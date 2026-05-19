@@ -9,6 +9,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { ecritureAlgebriqueSauf1, rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { columnTex, type Vector3 } from '../../lib/outils/geometrieVectorielle'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -24,14 +25,8 @@ export const refs = {
   'fr-fr': [],
 }
 
-type Point3d = [number, number, number]
-
-function pointTex(name: string, point: Point3d): string {
+function pointTex(name: string, point: Vector3): string {
   return `${name}(${point[0]}~;~${point[1]}~;~${point[2]})`
-}
-
-function columnTex(values: Point3d): string {
-  return `\\begin{pmatrix}${values[0]}\\\\${values[1]}\\\\${values[2]}\\end{pmatrix}`
 }
 
 function affineCoordinateTex(origin: number, direction: number): string {
@@ -40,13 +35,13 @@ function affineCoordinateTex(origin: number, direction: number): string {
   return `${origin}${ecritureAlgebriqueSauf1(direction)}k`
 }
 
-function parametricSystemTex(point: Point3d, direction: Point3d): string {
+function parametricSystemTex(point: Vector3, direction: Vector3): string {
   return `\\begin{cases}x=${affineCoordinateTex(point[0], direction[0])}\\\\y=${affineCoordinateTex(point[1], direction[1])}\\\\z=${affineCoordinateTex(point[2], direction[2])}\\end{cases}`
 }
 
 function highlightedParametricSystemTex(
-  point: Point3d,
-  direction: Point3d,
+  point: Vector3,
+  direction: Vector3,
 ): string {
   return `\\begin{cases}x=${miseEnEvidence(affineCoordinateTex(point[0], direction[0]))}\\\\y=${miseEnEvidence(affineCoordinateTex(point[1], direction[1]))}\\\\z=${miseEnEvidence(affineCoordinateTex(point[2], direction[2]))}\\end{cases}`
 }
@@ -60,13 +55,13 @@ export default class RepresentationParametriqueDroiteDeuxPoints extends Exercice
 
   nouvelleVersion() {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      const pointA: Point3d = [randint(-5, 5), randint(-5, 5), randint(-5, 5)]
-      const direction: Point3d = [
+      const pointA: Vector3 = [randint(-5, 5), randint(-5, 5), randint(-5, 5)]
+      const direction: Vector3 = [
         randint(-5, 5, 0),
         randint(-5, 5),
         randint(-5, 5),
       ]
-      const pointB: Point3d = [
+      const pointB: Vector3 = [
         pointA[0] + direction[0],
         pointA[1] + direction[1],
         pointA[2] + direction[2],

@@ -4,6 +4,14 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  columnTex,
+  crossProduct,
+  dot,
+  normSquared,
+  type Vector3,
+  vectorBetween,
+} from '../../lib/outils/geometrieVectorielle'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -20,30 +28,12 @@ export const refs = {
   'fr-fr': [],
 }
 
-type Vector3 = [number, number, number]
-
 function pointTex(name: string, point: Vector3): string {
   return `${name}=(${point[0]}~;~${point[1]}~;~${point[2]})`
 }
 
-function columnTex(vector: Vector3): string {
-  return `\\begin{pmatrix}${vector[0]}\\\\${vector[1]}\\\\${vector[2]}\\end{pmatrix}`
-}
-
-function vectorBetween(from: Vector3, to: Vector3): Vector3 {
-  return [to[0] - from[0], to[1] - from[1], to[2] - from[2]]
-}
-
 function opposite(vector: Vector3): Vector3 {
   return [-vector[0], -vector[1], -vector[2]]
-}
-
-function dot(u: Vector3, v: Vector3): number {
-  return u[0] * v[0] + u[1] * v[1] + u[2] * v[2]
-}
-
-function normSquared(vector: Vector3): number {
-  return dot(vector, vector)
 }
 
 function angleDegrees(u: Vector3, v: Vector3): number {
@@ -126,11 +116,7 @@ export default class AnglesTriangleEspace extends Exercice {
         pointA[1] + vectorAC[1],
         pointA[2] + vectorAC[2],
       ]
-      const cross: Vector3 = [
-        vectorAB[1] * vectorAC[2] - vectorAB[2] * vectorAC[1],
-        vectorAB[2] * vectorAC[0] - vectorAB[0] * vectorAC[2],
-        vectorAB[0] * vectorAC[1] - vectorAB[1] * vectorAC[0],
-      ]
+      const cross = crossProduct(vectorAB, vectorAC)
       if (cross.every((coordinate) => coordinate === 0)) {
         cpt++
         continue

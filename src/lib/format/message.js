@@ -7,7 +7,7 @@ import { context } from '../../modules/context'
  * @param {string} titre
  * @author Sébastien Lozano
  */
-export function warnMessage(texte, couleur, titre) {
+export function warnMessage(texte, couleur = 'black', titre) {
   const timeStamp = Date.now()
   if (typeof titre === 'undefined') {
     titre = ''
@@ -47,7 +47,7 @@ export function warnMessage(texte, couleur, titre) {
  * @author Sébastien Lozano
  */
 
-export function infoMessage({ titre, texte, couleur }) {
+export function infoMessage({ titre, texte, couleur = 'black' }) {
   // ;
   const timeStamp = Date.now()
   if (context.isHtml) {
@@ -84,7 +84,7 @@ export function infoMessage({ titre, texte, couleur }) {
  * @author Sébastien Lozano
  */
 
-export function lampeMessage({ titre, texte, couleur }) {
+export function lampeMessage({ titre, texte, couleur = 'black' }) {
   const timeStamp = Date.now()
   if (context.isHtml) {
     return `

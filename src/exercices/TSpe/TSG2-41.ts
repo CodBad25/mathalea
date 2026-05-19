@@ -1,15 +1,25 @@
 import { createList } from '../../lib/format/lists'
 import { lampeMessage } from '../../lib/format/message'
 import {
+  all,
+  isEquation,
+  isEquivalentEquation,
+} from '../../lib/interactif/checks'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import {
   ecritureAlgebrique,
-  ecritureAlgebriqueSauf0,
   ecritureParentheseSiNegatif,
-  rienSi0,
   rienSi1,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
-  miseEnEvidence,
-} from '../../lib/outils/embellissements'
+  crossProduct,
+  equationPlanTex,
+  expressionLineaireTex,
+  simplifieVector,
+} from '../../lib/outils/geometrieVectorielle'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -18,6 +28,8 @@ export const titre =
   'Déterminer une équation cartésienne d’un plan à partir de trois points'
 
 export const dateDePublication = '28/01/2026'
+export const interactifReady = true
+export const interactifType = 'mathLive'
 
 export const uuid = '7c2e8'
 
@@ -28,19 +40,20 @@ export const refs = {
 
 /**
  *
- * @author Stéphane Guyon
+ * @author Stéphane Guyon et Nathan Scheinmann pour l'interactif
  */
 export default class NomExercice extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
+    this.besoinFormulaireCaseACocher = [
+      'Autoriser des coordonnées nulles pour le vecteur normal',
+      false,
+    ]
+    this.sup = false
   }
 
   nouvelleVersion() {
-    // Petit utilitaire pour simplifier le vecteur normal
-    const pgcd = (x: number, y: number): number =>
-      y === 0 ? Math.abs(x) : pgcd(y, x % y)
-
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
       let texteCorr = ''
@@ -72,19 +85,18 @@ export default class NomExercice extends Exercice {
         ACz = zC - zA
 
         // vecteur normal par produit vectoriel AB ^ AC
-        nx = ABy * ACz - ABz * ACy
-        ny = ABz * ACx - ABx * ACz
-        nz = ABx * ACy - ABy * ACx
+        ;[nx, ny, nz] = crossProduct([ABx, ABy, ABz], [ACx, ACy, ACz])
         // on boucle si points alignés => normal nul
-      } while (nx === 0 || ny === 0 || nz === 0)
+      } while (
+        (nx === 0 && ny === 0 && nz === 0) ||
+        (this.sup === false && (nx === 0 || ny === 0 || nz === 0))
 
-      // simplifier le vecteur normal
-      const g = pgcd(pgcd(Math.abs(nx), Math.abs(ny)), Math.abs(nz))
-      nx /= g
-      ny /= g
-      nz /= g
+        // simplifier le vecteur normal
+      )
+      ;[nx, ny, nz] = simplifieVector([nx, ny, nz])
 
       const d = -(nx * xA + ny * yA + nz * zA)
+      const resultat = equationPlanTex(nx, ny, nz, d)
 
       const valeurAB = nx * ABx + ny * ABy + nz * ABz
       const valeurAC = nx * ACx + ny * ACy + nz * ACz
@@ -99,6 +111,17 @@ export default class NomExercice extends Exercice {
           items: [question1, question2, question3],
           style: 'nombres',
         })
+      if (this.interactif) {
+        texte += '<br>Équation cartésienne du plan $(ABC)$ : '
+        texte += ajouteChampTexteMathLive(this, i, KeyboardType.lycee)
+      }
+
+      handleAnswers(this, i, {
+        reponse: {
+          value: resultat,
+          compare: all([isEquation(), isEquivalentEquation()]),
+        },
+      })
 
       let reponse1 =
         lampeMessage({
@@ -150,9 +173,7 @@ export default class NomExercice extends Exercice {
         texte:
           "On utilise le fait que le vecteur $\\vec n\\begin{pmatrix}a\\\\b\\\\c\\end{pmatrix}$  est normal au plan d' équation cartésienne $ax+by+cz+d=0$. <br> Il suffit ensuite de tester les coordonnées d'un des points connus du plan dans l'équation cartésienne, pour déterminer le dernier paramètre $d$.",
       })
-      reponse3 += `Le vecteur $\\vec n \\begin{pmatrix}${nx}\\\\${ny}\\\\${nz}\\end{pmatrix}$ est normal au plan $(ABC)$. <br>Une équation cartésienne du plan est donc sous la forme $${nx}x ${ecritureAlgebrique(
-        ny,
-      )}y ${ecritureAlgebrique(nz)}z + d = 0$.<br>`
+      reponse3 += `Le vecteur $\\vec n \\begin{pmatrix}${nx}\\\\${ny}\\\\${nz}\\end{pmatrix}$ est normal au plan $(ABC)$. <br>Une équation cartésienne du plan est donc sous la forme $${expressionLineaireTex([nx, ny, nz], ['x', 'y', 'z'])} + d = 0$.<br>`
       reponse3 += `Pour déterminer la valeur de $d$, on utilise les coordonnées d'un point du plan, par exemple $A(${xA} ; ${yA} ; ${zA})$ :<br>`
       reponse3 += `$\\begin{aligned}
 &${nx}\\times ${ecritureParentheseSiNegatif(xA)} ${ecritureAlgebrique(ny)}\\times${ecritureParentheseSiNegatif(yA)} ${ecritureAlgebrique(nz)}\\times${ecritureParentheseSiNegatif(zA)} + d = 0 \\\\
@@ -160,7 +181,7 @@ export default class NomExercice extends Exercice {
 \\iff &d = ${d}
 \\end{aligned}$.<br>`
 
-      reponse3 += `Ainsi, le plan $(ABC)$ admet l’équation cartésienne :<br>$${miseEnEvidence(`${rienSi0(nx)}x ${ecritureAlgebriqueSauf0(ny)}y ${ecritureAlgebriqueSauf0(nz,)}z ${ecritureAlgebriqueSauf0(d)} = 0.`,)}$`
+      reponse3 += `Ainsi, le plan $(ABC)$ admet l’équation cartésienne :<br>$${miseEnEvidence(resultat)}$.`
 
       texteCorr = createList({
         items: [reponse1, reponse2, reponse3],

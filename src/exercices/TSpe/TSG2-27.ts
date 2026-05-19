@@ -1,5 +1,9 @@
 import { createList } from '../../lib/format/lists'
 import { lampeMessage } from '../../lib/format/message'
+import { all, isEqual } from '../../lib/interactif/checks'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -10,12 +14,15 @@ import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
+import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = "Calculer la distance d'un point à un plan"
+export const interactifReady = true
+export const interactifType = 'mathLive'
 
 export const dateDePublication = '26/01/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
@@ -34,6 +41,11 @@ export default class NomExercice extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
+    this.besoinFormulaireCaseACocher = [
+      'Correction avec la formule de la distance point-plan',
+      false,
+    ]
+    this.sup = false
   }
 
   nouvelleVersion() {
@@ -61,12 +73,29 @@ export default class NomExercice extends Exercice {
       const yH = new FractionEtendue(yA * denom - b * valeurPlanEnA(), denom)
       const zH = new FractionEtendue(zA * denom - c * valeurPlanEnA(), denom)
       const distanceAH = Math.abs(valeurPlanEnA()) / Math.sqrt(denom)
+      const valeurAbsolue = Math.abs(valeurPlanEnA())
+      const distanceExacte = new FractionEtendue(
+        valeurAbsolue * valeurAbsolue,
+        denom,
+      ).texRacineCarree()
 
       texte =
         "Dans un repère orthonormé de l'espace, on considère le point $A$ de coordonnées "
       texte += `$A(${xA} ; ${yA} ; ${zA})$ et le plan $\\mathcal{P}$  d'équation cartésienne : `
       texte += `$${rienSi1(a)}x ${ecritureAlgebriqueSauf1(b)} y ${ecritureAlgebriqueSauf1(c)} z ${ecritureAlgebrique(d)} = 0$.<br>`
       texte += `Déterminer la valeur approchée, arrondie au centième, de la distance du point $A$ au plan $\\mathcal{P}$ .<br>`
+      if (this.interactif) {
+        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
+          texteAvant: '<br>$d(A,\\mathcal{P})\\approx$ ',
+        })
+      }
+
+      handleAnswers(this, i, {
+        reponse: {
+          value: String(arrondi(distanceAH, 2)),
+          compare: all([isEqual()]),
+        },
+      })
 
       const normal = `${texteEnCouleurEtGras('Vecteur normal au plan :', 'black')}<br>A partir de l'équation cartésienne du plan $\\mathcal{P}$, on en déduit que le vecteur $\\vec{n}\\begin{pmatrix}${a}\\\\${b}\\\\${c}\\end{pmatrix}$ est un vecteur normal du plan $\\mathcal{P}$.<br>`
 
@@ -103,19 +132,37 @@ export default class NomExercice extends Exercice {
       let appartient = `${texteEnCouleurEtGras("Vérification que $A$ n'appartient pas au plan $\\mathcal{P}$  :", 'black')}<br>`
       appartient += `On remplace les coordonénes du point $A$ dans l'équation du plan et on calcule $${a} \\times ${ecritureParentheseSiNegatif(xA)}  ${ecritureAlgebrique(b)} \\times ${ecritureParentheseSiNegatif(yA)}  ${ecritureAlgebrique(c)} \\times ${ecritureParentheseSiNegatif(zA)}  ${ecritureAlgebrique(d)} = ${valeurPlanEnA()} \\neq 0$.<br>`
       appartient += `Donc le point $A$ n'appartient pas au plan $\\mathcal{P}$ .<br>`
-      texteCorr = lampeMessage({
-        titre: 'Méthode de résolution :',
-        texte:
-          "Pour calculer la distance du point $A$ au plan $\\mathcal{P}$, nous allons d'abord vérifier que le point $A$ n'appartient pas au plan (sinon, la distance est nulle).<br>S'il n'appartient pas, on cherche une représentation paramétrique de la droite $(\\Delta)$ orthogonale au plan $\\mathcal{P}$ passant par le point $A$. De là, on calcule les coordonnées du point H intersection de (Δ) avec P. La distance recherchée est la longueur AH.",
-        couleur: 'black',
-      })
+      if (this.sup === true) {
+        texteCorr = lampeMessage({
+          titre: 'Méthode de résolution :',
+          texte:
+            "On utilise directement la formule donnant la distance d'un point à un plan. Pour un point $M(x_0;y_0;z_0)$ et un plan d'équation $ax+by+cz+d=0$, on a $d(M,\\mathcal{P})=\\dfrac{|ax_0+by_0+cz_0+d|}{\\sqrt{a^2+b^2+c^2}}$.",
+          couleur: 'black',
+        })
+        texteCorr += `Ici, $A(${xA};${yA};${zA})$ et $\\mathcal{P}: ${rienSi1(a)}x ${ecritureAlgebriqueSauf1(b)} y ${ecritureAlgebriqueSauf1(c)} z ${ecritureAlgebrique(d)}=0$.<br>`
+        texteCorr += `On remplace donc $x_0$, $y_0$ et $z_0$ par les coordonnées de $A$ :<br>`
+        texteCorr += `$\\begin{aligned}
+        d(A,\\mathcal{P})
+        &=\\dfrac{|${a}\\times ${ecritureParentheseSiNegatif(xA)} ${ecritureAlgebrique(b)}\\times ${ecritureParentheseSiNegatif(yA)} ${ecritureAlgebrique(c)}\\times ${ecritureParentheseSiNegatif(zA)} ${ecritureAlgebrique(d)}|}{\\sqrt{${a}^2+${ecritureParentheseSiNegatif(b)}^2+${ecritureParentheseSiNegatif(c)}^2}}\\\\
+        &=\\dfrac{${valeurAbsolue}}{\\sqrt{${denom}}}\\\\
+        &=${distanceExacte}\\\\
+        &\\approx ${texNombre(distanceAH, 2)}.
+        \\end{aligned}$<br>`
+      } else {
+        texteCorr = lampeMessage({
+          titre: 'Méthode de résolution :',
+          texte:
+            "Pour calculer la distance du point $A$ au plan $\\mathcal{P}$, nous allons d'abord vérifier que le point $A$ n'appartient pas au plan (sinon, la distance est nulle).<br>S'il n'appartient pas, on cherche une représentation paramétrique de la droite $(\\Delta)$ orthogonale au plan $\\mathcal{P}$ passant par le point $A$. De là, on calcule les coordonnées du point H intersection de (Δ) avec P. La distance recherchée est la longueur AH.",
+          couleur: 'black',
+        })
 
-      texteCorr += createList({
-        items: [appartient, normal, droiteNormale, intersection, distance],
-        style: 'fleches',
-      })
-      texteCorr += `<br>La valeur approchée au centième de la distance entre le point $A$ et le plan $\\mathcal{P}$ est donc $${miseEnEvidence(
-        `AH  \\approx ${texNombre(distanceAH, 2)}`,
+        texteCorr += createList({
+          items: [appartient, normal, droiteNormale, intersection, distance],
+          style: 'fleches',
+        })
+      }
+      texteCorr += `La valeur approchée au centième de la distance entre le point $A$ et le plan $\\mathcal{P}$ est donc $${miseEnEvidence(
+        `${this.sup === true ? 'd(A,\\mathcal{P})' : 'AH'}  \\approx ${texNombre(distanceAH, 2)}`,
       )}$. `
       // = \\dfrac{${valeurAbsolue}}{\\sqrt{${denom}}}
 
