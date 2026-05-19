@@ -438,6 +438,25 @@ describe('checks atoms', () => {
       })
     })
 
+    it('noNumericComputation can allow reducible numeric fractions', () => {
+      const compare = all([
+        noNumericComputation({ allowReducibleFractions: true }),
+      ])
+
+      expect(compare('\\frac{2}{4}', '0')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(compare('1+1', '0')).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+      expect(compare('\\frac{2}{1}', '0')).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+    })
+
     it('termsGrouped refuses ungrouped like terms', () => {
       const compare = all([termsGrouped()])
 
@@ -583,6 +602,19 @@ describe('checks atoms', () => {
       expect(all([isReduced()])(saisie, '0')).toMatchObject({
         isOk: true,
         score: 1,
+      })
+    })
+
+    it('isReduced can allow reducible numeric fractions', () => {
+      const compare = all([isReduced({ allowReducibleFractions: true })])
+
+      expect(compare('\\frac{2}{4}', '0')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(compare('1+1', '0')).toMatchObject({
+        isOk: false,
+        score: 0,
       })
     })
   })

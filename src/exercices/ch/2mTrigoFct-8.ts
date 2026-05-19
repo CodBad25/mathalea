@@ -120,11 +120,17 @@ function isVariable(
 function xLabels() {
   return [
     { valeur: -3 * Math.PI, texte: '-3\\pi' },
+    { valeur: (-5 * Math.PI) / 2, texte: '-\\dfrac{5\\pi}{2}' },
     { valeur: -2 * Math.PI, texte: '-2\\pi' },
+    { valeur: (-3 * Math.PI) / 2, texte: '-\\dfrac{3\\pi}{2}' },
     { valeur: -Math.PI, texte: '-\\pi' },
+    { valeur: -Math.PI / 2, texte: '-\\dfrac{\\pi}{2}' },
     { valeur: 0, texte: '0' },
+    { valeur: Math.PI / 2, texte: '\\dfrac{\\pi}{2}' },
     { valeur: Math.PI, texte: '\\pi' },
+    { valeur: (3 * Math.PI) / 2, texte: '\\dfrac{3\\pi}{2}' },
     { valeur: 2 * Math.PI, texte: '2\\pi' },
+    { valeur: (5 * Math.PI) / 2, texte: '\\dfrac{5\\pi}{2}' },
     { valeur: 3 * Math.PI, texte: '3\\pi' },
   ]
 }
@@ -160,7 +166,7 @@ export default class ExpressionDepuisGraphiqueTrigonometrique extends Exercice {
         '2 : Amplitude',
         '3 : Déphasage',
         "4 : Axe d'oscillation",
-        '5 : Tout',
+        '5 : Mélange',
       ].join('\n'),
     ]
     this.sup = '3'
@@ -283,19 +289,19 @@ export default class ExpressionDepuisGraphiqueTrigonometrique extends Exercice {
         courbe,
       )
       texte +=
-        '<br>' +
+        ' ' +
         addMultiMathfield(this, i, {
           dataTemplate: [
-            'Période $T=$ %{champ1}',
+            "Axe d'oscillation $y=$ %{champ1}",
             'Amplitude $A=$ %{champ2}',
-            'Déphasage $h=$ %{champ3}',
-            "Axe d'oscillation $y=d=$ %{champ4}",
+            'Période $T=$ %{champ3}',
+            'Déphasage $h=$ %{champ4}',
             '$f(x)=$ %{champ5}',
-          ].join('<br>'),
+          ].join(' '),
           dataOptions: {
             champ1: {
-              keyboard: KeyboardType.grecTrigo,
-              minWidth: 120,
+              keyboard: KeyboardType.lycee,
+              minWidth: 90,
               ldots: true,
             },
             champ2: {
@@ -309,8 +315,8 @@ export default class ExpressionDepuisGraphiqueTrigonometrique extends Exercice {
               ldots: true,
             },
             champ4: {
-              keyboard: KeyboardType.lycee,
-              minWidth: 90,
+              keyboard: KeyboardType.grecTrigo,
+              minWidth: 120,
               ldots: true,
             },
             champ5: {
@@ -321,11 +327,19 @@ export default class ExpressionDepuisGraphiqueTrigonometrique extends Exercice {
           },
         })
 
+      const maximum = axe.sommeFraction(amplitude).simplifie()
+      const minimum = axe.differenceFraction(amplitude).simplifie()
+      const sommeExtremaTex = `${maximum.texFraction}${texSignedRationalTerm(minimum)}`
+      const differenceExtremaTex = `${maximum.texFraction}${texSignedRationalTerm(minimum.oppose())}`
+      const lectureDephasage =
+        forme === 'sin'
+          ? `Pour une forme en sinus avec $a>0$, le déphasage $h$ est l'abscisse du passage par l'axe d'oscillation où la courbe est montante. On lit donc $h=${miseEnEvidence(dephasageTex)}$.<br>`
+          : `Pour une forme en cosinus avec $a>0$, le déphasage $h$ est l'abscisse d'un maximum. On lit donc $h=${miseEnEvidence(dephasageTex)}$.<br>`
       const texteCorr =
-        `On lit sur le graphique l'axe d'oscillation $y=d=${miseEnEvidence(axe.texFraction)}$, donc $d=${miseEnEvidence(axe.texFraction)}$.<br>` +
-        `On lit aussi l'amplitude $A=${miseEnEvidence(amplitude.texFraction)}$, donc $a=${miseEnEvidence(coefficientAmplitude.texFraction)}$.<br>` +
-        `La période lue sur le graphique est $T=${miseEnEvidence(periodeTex)}$, donc $b=\\dfrac{2\\pi}{T}=${miseEnEvidence(pulsationFraction.texFraction)}$.<br>` +
-        `Le déphasage compatible avec la forme demandée est $h=${miseEnEvidence(dephasageTex)}$.<br>` +
+        `On lit $y_{\\min}=${minimum.texFraction}$ et $y_{\\max}=${maximum.texFraction}$. L'axe d'oscillation est la droite horizontale située à mi-hauteur entre ces deux valeurs : $y=\\dfrac{y_{\\max}+y_{\\min}}{2}=\\dfrac{${sommeExtremaTex}}{2}=${miseEnEvidence(axe.texFraction)}$, donc $d=${miseEnEvidence(axe.texFraction)}$.<br>` +
+        `L'amplitude est la distance verticale entre l'axe d'oscillation et un extremum, ou encore $A=\\dfrac{y_{\\max}-y_{\\min}}{2}=\\dfrac{${differenceExtremaTex}}{2}=${miseEnEvidence(amplitude.texFraction)}$, donc $a=${miseEnEvidence(coefficientAmplitude.texFraction)}$.<br>` +
+        `Pour lire la période, on mesure l'écart horizontal entre deux points homologues consécutifs de la courbe, par exemple deux maximums. On obtient $T=${miseEnEvidence(periodeTex)}$, donc $b=\\dfrac{2\\pi}{T}=${miseEnEvidence(pulsationFraction.texFraction)}$.<br>` +
+        lectureDephasage +
         `On obtient ainsi :\\[f(x)=${miseEnEvidence(expression)}${expression === reducedExpression ? '' : `=${miseEnEvidence(reducedExpression)}`}.\\]`
 
       handleAnswers(
@@ -333,7 +347,7 @@ export default class ExpressionDepuisGraphiqueTrigonometrique extends Exercice {
         i,
         {
           champ1: {
-            value: periodeTex,
+            value: axe.texFraction,
             compare: compareReduced,
           },
           champ2: {
@@ -341,11 +355,11 @@ export default class ExpressionDepuisGraphiqueTrigonometrique extends Exercice {
             compare: compareReduced,
           },
           champ3: {
-            value: dephasageTex,
+            value: periodeTex,
             compare: compareReduced,
           },
           champ4: {
-            value: axe.texFraction,
+            value: dephasageTex,
             compare: compareReduced,
           },
           champ5: {

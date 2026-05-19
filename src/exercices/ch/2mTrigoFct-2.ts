@@ -1,6 +1,10 @@
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
+import {
+  handleAnswers,
+  verifQuestionMultiMathfield,
+} from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm, verifQuestionQcm } from '../../lib/interactif/qcm'
 import { texPiCoefficient } from '../../lib/mathFonctions/trigo'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -24,8 +28,6 @@ export const refs = {
  * @author Nathan Scheinmann
  */
 export default class MesureAngleEntreZeroEtDeuxPi extends Exercice {
-  private anglesReduits: string[] = []
-
   constructor() {
     super()
     this.nbQuestions = 3
@@ -37,7 +39,6 @@ export default class MesureAngleEntreZeroEtDeuxPi extends Exercice {
   }
 
   nouvelleVersion() {
-    this.anglesReduits = []
     this.consigne =
       this.nbQuestions === 1
         ? "Déterminer la mesure d'angle dans $[0;2\\pi[$ qui repère le même point du cercle trigonométrique que la mesure donnée."
@@ -86,7 +87,6 @@ export default class MesureAngleEntreZeroEtDeuxPi extends Exercice {
 
       texte = `$${angle}$`
       if (this.interactif) {
-        this.autoCorrection[i] = { formatInteractif: 'custom' }
         texte +=
           '<br>' +
           addMultiMathfield(this, i, {
@@ -95,6 +95,17 @@ export default class MesureAngleEntreZeroEtDeuxPi extends Exercice {
               champ1: { keyboard: KeyboardType.grecTrigo, minWidth: 120 },
             },
           })
+        handleAnswers(
+          this,
+          i,
+          {
+            champ1: {
+              value: angleReduit,
+              compare: fonctionComparaison,
+            },
+          },
+          { formatInteractif: 'multiMathfield' },
+        )
         if (this.sup) {
           this.autoCorrection[i].enonce = texte
           this.autoCorrection[i].propositions = ['I', 'II', 'III', 'IV'].map(
@@ -129,7 +140,6 @@ export default class MesureAngleEntreZeroEtDeuxPi extends Exercice {
       }
 
       if (this.questionJamaisPosee(i, numerateur, denominateur, this.sup)) {
-        this.anglesReduits[i] = angleReduit
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
@@ -140,38 +150,7 @@ export default class MesureAngleEntreZeroEtDeuxPi extends Exercice {
   }
 
   correctionInteractive(i: number): string[] {
-    const multi = document.getElementById(
-      `multiMathfieldEx${this.numeroExercice}Q${i}`,
-    ) as
-      | (HTMLElement & {
-          getValue: () => Record<string, string>
-        })
-      | null
-    const mathfield = multi?.shadowRoot?.querySelector(
-      `#multiMathfieldEx${this.numeroExercice}Q${i}-champ1`,
-    ) as
-      | (HTMLElement & {
-          readOnly: boolean
-          classList: DOMTokenList
-        })
-      | null
-    const spanFeedback = multi?.shadowRoot?.querySelector(
-      `#check-multiMathfieldEx${this.numeroExercice}Q${i}-champ1`,
-    ) as HTMLSpanElement | null
-    const saisie = multi?.getValue().champ1 ?? ''
-    const resultatMesure = fonctionComparaison(
-      saisie,
-      this.anglesReduits[i],
-    ).isOk
-    if (mathfield != null) {
-      mathfield.readOnly = true
-      mathfield.classList.add('corrected')
-    }
-    if (spanFeedback != null) {
-      spanFeedback.innerHTML = resultatMesure ? '😎' : '☹️'
-    }
-    if (this.answers == null) this.answers = {}
-    this.answers[`multiMathfieldEx${this.numeroExercice}Q${i}`] = saisie
+    const resultatMesure = verifQuestionMultiMathfield(this, i).isOk
 
     if (!this.sup) return [resultatMesure ? 'OK' : 'KO']
 
