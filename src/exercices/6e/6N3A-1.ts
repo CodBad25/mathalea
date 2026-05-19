@@ -25,7 +25,7 @@ export const interactifType = 'mathLive'
 export const amcType = 'AMCNum'
 export const titre = "Calculer la valeur décimale d'une fraction"
 export const dateDePublication = '18/11/2021'
-export const dateDeModifImportante = '23/02/2024'
+export const dateDeModifImportante = '18/05/2026'
 
 /**
  * Calculer la valeur décimale des fractions suivantes.
@@ -56,7 +56,6 @@ export default class DivisionFraction extends Exercice {
       2,
       '1 : Déterminer le quotient exact\n2 : Déterminer un quotient approché au centième près',
     ]
-    // this.besoinFormulaire2CaseACocher = ['Exercice à la carte (à paramétrer dans le formulaire suivant)', false]
     this.besoinFormulaire3Texte = [
       'Types de questions',
       `Nombres séparés par des tirets
@@ -71,13 +70,16 @@ export default class DivisionFraction extends Exercice {
 9 : Entier divisé par 3 (quotient approché)
 10 : Mélange`,
     ]
+    this.besoinFormulaire4CaseACocher = ['En mode calcul mental']
+    this.sup4 = false
     this.consigne = 'Calculer la valeur décimale des fractions suivantes.'
     this.spacing = 2
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1) // Important sinon opdiv n'est pas joli
+    this.spacingCorr = context.isHtml ? 2 : 1 // Important sinon opdiv n'est pas joli
     this.nbQuestions = 4
     this.sup = 1
-    // this.sup2 = false
     this.sup3 = '10'
+    this.comment =
+      'Le mode calcul mental ne fonctionne que sur les valeurs exactes.'
   }
 
   nouvelleVersion() {
@@ -94,32 +96,38 @@ export default class DivisionFraction extends Exercice {
       i < this.nbQuestions && cpt < 50;
     ) {
       switch (listeTypeDeQuestions[i]) {
-        case 1: // fraction : entier divisé par 4 quotient : xx,25 ou xx,75
+        case 1: // fraction : entier divisé par 4 // quotient : xx,25 ou xx,75
           b = 4
-          a = (randint(2, 9) * 10 + randint(2, 9)) * 4 + choice([1, 3])
+          a = this.sup4
+            ? randint(2, 9) * 4 + choice([1, 3])
+            : (randint(2, 9) * 10 + randint(2, 9)) * 4 + choice([1, 3])
           q = a / b
           break
         case 2: // fraction : entier divisé par 8 quotient : x,125 ou x,375 ou x,625 ou x,875
           b = 8
-          a = randint(2, 9) * 8 + choice([1, 3, 5, 7])
+          a = this.sup4
+            ? randint(2, 5) * 8 + choice([1, 3, 5, 7])
+            : randint(2, 9) * 8 + choice([1, 3, 5, 7])
           q = a / b
           break
         case 3: // fraction : entier divisé par 6 quotient : xxx,5
           b = 6
-          q = arrondi(
-            randint(2, 9) * 100 + randint(2, 9) * 10 + randint(2, 9) + 0.5,
-            1,
-          )
+          q = this.sup4
+            ? arrondi(randint(2, 9) + 0.5, 1)
+            : arrondi(
+                randint(2, 9) * 100 + randint(2, 9) * 10 + randint(2, 9) + 0.5,
+                1,
+              )
           a = q * 6
           break
         case 4: // fraction : entier divisé par 2
           b = 2
-          a = randint(3, 50) * 2 + 1
+          a = this.sup4 ? randint(3, 10) * 2 + 1 : randint(3, 50) * 2 + 1
           q = a / b
           break
         case 5: // fraction : entier divisé par 5
           b = 5
-          a = randint(3, 50) * 2 + 1
+          a = this.sup4 ? randint(3, 10) * 2 + 1 : randint(3, 50) * 2 + 1
           q = a / b
           break
         case 6: // fraction : entier divisé par 10
