@@ -8,6 +8,10 @@ import {
 import { generateCleaner } from '../cleaners'
 import type { Check, CheckOverrides } from './types'
 
+type NumericComputationOptions = CheckOverrides & {
+  allowReducibleFractions?: boolean
+}
+
 const ce = new ComputeEngine()
 const clean = generateCleaner(['virgules', 'parentheses'])
 
@@ -121,7 +125,10 @@ function gcd(a: number, b: number): number {
   return x
 }
 
-function hasNumericDivisionComputation(expr: Expression): boolean {
+function hasNumericDivisionComputation(
+  expr: Expression,
+  allowReducibleFractions = false,
+): boolean {
   const current = unwrapDelimiter(expr)
   if (!isFunction(current, 'Divide')) return false
 
@@ -130,10 +137,15 @@ function hasNumericDivisionComputation(expr: Expression): boolean {
   if (numerator === undefined || denominator === undefined) return false
   if (denominator === 0) return false
 
-  return Math.abs(denominator) === 1 || gcd(numerator, denominator) !== 1
+  if (Math.abs(denominator) === 1) return true
+  if (allowReducibleFractions) return false
+  return gcd(numerator, denominator) !== 1
 }
 
-function hasNumericComputation(expr: Expression): boolean {
+function hasNumericComputation(
+  expr: Expression,
+  allowReducibleFractions = false,
+): boolean {
   const current = unwrapDelimiter(expr)
   if (!isFunction(current)) return false
 
@@ -151,7 +163,7 @@ function hasNumericComputation(expr: Expression): boolean {
   }
 
   if (current.operator === 'Divide') {
-    return hasNumericDivisionComputation(current)
+    return hasNumericDivisionComputation(current, allowReducibleFractions)
   }
 
   if (current.operator === 'Add' || current.operator === 'Subtract') {
@@ -167,7 +179,9 @@ function hasNumericComputation(expr: Expression): boolean {
     if (current.ops.filter(isNumericLiteral).length > 1) return true
   }
 
-  return current.ops.some(hasNumericComputation)
+  return current.ops.some((op) =>
+    hasNumericComputation(op, allowReducibleFractions),
+  )
 }
 
 function additiveTerms(expr: Expression): Expression[] {
@@ -293,11 +307,13 @@ export function noTrivialFactor(options: CheckOverrides = {}): Check {
   )
 }
 
-export function noNumericComputation(options: CheckOverrides = {}): Check {
+export function noNumericComputation(
+  options: NumericComputationOptions = {},
+): Check {
   return createReductionCheck(
     'noNumericComputation',
     "Cette expression n'est pas assez réduite : un calcul numérique reste à effectuer.",
-    (expr) => !hasNumericComputation(expr),
+    (expr) => !hasNumericComputation(expr, options.allowReducibleFractions),
     options,
   )
 }

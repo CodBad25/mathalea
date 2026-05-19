@@ -7,10 +7,16 @@ import {
 } from './reductionAtoms'
 import type { Check, CheckOverrides } from './types'
 
-export function isReduced(options: CheckOverrides = {}): Check {
+type IsReducedOptions = CheckOverrides & {
+  allowReducibleFractions?: boolean
+}
+
+export function isReduced(options: IsReducedOptions = {}): Check {
   const compare = all([
     noTrivialFactor(),
-    noNumericComputation(),
+    noNumericComputation({
+      allowReducibleFractions: options.allowReducibleFractions,
+    }),
     termsGrouped(),
     isDistributed(),
   ])
