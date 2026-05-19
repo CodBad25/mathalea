@@ -13,6 +13,7 @@ export default class ExerciceComparerDeuxFractions4e extends ExerciceComparerDeu
   constructor() {
     super()
     this.sup = 11
+    this.besoinFormulaire2CaseACocher = ['Inclure des nombres négatifs']
     this.sup2 = true
   }
 }
