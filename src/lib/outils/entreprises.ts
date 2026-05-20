@@ -77,6 +77,11 @@ export const entreprises: {
     determinant: 'la',
     pronom: 'elle',
   },
+  {
+    entreprise: "la recyclerie Tri-Logis",
+    determinant: 'la',
+    pronom: 'elle',
+  },
 ]
 
 /**

@@ -44,6 +44,8 @@ export default class CalculerUneExpressionSimpleFractions extends Exercice {
     this.sup3 = 7
     this.besoinFormulaire4CaseACocher = [`L'inconnue est une fraction`]
     this.sup4 = false
+    this.besoinFormulaire5CaseACocher = ['Avec uniquement la lettre $x$']
+    this.sup5 = false
   }
 
   nouvelleVersion() {
@@ -70,10 +72,13 @@ export default class CalculerUneExpressionSimpleFractions extends Exercice {
     const x = this.sup4
       ? choice([1, 3, 5, 7]) * r //Numérateur nombre premier
       : randint(1, 6) * r
+    const inconnue = this.sup5
+      ? 'x'
+      : choice(['x', 'y', 'z', 'm', 't', 'a', 'b', 'c'])
     this.consigne = this.sup4
-      ? `Pour $x=${fraction(x, b * k).texFraction}$, calculer :`
-      : `Pour $x=${x}$, calculer :`
-    const inconnue = 'x'
+      ? `Pour $${inconnue}=${fraction(x, b * k).texFraction}$, calculer :`
+      : `Pour $${inconnue}=${x}$, calculer :`
+
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
       let texteCorr = ''
