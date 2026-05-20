@@ -33,7 +33,7 @@
     noDecimal,
     noTrigonometry,
     sameCoordinates,
-    sameDescribedSet,
+    sameIntegerProgressionSet,
     sameDuration,
     sameInterval,
     sameNumberList,
@@ -82,7 +82,7 @@
     | 'sameNumberTuple'
     | 'sameNumberList'
     | 'sameOrderedNumberList'
-    | 'sameDescribedSet'
+    | 'sameIntegerProgressionSet'
     | 'sameParametricLine'
     | 'sameSet'
     | 'singleParameterVariable'
@@ -102,8 +102,9 @@
     tolerance: string | number
     // contains / doesNotContain
     pattern: string
-    // sameSet / sameDescribedSet
+    // sameSet / sameIntegerProgressionSet
     variable: string
+    allowMultipleExpressions: boolean
     // singleParameterVariable
     expectedParameter: string
     strictExpectedParameter: boolean
@@ -150,7 +151,7 @@
     sameNumberTuple: 'sameNumberTuple',
     sameNumberList: 'sameNumberList',
     sameOrderedNumberList: 'sameOrderedNumberList',
-    sameDescribedSet: 'sameDescribedSet',
+    sameIntegerProgressionSet: 'sameIntegerProgressionSet',
     sameParametricLine: 'sameParametricLine',
     sameSet: 'sameSet',
     singleParameterVariable: 'singleParameterVariable',
@@ -159,285 +160,293 @@
 
   const CHECK_DESCRIPTIONS: Record<CheckKind, string> = {
     isEqual: "Vérifie l'égalité mathématique (ou avec tolérance numérique)",
-    contains: "Vérifie que la saisie contient un motif (texte ou /regex/)",
-    doesNotContain: "Vérifie que la saisie ne contient pas un motif",
+    contains: 'Vérifie que la saisie contient un motif (texte ou /regex/)',
+    doesNotContain: 'Vérifie que la saisie ne contient pas un motif',
     isReduced:
-      "Compose noTrivialFactor, noNumericComputation, termsGrouped et isDistributed",
-    noTrivialFactor: "Refuse les facteurs triviaux et les termes nuls",
-    noNumericComputation: "Refuse les calculs numériques non effectués",
-    termsGrouped: "Vérifie que les termes semblables sont regroupés",
-    isDistributed: "Vérifie que les produits sur des sommes sont développés",
+      'Compose noTrivialFactor, noNumericComputation, termsGrouped et isDistributed',
+    noTrivialFactor: 'Refuse les facteurs triviaux et les termes nuls',
+    noNumericComputation: 'Refuse les calculs numériques non effectués',
+    termsGrouped: 'Vérifie que les termes semblables sont regroupés',
+    isDistributed: 'Vérifie que les produits sur des sommes sont développés',
     onlyIrreducibleFractions:
-      "Vérifie que toutes les fractions saisies sont irréductibles",
+      'Vérifie que toutes les fractions saisies sont irréductibles',
     fractionReducedFromExpected:
-      "Vérifie que la fraction est une réduction stricte de la fraction attendue",
+      'Vérifie que la fraction est une réduction stricte de la fraction attendue',
     noSquareRootInDenominator:
       "Vérifie qu'aucune racine carrée n'apparaît au dénominateur",
-    noDecimal: "Refuse les écritures décimales non entières dans la saisie",
+    noDecimal: 'Refuse les écritures décimales non entières dans la saisie',
     extractedRadicands:
-      "Vérifie que les facteurs carrés sont extraits des racines carrées",
+      'Vérifie que les facteurs carrés sont extraits des racines carrées',
     coordinatesReduced:
-      "Vérifie que chaque coordonnée est écrite sous forme réduite",
+      'Vérifie que chaque coordonnée est écrite sous forme réduite',
     intervalBoundsReduced:
       "Vérifie que chaque borne d'intervalle est écrite sous forme réduite",
-    isFraction: "Vérifie que la saisie est une fraction",
-    isDecimalFraction: "Vérifie que la saisie est une fraction décimale",
+    isFraction: 'Vérifie que la saisie est une fraction',
+    isDecimalFraction: 'Vérifie que la saisie est une fraction décimale',
     onlyDecimalNumbers:
-      "Vérifie que tous les nombres de la saisie sont écrits en décimal ou en entier",
+      'Vérifie que tous les nombres de la saisie sont écrits en décimal ou en entier',
     isScientificNotation:
-      "Vérifie que la saisie est écrite en notation scientifique",
-    isPowerForm: "Vérifie que la saisie est une puissance",
-    noTrigonometry: "Refuse les fonctions trigonométriques",
+      'Vérifie que la saisie est écrite en notation scientifique',
+    isPowerForm: 'Vérifie que la saisie est une puissance',
+    noTrigonometry: 'Refuse les fonctions trigonométriques',
     hasGroupedNumberSpacing:
-      "Vérifie les espaces de regroupement dans un nombre",
-    isEquation: "Vérifie que la saisie contient un unique signe =",
+      'Vérifie les espaces de regroupement dans un nombre',
+    isEquation: 'Vérifie que la saisie contient un unique signe =',
     isEquivalentEquation:
-      "Vérifie que deux équations sont équivalentes après passage dans un seul membre",
+      'Vérifie que deux équations sont équivalentes après passage dans un seul membre',
     hasZeroMember: "Vérifie qu'une équation est écrite avec un membre nul",
-    sameDuration: "Compare deux durées au format HMS",
-    sameCoordinates: "Compare deux listes de coordonnées",
+    sameDuration: 'Compare deux durées au format HMS',
+    sameCoordinates: 'Compare deux listes de coordonnées',
     sameInterval: "Compare deux intervalles ou réunions d'intervalles",
     valueInInterval: "Vérifie qu'une valeur appartient à un intervalle",
-    sameWithUnit: "Compare deux grandeurs avec unité",
-    sameNumberTuple: "Compare deux tuples de nombres entre parenthèses",
-    sameNumberList: "Compare deux suites de nombres non ordonnées",
-    sameOrderedNumberList: "Compare deux suites de nombres ordonnées",
-    sameDescribedSet:
-      "Vérifie que deux expressions décrivent le même ensemble quand la variable parcourt Z",
+    sameWithUnit: 'Compare deux grandeurs avec unité',
+    sameNumberTuple: 'Compare deux tuples de nombres entre parenthèses',
+    sameNumberList: 'Compare deux suites de nombres non ordonnées',
+    sameOrderedNumberList: 'Compare deux suites de nombres ordonnées',
+    sameIntegerProgressionSet:
+      'Vérifie que deux expressions décrivent le même ensemble quand la variable parcourt Z',
     sameParametricLine:
       "Vérifie que deux systèmes paramétriques décrivent la même droite de l'espace",
     sameSet: "Vérifie l'égalité de deux ensembles en extension",
     singleParameterVariable:
-      "Vérifie que le système paramétrique utilise une seule variable de paramétrage",
+      'Vérifie que le système paramétrique utilise une seule variable de paramétrage',
     stringEquals:
-      "Compare directement la saisie textuelle à la réponse attendue",
+      'Compare directement la saisie textuelle à la réponse attendue',
   }
 
-  const CHECK_EXAMPLES: Partial<Record<
-    CheckKind,
-    { accepted: string[]; refused: string[]; reference?: string }
-  >> = {
+  const CHECK_EXAMPLES: Partial<
+    Record<
+      CheckKind,
+      { accepted: string[]; refused: string[]; reference?: string }
+    >
+  > = {
     isEqual: {
-      accepted: ["\\frac{1}{2}", "0.5", "\\frac{2}{4}"],
-      refused: ["\\frac{1}{3}", "2"],
-      reference: "\\frac{1}{2}",
+      accepted: ['\\frac{1}{2}', '0.5', '\\frac{2}{4}'],
+      refused: ['\\frac{1}{3}', '2'],
+      reference: '\\frac{1}{2}',
     },
     contains: {
-      accepted: ["\\sin(x)+1", "2\\sin(\\pi)"],
-      refused: ["\\cos(x)", "x^2"],
+      accepted: ['\\sin(x)+1', '2\\sin(\\pi)'],
+      refused: ['\\cos(x)', 'x^2'],
     },
     doesNotContain: {
-      accepted: ["2x", "3a"],
-      refused: ["2\\times x", "3\\times a"],
+      accepted: ['2x', '3a'],
+      refused: ['2\\times x', '3\\times a'],
     },
     isReduced: {
-      accepted: ["2x+3", "3x^2-x"],
-      refused: ["2x+x+3", "2(x+1)", "\\frac{4}{2}x"],
+      accepted: ['2x+3', '3x^2-x'],
+      refused: ['2x+x+3', '2(x+1)', '\\frac{4}{2}x'],
     },
     noTrivialFactor: {
-      accepted: ["3x", "2x+1"],
-      refused: ["1\\times 3x", "0+3x", "x\\times 1"],
+      accepted: ['3x', '2x+1'],
+      refused: ['1\\times 3x', '0+3x', 'x\\times 1'],
     },
     noNumericComputation: {
-      accepted: ["\\sqrt{3}", "\\frac{1}{3}"],
-      refused: ["\\sqrt{9}", "\\frac{6}{3}", "2+1"],
+      accepted: ['\\sqrt{3}', '\\frac{1}{3}'],
+      refused: ['\\sqrt{9}', '\\frac{6}{3}', '2+1'],
     },
     termsGrouped: {
-      accepted: ["5x+3", "3x^2"],
-      refused: ["2x+3x", "x+4x+1"],
+      accepted: ['5x+3', '3x^2'],
+      refused: ['2x+3x', 'x+4x+1'],
     },
     isDistributed: {
-      accepted: ["2x+6", "3x-3"],
-      refused: ["2(x+3)", "3(x-1)"],
+      accepted: ['2x+6', '3x-3'],
+      refused: ['2(x+3)', '3(x-1)'],
     },
     onlyIrreducibleFractions: {
-      accepted: ["\\frac{1}{3}", "\\frac{3}{7}"],
-      refused: ["\\frac{2}{4}", "\\frac{6}{9}"],
+      accepted: ['\\frac{1}{3}', '\\frac{3}{7}'],
+      refused: ['\\frac{2}{4}', '\\frac{6}{9}'],
     },
     fractionReducedFromExpected: {
-      accepted: ["\\frac{6}{14}", "\\frac{9}{21}", "\\frac{3}{7}"],
-      refused: ["\\frac{18}{42}", "\\frac{2}{7}"],
-      reference: "\\frac{18}{42}",
+      accepted: ['\\frac{6}{14}', '\\frac{9}{21}', '\\frac{3}{7}'],
+      refused: ['\\frac{18}{42}', '\\frac{2}{7}'],
+      reference: '\\frac{18}{42}',
     },
     noSquareRootInDenominator: {
-      accepted: ["\\frac{\\sqrt{2}}{2}", "\\frac{1}{2}"],
-      refused: ["\\frac{1}{\\sqrt{2}}", "1/\\sqrt{2}"],
+      accepted: ['\\frac{\\sqrt{2}}{2}', '\\frac{1}{2}'],
+      refused: ['\\frac{1}{\\sqrt{2}}', '1/\\sqrt{2}'],
     },
     noDecimal: {
-      accepted: ["\\frac{1}{3}", "\\sqrt{2}"],
-      refused: ["0.333", "1.41"],
+      accepted: ['\\frac{1}{3}', '\\sqrt{2}'],
+      refused: ['0.333', '1.41'],
     },
     extractedRadicands: {
-      accepted: ["2\\sqrt{3}", "3\\sqrt{5}"],
-      refused: ["\\sqrt{12}", "\\sqrt{45}"],
+      accepted: ['2\\sqrt{3}', '3\\sqrt{5}'],
+      refused: ['\\sqrt{12}', '\\sqrt{45}'],
     },
     coordinatesReduced: {
-      accepted: ["(1;2)", "(\\frac{1}{2};3)"],
-      refused: ["(1;3-1)", "(\\frac{2}{4};1)"],
+      accepted: ['(1;2)', '(\\frac{1}{2};3)'],
+      refused: ['(1;3-1)', '(\\frac{2}{4};1)'],
     },
     intervalBoundsReduced: {
-      accepted: ["[1;2]", "[\\frac{1}{2};3]"],
-      refused: ["[1;3-1]", "[\\frac{2}{4};1]"],
+      accepted: ['[1;2]', '[\\frac{1}{2};3]'],
+      refused: ['[1;3-1]', '[\\frac{2}{4};1]'],
     },
     isFraction: {
-      accepted: ["\\frac{1}{2}", "3/4"],
-      refused: ["0.5", "2"],
+      accepted: ['\\frac{1}{2}', '3/4'],
+      refused: ['0.5', '2'],
     },
     isDecimalFraction: {
-      accepted: ["\\frac{7}{10}", "\\frac{13}{100}"],
-      refused: ["\\frac{7}{8}", "0.7"],
+      accepted: ['\\frac{7}{10}', '\\frac{13}{100}'],
+      refused: ['\\frac{7}{8}', '0.7'],
     },
     onlyDecimalNumbers: {
-      accepted: ["3{,}14", "x+2+3{,}14"],
-      refused: ["\\frac{314}{100}", "\\sqrt{2}"],
+      accepted: ['3{,}14', 'x+2+3{,}14'],
+      refused: ['\\frac{314}{100}', '\\sqrt{2}'],
     },
     isScientificNotation: {
-      accepted: ["1{,}357\\times10^3"],
-      refused: ["13{,}57\\times10^2", "1357"],
+      accepted: ['1{,}357\\times10^3'],
+      refused: ['13{,}57\\times10^2', '1357'],
     },
     isPowerForm: {
-      accepted: ["4^2", "x^3"],
-      refused: ["16", "4\\times4"],
+      accepted: ['4^2', 'x^3'],
+      refused: ['16', '4\\times4'],
     },
     noTrigonometry: {
-      accepted: ["x^2+1"],
-      refused: ["\\cos(x)+1"],
+      accepted: ['x^2+1'],
+      refused: ['\\cos(x)+1'],
     },
     hasGroupedNumberSpacing: {
-      accepted: ["1 234 567"],
-      refused: ["1234567"],
+      accepted: ['1 234 567'],
+      refused: ['1234567'],
     },
     isEquation: {
-      accepted: ["x=2", "2x+1=5"],
-      refused: ["x+2", "2x+1"],
+      accepted: ['x=2', '2x+1=5'],
+      refused: ['x+2', '2x+1'],
     },
     isEquivalentEquation: {
-      accepted: ["2x=4", "x-2=0", "3x=6"],
-      refused: ["x=3", "2x=5"],
-      reference: "x=2",
+      accepted: ['2x=4', 'x-2=0', '3x=6'],
+      refused: ['x=3', '2x=5'],
+      reference: 'x=2',
     },
     hasZeroMember: {
-      accepted: ["x-2=0", "2x+1=0"],
-      refused: ["x=2", "2x=-1"],
+      accepted: ['x-2=0', '2x+1=0'],
+      refused: ['x=2', '2x=-1'],
     },
     sameDuration: {
-      accepted: ["1h30min", "2min15s"],
-      refused: ["90min", "1h29min"],
-      reference: "1h30min",
+      accepted: ['1h30min', '2min15s'],
+      refused: ['90min', '1h29min'],
+      reference: '1h30min',
     },
     sameCoordinates: {
-      accepted: ["(1;2)", "(\\frac12;3)"],
-      refused: ["(1;2;3)", "(1;4)"],
-      reference: "(1;2)",
+      accepted: ['(1;2)', '(\\frac12;3)'],
+      refused: ['(1;2;3)', '(1;4)'],
+      reference: '(1;2)',
     },
     sameInterval: {
-      accepted: ["[1;2]", "\\emptyset"],
-      refused: ["]1;2]", "1;2"],
-      reference: "[1;2]",
+      accepted: ['[1;2]', '\\emptyset'],
+      refused: [']1;2]', '1;2'],
+      reference: '[1;2]',
     },
     valueInInterval: {
-      accepted: ["\\frac32", "1.5"],
-      refused: ["3", "2"],
-      reference: "[1;2]",
+      accepted: ['\\frac32', '1.5'],
+      refused: ['3', '2'],
+      reference: '[1;2]',
     },
     sameWithUnit: {
-      accepted: ["100\\operatorname{cm}", "1\\operatorname{m}"],
-      refused: ["100", "2\\operatorname{kg}"],
-      reference: "1\\operatorname{m}",
+      accepted: ['100\\operatorname{cm}', '1\\operatorname{m}'],
+      refused: ['100', '2\\operatorname{kg}'],
+      reference: '1\\operatorname{m}',
     },
     sameNumberTuple: {
-      accepted: ["(1;2;3)"],
-      refused: ["\\{1;2;3\\}", "(3;2;1)"],
-      reference: "(1;2;3)",
+      accepted: ['(1;2;3)'],
+      refused: ['\\{1;2;3\\}', '(3;2;1)'],
+      reference: '(1;2;3)',
     },
     sameNumberList: {
-      accepted: ["3;1;2", "1;2;1;3 avec l'option répétitions"],
-      refused: ["1;2;2"],
-      reference: "1;2;3",
+      accepted: ['3;1;2', "1;2;1;3 avec l'option répétitions"],
+      refused: ['1;2;2'],
+      reference: '1;2;3',
     },
     sameOrderedNumberList: {
-      accepted: ["1;2;3"],
-      refused: ["3;1;2"],
-      reference: "1;2;3",
+      accepted: ['1;2;3'],
+      refused: ['3;1;2'],
+      reference: '1;2;3',
     },
-    sameDescribedSet: {
-      accepted: ["2n", "2p"],
-      refused: ["2k+1", "3k"],
-      reference: "2x",
+    sameIntegerProgressionSet: {
+      accepted: ['2n', '2p', "4k\\pi;2\\pi+4k\\pi avec l'option branches"],
+      refused: ['2k+1', '3k'],
+      reference: '2x',
     },
     sameParametricLine: {
-      accepted: ["(1+2t,\\ 3+t,\\ t)", "(1+4s,\\ 3+2s,\\ 2s)"],
-      refused: ["(1+t,\\ 3+2t,\\ t)", "(2t,\\ t,\\ t)"],
-      reference: "(1+2t,\\ 3+t,\\ t)",
+      accepted: ['(1+2t,\\ 3+t,\\ t)', '(1+4s,\\ 3+2s,\\ 2s)'],
+      refused: ['(1+t,\\ 3+2t,\\ t)', '(2t,\\ t,\\ t)'],
+      reference: '(1+2t,\\ 3+t,\\ t)',
     },
     sameSet: {
-      accepted: ["\\{3,1,2\\}", "\\{1,2,2,3\\}"],
-      refused: ["\\{1,2\\}", "\\{1,2,4\\}"],
-      reference: "\\{1,2,3\\}",
+      accepted: ['\\{3,1,2\\}', '\\{1,2,2,3\\}'],
+      refused: ['\\{1,2\\}', '\\{1,2,4\\}'],
+      reference: '\\{1,2,3\\}',
     },
     singleParameterVariable: {
-      accepted: ["(1+2t,\\ 3t)", "(s,\\ 2s+1)"],
-      refused: ["(s+t,\\ s)", "(k+m,\\ k-m)"],
+      accepted: ['(1+2t,\\ 3t)', '(s,\\ 2s+1)'],
+      refused: ['(s+t,\\ s)', '(k+m,\\ k-m)'],
     },
     stringEquals: {
-      accepted: ["Bonjour", "oui"],
-      refused: ["bonjour", "Bonjour "],
-      reference: "Bonjour",
+      accepted: ['Bonjour', 'oui'],
+      refused: ['bonjour', 'Bonjour '],
+      reference: 'Bonjour',
     },
   }
 
   const DOC_BASE =
-    "https://forge.apps.education.fr/coopmaths/mathalea/-/wikis/Systeme-de-comparaison-interactif"
-
+    'https://forge.apps.education.fr/coopmaths/mathalea/-/wikis/Systeme-de-comparaison-interactif'
 
   const CHECK_DOC_ANCHOR: Partial<Record<CheckKind, string>> = {
     // Egalite
-    isEqual: "#equals--égalité-mathématique",
+    isEqual: '#equals--égalité-mathématique',
     // Meme objet
-    sameWithUnit: "#samewithunit-même-grandeur-avec-unité",
-    sameCoordinates: "#samecoordinates-mêmes-coordonnées",
-    sameInterval: "#sameinterval-même-intervalle",
-    sameDuration: "#sameduration-même-durée",
-    sameNumberTuple: "#samenumbertuple-même-tuple-de-nombres",
-    sameNumberList: "#samenumberlist-même-liste-de-nombres-non-ordonnée",
-    sameOrderedNumberList: "#sameorderednumberlist-même-liste-de-nombres-ordonnée",
-    sameSet: "#setequality--égalité-d’ensembles-en-extension",
-    sameDescribedSet: "#samedescribedset--même-ensemble-décrit-par-une-progression",
-    sameParametricLine: "#sameparametricline--même-droite-en-représentation-paramétrique",
+    sameWithUnit: '#samewithunit-même-grandeur-avec-unité',
+    sameCoordinates: '#samecoordinates-mêmes-coordonnées',
+    sameInterval: '#sameinterval-même-intervalle',
+    sameDuration: '#sameduration-même-durée',
+    sameNumberTuple: '#samenumbertuple-même-tuple-de-nombres',
+    sameNumberList: '#samenumberlist-même-liste-de-nombres-non-ordonnée',
+    sameOrderedNumberList:
+      '#sameorderednumberlist-même-liste-de-nombres-ordonnée',
+    sameSet: '#setequality--égalité-d’ensembles-en-extension',
+    sameIntegerProgressionSet:
+      '#sameintegerprogressionset--même-ensemble-décrit-par-une-progression',
+    sameParametricLine:
+      '#sameparametricline--même-droite-en-représentation-paramétrique',
     // Reduction / forme imposee
-    isReduced: "#isreduced--expression-réduite",
-    noTrivialFactor: "#notrivialfactor--pas-de-facteur-trivial",
-    noNumericComputation: "#nonumericcomputation--pas-de-calcul-non-effectué",
-    termsGrouped: "#termsgrouped--termes-semblables-regroupés",
-    isDistributed: "#distributed--produit-développé",
-    onlyIrreducibleFractions: "#irreduciblefractions--fractions-irréductibles",
+    isReduced: '#isreduced--expression-réduite',
+    noTrivialFactor: '#notrivialfactor--pas-de-facteur-trivial',
+    noNumericComputation: '#nonumericcomputation--pas-de-calcul-non-effectué',
+    termsGrouped: '#termsgrouped--termes-semblables-regroupés',
+    isDistributed: '#distributed--produit-développé',
+    onlyIrreducibleFractions: '#irreduciblefractions--fractions-irréductibles',
     fractionReducedFromExpected:
-      "#fractionreducedfromexpected--fraction-réduite-par-rapport-à-la-réponse-attendue",
+      '#fractionreducedfromexpected--fraction-réduite-par-rapport-à-la-réponse-attendue',
     noSquareRootInDenominator:
-      "#nosquarerootindenominator--pas-de-racine-carrée-au-dénominateur",
-    noDecimal: "#nodecimal--pas-d’écriture-décimale",
-    extractedRadicands: "#extractedradicands--racines-simplifiées",
-    coordinatesReduced: "#coordinatesreduced-coordonnées-réduites",
-    intervalBoundsReduced: "#intervalboundsreduced-bornes-dintervalle-réduites",
+      '#nosquarerootindenominator--pas-de-racine-carrée-au-dénominateur',
+    noDecimal: '#nodecimal--pas-d’écriture-décimale',
+    extractedRadicands: '#extractedradicands--racines-simplifiées',
+    coordinatesReduced: '#coordinatesreduced-coordonnées-réduites',
+    intervalBoundsReduced: '#intervalboundsreduced-bornes-dintervalle-réduites',
     // Texte / motif
-    stringEquals: "#stringequals--comparaison-textuelle-exacte",
-    contains: "#containspattern--la-saisie-contient-un-motif",
-    doesNotContain: "#doesnotcontainpattern--la-saisie-ne-contient-pas-un-motif",
+    stringEquals: '#stringequals--comparaison-textuelle-exacte',
+    contains: '#containspattern--la-saisie-contient-un-motif',
+    doesNotContain:
+      '#doesnotcontainpattern--la-saisie-ne-contient-pas-un-motif',
     // Type d’ecriture
-    isFraction: "#isfraction-la-saisie-est-une-fraction",
-    isDecimalFraction: "#isdecimalfraction-la-saisie-est-une-fraction-décimale",
-    onlyDecimalNumbers: "#isdecimalnumber-la-saisie-est-un-nombre-décimal",
-    isScientificNotation: "#isscientificnotation-la-saisie-est-en-notation-scientifique",
-    isPowerForm: "#ispowerform-la-saisie-est-une-puissance",
-    hasGroupedNumberSpacing: "#hasgroupednumberspacing-espacement-des-chiffres-par-groupes-de-3",
-    noTrigonometry: "#notrigonometry-refuse-les-fonctions-trigonométriques",
+    isFraction: '#isfraction-la-saisie-est-une-fraction',
+    isDecimalFraction: '#isdecimalfraction-la-saisie-est-une-fraction-décimale',
+    onlyDecimalNumbers: '#isdecimalnumber-la-saisie-est-un-nombre-décimal',
+    isScientificNotation:
+      '#isscientificnotation-la-saisie-est-en-notation-scientifique',
+    isPowerForm: '#ispowerform-la-saisie-est-une-puissance',
+    hasGroupedNumberSpacing:
+      '#hasgroupednumberspacing-espacement-des-chiffres-par-groupes-de-3',
+    noTrigonometry: '#notrigonometry-refuse-les-fonctions-trigonométriques',
     // Equations
-    isEquation: "#isequation-la-saisie-est-une-équation",
-    isEquivalentEquation: "#isequivalentequation-équations-équivalentes",
-    hasZeroMember: "#haszeromember-membre-nul-dans-léquation",
+    isEquation: '#isequation-la-saisie-est-une-équation',
+    isEquivalentEquation: '#isequivalentequation-équations-équivalentes',
+    hasZeroMember: '#haszeromember-membre-nul-dans-léquation',
     // Appartenance / parametrage
-    valueInInterval: "#valueininterval-valeur-dans-un-intervalle",
-    singleParameterVariable: "#singleparametervariable--variable-de-paramétrage-unique",
+    valueInInterval: '#valueininterval-valeur-dans-un-intervalle',
+    singleParameterVariable:
+      '#singleparametervariable--variable-de-paramétrage-unique',
   }
 
   type CheckGroup = {
@@ -461,7 +470,7 @@
         'sameNumberList',
         'sameOrderedNumberList',
         'sameSet',
-        'sameDescribedSet',
+        'sameIntegerProgressionSet',
         'sameParametricLine',
       ],
     },
@@ -717,6 +726,7 @@
       strictExpectedParameter: false,
       strictSameUnit: false,
       allowRepeatedNumbers: false,
+      allowMultipleExpressions: false,
       trim: false,
       ignoreCase: false,
     }
@@ -885,10 +895,11 @@
         })
       case 'sameOrderedNumberList':
         return sameOrderedNumberList(overrides)
-      case 'sameDescribedSet':
-        return sameDescribedSet({
+      case 'sameIntegerProgressionSet':
+        return sameIntegerProgressionSet({
           ...overrides,
           variable: cfg.variable.trim() || undefined,
+          allowMultipleExpressions: cfg.allowMultipleExpressions,
         })
       case 'sameParametricLine':
         return sameParametricLine(overrides)
@@ -966,8 +977,7 @@
       opts.push(`pattern: ${serializePattern(cfg.pattern)}`)
     }
     if (
-      (cfg.kind === 'sameSet' ||
-        cfg.kind === 'sameDescribedSet') &&
+      (cfg.kind === 'sameSet' || cfg.kind === 'sameIntegerProgressionSet') &&
       cfg.variable.trim()
     ) {
       opts.push(`variable: ${JSON.stringify(cfg.variable.trim())}`)
@@ -996,6 +1006,12 @@
     }
     if (cfg.kind === 'sameNumberList' && cfg.allowRepeatedNumbers) {
       opts.push('allowRepeatedNumbers: true')
+    }
+    if (
+      cfg.kind === 'sameIntegerProgressionSet' &&
+      cfg.allowMultipleExpressions
+    ) {
+      opts.push('allowMultipleExpressions: true')
     }
 
     const effectiveName = cfg.name.trim() || cfg.kind
@@ -1325,7 +1341,7 @@
                         </div>
                       {/if}
 
-                      {#if cfg.kind === 'sameSet' || cfg.kind === 'sameDescribedSet'}
+                      {#if cfg.kind === 'sameSet' || cfg.kind === 'sameIntegerProgressionSet'}
                         <div>
                           <label
                             for={`check-${cfg.id}-variable`}
@@ -1342,6 +1358,27 @@
                             class="w-full px-2 py-1.5 rounded border border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas-darkest font-mono text-sm focus:outline-none focus:ring-1 focus:ring-coopmaths-action"
                           />
                         </div>
+                      {/if}
+
+                      {#if cfg.kind === 'sameIntegerProgressionSet'}
+                        <label
+                          class="flex items-center gap-2 cursor-pointer select-none"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={cfg.allowMultipleExpressions}
+                            on:change={(e) =>
+                              updateCheckConfig(
+                                cfg.id,
+                                'allowMultipleExpressions',
+                                (e.currentTarget as HTMLInputElement).checked,
+                              )}
+                            class="rounded"
+                          />
+                          <span class="text-xs font-semibold opacity-70"
+                            >Accepter plusieurs branches séparées par ; ou ,</span
+                          >
+                        </label>
                       {/if}
 
                       {#if cfg.kind === 'singleParameterVariable'}
@@ -1368,7 +1405,12 @@
                             <input
                               type="checkbox"
                               checked={cfg.strictExpectedParameter}
-                              on:change={(e) => updateCheckConfig(cfg.id, "strictExpectedParameter", (e.currentTarget as HTMLInputElement).checked)}
+                              on:change={(e) =>
+                                updateCheckConfig(
+                                  cfg.id,
+                                  'strictExpectedParameter',
+                                  (e.currentTarget as HTMLInputElement).checked,
+                                )}
                               class="rounded"
                             />
                             <span class="text-xs font-semibold opacity-70"
@@ -1385,7 +1427,12 @@
                           <input
                             type="checkbox"
                             checked={cfg.strictSameUnit}
-                            on:change={(e) => updateCheckConfig(cfg.id, "strictSameUnit", (e.currentTarget as HTMLInputElement).checked)}
+                            on:change={(e) =>
+                              updateCheckConfig(
+                                cfg.id,
+                                'strictSameUnit',
+                                (e.currentTarget as HTMLInputElement).checked,
+                              )}
                             class="rounded"
                           />
                           <span class="text-xs font-semibold opacity-70"
@@ -1401,7 +1448,12 @@
                           <input
                             type="checkbox"
                             checked={cfg.allowRepeatedNumbers}
-                            on:change={(e) => updateCheckConfig(cfg.id, "allowRepeatedNumbers", (e.currentTarget as HTMLInputElement).checked)}
+                            on:change={(e) =>
+                              updateCheckConfig(
+                                cfg.id,
+                                'allowRepeatedNumbers',
+                                (e.currentTarget as HTMLInputElement).checked,
+                              )}
                             class="rounded"
                           />
                           <span class="text-xs font-semibold opacity-70"
@@ -1418,7 +1470,12 @@
                             <input
                               type="checkbox"
                               checked={cfg.trim}
-                              on:change={(e) => updateCheckConfig(cfg.id, "trim", (e.currentTarget as HTMLInputElement).checked)}
+                              on:change={(e) =>
+                                updateCheckConfig(
+                                  cfg.id,
+                                  'trim',
+                                  (e.currentTarget as HTMLInputElement).checked,
+                                )}
                               class="rounded"
                             />
                             <span class="text-xs font-semibold opacity-70"
@@ -1431,7 +1488,12 @@
                             <input
                               type="checkbox"
                               checked={cfg.ignoreCase}
-                              on:change={(e) => updateCheckConfig(cfg.id, "ignoreCase", (e.currentTarget as HTMLInputElement).checked)}
+                              on:change={(e) =>
+                                updateCheckConfig(
+                                  cfg.id,
+                                  'ignoreCase',
+                                  (e.currentTarget as HTMLInputElement).checked,
+                                )}
                               class="rounded"
                             />
                             <span class="text-xs font-semibold opacity-70"
@@ -1487,7 +1549,12 @@
                           <input
                             type="checkbox"
                             checked={cfg.feedbackEnabled}
-                            on:change={(e) => updateCheckConfig(cfg.id, "feedbackEnabled", (e.currentTarget as HTMLInputElement).checked)}
+                            on:change={(e) =>
+                              updateCheckConfig(
+                                cfg.id,
+                                'feedbackEnabled',
+                                (e.currentTarget as HTMLInputElement).checked,
+                              )}
                             class="rounded"
                           />
                           <span class="text-xs font-semibold opacity-70"
@@ -1501,7 +1568,12 @@
                           <input
                             type="checkbox"
                             checked={cfg.feedbackOnSuccess}
-                            on:change={(e) => updateCheckConfig(cfg.id, "feedbackOnSuccess", (e.currentTarget as HTMLInputElement).checked)}
+                            on:change={(e) =>
+                              updateCheckConfig(
+                                cfg.id,
+                                'feedbackOnSuccess',
+                                (e.currentTarget as HTMLInputElement).checked,
+                              )}
                             class="rounded"
                           />
                           <span class="text-xs font-semibold opacity-70"
@@ -1566,7 +1638,9 @@
             <div class="space-y-3">
               {#each CHECK_GROUPS as group}
                 <section>
-                  <p class="text-[11px] font-bold uppercase tracking-widest text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light mb-1.5">
+                  <p
+                    class="text-[11px] font-bold uppercase tracking-widest text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light mb-1.5"
+                  >
                     {group.title}
                   </p>
                   <div class="flex flex-wrap gap-2">
@@ -1603,37 +1677,58 @@
                     <div
                       class="mt-3 p-3 rounded-lg border border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas-darkest text-xs space-y-2"
                     >
-                      <p class="font-semibold font-mono text-sm text-coopmaths-action dark:text-coopmathsdark-action">
+                      <p
+                        class="font-semibold font-mono text-sm text-coopmaths-action dark:text-coopmathsdark-action"
+                      >
                         {hoveredKind}
                       </p>
-                      <p class="text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light italic">
+                      <p
+                        class="text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light italic"
+                      >
                         {CHECK_DESCRIPTIONS[hoveredKind]}
                       </p>
                       {#if ex}
                         {#if ex.reference}
-                          <p class="text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light">
+                          <p
+                            class="text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light"
+                          >
                             Pour la réponse attendue&nbsp;:
-                            <code class="font-mono bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark px-1 rounded">{ex.reference}</code>
+                            <code
+                              class="font-mono bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark px-1 rounded"
+                              >{ex.reference}</code
+                            >
                           </p>
                         {/if}
                         <div class="grid grid-cols-2 gap-2 pt-1">
                           <div>
-                            <p class="font-semibold text-green-600 dark:text-green-400 mb-1 flex items-center gap-1">
+                            <p
+                              class="font-semibold text-green-600 dark:text-green-400 mb-1 flex items-center gap-1"
+                            >
                               <i class="bx bx-check"></i> Accepté
                             </p>
                             <ul class="space-y-0.5">
                               {#each ex.accepted as expr}
-                                <li class="font-mono bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 px-2 py-0.5 rounded text-green-800 dark:text-green-200">{expr}</li>
+                                <li
+                                  class="font-mono bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 px-2 py-0.5 rounded text-green-800 dark:text-green-200"
+                                >
+                                  {expr}
+                                </li>
                               {/each}
                             </ul>
                           </div>
                           <div>
-                            <p class="font-semibold text-red-600 dark:text-red-400 mb-1 flex items-center gap-1">
+                            <p
+                              class="font-semibold text-red-600 dark:text-red-400 mb-1 flex items-center gap-1"
+                            >
                               <i class="bx bx-x"></i> Refusé
                             </p>
                             <ul class="space-y-0.5">
                               {#each ex.refused as expr}
-                                <li class="font-mono bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 px-2 py-0.5 rounded text-red-800 dark:text-red-200">{expr}</li>
+                                <li
+                                  class="font-mono bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 px-2 py-0.5 rounded text-red-800 dark:text-red-200"
+                                >
+                                  {expr}
+                                </li>
                               {/each}
                             </ul>
                           </div>
@@ -1705,7 +1800,8 @@
                      text-coopmaths-corpus dark:text-coopmathsdark-corpus
                      whitespace-pre select-all hover:opacity-80 transition-opacity text-left"
               on:click={copyCode}
-              title="Cliquez pour copier"><code>{generatedCode}</code></button>
+              title="Cliquez pour copier"><code>{generatedCode}</code></button
+            >
           {:else}
             <div
               class="text-xs text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light italic px-3 py-2 rounded-lg border border-dashed border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark"

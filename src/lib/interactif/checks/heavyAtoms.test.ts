@@ -36,8 +36,7 @@ import {
 } from './legacyDomainChecks'
 import { noDecimal } from './noDecimal'
 import { sameSet } from './sameSet'
-import { sameDescribedSet } from './sameDescribedSet'
-import { sameParametricZeroSet } from './sameParametricZeroSet'
+import { sameIntegerProgressionSet } from './sameIntegerProgressionSet'
 import { stringEquals } from './stringEquals'
 
 describe('checks heavy atoms', () => {
@@ -47,7 +46,9 @@ describe('checks heavy atoms', () => {
         isOk: true,
         score: 1,
       })
-      expect(all([sameDuration({ unit: 'h' })])('90min', '1h30min')).toMatchObject({
+      expect(
+        all([sameDuration({ unit: 'h' })])('90min', '1h30min'),
+      ).toMatchObject({
         isOk: false,
         score: 0,
       })
@@ -97,7 +98,9 @@ describe('checks heavy atoms', () => {
     })
 
     it('compares units with conversions', () => {
-      expect(all([sameWithUnit()])('100\\operatorname{cm}', '1m')).toMatchObject({
+      expect(
+        all([sameWithUnit()])('100\\operatorname{cm}', '1m'),
+      ).toMatchObject({
         isOk: true,
         score: 1,
       })
@@ -117,24 +120,20 @@ describe('checks heavy atoms', () => {
     })
 
     it('compares number tuples and lists', () => {
-      expect(all([sameNumberTuple()])('(1;2;3)', '(1;2;3)')).toMatchObject(
-        {
-          isOk: true,
-          score: 1,
-        },
-      )
+      expect(all([sameNumberTuple()])('(1;2;3)', '(1;2;3)')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
       expect(
         all([sameNumberTuple()])('\\left(1;2\\right)', '(1;2)'),
       ).toMatchObject({
         isOk: true,
         score: 1,
       })
-      expect(all([sameNumberTuple()])('\\{1;2;3\\}', '(1;2;3)')).toMatchObject(
-        {
-          isOk: false,
-          score: 0,
-        },
-      )
+      expect(all([sameNumberTuple()])('\\{1;2;3\\}', '(1;2;3)')).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
       expect(all([sameNumberList()])('3;1;2', '1;2;3')).toMatchObject({
         isOk: true,
         score: 1,
@@ -162,31 +161,36 @@ describe('checks heavy atoms', () => {
       })
     })
 
-    it('compares parametric zero sets', () => {
-      const expected = { offset: 0, period: Math.PI }
-      expect(all([sameParametricZeroSet(expected)])('k\\pi', '')).toMatchObject({
+    it('compares integer progression sets', () => {
+      expect(
+        all([sameIntegerProgressionSet()])('k\\pi', 'k\\pi'),
+      ).toMatchObject({
         isOk: true,
         score: 1,
       })
       expect(
-        all([sameParametricZeroSet(expected)])(
+        all([sameIntegerProgressionSet({ variable: 'k' })])(
           'S=\\left\\{k\\pi\\mid k\\in\\mathbb{Z}\\right\\}',
-          '',
+          'k\\pi',
         ),
       ).toMatchObject({
         isOk: true,
         score: 1,
       })
-      expect(all([sameParametricZeroSet(expected)])('2k\\pi', '')).toMatchObject({
+      expect(
+        all([sameIntegerProgressionSet()])('2k\\pi', 'k\\pi'),
+      ).toMatchObject({
         isOk: false,
         score: 0,
       })
     })
 
-    it('compares parametric zero sets with compact MathLive fractions', () => {
-      const expected = { offset: Math.PI / 2, period: Math.PI }
+    it('compares integer progression sets with compact MathLive fractions', () => {
       expect(
-        all([sameParametricZeroSet(expected)])('-\\frac12\\pi+k\\pi', ''),
+        all([sameIntegerProgressionSet()])(
+          '-\\frac12\\pi+k\\pi',
+          '\\frac12\\pi+k\\pi',
+        ),
       ).toMatchObject({
         isOk: true,
         score: 1,
@@ -205,12 +209,12 @@ describe('checks heavy atoms', () => {
         score: 0,
         feedback: 'Résultat incorrect car une fraction est attendue.',
       })
-      expect(all([isEqual(), isFraction()])('\\frac{2}{4}', '0.5')).toMatchObject(
-        {
-          isOk: true,
-          score: 1,
-        },
-      )
+      expect(
+        all([isEqual(), isFraction()])('\\frac{2}{4}', '0.5'),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
       expect(all([isEqual(), isFraction()])('0.5', '0.5')).toMatchObject({
         isOk: false,
         score: 0,
@@ -218,18 +222,18 @@ describe('checks heavy atoms', () => {
     })
 
     it('checks decimal fraction syntax', () => {
-      expect(all([isDecimalFraction()])('\\frac{7}{10}', 'anything')).toMatchObject(
-        {
-          isOk: true,
-          score: 1,
-        },
-      )
-      expect(all([isDecimalFraction()])('\\frac{7}{8}', 'anything')).toMatchObject(
-        {
-          isOk: false,
-          score: 0,
-        },
-      )
+      expect(
+        all([isDecimalFraction()])('\\frac{7}{10}', 'anything'),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(
+        all([isDecimalFraction()])('\\frac{7}{8}', 'anything'),
+      ).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
     })
 
     it('checks that all numbers are written as decimal numbers', () => {
@@ -237,17 +241,21 @@ describe('checks heavy atoms', () => {
         isOk: true,
         score: 1,
       })
-      expect(all([onlyDecimalNumbers()])('x+2+3{,}14', 'anything')).toMatchObject({
+      expect(
+        all([onlyDecimalNumbers()])('x+2+3{,}14', 'anything'),
+      ).toMatchObject({
         isOk: true,
         score: 1,
       })
-      expect(all([onlyDecimalNumbers()])('\\frac{314}{100}', 'anything')).toMatchObject(
-        {
-          isOk: false,
-          score: 0,
-        },
-      )
-      expect(all([onlyDecimalNumbers()])('\\sqrt{2}', 'anything')).toMatchObject({
+      expect(
+        all([onlyDecimalNumbers()])('\\frac{314}{100}', 'anything'),
+      ).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+      expect(
+        all([onlyDecimalNumbers()])('\\sqrt{2}', 'anything'),
+      ).toMatchObject({
         isOk: false,
         score: 0,
       })
@@ -267,10 +275,7 @@ describe('checks heavy atoms', () => {
         score: 0,
       })
       expect(
-        all([isEqual(), isScientificNotation()])(
-          '1{,}357\\times10^3',
-          '1357',
-        ),
+        all([isEqual(), isScientificNotation()])('1{,}357\\times10^3', '1357'),
       ).toMatchObject({
         isOk: true,
         score: 1,
@@ -352,10 +357,12 @@ describe('checks heavy atoms', () => {
     })
 
     it('checks reduced interval bounds bound by bound', () => {
-      expect(all([intervalBoundsReduced()])('[1;2]', 'anything')).toMatchObject({
-        isOk: true,
-        score: 1,
-      })
+      expect(all([intervalBoundsReduced()])('[1;2]', 'anything')).toMatchObject(
+        {
+          isOk: true,
+          score: 1,
+        },
+      )
       expect(
         all([intervalBoundsReduced()])('[1;3-1]', 'anything'),
       ).toMatchObject({
@@ -537,19 +544,13 @@ describe('checks heavy atoms', () => {
   describe('fraction form checks', () => {
     it('refuses square roots in denominators', () => {
       expect(
-        all([noSquareRootInDenominator()])(
-          '\\dfrac{\\sqrt{2}}{2}',
-          'anything',
-        ),
+        all([noSquareRootInDenominator()])('\\dfrac{\\sqrt{2}}{2}', 'anything'),
       ).toMatchObject({
         isOk: true,
         score: 1,
       })
       expect(
-        all([noSquareRootInDenominator()])(
-          '\\dfrac{1}{\\sqrt{2}}',
-          'anything',
-        ),
+        all([noSquareRootInDenominator()])('\\dfrac{1}{\\sqrt{2}}', 'anything'),
       ).toMatchObject({
         isOk: false,
         score: 0,
@@ -657,10 +658,7 @@ describe('checks heavy atoms', () => {
 
     it('accepts equivalent equations with compact MathLive fractions', () => {
       expect(
-        all([isEquivalentEquation()])(
-          '\\frac12x+y=1',
-          'x+2y=2',
-        ),
+        all([isEquivalentEquation()])('\\frac12x+y=1', 'x+2y=2'),
       ).toMatchObject({
         isOk: true,
         score: 1,
@@ -668,9 +666,7 @@ describe('checks heavy atoms', () => {
     })
 
     it('checks that one member is zero', () => {
-      expect(
-        all([hasZeroMember()])('2x+3y-5=0', 'anything'),
-      ).toMatchObject({
+      expect(all([hasZeroMember()])('2x+3y-5=0', 'anything')).toMatchObject({
         isOk: true,
         score: 1,
       })
@@ -708,7 +704,6 @@ describe('checks heavy atoms', () => {
         feedback: "L'équation est équivalente.\nForme incorrecte.",
       })
     })
-
   })
 
   describe('noDecimal', () => {
@@ -955,27 +950,27 @@ describe('checks heavy atoms', () => {
     })
   })
 
-  describe('sameDescribedSet', () => {
+  describe('sameIntegerProgressionSet', () => {
     it('accepts equivalent arithmetic progressions', () => {
       // 2x+2 and 2x describe sets with same step=2, same residue
-      expect(all([sameDescribedSet()])('2x+2', '2x')).toMatchObject({
+      expect(all([sameIntegerProgressionSet()])('2x+2', '2x')).toMatchObject({
         isOk: true,
         score: 1,
       })
     })
 
     it('accepts equivalent progressions with pi', () => {
-      expect(all([sameDescribedSet()])('2k\\pi', '2k\\pi-2\\pi')).toMatchObject(
-        {
-          isOk: true,
-          score: 1,
-        },
-      )
+      expect(
+        all([sameIntegerProgressionSet()])('2k\\pi', '2k\\pi-2\\pi'),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
     })
 
     it('refuses progressions with different step', () => {
       // step 2 vs step 4 — different
-      expect(all([sameDescribedSet()])('2x', '4x')).toMatchObject({
+      expect(all([sameIntegerProgressionSet()])('2x', '4x')).toMatchObject({
         isOk: false,
         score: 0,
       })
@@ -983,7 +978,7 @@ describe('checks heavy atoms', () => {
 
     it('refuses progressions with different residue', () => {
       // 2x+1 vs 2x+2 — same step but different offset modulo step
-      expect(all([sameDescribedSet()])('2x+1', '2x+2')).toMatchObject({
+      expect(all([sameIntegerProgressionSet()])('2x+1', '2x+2')).toMatchObject({
         isOk: false,
         score: 0,
       })
@@ -992,7 +987,7 @@ describe('checks heavy atoms', () => {
     it('accepts with explicit variable option', () => {
       // 4n+1 and 4n-3 describe the same set (mod 4): 1 ≡ -3 (mod 4)
       expect(
-        all([sameDescribedSet({ variable: 'n' })])('4n+1', '4n-3'),
+        all([sameIntegerProgressionSet({ variable: 'n' })])('4n+1', '4n-3'),
       ).toMatchObject({
         isOk: true,
         score: 1,
@@ -1001,7 +996,9 @@ describe('checks heavy atoms', () => {
 
     it('custom feedbackKo appears when failing', () => {
       const compare = all([
-        sameDescribedSet({ feedbackKo: 'Les ensembles ne coïncident pas.' }),
+        sameIntegerProgressionSet({
+          feedbackKo: 'Les ensembles ne coïncident pas.',
+        }),
       ])
 
       const result = compare('2x+1', '2x+2')
