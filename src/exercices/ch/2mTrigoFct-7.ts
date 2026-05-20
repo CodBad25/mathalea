@@ -1,7 +1,6 @@
 import { cercleTrigo } from '../../lib/2d/cercleTrigo'
 import { orangeMathalea } from '../../lib/colors'
-import { all } from '../../lib/interactif/checks/combinators'
-import { sameDescribedSet } from '../../lib/interactif/checks/sameDescribedSet'
+import { all, sameIntegerProgressionSet } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -272,7 +271,7 @@ function periodicFamiliesForValue(
 
 function uniquePeriodicFamilies(families: PeriodicFamily[]) {
   const kept: PeriodicFamily[] = []
-  const compare = all([sameDescribedSet({ variable: 'n' })])
+  const compare = all([sameIntegerProgressionSet({ variable: 'n' })])
   for (const family of families) {
     const tex = texPeriodicFamily(family)
     if (
@@ -294,7 +293,7 @@ function equivalentFamilyGroups(
   rawFamilies: PeriodicFamily[],
   groupedFamilies: PeriodicFamily[],
 ) {
-  const compare = all([sameDescribedSet({ variable: 'n' })])
+  const compare = all([sameIntegerProgressionSet({ variable: 'n' })])
   return groupedFamilies
     .map((representative) => ({
       representative,
@@ -356,48 +355,19 @@ function rawPeriodicFamilies(question: TrigoEquationQuestion) {
   )
 }
 
-function splitPeriodicSet(value: string) {
-  const withoutBraces = value
-    .trim()
-    .replace(/^\\left\\{/, '')
-    .replace(/\\right\\}$/, '')
-    .replace(/^\{/, '')
-    .replace(/\}$/, '')
-  return withoutBraces
-    .split(/[;,]/)
-    .map((part) => part.trim())
-    .filter((part) => part !== '')
-}
-
 function comparePeriodicSets(input: string, answer: string) {
-  const remainingInputParts = splitPeriodicSet(input)
-  const expectedParts = splitPeriodicSet(answer)
-  const compare = all([sameDescribedSet({ variable: 'n' })])
-
-  if (remainingInputParts.length !== expectedParts.length) {
-    return {
-      isOk: false,
-      feedback: 'Les familles de solutions ne décrivent pas le même ensemble.',
-    }
-  }
-
-  for (const expected of expectedParts) {
-    const index = remainingInputParts.findIndex(
-      (candidate) => compare(candidate, expected).isOk,
-    )
-    if (index === -1) {
-      return {
-        isOk: false,
-        feedback:
-          'Les familles de solutions ne décrivent pas le même ensemble.',
-      }
-    }
-    remainingInputParts.splice(index, 1)
-  }
+  const result = all([
+    sameIntegerProgressionSet({
+      variable: 'n',
+      allowMultipleExpressions: true,
+      feedbackKo:
+        'Les familles de solutions ne décrivent pas le même ensemble.',
+    }),
+  ])(input, answer)
 
   return {
-    isOk: true,
-    feedback: '',
+    isOk: result.isOk,
+    feedback: result.feedback ?? '',
   }
 }
 

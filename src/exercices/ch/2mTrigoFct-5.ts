@@ -1,5 +1,5 @@
 import { bleuMathalea } from '../../lib/colors'
-import { all, sameParametricZeroSet } from '../../lib/interactif/checks'
+import { all, sameIntegerProgressionSet } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -129,11 +129,6 @@ export default class ZerosFonctionTrigonometrique extends Exercice {
       const offsetFraction =
         secondMembreIsoleFraction.diviseFraction(coefficientXFraction)
       const signedPeriodFraction = coefficientXFraction.inverse().simplifie()
-      const positivePeriodFraction = new FractionEtendue(m.den, Math.abs(m.num))
-      const expected = {
-        offset: offsetFraction.valeurDecimale * Math.PI,
-        period: positivePeriodFraction.valeurDecimale * Math.PI,
-      }
       const answer = texProgression(offsetFraction, signedPeriodFraction)
       const coefficientX = `${coefficientXFraction.texFractionSaufUn}x`
       const translation = texSignedPiTerm(b)
@@ -204,7 +199,12 @@ Plusieurs écritures peuvent décrire le même ensemble de solutions.`
       handleAnswers(this, i, {
         reponse: {
           value: answer,
-          compare: all([sameParametricZeroSet(expected)]),
+          compare: all([
+            sameIntegerProgressionSet({
+              variable: 'k',
+              allowMultipleExpressions: true,
+            }),
+          ]),
         },
       })
 

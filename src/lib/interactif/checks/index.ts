@@ -38,14 +38,16 @@ export {
   noTrivialFactor,
   termsGrouped,
 } from './reductionAtoms'
-export { hasZeroMember, isEquation, isEquivalentEquation } from './equationChecks'
-export { sameDescribedSet } from './sameDescribedSet'
+export {
+  hasZeroMember,
+  isEquation,
+  isEquivalentEquation,
+} from './equationChecks'
+export { sameIntegerProgressionSet } from './sameIntegerProgressionSet'
 export { sameParametricLine } from './sameParametricLine'
 export { sameSet } from './sameSet'
 export { singleParameterVariable } from './singleParameterVariable'
 export { stringComparison, stringEquals } from './stringEquals'
-export { sameParametricZeroSet } from './sameParametricZeroSet'
-export type { ParametricZeroSetProgression } from './sameParametricZeroSet'
 export type {
   Check,
   CheckFactory,
