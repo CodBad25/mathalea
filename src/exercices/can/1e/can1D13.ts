@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -6,6 +7,7 @@ import {
   reduirePolynomeDegre3,
   rienSi1,
 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer la fonction dérivée d’un polynôme de degré 3'
@@ -30,6 +32,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
 
     this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
   }
 
   nouvelleVersion() {
@@ -43,9 +46,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
         c = randint(-10, 10, [0])
         d = randint(-10, 10, [0])
         if (!this.interactif) {
-          this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
-
-          $f(x)= ${reduirePolynomeDegre3(a, b, c, d)}$.<br>
+          this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : $f(x)= ${reduirePolynomeDegre3(a, b, c, d)}$.<br>
 
        Déterminer $f'(x)$.`
         } else {
@@ -55,7 +56,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
 
         this.correction = `$f$ est une fonction polynôme du troisième degré de la forme $f(x)=ax^3+bx^2+cx+d$.<br>
     La fonction dérivée est donnée par la somme des dérivées des fonctions $u$, $v$ et $w$ définies par $u(x)=${rienSi1(a)}x^3$, $v(x)=${rienSi1(b)}x^2$ et $w(x)=${reduireAxPlusB(c, d)}$.<br>
-     Comme $u'(x)=${3 * a}x^2$, $v'(x)=${2 * b}x$ et $w'(x)=${c}$, on obtient  $f'(x)=${reduirePolynomeDegre3(0, 3 * a, 2 * b, c)}$. `
+     Comme $u'(x)=${3 * a}x^2$, $v'(x)=${2 * b}x$ et $w'(x)=${c}$, on obtient  $f'(x)=${reduirePolynomeDegre3(0, 3 * a, 2 * b, c)}$.`
 
         this.reponse = [`${3 * a}x^2+${2 * b}x+${c}`]
         break
@@ -67,8 +68,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
         d = randint(-10, 10, [0])
         if (choice([true, false])) {
           if (!this.interactif) {
-            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
-
+            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : 
             $f(x)= ${rienSi1(b)}x^2${ecritureAlgebriqueSauf1(a)}x^3${ecritureAlgebriqueSauf1(c)}x${ecritureAlgebrique(d)}$.<br>
 
             Déterminer $f'(x)$.`
@@ -79,8 +79,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
           }
         } else {
           if (!this.interactif) {
-            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
-
+            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : 
             $f(x)=${rienSi1(c)}x${ecritureAlgebriqueSauf1(b)}x^2${ecritureAlgebrique(d)}${ecritureAlgebriqueSauf1(a)}x^3 $.<br>
 
             Déterminer $f'(x)$.`
@@ -92,7 +91,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
 
         this.correction = `$f$ est une fonction polynôme du troisième degré de la forme $f(x)=ax^3+bx^2+cx+d$.<br>
     La fonction dérivée est donnée par la somme des dérivées des fonctions $u$, $v$ et $w$ définies par $u(x)=${rienSi1(a)}x^3$, $v(x)=${rienSi1(b)}x^2$ et $w(x)=${reduireAxPlusB(c, d)}$.<br>
-     Comme $u'(x)=${3 * a}x^2$, $v'(x)=${2 * b}x$ et $w'(x)=${c}$, on obtient  $f'(x)=${reduirePolynomeDegre3(0, 3 * a, 2 * b, c)}$. `
+     Comme $u'(x)=${3 * a}x^2$, $v'(x)=${2 * b}x$ et $w'(x)=${c}$, on obtient  $f'(x)=${reduirePolynomeDegre3(0, 3 * a, 2 * b, c)}$.`
 
         this.reponse = [`${3 * a}x^2+${2 * b}x+${c}`]
 
@@ -104,8 +103,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
 
         if (choice([true, false])) {
           if (!this.interactif) {
-            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
-
+            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
             $f(x)= ${reduirePolynomeDegre3(a, b, 0, c)}$.<br>
 
         Déterminer $f'(x)$.`
@@ -116,8 +114,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
           }
         } else {
           if (!this.interactif) {
-            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
-
+            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : 
             $f(x)=${rienSi1(a)}x^3${ecritureAlgebrique(c)}${ecritureAlgebriqueSauf1(b)}x^2 $.<br>
 
       Déterminer $f'(x)$.`
@@ -130,7 +127,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
 
         this.correction = `$f$ est une fonction polynôme du troisième degré de la forme $f(x)=ax^3+bx^2+cx+d$ avec $c=0$.<br>
         La fonction dérivée est donnée par la somme des dérivées des fonctions $u$, $v$ et $w$ définies par $u(x)=${rienSi1(a)}x^3$, $v(x)=${rienSi1(b)}x^2$ et $w(x)=${c}$.<br>
-         Comme $u'(x)=${3 * a}x^2$, $v'(x)=${2 * b}x$ et $w'(x)=0$, on obtient  $f'(x)=${reduirePolynomeDegre3(0, 3 * a, 2 * b, 0)}$. `
+         Comme $u'(x)=${3 * a}x^2$, $v'(x)=${2 * b}x$ et $w'(x)=0$, on obtient  $f'(x)=${reduirePolynomeDegre3(0, 3 * a, 2 * b, 0)}$.`
 
         this.reponse = [`${3 * a}x^2+${2 * b}x`]
 
@@ -143,8 +140,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
 
         if (choice([true, false])) {
           if (!this.interactif) {
-            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
-
+            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
             $f(x)= ${reduirePolynomeDegre3(a, 0, b, c)}$.<br>
 
        Déterminer $f'(x)$.`
@@ -155,8 +151,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
           }
         } else {
           if (!this.interactif) {
-            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
-
+            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
             $f(x)=${rienSi1(b)}x${ecritureAlgebrique(c)}${ecritureAlgebriqueSauf1(a)}x^3 $.<br>
 
      Déterminer $f'(x)$.`
@@ -169,7 +164,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
 
         this.correction = `$f$ est une fonction polynôme du troisième degré de la forme $f(x)=ax^3+bx^2+cx+d$ avec $b=0$.<br>
         La fonction dérivée est donnée par la somme des dérivées des fonctions $u$ et $v$  définies par $u(x)=${rienSi1(a)}x^3$ et $v(x)=${reduireAxPlusB(b, c)}$.<br>
-         Comme $u'(x)=${3 * a}x^2$, $v'(x)=${b}$, on obtient  $f'(x)=${3 * a}x^2${ecritureAlgebrique(b)}$. `
+         Comme $u'(x)=${3 * a}x^2$, $v'(x)=${b}$, on obtient  $f'(x)=${3 * a}x^2${ecritureAlgebrique(b)}$.`
 
         this.reponse = [`${3 * a}x^2+${b}`]
 
@@ -205,7 +200,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
 
         this.correction = `$f$ est une fonction polynôme du troisième degré de la forme $f(x)=ax^3+bx^2+cx+d$ avec $b=0$ et $c=0$.<br>
         La fonction dérivée est donnée par la somme des dérivées des fonctions $u$ et $v$  définies par $u(x)=${rienSi1(a)}x^3$ et $v(x)=${b}$.<br>
-         Comme $u'(x)=${3 * a}x^2$, $v'(x)=0$, on obtient  $f'(x)=${3 * a}x^2$. `
+         Comme $u'(x)=${3 * a}x^2$, $v'(x)=0$, on obtient  $f'(x)=${3 * a}x^2$.`
 
         this.reponse = [`${3 * a}x^2`]
 
@@ -216,8 +211,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
 
         if (choice([true, false])) {
           if (!this.interactif) {
-            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
-
+            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
             $f(x)= ${rienSi1(b)}x^2${ecritureAlgebriqueSauf1(a)}x^3$.<br>
 
        Déterminer $f'(x)$.`
@@ -228,27 +222,39 @@ export default class DeriveePoly3 extends ExerciceSimple {
           }
           this.correction = `$f$ est une fonction polynôme du troisième degré de la forme $f(x)=ax^3+bx^2+cx+d$ avec $c=0$ et $d=0$.<br>
         La fonction dérivée est donnée par la somme des dérivées des fonctions $u$ et $v$  définies par $u(x)=${rienSi1(a)}x^3$ et $v(x)=${b}x^2$.<br>
-         Comme $u'(x)=${3 * a}x^2$, $v'(x)=${2 * b}x$, on obtient  $f'(x)=${3 * a}x^2${2 * b}x$. `
+         Comme $u'(x)=${3 * a}x^2$, $v'(x)=${2 * b}x$, on obtient  $f'(x)=${3 * a}x^2${2 * b}x$.`
           this.reponse = [`${3 * a}x^2+${2 * b}x`]
         } else {
           if (!this.interactif) {
-            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
-
+            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
             $f(x)=${rienSi1(b)}x${ecritureAlgebriqueSauf1(a)}x^3 $.<br>
 
      Déterminer $f'(x)$.`
           } else {
-            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :<br>
+            this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
              $f(x)=${rienSi1(b)}x${ecritureAlgebriqueSauf1(a)}x^3 $.<br>
       La fonction dérivée de $f$ est définie par : <br>$f'(x)=$`
           }
           this.correction = `$f$ est une fonction polynôme du troisième degré de la forme $f(x)=ax^3+bx^2+cx+d$ avec $b=0$ et $d=0$.<br>
         La fonction dérivée est donnée par la somme des dérivées des fonctions $u$ et $v$  définies par $u(x)=${rienSi1(a)}x^3$ et $v(x)=${b}x$.<br>
-         Comme $u'(x)=${3 * a}x^2$, $v'(x)=${b}$, on obtient  $f'(x)=${3 * a}x^2${ecritureAlgebrique(b)}$. `
+         Comme $u'(x)=${3 * a}x^2$, $v'(x)=${b}$, on obtient  $f'(x)=${3 * a}x^2${ecritureAlgebrique(b)}$.`
           this.reponse = [`${3 * a}x^2+${b}`]
         }
 
         break
     }
+    // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
+    const textCorrSplit = (this.correction ?? '')
+      .slice(0, -1)
+      .split('on obtient ')
+    let aRemplacer = textCorrSplit[textCorrSplit.length - 1]
+    aRemplacer = aRemplacer.replaceAll('$', '')
+
+    this.correction = ''
+    for (let ee = 0; ee < textCorrSplit.length - 1; ee++) {
+      this.correction += textCorrSplit[ee] + 'on obtient '
+    }
+    this.correction += `$${miseEnEvidence(`${aRemplacer}`)}$` + '.'
+    // Fin de cette uniformisation
   }
 }
