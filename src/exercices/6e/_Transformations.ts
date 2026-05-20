@@ -139,7 +139,7 @@ export default class Transformations extends Exercice {
       const n = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
       const M = []
       const N = []
-      const estSurAxe: Boolean[] = []
+      const estSurAxe: boolean[] = []
       // Ci-dessous, on évite le point $O$ comme point et comme nom de point.
       const nomPointsTranslationDejaUtilises = [15]
       const pointsDejaUtilises = [44]
@@ -1162,22 +1162,20 @@ export default class Transformations extends Exercice {
         },
         objetsEnonce,
       )
-      texte += '<br>' + graphique
-      texteCorr +=
-        '<br>' +
-        mathalea2d(
-          {
-            xmin: -4.5,
-            ymin: -4.5,
-            xmax: 5.8,
-            ymax: 5.3,
-            pixelsParCm: 40,
-            scale: 0.8,
-            optionsTikz: ['every node/.style={scale=0.6}'],
-            mainlevee: false,
-          },
-          objetsCorrection,
-        )
+      texte += graphique
+      texteCorr += mathalea2d(
+        {
+          xmin: -4.5,
+          ymin: -4.5,
+          xmax: 5.8,
+          ymax: 5.3,
+          pixelsParCm: 40,
+          scale: 0.8,
+          optionsTikz: ['every node/.style={scale=0.6}'],
+          mainlevee: false,
+        },
+        objetsCorrection,
+      )
 
       if (context.isAmc) {
         if (this.can) {
@@ -1208,8 +1206,8 @@ export default class Transformations extends Exercice {
           }
         } else {
           this.autoCorrectionAMC[0] = {
-            enonce: '<br>\\begin{center}' + graphique + '\\end{center}',
-            enonceAvant: false,
+            enonce: graphique,
+            enonceAGauche: [0.5, 0.5],
             enonceApresNumQuestion: true,
             options: { barreseparation: true },
             propositions: [

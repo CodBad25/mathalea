@@ -12,7 +12,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Effectuer des calculs avec des grands traits de fractions'
 export const interactifReady = true
-export const interactifType = 'mathlive'
+export const interactifType = 'mathLive'
 
 export const dateDePublication = '23/11/2024'
 
@@ -50,7 +50,7 @@ export default class CalculsAvecGrandsTraitsDeFraction extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
       let texteCorr = ''
-      let answer = Number.NaN
+      let answer = 0
       switch (listeTypeQuestions[i]) {
         case 'a/b*c-d': {
           const b = randint(2, 9)

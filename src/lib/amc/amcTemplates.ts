@@ -90,15 +90,15 @@ export const AMCHybrideContainerTemplate = `\\element{ {{- ref -}} }{
   \\begin{question}{ {{- enonceId -}} } \\QuestionIndicative
 {%- endif %}
 {%- if enonceAGauche %}
-  \\noindent\\fbox{\\begin{minipage}{ {{ enonceAGaucheLeft }}\\linewidth }
+  \\noindent\\fbox{\\begin{minipage}{ {{ enonceAGaucheLeft }}\\linewidth}
+  {{ enonce | safe }}
 {%- endif %}
-{%- if enonceCentre %}\\begin{center}{%- endif %}{{ enonceTexte | safe }}{%- if enonceCentre %}\\end{center}{%- endif %}
+{%- if enonceCentre %}\\begin{center}{{ enonce | safe }}\\end{center}{%- endif %}
 {%- if enonceAGauche %}
   \\end{minipage}}\\noindent\\begin{minipage}[t]{ {{ enonceAGaucheRight }}\\linewidth }
 {%- endif %}
-{%- if numerotationEnonce %}
-  \\end{question}
-{%- endif %}
+{%- if not enonceAGauche and not enonceCentre %}{{ enonce | safe }}{%- endif %}
+{%- if numerotationEnonce %}\\end{question}{%- endif %}
 {%- if multicols %}
   \\setlength{\\columnseprule}{ {{ "0.5" if barreseparation else "0" }}pt}\\begin{multicols}{2}
 {%- endif %}
@@ -113,7 +113,7 @@ export const AMCHybrideContainerTemplate = `\\element{ {{- ref -}} }{
 
 export const AMCHybrideQcmTemplate = `{% if disableNumber %}\\def\\AMCbeginQuestion#1#2{}\\AMCquestionNumberfalse{% endif %}
 \\begin{ {{- "question" if mode == "mono" else "questionmult" -}} }{ {{- id -}} }\\AMClabel{ {{- id -}} }
-{% if enonce %}{{ enonce | safe }}
+{%- if enonceCentre %}\\begin{center}{%- endif %}{{ enonce | safe }}{%- if enonceCentre %}\\end{center}{%- endif %}
 {% endif %}
 \\begin{ {{- layout -}} }{% if ordered %}[o]{% endif %}
 {% for p in propositions %}

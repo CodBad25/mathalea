@@ -75,6 +75,7 @@
     restitueCount: number
     pageBreakBefore: boolean
     multicols: boolean
+    titleOn: boolean
   }
 
   const AMC_HIDDEN_TEXT_TOKEN = '[[AMC_HIDDEN]]'
@@ -85,7 +86,9 @@
     correctionsDisplayMode: 'per-question' as 'per-question' | 'end-of-copy',
     nbExemplaires: 1,
     format: 'A4' as 'A4' | 'A3',
-    titleOn: true,
+    mergeGroupsAndShuffle: false,
+    mergedGroupTitle: 'Automatismes',
+    mergedGroupExerciseIndexes: [] as number[],
     identificationMode: 'AMCcodeGrid' as
       | 'AMCcodeGrid'
       | 'AMCassociation'
@@ -713,6 +716,17 @@
       bucket.push(setting)
       previousSettingsByKey.set(key, bucket)
     })
+
+    // Mémorise les clés des exercices fusionnés dans le groupe total (par clé stable).
+    const previousMergedIndexSet = new Set(
+      documentSettings.mergedGroupExerciseIndexes,
+    )
+    const previousKeyMergedMap = new Map<string, boolean>()
+    previousExercices.forEach((ex, idx) => {
+      const key = getExerciseSettingsKey(ex)
+      if (key) previousKeyMergedMap.set(key, previousMergedIndexSet.has(idx))
+    })
+
     exercices = amcReadyExercices
 
     // Détecte quand un nouvel exercice est ajouté (depuis ReferentielEnding ou ailleurs)
@@ -754,8 +768,24 @@
         restitueCount: resolvedRestitueCount,
         pageBreakBefore: preserved?.pageBreakBefore ?? false,
         multicols: preserved?.multicols ?? false,
+        titleOn: preserved?.titleOn ?? true,
       }
     })
+
+    // Reconstruit les indices des exercices fusionnés dans le groupe total.
+    const newMergedIndexes: number[] = []
+    exercices.forEach((ex, idx) => {
+      const key = getExerciseSettingsKey(ex)
+      const prevMerged = key ? previousKeyMergedMap.get(key) : undefined
+      // Inclure si: nouvel exercice (prevMerged=undefined) ou explicitement fusionné avant.
+      if (prevMerged !== false) {
+        newMergedIndexes.push(idx)
+      }
+    })
+    documentSettings = {
+      ...documentSettings,
+      mergedGroupExerciseIndexes: newMergedIndexes,
+    }
 
     if (
       selectedExerciseIndex != null &&
@@ -938,7 +968,12 @@
       showWarningMessage: documentSettings.showWarningMessage,
       warningMessage: documentSettings.warningMessage,
       associationRoster: documentSettings.associationRoster,
-      titleOn: documentSettings.titleOn,
+      groupTitleOn: groupSettings.map((s) => s.titleOn),
+      mergeGroupsAndShuffle: documentSettings.mergeGroupsAndShuffle,
+      mergedGroupTitle: documentSettings.mergedGroupTitle,
+      mergedGroupExerciseIndexes: documentSettings.mergeGroupsAndShuffle
+        ? documentSettings.mergedGroupExerciseIndexes
+        : null,
       collectCorrectionsAtEnd:
         documentSettings.correctionsDisplayMode === 'end-of-copy',
     })
@@ -2128,7 +2163,11 @@
     />
   </div>
 
-  <div class="w-full pb-8 {$darkMode.isActive ? 'dark' : ''}">
+  <div
+    class="w-full pb-8 text-coopmaths-corpus dark:text-coopmathsdark-corpus {$darkMode.isActive
+      ? 'dark'
+      : ''}"
+  >
     <div
       class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_22rem] gap-4 mt-4 xl:h-[calc(100vh-10rem)] xl:overflow-hidden"
     >
@@ -2661,17 +2700,68 @@
             <label class="inline-flex items-center gap-2 text-xs">
               <input
                 type="checkbox"
-                checked={documentSettings.titleOn}
+                checked={documentSettings.mergeGroupsAndShuffle}
                 on:change={(event) => {
                   documentSettings = {
                     ...documentSettings,
-                    titleOn: (event.currentTarget as HTMLInputElement).checked,
+                    mergeGroupsAndShuffle: (
+                      event.currentTarget as HTMLInputElement
+                    ).checked,
                   }
                   updateLatexPreview()
                 }}
               />
-              Afficher les titres de groupes
+              Fusionner les groupes et melanger
             </label>
+            {#if documentSettings.mergeGroupsAndShuffle}
+              <label for="amc-merged-group-title" class="block text-xs"
+                >Titre du groupe total</label
+              >
+              <input
+                id="amc-merged-group-title"
+                type="text"
+                class="w-full rounded border px-2 py-1 text-sm"
+                value={documentSettings.mergedGroupTitle}
+                on:input={(event) => {
+                  documentSettings = {
+                    ...documentSettings,
+                    mergedGroupTitle: (event.currentTarget as HTMLInputElement)
+                      .value,
+                  }
+                  updateLatexPreview()
+                }}
+              />
+              <fieldset class="mt-1">
+                <legend class="text-xs"
+                  >Groupes à inclure dans le groupe total</legend
+                >
+                {#each exercices as exercice, idx}
+                  <label class="flex items-center gap-2 text-xs">
+                    <input
+                      type="checkbox"
+                      checked={documentSettings.mergedGroupExerciseIndexes.includes(
+                        idx,
+                      )}
+                      on:change={(event) => {
+                        const checked = (
+                          event.currentTarget as HTMLInputElement
+                        ).checked
+                        const indexes =
+                          documentSettings.mergedGroupExerciseIndexes
+                        documentSettings = {
+                          ...documentSettings,
+                          mergedGroupExerciseIndexes: checked
+                            ? [...indexes, idx].sort((a, b) => a - b)
+                            : indexes.filter((i) => i !== idx),
+                        }
+                        updateLatexPreview()
+                      }}
+                    />
+                    {exercice.titre ?? `Exercice ${idx + 1}`}
+                  </label>
+                {/each}
+              </fieldset>
+            {/if}
             {#if documentSettings.showWarningMessage}
               <label for="amc-doc-warning" class="block text-xs"
                 >Message d'avertissement</label
@@ -2881,6 +2971,23 @@
                 }}
               />
               Restituegroupe en multicolonnes (2)
+            </label>
+
+            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                checked={groupSettings[selectedExerciseIndex]?.titleOn}
+                on:change={(event) => {
+                  const idx = selectedExerciseIndex!
+                  groupSettings[idx] = {
+                    ...groupSettings[idx],
+                    titleOn: (event.currentTarget as HTMLInputElement).checked,
+                  }
+                  groupSettings = [...groupSettings]
+                  updateLatexPreview()
+                }}
+              />
+              Afficher le titre de ce groupe
             </label>
 
             <label for="amc-group-seed" class="block text-xs"
@@ -3387,6 +3494,67 @@
 {/if}
 
 <style>
+  :global(#amcBuilder) {
+    color: var(--color-coopmaths-corpus);
+    color-scheme: light;
+  }
+
+  :global(#amcBuilder.dark),
+  :global(#amcBuilder .dark) {
+    color: var(--color-coopmathsdark-corpus);
+    color-scheme: dark;
+  }
+
+  :global(
+    #amcBuilder input:not([type='checkbox']):not([type='radio']):not(
+        [type='range']
+      )
+  ),
+  :global(#amcBuilder textarea),
+  :global(#amcBuilder select) {
+    border-color: var(--color-coopmaths-corpus-lightest);
+    background-color: var(--color-coopmaths-canvas);
+    color: var(--color-coopmaths-corpus);
+  }
+
+  :global(
+    #amcBuilder.dark input:not([type='checkbox']):not([type='radio']):not(
+        [type='range']
+      )
+  ),
+  :global(
+    #amcBuilder .dark input:not([type='checkbox']):not([type='radio']):not(
+        [type='range']
+      )
+  ),
+  :global(#amcBuilder.dark textarea),
+  :global(#amcBuilder .dark textarea),
+  :global(#amcBuilder.dark select),
+  :global(#amcBuilder .dark select) {
+    border-color: var(--color-coopmathsdark-canvas-light);
+    background-color: var(--color-coopmathsdark-canvas);
+    color: var(--color-coopmathsdark-corpus-lightest);
+  }
+
+  :global(#amcBuilder input:disabled),
+  :global(#amcBuilder textarea:disabled),
+  :global(#amcBuilder select:disabled),
+  :global(#amcBuilder button:disabled) {
+    opacity: 0.55;
+  }
+
+  :global(#amcBuilder input::placeholder),
+  :global(#amcBuilder textarea::placeholder) {
+    color: var(--color-coopmaths-corpus-lightest);
+  }
+
+  :global(#amcBuilder.dark input::placeholder),
+  :global(#amcBuilder .dark input::placeholder),
+  :global(#amcBuilder.dark textarea::placeholder),
+  :global(#amcBuilder .dark textarea::placeholder) {
+    color: var(--color-coopmathsdark-corpus-light);
+  }
+
   .amc-hybrid-header-card :global(.text-sm) {
     font-size: 0.92rem !important;
     line-height: 1.3rem !important;

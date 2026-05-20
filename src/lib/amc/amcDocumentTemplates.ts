@@ -20,14 +20,21 @@ export type AMCHeaderRenderData = {
 export type AMCDocumentStartRenderData = {
   seed: number
   groupsContent: string
+  mergeGroupsAndShuffle?: boolean
 }
 
 export type AMCCopyContentRenderData = {
   isCodeGrid: boolean
   groupsSections: string
+  mergedGroupsContent?: string
+  /** Section du groupe total (cleargroup + copygroup + titre + restituegroupe). Prioritaire sur mergedGroupsContent. */
+  totalGroupSection?: string
+  /** Sections individuelles des groupes non fusionnés dans le groupe total. */
+  nonMergedGroupsSections?: string
   isA3: boolean
   isAssociation: boolean
   collectCorrectionsAtEnd?: boolean
+  mergeGroupsAndShuffle?: boolean
 }
 
 export type AMCGroupSectionRenderData = {
@@ -319,12 +326,12 @@ export const AMCDocumentStartTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   %%% préparation des groupes
-  \\setdefaultgroupmode{cyclic}
+  \\setdefaultgroupmode{ {{- "withoutreplacement" if mergeGroupsAndShuffle else "cyclic" -}} }
 {{ groupsContent | safe }}
 `
 
 export const AMCCopyContentTemplate = `{% if isCodeGrid %}	 \\def\\AMCchoiceLabel##1{}{% endif %}
-{{ groupsSections | safe }}{% if collectCorrectionsAtEnd %}\\explaincontext{\\AMCexpliqueTout}
+{% if mergeGroupsAndShuffle %}{% if totalGroupSection is defined %}{{ totalGroupSection | safe }}{{ nonMergedGroupsSections | safe }}{% else %}{{ mergedGroupsContent | safe }}{% endif %}{% else %}{{ groupsSections | safe }}{% endif %}{% if collectCorrectionsAtEnd %}\\explaincontext{\\AMCexpliqueTout}
 {% endif %}{% if isA3 %}\\end{multicols}
 {% endif %}{% if isAssociation %}\\AMCassociation{\\id}
     }

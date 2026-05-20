@@ -250,6 +250,7 @@ describe('amcEngine', () => {
       type: 'AMCHybride',
       autoCorrectionItem: {
         enonce: 'Enonce hybride',
+        enonceAvant: true,
         propositions: [
           {
             type: 'qcmMono',
