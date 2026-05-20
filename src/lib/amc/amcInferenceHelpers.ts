@@ -6,6 +6,8 @@ import { countDecimals, countDigits, isFractionValue } from './amcHelpers'
 import type { IExerciceAMC, ReponseParams } from './amcTypes'
 
 const mathliveNumericCleaner = generateCleaner(['latex', 'virgules', 'espaces'])
+const strictNumericPattern = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/
+const compactPowerPattern = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)\^[+-]?\d+$/
 
 export function extractAMCValue(
   reponse: unknown,
@@ -129,14 +131,18 @@ export function inferNumericValueForAMC(
   if (/^\\?sqrt/.test(trimmed)) return undefined
 
   const cleaned = mathliveNumericCleaner(trimmed)
-  const parsed = Number.parseFloat(cleaned)
-  if (Number.isFinite(parsed)) {
-    return parsed
-
-    // Si le parsing a échoué jusqu'ici, on a sans doute à faire à une expression mathématique plus complexe, on ne peut pas l'inférer en tant que nombre ou fraction simple.
-  } else {
-    return undefined
+  if (strictNumericPattern.test(cleaned)) {
+    const parsed = Number(cleaned)
+    return Number.isFinite(parsed) ? parsed : undefined
   }
+
+  if (compactPowerPattern.test(cleaned)) {
+    const base = cleaned.split('^', 1)[0]
+    const parsed = Number(base)
+    return Number.isFinite(parsed) ? parsed : undefined
+  }
+
+  return undefined
 }
 
 export function mergeNumericParamsFromOptions(
@@ -194,6 +200,14 @@ function extractInteractiveAnswerCandidate(
 
   if ('reponse' in record) {
     return extractInteractiveAnswerCandidate(record.reponse)
+  }
+
+  if ('champ1' in record && !('champ2' in record)) {
+    return extractInteractiveAnswerCandidate(record.champ1)
+  }
+
+  if ('field1' in record && !('field2' in record)) {
+    return extractInteractiveAnswerCandidate(record.field1)
   }
 
   if ('valeur' in record) {

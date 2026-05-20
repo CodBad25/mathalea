@@ -94,6 +94,11 @@ describe('amcInferenceHelpers', () => {
         input: { reponse: { value: ['x+1', '\\sqrt{2}'], compare } },
         expected: undefined,
       },
+      {
+        label: 'expression arithmetique non numerique',
+        input: { reponse: { value: '7 + 8', compare } },
+        expected: undefined,
+      },
     ]
 
     for (const testCase of cases) {

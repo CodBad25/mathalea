@@ -30,7 +30,7 @@ export default class AutoC1a extends ExerciceQcmA {
     e1: number,
     f1: number,
     g1: number,
-    h1: number
+    h1: number,
   ): void {
     const aStr1 = texNombre(-a1, 4) // -a plus grand
     const bStr1 = texNombre(-b1, 4) // -b plus petit
@@ -43,7 +43,7 @@ export default class AutoC1a extends ExerciceQcmA {
     const fausseReponse4 = `$\\left(\\dfrac{1}{${texNombre(f1, 4)}}\\right)^2>\\left(\\dfrac{1}{${texNombre(e1, 4)}}\\right)^2$ est fausse car la fonction carré est strictement croissante sur $]0\\,;\\,+\\infty[$, donc $\\left(\\dfrac{1}{${texNombre(f1, 4)}}\\right)^2<\\left(\\dfrac{1}{${texNombre(e1, 4)}}\\right)^2$ car $\\dfrac{1}{${texNombre(f1, 4)}} < \\dfrac{1}{${texNombre(e1, 4)}}$.<br>`
 
     this.enonce = `La seule inégalité vraie est : `
-this.tip = `
+    this.tip = `
   <p style="margin: 0 0 10px 0;">
     Il faut penser aux fonctions de références, en particulier :
   </p>
@@ -57,9 +57,9 @@ this.tip = `
             font-size:13px; font-weight:500; color:#1a5fa8;
             background:#e8f1fb; text-decoration:none;">
     ▶ Voir la vidéo explicative
-  </a>`;
+  </a>`
 
-      switch (choixType) {
+    switch (choixType) {
       case 1: // Fonction carré (nombres négatifs)
         this.correction = `La seule inégalité vraie est : $${miseEnEvidence(`(${aStr1})^2 < (${bStr1})^2`)}$.<br>
         En effet, la fonction carré étant strictement décroissante sur $]-\\infty\\,;\\,0]$, 
@@ -68,7 +68,7 @@ this.tip = `
         ${fausseReponse2}
         ${fausseReponse3}
         ${fausseReponse4}`
-        
+
         this.reponses = [
           `$(${aStr1})^2<(${bStr1})^2$`,
           `$\\dfrac{1}{${texNombre(c1, 3)}} < \\dfrac{1}{${texNombre(d1, 3)}}$`,
@@ -84,7 +84,7 @@ this.tip = `
         ${fausseReponse1}
         ${fausseReponse3}
         ${fausseReponse4}`
-        
+
         this.reponses = [
           `$\\dfrac{1}{${texNombre(c1, 3)}} > \\dfrac{1}{${texNombre(d1, 3)}}$`,
           `$(${aStr1})^2>(${bStr1})^2$`,
@@ -101,7 +101,7 @@ this.tip = `
         ${fausseReponse1}
         ${fausseReponse2}
         ${fausseReponse4}`
-        
+
         this.reponses = [
           `$${texNombre(g1, 3)}^2<${texNombre(h1, 3)}^2$`,
           `$(${aStr1})^2>(${bStr1})^2$`,
@@ -119,7 +119,7 @@ this.tip = `
         ${fausseReponse1}
         ${fausseReponse2}
         ${fausseReponse3}`
-        
+
         this.reponses = [
           `$\\left(\\dfrac{1}{${texNombre(f1, 4)}}\\right)^2<\\left(\\dfrac{1}{${texNombre(e1, 4)}}\\right)^2$`,
           `$${texNombre(g1, 3)}^2>${texNombre(h1, 3)}^2$`,
@@ -133,21 +133,21 @@ this.tip = `
   versionOriginale: () => void = () => {
     // Valeurs originales de l'exercice
     this.appliquerLesValeurs(
-      1,      // choixType : cas de la fonction carré avec nombres négatifs
-      1.075,  // a1
-      1.076,  // b1
-      2.03,   // c1
-      2.032,  // d1
-      3,      // e1 (pour 1/3)
-      4,      // f1 (pour 1/4)
-      1.5,    // g1 (valeur arbitraire)
-      2.0     // h1 (valeur arbitraire)
+      1, // choixType : cas de la fonction carré avec nombres négatifs
+      1.075, // a1
+      1.076, // b1
+      2.03, // c1
+      2.032, // d1
+      3, // e1 (pour 1/3)
+      4, // f1 (pour 1/4)
+      1.5, // g1 (valeur arbitraire)
+      2.0, // h1 (valeur arbitraire)
     )
   }
 
   versionAleatoire: () => void = () => {
     const choixType = randint(1, 4) // 4 cas différents
-    
+
     // Génération des nombres aléatoires
     const a1 = randint(1, 5) + randint(1, 9) / 10 + randint(1, 9) / 100
     const b1 = a1 + randint(1, 9) / 100

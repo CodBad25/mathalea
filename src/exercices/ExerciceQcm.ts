@@ -36,7 +36,6 @@ export default class ExerciceQcm extends Exercice implements IExerciceQcm {
     this.sup2 = false
     // Il n'est pas prévu d'avoir plus d'une question car ceci est prévu pour un seul énoncé statique à la base même si on pourra changer les valeurs et prévoir une aléatoirisation
     this.nbQuestions = 1
-    this.nbQuestionsModifiable = false
 
     this.spacingCorr = 2 // idem pour la correction
     // Les options pour le qcm à modifier éventuellement (vertical à true pour les longues réponses par exemple)

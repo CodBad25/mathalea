@@ -1,16 +1,16 @@
-import { randint } from '../../modules/outils'
+import { randint, texConsigne, texIntroduction } from '../../modules/outils'
 import { format as formatLatex } from '../Latex'
 import { loadPackagesFromContent } from '../latex/preambuleTex'
 import type { contentsType } from '../LatexTypes'
 import { lettreDepuisChiffre } from '../outils/outilString'
 import type { IExercice } from '../types'
 import {
-  AMCPreambleTemplate,
-  renderAMCCopyContent,
-  renderAMCDocumentStart,
-  renderAMCGroupSection,
-  renderAMCHeader,
-  renderAMCPreamble,
+    AMCPreambleTemplate,
+    renderAMCCopyContent,
+    renderAMCDocumentStart,
+    renderAMCGroupSection,
+    renderAMCHeader,
+    renderAMCPreamble,
 } from './amcDocumentTemplates'
 import { renderAMCHybride, renderElement } from './amcRender'
 import type { IExerciceAMC } from './amcTypes'
@@ -34,7 +34,18 @@ export type CreerDocumentAmcOptions = {
   warningMessage?: string
   associationRoster?: string
   collectCorrectionsAtEnd?: boolean
+  /** @deprecated Utiliser groupTitleOn pour un contrôle par groupe */
   titleOn?: boolean
+  /** Visibilité du titre par exercice (index = position dans exercices[]). Prioritaire sur titleOn. */
+  groupTitleOn?: boolean[]
+  mergeGroupsAndShuffle?: boolean
+  /** Titre du groupe total (fusion). Par défaut "Automatismes". */
+  mergedGroupTitle?: string
+  /**
+   * Indices (dans exercices[]) des exercices à fusionner dans le groupe total.
+   * null ou undefined = tous les groupes actifs sont fusionnés (comportement par défaut).
+   */
+  mergedGroupExerciseIndexes?: number[] | null
   assumeAmcPrepared?: boolean
 }
 
@@ -380,8 +391,44 @@ export function exportQcmAmc(
   const title = exercise.titre
   const type = exercise.amcType
   let texQr = ''
-  let id = 0
   let isShuffled = true
+
+  // Si l'exercice est de type AMCOpen (inféré par fallback) et qu'il possède une consigne
+  // et/ou une introduction, on les regroupe dans un AMCHybrideContainer comme énoncé commun,
+  // avec chaque question comme enfant AMCOpen.
+  if (type === 'AMCOpen' && (exercise.consigne?.trim() || exercise.introduction?.trim())) {
+    const parts: string[] = []
+    if (exercise.consigne?.trim()) parts.push(texConsigne(exercise.consigne).trim())
+    if (exercise.introduction?.trim()) parts.push(texIntroduction(exercise.introduction).trim())
+    const combinedEnonce = parts.join('\n\n')
+
+    const syntheticItem = {
+      enonce: combinedEnonce,
+      propositions: autoCorrection.map((item: any) => ({
+        type: 'AMCOpen',
+        ...item,
+      })),
+    }
+
+    const hybrid = renderAMCHybride({
+      type: 'AMCHybride',
+      autoCorrectionItem: syntheticItem,
+      exercice: exercise,
+      ref,
+      idExo: exerciseIndex,
+      questionIndex: 0,
+      currentId: 0,
+      melange: isShuffled,
+    })
+
+    texQr = hybrid.texQr
+      .replaceAll('<br><br>', '\n\n\\medskip\n')
+      .replaceAll('<br>', '\n\n')
+
+    return [texQr, ref, exercise.nbQuestions, title, hybrid.melange]
+  }
+
+  let id = 0
   for (let j = 0; j < autoCorrection.length; j++) {
     if (autoCorrection[j] === undefined) {
       // Normalement, cela ne devrait jamais arriver.
@@ -487,13 +534,18 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
     associationRoster = '',
     collectCorrectionsAtEnd = false,
     titleOn = true,
+    groupTitleOn,
+    mergeGroupsAndShuffle = false,
+    mergedGroupTitle = 'Automatismes',
+    mergedGroupExerciseIndexes,
     assumeAmcPrepared = false,
   } = options
   // Attention exercises est maintenant un tableau de tous les exercices.
   // Dans cette partie, la fonction récupère tous les exercices et les trie pour les rassembler par groupe.
   // Toutes les questions d'un même exercice seront regroupées.
   let exerciseIndex = 0
-  let groupIndex
+  let exerciceInputIndex = 0
+  const exerciceIndexForGroup: number[] = []
   const areGroupQuestionCountsImplicit: boolean[] = []
   const seed = randint(1, 100000)
   const groupRefs: string[] = []
@@ -510,7 +562,10 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
   const amcExerciseCount = exercises.filter((el) => el.amcReady).length
   if (amcExerciseCount === 0) return ''
   for (const exercise of exercises) {
-    if (!exercise.amcReady) continue
+    if (!exercise.amcReady) {
+      exerciceInputIndex++
+      continue
+    }
 
     const [
       exerciseTex,
@@ -520,23 +575,24 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
       exerciseIsShuffled,
     ] = exportQcmAmc(exercise as IExerciceAMC, exerciseIndex)
     exerciseIndex++
-    groupIndex = groupRefs.indexOf(groupRef)
+    const groupIndex = groupRefs.indexOf(groupRef)
     if (groupIndex === -1) {
       // Le groupe n'existe pas encore.
+      const newGroupIndex = groupRefs.length
       groupRefs.push(groupRef)
-      groupIndex = groupRefs.length - 1
-      groupTexBlocks[groupIndex] = formatLatex(exerciseTex)
+      exerciceIndexForGroup[newGroupIndex] = exerciceInputIndex
+      groupTexBlocks[newGroupIndex] = formatLatex(exerciseTex)
 
       // Si le nombre de questions du groupe n'est pas défini, on prend toutes les questions de l'exercice.
-      if (typeof nbQuestions[groupIndex] === 'undefined') {
-        areGroupQuestionCountsImplicit[groupIndex] = true
-        nbQuestions[groupIndex] = exerciseQuestionCount
+      if (typeof nbQuestions[newGroupIndex] === 'undefined') {
+        areGroupQuestionCountsImplicit[newGroupIndex] = true
+        nbQuestions[newGroupIndex] = exerciseQuestionCount
       } else {
         // Le nombre de questions à restituer pour ce groupe a été fixé par l'utilisateur.
-        areGroupQuestionCountsImplicit[groupIndex] = false
+        areGroupQuestionCountsImplicit[newGroupIndex] = false
       }
-      groupTitles[groupIndex] = exerciseTitle
-      groupShuffleFlags[groupIndex] = exerciseIsShuffled
+      groupTitles[newGroupIndex] = exerciseTitle
+      groupShuffleFlags[newGroupIndex] = exerciseIsShuffled
     } else {
       // Le groupe existe déjà : on ajoute seulement si ce bloc n'est pas déjà présent.
       if (groupTexBlocks[groupIndex].indexOf(exerciseTex) === -1) {
@@ -547,6 +603,7 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
         }
       }
     }
+    exerciceInputIndex++
   }
   // Fin de la préparation des groupes.
 
@@ -592,6 +649,7 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
   const documentStart = renderAMCDocumentStart({
     seed,
     groupsContent,
+    mergeGroupsAndShuffle,
   })
 
   const copyHeader = renderAMCHeader({
@@ -607,23 +665,73 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
   })
 
   let groupsSections = ''
+  const mergedGroupCopies: string[] = []
+  let mergedTotalQuestions = 0
+  let totalGroupSection = ''
+  let nonMergedGroupsSections = ''
+
+  const mergedGroupExerciseIndexSet =
+    mergedGroupExerciseIndexes != null
+      ? new Set(mergedGroupExerciseIndexes)
+      : null
+
   for (const i of activeGroupIndexes) {
     const groupName = groupRefs[i]
-    groupsSections += renderAMCGroupSection({
-      groupTitle: titleOn ? groupTitles[i] : '',
-      groupName,
-      isMixed: groupShuffleFlags[i],
-      questionsToRestore: nbQuestions[i],
-      pageBreakBefore: groupLayouts[i]?.pageBreakBefore,
-      multicols: groupLayouts[i]?.multicols,
-    })
+    const questionsToRestore = Math.max(0, Number(nbQuestions[i]) || 0)
+    const exIdx = exerciceIndexForGroup[i] ?? i
+    const groupTitleVisible = groupTitleOn?.[exIdx] ?? titleOn
+
+    if (mergeGroupsAndShuffle) {
+      const isMerged =
+        mergedGroupExerciseIndexSet === null ||
+        mergedGroupExerciseIndexSet.has(exIdx)
+
+      if (isMerged && questionsToRestore > 0) {
+        mergedGroupCopies.push(
+          `\\copygroup[${questionsToRestore}]{${groupName}}{total}`,
+        )
+        mergedTotalQuestions += questionsToRestore
+      } else if (!isMerged) {
+        nonMergedGroupsSections += renderAMCGroupSection({
+          groupTitle: groupTitleVisible ? groupTitles[i] : '',
+          groupName,
+          isMixed: groupShuffleFlags[i],
+          questionsToRestore,
+          pageBreakBefore: groupLayouts[exIdx]?.pageBreakBefore,
+          multicols: groupLayouts[exIdx]?.multicols,
+        })
+      }
+    } else {
+      groupsSections += renderAMCGroupSection({
+        groupTitle: groupTitleVisible ? groupTitles[i] : '',
+        groupName,
+        isMixed: groupShuffleFlags[i],
+        questionsToRestore,
+        pageBreakBefore: groupLayouts[exIdx]?.pageBreakBefore,
+        multicols: groupLayouts[exIdx]?.multicols,
+      })
+    }
   }
+
+  if (mergeGroupsAndShuffle && mergedGroupCopies.length > 0) {
+    const totalSectionBody = renderAMCGroupSection({
+      groupTitle: mergedGroupTitle,
+      groupName: 'total',
+      isMixed: true,
+      questionsToRestore: mergedTotalQuestions,
+    })
+    totalGroupSection = `\\cleargroup{total}\n${mergedGroupCopies.join('\n')}\n${totalSectionBody}`
+  }
+
   const copyContent = renderAMCCopyContent({
     isCodeGrid: headerType === 'AMCcodeGrid',
     groupsSections,
+    totalGroupSection,
+    nonMergedGroupsSections,
     isA3: format === 'A3',
     isAssociation: headerType === 'AMCassociation',
     collectCorrectionsAtEnd,
+    mergeGroupsAndShuffle,
   })
 
   latexCode = preambule + '\n' + documentStart + '\n' + copyHeader + copyContent

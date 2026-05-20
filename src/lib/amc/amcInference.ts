@@ -2,12 +2,11 @@ import { type AutoCorrection, type IExercice } from '../types'
 import {
   ensureAMCOpenAutoCorrection,
   extractAMCValue,
-  inferAmcOptionsFromAnswerType,
   inferNumericValueForAMC,
   mergeNumericParamsFromOptions,
 } from './amcInferenceHelpers'
 import { normalizeAMCNumBlocks } from './amcNormalize'
-import type { IExerciceAMC, ReponseParams } from './amcTypes'
+import type { AMCReponseValue, IExerciceAMC, ReponseParams } from './amcTypes'
 
 /**
  * Applique une compatibilité AMC par défaut quand un exercice n'est pas paramétré finement.
@@ -57,12 +56,8 @@ export function mathaleaEnsureAMCCompatibility(
           extractAMCValue(item.reponse.valeur),
         )
         if (valeur === undefined) continue
-
-        const options = inferAmcOptionsFromAnswerType(item.reponse?.valeur)
-        const param = mergeNumericParamsFromOptions(
-          item.reponse?.param,
-          options,
-        )
+        // item est un item de autoCorrectionAMC, qui est censé être déjà au format AMC, mais on fait le travail d'inférence au cas où les données ne seraient pas parfaitement conformes. On infère les options AMC à partir de la réponse interactive (item.reponse) plutôt que de réutiliser directement les options de comparaison interactive (item.options) pour éviter de faire des hypothèses sur la structure des options interactives qui peuvent être différentes des options attendues par AMC.
+        const param = item.reponse?.param ?? {}
 
         const blocks = normalizeAMCNumBlocks({
           valeur,
@@ -216,20 +211,42 @@ export function mathaleaEnsureAMCCompatibility(
       canInferAMCNum = false
       break
     }
-
-    const valeur = inferNumericValueForAMC(
-      extractAMCValue(item.valeur?.reponse?.value),
-    )
+    let valeur: AMCReponseValue | undefined
+    if (
+      item.formatInteractif === 'mathlive' &&
+      item.valeur?.reponse?.value != null
+    ) {
+      valeur = inferNumericValueForAMC(
+        extractAMCValue(item.valeur?.reponse?.value),
+      )
+    } else if (
+      item.formatInteractif === 'fillInTheBlank' &&
+      item.valeur?.champ1 != null &&
+      !('champ2' in item.valeur)
+    ) {
+      valeur = inferNumericValueForAMC(
+        extractAMCValue(item.valeur?.champ1.value),
+      )
+    } else if (
+      item.formatInteractif === 'multiMathfield' &&
+      item.valeur?.champ1 != null &&
+      !('champ2' in item.valeur)
+    ) {
+      valeur = inferNumericValueForAMC(
+        extractAMCValue(item.valeur?.champ1.value),
+      )
+    } else {
+      canInferAMCNum = false
+      break
+    }
     if (valeur === undefined) {
       canInferAMCNum = false
       break
     }
-
     // On infère des options AMCNum à partir de la réponse interactive
     // ({ value, options, compare }) au lieu de réutiliser directement
     // les options de comparaison interactive.
-    const options = inferAmcOptionsFromAnswerType(item.valeur?.reponse)
-    const param = mergeNumericParamsFromOptions(item.options, options)
+    const param = mergeNumericParamsFromOptions(item.options, {})
 
     const blocks = normalizeAMCNumBlocks({
       valeur,
@@ -253,8 +270,7 @@ export function mathaleaEnsureAMCCompatibility(
   }
 
   if (canInferAMCNum) {
-    exercice.autoCorrection = autoCorrectionAmc as any
-    exerciseAny.autoCorrectionAMC = autoCorrectionAmc as any
+    exerciseAny.autoCorrectionAMC = autoCorrectionAmc
     exercice.amcType = 'AMCNum'
     exercice.amcReady = true
     return exercice as IExerciceAMC
