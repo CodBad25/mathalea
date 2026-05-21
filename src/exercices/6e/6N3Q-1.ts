@@ -15,6 +15,7 @@ export const interactifType = 'mathLive'
 export const amcType = 'AMCNum'
 export const amcReady = true
 export const titre = 'Résoudre des problèmes avec des calculs de pourcentages'
+export const dateDeModificationImportante = '21/05/2026'
 
 /**
  * Calculer le montant d'une réduction donnée en pourcentage d'un prix initial
@@ -33,7 +34,6 @@ export default class AppliquerUnPourcentage6N3Q extends Exercice {
     super()
 
     this.nbQuestions = 1
-    this.consigne = 'Calculer.'
     this.spacing = 2
     this.spacingCorr = 2
   }
@@ -53,11 +53,11 @@ export default class AppliquerUnPourcentage6N3Q extends Exercice {
       ['Une jupe', 20, 40],
     ]
     const legume = [
-      ['Une aubergine', 100, 200],
-      ['Un melon', 200, 300],
-      ['Une tomate', 50, 100],
-      ['Une betterave', 75, 100],
-      ['Une carotte', 30, 50],
+      ['Une aubergine', 100, 200, "l'aubergine"],
+      ['Un melon', 200, 300, 'le melon'],
+      ['Une tomate', 50, 100, 'la tomate'],
+      ['Une betterave', 75, 100, 'la betterave'],
+      ['Une carotte', 30, 50, 'la carotte'],
     ]
     const listeIndex = [0, 1, 2, 3, 4]
     const prix = []
@@ -76,7 +76,7 @@ export default class AppliquerUnPourcentage6N3Q extends Exercice {
             article[index[i]][2] as number,
           )
           montant = (pourcent[i] * prix[i]) / 100
-          texte = `${article[index[i]][0]} coûtant $${prix[i]}$${sp()}€ bénéficie d'une réduction de $${pourcent[i]} ${sp()}${sp()}\\%$.<br>`
+          texte = `${article[index[i]][0]} coûtait $${prix[i]}$${sp()}€. Son prix bénéficie, maintenant, d'une réduction de $${pourcent[i]} ${sp()}${sp()}\\%$.<br>`
           texte += 'Quel est le montant en euro de cette réduction ?'
           texte += ajouteChampTexteMathLive(
             this,
@@ -101,9 +101,11 @@ export default class AppliquerUnPourcentage6N3Q extends Exercice {
             article[index[i]][2] as number,
           )
           montant = (masse[i] * pourcent[i]) / 100
-          texte = `${legume[index[i]][0]} pesant $${masse[i]}$ grammes a eu une croissance de $${pourcent[i]} ${sp()}\\%$.<br>`
-          texte +=
-            'Quelle est la masse supplémentaire en grammes correspondant à cette croissance ?'
+          // texte = `${legume[index[i]][0]} pesant $${masse[i]}$ grammes a eu une croissance de $${pourcent[i]} ${sp()}\\%$.<br>`
+          // texte +=
+          //  'Quelle est la masse supplémentaire en grammes correspondant à cette croissance ?'
+          texte = `${legume[index[i]][0]} pesait $${masse[i]}$ grammes. Depuis, ${legume[index[i]][3]} a poursuivi sa croissance et sa masse a augmenté de $${pourcent[i]} ${sp()}\\%$.<br>`
+          texte += 'De combien de grammes sa masse a-t-elle augmenté ?'
           texte += ajouteChampTexteMathLive(
             this,
             i,
