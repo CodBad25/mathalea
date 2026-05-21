@@ -66,7 +66,6 @@ export default class EquationDuSecondDegreAvecUnParametre extends Exercice {
       'Nombres séparés par des tirets\n1 : Coefficient de x^2 constant\n2 : Coefficient de x^2 avec en a.m\n3 : Coefficient de x^2 en m+a\n4 : Mélange',
     ]
     this.sup = '1'
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
   }
 
   /**

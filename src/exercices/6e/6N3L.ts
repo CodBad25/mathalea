@@ -21,6 +21,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCNum'
+export const dateDeModificationImportante = '21/05/2026'
 
 /**
  * Calculer la fracton d'un nombre divisible par le dénominateur ... ou pas.
@@ -41,15 +42,20 @@ export default class FractionDUnNombre extends Exercice {
     this.besoinFormulaireCaseACocher = ['Forcer résultat entier', true]
     this.besoinFormulaire2CaseACocher = ['Plusieurs méthodes', false]
     this.nbQuestions = 5
-    this.consigne = 'Calculer.'
-    context.isHtml ? (this.spacingCorr = 3.5) : (this.spacingCorr = 2)
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 2)
+
+    this.spacingCorr = context.isHtml ? 3.5 : 2
+    this.spacing = 2
+
     this.sup = true
     this.sup2 = false
     this.nbCols = 2
   }
 
   nouvelleVersion() {
+    this.consigne = 'Donner la valeur décimale (ou entière) '
+    this.consigne +=
+      this.nbQuestions === 1 ? 'du calcul suivant.' : 'des calculs suivants.'
+
     const listeFractions = [
       [1, 2],
       [1, 3],
