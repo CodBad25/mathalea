@@ -11,6 +11,7 @@ import type { AMCReponseValue, IExerciceAMC, ReponseParams } from './amcTypes'
 /**
  * Applique une compatibilité AMC par défaut quand un exercice n'est pas paramétré finement.
  * Cette fonction privilégie un export possible (fallback AMCOpen) plutôt qu'un rejet.
+ * @author Jean-claude Lhote
  */
 export function mathaleaEnsureAMCCompatibility(
   exercice: IExercice | IExerciceAMC,

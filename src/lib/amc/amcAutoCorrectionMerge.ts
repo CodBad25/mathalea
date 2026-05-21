@@ -1,5 +1,7 @@
 import { normalizeTexte } from './amcHelpers'
-
+/**
+ * @author Jean-claude Lhote
+ */
 function copyLatexTextsOnPropositions(target: any, source: any): void {
   if (!target || !source) return
 

@@ -1,4 +1,8 @@
 <script lang="ts">
+  /**
+   * L'ensemble de ce fichier : code typescript, contenu Html est le fruit du travail exclusif de Jean-claude Lhote.
+   * @author Jean-claude Lhote
+   */
   import seedrandom from 'seedrandom'
   import { onDestroy, onMount } from 'svelte'
   import { mergeLatexTextsOnPropositions } from '../../../lib/amc/amcAutoCorrectionMerge'
@@ -78,6 +82,21 @@
     titleOn: boolean
   }
 
+  type SavedExerciseAmcConfig = {
+    exerciseKey: string
+    autoCorrectionAMC: any[]
+  }
+
+  type AmcBuilderConfigV1 = {
+    version: 1
+    exportedAt: string
+    exercicesParams: InterfaceParams[]
+    documentSettings: typeof documentSettings
+    groupSettings: GroupSetting[]
+    tikzScaleFactorsByQuestion: Record<string, number>
+    exercises: SavedExerciseAmcConfig[]
+  }
+
   const AMC_HIDDEN_TEXT_TOKEN = '[[AMC_HIDDEN]]'
 
   let exercices: IExercice[] = []
@@ -113,12 +132,17 @@
   let latexExportStatus = ''
   let latexExportStatusTimeout: ReturnType<typeof setTimeout> | null = null
   let isLatexExportError = false
+  let configStatus = ''
+  let configStatusTimeout: ReturnType<typeof setTimeout> | null = null
+  let isConfigStatusError = false
   let groupConsistencyReport: AMCGroupConsistencyReport | null = null
   let isDocumentSettingsOpen = true
   let isExerciseSettingsModalOpen = false
   let exerciseSettingsTargetIndex: number | null = null
   let pendingSettingsSeed: string | null = null
   let previousExercicesCount = 0 // Pour détecter les nouveaux exercices
+  let configImportInput: HTMLInputElement | null = null
+  let skipNextExercicesParamsRefresh = false
 
   let unsubscribeExercicesParams: (() => void) | null = null
 
@@ -1133,7 +1157,11 @@
         ? prop.propositions
         : []
       for (const sub of subProps) {
-        if (containsTikz(sub?.texte) || containsTikz(sub?.reponse?.texte)) {
+        if (
+          containsTikz(sub?.enonce) ||
+          containsTikz(sub?.texte) ||
+          containsTikz(sub?.reponse?.texte)
+        ) {
           return true
         }
       }
@@ -1222,6 +1250,7 @@
         ? prop.propositions
         : []
       for (const sub of subProps) {
+        pushIfString(sub?.enonce)
         pushIfString(sub?.texte)
         pushIfString(sub?.reponse?.texte)
       }
@@ -1261,6 +1290,221 @@
       latexExportStatus = ''
       latexExportStatusTimeout = null
     }, 3000)
+  }
+
+  function setConfigStatus(message: string, isError = false) {
+    configStatus = message
+    isConfigStatusError = isError
+    if (configStatusTimeout != null) {
+      clearTimeout(configStatusTimeout)
+    }
+    configStatusTimeout = setTimeout(() => {
+      configStatus = ''
+      configStatusTimeout = null
+      isConfigStatusError = false
+    }, 4000)
+  }
+
+  function normalizeGroupSetting(
+    value: GroupSetting,
+    fallback: GroupSetting,
+    maxQuestionCount: number,
+    lockQuestionCount: boolean,
+  ): GroupSetting {
+    const nextQuestionCount = lockQuestionCount
+      ? maxQuestionCount
+      : Math.max(1, Number(value.questionCount) || fallback.questionCount || 1)
+
+    return {
+      seed:
+        typeof value.seed === 'string' && value.seed.trim().length > 0
+          ? value.seed
+          : fallback.seed,
+      questionCount: nextQuestionCount,
+      restitueCount: Math.max(
+        1,
+        Math.min(
+          nextQuestionCount,
+          Number(value.restitueCount) || fallback.restitueCount || 1,
+        ),
+      ),
+      pageBreakBefore: Boolean(value.pageBreakBefore),
+      multicols: Boolean(value.multicols),
+      titleOn: Boolean(value.titleOn),
+    }
+  }
+
+  function buildAmcConfigSnapshot(): AmcBuilderConfigV1 {
+    return {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      exercicesParams: JSON.parse(JSON.stringify($exercicesParams)),
+      documentSettings: JSON.parse(JSON.stringify(documentSettings)),
+      groupSettings: JSON.parse(JSON.stringify(groupSettings)),
+      tikzScaleFactorsByQuestion: JSON.parse(
+        JSON.stringify(tikzScaleFactorsByQuestion),
+      ),
+      exercises: exercices.map((exercise) => ({
+        exerciseKey: getExerciseSettingsKey(exercise),
+        autoCorrectionAMC: JSON.parse(
+          JSON.stringify(getAmcAutoCorrection(exercise)),
+        ),
+      })),
+    }
+  }
+
+  function triggerConfigImport() {
+    configImportInput?.click()
+  }
+
+  function downloadAmcConfigFile() {
+    if (exercices.length === 0) {
+      setConfigStatus('Aucun exercice a sauvegarder.', true)
+      return
+    }
+
+    const snapshot = buildAmcConfigSnapshot()
+    const seed = exercices[0]?.seed ?? 'amc'
+    const content = `${JSON.stringify(snapshot, null, 2)}\n`
+    const blob = new Blob([content], { type: 'application/json;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+
+    link.href = url
+    link.download = `amc-config-${seed}.json`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+
+    setConfigStatus('Parametrage AMC sauvegarde en JSON.')
+  }
+
+  function parseAmcConfig(content: string): AmcBuilderConfigV1 | null {
+    const parsed = JSON.parse(content) as Partial<AmcBuilderConfigV1>
+    if (parsed?.version !== 1) return null
+    if (!Array.isArray(parsed.exercicesParams)) return null
+    if (
+      typeof parsed.documentSettings !== 'object' ||
+      parsed.documentSettings == null
+    ) {
+      return null
+    }
+    if (!Array.isArray(parsed.groupSettings)) return null
+    if (
+      typeof parsed.tikzScaleFactorsByQuestion !== 'object' ||
+      parsed.tikzScaleFactorsByQuestion == null
+    ) {
+      return null
+    }
+    if (!Array.isArray(parsed.exercises)) return null
+    return parsed as AmcBuilderConfigV1
+  }
+
+  async function applyAmcConfigSnapshot(snapshot: AmcBuilderConfigV1) {
+    const loadedParams = JSON.parse(
+      JSON.stringify(snapshot.exercicesParams),
+    ) as InterfaceParams[]
+
+    skipNextExercicesParamsRefresh = true
+    exercicesParams.set(loadedParams)
+    mathaleaUpdateUrlFromExercicesParams()
+    await refreshExercicesFromStore(loadedParams)
+
+    documentSettings = {
+      ...documentSettings,
+      ...snapshot.documentSettings,
+    }
+
+    const groupSettingsByKey = new Map<string, GroupSetting>()
+    snapshot.groupSettings.forEach((setting, index) => {
+      const exercise = exercices[index]
+      const key = getExerciseSettingsKey(exercise)
+      if (key !== '') {
+        groupSettingsByKey.set(key, setting)
+      }
+    })
+
+    groupSettings = exercices.map((exercise, index) => {
+      const fallback = groupSettings[index] ?? {
+        seed: exercise.seed,
+        questionCount: Math.max(1, Number((exercise as any)?.nbQuestions) || 1),
+        restitueCount: 1,
+        pageBreakBefore: false,
+        multicols: false,
+        titleOn: true,
+      }
+      const key = getExerciseSettingsKey(exercise)
+      const incoming =
+        groupSettingsByKey.get(key) ?? snapshot.groupSettings[index] ?? fallback
+      return normalizeGroupSetting(
+        incoming,
+        fallback,
+        getEffectiveQuestionCount(exercise),
+        (exercise as any)?.nbQuestionsModifiable === false,
+      )
+    })
+
+    const savedExercisesByKey = new Map<string, SavedExerciseAmcConfig>()
+    for (const exerciseSnapshot of snapshot.exercises) {
+      if (
+        typeof exerciseSnapshot?.exerciseKey === 'string' &&
+        exerciseSnapshot.exerciseKey.length > 0 &&
+        Array.isArray(exerciseSnapshot.autoCorrectionAMC)
+      ) {
+        savedExercisesByKey.set(exerciseSnapshot.exerciseKey, exerciseSnapshot)
+      }
+    }
+
+    for (const exercise of exercices) {
+      const key = getExerciseSettingsKey(exercise)
+      const saved = savedExercisesByKey.get(key)
+      if (!saved) continue
+      const clonedAutoCorrection = JSON.parse(
+        JSON.stringify(saved.autoCorrectionAMC),
+      )
+      ;(exercise as any).autoCorrectionAMC = clonedAutoCorrection
+      exercise.autoCorrection = JSON.parse(JSON.stringify(clonedAutoCorrection))
+      ;(exercise as any).amcHtmlQuestions =
+        extractAMCQuestionsFromAutoCorrection(exercise)
+    }
+
+    const loadedTikzScales: Record<string, number> = {}
+    for (const [key, value] of Object.entries(
+      snapshot.tikzScaleFactorsByQuestion,
+    )) {
+      const nextValue = Number(value)
+      if (!Number.isFinite(nextValue)) continue
+      loadedTikzScales[key] = clampTikzScaleFactor(nextValue)
+    }
+    tikzScaleFactorsByQuestion = loadedTikzScales
+
+    exercices = [...exercices]
+    updateLatexPreview()
+  }
+
+  async function handleConfigFileChange(event: Event) {
+    const input = event.currentTarget as HTMLInputElement
+    const file = input.files?.[0]
+    input.value = ''
+    if (!file) return
+
+    try {
+      const content = await file.text()
+      const parsedSnapshot = parseAmcConfig(content)
+      if (!parsedSnapshot) {
+        setConfigStatus(
+          'Fichier JSON AMC invalide ou version non supportee.',
+          true,
+        )
+        return
+      }
+
+      await applyAmcConfigSnapshot(parsedSnapshot)
+      setConfigStatus('Parametrage AMC recharge depuis le fichier JSON.')
+    } catch {
+      setConfigStatus('Impossible de charger ce fichier JSON.', true)
+    }
   }
 
   async function copyLatexToClipboard() {
@@ -2130,6 +2374,10 @@
     await mathaleaUpdateExercicesParamsFromUrl()
     await refreshExercicesFromStore($exercicesParams)
     unsubscribeExercicesParams = exercicesParams.subscribe((params) => {
+      if (skipNextExercicesParamsRefresh) {
+        skipNextExercicesParamsRefresh = false
+        return
+      }
       void refreshExercicesFromStore(params)
     })
   })
@@ -2137,6 +2385,9 @@
   onDestroy(() => {
     if (latexExportStatusTimeout != null) {
       clearTimeout(latexExportStatusTimeout)
+    }
+    if (configStatusTimeout != null) {
+      clearTimeout(configStatusTimeout)
     }
     if (unsubscribeExercicesParams) unsubscribeExercicesParams()
   })
@@ -2533,6 +2784,47 @@
         >
           Paramétrage
         </h3>
+
+        <div
+          class="mt-4 space-y-2 rounded-xl border border-coopmaths-struct-light/30 p-3"
+        >
+          <p class="text-sm font-semibold">Sauvegarde du parametrage</p>
+          <div class="flex flex-wrap gap-2">
+            <button
+              type="button"
+              class="rounded border px-3 py-1 text-xs"
+              on:click={downloadAmcConfigFile}
+              disabled={exercices.length === 0}
+            >
+              Sauvegarder (.json)
+            </button>
+            <button
+              type="button"
+              class="rounded border px-3 py-1 text-xs"
+              on:click={triggerConfigImport}
+            >
+              Charger (.json)
+            </button>
+          </div>
+          <input
+            bind:this={configImportInput}
+            type="file"
+            accept="application/json,.json"
+            class="hidden"
+            on:change={handleConfigFileChange}
+          />
+          {#if configStatus}
+            <div
+              class="rounded-md border px-3 py-2 text-xs font-medium {isConfigStatusError
+                ? 'border-red-300 bg-red-50 text-red-800 dark:border-red-700/60 dark:bg-red-900/20 dark:text-red-200'
+                : 'border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-700/60 dark:bg-emerald-900/20 dark:text-emerald-200'}"
+              role="status"
+              aria-live="polite"
+            >
+              {configStatus}
+            </div>
+          {/if}
+        </div>
 
         <details
           class="mt-4 rounded-xl border border-coopmaths-struct-light/30 p-3"

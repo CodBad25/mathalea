@@ -4,6 +4,9 @@ import { Complexe } from '../mathFonctions/Complexe'
 import { isValeur, type IExercice } from '../types'
 import { countDecimals, countDigits, isFractionValue } from './amcHelpers'
 import type { IExerciceAMC, ReponseParams } from './amcTypes'
+/**
+ * @author Jean-claude Lhote
+ */
 
 const mathliveNumericCleaner = generateCleaner(['latex', 'virgules', 'espaces'])
 const strictNumericPattern = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/

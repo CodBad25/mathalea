@@ -6,7 +6,9 @@ import type {
   AMCReponseValue,
   ReponseParams,
 } from './amcTypes'
-
+/**
+ * @author Jean-claude Lhote
+ */
 export function ensureAmcParam(exerciseAny: IExercice, i: number) {
   let autoCorrectionAMC = exerciseAny.autoCorrectionAMC
   if (!Array.isArray(autoCorrectionAMC)) {
