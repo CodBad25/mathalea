@@ -21,7 +21,8 @@ export const titre =
   'Résoudre une équation du second degré se ramenant au premier degré'
 export const interactifReady = true
 export const interactifType = 'multiMathfield'
-export const dateDeModifImportante = '21/06/2023' // EE : Rajout d'un paramètre, correction de coquilles, création interactivité et meilleure conclusion des corrections
+export const dateDeModifImportante = '21/05/2026'
+
 /**
  *
  * Résoudre une équation du type (ax)2 - b2 = 0
@@ -108,7 +109,7 @@ export default class ExerciceEquations extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            KeyboardType.clavierDeBaseAvecFraction,
+            KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
             {
               texteAvant: `<br>Solutions de l'équation (séparer les solutions avec un point-virgule) : `,
             },
@@ -140,7 +141,7 @@ export default class ExerciceEquations extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            KeyboardType.clavierDeBaseAvecFraction,
+            KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
             {
               texteAvant: `<br>Solutions de l'équation (séparer les solutions avec un point-virgule) : `,
             },
@@ -191,7 +192,7 @@ export default class ExerciceEquations extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            KeyboardType.clavierDeBaseAvecFraction,
+            KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
             {
               texteAvant: `<br>Solution de l'équation (séparer les solutions avec un point-virgule) : `,
             },
@@ -239,7 +240,7 @@ export default class ExerciceEquations extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            KeyboardType.clavierDeBaseAvecFraction,
+            KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
             {
               texteAvant: `<br>Solutions de l'équation (séparer les solutions avec un point-virgule) : `,
             },
@@ -288,7 +289,7 @@ export default class ExerciceEquations extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            KeyboardType.clavierDeBaseAvecFraction,
+            KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
             {
               texteAvant: `<br>Solution : `,
             },
@@ -319,7 +320,7 @@ export default class ExerciceEquations extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            KeyboardType.clavierDeBaseAvecFraction,
+            KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
             {
               texteAvant: `<br>Solution : `,
             },
@@ -362,7 +363,7 @@ export default class ExerciceEquations extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            KeyboardType.clavierDeBaseAvecFraction,
+            KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
             {
               texteAvant: `<br>Solution : `,
             },
