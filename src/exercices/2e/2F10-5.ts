@@ -127,11 +127,11 @@ export default class Signefonctionaffine extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    if (this.interactif) this.sup3 = 1
+
     let typeDeConsignes: number[] = []
     typeDeConsignes.push(
-      this.sup3 === 3 ? 1 : this.sup3,
-      this.sup3 === 3 ? 2 : this.sup3,
+      this.sup3 === 3 ? 1 : this.interactif ? 1 : this.sup3,
+      this.sup3 === 3 ? 2 : this.interactif ? 1 : this.sup3,
     )
     typeDeConsignes = combinaisonListes(typeDeConsignes, this.nbQuestions)
 
@@ -172,7 +172,7 @@ export default class Signefonctionaffine extends Exercice {
 
       if (this.questionJamaisPosee(i, typesDeQuestions, coefDirNumerique, b)) {
         // Si la question n'a jamais été posée, on en créé une autre
-        texte = `${context.isHtml || typeDeConsignes[i] === 1 ? 'Compléter' : 'Dresser'} le tableau de signes de la fonction $f$ définie sur $\\mathbb R$ par $f(x)=${reduireAxPlusB(a, b)}$.`
+        texte = `${(context.isHtml && typeDeConsignes[i] === 1) || this.interactif ? 'Compléter' : 'Dresser'} le tableau de signes de la fonction $f$ définie sur $\\mathbb R$ par $f(x)=${reduireAxPlusB(a, b)}$.`
 
         if (context.isHtml) {
           texteCorr = `${texteEnCouleurEtGras('Dans cet exercice, deux corrections différentes sont proposées.', bleuMathalea)} Voici celle `
