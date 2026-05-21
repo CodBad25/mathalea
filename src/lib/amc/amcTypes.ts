@@ -4,6 +4,9 @@ import type {
   InteractivityType,
   OldFormatInteractifType,
 } from '../types'
+/**
+ * @author Jean-claude Lhote
+ */
 export interface ReponseParams {
   digits?: number
   decimals?: number

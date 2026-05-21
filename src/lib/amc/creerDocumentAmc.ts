@@ -5,18 +5,21 @@ import type { contentsType } from '../LatexTypes'
 import { lettreDepuisChiffre } from '../outils/outilString'
 import type { IExercice } from '../types'
 import {
-    AMCPreambleTemplate,
-    renderAMCCopyContent,
-    renderAMCDocumentStart,
-    renderAMCGroupSection,
-    renderAMCHeader,
-    renderAMCPreamble,
+  AMCPreambleTemplate,
+  renderAMCCopyContent,
+  renderAMCDocumentStart,
+  renderAMCGroupSection,
+  renderAMCHeader,
+  renderAMCPreamble,
 } from './amcDocumentTemplates'
 import { renderAMCHybride, renderElement } from './amcRender'
 import type { IExerciceAMC } from './amcTypes'
 
 type ExportQcmAmcResult = [string, string, number, string, boolean]
-
+/**
+ * L'ensemble de ce fichier est le fruit du travail de Jean-claude Lhote
+ * @author Jean-claude Lhote
+ */
 export type CreerDocumentAmcOptions = {
   exercices: (IExerciceAMC | IExercice)[]
   nbQuestions?: number[]
@@ -225,7 +228,6 @@ function normalizeDynamicPreambleLines(lines: string[]): string[] {
   const dynamicPackages = new Map<string, string | null>()
   const packageOrder: string[] = []
   const otherLines: string[] = []
-  const otherSeen = new Set<string>()
 
   for (const line of lines) {
     const trimmed = line.trim()
@@ -233,10 +235,9 @@ function normalizeDynamicPreambleLines(lines: string[]): string[] {
 
     const packageDecl = parseUsepackageLine(trimmed)
     if (!packageDecl) {
-      if (!otherSeen.has(trimmed)) {
-        otherSeen.add(trimmed)
-        otherLines.push(trimmed)
-      }
+      // Ne pas dédupliquer ici : certaines lignes (ex: "}") doivent
+      // apparaître plusieurs fois pour conserver des blocs LaTeX valides.
+      otherLines.push(trimmed)
       continue
     }
 
@@ -371,6 +372,7 @@ export function checkAMCGroupConsistency(
  * @param {IExerciceAMC} exercise Exercice à exporter.
  * @param {number} exerciseIndex Numéro unique pour gérer les noms des éléments d'un groupe de questions.
  * @returns {ExportQcmAmcResult} Tuple: [codeLatex, referenceGroupe, nombreQuestions, titre, melange].
+ * @author Jean-claude Lhote
  */
 
 export function exportQcmAmc(
@@ -396,10 +398,15 @@ export function exportQcmAmc(
   // Si l'exercice est de type AMCOpen (inféré par fallback) et qu'il possède une consigne
   // et/ou une introduction, on les regroupe dans un AMCHybrideContainer comme énoncé commun,
   // avec chaque question comme enfant AMCOpen.
-  if (type === 'AMCOpen' && (exercise.consigne?.trim() || exercise.introduction?.trim())) {
+  if (
+    type === 'AMCOpen' &&
+    (exercise.consigne?.trim() || exercise.introduction?.trim())
+  ) {
     const parts: string[] = []
-    if (exercise.consigne?.trim()) parts.push(texConsigne(exercise.consigne).trim())
-    if (exercise.introduction?.trim()) parts.push(texIntroduction(exercise.introduction).trim())
+    if (exercise.consigne?.trim())
+      parts.push(texConsigne(exercise.consigne).trim())
+    if (exercise.introduction?.trim())
+      parts.push(texIntroduction(exercise.introduction).trim())
     const combinedEnonce = parts.join('\n\n')
 
     const syntheticItem = {

@@ -1,4 +1,8 @@
 <script lang="ts">
+  /**
+   * L'ensemble de ce fichier : code typescript, contenu Html est le fruit du travail exclusif de Jean-claude Lhote.
+   * @author Jean-claude Lhote
+   */
   import { normalizeAMCNumBlocks } from '../../../../lib/amc/amcNormalize'
   import type { ReponseParams } from '../../../../lib/amc/amcTypes'
   import AmcEnonceHtml from './AmcEnonceHtml.svelte'

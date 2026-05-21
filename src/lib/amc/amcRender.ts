@@ -1,3 +1,6 @@
+/**
+ * @author Jean-claude Lhote
+ */
 import { buildAMCId } from './amcHelpers'
 import { normalizeAMCNum, normalizeAMCOpen, normalizeQcm } from './amcNormalize'
 import {

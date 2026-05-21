@@ -1,4 +1,8 @@
 <script lang="ts">
+  /**
+   * L'ensemble de ce fichier : code typescript, contenu Html est le fruit du travail exclusif de Jean-claude Lhote.
+   * @author Jean-claude Lhote
+   */
   import { tick } from 'svelte'
   import { renderKatex } from '../../../../lib/mathalea'
 

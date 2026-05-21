@@ -1,5 +1,7 @@
 import { renderTemplate } from './amcTemplates'
-
+/**
+ * @author Jean-claude Lhote
+ */
 export type AMCPreambleRenderData = {
   documentClassOptions: string
   dynamicPreamble?: string
@@ -165,7 +167,7 @@ export const AMCPreambleTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% Explications %%%
   \\ExplSyntaxOn
-\\tl_new:N \\explicatons
+\\tl_new:N \\explications
 \\cs_new:Nn \\expl_vide: {
   \\tl_gset:Nn \\explications { \\debutexplications }
 }

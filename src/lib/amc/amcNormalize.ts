@@ -1,3 +1,6 @@
+/**
+ * @author Jean-claude Lhote
+ */
 import {
   computeDecimalAMC,
   countDigits,

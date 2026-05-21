@@ -1,3 +1,6 @@
+/**
+ * @author Jean-claude Lhote
+ */
 import nunjucks from 'nunjucks'
 
 nunjucks.configure('templates', { autoescape: false })
