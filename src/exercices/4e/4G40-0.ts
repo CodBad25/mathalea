@@ -43,8 +43,10 @@ export default class VocabulaireTriangleRectangle extends Exercice {
       'Type de questions ',
       'Nombres séparés par des tirets :\n1 : Donner le bon terme\n2 : Donner le bon côté\n3 : Mélange',
     ]
+    this.besoinFormulaire3CaseACocher = ["Indiquer l'angle sur la figure", true]
     this.sup = false
     this.sup2 = '3'
+    this.sup3 = true
   }
 
   nouvelleVersion() {
@@ -81,20 +83,21 @@ export default class VocabulaireTriangleRectangle extends Exercice {
       const codageDeAngle = codageAngle(A, B, C, 1)
       const objetsEnonce: NestedObjetMathalea2dArray = []
 
-      objetsEnonce.push(p2, nomme, codageDeAngle, codage)
+      objetsEnonce.push(p2, nomme, codage)
+      if (this.sup3) objetsEnonce.push(codageDeAngle)
       let goodAnswer: string
-      let texte = `Dans le triangle $${nom}$ rectangle en $${nom[0]}$, en considèrant l'angle aigu $\\widehat{${nom}}$ :<br>${mathalea2d(Object.assign({ mainlevee, pixelsParCm: 30, scale: 1 }, fixeBordures(objetsEnonce)), objetsEnonce)}`
+      let texte = `Le triangle $${nom}$ est rectangle en $${nom[0]}$. <br>${mathalea2d(Object.assign({ mainlevee, pixelsParCm: 30, scale: 1 }, fixeBordures(objetsEnonce)), objetsEnonce)}`
       let texteCorr: string
       const choix = choice([1, 2, 3])
       switch (choix) {
         case 1:
           texte +=
             listeTypeDeQuestions[i] === 1
-              ? `Le côté $[${nom[0]}${nom[1]}]$ est`
-              : `Le côté adjacent à $\\widehat{${nom}}$ est`
+              ? `Le côté $[${nom[0]}${nom[1]}]$ est :`
+              : `Le côté adjacent à $\\widehat{${nom}}$ est :`
           goodAnswer =
             listeTypeDeQuestions[i] === 1
-              ? `Le côté adjacent à $\\widehat{${nom}}$`
+              ? `le côté adjacent à $\\widehat{${nom}}$.`
               : `[${nom[0]}${nom[1]}]`
           texteCorr =
             listeTypeDeQuestions[i] === 1
@@ -104,11 +107,11 @@ export default class VocabulaireTriangleRectangle extends Exercice {
         case 2:
           texte +=
             listeTypeDeQuestions[i] === 1
-              ? `Le côté $[${nom[0]}${nom[2]}]$ est`
-              : `Le côté opposé à $\\widehat{${nom}}$ est`
+              ? `Le côté $[${nom[0]}${nom[2]}]$ est :`
+              : `Le côté opposé à $\\widehat{${nom}}$ est :`
           goodAnswer =
             listeTypeDeQuestions[i] === 1
-              ? `Le côté opposé à $\\widehat{${nom}}$`
+              ? `le côté opposé à $\\widehat{${nom}}$.`
               : `[${nom[0]}${nom[2]}]`
           texteCorr =
             listeTypeDeQuestions[i] === 1
@@ -118,11 +121,11 @@ export default class VocabulaireTriangleRectangle extends Exercice {
         default:
           texte +=
             listeTypeDeQuestions[i] === 1
-              ? `Le côté $[${nom[1]}${nom[2]}]$ est`
-              : `L'hypoténuse du triangle ${nom} est`
+              ? `Le côté $[${nom[1]}${nom[2]}]$ est :`
+              : `L'hypoténuse du triangle ${nom} est :`
           goodAnswer =
             listeTypeDeQuestions[i] === 1
-              ? "L'hypoténuse du triangle"
+              ? `le côté adjacent à $\\widehat{${nom}}$.`
               : `[${nom[1]}${nom[2]}]`
           texteCorr =
             listeTypeDeQuestions[i] === 1
@@ -138,16 +141,16 @@ export default class VocabulaireTriangleRectangle extends Exercice {
         listeTypeDeQuestions[i] === 1
           ? [
               {
-                texte: `Le côté adjacent à $\\widehat{${nom}}$`,
-                statut: goodAnswer === `Le côté adjacent à $\\widehat{${nom}}$`,
+                texte: `le côté adjacent à $\\widehat{${nom}}$.`,
+                statut: goodAnswer === `le côté adjacent à $\\widehat{${nom}}$.`,
               },
               {
-                texte: `Le côté opposé à $\\widehat{${nom}}$`,
-                statut: goodAnswer === `Le côté opposé à $\\widehat{${nom}}$`,
+                texte: `le côté opposé à $\\widehat{${nom}}$.`,
+                statut: goodAnswer === `le côté opposé à $\\widehat{${nom}}$.`,
               },
               {
-                texte: "L'hypoténuse du triangle",
-                statut: goodAnswer === "L'hypoténuse du triangle",
+                texte: "l'hypoténuse du triangle.",
+                statut: goodAnswer === "l'hypoténuse du triangle.",
               },
             ]
           : [
