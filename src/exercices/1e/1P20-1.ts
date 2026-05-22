@@ -193,14 +193,11 @@ export default class LoiDeProba extends Exercice {
             const tableauCorr = tableauColonneLigne(
               entetesCol,
               entetesLgn,
-              [
+              [miseEnEvidence(
+                  fraction((nb2 - nb1) * (nb2 - nb1), nb2 * nb2).texFraction),
+                miseEnEvidence(
+                  fraction(2 * (nb2 - nb1) * nb1, nb2 * nb2).texFraction),
                 miseEnEvidence(fraction(nb1 * nb1, nb2 * nb2).texFraction),
-                miseEnEvidence(
-                  fraction(2 * (nb2 - nb1) * nb1, nb2 * nb2).texFraction,
-                ),
-                miseEnEvidence(
-                  fraction((nb2 - nb1) * (nb2 - nb1), nb2 * nb2).texFraction,
-                ),
               ],
               1.5,
             )
@@ -294,7 +291,7 @@ export default class LoiDeProba extends Exercice {
             if (this.interactif) {
               texte += tabMathlive.output
               const reponses = [
-                ['L1C1', { value: fraction(nb1 * nb1, nb2 * nb2).texFraction }],
+                ['L1C3', { value: fraction(nb1 * nb1, nb2 * nb2).texFraction }],
                 [
                   'L1C2',
                   {
@@ -303,7 +300,7 @@ export default class LoiDeProba extends Exercice {
                   },
                 ],
                 [
-                  'L1C3',
+                  'L1C1',
                   {
                     value: fraction((nb2 - nb1) * (nb2 - nb1), nb2 * nb2)
                       .texFraction,
