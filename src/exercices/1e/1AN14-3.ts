@@ -52,7 +52,6 @@ export default class DeriveePoly extends Exercice {
     // Sortie LaTeX
 
     this.spacing = 2
-    this.spacingCorr = 2
     this.sup = '6'
     this.sup2 = false
     this.sup3 = false
@@ -67,6 +66,8 @@ export default class DeriveePoly extends Exercice {
   }
 
   nouvelleVersion() {
+    this.spacingCorr = this.sup2 ? 3 : 2
+
     const listeValeurs: string[] = [] // Les questions sont différentes du fait du nom de la fonction, donc on stocke les valeurs
 
     const listeOfCase = ['const', 'poly1', 'poly2', 'poly3', 'monbis']
@@ -229,11 +230,23 @@ export default class DeriveePoly extends Exercice {
         )
         if (termes.length > 1) {
           const fExpr = ce.parse(expression) as Expression
-          texteCorr = `La fonction $${nameF}(x)=${fExpr.latex.replaceAll('.', '{,}')}$ est une somme de $${termes.length}$ termes.<br>${useFraction ? '<br>' : ''}`
+          texteCorr = `La fonction $${nameF}(x)=${fExpr.latex.replaceAll('.', '{,}')}$ est une somme de $${termes.length}$ termes.<br>`
           texteCorr +=
             'On rappelle que $(u+v)^\\prime=u^\\prime+v^\\prime$.<br>'
+
           for (let n = 0; n < termes.length; n++) {
-            texteCorr += `$${termNames[n]}(x)=${termes[n]},\\ ${termNames[n]}^\\prime(x)=${termesD[n]}$.<br>${useFraction ? '<br>' : ''}`
+            texteCorr += `$${termNames[n]}(x)=${termes[n]},\\ ${termNames[n]}^\\prime(x)=`
+            texteCorr += `${termes[n].split('x').length > 1 && termes[n].split('x')[1] !== '' ? termes[n].split('x')[0] : ''}`
+            const exposant =
+              termesD[n].split('x').length > 1
+                ? parseInt(termes[n].split('x')[1].replace('^', ''))
+                : 0
+            texteCorr +=
+              termesD[n].split('x').length > 1 && termes[n].split('x')[0] !== ''
+                ? `\\times ${exposant}x${exposant - 1 !== 1 ? `^${exposant - 1}` : ''}` +
+                  '='
+                : ''
+            texteCorr += `${termesD[n]}$.<br>`
           }
         } else {
           const fExpr = ce.parse(expression) as Expression
@@ -242,7 +255,6 @@ export default class DeriveePoly extends Exercice {
       } else {
         if (poly.monomes.length > 1) {
           texteCorr = `$${nameF}^\\prime(x)=${poly.detailleCalculDerivee()}$.<br>`
-          texteCorr += 'On effectue les produits.<br>'
         } else {
           texteCorr = `La fonction $${nameF}(x)=${fExpr.latex.replaceAll('.', '{,}')}$ est une fonction constante, sa dérivée est la fonction constante nulle.<br>`
         }
@@ -253,7 +265,7 @@ export default class DeriveePoly extends Exercice {
       texteCorr = texteCorr.replaceAll('\\frac', '\\dfrac')
       if (this.interactif) {
         texte +=
-          `<br>${useFraction ? '<br>' : ''}` +
+          `<br>` +
           ajouteChampTexteMathLive(this, i, KeyboardType.lyceeClassique, {
             texteAvant: `$${nameF}'(x)=$`,
           }) +

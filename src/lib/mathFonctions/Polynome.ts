@@ -346,7 +346,7 @@ export class Polynome {
         }
       })
     } else {
-      // les coeffs sont fourni
+      // les coeffs sont fournis
       this.monomes = coeffs!.map(function (el) {
         if (el instanceof FractionEtendue) {
           if (useFraction) {
@@ -741,7 +741,7 @@ export class Polynome {
       letter: this.letter,
     })
   }
-
+  /* EE : Ancienne fonction programmée par JCL. Je la conserve qque temps pour être sûr que la nouvelle fasse mieux.
   detailleCalculDerivee() {
     let formeDerivee = ''
     for (let index = this.monomes.length - 1; index > 0; index--) {
@@ -753,6 +753,63 @@ export class Polynome {
             : `+${String(index)}\\times ${el instanceof FractionEtendue ? el.texParentheses : ecritureParentheseSiNegatif(el)}${index > 2 ? `${this.letter}^{${index - 1}}` : index === 2 ? this.letter : ''}`
       }
     }
+    return formeDerivee
+  }
+*/
+  detailleCalculDerivee() {
+    let formeDerivee = ''
+
+    for (let index = this.monomes.length - 1; index > 0; index--) {
+      const el = this.monomes[index]
+
+      if (!egal(Number(el), 0)) {
+        const estFraction = el instanceof FractionEtendue
+
+        const valeurNum = Number(el)
+        const estNegatif = estFraction ? el.signe === -1 : valeurNum < 0
+
+        const signe = estNegatif ? '-' : '+'
+
+        const absValeur = Math.abs(valeurNum)
+
+        // gestion du coefficient
+        let coeffTex = ''
+
+        if (estFraction) {
+          // fraction → on garde tel quel
+          coeffTex = el.texParentheses
+        } else {
+          if (absValeur === 1 && index > 1) {
+            // on n'écrit pas 1 devant x
+            coeffTex = ''
+          } else {
+            coeffTex = ecritureParentheseSiNegatif(absValeur)
+          }
+        }
+
+        let terme = ''
+
+        if (index === 1) {
+          // ax → a
+          terme = `${coeffTex}`
+        } else {
+          terme =
+            `${coeffTex}${coeffTex ? '\\times ' : ''}${index}` +
+            (index > 2
+              ? `${this.letter}^{${index - 1}}`
+              : index === 2
+                ? this.letter
+                : '')
+        }
+
+        if (formeDerivee === '') {
+          formeDerivee += (estNegatif ? '-' : '') + terme
+        } else {
+          formeDerivee += signe + terme
+        }
+      }
+    }
+
     return formeDerivee
   }
 
