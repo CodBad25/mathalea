@@ -102,7 +102,8 @@ export function updateGlobalOptionsInURL(url: URL) {
   if (
     options.v === 'eleve' ||
     options.v === 'myriade' ||
-    options.v === 'indices'
+    options.v === 'indices' ||
+    options.v === 'indice'
   ) {
     if (options.title != null && options.title.length > 0) {
       url.searchParams.append('title', options.title)
