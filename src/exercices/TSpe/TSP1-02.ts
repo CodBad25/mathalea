@@ -118,7 +118,7 @@ export default class LoiBinomialeUrne extends Exercice {
       }
       if (typesDeQuestionsDisponibles.includes(2)) {
         questions.push(
-          `Calculer $P(X=k)$.${this.interactif ? '\n$P(X=k)\\approx$' : ''}`,
+          `Calculer $P(X=${k})$.${this.interactif ? '\n$P(X=${k})\\approx$' : ''}`,
         )
         champsOptions.push({
           keyboard: KeyboardType.clavierNumbers,
@@ -167,7 +167,7 @@ export default class LoiBinomialeUrne extends Exercice {
       if (typesDeQuestionsDisponibles.includes(1)) {
         corrections.push(`On sait que la probabilité d'avoir $k$ succès quand $X$ suit une loi binomiale de paramètre $n$ et $p$ est :<br>
       $\\mathrm{P}(X=k)=\\displaystyle\\binom{n}{k}\\times p^k\\times (1-p)^{n-k}$.<br> 
-      ce qui donne dans notre situation : $\\mathrm{P}(X=k)=\\displaystyle\\binom{${n}}{k}\\times \\left(${p.texFractionSimplifiee}\\right)^k\\times \\left(${q.texFractionSimplifiee}\\right)^{${n}-k}\\quad$ (pour $0\\leqslant k\\leqslant ${n}$).<br> 
+      ce qui donne dans notre situation : $\\mathrm{P}(X=${k})=\\displaystyle\\binom{${n}}{k}\\times \\left(${p.texFractionSimplifiee}\\right)^k\\times \\left(${q.texFractionSimplifiee}\\right)^{${n}-k}\\quad$ (pour $0\\leqslant k\\leqslant ${n}$).<br> 
       Pour $k=0$, on a $\\mathrm{P}(X=0) = \\displaystyle\\binom{${n}}{0}\\times \\left(${p.texFractionSimplifiee}\\right)^0\\times \\left(${q.texFractionSimplifiee}\\right)^{${n}}$.
       <br>Par calcul, on obtient que $\\mathrm{P}(X=0)\\approx ${miseEnEvidence(texNombre(reponseNum0))}$.`)
       }
