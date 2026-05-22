@@ -313,7 +313,7 @@
     ? 'dark'
     : ''}"
 >
-  {#if $globalOptions.v === 'myriade' || $globalOptions.v === 'indices'}
+  {#if $globalOptions.v === 'myriade' || $globalOptions.v === 'indices' || $globalOptions.v === 'indice'}
     <Banner {brandImagePath} {productImagePath} />
   {/if}
   <div
@@ -327,7 +327,7 @@
   >
     <div
       class="flex flex-col-reverse lg:flex-row space-y-reverse space-y-4 lg:space-y-0 lg:space-x-4 scale-75 lg:scale-100 pointer-events-auto
-      {$globalOptions.v === 'myriade' || $globalOptions.v === 'indices'
+      {$globalOptions.v === 'myriade' || $globalOptions.v === 'indices' || $globalOptions.v === 'indice'
         ? 'translate-y-16'
         : ''}"
     >
@@ -568,7 +568,7 @@
     </div>
   </div>
   <Keyboard />
-  {#if $globalOptions.v !== 'myriade' && $globalOptions.v !== 'indices'}
+  {#if $globalOptions.v !== 'myriade' && $globalOptions.v !== 'indices' && $globalOptions.v !== 'indice'}
     <div
       class="flex justify-center w-full {$keyboardState.isVisible
         ? 'mt-52'

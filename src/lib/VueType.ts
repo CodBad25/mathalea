@@ -19,6 +19,7 @@ const VueTypeArray = <const>[
   'overview',
   'myriade',
   'indices',
+  'indice',
   'tools',
   'check-test',
   '',

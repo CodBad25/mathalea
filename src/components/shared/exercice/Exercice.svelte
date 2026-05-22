@@ -76,7 +76,8 @@
       if (
         $globalOptions.v === 'eleve' ||
         $globalOptions.v === 'myriade' ||
-        $globalOptions.v === 'indices'
+        $globalOptions.v === 'indices' ||
+        $globalOptions.v === 'indice'
       ) {
         return 'mathaleaVueEleve'
       } else {

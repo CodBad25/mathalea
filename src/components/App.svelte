@@ -175,6 +175,12 @@
         logoPath: 'assets/images/vendors/bordas/indices-bordas-logo.png',
       }
     }
+    if ($globalOptions.v === 'indice') {
+      $vendor.product = {
+        name: 'indice',
+        logoPath: 'assets/images/vendors/bordas/indice-bordas-logo.png',
+      }
+    }
   }
 
   function isDevMode() {
@@ -198,7 +204,7 @@
     <Diaporama />
   {:else if $globalOptions.v === 'can'}
     <Can />
-  {:else if $globalOptions.v === 'eleve' || $globalOptions.v === 'indices' || $globalOptions.v === 'myriade'}
+  {:else if $globalOptions.v === 'eleve' || $globalOptions.v === 'indices' || $globalOptions.v === 'myriade' || $globalOptions.v === 'indice'}
     <Eleve />
   {:else if $globalOptions.v === 'latex'}
     <Latex />
