@@ -1,16 +1,16 @@
+import { SVG, registerWindow } from '@svgdotjs/svg.js'
+import { createList } from '../../lib/format/lists'
+import { choice } from '../../lib/outils/arrayOutils'
+import { egalOuApprox } from '../../lib/outils/ecritures'
 import {
   texteEnCouleurEtGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
-import ExerciceBrevetA from '../ExerciceBrevetA'
-import { SVG, registerWindow } from '@svgdotjs/svg.js'
-import { context } from '../../modules/context'
-import { createList } from '../../lib/format/lists'
-import { texNombre } from '../../lib/outils/texNombre'
-import { egalOuApprox } from '../../lib/outils/ecritures'
-import { randint } from '../../modules/outils'
-import { choice } from '../../lib/outils/arrayOutils'
 import { sp } from '../../lib/outils/outilString'
+import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
+import { randint } from '../../modules/outils'
+import ExerciceBrevetA from '../ExerciceBrevetA'
 
 export const uuid = 'd11ae'
 export const refs = {
@@ -62,10 +62,13 @@ function latexRoulette(listeNumeros: number[]) {
       every odd number/.style={text=white},
       every even number/.style={text=black!70}]
       \\foreach \\number [count=\\i] in {${listeNumeros.join(',')}} {
-        \\node[number=\\i,rotate={\\i*\\angle+\\angle/2}] at ({\\i*\\angle+\\angle/2}:{(\\Rb+\\Rc)/2}) {\\sffamily\\bfseries\\number};
-      }
+        \\ifnum\\i=37
+    \\node[rotate={\\i*\\angle+\\angle/2},text=black!70] at ({\\i*\\angle+\\angle/2}:{(\\Rb+\\Rc)/2}) {\\sffamily\\bfseries\\number};
+  \\else
+    \\node[number=\\i, rotate={\\i*\\angle+\\angle/2}] at ({\\i*\\angle+\\angle/2}:{(\\Rb+\\Rc)/2}) {\\sffamily\\bfseries\\number};
+  \\fi
+  }
     \\end{scope}
-    \\node[rotate={\\angle/2},text=black!70] at ({\\angle/2}:{(\\Rb+\\Rc)/2}) {\\sffamily\\bfseries0};
     \\fill[black!70] ({\\angle/2}:{(\\Rb+\\Ra)/2}) circle (1.5mm);
   \\end{tikzpicture}`
 }
