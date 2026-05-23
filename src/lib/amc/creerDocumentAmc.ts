@@ -573,6 +573,10 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
       exerciceInputIndex++
       continue
     }
+    if (!exercise.amcReady) {
+      exerciceInputIndex++
+      continue
+    }
 
     const [
       exerciseTex,
@@ -596,6 +600,7 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
         nbQuestions[newGroupIndex] = exerciseQuestionCount
       } else {
         // Le nombre de questions à restituer pour ce groupe a été fixé par l'utilisateur.
+        areGroupQuestionCountsImplicit[newGroupIndex] = false
         areGroupQuestionCountsImplicit[newGroupIndex] = false
       }
       groupTitles[newGroupIndex] = exerciseTitle

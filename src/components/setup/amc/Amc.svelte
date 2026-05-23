@@ -128,6 +128,10 @@
   let selectedQuestionTikzScaleFactor = 1
   let selectedQuestionClipDimensionsLabel =
     'Dimensions de figure: clip non détecté'
+  let isAddAmcOpenEditorVisible = false
+  let addAmcOpenInstruction = ''
+  let addAmcOpenStatus = ''
+  let isAddAmcOpenStatusError = false
   let latexContent = ''
   let latexExportStatus = ''
   let latexExportStatusTimeout: ReturnType<typeof setTimeout> | null = null
@@ -1305,6 +1309,149 @@
     }, 4000)
   }
 
+  function setAddAmcOpenStatus(message: string, isError = false) {
+    addAmcOpenStatus = message
+    isAddAmcOpenStatusError = isError
+  }
+
+  function clearAddAmcOpenUi() {
+    isAddAmcOpenEditorVisible = false
+    addAmcOpenInstruction = ''
+    setAddAmcOpenStatus('', false)
+  }
+
+  function canSelectedGroupAddAmcOpen(): boolean {
+    if (selectedExerciseIndex == null) return false
+    const exercise = exercices[selectedExerciseIndex] as any
+    const type = exercise?.amcType
+    return type === 'qcmMono' || type === 'qcmMult' || type === 'AMCNum'
+  }
+
+  function buildHybridOpenProposition(instruction: string) {
+    return {
+      type: 'AMCOpen',
+      enonce: '',
+      propositions: [
+        {
+          texte: instruction,
+          enonce: instruction,
+          statut: 3,
+          sanscadre: false,
+          pointilles: true,
+        },
+      ],
+    }
+  }
+
+  function convertMonotypeQuestionToHybrid(
+    item: any,
+    sourceType: 'qcmMono' | 'qcmMult' | 'AMCNum',
+    openInstruction: string,
+  ) {
+    const cloned = cloneDeep(item ?? {})
+    const sourceOptions =
+      cloned.options != null ? cloneDeep(cloned.options) : undefined
+
+    const sourceProposition = (() => {
+      if (sourceType === 'AMCNum') {
+        const firstNumericBlock =
+          cloned?.propositions?.[0] != null
+            ? cloneDeep(cloned.propositions[0])
+            : { reponse: {} }
+        if (firstNumericBlock.reponse == null) {
+          firstNumericBlock.reponse =
+            cloned?.reponse != null ? cloneDeep(cloned.reponse) : {}
+        }
+        return {
+          type: 'AMCNum',
+          enonce: '',
+          ...(sourceOptions ? { options: sourceOptions } : {}),
+          propositions: [firstNumericBlock],
+        }
+      }
+
+      return {
+        type: sourceType,
+        enonce: '',
+        ...(sourceOptions ? { options: sourceOptions } : {}),
+        propositions: Array.isArray(cloned.propositions)
+          ? cloneDeep(cloned.propositions)
+          : [],
+      }
+    })()
+
+    return {
+      enonce: typeof cloned.enonce === 'string' ? cloned.enonce : '',
+      ...(sourceOptions ? { options: sourceOptions } : {}),
+      propositions: [
+        sourceProposition,
+        buildHybridOpenProposition(openInstruction),
+      ],
+    }
+  }
+
+  function addAmcOpenToSelectedGroup() {
+    if (selectedExerciseIndex == null) return
+    const exercise = exercices[selectedExerciseIndex] as any
+    if (!exercise) return
+
+    const sourceType = exercise.amcType as 'qcmMono' | 'qcmMult' | 'AMCNum'
+    if (
+      sourceType !== 'qcmMono' &&
+      sourceType !== 'qcmMult' &&
+      sourceType !== 'AMCNum'
+    ) {
+      setAddAmcOpenStatus(
+        'Conversion disponible uniquement pour les groupes qcm ou AMCNum.',
+        true,
+      )
+      return
+    }
+
+    const instruction = addAmcOpenInstruction.trim()
+    if (instruction.length === 0) {
+      setAddAmcOpenStatus('Saisis une consigne pour le bloc AMCOpen.', true)
+      return
+    }
+
+    const autoCorrection = getAmcAutoCorrection(exercise)
+    if (autoCorrection.length === 0) {
+      setAddAmcOpenStatus(
+        'Aucune question disponible pour ajouter un bloc AMCOpen.',
+        true,
+      )
+      return
+    }
+
+    const hybridAutoCorrection = autoCorrection.map((item) =>
+      convertMonotypeQuestionToHybrid(item, sourceType, instruction),
+    )
+
+    exercise.autoCorrectionAMC = hybridAutoCorrection
+    exercise.autoCorrection = cloneDeep(hybridAutoCorrection)
+    exercise.amcType = 'AMCHybride'
+    exercise.amcHtmlQuestions = extractAMCQuestionsFromAutoCorrection(exercise)
+
+    selectedRef = null
+    selectedHybridHeaderRef = {
+      exerciseIndex: selectedExerciseIndex,
+      questionIndex: 0,
+    }
+    clearAddAmcOpenUi()
+    exercices = [...exercices]
+    updateLatexPreview()
+  }
+
+  $: if (
+    !canSelectedGroupAddAmcOpen() &&
+    (isAddAmcOpenEditorVisible ||
+      addAmcOpenInstruction !== '' ||
+      addAmcOpenStatus !== '' ||
+      isAddAmcOpenStatusError)
+  ) {
+    clearAddAmcOpenUi()
+  }
+
   function normalizeGroupSetting(
     value: GroupSetting,
     fallback: GroupSetting,
@@ -2420,1346 +2567,1509 @@
       : ''}"
   >
     <div
-      class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_22rem] gap-4 mt-4 xl:h-[calc(100vh-10rem)] xl:overflow-hidden"
+      class="w-full pb-8 text-coopmaths-corpus dark:text-coopmathsdark-corpus {$darkMode.isActive
+        ? 'dark'
+        : ''}"
     >
-      <section
-        class="space-y-4 xl:h-full xl:min-h-0 xl:overflow-y-auto xl:pr-2"
+      <div
+        class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_22rem] gap-4 mt-4 xl:h-[calc(100vh-10rem)] xl:overflow-hidden"
       >
-        <div
-          class="rounded-xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/40 p-4 dark:bg-coopmathsdark-canvas-dark/50"
-          role="region"
-          aria-label="Zone centrale de composition AMC"
+        <section
+          class="space-y-4 xl:h-full xl:min-h-0 xl:overflow-y-auto xl:pr-2"
         >
-          <p
-            class="font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
-          >
-            Zone centrale de composition AMC
-          </p>
-          <p
-            class="text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus mt-1"
-          >
-            Clique sur un exercice du référentiel à gauche pour l'ajouter, puis
-            règle ses paramètres via le bouton Paramétrer l'exercice.
-          </p>
-        </div>
-
-        {#if exercices.length === 0}
           <div
-            class="rounded-xl border p-6 text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+            class="rounded-xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/40 p-4 dark:bg-coopmathsdark-canvas-dark/50"
+            role="region"
+            aria-label="Zone centrale de composition AMC"
           >
-            Aucun exercice sélectionné pour AMC.
-          </div>
-        {:else}
-          {#each exercices as exercice, exerciseIndex}
-            <article
-              class="rounded-2xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/30 p-4 dark:bg-coopmathsdark-canvas-dark/40 dark:border-coopmathsdark-struct-light/30"
+            <p
+              class="font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
             >
-              <header
-                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+              Zone centrale de composition AMC
+            </p>
+            <p
+              class="text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus mt-1"
+            >
+              Clique sur un exercice du référentiel à gauche pour l'ajouter,
+              puis règle ses paramètres via le bouton Paramétrer l'exercice.
+            </p>
+          </div>
+
+          {#if exercices.length === 0}
+            <div
+              class="rounded-xl border p-6 text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+            >
+              Aucun exercice sélectionné pour AMC.
+            </div>
+          {:else}
+            {#each exercices as exercice, exerciseIndex}
+              <article
+                class="rounded-2xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/30 p-4 dark:bg-coopmathsdark-canvas-dark/40 dark:border-coopmathsdark-struct-light/30"
               >
-                <div class="flex items-center gap-2">
-                  <h2
-                    class="font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
-                  >
-                    {exercice.id} - {exercice.titre}
-                  </h2>
-                  <button
-                    type="button"
-                    class="rounded border border-red-400 px-2 py-1 text-xs text-red-600 hover:bg-red-50 dark:border-red-600 dark:text-red-400 dark:hover:bg-red-900/30"
-                    aria-label="Supprimer le groupe"
-                    on:click={() => deleteExercise(exerciseIndex)}
-                  >
-                    Supprimer
-                  </button>
-                </div>
-                <div class="flex items-center gap-2 text-xs">
-                  <span
-                    class="rounded bg-coopmaths-canvas px-2 py-1 dark:bg-coopmathsdark-canvas"
-                  >
-                    Type: {exercice.amcType}
-                  </span>
-                  <span
-                    class="rounded bg-coopmaths-canvas px-2 py-1 dark:bg-coopmathsdark-canvas"
-                  >
-                    Seed: {groupSettings[exerciseIndex]?.seed}
-                  </span>
-                  <button
-                    type="button"
-                    class="rounded border px-2 py-1"
-                    on:click={() => {
-                      selectedExerciseIndex = exerciseIndex
-                      selectedHybridHeaderRef = null
-                      isDocumentSettingsOpen = false
-                    }}
-                  >
-                    Sélectionner le groupe
-                  </button>
-                </div>
-              </header>
-
-              <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                {#each getPreviewDisplayItems(exercice, exerciseIndex) as item (item.kind === 'hybridContainer' ? `hybrid-${item.header.key}` : item.block.key)}
-                  {#if item.kind === 'hybridContainer'}
-                    {@const hasCommonHeader = hasHybridHeaderContent(
-                      item.header,
-                    )}
-                    <div
-                      class="md:col-span-2 rounded-xl border-2 border-coopmaths-struct-light/70 bg-coopmaths-canvas/25 p-3 dark:border-coopmathsdark-struct-light/50 dark:bg-coopmathsdark-canvas/25"
+                <header
+                  class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+                >
+                  <div class="flex items-center gap-2">
+                    <h2
+                      class="font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
                     >
-                      <div class="mb-1 flex items-center justify-between gap-1">
-                        <p
-                          class="text-xs font-semibold uppercase tracking-wide text-coopmaths-struct dark:text-coopmathsdark-struct"
-                        >
-                          {item.header.label}
-                        </p>
-                      </div>
+                      {exercice.id} - {exercice.titre}
+                    </h2>
+                    <button
+                      type="button"
+                      class="rounded border border-red-400 px-2 py-1 text-xs text-red-600 hover:bg-red-50 dark:border-red-600 dark:text-red-400 dark:hover:bg-red-900/30"
+                      aria-label="Supprimer le groupe"
+                      on:click={() => deleteExercise(exerciseIndex)}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                  <div class="flex items-center gap-2 text-xs">
+                    <span
+                      class="rounded bg-coopmaths-canvas px-2 py-1 dark:bg-coopmathsdark-canvas"
+                    >
+                      Type: {exercice.amcType}
+                    </span>
+                    <span
+                      class="rounded bg-coopmaths-canvas px-2 py-1 dark:bg-coopmathsdark-canvas"
+                    >
+                      Seed: {groupSettings[exerciseIndex]?.seed}
+                    </span>
+                    <button
+                      type="button"
+                      class="rounded border px-2 py-1"
+                      on:click={() => {
+                        selectedExerciseIndex = exerciseIndex
+                        selectedHybridHeaderRef = null
+                        isDocumentSettingsOpen = false
+                      }}
+                    >
+                      Sélectionner le groupe
+                    </button>
+                  </div>
+                </header>
 
-                      {#if hasCommonHeader}
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {#each getPreviewDisplayItems(exercice, exerciseIndex) as item (item.kind === 'hybridContainer' ? `hybrid-${item.header.key}` : item.block.key)}
+                    {#if item.kind === 'hybridContainer'}
+                      {@const hasCommonHeader = hasHybridHeaderContent(
+                        item.header,
+                      )}
+                      <div
+                        class="md:col-span-2 rounded-xl border-2 border-coopmaths-struct-light/70 bg-coopmaths-canvas/25 p-3 dark:border-coopmathsdark-struct-light/50 dark:bg-coopmathsdark-canvas/25"
+                      >
                         <div
-                          role="button"
-                          tabindex="0"
-                          class="amc-hybrid-header-card rounded-xl border border-coopmaths-struct-light/40 bg-white/80 p-4 transition-colors dark:bg-coopmathsdark-canvas-dark/70 dark:border-coopmathsdark-struct-light/30 {isSelectedHybridHeader(
-                            item.header.questionRef,
-                          )
-                            ? 'ring-2 ring-coopmaths-action cursor-pointer'
-                            : 'cursor-pointer hover:bg-coopmaths-canvas/40 dark:hover:bg-coopmathsdark-canvas/40'}"
-                          on:click={() =>
-                            selectHybridHeader(item.header.questionRef)}
-                          on:keydown={(event) => {
-                            if (event.key === 'Enter' || event.key === ' ') {
-                              selectHybridHeader(item.header.questionRef)
-                            }
-                          }}
+                          class="mb-1 flex items-center justify-between gap-1"
                         >
                           <p
-                            class="text-base font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
+                            class="text-xs font-semibold uppercase tracking-wide text-coopmaths-struct dark:text-coopmathsdark-struct"
                           >
-                            Énoncé commun
+                            {item.header.label}
                           </p>
-                          <div class="mt-2">
-                            <AmcEnonceHtml
-                              content={item.header.htmlContent ||
-                                item.header.enonce}
-                              svgScale={item.header.previewScaleFactor}
-                            />
-                          </div>
                         </div>
-                      {/if}
 
-                      <div
-                        class="amc-hybrid-children grid grid-cols-1 md:grid-cols-2 gap-3"
-                        class:mt-3={hasCommonHeader}
-                      >
-                        {#each item.children as block (block.key)}
-                          <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+                        {#if hasCommonHeader}
                           <div
-                            role={block.ref ? 'button' : undefined}
-                            tabindex={block.ref ? 0 : undefined}
-                            class="amc-hybrid-child rounded-xl p-1 text-left transition-colors {block.ref
-                              ? `cursor-pointer ${
-                                  selectedRef &&
-                                  selectedRef.exerciseIndex ===
-                                    block.ref.exerciseIndex &&
-                                  selectedRef.questionIndex ===
-                                    block.ref.questionIndex &&
-                                  selectedRef.propositionIndex ===
-                                    block.ref.propositionIndex &&
-                                  selectedRef.kind === block.ref.kind
-                                    ? 'ring-2 ring-coopmaths-action'
-                                    : 'hover:bg-coopmaths-canvas/40 dark:hover:bg-coopmathsdark-canvas/40'
-                                }`
-                              : 'bg-coopmaths-canvas/20 dark:bg-coopmathsdark-canvas/20'}"
-                            on:click={() => {
-                              if (block.ref) selectBlock(block.ref)
-                            }}
-                            on:keydown={(e) => {
-                              if (
-                                block.ref &&
-                                (e.key === 'Enter' || e.key === ' ')
-                              )
-                                selectBlock(block.ref)
+                            role="button"
+                            tabindex="0"
+                            class="amc-hybrid-header-card rounded-xl border border-coopmaths-struct-light/40 bg-white/80 p-4 transition-colors dark:bg-coopmathsdark-canvas-dark/70 dark:border-coopmathsdark-struct-light/30 {isSelectedHybridHeader(
+                              item.header.questionRef,
+                            )
+                              ? 'ring-2 ring-coopmaths-action cursor-pointer'
+                              : 'cursor-pointer hover:bg-coopmaths-canvas/40 dark:hover:bg-coopmathsdark-canvas/40'}"
+                            on:click={() =>
+                              selectHybridHeader(item.header.questionRef)}
+                            on:keydown={(event) => {
+                              if (event.key === 'Enter' || event.key === ' ') {
+                                selectHybridHeader(item.header.questionRef)
+                              }
                             }}
                           >
-                            <div
-                              class="mb-1 flex items-center justify-between gap-1"
+                            <p
+                              class="text-base font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
                             >
-                              <p
-                                class="text-xs font-semibold uppercase tracking-wide text-coopmaths-action dark:text-coopmathsdark-action"
+                              Énoncé commun
+                            </p>
+                            <div class="mt-2">
+                              <AmcEnonceHtml
+                                content={item.header.htmlContent ||
+                                  item.header.enonce}
+                                svgScale={item.header.previewScaleFactor}
+                              />
+                            </div>
+                          </div>
+                        {/if}
+
+                        <div
+                          class="amc-hybrid-children grid grid-cols-1 md:grid-cols-2 gap-3"
+                          class:mt-3={hasCommonHeader}
+                        >
+                          {#each item.children as block (block.key)}
+                            <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+                            <div
+                              role={block.ref ? 'button' : undefined}
+                              tabindex={block.ref ? 0 : undefined}
+                              class="amc-hybrid-child rounded-xl p-1 text-left transition-colors {block.ref
+                                ? `cursor-pointer ${
+                                    selectedRef &&
+                                    selectedRef.exerciseIndex ===
+                                      block.ref.exerciseIndex &&
+                                    selectedRef.questionIndex ===
+                                      block.ref.questionIndex &&
+                                    selectedRef.propositionIndex ===
+                                      block.ref.propositionIndex &&
+                                    selectedRef.kind === block.ref.kind
+                                      ? 'ring-2 ring-coopmaths-action'
+                                      : 'hover:bg-coopmaths-canvas/40 dark:hover:bg-coopmathsdark-canvas/40'
+                                  }`
+                                : 'bg-coopmaths-canvas/20 dark:bg-coopmathsdark-canvas/20'}"
+                              on:click={() => {
+                                if (block.ref) selectBlock(block.ref)
+                              }}
+                              on:keydown={(e) => {
+                                if (
+                                  block.ref &&
+                                  (e.key === 'Enter' || e.key === ' ')
+                                )
+                                  selectBlock(block.ref)
+                              }}
+                            >
+                              <div
+                                class="mb-1 flex items-center justify-between gap-1"
                               >
-                                {block.label}
-                              </p>
-                              {#if block.ref}
-                                <button
-                                  type="button"
-                                  class="shrink-0 rounded px-1 text-xs text-coopmaths-corpus/60 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/40 dark:hover:text-red-400"
-                                  aria-label="Supprimer la question"
-                                  on:click|stopPropagation={() =>
-                                    deleteQuestion(
-                                      block.ref!.exerciseIndex,
-                                      block.ref!.questionIndex,
-                                    )}>×</button
+                                <p
+                                  class="text-xs font-semibold uppercase tracking-wide text-coopmaths-action dark:text-coopmathsdark-action"
                                 >
+                                  {block.label}
+                                </p>
+                                {#if block.ref}
+                                  <button
+                                    type="button"
+                                    class="shrink-0 rounded px-1 text-xs text-coopmaths-corpus/60 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/40 dark:hover:text-red-400"
+                                    aria-label="Supprimer la question"
+                                    on:click|stopPropagation={() =>
+                                      deleteQuestion(
+                                        block.ref!.exerciseIndex,
+                                        block.ref!.questionIndex,
+                                      )}>×</button
+                                  >
+                                {/if}
+                              </div>
+
+                              {#if block.previewKind === 'qcm'}
+                                <AmcPreviewQcm
+                                  enonce={block.enonce}
+                                  htmlContent={block.htmlContent}
+                                  svgScale={block.previewScaleFactor}
+                                  mode={block.data?.type === 'qcmMult' ||
+                                  exercice.amcType === 'qcmMult'
+                                    ? 'qcmMult'
+                                    : 'qcmMono'}
+                                  choix={block.data?.propositions ?? []}
+                                />
+                              {:else if block.previewKind === 'num'}
+                                <AmcPreviewNumeric
+                                  enonce={block.enonce}
+                                  htmlContent={block.htmlContent}
+                                  svgScale={block.previewScaleFactor}
+                                  value={block.data?.propositions?.[0]?.reponse
+                                    ?.valeur ?? block.data?.reponse?.valeur}
+                                  param={block.data?.propositions?.[0]?.reponse
+                                    ?.param ??
+                                    block.data?.reponse?.param ??
+                                    {}}
+                                />
+                              {:else if block.previewKind === 'open'}
+                                <AmcPreviewOpen
+                                  enonce={block.enonce}
+                                  htmlContent={block.htmlContent}
+                                  svgScale={block.previewScaleFactor}
+                                  lignes={block.data?.propositions?.[0]
+                                    ?.statut ??
+                                    block.data?.propositions?.[0]?.pointilles ??
+                                    3}
+                                  pointilles={block.data?.propositions?.[0]
+                                    ?.pointilles}
+                                  sanscadre={block.data?.propositions?.[0]
+                                    ?.sanscadre}
+                                />
                               {/if}
                             </div>
-
-                            {#if block.previewKind === 'qcm'}
-                              <AmcPreviewQcm
-                                enonce={block.enonce}
-                                htmlContent={block.htmlContent}
-                                svgScale={block.previewScaleFactor}
-                                mode={block.data?.type === 'qcmMult' ||
-                                exercice.amcType === 'qcmMult'
-                                  ? 'qcmMult'
-                                  : 'qcmMono'}
-                                choix={block.data?.propositions ?? []}
-                              />
-                            {:else if block.previewKind === 'num'}
-                              <AmcPreviewNumeric
-                                enonce={block.enonce}
-                                htmlContent={block.htmlContent}
-                                svgScale={block.previewScaleFactor}
-                                value={block.data?.propositions?.[0]?.reponse
-                                  ?.valeur ?? block.data?.reponse?.valeur}
-                                param={block.data?.propositions?.[0]?.reponse
-                                  ?.param ??
-                                  block.data?.reponse?.param ??
-                                  {}}
-                              />
-                            {:else if block.previewKind === 'open'}
-                              <AmcPreviewOpen
-                                enonce={block.enonce}
-                                htmlContent={block.htmlContent}
-                                svgScale={block.previewScaleFactor}
-                                lignes={block.data?.propositions?.[0]?.statut ??
-                                  block.data?.propositions?.[0]?.pointilles ??
-                                  3}
-                                pointilles={block.data?.propositions?.[0]
-                                  ?.pointilles}
-                                sanscadre={block.data?.propositions?.[0]
-                                  ?.sanscadre}
-                              />
-                            {/if}
-                          </div>
-                        {/each}
+                          {/each}
+                        </div>
                       </div>
-                    </div>
-                  {:else}
-                    {@const block = item.block}
-                    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-                    <div
-                      role={block.ref ? 'button' : undefined}
-                      tabindex={block.ref ? 0 : undefined}
-                      class="rounded-xl p-1 text-left transition-colors {block.ref
-                        ? `cursor-pointer ${
-                            selectedRef &&
-                            selectedRef.exerciseIndex ===
-                              block.ref.exerciseIndex &&
-                            selectedRef.questionIndex ===
-                              block.ref.questionIndex &&
-                            selectedRef.propositionIndex ===
-                              block.ref.propositionIndex &&
-                            selectedRef.kind === block.ref.kind
-                              ? 'ring-2 ring-coopmaths-action'
-                              : 'hover:bg-coopmaths-canvas/40 dark:hover:bg-coopmathsdark-canvas/40'
-                          }`
-                        : 'bg-coopmaths-canvas/20 dark:bg-coopmathsdark-canvas/20'}"
-                      on:click={() => {
-                        if (block.ref) selectBlock(block.ref)
-                      }}
-                      on:keydown={(e) => {
-                        if (block.ref && (e.key === 'Enter' || e.key === ' '))
-                          selectBlock(block.ref)
-                      }}
-                    >
-                      <div class="mb-1 flex items-center justify-between gap-1">
-                        <p
-                          class="text-xs font-semibold uppercase tracking-wide text-coopmaths-action dark:text-coopmathsdark-action"
+                    {:else}
+                      {@const block = item.block}
+                      <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+                      <div
+                        role={block.ref ? 'button' : undefined}
+                        tabindex={block.ref ? 0 : undefined}
+                        class="rounded-xl p-1 text-left transition-colors {block.ref
+                          ? `cursor-pointer ${
+                              selectedRef &&
+                              selectedRef.exerciseIndex ===
+                                block.ref.exerciseIndex &&
+                              selectedRef.questionIndex ===
+                                block.ref.questionIndex &&
+                              selectedRef.propositionIndex ===
+                                block.ref.propositionIndex &&
+                              selectedRef.kind === block.ref.kind
+                                ? 'ring-2 ring-coopmaths-action'
+                                : 'hover:bg-coopmaths-canvas/40 dark:hover:bg-coopmathsdark-canvas/40'
+                            }`
+                          : 'bg-coopmaths-canvas/20 dark:bg-coopmathsdark-canvas/20'}"
+                        on:click={() => {
+                          if (block.ref) selectBlock(block.ref)
+                        }}
+                        on:keydown={(e) => {
+                          if (block.ref && (e.key === 'Enter' || e.key === ' '))
+                            selectBlock(block.ref)
+                        }}
+                      >
+                        <div
+                          class="mb-1 flex items-center justify-between gap-1"
                         >
-                          {block.label}
-                        </p>
-                        {#if block.ref}
-                          <button
-                            type="button"
-                            class="shrink-0 rounded px-1 text-xs text-coopmaths-corpus/60 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/40 dark:hover:text-red-400"
-                            aria-label="Supprimer la question"
-                            on:click|stopPropagation={() =>
-                              deleteQuestion(
-                                block.ref!.exerciseIndex,
-                                block.ref!.questionIndex,
-                              )}>×</button
+                          <p
+                            class="text-xs font-semibold uppercase tracking-wide text-coopmaths-action dark:text-coopmathsdark-action"
                           >
+                            {block.label}
+                          </p>
+                          {#if block.ref}
+                            <button
+                              type="button"
+                              class="shrink-0 rounded px-1 text-xs text-coopmaths-corpus/60 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/40 dark:hover:text-red-400"
+                              aria-label="Supprimer la question"
+                              on:click|stopPropagation={() =>
+                                deleteQuestion(
+                                  block.ref!.exerciseIndex,
+                                  block.ref!.questionIndex,
+                                )}>×</button
+                            >
+                          {/if}
+                        </div>
+
+                        {#if block.previewKind === 'qcm'}
+                          <AmcPreviewQcm
+                            enonce={block.enonce}
+                            htmlContent={block.htmlContent}
+                            svgScale={block.previewScaleFactor}
+                            mode={block.data?.type === 'qcmMult' ||
+                            exercice.amcType === 'qcmMult'
+                              ? 'qcmMult'
+                              : 'qcmMono'}
+                            choix={block.data?.propositions ?? []}
+                          />
+                        {:else if block.previewKind === 'num'}
+                          <AmcPreviewNumeric
+                            enonce={block.enonce}
+                            htmlContent={block.htmlContent}
+                            svgScale={block.previewScaleFactor}
+                            value={block.data?.propositions?.[0]?.reponse
+                              ?.valeur ?? block.data?.reponse?.valeur}
+                            param={block.data?.propositions?.[0]?.reponse
+                              ?.param ??
+                              block.data?.reponse?.param ??
+                              {}}
+                          />
+                        {:else if block.previewKind === 'open'}
+                          <AmcPreviewOpen
+                            enonce={block.enonce}
+                            htmlContent={block.htmlContent}
+                            svgScale={block.previewScaleFactor}
+                            lignes={block.data?.propositions?.[0]?.statut ??
+                              block.data?.propositions?.[0]?.pointilles ??
+                              3}
+                            pointilles={block.data?.propositions?.[0]
+                              ?.pointilles}
+                            sanscadre={block.data?.propositions?.[0]?.sanscadre}
+                          />
                         {/if}
                       </div>
-
-                      {#if block.previewKind === 'qcm'}
-                        <AmcPreviewQcm
-                          enonce={block.enonce}
-                          htmlContent={block.htmlContent}
-                          svgScale={block.previewScaleFactor}
-                          mode={block.data?.type === 'qcmMult' ||
-                          exercice.amcType === 'qcmMult'
-                            ? 'qcmMult'
-                            : 'qcmMono'}
-                          choix={block.data?.propositions ?? []}
-                        />
-                      {:else if block.previewKind === 'num'}
-                        <AmcPreviewNumeric
-                          enonce={block.enonce}
-                          htmlContent={block.htmlContent}
-                          svgScale={block.previewScaleFactor}
-                          value={block.data?.propositions?.[0]?.reponse
-                            ?.valeur ?? block.data?.reponse?.valeur}
-                          param={block.data?.propositions?.[0]?.reponse
-                            ?.param ??
-                            block.data?.reponse?.param ??
-                            {}}
-                        />
-                      {:else if block.previewKind === 'open'}
-                        <AmcPreviewOpen
-                          enonce={block.enonce}
-                          htmlContent={block.htmlContent}
-                          svgScale={block.previewScaleFactor}
-                          lignes={block.data?.propositions?.[0]?.statut ??
-                            block.data?.propositions?.[0]?.pointilles ??
-                            3}
-                          pointilles={block.data?.propositions?.[0]?.pointilles}
-                          sanscadre={block.data?.propositions?.[0]?.sanscadre}
-                        />
-                      {/if}
-                    </div>
-                  {/if}
-                {/each}
-              </div>
-            </article>
-          {/each}
-        {/if}
-
-        <details
-          class="rounded-xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/20 p-3 dark:border-coopmathsdark-struct-light/30 dark:bg-coopmathsdark-canvas-dark/30"
-        >
-          <summary
-            class="cursor-pointer font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
-          >
-            LaTeX AMC généré en temps réel
-          </summary>
-          <div class="mt-3 flex flex-wrap gap-2">
-            <button
-              type="button"
-              class="rounded border border-coopmaths-struct-light/60 bg-white/70 px-3 py-1 text-xs font-medium text-coopmaths-struct transition-all duration-150 hover:border-blue-500 hover:text-blue-700 hover:shadow-sm active:scale-[0.97] active:border-blue-600 active:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-45 dark:bg-coopmathsdark-canvas-dark/40 dark:text-coopmathsdark-struct dark:hover:border-blue-400 dark:hover:text-blue-300 dark:active:bg-blue-900/20"
-              on:click={copyLatexToClipboard}
-              disabled={!latexContent.trim()}
-            >
-              Copier le LaTeX
-            </button>
-            <button
-              type="button"
-              class="rounded border border-coopmaths-struct-light/60 bg-white/70 px-3 py-1 text-xs font-medium text-coopmaths-struct transition-all duration-150 hover:border-blue-500 hover:text-blue-700 hover:shadow-sm active:scale-[0.97] active:border-blue-600 active:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-45 dark:bg-coopmathsdark-canvas-dark/40 dark:text-coopmathsdark-struct dark:hover:border-blue-400 dark:hover:text-blue-300 dark:active:bg-blue-900/20"
-              on:click={downloadLatexFile}
-              disabled={!latexContent.trim()}
-            >
-              Télécharger le .tex
-            </button>
-          </div>
-          {#if latexExportStatus}
-            <div
-              class="mt-3 rounded-md border px-3 py-2 text-xs font-medium {isLatexExportError
-                ? 'border-red-300 bg-red-50 text-red-800 dark:border-red-700/60 dark:bg-red-900/20 dark:text-red-200'
-                : 'border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-700/60 dark:bg-emerald-900/20 dark:text-emerald-200'}"
-              role="status"
-              aria-live="polite"
-            >
-              {latexExportStatus}
-            </div>
+                    {/if}
+                  {/each}
+                </div>
+              </article>
+            {/each}
           {/if}
-          <pre
-            class="mt-3 max-h-72 overflow-auto text-xs whitespace-pre-wrap">{latexContent}</pre>
-        </details>
-      </section>
 
-      <aside
-        class="rounded-2xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/30 p-4 dark:bg-coopmathsdark-canvas-dark/40 dark:border-coopmathsdark-struct-light/30 h-fit xl:h-[calc(100vh-10rem)] xl:overflow-y-auto xl:self-start"
-      >
-        <h3
-          class="font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
-        >
-          Paramétrage
-        </h3>
-
-        <div
-          class="mt-4 space-y-2 rounded-xl border border-coopmaths-struct-light/30 p-3"
-        >
-          <p class="text-sm font-semibold">Sauvegarde du parametrage</p>
-          <div class="flex flex-wrap gap-2">
-            <button
-              type="button"
-              class="rounded border px-3 py-1 text-xs"
-              on:click={downloadAmcConfigFile}
-              disabled={exercices.length === 0}
-            >
-              Sauvegarder (.json)
-            </button>
-            <button
-              type="button"
-              class="rounded border px-3 py-1 text-xs"
-              on:click={triggerConfigImport}
-            >
-              Charger (.json)
-            </button>
-          </div>
-          <input
-            bind:this={configImportInput}
-            type="file"
-            accept="application/json,.json"
-            class="hidden"
-            on:change={handleConfigFileChange}
-          />
-          {#if configStatus}
-            <div
-              class="rounded-md border px-3 py-2 text-xs font-medium {isConfigStatusError
-                ? 'border-red-300 bg-red-50 text-red-800 dark:border-red-700/60 dark:bg-red-900/20 dark:text-red-200'
-                : 'border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-700/60 dark:bg-emerald-900/20 dark:text-emerald-200'}"
-              role="status"
-              aria-live="polite"
-            >
-              {configStatus}
-            </div>
-          {/if}
-        </div>
-
-        <details
-          class="mt-4 rounded-xl border border-coopmaths-struct-light/30 p-3"
-          bind:open={isDocumentSettingsOpen}
-        >
-          <summary class="cursor-pointer text-sm font-semibold">
-            Paramétrage du document
-          </summary>
-
-          <div class="mt-3 space-y-2">
-            <label for="amc-doc-format" class="block text-xs">Format</label>
-            <select
-              id="amc-doc-format"
-              class="w-full rounded border px-2 py-1 text-sm"
-              value={documentSettings.format}
-              on:change={(event) => {
-                documentSettings = {
-                  ...documentSettings,
-                  format: (event.currentTarget as HTMLSelectElement).value as
-                    | 'A4'
-                    | 'A3',
-                }
-                updateLatexPreview()
-              }}
-            >
-              <option value="A4">A4</option>
-              <option value="A3">A3 (multicols 2)</option>
-            </select>
-
-            <label for="amc-doc-font-size" class="block text-xs"
-              >Taille de police</label
-            >
-            <select
-              id="amc-doc-font-size"
-              class="w-full rounded border px-2 py-1 text-sm"
-              value={documentSettings.fontSize}
-              on:change={(event) => {
-                documentSettings = {
-                  ...documentSettings,
-                  fontSize: (event.currentTarget as HTMLSelectElement).value as
-                    | '10pt'
-                    | '11pt'
-                    | '12pt',
-                }
-                updateLatexPreview()
-              }}
-            >
-              <option value="10pt">10pt</option>
-              <option value="11pt">11pt</option>
-              <option value="12pt">12pt</option>
-            </select>
-
-            <p class="mt-2 text-xs font-semibold">Identification élève</p>
-            <label class="inline-flex items-center gap-2 text-xs">
-              <input
-                type="radio"
-                name="amc-identification-mode"
-                checked={documentSettings.identificationMode === 'AMCcodeGrid'}
-                on:change={(event) => {
-                  if (!(event.currentTarget as HTMLInputElement).checked) return
-                  documentSettings = {
-                    ...documentSettings,
-                    identificationMode: 'AMCcodeGrid',
-                  }
-                  updateLatexPreview()
-                }}
-              />
-              AMCCodeGrid
-            </label>
-            <label class="inline-flex items-center gap-2 text-xs">
-              <input
-                type="radio"
-                name="amc-identification-mode"
-                checked={documentSettings.identificationMode ===
-                  'AMCassociation'}
-                on:change={(event) => {
-                  if (!(event.currentTarget as HTMLInputElement).checked) return
-                  documentSettings = {
-                    ...documentSettings,
-                    identificationMode: 'AMCassociation',
-                  }
-                  updateLatexPreview()
-                }}
-              />
-              Association
-            </label>
-            <label class="inline-flex items-center gap-2 text-xs">
-              <input
-                type="radio"
-                name="amc-identification-mode"
-                checked={documentSettings.identificationMode === 'AMCnom'}
-                on:change={(event) => {
-                  if (!(event.currentTarget as HTMLInputElement).checked) return
-                  documentSettings = {
-                    ...documentSettings,
-                    identificationMode: 'AMCnom',
-                  }
-                  updateLatexPreview()
-                }}
-              />
-              Juste champNom
-            </label>
-
-            {#if documentSettings.identificationMode === 'AMCassociation'}
-              <label for="amc-doc-roster" class="block text-xs"
-                >Liste eleves (nom, prenom[, id])</label
-              >
-              <textarea
-                id="amc-doc-roster"
-                class="w-full rounded border px-2 py-1 text-xs min-h-20"
-                value={documentSettings.associationRoster}
-                on:keydown={(event) => {
-                  event.stopPropagation()
-                }}
-                on:input={(event) => {
-                  documentSettings = {
-                    ...documentSettings,
-                    associationRoster: (
-                      event.currentTarget as HTMLTextAreaElement
-                    ).value,
-                  }
-                  updateLatexPreview()
-                }}
-              ></textarea>
-            {/if}
-
-            <label for="amc-doc-copies-count" class="block text-xs"
-              >Nombre d'exemplaires (\exemplaire)</label
-            >
-            <input
-              id="amc-doc-copies-count"
-              type="number"
-              min="1"
-              class="w-full rounded border px-2 py-1 text-sm"
-              value={documentSettings.nbExemplaires}
-              on:input={(event) => {
-                const value = Math.max(
-                  1,
-                  Number((event.currentTarget as HTMLInputElement).value) || 1,
-                )
-                documentSettings = {
-                  ...documentSettings,
-                  nbExemplaires: value,
-                }
-                updateLatexPreview()
-              }}
-            />
-
-            <label class="mt-2 inline-flex items-center gap-2 text-xs">
-              <input
-                type="checkbox"
-                checked={documentSettings.showWarningMessage}
-                on:change={(event) => {
-                  documentSettings = {
-                    ...documentSettings,
-                    showWarningMessage: (
-                      event.currentTarget as HTMLInputElement
-                    ).checked,
-                  }
-                  updateLatexPreview()
-                }}
-              />
-              Afficher le message d'avertissement
-            </label>
-            <label class="inline-flex items-center gap-2 text-xs">
-              <input
-                type="checkbox"
-                checked={documentSettings.mergeGroupsAndShuffle}
-                on:change={(event) => {
-                  documentSettings = {
-                    ...documentSettings,
-                    mergeGroupsAndShuffle: (
-                      event.currentTarget as HTMLInputElement
-                    ).checked,
-                  }
-                  updateLatexPreview()
-                }}
-              />
-              Fusionner les groupes et melanger
-            </label>
-            {#if documentSettings.mergeGroupsAndShuffle}
-              <label for="amc-merged-group-title" class="block text-xs"
-                >Titre du groupe total</label
-              >
-              <input
-                id="amc-merged-group-title"
-                type="text"
-                class="w-full rounded border px-2 py-1 text-sm"
-                value={documentSettings.mergedGroupTitle}
-                on:input={(event) => {
-                  documentSettings = {
-                    ...documentSettings,
-                    mergedGroupTitle: (event.currentTarget as HTMLInputElement)
-                      .value,
-                  }
-                  updateLatexPreview()
-                }}
-              />
-              <fieldset class="mt-1">
-                <legend class="text-xs"
-                  >Groupes à inclure dans le groupe total</legend
-                >
-                {#each exercices as exercice, idx}
-                  <label class="flex items-center gap-2 text-xs">
-                    <input
-                      type="checkbox"
-                      checked={documentSettings.mergedGroupExerciseIndexes.includes(
-                        idx,
-                      )}
-                      on:change={(event) => {
-                        const checked = (
-                          event.currentTarget as HTMLInputElement
-                        ).checked
-                        const indexes =
-                          documentSettings.mergedGroupExerciseIndexes
-                        documentSettings = {
-                          ...documentSettings,
-                          mergedGroupExerciseIndexes: checked
-                            ? [...indexes, idx].sort((a, b) => a - b)
-                            : indexes.filter((i) => i !== idx),
-                        }
-                        updateLatexPreview()
-                      }}
-                    />
-                    {exercice.titre ?? `Exercice ${idx + 1}`}
-                  </label>
-                {/each}
-              </fieldset>
-            {/if}
-            {#if documentSettings.showWarningMessage}
-              <label for="amc-doc-warning" class="block text-xs"
-                >Message d'avertissement</label
-              >
-              <textarea
-                id="amc-doc-warning"
-                class="w-full rounded border px-2 py-1 text-xs min-h-24"
-                value={documentSettings.warningMessage}
-                on:input={(event) => {
-                  documentSettings = {
-                    ...documentSettings,
-                    warningMessage: (event.currentTarget as HTMLTextAreaElement)
-                      .value,
-                  }
-                  updateLatexPreview()
-                }}
-              ></textarea>
-            {/if}
-
-            <label class="inline-flex items-center gap-2 text-xs">
-              <input
-                type="radio"
-                name="amc-corrections-display-mode"
-                checked={documentSettings.correctionsDisplayMode ===
-                  'per-question'}
-                on:change={(event) => {
-                  if (!(event.currentTarget as HTMLInputElement).checked) return
-                  documentSettings = {
-                    ...documentSettings,
-                    correctionsDisplayMode: 'per-question',
-                  }
-                  updateLatexPreview()
-                }}
-              />
-              Afficher les explications dans chaque question
-            </label>
-            <label class="inline-flex items-center gap-2 text-xs">
-              <input
-                type="radio"
-                name="amc-corrections-display-mode"
-                checked={documentSettings.correctionsDisplayMode ===
-                  'end-of-copy'}
-                on:change={(event) => {
-                  if (!(event.currentTarget as HTMLInputElement).checked) return
-                  documentSettings = {
-                    ...documentSettings,
-                    correctionsDisplayMode: 'end-of-copy',
-                  }
-                  updateLatexPreview()
-                }}
-              />
-              Regrouper toutes les explications en fin de copie corrigée
-            </label>
-          </div>
-        </details>
-
-        {#if selectedExerciseIndex != null}
-          <div
-            class="mt-4 space-y-3 rounded-xl border border-coopmaths-struct-light/30 p-3"
+          <details
+            class="rounded-xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/20 p-3 dark:border-coopmathsdark-struct-light/30 dark:bg-coopmathsdark-canvas-dark/30"
           >
-            <div class="flex items-center justify-between gap-2">
-              <p class="text-sm font-semibold">
-                Groupe d'exercice ({getAMCGroupName(
-                  exercices[selectedExerciseIndex],
-                )})
-              </p>
-              <div class="flex items-center gap-2">
-                <button
-                  type="button"
-                  class="rounded border px-3 py-1 text-xs"
-                  on:click={() =>
-                    openExerciseSettingsModal(selectedExerciseIndex!)}
-                >
-                  Paramétrer l'exercice
-                </button>
-                <button
-                  type="button"
-                  class="rounded border px-3 py-1 text-xs"
-                  on:click={selectNextExercise}
-                  disabled={exercices.length < 2}
-                >
-                  Groupe suivant
-                </button>
-              </div>
-            </div>
-            <label for="amc-group-question-count" class="block text-xs"
-              >Nombre de questions générées</label
+            <summary
+              class="cursor-pointer font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
             >
-            <input
-              id="amc-group-question-count"
-              type="number"
-              min="1"
-              class="w-full rounded border px-2 py-1 text-sm"
-              value={groupSettings[selectedExerciseIndex]?.questionCount}
-              disabled={!isSelectedExerciseQuestionCountModifiable()}
-              on:input={async (event) => {
-                if (!isSelectedExerciseQuestionCountModifiable()) return
-                const value = Math.max(
-                  1,
-                  Number((event.currentTarget as HTMLInputElement).value) || 1,
-                )
-                const idx = selectedExerciseIndex!
-                groupSettings[idx] = {
-                  ...groupSettings[idx],
-                  questionCount: value,
-                  restitueCount: Math.min(
-                    value,
-                    groupSettings[idx]?.restitueCount ?? value,
-                  ),
-                }
-                groupSettings = [...groupSettings]
-                const exercice = exercices[idx]
-                if (exercice) {
-                  exercice.nbQuestions = value
-                  const paramsIndex = findParamsIndexForExercise(exercice)
-                  if (paramsIndex >= 0) {
-                    exercicesParams.update((list) => {
-                      const next = [...list]
-                      next[paramsIndex] = {
-                        ...next[paramsIndex],
-                        nbQuestions: value,
-                      }
-                      return next
-                    })
-                    mathaleaUpdateUrlFromExercicesParams()
-                  }
-                }
-                await regenerateExercise(idx, groupSettings[idx]?.seed)
-              }}
-            />
-            {#if !isSelectedExerciseQuestionCountModifiable()}
-              <p
-                class="text-[11px] text-coopmaths-corpus/70 dark:text-coopmathsdark-corpus/70"
-              >
-                Verrouillé par l'exercice (nbQuestionsModifiable=false).
-              </p>
-            {/if}
-
-            <label for="amc-group-restitue-count" class="block text-xs"
-              >Nombre de questions a restituer (\restituegroupe)</label
-            >
-            <input
-              id="amc-group-restitue-count"
-              type="number"
-              min="1"
-              max={Math.max(
-                1,
-                Number(groupSettings[selectedExerciseIndex]?.questionCount) ||
-                  1,
-              )}
-              class="w-full rounded border px-2 py-1 text-sm"
-              value={groupSettings[selectedExerciseIndex]?.restitueCount}
-              on:input={(event) => {
-                const idx = selectedExerciseIndex!
-                const maxAllowed = Math.max(
-                  1,
-                  Number(groupSettings[idx]?.questionCount) || 1,
-                )
-                const value = Math.max(
-                  1,
-                  Math.min(
-                    Number((event.currentTarget as HTMLInputElement).value) ||
-                      1,
-                    maxAllowed,
-                  ),
-                )
-                groupSettings[idx] = {
-                  ...groupSettings[idx],
-                  restitueCount: value,
-                }
-                groupSettings = [...groupSettings]
-                updateLatexPreview()
-              }}
-            />
-
-            <label class="mt-2 inline-flex items-center gap-2 text-xs">
-              <input
-                type="checkbox"
-                checked={groupSettings[selectedExerciseIndex]?.pageBreakBefore}
-                on:change={(event) => {
-                  const idx = selectedExerciseIndex!
-                  groupSettings[idx] = {
-                    ...groupSettings[idx],
-                    pageBreakBefore: (event.currentTarget as HTMLInputElement)
-                      .checked,
-                  }
-                  groupSettings = [...groupSettings]
-                  updateLatexPreview()
-                }}
-              />
-              Saut de page avant ce restituegroupe
-            </label>
-
-            <label class="mt-2 inline-flex items-center gap-2 text-xs">
-              <input
-                type="checkbox"
-                checked={groupSettings[selectedExerciseIndex]?.multicols}
-                on:change={(event) => {
-                  const idx = selectedExerciseIndex!
-                  groupSettings[idx] = {
-                    ...groupSettings[idx],
-                    multicols: (event.currentTarget as HTMLInputElement)
-                      .checked,
-                  }
-                  groupSettings = [...groupSettings]
-                  updateLatexPreview()
-                }}
-              />
-              Restituegroupe en multicolonnes (2)
-            </label>
-
-            <label class="mt-2 inline-flex items-center gap-2 text-xs">
-              <input
-                type="checkbox"
-                checked={groupSettings[selectedExerciseIndex]?.titleOn}
-                on:change={(event) => {
-                  const idx = selectedExerciseIndex!
-                  groupSettings[idx] = {
-                    ...groupSettings[idx],
-                    titleOn: (event.currentTarget as HTMLInputElement).checked,
-                  }
-                  groupSettings = [...groupSettings]
-                  updateLatexPreview()
-                }}
-              />
-              Afficher le titre de ce groupe
-            </label>
-
-            <label for="amc-group-seed" class="block text-xs"
-              >Graine de génération aléatoire</label
-            >
-            <input
-              id="amc-group-seed"
-              type="text"
-              class="w-full rounded border px-2 py-1 text-sm"
-              value={groupSettings[selectedExerciseIndex]?.seed}
-              on:input={(event) => {
-                groupSettings[selectedExerciseIndex!] = {
-                  ...groupSettings[selectedExerciseIndex!],
-                  seed: (event.currentTarget as HTMLInputElement).value,
-                }
-                groupSettings = [...groupSettings]
-              }}
-            />
-            <div class="flex gap-2">
+              LaTeX AMC généré en temps réel
+            </summary>
+            <div class="mt-3 flex flex-wrap gap-2">
               <button
                 type="button"
-                class="rounded bg-coopmaths-action px-3 py-1 text-xs text-white"
-                on:click={() => {
-                  void regenerateExercise(
-                    selectedExerciseIndex!,
-                    groupSettings[selectedExerciseIndex!]?.seed,
-                  )
-                }}
+                class="rounded border border-coopmaths-struct-light/60 bg-white/70 px-3 py-1 text-xs font-medium text-coopmaths-struct transition-all duration-150 hover:border-blue-500 hover:text-blue-700 hover:shadow-sm active:scale-[0.97] active:border-blue-600 active:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-45 dark:bg-coopmathsdark-canvas-dark/40 dark:text-coopmathsdark-struct dark:hover:border-blue-400 dark:hover:text-blue-300 dark:active:bg-blue-900/20"
+                on:click={copyLatexToClipboard}
+                disabled={!latexContent.trim()}
               >
-                Appliquer la graine
+                Copier le LaTeX
+              </button>
+              <button
+                type="button"
+                class="rounded border border-coopmaths-struct-light/60 bg-white/70 px-3 py-1 text-xs font-medium text-coopmaths-struct transition-all duration-150 hover:border-blue-500 hover:text-blue-700 hover:shadow-sm active:scale-[0.97] active:border-blue-600 active:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-45 dark:bg-coopmathsdark-canvas-dark/40 dark:text-coopmathsdark-struct dark:hover:border-blue-400 dark:hover:text-blue-300 dark:active:bg-blue-900/20"
+                on:click={downloadLatexFile}
+                disabled={!latexContent.trim()}
+              >
+                Télécharger le .tex
+              </button>
+            </div>
+            {#if latexExportStatus}
+              <div
+                class="mt-3 rounded-md border px-3 py-2 text-xs font-medium {isLatexExportError
+                  ? 'border-red-300 bg-red-50 text-red-800 dark:border-red-700/60 dark:bg-red-900/20 dark:text-red-200'
+                  : 'border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-700/60 dark:bg-emerald-900/20 dark:text-emerald-200'}"
+                role="status"
+                aria-live="polite"
+              >
+                {latexExportStatus}
+              </div>
+            {/if}
+            <pre
+              class="mt-3 max-h-72 overflow-auto text-xs whitespace-pre-wrap">{latexContent}</pre>
+          </details>
+        </section>
+
+        <aside
+          class="rounded-2xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/30 p-4 dark:bg-coopmathsdark-canvas-dark/40 dark:border-coopmathsdark-struct-light/30 h-fit xl:h-[calc(100vh-10rem)] xl:overflow-y-auto xl:self-start"
+        >
+          <h3
+            class="font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
+          >
+            Paramétrage
+          </h3>
+
+          <div
+            class="mt-4 space-y-2 rounded-xl border border-coopmaths-struct-light/30 p-3"
+          >
+            <p class="text-sm font-semibold">Sauvegarde du parametrage</p>
+            <div class="flex flex-wrap gap-2">
+              <button
+                type="button"
+                class="rounded border px-3 py-1 text-xs"
+                on:click={downloadAmcConfigFile}
+                disabled={exercices.length === 0}
+              >
+                Sauvegarder (.json)
               </button>
               <button
                 type="button"
                 class="rounded border px-3 py-1 text-xs"
-                on:click={() => {
-                  void regenerateExercise(selectedExerciseIndex!)
+                on:click={triggerConfigImport}
+              >
+                Charger (.json)
+              </button>
+            </div>
+            <input
+              bind:this={configImportInput}
+              type="file"
+              accept="application/json,.json"
+              class="hidden"
+              on:change={handleConfigFileChange}
+            />
+            {#if configStatus}
+              <div
+                class="rounded-md border px-3 py-2 text-xs font-medium {isConfigStatusError
+                  ? 'border-red-300 bg-red-50 text-red-800 dark:border-red-700/60 dark:bg-red-900/20 dark:text-red-200'
+                  : 'border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-700/60 dark:bg-emerald-900/20 dark:text-emerald-200'}"
+                role="status"
+                aria-live="polite"
+              >
+                {configStatus}
+              </div>
+            {/if}
+          </div>
+
+          <details
+            class="mt-4 rounded-xl border border-coopmaths-struct-light/30 p-3"
+            bind:open={isDocumentSettingsOpen}
+          >
+            <summary class="cursor-pointer text-sm font-semibold">
+              Paramétrage du document
+            </summary>
+
+            <div class="mt-3 space-y-2">
+              <label for="amc-doc-format" class="block text-xs">Format</label>
+              <select
+                id="amc-doc-format"
+                class="w-full rounded border px-2 py-1 text-sm"
+                value={documentSettings.format}
+                on:change={(event) => {
+                  documentSettings = {
+                    ...documentSettings,
+                    format: (event.currentTarget as HTMLSelectElement).value as
+                      | 'A4'
+                      | 'A3',
+                  }
+                  updateLatexPreview()
                 }}
               >
-                Nouvelle graine
-              </button>
-            </div>
-            <button
-              type="button"
-              class="mt-2 w-full rounded border border-red-400 px-3 py-1 text-xs text-red-600 hover:bg-red-50 dark:border-red-600 dark:text-red-400 dark:hover:bg-red-900/30"
-              on:click={() => deleteExercise(selectedExerciseIndex!)}
-            >
-              Supprimer le groupe
-            </button>
-          </div>
-        {/if}
-
-        {#if selectedRef == null && selectedHybridHeaderRef == null}
-          <p
-            class="mt-4 text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus"
-          >
-            Sélectionne un bloc dans la zone centrale pour éditer ses paramètres
-            fins.
-          </p>
-        {:else if selectedQuestionHasTikzPicture()}
-          <div
-            class="mt-4 space-y-2 rounded-xl border border-coopmaths-struct-light/30 p-3"
-          >
-            <p class="text-sm font-semibold">
-              {selectedHybridHeaderRef != null
-                ? 'Figure TikZ (énoncé commun sélectionné)'
-                : 'Figure TikZ (question sélectionnée)'}
-            </p>
-            <label for="amc-tikz-scale" class="block text-xs"
-              >{selectedQuestionClipDimensionsLabel}</label
-            >
-            <input
-              id="amc-tikz-scale"
-              type="range"
-              min="0.5"
-              max="1.5"
-              step="0.05"
-              bind:value={tikzScaleSliderValue}
-              on:input={(event) =>
-                setSelectedQuestionTikzScaleFactor(
-                  Number((event.currentTarget as HTMLInputElement).value) ||
-                    tikzScaleSliderValue ||
-                    1,
-                )}
-            />
-            <p
-              class="text-xs text-coopmaths-corpus dark:text-coopmathsdark-corpus"
-            >
-              Facteur courant: {formatTikzScale(
-                selectedQuestionTikzScaleFactor,
-              )}
-              (plage 0.5 à 1.5)
-            </p>
-          </div>
-        {/if}
-
-        {#if selectedRef != null}
-          {#if selectedRef.kind === 'num'}
-            <div class="mt-4 space-y-2">
-              <p class="text-sm font-semibold">AMCnumericChoices</p>
-              <div class="flex items-center justify-between">
-                <label for="amc-num-digits" class="block text-xs">Digits</label>
-                {#if !isSelectedNumericParamExplicit('digits')}
-                  <span
-                    class="rounded-full border border-amber-300/70 bg-amber-100/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:border-amber-500/50 dark:bg-amber-900/30 dark:text-amber-200"
-                  >
-                    inféré
-                  </span>
-                {/if}
-              </div>
-              <input
-                id="amc-num-digits"
-                type="number"
-                min="1"
-                value={getSelectedNumericInferredValues().digits}
-                class="w-full rounded border px-2 py-1 text-sm"
-                on:input={(event) =>
-                  updateSelectedNumericParam(
-                    'digits',
-                    Math.max(
-                      1,
-                      Number((event.currentTarget as HTMLInputElement).value) ||
-                        1,
-                    ),
-                  )}
-              />
-
-              <div class="flex items-center justify-between">
-                <label for="amc-num-decimals" class="block text-xs"
-                  >Decimals</label
-                >
-                {#if !isSelectedNumericParamExplicit('decimals')}
-                  <span
-                    class="rounded-full border border-amber-300/70 bg-amber-100/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:border-amber-500/50 dark:bg-amber-900/30 dark:text-amber-200"
-                  >
-                    inféré
-                  </span>
-                {/if}
-              </div>
-              <input
-                id="amc-num-decimals"
-                type="number"
-                min="0"
-                value={getSelectedNumericInferredValues().decimals}
-                class="w-full rounded border px-2 py-1 text-sm"
-                on:input={(event) =>
-                  updateSelectedNumericParam(
-                    'decimals',
-                    Math.max(
-                      0,
-                      Number((event.currentTarget as HTMLInputElement).value) ||
-                        0,
-                    ),
-                  )}
-              />
-
-              <div class="flex items-center justify-between">
-                <label for="amc-num-approx" class="block text-xs">Approx</label>
-                {#if !isSelectedNumericParamExplicit('approx')}
-                  <span
-                    class="rounded-full border border-amber-300/70 bg-amber-100/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:border-amber-500/50 dark:bg-amber-900/30 dark:text-amber-200"
-                  >
-                    inféré
-                  </span>
-                {/if}
-              </div>
-              <input
-                id="amc-num-approx"
-                type="number"
-                min="0"
-                value={Number(getSelectedNumericParamValue('approx') ?? 0)}
-                class="w-full rounded border px-2 py-1 text-sm"
-                on:input={(event) =>
-                  updateSelectedNumericParam(
-                    'approx',
-                    Math.max(
-                      0,
-                      Number((event.currentTarget as HTMLInputElement).value) ||
-                        0,
-                    ),
-                  )}
-              />
-
-              <label class="mt-2 inline-flex items-center gap-2 text-xs">
-                <input
-                  type="checkbox"
-                  checked={Boolean(getSelectedNumericParamValue('signe'))}
-                  on:change={(event) =>
-                    updateSelectedNumericParam(
-                      'signe',
-                      (event.currentTarget as HTMLInputElement).checked,
-                    )}
-                />
-                Autoriser le signe
-              </label>
-              <label class="mt-2 inline-flex items-center gap-2 text-xs">
-                <input
-                  type="checkbox"
-                  checked={Boolean(getSelectedNumericParamValue('vertical'))}
-                  on:change={(event) =>
-                    updateSelectedNumericParam(
-                      'vertical',
-                      (event.currentTarget as HTMLInputElement).checked,
-                    )}
-                />
-                Affichage vertical
-              </label>
-
-              <div class="flex items-center justify-between">
-                <label for="amc-num-exp-digits" class="block text-xs"
-                  >Exposant: nombre de chiffres</label
-                >
-                {#if !isSelectedNumericParamExplicit('exposantNbChiffres')}
-                  <span
-                    class="rounded-full border border-amber-300/70 bg-amber-100/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:border-amber-500/50 dark:bg-amber-900/30 dark:text-amber-200"
-                  >
-                    inféré
-                  </span>
-                {/if}
-              </div>
-              <input
-                id="amc-num-exp-digits"
-                type="number"
-                min="0"
-                value={Number(
-                  getSelectedNumericParamValue('exposantNbChiffres') ?? 0,
-                )}
-                class="w-full rounded border px-2 py-1 text-sm"
-                on:input={(event) =>
-                  updateSelectedNumericParam(
-                    'exposantNbChiffres',
-                    Math.max(
-                      0,
-                      Number((event.currentTarget as HTMLInputElement).value) ||
-                        0,
-                    ),
-                  )}
-              />
-
-              <label class="mt-2 inline-flex items-center gap-2 text-xs">
-                <input
-                  type="checkbox"
-                  checked={Boolean(
-                    getSelectedNumericParamValue('exposantSigne'),
-                  )}
-                  on:change={(event) =>
-                    updateSelectedNumericParam(
-                      'exposantSigne',
-                      (event.currentTarget as HTMLInputElement).checked,
-                    )}
-                />
-                Exposant avec signe
-              </label>
-
-              <label for="amc-num-dec-sep" class="block text-xs"
-                >Separateur decimal</label
-              >
-              <select
-                id="amc-num-dec-sep"
-                class="w-full rounded border px-2 py-1 text-sm"
-                value={getSelectedNumericTpointUiValue()}
-                on:change={(event) =>
-                  updateSelectedNumericParam(
-                    'tpoint',
-                    (event.currentTarget as HTMLSelectElement).value ===
-                      'fraction'
-                      ? AMC_TPOINT_FRACTION
-                      : AMC_TPOINT_COMMA,
-                  )}
-              >
-                <option value="comma">Virgule (,)</option>
-                <option value="fraction">Barre de fraction</option>
+                <option value="A4">A4</option>
+                <option value="A3">A3 (multicols 2)</option>
               </select>
 
-              <label class="mt-2 inline-flex items-center gap-2 text-xs">
-                <input
-                  type="checkbox"
-                  checked={isSelectedBlockMulticolsEnabled()}
-                  on:change={(event) =>
-                    updateSelectedBlockMulticols(
-                      (event.currentTarget as HTMLInputElement).checked,
-                    )}
-                />
-                {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
-                  ? 'Elements de reponses en multicolonnes (2)'
-                  : 'Question en multicolonnes (2)'}
-              </label>
-              {#if exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'}
-                <label class="mt-2 inline-flex items-center gap-2 text-xs">
-                  <input
-                    type="checkbox"
-                    checked={isSelectedBlockMulticolsAllEnabled()}
-                    on:change={(event) =>
-                      updateSelectedBlockMulticolsAll(
-                        (event.currentTarget as HTMLInputElement).checked,
-                      )}
-                  />
-                  Bloc hybride complet en multicolonnes (2)
-                </label>
-              {/if}
-              <button
-                type="button"
-                class="mt-2 w-full rounded border px-3 py-1 text-xs"
-                on:click={appliquerParametresQuestionAuGroupe}
+              <label for="amc-doc-font-size" class="block text-xs"
+                >Taille de police</label
               >
-                Appliquer ces parametres a tout le groupe
-              </button>
-            </div>
-          {:else if selectedRef.kind === 'open'}
-            <div class="mt-4 space-y-2">
-              <p class="text-sm font-semibold">AMCOpen</p>
-              <label for="amc-open-lines" class="block text-xs"
-                >Nombre de lignes (statut)</label
+              <select
+                id="amc-doc-font-size"
+                class="w-full rounded border px-2 py-1 text-sm"
+                value={documentSettings.fontSize}
+                on:change={(event) => {
+                  documentSettings = {
+                    ...documentSettings,
+                    fontSize: (event.currentTarget as HTMLSelectElement)
+                      .value as '10pt' | '11pt' | '12pt',
+                  }
+                  updateLatexPreview()
+                }}
+              >
+                <option value="10pt">10pt</option>
+                <option value="11pt">11pt</option>
+                <option value="12pt">12pt</option>
+              </select>
+
+              <p class="mt-2 text-xs font-semibold">Identification élève</p>
+              <label class="inline-flex items-center gap-2 text-xs">
+                <input
+                  type="radio"
+                  name="amc-identification-mode"
+                  checked={documentSettings.identificationMode ===
+                    'AMCcodeGrid'}
+                  on:change={(event) => {
+                    if (!(event.currentTarget as HTMLInputElement).checked)
+                      return
+                    documentSettings = {
+                      ...documentSettings,
+                      identificationMode: 'AMCcodeGrid',
+                    }
+                    updateLatexPreview()
+                  }}
+                />
+                AMCCodeGrid
+              </label>
+              <label class="inline-flex items-center gap-2 text-xs">
+                <input
+                  type="radio"
+                  name="amc-identification-mode"
+                  checked={documentSettings.identificationMode ===
+                    'AMCassociation'}
+                  on:change={(event) => {
+                    if (!(event.currentTarget as HTMLInputElement).checked)
+                      return
+                    documentSettings = {
+                      ...documentSettings,
+                      identificationMode: 'AMCassociation',
+                    }
+                    updateLatexPreview()
+                  }}
+                />
+                Association
+              </label>
+              <label class="inline-flex items-center gap-2 text-xs">
+                <input
+                  type="radio"
+                  name="amc-identification-mode"
+                  checked={documentSettings.identificationMode === 'AMCnom'}
+                  on:change={(event) => {
+                    if (!(event.currentTarget as HTMLInputElement).checked)
+                      return
+                    documentSettings = {
+                      ...documentSettings,
+                      identificationMode: 'AMCnom',
+                    }
+                    updateLatexPreview()
+                  }}
+                />
+                Juste champNom
+              </label>
+
+              {#if documentSettings.identificationMode === 'AMCassociation'}
+                <label for="amc-doc-roster" class="block text-xs"
+                  >Liste eleves (nom, prenom[, id])</label
+                >
+                <textarea
+                  id="amc-doc-roster"
+                  class="w-full rounded border px-2 py-1 text-xs min-h-20"
+                  value={documentSettings.associationRoster}
+                  on:keydown={(event) => {
+                    event.stopPropagation()
+                  }}
+                  on:input={(event) => {
+                    documentSettings = {
+                      ...documentSettings,
+                      associationRoster: (
+                        event.currentTarget as HTMLTextAreaElement
+                      ).value,
+                    }
+                    updateLatexPreview()
+                  }}
+                ></textarea>
+              {/if}
+
+              <label for="amc-doc-copies-count" class="block text-xs"
+                >Nombre d'exemplaires (\exemplaire)</label
               >
               <input
-                id="amc-open-lines"
+                id="amc-doc-copies-count"
                 type="number"
                 min="1"
-                value="3"
                 class="w-full rounded border px-2 py-1 text-sm"
-                on:input={(event) =>
-                  updateSelectedOpenParam(
-                    'statut',
-                    Math.max(
+                value={documentSettings.nbExemplaires}
+                on:input={(event) => {
+                  const value = Math.max(
+                    1,
+                    Number((event.currentTarget as HTMLInputElement).value) ||
                       1,
-                      Number((event.currentTarget as HTMLInputElement).value) ||
-                        1,
-                    ),
-                  )}
+                  )
+                  documentSettings = {
+                    ...documentSettings,
+                    nbExemplaires: value,
+                  }
+                  updateLatexPreview()
+                }}
               />
 
               <label class="mt-2 inline-flex items-center gap-2 text-xs">
                 <input
                   type="checkbox"
-                  on:change={(event) =>
-                    updateSelectedOpenParam(
-                      'pointilles',
-                      (event.currentTarget as HTMLInputElement).checked,
-                    )}
+                  checked={documentSettings.showWarningMessage}
+                  on:change={(event) => {
+                    documentSettings = {
+                      ...documentSettings,
+                      showWarningMessage: (
+                        event.currentTarget as HTMLInputElement
+                      ).checked,
+                    }
+                    updateLatexPreview()
+                  }}
                 />
-                Pointillés
+                Afficher le message d'avertissement
               </label>
-              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <label class="inline-flex items-center gap-2 text-xs">
                 <input
                   type="checkbox"
-                  on:change={(event) =>
-                    updateSelectedOpenParam(
-                      'sanscadre',
-                      (event.currentTarget as HTMLInputElement).checked,
-                    )}
+                  checked={documentSettings.mergeGroupsAndShuffle}
+                  on:change={(event) => {
+                    documentSettings = {
+                      ...documentSettings,
+                      mergeGroupsAndShuffle: (
+                        event.currentTarget as HTMLInputElement
+                      ).checked,
+                    }
+                    updateLatexPreview()
+                  }}
                 />
-                Sans cadre
+                Fusionner les groupes et melanger Fusionner les groupes et melanger
               </label>
-              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              {#if documentSettings.mergeGroupsAndShuffle}
+                <label for="amc-merged-group-title" class="block text-xs"
+                  >Titre du groupe total</label
+                >
                 <input
-                  type="checkbox"
-                  checked={isSelectedBlockMulticolsEnabled()}
-                  on:change={(event) =>
-                    updateSelectedBlockMulticols(
-                      (event.currentTarget as HTMLInputElement).checked,
-                    )}
+                  id="amc-merged-group-title"
+                  type="text"
+                  class="w-full rounded border px-2 py-1 text-sm"
+                  value={documentSettings.mergedGroupTitle}
+                  on:input={(event) => {
+                    documentSettings = {
+                      ...documentSettings,
+                      mergedGroupTitle: (
+                        event.currentTarget as HTMLInputElement
+                      ).value,
+                    }
+                    updateLatexPreview()
+                  }}
                 />
-                {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
-                  ? 'Elements de reponses en multicolonnes (2)'
-                  : 'Question en multicolonnes (2)'}
-              </label>
-              {#if exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'}
-                <label class="mt-2 inline-flex items-center gap-2 text-xs">
-                  <input
-                    type="checkbox"
-                    checked={isSelectedBlockMulticolsAllEnabled()}
-                    on:change={(event) =>
-                      updateSelectedBlockMulticolsAll(
-                        (event.currentTarget as HTMLInputElement).checked,
-                      )}
-                  />
-                  Bloc hybride complet en multicolonnes (2)
-                </label>
+                <fieldset class="mt-1">
+                  <legend class="text-xs"
+                    >Groupes à inclure dans le groupe total</legend
+                  >
+                  {#each exercices as exercice, idx}
+                    <label class="flex items-center gap-2 text-xs">
+                      <input
+                        type="checkbox"
+                        checked={documentSettings.mergedGroupExerciseIndexes.includes(
+                          idx,
+                        )}
+                        on:change={(event) => {
+                          const checked = (
+                            event.currentTarget as HTMLInputElement
+                          ).checked
+                          const indexes =
+                            documentSettings.mergedGroupExerciseIndexes
+                          documentSettings = {
+                            ...documentSettings,
+                            mergedGroupExerciseIndexes: checked
+                              ? [...indexes, idx].sort((a, b) => a - b)
+                              : indexes.filter((i) => i !== idx),
+                          }
+                          updateLatexPreview()
+                        }}
+                      />
+                      {exercice.titre ?? `Exercice ${idx + 1}`}
+                    </label>
+                  {/each}
+                </fieldset>
               {/if}
-              <button
-                type="button"
-                class="mt-2 w-full rounded border px-3 py-1 text-xs"
-                on:click={appliquerParametresQuestionAuGroupe}
-              >
-                Appliquer ces parametres a tout le groupe
-              </button>
+              {#if documentSettings.mergeGroupsAndShuffle}
+                <label for="amc-merged-group-title" class="block text-xs"
+                  >Titre du groupe total</label
+                >
+                <input
+                  id="amc-merged-group-title"
+                  type="text"
+                  class="w-full rounded border px-2 py-1 text-sm"
+                  value={documentSettings.mergedGroupTitle}
+                  on:input={(event) => {
+                    documentSettings = {
+                      ...documentSettings,
+                      mergedGroupTitle: (
+                        event.currentTarget as HTMLInputElement
+                      ).value,
+                    }
+                    updateLatexPreview()
+                  }}
+                />
+                <fieldset class="mt-1">
+                  <legend class="text-xs"
+                    >Groupes à inclure dans le groupe total</legend
+                  >
+                  {#each exercices as exercice, idx}
+                    <label class="flex items-center gap-2 text-xs">
+                      <input
+                        type="checkbox"
+                        checked={documentSettings.mergedGroupExerciseIndexes.includes(
+                          idx,
+                        )}
+                        on:change={(event) => {
+                          const checked = (
+                            event.currentTarget as HTMLInputElement
+                          ).checked
+                          const indexes =
+                            documentSettings.mergedGroupExerciseIndexes
+                          documentSettings = {
+                            ...documentSettings,
+                            mergedGroupExerciseIndexes: checked
+                              ? [...indexes, idx].sort((a, b) => a - b)
+                              : indexes.filter((i) => i !== idx),
+                          }
+                          updateLatexPreview()
+                        }}
+                      />
+                      {exercice.titre ?? `Exercice ${idx + 1}`}
+                    </label>
+                  {/each}
+                </fieldset>
+              {/if}
+              {#if documentSettings.showWarningMessage}
+                <label for="amc-doc-warning" class="block text-xs"
+                  >Message d'avertissement</label
+                >
+                <textarea
+                  id="amc-doc-warning"
+                  class="w-full rounded border px-2 py-1 text-xs min-h-24"
+                  value={documentSettings.warningMessage}
+                  on:input={(event) => {
+                    documentSettings = {
+                      ...documentSettings,
+                      warningMessage: (
+                        event.currentTarget as HTMLTextAreaElement
+                      ).value,
+                    }
+                    updateLatexPreview()
+                  }}
+                ></textarea>
+              {/if}
+
+              <label class="inline-flex items-center gap-2 text-xs">
+                <input
+                  type="radio"
+                  name="amc-corrections-display-mode"
+                  checked={documentSettings.correctionsDisplayMode ===
+                    'per-question'}
+                  on:change={(event) => {
+                    if (!(event.currentTarget as HTMLInputElement).checked)
+                      return
+                    documentSettings = {
+                      ...documentSettings,
+                      correctionsDisplayMode: 'per-question',
+                    }
+                    updateLatexPreview()
+                  }}
+                />
+                Afficher les explications dans chaque question
+              </label>
+              <label class="inline-flex items-center gap-2 text-xs">
+                <input
+                  type="radio"
+                  name="amc-corrections-display-mode"
+                  checked={documentSettings.correctionsDisplayMode ===
+                    'end-of-copy'}
+                  on:change={(event) => {
+                    if (!(event.currentTarget as HTMLInputElement).checked)
+                      return
+                    documentSettings = {
+                      ...documentSettings,
+                      correctionsDisplayMode: 'end-of-copy',
+                    }
+                    updateLatexPreview()
+                  }}
+                />
+                Regrouper toutes les explications en fin de copie corrigée
+              </label>
             </div>
-          {:else}
-            <div class="mt-4 space-y-2">
-              <p class="text-sm font-semibold">QCM</p>
-              <label class="mt-2 inline-flex items-center gap-2 text-xs">
-                <input
-                  type="checkbox"
-                  on:change={(event) =>
-                    updateSelectedQcmOption(
-                      'ordered',
-                      (event.currentTarget as HTMLInputElement).checked,
-                    )}
-                />
-                Réponses ordonnées
-              </label>
-              <label class="mt-2 inline-flex items-center gap-2 text-xs">
-                <input
-                  type="checkbox"
-                  on:change={(event) =>
-                    updateSelectedQcmOption(
-                      'vertical',
-                      (event.currentTarget as HTMLInputElement).checked,
-                    )}
-                />
-                Affichage vertical
-              </label>
-              <label for="amc-qcm-last-choice" class="block text-xs"
-                >Index de lastChoice</label
+          </details>
+
+          {#if selectedExerciseIndex != null}
+            <div
+              class="mt-4 space-y-3 rounded-xl border border-coopmaths-struct-light/30 p-3"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <p class="text-sm font-semibold">
+                  Groupe d'exercice ({getAMCGroupName(
+                    exercices[selectedExerciseIndex],
+                  )})
+                </p>
+                <div class="flex items-center gap-2">
+                  <button
+                    type="button"
+                    class="rounded border px-3 py-1 text-xs"
+                    on:click={() =>
+                      openExerciseSettingsModal(selectedExerciseIndex!)}
+                  >
+                    Paramétrer l'exercice
+                  </button>
+                  <button
+                    type="button"
+                    class="rounded border px-3 py-1 text-xs"
+                    on:click={selectNextExercise}
+                    disabled={exercices.length < 2}
+                  >
+                    Groupe suivant
+                  </button>
+                </div>
+              </div>
+              <label for="amc-group-question-count" class="block text-xs"
+                >Nombre de questions générées</label
               >
               <input
-                id="amc-qcm-last-choice"
+                id="amc-group-question-count"
                 type="number"
-                min="0"
+                min="1"
                 class="w-full rounded border px-2 py-1 text-sm"
-                on:input={(event) =>
-                  updateSelectedQcmOption(
-                    'lastChoice',
-                    Math.max(
-                      0,
-                      Number((event.currentTarget as HTMLInputElement).value) ||
-                        0,
+                value={groupSettings[selectedExerciseIndex]?.questionCount}
+                disabled={!isSelectedExerciseQuestionCountModifiable()}
+                on:input={async (event) => {
+                  if (!isSelectedExerciseQuestionCountModifiable()) return
+                  const value = Math.max(
+                    1,
+                    Number((event.currentTarget as HTMLInputElement).value) ||
+                      1,
+                  )
+                  const idx = selectedExerciseIndex!
+                  groupSettings[idx] = {
+                    ...groupSettings[idx],
+                    questionCount: value,
+                    restitueCount: Math.min(
+                      value,
+                      groupSettings[idx]?.restitueCount ?? value,
                     ),
-                  )}
+                  }
+                  groupSettings = [...groupSettings]
+                  const exercice = exercices[idx]
+                  if (exercice) {
+                    exercice.nbQuestions = value
+                    const paramsIndex = findParamsIndexForExercise(exercice)
+                    if (paramsIndex >= 0) {
+                      exercicesParams.update((list) => {
+                        const next = [...list]
+                        next[paramsIndex] = {
+                          ...next[paramsIndex],
+                          nbQuestions: value,
+                        }
+                        return next
+                      })
+                      mathaleaUpdateUrlFromExercicesParams()
+                    }
+                  }
+                  await regenerateExercise(idx, groupSettings[idx]?.seed)
+                }}
               />
+              {#if !isSelectedExerciseQuestionCountModifiable()}
+                <p
+                  class="text-[11px] text-coopmaths-corpus/70 dark:text-coopmathsdark-corpus/70"
+                >
+                  Verrouillé par l'exercice (nbQuestionsModifiable=false).
+                </p>
+              {/if}
+
+              <label for="amc-group-restitue-count" class="block text-xs"
+                >Nombre de questions a restituer (\restituegroupe)</label
+              >
+              <input
+                id="amc-group-restitue-count"
+                type="number"
+                min="1"
+                max={Math.max(
+                  1,
+                  Number(groupSettings[selectedExerciseIndex]?.questionCount) ||
+                    1,
+                )}
+                class="w-full rounded border px-2 py-1 text-sm"
+                value={groupSettings[selectedExerciseIndex]?.restitueCount}
+                on:input={(event) => {
+                  const idx = selectedExerciseIndex!
+                  const maxAllowed = Math.max(
+                    1,
+                    Number(groupSettings[idx]?.questionCount) || 1,
+                  )
+                  const value = Math.max(
+                    1,
+                    Math.min(
+                      Number((event.currentTarget as HTMLInputElement).value) ||
+                        1,
+                      maxAllowed,
+                    ),
+                  )
+                  groupSettings[idx] = {
+                    ...groupSettings[idx],
+                    restitueCount: value,
+                  }
+                  groupSettings = [...groupSettings]
+                  updateLatexPreview()
+                }}
+              />
+
               <label class="mt-2 inline-flex items-center gap-2 text-xs">
                 <input
                   type="checkbox"
-                  checked={isSelectedBlockMulticolsEnabled()}
-                  on:change={(event) =>
-                    updateSelectedBlockMulticols(
-                      (event.currentTarget as HTMLInputElement).checked,
-                    )}
+                  checked={groupSettings[selectedExerciseIndex]
+                    ?.pageBreakBefore}
+                  on:change={(event) => {
+                    const idx = selectedExerciseIndex!
+                    groupSettings[idx] = {
+                      ...groupSettings[idx],
+                      pageBreakBefore: (event.currentTarget as HTMLInputElement)
+                        .checked,
+                    }
+                    groupSettings = [...groupSettings]
+                    updateLatexPreview()
+                  }}
                 />
-                {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
-                  ? 'Elements de reponses en multicolonnes (2)'
-                  : 'Question en multicolonnes (2)'}
+                Saut de page avant ce restituegroupe
               </label>
-              {#if exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'}
-                <label class="mt-2 inline-flex items-center gap-2 text-xs">
-                  <input
-                    type="checkbox"
-                    checked={isSelectedBlockMulticolsAllEnabled()}
-                    on:change={(event) =>
-                      updateSelectedBlockMulticolsAll(
-                        (event.currentTarget as HTMLInputElement).checked,
-                      )}
-                  />
-                  Bloc hybride complet en multicolonnes (2)
-                </label>
+
+              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  checked={groupSettings[selectedExerciseIndex]?.multicols}
+                  on:change={(event) => {
+                    const idx = selectedExerciseIndex!
+                    groupSettings[idx] = {
+                      ...groupSettings[idx],
+                      multicols: (event.currentTarget as HTMLInputElement)
+                        .checked,
+                    }
+                    groupSettings = [...groupSettings]
+                    updateLatexPreview()
+                  }}
+                />
+                Restituegroupe en multicolonnes (2)
+              </label>
+
+              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  checked={groupSettings[selectedExerciseIndex]?.titleOn}
+                  on:change={(event) => {
+                    const idx = selectedExerciseIndex!
+                    groupSettings[idx] = {
+                      ...groupSettings[idx],
+                      titleOn: (event.currentTarget as HTMLInputElement)
+                        .checked,
+                    }
+                    groupSettings = [...groupSettings]
+                    updateLatexPreview()
+                  }}
+                />
+                Afficher le titre de ce groupe
+              </label>
+
+              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  checked={groupSettings[selectedExerciseIndex]?.titleOn}
+                  on:change={(event) => {
+                    const idx = selectedExerciseIndex!
+                    groupSettings[idx] = {
+                      ...groupSettings[idx],
+                      titleOn: (event.currentTarget as HTMLInputElement)
+                        .checked,
+                    }
+                    groupSettings = [...groupSettings]
+                    updateLatexPreview()
+                  }}
+                />
+                Afficher le titre de ce groupe
+              </label>
+
+              <label for="amc-group-seed" class="block text-xs"
+                >Graine de génération aléatoire</label
+              >
+              <input
+                id="amc-group-seed"
+                type="text"
+                class="w-full rounded border px-2 py-1 text-sm"
+                value={groupSettings[selectedExerciseIndex]?.seed}
+                on:input={(event) => {
+                  groupSettings[selectedExerciseIndex!] = {
+                    ...groupSettings[selectedExerciseIndex!],
+                    seed: (event.currentTarget as HTMLInputElement).value,
+                  }
+                  groupSettings = [...groupSettings]
+                }}
+              />
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  class="rounded bg-coopmaths-action px-3 py-1 text-xs text-white"
+                  on:click={() => {
+                    void regenerateExercise(
+                      selectedExerciseIndex!,
+                      groupSettings[selectedExerciseIndex!]?.seed,
+                    )
+                  }}
+                >
+                  Appliquer la graine
+                </button>
+                <button
+                  type="button"
+                  class="rounded border px-3 py-1 text-xs"
+                  on:click={() => {
+                    void regenerateExercise(selectedExerciseIndex!)
+                  }}
+                >
+                  Nouvelle graine
+                </button>
+              </div>
+              {#if canSelectedGroupAddAmcOpen()}
+                <button
+                  type="button"
+                  class="mt-2 w-full rounded border px-3 py-1 text-xs"
+                  on:click={() => {
+                    isAddAmcOpenEditorVisible = !isAddAmcOpenEditorVisible
+                    if (!isAddAmcOpenEditorVisible) {
+                      clearAddAmcOpenUi()
+                    }
+                  }}
+                >
+                  Ajouter AMCOpen
+                </button>
+
+                {#if isAddAmcOpenEditorVisible}
+                  <div
+                    class="mt-2 space-y-2 rounded border border-coopmaths-struct-light/40 p-2"
+                  >
+                    <label
+                      for="amc-open-custom-instruction"
+                      class="block text-xs">Consigne du bloc AMCOpen</label
+                    >
+                    <textarea
+                      id="amc-open-custom-instruction"
+                      class="w-full rounded border px-2 py-1 text-xs min-h-16"
+                      bind:value={addAmcOpenInstruction}
+                      placeholder="Exemple: Rédiger la justification complète de la méthode utilisée."
+                    ></textarea>
+                    <div class="flex gap-2">
+                      <button
+                        type="button"
+                        class="rounded bg-coopmaths-action px-3 py-1 text-xs text-white"
+                        on:click={addAmcOpenToSelectedGroup}
+                      >
+                        Valider l'ajout
+                      </button>
+                      <button
+                        type="button"
+                        class="rounded border px-3 py-1 text-xs"
+                        on:click={clearAddAmcOpenUi}
+                      >
+                        Annuler
+                      </button>
+                    </div>
+                    {#if addAmcOpenStatus}
+                      <div
+                        class="rounded-md border px-3 py-2 text-xs font-medium {isAddAmcOpenStatusError
+                          ? 'border-red-300 bg-red-50 text-red-800 dark:border-red-700/60 dark:bg-red-900/20 dark:text-red-200'
+                          : 'border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-700/60 dark:bg-emerald-900/20 dark:text-emerald-200'}"
+                        role="status"
+                        aria-live="polite"
+                      >
+                        {addAmcOpenStatus}
+                      </div>
+                    {/if}
+                  </div>
+                {/if}
               {/if}
               <button
                 type="button"
-                class="mt-2 w-full rounded border px-3 py-1 text-xs"
-                on:click={appliquerParametresQuestionAuGroupe}
+                class="mt-2 w-full rounded border border-red-400 px-3 py-1 text-xs text-red-600 hover:bg-red-50 dark:border-red-600 dark:text-red-400 dark:hover:bg-red-900/30"
+                on:click={() => deleteExercise(selectedExerciseIndex!)}
               >
-                Appliquer ces parametres a tout le groupe
+                Supprimer le groupe
               </button>
             </div>
           {/if}
-        {/if}
 
-        {#if groupConsistencyReport && groupConsistencyReport.missingGroupDefinitions.length > 0}
-          <div class="mt-4 rounded border border-coopmaths-action p-3 text-xs">
-            <p class="font-semibold">Alerte cohérence AMC</p>
-            <ul class="mt-2 list-disc list-inside">
-              {#each groupConsistencyReport.missingGroupDefinitions as name}
-                <li>{name}</li>
-              {/each}
-            </ul>
-          </div>
-        {/if}
-      </aside>
+          {#if selectedRef == null && selectedHybridHeaderRef == null}
+            <p
+              class="mt-4 text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+            >
+              Sélectionne un bloc dans la zone centrale pour éditer ses
+              paramètres fins.
+            </p>
+          {:else if selectedQuestionHasTikzPicture()}
+            <div
+              class="mt-4 space-y-2 rounded-xl border border-coopmaths-struct-light/30 p-3"
+            >
+              <p class="text-sm font-semibold">
+                {selectedHybridHeaderRef != null
+                  ? 'Figure TikZ (énoncé commun sélectionné)'
+                  : 'Figure TikZ (question sélectionnée)'}
+              </p>
+              <label for="amc-tikz-scale" class="block text-xs"
+                >{selectedQuestionClipDimensionsLabel}</label
+              >
+              <input
+                id="amc-tikz-scale"
+                type="range"
+                min="0.5"
+                max="1.5"
+                step="0.05"
+                bind:value={tikzScaleSliderValue}
+                on:input={(event) =>
+                  setSelectedQuestionTikzScaleFactor(
+                    Number((event.currentTarget as HTMLInputElement).value) ||
+                      tikzScaleSliderValue ||
+                      1,
+                  )}
+              />
+              <p
+                class="text-xs text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+              >
+                Facteur courant: {formatTikzScale(
+                  selectedQuestionTikzScaleFactor,
+                )}
+                (plage 0.5 à 1.5)
+              </p>
+            </div>
+          {/if}
+
+          {#if selectedRef != null}
+            {#if selectedRef.kind === 'num'}
+              <div class="mt-4 space-y-2">
+                <p class="text-sm font-semibold">AMCnumericChoices</p>
+                <div class="flex items-center justify-between">
+                  <label for="amc-num-digits" class="block text-xs"
+                    >Digits</label
+                  >
+                  {#if !isSelectedNumericParamExplicit('digits')}
+                    <span
+                      class="rounded-full border border-amber-300/70 bg-amber-100/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:border-amber-500/50 dark:bg-amber-900/30 dark:text-amber-200"
+                    >
+                      inféré
+                    </span>
+                  {/if}
+                </div>
+                <input
+                  id="amc-num-digits"
+                  type="number"
+                  min="1"
+                  value={getSelectedNumericInferredValues().digits}
+                  class="w-full rounded border px-2 py-1 text-sm"
+                  on:input={(event) =>
+                    updateSelectedNumericParam(
+                      'digits',
+                      Math.max(
+                        1,
+                        Number(
+                          (event.currentTarget as HTMLInputElement).value,
+                        ) || 1,
+                      ),
+                    )}
+                />
+
+                <div class="flex items-center justify-between">
+                  <label for="amc-num-decimals" class="block text-xs"
+                    >Decimals</label
+                  >
+                  {#if !isSelectedNumericParamExplicit('decimals')}
+                    <span
+                      class="rounded-full border border-amber-300/70 bg-amber-100/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:border-amber-500/50 dark:bg-amber-900/30 dark:text-amber-200"
+                    >
+                      inféré
+                    </span>
+                  {/if}
+                </div>
+                <input
+                  id="amc-num-decimals"
+                  type="number"
+                  min="0"
+                  value={getSelectedNumericInferredValues().decimals}
+                  class="w-full rounded border px-2 py-1 text-sm"
+                  on:input={(event) =>
+                    updateSelectedNumericParam(
+                      'decimals',
+                      Math.max(
+                        0,
+                        Number(
+                          (event.currentTarget as HTMLInputElement).value,
+                        ) || 0,
+                      ),
+                    )}
+                />
+
+                <div class="flex items-center justify-between">
+                  <label for="amc-num-approx" class="block text-xs"
+                    >Approx</label
+                  >
+                  {#if !isSelectedNumericParamExplicit('approx')}
+                    <span
+                      class="rounded-full border border-amber-300/70 bg-amber-100/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:border-amber-500/50 dark:bg-amber-900/30 dark:text-amber-200"
+                    >
+                      inféré
+                    </span>
+                  {/if}
+                </div>
+                <input
+                  id="amc-num-approx"
+                  type="number"
+                  min="0"
+                  value={Number(getSelectedNumericParamValue('approx') ?? 0)}
+                  class="w-full rounded border px-2 py-1 text-sm"
+                  on:input={(event) =>
+                    updateSelectedNumericParam(
+                      'approx',
+                      Math.max(
+                        0,
+                        Number(
+                          (event.currentTarget as HTMLInputElement).value,
+                        ) || 0,
+                      ),
+                    )}
+                />
+
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={Boolean(getSelectedNumericParamValue('signe'))}
+                    on:change={(event) =>
+                      updateSelectedNumericParam(
+                        'signe',
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  Autoriser le signe
+                </label>
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={Boolean(getSelectedNumericParamValue('vertical'))}
+                    on:change={(event) =>
+                      updateSelectedNumericParam(
+                        'vertical',
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  Affichage vertical
+                </label>
+
+                <div class="flex items-center justify-between">
+                  <label for="amc-num-exp-digits" class="block text-xs"
+                    >Exposant: nombre de chiffres</label
+                  >
+                  {#if !isSelectedNumericParamExplicit('exposantNbChiffres')}
+                    <span
+                      class="rounded-full border border-amber-300/70 bg-amber-100/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:border-amber-500/50 dark:bg-amber-900/30 dark:text-amber-200"
+                    >
+                      inféré
+                    </span>
+                  {/if}
+                </div>
+                <input
+                  id="amc-num-exp-digits"
+                  type="number"
+                  min="0"
+                  value={Number(
+                    getSelectedNumericParamValue('exposantNbChiffres') ?? 0,
+                  )}
+                  class="w-full rounded border px-2 py-1 text-sm"
+                  on:input={(event) =>
+                    updateSelectedNumericParam(
+                      'exposantNbChiffres',
+                      Math.max(
+                        0,
+                        Number(
+                          (event.currentTarget as HTMLInputElement).value,
+                        ) || 0,
+                      ),
+                    )}
+                />
+
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={Boolean(
+                      getSelectedNumericParamValue('exposantSigne'),
+                    )}
+                    on:change={(event) =>
+                      updateSelectedNumericParam(
+                        'exposantSigne',
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  Exposant avec signe
+                </label>
+
+                <label for="amc-num-dec-sep" class="block text-xs"
+                  >Separateur decimal</label
+                >
+                <select
+                  id="amc-num-dec-sep"
+                  class="w-full rounded border px-2 py-1 text-sm"
+                  value={getSelectedNumericTpointUiValue()}
+                  on:change={(event) =>
+                    updateSelectedNumericParam(
+                      'tpoint',
+                      (event.currentTarget as HTMLSelectElement).value ===
+                        'fraction'
+                        ? AMC_TPOINT_FRACTION
+                        : AMC_TPOINT_COMMA,
+                    )}
+                >
+                  <option value="comma">Virgule (,)</option>
+                  <option value="fraction">Barre de fraction</option>
+                </select>
+
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={isSelectedBlockMulticolsEnabled()}
+                    on:change={(event) =>
+                      updateSelectedBlockMulticols(
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  {exercices[selectedRef.exerciseIndex]?.amcType ===
+                  'AMCHybride'
+                    ? 'Elements de reponses en multicolonnes (2)'
+                    : 'Question en multicolonnes (2)'}
+                </label>
+                {#if exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'}
+                  <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                    <input
+                      type="checkbox"
+                      checked={isSelectedBlockMulticolsAllEnabled()}
+                      on:change={(event) =>
+                        updateSelectedBlockMulticolsAll(
+                          (event.currentTarget as HTMLInputElement).checked,
+                        )}
+                    />
+                    Bloc hybride complet en multicolonnes (2)
+                  </label>
+                {/if}
+                <button
+                  type="button"
+                  class="mt-2 w-full rounded border px-3 py-1 text-xs"
+                  on:click={appliquerParametresQuestionAuGroupe}
+                >
+                  Appliquer ces parametres a tout le groupe
+                </button>
+              </div>
+            {:else if selectedRef.kind === 'open'}
+              <div class="mt-4 space-y-2">
+                <p class="text-sm font-semibold">AMCOpen</p>
+                <label for="amc-open-lines" class="block text-xs"
+                  >Nombre de lignes (statut)</label
+                >
+                <input
+                  id="amc-open-lines"
+                  type="number"
+                  min="1"
+                  value="3"
+                  class="w-full rounded border px-2 py-1 text-sm"
+                  on:input={(event) =>
+                    updateSelectedOpenParam(
+                      'statut',
+                      Math.max(
+                        1,
+                        Number(
+                          (event.currentTarget as HTMLInputElement).value,
+                        ) || 1,
+                      ),
+                    )}
+                />
+
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    on:change={(event) =>
+                      updateSelectedOpenParam(
+                        'pointilles',
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  Pointillés
+                </label>
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    on:change={(event) =>
+                      updateSelectedOpenParam(
+                        'sanscadre',
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  Sans cadre
+                </label>
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={isSelectedBlockMulticolsEnabled()}
+                    on:change={(event) =>
+                      updateSelectedBlockMulticols(
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  {exercices[selectedRef.exerciseIndex]?.amcType ===
+                  'AMCHybride'
+                    ? 'Elements de reponses en multicolonnes (2)'
+                    : 'Question en multicolonnes (2)'}
+                </label>
+                {#if exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'}
+                  <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                    <input
+                      type="checkbox"
+                      checked={isSelectedBlockMulticolsAllEnabled()}
+                      on:change={(event) =>
+                        updateSelectedBlockMulticolsAll(
+                          (event.currentTarget as HTMLInputElement).checked,
+                        )}
+                    />
+                    Bloc hybride complet en multicolonnes (2)
+                  </label>
+                {/if}
+                <button
+                  type="button"
+                  class="mt-2 w-full rounded border px-3 py-1 text-xs"
+                  on:click={appliquerParametresQuestionAuGroupe}
+                >
+                  Appliquer ces parametres a tout le groupe
+                </button>
+              </div>
+            {:else}
+              <div class="mt-4 space-y-2">
+                <p class="text-sm font-semibold">QCM</p>
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    on:change={(event) =>
+                      updateSelectedQcmOption(
+                        'ordered',
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  Réponses ordonnées
+                </label>
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    on:change={(event) =>
+                      updateSelectedQcmOption(
+                        'vertical',
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  Affichage vertical
+                </label>
+                <label for="amc-qcm-last-choice" class="block text-xs"
+                  >Index de lastChoice</label
+                >
+                <input
+                  id="amc-qcm-last-choice"
+                  type="number"
+                  min="0"
+                  class="w-full rounded border px-2 py-1 text-sm"
+                  on:input={(event) =>
+                    updateSelectedQcmOption(
+                      'lastChoice',
+                      Math.max(
+                        0,
+                        Number(
+                          (event.currentTarget as HTMLInputElement).value,
+                        ) || 0,
+                      ),
+                    )}
+                />
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={isSelectedBlockMulticolsEnabled()}
+                    on:change={(event) =>
+                      updateSelectedBlockMulticols(
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  {exercices[selectedRef.exerciseIndex]?.amcType ===
+                  'AMCHybride'
+                    ? 'Elements de reponses en multicolonnes (2)'
+                    : 'Question en multicolonnes (2)'}
+                </label>
+                {#if exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'}
+                  <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                    <input
+                      type="checkbox"
+                      checked={isSelectedBlockMulticolsAllEnabled()}
+                      on:change={(event) =>
+                        updateSelectedBlockMulticolsAll(
+                          (event.currentTarget as HTMLInputElement).checked,
+                        )}
+                    />
+                    Bloc hybride complet en multicolonnes (2)
+                  </label>
+                {/if}
+                <button
+                  type="button"
+                  class="mt-2 w-full rounded border px-3 py-1 text-xs"
+                  on:click={appliquerParametresQuestionAuGroupe}
+                >
+                  Appliquer ces parametres a tout le groupe
+                </button>
+              </div>
+            {/if}
+          {/if}
+
+          {#if groupConsistencyReport && groupConsistencyReport.missingGroupDefinitions.length > 0}
+            <div
+              class="mt-4 rounded border border-coopmaths-action p-3 text-xs"
+            >
+              <p class="font-semibold">Alerte cohérence AMC</p>
+              <ul class="mt-2 list-disc list-inside">
+                {#each groupConsistencyReport.missingGroupDefinitions as name}
+                  <li>{name}</li>
+                {/each}
+              </ul>
+            </div>
+          {/if}
+        </aside>
+      </div>
     </div>
-  </div>
-</SetupShell>
+  </div></SetupShell
+>
 
 {#if isExerciseSettingsModalOpen && exerciseSettingsTargetIndex != null && exercices[exerciseSettingsTargetIndex]}
   <BasicClassicModal
