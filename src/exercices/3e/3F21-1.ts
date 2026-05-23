@@ -57,14 +57,14 @@ export default class LectureExpressionFonctionsAffines extends Exercice {
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
 
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 1)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 2 : 1
+    this.spacingCorr = context.isHtml ? 2 : 1
     this.sup = 1
     this.sup2 = 3
     this.lineaire = false
   }
 
-  nouvelleVersion(numeroExercice: number) {
+  nouvelleVersion() {
     let explain = ''
     let preK = this.sup
     if (this.sup === 4) {
@@ -156,13 +156,14 @@ export default class LectureExpressionFonctionsAffines extends Exercice {
       }
     }
 
-    this.introduction = mathalea2d(
+    const introduction = mathalea2d(
       { xmin, ymin, xmax, ymax, pixelsParCm: 30, scale: 0.75 },
       objets2d,
     )
     for (let i = 0; i < nbDroites; i++) {
       this.listeQuestions.push(
-        `Déterminer l'expression de la fonction $f_${i + 1}$ représentée par la droite $(d_${i + 1})$.${this.interactif ? '<br>' : ''}` +
+        introduction +
+          `Déterminer l'expression de la fonction $f_${i + 1}$ représentée par la droite $(d_${i + 1})$.${this.interactif ? '<br>' : ''}` +
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBaseAvecX, {
             texteAvant: sp() + `$f_${i + 1}(x)=$`,
           }),
