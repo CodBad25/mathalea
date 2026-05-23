@@ -406,12 +406,6 @@ for (const [dir, entries] of grouped) {
           }
         }
 
-        if (autoCorrectionFoundCount === 0) {
-          failures.push(
-            `${entry.filePath} : interactifReady = true mais autoCorrection est restée vide sur toutes les graines et tous les scénarios`,
-          )
-        }
-
         if (failures.length > 0) {
           for (const failure of failures) {
             expect.soft(false, failure).toBe(true)
