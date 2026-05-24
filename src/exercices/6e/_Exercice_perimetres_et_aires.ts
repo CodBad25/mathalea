@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { arc } from '../../lib/2d/Arc'
 import { cercle } from '../../lib/2d/cercle'
@@ -46,7 +47,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
-export const dateDeModifImportante = '11/04/2023'
+export const dateDeModifImportante = '22/05/2026'
 export const titre = 'Calculer des périmètres et des aires'
 
 /**
@@ -58,17 +59,18 @@ export const titre = 'Calculer des périmètres et des aires'
  * @author Rémi Angot// modifié par Mireille Gain pour le support des décimaux // modifié par EE : Correction de nombreuses coquilles
  * * Relecture EE : Décembre 2021
  */
+
 export default class ExercicePerimetresEtAires extends Exercice {
   exo: string
+  valeurArrondie: boolean
   constructor() {
     super()
-    // Calculer le périmètre et l'aire de figures
     this.sup = '1-2'
     this.nbQuestions = 4
     this.sup2 = false // décimaux ou pas
     this.sup3 = false // avec figure
     this.sup4 = false // Avec une approximation de π
-    this.exo = 'NoDisk'
+    this.exo = 'NoDisk' // Autre choix = 'OnlyDisk'
     this.besoinFormulaireTexte = [
       'Type de figures',
       'Valeurs séparées par des tirets :\n1 : Carré\n2 : Rectangle\n3 : Triangle rectangle\n4 : Mélange',
@@ -82,12 +84,13 @@ export default class ExercicePerimetresEtAires extends Exercice {
       '1 : Périmètre\n2 : Aire\n3 : Les deux',
     ]
     this.sup5 = 3
+    this.valeurArrondie = true
   }
 
   nouvelleVersion() {
     this.sup5 = contraindreValeur(1, 3, this.sup5, 3)
-    let resultat1
-    let resultat2
+    let perimetreArrondi
+    let aireArrondie
     const tripletsPythagoriciens = [
       [3, 4, 5],
       [6, 8, 10],
@@ -138,6 +141,13 @@ export default class ExercicePerimetresEtAires extends Exercice {
       i < this.nbQuestions && cpt < 50;
     ) {
       texteCorr = ''
+      let perimetre = 1
+      let perimetreMin = 1
+      let perimetreMax = 1
+      let aire = 1
+      let aireMin = 1
+      let aireMax = 1
+
       if (i % 4 === 0) listeDeNomsDePolygones = ['QD']
       let partieDecimale1, partieDecimale2
       if (this.sup2) {
@@ -272,8 +282,8 @@ export default class ExercicePerimetresEtAires extends Exercice {
           if (this.sup5 !== 1)
             texteCorr += `$\\mathcal{A}_{${nomCarre}}=${texNombre(cote)}\\text{ cm}\\times${texNombre(cote)}\\text{ cm}=${miseEnEvidence(texNombre(cote * cote))}\\text{ cm}^2$`
 
-          resultat1 = 4 * cote
-          resultat2 = cote * cote
+          perimetreArrondi = 4 * cote
+          aireArrondie = cote * cote
           break
         case 'rectangle':
           L = randint(3, 11)
@@ -397,8 +407,8 @@ export default class ExercicePerimetresEtAires extends Exercice {
           if (this.sup5 !== 1)
             texteCorr += `$\\mathcal{A}_{${nomRectangle}}=${texNombre(L)}\\text{ cm}\\times${l}\\text{ cm}=${miseEnEvidence(texNombre(L * l))}\\text{ cm}^2$`
 
-          resultat1 = 2 * L + 2 * l
-          resultat2 = L * l
+          perimetreArrondi = 2 * L + 2 * l
+          aireArrondie = L * l
           break
         case 'triangle_rectangle': {
           triplet = choice(tripletsPythagoriciens)
@@ -500,14 +510,13 @@ export default class ExercicePerimetresEtAires extends Exercice {
           }
           if (this.sup5 !== 1)
             texteCorr += `$\\mathcal{A}_{${nomTriangle}}=${texNombre(a)}\\text{ cm}\\times${texNombre(b)}\\text{ cm}\\div2=${miseEnEvidence(texNombre((a * b) / 2))}\\text{ cm}^2$`
-          resultat1 = a + b + c
-          resultat2 = (a * b) / 2
+          perimetreArrondi = a + b + c
+          aireArrondie = (a * b) / 2
           break
         }
         case 'cercle':
           R = this.sup2 ? randint(2, 4) + randint(1, 9) / 10 : randint(2, 5)
           if (this.sup3) {
-            // this.sup5 = 3
             texte += 'de ce disque. '
             const nomCercle = creerNomDePolygone(4, listeDeNomsDePolygones)
             listeDeNomsDePolygones.push(nomCercle)
@@ -574,35 +583,48 @@ export default class ExercicePerimetresEtAires extends Exercice {
               texteCorr = ''
             }
           }
-
+          texteCorr += ``
           if (this.sup4) {
+            texteCorr += `Si on utilise $\\pi \\approx 3,14$, alors <br>`
             if (this.sup5 !== 2)
-              texteCorr += `<br>Si on utilise $\\pi \\approx 3,14$, alors <br> $\\mathcal{P}\\approx 2 \\times ${texNombre(R)} \\times 3,14 \\approx ${texNombre(2 * R * (this.sup4 ? 3.14 : Math.PI), 3)}\\text{ cm}$.<br>`
+              texteCorr += `$\\mathcal{P}\\approx 2 \\times ${texNombre(R)} \\times 3,14 \\approx ${texNombre(2 * R * (this.sup4 ? 3.14 : Math.PI), 3)}\\text{ cm}$.<br>`
             if (this.sup5 !== 1)
-              texteCorr += `$\\mathcal{A}\\approx ${texNombre(R)}\\times${texNombre(R)}\\times 3,14\\approx ${texNombre(R * R * (this.sup4 ? 3.14 : Math.PI), 3)}\\text{ cm}^2$.`
+              texteCorr += `$\\mathcal{A}\\approx ${texNombre(R)}\\times${texNombre(R)}\\times 3,14\\approx ${texNombre(R * R * (this.sup4 ? 3.14 : Math.PI), 3)}\\text{ cm}^2$.<br>`
           } else {
             if (this.sup5 !== 2) {
               texteCorr += `$\\mathcal{P}=2\\times${texNombre(R)}\\times\\pi\\text{ cm}=${texNombre(2 * R)}\\pi\\text{ cm}\\approx${texNombre(
                 2 * R * (this.sup4 ? 3.14 : Math.PI),
-                3,
+                arrondi(2 * R * (this.sup4 ? 3.14 : Math.PI), 2) ===
+                  arrondi(2 * R * (this.sup4 ? 3.14 : Math.PI), 3)
+                  ? 4
+                  : 3,
               )}\\text{ cm}$<br>`
             }
             if (this.sup5 !== 1) {
               texteCorr += `$\\mathcal{A}=${texNombre(R)}\\times${texNombre(R)}\\times\\pi\\text{ cm}^2=${texNombre(R * R)}\\pi\\text{ cm}^2\\approx${texNombre(
                 R * R * (this.sup4 ? 3.14 : Math.PI),
-                3,
-              )}\\text{ cm}^2$`
+                arrondi(R * R * (this.sup4 ? 3.14 : Math.PI), 2) ===
+                  arrondi(R * R * (this.sup4 ? 3.14 : Math.PI), 3)
+                  ? 4
+                  : 3,
+              )}\\text{ cm}^2$<br>`
             }
           }
+          perimetre = 2 * R * (this.sup4 ? 3.14 : Math.PI)
+          perimetreMin = troncature(perimetre, 1)
+          perimetreMax = troncature(perimetre + 0.1, 1)
+          perimetreArrondi = arrondi(perimetre, 1)
+          aire = R * R * (this.sup4 ? 3.14 : Math.PI)
+          aireMin = troncature(aire, 1)
+          aireMax = troncature(aire + 0.1, 1)
+          aireArrondie = arrondi(aire, 1)
           if (this.sup5 !== 2)
-            texteCorr += `<br>Les deux valeurs approchées au dixième de $\\text{cm}$ du périmètre de ce disque sont donc  $${miseEnEvidence(texNombre(troncature(2 * R * (this.sup4 ? 3.14 : Math.PI), 1)))}$ $${miseEnEvidence('\\text{cm}')}$ et $${miseEnEvidence(texNombre(0.1 + troncature(2 * R * (this.sup4 ? 3.14 : Math.PI), 1)))}$ $${miseEnEvidence('\\text{cm}')}$, sachant que la valeur la plus proche ($${miseEnEvidence(texNombre(2 * R * (this.sup4 ? 3.14 : Math.PI), 1))}$ $${miseEnEvidence('\\text{cm}')}$) est la valeur arrondie.`
+            texteCorr += `<br>Les deux valeurs approchées au dixième de $\\text{cm}$ du périmètre de ce disque sont donc  $${miseEnEvidence(texNombre(perimetreMin) + '\\text{ cm}', this.valeurArrondie ? bleuMathalea : orangeMathalea)}$ et $${miseEnEvidence(texNombre(perimetreMax) + '\\text{ cm}', this.valeurArrondie ? bleuMathalea : orangeMathalea)}$, sachant que la valeur la plus proche $(${miseEnEvidence(texNombre(perimetreArrondi) + '\\text{ cm}')})$ est la valeur arrondie.`
           if (this.sup5 !== 1)
-            texteCorr += `<br>Les deux valeurs approchées au dixième de $\\text{cm}^2$ de l'aire de ce disque sont donc  $${miseEnEvidence(texNombre(troncature(R * R * (this.sup4 ? 3.14 : Math.PI), 1)))}$ $${miseEnEvidence('\\text{cm}^2')}$ et $${miseEnEvidence(texNombre(0.1 + troncature(R * R * (this.sup4 ? 3.14 : Math.PI), 1)))}$ $${miseEnEvidence('\\text{cm}^2')}$, sachant que la valeur la plus proche ($${miseEnEvidence(texNombre(R * R * (this.sup4 ? 3.14 : Math.PI), 1))}$ $${miseEnEvidence('\\text{cm}^2')}$) est la valeur arrondie.<br>`
-          resultat1 = arrondi(2 * R * (this.sup4 ? 3.14 : Math.PI), 1)
-          resultat2 = arrondi(R * R * (this.sup4 ? 3.14 : Math.PI), 1)
+            texteCorr += `<br>Les deux valeurs approchées au dixième de $\\text{cm}^2$ de l'aire de ce disque sont donc  $${miseEnEvidence(texNombre(aireMin) + '\\text{ cm}^2', this.valeurArrondie ? bleuMathalea : orangeMathalea)}$ et $${miseEnEvidence(texNombre(aireMax) + '\\text{ cm}^2', this.valeurArrondie ? bleuMathalea : orangeMathalea)}$, sachant que la valeur la plus proche $(${miseEnEvidence(texNombre(aireArrondie) + '\\text{ cm}^2')})$ est la valeur arrondie.<br>`
           break
         case 'demi-disque':
-        default:
+        default: {
           R = this.sup2 ? randint(2, 4) + randint(1, 9) / 10 : randint(2, 5)
           if (this.sup3) {
             // this.sup5 = 3
@@ -676,33 +698,41 @@ export default class ExercicePerimetresEtAires extends Exercice {
           }
           if (this.sup5 !== 2)
             texteCorr +=
-              "Pour le périmètre, à la moitié d'un cercle, il faut penser à ajouter le diamètre du demi-cercle, pour fermer la figure.<br>"
+              "Pour le périmètre, à la moitié d'un cercle, il faut penser à ajouter le diamètre du demi-cercle, pour fermer la figure.<br><br>"
 
           if (this.sup4) {
+            texteCorr += `Si on utilise $\\pi \\approx 3,14$, alors <br>`
             if (this.sup5 !== 2)
-              texteCorr += `<br>Si on utilise $\\pi \\approx 3,14$, alors <br> $\\mathcal{P}\\approx (2 \\times ${texNombre(R)} \\times 3,14 \\div 2) + (2 \\times ${texNombre(R)}) \\approx ${texNombre((2 * R * (this.sup4 ? 3.14 : Math.PI)) / 2 + 2 * R, 3)} \\text{ cm} $.<br>`
+              texteCorr += `$\\mathcal{P}\\approx (2 \\times ${texNombre(R)} \\times 3,14 \\div 2) + (2 \\times ${texNombre(R)}) \\approx ${texNombre((2 * R * (this.sup4 ? 3.14 : Math.PI)) / 2 + 2 * R, 3)} \\text{ cm} $.<br>`
             if (this.sup5 !== 1)
-              texteCorr += `$\\mathcal{A}\\approx ${texNombre(R)}\\times${texNombre(R)}\\times 3,14 \\div 2\\approx ${texNombre((R * R * (this.sup4 ? 3.14 : Math.PI)) / 2, 3)} \\text{ cm} ^2$.`
+              texteCorr += `$\\mathcal{A}\\approx ${texNombre(R)}\\times${texNombre(R)}\\times 3,14 \\div 2\\approx ${texNombre((R * R * (this.sup4 ? 3.14 : Math.PI)) / 2, 3)} \\text{ cm} ^2$.<br>`
           } else {
             if (this.sup5 !== 2)
               texteCorr += `$\\mathcal{P}=(2\\times${texNombre(R)}\\times\\pi\\div 2) + (2\\times${texNombre(R)})${sp()}\\approx${texNombre((2 * R * (this.sup4 ? 3.14 : Math.PI)) / 2 + 2 * R, 3)}\\text{ cm}$<br>`
             if (this.sup5 !== 1)
-              texteCorr += `$\\mathcal{A}=${texNombre(R)}\\times${texNombre(R)}\\times\\pi \\div 2${sp()}\\approx${texNombre((R * R * (this.sup4 ? 3.14 : Math.PI)) / 2, 3)}\\text{ cm}^2$`
+              texteCorr += `$\\mathcal{A}=${texNombre(R)}\\times${texNombre(R)}\\times\\pi \\div 2${sp()}\\approx${texNombre((R * R * (this.sup4 ? 3.14 : Math.PI)) / 2, 3)}\\text{ cm}^2$<br>`
           }
+          perimetre = (2 * R * (this.sup4 ? 3.14 : Math.PI)) / 2 + 2 * R
+          perimetreMin = troncature(perimetre, 1)
+          perimetreMax = troncature(perimetre + 0.1, 1)
+          perimetreArrondi = arrondi(perimetre, 1)
+          aire = (R * R * (this.sup4 ? 3.14 : Math.PI)) / 2
+          aireMin = troncature(aire, 1)
+          aireMax = troncature(aire + 0.1, 1)
+          aireArrondie = arrondi(aire, 1)
           if (this.sup5 !== 2)
-            texteCorr += `<br>Les deux valeurs approchées au dixième de $\\text{cm}$ du périmètre de ce disque sont donc  $${miseEnEvidence(texNombre(troncature((2 * R * (this.sup4 ? 3.14 : Math.PI)) / 2 + 2 * R, 1)))}$ $${miseEnEvidence('\\text{ cm}')}$ et $${miseEnEvidence(texNombre(0.1 + troncature((2 * R * (this.sup4 ? 3.14 : Math.PI)) / 2 + 2 * R, 1)))}$ $${miseEnEvidence('\\text{ cm}')}$, sachant que la valeur la plus proche ($${miseEnEvidence(texNombre((2 * R * (this.sup4 ? 3.14 : Math.PI)) / 2 + 2 * R, 1))}$ $${miseEnEvidence('\\text{ cm}')}$) est la valeur arrondie.`
+            texteCorr += `<br>Les deux valeurs approchées au dixième de $\\text{cm}$ du périmètre de ce demi-disque sont donc  $${miseEnEvidence(texNombre(perimetreMin) + '\\text{ cm}', this.valeurArrondie ? bleuMathalea : orangeMathalea)}$ et $${miseEnEvidence(texNombre(perimetreMax) + '\\text{ cm}', this.valeurArrondie ? bleuMathalea : orangeMathalea)}$, sachant que la valeur la plus proche $(${miseEnEvidence(texNombre(perimetreArrondi) + '\\text{ cm}')})$ est la valeur arrondie.`
           if (this.sup5 !== 1)
-            texteCorr += `<br>Les deux valeurs approchées au dixième de $\\text{cm}^2$  de l'aire de ce disque sont donc  $${miseEnEvidence(texNombre(troncature((R * R * (this.sup4 ? 3.14 : Math.PI)) / 2, 1)))}$ $${miseEnEvidence('\\text{ cm}^2')}$ et $${miseEnEvidence(texNombre(0.1 + troncature((R * R * (this.sup4 ? 3.14 : Math.PI)) / 2, 1)))}$ $${miseEnEvidence('\\text{ cm}^2')}$, sachant que la valeur la plus proche ($${miseEnEvidence(texNombre((R * R * (this.sup4 ? 3.14 : Math.PI)) / 2, 1))}$ $${miseEnEvidence('\\text{ cm}^2')}$) est la valeur arrondie.<br>`
+            texteCorr += `<br>Les deux valeurs approchées au dixième de $\\text{cm}^2$ de l'aire de ce demi-disque sont donc  $${miseEnEvidence(texNombre(aireMin) + '\\text{ cm}^2', this.valeurArrondie ? bleuMathalea : orangeMathalea)}$ et $${miseEnEvidence(texNombre(aireMax) + '\\text{ cm}^2', this.valeurArrondie ? bleuMathalea : orangeMathalea)}$, sachant que la valeur la plus proche $(${miseEnEvidence(texNombre(aireArrondie) + '\\text{ cm}^2')})$ est la valeur arrondie.<br>`
 
-          resultat1 = arrondi(
-            (2 * R * (this.sup4 ? 3.14 : Math.PI)) / 2 + 2 * R,
-            1,
-          )
-          resultat2 = arrondi((R * R * (this.sup4 ? 3.14 : Math.PI)) / 2, 1)
           break
+        }
       }
       if (typeDeLaQuestion === 'demi-disque' || typeDeLaQuestion === 'cercle') {
-        texte += `Donner une valeur approchée au dixième de `
+        texte +=
+          this.valeurArrondie || context.isAmc
+            ? `Donner la valeur arrondie au dixième de `
+            : `Donner une valeur approchée au dixième de `
         texte +=
           this.sup5 === 3
             ? `$\\text{cm}$ pour l'un et au dixième de $\\text{cm}^2$  pour l'autre.`
@@ -736,20 +766,28 @@ export default class ExercicePerimetresEtAires extends Exercice {
           )
       }
 
-      if (this.questionJamaisPosee(i, String(resultat1), String(resultat2))) {
+      if (
+        this.questionJamaisPosee(
+          i,
+          String(perimetreArrondi),
+          String(aireArrondie),
+        )
+      ) {
         if (!context.isAmc) {
           if (this.sup5 !== 2)
             handleAnswers(this, indiceInteractif, {
               reponse: {
-                value: `${resultat1}cm`,
-                options: { unite: true, precisionUnite: 0.1 },
+                value: this.valeurArrondie
+                  ? `${perimetreArrondi}cm`
+                  : [`${perimetreMin}cm`, `${perimetreMax}cm`],
+                options: { unite: true, precisionUnite: 0 },
               },
             })
           if (this.sup5 !== 1)
             handleAnswers(this, indiceInteractif + (this.sup5 === 3 ? 1 : 0), {
               reponse: {
-                value: `${resultat2}cm^2`,
-                options: { unite: true, precisionUnite: 0.1 },
+                value: `${aireArrondie}cm^2`,
+                options: { unite: true, precisionUnite: 0 },
               },
             })
         } else {
@@ -766,12 +804,14 @@ export default class ExercicePerimetresEtAires extends Exercice {
                     multicolsBegin: true,
                     reponse: {
                       texte: 'Périmètre en $\\text{cm}$ :',
-                      valeur: resultat1,
+                      valeur: perimetreArrondi,
                       alignement: 'center',
                       param: {
-                        digits: nombreDeChiffresDe(resultat1),
+                        digits: nombreDeChiffresDe(perimetreArrondi),
                         decimals:
-                          nombreDeChiffresDansLaPartieDecimale(resultat1),
+                          nombreDeChiffresDansLaPartieDecimale(
+                            perimetreArrondi,
+                          ),
                         signe: false,
                         approx: 1,
                       },
@@ -788,12 +828,12 @@ export default class ExercicePerimetresEtAires extends Exercice {
                     multicolsEnd: true,
                     reponse: {
                       texte: 'Aire en $\\text{cm}^2$  :',
-                      valeur: resultat2,
+                      valeur: aireArrondie,
                       alignement: 'center',
                       param: {
-                        digits: nombreDeChiffresDe(resultat2),
+                        digits: nombreDeChiffresDe(aireArrondie),
                         decimals:
-                          nombreDeChiffresDansLaPartieDecimale(resultat2),
+                          nombreDeChiffresDansLaPartieDecimale(aireArrondie),
                         signe: false,
                         approx: 1,
                       },

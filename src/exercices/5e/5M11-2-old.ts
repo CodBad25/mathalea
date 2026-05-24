@@ -1,4 +1,4 @@
-import ExercicePerimetresEtAires from '../6e/_Exercice_perimetres_et_aires-old'
+import ExercicePerimetresEtAiresOld from '../6e/_Exercice_perimetres_et_aires-old'
 
 export const titre =
   "Calculer le périmètre et l'aire de disques ou demi-disques"
@@ -13,11 +13,11 @@ export const dateDeModifImportante = '11/04/2023'
 export const uuid = 'ac571'
 
 export const refs = {
-  'fr-fr': ['5M11-2', 'BP2AutoV6'],
+  'fr-fr': [],
   'fr-2016': ['6M22', 'BP2AutoV6'],
-  'fr-ch': ['10GM1-1'],
+  'fr-ch': [],
 }
-export default class Reglages6M22 extends ExercicePerimetresEtAires {
+export default class Reglages6M22 extends ExercicePerimetresEtAiresOld {
   constructor() {
     super()
     this.sup = '4-5'
