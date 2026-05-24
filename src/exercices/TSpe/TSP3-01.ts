@@ -5,10 +5,6 @@ import {
   randint,
 } from '../../modules/outils'
 import { texNombre } from '../../lib/outils/texNombre'
-import {
-  all,
-  isEqual,
-} from '../../lib/interactif/checks'
 
 import {
   ecritureAlgebriqueSauf0,
@@ -82,17 +78,6 @@ export default class Tcheby extends Exercice {
               handleAnswers(this, i, {
                 reponse: {
                   value: reponse1,
-
-                  compare: all([
-                    //noDecimal({
-                    // feedbackKo:
-                    //  'Pas de nombre décimal, la fraction doit être irréductible.',
-                    //  }),
-                    isEqual(),
-                    //onlyIrreducibleFractions({
-                    //  feedbackKo: 'La fraction doit être irréductible.',
-                    //}),
-                  ]),
                 },
               })
             }
@@ -116,17 +101,6 @@ export default class Tcheby extends Exercice {
               handleAnswers(this, i, {
                 reponse: {
                   value: reponse2,
-
-                  compare: all([
-                    //noDecimal({
-                    // feedbackKo:
-                    //  'Pas de nombre décimal, la fraction doit être irréductible.',
-                    // }),
-                    isEqual(),
-                    //onlyIrreducibleFractions({
-                    //  feedbackKo: 'La fraction doit être irréductible.',
-                    // }),
-                  ]),
                 },
               })
             }
@@ -155,14 +129,6 @@ export default class Tcheby extends Exercice {
               handleAnswers(this, i, {
                 reponse: {
                   value: reponse3,
-
-                  compare: all([
-                    // noDecimal({
-                    //  feedbackKo:
-                    //   'Pas de nombre décimal, la fraction doit être irréductible.',
-                    // }),
-                    isEqual(),
-                  ]),
                 },
               })
             }
@@ -184,14 +150,13 @@ export default class Tcheby extends Exercice {
             texte = `On considère une variable aléatoire $X$ d'espérance $E(X)=${mu}$ et de variance $Var(X)=${texNombre(variance)}$.<br>`
             texte += `Soit $n$, un entier supérieur ou égal à 1. Pour tout entier $i$ vérifiant $1\\leqslant i\\leqslant n$, on considère des variables aléatoires $X_i$ indépendantes et suivant la même loi que $X$.<br>`
             texte += `On pose $M_n = \\dfrac{X_1 + X_2 + \\cdots + X_n}{n}$.<br>`
-            texte += `Trouver le plus petit entier $n$ tel que $P \\left (\\lvert M_n ${ecritureAlgebriqueSauf0(-mu)} \\rvert \\geqslant ${texNombre(a)} \\right) \\leqslant ${texNombre(p)}$.<br>`
+            texte += `Trouver le plus petit entier $n$ vérifiant $P \\left (\\lvert M_n ${ecritureAlgebriqueSauf0(-mu)} \\rvert \\geqslant ${texNombre(a)} \\right) \\leqslant ${texNombre(p)}$.<br>`
             if (this.interactif) {
               texte += `$n = $ `
-              texte += `${ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBaseEntier)}`
+              texte += `${ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)}`
               handleAnswers(this, i, {
                 reponse: {
                   value: reponse4,
-                  compare: all([isEqual()]),
                 },
               })
             }
