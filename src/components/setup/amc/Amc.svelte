@@ -3164,58 +3164,8 @@
                     updateLatexPreview()
                   }}
                 />
-                Fusionner les groupes et melanger Fusionner les groupes et melanger
+                Fusionner les groupes et melanger
               </label>
-              {#if documentSettings.mergeGroupsAndShuffle}
-                <label for="amc-merged-group-title" class="block text-xs"
-                  >Titre du groupe total</label
-                >
-                <input
-                  id="amc-merged-group-title"
-                  type="text"
-                  class="w-full rounded border px-2 py-1 text-sm"
-                  value={documentSettings.mergedGroupTitle}
-                  on:input={(event) => {
-                    documentSettings = {
-                      ...documentSettings,
-                      mergedGroupTitle: (
-                        event.currentTarget as HTMLInputElement
-                      ).value,
-                    }
-                    updateLatexPreview()
-                  }}
-                />
-                <fieldset class="mt-1">
-                  <legend class="text-xs"
-                    >Groupes à inclure dans le groupe total</legend
-                  >
-                  {#each exercices as exercice, idx}
-                    <label class="flex items-center gap-2 text-xs">
-                      <input
-                        type="checkbox"
-                        checked={documentSettings.mergedGroupExerciseIndexes.includes(
-                          idx,
-                        )}
-                        on:change={(event) => {
-                          const checked = (
-                            event.currentTarget as HTMLInputElement
-                          ).checked
-                          const indexes =
-                            documentSettings.mergedGroupExerciseIndexes
-                          documentSettings = {
-                            ...documentSettings,
-                            mergedGroupExerciseIndexes: checked
-                              ? [...indexes, idx].sort((a, b) => a - b)
-                              : indexes.filter((i) => i !== idx),
-                          }
-                          updateLatexPreview()
-                        }}
-                      />
-                      {exercice.titre ?? `Exercice ${idx + 1}`}
-                    </label>
-                  {/each}
-                </fieldset>
-              {/if}
               {#if documentSettings.mergeGroupsAndShuffle}
                 <label for="amc-merged-group-title" class="block text-xs"
                   >Titre du groupe total</label
@@ -4108,9 +4058,8 @@
   }
 
   :global(
-    #amcBuilder input:not([type='checkbox']):not([type='radio']):not(
-        [type='range']
-      )
+    #amcBuilder
+      input:not([type='checkbox']):not([type='radio']):not([type='range'])
   ),
   :global(#amcBuilder textarea),
   :global(#amcBuilder select) {
@@ -4120,14 +4069,13 @@
   }
 
   :global(
-    #amcBuilder.dark input:not([type='checkbox']):not([type='radio']):not(
-        [type='range']
-      )
+    #amcBuilder.dark
+      input:not([type='checkbox']):not([type='radio']):not([type='range'])
   ),
   :global(
-    #amcBuilder .dark input:not([type='checkbox']):not([type='radio']):not(
-        [type='range']
-      )
+    #amcBuilder
+      .dark
+      input:not([type='checkbox']):not([type='radio']):not([type='range'])
   ),
   :global(#amcBuilder.dark textarea),
   :global(#amcBuilder .dark textarea),

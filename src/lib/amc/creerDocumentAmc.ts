@@ -339,6 +339,7 @@ export function checkAMCGroupConsistency(
 
   const elementRegex = /\\element\{([^}]+)\}\{/g
   const restitueRegex = /\\restituegroupe(?:\[[^\]]*\])?\{([^}]+)\}/g
+  const copygroupRegex = /\\copygroup(?:\[[^\]]*\])?\{([^}]+)\}\{([^}]+)\}/g
 
   let match: RegExpExecArray | null
   while ((match = elementRegex.exec(latexCode)) !== null) {
@@ -349,11 +350,20 @@ export function checkAMCGroupConsistency(
     restitutedSet.add(match[1])
   }
 
+  while ((match = copygroupRegex.exec(latexCode)) !== null) {
+    const sourceGroup = match[1]
+    const targetGroup = 'total' // Par convention, les groupes copiés sont destinés au groupe "total" dans le cas de la fusion.
+    restitutedSet.add(sourceGroup)
+    if (!declaredSet.has(sourceGroup)) {
+      restitutedSet.delete(targetGroup)
+    }
+  }
+
   const declaredGroups = Array.from(declaredSet)
   const restitutedGroups = Array.from(restitutedSet)
 
   const missingGroupDefinitions = restitutedGroups.filter(
-    (group) => !declaredSet.has(group),
+    (group) => group !== 'total' && !declaredSet.has(group),
   )
   const unusedGroupDefinitions = declaredGroups.filter(
     (group) => !restitutedSet.has(group),

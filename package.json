@@ -35,9 +35,9 @@
   ],
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/mathalea/mathaleaV3/issues"
+    "url": "https://forge.apps.education.fr/jeanclaudelhote/math-alea-mc/issues"
   },
-  "homepage": "https://github.com/mathalea/mathalea",
+  "homepage": "https://forge.apps.education.fr/jeanclaudelhote/math-alea-mc",
   "scripts": {
     "dev": "pnpm makeJson && vite",
     "start": "pnpm makeJson && vite",
