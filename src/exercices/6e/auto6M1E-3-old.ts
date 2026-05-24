@@ -1,4 +1,4 @@
-import ExercicePerimetresEtAires from './_Exercice_perimetres_et_aires-old'
+import ExercicePerimetresEtAiresOld from './_Exercice_perimetres_et_aires-old'
 export const titre = 'Calculer le périmètre de polygones usuels'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -18,7 +18,7 @@ export const refs = {
   'fr-ch': [''],
 }
 
-export default class Reglages6M10a extends ExercicePerimetresEtAires {
+export default class Reglagesauto6M1E3Old extends ExercicePerimetresEtAiresOld {
   constructor() {
     super()
     this.sup = '1-2-3'

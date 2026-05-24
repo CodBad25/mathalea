@@ -18,7 +18,7 @@ export const refs = {
   'fr-ch': [''],
 }
 
-export default class Reglages6M10a extends ExercicePerimetresEtAires {
+export default class Reglagesauto6M1E3 extends ExercicePerimetresEtAires {
   constructor() {
     super()
     this.sup = '1-2-3'

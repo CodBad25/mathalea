@@ -58,7 +58,7 @@ export const titre = 'Calculer des périmètres et des aires'
  * @author Rémi Angot// modifié par Mireille Gain pour le support des décimaux // modifié par EE : Correction de nombreuses coquilles
  * * Relecture EE : Décembre 2021
  */
-export default class ExercicePerimetresEtAires extends Exercice {
+export default class ExercicePerimetresEtAiresOld extends Exercice {
   exo: string
   constructor() {
     super()
