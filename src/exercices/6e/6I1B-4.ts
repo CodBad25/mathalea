@@ -178,7 +178,7 @@ export default class ExerciceTableur extends Exercice {
     const feedback =
       maxMessages.length === 0
         ? '✅ Toutes les formules sont correctes !'
-        : '❌ Des erreurs ont été détéctées.'
+        : '❌ Des erreurs ont été détectées.'
     return {
       isOk: maxMessages.length === 0,
       messages: maxMessages.join('') + feedback,
@@ -237,7 +237,11 @@ export default class ExerciceTableur extends Exercice {
       const { steps } = programmeCalcul(typesDeOperations as number[])
       this.listeSteps[q] = steps
       const operStr = transformationsOper(steps)
-      const cellDatas: any = {
+      type CellData =
+        | { v: string; s: string; t?: 1; formule?: string }
+        | { v: number; s: string; t?: 2; formule?: string }
+      type CellGrid = Record<number, Record<number, CellData>>
+      const cellDatas: CellGrid = {
         0: {
           0: { v: steps[0].oldn, s: 'style_id_orange', t: 2 },
         },

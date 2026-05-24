@@ -1,5 +1,6 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { addSheet, createTableurLatex } from '../../lib/tableur/outilsTableur'
 import type { GoodAnswersFormulas } from '../../lib/types'
 import { context } from '../../modules/context'
@@ -13,7 +14,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Saisir une formule simple sur tableur'
 export const dateDePublication = '07/02/2026'
-
+export const dateDeModifImportante = '23/05/2026'
 export const interactifReady = true
 export const interactifType = 'tableur'
 
@@ -22,24 +23,24 @@ export const interactifType = 'tableur'
  *  @author Olivier Mimeau
  * revisiter le vocabulaire moitié double .... cf 5C12-7
  * tableur d'après exercice 6I1B-4
+ * Amélioration correction et paramètres par Eric Elter le 23/05/2026
  */
 
-export const uuid = '4662d' // '46bae'
+export const uuid = 'e0f6a'
 
 export const refs = {
   'fr-fr': ['6I1B-5'],
   'fr-ch': [],
 }
 
-// const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
 export default class ExerciceTableurVocabulaire extends Exercice {
   destroyers: (() => void)[] = []
-  niveau: number = 6
+  niveau: number
   constructor() {
     super()
-    this.nbQuestions = 2
+    this.nbQuestions = 1
 
+    /* Inadapté pour les 6èmes à cause du carré, du cube, de l'opposé et de l'inverse
     this.besoinFormulaireTexte = [
       'Types de formules',
       [
@@ -60,7 +61,23 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         '13 : Quotient de deux nombres',
       ].join('\n'),
     ]
-    this.comment = `L'exercice étant de niveau 6eme, le choix 0 écarte la possibilité d'obtenir carré, cube, opposé ou inverse. Si on souhaite les obtenir, il faut effectuer une liste explicite du type 1-2-3-4-5-6-7-8-9-10-11-12-13`
+      */
+    this.besoinFormulaireTexte = [
+      'Types de formules',
+      [
+        'Nombres séparés par des tirets :',
+        ' 0 : Mélange',
+        ' 1 : Double',
+        ' 2 : Triple',
+        ' 3 : Moitié',
+        ' 4 : Quart',
+        ' 5 : Dixième',
+        ' 6 : Somme de deux nombres',
+        ' 7 : Différence entre deux nombres',
+        ' 8 : Produit de deux nombres',
+        ' 9 : Quotient de deux nombres',
+      ].join('\n'),
+    ]
 
     this.besoinFormulaire2Numerique = ['Nombre de lignes', 1, '1\n2\n3\n4\n5']
     this.sup = 0
@@ -117,12 +134,38 @@ export default class ExerciceTableurVocabulaire extends Exercice {
 
     const nbLignes = this.sup2
     const nbElements = this.nbQuestions * this.sup2
-    /*     const nbOperations =
-      this.sup === 1 ? randint(2, 5) : Math.min(Math.max(2, this.sup), 5)
- */
+
     let choixThisSup = this.sup
-    if (this.niveau === 6 && choixThisSup === 0) {
-      choixThisSup = '1-2-3-4-5-10-11-12-13'
+    if (this.niveau === 6) {
+      const map: Record<string, string> = {
+        '6': '10',
+        '7': '11',
+        '8': '12',
+        '9': '13',
+      }
+
+      choixThisSup = String(choixThisSup).replace(
+        /[6-9]/g,
+        (c: string) => map[c],
+      )
+
+      if (choixThisSup === '0') {
+        choixThisSup = '1-2-3-4-5-10-11-12-13'
+      }
+    } else if (this.niveau === 5) {
+      const map: Record<string, string> = {
+        '6': '8',
+        '7': '10',
+        '8': '11',
+        '9': '12',
+        '10': '13',
+      }
+
+      choixThisSup = String(choixThisSup).replace(/10|[6-9]/g, (c) => map[c])
+
+      if (choixThisSup === '0') {
+        choixThisSup = '1-2-3-4-5-8-10-11-12-13'
+      }
     }
     const listeTypeQuestionsBase = gestionnaireFormulaireTexte({
       saisie: choixThisSup,
@@ -133,6 +176,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
       // shuffle: false, //true bien pour les tests
       nbQuestions: Math.min(nbElements, 50),
     })
+
     const listeTypeQuestions = combinaisonListes(
       listeTypeQuestionsBase,
       nbElements,
@@ -140,6 +184,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
 
     type MotVocabulaire = {
       num: number
+      txtCellule: string
       txtEnonce: string
       txtCorrection: string
       txtFormule: string
@@ -147,127 +192,161 @@ export default class ExerciceTableurVocabulaire extends Exercice {
     const listeMots: MotVocabulaire[] = [
       {
         num: 1,
-        txtEnonce: 'Son double',
+        txtCellule: 'Son double',
+        txtEnonce: 'le double du nombre de départ',
         txtCorrection: 'le double de ',
-        txtFormule: '=B1*2',
+        txtFormule: `$${miseEnEvidence(`\\text{=B1*2}`)}$`,
       },
       {
         num: 2,
-        txtEnonce: 'Son triple',
+        txtCellule: 'Son triple',
+        txtEnonce: 'le triple du nombre de départ',
         txtCorrection: 'le triple de ',
-        txtFormule: '=B1*3',
+        txtFormule: `$${miseEnEvidence(`\\text{=B1*3}`)}$`,
       },
       {
         num: 3,
-        txtEnonce: 'Sa moitié',
+        txtCellule: 'Sa moitié',
+        txtEnonce: 'la moitié du nombre de départ',
         txtCorrection: 'la moitié de ',
-        txtFormule: '=B1/2',
+        txtFormule: `$${miseEnEvidence(`\\text{=B1/2}`)}$`,
       },
       {
         num: 4,
-        txtEnonce: 'Son quart',
+        txtCellule: 'Son quart',
+        txtEnonce: 'le quart du nombre de départ',
         txtCorrection: 'le quart de ',
-        txtFormule: '=B1/4',
+        txtFormule: `$${miseEnEvidence(`\\text{=B1/4}`)}$`,
       },
       {
         num: 5,
-        txtEnonce: 'Son dixième',
+        txtCellule: 'Son dixième',
+        txtEnonce: 'le dixième du nombre de départ',
         txtCorrection: 'le dixième de ',
-        txtFormule: '=B1/10',
+        txtFormule: `$${miseEnEvidence(`\\text{=B1/10}`)}$`,
       },
       {
         num: 6,
-        txtEnonce: 'Son carré',
+        txtCellule: 'Son carré',
+        txtEnonce: 'le carré du nombre de départ',
         txtCorrection: 'le carré de ',
-        txtFormule: `=B1^2`,
+        txtFormule: `$${miseEnEvidence(`\\text{=B1\\textasciicircum 2}`)}$`,
       },
       {
         num: 7,
-        txtEnonce: 'Son cube',
+        txtCellule: 'Son cube',
+        txtEnonce: 'le cube du nombre de départ',
         txtCorrection: 'le cube de ',
-        txtFormule: '=B1^3',
+        txtFormule: `$${miseEnEvidence(`\\text{=B1\\textasciicircum 3}`)}$`,
       },
       {
         num: 8,
-        txtEnonce: 'Son opposé',
+        txtCellule: 'Son opposé',
+        txtEnonce: "l'opposé du nombre de départ",
         txtCorrection: `l'opposé de `,
-        txtFormule: '=-B1',
+        txtFormule: `$${miseEnEvidence(`\\text{=-B1}`)}$`,
       },
       {
         num: 9,
-        txtEnonce: 'Son inverse',
+        txtCellule: 'Son inverse',
+        txtEnonce: "l'inverse du nombre de départ",
         txtCorrection: `l'inverse de `,
-        txtFormule: '=1/B1',
+        txtFormule: `$${miseEnEvidence(`\\text{=1/B1}`)}$`,
       },
       {
         num: 10,
-        txtEnonce: 'La somme de number1 et number2',
+        txtCellule: 'La somme de number1 et number2',
+        txtEnonce: '',
         txtCorrection: 'la somme de ',
-        txtFormule: '=B1+B2',
+        txtFormule: `$${miseEnEvidence(`\\text{=B1+B2}`)}$`,
       },
       {
         num: 11,
-        txtEnonce: 'La différence entre number1 et number2',
+        txtCellule: 'La différence entre number1 et number2',
+        txtEnonce: '',
         txtCorrection: 'la différence entre ',
-        txtFormule: '=B1-B2',
+        txtFormule: `$${miseEnEvidence(`\\text{=B1-B2}`)}$`,
       },
       {
         num: 12,
-        txtEnonce: 'Le produit de number1 par number2',
+        txtCellule: 'Le produit de number1 et number2',
+        txtEnonce: '',
         txtCorrection: 'le produit de ',
-        txtFormule: '=B1*B2',
+        txtFormule: `$${miseEnEvidence(`\\text{=B1*B2}`)}$`,
       },
       {
         num: 13,
-        txtEnonce: 'Le quotient de number1 par number2',
+        txtCellule: 'Le quotient de number1 par number2',
+        txtEnonce: '',
         txtCorrection: 'le quotient de ',
-        txtFormule: '=B1/B2',
+        txtFormule: `$${miseEnEvidence(`\\text{=B1/B2}`)}$`,
       },
     ]
-    // const colorsArr = Object.entries(ExerciceTableurVocabulaire.colors)
+
     for (let q = 0, cpt = 0; q < this.nbQuestions && cpt < 50; cpt++) {
       // const q = 0
       let texte = ''
       let texteCorr = ''
+      const listeMotsCellule: string[] = []
       const listeMotsEnonce: string[] = []
       const nbColTableur = 2
       const nbDepart = randint(15, 40)
-      const cellDatas: any[][] = [[]]
+      type CellType = 1 | 2 | 3
+
+      interface CellData {
+        v: string | number
+        s: string
+        t: CellType
+        formule?: string
+      }
+      const cellDatas: CellData[][] = [[]]
+      const cellDatasCorr: CellData[][] = [[]]
       const lesBonnesFormules: GoodAnswersFormulas = []
       cellDatas[0][0] = {
         v: 'Nombre de départ',
         s: '', // 'style_id_orange', // couleur uniquement apriori ?
-        t: 1, //  1:raggedright, 2:raggedleft, 3:center
+        t: 1, //  1:text, 2:number, 3:boolean
       }
       cellDatas[0][1] = {
         v: `${nbDepart}`,
         s: '', // 'style_id_orange', // couleur uniquement apriori ?
-        t: 3, // 1:raggedright, 2:raggedleft, 3:center
+        t: 2, //  1:text, 2:number, 3:boolean
       }
-      let enonce: string = ''
+      cellDatasCorr[0][0] = {
+        v: 'Nombre de départ',
+        s: '', // 'style_id_orange', // couleur uniquement apriori ?
+        t: 1, //  1:text, 2:number, 3:boolean
+      }
+      cellDatasCorr[0][1] = {
+        v: `${nbDepart}`,
+        s: '', // 'style_id_orange', // couleur uniquement apriori ?
+        t: 2, //  1:text, 2:number, 3:boolean
+      }
+      let motCellule: string = ''
+      let motEnonce: string = ''
       let formule: string = ''
 
       for (let i = q * nbLignes; i < (q + 1) * nbLignes; i++) {
         const lOperation = Number(listeTypeQuestions[i])
-        enonce = listeMots[lOperation - 1].txtEnonce
+        motCellule = listeMots[lOperation - 1].txtCellule
         formule = listeMots[lOperation - 1].txtFormule
         const nb2 = randint(15, 40, [nbDepart])
         switch (lOperation) {
           case 10: // somme
-            enonce = enonce
+            motCellule = motCellule
               .replace('de number1', 'du nombre de départ')
               .replace('number2', `de ${nb2}`)
             formule = formule.replace('B2', `${nb2}`)
             break
           case 11: // différence
             if (nb2 < nbDepart) {
-              enonce = enonce.replace(
+              motCellule = motCellule.replace(
                 'entre number1 et number2',
                 `entre le nombre de départ et ${nb2}`,
               )
               formule = formule.replace('B2', `${nb2}`)
             } else {
-              enonce = enonce.replace(
+              motCellule = motCellule.replace(
                 'entre number1 et number2',
                 `entre ${nb2} et le nombre de départ`,
               )
@@ -275,20 +354,20 @@ export default class ExerciceTableurVocabulaire extends Exercice {
             }
             break
           case 12: // produit
-            enonce = enonce
+            motCellule = motCellule
               .replace('de number1', 'du nombre de départ')
               .replace('number2', `${nb2}`)
             formule = formule.replace('B2', `${nb2}`)
             break
           case 13: // quotient
             if (nb2 < nbDepart) {
-              enonce = enonce.replace(
+              motCellule = motCellule.replace(
                 'de number1 par number2',
                 `du nombre de départ par ${nb2}`,
               )
               formule = formule.replace('B2', `${nb2}`)
             } else {
-              enonce = enonce.replace(
+              motCellule = motCellule.replace(
                 'de number1 par number2',
                 `de ${nb2} par le nombre de départ`,
               )
@@ -296,7 +375,12 @@ export default class ExerciceTableurVocabulaire extends Exercice {
             }
             break
         }
-        listeMotsEnonce.push(enonce)
+
+        if (lOperation > 9)
+          motEnonce = motCellule.charAt(0).toLowerCase() + motCellule.slice(1)
+        else motEnonce = listeMots[lOperation - 1].txtEnonce
+        listeMotsCellule.push(motCellule)
+        listeMotsEnonce.push(motEnonce)
         lesBonnesFormules.push({
           ref: `B${i - q * nbLignes + 2}`,
           formula: formule,
@@ -307,7 +391,21 @@ export default class ExerciceTableurVocabulaire extends Exercice {
       for (let i = 0; i < nbLignes; i++) {
         cellDatas.push([]) // creer une ligne par question
         cellDatas[i + 1][0] = {
-          v: `${listeMotsEnonce[i]}`,
+          v: `${listeMotsCellule[i]}`,
+          formule: `${lesBonnesFormules[i].formula}`,
+          s: '',
+          t: 1,
+        }
+        cellDatasCorr.push([]) // creer une ligne par question
+        cellDatasCorr[i + 1][0] = {
+          v: `${listeMotsCellule[i]}`,
+          formule: `${lesBonnesFormules[i].formula}`,
+          s: '',
+          t: 1,
+        }
+        cellDatasCorr[i + 1][1] = {
+          v: `${lesBonnesFormules[i].formula}`,
+          formule: `${lesBonnesFormules[i].formula}`,
           s: '',
           t: 1,
         }
@@ -318,28 +416,42 @@ export default class ExerciceTableurVocabulaire extends Exercice {
       data[0][0] = cellDatas[0][0].v
       data[0][1] = cellDatas[0][1].v
 
+      const dataCorr: (number | string)[][] = [[]]
+      dataCorr[0][0] = cellDatas[0][0].v
+      dataCorr[0][1] = cellDatas[0][1].v
+
       for (let i = 0; i < nbLignes; i++) {
         data.push([]) // creer une ligne par question
         data[i + 1][0] = cellDatas[i + 1][0].v
+        dataCorr.push([]) // creer une ligne par question
+        dataCorr[i + 1][0] = cellDatasCorr[i + 1][0].v
+        dataCorr[i + 1][1] = cellDatasCorr[i + 1][1].v
       }
 
       data.push([]) // ligne vide en plus
+      dataCorr.push([]) // ligne vide en plus
       const style: Record<string, string> = {}
       for (let i = 0; i < nbLignes + 2; i++) {
         const key = `A${i}`
-        style[key] = 'text-align: left' // 'background: #eca2a2'
+        style[key] = 'text-align: left ; color:black' // 'background: #eca2a2'
+      }
+      style['B1'] = 'text-align: left ; color:black' // 'background: #eca2a2'
+
+      texte += `On choisit un nombre de départ (ici, ${nbDepart}). <br>`
+      const mot = []
+      for (let j = 0; j < listeMotsEnonce.length; j++) {
+        mot.push(
+          listeMotsEnonce[j].charAt(0).toLowerCase() +
+            listeMotsEnonce[j].slice(1),
+        )
+        texte += `Saisir, dans la cellule B${j + 2}, la formule pour calculer ${mot[j]}.<br>`
       }
 
-      const mot =
-        listeMotsEnonce[0].charAt(0).toLowerCase() + listeMotsEnonce[0].slice(1)
-      texte += `On choisit un nombre de départ, ici ${nbDepart} <br>
-      Par exemple, la cellule B2 doit contenir la formule pour calculer ${mot}.<br>`
-      texte +=
-        nbLignes === 1 ? '' : 'Faire de même pour les autres cellules.<br>'
+      texte += '<br>'
       texte += 'Attention, '
       texte += nbLignes === 1 ? 'la formule doit' : 'les formules doivent'
       texte +=
-        ' fonctionner même si le nombre de départ change (Cellule B1).<br>'
+        ' fonctionner même si le nombre de départ change (dans la cellule B1).<br><br>'
 
       if (context.isHtml) {
         texte += addSheet({
@@ -349,14 +461,31 @@ export default class ExerciceTableurVocabulaire extends Exercice {
           minDimensions: [nbColTableur, 2], // listeMotsEnonce.length + 1],
           style,
           columns: [
-            { width: 180 },
+            { width: 320 }, // Suffisamment large pour que toutes les textes rentrent
             { width: 90 },
             { width: 90 },
             { width: 90 },
           ],
           interactif: this.interactif,
           showVerifyButton: false,
-          readOnlyCells: [`A1:A${nbLignes + 1}`],
+          readOnlyCells: [`A1:A${nbLignes + 1}`, `C1:D${nbLignes + 1}`],
+        })
+
+        texteCorr += addSheet({
+          numeroExercice: this.numeroExercice ?? 0,
+          question: q,
+          data: dataCorr,
+          minDimensions: [nbColTableur, 2], // listeMotsEnonce.length + 1],
+          style,
+          columns: [
+            { width: 320 }, // Suffisamment large pour que toutes les textes rentrent
+            { width: 90 },
+            { width: 90 },
+            { width: 90 },
+          ],
+          interactif: false,
+          showVerifyButton: false,
+          readOnlyCells: [`A1:D${nbLignes + 1}`],
         })
         handleAnswers(
           this,
@@ -392,9 +521,17 @@ export default class ExerciceTableurVocabulaire extends Exercice {
           ExerciceTableurVocabulaire.styles,
           options,
         )
+        texteCorr += createTableurLatex(
+          nbLignes + 1,
+          4,
+          cellDatasCorr,
+          ExerciceTableurVocabulaire.styles,
+          options,
+        )
       }
 
-      texteCorr = 'Voici les formules à saisir dans le tableur :<br>'
+      /*
+      texteCorr += 'Voici les formules à saisir dans le tableur :<br>'
       for (let i = 0; i < nbLignes; i++) {
         const index = i + q * nbLignes
         const lOperation = Number(listeTypeQuestions[index])
@@ -405,7 +542,8 @@ export default class ExerciceTableurVocabulaire extends Exercice {
           }
         texteCorr += `Pour calculer ${listeMots[lOperation - 1].txtCorrection}${nbDepart}, la formule  à saisir dans la cellule ${lesBonnesFormules[i].ref} est : ${formule}.<br>`
       }
-      /****************************************************/
+      */
+
       if (this.questionJamaisPosee(q, nbDepart, listeMotsEnonce[0])) {
         this.listeQuestions[q] = texte
         this.listeCorrections[q] = texteCorr

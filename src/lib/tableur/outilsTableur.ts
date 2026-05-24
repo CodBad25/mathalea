@@ -176,7 +176,7 @@ export function compareSheetFunction(
   const feedback =
     maxMessages.length === 0
       ? '✅ Toutes les saisies sont correctes !'
-      : '❌ Des erreurs ont été détéctées.'
+      : '❌ Des erreurs ont été détectées.'
   return {
     isOk: maxMessages.length === 0,
     messages: maxMessages + feedback,
