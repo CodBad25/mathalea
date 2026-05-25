@@ -153,14 +153,10 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
       4,
       '1 : Valeurs entières et 10%, 20%...\n2 : Valeurs entières et 10%, 20%... mais aussi 25% et 50%\n3 : Valeurs entières et 4%, 23%...\n4 : Une décimale comme 34,5%',
     ]
-    this.besoinFormulaire2CaseACocher = [
-      'Avec indication de la calculatrice (en interactif)',
-    ]
 
     this.nbQuestions = 2
 
     this.sup = 1 // Niveau de difficulté
-    this.sup2 = 2
   }
 
   nouvelleVersion() {
