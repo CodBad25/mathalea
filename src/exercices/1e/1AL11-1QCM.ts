@@ -14,7 +14,7 @@ export const dateDePublication = '10/08/2025'
 export const uuid = '3bd46'
 // @Author Stéphane Guyon
 export const refs = {
-  'fr-fr': ['1AL11-1QCM', '1Gen-A201-1', '1Tec-S202'],
+  'fr-fr': ['1AL11-1QCM', '1Gen-A201-1', ],
   'fr-ch': [],
 }
 export const interactifReady = true
