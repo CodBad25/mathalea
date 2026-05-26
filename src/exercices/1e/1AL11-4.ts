@@ -33,7 +33,7 @@ export const dateDePublication = '29/09/2024'
 export const uuid = '3ae4a'
 
 export const refs = {
-  'fr-fr': ['1AL11-4', '1Gen-A202', '1Tec-S203'],
+  'fr-fr': ['1AL11-4', '1Gen-A202', ],
   'fr-ch': [],
 }
 export default class TermesSASG extends Exercice {
