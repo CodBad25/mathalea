@@ -1,10 +1,11 @@
-import MetaExercice from '../MetaExerciceCan'
-import Exercice from '../Exercice'
 import seedrandom from 'seedrandom'
+import Exercice from '../Exercice'
+import MetaExercice from '../MetaExerciceCan'
 
-export const titre = 'Sélection d\'automatismes'
+export const titre = "Sélection d'automatismes"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+// Les automatismes de 1e sont des qcms, MetaExerciceCan produit un interactifType = 'mathLive' !
+export const interactifType = 'qcm'
 export const uuid = '722e4'
 export const refs = { 'fr-fr': ['1A'], 'fr-ch': [] }
 export const dateDePublication = '30/04/2026'
@@ -68,6 +69,7 @@ const CATEGORIES_FORM = {
 export default class Automatismes1A extends MetaExercice {
   constructor() {
     super([])
+    this.interactifType = 'qcm'
     this.sup = '2-2-2-2-2-2'
     this.besoinFormulaire2CaseACocher = [
       'Afficher la référence de chaque question',

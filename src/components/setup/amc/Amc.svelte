@@ -2550,10 +2550,53 @@
     />
   </div>
 
+  <div slot="sidenav-extra" let:isSidenavOpened let:toggleSidenav let:isMd>
+    {#if isMd && !isSidenavOpened}
+      <div
+        class="absolute z-50 left-0 top-0 h-8 md:h-10 w-8 md:w-10 rounded-r-md bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark"
+      >
+        <button
+          type="button"
+          aria-controls="sidenav"
+          aria-haspopup="true"
+          aria-label="Ouvrir le menu"
+          class="w-full h-full flex items-center justify-center"
+          on:click={() => toggleSidenav(false)}
+        >
+          <i
+            class="bx bx-right-arrow-alt text-lg md:text-2xl text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest hover:dark:text-coopmathsdark-action-lightest"
+          ></i>
+        </button>
+      </div>
+    {/if}
+  </div>
+
   <div
     slot="sidebar"
-    class="w-full bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark"
+    let:isSidenavOpened
+    let:toggleSidenav
+    let:isMd
+    class="relative w-full bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark"
   >
+    {#if isMd && isSidenavOpened}
+      <div
+        class="absolute z-50 left-0 top-0 h-8 md:h-10 w-8 md:w-10 rounded-r-md bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark"
+      >
+        <button
+          type="button"
+          aria-controls="sidenav"
+          aria-haspopup="true"
+          aria-label="Fermer le menu"
+          class="w-full h-full flex items-center justify-center"
+          on:click={() => toggleSidenav(false)}
+        >
+          <i
+            class="bx bx-x text-lg md:text-2xl text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest hover:dark:text-coopmathsdark-action-lightest"
+          ></i>
+        </button>
+      </div>
+    {/if}
+
     <SideMenu
       {addExercise}
       hideThirdAppsButton={true}
