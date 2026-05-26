@@ -426,7 +426,7 @@ export default class DonnerSensDefinitionQuotient extends Exercice {
       `#resultatCheckEx${this.numeroExercice}Q${2 * i + 100 + 1}`,
     )
     if (spanResultat3 != null) {
-      if (result[2] === 'OK') {
+      if (result[3] === 'OK') {
         spanResultat3.innerHTML = '😎'
       } else {
         spanResultat3.innerHTML = '☹️'
