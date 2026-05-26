@@ -15,6 +15,15 @@ import {
   type Object3DJSON,
 } from './threeInstance'
 
+export const DEFAULT_CUBE_COLORS = [
+  0xff0000, // red
+  0xa70909, // dark red
+  0xffa35c, // orange
+  0xda8427, // dark orange
+  0xffff00, // yellow
+  0xcaca1a, // dark yellow
+]
+
 class Canvas3dElement extends HTMLElement {
   private background: number = 0xeeeeee
   private width: number = 500
@@ -829,14 +838,6 @@ class Canvas3dElement extends HTMLElement {
 
 customElements.define('canvas-3d', Canvas3dElement)
 export default Canvas3dElement
-export const DEFAULT_CUBE_COLORS = [
-  0xff0000, // red
-  0xa70909, // dark red
-  0xffa35c, // orange
-  0xda8427, // dark orange
-  0xffff00, // yellow
-  0xcaca1a, // dark yellow
-]
 
 interface CubeDescription {
   type: 'cube'

@@ -38,8 +38,7 @@ export const refs = {
   'fr-ch': ['autres-15'],
 }
 
-export default class PaternNum0 extends Exercice {
-  canvas3ds: any[][] = []
+export default class PaternNum06eme extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
@@ -103,7 +102,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
       let i = 0, cpt = 0;
       i < Math.min(this.nbQuestions, nbDePattern) && cpt < 50;
     ) {
-      const canvas3d: any[] = []
+      const canvas3d: string[] = []
       const popped = listePreDef.pop()
       if (!popped) {
         continue

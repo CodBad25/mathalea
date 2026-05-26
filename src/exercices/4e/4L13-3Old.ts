@@ -14,14 +14,10 @@ import { enleveDoublonNum, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
-import {
-  estentier,
-  gestionnaireFormulaireTexte,
-  randint,
-} from '../../modules/outils'
+import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-
+// import type { VisualPattern } from '../../lib/2d/patterns/VisualPattern'
 import {
   cubeDef,
   project3dIso,
@@ -31,18 +27,16 @@ import {
 import { VisualPattern } from '../../lib/2d/patterns/VisualPattern'
 import { VisualPattern3D } from '../../lib/2d/patterns/VisualPattern3D'
 import { bleuMathalea } from '../../lib/colors'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { equation1erDegre1Inconnue } from '../../lib/outils/equations'
-import { arrondi, range1 } from '../../lib/outils/nombres'
+import { range1 } from '../../lib/outils/nombres'
 import { context } from '../../modules/context'
 
-export const titre = 'Travailler sur les motifs itératifs'
+export const titre = 'Comprendre un algorithme itératif'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '10/06/2025'
-export const dateDeModifImportante = '25/05/2026'
+export const dateDeModifImportante = '22/11/2025'
 
 /**
  * Étudier les premiers termes d'une série de motifs afin de donner le nombre de formes ${['e','a','é','i','o','u','y','è','ê'].includes(pattern.shapes[0][0]) ? 'd\'':'de'}${pattern.shapes[0]} du motif suivant.
@@ -50,37 +44,34 @@ export const dateDeModifImportante = '25/05/2026'
  * Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/
  * @author Jean-claude Lhote
  */
-export const uuid = '8f4a4'
+export const uuid = '328b3'
 
 export const refs = {
-  'fr-fr': ['4L13-3'],
-  'fr-2016': ['6I13'],
-  'fr-ch': ['autres-14'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': [],
 }
 
-export default class PaternNum04eme extends Exercice {
+export default class PaternNum0Old extends Exercice {
   destroyers: (() => void)[] = []
+
   constructor() {
     super()
-    this.correctionDetailleeDisponible = true
-    this.correctionDetaillee = false
-    this.nbQuestions = 1
+    this.nbQuestions = 3
     this.comment = `Étudier les premiers termes d'une série de motifs afin de donner le nombre de formes du motif suivant.\n
  Les patterns sont des motifs figuratifs qui évoluent selon des règles définies.\n
- Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/.<br><br>
-Grâce au troisième paramètre, on peut imposer des patterns choisis dans cette <a href="https://coopmaths.fr/alea/?uuid=71ff5&s=6" target="_blank" style="color: blue">liste de patterns</a>.<br>
-Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'exercice sera complété par des patterns choisis au hasard.<br><br>
-Grâce au quatrième paramètre, on peut choisir de résoudre la question sur le numéro de motif (Q6) par une équation ou de façon plus intuitive.<br>
-La correction détaillée (ou pas) n'est utile que si on choisit une résolution par équation.`
+ Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/.<br>
+Grâce au dernier paramètre, on peut imposer des patterns choisis dans cette <a href="https://coopmaths.fr/alea/?uuid=71ff5&s=6" target="_blank" style="color: blue">liste de patterns</a>.<br>
+Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'exercice sera complété par des patterns choisis au hasard.`
     this.besoinFormulaireNumerique = ['Nombre de figures par question', 4]
     this.sup = 3
-    this.besoinFormulaire2Texte = [
+    this.besoinFormulaire4Texte = [
       'Types de questions',
-      'Nombres séparés par des tirets :\n1: Motif suivant à dessiner\n2 : Motif suivant (nombre)\n3 : Motif 10 (nombre)\n4 : Motif 100 (nombre)\n5 : Motif N (nombre)\n6 : Numéro du motif\n7 : Ensemble de ces 6 questions',
+      'Nombres séparés par des tirets :\n1: Motif suivant à dessiner\n2 : Motif suivant (nombre)\n3 : Motif 10 (nombre)\n4 : Numéro du motif\n5 : Motif 100 (nombre)\n6 : Question au hasard parmi les 5 précédentes',
     ]
-    this.sup2 = '1-2-3-4-6'
+    this.sup4 = '6'
     const nbDePattern = listePatternsSansRatioNiFraction.length
-    this.besoinFormulaire3Texte = [
+    this.besoinFormulaire5Texte = [
       'Numéros des pattern désirés :',
       [
         'Nombres séparés par des tirets  :',
@@ -88,13 +79,7 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
         `Mettre ${nbDePattern + 1} pour laisser le hasard faire.`,
       ].join('\n'),
     ]
-    this.sup3 = `${nbDePattern + 1}`
-
-    // this.besoinFormulaire4Numerique = ['Choisir un nombre pour équation', 9999] // Que pour les 3èmes
-    this.sup4 = 0
-    this.besoinFormulaire5CaseACocher = ['Résolution Q6 par équation']
-    this.sup5 = false
-    this.spacingCorr = 2
+    this.sup5 = `${nbDePattern + 1}`
   }
 
   destroy() {
@@ -109,15 +94,12 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
     this.destroyers.length = 0
     const nbDePattern = listePatternsSansRatioNiFraction.length
 
-    const shuffleListe =
-      typeof this.sup3 === 'number' && this.sup3 >= nbDePattern + 1
     let typesPattern = gestionnaireFormulaireTexte({
-      saisie: this.sup3,
+      saisie: this.sup5,
       max: nbDePattern,
       defaut: nbDePattern + 1,
       melange: nbDePattern + 1,
       nbQuestions: this.nbQuestions,
-      shuffle: shuffleListe,
     }).map(Number)
 
     typesPattern = [...typesPattern, ...shuffle(range1(nbDePattern))]
@@ -132,11 +114,12 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
     const typesQuestions = Array.from(
       new Set(
         gestionnaireFormulaireTexte({
-          saisie: this.sup2,
-          max: 6,
-          defaut: 7,
-          melange: 7,
-          nbQuestions: 6,
+          saisie: this.sup4,
+          min: 1,
+          max: 5,
+          defaut: 1,
+          melange: 6,
+          nbQuestions: 5,
           shuffle: false,
         }).map(Number),
       ),
@@ -167,6 +150,7 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
             })
           : new VisualPattern([])
 
+      //  patterns.push(pattern)
       const figureCorr = []
       let xmin = Infinity
       let ymin = Infinity
@@ -364,12 +348,11 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
                     question: indexInteractif++,
                     objetReponse: { reponse: { value: nbTex } },
                     typeInteractivite: 'mathlive',
-                    classe: KeyboardType.clavierNumbers,
                   },
                 )}`,
               )
               listeCorrections.push(`Le motif $${nbFigures + 1}$ contient $${miseEnEvidence(texNombre(nbFormes, 0))}$ ${infosShape.nomPluriel}.<br>
-          ${!typesQuestions.includes(1) ? mathalea2d(Object.assign({ scale: 0.4, optionsTikz: 'transform shape', id: `Motif${i}F${nbFigures}` }, { xmin: xminCorr, ymin: yminCorr, xmax: xmaxCorr, ymax: ymaxCorr }), objetsCorr) : ''}`)
+          ${!typesQuestions.includes(1) ? mathalea2d(Object.assign(fixeBordures(objetsCorr, { rxmin: -1, rymin: 0, rxmax: 0, rymax: 1 }), { scale: 0.4, optionsTikz: 'transform shape' }), objetsCorr) : ''}`)
             }
             break
           case 3:
@@ -382,7 +365,6 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
                   question: indexInteractif++,
                   objetReponse: { reponse: { value: nbTex } },
                   typeInteractivite: 'mathlive',
-                  classe: KeyboardType.clavierNumbers,
                 },
               )}
             `)
@@ -391,106 +373,33 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
             ${explain}`)
             }
             break
-          case 5: {
-            const equation = equation1erDegre1Inconnue({
-              valeursRelatives: true,
-              type: pat.type === 'linéaire' ? 'ax=d' : 'ax+b=d',
-              a: delta,
-              b: pat.fonctionNb(0),
-              d: 0,
-              inconnue: 'n',
-            })
-            const reponseQ5 = equation.membreDeGauche
-
-            listeQuestions.push(`\nSi $n$ désigne un entier naturel, exprimer, en fonction de $n$, le nombre ${infosShape.articleCourt}${infosShape.nomPluriel} pour le motif $n$ ?<br>${ajouteQuestionMathlive(
-              {
-                exercice: this,
-                question: indexInteractif++,
-                objetReponse: {
-                  reponse: {
-                    value: reponseQ5,
-                    options: { calculFormel: true },
-                  },
-                },
-                typeInteractivite: 'mathlive',
-                classe: KeyboardType.alphanumeric,
-              },
-            )}
-            `)
-            let explain2
-            if (pat.type === 'linéaire')
-              explain2 = `On constate que le nombre de formes augmente de $${delta}$ à chaque étape.<br>
-        Et que c'est aussi le nombre de formes à l'étape 1.<br>`
-            else if (pat.type === 'affine')
-              explain2 = `On constate que le nombre de formes augmente de $${delta}$ à chaque étape.<br>
-              Cependant, il n'y a pas ${delta} formes sur le motif 1, mais ${pat.fonctionNb(1)}, soit ${b < 0 ? `${-b} de moins` : `${b} de plus`}.<br>`
-            explain2 += `Par conséquent, pour trouver le nombre ${infosShape.articleCourt}${infosShape.nomPluriel} pour le motif $n$, on peut utiliser l'expression $${miseEnEvidence(reponseQ5)}$.`
-            listeCorrections.push(`\n` + explain2)
-
-            break
-          }
-          case 6:
+          case 4:
             {
-              let explain2
-              let etape = randint(20, 80)
-              const nbFormes = this.sup4 > 9 ? this.sup4 : pat.fonctionNb(etape)
+              const etape = randint(20, 80)
+              const nbFormes = pat.fonctionNb(etape)
               const nbTex = texNombre(nbFormes, 0)
-              let enonce
+              listeQuestions.push(`\nUn motif de cette série contient $${nbTex}$ ${infosShape.nomPluriel}. À quel numéro de motif cela correspond-il ?<br>${ajouteQuestionMathlive(
+                {
+                  exercice: this,
+                  question: indexInteractif++,
+                  objetReponse: { reponse: { value: etape.toString() } },
+                  typeInteractivite: 'mathlive',
+                },
+              )}
+            `)
 
-              if (this.sup4 <= 9)
-                enonce = `\nUn motif de cette série contient $${nbTex}$ ${infosShape.nomPluriel}. À quel numéro de motif cela correspond-il ?`
-              else {
-                enonce = `\nOn dispose de $${nbTex}$ ${infosShape.nomPluriel}. Quel est le plus grand numéro de motif que l’on peut construire entièrement avec ces $${nbTex}$ ${infosShape.nomPluriel} ?`
-              }
-              listeQuestions.push(
-                enonce +
-                  `${ajouteQuestionMathlive({
-                    exercice: this,
-                    question: indexInteractif++,
-                    objetReponse: { reponse: { value: etape.toString() } },
-                    classe: KeyboardType.clavierNumbers,
-                    typeInteractivite: 'mathlive',
-                  })}
-            `,
-              )
-
-              const equation = equation1erDegre1Inconnue({
-                valeursRelatives: true,
-                a: delta,
-                b: pat.fonctionNb(0),
-                c: 0,
-                d: nbFormes,
-                inconnue: 'n',
-              })
-
-              if (!this.sup5) // Correction intuitive
-              {
-                etape = Math.floor(equation.reponseDecimale)
-
-                explain2 =
-                  pat.type === 'linéaire'
-                    ? `On constate que le nombre de formes augmente de $${delta}$ à chaque étape.<br>
-        Et que c'est aussi le nombre de formes à l'étape 1.<br>Par conséquent, pour trouver le numéro d'un motif dont on connait le nombre de formes, il faut simplement diviser ce nombre par ${delta} pour trouver le numéro.`
-                    : `On constate que le nombre de formes augmente de $${delta}$ à chaque étape.<br>
-        Cependant, il n'y a pas ${delta} formes sur le motif 1, mais ${pat.fonctionNb(1)}.<br>Par conséquent, il faut ${b < 0 ? `ajouter ${-b}` : `retirer ${b}`} au nombre de formes puis diviser le résultat par ${delta} : <br>
-        $\\dfrac{${nbTex} ${b < 0 ? '+' : '-'} ${Math.abs(b)}}{${delta}}${estentier(equation.reponseDecimale) ? '=' + miseEnEvidence(etape) : (arrondi((nbFormes - b) / delta, 2) === arrondi((nbFormes - b) / delta, 3) ? '=' : `\\approx`) + texNombre(equation.reponseDecimale)}$.`
-                listeCorrections.push(`C'est le motif numéro $${miseEnEvidence(etape)}$ qui contient $${miseEnEvidence(nbTex, bleuMathalea)}$ ${infosShape.nomPluriel}.<br>
-                 ${explain2}`)
-              } else {
-                // Correction par équation
-                explain2 = `Il faut résoudre l'équation $${equation.egalite}$.<br>`
-                explain2 += this.correctionDetaillee
-                  ? equation.correctionSansConclusionDetaillee
-                  : equation.correctionSansConclusion
-                if (!estentier(equation.reponseDecimale))
-                  explain2 += `L'entier qui précède $${texNombre(equation.reponseDecimale)}$ est $${miseEnEvidence(texNombre(Math.floor(equation.reponseDecimale)))}$.<br>`
-                listeCorrections.push(
-                  `${explain2}Avec $${miseEnEvidence(nbTex, bleuMathalea)}$ ${infosShape.nomPluriel}, on peut continuer la série jusqu'au motif numéro $${miseEnEvidence(texNombre(Math.floor(equation.reponseDecimale)))}$.`,
-                )
-              }
+              const explain2 =
+                pat.type === 'linéaire'
+                  ? `On constate que le nombre de formes  augmente de $${delta}$ à chaque étape.<br>
+        Et que c'est aussi le nombre de formes à l'étape 1. Par conséquent, pour trouver le numéro d'un motif dont on connait le nombre de formes, il faut simplement diviser ce nombre par ${delta} pour trouver le numéro.`
+                  : `On constate que le nombre de formes augmente de $${delta}$ à chaque étape.<br>
+        Cependant, il n'y a pas ${delta} formes sur le motif 1, mais ${pat.fonctionNb(1)}. Par conséquent, il faut ${b < 0 ? `ajouter ${-b}` : `retirer ${b}`} au nombre de formes puis diviser le résultat par ${delta} : <br>
+        $\\dfrac{${nbTex} ${b < 0 ? '+' : '-'} ${Math.abs(b)}}{${delta}}=${miseEnEvidence(etape)}$.`
+              listeCorrections.push(`C'est le motif numéro $${miseEnEvidence(etape.toString())}$ qui contient $${miseEnEvidence(texNombre(nbFormes, 0), bleuMathalea)}$ ${pattern.shapes[0]}s.<br>
+            ${explain2}`)
             }
             break
-          case 4:
+          case 5:
             {
               const nbFormes = pat.fonctionNb(100)
               const nbTex = texNombre(nbFormes, 0)
@@ -499,7 +408,6 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
                   exercice: this,
                   question: indexInteractif++,
                   objetReponse: { reponse: { value: nbTex } },
-                  classe: KeyboardType.clavierNumbers,
                   typeInteractivite: 'mathlive',
                 },
               )}
