@@ -44,7 +44,7 @@ export default class ExerciceEquationASolutionEntiere extends Exercice {
     ]
 
     this.spacing = 2
-    context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 2)
+    this.spacingCorr = context.isHtml ? 3 : 2
     this.correctionDetailleeDisponible = true
     this.correctionDetaillee = context.isHtml
     this.sup = true // Avec des nombres relatifs
