@@ -151,7 +151,7 @@ export default class ComprendreSensPourcentage extends Exercice {
           pourcentage = randint(21, 49, [30, 40]) // Entier aléatoire entre 21 et 49 en excluant 30 et 40.
 
           texteAvant[0] = `Si un aliment contient $${pourcentage}\\ \\%$ de ${nutriment}, alors pour $100$ ${unites} de cet aliment, il y a`
-          texteApres = `${unites} de ${nutriment}.<br>`
+          texteApres = `${unites} de ${nutriment}.`
 
           texteAvant[1] = `On peut en déduire que $${multiplePour100[i] * 100}$ ${unites} de cet aliment contiennent`
 
@@ -174,7 +174,7 @@ export default class ComprendreSensPourcentage extends Exercice {
           pourcentage = randint(81, 96, [90])
 
           texteAvant[0] = `Si ${fruitsAvecArticle} contient $${pourcentage}\\ \\%$ d'eau, alors pour $100$ ${unites} de ${fruits}, il y a`
-          texteApres = `${unites} d'eau.<br>`
+          texteApres = `${unites} d'eau.`
 
           texteAvant[1] = `On peut en déduire que $${multiplePour100[i] * 100}$ ${unites} de ${fruits} contiennent`
 
@@ -187,7 +187,7 @@ export default class ComprendreSensPourcentage extends Exercice {
           pourcentage = randint(11, 39, [20, 30])
 
           texteAvant[0] = `Si une boisson contient $${pourcentage}\\ \\%$ de ${nutriment}, alors pour $100$ ${unites} de cette boisson, il y a`
-          texteApres = `${unites} de ${nutriment}.<br>`
+          texteApres = `${unites} de ${nutriment}.`
 
           texteAvant[1] = `On peut en déduire que $${multiplePour100[i] * 100}$ ${unites} de cette boisson contiennent`
 
@@ -200,7 +200,7 @@ export default class ComprendreSensPourcentage extends Exercice {
           pourcentage = randint(2, 12, [10])
 
           texteAvant[0] = `Si un fromage contient $${pourcentage}\\ \\%$ de ${nutriment}, alors pour $100$ ${unites} de ce fromage, il y a`
-          texteApres = `${unites} de ${nutriment}.<br>`
+          texteApres = `${unites} de ${nutriment}.`
 
           texteAvant[1] = `On peut en déduire que $${multiplePour100[i] * 100}$ ${unites} de ce fromage contiennent`
 
@@ -213,7 +213,7 @@ export default class ComprendreSensPourcentage extends Exercice {
           pourcentage = randint(1, 9)
 
           texteAvant[0] = `Si un légume contient $${pourcentage}\\ \\%$ de ${nutriment}, alors pour $100$ ${unites} de ce légume, il y a`
-          texteApres = `${unites} de ${nutriment}.<br>`
+          texteApres = `${unites} de ${nutriment}.`
 
           texteAvant[1] = `On peut en déduire que $${multiplePour100[i] * 100}$ ${unites} de ce légume contiennent`
 
@@ -226,7 +226,7 @@ export default class ComprendreSensPourcentage extends Exercice {
           pourcentage = choice([15, 20, 25, 30, 40, 50, 60, 70])
 
           texteAvant[0] = `Si un magasin propose $${pourcentage}\\ \\%$ de réduction, alors pour $100$ €, on économise`
-          texteApres = `${unites}.<br>`
+          texteApres = `${unites}.`
 
           texteAvant[1] = `On peut en déduire que pour $${multiplePour100[i] * 100}$ €, on économise`
 
@@ -238,7 +238,7 @@ export default class ComprendreSensPourcentage extends Exercice {
           pourcentage = randint(4, 18, [10])
 
           texteAvant[0] = `Si une voiture consomme $${pourcentage}\\ \\%$ de son réservoir par $100\\text{ km}$, alors pour $100\\text{ km}$, elle utilise`
-          texteApres = `${unites} de carburant.<br>`
+          texteApres = `${unites} de carburant.`
 
           texteAvant[1] = `On peut en déduire que pour $${multiplePour100[i] * 100}\\text{ km}$, la voiture consomme`
 
@@ -250,14 +250,14 @@ export default class ComprendreSensPourcentage extends Exercice {
           pourcentage = choice([20, 40, 60])
           if (choice([true, false])) {
             texteAvant[0] = `Si ${quidam.prenom} passe $${pourcentage}\\ \\%$ de son temps à lire, alors pour $100$ minutes, ${quidam.pronom} lit`
-            texteApres = `${unites}.<br>`
+            texteApres = `${unites}.`
 
             texteAvant[1] = `On peut en déduire que pour $${multiplePour100[i] * 100}$ minutes, ${quidam.prenom} lit`
 
             texteAvant[2] = `On peut aussi en déduire que pour $${arrondi(100 / diviseurPour100[i])}$ minutes, ${quidam.prenom} lit`
           } else {
             texteAvant[0] = `Si ${quidam.prenom} passe $${pourcentage}\\ \\%$ de son temps à jouer aux jeux vidéos, alors pour $100$ minutes, ${quidam.pronom} joue`
-            texteApres = `${unites}.<br>`
+            texteApres = `${unites}.`
 
             texteAvant[1] = `On peut en déduire que pour $${multiplePour100[i] * 100}$ minutes, ${quidam.prenom} joue`
 
@@ -269,7 +269,7 @@ export default class ComprendreSensPourcentage extends Exercice {
           if (choice([true, true, true, false])) {
             unites = 'tirs'
             texteAvant[0] = `Si, au ${choice(['football', 'handball', 'water-polo', 'hockey'])}, ${quidam.prenom} réussit $${pourcentage}\\ \\%$ de ses tirs au but, alors pour $100$ tentatives de tirs au but, ${quidam.pronom} réussit`
-            texteApres = `${unites}.<br>`
+            texteApres = `${unites}.`
 
             texteAvant[1] = `On peut en déduire que pour $${multiplePour100[i] * 100}$ tentatives de tirs au but, ${quidam.prenom} marque`
 
@@ -277,7 +277,7 @@ export default class ComprendreSensPourcentage extends Exercice {
           } else {
             unites = 'lancers'
             texteAvant[0] = `Si, au basketball, ${quidam.prenom} réussit $${pourcentage}\\ \\%$ de ses lancers francs, alors pour $100$ tentatives de lancers francs, ${quidam.pronom} réussit`
-            texteApres = `${unites}.<br>`
+            texteApres = `${unites}.`
 
             texteAvant[1] = `On peut en déduire que pour $${multiplePour100[i] * 100}$ tentatives de lancers francs, ${quidam.prenom} marque`
 
@@ -288,7 +288,7 @@ export default class ComprendreSensPourcentage extends Exercice {
           unites = 'kWh'
           pourcentage = randint(3, 29, [10, 20])
           texteAvant[0] = `Si un appareil utilise $${pourcentage}\\ \\%$ de l'énergie d'un foyer, alors pour $100$ kilowattheures (kWh), cet appareil consomme`
-          texteApres = `${unites}.<br>`
+          texteApres = `${unites}.`
 
           texteAvant[1] = `On peut en déduire que pour $${multiplePour100[i] * 100}$ kWh, cet appareil consomme`
 
@@ -299,7 +299,7 @@ export default class ComprendreSensPourcentage extends Exercice {
           unites = 'voix'
           pourcentage = choice([20, 40, 60, 80])
           texteAvant[0] = `Si, lors d'une élection, un candidat récolte $${pourcentage}\\ \\%$ des voix, alors pour $100$ votants, ce candidat reçoit`
-          texteApres = `${unites}.<br>`
+          texteApres = `${unites}.`
 
           texteAvant[1] = `On peut en déduire que pour $${multiplePour100[i] * 100}$ votants, ce candidat reçoit`
 
@@ -310,7 +310,7 @@ export default class ComprendreSensPourcentage extends Exercice {
           unites = '$\\text{ km}$'
           pourcentage = randint(31, 79, [40, 50, 60, 70])
           texteAvant[0] = `Si un cycliste parcourt $${pourcentage}\\ \\%$ de son trajet total en montée, alors pour $100\\text{ km}$ parcourus,`
-          texteApres = `${unites} sont parcourus.<br>`
+          texteApres = `${unites} sont parcourus.`
 
           texteAvant[1] = `On peut en déduire que pour $${multiplePour100[i] * 100}\\text{ km}$ parcourus,`
 
