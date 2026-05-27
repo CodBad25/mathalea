@@ -83,7 +83,8 @@ export default class ProblemeEquationsPerimetreAireRectangle extends Exercice {
               valeursRelatives: false,
               type: 'ax+b=cx+d',
             })
-            longueurConnue = equation.a * equation.reponse + equation.b
+            longueurConnue =
+              equation.a * (equation.reponse as number) + equation.b
           } while (longueurConnue < 0)
           const a = equation.a
           const b = equation.b
@@ -122,7 +123,7 @@ export default class ProblemeEquationsPerimetreAireRectangle extends Exercice {
             ${this.correctionDetaillee ? equation.correctionDetaillee : equation.correction}<br><br>
             ${texteGras(`Calcul de $${segment1}$ en cm.`)}<br>
             $${segment1}=${equation.membreDeGauche}$<br>
-            $${segment1}=${a} \\times ${equation.reponse}${ecritureAlgebrique(b)}$<br>
+            $${segment1}=${a} \\times ${equation.reponse as number}${ecritureAlgebrique(b)}$<br>
             $${segment1}=${longueurConnue}$<br><br>
             ${texteGras(`Calcul de $${coteInconnu}$ en cm.`)}<br>
             $\\mathcal{P} = 2 \\times ${longueurConnue} + 2 \\times ${coteInconnu}$<br>
@@ -156,10 +157,10 @@ export default class ProblemeEquationsPerimetreAireRectangle extends Exercice {
             a2 = equation.a / 2 - a1
             b1 = randint(1, equation.b / 2)
             b2 = equation.b / 2 - b1
-            longueur = a1 * equation.reponse + b1
+            longueur = a1 * (equation.reponse as number) + b1
           } while (
-            a1 * equation.reponse + b1 <= 0 ||
-            a2 * equation.reponse + b2 <= 0 ||
+            a1 * (equation.reponse as number) + b1 <= 0 ||
+            a2 * (equation.reponse as number) + b2 <= 0 ||
             equation.d === 4 ||
             a2 === 0
           )
@@ -190,7 +191,7 @@ export default class ProblemeEquationsPerimetreAireRectangle extends Exercice {
           }
           segment1 = longCote
           segment2 = largeCote
-          largeur = a2 * equation.reponse + b2
+          largeur = a2 * (equation.reponse as number) + b2
           reponse = longueur * largeur
           texte += `$x$ est un nombre tel que $${segment1}=${expression1}$ et $${segment2}=${expression2}$ (en cm).<br>`
           texteCorr = `${nomRectangle} est un rectangle donc ses côtés opposés sont de la même longueur donc $${A.nom}${B.nom}=${C.nom}${D.nom}$ et $${B.nom}${C.nom}=${D.nom}${A.nom}$.<br><br>
@@ -201,10 +202,10 @@ export default class ProblemeEquationsPerimetreAireRectangle extends Exercice {
             ${texteGras("Résolution de l'équation.")}<br>
             ${this.correctionDetaillee ? equation.correctionDetaillee : equation.correction}<br><br>
             ${texteGras(`Calcul de $${segment1}$ en cm.`)}<br>
-            $${segment1} = ${a1} \\times ${equation.reponse}${b1 === 0 ? '' : ecritureAlgebrique(b1)}$<br>
+            $${segment1} = ${a1} \\times ${equation.reponse as number}${b1 === 0 ? '' : ecritureAlgebrique(b1)}$<br>
             $${segment1} = ${longueur}$<br><br>
             ${texteGras(`Calcul de $${segment2}$ en cm.`)}<br>
-            $${segment2} = ${a2} \\times ${equation.reponse}${b2 === 0 ? '' : ecritureAlgebrique(b2)}$<br>
+            $${segment2} = ${a2} \\times ${equation.reponse as number}${b2 === 0 ? '' : ecritureAlgebrique(b2)}$<br>
             $${segment2} = ${largeur}$<br><br>
             ${texteGras(`Calcul de l'aire de $${nomRectangle}$ en $\\text{cm}^2$.`)}<br>
             $\\mathcal{A} = L \\times l$<br>
