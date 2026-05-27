@@ -29,7 +29,7 @@ export const refs = {
 const articles = [
   { nom: 'oranges', det: "d'", prix: [1.2, 1.3, 1.4, 1.5] },
   { nom: 'pommes', det: 'de ', prix: [1.5, 1.6, 1.7, 1.8] },
-  { nom: 'bananes', det: 'de', prix: [1.1, 1.2, 1.3, 1.4] },
+  { nom: 'bananes', det: 'de ', prix: [1.1, 1.2, 1.3, 1.4] },
   { nom: 'ananas', det: "d'", prix: [2.5, 2.6, 2.7, 2.8] },
   { nom: 'cerises', det: 'de ', prix: [3.0, 3.2, 3.4, 3.6] },
 ]
