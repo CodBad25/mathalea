@@ -698,7 +698,7 @@ export default class QcmProprietesParallelogrammesParticuliers extends Exercice 
               texte: "c'est un parallélogramme.",
               statut: false,
               feedback:
-                "Ce n'est pas suffisant, il nous faudrait d'autres informations pour être certain que c'est un rectangle.",
+                "Ce n'est pas suffisant, il nous faudrait d'autres informations pour être certain que c'est un parallélogramme.",
             },
             {
               texte: "c'est un rectangle.",
@@ -762,7 +762,7 @@ export default class QcmProprietesParallelogrammesParticuliers extends Exercice 
               texte: "c'est un parallélogramme.",
               statut: false,
               feedback:
-                "Ce n'est pas suffisant, il nous faudrait d'autres informations pour être certain que c'est un rectangle.",
+                "Ce n'est pas suffisant, il nous faudrait d'autres informations pour être certain que c'est un parallélogramme.",
             },
             {
               texte: "c'est un rectangle.",
@@ -794,7 +794,7 @@ export default class QcmProprietesParallelogrammesParticuliers extends Exercice 
               texte: "c'est un parallélogramme.",
               statut: false,
               feedback:
-                "Ce n'est pas suffisant, il nous faudrait d'autres informations pour être certain que c'est un rectangle.",
+                "Ce n'est pas suffisant, il nous faudrait d'autres informations pour être certain que c'est un parallélogramme.",
             },
             {
               texte: "c'est un rectangle.",
@@ -826,7 +826,7 @@ export default class QcmProprietesParallelogrammesParticuliers extends Exercice 
               texte: "c'est un parallélogramme.",
               statut: false,
               feedback:
-                "Ce n'est pas suffisant, il nous faudrait d'autres informations pour être certain que c'est un rectangle.",
+                "Ce n'est pas suffisant, il nous faudrait d'autres informations pour être certain que c'est un parallélogramme.",
             },
             {
               texte: "c'est un rectangle.",
@@ -1171,19 +1171,19 @@ export default class QcmProprietesParallelogrammesParticuliers extends Exercice 
               texte: "c'est un rectangle.",
               statut: false,
               feedback:
-                "Ce n'est pas suffisant, il faudrait que les diagonales se coupent en leur milieu et soient de même longueur pour être certain que c'est un rectangle.",
+                "Ce n'est pas suffisant, il faudrait que les diagonales se coupent en leur milieu pour être certain que c'est un rectangle.",
             },
             {
               texte: "c'est un losange.",
-              statut: true,
+              statut: false,
               feedback:
-                "Ce n'est pas suffisant, il faudrait que les diagonales se coupent en leur milieu et soient perpendiculaires pour être certain que c'est un losange.",
+                "Ce n'est pas suffisant, il faudrait que les diagonales se coupent en leur milieu pour être certain que c'est un losange.",
             },
             {
               texte: "c'est un carré.",
-              statut: true,
+              statut: false,
               feedback:
-                "Ce n'est pas suffisant, il faudrait que les diagonales se coupent en leur milieu, soient perpendiculaires et soient de même longueur pour être certain que c'est un losange.",
+                "Ce n'est pas suffisant, il faudrait que les diagonales se coupent en leur milieu pour être certain que c'est un carré.",
             },
           ]
           texteCorr =
