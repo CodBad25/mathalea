@@ -83,8 +83,7 @@ export default class ProblemeEquationsPerimetreAireRectangle extends Exercice {
               valeursRelatives: false,
               type: 'ax+b=cx+d',
             })
-            longueurConnue =
-              equation.a * (equation.reponse as number) + equation.b
+            longueurConnue = equation.a * Number(equation.reponse) + equation.b
           } while (longueurConnue < 0)
           const a = equation.a
           const b = equation.b
@@ -157,10 +156,10 @@ export default class ProblemeEquationsPerimetreAireRectangle extends Exercice {
             a2 = equation.a / 2 - a1
             b1 = randint(1, equation.b / 2)
             b2 = equation.b / 2 - b1
-            longueur = a1 * (equation.reponse as number) + b1
+            longueur = a1 * Number(equation.reponse) + b1
           } while (
-            a1 * (equation.reponse as number) + b1 <= 0 ||
-            a2 * (equation.reponse as number) + b2 <= 0 ||
+            a1 * Number(equation.reponse) + b1 <= 0 ||
+            a2 * Number(equation.reponse) + b2 <= 0 ||
             equation.d === 4 ||
             a2 === 0
           )
@@ -191,7 +190,7 @@ export default class ProblemeEquationsPerimetreAireRectangle extends Exercice {
           }
           segment1 = longCote
           segment2 = largeCote
-          largeur = a2 * (equation.reponse as number) + b2
+          largeur = a2 * Number(equation.reponse) + b2
           reponse = longueur * largeur
           texte += `$x$ est un nombre tel que $${segment1}=${expression1}$ et $${segment2}=${expression2}$ (en cm).<br>`
           texteCorr = `${nomRectangle} est un rectangle donc ses côtés opposés sont de la même longueur donc $${A.nom}${B.nom}=${C.nom}${D.nom}$ et $${B.nom}${C.nom}=${D.nom}${A.nom}$.<br><br>
