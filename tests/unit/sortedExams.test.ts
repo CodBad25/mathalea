@@ -1,11 +1,8 @@
-import { describe, test, expect, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, test } from 'vitest'
 
-import { triAnnales } from '../../src/lib/components/sorting'
 import referentielExams from '../../src/json/referentielStaticFR.json'
-import {
-  buildReferentiel,
-  getAllEndings,
-} from '../../src/lib/components/refUtils'
+import { getAllEndings } from '../../src/lib/components/refUtils'
+import { triAnnales } from '../../src/lib/components/sorting'
 import type { JSONReferentielObject } from '../../src/lib/types/referentiels'
 
 describe('sorteddnbexamens', () => {
@@ -20,7 +17,7 @@ describe('sorteddnbexamens', () => {
   // examens.forEach((value, index)=> console.log('' + index + ':' + value.pathToResource[0] + ':' + value.pathToResource[1] + ':' + value.pathToResource[2] + ':' + value.resource.uuid))
   examens = triAnnales(examens, 'ascStringdescNumber')
   // examens.forEach((value, index)=> console.log('' + index + ':' + value.pathToResource[0] + ':' + value.pathToResource[1] + ':' + value.pathToResource[2] + ':' + value.resource.uuid))
-  const orderedExamsReferentiel = buildReferentiel(examens)
+  // const orderedExamsReferentiel = buildReferentiel(examens)
 
   beforeEach(() => {})
 
