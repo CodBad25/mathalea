@@ -1,26 +1,11 @@
 {
   "slides": [
     {
-      "background": "carousel05.jpg",
-      "title": "Course aux nombres",
-      "message": "Tous les sujets du concours 2026 sont disponibles en version aléatoirisée",
-      "image": "CAN.png"
-    },
-    {
-      "background": "carousel05.jpg",
-      "title": "Nouveau logiciel de géométrie dynamique",
-      "message": "« Secouer la figure », génération automatique des programmes de construction, interface simplifiée...",
-      "image": "apigeomv1.webp",
-      "link": "https://coopmaths.fr/www/blog/2026-04-06-apigeom/",
-      "buttonTitle": "Présentation d'apigeom"
-    },
-    {
-      "background": "carousel05.jpg",
-      "title": "fluence.mathalea.fr",
-      "message": "Tout le programme de cycle 2 et de cycle 3 pour travailler les automatismes en calcul mental (diaporama, parcours personnalisés, suivi local des scores...).",
-      "image": "fluence.png",
-      "link": "https://fluence.mathalea.fr/",
-      "buttonTitle": "fluence.mathalea.fr"
+      "title": "Le brevet et le bac approchent !",
+      "message": "Des conseils et des exercices pour réviser les examens de fin d'année",
+      "image": "revisions.png",
+      "link": "https://coopmaths.fr/www/revisions/",
+      "buttonTitle": "Accéder aux ressources pour réviser"
     },
     {
       "background": "carousel04.jpg",
