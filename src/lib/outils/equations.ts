@@ -26,6 +26,8 @@ import { texNombre } from './texNombre'
  * et la réponse est calculée exactement. Sinon, les coefficients manquants
  * sont tirés aléatoirement de façon à garantir une solution entière ou
  * fractionnaire simple.
+ * Si une des 4 variables `a`, `b`, `c`, `d` est fournie, alors il faut fournir les autres,
+ * quitte à les mettre à zéro.
  *
  * @param options - Paramètres de configuration de l'équation.
  * @param options.valeursRelatives - Si `true`, autorise des coefficients et
@@ -116,15 +118,28 @@ export const equation1erDegre1Inconnue = (
   },
 ) => {
   let a: Decimal = options.a != null ? new Decimal(options.a) : new Decimal(999)
+  if (a.isZero() && options.c == null) {
+    console.warn(
+      `Division impossible par zéro ! Changer la valeur de la variable a.`,
+    )
+    a = new Decimal(1000)
+  }
   let b: Decimal = options.b != null ? new Decimal(options.b) : new Decimal(999)
   let c: Decimal = options.c != null ? new Decimal(options.c) : new Decimal(999)
+  if (a.sub(c).isZero() && options.a != null && options.c != null) {
+    console.warn(
+      `Division impossible par zéro ! Changer la valeur de la variable c et/ou celle de a.`,
+    )
+    c = new Decimal(10000)
+  }
   let d: Decimal = options.d != null ? new Decimal(options.d) : new Decimal(999)
-  let type = options.type != null ? options.type : 'ax+b=cx+d'
-  if (b.isZero()) type = 'ax=d'
-  else if (a.toNumber() === 1) type = 'x+b=d'
+
+  let type = 'ax+b=cx+d'
+  if (options.type != null) type = options.type
+  else if (b.isZero() && c.isZero()) type = 'ax=d'
+  else if (a.toNumber() === 1 && c.isZero()) type = 'x+b=d'
   else if (c.isZero() && d.isZero()) type = 'ax+b=0'
   else if (c.isZero()) type = 'ax+b=d'
-  else type = 'ax+b=cx+d'
 
   let reponse: FractionEtendue | Decimal
   const inconnue = options.inconnue ?? 'x'
