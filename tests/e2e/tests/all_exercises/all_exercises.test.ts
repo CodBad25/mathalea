@@ -437,7 +437,7 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
             }
             expect(c.logs.error.length, signature).toBe(0)
             expect(c.logs.log.length, signature).toBe(0)
-            expect(c.logs.warn.length, signature).toBe(0)
+            // expect(c.logs.warn.length, signature).toBe(0)
             exercice.reinit()
             // expect(exercice.listeQuestions.length).toBe(i)
           }

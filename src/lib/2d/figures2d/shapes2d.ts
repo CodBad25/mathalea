@@ -1,7 +1,6 @@
 import { Shape2D } from '../Figures2D'
 import { ObjetMathalea2D } from '../ObjetMathalea2D'
 import { emoji } from './Emojis'
-import { bleuMathalea } from '../../../lib/colors'
 
 export function shapeDefToShapeSvg(shapeName: string): string {
   const shapeDef = listeShapes2DInfos[shapeName].shapeDef
@@ -45,7 +44,7 @@ export const shapeRectangle = new Shape2D({
 
 export const rectangleDef = new ObjetMathalea2D()
 rectangleDef.bordures = [-0.5, -0.25, 0.5, 0.25]
-rectangleDef.svg = function (coeff: number): string {
+rectangleDef.svg = function (_coeff: number): string {
   return `
   <!-- Rectangle 1x0.5 -->
   <defs>
@@ -100,7 +99,7 @@ export const shapeAllumette120 = new Shape2D({
 
 export const allumetteDef = new ObjetMathalea2D()
 allumetteDef.bordures = [-0.1, -0.5, 0.1, 0.5]
-allumetteDef.svg = function (coeff: number): string {
+allumetteDef.svg = function (_coeff: number): string {
   return `
   <!-- Allumette verticale -->
   <defs>
@@ -133,7 +132,7 @@ export const shapeSegmentHorizontal = new Shape2D({
 
 export const segmentHorizontalDef = new ObjetMathalea2D()
 segmentHorizontalDef.bordures = [0, 0, 1, 0]
-segmentHorizontalDef.svg = function (coeff: number): string {
+segmentHorizontalDef.svg = function (_coeff: number): string {
   return `
   <!-- Segment horizontal de (0,0) à (1,0) -->
   <defs>
@@ -161,7 +160,7 @@ export const shapeRectangleBlanc = new Shape2D({
 
 export const rectangleBlancDef = new ObjetMathalea2D()
 rectangleBlancDef.bordures = [-0.5, -0.25, 0.5, 0.25]
-rectangleBlancDef.svg = function (coeff: number): string {
+rectangleBlancDef.svg = function (_coeff: number): string {
   return `
   <!-- Rectangle blanc 1x0.5 -->
   <defs>
@@ -234,7 +233,7 @@ export const shapePentagone = new Shape2D({
 
 export const pentagoneDef = new ObjetMathalea2D()
 pentagoneDef.bordures = [-0.5, -0.5, 0.5, 0.5]
-pentagoneDef.svg = function (coeff: number): string {
+pentagoneDef.svg = function (_coeff: number): string {
   return `
   <!-- Pentagone régulier -->
   <defs>
@@ -256,7 +255,7 @@ pentagoneDef.tikz = function (): string {
 
 export const carreRondDef = new ObjetMathalea2D()
 carreRondDef.bordures = [-0.5, -0.5, 0.5, 0.5]
-carreRondDef.svg = function (coeff: number): string {
+carreRondDef.svg = function (_coeff: number): string {
   return `
   <!-- Carré arrondi -->
   <defs>
@@ -278,7 +277,7 @@ carreRondDef.tikz = function (): string {
 }
 export const losangeDef = new ObjetMathalea2D()
 losangeDef.bordures = [-0.5, -0.5, 0.5, 0.5]
-losangeDef.svg = function (coeff: number): string {
+losangeDef.svg = function (_coeff: number): string {
   return `
   <!-- Losange -->
   <defs>
@@ -299,7 +298,7 @@ losangeDef.tikz = function (): string {
 
 export const carreDef = new ObjetMathalea2D()
 carreDef.bordures = [-0.5, -0.5, 0.5, 0.5]
-carreDef.svg = function (coeff: number): string {
+carreDef.svg = function (_coeff: number): string {
   return `
   <!-- Carré -->
   <defs>
@@ -319,12 +318,12 @@ carreDef.tikz = function (): string {
 
 export const carreBleuDef = new ObjetMathalea2D()
 carreBleuDef.bordures = [-0.5, -0.5, 0.5, 0.5]
-carreBleuDef.svg = function (coeff: number): string {
+carreBleuDef.svg = function (_coeff: number): string {
   return `
   <!-- Carré bleu -->
   <defs>
       <rect id="carre-bleu" x="-10" y="-10" width="20" height="20"
-        fill=bleuMathalea stroke="black" stroke-width="0.5" />
+        fill=blue stroke="black" stroke-width="0.5" />
   </defs>`
 }
 carreBleuDef.tikz = function (): string {
@@ -339,7 +338,7 @@ carreBleuDef.tikz = function (): string {
 
 export const hexagoneDef = new ObjetMathalea2D()
 hexagoneDef.bordures = [-0.5, -0.5, 0.5, 0.5]
-hexagoneDef.svg = function (coeff: number): string {
+hexagoneDef.svg = function (_coeff: number): string {
   return `
   <!-- Hexagone -->
   <defs>
@@ -361,7 +360,7 @@ hexagoneDef.tikz = function (): string {
 
 export const hexagoneJauneDef = new ObjetMathalea2D()
 hexagoneJauneDef.bordures = [-0.5, -0.5, 0.5, 0.5]
-hexagoneJauneDef.svg = function (coeff: number): string {
+hexagoneJauneDef.svg = function (_coeff: number): string {
   return `
   <!-- Hexagone -->
   <defs>
@@ -392,12 +391,12 @@ export const shapeRond = new Shape2D({
 
 export const rondDef = new ObjetMathalea2D()
 rondDef.bordures = [-0.5, -0.5, 0.5, 0.5]
-rondDef.svg = function (coeff: number): string {
+rondDef.svg = function (_coeff: number): string {
   return `
   <!-- Rond -->
   <defs>
     <g id="rond">
-      <circle cx="0" cy="0" r="10" fill="lightblue" stroke=bleuMathalea stroke-width="0.5" />
+      <circle cx="0" cy="0" r="10" fill="lightblue" stroke=blue stroke-width="0.5" />
     </g>
   </defs>`
 }
@@ -420,7 +419,7 @@ export const shapeBalle = new Shape2D({
 
 export const balleDef = new ObjetMathalea2D()
 balleDef.bordures = [-0.5, -0.5, 0.5, 0.5]
-balleDef.svg = function (coeff: number): string {
+balleDef.svg = function (_coeff: number): string {
   return `
   <!-- Balle de tennis -->
  <defs>
@@ -474,7 +473,7 @@ export const shapeTriangleEquilateral = new Shape2D({
 
 export const triangleEquilateralDef = new ObjetMathalea2D()
 triangleEquilateralDef.bordures = [-0.5, -0.5, 0.5, 0.5]
-triangleEquilateralDef.svg = function (coeff: number): string {
+triangleEquilateralDef.svg = function (_coeff: number): string {
   return `
   <!-- Triangle équilatéral -->
   <defs>
@@ -504,7 +503,7 @@ export const shapeRedCross = new Shape2D({
 
 export const redCrossDef = new ObjetMathalea2D()
 redCrossDef.bordures = [-0.5, -0.5, 0.5, 0.5]
-redCrossDef.svg = function (coeff: number): string {
+redCrossDef.svg = function (_coeff: number): string {
   return `
   <!-- Red Cross -->
   <defs>

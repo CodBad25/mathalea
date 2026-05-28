@@ -183,7 +183,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
         )
         .join('\n')
       let texteCorr = ''
-      texte += `<br>Donner le ratio "${(pat as PatternRiche).texRatio}" dans le motif au rang $${nbFigures + 1}$ ?<br>`
+      texte += `<br>Donner le ratio "${(pat as PatternRiche).texRatio}" dans le motif au rang $${nbFigures + 1}$.<br>`
       if (!pat.fonctionRatio) {
         throw new Error(
           `La fonction ratio n'est pas définie pour le pattern ${JSON.stringify(pat)}`,
@@ -240,7 +240,11 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
       }
       const ratio = pat.fonctionRatio(nbFigures + 1)
       this.ratios[i] = ratio
-      const entries: [string, any][] = []
+
+      type Entry = [string, { value: string }] | ['callback', typeof callback]
+
+      const entries: Entry[] = []
+
       for (let k = 1; k <= ratio.values.length; k++) {
         const key = `champ${k}`
         const value = { value: ratio.values[k - 1].toString() }
