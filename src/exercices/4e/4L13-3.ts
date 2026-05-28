@@ -109,8 +109,7 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
     this.destroyers.length = 0
     const nbDePattern = listePatternsSansRatioNiFraction.length
 
-    const shuffleListe =
-      typeof this.sup3 === 'number' && this.sup3 >= nbDePattern + 1
+    const shuffleListe = this.sup3 >= nbDePattern + 1
     let typesPattern = gestionnaireFormulaireTexte({
       saisie: this.sup3,
       max: nbDePattern,

@@ -95,7 +95,7 @@ export class VisualPattern {
     return this.cells.has(VisualPattern.coordToKey([x, y, shape, options]))
   }
 
-  iterate(this: VisualPattern, n?: number): Set<string> {
+  iterate(this: VisualPattern, _n?: number): Set<string> {
     return this.cells // cette méthode doit être modifiée pour créer un motif changeant.
   }
 
