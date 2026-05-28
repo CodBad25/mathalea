@@ -119,16 +119,18 @@ export const equation1erDegre1Inconnue = (
 ) => {
   let a: Decimal = options.a != null ? new Decimal(options.a) : new Decimal(999)
   if (a.isZero() && options.c == null) {
-    console.warn(
-      `Division impossible par zéro ! Changer la valeur de la variable a.`,
+    window.notify(
+      `Division impossible par zéro ! Changer la valeur de la variable a qui vaut actuellement ${a}.`,
+      { a },
     )
     a = new Decimal(1000)
   }
   let b: Decimal = options.b != null ? new Decimal(options.b) : new Decimal(999)
   let c: Decimal = options.c != null ? new Decimal(options.c) : new Decimal(999)
   if (a.sub(c).isZero() && options.a != null && options.c != null) {
-    console.warn(
-      `Division impossible par zéro ! Changer la valeur de la variable c et/ou celle de a.`,
+    window.notify(
+      `Division impossible par zéro ! Changer la valeur de la variable c (qui vaut actuellement ${c}) et/ou celle de a (qui vaut actuellement ${a}).`,
+      { a, c },
     )
     c = new Decimal(10000)
   }
@@ -145,8 +147,8 @@ export const equation1erDegre1Inconnue = (
   const inconnue = options.inconnue ?? 'x'
   switch (type) {
     case 'x+b=d':
-      if (options.a == null) a = new Decimal(1)
-      if (options.c == null) c = new Decimal(0)
+      a = new Decimal(1)
+      c = new Decimal(0)
       if (options.b == null)
         b = new Decimal(randint(-9, 9, [0])).times(options.divisiblePar ?? 1)
       if (options.d == null)
@@ -158,51 +160,47 @@ export const equation1erDegre1Inconnue = (
       break
 
     case 'ax=d':
-      if (options.b == null) b = new Decimal(0)
-      if (options.c == null) c = new Decimal(0)
-      if (options.a != null && options.d != null)
-        reponse = new FractionEtendue(options.d, options.a)
+      b = new Decimal(0)
+      c = new Decimal(0)
+      if (options.a != null && options.d != null && !a.isZero())
+        reponse = new FractionEtendue(d, Number(a))
       else {
         if (options.valeursRelatives) {
-          if (options.a == null) a = new Decimal(randint(-9, 9, [0, -1, 1]))
+          a = new Decimal(randint(-9, 9, [0, -1, 1]))
           reponse = new Decimal(randint(-9, 9, [-1, 0, 1]))
         } else {
-          if (options.a == null) a = new Decimal(randint(2, 15))
+          a = new Decimal(randint(2, 15))
           reponse = new Decimal(randint(2, 9))
         }
-        if (options.d == null) d = a.times(reponse)
+        d = a.times(reponse)
       }
       break
 
     case 'ax+b=0':
     case 'ax+b=d':
-      if (options.a != null && options.b != null)
-        reponse = new FractionEtendue(
-          (options.d != null ? options.d : 0) - options.b,
-          options.a,
-        )
+      c = new Decimal(0)
+      if (type === 'ax+b=0') {
+        d = new Decimal(0)
+      }
+      if (options.a != null && options.b != null && !a.isZero())
+        reponse = new FractionEtendue(d.sub(b), Number(a))
       else {
         do {
-          if (options.c == null) c = new Decimal(0)
-          if (type === 'ax+b=0') {
-            if (options.d == null) d = new Decimal(0)
-          } else {
-            if (options.d == null)
-              d = new Decimal(randint(-9, 9, [0])).times(
-                options.divisiblePar ?? 1,
-              )
-          }
-          reponse = new Decimal(randint(-5, 5, [0, -1, 1]))
-          if (options.a == null)
-            a = new Decimal(randint(-5, 5, [-1, 0, 1])).times(
+          if (type === 'ax+b=d') {
+            d = new Decimal(randint(-9, 9, [0])).times(
               options.divisiblePar ?? 1,
             )
+          }
+          reponse = new Decimal(randint(-5, 5, [0, -1, 1]))
+          a = new Decimal(randint(-5, 5, [-1, 0, 1])).times(
+            options.divisiblePar ?? 1,
+          )
           if (!options.valeursRelatives) {
             reponse = reponse.abs()
-            if (options.a == null) a = a.abs()
-            if (options.d == null) d = d.abs()
+            a = a.abs()
+            d = d.abs()
           }
-          if (options.b == null) b = d.minus(a.times(reponse))
+          b = d.minus(a.times(reponse))
         } while (b.equals(0))
       }
       break
@@ -213,36 +211,30 @@ export const equation1erDegre1Inconnue = (
         options.a != null &&
         options.b != null &&
         options.c != null &&
-        options.d != null
+        options.d != null &&
+        !a.sub(c).isZero()
       )
-        reponse = new FractionEtendue(
-          options.d - options.b,
-          options.a - options.c,
-        )
+        reponse = new FractionEtendue(d.sub(b), Number(a.sub(c)))
       else {
-        if (options.d == null)
-          d = new Decimal(randint(-15, 15, 0)).times(options.divisiblePar ?? 1)
-        if (options.c == null)
-          c = new Decimal(randint(-5, 5, [-1, 0, 1])).times(
-            options.divisiblePar ?? 1,
-          )
+        d = new Decimal(randint(-15, 15, 0)).times(options.divisiblePar ?? 1)
+        c = new Decimal(randint(-5, 5, [-1, 0, 1])).times(
+          options.divisiblePar ?? 1,
+        )
         if (!options.valeursRelatives) {
-          if (options.c == null) c = c.abs()
-          if (options.a == null)
-            a = new Decimal(randint(2, 5))
-              .times(options.divisiblePar ?? 1)
-              .plus(c)
+          c = c.abs()
+          a = new Decimal(randint(2, 5))
+            .times(options.divisiblePar ?? 1)
+            .plus(c)
           reponse = new Decimal(
             randint(-9, 9, [0, -1, 1, -d.div(c.minus(a))]),
           ).abs()
         } else {
-          if (options.a == null)
-            a = new Decimal(randint(-5, 5, [-c, -c + 1, -c - 1, 0]))
-              .times(options.divisiblePar ?? 1)
-              .plus(c)
+          a = new Decimal(randint(-5, 5, [-c, -c + 1, -c - 1, 0]))
+            .times(options.divisiblePar ?? 1)
+            .plus(c)
           reponse = new Decimal(randint(-9, 9, [0, -1, 1, -d.div(c.minus(a))]))
         }
-        if (options.b == null) b = c.minus(a).times(reponse).plus(d)
+        b = c.minus(a).times(reponse).plus(d)
       }
       break
   }
