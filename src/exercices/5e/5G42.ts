@@ -209,7 +209,7 @@ export default class DemonstrationsParallelogrammes extends Exercice {
       const propositionsDuQCM = [
         {
           texte: 'losange',
-          statut: type === 'losange',
+          statut: type === 'losange' || type === 'carré',
         },
         {
           texte: 'carré',
@@ -217,7 +217,7 @@ export default class DemonstrationsParallelogrammes extends Exercice {
         },
         {
           texte: 'rectangle',
-          statut: type === 'rectangle',
+          statut: type === 'rectangle' || type === 'carré',
         },
         {
           texte: 'parallélogramme non particulier',
