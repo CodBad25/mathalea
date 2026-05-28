@@ -101,12 +101,10 @@ export default class NomExercice extends Exercice {
         `Considérons le plan $\\mathcal{P'}$ d'équation cartésienne $${equationPlane}$.<br>Nous allons procéder en deux étapes :<br> ` +
         createList({ items: [partie1, partie2], style: 'nombres' })
 
-      texteCorr +=
-        '<br>' +
-        createList({
-          items: [engendreparuv, pointAappartientAuPlan],
-          style: 'nombres',
-        })
+      texteCorr += createList({
+        items: [engendreparuv, pointAappartientAuPlan],
+        style: 'nombres',
+      })
 
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte
