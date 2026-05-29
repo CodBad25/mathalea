@@ -23,10 +23,11 @@ export const interactifType = 'mathLive'
  */
 
 export const dateDePublication = '06/01/2025'
-export const uuid = '843e6'
+export const uuid = '6e828'
 
 export const refs = {
-  'fr-fr': ['6N31-2', 'BP2AutoU6'],
+  'fr-fr': ['6N2F-1', 'BP2AutoU6'],
+  'fr-2016': ['6N31-2'],
   'fr-ch': ['9NO8-12a'],
 }
 
@@ -52,8 +53,8 @@ export default class OrdreDeGrandeurMultiplication extends Exercice {
     this.sup3 = false
 
     // this.nbQuestionsModifiable = false;
-    context.isHtml ? (this.spacing = 3) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2.5) : (this.spacingCorr = 1.5)
+    this.spacing = context.isHtml ? 3 : 2
+    this.spacingCorr = context.isHtml ? 2.5 : 1.5
   }
 
   nouvelleVersion() {
