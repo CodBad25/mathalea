@@ -1,6 +1,8 @@
 import { listeShapes2DInfos } from '../../lib/2d/figures2d/shapes2d'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import {
+  listePatternAffine,
+  listePatternLineaire,
   listePatternsSansRatioNiFraction,
   type PatternRiche,
   type PatternRiche3D,
@@ -10,7 +12,11 @@ import { polygone } from '../../lib/2d/polygones'
 import { texteParPosition } from '../../lib/2d/textes'
 import { createList } from '../../lib/format/lists'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
-import { enleveDoublonNum, shuffle } from '../../lib/outils/arrayOutils'
+import {
+  combinaisonListes,
+  enleveDoublonNum,
+  shuffle,
+} from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -60,31 +66,35 @@ export const refs = {
 
 export default class PaternNum04eme extends Exercice {
   destroyers: (() => void)[] = []
+  niveau: string
   constructor() {
     super()
     this.correctionDetailleeDisponible = true
     this.correctionDetaillee = false
     this.nbQuestions = 1
     this.comment = `Étudier les premiers termes d'une série de motifs afin de donner le nombre de formes du motif suivant.\n
- Les patterns sont des motifs figuratifs qui évoluent selon des règles définies.\n
- Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/.<br><br>
-Grâce au troisième paramètre, on peut imposer des patterns choisis dans cette <a href="https://coopmaths.fr/alea/?uuid=71ff5&s=6" target="_blank" style="color: blue">liste de patterns</a>.<br>
-Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'exercice sera complété par des patterns choisis au hasard.<br><br>
+ Les patterns sont des motifs figuratifs qui évoluent selon des règles définies par des fonctions linéaires ou affines.\n
+ <br>Cet exercice contient des motifs issus de l'excellent site :  <a href="https://www.visualpatterns.org/" target="_blank" style="color: blue">https://www.visualpatterns.org/</a>.<br><br>
+Grâce au troisième paramètre, on peut imposer des motifs choisis dans cette <a href="https://coopmaths.fr/alea/?uuid=71ff5&s=6" target="_blank" style="color: blue">liste de patterns</a>.<br>
+Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'exercice sera complété par des motifs choisis au hasard.<br>
+Les motifs linéaires ou affines correspondent aux motifs dont le motif n suit respectivement une fonction linéaire ou affine. Le choix de tels motifs prend le pas sur les autres choix.<br><br>
 Grâce au quatrième paramètre, on peut choisir de résoudre la question sur le numéro de motif (Q6) par une équation ou de façon plus intuitive.<br>
 La correction détaillée (ou pas) n'est utile que si on choisit une résolution par équation.`
     this.besoinFormulaireNumerique = ['Nombre de figures par question', 4]
     this.sup = 3
     this.besoinFormulaire2Texte = [
       'Types de questions',
-      'Nombres séparés par des tirets :\n1: Motif suivant à dessiner\n2 : Motif suivant (nombre)\n3 : Motif 10 (nombre)\n4 : Motif 100 (nombre)\n5 : Motif N (nombre)\n6 : Numéro du motif\n7 : Ensemble de ces 6 questions',
+      'Nombres séparés par des tirets :\n1: Motif suivant à dessiner\n2 : Motif suivant (nombre)\n3 : Motif 10 (nombre)\n4 : Motif 100 (nombre)\n5 : Motif n (nombre)\n6 : Numéro du motif\n7 : Ensemble de ces 6 questions',
     ]
     this.sup2 = '1-2-3-4-6'
     const nbDePattern = listePatternsSansRatioNiFraction.length
     this.besoinFormulaire3Texte = [
-      'Numéros des pattern désirés :',
+      'Numéros des motifs désirés :',
       [
         'Nombres séparés par des tirets  :',
         `Mettre des nombres entre 1 et ${nbDePattern}.`,
+        `Mettre 100 pour les motifs linéaires.`,
+        `Mettre 101 pour les motifs affines.`,
         `Mettre ${nbDePattern + 1} pour laisser le hasard faire.`,
       ].join('\n'),
     ]
@@ -95,6 +105,7 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
     this.besoinFormulaire5CaseACocher = ['Résolution Q6 par équation']
     this.sup5 = false
     this.spacingCorr = 2
+    this.niveau = '4e'
   }
 
   destroy() {
@@ -107,26 +118,44 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
     // MGu quand l'exercice est modifié, on détruit les anciens listeners
     this.destroyers.forEach((destroy) => destroy())
     this.destroyers.length = 0
+    const resolutionIntuitive = this.niveau === '4e' && !this.sup5
     const nbDePattern = listePatternsSansRatioNiFraction.length
+    const ordreAleatoireDesQuestions =
+      (this.niveau === '3e' && this.sup5) ||
+      (this.niveau === '4e' && this.sup3 >= nbDePattern + 1)
 
-    const shuffleListe = this.sup3 >= nbDePattern + 1
-    let typesPattern = gestionnaireFormulaireTexte({
-      saisie: this.sup3,
-      max: nbDePattern,
-      defaut: nbDePattern + 1,
-      melange: nbDePattern + 1,
-      nbQuestions: this.nbQuestions,
-      shuffle: shuffleListe,
-    }).map(Number)
+    let listePreDef: (PatternRiche | PatternRiche3D)[] = []
 
-    typesPattern = [...typesPattern, ...shuffle(range1(nbDePattern))]
-    typesPattern = enleveDoublonNum(typesPattern)
-    typesPattern = typesPattern.slice(0, 25)
-    typesPattern = typesPattern.reverse()
+    if (String(this.sup3).includes('100')) {
+      listePreDef = listePatternLineaire
+      if (ordreAleatoireDesQuestions)
+        listePreDef = combinaisonListes(listePreDef, this.nbQuestions)
+      listePreDef = [...listePreDef, ...shuffle(listePatternAffine)]
+    } else if (String(this.sup3).includes('101')) {
+      listePreDef = listePatternAffine
+      if (ordreAleatoireDesQuestions)
+        listePreDef = combinaisonListes(listePreDef, this.nbQuestions)
+      listePreDef = [...listePreDef, ...shuffle(listePatternLineaire)]
+    } else {
+      let typesPattern = gestionnaireFormulaireTexte({
+        saisie: this.sup3,
+        max: nbDePattern,
+        defaut: nbDePattern + 1,
+        melange: nbDePattern + 1,
+        nbQuestions: this.nbQuestions,
+        shuffle: ordreAleatoireDesQuestions,
+      }).map(Number)
 
-    const listePreDef = typesPattern.map(
-      (i) => listePatternsSansRatioNiFraction[i - 1],
-    )
+      typesPattern = [...typesPattern, ...shuffle(range1(nbDePattern))]
+      typesPattern = enleveDoublonNum(typesPattern)
+      typesPattern = typesPattern.slice(0, 25)
+      typesPattern = typesPattern.reverse()
+
+      listePreDef = typesPattern.map(
+        (i) => listePatternsSansRatioNiFraction[i - 1],
+      )
+    }
+
     const nbFigures = Math.max(2, this.sup)
     const typesQuestions = Array.from(
       new Set(
@@ -141,13 +170,13 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
       ),
     )
     let indexInteractif = 0
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+
+    for (
+      let i = 0, cpt = 0;
+      i < Math.min(this.nbQuestions, listePreDef.length) && cpt < 50;
+    ) {
       const objetsCorr: NestedObjetMathalea2dArray = []
-      const popped = listePreDef.pop()
-      if (!popped) {
-        continue
-      }
-      const pat = popped
+      const pat = listePreDef[i]
       const delta = pat.fonctionNb(2) - pat.fonctionNb(1)
       const b = pat.fonctionNb(1) - delta
       const explain =
@@ -452,7 +481,7 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
               })
               etape = Math.floor(equation.reponseDecimale)
 
-              if (!this.sup5) // Correction intuitive
+              if (resolutionIntuitive) // Correction intuitive
               {
                 explain2 =
                   pat.type === 'linéaire'
