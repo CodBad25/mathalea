@@ -3740,7 +3740,7 @@ const listePatternsPreDef: (PatternRiche | PatternRiche3D)[] = [
  * Liste des patterns prédéfinis, triés par type.
  * - listePattern2d : tous les patterns 2D
  * - listePattern3d : tous les patterns 3D
- * - listePatternAffine : tous les patterns affines
+ * - listePatternAffineOuLineaire : tous les patterns affines ou linéaires
  * - listePatternLineaire : tous les patterns linéaires
  * - listePatternDegre2 : tous les patterns de degré 2
  * - listePatternDegre3 : tous les patterns de degré 3
@@ -3758,13 +3758,26 @@ const listePatternAffineOuLineaire: (PatternRiche | PatternRiche3D)[] = // Tous 
   listePatternsPreDef
     .filter((p) => p.type === 'affine' || p.type === 'linéaire')
     .sort((a, b) => Number(a.numero) - Number(b.numero))
+
+const listePatternAffine: (PatternRiche | PatternRiche3D)[] = // Tous les partern affines ou linéaires, 2D ou 3D
+  listePatternsPreDef
+    .filter((p) => p.type === 'affine')
+    .sort((a, b) => Number(a.numero) - Number(b.numero))
+
+const listePatternLineaire: (PatternRiche | PatternRiche3D)[] = // Tous les partern affines ou linéaires, 2D ou 3D
+  listePatternsPreDef
+    .filter((p) => p.type === 'linéaire')
+    .sort((a, b) => Number(a.numero) - Number(b.numero))
+
 const listePatternsSansRatioNiFraction = listePatternAffineOuLineaire // Tous les pattern sans ratio, sans fraction, affine ou linéaire.
   .filter((p) => p.fonctionRatio == null && p.fonctionFraction == null)
   .sort((a, b) => Number(a.numero) - Number(b.numero))
 
 export {
   listePattern3d,
+  listePatternAffine,
   listePatternAffineOuLineaire,
+  listePatternLineaire,
   listePatternRatio,
   listePatternsPreDef,
   listePatternsSansRatioNiFraction,
