@@ -1,7 +1,6 @@
 import Decimal from 'decimal.js'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
-import { texFractionFromString } from './deprecatedFractions'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
@@ -323,12 +322,11 @@ export const equation1erDegre1Inconnue = (
     correction += soustraireB
     correctionDetaillee += soustraireB
   }
-
   const coeffX = aFinal.minus(cFinal)
   if (!coeffX.equals(1) && !coeffX.equals(-1)) {
     correctionDetaillee += `On divise les deux membres par $${texNombre(coeffX)}$.<br>`
     let diviserParA = `$${rienSi1(coeffX)}${inconnue}${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(coeffX))}=${texNombre(dFinal.minus(bFinal)) + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(coeffX))}$<br>
-      $${inconnue}=${texFractionFromString(texNombre(dFinal.minus(bFinal)), texNombre(coeffX))}`
+      $${inconnue}=${new FractionEtendue(dFinal.minus(bFinal), Number(coeffX)).texFSD}`
     const estDecimal =
       reponse instanceof FractionEtendue
         ? new FractionEtendue(100 * reponse.num, reponse.den).estEntiere
