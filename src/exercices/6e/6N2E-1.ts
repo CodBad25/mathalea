@@ -1,6 +1,8 @@
 import Decimal from 'decimal.js'
 import { grille, seyes } from '../../lib/2d/Grille'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+import type { AutoCorrectionAMC } from '../../lib/amc/amcEngine'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
@@ -16,8 +18,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const dateDeModifImportante = '08/04/2026'
 export const amcReady = true
@@ -225,15 +225,21 @@ export default class MultiplierDecimaux extends Exercice {
         const exerciseAny = this as any
         if (!Array.isArray(exerciseAny.autoCorrectionAMC)) {
           exerciseAny.autoCorrectionAMC = []
-          exerciseAny.questionsAMC = exerciseAny.autoCorrectionAMC.map((questionAMC) => amcConvert(questionAMC))
+          exerciseAny.questionsAMC = exerciseAny.autoCorrectionAMC.map(
+            (questionAMC: AutoCorrectionAMC) => amcConvert(questionAMC),
+          )
         }
         if (exerciseAny.autoCorrectionAMC[i] == null) {
           exerciseAny.autoCorrectionAMC[i] = {}
-          exerciseAny.questionsAMC[i] = amcConvert(exerciseAny.autoCorrectionAMC[i])
+          exerciseAny.questionsAMC[i] = amcConvert(
+            exerciseAny.autoCorrectionAMC[i],
+          )
         }
         if (exerciseAny.autoCorrectionAMC[i].reponse == null) {
           exerciseAny.autoCorrectionAMC[i].reponse = {}
-          exerciseAny.questionsAMC[i] = amcConvert(exerciseAny.autoCorrectionAMC[i])
+          exerciseAny.questionsAMC[i] = amcConvert(
+            exerciseAny.autoCorrectionAMC[i],
+          )
         }
         exerciseAny.autoCorrectionAMC[i].reponse.param = {
           digits: 0,
@@ -243,7 +249,9 @@ export default class MultiplierDecimaux extends Exercice {
           exposantSigne: false,
           approx: 0,
         }
-        exerciseAny.questionsAMC[i] = amcConvert(exerciseAny.autoCorrectionAMC[i])
+        exerciseAny.questionsAMC[i] = amcConvert(
+          exerciseAny.autoCorrectionAMC[i],
+        )
       } else {
         handleAnswers(this, i, { reponse: { value: reponse } })
       }
