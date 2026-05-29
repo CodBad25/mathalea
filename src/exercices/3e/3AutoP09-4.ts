@@ -3,6 +3,7 @@ import { pointAbstrait, type PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polyline } from '../../lib/2d/Polyline'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
@@ -14,7 +15,8 @@ export const titre = "Trouver une grandeur en fonction d'une autre"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
-export const dateDePublication = '3/01/2026'
+export const dateDePublication = '03/01/2026'
+export const dateDeModifImportante = '29/05/2026'
 
 export const uuid = '5bc81'
 
@@ -80,7 +82,7 @@ export default class HauteurValve extends ExerciceSimple {
     const graphique = mathalea2d(
       Object.assign(
         { scale: 0.5, style: 'display: inline-block', pixelsParCm: 20 },
-        fixeBordures(objets, { rxmin: 2 }),
+        fixeBordures(objets),
       ),
       objets,
     )
@@ -90,11 +92,13 @@ export default class HauteurValve extends ExerciceSimple {
       pointAbstrait(dist / 10, y(tetaDist) / 10),
       'red',
     )
+    seg1.epaisseur = 3
     const seg2 = segment(
       pointAbstrait(dist / 10, y(tetaDist) / 10),
       pointAbstrait(0, y(tetaDist) / 10),
       'red',
     )
+    seg2.epaisseur = 3
     seg1.styleExtremites = '->'
     seg2.styleExtremites = '->'
     seg1.pointilles = 5
@@ -103,7 +107,7 @@ export default class HauteurValve extends ExerciceSimple {
     const graphiqueCorr = mathalea2d(
       Object.assign(
         { scale: 0.5, style: 'display: inline-block', pixelsParCm: 20 },
-        fixeBordures(objetsCorr, { rxmin: 2 }),
+        fixeBordures(objetsCorr),
       ),
       objetsCorr,
     )
@@ -111,9 +115,13 @@ export default class HauteurValve extends ExerciceSimple {
     Sur le graphique ci-dessus, on a représenté la hauteur de la valve d'une roue de vélo en fonction de la distance parcourue en $\\text{cm}$ lors d'un tour complet.<br>`
     this.question += `Quelle est la hauteur de la valve lorsque la distance parcourue est de $${dist}\\text{ cm}$ ?`
 
-    this.reponse = `[${texNombre(y(tetaDist) - 2, 0)}; ${texNombre(y(tetaDist) + 2, 0)}]`
+    const valeursReponse = [
+      texNombre(y(tetaDist) - 2, 0),
+      texNombre(y(tetaDist) + 2, 0),
+    ]
+    this.reponse = `[${valeursReponse[0]}; ${valeursReponse[1]}]`
     this.correction =
       graphiqueCorr +
-      `<br><br>La hauteur de la valve lorsque la distance parcourue est de $${dist}\\text{ cm}$ est de $${this.reponse}\\text{ cm}$.`
+      `<br><br>Avec la précision du graphique, on peut estimer que la hauteur de la valve, lorsque la distance parcourue est de $${dist}\\text{ cm}$, est une valeur proche de $${miseEnEvidence(texNombre(y(tetaDist), 0))}\\text{ cm}$.`
   }
 }
