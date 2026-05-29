@@ -13,6 +13,8 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { amcConvert } from '../../../lib/amc/amcBuilders'
+
 
 export const titre = "Lire l'heure"
 export const dateDePublication = '4/11/2021'
@@ -133,6 +135,7 @@ export default class LireHeure extends ExerciceSimple {
           ],
         },
       ]
+      this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) => amcConvert(questionAMC))
     }
 
     this.canReponseACompleter = '$\\ldots$ h $\\ldots$ min'

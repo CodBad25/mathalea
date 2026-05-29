@@ -8,6 +8,8 @@ import { setReponse } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
+import { amcConvert } from '../../../lib/amc/amcBuilders'
+
 
 export const titre = 'Calculer avec des puissances'
 export const interactifReady = true
@@ -42,6 +44,7 @@ export default class CalculPuissanceSimple extends Exercice {
     ) {
       this.autoCorrection[i] = {}
       this.autoCorrectionAMC[i] = {}
+      this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
 
       index = randint(0, 3)
       a = bases[index]

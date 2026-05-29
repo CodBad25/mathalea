@@ -5,6 +5,8 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { amcConvert } from '../../../lib/amc/amcBuilders'
+
 export const titre = 'Trouver la bonne unité'
 export const dateDePublication = '5/11/2021'
 export const interactifReady = true
@@ -77,6 +79,7 @@ export default class TrouverLaBonneUnite extends ExerciceSimple {
           ],
         },
       ]
+      this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) => amcConvert(questionAMC))
     }
   }
 }
