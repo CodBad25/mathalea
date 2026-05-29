@@ -3311,7 +3311,7 @@ const pattern108: PatternRiche3D = {
 const pattern109: PatternRiche3D = {
   numero: 109,
   shapes: ['cube'],
-  type: 'linéaire',
+  type: 'affine',
   formule: '2\\times n+3',
   fonctionNb: (x: number) => 2 * x + 3,
   iterate3d: function (this: VisualPattern3D, n) {

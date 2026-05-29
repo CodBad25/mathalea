@@ -441,17 +441,6 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
               else {
                 enonce = `\nOn dispose de $${nbTex}$ ${infosShape.nomPluriel}. Quel est le plus grand numéro de motif que l’on peut construire entièrement avec ces $${nbTex}$ ${infosShape.nomPluriel} ?`
               }
-              listeQuestions.push(
-                enonce +
-                  `${ajouteQuestionMathlive({
-                    exercice: this,
-                    question: indexInteractif++,
-                    objetReponse: { reponse: { value: etape.toString() } },
-                    classe: KeyboardType.clavierNumbers,
-                    typeInteractivite: 'mathlive',
-                  })}
-            `,
-              )
 
               const equation = equation1erDegre1Inconnue({
                 valeursRelatives: true,
@@ -461,11 +450,10 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
                 d: nbFormes,
                 inconnue: 'n',
               })
+              etape = Math.floor(equation.reponseDecimale)
 
               if (!this.sup5) // Correction intuitive
               {
-                etape = Math.floor(equation.reponseDecimale)
-
                 explain2 =
                   pat.type === 'linéaire'
                     ? `On constate que le nombre de formes augmente de $${delta}$ à chaque étape.<br>
@@ -484,9 +472,21 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
                 if (!estentier(equation.reponseDecimale))
                   explain2 += `L'entier qui précède $${texNombre(equation.reponseDecimale)}$ est $${miseEnEvidence(texNombre(Math.floor(equation.reponseDecimale)))}$.<br>`
                 listeCorrections.push(
-                  `${explain2}Avec $${miseEnEvidence(nbTex, bleuMathalea)}$ ${infosShape.nomPluriel}, on peut continuer la série jusqu'au motif numéro $${miseEnEvidence(texNombre(Math.floor(equation.reponseDecimale)))}$.`,
+                  `${explain2}Avec $${miseEnEvidence(nbTex, bleuMathalea)}$ ${infosShape.nomPluriel}, on peut continuer la série jusqu'au motif numéro $${miseEnEvidence(texNombre(etape))}$.`,
                 )
               }
+
+              listeQuestions.push(
+                enonce +
+                  `${ajouteQuestionMathlive({
+                    exercice: this,
+                    question: indexInteractif++,
+                    objetReponse: { reponse: { value: etape.toString() } },
+                    classe: KeyboardType.clavierNumbers,
+                    typeInteractivite: 'mathlive',
+                  })}
+            `,
+              )
             }
             break
           case 4:
