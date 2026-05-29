@@ -6,12 +6,18 @@ import {
   createCubesProjections,
   projectionCubesIso2d,
 } from '../../lib/3d/3dProjectionMathalea2d/CubeIso'
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { listeDesDiviseurs } from '../../lib/outils/primalite'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+
+export const interactifReady = true
+export const interactifType = 'qcm'
+export const amcReady = true
+export const amcType = 'qcmMono'
 
 export const dateDePublication = '08/08/2025'
 export const titre = 'Comparer les volumes de deux empilements de cubes'
@@ -148,10 +154,28 @@ export default class DenombrerCubes extends Exercice {
       texteCorr += `<br>Le premier solide est un empilement de ${volume1} cubes.<br>`
       texteCorr += `Le deuxième solide est un pavé droit de dimensions $${larg} \\times ${long} \\times ${haut}$, son volume est de $${larg * long * haut}$.<br>`
 
+      this.autoCorrection[q] = {
+        enonce: '',
+        propositions: [
+          {
+            texte: "L'empilement de cubes",
+            statut: volume1 < larg * long * haut,
+          },
+          { texte: 'Le pavé droit', statut: volume1 > larg * long * haut },
+          {
+            texte: 'Ils ont le même volume',
+            statut: volume1 === larg * long * haut,
+          },
+        ],
+        options: {
+          ordered: true,
+        },
+      }
+      const monQcm = propositionsQcm(this, q)
       if (
         this.questionJamaisPosee(q, JSON.stringify(L1) + JSON.stringify(L2))
       ) {
-        this.listeQuestions[q] = texte
+        this.listeQuestions[q] = texte += this.interactif ? monQcm.texte : ''
         this.listeCorrections[q] = texteCorr
         q++
       }
