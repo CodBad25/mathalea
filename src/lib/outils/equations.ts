@@ -24,10 +24,9 @@ import { texNombre } from './texNombre'
  *
  * Si `a`, `b`, `c`, `d` sont fournis, le type est déduit automatiquement
  * et la réponse est calculée exactement. Sinon, les coefficients manquants
- * sont tirés aléatoirement de façon à garantir une solution entière ou
- * fractionnaire simple.
+ * sont tirés aléatoirement de façon à garantir une solution entière.
  * Si une des 4 variables `a`, `b`, `c`, `d` est fournie, alors il faut fournir les autres,
- * quitte à les mettre à zéro.
+ * quitte à les mettre à zéro, si on veut que le type soit sélectionné automatiquement.
  *
  * @param options - Paramètres de configuration de l'équation.
  * @param options.valeursRelatives - Si `true`, autorise des coefficients et
@@ -117,54 +116,69 @@ export const equation1erDegre1Inconnue = (
     type: 'ax+b=cx+d',
   },
 ) => {
-  let a: Decimal = options.a != null ? new Decimal(options.a) : new Decimal(999)
-  if (a.isZero() && options.c == null) {
+  let a: Decimal | null = options.a != null ? new Decimal(options.a) : null
+  let b: Decimal | null = options.b != null ? new Decimal(options.b) : null
+  let c: Decimal | null = options.c != null ? new Decimal(options.c) : null
+  let d: Decimal | null = options.d != null ? new Decimal(options.d) : null
+
+  if (a != null && a.isZero() && c == null) {
     window.notify(
-      `Division impossible par zéro ! Changer la valeur de la variable a qui vaut actuellement ${a}.`,
+      `Division impossible par zéro ! Changer la valeur de la variable a qui vaut actuellement 0.`,
       { a },
     )
-    a = new Decimal(1000)
+
+    throw new Error(
+      `equation1erDegre1Inconnue : a ne peut pas valoir 0 si c n'est pas fourni.`,
+    )
   }
-  let b: Decimal = options.b != null ? new Decimal(options.b) : new Decimal(999)
-  let c: Decimal = options.c != null ? new Decimal(options.c) : new Decimal(999)
-  if (a.sub(c).isZero() && options.a != null && options.c != null) {
+
+  if (a != null && c != null && a.sub(c).isZero()) {
     window.notify(
       `Division impossible par zéro ! Changer la valeur de la variable c (qui vaut actuellement ${c}) et/ou celle de a (qui vaut actuellement ${a}).`,
       { a, c },
     )
-    c = new Decimal(10000)
+
+    throw new Error(`equation1erDegre1Inconnue : a - c ne peut pas valoir 0.`)
   }
-  let d: Decimal = options.d != null ? new Decimal(options.d) : new Decimal(999)
 
   let type = 'ax+b=cx+d'
-  if (options.type != null) type = options.type
-  else if (b.isZero() && c.isZero()) type = 'ax=d'
-  else if (a.toNumber() === 1 && c.isZero()) type = 'x+b=d'
-  else if (c.isZero() && d.isZero()) type = 'ax+b=0'
-  else if (c.isZero()) type = 'ax+b=d'
+  if (options.type != null) {
+    type = options.type
+  } else if (b?.isZero() && c?.isZero()) {
+    type = 'ax=d'
+  } else if (a?.toNumber() === 1 && c?.isZero()) {
+    type = 'x+b=d'
+  } else if (c?.isZero() && d?.isZero()) {
+    type = 'ax+b=0'
+  } else if (c?.isZero()) {
+    type = 'ax+b=d'
+  }
 
-  let reponse: FractionEtendue | Decimal
+  let reponse: FractionEtendue | Decimal | null = null
+
   const inconnue = options.inconnue ?? 'x'
+
   switch (type) {
-    case 'x+b=d':
+    case 'x+b=d': {
       a = new Decimal(1)
       c = new Decimal(0)
-      if (options.b == null)
+      if (b == null)
         b = new Decimal(randint(-9, 9, [0])).times(options.divisiblePar ?? 1)
-      if (options.d == null)
+      if (d == null)
         d = new Decimal(randint(-16, 15, 0)).times(options.divisiblePar ?? 1)
       if (!options.valeursRelatives) {
         d = d.abs()
       }
       reponse = d.minus(b)
       break
+    }
 
-    case 'ax=d':
+    case 'ax=d': {
       b = new Decimal(0)
       c = new Decimal(0)
-      if (options.a != null && options.d != null && !a.isZero())
+      if (a != null && d != null && !a.isZero()) {
         reponse = new FractionEtendue(d, Number(a))
-      else {
+      } else {
         if (options.valeursRelatives) {
           a = new Decimal(randint(-9, 9, [0, -1, 1]))
           reponse = new Decimal(randint(-9, 9, [-1, 0, 1]))
@@ -175,21 +189,32 @@ export const equation1erDegre1Inconnue = (
         d = a.times(reponse)
       }
       break
+    }
 
     case 'ax+b=0':
-    case 'ax+b=d':
+    case 'ax+b=d': {
       c = new Decimal(0)
       if (type === 'ax+b=0') {
         d = new Decimal(0)
       }
-      if (options.a != null && options.b != null && !a.isZero())
-        reponse = new FractionEtendue(d.sub(b), Number(a))
-      else {
+
+      if (a != null && b != null && !a.isZero()) {
+        const dSafe = d ?? new Decimal(0)
+        reponse = new FractionEtendue(dSafe.sub(b), Number(a))
+      } else {
+        let maxIterations = 100
         do {
+          if (maxIterations-- <= 0) {
+            throw new Error(
+              `equation1erDegre1Inconnue : impossible de générer b ≠ 0 après 100 tentatives (type=${type}, valeursRelatives=${options.valeursRelatives}).`,
+            )
+          }
           if (type === 'ax+b=d') {
             d = new Decimal(randint(-9, 9, [0])).times(
               options.divisiblePar ?? 1,
             )
+          } else {
+            d = new Decimal(0)
           }
           reponse = new Decimal(randint(-5, 5, [0, -1, 1]))
           a = new Decimal(randint(-5, 5, [-1, 0, 1])).times(
@@ -204,76 +229,106 @@ export const equation1erDegre1Inconnue = (
         } while (b.equals(0))
       }
       break
+    }
 
     case 'ax+b=cx+d':
-    default:
+    default: {
       if (
-        options.a != null &&
-        options.b != null &&
-        options.c != null &&
-        options.d != null &&
+        a != null &&
+        b != null &&
+        c != null &&
+        d != null &&
         !a.sub(c).isZero()
-      )
+      ) {
         reponse = new FractionEtendue(d.sub(b), Number(a.sub(c)))
-      else {
+      } else {
         d = new Decimal(randint(-15, 15, 0)).times(options.divisiblePar ?? 1)
         c = new Decimal(randint(-5, 5, [-1, 0, 1])).times(
           options.divisiblePar ?? 1,
         )
+
         if (!options.valeursRelatives) {
           c = c.abs()
           a = new Decimal(randint(2, 5))
             .times(options.divisiblePar ?? 1)
             .plus(c)
+
+          const denominateurExclu = c.minus(a).isZero()
+            ? [] // aucune exclusion supplémentaire si on ne peut pas diviser
+            : [Number(d.div(a.minus(c)))] // valeur à exclure pour éviter b=0
           reponse = new Decimal(
-            randint(-9, 9, [0, -1, 1, -d.div(c.minus(a))]),
+            randint(-9, 9, [0, -1, 1, ...denominateurExclu]),
           ).abs()
         } else {
-          a = new Decimal(randint(-5, 5, [-c, -c + 1, -c - 1, 0]))
+          a = new Decimal(randint(-5, 5, [0]))
             .times(options.divisiblePar ?? 1)
             .plus(c)
-          reponse = new Decimal(randint(-9, 9, [0, -1, 1, -d.div(c.minus(a))]))
+          const denominateurExclu = c.minus(a).isZero()
+            ? []
+            : [Number(d.div(a.minus(c)))]
+          reponse = new Decimal(
+            randint(-9, 9, [0, -1, 1, ...denominateurExclu]),
+          )
         }
+
         b = c.minus(a).times(reponse).plus(d)
       }
       break
+    }
   }
-  const membreDeGauche = a.equals(0)
-    ? b
-    : `${rienSi1(a)}${inconnue}${b.equals(0) ? '' : ecritureAlgebrique(b)}`
-  const membreDeDroite = c.equals(0)
-    ? d
-    : `${rienSi1(c)}${inconnue}${d.equals(0) ? '' : ecritureAlgebrique(d)}`
+
+  if (reponse === null) {
+    throw new Error(
+      `equation1erDegre1Inconnue : reponse n'a pas été calculée (type="${type}" non reconnu ou cas non couvert).`,
+    )
+  }
+
+  // Ils ne devraient jamais être null ici si le switch est correct, mais on le garantit.
+  const aFinal = a ?? new Decimal(1)
+  const bFinal = b ?? new Decimal(0)
+  const cFinal = c ?? new Decimal(0)
+  const dFinal = d ?? new Decimal(0)
+
+  const membreDeGauche = aFinal.equals(0)
+    ? bFinal
+    : `${rienSi1(aFinal)}${inconnue}${bFinal.equals(0) ? '' : ecritureAlgebrique(bFinal)}`
+  const membreDeDroite = cFinal.equals(0)
+    ? dFinal
+    : `${rienSi1(cFinal)}${inconnue}${dFinal.equals(0) ? '' : ecritureAlgebrique(dFinal)}`
   const egalite = `${membreDeGauche}=${membreDeDroite}`
+
   let correction = ''
   let correctionDetaillee = ''
-  if (!c.equals(0)) {
-    if (c.greaterThan(0)) {
-      correctionDetaillee += `On soustrait $${rienSi1(c)}${inconnue}$ aux deux membres.<br>`
+
+  if (!cFinal.equals(0)) {
+    if (cFinal.greaterThan(0)) {
+      correctionDetaillee += `On soustrait $${rienSi1(cFinal)}${inconnue}$ aux deux membres.<br>`
     } else {
-      correctionDetaillee += `On ajoute $${rienSi1(-c)}${inconnue}$ aux deux membres.<br>`
+      correctionDetaillee += `On ajoute $${rienSi1(cFinal.neg())}${inconnue}$ aux deux membres.<br>`
     }
-    const soustraireCx = `$${rienSi1(a)}${inconnue}${ecritureAlgebrique(b)}${miseEnEvidence(signe(-c) + rienSi1(abs(c)) + inconnue)}=${texNombre(c)}${inconnue}${ecritureAlgebrique(d)}${miseEnEvidence(signe(-c) + rienSi1(abs(c)) + inconnue)}$<br>
-      $${rienSi1(a.minus(c))}${inconnue}${ecritureAlgebrique(b)}=${texNombre(d)}$<br>`
+    const soustraireCx = `$${rienSi1(aFinal)}${inconnue}${ecritureAlgebrique(bFinal)}${miseEnEvidence(signe(-cFinal) + rienSi1(abs(cFinal)) + inconnue)}=${texNombre(cFinal)}${inconnue}${ecritureAlgebrique(dFinal)}${miseEnEvidence(signe(-cFinal) + rienSi1(abs(cFinal)) + inconnue)}$<br>
+      $${rienSi1(aFinal.minus(cFinal))}${inconnue}${ecritureAlgebrique(bFinal)}=${texNombre(dFinal)}$<br>`
     correction += soustraireCx
     correctionDetaillee += soustraireCx
   }
-  if (!b.equals(0)) {
-    if (b.greaterThan(0)) {
-      correctionDetaillee += `On soustrait $${b}$ aux deux membres.<br>`
+
+  if (!bFinal.equals(0)) {
+    if (bFinal.greaterThan(0)) {
+      correctionDetaillee += `On soustrait $${bFinal}$ aux deux membres.<br>`
     } else {
-      correctionDetaillee += `On ajoute $${texNombre(-b)}$ aux deux membres.<br>`
+      correctionDetaillee += `On ajoute $${texNombre(bFinal.neg())}$ aux deux membres.<br>`
     }
-    const soustraireB = `$${rienSi1(a.minus(c))}${inconnue}${ecritureAlgebrique(b)}${miseEnEvidence(ecritureAlgebrique(-b))}=${texNombre(d)}${miseEnEvidence(ecritureAlgebrique(-b))}$<br>
-      $${rienSi1(a.minus(c))}${inconnue}=${texNombre(d.minus(b))}$<br>`
+    const soustraireB = `$${rienSi1(aFinal.minus(cFinal))}${inconnue}${ecritureAlgebrique(bFinal)}${miseEnEvidence(ecritureAlgebrique(bFinal.neg()))}=${texNombre(dFinal)}${miseEnEvidence(ecritureAlgebrique(bFinal.neg()))}$<br>
+      $${rienSi1(aFinal.minus(cFinal))}${inconnue}=${texNombre(dFinal.minus(bFinal))}$<br>`
     correction += soustraireB
     correctionDetaillee += soustraireB
   }
-  if (!a.minus(c).equals(1)) {
-    correctionDetaillee += `On divise les deux membres par $${texNombre(a.minus(c))}$.<br>`
-    let diviserParA = `$${rienSi1(a.minus(c))}${inconnue}${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a.minus(c)))}=${texNombre(d.minus(b)) + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a.minus(c)))}$<br>
-      $${inconnue}=${texFractionFromString(texNombre(d.minus(b)), texNombre(a.minus(c)))}`
 
+  const coeffX = aFinal.minus(cFinal)
+  if (!coeffX.equals(1) && !coeffX.equals(-1)) {
+    correctionDetaillee += `On divise les deux membres par $${texNombre(coeffX)}$.<br>`
+    let diviserParA = `$${rienSi1(coeffX)}${inconnue}${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(coeffX))}=${texNombre(dFinal.minus(bFinal)) + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(coeffX))}$<br>
+      $${inconnue}=${texFractionFromString(texNombre(dFinal.minus(bFinal)), texNombre(coeffX))}`
     const estDecimal =
       reponse instanceof FractionEtendue
         ? new FractionEtendue(100 * reponse.num, reponse.den).estEntiere
@@ -287,12 +342,21 @@ export const equation1erDegre1Inconnue = (
     diviserParA += `$<br>`
     correction += diviserParA
     correctionDetaillee += diviserParA
+  } else if (coeffX.equals(-1)) {
+    correctionDetaillee += `On multiplie les deux membres par $-1$.<br>`
+    const multiplierParMoins1 = `$-${inconnue}${miseEnEvidence('\\times(-1)')}=${texNombre(dFinal.minus(bFinal))}${miseEnEvidence('\\times(-1)')}$<br>
+      $${inconnue}=${texNombre(dFinal.minus(bFinal).neg())}$<br>`
+    correction += multiplierParMoins1
+    correctionDetaillee += multiplierParMoins1
   }
+
   const correctionSansConclusion = correction
   const correctionSansConclusionDetaillee = correctionDetaillee
+
   const conclusion = `La solution de l'équation $${egalite}$ est $${miseEnEvidence(reponse instanceof FractionEtendue ? reponse.texFSP : texNombre(reponse))}$.`
   correction += conclusion
   correctionDetaillee += conclusion
+
   return {
     membreDeGauche: String(membreDeGauche),
     membreDeDroite: String(membreDeDroite),
@@ -306,13 +370,13 @@ export const equation1erDegre1Inconnue = (
     correctionDetaillee,
     correctionSansConclusion,
     correctionSansConclusionDetaillee,
-    a: a.toNumber(),
-    aDecimal: a,
-    b: b.toNumber(),
-    bDecimal: b,
-    c: c.toNumber(),
-    cDecimal: c,
-    d: d.toNumber(),
-    dDecimal: d,
+    a: aFinal.toNumber(),
+    aDecimal: aFinal,
+    b: bFinal.toNumber(),
+    bDecimal: bFinal,
+    c: cFinal.toNumber(),
+    cDecimal: cFinal,
+    d: dFinal.toNumber(),
+    dDecimal: dFinal,
   }
 }
