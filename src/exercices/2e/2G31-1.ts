@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -182,6 +183,7 @@ export default class CoefficientDirecteurDeDroite extends Exercice {
                   },
                 ],
               }
+              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
             }
           }
           break
@@ -261,6 +263,7 @@ export default class CoefficientDirecteurDeDroite extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
           break
       }

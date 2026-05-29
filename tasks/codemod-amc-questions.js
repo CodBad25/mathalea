@@ -116,6 +116,110 @@ function hasNearbyQuestionsAssignment(sourceText, statementEnd) {
   return /questionsAMC\s*(\[|=)/.test(after)
 }
 
+function getAutoCorrectionAMCBaseInfo(sourceText, node) {
+  if (ts.isPropertyAccessExpression(node)) {
+    if (node.name.text === 'autoCorrectionAMC') {
+      return {
+        kind: 'array',
+        receiverText: sourceText.slice(
+          node.expression.getStart(),
+          node.expression.getEnd(),
+        ),
+      }
+    }
+
+    return getAutoCorrectionAMCBaseInfo(sourceText, node.expression)
+  }
+
+  if (ts.isElementAccessExpression(node)) {
+    if (
+      ts.isPropertyAccessExpression(node.expression) &&
+      node.expression.name.text === 'autoCorrectionAMC' &&
+      node.argumentExpression != null
+    ) {
+      return {
+        kind: 'indexed',
+        receiverText: sourceText.slice(
+          node.expression.expression.getStart(),
+          node.expression.expression.getEnd(),
+        ),
+        indexText: sourceText.slice(
+          node.argumentExpression.getStart(),
+          node.argumentExpression.getEnd(),
+        ),
+      }
+    }
+
+    return getAutoCorrectionAMCBaseInfo(sourceText, node.expression)
+  }
+
+  return null
+}
+
+function getAmcBuildersImportPath(filePath) {
+  const relativePath = path.relative(
+    path.dirname(filePath),
+    path.join(rootDir, 'src/lib/amc/amcBuilders'),
+  )
+  return relativePath.startsWith('.')
+    ? relativePath.replaceAll(path.sep, '/')
+    : `./${relativePath.replaceAll(path.sep, '/')}`
+}
+
+function findAmcBuildersImport(sourceFile) {
+  return sourceFile.statements.find((statement) => {
+    if (!ts.isImportDeclaration(statement)) return false
+    if (!ts.isStringLiteral(statement.moduleSpecifier)) return false
+    return statement.moduleSpecifier.text.endsWith('/lib/amc/amcBuilders')
+  })
+}
+
+function buildAmcConvertImportLine(filePath, sourceText, sourceFile) {
+  const importPath = getAmcBuildersImportPath(filePath)
+  const existingImport = findAmcBuildersImport(sourceFile)
+
+  if (existingImport != null) {
+    const namedBindings = existingImport.importClause?.namedBindings
+    if (namedBindings != null && ts.isNamedImports(namedBindings)) {
+      const importNames = namedBindings.elements.map(
+        (element) => element.name.text,
+      )
+      if (importNames.includes('amcConvert')) return null
+
+      const updatedNames = ['amcConvert', ...importNames].sort()
+      return {
+        kind: 'replace',
+        start: existingImport.getStart(),
+        end: existingImport.getEnd(),
+        text: sourceText
+          .slice(existingImport.getStart(), existingImport.getEnd())
+          .replace(/\{[^}]*\}/, `{ ${updatedNames.join(', ')} }`),
+      }
+    }
+  }
+
+  const lastImport = sourceFile.statements.filter(ts.isImportDeclaration).at(-1)
+
+  const insertionPoint =
+    lastImport?.getEnd() ?? sourceFile.statements[0]?.getStart() ?? 0
+
+  return {
+    kind: 'insert',
+    start: insertionPoint,
+    end: insertionPoint,
+    text: `${lastImport != null ? '\n' : ''}import { amcConvert } from '${importPath}'\n`,
+  }
+}
+
+function insertImportStatement(sourceText, sourceFile, filePath) {
+  const importEdit = buildAmcConvertImportLine(filePath, sourceText, sourceFile)
+  if (importEdit == null) return sourceText
+
+  const prefix = sourceText.slice(0, importEdit.start)
+  const suffix = sourceText.slice(importEdit.end)
+  return `${prefix}${importEdit.text}${suffix}`
+}
+
 function collectEditsForFile(sourceText, filePath) {
   const sourceFile = ts.createSourceFile(
     filePath,
@@ -135,20 +239,20 @@ function collectEditsForFile(sourceText, filePath) {
     ) {
       const leftSide = node.expression.left
 
-      if (isAutoCorrectionAMCElementAccess(leftSide)) {
-        if (!hasNearbyQuestionsAssignment(sourceText, node.getEnd())) {
-          edits.push({
-            start: node.getEnd(),
-            text: '\n' + makeIndexedInsertion(sourceText, node, leftSide),
-          })
-        }
-      } else if (isAutoCorrectionAMCPropertyAccess(leftSide)) {
-        if (!hasNearbyQuestionsAssignment(sourceText, node.getEnd())) {
-          edits.push({
-            start: node.getEnd(),
-            text: '\n' + makeArrayInsertion(sourceText, node, leftSide),
-          })
-        }
+      const baseInfo = getAutoCorrectionAMCBaseInfo(sourceText, leftSide)
+      if (
+        baseInfo != null &&
+        !hasNearbyQuestionsAssignment(sourceText, node.getEnd())
+      ) {
+        const insertionText =
+          baseInfo.kind === 'indexed'
+            ? `${getIndent(sourceText, node.getStart())}${baseInfo.receiverText}.questionsAMC[${baseInfo.indexText}] = amcConvert(${baseInfo.receiverText}.autoCorrectionAMC[${baseInfo.indexText}])`
+            : `${getIndent(sourceText, node.getStart())}${baseInfo.receiverText}.questionsAMC = ${baseInfo.receiverText}.autoCorrectionAMC.map((questionAMC) => amcConvert(questionAMC))`
+
+        edits.push({
+          start: node.getEnd(),
+          text: '\n' + insertionText,
+        })
       }
     }
 
@@ -173,6 +277,15 @@ async function processFile(filePath) {
   for (const edit of edits) {
     nextText = `${nextText.slice(0, edit.start)}${edit.text}${nextText.slice(edit.start)}`
   }
+
+  const sourceFile = ts.createSourceFile(
+    filePath,
+    nextText,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TS,
+  )
+  nextText = insertImportStatement(nextText, sourceFile, filePath)
 
   if (applyChanges) {
     await fs.writeFile(filePath, nextText)
