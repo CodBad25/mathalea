@@ -11,11 +11,11 @@ import type {
 // Nouvelles interfaces pour les exercices AMC
 
 // Bloc QCMMult ou QCMMono
-export type autoCorrectionForQcm = {
-  type: 'QCMMult' | 'QCMMono'
+export type AutoCorrectionForQcm = {
+  type: 'qcmMult' | 'qcmMono'
   enonce: string
   propositions: propositionForQcmAMC[]
-  options?: optionsForQcmAmc
+  options?: OptionsForQcmAmc
   correction?: string // Correction détaillée pour l'étudiant
 }
 
@@ -25,7 +25,7 @@ export type propositionForQcmAMC = {
   baremeForThisQuestion?: number // difficile à implémenter dans l'interface où les réponses sont mélangées et cela doit traduire une volonté pédagogique en contradiction avec l'ordre aléatoire des réponses. Donc, à coder en dur dans l'exercice.
 }
 
-export type optionsForQcmAmc = {
+export type OptionsForQcmAmc = {
   ordered?: boolean
   vertical?: boolean
   lastchoice?: number
@@ -45,14 +45,14 @@ export type optionsForQcmAmc = {
 }
 
 // Bloc AMCOpen
-export type autoCorrectionForAMCOpen = {
+export type AutoCorrectionForAMCOpen = {
   type: 'AMCOpen'
   enonce: string
-  options?: optionsForAMCOpen
+  options?: OptionsForAMCOpen
   correction?: string // Correction détaillée pour l'étudiant
 }
 
-export type optionsForAMCOpen = {
+export type OptionsForAMCOpen = {
   sansCadre?: boolean // -> variable lineup dans AMC (défaut false)
   cadreNbLines?: number // -> variable lines dans AMC (défaut 1)
   lignesEnPointillés?: boolean // -> variable dots dans AMC (défaut true)
@@ -62,15 +62,15 @@ export type optionsForAMCOpen = {
 }
 
 // Bloc AMCNum
-export type autoCorrectionForAMCNum = {
+export type AutoCorrectionForAMCNum = {
   type: 'AMCNum'
   enonce: string
   reponseAttendue: AmcNumericChoice
-  options?: optionsForAMCNum
+  options?: OptionsForAMCNum
   correction?: string // Correction détaillée pour l'étudiant
 }
 
-export type optionsForAMCNum = {
+export type OptionsForAMCNum = {
   scoring?: boolean // si true, un bareme est transmis à AMC pour la question
   scoreExact?: number // nombre de points pour la réponse exacte
   scoreApprox?: number // nombre de points pour une réponse approximative
@@ -85,7 +85,7 @@ export type AmcNumericChoice = {
   decimals?: number // idem digits
   signe?: boolean // sera inféré en cas de réponse négative... C'est un paramètre qu'on peut modifié via l'UI
   exposantNbChiffres?: number // peut-être inféré ou fixé via l'UI à posteriori (pour les réponse en notation scientifique gérée par AMCNumericChoices)
-  exposantSigne: boolean // idem
+  exposantSigne?: boolean // idem
   vertical?: boolean // Modifiable via l'UI
   vhead?: string // Ne fonctionne que si vertical est true. Permet d'écrire au-dessus de la colonne de  chaque série de cases à cocher un texte.
   tpoint?: string // tpoint est soit une virgule, soir une ligne séparatrice pour séparer une fraction.
@@ -103,21 +103,26 @@ export type baremeForOneBox = {
 }
 
 // Bloc AMCHybride
-export type autoCorrectionForAMCHybride = {
+export type AutoCorrectionForAMCHybride = {
   type: 'AMCHybride'
-  enonceComun: string
+  enonceCommun: string
   blocs: AutoCorrectionBaseTypes[]
-  options?: optionsForAMCHybride
+  options?: OptionsForAMCHybride
   correction?: string // Correction pour l'ensemble (peut être facultatif, chaque bloc apportant sa propre correction (elle aussi facultative))
 }
 
-export type TypeKeys = 'AMCOpen' | 'AMCNum' | 'QCMMono' | 'QCMMult'
+export type TypeKeys =
+  | 'AMCOpen'
+  | 'AMCNum'
+  | 'qcmMono'
+  | 'qcmMult'
+  | 'AMCHybride'
 export type AutoCorrectionBaseTypes =
-  | autoCorrectionForAMCNum
-  | autoCorrectionForAMCOpen
-  | autoCorrectionForQcm
+  | AutoCorrectionForAMCNum
+  | AutoCorrectionForAMCOpen
+  | AutoCorrectionForQcm
 
-export type optionsForAMCHybride = {
+export type OptionsForAMCHybride = {
   enonceAvant?: boolean // permet de supprimer l'énoncé commun si false
   enonceAvantUneFois?: boolean // si true, l'énoncé commun est afficher une seule fois avant le premier bloc.
   enonceCentre?: boolean // Centrage de l'énoncé commun (par défaut aligné à gauche)
@@ -256,6 +261,12 @@ export interface AutoCorrectionAMC {
   }
   options?: AMCLayoutOptions
 }
+
+export type QuestionAMC =
+  | AutoCorrectionForQcm
+  | AutoCorrectionForAMCNum
+  | AutoCorrectionForAMCOpen
+  | AutoCorrectionForAMCHybride
 
 export type IExerciceAMC = Omit<IExercice, 'autoCorrectionAMC'> & {
   autoCorrectionAMC: AutoCorrectionAMC[]

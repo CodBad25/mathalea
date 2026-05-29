@@ -1,6 +1,6 @@
 import type Figure from 'apigeom/src/Figure'
 import type Decimal from 'decimal.js'
-import type { AutoCorrectionAMC } from '../lib/amc/amcTypes'
+import type { AutoCorrectionAMC, QuestionAMC } from '../lib/amc/amcTypes'
 import {
   KeyboardType,
   type PartialKbType,
@@ -83,6 +83,7 @@ export default class Exercice implements IExercice {
   contenuCorrection?: string
   autoCorrection: AutoCorrection[]
   autoCorrectionAMC: AutoCorrectionAMC[]
+  questionsAMC: QuestionAMC[]
   figures?: Figure[] | ClickFigures[]
   amcReady?: boolean
   amcType?: string
@@ -152,8 +153,8 @@ export default class Exercice implements IExercice {
         titre: string
         categories: { label: string; max: number }[]
         defaut: number[]
-    }
-  
+      }
+
   questionRefs?: string[] // Affiche la référence de l'exercice en en-tête de la question (utile pour MetaExerciceCan)
   listeArguments: string[] // Variable servant à comparer les exercices pour ne pas avoir deux exercices identiques
   lastCallback: string // La dernière signature de listeArguments afin de comparaison : permet d'éviter un nouvelleVersionWrapper inutile
@@ -190,7 +191,8 @@ export default class Exercice implements IExercice {
     this.contenu = '' // Chaîne de caractères avec tout l'énoncé de l'exercice construit à partir de `this.listeQuestions` suivant le `context`
     this.contenuCorrection = '' // Idem avec la correction
     this.autoCorrection = [] // Liste des objets par question pour correction interactive
-    this.autoCorrectionAMC = [] // Liste des objets par question pour correction interactive de type AMC
+    this.autoCorrectionAMC = [] // Liste des objets par question pour correction interactive de type AMC (ancienne structure)
+    this.questionsAMC = [] // Liste des questions au format AMC typé (nouvelle structure)
 
     this.tableauSolutionsDuQcm = [] // Pour sauvegarder les solutions des QCM.
 
