@@ -14,6 +14,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Développer (a-b)(a+b)'
 export const interactifReady = true
@@ -239,6 +241,7 @@ export default class DevelopperIdentitesRemarquables3 extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (
         this.sup === 1

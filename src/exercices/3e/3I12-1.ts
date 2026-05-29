@@ -9,6 +9,8 @@ import {
 } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const titre = 'Compléter un script Scratch - 1'
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -301,6 +303,7 @@ export default class CompleterScriptMultiple extends Exercice {
             propositions: [{ statut: 3, sanscadre: true }],
           },
         ]
+        this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) => amcConvert(questionAMC))
       }
 
       if (this.questionJamaisPosee(i, texte)) {

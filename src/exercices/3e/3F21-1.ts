@@ -19,6 +19,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Déterminer une fonction affine'
 export const amcReady = true
@@ -286,6 +288,7 @@ export default class LectureExpressionFonctionsAffines extends Exercice {
           },
         ],
       }
+      this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
     }
   }
 }

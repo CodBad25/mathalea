@@ -19,6 +19,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Résoudre une équation produit nul'
 export const interactifReady = true
@@ -510,6 +512,7 @@ export default class ResoudreUneEquationProduitNul extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
 
         i++

@@ -13,6 +13,8 @@ import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenuSansNumero } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Factoriser une expression'
 export const dateDeModifImportante = '19/03/2026'
@@ -231,6 +233,7 @@ export default class FactoriserParNombreOux extends Exercice {
           enonce: texte,
           propositions: [{ texte: texteCorr, statut: 3, feedback: '' }],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
       const textCorrSplit = texteCorr.split('=')

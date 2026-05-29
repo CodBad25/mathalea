@@ -1,4 +1,5 @@
 import type { MathfieldElement } from 'mathlive'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -341,7 +342,7 @@ export default class RecourirDecompositionFacteursPremiers extends Exercice {
       }
       const bonneDecomposition = factorisation(nbADecomposer)
       handleAnswers(this, i, {
-        // @ts-expect-error
+        // @ts-expect-error bonneDecomposition est de type [number, number][] mais handleAnswers attend une string, on s'arrange pour que ça marche dans le callback
         reponse: { value: bonneDecomposition },
         callback: (exercice: IExercice, question: number) => {
           let isOk
@@ -415,6 +416,7 @@ export default class RecourirDecompositionFacteursPremiers extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         i++
       }

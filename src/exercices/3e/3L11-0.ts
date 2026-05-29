@@ -20,6 +20,8 @@ import {
   simpleDeveloppement,
   simpleDeveloppementAvecDoubleX,
 } from '../../lib/outils/ecritures'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Effectuer la simple distributivité'
 export const dateDePublication = '03/02/2025'
@@ -220,6 +222,7 @@ export default class SimpleDistributivite extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         if (typeDeQuestions < 3) {
           this.autoCorrectionAMC[i].propositions?.push(
             {

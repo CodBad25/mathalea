@@ -29,6 +29,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   "Exprimer le cosinus, le sinus ou la tangente d'un angle en fonction des côtés du triangle"
@@ -818,6 +820,7 @@ export default class ExprimerCosSinTan extends Exercice {
           },
           propositions: propositionsAMC,
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.questionJamaisPosee(i, nom)) {
         this.listeQuestions[i] = texte

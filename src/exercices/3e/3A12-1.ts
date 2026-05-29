@@ -15,6 +15,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   'Résoudre des problèmes avec recherche de diviseurs communs'
@@ -301,6 +303,7 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte

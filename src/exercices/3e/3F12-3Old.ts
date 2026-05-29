@@ -15,6 +15,8 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Compléter un tableau de valeurs'
 export const interactifReady = true
@@ -393,6 +395,7 @@ export default class TableauDeValeurs extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         /* EE : Qu'est-ce que ce code fait dans AMC ?
         if (listeReponses[0].type === 'Fraction') {
           if (listeReponses[0].den === 1) setReponse(this, i * 3, listeReponses[0].num, { formatInteractif: 'calcul' })

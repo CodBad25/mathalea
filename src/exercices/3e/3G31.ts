@@ -22,6 +22,8 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -462,6 +464,7 @@ export default class CalculDAngle extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       } else if (this.interactif && context.isHtml) {
         setReponse(this, i, angleABC)
       }

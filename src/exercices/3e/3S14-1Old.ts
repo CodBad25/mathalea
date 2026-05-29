@@ -28,6 +28,8 @@ import {
 } from '../../modules/outils'
 import { OutilsStats } from '../../modules/outilsStat'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = "Calculer des caractéristiques d'une série"
 export const interactifReady = true
@@ -968,6 +970,7 @@ export default class CalculerCaracteristiques extends Exercice {
           },
           propositions: [],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         for (let ee = 0; ee < typeQuestions.length; ee++) {
           this.autoCorrectionAMC[i].propositions!.push({
             type: 'AMCNum',
