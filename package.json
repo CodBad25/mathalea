@@ -35,9 +35,9 @@
   ],
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://forge.apps.education.fr/jeanclaudelhote/math-alea-mc/issues"
+    "url": "https://forge.apps.education.fr/coopmaths/mathalea/issues"
   },
-  "homepage": "https://forge.apps.education.fr/jeanclaudelhote/math-alea-mc",
+  "homepage": "https://forge.apps.education.fr/coopmaths/mathalea",
   "scripts": {
     "dev": "pnpm makeJson && vite",
     "start": "pnpm makeJson && vite",

@@ -61,7 +61,7 @@ export const AMCPreambleTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    \\usepackage{iftex}
    \\ifPDFTeX
      \\usepackage[T1]{fontenc}
-     \\usepackage[utf8]{inputenc}
+     \\usepackage[utf8x]{inputenc}
      \\usepackage{lmodern}
    \\else
      \\usepackage{fontspec}
@@ -365,12 +365,19 @@ export const AMCGroupSectionTemplate = `
 {% endif %}{% if multicols %}\\end{multicols}
 {% endif %}`
 
+function normalizeAmcTitleApostrophes(value: string): string {
+  return value.replace(/[\u2018\u2019]/g, "'")
+}
+
 export function renderAMCPreamble(data: AMCPreambleRenderData) {
   return renderTemplate(AMCPreambleTemplate, data)
 }
 
 export function renderAMCHeader(data: AMCHeaderRenderData) {
-  return renderTemplate(AMCHeaderTemplate, data)
+  return renderTemplate(AMCHeaderTemplate, {
+    ...data,
+    titre: normalizeAmcTitleApostrophes(data.titre),
+  })
 }
 
 export function renderAMCDocumentStart(data: AMCDocumentStartRenderData) {
@@ -382,5 +389,8 @@ export function renderAMCCopyContent(data: AMCCopyContentRenderData) {
 }
 
 export function renderAMCGroupSection(data: AMCGroupSectionRenderData) {
-  return renderTemplate(AMCGroupSectionTemplate, data)
+  return renderTemplate(AMCGroupSectionTemplate, {
+    ...data,
+    groupTitle: normalizeAmcTitleApostrophes(data.groupTitle),
+  })
 }
