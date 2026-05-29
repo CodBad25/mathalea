@@ -10,6 +10,8 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { representeFractionSurBarre } from '../../modules/representationsFractions'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const titre = "Représenter une fraction de l'unité"
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -164,6 +166,7 @@ export default class FractionsDunite extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.questionJamaisPosee(i, num, den)) {
         this.listeQuestions[i] = texte

@@ -13,6 +13,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const dateDePublication = '28/01/2023'
 export const dateDeModifImportante = '08/06/2024'
@@ -269,6 +271,7 @@ class PlacerPointsAbscissesFractionnairesBis extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (!isArrayInArray(fractionsUtilisees, [num, den])) {
         // Si la question n'a jamais été posée, on en crée une autre

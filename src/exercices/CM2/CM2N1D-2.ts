@@ -13,6 +13,8 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { context } from '../../modules/context'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Recomposer un entier'
 export const interactifReady = true
@@ -359,6 +361,7 @@ export default class RecomposerEntierC3 extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       texte += context.isHtml

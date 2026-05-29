@@ -10,6 +10,8 @@ import { bleuMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { fraction } from '../../modules/fractions'
 import { representationFraction } from '../../modules/representationsFractions'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const titre = 'Représenter des fractions'
 export const amcReady = true
 export const interactifReady = true
@@ -175,6 +177,7 @@ export default class RepresenterUneFraction extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.questionJamaisPosee(i, num, den)) {
         // Si la question n'a jamais été posée, on en crée une autre

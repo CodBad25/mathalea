@@ -10,6 +10,8 @@ import { context } from '../../modules/context'
 import { fraction } from '../../modules/fractions'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const dateDePublication = '29/06/2021'
 export const dateDeModifImportante = '03/05/2024'
@@ -217,6 +219,7 @@ class PlacerPointsAbscissesFractionnaires extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (!isArrayInArray(fractionsUtilisees, [num1, den1])) {
         // Si la question n'a jamais été posée, on en crée une autre
