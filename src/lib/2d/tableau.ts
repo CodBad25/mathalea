@@ -37,14 +37,17 @@ function flecheH(
   A: PointAbstrait,
   texte: StyledText,
   h: number = 1,
-): (Polyline | Segment | TexteParPoint)[] {
+): (Polyline | Segment | TexteParPoint | ObjetMathalea2D)[] {
   const D1 = new PointAbstrait(D.x, D.y + h)
   const A1 = pointAbstrait(A.x, A.y + h)
   const fleche = polyline(D, D1, A1)
   const eFleche = segment(A1, A)
   eFleche.styleExtremites = '->'
   const M = milieu(D1, A1)
-  const objets: any[] = [fleche, eFleche]
+  const objets: (Polyline | Segment | TexteParPoint | ObjetMathalea2D)[] = [
+    fleche,
+    eFleche,
+  ]
   let t
   if (texte) {
     const color = texte.color ?? 'black'
@@ -90,7 +93,7 @@ function flecheV(
   texte: StyledText,
   h: number = 1,
   flip: boolean = false,
-): (Polyline | Segment | TexteParPoint)[] {
+): (Polyline | Segment | TexteParPoint | ObjetMathalea2D)[] {
   if (flip) h = -h
   const D1 = pointAbstrait(D.x + h, D.y)
   const A1 = pointAbstrait(A.x + h, A.y)
@@ -98,7 +101,10 @@ function flecheV(
   const eFleche = segment(A1, A)
   eFleche.styleExtremites = '->'
   const M = milieu(D1, A1)
-  const objets: any[] = [fleche, eFleche]
+  const objets: Polyline | Segment | TexteParPoint | ObjetMathalea2D[] = [
+    fleche,
+    eFleche,
+  ]
   let t
   const color = texte.color ?? 'black'
   const math = texte.math ?? false
@@ -367,13 +373,13 @@ export class Tableau extends ObjetMathalea2D {
       } else {
         this.objets.push(...flecheV(Arrivee, Depart, flecheDroite))
       }
-      const { xmin, ymin, xmax, ymax } = fixeBordures(this.objets, {
+      /*const { xmin, ymin, xmax, ymax } = fixeBordures(this.objets, {
         rxmin: 0,
         rxmax: 0,
         rymin: 0,
         rymax: 0,
       })
-      this.bordures = [xmin, ymin, xmax, ymax]
+      this.bordures = [xmin, ymin, xmax, ymax]*/
     }
     // if (flecheGauche && typeof flecheGauche === 'string') {
     if (flecheGauche) {
@@ -391,7 +397,7 @@ export class Tableau extends ObjetMathalea2D {
       rymin: 0,
       rymax: 0,
     })
-    this.bordures = [xmin, ymin, xmax, ymax]
+    this.bordures = [xmin - 1, ymin, xmax, ymax] // EE : -1 nécessaire pour afficher le x dans 5P10-2
     return this
   }
 }

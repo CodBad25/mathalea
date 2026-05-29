@@ -27,7 +27,7 @@ export const interactifType = 'MetaInteractif2d'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '18/03/2023'
-export const dateDeModifImportante = '15/04/2026'
+export const dateDeModifImportante = '29/05/2026'
 
 export const uuid = '2d5ec'
 
@@ -304,10 +304,12 @@ export default class CalculerCoeffPropo extends Exercice {
                 gras: true,
               },
               flecheDroiteSens: 'bas',
-              flecheGauche: {
-                texte: this.interactif ? '' : '\\times \\ldots',
-                latex: true,
-              },
+              flecheGauche: this.interactif
+                ? undefined
+                : {
+                    texte: '\\times \\ldots',
+                    latex: true,
+                  },
               flecheGaucheSens: 'haut',
             })
           : new Tableau({
@@ -345,7 +347,10 @@ export default class CalculerCoeffPropo extends Exercice {
               nbColonnes: 4,
               ligne1: ligne1Corr,
               ligne2: ligne2Corr,
-              flecheDroite: { texte: `\\times ${coefficientTex}`, latex: true },
+              flecheDroite: {
+                texte: `\\times ${coefficientTex}`,
+                latex: true,
+              },
               flecheDroiteSens: 'bas',
               flecheGauche: {
                 texte: `\\times ${(coefficient as FractionEtendue).inverse().texFraction}`,
@@ -365,7 +370,11 @@ export default class CalculerCoeffPropo extends Exercice {
             })
       texte =
         'Le tableau ci-dessous représente une situation de proportionnalité.<br>'
-      texte += numAlpha(0) + 'Calculer le coefficient de proportionnalité.<br>'
+      texte += numAlpha(0) + 'Calculer le coefficient de proportionnalité'
+      texte +=
+        listeTypesDeCoefficient[i] !== 'Fraction'
+          ? " (sous forme d'un nombre décimal ou entier).<br>"
+          : '.<br>'
       texte += numAlpha(1) + 'Compléter le tableau de proportionnalité.<br>'
       // dessin du tableau selon le contexte
       // définition d'un objet pour les réponses attendues
@@ -452,12 +461,19 @@ export default class CalculerCoeffPropo extends Exercice {
             },
           )
           objets.push(inputs)
+
           handleAnswers(
             this,
             i,
             {
               bareme: toutAUnPoint,
-              field0: { value: coefficient },
+              field0: {
+                value:
+                  coefficient instanceof FractionEtendue
+                    ? coefficient
+                    : new FractionEtendue(coefficient, 1),
+                options: { fractionEgale: true, nombreDecimalSeulement: true },
+              },
               field1: { value: reponsesAttendue.reponse1.reponse.valeur },
               field2: { value: reponsesAttendue.reponse2.reponse.valeur },
             },
@@ -469,7 +485,7 @@ export default class CalculerCoeffPropo extends Exercice {
           objets,
         )
       } else {
-        // pour LAtex, c'est profCollege dans le texte
+        // pour Latex, c'est profCollege dans le texte
         texte += '\n\\Propor[Math,Stretch=2,largeur=15]{'
         for (let colonne = 0; colonne < 3; colonne++) {
           texte += `${ligne1[colonne + 1].texte.replace('...', '\\ldots')}/`
@@ -581,14 +597,14 @@ export default class CalculerCoeffPropo extends Exercice {
         )
         if (!quotient.estIrreductible) {
           texteCorr += `${miseEnEvidence(`\\dfrac{${texNombre(deuxiemeLigne[colonneReference].nombre)}}{${texNombre(premiereLigne[colonneReference].nombre)}}`, bleuMathalea)}`
-          texteCorr += `= ${miseEnEvidence((coefficient as FractionEtendue).texFraction)}$.<br>`
+          texteCorr += `= ${miseEnEvidence(coefficientTex)}$.<br>`
         } else {
           texteCorr += `${miseEnEvidence(`\\dfrac{${texNombre(deuxiemeLigne[colonneReference].nombre)}}{${texNombre(premiereLigne[colonneReference].nombre)}}`)}`
           texteCorr += '$.<br>'
         }
       } else {
         texteCorr += `${miseEnEvidence(`\\dfrac{${texNombre(deuxiemeLigne[colonneReference].nombre)}}{${texNombre(premiereLigne[colonneReference].nombre)}}`, bleuMathalea)}`
-        texteCorr += `= ${miseEnEvidence(texNombre(coefficient))}$.<br>`
+        texteCorr += `= ${miseEnEvidence(coefficientTex)}$.<br>`
       }
       texteCorr +=
         numAlpha(1) + 'On complète le tableau de proportionnalité.<br>'
