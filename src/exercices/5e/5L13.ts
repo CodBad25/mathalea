@@ -13,6 +13,8 @@ import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Réduire une expression de la forme $ax+bx$ '
 export const interactifReady = true
@@ -108,6 +110,7 @@ export default class Reductionaxbx extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         i++
       }

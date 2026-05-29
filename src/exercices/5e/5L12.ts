@@ -10,6 +10,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Réduire une expression littérale'
 export const interactifReady = true
@@ -164,6 +166,7 @@ export default class ReduireUneExpressionLitterale extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         i++
       }

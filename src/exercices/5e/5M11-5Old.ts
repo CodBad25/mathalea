@@ -40,6 +40,8 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Calculer périmètre et aire de figures composées'
 export const interactifReady = true
@@ -1294,6 +1296,7 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         if (this.sup4 === 1 || this.sup4 === 3) {
           this.autoCorrectionAMC[i].propositions!.push({
             type: 'AMCNum',

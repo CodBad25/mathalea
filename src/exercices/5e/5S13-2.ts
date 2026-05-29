@@ -22,6 +22,8 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Calculer des fréquences statistiques'
 export const interactifReady = true
@@ -554,6 +556,7 @@ function questionsEtCorrections(
           },
         ],
       }
+      exercice.questionsAMC[numero] = amcConvert(exercice.autoCorrectionAMC[numero])
     }
   }
   return {

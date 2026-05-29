@@ -11,6 +11,8 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 import choisirExpressionNumerique from './_choisirExpressionNumerique'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -179,6 +181,7 @@ export default class CalculerUneExpressionNumerique extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

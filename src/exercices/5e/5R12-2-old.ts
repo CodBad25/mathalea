@@ -18,6 +18,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = "Déterminer les coordonnées (relatives) d'un point"
 export const interactifReady = true
@@ -140,6 +142,7 @@ export default class ReperagePointDuPlan extends Exercice {
         options: { barreseparation: true },
         propositions: [],
       }
+      this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
     }
 
     texte =

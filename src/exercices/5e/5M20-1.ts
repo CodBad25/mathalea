@@ -20,6 +20,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Calculer le volume de solides donnés'
 export const amcReady = true
@@ -625,6 +627,7 @@ export default class CalculDeVolumes extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         } else {
           this.autoCorrectionAMC[i] = {
             enonce: texte + '\\\\Écrire le calcul:',
@@ -670,6 +673,7 @@ export default class CalculDeVolumes extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
       }
       if (

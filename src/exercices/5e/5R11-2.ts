@@ -10,6 +10,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const interactifReady = true
 export const interactifType = 'custom'
@@ -179,6 +181,7 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
           enonce: this.consigne + '<br>' + texte + '<br>',
           propositions: [{ statut: 3, sanscadre: true }],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       this.listeQuestions.push(texte)
       this.listeCorrections.push(texteCorr)

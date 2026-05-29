@@ -20,6 +20,8 @@ import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Calculer des fréquences statistiques'
 export const interactifReady = true
@@ -554,6 +556,7 @@ function questionsEtCorrections(
           },
         ],
       }
+      exercice.questionsAMC[numero] = amcConvert(exercice.autoCorrectionAMC[numero])
     }
   }
   return {

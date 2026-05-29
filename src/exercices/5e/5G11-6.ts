@@ -11,6 +11,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const titre = 'Compléter un nuage de points symétriques'
 export const dateDePublication = '18/12/2021'
 export const interactifReady = false
@@ -267,6 +269,7 @@ export default class CompleterParSymetrie5e extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

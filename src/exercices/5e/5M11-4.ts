@@ -21,6 +21,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const interactifReady = true
 export const interactifType = 'multiMathfield'
@@ -306,6 +308,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           } else if (this.sup === 2) {
             this.autoCorrectionAMC[i] = {
               enonce: '',
@@ -334,6 +337,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           } else {
             this.autoCorrectionAMC[i] = {
               enonce:
@@ -386,6 +390,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
         }
 

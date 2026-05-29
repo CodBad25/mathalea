@@ -24,6 +24,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   'Calculer périmètre et/ou aire de carrés, rectangles et triangles rectangles'
@@ -159,6 +161,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
           options: { barreseparation: true, numerotationEnonce: true },
           propositions: [],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       texteCorr = ''

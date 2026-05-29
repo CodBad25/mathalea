@@ -13,6 +13,8 @@ import { sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Tester une égalité'
 export const dateDeModifImportante = '18/11/2023'
@@ -414,6 +416,7 @@ export default class TesterUneEgalite extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         } else {
           this.autoCorrectionAMC.push({
             enonce: texte,

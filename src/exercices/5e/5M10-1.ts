@@ -24,6 +24,8 @@ import Grandeur from '../../modules/Grandeur'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = "Calculer l'aire de triangles"
 export const interactifReady = true
@@ -233,6 +235,7 @@ export default class AireDeTriangles extends Exercice {
             },
           },
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       // Si la question n'a jamais été posée, on l'enregistre

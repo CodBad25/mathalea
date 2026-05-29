@@ -19,6 +19,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const dateDePublication = '14/01/2025'
 export const amcReady = true
@@ -729,14 +731,18 @@ export default class ProprietesParallelesPerpendiculaires extends Exercice {
 
       /** ********************** AMC Open *****************************/
       this.autoCorrectionAMC[i] = {}
+      this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       this.autoCorrectionAMC[i].options = { ordered: false }
+      this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       this.autoCorrectionAMC[i].enonce = texte + '<br>'
+      this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       this.autoCorrectionAMC[i].propositions = [
         {
           texte: texteCorr,
           statut: 3,
         },
       ]
+      this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       /****************************************************/
 
       if (

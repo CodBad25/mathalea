@@ -12,6 +12,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   'Réduire et simplifier une expression littérale (somme et produit)'
@@ -198,6 +200,7 @@ export default class ReduireUneExpressionLitterale extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         i++
       }
