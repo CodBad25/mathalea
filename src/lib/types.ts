@@ -9,7 +9,7 @@ import type { IFractionEtendue } from '../modules/FractionEtendue.type'
 import type Decimal from 'decimal.js'
 import Hms from '../modules/Hms'
 import type { VueType } from './VueType'
-import type { AutoCorrectionAMC } from './amc/amcTypes'
+import type { AutoCorrectionAMC, QuestionAMC } from './amc/amcTypes'
 import { Complexe } from './mathFonctions/Complexe'
 
 /**
@@ -871,6 +871,7 @@ export interface IExercice {
   contenuCorrection?: string
   autoCorrection: AutoCorrection[]
   autoCorrectionAMC?: AutoCorrectionAMC[]
+  questionsAMC?: QuestionAMC[]
   figures?: Figure[] | ClickFigures[]
   amcReady?: boolean
   amcType?: string

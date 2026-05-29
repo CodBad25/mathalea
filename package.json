@@ -57,6 +57,8 @@
     "transpile": "tsc > journal.log",
     "lint": "eslint --fix 'src/exercices/**/*.{js,ts}'",
     "lintSvelte": "eslint --fix 'src/components/**/*.{js,ts}'",
+    "codemod:amc-questions": "node tasks/codemod-amc-questions.js",
+    "codemod:amc-questions:apply": "node tasks/codemod-amc-questions.js --apply",
     "format": "pnpm exec prettier --write src && pnpm exec prettier --write tasks && pnpm exec prettier --write tests",
     "doc": "pnpm exec typedoc",
     "addDNB": "pnpm --package=git+https://forge.apps.education.fr/coopmaths/dnb -c dlx dnbindex",

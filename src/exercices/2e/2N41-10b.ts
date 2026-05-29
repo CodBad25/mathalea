@@ -15,6 +15,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import ce from '../../lib/interactif/comparisonFunctions'
 import {
@@ -364,6 +365,7 @@ export default class DevelopperReduireExprComplexe extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en créé une autre

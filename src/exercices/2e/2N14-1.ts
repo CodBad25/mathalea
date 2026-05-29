@@ -11,6 +11,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -203,6 +205,7 @@ export default class EnsembleDeNombres extends Exercice {
         this.autoCorrectionAMC[i].propositions = [
           { texte: this.listeCorrections[i], statut: '1' },
         ]
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       texte += this.interactif
         ? ajouteChampTexteMathLive(

@@ -9,6 +9,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -595,6 +596,7 @@ export default class LecturesGraphiques extends Exercice {
         enonce: enonceAMC,
         propositions: [],
       }
+      this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
       for (let i = 0; i < this.nbQuestions; i++) {
         if (listeTypeQuestions[i] === 'nombreAntécédents') {
           this.autoCorrectionAMC[0].propositions![i] = {

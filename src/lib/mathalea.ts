@@ -679,7 +679,17 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     urlNeedToBeFreezed = true
     url = decrypt(url)
   }
-  const entries = url.searchParams.entries()
+  const decodedPathname = decodeURIComponent(url.pathname)
+  const legacyPathSegmentMatch = decodedPathname.match(/\/&([^/].*)$/)
+  const legacyQueryFromPath =
+    url.search.length === 0 && legacyPathSegmentMatch != null
+      ? legacyPathSegmentMatch[1]
+      : ''
+  const searchParams =
+    legacyQueryFromPath.length > 0
+      ? new URLSearchParams(legacyQueryFromPath)
+      : url.searchParams
+  const entries = searchParams.entries()
   let indiceExercice = -1
   const newExercisesParams: InterfaceParams[] = []
   let previousEntryWasUuid = false
@@ -732,7 +742,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
       } else if (entry[0] === 'tip' && (entry[1] === '0' || entry[1] === '1')) {
         newExercisesParams[indiceExercice].tip = entry[1]
       } else if (entry[0] === 'v') {
-        v = convertVueType(entry[1])
+        v = convertVueType(entry[1].trim().toLowerCase())
       } else if (entry[0] === 'recorder') {
         if (
           entry[1] === 'capytale' ||

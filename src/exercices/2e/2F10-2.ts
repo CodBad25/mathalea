@@ -7,6 +7,7 @@ import { Latex2d, latexParPoint, texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { homothetie, translation } from '../../lib/2d/transformations'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -150,51 +151,7 @@ export default class Lecturefonctionaffine extends Exercice {
               c,
               o,
             ) // On trace le graphique
-            if (context.isAmc) {
-              this.autoCorrectionAMC[i] = {
-                enonce: texte,
-                propositions: [
-                  {
-                    type: 'AMCNum',
-                    propositions: [
-                      {
-                        texte: `$f(x)=${reduireAxPlusB(a, b)}$`,
-                        statut: '',
-                        reponse: {
-                          texte: 'coefficient a de $f(x)=ax+b$',
-                          valeur: a,
-                          param: {
-                            digits: 1,
-                            decimals: 0,
-                            signe: true,
-                            approx: 0,
-                          },
-                        },
-                      },
-                    ],
-                  },
-                  {
-                    type: 'AMCNum',
-                    propositions: [
-                      {
-                        texte: '',
-                        statut: '',
-                        reponse: {
-                          texte: 'valeur b de $f(x)=ax+b$',
-                          valeur: b,
-                          param: {
-                            digits: 1,
-                            decimals: 0,
-                            signe: true,
-                            approx: 0,
-                          },
-                        },
-                      },
-                    ],
-                  },
-                ],
-              }
-            } else if (this.interactif) {
+            if (this.interactif) {
               handleAnswers(this, i, {
                 reponse: {
                   value: `${reduireAxPlusB(a, b)}`,
@@ -306,6 +263,50 @@ export default class Lecturefonctionaffine extends Exercice {
                 }
               }
             }
+            this.autoCorrectionAMC[i] = {
+              enonce: texte,
+              propositions: [
+                {
+                  type: 'AMCNum',
+                  propositions: [
+                    {
+                      texte: texteCorr,
+                      statut: '',
+                      reponse: {
+                        texte: 'coefficient a de $f(x)=ax+b$',
+                        valeur: a,
+                        param: {
+                          digits: 1,
+                          decimals: 0,
+                          signe: true,
+                          approx: 0,
+                        },
+                      },
+                    },
+                  ],
+                },
+                {
+                  type: 'AMCNum',
+                  propositions: [
+                    {
+                      texte: '',
+                      statut: '',
+                      reponse: {
+                        texte: 'valeur b de $f(x)=ax+b$',
+                        valeur: b,
+                        param: {
+                          digits: 1,
+                          decimals: 0,
+                          signe: true,
+                          approx: 0,
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
           break
         case 'typeE2':
@@ -462,6 +463,7 @@ export default class Lecturefonctionaffine extends Exercice {
                   },
                 ],
               }
+              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
             } else if (this.interactif) {
               handleAnswers(this, i, {
                 reponse: {
