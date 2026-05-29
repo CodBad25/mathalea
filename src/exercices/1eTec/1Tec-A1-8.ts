@@ -1,11 +1,17 @@
 import { texteGras } from '../../lib/format/style'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
+import { fraction } from '../../modules/fractions'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 export const titre = "Calculer l'union et l'intersection  de proportions"
+export const interactifReady = true
+export const interactifType = 'mathLive'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '26/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -43,6 +49,7 @@ export default class nomExercice extends Exercice {
         tarot,
         inter,
         union,
+        reponse,
         texte,
         texteCorr,
         cpt = 0;
@@ -64,6 +71,7 @@ export default class nomExercice extends Exercice {
       ) {
         case 'type1':
           texte += `Quelle est la proportion de personnes du club qui jouent  au tarot ${texteGras('ou')} à la belote?` // Le LateX entre deux symboles $, les variables dans des ${ }
+          reponse = union
           texteCorr = `On note :<br>
           $\\quad\\bullet\\quad p_T$ la proportion de personnes du club qui jouent au tarot.<br>
           $\\quad\\bullet\\quad p_B$ la proportion de personnes du club qui jouent à la belote.<br>
@@ -82,6 +90,7 @@ export default class nomExercice extends Exercice {
         case 'type2':
         default:
           texte += `Quelle est la proportion de personnes du club qui jouent au tarot ${texteGras('et')} à la belote ?` // Le LateX entre deux symboles $, les variables dans des ${ }
+          reponse = inter
           texteCorr = `On note :<br>
           $\\quad\\bullet\\quad p_T$ la proportion de personnes du club qui jouent au tarot.<br>
           $\\quad\\bullet\\quad p_B$ la proportion de personnes du club qui jouent à la belote.<br>
@@ -101,6 +110,20 @@ export default class nomExercice extends Exercice {
          `
           break
       }
+      texte += ajouteChampTexteMathLive(
+        this,
+        i,
+        KeyboardType.clavierDeBaseAvecFraction,
+        {
+          texteAvant: '<br>Réponse sous forme de fraction : ',
+        },
+      )
+      handleAnswers(this, i, {
+        reponse: {
+          value: fraction(reponse, effectif).texFraction,
+          options: { fractionEgale: true },
+        },
+      })
       // Si la question n'a jamais été posée, on l'enregistre
       if (this.questionJamaisPosee(i, effectif, belote, tarot)) {
         // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
