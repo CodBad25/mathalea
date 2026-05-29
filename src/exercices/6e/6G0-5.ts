@@ -15,6 +15,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const titre = 'Appartenir ou ne pas appartenir'
 export const dateDePublication = '05/10/2022'
 export const dateDeModifImportante = '4/10/2023'
@@ -282,6 +284,7 @@ export default class constructionElementaire extends Exercice {
             options: { avecSymboleMult: true }, // facultatif. Par défaut, multicols est à false. Ce paramètre provoque un multicolonnage (sur 2 colonnes par défaut) des propositions : pratique quand on met plusieurs AMCNum. !!! Attention, cela ne fonctionne pas, nativement, pour AMCOpen. !!!
             propositions: propositionsAMC,
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
 
         // listener

@@ -12,6 +12,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 /**
  * Calcule le cosinus d'un angle en degrés
@@ -359,6 +361,7 @@ export default class ArrondirUneValeur6e extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.questionJamaisPosee(i, di, ci, mi)) {
         // Si la question n'a jamais été posée, on en créé une autre

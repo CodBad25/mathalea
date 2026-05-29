@@ -20,6 +20,8 @@ import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Lire des abscisses décimales sous trois formes'
 export const interactifReady = true
@@ -372,6 +374,7 @@ export default class LireAbscisseDecimaleTroisFormes extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       const textedroite =

@@ -16,6 +16,8 @@ import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Lire une abscisse décimale grâce à des zooms successifs'
 
@@ -792,6 +794,7 @@ export default class LireUneAbscisseAvecZoom extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       texteCorr += mathalea2d(fenetre, objetsCorr)
       if (this.questionJamaisPosee(i, texte)) {

@@ -16,6 +16,8 @@ import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { fractionCliquable } from '../../modules/2dinteractif'
 import { context } from '../../modules/context'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Effectuer des calculs simples avec des fractions'
 export const dateDePublication = '20/11/2021'
@@ -298,6 +300,7 @@ export default class FractionsCalculsSimples extends Exercice {
             },
           },
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       // Si la question n'a jamais été posée, on l'enregistre
       if (this.questionJamaisPosee(i, a, b, listeTypeQuestions[i])) {

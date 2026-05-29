@@ -24,6 +24,8 @@ import {
   listeQuestionsToContenu,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   'Résoudre des problèmes de prix avec des aliments mettant en jeu diverses opérations'
@@ -397,6 +399,7 @@ export default class QuestionsMasses extends Exercice {
             propositions: propositionsAMC,
             enonceAvant: false,
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte

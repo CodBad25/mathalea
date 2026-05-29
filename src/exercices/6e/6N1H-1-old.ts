@@ -13,6 +13,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = "Lire l'abscisse décimale d'un point (niveau 2)"
 export const interactifReady = true
@@ -111,6 +113,7 @@ export default class LireAbscisseDecimaleBis2d extends Exercice {
         this.autoCorrectionAMC[i] = {
           propositions: [{ statut: 4, feedback: '' }],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       switch (typesDeQuestions[i]) {
         case 3:
@@ -244,6 +247,7 @@ export default class LireAbscisseDecimaleBis2d extends Exercice {
               { texte: texteCorr, statut: 0, feedback: '', sanscadre: true },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
       }
       if (this.listeQuestions.indexOf(texte) === -1) {

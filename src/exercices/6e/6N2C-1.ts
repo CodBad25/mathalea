@@ -8,6 +8,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   'Multiplier ou diviser un entier par 10, 100, 1 000... (résultat entier)'
@@ -160,6 +162,7 @@ export default class MultiplierEntierPar101001000 extends Exercice {
             },
           },
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       if (this.listeQuestions.indexOf(texte) === -1) {

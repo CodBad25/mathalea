@@ -55,6 +55,8 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -2129,6 +2131,7 @@ export default class PavagesEtTransformations extends Exercice {
           },
         ],
       }
+      this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
     }
   }
 }

@@ -18,6 +18,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const amcReady = true
 export const interactifReady = true
@@ -189,6 +191,7 @@ export default class DivisionFraction extends Exercice {
       }
       if (context.isAmc) {
         this.autoCorrectionAMC[i].enonce = texte
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].reponse = {
           texte: texteCorr,
           valeur: q,
@@ -202,6 +205,7 @@ export default class DivisionFraction extends Exercice {
             exposantNbChiffres: 0,
           },
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.questionJamaisPosee(i, a, b, q)) {
         // Si la question n'a jamais été posée, on en crée une autre

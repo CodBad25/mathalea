@@ -19,6 +19,8 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 import { Rose } from './_Rose'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const interactifReady = true
 export const interactifType = 'custom'
 export const amcReady = true
@@ -210,6 +212,7 @@ export default class ExoRose extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         i++
       }

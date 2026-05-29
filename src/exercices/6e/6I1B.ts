@@ -14,6 +14,8 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -319,6 +321,7 @@ export default class ColorierDeplacement extends Exercice {
       this.autoCorrectionAMC = [
         { propositions: [{ texte: '', statut: 3, sanscadre: true }] },
       ]
+      this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) => amcConvert(questionAMC))
     }
 
     texte +=

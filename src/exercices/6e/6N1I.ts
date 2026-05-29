@@ -5,6 +5,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const titre = 'Comparer des nombres décimaux'
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -192,6 +194,7 @@ export default class ComparerDecimaux extends Exercice {
             { texte: texteCorr, statut: 3, feedback: '', sanscadre: true },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       } else if (this.interactif) {
         this.autoCorrection[i] = {
           enonce: texte,

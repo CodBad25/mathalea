@@ -42,6 +42,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const dateDeModifImportante = '14/11/2021'
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -1364,6 +1366,7 @@ export default class ConstruireParSymetrie extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       if (this.questionJamaisPosee(i, Xmin, Xmax, Ymin, Ymax)) {

@@ -20,6 +20,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const dateDeModifImportante = '15/02/2025'
 export const amcReady = true
@@ -373,6 +375,7 @@ export default class AdditionsSoustractionsMultiplicationsPosees extends Exercic
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         i++
       }

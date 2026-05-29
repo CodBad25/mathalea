@@ -28,6 +28,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   "Déterminer la valeur d'un angle en utilisant la somme des mesures des angles dans un triangle"
@@ -1434,6 +1436,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         if (reponseInteractive.length > 1) {
           this.autoCorrectionAMC[
             i

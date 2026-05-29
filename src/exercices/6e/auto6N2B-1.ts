@@ -12,6 +12,8 @@ import Exercice from '../Exercice'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Donner différentes écritures de nombres décimaux'
 export const amcReady = true
@@ -212,6 +214,7 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
           break
         case 2: // n/100 = ... + .../100 + .../10
@@ -323,6 +326,7 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
 
           break
@@ -397,6 +401,7 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
           break
         case 4: // u = .../10
@@ -439,6 +444,7 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
 
           break
@@ -482,6 +488,7 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
           break
         case 6: // n/10 = ... + .../10 + .../100 = ...
@@ -587,6 +594,7 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
           break
         case 7: // .../100 = u + d/10 =...
@@ -651,6 +659,7 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
           break
       }

@@ -20,6 +20,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   "Déterminer le dernier chiffre d'une somme ou différence entre décimaux"
@@ -226,10 +228,12 @@ export default class DernierChiffreSommeDifférenceDécimaux extends Exercice {
         this.autoCorrectionAMC[i].enonce =
           texte.substring(0, texte.length - 1) +
           '~=$<br>Le chiffre des unités est : '
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].reponse = {
           texte: texteCorr,
           valeur: resultat,
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         const amcParam = ensureAmcParam(this, i)
         amcParam.digits = 1
         amcParam.decimals = 0

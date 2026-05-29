@@ -18,6 +18,8 @@ import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = "Lire l'abscisse entière d'un point (grands nombres)"
 export const interactifReady = true
@@ -286,6 +288,7 @@ export default class LireAbscisseEntiere2d extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       if (this.questionJamaisPosee(i, abs0, x1, x2, x3)) {

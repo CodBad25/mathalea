@@ -16,6 +16,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const amcReady = true
 export const interactifReady = true
@@ -153,6 +155,7 @@ export default class ProduitDeDecimauxAPartirProduitConnu extends Exercice {
           enonce: texte,
           reponse: { texte: texteCorr, valeur: reponse },
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         const amcParam = ensureAmcParam(this, i)
         amcParam.digits =
           nombreDeChiffresDansLaPartieEntiere(reponse) +

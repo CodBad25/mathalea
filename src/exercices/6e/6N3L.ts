@@ -15,6 +15,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = "Calculer la fraction d'un nombre"
 export const interactifReady = true
@@ -215,9 +217,11 @@ export default class FractionDUnNombre extends Exercice {
       )
       if (context.isAmc) {
         this.autoCorrectionAMC[i].enonce = texte
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].propositions = [
           { texte: texteCorr, statut: false },
         ]
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         const amcParam = ensureAmcParam(this, i)
         amcParam.digits = 2
         amcParam.decimals = 0

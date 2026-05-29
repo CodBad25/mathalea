@@ -35,6 +35,8 @@ import {
   chiffreAPositionDecimale,
   donneNomClasse,
 } from './auto6N2D'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const amcReady = true
 export const amcType = 'AMCNum'
@@ -629,7 +631,9 @@ export default class MultiplierDecimauxPar101001000V2 extends Exercice {
 
         if (context.isAmc) {
           this.autoCorrectionAMC[i].enonce = texte
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           this.autoCorrectionAMC[i].propositions = [{ texte: texteCorr }]
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           const amcParam = ensureAmcParam(this, i)
           amcParam.digits =
             nombreDeChiffresDansLaPartieEntiere(reponse) +

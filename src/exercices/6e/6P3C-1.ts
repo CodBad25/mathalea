@@ -30,6 +30,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   'Résoudre un problème relevant de la proportionnalité avec les propriétés de linéarité'
@@ -459,6 +461,7 @@ export default class ProportionnaliteParLineariteBis extends Exercice {
             options: { barreseparation: true, multicolsAll: true }, // facultatif. Par défaut, multicols est à false. Ce paramètre provoque un multicolonnage (sur 2 colonnes par défaut) : pratique quand on met plusieurs AMCNum. !!! Attention, cela ne fonctionne pas, nativement, pour AMCOpen. !!!
             propositions: propositionsAMC,
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

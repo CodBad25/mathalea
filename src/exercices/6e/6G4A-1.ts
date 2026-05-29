@@ -16,6 +16,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcType = 'AMCHybride'
@@ -305,6 +307,7 @@ export default class VocabulaireDeBaseDesAngles extends Exercice {
           options: { avecSymboleMult: true }, // facultatif. Par défaut, multicols est à false. Ce paramètre provoque un multicolonnage (sur 2 colonnes par défaut) des propositions : pratique quand on met plusieurs AMCNum. !!! Attention, cela ne fonctionne pas, nativement, pour AMCOpen. !!!
           propositions: propositionsAMC,
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       if (this.questionJamaisPosee(i, ...pointsX, ...pointsY)) {

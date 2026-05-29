@@ -7,6 +7,8 @@ import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const titre = 'Écrire correctement les grands nombres entiers'
 
 export const interactifReady = true
@@ -105,6 +107,7 @@ export default class ÉcrireNombresEntiersFormates extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       } else {
         handleAnswers(this, i, {
           reponse: {

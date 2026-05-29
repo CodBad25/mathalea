@@ -13,6 +13,8 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { egal, listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const dateDeModifImportante = '16/09/2024'
 export const titre = "Placer un point d'abscisse entière (grands nombres)"
@@ -287,6 +289,7 @@ export default class PlacerUnPointAbscisseEntiere2d extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       this.listeQuestions.push(texte)

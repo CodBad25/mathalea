@@ -15,6 +15,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Résoudre des problèmes de courses au marché'
 export const amcReady = true
@@ -407,10 +409,13 @@ export default class ProblemeCourse extends Exercice {
       if (context.isAmc) {
         // @ts-ignore this.autoCorrection[i] est bien défini
         this.autoCorrectionAMC[i].reponse.valeur = arrondi(reponse, 2)
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         // @ts-ignore this.autoCorrection[i] est bien défini
         this.autoCorrectionAMC[i].reponse.param.digits = 5
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         // @ts-ignore this.autoCorrection[i] est bien défini
         this.autoCorrectionAMC[i].reponse.param.decimals = 2
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.interactif) {
         texte += `<br> ${ajouteChampTexteMathLive(

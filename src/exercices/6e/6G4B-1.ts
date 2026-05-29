@@ -25,6 +25,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Mesurer un angle avec rapporteur intégré'
 export const interactifType = 'multiMathfield'
@@ -540,6 +542,7 @@ export default class MesurerUnAngleAvecRapporteur extends Exercice {
           // avecSymboleMult (par défaut à false) permet en cas de QCMMult d'avoir un numéro de question ET le symbole indiquant un choix multiple possible et non unique.
           propositions: propositionsAMC,
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       // On ajoute au texte de l'énoncé, la figure à main levée et la figure de l'enoncé.

@@ -9,6 +9,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = true
@@ -246,6 +248,7 @@ export default class VocabulaireDeBaseDesPolygones extends Exercice {
             // options: { ordered: false },
             propositions: propositionsAMC,
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
 
         i++

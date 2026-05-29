@@ -24,6 +24,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   'Résoudre des problèmes de proportionnalité en utilisant la linéarité simple'
@@ -279,6 +281,7 @@ function questionAchat(exo: Exercice, i: number): QuestionReturn {
         },
       ],
     }
+    exo.questionsAMC[i] = amcConvert(exo.autoCorrectionAMC[i])
   }
   return {
     qtexte: texte,
@@ -406,6 +409,7 @@ function questionRecette(exo: Exercice, i: number): QuestionReturn {
         },
       ],
     }
+    exo.questionsAMC[i] = amcConvert(exo.autoCorrectionAMC[i])
   }
   return {
     qtexte: texte,
@@ -609,6 +613,7 @@ function questionDistance(exo: Exercice, i: number): QuestionReturn {
         },
       ],
     }
+    exo.questionsAMC[i] = amcConvert(exo.autoCorrectionAMC[i])
   }
   // }
   return {
@@ -723,6 +728,7 @@ Or $${distanceReel}\\text{ km}$ est représenté par $${miseEnEvidence(texNombre
         },
       ],
     }
+    exo.questionsAMC[i] = amcConvert(exo.autoCorrectionAMC[i])
   }
   return {
     qtexte: texte,
@@ -860,6 +866,7 @@ fois $${miseEnEvidence(texNombre(liste[alea1].qtt_surface[alea3]), bleuMathalea)
         },
       ],
     }
+    exo.questionsAMC[i] = amcConvert(exo.autoCorrectionAMC[i])
   }
   // }
   return {

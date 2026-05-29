@@ -9,6 +9,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   "Déterminer reste et quotient d'une division euclidienne à partir d'une égalité"
@@ -175,6 +177,7 @@ export default class DivisionsEuclidiennesEgalite2 extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.questionJamaisPosee(i, a, b, q, r)) {
         // Si la question n'a jamais été posée, on en crée une autre
