@@ -13,6 +13,33 @@ vi.mock('../../src/lib/components/version', () => ({
 }))
 
 describe('mathaleaUpdateExercicesParamsFromUrl', () => {
+  it('should accept uppercase view value for AMC', async () => {
+    const url = 'https://coopmaths.fr/alea/?v=AMC'
+    const { mathaleaUpdateExercicesParamsFromUrl } =
+      await import('../../src/lib/mathalea')
+    const result = mathaleaUpdateExercicesParamsFromUrl(url)
+
+    expect(result.v).toBe('amc')
+  })
+
+  it('should parse legacy path query syntax /&v=AMC', async () => {
+    const url = 'https://coopmaths.fr/alea/&v=AMC'
+    const { mathaleaUpdateExercicesParamsFromUrl } =
+      await import('../../src/lib/mathalea')
+    const result = mathaleaUpdateExercicesParamsFromUrl(url)
+
+    expect(result.v).toBe('amc')
+  })
+
+  it('should parse encoded legacy path query syntax /%26v=AMC', async () => {
+    const url = 'https://coopmaths.fr/alea/%26v=AMC'
+    const { mathaleaUpdateExercicesParamsFromUrl } =
+      await import('../../src/lib/mathalea')
+    const result = mathaleaUpdateExercicesParamsFromUrl(url)
+
+    expect(result.v).toBe('amc')
+  })
+
   it('should update exercicesParams from URL', async () => {
     const url =
       'http://localhost?uuid=test-uuid&id=test-id&n=5&d=10&s=test-sup&s2=test-sup2&s3=test-sup3&s4=test-sup4&s5=test-sup5&alea=test-alea&cols=2&i=1&cd=1&v=eleve&z=2'
