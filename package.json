@@ -207,21 +207,5 @@
       "pre-commit": "git-precommit-checks"
     }
   },
-  "pnpm": {
-    "overrides": {
-      "typed-function@<0.10.6": ">=4.0.0",
-      "moment@>=2.18.0 <2.29.4": ">=2.29.4",
-      "svelte@<3.49.0": ">=3.49.0",
-      "react": "^18.3.1",
-      "react-dom": "^18.3.1"
-    },
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "apigeom",
-      "esbuild",
-      "svelte-preprocess",
-      "unrs-resolver"
-    ]
-  },
-  "packageManager": "pnpm@10.33.2"
+  "packageManager": "pnpm@11.5.0"
 }

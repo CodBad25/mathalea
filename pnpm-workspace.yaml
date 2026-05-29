@@ -1,2 +1,17 @@
 onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - apigeom
   - esbuild
+  - svelte-preprocess
+  - unrs-resolver
+allowBuilds:
+  '@parcel/watcher': true
+  apigeom: true
+  esbuild: true
+blockExoticSubdeps: false
+overrides:
+  typed-function@<0.10.6: '>=4.0.0'
+  moment@>=2.18.0 <2.29.4: '>=2.29.4'
+  svelte@<3.49.0: '>=3.49.0'
+  react: ^18.3.1
+  react-dom: ^18.3.1
