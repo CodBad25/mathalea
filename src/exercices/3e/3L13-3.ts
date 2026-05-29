@@ -139,7 +139,7 @@ function figureThales(
 }
 // fin figures début des problèmes
 
-function basket(cd: boolean) {
+function basket(_cd: boolean) {
   const x = randint(5, 15) // variables.x // nombre de paniers à trois points
   const a = randint(5, 12) // variables.a // nombres de paniers à deux points de plus que x
   const b = randint(15, 30) // variables.b // nombre de points marqués au lancer franc
@@ -181,7 +181,7 @@ function basket(cd: boolean) {
   }
 }
 
-function basket2(cd: boolean) {
+function basket2(_cd: boolean) {
   const x = randint(17, 27) // variables.x // nombre de paniers à deux points
   const a = randint(5, 12) // variables.a // nombres de paniers à trois points de moins que de paniers à 2 points
   const b = randint(15, 30) // variables.b // nombre de points marqués au lancer franc
@@ -228,7 +228,7 @@ function aliasAchatsEntier(cd: boolean) {
 function aliasAchatsReel(cd: boolean) {
   return achats(false, cd)
 }
-function achats(valeurEntiere: boolean, cd: boolean) {
+function achats(valeurEntiere: boolean, _cd: boolean) {
   let x: number
   let a: number
   let b: number
@@ -288,7 +288,7 @@ function aliasPolygoneEntier(cd: boolean) {
 function aliasPolygoneReel(cd: boolean) {
   return polyg(false, cd)
 }
-function polyg(valeurEntiere: boolean, cd: boolean) {
+function polyg(valeurEntiere: boolean, _cd: boolean) {
   const polygones = ['triangle', 'quadrilatère', 'pentagone', 'hexagone']
   const x = randint(2, 4) + (valeurEntiere ? 0 : randint(0, 45) / 5) // variables.x // longueur d'un des côtés égaux
   const a = randint(2, 5) + (valeurEntiere ? 0 : randint(0, 45) / 5) // variables.a // longueur du côté différent
@@ -338,7 +338,7 @@ function aliasProgramme1a(cd: boolean) {
 function aliasProgramme1b(cd: boolean) {
   return programme1(2, cd)
 }
-function programme1(n: 1 | 2, cd: boolean) {
+function programme1(n: 1 | 2, _cd: boolean) {
   let a: number
   let b: number
   let c: number
@@ -414,7 +414,7 @@ function aliasProgramme2a(cd: boolean) {
 function aliasProgramme2b(cd: boolean) {
   return programme2(2, cd)
 }
-function programme2(n: 1 | 2, cd: boolean) {
+function programme2(n: 1 | 2, _cd: boolean) {
   let a: number
   let b: number
   let c: number
@@ -493,7 +493,7 @@ function aliasTarifsEntier(cd: boolean) {
 function aliasTarifsReel(cd: boolean) {
   return tarifs(false, cd)
 }
-function tarifs(valeurEntiere: boolean, cd: boolean) {
+function tarifs(valeurEntiere: boolean, _cd: boolean) {
   const clubs = ['ciné-club', 'club de fitness', 'club de ski']
   let a: number
   let b: number
@@ -511,7 +511,7 @@ function tarifs(valeurEntiere: boolean, cd: boolean) {
     (c * 2) % ((b - d) * 2) !== 0
   )
   const x = Math.ceil(c / (b - d))
-  const equation = `x\\times${b}>=${c}+x\\times${texNombre(d, 1)}`
+  const equation = `x\\times${b}\\geq${c}+x\\times${texNombre(d, 1)}`
   const resolution = {
     equation,
     texteCorr: `${texteEnCouleurEtGras('Résolvons cette inéquation :', 'black')}<br>
@@ -583,7 +583,7 @@ function aliasSpectacleReel(cd: boolean) {
   return spectacle(false, cd)
 }
 
-function spectacle(valeurEntiere: boolean, cd: boolean) {
+function spectacle(valeurEntiere: boolean, _cd: boolean) {
   let a: number
   let b: number
   let c: number
@@ -637,7 +637,7 @@ function spectacle(valeurEntiere: boolean, cd: boolean) {
   }
 }
 
-function isocele(cd: boolean) {
+function isocele(_cd: boolean) {
   let a: number
   let b: number
   let c: number
@@ -719,7 +719,7 @@ function isocele(cd: boolean) {
   }
 }
 
-function thales(cd: boolean) {
+function thales(_cd: boolean) {
   let a: number
   let b: number
   let c: number
@@ -775,7 +775,7 @@ function thales(cd: boolean) {
   }
 }
 
-function thales2(cd: boolean) {
+function thales2(_cd: boolean) {
   let a: number
   let c: number
   let d: number
@@ -877,16 +877,9 @@ export default class ProblemesEnEquation extends Exercice {
       let fonctionProbleme = listeDeFonction[listeDeProblemes[i] - 1]
       if (Array.isArray(fonctionProbleme))
         fonctionProbleme = fonctionProbleme[this.sup2 ? 0 : 1]
-      let {
-        enonce,
-        intro,
-        conclusion,
-        figure,
-        verification,
-        uniteOptions,
-        x,
-        resolution,
-      } = fonctionProbleme(this.correctionDetaillee)
+      const result = fonctionProbleme(this.correctionDetaillee)
+      const { enonce, intro, conclusion, verification, x, resolution } = result
+      let { figure, uniteOptions } = result
       figure = figure ?? ''
       uniteOptions = uniteOptions ?? ['', '', '']
 
