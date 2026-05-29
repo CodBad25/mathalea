@@ -108,7 +108,7 @@ export type AutoCorrectionForAMCHybride = {
   enonceCommun: string
   blocs: AutoCorrectionBaseTypes[]
   options?: OptionsForAMCHybride
-  correction?: string // Correction pour l'ensemble (peut être facultatif, chaque bloc apportant sa propre correction (elle aussi facultative))
+  correctionCommune?: string // Correction pour l'ensemble (peut être facultatif, chaque bloc apportant sa propre correction (elle aussi facultative))
 }
 
 export type TypeKeys =

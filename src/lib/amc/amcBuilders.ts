@@ -23,7 +23,7 @@ export function buildAMCHybride(
     | AutoCorrectionForAMCOpen
   )[],
   enonceCommun: string,
-  correction: string,
+  correctionCommune: string,
   options: OptionsForAMCHybride,
 ): AutoCorrectionForAMCHybride {
   return {
@@ -31,7 +31,7 @@ export function buildAMCHybride(
     enonceCommun: enonceCommun ?? '',
     blocs,
     options: options ?? {},
-    correction: correction ?? '',
+    correctionCommune: correctionCommune ?? '',
   }
 }
 
@@ -181,23 +181,21 @@ function convertHybrideBloc(
   if (bloc.type === 'AMCNum') {
     const choice = bloc.propositions?.[0]
     const enonce = choice?.reponse?.texte ?? choice?.enonce ?? ''
-    const correction = choice?.texte ?? ''
     return buildAMCNum(
       enonce,
       legacyParamToAmcNumericChoice(
         choice?.reponse?.valeur,
         choice?.reponse?.param,
       ),
-      correction,
+      '',
     )
   }
 
   if (bloc.type === 'AMCOpen') {
     const enonce = bloc.enonce ?? ''
     const firstProp = bloc.propositions?.[0]
-    const correction = firstProp?.texte ?? ''
     const statut = firstProp?.statut
-    return buildAMCOpen(enonce, correction, {
+    return buildAMCOpen(enonce, '', {
       ...(firstProp?.sanscadre === true && { sansCadre: true }),
       ...(typeof statut === 'number' && statut > 0 && { cadreNbLines: statut }),
       ...(firstProp?.pointilles === true && { lignesEnPointillés: true }),
@@ -215,6 +213,17 @@ function convertHybrideBloc(
   return buildAMCQcm(enonce, propositions)
 }
 
+function extractHybrideParentCorrection(item: AutoCorrectionAMC): string {
+  const blocs = item.propositions ?? []
+  const firstNonQcmBloc = blocs.find(
+    (bloc) => bloc.type === 'AMCNum' || bloc.type === 'AMCOpen',
+  )
+
+  if (firstNonQcmBloc == null) return ''
+
+  return firstNonQcmBloc.propositions?.[0]?.texte ?? ''
+}
+
 // ---------------------------------------------------------------------------
 // Fonction principale de conversion
 // ---------------------------------------------------------------------------
@@ -226,6 +235,18 @@ function convertHybrideBloc(
  * Un indicateur `amcType` peut être fourni pour lever l'ambiguïté lorsque
  * la structure de l'item ne suffit pas à le déterminer (ex. : AMCNum dont
  * la valeur n'est pas encore dans `reponse.valeur`).
+ * // Migration d'un ancien exercice (AMCOpen) :
+this.questionAMC[i] = amcConvert({
+  enonce: texte,
+  propositions: [{ texte: '', statut: 3, sanscadre: true }],
+})
+
+// Migration explicite avec type hint (AMCNum sans valeur dans la structure) :
+this.questionAMC[i] = amcConvert(this.autoCorrectionAMC[i], 'AMCNum')
+
+// Nouvel exercice directement avec les builders :
+this.questionAMC[i] = buildAMCNum(enonce, { valeur: String(result), digits: 3, decimals: 1 }, correction)
+ * 
  */
 export function amcConvert(
   item: AutoCorrectionAMC,
@@ -236,6 +257,7 @@ export function amcConvert(
 
   if (resolvedType === 'AMCHybride') {
     const blocs = (item.propositions ?? []).map(convertHybrideBloc)
+    const correctionCommune = extractHybrideParentCorrection(item)
     const options: OptionsForAMCHybride = {
       ...(item.enonceAvant !== undefined && { enonceAvant: item.enonceAvant }),
       ...(item.enonceAvantUneFois !== undefined && {
@@ -248,7 +270,7 @@ export function amcConvert(
         multicols: item.options.multicols,
       }),
     }
-    return buildAMCHybride(blocs, item.enonce ?? '', '', options)
+    return buildAMCHybride(blocs, item.enonce ?? '', correctionCommune, options)
   }
 
   if (resolvedType === 'AMCNum') {
