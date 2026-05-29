@@ -28,6 +28,8 @@ import ce from '../../lib/interactif/comparisonFunctions'
 import { ordreAlphabetique } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Calculer une longueur avec le théorème de Pythagore'
 export const amcType = 'AMCHybride'
@@ -438,6 +440,7 @@ export default class Pythagore2D extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
       } else {
         const hypotenuse = [

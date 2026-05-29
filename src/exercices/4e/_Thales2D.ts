@@ -18,6 +18,8 @@ import Grandeur from '../../modules/Grandeur'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -381,6 +383,7 @@ export default class Thales2D extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte

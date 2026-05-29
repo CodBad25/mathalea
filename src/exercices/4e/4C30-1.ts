@@ -13,6 +13,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const dateDeModifImportante = '06/10/2025'
 export const interactifReady = true
@@ -339,6 +341,7 @@ export default class PuissancesEncadrement extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte

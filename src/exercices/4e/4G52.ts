@@ -15,6 +15,8 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 /**
  * Convertit un angle en degrés vers des radians
@@ -397,6 +399,7 @@ export default class ReperagePaveDroit extends Exercice {
           },
           propositions: propositionsAMC,
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       if (this.questionJamaisPosee(i, x, y, z)) {

@@ -17,6 +17,8 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const amcReady = true
 export const amcType = 'AMCNum'
@@ -329,6 +331,7 @@ export default class ExerciceAdditionnerOuSoustraireDesFractions extends Exercic
             },
           },
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       this.listeQuestions.push(texte)

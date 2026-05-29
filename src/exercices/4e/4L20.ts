@@ -21,6 +21,8 @@ import {
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Résoudre une équation du premier degré'
 export const interactifReady = true
@@ -395,6 +397,7 @@ export default class ExerciceEquation1 extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         i++
       }

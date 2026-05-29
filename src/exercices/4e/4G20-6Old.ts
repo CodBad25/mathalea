@@ -8,6 +8,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Encadrer une racine carrée et en donner un arrondi'
 export const interactifReady = true
@@ -208,6 +210,7 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           } else {
             this.autoCorrectionAMC[i] = {
               enonce: '',
@@ -267,6 +270,7 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
         }
         this.listeQuestions[i] = texte

@@ -26,6 +26,8 @@ import { sp } from '../../lib/outils/outilString'
 import type { IExercice } from '../../lib/types'
 import { mathalea2d } from '../../modules/mathalea2d'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const titre =
   "Déterminer la racine carrée d'un carré parfait (calcul mental)"
 export const dateDeModifImportante = '04/02/2026'
@@ -202,14 +204,18 @@ export default class RacineCareeDeCarresParfaits extends Exercice {
           setReponse(this, i, a)
           if (listeQuestions[i] === 1) {
             this.autoCorrectionAMC[i].enonce = `$\\sqrt{${c}}=\\dots$`
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
             this.autoCorrectionAMC[i].propositions = [
               { texte: `$\\sqrt{${c}}=${a}$`, statut: false },
             ]
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           } else {
             this.autoCorrectionAMC[i].enonce = `$${c} = \\dots^2$`
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
             this.autoCorrectionAMC[i].propositions = [
               { texte: `$${c}=${a}^2$`, statut: false },
             ]
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
           this.autoCorrectionAMC[i].reponse!.param = {
             digits: 2,

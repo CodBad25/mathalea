@@ -40,6 +40,8 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 import { transfoPoly } from './4G12-1'
 import { CHEMINS_PREDEFINIS } from './_4G12-paths'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Trouver une série de transformations'
 export const interactifReady = true
@@ -632,6 +634,7 @@ export default class SerieDeTransformations extends Exercice {
       i < this.nbQuestions && cpt < 10;
     ) {
       this.autoCorrectionAMC[i] = {}
+      this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       let chemin: number[]
 
       const polys: (Polygone | Vide2d)[] = []
@@ -886,6 +889,7 @@ export default class SerieDeTransformations extends Exercice {
             ],
           },
         ]
+        this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) => amcConvert(questionAMC))
       } else {
         handleAnswers(this, i, {
           reponse: {
