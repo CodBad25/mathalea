@@ -67,6 +67,9 @@ cache:
 
 .install_dependenciesPDF:
   before_script:
+    - npm install -g corepack@latest
+    - corepack enable
+    - corepack prepare pnpm@latest-10 --activate
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - lualatex -v
@@ -83,6 +86,9 @@ cache:
 
 .install_dependenciesPDFDNB:
   before_script:
+    - npm install -g corepack@latest
+    - corepack enable
+    - corepack prepare pnpm@latest-10 --activate
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - lualatex -v
@@ -101,6 +107,9 @@ cache:
 
 .install_dependenciesPDFBAC:
   before_script:
+    - npm install -g corepack@latest
+    - corepack enable
+    - corepack prepare pnpm@latest-10 --activate
     # - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - lualatex -v
@@ -757,42 +766,6 @@ testExosModifiedInteractif:
     - INTERACTIF_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest tests/unit/report-interactif.test.ts --run
   rules:
     # Se lance uniquement si le pipeline est déclenché par une Merge Request
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: always
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: always
-    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: manual
-    - when: never
-
-testExosModifiedLatex:
-  extends: .testCIPDF
-  timeout: 3h
-  script:
-    - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
-    - git checkout FETCH_HEAD
-    - |
-      COMMIT_COUNT=$(git rev-list --count HEAD)
-      MAX_COMMITS=5
-
-      if [ "$COMMIT_COUNT" -lt "$MAX_COMMITS" ]; then
-        DIFF_BASE="HEAD~$((COMMIT_COUNT - 1))"
-      else
-        DIFF_BASE="HEAD~$MAX_COMMITS"
-      fi
-      echo "Comparing from $DIFF_BASE to HEAD"
-
-      if git rev-parse --verify "$DIFF_BASE" >/dev/null 2>&1; then
-        echo "Comparing from $DIFF_BASE to HEAD"
-        CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
-      else
-        echo "⚠️ Le commit $DIFF_BASE n'est pas disponible (clone trop peu profond ?)"
-        CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
-      fi
-
-    - echo "$CHANGED_FILES"
-    - CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:pdfexports
-  rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
     - if: $CI_COMMIT_BRANCH == "main"
