@@ -70,6 +70,7 @@
     "test:e2e": "pnpm test:e2e:all",
     "test:e2e:dev": "vitest --config tests/e2e/vitest.config.dev.js --watch",
     "test:e2e:all": "NIV='' vitest --config tests/e2e/vitest.config.all.js --run",
+    "test:e2e:all_exercises": "vitest --config tests/e2e/vitest.config.all_exercises.js tests/all_exercises/all_exercises.test.ts --run",
     "test:e2e:interactivity": "vitest --config tests/e2e/vitest.config.interactivity.js --run",
     "test:e2e:pdfexports": "vitest --config tests/e2e/vitest.config.pdfexports.js --run",
     "test:e2e:latex_compile": "vitest --config tests/e2e/vitest.config.latex_compile.js --run",
