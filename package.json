@@ -72,6 +72,7 @@
     "test:e2e:all": "NIV='' vitest --config tests/e2e/vitest.config.all.js --run",
     "test:e2e:interactivity": "vitest --config tests/e2e/vitest.config.interactivity.js --run",
     "test:e2e:pdfexports": "vitest --config tests/e2e/vitest.config.pdfexports.js --run",
+    "test:e2e:latex_compile": "vitest --config tests/e2e/vitest.config.latex_compile.js --run",
     "test:e2e:console_errors": "vitest --config tests/e2e/vitest.config.console_errors.js --run",
     "test:e2e:console_errors:debug": "vitest --config tests/e2e/vitest.config.console_errors.debug.js --run",
     "test:e2e:views": "vitest --config tests/e2e/vitest.config.view.js --run",
