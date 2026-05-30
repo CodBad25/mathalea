@@ -21,6 +21,8 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { ajouterAide } from '../../lib/outils/enrichissements'
 import { fraction } from '../../modules/fractions'
 import { representationFraction } from '../../modules/representationsFractions'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   'Encadrer une fraction entre deux nombres entiers consécutifs'
@@ -199,6 +201,7 @@ export default class EncadrerFractionEntre2Entiers extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         } else {
           handleAnswers(
             this,

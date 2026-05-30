@@ -18,6 +18,8 @@ import Exercice from '../Exercice'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreIndiceeDepuisChiffre } from '../../lib/outils/outilString'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Multiplier ou/et diviser des fractions'
 export const amcReady = true
@@ -242,6 +244,7 @@ export default class ExerciceMultiplierFractions extends Exercice {
               },
             },
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
 
         // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras

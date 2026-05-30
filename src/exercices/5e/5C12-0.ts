@@ -20,6 +20,8 @@ import { listeDesDiviseurs } from '../../lib/outils/primalite'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Calculer en utilisant les priorités opératoires'
 export const amcReady = true
@@ -431,7 +433,9 @@ export default class Priorites extends Exercice {
           // On est en context AMC, on est passé par setReponse, pas de this.autoCorrection[i] !
           this.autoCorrectionAMC[i].enonce =
             texte.substring(0, texte.length - 1) + '~=$'
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           this.autoCorrectionAMC[i].propositions = [{ texte: texteCorr }]
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           const reponse = this.autoCorrectionAMC[i].reponse?.valeur
           const amcParam = ensureAmcParam(this, i)
           if (reponse != null) {

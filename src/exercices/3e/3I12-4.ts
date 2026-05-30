@@ -11,6 +11,8 @@ import {
 } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const titre = 'Comprendre un script Scratch - 2'
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -284,6 +286,7 @@ export default class ComprendreScriptListeMultiples extends Exercice {
           enonceAvant: false, // EE : ce champ est facultatif et permet (si false) de supprimer l'énoncé ci-dessus avant la numérotation de chaque question.
           propositions: [],
         }
+        this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
       }
       this.consigne =
         'Lire ce script Scratch associé à un lutin et répondre ensuite'

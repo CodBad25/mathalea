@@ -12,6 +12,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = "Déterminer le dernier chiffre d'un produit entre décimaux"
 export const dateDePublication = '28/01/2026'
@@ -114,6 +116,7 @@ export default class DernierChiffreProduitDécimaux extends Exercice {
           enonce: texte,
           reponse: { texte: texteCorr, valeur: resultat },
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         const amcParam = ensureAmcParam(this, i)
         amcParam.digits = 1
         amcParam.decimals = 0

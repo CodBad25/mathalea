@@ -17,6 +17,8 @@ import {
   rienSi1,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   'Additionner ou soustraire une expression entre parenthèses'
@@ -233,6 +235,7 @@ export default class ParenthesesPrecedesDeMoinsOuPlus extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       if (this.questionJamaisPosee(i, listeTypeDeQuestions[i], a, b, k)) {

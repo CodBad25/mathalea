@@ -1,7 +1,6 @@
 import seedrandom from 'seedrandom'
 import { ExamTemplateEngine } from '../components/setup/latex/LatexConfig'
 import Exercice from '../exercices/Exercice'
-import genericPreamble from '../lib/latex/preambule.tex?raw'
 import {
   loadFonts,
   loadPackagesFromContent,
@@ -14,6 +13,7 @@ import {
   type IExercice,
   type IExerciceStatique,
 } from '../lib/types'
+import genericPreamble from './latex/preambule.tex?raw'
 import { decodeExosGrouping, findExoPosition } from './LatexGroup'
 import type {
   ExoContent,

@@ -31,6 +31,8 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -624,6 +626,7 @@ export default class CalculDeLongueur extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (context.isHtml && !context.isAmc) {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.longueur, {

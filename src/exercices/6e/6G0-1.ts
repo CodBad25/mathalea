@@ -11,6 +11,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const titre = 'Utiliser la notation de droites, segments et demi-droites'
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -136,6 +138,7 @@ export default class NotationSegmentDroiteDemiDroite extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       if (this.listeQuestions.indexOf(texte) === -1) {

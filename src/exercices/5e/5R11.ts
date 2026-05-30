@@ -21,6 +21,8 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = "Lire l'abscisse relative d'un point"
 export const interactifReady = true
@@ -300,6 +302,7 @@ export default class LireAbscisseRelative extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       const texteCorr = mathalea2d(

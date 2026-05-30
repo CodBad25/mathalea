@@ -20,6 +20,8 @@ import { context } from '../../modules/context'
 
 import type { MathfieldElement } from 'mathlive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Recomposer un décimal ou un entier'
 export const interactifReady = true
@@ -679,6 +681,7 @@ export default class RecomposerEntierC3 extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
 
         texte +=

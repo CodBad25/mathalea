@@ -7,6 +7,8 @@ import { labyrinthe } from '../../modules/Labyrinthe'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Parcourir un labyrinthe de numération décimale'
 export const interactifReady = true
@@ -285,6 +287,7 @@ export default class ExerciceLabyrintheNumeration extends Exercice {
           ],
         },
       ]
+      this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) => amcConvert(questionAMC))
     }
     this.listeQuestions.push(texte)
     this.listeCorrections.push(texteCorr)

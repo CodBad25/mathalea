@@ -14,6 +14,8 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { egalOuApprox } from '../../lib/outils/ecritures'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = "Augmenter ou diminuer d'un pourcentage"
 export const interactifReady = true
@@ -407,6 +409,7 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
             // @ts-expect-error
             propositions: propositionsAMC,
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

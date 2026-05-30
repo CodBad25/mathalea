@@ -15,6 +15,8 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = "Écrire la liste de tous les diviseurs d'un entier - V2"
 export const interactifReady = true
@@ -312,6 +314,7 @@ export default class ListeDesDiviseurs5e extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       texte += ajouteChampTexteMathLive(
         this,

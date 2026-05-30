@@ -16,6 +16,8 @@ import {
   quotientier,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Lire des abscisses fractionnaires'
 export const interactifReady = true
@@ -517,6 +519,7 @@ export default class LireAbscissesFractionnairesComplexes extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         i++
       }

@@ -13,6 +13,8 @@ import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { texNombre } from '../../lib/outils/texNombre'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Associer puissances de 10 et préfixes'
 export const interactifReady = true
@@ -123,9 +125,11 @@ export default class PuissancesEtPrefixe extends Exercice {
           this.sup === 1
             ? `Quel est le préfixe correspondant à $10^{${exposant}}$ ? $\\ldots$ `
             : `Quelle est la puissance de 10 correspondant au préfixe ${prefixe} ? $\\ldots$ `
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].propositions = [
           { statut: 1, sanscadre: true, texte: texteCorr },
         ]
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.questionJamaisPosee(i, exposant)) {
         this.listeQuestions[i] = texte

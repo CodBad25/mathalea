@@ -12,6 +12,8 @@ import {
 import Exercice from '../Exercice'
 
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const dateDePublication = '28/09/2022'
 export const titre = 'Encadrer un décimal'
@@ -236,6 +238,7 @@ export default class EncadrerUnDecimal extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       this.listeQuestions.push(texte)
       this.listeCorrections.push(texteCorr)

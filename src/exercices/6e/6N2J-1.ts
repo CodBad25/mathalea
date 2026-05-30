@@ -13,6 +13,8 @@ import { context } from '../../modules/context'
 import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -222,7 +224,9 @@ export default class DivisionsEuclidiennesEgaliteFondamentale extends Exercice {
         this.autoCorrectionAMC[i].enonce =
           "Poser et effectuer la division euclidienne suivante puis donner l'égalité fondamentale correspondante.<br>" +
           texte
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].propositions = []
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].propositions![0].texte = texteCorr
         this.autoCorrectionAMC[i].propositions![0].sanscadre = false
         this.autoCorrectionAMC[i].propositions![0].statut = 3

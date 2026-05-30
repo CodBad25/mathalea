@@ -14,6 +14,8 @@ import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { context } from '../../modules/context'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Additionner deux fractions'
 export const interactifReady = true
@@ -261,6 +263,7 @@ export default class ExerciceAdditionnerDesFractions extends Exercice {
             },
           },
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       this.listeQuestions.push(texte)

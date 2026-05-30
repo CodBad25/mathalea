@@ -8,6 +8,8 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   'Écrire un nombre à partir de son nombre de dizaines, de centaines, de milliers...'
@@ -194,6 +196,7 @@ export default class ExerciceNumerationEntier extends Exercice {
             },
           },
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en crée une autre

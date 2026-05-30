@@ -13,6 +13,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   'Effectuer des calculs avec des puissances de 10 uniquement'
@@ -511,10 +513,13 @@ export default class PuissancesDeDix extends Exercice {
       if (context.isAmc) {
         // setReponse(this, i, reponseInteractive, { formatInteractif: 'puissance', basePuissance: 10, exposantPuissance: exposantInteractif })
         this.autoCorrectionAMC[i] = {}
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].enonce = `${texte}\n`
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].options = {
           ordered: false,
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].propositions = [
           {
             texte: `$10^{${exposantAMC[0]}}$`,
@@ -533,6 +538,7 @@ export default class PuissancesDeDix extends Exercice {
             statut: false,
           },
         ]
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (
         this.questionJamaisPosee(i, exp.map(String).join(), typesDeQuestions)

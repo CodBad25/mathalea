@@ -6,6 +6,8 @@ import { randint } from '../../../modules/outils'
 
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
+import { amcConvert } from '../../../lib/amc/amcBuilders'
+
 export const titre = 'Trouver la fraction (définition)'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -89,6 +91,7 @@ export default class FractionCommeFacteurManquant extends ExerciceSimple {
           },
         ],
       }
+      this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
     }
   }
 }

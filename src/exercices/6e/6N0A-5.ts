@@ -7,6 +7,8 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = "Déterminer le dernier chiffre d'un calcul entre entiers"
 export const amcReady = true
@@ -124,6 +126,7 @@ export default class DernierChiffre extends Exercice {
           enonce: texte,
           propositions: [{ texte: texteCorr }],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         const amcParam = ensureAmcParam(this, i)
         amcParam.digits = 1
         amcParam.decimals = 0

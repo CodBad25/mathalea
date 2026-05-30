@@ -27,6 +27,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Étudier des fonctions linéaires'
 export const interactifType = 'mathLive'
@@ -532,6 +534,7 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
           elementAmc.propositions![0].propositions![0].texte = texteCorr
           elementAmc.options = { multicolsAll: true }
           this.autoCorrectionAMC[i] = elementAmc
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
         const textCorrSplit = texteCorr.split('=')

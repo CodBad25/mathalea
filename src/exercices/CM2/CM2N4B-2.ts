@@ -1,6 +1,8 @@
 import { listeQuestionsToContenu } from '../../modules/outils'
 import TrouverSolutionMathador from '../5e/_TrouverSolutionMathador'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const titre = 'Jouer au "compte est bon"'
 export const amcReady = true
 export const interactifReady = false
@@ -46,6 +48,7 @@ export default class LeCompteEstBonV3 extends Exercice {
       i < this.nbQuestions && cpt < 50;
     ) {
       this.autoCorrectionAMC[i] = {}
+      this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       solutionMathador = TrouverSolutionMathador(
         minSolution,
         maxSolution ?? 100,
@@ -70,6 +73,7 @@ export default class LeCompteEstBonV3 extends Exercice {
           enonce: texte,
           propositions: [{ texte: texteCorr, statut: 4, feedback: '' }],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         i++
       }
       cpt++

@@ -26,6 +26,8 @@ import {
 import { Pavage, pavage } from '../../modules/Pavage'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   "Trouver l'image d'une figure par une rotation dans un pavage"
@@ -457,6 +459,7 @@ export default class PavageEtRotation2D extends Exercice {
           enonce: consigneAMC,
           propositions: propositionsAMC,
         }
+        this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
       }
     }
 

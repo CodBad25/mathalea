@@ -20,6 +20,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Lire des données représentées dans un diagramme'
 export const interactifReady = true
@@ -474,6 +476,7 @@ export default class LireUnDiagramme extends Exercice {
       } else {
         // en AMC
         this.autoCorrectionAMC[q].enonce = ''
+        this.questionsAMC[q] = amcConvert(this.autoCorrectionAMC[q])
         this.autoCorrectionAMC[q].propositions = [
           {
             type: 'qcmMono',
@@ -494,6 +497,7 @@ export default class LireUnDiagramme extends Exercice {
             options: { lastChoice: 2 },
           },
         ]
+        this.questionsAMC[q] = amcConvert(this.autoCorrectionAMC[q])
       }
 
       if (this.questionJamaisPosee(q, effectiftotal)) {

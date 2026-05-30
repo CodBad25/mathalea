@@ -24,6 +24,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const titre = 'Effectuer des liens entre angles et parallélisme'
 export const dateDePublication = '15/01/2022'
 export const dateDeModifImportante = '24/12/2025'
@@ -2051,6 +2053,7 @@ export default class ExercicesAnglesAIC extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         } else {
           this.autoCorrection[i] = {
             enonce: exercice.texte,

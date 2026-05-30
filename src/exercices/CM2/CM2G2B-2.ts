@@ -28,6 +28,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const dateDeModifImportante = '17/02/2025'
 export const amcReady = true
@@ -595,8 +597,11 @@ export default class ParalleleEtPerpendiculaires extends Exercice {
       )
       /** ********************** AMC Open *****************************/
       this.autoCorrectionAMC[i] = {}
+      this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       this.autoCorrectionAMC[i].options = { ordered: false }
+      this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       this.autoCorrectionAMC[i].enonce = enonce + '<br>'
+      this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       this.autoCorrectionAMC[i].propositions = [
         {
           texte: correction,
@@ -604,6 +609,7 @@ export default class ParalleleEtPerpendiculaires extends Exercice {
           sanscadre: true,
         },
       ]
+      this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       // this.autoCorrection = [{ enonce: enonce + '<br>', propositions: [{ texte: correction, statut: 3, sanscadre: true }] }]
       /****************************************************/
       correction += anim.htmlBouton(this.numeroExercice ?? 0, i)

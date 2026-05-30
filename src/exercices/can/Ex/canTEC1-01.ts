@@ -1,7 +1,8 @@
+import { amcConvert } from '../../../lib/amc/amcBuilders'
 import { Complexe } from '../../../lib/mathFonctions/Complexe'
-import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+
 export const titre = 'Somme de nombres complexes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -34,45 +35,45 @@ export default class SommeDeComplexes extends ExerciceSimple {
     this.question = `On donne $~~a = ${z1.toString()}~~$ et $~~b = ${z2.toString()}$.<br>Calcule $a + b$.`
     this.correction = `$${z1.toString()} + ${z2.toString()} = ${z1.add(z2).tex()}$`
     this.reponse = z1.add(z2)
-    if (context.isAmc)
-      this.autoCorrectionAMC[0] = {
-        enonce: this.question,
-        propositions: [
-          {
-            type: 'AMCNum',
-            propositions: [
-              {
-                texte: this.correction,
-                reponse: {
-                  valeur: Number(z1.add(z2).re),
-                  param: {
-                    digits: 2,
-                    decimals: 0,
-                    signe: true,
-                    approx: 0,
-                  },
+    this.autoCorrectionAMC[0] = {
+      enonce: this.question,
+      propositions: [
+        {
+          type: 'AMCNum',
+          propositions: [
+            {
+              texte: this.correction,
+              reponse: {
+                valeur: Number(z1.add(z2).re),
+                param: {
+                  digits: 2,
+                  decimals: 0,
+                  signe: true,
+                  approx: 0,
                 },
               },
-            ],
-          },
-          {
-            type: 'AMCNum',
-            propositions: [
-              {
-                texte: '',
-                reponse: {
-                  valeur: Number(z1.add(z2).im),
-                  param: {
-                    digits: 2,
-                    decimals: 0,
-                    signe: true,
-                    approx: 0,
-                  },
+            },
+          ],
+        },
+        {
+          type: 'AMCNum',
+          propositions: [
+            {
+              texte: '',
+              reponse: {
+                valeur: Number(z1.add(z2).im),
+                param: {
+                  digits: 2,
+                  decimals: 0,
+                  signe: true,
+                  approx: 0,
                 },
               },
-            ],
-          },
-        ],
-      }
+            },
+          ],
+        },
+      ],
+    }
+    this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
   }
 }

@@ -7,6 +7,8 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   'Additionner deux entiers relatifs dans un tableau à double entrée'
@@ -127,6 +129,7 @@ export default class ExerciceTableauAdditionsRelatifs extends Exercice {
           },
         ],
       }
+      this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
     }
     listeQuestionsToContenu(this)
   }

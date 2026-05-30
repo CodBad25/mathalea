@@ -26,6 +26,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 const cleaner = generateCleaner(['parentheses', 'espaces'])
 export const titre =
   'Appliquer les propriétés de conservation de la symétrie axiale'
@@ -225,6 +227,7 @@ export default class SymetrieAxialeConservation1 extends Exercice {
           propositions: [],
           options: { numerotationEnonce: true },
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       texte =
@@ -609,8 +612,11 @@ export default class SymetrieAxialeConservation1 extends Exercice {
           "Pour chaque question ci-dessous, placer sur cette figure, l'objet mathématique cité puis tracer son symétrique. Répondre ensuite à la question.<br>" +
           enonceAMC +
           '<br>'
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].enonceAvant = false
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].enonceAvantUneFois = true
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       texte += enonceAMC

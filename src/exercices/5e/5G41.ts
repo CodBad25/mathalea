@@ -35,6 +35,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Construire des quadrilatères particuliers'
 export const dateDeModifImportante = '18/04/2024'
@@ -769,12 +771,15 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
       }
 
       this.autoCorrectionAMC[0] = {}
+      this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
       this.autoCorrectionAMC[0].options = {
         ordered: true,
         barreseparation: true,
         multicolsAll: true,
       }
-      this.autoCorrectionAMC[0].enonce = '' // texte
+      this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
+      this.autoCorrectionAMC[0].enonce = ''
+      this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0]) // texte
       this.autoCorrectionAMC[0].propositions = [
         {
           type: 'AMCOpen',
@@ -813,6 +818,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
           enonce: 'Chiffre de la case du sommet construit, dans la cible 2',
         },
       ]
+      this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
 
       if (typeDeQuestion === 2) {
         const propositionsQcm5 = []

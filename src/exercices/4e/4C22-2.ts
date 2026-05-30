@@ -15,6 +15,8 @@ import Exercice from '../Exercice'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Diviser des fractions'
 export const amcReady = true
@@ -208,6 +210,7 @@ export default class ExerciceDiviserFractions extends Exercice {
               },
             },
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

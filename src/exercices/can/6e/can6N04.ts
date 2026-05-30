@@ -5,6 +5,7 @@ import Exercice from '../../Exercice'
 
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { latex2d } from '../../../lib/2d/textes'
+import { amcConvert } from '../../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { texFractionReduite } from '../../../lib/outils/deprecatedFractions'
@@ -120,7 +121,7 @@ export default class AbscisseFractionnaire extends Exercice {
         this.listeCorrections[i] = this.correction
 
         if (context.isAmc) {
-          if (this.version === '6e')
+          if (this.version === '6e') {
             this.autoCorrectionAMC[i] = {
               enonce: this.question,
               options: { multicols: true },
@@ -165,7 +166,8 @@ export default class AbscisseFractionnaire extends Exercice {
                 },
               ],
             }
-          else
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
+          } else {
             this.autoCorrectionAMC[i] = {
               enonce: this.question,
               propositions: [
@@ -190,6 +192,8 @@ export default class AbscisseFractionnaire extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
+          }
         }
 
         i++

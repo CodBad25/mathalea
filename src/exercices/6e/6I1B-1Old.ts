@@ -14,6 +14,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 /**
  * Calcule le cosinus d'un angle en degrés
  */
@@ -387,6 +389,7 @@ export default class ColorierDeplacementV2Old extends Exercice {
       this.autoCorrectionAMC = [
         { propositions: [{ texte: '', statut: 3, sanscadre: true }] },
       ]
+      this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) => amcConvert(questionAMC))
     }
 
     texte +=

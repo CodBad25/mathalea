@@ -12,6 +12,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   'Résoudre des problèmes avec des puissances de 10 et des conversions'
@@ -313,6 +315,7 @@ export default class ProblemesPuissancesDe10EtConversions extends Exercice {
               '<br>Indiquer votre raisonnement, vos calculs et votre réponse ci-dessous.',
             propositions: [{ statut: 3, sanscadre: false, texte: texteCorr }],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

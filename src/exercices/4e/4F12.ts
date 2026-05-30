@@ -22,6 +22,8 @@ import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha, sp } from '../../lib/outils/outilString'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   "Résoudre un problème s'appuyant sur la lecture d'une représentation graphique"
@@ -212,6 +214,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                   },
                 ],
               }
+              this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
             }
           }
           break
@@ -337,6 +340,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                   },
                 ],
               }
+              this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
             }
           }
           break
@@ -530,6 +534,7 @@ c) Quelle distance a-t-elle parcourue au total ? %{champ3}`,
                   },
                 ],
               }
+              this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
             }
           }
           break
@@ -717,6 +722,7 @@ c) Quelle distance a-t-elle parcourue au total ? %{champ3}`,
                   },
                 ],
               }
+              this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
             }
           }
           break

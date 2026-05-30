@@ -5,6 +5,8 @@ import { shuffle } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Placer des points dans un repère'
 export const dateDePublication = '27/10/2023'
@@ -168,6 +170,7 @@ class ReperagePointDuPlan extends ExerciceSimple {
           },
         ],
       }
+      this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
     }
   }
 

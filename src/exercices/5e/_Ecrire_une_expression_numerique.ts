@@ -18,6 +18,8 @@ import {
 import Exercice from '../Exercice'
 import ChoisirExpressionLitterale from './_Choisir_expression_litterale'
 import choisirExpressionNumerique from './_choisirExpressionNumerique'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const interactifReady = true
 export const interactifType = ['mathLive', 'listeDeroulante']
@@ -145,6 +147,7 @@ export default class EcrireUneExpressionNumerique extends Exercice {
           ))
       ) {
         this.autoCorrectionAMC[i] = {}
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         switch (this.version) {
           case 1:
             this.consigne =
@@ -317,6 +320,7 @@ export default class EcrireUneExpressionNumerique extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           } else {
             texte +=
               '<br>' +
@@ -355,6 +359,7 @@ export default class EcrireUneExpressionNumerique extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           } else {
             texte +=
               sp(10) +
@@ -395,6 +400,7 @@ export default class EcrireUneExpressionNumerique extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           } else {
             texte +=
               '<br>' +

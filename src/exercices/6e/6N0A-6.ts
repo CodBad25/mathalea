@@ -27,6 +27,8 @@ import {
 
 import DragAndDrop from '../../lib/interactif/DragAndDrop'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Écrire un nombre entier en chiffres ou en lettres'
 export const amcReady = true
@@ -394,6 +396,7 @@ export default class EcrirePetitsNombresEntiers extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         } else {
           // Mise en place du drag & drop si case à cocher correspondante
           if (this.sup4) {
@@ -464,6 +467,7 @@ export default class EcrirePetitsNombresEntiers extends Exercice {
           setReponse(this, i, NombreAEcrire) // Utile uniquement pour l'AMC
           this.autoCorrectionAMC[i].enonce =
             this.consigne + '\\\\' + nombreEnLettres(NombreAEcrire) + '\\\\'
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         } else {
           handleAnswers(this, i, {
             reponse: {

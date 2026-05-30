@@ -52,6 +52,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const dateDeModifImportante = '11/04/2025'
 export const interactifReady = true
@@ -1204,6 +1206,7 @@ export default class Transformations extends Exercice {
               },
             ],
           }
+          this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
         } else {
           this.autoCorrectionAMC[0] = {
             enonce: graphique,
@@ -1275,6 +1278,7 @@ export default class Transformations extends Exercice {
               },
             ],
           }
+          this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
         }
       }
 

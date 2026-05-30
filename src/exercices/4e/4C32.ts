@@ -21,6 +21,8 @@ import {
 } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Associer un nombre décimal à sa notation scientifique'
 export const interactifReady = true
@@ -221,14 +223,17 @@ export default class NotationScientifique extends Exercice {
             this.amcType = 'AMCNum'
             this.autoCorrectionAMC[i].enonce =
               'Donner la notation scientifique du nombre ' + texteAMC
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           } else {
             this.amcType = 'qcmMono'
             this.autoCorrectionAMC[i].enonce =
               "Donner l'écriture décimale du nombre " + texteAMC
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
             this.autoCorrectionAMC[i].options = {
               ordered: false,
               lastChoice: 5,
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
             this.autoCorrectionAMC[i].propositions = [
               {
                 texte: `$${decimalstring}$`,
@@ -247,6 +252,7 @@ export default class NotationScientifique extends Exercice {
                 statut: false,
               },
             ]
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
         }
         i++

@@ -14,6 +14,8 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { context } from '../../modules/context'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const dateDePublication = '12/10/2022'
 export const dateDeModifImportante = '29/10/2024'
@@ -192,6 +194,7 @@ export default class ExerciceLabyrinthePremiers3e extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       if (

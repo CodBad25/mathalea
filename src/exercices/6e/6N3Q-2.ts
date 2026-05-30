@@ -16,6 +16,8 @@ import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMath
 import { egalOuApprox } from '../../lib/outils/ecritures'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = "Augmenter ou diminuer d'un pourcentage"
 export const interactifReady = true
@@ -395,6 +397,7 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
             options: { multicols: true, barreseparation: true }, // facultatif. Par défaut, multicols est à false. Ce paramètre provoque un multicolonnage (sur 2 colonnes par défaut) : pratique quand on met plusieurs AMCNum. !!! Attention, cela ne fonctionne pas, nativement, pour AMCOpen. !!!
             propositions: propositionsAMC,
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         } else {
           handleAnswers(
             this,

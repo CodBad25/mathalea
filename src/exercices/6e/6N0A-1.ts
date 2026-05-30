@@ -16,6 +16,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Effectuer addition de deux entiers'
 export const amcReady = true
@@ -113,9 +115,11 @@ export default class ExerciceTablesAdditions extends Exercice {
           String(listeTypeDeQuestions[i] === 'somme' ? a + b : b),
         )
         this.autoCorrectionAMC[i].enonce = texte
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].propositions = [
           { texte: texteCorr, statut: '' },
         ]
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         const amcParam = ensureAmcParam(this, i)
         amcParam.digits = Math.max(
           2,

@@ -28,6 +28,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Construire des parallélogrammes'
 export const dateDeModifImportante = '18/04/2024'
@@ -387,12 +389,15 @@ export default class ConstructionsParallelogrammes extends Exercice {
         }
 
         this.autoCorrectionAMC[i] = {}
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].options = {
           ordered: true,
           barreseparation: true,
           multicolsAll: true,
         }
-        this.autoCorrectionAMC[i].enonce = '' // texte
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
+        this.autoCorrectionAMC[i].enonce = ''
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i]) // texte
         this.autoCorrectionAMC[i].propositions = [
           {
             type: 'AMCOpen',
@@ -436,6 +441,7 @@ export default class ConstructionsParallelogrammes extends Exercice {
               (listeTypeQuestions[i] > 2 ? ' 1' : ''),
           },
         ]
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
 
         if (listeTypeQuestions[i] > 2) {
           const propositionsQcm3 = []

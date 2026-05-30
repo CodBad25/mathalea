@@ -1,3 +1,5 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
+import type { AutoCorrectionAMC } from '../../lib/amc/amcEngine'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
@@ -141,12 +143,21 @@ export default class MultiplierDecimauxParametres extends Exercice {
         const exerciseAny = this as any
         if (!Array.isArray(exerciseAny.autoCorrectionAMC)) {
           exerciseAny.autoCorrectionAMC = []
+          exerciseAny.questionsAMC = exerciseAny.autoCorrectionAMC.map(
+            (questionAMC: AutoCorrectionAMC) => amcConvert(questionAMC),
+          )
         }
         if (exerciseAny.autoCorrectionAMC[i] == null) {
           exerciseAny.autoCorrectionAMC[i] = {}
+          exerciseAny.questionsAMC[i] = amcConvert(
+            exerciseAny.autoCorrectionAMC[i],
+          )
         }
         if (exerciseAny.autoCorrectionAMC[i].reponse == null) {
           exerciseAny.autoCorrectionAMC[i].reponse = {}
+          exerciseAny.questionsAMC[i] = amcConvert(
+            exerciseAny.autoCorrectionAMC[i],
+          )
         }
         exerciseAny.autoCorrectionAMC[i].reponse.param = {
           digits: 0,
@@ -156,6 +167,9 @@ export default class MultiplierDecimauxParametres extends Exercice {
           exposantSigne: false,
           approx: 0,
         }
+        exerciseAny.questionsAMC[i] = amcConvert(
+          exerciseAny.autoCorrectionAMC[i],
+        )
       }
       if (this.questionJamaisPosee(i, a, b)) {
         // Si la question n'a jamais été posée, on en crée une autre

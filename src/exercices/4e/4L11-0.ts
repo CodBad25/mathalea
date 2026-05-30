@@ -15,6 +15,8 @@ import {
   listeQuestionsToContenuSansNumero,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Factoriser une expression littérale (Niveau 1)'
 export const dateDePublication = '20/04/2025'
@@ -220,6 +222,7 @@ export default class FactoriserExpressionsNiv1 extends Exercice {
           enonce: texte,
           propositions: [{ texte: texteCorr, statut: 3, feedback: '' }],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras

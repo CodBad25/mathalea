@@ -11,6 +11,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint, texConsigne } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Lire graphiquement images et antécédents'
 export const interactifReady = true
@@ -112,6 +114,7 @@ export default class AntecedentEtImageGraphique extends Exercice {
         },
         propositions: [],
       }
+      this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
     }
 
     if (context.isHtml && this.interactif) {

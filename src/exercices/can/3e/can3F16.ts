@@ -7,6 +7,8 @@ import { getLang } from '../../../lib/stores/languagesStore'
 import { context } from '../../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
+import { amcConvert } from '../../../lib/amc/amcBuilders'
+
 
 export const titre = 'Lire images et antécédents depuis un tableau de valeurs'
 export const interactifReady = true
@@ -121,6 +123,7 @@ export default class ImageAntecedentDepuisTableau extends Exercice {
           },
           propositions: [],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       const question = questions[choix][choix2]
       const correction = corrections[choix][choix2]

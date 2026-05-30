@@ -17,6 +17,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Calculer des effectifs et des fréquences'
 export const interactifReady = true
@@ -416,6 +418,7 @@ export default class CalculEffectifFrequence extends Exercice {
             },
           ],
         }
+        this.questionsAMC[ee] = amcConvert(this.autoCorrectionAMC[ee])
       }
 
       // Si la question n'a jamais été posée, on l'enregistre

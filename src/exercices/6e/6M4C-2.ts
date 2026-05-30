@@ -10,6 +10,8 @@ import { minToHoraire } from '../../lib/outils/dateEtHoraires'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Utiliser les heures décimales'
 export const interactifReady = true
@@ -130,6 +132,7 @@ export default class HeuresDecimales extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       if (this.questionJamaisPosee(i, partieDecimale, partieEntiere)) {

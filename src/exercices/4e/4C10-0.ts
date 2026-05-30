@@ -6,6 +6,8 @@ import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { Relatif } from '../../modules/Relatif'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const dateDeModifImportante = '02/11/2025'
 export const interactifReady = true
@@ -99,6 +101,7 @@ export default class SigneProduitQuotientRelatifs extends Exercice {
       i < this.nbQuestions && cpt < 50;
     ) {
       this.autoCorrectionAMC[i] = {}
+      this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       // on ne choisit que des nombres compris entre 1 et 20
       const nbMax = 20
       // Le tableau des relatifs nécessaires, il m'en faut max 4 !

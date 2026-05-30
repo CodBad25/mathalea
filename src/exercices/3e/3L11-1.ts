@@ -19,6 +19,8 @@ import {
   ecritureAlgebriqueSauf1,
   reduirePolynomeDegre3,
 } from '../../lib/outils/ecritures'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Utiliser la double distributivité'
 export const interactifReady = true
@@ -245,6 +247,7 @@ export default class DoubleDistributivite extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.questionJamaisPosee(i, a, b, c, d, typesDeQuestions)) {
         // Si la question n'a jamais été posée, on en créé une autre

@@ -10,6 +10,8 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Utiliser la notation puissance'
 export const interactifReady = true
@@ -149,6 +151,7 @@ export default class NotationPuissance extends Exercice {
       i < this.nbQuestions && cpt < 50;
     ) {
       this.autoCorrectionAMC[i] = {}
+      this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       mantisse = randint(2, 10)
       if (listeSignesMantisse[i] === '-') mantisse = -mantisse
       if (this.sup5 === 1) {
@@ -310,9 +313,11 @@ export default class NotationPuissance extends Exercice {
           this.sup === 3
             ? texte + ' $=\\ldots$<br>'
             : 'Compléter : ' + texte + ' $=\\ldots$'
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].propositions = [
           { statut: 1, sanscadre: true, texte: texteCorr },
         ]
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras

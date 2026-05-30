@@ -20,6 +20,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Nommer des faces dans un pavé droit'
 export const amcReady = true
@@ -195,6 +197,7 @@ export default class LireFacePaveDroit extends Exercice {
             ordered: false,
           },
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrection[i].propositions = []
       }
 

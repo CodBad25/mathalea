@@ -23,6 +23,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const amcReady = true
 export const amcType = 'AMCNum'
@@ -353,7 +355,9 @@ export default class DiviserDecimauxPar101001000Old extends Exercice {
 
         if (context.isAmc) {
           this.autoCorrectionAMC[i].enonce = texte
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           this.autoCorrectionAMC[i].propositions = [{ texte: texteCorr }]
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           const amcParam = ensureAmcParam(this, i)
           amcParam.digits =
             nombreDeChiffresDansLaPartieEntiere(reponse) +

@@ -14,6 +14,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = "Jouer avec la compréhension des multiples d'un nombre"
 
@@ -216,6 +218,7 @@ export default class DivisionEuclidienneEtAjout extends Exercice {
                 },
               ],
             }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       if (this.questionJamaisPosee(i, dividende, quotient)) {

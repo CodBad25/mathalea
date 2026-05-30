@@ -10,6 +10,8 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 import TrouverSolutionMathador from './_TrouverSolutionMathador'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
@@ -118,6 +120,7 @@ export default class ÉcrireUneExpressionMathador extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
 
       if (

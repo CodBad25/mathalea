@@ -30,6 +30,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   "Agrandir ou réduire des figures, d'après une situation de proportionnalité"
@@ -1806,6 +1808,7 @@ class AgrandirReduireFigure extends Exercice {
             enonceAvant: true, // EE : ce champ est facultatif et permet (si false) de supprimer l'énoncé ci-dessus avant la numérotation de chaque question.
             propositions: propositionsAMC,
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         cpt++
       } while (longueurMax > longueurMaximum && cpt < 200)

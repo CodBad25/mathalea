@@ -19,6 +19,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = "Lire l'image d'un nombre à partir d'un graphique"
 export const interactifReady = true
@@ -231,6 +233,7 @@ export default class ImageGraphique extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         if (this.sup !== 1) {
           this.autoCorrectionAMC[i].propositions?.push({
             type: 'AMCNum',

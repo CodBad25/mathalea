@@ -28,6 +28,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   'Résoudre un problème relevant de la proportionnalité avec les propriétés de linéarité'
@@ -430,6 +432,7 @@ export default class ProportionnaliteParLineariteBis extends Exercice {
             // @ts-ignore
             propositions: propositionsAMC,
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

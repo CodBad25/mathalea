@@ -22,6 +22,8 @@ import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Compléter un tableau de valeurs'
 export const interactifReady = true
@@ -464,6 +466,7 @@ export default class TableauDeValeurs extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       } else if (this.interactif) {
         const reponses = []
         for (let i = 0; i < 3; i++) {

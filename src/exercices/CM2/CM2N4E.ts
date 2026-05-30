@@ -15,6 +15,8 @@ import { context } from '../../modules/context'
 import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const dateDePublication = '01/02/2026'
 export const amcReady = true
@@ -162,7 +164,9 @@ export default class DivisionDecimaleCM2 extends Exercice {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       if (context.isAmc) {
         this.autoCorrectionAMC[i].enonce = texte
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         this.autoCorrectionAMC[i].propositions = [{ texte: texteCorr }]
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         // @ts-expect-error trop compliqué à typer
         this.autoCorrectionAMC[i].reponse.param = {
           digits:
@@ -173,6 +177,7 @@ export default class DivisionDecimaleCM2 extends Exercice {
           signe: false,
           exposantNbChiffres: 0,
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.questionJamaisPosee(i, a, b)) {
         // Si la question n'a jamais été posée, on en crée une autre

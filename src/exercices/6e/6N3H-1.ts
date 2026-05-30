@@ -16,6 +16,8 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { rangeMinMax } from '../../lib/outils/nombres'
 import FractionEtendue from '../../modules/FractionEtendue'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 export const interactifReady = true
 export const interactifType = 'multiMathfield'
 export const amcReady = true
@@ -195,6 +197,7 @@ export default class ExerciceLabyrintheFractionsEgales extends Exercice {
             },
           ],
         }
+        this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
       }
       if (this.questionJamaisPosee(i, texte)) {
         // Si la question n'a jamais été posée, on en crée une autre

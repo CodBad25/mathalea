@@ -8,6 +8,8 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
+import { amcConvert } from '../../../lib/amc/amcBuilders'
+
 
 export const titre = 'Lire les extremums dans un tableau de variations'
 export const interactifReady = true
@@ -165,6 +167,7 @@ export default class ExtremumsTableau extends Exercice {
                   },
                 ],
               }
+              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
             }
           } else {
             texteCorr = `Pour tout réel $x$ de $[${x1}\\,;\\,${x4}]$, on a  $f(x)\\leqslant ${y3}$, c'est-à-dire  $f(x)\\leqslant f(${x3})$.<br>
@@ -219,6 +222,7 @@ export default class ExtremumsTableau extends Exercice {
                   },
                 ],
               }
+              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
             }
           }
         } else {
@@ -274,6 +278,7 @@ export default class ExtremumsTableau extends Exercice {
                   },
                 ],
               }
+              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
             }
           } else {
             texteCorr = `Pour tout réel $x$ de $[${x1}\\,;\\,${x4}]$, on a  $f(x)\\leqslant ${-y4}$, c'est-à-dire  $f(x)\\leqslant f(${x4})$.<br>
@@ -327,6 +332,7 @@ export default class ExtremumsTableau extends Exercice {
                   },
                 ],
               }
+              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
             }
           }
         }
@@ -395,6 +401,7 @@ export default class ExtremumsTableau extends Exercice {
                   },
                 ],
               }
+              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
             }
           } else {
             texteCorr = `Pour tout réel $x$ de $[${x1}\\,;\\,${x4}]$, on a  $f(x)\\geqslant ${y4}$, c'est-à-dire  $f(x)\\geqslant f(${x4})$.<br>
@@ -448,6 +455,7 @@ export default class ExtremumsTableau extends Exercice {
                   },
                 ],
               }
+              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
             }
           }
         } else {
@@ -503,6 +511,7 @@ export default class ExtremumsTableau extends Exercice {
                   },
                 ],
               }
+              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
             }
           } else {
             texteCorr = `Pour tout réel $x$ de $[${x1}\\,;\\,${x4}]$, on a  $f(x)\\geqslant ${-y3}$, c'est-à-dire  $f(x)\\geqslant f(${x3})$.<br>
@@ -556,6 +565,7 @@ export default class ExtremumsTableau extends Exercice {
                   },
                 ],
               }
+              this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
             }
           }
         }

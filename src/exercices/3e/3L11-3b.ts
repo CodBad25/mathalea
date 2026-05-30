@@ -16,6 +16,8 @@ import {
   doubleDeveloppement,
   reduirePolynomeDegre3,
 } from '../../lib/outils/ecritures'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Additionner des expressions à développer'
 export const dateDePublication = '03/02/2025'
@@ -286,6 +288,7 @@ export default class MultipleDistributivite extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.questionJamaisPosee(i, a, b, c, d, e, f, g, h)) {
         // Si la question n'a jamais été posée, on en créé une autre

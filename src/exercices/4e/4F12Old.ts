@@ -26,6 +26,8 @@ import { toutPourUnPoint } from '../../lib/interactif/mathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import Grandeur from '../../modules/Grandeur'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   "Résoudre un problème s'appuyant sur la lecture d'une représentation graphique"
@@ -228,6 +230,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
           }
         }
         break
@@ -370,6 +373,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
           }
         }
         break
@@ -582,6 +586,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
           }
         }
         break
@@ -797,6 +802,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
           }
         }
         break

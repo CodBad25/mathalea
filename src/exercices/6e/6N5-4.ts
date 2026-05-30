@@ -34,6 +34,8 @@ import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -215,6 +217,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
           break
         case 2:
@@ -292,6 +295,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                     },
                   ],
                 }
+                this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
               }
               break
             case 2:
@@ -355,6 +359,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                     },
                   ],
                 }
+                this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
               }
               break
           }
@@ -460,6 +465,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
           break
         case 4:
@@ -538,6 +544,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                     },
                   ],
                 }
+                this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
               }
               break
             case 2:
@@ -603,6 +610,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                     },
                   ],
                 }
+                this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
               }
               break
           }
@@ -726,6 +734,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                     },
                   ],
                 }
+                this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
               }
               break
             case 2:
@@ -817,6 +826,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                     },
                   ],
                 }
+                this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
               }
               break
           }
@@ -900,6 +910,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                     },
                   ],
                 }
+                this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
               }
               break
             case 2:
@@ -965,6 +976,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                     },
                   ],
                 }
+                this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
               }
               break
           }
@@ -1047,6 +1059,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                     },
                   ],
                 }
+                this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
               }
               break
             case 2:
@@ -1116,6 +1129,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                     },
                   ],
                 }
+                this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
               }
               break
           }
@@ -1196,6 +1210,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                     },
                   ],
                 }
+                this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
               }
               break
             case 2:
@@ -1287,6 +1302,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                     },
                   ],
                 }
+                this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
               }
               break
           }
@@ -1395,6 +1411,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 },
               ],
             }
+            this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
           }
           break
         case 10:
@@ -1490,6 +1507,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                     },
                   ],
                 }
+                this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
               }
               break
             case 2:
@@ -1555,6 +1573,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                     },
                   ],
                 }
+                this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
               }
               break
           }

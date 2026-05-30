@@ -10,6 +10,8 @@ import Hms from '../../modules/Hms'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Calculer des durées ou déterminer un horaire'
 export const interactifReady = true
@@ -310,6 +312,7 @@ export default class CalculsDeDureesOuHoraires extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       if (this.interactif) {
         texte += '<br>'

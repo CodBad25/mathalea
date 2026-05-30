@@ -23,6 +23,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Utiliser la simple distributivité'
 
@@ -332,6 +334,7 @@ export default class ExerciceDevelopper extends Exercice {
             },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
       // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
 

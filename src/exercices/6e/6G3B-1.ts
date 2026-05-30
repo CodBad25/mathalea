@@ -31,6 +31,8 @@ import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const dateDePublication = '30/11/2020'
 export const dateDeModifImportante = '06/09/2024'
@@ -225,6 +227,7 @@ export default class ConstruireMediatrices6e extends Exercice {
           },
         ],
       }
+      this.questionsAMC[ee] = amcConvert(this.autoCorrectionAMC[ee])
 
       if (this.questionJamaisPosee(ee, A.x, A.y, B.x, B.y)) {
         this.listeQuestions[ee] = texte + mathalea2d(params, objetsEnonce)

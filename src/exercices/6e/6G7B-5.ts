@@ -22,6 +22,8 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre = 'Utiliser des symétries axiales en pavage triangulaire'
 export const interactifReady = true
@@ -543,6 +545,7 @@ export default class SymetrieAxialePavageTriangulaire extends Exercice {
               },
             ],
           }
+          this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
         } else {
           this.autoCorrectionAMC[0].enonce += `${numAlpha(i)} ${texte} \\\\\n`
           this.autoCorrectionAMC[0].propositions!.push({

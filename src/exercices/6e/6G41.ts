@@ -14,6 +14,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -490,6 +492,7 @@ export default class RepresenterUnSolide extends Exercice {
             { texte: correction, statut: 3, feedback: '', sanscadre: true },
           ],
         }
+        this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         i++
       }
       cpt++

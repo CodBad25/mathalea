@@ -33,6 +33,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const titre =
   "Effectuer un enchaînement d'additions et de soustractions de nombres relatifs"
@@ -354,6 +356,7 @@ export default class ExerciceAdditionsSoustractionRelatifsV2 extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
 
         i++

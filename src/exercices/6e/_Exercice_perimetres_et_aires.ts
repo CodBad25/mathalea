@@ -42,6 +42,8 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -843,6 +845,7 @@ export default class ExercicePerimetresEtAires extends Exercice {
               },
             ],
           }
+          this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
         }
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
