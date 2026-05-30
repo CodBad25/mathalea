@@ -153,9 +153,9 @@ export default class Can2025TQ19 extends ExerciceSimple {
       lABx,
       lBBx,
     )
-    this.consigne = 'Équation réduite de cette droite.<br>'
-    this.consigne += `${objet}`
-    this.question = 'y=%{champ1}x+%{champ2}'
+    this.consigne = 'Équation réduite de cette droite.'
+    this.introduction = objet
+    this.question = 'y=%{champ1} x+%{champ2}'
     this.reponse = {
       bareme: toutPourUnPoint,
       champ1: { value: new FractionEtendue(yB - yA, 3).texFraction },
@@ -169,6 +169,6 @@ export default class Can2025TQ19 extends ExerciceSimple {
     this.correction += `${objetC}`
     this.canEnonce = `${objet}`
     this.canReponseACompleter = `Équation réduite de cette droite : <br> \\vspace{5mm}
-    $y=\\dfrac{\\ldots}{\\ldots}x+\\ldots$`
+    $y=\\dfrac{\\ldots}{\\ldots} x+\\ldots$`
   }
 }
