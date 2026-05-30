@@ -158,8 +158,7 @@ export default class CalculProbaFormuleProbaTotale extends Exercice {
       P(B)&=P(A\\cap B)+P(\\overline{A}\\cap B)\\\\
       &= P(A)\\times P_{A}(B)+P(\\overline{A})\\times P_{\\overline{A}}(B)\\\\
       &=${texNombre(pA, 1)}\\times ${texNombre(pBsachantA, 1)}+${texNombre(pAbarre, 1)}\\times ${texNombre(pBsachantAbarre, 1)}\\\\
-      &=${texNombre(reponse1, 2)}
-      \\end{aligned}$
+      &=${texNombre(reponse1, 2)}\\end{aligned}$
       `
           setReponse(this, i, reponse1)
           this.canEnonce = texte
@@ -249,8 +248,7 @@ export default class CalculProbaFormuleProbaTotale extends Exercice {
         P(\\overline{B})&=P(A\\cap \\overline{B})+P(\\overline{A}\\cap \\overline{B})\\\\
         &= P(A)\\times P_{A}(\\overline{B})+P(\\overline{A})\\times P_{\\overline{A}}(\\overline{B})\\\\
         &=${texNombre(pA, 1)}\\times ${texNombre(pBbarresachantA, 1)}+${texNombre(pAbarre, 1)}\\times ${texNombre(pBbarresachantAbarre, 1)}\\\\
-        &=${texNombre(reponse2, 2)}
-        \\end{aligned}$
+        &=${texNombre(reponse2, 2)}\\end{aligned}$
         `
           setReponse(this, i, reponse2)
           this.canEnonce = texte
