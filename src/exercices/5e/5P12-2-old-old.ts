@@ -13,13 +13,9 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 // import type { VisualPattern } from '../../lib/2d/patterns/VisualPattern'
-import type { MathfieldElement } from 'mathlive'
 import { VisualPattern } from '../../lib/2d/patterns/VisualPattern'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { Ratio } from '../../lib/mathFonctions/Ratio'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { range1 } from '../../lib/outils/nombres'
-import type { IExercice } from '../../lib/types'
 import { gestionnaireFormulaireTexte } from '../../modules/outils'
 
 export const titre = "Trouver le ratio d'évolution d'un motif numérique"
@@ -28,7 +24,6 @@ export const interactifType = 'mathLive'
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '26/06/2025'
-export const dateDeModificationImportante = '2/02/2026'
 
 /**
  * Étudier les premiers termes d'une série de motifs afin de donner le nombre de formes du motif de rang n sous forme de ratio.
@@ -36,18 +31,16 @@ export const dateDeModificationImportante = '2/02/2026'
  * Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/
  * @author Jean-claude Lhote
  */
-export const uuid = '328b9'
+export const uuid = '328b8'
 
 export const refs = {
   'fr-fr': [],
   'fr-ch': [],
 }
 
-export default class PaternRatioOld extends Exercice {
-  ratios: Ratio[] = []
+export default class PaternRatioOldOld extends Exercice {
   constructor() {
     super()
-    this.ratios = []
     this.nbQuestions = 3
     this.comment =
       "Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/"
@@ -183,108 +176,21 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
         )
         .join('\n')
       let texteCorr = ''
-      texte += `<br>Donner le ratio "${(pat as PatternRiche).texRatio}" dans le motif au rang $${nbFigures + 1}$.<br>`
+      texte += `<br>Donner le ratio "${(pat as PatternRiche).texRatio}" dans le motif au rang $${nbFigures + 1}$ ?<br>${ajouteQuestionMathlive(
+        {
+          exercice: this,
+          question: i,
+          objetReponse: { reponse: { value: pat.formule } },
+          typeInteractivite: 'mathlive',
+        },
+      )}`
       if (!pat.fonctionRatio) {
         throw new Error(
           `La fonction ratio n'est pas définie pour le pattern ${JSON.stringify(pat)}`,
         )
       }
-      const callback = (exercice: IExercice, question: number) => {
-        const mfe = document.querySelector(
-          `#champTexteEx${exercice.numeroExercice}Q${question}`,
-        ) as MathfieldElement
-        if (mfe == null)
-          return {
-            isOk: false,
-            feedback: '',
-            score: { nbBonnesReponses: 0, nbReponses: 1 },
-          }
-        const nbChamps = this.ratios[question].values.length
-        const valeursSaisies: string[] = []
-        for (let idx = 0; idx < nbChamps; idx++) {
-          const saisie = mfe.getPromptValue(`champ${idx + 1}`)
-          valeursSaisies.push(saisie)
-        }
-        if (
-          valeursSaisies.some(
-            (v) => v === '' || isNaN(Number(v.replace(',', '.'))),
-          )
-        ) {
-          return {
-            isOk: false,
-            feedback: 'Veuillez saisir des nombres valides.',
-            score: { nbBonnesReponses: 0, nbReponses: 1 },
-          }
-        }
-        const ratioSaisi = new Ratio(
-          valeursSaisies.map((v) => Number(v.replace(',', '.'))),
-        )
-        const isOkRatio = this.ratios[question].isProportionalTo(ratioSaisi)
-        const isEqual = this.ratios[question].equals(ratioSaisi)
-
-        const spanReponseLigne = document.querySelector(
-          `#resultatCheckEx${exercice.numeroExercice}Q${question}`,
-        )
-        if (spanReponseLigne != null) {
-          spanReponseLigne.innerHTML = isOkRatio ? '😎' : '☹️'
-        }
-        return {
-          isOk: isOkRatio,
-          feedback: isOkRatio
-            ? !isEqual
-              ? `Le ratio saisi est proportionnel au ratio attendu.`
-              : 'Bonne réponse !'
-            : "Le ratio saisi n'est pas proportionnel au ratio attendu.",
-          score: { nbBonnesReponses: isOkRatio ? 1 : 0, nbReponses: 1 },
-        }
-      }
       const ratio = pat.fonctionRatio(nbFigures + 1)
-      this.ratios[i] = ratio
-
-      type Entry = [string, { value: string }] | ['callback', typeof callback]
-
-      const entries: Entry[] = []
-
-      for (let k = 1; k <= ratio.values.length; k++) {
-        const key = `champ${k}`
-        const value = { value: ratio.values[k - 1].toString() }
-        entries.push([key, value])
-      }
-      entries.push(['callback', callback])
-      const objetReponse = Object.fromEntries(entries)
-
-      texte += ajouteQuestionMathlive({
-        exercice: this,
-        question: i,
-        classe: KeyboardType.clavierDeBase,
-        content: `${ratio.values
-          .map((_, index) => `%{champ${index + 1}}`)
-          .join('~:~')}`,
-        objetReponse,
-        typeInteractivite: 'fillInTheBlank',
-      })
       texteCorr += `Au rang $${nbFigures + 1}$, le ratio "${(pat as PatternRiche).texRatio}" sera $${miseEnEvidence(ratio.toLatex())}$.<br>`
-      const figureCorr: NestedObjetMathalea2dArray = []
-      for (const name of pat.shapes) {
-        if (name in listeShapes2DInfos) {
-          figureCorr.push(listeShapes2DInfos[name].shapeDef)
-        } else {
-          throw new Error(
-            `Le nom de la forme "${name}" n'est pas reconnu dans les formes prédéfinies.`,
-          )
-        }
-      }
-      figureCorr.push(...pattern.render(nbFigures + 1, 0, 0))
-      texteCorr += mathalea2d(
-        Object.assign(fixeBordures(figureCorr), {
-          id: `Motif${i}Correction`,
-          pixelsParCm: 20,
-          scale: 0.6,
-          style: 'display: block; margin: auto;',
-          optionsTikz: 'transform shape',
-        }),
-        figureCorr,
-      )
       this.listeQuestions.push(texte)
       this.listeCorrections.push(texteCorr)
       i++
