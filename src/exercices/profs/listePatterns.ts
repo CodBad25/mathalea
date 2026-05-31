@@ -108,7 +108,7 @@ export default class ListePatternsTousLesExos extends Exercice {
     for (let i = 0; i < listeOfAll.length; i++) {
       const pat = listeOfAll[i]
       if (pat == null) {
-        texte += `\n${texteEnCouleurEtGras(`Pattern ${i + 1}`, 'red')}: ${texteEnCouleurEtGras('Pattern inexistant', 'red')}`
+        texte += `\n${texteEnCouleurEtGras(`Motif ${i + 1}`, 'red')}: ${texteEnCouleurEtGras('Motif inexistant', 'red')}`
         continue
       }
 
@@ -130,7 +130,7 @@ export default class ListePatternsTousLesExos extends Exercice {
           if ('iterate' in pat) pattern.iterate = pat.iterate
           objets.push(pattern.render(j, j + 1, 0))
         }
-        texte += `\n${texteEnCouleurEtGras(`Pattern ${i + 1}`, bleuMathalea)}:  <br>`
+        texte += `\n${texteEnCouleurEtGras(`Motif ${i + 1}`, bleuMathalea)} ${pat.difficulte === undefined ? '' : ' (' + pat.difficulte + ')'} :<br>`
         texte += mathalea2d(
           Object.assign(
             fixeBordures(objets, { rxmin: 0, rymin: -1, rxmax: 0, rymax: 1 }),
@@ -296,19 +296,19 @@ export default class ListePatternsTousLesExos extends Exercice {
           yMin = Math.min(yMin, ymin)
         }
 
-        texte += `${texteEnCouleurEtGras(`Pattern ${i + 1}`, bleuMathalea)}:<br>`
+        texte += `${texteEnCouleurEtGras(`Motif ${i + 1}`, bleuMathalea)}${pat.difficulte === undefined ? '' : ' (' + pat.difficulte + ')'} :<br>`
         if (this.sup !== 5)
           texte += `Pour le motif 43, il y a ${n43} ${nom}.<br>`
         else {
           const estTresGrand = n43.sub(100000).isPositive()
           texte += estTresGrand
-            ? `Pour le motif 43, il y a beaucoup trop d'éléments dans le ratio ${texRatio}.<br>`
-            : `Pour le motif 43, il y a $${texNombre(n43)}$ éléments dans le ratio ${texRatio} de $${ratio43}$.<br>`
+            ? `Pour le motif 43, il y a beaucoup trop d'éléments dans le ratio "${texRatio}".<br>`
+            : `Pour le motif 43, il y a $${texNombre(n43)}$ éléments dans le ratio "${texRatio}" de $${ratio43}$.<br>`
         }
         texte += `
-            Pour le motif $${unDePlus}$, il y a $${texNombre(nUnDePlus)}$ éléments dans le ratio ${texRatio} de $${ratioUnDePlus}$.<br>`
+            Pour le motif $${unDePlus}$, il y a $${texNombre(nUnDePlus)}$ éléments dans le ratio "${texRatio}" de $${ratioUnDePlus}$.<br>`
 
-        const texRatioCouleur = pat.formule
+        const texRatioCouleur = (pat.formuleRatio ?? '')
           .split(' : ')
           .map((v) => miseEnEvidence(v, bleuMathalea))
           .join(' : ')
@@ -316,7 +316,7 @@ export default class ListePatternsTousLesExos extends Exercice {
         texte +=
           this.sup !== 5
             ? `Pour le motif $${miseEnEvidence('n', bleuMathalea)}$, il y a $${miseEnEvidence(pat.formule, bleuMathalea)}$ éléments.<br>`
-            : `Pour le motif $${miseEnEvidence('n', bleuMathalea)}$, il y a $${miseEnEvidence(pat.formule, bleuMathalea)}$ éléments dans le ratio ${texRatio} de $${texRatioCouleur}$.<br>`
+            : `Pour le motif $${miseEnEvidence('n', bleuMathalea)}$, le ratio "${texRatio}" est de $${texRatioCouleur}$.<br>`
 
         texte +=
           figures

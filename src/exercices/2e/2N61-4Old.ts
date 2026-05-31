@@ -1,4 +1,3 @@
-import { bleuMathalea } from '../../lib/colors'
 import { texSymbole } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -17,7 +16,7 @@ import Exercice from '../Exercice'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const dateDeModifImportante = '31/05/2026'
+export const dateDeModifImportante = '03/04/2022'
 export const dateDePublication = '17/07/2021'
 export const titre = 'Résoudre une inéquation quotient'
 
@@ -30,13 +29,12 @@ export const titre = 'Résoudre une inéquation quotient'
  * * Type 5 : (ax+b)/(cx+d)+e<0
  * * Tous les types
  * @author Guillaume Valmont
- * Éric Elter : Rajout d'un paramètre pour ne pas écrire les expressions forcément sous forme canonique (31/05/2026)
  */
-export const uuid = '0c09b'
+export const uuid = '0716b'
 
 export const refs = {
-  'fr-fr': ['2N61-4'],
-  'fr-ch': ['2mIneq-4'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class ExerciceInequationQuotient extends Exercice {
   constructor() {
@@ -45,6 +43,7 @@ export default class ExerciceInequationQuotient extends Exercice {
     this.spacingCorr = 2 // Espace entre deux lignes pour la correction
     this.correctionDetailleeDisponible = true
     this.correctionDetaillee = false // Désactive la correction détaillée par défaut
+    this.sup = 1 // Choix du type d'inéquation
     this.nbQuestions = 4 // Choix du nombre de questions
 
     // Choisit le type de question à l'aide d'un formulaire numérique (la réponse sera stockée dans this.sup)
@@ -53,11 +52,6 @@ export default class ExerciceInequationQuotient extends Exercice {
       5,
       '1: (x+a)/(x+b)<0\n2: (ax+b)/(cx+d)<0\n3: (ax+b)/[(cx+d)(ex+f)]<0\n4: (ax+b)/(cx+d)²<0\n5: (ax+b)/(cx+d)+e<0\n6: Tous les types précédents',
     ]
-    this.sup = 1 // Choix du type d'inéquation
-    this.besoinFormulaire2CaseACocher = [
-      'Ordre forcément canonique des expressions',
-    ]
-    this.sup2 = false
   }
 
   nouvelleVersion() {
@@ -187,7 +181,7 @@ export default class ExerciceInequationQuotient extends Exercice {
           symbole = '='
         }
         texteCorr += `$x ${ecritureAlgebrique(val)} ${symbole} 0$ <br>`
-        texteCorr += `$x ${ecritureAlgebrique(val)} ${miseEnEvidence(ecritureAlgebrique(-1 * val), bleuMathalea)} ${symbole} ${miseEnEvidence(ecritureAlgebrique(-1 * val), bleuMathalea)}$<br>`
+        texteCorr += `$x ${ecritureAlgebrique(val)} ${miseEnEvidence(ecritureAlgebrique(-1 * val))} ${symbole} ${miseEnEvidence(ecritureAlgebrique(-1 * val))}$<br>`
         texteCorr += `$x ${symbole} ${-val}$<br>`
       }
       // Fonction écrivant la correction détaillée d'une inéquation du type var1*x + var2 > 0
@@ -204,31 +198,24 @@ export default class ExerciceInequationQuotient extends Exercice {
         }
         // Détaille les étapes de la résolution en mettant en évidence les calculs réalisés.
         texteCorr += `<br>$${var1}x ${ecritureAlgebrique(var2)} ${symbolePlusGrand} 0$ <br>`
-        texteCorr += `$${var1}x ${ecritureAlgebrique(var2)} ${miseEnEvidence(ecritureAlgebrique(-1 * var2), bleuMathalea)} ${symbolePlusGrand} ${miseEnEvidence(ecritureAlgebrique(-1 * var2), bleuMathalea)}$<br>`
+        texteCorr += `$${var1}x ${ecritureAlgebrique(var2)} ${miseEnEvidence(ecritureAlgebrique(-1 * var2))} ${symbolePlusGrand} ${miseEnEvidence(ecritureAlgebrique(-1 * var2))}$<br>`
         texteCorr += `$${var1}x ${symbolePlusGrand} ${-var2}$<br>`
         // Si var1 < 0, l'inégalité change de sens
         if (var1 < 0) {
-          texteCorr += `$${var1}x ${miseEnEvidence('\\div ' + ecritureParentheseSiNegatif(var1), bleuMathalea)} `
+          texteCorr += `$${var1}x ${miseEnEvidence('\\div ' + ecritureParentheseSiNegatif(var1))} `
           if (withEqualSign) {
             // On met en évidence un > qui se change en <, pas un = qui ne change pas
             texteCorr += symbolePlusPetit
           } else {
             texteCorr += miseEnEvidence(symbolePlusPetit)
           }
-          texteCorr += ` ${-var2 + miseEnEvidence('\\div ' + ecritureParentheseSiNegatif(var1), bleuMathalea)}$<br>`
-          texteCorr += `$x ${symbolePlusPetit} ${new FractionEtendue(-var2, var1).texFSD}$`
-
-          texteCorr += new FractionEtendue(-var2, var1).estIrreductible
-            ? '<br>'
-            : ` et, par simplification, $x ${symbolePlusPetit} ${new FractionEtendue(-var2, var1).texFractionSimplifiee}$.<br>`
+          texteCorr += ` ${-var2 + miseEnEvidence('\\div ' + ecritureParentheseSiNegatif(var1))}$<br>`
+          texteCorr += `$x ${symbolePlusPetit} ${new FractionEtendue(-var2, var1).texFSD}$<br>`
           texteCorr += `Donc $${var1}x ${ecritureAlgebrique(var2)} ${symbolePlusGrand} 0$ si et seulement si $x ${symbolePlusPetit} ${new FractionEtendue(-var2, var1).texFractionSimplifiee}$.`
         } else {
           // sinon elle ne change pas de sens
-          texteCorr += `$${var1}x ${miseEnEvidence('\\div ' + ecritureParentheseSiNegatif(var1), bleuMathalea)} ${symbolePlusGrand} ${-var2} ${miseEnEvidence('\\div ' + ecritureParentheseSiNegatif(var1), bleuMathalea)}$<br>`
-          texteCorr += `$x ${symbolePlusGrand} ${new FractionEtendue(-var2, var1).texFSD}$`
-          texteCorr += new FractionEtendue(-var2, var1).estIrreductible
-            ? '<br>'
-            : ` et, par simplification, $x ${symbolePlusGrand} ${new FractionEtendue(-var2, var1).texFractionSimplifiee}$.<br>`
+          texteCorr += `$${var1}x ${miseEnEvidence('\\div ' + ecritureParentheseSiNegatif(var1))} ${symbolePlusGrand} ${-var2} ${miseEnEvidence('\\div ' + ecritureParentheseSiNegatif(var1))}$<br>`
+          texteCorr += `$x ${symbolePlusGrand} ${new FractionEtendue(-var2, var1).texFSD}$<br>`
           texteCorr += `Donc $${var1}x ${ecritureAlgebrique(var2)} ${symbolePlusGrand} 0$ si et seulement si $x ${symbolePlusGrand} ${new FractionEtendue(-var2, var1).texFractionSimplifiee}$.`
         }
       }
@@ -423,19 +410,7 @@ export default class ExerciceInequationQuotient extends Exercice {
         20,
       ]
       if (listeTypeDeQuestions[i] === '(x+a)/(x+b)<0') {
-        const formeFacteur1 = randint(0, 1) // 0 → (x+a), 1 → (a+x)
-        const formeFacteur2 = randint(0, 1) // 0 → (x+b), 1 → (b+x)
-        const texFacteur1 =
-          formeFacteur1 === 0 || this.sup2
-            ? `x${ecritureAlgebrique(a)}`
-            : `${a}+x`
-
-        const texFacteur2 =
-          formeFacteur2 === 0 || this.sup2
-            ? `x${ecritureAlgebrique(b)}`
-            : `${b}+x`
-
-        texte = `$\\dfrac{${texFacteur1}}{${texFacteur2}} ${texSymbole(signes[i])} 0$`
+        texte = `$\\dfrac{x${ecritureAlgebrique(a)}}{x${ecritureAlgebrique(b)}} ${texSymbole(signes[i])} 0$`
         texteCorr = texte + '<br>'
         texteCorr +=
           '$\\bullet$ On commence par chercher les éventuelles valeurs interdites :<br>'
@@ -449,7 +424,7 @@ export default class ExerciceInequationQuotient extends Exercice {
         if (this.correctionDetaillee) {
           resolutionDetailleeEquation(b)
         }
-        texteCorr += `$${texFacteur2} ${texSymbole('>')} 0$ si et seulement si $x ${texSymbole('>')} ${-b}$.<br>`
+        texteCorr += `$x${ecritureAlgebrique(b)} ${texSymbole('>')} 0$ si et seulement si $x ${texSymbole('>')} ${-b}$.<br>`
         // Prépare l'affichage du tableau
         texteCorr +=
           'On peut donc en déduire le tableau de signes suivant :<br>'
@@ -499,9 +474,13 @@ export default class ExerciceInequationQuotient extends Exercice {
           tabInit: [
             [
               ['$x$', 2, 30],
-              [`$${texFacteur1}$`, 2, 50],
-              [`$${texFacteur2}$`, 2, 50],
-              [`$\\dfrac{${texFacteur1}}{${texFacteur2}}$`, ecart, 50],
+              [`$x${ecritureAlgebrique(a)}$`, 2, 50],
+              [`$x${ecritureAlgebrique(b)}$`, 2, 50],
+              [
+                `$\\dfrac{x${ecritureAlgebrique(a)}}{x${ecritureAlgebrique(b)}}$`,
+                ecart,
+                50,
+              ],
             ],
             [
               '$-\\infty$',
@@ -537,31 +516,16 @@ export default class ExerciceInequationQuotient extends Exercice {
             correctionInteractif = `]-\\infty${separateur}${-b}[\\cup${pGauche}${-a}${separateur}+\\infty[`
           }
         }
-      } else if (listeTypeDeQuestions[i] === '(ax+b)/(cx+d)<0') {
-        const formeFacteur1 = randint(0, 1) // 0 → (ax+b), 1 → (b+ax)
-        const formeFacteur2 = randint(0, 1) // 0 → (cx+d), 1 → (d+cx)
-
-        const texFacteur1 =
-          formeFacteur1 === 0 || this.sup2
-            ? `${a}x${ecritureAlgebrique(b)}`
-            : `${b}${ecritureAlgebrique(a)}x`
-
-        const texFacteur2 =
-          formeFacteur2 === 0 || this.sup2
-            ? `${c}x${ecritureAlgebrique(d)}`
-            : `${d}${ecritureAlgebrique(c)}x`
-
+      }
+      if (listeTypeDeQuestions[i] === '(ax+b)/(cx+d)<0') {
         let valPetit, valGrand
-        texte = `$\\dfrac{${texFacteur1}}{${texFacteur2}} ${texSymbole(signes[i])} 0$`
+        texte = `$\\dfrac{${a}x${ecritureAlgebrique(b)}}{${c}x${ecritureAlgebrique(d)}} ${texSymbole(signes[i])} 0$`
         texteCorr = texte + '<br>'
         texteCorr +=
           '$\\bullet$ On commence par chercher les éventuelles valeurs interdites :'
         ecrireCorrectionDetaillee(c, d, true)
         const fractionMdc = new FractionEtendue(-d, c).texFractionSimplifiee
         const fractionMba = new FractionEtendue(-b, a).texFractionSimplifiee
-        /*texteCorr += new FractionEtendue(-d, c).estIrreductible
-          ? ''
-          : `$=${fractionMdc}$`*/
         texteCorr += `<br>Le quotient est défini sur $\\R ${texSymbole('\\')} \\{${fractionMdc}\\}$.`
         texteCorr += `<br>$\\bullet$ On résout l'inéquation sur $\\R ${texSymbole('\\')} \\{${fractionMdc}\\}$ :`
         if (this.correctionDetaillee) {
@@ -569,14 +533,14 @@ export default class ExerciceInequationQuotient extends Exercice {
           ecrireCorrectionDetaillee(c, d)
         } else {
           if (a < 0) {
-            texteCorr += `<br>$${texFacteur1}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionMba}$.`
+            texteCorr += `<br>$${a}x${ecritureAlgebrique(b)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionMba}$.`
           } else {
-            texteCorr += `<br>$${texFacteur1}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionMba}$.`
+            texteCorr += `<br>$${a}x${ecritureAlgebrique(b)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionMba}$.`
           }
           if (c < 0) {
-            texteCorr += `<br>$${texFacteur2}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionMdc}$.`
+            texteCorr += `<br>$${c}x${ecritureAlgebrique(d)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionMdc}$.`
           } else {
-            texteCorr += `<br>$${texFacteur2}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionMdc}$.`
+            texteCorr += `<br>$${c}x${ecritureAlgebrique(d)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionMdc}$.`
           }
         }
         // Prépare l'affichage du tableau de signes
@@ -696,9 +660,13 @@ export default class ExerciceInequationQuotient extends Exercice {
           tabInit: [
             [
               ['$x$', 2.5, 30],
-              [`$${texFacteur1}$`, 2, 75],
-              [`$${texFacteur2}$`, 2, 75],
-              [`$\\dfrac{${texFacteur1}}{${texFacteur2}}$`, ecart, 200],
+              [`$${a}x${ecritureAlgebrique(b)}$`, 2, 75],
+              [`$${c}x${ecritureAlgebrique(d)}$`, 2, 75],
+              [
+                `$\\dfrac{${a}x${ecritureAlgebrique(b)}}{${c}x${ecritureAlgebrique(d)}}$`,
+                ecart,
+                200,
+              ],
             ],
             [
               '$-\\infty$',
@@ -748,29 +716,13 @@ export default class ExerciceInequationQuotient extends Exercice {
             correctionInteractif = correctionInteractifInterieur
           }
         }
-      } else if (listeTypeDeQuestions[i] === '(ax+b)/[(cx+d)(ex+f)]<0') {
-        const formeFacteur1 = randint(0, 1) // 0 → (ax+b), 1 → (b+ax)
-        const formeFacteur2 = randint(0, 1) // 0 → (cx+d), 1 → (d+cx)
-        const formeFacteur3 = randint(0, 1) // 0 → (ex+f), 1 → (f+ex)
-
-        const texFacteur1 =
-          formeFacteur1 === 0 || this.sup2
-            ? `${a}x${ecritureAlgebrique(b)}`
-            : `${b}${ecritureAlgebrique(a)}x`
-        const texFacteur2 =
-          formeFacteur2 === 0 || this.sup2
-            ? `${c}x${ecritureAlgebrique(d)}`
-            : `${d}${ecritureAlgebrique(c)}x`
-        const texFacteur3 =
-          formeFacteur3 === 0 || this.sup2
-            ? `${e}x${ecritureAlgebrique(f)}`
-            : `${f}${ecritureAlgebrique(e)}x`
-
+      }
+      if (listeTypeDeQuestions[i] === '(ax+b)/[(cx+d)(ex+f)]<0') {
         let valPetit, valMoyen, valGrand
-        texte = `$\\dfrac{${texFacteur1}}{(${texFacteur2})(${texFacteur3})} ${texSymbole(signes[i])} 0$`
+        texte = `$\\dfrac{${a}x${ecritureAlgebrique(b)}}{(${c}x${ecritureAlgebrique(d)})(${e}x${ecritureAlgebrique(f)})} ${texSymbole(signes[i])} 0$`
         texteCorr = `${texte} <br>
 $\\bullet$ On commence par chercher les éventuelles valeurs interdites :<br>
-$(${texFacteur2})(${texFacteur3}) = 0$ si et seulement si $${texFacteur2} = 0$ ou $${texFacteur3} = 0$.`
+$(${c}x${ecritureAlgebrique(d)})(${e}x${ecritureAlgebrique(f)}) = 0$ si et seulement si $${c}x${ecritureAlgebrique(d)} = 0$ ou $${e}x${ecritureAlgebrique(f)} = 0$.`
         ecrireCorrectionDetaillee(c, d, true)
         ecrireCorrectionDetaillee(e, f, true)
         const fractionMdc = new FractionEtendue(-d, c).texFractionSimplifiee
@@ -784,19 +736,19 @@ $\\bullet$ On résout l'inéquation sur $\\R ${texSymbole('\\')} \\{${fractionMd
           ecrireCorrectionDetaillee(e, f)
         } else {
           if (a < 0) {
-            texteCorr += `<br>$${texFacteur1}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionMba}$.`
+            texteCorr += `<br>$${a}x${ecritureAlgebrique(b)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionMba}$.`
           } else {
-            texteCorr += `<br>$${texFacteur1}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionMba}$.`
+            texteCorr += `<br>$${a}x${ecritureAlgebrique(b)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionMba}$.`
           }
           if (c < 0) {
-            texteCorr += `<br>$${texFacteur2}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionMdc}$.`
+            texteCorr += `<br>$${c}x${ecritureAlgebrique(d)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionMdc}$.`
           } else {
-            texteCorr += `<br>$${texFacteur2}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionMdc}$.`
+            texteCorr += `<br>$${c}x${ecritureAlgebrique(d)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionMdc}$.`
           }
           if (e < 0) {
-            texteCorr += `<br>$${texFacteur3}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionMfe}$.`
+            texteCorr += `<br>$${e}x${ecritureAlgebrique(f)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionMfe}$.`
           } else {
-            texteCorr += `<br>$${texFacteur3}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionMfe}$.`
+            texteCorr += `<br>$${e}x${ecritureAlgebrique(f)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionMfe}$.`
           }
         }
         // Prépare l'affichage du tableau de signes
@@ -990,11 +942,11 @@ $\\bullet$ On résout l'inéquation sur $\\R ${texSymbole('\\')} \\{${fractionMd
           tabInit: [
             [
               ['$x$', 2.5, 30],
-              [`$${texFacteur1}$`, 2, 75],
-              [`$${texFacteur2}$`, 2, 75],
-              [`$${texFacteur3}$`, 2, 75],
+              [`$${a}x${ecritureAlgebrique(b)}$`, 2, 75],
+              [`$${c}x${ecritureAlgebrique(d)}$`, 2, 75],
+              [`$${e}x${ecritureAlgebrique(f)}$`, 2, 75],
               [
-                `$\\dfrac{${texFacteur1}}{(${texFacteur2})(${texFacteur3})}$`,
+                `$\\dfrac{${a}x${ecritureAlgebrique(b)}}{(${c}x${ecritureAlgebrique(d)})(${e}x${ecritureAlgebrique(f)})}$`,
                 ecart,
                 200,
               ],
@@ -1056,25 +1008,13 @@ $\\bullet$ On résout l'inéquation sur $\\R ${texSymbole('\\')} \\{${fractionMd
             correctionInteractif = correctionInteractif1et3
           }
         }
-      } else if (listeTypeDeQuestions[i] === '(ax+b)/(cx+d)²<0') {
-        const formeFacteur1 = randint(0, 1) // 0 → (ax+b), 1 → (b+ax)
-        const formeFacteur2 = randint(0, 1) // 0 → (cx+d), 1 → (d+cx)
-
-        const texFacteur1 =
-          formeFacteur1 === 0 || this.sup2
-            ? `${a}x${ecritureAlgebrique(b)}`
-            : `${b}${ecritureAlgebrique(a)}x`
-
-        const texFacteur2 =
-          formeFacteur2 === 0 || this.sup2
-            ? `${c}x${ecritureAlgebrique(d)}`
-            : `${d}${ecritureAlgebrique(c)}x`
-
+      }
+      if (listeTypeDeQuestions[i] === '(ax+b)/(cx+d)²<0') {
         let valPetit, valGrand
-        texte = `$\\dfrac{${texFacteur1}}{(${texFacteur2})^2} ${texSymbole(signes[i])} 0$`
+        texte = `$\\dfrac{${a}x${ecritureAlgebrique(b)}}{(${c}x${ecritureAlgebrique(d)})^2} ${texSymbole(signes[i])} 0$`
         texteCorr = `${texte} <br>
 $\\bullet$ On commence par chercher les éventuelles valeurs interdites :<br>
-$(${texFacteur2})^2 = 0$ si et seulement si $${c}x${ecritureAlgebrique(d)} = 0$.`
+$(${c}x${ecritureAlgebrique(d)})^2 = 0$ si et seulement si $${c}x${ecritureAlgebrique(d)} = 0$.`
         ecrireCorrectionDetaillee(c, d, true)
         const fractionMdc = new FractionEtendue(-d, c).texFractionSimplifiee
         const fractionMba = new FractionEtendue(-b, a).texFractionSimplifiee
@@ -1082,14 +1022,14 @@ $(${texFacteur2})^2 = 0$ si et seulement si $${c}x${ecritureAlgebrique(d)} = 0$.
 $\\bullet$ On résout l'inéquation sur $\\R ${texSymbole('\\')} \\{${fractionMdc}\\}$ :`
         if (this.correctionDetaillee) {
           ecrireCorrectionDetaillee(a, b)
-          texteCorr += `<br>Un carré étant toujours positif, $(${texFacteur2})^2 > 0$ pour tout $x$ différent de $${fractionMdc}$.`
+          texteCorr += `<br>Un carré étant toujours positif, $(${c}x${ecritureAlgebrique(d)})^2 > 0$ pour tout $x$ différent de $${fractionMdc}$.`
         } else {
           if (c < 0) {
-            texteCorr += `<br>$${texFacteur1}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionMba}$.`
+            texteCorr += `<br>$${a}x${ecritureAlgebrique(b)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionMba}$.`
           } else {
-            texteCorr += `<br>$${texFacteur1}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionMba}$.`
+            texteCorr += `<br>$${a}x${ecritureAlgebrique(b)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionMba}$.`
           }
-          texteCorr += `<br>Un carré étant toujours positif, $(${texFacteur2})^2 > 0$ pour tout $x$ différent de $${fractionMdc}$.`
+          texteCorr += `<br>Un carré étant toujours positif, $(${c}x${ecritureAlgebrique(d)})^2 > 0$ pour tout $x$ différent de $${fractionMdc}$.`
         }
         // Prépare l'affichage du tableau de signes
         texteCorr +=
@@ -1274,9 +1214,13 @@ $\\bullet$ On résout l'inéquation sur $\\R ${texSymbole('\\')} \\{${fractionMd
           tabInit: [
             [
               ['$x$', 2.5, 30],
-              [`$${texFacteur1}$`, 2, 75],
-              [`$(${texFacteur2})^2$`, 2, 75],
-              [`$\\dfrac{${texFacteur1}}{(${texFacteur2})^2}$`, ecart, 200],
+              [`$${a}x${ecritureAlgebrique(b)}$`, 2, 75],
+              [`$(${c}x${ecritureAlgebrique(d)})^2$`, 2, 75],
+              [
+                `$\\dfrac{${a}x${ecritureAlgebrique(b)}}{(${c}x${ecritureAlgebrique(d)})^2}$`,
+                ecart,
+                200,
+              ],
             ],
             [
               '$-\\infty$',
@@ -1337,22 +1281,10 @@ $\\bullet$ On résout l'inéquation sur $\\R ${texSymbole('\\')} \\{${fractionMd
             correctionInteractif = correctionInteractifGauche
           }
         }
-      } else if (listeTypeDeQuestions[i] === '(ax+b)/(cx+d)+e<0') {
-        const formeFacteur1 = randint(0, 1) // 0 → (ax+b), 1 → (b+ax)
-        const formeFacteur2 = randint(0, 1) // 0 → (cx+d), 1 → (d+cx)
-
-        const texFacteur1 =
-          formeFacteur1 === 0 || this.sup2
-            ? `${a}x${ecritureAlgebrique(b)}`
-            : `${b}${ecritureAlgebrique(a)}x`
-
-        const texFacteur2 =
-          formeFacteur2 === 0 || this.sup2
-            ? `${c}x${ecritureAlgebrique(d)}`
-            : `${d}${ecritureAlgebrique(c)}x`
-
+      }
+      if (listeTypeDeQuestions[i] === '(ax+b)/(cx+d)+e<0') {
         let valPetit, valGrand
-        texte = `$\\dfrac{${texFacteur1}}{${texFacteur2}}${ecritureAlgebrique(e)} ${texSymbole(signes[i])} 0$`
+        texte = `$\\dfrac{${a}x${ecritureAlgebrique(b)}}{${c}x${ecritureAlgebrique(d)}}${ecritureAlgebrique(e)} ${texSymbole(signes[i])} 0$`
         texteCorr = `${texte} <br>
 $\\bullet$ On commence par chercher les éventuelles valeurs interdites :`
         ecrireCorrectionDetaillee(c, d, true)
@@ -1363,24 +1295,24 @@ $\\bullet$ On commence par chercher les éventuelles valeurs interdites :`
 $\\bullet$ On résout l'inéquation sur $\\R ${texSymbole('\\')} \\{${fractionMdc}\\}$ :`
         if (this.correctionDetaillee) {
           texteCorr += `<br> $\\begin{aligned}
-          \\dfrac{${texFacteur1}}{${texFacteur2}} ${ecritureAlgebrique(e)} &= \\dfrac{${texFacteur1}}{${texFacteur2}} ${ecritureAlgebrique(e)} \\times \\dfrac{${texFacteur2}}{${texFacteur2}} \\\\
-          &= \\dfrac{${texFacteur1}}{${texFacteur2}} + \\dfrac{${e * c}x${ecritureAlgebrique(e * d)}}{${texFacteur2}} \\\\
-          &= \\dfrac{${texFacteur1} ${ecritureAlgebrique(e * c)}x${ecritureAlgebrique(e * d)}}{${texFacteur2}} \\\\
-          &= \\dfrac{${a + e * c}x${ecritureAlgebrique(b + e * d)}}{${texFacteur2}}
+          \\dfrac{${a}x${ecritureAlgebrique(b)}}{${c}x${ecritureAlgebrique(d)}} ${ecritureAlgebrique(e)} &= \\dfrac{${a}x${ecritureAlgebrique(b)}}{${c}x${ecritureAlgebrique(d)}} ${ecritureAlgebrique(e)} \\times \\dfrac{${c}x${ecritureAlgebrique(d)}}{${c}x${ecritureAlgebrique(d)}} \\\\
+          &= \\dfrac{${a}x${ecritureAlgebrique(b)}}{${c}x${ecritureAlgebrique(d)}} + \\dfrac{${e * c}x${ecritureAlgebrique(e * d)}}{${c}x${ecritureAlgebrique(d)}} \\\\
+          &= \\dfrac{${a}x${ecritureAlgebrique(b)} ${ecritureAlgebrique(e * c)}x${ecritureAlgebrique(e * d)}}{${c}x${ecritureAlgebrique(d)}} \\\\
+          &= \\dfrac{${a + e * c}x${ecritureAlgebrique(b + e * d)}}{${c}x${ecritureAlgebrique(d)}}
           \\end{aligned}$`
           ecrireCorrectionDetaillee(a + e * c, b + e * d)
           ecrireCorrectionDetaillee(c, d)
         } else {
-          texteCorr += `<br> $\\dfrac{${texFacteur1}}{${texFacteur2}} ${ecritureAlgebrique(e)} = \\dfrac{${a + e * c}x${ecritureAlgebrique(b + e * d)}}{${texFacteur2}}$`
+          texteCorr += `<br> $\\dfrac{${a}x${ecritureAlgebrique(b)}}{${c}x${ecritureAlgebrique(d)}} ${ecritureAlgebrique(e)} = \\dfrac{${a + e * c}x${ecritureAlgebrique(b + e * d)}}{${c}x${ecritureAlgebrique(d)}}$`
           if (a + e * c < 0) {
             texteCorr += `<br>$${a + e * c}x${ecritureAlgebrique(b + e * d)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionSimplifiee}$.`
           } else {
             texteCorr += `<br>$${a + e * c}x${ecritureAlgebrique(b + e * d)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionSimplifiee}$.`
           }
           if (c < 0) {
-            texteCorr += `<br>$${texFacteur2}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionMdc}$.`
+            texteCorr += `<br>$${c}x${ecritureAlgebrique(d)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('<')} ${fractionMdc}$.`
           } else {
-            texteCorr += `<br>$${texFacteur2}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionMdc}$.`
+            texteCorr += `<br>$${c}x${ecritureAlgebrique(d)}${texSymbole('>')}0$ si et seulement si $x${texSymbole('>')} ${fractionMdc}$.`
           }
         }
         // Prépare l'affichage du tableau de signes
@@ -1501,9 +1433,9 @@ $\\bullet$ On résout l'inéquation sur $\\R ${texSymbole('\\')} \\{${fractionMd
             [
               ['$x$', 2.5, 30],
               [`$${a + e * c}x${ecritureAlgebrique(b + e * d)}$`, 2, 75],
-              [`$${texFacteur2}$`, 2, 75],
+              [`$${c}x${ecritureAlgebrique(d)}$`, 2, 75],
               [
-                `$\\dfrac{${a + e * c}x${ecritureAlgebrique(b + e * d)}}{${texFacteur2}}$`,
+                `$\\dfrac{${a + e * c}x${ecritureAlgebrique(b + e * d)}}{${c}x${ecritureAlgebrique(d)}}$`,
                 ecart,
                 200,
               ],
@@ -1581,18 +1513,6 @@ $\\bullet$ On résout l'inéquation sur $\\R ${texSymbole('\\')} \\{${fractionMd
         })
       }
       if (this.questionJamaisPosee(i, a, b, c, e, d)) {
-        // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
-        const textCorrSplit = texteCorr.split('=')
-        let aRemplacer = textCorrSplit[textCorrSplit.length - 1]
-        aRemplacer = aRemplacer.replace('$', '')
-
-        texteCorr = ''
-        for (let ee = 0; ee < textCorrSplit.length - 1; ee++) {
-          texteCorr += textCorrSplit[ee] + '='
-        }
-        texteCorr += `$ $${miseEnEvidence(aRemplacer.slice(0, -1))}$` + '.' // Gestion du point final
-        // Fin de cette uniformisation
-
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
