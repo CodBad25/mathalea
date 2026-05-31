@@ -190,7 +190,7 @@ export default class FormeLitteraleIntroduireUneLettre extends Exercice {
         {
           prenom: prenom(),
           elt1: {
-            lettre: 'm',
+            lettre: 'c',
             article: 'un',
             sing: 'crayon',
             plur: 'crayons',
