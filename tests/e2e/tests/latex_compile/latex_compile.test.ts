@@ -3,9 +3,11 @@ import fs from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { beforeAll, describe, expect, test, vi } from 'vitest'
 import Latex from '../../../../src/lib/Latex'
+import { context } from '../../../../src/modules/context'
 import type { LatexFileInfos } from '../../../src/lib/LatexTypes'
 import { findUuid } from '../../helpers/filter'
 
+context.isHtml = false
 type RowStatus = 'OK' | 'KO' | 'NON_TESTE'
 
 type ReportRow = {
