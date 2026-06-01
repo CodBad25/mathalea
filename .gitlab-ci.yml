@@ -156,7 +156,7 @@ cache:
 
 .testCI:
   extends: .install_dependencies
-  image: mcr.microsoft.com/playwright:v1.51.0-noble
+  image: mcr.microsoft.com/playwright:v1.60.0-noble
   stage: playwright-test
   allow_failure: true
   timeout: 3h 30m
