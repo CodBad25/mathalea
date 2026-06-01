@@ -221,6 +221,9 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
   exercice.interactif = true
   exercice.numeroExercice = 1
   exercice.nbQuestions = 10
+  const defaultSup = exercice.sup
+  const defaultSup2 = exercice.sup2
+  const defaultSup3 = exercice.sup3
 
   logDebug(`Chargement de ${uuid}, ${urlExercice}`)
   // sup
@@ -340,26 +343,26 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
       const keysToUse = sampleSupWithFallback(sup)
       for (const keySup of keysToUse) {
         if (keySup === undefined) {
-          exercice.sup = undefined
+          exercice.sup = defaultSup
         } else {
           exercice.sup = sup[keySup]
         }
         log('sup=' + exercice.sup)
         for (const keySup2 of sampleSupWithFallback(sup2)) {
           if (keySup2 === undefined) {
-            exercice.sup2 = undefined
+            exercice.sup2 = defaultSup2
           } else {
             exercice.sup2 = sup2[keySup2]
           }
           for (const keySup3 of sampleSupWithFallback(sup3)) {
             if (keySup3 === undefined) {
-              exercice.sup3 = undefined
+              exercice.sup3 = defaultSup3
             } else {
               exercice.sup3 = sup3[keySup3]
             }
             const signature = [
-              'uuuid:' + exercice.uuid,
-              'ssed:' + exercice.seed,
+              'uuid:' + exercice.uuid,
+              'seed:' + exercice.seed,
               'sup:' + exercice.sup,
               'sup2:' + exercice.sup2,
               'sup3:' + exercice.sup3,
@@ -575,7 +578,7 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
   }
 } else {
   // testRunAllLots('2e/2F22-1')
-  testRunAllLots('5e/5G53.ts')
+  testRunAllLots('3e/3L12-3')
   // testRunAllLots('4e/4G52')
 
   // testRunAllLots('techno1')

@@ -155,7 +155,7 @@ export default class nomExercice extends Exercice {
       texte = ''
       texteCorr = ''
       const variables = ['x', 'y', 'z', 'r', 's', 't']
-      const variablesSelect = getRandomSubarray(variables, this.sup4)
+      const variablesSelect = getRandomSubarray(variables, this.sup4 + 1)
       const typeofCoeff = ['entier']
       const signeGroupements: number[] = []
       const ordreGroupements: string[] = []
