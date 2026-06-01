@@ -57,8 +57,8 @@ cache:
     - corepack prepare pnpm@latest-10 --activate
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
-    - pnpm add playwright@1.51.1 --save-dev
-    - pnpm add @playwright/test@1.51.1 --save-dev
+    - pnpm add playwright@1.60.0 --save-dev
+    - pnpm add @playwright/test@1.60.0 --save-dev
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm install
     - nohup pnpm start &
     - sleep 20
@@ -77,7 +77,7 @@ cache:
     - apt-get install -y libasound2t64 libgbm1 libgtk-3-0 libnss3 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 xdg-utils
     - pnpm exec playwright install chromium
     - ls /root/.cache/ms-playwright/
-    - pnpm add playwright@1.51.1 --save-dev
+    - pnpm add playwright@1.60.0 --save-dev
     - pnpm install
     - nohup pnpm start &
     - sleep 10
@@ -96,7 +96,7 @@ cache:
     - apt-get install -y libasound2t64 libgbm1 libgtk-3-0 libnss3 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 xdg-utils
     - pnpm exec playwright install chromium
     - ls /root/.cache/ms-playwright/
-    - pnpm add playwright@1.51.1 --save-dev
+    - pnpm add playwright@1.60.0 --save-dev
     - git clone https://forge.apps.education.fr/coopmaths/dnb.git ./public/static/dnb
     - mv ./public/static/dnb/sujets_decoupes/* ./public/static/dnb/
     - pnpm install
@@ -116,7 +116,7 @@ cache:
     - apt-get update --allow-releaseinfo-change
     - apt-get install -y libasound2t64 libgbm1 libgtk-3-0 libnss3 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 xdg-utils
     - pnpm exec playwright install chromium
-    - pnpm add playwright@1.51.1 --save-dev
+    - pnpm add playwright@1.60.0 --save-dev
     - git clone https://forge.apps.education.fr/coopmaths/bac.git ./public/static/bac
     - pnpm install
     - nohup pnpm start &
@@ -184,7 +184,7 @@ cache:
 
 .testExosModifiedConsolidated:
   extends: .install_dependencies
-  image: mcr.microsoft.com/playwright:v1.51.0-noble
+  image: mcr.microsoft.com/playwright:v1.60.0-noble
   stage: build-projet
   allow_failure: true
   timeout: 5h
