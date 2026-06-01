@@ -48,6 +48,15 @@ function pickRandom<T>(arr: T[], n: number, rng: () => number): T[] {
 }
 
 /**
+ * Cache des classes d'exercices déjà chargées, indexé par référence (nom de
+ * fichier). Partagé entre tous les niveaux : les refs (ex. `3AutoN01`) sont
+ * uniques. Permet de reconstruire une version de façon synchrone une fois les
+ * modules téléchargés, ce qui est indispensable en sortie diaporama où
+ * `reroll()` lit le contenu immédiatement après `nouvelleVersionWrapper()`.
+ */
+const loadedClassCache = new Map<string, new () => Exercice>()
+
+/**
  * Fabrique la classe d'un exercice « Sélection d'automatismes » à partir de sa
  * configuration de niveau.
  */
@@ -149,14 +158,10 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
       this.besoinFormulaire3CaseACocher = ['Garder la sélection d\'exercices']
       this.besoinFormulaireNombresCategories = categoriesForm
 
-      // Placeholders pendant le chargement asynchrone
-      this.listeQuestions = Array(totalQuestions).fill('chargement...')
-      this.listeCorrections = Array(totalQuestions).fill('')
-      this.autoCorrection = Array(totalQuestions).fill(undefined)
-
-      // Chargement uniquement des modules sélectionnés
-      Promise.all(selected.map((e) => e.loader())).then((loadedModules) => {
-        this.Exercices = loadedModules.map((m) => m.default)
+      // Construit les questions à partir des classes chargées puis restaure nos
+      // paramètres de formulaire (MetaExerciceCan les écrase pendant le rendu).
+      const buildFromClasses = (classes: (new () => Exercice)[]) => {
+        this.Exercices = classes
         this.sup2 = selected.map((_, i) => i + 1).join('-')
         this.sup = false
         this.sup3 = false
@@ -179,7 +184,36 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
         this.besoinFormulaire2Texte = false
         this.besoinFormulaire3CaseACocher = ['Garder la sélection d\'exercices']
         this.besoinFormulaireNombresCategories = categoriesForm
+      }
 
+      // Si tous les modules sélectionnés sont déjà en cache, on reconstruit de
+      // façon synchrone, sans déclencher `updateAsyncEx`. Indispensable en
+      // diaporama : `reroll()` lit `listeQuestions` juste après l'appel, et un
+      // rechargement asynchrone provoquerait une boucle (chaque `updateAsyncEx`
+      // relançant un `reroll`) tout en n'affichant que « chargement... ».
+      const cachedClasses = selected.map((e) => loadedClassCache.get(e.ref))
+      if (cachedClasses.every((c): c is new () => Exercice => c != null)) {
+        buildFromClasses(cachedClasses)
+        return
+      }
+
+      // Placeholders pendant le chargement asynchrone
+      this.listeQuestions = Array(totalQuestions).fill('chargement...')
+      this.listeCorrections = Array(totalQuestions).fill('')
+      this.autoCorrection = Array(totalQuestions).fill(undefined)
+
+      // Chargement uniquement des modules sélectionnés (manquants du cache)
+      Promise.all(
+        selected.map((e) => {
+          const cached = loadedClassCache.get(e.ref)
+          if (cached) return Promise.resolve(cached)
+          return e.loader().then((m) => {
+            loadedClassCache.set(e.ref, m.default)
+            return m.default
+          })
+        }),
+      ).then((classes) => {
+        buildFromClasses(classes)
         document.dispatchEvent(
           new window.Event('updateAsyncEx', { bubbles: true }),
         )
