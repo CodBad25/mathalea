@@ -15,7 +15,6 @@ import {
 } from '../../lib/2d/figures2d/shapes2d'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import {
-  listePattern3d,
   listePatternRatio,
   listePatternsSansRatioNiFraction,
   type PatternRiche,
@@ -37,6 +36,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
+import { patternsFor6N4B_2 } from '../6e/6N4B-2'
 import Exercice from '../Exercice'
 
 export const titre =
@@ -97,7 +97,7 @@ export default class ListePatternsTousLesExos extends Exercice {
         listeOfAll = listePatternsSansRatioNiFraction
         break
       case 2:
-        listeOfAll = listePattern3d
+        listeOfAll = patternsFor6N4B_2
         break
       case 5:
         listeOfAll = listePatternRatio
@@ -305,8 +305,10 @@ export default class ListePatternsTousLesExos extends Exercice {
             ? `Pour le motif 43, il y a beaucoup trop d'éléments dans le ratio "${texRatio}".<br>`
             : `Pour le motif 43, il y a $${texNombre(n43)}$ éléments dans le ratio "${texRatio}" de $${ratio43}$.<br>`
         }
-        texte += `
-            Pour le motif $${unDePlus}$, il y a $${texNombre(nUnDePlus)}$ éléments dans le ratio "${texRatio}" de $${ratioUnDePlus}$.<br>`
+        texte +=
+          this.sup !== 5
+            ? `Pour le motif $${unDePlus}$, il y a $${texNombre(nUnDePlus)}$ ${nom}.<br>`
+            : `Pour le motif $${unDePlus}$, il y a $${texNombre(nUnDePlus)}$ éléments dans le ratio "${texRatio}" de $${ratioUnDePlus}$.<br>`
 
         const texRatioCouleur = (pat.formuleRatio ?? '')
           .split(' : ')
