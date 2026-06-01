@@ -45,7 +45,7 @@ export default class DeriveeExp extends Exercice {
       'Choix des questions',
       'Nombres séparés par des tirets :\n1 : $a*e^x+bx+c$\n2 : $(ax+b)e^x  $\n3 : $\\dfrac{k*e^x}{a*x+b}$\n4 : $\\dfrac{ax+b}{e^x}$\n5 :   $\\dfrac{ax^2+bx+c}{e^x}$\n6 : $\\dfrac{k*e^x}{ax^2+b}$\n7 : Mélange',
     ]
-    this.sup = '6'
+    this.sup = '7'
     this.spacing = 1.5
     this.spacingCorr = 1.5
   }
