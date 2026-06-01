@@ -21,7 +21,7 @@ export const interactifType = 'mathLive'
 // Gestion de la date de publication initiale
 export const dateDePublication = '10/06/2025'
 export const dateDeModifImportante = '30/12/2025' // Ajout de patterns affines et linéaires
-const patternsFor6N4B = listePattern3d.filter(
+export const patternsFor6N4B_2 = listePattern3d.filter(
   (p) => p.type === 'affine' || p.type === 'linéaire',
 ) // On enlève les patterns quadratiques pour cet exercice
 
@@ -55,7 +55,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
       'Nombres séparés par des tirets :\n1: Motif suivant à dessiner\n2 : Motif suivant (nombre)\n3 : Motif 10 (nombre)\n4 : Numéro du motif\n5 : Motif 100 (nombre)\n6 : Question au hasard parmi les 5 précédentes',
     ]
     this.sup4 = '6'
-    const nbDePattern = patternsFor6N4B.length
+    const nbDePattern = patternsFor6N4B_2.length
     this.besoinFormulaire5Texte = [
       'Numéros des pattern désirés :',
       [
@@ -68,7 +68,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
   }
 
   nouvelleVersion(): void {
-    const nbDePattern = patternsFor6N4B.length
+    const nbDePattern = patternsFor6N4B_2.length
     let typesPattern = gestionnaireFormulaireTexte({
       saisie: this.sup5,
       max: nbDePattern,
@@ -82,7 +82,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
     typesPattern = typesPattern.slice(0, 25)
     typesPattern = typesPattern.reverse()
 
-    const listePreDef = typesPattern.map((i) => patternsFor6N4B[i - 1])
+    const listePreDef = typesPattern.map((i) => patternsFor6N4B_2[i - 1])
     const nbFigures = Math.max(1, this.sup)
     const typesQuestions = Array.from(
       new Set(
