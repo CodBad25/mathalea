@@ -36,7 +36,7 @@ export default class EvolutionsSuccesives extends Exercice {
     super()
     this.besoinFormulaireNumerique = [
       'Type de questions',
-      4,
+      3,
       '1 : Déterminer un taux global \n2 : Déterminer un taux intermédiaire\n3 : Mélange',
     ]
 

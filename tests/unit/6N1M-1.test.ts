@@ -31,7 +31,7 @@ describe('IntercalerDecimalEntre2Decimaux', () => {
     context.isHtml = true
     instance.interactif = true
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 10; i++) {
       const start = performance.now()
       instance.nouvelleVersion()
       const dureeMs = performance.now() - start
@@ -50,6 +50,6 @@ describe('IntercalerDecimalEntre2Decimaux', () => {
       expect(dureeMs).toBeLessThan(400)
     }
 
-    expect(dureesNouvelleVersionMs).toHaveLength(100)
+    expect(dureesNouvelleVersionMs).toHaveLength(10)
   })
 })

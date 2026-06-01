@@ -12,6 +12,7 @@ import {
   homothetie,
   projectionOrtho,
   symetrieAxiale,
+  translation,
   translation2Points,
 } from '../../lib/2d/transformations'
 import { pointSurDroite } from '../../lib/2d/utilitairesPoint'
@@ -103,7 +104,8 @@ export default class nomExercice extends Exercice {
         C = pointAbstrait(3, randint(2, 4) * choice([-1, 1]))
         D = pointAbstrait(-3, randint(2, 4) * choice([-1, 1]))
         E = pointAbstrait(choice([-5, -6, 5, 6]), 0)
-        const pointsAPlacer = shuffle([C, D, E]).slice(0, this.sup)
+        pointsAPlacer.length = 0
+        pointsAPlacer.push(...shuffle([C, D, E]).slice(0, this.sup))
         for (let k = 0; k < pointsAPlacer.length; k++) {
           pointsAPlacer[k].nom = lettres[2 + k]
           pointsAPlacer[k].positionNom = 'below'
@@ -223,7 +225,7 @@ export default class nomExercice extends Exercice {
             const angleD = codageAngleDroit(
               point.x === pied2.x ? images[index] : point,
               pied2,
-              A,
+              A.x === pied2.x ? translation(A, vecteur(-dy, dx)) : A,
               'red',
             )
             return [d, angleD, pied2]
@@ -319,6 +321,7 @@ export default class nomExercice extends Exercice {
         // Énoncé et correction
         compteur++
       } while (deuxCiblesSeChevauchent(cibles) && compteur < 50)
+
       texte = `Construire l'image ${pointsAPlacer.length > 1 ? 'des' : 'du'} point${pointsAPlacer.length > 1 ? 's' : ''} ${enumeration(pointsAPlacer.map((p) => `$${p.nom}$`))} par la translation qui transforme $${lettres[0]}$ en $${lettres[1]}$.<br>`
       objetsEnonceEtCorr.push(...cibles)
       texte += mathalea2d(

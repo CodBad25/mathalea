@@ -20,7 +20,7 @@ import { pyramideTronquee3d } from '../../lib/3d/3dProjectionMathalea2d/Pyramide
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { creerCouples } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -63,34 +63,29 @@ export default class NombreDeFacesEtDAretes extends Exercice {
       this.sup = 3
     }
 
-    let typeDeQuestion = []
     this.nbQuestions = Math.min(this.nbQuestions, 50) // Comme il n'y a que 70 questions différentes on limite pour éviter que la boucle ne cherche trop longtemps
-    const choix1 = combinaisonListes([1, 3, 5, 7, 9, 11, 13], this.nbQuestions)
-    const choix2 = combinaisonListes([2, 4, 6, 8, 10, 12, 14], this.nbQuestions)
-    const nbAretes: number[] = combinaisonListes(
+    const typesDeQuestions =
+      this.sup === 3
+        ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+        : this.sup === 1
+          ? [2, 4, 6, 8, 10, 12, 14]
+          : [1, 3, 5, 7, 9, 11, 13]
+    const questionsGenerees = creerCouples(
+      typesDeQuestions,
       [3, 4, 5, 6, 8],
       this.nbQuestions,
-    )
-    if (this.sup === 3) {
-      for (let i = 0; i < this.nbQuestions; i++) {
-        typeDeQuestion.push(choix1[i], choix2[i])
-      }
-    } else if (this.sup === 1) {
-      typeDeQuestion = choix2.slice(0, this.nbQuestions)
-    } else {
-      typeDeQuestion = choix1.slice(0, this.nbQuestions)
-    }
+    ) as Array<[number, number]>
 
     for (let j = 0, choix; j < this.nbQuestions; ) {
       let correction = ''
       let reponse = 0
       let question = 'Voici un solide :<br>'
       const objects = []
-      choix = typeDeQuestion[j]
+      let n: number
+      ;[choix, n] = questionsGenerees[j]
       context.anglePerspective = 20
       const objets = []
       const points3D: Point3d[] = []
-      const n = nbAretes[j]
       const rayon = 4
       const O = point3d(0, 0, 0)
       const k = vecteur3d(0, 0, 2)
