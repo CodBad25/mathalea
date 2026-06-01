@@ -3800,16 +3800,6 @@ const listePatternAffineOuLineaire: (PatternRiche | PatternRiche3D)[] = // Tous 
     .filter((p) => p.type === 'affine' || p.type === 'linéaire')
     .sort((a, b) => Number(a.numero) - Number(b.numero))
 
-const listePatternAffine: (PatternRiche | PatternRiche3D)[] = // Tous les partern affines ou linéaires, 2D ou 3D
-  listePatternsPreDef
-    .filter((p) => p.type === 'affine')
-    .sort((a, b) => Number(a.numero) - Number(b.numero))
-
-const listePatternLineaire: (PatternRiche | PatternRiche3D)[] = // Tous les partern affines ou linéaires, 2D ou 3D
-  listePatternsPreDef
-    .filter((p) => p.type === 'linéaire')
-    .sort((a, b) => Number(a.numero) - Number(b.numero))
-
 const listePatternsSansRatioNiFraction = listePatternAffineOuLineaire // Tous les pattern sans ratio, sans fraction, affine ou linéaire.
   .filter((p) => p.fonctionRatio == null && p.fonctionFraction == null)
   .sort((a, b) => Number(a.numero) - Number(b.numero))
