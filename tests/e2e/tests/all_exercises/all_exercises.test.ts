@@ -3,6 +3,7 @@ import { beforeAll, describe, expect, it, test, vi } from 'vitest'
 import type { IExercice } from '../../../../src/lib/types'
 import { findStatic, findUuid } from '../../helpers/filter.js'
 import { getFileLogger, log as lg, logError as lgE } from '../../helpers/log'
+import { createSolidesThreeJsMock } from '../../mocks/solidesThreeJs.mock'
 
 beforeAll(() => {
   const proto = SVGElement.prototype as any
@@ -51,11 +52,9 @@ vi.mock('../../../../src/lib/3d/3d_dynamique/Canvas3DElement', () => ({
   }),
 }))
 
-vi.mock('../../../../src/lib/3d/3d_dynamique/solidesThreeJs', () => ({
-  sphericalToCartesian: vi.fn((args) => {
-    return 'sphericalToCartesian-mock:' + args.length
-  }),
-}))
+vi.mock('../../../../src/lib/3d/3d_dynamique/solidesThreeJs', () =>
+  createSolidesThreeJsMock(),
+)
 
 vi.mock('../../../../src/lib/components/version', () => ({
   fetchServerVersion: vi.fn(() => Promise.resolve('1.0.0')),
@@ -576,7 +575,7 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
   }
 } else {
   // testRunAllLots('2e/2F22-1')
-  testRunAllLots('1e/1AN14-3')
+  testRunAllLots('5e/5G53.ts')
   // testRunAllLots('4e/4G52')
 
   // testRunAllLots('techno1')
