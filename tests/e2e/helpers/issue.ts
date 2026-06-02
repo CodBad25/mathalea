@@ -23,7 +23,7 @@ export async function createIssue(
     log('Création des tickets')
   } else if (!connection) {
     // pas de création de tickets
-    log('Pas de création de tickets à la base des tickets')
+    // log('Pas de création de tickets à la base des tickets')
     return
   }
   if (tickets.nombreInitial >= tickets.nombreMax) {
