@@ -15,7 +15,7 @@ import prefs from '../../helpers/prefs.js'
 
 async function test(page: Page) {
   const hostname = local
-    ? `http://localhost:${process.env.CI ? '80' : '5173'}/alea/`
+    ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
     : 'https://coopmaths.fr/alea/'
   const urlExercice =
     hostname + '?uuid=ec059&id=2F20-2&n=10&d=10&s=1&s2=2&i=1&cd=1' // Mettre ici l'url de l'exercice (éventuellement avec la graine mais push sans la graine)
@@ -84,7 +84,7 @@ async function test(page: Page) {
 async function testFractionSimplifieeIrreductible(page: Page) {
   // Ce test s'assure que les fractions simplifiées mais non irréductibles ne sont pas acceptées
   const hostname = local
-    ? `http://localhost:${process.env.CI ? '80' : '5173'}/alea/`
+    ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
     : 'https://coopmaths.fr/alea/'
   const urlExercice =
     hostname + '?uuid=f8f4e&id=5N13&n=20&d=10&s=50&s2=true&i=1&cd=1'

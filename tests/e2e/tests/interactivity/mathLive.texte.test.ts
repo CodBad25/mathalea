@@ -10,7 +10,7 @@ import prefs from '../../helpers/prefs.js'
 
 async function test(page: Page) {
   const hostname = local
-    ? `http://localhost:${process.env.CI ? '80' : '5173'}/alea/`
+    ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
     : 'https://coopmaths.fr/alea/'
   const urlExercice = hostname + '?uuid=4ce2d&id=3P10-1&n=20&i=1&s=2'
   // 3P10-1 uniquement dans le cas de la recherche du taux de variation

@@ -1,45 +1,53 @@
 import { expect } from '@playwright/test'
+import path from 'path'
 import type { Page } from 'playwright'
+import { fileURLToPath } from 'url'
 import prefs from '../../helpers/prefs.js'
 import { runTest } from '../../helpers/run'
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 async function testV(page: Page) {
+  const port =
+    process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')
+  const basePath = process.env.CI ? '/alea' : ''
+  const origin = `http://localhost:${port}`
+  const parentRoutePattern = '**/parent*'
+  const parentUrl = `${origin}${basePath}/parent`
+  const moduleMockRoutePattern = '**/modulemock.js*'
+  const moduleMockScriptUrl = '/modulemock.js'
+  const iframeUrl = `${origin}${basePath}/?recorder=capytale`
+
   // Mock the api call before navigating
-  await page.route(
-    `http://localhost:${process.env.CI ? '80' : '5173'}/parent`,
-    async (route) => {
-      await route.fulfill({
-        contentType: 'text/html',
-        body: `<html>
+  await page.route(parentRoutePattern, async (route) => {
+    await route.fulfill({
+      contentType: 'text/html',
+      body: `<html>
       <body>
       bonjour
       <div style='height: 90%;'>
-      <iframe id='iframe' width="100%" height="100%" allowfullscreen="" src='http://localhost:${process.env.CI ? '80' : '5173'}/alea/?recorder=capytale'></iframe>
+      <iframe id='iframe' width="100%" height="100%" allowfullscreen="" src='${iframeUrl}'></iframe>
       </div>
-      <script src='modulemock.js' type='module'></script>
+      <script src='${moduleMockScriptUrl}' type='module'></script>
       </body></html>`,
-      })
-    },
-  )
-  await page.route(
-    `http://localhost:${process.env.CI ? '80' : '5173'}/modulemock.js`,
-    async (route) => {
-      await route.fulfill({
-        contentType: 'text/javascript',
-        path: require('path').resolve(
-          __dirname,
-          '../../mock/mock.capytale.review.1.module.js',
-        ),
-      })
-    },
-  )
+    })
+  })
+  await page.route(moduleMockRoutePattern, async (route) => {
+    await route.fulfill({
+      contentType: 'text/javascript',
+      path: path.resolve(
+        __dirname,
+        '../../mock/mock.capytale.review.1.module.js',
+      ),
+    })
+  })
 
   // Go to the page
-  const hostname = `http://localhost:${process.env.CI ? '80' : '5173'}/parent`
   await page.setDefaultTimeout(60000) // Set timeout to 60 seconds
-  await page.goto(hostname)
+  await page.goto(parentUrl)
 
-  await page.getByText('bonjour').waitFor({ state: 'visible' })
+  await expect(page.locator('body')).toContainText('bonjour')
   await page.waitForSelector('#iframe')
   await page.waitForTimeout(3000) // attendre 3000 ms de plus pour assurer le rendu
   if (page.frames().length > 0) {

@@ -12,7 +12,7 @@ import prefs from '../../helpers/prefs.js'
 
 async function test(page: Page) {
   const hostname = local
-    ? `http://localhost:${process.env.CI ? '80' : '5173'}/alea/`
+    ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
     : 'https://coopmaths.fr/alea/'
   const urlExercice =
     hostname + '?uuid=91d72&id=5N10&n=20&d=10&s=3&s2=false&i=1&cd=1'

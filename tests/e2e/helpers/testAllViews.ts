@@ -82,7 +82,7 @@ export async function testAllViews(
   if (browser === null) throw Error("can't test a null browser")
   const [context] = browser.contexts()
   const hostname = local
-    ? `http://localhost:${process.env.CI ? '80' : '5173'}/alea/?`
+    ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/?`
     : 'https://coopmaths.fr/alea/?'
   await page.goto(hostname + options.params)
   await page.waitForLoadState('networkidle')

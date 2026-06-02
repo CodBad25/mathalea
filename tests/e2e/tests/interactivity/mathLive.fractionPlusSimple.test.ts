@@ -12,7 +12,7 @@ async function testFractionSimplifiee(page: Page) {
   // Ce test s'assure que les fractions simplifiée pas au maximum sont acceptées
   // et qu'une fraction égale (celle de l'énoncé) mais pas simplifiée n'est pas acceptée
   const hostname = local
-    ? `http://localhost:${process.env.CI ? '80' : '5173'}/alea/`
+    ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
     : 'https://coopmaths.fr/alea/'
   const urlExercice =
     hostname + '?uuid=f8f4e&id=5N13&n=20&d=10&s=50&s2=false&i=1&cd=1'

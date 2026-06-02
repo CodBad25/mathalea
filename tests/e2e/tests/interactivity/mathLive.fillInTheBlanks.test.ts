@@ -9,7 +9,7 @@ import {
 
 async function testCM2N2D1(page: Page) {
   const hostname = local
-    ? `http://localhost:${process.env.CI ? '80' : '5173'}/alea/`
+    ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
     : 'https://coopmaths.fr/alea/'
   const urlExercice = hostname + '?uuid=3bdcd&id=6N20-3&alea=vBuv&i=1'
   const questions = await getQuestions(page, urlExercice)
@@ -42,7 +42,7 @@ async function testCM2N2D1(page: Page) {
 
 async function test5R211(page: Page) {
   const hostname = local
-    ? `http://localhost:${process.env.CI ? '80' : '5173'}/alea/`
+    ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
     : 'https://coopmaths.fr/alea/'
   const urlExercice = hostname + '?uuid=f2db1&alea=1iCO&i=1' // Mettre ici l'url de l'exercice (éventuellement avec la graine mais push sans la graine)
   const questions = await getQuestions(page, urlExercice)

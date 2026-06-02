@@ -347,7 +347,7 @@ async function testRunAllLots(filter: string) {
         })
         log(filter)
         const hostname = local
-          ? `http://localhost:${process.env.CI ? '80' : '5173'}/alea/`
+          ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
           : 'https://coopmaths.fr/alea/'
         log(
           `uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]} i=${k} / ${filteredUuids.length}`,

@@ -374,7 +374,7 @@ async function testRunAllLots(filter: string) {
           })
         }
         const hostname = local
-          ? `http://localhost:${process.env.CI ? '80' : '5173'}/alea/`
+          ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
           : 'https://coopmaths.fr/alea/'
         log(`uuid=${uuids[k][0]} exo=${uuids[k][1]} i=${k} / ${uuids.length}`)
         const resultReq = await getLatexFile(
