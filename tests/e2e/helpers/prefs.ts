@@ -9,11 +9,11 @@ const prefs: Prefs = {
   browsers: ['chromium'],
   contextOptions: {},
   pauseOnError: true,
-  debug: true,
+  debug: false,
   headless: true,
   silent: false,
   slowMo: 0,
-  verbose: true,
+  verbose: false,
   nbExosParLot: 50,
 }
 
