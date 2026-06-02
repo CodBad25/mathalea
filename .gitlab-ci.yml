@@ -27,6 +27,7 @@ variables:
   SAST_EXCLUDED_PATHS: 'node_modules,.pnpm-store,dist,build,coverage,logs,.cache,.git,tests/e2e,playwright-report'
   SAST_EXCLUDED_ANALYZERS: 'bandit,gosec,flawfinder,brakeman'
   FF_USE_POD_ACTIVE_DEADLINE_SECONDS: 'false'
+  PDF_CI_IMAGE: '$CI_REGISTRY_IMAGE/ci/tex-node-playwright:node22-pw1.60-tex-2026-06'
 
 semgrep-sast:
   rules:
@@ -50,6 +51,26 @@ cache:
   paths:
     - .pnpm-store
 
+build-pdf-ci-image:
+  stage: build-projet
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.2-debug
+    entrypoint: ['']
+  variables:
+    DEST_IMAGE: '$CI_REGISTRY_IMAGE/ci/tex-node-playwright:node22-pw1.60-tex-2026-06'
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"gitlab-ci-token\",\"password\":\"$CI_JOB_TOKEN\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context "$CI_PROJECT_DIR" --dockerfile "$CI_PROJECT_DIR/docker/ci-pdf/Dockerfile" --destination "$DEST_IMAGE" --cache=true --cache-repo "$CI_REGISTRY_IMAGE/cache/kaniko"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+    - if: $CI_COMMIT_BRANCH == "pipeline"
+      when: manual
+    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
+      when: manual
+    - when: never
+
 .install_dependencies:
   before_script:
     - npm install -g corepack@latest
@@ -67,17 +88,11 @@ cache:
 
 .install_dependenciesPDF:
   before_script:
-    - npm install -g corepack@latest
     - corepack enable
-    - corepack prepare pnpm@latest-10 --activate
+    - corepack prepare pnpm@11.5.0 --activate
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - lualatex -v
-    - apt-get update --allow-releaseinfo-change
-    - apt-get install -y libasound2t64 libgbm1 libgtk-3-0 libnss3 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 xdg-utils
-    - pnpm exec playwright install chromium
-    - ls /root/.cache/ms-playwright/
-    - pnpm add playwright@1.60.0 --save-dev
     - pnpm install
     - nohup pnpm start &
     - sleep 10
@@ -86,17 +101,11 @@ cache:
 
 .install_dependenciesPDFDNB:
   before_script:
-    - npm install -g corepack@latest
     - corepack enable
-    - corepack prepare pnpm@latest-10 --activate
+    - corepack prepare pnpm@11.5.0 --activate
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - lualatex -v
-    - apt-get update --allow-releaseinfo-change
-    - apt-get install -y libasound2t64 libgbm1 libgtk-3-0 libnss3 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 xdg-utils
-    - pnpm exec playwright install chromium
-    - ls /root/.cache/ms-playwright/
-    - pnpm add playwright@1.60.0 --save-dev
     - git clone https://forge.apps.education.fr/coopmaths/dnb.git ./public/static/dnb
     - mv ./public/static/dnb/sujets_decoupes/* ./public/static/dnb/
     - pnpm install
@@ -107,16 +116,11 @@ cache:
 
 .install_dependenciesPDFBAC:
   before_script:
-    - npm install -g corepack@latest
     - corepack enable
-    - corepack prepare pnpm@latest-10 --activate
+    - corepack prepare pnpm@11.5.0 --activate
     # - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - lualatex -v
-    - apt-get update --allow-releaseinfo-change
-    - apt-get install -y libasound2t64 libgbm1 libgtk-3-0 libnss3 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 xdg-utils
-    - pnpm exec playwright install chromium
-    - pnpm add playwright@1.60.0 --save-dev
     - git clone https://forge.apps.education.fr/coopmaths/bac.git ./public/static/bac
     - pnpm install
     - nohup pnpm start &
@@ -125,7 +129,7 @@ cache:
     - sleep 30
 
 .testCIPDF:
-  image: guironne/tex-live-nodejs-playwright9
+  image: $PDF_CI_IMAGE
   extends: .install_dependenciesPDF
   stage: playwright-pdf
   allow_failure: true
@@ -694,7 +698,7 @@ testExosModifiedConsolidated:
     - when: never
 
 # Job LaTeX séparé (nécessite une image Docker spéciale)
-# Reste séparé car image guironne/tex-live-nodejs-playwright9 spécifique
+# Reste séparé car image PDF/TeX spécifique (variable PDF_CI_IMAGE)
 testExosModifiedLatex:
   extends: .testCIPDF
   timeout: 3h
@@ -723,91 +727,6 @@ testExosModifiedLatex:
     - echo "$CHANGED_FILES"
     - CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:pdfexports
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: always
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: always
-    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: manual
-    - when: never
-
-testExosModifiedInteractif:
-  extends: .testCI
-  stage: build-projet
-  timeout: 3h
-  script:
-    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
-    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm vite build
-    # - CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
-    - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
-    - git checkout FETCH_HEAD
-    - |
-      COMMIT_COUNT=$(git rev-list --count HEAD)
-      MAX_COMMITS=5
-
-      if [ "$COMMIT_COUNT" -lt "$MAX_COMMITS" ]; then
-        DIFF_BASE="HEAD~$((COMMIT_COUNT - 1))"
-      else
-        DIFF_BASE="HEAD~$MAX_COMMITS"
-      fi
-      echo "Comparing from $DIFF_BASE to HEAD"
-
-      if git rev-parse --verify "$DIFF_BASE" >/dev/null 2>&1; then
-        echo "Comparing from $DIFF_BASE to HEAD"
-        CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
-      else
-        echo "⚠️ Le commit $DIFF_BASE n'est pas disponible (clone trop peu profond ?)"
-        CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
-      fi
-
-    # -  CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
-    # - CHANGED_FILES=$(git diff --name-only HEAD~5..HEAD)
-    - echo "$CHANGED_FILES"
-    - INTERACTIF_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest tests/unit/report-interactif.test.ts --run
-  rules:
-    # Se lance uniquement si le pipeline est déclenché par une Merge Request
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: always
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: always
-    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: manual
-    - when: never
-
-testExosModifiedAmcnum:
-  extends: .testCI
-  stage: build-projet
-  script:
-    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
-    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm vite build
-    # - CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
-    - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
-    - git checkout FETCH_HEAD
-    - |
-      COMMIT_COUNT=$(git rev-list --count HEAD)
-      MAX_COMMITS=5
-
-      if [ "$COMMIT_COUNT" -lt "$MAX_COMMITS" ]; then
-        DIFF_BASE="HEAD~$((COMMIT_COUNT - 1))"
-      else
-        DIFF_BASE="HEAD~$MAX_COMMITS"
-      fi
-      echo "Comparing from $DIFF_BASE to HEAD"
-
-      if git rev-parse --verify "$DIFF_BASE" >/dev/null 2>&1; then
-        echo "Comparing from $DIFF_BASE to HEAD"
-        CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
-      else
-        echo "⚠️ Le commit $DIFF_BASE n'est pas disponible (clone trop peu profond ?)"
-        CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
-      fi
-
-    # -  CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
-    # - CHANGED_FILES=$(git diff --name-only HEAD~5..HEAD)
-    - echo "$CHANGED_FILES"
-    - AMCNUM_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest tests/unit/report-amcnum.test.ts --run
-  rules:
-    # Se lance uniquement si le pipeline est déclenché par une Merge Request
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
     - if: $CI_COMMIT_BRANCH == "main"
