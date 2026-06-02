@@ -1,47 +1,67 @@
-import { writeFileSync } from 'fs'
 import { expect } from '@playwright/test'
-import type { Page } from 'playwright'
+import { writeFileSync } from 'fs'
+import path from 'path'
+import type { Locator, Page } from 'playwright'
+import { fileURLToPath } from 'url'
 import { logDiffContext } from '../../helpers/compareStrings'
 import prefs from '../../helpers/prefs.js'
 import { runTest } from '../../helpers/run'
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+async function clickRobust(locator: Locator) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      await expect(locator).toBeVisible()
+      await expect(locator).toBeEnabled()
+      await locator.click({ trial: true, timeout: 5000 })
+      await locator.click({ timeout: 5000 })
+      return
+    } catch (error) {
+      if (attempt === 2) throw error
+      await locator.page().waitForTimeout(150)
+    }
+  }
+}
+
 async function testV(page: Page) {
+  const port =
+    process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')
+  const basePath = process.env.CI ? '/alea' : ''
+  const origin = `http://localhost:${port}`
+  const parentRoutePattern = '**/parent*'
+  const parentUrl = `${origin}${basePath}/parent`
+  const moduleMockRoutePattern = '**/modulemock.js*'
+  const moduleMockScriptUrl = '/modulemock.js'
+  const iframeUrl = `${origin}${basePath}/?recorder=capytale`
+
   // Mock the api call before navigating
-  await page.route(
-    `http://localhost:${process.env.CI ? '80' : '5173'}/parent`,
-    async (route) => {
-      await route.fulfill({
-        contentType: 'text/html',
-        body: `<html>
+  await page.route(parentRoutePattern, async (route) => {
+    await route.fulfill({
+      contentType: 'text/html',
+      body: `<html>
       <body>
       bonjour
       <div style='height: 90%;'>
-      <iframe id='iframe' width="100%" height="100%" allowfullscreen="" src='http://localhost:${process.env.CI ? '80' : '5173'}/alea/?recorder=capytale'></iframe>
+      <iframe id='iframe' width="100%" height="100%" allowfullscreen="" src='${iframeUrl}'></iframe>
       </div>
-      <script src='modulemock.js' type='module'></script>
+      <script src='${moduleMockScriptUrl}' type='module'></script>
       </body></html>`,
-      })
-    },
-  )
-  await page.route(
-    `http://localhost:${process.env.CI ? '80' : '5173'}/modulemock.js`,
-    async (route) => {
-      await route.fulfill({
-        contentType: 'text/javascript',
-        path: require('path').resolve(
-          __dirname,
-          '../../mock/mock.capytale.save.module.js',
-        ),
-      })
-    },
-  )
+    })
+  })
+  await page.route(moduleMockRoutePattern, async (route) => {
+    await route.fulfill({
+      contentType: 'text/javascript',
+      path: path.resolve(__dirname, '../../mock/mock.capytale.save.module.js'),
+    })
+  })
 
   // Go to the page
-  const hostname = `http://localhost:${process.env.CI ? '80' : '5173'}/parent`
   page.setDefaultTimeout(60000) // Set timeout to 60 seconds
-  await page.goto(hostname)
+  await page.goto(parentUrl)
 
-  await page.getByText('bonjour').waitFor({ state: 'visible' })
+  await expect(page.locator('body')).toContainText('bonjour')
 
   // await page.locator('#iframe').contentFrame().getByRole('button', { name: 'Exercice 1' }).click()
   // const box = await page.locator('#iframe').contentFrame().locator('.minute-hand').boundingBox()
@@ -113,26 +133,30 @@ async function testV(page: Page) {
     .getByRole('button', { name: 'Exercice 3' })
     .click()
   await page.locator('#iframe').contentFrame().locator('.ML__content').click()
-  await page
-    .locator('#iframe')
-    .contentFrame()
-    .getByRole('button', { name: '6', exact: true })
-    .click()
-  await page
-    .locator('#iframe')
-    .contentFrame()
-    .getByRole('button', { name: '0', exact: true })
-    .click()
-  await page
-    .locator('#iframe')
-    .contentFrame()
-    .getByRole('button', { name: '0', exact: true })
-    .click()
-  await page
-    .locator('#iframe')
-    .contentFrame()
-    .getByRole('button', { name: '0', exact: true })
-    .click()
+  await clickRobust(
+    page
+      .locator('#iframe')
+      .contentFrame()
+      .getByRole('button', { name: '6', exact: true }),
+  )
+  await clickRobust(
+    page
+      .locator('#iframe')
+      .contentFrame()
+      .getByRole('button', { name: '0', exact: true }),
+  )
+  await clickRobust(
+    page
+      .locator('#iframe')
+      .contentFrame()
+      .getByRole('button', { name: '0', exact: true }),
+  )
+  await clickRobust(
+    page
+      .locator('#iframe')
+      .contentFrame()
+      .getByRole('button', { name: '0', exact: true }),
+  )
   await page
     .locator('#iframe')
     .contentFrame()

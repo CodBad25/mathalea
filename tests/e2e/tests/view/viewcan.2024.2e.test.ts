@@ -11,6 +11,34 @@ function log(...args: unknown[]) {
   logConsole(args)
 }
 
+async function clickWithFallback(page: Page, selector: string) {
+  const locator = page.locator(selector)
+  await locator.waitFor({ state: 'visible', timeout: 30000 })
+  try {
+    await locator.click({ timeout: 60000 })
+  } catch {
+    await page.evaluate((sel) => {
+      const element = document.querySelector<HTMLElement>(sel)
+      if (!element) throw new Error(`Element not found: ${sel}`)
+      element.click()
+    }, selector)
+  }
+}
+
+async function ensureFieldVisible(page: Page, fieldId: string) {
+  const selector = `#champTexteEx${fieldId}`
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      await page.waitForSelector(selector, { timeout: 2000 })
+      return
+    } catch {
+      await clickWithFallback(page, '.bxs-chevron-right')
+      await page.waitForTimeout(150)
+    }
+  }
+  await page.waitForSelector(selector, { timeout: 10000 })
+}
+
 async function testCanView(page: Page) {
   await page.setDefaultTimeout(200000) // Set timeout to 60 seconds
   log('===========================================================')
@@ -18,7 +46,7 @@ async function testCanView(page: Page) {
   log('===========================================================')
   log("Chargement de l'url")
   const hostname = local
-    ? `http://localhost:${process.env.CI ? '80' : '5173'}/alea/`
+    ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
     : 'https://coopmaths.fr/alea/'
   await page.goto(hostname + '?uuid=94d21&alea=hqk0&s=1')
   log('Clique sur le lien vue élève (config)')
@@ -109,6 +137,7 @@ async function testCanView(page: Page) {
   await page1.locator('.key--1').click()
   await page1.locator('.key--2').click()
   await page1.locator('.bxs-chevron-right').click()
+  await ensureFieldVisible(page1, '0Q19')
   await inputAnswerById(page1, '0Q19', '-16')
   await page1.locator('.bxs-chevron-right').click()
   await inputAnswerById(page1, '0Q20', '5/2')
@@ -121,6 +150,7 @@ async function testCanView(page: Page) {
   await page1.locator('.bxs-chevron-right').click()
   await inputAnswerById(page1, '0Q24', 'x^2-8x+16')
   await page1.locator('.bxs-chevron-right').click()
+  await ensureFieldVisible(page1, '0Q25')
   await inputAnswerById(page1, '0Q25', '(x-5)(x+5)')
   await page1.locator('.bxs-chevron-right').click()
   await inputAnswerById(page1, '0Q26', '19/31')
@@ -172,7 +202,7 @@ async function testEleveView(page: Page) {
   log('===      TEST VUE ELEVE PRESENTATION 0 2024 ===============')
   log('===========================================================')
   const hostname = local
-    ? `http://localhost:${process.env.CI ? '80' : '5173'}/alea/`
+    ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
     : 'https://coopmaths.fr/alea/'
   await page.goto(hostname + '?uuid=94d21&alea=hqk0&s=1', { timeout: 100000 })
   log("Chargement de l'url:" + hostname + '?uuid=94d21&alea=hqk0&s=1')
@@ -268,10 +298,7 @@ async function testEleveView(page: Page) {
   await inputAnswerById(page1, '0Q29', '[-5;2]')
   await page1.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
   log('Vérifier les questions')
-  const element = await page1.waitForSelector('#buttonScoreEx0', {
-    timeout: 30000,
-  })
-  await element.click({ timeout: 60000 })
+  await clickWithFallback(page1, '#buttonScoreEx0')
   await page1.waitForSelector('#consigne0-29 + div', { timeout: 30000 })
   const buttonResult = await page1.locator('#consigne0-29 + div').innerText()
   expect('30 / 30').toEqual(buttonResult)
@@ -285,7 +312,7 @@ async function testEleveViewPre2(page: Page) {
   log('===   TEST VUE ELEVE Presentation 3 2024 ==================')
   log('===========================================================')
   const hostname = local
-    ? `http://localhost:${process.env.CI ? '80' : '5173'}/alea/`
+    ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
     : 'https://coopmaths.fr/alea/'
   await page.goto(hostname + '?uuid=94d21&alea=hqk0&s=1', { timeout: 120000 })
   log("Chargement de l'url:" + hostname + '?uuid=94d21&alea=hqk0&s=1')

@@ -113,6 +113,28 @@ NODE_OPTIONS=--max-old-space-size=4096 pnpm run prebuild-unit-tests
 
 ## Tests e2e globaux
 
+### Port du serveur en local (mode CI)
+
+Les tests e2e utilisent maintenant la variable `PLAYWRIGHT_SERVER_PORT` pour construire les URLs locales.
+
+Ordre de priorité du port :
+
+1. `PLAYWRIGHT_SERVER_PORT` si définie
+2. `80` si `CI=1`
+3. `5173` sinon
+
+Cela permet de reproduire le comportement CI en local sans devoir binder le port 80.
+
+Exemple pratique (local, mode CI, serveur sur 5173) :
+
+```bash
+pnpm install
+pnpm start
+CI=1 PLAYWRIGHT_SERVER_PORT=5173 pnpm test:e2e:views
+CI=1 PLAYWRIGHT_SERVER_PORT=5173 pnpm test:e2e:consistency
+CI=1 PLAYWRIGHT_SERVER_PORT=5173 pnpm test:e2e:interactivity
+```
+
 ### `playwright-testCanEleve`
 
 Ce job teste les vues via :
