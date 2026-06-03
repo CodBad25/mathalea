@@ -1,7 +1,11 @@
-import { resolve } from 'node:path'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { mergeConfig } from 'vite'
 import { defineConfig } from 'vitest/config'
 import viteConfig from './vite.config'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 export default mergeConfig(
   viteConfig,
@@ -24,6 +28,7 @@ export default mergeConfig(
       pool: 'threads',
       maxWorkers: 1,
       isolate: false,
+      disableConsoleIntercept: true,
     },
   }),
 )
