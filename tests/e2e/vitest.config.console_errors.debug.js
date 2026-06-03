@@ -1,10 +1,14 @@
 // Config dédiée au debug local du test console_errors (avec navigateur visible)
 // cf https://vitest.dev/config/
 
-import { resolve } from 'node:path'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { mergeConfig } from 'vite'
 import { defineConfig } from 'vitest/config'
 import viteConfig from './vite.config'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 export default mergeConfig(
   viteConfig,

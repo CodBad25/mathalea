@@ -1,4 +1,5 @@
-import { resolve } from 'path'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { defineConfig /*, splitVendorChunkPlugin */ } from 'vite'
 
 // tant qu'on a de gros soucis de RAM consommée on vire le plugin legacy
@@ -7,6 +8,9 @@ import { defineConfig /*, splitVendorChunkPlugin */ } from 'vite'
 // import legacy from '@vitejs/plugin-legacy' // il faut aussi installer terser
 
 import dynamicImport from 'vite-plugin-dynamic-import'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 // pour la gestion du statique, on laisse pas mal de trucs dans docroot/, que l'on ne veut pas voir supprimés
 // la pratique usuelle est de mettre ça dans un dossier {root}/public/, dont vite copie le contenu à chaque build dans {root}/docroot/
