@@ -52,13 +52,12 @@ export default class Suites extends Exercice {
       nbQuestions: this.nbQuestions,
     })
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      // Generate new values for each exercise
       const u = randint(-10, 10, 0)
       const r = randint(-10, 10, 0)
       const num = randint(-10, 10, 0)
       const den = randint(-10, 10, 0)
       const q = fraction(num, den).simplifie()
-      const n = randint(0, 20)
+      const n = randint(1, 20)
       let texte = ''
       let texteCorr = ''
       // Boucle principale où i+1 correspond au numéro de la question
