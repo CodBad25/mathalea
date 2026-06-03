@@ -1,6 +1,6 @@
 <script lang="ts">
   import seedrandom from 'seedrandom'
-  import { onMount, tick } from 'svelte'
+  import { onDestroy, onMount, tick } from 'svelte'
   import {
     buildExercisesList,
     splitExercisesIntoQuestions,
@@ -324,9 +324,22 @@
     }
   }
 
+  // Certains exercices (ex. « Sélection d'automatismes ») chargent leurs
+  // questions de façon asynchrone et signalent leur disponibilité via
+  // l'événement `updateAsyncEx` : on reconstruit alors les questions, sinon
+  // elles resteraient bloquées sur « chargement... ».
+  function forceUpdate() {
+    buildQuestions()
+  }
+
   onMount(async () => {
+    document.addEventListener('updateAsyncEx', forceUpdate)
     exercices = await Promise.all(buildExercisesList())
     await buildQuestions()
+  })
+
+  onDestroy(() => {
+    document.removeEventListener('updateAsyncEx', forceUpdate)
   })
 </script>
 

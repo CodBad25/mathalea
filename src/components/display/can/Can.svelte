@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import { get } from 'svelte/store'
   import MetaExercice from '../../../exercices/MetaExerciceCan'
   import {
@@ -88,6 +88,7 @@
   let recordedTimeFromCapytale: number
   let unavailableMessage = ''
   onMount(async () => {
+    document.addEventListener('updateAsyncEx', forceUpdate)
     // handleCapytale peut changer la valeur du store pour que le
     // professeur aille directement aux solutions de l'élève ou pour l'empêcher de recommencer
     canOptions.subscribe((value) => {
@@ -163,6 +164,14 @@
       }
     }
     // découpage des exerices en questions
+    buildQuestions()
+  })
+
+  // Certains exercices (ex. « Sélection d'automatismes ») chargent leurs
+  // questions de façon asynchrone et signalent leur disponibilité via
+  // l'événement `updateAsyncEx` : on reconstruit alors les questions, sinon
+  // elles resteraient bloquées sur « chargement... ».
+  function buildQuestions() {
     const splitResults = splitExercisesIntoQuestions(exercises)
     questions = splitResults.questions.filter(
       (question): question is string => typeof question === 'string',
@@ -172,9 +181,15 @@
     consignesCorrections = [...splitResults.consignesCorrections]
     indiceExercice = [...splitResults.indiceExercice]
     indiceQuestionInExercice = [...splitResults.indiceQuestionInExercice]
-    for (let i = 0; i < questions.length; i++) {
-      $canOptions.questionGetAnswer.push(false)
-    }
+    $canOptions.questionGetAnswer = questions.map(() => false)
+  }
+
+  function forceUpdate() {
+    buildQuestions()
+  }
+
+  onDestroy(() => {
+    document.removeEventListener('updateAsyncEx', forceUpdate)
   })
 
   type AnswerType = {
