@@ -2833,7 +2833,6 @@ const pattern96: PatternRiche = {
   shapes: ['fraise', 'soleil'],
   fonctionNb: (x: number) => 1 + 8 * x,
   fonctionFraction: (x: number) => new FractionEtendue(1 + 4 * x, 4 * x),
-
   fonctionRatio: (x: number) => new Ratio([1 + 4 * x, 4 * x]),
   texRatio: 'fraise : soleil',
   formule: '8\\times n+1',
@@ -3079,7 +3078,7 @@ const pattern101: PatternRiche = {
 
 // Tapis de Serpinski
 const pattern102: PatternRiche = {
-  numero: 101,
+  numero: 102,
   shapes: ['carré', 'carréBleu'],
   fonctionNb: (x: number) => (3 ** x - 1) / 2,
   fonctionFraction: (x: number) =>
@@ -3126,7 +3125,7 @@ const pattern102: PatternRiche = {
 }
 
 const pattern103: PatternRiche = {
-  numero: 101,
+  numero: 103,
   shapes: ['pentagone'],
   fonctionNb: (x: number) => (3 ** x - 1) / 2,
   formule: '\\dfrac{3^n-1}{2}',
@@ -3805,12 +3804,12 @@ const listePatternsSansRatioNiFraction = listePatternAffineOuLineaire // Tous le
   .sort((a, b) => Number(a.numero) - Number(b.numero))
 
 const listePatternAffine: (PatternRiche | PatternRiche3D)[] = // Tous les partern affines ou linéaires, 2D ou 3D
-  listePatternsPreDef
+  listePatternsSansRatioNiFraction
     .filter((p) => p.type === 'affine')
     .sort((a, b) => Number(a.numero) - Number(b.numero))
 
 const listePatternLineaire: (PatternRiche | PatternRiche3D)[] = // Tous les partern affines ou linéaires, 2D ou 3D
-  listePatternsPreDef
+  listePatternsSansRatioNiFraction
     .filter((p) => p.type === 'linéaire')
     .sort((a, b) => Number(a.numero) - Number(b.numero))
 
