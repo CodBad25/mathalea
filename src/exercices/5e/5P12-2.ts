@@ -19,11 +19,15 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { range1 } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
 import { mathalea2d } from '../../modules/mathalea2d'
-import { gestionnaireFormulaireTexte } from '../../modules/outils'
+import {
+  contraindreValeur,
+  gestionnaireFormulaireTexte,
+} from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
-export const titre = "Trouver le ratio d'évolution d'un motif numérique"
+export const titre =
+  "Trouver le ratio d'évolution d'un motif géométrique itératif"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
@@ -37,7 +41,7 @@ export const dateDeModificationImportante = '30/05/2026'
  * Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/
  * @author Jean-claude Lhote
  */
-export const uuid = '339c9'
+export const uuid = '2621f'
 
 export const refs = {
   'fr-fr': ['5P12-2'],
@@ -58,9 +62,15 @@ Grâce au troisième paramètre, on peut imposer des motifs choisis dans cette <
 Si le choix se porte sur des motifs prédéfinis (de facile à très difficile), alors ces choix sont cumulables entre eux ainsi qu'avec d'autres numéros.<br>
 Si plusieurs motifs prédéfinis sont choisis, alors ils seront toujours fournis dans l'ordre de difficulté même si l'ordre aléatoire du dernier paramètre a été choisi.<br>
 Si aucun motif prédéfini n'est choisi et si le nombre de questions est supérieur au nombre de motifs choisis, alors l'exercice sera complété par des motifs choisis au hasard.`
-    this.besoinFormulaireNumerique = ['Nombre de figures par question', 4]
+    this.besoinFormulaireNumerique = [
+      'Nombre de figures par question',
+      3,
+      'Deux figures\nTrois Figures\nQuatre Figures',
+    ]
     this.sup = 3
+
     this.nbDePattern = listePatternRatio.length
+
     this.besoinFormulaire2Texte = [
       'Types de questions',
       'Nombres séparés par des tirets :\n1 : Ratio du motif suivant\n2 : Ratio du motif suivant du suivant\n3 : Ratio du motif n\n4 : Ensemble de ces 3 questions',
@@ -68,28 +78,27 @@ Si aucun motif prédéfini n'est choisi et si le nombre de questions est supéri
     this.sup2 = '1-2'
 
     this.besoinFormulaire3Texte = [
-      'Numéros des motifs désirés :',
+      'Numéros des motifs désirés',
       [
         'Nombres séparés par des tirets  :',
-        `Mettre des nombres entre 1 et ${this.nbDePattern}.`,
-        `Mettre 100 pour des motifs faciles.`,
-        `Mettre 101 pour des motifs moyens.`,
-        `Mettre 102 pour des motifs difficiles.`,
-        `Mettre 103 pour des motifs très difficiles.`,
-        `Mettre ${this.nbDePattern + 1} pour laisser le hasard faire.`,
+        `Entre 1 et ${this.nbDePattern} : pour choisir un motif particulier`,
+        `0 : pour laisser le hasard faire`,
+        `100 : pour choisir des motifs faciles.`,
+        `101 : pour choisir des motifs moyens.`,
+        `102 : pour choisir des motifs difficiles.`,
+        `103 : pour choisir des motifs très difficiles.`,
       ].join('\n'),
     ]
-
     this.sup3 = `100-101`
 
-    this.besoinFormulaire4CaseACocher = ['Ordre aléatoire des questions']
+    this.besoinFormulaire4CaseACocher = ['Ordre aléatoire des motifs']
     this.sup4 = true
 
     this.niveau = '5e'
   }
 
   nouvelleVersion(): void {
-    const nbFigures = Math.max(2, this.sup)
+    const nbFigures = contraindreValeur(2, 4, this.sup + 1, 4)
 
     const ordreAleatoireDesQuestions = this.sup4
 
@@ -123,9 +132,9 @@ Si aucun motif prédéfini n'est choisi et si le nombre de questions est supéri
       { code: '103', niveau: 'tresDifficile' },
     ] as const
 
-    const choixDifficulte = config
-      .map((c) => c.code)
-      .filter((k) => String(this.sup3).includes(k))
+    const choixDifficulte = config.some((c) =>
+      String(this.sup3).includes(c.code),
+    )
 
     const parametre3 = String(this.sup3)
       .replaceAll('100', '')
@@ -137,11 +146,13 @@ Si aucun motif prédéfini n'est choisi et si le nombre de questions est supéri
 
     let typesPattern = gestionnaireFormulaireTexte({
       saisie: parametre3,
+      min: 0,
       max: this.nbDePattern,
-      defaut: this.nbDePattern + 1,
-      melange: this.nbDePattern + 1,
+      defaut: 0,
+      melange: 0,
       nbQuestions: this.nbQuestions,
       shuffle: ordreAleatoireDesQuestions,
+      exclus: [0],
     }).map(Number)
 
     if (choixDifficulte) {
@@ -166,7 +177,7 @@ Si aucun motif prédéfini n'est choisi et si le nombre de questions est supéri
     } else {
       typesPattern = [...typesPattern, ...shuffle(range1(this.nbDePattern))]
       typesPattern = enleveDoublonNum(typesPattern)
-      typesPattern = typesPattern.reverse()
+      // typesPattern = typesPattern.reverse()
 
       listePreDef = typesPattern.map((i) => listePatternRatio[i - 1])
     }
@@ -185,6 +196,7 @@ Si aucun motif prédéfini n'est choisi et si le nombre de questions est supéri
     )
 
     const nbSousQuestions = typesQuestions.length
+
     for (
       let i = 0, cpt = 0;
       i < Math.min(this.nbQuestions, listePreDef.length) && cpt < 50;
@@ -192,6 +204,7 @@ Si aucun motif prédéfini n'est choisi et si le nombre de questions est supéri
       const objetsCorr: NestedObjetMathalea2dArray = []
 
       const pat = listePreDef[i]
+
       const pattern = new VisualPattern([])
       pattern.iterate = (pat as PatternRiche).iterate
       pattern.shapes = pat.shapes
@@ -496,7 +509,7 @@ Si aucun motif prédéfini n'est choisi et si le nombre de questions est supéri
               style: 'alpha',
             })
 
-      if (this.questionJamaisPosee(i, typesQuestions.join(''), pat.numero)) {
+      if (this.questionJamaisPosee(i, pat.numero)) {
         this.listeQuestions.push(texte)
         this.listeCorrections.push(texteCorr)
         i++

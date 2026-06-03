@@ -23,6 +23,7 @@ import { createList } from '../../lib/format/lists'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import {
   areSameArray,
+  completerNombresUniques,
   compteOccurences,
   enleveDoublonNum,
   remplaceDansTableau,
@@ -41,41 +42,40 @@ import {
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
-export const titre = "Identifier la structure d'un motif itératif"
+export const titre = "Identifier la structure d'un motif (itératif)"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
 export const dateDePublication = '23/07/2025'
-export const dateDeModifImportante = '03/06/2026'
+export const dateDeModifImportante = '22/11/2025'
 
 /**
  * Identifier la structure d'un motif (itératif)
  * Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/
  * @author Éric Elter (sur les bases du 6I13 de Jean-claude Lhote)
  */
-export const uuid = '8e5d3'
+export const uuid = 'd41c5'
 
 export const refs = {
-  'fr-fr': ['6N4B'],
-  'fr-2016': ['6I13-1'],
+  'fr-fr': [],
+  'fr-2016': [],
   'fr-ch': [],
 }
 
-export default class PatternIteratif extends Exercice {
+export default class PatternIteratifOld extends Exercice {
   destroyers: (() => void)[] = []
 
   constructor() {
     super()
     this.nbQuestions = 3
-    this.comment = ` Les motifs sont des motifs figuratifs qui évoluent selon des règles définies.<br>
- Cet exercice contient des motifs issus de l'excellent site : <a href="https://www.visualpatterns.org/" target="_blank" style="color: blue">https://www.visualpatterns.org/</a>.<br>
+    this.comment = ` Les patterns sont des motifs figuratifs qui évoluent selon des règles définies.<br>
+ Cet exercice contient des patterns issus de l'excellent site : <a href="https://www.visualpatterns.org/" target="_blank" style="color: blue">https://www.visualpatterns.org/</a>.<br>
  Cet exercice propose d'étudier les premiers termes d'une série de motifs afin de répondre à différentes questions possibles.<br>
-Grâce au premier paramètre, on peut choisir le nombre de motifs visibles.<br><br>
-Grâce au deuxième paramètre, on peut choisir les questions à poser.<br><br>
-Grâce au troisième paramètre, on peut choisir le numéro du motif de la question 4.<br><br>
-Grâce au quatrième paramètre, on peut imposer des motifs choisis dans cette <a href="https://coopmaths.fr/alea/?uuid=71ff5&s=1" target="_blank" style="color: blue">liste de motifs</a>.<br>
-Si le nombre de motifs, dans l'exercice, est supérieur au nombre de motifs choisis, alors l'exercice sera complété par des motifs choisis au hasard. Le choix 0 sera toujours mis en dernier si d'autres choix ont été effectués.<br><br>
-Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au quatrième paramètre (sauf pour le choix 0 qui sera toujours du hasard).
+Grâce au premier paramètre, on peut choisir le nombre de motifs visibles.<br>
+Grâce au deuxième paramètre, on peut choisir les questions à poser.<br>
+Grâce au troisième paramètre, on peut choisir le numéro du motif de la question d.<br>
+Grâce au quatrième paramètre, on peut imposer des patterns choisis dans cette <a href="https://coopmaths.fr/alea/?uuid=71ff5&s=1" target="_blank" style="color: blue">liste de patterns</a>.<br>
+Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'exercice sera complété par des patterns choisis au hasard.
     `
     this.besoinFormulaireNumerique = [
       'Nombre de figures par question',
@@ -97,29 +97,24 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
         '7 : Ensemble des 5 premières propositions',
       ].join('\n'),
     ]
-
     this.sup2 = '7'
 
     this.besoinFormulaire3Numerique = [
-      `Numéro du motif de la question 4 (entre 11 et ${listePatternsSansRatioNiFraction.length}, ou bien ${listePatternsSansRatioNiFraction.length + 1} pour laisser le hasard choisir)`,
-      listePatternsSansRatioNiFraction.length + 1,
+      'Numéro du motif de la question c) (choisi entre 11 et 99).\nMettre 100 pour laisser le hasard choisir ',
+      listePatternsSansRatioNiFraction.length,
     ]
     this.sup3 = 0
 
     const maxNumPattern = listePatternsSansRatioNiFraction.length
-
     this.besoinFormulaire4Texte = [
-      'Numéros des motifs désirés',
+      'Numéro de pattern',
       [
-        'Nombres séparés par des tirets  :',
-        `Entre 1 et ${maxNumPattern} : pour choisir un motif particulier`,
-        `0 : pour laisser le hasard faire`,
+        'Nombres séparés par des tirets :',
+        `* Numéros entre 1 et ${maxNumPattern}`,
+        '* Mettre 0 pour laisser le hasard choisir ',
       ].join('\n'),
     ]
     this.sup4 = '0'
-
-    this.besoinFormulaire5CaseACocher = ['Ordre aléatoire des motifs']
-    this.sup5 = true
 
     this.listePackages = ['twemojis'] // this.listePackages est inutile mais la présence du mot "twemojis" est indispensable pour la sortie LaTeX.
   }
@@ -134,8 +129,6 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
     // MGu quand l'exercice est modifié, on détruit les anciens listeners
     this.destroyers.forEach((destroy) => destroy())
     this.destroyers.length = 0
-
-    const ordreAleatoireDesQuestions = this.sup5
     // on ne conserve que les linéaires et les affines sans ratio, ni fraction, ni multiple shape
     const listePatternReference = listePatternsSansRatioNiFraction
     const angle = Math.PI / 6
@@ -148,16 +141,19 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
       melange: 0,
       defaut: 0,
       exclus: [0],
-      shuffle: ordreAleatoireDesQuestions,
     }).map(Number)
 
-    listePattern = [
-      ...listePattern,
-      ...shuffle(range1(listePatternReference.length)),
-    ]
+    listePattern = enleveDoublonNum(listePattern)
 
-    const listePreDef = listePattern.map((i) => listePatternReference[i - 1])
+    listePattern = completerNombresUniques(
+      listePattern,
+      this.nbQuestions,
+      listePatternReference.length,
+    )
 
+    const listePreDef = shuffle(
+      listePattern.map((i) => listePatternReference[i - 1]),
+    )
     const nbFigures = contraindreValeur(2, 4, this.sup + 1, 4)
 
     let typesQuestionsInitiales = gestionnaireFormulaireTexte({
@@ -403,17 +399,9 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
             numeroMotif = 10
             break
           case 4:
-            this.sup3 = contraindreValeur(
-              1,
-              listePatternsSansRatioNiFraction.length + 1,
-              this.sup3,
-              randint(11, 99),
-            )
+            this.sup3 = contraindreValeur(1, 100, this.sup3, randint(11, 99))
             numeroMotif =
-              this.sup3 === listePatternsSansRatioNiFraction.length + 1 ||
-              this.sup3 < 11
-                ? randint(11, listePatternsSansRatioNiFraction.length + 1)
-                : this.sup3
+              this.sup3 === 100 || this.sup3 < 11 ? randint(11, 99) : this.sup3
             break
           case 5:
             numeroMotif = 100

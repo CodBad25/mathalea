@@ -65,7 +65,7 @@ export default class ListePatternsTousLesExos extends Exercice {
     this.besoinFormulaireNumerique = [
       'Liste restreinte pour la référence',
       6,
-      '1 : 6N4B\n2 : 6N4B-2\n3 : 5I13\n4 : 5L10-5\n5 : 5P12-2\n6 : 4L13-3',
+      '1 : 6N4B\n2 : 6N4B-2\n3 : 5I13\n4 : 5L10-5\n5 : 5P12-2\n6 : 4L13-3\n7 : 3L13-7\n8 : 3L16',
     ]
     this.sup = 1
 
@@ -90,17 +90,15 @@ export default class ListePatternsTousLesExos extends Exercice {
 
     let listeOfAll: (PatternRiche | PatternRiche3D)[] = []
     switch (this.sup) {
-      case 1:
-      case 3:
-      case 4:
-      case 6:
-        listeOfAll = listePatternsSansRatioNiFraction
-        break
       case 2:
         listeOfAll = patternsFor6N4B_2
         break
       case 5:
+      case 8:
         listeOfAll = listePatternRatio
+        break
+      default:
+        listeOfAll = listePatternsSansRatioNiFraction
         break
     }
 

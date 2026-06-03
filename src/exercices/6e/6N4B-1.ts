@@ -17,7 +17,7 @@ import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
-export const titre = 'Comprendre un algorithme répétitif'
+export const titre = 'Comprendre un algorithme répétitif sur des motifs'
 export const interactifReady = true
 export const interactifType = 'qcm'
 

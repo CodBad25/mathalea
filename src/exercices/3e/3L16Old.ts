@@ -1,6 +1,5 @@
-import PaternRatio from '../5e/5P12-2'
-export const titre =
-  "Trouver le terme général d'un ratio d'évolution d'un motif géométrique itératif"
+import PaternRatioOld from '../5e/5P12-2-old'
+export const titre = "Trouver le terme général d'un pattern géométrique"
 export const dateDePublication = '30/05/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -9,13 +8,13 @@ export const interactifType = 'mathLive'
  * @author Éric Elter
  */
 
-export const uuid = '7a6d5'
+export const uuid = 'fe750'
 
 export const refs = {
-  'fr-fr': ['3L16'],
+  'fr-fr': [],
   'fr-ch': [],
 }
-export default class PaternRatio3eme extends PaternRatio {
+export default class PaternRatio3emeOld extends PaternRatioOld {
   constructor() {
     super()
     this.niveau = '3e'
