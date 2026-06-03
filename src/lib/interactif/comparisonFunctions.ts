@@ -1,4 +1,8 @@
-import type { Expression, MathJsonExpression } from '@cortex-js/compute-engine'
+import type {
+  Expression,
+  MathJsonExpression,
+  MathJsonSymbol,
+} from '@cortex-js/compute-engine'
 import {
   compile,
   ComputeEngine,
@@ -1061,7 +1065,7 @@ function handleUnite(
   saisie: string,
   answer: string,
   { precision = 1 } = {},
-  options: OptionsComparaisonType,
+  _options: OptionsComparaisonType,
 ): ResultType {
   /* Version ArnoG 0.53 (incomplet, prise en compte de toutes les unités et tous les feedbacks)
   const sUnit = parseUnit(saisie)
@@ -1759,13 +1763,19 @@ function compareExpression(
   return saisie.every((element, index) => element.isEqual(answer[index]))
 }
 
+function isExpressionArray(
+  expr: MathJsonExpression,
+): expr is readonly [MathJsonSymbol, ...MathJsonExpression[]] {
+  return Array.isArray(expr)
+}
+
 // compare the raw (structural) form of the input and the answer: they must match (except for "2x", "2\times x" and "2\cdot x" that we want to consider equivalent):
 // This is assuming that you expect the answer to match the order of the reference. If you want to allow the order to be different, use:
 function normalizeRaw(json: MathJsonExpression): MathJsonExpression {
   // 🔹 Cas 1 : si ce n’est PAS un tableau
   // Donc un nombre ("3"), un symbole ("x"), etc.
   // → Rien à normaliser
-  if (!Array.isArray(json)) {
+  if (!isExpressionArray(json)) {
     return json
   }
 
@@ -1773,7 +1783,8 @@ function normalizeRaw(json: MathJsonExpression): MathJsonExpression {
   // Exemple : ["Add", 2, "x"]
   // op = "Add"
   // args = [2, "x"]
-  let [op, ...args] = json
+  let op = json[0]
+  const args = json.slice(1)
 
   // 🔥 Supprimer Delimiter inutile
   if (op === 'Delimiter') {
@@ -2062,7 +2073,7 @@ function handleExpressionsForcementReduites(
   answer: string,
 ): ResultType {
   const clean = generateCleaner([
-    // 'puissances',
+    'puissances',
     'virgules',
     // 'fractionsMemesNegatives',
     'parentheses',
