@@ -81,22 +81,22 @@
   let boutonInteractiviteUrlFlag = true
 
   let title: string
-  const ref = ''
-  if ($globalOptions.isTitleDisplayed && $globalOptions.isReferenceDisplayed) {
-    title = ref ? `${ref} - ${exercise.titre}` : exercise.titre
-  } else if ($globalOptions.isTitleDisplayed) {
-    title = exercise.titre
-  } else if ($globalOptions.isReferenceDisplayed) {
-    title = ref
-  } else {
-    title = ''
+  $: {
+    const reference = exercise.id ?? ''
+    if ($globalOptions.isTitleDisplayed && $globalOptions.isReferenceDisplayed) {
+      title = reference ? `${reference} - ${exercise.titre}` : exercise.titre
+    } else if ($globalOptions.isTitleDisplayed) {
+      title = exercise.titre
+    } else if ($globalOptions.isReferenceDisplayed) {
+      title = reference
+    } else {
+      title = ''
+    }
   }
   // Evènement indispensable pour pointCliquable par exemple
   const exercicesAffiches = new window.Event('exercicesAffiches', {
     bubbles: true,
   })
-
-  let headerExerciceProps: { title: string } = { title }
 
   let numberOfAnswerFields: number = 0
   let lastRenderedSignature = ''
@@ -637,7 +637,7 @@
 <div class="z-0 flex-1 w-full mb-4 lg:mb-6" bind:this={divExercice}>
   {#if $globalOptions.presMode !== 'recto' && $globalOptions.presMode !== 'verso'}
     <HeaderExerciceVueEleve
-      {...headerExerciceProps}
+      {title}
       indiceExercice={exerciseIndex}
       showNumber={indiceLastExercice > 0 &&
         $globalOptions.presMode !== 'un_exo_par_page'}
