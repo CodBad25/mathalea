@@ -243,7 +243,7 @@
                   id={'config-eleve-interactif-permis-toggle'}
                   explanations={[
                     "Les élèves peuvent rendre l'exercice interactif ou pas.",
-                    "Les élèves ne pourront pas changer le status de l'interactivité.",
+                    "Les élèves ne pourront pas changer le statut de l'interactivité.",
                   ]}
                 />
               </div>
