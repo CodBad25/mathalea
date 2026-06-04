@@ -3,6 +3,7 @@ import { writeFileSync } from 'fs'
 import path from 'path'
 import type { Page } from 'playwright'
 import { fileURLToPath } from 'url'
+import { logIfVerbose } from '../../helpers/log'
 import prefs from '../../helpers/prefs.js'
 import { runTest } from '../../helpers/run'
 
@@ -302,9 +303,9 @@ async function testV(page: Page) {
     const keysRep = Object.keys(responses[i])
     expect(keys.length).toEqual(keysRep.length)
     keys.forEach((key: string, j: number) => {
-      console.log('Question:', i)
-      console.log('Response:', j)
-      console.log('Key:', assignment.answers[key])
+      logIfVerbose('Question:', i)
+      logIfVerbose('Response:', j)
+      logIfVerbose('Key:', assignment.answers[key])
       expect(keysRep[j]).toEqual(key)
       if (key.includes('rectangleDND')) {
         expect(assignment.answers[key].split('-')[0]).toEqual(
@@ -347,7 +348,7 @@ async function testV(page: Page) {
       '/tmp/mathalea-apigeom-save-can.json',
       JSON.stringify(apigeomCaptures, null, 2),
     )
-    console.log(
+    logIfVerbose(
       '📸 Snapshots apigeom capturés dans /tmp/mathalea-apigeom-save-can.json',
     )
   }
