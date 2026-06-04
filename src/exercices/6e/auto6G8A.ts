@@ -10,10 +10,10 @@ import { cylindre3d } from '../../lib/3d/3dProjectionMathalea2d/Cylindre3dPerspe
 import { prisme3d } from '../../lib/3d/3dProjectionMathalea2d/Prisme3dPerspectiveCavaliere'
 import { pyramide3d } from '../../lib/3d/3dProjectionMathalea2d/Pyramide3dPerspectiveCavaliere'
 import {
+  Point3d,
   arc3d,
   arete3d,
   droite3d,
-  Point3d,
   point3d,
   polygone3d,
   rotation3d,
@@ -76,6 +76,8 @@ export default class ReconnaitreDesSolides extends Exercice {
       ].join('\n'),
     ]
     this.besoinFormulaire2CaseACocher = ['QCM']
+    this.besoinFormulaire3CaseACocher = ['correction détaillée']
+    this.sup3 = false
   }
 
   nouvelleVersion() {
@@ -87,7 +89,7 @@ export default class ReconnaitreDesSolides extends Exercice {
       'cylindre',
       'pavé droit',
       'cube',
-      'sphère',
+      'boule',
     ]
     this.interactifType = this.sup2 ? 'qcm' : 'mathLive'
 
@@ -120,7 +122,7 @@ export default class ReconnaitreDesSolides extends Exercice {
       // nombre de sommets de la base.
       const n = choix < 3 ? randint(3, 8) : choix === 5 || choix === 6 ? 4 : 0
 
-      let prisme, pyra, cone, cylindre, pave, sphere
+      let prisme, pyra, cone, cylindre, pave, boule
       let texteCorrection = ''
       let reponse = '' as string | string[]
       const solide = solides[choix - 1]
@@ -203,12 +205,16 @@ export default class ReconnaitreDesSolides extends Exercice {
             if (solide === 'prisme') {
               prisme = prisme3d(base, k3)
               objets.push(...prisme.c2d)
-              texteCorrection = `Prisme droit avec une base ayant $${prisme.base1.listePoints.length}$ sommets.`
+              texteCorrection = this.sup3
+                ? `Prisme droit avec une base ayant $${prisme.base1.listePoints.length}$ sommets`
+                : `Prisme droit`
             } else {
               pyra = pyramide3d(base, p3)
               const objs = pyra.c2d
               objets.push(...(objs as NestedObjetMathalea2dArray))
-              texteCorrection = `Pyramide avec une base ayant $${pyra.base.listePoints.length}$ sommets.` // et selon l'axe=$${axe}$`
+              texteCorrection = this.sup3
+                ? `Pyramide avec une base ayant $${pyra.base.listePoints.length}$ sommets` // et selon l'axe=$${axe}$`
+                : `Pyramide`
             }
           }
           reponse =
@@ -269,7 +275,7 @@ export default class ReconnaitreDesSolides extends Exercice {
             objets.push(cone, g, t)
           }
           reponse = ['cône', 'cone', 'cône de révolution', 'cone de révolution']
-          texteCorrection = 'Cône de révolution' // suivant l'axe=$${axe}$`
+          texteCorrection = this.sup3 ? 'Cône de révolution' : 'Cône' // suivant l'axe=$${axe}$`
           break
         }
         case 'cylindre': // cylindre
@@ -420,8 +426,9 @@ export default class ReconnaitreDesSolides extends Exercice {
           }
           objets.push(...cylindre.c2d)
           reponse = ['cylindre', 'cylindre de révolution']
-          texteCorrection =
-            premiereLettreEnMajuscule(solide) + ' de révolution.'
+          texteCorrection = this.sup3
+            ? premiereLettreEnMajuscule(solide) + ' de révolution'
+            : premiereLettreEnMajuscule(solide)
 
           break
         case 'pavé droit': // pavé droit
@@ -530,15 +537,19 @@ export default class ReconnaitreDesSolides extends Exercice {
           objets.push(...pave.c2d)
           reponse = solide
           reponseQcm = solide
-          texteCorrection = premiereLettreEnMajuscule(solide) + '.'
+          texteCorrection = premiereLettreEnMajuscule(solide)
 
           break
         }
-        case 'sphère': // sphère
-          sphere = sphere2d({ centre: pointAbstrait(0, 0), rx: 2, color: 'black' })
-          objets.push(sphere)
+        case 'boule': // sphère remplacé par boule dans programmes 2026
+          boule = sphere2d({
+            centre: pointAbstrait(0, 0),
+            rx: 2,
+            color: 'black',
+          })
+          objets.push(boule)
           reponse = solide
-          texteCorrection = premiereLettreEnMajuscule(solide) + '.'
+          texteCorrection = premiereLettreEnMajuscule(solide)
 
           break
       }
@@ -583,8 +594,8 @@ export default class ReconnaitreDesSolides extends Exercice {
             statut: reponseQcm === 'cube',
           },
           {
-            texte: 'Sphère',
-            statut: reponseQcm === 'sphère',
+            texte: 'Boule',
+            statut: reponseQcm === 'boule',
           },
         ]
         if (this.sup2) {
