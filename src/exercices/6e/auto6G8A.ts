@@ -215,6 +215,9 @@ export default class ReconnaitreDesSolides extends Exercice {
               texteCorrection = this.sup3
                 ? `Pyramide avec une base ayant $${pyra.base.listePoints.length}$ sommets` // et selon l'axe=$${axe}$`
                 : `Pyramide`
+              if ((pyra.base.listePoints.length === 3) && this.sup3) {
+                texteCorrection += ` (plus précisément, c'est un tétraèdre)`
+              }
             }
           }
           reponse =
@@ -535,7 +538,11 @@ export default class ReconnaitreDesSolides extends Exercice {
             pave = prisme3d(base, k3)
           }
           objets.push(...pave.c2d)
-          reponse = solide
+          if (solide === 'cube') {
+            reponse = ['cube', 'pavé droit']
+          } else {
+            reponse = solide
+          }
           reponseQcm = solide
           texteCorrection = premiereLettreEnMajuscule(solide)
 
