@@ -60,8 +60,11 @@
   import ModalCapytalSettings from './presentationalComponents/modalCapytalSettings/ModalCapytalSettings.svelte'
   import ModalThirdApps from './presentationalComponents/ModalThirdApps.svelte'
   import Placeholder from './presentationalComponents/Placeholder.svelte'
+  import MobileCarouselCards from './presentationalComponents/carousel/MobileCarouselCards.svelte'
+  import { getLang } from '../../../lib/stores/languagesStore'
   import SideMenu from './presentationalComponents/sideMenu/SideMenu.svelte'
 
+  const lang = getLang()
   let isNavBarVisible: boolean = true
   let innerWidth = 0
   let isBackToTopButtonVisible = false
@@ -498,8 +501,11 @@
         >
           <!-- Menu choix en mode smartphone -->
           <div>
+            {#if lang === 'fr-FR'}
+              <MobileCarouselCards />
+            {/if}
             <div
-              class="w-full flex flex-col bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark"
+              class="w-full flex flex-col bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark border-t border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest"
             >
               <button
                 type="button"

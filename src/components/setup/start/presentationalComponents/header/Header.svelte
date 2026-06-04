@@ -74,7 +74,7 @@
       </div>
     {/if}
     <div
-      class={`relative w-full flex flex-col justify-center items-center pl-100 h-25 lg:h-12.5 ${!isExerciseDisplayed ? 'invisible' : ''}`}
+      class={`relative w-full flex flex-col justify-center items-center pl-100 h-25 lg:h-12.5 ${!isExerciseDisplayed ? 'hidden' : ''}`}
       id="barre-boutons"
     >
       <SideMenuWrapper {isRecorder} {isSidenavOpened} {toggleSidenav} {isMd} />
