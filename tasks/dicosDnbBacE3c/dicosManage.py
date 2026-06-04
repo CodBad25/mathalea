@@ -97,7 +97,7 @@ def newEntry(file:str,dicoType:str)->list:
     extension = os.path.splitext(file)[1]
     # Pour les lignes à ajouter
     newLines = ''
-    print(filename)
+    # print(filename)
     # On traite les fichiers tex qui ne sont pas les fichiers de correction 
     if filename[-4:] != '_cor' and  extension == ".tex" :
         if 'mathalea' in filename: # EE : Pas encore trouvé à quelle occasion cela l'était
@@ -127,7 +127,7 @@ def newEntry(file:str,dicoType:str)->list:
             }},\n'''
         
         elif ('eam' in filename): # EE : Ici, on considère que c'est les EAM
-            print(filename.split('_'))
+            # print(filename.split('_'))
             numeroInitial = filename.split('_')[5]
             annee = filename.split('_')[2]
             mois = monthName(filename.split('_')[3])
