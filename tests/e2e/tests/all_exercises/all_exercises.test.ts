@@ -2,7 +2,12 @@ import { fileURLToPath } from 'node:url'
 import { beforeAll, describe, expect, it, test, vi } from 'vitest'
 import type { IExercice } from '../../../../src/lib/types'
 import { findStatic, findUuid } from '../../helpers/filter.js'
-import { getFileLogger, log as lg, logError as lgE } from '../../helpers/log'
+import {
+  getFileLogger,
+  log as lg,
+  logError as lgE,
+  logIfVerbose,
+} from '../../helpers/log'
 import { createSolidesThreeJsMock } from '../../mocks/solidesThreeJs.mock'
 
 beforeAll(() => {
@@ -336,10 +341,10 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
 
   for (let k = 0; k < 2; k++) {
     exercice.interactif = k === 0
-    log('interactif=' + exercice.interactif)
+    logIfVerbose('interactif=' + exercice.interactif)
     for (const i of [1, 10]) {
       exercice.nbQuestions = i
-      log('nbQuestions=' + exercice.nbQuestions)
+      logIfVerbose('nbQuestions=' + exercice.nbQuestions)
       const keysToUse = sampleSupWithFallback(sup)
       for (const keySup of keysToUse) {
         if (keySup === undefined) {
@@ -347,7 +352,7 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
         } else {
           exercice.sup = sup[keySup]
         }
-        log('sup=' + exercice.sup)
+        logIfVerbose('sup=' + exercice.sup)
         for (const keySup2 of sampleSupWithFallback(sup2)) {
           if (keySup2 === undefined) {
             exercice.sup2 = defaultSup2
@@ -504,7 +509,7 @@ async function testRunAllLots(filter: string) {
       const myName = filteredUuids[k][1]
       const f = async function () {
         log(filter)
-        log(
+        logIfVerbose(
           `uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]} i=${k} / ${filteredUuids.length}`,
         )
         try {
@@ -512,13 +517,15 @@ async function testRunAllLots(filter: string) {
             filteredUuids[k][0],
             `uuid=${filteredUuids[k][0]}&id=${filteredUuids[k][1].substring(0, filteredUuids[k][1].lastIndexOf('.')) || filteredUuids[k][1]}&alea=${alea}&testCI`,
           )
-          log(
+          logIfVerbose(
             `Resu: ${resultReq} uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]}`,
           )
           return resultReq === 'OK'
         } catch (e) {
-          log(e)
-          log(`Resu: KO uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]}`)
+          logError(e)
+          logError(
+            `Resu: KO uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]}`,
+          )
           throw e
         }
       }
@@ -532,7 +539,7 @@ async function testRunAllLots(filter: string) {
 if (process.env.NIV !== null && process.env.NIV !== undefined) {
   // utiliser pour les tests d'intégration
   const filter = (process.env.NIV as string).replaceAll(' ', '')
-  log(filter)
+  logIfVerbose(filter)
   testRunAllLots(filter)
 } else if (
   process.env.CI &&

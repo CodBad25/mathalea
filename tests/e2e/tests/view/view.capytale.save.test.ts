@@ -4,6 +4,7 @@ import path from 'path'
 import type { Locator, Page } from 'playwright'
 import { fileURLToPath } from 'url'
 import { logDiffContext } from '../../helpers/compareStrings'
+import { logIfVerbose } from '../../helpers/log'
 import prefs from '../../helpers/prefs.js'
 import { runTest } from '../../helpers/run'
 
@@ -90,15 +91,15 @@ async function testV(page: Page) {
     .contentFrame()
     .locator('#clockEx0Q0 > div > div > svg > text:nth-child(5)')
     .boundingBox()
-  console.log('box', box)
-  console.log('box2', box2)
+  logIfVerbose('box', box)
+  logIfVerbose('box2', box2)
   if (box !== null && box2 !== null) {
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
     await page.mouse.down()
     await page.mouse.move(box2.x + box2.width / 2, box2.y + box2.height / 2)
     await page.mouse.up()
   } else {
-    console.error('Box/Box2 is null', box, box2)
+    logIfVerbose('Box/Box2 is null', box, box2)
   }
   // const start = await page.locator('#iframe').contentFrame().locator('.minute-hand')
   // console.log(start)
@@ -270,9 +271,9 @@ async function testV(page: Page) {
     const keysRep = Object.keys(responses[i])
     expect(keys.length).toEqual(keysRep.length)
     keys.forEach((key: string, j: number) => {
-      console.log('Question:', i)
-      console.log('Response:', j)
-      console.log('Key:', assignment.answers[key])
+      logIfVerbose('Question:', i)
+      logIfVerbose('Response:', j)
+      logIfVerbose('Key:', assignment.answers[key])
       expect(keysRep[j]).toEqual(key)
       if (key.includes('rectangleDND')) {
         expect(assignment.answers[key].split('-')[0]).toEqual(
@@ -297,7 +298,7 @@ async function testV(page: Page) {
       '/tmp/mathalea-apigeom-save.json',
       JSON.stringify(apigeomCaptures, null, 2),
     )
-    console.log(
+    logIfVerbose(
       '📸 Snapshots apigeom capturés dans /tmp/mathalea-apigeom-save.json',
     )
   }
