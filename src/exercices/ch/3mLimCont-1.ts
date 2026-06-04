@@ -1,6 +1,12 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { ecritureAlgebrique } from '../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  ecritureAlgebriqueSauf0,
+} from '../../lib/outils/ecritures'
 import {
   miseEnEvidence,
   texteEnCouleurEtGras,
@@ -16,11 +22,12 @@ import Exercice from '../Exercice'
 export const titre =
   "Calculer une limite d'une fonction rationnelle sans indétermination ou avec une indétermination de type 1/0 ou 0/0"
 export const dateDePublication = '17/09/2025'
-export const interactifReady = false
+export const interactifReady = true
+export const interactifType = 'mathLive'
 export const uuid = '04b1e'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['3mA1-1'],
+  'fr-ch': ['3mLimCont-1'],
 }
 
 /**
@@ -183,6 +190,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
       let texteCorr = ''
+      let reponse = ''
       const coeffNum = this.sup4 ? 1 : randint(-3, 3, [0])
       const coeffDen = this.sup4 ? 1 : randint(-3, 3, [0])
       const limite = randint(-4, 4)
@@ -311,25 +319,26 @@ export default class ExerciceTangenteCourbe extends Exercice {
       }
       texte = 'Calculer $\\displaystyle\\lim_{x \\to ' + limite + '}'
       texte += `\\dfrac{${numerateurTex}}{${denominateurTex}}$`
-      texteCorr += `On commence par vérifier si la limite est indéterminée et si c'est le cas, de quel type d'indétermination il s'agit.<br> Notons la fraction rationnelle $\\dfrac{P(x)}{Q(x)}=\\dfrac{${numerateurTex}}{${denominateurTex}}$. On évalue le dénominateur en $x=${limite}$. On a $Q(${limite})=${polyDen.image(limite)}$.<br>`
+      const valeurNumEnLimite = polyNum.image(limite)
+      const valeurDenEnLimite = polyDen.image(limite)
+      texteCorr += `On commence par déterminer le type de la limite.<br> Notons la fraction rationnelle $\\dfrac{P(x)}{Q(x)}=\\dfrac{${numerateurTex}}{${denominateurTex}}$. On évalue d'abord le dénominateur en $x=${limite}$ : $Q(${limite})=${valeurDenEnLimite}$.<br>`
+      if (valeurDenEnLimite === 0) {
+        texteCorr += `Comme $Q(${limite})=0$, la fonction n'est pas définie en $x=${limite}$ et on ne peut pas calculer la limite par substitution directe.<br> On se place donc pour la suite avec $x\\neq ${limite}$ ; cela permet de simplifier un facteur $x${ecritureAlgebriqueSauf0(-limite)}$ si ce facteur apparaît.<br>`
+      }
       switch (typeDeQuestion) {
         case 1:
         case 2:
-          texteCorr += `La limite est n'est pas finie.<br> Puisque $P(${limite})=${polyNum.image(
-            limite,
-          )}\\neq 0$, on a une limite du type « $\\dfrac{1}{0}$ ».<br>`
+          texteCorr += `On évalue ensuite le numérateur : $P(${limite})=${valeurNumEnLimite}\\neq 0$. On obtient donc un quotient du type « $\\dfrac{\\text{1}}{0}$ ». Ce n'est pas une indétermination ; il faut calculer la limite à gauche et à droite.<br>`
           if (!this.sup3) {
             if (listeRacinesDen.length > 1) {
-              texteCorr += `On met autant que possible en évidence au dénominateur le facteur $x${ecritureAlgebrique(-limite)}$ (en utilisant la division polynomiale ou les identités remarquables).<br> On obtient $Q(x)=${formatFactorizedPolynomial(listeRacinesDen, limite, coeffDen, this.sup3)}$.<br>`
+              texteCorr += `On met autant que possible en évidence au dénominateur le facteur $x${ecritureAlgebriqueSauf0(-limite)}$ (en utilisant par exemple la division polynomiale).<br> On obtient $Q(x)=${formatFactorizedPolynomial(listeRacinesDen, limite, coeffDen, this.sup3)}$.<br>`
             }
           }
           break
         case 3:
         case 4:
         case 5:
-          texteCorr += `La limite est indéterminée.<br> Puisque $P(${limite})=${polyNum.image(
-            limite,
-          )}$, l'indétermination est du type « $\\dfrac{0}{0}$ ».<br>`
+          texteCorr += `On évalue ensuite le numérateur : $P(${limite})=${valeurNumEnLimite}$. Puisque $P(${limite})=0$ et $Q(${limite})=0$, on obtient une forme indéterminée du type « $\\dfrac{0}{0}$ ».<br>`
           if (!this.sup3) {
             if (listeRacinesDen.length > 1 && listeRacinesNum.length > 1) {
               texteCorr += `On met autant que possible en évidence au numérateur et au dénominateur le facteur $x${ecritureAlgebrique(-limite)}$ (en utilisant la division polynomiale ou les identités remarquables).<br>`
@@ -345,8 +354,8 @@ export default class ExerciceTangenteCourbe extends Exercice {
           }
           break
         case 6:
-          texteCorr += `La limite n'est pas indéterminée.<br> Ainsi, 
-          $\\displaystyle\\lim_{x \\to ${limite}} \\dfrac{P(x)}{Q(x)} = \\dfrac{\\displaystyle\\lim_{x \\to ${limite}} P(x)}{\\displaystyle\\lim_{x \\to ${limite}}Q(x)} = \\dfrac{P(${limite})}{Q(${limite})} = ${miseEnEvidence(`${new FractionEtendue(polyNum.image(limite), polyDen.image(limite)).texFractionSimplifiee}`)}$.`
+          texteCorr += `Ici $Q(${limite})\\neq 0$, donc la fonction est définie en $x=${limite}$ et la limite se calcule par substitution directe.<br> Ainsi, 
+          $\\displaystyle\\lim_{x \\to ${limite}} \\dfrac{P(x)}{Q(x)} = \\dfrac{\\displaystyle\\lim_{x \\to ${limite}} P(x)}{\\displaystyle\\lim_{x \\to ${limite}}Q(x)} = \\dfrac{P(${limite})}{Q(${limite})} = ${miseEnEvidence(`${new FractionEtendue(valeurNumEnLimite, valeurDenEnLimite).texFractionSimplifiee}`)}$.`
       }
       switch (typeDeQuestion) {
         case 3:
@@ -380,11 +389,11 @@ export default class ExerciceTangenteCourbe extends Exercice {
             $\\displaystyle\\lim_{x \\to ${limite}^-}${denominateurTex}=0^${signeDenGauche < 0 ? '-' : '+'}$.<br>
             D'où $\\displaystyle\\lim_{x \\to ${limite}^-} \\dfrac{P(x)}{Q(x)} = ${signeDenGauche * signeNum < 0 ? '-' : '+'}\\infty.$<br>`
             if (signeDenDroite !== signeDenGauche) {
+              reponse = 'nexistepas'
               texteCorr += `${texteEnCouleurEtGras("La limite n'existe donc pas")}.`
             } else {
-              texteCorr += ` La limite vaut donc $${miseEnEvidence(
-                `${signeDenDroite * signeNum < 0 ? '-' : '+'}\\infty`,
-              )}.$`
+              reponse = `${signeDenDroite * signeNum < 0 ? '-' : '+'}\\infty`
+              texteCorr += ` La limite vaut donc $${miseEnEvidence(reponse)}.$`
             }
           }
           break
@@ -402,7 +411,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
             const signeDenGauche =
               polyDenSimplifie.image(limite - 0.01) < 0 ? -1 : 1
             const signeNum = polyNumSimplifie.image(limite) < 0 ? -1 : 1
-            texteCorr += `On se retrouve à présent dans le cas d'une limite infinie du type «$\\,\\dfrac{1}{0}\\,$». On calcule les limites à droite et à gauche pour déterminer l'existence de la limite. <br> On calcule la limite à droite :<br>
+            texteCorr += `Après simplification, on obtient un quotient du type « $\\dfrac{\\text{nombre non nul}}{0}$ ». Ce n'est pas une indétermination ; on calcule les limites à droite et à gauche pour déterminer l'existence de la limite. <br> On calcule la limite à droite :<br>
             $\\begin{aligned}
             \\displaystyle\\lim_{x \\to ${limite}^+} \\dfrac{P(x)}{Q(x)} &= \\displaystyle\\lim_{x \\to ${limite}^+}\\dfrac{${formatFactorizedPolynomial(listeNumSansUneRacineLimite, limite, coeffNum, this.sup3)}}{${formatFactorizedPolynomial(listeDenSansUneRacineLimite, limite, coeffDen, this.sup3)}} \\\\
             &= \\dfrac{\\displaystyle\\lim_{x \\to ${limite}^+}${formatFactorizedPolynomial(listeNumSansUneRacineLimite, limite, coeffNum, this.sup3)}}{\\displaystyle\\lim_{x \\to ${limite}^+}${formatFactorizedPolynomial(listeDenSansUneRacineLimite, limite, coeffDen, this.sup3)}}. \\end{aligned}$<br>
@@ -421,17 +430,31 @@ export default class ExerciceTangenteCourbe extends Exercice {
             $\\displaystyle\\lim_{x \\to ${limite}^-}${formatFactorizedPolynomial(listeDenSansUneRacineLimite, limite, coeffDen, this.sup3)}=0^${signeDenGauche < 0 ? '-' : '+'}$.<br>
             D'où  $\\displaystyle\\lim_{x \\to ${limite}^-} \\dfrac{P(x)}{Q(x)}=${signeDenGauche * signeNum < 0 ? '-' : '+'}\\infty.$<br>`
             if (signeDenDroite !== signeDenGauche) {
+              reponse = 'nexistepas'
               texteCorr += `${texteEnCouleurEtGras("La limite n'existe donc pas")}.`
             } else {
-              texteCorr += ` La limite vaut donc $${miseEnEvidence(
-                `${signeDenDroite * signeNum < 0 ? '-' : '+'}\\infty`,
-              )}.$`
+              reponse = `${signeDenDroite * signeNum < 0 ? '-' : '+'}\\infty`
+              texteCorr += ` La limite vaut donc $${miseEnEvidence(reponse)}.$`
             }
           }
           break
         case 4:
-          texteCorr += `Cette nouvelle expression ne contient plus d'indétermination en $x=${limite}$.<br> On a donc $\\displaystyle\\lim_{x \\to ${limite}} \\dfrac{P(x)}{Q(x)} = \\displaystyle\\lim_{x \\to ${limite}} \\dfrac{${formatFactorizedPolynomial(listeNumSansUneRacineLimite, limite, coeffNum, this.sup3)}}{${formatFactorizedPolynomial(listeDenSansUneRacineLimite, limite, coeffDen, this.sup3)}}=\\dfrac{\\displaystyle\\lim_{x \\to ${limite}}${formatFactorizedPolynomial(listeNumSansUneRacineLimite, limite, coeffNum, this.sup3)}}{\\displaystyle\\lim_{x \\to ${limite}}${formatFactorizedPolynomial(listeDenSansUneRacineLimite, limite, coeffDen, this.sup3)}}=\\dfrac{${Polynome.fromRoots(listeNumSansUneRacineLimite).multiply(coeffNum).image(limite)}}{${Polynome.fromRoots(listeDenSansUneRacineLimite).multiply(coeffDen).image(limite)}}=${miseEnEvidence(`${new FractionEtendue(Polynome.fromRoots(listeNumSansUneRacineLimite).multiply(coeffNum).image(limite), Polynome.fromRoots(listeDenSansUneRacineLimite).multiply(coeffDen).image(limite)).texFractionSimplifiee}`)}$.`
+          {
+            reponse = new FractionEtendue(
+              Polynome.fromRoots(listeNumSansUneRacineLimite)
+                .multiply(coeffNum)
+                .image(limite),
+              Polynome.fromRoots(listeDenSansUneRacineLimite)
+                .multiply(coeffDen)
+                .image(limite),
+            ).texFractionSimplifiee
+            texteCorr += `Cette nouvelle expression ne contient plus d'indétermination en $x=${limite}$.<br> On a donc $\\displaystyle\\lim_{x \\to ${limite}} \\dfrac{P(x)}{Q(x)} = \\displaystyle\\lim_{x \\to ${limite}} \\dfrac{${formatFactorizedPolynomial(listeNumSansUneRacineLimite, limite, coeffNum, this.sup3)}}{${formatFactorizedPolynomial(listeDenSansUneRacineLimite, limite, coeffDen, this.sup3)}}=\\dfrac{\\displaystyle\\lim_{x \\to ${limite}}${formatFactorizedPolynomial(listeNumSansUneRacineLimite, limite, coeffNum, this.sup3)}}{\\displaystyle\\lim_{x \\to ${limite}}${formatFactorizedPolynomial(listeDenSansUneRacineLimite, limite, coeffDen, this.sup3)}}=\\dfrac{${Polynome.fromRoots(listeNumSansUneRacineLimite).multiply(coeffNum).image(limite)}}{${Polynome.fromRoots(listeDenSansUneRacineLimite).multiply(coeffDen).image(limite)}}=${miseEnEvidence(reponse)}$.`
+          }
           break
+      }
+      if (typeDeQuestion === 6) {
+        reponse = new FractionEtendue(valeurNumEnLimite, valeurDenEnLimite)
+          .texFractionSimplifiee
       }
       if (
         this.questionJamaisPosee(
@@ -442,6 +465,20 @@ export default class ExerciceTangenteCourbe extends Exercice {
           limite,
         )
       ) {
+        handleAnswers(this, i, {
+          reponse: {
+            value: reponse,
+            options: { texteAvecCasse: true },
+          },
+        })
+        if (this.interactif) {
+          texte += ajouteChampTexteMathLive(
+            this,
+            i,
+            KeyboardType.clavierLimites,
+            { texteAvant: ' $=$ ' },
+          )
+        }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

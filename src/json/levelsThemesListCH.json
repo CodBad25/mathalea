@@ -296,6 +296,9 @@
   "3mA1": {
     "titre": "Limites"
   },
+  "3mLimCont": {
+    "titre": "Calcul de limites et continuité"
+  },
   "3mA2": {
     "titre": "Dérivation"
   },
