@@ -10,10 +10,9 @@ export const titre =
   "Dire si un entier donné est un diviseur ou multiple d'un autre"
 
 export const dateDePublication = '02/05/2026'
-export const dateDeModificationImportante = '04/06/2026'
-export const uuid = '918c2'
+export const uuid = '92572'
 export const refs = {
-  'fr-fr': ['5A10-3'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 /**
@@ -50,7 +49,6 @@ export default class MultiplesOuDiviseurs extends Exercice {
       const nb2 = randint(2, 10)
       const produit = nb1 * nb2
       let n, m
-
       switch (
         listeTypeDeQuestions[i] // Suivant le type de question, le contenu sera différent
       ) {
@@ -70,17 +68,16 @@ export default class MultiplesOuDiviseurs extends Exercice {
         default: {
           const delta = Math.min(nb1, nb2)
 
-          const offsets = Array.from(
-            { length: 2 * delta - 1 },
-            (_, i) => i - (delta - 1),
-          ).filter((x) => x !== 0)
-
-          const mauvaisesReponses = offsets.map((x) => produit + x)
+          const mauvaisesReponses = Array.from(
+            { length: 2 * delta },
+            (_, i) => i - delta,
+          )
+            .filter((x) => x !== 0)
+            .map((x) => produit + x)
 
           const mauvaiseReponse = choice(mauvaisesReponses)
           n = choice([mauvaiseReponse, nb1])
           m = choice([mauvaiseReponse, nb1], n)
-
           texteCorr = `$${Math.max(m, n)}\\div${Math.min(m, n)}$ n'est pas égal à un entier puisque $${Math.max(m, n)}$ n'est pas dans la table de multiplication de $${Math.min(m, n)}$ donc $${miseEnEvidence(`${m}\\text{ n'est ni un diviseur, ni un multiple de }${n}`)}$.`
           bonneReponse = 'NiLUnNiLautre'
           break
