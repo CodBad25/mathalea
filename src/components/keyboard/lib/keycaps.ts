@@ -270,6 +270,18 @@ const basicKeys = {
     display: '$\\infty$',
     insert: '\\infty',
   },
+  PLUS_INFTY: {
+    display: '$+\\infty$',
+    insert: '+\\infty',
+  },
+  MINUS_INFTY: {
+    display: '$-\\infty$',
+    insert: '-\\infty',
+  },
+  NOT_EXISTS: {
+    display: '$\\not\\exists$',
+    insert: '\\not\\exists',
+  },
   // ================== letters
   a: { display: 'a' },
   b: { display: 'b' },
