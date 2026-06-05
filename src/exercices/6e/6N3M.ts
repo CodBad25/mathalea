@@ -504,7 +504,7 @@ export default class ProblemesFractions6e extends Exercice {
           KeyboardType.clavierDeBaseAvecFraction,
         )
         handleAnswers(this, i * nombreDeQuestionsDispo.length + ee, {
-          reponse: { value: reponsesPb[i][ee] },
+          reponse: { value: reponsesPb[i][nombreDeQuestionsDispo[ee] - 1] },
         })
         texteCorr +=
           (nombreDeQuestionsDispo.length > 1 ? numAlpha(ee) : '') +
