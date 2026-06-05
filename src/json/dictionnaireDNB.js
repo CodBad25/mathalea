@@ -7010,7 +7010,7 @@ export const dictionnaireDNB = {
                 mois: 'Juin',
                 numeroInitial: '1',
                 typeExercice: 'dnb',
-                tags: ['']
+                tags: ['Pythagore', 'Thalès', 'Aires et périmètres', 'Géométrie plane', 'Triangles semblables'],
             },
   dnb_2026_06_ameriquenord_2: {
                 annee: '2026',
@@ -7018,7 +7018,7 @@ export const dictionnaireDNB = {
                 mois: 'Juin',
                 numeroInitial: '2',
                 typeExercice: 'dnb',
-                tags: ['']
+                tags: ['Fonctions', 'Tableur', 'Calcul littéral', 'Équations', 'Lecture graphique'],
             },
   dnb_2026_06_ameriquenord_3: {
                 annee: '2026',
@@ -7026,7 +7026,7 @@ export const dictionnaireDNB = {
                 mois: 'Juin',
                 numeroInitial: '3',
                 typeExercice: 'dnb',
-                tags: ['']
+                tags: ['Pourcentages', 'Puissances', 'Probabilités', 'Grandeurs composées'],
             },
   dnb_2026_06_ameriquenord_4: {
                 annee: '2026',
@@ -7034,7 +7034,7 @@ export const dictionnaireDNB = {
                 mois: 'Juin',
                 numeroInitial: '4',
                 typeExercice: 'dnb',
-                tags: ['']
+                tags: ['Algorithmique-programmation'],
             },
   dnb_2026_06_ameriquenord_automatismes: {
                 annee: '2026',
@@ -7042,7 +7042,7 @@ export const dictionnaireDNB = {
                 mois: 'Juin',
                 numeroInitial: 'automatismes',
                 typeExercice: 'dnb',
-                tags: ['']
+                tags: ['Fractions', 'Pourcentages', 'Géométrie plane', 'Équations', 'Lecture graphique', 'Statistiques', 'Trigonométrie', 'Arithmétique'],
             },
 
 }
