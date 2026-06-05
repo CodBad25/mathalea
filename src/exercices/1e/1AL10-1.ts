@@ -402,7 +402,7 @@ Le premier versement a lieu le $25$ février $2024$.<br>`
 Au point de départ, la température est de $${temp}$ degrés Celsius.<br>`
           if (!this.sup2 || this.interactif) {
             texte += `L'évolution de la température est modélisée par une suite $(u_n)$, le terme $u_n$ est la température (en degrés Celsius) sur le parcours du randonneur à l'altitude $${texNombre(alt, 0)}+n$ mètres.<br>
-            Exprimer pour tout entier $n$, le terme $v_{n}$ en fonction de $n$.`
+            Exprimer pour tout entier $n$, le terme $u_{n}$ en fonction de $n$.`
           } else {
             texte += `Modéliser l'évolution de la température sur le parcours du randonneur par une suite $(u_n)$ définie de manière explicite à partir de l'altitude de $${texNombre(alt, 0)}\\text{ m}$.`
           }
