@@ -7004,4 +7004,45 @@ export const dictionnaireDNB = {
     typeExercice: 'dnb',
     tags: ['Automatismes'],
   },
+  dnb_2026_06_ameriquenord_1: {
+                annee: '2026',
+                lieu: 'Amérique du Nord',
+                mois: 'Juin',
+                numeroInitial: '1',
+                typeExercice: 'dnb',
+                tags: ['']
+            },
+  dnb_2026_06_ameriquenord_2: {
+                annee: '2026',
+                lieu: 'Amérique du Nord',
+                mois: 'Juin',
+                numeroInitial: '2',
+                typeExercice: 'dnb',
+                tags: ['']
+            },
+  dnb_2026_06_ameriquenord_3: {
+                annee: '2026',
+                lieu: 'Amérique du Nord',
+                mois: 'Juin',
+                numeroInitial: '3',
+                typeExercice: 'dnb',
+                tags: ['']
+            },
+  dnb_2026_06_ameriquenord_4: {
+                annee: '2026',
+                lieu: 'Amérique du Nord',
+                mois: 'Juin',
+                numeroInitial: '4',
+                typeExercice: 'dnb',
+                tags: ['']
+            },
+  dnb_2026_06_ameriquenord_automatismes: {
+                annee: '2026',
+                lieu: 'Amérique du Nord',
+                mois: 'Juin',
+                numeroInitial: 'automatismes',
+                typeExercice: 'dnb',
+                tags: ['']
+            },
+
 }
