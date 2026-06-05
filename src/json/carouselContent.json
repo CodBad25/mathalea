@@ -5,14 +5,16 @@
       "message": "Des conseils et des exercices pour réviser les examens de fin d'année",
       "image": "revisions.png",
       "link": "https://coopmaths.fr/www/revisions/",
-      "buttonTitle": "Accéder aux ressources pour réviser"
+      "buttonTitle": "Accéder aux ressources pour réviser",
+      "mobileVisible": true
     },
     {
       "background": "carousel04.jpg",
       "title": "Capytale",
       "message": "Les enseignants peuvent sélectionner des exercices, les donner à leurs élèves et récupérer tous les scores sur Capytale.",
       "image": "capytale.png",
-      "link": "https://capytale2.ac-paris.fr/"
+      "link": "https://capytale2.ac-paris.fr/",
+      "mobileVisible": false
     }
   ]
 }
