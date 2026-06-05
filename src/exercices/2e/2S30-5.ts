@@ -57,7 +57,7 @@ export default class FonctionsProbabilite2 extends Exercice {
     this.nbQuestions = 2
 
     context.isHtml ? (this.spacing = 2) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 2)
+    this.spacingCorr = context.isHtml ? 3 : 2
     this.sup = 1
     this.comment = `Selon le type de problème, le nombre de questions peut être différent. Si vous donnez cet exercice sur Capytale, vous devriez choisir les problèmes donnant 6 questions et donc 6 points et éviter le problème des chaussettes qui n'en donne que 3 et celui des dés qui n'en donne que 5.`
   }

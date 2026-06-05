@@ -43,8 +43,7 @@ export default class PaternRepetitif extends Exercice {
     super()
     this.nbQuestions = 3
     this.comment = `Étudier une série d'éléments figuratifs afin d'identifier un pattern et être capable d'interpoler l'élément de rang quelconque.\n
- <br>Les patterns (angliscisme utilisé dans certains documents de référence) sont des motifs figuratifs ou numériques répétitifs qui évoluent selon une règle définie.\n
- <br>Cet exercice contient des patterns figuratifs créés par Jean-claude Lhote, d'après une idée de Sophie Roubin`
+ <br>Les patterns (angliscisme utilisé dans certains documents de référence) sont des motifs figuratifs ou numériques répétitifs qui évoluent selon une règle définie.`
     this.besoinFormulaireTexte = [
       'Types de pattern',
       'Nombres séparés par des tirets\n1 : Pattern court sans symétrie\n2 : Pattern long sans symétrie\n3 : Pattern court avec symétrie\n4 : Pattern long avec symétrie\n5 : Pattern complexe avec sous-série\n6 : Mélange',

@@ -28,7 +28,7 @@ export default class EgaliteFG1 extends Exercice {
     this.nbQuestions = 2
     this.nbQuestionsModifiable = false
     
-    this.comment = 'Pour débattre<br>Pourquoi penses-tu que Julie choisit le bus et Paul le métro ? Est-ce que cela reflète un stéréotype sur les choix des transports ou les rôles des filles et des garçons ?'
+    this.comment = 'Pour débattre.<br>Pourquoi penses-tu que Julie choisit le bus et Paul le métro ? Est-ce que cela reflète un stéréotype sur les choix des transports ou les rôles des filles et des garçons ?'
   }
 
   nouvelleVersion () {

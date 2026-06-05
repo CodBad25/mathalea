@@ -85,7 +85,7 @@ export default class IntervallesDeR extends Exercice {
       ].join('\n'),
     ]
     this.sup3 = 9
-    this.comment = `Le premier paramètre "Type de questions" est en lien avec les paramètres suivants.<br>
+    this.comment = `Le premier paramètre « Type de questions » est en lien avec les paramètres suivants.<br>
       Vous pouvez choisir les inégalités ou les intervalles disponibles dans l'exercice.`
   }
 

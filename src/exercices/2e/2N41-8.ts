@@ -43,7 +43,7 @@ export default class MettreAuMemeDenominateurLit extends Exercice {
     this.nbQuestions = 2
     this.sup = 3
     this.comment = `Les expressions simples sont des expressions du type $a+\\dfrac{b}{x}$ ou $ax+\\dfrac{b}{x}$ ou $a+\\dfrac{b}{cx+d}$.<br>
-  Les expressions complexes sont plus complexes. Elles nécessitent par exemple un développement du numérateur et peuvent avoir deux valeurs interdites.`
+  Les expressions complexes nécessitent par exemple un développement du numérateur et peuvent avoir deux valeurs interdites.`
   }
 
   nouvelleVersion() {

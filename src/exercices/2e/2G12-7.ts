@@ -61,8 +61,8 @@ export default class BetaReperage2e extends Exercice {
     this.sup2 = false
     this.besoinFormulaire3Numerique = ['Nombre de points à trouver/placer', 3]
     this.sup3 = 3
-    this.comment = `Exercice fait suite à une demande sur la forge de Carole Feugère.<br> Il y a trois types de repères, le premier est orthogonal mais pas normé, le deuxième est normé mais pas orthonormal, le troisième n'est ni normé ni orthogonal.<br>
-    Les points à Placer sont choisis aléatoirement à coordonnées entières. On peut choisir le nombre de points à Placer de 1 à 3.`
+    this.comment = `Il y a trois types de repères, le premier est orthogonal mais pas normé, le deuxième est normé mais pas orthonormal, le troisième n'est ni normé ni orthogonal.<br>
+    Les points à placer sont choisis aléatoirement à coordonnées entières. On peut choisir le nombre de points à placer de 1 à 3.`
   }
 
   nouvelleVersion() {

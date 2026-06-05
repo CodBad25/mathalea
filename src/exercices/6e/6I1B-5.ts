@@ -166,6 +166,10 @@ export default class ExerciceTableurVocabulaire extends Exercice {
       if (choixThisSup === '0') {
         choixThisSup = '1-2-3-4-5-8-10-11-12-13'
       }
+    } else if (this.niveau === 4) {
+      if (choixThisSup === '0') {
+        choixThisSup = '1-2-3-4-5-6-7-8-9-10-11-12-13'
+      }
     }
     const listeTypeQuestionsBase = gestionnaireFormulaireTexte({
       saisie: choixThisSup,
@@ -188,6 +192,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
       txtEnonce: string
       txtCorrection: string
       txtFormule: string
+      plainFormule: string
     }
     const listeMots: MotVocabulaire[] = [
       {
@@ -196,6 +201,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         txtEnonce: 'le double du nombre de départ',
         txtCorrection: 'le double de ',
         txtFormule: `$${miseEnEvidence(`\\text{=B1*2}`)}$`,
+        plainFormule: '=B1*2',
       },
       {
         num: 2,
@@ -203,6 +209,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         txtEnonce: 'le triple du nombre de départ',
         txtCorrection: 'le triple de ',
         txtFormule: `$${miseEnEvidence(`\\text{=B1*3}`)}$`,
+        plainFormule: '=B1*3',
       },
       {
         num: 3,
@@ -210,6 +217,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         txtEnonce: 'la moitié du nombre de départ',
         txtCorrection: 'la moitié de ',
         txtFormule: `$${miseEnEvidence(`\\text{=B1/2}`)}$`,
+        plainFormule: '=B1/2',
       },
       {
         num: 4,
@@ -217,6 +225,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         txtEnonce: 'le quart du nombre de départ',
         txtCorrection: 'le quart de ',
         txtFormule: `$${miseEnEvidence(`\\text{=B1/4}`)}$`,
+        plainFormule: '=B1/4',
       },
       {
         num: 5,
@@ -224,6 +233,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         txtEnonce: 'le dixième du nombre de départ',
         txtCorrection: 'le dixième de ',
         txtFormule: `$${miseEnEvidence(`\\text{=B1/10}`)}$`,
+        plainFormule: '=B1/10',
       },
       {
         num: 6,
@@ -231,6 +241,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         txtEnonce: 'le carré du nombre de départ',
         txtCorrection: 'le carré de ',
         txtFormule: `$${miseEnEvidence(`\\text{=B1\\textasciicircum 2}`)}$`,
+        plainFormule: '=B1^2',
       },
       {
         num: 7,
@@ -238,6 +249,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         txtEnonce: 'le cube du nombre de départ',
         txtCorrection: 'le cube de ',
         txtFormule: `$${miseEnEvidence(`\\text{=B1\\textasciicircum 3}`)}$`,
+        plainFormule: '=B1^3',
       },
       {
         num: 8,
@@ -245,6 +257,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         txtEnonce: "l'opposé du nombre de départ",
         txtCorrection: `l'opposé de `,
         txtFormule: `$${miseEnEvidence(`\\text{=-B1}`)}$`,
+        plainFormule: '=-B1',
       },
       {
         num: 9,
@@ -252,6 +265,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         txtEnonce: "l'inverse du nombre de départ",
         txtCorrection: `l'inverse de `,
         txtFormule: `$${miseEnEvidence(`\\text{=1/B1}`)}$`,
+        plainFormule: '=1/B1',
       },
       {
         num: 10,
@@ -259,6 +273,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         txtEnonce: '',
         txtCorrection: 'la somme de ',
         txtFormule: `$${miseEnEvidence(`\\text{=B1+B2}`)}$`,
+        plainFormule: '=B1+B2',
       },
       {
         num: 11,
@@ -266,6 +281,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         txtEnonce: '',
         txtCorrection: 'la différence entre ',
         txtFormule: `$${miseEnEvidence(`\\text{=B1-B2}`)}$`,
+        plainFormule: '=B1-B2',
       },
       {
         num: 12,
@@ -273,6 +289,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         txtEnonce: '',
         txtCorrection: 'le produit de ',
         txtFormule: `$${miseEnEvidence(`\\text{=B1*B2}`)}$`,
+        plainFormule: '=B1*B2',
       },
       {
         num: 13,
@@ -280,6 +297,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         txtEnonce: '',
         txtCorrection: 'le quotient de ',
         txtFormule: `$${miseEnEvidence(`\\text{=B1/B2}`)}$`,
+        plainFormule: '=B1/B2',
       },
     ]
 
@@ -325,11 +343,13 @@ export default class ExerciceTableurVocabulaire extends Exercice {
       let motCellule: string = ''
       let motEnonce: string = ''
       let formule: string = ''
+      let plainFormule: string = ''
 
       for (let i = q * nbLignes; i < (q + 1) * nbLignes; i++) {
         const lOperation = Number(listeTypeQuestions[i])
         motCellule = listeMots[lOperation - 1].txtCellule
         formule = listeMots[lOperation - 1].txtFormule
+        plainFormule = listeMots[lOperation - 1].plainFormule
         const nb2 = randint(15, 40, [nbDepart])
         switch (lOperation) {
           case 10: // somme
@@ -337,6 +357,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
               .replace('de number1', 'du nombre de départ')
               .replace('number2', `de ${nb2}`)
             formule = formule.replace('B2', `${nb2}`)
+            plainFormule = plainFormule.replace('B2', `${nb2}`)
             break
           case 11: // différence
             if (nb2 < nbDepart) {
@@ -345,12 +366,14 @@ export default class ExerciceTableurVocabulaire extends Exercice {
                 `entre le nombre de départ et ${nb2}`,
               )
               formule = formule.replace('B2', `${nb2}`)
+              plainFormule = plainFormule.replace('B2', `${nb2}`)
             } else {
               motCellule = motCellule.replace(
                 'entre number1 et number2',
                 `entre ${nb2} et le nombre de départ`,
               )
               formule = formule.replace('B1-B2', `${nb2}-B1`)
+              plainFormule = plainFormule.replace('B1-B2', `${nb2}-B1`)
             }
             break
           case 12: // produit
@@ -358,6 +381,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
               .replace('de number1', 'du nombre de départ')
               .replace('number2', `${nb2}`)
             formule = formule.replace('B2', `${nb2}`)
+            plainFormule = plainFormule.replace('B2', `${nb2}`)
             break
           case 13: // quotient
             if (nb2 < nbDepart) {
@@ -366,12 +390,14 @@ export default class ExerciceTableurVocabulaire extends Exercice {
                 `du nombre de départ par ${nb2}`,
               )
               formule = formule.replace('B2', `${nb2}`)
+              plainFormule = plainFormule.replace('B2', `${nb2}`)
             } else {
               motCellule = motCellule.replace(
                 'de number1 par number2',
                 `de ${nb2} par le nombre de départ`,
               )
               formule = formule.replace('B1/B2', `${nb2}/B1`)
+              plainFormule = plainFormule.replace('B1/B2', `${nb2}/B1`)
             }
             break
         }
@@ -383,7 +409,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         listeMotsEnonce.push(motEnonce)
         lesBonnesFormules.push({
           ref: `B${i - q * nbLignes + 2}`,
-          formula: formule,
+          formula: plainFormule,
         })
       }
 
