@@ -1,3 +1,5 @@
+import { logError } from './log'
+
 export function logDiffContext(a: string, b: string, context = 10) {
   const len = Math.min(a.length, b.length)
 
@@ -18,7 +20,7 @@ export function logDiffContext(a: string, b: string, context = 10) {
 
   // Identiques
   if (diffIndex === -1) {
-    console.log('Aucune différence')
+    // console.log('Aucune différence')
     return
   }
 
@@ -34,9 +36,9 @@ export function logDiffContext(a: string, b: string, context = 10) {
   const afterA = a.slice(diffIndex + 1, endA)
   const afterB = b.slice(diffIndex + 1, endB)
 
-  console.log('Diff index:', diffIndex)
+  logError('Diff index:', diffIndex)
 
-  console.log(`A: …${beforeA}[${a[diffIndex] ?? '∅'}]${afterA}…`)
+  logError(`A: …${beforeA}[${a[diffIndex] ?? '∅'}]${afterA}…`)
 
-  console.log(`B: …${beforeB}[${b[diffIndex] ?? '∅'}]${afterB}…`)
+  logError(`B: …${beforeB}[${b[diffIndex] ?? '∅'}]${afterB}…`)
 }

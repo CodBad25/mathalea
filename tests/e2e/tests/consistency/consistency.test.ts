@@ -1,5 +1,5 @@
 import type { Locator, Page } from 'playwright'
-import { log } from '../../helpers/log'
+import { log, logError, logIfVerbose } from '../../helpers/log'
 import prefs from '../../helpers/prefs'
 import { runTest } from '../../helpers/run'
 import {
@@ -31,7 +31,7 @@ let exerciseType: ExerciseType = 'classique'
 
 function logState() {
   states.forEach((state) => {
-    console.log(state)
+    logIfVerbose(state)
   })
 }
 
@@ -226,10 +226,10 @@ function isConsistent() {
   const differenceIndexes = getDifferencesIndexes()
   if (differenceIndexes.length > 0) {
     for (const differenceIndex of differenceIndexes) {
-      console.log(
+      logError(
         `Il y a une différence entre la vue ${states[differenceIndex - 1].view} et la vue ${states[differenceIndex].view} pour les exercices de type ${states[differenceIndex].exerciseType}`,
       )
-      console.log(states[differenceIndex - 1], states[differenceIndex])
+      logError(states[differenceIndex - 1], states[differenceIndex])
     }
     return false
   }
