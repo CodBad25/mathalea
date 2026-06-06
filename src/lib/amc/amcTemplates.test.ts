@@ -7,7 +7,7 @@ import {
   AMCOpenTemplate,
   qcmTemplate,
   renderTemplate,
-} from '../../src/lib/amc/amcTemplates'
+} from './amcTemplates'
 
 describe('renderTemplate - AMClabel injection', () => {
   it('ajoute AMClabel une seule fois dans un template simple', () => {

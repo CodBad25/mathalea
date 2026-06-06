@@ -1,17 +1,58 @@
-import { expect } from '@playwright/test'
-import fs from 'fs/promises'
-import JSZip from 'jszip'
-import { spawn } from 'node:child_process'
-import type { Page } from 'playwright'
-import { describe, test } from 'vitest'
+import { spawn, spawnSync } from 'node:child_process'
+import fs from 'node:fs/promises'
+import { basename, resolve } from 'node:path'
+import { beforeAll, describe, expect, test, vi } from 'vitest'
+import Latex, { makeImageFilesUrls } from '../../../../src/lib/Latex'
+import type { LatexFileInfos } from '../../../../src/lib/LatexTypes'
+import type { IExercice, IExerciceStatique } from '../../../../src/lib/types'
+import { context } from '../../../../src/modules/context'
 import { findStatic, findUuid } from '../../helpers/filter'
 import { createIssue } from '../../helpers/issue'
 import { getFileLogger, log as lg, logError as lgE } from '../../helpers/log'
-import prefs from '../../helpers/prefs.js'
-import { runSeveralTests } from '../../helpers/run'
+
+context.isHtml = false
+
+type ExportStatus = 'OK' | 'KO' | 'NON_TESTE'
+type ExportStyle = 'ProfMaquette' | 'Can'
+
+type ExportRow = {
+  uuid: string
+  exercicePath: string
+  style: ExportStyle
+  status: ExportStatus
+  detail: string
+  debugDetail?: string
+}
 
 const logPDF = getFileLogger('exportPDF', { append: true })
-const logPackage = getFileLogger('exportPackage', { append: true })
+const DEFAULT_ALEA = 'e906e'
+const STATIC_UUID_PREFIXES = [
+  'crpe',
+  'dnb_',
+  'dnbpro_',
+  'e3c_',
+  'eam_',
+  'bac_',
+  'sti2d_',
+  'evacom_',
+  '2nd_',
+]
+
+const defaultLatexFileInfos: Omit<LatexFileInfos, 'style'> = {
+  title: '',
+  reference: '',
+  subtitle: '',
+  fontOption: 'StandardFont',
+  tailleFontOption: 12,
+  dysTailleFontOption: 14,
+  correctionOption: 'AvecCorrection',
+  qrcodeOption: 'SansQrcode',
+  typeFiche: 'Fiche',
+  durationCanOption: '9 min',
+  titleOption: 'SansTitre',
+  nbVersions: 1,
+  exos: {},
+}
 
 function log(...args: unknown[]) {
   lg(args)
@@ -23,436 +64,467 @@ function logError(...args: unknown[]) {
   logPDF(args)
 }
 
-const UPLOAD_FOLDER = 'updatefile'
-const UPLOAD_SUBFOLDER = 'output'
-
-// file parameter retrieved from an input type=file
-async function readZip(
-  file: fs.FileHandle,
-): Promise<Map<string, string | ArrayBuffer>> {
-  const buffer = await fs.readFile(file)
-  const files: Map<string, string | ArrayBuffer> = new Map<
-    string,
-    string | ArrayBuffer
-  >()
-  const zipper = new JSZip()
-  const unzippedFiles = await zipper.loadAsync(buffer)
-  const entries = Object.keys(unzippedFiles.files)
-  for (const _filename of entries) {
-    if (_filename !== 'images/') {
-      if (_filename.includes('eps')) {
-        files.set(
-          _filename.replace('images/', ''),
-          await unzippedFiles.files[_filename].async('string'),
-        )
-      } else if (_filename.includes('png')) {
-        files.set(
-          _filename.replace('images/', ''),
-          await unzippedFiles.files[_filename].async('arraybuffer'),
-        )
-      } else {
-        files.set(
-          _filename.replace('images/', ''),
-          await unzippedFiles.files[_filename].async('string'),
-        )
-      }
+beforeAll(() => {
+  const proto = SVGElement.prototype as any
+  if (!proto.getBBox) {
+    proto.getBBox = function () {
+      return { x: 0, y: 0, width: 0, height: 0 }
     }
   }
-  return files
+
+  window.matchMedia = vi.fn().mockReturnValue({ matches: false }) as any
+
+  Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+    configurable: true,
+    value: () => ({
+      fillRect: () => {},
+      clearRect: () => {},
+      getImageData: () => ({ data: [] }),
+      putImageData: () => {},
+      createImageData: () => [],
+      setTransform: () => {},
+      drawImage: () => {},
+      save: () => {},
+      restore: () => {},
+      beginPath: () => {},
+      moveTo: () => {},
+      lineTo: () => {},
+      closePath: () => {},
+      stroke: () => {},
+      translate: () => {},
+      scale: () => {},
+      rotate: () => {},
+      arc: () => {},
+      fill: () => {},
+      measureText: () => ({ width: 0 }),
+      transform: () => {},
+      rect: () => {},
+      clip: () => {},
+    }),
+  })
+})
+
+vi.mock('../../../../src/lib/3d/3d_dynamique/Canvas3DElement', () => ({
+  ajouteCanvas3d: vi.fn((args) => `canvas3DElement-mock:${args.length}`),
+}))
+
+vi.mock('../../../../src/lib/3d/3d_dynamique/solidesThreeJs', () => ({
+  sphericalToCartesian: vi.fn(
+    (args) => `sphericalToCartesian-mock:${args.length}`,
+  ),
+}))
+
+vi.mock('../../../../src/lib/components/version', () => ({
+  fetchServerVersion: vi.fn(() => Promise.resolve('1.0.0')),
+  checkForServerUpdate: vi.fn(() => Promise.resolve(false)),
+}))
+
+vi.mock('../../../../src/lib/renderScratch', () => ({
+  renderScratch: vi.fn(() => 'mocked value'),
+}))
+
+vi.mock('apigeom', async (original) => {
+  const real = await original()
+  ;(globalThis as any).APP_VERSION = 'test'
+  return real
+})
+
+const { mathaleaLoadExerciceFromUuid } =
+  await import('../../../../src/lib/mathalea')
+
+function hasLualatex() {
+  const res = spawnSync('lualatex', ['--version'], { stdio: 'ignore' })
+  return res.status === 0
 }
 
-function getFilenameWithoutExtension(filename: string) {
-  return filename.replace(/\.[^/.]+$/, '')
+function isStaticUuid(uuid: string) {
+  return STATIC_UUID_PREFIXES.some((prefix) => uuid.startsWith(prefix))
 }
 
-async function getLatexFile(page: Page, urlExercice: string) {
-  // Coopmaths
-  // Classique
-  // ProfMaquette
-  // ProfMaquette avec QrCode
+function normalizeChangedFiles(envValue: string | undefined) {
+  if (!envValue) return []
+  return envValue
+    .split('\n')
+    .flatMap((entry) => entry.split(' '))
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+}
 
-  page.setDefaultTimeout(150000)
+function isRelevantExerciseFile(filePath: string) {
+  const normalized = filePath.replaceAll('\\', '/')
+  if (!normalized.startsWith('src/exercices/')) return false
+  if (normalized.includes('ressources') || normalized.includes('apps')) {
+    return false
+  }
+  const segments = normalized.replace('src/exercices/', '').split('/')
+  if (segments.length < 2) return false
+  return /\.(ts|js)$/.test(normalized)
+}
 
-  const retries = 3 // Nombre de tentatives en cas d'erreur
-  for (let attempt = 1; attempt <= retries; attempt++) {
-    try {
-      log(urlExercice)
-      await page.goto(urlExercice)
-      await page.waitForLoadState('networkidle')
+function compactLines(value: string, maxLines: number = 18) {
+  const lines = value.split('\n').filter(Boolean)
+  return lines.slice(Math.max(0, lines.length - maxLines)).join(' | ')
+}
 
-      // const resu0 = await getLatexFileStyle(page, urlExercice, 'Coopmaths')
-      // if (resu0 === 'KO') {
-      //   return 'KO'
-      // }
-      // const resu1 = await getLatexFileStyle(page, urlExercice, 'Classique')
-      // if (resu1 === 'KO') {
-      //   return 'KO'
-      // }
+function extractLatexDiagnostic(logText: string) {
+  const lines = logText.split('\n')
+  const importantIndex = lines.findIndex((line) => /^!\s/.test(line))
+  if (importantIndex === -1) {
+    return (
+      compactLines(logText, 18) ||
+      'Aucun message LaTeX exploitable dans main.log.'
+    )
+  }
 
-      const resu2 = await getLatexFileStyle(page, urlExercice, 'ProfMaquette')
-      if (resu2 === 'KO') {
-        return 'KO'
-      }
-      const urlPage = page.url()
-      if (
-        urlPage.includes('dnb') ||
-        urlPage.includes('crpe') ||
-        urlPage.includes('sti2d') ||
-        urlPage.includes('bac') ||
-        urlPage.includes('e3c')
-      ) {
-        return 'OK'
-      }
-      const resu3 = await getLatexFileStyle(page, urlExercice, 'Can')
-      if (resu3 === 'KO') {
-        return 'KO'
-      }
-      return 'OK'
-    } catch (error) {
-      logError('Attempt ' + attempt + ' failed: ' + error)
-      if (attempt === retries) {
-        logError('All attempts failed.')
-        return 'KO'
-      }
-      log('Retrying...')
-      await new Promise((resolve) => setTimeout(resolve, 2000)) // Attendre 2 secondes avant de réessayer
+  const start = Math.max(0, importantIndex - 3)
+  const end = Math.min(lines.length, importantIndex + 8)
+  return lines
+    .slice(start, end)
+    .map((line) => line.trim())
+    .join(' | ')
+}
+
+function shortErrorLabel(detail: string) {
+  const knownPatterns = [
+    /Misplaced alignment tab character\s*&\./i,
+    /Undefined control sequence\./i,
+    /Missing \$ inserted\./i,
+    /Emergency stop\./i,
+    /File `[^']+' not found\./i,
+    /LaTeX Error:[^.]+\./i,
+  ]
+
+  for (const pattern of knownPatterns) {
+    const match = detail.match(pattern)
+    if (match && match[0]) return match[0]
+  }
+  return detail.slice(0, 180)
+}
+
+function needsStaticLookup(filter: string) {
+  return /(dnb|crpe|sti2d|bac|e3c)/.test(filter)
+}
+
+function toFilterFromExercisePath(file: string) {
+  return file.replace(/\.ts$/, '.').replace(/\.js$/, '.')
+}
+
+function getExerciseId(exercicePath: string, uuid: string) {
+  if (exercicePath === uuid) return uuid
+  const withoutExt = exercicePath.replace(/\.[^.]+$/, '')
+  const parts = withoutExt.split('/')
+  return parts[parts.length - 1] || uuid
+}
+
+function getStartedPath(exercicePath: string, uuid: string) {
+  if (exercicePath !== uuid) {
+    return exercicePath.split('/')[0] || 'test'
+  }
+  const [prefix] = uuid.split('_')
+  return prefix || 'test'
+}
+
+function buildExerciseUrl(uuid: string, exercicePath: string) {
+  const port =
+    process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')
+  const idPath =
+    exercicePath === uuid ? uuid : exercicePath.replace(/\.[^.]+$/, '')
+  return `http://localhost:${port}/alea/?uuid=${uuid}&id=${idPath}&alea=${DEFAULT_ALEA}&v=latex&testCI`
+}
+
+async function loadExercise(uuid: string) {
+  const exercice = await mathaleaLoadExerciceFromUuid(uuid)
+
+  if (!exercice) {
+    return {
+      status: 'NON_TESTE' as const,
+      detail: 'Exercice introuvable.',
     }
   }
+
+  ;(exercice as IExercice | IExerciceStatique).uuid = uuid
+
+  if ('seed' in exercice) {
+    exercice.seed = DEFAULT_ALEA
+    exercice.interactif = false
+    exercice.numeroExercice = 1
+  }
+
+  return {
+    status: 'OK' as const,
+    exercice: exercice as IExercice | IExerciceStatique,
+  }
 }
 
-async function getLatexFileStyle(
-  page: Page,
-  urlExercice: string,
-  style: string,
-) {
-  log('style=' + style)
-  let styleLocator = ''
-  switch (style) {
-    case 'Classique':
-      styleLocator = 'input#Style0'
-      break
-    case 'ProfMaquette':
-      styleLocator = 'input#Style1'
-      break
-    case 'Coopmaths':
-      styleLocator = 'input#Style2'
-      break
-    case 'Can':
-      styleLocator = 'input#Style3'
-      break
-    default:
-      styleLocator = 'input#Style2'
-  }
-  await page.click(styleLocator)
-
-  // await page.click('input#Style2') // style maquette
-
-  await new Promise((resolve) => setTimeout(resolve, 200))
-
-  const downloadPromise = page.waitForEvent('download', { timeout: 60000 })
-  page.click('button#downloadFullArchive')
-
-  const download = await downloadPromise
-
-  const downloadError = await download.failure()
-  if (downloadError !== null) {
-    logError('Error happened on download:', downloadError)
-    throw new Error(downloadError)
-  }
-
-  log(download.suggestedFilename())
-
-  const uuid = new URL(urlExercice).searchParams.get('uuid')
-
-  let idPath = new URL(urlExercice).searchParams.get('id')
-  idPath = idPath?.substring(0, idPath?.lastIndexOf('.')) || idPath
-  const id = idPath?.split('/').reverse()[0]
-  const startedPath = idPath?.split('/')[0].split('_')[0] || 'test'
-  // console.log(uuid)
-
-  try {
-    await fs.access(UPLOAD_FOLDER)
-  } catch (err) {
-    await fs.mkdir(UPLOAD_FOLDER)
-  }
-
-  try {
-    await fs.access(UPLOAD_FOLDER + '/' + UPLOAD_SUBFOLDER)
-  } catch (err) {
-    await fs.mkdir(UPLOAD_FOLDER + '/' + UPLOAD_SUBFOLDER)
-  }
-
-  try {
-    await fs.access(UPLOAD_FOLDER + '/' + UPLOAD_SUBFOLDER + '/' + startedPath)
-  } catch (err) {
-    await fs.mkdir(UPLOAD_FOLDER + '/' + UPLOAD_SUBFOLDER + '/' + startedPath)
-  }
-
-  const downloadedFilePath =
-    UPLOAD_FOLDER +
-    '/' +
-    UPLOAD_SUBFOLDER +
-    '/' +
-    startedPath +
-    '/' +
-    id +
-    style +
-    (id === uuid ? '_' : '_' + uuid + '_') +
-    download.suggestedFilename()
-
-  const folder =
-    UPLOAD_FOLDER +
-    '/' +
-    UPLOAD_SUBFOLDER +
-    '/' +
-    startedPath +
-    '/' +
-    id +
-    style +
-    (id === uuid ? '_' : '_' + uuid + '_') +
-    Date.now() +
-    '-' +
-    Math.round(Math.random() * 1e9)
-  await fs.mkdir(folder)
-
-  await download.saveAs(downloadedFilePath)
-
-  let file: string | undefined
-  if (download.suggestedFilename().endsWith('.tex')) {
-    file = download.suggestedFilename()
-    await fs.copyFile(downloadedFilePath, folder + '/' + file)
-  } else {
-    const zip = await fs.open(downloadedFilePath)
-    const unzipfiles: Map<string, string | ArrayBuffer> = await readZip(zip)
-    await zip.close()
-
-    const filesPromise: Promise<unknown>[] = []
-    unzipfiles.forEach((value, key) => {
-      if (value instanceof ArrayBuffer) {
-        const buffer = Buffer.from(value)
-        filesPromise.push(fs.writeFile(folder + '/' + key, buffer))
-      } else {
-        filesPromise.push(fs.writeFile(folder + '/' + key, value))
-      }
-    })
-    await Promise.all(filesPromise)
-
-    file = Array.from(unzipfiles.keys()).find(
-      (ele) => ele === 'main.tex' || ele === 'test.tex',
-    )
-  }
-
-  await fs.rm(downloadedFilePath, { recursive: true, force: true })
-
-  const controller = new AbortController()
-  const signal = controller.signal
-
-  const trace: string[] = []
-  const launch = new Promise((resolve, reject) => {
-    log(folder + '/' + file)
-    const xelatex = spawn('lualatex', ['--halt-on-error', '' + file], {
-      cwd: folder + '/',
-      signal,
-    })
-    const timer = setTimeout(
-      () => {
-        controller.abort()
-      },
-      5 * 60 * 1000,
-    )
-    xelatex.stdout.on('data', function (result) {
-      const out = Buffer.from(result, 'utf-8').toString()
-      trace.push(out.replaceAll('\r\n', ''))
-      if (trace.length > 30) {
-        trace.shift() // supprime le premier élément
-        // console.log(trace.join(' '))
-      }
-    })
-    xelatex.stderr.on('data', function (result) {
-      const out = Buffer.from(result, 'utf-8').toString()
-      log(out)
-    })
-    xelatex.on('error', function (err) {
-      reject(err)
-    })
-    xelatex.on('close', (code: number) => {
-      clearTimeout(timer)
-      if (code !== 0) {
-        log(code)
-        reject(code)
-      } else {
-        resolve(code)
-      }
-    })
-  })
-
-  const code = await launch.catch((err) => {
-    log(err)
-    return -1
-  })
-  log('code:' + code)
-  if (code === 0) {
-    await fs.copyFile(
-      folder + '/' + getFilenameWithoutExtension('' + file) + '.pdf',
-      UPLOAD_FOLDER +
-        '/' +
-        UPLOAD_SUBFOLDER +
-        '/' +
-        startedPath +
-        '/' +
-        id +
-        style +
-        (id === uuid ? '_' : '_' + uuid + '_') +
-        getFilenameWithoutExtension(download.suggestedFilename()) +
-        '.pdf',
-    )
-    await fs.rm(folder + '/', { recursive: true, force: true })
-    return 'OK'
-  } else {
-    log(trace.join('\n'))
-    await createIssue(urlExercice, trace, ['pdfexport'], log)
-    return 'KO'
-  }
-  // const formData = new FormData()
-  // unzipfiles.forEach((value, key) => {
-  //   // console.log(`m[${key}] = ${value}`);
-  //   formData.append('name', key)
-  //   formData.append('originalname', key)
-  //   formData.append('file', new Blob(new Array(value)), key)
-  // })
-
-  // let resultReq = ''
-
-  // await fetch('http://192.168.1.11:3000/generate', {
-  //   method: 'POST',
-  //   body: formData,
-  //   signal: AbortSignal.timeout(60 * 1000)
-  // }).then((res : Response) => {
-  //   log('response.status =' + res.status)
-  //   if (res.status === 200) {
-  //     resultReq = 'OK'
-  //   } else {
-  //     resultReq = 'KO'
-  //   }
-  //   return res.blob()
-  // }).then(blob => {
-  //   log(resultReq)
-  //   return blob.arrayBuffer()
-  // }).then(buffer => {
-  //   fs.writeFile(UPLOAD_FOLDER + '/' + id + '_' + uuid + (resultReq === 'OK' ? '.pdf' : '.log'), new Uint8Array(buffer))
-  // }).catch((err) => {
-  //   logError('Error occured' + err)
-  //   logError(err.name)
-  //   resultReq = 'KO'
-  //   logError(resultReq)
-  // })
-}
-
-async function testRunAllLots(filter: string) {
-  // return testAll(page, '6e/6G23')
-  const uuids =
-    filter.includes('dnb') ||
-    filter.includes('crpe') ||
-    filter.includes('sti2d') ||
-    filter.includes('bac') ||
-    filter.includes('e3c')
+async function resolveTargets() {
+  if (process.env.NIV) {
+    const filter = process.env.NIV.replaceAll(' ', '')
+    return needsStaticLookup(filter)
       ? await findStatic(filter)
       : await findUuid(filter)
-  for (let i = 0; i < uuids.length && i < 300; i += 20) {
-    const ff: ((page: Page) => Promise<boolean>)[] = []
-    for (let k = i; k < i + 20 && k < uuids.length; k++) {
-      const myName = 'test' + uuids[k][1]
-      const f = async function (page: Page) {
-        // Listen for all console logs
-        if (k === i) {
-          // seulement sur la première page Web, les autres c'est la même en faite
-          page.on('console', (msg) => {
-            logPDF(msg.text())
-            if (msg.text().includes('PACKAGETEST:')) {
-              logPackage(msg.text())
-            }
-          })
-        }
-        const hostname = local
-          ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
-          : 'https://coopmaths.fr/alea/'
-        log(`uuid=${uuids[k][0]} exo=${uuids[k][1]} i=${k} / ${uuids.length}`)
-        const resultReq = await getLatexFile(
-          page,
-          `${hostname}?uuid=${uuids[k][0]}&id=${uuids[k][1].substring(0, uuids[k][1].lastIndexOf('.')) || uuids[k][1]}&alea=${alea}&v=latex&testCI`,
-        )
-        log(`Resu: ${resultReq} uuid=${uuids[i][0]} exo=${uuids[k][1]}`)
-        return resultReq === 'OK'
-      }
-      Object.defineProperty(f, 'name', { value: myName, writable: false })
-      ff.push(f)
+  }
+
+  const changedFiles = normalizeChangedFiles(process.env.CHANGED_FILES)
+  const relevantFiles = [
+    ...new Set(changedFiles.filter(isRelevantExerciseFile)),
+  ]
+
+  if (relevantFiles.length > 0) {
+    const entries = await Promise.all(
+      relevantFiles.map(async (sourceFile) => {
+        const exercicePath = sourceFile.replace(/^src\/exercices\//, '')
+        const filter = toFilterFromExercisePath(exercicePath)
+        return await findUuid(filter)
+      }),
+    )
+    return entries.flat()
+  }
+
+  const defaults = ['can', '3e', '4e', '5e', '6e', '2e', '1e']
+  const results = await Promise.all(defaults.map((filter) => findUuid(filter)))
+  return results.flat()
+}
+
+async function materializeAssets(
+  workDir: string,
+  exercices: (IExercice | IExerciceStatique)[],
+) {
+  const urls = [...new Set(makeImageFilesUrls(exercices))]
+
+  for (const url of urls) {
+    const response = await fetch(url)
+    if (!response.ok) {
+      throw new Error(`Impossible de telecharger ${url} (${response.status})`)
     }
-    runSeveralTests(ff, import.meta.url, {
-      pauseOnError: false,
-      silent: false,
-      debug: false,
-    })
+    const arrayBuffer = await response.arrayBuffer()
+    await fs.writeFile(
+      resolve(workDir, basename(new URL(url).pathname)),
+      Buffer.from(arrayBuffer),
+    )
   }
 }
-/**
- * Attention, il faut le compilateur lualatex installé sur l'ordinateur
- * pour ensuite les compiler avec lualatex...
- */
 
-const alea = 'e906e'
-const local = true
-
-if (process.env.NIV !== null && process.env.NIV !== undefined) {
-  // utiliser pour les tests d'intégration
-  const filter = (process.env.NIV as string).replaceAll(' ', '')
-  prefs.headless = true
-  log(filter)
-  testRunAllLots(filter)
-} else if (
-  process.env.CHANGED_FILES !== null &&
-  process.env.CHANGED_FILES !== undefined
+async function compileTexToPdf(
+  texContent: string,
+  workDir: string,
+  outputBaseName: string,
 ) {
-  const changedFiles = process.env.CHANGED_FILES?.split('\n') ?? []
-  log(changedFiles)
-  prefs.headless = true
-  const filtered = changedFiles
-    .filter(
-      (file) =>
-        file.startsWith('src/exercices/') &&
-        !file.includes('ressources') &&
-        !file.includes('apps') &&
-        file.replace('src/exercices/', '').split('/').length >= 2,
+  const texFile = resolve(workDir, 'main.tex')
+  await fs.writeFile(texFile, texContent, 'utf8')
+
+  return await new Promise<{
+    ok: boolean
+    detail: string
+    debugDetail: string
+  }>((resolveResult) => {
+    let stdout = ''
+    let stderr = ''
+
+    const proc = spawn(
+      'lualatex',
+      ['--halt-on-error', '-interaction=nonstopmode', 'main.tex'],
+      { cwd: workDir },
     )
-    .map((file) =>
-      file
-        .replace(/^src\/exercices\//, '')
-        .replace(/\.ts$/, '.')
-        .replace(/\.js$/, '.'),
-    )
-  log(filtered)
-  if (filtered.length === 0) {
-    // aucun fichier concerné.. on sort
-    describe('dummy', () => {
-      test('should pass', () => {
-        expect(true).toBe(true)
+
+    proc.stdout.on('data', (chunk) => {
+      stdout += String(chunk)
+    })
+
+    proc.stderr.on('data', (chunk) => {
+      stderr += String(chunk)
+    })
+
+    proc.on('error', (error) => {
+      resolveResult({
+        ok: false,
+        detail: `Execution lualatex impossible: ${String(error)}`,
+        debugDetail: `Execution lualatex impossible: ${String(error)}`,
       })
     })
-  } else {
-    filtered.forEach((file) => {
-      const filter = file.replaceAll(' ', '')
-      testRunAllLots(filter)
+
+    proc.on('close', async (code) => {
+      if (code === 0) {
+        const pdfSource = resolve(workDir, 'main.pdf')
+        const pdfTarget = resolve(workDir, `${outputBaseName}.pdf`)
+        await fs.copyFile(pdfSource, pdfTarget)
+        resolveResult({
+          ok: true,
+          detail: `Compilation OK (${pdfTarget})`,
+          debugDetail: `Compilation OK (${pdfTarget})`,
+        })
+        return
+      }
+
+      let latexDiagnostic = ''
+      try {
+        const logPath = resolve(workDir, 'main.log')
+        const logContent = await fs.readFile(logPath, 'utf8')
+        latexDiagnostic = extractLatexDiagnostic(logContent)
+      } catch {
+        latexDiagnostic = ''
+      }
+
+      const excerpt = compactLines(`${stdout}\n${stderr}`)
+      const debugDetail =
+        latexDiagnostic || excerpt || 'Aucune trace exploitable.'
+      resolveResult({
+        ok: false,
+        detail: `lualatex exit ${code}. ${shortErrorLabel(debugDetail)}`,
+        debugDetail,
+      })
     })
-  }
-} else {
-  // testRunAllLots('dnb')
-  // testRunAllLots('c3')
-  testRunAllLots('can')
-  testRunAllLots('3e')
-  testRunAllLots('4e')
-  testRunAllLots('5e')
-  testRunAllLots('6e')
-  testRunAllLots('2e')
-  testRunAllLots('1e')
-  // testRunAllLots('bac')
-  // testRunAllLots('6e/6G10')
+  })
 }
+
+function printSummary(rows: ExportRow[]) {
+  const failingRows = rows.filter((row) => row.status === 'KO')
+  const totalRows = rows.length
+
+  console.log('')
+  console.log('=============================================================')
+  console.log('[SUMMARY] PDF exports KO uniquement')
+  console.log('=============================================================')
+  console.log('| Exercice | UUID | Style | Cause |')
+  console.log('| --- | --- | --- | --- |')
+
+  for (const row of failingRows) {
+    const cause = (row.debugDetail ?? row.detail)
+      .replace(/\|/g, '/')
+      .slice(0, 1200)
+    console.log(
+      `| ${row.exercicePath} | ${row.uuid} | ${row.style} | ${cause} |`,
+    )
+  }
+
+  console.log(
+    `| TOTAL | - | - | ${failingRows.length}/${totalRows} (echecs/total) |`,
+  )
+
+  console.log('-------------------------------------------------------------')
+  console.log(`ECHECS=${failingRows.length} TOTAL=${totalRows}`)
+  console.log('=============================================================')
+}
+
+describe('pdfexports sans playwright', () => {
+  test('genere puis compile les exports latex attendus', async () => {
+    log(`Démarrage du test PDF Exports - ${new Date().toLocaleString()}`)
+    if (!hasLualatex()) {
+      console.log('[INFO] lualatex introuvable: test saute.')
+      expect(true).toBe(true)
+      return
+    }
+
+    const targets = await resolveTargets()
+
+    if (targets.length === 0) {
+      console.log('[INFO] Aucun exercice cible detecte.')
+      expect(true).toBe(true)
+      return
+    }
+
+    const uniqueTargets = [
+      ...new Map(
+        targets.map(([uuid, exercicePath]) => [uuid, exercicePath]),
+      ).entries(),
+    ]
+
+    const rows: ExportRow[] = []
+
+    for (const [uuid, exercicePath] of uniqueTargets) {
+      const loaded = await loadExercise(uuid)
+      log(
+        `Processing ${(exercicePath.split('/').pop() ?? '').replace(
+          /\.[^/.]+$/,
+          '',
+        )} (UUID: ${uuid}) -> ${loaded.status}`,
+      )
+      if (loaded.status !== 'OK') {
+        rows.push({
+          uuid,
+          exercicePath,
+          style: 'ProfMaquette',
+          status: 'NON_TESTE',
+          detail: loaded.detail,
+        })
+        continue
+      }
+
+      const styles: ExportStyle[] =
+        isStaticUuid(uuid) || loaded.exercice.typeExercice === 'statique'
+          ? ['ProfMaquette']
+          : ['ProfMaquette', 'Can']
+
+      for (const style of styles) {
+        const startedPath = getStartedPath(exercicePath, uuid)
+        const exerciseId = getExerciseId(exercicePath, uuid)
+        const outputRoot = resolve('updatefile/output', startedPath)
+        await fs.mkdir(outputRoot, { recursive: true })
+
+        const safeLabel =
+          `${exerciseId}${style}${exerciseId === uuid ? '_' : `_${uuid}_`}`
+            .replace(/[^a-zA-Z0-9._-]/g, '_')
+            .slice(0, 120)
+        const workDir = await fs.mkdtemp(resolve(outputRoot, `${safeLabel}-`))
+
+        try {
+          const latex = new Latex()
+          latex.addExercices([loaded.exercice])
+          const latexFile = await latex.getFile({
+            ...defaultLatexFileInfos,
+            style,
+          })
+
+          await materializeAssets(workDir, [loaded.exercice])
+          const compileResult = await compileTexToPdf(
+            latexFile.latexWithPreamble,
+            workDir,
+            safeLabel,
+          )
+
+          if (!compileResult.ok) {
+            logError(
+              `Compilation KO pour ${exercicePath} (style ${style}): ${compileResult.detail}`,
+            )
+            await createIssue(
+              buildExerciseUrl(uuid, exercicePath),
+              [compileResult.debugDetail],
+              ['pdfexport'],
+              log,
+            )
+          }
+
+          rows.push({
+            uuid,
+            exercicePath,
+            style,
+            status: compileResult.ok ? 'OK' : 'KO',
+            detail: compileResult.detail,
+            debugDetail: compileResult.debugDetail,
+          })
+        } catch (error) {
+          const detail = `Generation ou compilation impossible: ${String(error)}`
+          logError(detail)
+          rows.push({
+            uuid,
+            exercicePath,
+            style,
+            status: 'KO',
+            detail,
+            debugDetail: detail,
+          })
+        }
+      }
+    }
+
+    printSummary(rows)
+
+    const failingRows = rows.filter((row) => row.status === 'KO')
+    if (failingRows.length > 0) {
+      throw new Error(
+        `Compilation PDF en erreur pour ${failingRows.length} export(s).`,
+      )
+    }
+
+    expect(true).toBe(true)
+  })
+})

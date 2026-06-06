@@ -1,6 +1,46 @@
 #!/usr/bin/env node
+/* eslint-disable no-undef */
 
-import { spawnSync } from 'node:child_process'
+// scripts/wait-for-server.ts
+import { spawn, spawnSync } from 'node:child_process'
+import waitOn from 'wait-on'
+
+// Lancer pnpm start en arrière-plan
+const startServer = async () => {
+  const child = spawn('pnpm', ['start'], { shell: true })
+
+  // Optionnel : écouter les logs
+  child.stdout.on('data', (data) => console.log(`Server stdout: ${data}`))
+  child.stderr.on('data', (data) => console.error(`Server stderr: ${data}`))
+
+  // On ne bloque pas l'attente du processus, car on l'attendra via `wait-on`
+}
+
+// Fonction principale
+const waitForServerOrLaunch = async () => {
+  console.log('Checking if server is running at http://localhost:5173/alea...')
+
+  try {
+    // Vérifier si le serveur est déjà prêt
+    await waitOn({ url: 'http://localhost:5173/alea' })
+    console.log('✅ Server is already running.')
+  } catch (err) {
+    console.log('Server not found. Launching pnpm start...')
+    await startServer()
+    console.log('Server launched. Waiting for it to be ready...')
+    // Attendre que le serveur écoute
+    await waitOn({ url: 'http://localhost:5173/alea' })
+    console.log('✅ Server started and ready.')
+  }
+}
+
+// Exécution
+waitForServerOrLaunch()
+  .then(() => {})
+  .catch((error) => {
+    console.error('❌ Failed to start or wait for server:', error)
+    process.exit(1)
+  })
 
 const sourceMode = process.argv[2] ?? 'staged'
 const maxCommitsArg = process.argv[3] ?? '1'
@@ -217,6 +257,7 @@ function main() {
 }
 
 try {
+  waitForServerOrLaunch()
   main()
 } catch (error) {
   const message = error instanceof Error ? error.message : String(error)

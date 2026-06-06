@@ -1,26 +1,21 @@
 import { describe, expect, it, vi } from 'vitest'
 
-// eslint-disable-next-line camelcase
-import * as exercice2N40_1 from '../../src/exercices/2e/2N40-1'
+import * as exercice2N40_1 from '../../exercices/2e/2N40-1'
+import { mathaleaHandleExerciceSimple } from '../mathalea'
 import {
   renderAMCCopyContent,
   renderAMCDocumentStart,
   renderAMCGroupSection,
   renderAMCHeader,
   renderAMCPreamble,
-} from '../../src/lib/amc/amcDocumentTemplates'
-import { mathaleaEnsureAMCCompatibility } from '../../src/lib/amc/amcInference'
-import {
-  checkAMCGroupConsistency,
-  creerDocumentAmc,
-} from '../../src/lib/amc/creerDocumentAmc'
-import { mathaleaHandleExerciceSimple } from '../../src/lib/mathalea'
+} from './amcDocumentTemplates'
+import { mathaleaEnsureAMCCompatibility } from './amcInference'
+import { checkAMCGroupConsistency, creerDocumentAmc } from './creerDocumentAmc'
 
 function prepareExercise(
   module: { default: new () => any; amcType?: string; amcReady?: boolean },
   seed: string,
 ) {
-  // eslint-disable-next-line new-cap
   const exercice = new module.default()
   if (module.amcType != null) exercice.amcType = module.amcType
   if (module.amcReady != null) exercice.amcReady = module.amcReady
@@ -429,7 +424,7 @@ describe('creerDocumentAmc templates', () => {
           propositions: [
             { texte: 'A', statut: false },
             { texte: 'B', statut: true },
-            { texte: 'C', statut: true },
+            { texte: 'C', statut: false },
           ],
         },
       ],
@@ -476,7 +471,6 @@ describe('creerDocumentAmc templates', () => {
     } as any
     mathaleaEnsureAMCCompatibility(exerciseExplicitlyBlocked)
 
-    // eslint-disable-next-line camelcase
     expect(exerciseExplicitQcm.amcType).toBe(exercice2N40_1.amcType)
     expect(exerciseInferredQcm.amcType).toBe(inferQcmType(exerciseInferredQcm))
     expect(exerciseInferredMathLive.amcType).toBe('AMCOpen')

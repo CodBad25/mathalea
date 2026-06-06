@@ -1,30 +1,29 @@
-FROM mcr.microsoft.com/playwright:v1.60.0-noble
+FROM registry.gitlab.com/islandoftex/images/texlive:latest
 
-# Keep everything non-interactive for CI builds.
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Minimal TeX stack for lualatex-based tests.
-# Add more texlive-* packages only if tests report missing modules.
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
-    texlive-latex-base \
-    texlive-luatex \
-    texlive-latex-recommended \
-    texlive-fonts-recommended \
-    texlive-science \
-    lmodern \
-    ghostscript \
+# Mettre à jour les paquets et installer les outils nécessaires
+RUN apt-get update && apt-get install -y \
+    wget \
     ca-certificates \
-    curl \
-    git \
-  && rm -rf /var/lib/apt/lists/*
+    gnupg \
+    xz-utils \
+    && rm -rf /var/lib/apt/lists/*
 
-# Use the project-declared package manager version.
-# Node 22+ has corepack built-in; no need to npm i -g corepack.
-RUN corepack enable \
-  && corepack prepare pnpm@11.5.0 --activate \
-  && pnpm --version \
-  && node --version
+# === Node.js 22.13.0 ===
+ENV NODE_VERSION=22.13.0
+RUN wget -O /tmp/node-v${NODE_VERSION}-linux-x64.tar.xz https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz && \
+    tar -xJf /tmp/node-v${NODE_VERSION}-linux-x64.tar.xz -C /usr/local --strip-components=1 && \
+    rm /tmp/node-v${NODE_VERSION}-linux-x64.tar.xz
+    # Après avoir installé node
+RUN npm install -g npm@latest
 
-# Optional sanity check to fail fast if TeX is not available.
-RUN lualatex -v
+# === Installer les paquets LaTeX nécessaires pour lualatex ===
+# Remplacer lmodern par newtx (meilleur choix pour lualatex moderne)
+RUN tlmgr install newtx
+RUN tlmgr update --self
+
+# === Nettoyer l’image ===
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# === Vérifier les installations ===
+RUN node --version
+RUN lualatex --version

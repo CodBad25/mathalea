@@ -3,9 +3,8 @@ import { dirname, relative, resolve } from 'path'
 import seedrandom from 'seedrandom'
 import { fileURLToPath, pathToFileURL } from 'url'
 import { beforeAll, describe, it, vi } from 'vitest'
-import { mathaleaHandleExerciceSimple } from '../../src/lib/mathalea'
-import type { IExercice } from '../../src/lib/types'
-import { context } from '../../src/modules/context'
+import { context } from '../../modules/context'
+import type { IExercice } from '../types'
 
 const TARGET_FILE = process.env.INTERACTIF_SINGLE_FILE
 const OUTPUT_FILE = process.env.INTERACTIF_SINGLE_OUTPUT
@@ -16,14 +15,22 @@ const rootDir = resolve(__dirname, '../..')
 const LOCAL_BUGSNAG_PREFIX =
   "message qui aurait été envoyé à bugsnag s'il avait été configuré"
 
-beforeAll(() => {
-  const proto = SVGElement.prototype as any
-  if (!proto.getBBox) {
-    proto.getBBox = function () {
-      return { x: 0, y: 0, width: 0, height: 0 }
-    }
-  }
-  window.matchMedia = vi.fn().mockReturnValue({ matches: false })
+function installDomShims() {
+  Object.defineProperty(SVGElement.prototype, 'getBBox', {
+    configurable: true,
+    value: () => ({ x: 0, y: 0, width: 0, height: 0 }),
+  })
+
+  window.matchMedia = vi.fn().mockReturnValue({
+    matches: false,
+    media: '',
+    onchange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => false,
+    addListener: () => {},
+    removeListener: () => {},
+  } as MediaQueryList)
 
   Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
     configurable: true,
@@ -55,6 +62,12 @@ beforeAll(() => {
       }
     },
   })
+}
+
+installDomShims()
+
+beforeAll(() => {
+  installDomShims()
 })
 
 vi.mock('../../src/lib/3d/3d_dynamique/Canvas3DElement', () => ({
@@ -83,6 +96,8 @@ vi.mock('apigeom', async (original) => {
   ;(globalThis as any).APP_VERSION = 'test'
   return real
 })
+
+const { mathaleaHandleExerciceSimple } = await import('../mathalea')
 
 function hasAutoCorrection(exercice: IExercice): boolean {
   return (

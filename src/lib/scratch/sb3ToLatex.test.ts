@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { sb3ToLatex } from '../../src/lib/scratch/sb3ToLatex'
+import { sb3ToLatex } from './sb3ToLatex'
 
 describe('sb3ToLatex', () => {
   it('rend les arguments de procedures_definition et procedures_call', () => {
