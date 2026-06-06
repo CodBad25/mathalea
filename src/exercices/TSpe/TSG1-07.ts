@@ -45,7 +45,7 @@ export default class denombrement extends Exercice {
       const partieEntiere = Math.floor(n / 2) // partie entière de n/2;
       const garcons = randint(partieEntiere, n - 5) // nombre de garcons
       const filles = n - garcons // nombre de filles
-      const assos = ['Coopmaths', 'Sesamath', 'Maths et échecs', 'Maths Adore']
+      const assos = ['Coopmaths']
       const nomAsso = choice(assos)
       const prenomGarcons =
         nomAsso === 'Coopmaths'
