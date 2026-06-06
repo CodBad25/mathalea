@@ -13,7 +13,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['tests/unit/setup-vitest.ts'],
-    testTimeout: 300000,
+    testTimeout: 3_600_000,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],

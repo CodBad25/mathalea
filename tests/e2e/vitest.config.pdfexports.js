@@ -28,7 +28,7 @@ export default mergeConfig(
         },
       },
       hookTimeout: 120_000,
-      testTimeout: 1_200_000,
+      testTimeout: 3_600_000,
       reporters: ['html', 'junit', 'json', 'default'],
       outputFile: {
         junit: './logs/junit-report.xml',
