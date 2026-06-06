@@ -12,8 +12,7 @@ import { dirname, join, relative, resolve } from 'path'
 import seedrandom from 'seedrandom'
 import { fileURLToPath, pathToFileURL } from 'url'
 import { afterAll, beforeAll, describe, it, vi } from 'vitest'
-import { mathaleaHandleExerciceSimple } from '../../src/lib/mathalea'
-import { context } from '../../src/modules/context'
+import { context } from '../../modules/context'
 
 const SHOULD_RUN_INTERACTIF_REPORT = process.env.INTERACTIF_REPORT === '1'
 const CHANGED_FILES = process.env.CHANGED_FILES
@@ -37,18 +36,26 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const exercicesDir = join(__dirname, '../../src/exercices')
 const rootDir = join(__dirname, '../..')
-const isolatedTestFile = 'tests/unit/report-interactif.single.test.ts'
+const isolatedTestFile = './report-interactif.single.test.ts'
 const LOCAL_BUGSNAG_PREFIX =
   "message qui aurait été envoyé à bugsnag s'il avait été configuré"
 
-beforeAll(() => {
-  const proto = SVGElement.prototype as any
-  if (!proto.getBBox) {
-    proto.getBBox = function () {
-      return { x: 0, y: 0, width: 0, height: 0 }
-    }
-  }
-  window.matchMedia = vi.fn().mockReturnValue({ matches: false })
+function installDomShims() {
+  Object.defineProperty(SVGElement.prototype, 'getBBox', {
+    configurable: true,
+    value: () => ({ x: 0, y: 0, width: 0, height: 0 }),
+  })
+
+  window.matchMedia = vi.fn().mockReturnValue({
+    matches: false,
+    media: '',
+    onchange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => false,
+    addListener: () => {},
+    removeListener: () => {},
+  } as MediaQueryList)
 
   Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
     configurable: true,
@@ -80,6 +87,12 @@ beforeAll(() => {
       }
     },
   })
+}
+
+installDomShims()
+
+beforeAll(() => {
+  installDomShims()
 })
 
 vi.mock('../../src/lib/3d/3d_dynamique/Canvas3DElement', () => ({
@@ -110,6 +123,8 @@ vi.mock('apigeom', async (original) => {
 
   return real
 })
+
+const { mathaleaHandleExerciceSimple } = await import('../mathalea')
 
 const interactifReadyRegex =
   /export const interactifReady\s*=\s*(?:true|'true'|"true")/m
@@ -600,7 +615,7 @@ if (SHOULD_RUN_INTERACTIF_REPORT) {
             formatTagList(row.tags) + (row.error ? ` (${row.error})` : ''),
           )
           const notifications = row.notifications
-            ?.map((notification) => notification.message.replaceAll('|', '\|'))
+            ?.map((notification) => notification.message)
             .map((notification) => formatTableCell(notification))
             .join(' / ')
           lines.push(
@@ -610,7 +625,7 @@ if (SHOULD_RUN_INTERACTIF_REPORT) {
       }
 
       const output = lines.join('\n') + '\n'
-      const outputPath = join(rootDir, 'documentation', 'interactif-report.md')
+      const outputPath = './interactif-report.md'
       writeFileSync(outputPath, output, 'utf8')
     })
   })

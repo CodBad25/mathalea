@@ -1,8 +1,8 @@
 import fs from 'node:fs'
-import prefs from './prefs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { JSHandle } from 'playwright'
+import prefs from './prefs'
 import { store } from './store'
 
 type Logger = (...args: unknown[]) => void
@@ -62,7 +62,7 @@ function logSerializer(logger: Logger, ...args: unknown[]) {
   if (prefs.silent) return
   const fileLogger = store.get('fileLogger') as (...args: unknown[]) => void
   const datePrefix = (args: unknown[]) => {
-    const prefix = `[${getCurrentTime()}]`
+    const prefix = `${getCurrentTime()}:`
     if (!Array.isArray(args) || !args.length)
       return logger(Error('fonction de log appelée sans argument'))
     args.unshift(prefix)
@@ -103,11 +103,11 @@ function getCurrentTime() {
   const hours = currentDate.getHours()
   const minutes = currentDate.getMinutes()
   const seconds = currentDate.getSeconds()
-  const milliseconds = currentDate.getMilliseconds()
+  const deciseconds = (currentDate.getMilliseconds() / 100).toFixed(1)
   const formattedHours = hours < 10 ? `0${hours}` : hours
   const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
   const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds
-  return `${formattedHours} h ${formattedMinutes} min ${formattedSeconds},${milliseconds} s`
+  return `${formattedHours}h${formattedMinutes}min${formattedSeconds},${deciseconds}s`
 }
 
 /**

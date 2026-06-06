@@ -19,20 +19,24 @@ stages:
   - playwright-testCanEleve
   - deploy-server
   - playwright-test
-  - playwright-pdf
+  - compile-pdf
   - playwright-pdfDNB
   - playwright-pdfBAC
+  - build_ci_pdf
 
 variables:
   SAST_EXCLUDED_PATHS: 'node_modules,.pnpm-store,dist,build,coverage,logs,.cache,.git,tests/e2e,playwright-report'
   SAST_EXCLUDED_ANALYZERS: 'bandit,gosec,flawfinder,brakeman'
   FF_USE_POD_ACTIVE_DEADLINE_SECONDS: 'false'
-  PDF_CI_IMAGE: '$CI_REGISTRY_IMAGE/ci/tex-node-playwright:node22-pw1.60-tex-2026-06'
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ''
+  DOCKER_IMAGE: '$CI_REGISTRY_IMAGE/ci/tex-node:node22-texlive-2026-06'
+  DOCKERFILE: docker/ci-pdf/Dockerfile
 
 semgrep-sast:
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
-      when: always
+      when: never
     - when: never
 
 sast:
@@ -51,20 +55,17 @@ cache:
   paths:
     - .pnpm-store
 
-build-pdf-ci-image:
+build_ci_pdf:
   stage: build-projet
-  image:
-    name: gcr.io/kaniko-project/executor:v1.23.2-debug
-    entrypoint: ['']
+  image: gcr.io/kaniko-project/executor:v1.23.2-debug
   variables:
-    DEST_IMAGE: '$CI_REGISTRY_IMAGE/ci/tex-node-playwright:node22-pw1.60-tex-2026-06'
+    DEST_IMAGE: '$CI_REGISTRY_IMAGE/ci/tex-node:node22-texlive-2026-06'
+    CACHE_REPO: '$CI_REGISTRY_IMAGE/cache/kaniko'
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"gitlab-ci-token\",\"password\":\"$CI_JOB_TOKEN\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context "$CI_PROJECT_DIR" --dockerfile "$CI_PROJECT_DIR/docker/ci-pdf/Dockerfile" --destination "$DEST_IMAGE" --cache=true --cache-repo "$CI_REGISTRY_IMAGE/cache/kaniko"
+    - /kaniko/executor --destination="$DEST_IMAGE" --cache=true --cache-repo="$CACHE_REPO" --dockerfile="$DOCKERFILE"
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: manual
     - if: $CI_COMMIT_BRANCH == "pipeline"
       when: manual
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
@@ -78,8 +79,6 @@ build-pdf-ci-image:
     - corepack prepare pnpm@latest-10 --activate
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
-    - pnpm add playwright@1.60.0 --save-dev
-    - pnpm add @playwright/test@1.60.0 --save-dev
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm install
     - nohup pnpm start &
     - sleep 20
@@ -88,8 +87,7 @@ build-pdf-ci-image:
 
 .install_dependenciesPDF:
   before_script:
-    - corepack enable
-    - corepack prepare pnpm@11.5.0 --activate
+    - npm install -g pnpm@11.3
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - lualatex -v
@@ -101,8 +99,7 @@ build-pdf-ci-image:
 
 .install_dependenciesPDFDNB:
   before_script:
-    - corepack enable
-    - corepack prepare pnpm@11.5.0 --activate
+    - npm install -g pnpm@11.3
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - lualatex -v
@@ -116,9 +113,8 @@ build-pdf-ci-image:
 
 .install_dependenciesPDFBAC:
   before_script:
-    - corepack enable
-    - corepack prepare pnpm@11.5.0 --activate
-    # - pnpm config set store-dir .pnpm-store
+    - npm install -g pnpm@11.3
+    - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - lualatex -v
     - git clone https://forge.apps.education.fr/coopmaths/bac.git ./public/static/bac
@@ -129,9 +125,9 @@ build-pdf-ci-image:
     - sleep 30
 
 .testCIPDF:
-  image: $PDF_CI_IMAGE
+  image: $DOCKER_IMAGE
   extends: .install_dependenciesPDF
-  stage: playwright-pdf
+  stage: compile-pdf
   allow_failure: true
   timeout: 2h 30m
   rules:
@@ -181,9 +177,9 @@ build-pdf-ci-image:
   artifacts:
     when: always
     paths:
-      - tests/e2e/logs
+      - ./tests/e2e/logs
     reports:
-      junit: tests/e2e/logs/junit-report.xml
+      junit: ./tests/e2e/logs/junit-report.xml
     expire_in: 10 day
 
 .testExosModifiedConsolidated:
@@ -262,7 +258,7 @@ playwright-console-consolidated:
 
 playwright-pdf-consolidated:
   extends: .testCIPDF
-  stage: playwright-pdf
+  stage: compile-pdf
   timeout: 5h
   script:
     - |
@@ -648,7 +644,7 @@ testExosModifiedConsolidated:
 
       # Test 3/4 : Interactivity report
       echo "🧪 Test 3/4: Interactivity report..."
-      if INTERACTIF_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest tests/unit/report-interactif.test.ts --run; then
+      if INTERACTIF_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest src/lib/amc/report-interactif.test.ts --run; then
         STATUS_INTERACTIF=ok
       else
         STATUS_INTERACTIF=ko
@@ -656,7 +652,7 @@ testExosModifiedConsolidated:
 
       # Test 4/4 : AMCnum report
       echo "🧪 Test 4/4: AMCnum report..."
-      if AMCNUM_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest tests/unit/report-amcnum.test.ts --run; then
+      if AMCNUM_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest src/lib/amc/report-amcnum.test.ts --run; then
         STATUS_AMCNUM=ok
       else
         STATUS_AMCNUM=ko

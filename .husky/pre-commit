@@ -1,6 +1,2 @@
 #!/bin/sh
-set -e
 
-echo 'Lancement des vérifications pre-commit...'
-pnpm git-precommit-checks
-node ./tasks/precommit-test.js

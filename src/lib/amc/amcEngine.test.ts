@@ -8,11 +8,8 @@ import {
   renderAMCNum,
   renderElement,
   renderQcm,
-} from '../../src/lib/amc/amcEngine'
-import type {
-  AMCUneProposition,
-  AutoCorrectionAMC,
-} from '../../src/lib/amc/amcTypes'
+} from './amcEngine'
+import type { AMCUneProposition, AutoCorrectionAMC } from './amcTypes'
 
 const exerciceMock = {
   listeQuestions: ['Question 0', 'Question 1', 'Question 2'],

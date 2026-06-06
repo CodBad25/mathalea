@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
+import { fonctionComparaison } from '../interactif/comparisonFunctions'
 import {
   inferAmcOptionsFromAnswerType,
   mergeNumericParamsFromOptions,
-} from '../../src/lib/amc/amcInferenceHelpers'
-import { fonctionComparaison } from '../../src/lib/interactif/comparisonFunctions'
+} from './amcInferenceHelpers'
 
 describe('amcInferenceHelpers', () => {
   it('couvre les formes de {reponse: {value, compare, options}} et l inference associee', () => {

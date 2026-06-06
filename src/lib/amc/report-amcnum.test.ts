@@ -2,10 +2,70 @@ import { readdirSync, readFileSync, statSync, writeFileSync } from 'fs'
 import { dirname, join, relative, resolve } from 'path'
 import seedrandom from 'seedrandom'
 import { fileURLToPath, pathToFileURL } from 'url'
-import { afterAll, describe, it } from 'vitest'
-import { mathaleaHandleExerciceSimple } from '../../src/lib/mathalea'
-import type { IExercice } from '../../src/lib/types'
-import { context } from '../../src/modules/context'
+import { afterAll, beforeAll, describe, it, vi } from 'vitest'
+import { context } from '../../modules/context'
+import type { IExercice } from '../types'
+
+vi.mock('../../src/lib/components/version', () => ({
+  fetchServerVersion: vi.fn(() => Promise.resolve('1.0.0')),
+  checkForServerUpdate: vi.fn(() => Promise.resolve(false)),
+}))
+
+function installDomShims() {
+  Object.defineProperty(SVGElement.prototype, 'getBBox', {
+    configurable: true,
+    value: () => ({ x: 0, y: 0, width: 0, height: 0 }),
+  })
+
+  const matchMediaMock = vi.fn().mockReturnValue({
+    matches: false,
+    media: '',
+    onchange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => false,
+    addListener: () => {},
+    removeListener: () => {},
+  } as MediaQueryList)
+  window.matchMedia = matchMediaMock
+
+  Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+    configurable: true,
+    value: () => ({
+      fillRect: () => {},
+      clearRect: () => {},
+      getImageData: () => ({ data: [] }),
+      putImageData: () => {},
+      createImageData: () => [],
+      setTransform: () => {},
+      drawImage: () => {},
+      save: () => {},
+      restore: () => {},
+      beginPath: () => {},
+      moveTo: () => {},
+      lineTo: () => {},
+      closePath: () => {},
+      stroke: () => {},
+      translate: () => {},
+      scale: () => {},
+      rotate: () => {},
+      arc: () => {},
+      fill: () => {},
+      measureText: () => ({ width: 0 }),
+      transform: () => {},
+      rect: () => {},
+      clip: () => {},
+    }),
+  })
+}
+
+installDomShims()
+
+beforeAll(() => {
+  installDomShims()
+})
+
+const { mathaleaHandleExerciceSimple } = await import('../mathalea')
 
 const SHOULD_RUN_AMCNUM_REPORT = process.env.AMCNUM_REPORT === '1'
 const CHANGED_FILES = process.env.CHANGED_FILES
@@ -177,7 +237,8 @@ function installNotificationCapture(relativePath: string) {
     }
     restoreWindowNotify = () => {
       if (previousNotify === undefined) {
-        delete (globalWindow as any).notify
+        const notifyHolder = globalWindow as { notify?: unknown }
+        delete notifyHolder.notify
       } else {
         globalWindow.notify = previousNotify
       }
@@ -369,7 +430,7 @@ if (SHOULD_RUN_AMCNUM_REPORT) {
       }
 
       const output = lines.join('\n') + '\n'
-      const outputPath = join(rootDir, 'documentation', 'amcnum-report.md')
+      const outputPath = './amcnum-report.md'
       writeFileSync(outputPath, output, 'utf8')
     })
   })

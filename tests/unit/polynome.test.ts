@@ -22,8 +22,8 @@ test('Somme et multiplication de polynômes', () => {
   const pMoinsPp = p.add(pp.multiply(-1))
   const ppMoinsP = pp.add(p.multiply(-1))
 
-  console.log(`pMoinsPP = ${JSON.stringify(pMoinsPp)}`)
-  console.log(`ppMoinsP = ${JSON.stringify(ppMoinsP)}`)
+  // logIfDebug(`pMoinsPP = ${JSON.stringify(pMoinsPp)}`)
+  // logIfDebug(`ppMoinsP = ${JSON.stringify(ppMoinsP)}`)
   expect(p.isEqual(p2)).toBe(true)
   expect(p.isEqual(p3)).toBe(true)
   expect(p3.isEqual(p2)).toBe(true)

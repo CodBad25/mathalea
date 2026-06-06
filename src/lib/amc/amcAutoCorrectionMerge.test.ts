@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { mergeLatexTextsOnPropositions } from '../../src/lib/amc/amcAutoCorrectionMerge'
-import { normalizeTexte } from '../../src/lib/amc/amcHelpers'
+import { mergeLatexTextsOnPropositions } from './amcAutoCorrectionMerge'
+import { normalizeTexte } from './amcHelpers'
 
 function collectTextsByStatus(
   propositions: Array<{ texte?: string; statut?: unknown }>,

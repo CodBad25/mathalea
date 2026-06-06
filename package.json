@@ -131,7 +131,8 @@
     "sortablejs": "^1.15.7",
     "three": "^0.182.0",
     "troika-three-text": "^0.52.4",
-    "ua-parser-js": "^2.0.9"
+    "ua-parser-js": "^2.0.9",
+    "wait-on": "^9.0.10"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
