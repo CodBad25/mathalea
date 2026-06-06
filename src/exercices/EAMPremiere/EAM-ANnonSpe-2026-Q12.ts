@@ -1,6 +1,6 @@
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence, texteEnCouleurEtGras, texteGras } from '../../lib/outils/embellissements'
+import { texteEnCouleurEtGras, texteGras } from '../../lib/outils/embellissements'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '8e7a5'
@@ -12,7 +12,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Utiliser les propriétés de la différence de deux nombres pour les comparer'
+export const titre = ''
 export const dateDePublication = '05/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**

@@ -77,7 +77,7 @@ export default class SigneFonctionAffine extends Exercice {
           if (a > 0) {
             texteCorr =
               monQcm.texteCorr +
-              `<br>$${reduireAxPlusB(a, b)}>0$.<br>
+              `$${reduireAxPlusB(a, b)}>0$.<br>
             En ajoutant $${ecritureParentheseSiNegatif(-b)}$ dans chaque membre, on obtient :<br>
             $${rienSi1(a)}x>${-b}$<br>
             En divisant par $${a}$ dans chaque membre, on obtient :<br>
@@ -86,7 +86,7 @@ export default class SigneFonctionAffine extends Exercice {
           } else {
             texteCorr =
               monQcm.texteCorr +
-              `<br>$${reduireAxPlusB(a, b)}>0$.<br>
+              `$${reduireAxPlusB(a, b)}>0$.<br>
             En ajoutant $${ecritureParentheseSiNegatif(-b)}$ dans chaque membre, on obtient :<br>
             $${rienSi1(a)}x>${-b}$<br>
             En divisant par $(${a})$ dans chaque membre, on obtient :<br>
@@ -123,7 +123,7 @@ export default class SigneFonctionAffine extends Exercice {
           if (a < 0) {
             texteCorr =
               monQcm.texteCorr +
-              `<br>$${reduireAxPlusB(a, b)}>0$.<br>
+              `$${reduireAxPlusB(a, b)}>0$.<br>
               En ajoutant $${ecritureParentheseSiNegatif(-b)}$ dans chaque membre, on obtient :<br>
               $${rienSi1(a)}x>${-b}$<br>
               En divisant par $(${a})$ dans chaque membre, on obtient :<br>
@@ -133,7 +133,7 @@ export default class SigneFonctionAffine extends Exercice {
           } else {
             texteCorr =
               monQcm.texteCorr +
-              `<br>$${reduireAxPlusB(a, b)}>0$.<br>
+              `$${reduireAxPlusB(a, b)}>0$.<br>
               En ajoutant $${ecritureParentheseSiNegatif(-b)}$ dans chaque membre, on obtient :<br>
               $${rienSi1(a)}x>${-b}$<br>
               En divisant par $${a}$ dans chaque membre, on obtient :<br>

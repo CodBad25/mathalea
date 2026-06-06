@@ -74,7 +74,7 @@ export default class VecteursColineairesVF extends Exercice {
 
           texteCorr =
             monQcm.texteCorr +
-            `<br>Deux vecteurs $\\vec{u}$ et $\\vec{v}$
+            `Deux vecteurs $\\vec{u}$ et $\\vec{v}$
         sont colinéaires si et seulement si leur déterminant $det\\left(\\vec{u}\\,;\\,\\vec{v}\\right)=0$.<br>
         Si $\\vec{u}\\begin{pmatrix}x_{\\vec{u}} \\\\ x_{\\vec{v}} \\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x_{\\vec{v}} \\\\ y_{\\vec{v}} \\end{pmatrix}$,
         alors $det\\left(\\vec{u}\\,;\\,\\vec{v}\\right)=x_{\\vec{u}}\\times y_{\\vec{v}}-y_{\\vec{u}}\\times x_{\\vec{v}}$.<br>
@@ -120,7 +120,7 @@ export default class VecteursColineairesVF extends Exercice {
 
           texteCorr =
             monQcm.texteCorr +
-            `<br>Deux vecteurs $\\vec{u}$ et $\\vec{v}$
+            `Deux vecteurs $\\vec{u}$ et $\\vec{v}$
             sont colinéaires si et seulement si leur déterminant $det\\left(\\vec{u}\\,;\\,\\vec{v}\\right)=0$.<br>
             Si $\\vec{u}\\begin{pmatrix}x_{\\vec{u}} \\\\ x_{\\vec{v}} \\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x_{\\vec{v}} \\\\ y_{\\vec{v}} \\end{pmatrix}$,
             alors $det\\left(\\vec{u}\\,;\\,\\vec{v}\\right)=x_{\\vec{u}}\\times y_{\\vec{v}}-y_{\\vec{u}}\\times x_{\\vec{v}}$.<br>
@@ -167,7 +167,7 @@ export default class VecteursColineairesVF extends Exercice {
 
           texteCorr =
             monQcm.texteCorr +
-            `<br>Deux vecteurs $\\vec{u}$ et $\\vec{v}$
+            `Deux vecteurs $\\vec{u}$ et $\\vec{v}$
             sont colinéaires si et seulement si leur déterminant $det\\left(\\vec{u}\\,;\\,\\vec{v}\\right)=0$.<br>
             Si  $\\vec{u}\\begin{pmatrix}x_{\\vec{u}} \\\\ x_{\\vec{v}} \\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x_{\\vec{v}} \\\\ y_{\\vec{v}} \\end{pmatrix}$,
             alors $det\\left(\\vec{u}\\,;\\,\\vec{v}\\right)=x_{\\vec{u}}\\times y_{\\vec{v}}-y_{\\vec{u}}\\times x_{\\vec{v}}$.<br>
@@ -214,7 +214,7 @@ export default class VecteursColineairesVF extends Exercice {
 
           texteCorr =
             monQcm.texteCorr +
-            `<br>Deux vecteurs $\\vec{u}$ et $\\vec{v}$
+            `Deux vecteurs $\\vec{u}$ et $\\vec{v}$
             sont colinéaires si et seulement si leur déterminant $det\\left(\\vec{u}\\,;\\,\\vec{v}\\right)=0$.<br>
             Si  $\\vec{u}\\begin{pmatrix}x_{\\vec{u}} \\\\ x_{\\vec{v}} \\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x_{\\vec{v}} \\\\ y_{\\vec{v}} \\end{pmatrix}$,
             alors $det\\left(\\vec{u}\\,;\\,\\vec{v}\\right)=x_{\\vec{u}}\\times y_{\\vec{v}}-y_{\\vec{u}}\\times x_{\\vec{v}}$.<br>
@@ -261,7 +261,7 @@ export default class VecteursColineairesVF extends Exercice {
 
           texteCorr =
             monQcm.texteCorr +
-            `<br>Deux vecteurs $\\vec{u}$ et $\\vec{v}$
+            `Deux vecteurs $\\vec{u}$ et $\\vec{v}$
             sont colinéaires si et seulement si leur déterminant $det\\left(\\vec{u}\\,;\\,\\vec{v}\\right)=0$.<br>
             Si  $\\vec{u}\\begin{pmatrix}x_{\\vec{u}} \\\\ x_{\\vec{v}} \\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}x_{\\vec{v}} \\\\ y_{\\vec{v}} \\end{pmatrix}$,
             alors $det\\left(\\vec{u}\\,;\\,\\vec{v}\\right)=x_{\\vec{u}}\\times y_{\\vec{v}}-y_{\\vec{u}}\\times x_{\\vec{v}}$.<br>
