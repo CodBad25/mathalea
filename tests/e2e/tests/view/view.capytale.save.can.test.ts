@@ -3,7 +3,7 @@ import { writeFileSync } from 'fs'
 import path from 'path'
 import type { Page } from 'playwright'
 import { fileURLToPath } from 'url'
-import { logIfVerbose } from '../../helpers/log'
+import { logError, logIfVerbose } from '../../helpers/log'
 import prefs from '../../helpers/prefs.js'
 import { runTest } from '../../helpers/run'
 
@@ -84,7 +84,7 @@ async function testV(page: Page) {
     await page.mouse.move(box2.x + box2.width / 2, box2.y + box2.height / 2)
     await page.mouse.up()
   } else {
-    console.log('Box/Box2 is null')
+    logError('Box/Box2 is null')
   }
   await page
     .locator('#iframe')
@@ -157,7 +157,7 @@ async function testV(page: Page) {
   if (box3 !== null) {
     await page.mouse.click(box3.x + box3.width / 2, box3.y + box3.height / 2)
   } else {
-    console.log('Box3 is null')
+    logError('Box3 is null')
   }
   await page
     .locator('#iframe')
@@ -295,7 +295,7 @@ async function testV(page: Page) {
       Ex6Q0: 'deux',
     },
   ]
-  console.log(value.studentAssignment)
+  logIfVerbose('Student Assignment:', value.studentAssignment)
   // await page.pause()
   const apigeomCaptures: Record<string, string> = {}
   value.studentAssignment.forEach((assignment: any, i: number) => {
@@ -316,26 +316,7 @@ async function testV(page: Page) {
         process.env.UPDATE_APIGEOM_SNAPSHOTS
       ) {
         apigeomCaptures[key] = assignment.answers[key]
-      } /* else if (key.includes('apigeom')) {
-        const json = assignment.answers[key]
-        const figure = JSON.parse(json)
-        const figureRep = JSON.parse((responses[i] as any)[key])
-        expect(figure.xMin).toEqual(figureRep.xMin)
-        expect(figure.yMin).toEqual(figureRep.yMin)
-        expect(figure.pixelsPerUnit).toEqual(figureRep.pixelsPerUnit)
-        expect(figure.point1.x).toEqual(figureRep.point1.x)
-        expect(figure.point1.y).toEqual(figureRep.point1.y)
-        expect(figure.point2.x).toEqual(figureRep.point2.x)
-        expect(figure.point2.y).toEqual(figureRep.point2.y)
-        expect(figure.element0.radius).toEqual(figureRep.element0.radius)
-        expect(figure.element0.idCenter).toEqual(figureRep.element0.idCenter)
-        expect(figure.element0.type).toEqual(figureRep.element0.type)
-        expect(figure.element0.fillColor).toEqual(figureRep.element0.fillColor)
-        expect(figure.element0.fillOpacity).toEqual(
-          figureRep.element0.fillOpacity,
-        )
-        expect(figure.element0.thickness).toEqual(figureRep.element0.thickness)
-      } */ else {
+      } else {
         expect(assignment.answers[key]).toEqual((responses[i] as any)[key])
       }
     })

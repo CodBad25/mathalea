@@ -79,8 +79,8 @@ build_ci_pdf:
     - corepack prepare pnpm@latest-10 --activate
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
-    - NODE_OPTIONS=--max-old-space-size=4096 pnpm install
-    - nohup pnpm start &
+    - NODE_OPTIONS=--max-old-space-size=4096 pnpm install --silent
+    - nohup pnpm start 2>&1 >/dev/null &
     - sleep 20
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
     - sleep 60
@@ -91,8 +91,8 @@ build_ci_pdf:
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - lualatex -v
-    - pnpm install
-    - nohup pnpm start &
+    - pnpm install --silent
+    - nohup pnpm start 2>&1 >/dev/null &
     - sleep 10
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
     - sleep 30
@@ -105,8 +105,8 @@ build_ci_pdf:
     - lualatex -v
     - git clone https://forge.apps.education.fr/coopmaths/dnb.git ./public/static/dnb
     - mv ./public/static/dnb/sujets_decoupes/* ./public/static/dnb/
-    - pnpm install
-    - nohup pnpm start &
+    - pnpm install --silent
+    - nohup pnpm start 2>&1 >/dev/null &
     - sleep 10
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
     - sleep 30
@@ -118,8 +118,8 @@ build_ci_pdf:
     - pnpm -v
     - lualatex -v
     - git clone https://forge.apps.education.fr/coopmaths/bac.git ./public/static/bac
-    - pnpm install
-    - nohup pnpm start &
+    - pnpm install --silent
+    - nohup pnpm start 2>&1 >/dev/null &
     - sleep 10
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
     - sleep 30
@@ -398,7 +398,7 @@ build:
     - corepack prepare pnpm@latest-10 --activate
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
-    - NODE_OPTIONS=--max-old-space-size=4096 pnpm install
+    - NODE_OPTIONS=--max-old-space-size=4096 pnpm install --silent
   script:
     - echo "CI_COMMIT_BRANCH '$CI_COMMIT_BRANCH'"
     - echo "CI_OPEN_MERGE_REQUESTS '$CI_OPEN_MERGE_REQUESTS'"
@@ -437,7 +437,7 @@ deployftp:
     - corepack prepare pnpm@latest-10 --activate
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
-    - pnpm install
+    - pnpm install --silent
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
     - echo "date_deploy $date_deploy"
     - echo "Déploiement FTP avec lftp sur ftp.sc1ceto1587.universe.wf..."
@@ -489,7 +489,7 @@ deploy:
     - ssh -i "$SSH_FILE_KEY" -v clarensa-mgu@ssh.cluster010.hosting.ovh.net
     - date_deploy=$(date +%Y-%m-%d_%H-%M-%S)
     - echo "date_deploy $date_deploy"
-    - pnpm install
+    - pnpm install --silent
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
     - ssh -i "$SSH_FILE_KEY" clarensa-mgu@ssh.cluster010.hosting.ovh.net "mkdir -p ~/releases/'$date_deploy'"
     - rsync -avz -e "ssh -i '$SSH_FILE_KEY'" dist/ clarensa-mgu@ssh.cluster010.hosting.ovh.net:~/releases/$date_deploy
@@ -743,7 +743,7 @@ tests-unitaires:
     - echo "CI_OPEN_MERGE_REQUESTS '$CI_OPEN_MERGE_REQUESTS'"
     - echo "CI_PIPELINE_SOURCE '$CI_PIPELINE_SOURCE'"
     - echo "$CI_COMMIT_AUTHOR"
-    - pnpm install
+    - pnpm install --silent
     - pnpm run makeJson
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm test:unit
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm test:src

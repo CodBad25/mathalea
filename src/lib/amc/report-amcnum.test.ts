@@ -72,8 +72,8 @@ const CHANGED_FILES = process.env.CHANGED_FILES
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
-const exercicesDir = join(__dirname, '../../src/exercices')
-const rootDir = join(__dirname, '../..')
+const exercicesDir = join(__dirname, '../../../src/exercices')
+const rootDir = join(__dirname, '../../..')
 const LOCAL_BUGSNAG_PREFIX =
   "message qui aurait été envoyé à bugsnag s'il avait été configuré"
 

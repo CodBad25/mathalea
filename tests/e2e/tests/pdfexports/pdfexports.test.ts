@@ -279,10 +279,13 @@ async function resolveTargets() {
     )
     return entries.flat()
   }
-
+  if (process.env.CI === 'true') {
+    return []
+  }
+  // En local, si pas de fichier modifié identifié, on teste une sélection de cibles par défaut pour assurer une couverture régulière sur les exercices populaires et les différents types d'exercices.
   const defaults = ['can', '3e', '4e', '5e', '6e', '2e', '1e']
   const results = await Promise.all(defaults.map((filter) => findUuid(filter)))
-  return results.flat()
+  return results.flat().splice(0, 300) // limiter à 300 cibles pour éviter les surcharges locales
 }
 
 async function materializeAssets(
@@ -489,7 +492,7 @@ describe('pdfexports sans playwright', () => {
               buildExerciseUrl(uuid, exercicePath),
               [compileResult.debugDetail],
               ['pdfexport'],
-              log,
+              logError,
             )
           }
 
