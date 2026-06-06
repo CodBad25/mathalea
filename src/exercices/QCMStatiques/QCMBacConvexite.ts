@@ -28,7 +28,6 @@ type Reponse = {
 }
 
 type QcmItem = {
-  titre: string
   enonce: string | (() => string)
   reponses: Reponse[]
   correction: string
@@ -353,7 +352,6 @@ const graphiqueJanvier2021 = () => {
 
 const qcmConvexite: QcmItem[] = [
   {
-    titre: '01. BAC Janvier 2024 sujet zéro - Question 2',
     enonce:
       "On considère la fonction $f$ définie sur l'intervalle $[0~;~\\pi]$ par $f(x)=x+\\sin(x)$.<br>On admet que $f$ est deux fois dérivable.",
     reponses: [
@@ -375,7 +373,6 @@ const qcmConvexite: QcmItem[] = [
       "On a $f'(x)=1+\\cos(x)$ puis $f''(x)=-\\sin(x)$. Or $\\sin(x)\\geqslant0$ sur $[0~;~\\pi]$, donc $f''(x)\\leqslant0$ : $f$ est concave.",
   },
   {
-    titre: '02. BAC Mars 2023 Centres étrangers G2 - Question 3',
     enonce:
       'La fonction $h$ définie sur $\\mathbb{R}$ par $h(x)=(x+1)\\mathrm{e}^{x}$ est :',
     reponses: [
@@ -393,10 +390,9 @@ const qcmConvexite: QcmItem[] = [
       "On a $h''(x)=(x+3)\\mathrm{e}^x$. Comme $\\mathrm{e}^x>0$, le signe de $h''$ est celui de $x+3$.",
   },
   {
-    titre: '03. BAC Mars 2023 Centres étrangers G1 - Question 2',
     enonce: () =>
       avecGraphique(
-        "La courbe $\\mathcal{C}$ ci-dessous représente une fonction $f$ définie et deux fois dérivable sur $]0~;~+\\infty[$. On sait que :<br><br>- le maximum de la fonction $f$ est atteint au point d'abscisse 3 ;<br>- le point P d'abscisse 5 est l'unique point d'inflexion de la courbe $\\mathcal{C}$.<br><br>On a :",
+        "La courbe $\\mathcal{C}$ ci-dessous représente une fonction $f$ définie et deux fois dérivable sur $]0~;~+\\infty[$. On sait que :<br><br>- le maximum de la fonction $f$ est atteint au point d'abscisse 3 ;<br>- le point P d'abscisse 5 est l'unique point d'inflexion de la courbe $\\mathcal{C}$.<br><br>On peut affirmer que :",
         graphiqueMars2023G1(),
       ),
     reponses: [
@@ -421,7 +417,6 @@ const qcmConvexite: QcmItem[] = [
       "Pour $x>5$, la courbe est au-dessus de l'axe et elle est convexe. Ainsi $f(x)>0$ et $f''(x)>0$.",
   },
   {
-    titre: '04. BAC Mars 2023 Réunion - Question 3',
     enonce:
       'On considère la fonction $h$ définie sur $\\mathbb{R}$ par :<br>$h(x)=(4x-16)\\mathrm{e}^{2x}$.<br>On note $\\mathcal{C}_h$ la courbe représentative de $h$ dans un repère orthogonal.<br>On peut affirmer que :',
     reponses: [
@@ -439,7 +434,6 @@ const qcmConvexite: QcmItem[] = [
       "On a $h''(x)=16(x-3)\\mathrm{e}^{2x}$. Comme $\\mathrm{e}^{2x}>0$, $h''$ change de signe en $x=3$.",
   },
   {
-    titre: '05. BAC Septembre 2022 Métropole sujet 1 - Question 2',
     enonce: () =>
       avecGraphique(
         "On considère une fonction $f$ définie et deux fois dérivable sur $\\mathbb{R}$.<br><br>On appelle $\\mathcal{C}$ sa représentation graphique.<br><br>On désigne par $f''$ la dérivée seconde de $f$.<br><br>On a représenté sur le graphique ci-contre la courbe de $f''$, notée $\\mathcal{C}''$.",
@@ -458,10 +452,9 @@ const qcmConvexite: QcmItem[] = [
       "La courbe de $f''$ est au-dessus de l'axe sur $]-\\infty~;~-1]$ et sur $[2~;~+\\infty[$. Donc $f$ y est convexe.",
   },
   {
-    titre: '06. BAC Septembre 2022 Métropole sujet 2 - Question 4',
     enonce: () =>
       avecGraphique(
-        "Pour les questions 4. et 5., on considère une fonction $f$ deux fois dérivable sur l'intervalle $[-4~;~2]$. On note $f'$ la fonction dérivée de $f$ et $f''$ la dérivée seconde de $f$.<br><br>On donne ci-dessous la courbe représentative $\\mathcal{C}'$ de la fonction dérivée $f'$ dans un repère du plan. On donne de plus les points A$(-2~;~0)$, B$(1~;~0)$ et C$(0~;~5)$.",
+        "On considère une fonction $f$ deux fois dérivable sur l'intervalle $[-4~;~2]$.<br><br>On donne ci-dessous la courbe représentative $\\mathcal{C}'$ de la fonction dérivée $f'$ dans un repère du plan.",
         graphiqueSeptembre2022Sujet2(),
       ) + 'La fonction $f$ est :',
     reponses: [
@@ -474,13 +467,12 @@ const qcmConvexite: QcmItem[] = [
       "$f$ est convexe là où $f'$ est croissante. Sur le graphique, $f'$ est croissante sur $[-4~;~0]$.",
   },
   {
-    titre: '07. BAC Septembre 2022 Métropole sujet 2 - Question 5',
     enonce: () =>
       avecGraphique(
-        "Pour les questions 4. et 5., on considère une fonction $f$ deux fois dérivable sur l'intervalle $[-4~;~2]$. On note $f'$ la fonction dérivée de $f$ et $f''$ la dérivée seconde de $f$.<br><br>On donne ci-dessous la courbe représentative $\\mathcal{C}'$ de la fonction dérivée $f'$ dans un repère du plan. On donne de plus les points A$(-2~;~0)$, B$(1~;~0)$ et C$(0~;~5)$.",
+        "On considère une fonction $f$ deux fois dérivable sur l'intervalle $[-4~;~2]$.<br><br>On donne ci-dessous la courbe représentative $\\mathcal{C}'$ de la fonction dérivée $f'$ dans un repère du plan. On donne les points B$(1~;~0)$ et C$(0~;~5)$.",
         graphiqueSeptembre2022Sujet2(),
       ) +
-      "On admet que la droite (BC) est la tangente à la courbe $\\mathcal{C}'$ au point B.<br>On a :",
+      "On admet que la droite (BC) est la tangente à la courbe $\\mathcal{C}'$ au point B.<br>Quelle égalité ou inégalité peut-on affirmer ?",
     reponses: [
       { texte: "$f'(1)<0$" },
       { texte: "$f'(1)=5$" },
@@ -491,7 +483,6 @@ const qcmConvexite: QcmItem[] = [
       "$f''(1)$ est le coefficient directeur de la tangente à $\\mathcal{C}'$ en B. La droite $(BC)$ a pour pente $\\dfrac{0-5}{1-0}=-5$.",
   },
   {
-    titre: '08. BAC Mai 2022 Centres étrangers sujet 1 - Question 2',
     enonce:
       'Soit la fonction $g$ définie pour tout réel $x$ strictement positif par :<br>$g(x)=x\\ln(x)-x^2$.<br><br>On note $\\mathcal{C}_g$ sa courbe représentative dans un repère du plan.',
     reponses: [
@@ -511,9 +502,8 @@ const qcmConvexite: QcmItem[] = [
       "$g''(x)=\\dfrac1x-2=\\dfrac{1-2x}{x}$. Sur $]0~;~+\\infty[$, $g''$ change de signe en $x=\\dfrac12$.",
   },
   {
-    titre: '09. BAC Mai 2022 Madagascar sujet 1 - Question 6',
     enonce:
-      "Dans la suite de l'exercice, on considère la fonction $h$ définie sur l'intervalle $]0~;~2]$ par :<br>$h(x)=x^2(1+2\\ln(x))$.<br><br>On note $\\mathcal{C}_h$ la courbe représentative de $h$ dans un repère du plan.<br><br>On admet que $h$ est deux fois dérivable sur l'intervalle $]0~;~2]$.<br><br>On note $h'$ sa dérivée et $h''$ sa dérivée seconde.<br><br>On admet que, pour tout réel $x$ de l'intervalle $]0~;~2]$, on a :<br>$h'(x)=4x(1+\\ln(x))$.<br><br>Sur l'intervalle $]0~;~2]$, le nombre de points d'inflexion de la courbe $\\mathcal{C}_h$ est égal à :",
+      "On considère la fonction $h$ définie sur l'intervalle $]0~;~2]$ par :<br>$h(x)=x^2(1+2\\ln(x))$.<br><br>On note $\\mathcal{C}_h$ sa courbe représentative dans un repère du plan.<br><br>On admet que $h$ est deux fois dérivable et que, pour tout réel $x\\in]0~;~2]$ :<br>$h'(x)=4x(1+\\ln(x))$.<br><br>Sur l'intervalle $]0~;~2]$, le nombre de points d'inflexion de la courbe $\\mathcal{C}_h$ est égal à :",
     reponses: [
       { texte: '$0$' },
       { texte: '$1$', statut: true },
@@ -524,7 +514,6 @@ const qcmConvexite: QcmItem[] = [
       "$h''(x)=4(2+\\ln(x))$. Cette dérivée seconde s'annule en $x=\\mathrm{e}^{-2}$ et change de signe : il y a un unique point d'inflexion.",
   },
   {
-    titre: '10. BAC Mai 2022 Métropole - Question 3',
     enonce: () =>
       avecGraphique(
         "On donne ci-contre la représentation graphique $\\mathcal{C}_{f'}$ de la fonction dérivée $f'$ d'une fonction $f$ définie sur $\\mathbb{R}$.<br><br>On peut affirmer que la fonction $f$ est :",
@@ -540,7 +529,6 @@ const qcmConvexite: QcmItem[] = [
       "$f$ est convexe là où $f'$ est croissante. D'après la courbe, $f'$ est croissante sur $[0~;~2]$.",
   },
   {
-    titre: '11. BAC Mai 2022 Polynésie - Question 4',
     enonce: () =>
       avecGraphique(
         "On considère une fonction $f$ définie et dérivable sur $[-2~;~2]$. Le tableau de variations de la fonction $f'$ dérivée de la fonction $f$ sur l'intervalle $[-2~;~2]$ est donné par :",
@@ -556,7 +544,6 @@ const qcmConvexite: QcmItem[] = [
       "$f'$ décroît sur $[-2~;~0]$, donc $f''\\leqslant0$ sur cet intervalle et $f$ y est concave.",
   },
   {
-    titre: '12. BAC Mai 2022 Centres étrangers sujet 2 - Question 2',
     enonce: () =>
       avecGraphique(
         "Soit $f$ une fonction deux fois dérivable sur l'intervalle $[-3~;~1]$. On donne ci-dessous la représentation graphique de sa fonction dérivée seconde $f''$.<br><br>On peut alors affirmer que :",
@@ -572,7 +559,6 @@ const qcmConvexite: QcmItem[] = [
       "On lit $f''>0$ avant $x=-1$ puis $f''<0$ après $x=-1$. Ainsi $f'$ croît puis décroît : elle admet un maximum en $x=-1$.",
   },
   {
-    titre: '13. BAC Mai 2022 Centres étrangers sujet 2 - Question 6',
     enonce: () =>
       avecGraphique(
         "Dans un repère, on a tracé ci-contre la courbe représentative d'une fonction $f$ définie et deux fois dérivable sur $[-2~;~4]$.<br><br>Parmi les courbes suivantes, laquelle représente la fonction $f''$, dérivée seconde de $f$ ?",
@@ -589,7 +575,6 @@ const qcmConvexite: QcmItem[] = [
     vertical: false,
   },
   {
-    titre: '14. BAC Mai 2022 Madagascar sujet 2 - Question 1',
     enonce:
       'Soit $g$ la fonction définie sur $\\mathbb{R}$ par $g(x)=x^{1000}+x$.<br><br>On peut affirmer que :',
     reponses: [
@@ -602,10 +587,9 @@ const qcmConvexite: QcmItem[] = [
       "$g''(x)=1000\\times999x^{998}\\geqslant0$ sur $\\mathbb{R}$. La fonction $g$ est donc convexe.",
   },
   {
-    titre: '15. BAC Mai 2022 Métropole sujet 2 - Question 2',
     enonce: () =>
       avecGraphique(
-        "Pour les questions 1 à 3 ci-dessous, on considère une fonction $f$ définie et deux fois dérivable sur $\\mathbb{R}$. La courbe de sa fonction dérivée $f'$ est donnée ci-dessous.<br><br>On admet que $f'$ admet un maximum en $-\\dfrac{3}{2}$ et que sa courbe coupe l'axe des abscisses au point de coordonnées $\\left(-\\dfrac12~;~0\\right)$.",
+        "On considère une fonction $f$ définie et deux fois dérivable sur $\\mathbb{R}$.<br><br>La courbe de sa fonction dérivée $f'$ est donnée ci-dessous. On admet que $f'$ admet un maximum en $-\\dfrac{3}{2}$.",
         graphiqueMai2022Sujet2(),
       ) + 'On peut affirmer que :',
     reponses: [
@@ -623,10 +607,9 @@ const qcmConvexite: QcmItem[] = [
       "$f'$ est croissante avant $-\\dfrac32$, puis décroissante après. Donc $f$ est convexe sur $]-\\infty~;~-\\dfrac32[$.",
   },
   {
-    titre: '16. BAC Mai 2022 Métropole sujet 2 - Question 3',
     enonce: () =>
       avecGraphique(
-        "Pour les questions 1 à 3 ci-dessous, on considère une fonction $f$ définie et deux fois dérivable sur $\\mathbb{R}$. La courbe de sa fonction dérivée $f'$ est donnée ci-dessous.<br><br>On admet que $f'$ admet un maximum en $-\\dfrac{3}{2}$ et que sa courbe coupe l'axe des abscisses au point de coordonnées $\\left(-\\dfrac12~;~0\\right)$.",
+        "On considère une fonction $f$ définie et deux fois dérivable sur $\\mathbb{R}$.<br><br>La courbe de sa fonction dérivée $f'$ est donnée ci-dessous. On admet que $f'$ admet un maximum en $-\\dfrac{3}{2}$.",
         graphiqueMai2022Sujet2(),
       ) + "La dérivée seconde $f''$ de la fonction $f$ vérifie :",
     reponses: [
@@ -642,10 +625,9 @@ const qcmConvexite: QcmItem[] = [
       "La tangente à la courbe de $f'$ est horizontale en son maximum d'abscisse $-\\dfrac32$. Ainsi $f''(-\\dfrac32)=0$.",
   },
   {
-    titre: '17. BAC Septembre 2021 Métropole - Question 3',
     enonce: () =>
       avecGraphique(
-        "Le graphique ci-contre donne la représentation graphique $\\mathcal{C}_f$ dans un repère orthogonal d'une fonction $f$ définie et dérivable sur $\\mathbb{R}$.<br>On notera $f'$ la fonction dérivée de $f$.<br>On donne les points A de coordonnées $(0~;~5)$ et B de coordonnées $(1~;~20)$.<br>Le point C est le point de la courbe $\\mathcal{C}_f$ ayant pour abscisse $-2,5$.<br>La droite (AB) est la tangente à la courbe $\\mathcal{C}_f$ au point A.",
+        "Le graphique ci-contre donne la représentation graphique $\\mathcal{C}_f$ dans un repère orthogonal d'une fonction $f$ définie et deux fois dérivable sur $\\mathbb{R}$.<br>Le point C est le point de la courbe $\\mathcal{C}_f$ ayant pour abscisse $-2,5$.",
         graphiqueSeptembre2021Metropole(),
       ) +
       "On admet que la dérivée seconde de la fonction $f$ est définie sur $\\mathbb{R}$ par :<br>$f''(x)=(10x+25)\\mathrm{e}^x$.<br><br>On peut affirmer que :",
@@ -662,7 +644,6 @@ const qcmConvexite: QcmItem[] = [
       "Comme $\\mathrm{e}^x>0$, le signe de $f''$ est celui de $10x+25$, qui s'annule en $x=-\\dfrac52$ et change de signe.",
   },
   {
-    titre: '18. BAC Juin 2021 Asie - Question 3',
     enonce: () =>
       avecGraphique(
         "On donne ci-dessous la courbe $\\mathcal{C}_{f''}$ représentant la fonction dérivée seconde $f''$ d'une fonction $f$ définie et deux fois dérivable sur l'intervalle $[-3,5~;~6]$.",
@@ -683,7 +664,6 @@ const qcmConvexite: QcmItem[] = [
       "Les points d'inflexion correspondent aux abscisses où $f''$ change de signe. Le graphique montre trois intersections avec changement de signe.",
   },
   {
-    titre: '19. BAC Juin 2021 Métropole - Question 4',
     enonce:
       "Soit $f$ la fonction définie pour tout nombre réel $x$ de l'intervalle $]0~;~+\\infty[$ par :<br>$f(x)=\\dfrac{\\mathrm{e}^{2x}}{x}$.<br><br>On donne l'expression de la dérivée seconde $f''$ de $f$, définie sur l'intervalle $]0~;~+\\infty[$ par :<br>$f''(x)=\\dfrac{2\\mathrm{e}^{2x}(2x^2-2x+1)}{x^3}$.<br><br>La fonction $f$ :",
     reponses: [
@@ -698,7 +678,6 @@ const qcmConvexite: QcmItem[] = [
       "Sur $]0~;~+\\infty[$, $\\mathrm{e}^{2x}>0$, $x^3>0$ et $2x^2-2x+1>0$. Donc $f''(x)>0$.",
   },
   {
-    titre: "20. BAC Janvier 2021 sujet zéro - Question sur la courbe de $g'$",
     enonce: () =>
       avecGraphique(
         "On suppose que $g$ est une fonction dérivable sur l'intervalle $[-4~;~4]$.<br>On donne ci-contre la représentation graphique de sa fonction dérivée $g'$.<br><br>On peut affirmer que :",
@@ -730,10 +709,11 @@ export default class QcmConvexiteStatique extends Exercice {
   }
 
   nouvelleVersion() {
-    const questions = shuffle(qcmConvexite).slice(
-      0,
-      Math.min(this.nbQuestions, qcmConvexite.length),
-    )
+    this.listeQuestions = []
+    this.listeCorrections = []
+
+    const nbQuestions = Math.min(this.nbQuestions, qcmConvexite.length)
+    const questions = shuffle(qcmConvexite).slice(0, nbQuestions)
 
     for (const [index, qcm] of questions.entries()) {
       const qcmData = buildQcmForExercise(this, index, {
