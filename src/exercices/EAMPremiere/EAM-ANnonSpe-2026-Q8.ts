@@ -2,7 +2,6 @@ import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '1de20'

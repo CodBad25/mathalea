@@ -3,13 +3,11 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
-import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -32,33 +30,43 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ9ANns2026 extends ExerciceQcmA {
-// Ajout de paramètres optionnels pour forcer les distracteurs de la version originale
-  private appliquerLesValeurs(m: number, p: number, distA?: string, distB?: string, distC?: string): void {
+  // Ajout de paramètres optionnels pour forcer les distracteurs de la version originale
+  private appliquerLesValeurs(
+    m: number,
+    p: number,
+    distA?: string,
+    distB?: string,
+    distC?: string,
+  ): void {
     const x0 = -p / m // L'abscisse à l'origine
 
     // --- CRÉATION DU GRAPHIQUE 2D (ÉNONCÉ) ---
     const r = repere({
-      xMin: -3, xMax: 4,
-      yMin: -4, yMax: 6,
+      xMin: -3,
+      xMax: 4,
+      yMin: -4,
+      yMax: 6,
       grilleSecondaire: true,
       grilleSecondaireXDistance: 0.5,
-      grilleSecondaireYDistance: 0.5
+      grilleSecondaireYDistance: 0.5,
     })
-    
+
     const ptA = pointAbstrait(0, p)
     const ptB = pointAbstrait(1, m + p)
-    const ptCorner = pointAbstrait(1, p) 
-    
+    const ptCorner = pointAbstrait(1, p)
+
     const d = droite(ptA, ptB, '', 'red')
     const o = latex2d('0', -0.3, -0.3, { letterSize: 'scriptsize' })
     d.epaisseur = 2
 
     const fenetreMathalea2d = {
-      xmin: -3.05, xmax: 4.05,
-      ymin: -4.05, ymax: 6.05,
+      xmin: -3.05,
+      xmax: 4.05,
+      ymin: -4.05,
+      ymax: 6.05,
       pixelsParCm: 30,
       scale: 0.6,
-      style: 'margin: auto; display: block;'
+      style: 'margin: auto; display: block;',
     }
 
     const figure = mathalea2d(fenetreMathalea2d, r, d, o)
@@ -73,16 +81,33 @@ export default class AutoQ9ANns2026 extends ExerciceQcmA {
     sVert.pointilles = 5
 
     const decY = m > 0 ? -0.4 : 0.4
-    const lHoriz = latex2d('+1', 0.5, p + decY, { color: 'blue', letterSize: 'scriptsize' })
-    
-    const lVertStr = m > 0 ? `+${m}` : `${m}`
-    const lVert = latex2d(lVertStr, 1.4, p + m / 2, { color: 'green', letterSize: 'scriptsize' })
+    const lHoriz = latex2d('+1', 0.5, p + decY, {
+      color: 'blue',
+      letterSize: 'scriptsize',
+    })
 
-    const figureCorr = mathalea2d(fenetreMathalea2d, r, d, o, sHoriz, sVert, lHoriz, lVert)
+    const lVertStr = m > 0 ? `+${m}` : `${m}`
+    const lVert = latex2d(lVertStr, 1.4, p + m / 2, {
+      color: 'green',
+      letterSize: 'scriptsize',
+    })
+
+    const figureCorr = mathalea2d(
+      fenetreMathalea2d,
+      r,
+      d,
+      o,
+      sHoriz,
+      sVert,
+      lHoriz,
+      lVert,
+    )
 
     // --- ÉNONCÉ ET CORRECTION ---
-    this.enonce = `${deuxColonnes(`Une droite est représentée ci-contre.${context.isHtml ? '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>' : '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'}L'équation réduite de cette droite est :`,`${figure}`)}`
+    this.enonce = `Une droite est représentée ci-dessous. <br><br>
+      ${figure}`
 
+    this.enonce += `L'équation réduite de cette droite est :`
     this.correction = `Par lecture graphique :<br>`
     this.correction += `$\\bullet$ La droite coupe l'axe des ordonnées au point de coordonnées $(0 ; ${p})$, donc l'ordonnée à l'origine est $p = ${p}$.<br>`
     this.correction += `$\\bullet$ En partant de ce point, si on avance de $1$ unité vers la droite, on se décale de $${Math.abs(m)}$ unités vers le ${m > 0 ? 'haut' : 'bas'} pour rejoindre la droite. Le coefficient directeur est donc $m = ${m}$.<br>`
@@ -124,21 +149,17 @@ export default class AutoQ9ANns2026 extends ExerciceQcmA {
       dist3 = `$y = ${formatX(p)}${formatConstant(x0)}$`
     }
 
-    this.reponses = [
-      repCorrecte,
-      dist1,
-      dist2,
-      dist3
-    ]
+    this.reponses = [repCorrecte, dist1, dist2, dist3]
   }
 
   versionOriginale: () => void = () => {
     // Version de l'image (fidèle au vrai sujet avec les espaces et les décimales à rallonge)
     this.appliquerLesValeurs(
-      -2, 3,
+      -2,
+      3,
       `$y = 3x + 1,5$`,
       `$y = -0,5x+3$`,
-      `$y = -2x+1,5$`
+      `$y = -2x+1,5$`,
     )
   }
 
@@ -149,20 +170,20 @@ export default class AutoQ9ANns2026 extends ExerciceQcmA {
     }
 
     const donnees: [number, number][] = [
-      [-2, 3],  
-      [2, 3],   
-      [-2, 1],  
-      [2, 1],   
-      [-2, -3], 
-      [2, -3],  
-      [-2, 5],  
-      [2, -5],
-      [4, -2],  
+      [-2, 3],
+      [2, 3],
+      [-2, 1],
+      [2, 1],
+      [-2, -3],
+      [2, -3],
+      [-2, 5],
+      [2, -4],
+      [4, -2],
       [-4, 2],
       [4, 1],
       [-4, 4],
       [4, 2],
-      [-4, 5]
+      [-4, 5],
     ]
 
     let compteur = 0
