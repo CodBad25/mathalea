@@ -9,4 +9,5 @@ Analyse runtime des exercices modifiés qui exportent `interactifReady = true`.
 
 | Numéro | Fichier | Titre | Tags | Notifications Bugsnag |
 | --- | --- | --- | --- | --- |
-| 1 | [src/exercices/2e/2G12-7.ts](src/exercices/2e/2G12-7.ts) |  | [autoCorrection-interactive-absente] |  |
+
+_Aucun exercice avec issue._

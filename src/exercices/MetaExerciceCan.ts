@@ -168,7 +168,25 @@ export default class MetaExercice extends Exercice {
               break
             }
 
-            if (
+            if (Question.formatInteractif === 'multiMathfield') {
+              // La question a construit elle-même son composant <multi-mathfield>
+              // (via addMultiMathfield) avec l'indice 0 : on réindexe les identifiants
+              // sur la position réelle de la question dans le méta-exercice.
+              const n = Question.numeroExercice
+              const questionHtml = String(Question.question)
+                .replaceAll(
+                  `multiMathfieldEx${n}Q0`,
+                  `multiMathfieldEx${n}Q${indexQuestion}`,
+                )
+                .replaceAll(
+                  `feedbackEx${n}Q0`,
+                  `feedbackEx${n}Q${indexQuestion}`,
+                )
+              this.listeQuestions[indexQuestion] = consigne + questionHtml
+              handleAnswers(this, indexQuestion, Question.reponse as Valeur, {
+                formatInteractif: 'multiMathfield',
+              })
+            } else if (
               Question.formatInteractif === 'fillInTheBlank' ||
               (typeof Question.reponse === 'object' &&
                 'champ1' in Question.reponse)
