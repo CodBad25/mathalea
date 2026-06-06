@@ -14,6 +14,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 export const titre =
   'Calculer un produit scalaire à l’aide de normes et d’un angle '
 export const interactifReady = true
@@ -107,7 +108,7 @@ export default class ProduitScalaireNormesAngles extends ExerciceSimple {
     \\overrightarrow{${nom[0]}${nom[1]}}\\cdot\\overrightarrow{${nom[0]}${nom[2]}}&=${nom[0]}${nom[1]}\\times ${nom[0]}${nom[2]}\\times \\cos(\\widehat{${nom[2]}${nom[0]}${nom[1]}})\\\\
     &=${choix ? `${a}\\times ${b}\\times \\cos(${angle[0]}°)` : `${a}\\times ${b}\\times \\cos\\left(${angle[2]}\\right)`}\\\\
              &=\\dfrac{${a * b}\\sqrt{3}}{2}\\\\
-             &=${texNombre(d, 1)}\\sqrt{3}
+             &=${miseEnEvidence(`${texNombre(d, 1)} \\sqrt{3}`)}
              \\end{aligned}$
 
 
@@ -122,7 +123,7 @@ export default class ProduitScalaireNormesAngles extends ExerciceSimple {
       \\overrightarrow{${nom[0]}${nom[1]}}\\cdot\\overrightarrow{${nom[0]}${nom[2]}}&=${nom[0]}${nom[1]}\\times ${nom[0]}${nom[2]}\\times \\cos(\\widehat{${nom[2]}${nom[0]}${nom[1]}})\\\\
       &=${choix ? `${a}\\times ${b}\\times \\cos(${angle[0]}°)` : `${a}\\times ${b}\\times \\cos\\left(${angle[2]}\\right)`}\\\\
                &=\\dfrac{${a * b}\\times\\sqrt{2}}{2}\\\\
-               &=${texNombre(d, 1)}\\sqrt{2}
+               &=${miseEnEvidence(`${texNombre(d, 1)} \\sqrt{2}`)}
                \\end{aligned}$
 
 
@@ -137,7 +138,7 @@ export default class ProduitScalaireNormesAngles extends ExerciceSimple {
       \\overrightarrow{${nom[0]}${nom[1]}}\\cdot\\overrightarrow{${nom[0]}${nom[2]}}&=${nom[0]}${nom[1]}\\times ${nom[0]}${nom[2]}\\times \\cos(\\widehat{${nom[2]}${nom[0]}${nom[1]}})\\\\
                &=${choix ? `${a}\\times ${b}\\times \\cos(${angle[0]}°)` : `${a}\\times ${b}\\times \\cos\\left(${angle[2]}\\right)`}\\\\
                &=${a * b}\\times\\dfrac{1}{2}\\\\
-               &=${texNombre(d, 1)}
+               &=${miseEnEvidence(texNombre(d, 1))}
                \\end{aligned}$
 
 
@@ -152,7 +153,7 @@ export default class ProduitScalaireNormesAngles extends ExerciceSimple {
     \\overrightarrow{${nom[0]}${nom[1]}}\\cdot\\overrightarrow{${nom[0]}${nom[2]}}&=${nom[0]}${nom[1]}\\times ${nom[0]}${nom[2]}\\times \\cos(\\widehat{${nom[2]}${nom[0]}${nom[1]}})\\\\
     &=${choix ? `${a}\\times ${b}\\times \\cos(${angle[0]}°)` : `${a}\\times ${b}\\times \\cos\\left(${angle[2]}\\right)`}\\\\
              &=${a * b}\\times\\dfrac{-1}{2}\\\\
-             &=${texNombre(-d, 1)}
+             &=${miseEnEvidence(texNombre(-d, 1))}
              \\end{aligned}$
 
 
@@ -167,7 +168,7 @@ export default class ProduitScalaireNormesAngles extends ExerciceSimple {
   \\overrightarrow{${nom[0]}${nom[1]}}\\cdot\\overrightarrow{${nom[0]}${nom[2]}}&=${nom[0]}${nom[1]}\\times ${nom[0]}${nom[2]}\\times \\cos(\\widehat{${nom[2]}${nom[0]}${nom[1]}})\\\\
   &=${choix ? `${a}\\times ${b}\\times \\cos(${angle[0]}°)` : `${a}\\times ${b}\\times \\cos\\left(${angle[2]}\\right)`}\\\\
            &=${a * b}\\times\\dfrac{-\\sqrt{2}}{2}\\\\
-           &=${texNombre(-d, 1)}\\sqrt{2}
+           &=${miseEnEvidence(`${texNombre(-d, 1)} \\sqrt{2}`)}
            \\end{aligned}$
 
 
@@ -185,7 +186,7 @@ export default class ProduitScalaireNormesAngles extends ExerciceSimple {
     \\overrightarrow{${nom[0]}${nom[1]}}\\cdot\\overrightarrow{${nom[0]}${nom[2]}}&=${nom[0]}${nom[1]}\\times ${nom[0]}${nom[2]}\\times \\cos(\\widehat{${nom[2]}${nom[0]}${nom[1]}})\\\\
     &=${choix ? `${a}\\times ${b}\\times \\cos(${angle[0]}°)` : `${a}\\times ${b}\\times \\cos\\left(${angle[2]}\\right)`}\\\\
              &=${a * b}\\times\\dfrac{-\\sqrt{3}}{2}\\\\
-             &=${texNombre(-d, 1)}\\sqrt{3}
+             &=${miseEnEvidence(`${texNombre(-d, 1)} \\sqrt{3}`)}
              \\end{aligned}$
 
 

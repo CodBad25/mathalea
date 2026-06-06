@@ -3,6 +3,7 @@ import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segmentAvecExtremites } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { bleuMathalea } from '../../../lib/colors'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
@@ -72,7 +73,7 @@ export default class MilieuEntre1EtFraction extends ExerciceSimple {
     this.question += '<br>'
     this.correction = `On calcule la moyenne de $${texNombre(a)}$ et $${texNombre(b)}$ :<br>
     $x_M=\\dfrac{${texNombre(a)}+${texNombre(b)}}{2}=
-    \\dfrac{${texNombre(a + b)}}{2}=${texNombre((a + b) / 2)}$`
+    \\dfrac{${texNombre(a + b)}}{2}=${miseEnEvidence(texNombre((a + b) / 2))}$`
 
     this.reponse = (a + b) / 2
   }

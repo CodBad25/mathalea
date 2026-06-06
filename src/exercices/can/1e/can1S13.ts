@@ -1,6 +1,7 @@
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 export const titre = 'Donner la nature d’une suite (formule de récurrence)'
@@ -73,7 +74,7 @@ export default class NatureSuiteRec extends Exercice {
           }
 
           texteCorr = `La formule de récurrence est de la forme $${s}_{n+1}=${s}_n+r$ avec $r=${a}$.<br>
-        On en déduit que $(${s}_n)$ est une suite arithmétique de raison $${a}$ et de premier terme $${s}_0=${u}$.`
+        On en déduit que $(${s}_n)$ est une ${texteEnCouleurEtGras('suite arithmétique')} de raison $${miseEnEvidence(a)}$ et de premier terme $${s}_0=${u}$.`
 
           break
 
@@ -112,7 +113,7 @@ export default class NatureSuiteRec extends Exercice {
           }
 
           texteCorr = `La formule de récurrence est de la forme $${s}_{n+1}=q\\times ${s}_n$ avec $q=${a}$.<br>
-        On en déduit que $(${s}_n)$ est une suite géométrique de raison $${a}$ et de premier terme $${s}_0=${u}$.`
+        On en déduit que $(${s}_n)$ est une ${texteEnCouleurEtGras('suite géométrique')} de raison $${miseEnEvidence(a)}$ et de premier terme $${s}_0=${u}$.`
 
           break
 
@@ -152,7 +153,7 @@ export default class NatureSuiteRec extends Exercice {
               Donner sa raison.`
             }
             texteCorr = `La formule de récurrence est de la forme $${s}_{n+1}=q\\times ${s}_n$ avec $q=-\\dfrac{1}{${a}}$.<br>
-        On en déduit que $(${s}_n)$ est une suite géométrique de raison $-\\dfrac{1}{${a}}$ et de premier terme $${s}_0=${u}$.`
+        On en déduit que $(${s}_n)$ est une ${texteEnCouleurEtGras('suite géométrique')} de raison $${miseEnEvidence(`-\\dfrac{1}{${a}}`)}$ et de premier terme $${s}_0=${u}$.`
           } else {
             texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = \\dfrac{${s}_{n}}{${a}}$.<br>
           Alors, $(${s}_n)$ est une suite ...`
@@ -184,7 +185,7 @@ export default class NatureSuiteRec extends Exercice {
               Donner sa raison.`
             }
             texteCorr = `La formule de récurrence est de la forme $${s}_{n+1}=q\\times ${s}_n$ avec $q=\\dfrac{1}{${a}}$.<br>
-        On en déduit que $(${s}_n)$ est une suite géométrique de raison $\\dfrac{1}{${a}}$ et de premier terme $${s}_0=${u}$.`
+        On en déduit que $(${s}_n)$ est une ${texteEnCouleurEtGras('suite géométrique')} de raison $${miseEnEvidence(`\\dfrac{1}{${a}}`)}$ et de premier terme $${s}_0=${u}$.`
           }
           break
       }
