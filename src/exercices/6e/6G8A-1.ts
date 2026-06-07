@@ -44,22 +44,23 @@ export default class DenombrerCubes extends Exercice {
       3,
       '1 : Compter les cubes\n2 : Compter les cubes manquants\n3 : Mélange',
     ]
-    this.besoinFormulaire4Numerique = [
-      'Volume',
-      2,
-      '1 : Volume en cubes\n2 : Volume en cm³',
-    ]
+    this.sup = 1
     this.besoinFormulaire2Numerique = [
       "Taille de l'empilement",
       5,
       'De taille 3\nDe taille 4\nDe taille 5\nDe taille 6\nDe taille 7',
     ]
+    this.sup2 = 1
     this.besoinFormulaire3CaseACocher = ['3D dynamique', false]
     this.sup3 = false
     this.nbQuestions = 3 // Ici le nombre de questions
+    this.besoinFormulaire4Numerique = [
+      'Volume',
+      2,
+      '1 : Volume en nombre de cubes\n2 : Volume en cm³',
+    ]
     this.sup4 = 1
-    this.sup = 1 // A décommenter : valeur par défaut d'un premier paramètre
-    this.sup2 = 1 // A décommenter : valeur par défaut d'un deuxième paramètre
+
     // c'est ici que commence le code de l'exercice cette fonction crée une copie de l'exercice
   }
 
@@ -88,18 +89,139 @@ export default class DenombrerCubes extends Exercice {
     const largeur = longueur // largeur de l'empilement
     const hauteur = longueur // hauteur de l'empilement
 
+    if (this.nbQuestions === 1) {
+      if (this.sup === 1) {
+        //Compter le nb de cubes présents
+        if (!this.sup3 || !context.isHtml) {
+          // 3d Iso avec Mathalea2d
+          if (!unitesCubes) {
+            this.consigne =
+              'Un empilement de cubes est représenté ci-dessous avec deux angles différents.<br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume en $\\text{cm}^3$ de cet empilement.'
+          } else {
+            this.consigne =
+              'Un empilement de cubes est représenté ci-dessous avec deux angles différents.<br>Déterminer le nombre de cubes que contient cet empilement.'
+          }
+        } else {
+          // 3d dynamique avec Canvas3DElement
+          if (!unitesCubes) {
+            this.consigne =
+              "Un empilement de cubes est représenté ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume en $\\text{cm}^3$ de cet empilement."
+          } else {
+            this.consigne =
+              "Un empilement de cubes est représenté ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Déterminer le nombre de cubes que contient cet empilement."
+          }
+        }
+      } else if (this.sup === 2) {
+        //Compter le nb de cubes manquant
+        if (!this.sup3 || !context.isHtml) {
+          // 3d Iso avec Mathalea2d
+          if (!unitesCubes) {
+            this.consigne =
+              "Un empilement de cubes est représenté ci-dessous avec deux angles différents.<br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume en $\\text{cm}^3$ manquant pour reconstruire un cube de 3 cm d'arête."
+          } else {
+            this.consigne =
+              'Un empilement de cubes est représenté ci-dessous avec deux angles différents.<br>Déterminer le nombre de cubes manquant pour reconstruire un grand cube constitué de 3 cubes sur chaque arête.'
+          }
+        } else {
+          // 3d dynamique avec Canvas3DElement
+          if (!unitesCubes) {
+            this.consigne =
+              "Un empilement de cubes est représenté ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume manquant pour reconstruire un cube de 3 cm d\'arête."
+          } else {
+            this.consigne =
+              "Un empilement de cubes est représenté ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Déterminer le nombre de cubes manquant pour reconstruire un grand cube constitué de 3 cubes sur chaque arête."
+          }
+        }
+      } else if (this.sup === 3) {
+        //Compter le nb de cubes manquant
+        if (!this.sup3 || !context.isHtml) {
+          // 3d Iso avec Mathalea2d
+          if (!unitesCubes) {
+            this.consigne =
+              "Un empilement de cubes est représenté ci-dessous avec deux angles différents.<br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume en $\\text{cm}^3$ le composant ou manquant pour reconstruire un cube de 3 cm d'arête."
+          } else {
+            this.consigne =
+              'Un empilement de cubes est représenté ci-dessous avec deux angles différents.<br>Déterminer le nombre de cubes le composant ou manquant pour reconstruire un grand cube constitué de 3 cubes sur chaque arête.'
+          }
+        } else {
+          // 3d dynamique avec Canvas3DElement
+          if (!unitesCubes) {
+            this.consigne =
+              "Un empilement de cubes est représenté ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume le composant ou manquant pour reconstruire un cube de 3 cm d\'arête."
+          } else {
+            this.consigne =
+              "Un empilement de cubes est représenté ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Déterminer le nombre de cubes le composant ou manquant pour reconstruire un grand cube constitué de 3 cubes sur chaque arête."
+          }
+        }
+      }
+    } else {
+      // Cas pour plusieurs questions
+      if (this.sup === 1) {
+        //Compter le nb de cubes présents
+        if (!this.sup3 || !context.isHtml) {
+          // 3d Iso avec Mathalea2d pour plusieurs questions
+          if (!unitesCubes) {
+            this.consigne =
+              'Dans chacun des cas ci-dessous, un empilement de cubes est représenté avec deux angles différents.<br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume en $\\text{cm}^3$ de ces empilements.'
+          } else {
+            this.consigne = `Dans chacun des cas ci-dessous, un empilement de cubes est représenté ci-dessous avec deux angles différents.<br>Déterminer le nombre de cubes que contient chacun de ces empilements.`
+          }
+        } else {
+          // 3d dynamique avec Canvas3DElement
+          if (!unitesCubes) {
+            this.consigne =
+              "Des empilements de cubes sont représentés ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume en $\\text{cm}^3$ de ces empilements."
+          } else {
+            this.consigne = `Des empilements de cubes sont représentés ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Déterminer le nombre de cubes que contient chacun de ces empilements.`
+          }
+        }
+      } else if (this.sup === 2) {
+        if (!this.sup3 || !context.isHtml) {
+          // 3D Iso avec Mathalea2d
+          if (!unitesCubes) {
+            this.consigne = `Dans chacun des cas ci-dessous, un empilement de cubes est représenté avec deux angles différents.<br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume en $\\text{cm}^3$ manquant pour reconstruire un cube de ${longueur} cm d'arête.`
+          } else {
+            this.consigne = `Dans chacun des cas ci-dessous, un empilement de cubes est représenté avec deux angles différents.<br>Déterminer le nombre de cubes manquant pour reconstruire un grand cube constitué de ${longueur} cubes sur chaque arête.`
+          }
+        } else {
+          // 3D dynamique avec Canvas3DElement
+          if (!unitesCubes) {
+            this.consigne = `Des empilements de cubes sont représentés ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume en $\\text{cm}^3$ manquant pour reconstruire un cube de ${longueur} cm d'arête.`
+          } else {
+            this.consigne = `Des empilements de cubes sont représentés ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Déterminer le nombre de cubes manquant pour reconstruire un grand cube constitué de ${longueur} cubes sur chaque arête.`
+          }
+        }
+      } else if (this.sup === 3) {
+        if (!this.sup3 || !context.isHtml) {
+          // 3D Iso avec Mathalea2d
+          if (!unitesCubes) {
+            this.consigne = `Dans chacun des cas ci-dessous, un empilement de cubes est représenté avec deux angles différents.<br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume en $\\text{cm}^3$ le composant ou manquant pour reconstruire un cube de ${longueur} cm d'arête.`
+          } else {
+            this.consigne = `Dans chacun des cas ci-dessous, un empilement de cubes est représenté avec deux angles différents.<br>Déterminer le nombre de cubes le composant ou manquant pour reconstruire un grand cube constitué de ${longueur} cubes sur chaque arête.`
+          }
+        } else {
+          // 3D dynamique avec Canvas3DElement
+          if (!unitesCubes) {
+            this.consigne = `Des empilements de cubes sont représentés ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Les cubes ayant des arêtes de 1 cm de longueur, calculer le volume en $\\text{cm}^3$ le composant ou manquant pour reconstruire un cube de ${longueur} cm d'arête.`
+          } else {
+            this.consigne = `Des empilements de cubes sont représentés ci-dessous (on peut faire tourner l'empilement en plein écran). <br>Déterminer le nombre de cubes le composant ou manquant pour reconstruire un grand cube constitué de ${longueur} cubes sur chaque arête.`
+          }
+        }
+      }
+    }
+
     for (
       let q = 0, texte, texteCorr, cpt = 0;
       q < this.nbQuestions && cpt < 50;
     ) {
       let figure, figureCorrection
       const L = empilementCubes(longueur, largeur, hauteur) // crée un empilement aléatoire
+      let texte = ''
       texteCorr = '' // Idem pour le texte de la correction.
 
       if (!this.sup3 || !context.isHtml) {
         // 3d Iso avec Mathalea2d
-        texte =
-          'Un empilement de cubes est représenté ci-dessous sous deux angles différents. <br>' // Nous utilisons souvent cette variable pour construire le texte de la question.
+        texte += ''
         ;({ figure, figureCorrection } = createCubesProjections(
           L,
           largeur,
@@ -108,23 +230,27 @@ export default class DenombrerCubes extends Exercice {
         ))
       } else {
         // 3d dynamique avec Canvas3DElement
-        texte =
-          "Un empilement de cubes est représenté ci-dessous (on peut faire tourner l'empilement en plein écran). <br>" // Nous utilisons souvent cette variable pour construire le texte de la question.
+        texte += ''
         ;({ canvasEnonce: figure, canvasCorrection: figureCorrection } =
           canvasEnonceCorrection(L, `scene3dEx${this.numeroExercice}Q${q}`))
       }
       // début de l'exercice
-      texte += unitesCubes
-        ? "L'unité de volume étant le cube, "
-        : 'Les cubes ayant des arêtes de $1\\text{ cm}$ de longueur, '
+
       switch (listeTypeDeQuestions[q]) {
         case 1:
-          texte += unitesCubes
-            ? 'combien de petits cubes contient cet empilement de cubes ?' +
-              ajouteChampTexteMathLive(this, q, KeyboardType.clavierNumbers)
-            : 'quel est le volume en $\\text{cm}^3$ de cet empilement de cubes ?' +
-              ajouteChampTexteMathLive(this, q, KeyboardType.volume)
+          if (this.interactif) {
+            texte += unitesCubes
+              ? 'Nombre de petits cubes composant cet empilement :' +
+                ajouteChampTexteMathLive(this, q, KeyboardType.clavierNumbers)
+              : 'Volume en $\\text{cm}^3$ :' +
+                ajouteChampTexteMathLive(this, q, KeyboardType.volume)
+          } else if (this.sup === 3) {
+            texte += unitesCubes
+              ? 'Nombre de petits cubes composant cet empilement ?<br>'
+              : 'Volume en $\\text{cm}^3$ composant cet empilement ?<br>'
+          }
           texte += '<br>' + figure
+
           // correction :
           texteCorr += "On peut représenter l'empilement par tranches : <br>"
           texteCorr += figureCorrection + '<br>'
@@ -136,11 +262,17 @@ export default class DenombrerCubes extends Exercice {
           })
           break
         case 2:
-          texte += unitesCubes
-            ? `combien de petits cubes manque-t-il pour reconstruire un grand cube constitué de $${longueur}$ cubes sur chaque arête ?` +
-              ajouteChampTexteMathLive(this, q, KeyboardType.clavierNumbers)
-            : `quel volume en $\\text{cm}^3$ manque-t-il pour reconstruire un cube de $${longueur}\\text{ cm}$ d'arête ?` +
-              ajouteChampTexteMathLive(this, q, KeyboardType.volume)
+          if (this.interactif) {
+            texte += unitesCubes
+              ? `Nombre de petits cubes manquant pour reconstruire un grand cube constitué de $${longueur}$ petits cubes sur chaque arête :` +
+                ajouteChampTexteMathLive(this, q, KeyboardType.clavierNumbers)
+              : `Volume en $\\text{cm}^3$ manquant pour reconstruire un cube de $${longueur}\\text{ cm}$ d'arête :` +
+                ajouteChampTexteMathLive(this, q, KeyboardType.volume)
+          } else if (this.sup === 3) {
+            texte += unitesCubes
+              ? 'Nombre de petits cubes manquant pour compléter cet empilement ?<br>'
+              : 'Volume en $\\text{cm}^3$ manquant pour compléter cet empilement ?<br>'
+          }
           texte += '<br>' + figure
           // correction :
           texteCorr +=
