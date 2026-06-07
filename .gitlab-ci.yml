@@ -70,7 +70,7 @@ build_ci_pdf:
       when: manual
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
       when: manual
-    - when: manual
+    - when: never
 
 .install_dependencies:
   before_script:
