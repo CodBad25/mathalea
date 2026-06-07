@@ -1,8 +1,8 @@
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Division euclidienne'
 export const interactifReady = true
@@ -45,9 +45,9 @@ export default class Can2025CE2Q15 extends ExerciceCan {
     }
     const monQcm = propositionsQcm(this, 0)
     this.formatInteractif = 'qcm'
-    this.consigne = `Coche la bonne réponse pour $${a}\\div ${b}$.`
+    this.consigne = `Coche la bonne réponse pour $${a}\\div ${b}$.<br>`
     this.canEnonce = this.consigne
-    this.question += `<br>\n${monQcm.texte}`
+    this.question += `${monQcm.texte}`
     this.correction = `On peut faire $${a} = ${quotient} \\times ${b} + ${reste}$.<br>
     La bonne réponse était : ${texteEnCouleurEtGras(`Il y a ${quotient} fois ${b} et il reste ${reste}`)}.`
     this.canReponseACompleter = monQcm.texte

@@ -18,12 +18,12 @@ RUN npm install -g npm@latest
 
 # === Installer les paquets LaTeX nécessaires pour lualatex ===
 # Remplacer lmodern par newtx (meilleur choix pour lualatex moderne)
-RUN tlmgr install newtx
-RUN tlmgr update --self
+# RUN tlmgr install newtx
+# RUN tlmgr update --self
 
 # === Nettoyer l’image ===
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # === Vérifier les installations ===
-RUN node --version
-RUN lualatex --version
+# RUN node --version
+# RUN lualatex --version
