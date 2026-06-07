@@ -3,19 +3,19 @@ export const titre = 'Construire un triangle'
 export const interactifReady = false
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
-export const uuid = '4c6a1'
+export const uuid = 'a808d'
 
 export const refs = {
-  'fr-fr': ['5G20'],
+  'fr-fr': [],
   'fr-ch': [],
 }
-export default class ConstruireUnTriangleAvecCible5e extends ConstruireUnTriangleAvecCible {
+export default class ConstruireUnTriangleAvecCible5eOld extends ConstruireUnTriangleAvecCible {
   constructor() {
     super()
     this.classe = 5
-    this.nbQuestions = 2
+    this.sup3 = 10
     this.besoinFormulaire3Texte = [
       'Type de questions',
       [
@@ -32,6 +32,5 @@ export default class ConstruireUnTriangleAvecCible5e extends ConstruireUnTriangl
         '10 : Mélange',
       ].join('\n'),
     ]
-    this.sup3 = '7-9'
   }
 }
