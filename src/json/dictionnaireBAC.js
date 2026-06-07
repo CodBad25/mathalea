@@ -3602,7 +3602,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Probabilités conditionnelles', 'Loi binomiale', 'Variables aléatoires', 'Bienaymé-Tchebychev'],
   },
   bac_2026_05_sujet1_ameriquenord_2: {
     annee: '2026',
@@ -3611,7 +3611,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Suites', 'Python', 'Équations différentielles'],
   },
   bac_2026_05_sujet1_ameriquenord_3: {
     annee: '2026',
@@ -3620,7 +3620,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Géométrie dans l\'espace'],
   },
   bac_2026_05_sujet1_ameriquenord_4: {
     annee: '2026',
@@ -3629,7 +3629,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Logarithme', 'Convexité'],
   },
   bac_2026_05_sujet2_ameriquenord_1: {
     annee: '2026',
@@ -3638,7 +3638,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Probabilités conditionnelles', 'Loi binomiale', 'Variables aléatoires', 'Bienaymé-Tchebychev'],
   },
   bac_2026_05_sujet2_ameriquenord_2: {
     annee: '2026',
@@ -3647,7 +3647,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Suites', 'Python'],
   },
   bac_2026_05_sujet2_ameriquenord_3: {
     annee: '2026',
@@ -3656,7 +3656,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Géométrie dans l\'espace'],
   },
   bac_2026_05_sujet2_ameriquenord_4: {
     annee: '2026',
@@ -3665,6 +3665,6 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Logarithme', 'TVI','Calcul intégral'],
   },
 }
