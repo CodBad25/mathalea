@@ -53,15 +53,7 @@ function enonceAvecConsigne(enonce: string): string {
     return `${contexte}<p><strong>Déterminer si l’affirmation suivante est vraie ou fausse :</strong></p><p>${affirmation}</p>`
   }
 
-  return `${contexte}\\medskip
-
-\\noindent\\textbf{Déterminer si l’affirmation suivante est vraie ou fausse :}
-
-\\medskip
-
-${affirmation}
-
-\\medskip`
+  return `${contexte}\\medskip\n\\noindent\\textbf{Déterminer si l’affirmation suivante est vraie ou fausse :}\n\\medskip\n${affirmation}\n\\medskip`
 }
 
 function graphiqueCarreEtAire(): string {
