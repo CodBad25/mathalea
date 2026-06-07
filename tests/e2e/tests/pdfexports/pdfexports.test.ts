@@ -4,6 +4,7 @@ import { basename, resolve } from 'node:path'
 import { beforeAll, describe, expect, test, vi } from 'vitest'
 import Latex, { makeImageFilesUrls } from '../../../../src/lib/Latex'
 import type { LatexFileInfos } from '../../../../src/lib/LatexTypes'
+import { shuffle } from '../../../../src/lib/outils/arrayOutils'
 import type { IExercice, IExerciceStatique } from '../../../../src/lib/types'
 import { context } from '../../../../src/modules/context'
 import { findStatic, findUuid } from '../../helpers/filter'
@@ -13,7 +14,7 @@ import { getFileLogger, log as lg, logError as lgE } from '../../helpers/log'
 context.isHtml = false
 
 type ExportStatus = 'OK' | 'KO' | 'NON_TESTE'
-type ExportStyle = 'ProfMaquette' | 'Can'
+type ExportStyle = 'ProfMaquette' | 'Can' | 'Classique'
 
 type ExportRow = {
   uuid: string
@@ -285,7 +286,7 @@ async function resolveTargets() {
   // En local, si pas de fichier modifié identifié, on teste une sélection de cibles par défaut pour assurer une couverture régulière sur les exercices populaires et les différents types d'exercices.
   const defaults = ['can', '3e', '4e', '5e', '6e', '2e', '1e']
   const results = await Promise.all(defaults.map((filter) => findUuid(filter)))
-  return results.flat().splice(0, 300) // limiter à 300 cibles pour éviter les surcharges locales
+  return shuffle(results.flat()).splice(0, 3000) // limiter à 3000 cibles pour éviter les surcharges locales et on brasse
 }
 
 async function materializeAssets(
@@ -455,7 +456,7 @@ describe('pdfexports sans playwright', () => {
       const styles: ExportStyle[] =
         isStaticUuid(uuid) || loaded.exercice.typeExercice === 'statique'
           ? ['ProfMaquette']
-          : ['ProfMaquette', 'Can']
+          : ['ProfMaquette', 'Can', 'Classique']
 
       for (const style of styles) {
         const startedPath = getStartedPath(exercicePath, uuid)
