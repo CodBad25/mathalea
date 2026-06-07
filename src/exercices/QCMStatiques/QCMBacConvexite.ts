@@ -9,17 +9,20 @@ import { spline, type NoeudSpline } from '../../lib/mathFonctions/Spline'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../modules/mathalea2d'
 import Exercice from '../Exercice'
-
+/**
+ * @author Stéphane Guyon
+ */
 export const uuid = 'b7e92'
 export const refs = {
-  'fr-fr': ['TSA2-QCMBac'],
+  'fr-fr': ['TSA3-QCMBac'],
   'fr-ch': [],
 }
+
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'QCM Bac : convexité'
+export const titre = 'S\'entraîner avec des QCM Bac : Convexité'
 export const dateDePublication = '31/05/2026'
 
 type Reponse = {
