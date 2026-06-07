@@ -23,7 +23,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { Triangle } from '../../modules/Triangle'
 import Exercice from '../Exercice'
 
-export const titre = "Déterminer la nature d'une droite remarquable"
+export const titre = "Déterminer la nature d'une droite remarquable - 1"
 export const interactifReady = true
 export const interactifType = 'listeDeroulante'
 export const dateDeModifImportante = '25/04/2026' // Rémi Angot ajout interactivité
@@ -155,7 +155,10 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
           ...objets[i],
         )
       if (this.interactif) {
-        texte += '<br>La droite tracée en bleu est ' + choixDeroulant(this, i, choix) + '.'
+        texte +=
+          '<br>La droite tracée en bleu est ' +
+          choixDeroulant(this, i, choix) +
+          '.'
         handleAnswers(
           this,
           i,
