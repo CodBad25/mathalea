@@ -1,0 +1,21 @@
+import DroiteRemarquableDuTriangle from './5G22'
+
+export const titre = "Déterminer la nature d'une droite remarquable - 2"
+export const interactifReady = true
+export const interactifType = 'listeDeroulante'
+
+/**
+ * @author Éric Elter (pour ce clone)
+ */
+export const uuid = 'da670'
+
+export const refs = {
+  'fr-fr': ['5G22b'],
+  'fr-ch': [],
+}
+export default class DroiteRemarquableDuTriangleMedianes extends DroiteRemarquableDuTriangle {
+  constructor() {
+    super()
+    this.sup = 2
+  }
+}
