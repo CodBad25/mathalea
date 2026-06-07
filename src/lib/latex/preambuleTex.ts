@@ -430,6 +430,8 @@ export function loadPackagesFromContent(contents: contentsType) {
     contents,
   )
 
+  testIfLoaded(['\\tableur', '\\helvbx'], '\\usepackage{pas-tableur}', contents)
+
   testIfLoaded(
     ['\\blocrep{', '\\blocrep['],
     `
