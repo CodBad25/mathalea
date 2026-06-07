@@ -14,7 +14,12 @@ import { getFileLogger, log as lg, logError as lgE } from '../../helpers/log'
 context.isHtml = false
 
 type ExportStatus = 'OK' | 'KO' | 'NON_TESTE'
-type ExportStyle = 'ProfMaquette' | 'Can' | 'Classique'
+type ExportStyle =
+  | 'ProfMaquette'
+  | 'Can'
+  | 'Classique'
+  | 'Coopmaths'
+  | 'ProfMaquetteQrcode'
 
 type ExportRow = {
   uuid: string
@@ -287,6 +292,7 @@ async function resolveTargets() {
   const defaults = ['can', '3e', '4e', '5e', '6e', '2e', '1e']
   const results = await Promise.all(defaults.map((filter) => findUuid(filter)))
   return shuffle(results.flat()).splice(0, 3000) // limiter à 3000 cibles pour éviter les surcharges locales et on brasse
+  return shuffle(results.flat()).splice(0, 3000) // limiter à 3000 cibles pour éviter les surcharges locales et on brasse
 }
 
 async function materializeAssets(
@@ -417,6 +423,9 @@ describe('pdfexports sans playwright', () => {
       expect(true).toBe(true)
       return
     }
+    const stylesForExport = process.env.STYLES
+      ? process.env.STYLES.split(',').map((s) => s.trim())
+      : ['ProfMaquette', 'ProfMaquetteQrcode', 'Can', 'Classique', 'Coopmaths']
 
     const targets = await resolveTargets()
 
@@ -456,7 +465,7 @@ describe('pdfexports sans playwright', () => {
       const styles: ExportStyle[] =
         isStaticUuid(uuid) || loaded.exercice.typeExercice === 'statique'
           ? ['ProfMaquette']
-          : ['ProfMaquette', 'Can', 'Classique']
+          : (stylesForExport as ExportStyle[])
 
       for (const style of styles) {
         const startedPath = getStartedPath(exercicePath, uuid)
