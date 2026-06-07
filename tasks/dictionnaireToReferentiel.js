@@ -300,7 +300,7 @@ for (const ex in dictionnaireEAM) {
   })
 }
 
-for (const annee of ['2025']) {
+for (const annee of ['2025', '2026', '2027', '2028', '2029']) {
   for (const filiere of ['Specialite', 'Specifique', 'Technologique']) {
     referentielFR['30_Épreuves de Première - Par année'][filiere][annee] = {}
     for (const ex in dictionnaireEAM) {
