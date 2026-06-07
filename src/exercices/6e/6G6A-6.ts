@@ -54,8 +54,8 @@ export default class TracerTriangle2Angles extends Exercice {
       'Type de questions',
       [
         'Nombres séparés par des tirets  :',
-        '1 : deux angles aigus',
-        '2 : un angle obtus et un angle aigu',
+        '1 : Deux angles aigus',
+        '2 : Un angle obtus et un angle aigu',
         '3 : Mélange',
       ].join('\n'),
     ]
