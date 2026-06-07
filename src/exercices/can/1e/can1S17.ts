@@ -10,6 +10,7 @@ import Exercice from '../../Exercice'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { arrondi } from '../../../lib/outils/nombres'
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 export const titre = 'Trouver le sens de variation d’une suite (QCM)'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -106,9 +107,9 @@ export default class SensVariationSuite extends Exercice {
              La fonction racine carrée définie sur $[0;+\\infty[$ est strictement croissante.<br>`
               texteCorr += `On en déduit que la fonction $x \\longmapsto ${rienSi1(a)}\\sqrt{x}$ est strictement `
               if (a > 0) {
-                texteCorr += `croissante sur $[0;+\\infty[$ et donc la suite $(${s}_{n})$ est strictement croissante. `
+                texteCorr += `croissante sur $[0;+\\infty[$ et donc la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('croissante')}. `
               } else {
-                texteCorr += `décroissante sur $[0;+\\infty[$ et donc la suite $(${s}_{n})$ est strictement décroissante. `
+                texteCorr += `décroissante sur $[0;+\\infty[$ et donc la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('décroissante')}. `
               }
             } else if (choix === 2) {
               // suite explicite avec fonction inverse
@@ -165,9 +166,9 @@ export default class SensVariationSuite extends Exercice {
              La fonction inverse définie sur $]0;+\\infty[$ est strictement décroissante.<br>`
               texteCorr += `On en déduit que la fonction $x \\longmapsto \\dfrac{${a}}{x}=${a}\\times \\dfrac{1}{x}$ est strictement `
               if (a > 0) {
-                texteCorr += `décroissante sur $]0;+\\infty[$ et donc la suite $(${s}_{n})$ est strictement décroissante. `
+                texteCorr += `décroissante sur $]0;+\\infty[$ et donc la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('décroissante')}. `
               } else {
-                texteCorr += `croissante sur $]0;+\\infty[$ et donc la suite $(${s}_{n})$ est strictement croissante. `
+                texteCorr += `croissante sur $]0;+\\infty[$ et donc la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('croissante')}. `
               }
             } else {
               // suite explicite avec fonction affine
@@ -223,9 +224,9 @@ export default class SensVariationSuite extends Exercice {
               texteCorr = `La suite est définie de manière explicite. Le sens de variation de la fonction $f$ associée donne le sens de variation de la suite.<br>
              La fonction affine $f$ définie sur $[0;+\\infty[$ par $f(x)=${rienSi1(a)}x${ecritureAlgebrique(b)}$ est strictement  `
               if (a > 0) {
-                texteCorr += `croissante sur $[0;+\\infty[$ et donc la suite $(${s}_{n})$ est strictement croissante. `
+                texteCorr += `croissante sur $[0;+\\infty[$ et donc la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('croissante')}. `
               } else {
-                texteCorr += `décroissante sur $[0;+\\infty[$ et donc la suite $(${s}_{n})$ est strictement décroissante. `
+                texteCorr += `décroissante sur $[0;+\\infty[$ et donc la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('décroissante')}. `
               }
             }
             variables.push(a, b)
@@ -287,9 +288,9 @@ export default class SensVariationSuite extends Exercice {
               }
               texteCorr = `On reconnaît la forme explicite d'une suite géométrique de raison $q=${q}$ et de premier terme $${s}_{0}=1$. <br>`
               if (q > 0) {
-                texteCorr += `Comme $q>1$ et que le premier terme est positif, la suite $(${s}_{n})$ est strictement croissante. `
+                texteCorr += `Comme $q>1$ et que le premier terme est positif, la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('croissante')}. `
               } else {
-                texteCorr += `Comme $q<0$, la suite $(${s}_{n})$ est ni croissante, ni décroissante. `
+                texteCorr += `Comme $q<0$, la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('ni croissante, ni décroissante')}. `
               }
             } else if (choix === 2) {
               // suite géométrique q^n avec 0<q<1
@@ -320,7 +321,7 @@ export default class SensVariationSuite extends Exercice {
               monQcmTexte = monQcm.texte
 
               texteCorr = `On reconnaît la forme explicite d'une suite géométrique de raison $q=${texNombre(q)}$ et de premier terme $${s}_0=1$. <br>`
-              texteCorr += `Comme $0 < q < 1$ et que le premier terme est  positif, la suite $(${s}_{n})$ est strictement décroissante. `
+              texteCorr += `Comme $0 < q < 1$ et que le premier terme est  positif, la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('décroissante')}. `
             } else {
               // suite géométrique avec q<0
               q = choice([randint(-9, -1) / 10, randint(-10, -1)])
@@ -351,7 +352,7 @@ export default class SensVariationSuite extends Exercice {
               monQcmTexte = monQcm.texte
 
               texteCorr = `On reconnaît la forme explicite d'une suite géométrique de raison $q=${texNombre(q)}$ et de premier terme $${s}_0=1$. <br>`
-              texteCorr += `Comme $ q < 0$, la suite $(${s}_{n})$ est ni croissante, ni décroissante. `
+              texteCorr += `Comme $ q < 0$, la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('ni croissante, ni décroissante')}. `
             }
           }
           break
@@ -410,7 +411,7 @@ export default class SensVariationSuite extends Exercice {
               monQcmTexte = monQcm.texte
 
               texteCorr = `On reconnaît la forme explicite d'une suite géométrique de raison $q=${texFractionFromString(n1, d1)}$ et de premier terme $${s}_0=1$. <br>`
-              texteCorr += `Comme $ 0 < q < 1$ et que le premier terme est positif, la suite $(${s}_{n})$ est  décroissante. `
+              texteCorr += `Comme $ 0 < q < 1$ et que le premier terme est positif, la suite $(${s}_{n})$ est  strictement ${texteEnCouleurEtGras('décroissante')}. `
             } else if (choix === 2) {
               // suite géométrique (a/b)^n avec a/b>1
               const listeFractions1 = [
@@ -462,7 +463,7 @@ export default class SensVariationSuite extends Exercice {
               monQcmTexte = monQcm.texte
 
               texteCorr = `On reconnaît la forme explicite d'une suite géométrique de raison $q=${texFractionFromString(d1, n1)}$ et de premier terme $${s}_0=1$. <br>`
-              texteCorr += `Comme $q>1$ et que le premier terme est positif, la suite $(${s}_{n})$ est  croissante. `
+              texteCorr += `Comme $q>1$ et que le premier terme est positif, la suite $(${s}_{n})$ est  strictement ${texteEnCouleurEtGras('croissante')}. `
             } else if (choix === 3) {
               // suite géométrique a*q^n avec q>1 ou q<0  et a>0
               const q = randint(-10, 10, [0, 1])
@@ -516,9 +517,9 @@ export default class SensVariationSuite extends Exercice {
               }
               texteCorr = `On reconnaît la forme explicite d'une suite géométrique de raison $q=${q}$ et de premier terme $${s}_{0}=${a}$. <br>`
               if (q > 0) {
-                texteCorr += `Comme $q>1$ et que le premier terme est positif, la suite $(${s}_{n})$ est strictement croissante. `
+                texteCorr += `Comme $q>1$ et que le premier terme est positif, la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('croissante')}. `
               } else {
-                texteCorr += `Comme $q<0$, la suite $(${s}_{n})$ est ni croissante, ni décroissante. `
+                texteCorr += `Comme $q<0$, la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('ni croissante, ni décroissante')}. `
               }
             } else if (choix === 4) {
               // suite géométrique a*q^n avec q>1 ou q<0 et a<0
@@ -575,7 +576,7 @@ export default class SensVariationSuite extends Exercice {
               if (q > 0) {
                 texteCorr += `Comme $q>1$ et que le premier terme est négatif, la suite $(${s}_{n})$ est strictement décroissante. `
               } else {
-                texteCorr += `Comme $q<0$, la suite $(${s}_{n})$ est ni croissante, ni décroissante. `
+                texteCorr += `Comme $q<0$, la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('ni croissante, ni décroissante')}. `
               }
             } else if (choix === 5) {
               // suite géométrique a*q^n avec 0<q <1 et a>0
@@ -607,7 +608,7 @@ export default class SensVariationSuite extends Exercice {
               monQcmTexte = monQcm.texte
 
               texteCorr = `On reconnaît la forme explicite d'une suite géométrique de raison $q=${q}$ et de premier terme $${s}_{0}=${a}$. <br>`
-              texteCorr += `Comme $0 < q <1$ et que le premier terme est positif, la suite $(${s}_{n})$ est strictement décroissante. `
+              texteCorr += `Comme $0 < q <1$ et que le premier terme est positif, la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('décroissante')}. `
             } else if (choix === 6) {
               // suite géométrique a*q^n avec 0<q <1 et a<0
               q = randint(1, 9) / 10
@@ -638,7 +639,7 @@ export default class SensVariationSuite extends Exercice {
               monQcmTexte = monQcm.texte
 
               texteCorr = `On reconnaît la forme explicite d'une suite géométrique de raison $q=${texNombre(q)}$ et de premier terme $${s}_{0}=${a}$. <br>`
-              texteCorr += `Comme $0 < q <1$ et que le premier terme est négatif, la suite $(${s}_{n})$ est strictement croissante. `
+              texteCorr += `Comme $0 < q <1$ et que le premier terme est négatif, la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('croissante')}. `
             } else if (choix === 7) {
               // suite géométrique a*q^n q fraction comprise entre 0 et 1 et a >0
               const listeFractions1 = [
@@ -691,7 +692,7 @@ export default class SensVariationSuite extends Exercice {
               monQcmTexte = monQcm.texte
 
               texteCorr = `On reconnaît la forme explicite d'une suite géométrique de raison $q=${q}$ et de premier terme $${s}_{0}=${a}$. <br>`
-              texteCorr += `Comme $0 < q <1$ et que le premier terme est positif, la suite $(${s}_{n})$ est strictement décroissante. `
+              texteCorr += `Comme $0 < q <1$ et que le premier terme est positif, la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('décroissante')}. `
             } else {
               // suite géométrique a*q^n q fraction >1
               const listeFractions1 = [
@@ -767,9 +768,9 @@ export default class SensVariationSuite extends Exercice {
               }
               texteCorr = `On reconnaît la forme explicite d'une suite géométrique de raison $q=${texFractionFromString(d1, n1)}$ et de premier terme $${s}_{0}=${a}$. <br>`
               if (a > 0) {
-                texteCorr += `Comme $q > 1$ et que le premier terme est positif, la suite $(${s}_{n})$ est strictement croissante. `
+                texteCorr += `Comme $q > 1$ et que le premier terme est positif, la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('croissante')}. `
               } else {
-                texteCorr += `Comme $q > 1$ et que le premier terme est négatif, la suite $(${s}_{n})$ est strictement décroissante. `
+                texteCorr += `Comme $q > 1$ et que le premier terme est négatif, la suite $(${s}_{n})$ est strictement ${texteEnCouleurEtGras('décroissante')}. `
               }
             }
           }
@@ -810,7 +811,7 @@ export default class SensVariationSuite extends Exercice {
               monQcmTexte = monQcm.texte
 
               texteCorr = `L'égalité $${s}_{n+1} =${s}_n+${rienSi1(b)}n+${c}$ s'écrit $${s}_{n+1} -${s}_n=${rienSi1(b)}n+${c} >0$. <br>
-            On en déduit que la suite $(${s}_n)$ est coissante.`
+            On en déduit que la suite $(${s}_n)$ est strictement ${texteEnCouleurEtGras('croissante')}.`
             } else if (choix === 2) {
               // suite recurrente u(n+1)=u(n)+bn+c avec bn+c <0
               const a = randint(1, 10) * choice([-1, 1])
@@ -842,7 +843,7 @@ export default class SensVariationSuite extends Exercice {
               monQcmTexte = monQcm.texte
 
               texteCorr = `L'égalité $${s}_{n+1} =${s}_n+${rienSi1(b)}n+${c}$ s'écrit $${s}_{n+1} -${s}_n=${ecritureAlgebrique(b)}n${ecritureAlgebrique(c)}<0$. <br>
-            On en déduit que la suite $(${s}_n)$ est décoissante.`
+            On en déduit que la suite $(${s}_n)$ est strictement ${texteEnCouleurEtGras('décroissante')}.`
             } else if (choix === 3) {
               // suite recurrente u(n+1)=u(n)+b
               const a = randint(1, 10) * choice([-1, 1])
@@ -897,9 +898,9 @@ export default class SensVariationSuite extends Exercice {
               }
               texteCorr = `On reconnaît la relation de récurrence d'une suite arithmétique de raison $${b}$.<br>`
               if (b > 0) {
-                texteCorr += `Comme $${b}>0$, la suite $(${s}_n)$ est croissante. `
+                texteCorr += `Comme $${b}>0$, la suite $(${s}_n)$ est strictement ${texteEnCouleurEtGras('croissante')}. `
               } else {
-                texteCorr += `Comme $${b}<0$, la suite $(${s}_n)$ est décroissante. `
+                texteCorr += `Comme $${b}<0$, la suite $(${s}_n)$ est strictement ${texteEnCouleurEtGras('décroissante')}. `
               }
             } else if (choix === 4) {
               // suite recurrente u(n+1)=q*u(n) avec q>1 ou q<0 et a>0
@@ -955,9 +956,9 @@ export default class SensVariationSuite extends Exercice {
               }
               texteCorr = `On reconnaît la relation de récurrence d'une suite géométrique de raison $${q}$.<br>`
               if (q > 0) {
-                texteCorr += `Comme $${q}>1$ et que le premier terme est positif, alors la suite $(${s}_n)$ est croissante. `
+                texteCorr += `Comme $${q}>1$ et que le premier terme est positif, alors la suite $(${s}_n)$ est strictement ${texteEnCouleurEtGras('croissante')}. `
               } else {
-                texteCorr += `Comme $${q}<0$, la suite $(${s}_n)$ est ni croissante, ni décroissante. `
+                texteCorr += `Comme $${q}<0$, la suite $(${s}_n)$ est strictement ${texteEnCouleurEtGras('ni croissante, ni décroissante')}. `
               }
             } else if (choix === 5) {
               // suite recurrente u(n+1)=q*u(n) avec q>1 ou q<0 et a<0
@@ -1013,9 +1014,9 @@ export default class SensVariationSuite extends Exercice {
               }
               texteCorr = `On reconnaît la relation de récurrence d'une suite géométrique de raison $${q}$.<br>`
               if (q > 0) {
-                texteCorr += `Comme $${q}>1$ et que le premier terme est négatif, alors la suite $(${s}_n)$ est décroissante. `
+                texteCorr += `Comme $${q}>1$ et que le premier terme est négatif, alors la suite $(${s}_n)$ est strictement ${texteEnCouleurEtGras('décroissante')}. `
               } else {
-                texteCorr += `Comme $${q}<0$, la suite $(${s}_n)$ est ni croissante, ni décroissante. `
+                texteCorr += `Comme $${q}<0$, la suite $(${s}_n)$ est strictement ${texteEnCouleurEtGras('ni croissante, ni décroissante')}. `
               }
             } else if (choix === 6) {
               // suite recurrente u(n+1)=q*u(n) avec 0<q<1
@@ -1071,9 +1072,9 @@ export default class SensVariationSuite extends Exercice {
               }
               texteCorr = `On reconnaît la relation de récurrence d'une suite géométrique de raison $${q}$.<br>`
               if (a > 0) {
-                texteCorr += `Comme $ 0< ${texNombre(q)} <1$ et que le premier terme est positif, alors la suite $(${s}_n)$ est décroissante. `
+                texteCorr += `Comme $ 0< ${texNombre(q)} <1$ et que le premier terme est positif, alors la suite $(${s}_n)$ est strictement ${texteEnCouleurEtGras('décroissante')}. `
               } else {
-                texteCorr += `Comme $ 0< ${texNombre(q)} <1$ et que le premier terme est négatif, alors la suite $(${s}_n)$ est croissante. `
+                texteCorr += `Comme $ 0< ${texNombre(q)} <1$ et que le premier terme est négatif, alors la suite $(${s}_n)$ est strictement ${texteEnCouleurEtGras('croissante')}. `
               }
             } else if (choix === 7) {
               // suite recurrente u(n+1)=q*u(n) avec 0<q<1 fraction
@@ -1150,9 +1151,9 @@ export default class SensVariationSuite extends Exercice {
               }
               texteCorr = `On reconnaît la relation de récurrence d'une suite géométrique de raison $${texFractionFromString(n1, d1)}$.<br>`
               if (a > 0) {
-                texteCorr += `Comme $ 0< ${texFractionFromString(n1, d1)} <1$ et que le premier terme est positif, alors la suite $(${s}_n)$ est décroissante. `
+                texteCorr += `Comme $ 0< ${texFractionFromString(n1, d1)} <1$ et que le premier terme est positif, alors la suite $(${s}_n)$ est strictement ${texteEnCouleurEtGras('décroissante')}. `
               } else {
-                texteCorr += `Comme $ 0< ${texFractionFromString(n1, d1)} <1$ et que le premier terme est négatif, alors la suite $(${s}_n)$ est croissante. `
+                texteCorr += `Comme $ 0< ${texFractionFromString(n1, d1)} <1$ et que le premier terme est négatif, alors la suite $(${s}_n)$ est strictement ${texteEnCouleurEtGras('croissante')}. `
               }
             } else {
               // suite recurrente u(n+1)=q*u(n) avec q>1 fraction
@@ -1229,9 +1230,9 @@ export default class SensVariationSuite extends Exercice {
               }
               texteCorr = `On reconnaît la relation de récurrence d'une suite géométrique de raison $${texFractionFromString(d1, n1)}$.<br>`
               if (a > 0) {
-                texteCorr += `Comme $  ${texFractionFromString(d1, n1)} >1$ et que le premier terme est positif, alors la suite $(${s}_n)$ est croissante. `
+                texteCorr += `Comme $  ${texFractionFromString(d1, n1)} >1$ et que le premier terme est positif, alors la suite $(${s}_n)$ est strictement ${texteEnCouleurEtGras('croissante')}. `
               } else {
-                texteCorr += `Comme $ 0< ${texFractionFromString(d1, n1)} <1$ et que le premier terme est négatif, alors la suite $(${s}_n)$ est décroissante. `
+                texteCorr += `Comme $ 0< ${texFractionFromString(d1, n1)} <1$ et que le premier terme est négatif, alors la suite $(${s}_n)$ est strictement ${texteEnCouleurEtGras('décroissante')}  . `
               }
             }
           }

@@ -5,6 +5,7 @@ import {
   ecritureParentheseSiNegatif,
 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
@@ -107,22 +108,22 @@ export default class CalculTermeSuiteRec extends ExerciceSimple {
         break
       case 'c': // suite géométrique
         if (!this.interactif) {
-          a = randint(2, 15) * choice([-1, 1])
+          a = choice([randint(2, 15) * choice([-1, 1]), randint(1,99)/100])
           u = randint(-15, 15, [0, 1, a, -a])
           this.question = `Soit $(${s}_n)$ une suite géométrique de raison $q$  définie pour tout   $n\\in \\mathbb{N}$, telle que
-          $${s}_0=${u}$ et $q=${a}$.<br>
+          $${s}_0=${u}$ et $q=${texNombre(a, 2)}$.<br>
           Donner l'expression de $${s}_n$ en fonction de $n$.`
           this.question += ''
         } else {
-          a = randint(2, 15)
+          a = choice([randint(2, 15), randint(1,99)/100])
           u = randint(-15, 15, [0, 1, a])
           this.question = `Soit $(${s}_n)$ une suite géométrique de raison $q$  définie pour tout   $n\\in \\mathbb{N}$, telle que
-          $${s}_0=${u}$ et $q=${a}$.<br>
+          $${s}_0=${u}$ et $q=${texNombre(a, 2)}$.<br>
           Donner l'expression de $${s}_n$ en fonction de $n$.`
           this.question += `<br> $${s}_n=$`
         }
         this.correction = `Pour tout entier naturel $n$, $u_n=u_0\\times q^n$.<br>
-        Avec $${s}_0=${u}$ et  $q=${a}$, on obtient $${s}_n=${miseEnEvidence(`${u}\\times${ecritureParentheseSiNegatif(a)}^n`)}$.`
+        Avec $${s}_0=${u}$ et  $q=${texNombre(a, 2)}$, on obtient $${s}_n=${miseEnEvidence(`${u}\\times${ecritureParentheseSiNegatif(a)}^n`)}$.`
         if (u === -1) {
           this.reponse = [`${u}\\times ${a}^n`, `-${a}^n`, `${a}^n\\times${u}`]
         } else {
@@ -131,21 +132,21 @@ export default class CalculTermeSuiteRec extends ExerciceSimple {
         break
       case 'd': // suite géométrique sur N*
         if (!this.interactif) {
-          a = randint(2, 15) * choice([-1, 1])
+          a = choice([randint(2, 15) * choice([-1, 1]), randint(1,99)/100])
           u = randint(-15, 15, [0, 1, -1, a, -a])
           this.question = `Soit $(${s}_n)$ une suite géométrique de raison $q$ définie pour tout $n\\in\\mathbb{N}^*$, telle que
-          $${s}_1=${u}$ et $q=${a}$.<br>
+          $${s}_1=${u}$ et $q=${texNombre(a, 2)}$.<br>
           Donner l'expression de $${s}_n$ en fonction de $n$.`
         } else {
-          a = randint(2, 15)
+          a = choice([randint(2, 15) , randint(1,99)/100])
           u = randint(-15, 15, [0, 1, -1, a, -a])
           this.question = `Soit $(${s}_n)$ une suite géométrique de raison $q$  définie pour tout   $n\\in\\mathbb{N}^*$, telle que
-          $${s}_1=${u}$ et $q=${a}$.<br>
+          $${s}_1=${u}$ et $q=${texNombre(a, 2)}$.<br>
           Donner l'expression de $${s}_n$ en fonction de $n$.`
           this.question += `<br> $${s}_n=$`
         }
         this.correction = `Pour tout entier naturel $n$, $u_n=u_1\\times q^{n-1}$.<br>
-        Avec $${s}_1=${u}$ et  $q=${a}$, on obtient $${s}_n=${miseEnEvidence(`${u}\\times${ecritureParentheseSiNegatif(a)}^{n-1}`)}$`
+        Avec $${s}_1=${u}$ et  $q=${texNombre(a, 2)}$, on obtient $${s}_n=${miseEnEvidence(`${u}\\times${ecritureParentheseSiNegatif(a)}^{n-1}`)}$`
         this.reponse = [
           `${u}\\times ${ecritureParentheseSiNegatif(a)}^{n-1}`,
           `${ecritureParentheseSiNegatif(a)}^{n-1}\\times${u}`,

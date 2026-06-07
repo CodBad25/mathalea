@@ -130,7 +130,7 @@ export default class MilieuEntre1EtFraction extends ExerciceSimple {
       */
     // Après
     this.correction = `On calcule la moyenne de $1$ et $${bonneFraction.texFraction}$ :<br>
-    $x_I=\\dfrac{1+${bonneFraction.texFraction}}{2}=
+    $x_M=\\dfrac{1+${bonneFraction.texFraction}}{2}=
     \\dfrac{${un.texFraction}+${bonneFraction.texFraction}}{2}=
         ${unPlusBonneFraction.texFraction}\\times ${half.texFraction}=
         ${pgcd(d + n, 2 * d) === 1 ? `${miseEnEvidence(resultat.texFraction)}` : `${resultat.texFraction}`} ${resultat.texSimplificationAvecEtapes(false, orangeMathalea)}$ <br><br>`

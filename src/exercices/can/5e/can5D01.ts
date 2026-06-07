@@ -10,6 +10,7 @@ import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 export const titre =
   'Convertir des heures décimales en heures/minutes et inversement'
@@ -44,7 +45,7 @@ export default class ConversionHeuresDecimalesMinutes extends Exercice {
           d = b * 60
           if (!this.interactif) {
             texte = `Convertir en heures/minutes : <br>$${texNombre(a + b)}$ h $=$ ..... h ..... min`
-            texteCorr = `$${texNombre(a + b)}$ h $ = ${a}$ h $ +$ $ ${texNombre(b)} \\times 60  = ${a}$ h $${d}$ min`
+            texteCorr = `$${texNombre(a + b)}$ h $ = ${a}$ h $ +$ $ ${texNombre(b)} \\times 60  = ${miseEnEvidence(a)}$ h $${miseEnEvidence(d)}$ min`
           } else {
             texte = `Convertir en heures/minutes : <br>$${texNombre(a + b)}$ h $=$`
             texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierHms)
@@ -54,7 +55,7 @@ export default class ConversionHeuresDecimalesMinutes extends Exercice {
                 options: { HMS: true },
               },
             })
-            texteCorr = `$${texNombre(a + b)}$ h $ = ${a}$ h $ +$ $ ${texNombre(b)} \\times 60$ min $  = ${a}$ h $${d}$ min`
+            texteCorr = `$${texNombre(a + b)}$ h $ = ${a}$ h $ +$ $ ${texNombre(b)} \\times 60$ min $  = ${miseEnEvidence(a)}$ h $${miseEnEvidence(d)}$ min`
           }
           this.canEnonce = 'Compléter.'
           this.canReponseACompleter = `$${texNombre(a + b)}$ h = $\\ldots$ h $\\ldots$ min`
@@ -68,7 +69,7 @@ export default class ConversionHeuresDecimalesMinutes extends Exercice {
           if (!this.interactif) {
             texte = `Compléter par un nombre décimal : <br>$${texNombre(a)}$ h $${texNombre(b * 60)}$ min  $=$ ..... h`
             texteCorr = `$${texNombre(b * 60)}$ min  $=   \\dfrac{${texNombre(b * 60)}}{60}$ h $=${texFractionReduite(b * 60, 60)}$ h $=   ${texNombre(b)}$ h. <br>
-          Ainsi, $${texNombre(a)}$ h $${texNombre(b * 60)}$ min  $=$ $${texNombre(a + b)}$ h.`
+          Ainsi, $${texNombre(a)}$ h $${texNombre(b * 60)}$ min  $=$ $${miseEnEvidence(texNombre(a + b))}$ h.`
           } else {
             texte = `Compléter par un nombre décimal : <br>$${texNombre(a)}$ h $${texNombre(b * 60)}$ min  $=$`
             texte += ajouteChampTexteMathLive(
@@ -79,8 +80,8 @@ export default class ConversionHeuresDecimalesMinutes extends Exercice {
                 texteApres: sp(5) + 'h',
               },
             )
-            texteCorr = `$${texNombre(b * 60)}$ min  $=   \\dfrac{${texNombre(b * 60)}}{60}$ h $=${texFractionReduite(b * 60, 60)}$ h $=   ${texNombre(b)}$ h. <br>
-          Ainsi, $${texNombre(a)}$ h $${texNombre(b * 60)}$ min  $=$ $${texNombre(a + b)}$ h.`
+            texteCorr = `$${texNombre(b * 60)}$ min  $=   \\dfrac{${texNombre(b * 60)}}{60}$ h $=${texFractionReduite(b * 60, 60)}$ h $=   $${texNombre(b)}$ h. <br>
+          Ainsi, $${texNombre(a)}$ h $${texNombre(b * 60)}$ min  $=$ $${miseEnEvidence(texNombre(a + b))}$ h.`
 
             handleAnswers(this, i, {
               reponse: {

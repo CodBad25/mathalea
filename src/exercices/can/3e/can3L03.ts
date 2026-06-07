@@ -1,4 +1,5 @@
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation du type $ax+b=c$'
@@ -43,7 +44,7 @@ export default class EquationAXPlusBEgalC extends ExerciceSimple {
     x&=\\dfrac{${c - b}}{${a}}\\\\
     x&=${this.reponse}
     \\end{aligned}$<br>
-    La solution de l'équation est : $${this.reponse}$.
+    La solution de l'équation est : $${miseEnEvidence(this.reponse)}$.
     `
   }
 }

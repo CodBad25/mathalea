@@ -483,7 +483,7 @@ export default class SecondDegreVariations extends Exercice {
             <br>            $f(x)=a(x-x_1)(x-x_2)$ où $x_1$ et $x_2$ sont les racines du polynôme.
             <br> L'abscisse du sommet de la parabole est donné par la moyenne des racines soit par : $\\dfrac{x_1+x_2}{2}=\\dfrac{${-b}+${ecritureParentheseSiNegatif(-c)}}{2}= ${maFraction.texFractionSimplifiee}$.
               <br>            Comme le coefficient $${a}$ devant les parenthèses est strictement positif, la fonction est d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
-              <br> Ainsi, $f$ est croissante sur $${miseEnEvidence(`\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${maFraction.texFractionSimplifiee} \\bigg]`)}$.    `
+              <br> Ainsi, $f$ est décroissante sur $${miseEnEvidence(`\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${maFraction.texFractionSimplifiee} \\bigg]`)}$.    `
           }
           break
       }

@@ -2,6 +2,7 @@ import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../../lib/outils/deprecatedFractions'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
@@ -76,7 +77,7 @@ export default class NatureSuiteRec extends Exercice {
           }
 
           texteCorr = `La formule de récurrence est de la forme $${s}_{n+1}=${s}_n+r$ avec $r=${a}$.<br>
-        On en déduit que $(${s}_n)$ est une suite arithmétique de raison $${a}$ et de premier terme $${s}_0=${u}$.`
+        On en déduit que $(${s}_n)$ est une ${texteEnCouleurEtGras('suite arithmétique')} de raison $${miseEnEvidence(a)}$ et de premier terme $${s}_0=${u}$.`
 
           break
         case 2: // suite arith u_n=u_{n+1}-r
@@ -114,7 +115,7 @@ export default class NatureSuiteRec extends Exercice {
           }
 
           texteCorr = `La formule de récurrence est de la forme $${s}_{n+1}=${s}_n+r$ avec $r=${-a}$.<br>
-        On en déduit que $(${s}_n)$ est une suite arithmétique de raison $${-a}$ et de premier terme $${s}_0=${u}$.`
+        On en déduit que $(${s}_n)$ est une ${texteEnCouleurEtGras('suite arithmétique')} de raison $${miseEnEvidence(-a)}$ et de premier terme $${s}_0=${u}$.`
 
           break
         case 3: // suite arith u_{n+1}=(au_n+a*r)/a
@@ -155,7 +156,7 @@ export default class NatureSuiteRec extends Exercice {
 
           texteCorr = `Comme $${s}_{n+1}  =\\dfrac{${b} ${s}_n${ecritureAlgebrique(b * a)}}{${b}}=\\dfrac{${b} ${s}_n}{${b}}+\\dfrac{${b * a}}{${b}}= ${s}_n${ecritureAlgebrique(a)}$, alors
         la formule de récurrence est de la forme $${s}_{n+1}=${s}_n+r$ avec $r=${a}$.<br>
-        On en déduit que $(${s}_n)$ est une suite arithmétique de raison $${a}$ et de premier terme $${s}_0=${u}$.`
+        On en déduit que $(${s}_n)$ est une ${texteEnCouleurEtGras('suite arithmétique')} de raison $${miseEnEvidence(a)}$ et de premier terme $${s}_0=${u}$.`
 
           break
 
@@ -195,7 +196,7 @@ export default class NatureSuiteRec extends Exercice {
 
           texteCorr = `$${s}_{n+1} -${s}_{n}= ${texNombre(a)}${s}_n$ s'écrit : $${s}_{n+1} = ${texNombre(a)}${s}_n+${s}_{n}=${texNombre(1 + a)}${s}_n$.<br>
            La formule de récurrence est de la forme $${s}_{n+1}=q\\times ${s}_n$ avec $q=${texNombre(1 + a)}$.<br>
-        On en déduit que $(${s}_n)$ est une suite géométrique de raison $${texNombre(1 + a)}$ et de premier terme $${s}_0=${u}$.`
+        On en déduit que $(${s}_n)$ est une ${texteEnCouleurEtGras('suite géométrique')} de raison $${miseEnEvidence(texNombre(1 + a))}$ et de premier terme $${s}_0=${u}$.`
 
           break
         case 5: // suite géo avec raison fraction
@@ -258,7 +259,7 @@ export default class NatureSuiteRec extends Exercice {
             }
             texteCorr = `$${s}_{n+1} =${s}_{n} -${texFractionFromString(n1, d1)}${s}_{n}=\\left(1-${texFractionFromString(n1, d1)}\\right)${s}_{n}=${texFractionFromString(d1 - n1, d1)}${s}_{n}$.<br>
                         La formule de récurrence est de la forme $${s}_{n+1}=q\\times ${s}_n$ avec $q=${texFractionFromString(d1 - n1, d1)}$.<br>
-        On en déduit que $(${s}_n)$ est une suite géométrique de raison $${texFractionFromString(d1 - n1, d1)}$ et de premier terme $${s}_0=${u}$.`
+        On en déduit que $(${s}_n)$ est une ${texteEnCouleurEtGras('suite géométrique')} de raison $${miseEnEvidence(texFractionFromString(d1 - n1, d1))}$ et de premier terme $${s}_0=${u}$.`
           } else {
             texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} =${s}_{n} +${texFractionFromString(n1, d1)}${s}_{n}$.<br>
           Alors, $(${s}_n)$ est une suite ...`
@@ -291,7 +292,7 @@ export default class NatureSuiteRec extends Exercice {
             }
             texteCorr = `$${s}_{n+1} =${s}_{n} +${texFractionFromString(n1, d1)}${s}_{n}=\\left(1+${texFractionFromString(n1, d1)}\\right)${s}_{n}=${texFractionFromString(d1 + n1, d1)}${s}_{n}$.<br>
             La formule de récurrence est de la forme $${s}_{n+1}=q\\times ${s}_n$ avec $q=${texFractionFromString(d1 + n1, d1)}$.<br>
-On en déduit que $(${s}_n)$ est une suite géométrique de raison $${texFractionFromString(d1 + n1, d1)}$ et de premier terme $${s}_0=${u}$.`
+            On en déduit que $(${s}_n)$ est une ${texteEnCouleurEtGras('suite géométrique')} de raison $${miseEnEvidence(texFractionFromString(d1 + n1, d1))}$ et de premier terme $${s}_0=${u}$.`
           }
 
           break
