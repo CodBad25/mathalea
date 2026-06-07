@@ -85,7 +85,12 @@ export default class VocabulaireDesTriangles extends Exercice {
     const tRect = new Triangle()
     const tIsoRect = new Triangle()
 
-    let l1: any, l2: any, l3: any, a1: any, a2: any, a3: any
+    let l1: number = 0
+    let l2: number = 0
+    let l3: number = 0
+    let a1: number = 0
+    let a2: number = 0
+    let a3: number = 0
     let texte = ''
     let texteCorr = ''
     const A = pointAbstrait(0, 0)

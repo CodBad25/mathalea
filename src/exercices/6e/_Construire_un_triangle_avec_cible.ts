@@ -688,7 +688,6 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
         objetsEnonceml,
       )
       if (this.sup) {
-        // @ts-ignore typage de objetsEnonce ou gestion des undefined
         texte += mathalea2d(
           Object.assign(
             {},
@@ -702,7 +701,6 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           objetsEnonce.filter((el) => el !== undefined),
         )
       }
-      // @ts-ignore typage de objetsEnonceCorrection ou gestion des undefined
       texteCorr += mathalea2d(
         Object.assign(
           {},
