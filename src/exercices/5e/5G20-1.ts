@@ -34,7 +34,7 @@ export const titre = 'Utiliser le vocabulaire des triangles'
 
 /**
  * Vocabulaire des triangles
- * @author Sébastien Lozano
+ * @author Sébastien Lozano -
  */
 export const uuid = 'c3781'
 
