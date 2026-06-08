@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { shuffle } from '../../lib/outils/arrayOutils'
+import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 import ExerciceCan from '../ExerciceCan'
@@ -26,8 +26,9 @@ export default class AutoQ6ANbrevet2026 extends ExerciceCan {
   }
 
   enonce(serie?: number[]) {
+    const length = choice([7, 9, 11])
     if (serie == null) {
-      serie = shuffle(Array.from({ length: 9 }, () => randint(1, 25)))
+      serie = shuffle(Array.from({ length }, () => randint(1, 25)))
     }
     const n = serie.length
     const trie = [...serie].sort((a, b) => a - b)

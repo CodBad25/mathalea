@@ -29,15 +29,12 @@ export default class AutoQ8ANbrevet2026 extends ExerciceCan {
     this.formatChampTexte = KeyboardType.clavierNumbers
   }
 
-  enonce(n?: number, type?: 2 | 3 | 5) {
+  enonce(n?: number, type?: 3 | 5) {
     if (n == null || type == null) {
-      type = choice([2, 3, 5] as (2 | 3 | 5)[])
+      type = choice([3, 5] as (3 | 5)[])
       if (type === 3) {
         // Divisibles par 3, pas par 2, 5, 9 ou 10
         n = choice([123, 159, 213, 219, 291, 339, 411])
-      } else if (type === 2) {
-        // Divisibles par 2, pas par 3, 4, 5 ou 9
-        n = choice([134, 146, 158, 178, 194, 214, 218, 226])
       } else {
         // Divisibles par 5, pas par 2, 3 ou 10
         n = choice([125, 145, 155, 175, 185, 215, 245, 265])

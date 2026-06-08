@@ -249,7 +249,7 @@ export default class DenombrerCubes extends Exercice {
               ? 'Nombre de petits cubes composant cet empilement ?<br>'
               : 'Volume en $\\text{cm}^3$ composant cet empilement ?<br>'
           }
-          texte += '<br>' + figure
+          texte += figure
 
           // correction :
           texteCorr += "On peut représenter l'empilement par tranches : <br>"
@@ -273,7 +273,7 @@ export default class DenombrerCubes extends Exercice {
               ? 'Nombre de petits cubes manquant pour compléter cet empilement ?<br>'
               : 'Volume en $\\text{cm}^3$ manquant pour compléter cet empilement ?<br>'
           }
-          texte += '<br>' + figure
+          texte += figure
           // correction :
           texteCorr +=
             "On peut, par exemple, représenter l'empilement par tranches : <br>"
@@ -293,6 +293,14 @@ export default class DenombrerCubes extends Exercice {
       if (this.questionJamaisPosee(q, JSON.stringify(L))) {
         this.listeQuestions[q] = texte
         this.listeCorrections[q] = texteCorr
+        this.listeCanEnonces[q] =
+          listeTypeDeQuestions[q] === 1
+            ? unitesCubes
+              ? 'Compter les cubes de l\'empilement (voir figure).'
+              : 'Calculer le volume en $\\text{cm}^3$ de l\'empilement (voir figure).'
+            : unitesCubes
+              ? `Compter les cubes manquants pour compléter un grand cube de $${longueur}$ petits cubes d'arête (voir figure).`
+              : `Calculer le volume en $\\text{cm}^3$ manquant pour reconstruire un cube de $${longueur}\\text{ cm}$ d'arête (voir figure).`
         q++
       }
       cpt++
