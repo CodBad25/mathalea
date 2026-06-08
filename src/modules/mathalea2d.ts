@@ -149,10 +149,16 @@ export function mathalea2d(
                     const dataKeyboard = buildDataKeyboardString(
                       convertClasseToString(input.classe),
                     )
-                    const divOuterHtml = `<div class="divLatex" style="position: absolute; top: ${ySvgInput}px; left: ${xSvgInput}px; transform: translate(-50%,-50%); opacity: ${input.opacity};" data-top=${ySvgInput} data-left=${xSvgInput}>${
+                    const champIndex = input.content.indexOf('%{champ1}')
+                    const prefix = champIndex > 0 ? input.content.slice(0, champIndex) : ''
+                    const prefixHtml = prefix ? katex.renderToString(prefix) : ''
+                    const mathFieldContent = input.content.slice(champIndex === -1 ? 0 : champIndex).replace('%{champ1}', '\\placeholder[champ1]{}')
+                    const blancContent = input.content.slice(champIndex === -1 ? 0 : champIndex).replace('%{champ1}', input.blanc)
+                    const transform = prefix ? 'translate(0,-50%)' : 'translate(-50%,-50%)'
+                    const divOuterHtml = `<div class="divLatex" style="position: absolute; top: ${ySvgInput}px; left: ${xSvgInput}px; transform: ${transform}; opacity: ${input.opacity}; display: inline-flex; align-items: center; gap: 2px;" data-top=${ySvgInput} data-left=${xSvgInput}>${prefixHtml}${
                       isInteractif
-                        ? `<math-field data-keyboard="${dataKeyboard}" virtual-keyboard-mode=manual readonly class="${input.classe} metaInteractif2d" id="MetaInteractif2dEx${code.exercice.numeroExercice}Q${code.question}field${input.index}">${input.content.replace('%{champ1}', '\\placeholder[champ1]{}')}</math-field>`
-                        : `$${input.content.replace('%{champ1}', input.blanc)}$`
+                        ? `<math-field data-keyboard="${dataKeyboard}" virtual-keyboard-mode=manual readonly class="${input.classe} metaInteractif2d" id="MetaInteractif2dEx${code.exercice.numeroExercice}Q${code.question}field${input.index}">${mathFieldContent}</math-field>`
+                        : `$${blancContent}$`
                     }</div>`
                     divsLatex.push(divOuterHtml)
                   }

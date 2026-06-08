@@ -22,7 +22,6 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const titre = 'Calculer le coefficient de proportionnalité'
 export const interactifReady = true
 export const interactifType = 'MetaInteractif2d'
@@ -430,7 +429,7 @@ export default class CalculerCoeffPropo extends Exercice {
           const inputs = new MetaInteractif2d(
             [
               {
-                x: 17.3,
+                x: 16.5,
                 y: 2,
                 content: '\\times %{champ1}',
                 classe: KeyboardType.clavierDeBaseAvecFraction,

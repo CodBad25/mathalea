@@ -1060,12 +1060,23 @@ math-field.metaInteractif2d {
   outline: none;
   vertical-align: middle;
 }
-math-field.metaInteractif2d:focus-within {
-  outline: 2px solid #3b82f6;
+math-field.metaInteractif2d::part(container) {
+  border: 1px solid var(--color-coopmathsdark-corpus-light);
+  border-radius: 2px;
+  padding: 2px 4px;
 }
-math-field.fillInTheBlanks::part(prompt),
+math-field.metaInteractif2d:focus-within::part(container) {
+  border: 2px solid #3b82f6;
+}
 math-field.metaInteractif2d::part(prompt) {
-  font-size: 1em; /* levier principal: réduit la boîte calculée */
+  font-size: 1em;
+  line-height: 1;
+  min-width: 1.5em;
+  border: none;
+  outline: none;
+}
+math-field.fillInTheBlanks::part(prompt) {
+  font-size: 1em;
   line-height: 1;
   min-height: 1em;
   min-width: 0px;
