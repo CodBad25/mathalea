@@ -163,6 +163,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
             y: result[1],
             rang: 5,
             taille: 0.3,
+            num: this.nbQuestions > 1 ? i + 1 : undefined,
           })
           if (this.sup) {
             objetsEnonce.push(
@@ -271,6 +272,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
             y: result[1],
             rang: 5,
             taille: 0.3,
+            num: this.nbQuestions > 1 ? i + 1 : undefined,
           })
           if (this.sup) {
             objetsEnonce.push(
@@ -329,6 +331,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
             y: result[1],
             rang: 5,
             taille: 0.3,
+            num: this.nbQuestions > 1 ? i + 1 : undefined,
           })
           if (this.sup) {
             objetsEnonce.push(
@@ -385,6 +388,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
             y: result[1],
             rang: 5,
             taille: 0.3,
+            num: this.nbQuestions > 1 ? i + 1 : undefined,
           })
           if (this.sup) {
             objetsEnonce.push(
@@ -438,6 +442,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
             y: result[1],
             rang: 5,
             taille: 0.3,
+            num: this.nbQuestions > 1 ? i + 1 : undefined,
           })
           if (this.sup) {
             objetsEnonce.push(
@@ -501,6 +506,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
             y: result[1],
             rang: 5,
             taille: 0.3,
+            num: this.nbQuestions > 1 ? i + 1 : undefined,
           })
           if (this.sup) {
             objetsEnonce.push(
@@ -565,6 +571,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
             y: result[1],
             rang: 5,
             taille: 0.3,
+            num: this.nbQuestions > 1 ? i + 1 : undefined,
           })
           if (this.sup) {
             objetsEnonce.push(
@@ -622,6 +629,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
             y: result[1],
             rang: 5,
             taille: 0.3,
+            num: this.nbQuestions > 1 ? i + 1 : undefined,
           })
           if (this.sup) {
             objetsEnonce.push(
