@@ -108,9 +108,9 @@ export function mathalea2d(
         const objet = objets as ObjetMathalea2D
         if (!mainlevee || typeof objet?.svgml === 'undefined') {
           if (objet?.svg) {
-            const code = objet.svg(pixelsParCm)
+            const code = context.isHtml ? objet.svg(pixelsParCm) : ''
             if (typeof code === 'string') {
-              codeSvg = '\t' + objet.svg(pixelsParCm) + '\n'
+              codeSvg = '\t' + code + '\n'
             } else {
               const codeLatex = code as ObjetDivLatex
               // on a à faire à un divLatex.
@@ -121,7 +121,7 @@ export function mathalea2d(
                 )
                 return codeSvg
               }
-
+              if (!context.isHtml) return ''
               const xSvg = (codeLatex.x - xmin) * pixelsParCm * zoom
               const ySvg = -(codeLatex.y - ymax) * pixelsParCm * zoom
               if ('letterSize' in codeLatex) {
@@ -139,6 +139,7 @@ export function mathalea2d(
                     : `<div class="divLatex" style="position: absolute; top: ${ySvg}px; left: ${xSvg}px; transform: translate(-50%,-50%) rotate(${normaliseOrientation(-codeLatex.orientation)}deg); opacity: ${codeLatex.opacity};" data-top=${ySvg} data-left=${xSvg}>${katex.renderToString('{\\color{' + codeLatex.color + '} \\' + codeLatex.letterSize + '{' + (codeLatex.gras ? '\\textbf{' : '') + codeLatex.latex.replaceAll('color[HTML]', 'color') + (codeLatex.gras ? '}' : '') + '}}')}</div>`
                 divsLatex.push(divOuterHtml)
               } else if ('exercice' in codeLatex) {
+                if (!context.isHtml) return ''
                 if ('inputs' in codeLatex) {
                   const code = codeLatex as unknown as MetaInteractif2dData
                   const inputs = code.inputs
@@ -173,6 +174,7 @@ export function mathalea2d(
           }
         } else {
           if (objet?.svgml) {
+            if (!context.isHtml) return ''
             codeSvg = '\t' + objet.svgml(pixelsParCm, amplitude) + '\n'
           }
         }
@@ -231,6 +233,7 @@ export function mathalea2d(
           if (!mainlevee || typeof objets.tikzml === 'undefined') {
             if (typeof objets.tikz === 'function') {
               // Pass axis bounds to Courbe's tikz method
+              if (context.isHtml) return ''
               if ((objets as any).usePgfplots === true) {
                 codeTikz =
                   '\t' +
@@ -242,6 +245,7 @@ export function mathalea2d(
             }
           } else {
             if (typeof objets.tikzml === 'function') {
+              if (context.isHtml) return ''
               codeTikz = '\t' + objets.tikzml(amplitude) + '\n'
             }
           }
