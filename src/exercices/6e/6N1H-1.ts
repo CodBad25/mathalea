@@ -1,4 +1,5 @@
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
@@ -14,8 +15,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Lire l'abscisse décimale d'un point (niveau 2)"
 export const interactifReady = true
@@ -241,7 +240,7 @@ export default class LireAbscisseDecimaleBis2d extends Exercice {
         )
 
         texte += addMultiMathfield(this, i, {
-          dataTemplate: `$${l1}\\lparen$%{champ1} $\\rparen$ ${sp(6)} $${l2}\\lparen$%{champ2} $\\rparen$ ${sp(6)} $${l3}\\lparen$%{champ3} $\\rparen$`,
+          dataTemplate: `$${l1}($%{champ1}$)$ ${sp(6)} $${l2}($%{champ2}$)$ ${sp(6)} $${l3}($%{champ3} $)$`,
           dataOptions: {
             champ1: { keyboard: KeyboardType.clavierNumbers },
             champ2: { keyboard: KeyboardType.clavierNumbers },
