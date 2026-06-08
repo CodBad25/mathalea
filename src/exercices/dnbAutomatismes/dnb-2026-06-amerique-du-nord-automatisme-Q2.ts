@@ -1,7 +1,7 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
+import { texNombre, texPrix } from '../../lib/outils/texNombre'
+import { randint } from '../../modules/outils'
 import ExerciceCan from '../ExerciceCan'
 
 export const uuid = 'c2a4b'
@@ -28,19 +28,19 @@ export default class AutoQ2ANbrevet2026 extends ExerciceCan {
 
   enonce(prix?: number, pourcentage?: number) {
     if (prix == null || pourcentage == null) {
-      prix = choice([40, 45, 50, 60, 80, 120, 150])
-      pourcentage = choice([10, 20, 25, 5])
+      prix = randint(1, 10) * 10 + 5
+      pourcentage = 10
     }
     const reduction = (prix * pourcentage) / 100
     const prixFinal = prix - reduction
 
     this.reponse = prixFinal
-    this.question = `Un article coûte $${texNombre(prix)}$ €. Quel sera son prix après une réduction de $${pourcentage}\\,\\%$ ?`
+    this.question = `Un article coûte $${texNombre(prix)}~\\text{€}$. Quel sera son prix après une réduction de $${pourcentage}\\,\\%$ ?`
     if (this.interactif) this.question += '<br>'
 
-    this.correction = `La réduction est de $${texNombre(prix)}\\times ${texNombre(pourcentage / 100)}=${texNombre(reduction)}$ €.<br>
+    this.correction = `La réduction est de $${texNombre(prix)} ~\\text{€} \\times ${texPrix(pourcentage / 100)}=${texPrix(reduction)}~\\text{€}$.<br>
 Le prix après réduction est donc :<br>
-$${texNombre(prix)}-${texNombre(reduction)}=${miseEnEvidence(`${texNombre(prixFinal)}`)}$ €.`
+$${texPrix(prix)}~\\text{€}-${texPrix(reduction)}~\\text{€}=${miseEnEvidence(`${texPrix(prixFinal)}`)}~\\text{€}$.`
   }
 
   nouvelleVersion() {
