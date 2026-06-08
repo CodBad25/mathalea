@@ -122,7 +122,7 @@ export default class denombrement extends Exercice {
       correction2 += `$\\begin{aligned}\\dbinom{${garcons}}{${ca}} &= \\dfrac{${garcons}~!}{${ca}~!\\times ${garcons - ca}~!}\\\\&=${texNombre(arrondi(factorielle(garcons) / (factorielle(ca) * factorielle(garcons - ca)), 0))}\\end{aligned}$<br>`
       correction2 +=
         'Il faut donc soustraire ce résultat du nombre total de CA possibles.<br>'
-      correction2 += `On a donc $${texNombre(reponse2)} - ${texNombre(NombreCAGarcons)} = ${miseEnEvidence(texNombre(arrondi(reponse2 - NombreCAGarcons, 0)))}$ CA possibles avec au moins une fille.`
+      correction2 += `On a donc $${texNombre(reponse1)} - ${texNombre(NombreCAGarcons)} = ${miseEnEvidence(texNombre(arrondi(reponse2 - NombreCAGarcons, 0)))}$ CA possibles avec au moins une fille.`
       let correction3 =
         "Pour constituer le bureau, l'ordre compte, puisqu'il y a trois postes différents à pourvoir.<br>"
       correction3 += `Il faut donc déterminer le nombre de triplets d'éléments distincts que l'on peut constituer dans une liste à ${ca} éléments.<br>`
