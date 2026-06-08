@@ -600,7 +600,7 @@ testExosModifiedConsolidated:
       # PHASE 1: Récupérer les fichiers modifiés
       # ============================================================
       COMMIT_COUNT=$(git rev-list --count HEAD)
-      MAX_COMMITS=2
+      MAX_COMMITS=5
 
       if [ "$COMMIT_COUNT" -lt "$MAX_COMMITS" ]; then
         DIFF_BASE="HEAD~$((COMMIT_COUNT - 1))"
@@ -703,7 +703,7 @@ testExosModifiedLatex:
     - git checkout FETCH_HEAD
     - |
       COMMIT_COUNT=$(git rev-list --count HEAD)
-      MAX_COMMITS=2
+      MAX_COMMITS=5
 
       if [ "$COMMIT_COUNT" -lt "$MAX_COMMITS" ]; then
         DIFF_BASE="HEAD~$((COMMIT_COUNT - 1))"
