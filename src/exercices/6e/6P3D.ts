@@ -1,6 +1,7 @@
 import { Decimal } from 'decimal.js'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { tableau } from '../../lib/2d/tableau'
+import { orangeMathalea } from '../../lib/colors'
 import { texMasse, texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
@@ -16,7 +17,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
 
 export const titre =
   'Résoudre des problèmes de proportionnalité avec la linéarité (avec ou sans un tableau)'
@@ -174,7 +174,7 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
             if (context.isAmc) setReponse(this, i, pg)
             else
               handleAnswers(this, i, {
-                reponse: { value: pg, options: { texteSansCasse: true } },
+                reponse: { value: pg },
               })
             texteApres = '€'
           } else if (a === 2) {
@@ -232,7 +232,7 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
             if (context.isAmc) setReponse(this, i, pg)
             else
               handleAnswers(this, i, {
-                reponse: { value: pg, options: { texteSansCasse: true } },
+                reponse: { value: pg },
               })
             texteApres = 'kg'
           } else {
@@ -289,7 +289,7 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
             if (context.isAmc) setReponse(this, i, pg)
             else
               handleAnswers(this, i, {
-                reponse: { value: pg, options: { texteSansCasse: true } },
+                reponse: { value: pg },
               })
             texteApres = 'cm$^3$'
           }
@@ -344,7 +344,7 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
             if (context.isAmc) setReponse(this, i, pp)
             else
               handleAnswers(this, i, {
-                reponse: { value: pp, options: { texteSansCasse: true } },
+                reponse: { value: pp },
               })
             texteApres = '€'
           } else if (a === 2) {
@@ -400,7 +400,7 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
             if (context.isAmc) setReponse(this, i, pp)
             else
               handleAnswers(this, i, {
-                reponse: { value: pp, options: { texteSansCasse: true } },
+                reponse: { value: pp },
               })
             texteApres = 'm$^2$'
           } else {
@@ -458,7 +458,7 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
             if (context.isAmc) setReponse(this, i, pp)
             else
               handleAnswers(this, i, {
-                reponse: { value: pp, options: { texteSansCasse: true } },
+                reponse: { value: pp },
               })
             texteApres = 'kg'
           }
@@ -546,7 +546,7 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
             if (context.isAmc) setReponse(this, i, pg)
             else
               handleAnswers(this, i, {
-                reponse: { value: pg, options: { texteSansCasse: true } },
+                reponse: { value: pg },
               })
             texteApres = '€'
           } else if (a === 2) {
@@ -631,7 +631,7 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
             if (context.isAmc) setReponse(this, i, pg)
             else
               handleAnswers(this, i, {
-                reponse: { value: pg, options: { texteSansCasse: true } },
+                reponse: { value: pg },
               })
             texteApres = 'm$^2$'
           } else {
@@ -718,7 +718,7 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
             if (context.isAmc) setReponse(this, i, pg)
             else
               handleAnswers(this, i, {
-                reponse: { value: pg, options: { texteSansCasse: true } },
+                reponse: { value: pg },
               })
             texteApres = 'kg'
           }
