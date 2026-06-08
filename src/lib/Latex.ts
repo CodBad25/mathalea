@@ -237,7 +237,7 @@ class Latex {
       contentCorr += '\n\\end{enumerate}\n'
       content += '\\end{TableauCan}\n\\addtocounter{nbEx}{-1}'
       /** On supprime les lignes vides car elles posent problème dans l'environnement TableauCan */
-      content = content.replace(/\n\s*\n/gm, '')
+      //  content = content.replace(/\n\s*\n/gm, '\n') // En quoi elle posent problème ? On perd les sauts de ligne entre les questions, c'est pas top pour la lisibilité
     } else {
       for (const exercice of this.exercices) {
         if (exercice.typeExercice === 'statique') {
@@ -1146,7 +1146,7 @@ export function format(
   if (text === undefined) return ''
   const lang = getLang()
   let formattedText = AvecLesDoublesEspaces
-    ? text.replace(/(<br *\/?>[\n\t ]*)+<br *\/?>/gim, '\n\n\\medskip\n')
+    ? text.replace(/(<br *\/?>[\n\t ]*)+<br *\/?>/gim, '\\medskip\n\n')
     : text
 
   formattedText = formattedText
