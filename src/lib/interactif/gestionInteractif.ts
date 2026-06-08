@@ -990,7 +990,7 @@ function handleDefaultValeur(reponse: Valeur): ValeurNormalized {
               isValidNumber(val.value[0]) &&
               isValidNumber(val.value[1])
             ) {
-              val.value = `[${val.value.map(String).join(';')}]`
+              val.value = `]${val.value.map(String).join(';')}[`
             }
           }
           for (let i = 0; i < val.value.length; i++) {
