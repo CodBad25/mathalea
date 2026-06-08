@@ -592,7 +592,7 @@ playwright-caneleve-consolidated:
 testExosModifiedConsolidated:
   extends: .testExosModifiedConsolidated
   script:
-    # Récupérer les fichiers modifiés depuis les 5 derniers commits
+    # Récupérer les fichiers modifiés depuis les 2 derniers commits
     - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
     - git checkout FETCH_HEAD
     - |
@@ -600,7 +600,7 @@ testExosModifiedConsolidated:
       # PHASE 1: Récupérer les fichiers modifiés
       # ============================================================
       COMMIT_COUNT=$(git rev-list --count HEAD)
-      MAX_COMMITS=1
+      MAX_COMMITS=2
 
       if [ "$COMMIT_COUNT" -lt "$MAX_COMMITS" ]; then
         DIFF_BASE="HEAD~$((COMMIT_COUNT - 1))"
@@ -703,7 +703,7 @@ testExosModifiedLatex:
     - git checkout FETCH_HEAD
     - |
       COMMIT_COUNT=$(git rev-list --count HEAD)
-      MAX_COMMITS=1
+      MAX_COMMITS=2
 
       if [ "$COMMIT_COUNT" -lt "$MAX_COMMITS" ]; then
         DIFF_BASE="HEAD~$((COMMIT_COUNT - 1))"
