@@ -74,9 +74,7 @@ build_ci_pdf:
 
 .install_dependencies:
   before_script:
-    - npm install -g corepack@latest
-    - corepack enable
-    - corepack prepare pnpm@latest-10 --activate
+    - npm install -g pnpm@11.3
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm install --silent
@@ -393,9 +391,7 @@ build:
     KUBERNETES_MEMORY_LIMIT: '6Gi'
   stage: build-projet
   before_script:
-    - npm install -g corepack@latest
-    - corepack enable
-    - corepack prepare pnpm@latest-10 --activate
+    - npm install -g pnpm@11.3
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm install --silent
@@ -473,9 +469,7 @@ deploy:
     - ip addr show
     - apt-get install -y rsync
     - apt-get install -y nodejs npm
-    - npm install -g corepack@latest
-    - corepack enable
-    - corepack prepare pnpm@latest-10 --activate
+    - npm install -g pnpm@11.3
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - eval $(ssh-agent -s)
@@ -734,9 +728,7 @@ testExosModifiedLatex:
 tests-unitaires:
   stage: build-projet
   script:
-    - npm install -g corepack@latest
-    - corepack enable
-    - corepack prepare pnpm@latest-10 --activate
+    - npm install -g pnpm@11.3
     - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - echo "CI_COMMIT_BRANCH '$CI_COMMIT_BRANCH'"
