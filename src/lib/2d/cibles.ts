@@ -345,7 +345,7 @@ export class CibleRonde extends ObjetMathalea2D {
     x = 0,
     y = 0,
     rang = 3,
-    num = 1,
+    num,
     taille = 0.3,
     color = 'gray',
     opacite = 0.5,
@@ -357,7 +357,7 @@ export class CibleRonde extends ObjetMathalea2D {
     taille?: number
     color?: string
     opacite?: number
-  }) {
+  } = {}) {
     super()
     this.objets = []
     this.stringColor = color
@@ -404,17 +404,19 @@ export class CibleRonde extends ObjetMathalea2D {
       c.opacite = this.opacite
       this.objets.push(c)
     }
-    const numero = texteParPosition(
-      nombreAvecEspace(num),
-      this.x,
-      this.y,
-      0,
-      this.stringColor,
-    ) as TexteParPoint
-    numero.opacite = 0.5
-    numero.taille = 30
-    numero.contour = true
-    this.objets.push(numero)
+    if (num !== undefined) {
+      const numero = texteParPosition(
+        nombreAvecEspace(num),
+        this.x,
+        this.y,
+        0,
+        this.stringColor,
+      ) as TexteParPoint
+      numero.opacite = 0.5
+      numero.taille = 30
+      numero.contour = true
+      this.objets.push(numero)
+    }
   }
 
   svg(coeff: number) {
@@ -456,7 +458,7 @@ export function cibleRonde({
   x = 0,
   y = 0,
   rang = 3,
-  num = 1,
+  num,
   taille = 0.3,
   color = 'gray',
   opacite = 0.5,
