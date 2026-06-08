@@ -52,9 +52,9 @@ export default class AutoQ5ANbrevet2026 extends ExerciceCan {
   enonce(xA?: number, yA?: number, xB?: number, yB?: number) {
     if (xA == null || yA == null || xB == null || yB == null) {
       xA = randint(-3, 2, [0])
-      yA = randint(-2, 3, [0])
-      xB = randint(-3, 2, [0])
-      yB = randint(-2, 3, [0])
+      yA = randint(-2, 3, [0, xA])
+      xB = randint(-3, 2, [0, xA, yA])
+      yB = randint(-2, 3, [0, xA, yA, xB])
     }
     const figure = this.construireFigure(xA, yA, xB, yB)
 

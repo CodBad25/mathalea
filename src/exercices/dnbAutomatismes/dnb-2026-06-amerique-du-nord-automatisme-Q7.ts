@@ -32,7 +32,11 @@ export const dateDePublication = '06/06/2026'
 type Scenario = 1 | 2 | 3 | 4
 
 export default class AutoQ7ANbrevet2026 extends ExerciceQcmA {
-  private construireFigure(valeur: number, angle: number, scenario: Scenario): string {
+  private construireFigure(
+    valeur: number,
+    angle: number,
+    scenario: Scenario,
+  ): string {
     const figure = new Figure({
       xMin: -1,
       yMin: -1,
@@ -41,14 +45,35 @@ export default class AutoQ7ANbrevet2026 extends ExerciceQcmA {
       pixelsPerUnit: 38,
     })
     figure.options.color = 'black'
-    const A = figure.create('Point', { x: 0, y: 0, label: 'A', shape: '', labelDxInPixels: -10 }) as Point
-    const B = figure.create('Point', { x: 3, y: 0, label: 'B', shape: '' }) as Point
-    const C = figure.create('Point', { x: 0, y: 4, label: 'C', shape: '' }) as Point
-    
+    const A = figure.create('Point', {
+      x: 0,
+      y: 0,
+      label: 'A',
+      shape: '',
+      labelDxInPixels: -10,
+    }) as Point
+    const B = figure.create('Point', {
+      x: 3,
+      y: 0,
+      label: 'B',
+      shape: '',
+    }) as Point
+    const C = figure.create('Point', {
+      x: 0,
+      y: 4,
+      label: 'C',
+      shape: '',
+    }) as Point
+
     figure.create('Segment', { point1: A, point2: B })
     figure.create('Segment', { point1: A, point2: C })
     figure.create('Segment', { point1: B, point2: C })
-    figure.create('MarkRightAngle', { point: A, directionPoint: B, size: 0.3, quadrant: 1 })
+    figure.create('MarkRightAngle', {
+      point: A,
+      directionPoint: B,
+      size: 0.3,
+      quadrant: 1,
+    })
     figure.create('TextByPosition', { x: 2.2, y: 0.35, text: `${angle}°` })
 
     if (scenario === 1) {
@@ -64,10 +89,14 @@ export default class AutoQ7ANbrevet2026 extends ExerciceQcmA {
 
     figure.optimizeLabels()
     if (!context.isHtml) return figure.tikz()
-    return figure.getStaticHtml({ center: true }).replace(/<svg\b/, '<svg filter="url(#handDrawn)"')
+    return figure.getStaticHtml({ center: true })
   }
 
-  private appliquerLesValeurs(valeur: number, angle: number, scenario: Scenario): void {
+  private appliquerLesValeurs(
+    valeur: number,
+    angle: number,
+    scenario: Scenario,
+  ): void {
     const figure = this.construireFigure(valeur, angle, scenario)
     const v = valeur
     const a = angle
