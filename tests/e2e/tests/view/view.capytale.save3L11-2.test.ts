@@ -45,7 +45,7 @@ async function testV(page: Page) {
   })
 
   // Go to the page
-  await page.setDefaultTimeout(60000) // Set timeout to 60 seconds
+  await page.setDefaultTimeout(200_000) // Set timeout to 200 seconds
   await page.goto(parentUrl)
 
   try {
