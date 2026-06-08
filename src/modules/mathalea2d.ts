@@ -150,11 +150,20 @@ export function mathalea2d(
                       convertClasseToString(input.classe),
                     )
                     const champIndex = input.content.indexOf('%{champ1}')
-                    const prefix = champIndex > 0 ? input.content.slice(0, champIndex) : ''
-                    const prefixHtml = prefix ? katex.renderToString(prefix) : ''
-                    const mathFieldContent = input.content.slice(champIndex === -1 ? 0 : champIndex).replace('%{champ1}', '\\placeholder[champ1]{}')
-                    const blancContent = input.content.slice(champIndex === -1 ? 0 : champIndex).replace('%{champ1}', input.blanc)
-                    const transform = prefix ? 'translate(0,-50%)' : 'translate(-50%,-50%)'
+                    const prefix =
+                      champIndex > 0 ? input.content.slice(0, champIndex) : ''
+                    const prefixHtml = prefix
+                      ? katex.renderToString(prefix)
+                      : ''
+                    const mathFieldContent = input.content
+                      .slice(champIndex === -1 ? 0 : champIndex)
+                      .replace('%{champ1}', '\\placeholder[champ1]{}')
+                    const blancContent = input.content
+                      .slice(champIndex === -1 ? 0 : champIndex)
+                      .replace('%{champ1}', input.blanc)
+                    const transform = prefix
+                      ? 'translate(0,-50%)'
+                      : 'translate(-50%,-50%)'
                     const divOuterHtml = `<div class="divLatex" style="position: absolute; top: ${ySvgInput}px; left: ${xSvgInput}px; transform: ${transform}; opacity: ${input.opacity}; display: inline-flex; align-items: center; gap: 2px;" data-top=${ySvgInput} data-left=${xSvgInput}>${prefixHtml}${
                       isInteractif
                         ? `<math-field data-keyboard="${dataKeyboard}" virtual-keyboard-mode=manual readonly class="${input.classe} metaInteractif2d" id="MetaInteractif2dEx${code.exercice.numeroExercice}Q${code.question}field${input.index}">${mathFieldContent}</math-field>`
@@ -348,8 +357,7 @@ export function mathalea2d(
       codeTikz += ']\n'
     }
 
-    codeTikz += `
-    \\tikzset{
+    codeTikz += `\\tikzset{
       point/.style={
         thick,
         draw,
@@ -359,11 +367,10 @@ export function mathalea2d(
         minimum height=5pt,
       },
     }
-    \\clip (${xmin},${ymin}) rectangle (${xmax},${ymax});
-    `
+    \\clip (${xmin},${ymin}) rectangle (${xmax},${ymax});`
     // code += codeTikz(...objets)
     codeTikz += ajouteCodeTikz(mainlevee, objets)
-    codeTikz += '\n\\end{tikzpicture}'
+    codeTikz += '\\end{tikzpicture}'
     if (centerLatex) codeTikz += '\\par}'
   }
 

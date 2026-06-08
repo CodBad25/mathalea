@@ -213,7 +213,7 @@ export default class LireAbscisseDecimale extends Exercice {
 
         texte += `<br><br>`
         texte += addMultiMathfield(this, i, {
-          dataTemplate: `$${l1}\\lparen$%{champ1} $\\rparen$ ${sp(6)} $${l2}\\lparen$%{champ2} $\\rparen$ ${sp(6)} $${l3}\\lparen$%{champ3} $\\rparen$`,
+          dataTemplate: `$${l1}($%{champ1} $)$ ${sp(6)} $${l2}($%{champ2} $)$ ${sp(6)} $${l3}($%{champ3} $)$`,
           dataOptions: {
             champ1: { keyboard: KeyboardType.clavierNumbers },
             champ2: { keyboard: KeyboardType.clavierNumbers },
