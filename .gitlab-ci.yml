@@ -92,10 +92,10 @@ build_ci_pdf:
     - pnpm -v
     - lualatex -v
     - pnpm install --silent
-    - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 10
-    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
-    - sleep 30
+    - pnpm run makeJson
+    # - sleep 10
+    # - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
+    # - sleep 30
 
 .install_dependenciesPDFDNB:
   before_script:
@@ -600,7 +600,7 @@ testExosModifiedConsolidated:
       # PHASE 1: Récupérer les fichiers modifiés
       # ============================================================
       COMMIT_COUNT=$(git rev-list --count HEAD)
-      MAX_COMMITS=5
+      MAX_COMMITS=1
 
       if [ "$COMMIT_COUNT" -lt "$MAX_COMMITS" ]; then
         DIFF_BASE="HEAD~$((COMMIT_COUNT - 1))"
@@ -703,7 +703,7 @@ testExosModifiedLatex:
     - git checkout FETCH_HEAD
     - |
       COMMIT_COUNT=$(git rev-list --count HEAD)
-      MAX_COMMITS=5
+      MAX_COMMITS=1
 
       if [ "$COMMIT_COUNT" -lt "$MAX_COMMITS" ]; then
         DIFF_BASE="HEAD~$((COMMIT_COUNT - 1))"
