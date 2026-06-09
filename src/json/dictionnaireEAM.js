@@ -258,7 +258,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: ['Suites','Tableur'],
+    tags: ['Suites', 'Tableur'],
   },
   eam_specifique_2026_06_ameriquenord_2: {
     annee: '2026',
@@ -276,7 +276,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: ['Dérivation','Second degré'],
+    tags: ['Dérivation', 'Second degré'],
   },
   eam_specialite_2026_06_etrangers_1: {
     annee: '2026',
@@ -285,7 +285,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: ['Suites','Python'],
+    tags: ['Suites', 'Python'],
   },
   eam_specialite_2026_06_etrangers_2: {
     annee: '2026',
@@ -339,6 +339,24 @@ export const dictionnaireEAM = {
     numeroInitial: 'automatismes',
     typeExercice: 'eam',
     filiere: 'Technologique',
+    tags: ['Automatismes'],
+  },
+  eam_specialite_2026_06_ameriquenord_automatismes: {
+    annee: '2026',
+    lieu: 'Spécialité Amérique du Nord',
+    mois: 'Juin',
+    numeroInitial: 'automatismes',
+    typeExercice: 'eam',
+    filiere: 'Specialite',
+    tags: ['Automatismes'],
+  },
+  eam_specifique_2026_06_ameriquenord_automatismes: {
+    annee: '2026',
+    lieu: 'Spécifique Amérique du Nord',
+    mois: 'Juin',
+    numeroInitial: 'automatismes',
+    typeExercice: 'eam',
+    filiere: 'Specifique',
     tags: ['Automatismes'],
   },
 }
