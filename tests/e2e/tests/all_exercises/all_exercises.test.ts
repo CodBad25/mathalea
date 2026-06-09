@@ -210,7 +210,7 @@ export function createURL(ex: IExercice) {
 const alea = 'e906e'
 
 async function getConsoleTest(uuid: string, urlExercice: string) {
-  log(urlExercice)
+  logIfVerbose(urlExercice)
 
   const exercice = await mathaleaLoadExerciceFromUuid(uuid)
   // exercice may be null/undefined or contain an error message in its titre; guard safely
@@ -230,7 +230,7 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
   const defaultSup2 = exercice.sup2
   const defaultSup3 = exercice.sup3
 
-  logDebug(`Chargement de ${uuid}, ${urlExercice}`)
+  logIfVerbose(`Chargement de ${uuid}, ${urlExercice}`)
   // sup
   const sup: Record<number, string | boolean | number> = {}
   if (
@@ -483,7 +483,7 @@ export function runSeveralTests(
 }
 
 async function testRunAllLots(filter: string) {
-  log(filter)
+  logIfVerbose(filter)
   const uuids = filter.includes('dnb')
     ? await findStatic(filter)
     : await findUuid(filter)
@@ -494,7 +494,7 @@ async function testRunAllLots(filter: string) {
     return !nameLower.includes('test') && !nameLower.includes('beta')
   })
 
-  log(filteredUuids)
+  logIfVerbose(filteredUuids)
   if (filteredUuids.length === 0) {
     log(`Aucun uuid trouvé pour le filtre '${filter}'`)
     describe('no-parameter-warning', () => {
@@ -508,7 +508,7 @@ async function testRunAllLots(filter: string) {
     for (let k = i; k < i + 20 && k < filteredUuids.length; k++) {
       const myName = filteredUuids[k][1]
       const f = async function () {
-        log(filter)
+        logIfVerbose(filter)
         logIfVerbose(
           `uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]} i=${k} / ${filteredUuids.length}`,
         )

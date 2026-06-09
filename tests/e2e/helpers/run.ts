@@ -134,8 +134,9 @@ export function runSeveralTests(
                   `${filename} ne contient pas de fonction test qui prend une page et retourne une promesse`,
                 )
               result = await promise
-              logError('last URL: ' + page.url())
               if (!result) {
+                logError('last URL: ' + page.url())
+
                 throw Error(
                   `test ${filename} KO avec ${browserName}\nlast URL: ${page.url()}`,
                 )

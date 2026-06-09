@@ -1,4 +1,5 @@
 import type { BrowserContext, Locator, Page } from 'playwright'
+import { logIfVerbose } from './log'
 import prefs from './prefs'
 
 export const ViewValidKeys = <const>[
@@ -356,7 +357,7 @@ export async function checkEachCombinationOfParams(
   const form5 = allForms[4]
 
   if (!form1 || options?.onlyOnce) {
-    console.log('No form to test')
+    logIfVerbose('No form to test')
     await action(page, '', options?.isFullViews || false)
     return
   }
@@ -371,9 +372,9 @@ export async function checkEachCombinationOfParams(
       action,
       options?.isFullViews || false,
     )
-    console.log(page.url())
+    logIfVerbose(page.url())
   } else {
-    console.log('Testing simpleTest')
+    logIfVerbose('Testing simpleTest')
     await simpleTest(
       page,
       form1,
@@ -471,37 +472,37 @@ async function simpleTest(
   isFullViews: boolean,
 ) {
   for (const value1 of form1.values) {
-    console.log('Testing', form1.description, value1)
+    logIfVerbose('Testing', form1.description, value1)
     await setParam(page, form1, value1)
-    console.log(page.url())
+    logIfVerbose(page.url())
     await action(page, `${form1.description}_${value1}`, isFullViews)
   }
   if (!form2) return
   for (const value2 of form2.values) {
-    console.log('Testing', form2.description, value2)
+    logIfVerbose('Testing', form2.description, value2)
     await setParam(page, form2, value2)
-    console.log(page.url())
+    logIfVerbose(page.url())
     await action(page, `${form2.description}_${value2}`, isFullViews)
   }
   if (!form3) return
   for (const value3 of form3.values) {
-    console.log('Testing', form3.description, value3)
+    logIfVerbose('Testing', form3.description, value3)
     await setParam(page, form3, value3)
-    console.log(page.url())
+    logIfVerbose(page.url())
     await action(page, `${form3.description}_${value3}`, isFullViews)
   }
   if (!form4) return
   for (const value4 of form4.values) {
-    console.log('Testing', form4.description, value4)
+    logIfVerbose('Testing', form4.description, value4)
     await setParam(page, form4, value4)
-    console.log(page.url())
+    logIfVerbose(page.url())
     await action(page, `${form4.description}_${value4}`, isFullViews)
   }
   if (!form5) return
   for (const value5 of form5.values) {
-    console.log('Testing', form5.description, value5)
+    logIfVerbose('Testing', form5.description, value5)
     await setParam(page, form5, value5)
-    console.log(page.url())
+    logIfVerbose(page.url())
     await action(page, `${form5.description}_${value5}`, isFullViews)
   }
 }
@@ -529,10 +530,10 @@ async function setParam(
     if ((await locator.count()) > 0) {
       // L'élément existe, effectuer une action
       await locator.fill(value.toString().split('-').length.toString())
-      console.log("L'élément #settings-nb-questions-0 a été trouvé et rempli.")
+      logIfVerbose("L'élément #settings-nb-questions-0 a été trouvé et rempli.")
     } else {
       // L'élément n'existe pas, gérer le cas
-      console.log("L'élément #settings-nb-questions-0 n'existe pas.")
+      logIfVerbose("L'élément #settings-nb-questions-0 n'existe pas.")
     }
     await form.locator.fill(value.toString())
   }

@@ -1,5 +1,5 @@
 import type { Locator, Page } from 'playwright'
-import { log, logError, logIfVerbose } from '../../helpers/log'
+import { logError, logIfVerbose } from '../../helpers/log'
 import prefs from '../../helpers/prefs'
 import { runTest } from '../../helpers/run'
 import {
@@ -40,7 +40,7 @@ async function test(page: Page) {
   const classicExerciseParams =
     'uuid=0e6bd&id=6C10-1&n=10&d=10&s=2-3-4-5-6-7-8-9-10&s2=1&s3=true&uuid=0e6bd&id=6C10-1&n=10&d=10&s=2-3-4-5-6-7-8-9-10&s2=1&s3=true'
   exerciseType = 'classique'
-  log('Testing classic exercise')
+  logIfVerbose('Testing classic exercise')
   await testAllViews(
     page,
     { params: classicExerciseParams, onlyOnce: true, isFullViews: true },
@@ -50,14 +50,14 @@ async function test(page: Page) {
   const simpleExerciseParams =
     'uuid=4ba86&id=canc3C04&n=10&d=10&cd=1&uuid=4ba86&id=canc3C04&n=10&d=10&cd=1'
   exerciseType = 'simple'
-  log('Testing simple exercise')
+  logIfVerbose('Testing simple exercise')
   await testAllViews(
     page,
     { params: simpleExerciseParams, onlyOnce: true, isFullViews: true },
     callback,
   )
   logState()
-  log('Check differences')
+  logIfVerbose('Check differences')
   return isConsistent()
 }
 
@@ -67,7 +67,7 @@ const callback = async (
   view: View,
   variation: Variation,
 ) => {
-  log(`Testing ${view} ${variation} ${description}`)
+  logIfVerbose(`Testing ${view} ${variation} ${description}`)
   if (view === 'diaporama') {
     await diaporamaStatePush(page, view)
   } else if (view === 'LaTeX' || view === 'AMC') {

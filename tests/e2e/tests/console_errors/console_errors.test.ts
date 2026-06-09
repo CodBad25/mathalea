@@ -3,7 +3,13 @@ import type { Locator, Page } from 'playwright'
 import { describe, test } from 'vitest'
 import { findStatic, findUuid } from '../../helpers/filter.js'
 import { createIssue } from '../../helpers/issue.js'
-import { getFileLogger, log as lg, logError as lgE } from '../../helpers/log.js'
+import {
+  getFileLogger,
+  log,
+  logError,
+  logIfDebug,
+  logIfVerbose,
+} from '../../helpers/log.js'
 import prefs from '../../helpers/prefs.js'
 import { runSeveralTests } from '../../helpers/run.js'
 import { checkEachCombinationOfParams } from '../../helpers/testAllViews.js'
@@ -11,28 +17,6 @@ import { checkEachCombinationOfParams } from '../../helpers/testAllViews.js'
 const logConsole = getFileLogger('exportConsole', { append: true })
 
 class ConsoleErrorsTestFailure extends Error {}
-
-function log(...args: unknown[]) {
-  lg(args)
-  logConsole(args)
-}
-
-function logError(...args: unknown[]) {
-  lgE(args)
-  logConsole(args)
-}
-
-function logDebug(...args: unknown[]) {
-  if (
-    process.env.CI &&
-    process.env.DEBUG !== null &&
-    process.env.DEBUG !== undefined
-  ) {
-    if ((process.env.DEBUG as string).replaceAll(' ', '') === 'DEBUG') {
-      log(args)
-    }
-  }
-}
 
 function formatFailureDetails(
   urlExercice: string,
@@ -100,17 +84,17 @@ async function waitForExercicesAffiches(page: Page, buttonZoom: Locator) {
   if (eventDetected instanceof Error) {
     logError(eventDetected.message)
   } else {
-    logDebug('Événement exercicesAffiches détecté')
+    logIfDebug('Événement exercicesAffiches détecté')
   }
 }
 
 async function action(page: Page, description: string) {
-  logDebug(`Test avec les paramètres ${description}`)
+  logIfVerbose(`Test avec les paramètres ${description}`)
   // clic sur nouvel énoncé 3 fois
   const buttonNewData = page.getByRole('button', { name: 'Nouvel énoncé' })
-  logDebug('Actualier (nouvel énoncé)')
+  logIfDebug('Actualier (nouvel énoncé)')
   await buttonNewData.click({ force: true })
-  logDebug('fin Actualier (nouvel énoncé)')
+  logIfDebug('fin Actualier (nouvel énoncé)')
   const buttonZoom = page.locator(
     '#setupButtonsBar > div > div:nth-child(2) > button',
   )
@@ -119,7 +103,7 @@ async function action(page: Page, description: string) {
   )
   const zParam = new URL(page.url()).searchParams.get('z')
   const z = zParam === null || zParam === '' ? 1 : Number(zParam)
-  log('Zoom')
+  logIfVerbose('Zoom')
   if (z < 1.4) {
     // await buttonZoom.highlight()
     await waitForExercicesAffiches(page, buttonZoom)
@@ -127,20 +111,20 @@ async function action(page: Page, description: string) {
     // await buttonZoomMoins.highlight()
     await waitForExercicesAffiches(page, buttonZoomMoins)
   }
-  log('Fin zoom')
+  logIfVerbose('Fin zoom')
   // Active le mode interactif
   const activateInteractivityButton = page.getByRole('button', {
     name: 'Rendre interactif',
   })
   if (await activateInteractivityButton.isVisible()) {
     await activateInteractivityButton.click()
-    logDebug('Active le mode interactif')
+    logIfVerbose('Active le mode interactif')
     // selectionne les questions
     const questionSelector = 'li[id^="exercice0Q"]'
     await page.waitForSelector(questionSelector)
-    log('new URL (mode interactif): ' + page.url())
+    logIfVerbose('new URL (mode interactif): ' + page.url())
     const locators = await page.locator(questionSelector).all()
-    log('nbre de questions:' + locators.length)
+    logIfVerbose('nbre de questions:' + locators.length)
     // locators.forEach(async (locator, index) => {
     //   const text = await locator.innerText()
     //   log(`Question ${index + 1}: ${text}`)
@@ -148,14 +132,14 @@ async function action(page: Page, description: string) {
     // => TODOS à poursuivre
     // Cliquer sur vérifier les données
     const buttonVerifier = page.locator('#verif0')
-    logDebug('Vérifier les réponses')
+    logIfVerbose('Vérifier les réponses')
     await buttonVerifier.click()
     await page.waitForSelector('article + div')
     const buttonResult = await page.locator('article + div').innerText()
-    log(buttonResult)
-    logDebug('Actualier (nouvel énoncé) 3 fois')
+    logIfVerbose(buttonResult)
+    logIfVerbose('Actualier (nouvel énoncé) 3 fois')
     await buttonNewData.click({ clickCount: 3 })
-    logDebug('fin Actualier (nouvel énoncé) 3 fois')
+    logIfVerbose('fin Actualier (nouvel énoncé) 3 fois')
   } else {
     // MGu : obligé car parfois on rate l'exception car trop rapide
     // await new Promise((resolve) => setTimeout(resolve, 1000)) // GV : Si on attend 1 seconde après chaque cas, il va falloir 1 an si on veut tester toutes les possibilités
@@ -163,7 +147,7 @@ async function action(page: Page, description: string) {
 }
 
 async function getConsoleTest(page: Page, urlExercice: string) {
-  log(urlExercice)
+  logIfVerbose(urlExercice)
   // on configure à 5 min le timeout
   page.setDefaultTimeout(5 * 60 * 1000)
 
@@ -175,8 +159,6 @@ async function getConsoleTest(page: Page, urlExercice: string) {
         if (msg.message !== 'Erreur de chargement de Mathgraph') {
           // mtgLoad : 3G22
           addUniqueMessage(messages, `pageerror:${page.url()} ${msg.message}`)
-          log(msg.message)
-          log(msg.stack)
           logError(msg)
         }
       })
@@ -235,23 +217,23 @@ async function getConsoleTest(page: Page, urlExercice: string) {
         // }
       })
 
-      logDebug('On charge la page')
+      logIfVerbose('On charge la page')
       await page.goto(urlExercice)
       await page.waitForLoadState('networkidle')
-      logDebug('fin : On charge la page')
+      logIfVerbose('fin : On charge la page')
 
       // Correction
       // On cherche les questions
-      logDebug('On cherche les questions')
+      logIfVerbose('On cherche les questions')
       await page.waitForSelector('div.mb-5>ul>div#consigne0-0')
-      logDebug('fin : On cherche les questions')
+      logIfVerbose('fin : On cherche les questions')
       // Pour chaque combinaison de paramètres, on clique sur nouvel énoncé 3 fois, active le mode interactif et reclique sur nouvel énoncé 3 fois
       await checkEachCombinationOfParams(page, action, { isFullViews: true })
       // Paramètres ça va les refermer puisqu'ils sont ouverts par défaut
       const buttonParam = page.getByRole('button', {
         name: "Changer les paramètres de l'",
       })
-      logDebug('Ferme les paramètres ')
+      logIfVerbose('Ferme les paramètres ')
       if (await buttonParam.isVisible()) {
         await buttonParam.click()
       }
@@ -300,7 +282,7 @@ async function testRunAllLots(filter: string) {
     return !nameLower.includes('test') && !nameLower.includes('beta')
   })
 
-  log(filteredUuids)
+  logIfVerbose(filteredUuids)
   if (filteredUuids.length === 0) {
     log(`Aucun uuid trouvé pour le filtre '${filter}'`)
     describe('no-parameter-warning', () => {
@@ -318,11 +300,11 @@ async function testRunAllLots(filter: string) {
         page.on('console', (msg) => {
           logConsole(msg.text())
         })
-        log(filter)
+        logIfVerbose(filter)
         const hostname = local
           ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
           : 'https://coopmaths.fr/alea/'
-        log(
+        logIfVerbose(
           `uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]} i=${k} / ${filteredUuids.length}`,
         )
         const resultReq = await getConsoleTest(
@@ -377,7 +359,7 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
         .replace(/\.ts$/, '.')
         .replace(/\.js$/, '.'),
     )
-  log(filtered)
+  logIfVerbose(filtered)
   if (filtered.length === 0) {
     // aucun fichier concerné.. on sort
     describe('dummy', () => {
