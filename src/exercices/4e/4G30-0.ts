@@ -88,6 +88,7 @@ export default class MonExoGuideAne extends Exercice {
       }
       if (this.questionJamaisPosee(i, targetAB, targetN, targetP)) {
         this.listeQuestions.push(texte)
+        this.listeCorrections.push('')
         i++
       }
       cpt++
