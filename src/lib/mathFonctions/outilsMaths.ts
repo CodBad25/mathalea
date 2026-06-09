@@ -3,6 +3,7 @@ import {
   isSymbol,
   type Expression,
 } from '@cortex-js/compute-engine'
+import { bleuMathalea } from '../../lib/colors'
 import { randint } from '../../modules/outils'
 import { generateCleaner } from '../interactif/cleaners'
 import ce from '../interactif/comparisonFunctions'
@@ -10,7 +11,6 @@ import { ecritureAlgebrique } from '../outils/ecritures'
 import { miseEnEvidence } from '../outils/embellissements'
 import { Matrice, matrice } from './Matrice'
 import { Polynome } from './Polynome'
-import { bleuMathalea } from '../../lib/colors'
 
 /**
  * delta(true) retourne dans un tableau des valeurs de a, b, c telles que b*b-4*a*c >0
@@ -192,7 +192,7 @@ export function resolutionSystemeLineaire3x3(
   fx2: number,
   fx3: number,
   d: number,
-): [Number, Number, number] {
+): [number, number, number] {
   const maMatrice = matrice([
     [x1 ** 3, x1 ** 2, x1],
     [x2 ** 3, x2 ** 2, x2],
