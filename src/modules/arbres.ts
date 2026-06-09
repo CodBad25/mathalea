@@ -254,17 +254,20 @@ export class Arbre {
       vertical ? yOrigine : yOrigine - sens * 5,
     )
 
-    const labelA = latex2d(
-      this.nom,
-      A.x + (vertical ? 0.1 * sens : 0),
-      A.y + (vertical ? 0 : 0.5 * sens),
-      {
-        color: 'black',
-        letterSize: 'normalsize',
-        backgroundColor: 'white',
-        opacity: 0.8,
-      },
-    )
+    const labelA =
+      this.nom === ''
+        ? vide2d()
+        : latex2d(
+            this.nom,
+            A.x + (vertical ? 0.1 * sens : 0),
+            A.y + (vertical ? 0 : 0.5 * sens),
+            {
+              color: 'black',
+              letterSize: 'normalsize',
+              backgroundColor: 'white',
+              opacity: 0.8,
+            },
+          )
 
     const positionProba = vertical
       ? homothetie(A, B, 0.5)
