@@ -6,6 +6,7 @@ import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
@@ -485,6 +486,8 @@ export default class CalculerCoeffPropo extends Exercice {
           Object.assign({}, fixeBordures(objets, { rxmin: -1.5 })),
           objets,
         )
+        texte += `<span id="resultatCheckEx${this.numeroExercice}Q${i}"></span>`
+        texte += ajouteFeedback(this, i)
       } else {
         // pour Latex, c'est profCollege dans le texte
         texte += '\n\\Propor[Math,Stretch=2,largeur=15]{'
