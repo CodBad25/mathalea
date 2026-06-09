@@ -231,7 +231,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: ['Probabilités', 'Variables aléatoires'],
   },
   eam_specialite_2026_06_ameriquenord_2: {
     annee: '2026',
@@ -240,7 +240,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: ['Suites', 'Python'],
   },
   eam_specialite_2026_06_ameriquenord_3: {
     annee: '2026',
@@ -249,7 +249,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: ['Exponentielle', 'Dérivation'],
   },
   eam_specifique_2026_06_ameriquenord_1: {
     annee: '2026',
@@ -258,7 +258,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['Suites','Tableur'],
   },
   eam_specifique_2026_06_ameriquenord_2: {
     annee: '2026',
@@ -267,7 +267,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['Probabilités'],
   },
   eam_specifique_2026_06_ameriquenord_3: {
     annee: '2026',
@@ -276,7 +276,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['Dérivation','Second degré'],
   },
   eam_specialite_2026_06_etrangers_1: {
     annee: '2026',
@@ -285,7 +285,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: ['Suites','Python'],
   },
   eam_specialite_2026_06_etrangers_2: {
     annee: '2026',
@@ -294,7 +294,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: ['Produit Scalaire'],
   },
   eam_specialite_2026_06_etrangers_3: {
     annee: '2026',
@@ -303,7 +303,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: ['Dérivation'],
   },
   eam_specialite_2026_06_etrangers_automatismes: {
     annee: '2026',
@@ -312,6 +312,33 @@ export const dictionnaireEAM = {
     numeroInitial: 'automatismes',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: ['Automatismes'],
+  },
+  eam_technologique_2026_06_etrangers_1: {
+    annee: '2026',
+    lieu: 'Centres étrangers',
+    mois: 'Juin',
+    numeroInitial: '1',
+    typeExercice: 'eam',
+    filiere: 'Technologique',
+    tags: ['Vrai/Faux', 'Suites', 'Probabilités'],
+  },
+  eam_technologique_2026_06_etrangers_2: {
+    annee: '2026',
+    lieu: 'Centres étrangers',
+    mois: 'Juin',
+    numeroInitial: '2',
+    typeExercice: 'eam',
+    filiere: 'Technologique',
+    tags: ['Dérivation', 'Troisième degré'],
+  },
+  eam_technologique_2026_06_etrangers_automatismes: {
+    annee: '2026',
+    lieu: 'Centres étrangers',
+    mois: 'Juin',
+    numeroInitial: 'automatismes',
+    typeExercice: 'eam',
+    filiere: 'Technologique',
+    tags: ['Automatismes'],
   },
 }
