@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { arc } from '../../lib/2d/Arc'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { grille } from '../../lib/2d/Grille'
@@ -24,6 +23,7 @@ import {
   pointSurSegment,
 } from '../../lib/2d/utilitairesPoint'
 import { aireTriangle } from '../../lib/2d/utilitairesTriangle'
+import { bleuMathalea } from '../../lib/colors'
 import { texteGras } from '../../lib/format/style'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
@@ -34,7 +34,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const interactifReady = true
 export const interactifType = 'qcm'
 
@@ -305,7 +304,11 @@ export default class TrianglesEgaux extends Exercice {
       // DE = AB
       const seg_DE_corr = segment(D, E, bleuMathalea)
       seg_DE_corr.epaisseur = 2
-      const seg_AB_corr = segment(p.listePoints[0], p.listePoints[1], bleuMathalea)
+      const seg_AB_corr = segment(
+        p.listePoints[0],
+        p.listePoints[1],
+        bleuMathalea,
+      )
       seg_AB_corr.epaisseur = 2
       // DI = AC ou EI1 = AC
       const seg_DI_corr = segment(D, I, 'red')
@@ -351,7 +354,14 @@ export default class TrianglesEgaux extends Exercice {
           // les segments
           seg_AB_corr,
           seg_DE_corr,
-          codageSegments('×', bleuMathalea, p.listePoints[0], p.listePoints[1], D, E),
+          codageSegments(
+            '×',
+            bleuMathalea,
+            p.listePoints[0],
+            p.listePoints[1],
+            D,
+            E,
+          ),
           seg_AC_corr,
           seg_DI_corr,
           codageSegments('||', 'red', p.listePoints[0], p.listePoints[2], D, I),
@@ -395,7 +405,14 @@ export default class TrianglesEgaux extends Exercice {
           // les segments
           seg_AB_corr,
           seg_DE_corr,
-          codageSegments('×', bleuMathalea, p.listePoints[0], p.listePoints[1], D, E),
+          codageSegments(
+            '×',
+            bleuMathalea,
+            p.listePoints[0],
+            p.listePoints[1],
+            D,
+            E,
+          ),
           seg_BC_corr,
           seg_DI1_corr,
           codageSegments(
@@ -450,7 +467,6 @@ export default class TrianglesEgaux extends Exercice {
                         Où placer le point $M$ pour que les triangles $ABC$ et $DEM$ soient égaux ?
                         <br>`,
         fig: `
-                    <br>
                     ${mathalea2d(
                       fenetreMathalea2D,
                       p,
