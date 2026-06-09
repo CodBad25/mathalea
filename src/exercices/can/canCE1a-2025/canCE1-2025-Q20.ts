@@ -42,7 +42,6 @@ export default class Can2025CE1Q20 extends ExerciceSimple {
       thickDistance: 10,
       axeStyle: '->',
       pointListe: [[absSol, '']],
-      pointCouleur: bleuMathalea,
       pointStyle: context.isHtml ? 'x' : '',
       pointTaille: 7,
       labelListe: [
