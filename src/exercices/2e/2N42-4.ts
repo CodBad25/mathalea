@@ -1,14 +1,14 @@
 import { shuffle2tableaux } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha, sp } from '../../lib/outils/outilString'
-import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Trinome from '../../modules/Trinome'
+import Exercice from '../Exercice'
 export const titre =
   "Utiliser les différentes formes d'un polynôme du second degré (2 formes)"
 export const interactifReady = false
@@ -162,9 +162,11 @@ class FormeTrinome extends Exercice {
       [corr2a, corr2b, corr2c],
     ]
     shuffle2tableaux(sousQuestions, sousCorrections)
-    for (let i = 0; i < 3; i++) {
+    question2 += `<br><br>${numAlpha(0)} ${sousQuestions[0]}`
+    correction2 += `${numAlpha(0)} ${sousCorrections[0]}`
+    for (let i = 1; i < 3; i++) {
       question2 += `<br><br>${numAlpha(i)} ${sousQuestions[i]}`
-      correction2 += `<br>${numAlpha(i)} ${sousCorrections[i]}`
+      correction2 += `<br><br>${numAlpha(i)} ${sousCorrections[i]}`
     }
 
     this.listeQuestions = [question1, question2]
