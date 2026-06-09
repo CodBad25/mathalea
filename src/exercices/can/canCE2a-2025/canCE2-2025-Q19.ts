@@ -1,9 +1,9 @@
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Ordre de grandeur'
 export const interactifReady = true
@@ -46,10 +46,11 @@ export default class Can2025CE2Q19 extends ExerciceCan {
     this.consigne = `Quel est le nombre le plus proche de $${a}\\times ${b}$ ?`
     this.correction = `$${a}$ est proche de $${Math.round(a / 10) * 10}$, donc $${a}\\times ${b}$ est proche de $${Math.round(a / 10) * 10}\\times ${b}$, soit $${miseEnEvidence(texNombre(Math.round(a / 10) * 10 * b, 0))}$.`
     this.canEnonce = this.consigne
-    this.question = `<br>\n${monQcm.texte}`
+    this.question = `${monQcm.texte}`
   }
 
   nouvelleVersion() {
-    this.canOfficielle ? this.enonce(11, 50) : this.enonce()
+    if (this.canOfficielle) this.enonce(11, 50)
+    else this.enonce()
   }
 }
