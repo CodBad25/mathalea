@@ -241,7 +241,7 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
     const values = parseMappingFromText(exercice.besoinFormulaireTexte[1])
     // 👉 { 1: 'Lancers de dés', 2: 'Notes', 3: 'Températures', ... }
     Object.keys(values).forEach((key) => {
-      sup[parseInt(key, 10)] = parseInt(key, 10)
+      sup[parseInt(key, 10)] = String(parseInt(key, 10))
     })
   } else if (
     Array.isArray(exercice.besoinFormulaireNumerique) &&
@@ -277,7 +277,7 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
     const values = parseMappingFromText(exercice.besoinFormulaire2Texte[1])
     // 👉 { 1: 'Lancers de dés', 2: 'Notes', 3: 'Températures', ... }
     Object.keys(values).forEach((key) => {
-      sup2[parseInt(key, 10)] = parseInt(key, 10)
+      sup2[parseInt(key, 10)] = String(parseInt(key, 10))
     })
   } else if (
     Array.isArray(exercice.besoinFormulaire2Numerique) &&
@@ -313,7 +313,7 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
     const values = parseMappingFromText(exercice.besoinFormulaire3Texte[1])
     // 👉 { 1: 'Lancers de dés', 2: 'Notes', 3: 'Températures', ... }
     Object.keys(values).forEach((key) => {
-      sup3[parseInt(key, 10)] = parseInt(key, 10)
+      sup3[parseInt(key, 10)] = String(parseInt(key, 10))
     })
   } else if (
     Array.isArray(exercice.besoinFormulaire3Numerique) &&
