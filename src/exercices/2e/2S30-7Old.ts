@@ -1,19 +1,19 @@
-import Exercice from '../Exercice'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import Exercice from '../Exercice'
 
-import FractionEtendue from '../../modules/FractionEtendue'
+import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { numAlpha } from '../../lib/outils/outilString'
+import { context } from '../../modules/context'
+import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { tableauColonneLigne } from '../../lib/2d/tableau'
-import { numAlpha } from '../../lib/outils/outilString'
-import { context } from '../../modules/context'
 export const titre =
   'Calculer des probabilités dans une situation concrète (union et intersection)'
 export const dateDePublication = '26/05/2024'
@@ -28,7 +28,7 @@ export const refs = {
   'fr-fr': [],
   'fr-ch': [],
 }
-export default class ProbaConcret extends Exercice {
+export default class ProbaConcretOld extends Exercice {
   constructor() {
     super()
     // this.consigne = 'Calculer '
@@ -146,10 +146,8 @@ export default class ProbaConcret extends Exercice {
           '\\overline{F}\\cap \\overline{C}',
           new FractionEtendue(nbHommesEtEmployes, total).texFraction,
           'la personne choisie est une femme ou fait partie des employés',
-          new FractionEtendue(
-            nbHommes + nbEmployes - nbHommesEtEmployes,
-            total,
-          ).texFraction,
+          new FractionEtendue(nbHommes + nbEmployes - nbHommesEtEmployes, total)
+            .texFraction,
         ],
       ]
       const EvUnion = choice(listeEvenementUnion)

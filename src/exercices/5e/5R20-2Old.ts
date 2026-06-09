@@ -32,7 +32,7 @@ export const refs = {
   'fr-fr': [],
   'fr-ch': [],
 }
-export default class ExerciceAdditionsRelatifsATrou extends Exercice {
+export default class ExerciceAdditionsRelatifsATrouOld extends Exercice {
   constructor(max = 10) {
     super()
     this.sup = max
