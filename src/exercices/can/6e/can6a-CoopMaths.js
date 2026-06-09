@@ -1,5 +1,6 @@
 import Decimal from 'decimal.js'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
+import { bleuMathalea } from '../../../lib/colors'
 import { texPrix } from '../../../lib/format/style'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
@@ -22,7 +23,6 @@ import {
   randint,
 } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const dateDeModifImportante = '11/09/2024'
 export const dateDePublication = '5/08/2021'
@@ -92,14 +92,17 @@ export default class CourseAuxNombres6e extends Exercice {
     let listeIndex
     // Si la saisie contient des numéros spécifiques (pas 31 = toutes les questions),
     // chaque question ne doit apparaître qu'une seule fois.
-    const saisie = this.sup || '31'
-    const valeurs = saisie
+    const saisie =
+      typeof this.sup === 'string' && this.sup !== '' ? this.sup : '31'
+    const valeurs = String(saisie)
       .split('-')
       .map((v) => parseInt(v.trim()))
       .filter((v) => !isNaN(v))
     if (valeurs.length >= 1 && !valeurs.includes(31)) {
       // Sélection manuelle : chaque question une seule fois
-      listeIndex = valeurs.filter((v) => v >= 1 && v <= 30).map((v) => v - 1)
+      listeIndex = Array.from(new Set(valeurs))
+        .map((n) => n > 0 && n < 31)
+        .map((n) => n - 1)
       this.nbQuestions = listeIndex.length
     } else {
       // 31 = toutes les questions (comportement par défaut)
@@ -110,7 +113,7 @@ export default class CourseAuxNombres6e extends Exercice {
         defaut: 31,
         nbQuestions: this.nbQuestions,
         shuffle: false,
-      }).map((index) => index - 1)
+      }).map((index) => Number(index) - 1)
     }
     const fruits = [
       ['pêches', 4, 10, 30],
@@ -172,7 +175,7 @@ export default class CourseAuxNombres6e extends Exercice {
         case 'q1':
           a = randint(1, 25)
           texte = `Le double d'un nombre vaut ${2 * a}, combien vaut sa moitié ?`
-          texteCorr = `Le nombre est ${a}, sa moitié est ${texNombre(a / 2)}.`
+          texteCorr = `Le nombre est ${a}, sa moitié est $${texNombre(a / 2)}$.`
           setReponse(this, q, a / 2)
           texte += ajouteChampTexteMathLive(this, q, KeyboardType.clavierDeBase)
           break
@@ -293,13 +296,13 @@ export default class CourseAuxNombres6e extends Exercice {
             b = a * 8
             resultat = a * 2
             texte = `Quel est le quart de $${b}$ ?`
-            texteCorr = `Le quart de $${b}$ est $${a * 2}.$`
+            texteCorr = `Le quart de $${b}$ est $${a * 2}$.`
             setReponse(this, q, resultat)
           } else {
             b = a * 6
             resultat = a * 2
             texte = `Quel est le tiers de $${b}$ ?`
-            texteCorr = `Le tiers de $${b}$ est $${a * 2}.$`
+            texteCorr = `Le tiers de $${b}$ est $${a * 2}$.`
             setReponse(this, q, resultat)
           }
           texte += ajouteChampTexteMathLive(this, q, KeyboardType.clavierDeBase)
@@ -327,7 +330,7 @@ export default class CourseAuxNombres6e extends Exercice {
           b = randint(10, 59)
           d = a * 60 + b
           texte = `Convertir $${d}$ minutes en heures et minutes (format : ... h ...min)`
-          texteCorr = `$${d} = ${a} \\times 60 + ${b}$ donc $${d}$ minutes = ${a}h ${b}min`
+          texteCorr = `$${d} = ${a} \\times 60 + ${b}$ donc $${d}$ minutes = $${a}$h $${b}$min`
           resultat = new Hms({ hour: a, minute: b })
           handleAnswers(this, q, {
             reponse: { value: resultat.toString(), options: { HMS: true } },
@@ -341,7 +344,7 @@ export default class CourseAuxNombres6e extends Exercice {
           a = b * 100 + c * 10 + d
           resultat = a % 3
           texte = `Quel est le reste de la division de $${a}$ par $3$ ?`
-          texteCorr = `Le reste de la division de $${a}$ par $3$ est ${a % 3}`
+          texteCorr = `Le reste de la division de $${a}$ par $3$ est $${a % 3}$`
           setReponse(this, q, resultat)
           texte += ajouteChampTexteMathLive(this, q, KeyboardType.clavierDeBase)
           break
@@ -470,7 +473,7 @@ export default class CourseAuxNombres6e extends Exercice {
           c = d * a + b
           resultat = c % a
           texte = `Je possède ${c} bonbons et je fabrique des sacs de ${a} bonbons. Une fois mes sacs complétés, combien me restera-t-il de bonbons ?`
-          texteCorr = `$${c}=${d}\\times ${a} + ${b}$, donc il me restera ${b} bonbons.`
+          texteCorr = `$${c}=${d}\\times ${a} + ${b}$, donc il me restera $${b}$ bonbons.`
           setReponse(this, q, b)
           texte += ajouteChampTexteMathLive(this, q, KeyboardType.clavierDeBase)
           break
@@ -503,7 +506,7 @@ export default class CourseAuxNombres6e extends Exercice {
           a = randint(3, 6) * 20
           b = randint(1, 3)
           resultat = a * (b + 0.5)
-          texte = `Une voiture roule à une vitesse constante de ${a} km/h. Combien de kilomètres parcourt-elle en ${b} h et 30 min ?`
+          texte = `Une voiture roule à une vitesse constante de ${a} km/h. Combien de kilomètres parcourt-elle en $${b}$ h et 30 min ?`
           texteCorr = `$${a}\\times ${texNombre(b + 0.5)} = ${resultat}$`
           setReponse(this, q, resultat)
           texte += ajouteChampTexteMathLive(
@@ -516,7 +519,7 @@ export default class CourseAuxNombres6e extends Exercice {
         case 'q28':
           a = randint(3, 9)
           b = randint(0, 1)
-          texte = `Est-il vrai qu'un carré de côté ${a} cm a le même périmètre qu'un rectangle de largeur ${a - b} cm et de longueur ${a + 1} cm ? (V ou F)`
+          texte = `Est-il vrai qu'un carré de côté $${a}$ cm a le même périmètre qu'un rectangle de largeur $${a - b}$ cm et de longueur $${a + 1}$ cm ? (V ou F)`
           if (b === 0) {
             texteCorr = `Faux car $4\\times ${a}\\text{ cm}$ $\\neq 2\\times ${a}\\text{ cm}$ $+ 2\\times ${a + 1}\\text{ cm}$.`
             setReponse(this, q, 'F', { formatInteractif: 'ignorerCasse' })
@@ -586,7 +589,7 @@ export default class CourseAuxNombres6e extends Exercice {
         case 'q30':
           a = randint(0, 7) // index du fruit
           b = fruits[a][1] * (1 + choice([-1, 1]) * randint(1, 3) * 0.1) // prix au kg
-          c = Math.round(randint(fruits[a][2], fruits[a][3]) / 10) // nombre de kg première valeur
+          c = Math.ceil(randint(fruits[a][2], fruits[a][3]) / 10) // nombre de kg première valeur
           d = randint(3, 6) // nombre de kg supplémentaires
           resultat = d * b
           texte = `$${c}$ kg de ${fruits[a][0]} coûtent $${texPrix(c * b)}$ €.<br> $${c + d}$ kg de ces mêmes ${fruits[a][0]} coûtent $${texPrix((c + d) * b)}$ €.<br>Combien coûtent ${d} kg de ces ${fruits[a][0]} ?`
