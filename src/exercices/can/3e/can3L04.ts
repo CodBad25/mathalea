@@ -1,14 +1,14 @@
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../../lib/outils/ecritures'
+import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import { randint, listeQuestionsToContenu } from '../../../modules/outils'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
 export const titre = 'Vérifier si un nombre est solution d’une inéquation (V/F)'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -37,7 +37,6 @@ export default class SolutionInequation extends Exercice {
     for (
       let i = 0, texte, texteCorr, monQcm, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (
         choice(['a', 'b', 'c']) //
@@ -53,11 +52,11 @@ export default class SolutionInequation extends Exercice {
             enonce: texte,
             propositions: [
               {
-                texte: 'V',
+                texte: 'Vrai',
                 statut: a * d + b > c,
               },
               {
-                texte: 'F',
+                texte: 'Faux',
                 statut: a * d + b <= c,
               },
             ],
@@ -69,21 +68,21 @@ export default class SolutionInequation extends Exercice {
             if (a === 1) {
               texteCorr =
                 monQcm.texteCorr +
-                `<br>$${d}$ est solution car : $${ecritureParentheseSiNegatif(d)}+${b}=${d + b}$ et $${d + b}>${c}$.`
+                `$${d}$ est solution car : $${ecritureParentheseSiNegatif(d)}+${b}=${d + b}$ et $${d + b}>${c}$.`
             } else {
               texteCorr =
                 monQcm.texteCorr +
-                `<br>$${d}$ est solution car : $${a}\\times ${ecritureParentheseSiNegatif(d)}+${b}=${a * d + b}$ et $${a * d + b}>${c}$.`
+                `$${d}$ est solution car : $${a}\\times ${ecritureParentheseSiNegatif(d)}+${b}=${a * d + b}$ et $${a * d + b}>${c}$.`
             }
           } else {
             if (a === 1) {
               texteCorr =
                 monQcm.texteCorr +
-                `<br>$${d}$ n'est pas  solution car : $ ${ecritureParentheseSiNegatif(d)}+${b}=${d + b}$ et $${d + b}\\leqslant${c}$.`
+                `$${d}$ n'est pas  solution car : $ ${ecritureParentheseSiNegatif(d)}+${b}=${d + b}$ et $${d + b}\\leqslant${c}$.`
             } else {
               texteCorr =
                 monQcm.texteCorr +
-                `<br>$${d}$ n'est pas solution car : $${a}\\times ${ecritureParentheseSiNegatif(d)}+${b}=${a * d + b}$ et $${a * d + b}\\leqslant${c}$.`
+                `$${d}$ n'est pas solution car : $${a}\\times ${ecritureParentheseSiNegatif(d)}+${b}=${a * d + b}$ et $${a * d + b}\\leqslant${c}$.`
             }
           }
 
@@ -99,11 +98,11 @@ export default class SolutionInequation extends Exercice {
             enonce: texte,
             propositions: [
               {
-                texte: 'V',
+                texte: 'Vrai',
                 statut: a * d * d - b > c,
               },
               {
-                texte: 'F',
+                texte: 'Faux',
                 statut: a * d * d - b <= c,
               },
             ],
@@ -115,21 +114,21 @@ export default class SolutionInequation extends Exercice {
             if (a === 1) {
               texteCorr =
                 monQcm.texteCorr +
-                `<br>$${d}$ est solution car : $ ${ecritureParentheseSiNegatif(d)}^2-${b}=${d ** 2 - b}$ et $${d ** 2 - b}>${c}$.`
+                `$${d}$ est solution car : $ ${ecritureParentheseSiNegatif(d)}^2-${b}=${d ** 2 - b}$ et $${d ** 2 - b}>${c}$.`
             } else {
               texteCorr =
                 monQcm.texteCorr +
-                `<br>$${d}$ est solution car : $${a}\\times${ecritureParentheseSiNegatif(d)}^2-${b}=${a * d ** 2 - b}$ et $${a * d ** 2 - b}>${c}$.`
+                `$${d}$ est solution car : $${a}\\times${ecritureParentheseSiNegatif(d)}^2-${b}=${a * d ** 2 - b}$ et $${a * d ** 2 - b}>${c}$.`
             }
           } else {
             if (a === 1) {
               texteCorr =
                 monQcm.texteCorr +
-                `<br>$${d}$ n'est pas  solution car : $ ${ecritureParentheseSiNegatif(d)}^2-${b}=${d ** 2 - b}$ et $${d ** 2 - b}\\leqslant${c}$.`
+                `$${d}$ n'est pas  solution car : $ ${ecritureParentheseSiNegatif(d)}^2-${b}=${d ** 2 - b}$ et $${d ** 2 - b}\\leqslant${c}$.`
             } else {
               texteCorr =
                 monQcm.texteCorr +
-                `<br>$${d}$ n'est pas solution car : $${a}\\times${ecritureParentheseSiNegatif(d)}^2-${b}=${a * d ** 2 - b}$ et $${a * d ** 2 - b}\\leqslant${c}$.`
+                `$${d}$ n'est pas solution car : $${a}\\times${ecritureParentheseSiNegatif(d)}^2-${b}=${a * d ** 2 - b}$ et $${a * d ** 2 - b}\\leqslant${c}$.`
             }
           }
           break
@@ -145,11 +144,11 @@ export default class SolutionInequation extends Exercice {
             enonce: texte,
             propositions: [
               {
-                texte: 'V',
+                texte: 'Vrai',
                 statut: d ** 2 <= a * d + b,
               },
               {
-                texte: 'F',
+                texte: 'Faux',
                 statut: d ** 2 > a * d + b,
               },
             ],
@@ -160,9 +159,9 @@ export default class SolutionInequation extends Exercice {
           if (d ** 2 <= a * d + b) {
             texteCorr =
               monQcm.texteCorr +
-              `<br>$${d}$ est  solution car : $${d ** 2}\\leqslant${a * d + b}$<br>
+              `$${d}$ est  solution car : $${d ** 2}\\leqslant${a * d + b}$<br>
           `
-            texteCorr += texteEnCouleur(`<br> Mentalement : <br>
+            texteCorr += texteEnCouleur(` Mentalement : <br>
           Faites deux calculs séparés puis comparez les résultats :<br>
           $\\bullet$  $${ecritureParentheseSiNegatif(d)}^2=${d ** 2}$.<br>
           $\\bullet$ $${a}\\times ${ecritureParentheseSiNegatif(d)}${ecritureAlgebrique(b)}=${a * d + b}$.<br>
@@ -171,9 +170,9 @@ export default class SolutionInequation extends Exercice {
           } else {
             texteCorr =
               monQcm.texteCorr +
-              `<br>$${d}$ n'est pas solution car : $${d ** 2}>${a * d + b}$<br>
+              `$${d}$ n'est pas solution car : $${d ** 2}>${a * d + b}$<br>
          `
-            texteCorr += texteEnCouleur(`<br> Mentalement : <br>
+            texteCorr += texteEnCouleur(` Mentalement : <br>
           Faites deux calculs séparés puis comparez les résultats :<br>
           $\\bullet$  $${ecritureParentheseSiNegatif(d)}^2=${d ** 2}$.<br>
           $\\bullet$ $${a}\\times ${ecritureParentheseSiNegatif(d)}${ecritureAlgebrique(b)}=${a * d + b}$.<br>
