@@ -72,7 +72,7 @@ export class Plot extends ObjetMathalea2D {
     if (tableauOptions.length > 0) {
       optionsDraw = '[' + tableauOptions.join(',') + ']'
     }
-    return `\n\t \\filldraw${optionsDraw} (${this.x},${this.y}) circle (${this.rayon});`
+    return `\t \\filldraw${optionsDraw} (${this.x},${this.y}) circle (${this.rayon});`
   }
 }
 
