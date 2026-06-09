@@ -1295,7 +1295,8 @@ export class Latex2d extends ObjetMathalea2D {
       this.col = `[HTML]{${this.col.substring(1)}}`
     } else {
       this.col =
-        this.col.startsWith('{') && this.col.endsWith('}')
+        (this.col.startsWith('{') && this.col.endsWith('}')) ||
+        this.col.startsWith('[HTML]')
           ? this.col
           : `{${this.col}}`
     }
