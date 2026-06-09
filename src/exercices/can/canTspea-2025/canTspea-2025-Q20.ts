@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { sp } from '../../../lib/outils/outilString'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { sp } from '../../../lib/outils/outilString'
 import FractionEtendue from '../../../modules/FractionEtendue'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   "Donner le nombre de solutions d'une équation du second degré"
 export const interactifReady = true
@@ -56,7 +56,7 @@ export default class Can2025TQ20 extends ExerciceSimple {
     } else {
       this.question = 'Entoure la bonne réponse. ' + qcm.texte
     }
-    this.correction = qcm.texteCorr + '<br>'
+    this.correction = qcm.texteCorr
     if (this.canOfficielle) {
       this.correction += `On calcule le discriminant $\\Delta=${signe === '-' ? `(${signe}\\sqrt{${b}})^2` : `\\sqrt{${b}}^2`} -4\\times 1\\times \\dfrac{1}{2}
   =${b}-\\dfrac{4}{2}=0$.<br>
