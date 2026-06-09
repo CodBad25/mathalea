@@ -1172,9 +1172,24 @@ export function verifQuestionMetaInteractif2d(
   feedback: string
   score: { nbBonnesReponses: number; nbReponses: number }
 } {
-  const eltFeedback = document.querySelector(
+  let eltFeedback = document.querySelector(
     `#resultatCheckEx${exercice.numeroExercice}Q${i}`,
   ) as HTMLSpanElement
+  if (!eltFeedback) {
+    const firstField = document.querySelector(
+      `#MetaInteractif2dEx${exercice.numeroExercice}Q${i}field0`,
+    )
+    const svgContainer = firstField?.closest('div[style*="position: relative"]')
+    const insertAfter = svgContainer ?? document.querySelector(`#exercice${exercice.numeroExercice}`)
+    if (insertAfter) {
+      eltFeedback = document.createElement('span')
+      eltFeedback.id = `resultatCheckEx${exercice.numeroExercice}Q${i}`
+      eltFeedback.style.display = 'block'
+      eltFeedback.style.marginTop = '4px'
+      eltFeedback.style.marginBottom = '16px'
+      insertAfter.insertAdjacentElement('afterend', eltFeedback)
+    }
+  }
   if (eltFeedback) {
     setStyles(eltFeedback, 'marginBottom: 20px')
     eltFeedback.innerHTML = ''
@@ -1243,10 +1258,12 @@ export function verifQuestionMetaInteractif2d(
     if (result.isOk) {
       compteurBonnesReponses++
       points.push(scoreFromResult(result))
-      mf.setPromptState('champ1', 'correct', true)
+      mf.setPromptState('champ1', 'default', true)
+      mf.classList.add('correct')
     } else {
       points.push(scoreFromResult(result))
-      mf.setPromptState('champ1', 'incorrect', true)
+      mf.setPromptState('champ1', 'default', true)
+      mf.classList.add('incorrect')
       if (result.feedback === 'saisieVide') result.feedback = null
       else {
         result = {
