@@ -22,8 +22,7 @@ export default class Puissances extends ExerciceQcmA {
       "On utilise la propriété de cours, qui calcule le produit des puissances d'un nombre réel non nul $a$  :<br>" +
       'Soit $n\\in \\mathbb{N}^*$ et $k\\in \\mathbb{N}^*$<br>' +
       'On a alors : $a^n\\times a^k=a^{n+k}$<br>' +
-      'Dans notre situation : $a^5\\times a^3=a^{5+3}=a^{8}$<br>' +
-      miseEnEvidence('$a^5\\times a^3=a^{8}$')
+      `Dans notre situation : $${miseEnEvidence('a^5\\times a^3=a^{8}')}$`
 
     this.reponses = [
       '$a^{8}$',
@@ -42,9 +41,7 @@ export default class Puissances extends ExerciceQcmA {
       this.correction = `On utilise la propriété de cours, qui calcule le produit des puissances d'un nombre réel non nul $a$    :<br>
     Soit $n\\in \\mathbb{N}$ et $k\\in \\mathbb{N}$<br>
     On a alors : $a^n\\times a^k=a^{n+k}$<br>
-    Dans notre situation : $a^{n}\\times a^${k}=a^{${n + k}}$
-   
-    &=${miseEnEvidence(`$a^{n}\\times a^${k}=a^{${n + k}}$`)}
+         Dans notre situation : $${miseEnEvidence(`a^{${n}}\\times a^{${n}}=a^{${n + k}}`)}$
     `
       this.reponses = [
         `$a^{${n + k}}$`,
