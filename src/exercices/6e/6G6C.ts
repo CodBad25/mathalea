@@ -1,0 +1,24 @@
+import DefinitionProprietesTriangles from '../5e/5G25'
+export const titre = 'Connaitre notamment la somme des angles dans un triangle'
+export const dateDePublication = '10/06/2026'
+export const interactifReady = true
+export const interactifType = 'listeDeroulante'
+
+/**
+ * Pour les nouveaux programmes de 6ème
+ * @author Éric Elter
+ */
+
+export const uuid = '04439'
+
+export const refs = {
+  'fr-fr': ['6G6C'],
+  'fr-ch': [],
+}
+export default class DefinitionProprietesTrianglesSommesDesAngles extends DefinitionProprietesTriangles {
+  constructor() {
+    super()
+    this.nbQuestions = 2
+    this.sup = '5-6'
+  }
+}
