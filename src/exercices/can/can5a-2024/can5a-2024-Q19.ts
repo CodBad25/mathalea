@@ -29,6 +29,7 @@ export default class NomExercice extends ExerciceSimple {
     if (this.canOfficielle) {
       this.reponse = 15
       this.question = '$25\\,\\%$ de $60$ € est égal à : '
+      this.canEnonce = '$25\\,\\%$ de $60$ € est égal à : '
       this.correction = `Prendre $25\\,\\%$ de $60$ € revient à prendre le quart de $60$   : <br>
       $\\dfrac{1}{4}\\times 60  =60\\div 4=${miseEnEvidence(15)} $ €`
     } else {
@@ -37,6 +38,7 @@ export default class NomExercice extends ExerciceSimple {
         const val = 4 * a
         this.reponse = a
         this.question = `$25\\,\\%$ de $${val}$ € est égal à : `
+        this.canEnonce = `$25\\,\\%$ de $${val}$ € est égal à : `
         this.correction = `Prendre $25\\,\\%$ de $${val}$ € revient à prendre le quart de $${val}$ : <br>
         $\\dfrac{1}{4}\\times ${val}=${val}\\div 4=${miseEnEvidence(this.reponse)}$ €`
       } else {
@@ -44,6 +46,7 @@ export default class NomExercice extends ExerciceSimple {
         const val = 10 * a
         this.reponse = a
         this.question = `$10\\,\\%$ de $${val}$ € est égal à : `
+        this.canEnonce = `$10\\,\\%$ de $${val}$ € est égal à : `
         this.correction = `Prendre $10\\,\\%$ de $${val}$ revient à prendre le dixième de $${val}$ : <br>
         $\\dfrac{1}{10}\\times ${val}=${val}\\div 10=${miseEnEvidence(this.reponse)}$ €`
       }

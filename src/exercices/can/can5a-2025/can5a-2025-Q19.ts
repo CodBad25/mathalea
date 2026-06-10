@@ -1,6 +1,7 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
@@ -33,14 +34,14 @@ export default class Can2025N5Q19 extends ExerciceCan {
     const index =
       b === 'centièmes' ? 5 : b === 'dixièmes' ? 4 : b === 'centaines' ? 0 : 1
     this.reponse = nbStr[index]
-    this.question = `Le chiffre des ${b} dans le nombre $${texNombre(a, 3)}$ est `
+    this.question = `Le chiffre des ${b} dans le nombre $${texNombre(a, 3)}$ est :`
     this.correction = `Le chiffre des ${b} dans le nombre $${texNombre(a, 3)}$ est $${miseEnEvidence(`${nbStr[index]}`)}$.`
 
-    if (!this.interactif) {
-      this.question += '$\\ldots$'
-    }
-    this.optionsChampTexte = { texteApres: '.' }
-  }
+    if (!this.interactif && context.isHtml) {
+         this.question += ' $\\ldots$'
+       }
+       this.optionsChampTexte = { texteApres: '.' }
+     }
 
   nouvelleVersion() {
     this.canOfficielle ? this.enonce(379.628, 'centièmes') : this.enonce()

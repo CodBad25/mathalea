@@ -1,5 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
@@ -19,7 +20,7 @@ export default class NomExercice extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBase
-
+this.optionsChampTexte = { texteApres: '.' }
     this.canOfficielle = false
   }
 
@@ -40,8 +41,9 @@ export default class NomExercice extends ExerciceSimple {
       Le produit de $${a}$ par la somme de $${b}$ et de $${c}$ est donc égal à : $${a}\\times ${b + c}=${miseEnEvidence(this.reponse)}$`
     }
 
-    if (!this.interactif) {
-      this.question += '$\\ldots$'
+     this.canReponseACompleter = '$\\ldots$'
+        if (!this.interactif && context.isHtml) {
+          this.question += '$\\ldots$'
+        }
+      }
     }
-  }
-}

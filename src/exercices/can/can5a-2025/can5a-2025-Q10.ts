@@ -1,5 +1,6 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
@@ -29,8 +30,8 @@ export default class Can2025N5Q10 extends ExerciceCan {
     Le nombre d'élèves dans un groupe est :`
     this.correction = `$${a}\\div ${b} = ${miseEnEvidence(String(c))}$<br>
     Donc, chaque groupe contient $${c}$ élèves.`
-
-    if (!this.interactif) {
+    this.canReponseACompleter = '$\\ldots$'
+    if (!this.interactif && context.isHtml) {
       this.question += ' $\\ldots$'
     }
     this.optionsChampTexte = { texteApres: '.' }

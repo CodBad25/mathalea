@@ -30,7 +30,8 @@ export default class NomExercice extends ExerciceSimple {
       reponse = 20
       this.question = `$4$ stylos identiques coûtent $8$ €.<br>
       Le prix de $10$ stylos est de : `
-
+this.canEnonce = `$4$ stylos identiques coûtent $8$ €.<br>
+Le prix de $10$ stylos est de : `
       this.correction = `$4$ stylos coûtent $8$ € donc $2$ stylos coûtent $8\\div 2=4$ €.<br>
       Ainsi, $10$ stylos coûtent $${miseEnEvidence(reponse)}$ €.`
     } else {
@@ -50,7 +51,8 @@ export default class NomExercice extends ExerciceSimple {
         reponse = b * k
         this.question = `$${a}$ stylos identiques coûtent $${b}$ €. <br>
         Le prix de $${b}$ stylos est de : `
-
+this.canEnonce = `$${a}$ stylos identiques coûtent $${b}$ €. <br>
+Le prix de $${b}$ stylos est de : `
         this.correction = `$${a}$ stylos coûtent $${b}$ €.<br>
           $${a / 2}$ ${a / 2 === 1 ? 'stylo coûte' : 'stylos coûtent'}  $${texPrix(b / 2)}$ €.<br>
           Ainsi,   $${b}$ stylos coûtent ${k > 2 ? `$2\\times ${b}+ ${texPrix(b / 2)} =${miseEnEvidence(texPrix(reponse))}$ €.` : `$${b}+ ${texPrix(b / 2)} =${miseEnEvidence(texPrix(reponse))}$ €.`}`

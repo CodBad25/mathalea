@@ -27,7 +27,7 @@ export default class Can2026CE2Q9 extends ExerciceCan {
     this.question = `Complète.<br>`
 
     this.correction = `$${a}+${miseEnEvidence(complement)}=${texNombre(1000)}$`
-
+this.canEnonce=`Complète l'égalité.`
     this.canReponseACompleter = `$${a}+\\ldots=${texNombre(1000)}$`
     this.reponse = complement
     this.formatChampTexte = KeyboardType.clavierDeBase
