@@ -14,9 +14,10 @@
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 
 stages:
+  - install
   - test
   - build-projet
-  - playwright-testCanEleve
+  - playwright
   - deploy-server
   - playwright-test
   - compile-pdf
@@ -32,6 +33,9 @@ variables:
   DOCKER_TLS_CERTDIR: ''
   DOCKER_IMAGE: '$CI_REGISTRY_IMAGE/ci/tex-node:node22-texlive-2026-06'
   DOCKERFILE: docker/ci-pdf/Dockerfile
+  PNPM_STORE: /builds/.pnpm-store
+  KUBERNETES_MEMORY_REQUEST: '5Gi'
+  KUBERNETES_MEMORY_LIMIT: '6Gi'
 
 semgrep-sast:
   rules:
@@ -55,12 +59,25 @@ cache:
   paths:
     - .pnpm-store
 
+install_dependencies:
+  stage: install
+  cache:
+    key: pnpm-lock-${CI_PROJECT_PATH_SLUG}-${CI_COMMIT_REF_SLUG}
+    paths:
+      - .pnpm-lock.yaml
+      - node_modules
+      - .cache/pnpm
+
+  script:
+    - pnpm install
+
 build_ci_pdf:
   stage: build-projet
   image: gcr.io/kaniko-project/executor:v1.23.2-debug
   variables:
     DEST_IMAGE: '$CI_REGISTRY_IMAGE/ci/tex-node:node22-texlive-2026-06'
     CACHE_REPO: '$CI_REGISTRY_IMAGE/cache/kaniko'
+  dependencies: [install_dependencies]
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"gitlab-ci-token\",\"password\":\"$CI_JOB_TOKEN\"}}}" > /kaniko/.docker/config.json
@@ -73,54 +90,37 @@ build_ci_pdf:
     - when: never
 
 .install_dependencies:
+  stage: install
   before_script:
-    - npm install -g pnpm@11.3
-    - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm install --silent
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 20
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
-    - sleep 60
 
 .install_dependenciesPDF:
+  dependencies: [install_dependencies]
   before_script:
-    - npm install -g pnpm@11.3
-    - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - lualatex -v
-    - pnpm install --silent
     - pnpm run makeJson
-    # - sleep 10
-    # - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
-    # - sleep 30
 
 .install_dependenciesPDFDNB:
+  dependencies: [install_dependencies]
   before_script:
-    - npm install -g pnpm@11.3
-    - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - lualatex -v
     - git clone https://forge.apps.education.fr/coopmaths/dnb.git ./public/static/dnb
     - mv ./public/static/dnb/sujets_decoupes/* ./public/static/dnb/
-    - pnpm install --silent
-    - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 10
-    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
-    - sleep 30
+    - pnpm run makeJson
 
 .install_dependenciesPDFBAC:
+  dependencies: [install_dependencies]
   before_script:
-    - npm install -g pnpm@11.3
-    - pnpm config set store-dir .pnpm-store
     - pnpm -v
     - lualatex -v
     - git clone https://forge.apps.education.fr/coopmaths/bac.git ./public/static/bac
-    - pnpm install --silent
-    - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 10
-    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
-    - sleep 30
+    - pnpm run makeJson
 
 .testCIPDF:
   image: $DOCKER_IMAGE
@@ -514,7 +514,7 @@ deploy:
       - dist
     expire_in: 1 day
 
-playwright-caneleve-consolidated:
+playwright-caneleve:
   extends: .testCI
   stage: playwright-testCanEleve
   allow_failure: true
@@ -531,32 +531,89 @@ playwright-caneleve-consolidated:
         FAIL=1
       fi
 
-      echo "🧪 test:e2e:consistency"
-      if pnpm test:e2e:consistency; then
-        STATUS_CONSISTENCY=ok
-      else
-        STATUS_CONSISTENCY=ko
-        FAIL=1
-      fi
-
-      echo "🧪 test:e2e:interactivity"
-      if pnpm test:e2e:interactivity; then
-        STATUS_INTERACTIVITY=ok
-      else
-        STATUS_INTERACTIVITY=ko
-        FAIL=1
-      fi
-
-      echo ""
-      echo "═══════════════════════════════════════════"
-      echo "📊 Résumé caneleve consolidated"
       echo "═══════════════════════════════════════════"
       [ "$STATUS_VIEWS" = "ok" ] && echo "✅ test:e2e:views" || echo "❌ test:e2e:views"
-      [ "$STATUS_CONSISTENCY" = "ok" ] && echo "✅ test:e2e:consistency" || echo "❌ test:e2e:consistency"
-      [ "$STATUS_INTERACTIVITY" = "ok" ] && echo "✅ test:e2e:interactivity" || echo "❌ test:e2e:interactivity"
       echo "═══════════════════════════════════════════"
 
       exit "$FAIL"
+
+  rules:
+    # Se lance uniquement si le pipeline est déclenché par une Merge Request
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
+      when: manual
+    - when: never
+  artifacts:
+    when: on_failure
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - api_failure
+      - unknown_failure
+      - script_failure
+
+playwright-consistency:
+  extends: .testCI
+  stage: playwright
+  allow_failure: true
+  timeout: 5h
+
+    echo "🧪 test:e2e:consistency"
+    if pnpm test:e2e:consistency; then
+    STATUS_CONSISTENCY=ok
+    else
+    STATUS_CONSISTENCY=ko
+    FAIL=1
+    fi
+
+    echo "═══════════════════════════════════════════"
+    echo "📊 Résumé consistency"
+    [ "$STATUS_CONSISTENCY" = "ok" ] && echo "✅ test:e2e:consistency" || echo "❌ test:e2e:consistency"
+    echo "═══════════════════════════════════════════"
+    exit "$FAIL"
+  rules:
+    # Se lance uniquement si le pipeline est déclenché par une Merge Request
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
+      when: manual
+    - when: never
+  artifacts:
+    when: on_failure
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - api_failure
+      - unknown_failure
+      - script_failure
+
+playwright-interactivity:
+  extends: .testCI
+  stage: playwright
+  allow_failure: true
+  timeout: 5h
+
+    echo "🧪 test:e2e:interactivity"
+    if pnpm test:e2e:interactivity; then
+    STATUS_INTERACTIVITY=ok
+    else
+    STATUS_INTERACTIVITY=ko
+    FAIL=1
+    fi
+
+    echo ""
+    echo "═══════════════════════════════════════════"
+    [ "$STATUS_INTERACTIVITY" = "ok" ] && echo "✅ test:e2e:interactivity" || echo "❌ test:e2e:interactivity"
+    echo "═══════════════════════════════════════════"
+
+    exit "$FAIL"
   rules:
     # Se lance uniquement si le pipeline est déclenché par une Merge Request
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -738,6 +795,30 @@ tests-unitaires:
     - pnpm install --silent
     - pnpm run makeJson
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm test:unit
+  rules:
+    # Se lance uniquement si le pipeline est déclenché par une Merge Request
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
+      when: manual
+    - when: never
+  artifacts:
+    when: on_failure
+
+tests-src:
+  stage: build-projet
+  script:
+    - npm install -g pnpm@11.3
+    - pnpm config set store-dir .pnpm-store
+    - pnpm -v
+    - echo "CI_COMMIT_BRANCH '$CI_COMMIT_BRANCH'"
+    - echo "CI_OPEN_MERGE_REQUESTS '$CI_OPEN_MERGE_REQUESTS'"
+    - echo "CI_PIPELINE_SOURCE '$CI_PIPELINE_SOURCE'"
+    - echo "$CI_COMMIT_AUTHOR"
+    - pnpm install --silent
+    - pnpm run makeJson
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm test:src
   rules:
     # Se lance uniquement si le pipeline est déclenché par une Merge Request
