@@ -7,7 +7,7 @@ import Exercice from '../Exercice'
  */
 export const uuid = 'c7b07'
 export const refs = {
-  'fr-fr': ['TSA5-42-Affirmations Bac'],
+  'fr-fr': ['TSA5-42'],
   'fr-ch': [],
 }
 export const titre = 'Répondre à des affirmations Bac sur le logarithme népérien'
