@@ -241,12 +241,11 @@ export default class IntersectionDeuxDroites extends Exercice {
         droite2,
         o,
       )
-      texte += '<br>'
 
       if (this.interactif) {
         texte +=
           "<br> Le point d'intersection des droites $d_1$ et $d_2$ est le point" +
-          remplisLesBlancs(this, i, '(%{champ1};%{champ2})')
+          remplisLesBlancs(this, i, '(%{champ1};%{champ2}).')
         handleAnswers(
           this,
           i,
