@@ -8,11 +8,11 @@ import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 
+import { crochetD, crochetG } from '../../lib/2d/intervalles'
+import { bleuMathalea } from '../../lib/colors'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
-import { bleuMathalea } from '../../lib/colors'
-import { crochetD, crochetG } from '../../lib/2d/intervalles'
 export const dateDePublication = '01/10/2025'
 export const dateDeModifImportante = '12/10/2025'
 export const uuid = '26802'
@@ -33,7 +33,7 @@ export const amcType = 'qcmMono'
 export const titre =
   'Résoudre une inéquation du type $\\dfrac{1}{x}<a$ ou $\\dfrac{1}{x}>a$ (avec ou sans courbe)'
 export default class Auto1AC10e extends ExerciceQcmA {
- private appliquerLesValeurs(
+  private appliquerLesValeurs(
     val: number,
     estInegStrict: boolean,
     typeInequation: 'inf' | 'sup',
@@ -64,7 +64,7 @@ export default class Auto1AC10e extends ExerciceQcmA {
       : `${deuxColonnes(
           `On a représenté l'hyperbole d'équation $y=\\dfrac{1}{x}$. <br><br>
            On note $(I)$ l'inéquation, sur $\\mathbb{R}^*$, $\\dfrac{1}{x}${signeInégalité} ${val}$.<br><br>`,
-          `${graphique}<br>`,
+          `${graphique}`,
         )} L'ensemble des solutions $S$ de cette inéquation est :`
 
     // Correction
@@ -122,8 +122,10 @@ export default class Auto1AC10e extends ExerciceQcmA {
 
         segmentsSolution = [sAxIO, sAxI2Bx]
         crochets = [
-          crochetD(O, 'red'),                                                            // 0[  (ouvert à droite)
-          estInegStrict ? crochetG(bornePoint, 'red') : crochetD(bornePoint, 'red'),    // ]1/a (strict) ou [1/a (large)
+          crochetD(O, 'red'), // 0[  (ouvert à droite)
+          estInegStrict
+            ? crochetG(bornePoint, 'red')
+            : crochetD(bornePoint, 'red'), // ]1/a (strict) ou [1/a (large)
         ]
       } else {
         // Pour 1/x < a avec a < 0 : ]1/a,0[ (strict) ou [1/a,0[ (large)
@@ -132,8 +134,10 @@ export default class Auto1AC10e extends ExerciceQcmA {
 
         segmentsSolution = [sAxO]
         crochets = [
-          estInegStrict ? crochetG(bornePoint, 'red') : crochetD(bornePoint, 'red'),    // ]1/a (strict) ou [1/a (large)
-          crochetD(O, 'red'),                                                            // 0[  (ouvert à droite)
+          estInegStrict
+            ? crochetG(bornePoint, 'red')
+            : crochetD(bornePoint, 'red'), // ]1/a (strict) ou [1/a (large)
+          crochetD(O, 'red'), // 0[  (ouvert à droite)
         ]
       }
     } else {
@@ -144,8 +148,10 @@ export default class Auto1AC10e extends ExerciceQcmA {
 
         segmentsSolution = [sAxO]
         crochets = [
-          crochetG(O, 'red'),                                                            // ]0  (ouvert à gauche)
-          estInegStrict ? crochetD(bornePoint, 'red') : crochetG(bornePoint, 'red'),    // 1/a[ (strict) ou 1/a] (large)
+          crochetG(O, 'red'), // ]0  (ouvert à gauche)
+          estInegStrict
+            ? crochetD(bornePoint, 'red')
+            : crochetG(bornePoint, 'red'), // 1/a[ (strict) ou 1/a] (large)
         ]
       } else {
         // Pour 1/x > a avec a < 0 : ]-∞,1/a[ ∪ ]0,+∞[ (strict) ou ]-∞,1/a] ∪ ]0,+∞[ (large)
@@ -159,8 +165,10 @@ export default class Auto1AC10e extends ExerciceQcmA {
 
         segmentsSolution = [sAxIBx, sOAxI2]
         crochets = [
-          estInegStrict ? crochetD(bornePoint, 'red') : crochetG(bornePoint, 'red'),    // 1/a[ (strict) ou 1/a] (large)
-          crochetG(O, 'red'),                                                            // ]0  (ouvert à gauche)
+          estInegStrict
+            ? crochetD(bornePoint, 'red')
+            : crochetG(bornePoint, 'red'), // 1/a[ (strict) ou 1/a] (large)
+          crochetG(O, 'red'), // ]0  (ouvert à gauche)
         ]
       }
     }
@@ -223,7 +231,12 @@ export default class Auto1AC10e extends ExerciceQcmA {
     const f = (x: number) => 1 / Number(x)
 
     // Droite horizontale fixe
-    const Cg = droite(pointAbstrait(-4, yDroite), pointAbstrait(4, yDroite), '', 'green')
+    const Cg = droite(
+      pointAbstrait(-4, yDroite),
+      pointAbstrait(4, yDroite),
+      '',
+      'green',
+    )
     Cg.epaisseur = 2
 
     // Graphique simple pour l'énoncé
