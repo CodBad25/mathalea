@@ -4,14 +4,14 @@ import Exercice from '../Exercice'
 
 export const uuid = 'c0f91'
 export const refs = {
-  'fr-fr': ['TSA1-QCMBac'],
+  'fr-fr': ['TSA1-31'],
   'fr-ch': [],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'QCM Bac : suites'
+export const titre = 'Répondre à des QCM Bac : suites'
 export const dateDePublication = '06/06/2026'
 
 type Reponse = {

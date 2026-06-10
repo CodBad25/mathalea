@@ -7,7 +7,7 @@ import Exercice from '../Exercice'
  */
 export const uuid = '81ed3'
 export const refs = {
-  'fr-fr': ['TSG1-10-Affirmations'],
+  'fr-fr': ['TSG1-10'],
   'fr-ch': [],
 }
 export const titre = 'Répondre à des affirmations Bac sur le dénombrement'

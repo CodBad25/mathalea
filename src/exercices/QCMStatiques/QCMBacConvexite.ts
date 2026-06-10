@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
  */
 export const uuid = 'b7e92'
 export const refs = {
-  'fr-fr': ['TSA3-QCMBac'],
+  'fr-fr': ['TSA3-24'],
   'fr-ch': [],
 }
 
@@ -22,7 +22,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'S\'entraîner avec des QCM Bac : Convexité'
+export const titre = 'Répondre à des QCM Bac : Convexité'
 export const dateDePublication = '31/05/2026'
 
 type Reponse = {

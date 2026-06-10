@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
  */
 export const uuid = 'f9d2a'
 export const refs = {
-  'fr-fr': ['TSA8-Affirmations'],
+  'fr-fr': ['TSA7-32'],
   'fr-ch': [],
 }
 export const titre =

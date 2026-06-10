@@ -2989,6 +2989,9 @@
   "TSA7-2": {
     "titre": "Équations différentielles"
   },
+   "TSA7-3": {
+    "titre": "Synthèse"
+  },
   "TSA8": {
     "titre": "Intégration"
   },
@@ -3004,15 +3007,24 @@
   "TSA8-4": {
     "titre": "Intégration par parties"
   },
+   "TSA8-5": {
+    "titre": "Synthèse"
+  },
 
   "TSP1": {
-    "titre": "Variables aléatoires discrètes finies"
+    "titre": "Loi binomiale"
   },
   "TSP2": {
-    "titre": "Sommes de variables aléatoires"
+    "titre": "Concentration"
   },
-  "TSP3": {
-    "titre": "Concentration, loi des grands nombres"
+  "TSP2-1": {
+    "titre": "Somme de variables aléatoires"
+  },
+  "TSP2-2": {
+    "titre": "Inégalité de Bienaymé-Tchebychev"
+  },
+  "TSP2-3": {
+    "titre": "Synthèse"
   },
   "TSG1": {
     "titre": "Combinatoire et dénombrement"
