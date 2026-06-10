@@ -19,7 +19,6 @@ export default class NomExercice extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBase
-
     this.canOfficielle = false
   }
 
@@ -54,7 +53,7 @@ export default class NomExercice extends ExerciceSimple {
     if (!this.interactif) {
       this.question += '$\\ldots\\text{ km}$'
     } else {
-      this.optionsChampTexte = { texteApres: '$\\text{ km}$' }
+      this.optionsChampTexte = { texteApres: '$\\text{ km}$.' }
     }
   }
 }

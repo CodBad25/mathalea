@@ -30,12 +30,12 @@ export default class Can2025N5Q14 extends ExerciceCan {
     const liste = [a, b, c, '$\\ldots$'].map((el) => `$${el}$`).join(' ; ')
     this.reponse = c + b - a
     this.question = 'Complète cette suite logique de nombres : '
-
+this.canEnonce = 'Complète cette suite logique de nombres : '
     this.question += liste
     this.correction = `On passe d'un nombre au suivant en ajoutant $${b - a}$.<br>
     Ainsi, ? $=${c} + ${b - a}=${miseEnEvidence(c + b - a)}$.`
     this.canReponseACompleter = `$${a}$ ; $${b}$ ; <br> $${c}$ ; $\\ldots$`
-    if (this.interactif) {
+    if (this.interactif ) {
       this.question = this.question.replace('$\\ldots$', '')
       this.optionsChampTexte = { texteApres: '.' }
     } else {

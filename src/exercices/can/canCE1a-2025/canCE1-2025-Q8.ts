@@ -58,6 +58,7 @@ export default class Can2025CE1Q8 extends ExerciceCan {
     this.correction =
       monQcm.texteCorr +
       `La durée possible ${c} est de $${miseEnEvidence(texNombre(a, 1))}$ ${b}.`
+      this.canEnonce= `Coche la durée possible ${c}.`
     this.canReponseACompleter = monQcm.texte
   }
 

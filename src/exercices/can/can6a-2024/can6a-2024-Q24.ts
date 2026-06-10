@@ -41,12 +41,12 @@ export default class PlaceVirguleProduit extends ExerciceSimple {
     }
     const resultatEntier = facteur1 * facteur2
     this.question =
-      `Sachant que $${texNombre(facteur1, 0)}\\times ${texNombre(facteur2, 0)}=${texNombre(resultatEntier, 0)}$,<br>complète` +
-      '.'
-    this.question += ` : $${texNombre(facteur1 / coeff, 3)}\\times ${texNombre(facteur2, 0)}=$`
+      `Sachant que $${texNombre(facteur1, 0)}\\times ${texNombre(facteur2, 0)}=${texNombre(resultatEntier, 0)}$, complète :`
+    this.question += `  $${texNombre(facteur1 / coeff, 3)}\\times ${texNombre(facteur2, 0)}=$`
     if (!this.interactif) {
       this.question += ' $\\ldots$'
     }
+    this.canEnonce=   `Sachant que $${texNombre(facteur1, 0)}\\times ${texNombre(facteur2, 0)}=${texNombre(resultatEntier, 0)}$, complète :`
     this.canReponseACompleter = `$${texNombre(facteur1 / coeff, 3)}\\times ${texNombre(facteur2, 0)}=\\ldots$`
     this.reponse = texNombre(resultatEntier / coeff, 3)
     const coeffInverse = new Decimal(1).div(coeff)

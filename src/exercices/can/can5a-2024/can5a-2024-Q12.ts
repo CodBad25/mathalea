@@ -1,9 +1,11 @@
+
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -24,7 +26,7 @@ export default class NomExercice extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBase
-
+this.optionsChampTexte = { texteApres: '.' }
     this.canOfficielle = false
   }
 
@@ -145,8 +147,8 @@ export default class NomExercice extends ExerciceSimple {
       Ces axes sont les médiatrices des côtés du triangle. `
       }
     }
-
-    if (!this.interactif) {
+    this.canReponseACompleter = '$\\ldots$'
+    if (!this.interactif && context.isHtml) {
       this.question += '$\\ldots$'
     }
   }

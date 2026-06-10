@@ -49,8 +49,8 @@ export default class PerimetreRectangle extends ExerciceSimple {
     const angle3 = codageAngleDroit(B, C, D)
     const angle4 = codageAngleDroit(C, D, A)
     const horizontale = segment(
-      pointAbstrait(0, -0.5),
-      pointAbstrait(grandeBase, -0.5),
+      pointAbstrait(0, -0.7),
+      pointAbstrait(grandeBase, -0.7),
     )
     horizontale.styleExtremites = '<->'
     const verticale = segment(
@@ -71,7 +71,7 @@ export default class PerimetreRectangle extends ExerciceSimple {
     const longueur = latexParCoordonnees(
       `\\text{${String(grandeBase) + ' cm'}}`,
       grandeBase / 2,
-      -0.5,
+      -0.8,
       'black',
       0,
       0,

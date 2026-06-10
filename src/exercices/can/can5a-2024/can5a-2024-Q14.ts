@@ -7,6 +7,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 import { bleuMathalea } from '../../../lib/colors'
+import { context } from '../../../modules/context'
 
 export const titre = 'Déterminer une abscisse sur une droite graduée'
 export const interactifReady = true
@@ -24,7 +25,7 @@ export default class NomExercice extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-
+this.optionsChampTexte = { texteApres: '.' }
     this.canOfficielle = false
   }
 
@@ -102,8 +103,9 @@ export default class NomExercice extends ExerciceSimple {
       Ainsi, l'abscisse du point $A$ est : ${choix ? `$${miseEnEvidence(texNombre(a, 2))}$` : `$${miseEnEvidence(texNombre(b))}$`}.`
     }
 
-    if (!this.interactif) {
-      this.question += ' $\\ldots$'
-    }
-  }
-}
+    this.canReponseACompleter = '$\\ldots$'
+       if (!this.interactif && context.isHtml) {
+         this.question += '$\\ldots$'
+       }
+     }
+   }

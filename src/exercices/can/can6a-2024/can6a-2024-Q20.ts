@@ -42,6 +42,7 @@ export default class AbscisseEnDemis extends ExerciceSimple {
     if (!this.interactif) {
       this.question += '$\\ldots\\ldots\\text{ km}$'
     }
+    this.canEnonce = `Une voiture roule à $${vitesse} \\text{ km/h}$.`
     this.canReponseACompleter = `En $${String(h)}$h$30$min, elle parcourt $\\ldots\\ldots\\text{ km}$.`
     this.reponse = String(distance)
     this.correction = `En $${String(h)}$h, elle parcourt $${String(h)}\\times ${String(vitesse)}\\text{ km}=${texNombre(h * vitesse, 0)}\\text{ km}$.<br>`

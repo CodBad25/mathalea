@@ -56,7 +56,7 @@ export default class TrouverLongueur extends ExerciceSimple {
     ])
     // this.reponse = propositions[0] Pas de this.reponse dans un qcm
     this.autoCorrection[0] = {
-      options: { ordered: false },
+      options: { vertical:true,ordered: false },
       enonce: `La hauteur d'${choix[a][0]} est :`,
       propositions: [
         {
@@ -76,6 +76,7 @@ export default class TrouverLongueur extends ExerciceSimple {
           statut: false,
         },
       ],
+      
     }
     const qcm = propositionsQcm(this, 0)
 

@@ -1,5 +1,6 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
@@ -28,10 +29,13 @@ export default class Can2025N5Q26 extends ExerciceCan {
     this.optionsChampTexte = { texteApres: ' $\\text{ cm}^3$' }
 
     this.canReponseACompleter = '$\\ldots\\text{ cm}^3$'
-    if (!this.interactif) {
+ if (!this.interactif && context.isHtml) {
       this.question += '$\\ldots\\text{ cm}^3$'
     }
+    this.optionsChampTexte = { texteApres: '.' }
   }
+
+
 
   nouvelleVersion() {
     this.canOfficielle ? this.enonce(0.5) : this.enonce()

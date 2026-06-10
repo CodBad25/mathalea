@@ -33,7 +33,7 @@ export default class NomExercice extends ExerciceSimple {
         this.question = `Recopie un ordre de grandeur de  $${texNombre(19397)}+${texNombre(56432)}$ parmi les valeurs suivantes : <br>
        `
       } else {
-        this.question = `Entoure un ordre de grandeur de : $${texNombre(19397)}+${texNombre(56432)}$ <br>`
+        this.question = `Entoure un ordre de grandeur de : $${texNombre(19397)}+${texNombre(56432)}$. <br>`
       }
       this.question += ` $800$ ${sp(2)} ; ${sp(2)} $${texNombre(8000)}$ ${sp(2)} ; ${sp(2)} $${texNombre(80000)}$${sp(2)} ; ${sp(2)} $${texNombre(800000)}$`
       this.correction = `Un ordre de grandeur de $19397$ est $20000$ et un ordre de grandeur de $${texNombre(56432)}$ est $${texNombre(60000)}$, ainsi, un ordre de 

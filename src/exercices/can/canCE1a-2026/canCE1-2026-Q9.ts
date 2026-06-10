@@ -68,6 +68,7 @@ export default class Can2026CE1Q9 extends ExerciceCan {
           statut: false,
         },
       ],
+      options: { vertical: true },
     }
 
     this.consigne = `Entoure le nombre  $\\textit{${lettres
