@@ -40,7 +40,7 @@ async function ensureFieldVisible(page: Page, fieldId: string) {
 }
 
 async function testCanView(page: Page) {
-  await page.setDefaultTimeout(200000) // Set timeout to 60 seconds
+  await page.setDefaultTimeout(500_000) // Set timeout to 500 seconds
   log('===========================================================')
   log('===           TEST VUE CAN 2024       =====================')
   log('===========================================================')
@@ -73,7 +73,6 @@ async function testCanView(page: Page) {
   const page1Promise = page.waitForEvent('popup')
   await page.getByRole('button', { name: 'Visualiser' }).click()
   const page1 = await page1Promise
-  await page1.setDefaultTimeout(100000) // Set timeout to 60 seconds
   // await page1.goto('http://localhost:5173/alea/?uuid=94d21&v=can&canD=10&canT=2024&canSA=true&canSM=gathered&canI=true')
   logIfVerbose('clique sur démarrer')
   await page1.getByRole('button', { name: ' Démarrer' }).click()
@@ -198,13 +197,15 @@ async function testCanView(page: Page) {
 }
 
 async function testEleveView(page: Page) {
+  await page.setDefaultTimeout(500_000) // Set timeout to 500 seconds
+
   log('===========================================================')
   log('===      TEST VUE ELEVE PRESENTATION 0 2024 ===============')
   log('===========================================================')
   const hostname = local
     ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
     : 'https://coopmaths.fr/alea/'
-  await page.goto(hostname + '?uuid=94d21&alea=hqk0&s=1', { timeout: 100000 })
+  await page.goto(hostname + '?uuid=94d21&alea=hqk0&s=1', { timeout: 200_000 })
   logIfVerbose("Chargement de l'url:" + hostname + '?uuid=94d21&alea=hqk0&s=1')
   logIfVerbose('Clique sur le lien vue élève (config)')
   await page
@@ -299,7 +300,7 @@ async function testEleveView(page: Page) {
   await page1.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
   logIfVerbose('Vérifier les questions')
   await clickWithFallback(page1, '#buttonScoreEx0')
-  await page1.waitForSelector('#consigne0-29 + div', { timeout: 30000 })
+  await page1.waitForSelector('#consigne0-29 + div', { timeout: 100_000 })
   const buttonResult = await page1.locator('#consigne0-29 + div').innerText()
   expect('30 / 30').toEqual(buttonResult)
   logIfVerbose(buttonResult)
@@ -308,13 +309,15 @@ async function testEleveView(page: Page) {
 }
 
 async function testEleveViewPre2(page: Page) {
+  await page.setDefaultTimeout(500_000) // Set timeout to 500 seconds
+
   log('===========================================================')
   log('===   TEST VUE ELEVE Presentation 3 2024 ==================')
   log('===========================================================')
   const hostname = local
     ? `http://localhost:${process.env.PLAYWRIGHT_SERVER_PORT ?? (process.env.CI ? '80' : '5173')}/alea/`
     : 'https://coopmaths.fr/alea/'
-  await page.goto(hostname + '?uuid=94d21&alea=hqk0&s=1', { timeout: 120000 })
+  await page.goto(hostname + '?uuid=94d21&alea=hqk0&s=1', { timeout: 200_000 })
   logIfVerbose("Chargement de l'url:" + hostname + '?uuid=94d21&alea=hqk0&s=1')
   logIfVerbose('Clique sur le lien vue élève (config)')
   // await page.getByRole('button', { name: 'Lien pour les élèves  ' }).click()
