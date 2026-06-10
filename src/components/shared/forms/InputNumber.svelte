@@ -18,7 +18,6 @@
     const rawValue = target.value
 
     if (rawValue === '') {
-      console.log(value)
       value = undefined
       dispatch('change', undefined)
     } else {
