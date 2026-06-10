@@ -83,7 +83,9 @@ export default class ExerciceEquationAxCongruence extends Exercice {
       const cellules = [
         ...Array.from({ length: k }, (_, n) => {
           const valeur = mod(a * n, k)
-          return valeur === b ? miseEnEvidence(valeur, '#2563a5') : `${valeur}`
+          return valeur === b
+            ? miseEnEvidence(valeur, bleuMathalea)
+            : `${valeur}`
         }),
       ]
       const style: { [key: string]: string } = {
@@ -116,8 +118,8 @@ $${a}x \\equiv ${b} \\,[${k}]$.<br> `
       texteCorr += `On cherche les entiers $x$ tels que $${a}x \\equiv ${b} \\,[${k}]$.<br>`
       texteCorr += `On procède à une disjonction des cas en dressant une table de congruence modulo $${k}$ :<br>`
       texteCorr += table
-      texteCorr += `<br>On en déduit que $x \\equiv ${r} \\,[${k}]$.`
-      texteCorr += `<br>On vérifie réciproquement que si $x \\equiv ${r} \\,[${k}]$ alors $${a}x \\equiv ${miseEnEvidence(b)} \\,[${k}]$ $.`
+      texteCorr += `<br>On en déduit que $x \\equiv ${miseEnEvidence(r)} \\,[${k}]$.`
+      texteCorr += `<br>On vérifie réciproquement que si $x \\equiv ${r} \\,[${k}]$ alors $${a}x \\equiv ${b} \\,[${k}]$.`
       texteCorr += `<br>L'ensemble des solutions est donc : $${miseEnEvidence(`S=\\{  ${r} + ${k}n, n \\in \\mathbb{Z} \\}`, bleuMathalea)}$. `
 
       if (this.questionJamaisPosee(i, texte)) {
