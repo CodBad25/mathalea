@@ -6,6 +6,7 @@ import {
   createCubesProjections,
   projectionCubesIso2d,
 } from '../../lib/3d/3dProjectionMathalea2d/CubeIso'
+import { bleuMathalea } from '../../lib/colors'
 import {
   choice,
   compteOccurences,
@@ -21,7 +22,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre = "Dessiner différentes vues d'un empilement de cubes"
 export const dateDePublication = '06/10/2022'
 export const dateDeModifImportante = '08/11/2023' // Retour du formulaire numérique en supprimant le tooltip
@@ -167,7 +167,7 @@ export default class VuesEmpilementCubes extends Exercice {
         }
       }
       for (let ee = 0; ee < this.sup3; ee++) {
-        vuePossible = listeVuesPossibles[ee]
+        vuePossible = listeVuesPossibles[ee] ?? 0 // pouvait être undefined.
         texteAMC = this.sup3 > 1 ? numAlpha(ee) + ' ' : ''
         texteAMC += `Dessiner la vue de ${vue[vuePossible][0]} de ce solide.`
         texte += texteAMC + '<br>'
