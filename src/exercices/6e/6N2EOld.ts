@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -8,8 +9,6 @@ import { context } from '../../modules/context'
 import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const amcType = 'AMCNum'
@@ -33,7 +32,7 @@ export const refs = {
   'fr-2016': ['6C30-0'],
   'fr-ch': [],
 }
-export default class MultiplierDecimaux extends Exercice {
+export default class MultiplierDecimauxOld extends Exercice {
   constructor() {
     super()
 

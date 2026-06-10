@@ -33,7 +33,7 @@ export const refs = {
   'fr-ch': [''],
 }
 
-export default class DeriveeExp extends Exercice {
+export default class DeriveeExp1AN313 extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1

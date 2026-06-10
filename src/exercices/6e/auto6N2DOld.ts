@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { glisseNombreInteractif } from '../../lib/apps/glisse_nombre_interactif'
 import { bleuMathalea } from '../../lib/colors'
@@ -23,8 +24,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const amcType = 'AMCNum'
@@ -84,7 +83,7 @@ export function analyserNombre(nombre: number): {
   // Étape 3 : compter combien de fois le chiffre des unités apparaît
   const occurrences = chiffres
     .split('')
-    .filter((chiffre, index, arr) => parseInt(chiffre) === chiffreUnites)
+    .filter((chiffre, _index, _arr) => parseInt(chiffre) === chiffreUnites)
 
   // Il y a un doublon si le chiffre des unités apparaît au moins deux fois
   const doublonUnites = occurrences.length > 1

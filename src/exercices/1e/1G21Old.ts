@@ -100,7 +100,7 @@ function mediatrice(A: PointAbstrait, B: PointAbstrait): [Droite, string] {
   ]
 }
 
-function questionDeuxPoints(i: number = 0): [string, string] {
+function questionDeuxPoints(_i: number = 0): [string, string] {
   const A = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'A')
   const B = new PointAbstrait(randint(-5, 5, [A.x]), randint(-5, 5, [A.y]), 'B')
   const [, details] = construireDroite(A, { B }) as [Droite, string]
@@ -111,7 +111,7 @@ function questionDeuxPoints(i: number = 0): [string, string] {
   ]
 }
 
-function questionPointvDir(i: number = 0): [string, string] {
+function questionPointvDir(_i: number = 0): [string, string] {
   const A = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'A')
   const ux = randint(-5, 5)
   const uy = randint(-5, 5, ux)
@@ -124,7 +124,7 @@ function questionPointvDir(i: number = 0): [string, string] {
   ]
 }
 
-function questionPointvNorm(i: number = 0): [string, string] {
+function questionPointvNorm(_i: number = 0): [string, string] {
   const A = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'A')
   const ux = randint(-5, 5)
   const uy = randint(-5, 5, ux)
@@ -136,7 +136,7 @@ function questionPointvNorm(i: number = 0): [string, string] {
   ]
 }
 
-function questionHauteur(i: number = 0): [string, string] {
+function questionHauteur(_i: number = 0): [string, string] {
   const A = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'A')
   const B = new PointAbstrait(randint(-5, 5, [A.x]), randint(-5, 5, [A.y]), 'B')
   const C = new PointAbstrait(
@@ -151,7 +151,7 @@ function questionHauteur(i: number = 0): [string, string] {
   ]
 }
 
-function questionMediatrice(i: number = 0): [string, string] {
+function questionMediatrice(_i: number = 0): [string, string] {
   const A = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'A')
   const B = new PointAbstrait(randint(-5, 5, [A.x]), randint(-5, 5, [A.y]), 'B')
   const [, details] = mediatrice(A, B)
@@ -161,7 +161,7 @@ function questionMediatrice(i: number = 0): [string, string] {
   ]
 }
 
-export default class nomExercice extends Exercice {
+export default class nom1G21Old extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 5

@@ -38,7 +38,7 @@ export const refs = {
   'fr-ch': [''],
 }
 
-export default class DeriveeExp extends Exercice {
+export default class DeriveeExp1AN312 extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
@@ -98,33 +98,37 @@ export default class DeriveeExp extends Exercice {
             handleAnswers(this, i, { reponse: { value } })
           }
           break
-           case 2://e^x * (a*x+b)
-            {const a = randint(-10, 10,0)
-      const b = randint(-10, 10)
-          texte = texteIntro +` $f(x) = (${reduireAxPlusB(a, b)})\\mathrm{e}^x  $.<br> Calculer $f'(x)$.`
+        case 2: //e^x * (a*x+b)
+          {
+            const a = randint(-10, 10, 0)
+            const b = randint(-10, 10)
+            texte =
+              texteIntro +
+              ` $f(x) = (${reduireAxPlusB(a, b)})\\mathrm{e}^x  $.<br> Calculer $f'(x)$.`
             texte += ajouteChampTexteMathLive(
               this,
               i,
               KeyboardType.clavierFonctionsTerminales,
               { texteAvant: "<br>$f'(x)=$" },
             )
-          texteCorr = `On reconnaît que $f = u\\times v$ avec $u(x) = \\mathrm{e}^x$ et $v(x) = ${reduireAxPlusB(a, b)}$. <br>
+            texteCorr = `On reconnaît que $f = u\\times v$ avec $u(x) = \\mathrm{e}^x$ et $v(x) = ${reduireAxPlusB(a, b)}$. <br>
           On a $u'(x) = \\mathrm{e}^x$ et $v'(x) = ${a}$. <br>
           Par conséquent, <br>$\\begin{aligned}f'(x) &= u'(x) \\times v(x) + u(x) \\times v'(x)\\\\
           & = \\mathrm{e}^x \\times (${reduireAxPlusB(a, b)}) + \\mathrm{e}^x \\times ${ecritureParentheseSiNegatif(a)} \\\\
            & = \\mathrm{e}^x \\left(${reduireAxPlusB(a, b)}  ${ecritureAlgebriqueSauf0(a)}\\right) \\\\
-          &=  ${miseEnEvidence(`(${reduireAxPlusB(a, a+b)})\\mathrm{e}^x`)}
+          &=  ${miseEnEvidence(`(${reduireAxPlusB(a, a + b)})\\mathrm{e}^x`)}
           \\end{aligned}$.`
-          value=`${reduireAxPlusB(a, a+b)}\\mathrm{e}^x`
+            value = `${reduireAxPlusB(a, a + b)}\\mathrm{e}^x`
             handleAnswers(this, i, { reponse: { value } })
-            }
+          }
           break
-        case 3:// ke^x / (a*x+b)
-         {const a = randint(-10, 10,0)
-      const b = randint(-10, 10)
-      const k = randint(-5, 5,[0,1,-1])
-      const racine = new FractionEtendue(-b, a).simplifie()
-          texte = `Soit $f$ la fonction définie et dérivable sur $\\mathbb{R}\\setminus\\left\\{${racine.texFractionSimplifiee}\\right\\}$ par $f(x) = \\dfrac{${k}\\mathrm{e}^x}{${reduireAxPlusB(a, b)}}$. <br> Calculer $f'(x)$.`
+        case 3: // ke^x / (a*x+b)
+          {
+            const a = randint(-10, 10, 0)
+            const b = randint(-10, 10)
+            const k = randint(-5, 5, [0, 1, -1])
+            const racine = new FractionEtendue(-b, a).simplifie()
+            texte = `Soit $f$ la fonction définie et dérivable sur $\\mathbb{R}\\setminus\\left\\{${racine.texFractionSimplifiee}\\right\\}$ par $f(x) = \\dfrac{${k}\\mathrm{e}^x}{${reduireAxPlusB(a, b)}}$. <br> Calculer $f'(x)$.`
             texte += ajouteChampTexteMathLive(
               this,
               i,
@@ -136,17 +140,20 @@ export default class DeriveeExp extends Exercice {
           Par conséquent, <br>$\\begin{aligned}f'(x) &= \\dfrac{u'(x) \\times v(x) - u(x) \\times v'(x)}{v(x)^2}\\\\
           & = \\dfrac{${k}\\mathrm{e}^x \\times (${reduireAxPlusB(a, b)}) - ${ecritureParentheseSiNegatif(k)}\\mathrm{e}^x \\times ${a}}{(${reduireAxPlusB(a, b)})^2} \\\\
            & = \\dfrac{${k}\\mathrm{e}^x \\left(${reduireAxPlusB(a, b)}  ${ecritureAlgebriqueSauf0(-a)}\\right)}{(${reduireAxPlusB(a, b)})^2} \\\\
-          &=  ${miseEnEvidence(`\\dfrac{ ${k}\\mathrm{e}^x(${reduireAxPlusB(a,(b-a))})}{(${reduireAxPlusB(a, b)})^2}`)}
+          &=  ${miseEnEvidence(`\\dfrac{ ${k}\\mathrm{e}^x(${reduireAxPlusB(a, b - a)})}{(${reduireAxPlusB(a, b)})^2}`)}
           \\end{aligned}$.`
-          value=`\\dfrac{${k}\\mathrm{e}^x(${reduireAxPlusB(a,(b-a))})}{(${reduireAxPlusB(a, b)})^2}`
-              handleAnswers(this, i, { reponse: { value } })
-         }
-         break
-            case 4:// (a*x+b)/e^x
-          {const a = randint(-10, 10,0)
-      const b = randint(-10, 10)
-        const k = randint(-5, 5,[0,1,-1])
-            texte = texteIntro +` $f(x) = \\dfrac{${reduireAxPlusB(a, b)}}{${k}\\mathrm{e}^x}$. <br> Calculer $f'(x)$ .`
+            value = `\\dfrac{${k}\\mathrm{e}^x(${reduireAxPlusB(a, b - a)})}{(${reduireAxPlusB(a, b)})^2}`
+            handleAnswers(this, i, { reponse: { value } })
+          }
+          break
+        case 4: // (a*x+b)/e^x
+          {
+            const a = randint(-10, 10, 0)
+            const b = randint(-10, 10)
+            const k = randint(-5, 5, [0, 1, -1])
+            texte =
+              texteIntro +
+              ` $f(x) = \\dfrac{${reduireAxPlusB(a, b)}}{${k}\\mathrm{e}^x}$. <br> Calculer $f'(x)$ .`
             texte += ajouteChampTexteMathLive(
               this,
               i,
@@ -161,100 +168,98 @@ export default class DeriveeExp extends Exercice {
            &=  \\dfrac{${k}\\mathrm{e}^x(${reduireAxPlusB(-a, a - b)})}{${k * k}\\mathrm{e}^{2x}} \\\\
            &=  ${miseEnEvidence(`\\dfrac{${reduireAxPlusB(-a, a - b)}}{${k}\\mathrm{e}^x}`)}
           \\end{aligned}$.`
-          value=`\\dfrac{${reduireAxPlusB(-a, a - b)}}{${k}\\mathrm{e}^x}`
-             handleAnswers(this, i, { reponse: { value } })
+            value = `\\dfrac{${reduireAxPlusB(-a, a - b)}}{${k}\\mathrm{e}^x}`
+            handleAnswers(this, i, { reponse: { value } })
           }
           break
-    
-      
-          
-        
-        case 5: //  (ax^2+bx+c)e^x
-              {
-                const a = randint(-10, 10, 0)
-                const b = randint(-10, 10)
-                const c= randint(-10, 10)
-                const poly = new Polynome({
-                  rand: true,
-                  coeffs: [c,b, a],
-                }) // ax+b
-                const polyF = new Polynome({
-                  rand: true,
-                  coeffs: [c + b, 2 * a + b, a],
-                })
 
-                texteCorr = `La fonction $f$ est dérivable sur $\\mathbb{R}$ comme produit de fonctions dérivables sur $\\mathbb{R}$.<br>
+        case 5: //  (ax^2+bx+c)e^x
+          {
+            const a = randint(-10, 10, 0)
+            const b = randint(-10, 10)
+            const c = randint(-10, 10)
+            const poly = new Polynome({
+              rand: true,
+              coeffs: [c, b, a],
+            }) // ax+b
+            const polyF = new Polynome({
+              rand: true,
+              coeffs: [c + b, 2 * a + b, a],
+            })
+
+            texteCorr = `La fonction $f$ est dérivable sur $\\mathbb{R}$ comme produit de fonctions dérivables sur $\\mathbb{R}$.<br>
             $f$ est de la forme $u\\times v$ avec $u(x)=${poly}$ et $v(x)=\\mathrm{e}^x$, donc sa fonction dérivée est donnée par 
             $f'=u'\\times v+ u\\times v'$.<br><br>
             Pour tout $x$ de $\\mathbb{R}$, <br>`
-                texte =
-                  texteIntro +
-                  ` $f(x)=${poly.isMon() ? `${poly}\\mathrm{e}^x` : `(${poly})\\mathrm{e}^x`}$.<br>
+            texte =
+              texteIntro +
+              ` $f(x)=${poly.isMon() ? `${poly}\\mathrm{e}^x` : `(${poly})\\mathrm{e}^x`}$.<br>
             Calculer $f'(x)$ et écrire son expression sous forme factorisée.`
-                texteCorr += `
+            texteCorr += `
               $\\begin{aligned}
-              f'(x)&=\\underbrace{${poly.derivee()}}_{u'(x)}\\times \\underbrace{\\mathrm{e}^x}_{v(x)}+\\underbrace{(${poly})}_{u(x)}\\times \\underbrace{\\mathrm{e}^x}_{v'(x)}\\\\${poly.isMon() ? '' : `
-              &=\\mathrm{e}^x(${poly.derivee()}+(${poly}))\\\\`}
+              f'(x)&=\\underbrace{${poly.derivee()}}_{u'(x)}\\times \\underbrace{\\mathrm{e}^x}_{v(x)}+\\underbrace{(${poly})}_{u(x)}\\times \\underbrace{\\mathrm{e}^x}_{v'(x)}\\\\${
+                poly.isMon()
+                  ? ''
+                  : `
+              &=\\mathrm{e}^x(${poly.derivee()}+(${poly}))\\\\`
+              }
               &= ${miseEnEvidence(`\\mathrm{e}^x(${polyF})`)}.
               \\end{aligned}$`
 
-                texte += ajouteChampTexteMathLive(
-                  this,
-                  i,
-                  KeyboardType.clavierFonctionsTerminales,
-                  { texteAvant: "<br>$f'(x)=$" },
-                )
-                value = `${`(${polyF})e^x`}`
-                handleAnswers(this, i, {
-                  reponse: { value, options: { factorisation: true } },
-                })
-              }
-              break
+            texte += ajouteChampTexteMathLive(
+              this,
+              i,
+              KeyboardType.clavierFonctionsTerminales,
+              { texteAvant: "<br>$f'(x)=$" },
+            )
+            value = `${`(${polyF})e^x`}`
+            handleAnswers(this, i, {
+              reponse: { value, options: { factorisation: true } },
+            })
+          }
+          break
 
-           
-      case 6: // (m*e^x)/(ax^2+b)
-        {
-          const a = randint(1, 5)
-          const b = 0
-          const c = randint(1, 6)
-          const m = randint(1, 7)
-          const poly = new Polynome({
-            rand: true,
-            coeffs: [c, b, a],
-          }) // ax^2+bx+c
-          const polyDer = poly.derivee()
-          const polySol = new Polynome({
-            rand: true,
-            coeffs: [c - b, b-2 * a , a],
-          })
-          texteCorr = `La fonction $f$ est dérivable sur $\\mathbb{R}$ comme quotient de fonctions dérivables sur $\\mathbb{R}$ dont le dénominateur ne s'annule pas sur $\\mathbb{R}$.<br>
+        case 6: // (m*e^x)/(ax^2+b)
+          {
+            const a = randint(1, 5)
+            const b = 0
+            const c = randint(1, 6)
+            const m = randint(1, 7)
+            const poly = new Polynome({
+              rand: true,
+              coeffs: [c, b, a],
+            }) // ax^2+bx+c
+            const polyDer = poly.derivee()
+            const polySol = new Polynome({
+              rand: true,
+              coeffs: [c - b, b - 2 * a, a],
+            })
+            texteCorr = `La fonction $f$ est dérivable sur $\\mathbb{R}$ comme quotient de fonctions dérivables sur $\\mathbb{R}$ dont le dénominateur ne s'annule pas sur $\\mathbb{R}$.<br>
           $f$ est de la forme $\\dfrac{u}{v}$ avec $u(x)=${rienSi1(m)}\\mathrm{e}^{x}$ et $v(x)=${poly}$, donc sa fonction dérivée est donnée par 
           $f'=\\dfrac{u'\\times v- u\\times v'}{v^2}$.<br><br>
           Soit $x$ de $\\mathbb{R}$, <br>`
-          texte = ` On considère la fonction $f$ définie sur $\\mathbb{R}$ par : 
+            texte = ` On considère la fonction $f$ définie sur $\\mathbb{R}$ par : 
           $f(x)=\\dfrac{${rienSi1(m)}\\mathrm{e}^{x}}{${poly}}$.<br>
           Calculer $f'(x)$.`
-          texteCorr += ` 
+            texteCorr += ` 
             $\\begin{aligned}
             f'(x)&=\\dfrac{\\overbrace{${rienSi1(m)}\\mathrm{e}^{x}}^{u'(x)}\\times (\\overbrace{${poly}}^{v(x)})-\\overbrace{${rienSi1(m)}\\mathrm{e}^{x}}^{u(x)}\\times \\overbrace{(${polyDer})}^{v'(x)}}{\\underbrace{(${poly})^2}_{(v(x))^2}}\\\\
        &=\\dfrac{ ${rienSi1(m)}\\mathrm{e}^{x}\\left(${poly}- (${polyDer})\\right)}{(${poly})^2} \\\\
       &=${miseEnEvidence(`\\dfrac{(${polySol})\\mathrm{e}^{x}}{(${poly})^2}`)}.
             \\end{aligned}$`
 
-          texte += ajouteChampTexteMathLive(
-            this,
-            i,
-            KeyboardType.clavierFonctionsTerminales,
-            { texteAvant: "<br>$f'(x)=$" },
-          )
-          const value = `\\dfrac{${m}(${poly} - ${polyDer})e^{x}}{(${poly})^2}`
-          handleAnswers(this, i, {
-            reponse: { value, options: { fonction: true } },
-          })
-        }
-        break
-      
-        
+            texte += ajouteChampTexteMathLive(
+              this,
+              i,
+              KeyboardType.clavierFonctionsTerminales,
+              { texteAvant: "<br>$f'(x)=$" },
+            )
+            const value = `\\dfrac{${m}(${poly} - ${polyDer})e^{x}}{(${poly})^2}`
+            handleAnswers(this, i, {
+              reponse: { value, options: { fonction: true } },
+            })
+          }
+          break
       }
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte
