@@ -294,7 +294,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: ['Produit Scalaire'],
+    tags: ['Produit scalaire'],
   },
   eam_specialite_2026_06_etrangers_3: {
     annee: '2026',
