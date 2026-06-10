@@ -19,7 +19,7 @@ export const dateDePublication = '26/01/2025' // La date de publication initiale
 export const uuid = 'd5252'
 
 export const refs = {
-  'fr-fr': ['TSG2-44'],
+  'fr-fr': ['TSG2-441'],
   'fr-ch': ['3G99-8'],
 }
 
@@ -27,7 +27,7 @@ export const refs = {
  *
  * @author Stéphane Guyon
  */
-export default class NomExercice extends Exercice {
+export default class positionRelative extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
@@ -119,8 +119,7 @@ export default class NomExercice extends Exercice {
         ],
         style: 'nombres',
       })
-      texte +=
-        '<br>Déterminer la position relative de $(d)$ et $(\\mathcal{P})$.'
+      texte += 'Déterminer la position relative de $(d)$ et $(\\mathcal{P})$.'
       texte +=
         '<br>En cas d’intersection, calculer les coordonnées du point commun.'
 
@@ -195,7 +194,7 @@ export default class NomExercice extends Exercice {
       }
       // Cas confondus
       if (cas === 'incluse') {
-        PointCommun += `Cette équation admet une infinité de solution. Il y a une infinité de points commun à $(d)$ et $(\\mathcal{P})$. <br> ${texteEnCouleurEtGras('On peut conclure que la droite $(d)$ est incluse dans le plan $(\\mathcal{P})$.')}`
+        PointCommun += `Cette équation admet une infinité de solutions. Il y a une infinité de points commun à $(d)$ et $(\\mathcal{P})$. <br> ${texteEnCouleurEtGras('On peut conclure que la droite $(d)$ est incluse dans le plan $(\\mathcal{P})$.')}`
       }
 
       texteCorr =
@@ -209,7 +208,7 @@ export default class NomExercice extends Exercice {
         style: 'fleches',
       })
       texteCorr +=
-        '<br>Nous allons pour cela procéder en deux étapes.  <br>' +
+        '<br><br>Nous allons pour cela procéder en deux étapes.  <br>' +
         createList({ items: [orthogonalite, PointCommun], style: 'nombres' })
 
       if (this.questionJamaisPosee(i, uz, uy, ux, d, c, b, a, z0, y0, x0)) {
