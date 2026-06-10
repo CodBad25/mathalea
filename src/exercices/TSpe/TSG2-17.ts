@@ -8,6 +8,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { sp } from '../../lib/outils/outilString'
 import { getLang } from '../../lib/stores/languagesStore'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -419,10 +420,14 @@ export default class VecteursRepCube extends Exercice {
       const texteCorr =
         `Dans le repère ${rep}, les ${lang === 'fr-CH' ? 'composantes' : 'coordonnées'} sont données par :<br>` +
         cv('AB', AB) +
-        '&emsp;' +
+        ',' +
+        sp(5) +
         cv('AC', AC) +
-        '&emsp;' +
-        cv('AD', AD)
+        sp(5) +
+        'et' +
+        sp(5) +
+        cv('AD', AD) +
+        '.'
 
       this.listeQuestions[i] = texte
       this.listeCorrections[i] = texteCorr
