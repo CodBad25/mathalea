@@ -117,9 +117,7 @@ export default class LireAbscisseFractionnaire extends ExerciceQcmA {
         .texFractionSimplifiee,
     ].map((el) => `$${el}$`)
     this.enonce =
-      figure +
-      `<br>
-    Sur cette droite graduée, quelle est l'abscisse du point $E$ ?`
+      figure + `Sur cette droite graduée, quelle est l'abscisse du point $E$ ?`
 
     this.correction = `On remarque qu'il y a ${divisionsUnite * (deuxiemeAbscisse - premiereAbscisse)} divisions entre $${premiereAbscisse}$ et $${deuxiemeAbscisse}$, donc chaque division vaut $\\dfrac{1}{${divisionsUnite}}$.<br>`
     this.correction += `Le point $E$ est situé après $${numerateur}$ divisions à partir de l'origine.<br>`
