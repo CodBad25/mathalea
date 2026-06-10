@@ -620,6 +620,7 @@ export function loadPackagesFromContent(contents: contentsType) {
       '\\Box',
       '\\checkmark',
       '\\fbox',
+      '\\smallsetminus',
     ],
     '\\usepackage{amssymb}',
     contents,
