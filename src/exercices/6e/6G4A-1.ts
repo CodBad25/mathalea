@@ -5,6 +5,7 @@ import { texteParPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { homothetie, rotation } from '../../lib/2d/transformations'
 import { angle, longueur } from '../../lib/2d/utilitairesGeometriques'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { lettreDepuisChiffre, numAlpha } from '../../lib/outils/outilString'
@@ -16,7 +17,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -283,8 +283,8 @@ export default class VocabulaireDeBaseDesAngles extends Exercice {
           texteCorrQuestion += questionReponse.question
           texteCorrQuestion += monQcm.texteCorr
           texteCorrQuestion += this.correctionDetaillee
-            ? '<br>' + questionReponse.explications + '<br><br>'
-            : '<br>'
+            ? questionReponse.explications + '<br><br>'
+            : ''
           texte += texteQuestion
           texteCorr += texteCorrQuestion
         } else {
