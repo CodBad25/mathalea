@@ -1,9 +1,10 @@
+import { bleuMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
 import {
   all,
   isEqual,
-  onlyIrreducibleFractions,
   isReduced,
+  onlyIrreducibleFractions,
 } from '../../lib/interactif/checks'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
@@ -22,7 +23,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre =
-  "Déterminer le projeté orthogonal d'un point sur une droite."
+  "Déterminer le projeté orthogonal d'un point sur une droite"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
@@ -39,7 +40,7 @@ export const refs = {
  *
  * @author Stéphane Guyon et Nathan Scheinmann (ajout du cas avec la formule)
  */
-export default class NomExercice extends Exercice {
+export default class projOrthogonal extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
@@ -136,14 +137,14 @@ export default class NomExercice extends Exercice {
       })
 
       let ortho = ''
-      ortho = ` ${texteEnCouleurEtGras('Les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{MH}$ sont orthogonaux :')} <br>On calcule les coordonnées du vecteur $\\overrightarrow{AB}\\begin{pmatrix}${xB}${ecritureAlgebrique(-xA)} \\\\${yB}${ecritureAlgebrique(-yA)} \\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}$ d'où $\\overrightarrow{AB}\\begin{pmatrix}${ux} \\\\ ${uy} \\\\ ${uz}\\end{pmatrix}$ .<br>`
+      ortho = ` ${texteEnCouleurEtGras('Les vecteurs ', bleuMathalea)} $${miseEnEvidence(`\\overrightarrow{AB}`, bleuMathalea)}$ ${texteEnCouleurEtGras(' et ', bleuMathalea)} $${miseEnEvidence(`\\overrightarrow{MH}`, bleuMathalea)}$ ${texteEnCouleurEtGras('sont orthogonaux.', bleuMathalea)} <br>On calcule les coordonnées du vecteur $\\overrightarrow{AB}\\begin{pmatrix}${xB}${ecritureAlgebrique(-xA)} \\\\${yB}${ecritureAlgebrique(-yA)} \\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}$ d'où $\\overrightarrow{AB}\\begin{pmatrix}${ux} \\\\ ${uy} \\\\ ${uz}\\end{pmatrix}$ .<br>`
       ortho += `On calcule les coordonnées du vecteur $\\overrightarrow{MH} \\begin{pmatrix}x  ${ecritureAlgebrique(-xM)} \\\\ y  ${ecritureAlgebrique(-yM)} \\\\ z  ${ecritureAlgebrique(-zM)}\\end{pmatrix}$.`
       ortho += `<br>Le vecteur $\\overrightarrow{AB}$ est orthogonal au vecteur $\\overrightarrow{MH}$, leur produit scalaire est donc nul.<br>`
       ortho += `Donc : <br>$\\begin{aligned}\\phantom{\\iff}&\\overrightarrow{MH} \\cdot \\overrightarrow{AB} = 0\\\\
 \\iff &(x ${ecritureAlgebrique(-xM)}) \\times ${ecritureParentheseSiNegatif(ux)} + (y ${ecritureAlgebrique(-yM)}) \\times ${ecritureParentheseSiNegatif(uy)} + (z ${ecritureAlgebrique(-zM)}) \\times ${ecritureParentheseSiNegatif(uz)} = 0\\\\
 \\iff &${rienSi1(ux)}  x  ${ecritureAlgebriqueSauf1(uy)} y  ${ecritureAlgebriqueSauf1(uz)} z  ${ecritureAlgebrique(-(ux * xM + uy * yM + uz * zM))}=0\\quad(1)\\end{aligned}$ <br>`
       let pointH = ''
-      pointH = `${texteEnCouleurEtGras('Le point $H$ appartient à la droite $(AB)$.')}<br>`
+      pointH = `${texteEnCouleurEtGras('Le point ', bleuMathalea)} $${miseEnEvidence(`H`, bleuMathalea)}$ ${texteEnCouleurEtGras('appartient à la droite ', bleuMathalea)} $${miseEnEvidence(`(AB)`, bleuMathalea)}$.<br>`
       pointH += `Pour utiliser que le point $H$ appartient à la droite $(AB)$, on détermine une représentation paramétrique de cette droite : <br>`
       pointH += `$(AB):\\left\\{ \\begin{array}{l} x = ${xA}  ${ecritureAlgebriqueSauf1(ux)} t \\\\ y = ${yA}  ${ecritureAlgebriqueSauf1(uy)} t \\quad (t\\in\\mathbb{R}) \\\\ z = ${zA}  ${ecritureAlgebriqueSauf1(uz)} t \\end{array} \\right.$ <br>`
 
@@ -170,7 +171,7 @@ export default class NomExercice extends Exercice {
           '<br>Par définition du projeté orthogonal, on déduit deux informations :' +
           createList({ items: [ortho, pointH], style: 'fleches' })
 
-        texteCorr += `${texteEnCouleurEtGras('<br>Synthèse des deux éléments précédents :')} <br>`
+        texteCorr += `<br><br>${texteEnCouleurEtGras('Synthèse des deux éléments précédents :', bleuMathalea)} <br><br>`
         texteCorr += `$H\\in(AB)\\cap\\mathcal{P}$. La droite $(AB)$ étant orthogonale au plan $\\mathscr{P}$, il existe un unique point $H$ solution. <br>`
         texteCorr += `$H(x_H,y_H,z_H)\\in(AB)\\cap\\mathcal{P}$ si et seulement s'il existe $t\\in\\mathbb{R}$ tel que : <br>`
         texteCorr += `$\\begin{cases}
