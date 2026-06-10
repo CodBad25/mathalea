@@ -14,6 +14,7 @@ import { homothetie, projectionOrtho } from '../../lib/2d/transformations'
 import { pointIntersectionLC } from '../../lib/2d/utilitairesPoint'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -96,8 +97,9 @@ export default class MesurerDistancePointDroite extends Exercice {
       const paramsEnonce = { xmin, ymin, xmax, ymax, pixelsParCm: 20, scale: 1 }
       texteCorr = '' + mathalea2d(paramsEnonce, objetsCorrection) + '<br>'
       texteCorr += `Pour mesurer la distance entre le point $${A.nom}$ et la droite ($d$) :<br>
-      - on utilise l'équerre pour tracer la perpendiculaire à la droite ($d$)) qui passe par le point $${A.nom}$<br>
-      - si on nomme $${H.nom}$ le pied de la perpendiculaire, alors la distance entre le point $${A.nom}$ et la droite ($d$) est la longueur $${A.nom + H.nom} = ${texNombre(distancePointDroite(A, d), 1)} cm$`
+      - on utilise l'équerre pour tracer la perpendiculaire à la droite ($d$) qui passe par le point $${A.nom}$<br>
+      - si on nomme $${H.nom}$ le pied de la perpendiculaire, alors la distance entre le point $${A.nom}$ ; 
+      et la droite ($d$) est la longueur $${A.nom + H.nom} = ${miseEnEvidence(`${texNombre(distancePointDroite(A, d), 1)}\\text{ cm}`)}$.`
       texte = `Mesurer la distance entre le point $${A.nom}$ et la droite ($d$).<br>`
       texte += mathalea2d(paramsEnonce, objetsEnonce)
       if (this.questionJamaisPosee(i, A.nom)) {
