@@ -1,5 +1,6 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -18,8 +19,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Lire l'image d'un nombre à partir d'un graphique"
 export const interactifReady = true
@@ -39,7 +38,7 @@ export const refs = {
   'fr-fr': [],
   'fr-ch': [],
 }
-export default class ImageGraphique extends Exercice {
+export default class ImageGraphiqueOld extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
@@ -91,7 +90,7 @@ export default class ImageGraphique extends Exercice {
         'On a tracé ci-dessous la courbe représentative de la fonction $f$.<br>'
       texteCorr = ''
       const r = repere({ xMin: -7, xMax: 9, yMin: -7, yMax: 7 })
-      f = (x) => 0
+      f = (_x) => 0
       if (this.sup === 1) {
         a = (fx2 - fx1) / (x2 - x1)
         b = a * x1 - fx1
@@ -122,7 +121,7 @@ export default class ImageGraphique extends Exercice {
       }
 
       if (this.sup === 3) {
-        let a1: Number, b1: Number, c1: Number
+        let a1: number, b1: number, c1: number
         ;[a1, b1, c1] = resolutionSystemeLineaire3x3(
           x1,
           x2,
