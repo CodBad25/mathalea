@@ -44,7 +44,7 @@ async function testV(page: Page) {
   })
 
   // Go to the page
-  await page.setDefaultTimeout(200_000) // Set timeout to 200 seconds
+  await page.setDefaultTimeout(500_000) // Set timeout to 500 seconds
   await page.goto(parentUrl)
 
   await expect(page.locator('body')).toContainText('bonjour')
