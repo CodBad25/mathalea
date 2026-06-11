@@ -4,14 +4,18 @@
    Équations différentielles
    Espace
    Exponentielle
-   Intégration
+   Calcul intégral
+   Intégration par parties
    Trigonométrie
    Logarithme
+   Limites de fonctions
+   Limites de suites
    Loi binomiale
    Primitives
    Probabilités conditionnelles
    Python
    QCM
+   Raisonnement par récurrence
    Suites
    Variables aléatoires
    TVI
@@ -48,7 +52,7 @@ export const dictionnaireBAC = {
     mois: 'Janvier',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Convexité'],
+    tags: ['Logarithme', 'Convexité', 'Limites de fonctions'],
   },
   bac_2021_01_sujet0_5: {
     annee: '2021',
@@ -88,7 +92,7 @@ export const dictionnaireBAC = {
     mois: 'Mars',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Suites', 'Tableur'],
+    tags: ['Suites', 'Tableur', 'Raisonnement par récurrence'],
   },
   bac_2021_03_sujet1_5: {
     annee: '2021',
@@ -96,7 +100,7 @@ export const dictionnaireBAC = {
     mois: 'Mars',
     numeroInitial: '5',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Convexité'],
+    tags: ['Logarithme', 'Convexité', 'Limites de fonctions'],
   },
   bac_2021_03_sujet2_1: {
     annee: '2021',
@@ -112,7 +116,7 @@ export const dictionnaireBAC = {
     mois: 'Mars',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2021_03_sujet2_3: {
     annee: '2021',
@@ -136,7 +140,7 @@ export const dictionnaireBAC = {
     mois: 'Mars',
     numeroInitial: '5',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Primitives'],
+    tags: ['Logarithme', 'Primitives', 'Limites de fonctions'],
   },
   bac_2021_05_ameriquenord_1: {
     annee: '2021',
@@ -152,7 +156,7 @@ export const dictionnaireBAC = {
     mois: 'Mai',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2021_05_ameriquenord_3: {
     annee: '2021',
@@ -176,7 +180,7 @@ export const dictionnaireBAC = {
     mois: 'Mai',
     numeroInitial: '5',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Convexité'],
+    tags: ['Logarithme', 'Convexité', 'Limites de fonctions', 'Limites de suites'],
   },
   bac_2021_06_polynesie_1: {
     annee: '2021',
@@ -184,7 +188,7 @@ export const dictionnaireBAC = {
     mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: ['Suites'],
+    tags: ['Suites', 'Raisonnement par récurrence'],
   },
   bac_2021_06_polynesie_2: {
     annee: '2021',
@@ -225,7 +229,7 @@ export const dictionnaireBAC = {
     mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2021_06_asie_10: {
     annee: '2021',
@@ -233,7 +237,14 @@ export const dictionnaireBAC = {
     mois: 'Juin',
     numeroInitial: '10',
     typeExercice: 'bac',
-    tags: ['Suites', 'Logarithme', 'Tableur'],
+    tags: [
+      'Suites',
+      'Logarithme',
+      'Tableur',
+      'Limites de fonctions',
+      'Limites de suites',
+      'Raisonnement par récurrence',
+    ],
   },
   bac_2021_06_asie_2: {
     annee: '2021',
@@ -257,7 +268,7 @@ export const dictionnaireBAC = {
     mois: 'Juin',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI', 'Convexité'],
+    tags: ['Logarithme', 'TVI', 'Convexité', 'Limites de fonctions'],
   },
   bac_2021_06_asie_5: {
     annee: '2021',
@@ -329,7 +340,7 @@ export const dictionnaireBAC = {
     mois: 'Juin',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites'],
+    tags: ['Suites', 'Raisonnement par récurrence'],
   },
   bac_2021_06_etrangers_4: {
     annee: '2021',
@@ -361,7 +372,7 @@ export const dictionnaireBAC = {
     mois: 'Juin',
     numeroInitial: '7',
     typeExercice: 'bac',
-    tags: ['Suites', 'Exponentielle', 'Python'],
+    tags: ['Suites', 'Exponentielle', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2021_06_etrangers_8: {
     annee: '2021',
@@ -377,7 +388,7 @@ export const dictionnaireBAC = {
     mois: 'Juin',
     numeroInitial: '9',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Variables aléatoires'],
+    tags: ['Logarithme', 'Variables aléatoires', 'Limites de fonctions'],
   },
   bac_2021_06_metropole_1: {
     annee: '2021',
@@ -409,7 +420,7 @@ export const dictionnaireBAC = {
     mois: 'Juin',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2021_06_metropole_4: {
     annee: '2021',
@@ -449,7 +460,7 @@ export const dictionnaireBAC = {
     mois: 'Juin',
     numeroInitial: '8',
     typeExercice: 'bac',
-    tags: ['Suites'],
+    tags: ['Suites', 'Raisonnement par récurrence'],
   },
   bac_2021_06_metropole_9: {
     annee: '2021',
@@ -457,7 +468,7 @@ export const dictionnaireBAC = {
     mois: 'Juin',
     numeroInitial: '9',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI'],
+    tags: ['Logarithme', 'TVI', 'Limites de fonctions'],
   },
   bac_2021_09_metropole_1: {
     annee: '2021',
@@ -473,7 +484,7 @@ export const dictionnaireBAC = {
     mois: 'Septembre',
     numeroInitial: '10',
     typeExercice: 'bac',
-    tags: ['Logarithme'],
+    tags: ['Logarithme', 'Limites de fonctions'],
   },
   bac_2021_09_metropole_2: {
     annee: '2021',
@@ -481,7 +492,7 @@ export const dictionnaireBAC = {
     mois: 'Septembre',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2021_09_metropole_3: {
     annee: '2021',
@@ -505,7 +516,7 @@ export const dictionnaireBAC = {
     mois: 'Septembre',
     numeroInitial: '5',
     typeExercice: 'bac',
-    tags: ['Logarithme'],
+    tags: ['Logarithme', 'Limites de fonctions'],
   },
   bac_2021_09_metropole_6: {
     annee: '2021',
@@ -537,7 +548,7 @@ export const dictionnaireBAC = {
     mois: 'Septembre',
     numeroInitial: '9',
     typeExercice: 'bac',
-    tags: ['Suites'],
+    tags: ['Suites', 'Raisonnement par récurrence'],
   },
 
   bac_2022_05_sujet1_ameriquenord_1: {
@@ -560,7 +571,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python', 'Logarithme'],
+    tags: ['Suites', 'Python', 'Logarithme', 'Limites de suites', 'Raisonnement par récurrence'],
   },
   bac_2022_05_sujet1_ameriquenord_3: {
     annee: '2022',
@@ -596,7 +607,14 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python', 'Exponentielle', 'Logarithme'],
+    tags: [
+      'Suites',
+      'Python',
+      'Exponentielle',
+      'Logarithme',
+      'Limites de suites',
+      'Raisonnement par récurrence',
+    ],
   },
   bac_2022_05_sujet1_asie_3: {
     annee: '2022',
@@ -614,7 +632,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Convexité'],
+    tags: ['Logarithme', 'Convexité', 'Limites de fonctions'],
   },
   bac_2022_05_sujet1_etrangers_1: {
     annee: '2022',
@@ -677,7 +695,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Exponentielle', 'TVI', 'Python'],
+    tags: ['Suites', 'Exponentielle', 'TVI', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2022_05_sujet1_madagascar_4: {
     annee: '2022',
@@ -695,7 +713,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: ['Exponentielle', 'Suites', 'TVI'],
+    tags: ['Exponentielle', 'Suites', 'TVI', 'Raisonnement par récurrence'],
   },
   bac_2022_05_sujet1_metropole_2: {
     annee: '2022',
@@ -731,7 +749,15 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: ['QCM', 'Logarithme', 'Primitives', 'Suites', 'Convexité', 'Python'],
+    tags: [
+      'QCM',
+      'Logarithme',
+      'Primitives',
+      'Suites',
+      'Convexité',
+      'Python',
+      'Limites de suites',
+    ],
   },
   bac_2022_05_sujet1_polynesie_2: {
     annee: '2022',
@@ -749,7 +775,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2022_05_sujet1_polynesie_4: {
     annee: '2022',
@@ -767,7 +793,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: ['Probabilités conditionnelles', 'Suites'],
+    tags: ['Probabilités conditionnelles', 'Suites', 'Raisonnement par récurrence'],
   },
   bac_2022_05_sujet2_ameriquenord_2: {
     annee: '2022',
@@ -812,7 +838,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Convexité', 'Logarithme', 'TVI'],
+    tags: ['Convexité', 'Logarithme', 'TVI', 'Limites de fonctions', 'Limites de suites'],
   },
   bac_2022_05_sujet2_asie_3: {
     annee: '2022',
@@ -834,7 +860,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python', 'Tableur'],
+    tags: ['Suites', 'Python', 'Tableur', 'Raisonnement par récurrence'],
   },
   bac_2022_05_sujet2_etrangers_1: {
     annee: '2022',
@@ -852,7 +878,14 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Convexité', 'Suites'],
+    tags: [
+      'Logarithme',
+      'Convexité',
+      'Suites',
+      'Limites de fonctions',
+      'Limites de suites',
+      'Raisonnement par récurrence',
+    ],
   },
   bac_2022_05_sujet2_etrangers_3: {
     annee: '2022',
@@ -906,7 +939,15 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Exponentielle', 'Logarithme', 'Suites', 'Python'],
+    tags: [
+      'Exponentielle',
+      'Logarithme',
+      'Suites',
+      'Python',
+      'Limites de fonctions',
+      'Limites de suites',
+      'Raisonnement par récurrence',
+    ],
   },
   bac_2022_05_sujet2_metropole_1: {
     annee: '2022',
@@ -951,7 +992,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: ['QCM', 'Logarithme', 'Exponentielle', 'Primitives'],
+    tags: ['QCM', 'Logarithme', 'Exponentielle', 'Primitives', 'Limites de fonctions'],
   },
   bac_2022_05_sujet2_polynesie_2: {
     annee: '2022',
@@ -969,7 +1010,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2022_05_sujet2_polynesie_4: {
     annee: '2022',
@@ -996,7 +1037,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python', 'Logarithme'],
+    tags: ['Suites', 'Python', 'Logarithme', 'Limites de suites', 'Raisonnement par récurrence'],
   },
   bac_2022_09_sujet1_ameriquesud_3: {
     annee: '2022',
@@ -1005,7 +1046,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI', 'Convexité'],
+    tags: ['Logarithme', 'TVI', 'Convexité', 'Limites de fonctions'],
   },
   bac_2022_09_sujet1_ameriquesud_4: {
     annee: '2022',
@@ -1045,7 +1086,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Exponentielle', 'TVI'],
+    tags: ['Logarithme', 'Exponentielle', 'TVI', 'Limites de fonctions', 'Limites de suites'],
   },
   bac_2022_09_sujet1_metropole_4: {
     annee: '2022',
@@ -1072,7 +1113,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2022_09_sujet1_polynesie_3: {
     annee: '2022',
@@ -1081,7 +1122,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Convexité', 'Primitives'],
+    tags: ['Logarithme', 'Convexité', 'Primitives', 'Limites de fonctions'],
   },
   bac_2022_09_sujet1_polynesie_4: {
     annee: '2022',
@@ -1108,7 +1149,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI', 'Convexité'],
+    tags: ['Logarithme', 'TVI', 'Convexité', 'Limites de fonctions'],
   },
   bac_2022_09_sujet2_ameriquesud_3: {
     annee: '2022',
@@ -1117,7 +1158,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2022_09_sujet2_ameriquesud_4: {
     annee: '2022',
@@ -1157,7 +1198,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Suites'],
+    tags: ['Logarithme', 'Suites', 'Limites de fonctions', 'Limites de suites', 'Raisonnement par récurrence'],
   },
   bac_2022_09_sujet2_metropole_4: {
     annee: '2022',
@@ -1175,7 +1216,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Convexité'],
+    tags: ['Logarithme', 'Convexité', 'Limites de fonctions'],
   },
   bac_2022_10_sujet1_caledonie_2: {
     annee: '2022',
@@ -1184,7 +1225,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Suites', 'Python'],
+    tags: ['Logarithme', 'Suites', 'Python', 'Limites de suites', 'Raisonnement par récurrence'],
   },
   bac_2022_10_sujet1_caledonie_3: {
     annee: '2022',
@@ -1220,7 +1261,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI', 'Python'],
+    tags: ['Logarithme', 'TVI', 'Python', 'Limites de fonctions'],
   },
   bac_2022_10_sujet2_caledonie_3: {
     annee: '2022',
@@ -1238,7 +1279,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['QCM', 'Suites', 'Exponentielle', 'Logarithme'],
+    tags: ['QCM', 'Suites', 'Exponentielle', 'Logarithme', 'Limites de suites'],
   },
 
   bac_2024_01_sujet0_1: {
@@ -1298,7 +1339,7 @@ export const dictionnaireBAC = {
     mois: 'Janvier',
     numeroInitial: '6',
     typeExercice: 'bac',
-    tags: ['Affirmations', 'Suites'],
+    tags: ['Affirmations', 'Suites', 'Raisonnement par récurrence'],
   },
   bac_2024_01_sujet0_7: {
     annee: '2024',
@@ -1306,7 +1347,7 @@ export const dictionnaireBAC = {
     mois: 'Janvier',
     numeroInitial: '7',
     typeExercice: 'bac',
-    tags: ['Exponentielle', 'Logarithme'],
+    tags: ['Exponentielle', 'Logarithme', 'Limites de fonctions'],
   },
   bac_2024_01_sujet0_8: {
     annee: '2024',
@@ -1314,7 +1355,7 @@ export const dictionnaireBAC = {
     mois: 'Janvier',
     numeroInitial: '8',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
 
   bac_2023_03_sujet1_ameriquenord_1: {
@@ -1351,7 +1392,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2023_03_sujet1_asie_1: {
     annee: '2023',
@@ -1360,7 +1401,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2023_03_sujet1_asie_2: {
     annee: '2023',
@@ -1378,7 +1419,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Logarithme'],
+    tags: ['Logarithme', 'Limites de fonctions'],
   },
   bac_2023_03_sujet1_asie_4: {
     annee: '2023',
@@ -1403,6 +1444,7 @@ export const dictionnaireBAC = {
       'Primitives',
       'Python',
       'Loi binomiale',
+      'Limites de suites',
     ],
   },
   bac_2023_03_sujet1_etrangers_groupe1_2: {
@@ -1412,7 +1454,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Probabilités conditionnelles', 'Suites', 'Loi binomiale'],
+    tags: ['Probabilités conditionnelles', 'Suites', 'Loi binomiale', 'Raisonnement par récurrence'],
   },
   bac_2023_03_sujet1_etrangers_groupe1_3: {
     annee: '2023',
@@ -1439,7 +1481,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: ['Logarithme'],
+    tags: ['Logarithme', 'Limites de fonctions'],
   },
   bac_2023_03_sujet1_etrangers_groupe2_2: {
     annee: '2023',
@@ -1448,7 +1490,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Probabilités conditionnelles', 'Suites'],
+    tags: ['Probabilités conditionnelles', 'Suites', 'Raisonnement par récurrence'],
   },
   bac_2023_03_sujet1_etrangers_groupe2_3: {
     annee: '2023',
@@ -1457,7 +1499,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['QCM', 'Logarithme', 'Convexité', 'Suites'],
+    tags: ['QCM', 'Logarithme', 'Convexité', 'Suites', 'Limites de suites'],
   },
   bac_2023_03_sujet1_etrangers_groupe2_4: {
     annee: '2023',
@@ -1484,7 +1526,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI'],
+    tags: ['Logarithme', 'TVI', 'Limites de fonctions'],
   },
   bac_2023_03_sujet1_metropole_3: {
     annee: '2023',
@@ -1493,7 +1535,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2023_03_sujet1_metropole_4: {
     annee: '2023',
@@ -1544,7 +1586,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Suites', 'Logarithme'],
+    tags: ['Suites', 'Logarithme', 'Limites de fonctions', 'Limites de suites', 'Raisonnement par récurrence'],
   },
   bac_2023_03_sujet1_reunion_1: {
     annee: '2023',
@@ -1562,7 +1604,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI', 'Convexité', 'Primitives'],
+    tags: ['Logarithme', 'TVI', 'Convexité', 'Primitives', 'Limites de fonctions'],
   },
   bac_2023_03_sujet1_reunion_3: {
     annee: '2023',
@@ -1571,7 +1613,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['QCM', 'Suites', 'Python'],
+    tags: ['QCM', 'Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2023_03_sujet1_reunion_4: {
     annee: '2023',
@@ -1598,7 +1640,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2023_03_sujet2_ameriquenord_3: {
     annee: '2023',
@@ -1623,6 +1665,8 @@ export const dictionnaireBAC = {
       'Suites',
       'Variables aléatoires',
       'Loi binomiale',
+      'Limites de fonctions',
+      'Limites de suites',
     ],
   },
   bac_2023_03_sujet2_asie_1: {
@@ -1641,7 +1685,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Exponentielle', 'TVI', 'Logarithme'],
+    tags: ['Exponentielle', 'TVI', 'Logarithme', 'Limites de fonctions'],
   },
   bac_2023_03_sujet2_asie_3: {
     annee: '2023',
@@ -1650,7 +1694,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2023_03_sujet2_asie_4: {
     annee: '2023',
@@ -1684,7 +1728,14 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI', 'Suites'],
+    tags: [
+      'Logarithme',
+      'TVI',
+      'Suites',
+      'Limites de fonctions',
+      'Limites de suites',
+      'Raisonnement par récurrence',
+    ],
   },
   bac_2023_03_sujet2_etrangers_groupe1_3: {
     annee: '2023',
@@ -1720,7 +1771,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Suites'],
+    tags: ['Logarithme', 'Suites', 'Limites de fonctions', 'Limites de suites', 'Raisonnement par récurrence'],
   },
   bac_2023_03_sujet2_etrangers_groupe2_3: {
     annee: '2023',
@@ -1756,7 +1807,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2023_03_sujet2_metropole_3: {
     annee: '2023',
@@ -1774,7 +1825,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Logarithme'],
+    tags: ['Logarithme', 'Limites de fonctions'],
   },
   bac_2023_03_sujet2_polynesie_1: {
     annee: '2023',
@@ -1810,7 +1861,15 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Affirmations', 'Suites', 'Logarithme', 'Convexité', 'Python'],
+    tags: [
+      'Affirmations',
+      'Suites',
+      'Logarithme',
+      'Convexité',
+      'Python',
+      'Limites de fonctions',
+      'Limites de suites',
+    ],
   },
   bac_2023_03_sujet2_reunion_1: {
     annee: '2023',
@@ -1828,7 +1887,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2023_03_sujet2_reunion_3: {
     annee: '2023',
@@ -1846,7 +1905,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['QCM', 'Convexité', 'Exponentielle', 'Logarithme'],
+    tags: ['QCM', 'Convexité', 'Exponentielle', 'Logarithme', 'Limites de fonctions'],
   },
   bac_2023_08_sujet1_caledonie_1: {
     annee: '2023',
@@ -1864,7 +1923,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2023_08_sujet1_caledonie_3: {
     annee: '2023',
@@ -1882,7 +1941,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Convexité', 'TVI'],
+    tags: ['Logarithme', 'Convexité', 'TVI', 'Limites de fonctions'],
   },
   bac_2023_08_sujet2_caledonie_1: {
     annee: '2023',
@@ -1909,7 +1968,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2023_08_sujet2_caledonie_4: {
     annee: '2023',
@@ -1927,7 +1986,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI', 'Python'],
+    tags: ['Logarithme', 'TVI', 'Python', 'Limites de fonctions'],
   },
   bac_2023_09_sujet1_ameriquesud_2: {
     annee: '2023',
@@ -1954,7 +2013,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Suites'],
+    tags: ['Suites', 'Raisonnement par récurrence'],
   },
   bac_2023_09_sujet1_metropole_1: {
     annee: '2023',
@@ -1990,7 +2049,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI', 'Convexité', 'Exponentielle'],
+    tags: ['Logarithme', 'TVI', 'Convexité', 'Exponentielle', 'Limites de fonctions'],
   },
   bac_2023_09_sujet1_polynesie_1: {
     annee: '2023',
@@ -2017,7 +2076,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2023_09_sujet1_polynesie_4: {
     annee: '2023',
@@ -2057,7 +2116,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2023_09_sujet2_ameriquesud_4: {
     annee: '2023',
@@ -2066,7 +2125,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Exponentielle', 'TVI', 'Convexité'],
+    tags: ['Logarithme', 'Exponentielle', 'TVI', 'Convexité', 'Limites de fonctions'],
   },
   bac_2023_09_sujet2_metropole_1: {
     annee: '2023',
@@ -2084,7 +2143,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Convexité'],
+    tags: ['Logarithme', 'Convexité', 'Limites de fonctions'],
   },
   bac_2023_09_sujet2_metropole_3: {
     annee: '2023',
@@ -2093,7 +2152,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python', 'Exponentielle'],
+    tags: ['Suites', 'Python', 'Exponentielle', 'Raisonnement par récurrence'],
   },
   bac_2023_09_sujet2_metropole_4: {
     annee: '2023',
@@ -2130,7 +2189,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI'],
+    tags: ['Logarithme', 'TVI', 'Limites de fonctions'],
   },
   bac_2024_05_sujet1_ameriquenord_4: {
     annee: '2024',
@@ -2139,7 +2198,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Primitives', 'Suites', 'Python', 'Intégration'],
+    tags: ['Primitives', 'Suites', 'Python', 'Calcul intégral'],
   },
   bac_2024_05_sujet2_ameriquenord_1: {
     annee: '2024',
@@ -2166,7 +2225,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2024_05_sujet2_ameriquenord_4: {
     annee: '2024',
@@ -2175,7 +2234,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Primitives', 'Intégration'],
+    tags: ['Logarithme', 'Primitives', 'Calcul intégral'],
   },
   bac_2024_06_sujet1_etrangers_1: {
     annee: '2024',
@@ -2193,7 +2252,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Exponentielle', 'Suites', 'Python'],
+    tags: ['Exponentielle', 'Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2024_06_sujet1_etrangers_3: {
     annee: '2024',
@@ -2251,7 +2310,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
 
   bac_2024_06_sujet1_asie_1: {
@@ -2261,7 +2320,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: ['Convexité', 'Exponentielle', 'Primitives', 'Intégration'],
+    tags: ['Convexité', 'Exponentielle', 'Primitives', 'Calcul intégral'],
   },
   bac_2024_06_sujet1_asie_2: {
     annee: '2024',
@@ -2334,7 +2393,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI', 'Intégration'],
+    tags: ['Logarithme', 'TVI', 'Calcul intégral', 'Limites de fonctions', 'Intégration par parties'],
   },
   bac_2024_06_sujet1_metropole_devoile_1: {
     annee: '2024',
@@ -2361,7 +2420,15 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: 'devoile',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Suites', 'Python', 'Intégration'],
+    tags: [
+      'Logarithme',
+      'Suites',
+      'Python',
+      'Calcul intégral',
+      'Limites de fonctions',
+      'Limites de suites',
+      'Raisonnement par récurrence',
+    ],
   },
   bac_2024_06_sujet1_metropole_devoile_4: {
     annee: '2024',
@@ -2370,7 +2437,14 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: 'devoile',
     typeExercice: 'bac',
-    tags: ['Affirmations', 'Exponentielle', 'Convexité', 'Logarithme', 'TVI'],
+    tags: [
+      'Affirmations',
+      'Exponentielle',
+      'Convexité',
+      'Logarithme',
+      'TVI',
+      'Limites de fonctions',
+    ],
   },
   bac_2024_06_sujet1_polynesie_1: {
     annee: '2024',
@@ -2388,7 +2462,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Équations différentielles', 'Intégration'],
+    tags: ['Équations différentielles', 'Calcul intégral'],
   },
   bac_2024_06_sujet1_polynesie_3: {
     annee: '2024',
@@ -2406,7 +2480,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2024_06_sujet2_asie_1: {
     annee: '2024',
@@ -2415,7 +2489,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Convexité', 'Suites'],
+    tags: ['Logarithme', 'Convexité', 'Suites', 'Limites de fonctions', 'Raisonnement par récurrence'],
   },
   bac_2024_06_sujet2_asie_2: {
     annee: '2024',
@@ -2439,6 +2513,7 @@ export const dictionnaireBAC = {
       'Dénombrement',
       'Logarithme',
       'Équations différentielles',
+      'Limites de suites',
     ],
   },
   bac_2024_06_sujet2_asie_4: {
@@ -2471,7 +2546,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python', 'Équations différentielles'],
+    tags: ['Suites', 'Python', 'Équations différentielles', 'Raisonnement par récurrence'],
   },
   bac_2024_06_sujet2_metropole_3: {
     annee: '2024',
@@ -2480,7 +2555,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Convexité', 'Logarithme', 'TVI'],
+    tags: ['Convexité', 'Logarithme', 'TVI', 'Limites de fonctions'],
   },
   bac_2024_06_sujet2_metropole_4: {
     annee: '2024',
@@ -2521,7 +2596,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: 'devoile',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python', 'Logarithme'],
+    tags: ['Suites', 'Python', 'Logarithme', 'Limites de suites', 'Raisonnement par récurrence'],
   },
   bac_2024_06_sujet2_metropole_devoile_4: {
     annee: '2024',
@@ -2530,7 +2605,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: 'devoile',
     typeExercice: 'bac',
-    tags: ['Convexité', 'Primitives', 'Exponentielle', 'Intégration'],
+    tags: ['Convexité', 'Primitives', 'Exponentielle', 'Calcul intégral'],
   },
   bac_2024_06_sujet2_polynesie_1: {
     annee: '2024',
@@ -2551,7 +2626,7 @@ export const dictionnaireBAC = {
     tags: [
       'QCM',
       'Équations différentielles',
-      'Intégration',
+      'Calcul intégral',
       'Logarithme',
       'Dénombrement',
     ],
@@ -2563,7 +2638,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Logarithme', 'Python'],
+    tags: ['Suites', 'Logarithme', 'Python', 'Limites de suites', 'Raisonnement par récurrence'],
   },
   bac_2024_06_sujet2_polynesie_4: {
     annee: '2024',
@@ -2590,7 +2665,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Exponentielle', 'Intégration'],
+    tags: ['Exponentielle', 'Calcul intégral'],
   },
   bac_2024_09_sujet1_metropole_3: {
     annee: '2024',
@@ -2599,7 +2674,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Affirmations', 'Suites', 'Python'],
+    tags: ['Affirmations', 'Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2024_09_sujet1_metropole_4: {
     annee: '2024',
@@ -2632,7 +2707,9 @@ export const dictionnaireBAC = {
       'Logarithme',
       'TVI',
       'Équations différentielles',
-      'Intégration',
+      'Calcul intégral',
+      'Limites de fonctions',
+      'Intégration par parties',
     ],
   },
   bac_2024_09_sujet1_polynesie_3: {
@@ -2642,7 +2719,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2024_09_sujet1_polynesie_4: {
     annee: '2024',
@@ -2667,6 +2744,7 @@ export const dictionnaireBAC = {
       'Suites',
       'Python',
       'Logarithme',
+      'Limites de suites',
     ],
   },
   bac_2024_06_sujet1_suede_2: {
@@ -2685,7 +2763,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Exponentielle', 'TVI', 'Intégration'],
+    tags: ['Exponentielle', 'TVI', 'Calcul intégral'],
   },
   bac_2024_06_sujet1_suede_4: {
     annee: '2024',
@@ -2722,7 +2800,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Affirmations', 'Intégration'],
+    tags: ['Suites', 'Affirmations', 'Calcul intégral', 'Raisonnement par récurrence'],
   },
   bac_2024_11_sujet1_amsud_4: {
     annee: '2024',
@@ -2749,7 +2827,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Affirmations', 'Suites', 'Équations différentielles'],
+    tags: ['Affirmations', 'Suites', 'Équations différentielles', 'Raisonnement par récurrence'],
   },
   bac_2024_11_sujet2_amsud_3: {
     annee: '2024',
@@ -2758,7 +2836,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Exponentielle', 'Intégration'],
+    tags: ['Exponentielle', 'Calcul intégral'],
   },
   bac_2024_11_sujet2_amsud_4: {
     annee: '2024',
@@ -2812,7 +2890,7 @@ export const dictionnaireBAC = {
     tags: [
       'Exponentielle',
       'Équations différentielles',
-      'Intégration',
+      'Calcul intégral',
       'Primitives',
     ],
   },
@@ -2832,7 +2910,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Logarithme', 'Python'],
+    tags: ['Suites', 'Logarithme', 'Python', 'Limites de suites'],
   },
   bac_2025_05_sujet2_ameriquenord_3: {
     annee: '2025',
@@ -2850,7 +2928,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Trigonométrie', 'Exponentielle', 'Intégration'],
+    tags: ['Trigonométrie', 'Exponentielle', 'Calcul intégral'],
   },
 
   bac_2025_05_sujet2_ameriquenord_secours_1: {
@@ -2860,7 +2938,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: 'secours',
     typeExercice: 'bac',
-    tags: ['Exponentielle', 'Convexité', 'Intégration', 'TVI'],
+    tags: ['Exponentielle', 'Convexité', 'Calcul intégral', 'TVI'],
   },
   bac_2025_05_sujet2_ameriquenord_secours_2: {
     annee: '2025',
@@ -2924,7 +3002,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python', 'Logarithme'],
+    tags: ['Suites', 'Python', 'Logarithme', 'Limites de suites'],
   },
   bac_2025_06_sujet1_asie_4: {
     annee: '2025',
@@ -2933,7 +3011,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Exponentielle', 'Intégration', 'TVI'],
+    tags: ['Exponentielle', 'Calcul intégral', 'TVI'],
   },
   bac_2025_06_sujet1_etrangers_1: {
     annee: '2025',
@@ -2965,7 +3043,14 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI', 'Python', 'Suites'],
+    tags: [
+      'Logarithme',
+      'TVI',
+      'Python',
+      'Suites',
+      'Limites de fonctions',
+      'Limites de suites',
+    ],
   },
   bac_2025_06_sujet1_etrangers_4: {
     annee: '2025',
@@ -2974,7 +3059,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Équations différentielles', 'Logarithme'],
+    tags: ['Équations différentielles', 'Logarithme', 'Limites de fonctions'],
   },
   bac_2025_06_sujet2_asie_1: {
     annee: '2025',
@@ -2992,7 +3077,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python', 'Logarithme'],
+    tags: ['Suites', 'Python', 'Logarithme', 'Limites de suites'],
   },
   bac_2025_06_sujet2_asie_3: {
     annee: '2025',
@@ -3010,7 +3095,12 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Exponentielle', 'Intégration', 'TVI', 'Équations différentielles'],
+    tags: [
+      'Exponentielle',
+      'Calcul intégral',
+      'TVI',
+      'Équations différentielles',
+    ],
   },
 
   bac_2025_06_sujet2_etrangers_1: {
@@ -3020,7 +3110,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python', 'Logarithme'],
+    tags: ['Suites', 'Python', 'Logarithme', 'Limites de suites'],
   },
   bac_2025_06_sujet2_etrangers_2: {
     annee: '2025',
@@ -3029,7 +3119,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Exponentielle', 'Intégration', 'TVI', 'Primitives'],
+    tags: ['Exponentielle', 'Calcul intégral', 'TVI', 'Primitives'],
   },
   bac_2025_06_sujet2_etrangers_3: {
     annee: '2025',
@@ -3080,7 +3170,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Exponentielle', 'Intégration', 'Suites', 'Python'],
+    tags: ['Exponentielle', 'Calcul intégral', 'Suites', 'Python'],
   },
   bac_2025_06_sujet1_polynesie_4: {
     annee: '2025',
@@ -3113,7 +3203,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Convexité', 'Intégration'],
+    tags: ['Logarithme', 'Convexité', 'Calcul intégral', 'Limites de fonctions', 'Intégration par parties'],
   },
   bac_2025_06_sujet1_metropole_3: {
     annee: '2025',
@@ -3135,7 +3225,7 @@ export const dictionnaireBAC = {
       'Suites',
       'Python',
       'Exponentielle',
-      'Intégration',
+      'Calcul intégral',
       'Équations différentielles',
     ],
   },
@@ -3169,7 +3259,14 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Affirmations', 'Logarithme', 'Convexité', 'Suites'],
+    tags: [
+      'Affirmations',
+      'Logarithme',
+      'Convexité',
+      'Suites',
+      'Limites de suites',
+      'Raisonnement par récurrence',
+    ],
   },
   bac_2025_06_sujet2_metropole_4: {
     annee: '2025',
@@ -3178,7 +3275,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Équations différentielles', 'Intégration', 'Exponentielle'],
+    tags: ['Équations différentielles', 'Calcul intégral', 'Exponentielle'],
   },
   bac_2025_06_sujet2_polynesie_1: {
     annee: '2025',
@@ -3196,7 +3293,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Convexité', 'TVI'],
+    tags: ['Logarithme', 'Convexité', 'TVI', 'Limites de fonctions'],
   },
   bac_2025_06_sujet2_polynesie_3: {
     annee: '2025',
@@ -3217,11 +3314,12 @@ export const dictionnaireBAC = {
     tags: [
       'Affirmations',
       'Dénombrement',
-      'Intégration',
+      'Calcul intégral',
       'Équations différentielles',
       'Logarithme',
       'Suites',
       'Trigonométrie',
+      'Intégration par parties',
     ],
   },
   bac_2025_09_sujet1_asie_1: {
@@ -3236,7 +3334,7 @@ export const dictionnaireBAC = {
       'Équations différentielles',
       'Convexité',
       'TVI',
-      'Intégration',
+      'Calcul intégral',
       'Exponentielle',
     ],
   },
@@ -3277,7 +3375,7 @@ export const dictionnaireBAC = {
     tags: [
       'Équations différentielles',
       'Exponentielle',
-      'Intégration',
+      'Calcul intégral',
       'Primitives',
     ],
   },
@@ -3297,7 +3395,13 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python', 'Logarithme'],
+    tags: [
+      'Suites',
+      'Python',
+      'Logarithme',
+      'Limites de suites',
+      'Raisonnement par récurrence',
+    ],
   },
   bac_2025_09_sujet1_metropole_4: {
     annee: '2025',
@@ -3344,7 +3448,14 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python', 'Logarithme', 'TVI'],
+    tags: [
+      'Suites',
+      'Python',
+      'Logarithme',
+      'TVI',
+      'Limites de suites',
+      'Raisonnement par récurrence',
+    ],
   },
   bac_2025_09_sujet1_polynesie_4: {
     annee: '2025',
@@ -3355,10 +3466,11 @@ export const dictionnaireBAC = {
     typeExercice: 'bac',
     tags: [
       'Affirmations',
-      'Intégration',
+      'Calcul intégral',
       'Dénombrement',
       'Espace',
       'Logarithme',
+      'Intégration par parties',
     ],
   },
   bac_2025_09_sujet2_metropole_1: {
@@ -3438,7 +3550,7 @@ export const dictionnaireBAC = {
     tags: [
       'Équations différentielles',
       'Exponentielle',
-      'Intégration',
+      'Calcul intégral',
       'Convexité',
       'TVI',
     ],
@@ -3483,7 +3595,7 @@ export const dictionnaireBAC = {
     typeExercice: 'bac',
     tags: [
       'TVI',
-      'Intégration',
+      'Calcul intégral',
       'Suites',
       'Python',
       'Exponentielle',
@@ -3505,6 +3617,8 @@ export const dictionnaireBAC = {
       'Suites',
       'Convexité',
       'Dénombrement',
+      'Limites de fonctions',
+      'Raisonnement par récurrence',
     ],
   },
   bac_2025_11_sujet2_ameriquesud_1: {
@@ -3537,7 +3651,15 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Suites', 'Tableur', 'Logarithme', 'Python', 'Exponentielle'],
+    tags: [
+      'Suites',
+      'Tableur',
+      'Logarithme',
+      'Python',
+      'Exponentielle',
+      'Limites de suites',
+      'Raisonnement par récurrence',
+    ],
   },
   bac_2025_11_sujet2_ameriquesud_4: {
     annee: '2025',
@@ -3550,7 +3672,7 @@ export const dictionnaireBAC = {
       'Dénombrement',
       'Équations différentielles',
       'Primitives',
-      'Intégration',
+      'Calcul intégral',
       'Exponentielle',
       'Convexité',
     ],
@@ -3574,7 +3696,7 @@ export const dictionnaireBAC = {
     tags: [
       'Probabilités conditionnelles',
       'Variables aléatoires',
-      'Intégration',
+      'Calcul intégral',
     ],
   },
   bac_2025_11_sujet2_caledonie_3: {
@@ -3584,7 +3706,13 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Suites', 'Exponentielle'],
+    tags: [
+      'Logarithme',
+      'Suites',
+      'Exponentielle',
+      'Limites de suites',
+      'Raisonnement par récurrence',
+    ],
   },
   bac_2025_11_sujet2_caledonie_4: {
     annee: '2025',
@@ -3593,7 +3721,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI'],
+    tags: ['Logarithme', 'TVI', 'Limites de fonctions'],
   },
   bac_2026_05_sujet1_ameriquenord_1: {
     annee: '2026',
@@ -3616,7 +3744,12 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python', 'Équations différentielles'],
+    tags: [
+      'Suites',
+      'Python',
+      'Équations différentielles',
+      'Raisonnement par récurrence',
+    ],
   },
   bac_2026_05_sujet1_ameriquenord_3: {
     annee: '2026',
@@ -3634,7 +3767,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'Convexité'],
+    tags: ['Logarithme', 'Convexité', 'Limites de fonctions'],
   },
   bac_2026_05_sujet2_ameriquenord_1: {
     annee: '2026',
@@ -3657,7 +3790,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: ['Suites', 'Python'],
+    tags: ['Suites', 'Python', 'Raisonnement par récurrence'],
   },
   bac_2026_05_sujet2_ameriquenord_3: {
     annee: '2026',
@@ -3675,7 +3808,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: ['Logarithme', 'TVI', 'Calcul intégral'],
+    tags: ['Logarithme', 'TVI', 'Calcul intégral', 'Limites de fonctions', 'Intégration par parties'],
   },
   bac_2026_06_sujet1_asie_1: {
     annee: '2026',
@@ -3684,7 +3817,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Probabilités conditionnelles', 'Suites', 'Python', 'Logarithme'],
   },
   bac_2026_06_sujet1_asie_2: {
     annee: '2026',
@@ -3693,7 +3826,14 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: [''],
+    tags: [
+      'Affirmations',
+      'Limites de fonctions',
+      'Raisonnement par récurrence',
+      'Loi binomiale',
+      'Calcul intégral',
+      'Dénombrement',
+    ],
   },
   bac_2026_06_sujet1_asie_3: {
     annee: '2026',
@@ -3702,7 +3842,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ["Géométrie dans l'espace"],
   },
   bac_2026_06_sujet1_asie_4: {
     annee: '2026',
@@ -3711,6 +3851,6 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Trigonométrie','TVI'],
   },
 }
