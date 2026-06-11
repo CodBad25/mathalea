@@ -130,7 +130,7 @@ export class Bissectrice extends DemiDroite {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      code += '\n\t' + objet.tikz()
+      code += `\t${objet.tikz()}\n`
     }
     return code
   }

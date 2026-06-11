@@ -78,7 +78,7 @@ export class BezierPath extends ObjetMathalea2D {
   }
 
   tikz() {
-    let path = `\n\t\\draw[color = ${this.color[1]},line width = ${this.epaisseur}, opacity = ${this.opacite}](${this.xStart},${this.yStart})`
+    let path = `\t\\draw[color = ${this.color[1]},line width = ${this.epaisseur}, opacity = ${this.opacite}](${this.xStart},${this.yStart})`
     // Pour tikz, les coordonnées du point initial et final doivent être en coordonnées absolues, seules les points de contrôles peuvent-être en relatif à leur noeud respectif
     let x0 = this.xStart
     let y0 = this.yStart
@@ -91,7 +91,7 @@ export class BezierPath extends ObjetMathalea2D {
       x0 = x3 // Le nouveau point de départ est le point d'arrivée du tronçon précédent !
       y0 = y3
     }
-    path += ';\n'
+    path += ';'
     return path
   }
 }

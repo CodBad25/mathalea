@@ -219,7 +219,7 @@ export class CibleCarree extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      code += '\n\t' + objet.tikz()
+      code += `\t${objet.tikz()}\n`
     }
     return code
   }
@@ -432,7 +432,7 @@ export class CibleRonde extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      code += '\n\t' + objet.tikz()
+      code += `\t${objet.tikz()}\n`
     }
     return code
   }
@@ -633,7 +633,7 @@ export class CibleCouronne extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      code += '\n\t' + objet.tikz()
+      code += `\t${objet.tikz()}\n`
     }
     return code
   }

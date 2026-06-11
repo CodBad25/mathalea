@@ -143,7 +143,7 @@ export class NomAngleParPosition extends ObjetMathalea2D {
     let code = ''
     if (this.objets != null) {
       for (const objet of this.objets) {
-        code += '\n\t' + objet.tikz()
+        code += `\t${objet.tikz()}\n`
       }
       return code
     } else return ''

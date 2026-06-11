@@ -83,7 +83,7 @@ export class Pave extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      code += '\n\t' + objet.tikz()
+      code += `\t${objet.tikz()}`
     }
     return code
   }
@@ -764,7 +764,7 @@ export class Cone extends ObjetMathalea2D {
     if (this.objets == null) return code
     for (const objet of this.objets) {
       objet.color = colorToLatexOrHTML(this.stringColor)
-      code += objet.tikz() + '\n\t'
+      code += objet.tikz() + '\t'
     }
     return code
   }
@@ -846,7 +846,7 @@ export class Sphere2d extends ObjetMathalea2D {
     if (this.objets == null) return code
     for (const objet of this.objets) {
       objet.color = this.color
-      code += objet.tikz() + '\n\t'
+      code += objet.tikz() + '\t'
     }
     return code
   }
@@ -1109,7 +1109,7 @@ export class Cylindre extends ObjetMathalea2D {
     if (this.objets == null) return code
     for (const objet of this.objets) {
       objet.color = colorToLatexOrHTML(this.stringColor)
-      code += objet.tikz() + '\n\t'
+      code += objet.tikz() + '\t'
     }
     return code
   }

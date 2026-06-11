@@ -85,7 +85,7 @@ export class CourbeInterpolee extends ObjetMathalea2D {
     let code = ''
     if (this.courbes == null) return code
     for (const objet of this.courbes) {
-      code += '\n\t' + objet.tikz()
+      code += `\t${objet.tikz()}\n`
     }
     return code
   }

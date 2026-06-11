@@ -614,7 +614,7 @@ export class PolygoneATrous extends ObjetMathalea2D {
   tikz() {
     let code = this.contour.tikz()
     for (let i = 0; i < this.trous.length; i++) {
-      code += '\n\t' + this.trous[i].tikz()
+      code += `\t${this.trous[i].tikz()}`
     }
     return code
   }

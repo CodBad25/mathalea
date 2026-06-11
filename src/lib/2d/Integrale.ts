@@ -117,7 +117,7 @@ export class Integrale extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      code += '\n\t' + objet.svg(coeff)
+      code += `\n\t${objet.svg(coeff)}\n`
     }
     return code
   }
@@ -126,7 +126,7 @@ export class Integrale extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      code += '\n\t' + objet.tikz()
+      code += `\t${objet.tikz()}\n`
     }
     return code
   }
@@ -135,8 +135,9 @@ export class Integrale extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      if (typeof objet.svgml === 'undefined') code += '\n\t' + objet.svg(coeff)
-      else code += '\n\t' + objet.svgml(coeff, amp)
+      if (typeof objet.svgml === 'undefined')
+        code += `\n\t${objet.svg(coeff)}\n`
+      else code += `\n\t${objet.svgml(coeff, amp)}\n`
     }
     return code
   }
@@ -145,8 +146,8 @@ export class Integrale extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      if (typeof objet.tikzml === 'undefined') code += '\n\t' + objet.tikz()
-      else code += '\n\t' + objet.tikzml(amp)
+      if (typeof objet.tikzml === 'undefined') code += `\t${objet.tikz()}\n`
+      else code += `\t${objet.tikzml(amp)}\n`
     }
     return code
   }
