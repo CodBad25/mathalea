@@ -6,6 +6,7 @@ import {
   getFileLogger,
   log as lg,
   logError as lgE,
+  logIfDebug,
   logIfVerbose,
 } from '../../helpers/log'
 import { createSolidesThreeJsMock } from '../../mocks/solidesThreeJs.mock'
@@ -397,7 +398,7 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
                 `Errors for exercice ${exercice.uuid} with signature ${signature}:`,
                 c.logs.error,
               )
-              logError(
+              logIfDebug(
                 `URL: for exercice ${exercice.uuid} with signature ${signature}:`,
                 createURL(exercice),
               )
@@ -417,7 +418,7 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
                   `logs for exercice ${exercice.uuid} with signature ${signature}:`,
                   filtered,
                 )
-                logError(
+                logIfDebug(
                   `URL: for exercice ${exercice.uuid} with signature ${signature}:`,
                   createURL(exercice),
                 )
@@ -428,19 +429,21 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
                 `warns for exercice ${exercice.uuid} with signature ${signature}:`,
                 c.logs.warn,
               )
-              logError(
+              logIfDebug(
                 `URL: for exercice ${exercice.uuid} with signature ${signature}:`,
                 createURL(exercice),
               )
             }
             if (exercice.listeQuestions.length !== i) {
-              logError(
-                `Waring : number of questions for exercice ${exercice.uuid} with signature ${signature}: expected ${i}, got ${exercice.listeQuestions.length}`,
-              )
-              logError(
-                `URL: for exercice ${exercice.uuid} with signature ${signature}:`,
-                createURL(exercice),
-              )
+              if (exercice.nbQuestionsModifiable !== false) {
+                logError(
+                  `Warning : number of questions for exercice ${exercice.uuid} with signature ${signature}: expected ${i}, got ${exercice.listeQuestions.length}`,
+                )
+                logIfDebug(
+                  `URL: for exercice ${exercice.uuid} with signature ${signature}:`,
+                  createURL(exercice),
+                )
+              }
             }
             expect(c.logs.error.length, signature).toBe(0)
             expect(c.logs.log.length, signature).toBe(0)
@@ -565,7 +568,7 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
         .replace(/\.ts$/, '.')
         .replace(/\.js$/, '.'),
     )
-  log(filtered)
+  logIfVerbose(filtered)
   if (filtered.length === 0) {
     // aucun fichier concerné.. on sort
     describe('dummy', () => {
@@ -576,7 +579,7 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
   } else {
     filtered.forEach((file, index) => {
       const filter = file.replaceAll(' ', '')
-      console.log(
+      logIfVerbose(
         'launching test for:',
         filter + `,  ${index + 1}/${filtered.length}`,
       )

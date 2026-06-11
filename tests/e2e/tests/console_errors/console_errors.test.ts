@@ -335,14 +335,14 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
   const filter = (process.env.NIV as string).replaceAll(' ', '')
   prefs.headless = true
   prefs.nbExosParLot = 300
-  log(filter)
+  logIfVerbose(filter)
   testRunAllLots(filter)
 } else if (
   process.env.CHANGED_FILES !== null &&
   process.env.CHANGED_FILES !== undefined
 ) {
   const changedFiles = process.env.CHANGED_FILES?.split('\n') ?? []
-  log(changedFiles)
+  logIfVerbose(changedFiles)
   prefs.headless = true
   prefs.nbExosParLot = 300
   const filtered = changedFiles
@@ -371,7 +371,7 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
     const cfiltered = filtered.slice(0, 200) // limiter à 200 exercices pour éviter de surcharger le serveur
     cfiltered.forEach((file, index) => {
       const filter = file.replaceAll(' ', '')
-      console.log(
+      logIfVerbose(
         'launching test for:',
         filter + `,  ${index + 1}/${cfiltered.length}`,
       )
