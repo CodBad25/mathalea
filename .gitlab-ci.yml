@@ -15,10 +15,10 @@
 
 stages:
   - test
+  - playwright-test
   - build-projet
   - playwright
   - deploy-server
-  - playwright-test
   - compile-pdf
   - playwright-pdfDNB
   - playwright-pdfBAC
@@ -84,30 +84,8 @@ build_ci_pdf:
       when: manual
     - when: never
 
-.install_dependenciesPDF:
-  extends: .pnpm_setup
-  script:
-    - lualatex -v
-    - pnpm run makeJson
-
-.install_dependenciesPDFDNB:
-  extends: .pnpm_setup
-  before_script:
-    - git clone https://forge.apps.education.fr/coopmaths/dnb.git ./public/static/dnb
-    - mv ./public/static/dnb/sujets_decoupes/* ./public/static/dnb/
-  script: 
-    - pnpm run makeJson
-
-.install_dependenciesPDFBAC:
-  extends: .pnpm_setup
-  before_script:
-    - git clone https://forge.apps.education.fr/coopmaths/bac.git ./public/static/bac
-  script:  
-    - pnpm run makeJson
-
 .testCIPDF:
   image: $DOCKER_IMAGE
-  extends: .install_dependenciesPDF
   stage: compile-pdf
   allow_failure: true
   timeout: 2h 30m
@@ -163,6 +141,21 @@ build_ci_pdf:
     reports:
       junit: ./tests/e2e/logs/junit-report.xml
     expire_in: 10 day
+
+.install_dependenciesPDFDNB:
+  extends: .testCIPDF
+  before_script:
+    - git clone https://forge.apps.education.fr/coopmaths/dnb.git ./public/static/dnb
+    - mv ./public/static/dnb/sujets_decoupes/* ./public/static/dnb/
+  script:
+    - pnpm run makeJson
+
+.install_dependenciesPDFBAC:
+  extends: .testCIPDF
+  before_script:
+    - git clone https://forge.apps.education.fr/coopmaths/bac.git ./public/static/bac
+  script:
+    - pnpm run makeJson
 
 .testExosModifiedConsolidated:
   image: mcr.microsoft.com/playwright:v1.60.0-noble
@@ -293,7 +286,6 @@ playwright-pdf-consolidated:
 
 playwright-pdf-dnb-consolidated:
   extends:
-    - .testCIPDF
     - .install_dependenciesPDFDNB
   stage: playwright-pdfDNB
   timeout: 5h
@@ -334,7 +326,6 @@ playwright-pdf-dnb-consolidated:
 
 playwright-pdf-bac-consolidated:
   extends:
-    - .testCIPDF
     - .install_dependenciesPDFBAC
   stage: playwright-pdfBAC
   timeout: 5h
@@ -499,7 +490,7 @@ deploy:
     expire_in: 1 day
 
 playwright-caneleve:
-  extends: .testCI
+  image: mcr.microsoft.com/playwright:v1.60.0-noble
   stage: playwright
   allow_failure: true
   timeout: 5h
@@ -508,9 +499,8 @@ playwright-caneleve:
     - corepack prepare pnpm@11.5.2 --activate
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm install --frozen-lockfile --prefer-offline --silent
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 20
+    - sleep 1
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
-    - sleep 60
     - |
       FAIL=0
 
@@ -548,7 +538,7 @@ playwright-caneleve:
       - script_failure
 
 playwright-consistency:
-  extends: .testCI
+  image: mcr.microsoft.com/playwright:v1.60.0-noble
   stage: playwright
   allow_failure: true
   timeout: 5h
@@ -557,9 +547,8 @@ playwright-consistency:
     - corepack prepare pnpm@11.5.2 --activate
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm install --frozen-lockfile --prefer-offline --silent
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 20
+    - sleep 1
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
-    - sleep 60
     - |
       FAIL=0
       echo "🧪 test:e2e:consistency"
@@ -595,7 +584,7 @@ playwright-consistency:
       - script_failure
 
 playwright-interactivity:
-  extends: .testCI
+  image: mcr.microsoft.com/playwright:v1.60.0-noble
   stage: playwright
   allow_failure: true
   timeout: 5h
@@ -604,9 +593,8 @@ playwright-interactivity:
     - corepack prepare pnpm@11.5.2 --activate
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm install --frozen-lockfile --prefer-offline --silent
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 20
+    - sleep 1
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
-    - sleep 60
     - |
       FAIL=0
       echo "🧪 test:e2e:interactivity"
@@ -651,16 +639,14 @@ playwright-interactivity:
 # Économies : 1 seul runner, 1 seule installation de dépendances, 1 seul démarrage du serveur
 testExosModifiedConsolidated:
   extends: .testExosModifiedConsolidated
-
   script:
     - corepack enable
     - corepack prepare pnpm@11.5.2 --activate
     - NODE_OPTIONS=--max-old-space-size=4096
-    - pnpm install --frozen-lockfile --prefer-offline
-    - nohup pnpm start 2>&1 &
-    - sleep 20
+    - pnpm install --frozen-lockfile --prefer-offline --silent
+    - nohup pnpm start 2>&1 >/dev/null &
+    - sleep 1
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
-    - sleep 60
     # Récupérer les fichiers modifiés depuis les 2 derniers commits
     - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
     - git checkout FETCH_HEAD
@@ -789,6 +775,9 @@ testExosModifiedLatex:
         CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
       fi
 
+    - npm install -g pnpm@11.5.2
+    - pnpm run makeJson >/dev/null
+    - sleep 2
     - echo "$CHANGED_FILES"
     - CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:pdfexports
   rules:
