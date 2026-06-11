@@ -1,8 +1,8 @@
-import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { mergeConfig } from 'vite'
-import { defineConfig } from 'vitest/config'
-import viteConfig from './vite.config'
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { mergeConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
+import viteConfig from './vite.config';
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -16,7 +16,7 @@ export default mergeConfig(
       },
     },
     test: {
-      include: ['./tests/view/view.eleve.2025.*.test.ts'],
+      include: ['./tests/view/view.eleve.can.2025.*.test.ts'],
       hookTimeout: 600_000,
       testTimeout: 20000_000,
       reporters: ['html', 'junit', 'json', 'default'],
