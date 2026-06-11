@@ -5,7 +5,6 @@ node_modules/
 docs/
 dist/
 built/
-pnpm-lock.yaml
 vitetest.config.ts
 /test-results/
 /playwright-report/
