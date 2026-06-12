@@ -57,6 +57,14 @@ export default class Auto1AC3j extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut calculer le double ou le triple d'un nombre écrit avec une puissance.
+  </p>
+  Ecrivez en langage mathématique le calcul, en respectant bien les priorités de calcul.<br>
+  Avec les propriétés des puissances, vous devez identifier la bonne réponse.<br>
+  Dans un QCM, une seule égalité est vraie . Vous pouvez aussi procéder par élimination.
+`
     // this.options = { vertical: true, ordered: false }
     this.versionAleatoire()
   }

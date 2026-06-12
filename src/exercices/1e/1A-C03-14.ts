@@ -21,5 +21,13 @@ export default class Auto1AC03n extends calculPuissancesNegativeFraction {
   constructor() {
     super()
     this.versionQcm = true
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut utiliser le sens d'un exposant négatif.
+  </p>
+  <p style="margin: 0 0 10px 0;">
+    Rappelez-vous que pour $a \\neq 0$, $a^{-1}=\\dfrac{1}{a}$ et que $a^{-2}=\\dfrac{1}{a^2}$. <br>
+  </p>
+`
   }
 }

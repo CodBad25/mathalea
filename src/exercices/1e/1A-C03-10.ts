@@ -60,6 +60,13 @@ export default class Auto1AC3j extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut passer d'une écriture scientifique à une écriture décimale.<br>
+    Si vous hésitez, vous pouvez construire au brouillon le tableau de numération du nombre en fonction des puissances de $10$.<br>
+  </p>
+ 
+`
     // this.options = { vertical: true, ordered: false }
     this.versionAleatoire()
   }

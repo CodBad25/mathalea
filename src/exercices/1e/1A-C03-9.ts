@@ -65,6 +65,14 @@ export default class Auto1AC3i extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut utiliser le comportement des puissances de $-1$.<br>
+    Tester le résultat de $(-1)^n$ pour différentes valeurs de $n$. En déduire une propriété qui devrait vous aider.<br>
+    Vous pouvez aussi essayer de trouver la bonne réponse par essais et erreurs, en testant les différentes propositions.
+  </p>
+  
+`
     this.versionAleatoire()
   }
 }

@@ -393,13 +393,16 @@ export default class Auto1AC3m extends ExerciceQcmA {
     super()
     this.tip = `
   <p style="margin: 0 0 10px 0;">
-    Repérez d'abord à quoi correspond l'épaisseur donnée : une feuille, dix feuilles ou cent feuilles.
-  </p>
-  <p style="margin: 0 0 10px 0;">
-    Faites aussi attention à l'unité écrite dans l'énoncé et à celle proposée dans les réponses.
-  </p>
+    Il faut bien identifier : 
+    <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>  A quoi correspond l'épaisseur donnée : une feuille, dix feuilles ou cent feuilles?
+     <li>  Quelle est l'unité de l'épaisseur donnée ?
+  <li>  Quel est le nombre de feuilles dans la pile à calculer ?
+  <li>  Quelle est l'unité attendue pour la réponse ?</li>
+   </ul>
+  
   <p style="margin: 0;">
-    Un bon réflexe est de garder une trace du nombre de feuilles et de l'unité à chaque étape, pour éviter de choisir une réponse seulement parce que le nombre paraît proche.
+   Faîtes un tableau de conversion si besoin.
   </p>
 `
     this.versionAleatoire()
