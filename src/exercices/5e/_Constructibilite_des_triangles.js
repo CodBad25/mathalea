@@ -17,7 +17,7 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre =
   'Constructibilité des triangles via les longueurs ou les angles'
-export const dateDeModifImportante = '11/1/2025' // Rémi Angot : modification de la rédaction de l'inégalité triangulaire
+export const dateDeModifImportante = '12/06/2026' // Éric Elter : Rajout, notamment, d'une entrée (triangle plat) dans le QCM devenu QCU
 
 /**
  * Constructibilité des triangles
@@ -46,14 +46,12 @@ export default class ConstructibiliteDesTriangles extends Exercice {
         !this.interactif || context.isAmc
           ? 'Justifier si les longueurs données permettent de construire le triangle'
           : 'Indiquer si, avec les informations fournies, le triangle est constructible'
-      // this.consigne += '<br>Dire si tous les élèves qui doivent construire ce triangle auront la même figure.'
     } else {
       // via angles
       consigneAMC =
         !this.interactif || context.isAmc
           ? 'Justifier si les angles donnés permettent de construire le triangle'
           : 'Indiquer si, avec les informations fournies, le triangle est constructible'
-      // this.consigne += '<br>Dire si tous les élèves qui doivent construire ce triangle auront la même figure.'
     }
     this.consigne = consigneAMC + '.'
     if (this.exo === '5G21-1') {
@@ -112,7 +110,6 @@ export default class ConstructibiliteDesTriangles extends Exercice {
       const triangle = new Triangle()
       // on crée un tableau pour le triangle courant
       const currentTriangle = []
-
       switch (listeTypeDeQuestions[i]) {
         case 1: // 3 longueurs constructible
           while (!triangle.isTrueTriangleLongueurs()) {
@@ -140,7 +137,9 @@ export default class ConstructibiliteDesTriangles extends Exercice {
           texteCorr = `${currentTriangle[2].cote}, qui mesure $${currentTriangle[2].valeur}\\text{ cm}$, est le plus grand côté.`
           texteCorr += `<br> De plus ${currentTriangle[0].longueur} + ${currentTriangle[1].longueur} = $${currentTriangle[0].valeur}\\text{ cm}$ + $${currentTriangle[1].valeur}\\text{ cm}$ = $${arrondi(currentTriangle[0].valeur + currentTriangle[1].valeur)}\\text{ cm}$.`
           texteCorr += `<br> On constate que  ${currentTriangle[2].longueur} < ${currentTriangle[0].longueur} + ${currentTriangle[1].longueur}.`
-          texteCorr += `<br> L'inégalité triangulaire est vérifiée donc ${texteEnCouleurEtGras(`le triangle ${triangle.getNom()} est constructible`)}.`
+          texteCorr += `<br> L'inégalité triangulaire est vérifiée donc ${texteEnCouleurEtGras(`le triangle `)}` +
+            `$${miseEnEvidence(triangle.getNom().substring(1, triangle.getNom().length - 1))}$` +
+            `${texteEnCouleurEtGras(` est constructible`)}.`
           break
         case 2: // 3 longueurs plat
           do {
@@ -211,7 +210,9 @@ export default class ConstructibiliteDesTriangles extends Exercice {
           texteCorr = `${currentTriangle[2].cote}, qui mesure $${currentTriangle[2].valeur}\\text{ cm}$, est le plus grand côté.`
           texteCorr += `<br> De plus ${currentTriangle[0].longueur} + ${currentTriangle[1].longueur} = $${currentTriangle[0].valeur}\\text{ cm}$ + $${currentTriangle[1].valeur}\\text{ cm}$ = $${arrondi(currentTriangle[0].valeur + currentTriangle[1].valeur)}\\text{ cm}$.`
           texteCorr += `<br> On constate que  ${currentTriangle[2].longueur} > ${currentTriangle[0].longueur} + ${currentTriangle[1].longueur}.`
-          texteCorr += `<br> L'inégalité triangulaire n'est pas vérifiée donc ${texteEnCouleurEtGras(`le triangle ${triangle.getNom()} n'est pas constructible`)}.`
+          texteCorr += `<br> L'inégalité triangulaire n'est pas vérifiée donc ${texteEnCouleurEtGras(`le triangle `)}` +
+            `$${miseEnEvidence(triangle.getNom().substring(1, triangle.getNom().length - 1))}$` +
+            `${texteEnCouleurEtGras(` n'est pas constructible`)}.`
 
           break
         case 4: // 2 longueurs et le périmètre
@@ -242,7 +243,9 @@ export default class ConstructibiliteDesTriangles extends Exercice {
           texteCorr += `<br> Donc, ${currentTriangle[2].cote}, qui mesure $${currentTriangle[2].valeur}\\text{ cm}$, est le plus grand côté.`
           texteCorr += `<br> De plus ${currentTriangle[0].longueur} + ${currentTriangle[1].longueur} = $${currentTriangle[0].valeur}\\text{ cm}$ + $${currentTriangle[1].valeur}\\text{ cm}$ = $${arrondi(currentTriangle[0].valeur + currentTriangle[1].valeur)}\\text{ cm}$.`
           texteCorr += `<br> On constate que ${currentTriangle[0].longueur} + ${currentTriangle[1].longueur} > ${currentTriangle[2].longueur}`
-          texteCorr += `<br> L'inégalité triangulaire est vérifiée donc ${texteEnCouleurEtGras(`le triangle ${triangle.getNom()} est constructible`)}.`
+          texteCorr += `<br> L'inégalité triangulaire est vérifiée donc ${texteEnCouleurEtGras(`le triangle `)}` +
+            `$${miseEnEvidence(triangle.getNom().substring(1, triangle.getNom().length - 1))}$` +
+            `${texteEnCouleurEtGras(` est constructible`)}.`
           break
         case 5: // 3 angles constructible
           while (!triangle.isTrueTriangleAngles()) {
@@ -432,9 +435,9 @@ export default class ConstructibiliteDesTriangles extends Exercice {
         // Si la question n'a jamais été posée, on en créé une autre
         const propositionsDuQcm = [
           {
-            texte: `Le triangle ${triangle.getNom()} est constructible`,
-            statut: !(
-              listeTypeDeQuestions[i] === 3 || listeTypeDeQuestions[i] === 7
+            texte: `Le triangle ${triangle.getNom()} est constructible mais n'est pas plat.`,
+            statut: (
+              listeTypeDeQuestions[i] === 1 || listeTypeDeQuestions[i] === 4 || listeTypeDeQuestions[i] === 5
             ),
             feedback:
               this.exo === '5G21-1'
@@ -442,7 +445,17 @@ export default class ConstructibiliteDesTriangles extends Exercice {
                 : 'Effectue la somme des angles du triangle.',
           },
           {
-            texte: `Le triangle ${triangle.getNom()} n'est pas constructible`,
+            texte: `Le triangle ${triangle.getNom()} est plat.`,
+            statut: (
+              listeTypeDeQuestions[i] === 2 || listeTypeDeQuestions[i] === 6
+            ),
+            feedback:
+              this.exo === '5G21-1'
+                ? 'Effectue la somme des longueurs les plus petites et compare-la à la plus grande longueur.'
+                : 'Effectue la somme des angles du triangle.',
+          },
+          {
+            texte: `Le triangle ${triangle.getNom()} n'est pas constructible.`,
             statut:
               listeTypeDeQuestions[i] === 3 || listeTypeDeQuestions[i] === 7,
             feedback:
@@ -451,7 +464,7 @@ export default class ConstructibiliteDesTriangles extends Exercice {
                 : 'Effectue la somme des angles du triangle.',
           },
           {
-            texte: `On ne peut pas savoir si le triangle ${triangle.getNom()} est constructible ou pas`,
+            texte: `On ne peut pas savoir si le triangle ${triangle.getNom()} est constructible ou pas.`,
             statut: false,
             feedback:
               this.exo === '5G21-1'
@@ -465,7 +478,8 @@ export default class ConstructibiliteDesTriangles extends Exercice {
           propositions: propositionsDuQcm,
           options: {
             vertical: true,
-            ordered: false, // (si les réponses doivent rester dans l'ordre ci-dessus, false s'il faut les mélanger),
+            ordered: false, // (si les réponses doivent rester dans l'ordre ci-dessus, false s'il faut les mélanger),    
+            radio: true,
             lastChoice: 2, // (en cas de mélange, l'index à partir duquel les propositions restent à leur place, souvent le dernier choix par défaut)
           },
         }
