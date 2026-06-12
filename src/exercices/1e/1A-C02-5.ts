@@ -226,6 +226,12 @@ export default class auto1AC025 extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.tip = `
+ 
+  <p style="margin: 0;">
+    Dans un QCM, on peut procéder par élimination, pour éliminer des propositions clairement fausses. <br>On peut aussi tester les propositions une par une : une seule doit résister à vos vérifications.
+  </p>
+`
     this.spacingCorr = 3
     this.versionAleatoire()
   }

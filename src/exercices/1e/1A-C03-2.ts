@@ -21,5 +21,6 @@ export default class Auto1AC3b extends CalculPuissancesOperation {
   constructor() {
     super()
     this.versionQcm = true
+   
   }
 }
