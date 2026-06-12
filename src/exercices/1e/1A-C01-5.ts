@@ -306,6 +306,24 @@ $a^2 > b^2$ : Faux. La fonction carré est croissante sur $[0\\,;+\\infty[$, don
 
   constructor () {
     super()
+     this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut penser aux fonctions de références, en particulier :
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>les variations de la <strong>fonction carré</strong>,</li>
+    <li>les variations de la <strong>fonction inverse</strong>.</li>
+      <li>les variations de la <strong>fonction racine carrée</strong>.</li>
+  </ul>
+  On peut aussi utiliser que multiplier une inégalité par un nombre négatif change le sens de l'inégalité.
+  <a href="https://podeduc.apps.education.fr/video/143477-indice-automatisme-1-c01-1mp4/?is_iframe=true&autoplay=true" target="_blank"
+     style="display:inline-flex; align-items:center; gap:6px;
+            padding:6px 14px; border:1px solid #b3cde8; border-radius:6px;
+            font-size:13px; font-weight:500; color:#1a5fa8;
+            background:#e8f1fb; text-decoration:none;">
+            
+    ▶ Voir la vidéo explicative
+  </a>`
     this.versionAleatoire()
   }
 }

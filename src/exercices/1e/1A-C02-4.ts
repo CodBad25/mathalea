@@ -20,6 +20,16 @@ export const refs = {
 export default class Auto1AC2a extends NombreInverse {
   constructor() {
     super()
+     this.tip = `
+  <p style="margin: 0 0 10px 0;">
+   La méthode la plus rigoureuse consisterait à résoudre l'équation pour trouver la solution.<br>
+    N'oubliez pas que dans un QCM, on vous suggère des solutions, qu'il n'y a qu'une seule bonne réponse....<br>
+    Vous pouvez donc essayer de trouver la bonne réponse par essais et erreurs, en testant les différentes propositions.
+
+  </p>
+
+ 
+  </a>`
     this.versionQcm = true
   }
 }

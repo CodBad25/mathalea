@@ -65,6 +65,16 @@ export default class Auto1AC3a extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.tip = `
+   <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>
+    Commencez par regarder la base (c’est le nombre auquel on applique l’exposant) au numérateur et au dénominateur.<br>
+    <li>Cherchez un lien évident entre ces deux bases, qui soit utile avec les proprétés des puissances.
+     <li>Réécrire l'expression de manière à faire apparaître une même base au numérateur et au dénominateur. <br>
+       </li>
+  </ul>Cela doit vous mettre sur la piste pour simplifier l’expression. <br>
+  </p>
+`
     this.versionAleatoire()
   }
 }
