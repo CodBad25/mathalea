@@ -156,6 +156,13 @@ export default class TrouverEgalite extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut vérifier plusieurs égalités avec des puissances. <br>
+    Pour chacune, identifiez la propriété utilisée et vérifiez si elle est correcte ou non. <br>
+  </p>
+  Dans un QCM, une seule égalité est vraie . Vous pouvez aussi procéder par élimination.
+`
     // this.options = { vertical: true, ordered: false }
     this.versionAleatoire()
   }

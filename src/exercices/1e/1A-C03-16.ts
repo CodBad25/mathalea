@@ -21,5 +21,15 @@ export default class Auto1AC3p extends calculPuissancesAvecn {
   constructor() {
     super()
     this.versionQcm = true
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut retrouver une valeur de $n$ dans une égalité avec des puissances.
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Commencez par transformer l'addition de deux termes identiques en une multiplication par $2$.</li>
+    <li>Essayez ensuite d'écrire toutes les puissances avec la même base.</li>
+    <li>Quand deux puissances de même base sont égales, comparez leurs exposants.</li>
+  </ul>
+`
   }
 }
