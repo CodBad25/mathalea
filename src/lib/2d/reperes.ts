@@ -1035,7 +1035,7 @@ export class Repere extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      code += '\n\t' + objet.tikz()
+      code += `\t${objet.tikz()}`
     }
     return code
   }
@@ -1055,7 +1055,7 @@ export class Repere extends ObjetMathalea2D {
     if (this.objets == null) return code
     for (const objet of this.objets) {
       if (typeof objet.tikzml === 'undefined') code += '\n\t' + objet.tikz()
-      else code += '\n\t' + objet.tikzml(amp)
+      else code += `\t${objet.tikzml(amp)}`
     }
     return code
   }

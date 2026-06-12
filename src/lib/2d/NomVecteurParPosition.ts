@@ -79,7 +79,7 @@ export class NomVecteurParPosition extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      code += '\n\t' + objet.tikz()
+      code += `\t${objet.tikz()}`
     }
     return code
   }

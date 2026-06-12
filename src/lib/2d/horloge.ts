@@ -86,7 +86,7 @@ export default class Horloge extends ObjetMathalea2D {
     let code = ''
     if (this.objets != null) {
       for (const objet of this.objets) {
-        code += objet.tikz() + '\n'
+        code += objet.tikz()
       }
     }
     return code

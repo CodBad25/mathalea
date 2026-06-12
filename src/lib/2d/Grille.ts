@@ -77,7 +77,7 @@ export class Grille extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      code += '\n\t' + objet.tikz()
+      code += `\t${objet.tikz()}\n`
     }
     return code
   }
@@ -100,9 +100,9 @@ export class Grille extends ObjetMathalea2D {
     if (this.objets == null) return code
     for (const objet of this.objets) {
       if (typeof objet.tikzml === 'undefined') {
-        code += '\n\t' + objet.tikz()
+        code += `\t${objet.tikz()}\n`
       } else {
-        code += '\n\t' + objet.tikzml(amp)
+        code += `\t${objet.tikzml(amp)}\n`
       }
     }
     return code
@@ -194,7 +194,7 @@ export class LignesHorizontales extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      code += '\n\t' + objet.tikz()
+      code += `\t${objet.tikz()}\n`
     }
     return code
   }
@@ -294,7 +294,7 @@ export class LignesVerticales extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      code += '\n\t' + objet.tikz()
+      code += `\t${objet.tikz()}\n`
     }
     return code
   }
@@ -376,7 +376,7 @@ export class Seyes extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      code += '\n\t' + objet.tikz()
+      code += `\t${objet.tikz()}\n`
     }
     return code
   }

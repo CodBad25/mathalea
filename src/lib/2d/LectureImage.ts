@@ -94,11 +94,11 @@ export class LectureImage extends ObjetMathalea2D {
     Sx.pointilles = 5
     Sy.pointilles = 5
     return (
-      '\t\n' +
+      '\t' +
       Sx.tikz() +
-      '\t\n' +
+      '\t' +
       Sy.tikz() +
-      '\t\n' +
+      '\t' +
       texteParPosition(
         this.textAbs,
         x0,
@@ -106,7 +106,7 @@ export class LectureImage extends ObjetMathalea2D {
         0,
         this.stringColor,
       ).tikz() +
-      '\t\n' +
+      '\t' +
       texteParPosition(
         this.textOrd,
         -1 / context.scale,
@@ -172,11 +172,11 @@ export class LectureImage extends ObjetMathalea2D {
     Sx.pointilles = 5
     Sy.pointilles = 5
     return (
-      '\t\n' +
+      '\t' +
       Sx.tikzml(amp) +
-      '\t\n' +
+      '\t' +
       Sy.tikzml(amp) +
-      '\t\n' +
+      '\t' +
       texteParPosition(
         this.textAbs,
         x0,
@@ -184,7 +184,7 @@ export class LectureImage extends ObjetMathalea2D {
         0,
         this.stringColor,
       ).tikz() +
-      '\t\n' +
+      '\t' +
       texteParPosition(
         this.textOrd,
         -1 / context.scale,

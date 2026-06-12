@@ -221,7 +221,7 @@ export class GlisseNombre extends ObjetMathalea2D {
     let code = ''
     if (this.objets == null) return code
     for (const objet of this.objets) {
-      if (typeof objet.tikz === 'function') code += '\n\t' + objet.tikz()
+      if (typeof objet.tikz === 'function') code += `\t${objet.tikz()}\n`
     }
     return code
   }

@@ -1,4 +1,4 @@
-import { ObjetMathalea2D } from './ObjetMathalea2D'
+import type FractionEtendue from '../../modules/FractionEtendue'
 import {
   coopmathsCorpusLightest,
   noirMathalea,
@@ -10,7 +10,7 @@ import {
   normalizeAnglePiFraction,
   trigoCircleAngles,
 } from '../mathFonctions/trigo'
-import type FractionEtendue from '../../modules/FractionEtendue'
+import { ObjetMathalea2D } from './ObjetMathalea2D'
 
 export type TrigoCircleMarkedPoint = {
   angle: number | FractionEtendue
@@ -226,38 +226,36 @@ export class CercleTrigo extends ObjetMathalea2D {
         this.options.guideAngles.length > 0
           ? this.options.guideAngles
           : trigoCircleAngles.map((angle) => angle.angleRad)
-      code +=
-        '\n' +
-        guideAngles
-          .map((guideAngle) => {
-            const normalized = normalizeAnglePiFraction(guideAngle)
-            const deg = (normalized.num / normalized.den) * 180
-            return `\\draw[gray!45, thin] (0,0) -- (${deg}:${r});`
-          })
-          .join('\n')
+      code += guideAngles
+        .map((guideAngle) => {
+          const normalized = normalizeAnglePiFraction(guideAngle)
+          const deg = (normalized.num / normalized.den) * 180
+          return `\\draw[gray!45, thin] (0,0) -- (${deg}:${r});`
+        })
+        .join('\n')
     }
     for (const angle of trigoCircleAngles) {
       if (this.options.showBasePoints) {
-        code += `\n\\fill (${angle.angleDeg}:${r}) circle (0.45pt);`
+        code += `\\fill (${angle.angleDeg}:${r}) circle (0.45pt);\n`
       }
       if (this.options.showRadians) {
         const mustShowLabel = this.options.labelAngles.length === 0
         if (mustShowLabel) {
-          code += `\n\\node[font=\\tiny] at (${angle.angleDeg}:${(r * 0.78).toFixed(3)}) {$${angle.angleTex}$};`
+          code += `\\node[font=\\tiny] at (${angle.angleDeg}:${(r * 0.78).toFixed(3)}) {$${angle.angleTex}$};\n`
         }
       }
       if (this.options.showDegrees) {
-        code += `\n\\node[font=\\tiny, gray] at (${angle.angleDeg}:${(r * 0.5).toFixed(3)}) {$${angle.angleDeg}^{\\circ}$};`
+        code += `\\node[font=\\tiny, gray] at (${angle.angleDeg}:${(r * 0.5).toFixed(3)}) {$${angle.angleDeg}^{\\circ}$};\n`
       }
       if (this.options.showCoordinates) {
-        code += `\n\\node[font=\\tiny] at (${angle.angleDeg}:${(r * 1.55).toFixed(3)}) {$\\left(${angle.cosTex};${angle.sinTex}\\right)$};`
+        code += `\\node[font=\\tiny] at (${angle.angleDeg}:${(r * 1.55).toFixed(3)}) {$\\left(${angle.cosTex};${angle.sinTex}\\right)$};\n`
       }
     }
     if (this.options.showRadians && this.options.labelAngles.length > 0) {
       for (const labelAngle of this.options.labelAngles) {
         const normalized = normalizeAnglePiFraction(labelAngle)
         const deg = (normalized.num / normalized.den) * 180
-        code += `\n\\node[font=\\tiny] at (${deg}:${(r * angleLabelRadiusFactor(deg)).toFixed(3)}) {$${angleTex(normalized)}$};`
+        code += `\\node[font=\\tiny] at (${deg}:${(r * angleLabelRadiusFactor(deg)).toFixed(3)}) {$${angleTex(normalized)}$};\n`
       }
     }
     for (let index = 0; index < this.options.markedPoints.length; index++) {
@@ -269,9 +267,9 @@ export class CercleTrigo extends ObjetMathalea2D {
       code =
         tikzColorDefinition(colorName, color) +
         code +
-        `\n\\fill[${parseHexColor(color) == null ? tikzColor(color) : colorName}] (${deg}:${r}) circle (${point.radius ?? 0.055});`
+        `\\fill[${parseHexColor(color) == null ? tikzColor(color) : colorName}] (${deg}:${r}) circle (${point.radius ?? 0.055});\n`
       if (point.label) {
-        code += `\n\\node[font=\\scriptsize, ${parseHexColor(color) == null ? tikzColor(color) : colorName}] at (${deg}:${(r * 1.14).toFixed(3)}) {$${point.label}$};`
+        code += `\\node[font=\\scriptsize, ${parseHexColor(color) == null ? tikzColor(color) : colorName}] at (${deg}:${(r * 1.14).toFixed(3)}) {$${point.label}$};\n`
       }
     }
     return code

@@ -176,7 +176,7 @@ export class CodageSegments extends ObjetMathalea2D {
           this.stringColor,
           this.echelle,
         ).tikz()
-        code += '\n'
+        // code += '\n'
       }
       code += codageSegment(
         this.args[0][this.args[0].length - 1],
@@ -184,7 +184,7 @@ export class CodageSegments extends ObjetMathalea2D {
         this.mark,
         this.stringColor,
       ).tikz()
-      code += '\n'
+      // code += '\n'
     } else if (this.args[0].constructor === Segment) {
       const condition = this.isEchelle ? this.args.length - 1 : this.args.length
       for (let i = 0; i < condition; i++) {
@@ -194,7 +194,7 @@ export class CodageSegments extends ObjetMathalea2D {
           this.mark,
           this.stringColor,
         ).tikz()
-        code += '\n'
+        //   code += '\n'
       }
     } else {
       const condition = this.isEchelle ? this.args.length - 1 : this.args.length
@@ -211,7 +211,7 @@ export class CodageSegments extends ObjetMathalea2D {
             this.stringColor,
             this.echelle,
           ).tikz()
-          code += '\n'
+          // code += '\n'
         }
       }
     }

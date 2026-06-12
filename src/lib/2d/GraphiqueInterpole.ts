@@ -67,7 +67,7 @@ export class GraphiqueInterpole extends ObjetMathalea2D {
   tikz() {
     let code = ''
     for (const objet of this.courbes) {
-      code += '\n\t' + objet.tikz()
+      code += `\t${objet.tikz()}\n`
     }
     return code
   }

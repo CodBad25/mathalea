@@ -225,7 +225,7 @@ export class CodageHauteurTriangle extends ObjetMathalea2D {
 
   tikz() {
     if (this.traceD) {
-      return this.c.tikz() + '\n\t' + this.d.tikz()
+      return this.c.tikz() + '\t' + this.d.tikz()
     } else {
       return this.c.tikz()
     }

@@ -96,7 +96,7 @@ export class AfficheCoteSegment extends ObjetMathalea2D {
     this.objets.forEach((objet) => {
       objet.opacite = this.opacite
     })
-    for (const objet of this.objets) code += '\n\t' + objet.tikz()
+    for (const objet of this.objets) code += `\t${objet.tikz()}\n`
     return code
   }
 }
