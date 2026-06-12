@@ -22,9 +22,8 @@ export default class Auto1AC2a extends NombreInverse {
     super()
      this.tip = `
   <p style="margin: 0 0 10px 0;">
-   La méthode la plus rigoureuse consisterait à résoudre l'équation pour trouver la solution.<br>
-    N'oubliez pas que dans un QCM, on vous suggère des solutions, qu'il n'y a qu'une seule bonne réponse....<br>
-    Vous pouvez donc essayer de trouver la bonne réponse par essais et erreurs, en testant les différentes propositions.
+   Il est plus facile de travailler avec une égalité de fractions.<br>
+   Une première étape utile peut consister à opérer les fractions du membre de droite.<br>
 
   </p>
 

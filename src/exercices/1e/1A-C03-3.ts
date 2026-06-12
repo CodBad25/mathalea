@@ -53,6 +53,15 @@ export default class Auto1AC3c extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut reconnaître une puissance de puissance.
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Repérez bien la base, l'exposant à l'intérieur des parenthèses et l'exposant placé à l'extérieur.</li>
+    <li>Demandez-vous ce que signifie répéter plusieurs fois la même puissance.</li>
+  </ul>
+`
     this.optionsDeComparaison = { texteSansCasse: true } // Pour le test qcm_exercice, sinon, il va croire que c'est des fractions ou unite...
     this.versionAleatoire()
   }
