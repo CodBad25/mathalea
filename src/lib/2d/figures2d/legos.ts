@@ -46,6 +46,23 @@ export function briqueLego(options?: {
   const studFillStyle = options?.studFillStyle || color
   const studStrokeStyle = options?.studStrokeStyle || 'black'
 
+  const toLatexColor = (c: string, name: string) =>
+    c.startsWith('#') ? `\\definecolor{${name}}{HTML}{${c.slice(1)}}` : ''
+
+  const colorDefs = [
+    toLatexColor(fillStyle, 'legoFill'),
+    toLatexColor(studFillStyle, 'legoStudFill'),
+    toLatexColor(strokeStyle, 'legoStroke'),
+    toLatexColor(studStrokeStyle, 'legoStudStroke'),
+  ]
+    .filter(Boolean)
+    .join('\n')
+
+  const fillStyleLatex = fillStyle.startsWith('#') ? 'legoFill' : fillStyle
+  const strokeStyleLatex = strokeStyle.startsWith('#') ? 'legoStroke' : strokeStyle
+  const studFillStyleLatex = studFillStyle.startsWith('#') ? 'legoStudFill' : studFillStyle
+  const studStrokeStyleLatex = studStrokeStyle.startsWith('#') ? 'legoStudStroke' : studStrokeStyle
+
   const width = nx / 2
   const height = ny / 2
 
@@ -61,11 +78,12 @@ ${Array.from({ length: nx }, (_, i) =>
 `.trim()
 
   const codeTikz = `
-\\draw[fill=${fillStyle}, draw=${strokeStyle}, line width=${lineWidth}pt] (${(-width / 2).toFixed(1)},${(-height / 2).toFixed(1)}) rectangle (${(width / 2).toFixed(1)},${(height / 2).toFixed(1)});
+${colorDefs}
+\\draw[fill=${fillStyleLatex}, draw=${strokeStyleLatex}, line width=${lineWidth}pt] (${(-width / 2).toFixed(1)},${(-height / 2).toFixed(1)}) rectangle (${(width / 2).toFixed(1)},${(height / 2).toFixed(1)});
 \\foreach \\x in {0,...,${nx - 1}} {
   \\foreach \\y in {0,...,${ny - 1}} {
-    \\fill[${studFillStyle}] (${(-width / 2 + 0.25).toFixed(2)}+\\x/2,${(-height / 2 + 0.25).toFixed(2)}+\\y/2) circle (0.15);
-    \\draw[draw=${studStrokeStyle}, line width=${lineWidth}pt] (${(-width / 2 + 0.25).toFixed(2)}+\\x/2,${(-height / 2 + 0.25).toFixed(2)}+\\y/2) circle (0.15);
+    \\fill[${studFillStyleLatex}] (${(-width / 2 + 0.25).toFixed(2)}+\\x/2,${(-height / 2 + 0.25).toFixed(2)}+\\y/2) circle (0.15);
+    \\draw[draw=${studStrokeStyleLatex}, line width=${lineWidth}pt] (${(-width / 2 + 0.25).toFixed(2)}+\\x/2,${(-height / 2 + 0.25).toFixed(2)}+\\y/2) circle (0.15);
   }
 }
 `.trim()
