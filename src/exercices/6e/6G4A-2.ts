@@ -216,9 +216,9 @@ export default class ReconnaitreUnAngleParticulier extends Exercice {
       texte += monQcm.texte
       texteCorr += context.isAmc ? '' : questionReponse.question + '<br>'
       texteCorr += monQcm.texteCorr
-      this.correctionDetaillee
-        ? (texteCorr += questionReponse.explications + '<br>')
-        : (texteCorr += '<br>')
+      if (this.correctionDetaillee) {
+        texteCorr += questionReponse.explications + '<br>'
+      }
       if (
         this.questionJamaisPosee(
           i,
