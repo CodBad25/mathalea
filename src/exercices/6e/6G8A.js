@@ -1,12 +1,11 @@
 import {
-  canvasEnonceCorrection,
-  empilementCubes,
-} from '../../lib/3d/3d_dynamique/empilementsCube'
-import {
   createCubesProjections,
   projectionCubesIso2d,
 } from '../../lib/3d/3dProjectionMathalea2d/CubeIso'
-import { bleuMathalea } from '../../lib/colors'
+import {
+  canvasEnonceCorrection,
+  empilementCubes,
+} from '../../lib/3d/3d_dynamique/empilementsCube'
 import {
   choice,
   compteOccurences,
@@ -64,9 +63,26 @@ export default class VuesEmpilementCubes extends Exercice {
     this.sup2 = 7
     this.sup3 = 3
     this.nbQuestions = 2
+    this.consigne = ''
   }
 
   nouvelleVersion() {
+    if (this.nbQuestions === 1) {
+      if (this.sup4 && context.isHtml) {
+        this.consigne = 'Voici un solide composé par un empilement de cubes.'
+      } else {
+        this.consigne =
+          'Voici un solide composé par un empilement de cubes, présenté de deux façons différentes.'
+      }
+    } else {
+      if (this.sup4 && context.isHtml) {
+        this.consigne =
+          'Dans chacun des cas ci-dessous, un solide composé par un empilement de cubes est proposé.'
+      } else {
+        this.consigne =
+          'Dans chacun des cas ci-dessous, un solide composé par un empilement de cubes est présenté de deux façons différentes.'
+      }
+    }
     const dimensionsTab = gestionnaireFormulaireTexte({
       max: 999,
       defaut: 1,
@@ -125,13 +141,13 @@ export default class VuesEmpilementCubes extends Exercice {
       ]
       const colorD = context.isAmc
         ? choice(['white', 'gray', 'darkgray'])
-        : choice(['red', bleuMathalea, 'green', 'gray'])
+        : choice(['red', 'blue', 'green', 'gray'])
       const colorT = context.isAmc
         ? choice(['white', 'gray', 'darkgray'], [colorD])
         : choice(['white', 'yellow'])
       const colorG = context.isAmc
         ? choice(['white', 'gray', 'darkgray'], [colorD, colorT])
-        : choice(['red', bleuMathalea, 'green', 'gray'], [colorD])
+        : choice(['red', 'blue', 'green', 'gray'], [colorD])
       const longueur =
         Math.floor((dimensions % 100) / 10) < 2
           ? randint(2, 6)
@@ -144,14 +160,13 @@ export default class VuesEmpilementCubes extends Exercice {
       const L = empilementCubes(longueur, largeur, hauteur)
       if (!this.sup4 || !context.isHtml) {
         // 3d iso avec mathalea2d (2 vues)
-        texte +=
-          'Voici un solide composé par un empilement de cubes, présenté de deux façons différentes. <br>'
+        texte += ''
         const { figure } = createCubesProjections(L, largeur, longueur, hauteur)
 
         texte += figure + '<br>'
       } else {
         // 3d dynamique avec Canvas3DElement (1 vue qui tourne)
-        texte += 'Voici un solide composé par un empilement de cubes.<br>'
+        texte += ''
         const { canvasEnonce } = canvasEnonceCorrection(
           L,
           `SceneEx${this.numeroExercice}Q${q}`,
