@@ -21,6 +21,15 @@ export default class Auto1AC3b extends CalculPuissancesOperation {
   constructor() {
     super()
     this.versionQcm = true
-   
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut simplifier une expression avec des puissances.
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Commencez par regarder si les puissances ont la même base ou le même exposant.</li>
+    <li>Rappelez-vous les propriétés du cours : produit, quotient et puissance d'une puissance.</li>
+    <li>Si vous hésitez, écrivez un petit exemple développé au brouillon pour retrouver la règle.</li>
+  </ul>
+`
   }
 }

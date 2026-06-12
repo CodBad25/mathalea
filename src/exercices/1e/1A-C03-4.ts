@@ -70,6 +70,16 @@ export default class Auto1AC3d extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut transformer un produit de puissances.<br>
+    Regardez d'abord si les deux exposants sont égaux.
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Si les deux puissances ont le même exposant, on peut regrouper les bases avec une propriété de cours.</li>
+    <li>Si les exposants sont différents, essayez de décomposer le calcul pour faire apparaître un produit de deux puissances de même exposant.</li>
+  </ul>
+`
     this.versionAleatoire()
   }
 }

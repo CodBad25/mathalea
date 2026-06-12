@@ -71,6 +71,16 @@ export default class Auto1AC3e extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut simplifier un quotient de puissances ayant la même base.
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Identifiez l'exposant du numérateur et celui du dénominateur.</li>
+    <li>Rappelez-vous de la règle pour diviser deux puissances de même base.</li>
+  </ul>
+   Si la variable $n$ vous gêne, essayez de faire le même calcul avec des nombres à la place de $n$ pour trouver la bonne méthode. <br>
+`
     this.versionAleatoire()
   }
 }

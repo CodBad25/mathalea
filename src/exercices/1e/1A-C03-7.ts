@@ -49,6 +49,12 @@ export default class Auto1AC3g extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    N'appliquez pas de formule sans comprendre ce que vous faites . <br>
+    Essayez de mettre du sens à l'opération demandée.<br>
+    Si la variable $n$ vous gêne, essayez de faire le même calcul avec des nombres à la place de $n$ pour trouver la bonne méthode. <br>
+`
     this.versionAleatoire()
   }
 }
