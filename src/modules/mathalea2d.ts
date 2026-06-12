@@ -378,7 +378,7 @@ export function mathalea2d(
     if (centerLatex) codeTikz += '\\par}'
   }
 
-  if (style.includes('display: block') && !centerLatex) codeTikz += '\\\\\n'
+  if (style.includes('display: block') && !centerLatex) codeTikz += '\n'
   if (context.isHtml) return codeHTML
   else return codeTikz
 }

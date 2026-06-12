@@ -235,6 +235,8 @@ class Latex {
         }
       }
       contentCorr += '\n\\end{enumerate}\n'
+      // Supprime le \\ (ou \\*) final pour éviter "There's no line here to end"
+      content = content.replace(/\\\\\*?\n$/, '\n')
       content += '\\end{TableauCan}\n\\addtocounter{nbEx}{-1}'
       /** On supprime les lignes vides car elles posent problème dans l'environnement TableauCan */
       //  content = content.replace(/\n\s*\n/gm, '\n') // En quoi elle posent problème ? On perd les sauts de ligne entre les questions, c'est pas top pour la lisibilité
@@ -1151,6 +1153,7 @@ export function format(
 
   formattedText = formattedText
     .replace(/(\d+)\s*°/g, '\\ang{$1}')
+    .replace(/\n(<br *\/?>)/g, '$1')
     .replace(/<br>/g, '\\\\')
     .replace(/( )?€( )/g, '\\,\\euro{}~')
     .replace(/( )?€/g, '\\,\\euro{}')
