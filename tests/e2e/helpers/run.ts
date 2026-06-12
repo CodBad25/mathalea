@@ -305,10 +305,12 @@ async function fillMathField(
   if (promptCount > 1 && Array.isArray(answer)) {
     for (let i = 0; i < answer.length && i < promptCount; i++) {
       await prompts[i].click()
+      await page.waitForTimeout(100) // Ajout d'un délai pour s'assurer que le champ est prêt à recevoir la saisie
       await champTexteMathlive.pressSequentially(answer[i].toString())
     }
   } else {
     await champTexteMathlive.click()
+    await page.waitForTimeout(100) // Ajout d'un délai pour s'assurer que le champ est prêt à recevoir la saisie
     await champTexteMathlive.pressSequentially(
       Array.isArray(answer) ? (answer[0]?.toString() ?? '') : answer.toString(),
     )
