@@ -14,11 +14,11 @@ import {
 } from '../../lib/3d/3dProjectionMathalea2d/BarreEtPlaque3dPerspectiveCavaliere'
 import { cube3d } from '../../lib/3d/3dProjectionMathalea2d/Cube3dPerspectiveCavaliere'
 import { paveLPH3d } from '../../lib/3d/3dProjectionMathalea2d/PaveEtPaveLPH3dPerspectiveCavaliere'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Déterminer le volume de pavés droit par dénombrement'
 export const interactifReady = true
@@ -43,9 +43,17 @@ export default class VolumesPavesParDenombrement extends Exercice {
     this.nbQuestions = 1 // Ici le nombre de questions
     this.correctionDetailleeDisponible = true
     this.correctionDetaillee = true
+    this.consigne = ''
   }
 
   nouvelleVersion() {
+    if (this.nbQuestions === 1) {
+      this.consigne =
+        'Donner le nombre de petits cubes constituant ce pavé droit.'
+    } else {
+      this.consigne =
+        'Dans chacun des cas suivants, donner le nombre de petits cubes constituant le pavé droit.'
+    }
     context.anglePerspective = 30
     context.coeffPerspective = 0.5
     const dimensions = []
@@ -77,14 +85,14 @@ export default class VolumesPavesParDenombrement extends Exercice {
       barres = []
       plaques = []
 
-      texte = 'Donner le nombre de petits cubes qui constituent ce pavé droit'
+      texte = ''
       texte += this.interactif
         ? ' : ' +
           ajouteChampTexteMathLive(this, q, KeyboardType.clavierNumbers) +
           '.'
-        : '.'
+        : ''
       texte +=
-        '<br>' +
+        (context.isHtml ? '<br>' : '\n\n') +
         mathalea2d(
           {
             xmin: -1,
@@ -172,17 +180,17 @@ export default class VolumesPavesParDenombrement extends Exercice {
       }
 
       if (this.correctionDetaillee) {
-        texteCorr = `Il y a ${l} cubes par barre :<br>`
+        texteCorr = `Il y a ${l} cubes par barre :${context.isHtml ? '<br>' : '\n\n'}`
         texteCorr += mathalea2d(
           { xmin: -1, xmax: l * 1.5 + 2, ymin: -0.5, ymax: 1.5 },
           cubes,
         )
-        texteCorr += `<br>Il y a ${p} barres par plaque :<br>`
+        texteCorr += `${context.isHtml ? '<br>' : '\n\n'}Il y a ${p} barres par plaque :${context.isHtml ? '<br>' : '\n\n'}`
         texteCorr += mathalea2d(
           { xmin: -1, xmax: l * 1.5 + 2, ymin: -0.5, ymax: 1.5 + p * 0.3 },
           barres,
         )
-        texteCorr += `<br>Enfin, il y a ${h} plaques empilées :<br>`
+        texteCorr += `${context.isHtml ? '<br>' : '\n\n'}Enfin, il y a ${h} plaques empilées :${context.isHtml ? '<br>' : '\n\n'}`
         texteCorr += mathalea2d(
           { xmin: -1, ymin: -1, xmax: 15, ymax: 1.5 + h * 1.4 },
           plaques,

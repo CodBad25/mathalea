@@ -71,10 +71,28 @@ export default class DenombrerCubes extends Exercice {
     this.sup3 = false
     this.nbQuestions = 3 // Ici le nombre de questions
     this.sup2 = 1 // A décommenter : valeur par défaut d'un deuxième paramètre
+    this.consigne = ''
     // c'est ici que commence le code de l'exercice cette fonction crée une copie de l'exercice
   }
 
   nouvelleVersion() {
+    if (this.nbQuestions === 1) {
+      if (this.sup3 && context.isHtml) {
+        this.consigne =
+          "Un empilement de cubes et un pavé droit sont représentés ci-dessous.<br>Quel est celui qui a le plus petit volume (en nombre de cubes identiques) ?<br>Les petits cubes sont tous identiques. Le zoom peut changer d'un solide à l'autre."
+      } else {
+        this.consigne =
+          'Ci-dessous, un empilement de cubes est représenté sous deux angles différents et un pavé droit est représenté à côté.<br>Quel est celui qui a le plus petit volume (en nombre de cubes identiques) ?'
+      }
+    } else {
+      if (this.sup3 && context.isHtml) {
+        this.consigne =
+          'Dans chacun des cas ci-dessous, un empilement de cubes et un pavé droit sont représentés.<br>Déterminer celui qui a le plus petit volume (en nombre de cubes identiques) ?'
+      } else {
+        this.consigne =
+          'Dans chacun des cas ci-dessous, un empilement de cubes est représenté sous deux angles différents et un pavé droit est représenté à côté.<br>Déterminer celui qui a le plus petit volume (en nombre de cubes identiques) ?'
+      }
+    }
     const longueur = 2 + parseInt(this.sup2) // longueur de l'empilement
     const largeur = longueur // largeur de l'empilement
     const hauteur = Math.min(longueur, 4) // hauteur de l'empilement
@@ -103,8 +121,7 @@ export default class DenombrerCubes extends Exercice {
 
       if (this.sup3 && context.isHtml) {
         // 3d dynamique avec Canvas3DElement
-        texte +=
-          'Un empilement de cubes et un pavé droit sont représentés ci-dessous.<br>' // Nous utilisons souvent cette variable pour construire le texte de la question.
+        texte += '' // Nous utilisons souvent cette variable pour construire le texte de la question.
         const { canvasEnonce, canvasCorrection } = canvasEnonceCorrection(
           L1,
           `scene3dEx${this.numeroExercice}Q${q}-1`,
@@ -119,8 +136,7 @@ export default class DenombrerCubes extends Exercice {
         texteCorr += canvasCorrection2
       } else {
         // 3d Iso avec Mathalea2d
-        texte +=
-          'Ci-dessous, un empilement de cubes est représenté sous deux angles différents et un pavé droit est représenté à côté.<br>'
+        texte += ''
         const { figure, figureCorrection } = createCubesProjections(
           L1,
           largeur,
@@ -145,11 +161,9 @@ export default class DenombrerCubes extends Exercice {
         texteCorr += figureCorrection + mathalea2d(params2, objets2)
       }
 
-      texte +=
-        '<br>Quel est celui qui a le plus petit volume (en nombre de cubes identiques) ?'
+      texte += ''
       if (context.isHtml && this.sup3) {
-        texte +=
-          "<br>Les petits cubes sont tous identiques. Le zoom peut changer d'un solide à l'autre."
+        texte += ''
       }
       texteCorr += `<br>Le premier solide est un empilement de ${volume1} cubes.<br>`
       texteCorr += `Le deuxième solide est un pavé droit de dimensions $${larg} \\times ${long} \\times ${haut}$, son volume est de $${larg * long * haut}$.<br>`
