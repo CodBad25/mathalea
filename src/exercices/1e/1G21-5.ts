@@ -1,7 +1,5 @@
-import { createList } from '../../lib/format/lists'
 import {
   contains,
-  
   isEqual,
   isEquivalentEquation,
   isReduced,
@@ -40,17 +38,16 @@ export const refs = {
  *
  * @author Stéphane Guyon
  *
-*/
+ */
 export default class SyntheseGeometrieReperee extends Exercice {
   constructor() {
     super()
-    this.nbQuestions = 1
+    this.nbQuestions = 6
+    this.nbQuestionsModifiable = false
   }
 
   nouvelleVersion() {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      let texte = ''
-      let texteCorr = ''
       const xA = randint(-5, 5, 0)
       const yA = randint(-5, 5, 0)
       let xC, yC: number
@@ -122,10 +119,6 @@ export default class SyntheseGeometrieReperee extends Exercice {
         ajouteChampTexteMathLive(this, 4, KeyboardType.lyceeClassique, {
           texteAvant: '<br>Coordonnées du milieu $\\Omega$ : ',
         })
-      const question4 = createList({
-        items: [question4a, question4b],
-        style: 'alpha',
-      })
 
       let question5 =
         'En déduire une équation du cercle de centre $\\Omega$ et de diamètre $[AB]$.'
@@ -238,50 +231,30 @@ export default class SyntheseGeometrieReperee extends Exercice {
       correction3 += `  On vérifie que les coordonnées obtenues vérifient bien les équations cartésiennes de $(AB)$ et de $(d)$. <br>
 	      Ainsi $\\begin{cases}x_H=${xH.texFractionSimplifiee}\\\\y_H=${yH.texFractionSimplifiee}\\end{cases}$.<br>
 	      Les coordonnées du point $H$, projeté orthogonal du point $C$ sur la droite $(AB)$, sont : $${miseEnEvidence(`H\\left(${xH.texFractionSimplifiee} ;\\, ${yH.texFractionSimplifiee} \\right)`)}$.`
-      const reponse3 = `H\\left(${xH.texFractionSimplifiee} ;\\, ${yH.texFractionSimplifiee} \\right)`
+      const reponse3 = `\\left(${xH.texFractionSimplifiee} ;\\, ${yH.texFractionSimplifiee} \\right)`
       const correction4a = `Pour calculer la distance $AB$, on utilise la formule : $AB=\\sqrt{(x_B-x_A)^2+(y_B-y_A)^2}$.<br>
       En appliquant la formule avec les coordonnées de $A$ et $B$, on trouve : $AB=\\sqrt{(${xB}${ecritureAlgebriqueSauf0(-xA)})^2+(${yB}${ecritureAlgebriqueSauf0(-yA)})^2}$.<br>
       En simplifiant, on trouve :  $${miseEnEvidence(distanceEstUnCarreParfait ? `AB=${Math.sqrt(distanceCarree)}` : `AB=\\sqrt{${distanceCarree}}`)}$`
-     
+
       const correction4b = `Pour calculer les coordonnées du milieu $\\Omega$ du segment $[AB]$, on utilise le résultat de cours : $\\Omega \\left( \\dfrac{x_A+x_B}{2} ;\\, \\dfrac{y_A+y_B}{2} \\right)$.<br>
       En appliquant la formule avec les coordonnées de $A$ et $B$, on trouve : $\\Omega \\left( \\dfrac{${xA}${ecritureAlgebriqueSauf0(xB)}}{2} ;\\, \\dfrac{${yA}${ecritureAlgebriqueSauf0(yB)}}{2} \\right)$.<br>
       En simplifiant, on trouve : $${miseEnEvidence(`\\Omega\\left(${xOmega.texFractionSimplifiee} ;\\, ${yOmega.texFractionSimplifiee} \\right)`)}$.<br>`
 
-      const reponse4a = `AB=${distanceEstUnCarreParfait ? Math.sqrt(distanceCarree) : `\\sqrt{${distanceCarree}}`}`
-      const reponse4b = `\\Omega\\left(${xOmega.texFractionSimplifiee} ;\\, ${yOmega.texFractionSimplifiee} \\right)`
-      const correction4 = createList({
-        items: [correction4a, correction4b],
-        style: 'alpha',
-      })
+      const reponse4a = `${distanceEstUnCarreParfait ? Math.sqrt(distanceCarree) : `\\sqrt{${distanceCarree}}`}`
+      const reponse4b = `\\left(${xOmega.texFractionSimplifiee} ;\\, ${yOmega.texFractionSimplifiee} \\right)`
 
       let correction5 = `Le diamètre du cercle est $AB$ donc son rayon vaut : $r=\\dfrac{AB}{2}=\\dfrac{\\sqrt{${distanceCarree}}}{2}$.<br>
       On en déduit que $r^2=\\dfrac{${distanceCarree}}{4}=  ${rayoncarre.texFractionSimplifiee}$.<br>
       On sait qu'une équation de cercle de centre $\\Omega(x_\\Omega ; y_\\Omega)$ et de rayon $r$ est sous la forme: $ (x - x_\\Omega)^2 + (y - y_\\Omega)^2 = r^2 $.<br>
-      En appliquant, on en déduit qu'une équation du cercle est 
+      En appliquant, on en déduit qu'une équation du cercle est
       $\\left(x-${xOmega.ecritureParentheseSiNegatif}\\right)^2 + \\left(y-${yOmega.ecritureParentheseSiNegatif}\\right)^2 = ${rayoncarre.texFractionSimplifiee}$.<br>
 	      Finalement,
 	      une équation du cercle de centre $\\Omega$ et de diamètre $[AB]$ est : `
       correction5 += `$${miseEnEvidence(`${termeCarreCercle('x', xOmega, xOmegaOppose)} + ${termeCarreCercle('y', yOmega, yOmegaOppose)} = ${rayoncarre.texFractionSimplifiee}`)}$.`
       const reponse5 = `${termeCarreCercle('x', xOmega, xOmegaOppose)} + ${termeCarreCercle('y', yOmega, yOmegaOppose)} = ${rayoncarre.texFractionSimplifiee}`
 
-      texte =
-        `Dans un repère orthonormé $(O;\\,\\vec{\\imath} ;\\,\\vec{\\jmath})$, on considère les points 
-        $A(${xA} ;\\, ${yA})$, $B(${xB} ;\\, ${yB} )$ et $C(${xC} ;\\, ${yC} \\, )$.<br>` +
-        createList({
-          items: [question1, question2, question3, question4, question5],
-          style: 'nombres',
-        })
-
-      texteCorr = createList({
-        items: [
-          correction1,
-          correction2,
-          correction3,
-          correction4,
-          correction5,
-        ],
-        style: 'nombres',
-      })
+      this.introduction = `Dans un repère orthonormé $(O;\\,\\vec{\\imath} ;\\,\\vec{\\jmath})$, on considère les points
+         $A(${xA} ;\\, ${yA})$, $B(${xB} ;\\, ${yB} )$ et $C(${xC} ;\\, ${yC} \\, )$.<br>`
 
       if (this.questionJamaisPosee(i, a)) {
         handleAnswers(this, 0, {
@@ -338,12 +311,11 @@ export default class SyntheseGeometrieReperee extends Exercice {
           // équation du cercle
           reponse: {
             value: reponse5,
-             compare: seq([isEqual()]),
+            compare: seq([isEqual()]),
           },
         })
-        // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
-        this.listeQuestions[i] = texte
-        this.listeCorrections[i] = texteCorr
+        this.listeQuestions = [question1, question2, question3, question4a, question4b, question5]
+        this.listeCorrections = [correction1, correction2, correction3, correction4a, correction4b, correction5]
         i++
       }
       cpt++
