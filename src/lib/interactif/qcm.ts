@@ -212,6 +212,7 @@ export function verifQuestionQcm(exercice: IExercice, i: number) {
         nbMauvaisesReponses++
       }
       check.disabled = true
+      check.style.opacity = '1'
     }
   })
   let typeFeedback = 'positive'
