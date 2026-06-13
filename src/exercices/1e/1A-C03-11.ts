@@ -57,8 +57,12 @@ export default class Puissances extends ExerciceQcmA {
   <p style="margin: 0 0 10px 0;">
     Il faut simplifier une expression rationnelle.
   </p>
- Si la variable $x$ vous gêne, essayez au brouillon d'effectuer le même genre de calcul avec des nombres à la place des lettres pour vous aider à trouver la bonne méthode.<br>
-`
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Repérer la grande fraction et la fraction placée au dénominateur.</li>
+    <li>Transformer la division par une fraction en multiplication par son inverse.</li>
+    <li>Regrouper ensuite les nombres d'un côté et les puissances de $x$ de l'autre.</li>
+    <li>Effectuer le même genre de calcul avec des nombres si la variable $x$ gêne.</li>
+  </ul>`
     this.versionAleatoire()
   }
 }

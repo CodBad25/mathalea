@@ -71,16 +71,15 @@ export default class Puissances extends ExerciceQcmA {
 
   constructor() {
     super()
-     this.tip = `
+    this.tip = `
   <p style="margin: 0 0 10px 0;">
-    Il faut simplifier cette expression algébrique.<br>
-    Si les expressions littérales vous gênent, essayez au brouillon d'effectuer le même genre de calcul avec des nombres à la place des lettres pour vous aider à trouver la bonne méthode.<br>
-    Une fois la stratégie identifée, vous pouvez appliquer la même méthode à l'expression algébrique.
-
+    Il faut simplifier cette expression algébrique.
   </p>
-
- 
-  </a>`
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Effectuer au brouillon le même genre de calcul avec des nombres si les expressions littérales gênent.</li>
+    <li>Identifier la stratégie sur ce calcul plus simple.</li>
+    <li>Appliquer ensuite la même méthode à l'expression algébrique.</li>
+  </ul>`
     this.versionAleatoire()
   }
 }

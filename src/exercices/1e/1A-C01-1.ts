@@ -45,11 +45,11 @@ export default class AutoC1a extends ExerciceQcmA {
     this.enonce = `La seule inégalité vraie est : `
     this.tip = `
   <p style="margin: 0 0 10px 0;">
-    Il faut penser aux fonctions de références, en particulier :
+    Il faut penser aux fonctions de référence, en particulier :
   </p>
   <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
-    <li>les variations de la <strong>fonction carré</strong>,</li>
-    <li>les variations de la <strong>fonction inverse</strong>.</li>
+    <li>utiliser les variations de la <strong>fonction carré</strong> ;</li>
+    <li>utiliser les variations de la <strong>fonction inverse</strong>.</li>
   </ul>
   <a href="https://podeduc.apps.education.fr/video/143477-indice-automatisme-1-c01-1mp4/?is_iframe=true&autoplay=true" target="_blank"
      style="display:inline-flex; align-items:center; gap:6px;

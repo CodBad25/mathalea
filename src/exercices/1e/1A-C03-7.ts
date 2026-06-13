@@ -51,10 +51,14 @@ export default class Auto1AC3g extends ExerciceQcmA {
     super()
     this.tip = `
   <p style="margin: 0 0 10px 0;">
-    N'appliquez pas de formule sans comprendre ce que vous faites . <br>
-    Essayez de mettre du sens à l'opération demandée.<br>
-    Si la variable $n$ vous gêne, essayez de faire le même calcul avec des nombres à la place de $n$ pour trouver la bonne méthode. <br>
-`
+    Il faut donner du sens à l'opération demandée avant d'appliquer une formule.
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Observer que les deux termes additionnés sont identiques.</li>
+    <li>Remplacer ce terme par une lettre au brouillon pour réfléchir à une addition du type $A+A$.</li>
+    <li>Faire le même calcul avec des nombres à la place de $n$ si la variable gêne.</li>
+    <li>Ne pas confondre addition de puissances et produit de puissances.</li>
+  </ul>`
     this.versionAleatoire()
   }
 }

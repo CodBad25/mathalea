@@ -158,11 +158,14 @@ export default class TrouverEgalite extends ExerciceQcmA {
     super()
     this.tip = `
   <p style="margin: 0 0 10px 0;">
-    Il faut vérifier plusieurs égalités avec des puissances. <br>
-    Pour chacune, identifiez la propriété utilisée et vérifiez si elle est correcte ou non. <br>
+    Il faut vérifier plusieurs égalités avec des puissances.
   </p>
-  Dans un QCM, une seule égalité est vraie . Vous pouvez aussi procéder par élimination.
-`
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Traiter les propositions une par une.</li>
+    <li>Identifier la propriété utilisée dans chaque proposition.</li>
+    <li>Vérifier si cette propriété est appliquée correctement.</li>
+    <li>Procéder par élimination : une seule égalité est vraie dans ce QCM.</li>
+  </ul>`
     // this.options = { vertical: true, ordered: false }
     this.versionAleatoire()
   }

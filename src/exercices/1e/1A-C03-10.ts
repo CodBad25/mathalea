@@ -62,11 +62,14 @@ export default class Auto1AC3j extends ExerciceQcmA {
     super()
     this.tip = `
   <p style="margin: 0 0 10px 0;">
-    Il faut passer d'une écriture scientifique à une écriture décimale.<br>
-    Si vous hésitez, vous pouvez construire au brouillon le tableau de numération du nombre en fonction des puissances de $10$.<br>
+    Il faut passer d'une écriture scientifique à une écriture décimale.
   </p>
- 
-`
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Regarder le signe de l'exposant de $10$.</li>
+    <li>Déplacer la virgule du nombre dans le bon sens.</li>
+    <li>Compter soigneusement le nombre de rangs de déplacement.</li>
+    <li>Construire au brouillon un tableau de numération en cas d'hésitation.</li>
+  </ul>`
     // this.options = { vertical: true, ordered: false }
     this.versionAleatoire()
   }
