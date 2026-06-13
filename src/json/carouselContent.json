@@ -9,6 +9,15 @@
       "mobileVisible": true
     },
     {
+      "background": "carousel05.jpg",
+      "title": "Cahiers de vacances gratuits",
+      "message": "Pour préparer l'entrée en sixième, en seconde, en première ou en terminale.",
+      "image": "cdv.png",
+      "link": "https://coopmaths.fr/www/cahiers-de-vacances/",
+      "buttonTitle": "Voir les cahiers",
+      "mobileVisible": true
+    },
+    {
       "background": "carousel04.jpg",
       "title": "Capytale",
       "message": "Les enseignants peuvent sélectionner des exercices, les donner à leurs élèves et récupérer tous les scores sur Capytale.",
