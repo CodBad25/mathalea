@@ -5,7 +5,6 @@ import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -64,15 +63,21 @@ export default class ExerciceConversionsVolumes extends Exercice {
       '1 : QCM\n2 : Numérique',
     ]
     this.besoinFormulaire4CaseACocher = ['Avec tableau', false]
+    this.besoinFormulaire5CaseACocher = [
+      'Avec tableau dans la correction',
+      false,
+    ]
 
     this.sup = 1 // Niveau de difficulté de l`exercice
     this.sup2 = false // Avec des nombres décimaux ou pas
     this.sup3 = 1 // interactifType Qcm
     this.sup4 = false
+    this.sup5 = false
     this.spacing = 2
   }
 
   nouvelleVersion() {
+    const withTableauCorr = this.sup5
     // if (context.vue === 'diap') this.sup3 = 1 // EE : Pourquoi forcer ce choix ? Je l'enlève.
     this.consigne =
       this.interactif && this.sup3 === 1
@@ -82,14 +87,24 @@ export default class ExerciceConversionsVolumes extends Exercice {
 
     Decimal.set({ toExpNeg: -20, toExpPos: 20 }) // pour éviter la conversion en notation scientifique on va jusqu'à 20 décimales (-7 est la valeur par défaut)
     const prefixeMulti = [
-      [' da', '\\times1000', 1000],
-      [' h', '\\times1000\\times1000', 1000000],
-      [' k', '\\times1000\\times1000\\times1000', 1000000000],
+      [' da', '\\times1{\\,}000', 1000, '\\times10'],
+      [' h', '\\times1{\\,}000\\times1{\\,}000', 1000000, '\\times100'],
+      [
+        ' k',
+        '\\times1{\\,}000\\times1{\\,}000\\times1{\\,}000',
+        1000000000,
+        '\\times1{\\,}000',
+      ],
     ]
     const prefixeDiv = [
-      [' d', '\\div1000', 1000],
-      [' c', '\\div1000\\div1000', 1000000],
-      [' m', '\\div1000\\div1000\\div1000', 1000000000],
+      [' d', '\\div1{\\,}000', 1000, '\\times0{,}1'],
+      [' c', '\\div1{\\,}000\\div1{\\,}000', 1000000, '\\times0{,}01'],
+      [
+        ' m',
+        '\\div1{\\,}000\\div1{\\,}000\\div1{\\,}000',
+        1000000000,
+        '\\times0{,}001',
+      ],
     ]
 
     const unite = 'm'
@@ -146,78 +161,40 @@ export default class ExerciceConversionsVolumes extends Exercice {
         // S'il faut multiplier pour convertir
 
         resultat = a.mul(prefixeMulti[k][2])
-        texte =
-          '$ ' +
-          texNombre(a, 3) +
-          texTexte(prefixeMulti[k][0] + unite) +
-          '^3' +
-          ' = \\dotfill ' +
-          texTexte(unite) +
-          '^3' +
-          '$'
-        texteCorr =
-          '$ ' +
-          texNombre(a, 3) +
-          texTexte(prefixeMulti[k][0] + unite) +
-          '^3' +
-          ' =  ' +
-          texNombre(a, 3) +
-          prefixeMulti[k][1] +
-          texTexte(unite) +
-          '^3' +
-          ' = ' +
-          texNombre(resultat, 20) +
-          texTexte(unite) +
-          '^3' +
-          '$'
-        texteCorr +=
-          '<br>' +
-          buildTab(
-            a.toNumber(),
-            prefixeMulti[k][0] + 'm',
-            resultat.toNumber(),
-            unite,
-            2,
-            true,
-          )
+        texte = `$${texNombre(a, 3)}${texTexte(prefixeMulti[k][0] + unite)}^3 = \\dotfill ${texTexte(unite)}^3$`
+        texteCorr = withTableauCorr
+          ? `$${texNombre(a, 3)}${texTexte(prefixeMulti[k][0] + unite)}^3 = ${texNombre(a, 3)}${prefixeMulti[k][1]}${texTexte(unite)}^3 = ${texNombre(resultat, 20)}${texTexte(unite)}^3$<br>`
+          : ''
+
+        texteCorr += withTableauCorr
+          ? buildTab(
+              a.toNumber(),
+              prefixeMulti[k][0] + 'm',
+              resultat.toNumber(),
+              unite,
+              2,
+              true,
+            )
+          : `$${texNombre(a, 3)}${texTexte(prefixeMulti[k][0] + unite)}^3 = ${texNombre(a, 3)}\\times1 ${texTexte(prefixeMulti[k][0] + unite)} \\times1${texTexte(prefixeMulti[k][0] + unite)} \\times1 ${texTexte(prefixeMulti[k][0] + unite)}= ${texNombre(a, 3)}${prefixeMulti[k][3]}${texTexte(unite)} ${prefixeMulti[k][3]}${texTexte(unite)} ${prefixeMulti[k][3]}${texTexte(unite)} = ${texNombre(a, 3)}\\times${texNombre(Number(prefixeMulti[k][2]), 9)} ${texTexte(unite)}^3= ${texNombre(resultat, 20)}${texTexte(unite)}^3$`
       } else if (div && typesDeQuestions < 4) {
         k = randint(0, 1) // Pas de conversions de mm^3 en m^3 avec des nombres décimaux car résultat inférieur à 10e-8
         // Le commentaire précédent est sans objet avec Decimal, on peut afficher ici 20 chiffres après la virgule sans passer en notation scientifique !
         resultat = a.div(prefixeMulti[k][2])
-        texte =
-          '$ ' +
-          texNombre(a, 3) +
-          texTexte(prefixeDiv[k][0] + unite) +
-          '^3' +
-          ' = \\dotfill ' +
-          texTexte(unite) +
-          '^3' +
-          '$'
-        texteCorr =
-          '$ ' +
-          texNombre(a, 3) +
-          texTexte(prefixeDiv[k][0] + unite) +
-          '^3' +
-          ' =  ' +
-          texNombre(a, 3) +
-          prefixeDiv[k][1] +
-          texTexte(unite) +
-          '^3' +
-          ' = ' +
-          texNombre(resultat, 20) + // avec les Decimaux, on peut demander une telle précision, texNombre n'affichera que ce qui est utile (sauf à mettre force, le troisième paramètre à true)
-          texTexte(unite) +
-          '^3' +
-          '$'
-        texteCorr +=
-          '<br>' +
-          buildTab(
-            a.toNumber(),
-            prefixeDiv[k][0] + 'm',
-            resultat.toNumber(),
-            unite,
-            2,
-            true,
-          )
+        texte = `$${texNombre(a, 3)}${texTexte(prefixeDiv[k][0] + unite)}^3 = \\dotfill ${texTexte(unite)}^3$`
+
+        texteCorr = withTableauCorr
+          ? `$${texNombre(a, 3)}${texTexte(prefixeDiv[k][0] + unite)}^3 = ${texNombre(a, 3)}${prefixeDiv[k][1]}${texTexte(unite)}^3 = ${texNombre(resultat, 20)}${texTexte(unite)}^3$<br>`
+          : ''
+        texteCorr += withTableauCorr
+          ? buildTab(
+              a.toNumber(),
+              prefixeDiv[k][0] + 'm',
+              resultat.toNumber(),
+              unite,
+              2,
+              true,
+            )
+          : `$${texNombre(a, 3)}${texTexte(prefixeDiv[k][0] + unite)}^3 =${texNombre(a, 3)}\\times1${texTexte(prefixeDiv[k][0] + unite)}\\times1${texTexte(prefixeDiv[k][0] + unite)}\\times1${texTexte(prefixeDiv[k][0] + unite)}= ${texNombre(a, 3)}${prefixeDiv[k][3]}${texTexte(unite)} ${prefixeDiv[k][3]}${texTexte(unite)} ${prefixeDiv[k][3]}${texTexte(unite)} = ${texNombre(a, 3)}\\times${texNombre(1 / Number(prefixeDiv[k][2]), 9)} ${texTexte(unite)}^3= ${texNombre(resultat, 20)}${texTexte(unite)}^3$`
       } else {
         const unite1 = randint(0, 3)
         let ecart = randint(1, 2) // nombre de multiplication par 10 pour passer de l`un à l`autre
@@ -228,100 +205,40 @@ export default class ExerciceConversionsVolumes extends Exercice {
         let multiplicationsPar1000 = ''
 
         if (randint(0, 1) > 0) {
-          switch (ecart) {
-            case 1:
-              multiplicationsPar1000 = `\\times 1${sp()}000`
-              break
-            case 2:
-              multiplicationsPar1000 = `\\times 1${sp()}000 \\times 1${sp()}000`
-              break
-            case 3:
-              multiplicationsPar1000 = `\\times 1${sp()}000 \\times 1${sp()}000 \\times 1${sp()}000`
-              break
-          }
+          // On multiplie pour passer de l`unité 2 à l`unité 1
+          multiplicationsPar1000 = `\\times 1{\\,}000`
           resultat = a.mul(10 ** (3 * ecart))
-          texte =
-            '$ ' +
-            texNombre(a, 3) +
-            texTexte(listeUnite[unite2]) +
-            '^3' +
-            ' = \\dotfill ' +
-            texTexte(listeUnite[unite1]) +
-            '^3' +
-            '$'
-          texteCorr =
-            '$ ' +
-            texNombre(a, 3) +
-            texTexte(listeUnite[unite2]) +
-            '^3' +
-            ' =  ' +
-            texNombre(a, 3) +
-            multiplicationsPar1000 +
-            texTexte(listeUnite[unite1]) +
-            '^3' +
-            ' = ' +
-            texNombre(resultat, 20) + // avec les Decimaux, on peut demander une telle précision, texNombre n'affichera que ce qui est utile (sauf à mettre force, le troisième paramètre à true)
-            texTexte(listeUnite[unite1]) +
-            '^3' +
-            '$'
-          texteCorr +=
-            '<br>' +
-            buildTab(
-              a.toNumber(),
-              listeUnite[unite2],
-              resultat.toNumber(),
-              listeUnite[unite1],
-              2,
-              true,
-            )
+          texte = `$${texNombre(a, 3)}${texTexte(listeUnite[unite2])}^3 = \\dotfill ${texTexte(listeUnite[unite1])}^3$`
+          texteCorr = withTableauCorr
+            ? `$${texNombre(a, 3)}${texTexte(listeUnite[unite2])}^3 = ${texNombre(a, 3)}${new Array(ecart).fill(multiplicationsPar1000).join(' ')}${texTexte(listeUnite[unite1])}^3 = ${texNombre(resultat, 20)}${texTexte(listeUnite[unite1])}^3$<br>`
+            : ''
+          texteCorr += withTableauCorr
+            ? buildTab(
+                a.toNumber(),
+                listeUnite[unite2],
+                resultat.toNumber(),
+                listeUnite[unite1],
+                2,
+                true,
+              )
+            : `$${texNombre(a, 3)}${texTexte(listeUnite[unite2])}^3 =  ${texNombre(a, 3)}\\times1${texTexte(listeUnite[unite2])}\\times1${texTexte(listeUnite[unite2])}\\times1${texTexte(listeUnite[unite2])}= ${texNombre(a, 3)}\\times${texNombre(10 ** ecart, 0)}${texTexte(listeUnite[unite1])}\\times${texNombre(10 ** ecart, 0)}${texTexte(listeUnite[unite1])}\\times${texNombre(10 ** ecart, 0)}${texTexte(listeUnite[unite1])} = ${texNombre(a, 3)}\\times${texNombre(10 ** (3 * ecart), 0)}${texTexte(listeUnite[unite1])}^3 = ${texNombre(resultat, 20)}${texTexte(listeUnite[unite1])}^3$`
         } else {
-          switch (ecart) {
-            case 1:
-              multiplicationsPar1000 = `\\div 1${sp()}000`
-              break
-            case 2:
-              multiplicationsPar1000 = `\\div 1${sp()}000 \\div 1${sp()}000`
-              break
-            case 3:
-            default:
-              multiplicationsPar1000 = `\\div 1${sp()}000 \\div 1${sp()}000 \\div 1${sp()}000`
-              break
-          }
+          multiplicationsPar1000 = `\\div 1{\\,}000`
           resultat = a.div(10 ** (3 * ecart))
-          texte =
-            '$ ' +
-            texNombre(a, 3) +
-            texTexte(listeUnite[unite1]) +
-            '^3' +
-            ' = \\dotfill ' +
-            texTexte(listeUnite[unite2]) +
-            '^3' +
-            '$'
-          texteCorr =
-            '$ ' +
-            texNombre(a, 3) +
-            texTexte(listeUnite[unite1]) +
-            '^3' +
-            ' =  ' +
-            texNombre(a, 3) +
-            multiplicationsPar1000 +
-            texTexte(listeUnite[unite2]) +
-            '^3' +
-            ' = ' +
-            texNombre(resultat, 20) +
-            texTexte(listeUnite[unite2]) +
-            '^3' +
-            '$'
-          texteCorr +=
-            '<br>' +
-            buildTab(
-              a.toNumber(),
-              listeUnite[unite1],
-              resultat.toNumber(),
-              listeUnite[unite2],
-              2,
-              true,
-            )
+          texte = `$${texNombre(a, 3)}${texTexte(listeUnite[unite1])}^3 = \\dotfill ${texTexte(listeUnite[unite2])}^3$`
+          texteCorr = withTableauCorr
+            ? `$${texNombre(a, 3)}${texTexte(listeUnite[unite1])}^3 = ${texNombre(a, 3)}${new Array(ecart).fill(multiplicationsPar1000).join(' ')}${texTexte(listeUnite[unite2])}^3 = ${texNombre(resultat, 20)}${texTexte(listeUnite[unite2])}^3$<br>`
+            : ''
+          texteCorr += withTableauCorr
+            ? buildTab(
+                a.toNumber(),
+                listeUnite[unite1],
+                resultat.toNumber(),
+                listeUnite[unite2],
+                2,
+                true,
+              )
+            : `$${texNombre(a, 3)}${texTexte(listeUnite[unite1])}^3 = ${texNombre(a, 3)}\\times1${texTexte(listeUnite[unite1])}\\times1${texTexte(listeUnite[unite1])}\\times1${texTexte(listeUnite[unite1])} = ${texNombre(a, 3)}\\times${texNombre(10 ** -ecart, 3)}${texTexte(listeUnite[unite2])}\\times${texNombre(10 ** -ecart, 3)}${texTexte(listeUnite[unite2])}\\times${texNombre(10 ** -ecart, 3)}${texTexte(listeUnite[unite2])} = ${texNombre(a, 3)}\\times${texNombre(10 ** (-3 * ecart), 9)}${texTexte(listeUnite[unite2])}^3 = ${texNombre(resultat, 20)}${texTexte(listeUnite[unite2])}^3$`
         }
       }
 
