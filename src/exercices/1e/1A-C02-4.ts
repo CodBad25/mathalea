@@ -20,15 +20,14 @@ export const refs = {
 export default class Auto1AC2a extends NombreInverse {
   constructor() {
     super()
-     this.tip = `
+    this.tip = `
   <p style="margin: 0 0 10px 0;">
-   Il est plus facile de travailler avec une égalité de fractions.<br>
-   Une première étape utile peut consister à opérer les fractions du membre de droite.<br>
-
+   Il est plus facile de travailler avec une égalité de fractions.
   </p>
-
- 
-  </a>`
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Effectuer d'abord les calculs de fractions dans le membre de droite pour obtenir une égalité de fractions.</li>
+    <li>Comparer ensuite les deux membres de l'égalité obtenue.</li>
+  </ul>`
     this.versionQcm = true
   }
 }

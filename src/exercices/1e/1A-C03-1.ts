@@ -66,15 +66,15 @@ export default class Auto1AC3a extends ExerciceQcmA {
   constructor() {
     super()
     this.tip = `
-   <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
-    <li>
-    Commencez par regarder la base (c’est le nombre auquel on applique l’exposant) au numérateur et au dénominateur.<br>
-    <li>Cherchez un lien évident entre ces deux bases, qui soit utile avec les proprétés des puissances.
-     <li>Réécrire l'expression de manière à faire apparaître une même base au numérateur et au dénominateur. <br>
-       </li>
-  </ul>Cela doit vous mettre sur la piste pour simplifier l’expression. <br>
+  <p style="margin: 0 0 10px 0;">
+    Il faut chercher à faire apparaître des puissances comparables.
   </p>
-`
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Regarder la base au numérateur et la base au dénominateur.</li>
+    <li>Chercher un lien évident entre ces deux bases, utile avec les propriétés des puissances.</li>
+    <li>Réécrire l'expression pour faire apparaître une même base au numérateur et au dénominateur.</li>
+    <li>Simplifier ensuite avec une propriété de cours.</li>
+  </ul>`
     this.versionAleatoire()
   }
 }

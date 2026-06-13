@@ -20,18 +20,19 @@ export const refs = {
 export default class Auto1AC2b extends ProgrammeCalcul2 {
   constructor() {
     super()
-     this.tip = `
+    this.tip = `
   <p style="margin: 0 0 10px 0;">
-    Il faut traduire la consigne donnée en français en mathématique.
+    Il faut traduire la consigne donnée en français en langage mathématique.
   </p>
   <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
-    <li> Identifiez les mots clés (inverse, somme, double, carré, ...), rappelez vous leur signification mathématique.</li>
-    <li> En faisant bien attention à <strong>l'ordre des mots</strong>, ecrivez le programme de calcul en respectant bien les priorités. </li>
+    <li>Identifier les mots clés : inverse, somme, double, carré...</li>
+    <li>Se rappeler leur signification mathématique.</li>
+    <li>Faire attention à <strong>l'ordre des mots</strong>.</li>
+    <li>Écrire le programme de calcul en respectant les priorités opératoires.</li>
   </ul>
- <strong>Attention au piège de l'ordre des mots :</strong><br>
- "L'école du directeur" ne veut pas dire la même chose que "le directeur de l'école". <br>
- A vous de bien identifier la bonne traduction mathématique.
-  </a>`
+  <p style="margin: 0;">
+    Attention au piège de l'ordre des mots : "l'école du directeur" ne veut pas dire la même chose que "le directeur de l'école".
+  </p>`
     this.versionQcm = true
   }
 }

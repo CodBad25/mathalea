@@ -67,12 +67,14 @@ export default class Auto1AC3i extends ExerciceQcmA {
     super()
     this.tip = `
   <p style="margin: 0 0 10px 0;">
-    Il faut utiliser le comportement des puissances de $-1$.<br>
-    Tester le résultat de $(-1)^n$ pour différentes valeurs de $n$. En déduire une propriété qui devrait vous aider.<br>
-    Vous pouvez aussi essayer de trouver la bonne réponse par essais et erreurs, en testant les différentes propositions.
+    Il faut utiliser le comportement des puissances de $-1$ et de leur inverse.
   </p>
-  
-`
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Tester le résultat de $(-1)^n$ pour différentes valeurs de $n$.</li>
+    <li>En déduire une propriété liée à la parité de l'exposant.</li>
+    <li>Se demander quel est l'inverse de $1$ et quel est l'inverse de $-1$.</li>
+    <li>Tester les propositions une par une en cas d'hésitation.</li>
+  </ul>`
     this.versionAleatoire()
   }
 }

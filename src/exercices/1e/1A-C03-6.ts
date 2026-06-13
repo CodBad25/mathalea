@@ -48,9 +48,14 @@ export default class Auto1AC3f extends ExerciceQcmA {
     this.tip = `
   <p style="margin: 0 0 10px 0;">
     L'expression mélange deux règles sur les puissances : le produit et la puissance de puissance. <br>
-    Il est donc essentiel d'identifier les priorités opératoires
+    Il est donc essentiel d'identifier les priorités opératoires.
   </p>
-  Si la variable $n$ vous gêne, essayez de faire le même calcul avec des nombres à la place de $n$ pour trouver la bonne méthode. <br>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Commencer par traiter la puissance placée entre parenthèses.</li>
+    <li>Observer ensuite que les deux facteurs ont la même base.</li>
+    <li>Utiliser la propriété du produit de puissances de même base.</li>
+    <li>Faire le même calcul avec des nombres à la place de $n$ si la variable gêne.</li>
+  </ul>
 `
     this.versionAleatoire()
   }

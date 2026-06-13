@@ -25,9 +25,11 @@ export default class Auto1AC03n extends calculPuissancesNegativeFraction {
   <p style="margin: 0 0 10px 0;">
     Il faut utiliser le sens d'un exposant négatif.
   </p>
-  <p style="margin: 0 0 10px 0;">
-    Rappelez-vous que pour $a \\neq 0$, $a^{-1}=\\dfrac{1}{a}$ et que $a^{-2}=\\dfrac{1}{a^2}$. <br>
-  </p>
-`
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Se rappeler que pour $a \\neq 0$, $a^{-1}=\\dfrac{1}{a}$.</li>
+    <li>Se rappeler aussi que $a^{-2}=\\dfrac{1}{a^2}$.</li>
+    <li>Observer que la base est déjà une fraction de la forme $\\dfrac{1}{a}$.</li>
+    <li>Commencer par réfléchir au cas de l'exposant $-1$.</li>
+  </ul>`
   }
 }
