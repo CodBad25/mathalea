@@ -183,6 +183,8 @@ playwright-console-consolidated:
   stage: playwright-test
   timeout: 5h
   script:
+    - corepack enable
+    - corepack prepare pnpm@11.5.2 --activate
     - pnpm install --frozen-lockfile --prefer-offline
     - nohup pnpm start 2>&1 >/dev/null &
     - |
@@ -238,6 +240,8 @@ playwright-pdf-consolidated:
   stage: compile-pdf
   timeout: 5h
   script:
+    - corepack enable
+    - corepack prepare pnpm@11.5.2 --activate
     - pnpm install --frozen-lockfile --prefer-offline
     - nohup pnpm start 2>&1 >/dev/null &
     - |
@@ -290,37 +294,39 @@ playwright-pdf-dnb-consolidated:
     - .install_dependenciesPDFDNB
   stage: playwright-pdfDNB
   timeout: 5h
-  script: pnpm install --frozen-lockfile --prefer-offline
+  script:
+    - corepack enable
+    - corepack prepare pnpm@11.5.2 --activate
+    - pnpm install --frozen-lockfile --prefer-offline
     - nohup pnpm start 2>&1 >/dev/null &
     - |
-    FAIL=0
+      FAIL=0
+      run_pdf () {
+      NIV_LABEL="$1"
+      STATUS_VAR="$2"
+      echo "🧪 pdfexports NIV=$NIV_LABEL"
+      if NIV="$NIV_LABEL" pnpm test:e2e:pdfexports; then
+      eval "$STATUS_VAR=ok"
+      else
+      eval "$STATUS_VAR=ko"
+      FAIL=1
+      fi
+      }
 
-    run_pdf () {
-    NIV_LABEL="$1"
-    STATUS_VAR="$2"
-    echo "🧪 pdfexports NIV=$NIV_LABEL"
-    if NIV="$NIV_LABEL" pnpm test:e2e:pdfexports; then
-    eval "$STATUS_VAR=ok"
-    else
-    eval "$STATUS_VAR=ko"
-    FAIL=1
-    fi
-    }
+      run_pdf "dnb_2013^dnb_2014^dnb_2015" STATUS_DNB_2013_2015
+      run_pdf "dnb_2016^dnb_2017^dnb_2018^dnb_2019" STATUS_DNB_2016_2019
+      run_pdf "dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024" STATUS_DNB_2020_2024
 
-    run_pdf "dnb_2013^dnb_2014^dnb_2015" STATUS_DNB_2013_2015
-    run_pdf "dnb_2016^dnb_2017^dnb_2018^dnb_2019" STATUS_DNB_2016_2019
-    run_pdf "dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024" STATUS_DNB_2020_2024
+      echo ""
+      echo "═══════════════════════════════════════════"
+      echo "📊 Résumé pdf dnb consolidated"
+      echo "═══════════════════════════════════════════"
+      [ "$STATUS_DNB_2013_2015" = "ok" ] && echo "✅ dnb_2013^dnb_2014^dnb_2015" || echo "❌ dnb_2013^dnb_2014^dnb_2015"
+      [ "$STATUS_DNB_2016_2019" = "ok" ] && echo "✅ dnb_2016^dnb_2017^dnb_2018^dnb_2019" || echo "❌ dnb_2016^dnb_2017^dnb_2018^dnb_2019"
+      [ "$STATUS_DNB_2020_2024" = "ok" ] && echo "✅ dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024" || echo "❌ dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024"
+      echo "═══════════════════════════════════════════"
 
-    echo ""
-    echo "═══════════════════════════════════════════"
-    echo "📊 Résumé pdf dnb consolidated"
-    echo "═══════════════════════════════════════════"
-    [ "$STATUS_DNB_2013_2015" = "ok" ] && echo "✅ dnb_2013^dnb_2014^dnb_2015" || echo "❌ dnb_2013^dnb_2014^dnb_2015"
-    [ "$STATUS_DNB_2016_2019" = "ok" ] && echo "✅ dnb_2016^dnb_2017^dnb_2018^dnb_2019" || echo "❌ dnb_2016^dnb_2017^dnb_2018^dnb_2019"
-    [ "$STATUS_DNB_2020_2024" = "ok" ] && echo "✅ dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024" || echo "❌ dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024"
-    echo "═══════════════════════════════════════════"
-
-    exit "$FAIL"
+      exit "$FAIL"
   artifacts:
     paths:
       - updatefile/output/dnb*
@@ -331,6 +337,8 @@ playwright-pdf-bac-consolidated:
   stage: playwright-pdfBAC
   timeout: 5h
   script:
+    - corepack enable
+    - corepack prepare pnpm@11.5.2 --activate
     - pnpm install --frozen-lockfile --prefer-offline
     - nohup pnpm start 2>&1 >/dev/null &
     - |
@@ -368,7 +376,6 @@ playwright-pdf-bac-consolidated:
 build:
   image: node:20-bullseye
   allow_failure: true
-  extends: .pnpm_setup
   variables:
     KUBERNETES_MEMORY_REQUEST: '6Gi'
     KUBERNETES_MEMORY_LIMIT: '10Gi'
@@ -376,6 +383,8 @@ build:
   before_script:
     - NODE_OPTIONS=--max-old-space-size=4096
   script:
+    - corepack enable
+    - corepack prepare pnpm@11.5.2 --activate
     - pnpm install --frozen-lockfile --prefer-offline
     - echo "CI_COMMIT_BRANCH '$CI_COMMIT_BRANCH'"
     - echo "CI_OPEN_MERGE_REQUESTS '$CI_OPEN_MERGE_REQUESTS'"
