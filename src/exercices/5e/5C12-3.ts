@@ -1,4 +1,5 @@
 import type { MathfieldElement } from 'mathlive'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import ce from '../../lib/interactif/comparisonFunctions'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -12,8 +13,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Utiliser la distributivité pour du calcul mental'
 export const interactifReady = true
@@ -342,7 +341,7 @@ class DistributiviteNumerique extends Exercice {
         .parse(mf.getPromptValue('champ5'))
         .isSame(ce.parse(`${this.rep5[i]}`))
       mf.setPromptState('champ5', test5 ? 'correct' : 'incorrect', true)
-      if (test1 && test2 && test3 && test4) {
+      if (test1 && test2 && test3 && test4 && test5) {
         // question à 5 champs test5 est pour la réponse finale
         result.push('OK')
         if (spanResultatCheck) spanResultatCheck.innerHTML = '😎'
@@ -357,7 +356,7 @@ class DistributiviteNumerique extends Exercice {
       }
     } else {
       // question à 4 champs test4 est pour la réponse final
-      if (test1 && test2 && test3) {
+      if (test1 && test2 && test3 && test4) {
         result.push('OK')
         if (spanResultatCheck) spanResultatCheck.innerHTML = '😎'
       } else {
