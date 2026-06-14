@@ -1180,7 +1180,9 @@ export function verifQuestionMetaInteractif2d(
       `#MetaInteractif2dEx${exercice.numeroExercice}Q${i}field0`,
     )
     const svgContainer = firstField?.closest('div[style*="position: relative"]')
-    const insertAfter = svgContainer ?? document.querySelector(`#exercice${exercice.numeroExercice}`)
+    const insertAfter =
+      svgContainer ??
+      document.querySelector(`#exercice${exercice.numeroExercice}`)
     if (insertAfter) {
       eltFeedback = document.createElement('span')
       eltFeedback.id = `resultatCheckEx${exercice.numeroExercice}Q${i}`
@@ -1258,11 +1260,11 @@ export function verifQuestionMetaInteractif2d(
     if (result.isOk) {
       compteurBonnesReponses++
       points.push(scoreFromResult(result))
-      mf.setPromptState('champ1', 'default', true)
+      mf.setPromptState('champ1', 'correct', true)
       mf.classList.add('correct')
     } else {
       points.push(scoreFromResult(result))
-      mf.setPromptState('champ1', 'default', true)
+      mf.setPromptState('champ1', 'incorrect', true)
       mf.classList.add('incorrect')
       if (result.feedback === 'saisieVide') result.feedback = null
       else {
