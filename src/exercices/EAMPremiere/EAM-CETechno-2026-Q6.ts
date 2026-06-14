@@ -75,7 +75,7 @@ export default class AutoQ6ANt2026 extends ExerciceQcmA {
     this.correction = `Pour déterminer la médiane, il est très utile de rajouter une ligne avec les effectifs cumulés croissants (E.C.C.) au tableau :<br><br>`
     this.correction += `${tableauCorrTex}<br><br>`
     this.correction += `L'effectif total est de $N = ${N}$ élèves.<br>`
-    this.correction += `Ce nombre étant pair, la médiane est la moyenne entre la $${rang1}^{\\text{e}}$ et la $${rang2}^{\\text{e}}$ note.<br>`
+    this.correction += `Ce nombre étant pair, une médiane est la moyenne entre la $${rang1}^{\\text{e}}$ et la $${rang2}^{\\text{e}}$ note.<br>`
     this.correction += `En lisant la ligne des effectifs cumulés croissants, on observe que la $${rang1}^{\\text{e}}$ et la $${rang2}^{\\text{e}}$ note valent toutes les deux $${mediane}$.<br>`
     this.correction += `La médiane est donc $${miseEnEvidence(texNombre(mediane, 1))}$.`
 
