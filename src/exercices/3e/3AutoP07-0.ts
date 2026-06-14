@@ -20,11 +20,11 @@ export const refs = {
 
 const caracteres = [
   'portent des lunettes',
-  'ont une taille supérieure à 1,75 m',
+  `ont une taille supérieure à $${texNombre(1.75)}\\text{ m}$`,
   'pratiquent un sport',
   'aiment la musique pop',
   'aiment le chocolat',
-  "consomment plus de 2 litres d'eau par jour",
+  "consomment plus de $2$ litres d'eau par jour",
 ]
 const populations = [
   {
@@ -88,7 +88,7 @@ export default class PourcentageComplementaire extends ExerciceSimple {
 
     this.reponse = texNombre((nbIndividus * pourcentage) / 100, 0)
 
-    this.question = `Dans ${population.lieu} de ${nbIndividus} ${population.nom}, $${pourcentage}\\%$ des ${population.nom} ${caractere}.<br>
+    this.question = `Dans ${population.lieu} de $${texNombre(nbIndividus)}$ ${population.nom}, $${pourcentage}\\%$ des ${population.nom} ${caractere}.<br>
     Combien ${population.déterminant}${population.nom} ${caractere} ?`
     this.correction = `Le nombre ${population.déterminant}${population.nom} qui ${caractere} est égal à :<br>
     $${texNombre(nbIndividus, 0)} \\times \\dfrac{${texNombre(
