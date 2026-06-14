@@ -4,7 +4,7 @@ import { scratchblock } from '../../modules/scratchblock'
 
 declare global {
   interface Window {
-    notify: (...args: any[]) => void
+    notify: (message: string, objet: unknown) => void
   }
 }
 
