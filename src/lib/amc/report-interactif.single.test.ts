@@ -6,6 +6,12 @@ import { beforeAll, describe, it, vi } from 'vitest'
 import { context } from '../../modules/context'
 import type { IExercice } from '../types'
 
+declare global {
+  interface Window {
+    notify: (message: string, objet: unknown) => void
+  }
+}
+
 const TARGET_FILE = process.env.INTERACTIF_SINGLE_FILE
 const OUTPUT_FILE = process.env.INTERACTIF_SINGLE_OUTPUT
 
@@ -93,7 +99,7 @@ vi.mock('../../src/lib/renderScratch', () => ({
 
 vi.mock('apigeom', async (original) => {
   const real = await original()
-  ;(globalThis as any).APP_VERSION = 'test'
+  ;(globalThis as { APP_VERSION?: string }).APP_VERSION = 'test'
   return real
 })
 
@@ -169,37 +175,17 @@ function installNotificationCapture(relativePath: string) {
     originalConsoleError(...args)
   }
 
-  const globalWindow = (
-    globalThis as typeof globalThis & {
-      window?: Window & { notify?: unknown }
-    }
-  ).window
-
-  let restoreWindowNotify = () => {}
-  if (globalWindow && typeof globalWindow.notify !== 'function') {
-    const previousNotify = globalWindow.notify
-    globalWindow.notify = (error: unknown) => {
-      pushNotification(error)
-    }
-    restoreWindowNotify = () => {
-      if (previousNotify === undefined) {
-        delete globalWindow.notify
-      } else {
-        globalWindow.notify = previousNotify
-      }
-    }
-  }
-
   return {
     notifications,
     restore: () => {
       console.error = originalConsoleError
-      restoreWindowNotify()
     },
   }
 }
 
-function isClassExport(value: unknown): value is new (...args: any[]) => any {
+function isClassExport(
+  value: unknown,
+): value is new (...args: unknown[]) => IExercice {
   if (typeof value !== 'function') return false
   const source = Function.prototype.toString.call(value)
   return source.startsWith('class ')
@@ -268,7 +254,7 @@ async function loadAndTestExercise(filePath: string): Promise<{
 
     return {
       file: relativePath,
-      title: (exercice as any).titre ?? module.titre,
+      title: (exercice as IExercice).titre ?? module.titre,
       tags,
       notifications:
         capture.notifications.length > 0 ? capture.notifications : undefined,
