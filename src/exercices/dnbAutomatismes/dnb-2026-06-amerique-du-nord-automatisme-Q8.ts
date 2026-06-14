@@ -11,7 +11,8 @@ export const refs = {
 }
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const titre = 'Déterminer un diviseur à l\'aide des critères de divisibilité'
+export const titre =
+  "Déterminer un diviseur à l'aide des critères de divisibilité"
 export const dateDePublication = '06/06/2026'
 
 /**
@@ -71,12 +72,15 @@ export default class AutoQ8ANbrevet2026 extends ExerciceCan {
       this.correction = `On calcule la somme des chiffres de $${nombre}$ : $${chiffres.join('+')}=${somme}$.<br>
 Comme $${somme}$ est divisible par $3$, le nombre $${nombre}$ est aussi divisible par $3$.<br>
 Un diviseur de $${nombre}$ autre que $1$ et lui-même est, par exemple, $${miseEnEvidence('3')}$.`
-    } else if (diviseur === 2) {
+    }
+    // Il n'y a pas de 2 dans les diviseurs possibles, donc on ne fait pas de correction pour 2.
+    /* else if (diviseur === 2) { 
       const dernierChiffre = nombre % 10
       this.correction = `Le dernier chiffre de $${nombre}$ est $${dernierChiffre}$, qui est pair.<br>
 Donc $${nombre}$ est divisible par $2$.<br>
 Un diviseur de $${nombre}$ autre que $1$ et lui-même est, par exemple, $${miseEnEvidence('2')}$.`
-    } else {
+    } */
+    else {
       this.correction = `Le dernier chiffre de $${nombre}$ est $5$.<br>
 Donc $${nombre}$ est divisible par $5$.<br>
 Un diviseur de $${nombre}$ autre que $1$ et lui-même est, par exemple, $${miseEnEvidence('5')}$.`
