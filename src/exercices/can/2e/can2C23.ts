@@ -1,10 +1,10 @@
 import { choice } from '../../../lib/outils/arrayOutils'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
+import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer le tout connaissant une partie'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -50,7 +50,7 @@ export default class CalculToutAvecPartie extends ExerciceSimple {
           // taux === 10
           partie = randint(4, 6) * 10 // 40 à 60 → total 400 à 600
         }
-        matiere = 'le Grec'
+        matiere = 'le grec'
         break
       case 2:
       default:
@@ -63,7 +63,7 @@ export default class CalculToutAvecPartie extends ExerciceSimple {
           // taux === 50
           partie = randint(15, 20) * 10 // 150 à 200 → total 300 à 400
         }
-        matiere = "l'Espagnol"
+        matiere = "l'espagnol"
         break
     }
 
