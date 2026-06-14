@@ -87,8 +87,11 @@ const isMetaExercice = (
 } =>
   typeof x === 'object' &&
   x !== null &&
-  Array.isArray((x as any).Exercices) &&
-  Array.isArray((x as any).correctionInteractives)
+  Array.isArray((x as { Exercices: unknown[] }).Exercices) &&
+  Array.isArray(
+    (x as { correctionInteractives: Array<(i: number) => string | string[]> })
+      .correctionInteractives,
+  )
 /**
  * Cette fonction vérifie les réponses de chaque question en appelant la fonction associée à son formatInteractif ('mathlive', 'listeDeroulante', 'cliqueFigure', 'qcm')
  * @param {Exercice} exercice
@@ -122,7 +125,8 @@ export function exerciceInteractif(
               i,
             })
           } else {
-            result === 'OK' ? nbQuestionsValidees++ : nbQuestionsNonValidees++
+            if (result === 'OK') nbQuestionsValidees++
+            else nbQuestionsNonValidees++
           }
         }
         break
@@ -189,7 +193,8 @@ export function exerciceInteractif(
       case 'custom': {
         if (isMetaExercice(exercice)) {
           const result = exercice.correctionInteractives[i](i)
-          result === 'OK' ? nbQuestionsValidees++ : nbQuestionsNonValidees++
+          if (result === 'OK') nbQuestionsValidees++
+          else nbQuestionsNonValidees++
         }
         break
       }
@@ -216,11 +221,13 @@ export function exerciceInteractif(
       }
       case 'qcm':
         resultat = verifQuestionQcm(exercice, i)
-        resultat === 'OK' ? nbQuestionsValidees++ : nbQuestionsNonValidees++
+        if (resultat === 'OK') nbQuestionsValidees++
+        else nbQuestionsNonValidees++
         break
       case 'listeDeroulante': {
         resultat = verifQuestionListeDeroulante(exercice, i)
-        resultat === 'OK' ? nbQuestionsValidees++ : nbQuestionsNonValidees++
+        if (resultat === 'OK') nbQuestionsValidees++
+        else nbQuestionsNonValidees++
         break
       }
       case 'cliqueFigure':
@@ -233,7 +240,8 @@ export function exerciceInteractif(
         } else {
           resultat = verifQuestionCliqueFigure(exercice, i)
         }
-        resultat === 'OK' ? nbQuestionsValidees++ : nbQuestionsNonValidees++
+        if (resultat === 'OK') nbQuestionsValidees++
+        else nbQuestionsNonValidees++
         break
       case 'multiMathfield':
         {
@@ -349,16 +357,16 @@ function verifExerciceCustom(
             else nbMauvaisesReponses++
           }
         } else {
-          correction === 'OK' ? nbBonnesReponses++ : nbMauvaisesReponses++
+          if (correction === 'OK') nbBonnesReponses++
+          else nbMauvaisesReponses++
         }
       }
     }
   } else {
     for (let i = 0; i < exercice.nbQuestions; i++) {
       if (exercice.correctionInteractive != null) {
-        exercice.correctionInteractive(i) === 'OK'
-          ? nbBonnesReponses++
-          : nbMauvaisesReponses++
+        if (exercice.correctionInteractive(i) === 'OK') nbBonnesReponses++
+        else nbMauvaisesReponses++
       }
     }
   }
@@ -964,7 +972,7 @@ export function setReponse(
 }
 
 // La solution est-elle un nombre ? Si oui, on force l'option nombreDecimalSeulement.
-function isValidNumber(value: any): boolean {
+function isValidNumber(value: unknown): boolean {
   // Convertir la valeur en chaîne et remplacer les séparateurs de milliers (par exemple, '{,}')
   const cleanedValue = String(value)
     .replace(/{,}/g, '') // Enlève les caractères '{,}' (séparateurs de milliers comme dans "1{,}5")
