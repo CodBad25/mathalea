@@ -1,8 +1,8 @@
 import { choice } from '../../../lib/outils/arrayOutils'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une partie connaissant le tout'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -37,13 +37,13 @@ export default class CalculPartieAvecTout extends ExerciceSimple {
       case 1:
         taux = choice([1, 2, 4, 5, 10])
         total = randint(4, 15) * 100
-        matiere = 'le Grec'
+        matiere = 'le grec'
         break
       case 2:
       default:
         taux = choice([20, 25, 50])
         total = randint(4, 15) * 100
-        matiere = "l'Espagnol"
+        matiere = "l'espagnol"
         break
     }
 
