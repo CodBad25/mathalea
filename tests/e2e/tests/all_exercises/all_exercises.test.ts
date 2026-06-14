@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url'
 import { beforeAll, describe, expect, it, test, vi } from 'vitest'
+import { mathaleaHandleExerciceSimple } from '../../../../src/lib/mathalea'
 import type { IExercice } from '../../../../src/lib/types'
 import { findStatic, findUuid } from '../../helpers/filter.js'
 import {
@@ -343,7 +344,7 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
   for (let k = 0; k < 2; k++) {
     exercice.interactif = k === 0
     logIfVerbose('interactif=' + exercice.interactif)
-    for (const i of [1, 10]) {
+    for (const i of exercice.typeExercice === 'simple' ? [1] : [1, 10]) {
       exercice.nbQuestions = i
       logIfVerbose('nbQuestions=' + exercice.nbQuestions)
       const keysToUse = sampleSupWithFallback(sup)
@@ -384,7 +385,12 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
             // log('sig:' + signature)
             const c = mockConsole()
             try {
-              exercice.nouvelleVersionWrapper()
+              console.log('Testing exercice with signature:', signature)
+              if (exercice.typeExercice === 'simple') {
+                mathaleaHandleExerciceSimple(exercice, exercice.interactif)
+              } else {
+                exercice.nouvelleVersionWrapper()
+              }
             } catch (e) {
               logError(
                 `Exception levée pour exercice ${exercice.uuid} avec signature ${signature}:`,
