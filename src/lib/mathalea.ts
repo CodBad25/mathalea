@@ -295,6 +295,11 @@ export async function mathaleaLoadExerciceFromUuid(uuid: string) {
       })
 
       exercice.id = filename
+      exercice.titre =
+        url.toLowerCase().includes('old.ts') ||
+        url.toLowerCase().includes('old.js')
+          ? exercice.titre + ' (ancienne version)'
+          : exercice.titre
       return exercice as IExercice
     } catch (error) {
       attempts++
