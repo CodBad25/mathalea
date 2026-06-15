@@ -128,6 +128,13 @@ export default class AutoC4a extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut convertir une somme de fractions décimales.<br>
+    On peut, au choix, convertir en écriture décimale ou en fraction décimale, puis effectuer la somme.<br>
+    On peut aussi procéder par élimination pour les propositions clairement fausses.
+  </p>
+  `
     this.versionAleatoire()
     this.spacing = 1.5
     this.spacingCorr = 1

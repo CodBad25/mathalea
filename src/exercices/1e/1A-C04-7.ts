@@ -21,5 +21,14 @@ export default class Auto1AC4g extends ProgrammeCalcul2 {
   constructor() {
     super()
     this.versionQcm = true
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut calculer un quotient avec des nombres décimaux.<br>
+    Il suffit de transformer le quotient pour obtenir une fraction, avec des nombres entiers au numérateur et dénominateur. Puis selon les situations :
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Réduire la fraction obtenue.</li>
+    <li>Tester les propositions en surveillant les erreurs de facteur $10$.</li>
+  </ul>`
   }
 }

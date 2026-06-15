@@ -169,6 +169,16 @@ export default class AutoC4b extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut traduire précisément l'énoncé en calcul.
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Identifier les mots clés : inverse, double, moitié, carré.</li>
+    <li>Respecter l'ordre des mots : "l'inverse du double" et "le double de l'inverse" ne veulent pas dire la même chose.</li>
+    <li>Traduire l'expression étape par étape au brouillon.</li>
+    <li>Tester les propositions par essais et erreurs si la traduction reste difficile.</li>
+  </ul>`
     this.versionAleatoire()
   }
 }

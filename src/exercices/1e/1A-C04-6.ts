@@ -21,5 +21,13 @@ export default class Auto1AC4f extends ÉcrirePourcentage {
   constructor() {
     super()
     this.versionQcm = true
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut écrire un nombre sous forme de pourcentage.<br>
+ 
+
+    Se rappeler qu'un pourcentage est une fraction de dénominateur $100$.
+  
+  </p>`
   }
 }

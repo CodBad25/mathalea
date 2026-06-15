@@ -315,6 +315,14 @@ export default class AutoC4c extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut traduire une expression du type "une fraction d'une fraction".
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Repérer les deux fractions mentionnées dans l'énoncé.</li>
+    <li>Comprendre que "de" ou "d'un" peut se traduire par une multiplication.</li>
+  </ul>`
     this.versionAleatoire()
   }
 }
