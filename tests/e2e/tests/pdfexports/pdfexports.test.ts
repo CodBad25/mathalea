@@ -4,7 +4,6 @@ import { basename, resolve } from 'node:path'
 import { beforeAll, describe, expect, test, vi } from 'vitest'
 import Latex, { makeImageFilesUrls } from '../../../../src/lib/Latex'
 import type { LatexFileInfos } from '../../../../src/lib/LatexTypes'
-import { shuffle } from '../../../../src/lib/outils/arrayOutils'
 import type { IExercice, IExerciceStatique } from '../../../../src/lib/types'
 import { context } from '../../../../src/modules/context'
 import { findStatic, findUuid } from '../../helpers/filter'
@@ -291,8 +290,7 @@ async function resolveTargets() {
   // En local, si pas de fichier modifié identifié, on teste une sélection de cibles par défaut pour assurer une couverture régulière sur les exercices populaires et les différents types d'exercices.
   const defaults = ['can', '3e', '4e', '5e', '6e', '2e', '1e']
   const results = await Promise.all(defaults.map((filter) => findUuid(filter)))
-  return shuffle(results.flat()).splice(0, 3000) // limiter à 3000 cibles pour éviter les surcharges locales et on brasse
-  return shuffle(results.flat()).splice(0, 3000) // limiter à 3000 cibles pour éviter les surcharges locales et on brasse
+  return results.flat() // Si on lance le test en local sans cible spécifique, on teste tous les exercices (ça dure 5h sur une machine puissante). Plus de
 }
 
 async function materializeAssets(
