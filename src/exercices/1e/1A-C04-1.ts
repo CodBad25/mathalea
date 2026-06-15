@@ -20,6 +20,13 @@ export const refs = {
 export default class Auto1AC4 extends FractionDecimaleEcritureDecimale2 {
   constructor() {
     super()
+     this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut convertir une somme de fractions décimales en un nombre décimal.<br>
+    Le plus simple consiste à écrire chaque fraction décimale en nombre décimal puis d'effectuer la somme.
+  </p>
+  
+`
     this.versionQcm = true
   }
 }

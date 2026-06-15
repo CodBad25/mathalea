@@ -22,18 +22,19 @@ export const dateDePublication = '18/01/2026'
  *
  */
 export default class AutoC4e extends ExerciceQcmA {
-    private appliquerLesValeurs(
+  private appliquerLesValeurs(
     partieEntiere: number,
     partieDecimale: number,
     denominateur: number,
-    typeBonneReponse: 'decimal' | 'fraction'
+    typeBonneReponse: 'decimal' | 'fraction',
   ): void {
     // Calcul du résultat
     const resultatDecimal = partieEntiere + partieDecimale + 1 / denominateur
-    
+
     // Construction du numérateur de la fraction correcte
-    const numerateurFraction = partieEntiere * denominateur + partieDecimale * denominateur + 1
-    
+    const numerateurFraction =
+      partieEntiere * denominateur + partieDecimale * denominateur + 1
+
     // Énoncé
     this.enonce = `On considère $A = ${texNombre(partieEntiere)} + ${texNombre(partieDecimale)} + \\dfrac{1}{${texNombre(denominateur)}}$. <br>
     On a :`
@@ -52,11 +53,11 @@ export default class AutoC4e extends ExerciceQcmA {
       `$A = ${texNombre(partieEntiere + partieDecimale + 0.001)}$`,
       `$A = ${texNombre(partieEntiere + 0.001)}$`,
     ]
-    
+
     const tousLesDistracteursFractions = [
-      `$A = \\dfrac{${texNombre(partieEntiere+denominateur)}}{${texNombre(denominateur)}}$`,
+      `$A = \\dfrac{${texNombre(partieEntiere + denominateur)}}{${texNombre(denominateur)}}$`,
       `$A = \\dfrac{${texNombre(partieEntiere * denominateur + 1)}}{${texNombre(denominateur)}}$`,
-      `$A = \\dfrac{${texNombre(partieEntiere * denominateur + (partieDecimale * 10) * denominateur)}}{${texNombre(denominateur)}}$`,
+      `$A = \\dfrac{${texNombre(partieEntiere * denominateur + partieDecimale * 10 * denominateur)}}{${texNombre(denominateur)}}$`,
       `$A = \\dfrac{${texNombre(partieEntiere * denominateur)}}{${texNombre(denominateur)}}$`,
       `$A = \\dfrac{${texNombre(Math.round((partieEntiere + partieDecimale) * denominateur))}}{${texNombre(denominateur)}}$`,
       `$A = \\dfrac{${texNombre(partieEntiere * denominateur + 10)}}{${texNombre(denominateur)}}$`,
@@ -64,22 +65,28 @@ export default class AutoC4e extends ExerciceQcmA {
 
     if (typeBonneReponse === 'decimal') {
       const bonneReponse = `$A = ${texNombre(resultatDecimal)}$`
-      
+
       // Filtrer les distracteurs décimaux différents de la bonne réponse et éliminer les doublons
-      const distracteursDisponiblesDecimaux = shuffle([...new Set(tousLesDistracteursDecimaux)].filter(d => d !== bonneReponse))
-      
+      const distracteursDisponiblesDecimaux = shuffle(
+        [...new Set(tousLesDistracteursDecimaux)].filter(
+          (d) => d !== bonneReponse,
+        ),
+      )
+
       // Prendre 1 distracteur décimal aléatoire
       const distracteurDecimal = distracteursDisponiblesDecimaux[0]
-      
+
       // Prendre 2 distracteurs fractions aléatoires
-      const distracteursFractionsSelectionnes = shuffle(tousLesDistracteursFractions).slice(0, 2)
-      
+      const distracteursFractionsSelectionnes = shuffle(
+        tousLesDistracteursFractions,
+      ).slice(0, 2)
+
       this.reponses = [
         bonneReponse,
         distracteurDecimal,
         ...distracteursFractionsSelectionnes,
       ]
-      
+
       this.correction = `On a : <br>$\\begin{aligned}  
       A &= ${texNombre(partieEntiere)} + ${texNombre(partieDecimale)} + \\dfrac{1}{${texNombre(denominateur)}}\\\\
       & = ${texNombre(partieEntiere + partieDecimale)} + ${texNombre(1 / denominateur)}\\\\
@@ -88,30 +95,37 @@ export default class AutoC4e extends ExerciceQcmA {
     } else {
       const bonneReponse = `$A = \\dfrac{${texNombre(numerateurFraction)}}{${texNombre(denominateur)}}$`
       const bonneReponseDecimale = `$A = ${texNombre(resultatDecimal)}$`
-      
+
       // Filtrer les distracteurs fractions différents de la bonne réponse et éliminer les doublons
-      const distracteursDisponiblesFractions = shuffle([...new Set(tousLesDistracteursFractions)].filter(d => d !== bonneReponse))
-      
+      const distracteursDisponiblesFractions = shuffle(
+        [...new Set(tousLesDistracteursFractions)].filter(
+          (d) => d !== bonneReponse,
+        ),
+      )
+
       // Prendre 1 distracteur fraction aléatoire
       const distracteurFraction = distracteursDisponiblesFractions[0]
-      
+
       // Filtrer les distracteurs décimaux et éliminer les doublons
-      const distracteursDisponiblesDecimaux = shuffle([...new Set(tousLesDistracteursDecimaux)].filter(
-        d => d !== bonneReponseDecimale
-      ))
-      
+      const distracteursDisponiblesDecimaux = shuffle(
+        [...new Set(tousLesDistracteursDecimaux)].filter(
+          (d) => d !== bonneReponseDecimale,
+        ),
+      )
+
       // Prendre 2 distracteurs décimaux aléatoires
-      const distracteursDecimauxSelectionnes = distracteursDisponiblesDecimaux.slice(0, 2)
-      
+      const distracteursDecimauxSelectionnes =
+        distracteursDisponiblesDecimaux.slice(0, 2)
+
       this.reponses = [
         bonneReponse,
         distracteurFraction,
         ...distracteursDecimauxSelectionnes,
       ]
-      
+
       const numerateurEntier = partieEntiere * denominateur
       const numerateurDecimal = partieDecimale * denominateur
-      
+
       this.correction = `On a : <br>
       
       $\\begin{aligned}
@@ -125,14 +139,14 @@ export default class AutoC4e extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     // Version originale conforme à l'image : 10 + 0,1 + 1/1000 = 10,101
     this.enonce = `On considère $A = ${texNombre(10)} + ${texNombre(0.1)} + \\dfrac{1}{${texNombre(1000)}}$. On a :`
-    
+
     this.reponses = [
       `$A = ${texNombre(10.101)}$`,
       `$A = \\dfrac{20^{-1}}{${texNombre(1000)}}$`,
       `$A = \\dfrac{1}{${texNombre(1000)}}$`,
-      `$A = ${texNombre(10.110)}$`,
+      `$A = ${texNombre(10.11)}$`,
     ]
-    
+
     this.correction = `On a : <br>
     $\\begin{aligned}
     A &= ${texNombre(10)} + ${texNombre(0.1)} + \\dfrac{1}{${texNombre(1000)}}\\\\
@@ -154,15 +168,24 @@ export default class AutoC4e extends ExerciceQcmA {
       [100, 0.001, 1000],
       [1000, 0.001, 1000],
     ]
-    
+
     const config = choice(configurations)
     const typeBonneReponse = choice(['decimal', 'fraction'] as const)
-    
+
     this.appliquerLesValeurs(config[0], config[1], config[2], typeBonneReponse)
   }
 
   constructor() {
     super()
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut additionner un entier, un nombre décimal et une fraction décimale.
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>Identifier séparément la partie entière, la partie décimale et la fraction.</li>
+    <li>Convertir la fraction décimale en écriture décimale ou vice-versa.</li>
+    <li>Vérifier les propositions en repérant les erreurs classiques de virgule pour vous piéger.</li>
+  </ul>`
     this.options = { vertical: false, ordered: false }
   }
 }

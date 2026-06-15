@@ -63,7 +63,7 @@ export default class Exercice implements IExercice {
   canOfficielle?: boolean = false
   canEnonce?: string // Seulement pour les exercices de type simple ??? NON ! NOTE de Jena-claude Lhote du 2/02/2025 : et pourquoi ça ???
   tip: string = ''
-  tipAvailable?: boolean // L'élève a-t-il le bouton indice ?
+  tipAvailable: boolean = false // L'élève a-t-il le bouton indice ?
   // On peut être amené à utiliser un Exercice non simple à une seule question dans une can, parce qu'il a 3 champs et une correction custom.
   // Et vouloir un this.canEnonce sur cet exercice, pour le document CAN !
   canReponseACompleter: string = '' // Seulement pour les exercices de type simple
