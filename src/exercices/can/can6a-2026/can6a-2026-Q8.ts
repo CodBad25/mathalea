@@ -79,7 +79,7 @@ export default class Can20266Q8 extends ExerciceCan {
     const objets = [drGrad, fleche, input, lab1, lab2, origine]
 
     const graphique = mathalea2d(
-      Object.assign({ pixelsParCm: 25, scale: 0.5 }, fixeBordures(objets)),
+      Object.assign({ pixelsParCm: 25, scale: 0.4 }, fixeBordures(objets)),
       objets,
     )
 

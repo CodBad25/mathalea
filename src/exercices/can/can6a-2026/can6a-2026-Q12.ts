@@ -3,6 +3,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
@@ -45,31 +46,42 @@ export default class Can20266Q12 extends ExerciceCan {
       [ouiF, nonF, ouiG, nonG]
     )
 
+     const tableauLatex = `\\begin{tblr}{colspec={|c|c|c|}, hlines, vlines}
+  & Oui &  Non\\\\
+ Filles & $${ouiF}$ & $${nonF}$\\\\
+ Garçons & $${ouiG}$ & $${nonG}$
+\\end{tblr}`
+
     if (cas === 1) {
       const result = nonF + nonG
       this.reponse = texNombre(result, 0)
-
-      this.question = `Viens-tu à vélo ? <br>${tableau}<br>$\\ldots$ élèves ne sont pas venus à vélo.`
+if(context.isHtml){
+      this.question = `Viens-tu à vélo ? <br>${tableau}<br>$\\ldots$ élèves ne sont pas venus à vélo.`}
+      else{this.question = `Viens-tu à vélo ? \\\\\\medskip ${tableauLatex} <br>$\\ldots$ élèves ne sont pas venus à vélo.`}
       if (this.interactif) {
         this.question = `Viens-tu à vélo ? <br>${tableau}<br>`
         this.optionsChampTexte = { texteApres: ' élèves ne sont pas venus à vélo.' }
       }
 
       this.correction = `Le nombre d'élèves qui ne sont pas venus à vélo est $${nonF} + ${nonG} = ${miseEnEvidence(texNombre(result, 0))}$.`
-      this.canEnonce = `Viens-tu à vélo ? <br>${tableau}`
+      this.canEnonce = `Viens-tu à vélo ? \\\\\\medskip${context.isHtml ? `${tableau}`: `${tableauLatex}`}`
       this.canReponseACompleter = `$\\ldots$ élèves ne sont pas venus à vélo.`
     } else {
       const result = ouiF + ouiG
       this.reponse = texNombre(result, 0)
 
-      this.question = `Viens-tu à vélo ? <br>${tableau}<br>$\\ldots$ élèves sont venus à vélo.`
+if(context.isHtml){
+      this.question = `Viens-tu à vélo ? <br>${tableau}<br>$\\ldots$ élèves sont venus à vélo.`}
+      else{this.question = `Viens-tu à vélo ? \\\\medskip${tableauLatex}<br> $\\ldots$ élèves sont venus à vélo.`}
+
+
       if (this.interactif) {
         this.question = `Viens-tu à vélo ? <br>${tableau}<br>`
         this.optionsChampTexte = { texteApres: ' élèves sont venus à vélo.' }
       }
 
       this.correction = `Le nombre d'élèves qui sont venus à vélo est $${ouiF} + ${ouiG} = ${miseEnEvidence(texNombre(result, 0))}$.`
-      this.canEnonce = `Viens-tu à vélo ? <br>${tableau}`
+      this.canEnonce = `Viens-tu à vélo ? \\\\\\medskip ${context.isHtml ? `${tableau}` : `${tableauLatex}`}`
       this.canReponseACompleter = `$\\ldots$ élèves sont venus à vélo.`
     }
   }
