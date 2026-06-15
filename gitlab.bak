@@ -1,3 +1,5 @@
+# sauvegarde du fichier .gitlab-ci.yml au 14/06/2026 Jean-Claude Lhote (av ant gros nettoyage)
+
 # You can override the included template(s) by including variable overrides
 # SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
 # Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
@@ -16,7 +18,6 @@
 stages:
   - test
   - playwright-test
-  - setup
   - build-projet
   - compile-pdf
   - playwright
@@ -24,7 +25,7 @@ stages:
   - playwright-pdfDNB
   - playwright-pdfBAC
   - build_ci_pdf
-  - planified
+  - manual
 
 variables:
   SAST_EXCLUDED_PATHS: 'node_modules,.pnpm-store,dist,build,coverage,logs,.cache,.git,tests/e2e,playwright-report'
@@ -43,7 +44,6 @@ cache:
   key:
     files:
       - pnpm-lock.yaml
-      - node_modules
   paths:
     - .pnpm-store/
 
@@ -70,32 +70,6 @@ default:
     - corepack prepare pnpm@11.5.2 --activate
     - pnpm config set store-dir .pnpm-store
 
-setup:
-  stage: setup
-  image: node:23.9.0
-  extends: .pnpm_setup
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-        - node_modules
-    paths:
-      - .pnpm-store/
-    policy: push
-  script:
-    - pnpm install --frozen-lockfile --prefer-offline --silent
-  rules:
-    # Se lance uniquement si le pipeline est déclenché par une Merge Request
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: always
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: always
-    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: manual
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: always
-    - when: never
-
 build_ci_pdf:
   stage: build-projet
   image: gcr.io/kaniko-project/executor:v1.23.2-debug
@@ -112,9 +86,7 @@ build_ci_pdf:
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
       when: manual
     - when: never
-# ================================================ #
-#             Templates
-# ================================================ #
+
 .testCIPDF:
   image: $DOCKER_IMAGE
   stage: compile-pdf
@@ -122,15 +94,12 @@ build_ci_pdf:
   timeout: 2h 30m
   script:
     - npm install -g pnpm@11.5.2
-    - pnpm config set store-dir .pnpm-store
   rules:
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
       when: manual
     - if: $CI_COMMIT_BRANCH == "mathalea-jobs"
       when: manual
     - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_TEST_MA == "PDF"
-      when: always
-    - if: $CI_PIPELINE_SOURCE == "schedule"
       when: always
     - when: never
   retry:
@@ -141,17 +110,13 @@ build_ci_pdf:
       - unknown_failure
   artifacts:
     when: always
-    expire_in: 2 day
+    paths:
+      - tests/e2e/logs
+    reports:
+      junit: tests/e2e/logs/junit-report.xml
+    expire_in: 10 day
     # exclude:
     #  - updatefile/output/*.*
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-        - node_modules
-    paths:
-      - .pnpm-store/
-    policy: pull
 
 .testCI:
   image: mcr.microsoft.com/playwright:v1.60.0-noble
@@ -163,7 +128,7 @@ build_ci_pdf:
       when: always
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
       when: manual
-    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_TEST_MA == "CONSOLE"
       when: always
     - when: never
   retry:
@@ -173,16 +138,12 @@ build_ci_pdf:
       - api_failure
       - unknown_failure
   artifacts:
-    when: on_failure
-    expire_in: 2 day
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-        - node_modules
+    when: always
     paths:
-      - .pnpm-store/
-    policy: pull
+      - ./tests/e2e/logs
+    reports:
+      junit: ./tests/e2e/logs/junit-report.xml
+    expire_in: 10 day
 
 .install_dependenciesPDFDNB:
   extends: .testCIPDF
@@ -212,19 +173,13 @@ build_ci_pdf:
       - unknown_failure
   artifacts:
     when: on_failure
-    expire_in: 2 day
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-        - node_modules
     paths:
-      - .pnpm-store/
-    policy: pull
+      - tests/e2e/logs
+    reports:
+      junit:
+        - tests/e2e/logs/junit-report.xml
+    expire_in: 2 day
 
-# ======================================= #
-# Tests effectués la nuit sur branche Guironne-Jobs #
-# ========================================#
 playwright-console-consolidated:
   extends: .testCI
   stage: playwright-test
@@ -232,7 +187,7 @@ playwright-console-consolidated:
   script:
     - corepack enable
     - corepack prepare pnpm@11.5.2 --activate
-    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile --prefer-offline
     - nohup pnpm start 2>&1 >/dev/null &
     - |
       FAIL=0
@@ -297,7 +252,7 @@ playwright-pdf-consolidated:
   script:
     - corepack enable
     - corepack prepare pnpm@11.5.2 --activate
-    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile --prefer-offline
     - nohup pnpm start 2>&1 >/dev/null &
     - |
       FAIL=0
@@ -353,7 +308,7 @@ playwright-pdf-dnb-consolidated:
   script:
     - corepack enable
     - corepack prepare pnpm@11.5.2 --activate
-    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile --prefer-offline
     - nohup pnpm start 2>&1 >/dev/null &
     - |
       FAIL=0
@@ -396,7 +351,7 @@ playwright-pdf-bac-consolidated:
   script:
     - corepack enable
     - corepack prepare pnpm@11.5.2 --activate
-    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile --prefer-offline
     - nohup pnpm start 2>&1 >/dev/null &
     - |
       FAIL=0
@@ -430,30 +385,143 @@ playwright-pdf-bac-consolidated:
     paths:
       - updatefile/output/e3c*
       - updatefile/output/bac*
-    expire_in: 2 days
 
-# =============================================== #
-# Tests effectués la nuit sur main
-# =============================================== #
+build:
+  image: node:23.9.0
+  allow_failure: true
+  variables:
+    KUBERNETES_MEMORY_REQUEST: '6Gi'
+    KUBERNETES_MEMORY_LIMIT: '10Gi'
+  stage: build-projet
+  before_script:
+    - NODE_OPTIONS=--max-old-space-size=4096
+  script:
+    - corepack enable
+    - corepack prepare pnpm@11.5.2 --activate
+    - pnpm install --frozen-lockfile --prefer-offline
+    - echo "CI_COMMIT_BRANCH '$CI_COMMIT_BRANCH'"
+    - echo "CI_OPEN_MERGE_REQUESTS '$CI_OPEN_MERGE_REQUESTS'"
+    - echo "CI_PIPELINE_SOURCE '$CI_PIPELINE_SOURCE'"
+    # Étape 1: makeJson
+    - pnpm run makeJson
+    # Étape 2: build séparé
+    - NODE_OPTIONS="--max-old-space-size=5096 --expose-gc" pnpm vite build
+    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm vite build
+    - echo "$CI_COMMIT_AUTHOR"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
+      when: manual
+    - when: never
+  artifacts:
+    when: always
+    paths:
+      - dist
+    expire_in: 1 day
+
+deployftp:
+  image: ubuntu
+  stage: deploy-server
+  allow_failure: true
+  script:
+    - echo "CI_COMMIT_BRANCH '$CI_COMMIT_BRANCH'"
+    - echo "CI_OPEN_MERGE_REQUESTS '$CI_OPEN_MERGE_REQUESTS'"
+    - echo "CI_PIPELINE_SOURCE '$CI_PIPELINE_SOURCE'"
+    - apt-get update -y && apt-get install -y lftp
+    - date_deploy=$(date +%Y-%m-%d_%H-%M-%S)
+    - apt-get install -y nodejs npm
+    - corepack enable
+    - corepack prepare pnpm@11.5.2 --activate
+    - pnpm install --frozen-lockfile --prefer-offline
+    - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
+    - echo "date_deploy $date_deploy"
+    - echo "Déploiement FTP avec lftp sur ftp.sc1ceto1587.universe.wf..."
+    - lftp -c "
+      set ftp:ssl-allow no;
+      open -u $FTP_USER,$FTP_PASSWORD ftp.sc1ceto1587.universe.wf;
+      mirror -R --delete --verbose ./dist /releases/$date_deploy;"
+
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
+      when: manual
+    - when: never
+  artifacts:
+    when: always
+    paths:
+      - dist
+    expire_in: 1 day
+
+deploy:
+  image: ubuntu
+  stage: deploy-server
+  allow_failure: true
+  script:
+    - echo "CI_COMMIT_BRANCH '$CI_COMMIT_BRANCH'"
+    - echo "CI_OPEN_MERGE_REQUESTS '$CI_OPEN_MERGE_REQUESTS'"
+    - echo "CI_PIPELINE_SOURCE '$CI_PIPELINE_SOURCE'"
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - apt-get update -y
+    - apt-get install -y wget iproute2
+    - wget -qO- ipinfo.io/ip
+    - ip addr show
+    - apt-get install -y rsync
+    - apt-get install -y nodejs npm
+    - corepack enable
+    - corepack prepare pnpm@11.5.2 --activate
+    - pnpm install --frozen-lockfile --prefer-offline
+    - eval $(ssh-agent -s)
+    - chmod 400 "$SSH_FILE_KEY"
+    - ssh-add "$SSH_FILE_KEY"
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - touch ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - ssh-keyscan ssh.cluster010.hosting.ovh.net >> ~/.ssh/known_hosts
+    - ssh -i "$SSH_FILE_KEY" -v clarensa-mgu@ssh.cluster010.hosting.ovh.net
+    - date_deploy=$(date +%Y-%m-%d_%H-%M-%S)
+    - echo "date_deploy $date_deploy"
+    - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
+    - ssh -i "$SSH_FILE_KEY" clarensa-mgu@ssh.cluster010.hosting.ovh.net "mkdir -p ~/releases/'$date_deploy'"
+    - rsync -avz -e "ssh -i '$SSH_FILE_KEY'" dist/ clarensa-mgu@ssh.cluster010.hosting.ovh.net:~/releases/$date_deploy
+    # - chmod 400 "$SSH_KEY"
+    # - echo "CI_COMMIT_BRANCH '$CI_COMMIT_BRANCH'"
+    # - ssh-add "$SSH_KEY"
+    # - echo "CI_COMMIT_BRANCH '$CI_COMMIT_BRANCH'"
+    # - ssh -v clarensa-mgu@ssh.cluster010.hosting.ovh.net
+    # - echo "CI_COMMIT_BRANCH '$CI_COMMIT_BRANCH'"
+    # - echo "$SSH_MGU" | tr -d '\r' | ssh-add -
+    #- echo "CI_COMMIT_BRANCH '$CI_COMMIT_BRANCH'"
+    #- echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    # - apt-get update -y
+    # - apt-get install -y rsync
+    # - rsync -avz -e "ssh -i <(echo \"$SSH_PRIVATE_KEY\")" . clarensa@ssh.cluster010.hosting.ovh.net:~/releases/test/
+    #- NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
+    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm vite build
+    # - echo "$CI_COMMIT_AUTHOR"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
+      when: manual
+    - when: never
+  artifacts:
+    when: always
+    paths:
+      - dist
+    expire_in: 1 day
 
 playwright-caneleve:
   image: mcr.microsoft.com/playwright:v1.60.0-noble
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-        - node_modules
-    paths:
-      - .pnpm-store/
-    policy: pull
   stage: playwright
   allow_failure: true
   timeout: 5h
   script:
     - corepack enable
     - corepack prepare pnpm@11.5.2 --activate
-    - NODE_OPTIONS=--max-old-space-size=4096
-    - pnpm config set store-dir .pnpm-store
+    - NODE_OPTIONS=--max-old-space-size=4096 pnpm install --frozen-lockfile --prefer-offline --silent
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 1
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
@@ -475,7 +543,6 @@ playwright-caneleve:
       exit "$FAIL"
   artifacts:
     when: on_failure
-    expire_in: 2 days
   retry:
     max: 2
     when:
@@ -490,22 +557,13 @@ playwright-caneleve:
 
 playwright-consistency:
   image: mcr.microsoft.com/playwright:v1.60.0-noble
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-        - node_modules
-    paths:
-      - .pnpm-store/
-    policy: pull
   stage: playwright
   allow_failure: true
   timeout: 5h
   script:
     - corepack enable
     - corepack prepare pnpm@11.5.2 --activate
-    - NODE_OPTIONS=--max-old-space-size=4096
-    - pnpm config set store-dir .pnpm-store
+    - NODE_OPTIONS=--max-old-space-size=4096 pnpm install --frozen-lockfile --prefer-offline --silent
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 1
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
@@ -526,7 +584,6 @@ playwright-consistency:
       exit "$FAIL"
   artifacts:
     when: on_failure
-    expire_in: 2 days
   retry:
     max: 2
     when:
@@ -542,21 +599,12 @@ playwright-consistency:
 playwright-interactivity:
   image: mcr.microsoft.com/playwright:v1.60.0-noble
   stage: playwright
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-        - node_modules
-    paths:
-      - .pnpm-store/
-    policy: pull
   allow_failure: true
   timeout: 5h
   script:
     - corepack enable
     - corepack prepare pnpm@11.5.2 --activate
-    - NODE_OPTIONS=--max-old-space-size=4096
-    - pnpm config set store-dir .pnpm-store
+    - NODE_OPTIONS=--max-old-space-size=4096 pnpm install --frozen-lockfile --prefer-offline --silent
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 1
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
@@ -578,7 +626,6 @@ playwright-interactivity:
       exit "$FAIL"
   artifacts:
     when: on_failure
-    expire_in: 2 days
   retry:
     max: 2
     when:
@@ -591,66 +638,6 @@ playwright-interactivity:
       when: always
     - when: never
 
-tests-unitaires:
-  stage: planified
-  extends: .pnpm_setup
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-        - node_modules
-    paths:
-      - .pnpm-store/
-    policy: pull
-  script:
-    - pnpm run makeJson
-    - NODE_OPTIONS=--max-old-space-size=4096 pnpm test:unit
-  rules:
-    # Se lance uniquement si le pipeline est déclenché par une Merge Request
-    # - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    #  when: always
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: manual
-    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: manual
-    - when: never
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: always
-  artifacts:
-    when: on_failure
-    expire_in: 2 day
-
-tests-src:
-  stage: planified
-  extends: .pnpm_setup
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-        - node_modules
-    paths:
-      - .pnpm-store/
-    policy: pull
-  script:
-    - pnpm run makeJson
-    - NODE_OPTIONS=--max-old-space-size=4096 pnpm test:src
-  rules:
-    # Se lance uniquement si le pipeline est déclenché par une Merge Request
-    # - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    #  when: always
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: manual
-    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: manual
-    - when: never
-  artifacts:
-    when: on_failure
-    expire_in: 2 day
-
-# ======================================================================================= #
-# Tests effectués à chaque demande de fusion avec les exercices modifiés sur 5 commmits.  #
-# ======================================================================================= #
-
 # Job consolidé : exécute les tests des exercices modifiés en séquence
 # Cela remplace 4 jobs précédents :
 # - testExosModifiedWithoutPlayWright
@@ -658,24 +645,15 @@ tests-src:
 # - testExosModifiedInteractif
 # - testExosModifiedAmcnum
 # Économies : 1 seul runner, 1 seule installation de dépendances, 1 seul démarrage du serveur
-
 testExosModifiedConsolidated:
   extends: .testExosModifiedConsolidated
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-        - node_modules
-    paths:
-      - .pnpm-store/
-    policy: pull
   script:
     - corepack enable
     - corepack prepare pnpm@11.5.2 --activate
     - NODE_OPTIONS=--max-old-space-size=4096
-    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile --prefer-offline --silent
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 10
+    - sleep 1
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
     # Récupérer les fichiers modifiés depuis les 2 derniers commits
     - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
@@ -779,20 +757,17 @@ testExosModifiedConsolidated:
     - when: never
   artifacts:
     when: on_failure
+    paths:
+      - tests/e2e/logs
+    reports:
+      junit:
+        - tests/e2e/logs/junit-report.xml
     expire_in: 2 day
 
 # Job LaTeX séparé (nécessite une image Docker spéciale)
 # Reste séparé car image PDF/TeX spécifique (variable PDF_CI_IMAGE)
 testExosModifiedLatex:
   extends: .testCIPDF
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-        - node_modules
-    paths:
-      - .pnpm-store/
-    policy: pull
   timeout: 3h
   script:
     - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
@@ -817,7 +792,6 @@ testExosModifiedLatex:
       fi
 
     - npm install -g pnpm@11.5.2
-    - pnpm config set store-dir .pnpm-store
     - pnpm run makeJson >/dev/null
     - sleep 2
     - echo "$CHANGED_FILES"
@@ -832,32 +806,59 @@ testExosModifiedLatex:
     - when: never
   artifacts:
     when: on_failure
+    paths:
+      - tests/e2e/logs
+    reports:
+      junit:
+        - tests/e2e/logs/junit-report.xml
     expire_in: 2 day
 
-testTypescriptOk:
-  image: node:23.9.0
+tests-unitaires:
+  stage: manual
   extends: .pnpm_setup
-  stage: build-projet
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-        - node_modules
-    paths:
-      - .pnpm-store/
-    policy: pull
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: always
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: always
-    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: never
-    - when: never
   script:
+    - pnpm install --frozen-lockfile --prefer-offline
     - pnpm run makeJson
-    - pnpm check
+    - NODE_OPTIONS=--max-old-space-size=4096 pnpm test:unit
+  rules:
+    # Se lance uniquement si le pipeline est déclenché par une Merge Request
+    # - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    #  when: always
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
+      when: manual
+    - when: never
   artifacts:
     when: on_failure
+    paths:
+      - tests/e2e/logs
+    reports:
+      junit:
+        - tests/e2e/logs/junit-report.xml
     expire_in: 2 day
-  allow_failure: true
+
+tests-src:
+  stage: manual
+  extends: .pnpm_setup
+  script:
+    - pnpm install --frozen-lockfile --prefer-offline
+    - pnpm run makeJson
+    - NODE_OPTIONS=--max-old-space-size=4096 pnpm test:src
+  rules:
+    # Se lance uniquement si le pipeline est déclenché par une Merge Request
+    # - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    #  when: always
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
+      when: manual
+    - when: never
+  artifacts:
+    when: on_failure
+    paths:
+      - tests/e2e/logs
+    reports:
+      junit:
+        - tests/e2e/logs/junit-report.xml
+    expire_in: 2 day
