@@ -18,5 +18,6 @@ export default class TableauxEtQuatriemeProportionnelle extends EqResolvantesTha
     this.consigneSingulier =
       'Déterminer la quatrième proportionnelle dans le tableau suivant.'
     this.sup = 1
+    this.clavierAvecFraction = true
   }
 }

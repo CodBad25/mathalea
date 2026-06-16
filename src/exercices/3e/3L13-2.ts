@@ -48,6 +48,7 @@ export default class EqResolvantesThales extends Exercice {
   consignePluriel: string
   consigneSingulier: string
   exo: string
+  clavierAvecFraction: boolean
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
@@ -61,6 +62,7 @@ export default class EqResolvantesThales extends Exercice {
     this.consignePluriel = 'Résoudre les équations suivantes.'
     this.consigneSingulier = "Résoudre l'équation suivante."
     this.exo = '3L13-2'
+    this.clavierAvecFraction = false
   }
 
   nouvelleVersion() {
@@ -267,9 +269,14 @@ $${inc}=${miseEnEvidence(texNombre((b * a) / c, 4))}$`,
         .replace('{', '')
         .replace('}', '')
 
-      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
-        texteAvant: `<br> $${inc} =$ `,
-      })
+      texte += ajouteChampTexteMathLive(
+        this,
+        i,
+        this.clavierAvecFraction
+          ? KeyboardType.clavierDeBaseAvecFraction
+          : KeyboardType.clavierDeBase,
+        { texteAvant: `<br> $${inc} =$ ` },
+      )
       reponse = new FractionEtendue(
         Number(correctionInteractif) * 10000,
         10000,
@@ -279,7 +286,10 @@ $${inc}=${miseEnEvidence(texNombre((b * a) / c, 4))}$`,
         handleAnswers(this, i, {
           reponse: {
             value: reponse,
-            options: { fractionEgale: true, nombreDecimalSeulement: true },
+            options: {
+              fractionEgale: true,
+              nombreDecimalSeulement: !this.clavierAvecFraction,
+            },
           },
         })
 
