@@ -42,9 +42,9 @@ export default class EgalitesUnitesAires extends Exercice {
       'Unités désirées',
       [
         'Nombres séparés par des tirets  :',
-        '1 : cm³',
-        '2 : dm³',
-        '3 : m³',
+        '1 : cm²',
+        '2 : dm²',
+        '3 : m²',
         '4 : Mélange',
       ].join('\n'),
     ]
