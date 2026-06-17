@@ -58,6 +58,18 @@ export default function figureApigeom({
   const idApigeom = `apigeomEx${exercice.numeroExercice}F${i}${idAddendum}`
   figure.id = idApigeom
 
+  // Auto-enregistrement de la figure dans le champ dédié figuresApiGeom pour
+  // qu'elle soit détruite par reinit() (cf. exportedReinit), indépendamment de
+  // l'endroit où l'exercice la range par ailleurs (this.figure, variable
+  // locale…). Sans cela, les figures apigeom non suivies ne sont jamais
+  // détruites → fuite mémoire (listeners DOM + références circulaires).
+  // NB : on n'utilise PAS exercice.figures qui est surchargé (Figure[] pour
+  // apigeom OU ClickFigures[] pour cliqueFigure).
+  if (!Array.isArray(exercice.figuresApiGeom)) exercice.figuresApiGeom = []
+  if (!exercice.figuresApiGeom.includes(figure)) {
+    exercice.figuresApiGeom.push(figure)
+  }
+
   // Pour revoir la copie de l'élève dans Capytale
   // Attention, la clé de answers[] doit contenir apigeom, c'est pourquoi l'id est généré par cette fonction
   function idApigeomFunct(event: Event): void {

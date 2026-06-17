@@ -20,7 +20,10 @@ export const refs = {
  * @author
  */
 export default class nomExercice extends Exercice {
-  figuresApiGeom!: Figure[]
+  // declare : typage seul (champ hérité de Exercice), sans réémettre le champ.
+  // Sans cette redéclaration, le champ de base étant optionnel, il serait
+  // typé possiblement undefined (accès this.figuresApiGeom[i] en erreur).
+  declare figuresApiGeom: Figure[]
   constructor() {
     super()
     this.consigne = 'Consigne'

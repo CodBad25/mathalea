@@ -51,8 +51,18 @@ export function exportedReinit(this: IExerciceSimple) {
   this.autoCorrectionAMC = []
   this.distracteurs = []
   this.checkSum = undefined
+  if (this.figuresApiGeom) {
+    // figures apigeom auto-enregistrées par figureApigeom()
+    this.figuresApiGeom.forEach((fig) => {
+      if (fig instanceof Figure) {
+        fig.destroy()
+      }
+    })
+    this.figuresApiGeom = []
+  }
   if (this.figures) {
-    // figure APIGEOM
+    // rétrocompat : figures apigeom éventuellement rangées dans this.figures
+    // (destroy() est idempotent, donc pas de double-destruction problématique)
     this.figures.forEach((fig) => {
       if (fig instanceof Figure) {
         fig.destroy()

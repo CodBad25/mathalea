@@ -70,7 +70,10 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
 
   nbPoints!: number[]
   exoCustomResultat: boolean
-  figuresApiGeom!: Figure[]
+  // declare : typage seul (champ hérité de Exercice), sans réémettre le champ.
+  // Sans cette redéclaration, le champ de base étant optionnel, il serait
+  // typé possiblement undefined (accès this.figuresApiGeom[i] en erreur).
+  declare figuresApiGeom: Figure[]
   constructor() {
     super()
     this.exoCustomResultat = true
