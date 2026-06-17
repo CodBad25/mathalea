@@ -8,7 +8,7 @@ import Question6 from '../EAMPremiere/EAM-ANSpe-2026-Q6'
 import Question7 from '../EAMPremiere/EAM-ANSpe-2026-Q7'
 import Question8 from '../EAMPremiere/EAM-ANSpe-2026-Q8'
 import Question9 from '../EAMPremiere/EAM-ANSpe-2026-Q9'
-export const titre = 'Amérique du Nord spécialité'
+export const titre = 'Amérique du Nord Spécialité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '869a4'

@@ -7,7 +7,7 @@ import Question5 from '../EAMPremiere/EAM-CESpe-2026-Q5'
 import Question6 from '../EAMPremiere/EAM-CESpe-2026-Q6'
 import Question7 from '../EAMPremiere/EAM-CESpe-2026-Q7'
 import Question8 from '../EAMPremiere/EAM-CESpe-2026-Q8'
-export const titre = 'Centres Étrangers spécialité'
+export const titre = 'Centres Étrangers Spécialité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '24962'
