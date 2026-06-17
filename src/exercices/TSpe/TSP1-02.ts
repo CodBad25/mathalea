@@ -106,10 +106,10 @@ export default class LoiBinomialeUrne extends Exercice {
       )
       if (typesDeQuestionsDisponibles.includes(1)) {
         questions.push(
-          `Calculer $P(X=0)$.${this.interactif ? '\n$P(X=0)\\approx$' : ''}`,
+          `Calculer $P(X=0)$.${this.interactif ? `\n$P(X=0)\\approx$` : ''}`,
         )
         questions.push(
-          `En déduire $P(X>0)$.${this.interactif ? '\n$P(X>0)\\approx$' : ''}`,
+          `En déduire $P(X>0)$.${this.interactif ? `\n$P(X>0)\\approx$` : ''}`,
         )
         champsOptions.push(
           { keyboard: KeyboardType.clavierNumbers, texteApres },
@@ -118,7 +118,7 @@ export default class LoiBinomialeUrne extends Exercice {
       }
       if (typesDeQuestionsDisponibles.includes(2)) {
         questions.push(
-          `Calculer $P(X=${k})$.${this.interactif ? '\n$P(X=${k})\\approx$' : ''}`,
+          `Calculer $P(X=${k})$.${this.interactif ? `\n$P(X=${k})\\approx$` : ''}`,
         )
         champsOptions.push({
           keyboard: KeyboardType.clavierNumbers,
@@ -127,7 +127,7 @@ export default class LoiBinomialeUrne extends Exercice {
       }
       if (typesDeQuestionsDisponibles.includes(3)) {
         questions.push(
-          `Calculer l'espérance $E(X)$.${this.interactif ? '\n$E(X)=$' : ''}`,
+          `Calculer l'espérance $E(X)$.${this.interactif ? `\n$E(X)=$` : ''}`,
         )
         champsOptions.push({
           keyboard: KeyboardType.clavierNumbers,
