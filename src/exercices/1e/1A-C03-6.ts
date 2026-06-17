@@ -52,7 +52,7 @@ export default class Auto1AC3f extends ExerciceQcmA {
   </p>
   <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
     <li>Commencer par traiter la puissance placée entre parenthèses.</li>
-    <li>Observer ensuite que les deux facteurs ont la même base.</li>
+    <li>Observer ensuite que les deux facteurs ont la même base (le nombre élevé à une puissance).</li>
     <li>Utiliser la propriété du produit de puissances de même base.</li>
     <li>Faire le même calcul avec des nombres à la place de $n$ si la variable gêne.</li>
   </ul>

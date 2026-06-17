@@ -26,7 +26,7 @@ export default class Auto1AC3b extends CalculPuissancesOperation {
     Il faut simplifier une expression avec des puissances.
   </p>
   <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
-    <li>Regarder si les puissances ont la même base ou le même exposant.</li>
+    <li>Regarder si les puissances ont la même base (le nombre élevé à une puissance) ou le même exposant.</li>
     <li>Se rappeler les propriétés du cours : produit, quotient et puissance d'une puissance.</li>
     <li>Écrire un petit exemple développé au brouillon en cas d'hésitation.</li>
   </ul>

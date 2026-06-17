@@ -27,7 +27,7 @@ export default class Auto1AC3p extends calculPuissancesAvecn {
   </p>
   <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
     <li>Transformer l'addition de deux termes identiques en une multiplication par $2$.</li>
-    <li>Écrire ensuite toutes les puissances avec la même base.</li>
+    <li>Écrire ensuite toutes les puissances avec la même base (le nombre élevé à une puissance).</li>
     <li>Comparer les exposants quand deux puissances de même base sont égales.</li>
   </ul>
 `
