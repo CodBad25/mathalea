@@ -13,13 +13,13 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['tests/unit/setup-vitest.ts'],
-    testTimeout: 7_200_000, // prévoir 2h pour un gros (très gros test de compilation)
-    coverage: {
+    testTimeout: 18_000_000, // prévoir 5h pour les test effectués la nuit
+    /*coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
       reportsDirectory: './coverage',
       exclude: ['tests/e2e/**', '.pnpm-store/**'],
-    },
+    },*/
     server: {
       deps: {
         inline: ['@cortex-js/compute-engine', '@scratch2latex/scratch-core'],

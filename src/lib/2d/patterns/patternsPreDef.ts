@@ -2575,7 +2575,7 @@ const pattern89: PatternRicheRepetition = {
     return newCells
   },
 }
-
+/*
 const pattern90: PatternRiche = {
   visualImg:
     'https://images.squarespace-cdn.com/content/v1/647f8c4916cb6662848ba604/c407a52a-19ae-4f37-b0fa-fbbbe2a3b7fd/4403080_orig.png?format=2500w',
@@ -2609,6 +2609,7 @@ const pattern90: PatternRiche = {
     return newCells
   },
 }
+  */
 
 // allumettes en carrés
 const pattern91: PatternRiche = {
@@ -3046,7 +3047,7 @@ const pattern100: PatternRicheRepetition = {
 }
 
 // triangle de Sierpinski avec des carrés
-const pattern101: PatternRiche = {
+/* const pattern101: PatternRiche = {
   numero: 101,
   shapes: ['carré'],
   fonctionNb: (x: number) => (3 ** x - 2) * 2,
@@ -3123,7 +3124,7 @@ const pattern102: PatternRiche = {
     return newCells
   },
 }
-
+*/
 const pattern103: PatternRiche = {
   numero: 103,
   shapes: ['pentagone'],
@@ -3748,7 +3749,7 @@ const listePatternsPreDef: (PatternRiche | PatternRiche3D)[] = [
   pattern80,
   pattern81,
   pattern82,
-  pattern90,
+  /* pattern90, */
   pattern91,
   pattern92,
   pattern93,
@@ -3758,8 +3759,8 @@ const listePatternsPreDef: (PatternRiche | PatternRiche3D)[] = [
   pattern97,
   pattern98,
   pattern99,
-  pattern101,
-  pattern102,
+  /* pattern101, */
+  /* pattern102, */
   pattern103,
   pattern104,
   pattern105,

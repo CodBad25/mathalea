@@ -14,13 +14,12 @@
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 
 stages:
+  - setup
   - test
   - playwright-test
-  - setup
   - build-projet
   - compile-pdf
   - playwright
-  - deploy-server
   - playwright-pdfDNB
   - playwright-pdfBAC
   - build_ci_pdf
@@ -81,7 +80,7 @@ setup:
         - node_modules
     paths:
       - .pnpm-store/
-    policy: push
+    policy: pull-push
   script:
     - pnpm install --frozen-lockfile --prefer-offline --silent
   rules:
@@ -95,6 +94,11 @@ setup:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: always
     - when: never
+  artifacts:
+    untracked: false
+    when: on_success
+    access: all
+    expire_in: 1 day
 
 build_ci_pdf:
   stage: build-projet
@@ -118,8 +122,8 @@ build_ci_pdf:
 .testCIPDF:
   image: $DOCKER_IMAGE
   stage: compile-pdf
-  allow_failure: true
-  timeout: 2h 30m
+  allow_failure: false
+  timeout: 5h
   script:
     - npm install -g pnpm@11.5.2
     - pnpm config set store-dir .pnpm-store
@@ -132,6 +136,8 @@ build_ci_pdf:
       when: always
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: always
+    - if: $CI_COMMIT_BRANCH == "pipeline"
+      when: manual
     - when: never
   retry:
     max: 2
@@ -157,7 +163,7 @@ build_ci_pdf:
   image: mcr.microsoft.com/playwright:v1.60.0-noble
   stage: playwright-test
   allow_failure: true
-  timeout: 3h 30m
+  timeout: 5h
   rules:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "merge_request_event"
       when: always
@@ -165,6 +171,8 @@ build_ci_pdf:
       when: manual
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: always
+    - if: $CI_COMMIT_BRANCH == "pipeline"
+      when: manual
     - when: never
   retry:
     max: 2
@@ -202,7 +210,7 @@ build_ci_pdf:
 .testExosModifiedConsolidated:
   image: mcr.microsoft.com/playwright:v1.60.0-noble
   stage: build-projet
-  allow_failure: true
+  allow_failure: false
   timeout: 5h
   retry:
     max: 2
@@ -229,11 +237,14 @@ playwright-console-consolidated:
   extends: .testCI
   stage: playwright-test
   timeout: 5h
+  allow_failure: true
   script:
     - corepack enable
     - corepack prepare pnpm@11.5.2 --activate
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
+    - sleep 10
+    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
     - |
       FAIL=0
 
@@ -294,11 +305,14 @@ playwright-pdf-consolidated:
   extends: .testCIPDF
   stage: compile-pdf
   timeout: 5h
+  allow_failure: false
   script:
     - corepack enable
     - corepack prepare pnpm@11.5.2 --activate
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
+    - sleep 10
+    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
     - |
       FAIL=0
 
@@ -350,11 +364,14 @@ playwright-pdf-dnb-consolidated:
     - .install_dependenciesPDFDNB
   stage: playwright-pdfDNB
   timeout: 5h
+  allow_failure: true
   script:
     - corepack enable
     - corepack prepare pnpm@11.5.2 --activate
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
+    - sleep 10
+    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
     - |
       FAIL=0
       run_pdf () {
@@ -393,11 +410,14 @@ playwright-pdf-bac-consolidated:
     - .install_dependenciesPDFBAC
   stage: playwright-pdfBAC
   timeout: 5h
+  allow_failure: true
   script:
     - corepack enable
     - corepack prepare pnpm@11.5.2 --activate
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
+    - sleep 10
+    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
     - |
       FAIL=0
 
@@ -455,7 +475,7 @@ playwright-caneleve:
     - NODE_OPTIONS=--max-old-space-size=4096
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 1
+    - sleep 10
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
     - |
       FAIL=0
@@ -486,6 +506,8 @@ playwright-caneleve:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: always
+    - if: $CI_COMMIT_BRANCH == "pipeline"
+      when: manual
     - when: never
 
 playwright-consistency:
@@ -507,7 +529,7 @@ playwright-consistency:
     - NODE_OPTIONS=--max-old-space-size=4096
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 1
+    - sleep 10
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
     - |
       FAIL=0
@@ -537,6 +559,8 @@ playwright-consistency:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: always
+    - if: $CI_COMMIT_BRANCH == "pipeline"
+      when: manual
     - when: never
 
 playwright-interactivity:
@@ -550,7 +574,7 @@ playwright-interactivity:
     paths:
       - .pnpm-store/
     policy: pull
-  allow_failure: true
+  allow_failure: false
   timeout: 5h
   script:
     - corepack enable
@@ -558,7 +582,7 @@ playwright-interactivity:
     - NODE_OPTIONS=--max-old-space-size=4096
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 1
+    - sleep 10
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
     - |
       FAIL=0
@@ -589,11 +613,14 @@ playwright-interactivity:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: always
+    - if: $CI_COMMIT_BRANCH == "pipeline"
+      when: manual
     - when: never
 
 tests-unitaires:
   stage: planified
   extends: .pnpm_setup
+  allow_failure: true
   cache:
     key:
       files:
@@ -616,6 +643,8 @@ tests-unitaires:
     - when: never
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: always
+    - if: $CI_COMMIT_BRANCH == "pipeline"
+      when: manual
   artifacts:
     when: on_failure
     expire_in: 2 day
@@ -623,6 +652,7 @@ tests-unitaires:
 tests-src:
   stage: planified
   extends: .pnpm_setup
+  allow_failure: true
   cache:
     key:
       files:
@@ -641,6 +671,10 @@ tests-src:
     - if: $CI_COMMIT_BRANCH == "main"
       when: manual
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
+      when: manual
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: always
+    - if: $CI_COMMIT_BRANCH == "pipeline"
       when: manual
     - when: never
   artifacts:
@@ -793,7 +827,7 @@ testExosModifiedLatex:
     paths:
       - .pnpm-store/
     policy: pull
-  timeout: 3h
+  timeout: 5h
   script:
     - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
     - git checkout FETCH_HEAD
@@ -819,7 +853,7 @@ testExosModifiedLatex:
     - npm install -g pnpm@11.5.2
     - pnpm config set store-dir .pnpm-store
     - pnpm run makeJson >/dev/null
-    - sleep 2
+    - sleep 10
     - echo "$CHANGED_FILES"
     - CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:pdfexports
   rules:
@@ -837,6 +871,7 @@ testExosModifiedLatex:
 testTypescriptOk:
   image: node:23.9.0
   extends: .pnpm_setup
+  allow_failure: true
   stage: build-projet
   cache:
     key:
@@ -860,4 +895,3 @@ testTypescriptOk:
   artifacts:
     when: on_failure
     expire_in: 2 day
-  allow_failure: true

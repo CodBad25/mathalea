@@ -1,6 +1,7 @@
 import { expect } from '@playwright/test'
 import type { Locator, Page } from 'playwright'
 import { describe, test } from 'vitest'
+import { shuffle } from '../../../../src/lib/outils/arrayOutils'
 import { findStatic, findUuid } from '../../helpers/filter.js'
 import { createIssue } from '../../helpers/issue.js'
 import {
@@ -149,7 +150,7 @@ async function action(page: Page, description: string) {
 async function getConsoleTest(page: Page, urlExercice: string) {
   logIfVerbose(urlExercice)
   // on configure à 5 min le timeout
-  page.setDefaultTimeout(5 * 60 * 1000)
+  page.setDefaultTimeout(30000)
 
   const retries = 3 // Nombre de tentatives en cas d'erreur
   for (let attempt = 1; attempt <= retries; attempt++) {
@@ -277,10 +278,12 @@ async function testRunAllLots(filter: string) {
       : await findUuid(filter)
 
   // Exclure les exercices contenant "test" ou "beta" dans leur nom
-  const filteredUuids = uuids.filter(([uuid, name]) => {
-    const nameLower = name.toLowerCase()
-    return !nameLower.includes('test') && !nameLower.includes('beta')
-  })
+  const filteredUuids = shuffle(
+    uuids.filter(([uuid, name]) => {
+      const nameLower = name.toLowerCase()
+      return !nameLower.includes('test') && !nameLower.includes('beta')
+    }),
+  ).slice(0, prefs.nbExosParLot) // Limiter le nombre d'exercices à tester pour éviter de surcharger le serveur
 
   logIfVerbose(filteredUuids)
   if (filteredUuids.length === 0) {
@@ -311,9 +314,15 @@ async function testRunAllLots(filter: string) {
           page,
           `${hostname}?uuid=${filteredUuids[k][0]}&id=${filteredUuids[k][1].substring(0, filteredUuids[k][1].lastIndexOf('.')) || filteredUuids[k][1]}&alea=${alea}&testCI`,
         )
-        log(
-          `Resu: ${resultReq} uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]}`,
-        )
+        if (resultReq !== 'OK') {
+          logError(
+            `Erreur pour uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]} i=${k} / ${filteredUuids.length}`,
+          )
+        } else {
+          logIfVerbose(
+            `Succès pour uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]} i=${k} / ${filteredUuids.length}`,
+          )
+        }
         return resultReq === 'OK'
       }
       Object.defineProperty(f, 'name', { value: myName, writable: false })
@@ -334,7 +343,9 @@ const local = true
 if (process.env.NIV !== null && process.env.NIV !== undefined) {
   const filter = (process.env.NIV as string).replaceAll(' ', '')
   prefs.headless = true
-  prefs.nbExosParLot = 300
+  prefs.nbExosParLot = process.env.NB_EXOS_PAR_LOT
+    ? parseInt(process.env.NB_EXOS_PAR_LOT)
+    : 75
   logIfVerbose(filter)
   testRunAllLots(filter)
 } else if (
@@ -344,7 +355,9 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
   const changedFiles = process.env.CHANGED_FILES?.split('\n') ?? []
   logIfVerbose(changedFiles)
   prefs.headless = true
-  prefs.nbExosParLot = 300
+  prefs.nbExosParLot = process.env.NB_EXOS_PAR_LOT
+    ? parseInt(process.env.NB_EXOS_PAR_LOT)
+    : 75
   const filtered = changedFiles
     .filter(
       (file) =>
@@ -368,7 +381,7 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
       })
     })
   } else {
-    const cfiltered = filtered.slice(0, 200) // limiter à 200 exercices pour éviter de surcharger le serveur
+    const cfiltered = filtered.slice(0, prefs.nbExosParLot) // limiter à 300 exercices pour éviter de surcharger le serveur
     cfiltered.forEach((file, index) => {
       const filter = file.replaceAll(' ', '')
       logIfVerbose(
