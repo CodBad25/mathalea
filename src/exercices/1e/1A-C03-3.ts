@@ -58,7 +58,7 @@ export default class Auto1AC3c extends ExerciceQcmA {
     Il faut reconnaître une puissance de puissance.
   </p>
   <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
-    <li>Repérer la base, l'exposant à l'intérieur des parenthèses et l'exposant placé à l'extérieur.</li>
+    <li>Repérer la base (le nombre élevé à une puissance), l'exposant à l'intérieur des parenthèses et l'exposant placé à l'extérieur.</li>
     <li>Se demander ce que signifie répéter plusieurs fois la même puissance.</li>
     <li>Utiliser la propriété des puissances de puissances.</li>
   </ul>

@@ -70,7 +70,7 @@ export default class Auto1AC3a extends ExerciceQcmA {
     Il faut chercher à faire apparaître des puissances comparables.
   </p>
   <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
-    <li>Regarder la base au numérateur et la base au dénominateur.</li>
+    <li>Regarder la base (le nombre élevé à une puissance) au numérateur et la base au dénominateur.</li>
     <li>Chercher un lien évident entre ces deux bases, utile avec les propriétés des puissances.</li>
     <li>Réécrire l'expression pour faire apparaître une même base au numérateur et au dénominateur.</li>
     <li>Simplifier ensuite avec une propriété de cours.</li>

@@ -77,7 +77,7 @@ export default class Auto1AC3e extends ExerciceQcmA {
   </p>
   <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
     <li>Identifier l'exposant du numérateur et celui du dénominateur.</li>
-    <li>Se rappeler la règle pour diviser deux puissances de même base.</li>
+    <li>Se rappeler la règle pour diviser deux puissances de même base (le nombre élevé à une puissance).</li>
     <li>Respecter l'ordre de la soustraction des exposants.</li>
     <li>Faire le même calcul avec des nombres à la place de $n$ si la variable gêne.</li>
   </ul>

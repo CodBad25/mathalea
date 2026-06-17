@@ -28,7 +28,7 @@ export default class Auto1AC03n extends calculPuissancesNegativeFraction {
   <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
     <li>Se rappeler que pour $a \\neq 0$, $a^{-1}=\\dfrac{1}{a}$.</li>
     <li>Se rappeler aussi que $a^{-2}=\\dfrac{1}{a^2}$.</li>
-    <li>Observer que la base est déjà une fraction de la forme $\\dfrac{1}{a}$.</li>
+    <li>Observer que la base(le nombre élevé à une puissance) est déjà une fraction de la forme $\\dfrac{1}{a}$.</li>
     <li>Commencer par réfléchir au cas de l'exposant $-1$.</li>
   </ul>`
   }

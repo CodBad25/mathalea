@@ -63,7 +63,7 @@ export default class Auto1AC3j extends ExerciceQcmA {
   <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
     <li>Écrire le calcul en langage mathématique.</li>
     <li>Respecter les priorités opératoires.</li>
-    <li>Reconnaître la base écrite sous la forme d'une puissance plus simple.</li>
+    <li>Reconnaître la base(le nombre élevé à une puissance) écrite sous la forme d'une puissance plus simple.</li>
     <li>Utiliser les propriétés des puissances pour identifier la bonne réponse.</li>
     <li>Procéder par élimination si plusieurs réponses semblent possibles.</li>
   </ul>`
