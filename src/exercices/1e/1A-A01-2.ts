@@ -11,7 +11,7 @@ import Question9 from '../EAMPremiere/EAM-ANnonSpe-2026-Q9'
 import Question10 from '../EAMPremiere/EAM-ANnonSpe-2026-Q10'
 import Question11 from '../EAMPremiere/EAM-ANnonSpe-2026-Q11'
 import Question12 from '../EAMPremiere/EAM-ANnonSpe-2026-Q12'
-export const titre = 'Amérique du Nord sans spécialité'
+export const titre = 'Amérique du Nord Sans Spécialité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'e5e04'

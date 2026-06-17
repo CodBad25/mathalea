@@ -11,7 +11,7 @@ import Question9 from '../EAMPremiere/EAM-CENonSpe-2026-Q9'
 import Question10 from '../EAMPremiere/EAM-CENonSpe-2026-Q10'
 import Question11 from '../EAMPremiere/EAM-CENonSpe-2026-Q11'
 import Question12 from '../EAMPremiere/EAM-CENonSpe-2026-Q12'
-export const titre = 'Centres Étrangers sans spécialité'
+export const titre = 'Centres Étrangers Sans Spécialité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'ab3b8'
