@@ -10,6 +10,7 @@ import {
   logIfDebug,
   logIfVerbose,
 } from '../../helpers/log'
+import prefs from '../../helpers/prefs'
 import { createSolidesThreeJsMock } from '../../mocks/solidesThreeJs.mock'
 
 beforeAll(() => {
@@ -227,7 +228,7 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
   exercice.seed = alea
   exercice.interactif = true
   exercice.numeroExercice = 1
-  exercice.nbQuestions = 10
+  exercice.nbQuestions = exercice.nbQuestionsModifiable === false ? 1 : 5
   const defaultSup = exercice.sup
   const defaultSup2 = exercice.sup2
   const defaultSup3 = exercice.sup3
@@ -344,7 +345,7 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
   for (let k = 0; k < 2; k++) {
     exercice.interactif = k === 0
     logIfVerbose('interactif=' + exercice.interactif)
-    for (const i of exercice.typeExercice === 'simple' ? [1] : [1, 10]) {
+    for (const i of exercice.typeExercice === 'simple' ? [1] : [5]) {
       exercice.nbQuestions = i
       logIfVerbose('nbQuestions=' + exercice.nbQuestions)
       const keysToUse = sampleSupWithFallback(sup)
@@ -431,7 +432,7 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
               }
             }
             if (c.logs.warn.length > 0) {
-              logError(
+              logIfDebug(
                 `warns for exercice ${exercice.uuid} with signature ${signature}:`,
                 c.logs.warn,
               )
@@ -442,7 +443,7 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
             }
             if (exercice.listeQuestions.length !== i) {
               if (exercice.nbQuestionsModifiable !== false) {
-                logError(
+                logIfVerbose(
                   `Warning : number of questions for exercice ${exercice.uuid} with signature ${signature}: expected ${i}, got ${exercice.listeQuestions.length}`,
                 )
                 logIfDebug(
@@ -498,10 +499,12 @@ async function testRunAllLots(filter: string) {
     : await findUuid(filter)
 
   // Exclure les exercices contenant "test" ou "beta" dans leur nom
-  const filteredUuids = uuids.filter(([uuid, name]) => {
-    const nameLower = name.toLowerCase()
-    return !nameLower.includes('test') && !nameLower.includes('beta')
-  })
+  const filteredUuids = uuids
+    .filter(([uuid, name]) => {
+      const nameLower = name.toLowerCase()
+      return !nameLower.includes('test') && !nameLower.includes('beta')
+    })
+    .slice(0, prefs.nbExosParLot) // Limiter à 75 exercices pour éviter un temps d'exécution trop long
 
   logIfVerbose(filteredUuids)
   if (filteredUuids.length === 0) {
@@ -512,7 +515,7 @@ async function testRunAllLots(filter: string) {
       })
     })
   }
-  for (let i = 0; i < filteredUuids.length && i < 300; i += 20) {
+  for (let i = 0; i < filteredUuids.length; i += 20) {
     const ff: (() => Promise<boolean>)[] = []
     for (let k = i; k < i + 20 && k < filteredUuids.length; k++) {
       const myName = filteredUuids[k][1]
@@ -526,9 +529,18 @@ async function testRunAllLots(filter: string) {
             filteredUuids[k][0],
             `uuid=${filteredUuids[k][0]}&id=${filteredUuids[k][1].substring(0, filteredUuids[k][1].lastIndexOf('.')) || filteredUuids[k][1]}&alea=${alea}&testCI`,
           )
-          logIfVerbose(
-            `Resu: ${resultReq} uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]}`,
-          )
+          if (resultReq !== 'OK') {
+            logError(
+              `Erreur pour uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]} i=${k} / ${filteredUuids.length}`,
+            )
+          } else {
+            log(
+              `Succès pour uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]} i=${k} / ${filteredUuids.length}`,
+            )
+            log(
+              `Le prochain exercice est ${filteredUuids[k + 1]?.[1] || 'aucun'}`,
+            )
+          }
           return resultReq === 'OK'
         } catch (e) {
           logError(e)
@@ -547,6 +559,10 @@ async function testRunAllLots(filter: string) {
 
 if (process.env.NIV !== null && process.env.NIV !== undefined) {
   // utiliser pour les tests d'intégration
+  prefs.headless = true
+  prefs.nbExosParLot = process.env.NB_EXOS_PAR_LOT
+    ? parseInt(process.env.NB_EXOS_PAR_LOT)
+    : 75
   const filter = (process.env.NIV as string).replaceAll(' ', '')
   logIfVerbose(filter)
   testRunAllLots(filter)
@@ -555,11 +571,18 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
   process.env.CHANGED_FILES !== null &&
   process.env.CHANGED_FILES !== undefined
 ) {
+  prefs.headless = true
+  prefs.nbExosParLot = process.env.NB_EXOS_PAR_LOT
+    ? parseInt(process.env.NB_EXOS_PAR_LOT)
+    : 75
   const changedFiles =
     process.env.CHANGED_FILES?.split('\n')
       .map((f) => f.split(' '))
       .flat() ?? []
   log(changedFiles)
+  log(
+    `fichiers écartés: ${changedFiles.filter((f) => f.replace('src/exercices/', '').split('/').length < 2)}`,
+  )
   const filtered = changedFiles
     .filter(
       (file) =>

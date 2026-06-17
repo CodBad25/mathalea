@@ -13,10 +13,9 @@ import Exercice from '../Exercice'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Écrire la liste de tous les diviseurs d'un entier - V2"
 export const interactifReady = true
