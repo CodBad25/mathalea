@@ -39,8 +39,9 @@ export default class EncadrerAvecFctRef extends Exercice {
     this.nbQuestions = 3
     this.sup = 5
     this.sup2 = false
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 1)
-    context.isHtml ? (this.spacingCorr = 2.2) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 2 : 1
+    this.spacingCorr = context.isHtml ? 2 : 1
+    this.consigne = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>`
   }
 
   nouvelleVersion() {
@@ -55,7 +56,6 @@ export default class EncadrerAvecFctRef extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       // les variables communes à toutes les questions
@@ -70,7 +70,6 @@ export default class EncadrerAvecFctRef extends Exercice {
       let a, b // Les valeurs seuils
       const large1 = choice([true, false]) // pour décider des inégalités larges ou pas
       const large2 = choice([true, false])
-
       switch (
         listeTypeQuestions[i] // Suivant le type de question, le contenu sera différent
       ) {
@@ -93,7 +92,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                     imgTex: ' ',
                   },
                 ]
-                texte = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>Si $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $x^2$ ......`
+                texte = `Si $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $x^2$ ......`
                 texteCorrAvantTableau = `$x${large1 ? '\\leqslant' : ' < '} ${a}$ signifie $x\\in ]-\\infty;${a}${large1 ? ']' : ' [ '}$. <br>
                 Puisque la fonction carré est strictement décroissante sur $]-\\infty;0]$ et strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
                     sur l'intervalle $]-\\infty;${a}]$ : <br>
@@ -121,7 +120,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                     imgTex: ' ',
                   },
                 ]
-                texte = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  $x^2$ ......`
+                texte = `Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  $x^2$ ......`
                 texteCorrAvantTableau = `$x${large1 ? '\\geqslant' : ' > '} ${a}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};+\\infty[$. <br>
                 Puisque la fonction carré est strictement décroissante sur $]-\\infty;0]$ et strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
                     sur l'intervalle $[${a};+\\infty[$ : <br>
@@ -144,7 +143,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                 b = randint(a + 1, 12)
                 xMin = a
                 xMax = b
-                texte = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $x^2$ ........`
+                texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $x^2$ ........`
                 texteCorrAvantTableau = `$${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};${b}${large2 ? ']' : ' [ '}$. <br>
                   Puisque la fonction carré est strictement décroissante sur $]-\\infty;0]$ et strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
                       sur l'intervalle $[${a};${b}]$ : <br>`
@@ -160,7 +159,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                 b = randint(a + 1, -1)
                 xMin = a
                 xMax = b
-                texte = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $x^2$  .......`
+                texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $x^2$  .......`
                 texteCorrAvantTableau = `$${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};${b}${large2 ? ']' : ' [ '}$. <br>
                       Puisque la fonction carré est strictement décroissante sur $]-\\infty;0]$ et strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
                           sur l'intervalle $[${a};${b}]$ : <br>`
@@ -177,7 +176,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                 b = randint(1, 10)
                 xMin = a
                 xMax = b
-                texte = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $x^2$ ........`
+                texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $x^2$ ........`
                 texteCorrAvantTableau = `$${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};${b}${large2 ? ']' : ' [ '}$. <br>
                   Puisque la fonction carré est strictement décroissante sur $]-\\infty;0]$ et strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
                       sur l'intervalle $[${a};${b}]$ : <br>
@@ -213,7 +212,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                   imgTex: `$\\frac{1}{${b}}$`,
                 },
               ]
-              texte = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $\\dfrac{1}{x}$  .......`
+              texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $\\dfrac{1}{x}$  .......`
               texteCorrAvantTableau = `$${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};${b}${large2 ? ']' : ' [ '}$. <br>
                       Puisque la fonction inverse est strictement décroissante sur $]-\\infty;0[$ et strictement décroissante sur $[0;+\\infty[$, on obtient son tableau de variations
                           sur l'intervalle $[${a};${b}]$ : <br>
@@ -241,7 +240,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                   imgTex: `$-\\frac{1}{${-b}}$`,
                 },
               ]
-              texte = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $\\dfrac{1}{x}$  .......`
+              texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $\\dfrac{1}{x}$  .......`
               texteCorrAvantTableau = `$${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};${b}${large2 ? ']' : ' [ '}$. <br>
                       Puisque la fonction inverse est strictement décroissante sur $]-\\infty;0[$ et strictement décroissante sur $[0;+\\infty[$, on obtient son tableau de variations
                           sur l'intervalle $[${a};${b}]$ : <br>`
@@ -274,7 +273,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                     imgTex: '',
                   },
                 ]
-                texte = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors, $\\dfrac{1}{x}$ ......`
+                texte = `Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors, $\\dfrac{1}{x}$ ......`
                 texteCorrAvantTableau = `$x${large1 ? '\\geqslant' : ' > '} ${a}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};+\\infty[$. <br>
               Puisque la fonction inverse est strictement décroissante sur $]0;+\\infty[$, on obtient son tableau de variations
                   sur l'intervalle $]0;+\\infty[$ : <br>`
@@ -284,7 +283,7 @@ export default class EncadrerAvecFctRef extends Exercice {
             Ainsi, les antécédents et les images sont rangés dans l'ordre inverse. <br>
             Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  $\\dfrac{1}{x}${large1 ? '\\leqslant' : ' < '}\\dfrac{1}{${a}}$.`
               } else {
-                texte = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>Si $x${large1 ? '\\leqslant' : ' < '}${b}$ alors,  $\\dfrac{1}{x}$ ......`
+                texte = `Si $x${large1 ? '\\leqslant' : ' < '}${b}$ alors,  $\\dfrac{1}{x}$ ......`
                 texteCorrAvantTableau = `$x${large1 ? '\\leqslant' : ' < '} ${b}$ signifie $x\\in ]-\\infty;${b}${large1 ? ']' : ' [ '}$. <br>
               Puisque la fonction inverse est strictement décroissante sur $]-\\infty;0[$ et strictement décroissante sur $]0;+\\infty[$, on obtient son tableau de variations
                   sur l'intervalle $]-\\infty;${b}]$ : <br>`
@@ -332,14 +331,14 @@ export default class EncadrerAvecFctRef extends Exercice {
                 substituts = [
                   {
                     antVal: a,
-                    antTex: a.toString(),
+                    antTex: a.toString() + 'toto',
                     imgVal: Math.sqrt(a),
                     imgTex: `$${racineDeA}$`,
                   },
                 ]
                 xMin = 0
                 xMax = a
-                texte = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>Si $x${large1 ? '\\leqslant' : ' < '}${a}$
+                texte = `Si $x${large1 ? '\\leqslant' : ' < '}${a}$
                alors,  $\\sqrt{x}$ ......`
                 texteCorrAvantTableau = `$x${large1 ? '\\leqslant' : ' < '} ${a}$ signifie $x\\in [0;${a}${large1 ? ']' : ' [ '}$ puisque $x\\geqslant 0$. <br>
 Puisque la fonction racine carrée est strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
@@ -374,7 +373,7 @@ Si $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $\\sqrt{x}${large1 ? '\\leqsl
                   },
                 ]
 
-                texte = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>Si $x${large1 ? '\\geqslant' : ' > '}${a}$
+                texte = `Si $x${large1 ? '\\geqslant' : ' > '}${a}$
                alors,  $\\sqrt{x}$ ......`
                 texteCorrAvantTableau = `$x${large1 ? '\\geqslant' : ' > '} ${a}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};+\\infty[$. <br>
 Puisque la fonction racine carrée est strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
@@ -415,7 +414,7 @@ Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  $\\sqrt{x}${large1 ? '\\geqsl
                   },
                 ]
 
-                texte = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>Si $${a}${large1 ? ' \\leqslant ' : ' < '} x ${large1 ? '\\leqslant' : ' < '} ${b}$
+                texte = `Si $${a}${large1 ? ' \\leqslant ' : ' < '} x ${large1 ? '\\leqslant' : ' < '} ${b}$
                alors,  ...... $\\sqrt{x}$ ......`
                 texteCorrAvantTableau = `$${a}${large1 ? '\\leqslant' : ' < '} x ${large1 ? '\\leqslant' : ' < '}${b}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};${b}${large1 ? ']' : ' [ '}$. <br>
 Puisque la fonction racine carrée est strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
@@ -481,7 +480,7 @@ Si $${a}${large1 ? '\\leqslant' : ' < '} x ${large1 ? '\\leqslant' : ' < '}${b}$
               symbole = '>'
               intervalle = `]${a} ; +\\infty[`
             }
-            texte = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>Si $x${symbole}${a}$ alors, $x^3$ ......`
+            texte = `Si $x${symbole}${a}$ alors, $x^3$ ......`
             texteCorrAvantTableau = `$x${symbole} ${a}$ signifie $x\\in ${intervalle}$. <br>
 Puisque $(${a})^3=${Math.pow(a, 3)}$ et que la fonction cube est strictement croissante sur $\\mathbb{R}$, on obtient son tableau de variations
 sur l'intervalle $]-\\infty;${a}]$ : <br>`
@@ -519,7 +518,7 @@ Si $x${symbole}${a}$ alors,  $x^3${symbole} ${Math.pow(a, 3)}$.`
               inégalité = `${b} > x > ${a}`
               intervalle = `]${a} ; ${b}[`
             }
-            texte = `Compléter par l'information la plus précise possible (on pourra utiliser un tableau de variations) : <br>Si $${inégalité}$ alors, $x^3$ ......`
+            texte = `Si $${inégalité}$ alors, $x^3$ ......`
             texteCorrAvantTableau = `$${inégalité}$ signifie $x\\in ${intervalle}$. <br>
 Puisque $(${a})^3=${Math.pow(a, 3)}$ et $(${b})^3=${Math.pow(b, 3)}$, et que la fonction cube est strictement croissante sur $\\mathbb{R}$, on obtient son tableau de variations
 sur l'intervalle $${intervalle}$ : <br>`
@@ -546,6 +545,8 @@ Si $${inégalité}$ alors, $${Math.pow(a, 3)} ${large1 ? ' \\leqslant ' : ' < '}
       texteCorr = texteCorrAvantTableau + tableau + texteCorrApresTableau
       if (this.questionJamaisPosee(i, this.listeQuestions[i], xMin, xMax)) {
         // Si la question n'a jamais été posée, on en crée une autre
+        texte += listeTypeQuestions[i] + '<br>'
+
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
