@@ -33,7 +33,10 @@ export const refs = {
  * @author Éric Elter
  */
 export default class defCercleDisque extends Exercice {
-  figuresApiGeom!: Figure[]
+  // declare : typage seul (champ hérité de Exercice), sans réémettre le champ.
+  // Sans cette redéclaration, le champ de base étant optionnel, il serait
+  // typé possiblement undefined (accès this.figuresApiGeom[i] en erreur).
+  declare figuresApiGeom: Figure[]
   figuresApiGeomCorr!: Figure[]
   lesPoints!: Point[][]
   lesPointsCorr!: Point[][]
