@@ -534,10 +534,10 @@ async function testRunAllLots(filter: string) {
               `Erreur pour uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]} i=${k} / ${filteredUuids.length}`,
             )
           } else {
-            log(
+            logIfVerbose(
               `Succès pour uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]} i=${k} / ${filteredUuids.length}`,
             )
-            log(
+            logIfVerbose(
               `Le prochain exercice est ${filteredUuids[k + 1]?.[1] || 'aucun'}`,
             )
           }
@@ -617,7 +617,7 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
   }
 } else {
   // testRunAllLots('2e/2F22-1')
-  testRunAllLots('3e/3L12-3')
+  testRunAllLots('CM2/CM2N2E-2')
   // testRunAllLots('4e/4G52')
 
   // testRunAllLots('techno1')

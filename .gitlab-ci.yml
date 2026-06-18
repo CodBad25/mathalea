@@ -15,6 +15,7 @@
 
 stages:
   - setup
+  - planified
   - test
   - playwright-test
   - build-projet
@@ -23,7 +24,6 @@ stages:
   - playwright-pdfDNB
   - playwright-pdfBAC
   - build_ci_pdf
-  - planified
 
 variables:
   SAST_EXCLUDED_PATHS: 'node_modules,.pnpm-store,dist,build,coverage,logs,.cache,.git,tests/e2e,playwright-report'
@@ -92,6 +92,8 @@ setup:
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
       when: manual
     - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: always
+    - if: $CI_COMMIT_BRANCH == "pipeline"
       when: always
     - when: never
   artifacts:
@@ -456,6 +458,79 @@ playwright-pdf-bac-consolidated:
 # Tests effectués la nuit sur main
 # =============================================== #
 
+jsdom-all-exercises:
+  image: node:23.9.0
+  cache:
+    key:
+      files:
+        - pnpm-lock.yaml
+        - node_modules
+    paths:
+      - .pnpm-store/
+    policy: pull
+  stage: planified
+  timeout: 1h
+  script:
+    - corepack enable
+    - corepack prepare pnpm@11.5.2 --activate
+    - NODE_OPTIONS=--max-old-space-size=4096
+    - pnpm config set store-dir .pnpm-store
+    - pnpm run makeJson >/dev/null
+    - sleep 10
+    - |
+      FAIL=0
+      run_all () {
+        NIV_LABEL="$1"
+        STATUS_VAR="$2"
+        echo "🧪 test all_exercises NIV=$NIV_LABEL"
+        if NIV="$NIV_LABEL" NB_EXOS_PAR_LOT=1000 pnpm test:e2e:all_exercises; then
+          eval "$STATUS_VAR=ok"
+        else
+          eval "$STATUS_VAR=ko"
+          FAIL=1
+        fi
+      }
+
+      run_all "can/2e^can/1e" STATUS_CAN_2E_1E
+      run_all "can/6e^can/5e" STATUS_CAN_6E_5E
+      run_all "can/4e^can/3e" STATUS_CAN_4E_3E
+      run_all "6e/6" STATUS_6E
+      run_all "5e/5" STATUS_5E
+      run_all "4e/4" STATUS_4E
+      run_all "3e/3" STATUS_3E
+
+      echo ""
+      echo "═══════════════════════════════════════════"
+      echo "📊 Résumé all_exercises"
+      echo "═══════════════════════════════════════════"
+      [ "$STATUS_CAN_2E_1E" = "ok" ] && echo "✅ can/2e^can/1e" || echo "❌ can/2e^can/1e"
+      [ "$STATUS_CAN_6E_5E" = "ok" ] && echo "✅ can/6e^can/5e" || echo "❌ can/6e^can/5e"
+      [ "$STATUS_CAN_4E_3E" = "ok" ] && echo "✅ can/4e^can/3e" || echo "❌ can/4e^can/3e"
+      [ "$STATUS_6E" = "ok" ] && echo "✅ 6e/6" || echo "❌ 6e/6"
+      [ "$STATUS_5E" = "ok" ] && echo "✅ 5e/5" || echo "❌ 5e/5"
+      [ "$STATUS_4E" = "ok" ] && echo "✅ 4e/4" || echo "❌ 4e/4"
+      [ "$STATUS_3E" = "ok" ] && echo "✅ 3e/3" || echo "❌ 3e/3"
+      echo "═══════════════════════════════════════════"
+
+      exit "$FAIL"
+
+  artifacts:
+    when: on_failure
+    expire_in: 2 days
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - api_failure
+      - unknown_failure
+      - script_failure
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: always
+    - if: $CI_COMMIT_BRANCH == "pipeline"
+      when: manual
+    - when: never
+
 playwright-caneleve:
   image: mcr.microsoft.com/playwright:v1.60.0-noble
   cache:
@@ -640,11 +715,11 @@ tests-unitaires:
       when: manual
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
       when: manual
-    - when: never
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: always
     - if: $CI_COMMIT_BRANCH == "pipeline"
       when: manual
+    - when: never
   artifacts:
     when: on_failure
     expire_in: 2 day

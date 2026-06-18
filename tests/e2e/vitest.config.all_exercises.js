@@ -52,7 +52,7 @@ export default mergeConfig(
       pool: 'threads',
       maxWorkers: 1,
       isolate: false,
-      disableConsoleIntercept: false,
+      disableConsoleIntercept: true,
     },
   }),
 )
