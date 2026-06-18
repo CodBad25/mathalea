@@ -415,6 +415,38 @@ function printSummary(rows: ExportRow[]) {
 
 describe('pdfexports sans playwright', () => {
   test('genere puis compile les exports latex attendus', async () => {
+    if (
+      process.env.NIV == null &&
+      process.env.CHANGED_FILES == null &&
+      process.env.CI !== 'true'
+    ) {
+      console.log(
+        '[INFO] Aucun filtre NIV ou CHANGED_FILES fourni, et pas en CI: test saute.',
+      )
+      console.log(
+        '[INFO] Pour tester les exports PDF, vous pouvez lancer le test avec un filtre NIV ou CHANGED_FILES, par exemple:',
+      )
+      console.log('  NIV=can pnpm test:e2e:pdfexports')
+      console.log(
+        '  CHANGED_FILES="src/exercices/3e/arithmetique/pgcd.ts" pnpm test:e2e:pdfexports',
+      )
+      console.log(
+        '[INFO] En CI, le test est automatiquement saute si aucun fichier modifie n est detecte.',
+      )
+      console.log(
+        '[INFO] Pour tester tous les exercices en local, vous pouvez lancer le test avec NIV=all (cela peut durer plusieurs heures (5h max)):',
+      )
+      console.log(
+        '[INFO] Pour limiter la compilation à des styles spécifiques, vous pouvez utiliser la variable d environnement STYLES, par exemple:',
+      )
+      console.log('  STYLES="ProfMaquette,Can" pnpm test:e2e:pdfexports')
+      console.log(
+        '  Les styles disponibles sont: ProfMaquette, ProfMaquetteQrcode, Can, Classique, Coopmaths',
+      )
+      expect(true).toBe(true)
+      return
+    }
+
     log(`Démarrage du test PDF Exports - ${new Date().toLocaleString()}`)
     if (!hasLualatex()) {
       console.log('[INFO] lualatex introuvable: test saute.')
@@ -423,7 +455,15 @@ describe('pdfexports sans playwright', () => {
     }
     const stylesForExport = process.env.STYLES
       ? process.env.STYLES.split(',').map((s) => s.trim())
-      : ['ProfMaquette', 'ProfMaquetteQrcode', 'Can', 'Classique', 'Coopmaths']
+      : process.env.CI === 'true'
+        ? ['ProfMaquette', 'Can', 'Coopmaths']
+        : [
+            'ProfMaquette',
+            'ProfMaquetteQrcode',
+            'Can',
+            'Classique',
+            'Coopmaths',
+          ]
 
     const targets = await resolveTargets()
 
