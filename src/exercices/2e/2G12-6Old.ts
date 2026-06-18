@@ -18,12 +18,12 @@ import Exercice from '../Exercice'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const uuid = '0fb89'
+export const uuid = '2c20c'
 export const titre =
   'Lire des coordonnées en repère orthogonal, normé ou quelconque'
 export const refs = {
-  'fr-fr': ['2G12-6'],
-  'fr-ch': ['9FA1-10', '10FA5-21', '3G90-1'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 
 /**
@@ -36,7 +36,6 @@ export default class Reperage2e extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
-    // Ajout du choix 4 spécifique pour le repère classique
     this.besoinFormulaireTexte = [
       'Type de repère',
       [
@@ -44,11 +43,10 @@ export default class Reperage2e extends Exercice {
         '1 : Orthogonal',
         '2 : Normé',
         '3 : Quelconque',
-        '4 : Orthogonal (O; I; J)',
-        '5 : Mélange',
+        '4 : Mélange',
       ].join('\n'),
     ]
-    this.sup = '5' // On passe le défaut à 5 pour le mélange
+    this.sup = '1'
     this.besoinFormulaire2CaseACocher = [
       'Présence de coordonnées fractionnaires',
       false,
@@ -66,10 +64,10 @@ export default class Reperage2e extends Exercice {
     const listeTypeDeReperes = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
-      max: 4, // Max ajusté à 4
-      melange: 5, // Mélange ajusté à 5
+      max: 3,
+      melange: 4,
       nbQuestions: this.nbQuestions,
-      defaut: 5,
+      defaut: 4,
     })
     const x: FractionEtendue[][] = []
     const y: FractionEtendue[][] = []
@@ -88,33 +86,14 @@ export default class Reperage2e extends Exercice {
       let coordsK: [number, number]
       let matrice: Matrice
       let matriceInverse: Matrice | undefined
-      
-      let listeNoms: string[]
-      let labelI: string, labelK: string, labelO: string
-
-      // Si le type est 4, on force les lettres O, I, J
-      if (listeTypeDeReperes[i] === 4) {
-        labelO = 'O'
-        labelI = 'I'
-        labelK = 'J'
-        // On génère plusieurs lettres et on filtre pour exclure O, I et J
-        const toutesLesLettres = choisitLettresDifferentes(15)
-        const lettresPourPoints = toutesLesLettres.filter((l) => l !== 'O' && l !== 'I' && l !== 'J')
-        listeNoms = [labelI, labelK, labelO, ...lettresPourPoints].slice(0, 3 + this.sup3)
-      } else {
-        listeNoms = choisitLettresDifferentes(3 + this.sup3)
-        labelI = listeNoms[0]
-        labelK = listeNoms[1]
-        labelO = listeNoms[2]
-      }
-      
+      const listeNoms = choisitLettresDifferentes(3 + this.sup3)
+      const [labelI, labelK, labelO] = listeNoms.slice(0, 3)
       noms[i] = listeNoms.slice(3)
       const pointO = pointAbstrait(0, 0, labelO, 'below left')
       let compteur = 0
       do {
         switch (listeTypeDeReperes[i]) {
           case 1:
-          case 4: // Le cas 4 utilise la même logique orthogonale que le cas 1
             coordsI = [choice([1.5, 2.5]), 0]
             coordsK = [0, choice([1, 2])]
             break
@@ -300,7 +279,7 @@ export default class Reperage2e extends Exercice {
         objets,
       )
 
-      question += `Quelles sont les coordonnées des points $${noms[i].join('$, $')}$ dans le repère $(${labelO}; ${labelI}; ${labelK})$ ?<br>`
+      question += `Quelles sont les coordonnées des points $${noms[i].join('$, $')}$ dans le repère $(${labelO},${labelI},${labelK})$ ?<br>`
       if (this.interactif) {
         question += noms[i]
           .map(
@@ -309,6 +288,7 @@ export default class Reperage2e extends Exercice {
                 exercice: this,
                 question: i * this.sup3 + k,
                 typeInteractivite: 'fillInTheBlank',
+                // objetReponse: { champ1: { value: x[i][k].texFractionSimplifiee, options: { nombreDecimalSeulement: true } }, champ2: { value: y[i][k].texFractionSimplifiee, options: { nombreDecimalSeulement: true } }, bareme: (listePoints: number[]) => [Math.min(...listePoints), 1] },
                 objetReponse: {
                   champ1: { value: x[i][k].texFractionSimplifiee },
                   champ2: { value: y[i][k].texFractionSimplifiee },
@@ -326,7 +306,7 @@ export default class Reperage2e extends Exercice {
           .map((el) => `Coordonnées de $${el}$ : $(\\ldots~~;~~\\ldots)$`)
           .join('<br>')
       }
-      const reponse = `Dans le repère $(${labelO}; ${labelI}; ${labelK})$ sont :<br>
+      const reponse = `Dans le repère $(${labelO},${labelI},${labelK})$ sont :<br>
             $${points[i].map((p, k) => `${listeNoms[k + 3]}(${x[i][k].texFractionSimplifiee};${y[i][k].texFractionSimplifiee})`).join(', ')}$`
       if (
         this.questionJamaisPosee(
