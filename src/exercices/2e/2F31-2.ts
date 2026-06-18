@@ -331,7 +331,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                 substituts = [
                   {
                     antVal: a,
-                    antTex: a.toString() + 'toto',
+                    antTex: a.toString(),
                     imgVal: Math.sqrt(a),
                     imgTex: `$${racineDeA}$`,
                   },
@@ -540,6 +540,10 @@ Si $${inégalité}$ alors, $${Math.pow(a, 3)} ${large1 ? ' \\leqslant ' : ' < '}
           substituts,
           step: 1,
           tolerance,
+          deltacl: 1.5, // décalage initial pour éloigner la 1ère valeur de la bordure du tableau
+          lgt: 2, // taille de la 1ère colonne du tableau
+          espcl: 6, // distance entre 2 antécédents
+          longueurDefaut: 30, // longueur par défaut d'un antécédent / immage pour tenir compte de la taille des nombres
         },
       )
       texteCorr = texteCorrAvantTableau + tableau + texteCorrApresTableau
