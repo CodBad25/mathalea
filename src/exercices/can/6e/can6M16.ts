@@ -173,7 +173,7 @@ export default class AireUsuelleParComptageCan extends ExerciceSimple {
       ),
       [grille(xmin, ymin, xmax, ymax, 'gray', 0.6, 1), ...objets],
     )
-    this.question = `${figure} Quelle est l'aire de la figure ci-dessus ?`
+    this.question = `${figure}Quelle est l'aire de la figure ci-dessus ?`
     this.optionsChampTexte = { texteApres: `$${unite}$` }
     this.reponse = value
     this.correction = `L'aire de cette figure est : $${miseEnEvidence(value[0])}\\text{ soit }${miseEnEvidence(String(aire))}${unite}$.`

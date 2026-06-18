@@ -75,7 +75,7 @@ export default class AmeriqueSud1224Ex1Q4 extends ExerciceQcmA {
     objets.push(fleche)
     const figure = mathalea2d(
       Object.assign(
-        { scale: 0.5, style: 'display: block' },
+        { scale: 0.5, style: 'display: inline' },
         fixeBordures(objets),
       ),
       objets,

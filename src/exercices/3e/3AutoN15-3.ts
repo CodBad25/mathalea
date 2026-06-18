@@ -104,7 +104,10 @@ export default class LireAbscisseFractionnaire extends ExerciceQcmA {
       labelE,
     ]
     const figure = mathalea2d(
-      Object.assign({ pixelsParCm: 40 }, fixeBordures(objets)),
+      Object.assign(
+        { pixelsParCm: 40, scale: 0.5, style: 'display: block' },
+        fixeBordures(objets),
+      ),
       objets,
     )
 
