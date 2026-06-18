@@ -234,10 +234,10 @@ export default class auto1AP3 extends ExerciceQcmA {
     &=${miseEnEvidence(texNombre(pA * pBA + (1 - pA) * (1 - pBbAb), 2))}.
     \\end{aligned}$`
     this.reponses = [
-      `$p(B)=${texNombre(pA * pBA + (1 - pA) * (1 - pBbAb))} $`,
-      `$p(B)=${texNombre(pA * pBA)}$ `,
-      `$p(B)=${texNombre(pA * pBA + (1 - pA) * pBbAb)}$ `,
-      `$p(B)=${texNombre(pBA)}$ `,
+      `$p(B)=${texNombre(pA * pBA + (1 - pA) * (1 - pBbAb))}$`,
+      `$p(B)=${texNombre(pA * pBA)}$`,
+      `$p(B)=${texNombre(pA * pBA + (1 - pA) * pBbAb)}$`,
+      `$p(B)=${texNombre(pBA)}$`,
     ]
   }
 
