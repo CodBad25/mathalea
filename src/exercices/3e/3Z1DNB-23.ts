@@ -78,11 +78,11 @@ export default class ExerciceMetropole392024 extends ExerciceBrevetA {
       urneB.length,
     )
     const probaSupAajout = new FractionEtendue(
-      [...urneA, ajout].filter((n) => n >= 20).length,
-      urneA.length + +1,
+      [...urneA, ajout].filter((n) => n >= min).length,
+      urneA.length + 1,
     )
     const probaSupBajout = new FractionEtendue(
-      [...urneB, ajout].filter((n) => n >= 20).length,
+      [...urneB, ajout].filter((n) => n >= min).length,
       urneB.length + 1,
     )
     const nbMulA = urneA.filter((n) => n % table === 0).length
