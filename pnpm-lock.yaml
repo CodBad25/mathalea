@@ -61,8 +61,8 @@ importers:
         specifier: ^0.182.0
         version: 0.182.0
       apigeom:
-        specifier: git+https://forge.apps.education.fr/coopmaths/apigeom.git#v1.6.1
-        version: git+https://forge.apps.education.fr/coopmaths/apigeom.git#7e28aef826eac2d8941c714af035fa164de08423
+        specifier: git+https://forge.apps.education.fr/coopmaths/apigeom.git#v1.6.2
+        version: git+https://forge.apps.education.fr/coopmaths/apigeom.git#06f76b7e7d677859618279caced33fe1dccc2542
       blockly:
         specifier: 12.5.1
         version: 12.5.1
@@ -1381,9 +1381,9 @@ packages:
     resolution: {integrity: sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==}
     engines: {node: '>=10'}
 
-  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git#7e28aef826eac2d8941c714af035fa164de08423:
-    resolution: {commit: 7e28aef826eac2d8941c714af035fa164de08423, repo: https://forge.apps.education.fr/coopmaths/apigeom.git, type: git}
-    version: 1.6.1
+  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git#06f76b7e7d677859618279caced33fe1dccc2542:
+    resolution: {commit: 06f76b7e7d677859618279caced33fe1dccc2542, repo: https://forge.apps.education.fr/coopmaths/apigeom.git, type: git}
+    version: 1.6.2
 
   arg@4.1.3:
     resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
@@ -4388,7 +4388,7 @@ snapshots:
 
   ansi-styles@5.2.0: {}
 
-  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git#7e28aef826eac2d8941c714af035fa164de08423:
+  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git#06f76b7e7d677859618279caced33fe1dccc2542:
     dependencies:
       katex: 0.16.47
       mathjs: 15.2.0

@@ -32,7 +32,7 @@ export const dateDeModifImportante = '19/06/2026'
  * Modifié par Éric Elter : rajout d'un paramètre
  * Modifié par Mireille : rajout du case soustraction
  */
-export const uuid = 'c75b6'
+export const uuid = '7367d'
 
 export const refs = {
   'fr-fr': ['6N3K-1', 'BP2AutoH25'],

@@ -107,7 +107,7 @@
     "@types/jspreadsheet-ce": "^4.7.9",
     "@types/nunjucks": "^3.2.6",
     "@types/three": "^0.182.0",
-    "apigeom": "git+https://forge.apps.education.fr/coopmaths/apigeom.git#v1.6.1",
+    "apigeom": "git+https://forge.apps.education.fr/coopmaths/apigeom.git#v1.6.2",
     "blockly": "12.5.1",
     "boxicons": "^2.1.4",
     "daisyui": "^5.5.19",
