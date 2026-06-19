@@ -383,11 +383,11 @@ export function prepareExerciceCliqueFigure(exercice: IExercice) {
   // Dès que l'exercice est affiché, on rajoute des listenners sur chaque éléments de this.figures.
   for (let i = 0; i < exercice.nbQuestions; i++) {
     if (
-      exercice.figures != null &&
-      exercice.figures[i] != null &&
-      isClickFiguresArray(exercice.figures)
+      exercice.cliqueFiguresArray != null &&
+      exercice.cliqueFiguresArray[i] != null &&
+      isClickFiguresArray(exercice.cliqueFiguresArray)
     ) {
-      const figures = exercice.figures[i]
+      const figures = exercice.cliqueFiguresArray[i]
       for (const objetFigure of figures) {
         const figSvg: unknown = document.getElementById(objetFigure.id)
         if (figSvg != null) {
@@ -450,11 +450,11 @@ function verifQuestionCliqueFigure(
   let erreur = false // Aucune erreur détectée
   let nbFiguresCliquees = 0
   if (
-    exercice.figures != null &&
-    exercice.figures[i] != null &&
-    Array.isArray(exercice.figures[i])
+    exercice.cliqueFiguresArray != null &&
+    exercice.cliqueFiguresArray[i] != null &&
+    Array.isArray(exercice.cliqueFiguresArray[i])
   ) {
-    for (const objetFigure of exercice.figures[i]) {
+    for (const objetFigure of exercice.cliqueFiguresArray[i]) {
       const eltFigure: unknown = document.getElementById(objetFigure.id)
       if (eltFigure != null) {
         figures.push(eltFigure)

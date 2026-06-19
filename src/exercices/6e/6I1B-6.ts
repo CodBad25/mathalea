@@ -68,7 +68,7 @@ export default class TrouverLeBonProgramme extends Exercice {
         'Nombres séparés par des tirets\n1 : Avancer\n2 : Tourner\n3 : Ajouter\n4 : Carré\n5 : Polygone\n6 : Rebours\n7 : Escalier\n0 : Mélange',
       ]
     }
-    this.figures = []
+    this.cliqueFiguresArray = []
     const listeTypeDeProgrammes = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
@@ -172,7 +172,7 @@ export default class TrouverLeBonProgramme extends Exercice {
           statut: vraisOuFaux[4],
         },
       ]
-      this.figures[i] = [
+      this.cliqueFiguresArray[i] = [
         {
           solution: vraisOuFaux[0],
           id: `cliqueFigure0Ex${this.numeroExercice}Q${i}`,

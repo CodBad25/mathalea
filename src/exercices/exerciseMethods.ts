@@ -60,16 +60,17 @@ export function exportedReinit(this: IExerciceSimple) {
     })
     this.figuresApiGeom = []
   }
-  if (this.figures) {
-    // rétrocompat : figures apigeom éventuellement rangées dans this.figures
-    // (destroy() est idempotent, donc pas de double-destruction problématique)
-    this.figures.forEach((fig) => {
+  if (this.figuresApiGeomCorr) {
+    // figures apigeom auto-enregistrées par figureApigeom()
+    this.figuresApiGeomCorr.forEach((fig) => {
       if (fig instanceof Figure) {
         fig.destroy()
       }
     })
+    this.figuresApiGeomCorr = []
   }
-  this.figures = []
+
+  this.cliqueFiguresArray = []
   if (this.dragAndDrops && this.dragAndDrops.length > 0) {
     for (const leDragAndDrop of this.dragAndDrops) {
       for (const [element, type, listener] of leDragAndDrop.listeners) {
@@ -98,9 +99,15 @@ function empreinteTexte(str: string): string {
     h1 = Math.imul(h1 ^ c, 2654435761)
     h2 = Math.imul(h2 ^ c, 1597334677)
   }
-  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909)
-  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909)
-  const hash = (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16).padStart(16, '0')
+  h1 =
+    Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^
+    Math.imul(h2 ^ (h2 >>> 13), 3266489909)
+  h2 =
+    Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^
+    Math.imul(h1 ^ (h1 >>> 13), 3266489909)
+  const hash = (4294967296 * (2097151 & h2) + (h1 >>> 0))
+    .toString(16)
+    .padStart(16, '0')
   return hash.length > str.length ? str : hash
 }
 

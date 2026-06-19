@@ -1,4 +1,3 @@
-import type Figure from 'apigeom/src/Figure'
 import { apigeomGraduatedLine } from '../../lib/apigeom/apigeomGraduatedLine'
 import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
 import { orangeMathalea } from '../../lib/colors'
@@ -35,7 +34,6 @@ type goodAnswer = { label: string; x: number }[]
 
 class PlacerPointsSurAxe extends Exercice {
   goodAnswers: goodAnswer[] = []
-  figures: Figure[] = []
   constructor() {
     super()
     this.consigne = 'Placer trois points sur un axe gradué.'
@@ -51,6 +49,8 @@ class PlacerPointsSurAxe extends Exercice {
   }
 
   nouvelleVersion() {
+    this.figuresApiGeom = []
+    this.figuresApiGeomCorr = []
     let typesDeQuestions
 
     if (this.sup > 3) {
@@ -135,7 +135,7 @@ class PlacerPointsSurAxe extends Exercice {
       figure.divFigureAndUserMessage.classList.add(
         ...['overflow-x-auto', 'overflow-y-hidden'],
       )
-      this.figures[i] = figure
+      this.figuresApiGeom[i] = figure
 
       const { figure: figureCorr, latex: latexCorr } = apigeomGraduatedLine({
         xMin: abs0 - 1 / (stepBis * stepBis * stepBis * stepBis),
@@ -165,6 +165,7 @@ class PlacerPointsSurAxe extends Exercice {
         colorLabel: orangeMathalea,
         labelDxInPixels: 0,
       })
+      this.figuresApiGeomCorr[i] = figureCorr
       texte = `Placer les points : $${label1}(${texNombre(abs1, 5)}), ${label2}(${texNombre(abs2, 5)}), ${label3}(${texNombre(abs3, 5)})$.`
 
       switch (true) {
@@ -191,9 +192,9 @@ class PlacerPointsSurAxe extends Exercice {
   }
 
   correctionInteractive = (i?: number) => {
-    if (i === undefined) return ['KO']
+    if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     const result: ('OK' | 'KO')[] = []
-    const figure = this.figures[i]
+    const figure = this.figuresApiGeom[i]
     // Sauvegarde de la réponse pour Capytale
     if (this.answers === undefined) this.answers = {}
     this.answers[figure.id] = figure.json

@@ -6,7 +6,9 @@ import { context } from '../modules/context'
 import { exercicesParams } from './stores/generalStore'
 import { globalOptions } from './stores/globalOptions'
 
-export function isFigureArray(figs: IExercice['figures']): figs is Figure[] {
+export function isFigureArray(
+  figs: IExercice['figuresApiGeom'],
+): figs is Figure[] {
   return Array.isArray(figs) && figs.length > 0 && figs[0] instanceof Figure
 }
 

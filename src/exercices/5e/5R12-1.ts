@@ -1,12 +1,11 @@
 import Figure from 'apigeom'
 import type TextByPosition from 'apigeom/src/elements/text/TextByPosition'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import figureApigeom from '../../lib/figureApigeom'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Placer des points dans un repère'
 export const dateDePublication = '27/10/2023'
@@ -30,8 +29,6 @@ export const refs = {
 type Coords = { label: string; x: number; y: number }
 
 class ReperagePointDuPlan extends ExerciceSimple {
-  // On déclare des propriétés supplémentaires pour cet exercice afin de pouvoir les réutiliser dans la correction
-  figure!: Figure
   points: Coords[] = []
   constructor() {
     super()
@@ -44,21 +41,24 @@ class ReperagePointDuPlan extends ExerciceSimple {
   }
 
   nouvelleVersion(): void {
-    this.figure = new Figure({
+    this.figuresApiGeom = []
+    this.figuresApiGeomCorr = []
+    const figure = new Figure({
       snapGrid: true,
       xMin: -6.3,
       yMin: -6.3,
       width: 378,
       height: 378,
     })
-    this.figures = [this.figure]
+
     // De -6.3 à 6.3 donc width = 12.6 * 30 = 378
-    this.figure.create('Grid', { xMin: -6, yMin: -6, xMax: 6, yMax: 6 })
-    this.figure.options.labelAutomaticForPoints = true
-    this.figure.options.labelAutomaticBeginsWith = 'A' // Les points sont nommés par ordre alphabétique
-    if ('Point' in this.figure.options.limitNumberOfElement)
-      this.figure.options.limitNumberOfElement.Point = 4 // On limite le nombre de points à 4
-    this.figure.options.pointDescriptionWithCoordinates = false
+    figure.create('Grid', { xMin: -6, yMin: -6, xMax: 6, yMax: 6 })
+    figure.options.labelAutomaticForPoints = true
+    figure.options.labelAutomaticBeginsWith = 'A' // Les points sont nommés par ordre alphabétique
+    if ('Point' in figure.options.limitNumberOfElement)
+      figure.options.limitNumberOfElement.Point = 4 // On limite le nombre de points à 4
+    figure.options.pointDescriptionWithCoordinates = false
+    this.figuresApiGeom[0] = figure
 
     let x1 = randint(-6, -1)
     let x2 = randint(1, 6, x1)
@@ -94,7 +94,7 @@ class ReperagePointDuPlan extends ExerciceSimple {
       height: 420,
       isDynamic: false,
     })
-    this.figures.push(figureCorr)
+    this.figuresApiGeomCorr[0] = figureCorr
     figureCorr.setToolbar({ tools: ['REMOVE'], position: 'top' })
     figureCorr.create('Grid', { xMin: -6, yMin: -6, xMax: 6, yMax: 6 })
     for (const coord of this.points) {
@@ -108,8 +108,8 @@ class ReperagePointDuPlan extends ExerciceSimple {
     }
     let enonce = 'Placer les points suivants : '
     enonce += `$A(${x1}\\;;\\;${y1})$ ; $B(${x2}\\;;\\;${y2})$ ; $C(${x3}\\;;\\;${y3})$ et $D(${x4}\\;;\\;${y4})$.`
-    // this.figure.divButtons = this.figure.addButtons('POINT DRAG REMOVE')
-    this.figure.setToolbar({
+    // figure.divButtons = figure.addButtons('POINT DRAG REMOVE')
+    figure.setToolbar({
       tools: ['POINT', 'DRAG', 'REMOVE'],
       position: 'top',
     })
@@ -121,7 +121,7 @@ class ReperagePointDuPlan extends ExerciceSimple {
           figureApigeom({
             exercice: this,
             i: 0,
-            figure: this.figure,
+            figure: this.figuresApiGeom[0],
             isDynamic: true,
             defaultAction: 'POINT',
           })
@@ -132,14 +132,14 @@ class ReperagePointDuPlan extends ExerciceSimple {
           figureApigeom({
             exercice: this,
             i: 0,
-            figure: this.figure,
+            figure: this.figuresApiGeom[0],
             isDynamic: false,
           })
       }
       this.correction = figureApigeom({
         exercice: this,
         i: 0,
-        figure: figureCorr,
+        figure: this.figuresApiGeomCorr[0],
         isDynamic: false,
         idAddendum: 'correction',
       })
@@ -176,15 +176,17 @@ class ReperagePointDuPlan extends ExerciceSimple {
   }
 
   correctionInteractive = () => {
+    if (this.figuresApiGeom === undefined) return ['KO']
+    const figure = this.figuresApiGeom[0]
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figure.id] = this.figure.json
+    this.answers[figure.id] = figure.json
     const resultat = [] // Tableau de 'OK' ou de'KO' pour le calcul du score
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q0`,
     )
     for (const coord of this.points) {
-      const { points, isValid, message } = this.figure.checkCoords({
+      const { points, isValid, message } = figure.checkCoords({
         label: coord.label,
         x: coord.x,
         y: coord.y,
@@ -204,7 +206,7 @@ class ReperagePointDuPlan extends ExerciceSimple {
           // Là aussi je rajoute as TextByPosition car je suis sûr que ce point a un label
           textLabel.color = 'red'
         }
-        const pointCorr = this.figure.create('Point', {
+        const pointCorr = figure.create('Point', {
           x: coord.x,
           y: coord.y,
           color: 'green',
@@ -216,9 +218,9 @@ class ReperagePointDuPlan extends ExerciceSimple {
         resultat.push('KO')
       }
     }
-    this.figure.isDynamic = false
-    this.figure.divButtons.style.display = 'none'
-    this.figure.divUserMessage.style.display = 'none'
+    figure.isDynamic = false
+    figure.divButtons.style.display = 'none'
+    figure.divUserMessage.style.display = 'none'
     return resultat
   }
 }

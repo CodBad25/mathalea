@@ -6,11 +6,11 @@ import Exercice from '../Exercice'
 
 import Figure from 'apigeom'
 import type CircleFractionDiagram from 'apigeom/src/elements/diagrams/CircleFractionDiagram'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { fraction } from '../../modules/fractions'
 import { representationFraction } from '../../modules/representationsFractions'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = 'Représenter des fractions'
 export const amcReady = true
@@ -50,6 +50,8 @@ export default class RepresenterUneFraction extends Exercice {
   }
 
   nouvelleVersion() {
+    this.figuresApiGeom = []
+    this.figuresApiGeomCorr = []
     let sc
     const ppc = 20
     if (context.isHtml) {
@@ -100,7 +102,7 @@ export default class RepresenterUneFraction extends Exercice {
         })
         figure.options.color = bleuMathalea
         figure._scale = context.isHtml ? 1 : 0.6
-        this.figures[i] = figure
+        this.figuresApiGeom[i] = figure
         figure.create('CircleFractionDiagram', {
           denominator: den,
           numberOfCircle: 3,
@@ -144,6 +146,7 @@ export default class RepresenterUneFraction extends Exercice {
         })
         diagrammeCorr.numerator = num
         texteCorr += figureCorr.getStaticHtml()
+        this.figuresApiGeomCorr[i] = figureCorr
       } else {
         texteCorr += mathalea2d(
           params,
@@ -191,9 +194,11 @@ export default class RepresenterUneFraction extends Exercice {
   }
 
   correctionInteractive = (i: number) => {
+    if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
+
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figures[i].id] = this.figures[i].json
+    this.answers[this.figuresApiGeom[i].id] = this.figuresApiGeom[i].json
     let result = 'KO'
     const divCheck = document.querySelector(
       `#resultatCheckEx${this.numeroExercice}Q${i}`,
@@ -201,7 +206,7 @@ export default class RepresenterUneFraction extends Exercice {
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,
     )
-    const diagramme = this.figures[i].elements.get(
+    const diagramme = this.figuresApiGeom[i].elements.get(
       'element0',
     ) as CircleFractionDiagram
     if (diagramme.type !== 'CircleFractionDiagram')
@@ -219,8 +224,8 @@ export default class RepresenterUneFraction extends Exercice {
       }
       result = 'KO'
     }
-    this.figures[i].isDynamic = false
-    this.figures[i].divUserMessage.style.display = 'none'
+    this.figuresApiGeom[i].isDynamic = false
+    this.figuresApiGeom[i].divUserMessage.style.display = 'none'
     return result
   }
 }

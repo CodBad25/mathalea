@@ -96,7 +96,7 @@ export default class choixPatron extends Exercice {
   }
 
   nouvelleVersion() {
-    this.figures = []
+    this.cliqueFiguresArray = []
     this.consigne =
       'Parmi les dessins suivants, lequel est un patron de cube ? <br>' // 'Consigne'
     this.consigne += this.interactif
@@ -248,7 +248,7 @@ export default class choixPatron extends Exercice {
               lastChoice: 4,
             }
             setCliqueFigure(this.autoCorrection[i])
-            this.figures[i] = [
+            this.cliqueFiguresArray[i] = [
               {
                 id: `cliquefigure0Ex${this.numeroExercice}Q${i}`,
                 solution: indexVraiPatron === 0,

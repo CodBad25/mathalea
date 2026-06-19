@@ -52,7 +52,7 @@ export default class TracerAvecScratch extends Exercice {
       this.nbQuestions,
     ) // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
 
-    this.figures = [[], [], [], []]
+    this.cliqueFiguresArray = [[], [], [], []]
 
     for (
       let i = 0, texte, texteCorr, cpt = 0;
@@ -216,7 +216,7 @@ export default class TracerAvecScratch extends Exercice {
 
         return enonces
       }
-      this.figures[i] = [
+      this.cliqueFiguresArray[i] = [
         { id: `cliquefigure0Ex${this.numeroExercice}Q${i}`, solution: true },
         { id: `cliquefigure1Ex${this.numeroExercice}Q${i}`, solution: false },
         { id: `cliquefigure2Ex${this.numeroExercice}Q${i}`, solution: false },

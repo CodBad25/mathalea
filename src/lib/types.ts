@@ -641,11 +641,7 @@ export function isValeur(value: unknown): value is Valeur {
  * On considère qu'un objet avec une méthode sommeFraction est une FractionEtendue.
  */
 export function isFractionEtendue(x: unknown): x is IFractionEtendue {
-  return (
-    typeof x === 'object' &&
-    x !== null &&
-    typeof (x as any).sommeFraction === 'function'
-  )
+  return typeof x === 'object' && x !== null && 'sommeFraction' in x
 }
 
 /**
@@ -653,11 +649,7 @@ export function isFractionEtendue(x: unknown): x is IFractionEtendue {
  * On considère qu'un objet avec une propriété uniteDeReference est une Grandeur.
  */
 export function isGrandeur(x: unknown): x is IGrandeur {
-  return (
-    typeof x === 'object' &&
-    x !== null &&
-    typeof (x as any).uniteDeReference === 'string'
-  )
+  return typeof x === 'object' && x !== null && 'uniteDeReference' in x
 }
 
 /**
@@ -668,9 +660,9 @@ export function isDecimal(x: unknown): x is Decimal {
   return (
     typeof x === 'object' &&
     x !== null &&
-    typeof (x as any).toDP === 'function' &&
-    typeof (x as any).toFixed === 'function' &&
-    typeof (x as any).plus === 'function'
+    'toDP' in x &&
+    'toFixed' in x &&
+    'plus' in x
   )
 }
 
@@ -824,11 +816,11 @@ export interface IExercice {
   titre: string
   id?: string
   uuid: string
-  sup: any
-  sup2: any
-  sup3: any
-  sup4: any
-  sup5: any
+  sup: boolean | string | number
+  sup2: boolean | string | number
+  sup3: boolean | string | number
+  sup4: boolean | string | number
+  sup5: boolean | string | number
   exoCustomResultat?: boolean
   duree?: number
   seed?: string
@@ -872,10 +864,11 @@ export interface IExercice {
   autoCorrection: AutoCorrection[]
   autoCorrectionAMC?: AutoCorrectionAMC[]
   questionsAMC?: QuestionAMC[]
-  figures?: Figure[] | ClickFigures[]
+  cliqueFiguresArray?: ClickFigures[]
   /** Figures apigeom de l'exercice. Renseigné automatiquement par figureApigeom()
    * et détruit par reinit() pour éviter les fuites mémoire. */
   figuresApiGeom?: Figure[]
+  figuresApiGeomCorr?: Figure[]
   amcReady?: boolean
   amcType?: string
   tableauSolutionsDuQcm?: object[]

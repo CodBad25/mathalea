@@ -20,6 +20,7 @@ import Exercice from '../Exercice'
 // Ici ce sont les fonctions de la librairie maison 2d.js qui gèrent tout ce qui est graphique (SVG/tikz) et en particulier ce qui est lié à l'objet lutin
 import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
 import { grille } from '../../lib/2d/Grille'
+import { bleuMathalea } from '../../lib/colors'
 import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
@@ -35,7 +36,6 @@ import {
   tournerG,
 } from '../../modules/2dLutin'
 import { scratchblock } from '../../modules/scratchblock'
-import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'cliqueFigure'
@@ -72,7 +72,7 @@ export default class AlgoTortue extends Exercice {
 
   nouvelleVersion(numeroExercice: number) {
     // la méthode qui crée une nouvelle version de l'exercice
-    this.figures = []
+    this.cliqueFiguresArray = []
     this.autoCorrection[0] = {}
     const nbInstructions = gestionnaireFormulaireTexte({
       saisie: this.sup,
@@ -396,7 +396,13 @@ export default class AlgoTortue extends Exercice {
         lutins[ordreLutins[i]],
         depart[ordreLutins[i]],
         grille(-0.5, -0.5, largeur, hauteur + 1, 'gray', 0.5, 0.5),
-        texteParPoint('40 pas', pointAbstrait(0.5, hauteur + 0.2), 0, 'black', 1),
+        texteParPoint(
+          '40 pas',
+          pointAbstrait(0.5, hauteur + 0.2),
+          0,
+          'black',
+          1,
+        ),
         texteParPoint(
           `figure ${i + 1}`,
           pointAbstrait((largeur - 0.5) / 2, -0.8),
@@ -452,7 +458,7 @@ export default class AlgoTortue extends Exercice {
     }
     setCliqueFigure(this.autoCorrection[0])
 
-    this.figures[0] = [
+    this.cliqueFiguresArray[0] = [
       {
         id: `cliquefigure0Ex${this.numeroExercice}Q0`,
         solution: ordreLutins.indexOf(0) === 0,

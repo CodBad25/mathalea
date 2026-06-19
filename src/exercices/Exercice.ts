@@ -84,10 +84,11 @@ export default class Exercice implements IExercice {
   autoCorrection: AutoCorrection[]
   autoCorrectionAMC: AutoCorrectionAMC[]
   questionsAMC: QuestionAMC[]
-  figures?: Figure[] | ClickFigures[]
+  cliqueFiguresArray?: ClickFigures[]
   /** Figures apigeom de l'exercice. Renseigné automatiquement par figureApigeom()
    * et détruit par reinit() pour éviter les fuites mémoire. */
   figuresApiGeom?: Figure[]
+  figuresApiGeomCorr?: Figure[]
   amcReady?: boolean
   amcType?: string
   tableauSolutionsDuQcm?: object[]

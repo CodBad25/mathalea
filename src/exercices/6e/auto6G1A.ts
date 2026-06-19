@@ -14,6 +14,7 @@ import {
   pointSurSegment,
 } from '../../lib/2d/utilitairesPoint'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import figureApigeom from '../../lib/figureApigeom'
 import { lettreDepuisChiffre, numAlpha } from '../../lib/outils/outilString'
 import Alea2iep from '../../modules/Alea2iep'
@@ -21,8 +22,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -65,7 +64,7 @@ export default class constructionElementaire extends Exercice {
   }
 
   nouvelleVersion() {
-    this.figures = []
+    this.figuresApiGeom = []
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const anim = new Alea2iep()
@@ -171,7 +170,7 @@ export default class constructionElementaire extends Exercice {
         })
         figure.options.labelAutomaticBeginsWith = E.nom
         figure.options.thickness = 2
-        this.figures[i] = figure
+        this.figuresApiGeom[i] = figure
         const pA = figure.create('Point', {
           x: A.x,
           y: A.y,
@@ -355,7 +354,7 @@ export default class constructionElementaire extends Exercice {
   }
 
   correctionInteractive = (i: number) => {
-    // if (i === undefined) return 'KO'
+    if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     if (
       this.Anom == null ||
       this.Bnom == null ||
@@ -365,7 +364,7 @@ export default class constructionElementaire extends Exercice {
       this.Fnom == null
     )
       return 'KO'
-    const figure = this.figures[i]
+    const figure = this.figuresApiGeom[i]
     figure.isDynamic = false
     figure.divButtons.style.display = 'none'
     figure.divUserMessage.style.display = 'none'

@@ -3,7 +3,7 @@ import type PointApigeom from 'apigeom/src/elements/points/Point'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { similitude } from '../../lib/2d/transformations'
 import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
-import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
+import figureApigeom from '../../lib/figureApigeom'
 import { Matrice } from '../../lib/mathFonctions/Matrice'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -29,7 +29,6 @@ export const refs = {
  * On se propose de placer des points aux coordonnées données dans un repère orthogonal, normé ou quelconque.
  */
 export default class BetaReperage2e extends Exercice {
-  figuresApiGeom: Figure[]
   labelsPoints: string[][]
   X: number[][]
   Y: number[][]
@@ -37,7 +36,6 @@ export default class BetaReperage2e extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
-    this.figuresApiGeom = []
     this.labelsPoints = []
     this.X = []
     this.Y = []
@@ -67,6 +65,7 @@ export default class BetaReperage2e extends Exercice {
 
   nouvelleVersion() {
     this.figuresApiGeom = []
+    this.figuresApiGeomCorr = []
     this.labelsPoints = []
     this.X = []
     this.Y = []
@@ -121,7 +120,12 @@ export default class BetaReperage2e extends Exercice {
                 1.5,
               )
               coordsI = [I.x, I.y]
-              const K = similitude(pointAbstrait(...coordsI), o, randint(60, 80), 1)
+              const K = similitude(
+                pointAbstrait(...coordsI),
+                o,
+                randint(60, 80),
+                1,
+              )
               coordsK = [K.x, K.y]
             }
             break
@@ -191,7 +195,6 @@ export default class BetaReperage2e extends Exercice {
           scale: 1,
         }),
       )
-      if (isFigureArray(this.figures)) this.figures.push(this.figuresApiGeom[i])
       this.figuresApiGeom[i].options.latexHeight = 10
       this.figuresApiGeom[i].options.labelDxInPixels = 10
       this.figuresApiGeom[i].options.labelDyInPixels = 10
@@ -344,7 +347,6 @@ export default class BetaReperage2e extends Exercice {
           scale: 1,
         }),
       )
-      if (isFigureArray(this.figures)) this.figures.push(figureCorrection)
       figureCorrection.options.latexHeight = 10
       figureCorrection.options.labelDxInPixels = 10
       figureCorrection.options.labelDyInPixels = 10
@@ -358,6 +360,7 @@ export default class BetaReperage2e extends Exercice {
           labelDyInPixels: y[i][k].valeurDecimale < 0 ? -10 : 10,
         })
       }
+      this.figuresApiGeomCorr[i] = figureCorrection
       let question: string = ''
       if (context.isHtml) {
         if (this.interactif) {
@@ -399,7 +402,8 @@ export default class BetaReperage2e extends Exercice {
   }
 
   correctionInteractive = (i?: number) => {
-    if (i === undefined) return ['KO']
+    if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
+
     const result: ('OK' | 'KO')[] = []
     const figure = this.figuresApiGeom[i]
     // Sauvegarde de la réponse pour Capytale

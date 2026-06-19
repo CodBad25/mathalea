@@ -60,7 +60,7 @@ export default class ExpressionAParabole extends Exercice {
   }
 
   nouvelleVersion() {
-    this.figures = []
+    this.cliqueFiguresArray = []
 
     // Gestion du choix du type d'expression
     const expressionsPossibles = gestionnaireFormulaireTexte({
@@ -263,7 +263,7 @@ export default class ExpressionAParabole extends Exercice {
         graphes[ordre[2]] +
         graphes[ordre[3]]
 
-      this.figures[i] = [
+      this.cliqueFiguresArray[i] = [
         { id: id0, solution: true },
         { id: id1, solution: false },
         { id: id2, solution: false },

@@ -2,6 +2,7 @@ import Figure from 'apigeom'
 import { distance } from 'apigeom/src/elements/calculus/Coords'
 import GraduatedLine from 'apigeom/src/elements/grid/GraduatedLine'
 import type { MathfieldElement } from 'mathlive'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
 import { orangeMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
@@ -18,8 +19,6 @@ import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const dateDePublication = '08/07/2025'
 export const titre = "Donner du sens à la définition d'un quotient"
@@ -46,10 +45,6 @@ export default class DonnerSensDefinitionQuotient extends Exercice {
   goodAnswerQb!: number[]
   goodAnswerQc!: number[]
 
-  // declare : typage seul (champ hérité de Exercice), sans réémettre le champ.
-  // Sans cette redéclaration, le champ de base étant optionnel, il serait
-  // typé possiblement undefined (accès this.figuresApiGeom[i] en erreur).
-  declare figuresApiGeom: Figure[]
   constructor() {
     super()
 
@@ -336,7 +331,7 @@ export default class DonnerSensDefinitionQuotient extends Exercice {
     // Sauvegarde de la réponse pour Capytale
     if (this.answers == null) this.answers = {}
     if (this == null) return ['KO']
-    if (this.figures == null) return ['KO']
+    if (this.figuresApiGeom == null) return ['KO']
     const result: ('OK' | 'KO')[] = []
 
     this.answers[this.figuresApiGeom[i].id] = this.figuresApiGeom[i].json

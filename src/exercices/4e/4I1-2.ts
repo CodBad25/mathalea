@@ -15,6 +15,7 @@ import {
 import Exercice from '../Exercice'
 // Ici ce sont les fonctions de la librairie maison 2d.js qui gèrent tout ce qui est graphique (SVG/tikz) et en particulier ce qui est lié à l'objet lutin
 import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
+import { bleuMathalea } from '../../lib/colors'
 import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import {
   allerA,
@@ -28,7 +29,6 @@ import {
   tournerG,
 } from '../../modules/2dLutin'
 import { scratchblock } from '../../modules/scratchblock'
-import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'cliqueFigure'
@@ -73,7 +73,7 @@ export default class AlgoTortue extends Exercice {
 
   nouvelleVersion(numeroExercice: number) {
     // la méthode qui crée une nouvelle version de l'exercice
-    this.figures = []
+    this.cliqueFiguresArray = []
     const objetsCorrection = []
     this.autoCorrection[0] = {}
     const figuresDisponibles = [
@@ -658,7 +658,7 @@ export default class AlgoTortue extends Exercice {
     if (this.interactif && context.isHtml) {
       texte += `<span id="resultatCheckEx${this.numeroExercice}Q0"></span>`
     }
-    this.figures[0] = [
+    this.cliqueFiguresArray[0] = [
       {
         id: `cliquefigure0Ex${this.numeroExercice}Q0`,
         solution: ordreLutins.indexOf(bonneReponse) === 0,

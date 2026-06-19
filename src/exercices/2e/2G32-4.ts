@@ -10,7 +10,7 @@ import { labelPoint, latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
-import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
+import figureApigeom from '../../lib/figureApigeom'
 import { choice } from '../../lib/outils/arrayOutils'
 import { abs } from '../../lib/outils/nombres'
 import { getLang } from '../../lib/stores/languagesStore'
@@ -73,7 +73,8 @@ export default class RepresenterfDroite extends Exercice {
       defaut: 4,
       nbQuestions: this.nbQuestions,
     })
-    this.figures = []
+    this.figuresApiGeom = []
+    this.figuresApiGeomCorr = []
 
     const textO = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
@@ -294,14 +295,12 @@ export default class RepresenterfDroite extends Exercice {
           width: 290,
           height: 290,
         })
-        if (isFigureArray(this.figures)) this.figures[2 * i] = figure
         const figureCorr = new Figure({
           xMin: cadre.xMin + 0.1,
           yMin: cadre.yMin + 0.1,
           width: 290,
           height: 290,
         })
-        if (isFigureArray(this.figures)) this.figures[2 * i + 1] = figureCorr
         figure.options.labelAutomaticBeginsWith = 'A'
         figure.create('Grid')
         figure.options.color = bleuMathalea
@@ -334,6 +333,7 @@ export default class RepresenterfDroite extends Exercice {
           position: 'top',
         })
 
+        this.figuresApiGeomCorr[i] = figureCorr
         const emplacementPourFigure = figureApigeom({
           exercice: this,
           i,
@@ -358,6 +358,7 @@ export default class RepresenterfDroite extends Exercice {
   }
 
   correctionInteractive = (i: number) => {
+    if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     if (this.pointsA[i] == null || this.pointsB[i] == null) return 'KO'
     const figure = this.figuresApiGeom[i]
     figure.isDynamic = false
