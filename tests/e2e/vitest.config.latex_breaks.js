@@ -1,0 +1,41 @@
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { mergeConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
+import viteConfig from './vite.config'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+const sanitizedViteConfig = {
+  ...viteConfig,
+  plugins: (viteConfig.plugins ?? []).filter(
+    (plugin) => !plugin?.name?.includes('dynamic-import'),
+  ),
+}
+
+export default mergeConfig(
+  sanitizedViteConfig,
+  defineConfig({
+    resolve: {
+      alias: {
+        testBrowser: resolve(__dirname, 'e2e'),
+      },
+    },
+    test: {
+      include: ['./tests/latex_breaks/*.test.{js,ts}'],
+      environment: 'jsdom',
+      environmentOptions: {
+        jsdom: {
+          url: 'http://localhost:80/alea/',
+        },
+      },
+      hookTimeout: 120_000,
+      testTimeout: 1_200_000,
+      pool: 'threads',
+      maxWorkers: 1,
+      isolate: false,
+      disableConsoleIntercept: true,
+    },
+  }),
+)
