@@ -2762,6 +2762,20 @@
   "1A-F08": {
     "titre": "Déterminer le coefficient directeur d’une droite à partir des coordonnées de deux de ses points"
   },
+    "1A-G": {
+    "titre": "Géométrie"
+  },
+   "1A-G01": {
+    "titre": "Repérage sur droites et plan"
+  },
+
+   "1A-G02": {
+    "titre": "Périmètres et aires"
+  },
+
+   "1A-G03": {
+    "titre": "Pythagore, Thalès, trigonométrie"
+  },
   "1A-S": {
     "titre": "Statistiques"
   },
