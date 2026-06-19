@@ -86,7 +86,7 @@ private appliquerLesValeurs(
     // -------------------------------------------------------------
 
     this.enonce = `Le diagramme ci-dessous donne la répartition des ventes d'un concessionnaire automobile.<br><br>`
-    this.enonce += figure + `<br>`
+    this.enonce += figure
     this.enonce += `Quel pourcentage des ventes représentent les véhicules cabriolets ?`
 
     this.correction = `Par simple lecture visuelle du diagramme circulaire, on peut procéder par élimination :<br>`
