@@ -13,6 +13,8 @@
 - Unit Tests: `pnpm prebuild-unit-tests` (runs vitest, must pass before commit)
 - TypeCheck: `pnpm check` (type checks .svelte and .ts files)
 
+⚠️: use `--pm-on-fail=ignore` option with each `pnpm`command. (i.e. `pnpm --pm-on-fail=ignore test:e2e:latex_breaks`)
+
 ## Project Structure
 
 - `src/components` – app .svelte components

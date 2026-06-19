@@ -22,6 +22,7 @@ _private/
 tests/**/logs
 updatefile
 .madgerc
+.pnpm-store
 # Dictionnaires générés
 src/json/referentielStaticFR.json
 src/json/referentielStaticCH.json
