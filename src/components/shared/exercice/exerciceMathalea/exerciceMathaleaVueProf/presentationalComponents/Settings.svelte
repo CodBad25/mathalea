@@ -21,11 +21,11 @@
 
   let nbQuestions: number
   let duration: number
-  let sup: boolean
-  let sup2: boolean
-  let sup3: boolean
-  let sup4: boolean
-  let sup5: boolean
+  let sup: boolean | number | string
+  let sup2: boolean | number | string
+  let sup3: boolean | number | string
+  let sup4: boolean | number | string
+  let sup5: boolean | number | string
   let versionQcm: boolean
   let alea: string
   let correctionDetaillee: boolean
@@ -67,7 +67,7 @@
     versionQcm =
       exercice instanceof ExerciceSimple ? exercice.versionQcm || false : false
     correctionDetaillee = exercice.correctionDetaillee
-    tipAvailable = exercice.tipAvailable ?? !!(exercice.tip?.length)
+    tipAvailable = exercice.tipAvailable ?? !!exercice.tip?.length
 
     if (
       Array.isArray(exercice.besoinFormulaireNumerique) &&
@@ -100,7 +100,8 @@
       formNum5 = parseFormNumerique(exercice.besoinFormulaire5Numerique)
     }
     if (exercice.besoinFormulaireNombresCategories) {
-      categoriesForm = exercice.besoinFormulaireNombresCategories as CategoriesForm
+      categoriesForm =
+        exercice.besoinFormulaireNombresCategories as CategoriesForm
     }
   })
 

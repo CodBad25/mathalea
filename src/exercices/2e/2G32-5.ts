@@ -8,7 +8,7 @@ import { labelPoint, latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
-import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
+import figureApigeom from '../../lib/figureApigeom'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -47,7 +47,7 @@ export default class RepresenterDroiteDepuisEq extends Exercice {
 
   nouvelleVersion() {
     this.figuresApiGeom = []
-    this.figures = []
+    this.figuresApiGeomCorr = []
 
     const textO = latex2d('\\text{O}', -0.3, -0.3, {
       letterSize: 'scriptsize',
@@ -217,8 +217,6 @@ export default class RepresenterDroiteDepuisEq extends Exercice {
         figureCorr.loadJson(JSON.parse(figure.json))
 
         this.figuresApiGeom[i] = figure
-        if (isFigureArray(this.figures)) this.figures[2 * i] = figure
-        if (isFigureArray(this.figures)) this.figures[2 * i + 1] = figureCorr
 
         const A1 = figureCorr.create('Point', { x: A.x, y: A.y, label: A.nom })
         const B1 = figureCorr.create('Point', { x: C.x, y: C.y, label: C.nom })
@@ -241,6 +239,7 @@ export default class RepresenterDroiteDepuisEq extends Exercice {
           ],
           position: 'top',
         })
+        this.figuresApiGeomCorr[i] = figureCorr
 
         const emplacementPourFigure = figureApigeom({
           exercice: this,
@@ -266,6 +265,7 @@ export default class RepresenterDroiteDepuisEq extends Exercice {
   }
 
   correctionInteractive = (i: number) => {
+    if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     if (this.pointsA[i] == null || this.pointsB[i] == null) return 'KO'
     const figure = this.figuresApiGeom[i]
     figure.isDynamic = false

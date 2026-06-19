@@ -20,7 +20,7 @@ import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
-import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
+import figureApigeom from '../../lib/figureApigeom'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -51,7 +51,6 @@ export const refs = {
 }
 
 export default class RepresenterUnVecteur extends Exercice {
-  figuresApiGeom: Figure[]
   longueur?: number
   largeur?: number
   xA: number[]
@@ -77,6 +76,7 @@ export default class RepresenterUnVecteur extends Exercice {
   }
 
   nouvelleVersion() {
+    this.figuresApiGeom = []
     this.longueur = 10
     this.largeur = 10
     this.figuresApiGeom = []
@@ -102,8 +102,6 @@ export default class RepresenterUnVecteur extends Exercice {
         border: false,
         scale: 0.65,
       })
-
-      if (isFigureArray(this.figures)) this.figures.push(this.figuresApiGeom[i])
 
       const OVecteur = this.figuresApiGeom[i].create('Point', {
         x: 0,
@@ -334,6 +332,7 @@ export default class RepresenterUnVecteur extends Exercice {
   }
 
   correctionInteractive = (i: number) => {
+    if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
     this.answers[this.figuresApiGeom[i].id] = this.figuresApiGeom[i].json
@@ -344,7 +343,7 @@ export default class RepresenterUnVecteur extends Exercice {
     this.figuresApiGeom[i].divButtons.style.display = 'none'
     this.figuresApiGeom[i].divUserMessage.style.display = 'none'
 
-    let { isValid, vectors } = this.figuresApiGeom[i].checkVector({
+    const { isValid, vectors } = this.figuresApiGeom[i].checkVector({
       color: 'green',
       xOrigin: this.xA[i],
       x: this.xB[i] - this.xA[i],
@@ -357,9 +356,7 @@ export default class RepresenterUnVecteur extends Exercice {
         e.type === 'VectorByPoints' && (e as VectorByPoints).color === 'green',
     ).length
 
-    isValid &&= nbVecteurs === 1
-
-    if (isValid) {
+    if (isValid && nbVecteurs === 1) {
       divFeedback.innerHTML = 'Bravo !'
       if (vectors[0] !== undefined) {
         vectors[0].color = 'green'

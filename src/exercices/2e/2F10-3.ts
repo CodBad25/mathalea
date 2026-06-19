@@ -10,7 +10,7 @@ import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import type { TracePoint } from '../../lib/2d/TracePoint'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { bleuMathalea } from '../../lib/colors'
-import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
+import figureApigeom from '../../lib/figureApigeom'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -42,7 +42,6 @@ export const refs = {
 }
 export default class Representerfonctionaffine extends Exercice {
   coefficients!: [number, number][]
-  figuresApiGeom: Figure[] = []
   level: 3 | 2 = 2
   constructor() {
     super()
@@ -69,7 +68,7 @@ export default class Representerfonctionaffine extends Exercice {
         ? 'la fonction affine suivante  définie'
         : 'les fonctions affines suivantes définies') +
       ' sur $\\mathbb R$ par :'
-    this.figures = []
+    this.figuresApiGeom = []
     this.coefficients = []
 
     let typesDeQuestionsDisponibles: (1 | 2)[] = []
@@ -293,7 +292,6 @@ export default class Representerfonctionaffine extends Exercice {
           width: 330,
           height: 330,
         })
-        if (isFigureArray(this.figures)) this.figures.push(figure)
         this.figuresApiGeom[i] = figure
         figure.setToolbar({
           tools: ['POINT', 'LINE', 'DRAG', 'REMOVE'],
@@ -320,7 +318,7 @@ export default class Representerfonctionaffine extends Exercice {
   }
 
   correctionInteractive = (i?: number) => {
-    if (i === undefined) return 'KO'
+    if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     let result: 'OK' | 'KO' = 'KO'
     if (this.figuresApiGeom[i] == null)
       throw new Error("La figure n'a pas été créée, n°" + i)

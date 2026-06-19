@@ -1,7 +1,7 @@
 import Figure from 'apigeom'
 import type Point from 'apigeom/src/elements/points/Point'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
-import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
+import figureApigeom from '../../lib/figureApigeom'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { rangeMinMax } from '../../lib/outils/nombres'
@@ -33,8 +33,6 @@ export const refs = {
 export default class SommeDeVecteurs extends Exercice {
   longueur?: number
   largeur?: number
-  figureApig: Figure[] = []
-  figureApigCorr: Figure[] = []
   pointExtremite: Point[] = []
   nomExtremite: string[] = []
 
@@ -51,16 +49,12 @@ export default class SommeDeVecteurs extends Exercice {
   }
 
   nouvelleVersion() {
+    this.figuresApiGeom = []
+    this.figuresApiGeomCorr = []
     this.longueur = 10
     this.largeur = 10
-    this.figureApig.forEach((fig) => {
-      fig.destroy()
-    })
-    this.figureApigCorr.forEach((fig) => {
-      fig.destroy()
-    })
-    this.figureApig = []
-    this.figureApigCorr = []
+    this.figuresApiGeom = []
+    this.figuresApiGeomCorr = []
     this.pointExtremite = []
     this.nomExtremite = []
     let choixU
@@ -101,7 +95,7 @@ export default class SommeDeVecteurs extends Exercice {
           choixV = 'pas0rigine'
           break
       }
-      this.figureApig[i] = new Figure({
+      this.figuresApiGeom[i] = new Figure({
         xMin: -this.longueur - 0.25, // On enlève 0.25 unités
         yMin: -this.largeur - 0.25,
         width: 0.65 * (this.longueur * 2 * 30 + 20), // On ajoute 20 pixels
@@ -109,11 +103,9 @@ export default class SommeDeVecteurs extends Exercice {
         border: false,
         scale: 0.65,
       })
-
-      if (isFigureArray(this.figures)) this.figures.push(this.figureApig[i])
 
       // Préparation de la correction animée
-      this.figureApigCorr[i] = new Figure({
+      this.figuresApiGeomCorr[i] = new Figure({
         xMin: -this.longueur - 0.25, // On enlève 0.25 unités
         yMin: -this.largeur - 0.25,
         width: 0.65 * (this.longueur * 2 * 30 + 20), // On ajoute 20 pixels
@@ -122,9 +114,7 @@ export default class SommeDeVecteurs extends Exercice {
         scale: 0.65,
       })
 
-      if (isFigureArray(this.figures)) this.figures.push(this.figureApigCorr[i])
-
-      this.figureApig[i].grid = this.figureApig[i].create('Grid', {
+      this.figuresApiGeom[i].grid = this.figuresApiGeom[i].create('Grid', {
         strokeWidthGrid: 1,
         yMin: -this.largeur + 0.1,
         yMax: this.largeur - 0.1,
@@ -135,19 +125,22 @@ export default class SommeDeVecteurs extends Exercice {
         repereOij: true,
       })
 
-      this.figureApigCorr[i].grid = this.figureApigCorr[i].create('Grid', {
-        strokeWidthGrid: 1,
-        yMin: -this.largeur + 0.1,
-        yMax: this.largeur - 0.1,
-        xMax: this.longueur - 0.1,
-        xMin: -this.longueur + 0.1,
-        axeX: true,
-        axeY: true,
-        repereOij: true,
-      })
+      this.figuresApiGeomCorr[i].grid = this.figuresApiGeomCorr[i].create(
+        'Grid',
+        {
+          strokeWidthGrid: 1,
+          yMin: -this.largeur + 0.1,
+          yMax: this.largeur - 0.1,
+          xMax: this.longueur - 0.1,
+          xMin: -this.longueur + 0.1,
+          axeX: true,
+          axeY: true,
+          repereOij: true,
+        },
+      )
 
-      this.figureApig[i].snapGrid = true
-      this.figureApig[i].setToolbar({
+      this.figuresApiGeom[i].snapGrid = true
+      this.figuresApiGeom[i].setToolbar({
         tools: [
           'DRAG',
           'REMOVE',
@@ -161,9 +154,9 @@ export default class SommeDeVecteurs extends Exercice {
         ],
         // position: 'top'
       })
-      this.figureApig[i].options.thickness = 3
-      this.figureApig[i].options.color = bleuMathalea
-      this.figureApig[i].buttons.get('POINT')?.click()
+      this.figuresApiGeom[i].options.thickness = 3
+      this.figuresApiGeom[i].options.color = bleuMathalea
+      this.figuresApiGeom[i].buttons.get('POINT')?.click()
 
       /*
       On construit au hasard :
@@ -205,7 +198,7 @@ export default class SommeDeVecteurs extends Exercice {
       const nomOrigine = lettreDepuisChiffre(numeroOrigine)
       const numeroExtremite = randint(1, 26, [15, numeroOrigine])
       this.nomExtremite[i] = lettreDepuisChiffre(numeroExtremite)
-      let pointOrigine = this.figureApig[i].create('Point', {
+      let pointOrigine = this.figuresApiGeom[i].create('Point', {
         x: xOrigin,
         y: yOrigin,
         label: nomOrigine,
@@ -213,15 +206,18 @@ export default class SommeDeVecteurs extends Exercice {
         thickness: 3,
         isSelectable: false,
       })
-      const pointOrigineCorrection = this.figureApigCorr[i].create('Point', {
-        x: xOrigin,
-        y: yOrigin,
-        label: nomOrigine,
-        color: 'black',
-        thickness: 3,
-        isSelectable: false,
-      })
-      this.pointExtremite[i] = this.figureApig[i].create('Point', {
+      const pointOrigineCorrection = this.figuresApiGeomCorr[i].create(
+        'Point',
+        {
+          x: xOrigin,
+          y: yOrigin,
+          label: nomOrigine,
+          color: 'black',
+          thickness: 3,
+          isSelectable: false,
+        },
+      )
+      this.pointExtremite[i] = this.figuresApiGeom[i].create('Point', {
         x: xOrigin + xSomme[i],
         y: yOrigin + ySomme[i],
         isVisible: false,
@@ -354,7 +350,7 @@ export default class SommeDeVecteurs extends Exercice {
       let pointOrigineChoix2X = 0
       let pointOrigineChoix2Y = 0
       if (choixU === 'origine') {
-        this.figureApig[i].create('Vector', {
+        this.figuresApiGeom[i].create('Vector', {
           origin: pointOrigine,
           x: vecteur1.x,
           y: vecteur1.y,
@@ -363,7 +359,7 @@ export default class SommeDeVecteurs extends Exercice {
           label: '\\vec{u}',
           isSelectable: false,
         })
-        this.figureApigCorr[i].create('Vector', {
+        this.figuresApiGeomCorr[i].create('Vector', {
           origin: pointOrigine,
           x: vecteur1.x,
           y: vecteur1.y,
@@ -387,17 +383,20 @@ export default class SommeDeVecteurs extends Exercice {
             yOrigin,
           ),
         )
-        const pointOrigineChoix2 = this.figureApig[i].create('Point', {
+        const pointOrigineChoix2 = this.figuresApiGeom[i].create('Point', {
           x: pointOrigineChoix2X,
           y: pointOrigineChoix2Y,
           isVisible: false,
         })
-        const pointOrigineChoix2Cor = this.figureApigCorr[i].create('Point', {
-          x: pointOrigineChoix2X,
-          y: pointOrigineChoix2Y,
-          isVisible: false,
-        })
-        this.figureApig[i].create('Vector', {
+        const pointOrigineChoix2Cor = this.figuresApiGeomCorr[i].create(
+          'Point',
+          {
+            x: pointOrigineChoix2X,
+            y: pointOrigineChoix2Y,
+            isVisible: false,
+          },
+        )
+        this.figuresApiGeom[i].create('Vector', {
           origin: pointOrigineChoix2,
           x: vecteur1.x,
           y: vecteur1.y,
@@ -406,7 +405,7 @@ export default class SommeDeVecteurs extends Exercice {
           label: '\\vec{u}',
           isSelectable: false,
         })
-        this.figureApigCorr[i].create('Vector', {
+        this.figuresApiGeomCorr[i].create('Vector', {
           origin: pointOrigineChoix2Cor,
           x: vecteur1.x,
           y: vecteur1.y,
@@ -420,7 +419,7 @@ export default class SommeDeVecteurs extends Exercice {
       let pointOrigineChoix3X = 0
       let pointOrigineChoix3Y = 0
       if (choixV === 'origine') {
-        this.figureApig[i].create('Vector', {
+        this.figuresApiGeom[i].create('Vector', {
           origin: pointOrigine,
           x: vecteur2.x,
           y: vecteur2.y,
@@ -429,7 +428,7 @@ export default class SommeDeVecteurs extends Exercice {
           label: '\\vec{v}',
           isSelectable: false,
         })
-        this.figureApigCorr[i].create('Vector', {
+        this.figuresApiGeomCorr[i].create('Vector', {
           origin: pointOrigine,
           x: vecteur2.x,
           y: vecteur2.y,
@@ -453,17 +452,20 @@ export default class SommeDeVecteurs extends Exercice {
             yOrigin,
           ),
         )
-        const pointOrigineChoix3 = this.figureApig[i].create('Point', {
+        const pointOrigineChoix3 = this.figuresApiGeom[i].create('Point', {
           x: pointOrigineChoix3X,
           y: pointOrigineChoix3Y,
           isVisible: false,
         })
-        const pointOrigineChoix3Cor = this.figureApigCorr[i].create('Point', {
-          x: pointOrigineChoix3X,
-          y: pointOrigineChoix3Y,
-          isVisible: false,
-        })
-        this.figureApig[i].create('Vector', {
+        const pointOrigineChoix3Cor = this.figuresApiGeomCorr[i].create(
+          'Point',
+          {
+            x: pointOrigineChoix3X,
+            y: pointOrigineChoix3Y,
+            isVisible: false,
+          },
+        )
+        this.figuresApiGeom[i].create('Vector', {
           origin: pointOrigineChoix3,
           x: vecteur2.x,
           y: vecteur2.y,
@@ -472,7 +474,7 @@ export default class SommeDeVecteurs extends Exercice {
           label: '\\vec{v}',
           isSelectable: false,
         })
-        this.figureApigCorr[i].create('Vector', {
+        this.figuresApiGeomCorr[i].create('Vector', {
           origin: pointOrigineChoix3Cor,
           x: vecteur2.x,
           y: vecteur2.y,
@@ -483,7 +485,7 @@ export default class SommeDeVecteurs extends Exercice {
         })
       }
 
-      pointOrigine = this.figureApig[i].create('Point', {
+      pointOrigine = this.figuresApiGeom[i].create('Point', {
         x: xOrigin,
         y: yOrigin,
         label: nomOrigine,
@@ -491,7 +493,7 @@ export default class SommeDeVecteurs extends Exercice {
         thickness: 3,
         isSelectable: false,
       })
-      this.figureApigCorr[i].create('Point', {
+      this.figuresApiGeomCorr[i].create('Point', {
         x: xOrigin,
         y: yOrigin,
         label: nomOrigine,
@@ -503,21 +505,21 @@ export default class SommeDeVecteurs extends Exercice {
       if (context.isHtml) {
         texte += figureApigeom({
           exercice: this,
-          figure: this.figureApig[i],
+          figure: this.figuresApiGeom[i],
           i,
         })
       } else {
-        this.figureApig[i].options.latexHeight = 20
-        this.figureApig[i].options.latexWidth = 20
-        texte += this.figureApig[i].tikz()
+        this.figuresApiGeom[i].options.latexHeight = 20
+        this.figuresApiGeom[i].options.latexWidth = 20
+        texte += this.figuresApiGeom[i].tikz()
       }
 
-      this.figureApigCorr[i].options.animationStepInterval = 250
-      this.figureApigCorr[i].grid!.color = 'gray'
-      this.figureApigCorr[i].options.latexHeight = 20
-      this.figureApigCorr[i].options.latexWidth = 20
+      this.figuresApiGeomCorr[i].options.animationStepInterval = 250
+      this.figuresApiGeomCorr[i].grid!.color = 'gray'
+      this.figuresApiGeomCorr[i].options.latexHeight = 20
+      this.figuresApiGeomCorr[i].options.latexWidth = 20
 
-      this.figureApigCorr[i].setToolbar({
+      this.figuresApiGeomCorr[i].setToolbar({
         position: 'top',
         tools: [
           'RESTART',
@@ -527,19 +529,19 @@ export default class SommeDeVecteurs extends Exercice {
           'PAUSE',
         ],
       })
-      this.figureApigCorr[i].stackUndo = []
-      this.figureApigCorr[i].stackRedo = []
-      this.figureApigCorr[i].saveState()
+      this.figuresApiGeomCorr[i].stackUndo = []
+      this.figuresApiGeomCorr[i].stackRedo = []
+      this.figuresApiGeomCorr[i].saveState()
       const pointAnimation = []
       const vecteurAnimation = []
       if (choixV === 'origine' && choixU === 'origine') {
         for (let ee = 0; ee < 11; ee++) {
-          pointAnimation[ee] = this.figureApigCorr[i].create('Point', {
+          pointAnimation[ee] = this.figuresApiGeomCorr[i].create('Point', {
             x: xOrigin + ((xPointIntermediaire - xOrigin) * ee) / 10,
             y: yOrigin + ((yPointIntermediaire - yOrigin) * ee) / 10,
             isVisible: false,
           })
-          vecteurAnimation[ee] = this.figureApigCorr[i].create('Vector', {
+          vecteurAnimation[ee] = this.figuresApiGeomCorr[i].create('Vector', {
             origin: pointAnimation[ee],
             x: vecteur2.x,
             y: vecteur2.y,
@@ -547,7 +549,7 @@ export default class SommeDeVecteurs extends Exercice {
             thickness: 3,
             label: '\\vec{v}',
           })
-          this.figureApigCorr[i].saveState()
+          this.figuresApiGeomCorr[i].saveState()
           if (ee !== 10) {
             vecteurAnimation[ee].hide()
             vecteurAnimation[ee].label = ''
@@ -555,7 +557,7 @@ export default class SommeDeVecteurs extends Exercice {
         }
       } else if (choixV === 'origine' && choixU !== 'origine') {
         for (let ee = 0; ee < 11; ee++) {
-          pointAnimation[ee] = this.figureApigCorr[i].create('Point', {
+          pointAnimation[ee] = this.figuresApiGeomCorr[i].create('Point', {
             x:
               pointOrigineChoix2X +
               ((xOrigin + vecteur2.x - pointOrigineChoix2X) * ee) / 10,
@@ -564,7 +566,7 @@ export default class SommeDeVecteurs extends Exercice {
               ((yOrigin + vecteur2.y - pointOrigineChoix2Y) * ee) / 10,
             isVisible: false,
           })
-          vecteurAnimation[ee] = this.figureApigCorr[i].create('Vector', {
+          vecteurAnimation[ee] = this.figuresApiGeomCorr[i].create('Vector', {
             origin: pointAnimation[ee],
             x: vecteur1.x,
             y: vecteur1.y,
@@ -572,7 +574,7 @@ export default class SommeDeVecteurs extends Exercice {
             thickness: 3,
             label: '\\vec{u}',
           })
-          this.figureApigCorr[i].saveState()
+          this.figuresApiGeomCorr[i].saveState()
           if (ee !== 10) {
             vecteurAnimation[ee].hide()
             vecteurAnimation[ee].label = ''
@@ -580,7 +582,7 @@ export default class SommeDeVecteurs extends Exercice {
         }
       } else if (choixV !== 'origine' && choixU === 'origine') {
         for (let ee = 0; ee < 11; ee++) {
-          pointAnimation[ee] = this.figureApigCorr[i].create('Point', {
+          pointAnimation[ee] = this.figuresApiGeomCorr[i].create('Point', {
             x:
               pointOrigineChoix3X +
               ((xPointIntermediaire - pointOrigineChoix3X) * ee) / 10,
@@ -589,7 +591,7 @@ export default class SommeDeVecteurs extends Exercice {
               ((yPointIntermediaire - pointOrigineChoix3Y) * ee) / 10,
             isVisible: false,
           })
-          vecteurAnimation[ee] = this.figureApigCorr[i].create('Vector', {
+          vecteurAnimation[ee] = this.figuresApiGeomCorr[i].create('Vector', {
             origin: pointAnimation[ee],
             x: vecteur2.x,
             y: vecteur2.y,
@@ -597,7 +599,7 @@ export default class SommeDeVecteurs extends Exercice {
             thickness: 3,
             label: '\\vec{v}',
           })
-          this.figureApigCorr[i].saveState()
+          this.figuresApiGeomCorr[i].saveState()
           if (ee !== 10) {
             vecteurAnimation[ee].hide()
             vecteurAnimation[ee].label = ''
@@ -606,14 +608,14 @@ export default class SommeDeVecteurs extends Exercice {
       } else {
         // (choixV !== 'origine' && choixU !== 'origine')
         for (let ee = 0; ee < 11; ee++) {
-          pointAnimation[ee] = this.figureApigCorr[i].create('Point', {
+          pointAnimation[ee] = this.figuresApiGeomCorr[i].create('Point', {
             x:
               pointOrigineChoix2X + ((xOrigin - pointOrigineChoix2X) * ee) / 10,
             y:
               pointOrigineChoix2Y + ((yOrigin - pointOrigineChoix2Y) * ee) / 10,
             isVisible: false,
           })
-          vecteurAnimation[ee] = this.figureApigCorr[i].create('Vector', {
+          vecteurAnimation[ee] = this.figuresApiGeomCorr[i].create('Vector', {
             origin: pointAnimation[ee],
             x: vecteur1.x,
             y: vecteur1.y,
@@ -621,14 +623,14 @@ export default class SommeDeVecteurs extends Exercice {
             thickness: 3,
             label: '\\vec{u}',
           })
-          this.figureApigCorr[i].saveState()
+          this.figuresApiGeomCorr[i].saveState()
           if (ee !== 10) {
             vecteurAnimation[ee].hide()
             vecteurAnimation[ee].label = ''
           }
         }
         for (let ee = 0; ee < 11; ee++) {
-          pointAnimation[ee] = this.figureApigCorr[i].create('Point', {
+          pointAnimation[ee] = this.figuresApiGeomCorr[i].create('Point', {
             x:
               pointOrigineChoix3X +
               ((xPointIntermediaire - pointOrigineChoix3X) * ee) / 10,
@@ -637,7 +639,7 @@ export default class SommeDeVecteurs extends Exercice {
               ((yPointIntermediaire - pointOrigineChoix3Y) * ee) / 10,
             isVisible: false,
           })
-          vecteurAnimation[ee] = this.figureApigCorr[i].create('Vector', {
+          vecteurAnimation[ee] = this.figuresApiGeomCorr[i].create('Vector', {
             origin: pointAnimation[ee],
             x: vecteur2.x,
             y: vecteur2.y,
@@ -645,21 +647,21 @@ export default class SommeDeVecteurs extends Exercice {
             thickness: 3,
             label: '\\vec{v}',
           })
-          this.figureApigCorr[i].saveState()
+          this.figuresApiGeomCorr[i].saveState()
           if (ee !== 10) {
             vecteurAnimation[ee].hide()
             vecteurAnimation[ee].label = ''
           }
         }
       }
-      this.figureApigCorr[i].create('Vector', {
+      this.figuresApiGeomCorr[i].create('Vector', {
         origin: pointOrigineCorrection,
         x: xSomme[i],
         y: ySomme[i],
         color: orangeMathalea,
         thickness: 3,
       })
-      this.figureApigCorr[i].create('Point', {
+      this.figuresApiGeomCorr[i].create('Point', {
         x: this.pointExtremite[i].x,
         y: this.pointExtremite[i].y,
         colorLabel: orangeMathalea,
@@ -667,7 +669,7 @@ export default class SommeDeVecteurs extends Exercice {
         label: this.nomExtremite[i],
       })
 
-      this.figureApigCorr[i].saveState()
+      this.figuresApiGeomCorr[i].saveState()
 
       if (context.isHtml) {
         texteCorr =
@@ -676,14 +678,14 @@ export default class SommeDeVecteurs extends Exercice {
             exercice: this,
             i,
             idAddendum: 'Correction',
-            figure: this.figureApigCorr[i],
+            figure: this.figuresApiGeomCorr[i],
           }) + '<br>'
       } else {
-        texteCorr = this.figureApigCorr[i].tikz() + '<br>'
+        texteCorr = this.figuresApiGeomCorr[i].tikz() + '<br>'
       }
       texteCorr += `Le point $${this.nomExtremite[i]}$ tel que $\\overrightarrow{${nomOrigine}${this.nomExtremite[i]}} = \\vec{u} + \\vec{v}$ a pour coordonnées ${texteEnCouleurEtGras(`( ${this.pointExtremite[i].x} ; ${this.pointExtremite[i].y} )`)}.<br>`
 
-      if (this.questionJamaisPosee(i, xSomme[i], xSomme[i])) {
+      if (this.questionJamaisPosee(i, xSomme[i], ySomme[i], xOrigin, yOrigin)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
@@ -695,9 +697,15 @@ export default class SommeDeVecteurs extends Exercice {
   }
 
   correctionInteractive = (i: number) => {
+    if (
+      i === undefined ||
+      this.figuresApiGeom === undefined ||
+      this.figuresApiGeom[i] === undefined
+    )
+      return ['KO']
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figureApig[i].id] = this.figureApig[i].json
+    this.answers[this.figuresApiGeom[i].id] = this.figuresApiGeom[i].json
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,
     ) as HTMLDivElement
@@ -705,10 +713,10 @@ export default class SommeDeVecteurs extends Exercice {
       `#resultatCheckEx${this.numeroExercice}Q${i}`,
     )
 
-    this.figureApig[i].isDynamic = false
-    this.figureApig[i].divButtons.style.display = 'none'
-    this.figureApig[i].divUserMessage.style.display = 'none'
-    const nbPoints = [...this.figureApig[i].elements.values()].filter(
+    this.figuresApiGeom[i].isDynamic = false
+    this.figuresApiGeom[i].divButtons.style.display = 'none'
+    this.figuresApiGeom[i].divUserMessage.style.display = 'none'
+    const nbPoints = [...this.figuresApiGeom[i].elements.values()].filter(
       (e) =>
         e.type === 'Point' && 'isVisible' in e && e.isVisible && !e.isChild,
     ).length
@@ -721,7 +729,7 @@ export default class SommeDeVecteurs extends Exercice {
       return 'KO'
     }
 
-    const resultatCheck = this.figureApig[i].checkCoords({
+    const resultatCheck = this.figuresApiGeom[i].checkCoords({
       label: this.nomExtremite[i],
       x: this.pointExtremite[i].x,
       y: this.pointExtremite[i].y,

@@ -44,7 +44,7 @@ export default class CliqueFigure extends Exercice {
   }
 
   nouvelleVersion() {
-    this.figures = [[], [], [], []]
+    this.cliqueFiguresArray = [[], [], [], []]
     this.consigne = this.interactif
       ? 'Cliquer sur la bonne figure.'
       : context.vue !== 'diap' && !context.isAmc
@@ -66,7 +66,7 @@ export default class CliqueFigure extends Exercice {
       // context.pixelsParCm = 10
       context.pixelsParCm = 20
       const labels = labelPoint(A, B)
-      this.figures[i] = [
+      this.cliqueFiguresArray[i] = [
         { id: `cliquefigure0Ex${this.numeroExercice}Q${i}`, solution: false },
         { id: `cliquefigure1Ex${this.numeroExercice}Q${i}`, solution: false },
         { id: `cliquefigure2Ex${this.numeroExercice}Q${i}`, solution: false },
@@ -185,26 +185,26 @@ export default class CliqueFigure extends Exercice {
       switch (typesDeQuestions[i]) {
         case 'segment':
           texte = `Le segment d'extrémités $${A.nom}$ et $${B.nom}$.`
-          this.figures[i][0].solution = true
+          this.cliqueFiguresArray[i][0].solution = true
           figCorr = vide2d()
           figCorrecteAMC = figSegmentAMC
           break
         case 'droite':
           texte = `La droite passant par les points $${A.nom}$ et $${B.nom}$.`
-          this.figures[i][1].solution = true
+          this.cliqueFiguresArray[i][1].solution = true
           figCorr = droite(A, B)
           figCorrecteAMC = figDroiteAMC
           break
         case 'demidroite':
           texte = `La demi-droite d'origine $${A.nom}$ passant par $${B.nom}$.`
-          this.figures[i][2].solution = true
+          this.cliqueFiguresArray[i][2].solution = true
           figCorr = demiDroite(A, B)
           figCorrecteAMC = figDemiDroiteAMC
           break
         case 'demidroite2':
         default:
           texte = `La demi-droite d'origine $${B.nom}$ passant par $${A.nom}$.`
-          this.figures[i][3].solution = true
+          this.cliqueFiguresArray[i][3].solution = true
           figCorr = demiDroite(B, A)
           figCorrecteAMC = figDemiDroite2AMC
           break

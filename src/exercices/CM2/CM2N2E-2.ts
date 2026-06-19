@@ -1,5 +1,6 @@
 import Figure from 'apigeom'
 import GraduatedLine from 'apigeom/src/elements/grid/GraduatedLine'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
 import { orangeMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
@@ -10,8 +11,6 @@ import { context } from '../../modules/context'
 import { fraction } from '../../modules/fractions'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const dateDePublication = '29/06/2021'
 export const dateDeModifImportante = '03/05/2024'
@@ -36,10 +35,6 @@ type goodAnswer = { label: string; x: number }[]
 
 class PlacerPointsAbscissesFractionnaires extends Exercice {
   goodAnswers!: goodAnswer[]
-  // declare : typage seul (champ hérité de Exercice), sans réémettre le champ.
-  // Sans cette redéclaration, le champ de base étant optionnel, il serait
-  // typé possiblement undefined (accès this.figuresApiGeom[i] en erreur).
-  declare figuresApiGeom: Figure[]
   constructor() {
     super()
 
@@ -60,6 +55,7 @@ class PlacerPointsAbscissesFractionnaires extends Exercice {
 
   nouvelleVersion() {
     this.figuresApiGeom = []
+    this.figuresApiGeomCorr = []
     this.goodAnswers = []
     let typeDeQuestions
     if (this.sup > 3) {
@@ -164,6 +160,7 @@ class PlacerPointsAbscissesFractionnaires extends Exercice {
         colorLabel: orangeMathalea,
         labelDxInPixels: 0,
       })
+      this.figuresApiGeomCorr[i] = figureCorr
 
       switch (true) {
         case context.isHtml && this.interactif:
@@ -238,11 +235,10 @@ class PlacerPointsAbscissesFractionnaires extends Exercice {
   }
 
   correctionInteractive = (i?: number) => {
-    if (i === undefined) return ['KO']
+    if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     // Sauvegarde de la réponse pour Capytale
     if (this.answers == null) this.answers = {}
     if (this == null) return ['KO']
-    if (this.figures == null) return ['KO']
     this.answers[this.figuresApiGeom[i].id] = this.figuresApiGeom[i].json
     const result: ('OK' | 'KO')[] = []
     const figure = this.figuresApiGeom[i]

@@ -1185,11 +1185,11 @@ function getUrlFromExercice(
     if (ex.duration !== undefined) {
       url.searchParams.append('d', ex.duration.toString())
     }
-    if (ex.sup !== undefined) url.searchParams.append('s', ex.sup)
-    if (ex.sup2 !== undefined) url.searchParams.append('s2', ex.sup2)
-    if (ex.sup3 !== undefined) url.searchParams.append('s3', ex.sup3)
-    if (ex.sup4 !== undefined) url.searchParams.append('s4', ex.sup4)
-    if (ex.sup5 !== undefined) url.searchParams.append('s5', ex.sup5)
+    if (ex.sup !== undefined) url.searchParams.append('s', String(ex.sup))
+    if (ex.sup2 !== undefined) url.searchParams.append('s2', String(ex.sup2))
+    if (ex.sup3 !== undefined) url.searchParams.append('s3', String(ex.sup3))
+    if (ex.sup4 !== undefined) url.searchParams.append('s4', String(ex.sup4))
+    if (ex.sup5 !== undefined) url.searchParams.append('s5', String(ex.sup5))
     if (ex.seed !== undefined)
       url.searchParams.append(
         'alea',

@@ -24,7 +24,8 @@ import { TracePoint } from '../../lib/2d/TracePoint'
 import { projectionOrtho, symetrieAxiale } from '../../lib/2d/transformations'
 import { pointSurDroite } from '../../lib/2d/utilitairesPoint'
 import type { Vide2d } from '../../lib/2d/Vide2d'
-import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
+import { bleuMathalea } from '../../lib/colors'
+import figureApigeom from '../../lib/figureApigeom'
 import {
   choice,
   combinaisonListes,
@@ -36,7 +37,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { egal, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Construire des symétriques de points'
 export const dateDePublication = '07/01/2024'
@@ -353,8 +353,6 @@ class ConstrctionsSymetriquesPoints extends Exercice {
           scale: 0.5,
           snapGrid: this.sup2 === 1,
         })
-        if (isFigureArray(this.figures))
-          this.figures.push(this.figuresApiGeom[i])
         this.figuresApiGeom[i].options.labelAutomaticForPoints = true
         this.figuresApiGeom[i].options.labelAutomaticBeginsWith =
           this.labels[i][0] + "'"
@@ -495,6 +493,7 @@ class ConstrctionsSymetriquesPoints extends Exercice {
   }
 
   correctionInteractive = (i: number) => {
+    if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     if (this.answers === undefined) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
     this.answers[this.figuresApiGeom[i].id] = this.figuresApiGeom[i].json

@@ -1,4 +1,4 @@
-import type Figure from 'apigeom/src/Figure'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { apigeomGraduatedLine } from '../../lib/apigeom/apigeomGraduatedLine'
 import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
 import { orangeMathalea } from '../../lib/colors'
@@ -10,8 +10,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const interactifReady = true
 export const interactifType = 'custom'
@@ -51,7 +49,8 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
   nouvelleVersion() {
     let typesDeQuestions
 
-    this.figures = []
+    this.figuresApiGeom = []
+    this.figuresApiGeomCorr = []
     if (this.sup === 4) {
       typesDeQuestions = combinaisonListes([1, 2, 3], this.nbQuestions)
     } else {
@@ -128,7 +127,7 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
       figure.options.labelAutomaticBeginsWith = label1
       figure.options.pointDescriptionWithCoordinates = false
       figure.options.distanceWithoutNewPoint = 0.00001
-      this.figures[i] = figure
+      this.figuresApiGeom[i] = figure
 
       const { figure: figureCorr, latex: latexCorr } = apigeomGraduatedLine({
         xMin: abs0 - 1 / (stepBis * stepBis * stepBis * stepBis),
@@ -158,6 +157,7 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
         colorLabel: orangeMathalea,
         labelDxInPixels: 0,
       })
+      this.figuresApiGeomCorr[i] = figureCorr
       texte = `Placer les points : $${label1}(${texNombre(abs1, 5)}), ${label2}(${texNombre(abs2, 5)}), ${label3}(${texNombre(abs3, 5)})$.`
 
       switch (true) {
@@ -192,9 +192,9 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
   }
 
   correctionInteractive = (i?: number) => {
-    if (i === undefined || this.figures === undefined) return ['KO']
+    if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     const result: ('OK' | 'KO')[] = []
-    const figure = this.figures[i] as Figure
+    const figure = this.figuresApiGeom![i]
     if (this.answers === undefined) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
     this.answers[figure.id] = figure.json

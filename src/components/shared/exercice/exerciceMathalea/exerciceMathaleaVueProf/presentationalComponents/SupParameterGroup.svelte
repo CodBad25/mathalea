@@ -13,7 +13,11 @@
   export let formNum: { titre: string; champs: string[] | number } | undefined =
     undefined
   export let categoriesForm:
-    | { titre: string; categories: { label: string; max: number }[]; defaut: number[] }
+    | {
+        titre: string
+        categories: { label: string; max: number }[]
+        defaut: number[]
+      }
     | undefined = undefined
 
   const dispatch = createEventDispatcher()
@@ -58,7 +62,9 @@
   <CheckboxWithLabel
     id="settings-check{supIndex}-{exerciceIndex}"
     bind:isChecked={supValue}
-    label={typeof caseACocher !== 'boolean' ? caseACocher[0] : ''}
+    label={typeof caseACocher !== 'boolean'
+      ? (caseACocher as [string, boolean])[0]
+      : ''}
     on:change={handleChange}
     darkBackground={true}
   />
@@ -109,15 +115,17 @@
 
 {#if categoriesForm}
   <div class="flex flex-col gap-1">
-    <div class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light">
+    <div
+      class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
+    >
       {categoriesForm.titre} :
     </div>
     {#each categoriesForm.categories as cat, i}
       <div class="flex items-center gap-2">
         <label
           class="w-36 text-sm text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
-          for="settings-cat{supIndex}-{i}-{exerciceIndex}"
-        >{cat.label}</label>
+          for="settings-cat{supIndex}-{i}-{exerciceIndex}">{cat.label}</label
+        >
         <InputNumber
           id="settings-cat{supIndex}-{i}-{exerciceIndex}"
           min={0}
@@ -142,11 +150,11 @@
       <div
         class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
       >
-        <div>{texte[0]} :</div>
+        <div>{String(texte as [string, string][0])} :</div>
         <div
           class="w-full pl-4 pb-2 whitespace-pre-wrap text-[80%] text-coopmaths-struct-light leading-tight"
         >
-          {texte[1]}
+          {String(texte as [string, string][1])}
         </div>
       </div>
       <InputText

@@ -36,9 +36,13 @@ export function mouseSvgClick(this: FigureClicable) {
  */
 export function indexQuestionCliqueFigure(exercice: IExercice, i: number) {
   const elementArray: (HTMLElement | null)[] = []
-  for (let j = 0; j < (exercice.figures![i] as ClickFigures).length; j++) {
+  for (
+    let j = 0;
+    j < (exercice.cliqueFiguresArray![i] as ClickFigures).length;
+    j++
+  ) {
     const eltFigure = document.getElementById(
-      (exercice.figures! as ClickFigures[])[i][j].id,
+      (exercice.cliqueFiguresArray! as ClickFigures[])[i][j].id,
     )
     elementArray.push(eltFigure)
   }
@@ -75,7 +79,7 @@ export function indexQuestionCliqueFigure(exercice: IExercice, i: number) {
   const figs = filteredElements.sort(documentPositionComparator)
   const numbs = []
   for (let j = 0; j < figs.length; j++) {
-    if ((figs[j] as any).etat) numbs.push((j + 1).toString())
+    if ((figs[j] as FigureClicable).etat) numbs.push((j + 1).toString())
   }
   return numbs.join(';')
 }
@@ -104,7 +108,9 @@ export function verifQuestionCliqueFigure(exercice: IExercice, i: number) {
   if (eltFeedback) eltFeedback.innerHTML = ''
   let erreur = false // Aucune erreur détectée
   let nbFiguresCliquees = 0
-  for (const objetFigure of (exercice.figures! as ClickFigures[])[i]) {
+  for (const objetFigure of (exercice.cliqueFiguresArray! as ClickFigures[])[
+    i
+  ]) {
     const eltFigure = document.getElementById(
       objetFigure.id,
     ) as FigureClicable | null
@@ -147,7 +153,9 @@ export function exerciceCliqueFigure(exercice: IExercice) {
   document.addEventListener('exercicesAffiches', () => {
     // Dès que l'exercice est affiché, on rajoute des listenners sur chaque éléments de this.figures.
     for (let i = 0; i < exercice.nbQuestions; i++) {
-      for (const objetFigure of (exercice.figures! as ClickFigures[])[i]) {
+      for (const objetFigure of (
+        exercice.cliqueFiguresArray! as ClickFigures[]
+      )[i]) {
         const figSvg = document.getElementById(
           objetFigure.id,
         ) as FigureClicable | null
@@ -164,13 +172,15 @@ export function exerciceCliqueFigure(exercice: IExercice) {
     )
     if (button) {
       if (!('hasMathaleaListener' in button)) {
-        button.addEventListener('click', (event) => {
+        button.addEventListener('click', () => {
           let nbBonnesReponses = 0
           let nbMauvaisesReponses = 0
           for (let i = 0; i < exercice.nbQuestions; i++) {
-            verifQuestionCliqueFigure(exercice, i) === 'OK'
-              ? nbBonnesReponses++
-              : nbMauvaisesReponses++
+            if (verifQuestionCliqueFigure(exercice, i) === 'OK') {
+              nbBonnesReponses++
+            } else {
+              nbMauvaisesReponses++
+            }
           }
           afficheScore(exercice, nbBonnesReponses, nbMauvaisesReponses)
         })
