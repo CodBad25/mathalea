@@ -90,7 +90,7 @@ setup:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: manual
+      when: always
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: always
     - if: $CI_COMMIT_BRANCH == "pipeline"
@@ -131,9 +131,9 @@ build_ci_pdf:
     - pnpm config set store-dir .pnpm-store
   rules:
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: manual
+      when: always
     - if: $CI_COMMIT_BRANCH == "mathalea-jobs"
-      when: manual
+      when: always
     - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_TEST_MA == "PDF"
       when: always
     - if: $CI_PIPELINE_SOURCE == "schedule"
@@ -170,7 +170,7 @@ build_ci_pdf:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "merge_request_event"
       when: always
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: manual
+      when: always
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: always
     - if: $CI_COMMIT_BRANCH == "pipeline"
@@ -712,9 +712,9 @@ tests-unitaires:
     # - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     #  when: always
     - if: $CI_COMMIT_BRANCH == "main"
-      when: manual
+      when: always
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: manual
+      when: always
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: always
     - if: $CI_COMMIT_BRANCH == "pipeline"
@@ -744,9 +744,9 @@ tests-src:
     # - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     #  when: always
     - if: $CI_COMMIT_BRANCH == "main"
-      when: manual
+      when: always
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: manual
+      when: always
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: always
     - if: $CI_COMMIT_BRANCH == "pipeline"
