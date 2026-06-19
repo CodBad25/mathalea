@@ -85,6 +85,7 @@ function numericCandidates(defaultValue: unknown, maxRaw: unknown): number[] {
 function textCandidatesFromLabel(label: string): string[] {
   const numbers = (label.match(/\d+/g) ?? []).map(Number)
   const uniqueNumbers = Array.from(new Set(numbers))
+  if (uniqueNumbers.length === 0) return []
   return [uniqueNumbers.map((n) => String(n)).join('-')]
 }
 
