@@ -1,0 +1,22 @@
+{
+  "links": [
+    {
+      "title": "Cahiers de vacances",
+      "subtitle": "6e - 2nde - 1re - Tle",
+      "icon": "bx bx-book",
+      "url": "https://coopmaths.fr/www/cahiers-de-vacances/"
+    },
+    {
+      "title": "Révisions d'examens",
+      "subtitle": "Brevet · Bac",
+      "icon": "bx bx-task",
+      "url": "https://coopmaths.fr/www/revisions/"
+    },
+    {
+      "title": "ApiGeom",
+      "subtitle": "Géométrie dynamique",
+      "icon": "bx bx-shape-triangle",
+      "url": "https://apigeom.net/"
+    }
+  ]
+}

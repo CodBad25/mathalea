@@ -66,7 +66,7 @@
         class="bg-coopmaths-canvas dark:bg-coopmathsdark-canvas print-hidden"
       >
         <NavBar
-          subtitle="Conception de document"
+          subtitle={isExerciseDisplayed ? 'Conception de document' : undefined}
           subtitleType="design"
           {locale}
           {handleLanguage}
