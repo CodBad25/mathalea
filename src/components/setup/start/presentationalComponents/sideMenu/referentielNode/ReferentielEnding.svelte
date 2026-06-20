@@ -11,6 +11,7 @@
   } from '../../../../../../lib/types/referentiels'
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   import { mathaleaGenerateSeed } from '../../../../../../lib/mathalea'
+  import { scrollToLastExercise } from '../../../../../../lib/scrollToLastExercise'
   import {
     changes,
     exercicesParams,
@@ -100,6 +101,9 @@
     }
     exercicesParams.update((list) => [...list, newExercise])
     $changes++
+    // On attend le rendu du DOM puis on fait défiler jusqu'au nouvel
+    // exercice ajouté pour le rendre visible.
+    tick().then(scrollToLastExercise)
   }
   /**
    * Retirer l'exercice de la liste (si plusieurs occurences
