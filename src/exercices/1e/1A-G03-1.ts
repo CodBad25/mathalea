@@ -21,7 +21,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Utiliser la trigonométrie dans le triangle rectangle'
+export const titre = 'Calculer le sinus, le cosinus et la tangente d\'un angle (avec figure)'
 export const dateDePublication = '18/06/2026'
 
 /**
