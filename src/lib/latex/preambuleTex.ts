@@ -409,6 +409,7 @@ export function loadPackagesFromContent(contents: contentsType) {
     contents,
   )
   testIfLoaded(['boxplot'], '\\usepgfplotslibrary{statistics}', contents)
+  testIfLoaded(['fill between'], '\\usepgfplotslibrary{fillbetween}', contents)
 
   testIfLoaded(['lstlisting'], '\\tcbuselibrary{listings}', contents)
 
