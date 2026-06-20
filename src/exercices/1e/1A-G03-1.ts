@@ -27,6 +27,7 @@ export const dateDePublication = '18/06/2026'
 /**
  * Version QCM de 3G3QCM-1.
  * @author Stéphane Guyon
+ * Date 18/06/2026
  */
 export default class TrigonometrieTriangleRectangleQCM extends ExerciceQcmA {
   private fractionSimplifiee(
