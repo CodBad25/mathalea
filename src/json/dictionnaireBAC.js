@@ -4310,4 +4310,113 @@ export const dictionnaireBAC = {
     typeExercice: 'bac',
     tags: ['Espace'],
   },
+  bac_2026_06_sujet2_antilles_1: {                
+                annee: '2026',                
+                lieu: 'antilles',                
+                mois: 'Juin',                
+                jour: 'J2',                
+                numeroInitial: '1',                              
+                typeExercice: 'bac',                               
+                tags: ['']            
+            },
+  bac_2026_06_sujet2_antilles_2: {                
+                annee: '2026',                
+                lieu: 'antilles',                
+                mois: 'Juin',                
+                jour: 'J2',                
+                numeroInitial: '2',                              
+                typeExercice: 'bac',                               
+                tags: ['']            
+            },
+  bac_2026_06_sujet2_antilles_3: {                
+                annee: '2026',                
+                lieu: 'antilles',                
+                mois: 'Juin',                
+                jour: 'J2',                
+                numeroInitial: '3',                              
+                typeExercice: 'bac',                               
+                tags: ['']            
+            },
+  bac_2026_06_sujet2_antilles_4: {                
+                annee: '2026',                
+                lieu: 'antilles',                
+                mois: 'Juin',                
+                jour: 'J2',                
+                numeroInitial: '4',                              
+                typeExercice: 'bac',                               
+                tags: ['']            
+            },
+  bac_2026_06_sujet2_metropole_1: {                
+                annee: '2026',                
+                lieu: 'Métropole',                
+                mois: 'Juin',                
+                jour: 'J2',                
+                numeroInitial: '1',                              
+                typeExercice: 'bac',                               
+                tags: ['']            
+            },
+  bac_2026_06_sujet2_metropole_2: {                
+                annee: '2026',                
+                lieu: 'Métropole',                
+                mois: 'Juin',                
+                jour: 'J2',                
+                numeroInitial: '2',                              
+                typeExercice: 'bac',                               
+                tags: ['']            
+            },
+  bac_2026_06_sujet2_metropole_3: {                
+                annee: '2026',                
+                lieu: 'Métropole',                
+                mois: 'Juin',                
+                jour: 'J2',                
+                numeroInitial: '3',                              
+                typeExercice: 'bac',                               
+                tags: ['']            
+            },
+  bac_2026_06_sujet2_metropole_4: {                
+                annee: '2026',                
+                lieu: 'Métropole',                
+                mois: 'Juin',                
+                jour: 'J2',                
+                numeroInitial: '4',                              
+                typeExercice: 'bac',                               
+                tags: ['']            
+            },
+  bac_2026_06_sujet2_polynesie_1: {                
+                annee: '2026',                
+                lieu: 'Polynésie',                
+                mois: 'Juin',                
+                jour: 'J2',                
+                numeroInitial: '1',                              
+                typeExercice: 'bac',                               
+                tags: ['']            
+            },
+  bac_2026_06_sujet2_polynesie_2: {                
+                annee: '2026',                
+                lieu: 'Polynésie',                
+                mois: 'Juin',                
+                jour: 'J2',                
+                numeroInitial: '2',                              
+                typeExercice: 'bac',                               
+                tags: ['']            
+            },
+  bac_2026_06_sujet2_polynesie_3: {                
+                annee: '2026',                
+                lieu: 'Polynésie',                
+                mois: 'Juin',                
+                jour: 'J2',                
+                numeroInitial: '3',                              
+                typeExercice: 'bac',                               
+                tags: ['']            
+            },
+  bac_2026_06_sujet2_polynesie_4: {                
+                annee: '2026',                
+                lieu: 'Polynésie',                
+                mois: 'Juin',                
+                jour: 'J2',                
+                numeroInitial: '4',                              
+                typeExercice: 'bac',                               
+                tags: ['']            
+            },
+
 }
