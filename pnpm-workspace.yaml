@@ -7,6 +7,7 @@ onlyBuiltDependencies:
 allowBuilds:
   '@parcel/watcher': true
   apigeom: true
+  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git#06f76b7e7d677859618279caced33fe1dccc2542: true
   esbuild: true
 blockExoticSubdeps: false
 overrides:
