@@ -66,7 +66,7 @@ default:
 .pnpm_setup:
   before_script:
     - corepack enable
-    - corepack prepare pnpm@11.5.2 --activate
+    - corepack prepare pnpm@11.8.0 --activate
     - pnpm config set store-dir .pnpm-store
 
 setup:
@@ -127,7 +127,7 @@ build_ci_pdf:
   allow_failure: false
   timeout: 5h
   script:
-    - npm install -g pnpm@11.5.2
+    - npm install -g pnpm@11.8.0
     - pnpm config set store-dir .pnpm-store
   rules:
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
@@ -242,7 +242,7 @@ playwright-console-consolidated:
   allow_failure: true
   script:
     - corepack enable
-    - corepack prepare pnpm@11.5.2 --activate
+    - corepack prepare pnpm@11.8.0 --activate
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 10
@@ -310,7 +310,7 @@ playwright-pdf-consolidated:
   allow_failure: false
   script:
     - corepack enable
-    - corepack prepare pnpm@11.5.2 --activate
+    - corepack prepare pnpm@11.8.0 --activate
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 10
@@ -369,7 +369,7 @@ playwright-pdf-dnb-consolidated:
   allow_failure: true
   script:
     - corepack enable
-    - corepack prepare pnpm@11.5.2 --activate
+    - corepack prepare pnpm@11.8.0 --activate
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 10
@@ -415,7 +415,7 @@ playwright-pdf-bac-consolidated:
   allow_failure: true
   script:
     - corepack enable
-    - corepack prepare pnpm@11.5.2 --activate
+    - corepack prepare pnpm@11.8.0 --activate
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 10
@@ -472,7 +472,7 @@ jsdom-all-exercises:
   timeout: 1h
   script:
     - corepack enable
-    - corepack prepare pnpm@11.5.2 --activate
+    - corepack prepare pnpm@11.8.0 --activate
     - NODE_OPTIONS=--max-old-space-size=4096
     - pnpm config set store-dir .pnpm-store
     - pnpm run makeJson >/dev/null
@@ -546,7 +546,7 @@ playwright-caneleve:
   timeout: 5h
   script:
     - corepack enable
-    - corepack prepare pnpm@11.5.2 --activate
+    - corepack prepare pnpm@11.8.0 --activate
     - NODE_OPTIONS=--max-old-space-size=4096
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
@@ -600,7 +600,7 @@ playwright-consistency:
   timeout: 5h
   script:
     - corepack enable
-    - corepack prepare pnpm@11.5.2 --activate
+    - corepack prepare pnpm@11.8.0 --activate
     - NODE_OPTIONS=--max-old-space-size=4096
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
@@ -653,7 +653,7 @@ playwright-interactivity:
   timeout: 5h
   script:
     - corepack enable
-    - corepack prepare pnpm@11.5.2 --activate
+    - corepack prepare pnpm@11.8.0 --activate
     - NODE_OPTIONS=--max-old-space-size=4096
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
@@ -780,7 +780,7 @@ testExosModifiedConsolidated:
     policy: pull
   script:
     - corepack enable
-    - corepack prepare pnpm@11.5.2 --activate
+    - corepack prepare pnpm@11.8.0 --activate
     - NODE_OPTIONS=--max-old-space-size=4096
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
@@ -925,7 +925,7 @@ testExosModifiedLatex:
         CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
       fi
 
-    - npm install -g pnpm@11.5.2
+    - npm install -g pnpm@11.8.0
     - pnpm config set store-dir .pnpm-store
     - pnpm run makeJson >/dev/null
     - sleep 10

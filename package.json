@@ -158,7 +158,7 @@
     "jsdom": "^29.1.1",
     "patch-package": "^8.0.1",
     "playwright": "1.60.0",
-    "pnpm": "11.5.2",
+    "pnpm": "11.8.0",
     "postcss": "^8.5.14",
     "postcss-load-config": "^6.0.1",
     "prettier": "^3.8.3",
