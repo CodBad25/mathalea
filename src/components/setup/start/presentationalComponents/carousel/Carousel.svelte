@@ -92,10 +92,10 @@
 </script>
 
 {#if carouselContent.slides && carouselContent.slides.length !== 0}
-  <div class="h-[90%]">
+  <div class="h-full flex flex-col">
     <div
       bind:this={carouselContainer}
-      class="carousel w-full h-full cursor-pause flex flex-row flex-nowrap overflow-x-scroll snap-x snap-mandatory scroll-smooth scrollbar-hide"
+      class="carousel w-full flex-1 min-h-0 cursor-pause flex flex-row flex-nowrap overflow-x-scroll snap-x snap-mandatory scroll-smooth scrollbar-hide"
       style="-ms-overflow-style: none; scrollbar-width: none;"
       on:mouseenter={handleMouseEnter}
       on:mouseleave={handleMouseLeave}
@@ -109,7 +109,7 @@
           style="transition: opacity {TRANSITION_DURATION}ms ease-in-out;"
         >
           <div
-            class="flex flex-col justify-center items-center xl:w-4/5 w-11/12 h-full
+            class="flex flex-col justify-center items-center w-full h-full
           bg-cover bg-no-repeat bg-center"
             style="background-image: url('images/carousel/{slide.background}');"
           >
@@ -130,11 +130,11 @@
                   : ''}"
             >
               <div
-                class="w-full h-full xl:p-20 lg:p-10 md:p-6 sm:p-4 p-3 flex flex-col justify-between items-start"
+                class="w-full h-full xl:p-20 lg:p-10 md:p-6 sm:p-4 p-3 flex flex-col gap-4 items-start"
               >
                 {#if slide.title && slide.title.length !== 0}
                   <h1
-                    class="w-full h-[20%] flex flex-row justify-start pb-8 font-bold
+                    class="w-full font-bold
              text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-6xl
              {slide.background && slide.background.length !== 0
                       ? 'text-coopmaths-struct dark:text-coopmathsdark-struct'
@@ -145,9 +145,9 @@
                 {/if}
                 {#if slide.message && slide.message.length !== 0}
                   {#if slide.image && slide.image.length !== 0}
-                    <div class="flex flex-row w-full h-[80%] gap-4">
+                    <div class="flex flex-row w-full flex-1 min-h-0 gap-4">
                       <div
-                        class="w-full lg:w-1/2 h-full flex justify-start items-center
+                        class="w-full lg:w-1/2 flex justify-start items-center
                         overflow-hidden text-ellipsis
                  px-4 sm:px-6 md:px-8 lg:px-10 font-light
                  text-lg sm:text-xl md:text-2xl lg:text-xl xl:text-2xl 2xl:text-4xl
@@ -158,10 +158,10 @@
                         {slide.message}
                       </div>
                       <div
-                        class="hidden lg:flex lg:w-1/2 flex-1 justify-center items-center"
+                        class="hidden lg:flex lg:w-1/2 flex-col flex-1 justify-end items-center gap-4"
                       >
                         <!-- Support for both images and videos -->
-                        <div class="carousel-media-wrapper">
+                        <div class="carousel-media-wrapper flex-1 min-h-0 flex items-center">
                           {#if slide.image.endsWith('.mp4')}
                             <video
                               class="carousel-media"
@@ -179,11 +179,28 @@
                             />
                           {/if}
                         </div>
+                        {#if slide.link && slide.link.length !== 0}
+                          <ButtonTextAction
+                            text={slide.buttonTitle && slide.buttonTitle.length !== 0
+                              ? slide.buttonTitle
+                              : 'En savoir plus'}
+                            class="inline-flex items-center py-1 px-3 rounded-md font-normal shrink-0"
+                            on:click={() => {
+                              const w = window.open(
+                                slide.link || 'https://coopmaths.fr/alea/',
+                                '_blank',
+                              )
+                              if (w) {
+                                w.focus()
+                              }
+                            }}
+                          />
+                        {/if}
                       </div>
                     </div>
                   {:else}
                     <div
-                      class="w-full h-[80%] flex justify-start items-center
+                      class="w-full flex-1 flex justify-start items-center
                       overflow-hidden text-ellipsis
                px-4 sm:px-6 md:px-8 lg:px-10 font-light
                text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl
@@ -193,28 +210,26 @@
                     >
                       {slide.message}
                     </div>
+                    {#if slide.link && slide.link.length !== 0}
+                      <ButtonTextAction
+                        text={slide.buttonTitle && slide.buttonTitle.length !== 0
+                          ? slide.buttonTitle
+                          : 'En savoir plus'}
+                        class="inline-flex items-center py-1 px-3 rounded-md font-normal"
+                        on:click={() => {
+                          const w = window.open(
+                            slide.link || 'https://coopmaths.fr/alea/',
+                            '_blank',
+                          )
+                          if (w) {
+                            w.focus()
+                          }
+                        }}
+                      />
+                    {/if}
                   {/if}
                 {/if}
               </div>
-              {#if slide.link && slide.link.length !== 0}
-                <div class="absolute bottom-6 right-6">
-                  <ButtonTextAction
-                    text={slide.buttonTitle && slide.buttonTitle.length !== 0
-                      ? slide.buttonTitle
-                      : 'En savoir plus'}
-                    class="inline-flex items-center py-1 px-3 rounded-md font-normal"
-                    on:click={() => {
-                      const w = window.open(
-                        slide.link || 'https://coopmaths.fr/alea/',
-                        '_blank',
-                      )
-                      if (w) {
-                        w.focus()
-                      }
-                    }}
-                  />
-                </div>
-              {/if}
             </div>
           </div>
         </div>

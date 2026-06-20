@@ -37,7 +37,7 @@
         : 'hidden'}
     ></i>
     <i
-      class={type === 'design'
+      class={type === 'design' && subtitle
         ? 'bx bx-chevron-right md:translate-y-1'
         : 'hidden'}
     ></i>

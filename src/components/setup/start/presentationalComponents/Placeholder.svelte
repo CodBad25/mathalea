@@ -2,6 +2,7 @@
   import { getLang } from '../../../../lib/stores/languagesStore'
   import Footer from '../../../Footer.svelte'
   import Carousel from './carousel/Carousel.svelte'
+  import QuickLinks from './QuickLinks.svelte'
 
   export let text: string
   const lang = getLang()
@@ -16,15 +17,18 @@
     </div> -->
     <!-- <Advertising /> -->
     {#if lang === 'fr-FR'}
-      <div class="md:block md:h-full hidden">
-        <Carousel />
+      <div class="hidden md:flex md:flex-col md:h-full gap-3">
+        <QuickLinks />
+        <div class="flex-1 min-h-0">
+          <Carousel />
+        </div>
       </div>
     {/if}
     <div
       class="animate-pulse flex flex-col md:flex-row justify-start space-x-6 items-center {lang !==
       'fr-FR'
         ? 'mt-32 md:mt-40'
-        : ''}"
+        : 'md:hidden'}"
     >
       <div class="mt-[10px]">
         <div class="hidden md:inline-flex">

@@ -43,7 +43,7 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
   }
 
   nouvelleVersion() {
-    this.figures = []
+    this.figuresApiGeom = []
 
     this.contenu = this.consigne
     for (let i = 0; i < this.nbQuestions; i++) {
@@ -86,7 +86,7 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
       figure.options.labelAutomaticBeginsWith = label1
       figure.options.pointDescriptionWithCoordinates = false
       figure.options.distanceWithoutNewPoint = 0.00001
-      this.figures[i] = figure
+      this.figuresApiGeom[i] = figure
 
       const { figure: figureCorr, latex: latexCorr } = apigeomGraduatedLine({
         xMin,
@@ -143,9 +143,9 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
   }
 
   correctionInteractive = (i?: number) => {
-    if (i === undefined || this.figures === undefined) return ['KO']
+    if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     const result: ('OK' | 'KO')[] = []
-    const figure = this.figures[i] as Figure
+    const figure = this.figuresApiGeom[i] as Figure
     if (this.answers === undefined) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
     this.answers[figure.id] = figure.json
