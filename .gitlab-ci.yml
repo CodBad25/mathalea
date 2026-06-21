@@ -836,9 +836,9 @@ testExosModifiedConsolidated:
         STATUS_VITEST=ko
       fi
 
-      # Test 3/4 : Interactivity report
-      echo "🧪 Test 3/4: Interactivity report..."
-      if INTERACTIF_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest src/lib/amc/report-interactif.test.ts --run; then
+      # Test 3/4 : Integration interactivity
+      echo "🧪 Test 3/4: Integration interactivity..."
+      if INTERACTIF_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest tests/integration/interactivity_all.test.ts --run; then
         STATUS_INTERACTIF=ok
       else
         STATUS_INTERACTIF=ko
@@ -852,6 +852,10 @@ testExosModifiedConsolidated:
         STATUS_AMCNUM=ko
       fi
 
+
+
+
+
       # ============================================================
       # PHASE 3: Résumé final
       # ============================================================
@@ -863,6 +867,7 @@ testExosModifiedConsolidated:
       [ "$STATUS_VITEST" = "ok" ] && echo "✅ All exercises vitest" || echo "❌ All exercises vitest"
       [ "$STATUS_INTERACTIF" = "ok" ] && echo "✅ Interactivity report" || echo "❌ Interactivity report"
       [ "$STATUS_AMCNUM" = "ok" ] && echo "✅ AMCnum report" || echo "❌ AMCnum report"
+      [ "$STATUS_INTERACTIVITY" = "ok" ] && echo "✅ Interactivité" || echo "❌ Interactivté report"]
 
       OK_COUNT=0
       [ "$STATUS_CONSOLE" = "ok" ] && OK_COUNT=$((OK_COUNT + 1))

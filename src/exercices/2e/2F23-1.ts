@@ -58,9 +58,7 @@ export default class EtudeTrinome extends Exercice {
     const etapesDeveloppement = p.arrayTexDevelopperFormeCanonique
     let correction1 = `On développe l'expression donnée : <br>$\\begin{aligned}f(x)&=${p.texFormeCanonique}\\\\
     ${a !== 1 ? `&=${etapesDeveloppement[0]}\\\\` : `&=${etapesDeveloppement[0]}\\\\`}
-   ${a !== 1 ? `&=${etapesDeveloppement[1]}\\\\` : ''}
- &=${etapesDeveloppement[2]}
- \\end{aligned}$<br>`
+   ${a !== 1 ? `&=${etapesDeveloppement[1]}\\\\&=${etapesDeveloppement[2]}` : `&=${etapesDeveloppement[2]}`}\\end{aligned}$<br>`
     correction1 += `On en déduit que $f(x)$ peut s'écrire $f(x)=${rienSi1(p.a)}x^2${ecritureAlgebrique(p.b)}x${x1 === 0 || x2 === 0 ? '' : `${p.c.texFractionSignee}`}$.`
     let question2, correction2
     if (this.sup === 3) {

@@ -88,8 +88,7 @@ export default class EtudeTrinome extends Exercice {
       } else {
         correction1 += `$\\begin{aligned}
      ${p.texFormeFactorisee} &= ${etapesDeveloppement2[1]}${this.correctionDetaillee === true ? `${sp(5)}${miseEnEvidence('\\textit{On développe avec la double distributivité}')}` : ''}\\\\
-      & = ${etapesDeveloppement2[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}')}` : ''}\\\\
-      &=f(x)
+      & = ${etapesDeveloppement2[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}')}\\\\&=f(x)` : '\\\\&=f(x)'}
       \\end{aligned}$<br>`
       }
       correction1 += `On retrouve la forme développée, donc on en déduit que $f(x)$ peut s'écrire sous forme factorisée : $f(x)=${p.texFormeFactorisee}$.`
@@ -99,16 +98,15 @@ export default class EtudeTrinome extends Exercice {
           ? `${sp(5)}${miseEnEvidence("\\textit{On développe avec l'égalité remarquable}")}`
           : ''
       }\\\\
-     ${
-       a !== 1
-         ? `&=${etapesDeveloppement[1]}${
-             this.correctionDetaillee === true
-               ? `${sp(5)}${miseEnEvidence('\\textit{On développe avec la simple distributivité}')}`
-               : ''
-           }\\\\`
-         : ''
-     }
-   &=${etapesDeveloppement[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}')}` : ''}
+      ${
+        a !== 1
+          ? `&=${etapesDeveloppement[1]}${
+              this.correctionDetaillee === true
+                ? `${sp(5)}${miseEnEvidence('\\textit{On développe avec la simple distributivité}')}`
+                : ''
+            }\\\\`
+          : ''
+      }&=${etapesDeveloppement[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}')}` : ''}
    \\end{aligned}$<br>`
       correction2 += `On en déduit que $f(x)$ s'écrit sous forme canonique :  $f(x)=${p.texFormeCanonique}$.`
     }
