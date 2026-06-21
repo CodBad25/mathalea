@@ -675,4 +675,50 @@ export const dictionnaireEAM = {
     filiere: 'Technologique',
     tags: [''],
   },
+  eam_specialite_2026_06_antilles_automatismes: {                
+                annee: '2026',                
+                lieu: 'Spécialité antilles',                
+                mois: 'Juin',                
+                numeroInitial: 'automatismes',
+                typeExercice: 'eam',  
+                filiere: 'Specialite',           
+                tags: ['']            
+            },
+  eam_specialite_2026_06_asie_1: {                
+                annee: '2026',                
+                lieu: 'Spécialité Asie',                
+                mois: 'Juin',                
+                numeroInitial: '1',
+                typeExercice: 'eam',  
+                filiere: 'Specialite',           
+                tags: ['']            
+            },
+  eam_specialite_2026_06_asie_2: {                
+                annee: '2026',                
+                lieu: 'Spécialité Asie',                
+                mois: 'Juin',                
+                numeroInitial: '2',
+                typeExercice: 'eam',  
+                filiere: 'Specialite',           
+                tags: ['']            
+            },
+  eam_specialite_2026_06_asie_automatismes: {                
+                annee: '2026',                
+                lieu: 'Spécialité Asie',                
+                mois: 'Juin',                
+                numeroInitial: 'automatismes',
+                typeExercice: 'eam',  
+                filiere: 'Specialite',           
+                tags: ['']            
+            },
+  eam_technologique_2026_06_metropole_automatismes: {                
+                annee: '2026',                
+                lieu: 'Métropole',                
+                mois: 'Juin',                
+                numeroInitial: 'automatismes',
+                typeExercice: 'eam',  
+                filiere: 'Technologique',           
+                tags: ['']            
+            },
+
 }
