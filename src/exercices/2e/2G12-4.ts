@@ -230,13 +230,17 @@ export default class NaturePolygone extends Exercice {
           texte += `<br>Déterminer la nature du triangle $${A.nom}${B.nom}${C.nom}$.`
           texteCorr =
             'On commence par réaliser un graphique permettant de visualiser la situation.<br>'
-          texteCorr +=
-            '<br>' +
-            mathalea2d(
-              { xmin: XMIN, ymin: YMIN, xmax: XMAX, ymax: YMAX },
-              objets,
-            )
-          texteCorr += `<br> On calcule séparément les distances $${A.nom}${B.nom}$, $${A.nom}${C.nom}$ et $${B.nom}${C.nom}$.<br><br>`
+          texteCorr += mathalea2d(
+            {
+              xmin: XMIN,
+              ymin: YMIN,
+              xmax: XMAX,
+              ymax: YMAX,
+              style: 'display: block',
+            },
+            objets,
+          )
+          texteCorr += `On calcule séparément les distances $${A.nom}${B.nom}$, $${A.nom}${C.nom}$ et $${B.nom}${C.nom}$.<br><br>`
           texteCorr += `$\\bullet$  $${A.nom}${B.nom}=\\sqrt{\\left(${xB}-${ecritureParentheseSiNegatif(xA)}\\right)^{2}+\\left(${yB}-${ecritureParentheseSiNegatif(yA)}\\right)^{2}}=\\sqrt{${xAbCarre}+${yAbCarre}}
           =\\sqrt{${texNombre(xAbCarre + yAbCarre)}}${extraireRacineCarree(abCarre)[0] === 1 ? '' : `=${texRacineCarree(abCarre)}`}$<br>`
           texteCorr += `$\\bullet$  $${A.nom}${C.nom}=\\sqrt{\\left(${xC}-${ecritureParentheseSiNegatif(xA)}\\right)^{2}+\\left(${yC}-${ecritureParentheseSiNegatif(yA)}\\right)^{2}}=\\sqrt{${xAcCarre}+${yAcCarre}}
@@ -285,13 +289,17 @@ export default class NaturePolygone extends Exercice {
 
           texteCorr =
             'On peut réaliser un graphique permettant de visualiser la situation.<br>'
-          texteCorr +=
-            '<br>' +
-            mathalea2d(
-              { xmin: XMIN, ymin: YMIN, xmax: XMAX, ymax: YMAX },
-              objets,
-            )
-          texteCorr += `<br> On calcule séparément les distances $${A.nom}${B.nom}$, $${A.nom}${C.nom}$ et $${B.nom}${C.nom}$.<br><br>`
+          texteCorr += mathalea2d(
+            {
+              xmin: XMIN,
+              ymin: YMIN,
+              xmax: XMAX,
+              ymax: YMAX,
+              style: 'display: block',
+            },
+            objets,
+          )
+          texteCorr += `On calcule séparément les distances $${A.nom}${B.nom}$, $${A.nom}${C.nom}$ et $${B.nom}${C.nom}$.<br><br>`
           texteCorr += `$\\bullet$  $${A.nom}${B.nom}=\\sqrt{\\left(${xB}-${ecritureParentheseSiNegatif(xA)}\\right)^{2}+\\left(${yB}-${ecritureParentheseSiNegatif(yA)}\\right)^{2}}=\\sqrt{${xAbCarre}+${yAbCarre}}
           =\\sqrt{${texNombre(xAbCarre + yAbCarre)}}$<br>`
           texteCorr += `$\\bullet$  $${A.nom}${C.nom}=\\sqrt{\\left(${xC}-${ecritureParentheseSiNegatif(xA)}\\right)^{2}+\\left(${yC}-${ecritureParentheseSiNegatif(yA)}\\right)^{2}}=\\sqrt{${xAcCarre}+${yAcCarre}}
@@ -345,13 +353,17 @@ export default class NaturePolygone extends Exercice {
           texte += `<br>Démontrer que $${A.nom}${B.nom}${C.nom}${D.nom}$ est un losange.`
           texteCorr =
             'On peut réaliser un graphique permettant de visualiser la situation.<br>'
-          texteCorr +=
-            '<br>' +
-            mathalea2d(
-              { xmin: XMIN, ymin: YMIN, xmax: XMAX, ymax: YMAX },
-              objets,
-            )
-          texteCorr += `<br>Il y a plusieurs méthodes  pour prouver  que le quadrilatère $${A.nom}${B.nom}${C.nom}${D.nom}$ est un losange.<br>
+          texteCorr += mathalea2d(
+            {
+              xmin: XMIN,
+              ymin: YMIN,
+              xmax: XMAX,
+              ymax: YMAX,
+              style: 'display: block',
+            },
+            objets,
+          )
+          texteCorr += `Il y a plusieurs méthodes  pour prouver  que le quadrilatère $${A.nom}${B.nom}${C.nom}${D.nom}$ est un losange.<br>
           Dans ce qui suit, nous démontrons que $${A.nom}${B.nom}${C.nom}${D.nom}$ est un parallélogramme avec deux côtés consécutifs de même longueur.<br>`
           texteCorr += `<br>On commence par prouver  que $${A.nom}${B.nom}${C.nom}${D.nom}$ est un parallélogramme.<br>`
           texteCorr += `<br>On sait que $${A.nom}${B.nom}${C.nom}${D.nom}$ est un parallélogramme si et seulement si ses diagonales se coupent en leur milieu.`
@@ -414,13 +426,17 @@ export default class NaturePolygone extends Exercice {
           texte += `<br>Démontrer que $${A.nom}${C.nom}${D.nom}${B.nom}$ est un rectangle.`
           texteCorr =
             'On peut réaliser un graphique permettant de visualiser la situation.<br>'
-          texteCorr +=
-            '<br>' +
-            mathalea2d(
-              { xmin: XMIN, ymin: YMIN, xmax: XMAX, ymax: YMAX },
-              objets,
-            )
-          texteCorr += `<br>Il y a plusieurs méthodes  pour prouver  que le quadrilatère $${A.nom}${C.nom}${D.nom}${B.nom}$ est un rectangle.<br>
+          texteCorr += mathalea2d(
+            {
+              xmin: XMIN,
+              ymin: YMIN,
+              xmax: XMAX,
+              ymax: YMAX,
+              style: 'display: block',
+            },
+            objets,
+          )
+          texteCorr += `Il y a plusieurs méthodes  pour prouver  que le quadrilatère $${A.nom}${C.nom}${D.nom}${B.nom}$ est un rectangle.<br>
           Dans ce qui suit, nous démontrons que $${A.nom}${C.nom}${D.nom}${B.nom}$ est un parallélogramme avec des diagonales de même longueur.<br>`
           texteCorr += `<br>On commence par prouver  que $${A.nom}${C.nom}${D.nom}${B.nom}$ est un parallélogramme.<br>`
           texteCorr += `<br>On sait que $${A.nom}${C.nom}${D.nom}${B.nom}$ est un parallélogramme si et seulement si ses diagonales se coupent en leur milieu.`
@@ -484,13 +500,17 @@ export default class NaturePolygone extends Exercice {
           texte += `<br>Démontrer que $${A.nom}${C.nom}${D.nom}${B.nom}$ est un carré.`
           texteCorr =
             'On peut réaliser un graphique permettant de visualiser la situation.<br>'
-          texteCorr +=
-            '<br>' +
-            mathalea2d(
-              { xmin: XMIN, ymin: YMIN, xmax: XMAX, ymax: YMAX },
-              objets,
-            )
-          texteCorr += `<br>Il y a plusieurs méthodes  pour prouver  que le quadrilatère $${A.nom}${C.nom}${D.nom}${B.nom}$ est un carré.<br>
+          texteCorr += mathalea2d(
+            {
+              xmin: XMIN,
+              ymin: YMIN,
+              xmax: XMAX,
+              ymax: YMAX,
+              style: 'display: block',
+            },
+            objets,
+          )
+          texteCorr += `Il y a plusieurs méthodes  pour prouver  que le quadrilatère $${A.nom}${C.nom}${D.nom}${B.nom}$ est un carré.<br>
           Dans ce qui suit, nous démontrons que $${A.nom}${C.nom}${D.nom}${B.nom}$ est un parallélogramme avec des diagonales de même longueur et deux côtés consécutifs de même longueur.<br>`
 
           texteCorr += `<br>On commence par prouver  que $${A.nom}${C.nom}${D.nom}${B.nom}$ est un parallélogramme.<br>`

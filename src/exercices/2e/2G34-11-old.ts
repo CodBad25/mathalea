@@ -4,6 +4,7 @@ import { PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPosition } from '../../lib/2d/textes'
 import { pointIntersectionDD } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -13,9 +14,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
-export const titre =
-  "[Ancien] Déterminer le point d'intersection de droites"
+export const titre = "[Ancien] Déterminer le point d'intersection de droites"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '20/04/2024'
@@ -313,6 +312,7 @@ export default class IntersectionDroites extends Exercice {
               ymax: 6,
               pixelsParCm: 25,
               scale: 0.5,
+              style: 'display: block',
             },
             r,
             droite1,
@@ -330,6 +330,7 @@ export default class IntersectionDroites extends Exercice {
               ymax: 6,
               pixelsParCm: 25,
               scale: 0.5,
+              style: 'display: block',
             },
             r,
             droite1,
@@ -339,7 +340,6 @@ export default class IntersectionDroites extends Exercice {
           ) // On trace le graphique
           break
       }
-      texte += '<br>'
       switch (listeTypeQuestions[i]) {
         case 'deuxDroitesSG':
         case 'deuxDroitesHG':
@@ -366,7 +366,7 @@ export default class IntersectionDroites extends Exercice {
         case 'troisDroitesHG':
           if (this.interactif) {
             texte +=
-              "<br> Le point d'intersection des droites sont" +
+              "Le point d'intersection des droites sont" +
               remplisLesBlancs(
                 this,
                 i,

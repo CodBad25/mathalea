@@ -5,13 +5,13 @@ import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { rotation, similitude } from '../../lib/2d/transformations'
+import { bleuMathalea } from '../../lib/colors'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Déterminer la nature de parallélogrammes'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -190,19 +190,19 @@ export default class DemonstrationsParallelogrammes extends Exercice {
       texte += this.interactif ? '.' : ' en justifiant la réponse.'
       texteCorr =
         'Les segments de même couleur sont parallèles sur le schéma suivant :<br>'
-      texteCorr +=
-        mathalea2d(
-          {
-            xmin: -5,
-            ymin: -4.5,
-            xmax: 5,
-            ymax: 4.5,
-            pixelsParCm: 20,
-            scale: 0.5,
-            mainlevee: true,
-          },
-          objets,
-        ) + '<br>'
+      texteCorr += mathalea2d(
+        {
+          xmin: -5,
+          ymin: -4.5,
+          xmax: 5,
+          ymax: 4.5,
+          pixelsParCm: 20,
+          scale: 0.5,
+          mainlevee: true,
+          style: 'display: block',
+        },
+        objets,
+      )
       texteCorr += `On sait que ${prop2}.<br>`
       texteCorr += `Si un parallélogramme ${prop1}, alors c'est un ${type}.<br>`
       texteCorr += `${nom} est donc un ${type}.`

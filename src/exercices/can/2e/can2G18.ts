@@ -112,7 +112,7 @@ export default class LectureGraphiqueVecteurRepere extends Exercice {
         grilleSecondaireXMax: xmax,
       })
 
-      texte = `Dans un repère $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$, lire les coordonnées du vecteur $\\overrightarrow{${vec}}$.<br><br>`
+      texte = `Dans un repère $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$, lire les coordonnées du vecteur $\\overrightarrow{${vec}}$.<br>`
       texte += mathalea2d(
         {
           xmin,
@@ -145,12 +145,12 @@ export default class LectureGraphiqueVecteurRepere extends Exercice {
           remplisLesBlancs(
             this,
             i,
-            '\\begin{pmatrix}%{champ1}\\\\\\\\%{champ2}\\end{pmatrix}',
+            '\\begin{pmatrix}%{champ1}\\\\%{champ2}\\end{pmatrix}',
           )
       }
 
       texteCorr = `En partant de l'origine  du vecteur pour aller à son extrémité, on fait un déplacement de $${k1}$ unité(s) horizontalement et $${k2}$ unité(s) verticalement.<br>
-        Les coordonnées du vecteur sont donc : $\\overrightarrow{${vec}}\\begin{pmatrix}${miseEnEvidence(`${k1}`)}\\\\\\\\${miseEnEvidence(`${k2}`)}\\end{pmatrix}$.`
+        Les coordonnées du vecteur sont donc : $\\overrightarrow{${vec}}\\begin{pmatrix}${miseEnEvidence(`${k1}`)}\\\\${miseEnEvidence(`${k2}`)}\\end{pmatrix}$.`
 
       this.reponse = xa
 

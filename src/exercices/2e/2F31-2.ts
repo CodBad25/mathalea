@@ -99,8 +99,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                 `
                 if (a < 0) {
                   texteCorrApresTableau = `<br>On constate que le minimum de $x^2$ sur $]-\\infty;${a}]$ est $${a ** 2}$. <br>
-            On en déduit que si  $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $x^2\\geqslant ${a ** 2}$.
-            <br> Remarque :  la fonction carré étant strictement décroissante sur $]-\\infty;0]$, elle change l'ordre.<br>
+            On en déduit que si  $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $x^2\\geqslant ${a ** 2}$.<br> Remarque :  la fonction carré étant strictement décroissante sur $]-\\infty;0]$, elle change l'ordre.<br>
             Ainsi, les antécédents et les images sont rangés dans l'ordre inverse. <br>
             Si $x${large1 ? '\\leqslant' : ' < '}${a}$ alors, $x^2\\geqslant (${a})^2$ soit $x^2\\geqslant ${a ** 2}$.`
                 } else {
@@ -127,8 +126,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                 `
                 if (a > 0) {
                   texteCorrApresTableau = `<br>On constate que le minimum de $x^2$ sur $[${a};+\\infty[$ est $${a ** 2}$. <br>
-            On en déduit que si  $x${large1 ? '\\geqslant' : ' > '}${a}$ alors, $x^2${large1 ? '\\geqslant' : ' > '} ${a ** 2}$.
-            <br> Remarque :  la fonction carré étant strictement croissante sur $[0;+\\infty[$, elle conserve l'ordre sur cet intervalle.<br>
+            On en déduit que si  $x${large1 ? '\\geqslant' : ' > '}${a}$ alors, $x^2${large1 ? '\\geqslant' : ' > '} ${a ** 2}$.<br> Remarque :  la fonction carré étant strictement croissante sur $[0;+\\infty[$, elle conserve l'ordre sur cet intervalle.<br>
             Ainsi, les antécédents et les images sont rangés dans le même ordre. <br>
           Si  $x${large1 ? '\\geqslant' : ' > '}${a}$ alors, $x^2${large1 ? '\\geqslant' : ' > '} ${a}^2$ soit  $x^2${large1 ? '\\geqslant' : ' > '} ${a ** 2}$.`
                 } else {
@@ -148,8 +146,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                   Puisque la fonction carré est strictement décroissante sur $]-\\infty;0]$ et strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
                       sur l'intervalle $[${a};${b}]$ : <br>`
                 texteCorrApresTableau = `<br>On constate que le minimum de $x^2$ sur $[${a};${b}]$  est $${a ** 2}$ et son maximum est $${b ** 2}$. <br>
-              On en déduit que si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$${a ** 2} ${large1 ? '\\leqslant' : ' < '} x^2 ${large2 ? '\\leqslant' : ' < '}${b ** 2}$.
-              <br> Remarque : la fonction carré étant strictement croissante sur $[0;+\\infty[$, elle conserve l'ordre sur cet intervalle.<br>
+              On en déduit que si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$${a ** 2} ${large1 ? '\\leqslant' : ' < '} x^2 ${large2 ? '\\leqslant' : ' < '}${b ** 2}$.<br> Remarque : la fonction carré étant strictement croissante sur $[0;+\\infty[$, elle conserve l'ordre sur cet intervalle.<br>
               Ainsi, les antécédents et les images sont rangés dans le même ordre. <br>
             Si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, $${sp(2)}${a}^2 ${large1 ? '\\leqslant' : ' < '} x^2 ${large2 ? '\\leqslant' : ' < '}${b}^2$, soit $${sp(2)}${a ** 2} ${large1 ? '\\leqslant' : ' < '} x^2 ${large2 ? '\\leqslant' : ' < '}${b ** 2}$.`
 
@@ -164,8 +161,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                       Puisque la fonction carré est strictement décroissante sur $]-\\infty;0]$ et strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
                           sur l'intervalle $[${a};${b}]$ : <br>`
                 texteCorrApresTableau = `<br>On constate que le minimum de $x^2$ sur $[${a};${b}]$  est $${b ** 2}$ et son maximum est $${a ** 2}$. <br>
-                  On en déduit que si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$${b ** 2} ${large2 ? '\\leqslant' : ' < '} x^2 ${large1 ? '\\leqslant' : ' < '}${a ** 2}$.
-                  <br> Remarque :  la fonction carré étant strictement décroissante sur $]-\\infty;0]$, elle change l'ordre sur cet intervalle.<br>
+                  On en déduit que si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$${b ** 2} ${large2 ? '\\leqslant' : ' < '} x^2 ${large1 ? '\\leqslant' : ' < '}${a ** 2}$.<br> Remarque :  la fonction carré étant strictement décroissante sur $]-\\infty;0]$, elle change l'ordre sur cet intervalle.<br>
                   Ainsi, les antécédents et les images sont rangés dans l'ordre inverse. <br>
             Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$(${a})^2 ${large1 ? '\\geqslant' : ' > '} x^2 ${large2 ? '\\geqslant' : ' > '}(${b})^2$ soit $${a ** 2} ${large1 ? '\\geqslant' : ' > '} x^2 ${large2 ? '\\geqslant' : ' > '}${b ** 2}$.`
 
@@ -218,8 +214,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                           sur l'intervalle $[${a};${b}]$ : <br>
                       `
               texteCorrApresTableau = `<br>On constate que le minimum de $\\dfrac{1}{x}$ sur $[${a};${b}]$  est $\\dfrac{1}{${b}}$ et son maximum est $\\dfrac{1}{${a}}$. <br>
-                  On en déduit que si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$\\dfrac{1}{${b}} ${large2 ? '\\leqslant' : ' < '} \\dfrac{1}{x} ${large1 ? '\\leqslant' : ' < '}\\dfrac{1}{${a}}$.
-                  <br> Remarque :  la fonction inverse étant strictement décroissante sur $]0; +\\infty[$, elle change l'ordre.<br>
+                  On en déduit que si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$\\dfrac{1}{${b}} ${large2 ? '\\leqslant' : ' < '} \\dfrac{1}{x} ${large1 ? '\\leqslant' : ' < '}\\dfrac{1}{${a}}$.<br> Remarque :  la fonction inverse étant strictement décroissante sur $]0; +\\infty[$, elle change l'ordre.<br>
                   Ainsi, les antécédents et les images sont rangés dans l'ordre inverse. <br>
             Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$\\dfrac{1}{${a}} ${large1 ? '\\geqslant' : ' > '} \\dfrac{1}{x} ${large2 ? '\\geqslant' : ' > '}\\dfrac{1}{${b}}$. `
               break
@@ -245,8 +240,7 @@ export default class EncadrerAvecFctRef extends Exercice {
                       Puisque la fonction inverse est strictement décroissante sur $]-\\infty;0[$ et strictement décroissante sur $[0;+\\infty[$, on obtient son tableau de variations
                           sur l'intervalle $[${a};${b}]$ : <br>`
               texteCorrApresTableau = `<br>On constate que le minimum de $\\dfrac{1}{x}$ sur $[${a};${b}]$  est $-\\dfrac{1}{${-b}}$ et son maximum est $-\\dfrac{1}{${-a}}$. <br>
-                  On en déduit que si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$-\\dfrac{1}{${-b}} ${large2 ? '\\leqslant' : ' < '} \\dfrac{1}{x} ${large1 ? '\\leqslant' : ' < '}-\\dfrac{1}{${-a}}$.
-                  <br> Remarque :  la fonction inverse étant strictement décroissante sur $]-\\infty;0[$, elle change l'ordre.<br>
+                  On en déduit que si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$-\\dfrac{1}{${-b}} ${large2 ? '\\leqslant' : ' < '} \\dfrac{1}{x} ${large1 ? '\\leqslant' : ' < '}-\\dfrac{1}{${-a}}$.<br> Remarque :  la fonction inverse étant strictement décroissante sur $]-\\infty;0[$, elle change l'ordre.<br>
                   Ainsi, les antécédents et les images sont rangés dans l'ordre inverse. <br>
             Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$-\\dfrac{1}{${-a}} ${large1 ? '\\geqslant' : ' > '} \\dfrac{1}{x} ${large2 ? '\\geqslant' : ' > '}-\\dfrac{1}{${-b}}$. `
               break
@@ -278,8 +272,7 @@ export default class EncadrerAvecFctRef extends Exercice {
               Puisque la fonction inverse est strictement décroissante sur $]0;+\\infty[$, on obtient son tableau de variations
                   sur l'intervalle $]0;+\\infty[$ : <br>`
                 texteCorrApresTableau = `<br>On constate que le maximum de $\\dfrac{1}{x}$ sur $]0;+\\infty[$ est $\\dfrac{1}{${a}}$. <br>
-            On en déduit que si  $x${large1 ? '\\geqslant' : ' < '}${a}$ alors,  $\\dfrac{1}{x}${large1 ? '\\leqslant' : ' < '} \\dfrac{1}{${a}}$.
-            <br> Remarque :  la fonction inverse étant strictement décroissante sur $]0;+\\infty[$, elle change l'ordre.<br>
+            On en déduit que si  $x${large1 ? '\\geqslant' : ' < '}${a}$ alors,  $\\dfrac{1}{x}${large1 ? '\\leqslant' : ' < '} \\dfrac{1}{${a}}$.<br> Remarque :  la fonction inverse étant strictement décroissante sur $]0;+\\infty[$, elle change l'ordre.<br>
             Ainsi, les antécédents et les images sont rangés dans l'ordre inverse. <br>
             Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  $\\dfrac{1}{x}${large1 ? '\\leqslant' : ' < '}\\dfrac{1}{${a}}$.`
               } else {
@@ -288,8 +281,7 @@ export default class EncadrerAvecFctRef extends Exercice {
               Puisque la fonction inverse est strictement décroissante sur $]-\\infty;0[$ et strictement décroissante sur $]0;+\\infty[$, on obtient son tableau de variations
                   sur l'intervalle $]-\\infty;${b}]$ : <br>`
                 texteCorrApresTableau = `<br>On constate que le minimum de $\\dfrac{1}{x}$ sur $]-\\infty;${b}]$ est $-\\dfrac{1}{${-b}}$. <br>
-            On en déduit que si  $x${large1 ? '\\leqslant' : ' < '}${b}$ alors,  $\\dfrac{1}{x}${large1 ? '\\geqslant' : ' > '} -\\dfrac{1}{${-b}}$.
-            <br> Remarque :  la fonction inverse étant strictement décroissante sur $]-\\infty;0[$, elle change l'ordre.<br>
+            On en déduit que si  $x${large1 ? '\\leqslant' : ' < '}${b}$ alors,  $\\dfrac{1}{x}${large1 ? '\\geqslant' : ' > '} -\\dfrac{1}{${-b}}$.<br> Remarque :  la fonction inverse étant strictement décroissante sur $]-\\infty;0[$, elle change l'ordre.<br>
             Ainsi, les antécédents et les images sont rangés dans l'ordre inverse. <br>
             Si $x${large1 ? '\\leqslant' : ' < '}${b}$ alors,  $\\dfrac{1}{x}${large1 ? '\\geqslant' : ' > '}-\\dfrac{1}{${-b}}$.`
                 substituts = [
@@ -344,8 +336,7 @@ export default class EncadrerAvecFctRef extends Exercice {
 Puisque la fonction racine carrée est strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
 sur l'intervalle $[0;${a}]$ : <br>`
                 texteCorrApresTableau = `<br>On constate que le maximum de $\\sqrt{x}$ sur $[0;${a}]$ est $${racineDeA}$. <br>
-On en déduit que si  $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $\\sqrt{x}\\leqslant ${racineDeA}$.
-<br> Remarque :  la fonction racine carrée étant strictement croissante sur $[0+\\infty[$, elle conserve l'ordre.<br>
+On en déduit que si  $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $\\sqrt{x}\\leqslant ${racineDeA}$.<br> Remarque :  la fonction racine carrée étant strictement croissante sur $[0+\\infty[$, elle conserve l'ordre.<br>
 Ainsi, les antécédents et les images sont rangés dans le même ordre : <br>
 Si $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $\\sqrt{x}${large1 ? '\\leqslant' : ' < '} ${racineDeA}$.`
               }
@@ -379,8 +370,7 @@ Si $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $\\sqrt{x}${large1 ? '\\leqsl
 Puisque la fonction racine carrée est strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
 sur l'intervalle $[${a};+\\infty[$ : <br>`
                 texteCorrApresTableau = `<br>On constate que le minimum de $\\sqrt{x}$ sur $[${a};+\\infty[$ est $${racineDeA}$. <br>
-On en déduit que si  $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  $\\sqrt{x}\\geqslant ${racineDeA}$.
-<br> Remarque :  la fonction racine carrée étant strictement croissante sur $[0+\\infty[$, elle conserve l'ordre.<br>
+On en déduit que si  $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  $\\sqrt{x}\\geqslant ${racineDeA}$.<br> Remarque :  la fonction racine carrée étant strictement croissante sur $[0+\\infty[$, elle conserve l'ordre.<br>
 Ainsi, les antécédents et les images sont rangés dans le même ordre : <br>
 Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  $\\sqrt{x}${large1 ? '\\geqslant' : ' > '} ${racineDeA}$.`
               }
@@ -420,8 +410,7 @@ Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  $\\sqrt{x}${large1 ? '\\geqsl
 Puisque la fonction racine carrée est strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
 sur l'intervalle $[${a};${b}]$ : <br>`
                 texteCorrApresTableau = `<br>On constate que le minimum de $\\sqrt{x}$ sur $[${a};${b}]$ est $${racineDeA}$ et son maximum est $${racineDeB}$. <br>
-On en déduit que si $${a}${large1 ? '\\leqslant' : ' < '} x ${large1 ? '\\leqslant' : ' < '}${b}$ alors, $${racineDeA}${large1 ? '\\leqslant' : ' < '} \\sqrt{x} ${large1 ? '\\leqslant' : ' < '}${racineDeB}$.
-<br> Remarque :  la fonction racine carrée étant strictement croissante sur $[0+\\infty[$, elle conserve l'ordre.<br>
+On en déduit que si $${a}${large1 ? '\\leqslant' : ' < '} x ${large1 ? '\\leqslant' : ' < '}${b}$ alors, $${racineDeA}${large1 ? '\\leqslant' : ' < '} \\sqrt{x} ${large1 ? '\\leqslant' : ' < '}${racineDeB}$.<br> Remarque :  la fonction racine carrée étant strictement croissante sur $[0+\\infty[$, elle conserve l'ordre.<br>
 Ainsi, les antécédents et les images sont rangés dans le même ordre : <br>
 Si $${a}${large1 ? '\\leqslant' : ' < '} x ${large1 ? '\\leqslant' : ' < '}${b}$ alors,  $${racineDeA}${large1 ? '\\leqslant' : ' < '} \\sqrt{x} ${large1 ? '\\leqslant' : ' < '}${racineDeB}$.`
               }
@@ -485,8 +474,7 @@ Si $${a}${large1 ? '\\leqslant' : ' < '} x ${large1 ? '\\leqslant' : ' < '}${b}$
 Puisque $(${a})^3=${Math.pow(a, 3)}$ et que la fonction cube est strictement croissante sur $\\mathbb{R}$, on obtient son tableau de variations
 sur l'intervalle $]-\\infty;${a}]$ : <br>`
             texteCorrApresTableau = `<br>On constate que le ${inférieur ? ' maximum ' : ' minimum '} de $x^3$ sur $${intervalle}$ est $${Math.pow(a, 3)}$. <br>
-On en déduit que si  $x${symbole}${a}$ alors,  $x^3${symbole} ${Math.pow(a, 3)}$.
-<br> Remarque :  la fonction cube étant strictement croissante sur $\\mathbb{R}$, elle conserve l'ordre.<br>
+On en déduit que si  $x${symbole}${a}$ alors,  $x^3${symbole} ${Math.pow(a, 3)}$.<br> Remarque :  la fonction cube étant strictement croissante sur $\\mathbb{R}$, elle conserve l'ordre.<br>
 Ainsi, les antécédents et les images sont rangés dans le même ordre : <br>
 Si $x${symbole}${a}$ alors,  $x^3${symbole} ${Math.pow(a, 3)}$.`
           } else {
@@ -523,8 +511,7 @@ Si $x${symbole}${a}$ alors,  $x^3${symbole} ${Math.pow(a, 3)}$.`
 Puisque $(${a})^3=${Math.pow(a, 3)}$ et $(${b})^3=${Math.pow(b, 3)}$, et que la fonction cube est strictement croissante sur $\\mathbb{R}$, on obtient son tableau de variations
 sur l'intervalle $${intervalle}$ : <br>`
             texteCorrApresTableau = `<br>On constate que le minimum de $x^3$ sur $${intervalle}$ est $${Math.pow(a, 3)}$, et son maximum sur le même intervalle est $${Math.pow(b, 3)}$. <br>
-On en déduit que si  $${inégalité}$ alors, $${Math.pow(a, 3)} ${large1 ? ' \\leqslant ' : ' < '} x^3 ${large1 ? ' \\leqslant ' : ' < '} ${Math.pow(b, 3)}$.
-<br> Remarque :  la fonction cube étant strictement croissante sur $\\mathbb{R}$, elle conserve l'ordre.<br>
+On en déduit que si  $${inégalité}$ alors, $${Math.pow(a, 3)} ${large1 ? ' \\leqslant ' : ' < '} x^3 ${large1 ? ' \\leqslant ' : ' < '} ${Math.pow(b, 3)}$.<br> Remarque :  la fonction cube étant strictement croissante sur $\\mathbb{R}$, elle conserve l'ordre.<br>
 Ainsi, les antécédents et les images sont rangés dans le même ordre : <br>
 Si $${inégalité}$ alors, $${Math.pow(a, 3)} ${large1 ? ' \\leqslant ' : ' < '} x^3 ${large1 ? ' \\leqslant ' : ' < '} ${Math.pow(b, 3)}$.`
           }

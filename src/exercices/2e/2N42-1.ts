@@ -100,8 +100,7 @@ export default class ExprimerEnFonctionDesAutres extends Exercice {
             ${nomV[0]}&=${nomV[1]}-${nomV[2]}\\\\
             ${nomV[0]}+${miseEnEvidence(nomV[2])}&=${nomV[1]}-${nomV[2]}+${miseEnEvidence(nomV[2])}\\\\
             ${nomV[0]}+${nomV[2]}&= ${nomV[1]}
-                           \\end{aligned}$
-                       <br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$ et $${nomV[2]}$ est $${nomV[1]}= ${nomV[0]}+${nomV[2]}$.`
+                           \\end{aligned}$<br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$ et $${nomV[2]}$ est $${nomV[1]}= ${nomV[0]}+${nomV[2]}$.`
           } else if (choix === 2) {
             // a=b+c on cherche b
             texte = `Soient $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ trois nombres vérifiant l'égalité :
@@ -117,8 +116,7 @@ export default class ExprimerEnFonctionDesAutres extends Exercice {
               ${nomV[0]}&=${nomV[1]}+${nomV[2]}\\\\
               ${nomV[0]}-${miseEnEvidence(nomV[2])}&=${nomV[1]}-${nomV[2]}-${miseEnEvidence(nomV[2])}\\\\
               ${nomV[0]}-${nomV[2]}&= ${nomV[1]}
-                             \\end{aligned}$
-                         <br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$ et $${nomV[2]}$ est $${nomV[1]}= ${nomV[0]}-${nomV[2]}$.`
+                             \\end{aligned}$<br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$ et $${nomV[2]}$ est $${nomV[1]}= ${nomV[0]}-${nomV[2]}$.`
           } else if (choix === 3) {
             // a=b/c on cherche b
             texte = `Soient $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ trois nombres non nuls vérifiant l'égalité  : 
@@ -133,8 +131,7 @@ export default class ExprimerEnFonctionDesAutres extends Exercice {
                               $\\begin{aligned}
                               ${nomV[0]}&=\\dfrac{${nomV[1]}}{${nomV[2]}}\\\\
                               ${nomV[0]}\\times ${nomV[2]}&=${nomV[1]}                              
-                                             \\end{aligned}$
-                                         <br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$ et $${nomV[2]}$ est $${nomV[1]}=${nomV[0]}\\times ${nomV[2]}$.`
+                                             \\end{aligned}$ <br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$ et $${nomV[2]}$ est $${nomV[1]}=${nomV[0]}\\times ${nomV[2]}$.`
           } else if (choix === 4) {
             // a=b/c on cherche c
             texte = `Soient $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ trois nombres non nuls vérifiant l'égalité  :
@@ -147,8 +144,7 @@ $\\begin{aligned}
  ${nomV[0]}&=\\dfrac{${nomV[1]}}{${nomV[2]}}\\\\
  ${nomV[0]}\\times ${nomV[2]}&=${nomV[1]} \\\\
  ${nomV[2]}&=\\dfrac{${nomV[1]}}{${nomV[0]}}                        
- \\end{aligned}$
-<br> Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$ et $${nomV[1]}$ est $${nomV[2]}=\\dfrac{${nomV[1]}}{${nomV[0]}}$.`
+ \\end{aligned}$<br> Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$ et $${nomV[1]}$ est $${nomV[2]}=\\dfrac{${nomV[1]}}{${nomV[0]}}$.`
           } else {
             // a=b*c on cherche b
             texte = `Soient $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ trois nombres non nuls vérifiant l'égalité  :
@@ -163,8 +159,7 @@ $\\begin{aligned}
     $\\begin{aligned}
     ${nomV[0]}&=${nomV[1]}\\times ${nomV[2]}\\\\
     \\dfrac{${nomV[0]}}{${nomV[2]}}&=${nomV[1]}
-                   \\end{aligned}$
-               <br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$ et $${nomV[2]}$ est $${nomV[1]}= \\dfrac{${nomV[0]}}{${nomV[2]}}$.`
+                   \\end{aligned}$ <br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$ et $${nomV[2]}$ est $${nomV[1]}= \\dfrac{${nomV[0]}}{${nomV[2]}}$.`
           }
           break
 
@@ -202,8 +197,7 @@ $\\begin{aligned}
       ${nomV[0]}-${nomV[1]}&=-${nomV[2]}${nomV[3]}\\\\
        -${nomV[0]}+${nomV[1]}&= ${nomV[2]}${nomV[3]}\\\\
        \\dfrac{-${nomV[0]}+${nomV[1]}}{${nomV[3]}}&=${nomV[2]}
-                 \\end{aligned}$
-      <br> Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et  $${nomV[3]}$ est $${nomV[2]}=  \\dfrac{${nomV[1]}-${nomV[0]}}{${nomV[3]}}$.`
+                 \\end{aligned}$<br>Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et  $${nomV[3]}$ est $${nomV[2]}=  \\dfrac{${nomV[1]}-${nomV[0]}}{${nomV[3]}}$.`
           } else if (choix === 2) {
             // a=b-cd on cherche  d
             intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$  quatre nombres (avec $${nomV[2]}$ non nul) vérifiant l'égalité  :`
@@ -222,8 +216,7 @@ $\\begin{aligned}
              ${nomV[0]}-${nomV[1]}&=-${nomV[2]}${nomV[3]}\\\\
               -${nomV[0]}+${nomV[1]}&= ${nomV[2]}${nomV[3]}\\\\
               \\dfrac{-${nomV[0]}+${nomV[1]}}{${nomV[2]}}&=${nomV[3]}
-                        \\end{aligned}$
-      <br> Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et  $${nomV[2]}$ est $${nomV[3]}=  \\dfrac{${nomV[1]}-${nomV[0]}}{${nomV[2]}}$.`
+                        \\end{aligned}$<br>Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et  $${nomV[2]}$ est $${nomV[3]}=  \\dfrac{${nomV[1]}-${nomV[0]}}{${nomV[2]}}$.`
           } else if (choix === 3) {
             // a=b-cd on cherche  b
             intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$  quatre nombres vérifiant l'égalité :`
@@ -237,8 +230,7 @@ $\\begin{aligned}
          $\\begin{aligned}
         ${nomV[0]}&=${nomV[1]}-${nomV[2]}${nomV[3]}\\\\
         ${nomV[0]}+${nomV[2]}${nomV[3]}&=${nomV[1]}
-                   \\end{aligned}$
- <br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et  $${nomV[2]}$ est $${nomV[1]}= ${nomV[0]}+${nomV[2]}${nomV[3]}$.`
+                   \\end{aligned}$ <br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et  $${nomV[2]}$ est $${nomV[1]}= ${nomV[0]}+${nomV[2]}${nomV[3]}$.`
           } else if (choix === 4) {
             // a=bc+d on cherche  b
             intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$  quatre nombres (avec $${nomV[2]}$ non nul) vérifiant l'égalité  :`
@@ -256,8 +248,7 @@ $\\begin{aligned}
        ${nomV[0]}&=${nomV[1]}${nomV[2]}+${nomV[3]}\\\\
        ${nomV[0]}-${nomV[3]}&=${nomV[1]}${nomV[2]}\\\\
         \\dfrac{${nomV[0]}-${nomV[3]}}{${nomV[2]}}&=${nomV[1]}
-                  \\end{aligned}$
-       <br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et  $${nomV[3]}$ est $${nomV[1]}=  \\dfrac{${nomV[0]}-${nomV[3]}}{${nomV[2]}}$.`
+                  \\end{aligned}$       <br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et  $${nomV[3]}$ est $${nomV[1]}=  \\dfrac{${nomV[0]}-${nomV[3]}}{${nomV[2]}}$.`
           } else if (choix === 5) {
             // a=bc+d on cherche  d
             intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$  quatre nombres vérifiant l'égalité suivante :`
@@ -271,8 +262,7 @@ $\\begin{aligned}
  $\\begin{aligned}
  ${nomV[0]}&=${nomV[1]}${nomV[2]}+${nomV[3]}\\\\
   ${nomV[0]}-${nomV[1]}${nomV[2]}&=${nomV[3]}
- \\end{aligned}$
-   <br> Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et  $${nomV[2]}$ est $${nomV[3]}=  ${nomV[0]}-${nomV[1]}${nomV[2]}$.`
+ \\end{aligned}$<br> Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et  $${nomV[2]}$ est $${nomV[3]}=  ${nomV[0]}-${nomV[1]}${nomV[2]}$.`
           } else if (choix === 6) {
             // a=(b+c)/d on cherche  b
             intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$  quatre nombres (avec $${nomV[3]}$ non nul) vérifiant l'égalité  :`
@@ -287,8 +277,7 @@ $\\begin{aligned}
  ${nomV[0]}&=\\dfrac{${nomV[1]}+${nomV[2]}}{${nomV[3]}}\\\\
  ${nomV[0]}\\times ${nomV[3]}&=${nomV[1]}+${nomV[2]}\\\\
  ${nomV[0]}\\times ${nomV[3]}-${nomV[2]}&=${nomV[1]}
- \\end{aligned}$
-    <br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et  $${nomV[3]}$ est $${nomV[1]}= ${nomV[3]}\\times ${nomV[0]}-${nomV[2]}$.`
+ \\end{aligned}$<br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et  $${nomV[3]}$ est $${nomV[1]}= ${nomV[3]}\\times ${nomV[0]}-${nomV[2]}$.`
           } else if (choix === 7) {
             // a=(b+c)/d on cherche  c
             intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ quatre nombres (avec $${nomV[3]}$ non nul) vérifiant l'égalité  :`
@@ -303,8 +292,7 @@ $\\begin{aligned}
  ${nomV[0]}&=\\dfrac{${nomV[1]}+${nomV[2]}}{${nomV[3]}}\\\\
  ${nomV[0]}\\times ${nomV[3]}&=${nomV[1]}+${nomV[2]}\\\\
  ${nomV[0]}\\times ${nomV[3]}-${nomV[1]}&=${nomV[2]}
- \\end{aligned}$
-    <br> Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et  $${nomV[3]}$ est $${nomV[2]}= ${nomV[3]}\\times ${nomV[0]}-${nomV[1]}$.`
+ \\end{aligned}$<br> Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et  $${nomV[3]}$ est $${nomV[2]}= ${nomV[3]}\\times ${nomV[0]}-${nomV[1]}$.`
           } else if (choix === 8) {
             // a=(b+c)/d on cherche  d
             intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$   quatre nombres (avec $${nomV[3]}$ et $${nomV[0]}$  non nuls) vérifiant l'égalité  :`
@@ -322,8 +310,7 @@ $\\begin{aligned}
  ${nomV[0]}&=\\dfrac{${nomV[1]}+${nomV[2]}}{${nomV[3]}}\\\\
  ${nomV[0]}\\times ${nomV[3]}&=${nomV[1]}+${nomV[2]}\\\\
   ${nomV[3]}&=\\dfrac{${nomV[1]} +${nomV[2]}}{${nomV[0]}}
- \\end{aligned}$
-    <br> Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et  $${nomV[2]}$ est $${nomV[3]}= \\dfrac{${nomV[1]} +${nomV[2]}}{${nomV[0]}}$.`
+ \\end{aligned}$<br> Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et  $${nomV[2]}$ est $${nomV[3]}= \\dfrac{${nomV[1]} +${nomV[2]}}{${nomV[0]}}$.`
           } else if (choix === 9) {
             // a=(b+c)*d on cherche  b
             intro = `Soient $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$   quatre nombres (avec $${nomV[3]}$ non nul) vérifiant l'égalité  :`
@@ -344,8 +331,7 @@ $\\begin{aligned}
  ${nomV[0]}&=${nomV[1]}${nomV[3]}+${nomV[2]}${nomV[3]}\\\\
   ${nomV[0]}-${nomV[2]}${nomV[3]}&=${nomV[1]}${nomV[3]}\\\\
  \\dfrac{${nomV[0]}-${nomV[2]}${nomV[3]}}{${nomV[3]}}&=${nomV[1]}
- \\end{aligned}$
-    <br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[3]}$ et  $${nomV[2]}$ est 
+ \\end{aligned}$<br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[3]}$ et  $${nomV[2]}$ est 
     $${nomV[1]}= \\dfrac{${nomV[0]} -${nomV[2]}\\times ${nomV[3]}}{${nomV[3]}}$ ou plus simplement $${nomV[1]}=\\dfrac{${nomV[0]}}{${nomV[3]}}-${nomV[2]}$.`
           } else if (choix === 10) {
             // a=(b+c)*d on cherche  d
@@ -360,8 +346,7 @@ $\\begin{aligned}
   $\\begin{aligned}
  ${nomV[0]}&=(${nomV[1]}+${nomV[2]})${nomV[3]}\\\\
 \\dfrac{${nomV[0]}}{${nomV[1]}+${nomV[2]}} &=${nomV[3]}
- \\end{aligned}$
-    <br> Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et  $${nomV[2]}$ est 
+ \\end{aligned}$<br> Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et  $${nomV[2]}$ est 
     $${nomV[3]}= \\dfrac{${nomV[0]}}{${nomV[1]}+${nomV[2]}}$.`
           } else if (choix === 11) {
             // a=(b-c)*d on cherche  b
@@ -381,8 +366,7 @@ $\\begin{aligned}
  ${nomV[0]}&=${nomV[1]}${nomV[3]}-${nomV[2]}${nomV[3]}\\\\
   ${nomV[0]}+${nomV[2]}${nomV[3]}&=${nomV[1]}${nomV[3]}\\\\
  \\dfrac{${nomV[0]}+${nomV[2]}${nomV[3]}}{${nomV[3]}}&=${nomV[1]}
- \\end{aligned}$
-    <br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[3]}$ et  $${nomV[2]}$ est 
+ \\end{aligned}$<br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[3]}$ et  $${nomV[2]}$ est 
     $${nomV[1]}= \\dfrac{${nomV[0]} +${nomV[2]}${nomV[3]}}{${nomV[3]}}$ ou plus simplement $${nomV[1]}=\\dfrac{${nomV[0]}}{${nomV[3]}}+${nomV[2]}$.`
           } else {
             // a=(b-c)*d on cherche  c
@@ -403,8 +387,7 @@ $\\begin{aligned}
   ${nomV[0]}-${nomV[1]}${nomV[3]}&=-${nomV[2]}${nomV[3]}\\\\
  \\dfrac{${nomV[0]}-${nomV[1]}${nomV[3]}}{-${nomV[3]}}&=${nomV[2]}\\\\
  \\dfrac{-${nomV[0]}+${nomV[1]}${nomV[3]}}{${nomV[3]}}&=${nomV[2]}
- \\end{aligned}$
-    <br> Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et  $${nomV[3]}$ est 
+ \\end{aligned}$<br> Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et  $${nomV[3]}$ est 
     $${nomV[2]}=  \\dfrac{-${nomV[0]}+${nomV[1]}${nomV[3]}}{${nomV[3]}}$ ou plus simplement : 
     $${nomV[2]}= ${nomV[1]} -\\dfrac{${nomV[0]}}{${nomV[3]}}$ .`
           }
@@ -447,8 +430,7 @@ $\\begin{aligned}
           ${nomV[0]}&=${nomV[1]}${nomV[3]}-${nomV[1]}${nomV[4]}+${nomV[2]}${nomV[3]}-${nomV[2]}${nomV[4]}\\\\
            ${nomV[0]}-${nomV[2]}${nomV[3]}+${nomV[2]}${nomV[4]}&= ${nomV[1]}(${nomV[3]}-${nomV[4]})\\\\
            \\dfrac{${nomV[0]}-${nomV[2]}${nomV[3]}+${nomV[2]}${nomV[4]}}{${nomV[3]}-${nomV[4]}}&=${nomV[1]}
-                     \\end{aligned}$
-          <br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$, $${nomV[3]}$ et $${nomV[4]}$ est $${nomV[1]}=\\dfrac{${nomV[0]}-${nomV[2]}${nomV[3]}+${nomV[2]}${nomV[4]}}{${nomV[3]}-${nomV[4]}}$ ou plus simplement 
+                     \\end{aligned}$<br> Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$, $${nomV[3]}$ et $${nomV[4]}$ est $${nomV[1]}=\\dfrac{${nomV[0]}-${nomV[2]}${nomV[3]}+${nomV[2]}${nomV[4]}}{${nomV[3]}-${nomV[4]}}$ ou plus simplement 
           $${nomV[1]}= \\dfrac{${nomV[0]}}{${nomV[3]}-${nomV[4]}}-${nomV[2]}$.`
           } else if (choix === 2) {
             // a=(b+c)(d-e) on cherche  e
@@ -473,8 +455,7 @@ ${nomV[0]}-${nomV[1]}${nomV[3]}-${nomV[2]}${nomV[3]}&= -${nomV[1]}${nomV[4]}-${n
 ${nomV[0]}-${nomV[1]}${nomV[3]}-${nomV[2]}${nomV[3]}&= ${nomV[4]}(-${nomV[1]}-${nomV[2]})\\\\
  \\dfrac{${nomV[0]}-${nomV[1]}${nomV[3]}-${nomV[2]}${nomV[3]}}{-${nomV[1]}-${nomV[2]}}&=${nomV[4]}\\\\
  \\dfrac{-${nomV[0]}+${nomV[1]}${nomV[3]}+${nomV[2]}${nomV[3]}}{${nomV[1]}+${nomV[2]}}&=${nomV[4]}
-                              \\end{aligned}$
-                   <br> Une expression de $${nomV[4]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ est 
+                              \\end{aligned}$<br> Une expression de $${nomV[4]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ est 
                    $${nomV[4]}=\\dfrac{-${nomV[0]}+${nomV[1]}${nomV[3]}+${nomV[2]}${nomV[3]}}{${nomV[1]}+${nomV[2]}}$ 
                    ou plus simplement 
                    $${nomV[4]}= -\\dfrac{${nomV[0]}}{${nomV[1]}+${nomV[2]}}+${nomV[3]}$.<br>
@@ -495,8 +476,7 @@ ${nomV[0]}-${nomV[1]}${nomV[3]}-${nomV[2]}${nomV[3]}&= ${nomV[4]}(-${nomV[1]}-${
    ${nomV[0]}${nomV[3]}-${nomV[0]}${nomV[4]}&= ${nomV[1]}+${nomV[2]}\\\\
    ${nomV[0]}${nomV[3]}&=${nomV[1]}+${nomV[2]}+${nomV[0]}${nomV[4]}\\\\
    ${nomV[3]}&=\\dfrac{${nomV[1]}+${nomV[2]}+${nomV[0]}${nomV[4]}}{${nomV[0]}}
-     \\end{aligned}$
-     <br> Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[4]}$ est 
+     \\end{aligned}$<br> Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[4]}$ est 
        $${nomV[3]}=\\dfrac{${nomV[1]}+${nomV[2]}+${nomV[0]}${nomV[4]}}{${nomV[0]}}$.`
           } else if (choix === 4) {
             // a=(b+c)/(d-e) on cherche  e
@@ -519,8 +499,7 @@ ${nomV[0]}-${nomV[1]}${nomV[3]}-${nomV[2]}${nomV[3]}&= ${nomV[4]}(-${nomV[1]}-${
       -${nomV[0]}${nomV[4]} &=${nomV[1]}+${nomV[2]}-${nomV[0]}${nomV[3]}\\\\
       ${nomV[4]}&=\\dfrac{${nomV[1]}+${nomV[2]}-${nomV[0]}${nomV[3]}}{-${nomV[0]}}\\\\
       ${nomV[4]}&=\\dfrac{-${nomV[1]}-${nomV[2]}+${nomV[0]}${nomV[3]}}{${nomV[0]}}
-         \\end{aligned}$
-         <br> Une expression de $${nomV[4]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ est 
+         \\end{aligned}$<br> Une expression de $${nomV[4]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[3]}$ est 
            $${nomV[4]}=\\dfrac{-${nomV[1]}-${nomV[2]}+${nomV[0]}${nomV[3]}}{${nomV[0]}}$.`
           } else if (choix === 5) {
             // a=b+c\sqrt{d+e} on cherche d
@@ -543,8 +522,7 @@ ${nomV[0]}-${nomV[1]}${nomV[3]}-${nomV[2]}${nomV[3]}&= ${nomV[4]}(-${nomV[1]}-${
    \\dfrac{${nomV[0]}-${nomV[1]}}{${nomV[1]}}&= \\sqrt{${nomV[3]}+${nomV[4]}}\\\\
    \\left(\\dfrac{${nomV[0]}-${nomV[1]}}{${nomV[1]}}\\right)^2 &=${nomV[3]}+${nomV[4]}\\\\
    \\left(\\dfrac{${nomV[0]}-${nomV[1]}}{${nomV[1]}}\\right)^2-${nomV[4]}&=${nomV[3]}
-\\end{aligned}$
- <br> Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[4]}$ est 
+\\end{aligned}$ <br> Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$, $${nomV[2]}$ et $${nomV[4]}$ est 
    $${nomV[3]}=\\left(\\dfrac{${nomV[0]}-${nomV[1]}}{${nomV[1]}}\\right)^2-${nomV[4]}$ ou par exemple $${nomV[3]}=\\dfrac{\\left(${nomV[0]}-${nomV[1]}\\right)^2-${nomV[4]}${nomV[1]}^2}{${nomV[1]}^2}$.
  `
           } else {
@@ -561,8 +539,7 @@ ${nomV[0]}-${nomV[1]}${nomV[3]}-${nomV[2]}${nomV[3]}&= ${nomV[4]}(-${nomV[1]}-${
    ${nomV[0]}=&${nomV[1]}+${nomV[2]}\\sqrt{${nomV[3]}+${nomV[4]}}\\\\
     ${nomV[0]}-${nomV[1]}&=${nomV[2]}\\sqrt{${nomV[3]}+${nomV[4]}}\\\\
     \\dfrac{${nomV[0]}-${nomV[1]}}{\\sqrt{${nomV[3]}+${nomV[4]}}}&=${nomV[2]}
- \\end{aligned}$
-  <br> Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$, $${nomV[3]}$ et $${nomV[4]}$ est 
+ \\end{aligned}$<br> Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$, $${nomV[3]}$ et $${nomV[4]}$ est 
     $${nomV[2]}= \\dfrac{${nomV[0]}-${nomV[1]}}{\\sqrt{${nomV[3]}+${nomV[4]}}}$.
   `
           }

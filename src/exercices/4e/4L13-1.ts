@@ -293,9 +293,7 @@ export default class FormeLitteraleIntroduireUneLettre extends Exercice {
 <br>On note $${lettre1}$ le prix d'${situation.elt1.article} ${situation.elt1.sing} et $${lettre2}$ le prix d'${situation.elt2.article} ${situation.elt2.sing}.`,
         question: '',
         correction: `
-        ${situation.prenom} va payer $${n}$ fois le prix d'${situation.elt1.article} ${situation.elt1.sing} et $${p}$ fois le prix d'${situation.elt2.article} ${situation.elt2.sing}.
-        <br> C'est-à-dire $${n}\\times ${lettre1} + ${p}\\times ${lettre2} = ${sliceUn(n)}${lettre1} + ${sliceUn(p)}${lettre2}$.
-        <br>Donc le prix total de l'achat est $${miseEnEvidence(`${sliceUn(n)}${lettre1} + ${sliceUn(p)}${lettre2}`)}$.
+        ${situation.prenom} va payer $${n}$ fois le prix d'${situation.elt1.article} ${situation.elt1.sing} et $${p}$ fois le prix d'${situation.elt2.article} ${situation.elt2.sing}.<br> C'est-à-dire $${n}\\times ${lettre1} + ${p}\\times ${lettre2} = ${sliceUn(n)}${lettre1} + ${sliceUn(p)}${lettre2}$.<br>Donc le prix total de l'achat est $${miseEnEvidence(`${sliceUn(n)}${lettre1} + ${sliceUn(p)}${lettre2}`)}$.
         `,
       })
       texte = `${enonces[0].enonce}`

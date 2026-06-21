@@ -298,8 +298,7 @@ Ainsi, $${choix1[1]}=${miseEnEvidence(`\\dfrac{A}{${choix1[3]}}`)}$.`
       A&=\\dfrac{B\\times h}{2}\\\\
       A\\times 2&=B\\times h\\\\
       \\dfrac{A\\times 2}{${choix1[3]}}&= ${choix1[1]}
-                     \\end{aligned}$
-      <br> 
+                     \\end{aligned}$<br> 
      Une expression de  $${choix1[1]}$ en fonction de $A$ et de $${choix1[3]}$ est $${choix1[1]}=\\dfrac{A\\times 2}{${choix1[3]}}$ ou plus simplement $${choix1[1]}=${miseEnEvidence(`\\dfrac{2A}{${choix1[3]}}`)}$.`
           }
           break
@@ -323,8 +322,7 @@ Exprimer $${choix1[0]}$ en fonction de $A$, de $${choix1[1]}$ et de $h$.<br>`
    A&=\\dfrac{(b+B)\\times h}{2}\\\\
   2\\times A&=(b+B)\\times h\\\\
   \\dfrac{2A}{h}&=b+B\\\\
-  \\dfrac{2A}{h}-${choix1[1]}   &=${choix1[0]}\\end{aligned}$
-     <br> 
+  \\dfrac{2A}{h}-${choix1[1]}   &=${choix1[0]}\\end{aligned}$ <br> 
     
  Une expression de  $${choix1[0]}$ en fonction de $A$, de  $${choix1[1]}$ et de $h$ est $${choix1[0]}=${miseEnEvidence(`\\dfrac{2A}{h}-${choix1[1]}`)}$.`
           }
@@ -340,8 +338,7 @@ Exprimer $h$ en fonction de $A$, de $B$ et de $b$.<br>`
   A&=\\dfrac{(b+B)\\times h}{2}\\\\
   2\\times A&=(b+B)\\times h\\\\
   \\dfrac{2A}{b+B}&=h
-  \\end{aligned}$
-     <br> 
+  \\end{aligned}$<br> 
                  
   Une expression de  $h$ en fonction de $A$, de  $B$ et de $b$ est $h= ${miseEnEvidence('\\dfrac{2A}{b+B}')}$.`
           break
@@ -361,8 +358,7 @@ Exprimer $h$ en fonction de $A$, de $B$ et de $b$.<br>`
          $\\begin{aligned}
         m&=\\dfrac{a+b}{2}\\\\
        2\\times m&=a+b\\\\
-       2\\times m-${choix1[1]}&=${choix1[0]}\\end{aligned}$
-          <br> 
+       2\\times m-${choix1[1]}&=${choix1[0]}\\end{aligned}$<br> 
          
       Une expression de  $${choix1[0]}$ en fonction de $m$ et de $${choix1[1]}$ est $${choix1[0]}=${miseEnEvidence(`2m-${choix1[1]}`)}$.`
           }
@@ -386,8 +382,7 @@ Exprimer $h$ en fonction de $A$, de $B$ et de $b$.<br>`
          $\\begin{aligned}
         m&=\\sqrt{a\\times b}\\\\
         m^2&=a\\times b\\\\
-       \\dfrac{m^2}{${choix1[1]}}&=${choix1[0]}\\end{aligned}$
-          <br> 
+       \\dfrac{m^2}{${choix1[1]}}&=${choix1[0]}\\end{aligned}$<br> 
          
       Une expression de  $${choix1[0]}$ en fonction de $m$ et de $${choix1[1]}$ est  $${miseEnEvidence(`\\dfrac{m^2}{${choix1[1]}}`)}$.`
           }
@@ -417,8 +412,7 @@ Exprimer $h$ en fonction de $A$, de $B$ et de $b$.<br>`
        \\dfrac{1}{\\dfrac{2${choix1[1]}}{${choix1[1]}h}-\\dfrac{h}{${choix1[1]}h}}&=${choix1[0]}\\\\
        \\dfrac{1}{\\dfrac{2${choix1[1]}-h}{${choix1[1]}h}}&=${choix1[0]}\\\\
        \\dfrac{${choix1[1]}h}{2${choix1[1]}-h}&=${choix1[0]}
-       \\end{aligned}$
-          <br> 
+       \\end{aligned}$<br> 
          
       Une expression de  $${choix1[0]}$ en fonction de $h$ et de $${choix1[1]}$ est  $${choix1[0]}=${miseEnEvidence(`\\dfrac{${choix1[1]}h}{2${choix1[1]}-h}`)}$.`
           }
@@ -436,8 +430,7 @@ Exprimer $h$ en fonction de $A$, de $B$ et de $b$.<br>`
          T&=\\dfrac{F-I}{I}\\\\
          T\\times I&=F-I\\\\
          T\\times I+I&=F
-       \\end{aligned}$
-          <br> 
+       \\end{aligned}$ <br> 
          
       Une expression de  $F$ en fonction de $T$ et de $I$ est  $F=T\\times I +I$ ou encore $F=${miseEnEvidence('I(T+1)')}$.`
           break
@@ -456,8 +449,7 @@ Exprimer $h$ en fonction de $A$, de $B$ et de $b$.<br>`
          T\\times I+I&=F\\\\
          I(T+1)&=F\\\\
          I&=\\dfrac{F}{T+1}
-       \\end{aligned}$
-          <br> 
+       \\end{aligned}$<br> 
          
       Une expression de  $I$ en fonction de $T$ et de $F$ est  $I=${miseEnEvidence('\\dfrac{F}{T+1}')}$.`
           break

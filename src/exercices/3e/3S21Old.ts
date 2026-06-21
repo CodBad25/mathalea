@@ -269,11 +269,18 @@ function unePieceDeuxUrnes(
   texteCorr = ''
   if (avecArbreDansCorrection && !avecArbrePondere) {
     texteCorr += "On a représenté l'expérience par l'arbre ci-dessous :<br>"
-    texteCorr +=
-      mathalea2d(
-        { xmin: -0.1, xmax: 16, ymin: 0, ymax: 12, zoom: 1.3, scale: 0.5 },
-        ...objets,
-      ) + '<br>'
+    texteCorr += mathalea2d(
+      {
+        xmin: -0.1,
+        xmax: 16,
+        ymin: 0,
+        ymax: 12,
+        zoom: 1.3,
+        scale: 0.5,
+        style: 'display: block',
+      },
+      ...objets,
+    )
     texteCorr += `Légende : ${B[0]} = ${boules[0]} ; ${B[1]} = ${boules[1]} ; ${B[2]} = ${boules[2]}<br>`
   }
   let q = 0
@@ -302,8 +309,7 @@ function unePieceDeuxUrnes(
       exercice,
       NoQuestion + 1,
       KeyboardType.clavierDeBaseAvecFraction,
-    ) +
-    '<br>'
+    )
   q++
   const ligneEnt = ['\\text{Pièce\\textbackslash Boules}']
   const colonneEnt = ['\\text{Pile}', '\\text{Face}']
@@ -506,8 +512,7 @@ function urneDeuxTiragesAvecRemise(
       exercice,
       NoQuestion,
       KeyboardType.clavierDeBaseAvecFraction,
-    ) +
-    '<br>'
+    )
   texte +=
     `${numAlpha(1)} Déterminer la probabilité d'obtenir deux boules de la même couleur.` +
     ajouteChampTexteMathLive(
@@ -522,8 +527,7 @@ function urneDeuxTiragesAvecRemise(
       exercice,
       NoQuestion + 2,
       KeyboardType.clavierDeBaseAvecFraction,
-    ) +
-    '<br>'
+    )
   let texteCorr = `L'issue «${b1Color}-${b1Color}» peut être obtenue de ${contenu[0]} façon${contenu[0] > 1 ? 's' : ''} et l'issue «${b1Color}-${b2Color}» peut être obtenue de ${contenu[1]} façon${contenu[1] > 1 ? 's' : ''}.<br>`
   texteCorr +=
     'Voici un tableau à double entrée qui représente toutes les issues de cette expérience.<br><br>'
@@ -531,18 +535,18 @@ function urneDeuxTiragesAvecRemise(
   if (avecArbreDansCorrection) {
     texteCorr +=
       "On peut aussi présenter les deux épreuves sous la forme d'un arbre de dénombrement :<br>"
-    texteCorr +=
-      mathalea2d(
-        {
-          xmin: 0,
-          xmax: card * 8.5,
-          ymin: 0,
-          ymax: 13,
-          zoom: 0.8,
-          scale: 9 / card / card,
-        },
-        ...objets,
-      ) + '<br>'
+    texteCorr += mathalea2d(
+      {
+        xmin: 0,
+        xmax: card * 8.5,
+        ymin: 0,
+        ymax: 13,
+        zoom: 0.8,
+        scale: 9 / card / card,
+        style: 'display: block',
+      },
+      ...objets,
+    )
     texteCorr += `Légende : ${b1Char} = ${b1Color} et ${b2Char} = ${b2Color}.<br>`
   }
   texteCorr += `${numAlpha(0)} L'événement «obtenir deux boules ${choix[1]}${choix[2] !== 'O' ? 's' : ''}» est réalisé par l'issue {${choix[2] + choix[2]}}.`

@@ -265,7 +265,7 @@ export function tableauDeVariation({
       codeLatex += '}' + '\n\t'
     }
   }
-  codeLatex += '\\end{tikzpicture}\n'
+  codeLatex += '\\end{tikzpicture}'
   return codeLatex
 }
 

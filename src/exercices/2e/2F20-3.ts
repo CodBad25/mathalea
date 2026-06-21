@@ -167,12 +167,12 @@ export default class LecturesGraphiques extends Exercice {
           ymax: 9,
           scale: 0.5,
           pixelsParCm: 30,
+          style: 'display: block',
         },
         r,
         graph,
         origine,
-      ) +
-      '<br>'
+      )
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
@@ -231,6 +231,7 @@ export default class LecturesGraphiques extends Exercice {
                 ymax: 9,
                 scale: 0.5,
                 pixelsParCm: 30,
+                style: 'display: block',
               },
               r,
               graph,
@@ -287,6 +288,7 @@ export default class LecturesGraphiques extends Exercice {
                 ymax: 9,
                 scale: 0.5,
                 pixelsParCm: 30,
+                style: 'display: block',
               },
               r,
               graph,
@@ -353,6 +355,7 @@ export default class LecturesGraphiques extends Exercice {
                 ymax: 9,
                 scale: 0.5,
                 pixelsParCm: 30,
+                style: 'display: block',
               },
               r,
               graph,
@@ -414,6 +417,7 @@ export default class LecturesGraphiques extends Exercice {
                   ymax: 9,
                   scale: 0.5,
                   pixelsParCm: 30,
+                  style: 'display: block',
                 },
                 r,
                 graph,
@@ -476,6 +480,7 @@ export default class LecturesGraphiques extends Exercice {
                   ymax: 9,
                   scale: 0.5,
                   pixelsParCm: 30,
+                  style: 'display: block',
                 },
                 r,
                 graph,
@@ -568,6 +573,7 @@ export default class LecturesGraphiques extends Exercice {
                 ymax: 9,
                 scale: 0.5,
                 pixelsParCm: 30,
+                style: 'display: block',
               },
               r,
               graph,
