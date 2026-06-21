@@ -289,7 +289,7 @@ async function loadExerciseForLatex(
 }
 
 function shortenLine(line: string) {
-  return line.trim().replace(/\s+/g, ' ').slice(0, 220)
+  return line.trim().replace(/\s+/g, ' ').slice(0, 100)
 }
 
 function lintLatexFragment(
@@ -421,7 +421,20 @@ function formatIssue(issue: LintIssue) {
 }
 
 function formatFailingRow(row: LintRow) {
-  const issuesMessage = (row.issues ?? []).map(formatIssue).join('\n\n')
+  const issues = (row.issues ?? []).map(formatIssue)
+  const ligneIssues = []
+  for (let i = 0; i < issues.length; i++) {
+    const issue = issues[i]
+    if (
+      issues
+        .slice(i + 1)
+        .some((other) => other.slice(0, 15) === issue.slice(0, 15))
+    )
+      continue
+    ligneIssues.push(issue)
+  }
+
+  const issuesMessage = ligneIssues.join('\n\n')
 
   return [
     `Exercice : ${row.exercicePath}`,
@@ -490,6 +503,9 @@ function printSummary(rows: LintRow[]) {
 
 describe('latex break lint', () => {
   test('refuse les doubles retours ligne LaTeX problematiques', async () => {
+    let fail = false
+    const refEnEchec = new Set<string>()
+
     if (
       process.env.NIV == null &&
       process.env.CHANGED_FILES == null &&
@@ -554,6 +570,10 @@ describe('latex break lint', () => {
             ...defaultLatexFileInfos,
           })
           const issues = lintLatexContents(contents)
+          if (issues.length > 0) {
+            refEnEchec.add(exercicePath)
+            fail = true
+          }
 
           rows.push({
             uuid,
@@ -582,14 +602,24 @@ describe('latex break lint', () => {
     }
 
     const failingRows = rows.filter((row) => row.status === 'KO')
-    if (failingRows.length > 0) {
+    printSummary(rows)
+
+    if (refEnEchec.size > 0) {
+      console.log(
+        `[INFO] ${refEnEchec.size} exercice(s) avec retours ligne LaTeX a corriger: ${[
+          ...refEnEchec,
+        ].join(', ')}`,
+      )
+    }
+    /* if (failingRows.length > 0) {
       if (process.env.LATEX_BREAKS_VERBOSE === 'true') {
         printSummary(rows)
       }
+
       throw new Error(formatFailureMessage(failingRows))
     }
+      */
 
-    printSummary(rows)
-    expect(true).toBe(true)
+    expect(fail).toBe(false)
   })
 })

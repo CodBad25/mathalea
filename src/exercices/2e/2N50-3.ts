@@ -177,9 +177,7 @@ export default class ModeliserEquations extends Exercice {
             On appelle recette le produit du nombre de bouteilles vendues par le prix unitaire.<br>
             On appelle résultat net de l'entreprise (lorsqu'elle produit et vend $x$ bouteilles), la différence entre la recette et les coûts de fabrication.<br>
       
-      Combien de bouteilles l'entreprise doit-elle produire et vendre pour que le résultat net soit nul ?
-            <br>
-                          `
+      Combien de bouteilles l'entreprise doit-elle produire et vendre pour que le résultat net soit nul ?<br>`
             texteCorr = `
       $\\bullet$ La recette est donnée par : $${texNombre(c)}\\times x=${texNombre(c)}x$ ;<br>
       $\\bullet$ Les coûts de fabrication sont donnés par : $${texNombre(a)}x+${texNombre(b)}$ ;<br>
@@ -257,8 +255,7 @@ export default class ModeliserEquations extends Exercice {
             texteCorr = `En notant $x$ le nombre choisi au départ, on obtient  :<br>
           $\\bullet$ Multiplier ce nombre par $${a}$ : ${sp(6)}$${a}\\times x=${a}x$ ;<br>
           $\\bullet$ Ajouter $${b}$ : ${sp(6)}$${a}x+${b}$ ; <br>
-          $\\bullet$ Multiplier le résultat par $${c}$ :${sp(6)}$${c}\\times (${a}x+${b})=${texNombre(c * a)}x+${texNombre(b * c)}$.<br>
-          <br>
+          $\\bullet$ Multiplier le résultat par $${c}$ :${sp(6)}$${c}\\times (${a}x+${b})=${texNombre(c * a)}x+${texNombre(b * c)}$.<br><br>
           On cherche $x$ tel que : <br>
           $\\begin{aligned}
           ${texNombre(c * a)}x+${texNombre(b * c)}&=${texNombre(res)}\\\\
@@ -289,8 +286,7 @@ export default class ModeliserEquations extends Exercice {
           $\\bullet$  avec le calcul de ${d} :
       $${a}\\times x+${b}=${a}x+${b}$ ;<br>
               $\\bullet$ avec celui de ${e}, on obtient : <br>
-      $(x+${c})\\times x-x^2=\\cancel{x^2}+${c}x-\\cancel{x^2}=${c}x$.<br>
-      <br>
+      $(x+${c})\\times x-x^2=\\cancel{x^2}+${c}x-\\cancel{x^2}=${c}x$.<br><br>
       On cherche donc $x$ tel que : <br>
       $\\begin{aligned}
       ${a}x+${b}&=${c}x\\\\
@@ -300,8 +296,7 @@ export default class ModeliserEquations extends Exercice {
       \\end{aligned}$<br>`
             if (a - c === 1) {
               texteCorr += `${sp(25)}$x=-${b}$<br>
-           Le nombre commun que ${d} et ${e} doivent choisir au départ pour obtenir le même résultat est : $-${b}$.
-                  `
+           Le nombre commun que ${d} et ${e} doivent choisir au départ pour obtenir le même résultat est : $-${b}$.`
             } else {
               texteCorr += `
             ${sp(20)}$ \\begin{aligned}
@@ -343,8 +338,7 @@ export default class ModeliserEquations extends Exercice {
                  
                  On obtient avec le ${texteGras('programme 1 :')} <br>
       $\\bullet$ Ajouter $${a}$ :${sp(5)} $x+${a}$ ;<br>
-      $\\bullet$ Prendre le carré du résultat :${sp(5)} $(x+${a})^2=x^2+2\\times x\\times ${a}+${a}^2=x^2+${texNombre(2 * a)}x+${texNombre(a * a)}$ ;<br>
-                  <br> On obtient avec le ${texteGras('programme 2 :')} <br>
+      $\\bullet$ Prendre le carré du résultat :${sp(5)} $(x+${a})^2=x^2+2\\times x\\times ${a}+${a}^2=x^2+${texNombre(2 * a)}x+${texNombre(a * a)}$ ;<br><br> On obtient avec le ${texteGras('programme 2 :')} <br>
       $\\bullet$ Multiplier par $${texNombre(2 * a)}$ :${sp(5)} $x\\times ${texNombre(2 * a)}=${texNombre(2 * a)}x$ ;<br>
       $\\bullet$ Ajouter $${b}$ : ${sp(5)} $${texNombre(2 * a)}x+${b}$.<br><br>
       Les deux programmes donnent le même résultat lorsque : <br>
@@ -354,8 +348,7 @@ export default class ModeliserEquations extends Exercice {
       x^2+${texNombre(a * a)}&=${b}\\\\
       x^2+${texNombre(a * a)}-${miseEnEvidence(texNombre(a * a))}&=${b}-${miseEnEvidence(texNombre(a * a))}\\\\
       x^2&=${texNombre(b - a * a)}
-      \\end{aligned}$
-      <br>
+      \\end{aligned}$<br>
             `
             if (b < a * a) {
               texteCorr += `
@@ -426,8 +419,7 @@ export default class ModeliserEquations extends Exercice {
                    On obtient avec le ${texteGras('programme 1 :')} :<br>
         $\\bullet$ Prendre l'opposé de ce nombre :${sp(10)} $-x$ <br>
         $\\bullet$ Multiplier par $${b}$ :${sp(10)} $${b}\\times (-x)= -${b}x$ <br>
-        $\\bullet$ Ajouter $${a}$ :${sp(10)} $-${b}x+${a}$ <br>
-                <br> On obtient avec le ${texteGras('programme 1 :')} :<br>
+        $\\bullet$ Ajouter $${a}$ :${sp(10)} $-${b}x+${a}$ <br><br> On obtient avec le ${texteGras('programme 1 :')} :<br>
         $\\bullet$ Multiplier par $${c}$ :${sp(10)} $x\\times ${c}=${c}x$ <br>
         $\\bullet$ Ajouter $${d}$ : ${sp(10)} $${c}x+${d}$<br>
         

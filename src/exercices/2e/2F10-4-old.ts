@@ -82,8 +82,7 @@ export default class DeterminerfonctionaffineOld extends Exercice {
             if (context.isDiaporama) {
               texteCorr = `$f(x)=${rienSi1(k)}x${k * a - b === 0 ? '' : `${ecritureAlgebrique(b - k * a)}`}$`
             } else {
-              texteCorr = `$f$ est une fonction affine, elle a donc une expression de la forme  $f(x)=ax+b$ avec $a$ et $b$ des nombres réels.
-                        <br>`
+              texteCorr = `$f$ est une fonction affine, elle a donc une expression de la forme  $f(x)=ax+b$ avec $a$ et $b$ des nombres réels.<br>`
               texteCorr +=
                 "D'après le cours, on sait que pour $u\\neq v$, $a=\\dfrac{f(u)-f(v)}{u-v}$ <br>"
               texteCorr += `Avec $u=${a}$ et  $v=${c}$, on obtient  :  $a=\\dfrac{f(${a})-f(${c})}{${a}-${ecritureParentheseSiNegatif(c)}}=\\dfrac{${b}-${ecritureParentheseSiNegatif(d)}}{${a}-${ecritureParentheseSiNegatif(c)}}=\\dfrac{${b - d}}{${a - c}}=${k}$.<br>`

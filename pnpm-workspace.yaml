@@ -1,6 +1,6 @@
 onlyBuiltDependencies:
   - '@parcel/watcher'
-  - apigeom
+  - apigeom@1.6.2
   - esbuild
   - svelte-preprocess
   - unrs-resolver

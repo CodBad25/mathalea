@@ -191,10 +191,16 @@ function unePieceDeuxUrnes(
   texte += ` et ${n2[2]} boule${n2[2] > 1 ? 's' : ''} ${boules[2]}${n2[2] > 1 ? 's' : ''}.<br>`
   texte += sup ? "On a représenté l'expérience par l'arbre ci-dessous<br>" : ''
   texte += sup
-    ? mathalea2d(Object.assign({ scale: 0.6 }, fixeBordures(objets)), objets)
+    ? mathalea2d(
+        Object.assign(
+          { scale: 0.6, style: 'display: block' },
+          fixeBordures(objets),
+        ),
+        objets,
+      )
     : ''
   texte +=
-    `<br>Donner la probabilité d'obtenir une boule ${boules[choix]}.` +
+    `Donner la probabilité d'obtenir une boule ${boules[choix]}.` +
     ajouteChampTexteMathLive(
       exercice,
       i,

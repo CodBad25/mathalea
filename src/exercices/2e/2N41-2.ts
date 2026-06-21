@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -18,7 +19,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Factoriser avec $a^2-b^2$'
 export const uuid = '47f20'
 export const interactifReady = true
@@ -522,8 +522,8 @@ export default class factorisationDifferenceCarres extends Exercice {
   &=\\underbrace{(${miseEnCouleur(`${e}(${a}x${ecritureAlgebrique(b)})`, 'red')})^2-(${miseEnCouleur(`${f}(${c}x${ecritureAlgebrique(d)})`, bleuMathalea)})^2}_{a^2-b^2}\\\\
   &=\\underbrace{[(${miseEnCouleur(`${e}(${a}x${ecritureAlgebrique(b)})`, 'red')})-(${miseEnCouleur(`${f}(${c}x${ecritureAlgebrique(d)})`, bleuMathalea)})][(${miseEnCouleur(`${e}(${a}x${ecritureAlgebrique(b)})`, 'red')})+(${miseEnCouleur(`${f}(${c}x${ecritureAlgebrique(d)})`, bleuMathalea)})]}_{(a-b)(a+b)}\\\\
    &= \\left[(${e}\\times ${a < 0 ? `(${a}x)` : `${a}x`}${ecritureAlgebrique(e)}\\times ${ecritureParentheseSiNegatif(b)})-(${f}\\times ${c < 0 ? `(${c}x)` : `${c}x`}${ecritureAlgebrique(f)}\\times ${ecritureParentheseSiNegatif(d)})\\right]
- \\left[(${e}\\times ${a < 0 ? `(${a}x)` : `${a}x`}${ecritureAlgebrique(e)}\\times ${ecritureParentheseSiNegatif(b)})+(${f}\\times ${c < 0 ? `(${c}x)` : `${c}x`}${ecritureAlgebrique(f)}\\times ${ecritureParentheseSiNegatif(d)})\\right]
-   \\\\&= (${a * e}x${ecritureAlgebrique(b * e)}${ecritureAlgebrique(-c * f)}x${ecritureAlgebrique(-d * f)})(${a * e}x${ecritureAlgebrique(b * e)}${ecritureAlgebrique(c * f)}x${ecritureAlgebrique(d * f)})\\\\`
+ \\left[(${e}\\times ${a < 0 ? `(${a}x)` : `${a}x`}${ecritureAlgebrique(e)}\\times ${ecritureParentheseSiNegatif(b)})+(${f}\\times ${c < 0 ? `(${c}x)` : `${c}x`}${ecritureAlgebrique(f)}\\times ${ecritureParentheseSiNegatif(d)})\\right]\\\\
+   &= (${a * e}x${ecritureAlgebrique(b * e)}${ecritureAlgebrique(-c * f)}x${ecritureAlgebrique(-d * f)})(${a * e}x${ecritureAlgebrique(b * e)}${ecritureAlgebrique(c * f)}x${ecritureAlgebrique(d * f)})\\\\`
               if (facteurConstant.length === 0 || !facteur1.includes('x')) {
                 texteCorr += ` &=(${facteur1})(${facteur2})\\end{aligned}$`
               } else {

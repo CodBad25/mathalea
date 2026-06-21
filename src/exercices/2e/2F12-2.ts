@@ -11,13 +11,13 @@ import Exercice from '../Exercice'
 import { mathalea2d } from '../../modules/mathalea2d'
 
 import { crochetD, crochetG } from '../../lib/2d/intervalles'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathlive'
@@ -183,6 +183,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 ymax: 5,
                 pixelsParCm: 30,
                 scale: 0.7,
+                style: 'display: block',
               },
               r1,
               o,
@@ -195,6 +196,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 ymax: 5,
                 pixelsParCm: 30,
                 scale: 1,
+                style: 'display: block',
               },
               courbe(f, {
                 repere: r1,
@@ -223,7 +225,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
             $\\bullet$ On trace la parabole d'équation $y=x^2$. <br>
             $\\bullet$ On trace la droite horizontale d'équation $y=${a}$. Cette droite coupe la parabole en $-\\sqrt{${a}}$ et $\\sqrt{${a}}$. <br>
             $\\bullet$  Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${estInegStrict ? 'strictement en dessous de' : ' sur ou sous '} la droite.<br>`
-            texteCorr += `${graphiqueC}<br>`
+            texteCorr += `${graphiqueC}`
 
             if (a === 1 || a === 4 || a === 9 || a === 16 || a === 25) {
               const borne = arrondi(Math.sqrt(a), 0)
@@ -338,6 +340,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 ymax: 5,
                 pixelsParCm: 30,
                 scale: 0.7,
+                style: 'display: block',
               },
               r1,
               o,
@@ -350,6 +353,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 ymax: 5.5,
                 pixelsParCm: 30,
                 scale: 1,
+                style: 'display: block',
               },
               courbe(f, {
                 repere: r1,
@@ -379,7 +383,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
             $\\bullet$ On trace la parabole d'équation $y=x^2$. <br>
             $\\bullet$ On trace la droite horizontale d'équation $y=${a}$. <br>
             $\\bullet$    Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${estInegStrict ? 'strictement au dessus de' : ' sur ou au dessus de '} la droite.<br>`
-            texteCorr += `${graphiqueC}<br>`
+            texteCorr += `${graphiqueC}`
 
             if (a === 1 || a === 4 || a === 9 || a === 16 || a === 25) {
               const borne = arrondi(Math.sqrt(a), 0)
@@ -520,6 +524,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 ymax: 4,
                 pixelsParCm: 30,
                 scale: 0.7,
+                style: 'display: block',
               },
               r1,
               o,
@@ -534,6 +539,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 ymax: 4,
                 pixelsParCm: 30,
                 scale: 1,
+                style: 'display: block',
               },
               courbe(f, {
                 repere: r1,
@@ -562,6 +568,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 ymax: 4,
                 pixelsParCm: 30,
                 scale: 1,
+                style: 'display: block',
               },
               courbe(f, {
                 repere: r1,
@@ -596,11 +603,11 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 intervalleLaTex('-\\infty', 0, true, true) +
                 '\\cup' +
                 intervalleLaTex(borne, '+\\infty', estInegStrict, true)
-              texteCorr += `${graphiqueC1}<br>`
+              texteCorr += `${graphiqueC1}`
               texteCorr += `Comme la fonction inverse est définie sur $\\mathbb{R}^*$, $0$ est une valeur interdite et donc l'ensemble des solutions de l'inéquation $\\dfrac{1}{x}${signeInégalité}${a}$ est : `
             } else {
               ensembleSolutions = intervalleLaTex(borne, 0, estInegStrict, true)
-              texteCorr += `${graphiqueC2}<br>`
+              texteCorr += `${graphiqueC2}`
               texteCorr += `Comme la fonction inverse est définie sur $\\mathbb{R}^*$, $0$ est une valeur interdite et donc l'ensemble des solutions de l'inéquation $\\dfrac{1}{x}${signeInégalité}${a}$ est : `
             }
           }
@@ -731,6 +738,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 ymax: 4,
                 pixelsParCm: 30,
                 scale: 0.7,
+                style: 'display: block',
               },
               r1,
               o,
@@ -745,6 +753,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 ymax: 4,
                 pixelsParCm: 30,
                 scale: 1,
+                style: 'display: block',
               },
               courbe(f, {
                 repere: r1,
@@ -772,6 +781,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 ymax: 4,
                 pixelsParCm: 30,
                 scale: 1,
+                style: 'display: block',
               },
               courbe(f, {
                 repere: r1,
@@ -803,14 +813,14 @@ export default class ResoudreGraphFonctionRef extends Exercice {
             $\\bullet$    Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${estInegStrict ? 'strictement au dessus de' : ' sur ou au dessus de '} la droite.<br>`
             if (a > 0) {
               ensembleSolutions = intervalleLaTex(0, borne, true, estInegStrict)
-              texteCorr += `${graphiqueC1}<br>`
+              texteCorr += `${graphiqueC1}`
               texteCorr += `Comme la fonction inverse est définie sur $\\mathbb{R}^*$, $0$ est une valeur interdite et donc l'ensemble des solutions de l'inéquation $\\dfrac{1}{x}${signeInégalité}${a}$ est : `
             } else {
               ensembleSolutions =
                 intervalleLaTex('-\\infty', borne, true, estInegStrict) +
                 '\\cup' +
                 intervalleLaTex(0, '+\\infty', true, true)
-              texteCorr += `${graphiqueC2}<br>`
+              texteCorr += `${graphiqueC2}`
               texteCorr += `Comme la fonction inverse est définie sur $\\mathbb{R}^*$, $0$ est une valeur interdite et donc l'ensemble des solutions de l'inéquation $\\dfrac{1}{x}${signeInégalité}${a}$ est : `
             }
           }
@@ -889,6 +899,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 ymax: 4,
                 pixelsParCm: 30,
                 scale: 0.7,
+                style: 'display: block',
               },
               r1,
               o,
@@ -901,6 +912,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 ymax: 4,
                 pixelsParCm: 30,
                 scale: 1,
+                style: 'display: block',
               },
               courbe(f, {
                 repere: r1,
@@ -931,7 +943,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
             $\\bullet$ On trace la courbe d'équation $y=\\sqrt{x}$. <br>
             $\\bullet$ On trace la droite horizontale d'équation $y=${a}$. Cette droite coupe la courbe en $${a}^2=${borne}$. <br>
             $\\bullet$  Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${estInegStrict ? 'strictement en dessous de' : ' sur ou sous '} la droite.<br>`
-            texteCorr += `${graphiqueC}<br>`
+            texteCorr += `${graphiqueC}`
             texteCorr += `Comme la fonction racine carrée est définie sur $[0\\,;\\,+\\infty[$, l'ensemble des solutions de l'inéquation $\\sqrt{x}${signeInégalité}${a}$ est : `
           }
           break
@@ -1011,6 +1023,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 ymax: 4,
                 pixelsParCm: 30,
                 scale: 0.7,
+                style: 'display: block',
               },
               r1,
               o,
@@ -1023,6 +1036,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 ymax: 4,
                 pixelsParCm: 30,
                 scale: 1,
+                style: 'display: block',
               },
               courbe(f, {
                 repere: r1,
@@ -1058,7 +1072,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
             $\\bullet$ On trace la courbe d'équation $y=\\sqrt{x}$. <br>
             $\\bullet$ On trace la droite horizontale d'équation $y=${a}$. Cette droite coupe la courbe en $${a}^2=${borne}$. <br>
             $\\bullet$  Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${estInegStrict ? 'strictement au dessus de' : ' sur ou au dessus de'} la droite.<br>`
-            texteCorr += `${graphiqueC}<br>`
+            texteCorr += `${graphiqueC}`
             texteCorr += `Comme la fonction racine carrée est définie sur $[0\\,;\\,+\\infty[$, l'ensemble des solutions de l'inéquation $\\sqrt{x}${signeInégalité}${a}$ est : `
           }
           break

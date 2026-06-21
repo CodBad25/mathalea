@@ -187,8 +187,7 @@ export default class EquationsFonctionsRef extends Exercice {
               }
               if (k > 0) {
                 if (k === a) {
-                  correction += `<br>L'équation est de la forme $x^2=k$ avec $k=${texNombre(k, 0)}$. Comme $${texNombre(k, 0)}>0$,  l'équation a deux solutions : $-\\sqrt{${texNombre(k, 0)}}$ et $\\sqrt{${texNombre(k, 0)}}$.
-                <br> Comme $-\\sqrt{${texNombre(k, 0)}}=-${extraireRacineCarree(k)[0]}$ et $\\sqrt{${k}}=${extraireRacineCarree(k)[0]}$ alors
+                  correction += `<br>L'équation est de la forme $x^2=k$ avec $k=${texNombre(k, 0)}$. Comme $${texNombre(k, 0)}>0$,  l'équation a deux solutions : $-\\sqrt{${texNombre(k, 0)}}$ et $\\sqrt{${texNombre(k, 0)}}$.<br> Comme $-\\sqrt{${texNombre(k, 0)}}=-${extraireRacineCarree(k)[0]}$ et $\\sqrt{${k}}=${extraireRacineCarree(k)[0]}$ alors
                 les solutions de l'équation peuvent s'écrire plus simplement : $-${extraireRacineCarree(k)[0]}$ et $${extraireRacineCarree(k)[0]}$.<br>
                 Ainsi,  $S=${miseEnEvidence(`\\{-${extraireRacineCarree(k)[0]}${sp(1)};${sp(1)}${extraireRacineCarree(k)[0]}\\}`)}$.`
                   reponse = `\\{-${extraireRacineCarree(k)[0]};${extraireRacineCarree(k)[0]}\\}`
@@ -210,8 +209,7 @@ export default class EquationsFonctionsRef extends Exercice {
               Ainsi, $S=${miseEnEvidence('\\{0\\}')}$. `
                 reponse = '\\{0\\}'
               } else {
-                correction += `<br>L'équation est de la forme $x^2=k$ avec $k=${texNombre(c - b, 0)}$. Comme $${texNombre(c - b, 0)}<0$, l'équation n'a pas de solution.
-                <br>Ainsi, $S=${miseEnEvidence('\\emptyset')}$. `
+                correction += `<br>L'équation est de la forme $x^2=k$ avec $k=${texNombre(c - b, 0)}$. Comme $${texNombre(c - b, 0)}<0$, l'équation n'a pas de solution.<br>Ainsi, $S=${miseEnEvidence('\\emptyset')}$. `
                 reponse = '\\emptyset'
               }
               break
@@ -246,8 +244,7 @@ export default class EquationsFonctionsRef extends Exercice {
 
               if (k > 0) {
                 if (k === a) {
-                  correction += `<br>L'équation est de la forme $x^2=k$ avec $k=${texNombre(k, 0)}$. Comme $${texNombre(k, 0)}>0$, l'équation a deux solutions : $-\\sqrt{${texNombre(k, 0)}}$ et $\\sqrt{${texNombre(k, 0)}}$.
-                <br>  Comme $-\\sqrt{${texNombre(k, 0)}}=-${extraireRacineCarree(k)[0]}$ et $\\sqrt{${k}}=${extraireRacineCarree(k)[0]}$ alors
+                  correction += `<br>L'équation est de la forme $x^2=k$ avec $k=${texNombre(k, 0)}$. Comme $${texNombre(k, 0)}>0$, l'équation a deux solutions : $-\\sqrt{${texNombre(k, 0)}}$ et $\\sqrt{${texNombre(k, 0)}}$.<br>Comme $-\\sqrt{${texNombre(k, 0)}}=-${extraireRacineCarree(k)[0]}$ et $\\sqrt{${k}}=${extraireRacineCarree(k)[0]}$ alors
                 les solutions de l'équation peuvent s'écrire plus simplement : $-${extraireRacineCarree(k)[0]}$ et $${extraireRacineCarree(k)[0]}$.<br>
                 Ainsi,  $S=${miseEnEvidence(`\\{-${extraireRacineCarree(k)[0]}${sp(1)};${sp(1)}${extraireRacineCarree(k)[0]}\\}`)}$.`
                   reponse = `\\{-${extraireRacineCarree(k)[0]};${extraireRacineCarree(k)[0]}\\}`
@@ -268,8 +265,7 @@ export default class EquationsFonctionsRef extends Exercice {
               Ainsi, $S=${miseEnEvidence('\\{0\\}')}$. `
                 reponse = '\\{0\\}'
               } else {
-                correction += `<br>L'équation est de la forme $x^2=k$ avec $k=${texNombre(b - c)}$. Comme $${texNombre(b - c)}<0$, l'équation n'a pas de solution.
-                <br> Ainsi, $S=${miseEnEvidence('\\emptyset')}$. `
+                correction += `<br>L'équation est de la forme $x^2=k$ avec $k=${texNombre(b - c)}$. Comme $${texNombre(b - c)}<0$, l'équation n'a pas de solution.<br> Ainsi, $S=${miseEnEvidence('\\emptyset')}$. `
                 reponse = '\\emptyset'
               }
               break
@@ -308,10 +304,8 @@ export default class EquationsFonctionsRef extends Exercice {
                   c - b === 16 * a ||
                   c - b === 25 * a
                 ) {
-                  correction += `<br>L'équation est de la forme $x^2=k$ avec $k=${texNombre(k, 0)}$. Comme $${texNombre(k, 0)}>0$, alors l'équation a deux solutions : $-\\sqrt{${texNombre(k, 0)}}$ et $\\sqrt{${texNombre(k, 0)}}$.
-                <br>  Comme $-\\sqrt{${texNombre(k, 0)}}=-${extraireRacineCarree(k)[0]}$ et $\\sqrt{${k}}=${extraireRacineCarree(k)[0]}$ alors
-                les solutions de l'équation peuvent s'écrire plus simplement : $-${extraireRacineCarree(k)[0]}$ et $${extraireRacineCarree(k)[0]}$.
-                <br> Ainsi, $S=${miseEnEvidence(`\\left\\{-${extraireRacineCarree(k)[0]}${sp(1)};${sp(1)}${extraireRacineCarree(k)[0]}\\right\\}`)}$.`
+                  correction += `<br>L'équation est de la forme $x^2=k$ avec $k=${texNombre(k, 0)}$. Comme $${texNombre(k, 0)}>0$, alors l'équation a deux solutions : $-\\sqrt{${texNombre(k, 0)}}$ et $\\sqrt{${texNombre(k, 0)}}$.<br>  Comme $-\\sqrt{${texNombre(k, 0)}}=-${extraireRacineCarree(k)[0]}$ et $\\sqrt{${k}}=${extraireRacineCarree(k)[0]}$ alors
+                les solutions de l'équation peuvent s'écrire plus simplement : $-${extraireRacineCarree(k)[0]}$ et $${extraireRacineCarree(k)[0]}$.<br> Ainsi, $S=${miseEnEvidence(`\\left\\{-${extraireRacineCarree(k)[0]}${sp(1)};${sp(1)}${extraireRacineCarree(k)[0]}\\right\\}`)}$.`
                   reponse = `\\{-${extraireRacineCarree(k)[0]};${extraireRacineCarree(k)[0]}\\}`
                 } else {
                   if (
@@ -320,8 +314,8 @@ export default class EquationsFonctionsRef extends Exercice {
                     (c - b === 16 && a === 9) ||
                     (c - b === 9 && a === 16)
                   ) {
-                    correction += `<br>L'équation est de la forme $x^2=k$ avec $k=${f1.texFractionSimplifiee}$. Comme $${texFractionReduite(c - b, a)}>0$, alors l'équation a deux solutions : $-\\sqrt{${texFractionReduite(c - b, a)}}$ et $\\sqrt{${texFractionReduite(c - b, a)}}$.
-                  <br>  Comme $-\\sqrt{${f1.texFractionSimplifiee}}=-\\dfrac{${extraireRacineCarree(c - b)[0]}}{${extraireRacineCarree(a)[0]}}$ et $\\sqrt{${f1.texFractionSimplifiee}}=\\dfrac{${extraireRacineCarree(c - b)[0]}}{${extraireRacineCarree(a)[0]}}$ alors
+                    correction += `<br>L'équation est de la forme $x^2=k$ avec $k=${f1.texFractionSimplifiee}$. Comme $${texFractionReduite(c - b, a)}>0$, alors l'équation a deux solutions : $-\\sqrt{${texFractionReduite(c - b, a)}}$ et $\\sqrt{${texFractionReduite(c - b, a)}}$.<br>
+                      Comme $-\\sqrt{${f1.texFractionSimplifiee}}=-\\dfrac{${extraireRacineCarree(c - b)[0]}}{${extraireRacineCarree(a)[0]}}$ et $\\sqrt{${f1.texFractionSimplifiee}}=\\dfrac{${extraireRacineCarree(c - b)[0]}}{${extraireRacineCarree(a)[0]}}$ alors
                   les solutions de l'équation peuvent s'écrire plus simplement : $-\\dfrac{${extraireRacineCarree(c - b)[0]}}{${extraireRacineCarree(a)[0]}}$ et $\\dfrac{${extraireRacineCarree(c - b)[0]}}{${extraireRacineCarree(a)[0]}}$.<br>
                   Ainsi, $S=${miseEnEvidence(`\\left\\{-\\dfrac{${extraireRacineCarree(c - b)[0]}}{${extraireRacineCarree(a)[0]}}${sp(1)};${sp(1)}\\dfrac{${extraireRacineCarree(c - b)[0]}}{${extraireRacineCarree(a)[0]}}\\right\\}`)}$`
                     reponse = `\\{-\\dfrac{${extraireRacineCarree(c - b)[0]}}{${extraireRacineCarree(a)[0]}};\\dfrac{${extraireRacineCarree(c - b)[0]}}{${extraireRacineCarree(a)[0]}}\\}`
@@ -791,14 +785,11 @@ Ainsi,    $S=${miseEnEvidence('\\emptyset')}$.<br>
       })
       texte =
         enonce +
-        '<br>' +
         ajouteChampTexteMathLive(this, i, KeyboardType.clavierEnsemble, {
-          texteAvant: ' $S=$',
+          texteAvant: '<br>$S=$',
+          texteApres: '<br>$\\textit{Respecter les notations}$.',
         })
       texteCorr = correction
-      if (this.interactif) {
-        texte += '<br>$\\textit{Respecter les notations}$.'
-      }
       if (this.questionJamaisPosee(i, listeTypeDeQuestions[i], a, b, k)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte

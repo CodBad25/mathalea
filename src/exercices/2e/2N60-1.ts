@@ -129,14 +129,12 @@ export default class ModeliseInequations extends Exercice {
               reponse = texNombre(Math.ceil((a - b) / (d - c)), 0)
             }
 
-            texte +=
-              '<br>' +
-              ajouteChampTexteMathLive(
-                this,
-                i,
-                KeyboardType.clavierDeBaseAvecFraction,
-                { texteApres: '$\\text{ km}$' },
-              )
+            texte += ajouteChampTexteMathLive(
+              this,
+              i,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteApres: '$\\text{ km}$' },
+            )
             handleAnswers(this, i, { reponse: { value: reponse } })
           }
           break
@@ -167,14 +165,12 @@ export default class ModeliseInequations extends Exercice {
        `
             reponse = texNombre(Math.floor((budget - b) / a), 0)
 
-            texte +=
-              '<br>' +
-              ajouteChampTexteMathLive(
-                this,
-                i,
-                KeyboardType.clavierDeBaseAvecFraction,
-                { texteApres: '$\\text{ km}$' },
-              )
+            texte += ajouteChampTexteMathLive(
+              this,
+              i,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteApres: '$\\text{ km}$' },
+            )
             handleAnswers(this, i, { reponse: { value: reponse } })
           }
           break
@@ -205,14 +201,12 @@ export default class ModeliseInequations extends Exercice {
                 ? texNombre((RT - PB * EM) / PB, 0)
                 : texNombre(Math.floor((RT - PB * EM) / PB) + 1, 0)
 
-            texte +=
-              '<br>' +
-              ajouteChampTexteMathLive(
-                this,
-                i,
-                KeyboardType.clavierDeBaseAvecFraction,
-                { texteApres: 'entrées' },
-              )
+            texte += ajouteChampTexteMathLive(
+              this,
+              i,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteApres: 'entrées', texteAvant: '<br>' },
+            )
             handleAnswers(this, i, { reponse: { value: reponse } })
           }
           break
@@ -323,9 +317,11 @@ export default class ModeliseInequations extends Exercice {
               reponse = choix
                 ? `[0;${f.texFraction}]`
                 : `[${f.texFraction};${L}]`
-              texte +=
-                '<br>' +
-                ajouteChampTexteMathLive(this, i, KeyboardType.clavierEnsemble)
+              texte += ajouteChampTexteMathLive(
+                this,
+                i,
+                KeyboardType.clavierEnsemble,
+              )
             } else {
               texteCorr += `$\\begin{aligned}
               \\dfrac{${l} x}{2} &${choix ? '\\leqslant' : '\\geqslant'} \\dfrac{${l}(${L}-x)}{${2 * P[1]}}\\\\`
@@ -342,7 +338,12 @@ export default class ModeliseInequations extends Exercice {
                 : `[${f.texFraction};${L}]`
               texte +=
                 '<br>' +
-                ajouteChampTexteMathLive(this, i, KeyboardType.clavierEnsemble)
+                ajouteChampTexteMathLive(
+                  this,
+                  i,
+                  KeyboardType.clavierEnsemble,
+                  { texteAvant: '<br>' },
+                )
             }
             handleAnswers(this, i, {
               reponse: { value: reponse, options: { intervalle: true } },
@@ -446,14 +447,12 @@ export default class ModeliseInequations extends Exercice {
              `
             reponse = new FractionEtendue(P - 2 * b - 2 * a, 4).texFraction
 
-            texte +=
-              '<br>' +
-              ajouteChampTexteMathLive(
-                this,
-                i,
-                KeyboardType.clavierDeBaseAvecFraction,
-                { texteAvant: '$x>$' },
-              )
+            texte += ajouteChampTexteMathLive(
+              this,
+              i,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: '<br>$x>$' },
+            )
             handleAnswers(this, i, { reponse: { value: reponse } })
           }
           break
@@ -573,14 +572,12 @@ Le problème revient donc à trouver les valeurs de $x$ vérifiant : $${rienSi1(
              `
               reponse = f.texFraction
             }
-            texte +=
-              '<br>' +
-              ajouteChampTexteMathLive(
-                this,
-                i,
-                KeyboardType.clavierDeBaseAvecFraction,
-                { texteAvant: '$x>$' },
-              )
+            texte += ajouteChampTexteMathLive(
+              this,
+              i,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: '<br>$x>$' },
+            )
             handleAnswers(this, i, { reponse: { value: reponse } })
           }
           break
@@ -621,29 +618,27 @@ Le problème revient donc à trouver les valeurs de $x$ vérifiant : $${rienSi1(
             if (pgcd(res - b * c, c * a) === 1) {
               texteCorr += `On doit choisir $x${c * a > 0 ? `${choix[1]}` : `${choix[2]}`}${f.texFraction}$ pour obtenir un nombre ${choix[0]} à $${res}$. .
             `
-              texte +=
-                '<br>' +
-                ajouteChampTexteMathLive(
-                  this,
-                  i,
-                  KeyboardType.clavierDeBaseAvecFraction,
-                  {
-                    texteAvant: c * a > 0 ? `$x${choix[1]}$` : `$x${choix[2]}$`,
-                  },
-                )
+              texte += ajouteChampTexteMathLive(
+                this,
+                i,
+                KeyboardType.clavierDeBaseAvecFraction,
+                {
+                  texteAvant:
+                    c * a > 0 ? `<br>$x${choix[1]}$` : `<br>$x${choix[2]}$`,
+                },
+              )
             } else {
               texteCorr += `Comme $\\dfrac{${res - b * c}}{${texNombre(c * a)}}=${f.texFraction}$, on doit choisir $x${c * a > 0 ? `${choix[1]}` : `${choix[2]}`}${f.texFraction}$ pour obtenir un nombre ${choix[0]} à $${res}$.
              `
-              texte +=
-                '<br>' +
-                ajouteChampTexteMathLive(
-                  this,
-                  i,
-                  KeyboardType.clavierDeBaseAvecFraction,
-                  {
-                    texteAvant: c * a > 0 ? `$x${choix[1]}$` : `$x${choix[2]}$`,
-                  },
-                )
+              texte += ajouteChampTexteMathLive(
+                this,
+                i,
+                KeyboardType.clavierDeBaseAvecFraction,
+                {
+                  texteAvant:
+                    c * a > 0 ? `<br>$x${choix[1]}$` : `<br>$x${choix[2]}$`,
+                },
+              )
             }
             reponse = f.texFraction
             handleAnswers(this, i, { reponse: { value: reponse } })
