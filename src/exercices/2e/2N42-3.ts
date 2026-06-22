@@ -96,17 +96,13 @@ export default class EtudeTrinome extends Exercice {
       $\\begin{aligned}${p.texFormeCanonique} &=${etapesDeveloppement[0]}${
         this.correctionDetaillee === true
           ? `${sp(5)}${miseEnEvidence("\\textit{On développe avec l'égalité remarquable}")}`
-          : ''
-      }\\\\
-      ${
-        a !== 1
+          : ''}\\\\
+  ${a !== 1
           ? `&=${etapesDeveloppement[1]}${
               this.correctionDetaillee === true
                 ? `${sp(5)}${miseEnEvidence('\\textit{On développe avec la simple distributivité}')}`
-                : ''
-            }\\\\`
-          : ''
-      }&=${etapesDeveloppement[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}')}` : ''}
+                : ''}\\\\`
+          : ''}&=${etapesDeveloppement[2]}${this.correctionDetaillee === true ? `${sp(20)}${miseEnEvidence('\\textit{On réduit}')}` : ''}
    \\end{aligned}$<br>`
       correction2 += `On en déduit que $f(x)$ s'écrit sous forme canonique :  $f(x)=${p.texFormeCanonique}$.`
     }
