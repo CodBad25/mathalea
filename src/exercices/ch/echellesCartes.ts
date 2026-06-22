@@ -10,7 +10,8 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre = 'Étudier une situation de proportionnalité avec des échelles'
+export const titre =
+  'Étudier une situation de proportionnalité avec des échelles'
 export const dateDePublication = '15/03/2024'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -167,8 +168,8 @@ export default class EchellesCartes extends Exercice {
           }
           break
         case 'reelle':
-          texte = `Deux villes se situent à une distance de $${texNombre(dReelleKm, 3)}\\,\\text{km}$.
-          <br>Quelle distance sépare les deux villes (en $\\text{cm}$) sur une carte d'échelle $1:${texNombre(echelle, 3)}$ ?`
+          texte = `Deux villes se situent à une distance de $${texNombre(dReelleKm, 3)}\\,\\text{km}$.<br>
+          Quelle distance sépare les deux villes (en $\\text{cm}$) sur une carte d'échelle $1:${texNombre(echelle, 3)}$ ?`
           texteCorr = `L'échelle d'une carte correspond au rapport entre la distance sur la carte et la distance réelle. 
           Dans notre cas, $1\\,\\text{cm}$ sur la carte correspond à $${texNombre(echelle, 3)}\\,\\text{cm} = ${texNombre(echelleKm, 3)}\\,\\text{km}$ dans la réalité. 
           Ainsi, `
@@ -200,8 +201,8 @@ export default class EchellesCartes extends Exercice {
           }
           break
         case 'echelle':
-          texte = `Deux villes se situent à une distance de $${texNombre(dCarte, 3)}\\,\\text{cm}$ sur une carte. Dans la réalité, elles se situent à $${texNombre(dReelleKm, 3)}\\,\\text{km}$ de distance.
-          <br> Déterminer l'échelle de la carte.`
+          texte = `Deux villes se situent à une distance de $${texNombre(dCarte, 3)}\\,\\text{cm}$ sur une carte. Dans la réalité, elles se situent à $${texNombre(dReelleKm, 3)}\\,\\text{km}$ de distance.<br>
+           Déterminer l'échelle de la carte.`
           texteCorr = `L'échelle d'une carte correspond au rapport entre la distance sur la carte et la distance réelle. 
           Dans notre cas, $${texNombre(dCarte, 3)}\\,\\text{cm}$ sur la carte correspondent à $${texNombre(dReelle, 3)}\\,\\text{cm}=${texNombre(dReelleKm, 3)}\\,\\text{km}$ dans la réalité. 
           Ainsi,`

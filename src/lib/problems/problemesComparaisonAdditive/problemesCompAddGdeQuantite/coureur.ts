@@ -16,8 +16,8 @@ export function coureur5(decimal = true): Probleme {
   const data = { nb1, nb2 }
   const unite = decimal ? 'km' : 'm'
   const uniteComplete = decimal ? 'kilomètres' : 'mètres'
-  const enonce = `${personnage.prenom} a réalisé un trail au cours duquel ${personnage.pronom} a couru sur $${texNombre(nb1, 3)}$ ${uniteComplete}. ${premiereLettreEnMajuscule(personnage.pronom)} a marché $${texNombre(nb2, 3)}$ ${uniteComplete} de plus que ce qu'${personnage.pronom} a couru.
-  <br>Sur quelle distance a-t-${personnage.pronom} marché ?`
+  const enonce = `${personnage.prenom} a réalisé un trail au cours duquel ${personnage.pronom} a couru sur $${texNombre(nb1, 3)}$ ${uniteComplete}. ${premiereLettreEnMajuscule(personnage.pronom)} a marché $${texNombre(nb2, 3)}$ ${uniteComplete} de plus que ce qu'${personnage.pronom} a couru.<br>
+  Sur quelle distance a-t-${personnage.pronom} marché ?`
   const correction = `${personnage.prenom} a marché sur $${texNombre(nb2, 3)}$ ${uniteComplete} de plus que $${texNombre(nb1, 3)}$ ${uniteComplete}.
   ${personnage.prenom} a donc marché : $${texNombre(nb1, 3)}\\text{  ${unite}}+${texNombre(nb2, 3)}\\text{  ${unite}} = ${miseEnEvidence(texNombre(nb2 + nb1, 3))}\\text{  ${unite}}$.`
   const probleme = new ProblemeCompAddGdeQantite('coureur5', data)
