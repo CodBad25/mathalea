@@ -717,11 +717,12 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
             pixelsParCm: 30,
             scale: 1,
             mainlevee: false,
+            style: 'display: block',
           },
         ),
         objetsCorrection.filter((el) => el !== undefined),
       )
-      texteCorr += '<br>' + IEP.htmlBouton(this.numeroExercice, i)
+      texteCorr += IEP.htmlBouton(this.numeroExercice, i)
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
