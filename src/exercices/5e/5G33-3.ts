@@ -95,7 +95,7 @@ export default class MesurerDistancePointDroite extends Exercice {
       const ymin = -4
       const ymax = 5
       const paramsEnonce = { xmin, ymin, xmax, ymax, pixelsParCm: 20, scale: 1 }
-      texteCorr = '' + mathalea2d(paramsEnonce, objetsCorrection) + '<br>'
+      texteCorr = '' + mathalea2d(paramsEnonce, objetsCorrection)
       texteCorr += `Pour mesurer la distance entre le point $${A.nom}$ et la droite ($d$) :<br>
       - on utilise l'équerre pour tracer la perpendiculaire à la droite ($d$) qui passe par le point $${A.nom}$<br>
       - si on nomme $${H.nom}$ le pied de la perpendiculaire, alors la distance entre le point $${A.nom}$ ; 

@@ -9,6 +9,7 @@ import {
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { rotation } from '../../lib/2d/transformations'
 import { pointIntersectionDD } from '../../lib/2d/utilitairesPoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { enleveDoublonNum, shuffle } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
@@ -19,8 +20,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const dateDePublication = '14/01/2025'
 export const amcReady = true
@@ -68,15 +67,15 @@ export default class ProprietesParallelesPerpendiculaires extends Exercice {
     this.comment =
       "Dans cet exercice, on peut choisir la(les) propriété(s) qu'on veut traiter.<br><br>"
     this.comment +=
-      "Il se peut que l'exercice vous propose moins de questions que le nombre demandé par manque de possibiilités d'exercices différents. Pour augmenter cette possibilité, choisissez d'autres types de raisonnement."
+      "Il se peut que l'exercice vous propose moins de questions que le nombre demandé par manque de possibiilités d'exercices différents. Pour augmenter cette possibilité, choisissez d'autres types de raisonnement.<br><br>"
     this.comment +=
-      "<br><br>Les propriétés évoquées dans 'Type de propriété' sont : <br><br> P1 : Si deux droites sont parallèles alors toute droite perpendiculaire à l'une est aussi perpendiculaire à l'autre.<br>"
+      "Les propriétés évoquées dans 'Type de propriété' sont : <br><br> P1 : Si deux droites sont parallèles alors toute droite perpendiculaire à l'une est aussi perpendiculaire à l'autre.<br><br>"
     this.comment +=
-      '<br> P2 : Si deux droites sont parallèles à une même droite alors elles sont parallèles entre elles.<br>'
+      'P2 : Si deux droites sont parallèles à une même droite alors elles sont parallèles entre elles.<br><br>'
     this.comment +=
-      '<br> P3 : Si deux droites sont perpendiculaires à une même droite alors elles sont parallèles entre elles.<br>'
+      'P3 : Si deux droites sont perpendiculaires à une même droite alors elles sont parallèles entre elles.<br><br>'
     this.comment +=
-      "<br> Le paramètre 'Pas de mélange des propriétés' permet soit de mélanger les propriétés qu'on a choisies, soit de ne retrouver qu'une seule propriété à la fois (avec le nombre d'étapes choisi)."
+      "Le paramètre 'Pas de mélange des propriétés' permet soit de mélanger les propriétés qu'on a choisies, soit de ne retrouver qu'une seule propriété à la fois (avec le nombre d'étapes choisi)."
   }
 
   nouvelleVersion() {
@@ -673,20 +672,19 @@ export default class ProprietesParallelesPerpendiculaires extends Exercice {
           " Les droites données parallèles dans l'énoncé sont de même "
         texteCorr += context.isHtml ? ' couleur/style.<br>' : 'style.<br>'
       }
-      texteCorr +=
-        mathalea2d(
-          {
-            xmin: -2,
-            xmax: 15,
-            ymin: -2,
-            ymax: 10,
-            pixelsParCm: 20,
-            scale: context.vue !== 'latex' ? 0.3 : 0.6,
-            mainlevee: false,
-            amplitude: 0.3,
-          },
-          objets,
-        ) + '<br>'
+      texteCorr += mathalea2d(
+        {
+          xmin: -2,
+          xmax: 15,
+          ymin: -2,
+          ymax: 10,
+          pixelsParCm: 20,
+          scale: context.vue !== 'latex' ? 0.3 : 0.6,
+          mainlevee: false,
+          amplitude: 0.3,
+        },
+        objets,
+      )
       for (let j = 0; j < code.length - 1; j++) {
         if (this.correctionDetaillee) texteCorr += 'On sait que : '
         else texteCorr += 'Comme '

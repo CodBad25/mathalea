@@ -212,11 +212,11 @@ export default class ProblemesAvecOperationsEnUneLigneOld extends Exercice {
             tortuesRelachees = groupesRelaches * tortuesParGroupeApres
           } while (tortuesInitiales === tortuesRelachees)
 
-          texte = `Une association possède $${tortuesInitiales}$ bébés tortues marines.
-          <br>Elles sont réparties équitablement dans $${nbGroupes}$ groupes.
-          <br>Chaque groupe est ensuite rejoint par $${tortuesSupplementaires}$ tortues supplémentaires élevées en réserve.
-          <br>L'association décide de relâcher $${groupesRelaches}$ groupes de tortues dans la mer.
-          <br>Combien de tortues ont été relâchées en mer ?<br>`
+          texte = `Une association possède $${tortuesInitiales}$ bébés tortues marines.<br>
+          Elles sont réparties équitablement dans $${nbGroupes}$ groupes.<br>
+          Chaque groupe est ensuite rejoint par $${tortuesSupplementaires}$ tortues supplémentaires élevées en réserve.<br>
+          L'association décide de relâcher $${groupesRelaches}$ groupes de tortues dans la mer.<br>
+          Combien de tortues ont été relâchées en mer ?<br>`
 
           reponse = `(${tortuesInitiales} \\div ${nbGroupes} + ${tortuesSupplementaires}) \\times ${groupesRelaches}`
 
