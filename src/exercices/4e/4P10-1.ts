@@ -2,6 +2,7 @@ import { courbe } from '../../lib/2d/Courbe'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
+import { bleuMathalea } from '../../lib/colors'
 import { texPrix, texteGras } from '../../lib/format/style'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../lib/outils/embellissements'
@@ -14,7 +15,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre =
   "Résoudre un problème de proportionnalité à l'aide d'un graphique"
 
@@ -216,25 +216,24 @@ export default class GraphiquesEtProportionnalite2 extends Exercice {
       const enonces = []
       enonces.push({
         enonce: `
-          À ${situation.lieu}, ${situation.prenom} utilise le graphique ci-dessous pour indiquer le prix de ses ${situation.articles} en fonction du ${situation.qte} ${situation.art_articles}.
-          <br>${situation.fig}
-          ${numAlpha(k++)} Justifier que c'est une situation de proportionnalité à l'aide du graphique.
-          <br> ${numAlpha(k++)} Quel est le prix de $${situation.qte_max}$ ${situation.unite}  ${situation.articles} ?
-          <br> ${numAlpha(k++)} Quel est le prix de $${situation.qte2}$ ${situation.unite}  ${situation.articles} ?
-          `,
+          À ${situation.lieu}, ${situation.prenom} utilise le graphique ci-dessous pour indiquer le prix de ses ${situation.articles} en fonction du ${situation.qte} ${situation.art_articles}.<br>
+          ${situation.fig}
+          ${numAlpha(k++)} Justifier que c'est une situation de proportionnalité à l'aide du graphique.<br>
+           ${numAlpha(k++)} Quel est le prix de $${situation.qte_max}$ ${situation.unite}  ${situation.articles} ?<br>
+            ${numAlpha(k++)} Quel est le prix de $${situation.qte2}$ ${situation.unite}  ${situation.articles} ?`,
         // question:``,
         correction: `
-         ${numAlpha(kCorr++)} Ce graphique est une droite qui passe par l'origine.
-        <br> ${texteEnCouleur("C'est donc bien le graphique d'une situation de proportionnalité.")}
-        <br> ${numAlpha(kCorr++)} Par lecture graphique, en utilisant les pointillés rouges du graphe ci-dessous, ${texteEnCouleur(`${situation.qte_max} ${situation.unite}  ${situation.articles} coûtent ${texPrix(arrondi(situation.qte_max * situation.prix_unitaire))} €.`)}
-        <br> ${situation.figureCorr}
-        ${numAlpha(kCorr++)} Pour $${situation.qte2}$ ${situation.unite}  ${situation.articles}, la lecture graphique est moins facile, nous allons détailler deux méthodes.
-        <br><br> ${texteGras('Première méthode par lecture graphique :')}
-        <br> Il faut prendre en compte que chaque petit carreau représente $${texPrix(stepAxeSecondaire * yscale)}$ € et utiliser les pointillés bleus.
-        <br><br> ${texteGras('Seconde méthode en calculant une quatrième proportionnelle :')}
-        <br> $${situation.qte_max}$ ${situation.unite}  ${situation.articles} coûtent $${texPrix(arrondi(situation.qte_max * situation.prix_unitaire))}$ €
-        donc $${situation.qte2}$ ${situation.unite}  ${situation.articles} coûtent : <br> $(${texPrix(arrondi(situation.qte_max * situation.prix_unitaire))}$ € $\\div ${situation.qte_max}$ ${situation.articles} $)\\times (${situation.qte2}$ ${situation.articles})  $= ${texPrix(arrondi(situation.qte2 * situation.prix_unitaire))}$ €
-        <br><br>${texteEnCouleur(`Quelle que soit la méthode utilisée, ${situation.qte2} ${situation.unite}  ${situation.articles} coûtent ${texPrix(arrondi(situation.qte2 * situation.prix_unitaire)).replace('{,}', ',')} €.`)}
+         ${numAlpha(kCorr++)} Ce graphique est une droite qui passe par l'origine.<br>
+          ${texteEnCouleur("C'est donc bien le graphique d'une situation de proportionnalité.")}<br>
+          ${numAlpha(kCorr++)} Par lecture graphique, en utilisant les pointillés rouges du graphe ci-dessous, ${texteEnCouleur(`${situation.qte_max} ${situation.unite}  ${situation.articles} coûtent ${texPrix(arrondi(situation.qte_max * situation.prix_unitaire))} €.`)}<br>
+          ${situation.figureCorr}
+        ${numAlpha(kCorr++)} Pour $${situation.qte2}$ ${situation.unite}  ${situation.articles}, la lecture graphique est moins facile, nous allons détailler deux méthodes.<br><br>
+         ${texteGras('Première méthode par lecture graphique :')}<br>
+          Il faut prendre en compte que chaque petit carreau représente $${texPrix(stepAxeSecondaire * yscale)}$ € et utiliser les pointillés bleus.<br><br>
+           ${texteGras('Seconde méthode en calculant une quatrième proportionnelle :')}<br>
+         $${situation.qte_max}$ ${situation.unite}  ${situation.articles} coûtent $${texPrix(arrondi(situation.qte_max * situation.prix_unitaire))}$ €
+        donc $${situation.qte2}$ ${situation.unite}  ${situation.articles} coûtent : <br> $(${texPrix(arrondi(situation.qte_max * situation.prix_unitaire))}$ € $\\div ${situation.qte_max}$ ${situation.articles} $)\\times (${situation.qte2}$ ${situation.articles})  $= ${texPrix(arrondi(situation.qte2 * situation.prix_unitaire))}$ €<br><br>
+        ${texteEnCouleur(`Quelle que soit la méthode utilisée, ${situation.qte2} ${situation.unite}  ${situation.articles} coûtent ${texPrix(arrondi(situation.qte2 * situation.prix_unitaire)).replace('{,}', ',')} €.`)}
         `,
       })
       texte = `${enonces[0].enonce}`
