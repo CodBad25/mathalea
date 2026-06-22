@@ -14,6 +14,7 @@ import {
 } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointSurSegment } from '../../lib/2d/utilitairesPoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -29,8 +30,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   "Exprimer le cosinus, le sinus ou la tangente d'un angle en fonction des côtés du triangle"
@@ -564,17 +563,18 @@ export default class ExprimerCosSinTan extends Exercice {
       if (this.sup === 1) {
         texteInit = texte
         texteInit += `Dans le triangle rectangle $${A.nom + B.nom + C.nom}$ et à l'aide des longueurs $${A.nom + B.nom}$, $${A.nom + C.nom}$ et $${B.nom + C.nom}$ :`
-        texte += `Compléter à l'aide des longueurs $${A.nom + B.nom}$, $${A.nom + C.nom}$ et $${B.nom + C.nom}$ : `
+        texte += `Compléter à l'aide des longueurs $${A.nom + B.nom}$, $${A.nom + C.nom}$ et $${B.nom + C.nom}$ : <br>`
         for (let ee = 0; ee < fonctionsTrigonometriques.length; ee++) {
-          texte += `<br>$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=$`
+          texte += `$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=$`
           if (!context.isAmc) {
-            texte += remplisLesBlancs(
-              this,
-              fonctionsTrigonometriques.length * i + ee,
-              '\\dfrac{%{champ1}}{%{champ2}}',
-              KeyboardType.alphanumeric,
-              '\\ldots',
-            )
+            texte +=
+              remplisLesBlancs(
+                this,
+                fonctionsTrigonometriques.length * i + ee,
+                '\\dfrac{%{champ1}}{%{champ2}}',
+                KeyboardType.alphanumeric,
+                '\\ldots',
+              ) + '<br>'
             handleAnswers(this, fonctionsTrigonometriques.length * i + ee, {
               champ1: {
                 value: correctionTrigoRLB[fonctionsTrigonometriques[ee]][0],
@@ -598,17 +598,18 @@ export default class ExprimerCosSinTan extends Exercice {
           'Exprimer les rapports trigonométriques pour ' +
           (this.nbQuestions === 1 ? 'ce' : 'chaque') +
           ' triangle rectangle, en fonction des longueurs respectives de ses côtés.'
-        texte += `Compléter à l'aide des longueurs $${A.nom + B.nom}$, $${A.nom + C.nom}$ et $${B.nom + C.nom}$ : `
+        texte += `Compléter à l'aide des longueurs $${A.nom + B.nom}$, $${A.nom + C.nom}$ et $${B.nom + C.nom}$ :<br> `
         for (let ee = 0; ee < fonctionsTrigonometriques.length; ee++) {
           if (!context.isAmc) {
-            texte += `<br>$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=$`
-            texte += remplisLesBlancs(
-              this,
-              2 * (fonctionsTrigonometriques.length * i + ee),
-              '\\dfrac{%{champ1}}{%{champ2}}',
-              KeyboardType.alphanumeric,
-              '\\ldots',
-            )
+            texte += `$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=$`
+            texte +=
+              remplisLesBlancs(
+                this,
+                2 * (fonctionsTrigonometriques.length * i + ee),
+                '\\dfrac{%{champ1}}{%{champ2}}',
+                KeyboardType.alphanumeric,
+                '\\ldots',
+              ) + '<br>'
             handleAnswers(
               this,
               2 * (fonctionsTrigonometriques.length * i + ee),
@@ -624,14 +625,15 @@ export default class ExprimerCosSinTan extends Exercice {
               },
             )
 
-            texte += `<br>$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + C.nom + B.nom}}\\right)=$`
-            texte += remplisLesBlancs(
-              this,
-              2 * (fonctionsTrigonometriques.length * i + ee) + 1,
-              '\\dfrac{%{champ1}}{%{champ2}}',
-              KeyboardType.alphanumeric,
-              '\\ldots',
-            )
+            texte += `$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + C.nom + B.nom}}\\right)=$`
+            texte +=
+              remplisLesBlancs(
+                this,
+                2 * (fonctionsTrigonometriques.length * i + ee) + 1,
+                '\\dfrac{%{champ1}}{%{champ2}}',
+                KeyboardType.alphanumeric,
+                '\\ldots',
+              ) + '<br>'
             handleAnswers(
               this,
               2 * (fonctionsTrigonometriques.length * i + ee) + 1,
@@ -684,16 +686,17 @@ export default class ExprimerCosSinTan extends Exercice {
         texteInit = texte
         for (let ee = 0; ee < fonctionsTrigonometriques.length; ee++) {
           texte += ee > 0 ? '<br>' : ''
-          texte += `Exprimer $${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}(\\widehat{${A.nom + B.nom + C.nom}})$ de deux manières différentes.`
+          texte += `Exprimer $${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}(\\widehat{${A.nom + B.nom + C.nom}})$ de deux manières différentes.<br>`
           if (!context.isAmc) {
-            texte += `<br>Parmi deux triangles, dans le triangle rectangle le plus grand, $${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=$`
-            texte += remplisLesBlancs(
-              this,
-              fonctionsTrigonometriques.length * 2 * i + 2 * ee,
-              '\\dfrac{%{champ1}}{%{champ2}}',
-              KeyboardType.alphanumeric,
-              '\\ldots',
-            )
+            texte += `Parmi deux triangles, dans le triangle rectangle le plus grand, $${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=$`
+            texte +=
+              remplisLesBlancs(
+                this,
+                fonctionsTrigonometriques.length * 2 * i + 2 * ee,
+                '\\dfrac{%{champ1}}{%{champ2}}',
+                KeyboardType.alphanumeric,
+                '\\ldots',
+              ) + '<br>'
             handleAnswers(
               this,
               fonctionsTrigonometriques.length * 2 * i + 2 * ee,
@@ -709,14 +712,15 @@ export default class ExprimerCosSinTan extends Exercice {
               },
             )
 
-            texte += `<br>Parmi deux triangles, dans le triangle rectangle le plus petit, $${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=$`
-            texte += remplisLesBlancs(
-              this,
-              fonctionsTrigonometriques.length * 2 * i + 2 * ee + 1,
-              '\\dfrac{%{champ1}}{%{champ2}}',
-              KeyboardType.alphanumeric,
-              '\\ldots',
-            )
+            texte += `Parmi deux triangles, dans le triangle rectangle le plus petit, $${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=$`
+            texte +=
+              remplisLesBlancs(
+                this,
+                fonctionsTrigonometriques.length * 2 * i + 2 * ee + 1,
+                '\\dfrac{%{champ1}}{%{champ2}}',
+                KeyboardType.alphanumeric,
+                '\\ldots',
+              ) + '<br>'
             handleAnswers(
               this,
               fonctionsTrigonometriques.length * 2 * i + 2 * ee + 1,
@@ -733,7 +737,6 @@ export default class ExprimerCosSinTan extends Exercice {
                 },
               },
             )
-            texte += '<br>'
           } else {
             propositionsAMC[ee * 2] = {
               type: 'qcmMono',
@@ -786,31 +789,31 @@ export default class ExprimerCosSinTan extends Exercice {
       }
 
       if (this.sup === 1 || this.sup === 2)
-        texteCorr += `<br>$${A.nom + B.nom + C.nom}$ est rectangle en $${A.nom}$ donc :`
+        texteCorr += `$${A.nom + B.nom + C.nom}$ est rectangle en $${A.nom}$ donc :<br>`
 
       if (this.sup === 1) {
         for (let ee = 0; ee < fonctionsTrigonometriques.length; ee++) {
-          texteCorr += `<br>$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=${miseEnEvidence(correctionTrigo[fonctionsTrigonometriques[ee]][0])}$`
+          texteCorr += `$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=${miseEnEvidence(correctionTrigo[fonctionsTrigonometriques[ee]][0])}$<br>`
           // texteCorr += ee === fonctionsTrigonometriques.length - 1 ? '.' : ''
         }
       } else if (this.sup === 2) {
         for (let ee = 0; ee < fonctionsTrigonometriques.length; ee++) {
-          texteCorr += `<br>$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=${miseEnEvidence(correctionTrigo[fonctionsTrigonometriques[ee]][0])}$ ;`
-          texteCorr += `<br>$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + C.nom + B.nom}}\\right)=${miseEnEvidence(correctionTrigo[fonctionsTrigonometriques[ee] === 3 ? 4 : fonctionsTrigonometriques[ee] === 1 ? 2 : 1][0])}$`
+          texteCorr += `$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=${miseEnEvidence(correctionTrigo[fonctionsTrigonometriques[ee]][0])}$ ;<br>`
+          texteCorr += `$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + C.nom + B.nom}}\\right)=${miseEnEvidence(correctionTrigo[fonctionsTrigonometriques[ee] === 3 ? 4 : fonctionsTrigonometriques[ee] === 1 ? 2 : 1][0])}$<br>`
           // texteCorr += ee === fonctionsTrigonometriques.length - 1 ? '.' : ''
         }
       } else if (this.sup === 3) {
         for (let ee = 0; ee < fonctionsTrigonometriques.length; ee++) {
-          texteCorr += `<br>$${A.nom + B.nom + C.nom}$ est rectangle en $${A.nom}$ donc `
-          texteCorr += `$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=${miseEnEvidence(correctionTrigo[fonctionsTrigonometriques[ee]][0])}$.`
-          texteCorr += `<br>$${A.nom + B.nom + H.nom}$ est rectangle en $${H.nom}$ donc `
-          texteCorr += `$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=${miseEnEvidence(correctionTrigoPointH[fonctionsTrigonometriques[ee]][0])}$.`
+          texteCorr += `$${A.nom + B.nom + C.nom}$ est rectangle en $${A.nom}$ donc `
+          texteCorr += `$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=${miseEnEvidence(correctionTrigo[fonctionsTrigonometriques[ee]][0])}$.<br>`
+          texteCorr += `$${A.nom + B.nom + H.nom}$ est rectangle en $${H.nom}$ donc `
+          texteCorr += `$${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=${miseEnEvidence(correctionTrigoPointH[fonctionsTrigonometriques[ee]][0])}$.<br>`
         }
       }
 
       if (context.isAmc) {
         this.autoCorrectionAMC[i] = {
-          enonce: texteInit + '\\\\\n',
+          enonce: texteInit + '\n',
           enonceAvant: true,
           options: {
             multicols: false,
