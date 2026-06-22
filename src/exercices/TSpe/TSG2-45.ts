@@ -60,7 +60,7 @@ export default class PlanRelatif extends Exercice {
       let d2 = 0
 
       if (scenario === 'confondus' || scenario === 'paralleles') {
-        const k = randint(-3, 3, [0,1,-1])
+        const k = randint(-3, 3, [0, 1, -1])
         a2 = k * a1
         b2 = k * b1
         c2 = k * c1
@@ -158,7 +158,7 @@ export default class PlanRelatif extends Exercice {
         Pour savoir si les vecteurs $\\vec n_1$ et $\\vec n_2$ sont colinéaires, on cherche s'il existe un réel  $k$ tel que : <br>
         $\\vec n_1= k \\vec n_2$       
          $\\iff\\begin{cases}${a1}=${rienSi1(a2)}k\\\\${b1}=${rienSi1(b2)}k\\\\${c1}=${rienSi1(c2)}k\\end{cases}\\quad\\iff\\quad
-          \\begin{cases}k=${k1.texFractionSimplifiee}\\\\\\\\k=${k2.texFractionSimplifiee}\\\\\\\\k=${k3.texFractionSimplifiee}.\\end{cases}$<br>`
+          \\begin{cases}k=${k1.texFractionSimplifiee}\\\\k=${k2.texFractionSimplifiee}\\\\k=${k3.texFractionSimplifiee}.\\end{cases}$<br>`
       if (paralleles) {
         kDifferentDe1 += `Le système admet une unique solution $k=${k1.texFractionSimplifiee}$.<br>
           On vient donc de montrer que $\\vec n_1= ${k1.texFractionSimplifiee} \\vec n_2$. 
@@ -178,26 +178,27 @@ export default class PlanRelatif extends Exercice {
         $\\begin{cases} ${rienSi1(a1)}x  ${ecritureAlgebriqueSauf1(b1)}y  ${ecritureAlgebriqueSauf1(c1)}z  ${ecritureAlgebrique(d1)} = 0\\\\
         ${rienSi1(a2)}x  ${ecritureAlgebriqueSauf1(b2)}y  ${ecritureAlgebriqueSauf1(c2)}z  ${ecritureAlgebrique(d2)} = 0\\end{cases}$<br>
         En multipliant la première équation par $${texNombre(a2)}$ et la deuxième par $${texNombre(a1)}$, le système précédent est équivalent à :<br>  
-        $\\begin{cases} ${rienSi1(a1*a2)}x  ${ecritureAlgebriqueSauf1(b1*a2)}y  ${ecritureAlgebriqueSauf1(c1*a2)}z  ${ecritureAlgebrique(d1*a2)} = 0\\\\
-        ${rienSi1(a2*a1)}x  ${ecritureAlgebriqueSauf1(b2*a1)}y  ${ecritureAlgebriqueSauf1(c2*a1)}z  ${ecritureAlgebrique(d2*a1)} = 0\\end{cases}$<br>
-        On observe que les deux équations sont ${confondus
-              ? 'proportionnelles, les plans sont donc confondus.'
-              : 'non proportionnelles, donc les plans sont parallèles distincts.'
-          }`;
-      }
-      else{
-        texteCorr+=`${texteEnCouleurEtGras('<br>Test d\'orthogonalité :', 'black')}<br>Pour vérifier l'orthogoanlité des plans, on calcule le produis sclaire de leurs vecteurs normaux : <br>
+        $\\begin{cases} ${rienSi1(a1 * a2)}x  ${ecritureAlgebriqueSauf1(b1 * a2)}y  ${ecritureAlgebriqueSauf1(c1 * a2)}z  ${ecritureAlgebrique(d1 * a2)} = 0\\\\
+        ${rienSi1(a2 * a1)}x  ${ecritureAlgebriqueSauf1(b2 * a1)}y  ${ecritureAlgebriqueSauf1(c2 * a1)}z  ${ecritureAlgebrique(d2 * a1)} = 0\\end{cases}$<br>
+        On observe que les deux équations sont ${
+          confondus
+            ? 'proportionnelles, les plans sont donc confondus.'
+            : 'non proportionnelles, donc les plans sont parallèles distincts.'
+        }`
+      } else {
+        texteCorr += `${texteEnCouleurEtGras("<br>Test d'orthogonalité :", 'black')}<br>Pour vérifier l'orthogoanlité des plans, on calcule le produis sclaire de leurs vecteurs normaux : <br>
         $\\begin{aligned}\\vec n_1\\cdot\\vec n_2 &= ${a1}\\times${ecritureParentheseSiNegatif(a2)} + ${b1}\\times${ecritureParentheseSiNegatif(b2)} + ${c1}\\times${ecritureParentheseSiNegatif(c2)}\\\\& = ${a1 * a2 + b1 * b2 + c1 * c2}\\end{aligned}$ 
         <br>Le produit scalaire est ${orthogonaux ? 'nul' : 'non nul'}, donc les plans sont ${orthogonaux ? 'orthogonaux' : 'non orthogonaux'}.`
-         }
+      }
 
-      texteCorr+=`${texteEnCouleurEtGras('<br>Conclusion :','black')}<br>` +
+      texteCorr +=
+        `${texteEnCouleurEtGras('<br>Conclusion :', 'black')}<br>` +
         (position === 'confondus'
           ? `${texteEnCouleurEtGras('Les deux plans sont confondus.')}`
           : position === 'paralleles'
             ? `${texteEnCouleurEtGras('Les deux plans sont parallèles distincts.')}`
             : position === 'orthogonaux'
-              ? `${texteEnCouleurEtGras('Les plans sont sécants orthogonaux.' )}`
+              ? `${texteEnCouleurEtGras('Les plans sont sécants orthogonaux.')}`
               : `${texteEnCouleurEtGras('Les plans sont sécants non orthogonaux.')}`)
 
       if (this.questionJamaisPosee(i, texte)) {
