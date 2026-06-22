@@ -96,8 +96,7 @@ export default class FonctionsCalculsDImages extends Exercice {
             'On donne le programme de calcul suivant qui correspond à une certaine fonction :'
           texteCorr = 'Avec ce programme de calcul :'
           if (context.isHtml) {
-            texte += `
-<br>
+            texte += `<br>
 <div class="ui compact warning message">
 <p>
 - Choisir un nombre.<br>
@@ -203,13 +202,13 @@ export default class FonctionsCalculsDImages extends Exercice {
             )
             texteCorr = texEnumerate(
               [
-                `Calculons l'image par $f$ de $x= ${c}$ :
-<br>$f(${miseEnEvidence('\\textit{\\textbf{x}}')})= ${a} ${miseEnEvidence('\\textit{\\textbf{x}}')}+${b}$
-<br>$f(${miseEnEvidence(c)})= ${a}\\times ${miseEnEvidence(c)}+${b}$
-<br>$f(${miseEnEvidence(c)})= ${a * c}+${b}$
-<br>$f(${miseEnEvidence(c)})= ${a * c + b}$`,
-                `L'image de ${c} par la fonction $f$ vaut ${a * c + b}.
-<br> On peut aussi dire que ${a * c + b} est l'image de ${c} par la fonction $f$.`,
+                `Calculons l'image par $f$ de $x= ${c}$ :<br>
+                $f(${miseEnEvidence('\\textit{\\textbf{x}}')})= ${a} ${miseEnEvidence('\\textit{\\textbf{x}}')}+${b}$<br>
+                $f(${miseEnEvidence(c)})= ${a}\\times ${miseEnEvidence(c)}+${b}$<br>
+                $f(${miseEnEvidence(c)})= ${a * c}+${b}$<br>
+                $f(${miseEnEvidence(c)})= ${a * c + b}$`,
+                `L'image de ${c} par la fonction $f$ vaut ${a * c + b}.<br>
+                 On peut aussi dire que ${a * c + b} est l'image de ${c} par la fonction $f$.`,
               ],
               this.spacing,
             )
@@ -252,13 +251,13 @@ export default class FonctionsCalculsDImages extends Exercice {
             )
             texteCorr = texEnumerate(
               [
-                `Calculons l'image par $g$ de $x= ${c}$ :
-<br>$g:${miseEnEvidence('\\textit{\\textbf{x}}')}\\longmapsto ${a} ${miseEnEvidence('\\textit{\\textbf{x}}')}+${b}$
-<br>$g:${miseEnEvidence(c)}\\longmapsto ${a}\\times ${miseEnEvidence(c)}+${b}$
-<br>$g:${miseEnEvidence(c)}\\longmapsto ${a * c}+${b}$
-<br>$g:${miseEnEvidence(c)}\\longmapsto ${a * c + b}$`,
-                `L'image de ${c} par la fonction $g$ vaut ${a * c + b}.
-<br> On peut aussi dire que ${a * c + b} est l'image de ${c} par la fonction $g$.`,
+                `Calculons l'image par $g$ de $x= ${c}$ :<br>
+                $g:${miseEnEvidence('\\textit{\\textbf{x}}')}\\longmapsto ${a} ${miseEnEvidence('\\textit{\\textbf{x}}')}+${b}$<br>
+                $g:${miseEnEvidence(c)}\\longmapsto ${a}\\times ${miseEnEvidence(c)}+${b}$<br>
+                $g:${miseEnEvidence(c)}\\longmapsto ${a * c}+${b}$<br>
+                $g:${miseEnEvidence(c)}\\longmapsto ${a * c + b}$`,
+                `L'image de ${c} par la fonction $g$ vaut ${a * c + b}.<br>
+                 On peut aussi dire que ${a * c + b} est l'image de ${c} par la fonction $g$.`,
               ],
               this.spacing,
             )
@@ -334,8 +333,8 @@ export default class FonctionsCalculsDImages extends Exercice {
                     ['\\times ' + a, a * c],
                     ['+' + b, a * c + b],
                   ]),
-                `L'image de ${c} par la fonction $g$ vaut ${a * c + b}.
- <br> On peut aussi dire que ${a * c + b} est l'image de ${c} par la fonction $g$.`,
+                `L'image de ${c} par la fonction $g$ vaut ${a * c + b}.<br>
+                 On peut aussi dire que ${a * c + b} est l'image de ${c} par la fonction $g$.`,
               ],
               this.spacing,
             )
