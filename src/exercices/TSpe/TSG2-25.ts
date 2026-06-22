@@ -111,10 +111,10 @@ export default class projOrthogonal extends Exercice {
       texte =
         "Dans un repère orthonormé de l'espace, on considère les points $A$, $B$  et $M$de coordonnées respectives : "
       texte += `$A(${xA} ; ${yA} ; ${zA})$, $B(${xB} ; ${yB} ; ${zB})$ et $M(${xM} ; ${yM} ; ${zM})$ .<br>`
-      texte += `Déterminer les coordonnées du point $H$ projeté orthogonal du point $M$ sur la droite $(AB)$ .<br>`
+      texte += `Déterminer les coordonnées du point $H$ projeté orthogonal du point $M$ sur la droite $(AB)$ .<br><br>`
       if (this.interactif) {
         texte +=
-          '<br>Les coordonnées du point $H$ sont : ' +
+          'Les coordonnées du point $H$ sont : ' +
           remplisLesBlancs(
             this,
             i,
@@ -136,61 +136,71 @@ export default class projOrthogonal extends Exercice {
         },
       })
 
-      let ortho = ''
-      ortho = ` ${texteEnCouleurEtGras('Les vecteurs ', bleuMathalea)} $${miseEnEvidence(`\\overrightarrow{AB}`, bleuMathalea)}$ ${texteEnCouleurEtGras(' et ', bleuMathalea)} $${miseEnEvidence(`\\overrightarrow{MH}`, bleuMathalea)}$ ${texteEnCouleurEtGras('sont orthogonaux.', bleuMathalea)} <br>On calcule les coordonnées du vecteur $\\overrightarrow{AB}\\begin{pmatrix}${xB}${ecritureAlgebrique(-xA)} \\\\${yB}${ecritureAlgebrique(-yA)} \\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}$ d'où $\\overrightarrow{AB}\\begin{pmatrix}${ux} \\\\ ${uy} \\\\ ${uz}\\end{pmatrix}$ .<br>`
-      ortho += `On calcule les coordonnées du vecteur $\\overrightarrow{MH} \\begin{pmatrix}x  ${ecritureAlgebrique(-xM)} \\\\ y  ${ecritureAlgebrique(-yM)} \\\\ z  ${ecritureAlgebrique(-zM)}\\end{pmatrix}$.`
-      ortho += `<br>Le vecteur $\\overrightarrow{AB}$ est orthogonal au vecteur $\\overrightarrow{MH}$, leur produit scalaire est donc nul.<br>`
-      ortho += `Donc : <br>$\\begin{aligned}\\phantom{\\iff}&\\overrightarrow{MH} \\cdot \\overrightarrow{AB} = 0\\\\
+      const ortho = ` ${texteEnCouleurEtGras('Les vecteurs ', bleuMathalea)} $${miseEnEvidence(`\\overrightarrow{AB}`, bleuMathalea)}$ ${texteEnCouleurEtGras(' et ', bleuMathalea)} $${miseEnEvidence(`\\overrightarrow{MH}`, bleuMathalea)}$ ${texteEnCouleurEtGras('sont orthogonaux.', bleuMathalea)} <br>
+      On calcule les coordonnées du vecteur $\\overrightarrow{AB}\\begin{pmatrix}${xB}${ecritureAlgebrique(-xA)} \\\\${yB}${ecritureAlgebrique(-yA)} \\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}$ d'où $\\overrightarrow{AB}\\begin{pmatrix}${ux} \\\\ ${uy} \\\\ ${uz}\\end{pmatrix}$ .<br>
+      On calcule les coordonnées du vecteur $\\overrightarrow{MH} \\begin{pmatrix}x  ${ecritureAlgebrique(-xM)} \\\\ y  ${ecritureAlgebrique(-yM)} \\\\ z  ${ecritureAlgebrique(-zM)}\\end{pmatrix}$.<br>
+      Le vecteur $\\overrightarrow{AB}$ est orthogonal au vecteur $\\overrightarrow{MH}$, leur produit scalaire est donc nul.<br>
+      Donc : <br>$\\begin{aligned}\\phantom{\\iff}&\\overrightarrow{MH} \\cdot \\overrightarrow{AB} = 0\\\\
 \\iff &(x ${ecritureAlgebrique(-xM)}) \\times ${ecritureParentheseSiNegatif(ux)} + (y ${ecritureAlgebrique(-yM)}) \\times ${ecritureParentheseSiNegatif(uy)} + (z ${ecritureAlgebrique(-zM)}) \\times ${ecritureParentheseSiNegatif(uz)} = 0\\\\
 \\iff &${rienSi1(ux)}  x  ${ecritureAlgebriqueSauf1(uy)} y  ${ecritureAlgebriqueSauf1(uz)} z  ${ecritureAlgebrique(-(ux * xM + uy * yM + uz * zM))}=0\\quad(1)\\end{aligned}$ <br>`
-      let pointH = ''
-      pointH = `${texteEnCouleurEtGras('Le point ', bleuMathalea)} $${miseEnEvidence(`H`, bleuMathalea)}$ ${texteEnCouleurEtGras('appartient à la droite ', bleuMathalea)} $${miseEnEvidence(`(AB)`, bleuMathalea)}$.<br>`
-      pointH += `Pour utiliser que le point $H$ appartient à la droite $(AB)$, on détermine une représentation paramétrique de cette droite : <br>`
-      pointH += `$(AB):\\left\\{ \\begin{array}{l} x = ${xA}  ${ecritureAlgebriqueSauf1(ux)} t \\\\ y = ${yA}  ${ecritureAlgebriqueSauf1(uy)} t \\quad (t\\in\\mathbb{R}) \\\\ z = ${zA}  ${ecritureAlgebriqueSauf1(uz)} t \\end{array} \\right.$ <br>`
+
+      const pointH = `${texteEnCouleurEtGras('Le point ', bleuMathalea)} $${miseEnEvidence(`H`, bleuMathalea)}$ ${texteEnCouleurEtGras('appartient à la droite ', bleuMathalea)} $${miseEnEvidence(`(AB)`, bleuMathalea)}$.<br>
+      Pour utiliser que le point $H$ appartient à la droite $(AB)$, on détermine une représentation paramétrique de cette droite : <br>
+      $(AB):\\left\\{ \\begin{array}{l} x = ${xA}  ${ecritureAlgebriqueSauf1(ux)} t \\\\ y = ${yA}  ${ecritureAlgebriqueSauf1(uy)} t \\quad (t\\in\\mathbb{R}) \\\\ z = ${zA}  ${ecritureAlgebriqueSauf1(uz)} t \\end{array} \\right.$ <br>`
 
       if (this.sup === true) {
-        texteCorr = `On calcule les coordonnées du vecteur $\\overrightarrow{AB}\\begin{pmatrix}${xB}${ecritureAlgebrique(-xA)} \\\\${yB}${ecritureAlgebrique(-yA)} \\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}$, d'où $\\overrightarrow{AB}\\begin{pmatrix}${ux} \\\\ ${uy} \\\\ ${uz}\\end{pmatrix}$.<br>`
-        texteCorr += `On calcule aussi $\\overrightarrow{AM}\\begin{pmatrix}${xM}${ecritureAlgebrique(-xA)} \\\\${yM}${ecritureAlgebrique(-yA)} \\\\${zM}${ecritureAlgebrique(-zA)}\\end{pmatrix}$
-        soit $\\overrightarrow{AM}\\begin{pmatrix}${xM - xA} \\\\ ${yM - yA} \\\\ ${zM - zA}\\end{pmatrix}$.<br>`
-        texteCorr += `Le point $H$ étant le projeté orthogonal de $M$ sur $(AB)$, le vecteur $\\overrightarrow{AH}$ est le projeté orthogonal du vecteur $\\overrightarrow{AM}$ sur $\\overrightarrow{AB}$.<br>`
-        texteCorr += `On utilise donc la formule : 
-        $\\overrightarrow{AH}=\\dfrac{\\overrightarrow{AM}\\cdot\\overrightarrow{AB}}{\\Vert\\overrightarrow{AB}\\Vert^2}\\overrightarrow{AB}$.<br>`
-        texteCorr += `Or :<br>
+        texteCorr = `On calcule les coordonnées du vecteur $\\overrightarrow{AB}\\begin{pmatrix}${xB}${ecritureAlgebrique(-xA)} \\\\${yB}${ecritureAlgebrique(-yA)} \\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}$, d'où $\\overrightarrow{AB}\\begin{pmatrix}${ux} \\\\ ${uy} \\\\ ${uz}\\end{pmatrix}$.<br>
+        On calcule aussi $\\overrightarrow{AM}\\begin{pmatrix}${xM}${ecritureAlgebrique(-xA)} \\\\${yM}${ecritureAlgebrique(-yA)} \\\\${zM}${ecritureAlgebrique(-zA)}\\end{pmatrix}$
+        soit $\\overrightarrow{AM}\\begin{pmatrix}${xM - xA} \\\\ ${yM - yA} \\\\ ${zM - zA}\\end{pmatrix}$.<br>
+        Le point $H$ étant le projeté orthogonal de $M$ sur $(AB)$, le vecteur $\\overrightarrow{AH}$ est le projeté orthogonal du vecteur $\\overrightarrow{AM}$ sur $\\overrightarrow{AB}$.<br>
+        On utilise donc la formule : 
+        $\\overrightarrow{AH}=\\dfrac{\\overrightarrow{AM}\\cdot\\overrightarrow{AB}}{\\Vert\\overrightarrow{AB}\\Vert^2}\\overrightarrow{AB}$.<br>
+        Or :<br>
         $\\dfrac{\\overrightarrow{AM}\\cdot\\overrightarrow{AB}}{\\Vert\\overrightarrow{AB}\\Vert^2}
         =\\dfrac{${xM - xA}\\times ${ecritureParentheseSiNegatif(ux)}+${ecritureParentheseSiNegatif(yM - yA)}\\times ${ecritureParentheseSiNegatif(uy)}+${ecritureParentheseSiNegatif(zM - zA)}\\times ${ecritureParentheseSiNegatif(uz)}}{${ux}^2+${uy}^2+${uz}^2}
-        =${valeurt.texFractionSimplifiee}$.<br>`
-        texteCorr += `Ainsi $\\overrightarrow{AH}=${valeurt.texFSP}\\begin{pmatrix}${ux} \\\\ ${uy} \\\\ ${uz}\\end{pmatrix}
-        =\\begin{pmatrix}${coordonneeXAH.texFractionSimplifiee} \\\\ ${coordonneeYAH.texFractionSimplifiee} \\\\ ${coordonneeZAH.texFractionSimplifiee}\\end{pmatrix}$.<br>`
-        texteCorr += `Comme $A(${xA} ; ${yA} ; ${zA})$, on obtient :<br>
-        $H(${abscisseH.texFractionSimplifiee} ; ${ordonneeH.texFractionSimplifiee} ; ${coteH.texFractionSimplifiee})$.<br>`
-        texteCorr += `Ainsi, les coordonnées du point $H$ sont $${miseEnEvidence(`H(${abscisseH.texFractionSimplifiee} ; ${ordonneeH.texFractionSimplifiee} ; ${coteH.texFractionSimplifiee}).`)}$`
+        =${valeurt.texFractionSimplifiee}$.<br>
+        Ainsi $\\overrightarrow{AH}=${valeurt.texFSP}
+        \\begin{pmatrix}
+        ${ux} \\\\
+         ${uy} \\\\
+          ${uz}
+          \\end{pmatrix}
+        =\\begin{pmatrix}
+        ${coordonneeXAH.texFractionSimplifiee} \\\\
+         ${coordonneeYAH.texFractionSimplifiee} \\\\
+          ${coordonneeZAH.texFractionSimplifiee}
+          \\end{pmatrix}$.<br>
+          Comme $A(${xA} ; ${yA} ; ${zA})$, on obtient :<br>
+        $H(${abscisseH.texFractionSimplifiee} ; ${ordonneeH.texFractionSimplifiee} ; ${coteH.texFractionSimplifiee})$.<br>
+        Ainsi, les coordonnées du point $H$ sont $${miseEnEvidence(`H(${abscisseH.texFractionSimplifiee} ; ${ordonneeH.texFractionSimplifiee} ; ${coteH.texFractionSimplifiee}).`)}$`
       } else {
-        texteCorr =
-          'Soit $x_H$, $y_H$ et $z_H$ des réels tels que les coordonnées du point $H$ soient $H(x_H;y_H;z_H)$.<br>'
-        texteCorr +=
-          '<br>Par définition du projeté orthogonal, on déduit deux informations :' +
-          createList({ items: [ortho, pointH], style: 'fleches' })
-
-        texteCorr += `<br><br>${texteEnCouleurEtGras('Synthèse des deux éléments précédents :', bleuMathalea)} <br><br>`
-        texteCorr += `$H\\in(AB)\\cap\\mathcal{P}$. La droite $(AB)$ étant orthogonale au plan $\\mathscr{P}$, il existe un unique point $H$ solution. <br>`
-        texteCorr += `$H(x_H,y_H,z_H)\\in(AB)\\cap\\mathcal{P}$ si et seulement s'il existe $t\\in\\mathbb{R}$ tel que : <br>`
-        texteCorr += `$\\begin{cases}
+        texteCorr = `Soit $x_H$, $y_H$ et $z_H$ des réels tels que les coordonnées du point $H$ soient $H(x_H;y_H;z_H)$.<br>
+        Par définition du projeté orthogonal, on déduit deux informations :<br>
+        ${createList({ items: [ortho, pointH], style: 'fleches' })}<br><br>
+        ${texteEnCouleurEtGras('Synthèse des deux éléments précédents :', bleuMathalea)} <br><br>
+        $H\\in(AB)\\cap\\mathcal{P}$. La droite $(AB)$ étant orthogonale au plan $\\mathscr{P}$, il existe un unique point $H$ solution. <br>
+        $H(x_H,y_H,z_H)\\in(AB)\\cap\\mathcal{P}$ si et seulement s'il existe $t\\in\\mathbb{R}$ tel que : <br>
+        $\\begin{cases}
 x_H = ${xA}  ${ecritureAlgebriqueSauf1(ux)} t \\\\ y_H = ${yA}  ${ecritureAlgebriqueSauf1(uy)} t \\\\ z_H = ${zA}  ${ecritureAlgebriqueSauf1(uz)} t \\\\
-${rienSi1(ux)}  x_H + ${rienSi1(uy)} y_H + ${rienSi1(uz)} z_H  ${ecritureAlgebrique(-(ux * xM + uy * yM + uz * zM))}=0\\end{cases}$ <br>`
-        texteCorr += `En remplaçant $x_H$, $y_H$ et $z_H$ dans la dernière équation, on obtient : <br>`
-        texteCorr += `$\\begin{aligned}
+${rienSi1(ux)}  x_H + ${rienSi1(uy)} y_H + ${rienSi1(uz)} z_H  ${ecritureAlgebrique(-(ux * xM + uy * yM + uz * zM))}=0\\end{cases}$ <br>
+En remplaçant $x_H$, $y_H$ et $z_H$ dans la dernière équation, on obtient : <br>
+$\\begin{aligned}
 &${rienSi1(ux)}  (${xA}  ${ecritureAlgebriqueSauf1(ux)}  t) + ${rienSi1(uy)}  (${yA}  ${ecritureAlgebriqueSauf1(uy)}  t) + ${rienSi1(uz)}  (${zA}  ${ecritureAlgebriqueSauf1(uz)}  t)  ${ecritureAlgebrique(-(ux * xM + uy * yM + uz * zM))}=0\\\\
 \\iff &${ux * xA}  ${ecritureAlgebriqueSauf1(ux * ux)}t  ${ecritureAlgebrique(uy * yA)} ${ecritureAlgebriqueSauf1(uy * uy)} t ${ecritureAlgebrique(uz * zA)} ${ecritureAlgebriqueSauf1(uz * uz)}t ${ecritureAlgebrique(-(ux * xM + uy * yM + uz * zM))}=0\\\\
 \\iff &${ux * ux + uy * uy + uz * uz}t  = ${produitScalaireAMAB} \\\\
-\\iff & t=${valeurt.texFractionSimplifiee}\\end{aligned}$<br>`
-
-        texteCorr += `On en déduit les coordonnées du point $H$ en remplaçant $t$ par ${valeurt.texFractionSimplifiee} dans les $3$ premières équations du système : <br>`
-        texteCorr += `$\\begin{cases}
-x_H = ${xA}  ${ecritureAlgebrique(ux)} \\times ${valeurt.texFSP} \\\\\\\\ y_H = ${yA}  ${ecritureAlgebrique(uy)} \\times ${valeurt.texFSP} \\\\\\\\ z_H = ${zA}  ${ecritureAlgebrique(uz)} \\times ${valeurt.texFSP} \\end{cases}$ d'où finalement`
-        texteCorr += `$\\begin{cases}
-x_H = ${abscisseH.texFractionSimplifiee} \\\\ y_H = ${ordonneeH.texFractionSimplifiee} \\\\ z_H = ${coteH.texFractionSimplifiee} \\end{cases}$ <br>`
-        texteCorr += `On vérifie que le point $H$ ainsi déterminé satisfait bien la dernière équation du système. <br>`
-        texteCorr += `Ainsi, les coordonnées du point $H$ sont $${miseEnEvidence(`H(${abscisseH.texFractionSimplifiee} ; ${ordonneeH.texFractionSimplifiee} ; ${coteH.texFractionSimplifiee}).`)}$`
+\\iff & t=${valeurt.texFractionSimplifiee}\\end{aligned}$<br>
+On en déduit les coordonnées du point $H$ en remplaçant $t$ par ${valeurt.texFractionSimplifiee} dans les $3$ premières équations du système : <br>
+$\\begin{cases}
+x_H = ${xA}  ${ecritureAlgebrique(ux)} \\times ${valeurt.texFSP} \\\\
+y_H = ${yA}  ${ecritureAlgebrique(uy)} \\times ${valeurt.texFSP} \\\\
+z_H = ${zA}  ${ecritureAlgebrique(uz)} \\times ${valeurt.texFSP}
+ \\end{cases}$ d'où finalement
+ $\\begin{cases}
+x_H = ${abscisseH.texFractionSimplifiee} \\\\
+y_H = ${ordonneeH.texFractionSimplifiee} \\\\
+z_H = ${coteH.texFractionSimplifiee} \\end{cases}$ <br>
+On vérifie que le point $H$ ainsi déterminé satisfait bien la dernière équation du système. <br>
+Ainsi, les coordonnées du point $H$ sont $${miseEnEvidence(`H(${abscisseH.texFractionSimplifiee} ; ${ordonneeH.texFractionSimplifiee} ; ${coteH.texFractionSimplifiee}).`)}$`
       }
 
       if (this.questionJamaisPosee(i, texte)) {
