@@ -34,11 +34,9 @@ export const refs = {
 export default class NomExercice extends Exercice {
   constructor() {
     super()
-    this.consigne = texteItalique(
+    this.consigne = `${texteItalique(
       "Préciser si l'affirmation suivante est vraie ou fausse, puis justifier la réponse donnée.<br> Une réponse non argumentée ne sera pas prise en compte.",
-    )
-    this.consigne +=
-      "<br><br> Dans un repère orthonormé de l'espace, on considère les représentations paramétriques des droites $(d)$ et $(d~')$."
+    )}<br>Dans un repère orthonormé de l'espace, on considère les représentations paramétriques des droites $(d)$ et $(d~')$.`
     this.nbQuestions = 1 // Nombre de questions à générer
     this.correctionDetaillee = false
     this.correctionDetailleeDisponible = true
@@ -189,12 +187,14 @@ export default class NomExercice extends Exercice {
       const u4 = new FractionEtendue(xB - xA, ux) // On crée les fractions étendues pour les vecteurs directeurs
       const u5 = new FractionEtendue(yB - yA, uy) // On crée les fractions étendues pour les vecteurs directeurs
       const u6 = new FractionEtendue(zB - zA, uz) // On crée les fractions étendues pour les vecteurs directeurs
-      const resultat1 = den1 !== 0
-        ? new FractionEtendue(num1, den1)
-        : new FractionEtendue(num1, 1) // valeur factice si dénominateur nul (cas parallèle)
-      const resultat2 = den2 !== 0
-        ? new FractionEtendue(num2, den2)
-        : new FractionEtendue(num2, 1) // valeur factice si dénominateur nul (cas parallèle)
+      const resultat1 =
+        den1 !== 0
+          ? new FractionEtendue(num1, den1)
+          : new FractionEtendue(num1, 1) // valeur factice si dénominateur nul (cas parallèle)
+      const resultat2 =
+        den2 !== 0
+          ? new FractionEtendue(num2, den2)
+          : new FractionEtendue(num2, 1) // valeur factice si dénominateur nul (cas parallèle)
       // Quotients utilisés uniquement dans les cas non parallèles.
       // On évite la création d'une fraction à dénominateur nul lorsque les droites sont parallèles.
       let quotient1: FractionEtendue
@@ -218,7 +218,7 @@ export default class NomExercice extends Exercice {
          $\\phantom{\\iff}\\vec u=\\lambda \\vec v$
           $\\quad\\iff \\begin{cases}${ux}= ${rienSi1(vx)}\\lambda\\\\${uy}= ${rienSi1(vy)}\\lambda\\\\${uz}=${rienSi1(vz)}\\lambda\\end{cases}$
           $\\quad\\iff \\begin{cases}\\lambda =${u1.inverse().texFractionSimplifiee}\\\\[7pt]\\lambda =${u2.inverse().texFractionSimplifiee}\\\\[7pt]
-           \\lambda =${u3.inverse().texFractionSimplifiee}\\end{cases}$`
+           \\lambda =${u3.inverse().texFractionSimplifiee}\\end{cases}$<br>`
       const t =
         (vx * (ux * (zB - zA) - uz * (xB - xA))) / (ux * (uz * vx - ux * vz)) +
         (xB - xA) / ux
@@ -236,56 +236,57 @@ export default class NomExercice extends Exercice {
           // On écrit les représentations paramétriques des droites (d) et (d')
           texte += `<br><br>${texteEnCouleurEtGras('Affirmation :')}  ${affirmation}`
 
-          texteCorr = texteEnCouleurEtGras('Étape 1 : Droites parallèles ?')
+          texteCorr =
+            texteEnCouleurEtGras('Étape 1 : Droites parallèles ?') + '<br>'
           if (this.correctionDetaillee) {
             texteCorr +=
-              "<br>On sait que la représentation paramétrique d'une droite est de la forme "
+              "On sait que la représentation paramétrique d'une droite est de la forme "
             texteCorr +=
-              '$(d):\\begin{cases}x=x_A+at \\\\y= y_A+bt\\quad(t\\in\\mathbb{R})\\\\z= z_A+ct\\end{cases}$'
+              '$(d):\\begin{cases}x=x_A+at \\\\y= y_A+bt\\quad(t\\in\\mathbb{R})\\\\z= z_A+ct\\end{cases}$<br>'
             texteCorr +=
-              '<br>où le point $A(x_A, y_A, z_A)$ est un point de la droite et $\\vec u\\begin{pmatrix}a\\\\b\\\\c\\end{pmatrix}$ est un vecteur directeur de la droite.<br>'
+              'où le point $A(x_A, y_A, z_A)$ est un point de la droite et $\\vec u\\begin{pmatrix}a\\\\b\\\\c\\end{pmatrix}$ est un vecteur directeur de la droite.<br>'
           }
-          texteCorr += `<br>On déduit de l'énoncé que le vecteur $\\vec u$ de coordonnées $\\vec u\\begin{pmatrix} ${ux}\\\\${uy}\\\\${uz}\\end{pmatrix}$ est un vecteur directeur de (d) `
+          texteCorr += `On déduit de l'énoncé que le vecteur $\\vec u$ de coordonnées $\\vec u\\begin{pmatrix} ${ux}\\\\${uy}\\\\${uz}\\end{pmatrix}$ est un vecteur directeur de (d) `
           texteCorr += `et que $\\vec v$ de coordonnées $\\vec v\\begin{pmatrix} ${vx}\\\\${vy}\\\\${vz}\\end{pmatrix}$ est un vecteur directeur de (d'). <br>`
           // On teste la colinéarité des vecteurs directeurs
           texteCorr += bloc2
           texteCorr +=
-            "<br>Le système n'admet pas de solutions donc les vecteurs ne sont donc pas colinéaires. <br>"
-          texteCorr += `<br>${texteGras("Les droites $(d)$ et $(d~')$ ne sont pas parallèles.")}`
+            "<Le système n'admet pas de solutions donc les vecteurs ne sont donc pas colinéaires. <br>"
+          texteCorr += `${texteGras("Les droites $(d)$ et $(d~')$ ne sont pas parallèles.")}<br>`
           // On teste si les droites sont sécantes ou non-coplanaires
           texteCorr += texteEnCouleurEtGras(
-            '<br>Étape 2 : Droites sécantes ou non-coplanaires ?',
+            'Étape 2 : Droites sécantes ou non-coplanaires ?<br>',
           )
           texteCorr +=
-            "<br>Les droites $(d)$ et $(d')$ sont sécantes, si et seulement s'il existe un point d'intersection $M(x;y;z)$ tel que $M\\in(d)\\cap (d')$."
+            "Les droites $(d)$ et $(d')$ sont sécantes, si et seulement s'il existe un point d'intersection $M(x;y;z)$ tel que $M\\in(d)\\cap (d')$.<br>"
           texteCorr +=
-            '<br>Les coordonnées du point $M$ vérifient donc les deux représentations paramétriques. <br>Ce qui est équivalent à résoudre le système suivant :'
+            'Les coordonnées du point $M$ vérifient donc les deux représentations paramétriques. <br>Ce qui est équivalent à résoudre le système suivant :<br>'
           texteCorr += bloc1
-          texteCorr += `<br>En égalisant les lignes 1 et 2, et les lignes 1 et 3, cela ${texteGras('implique')} que $s$ doit vérifier le système :<br>`
-          texteCorr += `<br>$\\begin{cases}
-            ${rienSi1(u1.simplifie())}s ${u4.simplifie().ecritureAlgebrique}=${u2.texFractionSimplifiee}s ${u5.simplifie().ecritureAlgebrique} \\\\\\\\
+          texteCorr += `En égalisant les lignes 1 et 2, et les lignes 1 et 3, cela ${texteGras('implique')} que $s$ doit vérifier le système :<br>`
+          texteCorr += `$\\begin{cases}
+            ${rienSi1(u1.simplifie())}s ${u4.simplifie().ecritureAlgebrique}=${u2.texFractionSimplifiee}s ${u5.simplifie().ecritureAlgebrique} \\\\
             ${rienSi1(u1.simplifie())}s ${u4.simplifie().ecritureAlgebrique} = ${u3.texFractionSimplifiee}s ${u6.simplifie().ecritureAlgebrique}
             \\end{cases}$`
           texteCorr += `$\\quad\\quad\\begin{cases}
-            \\left(${u1.texFractionSimplifiee}+${u2.oppose().texFractionSimplifiee}\\right)s =${u5.texFractionSimplifiee}${u4.oppose().simplifie().ecritureAlgebrique} \\\\\\\\
+            \\left(${u1.texFractionSimplifiee}+${u2.oppose().texFractionSimplifiee}\\right)s =${u5.texFractionSimplifiee}${u4.oppose().simplifie().ecritureAlgebrique} \\\\
             \\left(${u1.texFractionSimplifiee}+${u3.oppose().texFractionSimplifiee}\\right)s = ${u6.texFractionSimplifiee}${u4.oppose().simplifie().ecritureAlgebrique}
             \\end{cases}$`
 
           texteCorr += `$\\quad\\quad\\begin{cases}
-            ${u1.differenceFraction(u2).simplifie().texFraction}s =${u5.differenceFraction(u4).simplifie().texFraction} \\\\\\\\
+            ${u1.differenceFraction(u2).simplifie().texFraction}s =${u5.differenceFraction(u4).simplifie().texFraction} \\\\
             ${u1.differenceFraction(u3).simplifie().texFraction}s = ${u6.differenceFraction(u4).simplifie().texFraction}
             \\end{cases}$`
           texteCorr += `<br><br>$\\begin{cases}
-           s =${u5.differenceFraction(u4).simplifie().texFraction} \\times ${quotient1.simplifie().texFraction} \\\\\\\\
-          s = ${u6.differenceFraction(u4).simplifie().texFraction} \\times ${quotient2.simplifie().texFraction} \\\\\\\\
+           s =${u5.differenceFraction(u4).simplifie().texFraction} \\times ${quotient1.simplifie().texFraction} \\\\
+          s = ${u6.differenceFraction(u4).simplifie().texFraction} \\times ${quotient2.simplifie().texFraction} \\\\
             \\end{cases}$`
           texteCorr += `$\\quad\\quad\\begin{cases}
-          s =${resultat1.simplifie().texFraction} \\\\\\\\
+          s =${resultat1.simplifie().texFraction} \\\\
           s = ${resultat2.simplifie().texFraction}
-            \\end{cases}$`
+            \\end{cases}$<br>`
           texteCorr +=
-            "<br>Les deux équations sont incompatibles donc le système n'admet pas de solution.<br>"
-          texteCorr += texteEnCouleurEtGras('Conclusion :<br>')
+            "Les deux équations sont incompatibles donc le système n'admet pas de solution.<br>"
+          texteCorr += texteEnCouleurEtGras('Conclusion :') + '<br>'
           texteCorr +=
             "Donc les droites $(d)$ et $(d')$ ont des vecteurs directeurs non colinéaires et ne sont pas sécantes, elles sont donc non-coplanaires.<br>"
           if (
@@ -304,71 +305,72 @@ export default class NomExercice extends Exercice {
           quotient1 = new FractionEtendue(ux * uy, vx * uy - vy * ux)
           quotient2 = new FractionEtendue(ux * uz, vx * uz - vz * ux)
           texte += `$(d):\\begin{cases}x=${reduireAxPlusB(ux, xA, 't', { ordreInverse: true })} \\\\y= ${rienSi0(yA)}  ${ecritureAlgebriqueSauf1(uy)}t\\quad(t\\in\\mathbb{R})\\\\z= ${rienSi0(zA)} ${ecritureAlgebriqueSauf1(uz)}t\\end{cases}$`
-          texte += `$\\quad\\quad(d'):\\begin{cases}x=${rienSi0(xB)}${ecritureAlgebriqueSauf1(vx)}s\\\\y= ${rienSi0(yB)}  ${ecritureAlgebriqueSauf1(vy)}s\\quad(s\\in\\mathbb{R})\\\\z= ${rienSi0(zB)} ${ecritureAlgebriqueSauf1(vz)}s\\end{cases}$`
+          texte += `$\\quad\\quad(d'):\\begin{cases}x=${rienSi0(xB)}${ecritureAlgebriqueSauf1(vx)}s\\\\y= ${rienSi0(yB)}  ${ecritureAlgebriqueSauf1(vy)}s\\quad(s\\in\\mathbb{R})\\\\z= ${rienSi0(zB)} ${ecritureAlgebriqueSauf1(vz)}s\\end{cases}$<br><br>`
           // On écrit les représentations paramétriques des droites (d) et (d')
-          texte += `<br><br>${texteEnCouleurEtGras('Affirmation :')}  ${affirmation}`
+          texte += `${texteEnCouleurEtGras('Affirmation :')}  ${affirmation}`
 
-          texteCorr = texteEnCouleurEtGras('Étape 1 : Droites parallèles ?')
+          texteCorr =
+            texteEnCouleurEtGras('Étape 1 : Droites parallèles ?') + '<br>'
           if (this.correctionDetaillee) {
             texteCorr +=
-              "<br>On sait que la représentation paramétrique d'une droite est de la forme "
+              "On sait que la représentation paramétrique d'une droite est de la forme "
             texteCorr +=
-              '$(d):\\begin{cases}x=x_A+at \\\\y= y_A+bt\\quad(t\\in\\mathbb{R})\\\\z= z_A+ct\\end{cases}$'
+              '$(d):\\begin{cases}x=x_A+at \\\\y= y_A+bt\\quad(t\\in\\mathbb{R})\\\\z= z_A+ct\\end{cases}$<br>'
             texteCorr +=
-              '<br>où le point $A(x_A, y_A, z_A)$ est un point de la droite et $\\vec u\\begin{pmatrix}a\\\\b\\\\c\\end{pmatrix}$ est un vecteur directeur de la droite.<br>'
+              'où le point $A(x_A, y_A, z_A)$ est un point de la droite et $\\vec u\\begin{pmatrix}a\\\\b\\\\c\\end{pmatrix}$ est un vecteur directeur de la droite.<br>'
           }
-          texteCorr += `<br>On déduit de l'énoncé que le vecteur $\\vec u$ de coordonnées $\\vec u\\begin{pmatrix} ${ux}\\\\${uy}\\\\${uz}\\end{pmatrix}$ est un vecteur directeur de (d) `
+          texteCorr += `On déduit de l'énoncé que le vecteur $\\vec u$ de coordonnées $\\vec u\\begin{pmatrix} ${ux}\\\\${uy}\\\\${uz}\\end{pmatrix}$ est un vecteur directeur de (d) `
           texteCorr += `et que $\\vec v$ de coordonnées $\\vec v\\begin{pmatrix} ${vx}\\\\${vy}\\\\${vz}\\end{pmatrix}$ est un vecteur directeur de (d'). <br>`
           // On teste la colinéarité des vecteurs directeurs
           texteCorr += bloc2
           texteCorr +=
-            "<br>Le système n'admet pas de solutions donc les vecteurs ne sont donc pas colinéaires. <br>"
-          texteCorr += `<br>${texteGras("Les droites $(d)$ et $(d~')$ ne sont pas parallèles.")}`
+            "Le système n'admet pas de solutions donc les vecteurs ne sont donc pas colinéaires. <br>"
+          texteCorr += `${texteGras("Les droites $(d)$ et $(d~')$ ne sont pas parallèles.")}<br>`
           // On teste si les droites sont sécantes ou non-coplanaires
           texteCorr += texteEnCouleurEtGras(
-            '<br>Étape 2 : Droites sécantes ou non-coplanaires ?',
+            'Étape 2 : Droites sécantes ou non-coplanaires ?<br>',
           )
           texteCorr +=
-            '<br> Un point M de coordonnées $M(x,y,z)$ appartient aux deux droites si, et seulement si, ses coordonnées vérifient les représentations  paramétriques des deux droites.'
+            'Un point M de coordonnées $M(x,y,z)$ appartient aux deux droites si, et seulement si, ses coordonnées vérifient les représentations  paramétriques des deux droites.<br>'
           texteCorr +=
-            '<br>Ce qui est équivalent à résoudre le système suivant :'
+            'Ce qui est équivalent à résoudre le système suivant :<br>'
           texteCorr += bloc1
-          texteCorr += `<br><br>En égalisant les lignes 1 et 2, et les lignes 1 et 3, cela ${texteGras('implique')} que $s$ doit vérifier le système :<br>`
-          texteCorr += `<br>$\\begin{cases}
-           ${rienSi1(u1.simplifie())}s ${u4.simplifie().ecritureAlgebrique}=${rienSi1(u2.simplifie())}s ${u5.simplifie().ecritureAlgebrique} \\\\\\\\
+          texteCorr += `En égalisant les lignes 1 et 2, et les lignes 1 et 3, cela ${texteGras('implique')} que $s$ doit vérifier le système :<br>`
+          texteCorr += `$\\begin{cases}
+           ${rienSi1(u1.simplifie())}s ${u4.simplifie().ecritureAlgebrique}=${rienSi1(u2.simplifie())}s ${u5.simplifie().ecritureAlgebrique} \\\\
            ${rienSi1(u1.simplifie())}s ${u4.simplifie().ecritureAlgebrique} = ${rienSi1(u3.simplifie())}s ${u6.simplifie().ecritureAlgebrique}
             \\end{cases}$`
           texteCorr += `$\\quad\\quad\\begin{cases}
-            \\left(${u1.texFractionSimplifiee}+${u2.oppose().ecritureParentheseSiNegatif}\\right)s =${u5.texFractionSimplifiee}${u4.oppose().simplifie().ecritureAlgebrique} \\\\\\\\
+            \\left(${u1.texFractionSimplifiee}+${u2.oppose().ecritureParentheseSiNegatif}\\right)s =${u5.texFractionSimplifiee}${u4.oppose().simplifie().ecritureAlgebrique} \\\\
             \\left(${u1.texFractionSimplifiee}+${u3.oppose().ecritureParentheseSiNegatif}\\right)s = ${u6.texFractionSimplifiee}${u4.oppose().simplifie().ecritureAlgebrique}
             \\end{cases}$`
 
           texteCorr += `$\\quad\\quad\\begin{cases}
-            ${u1.differenceFraction(u2).simplifie().texFraction}s =${u5.differenceFraction(u4).simplifie().texFraction} \\\\\\\\
+            ${u1.differenceFraction(u2).simplifie().texFraction}s =${u5.differenceFraction(u4).simplifie().texFraction} \\\\
             ${u1.differenceFraction(u3).simplifie().texFraction}s = ${u6.differenceFraction(u4).simplifie().texFraction}
             \\end{cases}$`
           texteCorr += `<br><br>$\\begin{cases}
-           s =${u5.differenceFraction(u4).simplifie().texFraction} \\times ${quotient1.simplifie().ecritureParentheseSiNegatif} \\\\\\\\
-          s = ${u6.differenceFraction(u4).simplifie().texFraction} \\times ${quotient2.simplifie().ecritureParentheseSiNegatif} \\\\\\\\
+           s =${u5.differenceFraction(u4).simplifie().texFraction} \\times ${quotient1.simplifie().ecritureParentheseSiNegatif} \\\\
+          s = ${u6.differenceFraction(u4).simplifie().texFraction} \\times ${quotient2.simplifie().ecritureParentheseSiNegatif} \\\\
             \\end{cases}$`
 
           texteCorr += `$\\quad\\quad\\begin{cases}
-          s =${resultat1.simplifie().texFraction} \\\\\\\\
+          s =${resultat1.simplifie().texFraction} \\\\
           s = ${resultat2.simplifie().texFraction}
-            \\end{cases}$`
+            \\end{cases}$<br>`
           texteCorr +=
-            '<br>En remplaçant la valeur de $s$ dans le sytème, on obtient :'
-          texteCorr += `<br>$t =${u1.texFractionSimplifiee}\\times ${resultat2.simplifie().texFraction}${u4.simplifie().ecritureAlgebrique}~~$`
-          texteCorr += `d'où $~~t =${texNombre(t)}$.`
+            'En remplaçant la valeur de $s$ dans le sytème, on obtient :<br>'
+          texteCorr += `$t =${u1.texFractionSimplifiee}\\times ${resultat2.simplifie().texFraction}${u4.simplifie().ecritureAlgebrique}~~$`
+          texteCorr += `d'où $~~t =${texNombre(t)}$.<br>`
 
-          texteCorr += `<br>${texteGras('Réciproquement')}, on vérifie que pour $t=${texNombre(t)}~~$ et $~~s=${resultat2.simplifie().texFraction}$, les deux représentations donnent les coordonnées de leur point commun.<br>`
+          texteCorr += `${texteGras('Réciproquement')}, on vérifie que pour $t=${texNombre(t)}~~$ et $~~s=${resultat2.simplifie().texFraction}$, les deux représentations donnent les coordonnées de leur point commun.<br>`
           texteCorr += `$(d):\\begin{cases}x=${ux}\\times ${ecritureParentheseSiNegatif(t)}${ecritureAlgebrique(xA)}\\\\[7pt] y=${uy}\\times ${ecritureParentheseSiNegatif(t)}${ecritureAlgebrique(yA)}\\\\[7pt] z=${uz}\\times ${ecritureParentheseSiNegatif(t)}${ecritureAlgebrique(zA)}\\end{cases}$`
-          texteCorr += `$\\quad\\quad(d):\\begin{cases}x=${texNombre(ux * t + xA)}\\\\ y=${texNombre(uy * t + yA)}\\\\ z=${texNombre(uz * t + zA)}\\end{cases}$`
-          texteCorr += `<br>$(d'):\\begin{cases}x=${vx}\\times ${ecritureParentheseSiNegatif(resultat2.simplifie())}${ecritureAlgebrique(xB)}\\\\[7pt] y=${vy}\\times ${resultat2.simplifie().texFraction}${ecritureAlgebrique(yB)}\\\\[7pt] z=${vz}\\times ${resultat2.simplifie().texFraction}${ecritureAlgebrique(zB)}\\end{cases}$`
-          texteCorr += `$\\quad\\quad(d'):\\begin{cases}x=${texNombre(ux * t + xA)}\\\\ y=${texNombre(uy * t + yA)}\\\\ z=${texNombre(uz * t + zA)}\\end{cases}$`
-          texteCorr += `<br>On a montré que les droites $(d)$ et $(d')$ étaient sécantes au point de coordonnées $(${texNombre(ux * t + xA)}; ${texNombre(uy * t + yA)};${texNombre(uz * t + zA)})$.<br>`
+          texteCorr += `$\\quad\\quad(d):\\begin{cases}x=${texNombre(ux * t + xA)}\\\\ y=${texNombre(uy * t + yA)}\\\\ z=${texNombre(uz * t + zA)}\\end{cases}$<br>`
+          texteCorr += `$(d'):\\begin{cases}x=${vx}\\times ${ecritureParentheseSiNegatif(resultat2.simplifie())}${ecritureAlgebrique(xB)}\\\\[7pt] y=${vy}\\times ${resultat2.simplifie().texFraction}${ecritureAlgebrique(yB)}\\\\[7pt] z=${vz}\\times ${resultat2.simplifie().texFraction}${ecritureAlgebrique(zB)}\\end{cases}$`
+          texteCorr += `$\\quad\\quad(d'):\\begin{cases}x=${texNombre(ux * t + xA)}\\\\ y=${texNombre(uy * t + yA)}\\\\ z=${texNombre(uz * t + zA)}\\end{cases}$<br>`
+          texteCorr += `On a montré que les droites $(d)$ et $(d')$ étaient sécantes au point de coordonnées $(${texNombre(ux * t + xA)}; ${texNombre(uy * t + yA)};${texNombre(uz * t + zA)})$.<br>`
 
-          texteCorr += texteEnCouleurEtGras('Conclusion :<br>')
+          texteCorr += texteEnCouleurEtGras('Conclusion :') + '<br>'
           texteCorr +=
             "Donc les droites $(d)$ et $(d')$ ont des vecteurs directeurs non colinéaires et un point en commun. Elles sont donc sécantes.<br>"
           if (affirmation === "Les droites $(d)$ et $(d~')$ sont sécantes.") {
@@ -384,39 +386,41 @@ export default class NomExercice extends Exercice {
 
         case 'paralleles': // Droites parallèles
           texte += `$(d):\\begin{cases}x=${reduireAxPlusB(ux, xA, 't', { ordreInverse: true })} \\\\y= ${rienSi0(yA)}  ${ecritureAlgebriqueSauf1(uy)}t\\quad(t\\in\\mathbb{R})\\\\z= ${rienSi0(zA)} ${ecritureAlgebriqueSauf1(uz)}t\\end{cases}$`
-          texte += `$\\quad\\quad(d'):\\begin{cases}x=${rienSi0(xB)}${ecritureAlgebriqueSauf1(vx)}s\\\\y= ${rienSi0(yB)}  ${ecritureAlgebriqueSauf1(vy)}s\\quad(s\\in\\mathbb{R})\\\\z= ${rienSi0(zB)} ${ecritureAlgebriqueSauf1(vz)}s\\end{cases}$`
+          texte += `$\\quad\\quad(d'):\\begin{cases}x=${rienSi0(xB)}${ecritureAlgebriqueSauf1(vx)}s\\\\y= ${rienSi0(yB)}  ${ecritureAlgebriqueSauf1(vy)}s\\quad(s\\in\\mathbb{R})\\\\z= ${rienSi0(zB)} ${ecritureAlgebriqueSauf1(vz)}s\\end{cases}$<br><br>`
           // On écrit les représentations paramétriques des droites (d) et (d')
-          texte += `<br><br>${texteEnCouleurEtGras('Affirmation :')}  ${affirmation}`
+          texte += `${texteEnCouleurEtGras('Affirmation :')}  ${affirmation}`
 
-          texteCorr = texteEnCouleurEtGras('Étape 1 : Droites parallèles ?')
+          texteCorr =
+            texteEnCouleurEtGras('Étape 1 : Droites parallèles ?') + '<br>'
           if (this.correctionDetaillee) {
             texteCorr +=
-              "<br>On sait que la représentation paramétrique d'une droite est de la forme "
+              "On sait que la représentation paramétrique d'une droite est de la forme "
             texteCorr +=
-              '$(d):\\begin{cases}x=x_A+at \\\\y= y_A+bt\\quad(t\\in\\mathbb{R})\\\\z= z_A+ct\\end{cases}$'
+              '$(d):\\begin{cases}x=x_A+at \\\\y= y_A+bt\\quad(t\\in\\mathbb{R})\\\\z= z_A+ct\\end{cases}$<br>'
             texteCorr +=
-              '<br>où le point $A(x_A, y_A, z_A)$ est un point de la droite et $\\vec u\\begin{pmatrix}a\\\\b\\\\c\\end{pmatrix}$ est un vecteur directeur de la droite.<br>'
+              'où le point $A(x_A, y_A, z_A)$ est un point de la droite et $\\vec u\\begin{pmatrix}a\\\\b\\\\c\\end{pmatrix}$ est un vecteur directeur de la droite.<br>'
           }
-          texteCorr += `<br>On déduit de l'énoncé que le vecteur $\\vec u$ de coordonnées $\\vec u\\begin{pmatrix} ${ux}\\\\${uy}\\\\${uz}\\end{pmatrix}$ est un vecteur directeur de (d) `
+          texteCorr += `On déduit de l'énoncé que le vecteur $\\vec u$ de coordonnées $\\vec u\\begin{pmatrix} ${ux}\\\\${uy}\\\\${uz}\\end{pmatrix}$ est un vecteur directeur de (d) `
           texteCorr += `et que $\\vec v$ de coordonnées $\\vec v\\begin{pmatrix} ${vx}\\\\${vy}\\\\${vz}\\end{pmatrix}$ est un vecteur directeur de (d'). <br>`
           // On teste la colinéarité des vecteurs directeurs
           texteCorr += bloc2
-          texteCorr += `<br>On peut conclure que $\\vec u =  ${u3.inverse().texFractionSimplifiee} \\vec v$, les vecteurs sont alors colinéaires. <br>`
-          texteCorr += `<br>${texteGras("Les droites $(d)$ et $(d~')$ sont donc portées par des vecteurs de même direction.")}`
+          texteCorr += `On peut conclure que $\\vec u =  ${u3.inverse().texFractionSimplifiee} \\vec v$, les vecteurs sont alors colinéaires. <br>`
+          texteCorr += `${texteGras("Les droites $(d)$ et $(d~')$ sont donc portées par des vecteurs de même direction.")}<br>`
           // On teste si les droites sont sécantes ou non-coplanaires
-          texteCorr += texteEnCouleurEtGras(
-            '<br>Étape 2 : Droites parallèles ou confondues ?',
-          )
           texteCorr +=
-            "<br>Dans ces conditions, les droites $(d)$ et $(d')$ sont strictement parallèles, si et seulement si $(d)\\cap (d')=\\emptyset$."
+            texteEnCouleurEtGras(
+              'Étape 2 : Droites parallèles ou confondues ?',
+            ) + '<br>'
           texteCorr +=
-            '<br>Un point M de coordonnées $M(x,y,z)$ appartient aux deux droites si, et seulement si, ses coordonnées vérifient les représentations paramétriques des deux droites.'
+            "Dans ces conditions, les droites $(d)$ et $(d')$ sont strictement parallèles, si et seulement si $(d)\\cap (d')=\\emptyset$.<br>"
           texteCorr +=
-            '<br>Ce qui est équivalent à résoudre le système suivant :'
+            'Un point M de coordonnées $M(x,y,z)$ appartient aux deux droites si, et seulement si, ses coordonnées vérifient les représentations paramétriques des deux droites.<br>'
+          texteCorr +=
+            'Ce qui est équivalent à résoudre le système suivant :<br>'
           texteCorr += bloc1
           texteCorr +=
-            "<br>Les équations sont incompatibles donc le système n'admet pas de solution.<br>"
-          texteCorr += texteEnCouleurEtGras('Conclusion :<br>')
+            "Les équations sont incompatibles donc le système n'admet pas de solution.<br>"
+          texteCorr += texteEnCouleurEtGras('Conclusion :') + '<br>'
           texteCorr +=
             "Donc les droites $(d)$ et $(d')$ sont portées par des vecteurs colinéaires et ne sont pas sécantes, elles sont donc strictement parallèles.<br>"
           if (affirmation === "Les droites $(d)$ et $(d~')$ sont parallèles.") {
