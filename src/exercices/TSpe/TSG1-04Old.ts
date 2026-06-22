@@ -50,23 +50,21 @@ export default class nomExercice extends Exercice {
     const factorielleN2 = factorielle(n - 2)
     const resultat = factorielleN / (factorielleN2 * 2) // nombre de tirages possibles
     const proba = new FractionEtendue(voy * con, resultat) // proba de gagner)
-    this.consigne = `${texteEnCouleurEtGras("Sujet inspiré d'un exercice du sujet Bac Asie Juin 2021")} <br><br>Un sac contient ${n} lettres distinctes de l'alphabet dont ${voy} voyelles et ${con} consonnes.`
-    this.consigne += `<br>Un jeu consiste à tirer simultanément au hasard ${tirage} lettres dans ce sac. `
-    this.consigne += `<br>On gagne si le tirage est constitué d'une voyelle ${texteEnCouleurEtGras('et')} d'une consonne.`
+    this.consigne = `${texteEnCouleurEtGras("Sujet inspiré d'un exercice du sujet Bac Asie Juin 2021")} <br>Un sac contient ${n} lettres distinctes de l'alphabet dont ${voy} voyelles et ${con} consonnes.<br>
+    Un jeu consiste à tirer simultanément au hasard ${tirage} lettres dans ce sac.<br>
+    On gagne si le tirage est constitué d'une voyelle ${texteEnCouleurEtGras('et')} d'une consonne.`
 
     let question1 =
       'Un joueur extrait simultanément deux lettres du sac. Déterminer le nombre $n$ de tirages possibles.'
-    let correction1 = `Le tirage est simultané, on cherche donc le nombre de combinaisons de 2 éléments parmi ${n}.`
-    correction1 += `<br>On calcule donc <br>$\\begin{aligned}n&=\\dbinom{${n}}{2}\\\\&=\\dfrac{${n}~!}{${n - 2}~!\\times 2~ !}\\\\&=\\dfrac{${factorielleN}}{${factorielleN2}\\times 2}\\\\&=${resultat}.\\end{aligned}$`
-    correction1 += `<br>Il y a donc $${miseEnEvidence(resultat)}$ tirages possibles.`
+    const correction1 = `Le tirage est simultané, on cherche donc le nombre de combinaisons de 2 éléments parmi ${n}.<br>
+    On calcule donc <br>$\\begin{aligned}n&=\\dbinom{${n}}{2}\\\\&=\\dfrac{${n}~!}{${n - 2}~!\\times 2~ !}\\\\&=\\dfrac{${factorielleN}}{${factorielleN2}\\times 2}\\\\&=${resultat}.\\end{aligned}$<br>
+    Il y a donc $${miseEnEvidence(resultat)}$ tirages possibles.`
     let question2 = 'Déterminer la probabilité que le joueur gagne à ce jeu.'
-    let correction2 = 'On cherche le nombre de tirages gagnants.'
-    correction2 += `<br>Il y a ${voy} voyelles  possibles et pour chacune d'elles, ${con} consonnes possibles. <br>D'après le principe multiplicatif, il y a donc $${voy}\\times${con}=${voy * con}$ tirages gagnants.<br>`
-    correction2 += `La probabilité de succès est $p=${proba.texFraction}$`
-    if (pgcd(resultat, voy * con) !== 1) {
-      correction2 += `$=${proba.texFractionSimplifiee}$.`
-    }
-    correction2 += `<br>La probabilité que le joueur gagne à ce jeu est $${miseEnEvidence(proba.texFractionSimplifiee)}.$`
+    const correction2 = `On cherche le nombre de tirages gagnants.<br>
+    Il y a ${voy} voyelles  possibles et pour chacune d'elles, ${con} consonnes possibles. <br>
+    D'après le principe multiplicatif, il y a donc $${voy}\\times${con}=${voy * con}$ tirages gagnants.<br>
+    La probabilité de succès est $p=${proba.texFraction}${pgcd(resultat, voy * con) !== 1 ? `=${proba.texFractionSimplifiee}` : ''}$<br>
+    La probabilité que le joueur gagne à ce jeu est $${miseEnEvidence(proba.texFractionSimplifiee)}.$`
     const reponse2 = proba.texFractionSimplifiee
 
     handleAnswers(this, 0, { reponse: { value: resultat } })
