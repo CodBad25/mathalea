@@ -59,10 +59,12 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
     this.consigne =
       "Donner l'enchaînement de calculs sur une ligne qui permet de résoudre "
     this.consigne +=
-      this.nbQuestions > 1 ? 'les problèmes suivants.' : 'le problème suivant.'
+      this.nbQuestions > 1
+        ? 'les problèmes suivants.<br>'
+        : 'le problème suivant.<br>'
     if (this.sup2) {
       this.consigne +=
-        '<br>Calculer cet enchaînement et donner la réponse numérique de ce problème.'
+        'Calculer cet enchaînement et donner la réponse numérique de ce problème.'
     }
     const typesDeQuestions = gestionnaireFormulaireTexte({
       max: 11,
@@ -121,13 +123,13 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           leTexteApres = ' €'
 
           if (this.correctionDetaillee) {
-            correctionDetaillee = `<br>Les pains coûtent $${quantitéPains} \\times ${texPrix(prixPains)} = ${texPrix(quantitéPains * prixPains)}$ €<br>`
+            correctionDetaillee = `Les pains coûtent $${quantitéPains} \\times ${texPrix(prixPains)} = ${texPrix(quantitéPains * prixPains)}$ €<br>`
             correctionDetaillee += `On soustrait au prix total $${texNombre(prix)} - ${texPrix(prixPains * quantitéPains)} = ${texPrix(prix - quantitéPains * prixPains)}$ €<br>`
-            correctionDetaillee += `On divise par le nombre de tartelettes $${texPrix(prix - quantitéPains * prixPains)} \\div ${quantitéTartelettes} = ${texPrix((prix - quantitéPains * prixPains) / quantitéTartelettes)}$ €`
+            correctionDetaillee += `On divise par le nombre de tartelettes $${texPrix(prix - quantitéPains * prixPains)} \\div ${quantitéTartelettes} = ${texPrix((prix - quantitéPains * prixPains) / quantitéTartelettes)}$ €.<br>`
           } else correctionDetaillee = ''
 
           correctionDetaillee += this.sup2
-            ? "<br>Donc le prix d'une tartelette est " +
+            ? "Donc le prix d'une tartelette est " +
               `$${miseEnEvidence(reponseNumerique)}$ €.`
             : ''
           break
@@ -153,13 +155,13 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           texteAvant = "<br> Prix d'un stylo : "
 
           if (this.correctionDetaillee) {
-            correctionDetaillee = `<br>Les cahiers coûtent $${quantitéCahiers} \\times ${texPrix(prixCahiers)} = ${texPrix(quantitéCahiers * prixCahiers)}$ €<br>`
+            correctionDetaillee = `Les cahiers coûtent $${quantitéCahiers} \\times ${texPrix(prixCahiers)} = ${texPrix(quantitéCahiers * prixCahiers)}$ €<br>`
             correctionDetaillee += `On soustrait au prix total $${texPrix(prix)} - ${texPrix(prixCahiers * quantitéCahiers)} = ${texPrix(prix - quantitéCahiers * prixCahiers)}$ €<br>`
-            correctionDetaillee += `On divise par le nombre de stylos $${texPrix(prix - quantitéCahiers * prixCahiers)} \\div ${quantitéStylos} = ${texPrix((prix - quantitéCahiers * prixCahiers) / quantitéStylos)}$ €`
+            correctionDetaillee += `On divise par le nombre de stylos $${texPrix(prix - quantitéCahiers * prixCahiers)} \\div ${quantitéStylos} = ${texPrix((prix - quantitéCahiers * prixCahiers) / quantitéStylos)}$ €.<br>`
           } else correctionDetaillee = ''
 
           correctionDetaillee += this.sup2
-            ? "<br>Donc le prix d'un stylo est " +
+            ? "Donc le prix d'un stylo est " +
               `$${miseEnEvidence(reponseNumerique)}$ €.`
             : ''
 
@@ -184,13 +186,13 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           texteAvant = "<br> Nombre d'arbres dans le parc : "
 
           if (this.correctionDetaillee) {
-            correctionDetaillee = `<br>Au départ, on plante $${rangees} \\times ${arbresParRangee} = ${texNombre(arbresInitiaux)}$ arbres.<br>`
+            correctionDetaillee = `Au départ, on plante $${rangees} \\times ${arbresParRangee} = ${texNombre(arbresInitiaux)}$ arbres.<br>`
             correctionDetaillee += `Après la tempête, il reste $${texNombre(arbresInitiaux)} - ${texNombre(arbresArraches)} = ${texNombre(arbresInitiaux - arbresArraches)}$ arbres.<br>`
-            correctionDetaillee += `Après avoir replanté, il y a $${texNombre(arbresInitiaux - arbresArraches)} + ${texNombre(nouveauxArbres)} = ${texNombre(arbresFinaux)}$ arbres.`
+            correctionDetaillee += `Après avoir replanté, il y a $${texNombre(arbresInitiaux - arbresArraches)} + ${texNombre(nouveauxArbres)} = ${texNombre(arbresFinaux)}$ arbres.<br>`
           } else correctionDetaillee = ''
 
           correctionDetaillee += this.sup2
-            ? '<br>Donc il y a ' +
+            ? 'Donc il y a ' +
               `$${miseEnEvidence(reponseNumerique)}$ arbres dans le parc.`
             : ''
 
@@ -213,18 +215,18 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
             tortuesRelachees = groupesRelaches * tortuesParGroupeApres
           } while (tortuesInitiales === tortuesRelachees)
 
-          texte = `Une association possède $${tortuesInitiales}$ bébés tortues marines.
-          <br>Elles sont réparties équitablement dans $${nbGroupes}$ groupes.
-          <br>Chaque groupe est ensuite rejoint par $${tortuesSupplementaires}$ tortues supplémentaires élevées en réserve.
-          <br>L'association décide de relâcher $${groupesRelaches}$ groupes de tortues dans la mer.
-          <br>Combien de tortues ont été relâchées en mer ?<br>`
+          texte = `Une association possède $${tortuesInitiales}$ bébés tortues marines.<br>
+          Elles sont réparties équitablement dans $${nbGroupes}$ groupes.<br>
+          Chaque groupe est ensuite rejoint par $${tortuesSupplementaires}$ tortues supplémentaires élevées en réserve.<br>
+          L'association décide de relâcher $${groupesRelaches}$ groupes de tortues dans la mer.<br>
+          Combien de tortues ont été relâchées en mer ?<br>`
 
           reponse = `(${tortuesInitiales} \\div ${nbGroupes} + ${tortuesSupplementaires}) \\times ${groupesRelaches}`
 
           if (this.correctionDetaillee) {
-            correctionDetaillee = `<br>Chaque groupe contient au départ $${tortuesInitiales} \\div ${nbGroupes} = ${texNombre(tortuesParGroupe)}$ tortues.<br>`
+            correctionDetaillee = `Chaque groupe contient au départ $${tortuesInitiales} \\div ${nbGroupes} = ${texNombre(tortuesParGroupe)}$ tortues.<br>`
             correctionDetaillee += `Après ajout des tortues supplémentaires, chaque groupe contient $${texNombre(tortuesParGroupe)} + ${tortuesSupplementaires} = ${texNombre(tortuesParGroupeApres)}$ tortues.<br>`
-            correctionDetaillee += `On relâche ${groupesRelaches} \\times ${texNombre(tortuesParGroupeApres)} = $${texNombre(tortuesRelachees)}$ tortues.`
+            correctionDetaillee += `On relâche ${groupesRelaches} \\times ${texNombre(tortuesParGroupeApres)} = $${texNombre(tortuesRelachees)}$ tortues.<br>`
           } else correctionDetaillee = ''
 
           leTexteApres = ' tortues'
@@ -232,7 +234,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponseNumerique = texNombre(tortuesRelachees)
 
           correctionDetaillee += this.sup2
-            ? '<br>Donc ' +
+            ? 'Donc ' +
               `$${miseEnEvidence(reponseNumerique)}$ tortues ont été relâchées en mer.`
             : ''
 
@@ -258,10 +260,10 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponse = `${papierTotal} \\div ${papierParCarton} \\times ${argentParCarton} \\div ${prixParArbre} + ${arbresCadeaux}`
 
           if (this.correctionDetaillee) {
-            correctionDetaillee = `<br>On peut remplir $${papierTotal} \\div ${papierParCarton} = ${texNombre(nbCartons)}$ cartons.<br>`
+            correctionDetaillee = `On peut remplir $${papierTotal} \\div ${papierParCarton} = ${texNombre(nbCartons)}$ cartons.<br>`
             correctionDetaillee += `Ces cartons rapportent $${texNombre(nbCartons)} \\times ${argentParCarton} = ${texNombre(argentTotal)}$ €.<br>`
             correctionDetaillee += `Avec cet argent, on peut acheter $${texNombre(argentTotal)} \\div ${prixParArbre} = ${texNombre(arbresAchetes)}$ arbres.<br>`
-            correctionDetaillee += `Au total, l'école se procure $${texNombre(arbresAchetes)} + ${arbresCadeaux} = ${texNombre(arbresTotal)}$ arbres.`
+            correctionDetaillee += `Au total, l'école se procure $${texNombre(arbresAchetes)} + ${arbresCadeaux} = ${texNombre(arbresTotal)}$ arbres.<br>`
           } else correctionDetaillee = ''
 
           leTexteApres = ' arbres'
@@ -269,7 +271,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponseNumerique = texNombre(arbresTotal)
 
           correctionDetaillee += this.sup2
-            ? "<br>Donc l'école a pu se procurer " +
+            ? "Donc l'école a pu se procurer " +
               `$${miseEnEvidence(reponseNumerique)}$ arbres au total.`
             : ''
 
@@ -293,10 +295,10 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponse = `(${nbAmis} \\times ${prixBillet} + ${nbPaquets} \\times ${prixParPaquet}) \\div ${nbAmis}`
 
           if (this.correctionDetaillee) {
-            correctionDetaillee = `<br>Les billets coûtent au total $${nbAmis} \\times ${prixBillet} = ${texNombre(coutBillets)}$ €.<br>`
+            correctionDetaillee = `Les billets coûtent au total $${nbAmis} \\times ${prixBillet} = ${texNombre(coutBillets)}$ €.<br>`
             correctionDetaillee += `Le pop-corn coûte au total $${nbPaquets} \\times ${prixParPaquet} = ${texNombre(coutPopCorn)}$ €.<br>`
             correctionDetaillee += `Le coût total est $${texNombre(coutBillets)} + ${texNombre(coutPopCorn)} = ${texNombre(coutTotal)}$ €.<br>`
-            correctionDetaillee += `Chaque ami dépense $${texNombre(coutTotal)} \\div ${nbAmis} = ${texPrix(coutParAmi)}$ €.`
+            correctionDetaillee += `Chaque ami dépense $${texNombre(coutTotal)} \\div ${nbAmis} = ${texPrix(coutParAmi)}$ €.<br>`
           } else correctionDetaillee = ''
 
           leTexteApres = ' €'
@@ -304,7 +306,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponseNumerique = texPrix(coutParAmi)
 
           correctionDetaillee += this.sup2
-            ? '<br>Donc chaque ami dépense ' +
+            ? 'Donc chaque ami dépense ' +
               `$${miseEnEvidence(reponseNumerique)}$ € au total.`
             : ''
           break
@@ -333,9 +335,9 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponse = `(${nbSandwichs} \\times ${prixSandwich} + ${prixBouteille}) \\div ${nbAmis}`
 
           if (this.correctionDetaillee) {
-            correctionDetaillee = `<br>Les sandwichs coûtent au total $${nbSandwichs} \\times ${prixSandwich} = ${texNombre(coutSandwichs)}$ €.<br>`
+            correctionDetaillee = `Les sandwichs coûtent au total $${nbSandwichs} \\times ${prixSandwich} = ${texNombre(coutSandwichs)}$ €.<br>`
             correctionDetaillee += `Le coût total est $${texNombre(coutSandwichs)} + ${prixBouteille} = ${texNombre(coutTotal)}$ €.<br>`
-            correctionDetaillee += `Chaque personne paie $${texNombre(coutTotal)} \\div ${nbAmis} = ${texPrix(coutParAmi)}$ €.`
+            correctionDetaillee += `Chaque personne paie $${texNombre(coutTotal)} \\div ${nbAmis} = ${texPrix(coutParAmi)}$ €.<br>`
           } else correctionDetaillee = ''
 
           leTexteApres = ' €'
@@ -343,7 +345,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponseNumerique = texPrix(coutParAmi)
 
           correctionDetaillee += this.sup2
-            ? '<br>Donc chaque ami paie ' +
+            ? 'Donc chaque ami paie ' +
               `$${miseEnEvidence(reponseNumerique)}$ € au total.`
             : ''
           break
@@ -365,9 +367,9 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponse = `${nbEquipes} \\times ${joueursParEquipe} \\times ${bouteillesParJoueur} - ${bouteillesInutilisees}`
 
           if (this.correctionDetaillee) {
-            correctionDetaillee = `<br>Il y a au total $${nbEquipes} \\times ${joueursParEquipe} = ${texNombre(nbJoueurs)}$ joueurs.<br>`
+            correctionDetaillee = `Il y a au total $${nbEquipes} \\times ${joueursParEquipe} = ${texNombre(nbJoueurs)}$ joueurs.<br>`
             correctionDetaillee += `On distribue $${texNombre(nbJoueurs)} \\times ${bouteillesParJoueur} = ${texNombre(bouteillesDistribuees)}$ bouteilles.<br>`
-            correctionDetaillee += `Le nombre de bouteilles utilisées est $${texNombre(bouteillesDistribuees)} - ${bouteillesInutilisees} = ${texNombre(bouteillesUtilisees)}$ bouteilles.`
+            correctionDetaillee += `Le nombre de bouteilles utilisées est $${texNombre(bouteillesDistribuees)} - ${bouteillesInutilisees} = ${texNombre(bouteillesUtilisees)}$ bouteilles.<br>`
           } else correctionDetaillee = ''
 
           leTexteApres = ' bouteilles'
@@ -375,7 +377,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponseNumerique = texNombre(bouteillesUtilisees)
 
           correctionDetaillee += this.sup2
-            ? '<br>Donc ' +
+            ? 'Donc ' +
               `$${miseEnEvidence(reponseNumerique)}$ bouteilles ont été utilisées.`
             : ''
           break
@@ -400,10 +402,10 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponse = `(${nbCaisses} \\times ${kgParCaisse} \\times ${prixParKg} - ${frais}) \\div ${nbPersonnes}`
 
           if (this.correctionDetaillee) {
-            correctionDetaillee = `<br>Le verger produit au total $${nbCaisses} \\times ${kgParCaisse} = ${texNombre(kgTotal)}$ kg de pommes.<br>`
+            correctionDetaillee = `Le verger produit au total $${nbCaisses} \\times ${kgParCaisse} = ${texNombre(kgTotal)}$ kg de pommes.<br>`
             correctionDetaillee += `La recette totale est $${texNombre(kgTotal)} \\times ${prixParKg} = ${texNombre(recetteTotal)}$ €.<br>`
             correctionDetaillee += `Après remboursement des frais, il reste $${texNombre(recetteTotal)} - ${frais} = ${texPrix(resteAPartager)}$ €.<br>`
-            correctionDetaillee += `Chaque personne reçoit $${texNombre(resteAPartager)} \\div ${nbPersonnes} = ${texPrix(gainParPersonne)}$ €.`
+            correctionDetaillee += `Chaque personne reçoit $${texNombre(resteAPartager)} \\div ${nbPersonnes} = ${texPrix(gainParPersonne)}$ €.<br>`
           } else correctionDetaillee = ''
 
           leTexteApres = ' €'
@@ -411,7 +413,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponseNumerique = texPrix(gainParPersonne)
 
           correctionDetaillee += this.sup2
-            ? '<br>Donc chaque personne reçoit ' +
+            ? 'Donc chaque personne reçoit ' +
               `$${miseEnEvidence(reponseNumerique)}$ €.`
             : ''
           break
@@ -438,7 +440,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponse = `${nbPoules} \\times ${oeufsParPoule} - ${nbGateaux} \\times ${oeufsParGateau}`
 
           if (this.correctionDetaillee) {
-            correctionDetaillee = `<br>Les gâteaux utilisent au total $${nbGateaux} \\times ${oeufsParGateau} = ${texNombre(oeufsUtilises)}$ œufs.<br>`
+            correctionDetaillee = `Les gâteaux utilisent au total $${nbGateaux} \\times ${oeufsParGateau} = ${texNombre(oeufsUtilises)}$ œufs.<br>`
             correctionDetaillee += `Les poules ont pondu au total $${nbPoules} \\times ${oeufsParPoule} = ${texNombre(oeufsPondus)}$ œufs.<br>`
             correctionDetaillee += `Il me reste $${texNombre(oeufsPondus)} - ${texNombre(oeufsUtilises)} = ${texNombre(oeufsRestants)}$ œufs.<br>`
           } else correctionDetaillee = ''
@@ -448,7 +450,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponseNumerique = texNombre(oeufsRestants)
 
           correctionDetaillee += this.sup2
-            ? '<br>Donc il me reste ' +
+            ? 'Donc il me reste ' +
               `$${miseEnEvidence(reponseNumerique)}$ œufs de mes poules à la fin de la semaine .`
             : ''
           break
@@ -471,9 +473,9 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponse = `(${carburantInitial} - ${consommationParMinute} \\times ${dureeDecollage}) \\div ${nbReservoirs}`
 
           if (this.correctionDetaillee) {
-            correctionDetaillee = `<br>La fusée consomme au total $${consommationParMinute} \\times ${dureeDecollage} = ${texNombre(carburantConsomme)}$ litres.<br>`
+            correctionDetaillee = `La fusée consomme au total $${consommationParMinute} \\times ${dureeDecollage} = ${texNombre(carburantConsomme)}$ litres.<br>`
             correctionDetaillee += `Il reste $${carburantInitial} - ${texNombre(carburantConsomme)} = ${texNombre(carburantRestant)}$ litres.<br>`
-            correctionDetaillee += `Chaque réservoir contient $${texNombre(carburantRestant)} \\div ${nbReservoirs} = ${texNombre(carburantParReservoir)}$ litres.`
+            correctionDetaillee += `Chaque réservoir contient $${texNombre(carburantRestant)} \\div ${nbReservoirs} = ${texNombre(carburantParReservoir)}$ litres.<br>`
           } else correctionDetaillee = ''
 
           leTexteApres = ' litres'
@@ -481,7 +483,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponseNumerique = texNombre(carburantParReservoir)
 
           correctionDetaillee += this.sup2
-            ? '<br>Donc il y a ' +
+            ? 'Donc il y a ' +
               `$${miseEnEvidence(reponseNumerique)}$ litres dans chaque réservoir.`
             : ''
           break
@@ -489,40 +491,9 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
       }
 
       texteCorr =
-        `Un enchaînement possible de calculs est : $${miseEnEvidence(reponse)}$.` +
+        `Un enchaînement possible de calculs est : $${miseEnEvidence(reponse)}$.<br>` +
         correctionDetaillee
-      /* texte += ajouteChampTexteMathLive(
-        this,
-        i * nbQ,
-        KeyboardType.clavierDeBaseAvecEgal,
-        {
-          texteAvant: '<br> Enchaînement de calculs (en une seule ligne) : ',
-        },
-      )
-      handleAnswers(this, i * nbQ, {
-        reponse: {
-          value: reponse,
-          options: { expressionNumerique: true },
-        },
-      })
 
-      if (this.sup2) {
-        texte += ajouteChampTexteMathLive(
-          this,
-          i * 2 + 1,
-          KeyboardType.clavierNumbers,
-          {
-            texteApres,
-            texteAvant,
-          },
-        )
-        handleAnswers(this, i * 2 + 1, {
-          reponse: {
-            value: reponseNumerique,
-            options: { nombreDecimalSeulement: true },
-          },
-        })
-      } */
       const tailleChampsReponse = 150
       if (this.interactif) {
         if (this.sup2) {
