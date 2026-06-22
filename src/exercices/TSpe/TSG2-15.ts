@@ -67,15 +67,15 @@ export default class ExerciceAlignementEspace extends Exercice {
       const kX = new FractionEtendue(xB - xA, xC - xA)
       const kY = new FractionEtendue(yB - yA, yC - yA)
       const kZ = new FractionEtendue(zB - zA, zC - zA)
-      const texte = `Dans l’espace, muni d'un repère orthonormé, on considère trois points  :
-<br>$A(${xA}~;~${yA}~;~${zA})$, $B(${xB}~;~${yB}~;~${zB})$ et $C(${xC}~;~${yC}~;~${zC})$.<br>
-<br>Les points $A$, $B$ et $C$ sont-ils alignés ? Justifier votre réponse.`
+      const texte = `Dans l’espace, muni d'un repère orthonormé, on considère trois points  :<br>
+      $A(${xA}~;~${yA}~;~${zA})$, $B(${xB}~;~${yB}~;~${zB})$ et $C(${xC}~;~${yC}~;~${zC})$.<br><br>
+Les points $A$, $B$ et $C$ sont-ils alignés ? Justifier votre réponse.`
 
-      let texteCorr =
-        'La méthode consiste à savoir si les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ sont colinéaires.<br>'
-      texteCorr += `On cherche s'il existe un réel $k$ tel que  $\\overrightarrow{AB} = k\\overrightarrow{AC}$.<br>`
-      texteCorr += `Pour le vérifier, on calcule les coordonnées des deux vecteurs, en sachant que  $\\overrightarrow{AB}\\begin{pmatrix}x_B - x_A\\\\y_B - y_A\\\\z_B - z_A\\end{pmatrix}$. <br> On obtient $\\overrightarrow{AB}\\begin{pmatrix}${xB} ${ecritureAlgebrique(-xA)}\\\\${yB} ${ecritureAlgebrique(-yA)}\\\\${zB} ${ecritureAlgebrique(-zA)}\\end{pmatrix}$  `
-      texteCorr += ` d'où  $\\overrightarrow{AB}\\begin{pmatrix}${xB - xA}\\\\${yB - yA}\\\\${zB - zA}\\end{pmatrix}$ . <br> Il vient de la même manière  $\\overrightarrow{AC}\\begin{pmatrix}${xC - xA}\\\\${yC - yA}\\\\${zC - zA}\\end{pmatrix}$.<br>`
+      let texteCorr = `La méthode consiste à savoir si les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ sont colinéaires.<br>
+        On cherche s'il existe un réel $k$ tel que  $\\overrightarrow{AB} = k\\overrightarrow{AC}$.<br>
+        Pour le vérifier, on calcule les coordonnées des deux vecteurs, en sachant que  $\\overrightarrow{AB}\\begin{pmatrix}x_B - x_A\\\\y_B - y_A\\\\z_B - z_A\\end{pmatrix}$. <br> On obtient $\\overrightarrow{AB}\\begin{pmatrix}${xB} ${ecritureAlgebrique(-xA)}\\\\${yB} ${ecritureAlgebrique(-yA)}\\\\${zB} ${ecritureAlgebrique(-zA)}\\end{pmatrix}$
+      d'où  $\\overrightarrow{AB}\\begin{pmatrix}${xB - xA}\\\\${yB - yA}\\\\${zB - zA}\\end{pmatrix}$ .<br>
+       Il vient de la même manière  $\\overrightarrow{AC}\\begin{pmatrix}${xC - xA}\\\\${yC - yA}\\\\${zC - zA}\\end{pmatrix}$.<br>`
 
       // test robuste de colinéarité : on calcule k à partir d'une composante non nulle de AC
       texteCorr += `$\\overrightarrow{AB} = k\\overrightarrow{AC}$
@@ -84,17 +84,17 @@ export default class ExerciceAlignementEspace extends Exercice {
      ${yB - yA} = ${yC - yA} k\\\\
       ${zB - zA} = ${zC - zA} k
       \\end{cases}$ $\\iff \\begin{cases}
-     k= ${kX.texFractionSimplifiee}\\\\\\\\
-     k= ${kY.texFractionSimplifiee}\\\\\\\\
+     k= ${kX.texFractionSimplifiee}\\\\
+     k= ${kY.texFractionSimplifiee}\\\\
       k= ${kZ.texFractionSimplifiee}
-      \\end{cases}$<br>`
+      \\end{cases}$<br><br>`
 
       if (casAligne) {
-        texteCorr += `<br> On vient de prouver que $\\overrightarrow{AB} = ${kX.texFractionSimplifiee}\\overrightarrow{AC}$. <br>Les vecteurs sont colinéaires.`
-        texteCorr += `<br>Les points $A, \\,B$ et $C$ sont donc $${miseEnEvidence('\\text{alignés}')}$.`
+        texteCorr += `On vient de prouver que $\\overrightarrow{AB} = ${kX.texFractionSimplifiee}\\overrightarrow{AC}$. <br>Les vecteurs sont colinéaires.<br>`
+        texteCorr += `Les points $A, \\,B$ et $C$ sont donc $${miseEnEvidence('\\text{alignés}')}$.`
       } else {
-        texteCorr += `<br>On ne trouve pas un réel $k$ vérifiant simultanément les trois égalités.`
-        texteCorr += `<br>Les vecteurs ne sont pas colinéaires. Les points $A, \\,B$ et $C$ ne sont $${miseEnEvidence('\\text{pas alignés}')}$.`
+        texteCorr += `On ne trouve pas un réel $k$ vérifiant simultanément les trois égalités.<br>`
+        texteCorr += `Les vecteurs ne sont pas colinéaires. Les points $A, \\,B$ et $C$ ne sont $${miseEnEvidence('\\text{pas alignés}')}$.`
       }
 
       if (this.questionJamaisPosee(i, texte)) {
