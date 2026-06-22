@@ -113,8 +113,8 @@ export default class LoiBinomialeUrne extends Exercice {
                 texteCorr += `On sait que la probabilité d'avoir $k$ succès quand $X$ suit une loi binomiale de paramètre $n$ et $p$ est :<br>
       $\\mathrm{P}(X=k)=\\displaystyle\\binom{n}{k}\\times p^k\\times (1-p)^{n-k}$.<br> 
       ce qui donne dans notre situation : $\\mathrm{P}(X=k)=\\displaystyle\\binom{${n}}{k}\\times \\left(${p.texFractionSimplifiee}\\right)^k\\times \\left(${q.texFractionSimplifiee}\\right)^{${n}-k}\\quad$ (pour $0\\leqslant k\\leqslant ${n}$).<br> 
-      Pour $k=0$, on a $\\mathrm{P}(X=0) = \\displaystyle\\binom{${n}}{0}\\times \\left(${p.texFractionSimplifiee}\\right)^0\\times \\left(${q.texFractionSimplifiee}\\right)^{${n}}$.
-      <br>Par calcul, on obtient que $\\mathrm{P}(X=0)\\approx ${miseEnEvidence(texNombre(reponseNum0))}$.<br>`
+      Pour $k=0$, on a $\\mathrm{P}(X=0) = \\displaystyle\\binom{${n}}{0}\\times \\left(${p.texFractionSimplifiee}\\right)^0\\times \\left(${q.texFractionSimplifiee}\\right)^{${n}}$.<br>
+      Par calcul, on obtient que $\\mathrm{P}(X=0)\\approx ${miseEnEvidence(texNombre(reponseNum0))}$.<br>`
                 texteCorr += `Et comme $\\mathrm{P}(X>0) = 1 - \\mathrm{P}(X=0)$, on en déduit que $\\mathrm{P}(X>0) \\approx ${miseEnEvidence(texNombre(reponseNum1))}$.<br>`
                 if (this.interactif) {
                   texte += ajouteChampTexteMathLive(
@@ -193,8 +193,8 @@ export default class LoiBinomialeUrne extends Exercice {
                 texte += "Calculer l'espérance $\\mathrm{E}(X)$.<br>"
                 // texteCorr += `${texteGras("4. Calculer l'espérance $E(X)$ et interprétez ce résultat.<br>")}`
                 const reponse = esp.texFractionSimplifiee
-                texteCorr += `On sait que l'espérance de $X \\sim \\mathcal B\\left(n\\,;\\,p\\right)$ est donnée par $\\mathrm{E}(X) = n\\,p $.
-      <br>On obtient donc $\\mathrm{E}(X)= ${n}\\times ${p.texFractionSimplifiee}$ et finalement $\\mathrm{E}(X) = ${miseEnEvidence(reponse)}$.<br>`
+                texteCorr += `On sait que l'espérance de $X \\sim \\mathcal B\\left(n\\,;\\,p\\right)$ est donnée par $\\mathrm{E}(X) = n\\,p $.<br>
+                On obtient donc $\\mathrm{E}(X)= ${n}\\times ${p.texFractionSimplifiee}$ et finalement $\\mathrm{E}(X) = ${miseEnEvidence(reponse)}$.<br>`
                 texteApres = sp(5) + '(Saisir la valeur exacte.)'
                 if (this.interactif) {
                   texte += ajouteChampTexteMathLive(
