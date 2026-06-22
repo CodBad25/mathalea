@@ -6,9 +6,7 @@ fi
 
 
 until $(curl --output /dev/null --head --fail http://localhost:5173/alea/); do printf '.'; sleep 2; done
-    # Récupérer les fichiers modifiés depuis les 2 derniers commits
-git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
-git checkout FETCH_HEAD
+    # Récupérer les fichiers modifiés depuis les 5 derniers commits
 
 COMMIT_COUNT=$(git rev-list --count HEAD)
 MAX_COMMITS=5
@@ -17,18 +15,15 @@ if [ "$COMMIT_COUNT" -lt "$MAX_COMMITS" ]; then
 else
   DIFF_BASE="HEAD~$MAX_COMMITS"
 fi
+
 echo "Comparing from $DIFF_BASE to HEAD"
-if git rev-parse --verify "$DIFF_BASE" >/dev/null 2>&1; then
-  echo "Comparing from $DIFF_BASE to HEAD"
-  CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
-else
-  echo "⚠️ Le commit $DIFF_BASE n'est pas disponible (clone trop peu profond ?)"
-  CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
-fi
+CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
+
 echo ""
 echo "📋 Fichiers modifiés:"
 echo "$CHANGED_FILES"
 echo ""
+
 # ============================================================
 # PHASE 2: Tests unitaires et e2e
 # ============================================================
