@@ -168,8 +168,8 @@ export default class LoiBinomialeUrne extends Exercice {
         corrections.push(`On sait que la probabilité d'avoir $k$ succès quand $X$ suit une loi binomiale de paramètre $n$ et $p$ est :<br>
       $\\mathrm{P}(X=k)=\\displaystyle\\binom{n}{k}\\times p^k\\times (1-p)^{n-k}$.<br> 
       ce qui donne dans notre situation : $\\mathrm{P}(X=${k})=\\displaystyle\\binom{${n}}{k}\\times \\left(${p.texFractionSimplifiee}\\right)^k\\times \\left(${q.texFractionSimplifiee}\\right)^{${n}-k}\\quad$ (pour $0\\leqslant k\\leqslant ${n}$).<br> 
-      Pour $k=0$, on a $\\mathrm{P}(X=0) = \\displaystyle\\binom{${n}}{0}\\times \\left(${p.texFractionSimplifiee}\\right)^0\\times \\left(${q.texFractionSimplifiee}\\right)^{${n}}$.
-      <br>Par calcul, on obtient que $\\mathrm{P}(X=0)\\approx ${miseEnEvidence(texNombre(reponseNum0))}$.`)
+      Pour $k=0$, on a $\\mathrm{P}(X=0) = \\displaystyle\\binom{${n}}{0}\\times \\left(${p.texFractionSimplifiee}\\right)^0\\times \\left(${q.texFractionSimplifiee}\\right)^{${n}}$.<br>
+      Par calcul, on obtient que $\\mathrm{P}(X=0)\\approx ${miseEnEvidence(texNombre(reponseNum0))}$.`)
       }
       const bino = factorielle(n) / (factorielle(k) * factorielle(n - k))
       const reponseNum = arrondi(
@@ -186,8 +186,8 @@ export default class LoiBinomialeUrne extends Exercice {
           Par calcul, on obtient que $P(X=${k})\\approx ${miseEnEvidence(texNombre(arrondi(reponseNum, 2)))}$.`)
       }
       if (typesDeQuestionsDisponibles.includes(3)) {
-        corrections.push(`On sait que l'espérance de $X \\sim \\mathcal B\\left(n\\,;\\,p\\right)$ est donnée par $\\mathrm{E}(X) = n\\,p $.
-      <br>On obtient donc $\\mathrm{E}(X)= ${n}\\times ${p.texFractionSimplifiee}$ et finalement $\\mathrm{E}(X) = ${miseEnEvidence(esp.texFractionSimplifiee)}$.`)
+        corrections.push(`On sait que l'espérance de $X \\sim \\mathcal B\\left(n\\,;\\,p\\right)$ est donnée par $\\mathrm{E}(X) = n\\,p $.<br>
+          On obtient donc $\\mathrm{E}(X)= ${n}\\times ${p.texFractionSimplifiee}$ et finalement $\\mathrm{E}(X) = ${miseEnEvidence(esp.texFractionSimplifiee)}$.`)
       }
 
       const reponses: (string | number)[] = [n, p.texFractionSimplifiee]
