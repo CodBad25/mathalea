@@ -6,18 +6,17 @@ import { labelPoint } from '../../lib/2d/textes'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
-export const titre = "Calculer le périmètre d'un cercle"
+export const titre = "Calculer l'aire d'un disque"
 export const dateDePublication = '19/06/2026'
 
-export const uuid = 'c84f2'
+export const uuid = 'f19d3'
 
 export const refs = {
-  'fr-fr': ['1A-G02-4'],
+  'fr-fr': ['1A-G02-5'],
   'fr-ch': [],
 }
 
@@ -27,13 +26,13 @@ export const amcReady = true
 export const amcType = 'qcmMono'
 
 /**
- * Calculer le périmètre d'un cercle à partir de son rayon ou de son diamètre.
+ * Calculer l'aire d'un disque à partir de son diamètre.
  * @author Stéphane Guyon
  */
-export default class PerimetreCercleQcm extends ExerciceQcmA {
-  private appliquerLesValeurs(rayon: number, donneLeDiametre: boolean) {
-    const diametre = 2 * rayon
-    const valeurAvecPi314 = 3.14 * diametre
+export default class AireDisqueQcm extends ExerciceQcmA {
+  private appliquerLesValeurs(diametre: number) {
+    const rayon = diametre / 2
+    const coefficientAire = rayon ** 2
 
     const O = pointAbstrait(0, 0, 'O', 'below')
     const A = pointAbstrait(-2.5, 0)
@@ -41,25 +40,18 @@ export default class PerimetreCercleQcm extends ExerciceQcmA {
     const cercleC = cercle(O, 2.5)
     cercleC.epaisseur = 2
 
-    const segmentMesure = donneLeDiametre ? segment(A, B) : segment(O, B)
+    const segmentMesure = segment(A, B)
     segmentMesure.epaisseur = 1.5
     segmentMesure.pointilles = 5
-    const mesure = donneLeDiametre ? diametre : rayon
     const objets = [
       cercleC,
       segmentMesure,
       tracePoint(O),
       labelPoint(O),
-      texteSurSegment(
-        `$${mesure}\\text{ cm}$`,
-        donneLeDiametre ? A : O,
-        B,
-        'black',
-        0.6,
-      ),
+      texteSurSegment(`$${diametre}\\text{ cm}$`, A, B, 'black', 0.6),
     ]
 
-    this.enonce = `Le cercle ci-dessous n'est pas représenté à l'échelle.<br>
+    this.enonce = `Le disque ci-dessous n'est pas représenté à l'échelle.<br>
 ${mathalea2d(
   Object.assign(
     { pixelsParCm: 25, scale: 0.8, style: 'margin: auto' },
@@ -67,30 +59,26 @@ ${mathalea2d(
   ),
   objets,
 )}
-Quelle est la valeur exacte de son périmètre ?`
+Quelle est la valeur exacte de son aire ?`
 
     this.reponses = [
-      `$${diametre}\\pi\\text{ cm}$`,
-      donneLeDiametre
-        ? `$\\pi\\times ${diametre}^2\\text{ cm}$`
-        : `$\\pi\\times ${rayon}^2\\text{ cm}$`,
-      `$${texNombre(valeurAvecPi314, 2)}\\text{ cm}$`,
+      `$${coefficientAire}\\pi\\text{ cm}^2$`,
       `$${diametre}\\pi\\text{ cm}^2$`,
+      `$${diametre ** 2}\\pi\\text{ cm}^2$`,
+      `$${2 * coefficientAire}\\pi\\text{ cm}^2$`,
     ]
 
-    this.correction = donneLeDiametre
-      ? `Le périmètre d'un cercle de diamètre $D$ est $P=\\pi\\times D$.<br>
-Ainsi, $P=\\pi\\times ${diametre}=${miseEnEvidence(`${diametre}\\pi\\text{ cm}`)}$.`
-      : `Le périmètre d'un cercle de rayon $r$ est $P=2\\times\\pi\\times r$.<br>
-Ainsi, $P=2\\times\\pi\\times ${rayon}=${miseEnEvidence(`${diametre}\\pi\\text{ cm}`)}$.`
+    this.correction = `Le rayon est la moitié du diamètre : $r=${diametre}\\div 2=${rayon}\\text{ cm}$.<br>
+L'aire d'un disque de rayon $r$ est $\\mathcal{A}=\\pi\\times r^2$.<br>
+Ainsi, $\\mathcal{A}=\\pi\\times ${rayon}^2=${miseEnEvidence(`${coefficientAire}\\pi\\text{ cm}^2`)}$.`
   }
 
   versionOriginale = () => {
-    this.appliquerLesValeurs(4, false)
+    this.appliquerLesValeurs(8)
   }
 
   versionAleatoire = () => {
-    this.appliquerLesValeurs(randint(3, 9), randint(1, 2) === 1)
+    this.appliquerLesValeurs(2 * randint(3, 9))
   }
 
   constructor() {

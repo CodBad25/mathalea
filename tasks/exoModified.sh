@@ -17,7 +17,7 @@ else
 fi
 
 echo "Comparing from $DIFF_BASE to HEAD"
-CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
+CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD | while read -r f; do [ -f "$f" ] && echo "$f"; done)
 
 echo ""
 echo "📋 Fichiers modifiés:"
