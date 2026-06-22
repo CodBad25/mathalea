@@ -119,7 +119,7 @@ export default class AjouterDesFractionsDunite extends Exercice {
         scale: 0.5,
       }
       texteCorr += mathalea2d(params, ...objets)
-      texteCorr += '<br>Ce qui donne en les mettant bout à bout :<br>'
+      texteCorr += 'Ce qui donne en les mettant bout à bout :<br>'
       params = {
         xmin: -0.4,
         ymin: -1.5,
@@ -143,7 +143,7 @@ export default class AjouterDesFractionsDunite extends Exercice {
           1,
         ),
       )
-      texteCorr += `<br>La longueur du segment ainsi obtenu est : $${fraction(num[0] + num[1] + num[2] + num[3], den).texFraction}$.`
+      texteCorr += `La longueur du segment ainsi obtenu est : $${fraction(num[0] + num[1] + num[2] + num[3], den).texFraction}$.`
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
