@@ -6,6 +6,7 @@ import {
   arete3d,
   point3d,
 } from '../../lib/3d/3dProjectionMathalea2d/elementsEtTransformations3d'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -15,8 +16,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 /**
  * Convertit un angle en degrés vers des radians
@@ -284,7 +283,7 @@ export default class ReperagePaveDroit extends Exercice {
           },
           objetsAtracerCorr,
         )
-        texteCorr += `<br>$${lettreDepuisChiffre(i + 12)}$ de coordonnées $(${miseEnEvidence(pointCoord[0], bleuMathalea)};${miseEnEvidence(pointCoord[1], 'green')};${miseEnEvidence(pointCoord[2], 'red')})$.<br>`
+        texteCorr += `$${lettreDepuisChiffre(i + 12)}$ de coordonnées $(${miseEnEvidence(pointCoord[0], bleuMathalea)};${miseEnEvidence(pointCoord[1], 'green')};${miseEnEvidence(pointCoord[2], 'red')})$.<br>`
         propositionsAMC = [
           {
             type: 'AMCOpen',
@@ -325,7 +324,7 @@ export default class ReperagePaveDroit extends Exercice {
           },
           objetsAtracerCorr,
         )
-        texteCorr += `<br>Le point $${lettreDepuisChiffre(i + 12)}$ a pour coordonnées $(${miseEnEvidence(pointCoord[0], bleuMathalea)};${miseEnEvidence(pointCoord[1], 'green')};${miseEnEvidence(pointCoord[2], 'red')})$.`
+        texteCorr += `Le point $${lettreDepuisChiffre(i + 12)}$ a pour coordonnées $(${miseEnEvidence(pointCoord[0], bleuMathalea)};${miseEnEvidence(pointCoord[1], 'green')};${miseEnEvidence(pointCoord[2], 'red')})$.`
         propositionsAMC = [
           {
             type: 'AMCNum',
