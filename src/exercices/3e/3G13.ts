@@ -510,8 +510,8 @@ export default class CalculsHomothetie extends Exercice {
         flabelsPoints,
       )
       const frapport = {
-        enonce: this.sup4 ? frapportFig + '<br>' : '',
-        solution: !this.sup4 ? frapportFig + '<br>' : '',
+        enonce: this.sup4 ? frapportFig : '',
+        solution: !this.sup4 ? frapportFig : '',
       }
 
       objetsEnonce = [
@@ -531,8 +531,8 @@ export default class CalculsHomothetie extends Exercice {
         flabelsPoints,
       )
       const fImage = {
-        enonce: this.sup4 ? fImageFig + '<br>' : '',
-        solution: !this.sup4 ? fImageFig + '<br>' : '',
+        enonce: this.sup4 ? fImageFig : '',
+        solution: !this.sup4 ? fImageFig : '',
       }
 
       objetsEnonce = [
@@ -555,8 +555,8 @@ export default class CalculsHomothetie extends Exercice {
         flabelsPoints,
       )
       const fAntecedent = {
-        enonce: this.sup4 ? fAntecedentFig + '<br>' : '',
-        solution: !this.sup4 ? fAntecedentFig + '<br>' : '',
+        enonce: this.sup4 ? fAntecedentFig : '',
+        solution: !this.sup4 ? fAntecedentFig : '',
       }
 
       const flabelsPointsAvecB = labelPoint(
@@ -595,8 +595,8 @@ export default class CalculsHomothetie extends Exercice {
         flabelsPointsAvecB,
       )
       const fImage2etapes = {
-        enonce: this.sup4 ? fImage2etapesFig + '<br>' : '',
-        solution: !this.sup4 ? fImage2etapesFig + '<br>' : '',
+        enonce: this.sup4 ? fImage2etapesFig : '',
+        solution: !this.sup4 ? fImage2etapesFig : '',
       }
 
       objetsEnonce = [
@@ -623,8 +623,8 @@ export default class CalculsHomothetie extends Exercice {
         flabelsPointsAvecB,
       )
       const fAntecedent2etapes = {
-        enonce: this.sup4 ? fAntecedent2etapesFig + '<br>' : '',
-        solution: !this.sup4 ? fAntecedent2etapesFig + '<br>' : '',
+        enonce: this.sup4 ? fAntecedent2etapesFig : '',
+        solution: !this.sup4 ? fAntecedent2etapesFig : '',
       }
 
       objetsEnonce = [
@@ -646,8 +646,8 @@ export default class CalculsHomothetie extends Exercice {
         flabelsPoints,
       )
       const frapport2 = {
-        enonce: this.sup4 ? '<br>' + frapport2Fig + '<br>' : '',
-        solution: !this.sup4 ? frapport2Fig + '<br>' : '',
+        enonce: this.sup4 ? '<br>' + frapport2Fig : '',
+        solution: !this.sup4 ? frapport2Fig : '',
       }
       let donnees, donnee1, donnee2, donnee3
 
@@ -663,8 +663,7 @@ export default class CalculsHomothetie extends Exercice {
 
           texte = `$${hA}$ est l'image de $${A}$
           par une homothétie ${derapportpositifet}
-          de centre $${O}$ tel que $${donnee1}$ et $${donnee2}$.
-          <br>
+          de centre $${O}$ tel que $${donnee1}$ et $${donnee2}$.<br>
           ${illustrerParUneFigureAMainLevee} ${figurealechelle}
           Calculer le rapport $k$ de cette homothétie`
           texte += ajouteChampTexteMathLive(
@@ -682,12 +681,10 @@ export default class CalculsHomothetie extends Exercice {
             texteCorr = `$[${O}${hA}]$ est l'image de $[${O}${A}]$ par cette homothétie
             et $${O} ${hA} ${plusgrandque} ${O} ${A}$,
             donc c'est ${unAgrandissement} et on a : $${intervallek}$.<br>
-            ${frapport.solution}
-            `
+            ${frapport.solution}`
             texteCorr += `Le rapport de cette homothétie est ${lopposedu} quotient
             de la longueur d'un segment "à l'arrivée"
-            par sa longueur "au départ".
-            <br>
+            par sa longueur "au départ".<br>
             Soit `
           } else texteCorr = frapport.solution
           texteCorr += `$k=${signek}\\dfrac{${O}${hA}}{${O}${A}}=${signek}\\dfrac{${texNombre(OhADecimale)}}{${texNombre(OA.valeurDecimale)}}=${miseEnEvidence(this.sup3 === 1 ? texNombre(k.valeurDecimale, 2) : k.texFSD)}$.`
@@ -696,8 +693,7 @@ export default class CalculsHomothetie extends Exercice {
         case 'image': // cas 2
           texte = `$${hA}$ est l'image de $${A}$ par une homothétie
           de centre $${O}$ et de rapport $k=${this.sup3 === 1 ? texNombre(k.valeurDecimale) : k.texFSD}$
-          tel que $ {${O}${A}=${OA.valeurDecimale}\\text{ cm}}$.
-          <br>
+          tel que $ {${O}${A}=${OA.valeurDecimale}\\text{ cm}}$.<br>
           ${illustrerParUneFigureAMainLevee} ${figurealechelle} 
           Calculer $${O}${hA}$`
           texte += ajouteChampTexteMathLive(
@@ -712,14 +708,11 @@ export default class CalculsHomothetie extends Exercice {
           handleAnswers(this, i, { reponse: { value: OhADecimale } })
 
           if (this.correctionDetaillee) {
-            texteCorr = `$[${O}${hA}]$ est l'image de $[${O}${A}]$ par cette homothétie et $${intervallek}$, donc $[${O}${hA}]$ est ${unAgrandissement} de $[${O}${A}]$.
-            <br>${fImage.solution}`
+            texteCorr = `$[${O}${hA}]$ est l'image de $[${O}${A}]$ par cette homothétie et $${intervallek}$, donc $[${O}${hA}]$ est ${unAgrandissement} de $[${O}${A}]$.<br>${fImage.solution}`
             texteCorr += `Une homothétie de rapport ${positif} est
             une transformation qui multiplie
-            toutes les longueurs par ${lopposede} son rapport.
-            <br>
-            Soit $${O}${hA}=${signek}k \\times ${O}${A}$.
-            <br>
+            toutes les longueurs par ${lopposede} son rapport.<br>
+            Soit $${O}${hA}=${signek}k \\times ${O}${A}$.<br>
             Donc `
           } else texteCorr = fImage.solution
           texteCorr += `$${O}${hA}= ${this.sup3 === 1 ? texNombre(absk.valeurDecimale) : absk.texFSD} \\times ${texNombre(OA.valeurDecimale)} =  ${miseEnEvidence(texNombre(OhADecimale))}\\text{ cm}$.`
@@ -728,8 +721,7 @@ export default class CalculsHomothetie extends Exercice {
         case 'antécédent': // cas 3
           texte = `$${hA}$ est l'image de $${A}$ par une
           homothétie de centre $${O}$ et de rapport
-          $k=${this.sup3 === 1 ? texNombre(k.valeurDecimale) : k.texFSD}$ tel que $ {${O}${hA}=${texNombre(OhADecimale)}\\text{ cm}}$.
-          <br>
+          $k=${this.sup3 === 1 ? texNombre(k.valeurDecimale) : k.texFSD}$ tel que $ {${O}${hA}=${texNombre(OhADecimale)}\\text{ cm}}$.<br>
           ${illustrerParUneFigureAMainLevee} ${figurealechelle} 
           Calculer $${O}${A}$`
           texte += ajouteChampTexteMathLive(
@@ -749,10 +741,8 @@ export default class CalculsHomothetie extends Exercice {
             <br>${fAntecedent.solution}
             Une homothétie de rapport ${positif} est
             une transformation qui multiplie
-            toutes les longueurs par ${lopposede} son rapport.
-            <br>
-            Soit $${O}${hA}=${signek}k \\times  ${O}${A}$.
-            <br>
+            toutes les longueurs par ${lopposede} son rapport.<br>
+            Soit $${O}${hA}=${signek}k \\times  ${O}${A}$.<br>
             Donc `
           } else texteCorr = fAntecedent.solution
           texteCorr += `$${O}${A}=\\dfrac{${O}${hA}}{${signek}k}=\\dfrac{${texNombre(OhADecimale)}}{${this.sup3 === 1 ? texNombre(absk.valeurDecimale) : absk.texFSD}} ${OhAtimeskinverse} = ${miseEnEvidence(texNombre(OA.valeurDecimale))}\\text{ cm}$.`
@@ -771,8 +761,7 @@ export default class CalculsHomothetie extends Exercice {
           texte = `$${hA}$ et $${hB}$ sont les images respectives
           de $${A}$ et $${B}$ par une homothétie
           ${derapportpositifet} de centre $${O}$ tel que
-          $ {${donnee1}}$, $ {${donnee2}}$ et $ {${donnee3}}$.
-          <br>
+          $ {${donnee1}}$, $ {${donnee2}}$ et $ {${donnee3}}$.<br>
           ${illustrerParUneFigureAMainLevee} ${figurealechelle} 
           Calculer $${O}${hB}$`
           texte += ajouteChampTexteMathLive(
@@ -789,27 +778,20 @@ export default class CalculsHomothetie extends Exercice {
           if (this.correctionDetaillee) {
             texteCorr = `$[${O}${hA}]$ est l'image de $[${O}${A}]$
             et $${O} ${hA} ${plusgrandque} ${O} ${A}$
-            donc c'est ${unAgrandissement} et on a : $${intervallek}$.
-            <br>${fImage2etapes.solution}`
+            donc c'est ${unAgrandissement} et on a : $${intervallek}$.<br>${fImage2etapes.solution}`
             texteCorr += `Le rapport de cette homothétie est
             ${lopposedu} quotient de la longueur d'un segment
-            "à l'arrivée" par sa longueur "au départ".
-            <br>
-            Soit $k=${signek}\\dfrac{${O}${hA}}{${O}${A}}=${signek}\\dfrac{${texNombre(OhADecimale)}}{${texNombre(OA.valeurDecimale)}}=${this.sup3 === 1 ? texNombre(k.valeurDecimale) : k.texFSD}$.
-            <br>
-            $[${O}${hB}]$ est l'image de $[${O}${B}]$.
-            <br>
+            "à l'arrivée" par sa longueur "au départ".<br>
+            Soit $k=${signek}\\dfrac{${O}${hA}}{${O}${A}}=${signek}\\dfrac{${texNombre(OhADecimale)}}{${texNombre(OA.valeurDecimale)}}=${this.sup3 === 1 ? texNombre(k.valeurDecimale) : k.texFSD}$.<br>
+            $[${O}${hB}]$ est l'image de $[${O}${B}]$.<br>
             Or, une homothétie de rapport ${positif}
             est une transformation qui multiplie
-            toutes les longueurs par ${lopposede} son rapport.
-            <br>
-            Soit $${O}${hB}= ${signek}k \\times ${O}${B}$.
-            <br>
+            toutes les longueurs par ${lopposede} son rapport.<br>
+            Soit $${O}${hB}= ${signek}k \\times ${O}${B}$.<br>
             Donc `
           } else {
             texteCorr = fImage2etapes.solution
-            texteCorr += `Soit $k=${signek}\\dfrac{${O}${hA}}{${O}${A}}=${signek}\\dfrac{${texNombre(OhADecimale)}}{${texNombre(OA.valeurDecimale)}}=${this.sup3 === 1 ? texNombre(k.valeurDecimale) : k.texFSD}$.
-            <br><br>`
+            texteCorr += `Soit $k=${signek}\\dfrac{${O}${hA}}{${O}${A}}=${signek}\\dfrac{${texNombre(OhADecimale)}}{${texNombre(OA.valeurDecimale)}}=${this.sup3 === 1 ? texNombre(k.valeurDecimale) : k.texFSD}$.<br><br>`
           }
           texteCorr += `$${O}${hB}= ${this.sup3 === 1 ? texNombre(absk.valeurDecimale) : absk.texFSD} \\times ${texNombre(OB.valeurDecimale)} = ${miseEnEvidence(texNombre(OhB.valeurAbsolue()))}\\text{ cm}$.`
           break
@@ -826,9 +808,7 @@ export default class CalculsHomothetie extends Exercice {
           donnee3 = donnees[melange[2]]
           texte = `$${hA}$ et $${hB}$ sont les images respectives
           de $${A}$ et $${B}$ par une homothétie ${derapportpositifet}
-          de centre $${O}$ tel que
-          $ {${donnee1}}$, $ {${donnee2}}$ et $ {${donnee3}}$.
-          <br>
+          de centre $${O}$ tel que $ {${donnee1}}$, $ {${donnee2}}$ et $ {${donnee3}}$.<br>
           ${illustrerParUneFigureAMainLevee} ${figurealechelle2} 
           Calculer $${O}${B}$`
           texte += ajouteChampTexteMathLive(
@@ -845,27 +825,20 @@ export default class CalculsHomothetie extends Exercice {
           if (this.correctionDetaillee) {
             texteCorr = `$[${O}${hA}]$ est l'image de $[${O}${A}]$
             et $${O} ${hA} ${plusgrandque} ${O} ${A}$
-            donc c'est ${unAgrandissement} et on a : $${intervallek}$.
-            <br>${fAntecedent2etapes.solution}`
+            donc c'est ${unAgrandissement} et on a : $${intervallek}$.<br>${fAntecedent2etapes.solution}`
 
             texteCorr += `Le rapport de cette homothétie est ${lopposedu} quotient
-            de la longueur d'un segment "à l'arrivée" par sa longueur "au départ".
-            <br>
-            Soit $k=${signek}\\dfrac{${O}${hA}}{${O}${A}}=${signek}\\dfrac{${texNombre(OhADecimale)}}{${texNombre(OA.valeurDecimale)}}=${this.sup3 === 1 ? texNombre(k.valeurDecimale) : k.texFSD}$.
-            <br>
-            $[${O}${hB}]$ est l'image de $[${O}${B}]$.
-            <br>
+            de la longueur d'un segment "à l'arrivée" par sa longueur "au départ".<br>
+            Soit $k=${signek}\\dfrac{${O}${hA}}{${O}${A}}=${signek}\\dfrac{${texNombre(OhADecimale)}}{${texNombre(OA.valeurDecimale)}}=${this.sup3 === 1 ? texNombre(k.valeurDecimale) : k.texFSD}$.<br>
+            $[${O}${hB}]$ est l'image de $[${O}${B}]$.<br>
             Or, une homothétie de rapport ${positif} est
             une transformation qui multiplie
-            toutes les longueurs par ${lopposede} son rapport.
-            <br>
-            Soit $${O}${hB}=${signek}k \\times ${O}${B}$.
-            <br>
+            toutes les longueurs par ${lopposede} son rapport.<br>
+            Soit $${O}${hB}=${signek}k \\times ${O}${B}$.<br>
             Donc `
           } else {
             texteCorr = fImage2etapes.solution
-            texteCorr += `Soit $k=${signek}\\dfrac{${O}${hA}}{${O}${A}}=${signek}\\dfrac{${texNombre(OhADecimale)}}{${texNombre(OA.valeurDecimale)}}=${this.sup3 === 1 ? texNombre(k.valeurDecimale) : k.texFSD}$.
-            <br><br>`
+            texteCorr += `Soit $k=${signek}\\dfrac{${O}${hA}}{${O}${A}}=${signek}\\dfrac{${texNombre(OhADecimale)}}{${texNombre(OA.valeurDecimale)}}=${this.sup3 === 1 ? texNombre(k.valeurDecimale) : k.texFSD}$.<br><br>`
           }
           texteCorr += `$${O}${B}=\\dfrac{${O}${hB}}{${signek}k}=\\dfrac{${texNombre(OhB)}}{${this.sup3 === 1 ? texNombre(absk.valeurDecimale) : absk.texFSD}} ${OhBtimeskinverse} = ${miseEnEvidence(texNombre(OB.valeurDecimale))}\\text{ cm}$.`
 
@@ -898,8 +871,7 @@ export default class CalculsHomothetie extends Exercice {
               : ` = ${miseEnEvidence(texNombre(hAire))}`
           texteCorr += '\\text{ cm}^2$'
           if (this.correctionDetaillee) {
-            texteCorr = `Une homothétie est une transformation qui multiplie toutes les aires par le carré de son rapport.
-            <br>
+            texteCorr = `Une homothétie est une transformation qui multiplie toutes les aires par le carré de son rapport.<br>
             $${parentheseskAire}^2 \\times ${texNombre(Aire.valeurDecimale)} = ${texNombre(hAire)}`
             texteCorr +=
               environ === 'environ'
@@ -911,8 +883,7 @@ export default class CalculsHomothetie extends Exercice {
           break
 
         case 'aireAntécédent': // cas 7
-          texte = `L'image d'une figure par une homothétie de rapport $${signek}${this.sup3 === 1 ? texNombre(kAire.valeurDecimale) : kAire.texFSD}$ a pour aire $ {${texNombre(hAire)}\\text{ cm}^2}$.
-          <br>
+          texte = `L'image d'une figure par une homothétie de rapport $${signek}${this.sup3 === 1 ? texNombre(kAire.valeurDecimale) : kAire.texFSD}$ a pour aire $ {${texNombre(hAire)}\\text{ cm}^2}$.<br>
           Calculer l'aire de la figure de départ`
 
           texte += ajouteChampTexteMathLive(
@@ -928,22 +899,17 @@ export default class CalculsHomothetie extends Exercice {
 
           texteCorr = `$ {\\dfrac{${texNombre(hAire)}}{${parentheseskAire}^2} = ${miseEnEvidence(texNombre(Aire.valeurDecimale))}\\text{ cm}^2}$`
           if (this.correctionDetaillee) {
-            texteCorr = `Une homothétie est une transformation qui multiplie toutes les aires par le carré de son rapport.
-            <br>
-            Notons $\\mathscr{A}$ l'aire de la figure de départ.
-            <br>
-            D'où $${parentheseskAire}^2 \\times \\mathscr{A} = ${texNombre(hAire)}$.
-            <br>
-            Puis $\\mathscr{A}=\\dfrac{${texNombre(hAire)}}{${parentheseskAire}^2}=${texNombre(Aire.valeurDecimale)}$.
-            <br>
+            texteCorr = `Une homothétie est une transformation qui multiplie toutes les aires par le carré de son rapport.<br>
+            Notons $\\mathscr{A}$ l'aire de la figure de départ.<br>
+            D'où $${parentheseskAire}^2 \\times \\mathscr{A} = ${texNombre(hAire)}$.<br>
+            Puis $\\mathscr{A}=\\dfrac{${texNombre(hAire)}}{${parentheseskAire}^2}=${texNombre(Aire.valeurDecimale)}$.<br>
             Donc l'aire de la figure de départ est $ {${miseEnEvidence(texNombre(Aire.valeurDecimale))}\\text{ cm}^2}$.`
           }
           break
 
         case 'aireRapport': // cas 8
           kAire = positif === 'positif' ? kAire : kAire.multiplieEntier(-1)
-          texte = `Une figure et son image par une homothétie de rapport ${positif} ont respectivement pour aires $ {${texNombre(Aire.valeurDecimale)}\\text{ cm}^2}$ et $ {${texNombre(hAire)}\\text{ cm}^2}$.
-          <br>
+          texte = `Une figure et son image par une homothétie de rapport ${positif} ont respectivement pour aires $ {${texNombre(Aire.valeurDecimale)}\\text{ cm}^2}$ et $ {${texNombre(hAire)}\\text{ cm}^2}$.<br>
           Calculer le rapport de l'homothétie`
 
           texte += ajouteChampTexteMathLive(
@@ -961,8 +927,7 @@ export default class CalculsHomothetie extends Exercice {
             texteCorr = `Une homothétie est une transformation qui multiplie toutes les aires par le carré de son rapport. <br>
             Notons $k$ le rapport de cette homothétie.
             On a donc $k^2 \\times ${texNombre(Aire.valeurDecimale)} = ${texNombre(hAire)}$,
-            ou encore $k^2=\\dfrac{${texNombre(hAire)}}{${texNombre(Aire.valeurDecimale)}}$.
-            <br>
+            ou encore $k^2=\\dfrac{${texNombre(hAire)}}{${texNombre(Aire.valeurDecimale)}}$.<br>
             D'où `
           }
           texteCorr += `$ {k=${signek}\\sqrt{\\dfrac{${texNombre(hAire)}}{${texNombre(Aire.valeurDecimale)}}} = ${miseEnEvidence(this.sup3 === 1 ? texNombre(kAire.valeurDecimale) : kAire.texFSD)}}$.`
@@ -978,8 +943,7 @@ export default class CalculsHomothetie extends Exercice {
           donnee2 = donnees[melange[1]]
           texte = `$${hA}$ est l'image de $${A}$
           par une homothétie ${derapportpositifet}
-          de centre $${O}$ tel que $ {${donnee1}}$ et $ {${donnee2}}$.
-          <br>
+          de centre $${O}$ tel que $ {${donnee1}}$ et $ {${donnee2}}$.<br>
           ${illustrerParUneFigureAMainLevee} ${figurealechelle} 
           Calculer le rapport $k$ de cette homothétie`
           texte += ajouteChampTexteMathLive(
@@ -994,16 +958,13 @@ export default class CalculsHomothetie extends Exercice {
           handleAnswers(this, i, { reponse: { value: k.texFSD } })
 
           if (this.correctionDetaillee) {
-            texteCorr = `$${O}${hA} = ${calculsOhA} = ${texNombre(OhADecimale)}\\text{ cm}$
-            <br>
+            texteCorr = `$${O}${hA} = ${calculsOhA} = ${texNombre(OhADecimale)}\\text{ cm}$<br>
             $[${O}${hA}]$ est l'image de $[${O}${A}]$
             et $${O} ${hA} ${plusgrandque} ${O} ${A}$
-            donc c'est ${unAgrandissement} et on a : $${intervallek}$.
-            <br> ${frapport.solution}`
+            donc c'est ${unAgrandissement} et on a : $${intervallek}$.<br> ${frapport.solution}`
             texteCorr += `Le rapport de cette homothétie est ${lopposedu} quotient
             de la longueur d'un segment "à l'arrivée"
-            par sa longueur "au départ".
-            <br>
+            par sa longueur "au départ".<br>
             Soit `
           } else texteCorr = frapport.solution
           texteCorr += `$k=${signek}\\dfrac{${O}${hA}}{${O}${A}}=${signek}\\dfrac{${texNombre(OhADecimale)}}{${texNombre(OA.valeurDecimale)}}=${miseEnEvidence(this.sup3 === 1 ? texNombre(k.valeurDecimale) : k.texFSD)}$.`
@@ -1019,11 +980,9 @@ export default class CalculsHomothetie extends Exercice {
           donnee2 = donnees[melange[1]]
           texte = `$${hA}$ est l'image de $${A}$
           par une homothétie ${derapportpositifet}
-          de centre $${O}$ tel que $ {${donnee1}}$ et $ {${donnee2}}$.
-          <br>
+          de centre $${O}$ tel que $ {${donnee1}}$ et $ {${donnee2}}$.<br>
           ${illustrerParUneFigureAMainLevee} ${figurealechelle} 
-          Sans effectuer de calculs, que peut-on dire du rapport $k$ de cette homothétie ? Choisir la bonne réponse.
-          <br>
+          Sans effectuer de calculs, que peut-on dire du rapport $k$ de cette homothétie ? Choisir la bonne réponse.<br>
           ${figurealechelle}
           ${frapport.enonce}`
 
@@ -1054,11 +1013,9 @@ export default class CalculsHomothetie extends Exercice {
           if (this.correctionDetaillee) {
             texteCorr = `$[${O}${hA}]$ est l'image de $[${O}${A}]$
             et $${O} ${hA} ${plusgrandque} ${O} ${A}$
-            donc c'est ${unAgrandissement}.
-            <br>
+            donc c'est ${unAgrandissement}.<br>
             De plus, $${hA}${inNotin}[${O}${A})$.
-            ${frapport.solution}
-            <br>Donc `
+            ${frapport.solution}<br>Donc `
           } else texteCorr = frapport.solution + '<br>'
           texteCorr += `$${miseEnEvidence(intervallek)}$`
           texteCorr += this.correctionDetaillee ? '.' : ''
@@ -1075,11 +1032,9 @@ export default class CalculsHomothetie extends Exercice {
           donnee2 = donnees[melange[1]]
           texte = `$${hA}$ est l'image de $${A}$
           par une homothétie ${derapportpositifet}
-          de centre $${O}$ tel que $ {${donnee1}}$ et $ {${donnee2}}$.
-          <br>
+          de centre $${O}$ tel que $ {${donnee1}}$ et $ {${donnee2}}$.<br>
           ${illustrerParUneFigureAMainLevee} ${figurealechelle} 
-          Sans effectuer de calculs, que peut-on dire du rapport $k$ de cette homothétie ? Choisir la bonne réponse.
-          <br>
+          Sans effectuer de calculs, que peut-on dire du rapport $k$ de cette homothétie ? Choisir la bonne réponse.<br>
           ${figurealechelle}
           ${frapport2.enonce}`
 
@@ -1108,15 +1063,12 @@ export default class CalculsHomothetie extends Exercice {
           texte += '<br>' + propositionsQcm(this, i).texte
 
           if (this.correctionDetaillee) {
-            texteCorr = `$${O}${hA} = ${calculsOhA} = ${texNombre(OhADecimale)}\\text{ cm}$
-            <br>
+            texteCorr = `$${O}${hA} = ${calculsOhA} = ${texNombre(OhADecimale)}\\text{ cm}$<br>
             $[${O}${hA}]$ est l'image de $[${O}${A}]$
             et $${O} ${hA} ${plusgrandque} ${O} ${A}$
-            donc c'est ${unAgrandissement}.
-            <br>
+            donc c'est ${unAgrandissement}.<br>
             De plus, $${hA}${inNotin}[${O}${A})$.
-            ${frapport2.solution}
-            <br>Donc `
+            ${frapport2.solution}<br>Donc `
           } else texteCorr = frapport2.solution + '<br>'
           texteCorr += `$${miseEnEvidence(intervallek)}$`
           texteCorr += this.correctionDetaillee ? '.' : ''
