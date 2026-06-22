@@ -207,7 +207,7 @@ export default class ExprimerCosSinTan extends Exercice {
       if (!context.isHtml && !context.isAmc) {
         texte += '\\begin{minipage}{.4\\linewidth}\n'
       }
-      texte += mathalea2d(paramsEnonce, objetsEnonce) + '<br>'
+      texte += mathalea2d(paramsEnonce, objetsEnonce)
       if (!context.isHtml && !context.isAmc) {
         texte += '\n\\end{minipage}\n'
         texte += '\\begin{minipage}{.6\\linewidth}\n'
