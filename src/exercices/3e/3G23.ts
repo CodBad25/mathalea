@@ -464,8 +464,7 @@ export default class TrianglesEgaux extends Exercice {
       // on crée un objet pour stocker les figures et les corrections
       figures = {
         enonce: `
-                        Où placer le point $M$ pour que les triangles $ABC$ et $DEM$ soient égaux ?
-                        <br>`,
+                        Où placer le point $M$ pour que les triangles $ABC$ et $DEM$ soient égaux ?<br>`,
         fig: `
                     ${mathalea2d(
                       fenetreMathalea2D,
@@ -477,9 +476,8 @@ export default class TrianglesEgaux extends Exercice {
                       sgmt_DE,
                     )}`,
         corr_animmee_sol1: `
-                        Les triangles $ABC$ et $DE${I.nom}$ ont les mêmes longueurs et les mêmes angles.
-                        <br> ${texteEnCouleur(`Donc le point ${I.nom} est un point qui convient.`)}
-                        <br>
+                        Les triangles $ABC$ et $DE${I.nom}$ ont les mêmes longueurs et les mêmes angles.<br>
+                         ${texteEnCouleur(`Donc le point ${I.nom} est un point qui convient.`)}<br>
                         ${mathalea2d(
                           fenetreMathalea2D,
                           p,
@@ -498,9 +496,8 @@ export default class TrianglesEgaux extends Exercice {
                           codages_correction.sol1,
                         )}`,
         corr_animmee_sol2: `
-                        Les triangles $ABC$ et $DE${I1.nom}$ ont les mêmes longueurs et les mêmes angles.
-                        <br> ${texteEnCouleur(`Donc le point ${I1.nom} est un point qui convient.`)}
-                        <br>
+                        Les triangles $ABC$ et $DE${I1.nom}$ ont les mêmes longueurs et les mêmes angles.<br>
+                         ${texteEnCouleur(`Donc le point ${I1.nom} est un point qui convient.`)}<br>
                         ${mathalea2d(
                           fenetreMathalea2D,
                           p,
@@ -547,8 +544,8 @@ export default class TrianglesEgaux extends Exercice {
     }
     texte += propositionsQcm(this, 0).texte
     texte += `${figures.fig}`
-    texteCorr += `${texteGras('===== Première solution ======')}<br>${figures.corr_animmee_sol1}`
-    texteCorr += `<br><br>${texteGras('===== Seconde solution ======')}<br>${figures.corr_animmee_sol2}`
+    texteCorr += `${texteGras('===== Première solution ======')}<br>${figures.corr_animmee_sol1}<br><br>`
+    texteCorr += `${texteGras('===== Seconde solution ======')}<br>${figures.corr_animmee_sol2}`
 
     this.listeQuestions[0] = texte
     this.listeCorrections[0] = texteCorr
