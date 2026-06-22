@@ -317,7 +317,7 @@ function programmeAvancerType2(nbPas: number, vraiOuFaux: boolean) {
 \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbPas - 1 : nbPas}} fois}{
 \\blockmove{avancer de \\ovalnum{20} pas}
 }
-\\end{scratch}\n`
+\\end{scratch}`
   return codeScratch
 }
 
@@ -330,7 +330,7 @@ function programmeAvancerType3(nbPas: number, vraiOuFaux: boolean) {
 \\blockmove{avancer de \\ovalnum{20} pas}
 }
 \\blockmove{avancer de \\ovalnum{20} pas}
-\\end{scratch}\n`
+\\end{scratch}`
   return codeScratch
 }
 
@@ -344,7 +344,7 @@ function programmeAvancerType4(nbPas: number, vraiOuFaux: boolean) {
 \\blockmove{avancer de \\ovalnum{20} pas}
 }
 ${(nbPas % 2 === 1 && vraiOuFaux) || (nbPas % 2 === 0 && !vraiOuFaux) ? '\\blockmove{avancer de \\ovalnum{20} pas}' : ''}
-\\end{scratch}\n`
+\\end{scratch}`
   return codeScratch
 }
 
@@ -357,7 +357,7 @@ function programmeAvancerType5(nbPas: number, vraiOuFaux: boolean) {
 \\blockmove{avancer de \\ovalnum{10} pas}
 }
 ${vraiOuFaux ? '\\blockmove{avancer de \\ovalnum{20} pas}' : '\\blockmove{avancer de \\ovalnum{10} pas}'}
-\\end{scratch}\n`
+\\end{scratch}`
   return codeScratch
 }
 
@@ -432,7 +432,7 @@ function programmeTournerType2(angle: number, vraiOuFaux: boolean) {
 \\blockmove{tourner \\turnright{} de \\ovalnum{10} degrés}
 }
 \\blockmove{tourner \\turnleft{} de \\ovalnum{10} degrés}
-\\end{scratch}\n`
+\\end{scratch}`
   return codeScratch
 }
 
@@ -443,7 +443,7 @@ function programmeTournerType3(angle: number, vraiOuFaux: boolean) {
 \\blockmove{tourner \\turnright{} de \\ovalnum{10} degrés}
 }
 \\blockmove{tourner \\turnright{} de \\ovalnum{10} degrés}
-\\end{scratch}\n`
+\\end{scratch}`
   return codeScratch
 }
 
@@ -456,7 +456,7 @@ function programmeTournerType4(angle: number, vraiOuFaux: boolean) {
 }
 }
 ${(angle % 20 === 10 && vraiOuFaux) || (angle % 20 === 0 && !vraiOuFaux) ? '\\blockmove{tourner \\turnright{} de \\ovalnum{10} degrés}' : ''}
-\\end{scratch}\n`
+\\end{scratch}`
   return codeScratch
 }
 
@@ -467,7 +467,7 @@ function programmeTournerType5(angle: number, vraiOuFaux: boolean) {
 \\blockmove{tourner \\turnright{} de \\ovalnum{5} degrés}
 }
 ${vraiOuFaux ? '\\blockmove{tourner \\turnleft{} de \\ovalnum{10} degrés}' : '\\blockmove{tourner \\turnright{} de \\ovalnum{10} degrés}'}
-\\end{scratch}\n`
+\\end{scratch}`
   return codeScratch
 }
 
