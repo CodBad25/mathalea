@@ -5,6 +5,7 @@ import { homothetie, similitude } from '../../lib/2d/transformations'
 import { triangle2points2longueurs } from '../../lib/2d/triangles'
 import { angleOriente, longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance, pointSurSegment } from '../../lib/2d/utilitairesPoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -18,8 +19,6 @@ import Grandeur from '../../modules/Grandeur'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -233,16 +232,17 @@ export default class Thales2D extends Exercice {
       )
 
       if (k > 0 && this.sup2 === 1) {
-        texteCorr = `Dans le triangle $${nomA + nomB + nomC}$ :
-       <br> $\\leadsto$ $${nomM}\\in${'[' + nomC + nomA + ']'}$,
-       <br> $\\leadsto$ $${nomN}\\in${'[' + nomC + nomB + ']'}$,
-       <br> $\\leadsto$  $(${nomA + nomB})//(${nomM + nomN})$,
-       <br> donc d'après le théorème de Thalès, `
+        texteCorr = `Dans le triangle $${nomA + nomB + nomC}$ :<br>
+ $\\leadsto$ $${nomM}\\in${'[' + nomC + nomA + ']'}$,<br>
+ $\\leadsto$ $${nomN}\\in${'[' + nomC + nomB + ']'}$,<br>
+ $\\leadsto$  $(${nomA + nomB})//(${nomM + nomN})$,<br>
+       donc d'après le théorème de Thalès, `
         texteCorr += this.correctionDetaillee
           ? `les triangles $${nomA + nomB + nomC}$ et $${nomM + nomN + nomC}$ ont des longueurs proportionnelles.`
           : 'on a:'
       } else {
-        texteCorr = `Les droites $(${nomA + nomM})$ et $(${nomB + nomN})$ sont sécantes en $${nomC}$ et $(${nomA + nomB})//(${nomM + nomN})$ <br> donc d'après le théorème de Thalès, `
+        texteCorr = `Les droites $(${nomA + nomM})$ et $(${nomB + nomN})$ sont sécantes en $${nomC}$ et $(${nomA + nomB})//(${nomM + nomN})$ <br> 
+        donc d'après le théorème de Thalès, `
         texteCorr += this.correctionDetaillee
           ? `les triangles $${nomA + nomB + nomC}$ et $${nomM + nomN + nomC}$ ont des longueurs proportionnelles.`
           : 'on a:'
