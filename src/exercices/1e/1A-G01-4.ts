@@ -49,7 +49,7 @@ export default class LireCoordonneesFractionnairesQcm extends ExerciceQcmA {
   }
 
   private coordonneesTex([abscisse, ordonnee]: Coordonnees) {
-    return `\\left(${this.fractionTex(abscisse)}\\,;\\,${this.fractionTex(ordonnee)}\\right)`
+    return `A\\left(${this.fractionTex(abscisse)}\\,;\\,${this.fractionTex(ordonnee)}\\right)`
   }
 
   private construireFigure(
@@ -60,7 +60,15 @@ export default class LireCoordonneesFractionnairesQcm extends ExerciceQcmA {
   ) {
     const x = abscisse[0] / abscisse[1]
     const y = ordonnee[0] / ordonnee[1]
-    const pointA = pointAbstrait(x, y, 'A', 'above right')
+    const positionLabel =
+      Math.abs(x) <= Math.abs(y)
+        ? x < 0
+          ? 'left'
+          : 'right'
+        : y < 0
+          ? 'below'
+          : 'above'
+    const pointA = pointAbstrait(x, y, 'A', positionLabel)
     const xmin = -3
     const xmax = 3
     const ymin = -3
@@ -95,7 +103,7 @@ export default class LireCoordonneesFractionnairesQcm extends ExerciceQcmA {
       },
       repereFractionnaire,
       tracePoint(pointA, orangeMathalea),
-      labelPoint(pointA),
+      labelPoint(pointA, orangeMathalea),
     )
   }
 
