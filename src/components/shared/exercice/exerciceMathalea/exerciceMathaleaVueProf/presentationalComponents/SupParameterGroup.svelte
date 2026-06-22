@@ -150,11 +150,11 @@
       <div
         class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
       >
-        <div>{String(texte as [string, string][0])} :</div>
+        <div>{(texte as [string, string])[0]} :</div>
         <div
           class="w-full pl-4 pb-2 whitespace-pre-wrap text-[80%] text-coopmaths-struct-light leading-tight"
         >
-          {String(texte as [string, string][1])}
+          {(texte as [string, string])[1]}
         </div>
       </div>
       <InputText
