@@ -17,8 +17,7 @@ export function coureur2(decimal = true): Probleme {
   const uniteComplete = decimal ? 'kilomètres' : 'mètres'
   const enonce = `${personnage.prenom} a réalisé un trail au cours duquel ${personnage.pronom} a couru sur $${texNombre(nb1, 3)}$ ${uniteComplete} et a marché sur $${texNombre(nb2, 3)}$ ${uniteComplete}.<br>
   Quelle distance totale a-t-${personnage.pronom} parcourue au cours de ce trail ?`
-  const correction = `${personnage.prenom} a couru sur $${texNombre(nb1, 3)}$ ${uniteComplete} et a marché sur $${texNombre(nb2, 3)}$ ${uniteComplete}.
-  <br>Donc, au total, ${personnage.pronom} a parcouru $${texNombre(nb1, 3)}\\text{ ${unite}}+${texNombre(nb2, 3)}\\text{ ${unite}}=${miseEnEvidence(texNombre(nb1 + nb2, 3))}$ ${uniteComplete}.`
+  const correction = `${personnage.prenom} a couru sur $${texNombre(nb1, 3)}$ ${uniteComplete} et a marché sur $${texNombre(nb2, 3)}$ ${uniteComplete}.<br>Donc, au total, ${personnage.pronom} a parcouru $${texNombre(nb1, 3)}\\text{ ${unite}}+${texNombre(nb2, 3)}\\text{ ${unite}}=${miseEnEvidence(texNombre(nb1 + nb2, 3))}$ ${uniteComplete}.`
   const probleme = new ProblemeAdditif('coureur2', data)
   probleme.enonce = enonce
   probleme.correction = correction

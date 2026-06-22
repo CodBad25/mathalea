@@ -194,8 +194,8 @@ export default class FonctionsProbabilite6e extends Exercice {
         })
         texteCorr +=
           numAlpha(2) +
-          ` Il y a ${n[q]} ${objets} ${qualites[index1][q]}, donc il y a ${somme} $-$ ${n[q]} $=$ ${somme - n[q]} autres ${objets} et il y a ${somme} ${objets} possibles.
-          <br>La probabilité que son choix ne tombe pas sur l'${article} des ${objets} ${qualites[index1][q]} est `
+          ` Il y a ${n[q]} ${objets} ${qualites[index1][q]}, donc il y a ${somme} $-$ ${n[q]} $=$ ${somme - n[q]} autres ${objets} et il y a ${somme} ${objets} possibles.<br>
+          La probabilité que son choix ne tombe pas sur l'${article} des ${objets} ${qualites[index1][q]} est `
         reponseValue = new FractionEtendue(somme - n[q], somme).texFSD
         texteCorr +=
           this.niveau === 5
