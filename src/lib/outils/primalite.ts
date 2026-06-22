@@ -466,9 +466,13 @@ export function premierAvec(
 ) {
   if (n < 2) throw Error(`Impossible de trouver un nombre premier avec ${n}`)
   let candidat = inferieur ? 2 : n + 1
+  let compteur = 0
   do {
     if (pgcd(n, candidat) === 1 && !listeAEviter.includes(candidat))
       return candidat
     candidat++
-  } while (true)
+  } while (compteur++ < 1000) // sécurité pour éviter une boucle infinie
+  throw Error(
+    `Impossible de trouver un nombre premier avec ${n} après 1000 essais`,
+  )
 }
