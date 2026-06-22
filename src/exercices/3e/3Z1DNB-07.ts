@@ -116,7 +116,7 @@ KL = ${texNombre(kl, 1)}\\text{ m}.
 \\end{array}$`,
   figure,
   { largeur1: 30, eleId: '', widthmincol1: '200px', widthmincol2: '400px' },
-)}<br>`
+)}`
     const question1 = `Montrer que la longueur $DK$ est égale à $${texNombre(dk, 0)}\\text{ m}$.`
     const question2 = 'Montrer que le triangle $DKJ$ est rectangle en $K$.'
     const question3 =
