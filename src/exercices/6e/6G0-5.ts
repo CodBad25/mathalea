@@ -143,13 +143,14 @@ export default class constructionElementaire extends Exercice {
           ymax: Ymax,
           pixelsParCm: ppc,
           scale: sc,
+          style: 'display: block',
         },
         objetsEnonce,
       )
       colonne1 =
         (context.vue === 'diap' ? '<center>' : '') +
         figure +
-        (context.vue === 'diap' ? '</center>' : '<br>')
+        (context.vue === 'diap' ? '</center>' : '')
 
       colonne2 = 'Compléter avec $\\in$ ou $\\notin$. <br>'
       let correction2 = colonne2
