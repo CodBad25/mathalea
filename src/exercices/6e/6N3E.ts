@@ -7,6 +7,7 @@ import { pointSurSegment } from '../../lib/2d/utilitairesPoint'
 import { createList } from '../../lib/format/lists'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -47,7 +48,10 @@ export default class nomExercice extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
       let texteCorr = ''
-      const longueur = typesQuestions[i] === 3 ? randint(5, 8) : randint(8, 16)
+      const longueur =
+        typesQuestions[i] === 3
+          ? randint(5, context.isHtml ? 8 : 7)
+          : randint(8, context.isHtml ? 16 : 13) // 16 ça sort de la feuille à cause du décalage des listeitems (2 niveaux d'indentation)
       const den = randint(3, 7, [
         arrondi(longueur / 2, 1),
         arrondi(longueur / 3, 1),
@@ -96,15 +100,15 @@ export default class nomExercice extends Exercice {
           `Tracer un segment de longueur $${longueur}\\text{ cm}$.`,
         )
         corrections.push(`On utilise la règle pour tracer le segment de $${longueur}\\text{ cm}$ :<br>
-          ${mathalea2d(fixeBordures([unite1]), unite1)}<br>`)
+          ${mathalea2d(fixeBordures([unite1]), unite1)}`)
       } else {
-        texte += mathalea2d(fixeBordures([unite1]), unite1) + '<br>'
+        texte += mathalea2d(fixeBordures([unite1]), unite1)
       }
       if (this.sup2) {
         // Segment à partager
         questions.push(`Partager ce segment en $${den}$ parts égales.`)
         corrections.push(`À l'aide du guide-âne, on le partage en $${den}$ parts égales :<br>
-          ${mathalea2d(fixeBordures([unite1]), unite1, graduations1)}<br>`)
+          ${mathalea2d(fixeBordures([unite1]), unite1, graduations1)}`)
       }
       switch (typesQuestions[i]) {
         case 2:
@@ -119,7 +123,7 @@ export default class nomExercice extends Exercice {
               unite1,
               graduations1,
               label,
-            )}<br>`)
+            )}`)
           break
         case 3:
           // Fraction > 1
@@ -133,7 +137,7 @@ export default class nomExercice extends Exercice {
               unite1,
               unite2,
               this.sup2 ? [graduations1, graduations2] : [],
-            )}<br>
+            )}
             ${this.sup2 ? '' : `Le dénominateur est $${den}$. On partage ces unités en $${den}$ parts égales à l'aide du guide-âne.<br>`}
             Chaque pas représente $\\dfrac{1}{${den}}$. On avance de $${num}$ pas pour placer la fraction $\\dfrac{${num}}{${den}}$ :<br>
             ${mathalea2d(
@@ -143,7 +147,7 @@ export default class nomExercice extends Exercice {
               graduations1,
               graduations2,
               label,
-            )}<br>
+            )}
             Remarque : on aurait pu aller plus vite en remarquant que $\\dfrac{${num}}{${den}} = 1 + \\dfrac{${num - den}}{${den}}$, donc en avançant directement de $${num - den}$ pas dans la seconde unité.`)
           break
       }
