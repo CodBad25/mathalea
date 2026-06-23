@@ -244,14 +244,21 @@ export default class Auto1AC10e extends ExerciceQcmA {
       {
         xmin: -5,
         xmax: 5,
-        ymin: -4.5,
-        ymax: 4,
+        ymin: -5.5,
+        ymax: 5,
         pixelsParCm: 20,
         scale: 0.7,
       },
       r1,
       o,
-      courbe(f, { repere: r1, color: bleuMathalea, epaisseur: 2 }),
+      courbe(f, {
+        yMin: -4.5,
+        yMax: 4,
+        repere: r1,
+        color: bleuMathalea,
+        epaisseur: 2,
+        step: 0.01,
+      }),
     )
 
     // Graphique complet pour la correction
@@ -259,12 +266,19 @@ export default class Auto1AC10e extends ExerciceQcmA {
       {
         xmin: -4,
         xmax: 4.5,
-        ymin: -4.5,
-        ymax: 4,
+        ymin: -5.5,
+        ymax: 5,
         pixelsParCm: 25,
         scale: 1,
       },
-      courbe(f, { repere: r1, color: bleuMathalea, epaisseur: 2 }),
+      courbe(f, {
+        repere: r1,
+        color: bleuMathalea,
+        epaisseur: 2,
+        step: 0.01,
+        yMin: -4,
+        yMax: 4,
+      }),
       Cg,
       r1,
       o,
@@ -354,7 +368,7 @@ export default class Auto1AC10e extends ExerciceQcmA {
             $\\bullet$ On trace l'hyperbole d'équation $y=\\dfrac{1}{x}$. <br>
             $\\bullet$ On trace la droite horizontale d'équation $y=${val}$. Cette droite coupe l'hyperbole en un point dont l'abscisse est : $${borne}$. <br>
             $\\bullet$ Les solutions de l'inéquation sont les abscisses des points de la courbe qui se situent ${positionText} la droite.<br>
-            ${graphiqueC}<br>
+            ${graphiqueC}
             Comme la fonction inverse est définie sur $\\mathbb{R}^*$, $0$ est une valeur interdite et donc l'ensemble des solutions de l'inéquation $(I)$ est : ${texteEnCouleurEtGras(reponseCorrecte)}.`
   }
 
