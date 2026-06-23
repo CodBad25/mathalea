@@ -32,4 +32,8 @@
 
 ## Language
 
-Codebase in english. Comments and user-displayed content in french.
+Codebase in english. Comments, documentation and user-displayed content in french.
+
+## Answering Codebase Questions
+
+When answering a developer question about this codebase, read and follow `documentation/README.md` carefully.
