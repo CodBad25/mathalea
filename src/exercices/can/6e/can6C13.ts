@@ -50,8 +50,7 @@ export default class FSomme2Decimaux extends ExerciceSimple {
       this.question = `Calculer $${texNombre(n2, 1)}+${texNombre(e - a, 0)}$.`
       this.correction = `$${texNombre(n2, 1)}+${texNombre(e - a, 0)}=${miseEnEvidence(texNombre(Number(this.reponse), 1))}$<br>`
       this.correction += texteEnCouleur(
-        `
-      <br> Mentalement : <br>
+        `Mentalement : <br>
       On fait la somme des parties entières des deux nombres : $${a}+${e - a}=${e}$, puis on ajoute les dixièmes. On obtient :<br>
       $${e}+${texNombre(n1, 1)}=${texNombre(Number(this.reponse), 1)}$`,
         bleuMathalea,
@@ -69,8 +68,7 @@ export default class FSomme2Decimaux extends ExerciceSimple {
       this.question = `Calculer $${texNombre(n1.plus(a), 1)}+${texNombre(n2.plus(c), 1)}$.`
       this.correction = `$${texNombre(n1.plus(a), 1)}+${texNombre(n2.plus(c), 1)}=${miseEnEvidence(texNombre(Number(this.reponse), 1))}$<br>`
       this.correction += texteEnCouleur(
-        `
-        <br> Mentalement : <br>
+        `Mentalement : <br>
     On fait la somme des parties entières des deux nombres : $${a}+${c}=${a + c}$.<br>
     On fait la somme des parties décimales : $${texNombre(n1, 1)}+${texNombre(n2, 1)}=${texNombre(n3, 1)}$.<br>
     Le résultat est donc donné par :
