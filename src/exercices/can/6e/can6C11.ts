@@ -45,8 +45,7 @@ export default class DoubleOuTripleDecimal extends ExerciceSimple {
       this.question = `Quel est le triple de $${texNombre(c, 1)}$ ?`
       this.correction = `Le triple de $${texNombre(c, 1)}$ est $3 \\times ${texNombre(c, 1)}=${miseEnEvidence(texNombre(Number(this.reponse), 1))}$.<br>`
       this.correction += texteEnCouleur(
-        `
-      <br> Mentalement : <br>
+        `Mentalement : <br>
   On décompose $${texNombre(c, 1)}$ en $${e}+${texNombre(d, 1)}$. <br>
   On calcule le triple de $${e}$, soit $3\\times ${e}= ${3 * e}$
   puis le triple de $${texNombre(d, 1)}$, soit $3\\times ${texNombre(d, 1)}=${texNombre(d.mul(3), 1)}$.<br>
@@ -59,8 +58,7 @@ export default class DoubleOuTripleDecimal extends ExerciceSimple {
       this.question = `Quel est le double de $${texNombre(c, 1)}$ ?`
       this.correction = `Le double de $${texNombre(c, 1)}$ est $2 \\times ${texNombre(c, 1)}=${miseEnEvidence(texNombre(Number(this.reponse), 1))}$.<br>`
       this.correction += texteEnCouleur(
-        `
-      <br> Mentalement : <br>
+        `Mentalement : <br>
   On décompose $${texNombre(c, 1)}$ en $${e}+${texNombre(d, 1)}$. <br>
   On calcule le double de $${e}$, soit $2\\times ${e}= ${2 * e}$
   puis le double de $${texNombre(d, 1)}$, soit $2\\times ${texNombre(d, 1)}=${texNombre(d.mul(2), 1)}$.<br>
