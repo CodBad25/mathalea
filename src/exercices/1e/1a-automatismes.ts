@@ -23,8 +23,8 @@ const allModules = import.meta.glob('./1A-*.ts') as Record<
 
 export default createAutomatismesCanExercice({
   modules: allModules,
-  refRegex: /^1A-([CEFPRS])/,
-  categories: ['C', 'E', 'F', 'P', 'R', 'S'],
+  refRegex: /^1A-([CEFPRSG])/,
+  categories: ['C', 'E', 'F', 'P', 'R', 'S', 'G'],
   categoriesForm: {
     titre: 'Nombre de questions par catégorie',
     categories: [
@@ -34,8 +34,9 @@ export default createAutomatismesCanExercice({
       { label: 'Probabilités :', max: 12 },
       { label: 'Proportions :', max: 12 },
       { label: 'Statistiques :', max: 12 },
+      { label: 'Géométrie :', max: 12 },
     ],
-    defaut: [2, 2, 2, 2, 2, 2],
+    defaut: [2, 2, 2, 2, 2, 1, 1],
   },
   defaultSup: '2-2-2-2-2-2',
   interactifType: 'qcm',
