@@ -94,8 +94,7 @@ export default class CalculMoitieFraction extends ExerciceSimple {
     this.reponse = reponse.simplifie()
     this.question = `Calculer la moitié de $${f.texFraction}$ et écrire le résultat sous la forme d'une fraction simplifiée.<br>`
     this.correction = `Prendre la moitié revient à diviser par $2$ et cela revient à multiplier par $\\dfrac{1}{2}$.<br>
-    $${f.texFraction}\\div 2=${f.texFraction}\\times \\dfrac{1}{2}=${reponse.texFraction}${reponse.texSimplificationAvecEtapes()}$
-          `
-    this.correction += `<br>La moitié de $${f.texFraction}$ est $${miseEnEvidence(this.reponse.texFraction)}$.`
+    $${f.texFraction}\\div 2=${f.texFraction}\\times \\dfrac{1}{2}=${reponse.texFraction}${reponse.texSimplificationAvecEtapes()}$<br>
+    La moitié de $${f.texFraction}$ est $${miseEnEvidence(this.reponse.texFraction)}$.`
   }
 }
