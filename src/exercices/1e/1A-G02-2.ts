@@ -57,7 +57,12 @@ Calculer son aire.<br>
 ${mathalea2d(
   Object.assign(
     { pixelsParCm: 25, scale: 0.8, style: 'margin: auto' },
-    fixeBordures(objets),
+    fixeBordures(objets, {
+      rxmin: -0.6,
+      rxmax: 0.6,
+      rymin: -0.15,
+      rymax: 0.45,
+    }),
   ),
   objets,
 )}`

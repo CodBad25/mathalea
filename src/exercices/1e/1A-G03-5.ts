@@ -97,7 +97,15 @@ export default class LongueurAvecThalesQcm extends ExerciceQcmA {
       labelPoint(pointA, pointH, pointB, pointD, pointC),
     ]
     const figure = mathalea2d(
-      Object.assign({ scale: 0.7 }, fixeBordures(objets)),
+      Object.assign(
+        { scale: 0.7 },
+        fixeBordures(objets, {
+          rxmin: -0.6,
+          rxmax: 0.6,
+          rymin: -0.15,
+          rymax: 0.45,
+        }),
+      ),
       objets,
     )
     const donnees = (['BD', 'BC', 'HD', 'AC'] as Cote[])
@@ -112,7 +120,7 @@ Les droites $(${nomH}${nomD})$ et $(${nomA}${nomC})$ sont parallèles.<br>
 On donne ${donnees}.<br>
 Quelle est la longueur du segment $[${nomsCotes[coteCherche]}]$ ?`
 
-    this.correction = `Les points $${nomB}$, $${nomH}$, $${nomA}$ et $${nomB}$, $${nomD}$, $${nomC}$ sont alignés dans le même ordre, et les droites $(${nomH}${nomD})$ et $(${nomA}${nomC})$ sont parallèles.<br>
+    this.correction = `Les points $${nomB}$, $${nomH}$, $${nomA}$ et $${nomB}$, $${nomD}$, $${nomC}$ sont alignés et les droites $(${nomH}${nomD})$ et $(${nomA}${nomC})$ sont parallèles.<br>
 D'après le théorème de Thalès :
 $\\dfrac{${nomsCotes.BD}}{${nomsCotes.BC}}=\\dfrac{${nomsCotes.HD}}{${nomsCotes.AC}}$.<br>
 <br>On en déduit que $${nomsCotes[coteCherche]}=\\dfrac{${nomsCotes[premierFacteur]}\\times ${nomsCotes[secondFacteur]}}{${nomsCotes[diviseur]}}=\\dfrac{${longueurs[premierFacteur]}\\times ${longueurs[secondFacteur]}}{${longueurs[diviseur]}}=${miseEnEvidence(`${texNombre(valeurCorrecte, 2)}\\text{ cm}`)}$.`

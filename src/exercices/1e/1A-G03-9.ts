@@ -71,7 +71,15 @@ export default class CoteTriangleRectanglePythagoreQcm extends ExerciceQcmA {
       latex2d(etiquetteAC, -0.8, 1.5, {}),
     ]
     const figure = mathalea2d(
-      Object.assign({ pixelsParCm: 20, scale: 1 }, fixeBordures(objets)),
+      Object.assign(
+        { pixelsParCm: 20, scale: 1 },
+        fixeBordures(objets, {
+          rxmin: -0.6,
+          rxmax: 0.6,
+          rymin: -0.15,
+          rymax: 0.45,
+        }),
+      ),
       objets,
     )
 

@@ -21,7 +21,8 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Calculer le sinus, le cosinus et la tangente d\'un angle (avec figure)'
+export const titre =
+  "Calculer le sinus, le cosinus et la tangente d'un angle (avec figure)"
 export const dateDePublication = '18/06/2026'
 
 /**
@@ -124,7 +125,15 @@ export default class TrigonometrieTriangleRectangleQCM extends ExerciceQcmA {
       coteOppose,
     ]
     this.enonce += mathalea2d(
-      Object.assign({ pixelsParCm: 20, scale: 1 }, fixeBordures(objets)),
+      Object.assign(
+        { pixelsParCm: 20, scale: 1 },
+        fixeBordures(objets, {
+          rxmin: -0.6,
+          rxmax: 0.6,
+          rymin: -0.15,
+          rymax: 0.45,
+        }),
+      ),
       objets,
     )
     this.correction =

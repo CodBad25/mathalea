@@ -3,7 +3,6 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { labelPoint } from '../../lib/2d/textes'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
-import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -39,11 +38,7 @@ export default class PerimetreQuadrilatereQcm extends ExerciceQcmA {
     const perimetreEnCm = abEnCm + bcEnCm + cdEnCm + daEnCm
     const perimetreAvecVirguleDecaleeADroite = perimetreEnCm * 10
     const perimetreAvecErreurDePuissance = perimetreEnCm / 10
-    const valeurDistracteurAire = choice([
-      perimetreEnCm,
-      perimetreAvecVirguleDecaleeADroite,
-      perimetreAvecErreurDePuissance,
-    ])
+    const sommeDesValeursSansUnites = abEnCm + bcEnMm + cdEnCm + daEnMm
 
     const A = pointAbstrait(0, 0, 'A', 'below left')
     const B = pointAbstrait(5, 0.5, 'B', 'below right')
@@ -66,7 +61,12 @@ Calculer son périmètre.<br>
 ${mathalea2d(
   Object.assign(
     { pixelsParCm: 25, scale: 0.8, style: 'margin: auto' },
-    fixeBordures(objets),
+    fixeBordures(objets, {
+      rxmin: -0.6,
+      rxmax: 0.6,
+      rymin: -0.15,
+      rymax: 0.45,
+    }),
   ),
   objets,
 )}`
@@ -74,7 +74,7 @@ ${mathalea2d(
     this.reponses = [
       `$${perimetreEnCm}\\text{ cm}$`,
       `$${perimetreAvecVirguleDecaleeADroite}\\text{ cm}$`,
-      `$${texNombre(valeurDistracteurAire, 1)}\\text{ cm}^2$`,
+      `$${sommeDesValeursSansUnites}\\text{ cm}$`,
       `$${texNombre(perimetreAvecErreurDePuissance, 1)}\\text{ cm}$`,
     ]
 

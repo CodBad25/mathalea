@@ -3,6 +3,7 @@ import { orangeMathalea } from '../../lib/colors'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { pgcd } from '../../lib/outils/primalite'
+import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -41,7 +42,13 @@ export default class LireAbscisseFractionnaireQcm extends ExerciceQcmA {
     const [numerateur, denominateur] = this.fractionIrreductible(fraction)
     return denominateur === 1
       ? `${numerateur}`
-      : `\\dfrac{${numerateur}}{${denominateur}}`
+      : new FractionEtendue(numerateur, denominateur).texFSD
+  }
+
+  private fractionTexNonReduite([numerateur, denominateur]: Fraction) {
+    if (denominateur === 1) return `${numerateur}`
+    const signe = numerateur * denominateur < 0 ? '-' : ''
+    return `${signe}\\dfrac{${Math.abs(numerateur)}}{${Math.abs(denominateur)}}`
   }
 
   private construireFigure(numerateur: number, denominateur: number) {
@@ -118,7 +125,7 @@ export default class LireAbscisseFractionnaireQcm extends ExerciceQcmA {
       pgcd(Math.abs(numerateur), denominateur) === 1
     const conclusion = fractionEstIrreductible
       ? miseEnEvidence(valeurTex)
-      : `\\dfrac{${numerateur}}{${denominateur}}=${miseEnEvidence(valeurTex)}`
+      : `${this.fractionTexNonReduite([numerateur, denominateur])}=${miseEnEvidence(valeurTex)}`
     this.enonce = `Quelle est l'abscisse du point $A$ sur la droite graduée ci-dessous ?${figure}`
     this.correction = `Chaque unité est partagée en $${denominateur}$ parts égales : une petite graduation représente donc $\\dfrac{1}{${denominateur}}$.<br>
 Le point $A$ se trouve à la ${valeurAbsolueNumerateur === 1 ? 'première' : `${valeurAbsolueNumerateur}e`} petite graduation ${numerateur < 0 ? 'avant' : 'après'} $0$. Son abscisse est donc $${conclusion}$.`

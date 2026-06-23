@@ -158,7 +158,12 @@ Quelle est la longueur $${coteCherche}$ ?<br>
 ${mathalea2d(
   Object.assign(
     { pixelsParCm: 25, scale: 0.9, style: 'margin: auto' },
-    fixeBordures(objets),
+    fixeBordures(objets, {
+      rxmin: -0.6,
+      rxmax: 0.6,
+      rymin: -0.15,
+      rymax: 0.45,
+    }),
   ),
   objets,
 )}`

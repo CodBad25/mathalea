@@ -86,7 +86,15 @@ export default class LongueurThalesAvecDifferenceQcm extends ExerciceQcmA {
     const segmentOR = segment(O, R)
     const objets = [grandTriangle, segmentOR, labelPoint(Z, O, R, C, P)]
     const figure = mathalea2d(
-      Object.assign({ scale: 0.7 }, fixeBordures(objets)),
+      Object.assign(
+        { scale: 0.7 },
+        fixeBordures(objets, {
+          rxmin: -0.6,
+          rxmax: 0.6,
+          rymin: -0.15,
+          rymax: 0.45,
+        }),
+      ),
       objets,
     )
 
@@ -97,7 +105,7 @@ Les droites $(OR)$ et $(CP)$ sont parallèles.<br>
 On donne $OR=${longueurOR}\\text{ cm}$, $CP=${longueurCP}\\text{ cm}$ et $OC=${longueurOC}\\text{ cm}$.<br>
 Quelle est la longueur du segment $[ZO]$ ?`
 
-    this.correction = `Dans les triangles $ZOR$ et $ZCP$, les points $Z$, $O$, $C$ et $Z$, $R$, $P$ sont alignés dans le même ordre, et les droites $(OR)$ et $(CP)$ sont parallèles.<br>
+    this.correction = `Dans les triangles $ZOR$ et $ZCP$, les points $Z$, $O$, $C$ et $Z$, $R$, $P$ sont alignés et les droites $(OR)$ et $(CP)$ sont parallèles.<br>
 D'après le théorème de Thalès :
 $\\dfrac{ZO}{ZC}=\\dfrac{OR}{CP}$.<br>
 On pose $ZO=x$. Comme $OC=${longueurOC}\\text{ cm}$, on a $ZC=x+${longueurOC}$.<br>
