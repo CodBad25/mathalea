@@ -38,11 +38,9 @@ export default class DoubleEtMoitie extends ExerciceSimple {
     this.question = `Le double d'un nombre vaut $${4 * a}$, combien vaut sa moitié ?`
     this.correction = `Sa moitié vaut : $${miseEnEvidence(texNombre(a))}$.<br>`
     this.correction += texteEnCouleur(
-      `
-    <br> Mentalement : <br>
+      ` Mentalement : <br>
     Si le double du nombre est $${4 * a}$, ce nombre est : $${4 * a}\\div 2=${2 * a}$.<br>
-    Puisqu'on cherche sa moitié, on le divise par $2$, soit  $${2 * a}\\div 2=${a}$.<br>
-     `,
+    Puisqu'on cherche sa moitié, on le divise par $2$, soit  $${2 * a}\\div 2=${a}$.<br>`,
       bleuMathalea,
     )
     this.reponse = a
