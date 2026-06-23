@@ -15,7 +15,7 @@ import type { IFractionEtendue } from './FractionEtendue.type'
 const isFractionEtendue = (x: unknown): x is IFractionEtendue =>
   typeof x === 'object' &&
   x !== null &&
-  typeof (x as any).sommeFraction === 'function'
+  typeof (x as Record<string, unknown>).sommeFraction === 'function'
 
 export const epsilon = 0.000001
 
@@ -180,18 +180,17 @@ type GestionnaireFormulaireTexteParams = {
 export function gestionnaireFormulaireTexte(
   params: GestionnaireFormulaireTexteParams,
 ) {
-  let {
-    saisie,
+  const {
     min = 1,
     max,
     defaut,
+    saisie,
     listeOfCase,
     shuffle = true,
-    nbQuestions,
     melange = 0,
     enleveDoublons = false,
-    exclus,
   } = params
+  let { nbQuestions, exclus } = params
   if (exclus) {
     exclus = exclus.filter((element) => element >= min && element <= max)
   }
@@ -496,14 +495,18 @@ export function checkSum(...args: (number | string)[]) {
  */
 if (!Object.fromEntries) {
   Object.defineProperty(Object, 'fromEntries', {
-    value(entries: Iterable<[string, any]>) {
-      if (!entries || typeof (entries as any)[Symbol.iterator] !== 'function') {
+    value<T>(entries: Iterable<[string, T]>) {
+      if (
+        !entries ||
+        typeof (entries as Iterable<[string, T]>)[Symbol.iterator] !==
+          'function'
+      ) {
         throw new Error(
           'Object.fromEntries() requires a single iterable argument',
         )
       }
-      const o: Record<string, any> = {}
-      for (const [k, v] of entries as Iterable<[string, any]>) {
+      const o: Record<string, T> = {}
+      for (const [k, v] of entries as Iterable<[string, T]>) {
         o[k] = v
       }
       return o
