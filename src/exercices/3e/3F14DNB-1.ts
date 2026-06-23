@@ -121,8 +121,8 @@ export default class Exercice3F14DNB1 extends ExerciceBrevetA {
         L'antécédent de $${y1}$ par la fonction $g$ est $${y1 / c}$.`,
         `D'après la réponse 1.a., $${x0}$  est un antécédent de $${f(x0)}$ par la fonction $f$.<br>
         Et d'après le tableau, $${listeX.find((e) => f(e) === f(x0))}$ est un autre antécédent de $${f(x0)}$ par la fonction $f$.`,
-        `On peut saisir la formule = B1 * B1 ${bb === -1 ? '- B1' : bb === 1 ? '+ B1' : `${bb < 0 ? '- ' : '+ '} ${Math.abs(bb)} * B1`} ${cc < 0 ? '- ' : '+ '} ${Math.abs(cc)} dans la cellule B2 avant de l'étirer vers la droite jusqu'à la cellule ${lettreDepuisChiffre(1 + listeX.length)}2.
-      ${this.correctionDetaillee ? '<br>Cette formule calcule $f(x)$ pour la valeur de $x$ située en ligne 1 et colonne B.' : ''}`,
+        `On peut saisir la formule = B1 * B1 ${bb === -1 ? '- B1' : bb === 1 ? '+ B1' : `${bb < 0 ? '- ' : '+ '} ${Math.abs(bb)} * B1`} ${cc < 0 ? '- ' : '+ '} ${Math.abs(cc)} dans la cellule B2 avant de l'étirer vers la droite jusqu'à la cellule ${lettreDepuisChiffre(1 + listeX.length)}2.<br>
+        ${this.correctionDetaillee ? 'Cette formule calcule $f(x)$ pour la valeur de $x$ située en ligne 1 et colonne B.' : ''}`,
         `${
           listeAntGEgalG.length > 1
             ? `D'après le tableau, il existe ${nombreEnLettres(listeAntGEgalG.length)} nombres qui sont :<br>

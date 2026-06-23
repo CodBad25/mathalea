@@ -206,8 +206,7 @@ export default class VolumeBoule extends Exercice {
               },
               ...s.c2d,
               ...c.c2d,
-            ) +
-            '<br>'
+            )
           texteCorr +=
             'Méthode : on calcule le volume du cylindre auquel on va retrancher le volume de la boule. <br>'
           texteCorr +=
