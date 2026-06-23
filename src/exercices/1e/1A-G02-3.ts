@@ -12,7 +12,8 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
-export const titre = "Calculer l'aire d'un quadrilatère codé avec ses diagonales"
+export const titre =
+  "Calculer l'aire d'un quadrilatère codé avec ses diagonales"
 export const dateDePublication = '19/06/2026'
 
 export const uuid = 'd42f7'
@@ -63,7 +64,12 @@ Calculer son aire.<br>
 ${mathalea2d(
   Object.assign(
     { pixelsParCm: 25, scale: 0.8, style: 'margin: auto' },
-    fixeBordures(objets),
+    fixeBordures(objets, {
+      rxmin: -0.6,
+      rxmax: 0.6,
+      rymin: -0.15,
+      rymax: 0.45,
+    }),
   ),
   objets,
 )}`

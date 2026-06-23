@@ -118,7 +118,15 @@ export default class CoteParalleleThalesPapillonQcm extends ExerciceQcmA {
       labelPoint(pointA, pointH, pointB, pointD, pointC),
     ]
     const figure = mathalea2d(
-      Object.assign({ scale: 0.7 }, fixeBordures(objets)),
+      Object.assign(
+        { scale: 0.7 },
+        fixeBordures(objets, {
+          rxmin: -0.6,
+          rxmax: 0.6,
+          rymin: -0.15,
+          rymax: 0.45,
+        }),
+      ),
       objets,
     )
 

@@ -6,6 +6,7 @@ import { orangeMathalea } from '../../lib/colors'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { pgcd } from '../../lib/outils/primalite'
+import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -45,7 +46,7 @@ export default class LireCoordonneesFractionnairesQcm extends ExerciceQcmA {
     const [numerateur, denominateur] = this.fractionIrreductible(fraction)
     return denominateur === 1
       ? `${numerateur}`
-      : `\\dfrac{${numerateur}}{${denominateur}}`
+      : new FractionEtendue(numerateur, denominateur).texFSD
   }
 
   private coordonneesTex([abscisse, ordonnee]: Coordonnees) {
@@ -165,7 +166,7 @@ Ainsi, les coordonnées du point $A$ sont $${miseEnEvidence(coordonneesCorrectes
 
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { vertical: false, ordered: false }
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false
