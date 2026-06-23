@@ -1,6 +1,6 @@
 # Rapport d'analyse de la CI GitLab
 
-Ce document résume ce que teste la CI définie dans [.gitlab-ci.yml](../.gitlab-ci.yml), à quel moment chaque job se lance, et comment reproduire localement chaque vérification.
+Ce document résume ce que teste la CI définie dans [.gitlab-ci.yml](../../.gitlab-ci.yml), à quel moment chaque job se lance, et comment reproduire localement chaque vérification.
 
 ## Vue d'ensemble
 

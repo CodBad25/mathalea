@@ -208,13 +208,13 @@ function main() {
     {
       name: 'Interactivity report',
       command: 'pnpm',
-      args: ['vitest', 'tests/unit/report-interactif.test.ts', '--run'],
+      args: ['vitest', 'src/lib/amc/report-interactif.test.ts', '--run'],
       env: { INTERACTIF_REPORT: '1', CHANGED_FILES: changedFilesEnv },
     },
     {
       name: 'AMCnum report',
       command: 'pnpm',
-      args: ['vitest', 'tests/unit/report-amcnum.test.ts', '--run'],
+      args: ['vitest', 'src/lib/amc/report-amcnum.test.ts', '--run'],
       env: { AMCNUM_REPORT: '1', CHANGED_FILES: changedFilesEnv },
     },
   ]

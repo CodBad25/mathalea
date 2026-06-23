@@ -55,4 +55,4 @@ Exemple en une ligne :
 CI=1 PLAYWRIGHT_SERVER_PORT=5173 pnpm test:e2e:views
 ```
 
-Voir la documentation détaillée : [documentation/gitlab-ci-report.md](documentation/gitlab-ci-report.md#port-du-serveur-en-local-mode-ci)
+Voir la documentation détaillée : [documentation/testing/gitlab-ci.md](documentation/testing/gitlab-ci.md#port-du-serveur-en-local-mode-ci)
