@@ -14,7 +14,7 @@ export const dateDePublication = '10/08/2025'
 export const uuid = '3bd46'
 // @Author Stéphane Guyon
 export const refs = {
-  'fr-fr': ['1AL11-1QCM', '1Gen-A201-1', ],
+  'fr-fr': ['1AL11-1QCM', '1Gen-A201-1'],
   'fr-ch': [],
 }
 export const interactifReady = true
@@ -27,8 +27,8 @@ export default class Puissances extends ExerciceQcmA {
     const a = -2
     const b = 3
     this.enonce = `Soit $(u_n)$ la suite définie pour tout entier $n$ par $u_n=${reduireAxPlusB(a, b, 'n', { ordreInverse: true })}$.`
-    this.correction = `Soit $n\\in \\mathbb{N}$. On sait que la forme explicite d'une suite arithmétique $(u_n)$, de premier terme $u_0\\in \\mathbb{R}$ et de raison $r\\in \\mathbb{R}$
-    <br> est sous la forme : $u_n=u_0+n\\times r$.<br>
+    this.correction = `Soit $n\\in \\mathbb{N}$. On sait que la forme explicite d'une suite arithmétique $(u_n)$, de premier terme $u_0\\in \\mathbb{R}$ et de raison $r\\in \\mathbb{R}$<br>
+     est sous la forme : $u_n=u_0+n\\times r$.<br>
 Avec $u_0=${b}$ et $r=${a}$, on a bien $u_n=${reduireAxPlusB(a, b, 'n')}$.<br>
 $${miseEnEvidence(`(u_n)`)}$  ${texteEnCouleur(`est donc une suite arithmétique de raison ${a}`)}. `
     this.reponses = [
@@ -46,8 +46,8 @@ $${miseEnEvidence(`(u_n)`)}$  ${texteEnCouleur(`est donc une suite arithmétique
       const b = randint(-5, 5, [-1, 0, 1, a])
 
       this.enonce = `Soit $(u_n)$ la suite définie pour tout entier $n$ par $u_n=${reduireAxPlusB(a, b, 'n')}$.`
-      this.correction = `Soit $n\\in \\mathbb{N}$. On sait que la forme explicite d'une suite arithmétique $(u_n)$, de premier terme $u_0\\in \\mathbb{R}$ et de raison $r\\in \\mathbb{R}$
-    <br> est sous la forme : $u_n=u_0+n\\times r$.<br>
+      this.correction = `Soit $n\\in \\mathbb{N}$. On sait que la forme explicite d'une suite arithmétique $(u_n)$, de premier terme $u_0\\in \\mathbb{R}$ et de raison $r\\in \\mathbb{R}$<br>
+       est sous la forme : $u_n=u_0+n\\times r$.<br>
 Avec $u_0=${b}$ et $r=${a}$, on a bien $u_n=${reduireAxPlusB(a, b, 'n')}$.<br>
 $${miseEnEvidence(`(u_n)`)}$  ${texteEnCouleur(`est donc une suite arithmétique de raison ${a}`)}. `
 
@@ -62,8 +62,8 @@ $${miseEnEvidence(`(u_n)`)}$  ${texteEnCouleur(`est donc une suite arithmétique
       const b = randint(-5, 5, [-1, 0, 1, a])
 
       this.enonce = `Soit $(u_n)$ la suite définie pour tout entier $n$ par $u_n=${a}\\times ${ecritureParentheseSiNegatif(b)}^n$.`
-      this.correction = `Soit $n\\in \\mathbb{N}$. On sait que la forme explicite d'une suite géométrique $(u_n)$, de premier terme $u_0\\in \\mathbb{R}$ et de raison $q\\in \\mathbb{R}$
-    <br> est sous la forme : $u_n=u_0\\times q^n$.<br>
+      this.correction = `Soit $n\\in \\mathbb{N}$. On sait que la forme explicite d'une suite géométrique $(u_n)$, de premier terme $u_0\\in \\mathbb{R}$ et de raison $q\\in \\mathbb{R}$<br>
+       est sous la forme : $u_n=u_0\\times q^n$.<br>
 Avec $u_0=${a}$ et $q=${b}$, on a bien $u_n=${a}\\times ${ecritureParentheseSiNegatif(b)}^n$.<br>
 $${miseEnEvidence(`(u_n)`)}$  ${texteEnCouleur(`est donc une suite géométrique de raison ${b}`)}. `
 
@@ -141,8 +141,8 @@ $${miseEnEvidence(`(u_n)`)}$  ${texteEnCouleur(`est donc une suite géométrique
     } else if (cas === 5) {
       const a = randint(-5, 5, [-1, 0, 1])
       this.enonce = `Soit $(u_n)$ la suite définie pour tout entier $n$ par $u_n=${a}n$.`
-      this.correction = `Soit $n\\in \\mathbb{N}$. On sait que la forme explicite d'une suite arithmétique $(u_n)$, de premier terme $u_0\\in \\mathbb{R}$ et de raison $r\\in \\mathbb{R}$
-    <br> est sous la forme : $u_n=u_0+n\\times r$.<br>
+      this.correction = `Soit $n\\in \\mathbb{N}$. On sait que la forme explicite d'une suite arithmétique $(u_n)$, de premier terme $u_0\\in \\mathbb{R}$ et de raison $r\\in \\mathbb{R}$<br>
+       est sous la forme : $u_n=u_0+n\\times r$.<br>
 Avec $u_0=0$ et $r=${a}$, on a bien $u_n=${reduireAxPlusB(a, 0, 'n')}$.<br>
 $${miseEnEvidence(`(u_n)`)}$  ${texteEnCouleur(`est donc une suite arithmétique de raison ${a}`)}. `
 
