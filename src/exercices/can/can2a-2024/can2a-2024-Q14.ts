@@ -2,12 +2,12 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/viewcan.2024.2e.test.ts ⚠️
  */
 
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { texPrix, texteGras } from '../../../lib/format/style'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un prix après des évolutions successives'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -41,8 +41,8 @@ export default class NomExercice extends ExerciceSimple {
           [10, 50, 7.5, 15],
         ])
     const val1 = valeurs[0] + (valeurs[0] * valeurs[1]) / 100
-    const question = `Un article à $${texNombre(valeurs[0])}$ € subit une hausse de $${valeurs[1]}\\,\\%$ puis une baisse de $${valeurs[1]}\\,\\%$.
-        <br> Son nouveau prix est maintenant de : `
+    const question = `Un article à $${texNombre(valeurs[0])}$ € subit une hausse de $${valeurs[1]}\\,\\%$ puis une baisse de $${valeurs[1]}\\,\\%$.<br>
+    Son nouveau prix est maintenant de : `
     //  this.reponse = valeurs[2] Pas de this.reponse pour un qcm !
     this.autoCorrection[0] = {
       options: { ordered: false },
