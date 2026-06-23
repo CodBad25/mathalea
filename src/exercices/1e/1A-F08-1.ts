@@ -76,11 +76,10 @@ export default class AutoF3a extends ExerciceQcmA {
     
     L'image de $${xDemande}$ par cette fonction est :<br>
     $\\begin{aligned}
-    f(${xDemande})&=${m === 1 ? `${xDemande}` : `${m}\\times ${ecritureParentheseSiNegatif(xDemande)}`}  ${ecritureAlgebrique(p)}
-    ${m === 1 ? `\\\\` : ` \\\\&=${m * xDemande}${ecritureAlgebrique(p)}\\\\`} 
+    f(${xDemande})&=${m === 1 ? `${xDemande}` : `${m}\\times ${ecritureParentheseSiNegatif(xDemande)}`}  ${ecritureAlgebrique(p)}\\\\
+    ${m === 1 ? '' : `&=${m * xDemande}${ecritureAlgebrique(p)}\\\\`} 
     &=${miseEnEvidence(bonneReponse)}
-    \\end{aligned}$
-    `
+    \\end{aligned}$`
 
     // Réponses
     this.reponses = [
