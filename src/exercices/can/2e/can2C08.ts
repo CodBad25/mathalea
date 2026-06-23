@@ -52,16 +52,14 @@ export default class CalculAvecRacineCarree3 extends ExerciceSimple {
     $\\sqrt{${b}}=\\sqrt{${reduction[0]}^2\\times ${reduction[1]}} =
     \\sqrt{${reduction[0]}^2}\\times \\sqrt{${reduction[1]}}
     =${reduction[0]}\\sqrt{${reduction[1]}}$.<br>
-    Ainsi :
-    <br>
+    Ainsi :<br>
     $\\begin{aligned}
     (\\sqrt{${a}}+\\sqrt{${b}})^2&=(\\sqrt{${a}}+${reduction[0]}\\sqrt{${reduction[1]}})^2\\\\
     &= (${reduction[0] + 1}\\sqrt{${reduction[1]}})^2 \\\\
     &=(${reduction[0] + 1}\\sqrt{${reduction[1]}})\\times (${reduction[0] + 1}\\sqrt{${reduction[1]}})\\\\
     &=\\underbrace{${reduction[0] + 1}\\times ${reduction[0] + 1}}_{${(reduction[0] + 1) ** 2}}\\times \\underbrace{\\sqrt{${reduction[1]}}\\times \\sqrt{${reduction[1]}}}_{${reduction[1]}}\\\\
     &=  ${miseEnEvidence(`${(reduction[0] + 1) ** 2 * reduction[1]}`)}
-    \\end{aligned}$
-  `
+    \\end{aligned}$`
           this.canEnonce = `Calculer le carré de $\\sqrt{${a}}+\\sqrt{${b}}$.`
         } else {
           this.question = `Le carré de $\\sqrt{${b}}+\\sqrt{${a}}$ est égal à : `
@@ -69,16 +67,14 @@ export default class CalculAvecRacineCarree3 extends ExerciceSimple {
   $\\sqrt{${b}}=\\sqrt{${reduction[0]}^2\\times ${reduction[1]}} =
   \\sqrt{${reduction[0]}^2}\\times \\sqrt{${reduction[1]}}
   =${reduction[0]}\\sqrt{${reduction[1]}}$.<br>
-  Ainsi :
-  <br>
+  Ainsi :<br>
   $\\begin{aligned}
   (\\sqrt{${b}}+\\sqrt{${a}})^2&=(${reduction[0]}\\sqrt{${reduction[1]}}+\\sqrt{${a}})^2\\\\
   &= (${reduction[0] + 1}\\sqrt{${reduction[1]}})^2 \\\\
   &=(${reduction[0] + 1}\\sqrt{${reduction[1]}})\\times (${reduction[0] + 1}\\sqrt{${reduction[1]}})\\\\
   &=\\underbrace{${reduction[0] + 1}\\times ${reduction[0] + 1}}_{${(reduction[0] + 1) ** 2}}\\times \\underbrace{\\sqrt{${reduction[1]}}\\times \\sqrt{${reduction[1]}}}_{${reduction[1]}}\\\\
    &=  ${miseEnEvidence(`${(reduction[0] + 1) ** 2 * reduction[1]}`)}
-  \\end{aligned}$
-`
+  \\end{aligned}$`
           this.canEnonce = `Calculer le carré de $\\sqrt{${b}}+\\sqrt{${a}}$.`
         }
         this.reponse = a + b + 2 * Math.sqrt(a * b)
@@ -96,16 +92,14 @@ export default class CalculAvecRacineCarree3 extends ExerciceSimple {
     $\\sqrt{${b}}=\\sqrt{${reduction[0]}^2\\times ${reduction[1]}} =
     \\sqrt{${reduction[0]}^2}\\times \\sqrt{${reduction[1]}}
     =${reduction[0]}\\sqrt{${reduction[1]}}$.<br>
-    Ainsi :
-    <br>
+    Ainsi :<br>
     $\\begin{aligned}
     (\\sqrt{${a}}-\\sqrt{${b}})^2&=(\\sqrt{${a}}-${reduction[0]}\\sqrt{${reduction[1]}})^2\\\\
     &= (${1 - reduction[0]}\\sqrt{${reduction[1]}})^2 \\\\
     &=(${1 - reduction[0]}\\sqrt{${reduction[1]}})\\times (${1 - reduction[0]}\\sqrt{${reduction[1]}})\\\\
   &=\\underbrace{${ecritureParentheseSiNegatif(1 - reduction[0])}\\times ${ecritureParentheseSiNegatif(1 - reduction[0])}}_{${(1 - reduction[0]) ** 2}}\\times \\underbrace{\\sqrt{${reduction[1]}}\\times \\sqrt{${reduction[1]}}}_{${reduction[1]}}\\\\
       &=  ${miseEnEvidence(`${(1 - reduction[0]) ** 2 * reduction[1]}`)}
-    \\end{aligned}$
-  `
+    \\end{aligned}$`
           this.canEnonce = `Calculer le carré de $\\sqrt{${a}}-\\sqrt{${b}}$.`
         } else {
           this.question = `Le carré de $\\sqrt{${b}}-\\sqrt{${a}}$ est égal à : `
@@ -113,16 +107,14 @@ export default class CalculAvecRacineCarree3 extends ExerciceSimple {
   $\\sqrt{${b}}=\\sqrt{${reduction[0]}^2\\times ${reduction[1]}} =
   \\sqrt{${reduction[0]}^2}\\times \\sqrt{${reduction[1]}}
   =${reduction[0]}\\sqrt{${reduction[1]}}$.<br>
-  Ainsi :
-  <br>
+  Ainsi :<br>
   $\\begin{aligned}
   (\\sqrt{${b}}-\\sqrt{${a}})^2&=(${reduction[0]}\\sqrt{${reduction[1]}}-\\sqrt{${a}})^2\\\\
   &= (${reduction[0] - 1}\\sqrt{${reduction[1]}})^2 \\\\
   &=(${reduction[0] - 1}\\sqrt{${reduction[1]}})\\times (${reduction[0] - 1}\\sqrt{${reduction[1]}})\\\\
   &=\\underbrace{${ecritureParentheseSiNegatif(reduction[0] - 1)}\\times ${ecritureParentheseSiNegatif(reduction[0] - 1)}}_{${(reduction[0] - 1) ** 2}}\\times \\underbrace{\\sqrt{${reduction[1]}}\\times \\sqrt{${reduction[1]}}}_{${reduction[1]}}\\\\
        &=  ${miseEnEvidence(`${(reduction[0] - 1) ** 2 * reduction[1]}`)}
-  \\end{aligned}$
-`
+  \\end{aligned}$`
           this.canEnonce = `Calculer le carré de $\\sqrt{${b}}-\\sqrt{${a}}$.`
         }
         this.reponse = a + b - 2 * Math.sqrt(a * b)
