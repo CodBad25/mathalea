@@ -1,6 +1,7 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPosition } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
 import { tableauSignesFonction } from '../../lib/mathFonctions/etudeFonction'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha } from '../../lib/outils/outilString'
@@ -9,9 +10,9 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
-export const titre = 'Effectuer une étude complète de paraboles avec les zéros de la fonction'
+export const titre =
+  'Effectuer une étude complète de paraboles avec les zéros de la fonction'
 export const interactifReady = false
 
 export const dateDePublication = '25/11/2024'
@@ -72,7 +73,7 @@ export default class EtudeParabole extends Exercice {
     correction1 += `<br><br> Le sommet du graphe de $f$ a donc pour coordonnées $${miseEnEvidence(`\\left(${pAlpha.simplifie().texFractionSimplifiee} \\,;\\, ${pPoly.evaluer({ x: pAlpha }).texFractionSimplifiee}\\right)`)}$.`
 
     let question2 = 'Déterminer les zéros de la fonction.'
-    question2 += `<br><br>${numAlpha(0)} Le graphe de $f$ intersecte-t-il l'axe des abscisses ? Si oui, déterminer les coordonnées de ce(s) pointAbstrait(s) d'intersection.`
+    question2 += `<br><br>${numAlpha(0)} Le graphe de $f$ intersecte-t-il l'axe des abscisses ? Si oui, déterminer les coordonnées de ce(s) point(s) d'intersection.`
     question2 += `<br><br>${numAlpha(1)} En déduire le tableau des signes de la fonction $f$.`
 
     let correction2 = `On résout l'équation $f(x)=0$, c'est-à-dire $${p.printToLatex()}$ en calculant le discriminant.`
@@ -136,7 +137,11 @@ export default class EtudeParabole extends Exercice {
         },
         r,
         o,
-        courbe(p.fonctionEvaluer, { repere: r, color: bleuMathalea, epaisseur: 2 }),
+        courbe(p.fonctionEvaluer, {
+          repere: r,
+          color: bleuMathalea,
+          epaisseur: 2,
+        }),
       )
     this.listeQuestions = [question1, question2, question3, question4]
     this.listeCorrections = [correction1, correction2, correction3, correction4]
