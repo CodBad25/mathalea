@@ -4,6 +4,7 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { bleuMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -24,7 +25,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -143,14 +143,13 @@ export default class AngleProduitScalaire extends Exercice {
                 $\\overrightarrow{AB}\\begin{pmatrix}${xB}-${ecritureParentheseSiNegatif(xA)}\\\\[0.7em]${yB}-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$, soit $\\overrightarrow{AB}\\begin{pmatrix}${xB - xA}\\\\[0.7em]${yB - yA}\\end{pmatrix}$.<br>
                 $\\overrightarrow{AC}\\begin{pmatrix}${xC}-${ecritureParentheseSiNegatif(xA)}\\\\[0.7em]${yC}-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$, soit $\\overrightarrow{AC}\\begin{pmatrix}${xC - xA}\\\\[0.7em]${yC - yA}\\end{pmatrix}$.<br>
                 Ainsi, $\\overrightarrow{AB}\\cdot\\overrightarrow{AC}=${xB - xA}\\times ${ecritureParentheseSiNegatif(xC - xA)}+${ecritureParentheseSiNegatif(yB - yA)}\\times ${ecritureParentheseSiNegatif(yC - yA)}=${(xB - xA) * (xC - xA) + (yB - yA) * (yC - yA)}$.`
-     const normeABsousRacine = (xB - xA) ** 2 + (yB - yA) ** 2
+      const normeABsousRacine = (xB - xA) ** 2 + (yB - yA) ** 2
       const normeACsousRacine = (xC - xA) ** 2 + (yC - yA) ** 2
       const texteCorrQ2 = `On calcule $\\Vert\\overrightarrow{AB}\\Vert$ : <br>
       $\\begin{aligned}
       \\Vert\\overrightarrow{AB}\\Vert&=\\sqrt{${ecritureParentheseSiNegatif(xB - xA)}^2+${ecritureParentheseSiNegatif(yB - yA)}^2}\\\\
       &=${redAB[1] === 1 ? `${redAB[0]}` : `\\sqrt{${normeABsousRacine}}${redAB[0] === 1 ? '' : `\\\\&=${rienSi1(redAB[0])}\\sqrt{${redAB[1]}}`}`}
-      \\end{aligned}$
-    <br>
+      \\end{aligned}$<br>
     On calcule $\\Vert\\overrightarrow{AC}\\Vert$ : <br>
       $\\begin{aligned}
       \\Vert\\overrightarrow{AC}\\Vert&=\\sqrt{${ecritureParentheseSiNegatif(xC - xA)}^2+${ecritureParentheseSiNegatif(yC - yA)}^2}\\\\
