@@ -107,7 +107,7 @@ const couplesVecteursRationnels = [
   ],
 ]
 
-export default class ConstructionsParallelogrammesParticuliers extends Exercice {
+export default class ConstructionsParallelogrammesParticuliersV3 extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireTexte = [
