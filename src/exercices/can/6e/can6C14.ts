@@ -41,8 +41,7 @@ export default class Somme4EntiersQuiSeMarient extends ExerciceSimple {
     this.question = `Calculer $${c - a} + ${d + b} + ${c + a} + ${d - b}$.`
     this.correction = `$${c - a} + ${d + b} + ${c + a} + ${d - b} =  ${miseEnEvidence(2 * (c + d))}$<br>`
     this.correction += texteEnCouleur(
-      `
-    <br> Mentalement : <br>
+      `Mentalement : <br>
 On change l'ordre des termes pour simplifier le calcul  :<br>
   $\\underbrace{${c - a}+${c + a}}_{${2 * c}}+
 \\underbrace{${d + b}+${d - b}}_{${2 * d}}=${2 * c}+${2 * d}=${2 * c + 2 * d}$. `,
