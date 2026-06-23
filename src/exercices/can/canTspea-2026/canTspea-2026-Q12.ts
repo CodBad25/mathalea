@@ -1,12 +1,12 @@
-
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { sp } from '../../../lib/outils/outilString'
+import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { context } from '../../../modules/context'
-import { sp } from '../../../lib/outils/outilString'
-export const titre = 'Donner la valeur d\'une variable après exécution d\'un script'
+export const titre =
+  "Donner la valeur d'une variable après exécution d'un script"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '31vj3'
@@ -18,14 +18,14 @@ export const refs = {
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
 
-*/export default class Can2026TermQ11 extends ExerciceCan {
+*/ export default class Can2026TermQ11 extends ExerciceCan {
   constructor() {
     super()
-   this.optionsDeComparaison = {  nombreDecimalSeulement: true }
-     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.formatChampTexte = KeyboardType.clavierDeBase
   }
 
-   enonce(a?: number, nInit?: number, k?: number): void {
+  enonce(a?: number, nInit?: number, k?: number): void {
     if (a == null || nInit == null || k == null) {
       k = choice([2, 3])
       nInit = randint(2, 3)
@@ -50,22 +50,22 @@ export const refs = {
     if (context.isHtml) {
       this.question = 'On considère le script Python :<br>'
       this.question += `$\\begin{array}{|l|}
-\\hline
-\\ \\texttt{a = ${a}}
-\\\\\\ \\texttt{n = ${nInit}}
-\\\\\\ \\texttt{while n <= a:}
-\\\\\\ ${sp(9)}\\texttt{n = n * ${k}} \\\\
+\\hline\\\\
+\\texttt{a = ${a}}\\\\
+\\texttt{n = ${nInit}}\\\\
+\\texttt{while n <= a:}\\\\
+${sp(9)}\\texttt{n = n * ${k}} \\\\
 \\hline
 \\end{array}$<br>`
       this.question += `Valeur de $n$ après exécution du script :<br>`
     } else {
       this.question = 'On considère le script Python :<br>'
       this.question += `$\\begin{array}{|l|}
-\\hline
-\\\\ \\texttt{a = ${a}}
-\\\\\\\\ \\texttt{n = ${nInit}}
-\\\\\\\\ \\texttt{while n <= a:}
-\\\\\\\\ ${sp(9)}\\texttt{n = n * ${k}} \\\\
+\\hline\\\\
+ \\texttt{a = ${a}}\\\\
+\\texttt{n = ${nInit}}\\\\
+\\texttt{while n <= a:}\\\\
+ ${sp(9)}\\texttt{n = n * ${k}} \\\\
 \\hline
 \\end{array}$<br>`
       this.question += `Valeur de $n$ après exécution du script :<br>`
