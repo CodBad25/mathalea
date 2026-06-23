@@ -52,8 +52,7 @@ export default class EquationsCarree extends ExerciceSimple {
           this.correction = `L'équation est de la forme $X^2=k$ avec $X=(x${ecritureAlgebrique(a)})$ et $k=${k}$.<br>
           Comme $k>0$, les solutions de $(x${ecritureAlgebrique(a)})^2=${k}$ sont données par les solutions de chacune des équations :           $x${ecritureAlgebrique(a)}=-\\sqrt{${k}}$ et $x${ecritureAlgebrique(a)}=\\sqrt{${k}}$.<br>
           $x${ecritureAlgebrique(a)}=${-k1}$ a pour solution $${sol1}$ et $x${ecritureAlgebrique(a)}=${k1}$ a pour solution $${sol2}$.<br>
-          Ainsi, l'ensemble des solutions de l'équation est $S=${miseEnEvidence(`\\{${sol1}\\,;\\,${sol2}\\}`)}$.
-           `
+          Ainsi, l'ensemble des solutions de l'équation est $S=${miseEnEvidence(`\\{${sol1}\\,;\\,${sol2}\\}`)}$.`
           this.distracteurs = [
             // Erreur : oubli du changement de signe pour une des solutions
             `$S=\\{${sol1};${-sol2}\\}$`,
@@ -83,8 +82,7 @@ export default class EquationsCarree extends ExerciceSimple {
         Comme $k>0$, les solutions de $(x${ecritureAlgebrique(a)})^2=${k}$ sont données par les solutions de chacune des équations :         $x${ecritureAlgebrique(a)}=-\\sqrt{${k}}$ et $x${ecritureAlgebrique(a)}=\\sqrt{${k}}$.<br>
         $x${ecritureAlgebrique(a)}=-\\sqrt{${k}}$ a pour solution $-\\sqrt{${k}}${ecritureAlgebrique(-a)}$ et 
         $x${ecritureAlgebrique(a)}=\\sqrt{${k}}$ a pour solution $\\sqrt{${k}}${ecritureAlgebrique(-a)}$.<br>
-        Ainsi, l'ensemble des solutions de l'équation est $S=${miseEnEvidence(`\\{-\\sqrt{${k}}${ecritureAlgebrique(-a)}\\,;\\,\\sqrt{${k}}${ecritureAlgebrique(-a)}\\}`)}$.
-         `
+        Ainsi, l'ensemble des solutions de l'équation est $S=${miseEnEvidence(`\\{-\\sqrt{${k}}${ecritureAlgebrique(-a)}\\,;\\,\\sqrt{${k}}${ecritureAlgebrique(-a)}\\}`)}$.`
           this.distracteurs = [
             // Erreur : oubli du changement de signe pour une des racines
             `$S=\\{-\\sqrt{${k}}${ecritureAlgebrique(-a)};-\\sqrt{${k}}${ecritureAlgebrique(-a)}\\}$`,
@@ -111,8 +109,7 @@ export default class EquationsCarree extends ExerciceSimple {
 
           this.correction = `L'équation est de la forme $X^2=k$ avec $X=(x${ecritureAlgebrique(a)})$ et $k=${k}$.<br>
         Comme $k<0$, l'équation n'a pas de solution.<br>
-        Ainsi, l'ensemble des solutions de l'équation est $S=${miseEnEvidence('\\emptyset')}$.
-         `
+        Ainsi, l'ensemble des solutions de l'équation est $S=${miseEnEvidence('\\emptyset')}$.`
           this.distracteurs = [
             // Erreur : comme si k était positif avec √|k|
             `$S=\\{-\\sqrt{${-k}}${ecritureAlgebrique(-a)}\\,;\\,\\sqrt{${-k}}${ecritureAlgebrique(-a)}\\}$`,
