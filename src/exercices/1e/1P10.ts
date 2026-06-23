@@ -1,6 +1,7 @@
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latexParCoordonnees } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
 import { texteGras } from '../../lib/format/style'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
@@ -16,7 +17,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Calculer des probabilités conditionnelles'
 
@@ -275,10 +275,10 @@ export default class ProbabilitesConditionnelles extends Exercice {
           texteCorr += `<br> $P(A \\cap V)=${texProba(av / 100, this.sup)}$`
           texteCorr += `<br>On peut alors construire cet arbre de probabilités${sp(1)}: <br>`
           texteCorr += mathalea2d(
-            { xmin: -5, ymin: -1, xmax: 18, ymax: 10 },
+            { xmin: -5, ymin: -2, xmax: 18, ymax: 10 },
             objets,
           )
-          texteCorr += `<br>On a donc $P_{A}(V)=\\dfrac{P(A \\cap V)}{P(A)}=\\dfrac{${texProba(av / 100, this.sup)}}{${texProba(a / 100, this.sup)}}=${texFractionFromString(av, a)} $.`
+          texteCorr += `On a donc $P_{A}(V)=\\dfrac{P(A \\cap V)}{P(A)}=\\dfrac{${texProba(av / 100, this.sup)}}{${texProba(a / 100, this.sup)}}=${texFractionFromString(av, a)} $.`
           texteCorr += `<br><br>${texteGras('2.')} Comme $A$ et $\\bar A$ forment une partition de l'univers, on peut appliquer la loi des probabilités totales${sp()}:`
           texteCorr += ' <br>$P(V)=P(A \\cap V)+P(\\bar{A} \\cap V). $'
 
@@ -464,10 +464,10 @@ export default class ProbabilitesConditionnelles extends Exercice {
           texteCorr += `<br>$\\bullet~~P_{\\bar C}(E)=${texProba(ec / 100, this.sup)}$`
           texteCorr += `<br>Ce qui permet de construire cet arbre de probabilités${sp()}:${sp()}`
           texteCorr += mathalea2d(
-            { xmin: -5, ymin: -1, xmax: 18, ymax: 10 },
+            { xmin: -5, ymin: -2, xmax: 18, ymax: 10 },
             objets,
           )
-          texteCorr += `<br>${texteGras('2.')} L'événement  : le client ne souhaite ni une  «${sp(1)}couleur-soin${sp(1)}», ni un  «${sp(1)}effet coup de soleil${sp(1)}»  correspond à $\\bar{C} \\cap \\bar{E}$.`
+          texteCorr += `${texteGras('2.')} L'événement  : le client ne souhaite ni une  «${sp(1)}couleur-soin${sp(1)}», ni un  «${sp(1)}effet coup de soleil${sp(1)}»  correspond à $\\bar{C} \\cap \\bar{E}$.`
           texteCorr += `<br>On a $P(\\bar{C} \\cap \\bar{E})=P(\\bar{C}) \\times P_{\\bar{C}}(\\bar{E})=P(\\bar{C}) \\times (1-P_{\\bar{C}}(E))=${texProba(1 - c / 100, false)} \\times ${texProba(1 - ec / 100, false)}\\approx ${texProba((1 - c / 100) * (1 - ec / 100), false)}$.`
           texteCorr += `<br>${texteGras('3.')}  La probabilité qu'un client choisisse l'«${sp(1)}effet coup de soleil${sp(1)}»  sachant qu'il a pris une  «${sp(1)}couleur-soin${sp(1)}»  est $P_{C}(E)$.`
           texteCorr += `<br>On a alors d'après l'arbre pondéré${sp()}:`
