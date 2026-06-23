@@ -40,8 +40,7 @@ export default class FractionSimpleDeQuantite extends ExerciceSimple {
     this.question = `Calculer $\\dfrac{1}{${a}} \\text{ de } ${b} \\text{ L}$.`
     this.correction = `$\\dfrac{1}{${a}}$ de $${b} \\text{ L}$ = $${miseEnEvidence(this.reponse)} \\text{ L}$<br>`
     this.correction += texteEnCouleur(
-      `
-    <br> Mentalement : <br>
+      ` Mentalement : <br>
     Prendre $\\dfrac{1}{${a}}$ d'une quantité revient à la diviser par $${a}$.<br>
     Ainsi, $\\dfrac{1}{${a}}$ de $${b}=${b}\\div ${a}=${b / a}$.
      `,
