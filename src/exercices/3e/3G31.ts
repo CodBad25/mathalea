@@ -7,6 +7,7 @@ import { latexParPoint } from '../../lib/2d/textes'
 import { homothetie, rotation, similitude } from '../../lib/2d/transformations'
 import { angleOriente, longueur } from '../../lib/2d/utilitairesGeometriques'
 import { milieu } from '../../lib/2d/utilitairesPoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -22,8 +23,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -380,12 +379,12 @@ export default class CalculDAngle extends Exercice {
         texte += '\\begin{minipage}{.4\\linewidth}\n'
       }
       if (this.sup) {
-        texte += mathalea2d(paramsEnonce, objetsEnonce) + '<br>'
+        texte += mathalea2d(paramsEnonce, objetsEnonce)
       }
       if (this.correctionDetaillee) {
         if (!context.isHtml && !context.isAmc)
           texteCorr += '\\begin{minipage}{.5\\linewidth}\n'
-        texteCorr += mathalea2d(paramsCorrection, objetsCorrection) + '<br>'
+        texteCorr += mathalea2d(paramsCorrection, objetsCorrection)
         if (!context.isHtml && !context.isAmc)
           texteCorr += '\n\\end{minipage}\n'
       }

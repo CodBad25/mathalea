@@ -201,16 +201,12 @@ export default class TracerAvecScratch extends Exercice {
         const enonces = []
         enonces.push({
           enonce: `
-          ${scratchblock(situations[0].codeScratch)}
-          <br>
-          ${situations[0].fig}
-          `,
+          ${scratchblock(situations[0].codeScratch)}<br>
+          ${situations[0].fig}`,
           question: '',
           correction: `
-          La figure tracée par le programme a ${situations[0].nbCotes} côtés de même longueur et ${situations[0].nbCotes} angles de même mesure, c'est un ${texteEnCouleurEtGras(situations[0].nom, bleuMathalea)}.
-          <br><br>
-          ${situations[0].fig_corr}
-          `,
+          La figure tracée par le programme a ${situations[0].nbCotes} côtés de même longueur et ${situations[0].nbCotes} angles de même mesure, c'est un ${texteEnCouleurEtGras(situations[0].nom, bleuMathalea)}.<br><br>
+          ${situations[0].fig_corr}`,
           scratchCorrection: situations[0].codeScratch,
         })
 
