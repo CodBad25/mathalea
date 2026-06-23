@@ -40,8 +40,7 @@ export default class Auto1AC11c extends ExerciceQcmA {
          \\dfrac{${rienSi1(a)}y${ecritureAlgebriqueSauf1(b)}x}{xy}&= \\dfrac{${c}}{u} \\\\ 
           ${c === 1 ? `u` : `\\dfrac{u}{${c}}`} &=   \\dfrac{xy}{${rienSi1(a)}y${ecritureAlgebriqueSauf1(b)}x} \\\\
           u&= ${miseEnEvidence(`\\dfrac{${rienSi1(c)}xy}{${rienSi1(b)}x${ecritureAlgebriqueSauf1(a)}y}`)} 
-          \\end{aligned}$
-             `
+          \\end{aligned}$`
 
       this.reponses = [
         `$u=\\dfrac{${rienSi1(c)}xy}{${rienSi1(b)}x${ecritureAlgebriqueSauf1(a)}y}$`,
@@ -55,8 +54,7 @@ export default class Auto1AC11c extends ExerciceQcmA {
           \\dfrac{${rienSi1(a)}y-${rienSi1(b)}x}{xy}&= \\dfrac{${c}}{u} \\\\ 
            ${c === 1 ? `u` : `\\dfrac{u}{${c}}`}&= \\dfrac{xy}{${rienSi1(a)}y-${rienSi1(b)}x} \\\\
           u&= ${miseEnEvidence(`\\dfrac{${rienSi1(c)}xy}{${rienSi1(a)}y-${rienSi1(b)}x}`)} 
-          \\end{aligned}$
-             `
+          \\end{aligned}$`
 
       this.reponses = [
         `$u=\\dfrac{${rienSi1(c)}xy}{${rienSi1(a)}y-${rienSi1(b)}x}$`,
@@ -90,8 +88,7 @@ export default class Auto1AC11c extends ExerciceQcmA {
               \\dfrac{${a * b}+x}{${rienSi1(b)}x}&= \\dfrac{${c}}{u} \\\\ 
               u&= \\dfrac{${c === 1 ? '' : `${c}\\times `}${b}x}{${a * b}+x}\\\\
               u&= ${miseEnEvidence(`\\dfrac{${c * b}x}{${a * b}+x}`)} 
-              \\end{aligned}$
-                 `
+              \\end{aligned}$`
 
         this.reponses = [
           `$u=\\dfrac{${rienSi1(c * b)}x}{${a * b}+x}$`,
@@ -116,8 +113,7 @@ export default class Auto1AC11c extends ExerciceQcmA {
               \\dfrac{${rienSi1(a)}x+${rienSi1(b)}y}{y}&= \\dfrac{${c}}{u} \\\\ 
               u&=\\dfrac{${c === 1 ? `` : `${c}\\times `}y}{${rienSi1(a)}x+${b}y} \\\\
               u&= ${miseEnEvidence(`\\dfrac{${rienSi1(c)}y}{${rienSi1(a)}x+${rienSi1(b)}y}`)} 
-              \\end{aligned}$
-                 `
+              \\end{aligned}$`
 
         this.reponses = [
           `$u=\\dfrac{${rienSi1(c)}y}{${rienSi1(a)}x+${rienSi1(b)}y}$`,
