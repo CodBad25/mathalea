@@ -218,11 +218,11 @@ z = ${zD} ${ecritureAlgebriqueSauf1(nz)}t
          t&=${fracT.texFractionSimplifiee}
          \\end{aligned}.$<br>` +
         `En remplaçant $t$ dans les $3$ premières équations du système, on trouve : <br>` +
-        `$\\begin{cases}  x_H = ${xD} ${ecritureAlgebrique(nx)}\\times ${fracTSimplifie}\\\\\\\\
-      y_H = ${yD} ${ecritureAlgebrique(ny)}\\times ${fracTSimplifie} \\\\\\\\
+        `$\\begin{cases}  x_H = ${xD} ${ecritureAlgebrique(nx)}\\times ${fracTSimplifie}\\\\
+      y_H = ${yD} ${ecritureAlgebrique(ny)}\\times ${fracTSimplifie} \\\\
       z_H = ${zD} ${ecritureAlgebrique(nz)}\\times ${fracTSimplifie}\\\\\\end{cases} 
-      \\iff \\begin{cases}  x_H = ${xHFrac.texFractionSimplifiee} \\\\\\\\
-      y_H = ${yHFrac.texFractionSimplifiee} \\\\\\\\
+      \\iff \\begin{cases}  x_H = ${xHFrac.texFractionSimplifiee} \\\\
+      y_H = ${yHFrac.texFractionSimplifiee} \\\\
       z_H = ${zHFrac.texFractionSimplifiee}\\\\\\end{cases}$
       Donc $H\\left(${xHFrac.texFractionSimplifiee} ; ${yHFrac.texFractionSimplifiee} ; ${zHFrac.texFractionSimplifiee}\\right)$.`
 

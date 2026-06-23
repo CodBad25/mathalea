@@ -1,5 +1,6 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
+import { bleuMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
 import {
   ecritureAlgebrique,
@@ -11,7 +12,6 @@ import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
-import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '27/12/2025'
 export const dateDeModifImportante = '17/01/2026'
 export const interactifReady = false
@@ -93,8 +93,7 @@ export default class ProblemePointFixe extends ExerciceSimple {
     this.question = `Soit $f$ la fonction définie sur l'intervalle ${I} par
 			$f(x) = \\dfrac{${reduireAxPlusB(a, b)}}{${reduireAxPlusB(c, d)}}.$<br>
 			On considère la suite $\\left(u_n\\right)$ définie par :
-			$u_0 = ${u0}$ et pour tout entier naturel $n$, par  $u_{n+1} = f\\left(u_n\\right).$<br>
-			<br>`
+			$u_0 = ${u0}$ et pour tout entier naturel $n$, par  $u_{n+1} = f\\left(u_n\\right).$<br>`
     this.question += createList({
       style: 'nombres',
       items: [question1, question2, question3],
@@ -186,14 +185,13 @@ $f(${alpha}) \\leqslant f(u_{k+1})\\leqslant f(u_k) \\leqslant f(${beta}) $<br>
    donc : <br>
    $${fAlpha.texFractionSimplifiee} \\leqslant f(u_{k+1})\\leqslant f(u_k) \\leqslant ${fBeta.texFractionSimplifiee}$<br>
    Comme pour tout entier naturel $n$, $f(u_n)=u_{n+1}$, <br>
-   $  ${fAlpha.texFractionSimplifiee} \\leqslant u_{k+2} \\leqslant u_{k+1}\\leqslant ${fBeta.texFractionSimplifiee}\\\\$<br>
+   $${fAlpha.texFractionSimplifiee} \\leqslant u_{k+2} \\leqslant u_{k+1}\\leqslant ${fBeta.texFractionSimplifiee}$<br>
    
    Ce qui implique que : <br>
   
     $${alpha} \\leqslant ${fAlpha.texFractionSimplifiee} \\leqslant u_{k+2} \\leqslant ${fBeta.texFractionSimplifiee}\\leqslant ${beta} $<br>
     et donc : <br>
-  $      ${alpha} \\leqslant  u_{k+2}\\leqslant u_{k+1} \\leqslant ${beta} $.
-       <br>
+  $${alpha} \\leqslant  u_{k+2}\\leqslant u_{k+1} \\leqslant ${beta} $.<br>
        Ainsi, la propriété $\\mathcal{P}_{k+1}$ est vraie.<br>
        L'hérédité de la propriété est démontrée pour tout entier naturel $n$.<br>
         ${texteEnCouleurEtGras('Conclusion :', bleuMathalea)} <br>

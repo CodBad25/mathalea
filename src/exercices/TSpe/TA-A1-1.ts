@@ -18,11 +18,10 @@ export default class Puissances extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     this.enonce =
       'Soit $a$ un nombre réel non nul. À quelle expression est égal $a^5\\times a^3$ ?'
-    this.correction =
-      "On utilise la propriété de cours, qui calcule le produit des puissances d'un nombre réel non nul $a$  :<br>" +
-      'Soit $n\\in \\mathbb{N}^*$ et $k\\in \\mathbb{N}^*$<br>' +
-      'On a alors : $a^n\\times a^k=a^{n+k}$<br>' +
-      `Dans notre situation : $${miseEnEvidence('a^5\\times a^3=a^{8}')}$`
+    this.correction = `On utilise la propriété de cours, qui calcule le produit des puissances d'un nombre réel non nul $a$  :<br>
+      Soit $n\\in \\mathbb{N}^*$ et $k\\in \\mathbb{N}^*$<br>
+      On a alors : $a^n\\times a^k=a^{n+k}$<br>
+      Dans notre situation : $${miseEnEvidence('a^5\\times a^3=a^{8}')}$`
 
     this.reponses = [
       '$a^{8}$',
@@ -41,8 +40,7 @@ export default class Puissances extends ExerciceQcmA {
       this.correction = `On utilise la propriété de cours, qui calcule le produit des puissances d'un nombre réel non nul $a$    :<br>
     Soit $n\\in \\mathbb{N}$ et $k\\in \\mathbb{N}$<br>
     On a alors : $a^n\\times a^k=a^{n+k}$<br>
-         Dans notre situation : $${miseEnEvidence(`a^{${n}}\\times a^{${n}}=a^{${n + k}}`)}$
-    `
+         Dans notre situation : $${miseEnEvidence(`a^{${n}}\\times a^{${n}}=a^{${n + k}}`)}$`
       this.reponses = [
         `$a^{${n + k}}$`,
         `$a^{${n * k}}$`,

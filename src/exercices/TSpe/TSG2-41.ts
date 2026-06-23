@@ -131,8 +131,8 @@ export default class NomExercice extends Exercice {
           couleur: 'black',
         }) +
         ` On calcule les coordonnées des vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$.<br>
-         $\\overrightarrow{AB}\\begin{pmatrix}${xB}${ecritureAlgebrique(-xA)}\\\\${yB}${ecritureAlgebrique(-yA)}\\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}$ donc $\\overrightarrow{AB}\\begin{pmatrix}${ABx}\\\\${ABy}\\\\${ABz}\\end{pmatrix}$ .
-         <br>   $\\overrightarrow{AC}\\begin{pmatrix}${xC}${ecritureAlgebrique(-xA)}\\\\${yC}${ecritureAlgebrique(-yA)}\\\\${zC}${ecritureAlgebrique(-zA)}\\end{pmatrix}$ donc $\\overrightarrow{AC}\\begin{pmatrix}${ACx}\\\\${ACy}\\\\${ACz}\\end{pmatrix}$.<br>
+         $\\overrightarrow{AB}\\begin{pmatrix}${xB}${ecritureAlgebrique(-xA)}\\\\${yB}${ecritureAlgebrique(-yA)}\\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}$ donc $\\overrightarrow{AB}\\begin{pmatrix}${ABx}\\\\${ABy}\\\\${ABz}\\end{pmatrix}$ .<br>
+        $\\overrightarrow{AC}\\begin{pmatrix}${xC}${ecritureAlgebrique(-xA)}\\\\${yC}${ecritureAlgebrique(-yA)}\\\\${zC}${ecritureAlgebrique(-zA)}\\end{pmatrix}$ donc $\\overrightarrow{AC}\\begin{pmatrix}${ACx}\\\\${ACy}\\\\${ACz}\\end{pmatrix}$.<br>
           Deux vecteurs sont colinéaires s’il existe un réel $k$ tel que $\\overrightarrow{AB} = k  \\overrightarrow{AC}$, c’est-à-dire si un réel $k$ vérifie :<br>
           $\\begin{cases} ${ABx} = ${rienSi1(ACx)}k\\\\
           ${ABy} =  ${rienSi1(ACy)}k\\\\
@@ -143,8 +143,8 @@ export default class NomExercice extends Exercice {
       const fraction2 = new FractionEtendue(ABy, ACy)
       const fraction3 = new FractionEtendue(ABz, ACz)
       reponse1 += `$\\iff
-           \\begin{cases} k =${fraction1.texFractionSimplifiee}\\\\\\\\
-          k = ${fraction2.texFractionSimplifiee}\\\\\\\\
+           \\begin{cases} k =${fraction1.texFractionSimplifiee}\\\\
+          k = ${fraction2.texFractionSimplifiee}\\\\
           k = ${fraction3.texFractionSimplifiee}
           \\end{cases}$.<br>`
 

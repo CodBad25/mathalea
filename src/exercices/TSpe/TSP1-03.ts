@@ -266,7 +266,9 @@ $Q_2.$`,
 
            ${texteEnCouleurEtGras(`Utilisation de la formule de König-Huygens :`)}
            Pour toute variable aléatoire $X$, on a l'égalité : $\\mathrm V (X) = \\mathrm E (X^2) - \\mathrm E (X)^2.$ <br>
-          On calcule $\\mathrm E (X^2)$ grâce au tableau suivant : <br>${tableauVariance} <br> d'où <br>
+          On calcule $\\mathrm E (X^2)$ grâce au tableau suivant : <br>
+          ${tableauVariance}
+          d'où <br>
           $\\begin{aligned}\\mathrm E (X^2)&= 0^2\\times \\mathrm{P}(X=0) + 1^2\\times \\mathrm{P}(X=1) + 2^2\\times \\mathrm{P}(X=2)\\\\
           & = \\mathrm{P}(X=1) + 4\\times \\mathrm{P}(X=2)\\\\&=${texNombre(4 * pA * pBsipA + 1 - (1 - pA) * pBsiNonpA - pA * pBsipA)}\\end{aligned}$ <br>
           puis <br>$\\begin{aligned}\\mathrm V (X) &= \\mathrm E (X^2) - \\mathrm E (X)^2\\\\
