@@ -78,10 +78,9 @@ export default class Auto1C11 extends ExerciceQcmA {
  ${rienSi1(k * a - c)}x${ecritureAlgebrique(k * b)}&=${d}\\\\
  ${rienSi1(k * a - c)}x${ecritureAlgebrique(k * b)}${miseEnEvidence(ecritureAlgebrique(-k * b))}&=${d}${miseEnEvidence(ecritureAlgebrique(-k * b))}\\\\
  ${rienSi1(k * a - c)}x&=${d - k * b}\\\\
- x&=${texFractionFromString(d - k * b, k * a - c)}
- ${pgcd(abs(d - k * b), abs(k * a - c)) > 1 || k * a - c < 0 ? `\\\\x&=${new FractionEtendue(d - k * b, k * a - c).texFractionSimplifiee}` : ''}\\end{aligned}$
- `
-        this.correction += `<br> La solution est $${miseEnEvidence(new FractionEtendue(d - k * b, k * a - c).texFractionSimplifiee)}$.`
+ x&=${texFractionFromString(d - k * b, k * a - c)}\\\\
+ ${pgcd(abs(d - k * b), abs(k * a - c)) > 1 || k * a - c < 0 ? `x&=${new FractionEtendue(d - k * b, k * a - c).texFractionSimplifiee}` : ''}\\end{aligned}$<br>`
+        this.correction += `La solution est $${miseEnEvidence(new FractionEtendue(d - k * b, k * a - c).texFractionSimplifiee)}$.`
 
         bonnereponse = new FractionEtendue(d - k * b, k * a - c)
           .texFractionSimplifiee
@@ -112,9 +111,8 @@ export default class Auto1C11 extends ExerciceQcmA {
  ${rienSi1(newA - c)}x${ecritureAlgebrique(newB)}&=${d}\\\\
  ${rienSi1(newA - c)}x${ecritureAlgebrique(newB)}${miseEnEvidence(ecritureAlgebrique(-1 * newB))}&=${d}${miseEnEvidence(ecritureAlgebrique(-1 * newB))}\\\\
  ${rienSi1(newA - c)}x&=${d - newB}\\\\
- x&=${texFractionFromString(d - newB, newA - c)}
- ${pgcd(abs(d - newB), abs(newA - c)) > 1 || newA - c < 0 ? `\\\\x&=${new FractionEtendue(d - newB, newA - c).texFractionSimplifiee}\n` : ''}\\end{aligned}$
- `
+ x&=${texFractionFromString(d - newB, newA - c)}\\\\
+ ${pgcd(abs(d - newB), abs(newA - c)) > 1 || newA - c < 0 ? `x&=${new FractionEtendue(d - newB, newA - c).texFractionSimplifiee}` : ''}\\end{aligned}$`
 
         this.correction += `<br> La solution est $${miseEnEvidence(new FractionEtendue(d - newB, newA - c).texFractionSimplifiee)}$.`
 
