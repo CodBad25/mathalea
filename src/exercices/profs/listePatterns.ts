@@ -335,7 +335,7 @@ export default class ListePatternsTousLesExos extends Exercice {
                     yMax,
                     yMin,
                     scale: 0.5,
-                    style: 'display: inline-block',
+                    display: 'inline-block' as const,
                     optionsTikz: 'transform shape',
                   },
                 ),

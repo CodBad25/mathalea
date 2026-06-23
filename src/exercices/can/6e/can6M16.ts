@@ -163,7 +163,7 @@ export default class AireUsuelleParComptageCan extends ExerciceSimple {
     }
     const figure = mathalea2d(
       Object.assign(
-        { pixelsParCm: 20, scale: 0.5, style: 'display: block' },
+        { pixelsParCm: 20, scale: 0.5, display: 'block' } as const,
         fixeBordures(objets, {
           rxmin: -0.1,
           rxmax: 0.1,

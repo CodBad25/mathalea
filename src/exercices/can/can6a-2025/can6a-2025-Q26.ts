@@ -120,7 +120,7 @@ export default class Can2025N6Q26 extends ExerciceSimple {
         ymax: 0.9,
         pixelsParCm: 20,
         scale: 0.6,
-        style: 'margin: auto',
+        center: true,
       },
       d,
     )
@@ -159,7 +159,7 @@ export default class Can2025N6Q26 extends ExerciceSimple {
       ymax: 1.5,
       pixelsParCm: 20,
       scale: 0.5,
-      style: 'margin: auto',
+      center: true,
     },
     dCorrection,
   )
@@ -173,7 +173,7 @@ export default class Can2025N6Q26 extends ExerciceSimple {
         ymax: 0.8,
         pixelsParCm: 20,
         scale: 0.5,
-        style: 'margin: auto',
+        center: true,
       },
       dPDF,
     )

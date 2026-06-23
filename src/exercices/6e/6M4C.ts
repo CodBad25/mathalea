@@ -112,7 +112,6 @@ export default class ConversionsDeDurees extends Exercice {
           operande1: h + 24 * j,
           operande2: 24,
           type: 'divisionE',
-          style: 'margin-bottom: 1em',
           options: { solution: true, colore: bleuMathalea },
         })
         texteCorr += `<br>$${texNombre(
@@ -132,14 +131,12 @@ export default class ConversionsDeDurees extends Exercice {
             operande1: h * 3600 + m * 60 + s,
             operande2: 3600,
             type: 'divisionE',
-            style: 'margin-bottom: 1em',
             options: { solution: true, colore: bleuMathalea },
           })
           texteCorr += operation({
             operande1: m * 60 + s,
             operande2: 60,
             type: 'divisionE',
-            style: 'margin-bottom: 1em',
             options: { solution: true, colore: bleuMathalea },
           })
           texteCorr += `<br>$${texNombre(
@@ -158,10 +155,9 @@ export default class ConversionsDeDurees extends Exercice {
             operande1: m * 60 + s,
             operande2: 60,
             type: 'divisionE',
-            style: 'margin-bottom: 1em',
             options: { solution: true, colore: bleuMathalea },
           })
-          texteCorr += `$${texNombre(
+          texteCorr += `<br>$${texNombre(
             m * 60 + s,
           )}~\\text{s} = (${formatMinute(m)}\\times60~\\text{s})+${formatMinute(s)}~\\text{s}=`
           texteCorr +=
@@ -183,14 +179,12 @@ export default class ConversionsDeDurees extends Exercice {
             operande1: h + 24 * j + 24 * 7 * s,
             operande2: 24,
             type: 'divisionE',
-            style: 'margin-bottom: 1em',
             options: { solution: true, colore: bleuMathalea },
           })
           texteCorr += operation({
             operande1: 7 * s + j,
             operande2: 7,
             type: 'divisionE',
-            style: 'margin-bottom: 1em',
             options: { solution: true, colore: bleuMathalea },
           })
           texteCorr += `<br>$${texNombre(h + 24 * j + 24 * 7 * s)}~\\text{h} = (${

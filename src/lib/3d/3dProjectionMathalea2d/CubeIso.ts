@@ -189,7 +189,7 @@ export function projectionCubesIso2d(
       pixelsParCm: 20,
       scale: 0.6,
       mainlevee: false,
-      style: 'display: inline-block',
+      display: 'inline-block' as const,
     },
     fixeBordures(objets),
   )

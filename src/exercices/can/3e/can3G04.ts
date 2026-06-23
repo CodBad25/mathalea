@@ -63,7 +63,7 @@ export default class RechercheValeurPythagore extends ExerciceSimple {
             letterSize: 'scriptsize',
           }),
         )
-        this.question = `${mathalea2d(Object.assign({ scale: 0.7, style: 'margin: auto; display: block' }, fixeBordures([objets], { rxmin: 0, rxmax: 0, rymax: 0, rymin: 0.5 })), [objets])}`
+        this.question = `${mathalea2d(Object.assign({ scale: 0.7, display: 'block', center: true } as const, fixeBordures([objets], { rxmin: 0, rxmax: 0, rymax: 0, rymin: 0.5 })), [objets])}`
         if (this.interactif) {
           this.question += `Déterminer $x$ pour que le triangle soit rectangle.<br>
       (donner le résultat sous la forme $\\sqrt{a}$)<br>
@@ -101,7 +101,7 @@ export default class RechercheValeurPythagore extends ExerciceSimple {
           }),
         )
 
-        this.question = `${mathalea2d(Object.assign({ scale: 0.7, style: 'margin: auto; display: block' }, fixeBordures([objets], { rxmin: 0, rxmax: 0, rymax: 0, rymin: 0.5 })), [objets])}`
+        this.question = `${mathalea2d(Object.assign({ scale: 0.7, display: 'block', center: true } as const, fixeBordures([objets], { rxmin: 0, rxmax: 0, rymax: 0, rymin: 0.5 })), [objets])}`
         if (this.interactif) {
           this.question += `Déterminer $x$ pour que le triangle soit rectangle.<br>
       $x=$`

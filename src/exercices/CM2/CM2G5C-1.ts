@@ -180,10 +180,10 @@ export default class choixPatron extends Exercice {
             const fig0AMC = mathalea2d(
               Object.assign(
                 {
-                  style: 'display: inline-block',
+                  display: 'inline-block',
                   scale: zoomAMC,
                   id: `cliquefigure0Ex${this.numeroExercice}Q${i}`,
-                },
+                } as const,
                 fixeBordures(fig0),
               ),
               fig0,
@@ -191,10 +191,10 @@ export default class choixPatron extends Exercice {
             const fig1AMC = mathalea2d(
               Object.assign(
                 {
-                  style: 'display: inline-block',
+                  display: 'inline-block',
                   scale: zoomAMC,
                   id: `cliquefigure1Ex${this.numeroExercice}Q${i}`,
-                },
+                } as const,
                 fixeBordures(fig1),
               ),
               fig1,
@@ -202,10 +202,10 @@ export default class choixPatron extends Exercice {
             const fig2AMC = mathalea2d(
               Object.assign(
                 {
-                  style: 'display: inline-block',
+                  display: 'inline-block',
                   scale: zoomAMC,
                   id: `cliquefigure2Ex${this.numeroExercice}Q${i}`,
-                },
+                } as const,
                 fixeBordures(fig2),
               ),
               fig2,
@@ -213,10 +213,10 @@ export default class choixPatron extends Exercice {
             const fig3AMC = mathalea2d(
               Object.assign(
                 {
-                  style: 'display: inline-block',
+                  display: 'inline-block',
                   scale: zoomAMC,
                   id: `cliquefigure3Ex${this.numeroExercice}Q${i}`,
-                },
+                } as const,
                 fixeBordures(fig3),
               ),
               fig3,
@@ -287,10 +287,10 @@ export default class choixPatron extends Exercice {
                 mathalea2d(
                   Object.assign(
                     {
-                      style: 'display: inline-block',
+                      display: 'inline-block',
                       scale: zoom,
                       id: `correction0Ex${this.numeroExercice}Q${i}`,
-                    },
+                    } as const,
                     fixeBordures(fig1),
                   ),
                   fig1,
@@ -310,10 +310,10 @@ export default class choixPatron extends Exercice {
                 mathalea2d(
                   Object.assign(
                     {
-                      style: 'display: inline-block',
+                      display: 'inline-block',
                       scale: zoom,
                       id: `correction1Ex${this.numeroExercice}Q${i}`,
-                    },
+                    } as const,
                     fixeBordures(fig2),
                   ),
                   fig2,
@@ -331,10 +331,10 @@ export default class choixPatron extends Exercice {
                 mathalea2d(
                   Object.assign(
                     {
-                      style: 'display: inline-block',
+                      display: 'inline-block',
                       scale: zoom,
                       id: `correction2Ex${this.numeroExercice}Q${i}`,
-                    },
+                    } as const,
                     fixeBordures(fig3),
                   ),
                   fig3,

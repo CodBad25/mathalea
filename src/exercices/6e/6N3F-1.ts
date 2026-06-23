@@ -152,7 +152,7 @@ export default class EcrireEntierSousFormeDeFraction extends Exercice {
             xmax: (quotientier(entier * denominateur, denominateur) + 1) * 5,
             ymin: -1,
             ymax: 2,
-            style: 'display: inline',
+            display: 'inline',
           },
           schemaCorr,
         )

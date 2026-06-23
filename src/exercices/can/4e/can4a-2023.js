@@ -380,7 +380,7 @@ export default class SujetCAN2023Quatrieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 0.6,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -477,7 +477,7 @@ export default class SujetCAN2023Quatrieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 0.8,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -516,7 +516,7 @@ export default class SujetCAN2023Quatrieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 0.6,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -613,7 +613,7 @@ export default class SujetCAN2023Quatrieme extends Exercice {
             ymax: 3,
             pixelsParCm: 20,
             scale: 0.4,
-            style: 'margin: auto',
+            center: true,
           }
           f = new FractionEtendue(num, den)
           reponse = f

@@ -288,21 +288,21 @@ export default class RelationsMetriquesTriangleRectangle extends Exercice {
           '<br>' +
           mathalea2d(
             Object.assign(
-              { pixelParCm: 25, scale: 0.4, style: 'display: inline-block' },
+              { pixelParCm: 25, scale: 0.4, display: 'inline-block' } as const,
               fixeBordures(objetsTrAED),
             ),
             objetsTrAED,
           )
         texteCorr += mathalea2d(
           Object.assign(
-            { pixelParCm: 25, scale: 0.4, style: 'display: inline-block' },
+            { pixelParCm: 25, scale: 0.4, display: 'inline-block' } as const,
             fixeBordures(objetsTrAEB),
           ),
           objetsTrAEB,
         )
         texteCorr += mathalea2d(
           Object.assign(
-            { pixelParCm: 25, scale: 0.4, style: 'display: inline-block' },
+            { pixelParCm: 25, scale: 0.4, display: 'inline-block' } as const,
             fixeBordures(objetsTrEDB),
           ),
           objetsTrEDB,

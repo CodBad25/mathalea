@@ -76,7 +76,7 @@ export default class LongueurPythagore extends ExerciceSimple {
               ymax: C.y + b / 10 + 1,
               pixelsParCm: 140 / b,
               scale: 4 / b,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           ) + '<br>'
@@ -100,7 +100,7 @@ export default class LongueurPythagore extends ExerciceSimple {
               ymax: C.y + b / 10 + 1,
               pixelsParCm: 140 / b,
               scale: 4 / b,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           ) + '<br>'
@@ -124,7 +124,7 @@ export default class LongueurPythagore extends ExerciceSimple {
               ymax: C.y + b / 10 + 1,
               pixelsParCm: 140 / b,
               scale: 4 / b,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           ) + '<br>'

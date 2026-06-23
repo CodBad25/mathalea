@@ -334,7 +334,7 @@ export default class ExpressionAParabole extends Exercice {
       xmax: xmax * 1.1,
       ymin: new Decimal(ymin).div(rapportY).toNumber(),
       ymax: new Decimal(ymax).div(rapportY).toNumber(),
-      style: 'display: inline-block',
+      display: 'inline-block' as const,
     }
     if (id !== undefined) Object.assign(optionsFenetre, { id })
     if (pixelsParCm !== undefined)

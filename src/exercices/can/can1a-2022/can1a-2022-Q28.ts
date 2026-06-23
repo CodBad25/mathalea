@@ -62,7 +62,7 @@ export default class Can1a2022Q28 extends ExerciceCan {
 
     this.question = "Soient $A$ et $B$ deux évènements tels que :<br>"
     this.question += mathalea2d(
-      { xmin: -0.1, xmax: 14, ymin: 0, ymax: 7, style: 'inline', scale: 0.8 },
+      { xmin: -0.1, xmax: 14, ymin: 0, ymax: 7, display: 'inline', scale: 0.8 },
       ...objets,
     )
 

@@ -43,13 +43,14 @@ private appliquerLesValeurs(
     this.enonce = `Dans un repère orthonormé $(O ; \\vec{\\imath}, \\vec{\\jmath})$, la droite $d$ d’équation réduite ${equationTex} est représentée par :`
 
     const fenetreMathalea2d = {
-      xmin: -4.05,
-      xmax: 4.05,
-      ymin: -3.05,
-      ymax: 6.05,
+      xmin: -4.3,
+      xmax: 4.3,
+      ymin: -3.3,
+      ymax: 6.3,
       pixelsParCm: 20,
       scale: 0.45,
-      style: 'margin: auto; display: inline-block; padding: 5px;',
+      display: 'inline-block' as const,
+      center: true,
     }
 
     // Fonction locale pour générer un repère et une droite (utilisée pour les 4 propositions)

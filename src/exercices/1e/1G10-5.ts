@@ -268,7 +268,7 @@ export default class ProduitScalaireCoordonnees extends Exercice {
                 Calculer $\\vec{u}\\cdot\\vec{v}$.`
             texte += mathalea2d(
               Object.assign(
-                { scale: 0.7, pixelsParCm: 30, style: 'inline' },
+                { scale: 0.7, pixelsParCm: 30, display: 'inline' } as const,
                 fixeBordures(objets),
               ),
               objets,

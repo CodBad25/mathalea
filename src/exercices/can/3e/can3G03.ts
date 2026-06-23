@@ -147,7 +147,7 @@ export default class CalculLongueurThales2 extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.2,
-          style: 'margin: auto',
+          center: true,
         },
       ),
       objets,

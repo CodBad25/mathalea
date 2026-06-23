@@ -717,7 +717,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
             pixelsParCm: 30,
             scale: 1,
             mainlevee: false,
-            style: 'display: block',
+            display: 'block' as const,
           },
         ),
         objetsCorrection.filter((el) => el !== undefined),

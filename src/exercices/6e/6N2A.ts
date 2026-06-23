@@ -258,7 +258,7 @@ export default class AdditionnerSoustrairesDecimaux extends Exercice {
             operande1: a,
             operande2: b,
             type: 'soustraction',
-            style: 'display: inline-block',
+            display: 'inline-block',
             options: {
               colore: orangeMathalea,
               solution: true,
@@ -271,7 +271,7 @@ export default class AdditionnerSoustrairesDecimaux extends Exercice {
             operande1: a,
             operande2: b,
             type: 'soustraction',
-            style: 'display: inline-block',
+            display: 'inline-block',
             methodeParCompensation: false,
             options: {
               colore: orangeMathalea,
@@ -285,7 +285,7 @@ export default class AdditionnerSoustrairesDecimaux extends Exercice {
           operande1: a,
           operande2: b,
           type: 'addition',
-          style: 'display: inline-block',
+          display: 'inline-block',
           options: {
             colore: orangeMathalea,
             solution: true,

@@ -55,7 +55,7 @@ export default class auto1AF4c extends ExerciceQcmA {
    On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.7, style: 'margin: auto' },
+          { pixelsParCm: 30, scale: 0.7, center: true },
           {
             xmin: -4,
             ymin: -4,
@@ -125,7 +125,7 @@ export default class auto1AF4c extends ExerciceQcmA {
          On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 0.7, style: 'margin: auto' },
+                { pixelsParCm: 30, scale: 0.7, center: true },
                 {
                   xmin: -4,
                   ymin: -4,
@@ -192,7 +192,7 @@ export default class auto1AF4c extends ExerciceQcmA {
          On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 0.7, style: 'margin: auto' },
+                { pixelsParCm: 30, scale: 0.7, center: true },
                 {
                   xmin: -4,
                   ymin: -4,
@@ -259,7 +259,7 @@ export default class auto1AF4c extends ExerciceQcmA {
          On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 0.7, style: 'margin: auto' },
+                { pixelsParCm: 30, scale: 0.7, center: true },
                 {
                   xmin: -4,
                   ymin: -4,
@@ -325,7 +325,7 @@ export default class auto1AF4c extends ExerciceQcmA {
          On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 0.7, style: 'margin: auto' },
+                { pixelsParCm: 30, scale: 0.7, center: true },
                 {
                   xmin: -4,
                   ymin: -4,

@@ -233,7 +233,7 @@ export default class EqResolvantesThales extends Exercice {
           enoncePlus = mathalea2d(
             Object.assign(bordures, {
               scale: 0.6,
-              style: 'display:block',
+              display: 'block' as const,
             }),
             monTableau,
           )

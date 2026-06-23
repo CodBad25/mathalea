@@ -150,7 +150,7 @@ export default class TracerAvecScratch extends Exercice {
           figLutinEnonce[indiceLutin] = mathalea2d(
             Object.assign(
               {
-                style: 'display: inline-block',
+                display: 'inline-block',
                 xmin: -4,
                 ymin: -13.5,
                 xmax: 10,
@@ -158,7 +158,7 @@ export default class TracerAvecScratch extends Exercice {
                 pixelsParCm: 20,
                 scale: 0.4,
                 id: `cliquefigure${indiceLutin}Ex${this.numeroExercice}Q${i}`,
-              },
+              } as const,
               fixeBordures([lutinEnonce[indiceLutin]]),
             ),
             lutinEnonce[indiceLutin],
@@ -183,14 +183,14 @@ export default class TracerAvecScratch extends Exercice {
         const figLutinCorr = mathalea2d(
           Object.assign(
             {
-              style: 'display: inline-block',
+              display: 'inline-block',
               xmin: -4,
               ymin: -13.5,
               xmax: 10,
               ymax: 0.5,
               pixelsParCm: 20,
               scale: 0.4,
-            },
+            } as const,
             fixeBordures([lutinCorr]),
           ),
           lutinCorr,

@@ -251,7 +251,7 @@ export default class FractionsCalculsSimples extends Exercice {
                 xmax: (quotientier(n * a, b) + 1) * 5,
                 ymin: -1,
                 ymax: 2,
-                style: 'display: inline',
+                display: 'inline',
               },
               schemaCorr,
             )
@@ -267,7 +267,7 @@ export default class FractionsCalculsSimples extends Exercice {
                   xmax,
                   ymin: -1,
                   ymax: 2,
-                  style: 'display: inline',
+                  display: 'inline',
                 },
                 schema,
               )

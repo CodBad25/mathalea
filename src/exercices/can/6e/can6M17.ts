@@ -109,7 +109,7 @@ export default class DifferenceAireParComptageCan extends ExerciceSimple {
 
       const fig1 = mathalea2d(
         Object.assign(
-          { pixelsParCm: 20, scale: 0.5, style: 'display: inline-block' },
+          { pixelsParCm: 20, scale: 0.5, display: 'inline-block' } as const,
           fixeBordures(objets, {
             rxmin: -0.1,
             rymin: -0.1,

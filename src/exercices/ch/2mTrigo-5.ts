@@ -76,7 +76,7 @@ function renderTriangleFigure(
       ...bordures,
       pixelsParCm: metrics.pixelsParCm,
       scale: metrics.scale,
-      style: 'display: inline-block',
+      display: 'inline-block',
     },
     objets,
   )

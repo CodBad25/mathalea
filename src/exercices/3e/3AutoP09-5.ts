@@ -89,7 +89,7 @@ export default class ProblemeDePrix extends ExerciceSimple {
     const objets: NestedObjetMathalea2dArray = [rep, cP]
     const graphique = mathalea2d(
       Object.assign(
-        { scale: 0.5, style: 'display: inline-block', pixelsParCm: 20 },
+        { scale: 0.5, display: 'inline-block', pixelsParCm: 20 } as const,
         fixeBordures(objets),
       ),
       objets,
@@ -103,7 +103,7 @@ export default class ProblemeDePrix extends ExerciceSimple {
     ]
     const graphiqueCorrige = mathalea2d(
       Object.assign(
-        { scale: 0.5, style: 'display: inline-block', pixelsParCm: 20 },
+        { scale: 0.5, display: 'inline-block', pixelsParCm: 20 } as const,
         fixeBordures(objetsCorr),
       ),
       objetsCorr,

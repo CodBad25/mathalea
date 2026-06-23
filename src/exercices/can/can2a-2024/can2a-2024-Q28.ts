@@ -139,7 +139,7 @@ export default class NomExercice extends ExerciceSimple {
 
       this.question += mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.55, style: 'margin: auto' },
+          { pixelsParCm: 30, scale: 0.55, center: true },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,
@@ -208,7 +208,7 @@ export default class NomExercice extends ExerciceSimple {
       ` +
         mathalea2d(
           Object.assign(
-            { pixelsParCm: 30, scale: 0.55, style: 'margin: auto' },
+            { pixelsParCm: 30, scale: 0.55, center: true },
             {
               xmin: bornes.xMin - 1,
               ymin: bornes.yMin - 1,

@@ -108,7 +108,7 @@ export default class OrdonneeAbscisseFonctionLineaire extends ExerciceSimple {
         ymax,
         pixelsParCm: 30,
         scale: 0.75,
-        style: 'margin: auto',
+        center: true,
       },
       courbe(f, { repere: r1, color: bleuMathalea, epaisseur: 2 }),
       r1,

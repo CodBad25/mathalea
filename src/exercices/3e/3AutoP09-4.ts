@@ -81,7 +81,7 @@ export default class HauteurValve extends ExerciceSimple {
     const objets: NestedObjetMathalea2dArray = [rep, cF]
     const graphique = mathalea2d(
       Object.assign(
-        { scale: 0.5, style: 'display: inline-block', pixelsParCm: 20 },
+        { scale: 0.5, display: 'inline-block', pixelsParCm: 20 } as const,
         fixeBordures(objets),
       ),
       objets,
@@ -106,7 +106,7 @@ export default class HauteurValve extends ExerciceSimple {
     objetsCorr.push(seg1, seg2)
     const graphiqueCorr = mathalea2d(
       Object.assign(
-        { scale: 0.5, style: 'display: inline-block', pixelsParCm: 20 },
+        { scale: 0.5, display: 'inline-block', pixelsParCm: 20 } as const,
         fixeBordures(objetsCorr),
       ),
       objetsCorr,

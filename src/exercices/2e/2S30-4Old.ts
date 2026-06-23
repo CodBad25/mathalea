@@ -193,7 +193,7 @@ function unePieceDeuxUrnes(
   texte += sup
     ? mathalea2d(
         Object.assign(
-          { scale: 0.6, style: 'display: block' },
+          { scale: 0.6, display: 'block' } as const,
           fixeBordures(objets),
         ),
         objets,

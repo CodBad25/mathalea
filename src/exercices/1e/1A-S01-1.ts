@@ -292,10 +292,10 @@ export default class Auto1AS1 extends ExerciceQcmA {
     return mathalea2d(
       Object.assign(
         {
-          style: 'display: inline-block;',
+          display: 'inline-block',
           pixelsParCm: 16,
           scale: 0.4,
-        },
+        } as const,
         fixeBordures(objets, { rxmin: 0, rymin: 0, rxmax: 0, rymax: 0 }),
       ),
       objets,

@@ -120,7 +120,7 @@ export default class Can52026Q22 extends ExerciceCan {
             ymax: 7,
             pixelsParCm: 20,
             scale: 0.6,
-            style: 'margin: auto',
+            center: true,
           },
           objets,
         ) + '<br>Nombre de faces de ce solide'
@@ -158,7 +158,7 @@ export default class Can52026Q22 extends ExerciceCan {
             ymax: 5,
             scale: 0.6,
             pixelsParCm: 30,
-            style: 'margin: auto',
+            center: true,
           },
           objets,
         ) + '<br>Nombre de faces de ce solide'
@@ -199,7 +199,7 @@ export default class Can52026Q22 extends ExerciceCan {
 
             scale: 0.6,
             pixelsParCm: 30,
-            style: 'margin: auto',
+            center: true,
           },
           objets,
         ) + '<br>Nombre de faces de ce solide'

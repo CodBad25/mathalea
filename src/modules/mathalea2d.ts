@@ -15,6 +15,24 @@ const buildDataKeyboardString = (style = '') => {
   const blocks = buildDataKeyboardFromStyle(style)
   return blocks.join(' ')
 }
+export type Mathalea2dDisplay = 'block' | 'inline' | 'inline-block'
+
+export type Mathalea2dLayoutOptions = {
+  display?: Mathalea2dDisplay
+  center?: boolean
+}
+
+const buildOuterWrapperStyle = (
+  display: Mathalea2dDisplay = 'block',
+  center = false,
+) => {
+  if (center) {
+    return 'display: flex; justify-content: center'
+  }
+  return `display: ${display}`
+}
+
+const innerWrapperStyle = 'position: relative; display: inline-block'
 /*
   MathALEA2D
  @name      mathalea2d
@@ -50,7 +68,8 @@ const buildDataKeyboardString = (style = '') => {
  *  @param {string|string[]?} [options.optionsTikz = []]
  *  @param {boolean?} [options.mainlevee]
  *  @param {number?} [options.amplitude]
- *  @param {string?} [options.style = '']
+ *  @param {'block'|'inline'|'inline-block'?} [options.display = 'block']
+ *  @param {boolean?} [options.center]
  *  @param {string?} [options.id = '']
  * @param {(ObjetMathalea2D|ObjetMathalea2D[])[]} objets
  */
@@ -66,7 +85,8 @@ export function mathalea2d(
     optionsTikz = [],
     mainlevee = false,
     amplitude = 1,
-    style = 'display: block',
+    display,
+    center = false,
     id = '', // L'id peut-être utile pour des animations, c'est celui du svg. Le div englobant aura un id en M2D + id
     usePgfplots = false,
     centerLatex = false,
@@ -81,7 +101,8 @@ export function mathalea2d(
     optionsTikz?: string | string[]
     mainlevee?: boolean
     amplitude?: number
-    style?: string
+    display?: Mathalea2dDisplay
+    center?: boolean
     id?: string
     usePgfplots?: boolean
     centerLatex?: boolean
@@ -288,8 +309,10 @@ export function mathalea2d(
   codeSvg += ajouteCodeHtml(mainlevee, objets, divsLatex, xmin, ymax)
   codeSvg += '\n</svg>'
   codeSvg = codeSvg.replace(/\\thickspace/gm, ' ')
-  const codeHTML = `<div class="svgContainer" ${style ? `style="${style}"` : ''}>
-        <div ${id !== '' ? `id="M2D${id}"` : ''} style="position: relative;${style}">
+  const effectiveDisplay = display ?? 'block'
+  const outerWrapperStyle = buildOuterWrapperStyle(effectiveDisplay, center)
+  const codeHTML = `<div class="svgContainer" style="${outerWrapperStyle}">
+        <div ${id !== '' ? `id="M2D${id}"` : ''} style="${innerWrapperStyle}">
           ${codeSvg}
           ${divsLatex.join('\n')}
         </div>
@@ -378,7 +401,7 @@ export function mathalea2d(
     if (centerLatex) codeTikz += '\\par}'
   }
 
-  if (style.includes('display: block') && !centerLatex) codeTikz += '\\\\'
+  if (effectiveDisplay === 'block' && !centerLatex) codeTikz += '\\\\'
   if (context.isHtml) return codeHTML
   else return codeTikz
 }

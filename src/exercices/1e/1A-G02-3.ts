@@ -63,7 +63,7 @@ export default class AireQuadrilatereDiagonalesCodeesQcm extends ExerciceQcmA {
 Calculer son aire.<br>
 ${mathalea2d(
   Object.assign(
-    { pixelsParCm: 25, scale: 0.8, style: 'margin: auto' },
+    { pixelsParCm: 25, scale: 0.8, center: true },
     fixeBordures(objets, {
       rxmin: -0.6,
       rxmax: 0.6,

@@ -901,7 +901,7 @@ export default class SujetCAN2022cinquieme extends Exercice {
                   xmax: 15,
                   ymax: 1.5,
                   scale: 0.5,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 droiteGraduee({
                   Unite: 10,
@@ -936,7 +936,7 @@ export default class SujetCAN2022cinquieme extends Exercice {
                   xmax: 15,
                   ymax: 1.5,
                   scale: 0.5,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 droiteGraduee({
                   Unite: 10,
@@ -1310,7 +1310,7 @@ export default class SujetCAN2022cinquieme extends Exercice {
               mainlevee: false,
               amplitude: 0.5,
               scale: 0.5,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -1324,7 +1324,7 @@ export default class SujetCAN2022cinquieme extends Exercice {
               mainlevee: false,
               amplitude: 0.5,
               scale: 0.5,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
             s2,

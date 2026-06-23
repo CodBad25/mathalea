@@ -185,7 +185,7 @@ En s'aidant d'un tableau, calculer les prix totaux correspondant à ${lister(nom
       texteCorr = mathalea2d(
         Object.assign(bordures, {
           scale: 0.6,
-          style: 'display:block',
+          display: 'block' as const,
         }),
         monTableau,
       )

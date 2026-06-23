@@ -272,7 +272,7 @@ Grâce au troisième paramètre, on peut imposer l'ordre des motifs choisis au d
                 yMax,
                 yMin,
                 scale: 0.4,
-                style: 'display: inline-block',
+                display: 'inline-block' as const,
                 optionsTikz: 'transform shape',
               },
             ),

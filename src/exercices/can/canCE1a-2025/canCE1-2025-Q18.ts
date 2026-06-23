@@ -41,7 +41,7 @@ export default class Can2025CE1Q18 extends Exercice {
     const objets = horloge.objets ?? []
     texte = mathalea2d(
       Object.assign(
-        { scale: 0.7, style: 'margin: auto; display: block' },
+        { scale: 0.7, display: 'block', center: true } as const,
         fixeBordures(objets, { rxmin: 0, rxmax: 0, rymin: 0, rymax: 0.5 }),
       ),
       horloge,
@@ -74,7 +74,7 @@ export default class Can2025CE1Q18 extends Exercice {
           xmax: 3,
           ymax: 3,
           scale: 0.7,
-          style: 'margin: auto',
+          center: true,
         },
         horloge2,
       )
@@ -87,7 +87,7 @@ export default class Can2025CE1Q18 extends Exercice {
     this.canEnonce = `Dessine les deux aiguilles de la pendule pour indiquer $${hour}$ h $${minute}$.`
     this.canReponseACompleter = mathalea2d(
       Object.assign(
-        { scale: 0.7, style: 'margin: auto; display: block' },
+        { scale: 0.7, display: 'block', center: true } as const,
         fixeBordures(objets, { rxmin: 0, rxmax: 0, rymin: 0, rymax: 0.5 }),
       ),
       horloge,

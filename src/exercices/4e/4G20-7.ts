@@ -128,7 +128,7 @@ export default class Pythagore2DBlockly extends Exercice {
       }
 
       texte += mathalea2d(
-        { xmin, xmax, ymin, ymax, scale: 0.6, style: 'display: block' },
+        { xmin, xmax, ymin, ymax, scale: 0.6, display: 'block' },
         mesObjetsATracer,
       )
 

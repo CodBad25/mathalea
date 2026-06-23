@@ -343,7 +343,7 @@ export default class VecteursRepCube extends Exercice {
         '$(O,\\overrightarrow{OI},\\overrightarrow{OJ},\\overrightarrow{OK})$'
 
       const fig = mathalea2d(
-        Object.assign({ scale: 0.6, style: 'inline' }, fixeBordures(objets)),
+        Object.assign({ scale: 0.6, display: 'inline' } as const, fixeBordures(objets)),
         objets,
         tracePoint(pO),
         tracePoint(pI),

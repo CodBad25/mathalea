@@ -120,7 +120,7 @@ export default class Can32026Q23 extends ExerciceCan {
         mainlevee: false,
         amplitude: 0.3,
         scale: 0.4,
-        style: 'margin: auto',
+        center: true,
       },
       objets,
     )

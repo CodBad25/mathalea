@@ -62,7 +62,7 @@ export default class MetropoleJ25EX3Q4 extends ExerciceQcmA {
       labelPoint(point1, point2, point3),
     ]
     const figure = mathalea2d(
-      Object.assign({ style: 'display: inline-bloc' }, fixeBordures(objets)),
+      Object.assign({ display: 'inline-block' } as const, fixeBordures(objets)),
       objets,
     )
 

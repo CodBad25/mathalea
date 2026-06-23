@@ -62,28 +62,28 @@ export default class MetropoleSeptembre21Exo1Q3 extends ExerciceQcmA {
     this.enonce = `Sur quelle figure a-t-on représenté une flèche et son image par une rotation de centre $O$ et d'angle $${Math.abs(angle1)}^\\circ$ ?`
     const fig1 = mathalea2d(
       Object.assign(
-        { pixelsParCm: 30, scale: 1, style: 'display: inline-block' },
+        { pixelsParCm: 30, scale: 1, display: 'inline-block' } as const,
         fixeBordures(objets1),
       ),
       objets1,
     )
     const fig2 = mathalea2d(
       Object.assign(
-        { pixelsParCm: 30, scale: 1, style: 'display: inline-block' },
+        { pixelsParCm: 30, scale: 1, display: 'inline-block' } as const,
         fixeBordures(objets2),
       ),
       objets2,
     )
     const fig3 = mathalea2d(
       Object.assign(
-        { pixelsParCm: 30, scale: 1, style: 'display: inline-block' },
+        { pixelsParCm: 30, scale: 1, display: 'inline-block' } as const,
         fixeBordures(objets3),
       ),
       objets3,
     )
     const fig4 = mathalea2d(
       Object.assign(
-        { pixelsParCm: 30, scale: 1, style: 'display: inline-block' },
+        { pixelsParCm: 30, scale: 1, display: 'inline-block' } as const,
         fixeBordures(objets4),
       ),
       objets4,

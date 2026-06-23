@@ -78,7 +78,7 @@ export default class ProduitEtSommeOuDifferenceDeDecimaux extends Exercice {
           operande1: A.toNumber(),
           operande2: B.toNumber(),
           type: 'multiplication',
-          style: 'display: inline',
+          display: 'inline',
           options: { solution: true, colore: orangeMathalea },
         }) + '<br>'
       let indice = 0
@@ -118,7 +118,7 @@ export default class ProduitEtSommeOuDifferenceDeDecimaux extends Exercice {
           operande1,
           operande2,
           type: addition ? 'addition' : 'soustraction',
-          style: 'display: inline',
+          display: 'inline',
           methodeParCompensation: addition,
           options: { solution: true, colore: orangeMathalea },
         })

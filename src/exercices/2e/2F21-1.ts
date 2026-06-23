@@ -398,7 +398,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                 ymax: 7,
                 pixelsParCm: 20,
                 scale: 0.7,
-                style: 'margin: auto',
+                center: true,
               },
               courbe(f, {
                 repere: r1,
@@ -559,7 +559,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                 ymax: (f(s0) + 0.2) * 10,
                 pixelsParCm: 30,
                 scale: 0.7,
-                style: 'margin: auto',
+                center: true,
               },
               [
                 courbe(f, {
@@ -582,7 +582,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                 ymax: (f(s0) + 0.2) * 10,
                 pixelsParCm: 30,
                 scale: 0.7,
-                style: 'margin: auto',
+                center: true,
               },
               [
                 courbe(f, {
@@ -732,7 +732,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                 ymax: 31,
                 pixelsParCm: 20,
                 scale: 0.5,
-                style: 'margin: auto',
+                center: true,
               },
               TexteX,
               TexteY,

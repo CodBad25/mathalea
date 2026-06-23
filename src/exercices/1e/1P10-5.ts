@@ -469,7 +469,7 @@ On note :<br>`
             items: [
               mathalea2d(
                 Object.assign(
-                  { scale: 0.7, style: 'inline' },
+                  { scale: 0.7, display: 'inline' } as const,
                   fixeBordures(objetsC),
                 ),
                 objetsC,
@@ -509,7 +509,7 @@ On considère les événements suivants :`
               "Sans justifier, recopier puis compléter l'arbre pondéré suivant :<br>" +
                 mathalea2d(
                   Object.assign(
-                    { scale: 0.7, style: 'inline' },
+                    { scale: 0.7, display: 'inline' } as const,
                     fixeBordures(objets),
                   ),
                   objets,
@@ -525,7 +525,7 @@ On considère les événements suivants :`
             items: [
               mathalea2d(
                 Object.assign(
-                  { scale: 0.7, style: 'inline' },
+                  { scale: 0.7, display: 'inline' } as const,
                   fixeBordures(objetsC),
                 ),
                 objetsC,
@@ -568,7 +568,7 @@ On note les évènements suivants :<br>`
               `Recopier et compléter l'arbre pondéré suivant en justifiant la valeur $${texNombre(pBsachantA, 2)}$ :<br>` +
                 mathalea2d(
                   Object.assign(
-                    { scale: 0.7, style: 'inline' },
+                    { scale: 0.7, display: 'inline' } as const,
                     fixeBordures(objets3),
                   ),
                   objets3,
@@ -583,7 +583,7 @@ On note les évènements suivants :<br>`
             items: [
               mathalea2d(
                 Object.assign(
-                  { scale: 0.7, style: 'inline' },
+                  { scale: 0.7, display: 'inline' } as const,
                   fixeBordures(objetsC),
                 ),
                 objetsC,
@@ -626,7 +626,7 @@ On note les évènements suivants :<br>`
               "Recopier et compléter l'arbre pondéré suivant. <br>" +
                 mathalea2d(
                   Object.assign(
-                    { scale: 0.7, style: 'inline' },
+                    { scale: 0.7, display: 'inline' } as const,
                     fixeBordures(objets),
                   ),
                   objets,
@@ -642,7 +642,7 @@ On note les évènements suivants :<br>`
             items: [
               mathalea2d(
                 Object.assign(
-                  { scale: 0.7, style: 'inline' },
+                  { scale: 0.7, display: 'inline' } as const,
                   fixeBordures(objetsC),
                 ),
                 objetsC,
@@ -702,7 +702,7 @@ On note les évènements suivants :<br>`
                 `,
               mathalea2d(
                 Object.assign(
-                  { scale: 0.7, style: 'inline' },
+                  { scale: 0.7, display: 'inline' } as const,
                   fixeBordures(objetsC),
                 ),
                 objetsC,
@@ -774,7 +774,7 @@ On note les évènements suivants :<br>`
               'On peut réaliser un arbre pondéré qui sera complété au fur et à mesure des questions : ' +
                 mathalea2d(
                   Object.assign(
-                    { scale: 0.7, style: 'inline' },
+                    { scale: 0.7, display: 'inline' } as const,
                     fixeBordures(objetsC),
                   ),
                   objetsC,
@@ -826,7 +826,7 @@ On note :`
               "Recopier et compléter l'arbre pondéré ci-dessous, modélisant cette situation : <br>" +
                 mathalea2d(
                   Object.assign(
-                    { scale: 0.7, style: 'inline' },
+                    { scale: 0.7, display: 'inline' } as const,
                     fixeBordures(objets),
                   ),
                   objets,
@@ -848,7 +848,7 @@ sonner le portique en passant. On arrondira le résultat à $10^{-3}$.
 
               mathalea2d(
                 Object.assign(
-                  { scale: 0.7, style: 'inline' },
+                  { scale: 0.7, display: 'inline' } as const,
                   fixeBordures(objetsC),
                 ),
                 objetsC,

@@ -69,7 +69,7 @@ export default class CalculLongueurThalesMilieu extends ExerciceSimple {
           pixelsParCm: 18,
           mainlevee: false,
           amplitude: 0.5,
-          style: 'margin: auto',
+          center: true,
         },
         objets,
       )
@@ -114,7 +114,7 @@ export default class CalculLongueurThalesMilieu extends ExerciceSimple {
           pixelsParCm: 18,
           mainlevee: false,
           amplitude: 0.5,
-          style: 'margin: auto',
+          center: true,
         },
         objets,
       )

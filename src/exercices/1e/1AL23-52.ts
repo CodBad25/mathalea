@@ -132,7 +132,7 @@ export default class EtudeParabole extends Exercice {
           ymax: ymaxVal,
           pixelsParCm: 25,
           scale: 0.65,
-          style: 'margin: auto',
+          center: true,
         },
         r,
         o,

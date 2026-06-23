@@ -88,7 +88,7 @@ export default class MetropoleJ25EX3Q2 extends ExerciceQcmA {
     const grid = grille(0, -1, 12, 11, 'black', 0.5, 1)
     const objets = [grid, fig1, fig2, cocotte, cocotte2]
     const figure = mathalea2d(
-      Object.assign({ style: 'display: inline' }, fixeBordures(objets)),
+      Object.assign({ display: 'inline' } as const, fixeBordures(objets)),
       objets,
     )
     const transfos = [

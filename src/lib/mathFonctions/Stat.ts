@@ -789,7 +789,7 @@ export default class Stat {
       }
 
       return mathalea2d(
-        Object.assign({ style: 'display: inline-block' }, fixeBordures(histo)),
+        Object.assign({ display: 'inline-block' } as const, fixeBordures(histo)),
         histo,
       )
     } else {

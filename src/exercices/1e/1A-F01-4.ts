@@ -102,7 +102,7 @@ export default class AutoF01d extends ExerciceQcmA {
     this.enonce +=
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 1, style: 'margin: auto' },
+          { pixelsParCm: 30, scale: 1, center: true },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,

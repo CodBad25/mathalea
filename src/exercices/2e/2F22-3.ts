@@ -196,7 +196,7 @@ export default class BetaModeleSpline extends Exercice {
 
       const figure = mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.6, style: 'margin: auto' },
+          { pixelsParCm: 30, scale: 0.6, center: true },
           { xmin: xMin - 1, ymin: yMin - 1, xmax: xMax + 1, ymax: yMax + 1 },
         ),
         objetsEnonce,

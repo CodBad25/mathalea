@@ -214,7 +214,7 @@ export default class EchellesProblemes extends Exercice {
             texteCorr += mathalea2d(
               Object.assign(fixeBordures([monTableau]), {
                 scale: 0.7,
-                style: 'display:block',
+                display: 'block' as const,
               }),
               monTableau,
             )
@@ -301,7 +301,7 @@ export default class EchellesProblemes extends Exercice {
             texteCorr += mathalea2d(
               Object.assign(fixeBordures([monTableau]), {
                 scale: 0.7,
-                style: 'display:block',
+                display: 'block' as const,
               }),
               monTableau,
             )
@@ -407,7 +407,7 @@ export default class EchellesProblemes extends Exercice {
             texteCorr += mathalea2d(
               Object.assign(fixeBordures([monTableau]), {
                 scale: 0.7,
-                style: 'display:block',
+                display: 'block' as const,
               }),
               monTableau,
             )
@@ -486,7 +486,7 @@ export default class EchellesProblemes extends Exercice {
             texteCorr += mathalea2d(
               Object.assign(fixeBordures([monTableau]), {
                 scale: 0.7,
-                style: 'display:block',
+                display: 'block' as const,
               }),
               monTableau,
             )
@@ -581,7 +581,7 @@ export default class EchellesProblemes extends Exercice {
             texteCorr += mathalea2d(
               Object.assign(fixeBordures([monTableau]), {
                 scale: 0.7,
-                style: 'display:block',
+                display: 'block' as const,
               }),
               monTableau,
             )
@@ -637,7 +637,7 @@ export default class EchellesProblemes extends Exercice {
             texteCorr += mathalea2d(
               Object.assign(fixeBordures([monTableau]), {
                 scale: 0.7,
-                style: 'display:block',
+                display: 'block' as const,
               }),
               monTableau,
             )

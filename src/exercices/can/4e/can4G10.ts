@@ -115,7 +115,7 @@ export default class TripletsPythagoriciensOuPas extends Exercice {
       objets.push()
       const figure = mathalea2d(
         Object.assign(
-          { scale: 0.6, style: 'display: inline;' },
+          { scale: 0.6, display: 'inline' } as const,
           fixeBordures(objets),
         ),
         objets,

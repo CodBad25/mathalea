@@ -100,7 +100,7 @@ private appliquerLesValeurs(m: number, b: number): void {
       ymax: yMax + 0.05,
       pixelsParCm: 25,
       scale: 0.6,
-      style: 'margin: auto; display: block;',
+      display: 'block' as const, center: true,
     }
 
     const figure = mathalea2d(fenetreMathalea2d, r, d, labelDelta, o, i, j)

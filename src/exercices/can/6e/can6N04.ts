@@ -63,7 +63,7 @@ export default class AbscisseFractionnaire extends Exercice {
           ymax: 1.5,
           scale: 0.5,
           pixelsParCm: 30,
-          style: 'margin: auto',
+          center: true,
         },
         latex2d('A', (3 * b) / a, 0.5, { color: bleuMathalea }),
         droiteGraduee({

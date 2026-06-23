@@ -199,7 +199,7 @@ export default class NomExercice extends Exercice {
         `On considère un cube $ABCDEFGH$.` +
         '<br>' +
         mathalea2d(
-          Object.assign({ scale: 0.6, style: 'inline' }, fixeBordures(objets)),
+          Object.assign({ scale: 0.6, display: 'inline' } as const, fixeBordures(objets)),
           objets,
           traceA,
           traceB,

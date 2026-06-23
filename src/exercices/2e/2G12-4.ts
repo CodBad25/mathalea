@@ -236,7 +236,7 @@ export default class NaturePolygone extends Exercice {
               ymin: YMIN,
               xmax: XMAX,
               ymax: YMAX,
-              style: 'display: block',
+              display: 'block',
             },
             objets,
           )
@@ -295,7 +295,7 @@ export default class NaturePolygone extends Exercice {
               ymin: YMIN,
               xmax: XMAX,
               ymax: YMAX,
-              style: 'display: block',
+              display: 'block',
             },
             objets,
           )
@@ -359,7 +359,7 @@ export default class NaturePolygone extends Exercice {
               ymin: YMIN,
               xmax: XMAX,
               ymax: YMAX,
-              style: 'display: block',
+              display: 'block',
             },
             objets,
           )
@@ -432,7 +432,7 @@ export default class NaturePolygone extends Exercice {
               ymin: YMIN,
               xmax: XMAX,
               ymax: YMAX,
-              style: 'display: block',
+              display: 'block',
             },
             objets,
           )
@@ -506,7 +506,7 @@ export default class NaturePolygone extends Exercice {
               ymin: YMIN,
               xmax: XMAX,
               ymax: YMAX,
-              style: 'display: block',
+              display: 'block',
             },
             objets,
           )
