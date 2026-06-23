@@ -22,16 +22,6 @@ export type Mathalea2dLayoutOptions = {
   center?: boolean
 }
 
-const buildOuterWrapperStyle = (
-  display: Mathalea2dDisplay = 'block',
-  center = false,
-) => {
-  if (center) {
-    return 'display: flex; justify-content: center'
-  }
-  return `display: ${display}`
-}
-
 const innerWrapperStyle = 'position: relative; display: inline-block'
 /*
   MathALEA2D
@@ -310,8 +300,7 @@ export function mathalea2d(
   codeSvg += '\n</svg>'
   codeSvg = codeSvg.replace(/\\thickspace/gm, ' ')
   const effectiveDisplay = display ?? 'block'
-  const outerWrapperStyle = buildOuterWrapperStyle(effectiveDisplay, center)
-  const codeHTML = `<div class="svgContainer" style="${outerWrapperStyle}">
+  const codeHTML = `<div class="svgContainer" style="display: ${effectiveDisplay};${center ? ' margin: auto;' : ''}">
         <div ${id !== '' ? `id="M2D${id}"` : ''} style="${innerWrapperStyle}">
           ${codeSvg}
           ${divsLatex.join('\n')}
