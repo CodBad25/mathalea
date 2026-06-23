@@ -36,7 +36,7 @@ export default class DoubleEtMoitie extends ExerciceSimple {
   nouvelleVersion() {
     const a = randint(1, 25) // variables aléatoires
     this.question = `Le double d'un nombre vaut $${4 * a}$, combien vaut sa moitié ?`
-    this.correction = `Sa moitié vaut : $${miseEnEvidence(texNombre(a))}$.<br>`
+    this.correction = `Sa moitié vaut : $${miseEnEvidence(texNombre(a))}$.<br><br>`
     this.correction += texteEnCouleur(
       ` Mentalement : <br>
     Si le double du nombre est $${4 * a}$, ce nombre est : $${4 * a}\\div 2=${2 * a}$.<br>
