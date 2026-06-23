@@ -59,8 +59,7 @@ export default class NomExercice extends ExerciceSimple {
         const reponse = new FractionEtendue(b.n - a.n * c, b.d)
         this.reponse = reponse.texFraction
         this.question = `$ ${b.texFraction}-${a.texFraction}$`
-        this.correction = `Pour soustraire des fractions, on les met au même dénominateur.
-       <br>
+        this.correction = `Pour soustraire des fractions, on les met au même dénominateur.<br>
        Ainsi, <br><br>$\\begin{aligned} ${b.texFraction}-${a.texFraction}
        &= ${b.texFraction}-\\dfrac{${a.n}\\times ${c}}{${a.d}\\times ${c}}\\\\
       &=${b.texFraction}-${a.reduire(c).texFraction}\\\\
