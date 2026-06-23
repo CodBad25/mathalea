@@ -46,8 +46,7 @@ export default class SoustraireEntierDecimal extends ExerciceSimple {
         this.correction = `$${a}-${texNombre(u + d / 10, 1)}=${a}-${u}-${texNombre(d / 10, 1)}=${miseEnEvidence(texNombre(a - u - d / 10, 1))}$<br>`
         this.reponse = arrondi(a - u - d / 10, 1)
         this.correction += texteEnCouleur(
-          `
-    <br> Mentalement : <br>
+          `Mentalement : <br>
    On commence par soustraire les unités : $${a}-${u}=${a - u}$.<br>
     Puis les dixièmes : $${a - u}-${texNombre(d / 10)}=${texNombre(a - u - d / 10, 1)}$`,
           bleuMathalea,
@@ -62,8 +61,7 @@ export default class SoustraireEntierDecimal extends ExerciceSimple {
         this.correction = `$${a}-${texNombre(u + d / 10 + c / 100, 2)}=${a}-${u}-${texNombre(d / 10 + c / 100, 2)}=${miseEnEvidence(texNombre(a - u - d / 10 - c / 100, 2))}$<br>`
         this.reponse = arrondi(a - u - d / 10 - c / 100, 2)
         this.correction += texteEnCouleur(
-          `
-    <br> Mentalement : <br>
+          `Mentalement : <br>
     On commence par soustraire les unités : $${a}-${u}=${a - u}$.<br>
     Puis on soustrait la partie décimale de $${texNombre(u + d / 10 + c / 100, 2)}$ c'est-à-dire $${texNombre(d / 10 + c / 100, 2)}$. On obtient $${a - u}-${texNombre(d / 10 + c / 100)}=${texNombre(a - u - d / 10 - c / 100, 2)}$`,
           bleuMathalea,
