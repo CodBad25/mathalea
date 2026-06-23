@@ -22,7 +22,7 @@ Deux mécanismes de découverte sont utilisés selon la chaîne de filtre.
 ### `findStatic(filter)` — exercices statiques d'examen (DNB, Bac, E3C, CRPE, EVACOM)
 
 - Lit `src/json/referentielStaticFR.json` et `src/json/referentielStaticCH.json`.
-- Les fusionne en supprimant les doublons "par thème".
+- Les fusionne après suppression des entrées de tags et des catégories "par thème" qui créent des doublons.
 - Extrait les objets dont la propriété `uuid` correspond au préfixe du filtre.
 - Retourne des tuples `[uuid, uuid]`.
 
@@ -56,7 +56,7 @@ Les exercices sont traités par lots de **20** :
 for (let i = 0; i < filteredUuids.length && i < prefs.nbExosParLot; i += 20) {
 ```
 
-- `prefs.nbExosParLot` (défini à 300) limite le nombre total d'exercices testés.
+- `prefs.nbExosParLot` limite le nombre total d'exercices testés. Il vaut 75 par défaut pour les modes `NIV` et `CHANGED_FILES`, ou la valeur de `NB_EXOS_PAR_LOT` si elle est définie.
 - Chaque fonction de test reçoit comme nom le chemin du fichier d'exercice avec `Object.defineProperty(f, 'name', ...)`.
 
 ### Fonctionnement de `runSeveralTests`
@@ -106,7 +106,7 @@ Les messages sont **exclus** s'ils contiennent l'une des chaînes suivantes :
 | `<HeaderExercice>` | Message de composant Svelte |
 | `location().url` contient `mathgraph32` | Tous les messages MathGraph |
 
-Tous les messages non exclus sont ajoutés à un tableau `messages[]` avec un préfixe de type (`'console:'`, `'error:'` ou `'crach:'`).
+Tous les messages non exclus sont ajoutés à un tableau `messages[]` avec un préfixe de type (`'console:'`, `'pageerror:'`, `'crash:'` ou `'exception:'`).
 
 ---
 
@@ -159,7 +159,7 @@ Pour chaque combinaison de paramètres, le rappel `action` effectue les étapes 
 http://localhost:{5173|80}/alea/?uuid={uuid}&id={filename_without_extension}&alea=e906e&testCI
 ```
 
-- Port 80 en CI, 5173 en local.
+- Port `PLAYWRIGHT_SERVER_PORT` si défini, sinon 80 en CI et 5173 en local.
 - `alea=e906e` est une graine fixe pour la reproductibilité.
 - `testCI` est un paramètre d'URL qui indique le mode test.
 
@@ -192,7 +192,7 @@ Chaque exercice est tenté jusqu'à **3 fois** :
 
 Le test a trois points d'entrée :
 
-1. **Variable d'environnement `NIV`** : mode manuel ou CI pour un niveau précis. Exemple : `NIV=4e pnpm test:e2e:console_errors`.
+1. **Variable d'environnement `NIV`** : mode manuel ou CI pour un niveau précis. Exemple : `NIV=4e pnpm --pm-on-fail=ignore test:e2e:console_errors`.
 2. **Variable d'environnement `CHANGED_FILES`** : mode CI qui teste uniquement les exercices dont les fichiers source ont changé. Filtre les fichiers dans `src/exercices/` (hors `ressources` et `apps`), transforme les chemins, puis lance `testRunAllLots` pour chacun.
 3. **Aucune des deux variables** : affiche les consignes d'utilisation et crée un test ignoré.
 
@@ -204,6 +204,5 @@ Le test a trois points d'entrée :
 
 - **`testTimeout` :** 1 000 secondes (16,7 minutes par cas de test).
 - **`hookTimeout` :** 120 secondes.
-- **`pool` :** `threads` avec `maxWorkers: 1`, `isolate: false` — exécution séquentielle dans un seul thread.
+- **`pool` :** `threads` avec `maxWorkers: 1`, `isolate: false`, `disableConsoleIntercept: true` — exécution séquentielle dans un seul thread.
 - **`reporters` :** `html`, `junit`, `json`, `default`.
-

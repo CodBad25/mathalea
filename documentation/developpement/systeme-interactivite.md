@@ -24,6 +24,7 @@ export type InteractivityType =
   | 'tableur'
   | 'MetaInteractif2d'
   | 'svgSelection'
+  | 'multiMathfield'
 ```
 
 ### 1.1 `mathlive` (par défaut)
@@ -84,11 +85,16 @@ Interaction de type feuille de calcul.
 
 Utilisé pour la géométrie 2D avec plusieurs champs MathLive intégrés dans des constructions géométriques.
 
+### 1.13 `multiMathfield`
+
+Web Component `<multi-mathfield>` pour une réponse composée de plusieurs champs MathLive synchronisés avec un même gabarit. Les champs sont indexés par `field0`, `field1`, etc.
+**Fichier :** `src/lib/interactif/MultiMathfield/MultiMathfield.ts`, vérification dans `src/lib/interactif/gestionInteractif.ts`
+
 ---
 
 ## 2. Fonctionnement de `handleAnswers()`
 
-**Fichier :** `src/lib/interactif/gestionInteractif.ts`, ligne 1089
+**Fichier :** `src/lib/interactif/gestionInteractif.ts`
 
 ```typescript
 export function handleAnswers(
@@ -101,8 +107,11 @@ export function handleAnswers(
 
 C'est la **fonction moderne privilégiée** pour définir les réponses attendues :
 
-1. Ne fait rien si `context.isAmc` vaut `true`.
-2. Détermine `formatInteractif` depuis les paramètres ou utilise `'mathlive'` par défaut.
+1. Détermine `formatInteractif` depuis les paramètres ou utilise `'mathlive'` par défaut.
+   - Si `champ1` est présent, le format est déduit comme `fillInTheBlank`.
+   - Si des clés `L{row}C{col}` sont présentes, le format est déduit comme `tableauMathlive`.
+   - Sinon, le format existant de `autoCorrection[question]` est conservé si présent.
+2. En contexte AMC, initialise `autoCorrectionAMC[question]` et tente d'inférer une réponse AMC pour les réponses `mathlive` numériques simples (`number`, `string`, `FractionEtendue`, `Decimal`).
 3. Initialise `autoCorrection[question]` si nécessaire.
 4. **Normalise les valeurs de réponse** via `handleDefaultValeur()` :
    - `FractionEtendue` → chaîne LaTeX `.texFraction`
@@ -121,9 +130,11 @@ export interface Valeur {
   champ1?: AnswerType // champs fillInTheBlank
   champ2?: AnswerType // ... jusqu'à champ6
   rectangle1?: AnswerType // zones de glisser-déposer
-  // ... jusqu'à rectangle6
-  callback?: Function // vérification personnalisée
-  // clés L{row}C{col} pour tableauMathlive
+  // ... jusqu'à rectangle8
+  field0?: AnswerType // champs multiMathfield, jusqu'à field8
+  L1C1?: AnswerType // cellules tableauMathlive, jusqu'à L3C5
+  sheetAnswer?: SheetAnswerType // interaction tableur
+  callback?: Function // vérification personnalisée avec score détaillé
 }
 ```
 
@@ -137,7 +148,7 @@ Chaque `AnswerType` contient :
 
 ## 3. Fonctionnement de `setReponse()` (historique)
 
-**Fichier :** `src/lib/interactif/gestionInteractif.ts`, ligne 508
+**Fichier :** `src/lib/interactif/gestionInteractif.ts`
 
 Un **adaptateur déprécié** autour de `handleAnswers()` traduit les anciens formats :
 
@@ -158,7 +169,7 @@ Un **adaptateur déprécié** autour de `handleAnswers()` traduit les anciens fo
 
 ## 4. Vérification des réponses par type
 
-Le point de distribution central est `exerciceInteractif()` dans `gestionInteractif.ts` (ligne 125). Il parcourt toutes les questions et redirige selon `formatInteractif`.
+Le point de distribution central est `exerciceInteractif()` dans `gestionInteractif.ts`. Il parcourt toutes les questions et redirige selon `formatInteractif`.
 
 ### MathLive / fillInTheBlank / tableauMathlive / texte → `verifQuestionMathLive()`
 
@@ -168,6 +179,12 @@ Le point de distribution central est `exerciceInteractif()` dans `gestionInterac
 - **Texte à trous :** lit chaque emplacement via `mfe.getPromptValue(key)`, compare indépendamment, définit l'état du champ à `'correct'` ou `'incorrect'`, puis agrège avec `bareme`.
 - **Tableau :** lit chaque cellule `L{row}C{col}`, compare indépendamment, puis affiche un retour par cellule.
 - **Rappel :** si `reponses.callback` existe, l'appelle directement.
+
+### MultiMathfield → `verifQuestionMultiMathfield()`
+
+**Fichier :** `src/lib/interactif/gestionInteractif.ts`
+
+Lit les valeurs du composant `<multi-mathfield>`, compare chaque champ `field*` avec sa réponse attendue, affiche un retour par champ et agrège le score.
 
 ### QCM → `verifQuestionQcm()`
 
@@ -205,7 +222,7 @@ Appelle `exercice.correctionInteractive(i)`, qui retourne `'OK'` ou `'KO'`.
 
 ## 5. Fonction principale de comparaison : `fonctionComparaison()`
 
-**Fichier :** `src/lib/interactif/comparisonFunctions.ts`, ligne 723
+**Fichier :** `src/lib/interactif/comparisonFunctions.ts`
 
 Répartit selon les options :
 
@@ -221,11 +238,12 @@ Répartit selon les options :
 | `puissance` | Expressions avec puissances ou exposants |
 | `texteAvecCasse` | Texte sensible à la casse |
 | `texteSansCasse` | Texte sans prise en compte de la casse |
+| `coordonnees` | Coordonnées de points |
 | `egaliteExpression` | Égalité d'équations |
 | `nombreAvecEspace` | Nombres avec espaces |
 | `expressionNumerique` | Expressions numériques |
 | `ensembleDeNombres` / `kUplet` | Ensembles ou tuples |
-| `suiteDeNombres` | Suites ordonnées |
+| `suiteDeNombres` / `suiteRangeeDeNombres` | Suites de nombres, ordonnées si `suiteRangeeDeNombres` est activé |
 | `fractionSimplifiee` / `fractionReduite` / `fractionIrreductible` / `fractionDecimale` / `fractionEgale` / `fractionIdentique` | Vérifications spécialisées de fractions |
 | `developpementEgal` | Égalité de forme développée |
 | `calculFormel` | Comparaison symbolique |
@@ -251,6 +269,8 @@ export type AnswerValueType =
   | IGrandeur[]
   | Hms
   | Hms[]
+  | Complexe
+  | Complexe[]
 ```
 
 `handleDefaultValeur()` normalise tout en chaînes :
@@ -351,6 +371,7 @@ texte += ajouteChampTexteMathLive(this, i, keyboardType.clavierDeBase)
 | `src/lib/interactif/questionMathLive.ts` | Génération HTML : `ajouteChampTexteMathLive()`, `remplisLesBlancs()` |
 | `src/lib/interactif/qcm.ts` | `verifQuestionQcm()`, `propositionsQcm()` |
 | `src/lib/interactif/DragAndDrop.ts` | Classe de glisser-déposer et vérification |
+| `src/lib/interactif/MultiMathfield/MultiMathfield.ts` | Web Component `multiMathfield` |
 | `src/lib/interactif/questionListeDeroulante.ts` | Création et vérification des listes déroulantes |
 | `src/lib/interactif/questionSvgSelection/questionSvgSelection.ts` | Création et vérification des sélections SVG |
 | `src/lib/interactif/cliqueFigure.js` | Implémentation historique du clic sur figure |

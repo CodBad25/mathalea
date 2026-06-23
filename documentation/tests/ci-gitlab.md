@@ -1,526 +1,341 @@
 # Rapport d'analyse de la CI GitLab
 
-Ce document résume ce que teste la CI définie dans [.gitlab-ci.yml](../../.gitlab-ci.yml), à quel moment chaque tâche se lance, et comment reproduire localement chaque vérification.
+Ce document résume ce que teste la CI définie dans [.gitlab-ci.yml](../../.gitlab-ci.yml), à quel moment les tâches se lancent, et comment reproduire localement les vérifications principales.
 
 ## Vue d'ensemble
 
-La CI couvre principalement cinq familles de vérifications :
+La CI actuelle couvre principalement :
 
-- analyse de sécurité SAST avec Semgrep
-- tests unitaires Vitest
+- installation et cache `pnpm`
+- tests Vitest unitaires (`tests/unit`)
+- tests Vitest dans `src`
+- typecheck Svelte/TypeScript avec `pnpm --pm-on-fail=ignore check`
+- tests des exercices modifiés, regroupés dans un job consolidé
 - tests e2e Playwright/Vitest sur les vues, la cohérence et l'interactivité
 - tests e2e Playwright/Vitest de détection d'erreurs console par niveaux
-- tests e2e d'exports PDF
+- tests d'exports PDF, DNB, BAC et E3C
+- construction de l'image CI PDF via Kaniko
 
-Elle contient aussi des tâches de construction et de déploiement. La construction n'est pas un test à proprement parler, mais elle valide que la génération des JSON et la compilation Vite passent correctement.
+Le SAST GitLab est inclus mais les jobs `semgrep-sast` et `sast` sont désactivés par les règles actuelles.
 
-Point important : `pnpm check` n'est pas exécuté dans cette CI.
+## Stages
 
-## Étapes
+Les stages déclarés sont :
 
-Les stages déclarés sont les suivants :
-
-1. `test`
-2. `build-projet`
-3. `playwright-testCanEleve`
-4. `deploy-server`
-5. `playwright-test`
-6. `playwright-testLycee`
-7. `playwright-pdf`
+1. `setup`
+2. `planified`
+3. `test`
+4. `playwright-test`
+5. `build-projet`
+6. `compile-pdf`
+7. `playwright`
 8. `playwright-pdfDNB`
 9. `playwright-pdfBAC`
+10. `build_ci_pdf`
 
-## Préparation commune des tâches e2e
+## Préparation commune
 
-Les tâches e2e non PDF héritent de la préparation définie dans `.install_dependencies` :
-
-- installation et activation de `pnpm`
-- installation des dépendances du projet
-- ajout de `playwright` et `@playwright/test`
-- démarrage de l'application avec `pnpm start`
-- attente de disponibilité de `http://localhost:80/alea/`
-
-Pour reproduire localement les tests concernés :
+La plupart des jobs Node utilisent `.pnpm_setup` :
 
 ```bash
-pnpm install
-pnpm start
+corepack enable
+corepack prepare pnpm@11.8.0 --activate
+pnpm --pm-on-fail=ignore config set store-dir .pnpm-store
 ```
 
-Puis, dans un autre terminal, lancer la commande de la tâche voulue.
+Les jobs Playwright démarrent ensuite l'application avec `pnpm --pm-on-fail=ignore start` et attendent `http://localhost:80/alea/`.
 
-Les tâches PDF utilisent une préparation spécifique :
+Pour reproduire localement un test e2e sans lier le port 80, lancer le serveur sur 5173 puis forcer le port côté tests :
 
-- vérification de `lualatex`
-- installation des dépendances système nécessaires à Chromium
-- installation du navigateur Chromium via Playwright
-- démarrage de l'application
+```bash
+pnpm --pm-on-fail=ignore install
+pnpm --pm-on-fail=ignore start
+CI=1 PLAYWRIGHT_SERVER_PORT=5173 pnpm --pm-on-fail=ignore test:e2e:views
+```
 
-Les variantes DNB et BAC ajoutent en plus un clonage de dépôts annexes dans `public/static/`.
+Ordre de priorité du port dans les helpers Playwright :
 
-## Analyse de sécurité
+1. `PLAYWRIGHT_SERVER_PORT` si définie
+2. `80` si `CI` est définie
+3. `5173` sinon
 
-### `semgrep-sast`
+## Setup
 
-Cette tâche provient du modèle GitLab SAST et n'est activée que sur la branche `main`.
+### `setup`
+
+Installe les dépendances avec le lockfile et alimente le cache pnpm :
+
+```bash
+pnpm --pm-on-fail=ignore install --frozen-lockfile --prefer-offline --silent
+```
 
 Déclenchement :
 
-- automatique sur `main`
+- demandes de fusion
+- `main`
+- `guironne-jobs`
+- pipelines planifiés
+- branche `pipeline`
 
-Reproduction locale :
-
-- il n'existe pas de script `package.json` dédié dans le dépôt
-- la reproduction exacte dépend de l'outillage GitLab SAST utilisé par l'exécuteur
-
-## Tests unitaires
+## Tests unitaires et source
 
 ### `tests-unitaires`
 
-Cette tâche exécute :
+Exécute :
 
-- `pnpm run makeJson`
-- `NODE_OPTIONS=--max-old-space-size=4096 pnpm test:unit`
-- `NODE_OPTIONS=--max-old-space-size=4096 pnpm test:src`
-
-Cela correspond à :
-
-- tests Vitest dans `tests/unit`
-- tests Vitest directement dans `src`
+```bash
+pnpm --pm-on-fail=ignore run makeJson
+NODE_OPTIONS=--max-old-space-size=4096 pnpm --pm-on-fail=ignore test:unit
+```
 
 Déclenchement :
 
-- automatique sur toute demande de fusion
-- automatique sur `main`
-- manuel sur `guironne-jobs`
+- `main`
+- `guironne-jobs`
+- pipelines planifiés
+- branche `pipeline` en manuel
+
+### `tests-src`
+
+Exécute :
+
+```bash
+pnpm --pm-on-fail=ignore run makeJson
+NODE_OPTIONS=--max-old-space-size=4096 pnpm --pm-on-fail=ignore test:src
+```
+
+Déclenchement identique à `tests-unitaires`.
+
+Reproduction locale condensée :
+
+```bash
+pnpm --pm-on-fail=ignore run makeJson
+pnpm --pm-on-fail=ignore run prebuild-unit-tests
+```
+
+## Typecheck
+
+### `testTypescriptOk`
+
+Exécute :
+
+```bash
+pnpm --pm-on-fail=ignore run makeJson
+pnpm --pm-on-fail=ignore check
+```
+
+Déclenchement :
+
+- demandes de fusion
+- `main`
+- désactivé sur `guironne-jobs`
+
+Le job est actuellement `allow_failure: true`.
+
+## Exercices modifiés
+
+### `testExosModifiedConsolidated`
+
+Ce job remplace les anciens jobs séparés `testExosModifiedWithoutPlayWright`, `testExosModified`, `testExosModifiedInteractif` et `testExosModifiedAmcnum`.
+
+Il récupère les fichiers modifiés sur une fenêtre allant jusqu'à 5 commits, les place dans `CHANGED_FILES`, puis lance quatre sous-tests :
+
+```bash
+CHANGED_FILES="$CHANGED_FILES" pnpm --pm-on-fail=ignore test:e2e:console_errors
+CHANGED_FILES="$CHANGED_FILES" pnpm --pm-on-fail=ignore vitest --config tests/e2e/vitest.config.all_exercises.js --run
+INTERACTIF_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm --pm-on-fail=ignore vitest tests/integration/interactivity_all.test.ts --run
+AMCNUM_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm --pm-on-fail=ignore vitest src/lib/amc/report-amcnum.test.ts --run
+```
+
+Le job échoue si au moins un sous-test échoue.
+
+Déclenchement :
+
+- demandes de fusion
+- `main`
+- `guironne-jobs` en manuel
+
+### `testExosModifiedLatex`
+
+Job séparé car il utilise l'image CI avec LaTeX. Il récupère les fichiers modifiés sur la même fenêtre de 5 commits puis lance :
+
+```bash
+CHANGED_FILES="$CHANGED_FILES" pnpm --pm-on-fail=ignore test:e2e:pdfexports
+```
+
+Déclenchement :
+
+- demandes de fusion
+- `main`
+- `guironne-jobs` en manuel
+
+## Console Playwright
+
+### `playwright-console-consolidated`
+
+Lance `pnpm --pm-on-fail=ignore test:e2e:console_errors` pour les filtres suivants :
+
+- `6e/6`
+- `5e/5`
+- `4e/4`
+- `3e/3`
+- `2e/2`
+- `1e/1`
+- `TEx^TSpe^techno`
+- `QCM`
+- `can/6e^can/5e`
+- `can/4e^can/3e`
+- `can/2e^can/1e`
+- `can/Ex^can/TSpe`
+
+Déclenchement via le template `.testCI` :
+
+- condition historique restrictive `CI_COMMIT_BRANCH == "main" && CI_PIPELINE_SOURCE == "merge_request_event"`
+- `guironne-jobs`
+- pipelines planifiés
+- branche `pipeline` en manuel
+
+Le template `.testCI` est `allow_failure: true`.
 
 Reproduction locale :
 
 ```bash
-pnpm install
-pnpm makeJson
-NODE_OPTIONS=--max-old-space-size=4096 pnpm test:unit
-NODE_OPTIONS=--max-old-space-size=4096 pnpm test:src
+pnpm --pm-on-fail=ignore start
+NIV=6e/6 pnpm --pm-on-fail=ignore test:e2e:console_errors
 ```
 
-Commande condensée équivalente :
+## Playwright globaux planifiés
 
-```bash
-pnpm install
-pnpm makeJson
-NODE_OPTIONS=--max-old-space-size=4096 pnpm run prebuild-unit-tests
-```
+Ces jobs s'exécutent en pipeline planifié ou sur la branche `pipeline` en manuel.
 
-## Tests e2e globaux
-
-### Port du serveur en local (mode CI)
-
-Les tests e2e utilisent maintenant la variable `PLAYWRIGHT_SERVER_PORT` pour construire les URLs locales.
-
-Ordre de priorité du port :
-
-1. `PLAYWRIGHT_SERVER_PORT` si définie
-2. `80` si `CI=1`
-3. `5173` sinon
-
-Cela permet de reproduire le comportement CI en local sans devoir lier le port 80.
-
-Exemple pratique (local, mode CI, serveur sur 5173) :
-
-```bash
-pnpm install
-pnpm start
-CI=1 PLAYWRIGHT_SERVER_PORT=5173 pnpm test:e2e:views
-CI=1 PLAYWRIGHT_SERVER_PORT=5173 pnpm test:e2e:consistency
-CI=1 PLAYWRIGHT_SERVER_PORT=5173 pnpm test:e2e:interactivity
-```
-
-### `playwright-testCanEleve`
-
-Cette tâche teste les vues via :
-
-```bash
-pnpm test:e2e:views
-```
-
-Déclenchement :
-
-- automatique sur toute demande de fusion
-- automatique sur `main`
-- manuel sur `guironne-jobs`
+| Job | Commande | `allow_failure` |
+| --- | --- | --- |
+| `playwright-caneleve` | `pnpm --pm-on-fail=ignore test:e2e:views` | `true` |
+| `playwright-consistency` | `pnpm --pm-on-fail=ignore test:e2e:consistency` | `true` |
+| `playwright-interactivity` | `pnpm --pm-on-fail=ignore test:e2e:interactivity` | `false` |
 
 Reproduction locale :
 
 ```bash
-pnpm install
-pnpm start
-pnpm test:e2e:views
+pnpm --pm-on-fail=ignore start
+pnpm --pm-on-fail=ignore test:e2e:views
+pnpm --pm-on-fail=ignore test:e2e:consistency
+pnpm --pm-on-fail=ignore test:e2e:interactivity
 ```
 
-### `playwright-testConsistency`
+## All exercises JSDOM
 
-Cette tâche teste la cohérence fonctionnelle via :
+### `jsdom-all-exercises`
+
+Job planifié qui lance `pnpm --pm-on-fail=ignore test:e2e:all_exercises` avec `NB_EXOS_PAR_LOT=1000` sur les filtres CAN et collège :
+
+- `can/2e^can/1e`
+- `can/6e^can/5e`
+- `can/4e^can/3e`
+- `6e/6`
+- `5e/5`
+- `4e/4`
+- `3e/3`
+
+Déclenchement :
+
+- pipelines planifiés
+- branche `pipeline` en manuel
+
+## Exports PDF
+
+Les jobs PDF utilisent l'image `$DOCKER_IMAGE` (`ci/tex-node:node22-texlive-2026-06`) et le template `.testCIPDF`.
+
+### `playwright-pdf-consolidated`
+
+Lance `pnpm --pm-on-fail=ignore test:e2e:pdfexports` sur :
+
+- `can/2e^can/1e`
+- `can/6e^can/5e`
+- `can/4e^can/3e`
+- `6e/6`
+- `5e/5`
+- `4e/4`
+- `3e/3`
+
+### `playwright-pdf-dnb-consolidated`
+
+Clone le dépôt DNB dans `public/static/dnb`, déplace `sujets_decoupes`, puis teste :
+
+- `dnb_2013^dnb_2014^dnb_2015`
+- `dnb_2016^dnb_2017^dnb_2018^dnb_2019`
+- `dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024`
+
+### `playwright-pdf-bac-consolidated`
+
+Clone le dépôt BAC dans `public/static/bac`, puis teste :
+
+- `e3c_2024^e3c_2023^e3c_2022^e3c_2021`
+- `bac_2024^bac_2023^bac_2022^bac_2021`
+
+Déclenchement PDF via `.testCIPDF` :
+
+- `guironne-jobs`
+- `mathalea-jobs`
+- pipelines planifiés, notamment `CI_TEST_MA == "PDF"`
+- branche `pipeline` en manuel
+
+Reproduction locale ciblée :
 
 ```bash
-pnpm test:e2e:consistency
+pnpm --pm-on-fail=ignore start
+CI=1 NIV=6e/6 pnpm --pm-on-fail=ignore test:e2e:pdfexports
+```
+
+## Image CI PDF
+
+### `build_ci_pdf`
+
+Construit l'image Docker PDF avec Kaniko depuis `docker/ci-pdf/Dockerfile` et pousse :
+
+```text
+$CI_REGISTRY_IMAGE/ci/tex-node:node22-texlive-2026-06
 ```
 
 Déclenchement :
 
-- automatique sur toute demande de fusion
-- automatique sur `main`
-- manuel sur `guironne-jobs`
-
-Reproduction locale :
-
-```bash
-pnpm install
-pnpm start
-pnpm test:e2e:consistency
-```
-
-### `playwright-testInteractivity`
-
-Cette tâche teste l'interactivité via :
-
-```bash
-pnpm test:e2e:interactivity
-```
-
-Déclenchement :
-
-- automatique sur toute demande de fusion
-- automatique sur `main`
-- la règle `guironne-jobs` semble incomplète dans le YAML, donc pas de `when: manual` explicite
-
-Reproduction locale :
-
-```bash
-pnpm install
-pnpm start
-pnpm test:e2e:interactivity
-```
-
-## Tests e2e ciblés sur les exercices modifiés
-
-### `testExosModifiedWithoutPlayWright`
-
-Cette tâche récupère les fichiers modifiés sur une fenêtre allant jusqu'à 5 commits, les place dans `CHANGED_FILES`, active le mode CI, puis exécute :
-
-```bash
-CI=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest --config tests/e2e/vitest.config.all_exercises.js --run
-```
-
-Note : sans `CI=1`, la branche conditionnelle qui filtre sur les fichiers modifiés n'est pas activée dans `all_exercises.test.ts`.
-
-Déclenchement :
-
-- automatique sur toute demande de fusion
-- automatique sur `main`
-- manuel sur `guironne-jobs`
-
-Reproduction locale :
-
-```bash
-pnpm install
-pnpm start
-CI=1 CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm vitest --config tests/e2e/vitest.config.all_exercises.js --run
-```
-
-### `testExosModified`
-
-Cette tâche récupère elle aussi les fichiers modifiés, puis exécute les tests console ciblés :
-
-```bash
-CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:console_errors
-```
-
-Déclenchement :
-
-- automatique sur toute demande de fusion
-- automatique sur `main`
-- manuel sur `guironne-jobs`
-
-Reproduction locale :
-
-```bash
-pnpm install
-pnpm start
-CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm test:e2e:console_errors
-```
-
-## Tests e2e d'erreurs console par niveaux
-
-Ces tâches héritent de `.testCI`.
-
-Déclenchement commun :
-
-- automatique si `CI_COMMIT_BRANCH == "main"` et `CI_PIPELINE_SOURCE == "merge_request_event"`
-- automatique en pipeline planifié si `CI_TEST_MA == "CONSOLE"`
-- manuel sur `guironne-jobs`
-
-Remarque : cette règle est plus restrictive qu'une simple "demande de fusion", car elle dépend explicitement de `CI_COMMIT_BRANCH == "main"` dans `.testCI`.
-
-### Collège
-
-#### `test6e`
-
-```bash
-NIV=6e/6 pnpm test:e2e:console_errors
-```
-
-#### `test5e`
-
-```bash
-NIV=5e/5 pnpm test:e2e:console_errors
-```
-
-#### `test4e`
-
-```bash
-NIV=4e/4 pnpm test:e2e:console_errors
-```
-
-#### `test3e`
-
-```bash
-NIV=3e/3 pnpm test:e2e:console_errors
-```
-
-### Lycée
-
-#### `test2e`
-
-```bash
-NIV=2e/2 pnpm test:e2e:console_errors
-```
-
-#### `test1e`
-
-```bash
-NIV=1e/1 pnpm test:e2e:console_errors
-```
-
-#### `testTExOuTSpeOutechno`
-
-```bash
-NIV=TEx^TSpe^techno pnpm test:e2e:console_errors
-```
-
-### Autres ensembles
-
-#### `testQCM`
-
-```bash
-NIV=QCM pnpm test:e2e:console_errors
-```
-
-#### `testCan6e5e`
-
-```bash
-NIV=can/6e^can/5e pnpm test:e2e:console_errors
-```
-
-#### `testCan4e3e`
-
-```bash
-NIV=can/4e^can/3e pnpm test:e2e:console_errors
-```
-
-#### `testCan2e1e`
-
-```bash
-NIV=can/2e^can/1e pnpm test:e2e:console_errors
-```
-
-#### `testCanExTSpe`
-
-```bash
-NIV=can/Ex^can/TSpe pnpm test:e2e:console_errors
-```
-
-## Tests e2e d'exports PDF
-
-Ces tâches héritent de `.testCIPDF`.
-
-Note : dans `pdfexports.test.ts`, les modes ciblés par `NIV` et `CHANGED_FILES` ne sont activés que si `CI` est défini. En local, il faut donc préfixer les commandes ciblées par `CI=1`.
-
-Déclenchement commun :
-
-- manuel sur `guironne-jobs`
-- manuel sur `mathalea-jobs`
-- automatique en pipeline planifié si `CI_TEST_MA == "PDF"`
-
-### Export PDF par niveaux
-
-#### `test6ePDF`
-
-```bash
-CI=1 NIV=6e/6 pnpm test:e2e:pdfexports
-```
-
-#### `test5ePDF`
-
-```bash
-CI=1 NIV=5e/5 pnpm test:e2e:pdfexports
-```
-
-#### `test4ePDF`
-
-```bash
-CI=1 NIV=4e/4 pnpm test:e2e:pdfexports
-```
-
-#### `test3ePDF`
-
-```bash
-CI=1 NIV=3e/3 pnpm test:e2e:pdfexports
-```
-
-### Export PDF CAN
-
-#### `testCan6e5ePDF`
-
-```bash
-CI=1 NIV=can/6e^can/5e pnpm test:e2e:pdfexports
-```
-
-#### `testCan4e3ePDF`
-
-```bash
-CI=1 NIV=can/4e^can/3e pnpm test:e2e:pdfexports
-```
-
-#### `testCan2e1ePDF`
-
-```bash
-CI=1 NIV=can/2e^can/1e pnpm test:e2e:pdfexports
-```
-
-### Export PDF DNB
-
-Ces tâches nécessitent en plus :
-
-```bash
-git clone https://forge.apps.education.fr/coopmaths/dnb.git ./public/static/dnb
-mv ./public/static/dnb/sujets_decoupes/* ./public/static/dnb/
-```
-
-#### `testDNB20132015PDF`
-
-```bash
-CI=1 NIV=dnb_2013^dnb_2014^dnb_2015 pnpm test:e2e:pdfexports
-```
-
-#### `testDNB20162019PDF`
-
-```bash
-CI=1 NIV=dnb_2016^dnb_2017^dnb_2018^dnb_2019 pnpm test:e2e:pdfexports
-```
-
-#### `testDNB20202024PDF`
-
-```bash
-CI=1 NIV=dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024 pnpm test:e2e:pdfexports
-```
-
-### Export PDF BAC et E3C
-
-Ces tâches nécessitent en plus :
-
-```bash
-git clone https://forge.apps.education.fr/coopmaths/bac.git ./public/static/bac
-```
-
-#### `testBAC20202024PDF`
-
-```bash
-CI=1 NIV=bac_2024^bac_2023^bac_2022^bac_2021 pnpm test:e2e:pdfexports
-```
-
-#### `testE3C20202024PDF`
-
-```bash
-CI=1 NIV=e3c_2024^e3c_2023^e3c_2022^e3c_2021 pnpm test:e2e:pdfexports
-```
-
-## Construction et déploiements
-
-### `build`
-
-Cette tâche ne lance pas de tests, mais vérifie que les étapes suivantes passent :
-
-```bash
-pnpm run makeJson
-NODE_OPTIONS="--max-old-space-size=5096 --expose-gc" pnpm vite build
-```
-
-Déclenchement :
-
-- automatique sur `main`
-- manuel sur `guironne-jobs`
-
-Reproduction locale :
-
-```bash
-pnpm install
-pnpm run makeJson
-NODE_OPTIONS="--max-old-space-size=5096 --expose-gc" pnpm vite build
-```
-
-### `deploy` et `deployftp`
-
-Ces tâches sont des déploiements manuels, mais elles relancent implicitement des tests unitaires avant publication :
-
-```bash
-NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
-```
-
-Déclenchement :
-
-- manuel sur `main`
-- manuel sur `guironne-jobs`
+- branche `pipeline` en manuel
+- `guironne-jobs` en manuel
 
 ## Commandes utiles de synthèse
 
-### Reproduire les tests unitaires attendus avant construction
+### Pré-commit recommandé localement
 
 ```bash
-pnpm install
-pnpm makeJson
-pnpm run prebuild-unit-tests
+pnpm --pm-on-fail=ignore run makeJson
+pnpm --pm-on-fail=ignore run prebuild-unit-tests
+pnpm --pm-on-fail=ignore check
 ```
 
-### Reproduire les e2e globaux les plus visibles
+### E2E globaux
 
 ```bash
-pnpm install
-pnpm start
-pnpm test:e2e:views
-pnpm test:e2e:consistency
-pnpm test:e2e:interactivity
+pnpm --pm-on-fail=ignore start
+pnpm --pm-on-fail=ignore test:e2e:views
+pnpm --pm-on-fail=ignore test:e2e:consistency
+pnpm --pm-on-fail=ignore test:e2e:interactivity
 ```
 
-### Reproduire un test console ciblé sur un niveau
+### Exercice modifié
 
 ```bash
-pnpm install
-pnpm start
-NIV=6e/6 pnpm test:e2e:console_errors
-```
-
-### Reproduire un export PDF ciblé
-
-```bash
-pnpm install
-pnpm start
-CI=1 NIV=6e/6 pnpm test:e2e:pdfexports
+pnpm --pm-on-fail=ignore start
+CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm --pm-on-fail=ignore test:e2e:console_errors
+CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm --pm-on-fail=ignore vitest --config tests/e2e/vitest.config.all_exercises.js --run
+INTERACTIF_REPORT=1 CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm --pm-on-fail=ignore vitest tests/integration/interactivity_all.test.ts --run
+AMCNUM_REPORT=1 CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm --pm-on-fail=ignore vitest src/lib/amc/report-amcnum.test.ts --run
 ```
 
 ## Points d'attention
 
-- `pnpm check` n'est pas lancé dans la CI actuelle.
-- `playwright-testInteractivity` semble avoir une règle incomplète pour `guironne-jobs`.
-- les tâches e2e par niveaux sont marquées `allow_failure: true`
-- les tâches PDF sont aussi marquées `allow_failure: true`
-- les tâches ciblées sur exercices modifiés s'appuient sur une fenêtre de comparaison d'au plus 5 commits
+- `pnpm --pm-on-fail=ignore check` est bien lancé en CI via `testTypescriptOk`, mais ce job est `allow_failure: true`.
+- `tests-unitaires` et `tests-src` sont séparés et aussi `allow_failure: true`.
+- Les checks d'exercices modifiés sont consolidés et bloquants via `testExosModifiedConsolidated`.
+- Les e2e par niveaux restent `allow_failure: true` via `.testCI`.
+- Les PDF consolidés collège/CAN sont bloquants, tandis que les jobs DNB/BAC sont `allow_failure: true`.
+- La fenêtre de comparaison des exercices modifiés va jusqu'à 5 commits.

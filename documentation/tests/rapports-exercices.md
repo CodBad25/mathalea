@@ -1,15 +1,16 @@
 # Tests de rapport d'exercices
 
-Ce guide explique comment lancer les deux tests de rapport en local : **report-interactif** et **report-amcnum**.
+Ce guide explique comment lancer les rapports d'exercices en local : le rapport runtime **interactif**, le rapport **AMCNum**, et le test d'intégration interactif utilisé en CI.
 
 Index parent : [documentation/tests/README.md](README.md). Rapports générés : [reports/README.md](../../reports/README.md).
 
 ## 📋 Aperçu
 
-| Test                        | Rôle                                                                                                       | Sortie                                |
-| --------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| `report-interactif.test.ts` | Vérifie que les exercices interactifs (`interactifReady=true`) disposent d'une `autoCorrection`            | `reports/interactif-report.md`        |
-| `report-amcnum.test.ts`     | Vérifie que les exercices AMCNum (`amcReady=true`, `amcType=AMCNum`) disposent d'une correction AMC valide | `reports/amcnum-report.md`           |
+| Test | Rôle | Sortie |
+| --- | --- | --- |
+| `src/lib/amc/report-interactif.test.ts` | Vérifie en runtime que les exercices `interactifReady=true` remplissent `autoCorrection` | `reports/interactif-report.md` |
+| `tests/integration/interactivity_all.test.ts` | Vérifie que les réponses attendues sont acceptées par les comparateurs et par le DOM simulé | Logs JSON dans `tests/integration/logs/` |
+| `src/lib/amc/report-amcnum.test.ts` | Vérifie que les exercices `amcReady=true`, `amcType=AMCNum` disposent d'une correction AMC valide | `reports/amcnum-report.md` |
 
 ## 🎯 Lancement local
 
@@ -21,6 +22,12 @@ Index parent : [documentation/tests/README.md](README.md). Rapports générés :
 INTERACTIF_REPORT=1 pnpm --pm-on-fail=ignore vitest src/lib/amc/report-interactif.test.ts --run
 ```
 
+Mode plus isolé, utile quand un exercice peut bloquer le scan rapide :
+
+```bash
+INTERACTIF_REPORT=1 INTERACTIF_ISOLATED=1 pnpm --pm-on-fail=ignore vitest src/lib/amc/report-interactif.test.ts --run
+```
+
 **AMCNum :**
 
 ```bash
@@ -28,7 +35,7 @@ AMCNUM_REPORT=1 pnpm --pm-on-fail=ignore vitest src/lib/amc/report-amcnum.test.t
 ```
 
 ✅ Scanne **tous les fichiers** du répertoire `src/exercices/`
-⏱️ Peut prendre plusieurs minutes (3000+ fichiers)
+⏱️ Peut prendre plusieurs minutes
 📊 Génère un rapport Markdown complet avec tous les problèmes détectés
 
 ---
@@ -100,7 +107,15 @@ Aucun rapport n'est généré.
 
 - `autoCorrection-interactive-absente` : L'exercice déclare `interactifReady=true` mais `autoCorrection` reste vide
 - `erreur-runtime` : Erreur lors de l'instanciation ou génération
-- `class-export-manquante` : Pas d'export default
+- `timeout-exercice` : délai dépassé en mode isolé
+- `erreur-runtime-boucle` : processus isolé interrompu ou terminé anormalement
+
+### tests/integration/interactivity_all.test.ts
+
+- Vérifie trois graines : `ePxF1`, `a2b3c`, `z9y8x`
+- Teste les scénarios de paramètres construits depuis `TEST_PARAM`
+- Écrit les questions ignorées et les compteurs dans `tests/integration/logs/`
+- Vérifie aussi les doublons dans certains QCM générés depuis `reponse` / `distracteurs`
 
 ### report-amcnum.test.ts
 
@@ -114,12 +129,12 @@ Aucun rapport n'est généré.
 
 ## 🚀 Dans la CI
 
-Les tests s'exécutent automatiquement sur demande de fusion et sur `main` via GitLab CI :
+Les tests liés aux fichiers modifiés s'exécutent automatiquement sur demande de fusion et sur `main` via GitLab CI :
 
-- **Job `testExosModifiedInteractif`** : Analyse les fichiers modifiés d'une MR
-- **Job `testExosModifiedAmcnum`** : Analyse les fichiers modifiés d'une MR
+- **Job `testExosModifiedConsolidated`** : lance les erreurs console, `all_exercises`, `tests/integration/interactivity_all.test.ts` avec `INTERACTIF_REPORT=1`, puis `report-amcnum.test.ts` avec `AMCNUM_REPORT=1`
+- **Job `testExosModifiedLatex`** : relance `test:e2e:pdfexports` sur les fichiers modifiés avec l'image LaTeX
 
-La variable `CHANGED_FILES` est calculée automatiquement à partir du `git diff`.
+La variable `CHANGED_FILES` est calculée automatiquement à partir d'une fenêtre de `git diff` allant jusqu'à 5 commits.
 
 ---
 
@@ -141,6 +156,12 @@ INTERACTIF_REPORT=1 pnpm --pm-on-fail=ignore vitest src/lib/amc/report-interacti
 INTERACTIF_REPORT=1 pnpm --pm-on-fail=ignore vitest src/lib/amc/report-interactif.test.ts --run
 ```
 
+### Reproduire le test d'intégration interactif de la CI
+
+```bash
+INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm --pm-on-fail=ignore vitest tests/integration/interactivity_all.test.ts --run
+```
+
 ### Afficher le rapport généré
 
 ```bash
@@ -153,6 +174,6 @@ cat reports/amcnum-report.md
 ## 📝 Notes
 
 - Les deux tests ne s'exécutent **que** si leur variable d'environnement (`INTERACTIF_REPORT` ou `AMCNUM_REPORT`) est explicitement définie à `'1'`
-- En l'absence de `CHANGED_FILES`, les tests scannent **tous les exercices**
+- En l'absence de `CHANGED_FILES`, les tests de rapport scannent **tous les exercices**
 - Les rapports sont **écrasés** à chaque lancement (ils ne s'ajoutent pas)
 - Les fichiers dans `ressources/` et `apps/` sont toujours ignorés
