@@ -30,8 +30,8 @@ export default class Auto1AC13b extends ExerciceQcmA {
     a - b &= -cd\\\\
     -a + b &= cd\\\\
     \\dfrac{-a + b}{d} &= c
-    \\end{aligned}$
-    <br>Une expression de $c$ en fonction de $a$, $b$ et $d$ est $${miseEnEvidence('c = \\dfrac{b - a}{d}')}$.`
+    \\end{aligned}$<br>
+    Une expression de $c$ en fonction de $a$, $b$ et $d$ est $${miseEnEvidence('c = \\dfrac{b - a}{d}')}$.`
 
     this.reponses = [
       '$c=\\dfrac{b - a}{d}$',
@@ -72,8 +72,8 @@ export default class Auto1AC13b extends ExerciceQcmA {
         ${nomV[0]} - ${nomV[1]} &= -${nomV[2]}${nomV[3]}\\\\
         -${nomV[0]} + ${nomV[1]} &= ${nomV[2]}${nomV[3]}\\\\
         \\dfrac{-${nomV[0]} + ${nomV[1]}}{${nomV[3]}} &= ${nomV[2]}
-        \\end{aligned}$
-        <br>Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[3]}$ est $${miseEnEvidence(nomV[2] + ' = \\dfrac{' + nomV[1] + ' - ' + nomV[0] + '}{' + nomV[3] + '}')}$.`
+        \\end{aligned}$<br>
+        Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[3]}$ est $${miseEnEvidence(nomV[2] + ' = \\dfrac{' + nomV[1] + ' - ' + nomV[0] + '}{' + nomV[3] + '}')}$.`
 
         this.reponses = [
           `$${nomV[2]} = \\dfrac{${nomV[1]} - ${nomV[0]}}{${nomV[3]}}$`,
@@ -97,8 +97,8 @@ export default class Auto1AC13b extends ExerciceQcmA {
         ${nomV[0]} - ${nomV[1]} &= -${nomV[2]}${nomV[3]}\\\\
         -${nomV[0]} + ${nomV[1]} &= ${nomV[2]}${nomV[3]}\\\\
         \\dfrac{-${nomV[0]} + ${nomV[1]}}{${nomV[2]}} &= ${nomV[3]}
-        \\end{aligned}$
-        <br>Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ est $${miseEnEvidence(nomV[3] + ' = \\dfrac{' + nomV[1] + ' - ' + nomV[0] + '}{' + nomV[2] + '}')}$.`
+        \\end{aligned}$<br>
+        Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ est $${miseEnEvidence(nomV[3] + ' = \\dfrac{' + nomV[1] + ' - ' + nomV[0] + '}{' + nomV[2] + '}')}$.`
 
         this.reponses = [
           `$${nomV[3]} = \\dfrac{${nomV[1]} - ${nomV[0]}}{${nomV[2]}}$`,
@@ -120,8 +120,8 @@ export default class Auto1AC13b extends ExerciceQcmA {
         $\\begin{aligned}
         ${nomV[0]} &= ${nomV[1]} - ${nomV[2]}${nomV[3]}\\\\
         ${nomV[0]} + ${nomV[2]}${nomV[3]} &= ${nomV[1]}
-        \\end{aligned}$
-        <br>Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et $${nomV[3]}$ est $${miseEnEvidence(nomV[1] + ' = ' + nomV[0] + ' + ' + nomV[2] + nomV[3])}$.`
+        \\end{aligned}$<br>
+        Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et $${nomV[3]}$ est $${miseEnEvidence(nomV[1] + ' = ' + nomV[0] + ' + ' + nomV[2] + nomV[3])}$.`
 
         this.reponses = [
           `$${nomV[1]} = ${nomV[0]} + ${nomV[2]}${nomV[3]}$`,
@@ -144,8 +144,8 @@ export default class Auto1AC13b extends ExerciceQcmA {
         ${nomV[0]} &= ${nomV[1]}${nomV[2]} + ${nomV[3]}\\\\
         ${nomV[0]} - ${nomV[3]} &= ${nomV[1]}${nomV[2]}\\\\
         \\dfrac{${nomV[0]} - ${nomV[3]}}{${nomV[2]}} &= ${nomV[1]}
-        \\end{aligned}$
-        <br>Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et $${nomV[3]}$ est $${miseEnEvidence(nomV[1] + ' = \\dfrac{' + nomV[0] + ' - ' + nomV[3] + '}{' + nomV[2] + '}')}$.`
+        \\end{aligned}$<br>
+        Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et $${nomV[3]}$ est $${miseEnEvidence(nomV[1] + ' = \\dfrac{' + nomV[0] + ' - ' + nomV[3] + '}{' + nomV[2] + '}')}$.`
 
         this.reponses = [
           `$${nomV[1]} = \\dfrac{${nomV[0]} - ${nomV[3]}}{${nomV[2]}}$`,
@@ -167,8 +167,8 @@ export default class Auto1AC13b extends ExerciceQcmA {
         $\\begin{aligned}
         ${nomV[0]} &= ${nomV[1]}${nomV[2]} + ${nomV[3]}\\\\
         ${nomV[0]} - ${nomV[1]}${nomV[2]} &= ${nomV[3]}
-        \\end{aligned}$
-        <br>Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ est $${miseEnEvidence(nomV[3] + ' = ' + nomV[0] + ' - ' + nomV[1] + nomV[2])}$.`
+        \\end{aligned}$<br>
+        Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ est $${miseEnEvidence(nomV[3] + ' = ' + nomV[0] + ' - ' + nomV[1] + nomV[2])}$.`
 
         this.reponses = [
           `$${nomV[3]} = ${nomV[0]} - ${nomV[1]}${nomV[2]}$`,
@@ -191,8 +191,8 @@ export default class Auto1AC13b extends ExerciceQcmA {
         ${nomV[0]} &= \\dfrac{${nomV[1]} + ${nomV[2]}}{${nomV[3]}}\\\\
         ${nomV[0]} \\times ${nomV[3]} &= ${nomV[1]} + ${nomV[2]}\\\\
         ${nomV[0]} \\times ${nomV[3]} - ${nomV[2]} &= ${nomV[1]}
-        \\end{aligned}$
-        <br>Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et $${nomV[3]}$ est $${miseEnEvidence(nomV[1] + ' = ' + nomV[3] + ' \\times ' + nomV[0] + ' - ' + nomV[2])}$.`
+        \\end{aligned}$<br>
+        Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[2]}$ et $${nomV[3]}$ est $${miseEnEvidence(nomV[1] + ' = ' + nomV[3] + ' \\times ' + nomV[0] + ' - ' + nomV[2])}$.`
 
         this.reponses = [
           `$${nomV[1]} = ${nomV[3]} \\times ${nomV[0]} - ${nomV[2]}$`,
@@ -215,8 +215,8 @@ export default class Auto1AC13b extends ExerciceQcmA {
         ${nomV[0]} &= \\dfrac{${nomV[1]} + ${nomV[2]}}{${nomV[3]}}\\\\
         ${nomV[0]} \\times ${nomV[3]} &= ${nomV[1]} + ${nomV[2]}\\\\
         ${nomV[0]} \\times ${nomV[3]} - ${nomV[1]} &= ${nomV[2]}
-        \\end{aligned}$
-        <br>Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[3]}$ est $${miseEnEvidence(nomV[2] + ' = ' + nomV[3] + ' \\times ' + nomV[0] + ' - ' + nomV[1])}$.`
+        \\end{aligned}$<br>
+        Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[3]}$ est $${miseEnEvidence(nomV[2] + ' = ' + nomV[3] + ' \\times ' + nomV[0] + ' - ' + nomV[1])}$.`
 
         this.reponses = [
           `$${nomV[2]} = ${nomV[3]} \\times ${nomV[0]} - ${nomV[1]}$`,
@@ -239,8 +239,8 @@ export default class Auto1AC13b extends ExerciceQcmA {
         ${nomV[0]} &= \\dfrac{${nomV[1]} + ${nomV[2]}}{${nomV[3]}}\\\\
         ${nomV[0]} \\times ${nomV[3]} &= ${nomV[1]} + ${nomV[2]}\\\\
         ${nomV[3]} &= \\dfrac{${nomV[1]} + ${nomV[2]}}{${nomV[0]}}
-        \\end{aligned}$
-        <br>Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ est $${miseEnEvidence(nomV[3] + ' = \\dfrac{' + nomV[1] + ' + ' + nomV[2] + '}{' + nomV[0] + '}')}$.`
+        \\end{aligned}$<br>
+        Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ est $${miseEnEvidence(nomV[3] + ' = \\dfrac{' + nomV[1] + ' + ' + nomV[2] + '}{' + nomV[0] + '}')}$.`
 
         this.reponses = [
           `$${nomV[3]} = \\dfrac{${nomV[1]} + ${nomV[2]}}{${nomV[0]}}$`,
@@ -264,8 +264,8 @@ export default class Auto1AC13b extends ExerciceQcmA {
         ${nomV[0]} &= ${nomV[1]}${nomV[3]} + ${nomV[2]}${nomV[3]}\\\\
         ${nomV[0]} - ${nomV[2]}${nomV[3]} &= ${nomV[1]}${nomV[3]}\\\\
         \\dfrac{${nomV[0]} - ${nomV[2]}${nomV[3]}}{${nomV[3]}} &= ${nomV[1]}
-        \\end{aligned}$
-        <br>Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[3]}$ et $${nomV[2]}$ est $${miseEnEvidence(nomV[1] + ' = \\dfrac{' + nomV[0] + '}{' + nomV[3] + '} - ' + nomV[2])}$.`
+        \\end{aligned}$<br>
+        Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[3]}$ et $${nomV[2]}$ est $${miseEnEvidence(nomV[1] + ' = \\dfrac{' + nomV[0] + '}{' + nomV[3] + '} - ' + nomV[2])}$.`
 
         this.reponses = [
           `$${nomV[1]} = \\dfrac{${nomV[0]}}{${nomV[3]}} - ${nomV[2]}$`,
@@ -287,8 +287,8 @@ export default class Auto1AC13b extends ExerciceQcmA {
         $\\begin{aligned}
         ${nomV[0]} &= (${nomV[1]} + ${nomV[2]})${nomV[3]}\\\\
         \\dfrac{${nomV[0]}}{${nomV[1]} + ${nomV[2]}} &= ${nomV[3]}
-        \\end{aligned}$
-        <br>Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ est $${miseEnEvidence(nomV[3] + ' = \\dfrac{' + nomV[0] + '}{' + nomV[1] + ' + ' + nomV[2] + '}')}$.`
+        \\end{aligned}$<br>
+        Une expression de $${nomV[3]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[2]}$ est $${miseEnEvidence(nomV[3] + ' = \\dfrac{' + nomV[0] + '}{' + nomV[1] + ' + ' + nomV[2] + '}')}$.`
 
         this.reponses = [
           `$${nomV[3]} = \\dfrac{${nomV[0]}}{${nomV[1]} + ${nomV[2]}}$`,
@@ -312,8 +312,8 @@ export default class Auto1AC13b extends ExerciceQcmA {
         ${nomV[0]} &= ${nomV[1]}${nomV[3]} - ${nomV[2]}${nomV[3]}\\\\
         ${nomV[0]} + ${nomV[2]}${nomV[3]} &= ${nomV[1]}${nomV[3]}\\\\
         \\dfrac{${nomV[0]} + ${nomV[2]}${nomV[3]}}{${nomV[3]}} &= ${nomV[1]}
-        \\end{aligned}$
-        <br>Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[3]}$ et $${nomV[2]}$ est $${miseEnEvidence(nomV[1] + ' = \\dfrac{' + nomV[0] + '}{' + nomV[3] + '} + ' + nomV[2])}$.`
+        \\end{aligned}$<br>
+        Une expression de $${nomV[1]}$ en fonction de $${nomV[0]}$, $${nomV[3]}$ et $${nomV[2]}$ est $${miseEnEvidence(nomV[1] + ' = \\dfrac{' + nomV[0] + '}{' + nomV[3] + '} + ' + nomV[2])}$.`
 
         this.reponses = [
           `$${nomV[1]} = \\dfrac{${nomV[0]}}{${nomV[3]}} + ${nomV[2]}$`,
@@ -339,8 +339,8 @@ export default class Auto1AC13b extends ExerciceQcmA {
         ${nomV[0]} - ${nomV[1]}${nomV[3]} &= -${nomV[2]}${nomV[3]}\\\\
         \\dfrac{${nomV[0]} - ${nomV[1]}${nomV[3]}}{-${nomV[3]}} &= ${nomV[2]}\\\\
         \\dfrac{-${nomV[0]} + ${nomV[1]}${nomV[3]}}{${nomV[3]}} &= ${nomV[2]}
-        \\end{aligned}$
-        <br>Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[3]}$ est $${miseEnEvidence(nomV[2] + ' = ' + nomV[1] + ' - \\dfrac{' + nomV[0] + '}{' + nomV[3] + '}')}$.`
+        \\end{aligned}$<br>
+        Une expression de $${nomV[2]}$ en fonction de $${nomV[0]}$, $${nomV[1]}$ et $${nomV[3]}$ est $${miseEnEvidence(nomV[2] + ' = ' + nomV[1] + ' - \\dfrac{' + nomV[0] + '}{' + nomV[3] + '}')}$.`
 
         this.reponses = [
           `$${nomV[2]} = ${nomV[1]} - \\dfrac{${nomV[0]}}{${nomV[3]}}$`,
