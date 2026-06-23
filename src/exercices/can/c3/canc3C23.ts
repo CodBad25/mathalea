@@ -47,8 +47,7 @@ export default class ComplementADixCentMille extends ExerciceSimple {
           this.correction = `$100-${a}=${miseEnEvidence(100 - a)}$<br>`
           this.reponse = 100 - a
           this.correction += texteEnCouleur(
-            `
-    <br> Mentalement : <br><br>
+            `Mentalement : <br><br>
     $${a} \\xrightarrow{+${10 - (a % 10)}} ${a + (10 - (a % 10))} \\xrightarrow{+${100 - (a + (10 - (a % 10)))}} 100$.
      `,
             bleuMathalea,
@@ -62,8 +61,7 @@ export default class ComplementADixCentMille extends ExerciceSimple {
           this.correction = `$10-${a}=${miseEnEvidence(10 - a)}$<br>`
           this.reponse = 10 - a
           this.correction += texteEnCouleur(
-            `
-    <br> Mentalement : <br>
+            `Mentalement : <br>
     pour calculer $10-${a}$, on peut penser : « Combien faut-il ajouter à $${a}$ pour obtenir $10$ ? » <br>
      $${10 - a}$ car $${a}+${10 - a}=10$. <br><br>
      `,
@@ -103,8 +101,7 @@ export default class ComplementADixCentMille extends ExerciceSimple {
           diagramme += ` \\xrightarrow{+${etapeVers1000}} ${texNombre(1000)}$.`
 
           this.correction += texteEnCouleur(
-            `
-    <br> Mentalement : <br><br>
+            `Mentalement : <br><br>
     ${diagramme} <br><br>
      `,
             bleuMathalea,
