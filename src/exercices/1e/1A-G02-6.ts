@@ -39,8 +39,8 @@ export default class AireTriangleQuelconqueQcm extends ExerciceQcmA {
     const B = pointAbstrait(6, 0, 'B', 'below right')
     const H = pointAbstrait(4.2, 0, 'H', 'below')
     const C = pointAbstrait(4.2, 3.4, 'C', 'above')
-    const coteBaseDepart = pointAbstrait(0, -0.75)
-    const coteBaseArrivee = pointAbstrait(6, -0.75)
+    const coteBaseDepart = pointAbstrait(0, -1)
+    const coteBaseArrivee = pointAbstrait(6, -1)
     const triangle = polygone([A, B, C])
     triangle.epaisseur = 2
     const hauteurTracee = segment(C, H)
@@ -62,7 +62,7 @@ export default class AireTriangleQuelconqueQcm extends ExerciceQcmA {
         coteBaseArrivee,
         coteBaseDepart,
         'black',
-        0.35,
+        -0.35,
       ),
       texteSurSegment(`$${hauteur}\\text{ cm}$`, C, H, 'black', -0.35),
     ]
@@ -73,7 +73,7 @@ export default class AireTriangleQuelconqueQcm extends ExerciceQcmA {
         fixeBordures(objets, {
           rxmin: -0.6,
           rxmax: 0.6,
-          rymin: -0.15,
+          rymin: -0.25,
           rymax: 0.45,
         }),
       ),
@@ -81,7 +81,7 @@ export default class AireTriangleQuelconqueQcm extends ExerciceQcmA {
     )
 
     this.enonce = `Le triangle $ABC$ ci-dessous n'est pas représenté à l'échelle.<br>
-Calculer son aire.${figure}`
+ ${figure}Son aire est :`
 
     this.reponses = [
       `$${texNombre(aire)}\\text{ cm}^2$`,
