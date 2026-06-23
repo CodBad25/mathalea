@@ -260,8 +260,7 @@ export default class NomExercice extends Exercice {
 En conséquence,   $\\overrightarrow{OI}\\cdot \\overrightarrow{OC}=${xI}\\times 0+${yI}\\times ${cote}=${miseEnEvidence(`${produitScalaire}`)}$.`
       const correction2a = `Le point $H$ est le projeté orthogonal du point $C$ sur la droite $(OI)$. En utilisant la définition du produit scalaire avec le projeté orthogonal sur la droite $(OI)$, on trouve que :<br>
            $\\overrightarrow{OC}\\cdot \\overrightarrow{OI}=\\overrightarrow{OH}\\cdot \\overrightarrow{OI}$.<br>
-          Les vecteurs $\\overrightarrow{OH}$ et $\\overrightarrow{OI}$ sont colinéaires et de même sens, donc $\\overrightarrow{OH}\\cdot \\overrightarrow{OI}=${miseEnEvidence('OH\\times OI')}$.<br>
-         `
+          Les vecteurs $\\overrightarrow{OH}$ et $\\overrightarrow{OI}$ sont colinéaires et de même sens, donc $\\overrightarrow{OH}\\cdot \\overrightarrow{OI}=${miseEnEvidence('OH\\times OI')}$.<br>`
       const correction2b = `$\\overrightarrow{OI}\\begin{pmatrix}${xI}\\\\${yI}\\end{pmatrix}$, donc $OI=\\sqrt{${xI}^2+${yI}^2}=${miseEnEvidence(longueurOITex)}$.`
       const correction2c =
         `On a montré précédemment que :` +
@@ -276,8 +275,8 @@ En conséquence,   $\\overrightarrow{OI}\\cdot \\overrightarrow{OC}=${xI}\\times
         `On en déduit que $OH\\times ${longueurOITex}=${produitScalaire}$, d'où $OH=${miseEnEvidence(longueurOH)}$.`
       const correction3a = `Le point $H$ est le projeté orthogonal de $C$ sur $(OI)$, donc les vecteurs $\\overrightarrow{OI}$ et $\\overrightarrow{CH}$ sont orthogonaux.<br>
           Le vecteur $\\overrightarrow{OI}\\begin{pmatrix}${xI}\\\\${yI}\\end{pmatrix}$ est donc un vecteur normal à la droite $(CH)$.<br>
-          On sait que si un vecteur $\\vec n\\begin{pmatrix}a\\\\b\\end{pmatrix}$ est un vecteur normal à une droite, alors une équation de cette droite est de la forme $ax+by+c=0$, où $c$ est un nombre réel.
-          <br>Une équation de $(CH)$ est donc de la forme $${xI}x+${yI}y+c=0$.<br>
+          On sait que si un vecteur $\\vec n\\begin{pmatrix}a\\\\b\\end{pmatrix}$ est un vecteur normal à une droite, alors une équation de cette droite est de la forme $ax+by+c=0$, où $c$ est un nombre réel.<br>
+          Une équation de $(CH)$ est donc de la forme $${xI}x+${yI}y+c=0$.<br>
           Le point $C(0\\,;\\,${cote})$ appartient à $(CH)$, donc $${xI}\\times 0+${yI}\\times ${cote}+c=0$, soit $c=${-yI * cote}$.<br>
           ${diviseurEquationDroiteCH === 1 ? '' : `En divisant par ${diviseurEquationDroiteCH}, `}
          Une équation cartésienne de la droite $(CH)$ est donc $${miseEnEvidence(equationDroiteCH)}$.`

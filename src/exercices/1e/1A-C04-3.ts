@@ -26,8 +26,7 @@ export default class AutoC4b extends ExerciceQcmA {
     this.enonce = `L'inverse du double de $5$ est égal à  : `
     this.correction = ` Le double de $5$ est $10$. <br>
     L'inverse de $10$ est $\\dfrac{1}{10}$.<br>
-    L'inverse du double de $5$ est donc égal à  $${miseEnEvidence('\\dfrac{1}{10}')}$.
-  `
+    L'inverse du double de $5$ est donc égal à  $${miseEnEvidence('\\dfrac{1}{10}')}$.`
 
     this.reponses = [
       '$\\dfrac{1}{10}$',
@@ -47,8 +46,7 @@ export default class AutoC4b extends ExerciceQcmA {
             this.enonce = `L'inverse du double de $${a}$ est égal à   : `
             this.correction = ` Le double de $${a}$ est $${2 * a}$. <br>
     L'inverse de $${2 * a}$ est $\\dfrac{1}{${2 * a}}$.<br>
-    L'inverse du double de $${a}$ est donc égal à   $${miseEnEvidence(`\\dfrac{1}{${2 * a}}`)}$.
-  `
+    L'inverse du double de $${a}$ est donc égal à   $${miseEnEvidence(`\\dfrac{1}{${2 * a}}`)}$.`
 
             this.reponses = [
               `$\\dfrac{1}{${2 * a}}$`,
@@ -64,8 +62,7 @@ export default class AutoC4b extends ExerciceQcmA {
             this.enonce = `Le double de l'inverse  de $${a}$ est égal à   : `
             this.correction = ` L'inverse de $${a}$ est $\\dfrac{1}{${a}}$. <br>
     Le double  de $\\dfrac{1}{${a}}$ est $\\dfrac{2}{${a}}$.<br>
-    Le double de l'inverse  de $${a}$ est égal à    $${miseEnEvidence(`\\dfrac{2}{${a}}`)}$.
-  `
+    Le double de l'inverse  de $${a}$ est égal à    $${miseEnEvidence(`\\dfrac{2}{${a}}`)}$.`
 
             this.reponses = [
               `$\\dfrac{2}{${a}}$`,
@@ -81,8 +78,7 @@ export default class AutoC4b extends ExerciceQcmA {
             this.enonce = `L'inverse du carré de $${a}$ est égal à   : `
             this.correction = ` Le carré de $${a}$ est $${a}^2 = ${a * a}$. <br>
     L'inverse de $${a * a}$ est $\\dfrac{1}{${a * a}}$.<br>
-    L'inverse du carré de $${a}$ est donc égal à   $${miseEnEvidence(`\\dfrac{1}{${a * a}}`)}$.
-  `
+    L'inverse du carré de $${a}$ est donc égal à   $${miseEnEvidence(`\\dfrac{1}{${a * a}}`)}$.`
 
             this.reponses = [
               `$\\dfrac{1}{${a * a}}$`,
@@ -99,8 +95,7 @@ export default class AutoC4b extends ExerciceQcmA {
             this.enonce = `Le double du carré de $${a}$ est égal à   : `
             this.correction = ` Le carré de $${a}$ est $${a}^2 = ${a * a}$. <br>
     Le double de $${a * a}$ est $2 \\times ${a * a} = ${2 * a * a}$.<br>
-    Le double du carré de $${a}$ est égal à    $${miseEnEvidence(`${2 * a * a}`)}$.
-  `
+    Le double du carré de $${a}$ est égal à    $${miseEnEvidence(`${2 * a * a}`)}$.`
 
             this.reponses = [
               `$${2 * a * a}$`,
@@ -116,8 +111,7 @@ export default class AutoC4b extends ExerciceQcmA {
             this.enonce = `Le carré du double de $${a}$ est égal à   : `
             this.correction = ` Le double de $${a}$ est $2 \\times ${a} = ${2 * a}$. <br>
     Le carré de $${2 * a}$ est $${2 * a}^2 = ${4 * a * a}$.<br>
-    Le carré du double de $${a}$ est égal à    $${miseEnEvidence(`${4 * a * a}`)}$.
-  `
+    Le carré du double de $${a}$ est égal à    $${miseEnEvidence(`${4 * a * a}`)}$.`
 
             this.reponses = [
               `$${4 * a * a}$`,
@@ -133,8 +127,7 @@ export default class AutoC4b extends ExerciceQcmA {
             this.enonce = `L'inverse de la moitié de $${a}$ est égal à   : `
             this.correction = ` La moitié de $${a}$ est $\\dfrac{${a}}{2} = ${a / 2}$. <br>
     L'inverse de $${a / 2}$ est $\\dfrac{1}{${a / 2}}$.<br>
-    L'inverse de la moitié de $${a}$ est donc égal à   $${miseEnEvidence(`\\dfrac{1}{${a / 2}}`)}$.
-  `
+    L'inverse de la moitié de $${a}$ est donc égal à   $${miseEnEvidence(`\\dfrac{1}{${a / 2}}`)}$.`
 
             this.reponses = [
               `$\\dfrac{1}{${a / 2}}$`,
@@ -151,8 +144,7 @@ export default class AutoC4b extends ExerciceQcmA {
             this.enonce = `La moitié de l'inverse de $${a}$ est égale à   : `
             this.correction = ` L'inverse de $${a}$ est $\\dfrac{1}{${a}}$. <br>
     La moitié de $\\dfrac{1}{${a}}$ est $\\dfrac{1}{2} \\times \\dfrac{1}{${a}} = \\dfrac{1}{${2 * a}}$.<br>
-    La moitié de l'inverse de $${a}$ est égale à    $${miseEnEvidence(`\\dfrac{1}{${2 * a}}`)}$.
-  `
+    La moitié de l'inverse de $${a}$ est égale à    $${miseEnEvidence(`\\dfrac{1}{${2 * a}}`)}$.`
 
             this.reponses = [
               `$\\dfrac{1}{${2 * a}}$`,

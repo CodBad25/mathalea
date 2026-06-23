@@ -30,8 +30,7 @@ export default class AutoC4a extends ExerciceQcmA {
    A&=\\dfrac{1}{100}+\\dfrac{1}{${texNombre(1000)}}\\\\
    &=0,01+${texNombre(0.001)}\\\\
    &=${miseEnEvidence(0.011)}
-   \\end{aligned}$ <br>
-  `
+   \\end{aligned}$ <br>`
 
     this.reponses = [
       '$A=0,011$',
@@ -85,8 +84,7 @@ export default class AutoC4a extends ExerciceQcmA {
        &=${texNombre(somme, 4)}\\\\
        &=\\dfrac{${numerateurFraction}}{${texNombre(denominateurCommun)}}\\\\
        &=${miseEnEvidence(`\\dfrac{${numSimple}}{${texNombre(denSimple)}}`)}
-       \\end{aligned}$ <br>
-      `
+       \\end{aligned}$ <br>`
       } else {
         // Fraction non simplifiable : on met directement en évidence la fraction décimale
         this.correction = ` On a  : <br>
@@ -95,8 +93,7 @@ export default class AutoC4a extends ExerciceQcmA {
        &=${texNombre(num / d1, 4)}+${texNombre(num / d2, 4)}\\\\
        &=${texNombre(somme, 4)}\\\\
        &=${miseEnEvidence(`\\dfrac{${numSimple}}{${texNombre(denSimple)}}`)}
-       \\end{aligned}$ 
-      `
+       \\end{aligned}$ `
       }
     } else {
       // Si la bonne réponse est le nombre décimal
@@ -105,8 +102,7 @@ export default class AutoC4a extends ExerciceQcmA {
      A&=\\dfrac{${num}}{${texNombre(d1)}}+\\dfrac{${num}}{${texNombre(d2)}}\\\\
      &=${texNombre(num / d1, 4)}+${texNombre(num / d2, 4)}\\\\
      &=${miseEnEvidence(texNombre(somme, 4))}
-     \\end{aligned}$ 
-    `
+     \\end{aligned}$ `
     }
 
     if (formatFraction) {

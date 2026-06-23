@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { aLeBonNombreDePropsDifferentes } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -13,7 +14,6 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer une image avec le second degré'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -171,8 +171,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
               ` Mentalement : <br>
           On commence par "calculer" la première parenthèse :  $${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(b)}=${a * x + b}$.<br>
            Puis la deuxième : $${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(d)}=${c * x + d}$.<br>
-        On fait le produit des nombres obtenus : $${a * x + b}\\times ${c * x + d}=${(a * x + b) * (c * x + d)}$.
-    `,
+        On fait le produit des nombres obtenus : $${a * x + b}\\times ${c * x + d}=${(a * x + b) * (c * x + d)}$.`,
               bleuMathalea,
             )
           }
@@ -186,10 +185,9 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
 
             this.correction += texteEnCouleur(
               ` Mentalement : <br>
-        On commence par "calculer" la première parenthèse :  $${rienSi1(a)}\\times${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(b)}=${a * x + b}$.
-        <br>Puis la deuxième : $${c}\\times${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(d)}=${c * x + d}$.<br>
-        On fait le produit des nombres obtenus : $${a * x + b}\\times ${ecritureParentheseSiNegatif(c * x + d)}=${(a * x + b) * (c * x + d)}$.
-    `,
+        On commence par "calculer" la première parenthèse :  $${rienSi1(a)}\\times${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(b)}=${a * x + b}$.<br>
+        Puis la deuxième : $${c}\\times${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(d)}=${c * x + d}$.<br>
+        On fait le produit des nombres obtenus : $${a * x + b}\\times ${ecritureParentheseSiNegatif(c * x + d)}=${(a * x + b) * (c * x + d)}$.`,
               bleuMathalea,
             )
           }
@@ -203,10 +201,9 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
 
             this.correction += texteEnCouleur(
               ` Mentalement : <br>
-        On commence par "calculer" la première parenthèse :  $${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(b)}=${a * x + b}$.
-        <br>Puis la deuxième : $${c}\\times${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(d)}=${c * x + d}$.<br>
-        On fait le produit des nombres obtenus : $${a * x + b}\\times ${c * x + d}=${(a * x + b) * (c * x + d)}$.
-    `,
+        On commence par "calculer" la première parenthèse :  $${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(b)}=${a * x + b}$.<br>
+        Puis la deuxième : $${c}\\times${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(d)}=${c * x + d}$.<br>
+        On fait le produit des nombres obtenus : $${a * x + b}\\times ${c * x + d}=${(a * x + b) * (c * x + d)}$.`,
               bleuMathalea,
             )
           }
@@ -222,8 +219,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
               ` Mentalement : <br>
         On commence par "calculer" la première parenthèse :  $${a}\\times${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(b)}=${a * x + b}$.
         <br>Puis la deuxième : $${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(d)}=${c * x + d}$.<br>
-        On fait le produit des nombres obtenus : $${a * x + b}\\times ${ecritureParentheseSiNegatif(c * x + d)}=${(a * x + b) * (c * x + d)}$.
-    `,
+        On fait le produit des nombres obtenus : $${a * x + b}\\times ${ecritureParentheseSiNegatif(c * x + d)}=${(a * x + b) * (c * x + d)}$.`,
               bleuMathalea,
             )
           }
@@ -261,8 +257,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
             this.correction += texteEnCouleur(
               ` Mentalement : <br>
           On commence par "calculer" le carré de $${x}$ :  $${ecritureParentheseSiNegatif(x)}^2=${x * x}$.<br>
-          On calcule alors $${a}-${x * x}=${a - x * x}$.<br>
-    `,
+          On calcule alors $${a}-${x * x}=${a - x * x}$.<br>`,
               bleuMathalea,
             )
           } else {
@@ -313,8 +308,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
 
           this.correction += texteEnCouleur(
             ` Mentalement : <br>
-          On commence par "calculer" l'intérieur de la parenthèse, puis on élève le résultat au carré.
-    `,
+          On commence par "calculer" l'intérieur de la parenthèse, puis on élève le résultat au carré.`,
             bleuMathalea,
           )
           this.distracteurs = [

@@ -28,8 +28,7 @@ export default class Auto1AC3j extends ExerciceQcmA {
   private appliquerLesValeurs(a: number, n: number): void {
     this.enonce = `Quelle est l'écriture décimale du nombre dont l'écriture scientifique est $${texNombre(a, 4)}\\times 10^{${n}}$ ?`
 
-    this.correction = `Multiplier par  $10^{${n}}$ revient à multiplier par $${texNombre(10 ** n, 6)}$,  donc l'écriture décimale de $${texNombre(a, 6)}\\times 10^{${n}}$ est : $${miseEnEvidence(texNombre(a * 10 ** n, 6))}$.
-         `
+    this.correction = `Multiplier par  $10^{${n}}$ revient à multiplier par $${texNombre(10 ** n, 6)}$,  donc l'écriture décimale de $${texNombre(a, 6)}\\times 10^{${n}}$ est : $${miseEnEvidence(texNombre(a * 10 ** n, 6))}$.`
 
     this.reponses = [
       `$${texNombre(a * 10 ** n, 8)}$`,

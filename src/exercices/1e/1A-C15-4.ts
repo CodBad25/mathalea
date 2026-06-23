@@ -37,8 +37,7 @@ export default class Auto1C19 extends ExerciceQcmA {
                    $\\begin{aligned}
                    a+3{,}50\\times 85 &=352{,}50\\\\
                    a&=${miseEnEvidence('352{,}50-3{,}50\\times 85')}
-                   \\end{aligned}$
-                   `
+                   \\end{aligned}$`
 
     this.reponses = [
       '$352{,}50-3{,}50\\times 85$',
@@ -66,8 +65,7 @@ export default class Auto1C19 extends ExerciceQcmA {
                          $\\begin{aligned}
                          a+${texNombre(p, 2, true)}\\times ${n} &=${texNombre(fac, 3)}\\\\
                          a&=${miseEnEvidence(`${texNombre(fac, 3)}-${texNombre(p, 2, true)}\\times ${n}`)}
-                         \\end{aligned}$
-                         `
+                         \\end{aligned}$`
 
           this.reponses = [
             `$${texNombre(fac, 3)}-${texNombre(p, 2, true)}\\times ${n}$`,

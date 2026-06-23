@@ -54,13 +54,8 @@ export default class Auto1C19b extends ExerciceQcmA {
        
         En février, elle rembourse $${frac2.texFraction}$ de ce qu'elle a remboursé en janvier.<br>
         Elle rembourse donc $${frac2.texFraction} \\times ${frac1.texFraction} = ${fracFevrier.texFractionSimplifiee}$ du crédit total.<br>
-        
-        
         Au total, en janvier et février, elle aura remboursé : $${frac1.texFraction} + ${fracFevrier.texFraction}=${frac1Equiv.texFraction} + ${fracFevrierEquiv.texFraction} = ${totalRembourse.texFractionSimplifiee}$ du crédit. <br>
-        
-       
-        Il lui restera à rembourser en mars : $1 - ${totalRembourse.texFractionSimplifiee} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$ du crédit.
-        `
+        Il lui restera à rembourser en mars : $1 - ${totalRembourse.texFractionSimplifiee} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$ du crédit.`
 
     this.reponses = [
       `$${reponse.texFractionSimplifiee}\\text{ du crédit.}$`,
@@ -132,15 +127,10 @@ export default class Auto1C19b extends ExerciceQcmA {
 
       this.correction = `
        
-        En février, elle rembourse $${frac2.texFraction}$ de ce qu'elle a remboursé en janvier.<br>
-        Elle rembourse donc $${frac2.texFraction} \\times ${frac1.texFraction} = ${fracFevrier.texFractionSimplifiee}$ du crédit total.<br>
-        
-        
-        Au total, en janvier et février, elle aura remboursé :  $${frac1.texFraction} + ${fracFevrier.texFraction}=${frac1Equiv.texFraction} + ${fracFevrierEquiv.texFraction} = ${totalRembourse.texFractionSimplifiee}$ du crédit. <br>
-        
-       
-        Il lui restera à rembourser en mars : $1 - ${totalRembourse.texFractionSimplifiee} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$ du crédit.
-        `
+      En février, elle rembourse $${frac2.texFraction}$ de ce qu'elle a remboursé en janvier.<br>
+      Elle rembourse donc $${frac2.texFraction} \\times ${frac1.texFraction} = ${fracFevrier.texFractionSimplifiee}$ du crédit total.<br>
+      Au total, en janvier et février, elle aura remboursé :  $${frac1.texFraction} + ${fracFevrier.texFraction}=${frac1Equiv.texFraction} + ${fracFevrierEquiv.texFraction} = ${totalRembourse.texFractionSimplifiee}$ du crédit. <br>
+      Il lui restera à rembourser en mars : $1 - ${totalRembourse.texFractionSimplifiee} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$ du crédit.`
 
       // Génération de réponses erronées plausibles
       const fausseReponse1 = frac2
