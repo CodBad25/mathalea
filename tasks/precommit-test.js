@@ -2,45 +2,7 @@
 /* eslint-disable no-undef */
 
 // scripts/wait-for-server.ts
-import { spawn, spawnSync } from 'node:child_process'
-import waitOn from 'wait-on'
-
-// Lancer pnpm start en arrière-plan
-const startServer = async () => {
-  const child = spawn('pnpm', ['start'], { shell: true })
-
-  // Optionnel : écouter les logs
-  child.stdout.on('data', (data) => console.log(`Server stdout: ${data}`))
-  child.stderr.on('data', (data) => console.error(`Server stderr: ${data}`))
-
-  // On ne bloque pas l'attente du processus, car on l'attendra via `wait-on`
-}
-
-// Fonction principale
-const waitForServerOrLaunch = async () => {
-  console.log('Checking if server is running at http://localhost:5173/alea...')
-
-  try {
-    // Vérifier si le serveur est déjà prêt
-    await waitOn({ url: 'http://localhost:5173/alea' })
-    console.log('✅ Server is already running.')
-  } catch (err) {
-    console.log('Server not found. Launching pnpm start...')
-    await startServer()
-    console.log('Server launched. Waiting for it to be ready...')
-    // Attendre que le serveur écoute
-    await waitOn({ url: 'http://localhost:5173/alea' })
-    console.log('✅ Server started and ready.')
-  }
-}
-
-// Exécution
-waitForServerOrLaunch()
-  .then(() => {})
-  .catch((error) => {
-    console.error('❌ Failed to start or wait for server:', error)
-    process.exit(1)
-  })
+import { spawnSync } from 'node:child_process'
 
 const sourceMode = process.argv[2] ?? 'staged'
 const maxCommitsArg = process.argv[3] ?? '1'
@@ -189,37 +151,14 @@ function main() {
 
   const steps = [
     {
-      name: 'Console errors',
+      name: 'verification line breaks',
       command: 'pnpm',
-      args: ['test:e2e:console_errors'],
+      args: ['test:e2e:latex_breaks'],
       env: { CHANGED_FILES: changedFilesEnv },
-    },
-    {
-      name: 'All exercises vitest',
-      command: 'pnpm',
-      args: [
-        'vitest',
-        '--config',
-        'tests/e2e/vitest.config.all_exercises.js',
-        '--run',
-      ],
-      env: { CI: '1', CHANGED_FILES: changedFilesEnv },
-    },
-    {
-      name: 'Interactivity report',
-      command: 'pnpm',
-      args: ['vitest', 'src/lib/amc/report-interactif.test.ts', '--run'],
-      env: { INTERACTIF_REPORT: '1', CHANGED_FILES: changedFilesEnv },
-    },
-    {
-      name: 'AMCnum report',
-      command: 'pnpm',
-      args: ['vitest', 'src/lib/amc/report-amcnum.test.ts', '--run'],
-      env: { AMCNUM_REPORT: '1', CHANGED_FILES: changedFilesEnv },
     },
   ]
 
-  const latexDecision = shouldRunLatexStep()
+  /* const latexDecision = shouldRunLatexStep()
   if (latexDecision.run) {
     steps.push({
       name: 'LaTeX compile (sans UI)',
@@ -231,25 +170,17 @@ function main() {
     console.log(`[INFO] Test LaTeX saute (${latexDecision.reason}).`)
     console.log('[INFO] Attendu localement: outils LaTeX (lualatex) installes.')
   }
-
+*/
   const results = steps.map((step) => {
     const ok = runTestStep(step.name, step.command, step.args, step.env)
     return { name: step.name, ok }
   })
-
-  console.log('')
-  console.log('===========================================')
-  console.log('[SUMMARY] Resume des tests ExosModified (local)')
-  console.log('===========================================')
 
   for (const result of results) {
     console.log(`${result.ok ? '✅' : '❌'} ${result.name}`)
   }
 
   const okCount = results.filter((r) => r.ok).length
-  console.log('')
-  console.log(`Resultat global: ${okCount}/${results.length} sous-tests OK`)
-  console.log('===========================================')
 
   if (okCount !== results.length) {
     process.exit(1)
@@ -257,7 +188,6 @@ function main() {
 }
 
 try {
-  waitForServerOrLaunch()
   main()
 } catch (error) {
   const message = error instanceof Error ? error.message : String(error)

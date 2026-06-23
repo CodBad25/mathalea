@@ -23,7 +23,10 @@ type LatexFragmentName = 'content' | 'contentCorr'
 type LintIssue = {
   fragment: LatexFragmentName
   line: number
-  rule: 'four-consecutive-backslashes' | 'line-starts-with-double-backslash'
+  rule:
+    | 'four-consecutive-backslashes'
+    | 'line-starts-with-double-backslash'
+    | 'four-consecutive-backslashes-after-tikzpicture'
   excerpt: string
 }
 
@@ -301,12 +304,21 @@ function lintLatexFragment(
 
   for (const [index, line] of lines.entries()) {
     if (/\\\\\\\\/.test(line)) {
-      issues.push({
-        fragment,
-        line: index + 1,
-        rule: 'four-consecutive-backslashes',
-        excerpt: shortenLine(line),
-      })
+      if (/\\end{tikzpicture}\\\\\\\\/.test(line)) {
+        issues.push({
+          fragment,
+          line: index + 1,
+          rule: 'four-consecutive-backslashes-after-tikzpicture',
+          excerpt: shortenLine(line),
+        })
+      } else {
+        issues.push({
+          fragment,
+          line: index + 1,
+          rule: 'four-consecutive-backslashes',
+          excerpt: shortenLine(line),
+        })
+      }
     }
 
     if (/^[ \t]*\\\\/.test(line)) {
@@ -391,6 +403,15 @@ function describeFragment(fragment: LatexFragmentName) {
 
 function describeRule(rule: LintIssue['rule'], fragment: LatexFragmentName) {
   const { sourceHint, exampleVariable } = describeFragment(fragment)
+
+  if (rule === 'four-consecutive-backslashes-after-tikzpicture') {
+    return {
+      cause: 'Un <br> a été mis derrière un mathalea2d().',
+      action:
+        'Pour ajouter un espace après la figure, on ne met pas de <br>, on modifie ymin ou mieux : on utilise fixeBordures et on modifie rymin.',
+      example: `${exampleVariable} += \`\\end{tikzpicture}<br>ligne 2\``,
+    }
+  }
 
   if (rule === 'four-consecutive-backslashes') {
     return {
