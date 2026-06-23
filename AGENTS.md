@@ -36,4 +36,11 @@ Codebase in english. Comments, documentation and user-displayed content in frenc
 
 ## Answering Codebase Questions
 
-When answering a developer question about this codebase, read and follow `documentation/README.md` carefully.
+When answering a developer question about this codebase:
+
+- Start with `documentation/README.md`, then follow the relevant documentation links.
+- If documentation appears to answer the question, run a quick consistency check against the codebase before answering: verify referenced files, key symbols, scripts in `package.json`, or mentioned tests with `rg` or targeted file reads.
+- Cite the documentation page(s) used in the answer and state that the relevant code references were checked.
+- If documentation is missing, incomplete, or inconsistent with the code, inspect the codebase with `rg` and targeted reads before answering.
+- When the answer reveals durable missing or obsolete knowledge, update or create the relevant page under `documentation/` in the same change.
+- Do not document disposable investigation details, temporary state, unconfirmed bugs, or personal preferences.
