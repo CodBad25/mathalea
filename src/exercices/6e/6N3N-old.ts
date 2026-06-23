@@ -1,5 +1,4 @@
 import { createList } from '../../lib/format/lists'
-import { deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -35,8 +34,8 @@ const situations = [
       '%prénom% a parcouru $%frac1%$ de son trajet avant la pause déjeuner. Après le repas, %pronom% a parcouru $%frac2%$ de son trajet.<br>',
     question1: 'Quelle fraction de son trajet a-t-%pronom% parcourue ?',
     question2: 'Quelle fraction de son trajet lui reste-t-il à parcourir ?',
-    correction1: '%prénom% a parcouru $%frac3%$ de son trajet.',
-    correction2: 'Il lui reste $%frac4%$ de son trajet à parcourir.',
+    correction1: '%prénom% a parcouru $%frac3%$ de son trajet.<br>',
+    correction2: 'Il lui reste $%frac4%$ de son trajet à parcourir.<br>',
   },
   {
     id: 'gâteau',
@@ -44,8 +43,8 @@ const situations = [
       "%prénom% a mangé $%frac1%$ d'un gâteau au chocolat ce matin. Cet après-midi, %pronom% a mangé $%frac2%$ du gâteau.<br>",
     question1: 'Quelle fraction du gâteau a-t-%pronom% mangée ?',
     question2: 'Quelle fraction du gâteau reste-t-il ?',
-    correction1: '%prénom% a mangé $%frac3%$ de gâteau.',
-    correction2: 'Il reste $%frac4%$ de gâteau.',
+    correction1: '%prénom% a mangé $%frac3%$ de gâteau.<br>',
+    correction2: 'Il reste $%frac4%$ de gâteau.<br>',
   },
   {
     id: 'sufrages',
@@ -55,8 +54,8 @@ const situations = [
       'Quelle fraction des voix ont obtenu ensemble %prénom1% et %prénom2% ?',
     question2: 'Quelle fraction des voix ont obtenu les autres candidats ?',
     correction1:
-      '%prénom1% et %prénom2% ont obtenu ensemble $%frac3%$ des voix.',
-    correction2: 'Les autres candidats ont obtenu $%frac4%$ des voix.',
+      '%prénom1% et %prénom2% ont obtenu ensemble $%frac3%$ des voix.<br>',
+    correction2: 'Les autres candidats ont obtenu $%frac4%$ des voix.<br>',
   },
   {
     id: 'livre',
@@ -64,8 +63,8 @@ const situations = [
       "%prénom% a lu $%frac1%$ d'un livre hier. Aujourd'hui, %pronom% a lu $%frac2%$ du livre.<br>",
     question1: 'Quelle fraction du livre a-t-%pronom% lue ?',
     question2: 'Quelle fraction du livre lui reste-t-il à lire ?',
-    correction1: '%prénom% a lu $%frac3%$ du livre.',
-    correction2: 'Il lui reste $%frac4%$ du livre à lire.',
+    correction1: '%prénom% a lu $%frac3%$ du livre.<br>',
+    correction2: 'Il lui reste $%frac4%$ du livre à lire.<br>',
   },
   {
     id: 'capcaité du réservoir',
@@ -73,8 +72,8 @@ const situations = [
       "Un réservoir d'eau est rempli aux $%frac1%$. On y ajoute $%frac2%$ de sa capacité totale.<br>",
     question1: 'Quelle fraction du réservoir a-t-on remplie ?',
     question2: 'Quelle fraction du réservoir reste-t-il à remplir ?',
-    correction1: 'On a rempli $%frac3%$ du réservoir.',
-    correction2: 'Il reste $%frac4%$ du réservoir à remplir.',
+    correction1: 'On a rempli $%frac3%$ du réservoir.<br>',
+    correction2: 'Il reste $%frac4%$ du réservoir à remplir.<br>',
   },
   {
     id: 'surface du jardin',
@@ -83,8 +82,9 @@ const situations = [
     question1: 'Quelle fraction de la surface du jardin a-t-%pronom% plantée ?',
     question2:
       'Quelle fraction de la surface du jardin lui reste-t-il à planter ?',
-    correction1: '%prénom% a planté $%frac3%$ de la surface de son jardin.',
-    correction2: 'Il lui reste $%frac4%$ de la surface du jardin à planter.',
+    correction1: '%prénom% a planté $%frac3%$ de la surface de son jardin.<br>',
+    correction2:
+      'Il lui reste $%frac4%$ de la surface du jardin à planter.<br>',
   },
   {
     id: 'distance totale',
@@ -93,8 +93,8 @@ const situations = [
     question1: 'Quelle fraction de la distance totale a-t-%pronom% courue ?',
     question2:
       'Quelle fraction de la distance totale lui reste-t-il à courir ?',
-    correction1: '%prénom% a couru $%frac3%$ de la distance totale.',
-    correction2: 'Il lui reste $%frac4%$ de la distance totale à courir.',
+    correction1: '%prénom% a couru $%frac3%$ de la distance totale.<br>',
+    correction2: 'Il lui reste $%frac4%$ de la distance totale à courir.<br>',
   },
 ]
 
@@ -273,33 +273,25 @@ export default class ProblemesFractions extends Exercice {
                 `${frac3.texFraction}${frac3.estIrreductible ? '' : `\\text{ soit }${frac3.texFractionSimplifiee}`}`,
               ) +
               ' En effet :<br>' +
-              deuxColonnesResp(
-                ` $\\begin{aligned}${frac1.texFraction} + ${frac2.texFraction} ${
-                  coupleDen[0] === coupleDen[1]
-                    ? `&=\\dfrac{${frac1.num}+${frac2.num}}{${coupleDen[0]}}\\\\
+              ` $\\begin{aligned}${frac1.texFraction} + ${frac2.texFraction} ${
+                coupleDen[0] === coupleDen[1]
+                  ? `&=\\dfrac{${frac1.num}+${frac2.num}}{${coupleDen[0]}}\\\\
                   &=${
                     frac3.estIrreductible
                       ? miseEnEvidence(frac3.texFraction)
                       : `${frac3.texFraction}\\\\
                   &=${miseEnEvidence(frac3.texFractionSimplifiee)}`
-                  }\\end{aligned}$`
-                    : `&=\\dfrac{${frac1.num} \\times ${coupleDen[1] / coupleDen[0]}}{${coupleDen[0]}\\times ${coupleDen[1] / coupleDen[0]}} + ${frac2.texFraction}\\\\
+                  }\\end{aligned}$<br>`
+                  : `&=\\dfrac{${frac1.num} \\times ${coupleDen[1] / coupleDen[0]}}{${coupleDen[0]}\\times ${coupleDen[1] / coupleDen[0]}} + ${frac2.texFraction}\\\\
                   &=\\dfrac{${(frac1.num * coupleDen[1]) / coupleDen[0]}+${frac2.num}}{${coupleDen[1]}}\\\\
                   &=${
                     frac3.estIrreductible
                       ? miseEnEvidence(`${frac3.texFraction}`)
                       : `${frac3.texFraction}\\\\
                   &=${miseEnEvidence(frac3.texFractionSimplifiee)}`
-                  }\\end{aligned}$`
-                }`,
-                schema1.display(),
-                {
-                  largeur1: 20,
-                  eleId: '',
-                  widthmincol1: '100px',
-                  widthmincol2: '400px',
-                },
-              ) +
+                  }\\end{aligned}$<br>`
+              }` +
+              schema1.display() +
               '<br>',
 
             situation.correction2.replace(
@@ -307,10 +299,9 @@ export default class ProblemesFractions extends Exercice {
               `${frac4.texFraction}${frac4.estIrreductible ? '' : `\\text{ soit }${frac4.texFractionSimplifiee}`}`,
             ) +
               ' En effet :<br>' +
-              deuxColonnesResp(
-                `$\\begin{aligned}1 - ${frac3.texFraction} ${
-                  coupleDen[0] === coupleDen[1]
-                    ? `&=\\dfrac{${coupleDen[0]}}{${coupleDen[0]}} - \\dfrac{${frac3.num}}{${coupleDen[0]}}\\\\
+              `$\\begin{aligned}1 - ${frac3.texFraction} ${
+                coupleDen[0] === coupleDen[1]
+                  ? `&=\\dfrac{${coupleDen[0]}}{${coupleDen[0]}} - \\dfrac{${frac3.num}}{${coupleDen[0]}}\\\\
                 & = \\dfrac{${coupleDen[0]} - ${frac3.num}}{${coupleDen[0]}}\\\\
                 &=${
                   frac4.estIrreductible
@@ -318,7 +309,7 @@ export default class ProblemesFractions extends Exercice {
                     : `${frac4.texFraction}\\\\
                 &=${miseEnEvidence(frac4.texFractionSimplifiee)}`
                 }`
-                    : `&=\\dfrac{${coupleDen[1]}}{${coupleDen[1]}} - \\dfrac{${frac3.num}}{${coupleDen[1]}}\\\\
+                  : `&=\\dfrac{${coupleDen[1]}}{${coupleDen[1]}} - \\dfrac{${frac3.num}}{${coupleDen[1]}}\\\\
                 & = \\dfrac{${coupleDen[1]} - ${frac3.num}}{${coupleDen[1]}}\\\\
                 &=${frac4.texFraction}${
                   !frac4.estIrreductible
@@ -326,15 +317,8 @@ export default class ProblemesFractions extends Exercice {
                 &=${frac4.texFractionSimplifiee}`
                     : ''
                 }`
-                }\\end{aligned}$`,
-                schema2.display(),
-                {
-                  largeur1: 20,
-                  eleId: '',
-                  widthmincol1: '100px',
-                  widthmincol2: '400px',
-                },
-              ),
+              }\\end{aligned}$<br>` +
+              schema2.display(),
           ],
           style: 'alpha',
         })
@@ -374,33 +358,25 @@ export default class ProblemesFractions extends Exercice {
                 `${frac3.texFraction}${frac3.estIrreductible ? '' : `\\text{ soit }${frac3.texFractionSimplifiee}`}`,
               ) +
               ' En effet :<br>' +
-              deuxColonnesResp(
-                `$\\begin{aligned}${frac1.texFraction} + ${frac2.texFraction} ${
-                  coupleDen[0] === coupleDen[1]
-                    ? `&=\\dfrac{${frac1.num}+${frac2.num}}{${coupleDen[0]}}\\\\
+              `$\\begin{aligned}${frac1.texFraction} + ${frac2.texFraction} ${
+                coupleDen[0] === coupleDen[1]
+                  ? `&=\\dfrac{${frac1.num}+${frac2.num}}{${coupleDen[0]}}\\\\
                   &=${
                     frac3.estIrreductible
                       ? miseEnEvidence(frac3.texFraction)
                       : `${frac3.texFraction}\\\\
                   &=${miseEnEvidence(frac3.texFractionSimplifiee)}`
-                  }\\end{aligned}$`
-                    : `&=\\dfrac{${frac1.num} \\times ${coupleDen[1] / coupleDen[0]}}{${coupleDen[0]}\\times ${coupleDen[1] / coupleDen[0]}} + ${frac2.texFraction}\\\\
+                  }\\end{aligned}$<br>`
+                  : `&=\\dfrac{${frac1.num} \\times ${coupleDen[1] / coupleDen[0]}}{${coupleDen[0]}\\times ${coupleDen[1] / coupleDen[0]}} + ${frac2.texFraction}\\\\
                   &=\\dfrac{${(frac1.num * coupleDen[1]) / coupleDen[0]}+${frac2.num}}{${coupleDen[1]}}\\\\
                   &=${
                     frac4.estIrreductible
                       ? miseEnEvidence(frac3.texFraction)
                       : `${frac3.texFraction}\\\\
                   &=${miseEnEvidence(frac3.texFractionSimplifiee)}`
-                  }\\end{aligned}$`
-                }`,
-                schema1.display(),
-                {
-                  largeur1: 20,
-                  eleId: '',
-                  widthmincol1: '100px',
-                  widthmincol2: '400px',
-                },
-              ) +
+                  }\\end{aligned}$<br>`
+              }` +
+              schema1.display() +
               '<br>',
 
             situation.correction2.replace(
@@ -408,10 +384,9 @@ export default class ProblemesFractions extends Exercice {
               `${frac4.texFraction}${frac4.estIrreductible ? '' : `\\text{ soit }${frac4.texFractionSimplifiee}`}`,
             ) +
               ' En effet :' +
-              deuxColonnesResp(
-                `$\\begin{aligned}1 - ${frac3.texFraction}` +
-                  (coupleDen[0] === coupleDen[1]
-                    ? `&=\\dfrac{${coupleDen[0]}}{${coupleDen[0]}} - \\dfrac{${frac3.num}}{${coupleDen[0]}}\\\\
+              `$\\begin{aligned}1 - ${frac3.texFraction}` +
+              (coupleDen[0] === coupleDen[1]
+                ? `&=\\dfrac{${coupleDen[0]}}{${coupleDen[0]}} - \\dfrac{${frac3.num}}{${coupleDen[0]}}\\\\
               & = \\dfrac{${coupleDen[0]} - ${frac3.num}}{${coupleDen[0]}}\\\\
               &=${
                 frac4.estIrreductible
@@ -419,7 +394,7 @@ export default class ProblemesFractions extends Exercice {
                   : `${frac4.texFraction}\\\\
               &=${miseEnEvidence(frac4.texFractionSimplifiee)}`
               }`
-                    : `&=\\dfrac{${coupleDen[1]}}{${coupleDen[1]}} - \\dfrac{${frac3.num}}{${coupleDen[1]}}\\\\
+                : `&=\\dfrac{${coupleDen[1]}}{${coupleDen[1]}} - \\dfrac{${frac3.num}}{${coupleDen[1]}}\\\\
               & = \\dfrac{${coupleDen[1]} - ${frac3.num}}{${coupleDen[1]}}\\\\
               &=${
                 frac4.estIrreductible
@@ -427,15 +402,8 @@ export default class ProblemesFractions extends Exercice {
                   : `${frac4.texFraction}\\\\
               &=${miseEnEvidence(frac4.texFractionSimplifiee)}`
               }`) +
-                  `\\end{aligned}$`,
-                schema2.display(),
-                {
-                  largeur1: 20,
-                  eleId: '',
-                  widthmincol1: '100px',
-                  widthmincol2: '400px',
-                },
-              ),
+              `\\end{aligned}$<br>` +
+              schema2.display(),
           ],
           style: 'alpha',
         })

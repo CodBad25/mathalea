@@ -9,6 +9,7 @@ import {
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { rotation } from '../../lib/2d/transformations'
 import { pointIntersectionDD } from '../../lib/2d/utilitairesPoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import {
   choice,
@@ -25,8 +26,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const dateDePublication = '22/11/2020'
 export const amcReady = true
@@ -494,6 +493,7 @@ export default class ProprietesParallelesPerpendiculaires extends Exercice {
               scale: context.vue !== 'latex' ? 0.3 : 0.6,
               mainlevee: false,
               amplitude: 0.3,
+              style: 'display: block',
             },
             objets2,
           ) +
@@ -515,20 +515,20 @@ export default class ProprietesParallelesPerpendiculaires extends Exercice {
           " Les droites données parallèles dans l'énoncé sont de même "
         texteCorr += context.isHtml ? ' couleur/style.<br>' : 'style.<br>'
       }
-      texteCorr +=
-        mathalea2d(
-          {
-            xmin: -2,
-            xmax: 15,
-            ymin: -2,
-            ymax: 10,
-            pixelsParCm: 20,
-            scale: context.vue !== 'latex' ? 0.3 : 0.6,
-            mainlevee: false,
-            amplitude: 0.3,
-          },
-          objets,
-        ) + '<br>'
+      texteCorr += mathalea2d(
+        {
+          xmin: -2,
+          xmax: 15,
+          ymin: -2,
+          ymax: 10,
+          pixelsParCm: 20,
+          scale: context.vue !== 'latex' ? 0.3 : 0.6,
+          mainlevee: false,
+          amplitude: 0.3,
+          style: 'display: block',
+        },
+        objets,
+      )
       for (let j = 0; j < code.length - 1; j++) {
         if (this.correctionDetaillee) texteCorr += 'On sait que : '
         else texteCorr += 'Comme '

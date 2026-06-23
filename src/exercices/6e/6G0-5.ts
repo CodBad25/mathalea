@@ -5,6 +5,7 @@ import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { pointSurDroite } from '../../lib/2d/utilitairesPoint'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -13,9 +14,8 @@ import { rangeMinMax } from '../../lib/outils/nombres'
 import { lettreDepuisChiffre, numAlpha, sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = 'Appartenir ou ne pas appartenir'
 export const dateDePublication = '05/10/2022'
@@ -143,13 +143,14 @@ export default class constructionElementaire extends Exercice {
           ymax: Ymax,
           pixelsParCm: ppc,
           scale: sc,
+          style: 'display: block',
         },
         objetsEnonce,
       )
       colonne1 =
         (context.vue === 'diap' ? '<center>' : '') +
         figure +
-        (context.vue === 'diap' ? '</center>' : '<br>')
+        (context.vue === 'diap' ? '</center>' : '')
 
       colonne2 = 'Compléter avec $\\in$ ou $\\notin$. <br>'
       let correction2 = colonne2
@@ -270,8 +271,10 @@ export default class constructionElementaire extends Exercice {
       /****************************************************/
       if (this.questionJamaisPosee(i, correction)) {
         // Si la question n'a jamais été posée, on en crée une autre
-        this.listeQuestions[i] = enonce + '<br>'
-        this.listeCorrections[i] = correction + '<br>'
+        this.listeQuestions[i] =
+          `${enonce}${context.isHtml && i < this.nbQuestions - 1 ? '<br>' : ''}`
+        this.listeCorrections[i] =
+          `${correction}${context.isHtml && i < this.nbQuestions - 1 ? '<br>' : ''}`
 
         if (context.isAmc) {
           this.autoCorrectionAMC[i] = {
@@ -355,7 +358,5 @@ export default class constructionElementaire extends Exercice {
       }
       cpt++
     }
-
-    listeQuestionsToContenu(this)
   }
 }

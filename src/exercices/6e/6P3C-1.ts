@@ -1,6 +1,7 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tableau } from '../../lib/2d/tableau'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
 import { texPrix } from '../../lib/format/style'
@@ -30,8 +31,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   'Résoudre un problème relevant de la proportionnalité avec les propriétés de linéarité'
@@ -144,12 +143,12 @@ export default class ProportionnaliteParLineariteBis extends Exercice {
       const prenomlisteEE = [prenomliste[2], prenomliste[3], prenomliste[4]]
       shuffle2tableaux(consigneQuestions, prenomlisteEE)
 
-      texte = `${situation.lieu}, ${prenomliste[0]} achète $${n1}$ ${pluriel(n1, situation)} et paie $${texPrix(n1 * situation.pu)}$${sp()}€.
+      texte = `${situation.lieu}, ${prenomliste[0]} achète $${n1}$ ${pluriel(n1, situation)} et paie $${texPrix(n1 * situation.pu)}$${sp()}€.<br>
       ${prenomliste[1]} achète $${n2}$ ${pluriel(n2, situation)} et paie $${texPrix(n2 * situation.pu)}$${sp()}€.<br>`
       const q1 = `${String.fromCharCode(97 + k)}) Combien paiera ${prenomlisteEE[0]} pour $${consigneQuestions[k]}$ ${pluriel(consigneQuestions[k], situation)} ?`
       const enonceQ1 = q1 + ` %{champ${k + 1}}\n`
       k++
-      let enonceAMC = texte + '<br>' + q1
+      let enonceAMC = texte + q1
       const propositionsAMC = [
         {
           type: 'AMCNum',
@@ -252,9 +251,8 @@ export default class ProportionnaliteParLineariteBis extends Exercice {
       })
       if (!this.sup) {
         texteCorr = `
-        C'est une situation de proportionnalité. Nous pouvons donc utiliser les propriétés de linéarité de la proportionnalité.
-        <br>C'est ce que nous allons faire pour les trois premières questions.
-        <br>`
+        C'est une situation de proportionnalité. Nous pouvons donc utiliser les propriétés de linéarité de la proportionnalité.<br>
+        C'est ce que nous allons faire pour les trois premières questions.<br>`
         const listeCorr: string[] = []
         texteCorr += createList({
           items: [
@@ -306,18 +304,14 @@ export default class ProportionnaliteParLineariteBis extends Exercice {
         Avec $${texPrix(nMax * situation.pu)}$${sp()}€, ${prenomliste[5]} peut donc acheter $${miseEnEvidence(nMax)}$ ${pluriel(nMax, situation)}.`
       } else {
         texteCorr = `
-      C'est une situation de proportionnalité. Nous pouvons donc utiliser les propriétés de linéarité de la proportionnalité.
-      <br>`
+      C'est une situation de proportionnalité. Nous pouvons donc utiliser les propriétés de linéarité de la proportionnalité.<br>`
         const texteCorrInit = ``
         const texteCorrn3 = `
-      $${texPrix(n1 * situation.pu)}$${sp()}€ + $${texPrix(n2 * situation.pu)}$${sp()}€ = $${miseEnEvidence(texPrix(n3 * situation.pu))}$${sp()}€.
-      <br>`
+      $${texPrix(n1 * situation.pu)}$${sp()}€ + $${texPrix(n2 * situation.pu)}$${sp()}€ = $${miseEnEvidence(texPrix(n3 * situation.pu))}$${sp()}€.<br>`
         const texteCorrn4 = `
-      $${texPrix(n1 * situation.pu)}$${sp()}€ - $${texPrix(n2 * situation.pu)}$${sp()}€ = $${miseEnEvidence(texPrix(n4 * situation.pu))}$${sp()}€.
-      <br>`
+      $${texPrix(n1 * situation.pu)}$${sp()}€ - $${texPrix(n2 * situation.pu)}$${sp()}€ = $${miseEnEvidence(texPrix(n4 * situation.pu))}$${sp()}€.<br>`
         const texteCorrn5 = `
-     $${choixMult}\\times${texPrix(choixN * situation.pu)}$${sp()}€ = $${miseEnEvidence(texPrix(n5 * situation.pu))}$${sp()}€.
-      <br>`
+     $${choixMult}\\times${texPrix(choixN * situation.pu)}$${sp()}€ = $${miseEnEvidence(texPrix(n5 * situation.pu))}$${sp()}€.<br>`
         for (let kk = 0; kk < 3; kk++) {
           texteCorr += `<br>${numAlpha(kCorr++)} ` + texteCorrInit
           switch (consigneQuestions[kk]) {
@@ -334,8 +328,8 @@ export default class ProportionnaliteParLineariteBis extends Exercice {
         }
 
         texteCorr += `<br>
-      ${numAlpha(kCorr++)}$${texPrix(n1 * situation.pu)}$${sp()}€ $\\div ${n1} = ${texPrix(situation.pu)}$${sp()}€.
-      <br> $${texPrix(nMax * situation.pu)}$ ${sp()}€ $\\div ${texPrix(situation.pu)}$${sp()}€ $= ${miseEnEvidence(nMax)}$ ${pluriel(nMax, situation)}.`
+      ${numAlpha(kCorr++)}$${texPrix(n1 * situation.pu)}$${sp()}€ $\\div ${n1} = ${texPrix(situation.pu)}$${sp()}€.<br>
+       $${texPrix(nMax * situation.pu)}$ ${sp()}€ $\\div ${texPrix(situation.pu)}$${sp()}€ $= ${miseEnEvidence(nMax)}$ ${pluriel(nMax, situation)}.`
         const ligne1 = [
           {
             texte: 'Nombre de ' + situation.achat_plur,

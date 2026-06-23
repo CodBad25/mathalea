@@ -1,19 +1,39 @@
 import { context } from '../../modules/context'
+import type { ColourNames } from '../2d/colorToLatexOrHtml'
+import { colours } from '../2d/colorToLatexOrHtml'
 import { range } from './nombres'
 import './ShemasEnBoite.css'
 import { texNombre } from './texNombre'
-import { colours } from '../2d/colorToLatexOrHtml'
-import type { ColourNames } from '../2d/colorToLatexOrHtml'
 
 const standardLatexColors = new Set([
-  'black', 'white', 'red', 'green', 'blue', 'cyan', 'magenta', 'yellow',
-  'gray', 'darkgray', 'lightgray', 'orange', 'violet', 'purple', 'brown',
-  'lime', 'olive', 'pink', 'teal',
+  'black',
+  'white',
+  'red',
+  'green',
+  'blue',
+  'cyan',
+  'magenta',
+  'yellow',
+  'gray',
+  'darkgray',
+  'lightgray',
+  'orange',
+  'violet',
+  'purple',
+  'brown',
+  'lime',
+  'olive',
+  'pink',
+  'teal',
 ])
 
 function hexToRgb(hex: string): [number, number, number] {
   const h = hex.replace('#', '')
-  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]
+  return [
+    parseInt(h.slice(0, 2), 16),
+    parseInt(h.slice(2, 4), 16),
+    parseInt(h.slice(4, 6), 16),
+  ]
 }
 
 function colorForTikz(color: string): string {
@@ -82,7 +102,7 @@ type LigneSchemaType = {
     fontWeight?: string // pour le poids de la police de l'entête
   }
   spacing?: number // pour l'espacement après la ligne
-  height?: number // pour la hauteur de la ligne (en em), si non défini, on utilise la hauteur par défaut
+  height?: string // pour la hauteur de la ligne (en em), si non défini, on utilise la hauteur par défaut
 }
 
 type LigneAccoladeType = AccoladeType[]
@@ -743,7 +763,7 @@ export default class SchemaEnBoite {
     nbFois: number | string | undefined,
     nb1: number | string | undefined,
     nb2: number | string | undefined,
-    nbParts: number | String | undefined,
+    nbParts: number | string | undefined,
     reste: number | string | undefined,
     precison: number,
   ): SchemaEnBoite {

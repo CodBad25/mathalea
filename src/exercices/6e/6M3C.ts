@@ -195,7 +195,7 @@ export default class VolumesPavesParDenombrement extends Exercice {
           { xmin: -1, ymin: -1, xmax: 15, ymax: 1.5 + h * 1.4 },
           plaques,
         )
-        texteCorr += `<br>Il y a donc $${l} \\times ${p} \\times ${h} = ${miseEnEvidence(h * l * p)}$ cubes.<br>`
+        texteCorr += `Il y a donc $${l} \\times ${p} \\times ${h} = ${miseEnEvidence(h * l * p)}$ cubes.<br>`
       } else {
         for (let i = 0; i < h * p; i++) {
           objetsAtracer.push(...pavesCorr[h * p - 1 - i])

@@ -1,16 +1,16 @@
+import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
 import { context } from '../../modules/context'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { tableauColonneLigne } from '../../lib/2d/tableau'
-import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import Exercice from '../Exercice'
 export const titre =
   "Trouver un ordre de grandeur d'opérations sur les décimaux"
 export const interactifReady = true
@@ -238,8 +238,7 @@ export default class OrdreDeGrandeurOperationsDecimaux extends Exercice {
         enonce: tableau.output,
         question: '',
         correction: `
-          Commençons par calculer un ordre de grandeur du résultat de chaque opération dans la première colonne du tableau.
-          <br>
+          Commençons par calculer un ordre de grandeur du résultat de chaque opération dans la première colonne du tableau.<br>
           ${tableauColonneLigne(ligneEntete, tabEntetesLignesCorr, coches)}`,
       }
       const reponses = Object.assign(

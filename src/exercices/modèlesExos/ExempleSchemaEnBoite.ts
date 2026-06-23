@@ -260,7 +260,7 @@ Combien d’argent ${prenom} avait-elle sur son compte en banque avant son achat
           seb = new SchemaEnBoite({
             lignes: [
               {
-                height: 2.5,
+                height: '2.5em',
                 entete: {
                   content: 'Pays A',
                   couleur: 'magenta',
@@ -278,7 +278,7 @@ Combien d’argent ${prenom} avait-elle sur son compte en banque avant son achat
                 spacing: 0.5,
               },
               {
-                height: 2.5,
+                height: '2.5em',
                 entete: {
                   content: 'Pays B',
                   couleur: 'magenta',
@@ -326,7 +326,7 @@ Quelle est la plus grande longueur qu’elle peut choisir pour que toutes les in
               ],
               lignes: [
                 {
-                  height: 2.5,
+                  height: '2.5em',
                   barres: range(nb1 - 1).map((i) => {
                     const barre = Object.assign(
                       {
@@ -336,9 +336,7 @@ Quelle est la plus grande longueur qu’elle peut choisir pour que toutes les in
                       },
                       {
                         type:
-                          i === 0
-                            ? ('flèche' as 'flèche')
-                            : ('boite' as 'boite'),
+                          i === 0 ? ('flèche' as const) : ('boite' as const),
                         content: i === 0 ? '? cm' : '',
                       },
                     )
@@ -370,7 +368,7 @@ Combien ${prenoms[1]} a-t-il de cartes ?<br>`
             seb = new SchemaEnBoite({
               lignes: [
                 {
-                  height: 2.5,
+                  height: '2.5em',
                   entete: {
                     content: prenoms[1],
                     couleur: 'magenta',
@@ -388,7 +386,7 @@ Combien ${prenoms[1]} a-t-il de cartes ?<br>`
                   spacing: 0.5,
                 },
                 {
-                  height: 2.5,
+                  height: '2.5em',
                   entete: {
                     content: prenoms[0],
                     couleur: 'magenta',
@@ -398,7 +396,7 @@ Combien ${prenoms[1]} a-t-il de cartes ?<br>`
                     const barre = Object.assign(
                       {
                         length: 3,
-                        type: 'boite' as 'boite',
+                        type: 'boite' as const,
                         color: 'magenta',
                         content: '',
                         options: {
@@ -447,7 +445,7 @@ Combien ${prenoms[1]} a-t-il de cartes ?<br>`
             seb = new SchemaEnBoite({
               lignes: [
                 {
-                  height: 1,
+                  height: '1em',
                   entete: {
                     content: 'Billes vertes',
                     couleur: 'magenta',
@@ -464,7 +462,7 @@ Combien ${prenoms[1]} a-t-il de cartes ?<br>`
                   spacing: 1,
                 },
                 {
-                  height: 1,
+                  height: '1em',
                   entete: {
                     content: 'Billes rouges',
                     couleur: 'magenta',
@@ -479,7 +477,7 @@ Combien ${prenoms[1]} a-t-il de cartes ?<br>`
                   spacing: 1,
                 },
                 {
-                  height: 1,
+                  height: '1em',
                   entete: {
                     content: 'Billes bleues',
                     couleur: 'magenta',
