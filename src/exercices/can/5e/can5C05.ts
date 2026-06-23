@@ -32,12 +32,11 @@ export default class Division5e extends ExerciceSimple {
     const c = a * b
     this.reponse = a
     this.question = `Calculer $${c} \\div ${b}$.`
-    this.correction = `$${c} \\div ${b}=${a}$`
-    this.correction += texteEnCouleur(`
-    <br> Mentalement : <br>
+    this.correction =
+      `$${c} \\div ${b}=${a}$<br>` +
+      texteEnCouleur(`Mentalement : <br>
     On décompose $${c}$ en $${b * 10}+${c - 10 * b}=${b}\\times 10+${b}\\times ${(c - 10 * b) / b}=${b}(10+${(c - 10 * b) / b})$.<br>
         Ainsi :
-     $${c} \\div ${b}=10+${(c - 10 * b) / b}=${a}$.<br>
-     `)
+     $${c} \\div ${b}=10+${(c - 10 * b) / b}=${a}$.<br>`)
   }
 }
