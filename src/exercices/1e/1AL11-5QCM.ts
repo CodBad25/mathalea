@@ -30,9 +30,9 @@ export default class Puissances extends ExerciceQcmA {
     this.enonce = `Soit $(u_n)$ une suite arithmétique.<br>
     On donne $u_{${p}}=${up}$ et $u_{${p + k} }=${up + k * r}$. <br>
     La raison de cette suite est égale à : `
-    this.correction = `Soit $(u_n)$ une suite arithmétique, de premier terme $u_0\\in \\mathbb{R}$ et de raison $r\\in \\mathbb{R}.$
-    <br> On a alors pour tout $n\\in \\mathbb{N}$ et tout $p\\in \\mathbb{N}$ : $u_n=u_p+(n-p)r$.
-<br>En particulier, avec l'énoncé, <br>$\\begin{aligned}
+    this.correction = `Soit $(u_n)$ une suite arithmétique, de premier terme $u_0\\in \\mathbb{R}$ et de raison $r\\in \\mathbb{R}.$<br>
+    On a alors pour tout $n\\in \\mathbb{N}$ et tout $p\\in \\mathbb{N}$ : $u_n=u_p+(n-p)r$.<br>
+    En particulier, avec l'énoncé, <br>$\\begin{aligned}
 u_{${p + k}}&=u_{${p}}+(${p + k}-${p})\\times r\\\\
 ${k}\\times r&=u_{${p + k}}-u_{${p}}\\\\
 r&=\\dfrac{${up + k * r}-${up}}{${k}}\\\\
@@ -53,9 +53,9 @@ r&=${r}
 
       this.enonce = `Soit $(u_n)$ une suite arithmétique.<br>On donne $u_{${p}}=${up}$ et $u_{${p + k} }=${up + k * r}$. <br>
     La raison de cette suite est est égale à :`
-      this.correction = `Soit $(u_n)$ une suite arithmétique, de premier terme $u_0\\in \\mathbb{R}$ et de raison $r\\in \\mathbb{R}.$
-    <br> On a alors pour tout $n\\in \\mathbb{N}$ et tout $p\\in \\mathbb{N}$ : $u_n=u_p+(n-p)r$.
-<br>En particulier, avec l'énoncé, <br>$\\begin{aligned}
+      this.correction = `Soit $(u_n)$ une suite arithmétique, de premier terme $u_0\\in \\mathbb{R}$ et de raison $r\\in \\mathbb{R}.$<br>
+      On a alors pour tout $n\\in \\mathbb{N}$ et tout $p\\in \\mathbb{N}$ : $u_n=u_p+(n-p)r$.<br>
+      En particulier, avec l'énoncé, <br>$\\begin{aligned}
 u_{${p + k}}&=u_{${p}}+(${p + k}-${p})\\times r\\\\
 ${k}\\times r&=u_{${p + k}}-u_{${p}}\\\\
 r&=\\dfrac{${up + k * r}-${ecritureParentheseSiMoins(up)}}{${k}}\\\\
