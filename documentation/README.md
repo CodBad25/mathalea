@@ -1,6 +1,6 @@
 # Documentation MathALÉA
 
-Cette documentation est la source canonique durable du dépôt. Le dossier `old-documentation/` reste une photographie historique de l'ancien wiki : il sert de source de migration, mais les pages d'archives, de transition v2/v3, de roadmap, de TODO et de vie du projet ne sont pas reprises ici.
+Cette documentation est la source canonique durable du dépôt.
 
 Les rapports générés et les fichiers exportés archivés sont listés dans [reports/README.md](../reports/README.md).
 
