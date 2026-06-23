@@ -35,10 +35,9 @@ export default class Soustraire2Decimaux2 extends ExerciceSimple {
     const d2 = randint(d1, 9)
     const c2 = randint(1, 9)
     this.question = `Calculer $${texNombre(a + d1 / 10, 1)}-${texNombre(b + d2 / 10 + c2 / 100, 2)}$.`
-    this.correction = `$${texNombre(a + d1 / 10, 1)}-${texNombre(b + d2 / 10 + c2 / 100, 2)}=${texNombre(a + d1 / 10 - b - d2 / 10 - c2 / 100, 2)}$`
+    this.correction = `$${texNombre(a + d1 / 10, 1)}-${texNombre(b + d2 / 10 + c2 / 100, 2)}=${texNombre(a + d1 / 10 - b - d2 / 10 - c2 / 100, 2)}$<br>`
     this.reponse = arrondi(a + d1 / 10 - b - d2 / 10 - c2 / 100, 2)
-    this.correction += texteEnCouleur(`
-    <br> Mentalement : <br>
+    this.correction += texteEnCouleur(`Mentalement : <br>
    On commence par soustraire les unités : $${texNombre(a + d1 / 10, 1)}-${b}=${texNombre(a + d1 / 10 - b, 1)}$.<br>
    Puis on soustrait la partie décimale de $${texNombre(a + d2 / 10 + c2 / 100, 2)}$ c'est-à-dire $${texNombre(d2 / 10 + c2 / 100, 2)}$.
     On obtient $${texNombre(a + d1 / 10 - b, 1)}-${texNombre(d2 / 10 + c2 / 100, 2)}=${texNombre(a + d1 / 10 - b - d2 / 10 - c2 / 100, 2)}$`)
