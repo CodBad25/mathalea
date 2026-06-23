@@ -44,9 +44,7 @@ export default class SommetParabole extends ExerciceSimple {
     L'abscisse du sommet de la parabole qui représente $f$ est :`
     this.correction = `Pour un polynôme de degré $2$ du type $ax^2+bx+c$, l'abscisse du sommet 
     de la parabole $x_S$ est donnée par $-\\dfrac{b}{2a}$.<br>
-     L'abscisse du sommet est donnée  par $x_S=-\\dfrac{${b}}{2\\times ${ecritureParentheseSiNegatif(a)}}=${miseEnEvidence(this.reponse)}$.
-     <br>
-   `
+     L'abscisse du sommet est donnée  par $x_S=-\\dfrac{${b}}{2\\times ${ecritureParentheseSiNegatif(a)}}=${miseEnEvidence(this.reponse)}$.<br>`
 
     if (!this.interactif) {
       this.question += ' $\\ldots$'
