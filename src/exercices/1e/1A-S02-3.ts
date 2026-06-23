@@ -54,15 +54,13 @@ export default class MoyenneQCM extends ExerciceQcmA {
     this.correction = `Appelons $x$ la valeur cherchée.<br>
     On commence par calculer la somme des valeurs de la série de l'énoncé :<br>
     $${valeurs.join(' + ')} = ${somme}$.<br>
-    Comme la série de l'énoncé contient $${effectif}$ valeurs, la nouvelle série avec $x$ en contient $${effectif + 1}$.
-    <br>On peut calculer sa moyenne avec l'expression : $\\dfrac{${somme} + x}{${effectif + 1}}$<br>
+    Comme la série de l'énoncé contient $${effectif}$ valeurs, la nouvelle série avec $x$ en contient $${effectif + 1}$.<br>
+    On peut calculer sa moyenne avec l'expression : $\\dfrac{${somme} + x}{${effectif + 1}}$<br>
     Comme cette moyenne vaut $${texNombre(moyenne)}$ d'après l'énoncé, il faut alors résoudre l'équation : <br>
-    $\\dfrac{${somme} + x}{${effectif + 1}} = ${texNombre(moyenne)}$
-    <br>
-    $${somme} + x = ${texNombre(moyenne)} \\times ${effectif + 1}$
-    <br>
-    $x = ${texNombre(moyenne)} \\times ${effectif + 1} - ${somme}$
-    <br>$x = ${miseEnEvidence(texNombre(x))}$`
+    $\\dfrac{${somme} + x}{${effectif + 1}} = ${texNombre(moyenne)}$<br>
+    $${somme} + x = ${texNombre(moyenne)} \\times ${effectif + 1}$<br>
+    $x = ${texNombre(moyenne)} \\times ${effectif + 1} - ${somme}$<br>
+    $x = ${miseEnEvidence(texNombre(x))}$`
   }
 
   // Ceci est la fonction qui s'occupe d'écrire l'énoncé, la correction et les réponses
