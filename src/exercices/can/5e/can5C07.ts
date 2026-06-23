@@ -32,11 +32,9 @@ export default class PrioriteOperatoire5e extends ExerciceSimple {
     const c = randint(3, 9)
     this.reponse = b + a * c
     this.question = `Calculer $${b} + ${a} \\times ${c}$.`
-    this.correction = `$${b} + ${a} \\times ${c}= ${b} + ${a * c} = ${this.reponse}$`
-    this.correction += texteEnCouleur(`
-    <br> Mentalement : <br>
+    this.correction = `$${b} + ${a} \\times ${c}= ${b} + ${a * c} = ${this.reponse}$<br>`
+    this.correction += texteEnCouleur(`Mentalement : <br>
     La multiplication étant prioritaire sur l'addition, on commence par calculer $${a} \\times ${c}=${a * c}$.<br>
-    On ajoute ensuite  $${b}$ pour obtenir le résultat : $${a * c}+${b}=${this.reponse}$.
-     `)
+    On ajoute ensuite  $${b}$ pour obtenir le résultat : $${a * c}+${b}=${this.reponse}$.`)
   }
 }
