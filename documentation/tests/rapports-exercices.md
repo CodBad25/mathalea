@@ -2,7 +2,7 @@
 
 Ce guide explique comment lancer les deux tests de rapport en local : **report-interactif** et **report-amcnum**.
 
-Index parent : [documentation/testing/README.md](README.md). Rapports générés : [reports/README.md](../../reports/README.md).
+Index parent : [documentation/tests/README.md](README.md). Rapports générés : [reports/README.md](../../reports/README.md).
 
 ## 📋 Aperçu
 
@@ -13,7 +13,7 @@ Index parent : [documentation/testing/README.md](README.md). Rapports générés
 
 ## 🎯 Lancement local
 
-### 1. Mode full-scan (tous les exercices)
+### 1. Mode analyse complète (tous les exercices)
 
 **Interactif :**
 
@@ -114,7 +114,7 @@ Aucun rapport n'est généré.
 
 ## 🚀 Dans la CI
 
-Les tests s'exécutent automatiquement sur MR/main via GitLab CI :
+Les tests s'exécutent automatiquement sur demande de fusion et sur `main` via GitLab CI :
 
 - **Job `testExosModifiedInteractif`** : Analyse les fichiers modifiés d'une MR
 - **Job `testExosModifiedAmcnum`** : Analyse les fichiers modifiés d'une MR

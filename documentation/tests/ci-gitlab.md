@@ -1,6 +1,6 @@
 # Rapport d'analyse de la CI GitLab
 
-Ce document résume ce que teste la CI définie dans [.gitlab-ci.yml](../../.gitlab-ci.yml), à quel moment chaque job se lance, et comment reproduire localement chaque vérification.
+Ce document résume ce que teste la CI définie dans [.gitlab-ci.yml](../../.gitlab-ci.yml), à quel moment chaque tâche se lance, et comment reproduire localement chaque vérification.
 
 ## Vue d'ensemble
 
@@ -12,11 +12,11 @@ La CI couvre principalement cinq familles de vérifications :
 - tests e2e Playwright/Vitest de détection d'erreurs console par niveaux
 - tests e2e d'exports PDF
 
-Elle contient aussi des jobs de build et de déploiement. Le build n'est pas un test à proprement parler, mais il valide que la génération des JSON et la compilation Vite passent correctement.
+Elle contient aussi des tâches de construction et de déploiement. La construction n'est pas un test à proprement parler, mais elle valide que la génération des JSON et la compilation Vite passent correctement.
 
 Point important : `pnpm check` n'est pas exécuté dans cette CI.
 
-## Stages
+## Étapes
 
 Les stages déclarés sont les suivants :
 
@@ -30,9 +30,9 @@ Les stages déclarés sont les suivants :
 8. `playwright-pdfDNB`
 9. `playwright-pdfBAC`
 
-## Préparation commune des jobs e2e
+## Préparation commune des tâches e2e
 
-Les jobs e2e non PDF héritent de la préparation définie dans `.install_dependencies` :
+Les tâches e2e non PDF héritent de la préparation définie dans `.install_dependencies` :
 
 - installation et activation de `pnpm`
 - installation des dépendances du projet
@@ -47,9 +47,9 @@ pnpm install
 pnpm start
 ```
 
-Puis, dans un autre terminal, lancer la commande du job voulu.
+Puis, dans un autre terminal, lancer la commande de la tâche voulue.
 
-Les jobs PDF utilisent une préparation spécifique :
+Les tâches PDF utilisent une préparation spécifique :
 
 - vérification de `lualatex`
 - installation des dépendances système nécessaires à Chromium
@@ -62,7 +62,7 @@ Les variantes DNB et BAC ajoutent en plus un clonage de dépôts annexes dans `p
 
 ### `semgrep-sast`
 
-Ce job provient du template GitLab SAST et n'est activé que sur la branche `main`.
+Cette tâche provient du modèle GitLab SAST et n'est activée que sur la branche `main`.
 
 Déclenchement :
 
@@ -71,13 +71,13 @@ Déclenchement :
 Reproduction locale :
 
 - il n'existe pas de script `package.json` dédié dans le dépôt
-- la reproduction exacte dépend de l'outillage GitLab SAST utilisé par le runner
+- la reproduction exacte dépend de l'outillage GitLab SAST utilisé par l'exécuteur
 
 ## Tests unitaires
 
 ### `tests-unitaires`
 
-Ce job exécute :
+Cette tâche exécute :
 
 - `pnpm run makeJson`
 - `NODE_OPTIONS=--max-old-space-size=4096 pnpm test:unit`
@@ -90,7 +90,7 @@ Cela correspond à :
 
 Déclenchement :
 
-- automatique sur toute Merge Request
+- automatique sur toute demande de fusion
 - automatique sur `main`
 - manuel sur `guironne-jobs`
 
@@ -123,7 +123,7 @@ Ordre de priorité du port :
 2. `80` si `CI=1`
 3. `5173` sinon
 
-Cela permet de reproduire le comportement CI en local sans devoir binder le port 80.
+Cela permet de reproduire le comportement CI en local sans devoir lier le port 80.
 
 Exemple pratique (local, mode CI, serveur sur 5173) :
 
@@ -137,7 +137,7 @@ CI=1 PLAYWRIGHT_SERVER_PORT=5173 pnpm test:e2e:interactivity
 
 ### `playwright-testCanEleve`
 
-Ce job teste les vues via :
+Cette tâche teste les vues via :
 
 ```bash
 pnpm test:e2e:views
@@ -145,7 +145,7 @@ pnpm test:e2e:views
 
 Déclenchement :
 
-- automatique sur toute Merge Request
+- automatique sur toute demande de fusion
 - automatique sur `main`
 - manuel sur `guironne-jobs`
 
@@ -159,7 +159,7 @@ pnpm test:e2e:views
 
 ### `playwright-testConsistency`
 
-Ce job teste la cohérence fonctionnelle via :
+Cette tâche teste la cohérence fonctionnelle via :
 
 ```bash
 pnpm test:e2e:consistency
@@ -167,7 +167,7 @@ pnpm test:e2e:consistency
 
 Déclenchement :
 
-- automatique sur toute Merge Request
+- automatique sur toute demande de fusion
 - automatique sur `main`
 - manuel sur `guironne-jobs`
 
@@ -181,7 +181,7 @@ pnpm test:e2e:consistency
 
 ### `playwright-testInteractivity`
 
-Ce job teste l'interactivité via :
+Cette tâche teste l'interactivité via :
 
 ```bash
 pnpm test:e2e:interactivity
@@ -189,7 +189,7 @@ pnpm test:e2e:interactivity
 
 Déclenchement :
 
-- automatique sur toute Merge Request
+- automatique sur toute demande de fusion
 - automatique sur `main`
 - la règle `guironne-jobs` semble incomplète dans le YAML, donc pas de `when: manual` explicite
 
@@ -205,7 +205,7 @@ pnpm test:e2e:interactivity
 
 ### `testExosModifiedWithoutPlayWright`
 
-Ce job récupère les fichiers modifiés sur une fenêtre allant jusqu'à 5 commits, les place dans `CHANGED_FILES`, active le mode CI, puis exécute :
+Cette tâche récupère les fichiers modifiés sur une fenêtre allant jusqu'à 5 commits, les place dans `CHANGED_FILES`, active le mode CI, puis exécute :
 
 ```bash
 CI=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest --config tests/e2e/vitest.config.all_exercises.js --run
@@ -215,7 +215,7 @@ Note : sans `CI=1`, la branche conditionnelle qui filtre sur les fichiers modifi
 
 Déclenchement :
 
-- automatique sur toute Merge Request
+- automatique sur toute demande de fusion
 - automatique sur `main`
 - manuel sur `guironne-jobs`
 
@@ -229,7 +229,7 @@ CI=1 CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm vitest --config t
 
 ### `testExosModified`
 
-Ce job récupère lui aussi les fichiers modifiés, puis exécute les tests console ciblés :
+Cette tâche récupère elle aussi les fichiers modifiés, puis exécute les tests console ciblés :
 
 ```bash
 CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:console_errors
@@ -237,7 +237,7 @@ CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:console_errors
 
 Déclenchement :
 
-- automatique sur toute Merge Request
+- automatique sur toute demande de fusion
 - automatique sur `main`
 - manuel sur `guironne-jobs`
 
@@ -251,7 +251,7 @@ CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm test:e2e:console_error
 
 ## Tests e2e d'erreurs console par niveaux
 
-Ces jobs héritent de `.testCI`.
+Ces tâches héritent de `.testCI`.
 
 Déclenchement commun :
 
@@ -259,7 +259,7 @@ Déclenchement commun :
 - automatique en pipeline planifié si `CI_TEST_MA == "CONSOLE"`
 - manuel sur `guironne-jobs`
 
-Remarque : cette règle est plus restrictive qu'un simple "toute Merge Request", car elle dépend explicitement de `CI_COMMIT_BRANCH == "main"` dans `.testCI`.
+Remarque : cette règle est plus restrictive qu'une simple "demande de fusion", car elle dépend explicitement de `CI_COMMIT_BRANCH == "main"` dans `.testCI`.
 
 ### Collège
 
@@ -341,7 +341,7 @@ NIV=can/Ex^can/TSpe pnpm test:e2e:console_errors
 
 ## Tests e2e d'exports PDF
 
-Ces jobs héritent de `.testCIPDF`.
+Ces tâches héritent de `.testCIPDF`.
 
 Note : dans `pdfexports.test.ts`, les modes ciblés par `NIV` et `CHANGED_FILES` ne sont activés que si `CI` est défini. En local, il faut donc préfixer les commandes ciblées par `CI=1`.
 
@@ -399,7 +399,7 @@ CI=1 NIV=can/2e^can/1e pnpm test:e2e:pdfexports
 
 ### Export PDF DNB
 
-Ces jobs nécessitent en plus :
+Ces tâches nécessitent en plus :
 
 ```bash
 git clone https://forge.apps.education.fr/coopmaths/dnb.git ./public/static/dnb
@@ -426,7 +426,7 @@ CI=1 NIV=dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024 pnpm test:e2e:pdfexports
 
 ### Export PDF BAC et E3C
 
-Ces jobs nécessitent en plus :
+Ces tâches nécessitent en plus :
 
 ```bash
 git clone https://forge.apps.education.fr/coopmaths/bac.git ./public/static/bac
@@ -444,11 +444,11 @@ CI=1 NIV=bac_2024^bac_2023^bac_2022^bac_2021 pnpm test:e2e:pdfexports
 CI=1 NIV=e3c_2024^e3c_2023^e3c_2022^e3c_2021 pnpm test:e2e:pdfexports
 ```
 
-## Build et déploiements
+## Construction et déploiements
 
 ### `build`
 
-Ce job ne lance pas de tests, mais vérifie que les étapes suivantes passent :
+Cette tâche ne lance pas de tests, mais vérifie que les étapes suivantes passent :
 
 ```bash
 pnpm run makeJson
@@ -470,7 +470,7 @@ NODE_OPTIONS="--max-old-space-size=5096 --expose-gc" pnpm vite build
 
 ### `deploy` et `deployftp`
 
-Ces jobs sont des déploiements manuels, mais ils relancent implicitement des tests unitaires avant publication :
+Ces tâches sont des déploiements manuels, mais elles relancent implicitement des tests unitaires avant publication :
 
 ```bash
 NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
@@ -483,7 +483,7 @@ Déclenchement :
 
 ## Commandes utiles de synthèse
 
-### Reproduire les tests unitaires attendus avant build
+### Reproduire les tests unitaires attendus avant construction
 
 ```bash
 pnpm install
@@ -521,6 +521,6 @@ CI=1 NIV=6e/6 pnpm test:e2e:pdfexports
 
 - `pnpm check` n'est pas lancé dans la CI actuelle.
 - `playwright-testInteractivity` semble avoir une règle incomplète pour `guironne-jobs`.
-- les jobs e2e par niveaux sont marqués `allow_failure: true`
-- les jobs PDF sont aussi marqués `allow_failure: true`
-- les jobs ciblés sur exercices modifiés s'appuient sur une fenêtre de comparaison d'au plus 5 commits
+- les tâches e2e par niveaux sont marquées `allow_failure: true`
+- les tâches PDF sont aussi marquées `allow_failure: true`
+- les tâches ciblées sur exercices modifiés s'appuient sur une fenêtre de comparaison d'au plus 5 commits
