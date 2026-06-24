@@ -104,7 +104,7 @@ export default class VolumeCylindreAvecFigureQcm extends ExerciceQcmA {
 
     this.enonce = `Le cylindre ci-dessous n'est pas représenté à l'échelle.<br>
 On a codé le diamètre de sa base et sa hauteur.${figure}
-La valeur exacte de son volume en $\\text{cm}^3$ est : `
+La valeur exacte de son volume en $\\text{cm}^3$ est  `
 
     this.reponses = [
       `$${coefficientVolume}\\pi\\text{ cm}^3$`,
