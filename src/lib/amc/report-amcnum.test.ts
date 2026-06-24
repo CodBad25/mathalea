@@ -1,4 +1,10 @@
-import { readdirSync, readFileSync, statSync, writeFileSync } from 'fs'
+import {
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from 'fs'
 import { dirname, join, relative, resolve } from 'path'
 import seedrandom from 'seedrandom'
 import { fileURLToPath, pathToFileURL } from 'url'
@@ -74,6 +80,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const exercicesDir = join(__dirname, '../../../src/exercices')
 const rootDir = join(__dirname, '../../..')
+const reportsDir = join(rootDir, 'reports')
 const LOCAL_BUGSNAG_PREFIX =
   "message qui aurait été envoyé à bugsnag s'il avait été configuré"
 
@@ -414,7 +421,7 @@ if (SHOULD_RUN_AMCNUM_REPORT) {
       lines.push('| --- | --- | --- | --- |')
       let numero = 1
       for (const row of rows) {
-        const link = `[${row.file}](${row.file})`
+        const link = `[${row.file}](../${row.file})`
         const tagStr =
           formatTagList(row.tags) + (row.error ? ` (${row.error})` : '')
         const notifStr = row.notifications
@@ -430,7 +437,8 @@ if (SHOULD_RUN_AMCNUM_REPORT) {
       }
 
       const output = lines.join('\n') + '\n'
-      const outputPath = './amcnum-report.md'
+      mkdirSync(reportsDir, { recursive: true })
+      const outputPath = join(reportsDir, 'amcnum-report.md')
       writeFileSync(outputPath, output, 'utf8')
     })
   })

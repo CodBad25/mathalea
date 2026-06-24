@@ -97,7 +97,7 @@ export default class ProblemesDeLongueurs extends ExerciceSimple {
           xmax: 16.5,
           ymax: 3.5,
           scale: 0.45,
-          style: 'margin: auto',
+          center: true,
         },
         objets,
       )

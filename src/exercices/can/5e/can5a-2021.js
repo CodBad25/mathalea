@@ -642,7 +642,7 @@ export default class SujetCAN20215ieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1.4,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -719,7 +719,7 @@ export default class SujetCAN20215ieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1.4,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -792,7 +792,7 @@ export default class SujetCAN20215ieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1.4,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -942,7 +942,7 @@ export default class SujetCAN20215ieme extends Exercice {
                 xmax: 8,
                 ymax: 1.5,
                 scale: 0.8,
-                style: 'margin: auto',
+                center: true,
               },
               droiteGraduee({
                 Unite: 3,
@@ -1211,7 +1211,7 @@ export default class SujetCAN20215ieme extends Exercice {
               mainlevee: false,
               amplitude: 0.5,
               scale: 1.3,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -1396,7 +1396,7 @@ export default class SujetCAN20215ieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1.3,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -1445,7 +1445,7 @@ export default class SujetCAN20215ieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )

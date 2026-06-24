@@ -75,7 +75,7 @@ export default class perimetreCalcul2026 extends ExerciceSimple {
       '<br>' +
       mathalea2d(
         Object.assign(
-          { scale: 0.4, style: 'margin: auto' },
+          { scale: 0.4, center: true },
           fixeBordures(objets),
         ),
         objets,

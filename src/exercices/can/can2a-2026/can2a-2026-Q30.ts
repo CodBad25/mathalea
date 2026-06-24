@@ -184,7 +184,7 @@ export default class Can2a2026Q30 extends ExerciceCan {
           ymax: questionData.ymax,
           pixelsParCm: 20,
           scale: 0.5,
-          style: 'margin: auto',
+          center: true,
         },
         questionData.objets,
       ) + `<br>`

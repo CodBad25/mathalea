@@ -101,7 +101,7 @@ export default class Can2025N5Q30 extends ExerciceSimple {
             xmax: 14,
             ymin: -1,
             ymax: 7,
-            style: 'inline',
+            display: 'inline',
             scale: 0.5,
           },
           ...objets,

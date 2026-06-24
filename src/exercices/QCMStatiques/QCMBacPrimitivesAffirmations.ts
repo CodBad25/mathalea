@@ -110,7 +110,7 @@ function graphiqueCarreEtAire(): string {
       ymax: 10.5,
       pixelsParCm: 22,
       scale: 0.8,
-      style: 'margin: auto',
+      center: true,
       centerLatex: true,
     },
     r,

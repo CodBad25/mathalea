@@ -94,9 +94,9 @@ export default class PerimetreRectangle extends ExerciceSimple {
       Object.assign(
         {
           scale: grandeBase > 5 ? 0.75 : 1,
-          style: 'display: block',
+          display: 'block',
           pixelsParCm: grandeBase > 5 ? 20 : 30,
-        },
+        } as const,
         fixeBordures(objets),
       ),
       objets,
@@ -109,9 +109,9 @@ export default class PerimetreRectangle extends ExerciceSimple {
       Object.assign(
         {
           scale: grandeBase > 5 ? 0.6 : 0.9,
-          style: 'display: block',
+          display: 'block',
           pixelsParCm: grandeBase > 5 ? 20 : 30,
-        },
+        } as const,
         fixeBordures(objets),
       ),
       objets,

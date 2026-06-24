@@ -144,7 +144,7 @@ export default class Trigo extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 4 / c,
-          style: 'margin: auto',
+          center: true,
         },
       ),
       objets,

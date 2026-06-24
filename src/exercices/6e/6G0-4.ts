@@ -74,7 +74,7 @@ export default class CliqueFigure extends Exercice {
       ]
       const figSegment = mathalea2d(
         {
-          style: 'display: inline-block',
+          display: 'inline-block',
           xmin: -2,
           xmax: 6,
           ymin: -2,
@@ -86,7 +86,7 @@ export default class CliqueFigure extends Exercice {
       )
       const figDroite = mathalea2d(
         {
-          style: 'display: inline-block',
+          display: 'inline-block',
           xmin: -2,
           xmax: 6,
           ymin: -2,
@@ -99,7 +99,7 @@ export default class CliqueFigure extends Exercice {
       )
       const figDemiDroite = mathalea2d(
         {
-          style: 'display: inline-block',
+          display: 'inline-block',
           xmin: -2,
           xmax: 6,
           ymin: -2,
@@ -112,7 +112,7 @@ export default class CliqueFigure extends Exercice {
       )
       const figDemiDroite2 = mathalea2d(
         {
-          style: 'display: inline-block',
+          display: 'inline-block',
           xmin: -2,
           xmax: 6,
           ymin: -2,
@@ -125,7 +125,7 @@ export default class CliqueFigure extends Exercice {
       )
       const figSegmentAMC = mathalea2d(
         {
-          style: 'display: inline-block',
+          display: 'inline-block',
           xmin: -2,
           xmax: 6,
           ymin: -2,
@@ -137,7 +137,7 @@ export default class CliqueFigure extends Exercice {
       )
       const figDroiteAMC = mathalea2d(
         {
-          style: 'display: inline-block',
+          display: 'inline-block',
           xmin: -2,
           xmax: 6,
           ymin: -2,
@@ -150,7 +150,7 @@ export default class CliqueFigure extends Exercice {
       )
       const figDemiDroiteAMC = mathalea2d(
         {
-          style: 'display: inline-block',
+          display: 'inline-block',
           xmin: -2,
           xmax: 6,
           ymin: -2,
@@ -163,7 +163,7 @@ export default class CliqueFigure extends Exercice {
       )
       const figDemiDroite2AMC = mathalea2d(
         {
-          style: 'display: inline-block',
+          display: 'inline-block',
           xmin: -2,
           xmax: 6,
           ymin: -2,
@@ -248,7 +248,7 @@ export default class CliqueFigure extends Exercice {
               xmin: -4,
               xmax: 6,
               ymin: -2,
-              style: '',
+              display: 'inline-block',
               scale: 0.4,
               id: `figure3Ex${this.numeroExercice}Q${i}`,
             },

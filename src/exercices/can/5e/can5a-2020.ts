@@ -681,7 +681,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               mainlevee: false,
               amplitude: 0.5,
               scale: 1.2,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -698,7 +698,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1.2,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               ),

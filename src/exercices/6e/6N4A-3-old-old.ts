@@ -189,12 +189,10 @@ export default class ResoudreDesProblemes extends Exercice {
         mathalea2d(
           Object.assign(
             {
-              style: context.isHtml
-                ? 'display: block'
-                : 'display: inline-block',
+              display: context.isHtml ? 'block' : 'inline-block',
               pixelsParCm: 30,
               scale: 1,
-            },
+            } as const,
             fixeBordures(objetsA, {
               rxmin: 0,
               rymin: 0,
@@ -208,12 +206,10 @@ export default class ResoudreDesProblemes extends Exercice {
         mathalea2d(
           Object.assign(
             {
-              style: context.isHtml
-                ? 'display: block'
-                : 'display: inline-block',
+              display: context.isHtml ? 'block' : 'inline-block',
               pixelsParCm: 30,
               scale: 1,
-            },
+            } as const,
             fixeBordures(objetsB, {
               rxmin: 0,
               rymin: 0,
@@ -232,7 +228,7 @@ export default class ResoudreDesProblemes extends Exercice {
             rxmax: 0,
             rymax: 0,
           }),
-          { style: 'display: inline-block', pixelsParCm: 23, scale: 0.5 },
+          { display: 'inline-block' as const, pixelsParCm: 23, scale: 0.5 },
         ),
         [shape1.shapeDef, shape1.shape2D],
       )
@@ -245,7 +241,7 @@ export default class ResoudreDesProblemes extends Exercice {
             rxmax: 0,
             rymax: 0,
           }),
-          { style: 'display: inline-block', pixelsParCm: 23, scale: 0.5 },
+          { display: 'inline-block' as const, pixelsParCm: 23, scale: 0.5 },
         ),
         [shape2.shapeDef, shape2.shape2D],
       )

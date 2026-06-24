@@ -43,7 +43,7 @@ export default class NomExercice extends ExerciceSimple {
           xmax: 15,
           ymax: 1.5,
           scale: 0.7,
-          style: 'margin: auto',
+          center: true,
         },
         texteParPosition('A', 5.5, 0.9, 0, bleuMathalea, 1.5),
         droiteGraduee({
@@ -78,7 +78,7 @@ export default class NomExercice extends ExerciceSimple {
             xmax: 14,
             ymax: 1.5,
             scale: 0.6,
-            style: 'margin: auto',
+            center: true,
           },
           texteParPosition('A', (3 * a) / 4, 0.9, 0, bleuMathalea, 2),
           droiteGraduee({
@@ -112,7 +112,7 @@ export default class NomExercice extends ExerciceSimple {
             xmax: 14,
             ymax: 1.5,
             scale: 0.6,
-            style: 'margin: auto',
+            center: true,
           },
           texteParPosition('A', (3 * a) / 5, 0.9, 0, bleuMathalea, 2),
           droiteGraduee({

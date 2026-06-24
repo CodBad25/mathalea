@@ -161,7 +161,7 @@ export default class SignesTabGSpline extends Exercice {
     Dresser le tableau de signes de sa fonction dérivée $f^\\prime$.<br>` +
         mathalea2d(
           Object.assign(
-            { pixelsParCm: 30, scale: 0.55, style: 'margin: auto' },
+            { pixelsParCm: 30, scale: 0.55, center: true },
             { xmin: xMin - 1, ymin: yMin - 1, xmax: xMax + 1, ymax: yMax + 1 },
           ),
           objetsEnonce,
@@ -171,7 +171,7 @@ export default class SignesTabGSpline extends Exercice {
         texte = "Voici la représentation graphique d'une fonction $f$ :<br>"
         texte += mathalea2d(
           Object.assign(
-            { pixelsParCm: 30, scale: 0.55, style: 'margin: auto' },
+            { pixelsParCm: 30, scale: 0.55, center: true },
             { xmin: xMin - 1, ymin: yMin - 1, xmax: xMax + 1, ymax: yMax + 1 },
           ),
           objetsEnonce,

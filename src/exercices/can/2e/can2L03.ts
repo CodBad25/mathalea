@@ -63,8 +63,8 @@ export default class CoordonneesPointIntersectionAxeAbscissesDroite extends Exer
           }
 
           this.correction = `L'ordonnée de ce point est $0$ puisque le point d'intersection se situe sur l'axe des abscisses.<br>
-      Son abscisse est donc donnée par la solution de l'équation  $${reduireAxPlusB(a, b)}=0$, c'est-à-dire $x=${new FractionEtendue(-b, a).texFractionSimplifiee}$.
-    <br>Les coordonnées de ce   point sont donc : $(${miseEnEvidence(`${new FractionEtendue(-b, a).texFractionSimplifiee}\\,;\\,0`)})$.`
+      Son abscisse est donc donnée par la solution de l'équation  $${reduireAxPlusB(a, b)}=0$, c'est-à-dire $x=${new FractionEtendue(-b, a).texFractionSimplifiee}$<br>
+      Les coordonnées de ce   point sont donc : $(${miseEnEvidence(`${new FractionEtendue(-b, a).texFractionSimplifiee}\\,;\\,0`)})$.`
           this.distracteurs = [
             `$(0\\,;\\,${texNombre(-b / a, 1)})$`,
             `$(${b}\\,;\\,0)$`,
@@ -98,8 +98,8 @@ export default class CoordonneesPointIntersectionAxeAbscissesDroite extends Exer
           }
 
           this.correction = `L'ordonnée de ce point est $0$ puisque le point d'intersection se situe sur l'axe des abscisses.<br>
-      Son abscisse est donc donnée par la solution de l'équation  $\\dfrac{x}{${a}}${ecritureAlgebrique(b)}=0$, c'est-à-dire $x=${-b * a}$.
-    <br>Les coordonnées de ce   point sont donc : $(${miseEnEvidence(`${-b * a}\\,;\\,0`)})$.`
+      Son abscisse est donc donnée par la solution de l'équation  $\\dfrac{x}{${a}}${ecritureAlgebrique(b)}=0$, c'est-à-dire $x=${-b * a}$.<br>
+      Les coordonnées de ce   point sont donc : $(${miseEnEvidence(`${-b * a}\\,;\\,0`)})$.`
           this.distracteurs = [
             `$(0\\,;\\,${texNombre(-b * a, 1)})$`,
             `$(${b}\\,;\\,0)$`,

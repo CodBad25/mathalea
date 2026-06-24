@@ -1255,7 +1255,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                   xmax: 6,
                   ymax: 2.5,
                   scale: 0.7,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               ) +
@@ -2548,7 +2548,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               '<br>' +
               mathalea2d(
                 Object.assign(
-                  { scale: 0.4, style: 'margin: auto' },
+                  { scale: 0.4, center: true },
                   fixeBordures(objets),
                 ),
                 objets,
@@ -2623,7 +2623,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                   scale: 0.7,
                   pixelsParCm: 18,
                   mainlevee: false,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -2715,7 +2715,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                   scale: 0.7,
                   pixelsParCm: 18,
                   mainlevee: false,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )

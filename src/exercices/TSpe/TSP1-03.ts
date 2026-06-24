@@ -175,7 +175,7 @@ $Q_2.$`,
     this.correction = `${texteEnCouleurEtGras('Partie A :')}<br>`
     this.correction += `On commence par construire un arbre de probabilité qui illustre la situation :<br>`
     this.correction += mathalea2d(
-      Object.assign({ scale: 0.7, style: 'inline' }, fixeBordures(objets)),
+      Object.assign({ scale: 0.7, display: 'inline' } as const, fixeBordures(objets)),
       objets,
     )
     const correction1 = `L'évènement «${texteItalique('le candidat répond correctement aux deux questions $Q_1$ et $Q_2$')}» est $A\\cap B.$<br>

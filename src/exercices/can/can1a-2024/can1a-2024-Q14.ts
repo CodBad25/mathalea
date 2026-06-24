@@ -98,7 +98,7 @@ export default class EquationReduite extends ExerciceSimple {
         ymax: ymax + 0.25,
         pixelsParCm: 30,
         scale: 0.6,
-        style: 'margin: auto',
+        center: true,
       },
       o,
       d,

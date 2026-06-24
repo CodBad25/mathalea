@@ -133,7 +133,7 @@ export default class MaxMinG extends ExerciceSimple {
     Déterminer le ${choix ? 'maximum' : 'minimum'} de $f$ sur son ensemble de définition.<br><br>` +
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.65, style: 'margin: auto' },
+          { pixelsParCm: 30, scale: 0.65, center: true },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,
@@ -152,7 +152,7 @@ export default class MaxMinG extends ExerciceSimple {
       "On donne la représentation graphique d'une fonction $f$. <br>" +
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.65, style: 'margin: auto' },
+          { pixelsParCm: 30, scale: 0.65, center: true },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,

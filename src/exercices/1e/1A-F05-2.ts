@@ -78,7 +78,7 @@ export const dateDePublication = '02/02/2026'
 
     const figure = mathalea2d(
       Object.assign(
-        { pixelsParCm: 30, scale: 0.6, style: 'margin: auto' },
+        { pixelsParCm: 30, scale: 0.6, center: true },
         { 
           xmin: bornes.xMin - 1, 
           ymin: bornes.yMin - 1, 
@@ -216,7 +216,7 @@ ${tableauSignes1}`
 
     const figure = mathalea2d(
       Object.assign(
-        { pixelsParCm: 30, scale: 0.6, style: 'margin: auto' },
+        { pixelsParCm: 30, scale: 0.6, center: true },
         { 
           xmin: bornes.xMin - 1, 
           ymin: bornes.yMin - 1, 

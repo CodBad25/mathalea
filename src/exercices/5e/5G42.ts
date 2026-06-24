@@ -199,7 +199,7 @@ export default class DemonstrationsParallelogrammes extends Exercice {
           pixelsParCm: 20,
           scale: 0.5,
           mainlevee: true,
-          style: 'display: block',
+          display: 'block',
         },
         objets,
       )

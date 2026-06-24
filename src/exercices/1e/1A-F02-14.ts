@@ -60,7 +60,7 @@ export default class AutoF2f extends ExerciceQcmA {
           ymax: yMax,
           pixelsParCm: 20,
           scale: 0.6,
-          style: 'margin: auto',
+          center: true,
         },
         r,
         o,

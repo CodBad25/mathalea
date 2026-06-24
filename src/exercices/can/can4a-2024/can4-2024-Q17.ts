@@ -117,7 +117,7 @@ export default class NomExercice extends ExerciceSimple {
           mainlevee: true,
           amplitude: 0.5,
           scale: 0.8,
-          style: 'margin: auto',
+          center: true,
         },
         objets1,
       )
@@ -138,7 +138,7 @@ export default class NomExercice extends ExerciceSimple {
             mainlevee: true,
             amplitude: 0.5,
             scale: 0.8,
-            style: 'margin: auto',
+            center: true,
           },
           objets1,
         )
@@ -158,7 +158,7 @@ export default class NomExercice extends ExerciceSimple {
             mainlevee: true,
             amplitude: 0.5,
             scale: 0.8,
-            style: 'margin: auto',
+            center: true,
           },
           objets2,
         )

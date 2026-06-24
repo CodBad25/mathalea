@@ -60,7 +60,7 @@ export default class VecteurEgal extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.5,
-          style: 'margin: auto',
+          center: true,
         },
         objets,
       ) + '<br>Compléter :'
@@ -78,7 +78,7 @@ export default class VecteurEgal extends ExerciceSimple {
         mainlevee: false,
         amplitude: 0.5,
         scale: 0.5,
-        style: 'margin: auto',
+        center: true,
       },
       objets,
     )

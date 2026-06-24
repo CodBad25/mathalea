@@ -119,7 +119,7 @@ export default class LectureGraphiqueVecteurRepere extends Exercice {
           xmax,
           ymin,
           ymax,
-          style: 'margin: auto',
+          center: true,
           pixelsParCm: 30,
           scale: 0.75,
         },

@@ -157,7 +157,7 @@ Quelle est la longueur $${coteCherche}$ ?<br>
 <em>Aide :</em> $\\sin ${angle}^\\circ=${valeurSinus}$, $\\cos ${angle}^\\circ=${valeurCosinus}$ et $\\tan ${angle}^\\circ=${valeurTangente}$.<br>
 ${mathalea2d(
   Object.assign(
-    { pixelsParCm: 25, scale: 0.9, style: 'margin: auto' },
+    { pixelsParCm: 25, scale: 0.9, center: true },
     fixeBordures(objets, {
       rxmin: -0.6,
       rxmax: 0.6,

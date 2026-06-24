@@ -111,7 +111,7 @@ export default class Can52026Q17 extends ExerciceCan {
         pixelsParCm: 20,
         mainlevee: false,
         scale: 0.5,
-        style: 'margin: auto',
+        center: true,
       },
       objets,
     )

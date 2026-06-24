@@ -66,7 +66,7 @@ export default class SujetZero2024Ex5Q5 extends ExerciceQcm {
         ymax: 1,
         pixelsParCm: 30,
         scale: 1,
-        style: 'margin: auto',
+        center: true,
       },
       [
         courbe(f, {

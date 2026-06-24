@@ -128,9 +128,9 @@ export default class PerimetreRectangleCM2 extends ExerciceSimple {
       Object.assign(
         {
           scale: grandeBase > 5 ? 0.75 : 1,
-          style: 'display: block',
+          display: 'block',
           pixelsParCm: grandeBase > 5 ? 20 : 25,
-        },
+        } as const,
         fixeBordures(objets),
       ),
       objets,

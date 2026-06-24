@@ -10,7 +10,36 @@ import {
 } from '../lib/outils/nombres'
 import { stringNombre, texNombre } from '../lib/outils/texNombre'
 import { context } from './context'
-import { mathalea2d } from './mathalea2d'
+import { mathalea2d, type Mathalea2dLayoutOptions } from './mathalea2d'
+
+type OperationOptions = {
+  solution?: boolean
+  colore?: string
+}
+
+type OperationPoseeOptions = Mathalea2dLayoutOptions & {
+  operande1?: number | Decimal
+  operande2?: number | Decimal
+  type?:
+    | 'addition'
+    | 'soustraction'
+    | 'multiplication'
+    | 'division'
+    | 'divisionE'
+  precision?: number
+  base?: number
+  retenuesOn?: boolean
+  methodeParCompensation?: boolean
+  options?: OperationOptions
+}
+
+type AdditionMultiplePoseeOptions = Mathalea2dLayoutOptions & {
+  base?: number
+  retenuesOn?: boolean
+  calculer?: boolean
+  colore?: string
+}
+
 function nombreDeChiffresApresLaVirgule(x: Decimal) {
   const s = x.toString()
   const pe = x.floor().toString()
@@ -37,7 +66,8 @@ function soustractionPosee(
   retenuesOn = true,
   methodeParCompensation = true,
   calculer = true,
-  style: string,
+  display: Mathalea2dLayoutOptions['display'],
+  center: boolean,
   colore: string,
 ) {
   const isColored = colore !== ''
@@ -331,7 +361,8 @@ function soustractionPosee(
       {
         pixelsParCm: 20,
         scale: 0.8,
-        style,
+        display,
+        center,
         optionsTikz: ['transform shape, yshift=-1.75cm'],
       },
       fixeBordures(objets),
@@ -346,7 +377,8 @@ function divisionPosee(
   divis: number | Decimal,
   precision = 0,
   calculer = true,
-  style: string,
+  display: Mathalea2dLayoutOptions['display'],
+  center: boolean,
   colore: string,
 ) {
   const isColored = colore !== ''
@@ -554,7 +586,7 @@ function divisionPosee(
 
   const code = mathalea2d(
     Object.assign(
-      { pixelsParCm: 20, scale: 0.8, style },
+      { pixelsParCm: 20, scale: 0.8, display, center },
       fixeBordures(objets, { rxmin: -5 }),
     ),
     objets,
@@ -568,7 +600,8 @@ function additionPosee(
   base: number,
   retenuesOn: boolean,
   calculer = true,
-  style: string,
+  display: Mathalea2dLayoutOptions['display'],
+  center: boolean,
   colore: string,
 ) {
   const isColored = colore !== ''
@@ -730,7 +763,10 @@ function additionPosee(
       )
   }
   code += mathalea2d(
-    Object.assign({ pixelsParCm: 20, scale: 0.8, style }, fixeBordures(objets)),
+    Object.assign(
+      { pixelsParCm: 20, scale: 0.8, display, center },
+      fixeBordures(objets),
+    ),
     objets,
   )
   return code
@@ -742,15 +778,10 @@ export function additionMultiplePosee(
     base = 10,
     retenuesOn = false,
     calculer = false,
-    style = 'display: block',
+    display,
+    center = false,
     colore = '',
-  }: {
-    base?: number
-    retenuesOn?: boolean
-    calculer?: boolean
-    style?: string
-    colore?: string
-  },
+  }: AdditionMultiplePoseeOptions,
 ) {
   const isColored = colore !== ''
   if (context.isHtml) {
@@ -894,7 +925,7 @@ export function additionMultiplePosee(
     }
     code += mathalea2d(
       Object.assign(
-        { pixelsParCm: 20, scale: 0.8, style },
+        { pixelsParCm: 20, scale: 0.8, display, center },
         fixeBordures(objets),
       ),
       objets,
@@ -916,7 +947,8 @@ function multiplicationPosee(
   operande2: number | Decimal,
   base: number,
   calculer = true,
-  style: string,
+  display: Mathalea2dLayoutOptions['display'],
+  center: boolean,
   colore: string,
 ) {
   const isColored = colore !== ''
@@ -1190,7 +1222,10 @@ function multiplicationPosee(
     }
   }
   const code = mathalea2d(
-    Object.assign({ pixelsParCm: 20, scale: 0.8, style }, fixeBordures(objets)),
+    Object.assign(
+      { pixelsParCm: 20, scale: 0.8, display, center },
+      fixeBordures(objets),
+    ),
     objets,
   )
 
@@ -1212,10 +1247,11 @@ export default function operation({
   precision = 0,
   base = 10,
   retenuesOn = true,
-  style = 'display: block',
+  display,
+  center = false,
   methodeParCompensation = true,
   options = { solution: true, colore: '' },
-}) {
+}: OperationPoseeOptions) {
   // precision est pour le quotient décimal
   const calculer = options.solution
   let Code
@@ -1233,7 +1269,8 @@ export default function operation({
           retenuesOn,
           methodeParCompensation,
           calculer,
-          style,
+          display,
+          center,
           colore,
         )
         break
@@ -1243,7 +1280,8 @@ export default function operation({
           operande2,
           base,
           calculer,
-          style,
+          display,
+          center,
           colore,
         )
         break
@@ -1253,12 +1291,21 @@ export default function operation({
           operande2,
           precision,
           calculer,
-          style,
+          display,
+          center,
           colore,
         )
         break
       case 'divisionE':
-        Code = divisionPosee(operande1, operande2, 0, calculer, style, colore)
+        Code = divisionPosee(
+          operande1,
+          operande2,
+          0,
+          calculer,
+          display,
+          center,
+          colore,
+        )
         break
       case 'addition':
       default:
@@ -1268,7 +1315,8 @@ export default function operation({
           base,
           retenuesOn,
           calculer,
-          style,
+          display,
+          center,
           colore,
         )
         break
@@ -1284,7 +1332,8 @@ export default function operation({
             retenuesOn,
             methodeParCompensation,
             calculer,
-            style,
+            display,
+            center,
             colore,
           )
         } else {

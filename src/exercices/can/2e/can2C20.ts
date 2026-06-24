@@ -79,8 +79,7 @@ Quelle fraction de la bouteille a-t-elle bu à midi ? `
     this.correction = `Le matin, ${prenom} a bu $${frac1.texFraction}$ de la bouteille. Il reste alors $${reste.texFraction}$ de la bouteille.<br>
     À midi, elle a bu $${frac2.texFraction}$ du reste.<br>
      Comme $${frac2.texFraction}\\times ${reste.texFraction}=${reponse.texFraction}$, elle a bu $${miseEnEvidence(reponse.texFraction)}$ 
-     ${pgcd(reponse.num, reponse.den) === 1 ? '' : ` ou $${reponse.simplifie().texFraction}$`} de la bouteille à midi.
-          `
+     ${pgcd(reponse.num, reponse.den) === 1 ? '' : ` ou $${reponse.simplifie().texFraction}$`} de la bouteille à midi.`
     this.distracteurs = [
       `$${frac2.ajouteEntier(-1).oppose().texFractionSimplifiee}$`,
       `$${frac1.sommeFraction(frac2).texFractionSimplifiee}$`,

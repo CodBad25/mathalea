@@ -76,7 +76,7 @@ export default class LectureCoordonnees extends ExerciceSimple {
         ymax: 2,
         scale: 1,
         pixelsParCm: 50,
-        style: 'margin: auto',
+        center: true,
       },
       r,
       o,

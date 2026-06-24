@@ -880,7 +880,7 @@ $\\begin{array}{|l|}\n
             ]
             graphique = mathalea2d(
               Object.assign(
-                { pixelsParCm: 15, scale: 0.4, style: 'inline-block' },
+                { pixelsParCm: 15, scale: 0.4, display: 'inline-block' } as const,
                 fixeBordures(objets),
               ),
               objets,

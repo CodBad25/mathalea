@@ -432,7 +432,7 @@ export default class NommerUnAngle extends Exercice {
                 ymax: 1.2,
                 pixelsParCm: 20,
                 scale: 0.5,
-                style: 'display:inline-block',
+                display: 'inline-block',
               },
               marquageAngleConsigne,
             )
@@ -483,7 +483,7 @@ export default class NommerUnAngle extends Exercice {
                 ymax: 1.2,
                 pixelsParCm: 20,
                 scale: 0.5,
-                style: 'display:inline-block',
+                display: 'inline-block',
               },
               marquageAngleConsigne,
             )

@@ -86,7 +86,7 @@ private appliquerLesValeurs(dx: number, dy: number): void {
         ymax: yMax + 0.5,
         pixelsParCm: 25,
         scale: 0.6,
-        style: 'margin: auto; display: block;',
+        display: 'block', center: true,
       },
       r,
       courbe,

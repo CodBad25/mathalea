@@ -114,7 +114,7 @@ export default class auto1AF2 extends ExerciceQcmA {
  `,
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 20, scale: 0.6, style: 'margin: auto' },
+          { pixelsParCm: 20, scale: 0.6, center: true },
           {
             xmin: -5,
             ymin: -5,
@@ -349,7 +349,7 @@ Leurs abscisses sont notées respectivement $${formaterListe(nomsPoints.map((nom
  `,
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 22, scale: 0.6, style: 'margin: auto' },
+          { pixelsParCm: 22, scale: 0.6, center: true },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,

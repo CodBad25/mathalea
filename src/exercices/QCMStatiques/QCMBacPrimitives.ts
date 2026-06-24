@@ -84,7 +84,7 @@ function graphiquePolynesie2024(avecAire = false): string {
       ymax: 4.5,
       pixelsParCm: 25,
       scale: 0.9,
-      style: 'margin: auto',
+      center: true,
       centerLatex: true,
     },
     r,

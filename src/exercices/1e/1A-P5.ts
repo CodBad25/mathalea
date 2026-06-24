@@ -94,7 +94,7 @@ export default class can1P04 extends ExerciceSimple {
     let texte = `On donne l'arbre de probabilités ci-dessous et $P(C)=${texProba(pC)}$.<br><br> 
           `
     texte += mathalea2d(
-      Object.assign({ style: 'inline' }, fixeBordures(objets)),
+      Object.assign({ display: 'inline' } as const, fixeBordures(objets)),
       objets,
     )
     if (this.versionQcm) {
@@ -128,7 +128,7 @@ export default class can1P04 extends ExerciceSimple {
         xmax: 14,
         ymin: 0,
         ymax: 6,
-        style: 'inline',
+        display: 'inline',
         scale: 0.5,
       },
       objets,

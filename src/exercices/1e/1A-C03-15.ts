@@ -32,8 +32,7 @@ export default class Auto1AC3j extends ExerciceQcmA {
     & = ${k}\\times ${choix === 'double' ? ` \\left(2^{2}\\right)^{${n}}` : `\\left(3^{2}\\right)^{${n}}`} \\\\
     &=${k}\\times ${choix === 'double' ? ` 2^{${2 * n}}` : `3^{${2 * n}}`} \\\\
     &=${choix === 'double' ? `${miseEnEvidence(`2^{${2 * n + 1}}`)}` : `${miseEnEvidence(`3^{${2 * n + 1}}`)}`} \\\\
-    \\end{aligned}$
-    `
+    \\end{aligned}$`
 
     this.reponses = [
       `${choix === 'double' ? `$2^{${2 * n + 1}}$` : `$3^{${2 * n + 1}}$`}`,

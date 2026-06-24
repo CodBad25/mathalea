@@ -95,7 +95,7 @@ export default class Can2026CE2Q16 extends ExerciceCan {
           {
             svg: mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 1, style: 'display: inline-block' },
+                { pixelsParCm: 30, scale: 1, display: 'inline-block' } as const,
                 fixeBordures(
                   (
                     piece

@@ -85,7 +85,7 @@ export default class ExercicePolynesie462024 extends ExerciceBrevetA {
     ]
     const figure = mathalea2d(
       Object.assign(
-        { pixelsParCm: 20, scale: 0.5, style: 'display: inline' },
+        { pixelsParCm: 20, scale: 0.5, display: 'inline' } as const,
         fixeBordures(objets),
       ),
       objets,

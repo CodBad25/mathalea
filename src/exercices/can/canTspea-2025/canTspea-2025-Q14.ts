@@ -133,7 +133,7 @@ export default class Can2025TQ14 extends ExerciceSimple {
       `Nombre de solutions de l'équation $f'(x)=0$${this.canOfficielle ? ' sur $[-3\\,;\\,4]$' : ''}.<br>` +
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.65, style: 'margin: auto' },
+          { pixelsParCm: 30, scale: 0.65, center: true },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,

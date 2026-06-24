@@ -283,7 +283,7 @@ export default class CompleterParSymetrie6e extends Exercice {
         texte += `<div id="resultatCheckEx${this.numeroExercice}Q${i}"></div>`
       }
       texteCorr = `Il faut ajouter au minimum ${pointsEnPlusCorr.length} points (en rouge sur la figure) afin que la figure soit symétrique par rapport à l'axe.
-      ${mathalea2d({ xmin: -1, ymin: -1, xmax: 11, ymax: 11, scale: 0.5, style: 'inline' }, ...objetsEnonce[i], ...objetsCorrection[i])}`
+      ${mathalea2d({ xmin: -1, ymin: -1, xmax: 11, ymax: 11, scale: 0.5, display: 'inline' }, ...objetsEnonce[i], ...objetsCorrection[i])}`
 
       if (
         this.questionJamaisPosee(

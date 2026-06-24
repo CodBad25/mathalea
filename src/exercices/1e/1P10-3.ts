@@ -191,7 +191,7 @@ export default class CalculerProbaArbre extends Exercice {
           texte +=
             mathalea2d(
               Object.assign(
-                { scale: 0.7, style: 'inline' },
+                { scale: 0.7, display: 'inline' } as const,
                 fixeBordures(objets),
               ),
               objets,
@@ -281,7 +281,7 @@ export default class CalculerProbaArbre extends Exercice {
           texte +=
             mathalea2d(
               Object.assign(
-                { scale: 0.7, style: 'inline' },
+                { scale: 0.7, display: 'inline' } as const,
                 fixeBordures(objets),
               ),
               objets,
@@ -325,7 +325,7 @@ export default class CalculerProbaArbre extends Exercice {
           texte +=
             mathalea2d(
               Object.assign(
-                { scale: 0.7, style: 'inline' },
+                { scale: 0.7, display: 'inline' } as const,
                 fixeBordures(objets),
               ),
               objets,

@@ -78,7 +78,7 @@ export default class AutoQ5CEns2026 extends ExerciceQcmA {
       ymax: 6.05,
       pixelsParCm: 30,
       scale: 0.6,
-      style: 'margin: auto; display: block;',
+      display: 'block' as const, center: true,
     }
 
     const figure = mathalea2d(fenetreMathalea2d, r, d, marqueursAB, labelsAB, o)

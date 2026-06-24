@@ -53,7 +53,7 @@ export default class NomExercice extends ExerciceSimple {
             ymin: -1,
             ymax: 4,
             scale: 0.6,
-            style: 'margin: auto',
+            center: true,
           },
           objets,
         )

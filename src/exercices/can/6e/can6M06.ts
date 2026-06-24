@@ -98,7 +98,7 @@ export default class Perimetre extends ExerciceSimple {
           mainlevee: true,
           amplitude: 0.5,
           scale: 0.6,
-          style: 'margin: auto',
+          center: true,
         },
         objets,
       )

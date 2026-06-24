@@ -125,7 +125,7 @@ export function renderGraph(
       pixelsParCm: 28,
       usePgfplots: true,
       centerLatex: true,
-      style: 'display: block; width: fit-content; margin: 0.5em auto;',
+      display: 'block', center: true,
     },
     graphRepere,
     ...objets,

@@ -73,7 +73,7 @@ export default class AutoQ3AGs2026 extends ExerciceQcmA {
         ymax: yMax + 0.5,
         pixelsParCm: 25,
         scale: 0.55,
-        style: 'margin: auto; display: block;',
+        display: 'block', center: true,
       },
       r,
       courbe,

@@ -131,7 +131,7 @@ export default class ImageSpline extends ExerciceSimple {
       this.question =
         mathalea2d(
           Object.assign(
-            { pixelsParCm: 30, scale: 0.7, style: 'margin: auto' },
+            { pixelsParCm: 30, scale: 0.7, center: true },
             {
               xmin: bornes.xMin - 1,
               ymin: bornes.yMin - 1,
@@ -151,7 +151,7 @@ export default class ImageSpline extends ExerciceSimple {
     ` +
         mathalea2d(
           Object.assign(
-            { pixelsParCm: 30, scale: 0.7, style: 'margin: auto' },
+            { pixelsParCm: 30, scale: 0.7, center: true },
             {
               xmin: bornes.xMin - 1,
               ymin: bornes.yMin - 1,

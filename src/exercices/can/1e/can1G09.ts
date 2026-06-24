@@ -114,7 +114,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
         ymax: r + 1,
         pixelsParCm: 15,
         scale: 0.45,
-        style: 'margin: auto',
+        center: true,
       },
       c,
       s1,

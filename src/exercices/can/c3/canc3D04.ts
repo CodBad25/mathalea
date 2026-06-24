@@ -68,7 +68,7 @@ export default class ExerciceInteractiveClock extends Exercice {
             xmax: 3,
             ymax: 3,
             scale: 0.6,
-            style: 'margin: auto',
+            center: true,
           },
           horloge,
         )
@@ -85,7 +85,7 @@ export default class ExerciceInteractiveClock extends Exercice {
             xmax: 3,
             ymax: 3,
             scale: 0.6,
-            style: 'margin: auto',
+            center: true,
           },
           horloge,
         )

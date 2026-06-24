@@ -109,7 +109,7 @@ export default class Auto1AF2p extends ExerciceQcmA {
         ymax: ymax + 0.25,
         pixelsParCm: 30,
         scale: 0.75,
-        style: 'margin: auto',
+        center: true,
       },
       d,
       r1,

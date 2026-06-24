@@ -83,7 +83,7 @@ export default class Can2a2026Q13 extends ExerciceCan {
       {
         pixelsParCm: 40,
         scale: 0.8,
-        style: 'margin: auto',
+        center: true,
         xmin: -3,
         ymin: -2,
         xmax: 4,

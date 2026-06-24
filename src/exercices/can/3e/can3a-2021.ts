@@ -549,7 +549,7 @@ export default class SujetCAN20213ieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 0.8,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -689,7 +689,7 @@ export default class SujetCAN20213ieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -806,7 +806,7 @@ export default class SujetCAN20213ieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1.2,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -844,7 +844,7 @@ export default class SujetCAN20213ieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -882,7 +882,7 @@ export default class SujetCAN20213ieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -1068,7 +1068,7 @@ export default class SujetCAN20213ieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -1149,7 +1149,7 @@ export default class SujetCAN20213ieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -1225,7 +1225,7 @@ export default class SujetCAN20213ieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -1301,7 +1301,7 @@ export default class SujetCAN20213ieme extends Exercice {
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 1,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )

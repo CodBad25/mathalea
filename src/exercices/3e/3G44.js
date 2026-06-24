@@ -198,7 +198,7 @@ export default class CalculPythagoreEspace extends Exercice {
                 fixeBordures(objetsEnonce),
                 {
                   scale: 0.7,
-                  style: 'block',
+                  display: 'block',
                 },
               ),
               objetsEnonce,
@@ -219,7 +219,7 @@ export default class CalculPythagoreEspace extends Exercice {
                 fixeBordures(objetsEnonce),
                 {
                   scale: 0.7,
-                  style: 'block',
+                  display: 'block',
                 },
               ),
               objetsEnonce,
@@ -277,7 +277,7 @@ export default class CalculPythagoreEspace extends Exercice {
                 fixeBordures(objetsEnonce),
                 {
                   scale: 0.7,
-                  style: 'block',
+                  display: 'block',
                 },
               ),
               objetsEnonce,
@@ -315,7 +315,7 @@ export default class CalculPythagoreEspace extends Exercice {
                 fixeBordures(objetsEnonce),
                 {
                   scale: 0.7,
-                  style: 'block',
+                  display: 'block',
                 },
               ),
               objetsEnonce,
@@ -383,7 +383,7 @@ export default class CalculPythagoreEspace extends Exercice {
                 fixeBordures(objetsEnonce),
                 {
                   scale: context.isHtml ? 0.7 : 0.3,
-                  style: 'block',
+                  display: 'block',
                 },
               ),
               objetsEnonce,
@@ -404,7 +404,7 @@ export default class CalculPythagoreEspace extends Exercice {
                 fixeBordures(objetsEnonce),
                 {
                   scale: context.isHtml ? 0.7 : 0.3,
-                  style: 'block',
+                  display: 'block',
                 },
               ),
               objetsEnonce,
@@ -467,7 +467,7 @@ export default class CalculPythagoreEspace extends Exercice {
                 fixeBordures(objetsEnonce),
                 {
                   scale: context.isHtml ? 0.7 : 0.3,
-                  style: 'block',
+                  display: 'block',
                 },
               ),
               objetsEnonce,
@@ -505,7 +505,7 @@ export default class CalculPythagoreEspace extends Exercice {
                 fixeBordures(objetsEnonce),
                 {
                   scale: 0.7,
-                  style: 'block',
+                  display: 'block',
                 },
               ),
               objetsEnonce,
@@ -642,7 +642,7 @@ export default class CalculPythagoreEspace extends Exercice {
               fixeBordures([...solideDessine.c2d]),
               {
                 scale: context.isHtml ? 0.7 : 0.3,
-                style: 'block',
+                display: 'block',
               },
             ),
             objetsEnonce,
@@ -659,7 +659,7 @@ export default class CalculPythagoreEspace extends Exercice {
               fixeBordures(objetsEnonce),
               {
                 scale: context.isHtml ? 0.7 : 0.3,
-                style: 'block',
+                display: 'block',
               },
             ),
             objetsEnonce,
@@ -725,7 +725,7 @@ export default class CalculPythagoreEspace extends Exercice {
               fixeBordures([...solideDessine.c2d]),
               {
                 scale: context.isHtml ? 0.7 : 0.3,
-                style: 'block',
+                display: 'block',
               },
             ),
             [...solideDessine.c2d, segmentATrouver],
@@ -752,7 +752,7 @@ export default class CalculPythagoreEspace extends Exercice {
               fixeBordures(objetsEnonce),
               {
                 scale: context.isHtml ? 0.7 : 0.3,
-                style: 'block',
+                display: 'block',
               },
             ),
             objetsEnonce,
@@ -835,7 +835,7 @@ export default class CalculPythagoreEspace extends Exercice {
               fixeBordures([...solideDessine.c2d]),
               {
                 scale: context.isHtml ? 0.7 : 0.3,
-                style: 'block',
+                display: 'block',
               },
             ),
             [...solideDessine.c2d, segmentATrouver, labelPoint(ptBase, D.c2d)],
@@ -864,7 +864,7 @@ export default class CalculPythagoreEspace extends Exercice {
               fixeBordures(objetsEnonce),
               {
                 scale: context.isHtml ? 0.7 : 0.3,
-                style: 'block',
+                display: 'block',
               },
             ),
             objetsEnonce,
@@ -947,7 +947,7 @@ export default class CalculPythagoreEspace extends Exercice {
               fixeBordures(objetsEnonce),
               {
                 scale: context.isHtml ? 0.7 : 0.3,
-                style: 'block',
+                display: 'block',
               },
             ),
             objetsEnonce,
@@ -972,7 +972,7 @@ export default class CalculPythagoreEspace extends Exercice {
               fixeBordures(objetsEnonce),
               {
                 scale: context.isHtml ? 0.7 : 0.3,
-                style: 'block',
+                display: 'block',
               },
             ),
             objetsEnonce,
@@ -1051,7 +1051,7 @@ export default class CalculPythagoreEspace extends Exercice {
               fixeBordures(objetsEnonce),
               {
                 scale: context.isHtml ? 0.7 : 0.3,
-                style: 'block',
+                display: 'block',
               },
             ),
             objetsEnonce,
@@ -1078,7 +1078,7 @@ export default class CalculPythagoreEspace extends Exercice {
               fixeBordures(objetsEnonce),
               {
                 scale: context.isHtml ? 0.7 : 0.3,
-                style: 'block',
+                display: 'block',
               },
             ),
             objetsEnonce,

@@ -110,14 +110,14 @@ export default class IntegraleSurface extends ExerciceSimple {
       )
       const figCorr1 = mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.7, style: 'display: inline-block' },
+          { pixelsParCm: 30, scale: 0.7, display: 'inline-block' } as const,
           fixeBordures(objets1),
         ),
         objets1,
       )
       const figCorr2 = mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.7, style: 'display: inline-block' },
+          { pixelsParCm: 30, scale: 0.7, display: 'inline-block' } as const,
           fixeBordures(objets2),
         ),
         objets2,

@@ -103,7 +103,7 @@ export default class MultiplierDecimauxOld extends Exercice {
         operande1: a,
         operande2: b,
         type: 'multiplication',
-        style: 'display: inline',
+        display: 'inline',
         options: { solution: true, colore: orangeMathalea },
       })
       texteCorr +=
@@ -112,7 +112,7 @@ export default class MultiplierDecimauxOld extends Exercice {
           operande1: b,
           operande2: a,
           type: 'multiplication',
-          style: 'display: inline',
+          display: 'inline',
           options: { solution: true, colore: orangeMathalea },
         })
       if (context.isHtml && this.interactif) {

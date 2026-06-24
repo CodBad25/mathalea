@@ -61,7 +61,7 @@ export default class CalculCotePythagore extends ExerciceSimple {
       }),
     )
     this.question = `Déterminer la valeur exacte de $${nom[1]}${nom[2]}$.<br>`
-    this.question += `${mathalea2d(Object.assign({ scale: 0.5, style: 'margin: auto; display: block' }, fixeBordures([objets], { rxmin: 0, rxmax: 0, rymax: 0, rymin: 0.5 })), [objets])}`
+    this.question += `${mathalea2d(Object.assign({ scale: 0.5, display: 'block', center: true } as const, fixeBordures([objets], { rxmin: 0, rxmax: 0, rymax: 0, rymin: 0.5 })), [objets])}`
     this.optionsChampTexte = { texteAvant: `<br>$${nom[1]}${nom[2]}=$` }
     this.correction = ` On utilise le théorème de Pythagore dans le triangle $${nom[0]}${nom[1]}${nom[2]}$,  rectangle en $${nom[1]}$.<br>
       On obtient :<br><br>

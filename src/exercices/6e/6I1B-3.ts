@@ -380,7 +380,7 @@ export default class AlgoTortue extends Exercice {
         pixelsParCm: Math.round(100 / largeur),
         scale: 2.5 / largeur,
         zoom: 1,
-        style: 'display:inline-block; margin-right:0.5em;',
+        display: 'inline-block' as const,
         id: `cliquefigure${i}Ex${numeroExercice}Q0`,
       }
       paramsCorrection = {

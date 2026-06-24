@@ -213,7 +213,7 @@ export default class Auto1AF5 extends ExerciceQcmA {
         ymax: ymax + 0.25,
         pixelsParCm: 30,
         scale: 0.6,
-        style: 'margin: auto',
+        center: true,
       },
       courbe(f1, {
         repere: r,
@@ -518,7 +518,7 @@ export default class Auto1AF5 extends ExerciceQcmA {
         ymax: ymax + 0.05,
         pixelsParCm: 30,
         scale: 0.6,
-        style: 'margin: auto',
+        center: true,
       },
       courbe(f1, {
         repere: r,

@@ -98,7 +98,7 @@ export default class ProduitScalaireNormesAngles extends ExerciceSimple {
         mainlevee: false,
         amplitude: 0.3,
         scale: 0.5,
-        style: 'margin: auto',
+        center: true,
       },
       objets,
     )

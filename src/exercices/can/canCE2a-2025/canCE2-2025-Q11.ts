@@ -189,7 +189,7 @@ export default class Visualisation3d extends ExerciceCan {
     }
     const figure0 = mathalea2d(
       Object.assign(
-        { scale: 0.4, style: 'display: inline-block' },
+        { scale: 0.4, display: 'inline-block' } as const,
         fixeBordures(objets0),
       ),
       objets0,
@@ -213,7 +213,7 @@ export default class Visualisation3d extends ExerciceCan {
     }
     const figure1 = mathalea2d(
       Object.assign(
-        { scale: 0.4, style: 'display: inline-block' },
+        { scale: 0.4, display: 'inline-block' } as const,
         fixeBordures(objets1),
       ),
       objets1,
@@ -237,7 +237,7 @@ export default class Visualisation3d extends ExerciceCan {
     }
     const figure2 = mathalea2d(
       Object.assign(
-        { scale: 0.4, style: 'display: inline-block' },
+        { scale: 0.4, display: 'inline-block' } as const,
         fixeBordures(objets2),
       ),
       objets2,
@@ -261,7 +261,7 @@ export default class Visualisation3d extends ExerciceCan {
     }
     const figure4 = mathalea2d(
       Object.assign(
-        { scale: 0.4, style: 'display: inline-block' },
+        { scale: 0.4, display: 'inline-block' } as const,
         fixeBordures(objets4),
       ),
       objets4,
@@ -285,7 +285,7 @@ export default class Visualisation3d extends ExerciceCan {
     }
     const figure5 = mathalea2d(
       Object.assign(
-        { scale: 0.4, style: 'display: inline-block' },
+        { scale: 0.4, display: 'inline-block' } as const,
         fixeBordures(objets5),
       ),
       objets5,
@@ -309,7 +309,7 @@ export default class Visualisation3d extends ExerciceCan {
     }
     const figure6 = mathalea2d(
       Object.assign(
-        { scale: 0.4, style: 'display: inline-block' },
+        { scale: 0.4, display: 'inline-block' } as const,
         fixeBordures(objets6),
       ),
       objets6,
@@ -330,7 +330,7 @@ export default class Visualisation3d extends ExerciceCan {
     }
     const figureBis = mathalea2d(
       Object.assign(
-        { scale: 0.4, style: 'display: inline-block' },
+        { scale: 0.4, display: 'inline-block' } as const,
         fixeBordures(objetsBis),
       ),
       objetsBis,

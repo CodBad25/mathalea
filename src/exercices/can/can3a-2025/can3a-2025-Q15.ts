@@ -75,7 +75,7 @@ export default class hypoténusePythagore extends ExerciceSimple {
         mainlevee: false,
         amplitude: 0.3,
         scale: 0.7,
-        style: 'margin: auto',
+        center: true,
       },
       objets,
     )

@@ -104,7 +104,7 @@ export default class CheminsQuadrillage extends Exercice {
             mainlevee: false,
             amplitude: 0.5,
             scale: 0.5,
-            style: 'margin: auto',
+            center: true,
           },
           objets,
         )
@@ -147,7 +147,7 @@ export default class CheminsQuadrillage extends Exercice {
             mainlevee: false,
             amplitude: 0.5,
             scale: 0.5,
-            style: 'margin: auto',
+            center: true,
           },
           objets,
         )
@@ -196,7 +196,7 @@ export default class CheminsQuadrillage extends Exercice {
             mainlevee: false,
             amplitude: 0.5,
             scale: 0.5,
-            style: 'margin: auto',
+            center: true,
           },
           objets,
         )

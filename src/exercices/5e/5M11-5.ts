@@ -272,8 +272,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 pixelsParCm: 20,
                 zoom: 1,
                 optionsTikz: 'baseline=(current bounding box.north)',
-                style: 'display: block',
-              },
+                display: 'block',
+              } as const,
               fixeBordures([A, B, C, D, E, pointAbstrait(C.x, C.y + 0.5)], {
                 rxmin: -1.2,
                 rymin: -1.2,
@@ -290,8 +290,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                   pixelsParCm: 20,
                   zoom: 1,
                   optionsTikz: 'baseline=(current bounding box.north)',
-                  style: 'display: block',
-                },
+                  display: 'block',
+                } as const,
                 fixeBordures(
                   [
                     A,
@@ -398,8 +398,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 pixelsParCm: 20,
                 zoom: 1,
                 optionsTikz: 'baseline=(current bounding box.north)',
-                style: 'display: block',
-              },
+                display: 'block',
+              } as const,
               fixeBordures([M, N, S, O, P, pointAbstrait(N.x, N.y + 0.5)], {
                 rxmin: -1,
                 rymin: -1.2,
@@ -416,8 +416,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                   pixelsParCm: 20,
                   zoom: 1,
                   optionsTikz: 'baseline=(current bounding box.north)',
-                  style: 'display: block',
-                },
+                  display: 'block',
+                } as const,
                 fixeBordures([M, N, S, O, P, pointAbstrait(N.x, N.y + 0.5)], {
                   rxmin: -1,
                   rymin: -1.2,
@@ -590,8 +590,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 pixelsParCm: 20,
                 zoom: 1,
                 optionsTikz: 'baseline=(current bounding box.north)',
-                style: 'display: block',
-              },
+                display: 'block',
+              } as const,
               fixeBordures([M, N, S, O, P, pointAbstrait(N.x, N.y + 0.5)], {
                 rxmin: -1,
                 rymin: -1,
@@ -608,8 +608,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                   pixelsParCm: 20,
                   zoom: 1,
                   optionsTikz: 'baseline=(current bounding box.north)',
-                  style: 'display: block',
-                },
+                  display: 'block',
+                } as const,
                 fixeBordures([M, N, S, O, P, pointAbstrait(N.x, N.y + 0.5)], {
                   rxmin: -1,
                   rymin: -1,
@@ -714,8 +714,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 pixelsParCm: 20,
                 zoom: 1,
                 optionsTikz: 'baseline=(current bounding box.north)',
-                style: 'display: block',
-              },
+                display: 'block',
+              } as const,
               fixeBordures(
                 [A, B, C, D, E, demicercle, pointAbstrait(C.x, C.y + 0.2)],
                 {
@@ -734,8 +734,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                   pixelsParCm: 20,
                   zoom: 1,
                   optionsTikz: 'baseline=(current bounding box.north)',
-                  style: 'display: block',
-                },
+                  display: 'block',
+                } as const,
                 fixeBordures(
                   [A, B, C, D, E, demicercle, pointAbstrait(C.x, C.y + 0.2)],
                   {
@@ -883,8 +883,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 pixelsParCm: 20,
                 zoom: 1,
                 optionsTikz: 'baseline=(current bounding box.north)',
-                style: 'display: block',
-              },
+                display: 'block',
+              } as const,
               fixeBordures(
                 [
                   A,
@@ -912,8 +912,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                   pixelsParCm: 20,
                   zoom: 1,
                   optionsTikz: 'baseline=(current bounding box.north)',
-                  style: 'display: block',
-                },
+                  display: 'block',
+                } as const,
                 fixeBordures(
                   [
                     A,
@@ -1080,8 +1080,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 pixelsParCm: 20,
                 zoom: 1,
                 optionsTikz: 'baseline=(current bounding box.north)',
-                style: 'display: block',
-              },
+                display: 'block',
+              } as const,
               fixeBordures(
                 [demicercle, A, B, C, D, E, pointAbstrait(C.x, C.y + 0.6)],
                 {
@@ -1100,8 +1100,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                   pixelsParCm: 20,
                   zoom: 1,
                   optionsTikz: 'baseline=(current bounding box.north)',
-                  style: 'display: block',
-                },
+                  display: 'block',
+                } as const,
                 fixeBordures(
                   [demicercle, A, B, C, D, E, pointAbstrait(C.x, C.y + 0.2)],
                   {
@@ -1254,8 +1254,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 pixelsParCm: 20,
                 zoom: 1,
                 optionsTikz: 'baseline=(current bounding box.north)',
-                style: 'display: block',
-              },
+                display: 'block',
+              } as const,
               fixeBordures(
                 [
                   A,
@@ -1283,8 +1283,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                   pixelsParCm: 20,
                   zoom: 1,
                   optionsTikz: 'baseline=(current bounding box.north)',
-                  style: 'display: block',
-                },
+                  display: 'block',
+                } as const,
                 fixeBordures(
                   [
                     A,

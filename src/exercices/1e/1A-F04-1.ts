@@ -85,7 +85,7 @@ export default class AutoF4 extends ExerciceQcmA {
     this.enonce +=
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.75, style: 'margin: auto' },
+          { pixelsParCm: 30, scale: 0.75, center: true },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,
@@ -262,7 +262,7 @@ export default class AutoF4 extends ExerciceQcmA {
     this.enonce +=
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.75, style: 'margin: auto' },
+          { pixelsParCm: 30, scale: 0.75, center: true },
           {
             xmin: bornes.xMin - 2,
             ymin: bornes.yMin - 1,

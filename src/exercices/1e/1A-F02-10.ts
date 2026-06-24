@@ -72,15 +72,10 @@ export default class AutoFO2j extends ExerciceQcmA {
     
     L'image de $${xDemande}$ par cette fonction correspond à  l'ordonnée du point de  $\\mathscr{D}$ dont l'abscisse est $${xDemande}$ :<br>
     $\\begin{aligned}
-    g(${xDemande})&=${m === 1 ? `${xDemande}` : `${m}\\times ${ecritureParentheseSiNegatif(xDemande)}`}${ecritureAlgebrique(b)}${
-      m === 1
-        ? ''
-        : `\\\\
-    &=${m * xDemande}${ecritureAlgebrique(b)}`
-    }\\\\
+    g(${xDemande})&=${m === 1 ? `${xDemande}` : `${m}\\times ${ecritureParentheseSiNegatif(xDemande)}`}${ecritureAlgebrique(b)}\\\\
+    ${m === 1 ? '' : `&=${m * xDemande}${ecritureAlgebrique(b)}\\\\`}
     &=${miseEnEvidence(bonneReponse)}
-    \\end{aligned}$
-    `
+    \\end{aligned}$`
 
     // Réponses
     this.reponses = [

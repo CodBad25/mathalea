@@ -330,7 +330,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 xmax: 10,
                 ymax: 1.5,
                 scale: 0.8,
-                style: 'margin: auto',
+                center: true,
               },
               texteParPosition('?', (8 * b) / a, 0.7, 0, bleuMathalea, 2),
               droiteGraduee({
@@ -469,7 +469,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 xmax: 14,
                 ymax: 1.5,
                 scale: 0.7,
-                style: 'margin: auto',
+                center: true,
               },
               texteParPosition(
                 'A',
@@ -671,7 +671,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               mainlevee: false,
               amplitude: 0.5,
               scale: 0.7,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -938,7 +938,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               pixelsParCm: 50,
               mainlevee: false,
               scale: 1,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )

@@ -221,7 +221,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           texte = `Combien y a-t-il de boules noires ?
           <br>`
 
-          texte += `${mathalea2d(Object.assign({ scale: 0.3, style: 'margin: auto' }, fixeBordures(d)), d)}`
+          texte += `${mathalea2d(Object.assign({ scale: 0.3, center: true }, fixeBordures(d)), d)}`
           reponse = b
           texteCorr = `Le nombre de boules noires est donné par : $${k}\\times ${texNombre(b / k, 0)}=${miseEnEvidence(b)}$.`
 
@@ -327,7 +327,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 xmax: 15,
                 ymax: 1.8,
                 scale: 0.5,
-                style: 'margin: auto',
+                center: true,
               },
               d,
               b,
@@ -794,7 +794,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 xmax: 15,
                 ymax: 1.5,
                 scale: 0.5,
-                style: 'margin: auto',
+                center: true,
               },
               d,
               b,
@@ -879,7 +879,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               xmax: 6.1,
               ymax: b + 0.5,
               scale: 0.7,
-              style: 'margin: auto',
+              center: true,
             },
             A,
             C,
@@ -1018,7 +1018,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 0.5,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               ) + '<br>'
@@ -1077,7 +1077,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 0.5,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               ) + '<br>'
@@ -1141,7 +1141,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 0.5,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               ) + '<br>'
@@ -1358,7 +1358,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 xmax: 12.1,
                 ymax: 5.5,
                 scale: 1,
-                style: 'margin: auto',
+                center: true,
               },
               C,
               A,
@@ -1407,7 +1407,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 xmax: 12.1,
                 ymax: 6,
                 scale: 1,
-                style: 'margin: auto',
+                center: true,
               },
               A,
               C,
@@ -1460,7 +1460,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 xmax: 14,
                 ymax: 1.5,
                 scale: 0.6,
-                style: 'margin: auto',
+                center: true,
               },
               texteParPosition(
                 '?',
@@ -1502,7 +1502,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 xmax: 14,
                 ymax: 1.5,
                 scale: 0.5,
-                style: 'margin: auto',
+                center: true,
               },
               texteParPosition(
                 '?',
@@ -1662,7 +1662,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 0.7,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -1750,7 +1750,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                   mainlevee: false,
                   amplitude: 0.5,
                   scale: 0.7,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )

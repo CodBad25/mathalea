@@ -113,7 +113,7 @@ export default class Can52026Q19 extends ExerciceCan {
         mainlevee: false,
         amplitude: 0.3,
         scale: 0.7,
-        style: 'margin: auto',
+        center: true,
       },
       [triangle, labels, affAngleD, affAngleF, affAngleE],
     )

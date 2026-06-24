@@ -65,12 +65,10 @@ export default class ValeursDefPourcentage extends ExerciceSimple {
         100\\,\\% \\text{ de } N&=${choix[2]}\\times${texNombre(valeur, 2)}\\\\
         ${choix[0] === 5 && !Number.isInteger((choix[0] * choix[1]) / 100) ? `100\\,\\% \\text{ de } N&=\\underbrace{2\\times 10}_{=20}\\times${texNombre(valeur, 2)}\\\\` : context.isHtml ? '' : '\\'}
         N&=${miseEnEvidence(`${texNombre(choix[1], 0)}`)}
-        \\end{aligned}$
-          `
+        \\end{aligned}$<br>`
     if (choix[0] === 5 && !Number.isInteger((choix[0] * choix[1]) / 100)) {
-      this.correction += `<br>  ${texteGras('Remarque : ')} <br>
-              Pour multiplier un nombre par $20$, on peut le multiplier par $10$, puis par $2$.
-                `
+      this.correction += `${texteGras('Remarque : ')} <br>
+              Pour multiplier un nombre par $20$, on peut le multiplier par $10$, puis par $2$.`
     }
 
     if (this.interactif && !this.versionQcm) {

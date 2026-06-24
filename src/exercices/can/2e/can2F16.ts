@@ -163,7 +163,7 @@ export default class EquationsGSpline extends ExerciceSimple {
     Résoudre l'équation  $f(x)=${y1}$.<br>` +
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.65, style: 'margin: auto' },
+          { pixelsParCm: 30, scale: 0.65, center: true },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,

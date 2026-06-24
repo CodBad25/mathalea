@@ -186,7 +186,7 @@ export default class Can2026CE1Q18 extends ExerciceCan {
         ymax,
         pixelsParCm: 20,
         scale: 0.5,
-        style: 'margin: auto',
+        center: true,
       },
       objets,
     )

@@ -129,7 +129,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -161,7 +161,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -193,7 +193,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -224,7 +224,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -255,7 +255,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -290,7 +290,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -361,7 +361,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -398,7 +398,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -477,7 +477,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -513,7 +513,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -549,7 +549,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
@@ -586,7 +586,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
                   mainlevee: false,
                   amplitude: 0.3,
                   scale: 0.4,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 objets,
               )
