@@ -1,6 +1,10 @@
+import { codageSegments } from '../../lib/2d/CodageSegment'
+import type { ObjetMathalea2D } from '../../lib/2d/ObjetMathalea2D'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { rotation } from '../../lib/2d/transformations'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -9,129 +13,137 @@ import {
   AddTabPropMathlive,
   type Icell,
 } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
-import { choice } from '../../lib/outils/arrayOutils'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { arrondi } from '../../lib/outils/nombres'
 import { numAlpha } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = "Produire une formule à partir d'un tableau"
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const dateDeModifImportante = '05/05/2026'
+export const dateDeModifImportante = '24/06/2026'
 
 /**
  * * Traduire la dépendance entre deux grandeurs par un tableau de valeurs et produire une formule.
  * @author Sébastien Lozano
  * Éric Elter : Refactorisation, passage en TS et en interactif le 05/05/2026
+ * @author Olivier Mimeau
+ *   ajout de cas, fix le perimetre en cm quoi qu'il arrive
  */
 
-export const uuid = '7aba6'
+export const uuid = '0024b'
 
 export const refs = {
   'fr-fr': ['5L10-4', 'BP2AutoJ2'],
   'fr-ch': ['10FA1-9'],
 }
 
-// une fonction pour moduler l'affichage d'une étape dans la correction
-function etapeCorrective(str: string, sup: number) {
-  return sup === 1 ? '' : str
+type Longueur = {
+  unite: string
+  valeur: number
 }
 
 export default class TableauxEtFonction extends Exercice {
   constructor() {
     super()
-    this.besoinFormulaireNumerique = [
-      'Niveau de difficulté',
-      2,
-      '1 : Les mêmes unités\n2 : Unités différentes',
+    this.besoinFormulaireTexte = [
+      "Type d'unités",
+      [
+        'Nombres séparés par des tirets  :',
+        '0 : Mélange',
+        '1 : Les mêmes unités',
+        '2 : Unités différentes',
+      ].join('\n'),
     ]
-
-    this.sup = 1
+    this.besoinFormulaire2Texte = [
+      'Type de questions',
+      [
+        'Nombres séparés par des tirets  :',
+        '0 : Mélange',
+        '1 : Périmètre d’un rectangle',
+        '2 : Aire d’un rectangle',
+        '3 : Périmètre d’un triangle isocèle de base fixée',
+        '4 : Périmètre d’un triangle isocèle de base variable',
+        '5 : Périmètre d’un carré',
+        '6 : Aire d’un carré',
+        '7 : Périmètre d’un triangle équilatéral',
+        '8 : Aire d’un triangle rectangle',
+      ].join('\n'),
+    ]
+    this.sup = '0'
+    this.sup2 = '0'
     this.nbQuestions = 1
 
-    context.isHtml ? (this.spacing = 3) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2.5) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 3 : 2
+    this.spacingCorr = context.isHtml ? 1.5 : 1
   }
 
   nouvelleVersion() {
-    for (
-      let i = 0, texte, texteCorr, cpt = 0;
-      i < this.nbQuestions && cpt < 50;
-    ) {
-      const L1 = randint(3, 7)
-      const L2 = L1 + 1
-      const L3 = L2 * 2
-      const L4 = L2 * 3
-
-      const coteInconnu = choice(['L'])
-      let coteInconnuCorr
-      let coteInconnuCorrNum
-      const coteConnu: number = randint(3, 7)
-
-      let unites
-      let grandL: string[] = ['', '', '', '']
-      let grandLNum: number[] = [0, 0, 0, 0]
-      let petitL = ''
-      let petitLNum = 0
-      let unitegrandL
-      let unitepetitL
-      let txtCorr
-      if (this.sup === 1) {
-        // même unités
-        unites = choice([
-          ['\\text{cm}', '\\text{cm}'],
-          ['\\text{m}', '\\text{m}'],
-        ])
-        grandL = [`${L1}`, `${L2}`, `${L3}`, `${L4}`]
-        grandLNum = [L1, L2, L3, L4]
-        petitL = `${coteConnu}`
-        petitLNum = coteConnu
-        unitegrandL = unites[0]
-        unitepetitL = unites[1]
-        coteInconnuCorr = coteInconnu
-        coteInconnuCorrNum = '2' + coteInconnu
-        txtCorr =
-          "Les unités sont les mêmes, donc il n'est pas nécessaire de convertir."
-      } else {
-        // unités différentes
-        unites = choice([
-          ['\\text{cm}', '\\text{m}'],
-          ['\\text{m}', '\\text{cm}'],
-        ])
-        if (unites[0] === '\\text{cm}') {
-          grandL = [`${L1}`, `${L2}`, `${L3}`, `${L4}`]
-          grandLNum = [L1, L2, L3, L4]
-          petitL = `${coteConnu}\\times 100`
-          petitLNum = 100 * coteConnu
-          unitegrandL = unites[0]
-          unitepetitL = unites[0]
-          coteInconnuCorr = coteInconnu
-          coteInconnuCorrNum = '2' + coteInconnu
-        } else {
-          // if (unites[0] === '\\text{m}') {
-          grandL = [
-            `${L1}\\times 100`,
-            `${L2}\\times 100`,
-            `${L3}\\times 100`,
-            `${L4}\\times 100`,
-          ]
-          grandLNum = [L1 * 100, L2 * 100, L3 * 100, L4 * 100]
-          petitL = `${coteConnu}`
-          petitLNum = coteConnu
-          unitegrandL = unites[1]
-          unitepetitL = unites[1]
-          coteInconnuCorr = coteInconnu + '\\times 100'
-          coteInconnuCorrNum = '200' + coteInconnu
-        }
-        txtCorr =
-          'Les unités sont différentes. Donc, pour plus de confort, nous pouvons les convertir dans la même unité, ici en cm.'
-      }
-
-      // on prépare la fenetre mathalea2d
+    const typesUnites = ['Meme', 'Differents']
+    const typesDUnitesDisponibles = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      min: 1,
+      max: 2,
+      melange: 0,
+      defaut: 0,
+      listeOfCase: typesUnites,
+      nbQuestions: this.nbQuestions,
+    })
+    const listeTypeDUnites = combinaisonListes(
+      typesDUnitesDisponibles,
+      this.nbQuestions,
+    )
+    const typesQuestions = [
+      'PeriRect',
+      'AireRect',
+      'PeriTriBaseFixee',
+      'PeriTriBaseVariable',
+      'PeriCarre',
+      'AireCarre',
+      'PeriTriEquilateral',
+      'AireTriRectangle',
+    ]
+    const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
+      saisie: this.sup2,
+      min: 1,
+      max: 8,
+      melange: 0,
+      defaut: 0,
+      listeOfCase: typesQuestions,
+      nbQuestions: this.nbQuestions,
+    })
+    const listeTypeDeQuestions = combinaisonListes(
+      typesDeQuestionsDisponibles,
+      this.nbQuestions,
+    )
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+      let memesUnites = listeTypeDUnites[i] === 'Meme'
+      let texte = ''
+      let texteCorr = ''
+      const coteInconnue = 'L' //choice(['L'])
+      const uniteConnue = choice(['cm', 'm'])
+      const unitecoteInconnue = memesUnites
+        ? uniteConnue
+        : uniteConnue === 'cm'
+          ? 'm'
+          : 'cm'
+      const uniteCoteInconnueCorr = memesUnites ? uniteConnue : 'cm' // si les unites sont différentes, la correction est en cm
+      let uniteCorr = ''
+      let formeFigure = ''
+      let formule = ''
+      let fctFormule: (connueVal: number, inconnueVal: number) => number = () =>
+        0
+      let ReponsesFormule = ''
+      let IntroCorr = ''
       const fenetreMathalea2D = {
         xmin: -5,
         ymin: -3,
@@ -140,26 +152,267 @@ export default class TableauxEtFonction extends Exercice {
         pixelsParCm: 20,
         scale: 0.5,
       }
-      const A = pointAbstrait(-4, 2)
-      const B = pointAbstrait(-4, -2)
-      const C = pointAbstrait(4, -2)
-      const D = pointAbstrait(4, 2)
-      const mesAppels = [polygone(A, B, C, D)]
-      const figure = mathalea2d(fenetreMathalea2D, mesAppels)
+      let figure = ''
+      let texteIntro = ''
+      let consigne = ''
+      let expliciterFormule = ''
+      const InconnuNum: Longueur[] = []
+      InconnuNum[0] = { unite: unitecoteInconnue, valeur: randint(3, 7) }
+      InconnuNum[1] = {
+        unite: unitecoteInconnue,
+        valeur: InconnuNum[0].valeur + 1,
+      }
+      InconnuNum[2] = {
+        unite: unitecoteInconnue,
+        valeur: InconnuNum[1].valeur * 2,
+      }
+      InconnuNum[3] = {
+        unite: unitecoteInconnue,
+        valeur: InconnuNum[1].valeur * 3,
+      }
+
+      let coteConnuNum: Longueur = {
+        unite: uniteConnue,
+        valeur: randint(3, 7),
+      }
+
+      switch (listeTypeDeQuestions[i]) {
+        case 'PeriRect':
+          {
+            formeFigure = 'rectangle'
+            texteIntro = `dont l'un des côtés mesure $${coteConnuNum.valeur}$ $\\text{${coteConnuNum.unite}}$ et l'autre mesure $${coteInconnue}$ $\\text{${unitecoteInconnue}}$`
+            formule = `2\\times ConnueVal + 2\\times InconnueVal`
+            fctFormule = (connueVal: number, inconnueVal: number) =>
+              2 * connueVal + 2 * inconnueVal
+
+            const A = pointAbstrait(-4, 2)
+            const B = pointAbstrait(-4, -2)
+            const C = pointAbstrait(4, -2)
+            const D = pointAbstrait(4, 2)
+            const mesAppels = [polygone(A, B, C, D)]
+            figure = mathalea2d(fenetreMathalea2D, mesAppels)
+            const multInconnueCorr =
+              memesUnites || unitecoteInconnue === 'cm' ? 2 : 200
+            ReponsesFormule = `${texNombre(2 * donnevaleur(coteConnuNum, memesUnites))} + ${multInconnueCorr}${coteInconnue}`
+            consigne = `périmètre`
+            uniteCorr = uniteCoteInconnueCorr
+            IntroCorr = memesUnites
+              ? `Les unités sont les mêmes, donc il n'est pas nécessaire de convertir.<br>`
+              : `Les unités sont différentes. Donc, nous devons les convertir dans la même unité, ici en cm.<br>`
+            IntroCorr += `Il y a plusieurs façons de calculer le périmètre d'un rectangle, par exemple : <br> $2\\times\\text{ largeur} + 2\\times\\text{ Longueur}$.<br>`
+            IntroCorr += `Ici, l'un des côtés mesure toujours `
+            IntroCorr += `$ \\color{blue}{${memesUnites || coteConnuNum.unite === 'cm' ? '' : `${coteConnuNum.valeur} \\times 100 \\text{ cm} =`}${memesUnites || coteConnuNum.unite === 'cm' ? coteConnuNum.valeur : coteConnuNum.valeur * 100} \\text{ ${uniteCoteInconnueCorr}}} $.<br>`
+
+            expliciterFormule = `$2\\times {\\color{blue}{${coteConnuNum.valeur} \\text{ ${coteConnuNum.unite}}}} +2\\times {\\color{green}{${coteInconnue} \\text{ ${unitecoteInconnue}}}}`
+            expliciterFormule += ` ${memesUnites ? '' : `=2\\times {\\color{blue}{${coteConnuNum.valeur}${coteConnuNum.unite === 'm' ? ` \\times 100` : ``} \\text{ ${uniteCoteInconnueCorr}}}} +2\\times {\\color{green}{${coteInconnue}${unitecoteInconnue === 'm' ? ` \\times 100` : ``} \\text{ ${uniteCoteInconnueCorr}}}}`}$`
+          }
+          break
+        case 'AireRect':
+          {
+            formeFigure = 'rectangle'
+            texteIntro = `dont l'un des côtés mesure $${coteConnuNum.valeur}$ $\\text{${coteConnuNum.unite}}$ et l'autre mesure $${coteInconnue}$ $\\text{${unitecoteInconnue}}$`
+
+            formule = ` ConnueVal \\times InconnueVal`
+            fctFormule = (connueVal: number, inconnueVal: number) =>
+              connueVal * inconnueVal
+            const A = pointAbstrait(-4, 2)
+            const B = pointAbstrait(-4, -2)
+            const C = pointAbstrait(4, -2)
+            const D = pointAbstrait(4, 2)
+            const mesAppels = [polygone(A, B, C, D)]
+            figure = mathalea2d(fenetreMathalea2D, mesAppels)
+            const multInconnueCorr =
+              memesUnites || unitecoteInconnue === 'cm' ? 1 : 100
+            ReponsesFormule = `${texNombre(multInconnueCorr * donnevaleur(coteConnuNum, memesUnites))}${coteInconnue}`
+            consigne = `aire`
+            uniteCorr = `$${uniteCoteInconnueCorr}^2$`
+            IntroCorr = memesUnites
+              ? `Les unités sont les mêmes, donc il n'est pas nécessaire de convertir.<br>`
+              : `Les unités sont différentes. Donc, nous devons les convertir dans la même unité, ici en cm.<br>`
+            IntroCorr += `Pour calculer l'aire d'un rectangle, onutilise une formule : <br> $\\text{largeur} \\times \\text{longueur}$.<br>`
+            IntroCorr += `Ici, l'un des côtés mesure toujours `
+            IntroCorr += `$ \\color{blue}{${memesUnites || coteConnuNum.unite === 'cm' ? '' : `${coteConnuNum.valeur} \\times 100 \\text{ cm} =`}${memesUnites || coteConnuNum.unite === 'cm' ? coteConnuNum.valeur : coteConnuNum.valeur * 100} \\text{ ${uniteCoteInconnueCorr}}} $.<br>`
+            expliciterFormule = `$ {\\color{blue}{${coteConnuNum.valeur} \\text{ ${coteConnuNum.unite}}}} \\times {\\color{green}{${coteInconnue} \\text{ ${unitecoteInconnue}}}}`
+            expliciterFormule += ` ${memesUnites ? '' : `= {\\color{blue}{${coteConnuNum.valeur}${coteConnuNum.unite === 'm' ? ` \\times 100` : ``} \\text{ ${uniteCoteInconnueCorr}}}} \\times {\\color{green}{${coteInconnue}${unitecoteInconnue === 'm' ? ` \\times 100` : ``} \\text{ ${uniteCoteInconnueCorr}}}}`}$`
+          }
+          break
+        case 'PeriTriBaseFixee':
+          {
+            formeFigure = 'triangle isocèle'
+            texteIntro = `dont la base mesure $${coteConnuNum.valeur}$ $\\text{${coteConnuNum.unite}}$ et les autres côtés mesurent $${coteInconnue}$ $\\text{${unitecoteInconnue}}$`
+            formule = `ConnueVal+ 2\\times InconnueVal `
+            fctFormule = (connueVal: number, inconnueVal: number) =>
+              connueVal + 2 * inconnueVal
+
+            const A = pointAbstrait(-3, -2)
+            const B = pointAbstrait(3, -2)
+            const C = pointAbstrait(0, 2)
+            const mesAppels: ObjetMathalea2D[] = [polygone(A, B, C)]
+            mesAppels.push(codageSegments('||', bleuMathalea, C, A, C, B))
+            figure = mathalea2d(fenetreMathalea2D, mesAppels)
+            const multInconnueCorr =
+              memesUnites || unitecoteInconnue === 'cm' ? 2 : 200
+            ReponsesFormule = `${texNombre(donnevaleur(coteConnuNum, memesUnites))} + ${multInconnueCorr}${coteInconnue}`
+            consigne = `périmètre`
+            uniteCorr = uniteCoteInconnueCorr
+            IntroCorr = memesUnites
+              ? `Les unités sont les mêmes, donc il n'est pas nécessaire de convertir.<br>`
+              : `Les unités sont différentes. Donc, nous devons les convertir dans la même unité, ici en cm.<br>`
+            IntroCorr += `Il y a plusieurs façons de calculer le périmètre d'un triangle isocèle, par exemple : <br> $\\text{base }+ 2\\times \\text{côté du sommet principal}$.<br>`
+            IntroCorr += `Ici, la base mesure toujours `
+            IntroCorr += `$ \\color{blue}{${memesUnites || coteConnuNum.unite === 'cm' ? '' : `${coteConnuNum.valeur} \\times 100 \\text{ cm} =`}${memesUnites || coteConnuNum.unite === 'cm' ? coteConnuNum.valeur : coteConnuNum.valeur * 100} \\text{ ${uniteCoteInconnueCorr}}} $.<br>`
+
+            expliciterFormule = `$ {\\color{blue}{${coteConnuNum.valeur} \\text{ ${coteConnuNum.unite}}}} +2\\times {\\color{green}{${coteInconnue} \\text{ ${unitecoteInconnue}}}}`
+            expliciterFormule += ` ${memesUnites ? '' : `= {\\color{blue}{${coteConnuNum.valeur}${coteConnuNum.unite === 'm' ? ` \\times 100` : ``} \\text{ ${uniteCoteInconnueCorr}}}} +2\\times {\\color{green}{${coteInconnue}${unitecoteInconnue === 'm' ? ` \\times 100` : ``} \\text{ ${uniteCoteInconnueCorr}}}}`}$`
+          }
+          break
+        case 'PeriTriBaseVariable':
+          {
+            // coteConnuNum doit etre > maxcoteInconnue/2 en tenant compte des unités
+            const max =
+              arrondi(Math.max(...InconnuNum.map((el) => el.valeur)) / 2, 0) + 1
+            const coef = memesUnites || unitecoteInconnue === 'cm' ? 1 : 100
+            coteConnuNum = {
+              unite: uniteConnue,
+              valeur: randint(max, max + 4) * coef,
+            }
+            formeFigure = 'triangle isocèle'
+            texteIntro = `dont la base mesure $${coteInconnue}$ $\\text{${unitecoteInconnue}}$ et les autres côtés mesurent $${coteConnuNum.valeur}$ $\\text{${coteConnuNum.unite}}$`
+            formule = `2\\times ConnueVal + InconnueVal `
+            fctFormule = (connueVal: number, inconnueVal: number) =>
+              2 * connueVal + inconnueVal
+
+            const A = pointAbstrait(-3, -2)
+            const B = pointAbstrait(3, -2)
+            const C = pointAbstrait(0, 2)
+            const mesAppels: ObjetMathalea2D[] = [polygone(A, B, C)]
+            mesAppels.push(codageSegments('||', bleuMathalea, C, A, C, B))
+            figure = mathalea2d(fenetreMathalea2D, mesAppels)
+            const multInconnueCorr =
+              memesUnites || unitecoteInconnue === 'cm' ? '' : '100'
+            //            ReponsesFormule = `${texNombre(donnevaleur(coteConnuNum, memesUnites))} + ${multInconnueCorr}${coteInconnue}`
+            ReponsesFormule = `${donnevaleur(coteConnuNum, memesUnites)} + ${multInconnueCorr}${coteInconnue}`
+            consigne = `périmètre`
+            uniteCorr = uniteCoteInconnueCorr
+            IntroCorr = memesUnites
+              ? `Les unités sont les mêmes, donc il n'est pas nécessaire de convertir.<br>`
+              : `Les unités sont différentes. Donc, nous devons les convertir dans la même unité, ici en cm.<br>`
+            IntroCorr += `Il y a plusieurs façons de calculer le périmètre d'un triangle isocèle, par exemple : <br> $2\\times\\text{ côté du sommet principal} + \\text{base}$.<br>`
+            IntroCorr += `Ici, les côtés de sommet principal mesurent toujours `
+            IntroCorr += `$ \\color{blue}{${memesUnites || coteConnuNum.unite === 'cm' ? '' : `${coteConnuNum.valeur} \\times 100 \\text{ cm} =`}${memesUnites || coteConnuNum.unite === 'cm' ? coteConnuNum.valeur : coteConnuNum.valeur * 100} \\text{ ${uniteCoteInconnueCorr}}} $.<br>`
+
+            expliciterFormule = `$ 2\\times {\\color{blue}{${coteConnuNum.valeur} \\text{ ${coteConnuNum.unite}}}} + {\\color{green}{${coteInconnue} \\text{ ${unitecoteInconnue}}}}`
+            expliciterFormule += ` ${memesUnites ? '' : `= 2\\times {\\color{blue}{${coteConnuNum.valeur}${coteConnuNum.unite === 'm' ? ` \\times 100` : ``} \\text{ ${uniteCoteInconnueCorr}}}} + {\\color{green}{${coteInconnue}${unitecoteInconnue === 'm' ? ` \\times 100` : ``} \\text{ ${uniteCoteInconnueCorr}}}}`}$`
+          }
+          break
+        case 'PeriCarre':
+          {
+            memesUnites = true
+            formeFigure = 'carré'
+            texteIntro = `dont le côté mesure $${coteInconnue}$ $\\text{${unitecoteInconnue}}$`
+            formule = `4\\times InconnueVal`
+            fctFormule = (connueVal: number, inconnueVal: number) =>
+              4 * inconnueVal
+            const A = pointAbstrait(-2, 2)
+            const B = pointAbstrait(-2, -2)
+            const C = pointAbstrait(2, -2)
+            const D = pointAbstrait(2, 2)
+            const mesAppels = [polygone(A, B, C, D)]
+            figure = mathalea2d(fenetreMathalea2D, mesAppels)
+            ReponsesFormule = `${texNombre(4)}${coteInconnue}`
+            consigne = `périmètre`
+            uniteCorr = uniteCoteInconnueCorr
+            IntroCorr = `Il y a plusieurs façons de calculer le périmètre d'un carré, par exemple : <br> $4\\times \\text{côté}$.<br>`
+
+            expliciterFormule = `$4\\times {\\color{green}{${coteInconnue} \\text{ ${unitecoteInconnue}}}}$`
+          }
+          break
+        case 'AireCarre':
+          {
+            memesUnites = true
+            formeFigure = 'carré'
+            texteIntro = `dont le côté mesure $${coteInconnue}$ $\\text{${unitecoteInconnue}}$`
+            formule = `InconnueVal \\times InconnueVal`
+            fctFormule = (connueVal: number, inconnueVal: number) =>
+              inconnueVal ** 2
+            const A = pointAbstrait(-2, 2)
+            const B = pointAbstrait(-2, -2)
+            const C = pointAbstrait(2, -2)
+            const D = pointAbstrait(2, 2)
+            const mesAppels = [polygone(A, B, C, D)]
+            figure = mathalea2d(fenetreMathalea2D, mesAppels)
+            ReponsesFormule = `${coteInconnue}^2`
+            consigne = `aire`
+            uniteCorr = `$${uniteCoteInconnueCorr}^2$`
+            IntroCorr = `Pour calculer l'aire d'un carré, on utilise la formule : <br> $\\text{côté} \\times \\text{côté}$.<br>`
+
+            expliciterFormule = `$ {\\color{green}{${coteInconnue} \\text{ ${unitecoteInconnue}}}} \\times {\\color{green}{${coteInconnue} \\text{ ${unitecoteInconnue}}}}$`
+          }
+          break
+        case 'PeriTriEquilateral':
+          {
+            memesUnites = true
+            formeFigure = 'triangle équilatéral'
+            texteIntro = `dont le côté mesure $${coteInconnue}$ $\\text{${unitecoteInconnue}}$`
+            formule = `3\\times InconnueVal`
+            fctFormule = (connueVal: number, inconnueVal: number) =>
+              3 * inconnueVal
+            const A = pointAbstrait(-3, -2.5)
+            const B = pointAbstrait(3, -2.5)
+            const C = rotation(B, A, 60)
+            const mesAppels: ObjetMathalea2D[] = [polygone(A, B, C)]
+            mesAppels.push(codageSegments('||', bleuMathalea, C, A, C, B, A, B))
+            figure = mathalea2d(fenetreMathalea2D, mesAppels)
+            ReponsesFormule = `${texNombre(3)}${coteInconnue}`
+            consigne = `périmètre`
+            uniteCorr = uniteCoteInconnueCorr
+            IntroCorr = `Il y a plusieurs façons de calculer le périmètre d'un triangle équilatéral, par exemple : <br> $3\\times \\text{côté}$.<br>`
+
+            expliciterFormule = `$3\\times {\\color{green}{${coteInconnue} \\text{ ${unitecoteInconnue}}}}$`
+          }
+          break
+        case 'AireTriRectangle':
+          {
+            formeFigure = 'triangle rectangle'
+            texteIntro = `dont l'un des côtés de l'angle droit mesure $${coteConnuNum.valeur}$ $\\text{${coteConnuNum.unite}}$ et l'autre côté de l'angle droit mesure $${coteInconnue}$ $\\text{${unitecoteInconnue}}$`
+            formule = ` ConnueVal \\times InconnueVal \\div 2`
+            fctFormule = (connueVal: number, inconnueVal: number) =>
+              (connueVal * inconnueVal) / 2
+            const A = pointAbstrait(-3, -2)
+            const B = pointAbstrait(3, -2)
+            const C = pointAbstrait(-3, 2)
+            const mesAppels = [polygone(A, B, C)]
+            figure = mathalea2d(fenetreMathalea2D, mesAppels)
+            const multInconnueCorr =
+              memesUnites || unitecoteInconnue === 'cm' ? 1 : 100
+            ReponsesFormule = `${texNombre((multInconnueCorr * donnevaleur(coteConnuNum, memesUnites)) / 2)}${coteInconnue}`
+            consigne = `aire`
+            uniteCorr = `$${uniteCoteInconnueCorr}^2$`
+            IntroCorr = memesUnites
+              ? `Les unités sont les mêmes, donc il n'est pas nécessaire de convertir.<br>`
+              : `Les unités sont différentes. Donc, nous devons les convertir dans la même unité, ici en cm.<br>`
+            IntroCorr += `Pour calculer l'aire d'un triangle rectangle, onutilise une formule : <br> $\\text{base} \\times \\text{hauteur} \\div 2$.<br>`
+            IntroCorr += `Ici, l'un des côtés mesure toujours `
+            IntroCorr += `$ \\color{blue}{${memesUnites || coteConnuNum.unite === 'cm' ? '' : `${coteConnuNum.valeur} \\times 100 \\text{ cm} =`}${memesUnites || coteConnuNum.unite === 'cm' ? coteConnuNum.valeur : coteConnuNum.valeur * 100} \\text{ ${uniteCoteInconnueCorr}}} $.<br>`
+            expliciterFormule = `$ {\\color{blue}{${coteConnuNum.valeur} \\text{ ${coteConnuNum.unite}}}} \\times {\\color{green}{${coteInconnue} \\text{ ${unitecoteInconnue}}}} \\div 2`
+            expliciterFormule += ` ${memesUnites ? '' : `= {\\color{blue}{${coteConnuNum.valeur}${coteConnuNum.unite === 'm' ? ` \\times 100` : ``} \\text{ ${uniteCoteInconnueCorr}}}} \\times {\\color{green}{${coteInconnue}${unitecoteInconnue === 'm' ? ` \\times 100` : ``} \\text{ ${uniteCoteInconnueCorr}}}} \\div 2`}$`
+          }
+          break
+      }
 
       const ligne1: Icell[] = [
         {
-          texte: `\\text{Longueur $${coteInconnu}$ du côté (en ${unites[0]})}`,
+          texte: `\\text{Longueur $${coteInconnue}$ du côté (en \\text{ ${unitecoteInconnue}})}`,
           gras: true,
           color: 'black',
           latex: true,
         },
       ].concat(
-        grandLNum.map((el) =>
+        InconnuNum.map((el) =>
           Object.assign(
             {},
             {
-              texte: texNombre(el, 1),
+              texte: texNombre(el.valeur, 1),
               gras: false,
               color: 'black',
               latex: true,
@@ -167,21 +420,22 @@ export default class TableauxEtFonction extends Exercice {
           ),
         ),
       )
-      const reponsesAttendues = [
-        2 * petitLNum + 2 * grandLNum[0],
-        2 * petitLNum + 2 * grandLNum[1],
-        2 * petitLNum + 2 * grandLNum[2],
-        2 * petitLNum + 2 * grandLNum[3],
+      const reponsesNumAttendues = [
+        Evalfct(fctFormule, coteConnuNum, InconnuNum[0], memesUnites),
+        Evalfct(fctFormule, coteConnuNum, InconnuNum[1], memesUnites),
+        Evalfct(fctFormule, coteConnuNum, InconnuNum[2], memesUnites),
+        Evalfct(fctFormule, coteConnuNum, InconnuNum[3], memesUnites),
       ]
+
       const ligne2: Icell[] = [
         {
-          texte: `\\text{Périmètre du rectangle (en $${unites[1]}$)}`,
+          texte: `\\text{${majusculePremiereLettre(singulier(consigne))} du ${formeFigure} (en ${uniteCorr})}`,
           gras: true,
           color: 'black',
           latex: true,
         },
       ].concat(
-        reponsesAttendues.map(() =>
+        reponsesNumAttendues.map(() =>
           Object.assign(
             {},
             { texte: '', gras: false, color: 'black', latex: true },
@@ -190,105 +444,65 @@ export default class TableauxEtFonction extends Exercice {
       )
       const nbColonnes = 4
 
-      const situations = [
-        {
-          unites,
-          coteConnu,
-          coteInconnu,
-          tableauInteractif: AddTabPropMathlive.create(
-            this.numeroExercice ?? 0,
-            2 * i,
-            { ligne1, ligne2, nbColonnes },
-            'clavierDeBase',
-            this.interactif,
-            {},
-          ),
-          tableau: tableauColonneLigne(
-            [
-              `\\text{Longueur $${coteInconnu}$ du côté (en ${unites[0]})}`,
-              `\\phantom{000}${L1}\\phantom{000}`,
-              `\\phantom{000}${L2}\\phantom{000}`,
-              `\\phantom{000}${L3}\\phantom{000}`,
-              `\\phantom{000}${L4}\\phantom{000}`,
-            ],
-            [`\\text{Périmètre du rectangle (en $${unites[1]}$)}`],
-            ['', '', '', ''],
-          ),
-          calculL1: `$\\text{Pour } ${L1} \\text{ ${unites[0]} : } 2\\times {\\color{blue}{${coteConnu} \\text{ ${unites[1]}}}} +2\\times {\\color{green}{${L1}\\text{ ${unites[0]}}}} ${etapeCorrective(`=2\\times {\\color{blue}{${petitLNum} \\text{ ${unitepetitL}}}} +2\\times {\\color{green}{${texNombre(grandLNum[0])} \\text{ ${unitegrandL}}}}`, this.sup)} = ${texNombre(2 * petitLNum + 2 * grandLNum[0])} \\text{ ${unitegrandL}}$.`,
-          calculL2: `$\\text{Pour } ${L2} \\text{ ${unites[0]} : } 2\\times {\\color{blue}{${coteConnu} \\text{ ${unites[1]}}}} +2\\times {\\color{green}{${L2}\\text{ ${unites[0]}}}} ${etapeCorrective(`=2\\times {\\color{blue}{${petitLNum} \\text{ ${unitepetitL}}}} +2\\times {\\color{green}{${texNombre(grandLNum[1])} \\text{ ${unitegrandL}}}}`, this.sup)} = ${texNombre(2 * petitLNum + 2 * grandLNum[1])} \\text{ ${unitegrandL}}$.`,
-          calculL3: `$\\text{Pour } ${L3} \\text{ ${unites[0]} : } 2\\times {\\color{blue}{${coteConnu} \\text{ ${unites[1]}}}} +2\\times {\\color{green}{${L3}\\text{ ${unites[0]}}}} ${etapeCorrective(`=2\\times {\\color{blue}{${petitLNum} \\text{ ${unitepetitL}}}} +2\\times {\\color{green}{${texNombre(grandLNum[2])} \\text{ ${unitegrandL}}}}`, this.sup)} = ${texNombre(2 * petitLNum + 2 * grandLNum[2])} \\text{ ${unitegrandL}}$.`,
-          calculL4: `$\\text{Pour } ${L4} \\text{ ${unites[0]} : } 2\\times {\\color{blue}{${coteConnu} \\text{ ${unites[1]}}}} +2\\times {\\color{green}{${L4}\\text{ ${unites[0]}}}} ${etapeCorrective(`=2\\times {\\color{blue}{${petitLNum} \\text{ ${unitepetitL}}}} +2\\times {\\color{green}{${texNombre(grandLNum[3])} \\text{ ${unitegrandL}}}}`, this.sup)} = ${texNombre(2 * petitLNum + 2 * grandLNum[3])} \\text{ ${unitegrandL}}$.`,
-          tableau_corr: tableauColonneLigne(
-            [
-              `\\text{Longueur $${coteInconnuCorr}$ du côté (en ${unitegrandL})}`,
-              `\\phantom{0}${grandL[0]}\\phantom{0}`,
-              `\\phantom{0}${grandL[1]}\\phantom{0}`,
-              `\\phantom{0}${grandL[2]}\\phantom{0}`,
-              `\\phantom{0}${grandL[3]}\\phantom{0}`,
-            ],
-            [`\\text{Périmètre du rectangle (en ${unitepetitL})}`],
-            [
-              `${miseEnEvidence(texNombre(2 * petitLNum + 2 * grandLNum[0]))}`,
-              `${miseEnEvidence(texNombre(2 * petitLNum + 2 * grandLNum[1]))}`,
-              `${miseEnEvidence(texNombre(2 * petitLNum + 2 * grandLNum[2]))}`,
-              `${miseEnEvidence(texNombre(2 * petitLNum + 2 * grandLNum[3]))}`,
-            ],
-          ),
-          reponseSecondeQ: `${texNombre(2 * petitLNum)} + ${coteInconnuCorrNum}`,
-          secondeQ: `2\\times {\\color{blue}{${coteConnu} \\text{ ${unites[1]}}}} +2\\times {\\color{green}{${coteInconnu} \\text{ ${unites[0]}}}} ${etapeCorrective(`=2\\times {\\color{blue}{${petitLNum} \\text{ ${unitepetitL}}}} +2\\times {\\color{green}{${coteInconnuCorr} \\text{ ${unitegrandL}}}}`, this.sup)} = ${miseEnEvidence(`${texNombre(2 * petitLNum)} + ${coteInconnuCorrNum}`)} \\text{ exprimé en ${unitegrandL}.}`,
-          intro: txtCorr,
-          fig: figure,
-        },
-      ]
+      const tableauInteractif = AddTabPropMathlive.create(
+        this.numeroExercice ?? 0,
+        2 * i,
+        { ligne1, ligne2, nbColonnes },
+        'clavierDeBase',
+        this.interactif,
+        {},
+      )
+      const tableau = tableauColonneLigne(
+        [
+          `\\text{Longueur $${coteInconnue}$ du côté (en \\text{${unitecoteInconnue}})}`,
+          `\\phantom{000}${InconnuNum[0].valeur}\\phantom{000}`,
+          `\\phantom{000}${InconnuNum[1].valeur}\\phantom{000}`,
+          `\\phantom{000}${InconnuNum[2].valeur}\\phantom{000}`,
+          `\\phantom{000}${InconnuNum[3].valeur}\\phantom{000}`,
+        ],
+        [
+          `\\text{${majusculePremiereLettre(singulier(consigne))} du ${formeFigure} (en \\text{${uniteCorr}})}`,
+        ],
+        ['', '', '', ''],
+      )
 
-      const enonces = []
+      const tableau_corr = tableauColonneLigne(
+        [
+          `\\text{Longueur $${coteInconnue}$ du côté (en ${uniteCoteInconnueCorr})}`,
+          `\\phantom{0}${InconnuNum[0].valeur}${!memesUnites && unitecoteInconnue === 'm' ? ` \\times 100` : ``}\\phantom{0}`,
+          `\\phantom{0}${InconnuNum[1].valeur}${!memesUnites && unitecoteInconnue === 'm' ? ` \\times 100` : ``}\\phantom{0}`,
+          `\\phantom{0}${InconnuNum[2].valeur}${!memesUnites && unitecoteInconnue === 'm' ? ` \\times 100` : ``}\\phantom{0}`,
+          `\\phantom{0}${InconnuNum[3].valeur}${!memesUnites && unitecoteInconnue === 'm' ? ` \\times 100` : ``}\\phantom{0}`,
+        ],
+        [
+          `\\text{${majusculePremiereLettre(singulier(consigne))} du ${formeFigure} (en ${uniteCorr})}`,
+        ],
+        [
+          `${miseEnEvidence(texNombre(reponsesNumAttendues[0]))}`,
+          `${miseEnEvidence(texNombre(reponsesNumAttendues[1]))}`,
+          `${miseEnEvidence(texNombre(reponsesNumAttendues[2]))}`,
+          `${miseEnEvidence(texNombre(reponsesNumAttendues[3]))}`,
+        ],
+      )
+      //fig: figure,
+
       let indexSousQuestion = 0
       let indexSousQuestionCorr = 0
 
-      enonces.push({
-        enonce: `
-On considère un rectangle, comme ci-dessous, dont l'un des côtés mesure $${situations[0].coteConnu}$ $${unites[1]}$ et l'autre mesure $${situations[0].coteInconnu}$ $${unites[0]}$.<br>
-${situations[0].fig}
-
-${numAlpha(indexSousQuestion++)} Compléter le tableau suivant :<br>
-${
-  this.interactif
-    ? `${situations[0].tableauInteractif.output}`
-    : `${situations[0].tableau}`
-}
-
-
-${numAlpha(indexSousQuestion++)} Quelle formule${this.interactif ? ', exprimée en $\\text{cm}$,' : ''} permet de calculer le périmètre de ce rectangle en fonction de $${situations[0].coteInconnu}$ ?
-${
-  this.interactif
-    ? `${ajouteChampTexteMathLive(this, 2 * i + 1, KeyboardType.alphanumeric)}`
-    : ``
-}
-`,
-        question: '',
-        correction: `
-${numAlpha(indexSousQuestionCorr++)} ${situations[0].intro}<br>
-Il y a plusieurs façons de calculer le périmètre d'un rectangle, par exemple : <br> $2\\times largeur + 2\\times Longueur$.<br>
-Ici, l'un des côtés mesure toujours $\\color{blue}{${petitL}} \\text{ ${unitepetitL}}$.<br>
-Calculons les périmètres pour chacune des valeurs données :<br>
-${situations[0].calculL1}<br>
-${situations[0].calculL2}<br>
-${situations[0].calculL3}<br>
-${situations[0].calculL4}<br>
-Nous pouvons alors remplir le tableau.${!context.isHtml ? '\\par\\medskip' : '<br>'}
-${situations[0].tableau_corr}${!context.isHtml ? '\\par\\medskip' : '<br>'}
-${numAlpha(indexSousQuestionCorr++)} On peut généraliser le raisonnement des calculs du périmètre, et ainsi obtenir une formule.<br>
-$${situations[0].secondeQ}$
-
-`,
-      })
-
+      texte += `On considère un ${formeFigure}, comme ci-dessous, ${texteIntro}.<br>`
+      texte += figure
+      texte += `${!context.isHtml ? '\\par' : ''}${numAlpha(indexSousQuestion++)} Compléter le tableau suivant :<br>`
+      texte += this.interactif ? tableauInteractif.output : tableau
+      texte += `${!context.isHtml ? '\\par\\medskip' : '<br>'}${numAlpha(indexSousQuestion++)} Quelle formule${this.interactif ? ', exprimée en $\\text{cm}$,' : ''} permet de calculer ${singulier(consigne)} de ce ${formeFigure} en fonction de $${coteInconnue}$ ?`
+      texte += this.interactif
+        ? ajouteChampTexteMathLive(this, 2 * i + 1, KeyboardType.alphanumeric)
+        : ``
       const reponsesTableau = []
       for (let i = 0; i < nbColonnes; i++) {
         reponsesTableau.push([
           `L1C${i + 1}`,
           {
-            value: reponsesAttendues[i],
+            value: reponsesNumAttendues[i],
             options: { approximatelyCompare: true, tolerance: 0 },
           },
         ])
@@ -296,12 +510,22 @@ $${situations[0].secondeQ}$
       reponsesTableau.push(['bareme', toutAUnPoint])
       handleAnswers(this, 2 * i, Object.fromEntries(reponsesTableau))
       handleAnswers(this, 2 * i + 1, {
-        reponse: { value: situations[0].reponseSecondeQ },
+        reponse: { value: ReponsesFormule.replaceAll('$', '') },
       })
 
-      texte = `${enonces[0].enonce}`
-      texteCorr = `${enonces[0].correction}`
-
+      texteCorr += `${numAlpha(indexSousQuestionCorr++)} `
+      texteCorr += IntroCorr
+      texteCorr += `Calculons ${pluriel(consigne)} pour chacune des valeurs données :<br>`
+      for (let j = 0; j < InconnuNum.length; j++) {
+        texteCorr += `$\\text{Pour } ${InconnuNum[j].valeur} \\text{ ${InconnuNum[j].unite} : } 
+            ${interpreteFormumle(formule, coteConnuNum, InconnuNum[j], !memesUnites)} 
+          = \\text{${texNombre(reponsesNumAttendues[j])}  ${uniteCorr}}$.<br>`
+      }
+      texteCorr += `Nous pouvons alors remplir le tableau.${!context.isHtml ? '\\par\\medskip' : '<br>'}`
+      texteCorr += `${tableau_corr}${!context.isHtml ? '\\par\\medskip' : '<br>'}`
+      texteCorr += `${numAlpha(indexSousQuestionCorr++)} On peut généraliser le raisonnement des calculs ${preposition(consigne)}, et ainsi obtenir une formule.<br>`
+      texteCorr += expliciterFormule
+      texteCorr += ` =$${ReponsesFormule} \\text{ exprimé en ${uniteCorr}}$.<br>`
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
@@ -311,4 +535,96 @@ $${situations[0].secondeQ}$
     }
     listeQuestionsToContenu(this)
   }
+}
+
+function majusculePremiereLettre(chaine: string): string {
+  return chaine.charAt(0).toUpperCase() + chaine.slice(1)
+}
+
+function singulier(chaine: string): string {
+  let article = 'le '
+  if (
+    chaine.charAt(0) === 'a' ||
+    chaine.charAt(0) === 'e' ||
+    chaine.charAt(0) === 'i' ||
+    chaine.charAt(0) === 'o' ||
+    chaine.charAt(0) === 'u'
+  ) {
+    article = `l'`
+  }
+  return article + chaine
+}
+
+function pluriel(chaine: string): string {
+  return 'les ' + chaine + 's'
+}
+
+function preposition(chaine: string): string {
+  let article = 'du '
+  if (
+    chaine.charAt(0) === 'a' ||
+    chaine.charAt(0) === 'e' ||
+    chaine.charAt(0) === 'i' ||
+    chaine.charAt(0) === 'o' ||
+    chaine.charAt(0) === 'u'
+  ) {
+    article = "de l'"
+  }
+  return article + chaine
+}
+
+function interpreteFormumle(
+  formule: string,
+  connueVal: Longueur,
+  inconnueVal: Longueur,
+  convertir: boolean = false,
+): string {
+  const reponse1 = `${formule
+    .replace(
+      /ConnueVal/g,
+      `{\\color{blue}{${connueVal.valeur} \\text{ ${connueVal.unite}}}}`,
+    )
+    .replace(
+      /InconnueVal/g,
+      `{\\color{green}{${inconnueVal.valeur} \\text{ ${inconnueVal.unite}}}}`,
+    )}`
+  const connueValbis =
+    connueVal.unite === 'cm'
+      ? connueVal
+      : { unite: 'cm', valeur: `${connueVal.valeur * 100}` }
+  const inconnueValbis =
+    inconnueVal.unite === 'cm'
+      ? inconnueVal
+      : { unite: 'cm', valeur: `${inconnueVal.valeur * 100}` }
+  const reponse2 =
+    ' = ' +
+    `${formule
+      .replace(
+        /ConnueVal/g,
+        `{\\color{blue}{${connueValbis.valeur} \\text{ ${connueValbis.unite}}}}`,
+      )
+      .replace(
+        /InconnueVal/g,
+        `{\\color{green}{${inconnueValbis.valeur} \\text{ ${inconnueValbis.unite}}}}`,
+      )}`
+
+  let reponse = reponse1
+  reponse += convertir ? reponse2 : ''
+  return reponse
+}
+
+function donnevaleur(L: Longueur, memeUnite: boolean = true): number {
+  return memeUnite || L.unite === 'cm' ? L.valeur : L.valeur * 100
+}
+
+function Evalfct(
+  fct: (connueVal: number, inconnueVal: number) => number,
+  connueVal: Longueur,
+  inconnueVal: Longueur,
+  memeUnite: boolean = true,
+): number {
+  return fct(
+    donnevaleur(connueVal, memeUnite),
+    donnevaleur(inconnueVal, memeUnite),
+  )
 }
