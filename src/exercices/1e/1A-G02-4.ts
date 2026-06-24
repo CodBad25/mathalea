@@ -59,7 +59,7 @@ export default class PerimetreCercleQcm extends ExerciceQcmA {
       ),
     ]
 
-    this.enonce = `Le cercle ci-dessous n'est pas représenté à l'échelle.<br>
+    this.enonce = `Le cercle ci-dessous, sur lequel on a codé un ${donneLeDiametre ? 'diamètre' : 'rayon'}, n'est pas représenté à l'échelle.<br>
 ${mathalea2d(
   Object.assign(
     { pixelsParCm: 25, scale: 0.8, center: true },
@@ -67,7 +67,7 @@ ${mathalea2d(
   ),
   objets,
 )}
-Quelle est la valeur exacte de son périmètre ?`
+La valeur exacte de son périmètre est `
 
     this.reponses = [
       `$${diametre}\\pi\\text{ cm}$`,
@@ -75,7 +75,9 @@ Quelle est la valeur exacte de son périmètre ?`
         ? `$\\pi\\times ${diametre}^2\\text{ cm}$`
         : `$\\pi\\times ${rayon}^2\\text{ cm}$`,
       `$${texNombre(valeurAvecPi314, 2)}\\text{ cm}$`,
-      `$${diametre}\\pi\\text{ cm}^2$`,
+      donneLeDiametre
+        ? `$${rayon ** 2}\\pi\\text{ cm}$`
+        : `$${rayon}\\pi\\text{ cm}$`,
     ]
 
     this.correction = donneLeDiametre
