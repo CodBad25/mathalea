@@ -240,8 +240,8 @@ Pour une réponse interactive, essayer :
 Lancer les validations adaptées avant commit :
 
 ```bash
-pnpm --pm-on-fail=ignore prebuild-unit-tests
-pnpm --pm-on-fail=ignore check
+pnpm prebuild-unit-tests
+pnpm check
 ```
 
 Pour un doute sur le comparateur, les tests unitaires de `fonctionComparaison()` couvrent notamment `nombreDecimalSeulement`, les fractions et les options combinées.

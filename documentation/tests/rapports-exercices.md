@@ -19,19 +19,19 @@ Index parent : [documentation/tests/README.md](README.md). Rapports générés :
 **Interactif :**
 
 ```bash
-INTERACTIF_REPORT=1 pnpm --pm-on-fail=ignore vitest src/lib/amc/report-interactif.test.ts --run
+INTERACTIF_REPORT=1 pnpm vitest src/lib/amc/report-interactif.test.ts --run
 ```
 
 Mode plus isolé, utile quand un exercice peut bloquer le scan rapide :
 
 ```bash
-INTERACTIF_REPORT=1 INTERACTIF_ISOLATED=1 pnpm --pm-on-fail=ignore vitest src/lib/amc/report-interactif.test.ts --run
+INTERACTIF_REPORT=1 INTERACTIF_ISOLATED=1 pnpm vitest src/lib/amc/report-interactif.test.ts --run
 ```
 
 **AMCNum :**
 
 ```bash
-AMCNUM_REPORT=1 pnpm --pm-on-fail=ignore vitest src/lib/amc/report-amcnum.test.ts --run
+AMCNUM_REPORT=1 pnpm vitest src/lib/amc/report-amcnum.test.ts --run
 ```
 
 ✅ Scanne **tous les fichiers** du répertoire `src/exercices/`
@@ -45,13 +45,13 @@ AMCNUM_REPORT=1 pnpm --pm-on-fail=ignore vitest src/lib/amc/report-amcnum.test.t
 **Interactif :**
 
 ```bash
-INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm --pm-on-fail=ignore vitest src/lib/amc/report-interactif.test.ts --run
+INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm vitest src/lib/amc/report-interactif.test.ts --run
 ```
 
 **AMCNum :**
 
 ```bash
-AMCNUM_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm --pm-on-fail=ignore vitest src/lib/amc/report-amcnum.test.ts --run
+AMCNUM_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm vitest src/lib/amc/report-amcnum.test.ts --run
 ```
 
 ✅ Scanne **uniquement les fichiers listés** dans `CHANGED_FILES`
@@ -65,7 +65,7 @@ AMCNUM_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm --pm-on-fail=ign
 ```bash
 INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts
 src/exercices/2e/2G34-4.ts
-src/exercices/2e/2G34-5.ts' pnpm --pm-on-fail=ignore vitest src/lib/amc/report-interactif.test.ts --run
+src/exercices/2e/2G34-5.ts' pnpm vitest src/lib/amc/report-interactif.test.ts --run
 ```
 
 ✅ Utilisez `\n` (nouvelle ligne) pour séparer les fichiers
@@ -143,7 +143,7 @@ La variable `CHANGED_FILES` est calculée automatiquement à partir d'une fenêt
 ### Exécuter et afficher les 50 premières lignes
 
 ```bash
-INTERACTIF_REPORT=1 pnpm --pm-on-fail=ignore vitest src/lib/amc/report-interactif.test.ts --run 2>&1 | head -n 50
+INTERACTIF_REPORT=1 pnpm vitest src/lib/amc/report-interactif.test.ts --run 2>&1 | head -n 50
 ```
 
 ### Vérifier un exercice sans lancer le test complet
@@ -153,13 +153,13 @@ INTERACTIF_REPORT=1 pnpm --pm-on-fail=ignore vitest src/lib/amc/report-interacti
 # Exemple : const matcher = '2e/2G' // scannera seulement src/exercices/2e/2G*
 
 # Puis :
-INTERACTIF_REPORT=1 pnpm --pm-on-fail=ignore vitest src/lib/amc/report-interactif.test.ts --run
+INTERACTIF_REPORT=1 pnpm vitest src/lib/amc/report-interactif.test.ts --run
 ```
 
 ### Reproduire le test d'intégration interactif de la CI
 
 ```bash
-INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm --pm-on-fail=ignore vitest tests/integration/interactivity_all.test.ts --run
+INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm vitest tests/integration/interactivity_all.test.ts --run
 ```
 
 ### Afficher le rapport généré

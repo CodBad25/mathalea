@@ -9,7 +9,7 @@ La CI actuelle couvre principalement :
 - installation et cache `pnpm`
 - tests Vitest unitaires (`tests/unit`)
 - tests Vitest dans `src`
-- typecheck Svelte/TypeScript avec `pnpm --pm-on-fail=ignore check`
+- typecheck Svelte/TypeScript avec `pnpm check`
 - tests des exercices modifiés, regroupés dans un job consolidé
 - tests e2e Playwright/Vitest sur les vues, la cohérence et l'interactivité
 - tests e2e Playwright/Vitest de détection d'erreurs console par niveaux
@@ -40,17 +40,17 @@ La plupart des jobs Node utilisent `.pnpm_setup` :
 ```bash
 corepack enable
 corepack prepare pnpm@11.8.0 --activate
-pnpm --pm-on-fail=ignore config set store-dir .pnpm-store
+pnpm config set store-dir .pnpm-store
 ```
 
-Les jobs Playwright démarrent ensuite l'application avec `pnpm --pm-on-fail=ignore start` et attendent `http://localhost:80/alea/`.
+Les jobs Playwright démarrent ensuite l'application avec `pnpm start` et attendent `http://localhost:80/alea/`.
 
 Pour reproduire localement un test e2e sans lier le port 80, lancer le serveur sur 5173 puis forcer le port côté tests :
 
 ```bash
-pnpm --pm-on-fail=ignore install
-pnpm --pm-on-fail=ignore start
-CI=1 PLAYWRIGHT_SERVER_PORT=5173 pnpm --pm-on-fail=ignore test:e2e:views
+pnpm install
+pnpm start
+CI=1 PLAYWRIGHT_SERVER_PORT=5173 pnpm test:e2e:views
 ```
 
 Ordre de priorité du port dans les helpers Playwright :
@@ -66,7 +66,7 @@ Ordre de priorité du port dans les helpers Playwright :
 Installe les dépendances avec le lockfile et alimente le cache pnpm :
 
 ```bash
-pnpm --pm-on-fail=ignore install --frozen-lockfile --prefer-offline --silent
+pnpm install --frozen-lockfile --prefer-offline --silent
 ```
 
 Déclenchement :
@@ -84,8 +84,8 @@ Déclenchement :
 Exécute :
 
 ```bash
-pnpm --pm-on-fail=ignore run makeJson
-NODE_OPTIONS=--max-old-space-size=4096 pnpm --pm-on-fail=ignore test:unit
+pnpm run makeJson
+NODE_OPTIONS=--max-old-space-size=4096 pnpm test:unit
 ```
 
 Déclenchement :
@@ -100,8 +100,8 @@ Déclenchement :
 Exécute :
 
 ```bash
-pnpm --pm-on-fail=ignore run makeJson
-NODE_OPTIONS=--max-old-space-size=4096 pnpm --pm-on-fail=ignore test:src
+pnpm run makeJson
+NODE_OPTIONS=--max-old-space-size=4096 pnpm test:src
 ```
 
 Déclenchement identique à `tests-unitaires`.
@@ -109,8 +109,8 @@ Déclenchement identique à `tests-unitaires`.
 Reproduction locale condensée :
 
 ```bash
-pnpm --pm-on-fail=ignore run makeJson
-pnpm --pm-on-fail=ignore run prebuild-unit-tests
+pnpm run makeJson
+pnpm run prebuild-unit-tests
 ```
 
 ## Typecheck
@@ -120,8 +120,8 @@ pnpm --pm-on-fail=ignore run prebuild-unit-tests
 Exécute :
 
 ```bash
-pnpm --pm-on-fail=ignore run makeJson
-pnpm --pm-on-fail=ignore check
+pnpm run makeJson
+pnpm check
 ```
 
 Déclenchement :
@@ -141,10 +141,10 @@ Ce job remplace les anciens jobs séparés `testExosModifiedWithoutPlayWright`, 
 Il récupère les fichiers modifiés sur une fenêtre allant jusqu'à 5 commits, les place dans `CHANGED_FILES`, puis lance quatre sous-tests :
 
 ```bash
-CHANGED_FILES="$CHANGED_FILES" pnpm --pm-on-fail=ignore test:e2e:console_errors
-CHANGED_FILES="$CHANGED_FILES" pnpm --pm-on-fail=ignore vitest --config tests/e2e/vitest.config.all_exercises.js --run
-INTERACTIF_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm --pm-on-fail=ignore vitest tests/integration/interactivity_all.test.ts --run
-AMCNUM_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm --pm-on-fail=ignore vitest src/lib/amc/report-amcnum.test.ts --run
+CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:console_errors
+CHANGED_FILES="$CHANGED_FILES" pnpm vitest --config tests/e2e/vitest.config.all_exercises.js --run
+INTERACTIF_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest tests/integration/interactivity_all.test.ts --run
+AMCNUM_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest src/lib/amc/report-amcnum.test.ts --run
 ```
 
 Le job échoue si au moins un sous-test échoue.
@@ -160,7 +160,7 @@ Déclenchement :
 Job séparé car il utilise l'image CI avec LaTeX. Il récupère les fichiers modifiés sur la même fenêtre de 5 commits puis lance :
 
 ```bash
-CHANGED_FILES="$CHANGED_FILES" pnpm --pm-on-fail=ignore test:e2e:pdfexports
+CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:pdfexports
 ```
 
 Déclenchement :
@@ -173,7 +173,7 @@ Déclenchement :
 
 ### `playwright-console-consolidated`
 
-Lance `pnpm --pm-on-fail=ignore test:e2e:console_errors` pour les filtres suivants :
+Lance `pnpm test:e2e:console_errors` pour les filtres suivants :
 
 - `6e/6`
 - `5e/5`
@@ -200,8 +200,8 @@ Le template `.testCI` est `allow_failure: true`.
 Reproduction locale :
 
 ```bash
-pnpm --pm-on-fail=ignore start
-NIV=6e/6 pnpm --pm-on-fail=ignore test:e2e:console_errors
+pnpm start
+NIV=6e/6 pnpm test:e2e:console_errors
 ```
 
 ## Playwright globaux planifiés
@@ -210,24 +210,24 @@ Ces jobs s'exécutent en pipeline planifié ou sur la branche `pipeline` en manu
 
 | Job | Commande | `allow_failure` |
 | --- | --- | --- |
-| `playwright-caneleve` | `pnpm --pm-on-fail=ignore test:e2e:views` | `true` |
-| `playwright-consistency` | `pnpm --pm-on-fail=ignore test:e2e:consistency` | `true` |
-| `playwright-interactivity` | `pnpm --pm-on-fail=ignore test:e2e:interactivity` | `false` |
+| `playwright-caneleve` | `pnpm test:e2e:views` | `true` |
+| `playwright-consistency` | `pnpm test:e2e:consistency` | `true` |
+| `playwright-interactivity` | `pnpm test:e2e:interactivity` | `false` |
 
 Reproduction locale :
 
 ```bash
-pnpm --pm-on-fail=ignore start
-pnpm --pm-on-fail=ignore test:e2e:views
-pnpm --pm-on-fail=ignore test:e2e:consistency
-pnpm --pm-on-fail=ignore test:e2e:interactivity
+pnpm start
+pnpm test:e2e:views
+pnpm test:e2e:consistency
+pnpm test:e2e:interactivity
 ```
 
 ## All exercises JSDOM
 
 ### `jsdom-all-exercises`
 
-Job planifié qui lance `pnpm --pm-on-fail=ignore test:e2e:all_exercises` avec `NB_EXOS_PAR_LOT=1000` sur les filtres CAN et collège :
+Job planifié qui lance `pnpm test:e2e:all_exercises` avec `NB_EXOS_PAR_LOT=1000` sur les filtres CAN et collège :
 
 - `can/2e^can/1e`
 - `can/6e^can/5e`
@@ -248,7 +248,7 @@ Les jobs PDF utilisent l'image `$DOCKER_IMAGE` (`ci/tex-node:node22-texlive-2026
 
 ### `playwright-pdf-consolidated`
 
-Lance `pnpm --pm-on-fail=ignore test:e2e:pdfexports` sur :
+Lance `pnpm test:e2e:pdfexports` sur :
 
 - `can/2e^can/1e`
 - `can/6e^can/5e`
@@ -283,8 +283,8 @@ Déclenchement PDF via `.testCIPDF` :
 Reproduction locale ciblée :
 
 ```bash
-pnpm --pm-on-fail=ignore start
-CI=1 NIV=6e/6 pnpm --pm-on-fail=ignore test:e2e:pdfexports
+pnpm start
+CI=1 NIV=6e/6 pnpm test:e2e:pdfexports
 ```
 
 ## Image CI PDF
@@ -307,33 +307,33 @@ Déclenchement :
 ### Pré-commit recommandé localement
 
 ```bash
-pnpm --pm-on-fail=ignore run makeJson
-pnpm --pm-on-fail=ignore run prebuild-unit-tests
-pnpm --pm-on-fail=ignore check
+pnpm run makeJson
+pnpm run prebuild-unit-tests
+pnpm check
 ```
 
 ### E2E globaux
 
 ```bash
-pnpm --pm-on-fail=ignore start
-pnpm --pm-on-fail=ignore test:e2e:views
-pnpm --pm-on-fail=ignore test:e2e:consistency
-pnpm --pm-on-fail=ignore test:e2e:interactivity
+pnpm start
+pnpm test:e2e:views
+pnpm test:e2e:consistency
+pnpm test:e2e:interactivity
 ```
 
 ### Exercice modifié
 
 ```bash
-pnpm --pm-on-fail=ignore start
-CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm --pm-on-fail=ignore test:e2e:console_errors
-CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm --pm-on-fail=ignore vitest --config tests/e2e/vitest.config.all_exercises.js --run
-INTERACTIF_REPORT=1 CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm --pm-on-fail=ignore vitest tests/integration/interactivity_all.test.ts --run
-AMCNUM_REPORT=1 CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm --pm-on-fail=ignore vitest src/lib/amc/report-amcnum.test.ts --run
+pnpm start
+CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm test:e2e:console_errors
+CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm vitest --config tests/e2e/vitest.config.all_exercises.js --run
+INTERACTIF_REPORT=1 CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm vitest tests/integration/interactivity_all.test.ts --run
+AMCNUM_REPORT=1 CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm vitest src/lib/amc/report-amcnum.test.ts --run
 ```
 
 ## Points d'attention
 
-- `pnpm --pm-on-fail=ignore check` est bien lancé en CI via `testTypescriptOk`, mais ce job est `allow_failure: true`.
+- `pnpm check` est bien lancé en CI via `testTypescriptOk`, mais ce job est `allow_failure: true`.
 - `tests-unitaires` et `tests-src` sont séparés et aussi `allow_failure: true`.
 - Les checks d'exercices modifiés sont consolidés et bloquants via `testExosModifiedConsolidated`.
 - Les e2e par niveaux restent `allow_failure: true` via `.testCI`.

@@ -192,7 +192,7 @@ Chaque exercice est tenté jusqu'à **3 fois** :
 
 Le test a trois points d'entrée :
 
-1. **Variable d'environnement `NIV`** : mode manuel ou CI pour un niveau précis. Exemple : `NIV=4e pnpm --pm-on-fail=ignore test:e2e:console_errors`.
+1. **Variable d'environnement `NIV`** : mode manuel ou CI pour un niveau précis. Exemple : `NIV=4e pnpm test:e2e:console_errors`.
 2. **Variable d'environnement `CHANGED_FILES`** : mode CI qui teste uniquement les exercices dont les fichiers source ont changé. Filtre les fichiers dans `src/exercices/` (hors `ressources` et `apps`), transforme les chemins, puis lance `testRunAllLots` pour chacun.
 3. **Aucune des deux variables** : affiche les consignes d'utilisation et crée un test ignoré.
 

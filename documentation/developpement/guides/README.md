@@ -13,8 +13,8 @@ Si vous débutez sur le dépôt, commencez par [Installation et workflows](insta
 3. Vérifier la modification avec les commandes adaptées :
 
 ```bash
-pnpm --pm-on-fail=ignore prebuild-unit-tests
-pnpm --pm-on-fail=ignore check
+pnpm prebuild-unit-tests
+pnpm check
 ```
 
 ### Créer un exercice complet
@@ -67,8 +67,8 @@ pnpm --pm-on-fail=ignore check
 Les commandes doivent être lancées avec `--pm-on-fail=ignore`.
 
 ```bash
-pnpm --pm-on-fail=ignore prebuild-unit-tests
-pnpm --pm-on-fail=ignore check
+pnpm prebuild-unit-tests
+pnpm check
 ```
 
 Pour une modification limitée à quelques exercices, consultez aussi [Rapports d'exercices](../../tests/rapports-exercices.md) et [Tests et CI](../../tests/README.md) afin de choisir le test ciblé pertinent plutôt que de lancer toute la suite e2e.

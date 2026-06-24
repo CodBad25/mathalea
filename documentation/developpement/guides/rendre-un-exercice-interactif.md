@@ -509,10 +509,10 @@ Après modification, tester au moins un tirage dans l'interface.
 1. Lancer le serveur si besoin :
 
 ```bash
-pnpm --pm-on-fail=ignore dev
+pnpm dev
 ```
 
-2. Copier le `uuid` dans le fichier de l'exercice :
+1. Copier le `uuid` dans le fichier de l'exercice :
 
 ```ts
 export const uuid = 'ccb71'
@@ -526,7 +526,7 @@ http://localhost:5173/alea/?uuid=UUID_DE_L_EXERCICE&i=1
 
 Selon les routes disponibles localement, l'option peut aussi être portée par les paramètres globaux de l'interface. Si le `uuid` n'est pas pratique, tester aussi par l'identifiant ou la référence de l'exercice quand la route le permet, par exemple la valeur déclarée dans `refs`. Vérifier visuellement que les champs apparaissent.
 
-3. Tester :
+1. Tester :
 
 - une bonne réponse ;
 - une mauvaise réponse ;
@@ -535,24 +535,24 @@ Selon les routes disponibles localement, l'option peut aussi être portée par l
 - une réponse équivalente que l'on veut refuser ;
 - le bouton "Nouvelles données".
 
-4. Pour afficher les réponses attendues dans la console en local, ajouter `triche` à l'URL :
+1. Pour afficher les réponses attendues dans la console en local, ajouter `triche` à l'URL :
 
 ```text
 http://localhost:5173/alea/?uuid=UUID_DE_L_EXERCICE&i=1&triche
 ```
 
-5. Vérifier le rendu non interactif et la correction. Si l'exercice est compatible AMC, vérifier aussi l'export.
+1. Vérifier le rendu non interactif et la correction. Si l'exercice est compatible AMC, vérifier aussi l'export.
 
 Avant commit, lancer au minimum :
 
 ```bash
-pnpm --pm-on-fail=ignore prebuild-unit-tests
+pnpm prebuild-unit-tests
 ```
 
 Si un fichier TypeScript ou Svelte a été modifié, lancer aussi :
 
 ```bash
-pnpm --pm-on-fail=ignore check
+pnpm check
 ```
 
 Pour une modification très ciblée, ajouter ou adapter un test seulement si le comportement interactif, le comparateur ou l'export change durablement.
@@ -560,13 +560,13 @@ Pour une modification très ciblée, ajouter ou adapter un test seulement si le 
 Pour une modification interactive dans un exercice, lancer aussi les vérifications ciblées décrites dans [tests de rapport d'exercices](../../tests/rapports-exercices.md), en remplaçant le chemin par le fichier modifié :
 
 ```bash
-INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm --pm-on-fail=ignore vitest src/lib/amc/report-interactif.test.ts --run
+INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm vitest src/lib/amc/report-interactif.test.ts --run
 ```
 
 Ce rapport vérifie notamment que les exercices `interactifReady=true` remplissent bien `autoCorrection`.
 
 ```bash
-INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm --pm-on-fail=ignore vitest tests/integration/interactivity_all.test.ts --run
+INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm vitest tests/integration/interactivity_all.test.ts --run
 ```
 
 Ce test d'intégration vérifie que les réponses attendues sont acceptées par les comparateurs et par le DOM simulé. Pour plusieurs fichiers, mettre un chemin par ligne dans `CHANGED_FILES`.

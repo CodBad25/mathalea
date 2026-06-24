@@ -29,4 +29,4 @@ Pour un premier exercice, lire les guides dans cet ordre :
 - Pour une réponse interactive, déclarer explicitement les options utiles dans `handleAnswers()` et essayer une bonne réponse, une réponse équivalente acceptée et une réponse proche qui doit être refusée.
 - Pour une figure 2D, contrôler les bornes passées à `mathalea2d()`, la lisibilité des styles et l'alignement dans l'export TikZ.
 - Avant d'ajouter un nouveau helper, rechercher un équivalent dans `src/lib/outils/`, `src/lib/2d/`, `src/lib/mathFonctions/` et `src/modules/`.
-- Avant de proposer une modification, lancer les validations adaptées : `pnpm --pm-on-fail=ignore prebuild-unit-tests` pour les tests unitaires et `pnpm --pm-on-fail=ignore check` pour le typage.
+- Avant de proposer une modification, lancer les validations adaptées : `pnpm prebuild-unit-tests` pour les tests unitaires et `pnpm check` pour le typage.

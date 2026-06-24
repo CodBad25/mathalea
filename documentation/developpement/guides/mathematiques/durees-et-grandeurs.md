@@ -329,19 +329,19 @@ Le clavier aide la saisie, mais la validation dépend de `handleAnswers()` et de
 Pour un changement qui touche `Hms`, `Grandeur` ou une comparaison associée, lancer au minimum :
 
 ```bash
-pnpm --pm-on-fail=ignore vitest tests/unit/hms.test.ts tests/unit/grandeur.test.ts tests/unit/fonctionsDeComparaison.test.ts
+pnpm vitest tests/unit/hms.test.ts tests/unit/grandeur.test.ts tests/unit/fonctionsDeComparaison.test.ts
 ```
 
 Avant commit, respecter la commande projet :
 
 ```bash
-pnpm --pm-on-fail=ignore prebuild-unit-tests
+pnpm prebuild-unit-tests
 ```
 
 Pour une modification TypeScript ou Svelte liée à un exercice :
 
 ```bash
-pnpm --pm-on-fail=ignore check
+pnpm check
 ```
 
 Vérifications manuelles utiles sur un exercice interactif :

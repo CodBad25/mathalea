@@ -6,8 +6,8 @@ Ce guide décrit le chemin le plus direct pour créer un exercice génératif no
 
 ## Prérequis
 
-- Avoir installé les dépendances : `pnpm --pm-on-fail=ignore install`.
-- Savoir lancer l'application : `pnpm --pm-on-fail=ignore dev`.
+- Avoir installé les dépendances : `pnpm install`.
+- Savoir lancer l'application : `pnpm dev`.
 - Avoir identifié la référence de l'exercice, par exemple `6N0A-1`, et le niveau cible.
 - Partir d'un exercice proche dans `src/exercices/`, pas d'un ancien modèle d'archive.
 
@@ -42,7 +42,7 @@ Un exercice doit exporter au minimum son titre, son `uuid`, ses références, pu
 Pour obtenir un `uuid` disponible, lancer :
 
 ```sh
-pnpm --pm-on-fail=ignore getNewUuid
+pnpm getNewUuid
 ```
 
 Le script affiche une ligne de ce type :
@@ -109,10 +109,10 @@ Adapter les chemins d'import si le fichier est plus profond. Par exemple, depuis
 Après avoir créé ou renommé le fichier, reconstruire les index qui alimentent les menus et les correspondances `uuid`/référence :
 
 ```sh
-pnpm --pm-on-fail=ignore makeJson
+pnpm makeJson
 ```
 
-Si `pnpm --pm-on-fail=ignore dev` tournait déjà avant la création du fichier, le redémarrer. Sinon le nouvel exercice peut manquer dans `uuidsToUrl` ou `refToUuid`.
+Si `pnpm dev` tournait déjà avant la création du fichier, le redémarrer. Sinon le nouvel exercice peut manquer dans `uuidsToUrl` ou `refToUuid`.
 
 ## 3. Comprendre le rôle de chaque bloc
 
@@ -263,7 +263,7 @@ Un exercice interactif doit toujours conserver une version non interactive lisib
 Pendant le développement :
 
 ```sh
-pnpm --pm-on-fail=ignore dev
+pnpm dev
 ```
 
 Ouvrir ensuite l'exercice avec son identifiant ou son `uuid`, par exemple :
@@ -284,7 +284,7 @@ Tester plusieurs graines avec le bouton de nouvelle version ou avec le paramètr
 Pour générer des captures et parcourir plusieurs vues :
 
 ```sh
-id=REF_EXERCICE pnpm --pm-on-fail=ignore testExercice
+id=REF_EXERCICE pnpm testExercice
 ```
 
 Les captures sont écrites dans `screenshots/REF_EXERCICE/`.
@@ -294,14 +294,14 @@ Les captures sont écrites dans `screenshots/REF_EXERCICE/`.
 Pour cibler les erreurs console d'un exercice :
 
 ```sh
-FILE=src/exercices/6e/REF_EXERCICE.ts pnpm --pm-on-fail=ignore test:exo:file
+FILE=src/exercices/6e/REF_EXERCICE.ts pnpm test:exo:file
 ```
 
 Avant commit, lancer les vérifications de référence :
 
 ```sh
-pnpm --pm-on-fail=ignore prebuild-unit-tests
-pnpm --pm-on-fail=ignore check
+pnpm prebuild-unit-tests
+pnpm check
 ```
 
 `prebuild-unit-tests` lance les tests unitaires et les tests `src`. `check` lance le typecheck Svelte/TypeScript.
@@ -312,7 +312,7 @@ L'exercice n'apparaît pas dans le menu :
 
 - vérifier `export const uuid` ;
 - vérifier `export const refs` ;
-- relancer `pnpm --pm-on-fail=ignore dev`, qui exécute `makeJson`.
+- relancer `pnpm dev`, qui exécute `makeJson`.
 
 La page affiche une erreur d'import :
 

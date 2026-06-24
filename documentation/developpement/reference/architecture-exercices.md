@@ -41,11 +41,11 @@ L'interactivité moderne passe par `handleAnswers()` dans `src/lib/interactif/ge
 Les tests et rapports sont décrits dans [tests et CI](../../tests/README.md). Avant commit, la commande de référence pour les tests unitaires est :
 
 ```sh
-pnpm --pm-on-fail=ignore prebuild-unit-tests
+pnpm prebuild-unit-tests
 ```
 
 Pour les changements TypeScript ou Svelte, lancer aussi :
 
 ```sh
-pnpm --pm-on-fail=ignore check
+pnpm check
 ```

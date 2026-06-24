@@ -90,7 +90,7 @@ Points importants :
 - remplacer `uuid = 'a-remplacer'` par un UUID généré avec la commande indiquée dans [coder un exercice classique](coder-un-exercice-classique.md) :
 
 ```sh
-pnpm --pm-on-fail=ignore getNewUuid
+pnpm getNewUuid
 ```
 
 - `refs['fr-fr']` contient l'identifiant de l'exercice côté interface. C'est cette valeur qui sert dans l'URL de prévisualisation `?id=...` ;
@@ -329,10 +329,10 @@ Pendant le développement :
 1. Lancer le serveur local :
 
 ```sh
-pnpm --pm-on-fail=ignore dev
+pnpm dev
 ```
 
-2. Ouvrir l'exercice avec son identifiant `refs['fr-fr']` :
+1. Ouvrir l'exercice avec son identifiant `refs['fr-fr']` :
 
 ```txt
 http://localhost:5173/alea/?id=REF_EXERCICE&i=1
@@ -344,14 +344,14 @@ ou avec son UUID :
 http://localhost:5173/alea/?uuid=UUID_GENERE&i=1
 ```
 
-3. Tester au moins une bonne réponse et une mauvaise réponse.
-4. Vérifier le rendu non interactif ou LaTeX si l'exercice doit être imprimé.
-5. Vérifier AMC si `amcReady` est déclaré.
+1. Tester au moins une bonne réponse et une mauvaise réponse.
+2. Vérifier le rendu non interactif ou LaTeX si l'exercice doit être imprimé.
+3. Vérifier AMC si `amcReady` est déclaré.
 
 Pour une validation ciblée du rapport interactif sur un exercice modifié :
 
 ```sh
-INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/6e/mon-qcm.ts' pnpm --pm-on-fail=ignore vitest src/lib/amc/report-interactif.test.ts --run
+INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/6e/mon-qcm.ts' pnpm vitest src/lib/amc/report-interactif.test.ts --run
 ```
 
 Remplacer `src/exercices/6e/mon-qcm.ts` par le chemin réel du fichier d'exercice. Le rapport généré est documenté dans [rapports d'exercices](../../tests/rapports-exercices.md).
@@ -359,13 +359,13 @@ Remplacer `src/exercices/6e/mon-qcm.ts` par le chemin réel du fichier d'exercic
 Avant commit :
 
 ```sh
-pnpm --pm-on-fail=ignore prebuild-unit-tests
+pnpm prebuild-unit-tests
 ```
 
 Si des fichiers TypeScript ou Svelte sont modifiés :
 
 ```sh
-pnpm --pm-on-fail=ignore check
+pnpm check
 ```
 
 Pour les rapports d'exercices interactifs et AMC, voir [rapports d'exercices](../../tests/rapports-exercices.md).

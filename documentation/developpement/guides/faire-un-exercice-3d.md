@@ -14,15 +14,15 @@ Avant d'ajouter de la 3D, savoir créer un exercice classique et vérifier qu'il
 Installer les dépendances du dépôt, puis lancer les contrôles avec l'option demandée par le projet :
 
 ```bash
-pnpm --pm-on-fail=ignore install
-pnpm --pm-on-fail=ignore check
-pnpm --pm-on-fail=ignore prebuild-unit-tests
+pnpm install
+pnpm check
+pnpm prebuild-unit-tests
 ```
 
 Pour prévisualiser localement :
 
 ```bash
-pnpm --pm-on-fail=ignore dev
+pnpm dev
 ```
 
 ## Choisir le bon type de rendu
@@ -220,10 +220,10 @@ Ne pas exiger que l'élève clique dans la scène 3D pour que la réponse soit v
 1. Lancer le serveur :
 
 ```bash
-pnpm --pm-on-fail=ignore dev
+pnpm dev
 ```
 
-2. Ouvrir l'exercice dans l'interface locale, puis vérifier :
+1. Ouvrir l'exercice dans l'interface locale, puis vérifier :
 
 - le mode HTML avec l'option "3D dynamique" cochée si elle existe ;
 - le mode HTML avec cette option décochée ;
@@ -231,22 +231,22 @@ pnpm --pm-on-fail=ignore dev
 - la correction ;
 - un export LaTeX/PDF ou AMC si l'exercice annonce cette compatibilité.
 
-3. Pour cibler rapidement un exercice, utiliser sa référence déclarée dans `refs`, par exemple `can6M11`, ou son `uuid` si l'interface locale le permet.
+1. Pour cibler rapidement un exercice, utiliser sa référence déclarée dans `refs`, par exemple `can6M11`, ou son `uuid` si l'interface locale le permet.
 
 ## Tests et vérifications
 
 Avant de proposer une modification :
 
 ```bash
-pnpm --pm-on-fail=ignore check
-pnpm --pm-on-fail=ignore prebuild-unit-tests
+pnpm check
+pnpm prebuild-unit-tests
 ```
 
 Pour un changement qui touche les exports, ajouter les tests e2e adaptés :
 
 ```bash
-pnpm --pm-on-fail=ignore test:e2e:latex_compile
-pnpm --pm-on-fail=ignore test:e2e:pdfexports
+pnpm test:e2e:latex_compile
+pnpm test:e2e:pdfexports
 ```
 
 Les tests e2e mockent déjà `Canvas3DElement` dans plusieurs suites, notamment `tests/e2e/tests/all_exercises/all_exercises.test.ts`, `tests/e2e/tests/latex_compile/latex_compile.test.ts`, `tests/e2e/tests/latex_breaks/latex_breaks.test.ts` et `tests/e2e/tests/pdfexports/pdfexports.test.ts`. Si un test échoue autour du rendu 3D dynamique, vérifier d'abord que le code ne dépend pas d'un vrai contexte WebGL pendant la génération de l'exercice.
@@ -302,4 +302,4 @@ Si une figure statique a des faces ou arêtes cachées inattendues :
 - L'`id` de chaque canvas est unique.
 - L'exercice reste résoluble sans manipulation du canvas.
 - Les dimensions, labels et couleurs restent lisibles en HTML et en export.
-- `pnpm --pm-on-fail=ignore check` et `pnpm --pm-on-fail=ignore prebuild-unit-tests` ont été lancés, ou leur non-exécution est documentée dans la réponse de fin.
+- `pnpm check` et `pnpm prebuild-unit-tests` ont été lancés, ou leur non-exécution est documentée dans la réponse de fin.

@@ -460,11 +460,9 @@ function printUsage() {
   console.log('[INFO] Aucun filtre NIV ou CHANGED_FILES fourni.')
   console.log('[INFO] Pour tester les retours ligne LaTeX:')
   console.log('  NIV=4C20 pnpm test:e2e:latex_breaks')
+  console.log('  NIV=4C20 TEST_PARAM=single pnpm test:e2e:latex_breaks')
   console.log(
-    '  NIV=4C20 TEST_PARAM=single pnpm --pm-on-fail=ignore test:e2e:latex_breaks',
-  )
-  console.log(
-    '  NIV=4C20 TEST_PARAM=full TEST_PARAM_MAX=20 pnpm --pm-on-fail=ignore test:e2e:latex_breaks',
+    '  NIV=4C20 TEST_PARAM=full TEST_PARAM_MAX=20 pnpm test:e2e:latex_breaks',
   )
   console.log(
     '  CHANGED_FILES="src/exercices/3e/arithmetique/pgcd.ts" pnpm test:e2e:latex_breaks',

@@ -367,8 +367,8 @@ rg "class FractionEtendue|export default FractionEtendue|export interface IFract
 Pour une modification d'exercice qui touche l'affichage des nombres, vérifiez au minimum :
 
 ```bash
-pnpm --pm-on-fail=ignore prebuild-unit-tests
-pnpm --pm-on-fail=ignore check
+pnpm prebuild-unit-tests
+pnpm check
 ```
 
 Contrôlez aussi un rendu HTML et un rendu LaTeX si l'exercice contient :

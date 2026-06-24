@@ -14,7 +14,7 @@ Avant d'ajouter AMC, l'environnement et l'exercice doivent déjà être opérati
 
 - les dépendances du dépôt sont installées ;
 - l'exercice est lançable dans l'interface ou par les tests habituels ;
-- la commande `pnpm --pm-on-fail=ignore check` est disponible et ne doit pas être remplacée par un contrôle partiel quand le changement touche du TypeScript ou du Svelte ;
+- la commande `pnpm check` est disponible et ne doit pas être remplacée par un contrôle partiel quand le changement touche du TypeScript ou du Svelte ;
 - `nouvelleVersion()` remplit les questions et corrections habituelles (`listeQuestions` / `listeCorrections`, ou `question` / `correction` pour un `ExerciceSimple`) ;
 - le rendu LaTeX est lisible sans composant navigateur ;
 - les réponses attendues sont connues au moment de la génération ;
@@ -367,7 +367,7 @@ if (context.isAmc) {
 Pour un fichier modifié, lancez d'abord le rapport ciblé AMCNum si l'exercice est `AMCNum` :
 
 ```bash
-AMCNUM_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm --pm-on-fail=ignore vitest src/lib/amc/report-amcnum.test.ts --run
+AMCNUM_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm vitest src/lib/amc/report-amcnum.test.ts --run
 ```
 
 Ce rapport ne valide que les exercices `amcType='AMCNum'`. Les QCM, `AMCOpen` et `AMCHybride` doivent être vérifiés par l'aperçu AMC et par l'export LaTeX/PDF.
@@ -375,20 +375,20 @@ Ce rapport ne valide que les exercices `amcType='AMCNum'`. Les QCM, `AMCOpen` et
 Pour un QCM ou un exercice interactif, vérifiez aussi le rapport interactif :
 
 ```bash
-INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm --pm-on-fail=ignore vitest src/lib/amc/report-interactif.test.ts --run
+INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/2e/2G34-3.ts' pnpm vitest src/lib/amc/report-interactif.test.ts --run
 ```
 
 Si le changement touche des helpers partagés ou plusieurs familles d'exercices, lancez les tests de référence :
 
 ```bash
-pnpm --pm-on-fail=ignore prebuild-unit-tests
-pnpm --pm-on-fail=ignore check
+pnpm prebuild-unit-tests
+pnpm check
 ```
 
 Pour contrôler le rendu final, exportez l'exercice depuis l'interface en mode AMC ou lancez le test LaTeX/PDF pertinent si le changement touche le rendu :
 
 ```bash
-pnpm --pm-on-fail=ignore test:e2e:pdfexports
+pnpm test:e2e:pdfexports
 ```
 
 ### Vérification dans l'interface
@@ -396,14 +396,14 @@ pnpm --pm-on-fail=ignore test:e2e:pdfexports
 1. Lancer le serveur local :
 
 ```bash
-pnpm --pm-on-fail=ignore dev
+pnpm dev
 ```
 
-2. Ouvrir l'interface AMC, par exemple [http://localhost:5173/?v=amc](http://localhost:5173/?v=amc).
-3. Dans le référentiel à gauche, rechercher l'exercice modifié puis cliquer dessus pour l'ajouter à la "Zone centrale de composition AMC".
-4. Vérifier la carte d'aperçu : l'énoncé doit être lisible, les QCM doivent afficher les choix, les `AMCNum` doivent afficher les cases numériques attendues, les `AMCOpen` doivent afficher une zone de réponse.
-5. Ouvrir le panneau "LaTeX AMC généré en temps réel".
-6. Cliquer sur "Télécharger le .tex". Le navigateur télécharge un fichier nommé `amc-${seed}.tex`, par exemple `amc-ePxF1.tex`.
+1. Ouvrir l'interface AMC, par exemple [http://localhost:5173/?v=amc](http://localhost:5173/?v=amc).
+2. Dans le référentiel à gauche, rechercher l'exercice modifié puis cliquer dessus pour l'ajouter à la "Zone centrale de composition AMC".
+3. Vérifier la carte d'aperçu : l'énoncé doit être lisible, les QCM doivent afficher les choix, les `AMCNum` doivent afficher les cases numériques attendues, les `AMCOpen` doivent afficher une zone de réponse.
+4. Ouvrir le panneau "LaTeX AMC généré en temps réel".
+5. Cliquer sur "Télécharger le .tex". Le navigateur télécharge un fichier nommé `amc-${seed}.tex`, par exemple `amc-ePxF1.tex`.
 
 Un export correct contient un document LaTeX AMC complet, avec des blocs `\element{...}` et des questions AMC (`question`, `questionmult` ou `questionmultx`). Selon le type, on doit voir `\bonne` / `\mauvaise` pour un QCM, `\AMCnumericChoices` pour un `AMCNum`, ou `\notation` pour un `AMCOpen`. Il ne doit pas rester de balises ou traces HTML interactives comme `<input>`, `<button>`, des composants MathLive, `undefined` ou `[object Object]`.
 
