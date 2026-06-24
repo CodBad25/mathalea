@@ -66,6 +66,7 @@ export default class VolumeCylindreAvecFigureQcm extends ExerciceQcmA {
       pointAbstrait(rayonGraphique + 0.45, centreHaut.y),
     )
     hauteurTracee.styleExtremites = '<->'
+    hauteurTracee.pointilles = 5
     hauteurTracee.epaisseur = 1.5
 
     const objets = [
