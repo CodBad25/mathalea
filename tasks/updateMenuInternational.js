@@ -31,6 +31,7 @@ async function readInfos(
   exercicesShuffled,
   codePays,
   exercicesNonClasses = {},
+  refMap = new Map(),
 ) {
   const files = await fs.readdir(dirPath)
   await Promise.all(
@@ -47,6 +48,7 @@ async function readInfos(
           exercicesShuffled,
           codePays,
           exercicesNonClasses,
+          refMap,
         )
       } else if (stat.isFile()) {
         // Check if it's a .js or .ts file, and exclude certain files
@@ -343,6 +345,13 @@ async function readInfos(
                 }
                 infos.typeExercice = 'alea'
                 if (infos.id !== undefined) {
+                  if (refMap.has(infos.id)) {
+                    console.error(
+                      '\x1b[31m%s\x1b[0m',
+                      `${codePays}: ref ${infos.id} en doublon dans ${filePath} et ${refMap.get(infos.id)}`,
+                    )
+                  }
+                  refMap.set(infos.id, filePath.replace('src/exercices/', ''))
                   exercicesShuffled[infos.id] = { ...infos }
                   refToUuid[infos.id] = infos.uuid
                 }
