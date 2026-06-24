@@ -10,7 +10,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import ExerciceQcmA from '../ExerciceQcmA'
 
-export const titre = "Calculer le volume d'un cône"
+export const titre = "Calculer le volume d'un cône (avec figure)"
 export const dateDePublication = '23/06/2026'
 
 export const uuid = 'f0d92'
@@ -51,8 +51,8 @@ export default class VolumeConeAvecFigureQcm extends ExerciceQcmA {
     const rayonEnCm = diametreEnCm / 2
     const produit = rayonEnCm ** 2 * hauteurEnCm
     const coefficientVolume = produit / 3
-    const coefficientAvecDivisionParDeux = produit / 2
-    const volumeAvecPiDecimal = coefficientVolume * 3.14
+    const coefficientAvecRayonNonCarre = (2 * rayonEnCm * hauteurEnCm) / 3
+    const coefficientAvecAireLaterale = 2 * rayonEnCm * hauteurEnCm
 
     const centreBase = pointAbstrait(0, 0)
     const sommet = pointAbstrait(0, 3.8)
@@ -108,14 +108,15 @@ export default class VolumeConeAvecFigureQcm extends ExerciceQcmA {
     )
 
     this.enonce = `Le cône ci-dessous n'est pas représenté à l'échelle.<br>
-Le diamètre de sa base est codé sous la figure et sa hauteur est tracée en pointillés.<br>
-La valeur exacte de son volume en $\\text{cm}^3$ est : ${figure}`
+On a indiqué le diamètre de sa base et sa hauteur.<br>
+ ${figure}
+ La valeur exacte de son volume en $\\text{cm}^3$ est `
 
     this.reponses = [
       `$${texNombre(coefficientVolume)}\\pi\\text{ cm}^3$`,
-      `$${texNombre(volumeAvecPiDecimal)}\\text{ cm}^3$`,
-      `$${texNombre(coefficientAvecDivisionParDeux)}\\pi\\text{ cm}^3$`,
-      `$${texNombre(coefficientVolume)}\\text{ cm}^3$`,
+      `$${texNombre(coefficientAvecRayonNonCarre)}\\pi\\text{ cm}^3$`,
+      `$${texNombre(coefficientAvecAireLaterale)}\\pi\\text{ cm}^3$`,
+      `$${texNombre(produit)}\\pi\\text{ cm}^3$`,
     ]
 
     const conversionDiametre =

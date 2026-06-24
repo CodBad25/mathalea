@@ -107,7 +107,7 @@ export default class VolumePrismeDroitBasePentagonaleQcm extends ExerciceQcmA {
     this.enonce = `Le solide ci-dessous est un prisme droit à base pentagonale. Il n'est pas représenté à l'échelle.<br>
 L'aire de sa base est $${aireBaseEnCm2}\\text{ cm}^2$.
 ${figure}
-Son volume est égal à :`
+Son volume est égal à `
 
     this.reponses = [
       `$${texNombre(volume)}\\text{ cm}^3$`,
@@ -116,7 +116,7 @@ Son volume est égal à :`
       `$${texNombre(volume)}\\pi\\text{ cm}^3$`,
     ]
 
-    this.correction = `Le volume d'un prisme droit dont la base mesure $\\mathcal{A}$ et dont la hauteur est $h$ est donné par :<br>
+    this.correction = `Le volume d'un prisme droit dont l'aire de la base mesure $\\mathcal{A}$ et dont la hauteur est $h$ est donné par :<br>
 $V=\\mathcal{A}\\times h$.<br>
 On convertit la hauteur en centimètres : $${hauteurEnDm}\\text{ dm}=${hauteurEnCm}\\text{ cm}$.<br>
 Donc $V=${aireBaseEnCm2}\\times ${hauteurEnCm}=${miseEnEvidence(`${texNombre(volume)}\\text{ cm}^3`)}$.`

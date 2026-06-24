@@ -36,7 +36,7 @@ export default class VolumePrismeDroitBaseTriangleRectangleQcm extends ExerciceQ
 
     this.enonce = `Un prisme droit a pour base un triangle rectangle dont les côtés de l'angle droit mesurent $${coteAngleDroit1}\\text{ cm}$ et $${coteAngleDroit2}\\text{ cm}$.<br>
 La hauteur du prisme est $${hauteurPrisme}\\text{ cm}$.<br>
-Son volume est égal à :`
+Son volume est égal à `
 
     this.reponses = [
       `$${texNombre(volume)}\\text{ cm}^3$`,
