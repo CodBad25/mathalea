@@ -29,11 +29,9 @@ export default class LireCoordonneesPointQCM extends ExerciceQcmA {
     label: string,
     x: number,
     y: number,
-    delimiter: 'parentheses' | 'crochets' = 'parentheses',
+    egalApresLabel = false,
   ) {
-    const ouvrant = delimiter === 'parentheses' ? '\\left(' : '\\left['
-    const fermant = delimiter === 'parentheses' ? '\\right)' : '\\right]'
-    return `$${label}${ouvrant}${texNombre(x)}\\,;\\,${texNombre(y)}${fermant}$`
+    return `$${label}${egalApresLabel ? '=' : ''}\\left(${texNombre(x)}\\,;\\,${texNombre(y)}\\right)$`
   }
 
   private construireFigure(x: number, y: number, label: string) {
@@ -50,6 +48,7 @@ export default class LireCoordonneesPointQCM extends ExerciceQcmA {
         ymax: yMax,
         pixelsParCm: 30,
         scale: 0.75,
+        style: 'display: block; margin: 1rem auto;',
       },
       repere({
         xMin,
@@ -82,16 +81,17 @@ export default class LireCoordonneesPointQCM extends ExerciceQcmA {
     const propositions = [
       bonneReponse,
       this.coordonneesTex(label, y, x),
-      this.coordonneesTex(label, x, y, 'crochets'),
+      this.coordonneesTex(label, x, y, true),
       this.coordonneesTex(label, -x, y),
       this.coordonneesTex(label, x, -y),
-      this.coordonneesTex(label, y, x, 'crochets'),
+      this.coordonneesTex(label, y, x, true),
       this.coordonneesTex(label, -y, -x),
     ]
     this.reponses = [...new Set(propositions)].slice(0, 4)
 
     const figure = this.construireFigure(x, y, label)
-    this.enonce = `Dans le repère ci-dessous, quelles sont les coordonnées du point $${label}$ ?<br>${figure}`
+    this.enonce = `On considère le repère ci-dessous : ${figure}
+Les coordonnées du point $${label}$ sont `
     this.correction = `On lit d'abord l'abscisse sur l'axe horizontal, puis l'ordonnée sur l'axe vertical.<br>
 Le point $${label}$ a donc pour coordonnées $${miseEnEvidence(bonneReponse.slice(1, -1))}$.`
   }
