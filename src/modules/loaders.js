@@ -59,6 +59,20 @@ function ensureGlobalTabTracker() {
   hasGlobalTabTracker = true
 }
 
+function selectFillInTheBlanksPrompt(mf, direction) {
+  const prompts = mf.getPrompts?.()
+  if (!Array.isArray(prompts) || prompts.length === 0) return false
+
+  const promptId = direction === 'backward' ? prompts.at(-1) : prompts.at(0)
+  if (promptId == null) return false
+
+  const range = mf.getPromptRange?.(promptId)
+  if (range == null) return false
+
+  mf.selection = range
+  return true
+}
+
 async function load(name) {
   if (!apps[name]) throw UserFriendlyError(`application ${name} inconnue`)
   if (loadedApps.has(name)) return
@@ -207,7 +221,9 @@ export async function loadMathLive(divExercice) {
             if (mf.matches(':focus-within') && !mf.isSelectionEditable) {
               redirecting = true
               mf.executeCommand('moveToNextPlaceholder')
-              requestAnimationFrame(() => { redirecting = false })
+              requestAnimationFrame(() => {
+                redirecting = false
+              })
             }
           })
         }
@@ -263,13 +279,12 @@ function handleFocusMathField(event) {
     setTimeout(() => {
       if (!mf.matches(':focus-within')) return
       if (tabDirection === 'backward') {
-        // En entrée par TAB dans un nouveau mathfield, on force un prompt cohérent
-        // pour éviter la reprise sur un ancien prompt mémorisé par le navigateur.
-        mf.executeCommand('moveToMathfieldEnd')
-        mf.executeCommand('moveToPreviousPlaceholder')
+        // En entrée par TAB dans un nouveau mathfield, on force un prompt
+        // cohérent sans utiliser moveTo...Placeholder qui est relatif et peut
+        // ressortir du champ si MathLive a déjà placé la sélection.
+        selectFillInTheBlanksPrompt(mf, 'backward')
       } else if (tabDirection === 'forward') {
-        mf.executeCommand('moveToMathfieldStart')
-        mf.executeCommand('moveToNextPlaceholder')
+        selectFillInTheBlanksPrompt(mf, 'forward')
       }
     }, 0)
   }
