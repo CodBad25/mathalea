@@ -57,7 +57,7 @@ export default class PerimetreQuadrilatereQcm extends ExerciceQcmA {
     ]
 
     this.enonce = `Le quadrilatère $ABCD$ ci-dessous n'est pas représenté à l'échelle.<br>
-Calculer son périmètre.<br>
+
 ${mathalea2d(
   Object.assign(
     { pixelsParCm: 25, scale: 0.8, center: true },
@@ -69,7 +69,8 @@ ${mathalea2d(
     }),
   ),
   objets,
-)}`
+)}
+Son périmètre est égal à `
 
     this.reponses = [
       `$${perimetreEnCm}\\text{ cm}$`,
