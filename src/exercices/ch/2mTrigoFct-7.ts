@@ -493,8 +493,10 @@ function correctionDetails(question: TrigoEquationQuestion) {
       })
       .join('<br>')
 
-    return [
-      `$${texEquation(question)}$ équivaut à ${rootEquations}.`,
+    return `$${texEquation(question)}$ équivaut à ${rootEquations}.<br>
+    On lit sur le cercle trigonométrique complet les angles qui vérifient ces équations.<br>
+    ${renderFullReferenceCircle(referenceSolutions)}
+    ${[
       'On lit sur le cercle trigonométrique complet les angles qui vérifient ces équations.',
       renderFullReferenceCircle(referenceSolutions),
       details,
@@ -504,7 +506,7 @@ function correctionDetails(question: TrigoEquationQuestion) {
       ...mergeExplanation,
       ...finalCircleStep,
       '',
-    ].join('<br>')
+    ].join('<br>')}`
   }
 
   const lines: string[] = []
@@ -649,7 +651,10 @@ export default class ResoudreEquationTrigoDansR extends Exercice {
       }
 
       const texteCorr =
-        correctionDetails(question) +
+        correctionDetails(question).replaceAll(
+          '\\end{tikzpicture}\\\\',
+          '\\end{tikzpicture}\n',
+        ) +
         `L'ensemble des solutions est donc $S=\\left\\{${miseEnEvidence(expectedAnswer)}\\mid n\\in\\mathbb{Z}\\right\\}$.`
 
       if (this.questionJamaisPosee(i, equation, this.sup2, this.sup3)) {

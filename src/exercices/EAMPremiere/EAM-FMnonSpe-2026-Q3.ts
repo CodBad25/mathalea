@@ -1,4 +1,3 @@
-
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { bleuMathalea } from '../../lib/colors'
@@ -28,15 +27,15 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ3FMns2026 extends ExerciceQcmA {
-private appliquerLesValeurs(dx: number, dy: number): void {
+  private appliquerLesValeurs(dx: number, dy: number): void {
     // Points de base modélisant fidèlement la courbe de l'image
     const baseNoeuds = [
       { x: -4, y: -1, deriveeGauche: 4, deriveeDroit: 4, isVisible: false },
-      { x: -3, y: 1.5, deriveeGauche: 0, deriveeDroit: 0, isVisible: false }, 
-      { x: -1.5, y: -1.5, deriveeGauche: 0, deriveeDroit: 0, isVisible: false }, 
-      { x: 0, y: 1, deriveeGauche: 2, deriveeDroit: 2, isVisible: false }, 
+      { x: -3, y: 1.5, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
+      { x: -1.5, y: -1.5, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
+      { x: 0, y: 1, deriveeGauche: 2, deriveeDroit: 2, isVisible: false },
       { x: 1, y: 3, deriveeGauche: 0, deriveeDroit: 0, isVisible: false }, // Maximum ciblé (antécédent de base)
-      { x: 3, y: 0.5, deriveeGauche: 0, deriveeDroit: 0, isVisible: false }, 
+      { x: 3, y: 0.5, deriveeGauche: 0, deriveeDroit: 0, isVisible: false },
       { x: 5, y: 2.5, deriveeGauche: 1, deriveeDroit: 1, isVisible: false },
     ]
 
@@ -82,11 +81,12 @@ private appliquerLesValeurs(dx: number, dy: number): void {
       {
         xmin: xMin - 0.5,
         xmax: xMax + 0.5,
-        ymin: yMin - 0.5,
+        ymin: yMin - 1.5,
         ymax: yMax + 0.5,
         pixelsParCm: 25,
         scale: 0.6,
-        display: 'block', center: true,
+        display: 'block',
+        center: true,
       },
       r,
       courbe,
@@ -107,35 +107,37 @@ private appliquerLesValeurs(dx: number, dy: number): void {
     }
 
     this.enonce = `On donne ci-dessous la représentation graphique d'une fonction $f$.<br><br>
-${figure}<br>`
+${figure}`
     this.enonce += `Lequel de ces nombres est un antécédent de $${k}$ ?`
 
     // --- DISTRACTEURS INTELLIGENTS ---
     const fmt = (x: number) => `$${texNombre(x, 1)}$`
     const distracteurs = new Set<number>()
-    
+
     // 1er piège : l'élève donne l'image de k au lieu de l'antécédent
     if (imageDeK !== undefined) distracteurs.add(imageDeK)
-    
+
     // 2e piège : l'élève donne k lui-même
-    distracteurs.add(k) 
+    distracteurs.add(k)
 
     // On complète avec des valeurs proches si besoin
     let ecart = 0.5
     while (distracteurs.size < 3) {
-      if (repCorrecte + ecart !== k && repCorrecte + ecart !== imageDeK) distracteurs.add(repCorrecte + ecart)
+      if (repCorrecte + ecart !== k && repCorrecte + ecart !== imageDeK)
+        distracteurs.add(repCorrecte + ecart)
       if (distracteurs.size === 3) break
-      if (repCorrecte - ecart !== k && repCorrecte - ecart !== imageDeK) distracteurs.add(repCorrecte - ecart)
+      if (repCorrecte - ecart !== k && repCorrecte - ecart !== imageDeK)
+        distracteurs.add(repCorrecte - ecart)
       ecart += 0.5
     }
 
     const distArray = Array.from(distracteurs).slice(0, 3)
-    
+
     this.reponses = [
-      fmt(repCorrecte), 
-      fmt(distArray[0]), 
-      fmt(distArray[1]), 
-      fmt(distArray[2])
+      fmt(repCorrecte),
+      fmt(distArray[0]),
+      fmt(distArray[1]),
+      fmt(distArray[2]),
     ]
 
     // --- CORRECTION ---
@@ -144,8 +146,6 @@ ${figure}<br>`
     this.correction += `On se place à la valeur $${k}$ sur l'axe des ordonnées (axe vertical), on se déplace horizontalement jusqu'à rencontrer la courbe, puis on lit l'abscisse correspondante sur l'axe des abscisses.<br>`
     this.correction += `On lit ici que le point de la courbe d'ordonnée $${k}$ a pour abscisse $${repCorrecte}$.<br>`
     this.correction += `Donc un antécédent de $${k}$ est $${miseEnEvidence(texNombre(repCorrecte, 1))}$.`
-    
-   
   }
 
   versionOriginale: () => void = () => {
@@ -162,14 +162,14 @@ ${figure}<br>`
     // Paires calculées pour s'assurer que k tombe sur un noeud clair du graphique (image parfaitement lisible)
     // et que l'image de k n'est pas égale à l'antécédent de k.
     const validPairs: [number, number][] = [
-      [2, -1],  // k=2,  rep=3,  imageDeK=0
-      [1, -2],  // k=1,  rep=2,  imageDeK=-1
+      [2, -1], // k=2,  rep=3,  imageDeK=0
+      [1, -2], // k=1,  rep=2,  imageDeK=-1
       [-2, -2], // k=1,  rep=-1, imageDeK=-1.5
       [-1, -1], // k=2,  rep=0,  imageDeK=-0.5
-      [0, 0],   // k=3,  rep=1,  imageDeK=0.5 (Version originale)
-      [1, 1],   // k=4,  rep=2,  imageDeK=1.5
-      [-2, 0],  // k=3,  rep=-1, imageDeK=2.5
-      [-1, 1],  // k=4,  rep=0,  imageDeK=3.5
+      [0, 0], // k=3,  rep=1,  imageDeK=0.5 (Version originale)
+      [1, 1], // k=4,  rep=2,  imageDeK=1.5
+      [-2, 0], // k=3,  rep=-1, imageDeK=2.5
+      [-1, 1], // k=4,  rep=0,  imageDeK=3.5
     ]
 
     let compteur = 0

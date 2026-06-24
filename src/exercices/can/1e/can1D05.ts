@@ -1,5 +1,6 @@
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { Spline, spline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -7,7 +8,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const dateDePublication = '05/05/2024'
 export const interactifReady = true
@@ -116,7 +116,12 @@ export default class ResolEquationDerivee extends ExerciceSimple {
     const courbe1 = theSpline.courbe({
       epaisseur: 1.5,
       ajouteNoeuds: true,
-      optionsNoeuds: { color: bleuMathalea, taille: 2, style: 'x', epaisseur: 2 },
+      optionsNoeuds: {
+        color: bleuMathalea,
+        taille: 2,
+        style: 'x',
+        epaisseur: 2,
+      },
       color: bleuMathalea,
     })
     const objetsEnonce = [repere1, courbe1]
@@ -129,7 +134,7 @@ export default class ResolEquationDerivee extends ExerciceSimple {
           { pixelsParCm: 30, scale: 0.65, center: true },
           {
             xmin: bornes.xMin - 1,
-            ymin: bornes.yMin - 1,
+            ymin: bornes.yMin - 2,
             xmax: bornes.xMax + 1,
             ymax: bornes.yMax + 1,
           },
@@ -137,7 +142,6 @@ export default class ResolEquationDerivee extends ExerciceSimple {
         objetsEnonce,
         o,
       ) // fixeBordures(objetsEnonce))
-    this.question += '<br>'
     const extrema = nuage.filter((el) => el.deriveeGauche === 0)
     // const nbreExtremum=nuage.filter((el)=>el.deriveeGauche===0).length
     this.reponse = String(extrema.length)

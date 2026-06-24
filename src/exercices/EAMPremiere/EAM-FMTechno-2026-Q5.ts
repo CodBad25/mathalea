@@ -1,4 +1,3 @@
-
 import { droite } from '../../lib/2d/droites'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
@@ -22,7 +21,8 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Déterminer une équation réduite de droite par lecture graphique'
+export const titre =
+  'Déterminer une équation réduite de droite par lecture graphique'
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -31,7 +31,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ5FMt2026 extends ExerciceQcmA {
- // Ajout de paramètres optionnels pour forcer les distracteurs de la version originale
+  // Ajout de paramètres optionnels pour forcer les distracteurs de la version originale
   private appliquerLesValeurs(
     m: number,
     p: number,
@@ -63,11 +63,12 @@ export default class AutoQ5FMt2026 extends ExerciceQcmA {
     const fenetreMathalea2d = {
       xmin: -3.05,
       xmax: 4.05,
-      ymin: -4.05,
+      ymin: -5.05,
       ymax: 6.05,
       pixelsParCm: 30,
       scale: 0.6,
-      display: 'block' as const, center: true,
+      display: 'block' as const,
+      center: true,
     }
 
     const figure = mathalea2d(fenetreMathalea2d, r, d, o)
@@ -106,16 +107,17 @@ export default class AutoQ5FMt2026 extends ExerciceQcmA {
 
     // --- ÉNONCÉ ET CORRECTION ---
     this.enonce = `Une droite est représentée ci-dessous. <br><br>
-      ${figure}
-      
-      `
+      ${figure}`
 
     this.enonce += `L'équation réduite de cette droite est :`
     this.correction = `Par lecture graphique :<br>`
     this.correction += `$\\bullet$ La droite coupe l'axe des ordonnées au point de coordonnées $(0 ; ${p})$, donc l'ordonnée à l'origine est $p = ${p}$.<br>`
     this.correction += `$\\bullet$ En partant de ce point, si on avance de $1$ unité vers la droite, on se décale de $${Math.abs(m)}$ unités vers le ${m > 0 ? 'haut' : 'bas'} pour rejoindre la droite. Le coefficient directeur est donc $m = ${m}$.<br>`
     this.correction += `L'équation réduite est de la forme $y = mx + p$, ce qui donne $${miseEnEvidence(`y = ${reduireAxPlusB(m, p)}`)}$.<br>`
-    this.correction += figureCorr
+    this.correction += figureCorr.replace(
+      `\\end{tikzpicture}\\\\`,
+      '\\end{tikzpicture}',
+    )
 
     // --- DISTRACTEURS ---
     const repCorrecte = `$y = ${reduireAxPlusB(m, p)}$`

@@ -805,10 +805,10 @@ testExosModifiedConsolidated:
 
       if git rev-parse --verify "$DIFF_BASE" >/dev/null 2>&1; then
         echo "Comparing from $DIFF_BASE to HEAD"
-        CHANGED_FILES=$(git diff --name-only --diff-filter=AD "$DIFF_BASE"..HEAD)
+        CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT "$DIFF_BASE"..HEAD)
       else
         echo "⚠️ Le commit $DIFF_BASE n'est pas disponible (clone trop peu profond ?)"
-        CHANGED_FILES=$(git diff --name-only --diff-filter=AD $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
+        CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
       fi
 
       echo ""
@@ -923,10 +923,10 @@ testExosModifiedLatex:
 
       if git rev-parse --verify "$DIFF_BASE" >/dev/null 2>&1; then
         echo "Comparing from $DIFF_BASE to HEAD"
-        CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
+        CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT "$DIFF_BASE"..HEAD)
       else
         echo "⚠️ Le commit $DIFF_BASE n'est pas disponible (clone trop peu profond ?)"
-        CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
+        CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
       fi
 
     - npm install -g pnpm@11.8.0
