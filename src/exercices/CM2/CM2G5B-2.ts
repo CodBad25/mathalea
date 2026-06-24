@@ -175,7 +175,7 @@ export default class LireFacePaveDroit extends Exercice {
         mathalea2d(
           Object.assign({}, fixeBordures(objetsEnonce), {
             scale: context.isHtml ? 0.7 : 0.3,
-            style: 'block',
+            display: 'block' as const,
           }),
           objetsEnonce,
         ) + '<br>'

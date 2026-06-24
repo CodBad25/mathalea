@@ -313,7 +313,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
                 yMax,
                 yMin,
                 scale: 0.4,
-                style: 'display: inline-block',
+                display: 'inline-block' as const,
                 optionsTikz: 'transform shape',
               },
             ),

@@ -58,7 +58,7 @@ export default class Can2025CE1Q20 extends ExerciceSimple {
         xmax: 12,
         ymax: 1.5,
         scale: 0.6,
-        style: 'margin: auto',
+        center: true,
       },
       d,
     )
@@ -76,7 +76,7 @@ export default class Can2025CE1Q20 extends ExerciceSimple {
         xmax: 12.2,
         ymax: 1.5,
         scale: 0.38,
-        style: 'margin: auto',
+        center: true,
       },
       d,
     )

@@ -113,7 +113,7 @@ export default class MilieuEntre1EtFraction extends ExerciceSimple {
         mainlevee: false,
         amplitude: 0.4,
         scale: 0.6,
-        style: 'margin: auto',
+        center: true,
       },
       objets,
     )

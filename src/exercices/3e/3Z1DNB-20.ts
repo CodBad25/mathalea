@@ -99,14 +99,14 @@ export default class ExerciceCentresEtrangers262024 extends ExerciceBrevetA {
     const objets2 = [depArr, fleche, poly2, ...exos2, ...textEx2]
     const figure1 = mathalea2d(
       Object.assign(
-        { pixelsParCm: 20, scale: 0.5, style: 'display: inline' },
+        { pixelsParCm: 20, scale: 0.5, display: 'inline' } as const,
         fixeBordures(objets1),
       ),
       objets1,
     )
     const figure2 = mathalea2d(
       Object.assign(
-        { pixelsParCm: 20, scale: 0.5, style: 'display: inline' },
+        { pixelsParCm: 20, scale: 0.5, display: 'inline' } as const,
         fixeBordures(objets2),
       ),
       objets2,

@@ -581,7 +581,7 @@ export default class AlgoTortue extends Exercice {
       ymax: hauteur + 1,
       pixelsParCm: Math.round(200 / largeur),
       scale: 4 / largeur,
-      style: 'display: inline-block',
+      display: 'inline-block' as const,
     }
     const paramsCorrection = {
       xmin: -0.5,
@@ -590,7 +590,7 @@ export default class AlgoTortue extends Exercice {
       ymax: hauteur + 1,
       pixelsParCm: Math.round(200 / largeur),
       scale: 4 / largeur,
-      style: 'display: inline-block',
+      display: 'inline-block' as const,
     }
 
     // mathalea2d() est la fonction qui ajoute soit une figure SVG (en html), soit une figure tikz en Latex. Ici, juste la grille est le point de départ.

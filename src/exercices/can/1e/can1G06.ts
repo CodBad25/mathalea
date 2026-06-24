@@ -110,7 +110,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -166,7 +166,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
                 mainlevee: false,
                 amplitude: 0.3,
                 scale: 0.5,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -189,7 +189,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
                 mainlevee: false,
                 amplitude: 0.3,
                 scale: 0.5,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -248,7 +248,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.4,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -274,7 +274,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.4,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -301,7 +301,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.4,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -330,7 +330,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.4,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -359,7 +359,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.4,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -418,7 +418,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -445,7 +445,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -472,7 +472,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -547,7 +547,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -578,7 +578,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -607,7 +607,7 @@ Ainsi, $\\overrightarrow{ED}\\cdot ${choixb ? '\\overrightarrow{OC}' : '\\overri
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -638,7 +638,7 @@ Ainsi, $\\overrightarrow{ED}\\cdot ${choixb ? '\\overrightarrow{OC}' : '\\overri
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -665,7 +665,7 @@ Ainsi, $\\overrightarrow{ED}\\cdot ${choixb ? '\\overrightarrow{OC}' : '\\overri
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -696,7 +696,7 @@ Ainsi, $\\overrightarrow{ED}\\cdot ${choixb ? '\\overrightarrow{OC}' : '\\overri
               mainlevee: false,
               amplitude: 0.3,
               scale: 0.5,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )

@@ -146,7 +146,7 @@ export default class LectureProbabilite2 extends Exercice {
       objets = omega.represente(0, 7, 0, 1.5, true, 1, 10) // On crée l'arbre complet echelle 1.4 feuilles verticales sens gauche-droite
       texte = "On donne l'arbre de probabilités :<br><br>"
       texte += mathalea2d(
-        { xmin: -0.1, xmax: 14, ymin: 0, ymax: 7, style: 'inline', scale: 0.5 },
+        { xmin: -0.1, xmax: 14, ymin: 0, ymax: 7, display: 'inline', scale: 0.5 },
         ...objets,
       )
       texte += '<br>Compléter avec le nombre qui convient : '
@@ -208,7 +208,7 @@ export default class LectureProbabilite2 extends Exercice {
           xmax: 14,
           ymin: 0,
           ymax: 7,
-          style: 'inline',
+          display: 'inline',
           scale: 0.5,
         },
         ...objets,

@@ -91,7 +91,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
                 xmax: 7,
                 ymax: 7,
                 scale: 0.5,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -131,7 +131,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
                 xmax: 7,
                 ymax: 7,
                 scale: 0.5,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -185,7 +185,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
               xmax: 11,
               ymax: 7,
               scale: 0.5,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -230,7 +230,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
                 xmax: 7,
                 ymax: 6,
                 scale: 0.5,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -260,7 +260,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
                 xmax: 7,
                 ymax: 6,
                 scale: 0.5,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -312,7 +312,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
                 xmax: 6,
                 ymax: 3,
                 scale: 0.7,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -346,7 +346,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
                 xmax: 6,
                 ymax: 2.5,
                 scale: 0.7,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -384,7 +384,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
                 xmax: 6,
                 ymax: 2.5,
                 scale: 0.7,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )

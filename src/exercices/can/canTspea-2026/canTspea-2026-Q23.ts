@@ -72,7 +72,7 @@ export const refs = {
             xmax: 14,
             ymin: -1,
             ymax: 6,
-            style: 'inline',
+            display: 'inline',
             scale: 0.5,
           },
           ...objets,

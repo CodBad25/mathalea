@@ -270,7 +270,7 @@ export default class UtiliserProduitScalaire extends Exercice {
               Montrer que les droites $(${nomE}${nomC})$ et $(${nomD}${nomF})$ sont perpendiculaires.<br>` +
                 mathalea2d(
                   Object.assign(
-                    { scale: 0.7, pixelsParCm: 25, style: 'inline' },
+                    { scale: 0.7, pixelsParCm: 25, display: 'inline' } as const,
                     fixeBordures(objets),
                   ),
                   objets,
@@ -342,7 +342,7 @@ export default class UtiliserProduitScalaire extends Exercice {
               Montrer que les droites $(${nomA}${nomE})$ et $(${nomB}${nomF})$ sont perpendiculaires.<br>` +
                 mathalea2d(
                   Object.assign(
-                    { scale: 0.7, pixelsParCm: 25, style: 'inline' },
+                    { scale: 0.7, pixelsParCm: 25, display: 'inline' } as const,
                     fixeBordures(objets),
                   ),
                   objets,
@@ -433,7 +433,7 @@ export default class UtiliserProduitScalaire extends Exercice {
                 }) +
                 mathalea2d(
                   Object.assign(
-                    { scale: 0.7, pixelsParCm: 25, style: 'inline' },
+                    { scale: 0.7, pixelsParCm: 25, display: 'inline' } as const,
                     fixeBordures(objets),
                   ),
                   objets,
@@ -510,7 +510,7 @@ export default class UtiliserProduitScalaire extends Exercice {
                 }) +
                 mathalea2d(
                   Object.assign(
-                    { scale: 0.7, pixelsParCm: 25, style: 'inline' },
+                    { scale: 0.7, pixelsParCm: 25, display: 'inline' } as const,
                     fixeBordures(objets),
                   ),
                   objets,

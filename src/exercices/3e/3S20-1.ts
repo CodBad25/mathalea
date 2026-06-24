@@ -273,7 +273,7 @@ function unePieceDeuxUrnes(
         ymax: 12,
         zoom: 1.3,
         scale: 0.5,
-        style: 'display: block',
+        display: 'block',
       },
       ...objets,
     )
@@ -537,7 +537,7 @@ function urneDeuxTiragesAvecRemise(
         ymax: 13,
         zoom: 0.8,
         scale: 9 / card / card,
-        style: 'display: block',
+        display: 'block',
       },
       ...objets,
     )

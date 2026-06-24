@@ -377,7 +377,7 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
                 yMax,
                 yMin,
                 scale: 0.4,
-                style: 'display: inline-block',
+                display: 'inline-block' as const,
                 optionsTikz: 'transform shape',
               },
             ),

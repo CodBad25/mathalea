@@ -180,7 +180,7 @@ export default class EquationsGSplineNombre extends ExerciceSimple {
     this.question +=
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 25, scale: 0.9, style: 'margin: auto' },
+          { pixelsParCm: 25, scale: 0.9, center: true },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,

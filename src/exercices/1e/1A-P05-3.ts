@@ -79,7 +79,7 @@ export default class auto1AP3c extends ExerciceQcmA {
 
     this.enonce = "On donne l'arbre de probabilités ci-dessous :<br>"
     this.enonce += mathalea2d(
-      Object.assign({ style: 'inline' }, fixeBordures(objets)),
+      Object.assign({ display: 'inline' } as const, fixeBordures(objets)),
       objets,
     )
     this.enonce += '<br>$p_C(A)$ est égal à :'
@@ -179,7 +179,7 @@ export default class auto1AP3c extends ExerciceQcmA {
 
     this.enonce = "On donne l'arbre de probabilités ci-dessous :<br>"
     this.enonce += mathalea2d(
-      Object.assign({ style: 'inline' }, fixeBordures(objets)),
+      Object.assign({ display: 'inline' } as const, fixeBordures(objets)),
       objets,
     )
     this.enonce += '<br>$P_C(A)$ est égal à :'

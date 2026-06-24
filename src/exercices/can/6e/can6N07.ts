@@ -52,7 +52,7 @@ export default class LireAbscisseDecimaleDeFraction extends ExerciceSimple {
             ymax: 1,
             pixelsParCm: 35,
             scale: 0.6,
-            style: 'margin: auto',
+            center: true,
           },
           latex2d('A', (3 * a) / 4, 0.5, { color: bleuMathalea }),
           droiteGraduee({
@@ -91,7 +91,7 @@ export default class LireAbscisseDecimaleDeFraction extends ExerciceSimple {
             ymax: 1,
             pixelsParCm: 35,
             scale: 0.6,
-            style: 'margin: auto',
+            center: true,
           },
           latex2d('A', (3 * a) / 5, 0.5, { color: bleuMathalea }),
           droiteGraduee({

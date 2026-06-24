@@ -209,7 +209,7 @@ export default class ConstruireSectionPaveDroit extends Exercice {
           Object.assign(
             { optionsTikz: 'baseline=(current bounding box.north)' },
             fixeBordures(objetsEnonce),
-            { scale: context.isHtml ? 0.7 : 0.3, style: 'block' },
+            { scale: context.isHtml ? 0.7 : 0.3, display: 'block' },
           ),
           objetsEnonce,
           traceTesPoints,
@@ -270,7 +270,7 @@ export default class ConstruireSectionPaveDroit extends Exercice {
           Object.assign(
             { optionsTikz: 'baseline=(current bounding box.north)' },
             fixeBordures(objetsEnonce),
-            { scale: context.isHtml ? 0.7 : 0.3, style: 'block' },
+            { scale: context.isHtml ? 0.7 : 0.3, display: 'block' },
           ),
           objetsEnonce,
           traceTesPoints,

@@ -278,7 +278,7 @@ export default class LoiDeProba extends Exercice {
               `
             texteCorr +=
               mathalea2d(
-                Object.assign({ style: 'inline' }, fixeBordures(objets)),
+                Object.assign({ display: 'inline' } as const, fixeBordures(objets)),
                 objets,
               ) +
               ' <br> ' +

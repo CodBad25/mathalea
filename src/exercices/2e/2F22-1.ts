@@ -324,8 +324,8 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
           Object.assign(
             {
               scale: 0.6,
-              style: 'display: block',
-            },
+              display: 'block',
+            } as const,
             fixeBordures(objetsEnonce),
           ),
           objetsEnonce,

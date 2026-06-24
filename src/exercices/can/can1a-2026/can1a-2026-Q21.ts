@@ -127,7 +127,7 @@ export default class Can1a2026Q21 extends ExerciceCan {
 
     const graphique = mathalea2d(
       Object.assign(
-        { pixelsParCm: 30, scale: 0.65, style: 'margin: auto' },
+        { pixelsParCm: 30, scale: 0.65, center: true },
         {
           xmin: bornes.xMin - 1,
           ymin: bornes.yMin - 1,

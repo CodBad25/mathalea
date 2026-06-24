@@ -90,7 +90,7 @@ export default class Can2025CE1Q15 extends ExerciceCan {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.6,
-          style: 'margin: auto',
+          center: true,
         },
         objets,
       ) +
@@ -107,7 +107,7 @@ export default class Can2025CE1Q15 extends ExerciceCan {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.6,
-          style: 'margin: auto',
+          center: true,
         },
         objets,
       ) + '<br>'

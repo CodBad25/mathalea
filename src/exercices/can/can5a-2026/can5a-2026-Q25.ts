@@ -76,7 +76,7 @@ export default class Can52026Q25 extends ExerciceCan {
         ymax: 3,
         scale: 1, // CORRECTION : scale à 1 pour avoir 2 carreaux = 1 unité visuellement
         pixelsParCm: 40,
-        style: 'margin: auto',
+        center: true,
       },
       r,
       o,

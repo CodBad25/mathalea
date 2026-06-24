@@ -98,7 +98,7 @@ export default class calculerPythagore2026 extends ExerciceSimple {
           scale: 0.6,
           pixelsParCm: 18,
           mainlevee: false,
-          style: 'margin: auto',
+          center: true,
         },
         objets,
       )

@@ -70,7 +70,7 @@ export default class AutoQ8FMt2026 extends ExerciceQcmA {
         ymax: yMax + 0.05,
         pixelsParCm: 25,
         scale: 0.6,
-        style: 'margin: auto',
+        center: true,
       },
       r,
       courbe(f, { repere: r, color: 'red', epaisseur: 2 }),

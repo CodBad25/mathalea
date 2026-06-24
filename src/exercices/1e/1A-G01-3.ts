@@ -79,7 +79,7 @@ export default class LireAbscisseFractionnaireQcm extends ExerciceQcmA {
         xmax: 14,
         ymax: 1.5,
         scale: 0.75,
-        style: 'margin: auto',
+        center: true,
       },
       droite,
     )

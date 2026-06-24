@@ -52,7 +52,7 @@ export default class Can2025CM1Q15 extends ExerciceSimple {
     this.question = 'Donne la longueur du contour de cette figure.<br> '
     this.question += mathalea2d(
       Object.assign(
-        { scale: 0.5, style: 'margin: auto' },
+        { scale: 0.5, center: true },
         fixeBordures(objets),
       ),
       objets,

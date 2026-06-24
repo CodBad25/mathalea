@@ -27,7 +27,7 @@ Le moteur développé depuis 2018 connait un développement régulier grâce à 
 
 ## Utilisation en local
 
-La dernière version est disponible sur https://coopmaths.fr/alea.
+La dernière version est disponible sur <https://coopmaths.fr/alea>.
 
 Vous pouvez récupérer une copie du dépot et l'utiliser en local. Pour cela, vous aurez besoin d'une version récente de NodeJS afin d'exécuter les commandes suivantes.
 
@@ -42,8 +42,8 @@ pnpm dev
 
 La communauté de développeur autour de MathALEA est ouverte et prête à accompagner toutes les bonnes volontés intéressées pour améliorer l'outil.
 
-La documentation est disponible sur https://forge.apps.education.fr/coopmaths/mathalea/-/wikis/home.
-Vous pouvez nous contacter à contact@coopmaths.fr.
+La documentation est disponible sur <https://forge.apps.education.fr/coopmaths/mathalea/-/wikis/home>.
+Vous pouvez nous contacter à <contact@coopmaths.fr>.
 
 ## Reproduire les tests CI en local
 
@@ -55,4 +55,4 @@ Exemple en une ligne :
 CI=1 PLAYWRIGHT_SERVER_PORT=5173 pnpm test:e2e:views
 ```
 
-Voir la documentation détaillée : [documentation/gitlab-ci-report.md](documentation/gitlab-ci-report.md#port-du-serveur-en-local-mode-ci)
+Voir la documentation détaillée : [documentation/tests/ci-gitlab.md](documentation/tests/ci-gitlab.md#port-du-serveur-en-local-mode-ci)

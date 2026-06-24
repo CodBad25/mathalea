@@ -143,7 +143,7 @@ export default class constructionElementaire extends Exercice {
           ymax: Ymax,
           pixelsParCm: ppc,
           scale: sc,
-          style: 'display: block',
+          display: 'block',
         },
         objetsEnonce,
       )

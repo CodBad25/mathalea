@@ -243,8 +243,8 @@ run_exomodified_group() {
 
   echo ""
   echo -e "${BLUE}🧪 exomodified: report-interactif${NC}"
-  if INTERACTIF_REPORT=1 CHANGED_FILES="$changed_files" pnpm vitest tests/unit/report-interactif.test.ts --run; then
-    if report_contains_changed_exercise_issues "documentation/interactif-report.md" "$changed_files"; then
+  if INTERACTIF_REPORT=1 CHANGED_FILES="$changed_files" pnpm vitest src/lib/amc/report-interactif.test.ts --run; then
+    if report_contains_changed_exercise_issues "reports/interactif-report.md" "$changed_files"; then
       echo -e "${RED}Le rapport interactif contient des exercices modifiés en issue.${NC}"
       add_result "exomodified: report-interactif" ko
     else
@@ -256,8 +256,8 @@ run_exomodified_group() {
 
   echo ""
   echo -e "${BLUE}🧪 exomodified: report-amcnum${NC}"
-  if AMCNUM_REPORT=1 CHANGED_FILES="$changed_files" pnpm vitest tests/unit/report-amcnum.test.ts --run; then
-    if report_contains_changed_exercise_issues "documentation/amcnum-report.md" "$changed_files"; then
+  if AMCNUM_REPORT=1 CHANGED_FILES="$changed_files" pnpm vitest src/lib/amc/report-amcnum.test.ts --run; then
+    if report_contains_changed_exercise_issues "reports/amcnum-report.md" "$changed_files"; then
       echo -e "${RED}Le rapport AMCNum contient des exercices modifiés en issue.${NC}"
       add_result "exomodified: report-amcnum" ko
     else

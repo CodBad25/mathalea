@@ -93,7 +93,7 @@ export default class AutoQ12CEns2026 extends ExerciceQcmA {
 
     this.enonce = "Soient $A$ et $B$ deux événements.<br>On donne l'arbre de probabilités ci-dessous :<br>"
     this.enonce += mathalea2d(
-      Object.assign({ style: 'inline', scale: 0.5 }, fixeBordures(objets)),
+      Object.assign({ display: 'inline', scale: 0.5 } as const, fixeBordures(objets)),
       objets,
     )
     this.enonce += `<br>On peut alors affirmer que $P_{${texX}}(${texY})$ est égale à :`

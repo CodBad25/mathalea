@@ -92,7 +92,7 @@ export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {
         ymax: 9,
         pixelsParCm: 30,
         scale: 1,
-        style: 'margin: auto',
+        center: true,
       },
       [
         courbe(f, {

@@ -175,7 +175,7 @@ Grâce au quatrième paramètre, on peut imposer l'ordre des motifs choisis au q
             ? `<div style="display: inline-block; width: 250px; height: 250px; margin-right: 10px;">${canvas3d[j]}<h1>motif ${j + 1}</h1></div>`
             : mathalea2d(
                 Object.assign(
-                  { style: 'display: inline-block' },
+                  { display: 'inline-block' } as const,
                   fixeBordures(figsLatex[j]),
                 ),
                 cubeDef(`cubeIsoQ${i}F0`),
@@ -199,7 +199,7 @@ Grâce au quatrième paramètre, on peut imposer l'ordre des motifs choisis au q
                   ? `<div style="display: inline-block; width: 250px; height: 250px; margin-right: 10px;">${canvas3d[nbFigures + 1]}</div>`
                   : mathalea2d(
                       Object.assign(
-                        { style: 'display: inline-block' },
+                        { display: 'inline-block' } as const,
                         fixeBordures(figsLatex[nbFigures]),
                       ),
                       cubeDef(`cubeIsoQ${i}F0`),

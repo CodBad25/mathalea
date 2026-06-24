@@ -83,7 +83,7 @@ export default class CalculLongueurGrille extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.5,
-          style: 'margin: auto',
+          center: true,
         },
         objets,
       )
@@ -107,7 +107,7 @@ export default class CalculLongueurGrille extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.5,
-          style: 'margin: auto',
+          center: true,
         },
         objetsC,
       )
@@ -124,7 +124,7 @@ export default class CalculLongueurGrille extends ExerciceSimple {
           mainlevee: false,
           amplitude: 0.5,
           scale: 0.5,
-          style: 'margin: auto',
+          center: true,
         },
         objets,
       )

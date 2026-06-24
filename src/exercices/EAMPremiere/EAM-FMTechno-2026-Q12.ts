@@ -78,7 +78,7 @@ private appliquerLesValeurs(
     // On englobe le tout en s'assurant que rxmax va jusqu'à 13 pour inclure la légende
     const figure = mathalea2d(
       Object.assign(
-        { style: 'display: block; margin: auto;', pixelsParCm: 20, scale: 0.5 },
+        { display: 'block', center: true, pixelsParCm: 20, scale: 0.5 } as const,
         fixeBordures(objets2d, { rxmin: 0, rymin: 0, rxmax: 0, rymax: 0 })
       ),
       objets2d

@@ -771,7 +771,7 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
             { xmin, xmax, ymin, ymax },
             {
               scale: 0.7,
-              style: 'display:block',
+              display: 'block' as const,
             },
           ),
           monTableau,

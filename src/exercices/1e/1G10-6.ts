@@ -165,7 +165,7 @@ export default class ProduitScalaireNormes extends Exercice {
       objets.push(ABC, nommeABC, codeAB, codeAC, codeBC)
       const figure = mathalea2d(
         Object.assign(
-          { scale: 0.7, pixelsParCm: 20, style: 'inline' },
+          { scale: 0.7, pixelsParCm: 20, display: 'inline' } as const,
           fixeBordures(objets),
         ),
         objets,

@@ -36,6 +36,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const exercicesDir = join(__dirname, '../../../src/exercices')
 const rootDir = join(__dirname, '../../../')
+const reportsDir = join(rootDir, 'reports')
 const isolatedTestFile = './report-interactif.single.test.ts'
 const LOCAL_BUGSNAG_PREFIX =
   "message qui aurait été envoyé à bugsnag s'il avait été configuré"
@@ -609,7 +610,7 @@ if (SHOULD_RUN_INTERACTIF_REPORT) {
       } else {
         let numero = 1
         for (const row of rows) {
-          const link = formatTableCell(`[${row.file}](${row.file})`)
+          const link = formatTableCell(`[${row.file}](../${row.file})`)
           const title = formatTableCell(row.title ?? '')
           const tagStr = formatTableCell(
             formatTagList(row.tags) + (row.error ? ` (${row.error})` : ''),
@@ -625,7 +626,8 @@ if (SHOULD_RUN_INTERACTIF_REPORT) {
       }
 
       const output = lines.join('\n') + '\n'
-      const outputPath = './interactif-report.md'
+      mkdirSync(reportsDir, { recursive: true })
+      const outputPath = join(reportsDir, 'interactif-report.md')
       writeFileSync(outputPath, output, 'utf8')
     })
   })

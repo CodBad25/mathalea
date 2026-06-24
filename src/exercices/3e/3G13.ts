@@ -503,7 +503,7 @@ export default class CalculsHomothetie extends Exercice {
       if (figure.arcOhA.typeObjet !== 'point') objetsEnonce.push(figure.arcOhA)
       const frapportFig = mathalea2d(
         Object.assign({}, fixeBordures([...objetsEnonce, ...flabelsPoints]), {
-          style: 'inline',
+          display: 'inline' as const,
           scale: fscale,
         }),
         objetsEnonce,
@@ -524,7 +524,7 @@ export default class CalculsHomothetie extends Exercice {
       if (figure.arcOhA.typeObjet !== 'point') objetsEnonce.push(figure.arcOhA)
       const fImageFig = mathalea2d(
         Object.assign({}, fixeBordures([...objetsEnonce, ...flabelsPoints]), {
-          style: 'inline',
+          display: 'inline' as const,
           scale: fscale,
         }),
         objetsEnonce,
@@ -548,7 +548,7 @@ export default class CalculsHomothetie extends Exercice {
       if (figure.arcOhA.typeObjet !== 'point') objetsEnonce.push(figure.arcOhA)
       const fAntecedentFig = mathalea2d(
         Object.assign({}, fixeBordures([...objetsEnonce, ...flabelsPoints]), {
-          style: 'inline',
+          display: 'inline' as const,
           scale: fscale,
         }),
         objetsEnonce,
@@ -589,7 +589,7 @@ export default class CalculsHomothetie extends Exercice {
         Object.assign(
           {},
           fixeBordures([...objetsEnonce, ...flabelsPointsAvecB]),
-          { style: 'inline', scale: fscale },
+          { display: 'inline' as const, scale: fscale },
         ),
         objetsEnonce,
         flabelsPointsAvecB,
@@ -617,7 +617,7 @@ export default class CalculsHomothetie extends Exercice {
         Object.assign(
           {},
           fixeBordures([...objetsEnonce, ...flabelsPointsAvecB]),
-          { style: 'inline', scale: fscale },
+          { display: 'inline' as const, scale: fscale },
         ),
         objetsEnonce,
         flabelsPointsAvecB,
@@ -639,7 +639,7 @@ export default class CalculsHomothetie extends Exercice {
       if (figure.arcAhA.typeObjet !== 'point') objetsEnonce.push(figure.arcAhA)
       const frapport2Fig = mathalea2d(
         Object.assign({}, fixeBordures([...objetsEnonce, ...flabelsPoints]), {
-          style: 'inline',
+          display: 'inline' as const,
           scale: fscale,
         }),
         objetsEnonce,

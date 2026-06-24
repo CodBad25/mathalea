@@ -83,7 +83,7 @@ export default class ImageSpline extends ExerciceSimple {
     this.correction += `<!-- Coefficient directeur de la droite : ${pente}-->` // Question jamais posée se base sur la correction, j'ajoute donc ce commentaire pour avoir plus de deux questions possibles
     this.question = `Ce graphique représente-t-il une situation de proportionnalité ?<br>
     
-    ${mathalea2d({ xmin: -7, xmax: 7, ymin: -6, ymax: 6, pixelsParCm: 17, style: 'margin: auto', scale: 0.6 }, r, c)}`
+    ${mathalea2d({ xmin: -7, xmax: 7, ymin: -6, ymax: 6, pixelsParCm: 17, center: true, scale: 0.6 }, r, c)}`
     if (this.interactif) {
       this.question += '<br> Répondre par OUI (saisir O) ou NON (saisir N).<br>'
     }

@@ -131,7 +131,7 @@ export default class NomExercice extends ExerciceSimple {
         this.question = 'On donne le graphique d’une fonction $f$ : <br>'
         this.question += mathalea2d(
           Object.assign(
-            { pixelsParCm: 30, scale: 0.55, style: 'margin: auto' },
+            { pixelsParCm: 30, scale: 0.55, center: true },
             {
               xmin: bornes.xMin - 1,
               ymin: bornes.yMin - 1,
@@ -203,7 +203,7 @@ export default class NomExercice extends ExerciceSimple {
           `Sur quel intervalle, $f$ est-elle ${choix ? 'positive' : 'négative'} ou nulle ?<br>` +
           mathalea2d(
             Object.assign(
-              { pixelsParCm: 30, scale: 0.65, style: 'margin: auto' },
+              { pixelsParCm: 30, scale: 0.65, center: true },
               {
                 xmin: bornes.xMin - 1,
                 ymin: bornes.yMin - 1,
@@ -237,7 +237,7 @@ export default class NomExercice extends ExerciceSimple {
         this.question = 'On donne le graphique d’une fonction $f$ : <br>'
         this.question += mathalea2d(
           Object.assign(
-            { pixelsParCm: 30, scale: 0.65, style: 'margin: auto' },
+            { pixelsParCm: 30, scale: 0.65, center: true },
             {
               xmin: bornes.xMin - 1,
               ymin: bornes.yMin - 1,

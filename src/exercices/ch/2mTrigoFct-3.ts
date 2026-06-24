@@ -118,7 +118,7 @@ function renderCircleQuestion(exercice: Exercice, questionIndex: number) {
       ymax: 3.7,
       pixelsParCm: 90,
       scale: 1,
-      style: 'display: block',
+      display: 'block',
     },
     cercleTrigo({ radius: 2, showCoordinates: Boolean(exercice.sup2) }),
   )
@@ -133,7 +133,7 @@ function renderCorrectionCircle(branches: CorrectionBranch[]) {
       ymax: 3.7,
       pixelsParCm: 90,
       scale: 1,
-      style: 'display: block',
+      display: 'block',
     },
     cercleTrigo({
       radius: 2,
@@ -157,7 +157,7 @@ function renderFinalAnswerCircle(solutions: TrigoCircleAngle[]) {
       ymax: 3.7,
       pixelsParCm: 90,
       scale: 1,
-      style: 'display: block',
+      display: 'block',
     },
     cercleTrigo({
       radius: 2,

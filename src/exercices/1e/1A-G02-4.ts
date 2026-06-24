@@ -62,7 +62,7 @@ export default class PerimetreCercleQcm extends ExerciceQcmA {
     this.enonce = `Le cercle ci-dessous n'est pas représenté à l'échelle.<br>
 ${mathalea2d(
   Object.assign(
-    { pixelsParCm: 25, scale: 0.8, style: 'margin: auto' },
+    { pixelsParCm: 25, scale: 0.8, center: true },
     fixeBordures(objets),
   ),
   objets,

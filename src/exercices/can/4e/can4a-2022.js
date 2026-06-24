@@ -1017,7 +1017,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -1056,7 +1056,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -1095,7 +1095,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )

@@ -230,7 +230,7 @@ export default class ParallélogrammeSommet extends Exercice {
                 ymax: YMAX,
                 pixelsParCm: 25,
                 scale: 0.6,
-                style: 'display: block',
+                display: 'block',
               },
               objets,
             )
@@ -408,7 +408,7 @@ export default class ParallélogrammeSommet extends Exercice {
                 ymax: YMAX,
                 pixelsParCm: 25,
                 scale: 0.6,
-                style: 'display: block',
+                display: 'block',
               },
               objets,
             )
@@ -606,7 +606,7 @@ export default class ParallélogrammeSommet extends Exercice {
                 ymax: YMAX,
                 pixelsParCm: 25,
                 scale: 0.6,
-                style: 'display: block',
+                display: 'block',
               },
               objets,
               E,

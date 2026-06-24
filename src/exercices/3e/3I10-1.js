@@ -422,7 +422,7 @@ export default class ScratchMultiScript extends Exercice {
         mathalea2d(
           Object.assign({}, fixeBordures(lePlateau.objets), {
             scale: 0.4,
-            style: 'display: inline',
+            display: 'inline',
           }),
           lePlateau.objets,
         ),
@@ -458,7 +458,7 @@ export default class ScratchMultiScript extends Exercice {
       objetsCorrection.push(lePlateau.objets, lutins[i])
       texteCorr += mathalea2d(
         Object.assign({}, fixeBordures(objetsCorrection), {
-          style: 'display: inline',
+          display: 'inline',
           scale: 0.4,
         }),
         objetsCorrection,
@@ -488,7 +488,7 @@ export default class ScratchMultiScript extends Exercice {
           mathalea2d(
             Object.assign({}, fixeBordures(lePlateau.objets), {
               scale: 0.4,
-              style: 'display: inline',
+              display: 'inline',
             }),
             lePlateau.objets,
           ),

@@ -148,7 +148,7 @@ export default class MultiplierDecimaux extends Exercice {
             operande1: a.toNumber(),
             operande2: b.toNumber(),
             type: 'multiplication',
-            style: 'display: inline',
+            display: 'inline',
             options: { solution: true, colore: orangeMathalea },
           })
           texteCorr += context.isHtml ? '' : '\\hspace*{30mm}'
@@ -156,7 +156,7 @@ export default class MultiplierDecimaux extends Exercice {
             operande1: b.toNumber(),
             operande2: a.toNumber(),
             type: 'multiplication',
-            style: 'display: inline',
+            display: 'inline',
             options: { solution: true, colore: orangeMathalea },
           })
           break
@@ -165,7 +165,7 @@ export default class MultiplierDecimaux extends Exercice {
             operande1: facteuraEntier.toNumber(),
             operande2: facteurbEntier.toNumber(),
             type: 'multiplication',
-            style: 'display: inline',
+            display: 'inline',
             options: { solution: true, colore: bleuMathalea },
           })
           texteCorr += context.isHtml ? '' : '\\hspace*{30mm}'

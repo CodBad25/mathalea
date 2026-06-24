@@ -145,7 +145,7 @@ export default class Can52026Q16 extends ExerciceCan {
 
     this.consigne = mathalea2d(
       Object.assign(
-        { style: 'margin: auto', scale: 0.5 },
+        { center: true, scale: 0.5 },
         fixeBordures(objets),
       ),
       objets,
@@ -165,7 +165,7 @@ La proportion de boules blanches est donc : ${pgcd(nbBlanches, total) !== 1 ? `$
     this.canEnonce =
       mathalea2d(
         Object.assign(
-          { style: 'margin: auto', scale: 0.5 },
+          { center: true, scale: 0.5 },
           fixeBordures(objets),
         ),
         objets,

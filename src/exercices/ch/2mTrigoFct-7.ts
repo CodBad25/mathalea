@@ -115,7 +115,7 @@ function renderCircle(points: FractionEtendue[], color?: string) {
       ymax: 3.7,
       pixelsParCm: 90,
       scale: 1,
-      style: 'display: block',
+      display: 'block',
     },
     cercleTrigo({
       radius: 2,
@@ -141,7 +141,7 @@ function renderFullReferenceCircle(points: FractionEtendue[]) {
       ymax: 3.7,
       pixelsParCm: 90,
       scale: 1,
-      style: 'display: block',
+      display: 'block',
     },
     cercleTrigo({
       radius: 2,

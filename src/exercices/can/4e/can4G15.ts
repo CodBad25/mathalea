@@ -85,7 +85,7 @@ export default class QuestionsAiresEtPerimetres4 extends ExerciceSimple {
         mainlevee: true,
         amplitude: 0.5,
         scale: 0.7,
-        style: 'margin: auto',
+        center: true,
       },
       objets,
     )

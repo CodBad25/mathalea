@@ -158,14 +158,14 @@ export default class ProduitScalaireAlKashi extends Exercice {
       )
       const figure = mathalea2d(
         Object.assign(
-          { scale: 0.7, pixelsParCm: 20, style: 'inline' },
+          { scale: 0.7, pixelsParCm: 20, display: 'inline' } as const,
           fixeBordures(objets),
         ),
         objets,
       )
       const figureC = mathalea2d(
         Object.assign(
-          { scale: 0.7, pixelsParCm: 15, style: 'inline' },
+          { scale: 0.7, pixelsParCm: 15, display: 'inline' } as const,
           fixeBordures(objetsC),
         ),
         objetsC,

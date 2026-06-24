@@ -344,7 +344,7 @@ L'expression donnée entre crochets est la formule qui permet de calculer le nom
                     yMax,
                     yMin,
                     scale: 0.5,
-                    style: 'display: inline-block',
+                    display: 'inline-block' as const,
                     optionsTikz: 'transform shape',
                   },
                 ),

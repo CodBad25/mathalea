@@ -109,7 +109,7 @@ export default class Can1a2026Q23 extends ExerciceCan {
             xmax: 14,
             ymin: -1,
             ymax: 6,
-            style: 'inline',
+            display: 'inline',
             scale: 0.5,
           },
           ...objets,

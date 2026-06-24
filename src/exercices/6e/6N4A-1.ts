@@ -368,7 +368,7 @@ export default class ModelisationProblemes extends Exercice {
               Object.assign({}, fixeBordures(objets), {
                 ymin: -1,
                 ymax: 6,
-                style: 'display: inline',
+                display: 'inline' as const,
                 pixelsParCm: 13,
                 scale: 0.25,
               }),
@@ -433,7 +433,7 @@ export default class ModelisationProblemes extends Exercice {
               Object.assign({}, fixeBordures(objets), {
                 ymin: -1,
                 ymax: 6,
-                style: 'display: inline',
+                display: 'inline' as const,
                 pixelsParCm: 13,
                 scale: 0.25,
               }),
@@ -484,7 +484,7 @@ export default class ModelisationProblemes extends Exercice {
               Object.assign({}, fixeBordures(objets), {
                 ymin: -1,
                 ymax: 6,
-                style: 'display: inline',
+                display: 'inline' as const,
                 pixelsParCm: 13,
                 scale: 0.25,
               }),
@@ -547,7 +547,7 @@ export default class ModelisationProblemes extends Exercice {
               Object.assign({}, fixeBordures(objets), {
                 ymin: -1,
                 ymax: 6,
-                style: 'display: inline',
+                display: 'inline' as const,
                 pixelsParCm: 13,
                 scale: 0.25,
               }),
@@ -610,7 +610,7 @@ export default class ModelisationProblemes extends Exercice {
               Object.assign({}, fixeBordures(objets), {
                 ymin: -1,
                 ymax: 6,
-                style: 'display: inline',
+                display: 'inline' as const,
                 pixelsParCm: 13,
                 scale: 0.25,
               }),
@@ -660,7 +660,7 @@ export default class ModelisationProblemes extends Exercice {
               Object.assign({}, fixeBordures(objets), {
                 ymin: -1,
                 ymax: 6,
-                style: 'display: inline',
+                display: 'inline' as const,
                 pixelsParCm: 13,
                 scale: 0.25,
               }),
@@ -723,7 +723,7 @@ export default class ModelisationProblemes extends Exercice {
               Object.assign({}, fixeBordures(objets), {
                 ymin: -1,
                 ymax: 6,
-                style: 'display: inline',
+                display: 'inline' as const,
                 pixelsParCm: 13,
                 scale: 0.25,
               }),
@@ -774,7 +774,7 @@ export default class ModelisationProblemes extends Exercice {
               Object.assign({}, fixeBordures(objets), {
                 ymin: -1,
                 ymax: 6,
-                style: 'display: inline',
+                display: 'inline' as const,
                 pixelsParCm: 13,
                 scale: 0.25,
               }),

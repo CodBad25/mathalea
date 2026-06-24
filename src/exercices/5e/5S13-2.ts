@@ -128,7 +128,7 @@ function graphique(
       {},
       fixeBordures([diagramme], { rxmin: -3, rymin: -3, rymax: 1.5 }),
       {
-        style: 'inline',
+        display: 'inline' as const,
         scale: 0.5,
       },
     ),

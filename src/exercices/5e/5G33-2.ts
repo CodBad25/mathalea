@@ -493,7 +493,7 @@ export default class ProprietesParallelesPerpendiculaires extends Exercice {
               scale: context.vue !== 'latex' ? 0.3 : 0.6,
               mainlevee: false,
               amplitude: 0.3,
-              style: 'display: block',
+              display: 'block',
             },
             objets2,
           ) +
@@ -525,7 +525,7 @@ export default class ProprietesParallelesPerpendiculaires extends Exercice {
           scale: context.vue !== 'latex' ? 0.3 : 0.6,
           mainlevee: false,
           amplitude: 0.3,
-          style: 'display: block',
+          display: 'block',
         },
         objets,
       )

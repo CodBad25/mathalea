@@ -279,7 +279,7 @@ export default class ReperagePaveDroit extends Exercice {
                 context.coeffPerspective *
                 degSin(context.anglePerspective),
             scale: 0.6,
-            style: 'display: block; margin-top:20px;',
+            display: 'block',
           },
           objetsAtracerCorr,
         )
@@ -320,7 +320,7 @@ export default class ReperagePaveDroit extends Exercice {
                 context.coeffPerspective *
                 degSin(context.anglePerspective),
             scale: 0.6,
-            style: 'display: block; margin-top:20px;',
+            display: 'block',
           },
           objetsAtracerCorr,
         )
@@ -450,7 +450,7 @@ export default class ReperagePaveDroit extends Exercice {
               context.coeffPerspective *
               degSin(context.anglePerspective),
           scale: 0.6,
-          style: 'display: block; margin-top:20px;',
+          display: 'block',
         },
         objetsAtracer,
       ) +

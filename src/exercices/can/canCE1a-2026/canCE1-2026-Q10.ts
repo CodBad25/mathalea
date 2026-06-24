@@ -65,7 +65,7 @@ export default class Can2025CE2QXX extends ExerciceCan {
 
     return mathalea2d(
       Object.assign(
-        { scale: 0.5, style: 'display: inline-block', pixelsParCm: 20 },
+        { scale: 0.5, display: 'inline-block', pixelsParCm: 20 } as const,
         fixeBordures(objets),
       ),
       objets,

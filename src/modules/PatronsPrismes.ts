@@ -807,10 +807,10 @@ export class FacePrisme {
     resultat = mathalea2d(
       Object.assign(
         {
-          style: 'display: inline-block',
+          display: 'inline-block',
           scale: zoom,
           id: '' /* `correction1Ex${this.numeroExercice}Q${i}` */,
-        },
+        } as const,
         fixeBordures(lesDessins),
       ),
       lesDessins,

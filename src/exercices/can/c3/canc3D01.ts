@@ -87,7 +87,7 @@ export default class LireHeure extends ExerciceSimple {
           xmax: 3,
           ymax: 3,
           scale: 0.7,
-          style: 'margin: auto',
+          center: true,
         },
         horloge,
       )

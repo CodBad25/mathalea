@@ -60,7 +60,7 @@ export default class AutoF2e extends ExerciceQcmA {
           ymax: yMax,
           pixelsParCm: 25,
           scale: 0.65,
-          style: 'margin: auto',
+          center: true,
         },
         r,
         o,

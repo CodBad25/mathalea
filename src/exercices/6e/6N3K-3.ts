@@ -100,7 +100,7 @@ export default class AjouterDesLegosFractions extends Exercice {
         .render()
       return mathalea2d(
         Object.assign(
-          { scale: 0.5, style: 'display:inline-block;' },
+          { scale: 0.5, display: 'inline-block' } as const,
           fixeBordures([boite], { rxmin: 0, rxmax: 0, rymin: 0, rymax: 0 }),
         ),
         boite,

@@ -79,7 +79,7 @@ export default class LectureGraphiqueParabolebEtc extends Exercice {
           ymax: 4, // Math.max(3, f(0) + 1),
           pixelsParCm: 25,
           scale: 0.6,
-          style: 'margin: auto',
+          center: true,
         },
         r,
         o,

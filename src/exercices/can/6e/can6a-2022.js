@@ -236,7 +236,7 @@ export default class SujetCAN2022Sixieme extends Exercice {
                 xmax: 15,
                 ymax: 2,
                 scale: 0.6,
-                style: 'margin: auto',
+                center: true,
               },
               d,
             )
@@ -580,7 +580,7 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
               mainlevee: false,
               amplitude: 0.5,
               scale: 0.8,
-              style: 'margin: auto',
+              center: true,
             },
             objets,
           )
@@ -738,7 +738,7 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 0.7,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -782,7 +782,7 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 1,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -895,7 +895,7 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
                   xmax: 14,
                   ymax: 1.5,
                   scale: 0.8,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 droiteGraduee({
                   Unite: 3,
@@ -928,7 +928,7 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
                   xmax: 14,
                   ymax: 1.5,
                   scale: 0.8,
-                  style: 'margin: auto',
+                  center: true,
                 },
                 droiteGraduee({
                   Unite: 3,

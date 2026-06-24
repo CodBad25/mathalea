@@ -84,7 +84,7 @@ export default class AutoF4b extends ExerciceQcmA {
     this.enonce +=
       mathalea2d(
         Object.assign(
-          { pixelsParCm: 30, scale: 0.9, style: 'margin: auto' },
+          { pixelsParCm: 30, scale: 0.9, center: true },
           {
             xmin: bornes.xMin - 1,
             ymin: bornes.yMin - 1,
@@ -259,7 +259,7 @@ Cette affirmation est fausse : Les solutions de l'inéquation $f(x) \\geqslant 0
           this.enonce +=
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 1, style: 'margin: auto' },
+                { pixelsParCm: 30, scale: 1, center: true },
                 {
                   xmin: bornes.xMin - 1,
                   ymin: bornes.yMin - 1,
@@ -436,7 +436,7 @@ Cette affirmation est fausse : Les solutions de l'inéquation $f(x) \\geqslant 0
           this.enonce +=
             mathalea2d(
               Object.assign(
-                { pixelsParCm: 30, scale: 1, style: 'margin: auto' },
+                { pixelsParCm: 30, scale: 1, center: true },
                 {
                   xmin: bornes.xMin - 1,
                   ymin: bornes.yMin - 1,

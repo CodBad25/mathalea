@@ -699,7 +699,7 @@ export default class SujetCAN2021Seconde extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 0.8,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
@@ -1058,7 +1058,7 @@ export default class SujetCAN2021Seconde extends Exercice {
                 mainlevee: false,
                 amplitude: 0.5,
                 scale: 0.8,
-                style: 'margin: auto',
+                center: true,
               },
               objets,
             )
