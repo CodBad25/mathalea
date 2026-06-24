@@ -63,7 +63,8 @@ function selectFillInTheBlanksPrompt(mf, direction) {
   const prompts = mf.getPrompts?.()
   if (!Array.isArray(prompts) || prompts.length === 0) return false
 
-  const promptId = direction === 'backward' ? prompts.at(-1) : prompts.at(0)
+  const promptId =
+    direction === 'backward' ? prompts[prompts.length - 1] : prompts[0]
   if (promptId == null) return false
 
   const range = mf.getPromptRange?.(promptId)
@@ -71,6 +72,69 @@ function selectFillInTheBlanksPrompt(mf, direction) {
 
   mf.selection = range
   return true
+}
+
+function isSafariLikeBrowser() {
+  if (typeof navigator === 'undefined') return false
+  return (
+    /\bAppleWebKit\//.test(navigator.userAgent) &&
+    /\bSafari\//.test(navigator.userAgent) &&
+    !/\bChrome\//.test(navigator.userAgent) &&
+    !/\bChromium\//.test(navigator.userAgent)
+  )
+}
+
+function insertInFillInTheBlanksPrompt(mf, text) {
+  if (!mf.isSelectionEditable) {
+    selectFillInTheBlanksPrompt(mf, 'forward')
+  }
+  mf.insert(text)
+}
+
+function handleFillInTheBlanksBeforeInput(event) {
+  const mf = event.currentTarget
+  if (mf.classList.contains('corrected')) return
+
+  if (!isSafariLikeBrowser()) {
+    if (mf.isSelectionEditable) return
+    event.preventDefault()
+    selectFillInTheBlanksPrompt(mf, 'forward')
+    return
+  }
+
+  if (event.inputType === 'insertText' && typeof event.data === 'string') {
+    event.preventDefault()
+    insertInFillInTheBlanksPrompt(mf, event.data)
+    return
+  }
+
+  if (mf.isSelectionEditable) return
+  event.preventDefault()
+  selectFillInTheBlanksPrompt(mf, 'forward')
+}
+
+function handleFillInTheBlanksKeydown(event) {
+  if (
+    event.key.length !== 1 ||
+    event.altKey ||
+    event.ctrlKey ||
+    event.metaKey
+  ) {
+    return
+  }
+  const mf = event.currentTarget
+  if (mf.classList.contains('corrected')) return
+
+  if (isSafariLikeBrowser()) {
+    if (mf.isSelectionEditable) return
+    event.preventDefault()
+    insertInFillInTheBlanksPrompt(mf, event.key)
+    return
+  }
+
+  if (mf.isSelectionEditable) return
+  event.preventDefault()
+  selectFillInTheBlanksPrompt(mf, 'forward')
 }
 
 async function load(name) {
@@ -165,7 +229,15 @@ function injectPromptStyles(mf) {
   if (shadow && !shadow.getElementById('ml-prompt-styles')) {
     const style = document.createElement('style')
     style.id = 'ml-prompt-styles'
+    const hostCaretStyle = isSafariLikeBrowser()
+      ? `
+    :host {
+      caret-color: transparent;
+    }
+    `
+      : ''
     style.textContent = `
+    ${hostCaretStyle}
     .ML__prompt:not(.ML__lockedPromptBox):not(.ML__focusedPromptBox) {
     min-height: 1em !important;
      outline: solid !important;
@@ -215,23 +287,20 @@ export async function loadMathLive(divExercice) {
         mf.addEventListener('focus', handleFocusMathField)
         mf.addEventListener('focusout', handleFocusOutMathField)
         if (mf.classList.contains('fillInTheBlanks')) {
-          let redirecting = false
-          mf.addEventListener('selection-change', () => {
-            if (redirecting || mf.classList.contains('corrected')) return
-            if (mf.matches(':focus-within') && !mf.isSelectionEditable) {
-              redirecting = true
-              mf.executeCommand('moveToNextPlaceholder')
-              requestAnimationFrame(() => {
-                redirecting = false
-              })
-            }
-          })
+          mf.addEventListener(
+            'beforeinput',
+            handleFillInTheBlanksBeforeInput,
+            true,
+          )
+          mf.addEventListener('keydown', handleFillInTheBlanksKeydown, true)
         }
         mf.addEventListener('input', () => {
           const content = mf.getValue()
           // Remplace les espaces consécutifs par un seul espace
           const filteredContent = content.replaceAll('\\,\\,', '\\,')
-          mf.setValue(filteredContent)
+          if (filteredContent !== content) {
+            mf.setValue(filteredContent)
+          }
         })
         if (mf.getAttribute('data-space') === 'true') {
           mf.mathModeSpace = '\\,'
@@ -284,6 +353,8 @@ function handleFocusMathField(event) {
         // ressortir du champ si MathLive a déjà placé la sélection.
         selectFillInTheBlanksPrompt(mf, 'backward')
       } else if (tabDirection === 'forward') {
+        selectFillInTheBlanksPrompt(mf, 'forward')
+      } else if (!mf.isSelectionEditable) {
         selectFillInTheBlanksPrompt(mf, 'forward')
       }
     }, 0)
