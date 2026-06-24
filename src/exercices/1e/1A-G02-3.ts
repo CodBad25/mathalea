@@ -37,6 +37,7 @@ export default class AireQuadrilatereDiagonalesCodeesQcm extends ExerciceQcmA {
     const largeurEnCm = largeurEnMm / 10
     const aireEnCm2 = longueurEnCm * largeurEnCm
     const perimetreEnCm = 2 * (longueurEnCm + largeurEnCm)
+    const produitSansConversion = longueurEnCm * largeurEnMm
 
     const A = pointAbstrait(0, 0, 'A', 'below left')
     const B = pointAbstrait(5, 0.6, 'B', 'below right')
@@ -59,8 +60,8 @@ export default class AireQuadrilatereDiagonalesCodeesQcm extends ExerciceQcmA {
       texteSurSegment(`$${largeurEnMm}\\text{ mm}$`, C, B, 'black', 0.7),
     ]
 
-    this.enonce = `Le quadrilatère $ABCD$ ci-dessous  n'est pas représenté à l'échelle.<br>
-Calculer son aire.<br>
+    this.enonce = `Le quadrilatère $ABCD$ ci-dessous  n'est pas représenté à l'échelle.
+
 ${mathalea2d(
   Object.assign(
     { pixelsParCm: 25, scale: 0.8, center: true },
@@ -72,13 +73,14 @@ ${mathalea2d(
     }),
   ),
   objets,
-)}`
+)}
+Son aire est égale à `
 
     this.reponses = [
       `$${aireEnCm2}\\text{ cm}^2$`,
+      `$${produitSansConversion}\\text{ cm}^2$`,
       `$${perimetreEnCm}\\text{ cm}$`,
       `$${perimetreEnCm}\\text{ cm}^2$`,
-      `$${aireEnCm2}\\text{ cm}$`,
     ]
 
     this.correction = `Les quatre demi-diagonales portent le même codage : les diagonales de $ABCD$ se coupent donc en leur milieu et ont la même longueur.<br>
