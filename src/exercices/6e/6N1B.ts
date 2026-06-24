@@ -189,7 +189,13 @@ export default class NombreDecimalOraliseDeDifferentesManieres extends Exercice 
                 texteApres,
               })
           : ' $\\ldots\\ldots\\ldots$ ' + texteApres
-        handleAnswers(this, i, { reponse: { value: reponse } })
+        handleAnswers(
+          this,
+          i,
+          binomesConversion[i][1] > 3
+            ? { champ1: { value: reponse } }
+            : { reponse: { value: reponse } },
+        )
       }
 
       if (this.questionJamaisPosee(i, ...binomesConversion[i])) {
