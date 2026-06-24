@@ -1,16 +1,15 @@
-
-import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
-import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { mathalea2d } from '../../modules/mathalea2d'
-import ExerciceQcmA from '../ExerciceQcmA'
-import { reduireAxPlusB } from '../../lib/outils/ecritures'
-import { latex2d } from '../../lib/2d/textes'
 import { droite } from '../../lib/2d/droites'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
+import { latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
+import { choice } from '../../lib/outils/arrayOutils'
+import { reduireAxPlusB } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { mathalea2d } from '../../modules/mathalea2d'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '3a64e'
 export const refs = {
@@ -30,7 +29,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ2FMs2026 extends ExerciceQcmA {
-private appliquerLesValeurs(m: number, b: number): void {
+  private appliquerLesValeurs(m: number, b: number): void {
     // Configuration du repère
     const xMin = -4
     const xMax = 5
@@ -86,7 +85,12 @@ private appliquerLesValeurs(m: number, b: number): void {
     const decalageX = m > 0 ? -0.6 : 0.6
     const decalageY = 0.2
 
-    const labelDelta = latex2d('(\\Delta)', xLabel + decalageX, yLabel + decalageY, { color: 'red' })
+    const labelDelta = latex2d(
+      '(\\Delta)',
+      xLabel + decalageX,
+      yLabel + decalageY,
+      { color: 'red' },
+    )
 
     // Placement des points O, I, J
     const o = latex2d('\\text{O}', 0.3, 0.3, { letterSize: 'scriptsize' })
@@ -96,11 +100,12 @@ private appliquerLesValeurs(m: number, b: number): void {
     const fenetreMathalea2d = {
       xmin: xMin - 0.05,
       xmax: xMax + 0.05,
-      ymin: yMin - 0.05,
+      ymin: yMin - 1.05,
       ymax: yMax + 0.05,
       pixelsParCm: 25,
       scale: 0.6,
-      display: 'block' as const, center: true,
+      display: 'block' as const,
+      center: true,
     }
 
     const figure = mathalea2d(fenetreMathalea2d, r, d, labelDelta, o, i, j)
@@ -110,43 +115,48 @@ private appliquerLesValeurs(m: number, b: number): void {
 
     // Génération des équations réduites
     const correct = `y = ${reduireAxPlusB(m, b)}`
-    
+
     // Distracteurs calqués sur l'image (erreur de signe, coefficient directeur doublé ou opposé du double)
     const d1 = `y = ${reduireAxPlusB(-m, b)}`
     const d2 = `y = ${reduireAxPlusB(2 * m, b)}`
     const d3 = `y = ${reduireAxPlusB(-2 * m, b)}`
 
-    this.reponses = [
-      `$${correct}$`,
-      `$${d1}$`,
-      `$${d2}$`,
-      `$${d3}$`
-    ]
+    this.reponses = [`$${correct}$`, `$${d1}$`, `$${d2}$`, `$${d3}$`]
 
     // --- ÉLÉMENTS GRAPHIQUES POUR LA CORRECTION ---
-    
+
     // Marqueur pour l'ordonnée à l'origine
     const traceOrdonnee = tracePoint(A, 'red')
     traceOrdonnee.taille = 3
     traceOrdonnee.epaisseur = 2
-    
+
     // Déplacement horizontal en bleu et en pointillés
     const sHoriz = segment(pointAbstrait(0, b), pointAbstrait(1, b), 'blue')
     sHoriz.epaisseur = 2
     sHoriz.pointilles = 5
-    
+
     // Déplacement vertical en vert et en pointillés
     const sVert = segment(pointAbstrait(1, b), pointAbstrait(1, b + m), 'green')
     sVert.epaisseur = 2
     sVert.pointilles = 5
 
     // Étiquettes sur les pointillés avec les bonnes couleurs
-    const lblHoriz = m > 0 
-      ? latex2d('+1', 0.5, b - 0.5, { letterSize: 'scriptsize', color: 'blue' }) 
-      : latex2d('+1', 0.5, b + 0.5, { letterSize: 'scriptsize', color: 'blue' })
-      
+    const lblHoriz =
+      m > 0
+        ? latex2d('+1', 0.5, b - 0.5, {
+            letterSize: 'scriptsize',
+            color: 'blue',
+          })
+        : latex2d('+1', 0.5, b + 0.5, {
+            letterSize: 'scriptsize',
+            color: 'blue',
+          })
+
     const lblVertTxt = m > 0 ? `+${m}` : `${m}`
-    const lblVert = latex2d(lblVertTxt, 1.6, b + m / 2, { letterSize: 'scriptsize', color: 'green' })
+    const lblVert = latex2d(lblVertTxt, 1.6, b + m / 2, {
+      letterSize: 'scriptsize',
+      color: 'green',
+    })
 
     // FIGURE 2 : Pour la correction (annotée)
     const figureCorr = mathalea2d(
@@ -161,15 +171,15 @@ private appliquerLesValeurs(m: number, b: number): void {
       sHoriz,
       sVert,
       lblHoriz,
-      lblVert
+      lblVert,
     )
 
     // Rédaction de la correction textuelle associée
     const action = m > 0 ? 'monte' : 'descend'
     const uniteAction = Math.abs(m) === 1 ? 'unité' : 'unités'
-    
+
     this.correction = `L'équation réduite d'une droite non parallèle à l'axe des ordonnées est de la forme $y = ax + b$.<br><br>`
-    this.correction += `${figureCorr}<br>`
+    this.correction += `${figureCorr}`
     this.correction += `$\\bullet\\quad$ L'ordonnée à l'origine $b$ se lit sur l'axe des ordonnées  : la droite coupe cet axe en $y = ${b}$, donc $b = ${b}$.<br>`
     this.correction += `$\\bullet\\quad$ Le coefficient directeur $a$ se lit graphiquement : en partant de ce point, lorsqu'on avance de $1$ unité vers la droite (en bleu), la droite ${action} de $${Math.abs(m)}$ ${uniteAction} (en vert).<br>`
     this.correction += `Donc $a = ${m}$.<br><br>`

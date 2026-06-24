@@ -695,6 +695,7 @@ class Latex {
         contents.content += contentVersion.content
         contents.contentCorr += contentVersion.contentCorr
       }
+
       if (latexFileInfos.signal?.aborted) {
         throw new DOMException(
           'Aborted in getContents of Latex.ts',
@@ -721,6 +722,13 @@ class Latex {
         contents.intro += '\n\\begin{document}\n'
       }
     }
+    contents.content = contents.content
+      .replaceAll('\\\\\\\\', '\n\\medskip\n\n')
+      .replace(/\n\s*\\\\/g, '\\\\\n')
+    contents.contentCorr = contents.contentCorr
+      .replaceAll('\\\\\\\\', '\n\\medskip\n\n')
+      .replace(/\n\s*\\\\/g, '\\\\\n')
+
     return contents
   }
 

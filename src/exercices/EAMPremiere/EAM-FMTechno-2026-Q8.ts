@@ -66,7 +66,7 @@ export default class AutoQ8FMt2026 extends ExerciceQcmA {
       {
         xmin: xMin - 0.5,
         xmax: xMax + 0.5,
-        ymin: yMin - 0.05,
+        ymin: yMin - 1.05,
         ymax: yMax + 0.05,
         pixelsParCm: 25,
         scale: 0.6,
@@ -77,7 +77,7 @@ export default class AutoQ8FMt2026 extends ExerciceQcmA {
     )
 
     this.enonce = `On considère la représentation graphique d'une fonction $f$ polynôme du second degré, définie sur $\\mathbb{R}$.<br><br>
-${figure}<br>
+${figure}
 Le tableau de signes de cette fonction $f$ est :`
 
     // --- RÉPONSES (tableaux de signes) ---
