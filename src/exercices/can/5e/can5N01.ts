@@ -1,4 +1,7 @@
-import { miseEnEvidence, texteEnCouleur } from '../../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -35,13 +38,11 @@ export default class SommeDecimale5e extends ExerciceSimple {
     const d = randint(1, 9, [a, b, c])
     this.reponse = arrondi(10 + (b + d) * 0.1 + c * 0.01)
     this.question = `Calculer $${texNombre(a + b * 0.1 + c * 0.01)}+${texNombre(10 - a + d * 0.1)}$.`
-    this.correction = `$${texNombre(a + b * 0.1 + c * 0.01)}+${texNombre(10 - a + d * 0.1)}=${miseEnEvidence(texNombre(10 + (b + d) * 0.1 + c * 0.01))}$`
-    this.correction += texteEnCouleur(`
-    <br> Mentalement : <br>
+    this.correction = `$${texNombre(a + b * 0.1 + c * 0.01)}+${texNombre(10 - a + d * 0.1)}=${miseEnEvidence(texNombre(10 + (b + d) * 0.1 + c * 0.01))}$<br>`
+    this.correction += texteEnCouleur(` Mentalement : <br>
     On fait la somme des parties entières des deux nombres : $${a}+${10 - a}=${10}$, puis on ajoute les parties décimales. <br>
     On obtient :<br>
 $${texNombre(b * 0.1 + c * 0.01)}+${texNombre(d * 0.1)}=${texNombre(b * 0.1 + c * 0.01 + d * 0.1)}$.<br>
-Ainsi, $${texNombre(a + b * 0.1 + c * 0.01)}+${texNombre(10 - a + d * 0.1)}=${texNombre(10 + (b + d) * 0.1 + c * 0.01)}$.
-    `)
+Ainsi, $${texNombre(a + b * 0.1 + c * 0.01)}+${texNombre(10 - a + d * 0.1)}=${texNombre(10 + (b + d) * 0.1 + c * 0.01)}$.`)
   }
 }

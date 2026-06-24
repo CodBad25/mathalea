@@ -46,8 +46,7 @@ export default class MultiplierDeuxDecimaux extends ExerciceSimple {
         this.correction = `$${texNombre(b, 1)}\\times ${c}=${miseEnEvidence(texNombre(Number(this.reponse), 1))}$<br>`
 
         this.correction += texteEnCouleur(
-          `
-    <br> Mentalement : <br>
+          `Mentalement : <br>
    Comme $${texNombre(b, 1)}=${a}\\times 0,1$, alors $${texNombre(b, 1)}\\times ${c}=${a}\\times 0,1\\times ${c} =
    ${a * c}\\times 0,1=${texNombre(Number(this.reponse), 1)}$ `,
           bleuMathalea,
@@ -62,8 +61,7 @@ export default class MultiplierDeuxDecimaux extends ExerciceSimple {
         this.correction = `$${texNombre(b, 2)}\\times ${c}=${miseEnEvidence(texNombre(Number(this.reponse), 2))}$<br>`
 
         this.correction += texteEnCouleur(
-          `
-    <br> Mentalement : <br>
+          `Mentalement : <br>
    Comme $${texNombre(b, 2)}=${a}\\times 0,01$, alors $${texNombre(b, 2)}\\times ${c}=${a}\\times 0,01\\times ${c} =
    ${a * c}\\times 0,01=${texNombre(Number(this.reponse), 2)}$ `,
           bleuMathalea,
@@ -80,8 +78,7 @@ export default class MultiplierDeuxDecimaux extends ExerciceSimple {
         this.correction = `$${texNombre(b, 1)}\\times ${texNombre(d, 1)}=${miseEnEvidence(texNombre(Number(this.reponse), 2))}$<br>`
 
         this.correction += texteEnCouleur(
-          `
-    <br> Mentalement : <br>
+          `Mentalement : <br>
    Comme $${texNombre(b, 1)}=${a}\\times 0,1$ et $${texNombre(d, 1)}=${c}\\times 0,1$,
     alors $${texNombre(b, 1)}\\times ${texNombre(d, 1)}=${a}\\times ${c}\\times 0,1 \\times 0,1=${a * c}\\times 0,01=${texNombre(Number(this.reponse), 2)}$ `,
           bleuMathalea,
@@ -98,8 +95,7 @@ export default class MultiplierDeuxDecimaux extends ExerciceSimple {
         this.correction = `$${texNombre(b, 1)}\\times ${texNombre(d, 2)}=${miseEnEvidence(texNombre(Number(this.reponse), 3))}$<br>`
 
         this.correction += texteEnCouleur(
-          `
-    <br> Mentalement : <br>
+          `Mentalement : <br>
    Comme $${texNombre(b, 1)}=${a}\\times 0,1$ et $${texNombre(d, 2)}=${c}\\times 0,01$,
     alors $${texNombre(b, 1)}\\times ${texNombre(d, 2)}=${a}\\times ${c}\\times 0,01 \\times 0,1=${a * c}\\times 0,001=${texNombre(Number(this.reponse), 3)}$ `,
           bleuMathalea,

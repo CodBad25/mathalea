@@ -71,8 +71,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
               ` Mentalement : <br>
           On commence par calculer le carré de $${x}$, soit $${ecritureParentheseSiNegatif(x)}^2=${texNombre(x ** 2)}$. <br>
    On calcule $${b}\\times ${ecritureParentheseSiNegatif(x)}$ que l'on ajoute à $${texNombre(a * x ** 2)}$, soit $${a * x ** 2}+${ecritureParentheseSiNegatif(b * x)}=${a * x ** 2 + b * x}$.<br>
-  Pour finir, on ajoute   $${c}$, ce qui donne $${texNombre(a * x ** 2 + b * x)}+${c}$, soit $${texNombre(a * x ** 2 + b * x + c)}$.<br>
-    `,
+  Pour finir, on ajoute   $${c}$, ce qui donne $${texNombre(a * x ** 2 + b * x)}+${c}$, soit $${texNombre(a * x ** 2 + b * x + c)}$.<br>`,
               bleuMathalea,
             )
           }
@@ -89,8 +88,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
               On commence par calculer le carré de $${x}$, soit $${ecritureParentheseSiNegatif(x)}^2=${texNombre(x ** 2)}$. <br>
      On multiplie ensuite cette valeur par le coefficient devant $x^2$, soit $${a}\\times ${texNombre(x ** 2)}=${texNombre(a * x ** 2)}$.<br>
       On calcule $${b}\\times ${ecritureParentheseSiNegatif(x)}$ que l'on ajoute à $${texNombre(a * x ** 2)}$, soit $${a * x ** 2}+${ecritureParentheseSiNegatif(b * x)}=${a * x ** 2 + b * x}$.<br>
-      Pour finir, on ajoute   $${c}$, ce qui donne $${texNombre(a * x ** 2 + b * x)}+${c}$, soit $${texNombre(a * x ** 2 + b * x + c)}$.<br>
-        `,
+      Pour finir, on ajoute   $${c}$, ce qui donne $${texNombre(a * x ** 2 + b * x)}+${c}$, soit $${texNombre(a * x ** 2 + b * x + c)}$.<br>`,
               bleuMathalea,
             )
           }
@@ -105,8 +103,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
               ` Mentalement : <br>
           On commence par calculer le carré de $${x}$, soit $${ecritureParentheseSiNegatif(x)}^2=${texNombre(x ** 2)}$. <br>
    On ajoute  $${x}$ soit $${a * x ** 2}+${ecritureParentheseSiNegatif(x)}=${x ** 2 + b * x}$.<br>
-  Pour finir, on ajoute   $${c}$, ce qui donne $${texNombre(a * x ** 2 + b * x)}+${c}$, soit $${texNombre(a * x ** 2 + b * x + c)}$.<br>
-    `,
+  Pour finir, on ajoute   $${c}$, ce qui donne $${texNombre(a * x ** 2 + b * x)}+${c}$, soit $${texNombre(a * x ** 2 + b * x + c)}$.<br>`,
               bleuMathalea,
             )
           }
@@ -123,8 +120,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
           On commence par calculer le carré de $${x}$, soit $${ecritureParentheseSiNegatif(x)}^2=${texNombre(x ** 2)}$. <br>
  On multiplie ensuite cette valeur par le coefficient devant $x^2$, soit $${a}\\times ${texNombre(x ** 2)}=${texNombre(a * x ** 2)}$.<br>
  On ajoute  $${x}$ soit $${a * x ** 2}+${ecritureParentheseSiNegatif(x)}=${a * x ** 2 + b * x}$.<br>
-  Pour finir, on ajoute   $${c}$, ce qui donne $${texNombre(a * x ** 2 + b * x)}+${c}$, soit $${texNombre(a * x ** 2 + b * x + c)}$.<br>
-    `,
+  Pour finir, on ajoute   $${c}$, ce qui donne $${texNombre(a * x ** 2 + b * x)}+${c}$, soit $${texNombre(a * x ** 2 + b * x + c)}$.<br>`,
               bleuMathalea,
             )
           }
@@ -217,8 +213,8 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
 
             this.correction += texteEnCouleur(
               ` Mentalement : <br>
-        On commence par "calculer" la première parenthèse :  $${a}\\times${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(b)}=${a * x + b}$.
-        <br>Puis la deuxième : $${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(d)}=${c * x + d}$.<br>
+        On commence par "calculer" la première parenthèse :  $${a}\\times${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(b)}=${a * x + b}$.<br>
+        Puis la deuxième : $${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(d)}=${c * x + d}$.<br>
         On fait le produit des nombres obtenus : $${a * x + b}\\times ${ecritureParentheseSiNegatif(c * x + d)}=${(a * x + b) * (c * x + d)}$.`,
               bleuMathalea,
             )

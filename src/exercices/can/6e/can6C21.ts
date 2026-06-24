@@ -37,10 +37,9 @@ export default class ComplementAUn extends ExerciceSimple {
   nouvelleVersion() {
     const a = randint(1, 9) / 10 + randint(1, 9) / 100
     this.question = `Calculer $1-${texNombre(a)}$.`
-    this.correction = `$1-${texNombre(a)}=${miseEnEvidence(texNombre(1 - a))}$<br>`
+    this.correction = `$1-${texNombre(a)}=${miseEnEvidence(texNombre(1 - a))}$<br><br>`
     this.correction += texteEnCouleur(
-      `
-    <br> Mentalement : <br>
+      `Mentalement : <br>
     $1$ unité = $100$ centièmes.<br>
     On enlève $${texNombre(100 * a)}$ centièmes à $100$ centièmes, il en reste $${texNombre(100 * (1 - a))}$.<br>
     Ainsi, $1-${texNombre(a)}=${texNombre(1 - a)}$.  `,

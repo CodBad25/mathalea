@@ -42,22 +42,20 @@ export default class ComplementAUn extends ExerciceSimple {
       case 1:
         a = randint(2, 9) / 10
         correctionSup = texteEnCouleur(
-          `
-    <br> Mentalement : <br>
+          `Mentalement : <br>
     $1$ unité = $10$ dixièmes.<br>
     On enlève $${texNombre(10 * a)}$ dixièmes à $10$ dixièmes, il en reste $${texNombre(10 * (1 - a))}$.<br>
-    Ainsi, $1-${texNombre(a)}=${texNombre(1 - a)}$.  `,
+    Ainsi, $1-${texNombre(a)}=${texNombre(1 - a)}$.`,
           bleuMathalea,
         )
         break
       case 2:
         a = randint(2, 9) / 100
         correctionSup = texteEnCouleur(
-          `
-    <br> Mentalement : <br>
+          `Mentalement : <br>
     $1$ unité = $100$ centièmes.<br>
     On enlève $${texNombre(100 * a)}$ centièmes à $100$ centièmes, il en reste $${texNombre(100 * (1 - a))}$.<br>
-    Ainsi, $1-${texNombre(a)}=${texNombre(1 - a)}$.  `,
+    Ainsi, $1-${texNombre(a)}=${texNombre(1 - a)}$.`,
           bleuMathalea,
         )
         break
@@ -65,11 +63,10 @@ export default class ComplementAUn extends ExerciceSimple {
       default:
         a = randint(2, 9) / 1000
         correctionSup = texteEnCouleur(
-          `
-    <br> Mentalement : <br>
+          `Mentalement : <br>
     $1$ unité = $1000$ millièmes.<br>
     On enlève $${texNombre(1000 * a)}$ millièmes à $1000$ millièmes, il en reste $${texNombre(1000 * (1 - a))}$.<br>
-    Ainsi, $1-${texNombre(a)}=${texNombre(1 - a)}$.  `,
+    Ainsi, $1-${texNombre(a)}=${texNombre(1 - a)}$.`,
           bleuMathalea,
         )
         break

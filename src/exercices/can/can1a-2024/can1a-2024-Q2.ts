@@ -46,8 +46,7 @@ export default class PointsCourbe extends ExerciceSimple {
     $\\begin{aligned}
         f(${abs})&=${ecritureParentheseSiNegatif(abs)}^2${ecritureAlgebrique(a)}\\\\
         &=${abs ** 2 + a}
-        \\end{aligned}$
-        <br>
+        \\end{aligned}$<br>
         ${
           abs ** 2 + a === ord
             ? `Le point $A$ est bien sur la parabole.<br> L'affirmation est ${texteEnCouleurEtGras('Vraie')}`

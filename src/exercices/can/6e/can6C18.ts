@@ -33,12 +33,10 @@ export default class ResteDivisionEuclidienne1 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    let a, b, c, d, q, r
-
-    a = randint(7, 9)
-    b = randint(1, a - 1)
-    d = randint(5, 9)
-    c = d * a + b
+    const a = randint(7, 9)
+    const b = randint(1, a - 1)
+    const d = randint(5, 9)
+    const c = d * a + b
     this.reponse = c % a
     this.question = `Je possède $${c}$ bonbons et je fabrique des sacs de $${a}$ bonbons.<br>
      Une fois mes sacs complétés, combien me restera-t-il de bonbons ?`
@@ -48,26 +46,21 @@ export default class ResteDivisionEuclidienne1 extends ExerciceSimple {
       this.correction = `Il me restera $${miseEnEvidence(b)}$ bonbons.<br>`
     }
     this.correction += texteEnCouleur(
-      `
-    <br> Mentalement : <br>
+      `Mentalement : <br>
     On cherche un multiple de $${a}$ inférieur à $${c}$ (mais le plus grand possible).
      C'est $${c - (c % a)}$. <br> `,
       bleuMathalea,
     )
     if (b === 1) {
       this.correction += texteEnCouleur(
-        `
-     Comme $${c}=${c - (c % a)} + ${b}$, donc il me restera $${b}$ bonbon.<br>
-     Remarque : je pourrai faire $${(c - (c % a)) / a}$ sacs complets.
-     `,
+        `Comme $${c}=${c - (c % a)} + ${b}$, donc il me restera $${b}$ bonbon.<br>
+     Remarque : je pourrai faire $${(c - (c % a)) / a}$ sacs complets.`,
         bleuMathalea,
       )
     } else {
       this.correction += texteEnCouleur(
-        `
-     Comme $${c}=${c - (c % a)} + ${b}$, donc il me restera $${b}$ bonbons.<br>
-     Remarque : je pourrai faire $${(c - (c % a)) / a}$ sacs complets.
-     `,
+        `Comme $${c}=${c - (c % a)} + ${b}$, donc il me restera $${b}$ bonbons.<br>
+     Remarque : je pourrai faire $${(c - (c % a)) / a}$ sacs complets.`,
         bleuMathalea,
       )
     }

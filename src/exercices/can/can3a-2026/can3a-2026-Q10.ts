@@ -33,12 +33,11 @@ export default class Can32026Q10 extends ExerciceCan {
 
     this.reponse = (a * b) / 100
     this.question = `$${a}\\,\\%$ de $${b}$`
-    this.correction = `$10\\,\\%$ de $${b}$ est égal à $${texNombre(b)}\\div 10 = ${a === 10 ? `${miseEnEvidence(texNombre(b / 10, 0))}` : `${texNombre(b / 10, 0)}`}$.
+    this.correction = `$10\\,\\%$ de $${b}$ est égal à $${texNombre(b)}\\div 10 = ${a === 10 ? `${miseEnEvidence(texNombre(b / 10, 0))}` : `${texNombre(b / 10, 0)}`}$.<br>
       ${
         a === 10
           ? ``
-          : `<br>
-      Donc $${a}\\,\\%$ de $${b}$ est égal à $${texNombre(a / 10, 0)}\\times ${texNombre(b / 10, 0)}=${miseEnEvidence(texNombre((a * b) / 100, 2))}$.`
+          : `Donc $${a}\\,\\%$ de $${b}$ est égal à $${texNombre(a / 10, 0)}\\times ${texNombre(b / 10, 0)}=${miseEnEvidence(texNombre((a * b) / 100, 2))}$.`
       }`
 
     if (this.interactif) {

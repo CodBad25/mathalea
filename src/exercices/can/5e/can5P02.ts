@@ -82,7 +82,7 @@ export default class PoucentageP2 extends ExerciceSimple {
         Parmi ces ${n}, il y a $${c}\\,\\%$  de ${d}.<br>
         $${c}\\,\\%$  de $${texNombre((b * a) / 100)}=${texNombre(c / 100, 2)}\\times ${texNombre((b * a) / 100, 2)}=${texNombre((c * b * a) / 10000, 2)}$.<br>
         Il y a donc $${miseEnEvidence(texNombre((c * b * a) / 10000, 2))}$ ${n} de type ${d} dans cette ville.<br>`
-        this.correction += texteEnCouleur(` Mentalement : <br>
+        this.correction += texteEnCouleur(`Mentalement : <br>
                 Prendre $10\\,\\%$  d'une quantité revient à la diviser par $10$. <br>
        Pour calculer $20\\,\\%$, $30\\,\\, \\%$, $40\\,\\%$, .... d'une quantité, on
        commence par calculer  $10\\,\\%$  de cette quantité en la divisant par $10$, puis on multiplie

@@ -31,7 +31,7 @@ export default class CalculPrix extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-  this.optionsDeComparaison = {
+    this.optionsDeComparaison = {
       nombreDecimalSeulement: true,
     }
     this.optionsChampTexte = { texteApres: '€', texteAvant: '<br>' }
@@ -58,26 +58,19 @@ export default class CalculPrix extends ExerciceSimple {
         b2 = b1 * a
         reponse = b2
         this.question = `Le prix d'un kg ${n} est $${texPrix(a)}$ €. <br>
-
-        Quel est le prix de $${b}$ g ? `
+Quel est le prix de $${b}$ g ? `
 
         this.correction = `Comme $${b}$ g $=${texNombre(b1, 1)}$ kg, le  prix  de $${b}$ g ${n} est donné par : <br>
         $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b2, 2)}$.<br>
         Le prix de $${b}$ g ${n} est $${miseEnEvidence(texPrix(b2))}$ €.`
         if (b !== 100) {
           if (b === 500) {
-            this.correction += texteEnCouleur(`
-  <br> Mentalement : <br>
+            this.correction += texteEnCouleur(` Mentalement : <br>
   Multiplier par $0,5$ revient à diviser par $2$. <br>
-  Ainsi, $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texPrix(a)}\\div 2=${texPrix(reponse)}$.
-
-`)
+  Ainsi, $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texPrix(a)}\\div 2=${texPrix(reponse)}$.`)
           } else {
-            this.correction += texteEnCouleur(`
-  <br> Mentalement : <br>
-  $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b1 * 10, 1)}\\times 0,1\\times ${texNombre(a, 1)}=${texNombre(b1 * 10, 1)}\\times ${texNombre(a / 10, 1)}=${texPrix(reponse)}$.
-
-`)
+            this.correction += texteEnCouleur(`Mentalement : <br>
+  $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b1 * 10, 1)}\\times 0,1\\times ${texNombre(a, 1)}=${texNombre(b1 * 10, 1)}\\times ${texNombre(a / 10, 1)}=${texPrix(reponse)}$.`)
           }
         } else {
           this.correction += ''
@@ -94,26 +87,19 @@ export default class CalculPrix extends ExerciceSimple {
         b2 = b1 * a
         reponse = b2
         this.question = `Le prix d'un kg ${n} est $${texPrix(a)}$ €. <br>
-
-        Quel est le prix de $${b}$ g ? `
+Quel est le prix de $${b}$ g ? `
 
         this.correction = `Comme $${b}$ g $=${texNombre(b1, 1)}$ kg, le  prix  de $${b}$ g ${n} est donné par : <br>
         $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b2, 2)}$.<br>
         Le prix de $${b}$ g ${n} est $${miseEnEvidence(texPrix(b2))}$ €.`
         if (b !== 100) {
           if (b === 500) {
-            this.correction += texteEnCouleur(`
-  <br> Mentalement : <br>
+            this.correction += texteEnCouleur(`Mentalement : <br>
   Multiplier par $0,5$ revient à diviser par $2$. <br>
-  Ainsi, $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texPrix(a)}\\div 2=${texPrix(reponse)}$.
-
-`)
+  Ainsi, $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texPrix(a)}\\div 2=${texPrix(reponse)}$.`)
           } else {
-            this.correction += texteEnCouleur(`
-  <br> Mentalement : <br>
-  $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b1 * 10, 1)}\\times 0,1\\times ${texNombre(a, 1)}=${texNombre(b1 * 10, 1)}\\times ${texNombre(a / 10, 1)}=${texPrix(reponse)}$.
-
-`)
+            this.correction += texteEnCouleur(`Mentalement : <br>
+  $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b1 * 10, 1)}\\times 0,1\\times ${texNombre(a, 1)}=${texNombre(b1 * 10, 1)}\\times ${texNombre(a / 10, 1)}=${texPrix(reponse)}$.`)
           }
         } else {
           this.correction += ''
@@ -141,26 +127,19 @@ export default class CalculPrix extends ExerciceSimple {
         b2 = b1 * a
         reponse = b2
         this.question = `Le prix d'un kg de café ${n} est $${texPrix(a)}$ €. <br>
-
-          Quel est le prix de $${b}$ g ? `
+Quel est le prix de $${b}$ g ? `
 
         this.correction = `Comme $${b}$ g $=${texNombre(b1, 1)}$ kg, le  prix  de $${b}$ g de café ${n} est donné par : <br>
           $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b2, 2)}$.<br>
           Le prix de $${b}$ g de café ${n} est $${miseEnEvidence(texPrix(b2))}$ €.`
         if (b !== 100) {
           if (b === 500) {
-            this.correction += texteEnCouleur(`
-    <br> Mentalement : <br>
+            this.correction += texteEnCouleur(` Mentalement : <br>
     Multiplier par $0,5$ revient à diviser par $2$. <br>
-    Ainsi, $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texPrix(a)}\\div 2=${texPrix(reponse)}$.
-
-  `)
+    Ainsi, $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texPrix(a)}\\div 2=${texPrix(reponse)}$.`)
           } else {
-            this.correction += texteEnCouleur(`
-    <br> Mentalement : <br>
-    $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b1 * 10, 1)}\\times 0,1\\times ${texNombre(a, 1)}=${texNombre(b1 * 10, 1)}\\times ${texNombre(a / 10, 1)}=${texPrix(reponse)}$.
-
-  `)
+            this.correction += texteEnCouleur(`Mentalement : <br>
+    $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b1 * 10, 1)}\\times 0,1\\times ${texNombre(a, 1)}=${texNombre(b1 * 10, 1)}\\times ${texNombre(a / 10, 1)}=${texPrix(reponse)}$.`)
           }
         } else {
           this.correction += ''
