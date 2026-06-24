@@ -3,7 +3,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
-export const titre = "Calculer le volume d'un cône"
+export const titre = "Calculer le volume d'un cône (sans figure)"
 export const dateDePublication = '23/06/2026'
 
 export const uuid = 'b3a06'
@@ -30,7 +30,7 @@ export default class VolumeConeQcm extends ExerciceQcmA {
     const volumeAvecPiDecimal = coefficientVolume * 3.14
 
     this.enonce = `Un cône a pour rayon de base $${rayon}\\text{ cm}$ et pour hauteur $${hauteur}\\text{ cm}$.<br>
-La valeur exacte de son volume est :`
+La valeur exacte de son volume est `
 
     this.reponses = [
       `$${texNombre(coefficientVolume)}\\pi\\text{ cm}^3$`,

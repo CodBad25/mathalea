@@ -36,11 +36,11 @@ export default class AireTriangleQuelconqueQcm extends ExerciceQcmA {
     const aire = produit / 2
 
     const A = pointAbstrait(0, 0, 'A', 'below left')
-    const B = pointAbstrait(6, 0, 'B', 'below right')
+    const B = pointAbstrait(6.5, 0, 'B', 'below right')
     const H = pointAbstrait(4.2, 0, 'H', 'below')
     const C = pointAbstrait(4.2, 3.4, 'C', 'above')
     const coteBaseDepart = pointAbstrait(0, -1)
-    const coteBaseArrivee = pointAbstrait(6, -1)
+    const coteBaseArrivee = pointAbstrait(6.5, -1)
     const triangle = polygone([A, B, C])
     triangle.epaisseur = 2
     const hauteurTracee = segment(C, H)
@@ -62,9 +62,9 @@ export default class AireTriangleQuelconqueQcm extends ExerciceQcmA {
         coteBaseArrivee,
         coteBaseDepart,
         'black',
-        -0.35,
+        0.35,
       ),
-      texteSurSegment(`$${hauteur}\\text{ cm}$`, C, H, 'black', -0.35),
+      texteSurSegment(`$${hauteur}\\text{ cm}$`, C, H, 'black', 0.35),
     ]
 
     const figure = mathalea2d(
