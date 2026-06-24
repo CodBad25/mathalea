@@ -15,7 +15,7 @@ describe('mathalea2d layout options', () => {
   it('serializes the default HTML layout as block', () => {
     context.isHtml = true
 
-    expect(mathalea2d()).toContain('style="display: block"')
+    expect(mathalea2d()).toContain('style="display: block;"')
     expect(mathalea2d()).toContain(
       'style="position: relative; display: inline-block"',
     )
@@ -28,15 +28,15 @@ describe('mathalea2d layout options', () => {
   ] as const)('serializes display %s in HTML', (display, expectedStyle) => {
     context.isHtml = true
 
-    expect(mathalea2d({ display })).toContain(`style="${expectedStyle}"`)
+    expect(mathalea2d({ display })).toContain(`style="${expectedStyle};"`)
   })
 
-  it('serializes centered HTML layout with a centering outer wrapper', () => {
+  it('serializes centered HTML layout with automatic margins', () => {
     context.isHtml = true
 
     const html = mathalea2d({ center: true })
 
-    expect(html).toContain('style="display: flex; justify-content: center"')
+    expect(html).toContain('style="display: block; margin: auto;"')
     expect(html).toContain(
       'style="position: relative; display: inline-block"',
     )
@@ -47,7 +47,7 @@ describe('mathalea2d layout options', () => {
 
     const html = mathalea2d({ display: 'inline-block', center: true })
 
-    expect(html).toContain('style="display: flex; justify-content: center"')
+    expect(html).toContain('style="display: inline-block; margin: auto;"')
   })
 
   it('treats omitted display like block for LaTeX line breaks', () => {
@@ -94,7 +94,7 @@ describe('operation layout options', () => {
       center: true,
     })
 
-    expect(html).toContain('style="display: flex; justify-content: center"')
+    expect(html).toContain('style="display: inline-block; margin: auto;"')
   })
 
   it('forwards display and center from additionMultiplePosee', () => {
@@ -105,7 +105,7 @@ describe('operation layout options', () => {
       center: true,
     })
 
-    expect(html).toContain('style="display: flex; justify-content: center"')
+    expect(html).toContain('style="display: inline; margin: auto;"')
   })
 })
 
