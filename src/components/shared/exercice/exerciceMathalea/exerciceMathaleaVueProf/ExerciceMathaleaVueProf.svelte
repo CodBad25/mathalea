@@ -33,12 +33,12 @@
   } from '../../../../../lib/types'
   import type { HeaderProps } from '../../../../../lib/types/ui'
   import { loadMathLive } from '../../../../../modules/loaders'
+  import ButtonTextAction from '../../../forms/ButtonTextAction.svelte'
+  import BasicClassicModal from '../../../modal/BasicClassicModal.svelte'
   import { countMathField } from '../../countMathField'
   import { handleCorrectionAffichee } from '../../handleCorrection'
   import HeaderExerciceVueProf from '../../shared/headerExerciceVueProf/HeaderExerciceVueProf.svelte'
   import Settings from './presentationalComponents/Settings.svelte'
-  import BasicClassicModal from '../../../modal/BasicClassicModal.svelte'
-  import ButtonTextAction from '../../../forms/ButtonTextAction.svelte'
 
   let isIndiceModalDisplayed = false
   let isTipAvailable: boolean
@@ -65,9 +65,7 @@
   let exercicesNumber: number = get(exercicesParams).length
 
   let id: string =
-    interfaceParams && interfaceParams.id
-      ? interfaceParams.id
-      : ''
+    interfaceParams && interfaceParams.id ? interfaceParams.id : ''
 
   const subscribeExercicesParamsStore = exercicesParams.subscribe((value) => {
     log('new interface')
@@ -704,7 +702,10 @@
                 }}
               />
             </div>
-            <BasicClassicModal bind:isDisplayed={isIndiceModalDisplayed} icon="bx-help-circle">
+            <BasicClassicModal
+              bind:isDisplayed={isIndiceModalDisplayed}
+              icon="bx-help-circle"
+            >
               <span slot="header">Indice</span>
               <!-- eslint-disable-next-line svelte/no-at-html-tags -->
               <div slot="content" class="text-left">{@html exercise.tip}</div>
@@ -754,11 +755,16 @@
                     id="exercice{exerciseIndex}Q{i}"
                     style="line-height: {exercise.spacing || 1}"
                   >
-                    {#if exercise.questionRefs?.[i]}
-                      <span class="text-xs font-mono text-coopmaths-struct dark:text-coopmathsdark-struct mr-2">{exercise.questionRefs[i]}</span><br>
-                    {/if}
-                    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                    {@html mathaleaFormatExercice(item)}
+                    <div style="display: inline-block; vertical-align: top;">
+                      {#if exercise.questionRefs?.[i]}
+                        <span
+                          class="text-xs font-mono text-coopmaths-struct dark:text-coopmathsdark-struct mr-2"
+                          >{exercise.questionRefs[i]}</span
+                        ><br />
+                      {/if}
+                      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                      {@html mathaleaFormatExercice(item)}
+                    </div>
                   </li>
                   {#if isCorrectionVisible}
                     <!-- EE : remplacement de ce class pour celui du dessous class="relative border-l-coopmaths-struct dark:border-l-coopmathsdark-struct border-l-[3px] text-coopmaths-corpus dark:text-coopmathsdark-corpus mt-6 lg:mt-2 mb-6 py-2 pl-4"  -->

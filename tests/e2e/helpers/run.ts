@@ -309,6 +309,8 @@ async function fillMathField(
       await champTexteMathlive.pressSequentially(answer[i].toString())
     }
   } else {
+    await champTexteMathlive.focus()
+    await page.waitForTimeout(100)
     await champTexteMathlive.click()
     await page.waitForTimeout(100) // Ajout d'un délai pour s'assurer que le champ est prêt à recevoir la saisie
     await champTexteMathlive.pressSequentially(
