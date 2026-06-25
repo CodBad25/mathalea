@@ -49,7 +49,7 @@ export default class LireCoordonneesPointQCM extends ExerciceQcmA {
         pixelsParCm: 30,
         scale: 0.75,
         display: 'block',
-        center: true
+        center: true,
       },
       repere({
         xMin,
@@ -82,10 +82,8 @@ export default class LireCoordonneesPointQCM extends ExerciceQcmA {
     const propositions = [
       bonneReponse,
       this.coordonneesTex(label, y, x),
-      this.coordonneesTex(label, x, y, true),
       this.coordonneesTex(label, -x, y),
       this.coordonneesTex(label, x, -y),
-      this.coordonneesTex(label, y, x, true),
       this.coordonneesTex(label, -y, -x),
     ]
     this.reponses = [...new Set(propositions)].slice(0, 4)
