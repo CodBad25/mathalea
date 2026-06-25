@@ -17,11 +17,16 @@
     id="exercice{exerciseIndex}Q{questionIndex}"
     style="line-height: {exercise.spacing || 1}"
   >
-    {#if exercise.questionRefs?.[questionIndex]}
-      <span class="text-xs font-mono text-coopmaths-struct dark:text-coopmathsdark-struct mr-2">{exercise.questionRefs[questionIndex]}</span><br>
-    {/if}
-    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-    {@html mathaleaFormatExercice(exercise.listeQuestions[questionIndex])}
+    <div style="display: inline-block; vertical-align: top;">
+      {#if exercise.questionRefs?.[questionIndex]}
+        <span
+          class="text-xs font-mono text-coopmaths-struct dark:text-coopmathsdark-struct mr-2"
+          >{exercise.questionRefs[questionIndex]}</span
+        ><br />
+      {/if}
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+      {@html mathaleaFormatExercice(exercise.listeQuestions[questionIndex])}
+    </div>
   </li>
   {#if isCorrectionVisible}
     <div
