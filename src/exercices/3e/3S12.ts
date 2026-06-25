@@ -1,5 +1,6 @@
 import { traceBarre } from '../../lib/2d/diagrammes'
 import { repere } from '../../lib/2d/reperes'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
@@ -18,8 +19,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Calculer des effectifs et des fréquences'
 export const interactifReady = true
@@ -37,7 +36,7 @@ export const dateDeModifImportante = '18/04/2026' // passage en MultiMathfield
 export const uuid = 'f4b96'
 
 export const refs = {
-  'fr-fr': ['3S12', '2S20-1', 'BP2AutoA5', 'BP2SP2'],
+  'fr-fr': ['3S12', 'BP2AutoA5', 'BP2SP2'],
   'fr-ch': [],
 }
 export default class CalculEffectifFrequence extends Exercice {
