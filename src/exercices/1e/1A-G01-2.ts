@@ -48,7 +48,8 @@ export default class LireCoordonneesPointQCM extends ExerciceQcmA {
         ymax: yMax,
         pixelsParCm: 30,
         scale: 0.75,
-        style: 'display: block; margin: 1rem auto;',
+        display: 'block',
+        center: true
       },
       repere({
         xMin,
