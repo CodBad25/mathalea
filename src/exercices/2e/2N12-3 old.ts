@@ -25,8 +25,8 @@ export const dateDePublication = '28/09/2022' // La date de publication initiale
 export const uuid = 'ed2ee'
 
 export const refs = {
-  'fr-fr': ['2N12-3'],
-  'fr-ch': ['10NO3-5'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
   constructor() {

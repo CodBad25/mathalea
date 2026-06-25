@@ -35,7 +35,7 @@ export const uuid = 'fd4d8'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['9NO4-18'],
+  'fr-ch': [],
 }
 export default class ExerciceLabyrintheMultiplesOld extends Exercice {
   niveau: string

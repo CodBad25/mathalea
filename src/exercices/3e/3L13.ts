@@ -7,7 +7,7 @@ export const titre = 'Résoudre une équation du premier degré'
 export const dateDeModifImportante = '02/04/2024'
 export const uuid = 'f239f'
 export const refs = {
-  'fr-fr': ['3L13', 'BP2RES10', '3AutoN14-1'],
+  'fr-fr': ['3L13', 'BP2RES10'],
   'fr-ch': ['11FA6-3'],
 }
 export default class ExerciceEquation3e extends ExerciceEquation1 {

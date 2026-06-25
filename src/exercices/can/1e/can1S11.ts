@@ -28,7 +28,7 @@ export const dateDePublication = '16/02/2022' // La date de publication initiale
 export const uuid = '88acd'
 
 export const refs = {
-  'fr-fr': ['can1S13'],
+  'fr-fr': ['can1S11'],
   'fr-ch': [],
 }
 export default class NatureSuiteEx extends Exercice {

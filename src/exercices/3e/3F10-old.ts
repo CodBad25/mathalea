@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -15,8 +16,6 @@ import { getLang } from '../../lib/stores/languagesStore'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Lire images et antécédents depuis un tableau de valeurs'
 export const interactifReady = true
@@ -30,8 +29,8 @@ export const amcType = 'AMCHybride'
 export const uuid = 'b92db'
 
 export const refs = {
-  'fr-fr': ['3F10', 'BP2AutoO1'],
-  'fr-ch': ['10FA5-4', '1mF1-6'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
   constructor() {
