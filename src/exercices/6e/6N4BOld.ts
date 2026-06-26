@@ -62,7 +62,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export default class PatternIteratifOld extends Exercice {
+export default class PatternIteratif6eOld extends Exercice {
   destroyers: (() => void)[] = []
 
   constructor() {

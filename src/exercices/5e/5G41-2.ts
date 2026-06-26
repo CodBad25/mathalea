@@ -21,6 +21,6 @@ export const refs = {
 export default class ConstruireQuadrilatèresParticuliers extends TracerQuadrilatèresParticuliers {
   constructor() {
     super()
-    this.sup = '0'
+    this.sup = '1-2-3-4-5-6'
   }
 }
