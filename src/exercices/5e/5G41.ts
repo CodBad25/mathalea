@@ -87,7 +87,6 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
     this.besoinFormulaire3CaseACocher = ['Cible présente']
     this.besoinFormulaire4CaseACocher = ['Points présents (si cible absente)']
     this.nbQuestions = 1
-    //this.nbQuestionsModifiable = false
 
     this.sup = 8
     this.sup2 = 2
@@ -113,7 +112,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
           defaut: 8,
           enleveDoublons: true,
         }).map(Number)
-    else {
+    else if (this.exo === '5G41-4') {
       // Pour l'exercice 5G41-4
       typesDeFigures = gestionnaireFormulaireTexte({
         nbQuestions: this.nbQuestions,
@@ -127,6 +126,21 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
         if (n === 3) return 5
         if (n === 4) return 6
         if (n === 5) return 7
+        return n
+      })
+    } else {
+      // Pour l'exercice 5G41-5
+      typesDeFigures = gestionnaireFormulaireTexte({
+        nbQuestions: this.nbQuestions,
+        saisie: this.sup,
+        max: 2,
+        melange: 3,
+        defaut: 3,
+        enleveDoublons: true,
+      }).map(Number)
+      typesDeFigures = typesDeFigures.map((n) => {
+        if (n === 1) return 3
+        if (n === 2) return 4
         return n
       })
     }
@@ -190,7 +204,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
             texteCorr += `Nommons $${noms[4]}$, le milieu de $[${noms[1] + noms[3]}]$. $${noms[2]}$ est le symétrique de $${noms[0]}$ par rapport à $${noms[4]}$.<br>`
             texteCorr += `Construisons tout d'abord le triangle $${noms[0] + noms[1] + noms[3]}$.<br>Puis plaçons $${noms[4]}$, le milieu de $[${noms[1] + noms[3]}]$ et enfin le point $${noms[2]}$.<br>`
           }
-          if (this.exo === 'originel')
+          if (this.exo !== '5G41-4')
             if (longueur(B, D) !== longueur(A, C)) {
               texteCorr += `Comme $${noms[0] + noms[3]}\\ne ${noms[0] + noms[1]}$ et que $${noms[0] + noms[2]}\\ne ${noms[3] + noms[1]}$, le parallélogramme $${nom}$ n'est ni un losange, ni un rectangle.<br>`
               texteCorr += `$${miseEnEvidence(nom)}$ ${texteEnCouleurEtGras("n'est pas un parallélogramme particulier")}.<br>`
@@ -232,7 +246,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
             texteCorr += `Construisons ensuite un angle $\\widehat{${noms[0] + noms[4] + 'x'}}$ de mesure $${alpha}^\\circ$.<br>`
             texteCorr += `Construisons enfin le point $${noms[1]}$ sur $[${noms[4]}x)$ et son symétrique $${noms[3]}$ par rapport à $${noms[4]}$ situés tous les deux à $${texNombre(arrondi(c4 / 2))}\\text{ cm}$ de $${noms[4]}$.<br>`
           }
-          if (this.exo === 'originel')
+          if (this.exo !== '5G41-4')
             texteCorr += `$${miseEnEvidence(nom)}$ ${texteEnCouleurEtGras("n'est pas un parallélogramme particulier")}.<br>`
           xm = Math.min(A.x, B.x, C.x) - 0.8
           ym = Math.min(A.y, B.y, C.y) - 0.8
@@ -329,7 +343,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
             texteCorr += `Désignons $${noms[4]}$ le milieu de $[${noms[1] + noms[3]}]$.<br>`
             texteCorr += `Construisons ensuite le point $${noms[2]}$ symétrique  de $${noms[0]}$ par rapport à $${noms[4]}$, milieu de $[${noms[1] + noms[3]}]$.<br>`
           }
-          if (this.exo === 'originel') {
+          if (this.exo !== '5G41-4') {
             texteCorr += `Comme $${nom}$ est un parallélogramme qui ne possède pas d'angle droit et que ses côtés consécutifs sont de longueurs différentes, `
             texteCorr += `$${miseEnEvidence(nom)}$ ${texteEnCouleurEtGras("n'est pas un parallélogramme particulier")}.<br>`
           }
@@ -365,7 +379,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
             texteCorr += `Construisons tout d'abord le triangle $${noms[0] + noms[1] + noms[4]}$ `
             texteCorr += `puis les points $${noms[2]}$ et $${noms[3]}$ symétriques respectifs de $${noms[0]}$ et $${noms[1]}$ par rapport à $${noms[4]}$.<br>`
           }
-          if (this.exo === 'originel') {
+          if (this.exo !== '5G41-4') {
             if (c1 * c1 !== c2 * c2 + c3 * c3) {
               texteCorr += `Le triangle $${noms[0] + noms[1] + noms[4]}$ n'est pas un triangle rectangle, donc les diagonales ne sont pas perpendiculaires.<br>`
               if (c2 === c3)
@@ -418,7 +432,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
             texteCorr += `puis le point $${noms[3]}$ symétrique de $${noms[1]}$ par rapport à $${noms[4]}$.<br>`
           }
 
-          if (this.exo === 'originel') {
+          if (this.exo !== '5G41-4') {
             texteCorr += `Le triangle $${noms[0] + noms[1] + noms[2]}$ n'est pas un triangle isocèle car ses angles ne sont pas égaux.<br>`
             texteCorr += `De plus, dans ce triangle $${noms[0] + noms[1] + noms[2]}$,  l'angle $\\widehat{${noms[0] + noms[1] + noms[2]}}$ mesure $${180 - c2 - c3}^\\circ$ et n'est pas droit donc $${miseEnEvidence(nom)}$ ${texteEnCouleurEtGras("n'est pas un parallélogramme particulier")}.<br>`
           }
@@ -445,7 +459,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
       }
       let texteAMC = texte + `Construire le parallélogramme $${nom}$<br><br>`
       texte +=
-        this.exo === 'originel'
+        this.exo !== '5G41-4'
           ? `Préciser si c'est un parallélogramme particulier puis construire le parallélogramme $${nom}$.<br>`
           : `Construire le parallélogramme $${nom}$.<br>`
       texteAMC +=
