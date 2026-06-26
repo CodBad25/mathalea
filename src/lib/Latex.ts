@@ -1162,7 +1162,7 @@ export function format(
   formattedText = formattedText
     .replace(/(\d+)\s*°/g, '\\ang{$1}')
     .replace(/\n(<br *\/?>)/g, '$1')
-    .replace(/<br>/g, '\\\\')
+    .replace(/<br>/g, '\n\n')
     .replace(/( )?€( )/g, '\\,\\euro{}~')
     .replace(/( )?€/g, '\\,\\euro{}')
     .replace(/\\\\\s*\n\n/gm, '\\\\')
@@ -1170,6 +1170,7 @@ export function format(
     .replaceAll('»', '\\fg{}')
     .replaceAll('œ', '\\oe ')
     .replaceAll('°', '$^\\circ$ ')
+    .replaceAll('\n\n\n', '\n\n') // une ligne vide... pas 2
 
   // Check if the language is 'fr-CH' and replace \times with \cdot if true
   if (lang === 'fr-CH') {
