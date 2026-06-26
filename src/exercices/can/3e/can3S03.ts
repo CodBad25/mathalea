@@ -12,7 +12,6 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
- * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
  */
 export const uuid = 'd86be'
@@ -132,6 +131,7 @@ export default class CalculsProbabilite2 extends ExerciceSimple {
       const picked = shuffle(uniq).slice(0, 3)
       // formatage pour QCM : mettre entre $...$
       this.distracteurs = picked.map((n) => `$${n}$`)
+      this.reponse = `$${correctTex}$`
     }
   }
 }
