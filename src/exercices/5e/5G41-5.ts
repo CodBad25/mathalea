@@ -1,6 +1,7 @@
 import ConstructionsParallelogrammesParticuliers from './5G41'
 
-export const interactifReady = false
+export const amcReady = true
+export const amcType = 'AMCHybride'
 export const titre =
   'Construire un parallélogramme particulier et auto-vérification'
 export const dateDePublication = '25/06/2026'
