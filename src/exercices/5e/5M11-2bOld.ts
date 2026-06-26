@@ -10,17 +10,16 @@ export const amcType = 'AMCHybride'
 export const dateDePublication = '22/05/2026'
 
 /** */
-export const uuid = '57f65'
+export const uuid = '72489'
 
 export const refs = {
-  'fr-fr': ['5M11-2b', 'BP2AutoV6b'],
-  'fr-ch': ['10GM1-1b'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
-export default class Reglages5M112b extends ExercicePerimetresEtAires {
+export default class Reglages5M112bOld extends ExercicePerimetresEtAires {
   constructor() {
     super()
-    this.sup = '4'
-    this.sup5 = 2
+    this.sup = '4-5'
     this.exo = 'OnlyDisk'
     this.valeurArrondie = true
     this.besoinFormulaireTexte = [
