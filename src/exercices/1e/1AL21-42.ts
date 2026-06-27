@@ -177,9 +177,11 @@ export default class ResoudreEquationDegre2Bis extends Exercice {
     listeQuestionsToContenu(this)
     document.addEventListener('exercicesAffiches', () => {
       for (let i = 0; i < this.nbQuestions; i++) {
-        const question = document.getElementById(
-          `exercice${this.numeroExercice}Q${i}`,
-        )
+        const question =
+          document
+            .getElementById(`exercice${this.numeroExercice}Q${i}`)
+            ?.getElementsByTagName('div')[0] ??
+          document.getElementById(`exercice${this.numeroExercice}Q${i}`) // Si la question est dans un div, on sélectionne le div, sinon on sélectionne la question elle-même
         if (question?.querySelector('button')) continue
         const feedback = document.getElementById(
           `resultatCheckEx${this.numeroExercice}Q${i}`,
@@ -218,7 +220,9 @@ export default class ResoudreEquationDegre2Bis extends Exercice {
             'ease-in-out',
           )
           button.textContent = 'Pas factorisable'
-          question.insertBefore(button, feedback.nextSibling)
+          const elementSuivant = feedback.nextElementSibling
+
+          question.insertBefore(button, elementSuivant)
           button.addEventListener('click', () => {
             const mathfield = document.getElementById(
               `champTexteEx${this.numeroExercice}Q${i}`,
