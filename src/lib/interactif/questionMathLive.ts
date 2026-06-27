@@ -97,7 +97,7 @@ export function ajouteQuestionMathlive({
   handleAnswers(exercice, question, objetReponse, reponseParams)
   switch (typeInteractivite) {
     case 'fillInTheBlank':
-      return remplisLesBlancs(exercice, question, content, classe, '\\ldots')
+      return `${texteAvant}${remplisLesBlancs(exercice, question, content, classe, '\\ldots')}${texteApres}`
     case 'tableauMathlive': {
       if (!tableau) {
         window.notify(

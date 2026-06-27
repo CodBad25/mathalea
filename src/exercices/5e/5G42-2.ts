@@ -350,6 +350,7 @@ export default class ConstructionsParallelogrammesParticuliersV2 extends Exercic
             champ1: { value: pointInvisible.x },
             champ2: { value: pointInvisible.y },
           },
+          texteAvant: '<br>',
         })
         texte += mathalea2d(
           Object.assign({ pixelsParCm: 30 }, fixeBordures(objetsEnonce)),
