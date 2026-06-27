@@ -18,12 +18,12 @@ export const titre = 'Utiliser des critères de divisibilité dans un tableau'
  * Ajouter un paramètre pour sélectionner le mode d'affichage serait mieux : tableau ou QCM
  * @author Rémi Angot
  */
-export const uuid = 'fa3ec'
+export const uuid = 'fa2eb'
 
 export const refs = {
-  'fr-fr': ['5A11-4', '3AutoN09-1'],
-  'fr-2016': ['6N43-2'],
-  'fr-ch': ['9NO4-5'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': [],
 }
 export default class TableauCriteresDeDivisibilite extends Exercice {
   constructor() {
@@ -89,7 +89,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           )
           tableauDeNombresAvecCorrection[i] = `${texNombre2(
             tableauDeNombres[i],
-          )} & \\color{blue}{\\text{oui}} & \\text{non} & \\text{non} & \\text{non} & \\text{non} \\\\`
+          )} & \\color{blue}{\\text{oui}} & \\text{non} & \\text{non} & \\text{non} \\\\`
           this.autoCorrection[i].propositions = [
             {
               texte: '2',
@@ -110,12 +110,6 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
               texte: '9',
               statut: false,
               feedback: "La somme des chiffres n'est pas divisible par 9.",
-            },
-            {
-              texte: '10',
-              statut: false,
-              feedback:
-                "Le chiffre des unités n'est pas 0, donc il n'est pas divisible par 10.",
             },
             {
               texte: 'aucun de ces nombres',
@@ -140,7 +134,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           )
           tableauDeNombresAvecCorrection[i] = `${texNombre2(
             tableauDeNombres[i],
-          )} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non} & \\text{non}& \\text{non}  \\\\`
+          )} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non} & \\text{non} \\\\`
           this.autoCorrection[i].propositions = [
             {
               texte: '2',
@@ -162,12 +156,6 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
               texte: '9',
               statut: false,
               feedback: "La somme des chiffres n'est pas divisible par 9.",
-            },
-            {
-              texte: '10',
-              statut: false,
-              feedback:
-                "Le chiffre des unités n'est pas 0, donc il n'est pas divisible par 10.",
             },
             {
               texte: 'aucun de ces nombres',
@@ -191,7 +179,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           )
           tableauDeNombresAvecCorrection[i] = `${texNombre2(
             tableauDeNombres[i],
-          )} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non} \\\\`
+          )} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non} & \\color{blue}{\\text{oui}} \\\\`
           this.autoCorrection[i].propositions = [
             {
               texte: '2',
@@ -209,17 +197,10 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
               statut: false,
               feedback: "Le chiffre des unités n'est ni 0, ni 5.",
             },
-
             {
               texte: '9',
               statut: true,
               feedback: 'Correct !',
-            },
-            {
-              texte: '10',
-              statut: false,
-              feedback:
-                "Le chiffre des unités n'est pas 0, donc il n'est pas divisible par 10.",
             },
             {
               texte: 'aucun de ces nombres',
@@ -243,7 +224,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           )
           tableauDeNombresAvecCorrection[i] = `${texNombre2(
             tableauDeNombres[i],
-          )} & \\text{non} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non}  & \\text{non}\\\\`
+          )} & \\text{non} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non} \\\\`
           this.autoCorrection[i].propositions = [
             {
               texte: '2',
@@ -267,12 +248,6 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
               feedback: "La somme des chiffres n'est pas divisible par 9.",
             },
             {
-              texte: '10',
-              statut: false,
-              feedback:
-                "Le chiffre des unités n'est pas 0, donc il n'est pas divisible par 10.",
-            },
-            {
               texte: 'aucun de ces nombres',
               statut: false,
               feedback: `Ce nombre est divisible par 5 car son chiffre des unités est $${tableauDeNombres[i].toString().charAt(tableauDeNombres[i].toString().length - 1)}$.`,
@@ -293,7 +268,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           )
           tableauDeNombresAvecCorrection[i] = `${texNombre2(
             tableauDeNombres[i],
-          )} & \\color{blue}{\\text{oui}} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non} & \\color{blue}{\\text{oui}}\\\\`
+          )} & \\color{blue}{\\text{oui}} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non} \\\\`
           this.autoCorrection[i].propositions = [
             {
               texte: '2',
@@ -314,11 +289,6 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
               texte: '9',
               statut: false,
               feedback: "La somme des chiffres n'est pas divisible par 9.",
-            },
-            {
-              texte: '10',
-              statut: true,
-              feedback: 'Correct !',
             },
             {
               texte: 'aucun de ces nombres',
@@ -342,7 +312,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           )
           tableauDeNombresAvecCorrection[i] = `${texNombre2(
             tableauDeNombres[i],
-          )} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\text{non} & \\text{non} & \\text{non} \\\\`
+          )} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\text{non} & \\text{non} \\\\`
           this.autoCorrection[i].propositions = [
             {
               texte: '2',
@@ -363,12 +333,6 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
               texte: '9',
               statut: false,
               feedback: "La somme des chiffres n'est pas divisible par 9.",
-            },
-            {
-              texte: '10',
-              statut: false,
-              feedback:
-                "Le chiffre des unités n'est pas 0, donc il n'est pas divisible par 10.",
             },
             {
               texte: 'aucun de ces nombres',
@@ -392,7 +356,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           )
           tableauDeNombresAvecCorrection[i] = `${texNombre2(
             tableauDeNombres[i],
-          )} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non} \\\\`
+          )} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\text{non} & \\color{blue}{\\text{oui}} \\\\`
           this.autoCorrection[i].propositions = [
             {
               texte: '2',
@@ -413,12 +377,6 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
               texte: '9',
               statut: true,
               feedback: 'Correct !',
-            },
-            {
-              texte: '10',
-              statut: false,
-              feedback:
-                "Le chiffre des unités n'est pas 0, donc il n'est pas divisible par 10.",
             },
             {
               texte: 'aucun de ces nombres',
@@ -442,7 +400,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           )
           tableauDeNombresAvecCorrection[i] = `${texNombre2(
             tableauDeNombres[i],
-          )} & \\text{non} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\text{non} & \\text{non} \\\\`
+          )} & \\text{non} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\text{non} \\\\`
           this.autoCorrection[i].propositions = [
             {
               texte: '2',
@@ -466,12 +424,6 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
               feedback: "La somme des chiffres n'est pas divisible par 9.",
             },
             {
-              texte: '10',
-              statut: false,
-              feedback:
-                "Le chiffre des unités n'est pas 0, donc il n'est pas divisible par 10.",
-            },
-            {
               texte: 'aucun de ces nombres',
               statut: false,
               feedback:
@@ -493,7 +445,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           )
           tableauDeNombresAvecCorrection[i] = `${texNombre2(
             tableauDeNombres[i],
-          )} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}}\\\\`
+          )} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} \\\\`
           this.autoCorrection[i].propositions = [
             {
               texte: '2',
@@ -512,11 +464,6 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
             },
             {
               texte: '9',
-              statut: true,
-              feedback: 'Correct !',
-            },
-            {
-              texte: '10',
               statut: true,
               feedback: 'Correct !',
             },
@@ -539,7 +486,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           )
           tableauDeNombresAvecCorrection[i] = `${texNombre2(
             tableauDeNombres[i],
-          )} & \\text{non} & \\text{non} & \\text{non} & \\text{non} & \\text{non} \\\\`
+          )} & \\text{non} & \\text{non} & \\text{non} & \\text{non} \\\\`
           this.autoCorrection[i].propositions = [
             {
               texte: '2',
@@ -561,12 +508,6 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
               texte: '9',
               statut: false,
               feedback: "La somme des chiffres n'est pas divisible par 9.",
-            },
-            {
-              texte: '10',
-              statut: false,
-              feedback:
-                "Le chiffre des unités n'est pas 0, donc il n'est pas divisible par 10.",
             },
             {
               texte: 'aucun de ces nombres',
@@ -596,18 +537,18 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
     let texte = ''
     let texteCorr = ''
     if (context.isHtml && !this.interactif) {
-      texte = '$\\def\\arraystretch{2.5}\\begin{array}{|l|c|c|c|c|c|}\n'
+      texte = '$\\def\\arraystretch{2.5}\\begin{array}{|l|c|c|c|c|}\n'
     }
     if (!context.isHtml && !this.interactif) {
-      texte = '\n\n$\\begin{array}{|l|c|c|c|c|c|}\n'
+      texte = '\n\n$\\begin{array}{|l|c|c|c|c|}\n'
     }
     if (!context.isAmc && !this.interactif) {
       texte += '\\hline\n'
       texte +=
-        '\\text{... est divisible} & \\text{par }2 & \\text{par }3 & \\text{par }5 & \\text{par }9 & \\text{par }10\\\\\n'
+        '\\text{... est divisible} & \\text{par }2 & \\text{par }3 & \\text{par }5 & \\text{par }9\\\\\n'
       texte += '\\hline\n'
       for (let k = 0; k < this.nbQuestions; k++) {
-        texte += `${texNombre2(tableauDeNombres[k])} & & & & & \\\\\n`
+        texte += `${texNombre2(tableauDeNombres[k])} & & & & \\\\\n`
         texte += '\\hline\n'
       }
       texte += '\\end{array}\n$'
@@ -616,16 +557,16 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
 
     // la correction
     if (context.isHtml && !this.interactif) {
-      texteCorr = '$\\def\\arraystretch{2.5}\\begin{array}{|l|c|c|c|c|c|}\n'
+      texteCorr = '$\\def\\arraystretch{2.5}\\begin{array}{|l|c|c|c|c|}\n'
     }
     if (!context.isHtml && !context.isAmc && !this.interactif) {
-      texteCorr = '$\\begin{array}{|l|c|c|c|c|c|}\n'
+      texteCorr = '$\\begin{array}{|l|c|c|c|c|}\n'
     }
 
     if (!context.isAmc && !this.interactif) {
       texteCorr += '\\hline\n'
       texteCorr +=
-        '\\text{... est divisible} & \\text{par }2 & \\text{par }3 & \\text{par }5 & \\text{par }9 & \\text{par }10\\\\\n'
+        '\\text{... est divisible} & \\text{par }2 & \\text{par }3 & \\text{par }5 & \\text{par }9\\\\\n'
       texteCorr += '\\hline\n'
       for (let l = 0; l < this.nbQuestions; l++) {
         texteCorr += tableauDeNombresAvecCorrection[l]
