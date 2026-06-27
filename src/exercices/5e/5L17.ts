@@ -112,7 +112,7 @@ En s'aidant d'un tableau, calculer les distances de freinage correspondant à de
           }
           profondeurs.sort((a, b) => a - b)
           texte = `La pression de l'eau dépend de la profondeur à laquelle on se trouve.<br>
-On peut calculer la Pression $(P)$ en Pascal à partir de la Profondeur $(d)$ en mètres à l'aide de la formule $P = 1013 + 980d$.<br>
+On peut calculer la Pression $(P)$ en Pascal à partir de la Profondeur $(d)$ en mètres à l'aide de la formule $P = ${texNombre(1013)} + 980d$.<br>
 En s'aidant d'un tableau, calculer les pressions correspondant à des profondeurs de ${lister(profondeurs.map((t) => ` $${t}\\text{ m}$`))}.`
           ligne1 = makeLine('\\text{Profondeur en m} (d)', profondeurs)
           ligne2 = makeLine(
