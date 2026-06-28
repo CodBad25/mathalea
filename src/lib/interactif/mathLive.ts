@@ -386,7 +386,12 @@ export function verifQuestionMathLive(
         feedback = check.feedback ?? ''
       }
     }
-
+    let nbReponses = 1
+    let nbBonnesReponses = bestScore
+    if (bareme != null && typeof bareme === 'function') {
+      ;[nbBonnesReponses, nbReponses] = bareme([bestScore])
+      bestScore = nbBonnesReponses
+    }
     if (spanReponseLigne != null) {
       spanReponseLigne.innerHTML = ''
       if (customFeedback.length > 0) {
@@ -399,7 +404,7 @@ export function verifQuestionMathLive(
         return {
           isOk,
           feedback: noFeedback ? '' : feedback,
-          score: { nbBonnesReponses: bestScore, nbReponses: 1 },
+          score: { nbBonnesReponses: bestScore, nbReponses: nbReponses ?? 1 },
         }
       }
       if (writeResult) {
@@ -409,13 +414,13 @@ export function verifQuestionMathLive(
         return {
           isOk,
           feedback: noFeedback ? '' : feedback,
-          score: { nbBonnesReponses: bestScore, nbReponses: 1 },
+          score: { nbBonnesReponses: bestScore, nbReponses: nbReponses ?? 1 },
         }
       }
       return {
         isOk,
         feedback: noFeedback ? '' : feedback,
-        score: { nbBonnesReponses: bestScore, nbReponses: 1 },
+        score: { nbBonnesReponses: bestScore, nbReponses: nbReponses ?? 1 },
       } // ce code n'est jamais exécuté vu que writeResult est toujours true
     }
   } catch (error) {
