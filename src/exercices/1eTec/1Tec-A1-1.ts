@@ -1,4 +1,4 @@
-import EcritureFractionnaire from '../5e/5N11-3'
+import FractionVersPourcentage from '../6e/6N1F-3'
 export const titre = 'Écrire avec fraction, écriture décimale, pourcentage'
 export const dateDePublication = '19/06/2022'
 export const interactifReady = true
@@ -15,7 +15,7 @@ export const refs = {
   'fr-fr': ['2S10-5', 'BP2AutoC5'],
   'fr-ch': [],
 }
-export default class EcritureFractionnaire1T extends EcritureFractionnaire {
+export default class EcritureFractionnaire1T extends FractionVersPourcentage {
   constructor() {
     super()
     this.sup = 1
