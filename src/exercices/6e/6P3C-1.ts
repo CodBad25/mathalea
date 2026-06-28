@@ -62,12 +62,12 @@ type Situation = {
 export default class ProportionnaliteParLineariteBis extends Exercice {
   constructor() {
     super()
-
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 1)
+    this.spacing = context.isHtml ? 2 : 1
     this.besoinFormulaireCaseACocher = [
       'Résolution avec tableau récapitulatif dans la correction',
     ]
     this.sup = false
+    this.nbQuestions = 1
   }
 
   nouvelleVersion() {
@@ -228,7 +228,7 @@ export default class ProportionnaliteParLineariteBis extends Exercice {
       })
       enonceAMC = `${numAlpha(k)} Quel est le nombre maximum de ${situation.achat_plur} que ${prenomliste[5]} peut acheter avec $${texPrix(nMax * situation.pu)}$${sp()}€ ? `
 
-      const enonceQ4 = `${String.fromCharCode(97 + k)}) Quel est le nombre maximum de ${situation.achat_plur} que ${prenomliste[5]} peut acheter avec $${texPrix(nMax * situation.pu)}$${sp()}€ ? %{champ${k + 1}} ${situation.achat_plur}\n`
+      const enonceQ4 = `${String.fromCharCode(97 + k)}) Quel est le nombre maximum de ${situation.achat_plur} que ${prenomliste[5]} peut acheter avec $${texPrix(nMax * situation.pu)}$${sp()}€ ? %{champ${k + 1}}\n`
       k++
       propositionsAMC.push({
         type: 'AMCNum',
