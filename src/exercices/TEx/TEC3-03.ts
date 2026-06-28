@@ -1,6 +1,20 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import {
+  listePour2PiSur3,
+  listePour3PiSur4,
+  listePour5PiSur6,
+  listePourMoins2PiSur3,
+  listePourMoins3PiSur4,
+  listePourMoins5PiSur6,
+  listePourMoinsPiSur3,
+  listePourMoinsPiSur4,
+  listePourMoinsPiSur6,
+  listePourPiSur3,
+  listePourPiSur4,
+  listePourPiSur6,
+} from '../../lib/mathFonctions/Complexe'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -17,163 +31,6 @@ export const refs = {
   'fr-ch': [],
 }
 export const dateDePublication = '18/08/2024'
-// Les triplets a, b, A utilisés dans g(t)=acos(wt)+bsin(wt)=A.cos(wt+phi)
-const listePourPiSur6 = [
-  { a: '\\sqrt{3}', b: '1', A: '2' },
-  { a: '1', b: '\\dfrac{\\sqrt{3}}{3}', A: '2\\dfrac{\\sqrt{3}}{3}' },
-  { a: '3', b: '\\sqrt{3}', A: '2\\sqrt{3}' },
-  { a: '\\sqrt{6}', b: '\\sqrt{2}', A: '2\\sqrt{2}' },
-  { a: '\\sqrt{15}', b: '\\sqrt{5}', A: '2\\sqrt{5}' },
-].map((el) =>
-  Object.assign(el, {
-    aSurA: '\\dfrac{\\sqrt{3}}{2}',
-    moinsBSurA: '-\\dfrac{1}{2}',
-    phi: '\\dfrac{\\pi}{6}',
-  }),
-)
-const listePourPiSur4 = [
-  { a: '\\sqrt{2}', b: '\\sqrt{2}', A: '2' },
-  { a: '1', b: '1', A: '\\sqrt{2}' },
-  { a: '2', b: '2', A: '2\\sqrt{2}' },
-  { a: '\\sqrt{3}', b: '\\sqrt{3}', A: '\\sqrt{6}' },
-  { a: '3', b: '3', A: '3\\sqrt{2}' },
-].map((el) =>
-  Object.assign(el, {
-    aSurA: '\\dfrac{\\sqrt{2}}{2}',
-    moinsBSurA: '-\\dfrac{\\sqrt{2}}{2}',
-    phi: '\\dfrac{\\pi}{4}',
-  }),
-)
-const listePourPiSur3 = [
-  { a: '1', b: '\\sqrt{3}', A: '2' },
-  { a: '\\sqrt{3}', b: '3', A: '2\\sqrt{3}' },
-  { a: '\\sqrt{2}', b: '\\sqrt{6}', A: '2\\sqrt{2}' },
-  { a: '\\sqrt{5}', b: '\\sqrt{15}', A: '2\\sqrt{5}' },
-  { a: '\\dfrac{\\sqrt{3}}{3}', b: '1', A: '2\\dfrac{\\sqrt{3}}{3}' },
-].map((el) =>
-  Object.assign(el, {
-    aSurA: '\\dfrac{1}{2}',
-    moinsBSurA: '-\\dfrac{\\sqrt{3}}{2}',
-    phi: '\\dfrac{\\pi}{3}',
-  }),
-)
-const listePour3PiSur4 = listePourPiSur4.map((el) =>
-  Object.assign(
-    {},
-    {
-      a: `-${el.a}`,
-      b: el.b,
-      A: el.A,
-      aSurA: `-${el.aSurA}`,
-      moinsBSurA: el.moinsBSurA,
-      phi: '\\dfrac{3\\pi}{4}',
-    },
-  ),
-)
-const listePour5PiSur6 = listePourPiSur6.map((el) =>
-  Object.assign(
-    {},
-    {
-      a: `-${el.a}`,
-      b: el.b,
-      A: el.A,
-      aSurA: `-${el.aSurA}`,
-      moinsBSurA: el.moinsBSurA,
-      phi: '\\dfrac{5\\pi}{6}',
-    },
-  ),
-)
-const listePour2PiSur3 = listePourPiSur3.map((el) =>
-  Object.assign(
-    {},
-    {
-      a: `-${el.a}`,
-      b: el.b,
-      A: el.A,
-      aSurA: `-${el.aSurA}`,
-      moinsBSurA: el.moinsBSurA,
-      phi: '\\dfrac{2\\pi}{3}',
-    },
-  ),
-)
-const listePourMoinsPiSur4 = listePourPiSur4.map((el) =>
-  Object.assign(
-    {},
-    {
-      a: el.a,
-      b: `-${el.b}`,
-      A: el.A,
-      aSurA: el.aSurA,
-      moinsBSurA: `-(${el.moinsBSurA})`,
-      phi: '-\\dfrac{\\pi}{4}',
-    },
-  ),
-)
-const listePourMoinsPiSur6 = listePourPiSur6.map((el) =>
-  Object.assign(
-    {},
-    {
-      a: el.a,
-      b: `-${el.b}`,
-      A: el.A,
-      aSurA: el.aSurA,
-      moinsBSurA: `-(${el.moinsBSurA})`,
-      phi: '-\\dfrac{\\pi}{6}',
-    },
-  ),
-)
-const listePourMoinsPiSur3 = listePourPiSur3.map((el) =>
-  Object.assign(
-    {},
-    {
-      a: el.a,
-      b: `-${el.b}`,
-      A: el.A,
-      aSurA: el.aSurA,
-      moinsBSurA: `-(${el.moinsBSurA})`,
-      phi: '-\\dfrac{\\pi}{3}',
-    },
-  ),
-)
-const listePourMoins3PiSur4 = listePour3PiSur4.map((el) =>
-  Object.assign(
-    {},
-    {
-      a: el.a,
-      b: `-${el.b}`,
-      A: el.A,
-      aSurA: el.aSurA,
-      moinsBSurA: `-(${el.moinsBSurA})`,
-      phi: '-\\dfrac{3\\pi}{4}',
-    },
-  ),
-)
-const listePourMoins5PiSur6 = listePour5PiSur6.map((el) =>
-  Object.assign(
-    {},
-    {
-      a: el.a,
-      b: `-${el.b}`,
-      A: el.A,
-      aSurA: el.aSurA,
-      moinsBSurA: `-(${el.moinsBSurA})`,
-      phi: '-\\dfrac{5\\pi}{6}',
-    },
-  ),
-)
-const listePourMoins2PiSur3 = listePour2PiSur3.map((el) =>
-  Object.assign(
-    {},
-    {
-      a: el.a,
-      b: `-${el.b}`,
-      A: el.A,
-      aSurA: el.aSurA,
-      moinsBSurA: `-(${el.moinsBSurA})`,
-      phi: '-\\dfrac{2\\pi}{3}',
-    },
-  ),
-)
 
 /**
  * Transformer acos(wt)+bsin(wt) en A.cos(wt+phi)

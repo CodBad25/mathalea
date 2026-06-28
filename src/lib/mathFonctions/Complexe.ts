@@ -139,6 +139,17 @@ export class Complexe {
     return numerise(new Complexe(re, im))
   }
 
+  mulEntier(factor: number): Complexe {
+    return new Complexe(
+      this.re instanceof FractionEtendue
+        ? this.re.produitFraction(factor)
+        : this.re * factor,
+      this.im instanceof FractionEtendue
+        ? this.im.produitFraction(factor)
+        : this.im * factor,
+    )
+  }
+
   mul(other: Complexe): Complexe {
     const a =
       this.re instanceof FractionEtendue
@@ -176,6 +187,17 @@ export class Complexe {
       result = result.mul(this)
     }
     return numerise(result)
+  }
+
+  divEntier(factor: number): Complexe {
+    return new Complexe(
+      this.re instanceof FractionEtendue
+        ? this.re.diviseEntier(factor)
+        : this.re / factor,
+      this.im instanceof FractionEtendue
+        ? this.im.diviseEntier(factor)
+        : this.im / factor,
+    )
   }
 
   div(other: Complexe): Complexe {
@@ -273,7 +295,7 @@ export class Complexe {
     )}i`
   }
 
-  tex(): string {
+  tex(ecritureAlgebrique: boolean = false): string {
     // Affichage symbolique pour la partie réelle
     let reTex: string
     if (this.re instanceof FractionEtendue) {
@@ -294,11 +316,27 @@ export class Complexe {
       imTex = '-'
     }
     if (this.isReal) {
+      if (ecritureAlgebrique) {
+        return reTex.startsWith('-') ? reTex : `+${reTex}`
+      }
       return reTex
     } else if (this.isImaginary) {
+      if (ecritureAlgebrique) {
+        return imTex.startsWith('-') ? `${imTex}i` : `+${imTex}i`
+      }
       return `${imTex}i`
     }
+    if (ecritureAlgebrique) {
+      return `${reTex.startsWith('-') ? reTex : `+${reTex}`}${imTex.startsWith('-') ? `${imTex}i` : `+${imTex}i`}`
+    }
     return `${reTex}${imTex.startsWith('-') ? '-' : '+'}${imTex.slice(imTex.startsWith('-') ? 1 : 0)}i`
+  }
+
+  parentheseSiComplexe(): string {
+    if (this.isReal || this.isImaginary) {
+      return this.tex()
+    }
+    return `(${this.tex()})`
   }
 
   texTrigoForm(): string {
@@ -433,3 +471,232 @@ export function texNombreSymbolique(x: number): string {
     return x.toString()
   }
 }
+
+export const listePourPiSur6 = [
+  { a: '\\sqrt{3}', b: '1', A: '2' },
+  { a: '2\\sqrt{3}', b: '2', A: '4' },
+  { a: '3\\sqrt{3}', b: '3', A: '6' },
+  {
+    a: '1',
+    b: '\\dfrac{\\sqrt{3}}{3}',
+    A: '2\\dfrac{\\sqrt{3}}{3}',
+  },
+  {
+    a: '2',
+    b: '\\dfrac{2\\sqrt{3}}{3}',
+    A: '4\\dfrac{\\sqrt{3}}{3}',
+  },
+  { a: '3', b: '\\sqrt{3}', A: '2\\sqrt{3}' },
+  {
+    a: '\\sqrt{6}',
+    b: '\\sqrt{2}',
+    A: '2\\sqrt{2}',
+  },
+  {
+    a: '\\sqrt{15}',
+    b: '\\sqrt{5}',
+    A: '2\\sqrt{5}',
+  },
+].map((el) =>
+  Object.assign(el, {
+    aSurA: '\\dfrac{\\sqrt{3}}{2}',
+    bSurA: '\\dfrac{1}{2}',
+    phi: '\\dfrac{\\pi}{6}',
+    moinsBSurA: '-\\dfrac{1}{2}',
+  }),
+)
+export const listePourPiSur4 = [
+  {
+    a: '\\sqrt{2}',
+    b: '\\sqrt{2}',
+    A: '2',
+  },
+  { a: '1', b: '1', A: '\\sqrt{2}' },
+  { a: '2', b: '2', A: '2\\sqrt{2}' },
+  {
+    a: '\\sqrt{3}',
+    b: '\\sqrt{3}',
+    A: '\\sqrt{6}',
+  },
+  { a: '3', b: '3', A: '3\\sqrt{2}' },
+  { a: '5', b: '5', A: '5\\sqrt{2}' },
+  {
+    a: '\\sqrt{6}',
+    b: '\\sqrt{6}',
+    A: '2\\sqrt{3}',
+  },
+  {
+    a: '\\sqrt{5}',
+    b: '\\sqrt{5}',
+    A: '\\sqrt{10}',
+  },
+  { a: '6', b: '6', A: '6\\sqrt{2}' },
+].map((el) =>
+  Object.assign(el, {
+    aSurA: '\\dfrac{\\sqrt{2}}{2}',
+    bSurA: '\\dfrac{\\sqrt{2}}{2}',
+    phi: '\\dfrac{\\pi}{4}',
+    moinsBSurA: '-\\dfrac{\\sqrt{2}}{2}',
+  }),
+)
+export const listePourPiSur3 = [
+  { a: '1', b: '\\sqrt{3}', A: '2' },
+  { a: '2', b: '2\\sqrt{3}', A: '4' },
+  { a: '3', b: '3\\sqrt{3}', A: '6' },
+  { a: '\\sqrt{3}', b: '3', A: '2\\sqrt{3}' },
+  { a: '2\\sqrt{3}', b: '6', A: '4\\sqrt{3}' },
+  { a: '3\\sqrt{3}', b: '9', A: '6\\sqrt{3}' },
+  {
+    a: '\\sqrt{2}',
+    b: '\\sqrt{6}',
+    A: '2\\sqrt{2}',
+  },
+  {
+    a: '\\sqrt{5}',
+    b: '\\sqrt{15}',
+    A: '2\\sqrt{5}',
+  },
+  {
+    a: '\\dfrac{\\sqrt{3}}{3}',
+    b: '1',
+    A: '2\\dfrac{\\sqrt{3}}{3}',
+  },
+  {
+    a: '2\\dfrac{\\sqrt{3}}{3}',
+    b: '2',
+    A: '4\\dfrac{\\sqrt{3}}{3}',
+  },
+].map((el) =>
+  Object.assign(el, {
+    aSurA: '\\dfrac{1}{2}',
+    bSurA: '\\dfrac{\\sqrt{3}}{2}',
+    phi: '\\dfrac{\\pi}{3}',
+    moinsBSurA: '-\\dfrac{\\sqrt{3}}{2}',
+  }),
+)
+export const listePour3PiSur4 = listePourPiSur4.map((el) =>
+  Object.assign(
+    {},
+    {
+      a: `-${el.a}`,
+      b: el.b,
+      A: el.A,
+      aSurA: `-${el.aSurA}`,
+      bSurA: el.bSurA,
+      moinsBSurA: el.moinsBSurA,
+      phi: '\\dfrac{3\\pi}{4}',
+    },
+  ),
+)
+export const listePour5PiSur6 = listePourPiSur6.map((el) =>
+  Object.assign(
+    {},
+    {
+      a: `-${el.a}`,
+      b: el.b,
+      A: el.A,
+      aSurA: `-${el.aSurA}`,
+      bSurA: el.bSurA,
+      moinsBSurA: el.moinsBSurA,
+      phi: '\\dfrac{5\\pi}{6}',
+    },
+  ),
+)
+export const listePour2PiSur3 = listePourPiSur3.map((el) =>
+  Object.assign(
+    {},
+    {
+      a: `-${el.a}`,
+      b: el.b,
+      A: el.A,
+      aSurA: `-${el.aSurA}`,
+      bSurA: el.bSurA,
+      moinsBSurA: `-${el.moinsBSurA}`,
+      phi: '\\dfrac{2\\pi}{3}',
+    },
+  ),
+)
+export const listePourMoinsPiSur4 = listePourPiSur4.map((el) =>
+  Object.assign(
+    {},
+    {
+      a: el.a,
+      b: `-${el.b}`,
+      A: el.A,
+      aSurA: el.aSurA,
+      bSurA: `-${el.bSurA}`,
+      moinsBSurA: `-${el.moinsBSurA}`,
+      phi: '-\\dfrac{\\pi}{4}',
+    },
+  ),
+)
+export const listePourMoinsPiSur6 = listePourPiSur6.map((el) =>
+  Object.assign(
+    {},
+    {
+      a: el.a,
+      b: `-${el.b}`,
+      A: el.A,
+      aSurA: el.aSurA,
+      bSurA: `-${el.bSurA}`,
+      moinsBSurA: `-${el.moinsBSurA}`,
+      phi: '-\\dfrac{\\pi}{6}',
+    },
+  ),
+)
+export const listePourMoinsPiSur3 = listePourPiSur3.map((el) =>
+  Object.assign(
+    {},
+    {
+      a: el.a,
+      b: `-${el.b}`,
+      A: el.A,
+      aSurA: el.aSurA,
+      bSurA: `-${el.bSurA}`,
+      moinsBSurA: `-${el.moinsBSurA}`,
+      phi: '-\\dfrac{\\pi}{3}',
+    },
+  ),
+)
+export const listePourMoins3PiSur4 = listePour3PiSur4.map((el) =>
+  Object.assign(
+    {},
+    {
+      a: el.a,
+      b: `-${el.b}`,
+      A: el.A,
+      aSurA: el.aSurA,
+      bSurA: `-${el.bSurA}`,
+      moinsBSurA: `-${el.moinsBSurA}`,
+      phi: '-\\dfrac{3\\pi}{4}',
+    },
+  ),
+)
+export const listePourMoins5PiSur6 = listePour5PiSur6.map((el) =>
+  Object.assign(
+    {},
+    {
+      a: el.a,
+      b: `-${el.b}`,
+      A: el.A,
+      aSurA: el.aSurA,
+      bSurA: `-${el.bSurA}`,
+      moinsBSurA: `-${el.moinsBSurA}`,
+      phi: '-\\dfrac{5\\pi}{6}',
+    },
+  ),
+)
+export const listePourMoins2PiSur3 = listePour2PiSur3.map((el) =>
+  Object.assign(
+    {},
+    {
+      a: el.a,
+      b: `-${el.b}`,
+      A: el.A,
+      aSurA: el.aSurA,
+      bSurA: `-${el.bSurA}`,
+      moinsBSurA: `-${el.moinsBSurA}`,
+      phi: '-\\dfrac{2\\pi}{3}',
+    },
+  ),
+)

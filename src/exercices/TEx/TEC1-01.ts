@@ -10,8 +10,7 @@ export const dateDePublication = '30/10/2021'
 /**
  *
  * @author Éric Schrafstetter
-
-*/
+ */
 export const uuid = '8e72e'
 
 export const refs = {
@@ -50,7 +49,7 @@ export default class EquationDuPremierDegreDansC extends Exercice {
       const zSol = z2.negate().div(z1)
 
       // Enoncé
-      texte = `$(${z1})z${'+'.repeat(z2.re > 0)}${z2}=0$` // ajout d'un signe + si partie réelle positive
+      texte = `$(${z1})z${'+'.repeat(Number(z2.re) > 0 ? 1 : 0)}${z2}=0$` // ajout d'un signe + si partie réelle positive
       // Corrigé
       texteCorr = "Passons le terme constant du côté droit de l'équation :"
       texteCorr += `<br>$(${z1.tex()})z=${moinsZ2.tex()}$`
@@ -74,5 +73,3 @@ export default class EquationDuPremierDegreDansC extends Exercice {
   }
   // this.besoinFormulaireNumerique = ['Niveau de difficulté', 3]
 }
-
-// python3 list-to-js.py pour faire apparaître l'exercice dans le menu
