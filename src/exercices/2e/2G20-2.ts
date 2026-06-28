@@ -126,7 +126,6 @@ export default class CoefficientColineariteGraphique extends ExerciceSimple {
     this.reponse = {
       champ1: {
         value: coefficient.texFractionSimplifiee,
-        options: { fractionEgale: true },
       },
     }
 
