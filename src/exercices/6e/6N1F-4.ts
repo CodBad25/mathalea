@@ -23,7 +23,7 @@ export const dateDeModifImportante = '10/01/2024'
 export const uuid = '6b534'
 
 export const refs = {
-  'fr-fr': ['5N11-4'],
+  'fr-fr': ['6N1F-4'],
   'fr-ch': ['9NO14-7'],
 }
 export default class ValeurApprocheeDePourcentages extends Exercice {
