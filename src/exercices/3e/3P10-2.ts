@@ -48,7 +48,7 @@ export default class VariationsCumulees extends Exercice {
     this.nbQuestions = 4
     this.besoinFormulaireTexte = [
       'Type de problème',
-      "0: Mélange\n1: Augmentation de salaire\n2 : Intérêts d'un placement\n3: Diminution de population",
+      "0: Mélange\n1: Augmentation de salaire\n2 : Intérêts d'un placement\n3: Diminution de population animale\n4: Population mondiale",
     ]
     this.besoinFormulaire2Numerique = [
       'Progressivité des énoncés',
@@ -64,7 +64,7 @@ export default class VariationsCumulees extends Exercice {
     const problemes = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
-      max: 3,
+      max: 4,
       nbQuestions: this.nbQuestions,
       defaut: 1,
       melange: 0,
@@ -91,6 +91,14 @@ export default class VariationsCumulees extends Exercice {
         correction3: '',
       }
       switch (problemes[i]) {
+        case 4:
+          {
+            // Population mondiale
+            const nbAns = randint(3, 6)
+            pourcentage = randint(8, 14) * 0.1
+            probleme = populationMondiale(pourcentage, nbAns)
+          }
+          break
         case 2:
           {
             // Intérêts d'un placement
@@ -499,6 +507,124 @@ $${texNombre(populationInitiale)}\\times (\\dfrac{100-${PourcentageDiminution}}{
  $${texNombre((populationInitiale * (100 - PourcentageDiminution)) / 100)}\\times \\dfrac{100-${PourcentageDiminution}}{100}=${texNombre((populationInitiale * (100 - PourcentageDiminution)) / 100)}\\times ${texNombre((100 - PourcentageDiminution) / 100, 2)}${egalOuApprox(populationInitiale * Math.pow((100 - PourcentageDiminution) / 100, 2), 0)}${miseEnEvidence(texNombre(populationInitiale * Math.pow((100 - PourcentageDiminution) / 100, 2), 0))}$ individus.<br>
  ${numAlpha(2)} Au bout de ${nbAns} ans, il restera :<br>
  $${texNombre(populationInitiale * Math.pow((100 - PourcentageDiminution) / 100, nbAns))}\\times \\dfrac{100-${PourcentageDiminution}}{100}=${texNombre(populationInitiale * Math.pow((100 - PourcentageDiminution) / 100, nbAns))}\\times ${texNombre((100 - PourcentageDiminution) / 100, 2)}${egalOuApprox(populationInitiale * Math.pow((100 - PourcentageDiminution) / 100, nbAns), 0)}${miseEnEvidence(texNombre(populationInitiale * Math.pow((100 - PourcentageDiminution) / 100, nbAns), 0))}$ individus.<br>`
+  return {
+    enonceBase,
+    questionType1,
+    correctionType1,
+    valeur1,
+    dataTemplate2,
+    dataOptions2,
+    valeur2,
+    correction2,
+    dataTemplate3,
+    dataOptions3,
+    valeur3,
+    correction3,
+  }
+}
+
+function populationMondiale(pourcentage: number, nbAns: number) {
+  const populationIntitiale = 8.3 * 10 ** 9 // Population mondiale initiale
+  const enonceBase = `La population mondiale est de $${texNombre(populationIntitiale, 0)}$ individus.<br>
+  On considère qu'elle augmente de $${texNombre(pourcentage, 1)}~\\%$ chaque année.<br>`
+  const questionType1 = `Combien d'individus y aura-t-il au bout de ${nbAns} ans ?`
+  const correctionType1 = `La population au bout de ${nbAns} ans sera de :<br>
+$\\begin{aligned}
+${texNombre(populationIntitiale, 0)}\\times (\\dfrac{100+${texNombre(pourcentage, 1)}}{100})^${nbAns}&=${texNombre(populationIntitiale, 0)}\\times ${texNombre((100 + pourcentage) / 100, 2)}^${nbAns}\\\\
+&\\approx${texNombre(populationIntitiale, 0)}\\times ${texNombre(Math.pow((100 + pourcentage) / 100, nbAns), 3)}\\\\
+&\\approx${texNombre(populationIntitiale * Math.pow((100 + pourcentage) / 100, nbAns), 0)}\\\\
+\\end{aligned}$<br>
+Ainsi, la population au bout de ${nbAns} ans sera de $${miseEnEvidence(
+    texNombre(
+      populationIntitiale * Math.pow((100 + pourcentage) / 100, nbAns),
+      0,
+    ),
+  )}$ individus.`
+  const valeur1 = {
+    reponse: {
+      value: texNombre(
+        populationIntitiale * Math.pow((100 + pourcentage) / 100, nbAns),
+        0,
+      ),
+    },
+    bareme: troisPointsSiJuste,
+  }
+
+  const dataTemplate2 = `a) Par quel nombre faut-il multiplier chaque année la population pour obtenir la nouvelle population ? %{champ1}<br>
+b) Combien d'individus y aura-t-il au bout de ${nbAns} ans ? %{champ2}<br>`
+  const dataOptions2 = {
+    champ1: {
+      texteApres: '',
+      keyboard: KeyboardType.clavierDeBase,
+    },
+    champ2: {
+      texteApres: ' individus',
+      keyboard: KeyboardType.clavierDeBase,
+    },
+    bareme: troisPointsPour2Questions,
+  }
+  const valeur2 = {
+    champ1: {
+      value: texNombre((100 + pourcentage) / 100, 2),
+    },
+    champ2: {
+      value: texNombre(
+        populationIntitiale * Math.pow((100 + pourcentage) / 100, nbAns),
+        0,
+      ),
+    },
+    bareme: troisPointsPour2Questions,
+  }
+
+  const correction2 = `${numAlpha(0)} La population est multipliée chaque année par :<br>
+$\\dfrac{100+${texNombre(pourcentage, 1)}}{100}=${miseEnEvidence(texNombre((100 + pourcentage) / 100, 3))}$<br>
+${numAlpha(1)} La population au bout de ${nbAns} ans sera de :<br>
+$${texNombre(populationIntitiale, 0)}\\times (\\dfrac{100+${texNombre(pourcentage, 1)}}{100})^${nbAns}=${texNombre(populationIntitiale, 0)}\\times ${texNombre((100 + pourcentage) / 100, 2)}^${nbAns}${egalOuApprox(populationIntitiale * Math.pow((100 + pourcentage) / 100, nbAns), 0)}${miseEnEvidence(texNombre(populationIntitiale * Math.pow((100 + pourcentage) / 100, nbAns), 0))}$ individus.<br>`
+
+  const dataTemplate3 = `a) Au bout d'un an, combien d'individus y aura-t-il ? %{champ1}<br>
+  b) Au bout de deux ans, combien d'individus y aura-t-il ? %{champ2}<br>
+  c) Au bout de ${nbAns} ans, combien d'individus y aura-t-il ? %{champ3}<br>`
+  const dataOptions3 = {
+    champ1: {
+      texteApres: ' individus',
+      keyboard: KeyboardType.clavierDeBase,
+    },
+    champ2: {
+      texteApres: ' individus',
+      keyboard: KeyboardType.clavierDeBase,
+    },
+    champ3: {
+      texteApres: ' individus',
+      keyboard: KeyboardType.clavierDeBase,
+    },
+    bareme: toutAUnPoint,
+  }
+  const valeur3 = {
+    champ1: {
+      value: texNombre(
+        populationIntitiale * Math.pow((100 + pourcentage) / 100, 1),
+        0,
+      ),
+    },
+    champ2: {
+      value: texNombre(
+        populationIntitiale * Math.pow((100 + pourcentage) / 100, 2),
+        0,
+      ),
+    },
+    champ3: {
+      value: texNombre(
+        populationIntitiale * Math.pow((100 + pourcentage) / 100, nbAns),
+        0,
+      ),
+    },
+  }
+  const correction3 = `${numAlpha(0)} Au bout d'un an, il y aura :<br>
+ $${texNombre(populationIntitiale, 0)}\\times \\dfrac{100+${texNombre(pourcentage, 1)}}{100}=${texNombre(populationIntitiale, 0)}\\times ${texNombre((100 + pourcentage) / 100, 3)}${egalOuApprox(populationIntitiale * Math.pow((100 + pourcentage) / 100, 1), 0)}${miseEnEvidence(texNombre(populationIntitiale * Math.pow((100 + pourcentage) / 100, 1), 0))}$ individus.<br>
+ ${numAlpha(1)} Au bout de deux ans, il y aura :<br>
+ $${texNombre((populationIntitiale * (100 + pourcentage)) / 100, 0)}\\times \\dfrac{100+${texNombre(pourcentage, 1)}}{100}=${texNombre((populationIntitiale * (100 + pourcentage)) / 100, 0)}\\times ${texNombre((100 + pourcentage) / 100, 3)}${egalOuApprox(populationIntitiale * Math.pow((100 + pourcentage) / 100, 2), 0)}${miseEnEvidence(texNombre(populationIntitiale * Math.pow((100 + pourcentage) / 100, 2), 0))}$ individus.<br>
+ ${numAlpha(2)} Au bout de ${nbAns} ans, il y aura :<br>
+ $${texNombre(populationIntitiale, 0)}\\times (\\dfrac{100+${texNombre(pourcentage, 1)}}{100})^{${nbAns}}\\approx${texNombre(populationIntitiale, 0)}\\times ${texNombre(Math.pow((100 + pourcentage) / 100, nbAns), 3)}\\approx${miseEnEvidence(texNombre(populationIntitiale * Math.pow((100 + pourcentage) / 100, nbAns), 0))}$ individus.<br>`
   return {
     enonceBase,
     questionType1,
