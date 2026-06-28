@@ -1,4 +1,4 @@
-import { buildCorrDetails } from '../../lib/calculerCe'
+import { buildCorrDetails, renderMathJsonLatex } from '../../lib/calculerCe'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
@@ -214,11 +214,9 @@ export default class SubstituerDansUneExpressionLitterale extends Exercice {
         { x },
         { canonical: false },
       )
-      // Workaround compute-engine LaTeX serialization bug: 3*2^2 may render as 32^2 after numeric substitution.
-      const expression = expressionX.replace(
-        /(^|[^A-Za-z])x(?=[^A-Za-z]|$)/g,
-        `$1\\times{${x}}`,
-      )
+      // renderMathJsonLatex gère les parenthèses autour des négatifs dans les produits et puissances,
+      // et préserve l'ordre des termes tel qu'affiché dans la question.
+      const expression = renderMathJsonLatex(parsedExpression.json as any)
       const corrDetails = buildCorrDetails(parsedExpression, {
         comment: this.correctionDetaillee,
         singleOp: false,

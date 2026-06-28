@@ -163,7 +163,7 @@ export default class FormeLitteraleIntroduireUneLettre extends Exercice {
             lettre: 'p',
             article: 'un',
             sing: 'pantalon',
-            plur: 'patallons',
+            plur: 'pantalons',
           },
           elt2: {
             lettre: 't',
@@ -183,8 +183,8 @@ export default class FormeLitteraleIntroduireUneLettre extends Exercice {
           elt2: {
             lettre: 'v',
             article: 'un',
-            sing: 'vynil',
-            plur: 'vynils',
+            sing: 'disque vinyle',
+            plur: 'disques vinyles',
           },
         },
         {
