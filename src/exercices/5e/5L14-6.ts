@@ -218,7 +218,7 @@ export default class CalculerUneExpressionSimpleFractions extends Exercice {
             break
         }
       }
-      texte = `$${lettreDepuisChiffre(i + 1)} = ${expression}$.`
+      texte = `$${lettreDepuisChiffre(i + 1)} = ${expression}$`
       if (this.interactif) {
         texte += `<br>$${lettreDepuisChiffre(i + 1)} = $`
         texte += ajouteChampTexteMathLive(
