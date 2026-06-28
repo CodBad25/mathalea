@@ -83,17 +83,17 @@ export default class FractionVersPourcentage extends Exercice {
           texte = remplisLesBlancs(
             this,
             i,
-            `\\dfrac{${num}}{${den}}=\\dfrac{%{champ1}}{%{champ2}}=\\dfrac{%{champ3}}{100}=%{champ4}\\%`,
+            `\\dfrac{${num}}{${texNombre(den)}}=\\dfrac{%{champ1}}{%{champ2}}=\\dfrac{%{champ3}}{100}=%{champ4}\\%`,
             'clavierDeBase',
             '\\ldots\\ldots',
           )
         } else {
-          texte = `$\\dfrac{${num}}{${den}}=~\\dfrac{\\ldots\\ldots\\ldots\\ldots\\ldots}{\\ldots\\ldots\\ldots\\ldots\\ldots}=\\dfrac{\\ldots\\ldots}{100}~=~{\\ldots\\ldots}~\\%$`
+          texte = `$\\dfrac{${num}}{${texNombre(den)}}=~\\dfrac{\\ldots\\ldots\\ldots\\ldots\\ldots}{\\ldots\\ldots\\ldots\\ldots\\ldots}=\\dfrac{\\ldots\\ldots}{100}~=~{\\ldots\\ldots}~\\%$`
         }
         if (den < 100) {
-          texteCorr = `$\\dfrac{${num}}{${texNombre(den)}}=\\dfrac{${num}{\\color{blue}\\times${100 / den}}}{${den}{\\color{blue}\\times${100 / den}}}=\\dfrac{${percenti}}{100}=${percenti}~\\%$`
+          texteCorr = `$\\dfrac{${num}}{${texNombre(den)}}=\\dfrac{${num}{\\color{blue}\\times${100 / den}}}{${texNombre(den)}{\\color{blue}\\times${100 / den}}}=\\dfrac{${percenti}}{100}=${percenti}~\\%$`
         } else {
-          texteCorr = `$\\dfrac{${num}}{${texNombre(den)}}=\\dfrac{${num}{\\color{blue}\\div${den / 100}}}{${den}{\\color{blue}\\div${den / 100}}}=\\dfrac{${percenti}}{100}=${percenti}~\\%$`
+          texteCorr = `$\\dfrac{${num}}{${texNombre(den)}}=\\dfrac{${num}{\\color{blue}\\div${den / 100}}}{${texNombre(den)}{\\color{blue}\\div${den / 100}}}=\\dfrac{${percenti}}{100}=${percenti}~\\%$`
         }
         handleAnswers(
           this,
@@ -159,14 +159,15 @@ export default class FractionVersPourcentage extends Exercice {
           (num1.includes('\\times')
             ? ce
                 .parse(
-                  `\\frac{${Number(num1.split('\\times')[0]) * (Number(num1.split('\\times')[1]) ?? 1)}}{${Number(den1.split('\\times')[0]) * (Number(den1.split('\\times')[1]) ?? 1)}}`,
+                  `\\frac{${Number(num1.split('\\times')[0]) * Number(num1.split('\\times')[1] ?? 1)}}{${Number(den1.split('\\times')[0]) * Number(den1.split('\\times')[1] ?? 1)}}`,
                 )
                 .isEqual(ce.parse(`\\frac{${reponseAttendue}}{100}`))
             : ce
                 .parse(
-                  `\\frac{${Number(num1.split('\\div')[0]) * (Number(num1.split('\\div')[1]) ?? 1)}}{${Number(den1.split('\\div')[0]) * (Number(den1.split('\\div')[1]) ?? 1)}}`,
+                  `\\frac{${Number(num1.split('\\div')[0]) * Number(num1.split('\\div')[1] ?? 1)}}{${Number(den1.split('\\div')[0]) * Number(den1.split('\\div')[1] ?? 1)}}`,
                 )
                 .isEqual(ce.parse(`\\frac{${reponseAttendue}}{100}`))) ?? false
+
         test1Bis = ce.parse(den1).isEqual(ce.parse('100')) ?? false
       }
       if (num2 === '') {

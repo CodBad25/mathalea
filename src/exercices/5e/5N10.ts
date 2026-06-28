@@ -1,4 +1,3 @@
-/* eslint-disable no-unmodified-loop-condition */
 /**
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.fraction.test.ts ⚠️
  */
@@ -129,8 +128,7 @@ export default class PasserEcritureDecimaleEcritureFractionnaireInversement exte
             )
         }
         if (listeTypeFractions[i] === 'fractionsNonDecimales') {
-          let multiple
-          denominateur === 4 ? (multiple = 100) : (multiple = 10)
+          const multiple = denominateur === 4 ? 100 : 10
           texteCorr = `$${texNombre(ecritureDecimale, 3)} = ${miseEnEvidence(`\\dfrac{${ecritureDecimale * multiple}}{${multiple}}`)}$  ou $${texNombre(ecritureDecimale, 3)} = ${miseEnEvidence(`\\dfrac{${numerateur}}{${denominateur}}`)}$`
         } else {
           texteCorr = `$${texNombre(ecritureDecimale, 3)} = ${miseEnEvidence(`\\dfrac{${numerateur}}{${denominateur}}`)}$`
@@ -142,7 +140,7 @@ export default class PasserEcritureDecimaleEcritureFractionnaireInversement exte
           },
         })
       } else {
-        texte = `Donner l'écriture décimale de $\\dfrac{${numerateur}}{${denominateur}}$.`
+        texte = `Donner l'écriture décimale de $${new FractionEtendue(numerateur, denominateur).texFSP}$.`
         if (this.interactif) {
           texte +=
             '<br>' +

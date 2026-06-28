@@ -1,12 +1,10 @@
 import TableauxEtPourcentages from './_Tableaux_et_pourcentages'
 
-export const titre =
-  'Compléter tableau (issu de pourcentages avec un pourcentage fixe)'
+export const titre = 'Utiliser un pourcentage - Pourcentage fixe'
 export const interactifReady = false
 
 /**
  * * Tableaux et pourcentages prix constant
- * * numéro de l'exo ex : 5N11-2 fils de 5N11-pere
  * * publication initiale le 28/11/2020
  * @author Sébastien Lozano
  */
