@@ -1,21 +1,22 @@
-import CalculDeVolumes from '../5e/5M20-1'
-export const titre = 'Calculer des volumes de solides'
+import CalculDeVolumes from './5M20-1'
+export const titre = 'Calculer des volumes de solides (cylindres notamment)'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
 export const interactifType = ['qcm', 'mathLive']
-export const dateDeModifImportante = '10/06/2024'
-export const uuid = 'e26ca'
+export const dateDePublication = '27/06/2026'
+export const uuid = 'dc629'
 export const refs = {
-  'fr-fr': [],
-  'fr-ch': ['10GM2-1'],
+  'fr-fr': ['5M20-3'],
+  'fr-ch': [],
 }
-export default class CalculDeVolumes5e extends CalculDeVolumes {
+export default class CalculDeVolumes5eCylindre extends CalculDeVolumes {
   constructor() {
     super()
     this.sup = 1
-    this.sup4 = 5
+    this.sup4 = '3'
     this.classe = 5
+    this.nbQuestions = 2
     this.besoinFormulaire4Texte = [
       'Type de solides',
       'Nombres séparés par des tirets :\n1  : Cubes\n2 : Pavés droits\n3 : Cylindres\n4 : Prismes droits\n5 : Mélange',

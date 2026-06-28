@@ -3,6 +3,7 @@
  */
 
 import Decimal from 'decimal.js'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
@@ -20,8 +21,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Calculer le volume de solides donnés'
 export const amcReady = true
@@ -37,7 +36,7 @@ export const dateDeModifImportante = '10/06/2024'
 export const uuid = '04b0d'
 
 export const refs = {
-  'fr-fr': ['5M20-1'],
+  'fr-fr': [],
   'fr-2016': ['6M30'],
   'fr-ch': ['9GM3-2'],
 }
