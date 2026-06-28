@@ -44,6 +44,7 @@ const KEYBOARD_CATEGORIES = [
   'vFON',
   'volume',
   'variableN',
+  'algo',
 ] as const
 
 export type KeyboardCategory = (typeof KEYBOARD_CATEGORIES)[number] // on crée le type à partir du tableau de strings comme un union type de toutes les strings
@@ -202,6 +203,8 @@ export const convertKeyboardTypeToBlocks = (
       return ['numbers', 'estOuestSudNord']
     case KeyboardType.nombresEtDegreCelsius:
       return ['numbers', 'degreCelsius']
+    case KeyboardType.algo:
+      return ['numbers', 'algo']
 
     default:
       window.notify(
@@ -413,5 +416,11 @@ const shortcutsByKeyboards = {
 
   numbersSpace: {
     ' ': '\\,',
+  },
+  algo: {
+    '>': { mode: 'math', value: '\\rightarrow' },
+    '<': { mode: 'math', value: '\\leftarrow' },
+    '^': { mode: 'math', value: '\\uparrow' },
+    v: { mode: 'math', value: '\\downarrow' },
   },
 } as ShortcutsByKeyboards

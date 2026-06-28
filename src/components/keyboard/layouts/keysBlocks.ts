@@ -787,6 +787,32 @@ const eosnCaps: CompleteKeysList = {
   block: ['O', 'E', 'S', 'N', 'DEG', 'SEMICOLON'],
 }
 
+const algoCaps: CompleteKeysList = {
+  inline: [
+    'NORD',
+    'SUD',
+    'EST',
+    'OUEST',
+    'AVANCE',
+    'RECULE',
+    'TOURNE_DROITE',
+    'TOURNE_GAUCHE',
+    'DEMITOUR',
+    'SEMICOLON',
+  ],
+  block: [
+    'NORD',
+    'SUD',
+    'EST',
+    'OUEST',
+    'AVANCE',
+    'RECULE',
+    'TOURNE_DROITE',
+    'TOURNE_GAUCHE',
+    'DEMITOUR',
+    'SEMICOLON',
+  ],
+}
 const majusculesCaps: CompleteKeysList = {
   inline: [
     'A',
@@ -1272,6 +1298,13 @@ export const estOuestSudNord: KeyboardBlock = {
   isUnits: false,
 }
 
+export const algo: KeyboardBlock = {
+  keycaps: algoCaps,
+  cols: 2,
+  title: 'Clavier Algorithme',
+  isUnits: false,
+}
+
 export const keyboardBlocks: {
   [key in Exclude<BlockForKeyboard, 'alphanumeric'>]: KeyboardBlock
 } = {
@@ -1319,4 +1352,5 @@ export const keyboardBlocks: {
   uppercaseQToW,
   uppercaseXToZ,
   estOuestSudNord,
+  algo,
 }
