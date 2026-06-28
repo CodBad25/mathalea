@@ -39,7 +39,7 @@ function isNumericNode(node: MathJsonNode): boolean {
   return Boolean(ce.box(normalized as any, { form: 'raw' }).isNumber)
 }
 
-function renderMathJsonLatex(
+export function renderMathJsonLatex(
   node: MathJsonNode,
   options?: { implicitMultiply?: boolean },
 ): string {
@@ -62,13 +62,16 @@ function renderMathJsonLatex(
 
   if (operator === 'Multiply') {
     return ops
-      .map((op) => {
+      .map((op, index) => {
         const normalizedOp = unwrapDelimiter(op)
         const rendered = renderMathJsonLatex(normalizedOp, { implicitMultiply })
         if (
           isMathJsonFunction(normalizedOp) &&
           ['Add', 'Subtract'].includes(normalizedOp[0])
         ) {
+          return `\\left(${rendered}\\right)`
+        }
+        if (index > 0 && rendered.startsWith('-')) {
           return `\\left(${rendered}\\right)`
         }
         return rendered
@@ -78,13 +81,16 @@ function renderMathJsonLatex(
 
   if (operator === 'InvisibleOperator') {
     return ops
-      .map((op) => {
+      .map((op, index) => {
         const normalizedOp = unwrapDelimiter(op)
         const rendered = renderMathJsonLatex(normalizedOp, { implicitMultiply })
         if (
           isMathJsonFunction(normalizedOp) &&
           ['Add', 'Subtract'].includes(normalizedOp[0])
         ) {
+          return `\\left(${rendered}\\right)`
+        }
+        if (index > 0 && rendered.startsWith('-')) {
           return `\\left(${rendered}\\right)`
         }
         return rendered
@@ -98,10 +104,13 @@ function renderMathJsonLatex(
 
   if (operator === 'Power' && ops.length === 2) {
     const [base, exponent] = ops
-    const renderedBase =
-      isMathJsonFunction(base) && !['Number', 'Symbol'].includes(base[0])
-        ? `\\left(${renderMathJsonLatex(base, { implicitMultiply })}\\right)`
-        : renderMathJsonLatex(base, { implicitMultiply })
+    const baseLatex = renderMathJsonLatex(base, { implicitMultiply })
+    const needsParens =
+      baseLatex.startsWith('-') ||
+      (isMathJsonFunction(base) && !['Number', 'Symbol'].includes(base[0]))
+    const renderedBase = needsParens
+      ? `\\left(${baseLatex}\\right)`
+      : baseLatex
     return `${renderedBase}^{${renderMathJsonLatex(exponent, { implicitMultiply })}}`
   }
 
