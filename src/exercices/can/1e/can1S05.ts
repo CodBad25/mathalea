@@ -1,6 +1,6 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
-import { sp } from '../../../lib/outils/outilString'
+import { scriptPython } from '../../../lib/outils/scriptPython'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Donner le résultat d’un programme Python'
@@ -42,15 +42,15 @@ export default class CalculSuitePython extends ExerciceSimple {
         r = randint(1, 9) * choice([-1, 1])
         k = a
         this.question = `Que renvoie l'instruction $\\texttt{suite(${a})}$ ?<br>
-        $\\begin{array}{|l|}
-        \\hline
-        \\texttt{def suite(n) :}  \\\\
-        ${sp(6)} \\texttt{u = ${u}}\\\\
-        ${sp(6)} \\texttt{for i in range(n) :}\\\\
-        ${sp(12)} \\texttt{u = u${ecritureAlgebrique(r)}}\\\\
-        ${sp(6)} \\texttt{return u}\\\\
-        \\hline
-        \\end{array}$`
+       ${scriptPython(
+         `def suite(n) :
+ u = ${u}
+ for i in range(n) :
+  u = u${ecritureAlgebrique(r)}
+ return u`,
+         6,
+       )}`
+
         this.correction = ` L'instruction $\\texttt{for i in range(n)}$ signifie : pour i allant de $0$ à $${a - 1}$.<br>
       On calcule les valeurs successives de la variable u :<br>`
 
@@ -66,15 +66,15 @@ export default class CalculSuitePython extends ExerciceSimple {
         u = randint(1, 8) * choice([-1, 1])
         k = a
         this.question = `Que renvoie l'instruction $\\texttt{suite(${a})}$ ?<br>
-        $\\begin{array}{|l|}
-        \\hline
-        \\texttt{def suite(n) :}  \\\\
-        ${sp(6)} \\texttt{u = ${u}}\\\\
-        ${sp(6)} \\texttt{for i in range(1,n) :}\\\\
-        ${sp(12)} \\texttt{u = u+i}\\\\
-        ${sp(6)} \\texttt{return u}\\\\
-        \\hline
-       \\end{array}$<br><br>`
+        ${scriptPython(
+          `def suite(n) :
+ u = ${u}
+ for i in range(1,n) :
+  u = u+i
+ return u`,
+          6,
+        )}`
+
         this.correction = ` L'instruction $\\texttt{for i in range(1,n)}$ signifie : pour i allant de 1 à $${a - 1}$.<br>
         On calcule les valeurs successives de la variable u :<br>`
 
@@ -91,18 +91,16 @@ export default class CalculSuitePython extends ExerciceSimple {
         q = randint(2, 3)
         k = a
         this.question = `Que renvoie l'instruction $\\texttt{suite(${a})}$ ?<br>
-        $\\begin{array}{|l|}
-        \\hline
-        \\texttt{def suite(u) :}  \\\\
-        ${sp(6)} \\texttt{u=${a}}\\\\
-        ${sp(6)} \\texttt{n=0}\\\\
-        ${sp(6)} \\texttt{while u<${b}:}\\\\
-        ${sp(12)} \\texttt{u = u*${q}}\\\\
-        ${sp(12)} \\texttt{n = n+1}\\\\
-        ${sp(6)} \\texttt{return n}\\\\
-        \\hline
-        \\end{array}$<br><br>`
-
+        ${scriptPython(
+          `def suite(u) :
+ u=${a}
+ n=0
+ while u<${b}:
+  u = u*${q}
+  n = n+1
+ return n`,
+          6,
+        )}`
         this.correction = ` L'instruction $\\texttt{while u<${b}}$ signifie : tant que u<${b}.<br>
 On calcule les valeurs successives des  variables u et n. On s'arrête dès que u dépasse ${b} :<br>
         On a au départ, u=${a} et n=0, puis, `
