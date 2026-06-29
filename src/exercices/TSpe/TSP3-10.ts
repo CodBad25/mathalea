@@ -1,15 +1,15 @@
-import ExerciceQcm from '../../ExerciceQcm'
+import ExerciceQcm from '../ExerciceQcm'
 
 export const uuid = '2ff97'
 export const refs = {
-  'fr-fr': ['TSP1-QCM01'],
+  'fr-fr': ['TSP3-10'],
   'fr-ch': ['NR'],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Amérique 08/23 : espérance'
+export const titre = 'Calculer l\'espérance d\'une variable aléatoire (QCM Bac)'
 export const dateDePublication = '05/11/2024'
 /**
  * Ceci est un exo construit à partir d'une question de qcm de Bac.

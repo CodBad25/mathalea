@@ -3024,20 +3024,38 @@
    "TSA8-5": {
     "titre": "Synthèse"
   },
-
-  "TSP1": {
-    "titre": "Loi binomiale"
+ "TSP1": {
+    "titre": "Probabilités conditionnelles"
   },
   "TSP2": {
-    "titre": "Concentration"
+    "titre": "Loi binomiale"
   },
-  "TSP2-1": {
-    "titre": "Somme de variables aléatoires"
+   "TSP2-1": {
+    "titre": "Applications directes"
   },
   "TSP2-2": {
+    "titre": "Synthèse"
+  },
+   "TSP3": {
+    "titre": "Variables aléatoires"
+  },
+    "TSP3-1": {
+    "titre": "Variables aléatoires (définition, loi de probabilité, espérance, variance)"
+  },
+    "TSP3-2": {
+    "titre": "Somme de variables aléatoires"
+  },
+  "TSP4": {
+    "titre": "Concentration"
+  },
+
+  "TSP4-1": {
     "titre": "Inégalité de Bienaymé-Tchebychev"
   },
-  "TSP2-3": {
+   "TSP4-2": {
+    "titre": "Inégalité de Concentration"
+  },
+  "TSP4-3": {
     "titre": "Synthèse"
   },
   "TSG1": {

@@ -1,18 +1,18 @@
-// import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { nombreElementsDifferents } from '../../ExerciceQcm'
-import ExerciceQcmA from '../../ExerciceQcmA'
+// import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { randint } from '../../modules/outils'
+import { nombreElementsDifferents } from '../ExerciceQcm'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '79c98'
 export const refs = {
-  'fr-fr': ['TSP1-QCM04'],
+  'fr-fr': ['TSP2-14'],
   'fr-ch': [],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Centres étrangers 03/23 : binomiale'
+export const titre = "Exprimer une probabilité à l'aide de la fonction de répartition d'une loi binomiale (QCM Bac)"
 export const dateDePublication = '08/11/2024'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**

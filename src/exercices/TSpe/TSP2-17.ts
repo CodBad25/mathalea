@@ -1,16 +1,16 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceQcm from '../../ExerciceQcm'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import ExerciceQcm from '../ExerciceQcm'
 
 export const uuid = '41f8f'
 export const refs = {
-  'fr-fr': ['TSP1-QCM09'],
+  'fr-fr': ['TSP2-17'],
   'fr-ch': [],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Métropole 03/23 : binomiale'
+export const titre = 'Calculer une probabilité ponctuelle avec une loi binomiale (QCM Bac)'
 export const dateDePublication = '11/03/2025'
 /**
  * Ceci est un exo construit à partir d'une question de qcm de Bac.

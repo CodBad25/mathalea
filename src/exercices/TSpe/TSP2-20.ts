@@ -28,7 +28,7 @@ export const uuid = 'daabf'
  */
 
 export const refs = {
-  'fr-fr': ['TSP1-02'],
+  'fr-fr': ['TSP2-20'],
   'fr-ch': [],
 }
 

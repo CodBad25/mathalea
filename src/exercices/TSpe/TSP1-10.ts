@@ -1,16 +1,16 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceQcm from '../../ExerciceQcm'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import ExerciceQcm from '../ExerciceQcm'
 
-export const uuid = 'ef507'
+export const uuid = '97669'
 export const refs = {
-  'fr-fr': ['TSP1-QCM10'],
+  'fr-fr': ['TSP1-10'],
   'fr-ch': [],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Métropole 03/23 : binomiale'
+export const titre = 'Calculer une probabilité avec une probabilité conditionnelle (QCM Bac)'
 export const dateDePublication = '11/03/2025'
 /**
  * Ceci est un exo construit à partir d'une question de qcm de Bac.
@@ -25,6 +25,13 @@ export const dateDePublication = '11/03/2025'
  */
 export default class metropoleSept2024Ex4Q1 extends ExerciceQcm {
   versionOriginale: () => void = () => {
+    this.reponses = [
+      '$\\dfrac{7}{25}$', // Réponse correcte (c)
+      '$\\dfrac{7}{10}$', // Mauvaise réponse (a)
+      '$\\dfrac{3}{25}$', // Mauvaise réponse (b)
+      '$\\dfrac{24}{125}$', // Mauvaise réponse (d)
+    ]
+
     this.enonce = this.sup3
       ? `Un jeu vidéo possède une vaste communauté de joueurs en ligne.<br> Avant de débuter une partie, le joueur doit choisir entre deux "mondes" : soit le monde A, soit le monde B.
 <br>On choisit au hasard un individu dans la communauté des joueurs.<br>
@@ -37,22 +44,13 @@ $\\bullet~~$ $A$ :  "Le joueur choisit le monde A" ; <br>
 $\\bullet~~$ $B$ :  "Le joueur choisit le monde B"  ;<br>
 $\\bullet~~$ $G$ :  "Le joueur gagne la partie" .<br><br>`
       : ''
-
-    this.reponses = [
-      '$n = 3$', // Réponse correcte (b)
-      '$n = 2$', // Mauvaise réponse (a)
-      '$n = 4$', // Mauvaise réponse (c)
-      '$n = 5$', // Mauvaise réponse (d)
-    ]
-
     this.enonce +=
-      'On considère un entier naturel $n$ pour lequel la probabilité, arrondie au millième,<br> que le joueur gagne au plus $n$ parties est de $0,207$. Alors :'
-
+      'La probabilité que le joueur choisisse le monde A et gagne la partie est égale à :'
     this.correction =
-      'On cherche $n$ tel que $P(X \\leq n) \\approx 0,207$.<br>'
+      'On utilise la formule des probabilités conditionnelles :<br>'
     this.correction +=
-      'En utilisant la loi binomiale avec $n = 10$ et $p = \\dfrac{12}{25}$, on trouve que $n = 3$.<br>'
-    this.correction += `La bonne réponse est donc $${miseEnEvidence('n = 3')}$.`
+      '$P(A \\cap G) = P(A) \\times P_A(G) = \\dfrac{2}{5} \\times \\dfrac{7}{10} = \\dfrac{7}{25}.$<br>'
+    this.correction += `La bonne réponse est donc $${miseEnEvidence('\\dfrac{7}{25}')}$.`
   }
 
   constructor() {

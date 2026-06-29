@@ -1,19 +1,19 @@
-// import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
-import { nombreElementsDifferents } from '../../ExerciceQcm'
-import ExerciceQcmA from '../../ExerciceQcmA'
+// import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
+import { randint } from '../../modules/outils'
+import { nombreElementsDifferents } from '../ExerciceQcm'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '0ba80'
 export const refs = {
-  'fr-fr': ['TSP1-QCM03'],
+  'fr-fr': ['TSP2-11'],
   'fr-ch': ['3mQCM-5'],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Centres étrangers 03/23 : binomiale'
+export const titre = 'Calculer une probabilité avec la loi binomiale (QCM Bac)'
 export const dateDePublication = '08/11/2024'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -40,7 +40,7 @@ export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {
       : ''
     this.enonce +=
       'Quelle est la probabilité, arrondie au millième, de tirer au moins une pièce défectueuse ?'
-    this.correction = `$X$ soit une loi binomiale de paramètres $(${NaN};${p / 100})$. <br>
+    this.correction = `$X$ suit une loi binomiale de paramètres $(${nn};${p / 100})$. <br>
     On cherche : $p\\left(X\\geqslant 1\\right)=1-p\\left(X=0\\right)$.<br>
     $p\\left(X=0\\right)=${1 - p / 100}^{${nn}}\\approx${texNombre((1 - p / 100) ** nn, 3)}$<br>
     $p\\left(X\\geqslant 1\\right)\\approx${texNombre(1 - (1 - p / 100) ** nn, 3)}$`
@@ -58,7 +58,7 @@ export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {
     do {
       const p = randint(2, 6)
       const nn = randint(2, 7) * 10
-      this.appliquerLesValeurs(nn, p)
+      this.appliquerLesValeurs(p, nn)
     } while (nombreElementsDifferents(this.reponses) < n)
   }
 

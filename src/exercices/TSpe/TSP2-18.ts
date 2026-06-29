@@ -1,16 +1,16 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceQcm from '../../ExerciceQcm'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import ExerciceQcm from '../ExerciceQcm'
 
-export const uuid = '10fbc'
+export const uuid = 'ef507'
 export const refs = {
-  'fr-fr': ['TSP1-QCM10'],
-  'fr-ch': ['NR'],
+  'fr-fr': ['TSP2-18'],
+  'fr-ch': [],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Métropole 03/23 : binomiale'
+export const titre = "Déterminer un entier à partir d'une probabilité cumulée avec une loi binomiale (QCM Bac)"
 export const dateDePublication = '11/03/2025'
 /**
  * Ceci est un exo construit à partir d'une question de qcm de Bac.
@@ -39,19 +39,20 @@ $\\bullet~~$ $G$ :  "Le joueur gagne la partie" .<br><br>`
       : ''
 
     this.reponses = [
-      '$1 - \\left(\\dfrac{13}{25}\\right)^{10}$', // Réponse correcte (d)
-      '$1 - \\left(\\dfrac{12}{25}\\right)^{10}$', // Mauvaise réponse (a)
-      '$\\left(\\dfrac{13}{25}\\right)^{10}$', // Mauvaise réponse (b)
-      '$\\left(\\dfrac{12}{25}\\right)^{10}$', // Mauvaise réponse (c)
+      '$n = 3$', // Réponse correcte (b)
+      '$n = 2$', // Mauvaise réponse (a)
+      '$n = 4$', // Mauvaise réponse (c)
+      '$n = 5$', // Mauvaise réponse (d)
     ]
 
     this.enonce +=
-      'La probabilité que le joueur gagne au moins une partie est égale à :'
+      'On considère un entier naturel $n$ pour lequel la probabilité, arrondie au millième,<br> que le joueur gagne au plus $n$ parties est de $0,207$. Alors :'
 
-    this.correction = "On utilise l'événement complémentaire :<br>"
+    this.correction =
+      'On cherche $n$ tel que $P(X \\leq n) \\approx 0,207$.<br>'
     this.correction +=
-      '$P(X \\geq 1) = 1 - P(X = 0) = 1 - \\left(\\dfrac{13}{25}\\right)^{10}.$<br>'
-    this.correction += `La bonne réponse est donc $${miseEnEvidence('1 - \\left(\\dfrac{13}{25}\\right)^{10}')}$.`
+      'En utilisant la loi binomiale avec $n = 10$ et $p = \\dfrac{12}{25}$, on trouve que $n = 3$.<br>'
+    this.correction += `La bonne réponse est donc $${miseEnEvidence('n = 3')}$.`
   }
 
   constructor() {
