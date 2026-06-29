@@ -43,7 +43,7 @@ export default class EquationsCarree extends ExerciceSimple {
           const sol1 = -k1 - a
           const sol2 = k1 - a
           this.reponse = this.versionQcm
-            ? `$\\{${sol1}\\,;\\,${sol2}\\}$`
+            ? `$S=\\{${sol1}\\,;\\,${sol2}\\}$`
             : `\\{${sol1};${sol2}\\}`
           this.question = this.versionQcm
             ? `L'ensemble $S$ des solutions de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$ est :`
@@ -73,7 +73,7 @@ export default class EquationsCarree extends ExerciceSimple {
           const a = randint(-10, 10, 0)
           const k = choice([2, 3, 5, 6, 7, 10, 11, 13, 15, 21])
           this.reponse = this.versionQcm
-            ? `$\\{-\\sqrt{${k}}${ecritureAlgebrique(-a)}\\,;\\,\\sqrt{${k}}${ecritureAlgebrique(-a)}\\}$`
+            ? `$S=\\{-\\sqrt{${k}}${ecritureAlgebrique(-a)}\\,;\\,\\sqrt{${k}}${ecritureAlgebrique(-a)}\\}$`
             : `\\{-\\sqrt{${k}}${ecritureAlgebrique(-a)};\\sqrt{${k}}${ecritureAlgebrique(-a)}\\}`
           this.question = this.versionQcm
             ? `L'ensemble $S$ des solutions de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$ est :`
@@ -102,7 +102,7 @@ export default class EquationsCarree extends ExerciceSimple {
         {
           const a = randint(-10, 10, 0)
           const k = randint(-10, -1)
-          this.reponse = this.versionQcm ? '$\\emptyset$' : '\\emptyset'
+          this.reponse = this.versionQcm ? '$S=\\emptyset$' : '\\emptyset'
           this.question = this.versionQcm
             ? `L'ensemble $S$ des solutions de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$ est :`
             : `Donner l'ensemble $S$ des solutions de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$.`
