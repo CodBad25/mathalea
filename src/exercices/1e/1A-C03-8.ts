@@ -15,7 +15,7 @@ export const amcType = 'qcmMono'
 export const titre = 'Calculer avec des puissances de $-1$'
 export default class Auto1AC3h extends ExerciceQcmA {
   private appliquerLesValeurs(k: number): void {
-    this.enonce = `Soit $n$ un entier non nul.<br> À quelle expression est égale $\\left(-1\\right)^{n+${k}}$ ?`
+    this.enonce = `Soit $n$ un entier.<br> À quelle expression est égale $\\left(-1\\right)^{n+${k}}$ ?`
 
     if (k % 2 === 0) {
       // k est pair
