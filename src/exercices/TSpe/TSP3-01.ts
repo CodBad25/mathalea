@@ -23,7 +23,7 @@ export const dateDePublication = '26/12/2025'
 export const uuid = 'd5829'
 
 export const refs = {
-  'fr-fr': ['TSP1-03'],
+  'fr-fr': ['TSP3-01'],
   'fr-ch': [],
 }
 export default class VarianceVariablesAleatoires extends ExerciceSimple {

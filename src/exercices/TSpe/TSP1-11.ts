@@ -1,16 +1,16 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceQcm from '../../ExerciceQcm'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import ExerciceQcm from '../ExerciceQcm'
 
-export const uuid = '97669'
+export const uuid = 'e205f'
 export const refs = {
-  'fr-fr': ['TSP1-QCM07'],
+  'fr-fr': ['TSP1-11'],
   'fr-ch': [],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Métropole 03/23 : conditionnelles'
+export const titre = 'Calculer une probabilité avec une probabilité conditionnelle (QCM Bac)'
 export const dateDePublication = '11/03/2025'
 /**
  * Ceci est un exo construit à partir d'une question de qcm de Bac.
@@ -26,10 +26,10 @@ export const dateDePublication = '11/03/2025'
 export default class metropoleSept2024Ex4Q1 extends ExerciceQcm {
   versionOriginale: () => void = () => {
     this.reponses = [
-      '$\\dfrac{7}{25}$', // Réponse correcte (c)
-      '$\\dfrac{7}{10}$', // Mauvaise réponse (a)
-      '$\\dfrac{3}{25}$', // Mauvaise réponse (b)
-      '$\\dfrac{24}{125}$', // Mauvaise réponse (d)
+      '$\\dfrac{1}{3}$', // Réponse correcte (b)
+      '$\\dfrac{1}{5}$', // Mauvaise réponse (a)
+      '$\\dfrac{7}{15}$', // Mauvaise réponse (c)
+      '$\\dfrac{5}{12}$', // Mauvaise réponse (d)
     ]
 
     this.enonce = this.sup3
@@ -45,12 +45,18 @@ $\\bullet~~$ $B$ :  "Le joueur choisit le monde B"  ;<br>
 $\\bullet~~$ $G$ :  "Le joueur gagne la partie" .<br><br>`
       : ''
     this.enonce +=
-      'La probabilité que le joueur choisisse le monde A et gagne la partie est égale à :'
-    this.correction =
-      'On utilise la formule des probabilités conditionnelles :<br>'
+      "La probabilité que le joueur gagne la partie sachant qu'il a choisi le monde B est égale à :"
+    this.correction = 'On utilise la formule des probabilités totales :<br>'
+    this.correction += '$P(G) = P(A \\cap G) + P(B \\cap G).$<br>'
     this.correction +=
-      '$P(A \\cap G) = P(A) \\times P_A(G) = \\dfrac{2}{5} \\times \\dfrac{7}{10} = \\dfrac{7}{25}.$<br>'
-    this.correction += `La bonne réponse est donc $${miseEnEvidence('\\dfrac{7}{25}')}$.`
+      'On connaît $P(G) = \\dfrac{12}{25}$ et $P(A \\cap G) = \\dfrac{7}{25}$, donc :<br>'
+    this.correction +=
+      '$P(B \\cap G) = P(G) - P(A \\cap G) = \\dfrac{12}{25} - \\dfrac{7}{25} = \\dfrac{5}{25} = \\dfrac{1}{5}.$<br>'
+    this.correction +=
+      'Ensuite, on utilise la formule des probabilités conditionnelles :<br>'
+    this.correction +=
+      '$P_B(G) = \\dfrac{P(B \\cap G)}{P(B)} = \\dfrac{\\dfrac{1}{5}}{\\dfrac{3}{5}} = \\dfrac{1}{3}.$<br>'
+    this.correction += `La bonne réponse est donc $${miseEnEvidence('\\dfrac{1}{3}')}$.`
   }
 
   constructor() {

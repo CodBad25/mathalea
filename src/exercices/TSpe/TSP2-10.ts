@@ -8,14 +8,14 @@ import ExerciceQcm from '../ExerciceQcm'
 */
 export const uuid = 'ed6a5'
 export const refs = {
-  'fr-fr': ['TSP1-01'],
+  'fr-fr': ['TSP2-10'],
   'fr-ch': [],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Calculer une probabilité avec la loi binomiale'
+export const titre = 'Calculer une probabilité avec la loi binomiale (QCM)'
 export const dateDePublication = '15/03/2025'
 /**
  * Ceci est un exo construit à partir d'une question de qcm de Bac.

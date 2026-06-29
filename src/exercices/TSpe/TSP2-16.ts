@@ -1,19 +1,19 @@
-// import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
-import { nombreElementsDifferents } from '../../ExerciceQcm'
-import ExerciceQcmA from '../../ExerciceQcmA'
+// import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
+import { randint } from '../../modules/outils'
+import { nombreElementsDifferents } from '../ExerciceQcm'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '1916e'
 export const refs = {
-  'fr-fr': ['TSP1-QCM06'],
+  'fr-fr': ['TSP2-16'],
   'fr-ch': ['NR'],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Centres étrangers 03/23 : binomiale'
+export const titre = "Calculer la probabilité d'une succession de succès avec une loi binomiale (QCM Bac)"
 export const dateDePublication = '08/11/2024'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -42,12 +42,12 @@ export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {
       : ''
     this.enonce +=
       'Quelle est la probabilité de ne tirer que des pièces défectueuses ?'
-    this.correction = `$p\\left(X=0\\right)=${texNombre(p / 100, 3)}^n $`
+    this.correction = `$p\\left(X=n\\right)=${texNombre(p / 100, 3)}^n $`
   }
 
   // S'occupe de passser les données originales à la fonction appliquerLesValeurs
   versionOriginale: () => void = () => {
-    this.appliquerLesValeurs(4, 50) // valeurs originales pour f(x) = {a=3}x-{b=2} avec x={c=-4}
+    this.appliquerLesValeurs(4, 50) // 4 % et 50 pièces
   }
 
   // s'occupe d'aléatoiriser les valeurs à passer à la fonction appliquerLesValeurs en vérifiant qu'on a bien 3 réponses différentes
@@ -58,7 +58,7 @@ export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {
       const p = randint(2, 9)
       const nn = randint(3, 7) * 10 + randint(1, 9)
 
-      this.appliquerLesValeurs(nn, p)
+      this.appliquerLesValeurs(p, nn)
     } while (nombreElementsDifferents(this.reponses) < n)
   }
 

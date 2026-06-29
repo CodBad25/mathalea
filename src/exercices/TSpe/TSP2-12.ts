@@ -1,15 +1,15 @@
-import ExerciceQcm from '../../ExerciceQcm'
+import ExerciceQcm from '../ExerciceQcm'
 
 export const uuid = '48bb3'
 export const refs = {
-  'fr-fr': ['TSP1-QCM02'],
+  'fr-fr': ['TSP2-12'],
   'fr-ch': [],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Amérique 08/23 : binomiale'
+export const titre = "Déterminer le paramètre d'une loi binomiale (QCM Bac)"
 export const dateDePublication = '05/11/2024'
 /**
  * Ceci est un exo construit à partir d'une question de qcm de Bac.

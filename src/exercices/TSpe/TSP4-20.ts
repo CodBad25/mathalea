@@ -24,7 +24,7 @@ export const dateDePublication = '22/05/2026'
 
 export const uuid = 'f25ef'
 export const refs = {
-  'fr-fr': ['TSP2-22'],
+  'fr-fr': ['TSP4-20'],
   'fr-ch': [],
 } /**
  *
