@@ -52,11 +52,26 @@ export default class VolumePrismeDroitBasePentagonaleQcm extends ExerciceQcmA {
     const baseInferieure = polygone([A, B, C, D, E])
     const baseSuperieure = polygone([Aprime, Bprime, Cprime, Dprime, Eprime])
     baseInferieure.epaisseur = 2
+    baseInferieure.color = colorToLatexOrHTML('none')
     baseInferieure.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
     baseInferieure.opaciteDeRemplissage = 0.6
     baseSuperieure.epaisseur = 2
     baseSuperieure.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
     baseSuperieure.opaciteDeRemplissage = 0.35
+
+    const aretesBaseInferieure = [
+      segment(A, B),
+      segment(B, C),
+      segment(C, D),
+      segment(D, E),
+      segment(E, A),
+    ]
+    for (const arete of aretesBaseInferieure) {
+      arete.epaisseur = 2
+    }
+    for (const areteCachee of [aretesBaseInferieure[2], aretesBaseInferieure[3]]) {
+      areteCachee.pointilles = 5
+    }
 
     const aretes = [
       segment(A, Aprime),
@@ -68,6 +83,7 @@ export default class VolumePrismeDroitBasePentagonaleQcm extends ExerciceQcmA {
     for (const arete of aretes) {
       arete.epaisseur = 1.5
     }
+    aretes[3].pointilles = 5
 
     const coteHauteur = segment(
       pointAbstrait(C.x + 0.65, C.y),
@@ -80,6 +96,7 @@ export default class VolumePrismeDroitBasePentagonaleQcm extends ExerciceQcmA {
     const objets = [
       baseInferieure,
       baseSuperieure,
+      ...aretesBaseInferieure,
       ...aretes,
       coteHauteur,
       texteSurSegment(
