@@ -6,6 +6,7 @@ import {
   combinaisonListes,
   shuffle,
 } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { obtenirListeFacteursPremiers } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -18,7 +19,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCNum'
-export const dateDeModifImportante = '15/01/2024'
+export const dateDeModifImportante = '29/06/2026'
 /**
  * Additions à trou dans les relatifs
  *
@@ -38,6 +39,8 @@ export default class DevinerNombreRelatif extends Exercice {
 
     this.spacing = 2
     this.nbQuestions = 3
+    this.besoinFormulaireCaseACocher = ['Utiliser valeur absolue']
+    this.sup = true
   }
 
   nouvelleVersion() {
@@ -65,7 +68,7 @@ export default class DevinerNombreRelatif extends Exercice {
           somme = randint(unite + 1, unite + 9)
           dixieme = somme - unite
           centieme = 0
-          texte = `Je suis un nombre ${type[signe + 1]} dont la distance à zéro est comprise entre ${unite} et ${unite + 1}.<br>`
+          texte = `Je suis un nombre ${type[signe + 1]} dont la ${this.sup ? 'valeur absolue' : 'distance à zéro'} est comprise entre ${unite} et ${unite + 1}.<br>`
           texte += `On m'écrit avec deux chiffres dont la somme est ${somme}.<br>Qui suis-je ?`
           break
 
@@ -92,7 +95,7 @@ export default class DevinerNombreRelatif extends Exercice {
           unite = facteurs[0]
           dixieme = facteurs[1]
           centieme = facteurs[2]
-          texte = `Je suis un nombre ${type[signe + 1]} dont la distance à zéro est comprise entre ${unite} et ${unite + 1}.<br>`
+          texte = `Je suis un nombre ${type[signe + 1]} dont la ${this.sup ? 'valeur absolue' : 'distance à zéro'} est comprise entre ${unite} et ${unite + 1}.<br>`
           texte += `Le produit de mes trois chiffres vaut ${produit}.<br>`
           if (dixieme < centieme) {
             texte +=
@@ -104,7 +107,7 @@ export default class DevinerNombreRelatif extends Exercice {
           texte += ' Qui suis-je ?'
           break
       }
-      texteCorr = `Je suis $${texNombre(signe * (unite + dixieme / 10 + centieme / 100))}$.`
+      texteCorr = `Je suis $${miseEnEvidence(texNombre(signe * (unite + dixieme / 10 + centieme / 100)))}$.`
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
 
       setReponse(
