@@ -160,6 +160,7 @@ export class MultiMathfieldElement extends HTMLElement {
     currentSpan.style.display = 'inline-block'
     const container = document.createElement('span')
     container.style.display = 'inline-block'
+    container.style.verticalAlign = 'top'
     while ((match = regex.exec(template)) !== null) {
       if (match.index > lastIndex) {
         // Stylise les items a), b), ... dans le texte brut

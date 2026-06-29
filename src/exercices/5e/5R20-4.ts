@@ -36,7 +36,7 @@ export default class ProblemesAdditifsRelatifs5e extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 2
-    this.spacing = context.isHtml ? 2 : 1
+    this.spacing = context.isHtml ? 1 : 1
     this.spacingCorr = context.isHtml ? 2 : 0.5
   }
 
@@ -166,8 +166,7 @@ export default class ProblemesAdditifsRelatifs5e extends Exercice {
 
       const enonces = []
       enonces.push({
-        enonce: `
-Un jeu consiste à ${situations.enonce_1}<br>
+        enonce: `Un jeu consiste à ${situations.enonce_1}<br>
 ${situations.enonce_2} $${texPrix(situations.gain_multiple)}~$€.<br>
 ${situations.enonce_3} $${texPrix(situations.gain_unitaire)}~$€.<br>
 ${situations.enonce_4} $${texPrix(situations.perte)}~$€.<br>
@@ -198,7 +197,7 @@ Globalement, ${situations.prenom} ${situations.bilan[3]} $${miseEnEvidence(situa
       })
 
       texte = this.interactif
-        ? `<br>${addMultiMathfield(this, i, {
+        ? `${addMultiMathfield(this, i, {
             dataTemplate: `${enonces[0].enonce}`,
             dataOptions: {
               champ1: {
