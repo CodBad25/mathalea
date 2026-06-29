@@ -18,7 +18,7 @@ import { vecteur } from '../lib/2d/Vecteur'
 import { mathalea2d } from '../modules/mathalea2d'
 
 /**
- * Bibliotheque de bases
+ * Bibliotheque de base
  * classe FacePrisme : arbre qui permet de definir un prisme (formes et faces)
  * classe Arrete : arrete d'un prisme
  * fonctions de construction de patron "enT, enS et au hasard"
@@ -35,6 +35,11 @@ type ListeDesBases = {
   listeCotes: number[]
   listeAngles: number[]
 }[]
+
+export type ArreteDuPatron = {
+  face: FacePrisme
+  numArrete: number
+}
 
 export const listeDeBases: ListeDesBases = [
   {
@@ -124,7 +129,7 @@ export const listeDeBases: ListeDesBases = [
 ]
 
 export class Arrete {
-  numero: number = 0
+  numero: number = 0 //ce ne sont pas des numero absolus mais des indices dans le tableau des arretes de la face
   longueur: number = 0
   autreFace: FacePrisme
   autreArrete: number
@@ -206,6 +211,7 @@ export class FacePrisme {
         sommeAngles,
       )
     }
+
     const s = segment(this._sommets[nombresdeCotes - 1], this._sommets[0])
     this._anglesCotes[nombresdeCotes - 1] = modulo360(s.angleAvecHorizontale)
     this._arretes[nombresdeCotes - 1] = new Arrete(
@@ -666,11 +672,10 @@ export class FacePrisme {
     return facesLaterales
   }
 
-  trouveArreteslateralesDisponiblesPourFaceLaterale(sens: number = 0): {
-    face: FacePrisme
-    numArrete: number
-  }[] {
-    const resultat: { face: FacePrisme; numArrete: number }[] = []
+  trouveArreteslateralesDisponiblesPourFaceLaterale(
+    sens: number = 0,
+  ): ArreteDuPatron[] {
+    const resultat: ArreteDuPatron[] = []
     if (sens === 0 || sens === 1) {
       if (this.arretesi(1).autreFace === this) {
         resultat.push({ face: this, numArrete: 1 })
@@ -732,10 +737,7 @@ export class FacePrisme {
     return resultat
   }
 
-  trouveToutesArreteslateralesDisponibles(sens: number = 0): {
-    face: FacePrisme
-    numArrete: number
-  }[] {
+  trouveToutesArreteslateralesDisponibles(sens: number = 0): ArreteDuPatron[] {
     // Parcours l'objet pourlister parcoursles faces laterales
     const listeFaceslaterales = this.parcoursFacesLaterales()
     // effectue la liste des arretes latterales dispo dans cette liste
@@ -747,6 +749,58 @@ export class FacePrisme {
         }
       }
     })
+    return resultat
+  }
+
+  trouveToutesArretesSurBordDeLongueur(long: number = 0): ArreteDuPatron[] {
+    /*       longueur: number = 0
+  autreFace: FacePrisme
+  autreArrete: number
+  connectee: boolean = false */
+    // Parcours l'objet pourlister parcoursles faces laterales
+    /*     const listeFaceslaterales = this.parcoursFacesLaterales()
+    // effectue la liste des arretes latterales dispo dans cette liste
+    const resultat: { face: FacePrisme; numArrete: number }[] = []
+    listeFaceslaterales.forEach((lface) => {
+      for (let i = 1; i < 4; i += 2) {
+        if (
+          !lface.arretesi(i).connectee &&
+          lface.arretesi(i).longueur === long
+        ) {
+          resultat.push({ face: lface, numArrete: i })
+        }
+      }
+    })
+ */
+    const resultat: ArreteDuPatron[] = []
+    const facesVisitees: Set<number> = new Set() // Stocke les numéros de faces déjà visitées
+
+    // Fonction récursive pour le parcours en profondeur (DFS)
+    const parcourir = (face: FacePrisme, niveau: number = 0) => {
+      if (facesVisitees.has(face.numFace)) {
+        return // Évite les redondances
+      }
+      facesVisitees.add(face.numFace)
+      // regarde les arretes de la face
+      face._arretes.forEach((connection) => {
+        if (!connection.connectee && connection.longueur === long) {
+          resultat.push({ face: face, numArrete: connection.numero })
+        }
+      })
+
+      // Parcourt les faces connectées
+      face._arretes.forEach((connection) => {
+        if (connection.autreFace) {
+          parcourir(connection.autreFace, niveau + 1)
+        }
+      })
+    }
+
+    // Lancer le parcours à partir de cette face
+    parcourir(this)
+
+    return resultat
+
     return resultat
   }
 
@@ -777,12 +831,12 @@ export class FacePrisme {
     return reponse
   }
 
-  dessinerObjet(
+  // Numero: 'sans' | 'standard' | 'hasard' : distinction 'standard' | 'hasard' sans effet car deja implementaer a la fabrication du patron.
+  patron(
     Numero: 'sans' | 'standard' | 'hasard',
     premiersSegments: 'sans' | 'seg0' | 'seg0seg1',
-  ): string {
+  ): ObjetMathalea2D[] {
     const facesVisitees: Set<number> = new Set() // Stocke les numéros de faces déjà visitées
-    let resultat: string = ''
     const lesDessins: ObjetMathalea2D[] = []
     // Fonction récursive pour le parcours en profondeur (DFS)
     const parcourir = (face: FacePrisme, niveau: number = 0) => {
@@ -804,10 +858,20 @@ export class FacePrisme {
 
     // Lancer le parcours à partir de cette face
     parcourir(this)
+    return lesDessins
+  }
+
+  // Numero: 'sans' | 'standard' | 'hasard' : distinction 'standard' | 'hasard' sans effet car deja implementaer a la fabrication du patron.
+  dessinerObjet(
+    Numero: 'sans' | 'standard' | 'hasard',
+    premiersSegments: 'sans' | 'seg0' | 'seg0seg1',
+  ): string {
+    const lesDessins: ObjetMathalea2D[] = this.patron(Numero, premiersSegments)
+    let resultat: string = ''
     resultat = mathalea2d(
       Object.assign(
         {
-          display: 'inline-block',
+          display: 'block', //'inline-block',
           scale: zoom,
           id: '' /* `correction1Ex${this.numeroExercice}Q${i}` */,
         } as const,
