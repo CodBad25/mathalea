@@ -15,7 +15,7 @@ export const amcType = 'qcmMono'
 export const titre = 'Additionner deux puissances identiques'
 export default class Auto1AC3g extends ExerciceQcmA {
   private appliquerLesValeurs(k: number): void {
-    this.enonce = `Soit $n$ un entier non nul. <br>À quelle expression est égale $${k}^{n}+${k}^n$ ?`
+    this.enonce = `Soit $n$ un entier. <br>À quelle expression est égale $${k}^{n}+${k}^n$ ?`
 
     this.correction = `$\\begin{aligned} ${k}^{n}+${k}^n&=2\\times ${k}^{n}`
 

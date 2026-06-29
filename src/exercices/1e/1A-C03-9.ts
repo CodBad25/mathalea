@@ -15,7 +15,7 @@ export const amcType = 'qcmMono'
 export const titre = 'Calculer l’inverse d’une puissance de $-1$'
 export default class Auto1AC3i extends ExerciceQcmA {
   private appliquerLesValeurs(k: number): void {
-    this.enonce = `Soit $n$ un entier non nul.<br> À quelle expression est égale $\\dfrac{1}{\\left(-1\\right)^{n+${k}}}$ ?`
+    this.enonce = `Soit $n$ un entier.<br> À quelle expression est égale $\\dfrac{1}{\\left(-1\\right)^{n+${k}}}$ ?`
 
     if (k % 2 === 0) {
       // k est pair
