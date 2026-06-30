@@ -307,7 +307,7 @@ export function suppressionParentheses(
   exp = clean(exp)
   const arbre = ce.parse(exp, { form: 'raw' })
   const sp = flattenAdd(flattenAdd(arbre))
-  const parts = isFunction(sp) ? sp.ops : []
+  const parts = isFunction(sp) && sp.operator === 'Add' ? (sp.ops ?? []) : [sp]
   let expressionFinale = ''
   for (let index = 0; index < parts.length; index++) {
     const latex = parts[index].latex.startsWith('-')
@@ -416,22 +416,36 @@ export function regroupeTermesMemeDegre(
         parcel += term
       }
       expressionFinale.push(
-        `(${miseEnForme(parcel, couleurs[Math.max(0, 2 - (i - 1))], isColored ?? false)})`,
+        `\\left(${miseEnForme(parcel, couleurs[Math.max(0, 2 - (i - 1))], isColored ?? false)}\\right)`,
       )
     }
   }
   return expressionFinale.join('+')
 }
 
-// const isNumeric = (node: Expression) => node.isNumberLiteral
-const isNumeric = (node: Expression) => node.isNumber
-// const isNumeric = (node: Expression) =>
-//  node.isNumber && isFunction(node) && node.ops.length === 0
+const isNumeric = (node: Expression) => node.isNumber && node.isConstant
 const isSingleSymbol = (node: Expression) =>
   isSymbol(node) &&
   node.symbol &&
   node.symbol.length === 1 &&
   node.latex.length === 1
+const isNegative = (node: Expression) =>
+  typeof node.re === 'number'
+    ? node.re < 0
+    : node.latex.startsWith('-') || node.latex.startsWith('\\frac{-')
+const isFraction = (node: Expression) => node.latex.includes('\\frac')
+const facteurAuCarre = (node: Expression) => {
+  if (isSingleSymbol(node)) return `${node.latex}^2`
+  if (isNumeric(node) && !isNegative(node) && !isFraction(node)) {
+    return `${node.latex}^2`
+  }
+  return `\\left( ${node.latex}\\right) ^2`
+}
+const facteurDansProduit = (node: Expression) => {
+  if (isSingleSymbol(node)) return node.latex
+  if (isNumeric(node) && !isNegative(node)) return node.latex
+  return `\\left( ${node.latex}\\right) `
+}
 
 /**
  * @author Jean-claude Lhote
@@ -480,37 +494,9 @@ export function developpe(
     const somme = interior.operator === 'Add'
     const terme1 = isFunction(interior) ? interior.op1 : ce.parse('')
     const terme2 = isFunction(interior) ? interior.op2 : ce.parse('')
-    const carre1 = isNumeric(terme1)
-      ? terme1.latex.startsWith('-')
-        ? `\\left( ${terme1.latex}\\right) ^2`
-        : `${terme1.latex}^2`
-      : isSingleSymbol(terme1)
-        ? `${terme1.latex}^2`
-        : `\\left( ${terme1.latex}\\right) ^2`
-    const carre2 = isNumeric(terme2)
-      ? terme2.latex.startsWith('-')
-        ? `\\left( ${terme2.latex}\\right) ^2`
-        : `${terme2.latex}^2`
-      : isSingleSymbol(terme2)
-        ? `${terme2.latex}^2`
-        : `\\left( ${terme2.latex}\\right) ^2`
-    const dbleProd = `2\\times ${
-      isNumeric(terme1)
-        ? terme1.latex.startsWith('-')
-          ? `\\left( ${terme1.latex}\\right) `
-          : `${terme1.latex}`
-        : isSingleSymbol(terme1)
-          ? `${terme1.latex}`
-          : `\\left( ${terme1.latex}\\right) `
-    }\\times ${
-      isNumeric(terme2)
-        ? terme2.latex.startsWith('-')
-          ? `\\left( ${terme2.latex}\\right) `
-          : `${terme2.latex}`
-        : isSingleSymbol(terme2)
-          ? `${terme2.latex}`
-          : `\\left( ${terme2.latex}\\right) `
-    }`
+    const carre1 = facteurAuCarre(terme1)
+    const carre2 = facteurAuCarre(terme2)
+    const dbleProd = `2\\times ${facteurDansProduit(terme1)}\\times ${facteurDansProduit(terme2)}`
     if (level === 2) {
       return `${miseEnForme(carre1, couleurs[colorOffset], isColored)}${somme ? '+' : '-'}${miseEnForme(dbleProd, couleurs[colorOffset + 1], isColored)}+${miseEnForme(carre2, couleurs[colorOffset + 2], isColored)}`.replaceAll(
         '\\frac',

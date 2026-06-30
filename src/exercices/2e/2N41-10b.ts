@@ -271,7 +271,7 @@ export default class DevelopperReduireExprComplexe extends Exercice {
         texteCorr += `&=${sansParentheses}\\\\`
         texteCorr += `&=${expressionOrdonnee}\\\\`
       } else {
-        texteCorr += `&=(${devExpr1})${ope}(${devExpr2})\\\\`
+        texteCorr += `&=\\left(${devExpr1}\\right)${ope}\\left(${devExpr2}\\right)\\\\`
       }
 
       texteCorr += `&=${miseEnEvidence(reponse)}\\end{aligned}$`
