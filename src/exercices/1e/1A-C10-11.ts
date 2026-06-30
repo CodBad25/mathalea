@@ -25,10 +25,10 @@ export default class Auto1AC11c extends ExerciceQcmA {
     Ainsi, $x=\\dfrac{-137-72}{-53}$, soit  $${miseEnEvidence('x=\\dfrac{137+72}{53}')}$.`
 
     this.reponses = [
-      '$x=\\dfrac{137+72}{53}$',
-      '$x=\\dfrac{137-72}{53}$',
-      '$x=\\dfrac{72-137}{53}$',
-      '$x=\\dfrac{72+137}{-53}$',
+      '$\\dfrac{137+72}{53}$',
+      '$\\dfrac{137-72}{53}$',
+      '$\\dfrac{72-137}{53}$',
+      '$\\dfrac{72+137}{-53}$',
     ]
   }
 
@@ -47,10 +47,10 @@ export default class Auto1AC11c extends ExerciceQcmA {
     Ainsi, $x=\\dfrac{${c}${ecritureAlgebrique(-b)}}{${a}}$, soit  $${miseEnEvidence(`x=\\dfrac{${-b}${ecritureAlgebrique(c)}}{${a}}`)}$.`
 
             this.reponses = [
-              `$x=\\dfrac{${-b}${ecritureAlgebrique(c)}}{${a}}$`,
-              `$x=\\dfrac{${c}${ecritureAlgebrique(b)}}{${a}}$`,
-              `$x=\\dfrac{${-c}${ecritureAlgebrique(b)}}{${a}}$`,
-              `$x=\\dfrac{${c}${ecritureAlgebrique(-a)}}{${-b}}$`,
+              `$\\dfrac{${-b}${ecritureAlgebrique(c)}}{${a}}$`,
+              `$\\dfrac{${c}${ecritureAlgebrique(b)}}{${a}}$`,
+              `$\\dfrac{${-c}${ecritureAlgebrique(b)}}{${a}}$`,
+              `$\\dfrac{${c}${ecritureAlgebrique(-a)}}{${-b}}$`,
             ]
           }
           break
@@ -65,10 +65,10 @@ export default class Auto1AC11c extends ExerciceQcmA {
     Ainsi, $x=\\dfrac{${c}${ecritureAlgebrique(-b)}}{${a}}$, soit  $${miseEnEvidence(`x=\\dfrac{${-c}${ecritureAlgebrique(b)}}{${-a}}`)}$.`
 
             this.reponses = [
-              `$x=\\dfrac{${-c}${ecritureAlgebrique(b)}}{${-a}}$`,
-              `$x=\\dfrac{${-c}${ecritureAlgebrique(-b)}}{${-a}}$`,
-              `$x=\\dfrac{${-c}${ecritureAlgebrique(-b)}}{${a}}$`,
-              `$x=\\dfrac{${c}${ecritureAlgebrique(-a)}}{${-b}}$`,
+              `$\\dfrac{${-c}${ecritureAlgebrique(b)}}{${-a}}$`,
+              `$\\dfrac{${-c}${ecritureAlgebrique(-b)}}{${-a}}$`,
+              `$\\dfrac{${-c}${ecritureAlgebrique(-b)}}{${a}}$`,
+              `$\\dfrac{${c}${ecritureAlgebrique(-a)}}{${-b}}$`,
             ]
           }
           break
@@ -85,10 +85,10 @@ export default class Auto1AC11c extends ExerciceQcmA {
     Ainsi, $x=\\dfrac{${c}-${b}}{${a}}$, soit  $${miseEnEvidence(`x=\\dfrac{${-c}${ecritureAlgebrique(b)}}{${-a}}`)}$.`
 
             this.reponses = [
-              `$x=\\dfrac{${-c}${ecritureAlgebrique(b)}}{${-a}}$`,
-              `$x=\\dfrac{${-c}${ecritureAlgebrique(-b)}}{${a}}$`,
-              `$x=\\dfrac{${c}${ecritureAlgebrique(b)}}{${-a}}$`,
-              `$x=\\dfrac{${c}${ecritureAlgebrique(-a)}}{${-b}}$`,
+              `$\\dfrac{${-c}${ecritureAlgebrique(b)}}{${-a}}$`,
+              `$\\dfrac{${-c}${ecritureAlgebrique(-b)}}{${a}}$`,
+              `$\\dfrac{${c}${ecritureAlgebrique(b)}}{${-a}}$`,
+              `$\\dfrac{${c}${ecritureAlgebrique(-a)}}{${-b}}$`,
             ]
           }
           break

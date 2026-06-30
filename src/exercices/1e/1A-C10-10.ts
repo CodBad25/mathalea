@@ -25,10 +25,10 @@ export default class Auto1AC11b extends ExerciceQcmA {
         Ainsi, la solution de l'équation est $${miseEnEvidence('0')}$.`
 
     this.reponses = [
-      '$\\vphantom{\\dfrac{1}{3}}x=0$',
-      '$\\vphantom{\\dfrac{1}{3}}x=-3$',
-      '$x=\\dfrac{1}{3}$',
-      '$x=-\\dfrac{1}{3}$',
+      '$\\vphantom{\\dfrac{1}{3}}0$',
+      '$\\vphantom{\\dfrac{1}{3}}-3$',
+      '$\\dfrac{1}{3}$',
+      '$-\\dfrac{1}{3}$',
     ]
   }
 
@@ -43,10 +43,10 @@ export default class Auto1AC11b extends ExerciceQcmA {
         Ainsi, la solution de l'équation est $${miseEnEvidence('0')}$.`
 
           this.reponses = [
-            '$\\vphantom{\\dfrac{1}{3}}x=0$',
-            `$\\vphantom{\\dfrac{1}{3}}x=${-a}$`,
-            `$x=\\dfrac{1}{${abs(a)}}$`,
-            `$x=-\\dfrac{1}{${abs(a)}}$`,
+            '$\\vphantom{\\dfrac{1}{3}}0$',
+            `$\\vphantom{\\dfrac{1}{3}}${-a}$`,
+            `$\\dfrac{1}{${abs(a)}}$`,
+            `$-\\dfrac{1}{${abs(a)}}$`,
           ]
         }
         break
@@ -59,10 +59,10 @@ export default class Auto1AC11b extends ExerciceQcmA {
     C'est bien $0\\div ${a}$ qui est égal à 0.<br>
         Ainsi, la solution de l'équation est $${miseEnEvidence('0')}$.`
           this.reponses = [
-            '$\\vphantom{\\dfrac{1}{3}}x=0$',
-            `$\\vphantom{\\dfrac{1}{3}}x=${-a}$`,
-            `$x=\\dfrac{1}{${abs(a)}}$`,
-            `$x=-\\dfrac{1}{${abs(a)}}$`,
+            '$\\vphantom{\\dfrac{1}{3}}0$',
+            `$\\vphantom{\\dfrac{1}{3}}${-a}$`,
+            `$\\dfrac{1}{${abs(a)}}$`,
+            `$-\\dfrac{1}{${abs(a)}}$`,
           ]
         }
         break
@@ -75,10 +75,10 @@ export default class Auto1AC11b extends ExerciceQcmA {
           this.correction = ` Le quotient $\\dfrac{${a}}{x}$ est égal à $1$, lorsque son numérateur et son dénominateur sont égaux, c'est-à-dire lorsque $x=${a}$.<br>
         Ainsi, la solution de l'équation est $${miseEnEvidence(a)}$.`
           this.reponses = [
-            `$\\vphantom{\\dfrac{1}{3}}x=${a}$`,
-            `$\\vphantom{\\dfrac{1}{3}}x=${-a}$`,
-            `$x=\\dfrac{1}{${abs(a)}}$`,
-            `$x=-\\dfrac{1}{${abs(a)}}$`,
+            `$\\vphantom{\\dfrac{1}{3}}${a}$`,
+            `$\\vphantom{\\dfrac{1}{3}}${-a}$`,
+            `$\\dfrac{1}{${abs(a)}}$`,
+            `$-\\dfrac{1}{${abs(a)}}$`,
           ]
         }
         break
@@ -90,10 +90,10 @@ export default class Auto1AC11b extends ExerciceQcmA {
           this.correction = ` Le quotient $\\dfrac{x}{${a}}$ est égal à $1$, lorsque son numérateur et son dénominateur sont égaux, c'est-à-dire lorsque $x=${a}$.<br>
         Ainsi, la solution de l'équation est $${miseEnEvidence(a)}$.`
           this.reponses = [
-            `$\\vphantom{\\dfrac{1}{3}}x=${a}$`,
-            `$\\vphantom{\\dfrac{1}{3}}x=${-a}$`,
-            `$x=\\dfrac{1}{${abs(a)}}$`,
-            `$x=-\\dfrac{1}{${abs(a)}}$`,
+            `$\\vphantom{\\dfrac{1}{3}}${a}$`,
+            `$\\vphantom{\\dfrac{1}{3}}${-a}$`,
+            `$\\dfrac{1}{${abs(a)}}$`,
+            `$-\\dfrac{1}{${abs(a)}}$`,
           ]
         }
         break
@@ -106,10 +106,10 @@ export default class Auto1AC11b extends ExerciceQcmA {
           this.correction = ` Le quotient $\\dfrac{${a}}{x}$ est égal à $${a}$, lorsque son  dénominateur est égal à $1$.<br>
         Ainsi, la solution de l'équation est $${miseEnEvidence('1')}$.`
           this.reponses = [
-            `$\\vphantom{\\dfrac{1}{3}}x=1$`,
-            `$\\vphantom{\\dfrac{1}{3}}x=${a}$`,
-            `$\\vphantom{\\dfrac{1}{3}}x=${-a}$`,
-            `$x=\\dfrac{1}{${abs(a)}}$`,
+            `$\\vphantom{\\dfrac{1}{3}}1$`,
+            `$\\vphantom{\\dfrac{1}{3}}${a}$`,
+            `$\\vphantom{\\dfrac{1}{3}}${-a}$`,
+            `$\\dfrac{1}{${abs(a)}}$`,
           ]
         }
         break
@@ -124,10 +124,10 @@ export default class Auto1AC11b extends ExerciceQcmA {
         Ainsi, la solution de l'équation est $${miseEnEvidence('1')}$.`
 
           this.reponses = [
-            '$\\vphantom{\\dfrac{1}{3}}x=1$',
-            `$\\vphantom{\\dfrac{1}{3}}x=${-a}$`,
-            `$x=\\dfrac{1}{${abs(a)}}$`,
-            `$x=-\\dfrac{1}{${abs(a)}}$`,
+            '$\\vphantom{\\dfrac{1}{3}}1$',
+            `$\\vphantom{\\dfrac{1}{3}}${-a}$`,
+            `$\\dfrac{1}{${abs(a)}}$`,
+            `$-\\dfrac{1}{${abs(a)}}$`,
           ]
         }
         break
