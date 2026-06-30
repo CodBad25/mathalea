@@ -175,7 +175,7 @@ const qcmSuites: QcmItem[] = [
   },
   {
     enonce:
-      "Un récipient contenant initialement 1 litre d'eau est laissé au soleil.<br>Toutes les heures, le volume d'eau diminue de 15\\,\\%.<br>Au bout de quel nombre entier d'heures le volume d'eau devient-il inférieur à un quart de litre ?",
+      "Un récipient contenant initialement 1 litre d'eau est laissé au soleil.<br>Toutes les heures, le volume d'eau diminue de $15\\,\\%$.<br>Au bout de quel nombre entier d'heures le volume d'eau devient-il inférieur à un quart de litre ?",
     reponses: [
       { texte: '2 heures' },
       { texte: '8 heures.' },
@@ -183,7 +183,7 @@ const qcmSuites: QcmItem[] = [
       { texte: '13 heures' },
     ],
     correction:
-      'Enlever 15\\,\\%, revient à multiplier par 0,85 $\\left(1 - \\dfrac{15}{100} = \\dfrac{85}{100} = 0,85 \\right)$.<br>Il faut donc trouver $n \\in \\N$ tel que $1 \\times 0,85^n < 0,25$ soit en prenant le logarithme népérien $n\\ln 0,85 < \\ln 0,25 \\iff n > \\dfrac{\\ln 0,25}{\\ln 0,85}$.<br>Or $\\dfrac{\\ln 0,25}{\\ln 0,85} \\approx 8,5$ : il faut donc attendre au moins la 9e heure. Réponse $\\mathbf{c}$.',
+      'Enlever $15\\,\\%$, revient à multiplier par 0,85 $\\left(1 - \\dfrac{15}{100} = \\dfrac{85}{100} = 0,85 \\right)$.<br>Il faut donc trouver $n \\in \\N$ tel que $1 \\times 0,85^n < 0,25$ soit en prenant le logarithme népérien $n\\ln 0,85 < \\ln 0,25 \\iff n > \\dfrac{\\ln 0,25}{\\ln 0,85}$.<br>Or $\\dfrac{\\ln 0,25}{\\ln 0,85} \\approx 8,5$ : il faut donc attendre au moins la 9e heure. Réponse $\\mathbf{c}$.',
   },
   {
     enonce:
@@ -211,7 +211,7 @@ const qcmSuites: QcmItem[] = [
   },
   {
     enonce:
-      'Une action est cotée à 57 € . Sa valeur augmente de 3\\,\\% tous les mois.<br>La fonction Python seuil() qui renvoie le nombre de mois à attendre pour que sa valeur dépasse 200 € est :',
+      'Une action est cotée à 57 € . Sa valeur augmente de $3\\,\\%$ tous les mois.<br>La fonction Python seuil() qui renvoie le nombre de mois à attendre pour que sa valeur dépasse 200 € est :',
     reponses: [
       { texte: code('def seuil() :\n    m=0\n    v=57\n    while v < 200 :\n        m=m+1\n        v = v*1.03\n    return m'), statut: true },
       { texte: code('def seuil() :\n    m=0\n    v=57\n    while v > 200 :\n        m=m+1\n        v = v*1.03\n    return m') },
