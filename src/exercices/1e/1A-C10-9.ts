@@ -26,10 +26,10 @@ export default class Auto1AC11a extends ExerciceQcmA {
         Ainsi, la solution de l'équation est $${miseEnEvidence('\\dfrac{144}{9}')}$.`
 
     this.reponses = [
-      '$\\vphantom{\\dfrac{1}{3}}x=\\dfrac{144}{9}$',
-      '$x=\\dfrac{9}{144}$',
-      '$\\vphantom{\\dfrac{1}{3}}x=144\\times 9$',
-      '$x=-16$',
+      '$\\vphantom{\\dfrac{1}{3}}\\dfrac{144}{9}$',
+      '$\\dfrac{9}{144}$',
+      '$\\vphantom{\\dfrac{1}{3}}144\\times 9$',
+      '$-16$',
     ]
   }
 
@@ -46,10 +46,10 @@ export default class Auto1AC11a extends ExerciceQcmA {
         Ainsi, la solution de l'équation est $${miseEnEvidence(`\\dfrac{${b}}{${a}}`)}$.`
 
             this.reponses = [
-              `$x=\\dfrac{${b}}{${a}}$`,
-              `$\\vphantom{\\dfrac{1}{3}}x=\\dfrac{${a}}{${b}}$`,
-              `$\\vphantom{\\dfrac{1}{3}}x=${b}\\times ${a}$`,
-              `$\\vphantom{\\dfrac{1}{3}}x=-${texNombre(b / a, 0)}$`,
+              `$\\dfrac{${b}}{${a}}$`,
+              `$\\vphantom{\\dfrac{1}{3}}\\dfrac{${a}}{${b}}$`,
+              `$\\vphantom{\\dfrac{1}{3}}${b}\\times ${a}$`,
+              `$\\vphantom{\\dfrac{1}{3}}-${texNombre(b / a, 0)}$`,
             ]
           }
           break
@@ -62,10 +62,10 @@ export default class Auto1AC11a extends ExerciceQcmA {
     Ainsi, la solution de l'équation est $${miseEnEvidence(`${a}\\times ${b}`)}$.`
 
             this.reponses = [
-              `$\\vphantom{\\dfrac{1}{3}}x=${a} \\times ${b}$`,
-              `$x=\\dfrac{${b}}{${a}}$`,
-              `$x=\\dfrac{${a}}{${b}}$`,
-              `$\\vphantom{\\dfrac{1}{3}}x=-${texNombre(a * b)}$`,
+              `$\\vphantom{\\dfrac{1}{3}}${a} \\times ${b}$`,
+              `$\\dfrac{${b}}{${a}}$`,
+              `$\\dfrac{${a}}{${b}}$`,
+              `$\\vphantom{\\dfrac{1}{3}}-${texNombre(a * b)}$`,
             ]
           }
           break
@@ -81,10 +81,10 @@ export default class Auto1AC11a extends ExerciceQcmA {
     Ainsi, la solution de l'équation est $${miseEnEvidence(`${texNombre(b / a, 0)}`)}$.`
 
             this.reponses = [
-              `$\\vphantom{\\dfrac{1}{3}}x=${solution}$`,
-              `$x=-\\dfrac{${b}}{${a}}$`,
-              `$\\vphantom{\\dfrac{1}{3}}x=\\dfrac{${a}}{${b}}$`,
-              `$\\vphantom{\\dfrac{1}{3}}x=-${solution}$`,
+              `$\\vphantom{\\dfrac{1}{3}}${solution}$`,
+              `$-\\dfrac{${b}}{${a}}$`,
+              `$\\vphantom{\\dfrac{1}{3}}\\dfrac{${a}}{${b}}$`,
+              `$\\vphantom{\\dfrac{1}{3}}-${solution}$`,
             ]
           }
           break
