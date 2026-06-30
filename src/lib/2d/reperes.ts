@@ -626,7 +626,7 @@ export class Repere extends ObjetMathalea2D {
           traitH.opacite = grilleYOpacite
           traitH.epaisseur = grilleEpaisseur
           if (grilleY === 'pointilles') {
-            traitH.pointilles = 5
+            traitH.pointilles = 4
           }
           this.objets.push(traitH)
         }
@@ -688,7 +688,7 @@ export class Repere extends ObjetMathalea2D {
           traitV.opacite = grilleXOpacite
           traitV.epaisseur = grilleEpaisseur
           if (grilleX === 'pointilles') {
-            traitV.pointilles = 5
+            traitV.pointilles = 4
           }
           this.objets.push(traitV)
         }
