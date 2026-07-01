@@ -19,6 +19,10 @@ import Exercice from '../Exercice'
 
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { propositionsQcm } from '../../lib/interactif/qcm'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 export const titre = 'Organiser des données dans un tableau'
 export const dateDeModifImportante = '27/08/2024'
 
@@ -152,7 +156,7 @@ export default class OrganiserDonneesDepuisTexte extends Exercice {
     }
     texte += '<br>'
     texte += `${numAlpha(0)} Remplir le tableau suivant. <br>`
-    const tabEntetesColonnes = ['Amis\\textbackslash fruits']
+    const tabEntetesColonnes = ['Amis\\textbackslash Fruits']
       .concat(lstFruitExo.map((el) => premiereLettreEnMajuscule(el)))
       .concat(['TOTAL'])
       .map((el) => `\\text{${el}}`)
@@ -178,7 +182,7 @@ export default class OrganiserDonneesDepuisTexte extends Exercice {
       tabLines2.push(sommeUnFruit)
     }
     tabLines2.push(sommeTotale)
-    const tabLinesCorr = tabLines2.map((el) => texNombre(el, 2))
+    const tabLinesCorr = tabLines2.map((el) => miseEnEvidence(texNombre(el, 2)))
     let objetReponse = {}
     for (let i = 0; i < tabLinesCorr.length; i++) {
       const ligne = Math.floor(i / (nbFruits + 1))
@@ -202,7 +206,7 @@ export default class OrganiserDonneesDepuisTexte extends Exercice {
     texteCorr += '<br>'
 
     // Question 2 :
-    texteCorr += `${numAlpha(1)} ${this.sup ? 'La masse totale' : 'Le nombre total'} de fruits est : $${texNombre(sommeTotale, 2)}$${this.sup ? ' kg' : ''}.<br>`
+    texteCorr += `${numAlpha(1)} ${this.sup ? 'La masse totale' : 'Le nombre total'} de fruits est : $${miseEnEvidence(texNombre(sommeTotale, 2))}$${this.sup ? ' kg' : ''}.<br>`
 
     // Question 3 :
     texteCorr += `${numAlpha(2)} On regarde la dernière colonne du tableau. `
@@ -224,9 +228,9 @@ export default class OrganiserDonneesDepuisTexte extends Exercice {
     const nmaxTex = texNombre(nmax, 1)
     if (lstmax.length > 1) {
       texteCorr += 'Les personnes qui ont rapporté le plus de fruits sont : '
-      texteCorr += lstmax[0]
+      texteCorr += texteEnCouleurEtGras(String(lstmax[0]))
       for (let k = 1; k < lstmax.length; k++) {
-        texteCorr += ` et ${lstmax[k]}`
+        texteCorr += ` et ${texteEnCouleurEtGras(String(lstmax[k]))}`
       }
       if (this.sup) {
         texteCorr += `. La masse maximale rapportée est de $${nmaxTex}$ kg.<br>`
@@ -234,10 +238,11 @@ export default class OrganiserDonneesDepuisTexte extends Exercice {
         texteCorr += `. Le nombre maximal de fruits rapporté par une personne est de $${nmaxTex}$.<br>`
       }
     } else {
+      texteCorr += `La personne qui a rapporté le plus de fruits est ${texteEnCouleurEtGras(String(lstmax))}. `
       if (this.sup) {
-        texteCorr += `La personne qui a rapporté le plus de fruits est ${lstmax}. Cette masse maximale est de $${nmaxTex}$ kg.<br>`
+        texteCorr += `Cette masse maximale est de $${nmaxTex}$ kg.<br>`
       } else {
-        texteCorr += `La personne qui a rapporté le plus de fruits est ${lstmax}. Ce nombre maximal de fruits est de $${nmaxTex}$.<br>`
+        texteCorr += `Ce nombre maximal de fruits est de $${nmaxTex}$.<br>`
       }
     }
 
@@ -273,9 +278,9 @@ export default class OrganiserDonneesDepuisTexte extends Exercice {
       texteCorr += `. Il y en a $${nmax}$ de chaque sorte.<br>`
     } else {
       if (this.sup) {
-        texteCorr += `Il y a plus de ${fmax[0]}s que d'autres fruits. Il y en a $${nmaxTex2}$ kg.`
+        texteCorr += `Il y a plus de ${fmax[0]}s que d'autres fruits. Il y en a $${miseEnEvidence(nmaxTex2)}$ kg.`
       } else {
-        texteCorr += `Il y a plus de ${fmax[0]}s que d'autres fruits. Il y en a $${nmaxTex2}$.`
+        texteCorr += `Il y a plus de ${fmax[0]}s que d'autres fruits. Il y en a $${miseEnEvidence(nmaxTex2)}$.`
       }
     }
     // fin correction
@@ -290,8 +295,8 @@ export default class OrganiserDonneesDepuisTexte extends Exercice {
     this.autoCorrection[2] = {
       propositions: [],
     }
+    this.autoCorrection[2].propositions = []
     for (const p of lstPrenomExo) {
-      // @ts-expect-error
       this.autoCorrection[2].propositions.push({
         texte: p,
         statut: lstmax.includes(p),
@@ -306,8 +311,8 @@ export default class OrganiserDonneesDepuisTexte extends Exercice {
     this.autoCorrection[3] = {
       propositions: [],
     }
+    this.autoCorrection[3].propositions = []
     for (const f of lstFruitExo) {
-      // @ts-expect-error
       this.autoCorrection[3].propositions.push({
         texte: f,
         statut: fmax.includes(f),
