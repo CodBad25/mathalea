@@ -15,12 +15,12 @@ import {
   randint,
 } from '../../modules/outils'
 import {
-  Arrete,
+  Arete,
   FacePrisme,
   patronEnS,
   patronEnT,
   patronHasard,
-  type ArreteDuPatron,
+  type AreteDuPatron,
 } from '../../modules/PatronsPrismes'
 import Exercice from '../Exercice'
 export const interactifReady = true
@@ -49,7 +49,7 @@ export default class longueurPatronPaveDroit extends Exercice {
         'Nombres séparés par des tirets  :',
         '0 : Mélange',
         '1 : Patrons simples',
-        '2 : Patrons moins Simples',
+        '2 : Patrons moins simples',
       ].join('\n'),
     ]
     this.sup = '0'
@@ -58,8 +58,8 @@ export default class longueurPatronPaveDroit extends Exercice {
       [
         'Nombres séparés par des tirets  :',
         '0 : Mélange',
-        '1 : Arrete directe',
-        '2 : Arrete indirecte',
+        '1 : Arête directe',
+        '2 : Arête indirecte',
       ].join('\n'),
     ]
     this.sup2 = '0'
@@ -70,15 +70,20 @@ export default class longueurPatronPaveDroit extends Exercice {
       ),
     ]
     this.sup3 = '0'
-    this.consigne = `Les patrons ci-dessous sont des patrons de pavé droit. Compléter les longueurs manquantes.`
+    this.besoinFormulaire4CaseACocher = [`Schéma dans l'énoncé`, true]
+    this.sup4 = true
+    this.consigne = ``
     this.nbQuestions = 3
   }
 
   nouvelleVersion() {
+    const schema = this.sup4
     if (this.nbQuestions === 1) {
-      this.consigne = `Le patron ci-dessous est celui d'un pavé droit. Compléter les longueurs manquantes.`
+      this.consigne = `Le patron ci-dessous est ${schema ? 'le schéma ' : 'celui '} d'un patron de pavé droit. Compléter les longueurs manquantes.`
+    } else {
+      this.consigne = `Les patrons ci-dessous sont des ${schema ? 'shémas de' : ' '} patrons de pavé droit. Compléter les longueurs manquantes.`
     }
-    const typeQuestionsDisponibles = ['TouS', 'AuPif'] //, 'type2', 'type3']
+    const typeQuestionsDisponibles = ['TouS', 'AuPif']
     const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
@@ -92,7 +97,7 @@ export default class longueurPatronPaveDroit extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    const typeDemandeDisponibles = ['Directe', 'Indirecte'] //, 'type2', 'type3']
+    const typeDemandeDisponibles = ['Directe', 'Indirecte']
     const typeDeDemandeDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup2,
       min: 1,
@@ -106,7 +111,7 @@ export default class longueurPatronPaveDroit extends Exercice {
       typeDeDemandeDisponibles,
       this.nbQuestions * 3,
     )
-    const nbLongueursDisponibles = ['1', '2', '3'] //, 'type2', 'type3']
+    const nbLongueursDisponibles = ['1', '2', '3']
     const nbdeLongueursDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup3,
       min: 1,
@@ -131,8 +136,17 @@ export default class longueurPatronPaveDroit extends Exercice {
       dimensions[2] = randint(dimensions[1] + 1, dimensions[1] + 5, [
         dimensions[0],
       ]) //longueur
+      const dimSchema = combinaisonListes([3, 3.4, 3.6], 3)
+      const dimensionsSchema: number[] = []
+      dimensionsSchema[0] = schema ? dimSchema[0] : dimensions[0]
+      dimensionsSchema[1] = schema ? dimSchema[1] : dimensions[1]
+      dimensionsSchema[2] = schema ? dimSchema[2] : dimensions[2]
       const nbSommetBase = 4
-      const listeCotesBase = [dimensions[2], dimensions[1], dimensions[2]]
+      const listeCotesBase = [
+        dimensionsSchema[2],
+        dimensionsSchema[1],
+        dimensionsSchema[2],
+      ]
       const listeAnglesBase = [90, 90]
       let base1: FacePrisme = new FacePrisme(
         1,
@@ -150,7 +164,7 @@ export default class longueurPatronPaveDroit extends Exercice {
                 {
                   base1 = patronEnT(
                     nbSommetBase,
-                    dimensions[0],
+                    dimensionsSchema[0],
                     listeCotesBase,
                     listeAnglesBase,
                     {
@@ -165,7 +179,7 @@ export default class longueurPatronPaveDroit extends Exercice {
                 {
                   base1 = patronEnS(
                     nbSommetBase,
-                    dimensions[0],
+                    dimensionsSchema[0],
                     listeCotesBase,
                     listeAnglesBase,
                     {
@@ -186,7 +200,7 @@ export default class longueurPatronPaveDroit extends Exercice {
             while (enLigne && k < 50) {
               base1 = patronHasard(
                 nbSommetBase,
-                dimensions[0],
+                dimensionsSchema[0],
                 listeCotesBase,
                 listeAnglesBase,
                 {
@@ -204,7 +218,7 @@ export default class longueurPatronPaveDroit extends Exercice {
           break
         case 'type3':
         default:
-          texte += `Question ${i + 1} par defeaut merci de signaler le problème<br>`
+          texte += `Question ${i + 1} par defaut merci de signaler le problème<br>`
           texteCorr = `Correction ${i + 1} de type 3`
           break
       }
@@ -221,8 +235,9 @@ export default class longueurPatronPaveDroit extends Exercice {
       for (let j = 0; j < 3; j++) {
         lesSegments[j] = fixeCotesQuestionReponse(
           base1,
-          dimensions[j],
+          dimensionsSchema[j],
           numBase2,
+          dimensions[j],
           `${listeTypeDeDemande[i * 3 + j]}`,
         )
       }
@@ -240,6 +255,7 @@ export default class longueurPatronPaveDroit extends Exercice {
             `${texNombre(lesSegmentsMelanges[j].longNum, 1)}\\text{ cm}`,
             lesSegmentsMelanges[j].longDepart.ext1,
             lesSegmentsMelanges[j].longDepart.ext2,
+            { distance: 0.8 },
           ),
         )
       }
@@ -307,9 +323,11 @@ export default class longueurPatronPaveDroit extends Exercice {
             `${texNombre(lesSegmentsMelanges[j].longNum, 1)}\\text{ cm}`,
             lesSegmentsMelanges[j].longAChercher.ext1,
             lesSegmentsMelanges[j].longAChercher.ext2,
+            { distance: 0.8 },
           ),
         )
       }
+      lesDessinsCorr.push(...base1.codageCotes())
       texte += mathalea2d(
         Object.assign(
           {
@@ -332,9 +350,9 @@ export default class longueurPatronPaveDroit extends Exercice {
         ),
         lesDessinsCorr,
       )
-      if (this.interactif) {
+      /* if (this.interactif) {
         texte += '<br>'
-      }
+      } */
 
       if (
         this.questionJamaisPosee(
@@ -357,39 +375,36 @@ export default class longueurPatronPaveDroit extends Exercice {
 type coord = { x: number; y: number }
 type ExtremitesSegment = { ext1: PointAbstrait; ext2: PointAbstrait }
 
-function extSegment(cote: ArreteDuPatron, numbase2: number): ExtremitesSegment {
+function extSegment(cote: AreteDuPatron, numbase2: number): ExtremitesSegment {
   let exta: PointAbstrait
   let extb: PointAbstrait
   if (cote.face.numFace === numbase2) {
-    exta = cote.face.sommeti(cote.numArrete)
-    extb = cote.face.sommeti(cote.numArrete + 1)
+    exta = cote.face.sommeti(cote.numArete)
+    extb = cote.face.sommeti(cote.numArete + 1)
   } else {
-    exta = cote.face.sommeti(cote.numArrete + 1)
-    extb = cote.face.sommeti(cote.numArrete)
+    exta = cote.face.sommeti(cote.numArete + 1)
+    extb = cote.face.sommeti(cote.numArete)
   }
   return { ext1: exta, ext2: extb }
 }
 
-function sommetCommun(
-  arrete1: ArreteDuPatron,
-  arrete2: ArreteDuPatron,
-): boolean {
+function sommetCommun(arete1: AreteDuPatron, arete2: AreteDuPatron): boolean {
   return (
     memeCoord(
-      coordApprox(arrete1, arrete1.numArrete),
-      coordApprox(arrete2, arrete2.numArrete),
+      coordApprox(arete1, arete1.numArete),
+      coordApprox(arete2, arete2.numArete),
     ) ||
     memeCoord(
-      coordApprox(arrete1, arrete1.numArrete),
-      coordApprox(arrete2, arrete2.numArrete + 1),
+      coordApprox(arete1, arete1.numArete),
+      coordApprox(arete2, arete2.numArete + 1),
     ) ||
     memeCoord(
-      coordApprox(arrete1, arrete1.numArrete + 1),
-      coordApprox(arrete2, arrete2.numArrete),
+      coordApprox(arete1, arete1.numArete + 1),
+      coordApprox(arete2, arete2.numArete),
     ) ||
     memeCoord(
-      coordApprox(arrete1, arrete1.numArrete + 1),
-      coordApprox(arrete2, arrete2.numArrete + 1),
+      coordApprox(arete1, arete1.numArete + 1),
+      coordApprox(arete2, arete2.numArete + 1),
     )
   )
 }
@@ -397,14 +412,12 @@ function sommetCommun(
 function quatreEnLigne(faceDepart: FacePrisme): boolean {
   function combienDeFacesParLa(
     faceDepart: FacePrisme,
-    numArrete: number,
+    numArete: number,
   ): number {
-    let arreteEnCours = faceDepart.arretesi(numArrete)
+    let areteEnCours = faceDepart.aretesi(numArete)
     let nbFaceEnligne = 0
-    while (arreteEnCours.connectee) {
-      arreteEnCours = arreteEnCours.autreFace.arretesi(
-        arreteEnCours.autreArrete + 2,
-      )
+    while (areteEnCours.connectee) {
+      areteEnCours = areteEnCours.autreFace.aretesi(areteEnCours.autreArete + 2)
       nbFaceEnligne++
     }
     return nbFaceEnligne
@@ -423,42 +436,40 @@ function quatreEnLigne(faceDepart: FacePrisme): boolean {
   return result
 }
 
-function TrouveArreteEnFace(
-  arrete1: ArreteDuPatron,
-  listeArretes: ArreteDuPatron[],
+function TrouveAreteEnFace(
+  arete1: AreteDuPatron,
+  listeAretes: AreteDuPatron[],
 ): number {
-  const num = arrete1.numArrete + 2
-  let ArreteEnCours: Arrete = arrete1.face.arretesi(num)
-  let faceEnCours = arrete1.face
+  const num = arete1.numArete + 2
+  let AreteEnCours: Arete = arete1.face.aretesi(num)
+  let faceEnCours = arete1.face
 
   let i = 0
-  while (i < 12 && ArreteEnCours.connectee) {
-    faceEnCours = ArreteEnCours.autreFace
-    ArreteEnCours = ArreteEnCours.autreFace.arretesi(
-      ArreteEnCours.autreArrete + 2,
-    )
+  while (i < 12 && AreteEnCours.connectee) {
+    faceEnCours = AreteEnCours.autreFace
+    AreteEnCours = AreteEnCours.autreFace.aretesi(AreteEnCours.autreArete + 2)
     i++
   }
 
   let match = 0
   while (
-    match < listeArretes.length &&
-    (listeArretes[match].face !== faceEnCours ||
-      listeArretes[match].numArrete !== ArreteEnCours.numero)
+    match < listeAretes.length &&
+    (listeAretes[match].face !== faceEnCours ||
+      listeAretes[match].numArete !== AreteEnCours.numero)
   ) {
     match++
   }
-  if (match === listeArretes.length) {
+  if (match === listeAretes.length) {
     match = -1
   }
 
   return match
 }
 
-function coordApprox(arrete: ArreteDuPatron, num: number): coord {
+function coordApprox(arete: AreteDuPatron, num: number): coord {
   return {
-    x: arrondi(arrete.face.sommeti(num).x, 3),
-    y: arrondi(arrete.face.sommeti(num).y, 3),
+    x: arrondi(arete.face.sommeti(num).x, 3),
+    y: arrondi(arete.face.sommeti(num).y, 3),
   }
 }
 
@@ -468,8 +479,9 @@ function memeCoord(pt1: coord, pt2: coord): boolean {
 
 function fixeCotesQuestionReponse(
   face: FacePrisme,
-  long: number,
+  longAchercherSurSchema: number,
   numBase2: number,
+  longAchercher: number,
   typeLongAChercher: string,
 ): {
   longDepart: ExtremitesSegment
@@ -477,55 +489,57 @@ function fixeCotesQuestionReponse(
   typedeRecherche: string
   longNum: number
 } {
-  let arretesTrouvees: ArreteDuPatron[] = []
-  arretesTrouvees = face.trouveToutesArretesSurBordDeLongueur(long)
+  let aretesTrouvees: AreteDuPatron[] = []
+  aretesTrouvees = face.trouveToutesAretesSurBordDeLongueur(
+    longAchercherSurSchema,
+  )
 
-  const choixCoteConnu = randint(1, arretesTrouvees.length - 1)
-  const coteConnu = arretesTrouvees.splice(choixCoteConnu, 1)[0]
+  const choixCoteConnu = randint(1, aretesTrouvees.length - 1)
+  const coteConnu = aretesTrouvees.splice(choixCoteConnu, 1)[0]
 
-  const arretesDirectes: ArreteDuPatron[] = []
-  for (let j = 0; j < arretesTrouvees.length; j++) {
-    if (sommetCommun(arretesTrouvees[j], coteConnu)) {
-      arretesDirectes.push(arretesTrouvees[j])
-      arretesTrouvees.splice(j, 1)
+  const aretesDirectes: AreteDuPatron[] = []
+  for (let j = 0; j < aretesTrouvees.length; j++) {
+    if (sommetCommun(aretesTrouvees[j], coteConnu)) {
+      aretesDirectes.push(aretesTrouvees[j])
+      aretesTrouvees.splice(j, 1)
     }
   }
 
-  const arretesEnface: ArreteDuPatron[] = []
-  const numEnFace = TrouveArreteEnFace(coteConnu, arretesTrouvees)
+  const aretesEnface: AreteDuPatron[] = []
+  const numEnFace = TrouveAreteEnFace(coteConnu, aretesTrouvees)
   if (numEnFace > -1) {
-    arretesEnface.push(arretesTrouvees[numEnFace])
-    arretesTrouvees.splice(numEnFace, 1)
+    aretesEnface.push(aretesTrouvees[numEnFace])
+    aretesTrouvees.splice(numEnFace, 1)
   }
 
-  let arrete: ArreteDuPatron = coteConnu
+  let arete: AreteDuPatron = coteConnu
   let typeQuestion = ''
-  if (arretesTrouvees.length > 0 && typeLongAChercher === 'Indirecte') {
-    arrete = choice(arretesTrouvees)
+  if (aretesTrouvees.length > 0 && typeLongAChercher === 'Indirecte') {
+    arete = choice(aretesTrouvees)
     typeQuestion = 'Indirecte'
   } else {
     const choix: string[] = []
-    if (arretesEnface.length > 0) {
+    if (aretesEnface.length > 0) {
       choix.push('EnFace')
     }
-    if (arretesDirectes.length > 0) {
+    if (aretesDirectes.length > 0) {
       choix.push('Direct')
     }
 
     typeQuestion = choice(choix)
 
     if (typeQuestion === 'EnFace') {
-      arrete = choice(arretesEnface)
+      arete = choice(aretesEnface)
     } else {
-      arrete = choice(arretesDirectes)
+      arete = choice(aretesDirectes)
     }
   }
 
   return {
     longDepart: extSegment(coteConnu, numBase2),
-    longAChercher: extSegment(arrete, numBase2),
+    longAChercher: extSegment(arete, numBase2),
     typedeRecherche: typeQuestion,
-    longNum: long,
+    longNum: longAchercher,
   }
 }
 
