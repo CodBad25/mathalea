@@ -245,7 +245,7 @@ La droite qui possède ces deux caractéristiques est $${miseEnEvidence(`\\left(
   }
 
   versionAleatoire = () => {
-    const a = randint(-3, 3, [0,1])
+    const a = randint(-3, 3, [-1, 0, 1])
     let b = randint(-4, 4, 0)
     while (b === a * a || b === -a * a) {
       b = randint(-4, 4, 0)
