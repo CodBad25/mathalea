@@ -2,9 +2,10 @@ import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { creerCouples, shuffle2tableaux } from '../../lib/outils/arrayOutils'
 import { enumeration } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -19,8 +20,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Déterminer les coordonnées (relatives) d'un point"
 export const interactifReady = true
@@ -161,18 +160,20 @@ export default class ReperagePointDuPlan extends Exercice {
       nbPoints > 1
         ? 'Déterminer les coordonnées respectives des points '
         : 'Déterminer les coordonnées du point '
+    texte += enumeration(range(nbPoints - 1).map((i) => `$${nom[i]}$`))
+    texte += '.<br>'
+
     texteCorr =
       nbPoints > 1
         ? 'Les coordonnées respectives des points sont :<br>'
         : 'Les coordonnées du point sont :<br>'
-
-    texte += enumeration(range(nbPoints - 1).map((i) => `$${nom[i]}$`))
     texteCorr += enumeration(
       range(nbPoints - 1).map(
         (i) =>
           `$${nom[i]}(${miseEnEvidence(texNombre(points[i].x))};${miseEnEvidence(texNombre(points[i].y))})$`,
       ),
     )
+    texteCorr += '.'
 
     if (context.isAmc) {
       for (let i = 0; i < nbPoints; i++) {
@@ -270,11 +271,22 @@ export default class ReperagePointDuPlan extends Exercice {
             `$${nom[i]}($%{champ${2 * i + 1}}$;$%{champ${2 * i + 2}}$)$${i % 3 === 2 ? '\n' : ''}`,
         )
         .join(', ')
-      const dataOptions: Record<string, any> = {}
-      const reponses: Record<string, any> = {}
+      interface ChampOption {
+        keyboard: string | undefined
+      }
+
+      interface ChampReponse {
+        value: number
+      }
+      const dataOptions: Record<string, ChampOption> = {}
+      const reponses: Record<string, ChampReponse> = {}
       for (let i = 0; i < nbPoints; i++) {
-        dataOptions[`champ${2 * i + 1}`] = { keyboard: KeyboardType.clavierDeBaseAvecFraction }
-        dataOptions[`champ${2 * i + 2}`] = { keyboard: KeyboardType.clavierDeBaseAvecFraction }
+        dataOptions[`champ${2 * i + 1}`] = {
+          keyboard: KeyboardType.clavierDeBaseAvecFraction,
+        }
+        dataOptions[`champ${2 * i + 2}`] = {
+          keyboard: KeyboardType.clavierDeBaseAvecFraction,
+        }
         reponses[`champ${2 * i + 1}`] = { value: points[i].x }
         reponses[`champ${2 * i + 2}`] = { value: points[i].y }
       }
