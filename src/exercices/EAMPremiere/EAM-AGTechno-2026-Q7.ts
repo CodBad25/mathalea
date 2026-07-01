@@ -6,7 +6,10 @@ import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { latex2d } from '../../lib/2d/textes'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
-import { ecritureAlgebrique } from '../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  ecritureParentheseSiNegatif,
+} from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d, type Mathalea2dDisplay } from '../../modules/mathalea2d'
@@ -89,7 +92,7 @@ export default class AutoQ7AGt2026 extends ExerciceQcmA {
 
     this.correction = `La droite $(d)$ passe par les points $A(${texNombre(abscisseAOrigine, 2)};0)$ et $B(0;${texNombre(ordonneeAOrigine, 2)})$.<br>
     Son coefficient directeur est donc :<br>
-    $a=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${texNombre(ordonneeAOrigine, 2)}-0}{0-${texNombre(abscisseAOrigine, 2)}}=\\dfrac{${texNombre(ordonneeAOrigine, 2)}}{-${texNombre(abscisseAOrigine, 2)}}=${texNombre(coefficientDirecteur, 2)}$<br>
+    $a=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${texNombre(ordonneeAOrigine, 2)}-0}{0-${ecritureParentheseSiNegatif(-abscisseAOrigine)}}=\\dfrac{${texNombre(ordonneeAOrigine, 2)}}{${ecritureAlgebrique(-abscisseAOrigine)}}=${texNombre(coefficientDirecteur, 2)}$<br>
     Et sont ordonnée à l'origine est : $x_B=${ordonneeAOrigine}$<br>
     L'équation réduite de la droite $(d)$ est donc :<br>
     $${miseEnEvidence(`y=${texNombre(coefficientDirecteur, 2)}x+${texNombre(ordonneeAOrigine, 2)}`)}$`

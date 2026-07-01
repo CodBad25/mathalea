@@ -1,5 +1,6 @@
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
+import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { texNombre } from '../../lib/outils/texNombre'
 import ExerciceQcmA from '../ExerciceQcmA'
 
@@ -35,7 +36,7 @@ Où $F$ désigne la température en $^\\circ \\text{F}$ et $C$ désigne la temp�
 ${debutPhrase} $${texNombre(temperatureCelsius, 2)}\\,^\\circ \\text{C}$, ${finPhrase} en degrés Fahrenheit est donc :<br>`
 
     this.correction = `On applique la formule de conversion :<br>
-$F = 1{,}8\\times ${texNombre(temperatureCelsius, 2)} + 32 =${texNombre(1.8 * temperatureCelsius, 2)} + 32 = ${sol}\\,^\\circ \\text{F}$.`
+$F = 1{,}8\\times ${ecritureParentheseSiNegatif(temperatureCelsius)} + 32 =${texNombre(1.8 * temperatureCelsius, 2)} + 32 = ${sol}\\,^\\circ \\text{F}$.`
 
     this.reponses = [sol, dist1, dist2, dist3].map(
       (x) => `$${x}\\,^\\circ \\text{F}$`,

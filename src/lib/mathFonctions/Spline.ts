@@ -827,7 +827,7 @@ export class Spline {
     color?: string
     epaisseur?: number
     ajouteNoeuds?: boolean
-    optionsNoeuds?: Object
+    optionsNoeuds?: object
   } = {}) {
     return new Trace(this, {
       color,

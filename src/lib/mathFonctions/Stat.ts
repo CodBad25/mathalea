@@ -1,19 +1,23 @@
+import { bleuMathalea } from '../../lib/colors'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
+import { arc } from '../2d/Arc'
 import { BoiteBuilder } from '../2d/BoiteBuilder'
 import { colorToLatexOrHTML } from '../2d/colorToLatexOrHtml'
 import { fixeBordures } from '../2d/fixeBordures'
-import { pointAbstrait } from '../2d/PointAbstrait'
+import { PointAbstrait, pointAbstrait } from '../2d/PointAbstrait'
 import { polygone } from '../2d/polygones'
+import { polyline } from '../2d/Polyline'
 import { segment } from '../2d/segmentsVecteurs'
 import { latex2d } from '../2d/textes'
 import { tracePoint } from '../2d/TracePoint'
+import { homothetie, rotation } from '../2d/transformations'
 import { milieu } from '../2d/utilitairesPoint'
 import { vide2d } from '../2d/Vide2d'
 import { shuffle } from '../outils/arrayOutils'
+import { texcolors } from '../outils/embellissements'
 import { texNombre } from '../outils/texNombre'
-import { bleuMathalea } from '../../lib/colors'
 
 /**
  * Classe pour les statistiques descriptives
@@ -544,6 +548,96 @@ export default class Stat {
     }
   }
 
+  diagrammeCirc({
+    percentVsEffectifs = true,
+    effectifsOn = false,
+    valuesOn = true,
+    colors = texcolors,
+    semi = false,
+    rayon = 5,
+  }) {
+    const pairs: Array<[number | string, number]> = (
+      this.serieTableau as Array<[number | string, number]>
+    ).slice()
+    const total = pairs.reduce((s, [, f]) => s + f, 0)
+    const secteurs: { angle: number; color: string; label: string }[] = []
+    for (let i = 0; i < pairs.length; i++) {
+      secteurs.push({
+        angle: ((360 / (semi ? 2 : 1)) * pairs[i][1]) / total,
+        color: colors(i),
+        label: this.isQualitative
+          ? String(pairs[i][0])
+          : texNombre(Number(pairs[i][0])),
+      })
+    }
+    const O = pointAbstrait(0, 0)
+    let A = pointAbstrait(rayon, 0)
+    const objets: NestedObjetMathalea2dArray = []
+    for (let i = 0; i < pairs.length; i++) {
+      objets.push(arc(A, O, secteurs[i].angle, true, colors(i)))
+      const P = rotation(A, O, secteurs[i].angle / 2)
+      const C = homothetie(P, O, 0.5)
+      A = rotation(A, O, secteurs[i].angle)
+
+      let Q: PointAbstrait
+      let R: PointAbstrait
+      let justify = 'droite'
+      if (P.x >= O.x) {
+        //légende à droite
+        if (P.y > O.y) {
+          // légende au-dessus
+          Q = pointAbstrait(P.x + 0.5, P.y + 1)
+          R = pointAbstrait(P.x + 2, P.y + 1)
+          justify = 'droite'
+        } else {
+          // légende en dessous
+          Q = pointAbstrait(P.x + 0.5, P.y - 1)
+          R = pointAbstrait(P.x + 2, P.y - 1)
+          justify = 'droite'
+        }
+      } else {
+        if (P.y > O.y) {
+          // légende au-dessus
+          Q = pointAbstrait(P.x - 0.5, P.y + 1)
+          R = pointAbstrait(P.x - 2, P.y + 1)
+          justify = 'gauche'
+        } else {
+          // légende en dessous
+          Q = pointAbstrait(P.x - 0.5, P.y - 1)
+          R = pointAbstrait(P.x - 2, P.y - 1)
+          justify = 'gauche'
+        }
+      }
+      objets.push(polyline(P, Q, R))
+      objets.push(
+        latex2d(
+          `\\text{${secteurs[i].label}}`,
+          R.x + (justify === 'droite' ? 0.5 : -0.5),
+          R.y,
+          {
+            justify: justify as 'droite' | 'gauche',
+          },
+        ),
+      )
+      if (effectifsOn) {
+        if (percentVsEffectifs) {
+          objets.push(
+            latex2d(texNombre((pairs[i][1] / total) * 100, 2), C.x, C.y, {}),
+          )
+        } else {
+          objets.push(latex2d(texNombre(pairs[i][1], 2), C.x, C.y, {}))
+        }
+      }
+    }
+    return mathalea2d(
+      Object.assign(
+        { scale: 0.5 },
+        fixeBordures(objets, { rxmin: -3, rxmax: 3 }),
+      ),
+      objets,
+    )
+  }
+
   diagramme({
     cumul = false,
     croissance = true,
@@ -789,7 +883,10 @@ export default class Stat {
       }
 
       return mathalea2d(
-        Object.assign({ display: 'inline-block' } as const, fixeBordures(histo)),
+        Object.assign(
+          { display: 'inline-block' } as const,
+          fixeBordures(histo),
+        ),
         histo,
       )
     } else {
