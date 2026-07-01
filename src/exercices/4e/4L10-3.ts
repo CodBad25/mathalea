@@ -1,6 +1,6 @@
 import FabriqueAYohaku from '../6e/_Yohaku'
 export const titre =
-  'Résoudre un Yohaku additif expressions littérales niveau 1'
+  'Résoudre un Yohaku additif avec des expressions littérales'
 export const dateDePublication = '10/08/2022'
 export const dateDeModifImportante = '16/12/2023'
 

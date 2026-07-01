@@ -1,6 +1,6 @@
 import FabriqueAYohaku from '../6e/_Yohaku'
 export const titre =
-  'Résoudre un Yohaku multiplicatif nombres relatifs niveau 1'
+  'Résoudre un Yohaku multiplicatif avec des nombres relatifs'
 export const dateDePublication = '10/08/2022'
 export const dateDeModifImportante = '16/12/2023'
 

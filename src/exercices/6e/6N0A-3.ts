@@ -1,5 +1,5 @@
 import FabriqueAYohaku from './_Yohaku'
-export const titre = 'Résoudre un Yohaku additif niveau 1'
+export const titre = 'Résoudre un Yohaku additif'
 export const dateDePublication = '10/08/2022'
 export const interactifReady = true
 export const interactifType = 'custom'
