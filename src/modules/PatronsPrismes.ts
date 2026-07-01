@@ -6,6 +6,7 @@ import {
 } from '../lib/outils/arrayOutils'
 import { randint } from '../modules/outils'
 
+import { codageSegment } from '../lib/2d/CodageSegment'
 import { fixeBordures } from '../lib/2d/fixeBordures'
 import type { ObjetMathalea2D } from '../lib/2d/ObjetMathalea2D'
 import { PointAbstrait, pointAbstrait } from '../lib/2d/PointAbstrait'
@@ -20,7 +21,7 @@ import { mathalea2d } from '../modules/mathalea2d'
 /**
  * Bibliotheque de base
  * classe FacePrisme : arbre qui permet de definir un prisme (formes et faces)
- * classe Arrete : arrete d'un prisme
+ * classe Arete : arete d'un prisme
  * fonctions de construction de patron "enT, enS et au hasard"
  * fonctions utilitaires (modulo360 et modulo (en général) et detections d'angles saillant)
  * @author Olivier Mimeau
@@ -36,9 +37,9 @@ type ListeDesBases = {
   listeAngles: number[]
 }[]
 
-export type ArreteDuPatron = {
+export type AreteDuPatron = {
   face: FacePrisme
-  numArrete: number
+  numArete: number
 }
 
 export const listeDeBases: ListeDesBases = [
@@ -128,44 +129,44 @@ export const listeDeBases: ListeDesBases = [
   },
 ]
 
-export class Arrete {
-  numero: number = 0 //ce ne sont pas des numero absolus mais des indices dans le tableau des arretes de la face
+export class Arete {
+  numero: number = 0 //ce ne sont pas des numero absolus mais des indices dans le tableau des aretes de la face
   longueur: number = 0
   autreFace: FacePrisme
-  autreArrete: number
+  autreArete: number
   connectee: boolean = false
   constructor(
     num: number,
     long: number,
     faceConnexion: FacePrisme,
-    autreArrete: number,
+    autreArete: number,
     connectee: boolean,
   ) {
     this.numero = num
     this.longueur = long
     this.autreFace = faceConnexion
-    this.autreArrete = autreArrete
+    this.autreArete = autreArete
     this.connectee = connectee
   }
 
-  setFaceConnectee(faceConnexion: FacePrisme, autreArrete: number): void {
+  setFaceConnectee(faceConnexion: FacePrisme, autreArete: number): void {
     this.autreFace = faceConnexion
-    this.autreArrete = autreArrete
+    this.autreArete = autreArete
     this.connectee = true
   }
 
-  setFaceConnectable(faceConnexion: FacePrisme, autreArrete: number): void {
+  setFaceConnectable(faceConnexion: FacePrisme, autreArete: number): void {
     this.autreFace = faceConnexion
-    this.autreArrete = autreArrete
+    this.autreArete = autreArete
     this.connectee = false
   }
 
-  copieArrete(): Arrete {
-    return new Arrete(
+  copieArete(): Arete {
+    return new Arete(
       this.numero,
       this.longueur,
       this.autreFace,
-      this.autreArrete,
+      this.autreArete,
       this.connectee,
     )
   }
@@ -176,7 +177,7 @@ export class Arrete {
  */
 export class FacePrisme {
   private _numFace: number
-  private _arretes: Arrete[] = []
+  private _aretes: Arete[] = []
   private _anglesCotes: number[] = []
   private _sommets: PointAbstrait[] = []
   private _dessin: Polygone
@@ -192,7 +193,7 @@ export class FacePrisme {
   ) {
     this._numFace = numeroFace
     for (let j = 0; j < nombresdeCotes - 1; j++) {
-      this._arretes[j] = new Arrete(j, longueurCotes[j], this, -1, false) // faceConnectee et autreArrete à remplir plus tard
+      this._aretes[j] = new Arete(j, longueurCotes[j], this, -1, false) // faceConnectee et autreArete à remplir plus tard
     }
     this._sommets[0] = pointDepart
     let sommeAngles = modulo360(angleDepart)
@@ -214,7 +215,7 @@ export class FacePrisme {
 
     const s = segment(this._sommets[nombresdeCotes - 1], this._sommets[0])
     this._anglesCotes[nombresdeCotes - 1] = modulo360(s.angleAvecHorizontale)
-    this._arretes[nombresdeCotes - 1] = new Arrete(
+    this._aretes[nombresdeCotes - 1] = new Arete(
       nombresdeCotes - 1,
       longueur(this._sommets[0], this._sommets[nombresdeCotes - 1]),
       this,
@@ -237,8 +238,8 @@ export class FacePrisme {
     return this._sommets[modulo(i, this._sommets.length)]
   }
 
-  get arretes(): Arrete[] {
-    return this._arretes
+  get aretes(): Arete[] {
+    return this._aretes
   }
 
   get anglesCotes(): number[] {
@@ -249,8 +250,8 @@ export class FacePrisme {
     return this._anglesCotes[modulo(i, this._anglesCotes.length)]
   }
 
-  arretesi(i: number): Arrete {
-    return this._arretes[modulo(i, this._arretes.length)]
+  aretesi(i: number): Arete {
+    return this._aretes[modulo(i, this._aretes.length)]
   }
 
   get base(): boolean {
@@ -262,20 +263,20 @@ export class FacePrisme {
   }
 
   ajouteFaceConnectee(
-    numArrete: number,
+    numArete: number,
     face: FacePrisme,
-    autreArrete: number,
+    autreArete: number,
   ): void {
-    // a faire : verifie si le numero d'arrete de l'autre face existe
-    this._arretes[numArrete].setFaceConnectee(face, autreArrete)
+    // a faire : verifie si le numero d'arete de l'autre face existe
+    this._aretes[numArete].setFaceConnectee(face, autreArete)
   }
 
   ajouteFaceConnectable(
-    numArrete: number,
+    numArete: number,
     face: FacePrisme,
-    autreArrete: number,
+    autreArete: number,
   ): void {
-    this._arretes[numArrete].setFaceConnectable(face, autreArrete)
+    this._aretes[numArete].setFaceConnectable(face, autreArete)
   }
 
   listerConnections(): string {
@@ -283,7 +284,7 @@ export class FacePrisme {
 
     // Ajouter les faces connectées
     resultat += '<br>--- Faces connectées ---<br>'
-    this._arretes.forEach((connection) => {
+    this._aretes.forEach((connection) => {
       if (connection.autreFace) {
         resultat += `Arête ${connection.numero} :`
         if (connection.autreFace.numFace === this._numFace) {
@@ -314,7 +315,7 @@ export class FacePrisme {
       resultat += `${indent}Face ${face.numFace} (Base: ${face.base})<br>`
       resultat += face.listerConnections() + `<br>`
       // Parcourt les faces connectées
-      face._arretes.forEach((connection) => {
+      face._aretes.forEach((connection) => {
         if (connection.autreFace) {
           parcourir(connection.autreFace, niveau + 1)
         }
@@ -339,7 +340,7 @@ export class FacePrisme {
         return face
       }
       // Parcourt les faces connectées
-      for (const connection of face._arretes) {
+      for (const connection of face._aretes) {
         if (connection.autreFace) {
           const resultat = parcourir(connection.autreFace)
           if (resultat) {
@@ -358,13 +359,13 @@ export class FacePrisme {
     faceBase: FacePrisme,
   ): number[] {
     const facesLaterales: number[] = []
-    const listeArretesDispo = faceBase.trouveArretesdisponibles(true)
+    const listeAretesDispo = faceBase.trouveAretesdisponibles(true)
     // Parcourt les faces connectées directement à la base
-    faceBase._arretes.forEach((connection) => {
+    faceBase._aretes.forEach((connection) => {
       if (
         connection.autreFace &&
         !connection.autreFace.base &&
-        listeArretesDispo.indexOf(connection.numero) > -1
+        listeAretesDispo.indexOf(connection.numero) > -1
       ) {
         facesLaterales.push(connection.autreFace.numFace)
       }
@@ -372,8 +373,8 @@ export class FacePrisme {
     return facesLaterales
   }
 
-  faceConnecteei(numArrete: number): FacePrisme | null {
-    const connection = this._arretes.find((conn) => conn.numero === numArrete)
+  faceConnecteei(numArete: number): FacePrisme | null {
+    const connection = this._aretes.find((conn) => conn.numero === numArete)
     if (
       connection &&
       connection.autreFace &&
@@ -385,8 +386,8 @@ export class FacePrisme {
     }
   }
 
-  faceConnectablei(numArrete: number): FacePrisme | null {
-    const connection = this._arretes.find((conn) => conn.numero === numArrete)
+  faceConnectablei(numArete: number): FacePrisme | null {
+    const connection = this._aretes.find((conn) => conn.numero === numArete)
     if (
       connection &&
       connection.autreFace &&
@@ -399,32 +400,32 @@ export class FacePrisme {
   }
 
   /**
-   * Retourne la liste des indices des arretes de cette face qui ne sont pas encore reliées à une autre face.
-   * @returns Un tableau d'indices d'arretes disponibles.
+   * Retourne la liste des indices des aretes de cette face qui ne sont pas encore reliées à une autre face.
+   * @returns Un tableau d'indices d'aretes disponibles.
    */
-  listerIndicesArretesDisponibles(): number[] {
-    const arretesDisponibles: number[] = []
+  listerIndicesAretesDisponibles(): number[] {
+    const aretesDisponibles: number[] = []
 
-    // Parcourir les arretes connectées
-    this._arretes.forEach((connection) => {
+    // Parcourir les aretes connectées
+    this._aretes.forEach((connection) => {
       if (
         !connection.autreFace ||
         connection.autreFace.numFace === this._numFace
       ) {
-        arretesDisponibles.push(connection.numero)
+        aretesDisponibles.push(connection.numero)
       }
     })
-    // Parcourir les arretes connectables
+    // Parcourir les aretes connectables
     /*  this._facesConnectables.forEach((connection) => {
       if (!connection.face || connection.face.numFace === this._numFace) {
-        // Vérifier si l'arrete n'est pas déjà dans la liste (pour éviter les doublons)
-        if (!arretesDisponibles.includes(connection.arrete)) {
-          arretesDisponibles.push(connection.arrete)
+        // Vérifier si l'arete n'est pas déjà dans la liste (pour éviter les doublons)
+        if (!aretesDisponibles.includes(connection.arete)) {
+          aretesDisponibles.push(connection.arete)
         }
       }
     }) */
 
-    return arretesDisponibles
+    return aretesDisponibles
   }
 
   creerFaceLateraleSurBase(
@@ -448,9 +449,9 @@ export class FacePrisme {
         NumFace,
         4,
         [
-          this.arretesi(numCoteBase).longueur,
+          this.aretesi(numCoteBase).longueur,
           hauteurPrisme,
-          this.arretesi(numCoteBase).longueur,
+          this.aretesi(numCoteBase).longueur,
         ],
         [90, 90],
         false,
@@ -470,8 +471,8 @@ export class FacePrisme {
     // On gère les connexions (faces connectables) avec les autres faces latérales qui serait connectées sur les arrêtes adjacentes de la base
     let autreFace: FacePrisme | null = null
     for (let i = -1; i <= 1; i += 2) {
-      if (this.arretesi(numCoteBase + i).autreArrete !== -1) {
-        autreFace = this.arretesi(numCoteBase + i).autreFace
+      if (this.aretesi(numCoteBase + i).autreArete !== -1) {
+        autreFace = this.aretesi(numCoteBase + i).autreFace
         if (autreFace) {
           maface.ajouteFaceConnectable(2 - i, autreFace, 2 + i) // (3, autreFace, 1)
           autreFace.ajouteFaceConnectable(2 + i, maface, 2 - i) // (1, maface, 3)
@@ -504,9 +505,9 @@ export class FacePrisme {
     if (!this.base) {
       if (numCote === 3 || numCote === 1) {
         const plusMoins1 = numCote === 3 ? -1 : 1
-        // l'arrete 2 de this est connecté à la base il faut la longeur de la bonne arrete de la base
-        const largeurFaceLaterale = this.arretesi(2).autreFace.arretesi(
-          this.arretesi(2).autreArrete + plusMoins1,
+        // l'arete 2 de this est connecté à la base il faut la longeur de la bonne arete de la base
+        const largeurFaceLaterale = this.aretesi(2).autreFace.aretesi(
+          this.aretesi(2).autreArete + plusMoins1,
         ).longueur
         let pointDecale = this.sommeti(1)
         if (numCote === 3) {
@@ -531,25 +532,25 @@ export class FacePrisme {
         this.ajouteFaceConnectee(numCote, maface, numCoteConstruit)
 
         // gerer avec la base (les bases) si elle existe deja ou pas
-        // si this.arretesi(2).autreFace.base
+        // si this.aretesi(2).autreFace.base
         let num: number = 0
         for (let i = 0; i < 4; i++) {
-          if (this.arretesi(i).autreFace.base) {
-            const num = this.arretesi(i).autreFace.arretesi(
-              this.arretesi(i).autreArrete + plusMoins1,
+          if (this.aretesi(i).autreFace.base) {
+            const num = this.aretesi(i).autreFace.aretesi(
+              this.aretesi(i).autreArete + plusMoins1,
             ).numero
-            maface.ajouteFaceConnectable(i, this.arretesi(i).autreFace, num)
-            this.arretesi(i).autreFace.ajouteFaceConnectable(num, maface, i)
+            maface.ajouteFaceConnectable(i, this.aretesi(i).autreFace, num)
+            this.aretesi(i).autreFace.ajouteFaceConnectable(num, maface, i)
           }
         }
 
         // dsdsq
-        num = this.arretesi(2).autreFace.arretesi(
-          this.arretesi(2).autreArrete + 2 * plusMoins1,
+        num = this.aretesi(2).autreFace.aretesi(
+          this.aretesi(2).autreArete + 2 * plusMoins1,
         ).autreFace.numFace
-        if (num !== this.arretesi(2).autreFace._numFace) {
-          const tface = this.arretesi(2).autreFace.arretesi(
-            this.arretesi(2).autreArrete + 2 * plusMoins1,
+        if (num !== this.aretesi(2).autreFace._numFace) {
+          const tface = this.aretesi(2).autreFace.aretesi(
+            this.aretesi(2).autreArete + 2 * plusMoins1,
           ).autreFace
           const autreNumCote = numCote === 3 ? 1 : 3
           maface.ajouteFaceConnectable(numCote, tface, autreNumCote)
@@ -572,33 +573,33 @@ export class FacePrisme {
     // Implémentation pour créer une face latérale connectée à une base à partir d'un numéro d'arête et d'un numéro de face
     const maface: FacePrisme = new FacePrisme(NumFace, 3, [1, 1], [90], true)
     const angleDepart = this.anglesCotei(2)
-    const numCoteBase = this.arretesi(2).autreArrete
-    const angleDepart2 = this.arretesi(2).autreFace.anglesCotei(numCoteBase)
+    const numCoteBase = this.aretesi(2).autreArete
+    const angleDepart2 = this.aretesi(2).autreFace.anglesCotei(numCoteBase)
     const angleDecale = modulo360(angleDepart2 + angleDepart + 180)
     const longueursCotes = []
     const anglesCotes = []
-    const arretes = []
-    for (let i = 0; i < base1.arretes.length; i++) {
-      longueursCotes.push(base1.arretes[i].longueur)
+    const aretes = []
+    for (let i = 0; i < base1.aretes.length; i++) {
+      longueursCotes.push(base1.aretes[i].longueur)
       anglesCotes.push(modulo360(-base1.anglesCotes[i] + angleDecale))
-      const newArrete = base1.arretes[i].copieArrete()
+      const newArete = base1.aretes[i].copieArete()
 
-      if (newArrete.autreFace === base1) {
-        newArrete.autreFace = maface
+      if (newArete.autreFace === base1) {
+        newArete.autreFace = maface
       }
 
-      arretes.push(newArrete)
+      aretes.push(newArete)
     }
 
     maface._anglesCotes = anglesCotes
-    maface._arretes = arretes
+    maface._aretes = aretes
     // calcul points
 
     maface._sommets[0] = this._sommets[0]
-    for (let i = 1; i < arretes.length; i++) {
+    for (let i = 1; i < aretes.length; i++) {
       maface._sommets[i] = pointAdistance(
         maface._sommets[i - 1],
-        maface._arretes[i - 1].longueur,
+        maface._aretes[i - 1].longueur,
         maface._anglesCotes[i - 1],
       )
     }
@@ -616,8 +617,8 @@ export class FacePrisme {
     maface.ajouteFaceConnectee(numCoteBase, this, 0)
     this.ajouteFaceConnectee(0, maface, numCoteBase)
 
-    for (let i = 0; i < maface.arretes.length; i++) {
-      const tmpFace = maface._arretes[i].autreFace
+    for (let i = 0; i < maface.aretes.length; i++) {
+      const tmpFace = maface._aretes[i].autreFace
       if (i !== numCoteBase && tmpFace !== maface) {
         maface.ajouteFaceConnectable(i, tmpFace, 0)
         tmpFace.ajouteFaceConnectable(0, maface, i)
@@ -640,7 +641,7 @@ export class FacePrisme {
       if (face.base && face.numFace !== this._numFace) {
         lesBases.push(face)
       }
-      face._arretes.forEach((connection) => {
+      face._aretes.forEach((connection) => {
         if (connection.autreFace) {
           parcourir(connection.autreFace)
         }
@@ -661,7 +662,7 @@ export class FacePrisme {
         if (!face.base) {
           facesLaterales.push(face)
         }
-        face._arretes.forEach((connection) => {
+        face._aretes.forEach((connection) => {
           if (connection.autreFace) {
             parcourir(connection.autreFace)
           }
@@ -672,29 +673,29 @@ export class FacePrisme {
     return facesLaterales
   }
 
-  trouveArreteslateralesDisponiblesPourFaceLaterale(
+  trouveAreteslateralesDisponiblesPourFaceLaterale(
     sens: number = 0,
-  ): ArreteDuPatron[] {
-    const resultat: ArreteDuPatron[] = []
+  ): AreteDuPatron[] {
+    const resultat: AreteDuPatron[] = []
     if (sens === 0 || sens === 1) {
-      if (this.arretesi(1).autreFace === this) {
-        resultat.push({ face: this, numArrete: 1 })
-      } else if (this.arretesi(1).autreFace && this.arretesi(1).connectee) {
+      if (this.aretesi(1).autreFace === this) {
+        resultat.push({ face: this, numArete: 1 })
+      } else if (this.aretesi(1).autreFace && this.aretesi(1).connectee) {
         resultat.push(
-          ...this.arretesi(
+          ...this.aretesi(
             1,
-          ).autreFace.trouveArreteslateralesDisponiblesPourFaceLaterale(1),
+          ).autreFace.trouveAreteslateralesDisponiblesPourFaceLaterale(1),
         )
       }
     }
     if (sens === 0 || sens === 3) {
-      if (this.arretesi(3).autreFace === this) {
-        resultat.push({ face: this, numArrete: 3 })
-      } else if (this.arretesi(3).autreFace && this.arretesi(3).connectee) {
+      if (this.aretesi(3).autreFace === this) {
+        resultat.push({ face: this, numArete: 3 })
+      } else if (this.aretesi(3).autreFace && this.aretesi(3).connectee) {
         resultat.push(
-          ...this.arretesi(
+          ...this.aretesi(
             3,
-          ).autreFace.trouveArreteslateralesDisponiblesPourFaceLaterale(3),
+          ).autreFace.trouveAreteslateralesDisponiblesPourFaceLaterale(3),
         )
       }
     }
@@ -703,21 +704,21 @@ export class FacePrisme {
 
   /*
    * base1 : la definition des angles saillant depend du sens : anti horaire pour base1 et horaire pour base 2
-   * facesExistantes = true : renvoie la liste des arretes ou des faces sont déja crée
-   * facesExistantes = false : renvoie la liste des arretes ou on peut creer une faces latérales (angles saillants)
+   * facesExistantes = true : renvoie la liste des aretes ou des faces sont déja crée
+   * facesExistantes = false : renvoie la liste des aretes ou on peut creer une faces latérales (angles saillants)
    */
-  trouveArretesdisponibles(
+  trouveAretesdisponibles(
     base1: boolean,
     facesExistantes: boolean = false,
   ): number[] {
     const resultat: number[] = []
-    for (let i = 0; i < this.arretes.length; i++) {
+    for (let i = 0; i < this.aretes.length; i++) {
       const laFaceiDoitExister =
-        facesExistantes && this.arretesi(i).autreFace !== this
-      const regardeLArretei = facesExistantes
+        facesExistantes && this.aretesi(i).autreFace !== this
+      const regardeLAretei = facesExistantes
         ? laFaceiDoitExister
-        : this.arretesi(i).autreFace === this
-      if (regardeLArretei) {
+        : this.aretesi(i).autreFace === this
+      if (regardeLAretei) {
         let saillant = true
         if (base1) {
           saillant =
@@ -737,42 +738,42 @@ export class FacePrisme {
     return resultat
   }
 
-  trouveToutesArreteslateralesDisponibles(sens: number = 0): ArreteDuPatron[] {
+  trouveToutesAreteslateralesDisponibles(sens: number = 0): AreteDuPatron[] {
     // Parcours l'objet pourlister parcoursles faces laterales
     const listeFaceslaterales = this.parcoursFacesLaterales()
-    // effectue la liste des arretes latterales dispo dans cette liste
-    const resultat: { face: FacePrisme; numArrete: number }[] = []
+    // effectue la liste des aretes latterales dispo dans cette liste
+    const resultat: { face: FacePrisme; numArete: number }[] = []
     listeFaceslaterales.forEach((lface) => {
       for (let i = 1; i < 4; i += 2) {
-        if (lface.arretesi(i).autreFace.numFace === lface.numFace) {
-          resultat.push({ face: lface, numArrete: i })
+        if (lface.aretesi(i).autreFace.numFace === lface.numFace) {
+          resultat.push({ face: lface, numArete: i })
         }
       }
     })
     return resultat
   }
 
-  trouveToutesArretesSurBordDeLongueur(long: number = 0): ArreteDuPatron[] {
+  trouveToutesAretesSurBordDeLongueur(long: number = 0): AreteDuPatron[] {
     /*       longueur: number = 0
   autreFace: FacePrisme
-  autreArrete: number
+  autreArete: number
   connectee: boolean = false */
     // Parcours l'objet pourlister parcoursles faces laterales
     /*     const listeFaceslaterales = this.parcoursFacesLaterales()
-    // effectue la liste des arretes latterales dispo dans cette liste
-    const resultat: { face: FacePrisme; numArrete: number }[] = []
+    // effectue la liste des aretes latterales dispo dans cette liste
+    const resultat: { face: FacePrisme; numArete: number }[] = []
     listeFaceslaterales.forEach((lface) => {
       for (let i = 1; i < 4; i += 2) {
         if (
-          !lface.arretesi(i).connectee &&
-          lface.arretesi(i).longueur === long
+          !lface.aretesi(i).connectee &&
+          lface.aretesi(i).longueur === long
         ) {
-          resultat.push({ face: lface, numArrete: i })
+          resultat.push({ face: lface, numArete: i })
         }
       }
     })
  */
-    const resultat: ArreteDuPatron[] = []
+    const resultat: AreteDuPatron[] = []
     const facesVisitees: Set<number> = new Set() // Stocke les numéros de faces déjà visitées
 
     // Fonction récursive pour le parcours en profondeur (DFS)
@@ -781,15 +782,15 @@ export class FacePrisme {
         return // Évite les redondances
       }
       facesVisitees.add(face.numFace)
-      // regarde les arretes de la face
-      face._arretes.forEach((connection) => {
+      // regarde les aretes de la face
+      face._aretes.forEach((connection) => {
         if (!connection.connectee && connection.longueur === long) {
-          resultat.push({ face: face, numArrete: connection.numero })
+          resultat.push({ face: face, numArete: connection.numero })
         }
       })
 
       // Parcourt les faces connectées
-      face._arretes.forEach((connection) => {
+      face._aretes.forEach((connection) => {
         if (connection.autreFace) {
           parcourir(connection.autreFace, niveau + 1)
         }
@@ -831,6 +832,52 @@ export class FacePrisme {
     return reponse
   }
 
+  codageCotes(): ObjetMathalea2D[] {
+    const facesVisitees: Set<number> = new Set() // Stocke les numéros de faces déjà visitées
+    const aretesVisitees: string[] = [] // Stocke les numéros d'arêtes déjà visitées
+    const lesLongueurs: number[] = []
+    const lesCodages: string[] = ['|', 'X', 'O', '||', '|||', '/', '//', '///']
+
+    const lesDessins: ObjetMathalea2D[] = []
+    // Fonction récursive pour le parcours en profondeur (DFS)
+    const parcourir = (face: FacePrisme, niveau: number = 0) => {
+      if (facesVisitees.has(face.numFace)) {
+        return // Évite les redondances
+      }
+      facesVisitees.add(face.numFace) // Marque la face actuelle comme visitée
+
+      // Parcourt les arretes pour ajouter les codages le cas echéant et pour parcourir les faces connectées
+      face._aretes.forEach((item) => {
+        const empreinteArete = `${face.numFace}-${item.numero}`
+        if (!aretesVisitees.includes(empreinteArete) || niveau > 10) {
+          aretesVisitees.push(empreinteArete)
+          if (item.connectee) {
+            const autreEmpreinteArete = `${item.autreFace.numFace}-${item.autreArete}`
+            aretesVisitees.push(autreEmpreinteArete)
+          }
+
+          if (!lesLongueurs.includes(item.longueur)) {
+            lesLongueurs.push(item.longueur)
+          }
+          const indexLongueur = lesLongueurs.indexOf(item.longueur)
+          const A = face.sommeti(item.numero)
+          const B = face.sommeti(item.numero + 1)
+          lesDessins.push(
+            codageSegment(A, B, lesCodages[indexLongueur], 'black', 1),
+          )
+          if (item.connectee) {
+            parcourir(item.autreFace, niveau + 1)
+          }
+        }
+      })
+    }
+
+    // Lancer le parcours à partir de cette face
+
+    parcourir(this)
+    return lesDessins
+  }
+
   // Numero: 'sans' | 'standard' | 'hasard' : distinction 'standard' | 'hasard' sans effet car deja implementaer a la fabrication du patron.
   patron(
     Numero: 'sans' | 'standard' | 'hasard',
@@ -849,7 +896,7 @@ export class FacePrisme {
       lesDessins.push(...face.dessinerFace(Numero !== 'sans', premiersSegments))
       // Ajouter le dessin de la face au résultat (ici, on concatène les dessins en HTML)
       // Parcourt les faces connectées
-      face._arretes.forEach((connection) => {
+      face._aretes.forEach((connection) => {
         if (connection.autreFace) {
           parcourir(connection.autreFace, niveau + 1)
         }
@@ -942,13 +989,13 @@ export function patronHasard(
   /**
    * armature : on choisit cote de la base1 à partir duquel on commence à construire les faces latérales
    * onc choisit le nombre de faces latérales sur la première ligne (c'est à dire les faces latérales qui seront connectées directement à la base1)
-   * pour chaque face latérale de la première ligne on choisit une arrete disponible pour construire la face latérale suivante
+   * pour chaque face latérale de la première ligne on choisit une arete disponible pour construire la face latérale suivante
    * on construit la base2 à partir d'une face latérale connectée ou connectable à la base1
    */
 
-  // numDebutCoteBase = randint(0, base1.arretes.length - 1)
-  let listeArretesDispo = base1.trouveArretesdisponibles(true)
-  const numDebutCoteBase = choice(listeArretesDispo)
+  // numDebutCoteBase = randint(0, base1.aretes.length - 1)
+  let listeAretesDispo = base1.trouveAretesdisponibles(true)
+  const numDebutCoteBase = choice(listeAretesDispo)
   if (
     options.horizontal === 'horizontal' ||
     options.horizontal === 'vertical'
@@ -980,63 +1027,63 @@ export function patronHasard(
   ordreFace += 1
   nbFacesLatRestant -= 1
   let maface: FacePrisme
-  enleveElement(listeArretesDispo, numDebutCoteBase)
+  enleveElement(listeAretesDispo, numDebutCoteBase)
 
-  if (!options.enT && listeArretesDispo.length === 1) {
+  if (!options.enT && listeAretesDispo.length === 1) {
     base1.creerFaceLateraleSurBase(
       num[ordreFace],
       true, // true c'est bien la base1
-      listeArretesDispo[0],
+      listeAretesDispo[0],
       hauteurPrisme,
     )
     ordreFace += 1
     nbFacesLatRestant -= 1
-    enleveElement(listeArretesDispo, listeArretesDispo[0])
+    enleveElement(listeAretesDispo, listeAretesDispo[0])
   }
-  // si listeArretesDispo.length===0) on passe dirrectement à ajoutbase2 sur maface1
+  // si listeAretesDispo.length===0) on passe dirrectement à ajoutbase2 sur maface1
   // puis fin des faces latérales donc
-  if (listeArretesDispo.length > 0) {
-    const nbArretesDispoDeDepart = listeArretesDispo.length
-    const minArretesDispoRestant = options.enT || options.enS ? 0 : 1 // si pas en T et pas en S il doit rester une face latérale (à connecter)
+  if (listeAretesDispo.length > 0) {
+    const nbAretesDispoDeDepart = listeAretesDispo.length
+    const minAretesDispoRestant = options.enT || options.enS ? 0 : 1 // si pas en T et pas en S il doit rester une face latérale (à connecter)
     // pour eviter que toutes soit alignées
     const nbFaceLateralesBaseAConnecter = randint(
-      minArretesDispoRestant,
-      nbArretesDispoDeDepart - minArretesDispoRestant,
+      minAretesDispoRestant,
+      nbAretesDispoDeDepart - minAretesDispoRestant,
     )
 
     maface = maface1
     do {
-      const listeArretesLateralesDisponibles =
-        maface.trouveArreteslateralesDisponiblesPourFaceLaterale()
-      const tFace = choice(listeArretesLateralesDisponibles)
+      const listeAretesLateralesDisponibles =
+        maface.trouveAreteslateralesDisponiblesPourFaceLaterale()
+      const tFace = choice(listeAretesLateralesDisponibles)
       maface = tFace.face.creerFaceLateraleSurFaceLaterale(
         num[ordreFace],
-        tFace.numArrete,
+        tFace.numArete,
         hauteurPrisme,
       )
       ordreFace += 1
       nbFacesLatRestant -= 1
-      listeArretesDispo = base1.trouveArretesdisponibles(true)
+      listeAretesDispo = base1.trouveAretesdisponibles(true)
       // ajoute une face
-      // et listeArretesDispo = base1.trouveArretesdisponibles(true)
+      // et listeAretesDispo = base1.trouveAretesdisponibles(true)
     } while (
-      listeArretesDispo.length >
-      nbArretesDispoDeDepart - nbFaceLateralesBaseAConnecter
+      listeAretesDispo.length >
+      nbAretesDispoDeDepart - nbFaceLateralesBaseAConnecter
     )
     // }
   }
   // partie créer base2
-  const arretesDispo = base1.trouveArretesdisponibles(true, true) // (true, true)
+  const aretesDispo = base1.trouveAretesdisponibles(true, true) // (true, true)
 
-  if (options.enS && arretesDispo.length > 1) {
-    enleveElement(arretesDispo, maface1.arretesi(2).autreArrete) // enleveElement(listeArretesDispo, maface1.numFace)
+  if (options.enS && aretesDispo.length > 1) {
+    enleveElement(aretesDispo, maface1.aretesi(2).autreArete) // enleveElement(listeAretesDispo, maface1.numFace)
   }
   let faceauPif: FacePrisme
   if (options.enT && nbFacesLatRestant === 0) {
     faceauPif = maface1
   } else {
-    const tempnum = choice(arretesDispo)
-    faceauPif = base1.arretesi(tempnum).autreFace // base1.trouverFaceParNumero(choice(facesLaterales))
+    const tempnum = choice(aretesDispo)
+    faceauPif = base1.aretesi(tempnum).autreFace // base1.trouverFaceParNumero(choice(facesLaterales))
   }
 
   if (faceauPif) {
@@ -1047,17 +1094,17 @@ export function patronHasard(
     ordreFace += options.tNumerotation === 'hasard' ? 1 : 0
   }
 
-  if ((!options.enT || !options.enS) && listeArretesDispo.length > 0) {
+  if ((!options.enT || !options.enS) && listeAretesDispo.length > 0) {
     const baseChoisie = choice([base1, base2])
-    listeArretesDispo = baseChoisie.trouveArretesdisponibles(
+    listeAretesDispo = baseChoisie.trouveAretesdisponibles(
       baseChoisie === base1,
     )
 
-    const numArreteChoisie = choice(listeArretesDispo)
+    const numAreteChoisie = choice(listeAretesDispo)
     maface = baseChoisie.creerFaceLateraleSurBase(
       num[ordreFace],
       baseChoisie === base1,
-      numArreteChoisie,
+      numAreteChoisie,
       hauteurPrisme,
     )
     ordreFace += 1
@@ -1069,13 +1116,13 @@ export function patronHasard(
    * oun choisit sur faces laterales disponibles
    * ou sur base si base on choisit base 1 ou base 2
    */
-  // si reste 1 ou + base1.trouveArretesdisponibles(true) il faudra forecer la ceation d'une face laterale sur base1 ou 2
+  // si reste 1 ou + base1.trouveAretesdisponibles(true) il faudra forecer la ceation d'une face laterale sur base1 ou 2
   // mais peute etre savoir si cette 2eme face pas deja crée cf
 
   let choix = ['base', 'laterale']
   for (let j = 0; j < nbFacesLatRestant; j++) {
-    listeArretesDispo = base1.trouveArretesdisponibles(true)
-    if (listeArretesDispo.length < 1) {
+    listeAretesDispo = base1.trouveAretesdisponibles(true)
+    if (listeAretesDispo.length < 1) {
       choix = ['laterale']
     }
     const choixBaseOuLaterale = choice(choix) // 999
@@ -1083,14 +1130,14 @@ export function patronHasard(
       case 'base':
         {
           const baseChoisie = choice([base1, base2])
-          if (listeArretesDispo.length === 1) {
+          if (listeAretesDispo.length === 1) {
             choix = ['laterale']
           }
-          const numArreteChoisie = choice(listeArretesDispo)
+          const numAreteChoisie = choice(listeAretesDispo)
           maface = baseChoisie.creerFaceLateraleSurBase(
             num[ordreFace],
             baseChoisie === base1,
-            numArreteChoisie,
+            numAreteChoisie,
             hauteurPrisme,
           )
           ordreFace += 1
@@ -1098,11 +1145,11 @@ export function patronHasard(
         break
       case 'laterale':
         {
-          const arretesDispo = base1.trouveToutesArreteslateralesDisponibles()
-          const uFace = choice(arretesDispo)
+          const aretesDispo = base1.trouveToutesAreteslateralesDisponibles()
+          const uFace = choice(aretesDispo)
           maface = uFace.face.creerFaceLateraleSurFaceLaterale(
             num[ordreFace],
-            uFace.numArrete,
+            uFace.numArete,
             hauteurPrisme,
           )
           ordreFace += 1
@@ -1133,7 +1180,7 @@ export function patronEnS(
   /**
    * armature : on choisit cote de la base1 à partir duquel on commence à construire les faces latérales
    * on construit les faces latérales alignes
-   * pour chaque face latérale de la première ligne on choisit une arrete disponible pour construire la face latérale suivante
+   * pour chaque face latérale de la première ligne on choisit une arete disponible pour construire la face latérale suivante
    * on construit la base2 en face de la base1
    */
   const tempNum: number[] = []
@@ -1163,7 +1210,7 @@ export function patronEnS(
     options.angleDeDepart, // angle depart
   )
 
-  const numDebutCoteBase = choice(base1.trouveArretesdisponibles(true))
+  const numDebutCoteBase = choice(base1.trouveAretesdisponibles(true))
   if (
     options.horizontal === 'horizontal' ||
     options.horizontal === 'vertical'
@@ -1198,21 +1245,21 @@ export function patronEnS(
   ordreFace += 1
   maface = maface1
   for (let j = 1; j < nbSommetBase; j++) {
-    const listeArretesLateralesDisponibles =
-      maface.trouveArreteslateralesDisponiblesPourFaceLaterale()
-    const tFace = choice(listeArretesLateralesDisponibles)
+    const listeAretesLateralesDisponibles =
+      maface.trouveAreteslateralesDisponiblesPourFaceLaterale()
+    const tFace = choice(listeAretesLateralesDisponibles)
     maface = tFace.face.creerFaceLateraleSurFaceLaterale(
       num[ordreFace],
-      tFace.numArrete,
+      tFace.numArete,
       hauteurPrisme,
     )
     ordreFace += 1
   }
-  const arretesDispo = base1.trouveArretesdisponibles(true, true)
-  if (!options.enT && arretesDispo.length > 1) {
-    enleveElement(arretesDispo, maface1.arretesi(2).autreArrete)
+  const aretesDispo = base1.trouveAretesdisponibles(true, true)
+  if (!options.enT && aretesDispo.length > 1) {
+    enleveElement(aretesDispo, maface1.aretesi(2).autreArete)
   }
-  const faceauPif = base1.arretesi(choice(arretesDispo)).autreFace // base1.trouverFaceParNumero(choice(facesLaterales))
+  const faceauPif = base1.aretesi(choice(aretesDispo)).autreFace // base1.trouverFaceParNumero(choice(facesLaterales))
   if (faceauPif) {
     faceauPif.creer2emeBaseSurFaceLaterale(
       options.tNumerotation === 'hasard' ? num[ordreFace] : 2,
@@ -1241,7 +1288,7 @@ export function patronEnT(
   /**
    * armature : on choisit cote de la base1 à partir duquel on commence à construire les faces latérales
    * on construit la base1 en tenant compte de horizontalon construit les faces latérales alignes
-   * pour chaque face latérale de la première ligne on choisit une arrete disponible pour construire la face latérale suivante
+   * pour chaque face latérale de la première ligne on choisit une arete disponible pour construire la face latérale suivante
    * on construit la base2 en face de la base1
    */
   const tempNum: number[] = []
@@ -1270,7 +1317,7 @@ export function patronEnT(
     pointAbstrait(0, 0),
     options.angleDeDepart, // angle depart
   )
-  const numDebutCoteBase = choice(base1.trouveArretesdisponibles(true))
+  const numDebutCoteBase = choice(base1.trouveAretesdisponibles(true))
   if (
     options.horizontal === 'horizontal' ||
     options.horizontal === 'vertical'
@@ -1302,12 +1349,12 @@ export function patronEnT(
   )
   ordreFace += 1
   for (let j = 1; j < nbSommetBase; j++) {
-    const listeArretesLateralesDisponibles =
-      mafaceDeBase.trouveArreteslateralesDisponiblesPourFaceLaterale()
-    const tFace = choice(listeArretesLateralesDisponibles)
+    const listeAretesLateralesDisponibles =
+      mafaceDeBase.trouveAreteslateralesDisponiblesPourFaceLaterale()
+    const tFace = choice(listeAretesLateralesDisponibles)
     tFace.face.creerFaceLateraleSurFaceLaterale(
       num[ordreFace],
-      tFace.numArrete,
+      tFace.numArete,
       hauteurPrisme,
     )
     ordreFace += 1
