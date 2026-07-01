@@ -1,5 +1,5 @@
 import FabriqueAYohaku from './_Yohaku'
-export const titre = 'Résoudre un Yohaku multiplicatif niveau 1'
+export const titre = 'Résoudre un Yohaku multiplicatif'
 export const dateDePublication = '10/08/2022'
 export const dateDeModifImportante = '16/12/2023'
 
