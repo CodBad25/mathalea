@@ -803,6 +803,23 @@ input[id^='html-insert-text-input-'] {
   @apply text-sm bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus border border-coopmaths-action dark:border-coopmathsdark-action font-light focus:border focus:border-coopmaths-action dark:focus:border-coopmathsdark-action focus:outline-0 focus:ring-0 px-2 py-1 w-3/5 lg:w-2/5;
 }
 
+input[id^='champTexteEx'] {
+  @apply text-coopmaths-corpus dark:text-coopmathsdark-corpus border border-coopmaths-corpus dark:border-coopmathsdark-corpus;
+  /* Override MathLive highlight colors to match our class-based dark mode (not prefers-color-scheme) */
+  display: inline-block;
+  flex: 1;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  font-size: 1em;
+  line-height: 1em;
+  min-width: 50px;
+  width: auto;
+  padding: 4px;
+  white-space: normal;
+  background-color: transparent;
+  overflow-x: visible;
+}
+
 i[id^='html-insert-info-'] {
   @apply flex px-2  hover:text-coopmaths-action-lightest text-coopmaths-action dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest;
 }
