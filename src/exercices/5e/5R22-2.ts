@@ -1,18 +1,18 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureNombreRelatif,
 } from '../../lib/outils/ecritures'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { context } from '../../modules/context'
-import { sp } from '../../lib/outils/outilString'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { texNombre } from '../../lib/outils/texNombre'
 import { arrondi } from '../../lib/outils/nombres'
+import { sp } from '../../lib/outils/outilString'
+import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
@@ -31,7 +31,7 @@ export const titre =
 export const uuid = '070b4'
 
 export const refs = {
-  'fr-fr': ['5R22-2'],
+  'fr-fr': [],
   'fr-ch': ['9NO9-16'],
 }
 export default class ExerciceSimplificationSommeAlgebrique extends Exercice {
@@ -70,7 +70,6 @@ export default class ExerciceSimplificationSommeAlgebrique extends Exercice {
     for (
       let i = 0, s, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // On limite le nombre d'essais pour chercher des valeurs nouvelles
       const CoefDecimales = this.sup3 ? 10 : 1
