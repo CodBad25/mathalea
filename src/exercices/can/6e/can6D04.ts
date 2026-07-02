@@ -1,5 +1,6 @@
 import ConversionHeuresMinutesOuMinutesEtSecondes from '../../6e/6M4C-1'
-export const titre = 'Convertir minutes<->heures ou secondes<->minutes'
+export const titre =
+  'Convertir minutes vers heures et minutes ou secondes vers minutes et secondes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
