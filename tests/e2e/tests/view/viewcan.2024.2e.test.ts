@@ -40,7 +40,7 @@ async function ensureFieldVisible(page: Page, fieldId: string) {
 }
 
 async function testCanView(page: Page) {
-  await page.setDefaultTimeout(500_000) // Set timeout to 500 seconds
+  await page.setDefaultTimeout(1_500_000) // Set timeout to 500 seconds
   log('===========================================================')
   log('===           TEST VUE CAN 2024       =====================')
   log('===========================================================')

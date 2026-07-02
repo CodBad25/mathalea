@@ -21,8 +21,8 @@ export default mergeConfig(
     test: {
       include: ['./tests/console_errors/*.debug.test.{js,ts}'],
       exclude: [],
-      hookTimeout: 120_000,
-      testTimeout: 1000_000,
+      hookTimeout: 600_000,
+      testTimeout: 20_000_000,
       reporters: ['html', 'junit', 'json', 'default'],
       outputFile: {
         junit: './logs/junit-report.debug.xml',

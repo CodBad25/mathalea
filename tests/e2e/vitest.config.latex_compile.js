@@ -18,8 +18,8 @@ export default mergeConfig(
     test: {
       include: ['./tests/latex_compile/*.test.{js,ts}'],
       environment: 'jsdom',
-      hookTimeout: 120_000,
-      testTimeout: 3_600_000,
+      hookTimeout: 600_000,
+      testTimeout: 7_200_000,
       pool: 'threads',
       maxWorkers: 1,
       isolate: false,

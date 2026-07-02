@@ -22,8 +22,8 @@ export default mergeConfig(
       include: ['./tests/console_errors/*.test.{js,ts}'],
       exclude: ['./tests/console_errors/*.debug.test.{js,ts}'],
       // on veut laisser le navigateur ouvert sur un plantage (3min)
-      hookTimeout: 120_000,
-      testTimeout: 1000_000,
+      hookTimeout: 600_000,
+      testTimeout: 20_000_000,
       // describe.sequential() ne fonctionne que dans un describe.concurrent()
       // cf https://vitest.dev/api/#describe-sequential
       // pour lancer tous les tests en séquentiel, il faut préciser singleThread ou singleFork

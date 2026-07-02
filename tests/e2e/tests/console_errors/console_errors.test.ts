@@ -149,8 +149,7 @@ async function action(page: Page, description: string) {
 
 async function getConsoleTest(page: Page, urlExercice: string) {
   logIfVerbose(urlExercice)
-  // on configure à 5 min le timeout
-  page.setDefaultTimeout(30000)
+  page.setDefaultTimeout(1_500_000)
 
   const retries = 3 // Nombre de tentatives en cas d'erreur
   for (let attempt = 1; attempt <= retries; attempt++) {

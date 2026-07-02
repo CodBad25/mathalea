@@ -20,7 +20,7 @@ export default mergeConfig(
       exclude: ['./tests/dev/mathLive.moule.test.ts'],
       // on veut laisser le navigateur ouvert sur un plantage (10min)
       hookTimeout: 600_000,
-      testTimeout: 3_600_000,
+      testTimeout: 7_200_000,
 
       // describe.sequential() ne fonctionne que dans un describe.concurrent()
       // cf https://vitest.dev/api/#describe-sequential

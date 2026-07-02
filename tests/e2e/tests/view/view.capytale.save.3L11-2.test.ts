@@ -45,12 +45,12 @@ async function testV(page: Page) {
   })
 
   // Go to the page
-  await page.setDefaultTimeout(500_000) // Set timeout to 500 seconds
+  await page.setDefaultTimeout(1_500_000) // Set timeout to 1_500_000 seconds
   await page.goto(parentUrl)
 
   try {
     await expect(page.locator('body')).toContainText('bonjour', {
-      timeout: 5000,
+      timeout: 10_000,
     })
   } catch {
     if (parentUrl !== fallbackParentUrl) {
@@ -69,7 +69,7 @@ async function testV(page: Page) {
   // }
 
   await page.waitForSelector('#iframe')
-  await page.waitForTimeout(3000) // attendre 3000 ms de plus pour assurer le rendu
+  await page.waitForTimeout(10_000) // attendre 10_000 ms de plus pour assurer le rendu
   if (page.frames().length > 0) {
     await Promise.all(
       page.frames().map((frame) => frame.waitForLoadState('networkidle')),

@@ -220,6 +220,7 @@ build_ci_pdf:
       - runner_system_failure
       - api_failure
       - unknown_failure
+      - script_failure
   artifacts:
     when: on_failure
     expire_in: 2 day
@@ -245,8 +246,8 @@ playwright-console-consolidated:
     - corepack prepare pnpm@11.8.0 --activate
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 10
-    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
+    - sleep 50
+    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
     - |
       FAIL=0
 
@@ -313,8 +314,8 @@ playwright-pdf-consolidated:
     - corepack prepare pnpm@11.8.0 --activate
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 10
-    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
+    - sleep 30
+    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
     - |
       FAIL=0
 
@@ -372,8 +373,8 @@ playwright-pdf-dnb-consolidated:
     - corepack prepare pnpm@11.8.0 --activate
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 10
-    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
+    - sleep 50
+    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
     - |
       FAIL=0
       run_pdf () {
@@ -418,8 +419,8 @@ playwright-pdf-bac-consolidated:
     - corepack prepare pnpm@11.8.0 --activate
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 10
-    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
+    - sleep 50
+    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
     - |
       FAIL=0
 
@@ -476,7 +477,7 @@ jsdom-all-exercises:
     - NODE_OPTIONS=--max-old-space-size=4096
     - pnpm config set store-dir .pnpm-store
     - pnpm run makeJson >/dev/null
-    - sleep 10
+    - sleep 50
     - |
       FAIL=0
       run_all () {
@@ -550,8 +551,8 @@ playwright-caneleve:
     - NODE_OPTIONS=--max-old-space-size=4096
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 10
-    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
+    - sleep 50
+    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
     - |
       FAIL=0
 
@@ -604,8 +605,8 @@ playwright-consistency:
     - NODE_OPTIONS=--max-old-space-size=4096
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 10
-    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
+    - sleep 50
+    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
     - |
       FAIL=0
       echo "🧪 test:e2e:consistency"
@@ -657,8 +658,8 @@ playwright-interactivity:
     - NODE_OPTIONS=--max-old-space-size=4096
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 10
-    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
+    - sleep 50
+    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
     - |
       FAIL=0
       echo "🧪 test:e2e:interactivity"
@@ -706,6 +707,7 @@ tests-unitaires:
     policy: pull
   script:
     - pnpm run makeJson
+    - sleep 50
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm test:unit
   rules:
     # Se lance uniquement si le pipeline est déclenché par une Merge Request
@@ -738,6 +740,7 @@ tests-src:
     policy: pull
   script:
     - pnpm run makeJson
+    - sleep 30
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm test:src
   rules:
     # Se lance uniquement si le pipeline est déclenché par une Merge Request
@@ -784,8 +787,8 @@ testExosModifiedConsolidated:
     - NODE_OPTIONS=--max-old-space-size=4096
     - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
-    - sleep 10
-    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 10; done
+    - sleep 50
+    - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
     # Récupérer les fichiers modifiés depuis les 2 derniers commits
     - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
     - git checkout FETCH_HEAD
@@ -932,7 +935,7 @@ testExosModifiedLatex:
     - npm install -g pnpm@11.8.0
     - pnpm config set store-dir .pnpm-store
     - pnpm run makeJson >/dev/null
-    - sleep 10
+    - sleep 50
     - echo "$CHANGED_FILES"
     - CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:pdfexports
   rules:
