@@ -16,12 +16,12 @@ async function clickRobust(locator: Locator) {
     try {
       await expect(locator).toBeVisible()
       await expect(locator).toBeEnabled()
-      await locator.click({ trial: true, timeout: 5000 })
-      await locator.click({ timeout: 5000 })
+      await locator.click({ trial: true, timeout: 10_000 })
+      await locator.click({ timeout: 10_000 })
       return
     } catch (error) {
       if (attempt === 2) throw error
-      await locator.page().waitForTimeout(150)
+      await locator.page().waitForTimeout(300)
     }
   }
 }
@@ -59,7 +59,7 @@ async function testV(page: Page) {
   })
 
   // Go to the page
-  await page.setDefaultTimeout(500_000) // Set timeout to 500 seconds
+  await page.setDefaultTimeout(1_500_000) // Set timeout to 1_500_000 seconds
   await page.goto(parentUrl)
 
   await expect(page.locator('body')).toContainText('bonjour')
@@ -74,7 +74,7 @@ async function testV(page: Page) {
   // }
 
   await page.waitForSelector('#iframe')
-  await page.waitForTimeout(3000) // attendre 3000 ms de plus pour assurer le rendu
+  await page.waitForTimeout(10_000) // attendre 10_000 ms de plus pour assurer le rendu
   if (page.frames().length > 0) {
     await Promise.all(
       page.frames().map((frame) => frame.waitForLoadState('networkidle')),

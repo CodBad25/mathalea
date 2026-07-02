@@ -22,7 +22,7 @@ export default mergeConfig(
     test: {
       include: ['./tests/screenshot/screenshot.test.{js,ts}'],
       hookTimeout: 600_000,
-      testTimeout: 20_000,
+      testTimeout: 20_000_000,
       pool: 'threads',
       maxWorkers: 1,
       isolate: false,

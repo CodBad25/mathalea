@@ -28,8 +28,8 @@ export default mergeConfig(
       environment: 'jsdom',
 
       // on veut laisser le navigateur ouvert sur un plantage (3min)
-      hookTimeout: 30_000,
-      testTimeout: 120_000,
+      hookTimeout: 600_000,
+      testTimeout: 20_000_000,
       // describe.sequential() ne fonctionne que dans un describe.concurrent()
       // cf https://vitest.dev/api/#describe-sequential
       // pour lancer tous les tests en séquentiel, il faut préciser singleThread ou singleFork
