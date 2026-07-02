@@ -16,14 +16,13 @@ import {
 import Exercice from '../Exercice'
 
 import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Calculer des fréquences statistiques'
 export const interactifReady = true
@@ -128,7 +127,7 @@ function graphique(
       {},
       fixeBordures([diagramme], { rxmin: -3, rymin: -3, rymax: 1.5 }),
       {
-        display: 'inline' as const,
+        display: 'block' as const,
         scale: 0.5,
       },
     ),
@@ -556,7 +555,9 @@ function questionsEtCorrections(
           },
         ],
       }
-      exercice.questionsAMC[numero] = amcConvert(exercice.autoCorrectionAMC[numero])
+      exercice.questionsAMC[numero] = amcConvert(
+        exercice.autoCorrectionAMC[numero],
+      )
     }
   }
   return {

@@ -44,7 +44,7 @@ export class AxeY extends ObjetMathalea2D {
           0,
           color,
           1,
-          'milieu',
+          'droite',
           false,
           1,
         ),
