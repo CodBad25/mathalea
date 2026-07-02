@@ -2,6 +2,7 @@ import Stat from '../../lib/mathFonctions/Stat'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = 'aeba5'
@@ -147,6 +148,22 @@ export default class AutoQ11AGt2026 extends ExerciceQcmA {
       this.versionOriginale()
       return
     }
+    const effectifs = this.besoinFormulaireCaseACocher
+      ? [85, 125, 189, 186, 248, 167]
+      : Array.from({ length: 6 }, () => randint(100, 200))
+    const total = effectifs.reduce((a, b) => a + b, 0)
+    if (total < 1000) {
+      do {
+        const index = randint(0, 5)
+        effectifs[index] += 1
+      } while (effectifs.reduce((a, b) => a + b, 0) < 1000)
+    } else {
+      do {
+        const index = randint(0, 5)
+        if (effectifs[index] > 100) effectifs[index] -= 1
+        else continue
+      } while (effectifs.reduce((a, b) => a + b, 0) > 1000)
+    }
     const choix = choice(['min', 'max'])
     const age =
       choix === 'min'
@@ -163,7 +180,7 @@ export default class AutoQ11AGt2026 extends ExerciceQcmA {
     ])
     this.appliquerLesValeurs(
       `Le diagramme ci-dessous donne la répartition en pourcentage de joueurs de jeux vidéo selon leur âge`,
-      [85, 125, 189, 186, 248, 167],
+      effectifs,
       age,
       question,
       dist3,
