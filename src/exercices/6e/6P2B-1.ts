@@ -209,7 +209,7 @@ export default class FonctionsProbabilite6e extends Exercice {
           ` On sait qu'on tombera sur ${article} ${objet} mais on ne sait pas ${defini} sera ${singulier(qualites[index1][0], index1)}, ${singulier(qualites[index1][1], index1)}, ${singulier(qualites[index1][2], index1)}, ${singulier(qualites[index1][3], index1)} ou ${singulier(qualites[index1][4], index1)}.<br>On ne peut pas prévoir à l'avance le résultat, c'est donc une expérience aléatoire.<br>`
         texte += numAlpha(1) + ' Quelles sont les issues ?<br>'
         const issues = qualites[index1]
-          .map((q, i) => `- ${texteEnCouleurEtGras(singulier(q, index1))}`)
+          .map((q) => `- ${texteEnCouleurEtGras(singulier(q, index1))}`)
           .join(' ;<br>\n')
         texteCorr += numAlpha(1) + `Les issues sont :<br>${issues}.<br>`
         texte +=

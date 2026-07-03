@@ -1,6 +1,7 @@
 import { traceBarre } from '../../lib/2d/diagrammes'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { repere } from '../../lib/2d/reperes'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
@@ -11,8 +12,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Lire un diagramme en bâtons'
 export const amcReady = true
@@ -47,7 +46,7 @@ export default class LectureDiagrammeBaton extends Exercice {
       '1 : Entre 1 et 100\n2 : Entre 100 et 1 000',
     ]
 
-    this.consigne = "Répondre aux questions à l'aide du graphique."
+    // this.consigne = "Répondre aux questions à l'aide du graphique."
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
 
@@ -162,10 +161,11 @@ export default class LectureDiagrammeBaton extends Exercice {
       'Blueross',
       'Vlane',
     ]
-    this.introduction =
+    //this.introduction =
+    this.consigne =
       'Dans le parc naturel de ' +
       choice(lstNomParc) +
-      ", il y a beaucoup d'animaux.<br>Voici un diagramme en bâtons qui donne le nombre d'individus pour chaque espèce.<br>"
+      ", il y a beaucoup d'animaux.<br><br>Voici un diagramme en bâtons qui donne le nombre d'individus pour chaque espèce.<br>"
     this.listeQuestions[0] = 'Quels sont les animaux les plus nombreux ?'
     this.listeQuestions[1] = 'Quels sont les animaux les moins nombreux ?'
     const numAnimal = randint(0, nbAnimaux - 1)
