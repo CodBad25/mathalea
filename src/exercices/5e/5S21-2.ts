@@ -1,5 +1,5 @@
 import FonctionsProbabilite6e from '../6e/6P2B-1'
-export const titre = 'Utiliser le vocabulaire des probabilités'
+export const titre = 'Attribuer des probabilités dans des cas simples'
 export const interactifReady = false
 export const dateDePublication = '03/04/2022'
 
