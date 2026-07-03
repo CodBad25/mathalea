@@ -7,6 +7,7 @@ import { labelPoint } from '../../lib/2d/textes'
 import { TexteSurArc, texteSurArc } from '../../lib/2d/TexteSurArc'
 import { homothetie, rotation, translation } from '../../lib/2d/transformations'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
@@ -24,7 +25,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = 'Effectuer des liens entre angles et parallélisme'
 export const dateDePublication = '15/01/2022'
@@ -171,8 +171,8 @@ export default class ExercicesAnglesAIC extends Exercice {
     this.nbCols = 2
     this.nbColsCorr = 2
 
-    context.isHtml ? (this.spacing = 1.75) : (this.spacing = 0)
-    context.isHtml ? (this.spacingCorr = 1.75) : (this.spacingCorr = 0)
+    this.spacing = context.isHtml ? 1.75 : 1
+    this.spacingCorr = context.isHtml ? 1.75 : 1
     this.sup = 8 // Type d'exercice
     this.nbQuestions = 3
   }

@@ -90,8 +90,8 @@ export default class perimetreVersFormule extends Exercice {
     this.sup3 = 1
     this.nbQuestions = 1
 
-    context.isHtml ? (this.spacing = 3) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2.5) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 3 : 2
+    this.spacingCorr = context.isHtml ? 2.5 : 1
   }
 
   nouvelleVersion() {
@@ -621,7 +621,7 @@ export default class perimetreVersFormule extends Exercice {
         )
       }
 
-      // On trace la figure en commançant par la légende
+      // On trace la figure en commençant par la légende
       drawLegend()
 
       // on trace nombreFigures figures
