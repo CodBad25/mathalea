@@ -341,7 +341,6 @@ export const dictionnaireSTI2D = {
     tags: ['Intégration'],
   },
 
-
   sti2d_2022_05_etrangers_maths: {
     annee: '2022',
     lieu: 'Centres étrangers',
@@ -698,7 +697,6 @@ export const dictionnaireSTI2D = {
     tags: ['Équations différentielles', 'Exponentielle', 'Équation'],
   },
 
-
   sti2d_2023_03_metropole_maths: {
     annee: '2023',
     lieu: 'Métropole',
@@ -971,7 +969,6 @@ export const dictionnaireSTI2D = {
     tags: ['Exponentielle', 'Équation', 'Dérivation'],
   },
 
-
   sti2d_2024_06_polynesie_maths: {
     annee: '2024',
     lieu: 'Polynésie',
@@ -1127,7 +1124,6 @@ export const dictionnaireSTI2D = {
     tags: ['Dérivation', 'Équation', 'Logarithme népérien'],
   },
 
-
   sti2d_2025_06_metropole_maths: {
     annee: '2025',
     lieu: 'Métropole',
@@ -1184,186 +1180,194 @@ export const dictionnaireSTI2D = {
     typeExercice: 'sti2d',
     tags: ['Dérivation', 'Trigonométrie', 'Intégration'],
   },
-  sti2d_2025_09_metropole_maths: {                
-                annee: '2025',                
-                lieu: 'Métropole',                
-                mois: 'Septembre',                
-                numeroInitial: 'maths',
-                typeExercice: 'sti2d',                               
-                tags: [
-                  'Exponentielle',
-                  'Dérivation',
-                  'Variations',
-                  'Intégration',
-                  'Logarithme népérien',
-                  'Équations différentielles',
-                  'Équation',
-                ]            
-            },
-  sti2d_2025_09_metropole_mq1: {                
-                annee: '2025',                
-                lieu: 'Métropole',                
-                mois: 'Septembre',                
-                numeroInitial: 'mq1',
-                typeExercice: 'sti2d',                               
-                tags: ['Exponentielle', 'Dérivation', 'Variations']            
-            },
-  sti2d_2025_09_metropole_mq2: {                
-                annee: '2025',                
-                lieu: 'Métropole',                
-                mois: 'Septembre',                
-                numeroInitial: 'mq2',
-                typeExercice: 'sti2d',                               
-                tags: ['Intégration', 'Logarithme népérien']            
-            },
-  sti2d_2025_09_metropole_mq3: {                
-                annee: '2025',                
-                lieu: 'Métropole',                
-                mois: 'Septembre',                
-                numeroInitial: 'mq3',
-                typeExercice: 'sti2d',                               
-                tags: ['Équations différentielles']            
-            },
-  sti2d_2025_09_metropole_mq4: {                
-                annee: '2025',                
-                lieu: 'Métropole',                
-                mois: 'Septembre',                
-                numeroInitial: 'mq4',
-                typeExercice: 'sti2d',                               
-                tags: ['Équation', 'Exponentielle']            
-            },
-  sti2d_2025_09_metropole_pcm: {                
-                annee: '2025',                
-                lieu: 'Métropole',                
-                mois: 'Septembre',                
-                numeroInitial: 'pcm',
-                typeExercice: 'sti2d',                               
-                tags: ['Logarithme népérien', 'Dérivation', 'Variations']            
-            },
-  sti2d_2025_09_metropole_secours_maths: {                
-                annee: '2025',                
-                lieu: 'Métropole',                
-                mois: 'Septembre',                
-                numeroInitial: 'secours',
-                typeExercice: 'sti2d',                               
-                tags: [
-                  'Dérivation',
-                  'Exponentielle',
-                  'Équations différentielles',
-                  'Nombres complexes',
-                  'Intégration',
-                ]            
-            },
-  sti2d_2025_09_metropole_secours_mq1: {                
-                annee: '2025',                
-                lieu: 'Métropole',                
-                mois: 'Septembre',                
-                numeroInitial: 'secours',
-                typeExercice: 'sti2d',                               
-                tags: ['Dérivation', 'Exponentielle']            
-            },
-  sti2d_2025_09_metropole_secours_mq2: {                
-                annee: '2025',                
-                lieu: 'Métropole',                
-                mois: 'Septembre',                
-                numeroInitial: 'secours',
-                typeExercice: 'sti2d',                               
-                tags: ['Équations différentielles']            
-            },
-  sti2d_2025_09_metropole_secours_mq3: {                
-                annee: '2025',                
-                lieu: 'Métropole',                
-                mois: 'Septembre',                
-                numeroInitial: 'secours',
-                typeExercice: 'sti2d',                               
-                tags: ['Nombres complexes']            
-            },
-  sti2d_2025_09_metropole_secours_mq4: {                
-                annee: '2025',                
-                lieu: 'Métropole',                
-                mois: 'Septembre',                
-                numeroInitial: 'secours',
-                typeExercice: 'sti2d',                               
-                tags: ['Intégration']            
-            },
-  sti2d_2025_09_metropole_secours_pcm: {                
-                annee: '2025',                
-                lieu: 'Métropole',                
-                mois: 'Septembre',                
-                numeroInitial: 'secours',
-                typeExercice: 'sti2d',                               
-                tags: ['Limites', 'Équation', 'Exponentielle']            
-            },
-  sti2d_2025_06_polynesie_maths: {                
-                annee: '2025',                
-                lieu: 'Polynésie',                
-                mois: 'Juin',                
-                numeroInitial: 'maths',
-                typeExercice: 'sti2d',                               
-                tags: [
-                  'Nombres complexes',
-                  'Équations différentielles',
-                  'Limites',
-                ]            
-            },
-  sti2d_2025_06_polynesie_mq1: {                
-                annee: '2025',                
-                lieu: 'Polynésie',                
-                mois: 'Juin',                
-                numeroInitial: 'mq1',
-                typeExercice: 'sti2d',                               
-                tags: ['Nombres complexes']            
-            },
-  sti2d_2025_06_polynesie_mq2: {                
-                annee: '2025',                
-                lieu: 'Polynésie',                
-                mois: 'Juin',                
-                numeroInitial: 'mq2',
-                typeExercice: 'sti2d',                               
-                tags: ['Équations différentielles', 'Limites']            
-            },
-  sti2d_2025_06_polynesie_pcm: {                
-                annee: '2025',                
-                lieu: 'Polynésie',                
-                mois: 'Juin',                
-                numeroInitial: 'pcm',
-                typeExercice: 'sti2d',                               
-                tags: ['Dérivation', 'Intégration']            
-            },
-  sti2d_2025_11_caledonie_maths: {                
-                annee: '2025',                
-                lieu: 'Nouvelle Calédonie',                
-                mois: 'Novembre',                
-                numeroInitial: 'maths',
-                typeExercice: 'sti2d',                               
-                tags: [
-                  'Intégration',
-                  'Nombres complexes',
-                ]            
-            },
-  sti2d_2025_11_caledonie_mq1: {                
-                annee: '2025',                
-                lieu: 'Nouvelle Calédonie',                
-                mois: 'Novembre',                
-                numeroInitial: 'mq1',
-                typeExercice: 'sti2d',                               
-                tags: ['Intégration']            
-            },
-  sti2d_2025_11_caledonie_mq2: {                
-                annee: '2025',                
-                lieu: 'Nouvelle Calédonie',                
-                mois: 'Novembre',                
-                numeroInitial: 'mq2',
-                typeExercice: 'sti2d',                               
-                tags: ['Nombres complexes']            
-            },
-  sti2d_2025_11_caledonie_pcm: {                
-                annee: '2025',                
-                lieu: 'Nouvelle Calédonie',                
-                mois: 'Novembre',                
-                numeroInitial: 'pcm',
-                typeExercice: 'sti2d',                               
-                tags: ['Équations différentielles']            
-            },
-
+  sti2d_2025_09_metropole_maths: {
+    annee: '2025',
+    lieu: 'Métropole',
+    mois: 'Septembre',
+    numeroInitial: 'maths',
+    typeExercice: 'sti2d',
+    tags: [
+      'Exponentielle',
+      'Dérivation',
+      'Variations',
+      'Intégration',
+      'Logarithme népérien',
+      'Équations différentielles',
+      'Équation',
+    ],
+  },
+  sti2d_2025_09_metropole_mq1: {
+    annee: '2025',
+    lieu: 'Métropole',
+    mois: 'Septembre',
+    numeroInitial: 'mq1',
+    typeExercice: 'sti2d',
+    tags: ['Exponentielle', 'Dérivation', 'Variations'],
+  },
+  sti2d_2025_09_metropole_mq2: {
+    annee: '2025',
+    lieu: 'Métropole',
+    mois: 'Septembre',
+    numeroInitial: 'mq2',
+    typeExercice: 'sti2d',
+    tags: ['Intégration', 'Logarithme népérien'],
+  },
+  sti2d_2025_09_metropole_mq3: {
+    annee: '2025',
+    lieu: 'Métropole',
+    mois: 'Septembre',
+    numeroInitial: 'mq3',
+    typeExercice: 'sti2d',
+    tags: ['Équations différentielles'],
+  },
+  sti2d_2025_09_metropole_mq4: {
+    annee: '2025',
+    lieu: 'Métropole',
+    mois: 'Septembre',
+    numeroInitial: 'mq4',
+    typeExercice: 'sti2d',
+    tags: ['Équation', 'Exponentielle'],
+  },
+  sti2d_2025_09_metropole_pcm: {
+    annee: '2025',
+    lieu: 'Métropole',
+    mois: 'Septembre',
+    numeroInitial: 'pcm',
+    typeExercice: 'sti2d',
+    tags: ['Logarithme népérien', 'Dérivation', 'Variations'],
+  },
+  sti2d_2025_09_metropole_secours_maths: {
+    annee: '2025',
+    lieu: 'Métropole',
+    mois: 'Septembre',
+    numeroInitial: 'secours',
+    typeExercice: 'sti2d',
+    tags: [
+      'Dérivation',
+      'Exponentielle',
+      'Équations différentielles',
+      'Nombres complexes',
+      'Intégration',
+    ],
+  },
+  sti2d_2025_09_metropole_secours_mq1: {
+    annee: '2025',
+    lieu: 'Métropole',
+    mois: 'Septembre',
+    numeroInitial: 'secours',
+    typeExercice: 'sti2d',
+    tags: ['Dérivation', 'Exponentielle'],
+  },
+  sti2d_2025_09_metropole_secours_mq2: {
+    annee: '2025',
+    lieu: 'Métropole',
+    mois: 'Septembre',
+    numeroInitial: 'secours',
+    typeExercice: 'sti2d',
+    tags: ['Équations différentielles'],
+  },
+  sti2d_2025_09_metropole_secours_mq3: {
+    annee: '2025',
+    lieu: 'Métropole',
+    mois: 'Septembre',
+    numeroInitial: 'secours',
+    typeExercice: 'sti2d',
+    tags: ['Nombres complexes'],
+  },
+  sti2d_2025_09_metropole_secours_mq4: {
+    annee: '2025',
+    lieu: 'Métropole',
+    mois: 'Septembre',
+    numeroInitial: 'secours',
+    typeExercice: 'sti2d',
+    tags: ['Intégration'],
+  },
+  sti2d_2025_09_metropole_secours_pcm: {
+    annee: '2025',
+    lieu: 'Métropole',
+    mois: 'Septembre',
+    numeroInitial: 'secours',
+    typeExercice: 'sti2d',
+    tags: ['Limites', 'Équation', 'Exponentielle'],
+  },
+  sti2d_2025_06_polynesie_maths: {
+    annee: '2025',
+    lieu: 'Polynésie',
+    mois: 'Juin',
+    numeroInitial: 'maths',
+    typeExercice: 'sti2d',
+    tags: ['Nombres complexes', 'Équations différentielles', 'Limites'],
+  },
+  sti2d_2025_06_polynesie_mq1: {
+    annee: '2025',
+    lieu: 'Polynésie',
+    mois: 'Juin',
+    numeroInitial: 'mq1',
+    typeExercice: 'sti2d',
+    tags: ['Nombres complexes'],
+  },
+  sti2d_2025_06_polynesie_mq2: {
+    annee: '2025',
+    lieu: 'Polynésie',
+    mois: 'Juin',
+    numeroInitial: 'mq2',
+    typeExercice: 'sti2d',
+    tags: ['Équations différentielles', 'Limites'],
+  },
+  sti2d_2025_06_polynesie_pcm: {
+    annee: '2025',
+    lieu: 'Polynésie',
+    mois: 'Juin',
+    numeroInitial: 'pcm',
+    typeExercice: 'sti2d',
+    tags: ['Dérivation', 'Intégration'],
+  },
+  sti2d_2025_11_caledonie_maths: {
+    annee: '2025',
+    lieu: 'Nouvelle Calédonie',
+    mois: 'Novembre',
+    numeroInitial: 'maths',
+    typeExercice: 'sti2d',
+    tags: ['Intégration', 'Nombres complexes'],
+  },
+  sti2d_2025_11_caledonie_mq1: {
+    annee: '2025',
+    lieu: 'Nouvelle Calédonie',
+    mois: 'Novembre',
+    numeroInitial: 'mq1',
+    typeExercice: 'sti2d',
+    tags: ['Intégration'],
+  },
+  sti2d_2025_11_caledonie_mq2: {
+    annee: '2025',
+    lieu: 'Nouvelle Calédonie',
+    mois: 'Novembre',
+    numeroInitial: 'mq2',
+    typeExercice: 'sti2d',
+    tags: ['Nombres complexes'],
+  },
+  sti2d_2025_11_caledonie_pcm: {
+    annee: '2025',
+    lieu: 'Nouvelle Calédonie',
+    mois: 'Novembre',
+    numeroInitial: 'pcm',
+    typeExercice: 'sti2d',
+    tags: ['Équations différentielles'],
+  },
+  sti2d_2026_06_metropole_j2_maths: {
+    annee: '2026',
+    lieu: 'Métropole',
+    mois: 'Juin',
+    numeroInitial: 'J2 - maths ',
+    typeExercice: 'sti2d',
+    tags: [''],
+  },
+  sti2d_2026_06_metropole_j2_pcm: {
+    annee: '2026',
+    lieu: 'Métropole',
+    mois: 'Juin',
+    numeroInitial: 'J2 - pcm ',
+    typeExercice: 'sti2d',
+    tags: [''],
+  },
 }
