@@ -87,10 +87,10 @@ export default class AutoQ4ANt2026 extends ExerciceQcmA {
     this.appliquerLesValeurs(
       0.3,
       false,
-      '0{,}6',
+      '0,6',
       '\\dfrac{2}{6}',
       '\\dfrac{1}{6}',
-      '0{,}3',
+      '0,3',
     )
   }
 

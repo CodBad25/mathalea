@@ -101,7 +101,7 @@ export default class Can20266Q16 extends ExerciceCan {
           ajouteFeedback(this, 0)
         : '')
 
-    this.correction = `Un pas de graduation est égal à $0{,}001$ et il y a $${texNombre((abscisse - min) / 0.001, 0)}$ pas de graduation entre $${texNombre(min, 3)}$ et la dernière flèche.<br>
+    this.correction = `Un pas de graduation est égal à $0,001$ et il y a $${texNombre((abscisse - min) / 0.001, 0)}$ pas de graduation entre $${texNombre(min, 3)}$ et la dernière flèche.<br>
     Donc l'abscisse de la flèche est $${miseEnEvidence(texNombre(abscisse, 3))}$.`
 
     this.formatChampTexte = KeyboardType.clavierDeBase

@@ -300,7 +300,7 @@ class LireImageParApiGeom extends Exercice {
     )
     if (context.isHtml) {
       this.listeCorrections[0] =
-        'Les images sont tolérées à $0{,}1$ près :' +
+        'Les images sont tolérées à $0,1$ près :' +
         tableauValeur.output +
         figureCorrection
 
@@ -320,7 +320,7 @@ class LireImageParApiGeom extends Exercice {
     } else {
       this.listeCorrections[0] =
         figureCorrection +
-        'Les images sont tolérées à $0{,}1$ près :' +
+        'Les images sont tolérées à $0,1$ près :' +
         '\\\\' +
         tabValeurTex
       this.listeQuestions = [

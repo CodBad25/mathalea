@@ -126,8 +126,8 @@ ${
 $Q_1 = ${texNombre(boite.q1, 2)}$, $Q_3 = ${texNombre(boite.q3, 2)}$<br>
 $\\text{IQR} = Q_3 - Q_1 = ${texNombre(ecartInterquartile, 2)}$<br>
 Les bornes pour détecter les valeurs aberrantes sont :<br>
-Borne inférieure $= Q_1 - 1{,}5 * \\text{ IQR} = ${texNombre(borneInf, 2)}$<br>
-Borne supérieure $= Q_3 + 1{,}5 * \\text{ IQR} = ${texNombre(borneSup, 2)}$<br>
+Borne inférieure $= Q_1 - 1,5 * \\text{ IQR} = ${texNombre(borneInf, 2)}$<br>
+Borne supérieure $= Q_3 + 1,5 * \\text{ IQR} = ${texNombre(borneSup, 2)}$<br>
 Les valeurs aberrantes sont celles qui sont en dehors de ces bornes : ${valeursHorsBornes.length > 0 ? valeursHorsBornes.join(', ') : 'Aucune'}.<br>
 Donc, peut-on affirmer qu'il y a des valeurs aberrantes dans cette série ? ${texteEnCouleurEtGras(bonneReponse)}.`
   }

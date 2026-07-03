@@ -6,37 +6,37 @@ import {
   isEquation,
   isEquivalentEquation,
 } from './equationChecks'
-import { isEqual } from './isEqual'
 import { extractedRadicands } from './extractedRadicands'
-import {
-  fractionReducedFromExpected,
-  noSquareRootInDenominator,
-} from './fractionFormChecks'
 import {
   coordinatesReduced,
   hasGroupedNumberSpacing,
   intervalBoundsReduced,
   isDecimalFraction,
-  onlyDecimalNumbers,
   isFraction,
   isPowerForm,
   isScientificNotation,
   noTrigonometry,
+  onlyDecimalNumbers,
 } from './formAtoms'
-import { onlyIrreducibleFractions } from './onlyIrreducibleFractions'
 import {
-  sameWithUnit,
+  fractionReducedFromExpected,
+  noSquareRootInDenominator,
+} from './fractionFormChecks'
+import { isEqual } from './isEqual'
+import {
   sameCoordinates,
   sameDuration,
   sameInterval,
   sameNumberList,
   sameNumberTuple,
   sameOrderedNumberList,
+  sameWithUnit,
   valueInInterval,
 } from './legacyDomainChecks'
 import { noDecimal } from './noDecimal'
-import { sameSet } from './sameSet'
+import { onlyIrreducibleFractions } from './onlyIrreducibleFractions'
 import { sameIntegerProgressionSet } from './sameIntegerProgressionSet'
+import { sameSet } from './sameSet'
 import { stringEquals } from './stringEquals'
 
 describe('checks heavy atoms', () => {
@@ -237,16 +237,16 @@ describe('checks heavy atoms', () => {
     })
 
     it('checks that all numbers are written as decimal numbers', () => {
-      expect(all([onlyDecimalNumbers()])('3{,}14', 'anything')).toMatchObject({
+      expect(all([onlyDecimalNumbers()])('3,14', 'anything')).toMatchObject({
         isOk: true,
         score: 1,
       })
-      expect(
-        all([onlyDecimalNumbers()])('x+2+3{,}14', 'anything'),
-      ).toMatchObject({
-        isOk: true,
-        score: 1,
-      })
+      expect(all([onlyDecimalNumbers()])('x+2+3,14', 'anything')).toMatchObject(
+        {
+          isOk: true,
+          score: 1,
+        },
+      )
       expect(
         all([onlyDecimalNumbers()])('\\frac{314}{100}', 'anything'),
       ).toMatchObject({
@@ -263,19 +263,19 @@ describe('checks heavy atoms', () => {
 
     it('checks scientific notation shape only', () => {
       expect(
-        all([isScientificNotation()])('1{,}357\\times10^3', 'anything'),
+        all([isScientificNotation()])('1,357\\times10^3', 'anything'),
       ).toMatchObject({
         isOk: true,
         score: 1,
       })
       expect(
-        all([isScientificNotation()])('13{,}57\\times10^2', 'anything'),
+        all([isScientificNotation()])('13,57\\times10^2', 'anything'),
       ).toMatchObject({
         isOk: false,
         score: 0,
       })
       expect(
-        all([isEqual(), isScientificNotation()])('1{,}357\\times10^3', '1357'),
+        all([isEqual(), isScientificNotation()])('1,357\\times10^3', '1357'),
       ).toMatchObject({
         isOk: true,
         score: 1,
@@ -319,13 +319,13 @@ describe('checks heavy atoms', () => {
 
     it('checks grouped number spacing relative to the expected number', () => {
       expect(
-        all([hasGroupedNumberSpacing()])('1 234 567{,}890 1', '1234567{,}8901'),
+        all([hasGroupedNumberSpacing()])('1 234 567,890 1', '1234567,8901'),
       ).toMatchObject({
         isOk: true,
         score: 1,
       })
       expect(
-        all([hasGroupedNumberSpacing()])('1234567{,}8901', '1234567{,}8901'),
+        all([hasGroupedNumberSpacing()])('1234567,8901', '1234567,8901'),
       ).toMatchObject({
         isOk: false,
         score: 0,

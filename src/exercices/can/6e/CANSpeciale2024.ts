@@ -1717,7 +1717,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             }
             texteCorr = `Un dixième d'heure est égal à 6 minutes. <br>
             24 minutes correspondent donc à 4 dixièmes d'heure, soit 0,4 h.<br>
-            $20$ h $24$ min $= ${miseEnEvidence('20{,}4')}$ h`
+            $20$ h $24$ min $= ${miseEnEvidence('20,4')}$ h`
             this.listeCanEnonces.push('Compléter avec un nombre décimal.')
             this.listeCanReponsesACompleter.push(
               ' $20$ h $24$ min $=\\ldots$ heures',
@@ -1725,10 +1725,10 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
           } else {
             if (!this.interactif) {
               texte = `Compléter :<br>
-            $20{,}4$ h  $=\\ldots$ h $\\ldots$ min`
+            $20,4$ h  $=\\ldots$ h $\\ldots$ min`
             } else {
               texte = `Compléter (en heures/minutes) :<br>
-            $20{,}4$ h  $=$`
+            $20,4$ h  $=$`
             }
             texteCorr = ` Comme $0,4$ h $=0,4\\times 60$ min $= 24$ min, on en déduit $20,4$ h  $=${miseEnEvidence('20')}$ h $${miseEnEvidence('24')}$ min.`
             reponse = new Hms({ hour: 20, minute: 24 })

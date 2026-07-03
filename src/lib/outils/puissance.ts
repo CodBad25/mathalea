@@ -37,9 +37,9 @@ export function ecriturePuissance(a: number, b: number, n: number) {
     case 1:
       return `$${puissance(b, n)}$`
     default:
-      return `$${String(arrondi(a, 3)).replace('.', '{,}')} \\times ${puissance(b, n)}$`.replace(
+      return `$${String(arrondi(a, 3)).replace('.', ',')} \\times ${puissance(b, n)}$`.replace(
         '.',
-        '{,}',
+        ',',
       )
   }
 }

@@ -37,13 +37,13 @@ function meilleurPrix(
       : `Il est préférable de prendre un pot de peinture B de $10~\\mathrm{l}$ à $${texPrix(prixPotB)}$€ plutôt que deux pots de peinture A de $5~\\mathrm{l}$ dont le deuxième est à $50\\,\\%$ de réduction pour un total de $${texPrix(prixPotA)}+\\dfrac{${texPrix(prixPotA)}}{2}=${texPrix(prixPotA * 1.5)}$€.`
   } else if (nbLitres <= 15) {
     if (2.5 * prixPotA < 1.5 * prixPotB) {
-      return `Il est préférable de prendre trois pots de peinture A de $5~\\mathrm{l}$ à $${texPrix(prixPotA)}$€ dont un à $50\\,\\%$ soit au total de $2{,}5\\times ${texPrix(prixPotA)}=${texPrix(2.5 * prixPotA)}$€ plutôt qu'un pot de peinture A de $5~\\mathrm{l}$ à $${texPrix(prixPotA)}$€ et un pot de peinture B de $10~\\mathrm{l}$ à $${texPrix(prixPotB)}$€, soit un total de $${texPrix(prixPotA + prixPotB)}$€.`
+      return `Il est préférable de prendre trois pots de peinture A de $5~\\mathrm{l}$ à $${texPrix(prixPotA)}$€ dont un à $50\\,\\%$ soit au total de $2,5\\times ${texPrix(prixPotA)}=${texPrix(2.5 * prixPotA)}$€ plutôt qu'un pot de peinture A de $5~\\mathrm{l}$ à $${texPrix(prixPotA)}$€ et un pot de peinture B de $10~\\mathrm{l}$ à $${texPrix(prixPotB)}$€, soit un total de $${texPrix(prixPotA + prixPotB)}$€.`
     }
     return prixPotA + prixPotB < prixPotB * 1.5
-      ? `Il est préférable de prendre un pot de peinture A de $5~\\mathrm{l}$ à $${texPrix(prixPotA)}$€ et un pot de peinture B de $10~\\mathrm{l}$ à $${texPrix(prixPotB)}$€, soit un total de $${texPrix(prixPotA + prixPotB)}$€ plutôt que deux pots de peinture B de $10~\\mathrm{l}$ le deuxième étant à $50\\,\\%$ soit au total $${texPrix(prixPotB)}\\times 1{,}5=${texPrix(prixPotB * 1.5)}$€.<br>
-      De plus, trois pots de peinture A seront au prix de $2{,}5\\times ${texPrix(prixPotA)}=${texPrix(2.5 * prixPotA)}$€, ce qui est moins intéressant.`
-      : `Il est préférable de prendre deux pots de peinture B de $10~\\mathrm{l}$ le deuxième étant à $50\\,\\%$ : $${texPrix(prixPotB)}\\times 1{,}5=${texPrix(prixPotB * 1.5)}$€ plutôt qu'un pot de peinture A de $5~\\mathrm{l}$ à $${texPrix(prixPotA)}$€ et un pot de peinture B de $10~\\mathrm{l}$ à $${texPrix(prixPotB)}$€, soit un total de $${texPrix(prixPotA + prixPotB)}$€.<br>
-      De plus, trois pots de peinture A seront au prix de $2{,}5\\times ${texPrix(prixPotA)}=${texPrix(2.5 * prixPotA)}$€, ce qui est aussi moins intéressant.`
+      ? `Il est préférable de prendre un pot de peinture A de $5~\\mathrm{l}$ à $${texPrix(prixPotA)}$€ et un pot de peinture B de $10~\\mathrm{l}$ à $${texPrix(prixPotB)}$€, soit un total de $${texPrix(prixPotA + prixPotB)}$€ plutôt que deux pots de peinture B de $10~\\mathrm{l}$ le deuxième étant à $50\\,\\%$ soit au total $${texPrix(prixPotB)}\\times 1,5=${texPrix(prixPotB * 1.5)}$€.<br>
+      De plus, trois pots de peinture A seront au prix de $2,5\\times ${texPrix(prixPotA)}=${texPrix(2.5 * prixPotA)}$€, ce qui est moins intéressant.`
+      : `Il est préférable de prendre deux pots de peinture B de $10~\\mathrm{l}$ le deuxième étant à $50\\,\\%$ : $${texPrix(prixPotB)}\\times 1,5=${texPrix(prixPotB * 1.5)}$€ plutôt qu'un pot de peinture A de $5~\\mathrm{l}$ à $${texPrix(prixPotA)}$€ et un pot de peinture B de $10~\\mathrm{l}$ à $${texPrix(prixPotB)}$€, soit un total de $${texPrix(prixPotA + prixPotB)}$€.<br>
+      De plus, trois pots de peinture A seront au prix de $2,5\\times ${texPrix(prixPotA)}=${texPrix(2.5 * prixPotA)}$€, ce qui est aussi moins intéressant.`
   } else {
     return 3 * prixPotA < prixPotB * 1.5
       ? `Il est préférable de prendre quatre pots de peinture A de $5~\\mathrm{l}$ dont deux à $${texPrix(prixPotA)}$€ chacun et deux à $50\\,\\%$, soit un total de $2\\times ${texPrix(prixPotA)}+2\\times \\dfrac{${texPrix(prixPotA)}}{2}=${texPrix(prixPotA * 3)}$€ plutôt que deux pots de peinture B de $10~\\mathrm{l}$ le deuxième étant à $50\\,\\%$ pour un total de $${texPrix(prixPotB)}+\\dfrac{${texPrix(prixPotB)}}{2}=${texPrix(prixPotB * 1.5)}$€.`
@@ -65,7 +65,7 @@ export default class ExerciceAmeriqueNord392024 extends ExerciceBrevetA {
     this.besoinFormulaireCaseACocher = ['Sujet original', false]
     this.sup = false
     this.introduction = texteItalique(
-      "D'après l'exercice 4 du brevet Amérique du Nord 2024.<br>",
+      "D'après l'exercice 4 du brevet Amérique du Nord 2024.",
     )
 
     this.versionAleatoire()
@@ -97,7 +97,10 @@ export default class ExerciceAmeriqueNord392024 extends ExerciceBrevetA {
     const FP = pointAbstrait(9, 2, 'F', 'above right')
     const IP = pointAbstrait(13.5, 0.75, 'I', 'below')
     const JP = pointAbstrait(13.5, 2.25, 'J', 'above')
-    const flecheP = segment(pointAbstrait(13.7, 0.75), pointAbstrait(13.7, 2.25))
+    const flecheP = segment(
+      pointAbstrait(13.7, 0.75),
+      pointAbstrait(13.7, 2.25),
+    )
     flecheP.styleExtremites = '<->'
     const epP = placeLatexSurSegment(
       `${epaisseur}~\\mathrm{cm}`,
@@ -198,7 +201,7 @@ $\\mathcal{A}(EJGH) = \\mathcal{A}(EFGH) + \\mathcal{A}(FJG) = ${texNombre(haute
 Le volume de la terrasse est égal à :<br>
 $\\mathcal{V} = \\mathcal{A}(EFJGH) \\times ${texNombre(epaisseur / 100, 2)} = ${texNombre(surfaceTerrasse, 2)} \\times ${texNombre(epaisseur / 100, 2)} = ${texNombre((surfaceTerrasse * epaisseur) / 100, 4)}~\\mathrm{m}^3$ soit moins de $${volumeBeton}~\\mathrm{m}^3$.`
     const correction3b = `Comme il faut $250~\\mathrm{kg}$ de ciment pour faire $1~\\mathrm{m}^3$ de béton, il faut donc $${volumeBeton}\\times 250 = ${texNombre(250 * volumeBeton, 0)}~\\mathrm{kg}$ de ciment pour $${volumeBeton}~\\mathrm{m}^3$ de béton.`
-    const correction3c = `Le ratio, peut également s'écrire par proportionnalité $1~;~3{,}5~;~2{,}5$, d'où pour faire $${volumeBeton}~\\mathrm{m}^3$ de béton :<br>
+    const correction3c = `Le ratio, peut également s'écrire par proportionnalité $1~;~3,5~;~2,5$, d'où pour faire $${volumeBeton}~\\mathrm{m}^3$ de béton :<br>
 -- quantité de gravier nécessaire $${texNombre(masseCiment, 0)}\\times ${texNombre(3.5, 1)}= ${texNombre(masseGravier, 1)}~\\mathrm{kg}$ ;<br>
 -- quantité de sable nécessaire $${texNombre(masseCiment, 0)}\\times ${texNombre(2.5, 1)}= ${texNombre(masseSable, 1)}~\\mathrm{kg}$.`
     const correction3 = createList({

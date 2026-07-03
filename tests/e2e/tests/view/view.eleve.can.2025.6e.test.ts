@@ -9,7 +9,7 @@ async function testEleveView(page: Page) {
     '25',
     '4',
     '50',
-    '1024',
+    '1\\,024',
     '531',
     '5{\\:\\text{h}\\:}25{\\:\\text{min}\\:}',
     '32',

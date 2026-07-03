@@ -182,7 +182,7 @@ export default class nom1G21Old extends Exercice {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr.replace(
           /\b(\d+)\.(\d+)\b/g,
-          '$1{,}$2',
+          '$1,$2',
         )
         i++
       }

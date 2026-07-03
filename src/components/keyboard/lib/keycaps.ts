@@ -123,7 +123,7 @@ const basicKeys = {
   // ================== symbols
   COMMA: {
     display: ',',
-    insert: '{,}',
+    insert: ',',
   },
   POINT: {
     display: '.',

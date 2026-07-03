@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -24,7 +23,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ8FMs2026 extends ExerciceQcmA {
-private appliquerLesValeurs(
+  private appliquerLesValeurs(
     a: number,
     b: number,
     c: number,
@@ -33,9 +32,8 @@ private appliquerLesValeurs(
     repOrigine?: string,
     d1Origine?: string,
     d2Origine?: string,
-    d3Origine?: string
+    d3Origine?: string,
   ): void {
-    
     this.enonce = `On considère le nombre $A = \\dfrac{10^{${a}} \\times 10^{${b}}}{(10^{${c}})^{${d}}}$.<br>`
     this.enonce += `On peut affirmer que :`
 
@@ -50,7 +48,7 @@ private appliquerLesValeurs(
       d3 = d3Origine
     } else {
       correct = `A = ${texNombre(Math.pow(10, E), 5)}`
-      
+
       if (E < 0) {
         // La réponse est une puissance "négative" (ex: 0,001)
         // -> on met le piège du signe "-" comme dans l'image
@@ -66,17 +64,12 @@ private appliquerLesValeurs(
       }
     }
 
-    this.reponses = [
-      `$${correct}$`,
-      `$${d1}$`,
-      `$${d2}$`,
-      `$${d3}$`
-    ]
+    this.reponses = [`$${correct}$`, `$${d1}$`, `$${d2}$`, `$${d3}$`]
 
     const numExp = a + b
     const denExp = c * d
     const bStr = b < 0 ? `(${b})` : `${b}`
-    
+
     // Rédaction adaptative et complète de la correction
     this.correction = `Pour simplifier cette expression, on utilise les propriétés des puissances de $10$ :<br>`
     this.correction += `$\\begin{aligned}`
@@ -93,11 +86,15 @@ private appliquerLesValeurs(
   versionOriginale: () => void = () => {
     // Valeurs strictes de l'image
     this.appliquerLesValeurs(
-      201, -4, 2, 100, -3,
-      'A = 0{,}001',
-      'A = -0{,}001',
-      'A = 0{,}000\\,1',
-      'A = 1\\,000'
+      201,
+      -4,
+      2,
+      100,
+      -3,
+      'A = 0,001',
+      'A = -0,001',
+      'A = 0,000\\,1',
+      'A = 1\\,000',
     )
   }
 
@@ -111,18 +108,18 @@ private appliquerLesValeurs(
     do {
       // Ordre de grandeur final visé (100, 1000, 0.01 ou 0.001)
       const E = choice([-3, -2, 2, 3])
-      
+
       // On crée des nombres cohérents pour les exposants du dénominateur
       const c = choice([2, 3, 4, 5, 10])
       const d = choice([10, 20, 50, 100])
       const cd = c * d
-      
+
       // L'exposant "a" tourne autour de ce produit
       const a = randint(cd - 5, cd + 5)
-      
+
       // On calcule le "b" manquant pour retomber exactement sur l'exposant cible E
       const b = E + cd - a
-      
+
       // On évite les cas triviaux (où l'un des exposants du numérateur vaut 0)
       if (b === 0 || a === 0) continue
 

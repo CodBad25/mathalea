@@ -13,7 +13,8 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Résoudre des problèmes de croissance  et décroissance exponentielle'
+export const titre =
+  'Résoudre des problèmes de croissance  et décroissance exponentielle'
 export const dateDePublication = '03/02/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -491,8 +492,8 @@ export default class CroissanceExponentielle extends Exercice {
           texteCorr += `$\\bullet$ $t = ?$ (temps recherché)<br><br>`
           texteCorr += `On isole $t$ :<br>`
           texteCorr += `$\\begin{aligned}\n`
-          texteCorr += `\\dfrac{t}{T} &= \\dfrac{\\ln(${texNombre(pourcentageCible / 100, 2)})}{\\ln(0{,}5)}\\\\\n`
-          texteCorr += `t &= ${demiVieHeures} \\cdot \\dfrac{\\ln(${texNombre(pourcentageCible / 100, 2)})}{\\ln(0{,}5)}\\\\\n`
+          texteCorr += `\\dfrac{t}{T} &= \\dfrac{\\ln(${texNombre(pourcentageCible / 100, 2)})}{\\ln(0,5)}\\\\\n`
+          texteCorr += `t &= ${demiVieHeures} \\cdot \\dfrac{\\ln(${texNombre(pourcentageCible / 100, 2)})}{\\ln(0,5)}\\\\\n`
           texteCorr += `&\\approx ${`${miseEnEvidence(texNombre(tempsTrouve, 1))}\\text{ heures}`}\n`
           texteCorr += `\\end{aligned}$<br><br>`
           texteCorr += `Il ne restera que $${pourcentageCible}\\,\\%$ de la dose après environ $${`${miseEnEvidence(texNombre(tempsTrouve, 1))}\\text{ heures}`}$.`
@@ -594,8 +595,8 @@ export default class CroissanceExponentielle extends Exercice {
           texteCorr += `On isole $t$ :<br>`
           texteCorr += `$\\begin{aligned}\n`
           texteCorr += `\\left(\\dfrac{1}{2}\\right)^{t/T} &= ${texNombre(pourcentageCible / 100, 2)}\\\\\n`
-          texteCorr += `t &= T \\cdot \\dfrac{\\ln(${texNombre(pourcentageCible / 100, 2)})}{\\ln(0{,}5)}\\\\\n`
-          texteCorr += `&= ${demiVieAns} \\cdot \\dfrac{\\ln(${texNombre(pourcentageCible / 100, 2)})}{\\ln(0{,}5)}\\\\\n`
+          texteCorr += `t &= T \\cdot \\dfrac{\\ln(${texNombre(pourcentageCible / 100, 2)})}{\\ln(0,5)}\\\\\n`
+          texteCorr += `&= ${demiVieAns} \\cdot \\dfrac{\\ln(${texNombre(pourcentageCible / 100, 2)})}{\\ln(0,5)}\\\\\n`
           texteCorr += `&\\approx ${`${miseEnEvidence(texNombre(tempsTrouve, 1))}\\text{ ans}`}\n`
           texteCorr += `\\end{aligned}$<br><br>`
           texteCorr += `Il ne restera que $${pourcentageCible}\\,\\%$ de la masse après environ $${`${miseEnEvidence(texNombre(tempsTrouve, 1))}\\text{ ans}`}$.`

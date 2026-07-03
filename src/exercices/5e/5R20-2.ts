@@ -153,7 +153,7 @@ export default class ExerciceAdditionsRelatifsATrou extends Exercice {
           // 2️⃣ Deuxième terme : garde les parenthèses si elles sont présentes
           // 3️⃣ Résultat : on enlève les parenthèses éventuelles autour du résultat
           const match = texteCorr.match(
-            /\$?\s*(\(?[-+]?\d+(?:{,}\d+)?\)?)\s*\+\s*(\(?[-+]?\d+(?:{,}\d+)?\)?)\s*=\s*(?:\(?([-+]?\d+(?:{,}\d+)?)\)?)\s*\$?/,
+            /\$?\s*(\(?[-+]?\d+(?:,\d+)?\)?)\s*\+\s*(\(?[-+]?\d+(?:,\d+)?\)?)\s*=\s*(?:\(?([-+]?\d+(?:,\d+)?)\)?)\s*\$?/,
           )
 
           const firstTerm = match?.[1] ?? 0

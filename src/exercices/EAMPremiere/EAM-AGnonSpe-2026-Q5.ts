@@ -13,7 +13,8 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Déterminer le calcul permettant de calculer un prix final après une évolution'
+export const titre =
+  'Déterminer le calcul permettant de calculer un prix final après une évolution'
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -22,12 +23,12 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ5AGns2026 extends ExerciceQcmA {
- private appliquerLesValeurs(
+  private appliquerLesValeurs(
     valeur: number,
     p: number,
     typeEvolution: 'augmentation' | 'réduction',
     typeForme: 1 | 2 | 3,
-    distracteurs?: string[]
+    distracteurs?: string[],
   ): void {
     const decimalP = p / 100
     const strDecimalP = texNombre(decimalP, 2)
@@ -52,11 +53,13 @@ export default class AutoQ5AGns2026 extends ExerciceQcmA {
       explication = `Une ${typeEvolution} de $${p}\\,\\%$ revient à prendre $100\\,\\% ${signe} ${p}\\,\\% = ${num}\\,\\%$ du prix initial.<br>Le calcul est donc : $${miseEnEvidence(repCorrecteMath)}$.`
     } else {
       // Forme : Additive/Soustractive (ex: 200 + 0.2 x 200)
-      repCorrecteMath = typeEvolution === 'augmentation'
-        ? `${strVal} + ${strDecimalP} \\times ${strVal}`
-        : `${strVal} - ${strDecimalP} \\times ${strVal}`
-      const motEvo = typeEvolution === 'augmentation' ? "l'augmentation" : "la réduction"
-      const motOp = typeEvolution === 'augmentation' ? "ajoute" : "soustrait"
+      repCorrecteMath =
+        typeEvolution === 'augmentation'
+          ? `${strVal} + ${strDecimalP} \\times ${strVal}`
+          : `${strVal} - ${strDecimalP} \\times ${strVal}`
+      const motEvo =
+        typeEvolution === 'augmentation' ? "l'augmentation" : 'la réduction'
+      const motOp = typeEvolution === 'augmentation' ? 'ajoute' : 'soustrait'
       explication = `On calcule d'abord le montant de ${motEvo} : $${p}\\,\\%$ de $${strVal}$ s'écrit $${strDecimalP} \\times ${strVal}$.<br>`
       explication += `Puis on ${motOp} ce montant au prix initial.<br>Le calcul est donc : $${miseEnEvidence(repCorrecteMath)}$.`
     }
@@ -65,30 +68,37 @@ export default class AutoQ5AGns2026 extends ExerciceQcmA {
     const repCorrecte = `$${repCorrecteMath}$`
 
     if (distracteurs && distracteurs.length >= 3) {
-      this.reponses = [repCorrecte, distracteurs[0], distracteurs[1], distracteurs[2]]
+      this.reponses = [
+        repCorrecte,
+        distracteurs[0],
+        distracteurs[1],
+        distracteurs[2],
+      ]
     } else {
-      const cmOppose = typeEvolution === 'augmentation' ? 1 - decimalP : 1 + decimalP
-      const erreurModAdd = typeEvolution === 'augmentation' 
-        ? `$100 \\times ${strDecimalP} + ${strVal}$` 
-        : `$${strVal} - 100 \\times ${strDecimalP}$`
+      const cmOppose =
+        typeEvolution === 'augmentation' ? 1 - decimalP : 1 + decimalP
+      const erreurModAdd =
+        typeEvolution === 'augmentation'
+          ? `$100 \\times ${strDecimalP} + ${strVal}$`
+          : `$${strVal} - 100 \\times ${strDecimalP}$`
 
       let mauvaisesReponses = [
-        `$${strVal} ${signe} ${strDecimalP}$`,                   // Ajouter/soustraire le décimal brut
-        `$${strVal} \\times \\dfrac{${p}}{100}$`,                // Calculer juste l'évolution
-        `$${strVal} \\times ${texNombre(cmOppose, 2)}$`,         // Se tromper de signe pour le CM
-        erreurModAdd,                                            // Mauvaise modélisation avec 100
-        `$${strVal} \\times ${strDecimalP}$`                     // Oublier le "1" du CM
+        `$${strVal} ${signe} ${strDecimalP}$`, // Ajouter/soustraire le décimal brut
+        `$${strVal} \\times \\dfrac{${p}}{100}$`, // Calculer juste l'évolution
+        `$${strVal} \\times ${texNombre(cmOppose, 2)}$`, // Se tromper de signe pour le CM
+        erreurModAdd, // Mauvaise modélisation avec 100
+        `$${strVal} \\times ${strDecimalP}$`, // Oublier le "1" du CM
       ]
 
       // On filtre pour être sûr à 100% que la bonne réponse n'est pas dans le tableau
-      mauvaisesReponses = mauvaisesReponses.filter(rep => rep !== repCorrecte)
+      mauvaisesReponses = mauvaisesReponses.filter((rep) => rep !== repCorrecte)
 
       // On prend la bonne réponse et les 3 premières mauvaises réponses
       this.reponses = [
-        repCorrecte, 
-        mauvaisesReponses[0], 
-        mauvaisesReponses[1], 
-        mauvaisesReponses[2]
+        repCorrecte,
+        mauvaisesReponses[0],
+        mauvaisesReponses[1],
+        mauvaisesReponses[2],
       ]
     }
 
@@ -98,9 +108,9 @@ export default class AutoQ5AGns2026 extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     // Reproduction exacte de la question 5 de l'image
     this.appliquerLesValeurs(200, 20, 'augmentation', 1, [
-      `$200 + 0{,}2$`,
+      `$200 + 0,2$`,
       `$200 \\times \\dfrac{20}{100}$`,
-      `$100 \\times 0{,}20 + 200$`
+      `$100 \\times 0,20 + 200$`,
     ])
   }
 
@@ -115,9 +125,11 @@ export default class AutoQ5AGns2026 extends ExerciceQcmA {
       // Tirage de valeurs cohérentes pour des prix
       const valeur = choice([40, 50, 80, 120, 150, 200, 250, 300, 400])
       const p = choice([5, 10, 15, 20, 25, 30, 40, 50, 60])
-      
+
       // On varie entre augmentation et réduction, et on tire une des 3 formes de formules attendues
-      const typeEvo = choice(['augmentation', 'réduction']) as 'augmentation' | 'réduction'
+      const typeEvo = choice(['augmentation', 'réduction']) as
+        | 'augmentation'
+        | 'réduction'
       const forme = choice([1, 2, 3]) as 1 | 2 | 3
 
       this.appliquerLesValeurs(valeur, p, typeEvo, forme)

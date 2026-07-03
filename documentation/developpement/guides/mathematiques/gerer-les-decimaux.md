@@ -183,7 +183,7 @@ handleAnswers(this, i, {
 })
 ```
 
-Avec `nombreDecimalSeulement`, les saisies `0.5` et `0{,}5` sont acceptées pour `0.5`, mais `\frac{1}{2}` ou `1/2` sont refusées comme forme de réponse décimale.
+Avec `nombreDecimalSeulement`, les saisies `0.5` et `0,5` sont acceptées pour `0.5`, mais `\frac{1}{2}` ou `1/2` sont refusées comme forme de réponse décimale.
 
 ## Procédure complète pour un exercice
 
@@ -233,7 +233,7 @@ Avant de considérer l'exercice terminé, vérifier manuellement les cas qui dé
 Pour une réponse interactive, essayer :
 
 - la réponse avec un point : `0.5` ;
-- la réponse avec une virgule MathLive : `0{,}5` ;
+- la réponse avec une virgule MathLive : `0,5` ;
 - une fraction équivalente si elle doit être refusée : `\frac{1}{2}` ;
 - une expression équivalente si elle doit être refusée avec `nombreDecimalSeulement` : `0.2+0.3`.
 

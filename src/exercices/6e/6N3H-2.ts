@@ -82,7 +82,7 @@ export default class EgalitesEntreFractions extends Exercice {
       const saisies = prompts.map((prompt) => mfe.getPromptValue(prompt))
       const thereSomeDecimals = saisies.some(
         (v) =>
-          parseInt(v.replace('{,}', '.')) !== parseFloat(v.replace('{,}', '.')),
+          parseInt(v.replace(',', '.')) !== parseFloat(v.replace(',', '.')),
       )
       if (thereSomeDecimals) {
         return {

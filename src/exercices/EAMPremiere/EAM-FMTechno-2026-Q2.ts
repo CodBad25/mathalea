@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -24,7 +23,11 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ2FMt2026 extends ExerciceQcmA {
-private appliquerLesValeurs(total: number, p: number, distracteurNul: string): void {
+  private appliquerLesValeurs(
+    total: number,
+    p: number,
+    distracteurNul: string,
+  ): void {
     this.enonce = `Un lycée compte $${total}$ élèves. L'effectif augmente de $${p}\\,\\%$ l'année suivante.<br>`
     this.enonce += `Le nombre d'élèves est donc multiplié par :`
 
@@ -33,12 +36,7 @@ private appliquerLesValeurs(total: number, p: number, distracteurNul: string): v
     const d2 = `0,0${p}` // le taux écrit en décimal
     const d3 = distracteurNul // troisième distracteur (variable selon la version)
 
-    this.reponses = [
-      `$${coeff}$`,
-      `$${d1}$`,
-      `$${d2}$`,
-      `$${d3}$`
-    ]
+    this.reponses = [`$${coeff}$`, `$${d1}$`, `$${d2}$`, `$${d3}$`]
 
     this.correction = `Augmenter un effectif de $${p}\\,\\%$ revient à le multiplier par un coefficient multiplicateur égal à : <br>`
     this.correction += `$1 + \\dfrac{${p}}{100} = 1 + ${texNombre(p / 100, 2)} = ${miseEnEvidence(coeff)}$.`
@@ -62,7 +60,7 @@ private appliquerLesValeurs(total: number, p: number, distracteurNul: string): v
       const total = choice([400, 500, 600, 700, 800])
 
       // Distracteur "1,p" : erreur 1 + p/10 au lieu de 1 + p/100 (ex : 1,4 pour 4 %)
-      this.appliquerLesValeurs(total, p, `1{,}${p}`)
+      this.appliquerLesValeurs(total, p, `1,${p}`)
       compteur++
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }

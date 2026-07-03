@@ -97,13 +97,13 @@ export default class ExerciceConversionsVolumes extends Exercice {
       ],
     ]
     const prefixeDiv = [
-      [' d', '\\div1{\\,}000', 1000, '\\times0{,}1'],
-      [' c', '\\div1{\\,}000\\div1{\\,}000', 1000000, '\\times0{,}01'],
+      [' d', '\\div1{\\,}000', 1000, '\\times0,1'],
+      [' c', '\\div1{\\,}000\\div1{\\,}000', 1000000, '\\times0,01'],
       [
         ' m',
         '\\div1{\\,}000\\div1{\\,}000\\div1{\\,}000',
         1000000000,
-        '\\times0{,}001',
+        '\\times0,001',
       ],
     ]
 

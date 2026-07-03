@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import Trinome from './Trinome'
 import FractionEtendue from './FractionEtendue'
+import Trinome from './Trinome'
 
 const p1 = new Trinome(1, 2, 1)
 
@@ -214,7 +214,7 @@ describe('Trinome', () => {
       )
       const trinome2 = new Trinome(-2, -20, -47)
       expect(trinome2.texCalculRacine1()).toBe(
-        'x_1 = \\dfrac{-b+\\sqrt{\\Delta}}{2a}=\\dfrac{20+\\sqrt{24}}{2\\times\\left(-2\\right)}=\\dfrac{-20-\\sqrt{24}}{4}\\approx-6{,}225',
+        'x_1 = \\dfrac{-b+\\sqrt{\\Delta}}{2a}=\\dfrac{20+\\sqrt{24}}{2\\times\\left(-2\\right)}=\\dfrac{-20-\\sqrt{24}}{4}\\approx-6,225',
       )
       expect(trinome2.texCalculRacine1(true)).toBe(
         'x_1 = \\dfrac{-b+\\sqrt{\\Delta}}{2a}=\\dfrac{20+\\sqrt{24}}{2\\times\\left(-2\\right)}=\\dfrac{-20-\\sqrt{24}}{4}=\\dfrac{-10- \\sqrt{6}}{2}',

@@ -269,7 +269,7 @@ export default class Trinome {
       if (this.x1 instanceof FractionEtendue)
         result += `=${this.x1.texFractionSimplifiee}`
       else if (!exact) {
-        result += `\\approx${this.x1.toString().replace('.', '{,}')}`
+        result += `\\approx${this.x1.toString().replace('.', ',')}`
       } else {
         if (this.discriminant.estEntiere) {
           const [r0, r1] = extraireRacineCarree(
@@ -313,7 +313,7 @@ export default class Trinome {
       if (this.x1 instanceof FractionEtendue)
         result += `=${this.x1.texFraction}`
       else if (!exact) {
-        result += `\\approx${this.x1.toString().replace('.', '{,}')}`
+        result += `\\approx${this.x1.toString().replace('.', ',')}`
       } else {
         if (this.discriminant.estEntiere) {
           const [r0, r1] = extraireRacineCarree(
@@ -368,7 +368,7 @@ export default class Trinome {
       if (this.x2 instanceof FractionEtendue)
         result += `=${this.x2.texFractionSimplifiee}`
       else if (!exact) {
-        result += `\\approx${this.x2.toString().replace('.', '{,}')}`
+        result += `\\approx${this.x2.toString().replace('.', ',')}`
       } else {
         if (this.discriminant.estEntiere) {
           const [r0, r1] = extraireRacineCarree(
@@ -413,7 +413,7 @@ export default class Trinome {
       if (this.x2 instanceof FractionEtendue)
         result += `=${this.x2.texFractionSimplifiee}`
       else if (!exact) {
-        result += `\\approx${this.x2.toString().replace('.', '{,}')}`
+        result += `\\approx${this.x2.toString().replace('.', ',')}`
       } else {
         if (this.discriminant.estEntiere) {
           const [r0, r1] = extraireRacineCarree(

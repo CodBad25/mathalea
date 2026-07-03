@@ -10,7 +10,7 @@ import {
   texteParPosition,
 } from '../../lib/2d/textes'
 import { rotation } from '../../lib/2d/transformations'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -441,20 +441,20 @@ export default class Questions2023 extends Exercice {
             'Vu que le nombre dérivé en $x_0$ est $2x_0$, alors $a=\\dfrac{-1}{2x_0}$.<br>'
           texteCorr +=
             sp(29) +
-            "Pour le point considéré, $x_0^2=\\dfrac{-1}{2x_0}x_0+b$ d'où $b=x_0^2+0{,}5$.<br>"
+            "Pour le point considéré, $x_0^2=\\dfrac{-1}{2x_0}x_0+b$ d'où $b=x_0^2+0,5$.<br>"
           texteCorr +=
             `${texteEnCouleur('Conclusion de ce préambule')}` +
             " : La normale à la parabole coupe l'axe des ordonnées une demie-unité plus haut que le point considéré de la parabole.<br><br>"
-          texteCorr += `Dans le triangle $CHM$, rectangle en $H$, d'après la propriété de Pythagore, la longueur $HM$ est égale à : $\\sqrt{${texNombre(2022)}^2-0{,}5^2}$.<br>`
+          texteCorr += `Dans le triangle $CHM$, rectangle en $H$, d'après la propriété de Pythagore, la longueur $HM$ est égale à : $\\sqrt{${texNombre(2022)}^2-0,5^2}$.<br>`
           texteCorr += "C'est aussi l'abscisse du point $M$.<br>"
-          texteCorr += `On en déduit que l'ordonnée du point $M$ (et donc de $H$) est $${texNombre(2022)}^2-0{,}25$.<br>`
-          texteCorr += `Le point $C$ a donc pour coordonnées : $(0;${texNombre(2022)}^2+0{,}25)$.<br>`
+          texteCorr += `On en déduit que l'ordonnée du point $M$ (et donc de $H$) est $${texNombre(2022)}^2-0,25$.<br>`
+          texteCorr += `Le point $C$ a donc pour coordonnées : $(0;${texNombre(2022)}^2+0,25)$.<br>`
           texteCorr += `Pour obtenir l'ordonnée de $C'$, on ajoute $r+${texNombre(2022)}$.<br>`
-          texteCorr += `On obtient donc pour l'ordonnée de $C'$ : $${texNombre(2022)}^2+0{,}25+${texNombre(2022)}+r$.<br>`
-          texteCorr += `Le point $M'$ a pour coordonnées $(\\sqrt{r^2-0{,}5^2}${sp(2)};${sp(2)}${texNombre(2022)}^2-0{,}25+${texNombre(2022)}+r)$.<br>`
+          texteCorr += `On obtient donc pour l'ordonnée de $C'$ : $${texNombre(2022)}^2+0,25+${texNombre(2022)}+r$.<br>`
+          texteCorr += `Le point $M'$ a pour coordonnées $(\\sqrt{r^2-0,5^2}${sp(2)};${sp(2)}${texNombre(2022)}^2-0,25+${texNombre(2022)}+r)$.<br>`
           texteCorr +=
             "Or comme $M'$ est sur la courbe, son ordonnée est aussi le carré de son abscisse, ce qui nous donne l'égalité : "
-          texteCorr += `$r^2-0{,}25 = ${texNombre(2022)}^2-0{,}25+${texNombre(2022)}+r$.<br>`
+          texteCorr += `$r^2-0,25 = ${texNombre(2022)}^2-0,25+${texNombre(2022)}+r$.<br>`
           texteCorr += `En réorganisant cette équation, nous obtenons : $r^2 - ${texNombre(2022)}^2 = ${texNombre(2022)}+r$.<br>`
           texteCorr += `On en déduit que : $(r-${texNombre(2022)})(r+${texNombre(2022)}) = r+${texNombre(2022)}$.<br>`
           texteCorr += `Ce qui conduit à : $r-${texNombre(2022)}=1$ d'où $r=${miseEnEvidence(texNombre(2023))}$.<br>`

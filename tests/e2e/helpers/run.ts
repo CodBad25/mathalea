@@ -345,6 +345,7 @@ export async function inputAnswerById(
 
 export async function checkFeedback(page: Page, questions: Question[]) {
   await checkButtonClick(page)
+  await page.waitForTimeout(1000) // attendre un peu pour que le feedback s'affiche
   await addFeedbacks(page, questions)
 
   for (const question of questions) {

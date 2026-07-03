@@ -89,8 +89,8 @@ export default class AutoQ3ANt2026 extends ExerciceQcmA {
       990,
       20,
       false,
-      '990 \\times 0{,}8',
-      '990 \\times 0{,}2',
+      '990 \\times 0,8',
+      '990 \\times 0,2',
       '990 \\times \\left(1 + \\dfrac{20}{100}\\right)',
       '990 \\times \\left(-\\dfrac{20}{100}\\right)',
     )

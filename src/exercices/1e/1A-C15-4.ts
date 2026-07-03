@@ -28,22 +28,22 @@ export default class Auto1C19 extends ExerciceQcmA {
 
   versionOriginale: () => void = () => {
     this.enonce = `Dans une région de France, le tarif de l'eau est le suivant : <br>
-              Un abonnement annuel et $3{,}50$ € par mètre cube consommé. <br>
-              Une famille a payé une facture de $352{,}50$ € pour une consommation de $85\\text{ m}^3$.<br>
+              Un abonnement annuel et $3,50$ € par mètre cube consommé. <br>
+              Une famille a payé une facture de $352,50$ € pour une consommation de $85\\text{ m}^3$.<br>
             Le prix de l'abonnement est donné par le calcul :`
 
-    this.correction = `La facture s'élève à $352{,}50$ € pour une consommation de $85\\text{ m}^3$.<br>
+    this.correction = `La facture s'élève à $352,50$ € pour une consommation de $85\\text{ m}^3$.<br>
                    En notant $a$ le montant de l'abonnement, on obtient : <br>
                    $\\begin{aligned}
-                   a+3{,}50\\times 85 &=352{,}50\\\\
-                   a&=${miseEnEvidence('352{,}50-3{,}50\\times 85')}
+                   a+3,50\\times 85 &=352,50\\\\
+                   a&=${miseEnEvidence('352,50-3,50\\times 85')}
                    \\end{aligned}$`
 
     this.reponses = [
-      '$352{,}50-3{,}50\\times 85$',
-      '$\\dfrac{352{,}50}{3{,}50\\times 85}$',
-      '$\\dfrac{3{,}50\\times 85}{352{,}50}$',
-      '$352{,}50+3{,}50\\times 85$',
+      '$352,50-3,50\\times 85$',
+      '$\\dfrac{352,50}{3,50\\times 85}$',
+      '$\\dfrac{3,50\\times 85}{352,50}$',
+      '$352,50+3,50\\times 85$',
     ]
   }
 

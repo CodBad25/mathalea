@@ -44,7 +44,7 @@ export default class ÉcrireNombresDecimauxFormates extends Exercice {
       let nombrestring = n.toString()
       for (let k = 0; k < nzeroEnt; k++) nombrestring = '0' + nombrestring
       for (let k = 0; k < nzeroDec; k++) nombrestring = nombrestring + '0'
-      return nombrestring.replace('.', '{,}')
+      return nombrestring.replace('.', ',')
     }
     function compteZerosFinaux(n: number) {
       let cpt = 0
@@ -108,7 +108,7 @@ export default class ÉcrireNombresDecimauxFormates extends Exercice {
         }
       } while (Math.abs(nombre - Math.round(nombre)) < 0.00000001)
       nombrestring = zeroSuperflus(nombre)
-      nombre = parseFloat(nombrestring.replace('{,}', '.'))
+      nombre = parseFloat(nombrestring.replace(',', '.'))
       texte =
         `$${nombrestring}$` +
         ajouteChampTexteMathLive(this, i, KeyboardType.numbersSpace, {

@@ -33,7 +33,7 @@ describe('amcInferenceHelpers', () => {
       },
       {
         label: 'value numerique decimal string',
-        input: { reponse: { value: '1{,}5' } },
+        input: { reponse: { value: '1,5' } },
         expected: { digits: 2, decimals: 1, signe: false },
       },
       {

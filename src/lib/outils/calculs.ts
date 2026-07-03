@@ -58,7 +58,7 @@ const texNombre = (n: number | Decimal, precision: number) => {
   if (precision === 0) return n.toString()
   else {
     const dn = new Decimal(n)
-    return dn.toDP(precision).toString().replace('.', '{,}')
+    return dn.toDP(precision).toString().replace('.', ',')
   }
 }
 

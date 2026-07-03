@@ -6,8 +6,8 @@
  * Exemples :
  *  deparenthise('\\dfrac{(+4)}{(-8)}')
  *    -> '\\dfrac{4}{-8}'
- *  deparenthise('$ … + (-3{,}3) = (+5{,}6) $')
- *    -> '$ … + (-3{,}3) = 5{,}6 $'
+ *  deparenthise('$ … + (-3,3) = (+5,6) $')
+ *    -> '$ … + (-3,3) = 5,6 $'
  *  deparenthise('2 \\times (-3)')
  *    -> '2 \\times (-3)'
  */
@@ -64,7 +64,7 @@ export function deparenthise(latexIn: string): string {
   // - pas après \times, \div, + ou -
   // ⚡ Remarque : ne touche pas aux nombres négatifs déjà entre parenthèses
   result = result.replace(
-    /(?<!\\times\s)(?<!\\div\s)(?<![-+])\((\d+(?:{,}\d+)?)\)/g,
+    /(?<!\\times\s)(?<!\\div\s)(?<![-+])\((\d+(?:,\d+)?)\)/g,
     '$1',
   )
 

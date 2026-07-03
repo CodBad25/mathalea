@@ -1,14 +1,14 @@
+import type { Page } from 'playwright'
+import { fraction } from '../../../../src/modules/fractions'
+import { KatexHandler } from '../../helpers/KatexHandler'
+import prefs from '../../helpers/prefs.js'
 import {
   checkFeedback,
   getQuestions,
   inputAnswer,
   runTest,
 } from '../../helpers/run'
-import type { Page } from 'playwright'
 import { clean } from '../../helpers/text'
-import { KatexHandler } from '../../helpers/KatexHandler'
-import { fraction } from '../../../../src/modules/fractions'
-import prefs from '../../helpers/prefs.js'
 
 async function test(page: Page) {
   const hostname = local
@@ -65,5 +65,6 @@ if (process.env.CI) {
   prefs.headless = true
   runTest(test, import.meta.url, { pauseOnError: false }) // true pendant le développement, false ensuite
 } else {
+  prefs.headless = false
   runTest(test, import.meta.url)
 }

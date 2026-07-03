@@ -39,9 +39,9 @@ export default class TauxReciproque extends ExerciceQcmA {
 
     this.reponses = [
       `$${bonneReponseRetenue}$`,
-      '$\\dfrac{1}{1{,}27}$',
-      '$1-\\dfrac{1}{1{,}27}$',
-      '$\\dfrac{0,27}{1{,}27}$',
+      '$\\dfrac{1}{1,27}$',
+      '$1-\\dfrac{1}{1,27}$',
+      '$\\dfrac{0,27}{1,27}$',
     ]
   }
 

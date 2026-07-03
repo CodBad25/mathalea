@@ -6,7 +6,7 @@ export function clean(
 ) {
   text = text.replaceAll('−', '-')
   if (options.includes('dollars')) text = text.replaceAll('$', '')
-  if (options.includes('virgules')) text = text.replaceAll('{,}', ',')
+  // if (options.includes('virgules')) text = text.replaceAll(',', ',') Il n'y a plus de {,} dans les textes donc on ne fait plus de remplacement
   if (options.includes('espaces'))
     text = text.replaceAll(/\s/g, '').replaceAll('\\,', '')
   if (options.includes('cr')) text = text.replaceAll(/\n/g, '')

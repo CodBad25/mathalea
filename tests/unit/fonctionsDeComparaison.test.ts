@@ -1178,7 +1178,7 @@ describe('fonctionComparaison', () => {
     })
     expect(result.isOk).toBe(true)
 
-    result = fonctionComparaison('0{,}5', '0.5', {
+    result = fonctionComparaison('0,5', '0.5', {
       nombreDecimalSeulement: true,
     })
     expect(result.isOk).toBe(true)
@@ -1602,31 +1602,31 @@ describe('fonctionComparaison', () => {
   //
 
   it("Vérifie le fonctionnement de l'option ecritureScientifique", () => {
-    let result = fonctionComparaison('1{,}357\\times 10^3', '1357', {
+    let result = fonctionComparaison('1,357\\times 10^3', '1357', {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(true)
-    result = fonctionComparaison('1{,}357\\cdot 10^3', '1357', {
+    result = fonctionComparaison('1,357\\cdot 10^3', '1357', {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(true)
-    result = fonctionComparaison('1{,}350\\cdot 10^3', '1350', {
+    result = fonctionComparaison('1,350\\cdot 10^3', '1350', {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(true)
-    result = fonctionComparaison('1{,}35\\cdot 10^3', '1350', {
+    result = fonctionComparaison('1,35\\cdot 10^3', '1350', {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(true)
-    result = fonctionComparaison('10^3 \\times 1{,}357', '1357', {
+    result = fonctionComparaison('10^3 \\times 1,357', '1357', {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(true)
-    result = fonctionComparaison('1{,}357\\times 10^{3}', '1357', {
+    result = fonctionComparaison('1,357\\times 10^{3}', '1357', {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(true)
-    result = fonctionComparaison('1{,}357\\times 10^{+3}', '1357', {
+    result = fonctionComparaison('1,357\\times 10^{+3}', '1357', {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(true)
@@ -1634,15 +1634,15 @@ describe('fonctionComparaison', () => {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(true)
-    result = fonctionComparaison('1{,}357\\times 1000', '1357', {
+    result = fonctionComparaison('1,357\\times 1000', '1357', {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(false)
-    result = fonctionComparaison('1{,}357\\times 10^0', '1.357', {
+    result = fonctionComparaison('1,357\\times 10^0', '1.357', {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(true)
-    result = fonctionComparaison('1{,}357', '1.357', {
+    result = fonctionComparaison('1,357', '1.357', {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(true)
@@ -1653,26 +1653,26 @@ describe('fonctionComparaison', () => {
     expect(result.feedback).toBe(
       "La réponse fournie est bien égale à celle attendue mais la réponse fournie n'est pas en notation scientifique.",
     )
-    result = fonctionComparaison('13{,}57\\times 10^{2}', '1357', {
+    result = fonctionComparaison('13,57\\times 10^{2}', '1357', {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(false)
     expect(result.feedback).toBe(
       "La réponse fournie est bien égale à celle attendue mais la réponse fournie n'est pas en notation scientifique.",
     )
-    result = fonctionComparaison('1{,}357\\times 10^{4}', '1357', {
+    result = fonctionComparaison('1,357\\times 10^{4}', '1357', {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(false)
     expect(result.feedback).toBe(
       "La réponse fournie est bien en notation scientifique mais la réponse fournie n'est pas égale à celle attendue.",
     )
-    result = fonctionComparaison('13{,}75\\times 10^{2}', '1357', {
+    result = fonctionComparaison('13,75\\times 10^{2}', '1357', {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(false)
     expect(result.feedback).toBe('La mantisse doit être inférieure à 10.')
-    result = fonctionComparaison('0{,}75\\times 10^{2}', '1357', {
+    result = fonctionComparaison('0,75\\times 10^{2}', '1357', {
       ecritureScientifique: true,
     })
     expect(result.isOk).toBe(false)
@@ -1747,60 +1747,58 @@ describe('fonctionComparaison', () => {
 
   it('Vérifie le fonctionnement des options unite et precisionUnite', () => {
     let result = fonctionComparaison(
-      '3{,}5\\operatorname{\\mathrm{cm}}',
-      '3{,}5cm',
+      '3,5\\operatorname{\\mathrm{cm}}',
+      '3,5cm',
       { unite: true },
     )
     expect(result.isOk).toBe(true)
-    result = fonctionComparaison(
-      '0{,}035\\operatorname{\\mathrm{m}}',
-      '3{,}5cm',
-      { unite: true },
-    )
+    result = fonctionComparaison('0,035\\operatorname{\\mathrm{m}}', '3,5cm', {
+      unite: true,
+    })
     expect(result.isOk).toBe(true)
-    result = fonctionComparaison('0{,}035\\operatorname{\\mathrm{g}}', '32cm', {
+    result = fonctionComparaison('0,035\\operatorname{\\mathrm{g}}', '32cm', {
       unite: true,
     })
     expect(result.isOk).toBe(false)
     expect(result.feedback).toBe(`L'unité choisie n'est, déjà, pas correcte.`)
 
-    result = fonctionComparaison('3{,}5', '3{,}5cm', { unite: true })
+    result = fonctionComparaison('3,5', '3,5cm', { unite: true })
     expect(result.isOk).toBe(false)
     expect(result.feedback).toBe(
       "La réponse pourrait être correcte si l'unité avait été précisée.",
     )
 
-    result = fonctionComparaison('35', '3{,}5cm', { unite: true })
+    result = fonctionComparaison('35', '3,5cm', { unite: true })
     expect(result.isOk).toBe(false)
     expect(result.feedback).toBe(
       "La réponse pourrait être correcte si l'unité avait été précisée.",
     )
 
-    result = fonctionComparaison('0.35', '3{,}5cm', { unite: true })
+    result = fonctionComparaison('0.35', '3,5cm', { unite: true })
     expect(result.isOk).toBe(false)
     expect(result.feedback).toBe(
       "La réponse pourrait être correcte si l'unité avait été précisée.",
     )
 
-    result = fonctionComparaison('2{,}5', '3{,}5cm', { unite: true })
+    result = fonctionComparaison('2,5', '3,5cm', { unite: true })
     expect(result.isOk).toBe(false)
     expect(result.feedback).toBe(
       "La réponse est fausse et il faut saisir l'unité.",
     )
 
-    result = fonctionComparaison('3{,}47\\operatorname{\\mathrm{m}}', '347cm', {
+    result = fonctionComparaison('3,47\\operatorname{\\mathrm{m}}', '347cm', {
       unite: true,
       precisionUnite: 0,
     })
     expect(result.isOk).toBe(true)
 
-    result = fonctionComparaison('3{,}5\\operatorname{\\mathrm{m}}', '3.47m', {
+    result = fonctionComparaison('3,5\\operatorname{\\mathrm{m}}', '3.47m', {
       unite: true,
       precisionUnite: 0.1,
     })
     expect(result.isOk).toBe(true)
 
-    result = fonctionComparaison('3{,}4\\operatorname{\\mathrm{m}}', '3.47m', {
+    result = fonctionComparaison('3,4\\operatorname{\\mathrm{m}}', '3.47m', {
       unite: true,
       precisionUnite: 0.05,
     })
@@ -2050,11 +2048,11 @@ describe('fonctionComparaison', () => {
       nombreAvecEspace: true,
     })
     expect(result.isOk).toBe(true)
-    result = fonctionComparaison('1 000{,}3', texNombre(1000.3), {
+    result = fonctionComparaison('1 000,3', texNombre(1000.3), {
       nombreAvecEspace: true,
     })
     expect(result.isOk).toBe(true)
-    result = fonctionComparaison('1 000{,}123 4', texNombre(1000.1234), {
+    result = fonctionComparaison('1 000,123 4', texNombre(1000.1234), {
       nombreAvecEspace: true,
     })
     expect(result.isOk).toBe(true)
@@ -2062,7 +2060,7 @@ describe('fonctionComparaison', () => {
       nombreAvecEspace: true,
     })
     expect(result.isOk).toBe(true)
-    result = fonctionComparaison('0{,}123', texNombre(0.123), {
+    result = fonctionComparaison('0,123', texNombre(0.123), {
       nombreAvecEspace: true,
     })
     expect(result.isOk).toBe(true)
@@ -3527,7 +3525,7 @@ describe('fonctionComparaison', () => {
     })
     expect(result.isOk).toBe(true)
 
-    result = fonctionComparaison('4;-5;10{,}2', '4;-5;10.2', {
+    result = fonctionComparaison('4;-5;10,2', '4;-5;10.2', {
       suiteRangeeDeNombres: true,
     })
     expect(result.isOk).toBe(true)

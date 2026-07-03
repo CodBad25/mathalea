@@ -86,9 +86,9 @@ export default class ExerciceConversionsAires extends Exercice {
       [' k', '\\times100\\times100\\times100', 1000000, '\\times1000'],
     ] // On réinitialise cette liste qui a pu être modifiée dans le cas des ares
     let prefixeDiv = [
-      [' d', '\\div100', 100, '\\times0{,}1'],
-      [' c', '\\div100\\div100', 10000, '\\times0{,}01'],
-      [' m', '\\div100\\div100\\div100', 1000000, '\\times0{,}001'],
+      [' d', '\\div100', 100, '\\times0,1'],
+      [' c', '\\div100\\div100', 10000, '\\times0,01'],
+      [' m', '\\div100\\div100\\div100', 1000000, '\\times0,001'],
     ]
     const unite = 'm'
     const listeUnite = ['mm', 'cm', 'dm', 'm', 'dam', 'hm', 'km']
@@ -200,9 +200,9 @@ export default class ExerciceConversionsAires extends Exercice {
         prefixe = prefixeMulti[k][2]
       } else if (div && typesDeQuestions < 4) {
         prefixeDiv = [
-          [' d', '\\div100', 100, '\\times0{,}1'],
-          [' c', '\\div100\\div100', 10000, '\\times0{,}01'],
-          [' m', '\\div100\\div100\\div100', 1000000, '\\times0{,}001'],
+          [' d', '\\div100', 100, '\\times0,1'],
+          [' c', '\\div100\\div100', 10000, '\\times0,01'],
+          [' m', '\\div100\\div100\\div100', 1000000, '\\times0,001'],
         ]
         k = randint(0, 1) // Pas de conversions de mm^2 en m^2 avec des nombres décimaux car résultat inférieur à 10e-8
         resultat = a.div(prefixeDiv[k][2]) // Attention aux notations scientifiques pour 10e-8
@@ -319,7 +319,7 @@ ${range(Math.abs(ecart - 1))
   .reverse()
   .map(
     (i) =>
-      `${texNombre(a, 2)} ${'\\times0{,}01'.repeat(Math.abs(ecart - i))} ${texTexte(listeUnite[unite1 + i])}^2`,
+      `${texNombre(a, 2)} ${'\\times0,01'.repeat(Math.abs(ecart - i))} ${texTexte(listeUnite[unite1 + i])}^2`,
   )
   .join('\\\\\n&= ')}\\\\
             &=${texNombre(a, 2)} \\times ${texNombre(Math.pow(10, -2 * ecart))} ${texTexte(listeUnite[unite2])}^2\\\\

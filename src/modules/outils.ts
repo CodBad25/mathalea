@@ -683,7 +683,7 @@ export function num(nb: number) {
       .format(nb)
       .toString()
       .replace(/\s+/g, '\\thickspace ')
-      .replace(',', '{,}')
+      .replace(',', ',')
   } else {
     window.notify("Fonction num() appelée avec autre chose qu'un number", {
       nb,

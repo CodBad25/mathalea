@@ -105,7 +105,7 @@ export default class AgrandissementReduction extends Exercice {
             texteAvant: 'aire de la base de la pyramide',
             titreAide: "Formule : Aire d'un carré de côté $c$",
           }) +
-          `(arrondie à $0{,}01\\text{cm}^2$ près).${ajouteQuestionMathlive({
+          `(arrondie à $0,01\\text{cm}^2$ près).${ajouteQuestionMathlive({
             exercice: this,
             question: 0,
             typeInteractivite: 'mathlive',
@@ -122,7 +122,7 @@ export default class AgrandissementReduction extends Exercice {
             titreAide:
               "Formule : Volume d'une pyramide d'aire de base $B$ et de hauteur $h$",
           }) +
-          ` $SABCD$ (arrondi à $0{,}001\\text{cm}^3$ près)${ajouteQuestionMathlive(
+          ` $SABCD$ (arrondi à $0,001\\text{cm}^3$ près)${ajouteQuestionMathlive(
             {
               exercice: this,
               question: 1,
@@ -144,7 +144,7 @@ export default class AgrandissementReduction extends Exercice {
               titreAide: "Définition : Section plane d'un solide",
             },
           ) +
-          ` $A'B'C'D'$ sachant que $SO'${sp()}=${sp()}${texNombre(h2, 0)}${sp()}\\text{cm}$ (arrondie à $0{,}01\\text{cm}^2$ près)${ajouteQuestionMathlive(
+          ` $A'B'C'D'$ sachant que $SO'${sp()}=${sp()}${texNombre(h2, 0)}${sp()}\\text{cm}$ (arrondie à $0,01\\text{cm}^2$ près)${ajouteQuestionMathlive(
             {
               exercice: this,
               question: 2,
@@ -158,7 +158,7 @@ export default class AgrandissementReduction extends Exercice {
           )}.<br>`
         texte +=
           numAlpha(3) +
-          ` Calculer le volume de la pyramide $SA'B'C'D'$ (arrondi à $0{,}001\\text{cm}^3$ près)${ajouteQuestionMathlive(
+          ` Calculer le volume de la pyramide $SA'B'C'D'$ (arrondi à $0,001\\text{cm}^3$ près)${ajouteQuestionMathlive(
             {
               exercice: this,
               question: 3,
@@ -180,7 +180,7 @@ export default class AgrandissementReduction extends Exercice {
               texteAvant: 'tronc de la pyramide',
               titreAide: 'Définition : Tronc de pyramide',
             },
-          )} (arrondi à $0{,}001\\text{cm}^3$ près)${ajouteQuestionMathlive({
+          )} (arrondi à $0,001\\text{cm}^3$ près)${ajouteQuestionMathlive({
             exercice: this,
             question: 4,
             typeInteractivite: 'mathlive',
@@ -335,7 +335,7 @@ export default class AgrandissementReduction extends Exercice {
             texteAvant: 'aire de la base du cône',
             titreAide: 'Formule : Aire du disque de rayon R',
           }) +
-          ` (arrondie à $0{,}01\\text{cm}^2$ près).${ajouteQuestionMathlive({
+          ` (arrondie à $0,01\\text{cm}^2$ près).${ajouteQuestionMathlive({
             exercice: this,
             question: 0,
             typeInteractivite: 'mathlive',
@@ -357,7 +357,7 @@ export default class AgrandissementReduction extends Exercice {
                 "Formule : Volume d'un cône de rayon R et de hauteur h",
             },
           ) +
-          ` (arrondi à $0{,}001\\text{cm}^3$ près).${ajouteQuestionMathlive({
+          ` (arrondi à $0,001\\text{cm}^3$ près).${ajouteQuestionMathlive({
             exercice: this,
             question: 1,
             typeInteractivite: 'mathlive',
@@ -378,7 +378,7 @@ export default class AgrandissementReduction extends Exercice {
               titreAide: "Définition : Section plane d'un solide",
             },
           ) +
-          ` sachant que $SO'=${texNombre(h2, 0)}${sp()}\\text{cm}$ (arrondie à $0{,}01\\text{cm}^2$ près).${ajouteQuestionMathlive(
+          ` sachant que $SO'=${texNombre(h2, 0)}${sp()}\\text{cm}$ (arrondie à $0,01\\text{cm}^2$ près).${ajouteQuestionMathlive(
             {
               exercice: this,
               question: 2,
@@ -394,7 +394,7 @@ export default class AgrandissementReduction extends Exercice {
           )}<br>`
         texte +=
           numAlpha(3) +
-          ` Calculer le volume du cône de hauteur $SO'$ (arrondi à $0{,}001\\text{cm}^3$ près).${ajouteQuestionMathlive(
+          ` Calculer le volume du cône de hauteur $SO'$ (arrondi à $0,001\\text{cm}^3$ près).${ajouteQuestionMathlive(
             {
               exercice: this,
               question: 3,
@@ -422,7 +422,7 @@ export default class AgrandissementReduction extends Exercice {
               titreAide: 'Définition : Tronc de cône',
             },
           ) +
-          ` (arrondi à $0{,}001\\text{cm}^3$ près).${ajouteQuestionMathlive({
+          ` (arrondi à $0,001\\text{cm}^3$ près).${ajouteQuestionMathlive({
             exercice: this,
             question: 4,
             typeInteractivite: 'mathlive',
@@ -611,7 +611,7 @@ export default class AgrandissementReduction extends Exercice {
             titreAide:
               "Formule : Aire d'un triangle rectangle de côtés de l'angle droit c et c'",
           }) +
-          ` (arrondie à $0{,}01\\text{cm}^2$ près).${ajouteQuestionMathlive({
+          ` (arrondie à $0,01\\text{cm}^2$ près).${ajouteQuestionMathlive({
             exercice: this,
             question: 0,
             typeInteractivite: 'mathlive',
@@ -630,7 +630,7 @@ export default class AgrandissementReduction extends Exercice {
               "Formule : Volume d'une pyramide d'aire de base $B$ et de hauteur $h$",
           }) +
           ' SOAB' +
-          ` (arrondi à $0{,}001\\text{cm}^3$ près).${ajouteQuestionMathlive({
+          ` (arrondi à $0,001\\text{cm}^3$ près).${ajouteQuestionMathlive({
             exercice: this,
             question: 1,
             typeInteractivite: 'mathlive',
@@ -654,7 +654,7 @@ export default class AgrandissementReduction extends Exercice {
             },
           ) +
           ` $O'A'B'$ sachant que $SO'=${texNombre(h2, 0)}${sp()}\\text{cm}$` +
-          ` (arrondie à $0{,}01\\text{cm}^2$ près).${ajouteQuestionMathlive({
+          ` (arrondie à $0,01\\text{cm}^2$ près).${ajouteQuestionMathlive({
             exercice: this,
             question: 2,
             typeInteractivite: 'mathlive',
@@ -669,7 +669,7 @@ export default class AgrandissementReduction extends Exercice {
         texte +=
           numAlpha(3) +
           " Calculer le volume de la pyramide $SO'A'B'$" +
-          ` (arrondi à $0{,}001\\text{cm}^3$ près).${ajouteQuestionMathlive({
+          ` (arrondi à $0,001\\text{cm}^3$ près).${ajouteQuestionMathlive({
             exercice: this,
             question: 3,
             typeInteractivite: 'mathlive',
@@ -690,7 +690,7 @@ export default class AgrandissementReduction extends Exercice {
               titreAide: 'Définition : Tronc de pyramide',
             },
           )}` +
-          ` (arrondi à $0{,}001\\text{cm}^3$ près).${ajouteQuestionMathlive({
+          ` (arrondi à $0,001\\text{cm}^3$ près).${ajouteQuestionMathlive({
             exercice: this,
             question: 4,
             typeInteractivite: 'mathlive',
@@ -981,7 +981,7 @@ export default class AgrandissementReduction extends Exercice {
         texte +=
           numAlpha(0) +
           ' Calculer le volume total du cône' +
-          ` (arrondi à $0{,}001\\text{cm}^3$ près).${ajouteQuestionMathlive({
+          ` (arrondi à $0,001\\text{cm}^3$ près).${ajouteQuestionMathlive({
             exercice: this,
             question: 0,
             typeInteractivite: 'mathlive',
@@ -997,7 +997,7 @@ export default class AgrandissementReduction extends Exercice {
         texte +=
           numAlpha(1) +
           ' En déduire le volume de chocolat présent dans le fond du cône' +
-          ` (arrondi à $0{,}001\\text{cm}^3$ près).${ajouteQuestionMathlive({
+          ` (arrondi à $0,001\\text{cm}^3$ près).${ajouteQuestionMathlive({
             exercice: this,
             question: 1,
             typeInteractivite: 'mathlive',
@@ -1013,7 +1013,7 @@ export default class AgrandissementReduction extends Exercice {
         texte +=
           numAlpha(2) +
           ' Déduire des deux premières questions le volume de glace permettant de remplir le cône' +
-          ` (arrondi à $0{,}001\\text{cm}^3$ près).${ajouteQuestionMathlive({
+          ` (arrondi à $0,001\\text{cm}^3$ près).${ajouteQuestionMathlive({
             exercice: this,
             question: 2,
             typeInteractivite: 'mathlive',
@@ -1038,7 +1038,7 @@ export default class AgrandissementReduction extends Exercice {
         texte +=
           numAlpha(3) +
           ' Si la glace avait été mise dans le cône avant le chocolat, quelle serait la hauteur atteinte par la glace dans le cône ?' +
-          ` (arrondi à $0{,}0001\\text{cm}$ près).${ajouteQuestionMathlive({
+          ` (arrondi à $0,0001\\text{cm}$ près).${ajouteQuestionMathlive({
             exercice: this,
             question: 3,
             typeInteractivite: 'mathlive',
@@ -1053,7 +1053,7 @@ export default class AgrandissementReduction extends Exercice {
         texte +=
           numAlpha(4) +
           " Quelle serait alors l'épaisseur de chocolat au dessus de la glace ?" +
-          ` (arrondi à $0{,}01\\text{mm}$ près).${ajouteQuestionMathlive({
+          ` (arrondi à $0,01\\text{mm}$ près).${ajouteQuestionMathlive({
             exercice: this,
             question: 4,
             typeInteractivite: 'mathlive',

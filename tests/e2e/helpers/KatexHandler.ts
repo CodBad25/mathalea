@@ -3,8 +3,8 @@
  * @class
  */
 import type { Locator, Page } from 'playwright'
-import type { Question } from './types'
 import { clean } from './text'
+import type { Question } from './types'
 
 export class KatexHandler {
   page: Page
@@ -63,9 +63,21 @@ export class KatexHandler {
    */
   async getFraction() {
     if (this.locator != null) {
-      const num = await this.locator.locator('mn').first().textContent()
-      const den = await this.locator.locator('mn').nth(1).textContent()
-      return { num, den }
+      const latex = (await this.locator
+        .locator('annotation')
+        .first()
+        .textContent())!.slice(1, -1)
+      const [num, den] = latex
+        .split('\\dfrac{')[1]
+        .split('}')
+        .map((s) => s.replace('{', ''))
+        .map((s) => s.replaceAll('\\,', ''))
+
+      console.log(`getFraction : ${latex} => ${num}/${den}`)
+      return {
+        num: `${latex.startsWith('-') ? '-' + num.replaceAll('\\,', '') : num.replaceAll('\\,', '')}`,
+        den: den.replaceAll('\\,', ''),
+      }
     }
   }
 

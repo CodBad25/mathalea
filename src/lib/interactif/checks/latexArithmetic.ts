@@ -1,7 +1,7 @@
 export function normalizeLatexArithmetic(value: string): string {
   let normalized = value
     .trim()
-    .replaceAll('{,}', '.')
+    .replaceAll(',', '.')
     .replaceAll(',', '.')
     .replaceAll('−', '-')
     .replaceAll('\\times', '*')
@@ -37,11 +37,7 @@ export function splitTopLevelTerms(expression: string): string[] {
     const character = expression[index]
     if (character === '(') depth++
     if (character === ')') depth--
-    if (
-      depth === 0 &&
-      index > 0 &&
-      (character === '+' || character === '-')
-    ) {
+    if (depth === 0 && index > 0 && (character === '+' || character === '-')) {
       terms.push(expression.slice(start, index))
       start = index
     }

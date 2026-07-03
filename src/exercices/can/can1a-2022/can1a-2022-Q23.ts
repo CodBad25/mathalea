@@ -1,10 +1,9 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = 'Convertir des m³ en L et inversement'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -34,20 +33,20 @@ export default class Can1a2022Q23 extends ExerciceCan {
     if (sens) {
       const reponse = a * 1000
       this.optionsChampTexte = { texteApres: ' L' }
-      this.question = `$${texNombre(a, 1)}\\text{ m}^3=${!this.interactif ? '\\ldots \\text{ L}':''}$`
+      this.question = `$${texNombre(a, 1)}\\text{ m}^3=${!this.interactif ? '\\ldots \\text{ L}' : ''}$`
       this.correction = ` $1\\text{ m}^3$= $1000$ L donc $${texNombre(a, 1)}\\text{ m}^3=${miseEnEvidence(texNombre(reponse, 0))}$ L.`
       this.reponse = reponse.toFixed(0)
-      
-        this.canEnonce = `$${texNombre(a, 1)}\\text{ m}^3=$`
-        this.canReponseACompleter = '$\\ldots$  L'
+
+      this.canEnonce = `$${texNombre(a, 1)}\\text{ m}^3=$`
+      this.canReponseACompleter = '$\\ldots$  L'
     } else {
       const reponse = a / 1000
       this.optionsChampTexte = { texteApres: '$\\text{ m}^3$' }
-      this.question = `$${texNombre(a, 1)}$ L $=${!this.interactif ? '\\ldots\\text{ m}^3':''}$`
-      this.correction = `$1$ L= $0{,}001\\text{ m}^3$ donc $${texNombre(a, 1)}$ L $=${miseEnEvidence(texNombre(reponse, 4))}\\text{ m}^3$.`
+      this.question = `$${texNombre(a, 1)}$ L $=${!this.interactif ? '\\ldots\\text{ m}^3' : ''}$`
+      this.correction = `$1$ L= $0,001\\text{ m}^3$ donc $${texNombre(a, 1)}$ L $=${miseEnEvidence(texNombre(reponse, 4))}\\text{ m}^3$.`
       this.reponse = reponse.toFixed(4)
-        this.canEnonce = `$${texNombre(a, 1)}$ L $=$`
-        this.canReponseACompleter = '$\\ldots\\text{ m}^3$'
+      this.canEnonce = `$${texNombre(a, 1)}$ L $=$`
+      this.canReponseACompleter = '$\\ldots\\text{ m}^3$'
     }
   }
 

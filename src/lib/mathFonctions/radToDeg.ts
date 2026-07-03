@@ -96,7 +96,7 @@ export function kCosOuKSin(k: number, cosOuSin: string) {
   } else {
     // Pas de dénominateur 2, on est sur un nombre décimal comme 0.5
     const val = parseFloat(cosOuSin)
-    return `${signe}${(k * val).toFixed(1).replace('.', '{,}')}`
+    return `${signe}${(k * val).toFixed(1).replace('.', ',')}`
   }
 }
 function parenthesesSiNegatif(value: string): string {

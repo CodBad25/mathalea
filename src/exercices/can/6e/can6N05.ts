@@ -70,9 +70,9 @@ export default class ChiffreDes extends ExerciceSimple {
     this.correction = `Le chiffre des ${m} est $${this.reponse}$.<br><br>$\\begin{array}{|c|c|c|c|c|c|c|}\n`
     this.correction += '\\hline\n'
     this.correction +=
-      '\\text{Centaine} &  \\text{Dizaine} & \\text{Unité} &  \\Large{\\textbf{,}}& \\text{Dixième} & \\text{Centième} & \\text{Millième} \\\\ \n'
+      '\\text{Centaine} &  \\text{Dizaine} & \\text{Unité} &  \\Large{\\textbf,}& \\text{Dixième} & \\text{Centième} & \\text{Millième} \\\\ \n'
     this.correction += '\\hline\n'
-    this.correction += `${a}&${b}&${c} & \\Large{\\textbf{,}}& ${d}&${e}& ${f}\\\\ \n`
+    this.correction += `${a}&${b}&${c} & \\Large{\\textbf,}& ${d}&${e}& ${f}\\\\ \n`
     this.correction += '\\hline\n'
     this.correction += '\\end{array}\n$'
   }

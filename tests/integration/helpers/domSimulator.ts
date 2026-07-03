@@ -1,7 +1,10 @@
 import type { MathfieldElement } from 'mathlive'
 import ListeDeroulanteElement from '../../../src/lib/interactif/listeDeroulante/ListeDeroulanteElement'
-import type { GoodAnswersFormulas, SheetTestDatas } from '../../../src/lib/types'
 import { MySpreadsheetElement } from '../../../src/lib/tableur/MySpreadSheet'
+import type {
+  GoodAnswersFormulas,
+  SheetTestDatas,
+} from '../../../src/lib/types'
 
 function createFakeMfe(
   id: string,

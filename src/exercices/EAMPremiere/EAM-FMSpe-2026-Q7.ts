@@ -90,7 +90,7 @@ export default class AutoQ7FMs2026 extends ExerciceQcmA {
       const xD1 = xTest === 0 ? alpha : -xTest
       d1 = `${noms[1]}(${texNombre(xD1, 1)}\\,;\\,${texNombre(yTest, 1)})`
 
-     // Distracteur 2 : Erreur sur l'ordonnée
+      // Distracteur 2 : Erreur sur l'ordonnée
       // Si l'abscisse annule la parenthèse (diff === 0), on applique le piège a * 0 = a
       const yD2 = diff === 0 ? a + beta : yTest + (a > 0 ? 2 : -2)
       d2 = `${noms[2]}(${xTestStr}\\,;\\,${texNombre(yD2, 1)})`
@@ -98,7 +98,7 @@ export default class AutoQ7FMs2026 extends ExerciceQcmA {
       // Distracteur 3 : Faux sommet (piège classique pour ceux qui cherchent (alpha ; beta))
       let decalage = choice([-1, 1, 2])
       // Sécurité : on s'assure que yD3 ne soit pas identique à yD2 dans le cas où diff === 0
-      while (diff === 0 && (beta + decalage) === yD2) {
+      while (diff === 0 && beta + decalage === yD2) {
         decalage = choice([-2, -1, 1, 2, 3])
       }
       d3 = `${noms[3]}(${texNombre(alpha, 1)}\\,;\\,${texNombre(beta + decalage, 1)})`
@@ -138,8 +138,8 @@ export default class AutoQ7FMs2026 extends ExerciceQcmA {
       'C',
       'C(3\\,;\\,10)',
       'A(-3\\,;\\,10)',
-      'B(3\\,;\\,10{,}5)',
-      'D(0\\,;\\,19{,}5)',
+      'B(3\\,;\\,10,5)',
+      'D(0\\,;\\,19,5)',
     )
   }
 
