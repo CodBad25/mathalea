@@ -1,0 +1,79 @@
+name: Sync amont + déploiement
+
+on:
+  schedule:
+    # Chaque nuit à 03h17 UTC (05h17 Paris l'été)
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout beleval (historique complet pour le merge)
+        uses: actions/checkout@v4
+        with:
+          ref: beleval
+          fetch-depth: 0
+
+      - name: Merge de l'amont CoopMaths
+        id: merge
+        run: |
+          git config user.name "sync-bot"
+          git config user.email "codbad25@users.noreply.github.com"
+          git remote add upstream https://forge.apps.education.fr/coopmaths/mathalea.git
+          git fetch upstream main
+          BEFORE=$(git rev-parse HEAD)
+          # En cas de conflit, le job échoue → notification GitHub par mail
+          git merge upstream/main --no-edit
+          AFTER=$(git rev-parse HEAD)
+          if [ "$BEFORE" = "$AFTER" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Aucune nouveauté en amont, rien à faire."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Pousser beleval et le miroir main
+        if: steps.merge.outputs.changed == 'true'
+        run: |
+          git push origin beleval
+          git push origin upstream/main:main
+
+      - name: Installer pnpm
+        if: steps.merge.outputs.changed == 'true'
+        uses: pnpm/action-setup@v4
+
+      - name: Installer Node
+        if: steps.merge.outputs.changed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Installer les dépendances
+        if: steps.merge.outputs.changed == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        if: steps.merge.outputs.changed == 'true'
+        run: pnpm makeJson && node --max-old-space-size=6144 ./node_modules/vite/bin/vite.js build
+
+      - name: Déployer sur le serveur
+        if: steps.merge.outputs.changed == 'true'
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy.key
+          chmod 600 ~/.ssh/deploy.key
+          ssh-keyscan -H 89.168.61.230 >> ~/.ssh/known_hosts 2>/dev/null
+          rsync -az --delete -e "ssh -i ~/.ssh/deploy.key" dist/ "${{ secrets.DEPLOY_HOST }}:/var/www/alea/"
+
+      - name: Vérifier le site
+        if: steps.merge.outputs.changed == 'true'
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" https://beltools.fr/alea/)
+          echo "HTTP $code"
+          test "$code" = "200"
