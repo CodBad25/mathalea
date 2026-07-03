@@ -14,7 +14,7 @@ export const dateDeModifImportante = '31/03/2025'
 export const uuid = 'ec32b'
 
 export const refs = {
-  'fr-fr': ['5G11'],
+  'fr-fr': [],
   'fr-ch': ['9ES6-7'],
 }
 export default class Transformations5e extends Transformations {
