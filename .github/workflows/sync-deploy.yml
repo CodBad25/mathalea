@@ -5,6 +5,11 @@ on:
     # Chaque nuit à 03h17 UTC (05h17 Paris l'été)
     - cron: "17 3 * * *"
   workflow_dispatch:
+    inputs:
+      force_build:
+        description: "Builder et déployer même sans nouveauté en amont"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -38,32 +43,32 @@ jobs:
           fi
 
       - name: Pousser beleval et le miroir main
-        if: steps.merge.outputs.changed == 'true'
+        if: steps.merge.outputs.changed == 'true' || github.event.inputs.force_build == 'true'
         run: |
           git push origin beleval
           git push origin upstream/main:main
 
       - name: Installer pnpm
-        if: steps.merge.outputs.changed == 'true'
+        if: steps.merge.outputs.changed == 'true' || github.event.inputs.force_build == 'true'
         uses: pnpm/action-setup@v4
 
       - name: Installer Node
-        if: steps.merge.outputs.changed == 'true'
+        if: steps.merge.outputs.changed == 'true' || github.event.inputs.force_build == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
 
       - name: Installer les dépendances
-        if: steps.merge.outputs.changed == 'true'
+        if: steps.merge.outputs.changed == 'true' || github.event.inputs.force_build == 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        if: steps.merge.outputs.changed == 'true'
+        if: steps.merge.outputs.changed == 'true' || github.event.inputs.force_build == 'true'
         run: pnpm makeJson && node --max-old-space-size=6144 ./node_modules/vite/bin/vite.js build
 
       - name: Déployer sur le serveur
-        if: steps.merge.outputs.changed == 'true'
+        if: steps.merge.outputs.changed == 'true' || github.event.inputs.force_build == 'true'
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy.key
@@ -72,7 +77,7 @@ jobs:
           rsync -az --delete -e "ssh -i ~/.ssh/deploy.key" dist/ "${{ secrets.DEPLOY_HOST }}:/var/www/alea/"
 
       - name: Vérifier le site
-        if: steps.merge.outputs.changed == 'true'
+        if: steps.merge.outputs.changed == 'true' || github.event.inputs.force_build == 'true'
         run: |
           code=$(curl -s -o /dev/null -w "%{http_code}" https://beltools.fr/alea/)
           echo "HTTP $code"
