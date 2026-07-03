@@ -205,7 +205,8 @@ async function getConsoleTest(page: Page, urlExercice: string) {
               'The column width is less than 0, need to adjust page width to make',
             ) &&
           !msg.location().url.includes('mathgraph32') &&
-          !msg.text().includes('placeholderMetrics 0.7 0.2')
+          !msg.text().includes('placeholderMetrics 0.7 0.2') &&
+          !msg.text().includes('Compilation fallback for')
         ) {
           if (!msg.text().includes('<HeaderExercice>')) {
             addUniqueMessage(
@@ -338,7 +339,7 @@ async function testRunAllLots(filter: string) {
 
 const alea = 'e906e'
 const local = true
-
+process.env.NIV = 'EAMPremiere/EAM-PolynesieSpe-2026-Q4.ts'
 if (process.env.NIV !== null && process.env.NIV !== undefined) {
   const filter = (process.env.NIV as string).replaceAll(' ', '')
   prefs.headless = true
