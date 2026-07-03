@@ -59,7 +59,7 @@ export default class ProblemesPuissancesDe10EtConversions extends Exercice {
     this.sup = '9'
     this.nbQuestions = 4
 
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacingCorr = context.isHtml ? 2 : 1
   }
 
   nouvelleVersion() {

@@ -1,15 +1,15 @@
+import { warnMessage } from '../../lib/format/message'
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import {
   combinaisonListesSansChangerOrdre,
   shuffle,
 } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import { warnMessage } from '../../lib/format/message'
 import { cribleEratostheneN } from '../../lib/outils/primalite'
 import { nombreAvecEspace } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
 import { context } from '../../modules/context'
-import { listeQuestionsToContenu, randint, itemize } from '../../modules/outils'
-import { propositionsQcm } from '../../lib/interactif/qcm'
+import { itemize, listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const titre =
   'Justifier si des nombres sont premiers ou pas - Variante avec les critères de divisibilité par 7 et par 11'
 export const interactifReady = true
@@ -41,8 +41,8 @@ export default class PremierOuPasCriterePar7Par11 extends Exercice {
     if (context.isDiaporama) {
       this.consigne = 'Ce nombre est-il premier ?'
     }
-    context.isHtml ? (this.spacing = 1) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 1 : 2
+    this.spacingCorr = context.isHtml ? 2 : 1
     this.nbQuestions = 7
 
     this.nbCols = 2
@@ -120,7 +120,6 @@ export default class PremierOuPasCriterePar7Par11 extends Exercice {
         sum1,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typesDeQuestions = listeTypeDeQuestions[i]
       let texte = ''

@@ -38,8 +38,8 @@ export default class calculsDeCarre extends Exercice {
 
     this.sup = 1
     this.nbQuestions = 6
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1.5)
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 2)
+    this.spacingCorr = context.isHtml ? 2 : 1.5
+    this.spacing = 2
     this.consigneModifiable = false
     this.besoinFormulaireNumerique = [
       'Type de nombre',

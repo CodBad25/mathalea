@@ -1,9 +1,9 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre =
   'Résoudre des problèmes avec des  puissances de 10 et des conversions'
@@ -27,7 +27,7 @@ export default class ProblemesPuissancesDe10EtConversions extends Exercice {
 
     this.nbQuestions = 4
 
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacingCorr = context.isHtml ? 2 : 1
   }
 
   nouvelleVersion() {

@@ -53,7 +53,7 @@ export default class ResoudreUneEquationProduitNul extends Exercice {
     this.nbQuestions = 5
 
     this.sup = 2
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1.5)
+    this.spacingCorr = context.isHtml ? 2 : 1.5
   }
 
   nouvelleVersion() {

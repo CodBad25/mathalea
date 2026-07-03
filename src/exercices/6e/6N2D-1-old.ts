@@ -79,8 +79,8 @@ export default class ProduitDeDecimauxAPartirProduitConnu extends Exercice {
     ]
     this.besoinFormulaire3CaseACocher = ['Produit initial donné', false]
     this.besoinFormulaire4CaseACocher = ['Correction avec des mots', true]
-    context.isHtml ? (this.spacing = 3) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2.5) : (this.spacingCorr = 1.5)
+    this.spacing = context.isHtml ? 3 : 2
+    this.spacingCorr = context.isHtml ? 2.5 : 1.5
   }
 
   nouvelleVersion() {

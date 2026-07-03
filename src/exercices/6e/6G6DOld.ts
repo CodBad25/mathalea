@@ -6,6 +6,7 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { nommePolygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { triangle2points2angles } from '../../lib/2d/triangles'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -23,8 +24,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   "Déterminer la valeur d'un angle en utilisant la somme des angles dans un triangle"
@@ -116,8 +115,8 @@ export default class ExerciceAnglesTrianglesOld extends Exercice {
     this.sup2 = false
     this.sup3 = true
     this.sup4 = '1'
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1.5)
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 2)
+    this.spacingCorr = context.isHtml ? 2 : 1.5
+    this.spacing = 2
     this.nbQuestions = 5
     this.correctionDetailleeDisponible = true
     this.nbCols = 2

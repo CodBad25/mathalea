@@ -1,5 +1,6 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
@@ -19,8 +20,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Lire l'image d'un nombre à partir d'un graphique"
 export const interactifReady = true
@@ -51,7 +50,7 @@ export default class ImageGraphique extends Exercice {
 
     this.sup = 3
 
-    // context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 1)
+    // this.spacingCorr = context.isHtml ? 3 : 1
     this.nbQuestions = 1
     this.pointsParQuestions = 3
   }

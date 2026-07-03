@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -9,8 +10,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   "Déterminer reste et quotient d'une division euclidienne à partir d'une égalité"
@@ -43,7 +42,7 @@ export default class DivisionsEuclidiennesEgalite2 extends Exercice {
       'Pour la division euclidienne de a par b, on cherche les nombres q et r tels que  a = (b × q) + r avec r < b',
     )
     this.spacing = 2
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1) // Important sinon opidiv n'est pas joli
+    this.spacingCorr = context.isHtml ? 2 : 1 // Important sinon opidiv n'est pas joli
     this.nbQuestions = 4
     this.sup = 1
   }

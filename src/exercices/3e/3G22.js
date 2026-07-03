@@ -44,8 +44,8 @@ export default class AgrandissementReduction extends Exercice {
     ]
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
-    context.isHtml ? (this.spacingCorr = 2.5) : (this.spacingCorr = 1.5)
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 2)
+    this.spacingCorr = context.isHtml ? 2.5 : 1.5
+    this.spacing = 2
 
     this.quatrieme = false
     this.sup = 1 //

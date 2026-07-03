@@ -1,5 +1,6 @@
 import { grille, seyes } from '../../lib/2d/Grille'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -18,8 +19,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const amcType = 'AMCNum'
@@ -70,7 +69,7 @@ export default class AdditionnerSoustrairesDecimaux extends Exercice {
 
     this.consigne = 'Poser et effectuer les calculs suivants.'
     this.spacing = 2
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1) // Important sinon les opérations posées ne sont pas jolies
+    this.spacingCorr = context.isHtml ? 2 : 1 // Important sinon les opérations posées ne sont pas jolies
     this.nbQuestions = 4
     this.sup = 3
     this.sup2 = 3

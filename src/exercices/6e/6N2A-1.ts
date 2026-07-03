@@ -4,6 +4,7 @@
 
 import { grille, seyes } from '../../lib/2d/Grille'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -20,8 +21,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const dateDeModifImportante = '15/02/2025'
 export const amcReady = true
@@ -55,7 +54,7 @@ export default class AdditionsSoustractionsMultiplicationsPosees extends Exercic
   constructor() {
     super()
     this.spacing = 2
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1) // Important sinon les opérations posées ne sont pas jolies
+    this.spacingCorr = context.isHtml ? 2 : 1 // Important sinon les opérations posées ne sont pas jolies
     this.nbQuestions = 5
 
     this.besoinFormulaireTexte = [

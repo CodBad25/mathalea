@@ -37,8 +37,8 @@ export default class PremierOuPas5e extends Exercice {
     // pas de différence entre la version html et la version latex pour la consigne
     this.consigne = 'Justifier que les nombres suivants sont premiers ou pas.'
     // this.consigne += `<br>`;
-    context.isHtml ? (this.spacing = 3) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 3 : 2
+    this.spacingCorr = context.isHtml ? 2 : 1
     this.nbQuestions = 7
     // this.correctionDetailleeDisponible = true;
     this.nbCols = 2
@@ -77,7 +77,6 @@ export default class PremierOuPas5e extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typesDeQuestions = listeTypeDeQuestions[i]
 

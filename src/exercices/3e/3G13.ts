@@ -65,8 +65,8 @@ export default class CalculsHomothetie extends Exercice {
 
     this.correctionDetailleeDisponible = true
     this.correctionDetaillee = true
-    context.isHtml ? (this.spacing = 1.5) : (this.spacing = 0)
-    context.isHtml ? (this.spacingCorr = 1.5) : (this.spacingCorr = 0)
+    this.spacing = context.isHtml ? 1.5 : 1
+    this.spacingCorr = context.isHtml ? 1.5 : 1
     this.sup = 12 // Type d'exercice
     this.sup2 = 3 // 1 : Homothéties de rapport positif, 2: de rapport négatif 3 : mélange
     this.sup3 = 1 // Choix des valeurs

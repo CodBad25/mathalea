@@ -34,8 +34,8 @@ export default class ListerDiviseursParDecompositionFacteursPremiers extends Exe
     this.consigne =
       "Sans la calculatrice, compter/lister les diviseurs d'un entier à partir de sa décomposition en facteurs premiers."
     // this.consigne += `<br>`;
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 1)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 2 : 1
+    this.spacingCorr = context.isHtml ? 2 : 1
     this.nbQuestions = 2
     // this.correctionDetailleeDisponible = true;
   }
@@ -44,7 +44,6 @@ export default class ListerDiviseursParDecompositionFacteursPremiers extends Exe
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte =
         "Lister/compter les diviseurs d'un entier à partir de sa décomposition en facteurs premiers"

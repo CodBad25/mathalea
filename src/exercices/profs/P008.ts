@@ -32,7 +32,7 @@ export default class OperationsPosees extends Exercice {
     ]
 
     this.spacing = 2
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1) // Important sinon opidiv n'est pas joli
+    this.spacingCorr = context.isHtml ? 2 : 1 // Important sinon opidiv n'est pas joli
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
     this.sup = 1

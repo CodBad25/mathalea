@@ -3,6 +3,7 @@ import { grille } from '../../lib/2d/Grille'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { texteParPosition } from '../../lib/2d/textes'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
@@ -14,8 +15,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -59,8 +58,8 @@ export default class ColorierDeplacement extends Exercice {
     this.consigne = 'Dans le quadrillage, effectuer le programme.<br>'
 
     this.nbQuestionsModifiable = false
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 1)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 2 : 1
+    this.spacingCorr = context.isHtml ? 2 : 1
   }
 
   nouvelleVersion() {
@@ -321,7 +320,9 @@ export default class ColorierDeplacement extends Exercice {
       this.autoCorrectionAMC = [
         { propositions: [{ texte: '', statut: 3, sanscadre: true }] },
       ]
-      this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) => amcConvert(questionAMC))
+      this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) =>
+        amcConvert(questionAMC),
+      )
     }
 
     texte +=

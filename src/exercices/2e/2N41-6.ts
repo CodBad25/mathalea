@@ -56,7 +56,7 @@ export default class DevelopperIdentitesRemarquables2 extends Exercice {
     this.sup2 = 4
 
     this.correctionDetailleeDisponible = true
-    context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 2)
+    this.spacingCorr = context.isHtml ? 3 : 2
     if (!context.isHtml) {
       this.correctionDetaillee = false
     }

@@ -69,8 +69,8 @@ export default class DivisionEuclidienneMultiplesDiviseursCriteres extends Exerc
         '5 : Mélange',
       ].join('\n'),
     ]
-    context.isHtml ? (this.spacing = 1) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 2)
+    this.spacing = context.isHtml ? 1 : 2
+    this.spacingCorr = 2
     this.nbQuestions = 5
 
     this.sup3 = 3

@@ -546,8 +546,8 @@ export default class ProportionnaliteParCoefDeProportionnalite extends Exercice 
   constructor() {
     super()
 
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 1)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 2 : 1
+    this.spacingCorr = context.isHtml ? 2 : 1
     this.nbQuestions = 6
 
     this.besoinFormulaireCaseACocher = [

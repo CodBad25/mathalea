@@ -138,8 +138,8 @@ export default class ProblemesGrandeursComposees extends Exercice {
 
     this.nbQuestions = 3
 
-    context.isHtml ? (this.spacing = 3) : (this.spacing = 1.5)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 2)
+    this.spacing = context.isHtml ? 3 : 1.5
+    this.spacingCorr = 2
     this.sup = ''
   }
 

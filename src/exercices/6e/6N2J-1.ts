@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
@@ -13,8 +14,6 @@ import { context } from '../../modules/context'
 import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -64,7 +63,7 @@ export default class DivisionsEuclidiennesEgaliteFondamentale extends Exercice {
     this.sup = 1
     this.sup2 = false
     this.spacing = 2
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1) // Important sinon opidiv n'est pas joli
+    this.spacingCorr = context.isHtml ? 2 : 1 // Important sinon opidiv n'est pas joli
     this.nbQuestions = 4
     this.classe = 6
   }

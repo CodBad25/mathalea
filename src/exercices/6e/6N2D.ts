@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -16,8 +17,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const interactifReady = true
@@ -46,8 +45,8 @@ export default class ProduitDeDecimauxAPartirProduitConnu extends Exercice {
     this.sup = 1
     this.nbQuestions = 3
 
-    context.isHtml ? (this.spacing = 3) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2.5) : (this.spacingCorr = 1.5)
+    this.spacing = context.isHtml ? 3 : 2
+    this.spacingCorr = context.isHtml ? 2.5 : 1.5
   }
 
   nouvelleVersion() {

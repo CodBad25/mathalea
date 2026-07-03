@@ -14,6 +14,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { tableau } from '../../lib/2d/tableau'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -23,7 +24,6 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Résoudre une équation résolvante pour le théorème de Thalès'
@@ -66,8 +66,8 @@ export default class EqResolvantesThales extends Exercice {
   }
 
   nouvelleVersion() {
-    context.isHtml ? (this.spacing = 1) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2.5) : (this.spacingCorr = 1.5)
+    this.spacing = context.isHtml ? 1 : 2
+    this.spacingCorr = context.isHtml ? 2.5 : 1.5
     const typesDeQuestionsDisponibles = shuffle([
       choice([0, 1]),
       choice([2, 3]),

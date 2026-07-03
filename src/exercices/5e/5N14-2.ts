@@ -43,7 +43,7 @@ export default class ExerciceComparerQuatreFractions extends Exercice {
 
     this.consigne = "Ranger les nombres suivants dans l'ordre croissant."
     this.spacing = 2
-    context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 2.5)
+    this.spacingCorr = context.isHtml ? 3 : 2.5
     this.nbQuestions = 2
 
     this.sup = false

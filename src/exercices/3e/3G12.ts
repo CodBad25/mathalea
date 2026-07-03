@@ -6,6 +6,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { rotation } from '../../lib/2d/transformations'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { arcenciel, texcolors } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -26,8 +27,6 @@ import {
 import { Pavage, pavage } from '../../modules/Pavage'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   "Trouver l'image d'une figure par une rotation dans un pavage"
@@ -74,7 +73,7 @@ export default class PavageEtRotation2D extends Exercice {
     this.sup2 = false // On cache les barycentres par défaut.
     this.sup3 = 7
     this.sup4 = true // On ignore les rotations centrales par défaut.
-    context.isHtml ? (this.spacingCorr = 2.5) : (this.spacingCorr = 1.5)
+    this.spacingCorr = context.isHtml ? 2.5 : 1.5
   }
 
   nouvelleVersion() {

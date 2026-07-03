@@ -1,16 +1,15 @@
-import { combinaisonListesSansChangerOrdre } from '../../lib/outils/arrayOutils'
 import { warnMessage } from '../../lib/format/message'
+import { combinaisonListesSansChangerOrdre } from '../../lib/outils/arrayOutils'
 import { numAlpha } from '../../lib/outils/outilString'
 import {
   decompositionFacteursPremiersArray,
   premiersEntreBornes,
 } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const titre = 'Rendre irréductible une fraction'
-
 
 /**
  * Fractions irréductibles
@@ -29,8 +28,8 @@ export default class FractionsIrreductibles extends Exercice {
     // pas de différence entre la version html et la version latex pour la consigne
     this.consigne =
       'Rendre irréductible une fraction et son inverse à partir des décompositions en produit de facteurs premiers.'
-    context.isHtml ? (this.spacing = 4) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 4) : (this.spacingCorr = 2)
+    this.spacing = context.isHtml ? 4 : 2
+    this.spacingCorr = context.isHtml ? 4 : 2
     this.nbQuestions = 1
 
     this.sup = true
@@ -56,7 +55,6 @@ export default class FractionsIrreductibles extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typesDeQuestions = listeTypeDeQuestions[i]
       texte = ''
