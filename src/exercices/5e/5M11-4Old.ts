@@ -5,6 +5,7 @@ import { placeLatexSurSegment } from '../../lib/2d/placeLatexSurSegment'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { rotation } from '../../lib/2d/transformations'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -20,8 +21,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -60,7 +59,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
     this.sup = 3 // 1 : périmètre, 2 : aire, 3 : périmètres et aires
     this.sup2 = 4
     this.spacing = 2
-    context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 2)
+    this.spacingCorr = context.isHtml ? 3 : 2
     this.nbQuestions = 3
   }
 

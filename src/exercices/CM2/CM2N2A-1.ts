@@ -1,6 +1,7 @@
 import Figure from 'apigeom'
 import LineFractionDiagram from 'apigeom/src/elements/diagrams/LineFractionDiagram'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -10,7 +11,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { representeFractionSurBarre } from '../../modules/representationsFractions'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = "Représenter une fraction de l'unité"
 export const amcReady = true
@@ -38,8 +38,8 @@ export default class FractionsDunite extends Exercice {
     super()
     this.nbQuestions = 5
     this.consigne = 'Colorier en bleu un segment de longueur ...'
-    context.isHtml ? (this.spacingCorr = 3.5) : (this.spacingCorr = 2)
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 2)
+    this.spacingCorr = context.isHtml ? 3.5 : 2
+    this.spacing = 2
     this.sup = 1
     this.besoinFormulaireNumerique = [
       'Type  de questions',

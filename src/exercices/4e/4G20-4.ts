@@ -42,8 +42,8 @@ export default class ArrondirUneValeur4e extends Exercice {
     this.nbQuestions = 3
 
     this.version = 1
-    context.isHtml ? (this.spacing = 1.5) : (this.spacing = 2.5)
-    context.isHtml ? (this.spacingCorr = 1.5) : (this.spacingCorr = 2.5)
+    this.spacing = context.isHtml ? 1.5 : 2.5
+    this.spacingCorr = context.isHtml ? 1.5 : 2.5
   }
 
   nouvelleVersion() {

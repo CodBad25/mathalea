@@ -49,7 +49,7 @@ export default class ImageGraphiqueOld extends Exercice {
 
     this.sup = 3
 
-    // context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 1)
+    // this.spacingCorr = context.isHtml ? 3 : 1
     this.nbQuestions = 1
     this.pointsParQuestions = 3
   }

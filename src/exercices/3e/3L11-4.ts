@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -13,8 +14,6 @@ import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenuSansNumero } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Factoriser une expression'
 export const dateDeModifImportante = '19/03/2026'
@@ -46,7 +45,7 @@ export default class FactoriserParNombreOux extends Exercice {
     this.nbCols = 2
     this.nbColsCorr = 2
 
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacingCorr = context.isHtml ? 2 : 1
     this.listeAvecNumerotation = false
     this.besoinFormulaireNumerique = [
       "Type d'expressions",

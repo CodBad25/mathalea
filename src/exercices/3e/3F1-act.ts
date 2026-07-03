@@ -75,8 +75,8 @@ export default class FonctionNotionVocabulaire extends Exercice {
 
     // pas de différence entre la version html et la version latex pour la consigne
     this.consigne = 'Étudier différents procédés de calcul.'
-    context.isHtml ? (this.spacing = 3) : (this.spacing = 1)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 3 : 1
+    this.spacingCorr = context.isHtml ? 2 : 1
     // this.nbQuestions;// = 4;
     this.nbQuestionsModifiable = false
     // this.correctionDetailleeDisponible = true;

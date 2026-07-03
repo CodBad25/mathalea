@@ -51,7 +51,7 @@ export default class DivisionsEuclidiennes extends Exercice {
     ]
     this.sup = 2
     this.spacing = 2
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1) // Important sinon opidiv n'est pas joli
+    this.spacingCorr = context.isHtml ? 2 : 1 // Important sinon opidiv n'est pas joli
     this.nbQuestions = 4
     this.classe = 6
   }

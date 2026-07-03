@@ -3,6 +3,7 @@ import {
   combinaisonListesSansChangerOrdre,
 } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { ajouterAide } from '../../lib/outils/enrichissements'
 import { numAlpha } from '../../lib/outils/outilString'
 import {
   decompositionFacteursPremiers,
@@ -10,10 +11,9 @@ import {
   ppcm,
 } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouterAide } from '../../lib/outils/enrichissements'
+import Exercice from '../Exercice'
 export const titre = "Résoudre un exercice d'engrenages"
 export const dateDeModifImportante = '01/04/2023'
 /**
@@ -31,8 +31,8 @@ export default class PpcmEngrenages extends Exercice {
   constructor() {
     super()
 
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacing = 2
+    this.spacingCorr = context.isHtml ? 2 : 1
     this.nbQuestionsModifiable = false
     this.nbQuestions = 4
 
@@ -69,7 +69,6 @@ export default class PpcmEngrenages extends Exercice {
     for (
       let i = 0, texte, texteCorr, k, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = ''
       texteCorr = ''

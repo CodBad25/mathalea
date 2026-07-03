@@ -45,8 +45,8 @@ export default class ProportionnalitePasProportionnalite extends Exercice {
     ]
     this.besoinFormulaire2CaseACocher = ["Avec 'je ne sais pas' dans le QCM"]
 
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 1.4)
-    context.isHtml ? (this.spacingCorr = 1.5) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 2 : 1.4
+    this.spacingCorr = context.isHtml ? 1.5 : 1
     this.nbQuestions = 5
 
     this.nbColsModifiable = false

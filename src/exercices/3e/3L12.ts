@@ -1,19 +1,19 @@
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
-import Exercice from '../Exercice'
+import { pgcd } from '../../lib/outils/primalite'
+import { context } from '../../modules/context'
+import { fraction } from '../../modules/fractions'
 import {
   listeQuestionsToContenuSansNumero,
   randint,
 } from '../../modules/outils'
-import { context } from '../../modules/context'
-import { reduireAxPlusB } from '../../lib/outils/ecritures'
-import { fraction } from '../../modules/fractions'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { pgcd } from '../../lib/outils/primalite'
+import Exercice from '../Exercice'
 
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = 'Factoriser a²-b²'
 export const interactifReady = true
@@ -44,7 +44,7 @@ export default class FactoriserIdentitesRemarquables3 extends Exercice {
       'Présentation des corrections en colonnes',
       false,
     ]
-    context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 2)
+    this.spacingCorr = context.isHtml ? 3 : 2
 
     this.nbQuestions = 4
     this.sup = 4
@@ -114,7 +114,6 @@ export default class FactoriserIdentitesRemarquables3 extends Exercice {
         ds,
         typesDeQuestions;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typesDeQuestions = listeTypeDeQuestions[i]
       do {

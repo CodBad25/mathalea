@@ -98,8 +98,8 @@ export default class RapportsSurUnSegment extends Exercice {
 
     this.nbQuestions = 2
     this.consigne = 'Sur tous les axes, les graduations sont régulières.'
-    context.isHtml ? (this.spacing = 3) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2.5) : (this.spacingCorr = 1.5)
+    this.spacing = context.isHtml ? 3 : 2
+    this.spacingCorr = context.isHtml ? 2.5 : 1.5
   }
 
   nouvelleVersion() {

@@ -1,3 +1,6 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
   combinaisonListes,
@@ -8,14 +11,11 @@ import {
   nombreDeChiffresDansLaPartieEntiere,
   rangeMinMax,
 } from '../../lib/outils/nombres'
+import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { sp } from '../../lib/outils/outilString'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import Exercice from '../Exercice'
 
 export const dateDeModifImportante = '22/09/2024'
 export const titre =
@@ -116,15 +116,15 @@ export default class ChiffreNombreDe extends Exercice {
 
     this.sup = 1
     this.sup2 = 3
-    context.isHtml ? (this.spacing = 3) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2.5) : (this.spacingCorr = 1.5)
+    this.spacing = context.isHtml ? 3 : 2
+    this.spacingCorr = context.isHtml ? 2.5 : 1.5
 
     this.nbQuestions = 6
   }
 
   nouvelleVersion() {
-    context.isHtml ? (this.spacing = 3) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2.5) : (this.spacingCorr = 1.5)
+    this.spacing = context.isHtml ? 3 : 2
+    this.spacingCorr = context.isHtml ? 2.5 : 1.5
     let typesDeQuestionsDisponibles = []
     this.consigne =
       this.interactif && this.sup > 1
@@ -178,7 +178,6 @@ export default class ChiffreNombreDe extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const mmc = randint(1, 9)
       const mmd = randint(0, 9, [mmc])

@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -13,8 +14,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   'Effectuer des calculs avec des puissances de 10 uniquement'
@@ -42,8 +41,8 @@ export default class PuissancesDeDix extends Exercice {
     context.isHtml
       ? (this.consigne = 'Écrire sous la forme $\\mathbf{10^n}$.')
       : (this.consigne = 'Écrire sous la forme $10^n$.')
-    context.isHtml ? (this.spacing = 3) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 2)
+    this.spacing = context.isHtml ? 3 : 2
+    this.spacingCorr = context.isHtml ? 3 : 2
     this.nbQuestions = 5
 
     this.sup = 1
@@ -86,7 +85,9 @@ export default class PuissancesDeDix extends Exercice {
     // pour pouvoir adapter les couleurs en cas de besoin
     const coul0 = 'red'
     const coul1 = bleuMathalea
-    const coul1Cmd = context.isHtml ? `\\color{${coul1}}` : `\\color[HTML]{${coul1.replace('#', '')}}`
+    const coul1Cmd = context.isHtml
+      ? `\\color{${coul1}}`
+      : `\\color[HTML]{${coul1.replace('#', '')}}`
 
     for (
       let i = 0,

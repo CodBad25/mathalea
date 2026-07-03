@@ -1,4 +1,4 @@
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -40,7 +40,7 @@ export default class DivisionDecimale extends Exercice {
       '1 : Inférieurs à 1\n2 : Supérieurs à 1\n3 : Mélange',
     ]
     this.spacing = 2
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1) // Important sinon opdiv n'est pas joli
+    this.spacingCorr = context.isHtml ? 2 : 1 // Important sinon opdiv n'est pas joli
     this.nbQuestions = 4
     this.sup = 3
   }

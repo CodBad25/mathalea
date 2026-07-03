@@ -57,7 +57,7 @@ export default class DivisionsEuclidiennes extends Exercice {
     this.sup2 = false
     this.sup3 = randint(1, 99)
     this.spacing = 2
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1) // Important sinon opidiv n'est pas joli
+    this.spacingCorr = context.isHtml ? 2 : 1 // Important sinon opidiv n'est pas joli
     this.nbQuestions = 4
     this.comment =
       'Si le paramètre "Choisir son propre diviseur" est validé, alors seulement vous pourrez choisir votre propre diviseur.'

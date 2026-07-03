@@ -30,7 +30,7 @@ export default class PasserDeLaBase12Ou16ALaBase10 extends Exercice {
 
     this.nbQuestions = 3
 
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacingCorr = context.isHtml ? 2 : 1
   }
 
   nouvelleVersion() {

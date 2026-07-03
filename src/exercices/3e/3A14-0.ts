@@ -43,8 +43,8 @@ export default class DesChocolatsDansDesBoites extends Exercice {
     this.introduction =
       "D'après Brevet des Collèges - Centres étrangers - Juin 2022"
 
-    context.isHtml ? (this.spacing = 1) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 2)
+    this.spacing = context.isHtml ? 1 : 2
+    this.spacingCorr = 2
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
   }

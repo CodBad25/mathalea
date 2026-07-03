@@ -69,7 +69,7 @@ export default class PavageEtDemiTour2D extends Exercice {
     this.sup = 1 // 1 pour des pavages modestes, 2 pour des plus grands.
     this.sup2 = false // On cache les barycentres par défaut.
     this.sup3 = 7
-    context.isHtml ? (this.spacingCorr = 2.5) : (this.spacingCorr = 1.5)
+    this.spacingCorr = context.isHtml ? 2.5 : 1.5
   }
 
   nouvelleVersion() {

@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { warnMessage } from '../../lib/format/message'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -16,8 +17,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -46,8 +45,8 @@ export default class DecompositionFacteursPremiers extends Exercice {
     // pas de différence entre la version html et la version latex pour la consigne
     // mais une différence selon que l'exo est affiché en interactif ou non
 
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacing = 2
+    this.spacingCorr = context.isHtml ? 2 : 1
     this.nbQuestions = 3
     // this.correctionDetailleeDisponible = true;
 

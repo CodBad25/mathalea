@@ -1,4 +1,5 @@
 import Figure from 'apigeom'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
@@ -18,7 +19,6 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 import { RedactionPythagore } from './_pythagore'
-import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Résoudre des problèmes utilisant le théorème de Pythagore'
 export const dateDeModifImportante = '26/01/2025'
 export const interactifReady = true
@@ -46,7 +46,7 @@ export default class ProblemesPythagore extends Exercice {
     this.nbQuestions = 2
 
     this.sup = 3
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1.5)
+    this.spacingCorr = context.isHtml ? 2 : 1.5
     this.besoinFormulaireNumerique = [
       'Sens direct ou réciproque/contraposée',
       3,

@@ -7,6 +7,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { rotation } from '../../lib/2d/transformations'
 import { triangle2points1hauteur } from '../../lib/2d/triangles'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -24,8 +25,6 @@ import Grandeur from '../../modules/Grandeur'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Calculer l'aire de triangles"
 export const interactifReady = true
@@ -61,7 +60,7 @@ export default class AireDeTriangles extends Exercice {
 
     this.spacing = 2
 
-    context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 2)
+    this.spacingCorr = context.isHtml ? 3 : 2
     this.nbQuestions = 3
 
     this.sup = 3

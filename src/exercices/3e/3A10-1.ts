@@ -47,8 +47,8 @@ export default class PremierOuPas extends Exercice {
       'Que des nombres premiers inférieurs à 100',
     ]
     // pas de différence entre la version html et la version latex pour la consigne
-    context.isHtml ? (this.spacing = 1) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 1 : 2
+    this.spacingCorr = context.isHtml ? 2 : 1
 
     // this.correctionDetailleeDisponible = true;
     this.nbCols = 2

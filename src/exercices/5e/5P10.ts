@@ -1,12 +1,15 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { bleuMathalea } from '../../lib/colors'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import {
   choice,
   combinaisonListesSansChangerOrdre,
   shuffle,
 } from '../../lib/outils/arrayOutils'
-import { miseEnCouleur, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import { bleuMathalea } from '../../lib/colors'
+import {
+  miseEnCouleur,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
@@ -100,8 +103,8 @@ export default class TableauxEtProportionnalite extends Exercice {
 
     this.interactif = false
 
-    context.isHtml ? (this.spacing = 3) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2.5) : (this.spacingCorr = 1.5)
+    this.spacing = context.isHtml ? 3 : 2
+    this.spacingCorr = context.isHtml ? 2.5 : 1.5
   }
 
   nouvelleVersion() {

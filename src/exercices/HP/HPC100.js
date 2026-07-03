@@ -25,7 +25,7 @@ export default class DivisionDePolynomes extends Exercice {
 
     this.nbQuestions = 2
 
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacingCorr = context.isHtml ? 2 : 1
     this.sup = 1 // Niveau de difficulté
   }
 

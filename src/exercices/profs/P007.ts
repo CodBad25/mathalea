@@ -47,7 +47,7 @@ export default class PavagesMathalea2d extends Exercice {
     this.sup3 = true
     this.correctionDetaillee = false
     this.correctionDetailleeDisponible = true
-    context.isHtml ? (this.spacingCorr = 2.5) : (this.spacingCorr = 1.5)
+    this.spacingCorr = context.isHtml ? 2.5 : 1.5
   }
 
   nouvelleVersion() {

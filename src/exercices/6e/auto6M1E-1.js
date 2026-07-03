@@ -52,7 +52,7 @@ export default class AireCarresRectanglesTrianglesSL extends Exercice {
 
     this.spacing = 2
 
-    context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 2)
+    this.spacingCorr = context.isHtml ? 3 : 2
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
   }

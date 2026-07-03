@@ -50,7 +50,7 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
       'Les équations sont de la forme :<br>$ax+b=cx+d$<br>$k(ax+b)=cx+d$<br>$k-(ax+b)=cx+d$<br>avec des nombres à un chiffre.'
     this.spacing = 2
     this.interactifType = 'mathLive'
-    context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 2)
+    this.spacingCorr = context.isHtml ? 3 : 2
     this.correctionDetailleeDisponible = true
     if (!context.isHtml) {
       this.correctionDetaillee = false

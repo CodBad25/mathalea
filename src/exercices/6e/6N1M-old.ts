@@ -11,10 +11,9 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const dateDePublication = '28/09/2022'
 export const titre = 'Encadrer un décimal'
@@ -50,8 +49,8 @@ export default class EncadrerUnDecimal extends Exercice {
     this.nbQuestions = 4
     this.consigneCorrection = 'Encadrer'
 
-    context.isHtml ? (this.spacing = 1.5) : (this.spacing = 1.5)
-    context.isHtml ? (this.spacingCorr = 1.2) : (this.spacingCorr = 1.5)
+    this.spacing = 1.5
+    this.spacingCorr = context.isHtml ? 1.2 : 1.5
   }
 
   nouvelleVersion() {

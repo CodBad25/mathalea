@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { texSymbole } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -24,7 +25,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 type SymboleInegalite = '≤' | '≥' | '<' | '>'
 type Question =
@@ -82,7 +82,7 @@ export default class ExerciceInequation1 extends Exercice {
 
     this.spacing = 1.5
     this.spacingCorr = 1.5
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1.5)
+    this.spacingCorr = context.isHtml ? 2 : 1.5
     this.correctionDetailleeDisponible = true
     if (!context.isHtml) {
       this.correctionDetaillee = false

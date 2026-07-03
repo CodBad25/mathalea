@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { AddTabPropMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
@@ -16,7 +17,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Compléter un tableau de proportionnalité avec les propriétés de linéarité'
@@ -354,8 +354,8 @@ function redaction(
 export default class ProportionnaliteParLinearite2 extends Exercice {
   constructor() {
     super()
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 1)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 2 : 1
+    this.spacingCorr = context.isHtml ? 2 : 1
     this.nbQuestions = 6
     this.besoinFormulaireCaseACocher = ['calculs entiers', true]
     this.sup = true
@@ -378,8 +378,8 @@ export default class ProportionnaliteParLinearite2 extends Exercice {
   }
 
   nouvelleVersion() {
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 1)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 2 : 1
+    this.spacingCorr = context.isHtml ? 2 : 1
     const listeTypesDeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup3,
       min: 1,
