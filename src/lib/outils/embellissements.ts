@@ -111,8 +111,8 @@ export function coloreUnSeulChiffre(
   if (index === undefined) return texte // sécurité
 
   // Cas avec virgule
-  if (texte.includes('{,}')) {
-    const [partieEntiere, partieDecimale] = texte.split('{,}')
+  if (texte.includes(',')) {
+    const [partieEntiere, partieDecimale] = texte.split(',')
 
     if (estDroite) {
       if (index >= partieDecimale.length) return texte
@@ -120,7 +120,7 @@ export function coloreUnSeulChiffre(
       const chiffreCible = partieDecimale.charAt(index)
       const apres = partieDecimale.slice(index + 1)
       const colored = getColorLatex(chiffreCible)
-      return `\\boldsymbol{${partieEntiere}{,}${avant}}{${colored}}\\boldsymbol{${apres}}`
+      return `\\boldsymbol{${partieEntiere},${avant}}{${colored}}\\boldsymbol{${apres}}`
     } else {
       const pos = partieEntiere.length + index
       if (pos < 0 || pos >= partieEntiere.length) return texte
@@ -129,7 +129,7 @@ export function coloreUnSeulChiffre(
       const suffixe = partieEntiere.slice(pos + 1)
       const colored = getColorLatex(chiffreCible)
 
-      return `\\boldsymbol{${prefixe}}{${colored}}\\boldsymbol{${suffixe}{,}${partieDecimale}}`
+      return `\\boldsymbol{${prefixe}}{${colored}}\\boldsymbol{${suffixe},${partieDecimale}}`
     }
   }
 

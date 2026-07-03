@@ -21,8 +21,8 @@ describe('deparenthise()', () => {
 
     it('supprime les parenthèses inutiles', () => {
       expect(
-        norm(deparenthise('$ \\ldots\\ldots\\ldots + (-3{,}3) = (+5{,}6) $')),
-      ).toBe('$\\ldots\\ldots\\ldots+(-3{,}3)=5{,}6$')
+        norm(deparenthise('$ \\ldots\\ldots\\ldots + (-3,3) = (+5,6) $')),
+      ).toBe('$\\ldots\\ldots\\ldots+(-3,3)=5,6$')
     })
 
     it('supprime les parenthèses inutiles', () => {

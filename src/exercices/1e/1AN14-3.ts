@@ -198,7 +198,7 @@ export default class DeriveePoly extends Exercice {
         'e',
       ][i % 16]
       const fExpr = ce.parse(expression) as Expression
-      texte = `$${nameF}(x)=${fExpr != null ? fExpr.latex.replaceAll('.', '{,}') : 'Erreur dans la fonction'}$<br>`
+      texte = `$${nameF}(x)=${fExpr != null ? fExpr.latex.replaceAll('.', ',') : 'Erreur dans la fonction'}$<br>`
       // Correction
       texteCorr = `$${nameF}$ est dérivable sur $\\R$.<br>`
       texteCorr +=
@@ -230,7 +230,7 @@ export default class DeriveePoly extends Exercice {
         )
         if (termes.length > 1) {
           const fExpr = ce.parse(expression) as Expression
-          texteCorr = `La fonction $${nameF}(x)=${fExpr.latex.replaceAll('.', '{,}')}$ est une somme de $${termes.length}$ termes.<br>`
+          texteCorr = `La fonction $${nameF}(x)=${fExpr.latex.replaceAll('.', ',')}$ est une somme de $${termes.length}$ termes.<br>`
           texteCorr +=
             'On rappelle que $(u+v)^\\prime=u^\\prime+v^\\prime$.<br>'
 
@@ -250,16 +250,16 @@ export default class DeriveePoly extends Exercice {
           }
         } else {
           const fExpr = ce.parse(expression) as Expression
-          texteCorr = `La fonction $${nameF}(x)=${fExpr.latex.replaceAll('.', '{,}')}$ est une fonction constante, sa dérivée est la fonction constante nulle.<br>`
+          texteCorr = `La fonction $${nameF}(x)=${fExpr.latex.replaceAll('.', ',')}$ est une fonction constante, sa dérivée est la fonction constante nulle.<br>`
         }
       } else {
         if (poly.monomes.length > 1) {
           texteCorr = `$${nameF}^\\prime(x)=${poly.detailleCalculDerivee()}$.<br>`
         } else {
-          texteCorr = `La fonction $${nameF}(x)=${fExpr.latex.replaceAll('.', '{,}')}$ est une fonction constante, sa dérivée est la fonction constante nulle.<br>`
+          texteCorr = `La fonction $${nameF}(x)=${fExpr.latex.replaceAll('.', ',')}$ est une fonction constante, sa dérivée est la fonction constante nulle.<br>`
         }
       }
-      texteCorr += `On obtient alors : $${nameF}^\\prime(x)=${poly.derivee().toLatex().replaceAll('.', '{,}')}$.`
+      texteCorr += `On obtient alors : $${nameF}^\\prime(x)=${poly.derivee().toLatex().replaceAll('.', ',')}$.`
 
       texte = texte.replaceAll('\\frac', '\\dfrac')
       texteCorr = texteCorr.replaceAll('\\frac', '\\dfrac')

@@ -20,8 +20,8 @@ export const refs = {
 */ export default class Can2026TermQ26 extends ExerciceCan {
   constructor() {
     super()
-     this.formatInteractif = 'fillInTheBlank'
-   this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.formatInteractif = 'fillInTheBlank'
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
     this.formatChampTexte = KeyboardType.clavierDeBase
   }
 
@@ -33,7 +33,6 @@ export const refs = {
     const borneInf = Math.floor(n / Math.E)
     const borneSup = borneInf + 1
 
-    
     this.reponse = {
       bareme: toutPourUnPoint,
       champ1: { value: String(borneInf) },
@@ -43,7 +42,7 @@ export const refs = {
     this.consigne = 'Compléter avec deux entiers consécutifs.'
     this.question = `%{champ1} ~\\leqslant \\dfrac{${n}}{\\text{e}} \\leqslant ~%{champ2}`
 
-    this.correction = `On sait que $\\text{e} \\approx 2{,}718$, soit environ $2{,}7$.<br>`
+    this.correction = `On sait que $\\text{e} \\approx 2,718$, soit environ $2,7$.<br>`
     this.correction += `On cherche à encadrer $\\dfrac{${n}}{\\text{e}}$ par deux entiers consécutifs, ce qui revient à encadrer $${n}$ par deux multiples consécutifs de $\\text{e}$.<br>`
     this.correction += `On a $${borneInf} \\times \\text{e} \\approx ${texNombre(borneInf * 2.718, 1)}$ et $${borneSup} \\times \\text{e} \\approx ${texNombre(borneSup * 2.718, 1)}$.<br>`
     this.correction += `Puisque $${borneInf}\\text{e} \\leqslant ${n} \\leqslant ${borneSup}\\text{e}$, en divisant tous les membres par $\\text{e}$ (qui est strictement positif), on obtient :<br>`

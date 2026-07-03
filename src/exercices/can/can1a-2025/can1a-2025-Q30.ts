@@ -136,8 +136,8 @@ export default class Can2025N5Q30 extends ExerciceSimple {
 
     /* Avec profCollege
     this.canEnonce = '$A$ et $B$ sont deux événements tels que :<br>' +
-     `\\[\\Proba[Arbre,Branche=3,Rayon=0.75,Incline=false]{A/$0{,}2$,$\\overline{A}$/,B
-/$0{,}2$,$\\overline{B}$/,B/$0{,}2$,$\\overline{B}$/}\\]`
+     `\\[\\Proba[Arbre,Branche=3,Rayon=0.75,Incline=false]{A/$0,2$,$\\overline{A}$/,B
+/$0,2$,$\\overline{B}$/,B/$0,2$,$\\overline{B}$/}\\]`
 */
     this.canReponseACompleter = '$P(B)=\\ldots$'
   }

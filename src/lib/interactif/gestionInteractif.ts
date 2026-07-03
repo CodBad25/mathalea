@@ -973,9 +973,9 @@ export function setReponse(
 
 // La solution est-elle un nombre ? Si oui, on force l'option nombreDecimalSeulement.
 function isValidNumber(value: unknown): boolean {
-  // Convertir la valeur en chaîne et remplacer les séparateurs de milliers (par exemple, '{,}')
+  // Convertir la valeur en chaîne et remplacer les séparateurs de milliers (par exemple, ',')
   const cleanedValue = String(value)
-    .replace(/{,}/g, '') // Enlève les caractères '{,}' (séparateurs de milliers comme dans "1{,}5")
+    .replace(/,/g, '') // Enlève les caractères ',' (séparateurs de milliers comme dans "1,5")
     .replace(',', '.') // Remplace la virgule par un point pour les décimales
   // Vérifier que la chaîne ne contient que des chiffres et un seul séparateur décimal (point ou virgule)
   // Ou un nombre javascript écrit dans tous les formats supportés

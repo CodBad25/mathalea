@@ -118,7 +118,7 @@ export default class NCDecembre23Exo1Q5 extends ExerciceQcmA {
             this.reponses =
               rapport === 0.5
                 ? [
-                    'a pour rapport $0{,}5$.',
+                    'a pour rapport $0,5$.',
                     `transforme $${noms[5]}$ en $${noms[3]}$.`,
                     `transforme $${noms[4]}$ en $${noms[2]}$.`,
                   ]
@@ -129,7 +129,7 @@ export default class NCDecembre23Exo1Q5 extends ExerciceQcmA {
                   ]
             this.correction =
               rapport === 0.5
-                ? `$${noms[6]}$ est le milieu de $[${noms[0] + noms[1]}]$ par conséquent le rapport de cette homothetie est $${miseEnEvidence('0{,}5')}$.`
+                ? `$${noms[6]}$ est le milieu de $[${noms[0] + noms[1]}]$ par conséquent le rapport de cette homothetie est $${miseEnEvidence('0,5')}$.`
                 : `$${noms[6]}$ est le milieu de $[${noms[0] + noms[1]}]$ par conséquent le rapport de cette homothetie est $${miseEnEvidence('2')}$.`
             break
           case 3:
@@ -143,7 +143,7 @@ export default class NCDecembre23Exo1Q5 extends ExerciceQcmA {
                 : [
                     `transforme $${noms[5]}$ en $${noms[3]}$.`,
                     `transforme $${noms[2]}$ en $${noms[4]}$.`,
-                    'a pour rapport $0{,}5$.',
+                    'a pour rapport $0,5$.',
                   ]
             this.correction =
               rapport === 0.5
@@ -161,7 +161,7 @@ export default class NCDecembre23Exo1Q5 extends ExerciceQcmA {
                   ]
                 : [
                     `transforme $${noms[4]}$ en $${noms[2]}$.`,
-                    'a pour rapport $0{,}5$.',
+                    'a pour rapport $0,5$.',
                     `transforme $${noms[3]}$ en $${noms[5]}$.`,
                   ]
             this.correction =
@@ -180,7 +180,7 @@ export default class NCDecembre23Exo1Q5 extends ExerciceQcmA {
             this.reponses =
               rapport === 0.5
                 ? [
-                    'a pour rapport $0{,}5$.',
+                    'a pour rapport $0,5$.',
                     `transforme $${noms[5]}$ en $${noms[3]}$.`,
                     `transforme $${noms[6]}$ en $${noms[1]}$.`,
                   ]
@@ -191,7 +191,7 @@ export default class NCDecembre23Exo1Q5 extends ExerciceQcmA {
                   ]
             this.correction =
               rapport === 0.5
-                ? `$${noms[4]}$ est le milieu de $[${noms[0] + noms[2]}]$ par conséquent le rapport de cette homothetie est $${miseEnEvidence('0{,}5')}$.`
+                ? `$${noms[4]}$ est le milieu de $[${noms[0] + noms[2]}]$ par conséquent le rapport de cette homothetie est $${miseEnEvidence('0,5')}$.`
                 : `$${noms[4]}$ est le milieu de $[${noms[0] + noms[2]}]$ par conséquent le rapport de cette homothetie est $${miseEnEvidence('2')}$.`
 
             break
@@ -206,7 +206,7 @@ export default class NCDecembre23Exo1Q5 extends ExerciceQcmA {
                 : [
                     `transforme $${noms[6]}$ en $${noms[1]}$.`,
                     `transforme $${noms[3]}$ en $${noms[5]}$.`,
-                    'a pour rapport $0{,}5$.',
+                    'a pour rapport $0,5$.',
                   ]
             this.correction =
               rapport === 0.5
@@ -224,7 +224,7 @@ export default class NCDecembre23Exo1Q5 extends ExerciceQcmA {
                   ]
                 : [
                     `transforme $${noms[5]}$ en $${noms[3]}$.`,
-                    'a pour rapport $0{,}5$.',
+                    'a pour rapport $0,5$.',
                     `transforme $${noms[1]}$ en $${noms[6]}$.`,
                   ]
             this.correction =
@@ -243,7 +243,7 @@ export default class NCDecembre23Exo1Q5 extends ExerciceQcmA {
             this.reponses =
               rapport === 0.5
                 ? [
-                    'a pour rapport $0{,}5$.',
+                    'a pour rapport $0,5$.',
                     `transforme $${noms[4]}$ en $${noms[2]}$.`,
                     `transforme $${noms[6]}$ en $${noms[1]}$.`,
                   ]
@@ -254,7 +254,7 @@ export default class NCDecembre23Exo1Q5 extends ExerciceQcmA {
                   ]
             this.correction =
               rapport === 0.5
-                ? `$${noms[5]}$ est le milieu de $[${noms[0] + noms[3]}]$ par conséquent le rapport de cette homothetie est $${miseEnEvidence('0{,}5')}$.`
+                ? `$${noms[5]}$ est le milieu de $[${noms[0] + noms[3]}]$ par conséquent le rapport de cette homothetie est $${miseEnEvidence('0,5')}$.`
                 : `$${noms[5]}$ est le milieu de $[${noms[0] + noms[3]}]$ par conséquent le rapport de cette homothetie est $${miseEnEvidence('2')}$.`
 
             break
@@ -269,7 +269,7 @@ export default class NCDecembre23Exo1Q5 extends ExerciceQcmA {
                 : [
                     `transforme $${noms[6]}$ en $${noms[1]}$.`,
                     `transforme $${noms[2]}$ en $${noms[4]}$.`,
-                    'a pour rapport $0{,}5$.',
+                    'a pour rapport $0,5$.',
                   ]
             this.correction =
               rapport === 0.5
@@ -287,7 +287,7 @@ export default class NCDecembre23Exo1Q5 extends ExerciceQcmA {
                   ]
                 : [
                     `transforme $${noms[4]}$ en $${noms[2]}$.`,
-                    'a pour rapport $0{,}5$.',
+                    'a pour rapport $0,5$.',
                     `transforme $${noms[1]}$ en $${noms[6]}$.`,
                   ]
             this.correction =

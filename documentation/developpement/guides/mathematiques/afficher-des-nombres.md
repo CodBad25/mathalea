@@ -8,14 +8,14 @@ Ne concaténez pas un nombre brut avec `String(nombre)`, `nombre.toString()` ou 
 
 Choisissez d'abord le type d'affichage attendu :
 
-| Besoin | Helper à utiliser | Où placer le résultat |
-| --- | --- | --- |
-| Nombre dans une formule ou une correction mathématique | `texNombre(nombre, precision)` | entre `$...$`, ou dans une chaîne LaTeX déjà en mode maths |
-| Nombre dans du texte hors mode maths | `stringNombre(nombre, precision)` | directement dans le texte |
-| Prix avec centimes utiles | `texPrix(nombre)` | entre `$...$`, puis ajouter `\\text{ €}` ou `€` selon le contexte |
-| Coefficient devant une inconnue | `rienSi1`, `ecritureAlgebrique`, `ecritureAlgebriqueSauf1` | dans une formule |
-| Nombre relatif à parenthéser | `ecritureParentheseSiNegatif` ou `ecritureNombreRelatif` | dans une formule |
-| Fraction exacte | `FractionEtendue` et ses propriétés LaTeX | entre `$...$` |
+| Besoin                                                 | Helper à utiliser                                          | Où placer le résultat                                             |
+| ------------------------------------------------------ | ---------------------------------------------------------- | ----------------------------------------------------------------- |
+| Nombre dans une formule ou une correction mathématique | `texNombre(nombre, precision)`                             | entre `$...$`, ou dans une chaîne LaTeX déjà en mode maths        |
+| Nombre dans du texte hors mode maths                   | `stringNombre(nombre, precision)`                          | directement dans le texte                                         |
+| Prix avec centimes utiles                              | `texPrix(nombre)`                                          | entre `$...$`, puis ajouter `\\text{ €}` ou `€` selon le contexte |
+| Coefficient devant une inconnue                        | `rienSi1`, `ecritureAlgebrique`, `ecritureAlgebriqueSauf1` | dans une formule                                                  |
+| Nombre relatif à parenthéser                           | `ecritureParentheseSiNegatif` ou `ecritureNombreRelatif`   | dans une formule                                                  |
+| Fraction exacte                                        | `FractionEtendue` et ses propriétés LaTeX                  | entre `$...$`                                                     |
 
 ## Imports
 
@@ -70,14 +70,13 @@ this.correction = `$${texNombre(a, 1)}+${texNombre(b, 0)}=${texNombre(a + b, 1)}
 À faire :
 
 ```ts
-`$${texNombre(1000.3, 1)}$`
+;`$${texNombre(1000.3, 1)}$`
 ```
 
 À éviter :
 
 ```ts
-`${1000.3}`
-`$${1000.3}$`
+;`${1000.3}``$${1000.3}$`
 ```
 
 Le premier exemple ne respecte pas la notation française. Le second est en mode maths mais garde le point décimal anglais.
@@ -92,14 +91,14 @@ const longueur = 12.5
 this.question = `Tracer un segment de ${stringNombre(longueur, 1)} cm.`
 ```
 
-N'utilisez pas `texNombre` hors mode maths : il peut contenir `{,}` ou `\\,`, qui sont destinés à KaTeX/LaTeX.
+N'utilisez pas `texNombre` hors mode maths : il peut contenir `,` ou `\\,`, qui sont destinés à KaTeX/LaTeX.
 
 ## Étape 4 : compléter les zéros quand ils ont du sens
 
 Le troisième argument de `texNombre` ou `stringNombre` force l'affichage des décimales jusqu'à la précision demandée.
 
 ```ts
-texNombre(3.5, 2, true) // 3{,}50 en LaTeX
+texNombre(3.5, 2, true) // 3,50 en LaTeX
 stringNombre(3.5, 2, true) // 3,50 en texte
 ```
 
@@ -113,7 +112,7 @@ Utilisez-le quand les zéros sont significatifs pour l'élève :
 Pour compléter aussi un entier, passez le quatrième argument à `true` :
 
 ```ts
-texNombre(3, 2, true, true) // 3{,}00 en LaTeX
+texNombre(3, 2, true, true) // 3,00 en LaTeX
 ```
 
 Pour les prix, préférez `texPrix` quand le comportement attendu est simplement : entier sans centimes, non-entier avec deux décimales.
@@ -184,14 +183,14 @@ this.correction = `$${f.texFraction}=${f.texFractionSimplifiee}$.`
 
 Propriétés utiles :
 
-| Propriété | Usage |
-| --- | --- |
-| `texFraction` | fraction telle qu'elle a été construite |
-| `texFractionSimplifiee` | fraction simplifiée |
-| `texFSD` | écriture simplifiée directe, pratique dans les calculs |
-| `texFractionSignee` | fraction avec signe algébrique |
-| `texFractionSaufUn` | coefficient fractionnaire sans écrire `1` quand il vaut 1 |
-| `ecritureParentheseSiNegatif` | fraction parenthésée si elle est négative |
+| Propriété                     | Usage                                                     |
+| ----------------------------- | --------------------------------------------------------- |
+| `texFraction`                 | fraction telle qu'elle a été construite                   |
+| `texFractionSimplifiee`       | fraction simplifiée                                       |
+| `texFSD`                      | écriture simplifiée directe, pratique dans les calculs    |
+| `texFractionSignee`           | fraction avec signe algébrique                            |
+| `texFractionSaufUn`           | coefficient fractionnaire sans écrire `1` quand il vaut 1 |
+| `ecritureParentheseSiNegatif` | fraction parenthésée si elle est négative                 |
 
 Quand vous voulez une valeur décimale approchée d'une fraction, faites-le explicitement :
 
@@ -322,7 +321,7 @@ JavaScript peut produire des valeurs comme `0.30000000000000004`. Ne les affiche
 ```ts
 const somme = 0.1 + 0.2
 
-texNombre(somme, 1) // 0{,}3
+texNombre(somme, 1) // 0,3
 ```
 
 Si le calcul décimal doit rester exact avant l'affichage, utilisez `Decimal` ou `FractionEtendue` selon le besoin. Voir aussi [Gérer les décimaux](gerer-les-decimaux.md).
@@ -349,8 +348,7 @@ const affichage = texNombre(valeur, 2)
 Gardez l'unité hors du helper numérique.
 
 ```ts
-`$${texNombre(12.5, 1)}\\text{ cm}$`
-`${stringNombre(12.5, 1)} cm`
+;`$${texNombre(12.5, 1)}\\text{ cm}$``${stringNombre(12.5, 1)} cm`
 ```
 
 N'écrivez pas l'unité dans `texNombre`.
@@ -381,16 +379,16 @@ Contrôlez aussi un rendu HTML et un rendu LaTeX si l'exercice contient :
 
 ## Dépannage
 
-| Symptôme | Cause probable | Correction |
-| --- | --- | --- |
-| Le rendu affiche `3{,}5` dans du texte | `texNombre` est utilisé hors mode maths | Utiliser `stringNombre` ou entourer le nombre par `$...$` si c'est une formule |
-| Le rendu affiche `3.5` | nombre brut interpolé | Remplacer par `texNombre(3.5, 1)` ou `stringNombre(3.5, 1)` |
-| Des décimales inattendues apparaissent | précision absente ou calcul flottant brut | Passer une précision explicite et stabiliser le calcul |
-| Les centimes `0` disparaissent | zéros non forcés | Utiliser `texNombre(nb, 2, true)` ou `texPrix(nb)` |
-| On obtient `1x` ou `+-3` | concaténation algébrique manuelle | Utiliser `rienSi1`, `ecritureAlgebrique` ou `ecritureAlgebriqueSauf1` |
-| Un produit affiche `3\\times -2` | nombre négatif non parenthésé | Utiliser `ecritureParentheseSiNegatif(-2)` |
-| Une fraction exacte devient `0,33333333` | conversion trop tôt en décimal | Garder `FractionEtendue` et afficher `texFraction` ou `texFractionSimplifiee` |
-| Notification "Trop de chiffres" | plus de 15 chiffres significatifs avec un `number` | Réduire la précision, réduire la taille du nombre ou utiliser `Decimal` |
+| Symptôme                                 | Cause probable                                     | Correction                                                                     |
+| ---------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Le rendu affiche `3,5` dans du texte     | `texNombre` est utilisé hors mode maths            | Utiliser `stringNombre` ou entourer le nombre par `$...$` si c'est une formule |
+| Le rendu affiche `3.5`                   | nombre brut interpolé                              | Remplacer par `texNombre(3.5, 1)` ou `stringNombre(3.5, 1)`                    |
+| Des décimales inattendues apparaissent   | précision absente ou calcul flottant brut          | Passer une précision explicite et stabiliser le calcul                         |
+| Les centimes `0` disparaissent           | zéros non forcés                                   | Utiliser `texNombre(nb, 2, true)` ou `texPrix(nb)`                             |
+| On obtient `1x` ou `+-3`                 | concaténation algébrique manuelle                  | Utiliser `rienSi1`, `ecritureAlgebrique` ou `ecritureAlgebriqueSauf1`          |
+| Un produit affiche `3\\times -2`         | nombre négatif non parenthésé                      | Utiliser `ecritureParentheseSiNegatif(-2)`                                     |
+| Une fraction exacte devient `0,33333333` | conversion trop tôt en décimal                     | Garder `FractionEtendue` et afficher `texFraction` ou `texFractionSimplifiee`  |
+| Notification "Trop de chiffres"          | plus de 15 chiffres significatifs avec un `number` | Réduire la précision, réduire la taille du nombre ou utiliser `Decimal`        |
 
 ## Checklist rapide
 

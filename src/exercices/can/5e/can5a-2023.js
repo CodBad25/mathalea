@@ -207,9 +207,9 @@ export default class SujetCAN2023Cinquieme extends Exercice {
           texteCorr = `Le chiffre des ${m} est $${miseEnEvidence(reponse)}$.<br>$
               \\begin{array}{|c|c|c|c|c|c|c|}
               \\hline
-              \\text{\\small{Centaines}} &  \\text{\\small{Dizaines}} & \\text{\\small{Unités}}&  \\Large{\\textbf{,}}& \\text{\\small{Dixièmes}} & \\text{\\small{Centièmes}} & \\text{\\small{Millièmes}}${context.isHtml ? '\\\\' : '\\tabularnewline'}
+              \\text{\\small{Centaines}} &  \\text{\\small{Dizaines}} & \\text{\\small{Unités}}&  \\Large{\\textbf,}& \\text{\\small{Dixièmes}} & \\text{\\small{Centièmes}} & \\text{\\small{Millièmes}}${context.isHtml ? '\\\\' : '\\tabularnewline'}
               \\hline
-              ${a}&${b}&${c} & \\Large{\\textbf{,}}& ${d}&${e}& ${f}${context.isHtml ? '\\\\' : '\\tabularnewline'}
+              ${a}&${b}&${c} & \\Large{\\textbf,}& ${d}&${e}& ${f}${context.isHtml ? '\\\\' : '\\tabularnewline'}
               \\hline
               \\end{array}
               $<br>

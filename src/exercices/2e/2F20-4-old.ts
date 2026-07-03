@@ -146,7 +146,7 @@ function renseigneFonction(poly: Polynome) {
   ]
   const expr: string = reduirePolynomeDegre3(a, b, c, d)
     .replaceAll('\\,', '')
-    .replaceAll('{,}', '.')
+    .replaceAll(',', '.')
   return { func, expr, poly }
 }
 

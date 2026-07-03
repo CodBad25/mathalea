@@ -185,17 +185,17 @@ $\\dfrac{${miseEnEvidence(
       if (
         champ2 === den1[0] ||
         champ2 === den1[0][1] + den1[0][0] ||
-        champ2.replace('{,}', '.') === den1[1].toString()
+        champ2.replace(',', '.') === den1[1].toString()
       ) {
         if (
           champ3 === num2[0] ||
           champ3 === num2[0][1] + num2[0][0] ||
-          champ3.replace('{,}', '.') === num2[1].toString()
+          champ3.replace(',', '.') === num2[1].toString()
         ) {
           if (
             champ4 === den2[0] ||
             champ4 === den2[0][1] + den2[0][0] ||
-            champ4.replace('{,}', '.') === den2[1].toString()
+            champ4.replace(',', '.') === den2[1].toString()
           ) {
             result = 'OK'
           } else result = 'KO'
@@ -206,17 +206,17 @@ $\\dfrac{${miseEnEvidence(
       if (
         champ1 === den1[0] ||
         champ1 === den1[0][1] + den1[0][0] ||
-        champ1.replace('{,}', '.') === den1[1].toString()
+        champ1.replace(',', '.') === den1[1].toString()
       ) {
         if (
           champ4 === num2[0] ||
           champ4 === num2[0][1] + num2[0][0] ||
-          champ4.replace('{,}', '.') === num2[1].toString()
+          champ4.replace(',', '.') === num2[1].toString()
         ) {
           if (
             champ3 === den2[0] ||
             champ3 === den2[0][1] + den2[0][0] ||
-            champ3.replace('{,}', '.') === den2[1].toString()
+            champ3.replace(',', '.') === den2[1].toString()
           ) {
             result = 'OK'
           } else result = 'KO'
@@ -227,17 +227,17 @@ $\\dfrac{${miseEnEvidence(
       if (
         champ4 === den1[0] ||
         champ4 === den1[0][1] + den1[0][0] ||
-        champ4.replace('{,}', '.') === den1[1].toString()
+        champ4.replace(',', '.') === den1[1].toString()
       ) {
         if (
           champ1 === num2[0] ||
           champ1 === num2[0][1] + num2[0][0] ||
-          champ1.replace('{,}', '.') === num2[1].toString()
+          champ1.replace(',', '.') === num2[1].toString()
         ) {
           if (
             champ2 === den2[0] ||
             champ2 === den2[0][1] + den2[0][0] ||
-            champ2.replace('{,}', '.') === den2[1].toString()
+            champ2.replace(',', '.') === den2[1].toString()
           ) {
             result = 'OK'
           } else result = 'KO'
@@ -248,17 +248,17 @@ $\\dfrac{${miseEnEvidence(
       if (
         champ3 === den1[0] ||
         champ3 === den1[0][1] + den1[0][0] ||
-        champ3.replace('{,}', '.') === den1[1].toString()
+        champ3.replace(',', '.') === den1[1].toString()
       ) {
         if (
           champ2 === num2[0] ||
           champ2 === num2[0][1] + num2[0][0] ||
-          champ2.replace('{,}', '.') === num2[1].toString()
+          champ2.replace(',', '.') === num2[1].toString()
         ) {
           if (
             champ1 === den2[0] ||
             champ1 === den2[0][1] + den2[0][0] ||
-            champ1.replace('{,}', '.') === den2[1].toString()
+            champ1.replace(',', '.') === den2[1].toString()
           ) {
             result = 'OK'
           } else result = 'KO'

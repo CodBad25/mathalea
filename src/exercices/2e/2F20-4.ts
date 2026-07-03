@@ -17,9 +17,9 @@ import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { mathalea2d } from '../../modules/mathalea2d'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Résoudre graphiquement une équation ou une inéquation'
 export const dateDePublication = '29/10/2023'
@@ -145,7 +145,7 @@ function renseigneFonction(poly: Polynome) {
   ]
   const expr: string = reduirePolynomeDegre3(a, b, c, d)
     .replaceAll('\\,', '')
-    .replaceAll('{,}', '.')
+    .replaceAll(',', '.')
   return { func, expr, poly }
 }
 
@@ -731,7 +731,13 @@ class resolutionEquationInequationGraphique extends Exercice {
 
     let courbe1, courbe2
     if (f1Type === 'constante' || f1Type === 'affine') {
-      courbe1 = segment(-8, fonction1.func(-8), 8, fonction1.func(8), bleuMathalea)
+      courbe1 = segment(
+        -8,
+        fonction1.func(-8),
+        8,
+        fonction1.func(8),
+        bleuMathalea,
+      )
     } else {
       courbe1 = courbe(fonction1.func, {
         repere,

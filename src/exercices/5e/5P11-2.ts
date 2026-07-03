@@ -149,12 +149,12 @@ export default class ConvertirVitesse extends Exercice {
           texteCorr += `Pour convertir $1\\text{\\,m/s}$ en $\\text{km/h}$ :<br>`
           texteCorr += `$1\\text{\\,m/s} = \\dfrac{1\\text{\\,m}}{1\\text{\\,s}}$<br><br>`
           texteCorr += `En convertissant les unités :<br>`
-          texteCorr += `$\\dfrac{1\\text{\\,m}}{1\\text{\\,s}} = \\dfrac{1\\text{\\,m} \\times \\dfrac{1\\text{\\,km}}{1000\\text{\\,m}}}{1\\text{\\,s} \\times \\dfrac{1\\text{\\,h}}{3600\\text{\\,s}}} = \\dfrac{\\dfrac{1}{1000}\\text{\\,km}}{\\dfrac{1}{3600}\\text{\\,h}} = \\dfrac{1}{1000} \\times \\dfrac{3600}{1}\\,\\dfrac{\\text{km}}{\\text{h}} = \\dfrac{3600}{1000}\\,\\dfrac{\\text{km}}{\\text{h}} = 3{,}6\\text{\\,km/h}$<br><br>`
+          texteCorr += `$\\dfrac{1\\text{\\,m}}{1\\text{\\,s}} = \\dfrac{1\\text{\\,m} \\times \\dfrac{1\\text{\\,km}}{1000\\text{\\,m}}}{1\\text{\\,s} \\times \\dfrac{1\\text{\\,h}}{3600\\text{\\,s}}} = \\dfrac{\\dfrac{1}{1000}\\text{\\,km}}{\\dfrac{1}{3600}\\text{\\,h}} = \\dfrac{1}{1000} \\times \\dfrac{3600}{1}\\,\\dfrac{\\text{km}}{\\text{h}} = \\dfrac{3600}{1000}\\,\\dfrac{\\text{km}}{\\text{h}} = 3,6\\text{\\,km/h}$<br><br>`
 
           texteCorr += `${texteEnCouleurEtGras('Règle : Pour convertir des m/s en $\\text{km/h}$, on multiplie par 3,6')}<br><br>`
 
           texteCorr += `${texteEnCouleurEtGras('Étape 4 : Application numérique')}<br>`
-          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,m/s} = ${texNombre(valeur, 2)} \\times 3{,}6 = ${miseEnEvidence(`${texNombre(reponse, 2)}\\text{\\,km/h}`)}$`
+          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,m/s} = ${texNombre(valeur, 2)} \\times 3,6 = ${miseEnEvidence(`${texNombre(reponse, 2)}\\text{\\,km/h}`)}$`
         } else {
           // km/h → m/s
           texteCorr = `Pour convertir des vitesses de $\\text{\\,km/h}$ en $\\text{\\,m/s}$, nous devons établir la relation entre ces unités.<br><br>`
@@ -169,20 +169,20 @@ export default class ConvertirVitesse extends Exercice {
 
           texteCorr += `${texteEnCouleurEtGras('Étape 3 : Calculer le facteur de conversion')}<br>`
           texteCorr += `Pour convertir $1\\text{\\,km/h}$ en $\\text{\\,m/s}$ :<br>`
-          texteCorr += `$1\\text{\\,km/h} = \\dfrac{1\\text{\\,km}}{1\\text{\\,h}}= \\dfrac{1000\\text{\\,m}}{3600\\text{\\,s}} =  1\\div 3{,}6\\text{\\,m/s}$<br><br>`
+          texteCorr += `$1\\text{\\,km/h} = \\dfrac{1\\text{\\,km}}{1\\text{\\,h}}= \\dfrac{1000\\text{\\,m}}{3600\\text{\\,s}} =  1\\div 3,6\\text{\\,m/s}$<br><br>`
           texteCorr += `${texteEnCouleurEtGras('Règle : Pour convertir des km/h en $\\text{m/s}$, on divise par 3,6')}<br><br>`
 
           texteCorr += `${texteEnCouleurEtGras('Étape 4 : Application numérique')}<br>`
-          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,km/h} = ${texNombre(valeur, 2)} \\div 3{,}6 = ${miseEnEvidence(`${texNombre(reponse, 2)}\\text{\\,m/s}`)}$`
+          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,km/h} = ${texNombre(valeur, 2)} \\div 3,6 = ${miseEnEvidence(`${texNombre(reponse, 2)}\\text{\\,m/s}`)}$`
         }
       } else {
         // Correction simple
         if (typeDeQuestion === 1) {
           texteCorr = `${texteEnCouleurEtGras('Conversion m/s → km/h : multiplier par 3,6')}<br><br>`
-          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,m/s} = ${texNombre(valeur, 2)} \\times 3{,}6 = ${miseEnEvidence(`${texNombre(reponse, 2)}\\text{\\,km/h}`)}$`
+          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,m/s} = ${texNombre(valeur, 2)} \\times 3,6 = ${miseEnEvidence(`${texNombre(reponse, 2)}\\text{\\,km/h}`)}$`
         } else {
           texteCorr = `${texteEnCouleurEtGras('Conversion km/h → m/s : diviser par 3,6')}<br><br>`
-          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,km/h} = ${texNombre(valeur, 2)} \\div 3{,}6 = ${miseEnEvidence(`${texNombre(reponse, 2)}\\text{\\,m/s}`)}$`
+          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,km/h} = ${texNombre(valeur, 2)} \\div 3,6 = ${miseEnEvidence(`${texNombre(reponse, 2)}\\text{\\,m/s}`)}$`
         }
       }
 

@@ -68,7 +68,7 @@ class NombrePeriodique {
       partieDecimaleStr =
         '0'.repeat(chiffresManquants) + this.partieDecimale.toString()
     }
-    return `${this.partieEntiere}{,}${partieDecimaleStr}${this.periode === 0 ? '' : `\\overline{${this.periode}}`}`
+    return `${this.partieEntiere},${partieDecimaleStr}${this.periode === 0 ? '' : `\\overline{${this.periode}}`}`
   }
 
   toFraction(): FractionEtendue {

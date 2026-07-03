@@ -117,7 +117,7 @@ export const AMCPreambleTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    \\newcommand{\\Vcurs}{\\begin{cursive}V\\end{cursive}}
    \\usepackage[normalem]{ulem}
    % plus utilisé avec ProfCollege
-   % \\usepackage{sistyle} \\SIdecimalsign{,} %% => \\num{...} \\num*{...}
+   % \\usepackage{sistyle} \\SIdecimalsign, %% => \\num{...} \\num*{...}
    % cf. http://fr.wikibooks.org/wiki/LaTeX/%C3%89crire_de_la_physique
    %  sous Ubuntu, paquet texlive-science à installer
    %\\usepackage[autolanguage,np]{numprint} % déjà appelé par défaut dans introLatex

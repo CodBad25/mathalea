@@ -32,7 +32,7 @@ export default class auto1AC5e extends ExerciceQcmA {
       "Parmi les quatre propositions, laquelle est un ordre de grandeur de la longueur d'un terrain de football ?",
       '$0,1$ $\\text{km}$',
       ['$10$ $\\text{km}$', '$0,1$ $\\text{m}$', '$10$ $\\text{dm}$'],
-      `Un terrain de football mesure environ $100$ $\\text{m}$, soit $${miseEnEvidence('0{,}1\\text{ km}')}$.`,
+      `Un terrain de football mesure environ $100$ $\\text{m}$, soit $${miseEnEvidence('0,1\\text{ km}')}$.`,
     )
   }
 
@@ -53,14 +53,14 @@ export default class auto1AC5e extends ExerciceQcmA {
           `$${texNombre(1000)}\\text{ cm}$`,
           '$10\\text{ dm}$',
         ],
-        correction: `Un terrain de football mesure environ $100$ $\\text{m}$, soit $${miseEnEvidence('0{,}1\\text{ km}')}$.`,
+        correction: `Un terrain de football mesure environ $100$ $\\text{m}$, soit $${miseEnEvidence('0,1\\text{ km}')}$.`,
       },
       {
         enonce:
           "Parmi les quatre propositions, laquelle est un ordre de grandeur de la taille d'une fourmi ?",
         bonneReponse: '$0,05\\text{ dm}$',
         distracteurs: ['$0,05\\text{ m}$', '$5\\text{ dm}$', '$0,5\\text{ m}$'],
-        correction: `Une fourmi mesure environ $5$ $\\text{mm}$, soit $0,5$ $\\text{cm}$ $= ${miseEnEvidence('0{,}05\\text{ dm}')}$.`,
+        correction: `Une fourmi mesure environ $5$ $\\text{mm}$, soit $0,5$ $\\text{cm}$ $= ${miseEnEvidence('0,05\\text{ dm}')}$.`,
       },
       {
         enonce:
@@ -105,7 +105,7 @@ export default class auto1AC5e extends ExerciceQcmA {
           '$0,04\\text{ dam}$',
           '$4\\text{ hm}$',
         ],
-        correction: `Une voiture mesure environ $4$ $\\text{m}$, soit $${miseEnEvidence('0{,}4\\text{ dam}')}$.`,
+        correction: `Une voiture mesure environ $4$ $\\text{m}$, soit $${miseEnEvidence('0,4\\text{ dam}')}$.`,
       },
       {
         enonce:
@@ -116,14 +116,14 @@ export default class auto1AC5e extends ExerciceQcmA {
           '$0,015\\text{ m}$',
           '$15\\text{ m}$',
         ],
-        correction: `Un stylo mesure environ $15$ $\\text{cm}$, soit $${miseEnEvidence('0{,}15\\text{ m}')}$.`,
+        correction: `Un stylo mesure environ $15$ $\\text{cm}$, soit $${miseEnEvidence('0,15\\text{ m}')}$.`,
       },
       {
         enonce:
           "Parmi les quatre propositions, laquelle est un ordre de grandeur de la largeur d'une main ?",
         bonneReponse: '$0,1\\text{ m}$',
         distracteurs: ['$1\\text{ m}$', '$0,01\\text{ m}$', '$10\\text{ m}$'],
-        correction: `La largeur d'une main est d'environ $10$ $\\text{cm}$, soit $${miseEnEvidence('0{,}1\\text{ m}')}$.`,
+        correction: `La largeur d'une main est d'environ $10$ $\\text{cm}$, soit $${miseEnEvidence('0,1\\text{ m}')}$.`,
       },
 
       // ===== VITESSES =====
@@ -146,7 +146,7 @@ export default class auto1AC5e extends ExerciceQcmA {
           '$V \\approx 0,14$',
           '$V \\approx 140$',
         ],
-        correction: `Un piéton marche à environ $5$ $\\text{km/h}$. On divise par $3,6$ : $5 \\div 3,6 \\approx 1,4$, soit $${miseEnEvidence('V \\approx 1{,}4')}$ $\\text{m/s}$.`,
+        correction: `Un piéton marche à environ $5$ $\\text{km/h}$. On divise par $3,6$ : $5 \\div 3,6 \\approx 1,4$, soit $${miseEnEvidence('V \\approx 1,4')}$ $\\text{m/s}$.`,
       },
 
       {
@@ -171,7 +171,7 @@ export default class auto1AC5e extends ExerciceQcmA {
           '$0,015\\text{ kg}$',
           '$15\\text{ kg}$',
         ],
-        correction: `Une pomme pèse environ $150$ $\\text{g}$, soit $${miseEnEvidence('0{,}15\\text{ kg}')}$.`,
+        correction: `Une pomme pèse environ $150$ $\\text{g}$, soit $${miseEnEvidence('0,15\\text{ kg}')}$.`,
       },
       {
         enonce:
@@ -189,7 +189,7 @@ export default class auto1AC5e extends ExerciceQcmA {
           "Parmi les quatre propositions, laquelle est un ordre de grandeur de la masse d'une voiture ?",
         bonneReponse: '$1,2\\text{ t}$',
         distracteurs: ['$12\\text{ t}$', '$0,12\\text{ t}$', '$120\\text{ t}$'],
-        correction: `Une voiture pèse environ $1\\,200$ $\\text{kg}$, soit $${miseEnEvidence('1{,}2\\text{ t}')}$.`,
+        correction: `Une voiture pèse environ $1\\,200$ $\\text{kg}$, soit $${miseEnEvidence('1,2\\text{ t}')}$.`,
       },
       {
         enonce:
@@ -200,7 +200,7 @@ export default class auto1AC5e extends ExerciceQcmA {
           '$0,6\\text{ kg}$',
           '$6\\text{ kg}$',
         ],
-        correction: `Un morceau de sucre pèse environ $6$ $\\text{g}$, soit $${miseEnEvidence('0{,}006\\text{ kg}')}$.`,
+        correction: `Un morceau de sucre pèse environ $6$ $\\text{g}$, soit $${miseEnEvidence('0,006\\text{ kg}')}$.`,
       },
       {
         enonce:
@@ -211,7 +211,7 @@ export default class auto1AC5e extends ExerciceQcmA {
           '$0,025\\text{ kg}$',
           '$25\\text{ kg}$',
         ],
-        correction: `Une baguette de pain pèse environ $250$ $\\text{g}$, soit $${miseEnEvidence('0{,}25\\text{ kg}')}$.`,
+        correction: `Une baguette de pain pèse environ $250$ $\\text{g}$, soit $${miseEnEvidence('0,25\\text{ kg}')}$.`,
       },
 
       // ===== CONTENANCES =====
@@ -224,7 +224,7 @@ export default class auto1AC5e extends ExerciceQcmA {
           '$0,033\\text{ L}$',
           '$33\\text{ L}$',
         ],
-        correction: `Une canette de soda contient $33$ $\\text{cL}$, soit $${miseEnEvidence('0{,}33\\text{ L}')}$.`,
+        correction: `Une canette de soda contient $33$ $\\text{cL}$, soit $${miseEnEvidence('0,33\\text{ L}')}$.`,
       },
       {
         enonce:
@@ -244,7 +244,7 @@ export default class auto1AC5e extends ExerciceQcmA {
           "Parmi les quatre propositions, laquelle est un ordre de grandeur de l'épaisseur d'un livre ?",
         bonneReponse: '$0,02\\text{ m}$',
         distracteurs: ['$0,2\\text{ m}$', '$0,002\\text{ m}$', '$2\\text{ m}$'],
-        correction: `Un livre a une épaisseur d'environ $2$ $\\text{cm}$, soit $${miseEnEvidence('0{,}02\\text{ m}')}$.`,
+        correction: `Un livre a une épaisseur d'environ $2$ $\\text{cm}$, soit $${miseEnEvidence('0,02\\text{ m}')}$.`,
       },
       {
         enonce:
@@ -255,7 +255,7 @@ export default class auto1AC5e extends ExerciceQcmA {
           '$0,006\\text{ kg}$',
           '$6\\text{ kg}$',
         ],
-        correction: `Un œuf pèse environ $60$ $\\text{g}$, soit $${miseEnEvidence('0{,}06\\text{ kg}')}$.`,
+        correction: `Un œuf pèse environ $60$ $\\text{g}$, soit $${miseEnEvidence('0,06\\text{ kg}')}$.`,
       },
       {
         enonce:
@@ -266,7 +266,7 @@ export default class auto1AC5e extends ExerciceQcmA {
           '$0,25\\text{ dL}$',
           '$250\\text{ dL}$',
         ],
-        correction: `Un verre d'eau contient environ $25$ $\\text{cL}$, soit $${miseEnEvidence('2{,}5\\text{ dL}')}$.`,
+        correction: `Un verre d'eau contient environ $25$ $\\text{cL}$, soit $${miseEnEvidence('2,5\\text{ dL}')}$.`,
       },
       {
         enonce:
@@ -277,7 +277,7 @@ export default class auto1AC5e extends ExerciceQcmA {
           '$0,015\\text{ hm}$',
           '$15\\text{ hm}$',
         ],
-        correction: `Un immeuble de $5$ étages mesure environ $15$ $\\text{m}$, soit $${miseEnEvidence('0{,}15\\text{ hm}')}$.`,
+        correction: `Un immeuble de $5$ étages mesure environ $15$ $\\text{m}$, soit $${miseEnEvidence('0,15\\text{ hm}')}$.`,
       },
     ]
 

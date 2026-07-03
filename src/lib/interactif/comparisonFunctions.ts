@@ -464,7 +464,7 @@ function handleHMS(saisie: string, goodAnswer: string): ResultType {
 /**
  * Compare deux chaînes de coordonnées (2D ou 3D), en normalisant les formats.
  * Gère : parenthèses, séparateur (;), fractions, décimaux, espaces, etc.
- * Exemples acceptés : (3;3), 3;4, (-3;2{,}5), (\frac35;-frac{2}{5}), 1,2,3
+ * Exemples acceptés : (3;3), 3;4, (-3;2,5), (\frac35;-frac{2}{5}), 1,2,3
  * @author Jean-claude Lhote
  */
 export function handleCoordinates(saisie: string, answer: string): ResultType {
@@ -867,9 +867,9 @@ function handleNombreAvecEspace(saisie: string, answer: string): ResultType {
   let goodAnswerNew = goodAnswerClean.replace(/\s+/g, '') // EE : On enlève tous les espaces s'il y en a.
 
   // Gestion pénible de la virgule ci-dessous dans le cas de plus de 3 chiffres dans la partie décimale.
-  goodAnswerNew = goodAnswerNew.replace('{,}', ',') // EE : On enlève toutes les virgules sous la forme {,} s'il y en a.
+  goodAnswerNew = goodAnswerNew.replace(',', ',') // EE : On enlève toutes les virgules sous la forme , s'il y en a.
   goodAnswerNew = formatNumberWithSpaces(goodAnswerNew) // EE : On rajoute tous les espaces adéquats.
-  goodAnswerNew = goodAnswerNew.replace(',', '{,}') // EE : On rajoute toutes les virgules sous la forme {,} s'il y en a.
+  goodAnswerNew = goodAnswerNew.replace(',', ',') // EE : On rajoute toutes les virgules sous la forme , s'il y en a.
 
   let feedback = ''
   if (inputCleanFirst !== goodAnswerNew && inputClean === goodAnswerClean) {

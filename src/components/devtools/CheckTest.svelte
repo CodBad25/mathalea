@@ -1,52 +1,52 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
   import type { MathfieldElement } from 'mathlive'
-  import Keyboard from '../keyboard/Keyboard.svelte'
-  import { keyboardState } from '../keyboard/stores/keyboardStore'
-  import type { BlockForKeyboard } from '../keyboard/types/keyboardContent'
+  import { onMount } from 'svelte'
+  import type { Check, CompareResult } from '../../lib/interactif/checks'
   import {
     all,
-    seq,
     contains,
-    sameWithUnit,
     coordinatesReduced,
     doesNotContain,
-    isDistributed,
-    isEqual,
     extractedRadicands,
     fractionReducedFromExpected,
     hasGroupedNumberSpacing,
-    intervalBoundsReduced,
-    noSquareRootInDenominator,
-    onlyIrreducibleFractions,
     hasZeroMember,
+    intervalBoundsReduced,
     isDecimalFraction,
-    onlyDecimalNumbers,
+    isDistributed,
+    isEqual,
     isEquation,
     isEquivalentEquation,
     isFraction,
     isPowerForm,
     isReduced,
     isScientificNotation,
-    noNumericComputation,
-    noTrivialFactor,
     noDecimal,
+    noNumericComputation,
+    noSquareRootInDenominator,
     noTrigonometry,
+    noTrivialFactor,
+    onlyDecimalNumbers,
+    onlyIrreducibleFractions,
     sameCoordinates,
-    sameIntegerProgressionSet,
     sameDuration,
+    sameIntegerProgressionSet,
     sameInterval,
     sameNumberList,
     sameNumberTuple,
     sameOrderedNumberList,
     sameParametricLine,
     sameSet,
+    sameWithUnit,
+    seq,
     singleParameterVariable,
     stringEquals,
     termsGrouped,
     valueInInterval,
   } from '../../lib/interactif/checks'
-  import type { Check, CompareResult } from '../../lib/interactif/checks'
+  import Keyboard from '../keyboard/Keyboard.svelte'
+  import { keyboardState } from '../keyboard/stores/keyboardStore'
+  import type { BlockForKeyboard } from '../keyboard/types/keyboardContent'
 
   type CheckKind =
     | 'isEqual'
@@ -291,12 +291,12 @@
       refused: ['\\frac{7}{8}', '0.7'],
     },
     onlyDecimalNumbers: {
-      accepted: ['3{,}14', 'x+2+3{,}14'],
+      accepted: ['3,14', 'x+2+3,14'],
       refused: ['\\frac{314}{100}', '\\sqrt{2}'],
     },
     isScientificNotation: {
-      accepted: ['1{,}357\\times10^3'],
-      refused: ['13{,}57\\times10^2', '1357'],
+      accepted: ['1,357\\times10^3'],
+      refused: ['13,57\\times10^2', '1357'],
     },
     isPowerForm: {
       accepted: ['4^2', 'x^3'],

@@ -46,6 +46,7 @@ import { isHtmlDocumentText } from './httpResponses'
 import { fonctionComparaison } from './interactif/comparisonFunctions'
 import { handleAnswers, setReponse } from './interactif/gestionInteractif'
 import { buildSimpleVersionQcm } from './interactif/qcmBuilder'
+import { optionsKatex } from './latex/Katex'
 import { Complexe } from './mathFonctions/Complexe'
 import { shuffle } from './outils/arrayOutils'
 import { renderScratchDiv } from './renderScratch'
@@ -576,24 +577,13 @@ export function renderDiv(HtmlElement: HTMLElement, _content: string) {
 }
 
 export function renderKatex(element: HTMLElement) {
-  const options = {
-    delimiters: [
-      { left: '\\[', right: '\\]', display: true },
-      { left: '$', right: '$', display: false },
-    ],
-    throwOnError: true,
-    errorColor: '#CC0000',
-    strict: 'warn',
-    trust: false,
-  }
-
   // Ajouter preProcess sans typage strict
-  Object.assign(options, {
+  Object.assign(optionsKatex, {
     preProcess: (chaine: string) =>
       '{' + chaine.replaceAll(String.fromCharCode(160), '\\,') + '}',
   })
 
-  renderMathInElement(element, options as any)
+  renderMathInElement(element, optionsKatex as any)
   document.dispatchEvent(new window.Event('katexRendered'))
 }
 

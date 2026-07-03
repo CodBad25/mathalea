@@ -1,7 +1,7 @@
 import { ComputeEngine, isFunction } from '@cortex-js/compute-engine'
 import { generateCleaner } from '../cleaners'
-import type { Check, CheckOverrides } from './types'
 import { isReduced } from './isReduced'
+import type { Check, CheckOverrides } from './types'
 
 const ce = new ComputeEngine()
 
@@ -41,9 +41,7 @@ function createTextCheck(
 
 function parseFractionParts(value: string): [number, number] | undefined {
   const normalized = cleanBasic(value)
-  const latex = normalized.match(
-    /^(-?)\\[dtc]?frac\{(-?\d+)\}\{(-?\d+)\}$/,
-  )
+  const latex = normalized.match(/^(-?)\\[dtc]?frac\{(-?\d+)\}\{(-?\d+)\}$/)
   if (latex != null) {
     const sign = latex[1] === '-' ? -1 : 1
     return [sign * Number(latex[2]), Number(latex[3])]
@@ -136,11 +134,16 @@ export function onlyDecimalNumbers(options: CheckOverrides = {}): Check {
     'Résultat incorrect car seuls des nombres décimaux ou entiers sont attendus.',
     (saisie) => {
       const normalized = cleanBasic(saisie)
-        .replaceAll('{,}', '.')
+        .replaceAll(',', '.')
         .replaceAll(',', '.')
       if (/\\[dtc]?frac|\\sqrt|(?<=\d)\/(?=\d)/.test(normalized)) return false
-      const numbers = normalized.match(/(?<![A-Za-z\\])[-+]?(?:\d+(?:\.\d*)?|\.\d+)/g)
-      return numbers !== null && numbers.every((value) => Number.isFinite(Number(value)))
+      const numbers = normalized.match(
+        /(?<![A-Za-z\\])[-+]?(?:\d+(?:\.\d*)?|\.\d+)/g,
+      )
+      return (
+        numbers !== null &&
+        numbers.every((value) => Number.isFinite(Number(value)))
+      )
     },
     options,
   )
@@ -152,7 +155,7 @@ export function isScientificNotation(options: CheckOverrides = {}): Check {
     'La réponse doit être écrite en notation scientifique.',
     (saisie) => {
       const normalized = cleanBasic(saisie)
-        .replaceAll('{,}', '.')
+        .replaceAll(',', '.')
         .replaceAll(',', '.')
         .replaceAll('\\cdot', '\\times')
       const mantissaFirst = normalized.match(
@@ -201,7 +204,7 @@ export function hasGroupedNumberSpacing(options: CheckOverrides = {}): Check {
       const format = (value: string) => {
         const normalized = value
           .replaceAll('\\,', ' ')
-          .replaceAll('{,}', ',')
+          .replaceAll(',', ',')
           .replace(/\s+/g, '')
         return normalized.replace(/\b\d+(?:[.,]\d+)?\b/g, (match) => {
           const separator = match.includes(',') ? ',' : '.'
@@ -214,8 +217,10 @@ export function hasGroupedNumberSpacing(options: CheckOverrides = {}): Check {
       }
 
       return (
-        saisie.replaceAll('\\,', ' ').replace(/\s{2,}/g, ' ').trim() ===
-        format(answer).replace(',', '{,}')
+        saisie
+          .replaceAll('\\,', ' ')
+          .replace(/\s{2,}/g, ' ')
+          .trim() === format(answer).replace(',', ',')
       )
     },
     options,

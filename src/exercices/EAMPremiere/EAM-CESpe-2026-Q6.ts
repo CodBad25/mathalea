@@ -23,14 +23,13 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ6CEs2026 extends ExerciceQcmA {
- private appliquerLesValeurs(
+  private appliquerLesValeurs(
     hausse: number,
     ordreInverse: boolean,
     d1?: number,
     d2?: number,
-    d3?: number
+    d3?: number,
   ): void {
-    
     const cmHausse = 1 + hausse / 100
     const cmBaisse = 0.5
     const cmGlobal = cmHausse * cmBaisse
@@ -44,45 +43,45 @@ export default class AutoQ6CEs2026 extends ExerciceQcmA {
     }
 
     // Chaînes de calculs pour la correction
-    const strHausse = `1 + ${texNombre(hausse/100,2)}= ${texNombre(cmHausse, 2)}`
-    const strBaisse = `1 - 0,5 = 0{,}5`
+    const strHausse = `1 + ${texNombre(hausse / 100, 2)}= ${texNombre(cmHausse, 2)}`
+    const strBaisse = `1 - 0,5 = 0,5`
 
     this.correction = `Le coefficient multiplicateur global est égal au produit des coefficients multiplicateurs successifs.<br><br>`
-    
+
     if (!ordreInverse) {
       this.correction += `$\\bullet$ Pour la hausse de $${hausse}\\,\\%$ : $CM_1 = ${strHausse}$<br>`
       this.correction += `$\\bullet$ Pour la baisse de $50\\,\\%$ : $CM_2 = ${strBaisse}$<br>`
-      this.correction += `Le coefficient multiplicateur global est : $CM = CM_1 \\times CM_2 = ${texNombre(cmHausse, 2)} \\times 0{,}5 = ${texNombre(cmGlobal, 3)}$.<br><br>`
+      this.correction += `Le coefficient multiplicateur global est : $CM = CM_1 \\times CM_2 = ${texNombre(cmHausse, 2)} \\times 0,5 = ${texNombre(cmGlobal, 3)}$.<br><br>`
     } else {
       this.correction += `$\\bullet$ Pour la baisse de $50\\,\\%$ : $CM_1 = ${strBaisse}$<br>`
       this.correction += `$\\bullet$ Pour la hausse de $${hausse}\\,\\%$ : $CM_2 = ${strHausse}$<br>`
-      this.correction += `Le coefficient multiplicateur global est : $CM = CM_1 \\times CM_2 = 0{,}5 \\times ${texNombre(cmHausse, 2)} = ${texNombre(cmGlobal, 3)}$.<br>`
+      this.correction += `Le coefficient multiplicateur global est : $CM = CM_1 \\times CM_2 = 0,5 \\times ${texNombre(cmHausse, 2)} = ${texNombre(cmGlobal, 3)}$.<br>`
     }
-    
+
     this.correction += `Le taux d'évolution global est donc : $t = CM - 1 = ${texNombre(cmGlobal, 3)} - 1 = -${texNombre(1 - cmGlobal, 3)}$.<br>`
     this.correction += `Cela correspond donc à une baisse de $${miseEnEvidence(texNombre(reponse, 1) + '\\,\\%')}$.`
 
     // Génération des distracteurs
     const dist1 = d1 ?? Math.abs(50 - hausse) // Piège 1 : Additionner/soustraire les pourcentages
-    const dist2 = d2 ?? 50 + hausse / 2       // Piège 2 : Erreur de signe ou mauvaise base
-    const dist3 = d3 ?? hausse / 2            // Piège 3 : Moitié de la hausse
+    const dist2 = d2 ?? 50 + hausse / 2 // Piège 2 : Erreur de signe ou mauvaise base
+    const dist3 = d3 ?? hausse / 2 // Piège 3 : Moitié de la hausse
 
     // Sécurité pour garantir 3 distracteurs uniques par rapport à la réponse
     const candidates = [dist1, dist2, dist3]
-    const uniqueDists = [...new Set(candidates)].filter(d => d !== reponse)
-    
+    const uniqueDists = [...new Set(candidates)].filter((d) => d !== reponse)
+
     while (uniqueDists.length < 3) {
-       const newD = randint(1, 9) * 10
-       if (newD !== reponse && !uniqueDists.includes(newD)) {
-           uniqueDists.push(newD)
-       }
+      const newD = randint(1, 9) * 10
+      if (newD !== reponse && !uniqueDists.includes(newD)) {
+        uniqueDists.push(newD)
+      }
     }
 
     this.reponses = [
       `$${texNombre(reponse, 1)}\\,\\%$`,
       `$${texNombre(uniqueDists[0], 1)}\\,\\%$`,
       `$${texNombre(uniqueDists[1], 1)}\\,\\%$`,
-      `$${texNombre(uniqueDists[2], 1)}\\,\\%$`
+      `$${texNombre(uniqueDists[2], 1)}\\,\\%$`,
     ]
   }
 
@@ -104,7 +103,7 @@ export default class AutoQ6CEs2026 extends ExerciceQcmA {
     do {
       const h = choice(casHausse)
       const inv = choice([true, false])
-      
+
       this.appliquerLesValeurs(h, inv)
       compteur++
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
@@ -113,6 +112,5 @@ export default class AutoQ6CEs2026 extends ExerciceQcmA {
   constructor() {
     super()
     this.versionAleatoire()
-  
   }
 }

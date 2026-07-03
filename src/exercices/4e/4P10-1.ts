@@ -233,7 +233,7 @@ export default class GraphiquesEtProportionnalite2 extends Exercice {
            ${texteGras('Seconde méthode en calculant une quatrième proportionnelle :')}<br>
          $${situation.qte_max}$ ${situation.unite}  ${situation.articles} coûtent $${texPrix(arrondi(situation.qte_max * situation.prix_unitaire))}$ €
         donc $${situation.qte2}$ ${situation.unite}  ${situation.articles} coûtent : <br> $(${texPrix(arrondi(situation.qte_max * situation.prix_unitaire))}$ € $\\div ${situation.qte_max}$ ${situation.articles} $)\\times (${situation.qte2}$ ${situation.articles})  $= ${texPrix(arrondi(situation.qte2 * situation.prix_unitaire))}$ €<br><br>
-        ${texteEnCouleur(`Quelle que soit la méthode utilisée, ${situation.qte2} ${situation.unite}  ${situation.articles} coûtent ${texPrix(arrondi(situation.qte2 * situation.prix_unitaire)).replace('{,}', ',')} €.`)}
+        ${texteEnCouleur(`Quelle que soit la méthode utilisée, ${situation.qte2} ${situation.unite}  ${situation.articles} coûtent ${texPrix(arrondi(situation.qte2 * situation.prix_unitaire)).replace(',', ',')} €.`)}
         `,
       })
       texte = `${enonces[0].enonce}`

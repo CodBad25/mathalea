@@ -34,10 +34,10 @@ const qcmData = {
       ],
     },
     {
-      enonce: 'Calculer la moyenne des nombres : $13{,}7$ ; $22{,}5$ ; $5{,}8$',
-      reponses: ['$14$', '$42$', '$13{,}7$', '$14{,}33$'],
+      enonce: 'Calculer la moyenne des nombres : $13,7$ ; $22,5$ ; $5,8$',
+      reponses: ['$14$', '$42$', '$13,7$', '$14,33$'],
       corrections: [
-        'Correct ! Moyenne = $\\frac{13{,}7 + 22{,}5 + 5{,}8}{3} = \\frac{42}{3} = 14$',
+        'Correct ! Moyenne = $\\frac{13,7 + 22,5 + 5,8}{3} = \\frac{42}{3} = 14$',
         'Erreur : vous avez oublié de diviser par le nombre de valeurs. $42 \\div 3 = 14$',
         'Erreur : ceci est seulement la première valeur, pas la moyenne des trois',
         'Erreur : vous avez divisé par le mauvais nombre ou fait une erreur de calcul',
@@ -76,12 +76,12 @@ const qcmData = {
     },
     {
       enonce:
-        'Calculer sous forme décimale $B = 4{,}5 \\times 10^1 + 5{,}5 \\times 10^3$',
+        'Calculer sous forme décimale $B = 4,5 \\times 10^1 + 5,5 \\times 10^3$',
       reponses: ['$5\\,545$', '$10$', '$5\\,050$', '$55\\,45$'],
       corrections: [
-        'Correct ! $B = 4{,}5 \\times 10 + 5{,}5 \\times 1000 = 45 + 5500 = 5545$',
+        'Correct ! $B = 4,5 \\times 10 + 5,5 \\times 1000 = 45 + 5500 = 5545$',
         'Erreur : vous avez additionné les coefficients sans tenir compte des puissances de 10',
-        'Erreur : vous avez mal calculé une des multiplications. $5{,}5 \\times 10^3 = 5500$, pas 5000',
+        'Erreur : vous avez mal calculé une des multiplications. $5,5 \\times 10^3 = 5500$, pas 5000',
         'Erreur : vous avez confondu les puissances. $10^1 = 10$ et $10^3 = 1000$',
       ],
     },

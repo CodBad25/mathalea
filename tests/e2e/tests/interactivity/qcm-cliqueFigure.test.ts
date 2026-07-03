@@ -32,9 +32,6 @@ async function test1(page: Page) {
     const [value1, value2] = [premierMembre, secondMembre].map((m) =>
       ce.parse(m).evaluate().N().toString(),
     )
-    console.log(
-      `Égalité ${i + 1}: ${premierMembre} = ${secondMembre} => ${value1} = ${value2}`,
-    )
     status.push(value1 === value2)
   }
   const indexCorrect = status.findIndex((s) => s)
@@ -42,7 +39,6 @@ async function test1(page: Page) {
     .locator('.ex0')
     .locator('input[type="checkbox"]')
     .nth(indexCorrect)
-  await page.pause()
   await checkboxe.check()
 
   await checkFeedback(page, questions)

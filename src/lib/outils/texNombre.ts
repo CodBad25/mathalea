@@ -104,7 +104,7 @@ export function texNombre(
     completerZeros,
     aussiCompleterEntiers,
   )
-  return (result ?? '').replace(',', '{,}').replace(/\s+/g, '\\,')
+  return (result ?? '').replace(/\s+/g, '\\,')
 }
 
 /**
@@ -142,7 +142,7 @@ export function texNombre2(nb: number) {
   if (partieDecimale === '') {
     nombre = partieEntiere
   } else {
-    nombre = partieEntiere + '{,}' + partieDecimale
+    nombre = partieEntiere + ',' + partieDecimale
   }
   return nombre
 }
@@ -169,7 +169,7 @@ export function nombreAvecEspace(nb: number) {
     if (nb > 999 || nombreDeChiffresDansLaPartieDecimale(nb) > 3) {
       result = '\\numprint{' + nb.toString().replace('.', ',') + '}'
     } else {
-      result = Number(nb).toString().replace('.', '{,}')
+      result = Number(nb).toString().replace('.', ',')
     }
     return result
   }

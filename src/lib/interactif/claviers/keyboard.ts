@@ -296,8 +296,8 @@ const shortcutsByKeyboards = {
   default: {
     // D: { mode: 'math', value: 'd' }, // On avait un problème avec la notation D et mathLive
     '*': { mode: 'math', value: '\\times' },
-    '.': { mode: 'math', value: '{,}' },
-    ',': { mode: 'math', value: '{,}' },
+    '.': { mode: 'math', value: ',' },
+    ',': { mode: 'math', value: ',' },
     '%': { mode: 'math', value: '\\%' },
     '²': { mode: 'math', value: '^2' },
     '³': { mode: 'math', value: '^3' },

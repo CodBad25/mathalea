@@ -45,7 +45,7 @@ export const refs = {
 function texProba(proba: number, rationnel: boolean, precision = 3) {
   return rationnel
     ? fraction(arrondi(proba, precision)).toLatex().replace('\\frac', '\\dfrac')
-    : Number(arrondi(proba, precision)).toString().replace('.', '{,}')
+    : Number(arrondi(proba, precision)).toString().replace('.', ',')
 }
 export default class ProbabilitesConditionnelles extends Exercice {
   constructor() {

@@ -1,4 +1,3 @@
-
 import Decimal from 'decimal.js'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
@@ -25,7 +24,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ8FMns2026 extends ExerciceQcmA {
-private appliquerLesValeurs(
+  private appliquerLesValeurs(
     notes: number[],
     repOrigine?: string,
     d1Origine?: string,
@@ -38,13 +37,14 @@ private appliquerLesValeurs(
     let mediane: number
     if (n % 2 === 0) {
       // Les deux valeurs centrales sont garanties d'être identiques par notre constructeur aléatoire
-      mediane = notesTriees[n / 2] 
+      mediane = notesTriees[n / 2]
     } else {
       mediane = notesTriees[Math.floor(n / 2)]
     }
 
     // Traduction de la taille du tableau en toutes lettres pour l'énoncé
-    const nbLettres = n === 5 ? 'cinq' : n === 6 ? 'six' : n === 7 ? 'sept' : 'huit'
+    const nbLettres =
+      n === 5 ? 'cinq' : n === 6 ? 'six' : n === 7 ? 'sept' : 'huit'
 
     this.enonce = `On s'intéresse au confort d'un hôtel.<br>`
     this.enonce += `Les ${nbLettres} dernières notes obtenues sont : $${notes.join('\\,;\\,')}$<br><br>`
@@ -73,7 +73,7 @@ private appliquerLesValeurs(
 
       // Distracteur 1 : La moyenne (on l'arrondit à 1 décimale, puis on reconvertit en number)
       faussesReponses.add(new Decimal(decMean.toFixed(1)).toNumber())
-      
+
       // Distracteur 2 & 3 : Valeurs décimales autour de la médiane
       faussesReponses.add(decMediane.plus(0.5).toNumber())
       faussesReponses.add(decMediane.minus(0.5).toNumber())
@@ -114,7 +114,7 @@ private appliquerLesValeurs(
   }
 
   versionOriginale: () => void = () => {
-    this.appliquerLesValeurs([2, 3, 5, 4, 2, 3], '$3$', '$2$', '$3{,}5$', '$4$')
+    this.appliquerLesValeurs([2, 3, 5, 4, 2, 3], '$3$', '$2$', '$3,5$', '$4$')
   }
 
   versionAleatoire: () => void = () => {
@@ -132,28 +132,27 @@ private appliquerLesValeurs(
         // CAS PAIR : 6 ou 8 valeurs
         const n = choice([6, 8])
         const mediane = randint(2, 4) // Médiane ni trop petite, ni trop grande
-        
+
         // On force les deux valeurs du centre à être strictement identiques
         notes.push(mediane, mediane)
-        
+
         // On répartit équitablement le reste des notes de part et d'autre pour conserver la médiane
         const nbOthers = (n - 2) / 2
         for (let i = 0; i < nbOthers; i++) {
           notes.push(randint(1, mediane)) // Valeurs plus petites ou égales
           notes.push(randint(mediane, 5)) // Valeurs plus grandes ou égales
         }
-        
-        notes = shuffle(notes)
 
+        notes = shuffle(notes)
       } else {
         // CAS IMPAIR : 5 ou 7 valeurs
         const n = choice([5, 7])
         notes = Array.from({ length: n }, () => randint(1, 5))
-        
+
         const notesSorted = [...notes].sort((a, b) => a - b)
         const m = notesSorted[Math.floor(n / 2)]
         if (m === 1 || m === 5) {
-            notes[0] = choice([2, 3, 4])
+          notes[0] = choice([2, 3, 4])
         }
       }
 

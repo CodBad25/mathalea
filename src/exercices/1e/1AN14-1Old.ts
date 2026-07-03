@@ -154,7 +154,7 @@ class DerivationFonctionsUsuelles extends Exercice {
               ),
               `${texNombre(new Decimal(randint(-1000, 1000, 0)).div(100), 2)}${ecritureAlgebriqueSauf1(new Decimal(randint(-1000, 1000, 0)).div(100))}x`,
             ])
-            laDerivee = laFonction.replaceAll('{,}', '.')
+            laDerivee = laFonction.replaceAll(',', '.')
             const derivee1 = laDerivee.match(/-?\d*\.?\d*(-?\+?\d*.?\d*)x/)
             const derivee2 = laDerivee.match(/(-?\d*\.?\d*)x/)
             if (laFonction.charAt(laFonction.length - 1) === 'x') {
@@ -173,7 +173,7 @@ class DerivationFonctionsUsuelles extends Exercice {
             laDerivee = laDerivee.startsWith('+')
               ? laDerivee.substring(1)
               : laDerivee
-            laDerivee = laDerivee.replaceAll('.', '{,}')
+            laDerivee = laDerivee.replaceAll('.', ',')
             correctionDetaillee = `La fonction $${nameF}$ est une fonction affine de la forme $f(x)=ax+b$, sa dérivée est le coefficient $a$.<br>`
           }
           break

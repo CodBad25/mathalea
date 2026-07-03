@@ -1155,7 +1155,7 @@ export class GuideAne extends HTMLElement {
         // Affichage décimal avec virgule française pour LaTeX
         const decimalStr = Number.isInteger(roundedValue)
           ? roundedValue.toString()
-          : roundedValue.toString().replace('.', '{,}')
+          : roundedValue.toString().replace('.', ',')
         return `AD = $${decimalStr}$ cm`
       } else {
         return `AD = $\\dfrac{${this.p * currentAB}}{${this.n}}$ cm`

@@ -1,4 +1,3 @@
-
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -15,7 +14,8 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Calculer un coefficient multiplicateur à partir d\'un pourcentage'
+export const titre =
+  "Calculer un coefficient multiplicateur à partir d'un pourcentage"
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -24,13 +24,13 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ4FMs2026 extends ExerciceQcmA {
- private appliquerLesValeurs(
+  private appliquerLesValeurs(
     p: number,
     reponseFraction: boolean,
     repOrigine?: string,
     d1Origine?: string,
     d2Origine?: string,
-    d3Origine?: string
+    d3Origine?: string,
   ): void {
     this.enonce = `Le prix d'un article augmente de $${p}\\,\\%$.<br>`
     this.enonce += `Cela signifie que le prix de cet article a été multiplié par :`
@@ -45,46 +45,46 @@ export default class AutoQ4FMs2026 extends ExerciceQcmA {
       d2 = d2Origine
       d3 = d3Origine
     } else {
-      const decDecrease = `0{,}${100 - p}` // Ex: 0,85 pour 15% (baisse)
-      const weirdDec = `1{,}1${p}`         // Ex: 1,115 pour 15% (distracteur d)
+      const decDecrease = `0,${100 - p}` // Ex: 0,85 pour 15% (baisse)
+      const weirdDec = `1,1${p}` // Ex: 1,115 pour 15% (distracteur d)
 
       if (reponseFraction) {
         // La bonne réponse attendue est la fraction
         correct = `\\dfrac{${100 + p}}{100}`
-        d1 = `0{,}${p}` // Confusion avec juste l'ajout du taux
+        d1 = `0,${p}` // Confusion avec juste l'ajout du taux
         d2 = decDecrease
         d3 = weirdDec
       } else {
         // La bonne réponse attendue est le nombre décimal
-        correct = `1{,}${p}`
+        correct = `1,${p}`
         d1 = `\\dfrac{${p}}{100}` // Confusion avec la fraction du taux (distracteur a)
         d2 = decDecrease
         d3 = weirdDec
       }
     }
 
-    this.reponses = [
-      `$${correct}$`,
-      `$${d1}$`,
-      `$${d2}$`,
-      `$${d3}$`
-    ]
+    this.reponses = [`$${correct}$`, `$${d1}$`, `$${d2}$`, `$${d3}$`]
 
     // Rédaction adaptative de la correction
     this.correction = `Augmenter le prix d'un article de $${p}\\,\\%$ revient à multiplier le prix par un coefficient multiplicateur égal à : <br>`
-    
+
     if (!reponseFraction) {
       this.correction += `$1+${texNombre(p / 100, 2)} = ${miseEnEvidence(correct)}$.`
     } else {
       this.correction += `$1+${texNombre(p / 100, 2)}= ${texNombre((100 + p) / 100, 2)}$, soit $${miseEnEvidence(correct)}$.<br>`
     }
-    
-
   }
 
   versionOriginale: () => void = () => {
     // Valeurs strictes du sujet de l'image (15% avec décimal)
-    this.appliquerLesValeurs(15, false, '1{,}15', '\\dfrac{15}{100}', '0{,}85', '1{,}115')
+    this.appliquerLesValeurs(
+      15,
+      false,
+      '1,15',
+      '\\dfrac{15}{100}',
+      '0,85',
+      '1,115',
+    )
   }
 
   versionAleatoire: () => void = () => {
@@ -97,7 +97,7 @@ export default class AutoQ4FMs2026 extends ExerciceQcmA {
     do {
       // Pourcentage entre 11 et 19 comme demandé
       const p = randint(11, 19)
-      
+
       // On choisit au hasard si on attend la fraction ou le décimal
       const reponseFraction = choice([true, false])
 

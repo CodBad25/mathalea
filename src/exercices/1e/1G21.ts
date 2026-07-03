@@ -5,9 +5,9 @@ import { Vecteur } from '../../lib/2d/Vecteur'
 import {
   all,
   hasZeroMember,
-  onlyIrreducibleFractions,
   isEquation,
   isEquivalentEquation,
+  onlyIrreducibleFractions,
 } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -197,7 +197,7 @@ export default class nomExercice extends Exercice {
       const { reponse, signature, texte, texteCorr } = question()
       const texteInteractif =
         texte +
-        ajouteChampTexteMathLive(this, i,  KeyboardType.lyceeClassique, {
+        ajouteChampTexteMathLive(this, i, KeyboardType.lyceeClassique, {
           texteAvant: '<br>Une équation cartésienne : ',
           texteApres: '.',
         })
@@ -216,7 +216,7 @@ export default class nomExercice extends Exercice {
         this.listeQuestions[i] = texteInteractif
         this.listeCorrections[i] = texteCorr.replace(
           /\b(\d+)\.(\d+)\b/g,
-          '$1{,}$2',
+          '$1,$2',
         )
         i++
       }

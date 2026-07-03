@@ -212,9 +212,9 @@ export default class SujetCAN2023Quatrieme extends Exercice {
           $D$ : dizaines et $U$ : unités. <br>
           $\\begin{array}{|c|c|c|c|c|c|c|}
               \\hline
-              \\text{\\small{C}} &  \\text{\\small{D}} & \\text{\\small{U}}&  \\Large{\\textbf{,}}& \\text{\\small{Dixièmes}} & \\text{\\small{Centièmes}} & \\text{\\small{Millièmes}}${context.isHtml ? '\\\\' : '\\tabularnewline'}
+              \\text{\\small{C}} &  \\text{\\small{D}} & \\text{\\small{U}}&  \\Large{\\textbf,}& \\text{\\small{Dixièmes}} & \\text{\\small{Centièmes}} & \\text{\\small{Millièmes}}${context.isHtml ? '\\\\' : '\\tabularnewline'}
               \\hline
-              ${a}&${b}&${c} & \\Large{\\textbf{,}}& ${d}&${e}& ${f}${context.isHtml ? '\\\\' : '\\tabularnewline'}
+              ${a}&${b}&${c} & \\Large{\\textbf,}& ${d}&${e}& ${f}${context.isHtml ? '\\\\' : '\\tabularnewline'}
               \\hline
               \\end{array}
               $
