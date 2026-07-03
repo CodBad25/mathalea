@@ -280,6 +280,7 @@ export function loadPackagesFromContent(contents: contentsType) {
   testIfLoaded(['\\contour'], '\\usepackage{contour}', contents)
   testIfLoaded(['\\twemoji'], '\\usepackage{twemojis}', contents)
   testIfLoaded(['ifthenelse'], '\\usepackage{ifthen}', contents)
+  testIfLoaded(['adjustbox'], '\\usepackage{adjustbox}', contents)
   testIfLoaded(
     ['pspicture', '\\rput', '\\pscurve', '\\psset', '\\psframe'],
     '\\usepackage{pstricks}',
