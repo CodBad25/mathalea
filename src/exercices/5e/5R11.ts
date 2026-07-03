@@ -1,7 +1,9 @@
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { labelPoint } from '../../lib/2d/textes'
+import { latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
+import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
@@ -21,8 +23,6 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Lire l'abscisse relative d'un point"
 export const interactifReady = true
@@ -205,7 +205,12 @@ export default class LireAbscisseRelative extends Exercice {
       const A = pointAbstrait(changeCoord(abs1, abs0, pas1), 0, l1, 'above')
       const B = pointAbstrait(changeCoord(abs2, abs0, pas1), 0, l2, 'above')
       const C = pointAbstrait(changeCoord(abs3, abs0, pas1), 0, l3, 'above')
-      objets.push(tracePoint(A, B, C), labelPoint(A, B, C))
+      objets.push(tracePoint(A, B, C))
+      objets.push(
+        latex2d(A.nom, A.x, A.y + 0.5, {}),
+        latex2d(B.nom, B.x, B.y + 0.5, {}),
+        latex2d(C.nom, C.x, C.y + 0.5, {}),
+      )
 
       let texte = mathalea2d(
         {
@@ -314,41 +319,50 @@ export default class LireAbscisseRelative extends Exercice {
           scale: 0.75,
           zoom: 1.5,
         },
-        droiteGraduee({
-          Unite: 3 * pas1,
-          Min: abs0,
-          Max: abs0 + 6.9 / pas1,
-          x: abs0,
-          y: 0,
-          thickSecDist: 1 / pas2 / pas1,
-          thickSec: !estEntier,
-          axeEpaisseur: 1,
-          thickEpaisseur: 1,
-          labelsPrincipaux: !estEntier,
-          thickDistance: 1 / pas1,
-          labelPointTaille: 8,
-          labelPointLargeur: 0, // ce paramètre ne sert plus
-          pointListe: [
-            [abs1, l1],
-            [abs2, l2],
-            [abs3, l3],
-          ],
-          labelListe: estEntier
-            ? ([
-                [0, '0'],
-                [1, '1'],
-                [abs1, texNombre(abs1, precision)],
-                [abs2, texNombre(abs2, precision)],
-                [abs3, texNombre(abs3, precision)],
-              ] as [number, string][])
-            : ([
-                [abs1, texNombre(abs1, precision)],
-                [abs2, texNombre(abs2, precision)],
-                [abs3, texNombre(abs3, precision)],
-              ] as [number, string][]),
-          labelDistance: 0.7,
-          labelCustomDistance: 1.2,
-        }),
+        [
+          droiteGraduee({
+            Unite: 3 * pas1,
+            Min: abs0,
+            Max: abs0 + 6.9 / pas1,
+            x: abs0,
+            y: 0,
+            thickSecDist: 1 / pas2 / pas1,
+            thickSec: !estEntier,
+            axeEpaisseur: 1,
+            thickEpaisseur: 1,
+            labelsPrincipaux: !estEntier,
+            thickDistance: 1 / pas1,
+            labelPointTaille: 8,
+            labelPointLargeur: 0, // ce paramètre ne sert plus
+            labelListe: estEntier
+              ? ([
+                  [0, '0'],
+                  [1, '1'],
+                ] as [number, string][])
+              : [],
+            labelDistance: 0.7,
+            labelCustomDistance: 1.2,
+          }),
+          tracePoint(A, B, C),
+          latex2d(A.nom, A.x, A.y + 0.5, {}),
+          latex2d(B.nom, B.x, B.y + 0.5, {}),
+          latex2d(C.nom, C.x, C.y + 0.5, {}),
+          latex2d(texNombre(abs1, precision), A.x, A.y - 1.2, {
+            letterSize: 'small',
+            color: orangeMathalea,
+            gras: true,
+          }),
+          latex2d(texNombre(abs2, precision), B.x, B.y - 1.2, {
+            letterSize: 'small',
+            color: orangeMathalea,
+            gras: true,
+          }),
+          latex2d(texNombre(abs3, precision), C.x, C.y - 1.2, {
+            letterSize: 'small',
+            color: orangeMathalea,
+            gras: true,
+          }),
+        ],
       )
 
       this.listeQuestions.push(texte)
