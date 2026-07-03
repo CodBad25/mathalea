@@ -54,7 +54,7 @@ export const amcType = 'AMCHybride'
 export const uuid = '37e3e'
 
 export const refs = {
-  'fr-fr': ['5G41'],
+  'fr-fr': [],
   'fr-ch': ['9ES4-5'],
 }
 export default class ConstructionsParallelogrammesParticuliers extends Exercice {

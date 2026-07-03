@@ -39,7 +39,7 @@ export const titre = 'Utiliser le vocabulaire des triangles'
 export const uuid = 'c3781'
 
 export const refs = {
-  'fr-fr': ['5G20-1'],
+  'fr-fr': [],
   'fr-ch': ['9ES2-7'],
 }
 export default class VocabulaireDesTriangles extends Exercice {
