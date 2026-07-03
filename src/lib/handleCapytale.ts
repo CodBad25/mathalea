@@ -1,4 +1,5 @@
 import { RPC } from '@mixer/postmessage-rpc'
+import seedrandom from 'seedrandom'
 // eslint-disable-next-line import-x/no-duplicates
 import { tick } from 'svelte'
 // eslint-disable-next-line import-x/no-duplicates
@@ -6,9 +7,16 @@ import { get } from 'svelte/store'
 
 import type {
   Activity,
+  IExercice,
+  IExerciceStatique,
   InterfaceResultExercice,
   QuestionResult,
 } from '../lib/types'
+import { context } from '../modules/context'
+import {
+  mathaleaGetExercicesFromParams,
+  mathaleaHandleExerciceSimple,
+} from './mathalea'
 import {
   mathaleaGoToView,
   mathaleaWriteStudentPreviousAnswers,
@@ -454,8 +462,60 @@ function sendToCapytaleActivityParams() {
   return { exercicesParams: params, globalOptions: options, canOptions }
 }
 
+/**
+ * Expose le contenu généré des exercices (énoncés et corrections) à la plateforme hôte.
+ * Le contenu est régénéré à partir de la graine (alea) de chaque exercice :
+ * il est donc identique à ce que l'élève a vu, y compris en mode review.
+ */
+async function sendToCapytaleExerciseContent() {
+  const params = get(exercicesParams)
+  const exercices = await mathaleaGetExercicesFromParams(params)
+  const content = []
+  for (const exercice of exercices) {
+    if (exercice.typeExercice === 'statique') {
+      const exStatique = exercice as IExerciceStatique
+      content.push({
+        uuid: exStatique.uuid,
+        id: exStatique.uuid,
+        titre: '',
+        seed: undefined,
+        questions: [
+          {
+            enonce: exStatique.content,
+            correction: exStatique.contentCorr,
+          },
+        ],
+      })
+      continue
+    }
+    const ex = exercice as IExercice
+    // Génération HTML non interactive avec la graine de l'exercice (même recette que la vue AMC)
+    context.isHtml = true
+    context.isAmc = false
+    ex.interactif = false
+    if (ex.seed !== undefined) seedrandom(ex.seed, { global: true })
+    if (ex.typeExercice === 'simple') {
+      mathaleaHandleExerciceSimple(ex, false)
+    } else if (typeof ex.nouvelleVersionWrapper === 'function') {
+      ex.nouvelleVersionWrapper()
+    }
+    content.push({
+      uuid: ex.uuid,
+      id: ex.id,
+      titre: ex.titre,
+      seed: ex.seed,
+      questions: (ex.listeQuestions ?? []).map((enonce, i) => ({
+        enonce,
+        correction: ex.listeCorrections?.[i] ?? '',
+      })),
+    })
+  }
+  return content
+}
+
 export default async function handleCapytale() {
   rpc.expose('platformGetActivityParams', sendToCapytaleActivityParams)
+  rpc.expose('getExerciseContent', sendToCapytaleExerciseContent)
   try {
     const activityParams = await rpc.call<ActivityParams>(
       'toolGetActivityParams',
