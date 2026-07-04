@@ -76,7 +76,7 @@ function replaceThinSpaces(str: string): string {
  * @param {string} str
  */
 function cleanComas(str: string): string {
-  return replaceThinSpaces(replaceUnescapedCommas(str.replaceAll(/\,/g, '.')))
+  return replaceThinSpaces(replaceUnescapedCommas(str))
 }
 /**
  * Supprime tous les espaces "classiques" et les espaces LaTeX d'une chaîne.
