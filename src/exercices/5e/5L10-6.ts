@@ -630,9 +630,22 @@ export default class perimetreVersFormule extends Exercice {
       const nombreCerclesRayon = [0, 0]
       const nombreCerclesDiametre = [0, 0]
       let listeFigures: string[] = []
+      type DictDraw =
+        | typeof drawRectangle
+        | typeof drawTriangle
+        | typeof drawHexagone
+        | typeof drawTrapeze
+        | typeof drawCercle
+        | typeof drawQuartCercle
+        | typeof drawDemiCercle
+        | typeof drawRectangleDemiCercle
+
       const dictDraw: Record<
         string,
-        { f: Function; params: Record<string, any> }
+        {
+          f: DictDraw
+          params: Record<string, any>
+        }
       > = {
         rectangle01: {
           f: drawRectangle,
@@ -828,9 +841,10 @@ export default class perimetreVersFormule extends Exercice {
 
       for (let iFigure = 0; iFigure < nombreFigures; iFigure++) {
         const selectDraw = listeFigures[iFigure]
+        const params = dictDraw[selectDraw].params
 
         const dictDrawValue = dictDraw[selectDraw]
-        x = dictDrawValue.f(x + espaceEntreFigures, dictDrawValue.params)
+        x = dictDrawValue.f(x + espaceEntreFigures, params as any)
         nombreCotes[0] += dictDrawValue.params.n[0]
         nombreCotes[1] += dictDrawValue.params.n[1]
         nombreCerclesRayon[0] += dictDrawValue.params.ncr[0]
