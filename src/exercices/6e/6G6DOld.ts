@@ -119,8 +119,6 @@ export default class ExerciceAnglesTrianglesOld extends Exercice {
     this.spacing = 2
     this.nbQuestions = 5
     this.correctionDetailleeDisponible = true
-    this.nbCols = 2
-    this.nbColsCorr = 2
   }
 
   nouvelleVersion() {
