@@ -1269,11 +1269,7 @@ function handleFraction(
   answer: string,
   options: OptionsComparaisonType,
 ): ResultType {
-  const clean = generateCleaner([
-    'espaces',
-    'virgules',
-    'fractionsMemesNegatives',
-  ])
+  const clean = generateCleaner(['virgules', 'fractionsMemesNegatives'])
   const sFrac = parseFractionLatex(clean(saisie))
 
   if (
@@ -1309,14 +1305,14 @@ function handleFraction(
       )
     }
 
-    return mathEqual(parse(clean(saisie)), parse(cleanGoodAnswer))
+    return mathEqual(parse(saisie), parse(cleanGoodAnswer))
       ? ok()
       : fail(
           `C'est bien une fraction irréductible mais pas égale à celle attendue.`,
         )
   }
 
-  if (!mathEqual(parse(saisie), parse(clean(answer))))
+  if (!mathEqual(parse(saisie), parse(answer)))
     return fail(`Cette fraction n'est pas égale à celle attendue.`)
 
   if (options.fractionDecimale) {
@@ -1364,9 +1360,8 @@ function handleFraction(
   }
 
   // options.fractionEgale
-  return mathEqual(parse(clean(saisie)), parse(clean(answer))) ? ok() : fail()
+  return mathEqual(parse(saisie), parse(answer)) ? ok() : fail()
 }
-
 /*
 function handleFractionIrreductible(
   saisie: string,
