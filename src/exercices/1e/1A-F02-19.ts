@@ -135,10 +135,7 @@ export default class AutoF2s extends ExerciceQcmA {
 
       this.appliquerLesValeurs({ a, x1, x2 })
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

@@ -164,10 +164,7 @@ export default class AutoF1f extends ExerciceQcmA {
         `$${distracteur3.texFractionSimplifiee}$`, // Erreur sur x²
       ]
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

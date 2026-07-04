@@ -5,6 +5,7 @@ import { droite } from '../../lib/2d/droites'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -17,7 +18,6 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
-import { bleuMathalea } from '../../lib/colors'
 /**
  * @author Gilles Mora
  *
@@ -166,10 +166,7 @@ export default class Auto1AF2p extends ExerciceQcmA {
       const ordOrigine = randint(1, 3)
       this.appliquerLesValeurs(frac[0], frac[1], abs, ordOrigine)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

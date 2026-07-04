@@ -109,7 +109,7 @@ Le nombre ${de}${personnes} venant ${moyensTransport2} est :`
     } while (
       this.versionQcm &&
       compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
+      !aLeBonNombreDePropsDifferentes(this, 4, true)
     )
   }
 }

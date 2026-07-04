@@ -32,11 +32,12 @@ export default class AutoQ9ANs2026 extends ExerciceQcmA {
     let faux3 = ''
 
     switch (cas) {
-      case 1: // 
+      case 1: //
         enonceExpr = '\\dfrac{2 \\times 3^2}{27 \\times 2^3}'
         et1 = '\\dfrac{2^1 \\times 3^2}{3^3 \\times 2^3}'
         et2 = '\\dfrac{2^1}{2^3} \\times \\dfrac{3^2}{3^3}'
-        et3 = '\\dfrac{1}{2^2} \\times \\dfrac{1}{3^1} = \\dfrac{1}{4} \\times \\dfrac{1}{3}'
+        et3 =
+          '\\dfrac{1}{2^2} \\times \\dfrac{1}{3^1} = \\dfrac{1}{4} \\times \\dfrac{1}{3}'
         repJuste = '\\dfrac{1}{12}'
         faux1 = '\\dfrac{1}{9}'
         faux2 = '12'
@@ -46,7 +47,8 @@ export default class AutoQ9ANs2026 extends ExerciceQcmA {
         enonceExpr = '\\dfrac{3 \\times 2^2}{8 \\times 3^2}'
         et1 = '\\dfrac{3^1 \\times 2^2}{2^3 \\times 3^2}'
         et2 = '\\dfrac{2^2}{2^3} \\times \\dfrac{3^1}{3^2}'
-        et3 = '\\dfrac{1}{2^1} \\times \\dfrac{1}{3^1} = \\dfrac{1}{2} \\times \\dfrac{1}{3}'
+        et3 =
+          '\\dfrac{1}{2^1} \\times \\dfrac{1}{3^1} = \\dfrac{1}{2} \\times \\dfrac{1}{3}'
         repJuste = '\\dfrac{1}{6}'
         faux1 = '\\dfrac{1}{12}'
         faux2 = '6'
@@ -115,7 +117,7 @@ export default class AutoQ9ANs2026 extends ExerciceQcmA {
     }
 
     this.enonce = `On considère le nombre réel : $E = ${enonceExpr}$. On peut affirmer que $E$ est égal à :`
-    
+
     this.correction = `On utilise les règles de calcul sur les puissances pour simplifier l'expression :<br>
     $\\begin{aligned}
     E &= ${enonceExpr}\\\\
@@ -126,16 +128,10 @@ export default class AutoQ9ANs2026 extends ExerciceQcmA {
     \\end{aligned}$`
 
     // Le premier élément est la bonne réponse, l'aléatoire mélangera l'ordre à l'affichage
-    this.reponses = [
-      `$${repJuste}$`,
-      `$${faux1}$`,
-      `$${faux2}$`,
-      `$${faux3}$`
-    ]
+    this.reponses = [`$${repJuste}$`, `$${faux1}$`, `$${faux2}$`, `$${faux3}$`]
   }
 
   versionOriginale: () => void = () => {
-  
     this.appliquerLesValeurs(1)
   }
 
@@ -150,10 +146,7 @@ export default class AutoQ9ANs2026 extends ExerciceQcmA {
       const cas = choice([1, 2, 3, 4, 5, 6, 7, 8])
       this.appliquerLesValeurs(cas)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

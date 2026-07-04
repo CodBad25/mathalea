@@ -118,10 +118,7 @@ Ainsi, le nouveau prix est donné par : $${miseEnEvidence(`${texNombre(prixIniti
 
       this.appliquerLesValeurs(prixInitial, pourcentage)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
-    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {

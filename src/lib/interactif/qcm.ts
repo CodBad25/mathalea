@@ -30,8 +30,7 @@ import { lettreDepuisChiffre } from '../outils/outilString'
 import { shuffleJusquaWithIndexes } from '../qcmCam'
 import type { ButtonWithMathaleaListener } from '../types/can'
 import { afficheScore } from './afficheScore'
-import { generateCleaner } from './cleaners'
-import ce, { fonctionComparaison } from './comparisonFunctions'
+import ce from './comparisonFunctions'
 
 export function guessOptionsForReponses(
   reponses: string[],
@@ -591,7 +590,6 @@ export function aLeBonNombreDePropsDifferentes(
   exercice: any,
   nombreSouhaite: number, // le nombre de réponses différentes que l'on devrait avoir (bonne réponse + distracteurs)
   test = true, // Mettre à true pour ne pas afficher de notifications, utilisé dans l'exo pour tester l'aléatoire sans alerter l'utilisateur à chaque fois que ça ne marche pas
-  options?: OptionsComparaisonType,
 ): boolean {
   let reponses: string[]
   if (exercice instanceof ExerciceQcm) {
@@ -626,66 +624,23 @@ export function aLeBonNombreDePropsDifferentes(
       )
     return false
   }
-  // Si options n'est pas fourni, on tente de le deviner automatiquement
-
-  const cleaner = generateCleaner([
-    'virgules',
-    'espaceNormal',
-    'fractions',
-    'parentheses',
-    'mathrm',
-    'operatorName',
-    'accolades',
-  ])
-
-  reponses = reponses
-    .map((s: string) =>
-      cleaner(s)
-        .replace(/\\,/g, '')
-        .replaceAll(/\\backslash/g, '\\')
-        .replace('S=', '')
-        .replace('S = ', '')
-        .replace('x\\longmapsto', ''),
-    )
-    .map((s: string) =>
-      options && 'texteAvecCasse' in options ? s : s.toLowerCase(),
-    )
-  const opts =
-    options && Object.keys(options).length > 0
-      ? options
-      : exercice.optionsDeComparaison || guessOptionsForReponses(reponses)
 
   const doublons = []
-  // On compare des expressions littérales qui peuvent être différentes mais équivalentes
+  // La comparaison des différents éléments se fait en comparant des strings.
   let doublonsTrouvés = false
   let nbReponsesDifferentes = reponses.length
   for (let i = 0; i < reponses.length - 1; i++) {
-    let reponse = reponses[i]
-    if (opts.unite) {
-      try {
-        const g = Grandeur.fromString(reponse)
-        reponse = `${g.mesure} \\operatorname{${g.uniteDeReference}}`
-      } catch (e) {
-        // Si on n'arrive pas à parser la grandeur, on laisse la réponse telle quelle et on verra si elle est considérée comme un doublon ou pas. Mieux vaut risquer un faux positif de doublon que de rater un doublon parce qu'on n'a pas réussi à parser la grandeur.
-      }
-    }
     for (let j = i + 1; j < reponses.length; ) {
-      const compare = exercice.compare || fonctionComparaison
-      const result = compare(
-        reponse,
-        opts.unite
-          ? reponses[j].replace(/\\text\{([^}]*)\}/g, ' $1') // Virer les \text{} qui peuvent gêner la comparaison des unités, par exemple "\text{ m}" -> m
-          : reponses[j],
-        opts,
-      )
-      if (result.isOk) {
+      if (
+        reponses[i].toLowerCase().trim() === reponses[j].toLowerCase().trim()
+      ) {
         if (i === 0) {
           exercice.reponses[j] = 'doublon de la bonne réponse'
         } else {
           exercice.reponses[j] = `doublon de la réponse à l'indice ${i}`
         }
         doublons.push(
-          `à l'indice ${i} j'ai ${reponse} et à l'indice ${j} j'ai ${reponses[j]}, je supprime la réponse à l'indice ${j} et je garde celle à l'indice ${i}`,
+          `à l'indice ${i} j'ai ${reponses[i]} et à l'indice ${j} j'ai ${reponses[j]}, je supprime la réponse à l'indice ${j} et je garde celle à l'indice ${i}`,
         )
         doublonsTrouvés = true
         nbReponsesDifferentes--
