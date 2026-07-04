@@ -6,6 +6,7 @@ import { latexParPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { rotation } from '../../lib/2d/transformations'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
@@ -19,8 +20,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Calculer périmètre et/ou aire de disques'
 export const interactifReady = true
@@ -148,18 +147,18 @@ export default class PerimetreAireDisques extends Exercice {
       if (this.sup === 1) {
         this.consigne =
           this.nbQuestions > 1
-            ? 'Calculer le périmètre (en$\\text{cm}$) des disques suivants.'
-            : 'Calculer le périmètre (en$\\text{cm}$) du disque suivant.'
+            ? 'Calculer le périmètre (en $\\text{cm}$) des disques suivants.'
+            : 'Calculer le périmètre (en $\\text{cm}$) du disque suivant.'
       } else if (this.sup === 2) {
         this.consigne =
           this.nbQuestions > 1
-            ? "Calculer l'aire (en$\\text{cm}^2$) des disques suivants."
-            : "Calculer l'aire (en$\\text{cm}^2$) du disque suivant."
+            ? "Calculer l'aire (en $\\text{cm}^2$) des disques suivants."
+            : "Calculer l'aire (en $\\text{cm}^2$) du disque suivant."
       } else {
         this.consigne =
           this.nbQuestions > 1
-            ? "Calculer le périmètre (en$\\text{cm}$) et l'aire (en$\\text{cm}^2$) des disques suivants."
-            : "Calculer le périmètre (en$\\text{cm}$) et l'aire (en$\\text{cm}^2$) du disque suivant."
+            ? "Calculer le périmètre (en $\\text{cm}$) et l'aire (en $\\text{cm}^2$) des disques suivants."
+            : "Calculer le périmètre (en $\\text{cm}$) et l'aire (en $\\text{cm}^2$) du disque suivant."
       }
       reponseL1 = this.sup === 2 ? 0 : arrondi(2 * r, 2)
       reponseL2 =
