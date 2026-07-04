@@ -86,10 +86,7 @@ export default class AmeriqueSud1224Ex1Q4 extends ExerciceQcmA {
       const nbTours = produitNbDentsNbTours / petiteRoue
       this.appliquerLesValeurs(nb1, nb2, nbTours)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 3, true, { texteSansCasse: true })
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 3, true))
   }
 
   constructor() {

@@ -1,13 +1,13 @@
 import Decimal from 'decimal.js'
+import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-import ExerciceQcmA from '../ExerciceQcmA'
-import { randint } from '../../modules/outils'
-import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { mathalea2d } from '../../modules/mathalea2d'
 import { Arbre } from '../../modules/arbres'
+import { mathalea2d } from '../../modules/mathalea2d'
+import { randint } from '../../modules/outils'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = 'bbdca'
 export const refs = {
@@ -27,12 +27,12 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ11CEns2026 extends ExerciceQcmA {
-appliquerLesValeurs = (
+  appliquerLesValeurs = (
     numA: number,
     numB_A: number,
     numB_NotA: number,
     xEstBarre: boolean,
-    yEstBarre: boolean
+    yEstBarre: boolean,
   ) => {
     const rationnel = false
 
@@ -61,7 +61,12 @@ appliquerLesValeurs = (
           visible: false,
           enfants: [
             new Arbre({ rationnel, nom: 'B', proba: pB_A.toNumber() }),
-            new Arbre({ rationnel, nom: '\\bar B', proba: pNotB_A.toNumber(),  visible: false }),
+            new Arbre({
+              rationnel,
+              nom: '\\bar B',
+              proba: pNotB_A.toNumber(),
+              visible: false,
+            }),
           ],
         }),
         new Arbre({
@@ -69,8 +74,17 @@ appliquerLesValeurs = (
           nom: '\\bar A',
           proba: pNotA.toNumber(),
           enfants: [
-            new Arbre({ rationnel, nom: 'B', proba: pB_NotA.toNumber(),  visible: false }),
-            new Arbre({ rationnel, nom: '\\bar B', proba: pNotB_NotA.toNumber() }),
+            new Arbre({
+              rationnel,
+              nom: 'B',
+              proba: pB_NotA.toNumber(),
+              visible: false,
+            }),
+            new Arbre({
+              rationnel,
+              nom: '\\bar B',
+              proba: pNotB_NotA.toNumber(),
+            }),
           ],
         }),
       ],
@@ -91,9 +105,13 @@ appliquerLesValeurs = (
     // Réponse exacte
     const resAns = pY_X
 
-    this.enonce = "Soient $A$ et $B$ deux événements.<br>On donne l'arbre de probabilités ci-dessous :<br>"
+    this.enonce =
+      "Soient $A$ et $B$ deux événements.<br>On donne l'arbre de probabilités ci-dessous :<br>"
     this.enonce += mathalea2d(
-      Object.assign({ display: 'inline', scale: 0.5 } as const, fixeBordures(objets)),
+      Object.assign(
+        { display: 'inline', scale: 0.5 } as const,
+        fixeBordures(objets),
+      ),
       objets,
     )
     this.enonce += `<br>On peut alors affirmer que $P_{${texX}}(${texY})$ est égale à :`
@@ -121,12 +139,17 @@ P_{${texX}}(${texY}) &= 1 - P_{${texX}}(${texYbar})\\\\
     const d3 = pB_A // lit l'autre conditionnelle affichée : P_A(B)
 
     const distracteurs = [texNombre(d1), texNombre(d2), texNombre(d3)]
-    const distracteursUniques = [...new Set(distracteurs)].filter(d => d !== texNombre(resAns))
+    const distracteursUniques = [...new Set(distracteurs)].filter(
+      (d) => d !== texNombre(resAns),
+    )
 
     // Filet de sécurité : garantir 3 distracteurs uniques
     while (distracteursUniques.length < 3) {
       const texVal = texNombre(new Decimal(randint(1, 9)).div(10))
-      if (texVal !== texNombre(resAns) && !distracteursUniques.includes(texVal)) {
+      if (
+        texVal !== texNombre(resAns) &&
+        !distracteursUniques.includes(texVal)
+      ) {
         distracteursUniques.push(texVal)
       }
     }
@@ -177,11 +200,11 @@ P_{${texX}}(${texY}) &= 1 - P_{${texX}}(${texYbar})\\\\
       compteur++
     } while (
       compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, this.reponses.length)
+      !aLeBonNombreDePropsDifferentes(this, this.reponses.length, true)
     )
   }
 
-  constructor () {
+  constructor() {
     super()
     this.versionAleatoire()
     this.spacingCorr = 2

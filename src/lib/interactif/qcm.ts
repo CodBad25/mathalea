@@ -631,9 +631,7 @@ export function aLeBonNombreDePropsDifferentes(
   let nbReponsesDifferentes = reponses.length
   for (let i = 0; i < reponses.length - 1; i++) {
     for (let j = i + 1; j < reponses.length; ) {
-      if (
-        reponses[i].toLowerCase().trim() === reponses[j].toLowerCase().trim()
-      ) {
+      if (reponses[i].trim() === reponses[j].trim()) {
         if (i === 0) {
           exercice.reponses[j] = 'doublon de la bonne réponse'
         } else {

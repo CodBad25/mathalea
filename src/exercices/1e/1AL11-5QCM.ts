@@ -74,9 +74,7 @@ La raison est donc $${miseEnEvidence(`r=${r}.`)}$ `
       compteur++
     } while (
       compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, nombreSouhaites, true, {
-        avecFractions: true,
-      })
+      !aLeBonNombreDePropsDifferentes(this, nombreSouhaites, true)
     )
   }
 
