@@ -9,10 +9,7 @@ import {
   vi,
 } from 'vitest'
 import { createURL } from '../../src/lib/createURL'
-import {
-  aLeBonNombreDePropsDifferentes,
-  guessOptionsForReponses,
-} from '../../src/lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../src/lib/interactif/qcm'
 import { clearDOM } from './helpers/domSimulator'
 import { discoverExercises, loadExercise } from './helpers/exerciseLoader'
 import {
@@ -382,19 +379,10 @@ for (const [dir, entries] of grouped) {
               ].length
             }
             if (isQcm) {
-              const options =
-                exercice.optionsDeComparaison ||
-                guessOptionsForReponses(
-                  (exercice as any).reponses ?? [
-                    String((exercice as any).reponse),
-                    ...((exercice as any).distracteurs ?? []).map(String),
-                  ],
-                )
               const ok = aLeBonNombreDePropsDifferentes(
                 exercice,
                 expectedQcmCount,
                 true,
-                options,
               )
               if (!ok) {
                 failures.push(
