@@ -12,10 +12,10 @@ import {
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
+import { bleuMathalea } from '../../lib/colors'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
-import { bleuMathalea } from '../../lib/colors'
 /**
  * @author Gilles Mora
  *
@@ -305,12 +305,7 @@ export default class Auto1AF076 extends ExerciceQcmA {
       const typeP = choice(['pos', 'neg', 'nul']) as 'pos' | 'neg' | 'nul'
       this.appliquerLesValeurs(signeM, typeP)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {
-        egaliteExpression: true,
-      })
-    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {

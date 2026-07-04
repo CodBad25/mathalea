@@ -45,10 +45,7 @@ export default class Auto1AC3c extends ExerciceQcmA {
       const a = randint(2, 4)
       this.appliquerLesValeurs(a, k)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true })
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

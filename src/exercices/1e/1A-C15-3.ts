@@ -94,10 +94,7 @@ La fraction de la dépense totale que Alice doit donner à Louis est donc $${mis
         `$${f.produitFraction(d).texFraction}$`,
       ]
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { fractionEgale: true })
-    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)

@@ -112,10 +112,7 @@ export default class VitesseEtDistance extends ExerciceQcmA {
         : choice([[20, [1, 9, 11]]])
       this.appliquerLesValeurs(vitesse, diviseurMultiple)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { HMS: true })
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
