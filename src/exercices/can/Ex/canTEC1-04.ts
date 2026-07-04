@@ -178,9 +178,7 @@ export default class Complexes1 extends ExerciceQcmA {
       }
     } while (
       compteur++ < 100 &&
-      aLeBonNombreDePropsDifferentes(this.reponses, 4, true, {
-        expressionNumerique: true,
-      })
+      aLeBonNombreDePropsDifferentes(this.reponses, 4, true)
     )
   }
 

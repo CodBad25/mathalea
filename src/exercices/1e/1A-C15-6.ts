@@ -71,13 +71,7 @@ Le montant de l'abonnement mensuel est donc de $${miseEnEvidence(abo + sp(1) + '
 
       this.appliquerLesValeurs(prixH, nbreSeance1, nbreSeance2, abo)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, false, {
-        unite: true,
-        precisionUnite: 0,
-      })
-    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, false)) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {
