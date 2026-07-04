@@ -8,7 +8,7 @@ import Question7 from '../EAMPremiere/EAM-PolynesieSpecifique-2026-Q7'
 import Question8 from '../EAMPremiere/EAM-PolynesieSpecifique-2026-Q8'
 import MetaExercice from '../MetaExerciceCan'
 
-export const titre = 'Polynésie spécifique'
+export const titre = 'Polynésie Sans Spécialité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'psp26'
