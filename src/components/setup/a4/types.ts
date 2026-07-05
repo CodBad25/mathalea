@@ -47,7 +47,10 @@ export interface A4Options {
   showCorrection: boolean
   /** Nombre de versions du sujet (données aléatoires différentes) */
   nbVersions: number
+  /** Niveau de zoom (en %) utilisé quand zoomMode vaut 'fixed' */
   zoom: number
+  /** 'fixed' : zoom manuel ; 'width'/'page' : zoom recalculé pour adapter la page à l'espace disponible */
+  zoomMode: 'fixed' | 'width' | 'page'
 }
 
 export const defaultA4Options: A4Options = {
@@ -62,6 +65,7 @@ export const defaultA4Options: A4Options = {
   showCorrection: false,
   nbVersions: 1,
   zoom: 100,
+  zoomMode: 'fixed',
 }
 
 /**

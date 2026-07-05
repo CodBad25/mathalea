@@ -18,7 +18,7 @@
   } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
   import { isLocalStorageAvailable } from '../../../lib/stores/storage'
-  import type { IExercice } from '../../../lib/types'
+  import type { IExercice, InterfaceParams } from '../../../lib/types'
   import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
@@ -37,6 +37,8 @@
   const MM_TO_PX = 96 / 25.4
   const PAGE_WIDTH_MM = 210
   const PAGE_HEIGHT_MM = 297
+  const PAGE_WIDTH_PX = PAGE_WIDTH_MM * MM_TO_PX
+  const PAGE_HEIGHT_PX = PAGE_HEIGHT_MM * MM_TO_PX
   const COLUMN_GAP_MM = 6
   const FOOTER_MM = 8
   const HEADER_GAP_MM = 4
@@ -152,6 +154,10 @@
   let galleySubjectHeaderEl: HTMLDivElement
   let galleyCorrectionHeaderEl: HTMLDivElement
   let pagesEl: HTMLDivElement
+  let previewAreaEl: HTMLDivElement
+  /** Espace disponible (px) pour la page dans la zone d'aperçu, hors zoom */
+  let previewWidthPx = 0
+  let previewHeightPx = 0
 
   $: settingsExercise =
     settingsExerciseIndex !== null
@@ -161,9 +167,32 @@
   $: columnWidthMm =
     (contentWidthMm - (options.columns - 1) * COLUMN_GAP_MM) / options.columns
 
+  /** Zoom (%) réellement appliqué : fixe, ou calculé pour adapter la page */
+  $: computedZoomPercent =
+    options.zoomMode === 'fixed'
+      ? options.zoom
+      : (() => {
+          const widthRatio =
+            previewWidthPx > 0
+              ? (previewWidthPx / PAGE_WIDTH_PX) * 100
+              : options.zoom
+          if (options.zoomMode === 'width') return widthRatio
+          const heightRatio =
+            previewHeightPx > 0
+              ? (previewHeightPx / PAGE_HEIGHT_PX) * 100
+              : widthRatio
+          return Math.min(widthRatio, heightRatio)
+        })()
+  /** Valeur du <select> de zoom : le pourcentage fixe, ou le mode d'adaptation */
+  $: zoomSelectValue =
+    options.zoomMode === 'fixed' ? String(options.zoom) : options.zoomMode
+  $: if (!isLoading && previewAreaEl != null) measurePreviewArea()
+
   const versionLetter = (version: number) => String.fromCharCode(65 + version)
 
-  onMount(async () => {
+  /** (Re)construit les exercices à partir du store exercicesParams */
+  async function loadExercises() {
+    isLoading = true
     const results = await Promise.allSettled(buildExercisesList())
     exercises = results.map((result) =>
       result.status === 'fulfilled' ? result.value : null,
@@ -173,6 +202,27 @@
     }
     isLoading = false
     await refreshLayout(true)
+  }
+
+  /**
+   * Mesure l'espace disponible (hors zoom) dans la zone d'aperçu, pour les
+   * modes d'adaptation automatique (largeur / page entière).
+   */
+  function measurePreviewArea() {
+    if (previewAreaEl == null) return
+    const rect = previewAreaEl.getBoundingClientRect()
+    const style = getComputedStyle(previewAreaEl)
+    const paddingX = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)
+    const paddingTop = parseFloat(style.paddingTop)
+    const paddingBottom = parseFloat(style.paddingBottom)
+    previewWidthPx = previewAreaEl.clientWidth - paddingX
+    previewHeightPx = window.innerHeight - rect.top - paddingTop - paddingBottom
+  }
+
+  onMount(() => {
+    loadExercises()
+    window.addEventListener('resize', measurePreviewArea)
+    return () => window.removeEventListener('resize', measurePreviewArea)
   })
 
   onDestroy(() => {
@@ -612,6 +662,19 @@
     scheduleRefresh(false, 500)
   }
 
+  /** Choix dans le <select> de zoom : pourcentage fixe ou mode d'adaptation */
+  function onZoomSelectChange(event: Event) {
+    const value = (event.currentTarget as HTMLSelectElement).value
+    if (value === 'width' || value === 'page') {
+      options.zoomMode = value
+    } else {
+      options.zoomMode = 'fixed'
+      options.zoom = Number(value)
+    }
+    measurePreviewArea()
+    persist()
+  }
+
   function resetHeader() {
     docTitle = DEFAULT_TITLE
     headerLine = DEFAULT_HEADER_LINE
@@ -761,8 +824,8 @@
     scheduleRefresh(true, 0)
   }
 
-  /** Nouvelles données aléatoires pour l'exercice d'indice k */
-  function newData(k: number) {
+  /** Nouvelle graine pour l'exercice d'indice k (sans rafraîchir) */
+  function applyNewSeedTo(k: number) {
     const exercise = exercises[k]
     if (exercise == null) return
     exercise.seed = undefined
@@ -770,9 +833,21 @@
     const params = get(exercicesParams)[k]
     if (params != null && exercise.seed !== undefined) {
       params.alea = exercise.seed
-      exercicesParams.update((list) => list)
     }
     clearCustomContentFor(k)
+  }
+
+  /** Nouvelles données aléatoires pour l'exercice d'indice k */
+  function newData(k: number) {
+    applyNewSeedTo(k)
+    exercicesParams.update((list) => list)
+    refreshLayout(true)
+  }
+
+  /** Nouvelles données aléatoires pour tous les exercices de la fiche */
+  function newDataForAll() {
+    for (const k of exercises.keys()) applyNewSeedTo(k)
+    exercicesParams.update((list) => list)
     refreshLayout(true)
   }
 
@@ -871,17 +946,113 @@
           PAGE_HEIGHT_MM,
         )
       }
-      const filename =
-        docTitle
-          .trim()
-          .replace(/[^\p{L}\p{N} _-]/gu, '')
-          .replace(/\s+/g, '_') || 'fiche-a4'
-      pdf.save(`${filename}.pdf`)
+      pdf.save(`${exportFilename()}.pdf`)
     } catch (error) {
       console.error("Erreur lors de l'export PDF", error)
     } finally {
       isGeneratingPdf = false
     }
+  }
+
+  /** Nom de fichier dérivé du titre de la fiche (PDF et JSON) */
+  function exportFilename() {
+    return (
+      docTitle
+        .trim()
+        .replace(/[^\p{L}\p{N} _-]/gu, '')
+        .replace(/\s+/g, '_') || 'fiche-a4'
+    )
+  }
+
+  /**
+   * Sauvegarde JSON autonome de la fiche : liste des exercices (uuid,
+   * graines, réglages) et tout l'état propre à la vue A4, y compris les
+   * énoncés modifiés. Rechargeable via le bouton voisin.
+   */
+  function exportJson() {
+    const data = {
+      format: 'mathalea-a4',
+      version: 1,
+      exercicesParams: get(exercicesParams),
+      options,
+      docTitle,
+      headerLine,
+      breaksBefore,
+      textBlocksBefore,
+      exOverrides,
+      customContent,
+    }
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: 'application/json',
+    })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `${exportFilename()}.json`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
+  let importInputEl: HTMLInputElement
+
+  async function importJson(event: Event) {
+    const input = event.currentTarget as HTMLInputElement
+    const file = input.files?.[0]
+    input.value = '' // permet de recharger deux fois de suite le même fichier
+    if (file == null) return
+    try {
+      const parsed = JSON.parse(await file.text())
+      if (
+        parsed?.format !== 'mathalea-a4' ||
+        !Array.isArray(parsed.exercicesParams)
+      ) {
+        throw new Error('format de fiche A4 inattendu')
+      }
+      await applyImportedSheet(parsed)
+    } catch (error) {
+      console.error('Fichier de fiche A4 illisible', error)
+      window.alert("Ce fichier n'est pas une fiche A4 MathALÉA valide.")
+    }
+  }
+
+  /** Remplace toute la fiche courante par celle du fichier importé */
+  async function applyImportedSheet(parsed: Record<string, unknown>) {
+    clearTimeout(refreshTimer)
+    editing = null
+    settingsExerciseIndex = null
+    isPageSettingsOpen = false
+    clearHover()
+    for (const exercise of exercises) {
+      exercise?.reinit?.()
+      exercise?.destroy?.()
+    }
+    exercises = []
+    options = { ...defaultA4Options, ...((parsed.options as object) ?? {}) }
+    docTitle =
+      typeof parsed.docTitle === 'string' ? parsed.docTitle : DEFAULT_TITLE
+    headerLine =
+      typeof parsed.headerLine === 'string'
+        ? parsed.headerLine
+        : DEFAULT_HEADER_LINE
+    breaksBefore = Array.isArray(parsed.breaksBefore)
+      ? parsed.breaksBefore.filter((k): k is number => typeof k === 'number')
+      : []
+    textBlocksBefore =
+      parsed.textBlocksBefore != null &&
+      typeof parsed.textBlocksBefore === 'object'
+        ? (parsed.textBlocksBefore as Record<number, string>)
+        : {}
+    exOverrides =
+      parsed.exOverrides != null && typeof parsed.exOverrides === 'object'
+        ? (parsed.exOverrides as Record<number, A4ExerciseOverrides>)
+        : {}
+    customContent =
+      parsed.customContent != null && typeof parsed.customContent === 'object'
+        ? (parsed.customContent as Record<string, string>)
+        : {}
+    headerVersion++ // recrée les champs contenteditable avec le nouveau texte
+    exercicesParams.set(parsed.exercicesParams as InterfaceParams[])
+    await loadExercises()
   }
 
   function handleUnitHover(unit: A4UnitData) {
@@ -981,13 +1152,15 @@
         <i class="bx bx-zoom-in text-xl"></i>
         <select
           class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-          bind:value={options.zoom}
-          on:change={persist}
+          value={zoomSelectValue}
+          on:change={onZoomSelectChange}
         >
-          <option value={50}>50 %</option>
-          <option value={75}>75 %</option>
-          <option value={100}>100 %</option>
-          <option value={130}>130 %</option>
+          <option value="50">50 %</option>
+          <option value="75">75 %</option>
+          <option value="100">100 %</option>
+          <option value="130">130 %</option>
+          <option value="width">Adapter à la largeur</option>
+          <option value="page">Adapter à la page</option>
         </select>
       </label>
 
@@ -1001,7 +1174,43 @@
         Réglages
       </button>
 
+      <button
+        type="button"
+        title="Nouvelles données aléatoires pour tous les exercices"
+        class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+        on:click={newDataForAll}
+      >
+        <i class="bx bx-refresh text-xl"></i>
+        Nouvelles données
+      </button>
+
       <div class="grow"></div>
+
+      <button
+        type="button"
+        title="Sauvegarder la fiche (fichier JSON)"
+        aria-label="Sauvegarder la fiche (fichier JSON)"
+        class="flex items-center text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+        on:click={exportJson}
+      >
+        <i class="bx bx-save text-2xl"></i>
+      </button>
+      <button
+        type="button"
+        title="Recharger une fiche (fichier JSON)"
+        aria-label="Recharger une fiche (fichier JSON)"
+        class="flex items-center text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+        on:click={() => importInputEl.click()}
+      >
+        <i class="bx bx-upload text-2xl"></i>
+      </button>
+      <input
+        type="file"
+        accept="application/json,.json"
+        class="hidden"
+        bind:this={importInputEl}
+        on:change={importJson}
+      />
 
       <ButtonTextAction
         text={isGeneratingPdf ? 'PDF en cours...' : 'Télécharger le PDF'}
@@ -1026,8 +1235,12 @@
   {:else}
     <div
       class="a4-preview-area overflow-auto px-4 py-6"
-      style="zoom: {isGeneratingPdf ? 1 : options.zoom / 100}"
+      bind:this={previewAreaEl}
     >
+      <div
+        class="a4-zoom-wrapper"
+        style="zoom: {isGeneratingPdf ? 1 : computedZoomPercent / 100}"
+      >
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div class="a4-pages" bind:this={pagesEl} on:mouseleave={clearHover}>
         {#key layoutVersion}
@@ -1336,6 +1549,7 @@
             {/each}
           {/each}
         {/key}
+      </div>
       </div>
     </div>
   {/if}
@@ -1845,9 +2059,11 @@
       min-height: 0;
     }
     .a4-preview-area {
-      zoom: 1 !important;
       overflow: visible !important;
       padding: 0 !important;
+    }
+    .a4-zoom-wrapper {
+      zoom: 1 !important;
     }
     .a4-pages {
       gap: 0 !important;

@@ -24,6 +24,7 @@
         console.error('Erreur de rendu dans la vue A4', error)
       }
       applySvgZoom(node, svgZoom ?? 1)
+      fitWideContent(node)
     }
     render(content)
     return {
@@ -63,6 +64,38 @@
         if (Number.isFinite(top)) label.style.top = `${top * zoom}px`
         if (Number.isFinite(left)) label.style.left = `${left * zoom}px`
       }
+    }
+  }
+
+  /**
+   * Réduit (transform: scale) les blocs plus larges que la colonne —
+   * tableaux, formules KaTeX en display, blocs Scratch, figures mathalea2d —
+   * pour que rien ne dépasse en mode multi-colonnes. La hauteur de mise en
+   * page perdue par le transform (qui ne l'affecte pas) est compensée par une
+   * marge négative, pour que la mesure de pagination reste exacte. Le HTML
+   * étant réinjecté brut à chaque rendu, la réduction ne se cumule jamais.
+   * offsetWidth/scrollWidth (et non getBoundingClientRect) : insensibles au
+   * zoom CSS de l'aperçu.
+   * Pour mathalea2d, on scale le wrapper (.svgContainer > div) et non le SVG
+   * (pas de max-width CSS) : les étiquettes .divLatex sont positionnées en px
+   * absolus dans ce wrapper, seul un scale de l'ensemble les garde alignées.
+   */
+  function fitWideContent(node: HTMLElement) {
+    const available = node.clientWidth
+    if (available <= 0) return
+    for (const el of node.querySelectorAll<HTMLElement>(
+      'table, .katex-display, .scratchblocks, .svgContainer > div',
+    )) {
+      // déjà réduit via un ancêtre (tableau imbriqué, formule dans un tableau)
+      if (el.parentElement?.closest('[data-a4-fit]') != null) continue
+      const width = Math.max(el.offsetWidth, el.scrollWidth)
+      if (width <= available + 1) continue
+      const ratio = available / width
+      const height = el.offsetHeight
+      el.dataset.a4Fit = ''
+      el.style.transform = `scale(${ratio})`
+      el.style.transformOrigin = 'top left'
+      el.style.marginBottom = `${-height * (1 - ratio)}px`
     }
   }
 </script>
@@ -110,10 +143,9 @@
     color: #666666;
     font-style: italic;
   }
-  .a4-unit :global(svg.mathalea2d) {
-    max-width: 100%;
-    height: auto;
-  }
+  /* Pas de max-width sur svg.mathalea2d : un rétrécissement CSS du seul SVG
+     désalignerait les étiquettes .divLatex ; fitWideContent scale le wrapper
+     entier à la place. */
   .a4-unit :global(img) {
     max-width: 100%;
   }
