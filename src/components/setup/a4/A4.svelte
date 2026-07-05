@@ -49,12 +49,16 @@
     'Nom : ______________________    Prénom : ______________________    Classe : ______'
   /** Padding de base (em) sous chaque question, multiplié par l'espacement choisi */
   const QUESTION_PADDING_EM = 0.55
+  /** Padding de base (em) au-dessus de chaque exercice, multiplié par l'espacement choisi */
+  const EXERCISE_GAP_EM = 0.9
 
   let options: A4Options = { ...defaultA4Options }
   let docTitle = DEFAULT_TITLE
   let headerLine = DEFAULT_HEADER_LINE
   /** Indices des exercices avant lesquels un saut de colonne est imposé */
   let breaksBefore: number[] = []
+  /** Indices des exercices fusionnés avec le précédent (numérotation continue) */
+  let mergesBefore: number[] = []
   /** Blocs de texte libres insérés au-dessus d'un exercice (source `$...$`) */
   let textBlocksBefore: Record<number, string> = {}
   /** Réglages A4 propres à chaque exercice (zoom des figures, espacement...) */
@@ -95,6 +99,9 @@
     } else if (Array.isArray(parsed.breaksAfterExercise)) {
       // ancien format : saut APRÈS l'exercice k = saut AVANT l'exercice k+1
       breaksBefore = parsed.breaksAfterExercise.map((k: number) => k + 1)
+    }
+    if (Array.isArray(parsed.mergesBefore)) {
+      mergesBefore = parsed.mergesBefore
     }
     if (
       parsed.textBlocksBefore != null &&
@@ -198,6 +205,44 @@
 
   const versionLetter = (version: number) => String.fromCharCode(65 + version)
 
+  /** Styles de texte communs aux pages et à la galée de mesure */
+  $: textStyle =
+    (options.fontFamily === 'verdana'
+      ? 'font-family: Verdana, sans-serif;'
+      : options.fontFamily === 'opendyslexic'
+        ? "font-family: 'OpenDyslexic', Verdana, sans-serif;"
+        : '') + (options.doubleWordSpacing ? ' word-spacing: 0.25em;' : '')
+
+  const escapeHtml = (text: string) =>
+    text
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+
+  /**
+   * Référence affichée pour l'exercice k : celle du référentiel, sauf si le
+   * professeur l'a modifiée (chaîne vide = référence effacée).
+   */
+  function exerciseRef(k: number): string {
+    const overridden = exOverrides[k]?.ref
+    if (overridden !== undefined) return overridden
+    return get(exercicesParams)[k]?.id ?? ''
+  }
+
+  /** Titre de l'exercice k : « Exercice 2 », suivi de sa référence si demandé.
+   * La référence n'est pas affichée pour un groupe d'exercices fusionnés
+   * (le titre couvre plusieurs exercices aux références différentes). */
+  function exerciseTitleHtml(k: number, number: number, withRef = true): string {
+    let html = `${options.exerciseLabel} ${number}`
+    if (withRef && options.showExerciseRefs) {
+      const ref = exerciseRef(k).trim()
+      if (ref.length > 0) {
+        html += ` <span class="a4-exo-ref">${escapeHtml(ref)}</span>`
+      }
+    }
+    return html
+  }
+
   /** (Re)construit les exercices à partir du store exercicesParams */
   async function loadExercises() {
     isLoading = true
@@ -262,9 +307,59 @@
     }
   }
 
+  /**
+   * Fusions d'exercices — option globale ou fusions locales (menu « + »).
+   * Les exercices fusionnés avec le précédent forment des groupes : le titre
+   * n'apparaît que sur la tête du groupe et la numérotation des questions
+   * continue à l'intérieur du groupe. Les mêmes décalages servent au sujet
+   * et au corrigé pour qu'ils restent alignés même si un exercice n'a pas
+   * de correction.
+   */
+  function computeMergeLayout(): {
+    /** L'exercice k est fusionné avec le précédent (pas de titre) */
+    merged: boolean[]
+    /** L'exercice k fait partie d'un groupe fusionné (numérotation forcée) */
+    grouped: boolean[]
+    /** Numéro (0-based) de la première question de l'exercice k dans son groupe */
+    offsets: number[]
+    /** Numéro affiché (1-based) du groupe de l'exercice k */
+    titleNumbers: number[]
+  } {
+    const merged = exercises.map(
+      (_, k) => k > 0 && (options.mergeExercises || mergesBefore.includes(k)),
+    )
+    const grouped = exercises.map(
+      (_, k) => merged[k] || (merged[k + 1] ?? false),
+    )
+    const offsets: number[] = []
+    const titleNumbers: number[] = []
+    let questionCounter = 0
+    let titleCounter = 0
+    for (const [k, exercise] of exercises.entries()) {
+      if (!merged[k]) {
+        questionCounter = 0
+        titleCounter++
+      }
+      offsets.push(questionCounter)
+      titleNumbers.push(titleCounter)
+      if (exercise == null) continue
+      if (
+        exercise.typeExercice != null &&
+        exercise.typeExercice.includes('html')
+      ) {
+        continue
+      }
+      if (exercise.listeAvecNumerotation === false) continue
+      questionCounter += exercise.listeQuestions?.length ?? 0
+    }
+    return { merged, grouped, offsets, titleNumbers }
+  }
+
   /** Unités du sujet (énoncés) pour l'état courant des exercices */
   function buildUnits(idPrefix: string): A4UnitData[] {
     const list: A4UnitData[] = []
+    const exerciseGapEm = EXERCISE_GAP_EM * options.exerciseSpacing
+    const { merged, grouped, offsets, titleNumbers } = computeMergeLayout()
     for (const [k, exercise] of exercises.entries()) {
       const overrides = exOverrides[k] ?? {}
       const svgZoom = overrides.svgZoom ?? 1
@@ -287,12 +382,13 @@
         })
         continue
       }
-      if (options.showExerciseTitles) {
+      if (options.showExerciseTitles && !merged[k]) {
         list.push({
           id: `${idPrefix}${k}-title`,
           exerciseIndex: k,
           kind: 'title',
-          html: `${options.exerciseLabel} ${k + 1}`,
+          html: exerciseTitleHtml(k, titleNumbers[k], !grouped[k]),
+          style: `padding-top: ${exerciseGapEm}em;`,
         })
       }
       if (
@@ -324,9 +420,13 @@
         })
       }
       const questions = exercise.listeQuestions ?? []
-      const numbered =
-        questions.length > 1 && exercise.listeAvecNumerotation !== false
-      const paddingEm = QUESTION_PADDING_EM * (overrides.spacing ?? 1)
+      // Dans un groupe fusionné, toutes les questions sont numérotées (même
+      // celles d'un exercice à question unique) pour une suite continue
+      const numbered = grouped[k]
+        ? exercise.listeAvecNumerotation !== false
+        : questions.length > 1 && exercise.listeAvecNumerotation !== false
+      const paddingEm =
+        QUESTION_PADDING_EM * (overrides.spacing ?? options.questionSpacing)
       for (const [i, question] of questions.entries()) {
         const questionId = `${idPrefix}${k}-q-${i}`
         const questionSource =
@@ -334,7 +434,8 @@
           mathaleaFormatExercice(question).replaceAll('{zoomFactor}', '1')
         let html = questionSource
         if (numbered) {
-          html = `<span class="a4-question-number">${i + 1}.</span> ${html}`
+          const number = (offsets[k] ?? 0) + i + 1
+          html = `<span class="a4-question-number">${number}.</span> ${html}`
         }
         list.push({
           id: questionId,
@@ -347,12 +448,26 @@
         })
       }
     }
+    // Les titres portent l'espace entre exercices ; pour un exercice qui
+    // commence sans titre (numérotation masquée, exercice fusionné),
+    // l'espace est ajouté au-dessus de sa première unité
+    let previousExercise: number | null = null
+    for (const [index, unit] of list.entries()) {
+      const hasTitle =
+        options.showExerciseTitles && !merged[unit.exerciseIndex]
+      if (index > 0 && unit.exerciseIndex !== previousExercise && !hasTitle) {
+        unit.style = `padding-top: ${exerciseGapEm}em; ${unit.style ?? ''}`
+      }
+      previousExercise = unit.exerciseIndex
+    }
     return list
   }
 
   /** Unités du corrigé pour l'état courant des exercices */
   function buildCorrectionUnits(idPrefix: string): A4UnitData[] {
     const list: A4UnitData[] = []
+    const exerciseGapEm = EXERCISE_GAP_EM * options.exerciseSpacing
+    const { merged, grouped, offsets, titleNumbers } = computeMergeLayout()
     for (const [k, exercise] of exercises.entries()) {
       if (exercise == null) continue
       if (
@@ -365,13 +480,18 @@
       if (corrections.length === 0) continue
       const overrides = exOverrides[k] ?? {}
       const svgZoom = overrides.svgZoom ?? 1
-      // Le titre est toujours affiché dans le corrigé pour identifier l'exercice
-      list.push({
-        id: `${idPrefix}${k}-title`,
-        exerciseIndex: k,
-        kind: 'title',
-        html: `${options.exerciseLabel} ${k + 1}`,
-      })
+      // Le titre est toujours affiché dans le corrigé pour identifier
+      // l'exercice — sauf pour un exercice fusionné avec le précédent,
+      // où les numéros continus s'en chargent
+      if (!merged[k]) {
+        list.push({
+          id: `${idPrefix}${k}-title`,
+          exerciseIndex: k,
+          kind: 'title',
+          html: exerciseTitleHtml(k, titleNumbers[k], !grouped[k]),
+          style: `padding-top: ${exerciseGapEm}em;`,
+        })
+      }
       if (
         exercise.consigneCorrection != null &&
         exercise.consigneCorrection.length > 0
@@ -389,8 +509,9 @@
           svgZoom,
         })
       }
-      const numbered =
-        corrections.length > 1 && exercise.listeAvecNumerotation !== false
+      const numbered = grouped[k]
+        ? exercise.listeAvecNumerotation !== false
+        : corrections.length > 1 && exercise.listeAvecNumerotation !== false
       for (const [i, correction] of corrections.entries()) {
         const correctionId = `${idPrefix}${k}-q-${i}`
         const correctionSource =
@@ -398,7 +519,8 @@
           mathaleaFormatExercice(correction).replaceAll('{zoomFactor}', '1')
         let html = correctionSource
         if (numbered) {
-          html = `<span class="a4-question-number">${i + 1}.</span> ${html}`
+          const number = (offsets[k] ?? 0) + i + 1
+          html = `<span class="a4-question-number">${number}.</span> ${html}`
         }
         list.push({
           id: correctionId,
@@ -410,6 +532,19 @@
           svgZoom,
         })
       }
+    }
+    // Un exercice fusionné commence sans titre : l'espace entre exercices
+    // est ajouté au-dessus de sa première unité
+    let previousExercise: number | null = null
+    for (const [index, unit] of list.entries()) {
+      if (
+        index > 0 &&
+        unit.exerciseIndex !== previousExercise &&
+        merged[unit.exerciseIndex]
+      ) {
+        unit.style = `padding-top: ${exerciseGapEm}em; ${unit.style ?? ''}`
+      }
+      previousExercise = unit.exerciseIndex
     }
     return list
   }
@@ -635,6 +770,7 @@
       docTitle,
       headerLine,
       breaksBefore,
+      mergesBefore,
       textBlocksBefore,
       exOverrides,
       customContent,
@@ -690,12 +826,18 @@
       ...options,
       pageFormat: defaultA4Options.pageFormat,
       orientation: defaultA4Options.orientation,
+      fontFamily: defaultA4Options.fontFamily,
       showHeader: defaultA4Options.showHeader,
       showFooter: defaultA4Options.showFooter,
       showExerciseTitles: defaultA4Options.showExerciseTitles,
+      showExerciseRefs: defaultA4Options.showExerciseRefs,
       exerciseLabel: defaultA4Options.exerciseLabel,
+      mergeExercises: defaultA4Options.mergeExercises,
       marginHMm: defaultA4Options.marginHMm,
       marginVMm: defaultA4Options.marginVMm,
+      questionSpacing: defaultA4Options.questionSpacing,
+      exerciseSpacing: defaultA4Options.exerciseSpacing,
+      doubleWordSpacing: defaultA4Options.doubleWordSpacing,
     }
     docTitle = DEFAULT_TITLE
     headerLine = DEFAULT_HEADER_LINE
@@ -805,6 +947,18 @@
   }
 
   /**
+   * Fusionne/sépare l'exercice k avec celui qui le précède : plus de titre
+   * pour k et la numérotation des questions continue à la suite.
+   */
+  function toggleMergeBefore(k: number) {
+    insertMenuExercise = null
+    mergesBefore = mergesBefore.includes(k)
+      ? mergesBefore.filter((i) => i !== k)
+      : [...mergesBefore, k]
+    refreshLayout(true)
+  }
+
+  /**
    * Oublie les énoncés personnalisés d'un exercice : quand son contenu est
    * regénéré (nouvelles données, changement de réglages), le texte d'origine
    * qui avait été modifié n'existe plus.
@@ -899,11 +1053,12 @@
       ;[copy[k], copy[target]] = [copy[target], copy[k]]
       return copy
     })
-    // Les réglages, blocs de texte et sauts suivent leur exercice
+    // Les réglages, blocs de texte, sauts et fusions suivent leur exercice
     const swap = (i: number) => (i === k ? target : i === target ? k : i)
     exOverrides = remapNumericRecord(exOverrides, swap)
     textBlocksBefore = remapNumericRecord(textBlocksBefore, swap)
     breaksBefore = breaksBefore.map(swap)
+    mergesBefore = mergesBefore.map(swap)
     remapCustomContent(swap)
     hoveredExercise = null
     insertMenuExercise = null
@@ -921,6 +1076,9 @@
     exOverrides = remapNumericRecord(exOverrides, shift)
     textBlocksBefore = remapNumericRecord(textBlocksBefore, shift)
     breaksBefore = breaksBefore
+      .filter((i) => i !== k)
+      .map((i) => (i > k ? i - 1 : i))
+    mergesBefore = mergesBefore
       .filter((i) => i !== k)
       .map((i) => (i > k ? i - 1 : i))
     remapCustomContent(shift)
@@ -1004,6 +1162,7 @@
       docTitle,
       headerLine,
       breaksBefore,
+      mergesBefore,
       textBlocksBefore,
       exOverrides,
       customContent,
@@ -1062,6 +1221,9 @@
         : DEFAULT_HEADER_LINE
     breaksBefore = Array.isArray(parsed.breaksBefore)
       ? parsed.breaksBefore.filter((k): k is number => typeof k === 'number')
+      : []
+    mergesBefore = Array.isArray(parsed.mergesBefore)
+      ? parsed.mergesBefore.filter((k): k is number => typeof k === 'number')
       : []
     textBlocksBefore =
       parsed.textBlocksBefore != null &&
@@ -1277,7 +1439,7 @@
                 <section
                   class="a4-page"
                   class:a4-page-correction={section.kind === 'correction'}
-                  style="width: {PAGE_WIDTH_MM}mm; height: {PAGE_HEIGHT_MM}mm; padding: {options.marginVMm}mm {options.marginHMm}mm; font-size: {options.fontSizePt}pt;"
+                  style="width: {PAGE_WIDTH_MM}mm; height: {PAGE_HEIGHT_MM}mm; padding: {options.marginVMm}mm {options.marginHMm}mm; font-size: {options.fontSizePt}pt; {textStyle}"
                 >
                   {#if pageIndex === 0}
                     {#if section.kind === 'subject' && (options.showHeader || options.nbVersions > 1)}
@@ -1415,6 +1577,28 @@
                                             ? 'Retirer le saut de colonne'
                                             : 'Saut de colonne'}
                                         </button>
+                                        {#if !options.mergeExercises}
+                                          <button
+                                            type="button"
+                                            on:click={() =>
+                                              toggleMergeBefore(
+                                                unit.exerciseIndex,
+                                              )}
+                                          >
+                                            <i
+                                              class="bx {mergesBefore.includes(
+                                                unit.exerciseIndex,
+                                              )
+                                                ? 'bx-unlink'
+                                                : 'bx-link'}"
+                                            ></i>
+                                            {mergesBefore.includes(
+                                              unit.exerciseIndex,
+                                            )
+                                              ? "Séparer de l'exercice précédent"
+                                              : "Fusionner avec l'exercice précédent"}
+                                          </button>
+                                        {/if}
                                       {/if}
                                       <button
                                         type="button"
@@ -1476,6 +1660,28 @@
                                             ? 'Retirer le saut de colonne'
                                             : 'Saut de colonne'}
                                         </button>
+                                        {#if !options.mergeExercises}
+                                          <button
+                                            type="button"
+                                            on:click={() =>
+                                              toggleMergeBefore(
+                                                unit.exerciseIndex,
+                                              )}
+                                          >
+                                            <i
+                                              class="bx {mergesBefore.includes(
+                                                unit.exerciseIndex,
+                                              )
+                                                ? 'bx-unlink'
+                                                : 'bx-link'}"
+                                            ></i>
+                                            {mergesBefore.includes(
+                                              unit.exerciseIndex,
+                                            )
+                                              ? "Séparer de l'exercice précédent"
+                                              : "Fusionner avec l'exercice précédent"}
+                                          </button>
+                                        {/if}
                                       {/if}
                                       <button
                                         type="button"
@@ -1591,7 +1797,7 @@
   <div class="a4-galley" aria-hidden="true">
     <div
       bind:this={galleyEl}
-      style="width: {columnWidthMm}mm; font-size: {options.fontSizePt}pt;"
+      style="width: {columnWidthMm}mm; font-size: {options.fontSizePt}pt; {textStyle}"
     >
       {#each sections as section, sectionIndex}
         {#each section.units as unit (unit.id)}
@@ -1601,7 +1807,9 @@
         {/each}
       {/each}
     </div>
-    <div style="width: {contentWidthMm}mm; font-size: {options.fontSizePt}pt;">
+    <div
+      style="width: {contentWidthMm}mm; font-size: {options.fontSizePt}pt; {textStyle}"
+    >
       {#if options.showHeader || options.nbVersions > 1}
         <div bind:this={galleySubjectHeaderEl}>
           <header class="a4-doc-header">
@@ -1701,6 +1909,61 @@
           </div>
         </div>
 
+        <label class="flex items-center justify-between gap-4 text-sm">
+          Police
+          <select
+            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={options.fontFamily}
+            on:change={() => scheduleRefresh(false, 0)}
+          >
+            <option value="default">Police par défaut</option>
+            <option value="verdana">Verdana</option>
+            <option value="opendyslexic">OpenDyslexic</option>
+          </select>
+        </label>
+
+        <label class="flex items-center gap-2 text-sm cursor-pointer">
+          <input
+            type="checkbox"
+            bind:checked={options.doubleWordSpacing}
+            on:change={() => scheduleRefresh(false, 0)}
+          />
+          Doubler l'espacement entre les mots
+        </label>
+
+        <div class="flex items-center justify-between gap-4 text-sm">
+          <span>Espacement</span>
+          <div class="flex items-center gap-4">
+            <!-- Inputs hors des labels (for/id) : voir le commentaire des marges -->
+            <div class="flex items-center gap-2">
+              <label for="a4-question-spacing-input">Questions</label>
+              <input
+                id="a4-question-spacing-input"
+                type="number"
+                min="1"
+                max="12"
+                step="0.5"
+                class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={options.questionSpacing}
+                on:change={() => scheduleRefresh(true, 0)}
+              />
+            </div>
+            <div class="flex items-center gap-2">
+              <label for="a4-exercise-spacing-input">Exercices</label>
+              <input
+                id="a4-exercise-spacing-input"
+                type="number"
+                min="0"
+                max="12"
+                step="0.5"
+                class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={options.exerciseSpacing}
+                on:change={() => scheduleRefresh(true, 0)}
+              />
+            </div>
+          </div>
+        </div>
+
         <label class="flex items-center gap-2 text-sm cursor-pointer">
           <input
             type="checkbox"
@@ -1724,10 +1987,10 @@
             bind:checked={options.showExerciseTitles}
             on:change={() => scheduleRefresh(true, 0)}
           />
-          Afficher le titre des exercices
+          Afficher la numérotation des exercices
         </label>
         <label class="flex items-center justify-between gap-4 text-sm">
-          Nommer les exercices
+          Libellé de la numérotation
           <select
             class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
             bind:value={options.exerciseLabel}
@@ -1737,6 +2000,25 @@
             <option value="Question">Question</option>
             <option value="Activité">Activité</option>
           </select>
+        </label>
+        <label class="flex items-center gap-2 text-sm cursor-pointer">
+          <input
+            type="checkbox"
+            bind:checked={options.showExerciseRefs}
+            disabled={options.mergeExercises}
+            on:change={() => scheduleRefresh(true, 0)}
+          />
+          <span class:opacity-50={options.mergeExercises}>
+            Afficher la référence des exercices
+          </span>
+        </label>
+        <label class="flex items-center gap-2 text-sm cursor-pointer">
+          <input
+            type="checkbox"
+            bind:checked={options.mergeExercises}
+            on:change={() => scheduleRefresh(true, 0)}
+          />
+          Fusionner les exercices (questions numérotées à la suite)
         </label>
         <div class="flex items-center justify-between gap-4 text-sm">
           <span>Marges</span>
@@ -1841,16 +2123,40 @@
                   max="12"
                   step="0.5"
                   class="w-20 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas py-0.5 text-sm"
-                  value={exOverrides[settingsExerciseIndex]?.spacing ?? 1}
+                  value={exOverrides[settingsExerciseIndex]?.spacing ??
+                    options.questionSpacing}
                   on:change={(event) => {
                     if (settingsExerciseIndex !== null) {
                       applyA4Overrides(settingsExerciseIndex, {
-                        spacing: Number(event.currentTarget.value) || 1,
+                        spacing:
+                          Number(event.currentTarget.value) ||
+                          options.questionSpacing,
                       })
                     }
                   }}
                 />
               </div>
+              {#if options.showExerciseRefs}
+                <div class="flex items-center gap-2 text-sm font-light">
+                  <label for="a4-ref-input">Référence affichée</label>
+                  <input
+                    id="a4-ref-input"
+                    type="text"
+                    placeholder="(effacée)"
+                    class="w-28 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas py-0.5 text-sm"
+                    value={exOverrides[settingsExerciseIndex]?.ref ??
+                      $exercicesParams[settingsExerciseIndex]?.id ??
+                      ''}
+                    on:change={(event) => {
+                      if (settingsExerciseIndex !== null) {
+                        applyA4Overrides(settingsExerciseIndex, {
+                          ref: event.currentTarget.value.trim(),
+                        })
+                      }
+                    }}
+                  />
+                </div>
+              {/if}
             </div>
           </div>
         {/key}

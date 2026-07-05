@@ -152,6 +152,12 @@
   .a4-unit :global(.a4-question-number) {
     font-weight: 700;
   }
+  /* Référence du référentiel à côté de la numérotation (ex : « 6C10 ») */
+  .a4-unit :global(.a4-exo-ref) {
+    font-weight: 400;
+    font-size: 0.85em;
+    color: #666666;
+  }
   .a4-unit :global(table) {
     max-width: 100%;
   }
