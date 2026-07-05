@@ -16,7 +16,13 @@
   export let exportQcmCam: () => Promise<void>
 
   // Bouton Kutsum masqué en production — activer avec ?kutsum=1 dans l'URL
-  const showKutsum = new URLSearchParams(window.location.search).get('kutsum') === '1' || window.location.hostname === 'localhost'
+  const showKutsum =
+    new URLSearchParams(window.location.search).get('kutsum') === '1' ||
+    window.location.hostname === 'localhost'
+
+  const showA4 =
+    new URLSearchParams(window.location.search).get('beta') === '1' ||
+    window.location.hostname === 'localhost'
 
   let showMoreModal = false
   let moreDialog: HTMLDialogElement
@@ -65,8 +71,7 @@
     {
       id: 'qcmcam',
       label: 'QCM Cam',
-      description:
-        "La web'app pour sonder avec une webcam ou un smartphone",
+      description: "La web'app pour sonder avec une webcam ou un smartphone",
       component: QcmCamIcon,
       action: () => {
         showMoreModal = false
@@ -77,7 +82,7 @@
       id: 'amc',
       label: 'AMC',
       description:
-        "Auto Multiple Choice - Pour la correction automatisée avec scan des copies",
+        'Auto Multiple Choice - Pour la correction automatisée avec scan des copies',
       component: AmcIcon,
       action: () => exportAndClose('amc'),
     },
@@ -128,6 +133,13 @@
     class="w-7 h-7 hover:fill-coopmaths-action-lightest fill-coopmaths-action dark:fill-coopmathsdark-action dark:hover:fill-coopmathsdark-action-lightest"
   />
 </button>
+{#if showA4}
+<ButtonIconTooltip
+  icon="bx-printer text-3xl"
+  tooltip="Impression A4"
+  on:click={() => handleExport('a4')}
+/>
+{/if}
 <ButtonIconTooltip
   icon="bx-dots-horizontal-rounded text-3xl"
   tooltip="Plus d'exports"
@@ -197,7 +209,10 @@
 
       <button
         class="flex items-start gap-4 p-4 rounded-lg hover:bg-coopmaths-canvas-dark dark:hover:bg-coopmathsdark-canvas-dark transition-colors"
-        on:click={() => { showMoreModal = false; downloadRedirectFile() }}
+        on:click={() => {
+          showMoreModal = false
+          downloadRedirectFile()
+        }}
       >
         <div class="shrink-0 pt-1">
           <i
@@ -217,7 +232,9 @@
           </p>
         </div>
         <div class="shrink-0 pt-1">
-          <i class="bx bx-download text-2xl text-coopmaths-action dark:text-coopmathsdark-action"></i>
+          <i
+            class="bx bx-download text-2xl text-coopmaths-action dark:text-coopmathsdark-action"
+          ></i>
         </div>
       </button>
     </div>
