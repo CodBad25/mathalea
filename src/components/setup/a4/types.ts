@@ -33,6 +33,10 @@ export interface A4ExerciseOverrides {
 export interface A4Options {
   columns: number
   fontSizePt: number
+  /** Format de page */
+  pageFormat: 'A4' | 'A5'
+  /** Orientation de la page */
+  orientation: 'portrait' | 'landscape'
   /** Marge horizontale (gauche/droite) */
   marginHMm: number
   /** Marge verticale (haut/bas) */
@@ -56,6 +60,8 @@ export interface A4Options {
 export const defaultA4Options: A4Options = {
   columns: 2,
   fontSizePt: 11,
+  pageFormat: 'A4',
+  orientation: 'portrait',
   marginHMm: 12,
   marginVMm: 12,
   showHeader: true,

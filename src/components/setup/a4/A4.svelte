@@ -35,10 +35,11 @@
   } from './types'
 
   const MM_TO_PX = 96 / 25.4
-  const PAGE_WIDTH_MM = 210
-  const PAGE_HEIGHT_MM = 297
-  const PAGE_WIDTH_PX = PAGE_WIDTH_MM * MM_TO_PX
-  const PAGE_HEIGHT_PX = PAGE_HEIGHT_MM * MM_TO_PX
+  /** Dimensions (mm) en portrait, par format de page */
+  const PAGE_SIZES_MM: Record<A4Options['pageFormat'], [number, number]> = {
+    A4: [210, 297],
+    A5: [148, 210],
+  }
   const COLUMN_GAP_MM = 6
   const FOOTER_MM = 8
   const HEADER_GAP_MM = 4
@@ -163,6 +164,13 @@
     settingsExerciseIndex !== null
       ? (exercises[settingsExerciseIndex] ?? null)
       : null
+  $: [portraitWidthMm, portraitHeightMm] = PAGE_SIZES_MM[options.pageFormat]
+  $: PAGE_WIDTH_MM =
+    options.orientation === 'landscape' ? portraitHeightMm : portraitWidthMm
+  $: PAGE_HEIGHT_MM =
+    options.orientation === 'landscape' ? portraitWidthMm : portraitHeightMm
+  $: PAGE_WIDTH_PX = PAGE_WIDTH_MM * MM_TO_PX
+  $: PAGE_HEIGHT_PX = PAGE_HEIGHT_MM * MM_TO_PX
   $: contentWidthMm = PAGE_WIDTH_MM - 2 * options.marginHMm
   $: columnWidthMm =
     (contentWidthMm - (options.columns - 1) * COLUMN_GAP_MM) / options.columns
@@ -675,11 +683,23 @@
     persist()
   }
 
-  function resetHeader() {
+  /** Réinitialise tous les réglages de la modale « Réglages de la page » */
+  function resetPageSettings() {
+    options = {
+      ...options,
+      pageFormat: defaultA4Options.pageFormat,
+      orientation: defaultA4Options.orientation,
+      showHeader: defaultA4Options.showHeader,
+      showFooter: defaultA4Options.showFooter,
+      showExerciseTitles: defaultA4Options.showExerciseTitles,
+      exerciseLabel: defaultA4Options.exerciseLabel,
+      marginHMm: defaultA4Options.marginHMm,
+      marginVMm: defaultA4Options.marginVMm,
+    }
     docTitle = DEFAULT_TITLE
     headerLine = DEFAULT_HEADER_LINE
     headerVersion++ // force la recréation des champs contenteditable
-    scheduleRefresh(false, 0)
+    scheduleRefresh(true, 0)
   }
 
   /** Applique les réglages émis par le panneau Settings de la vue prof */
@@ -930,7 +950,12 @@
       const pageEls = Array.from(
         pagesEl.querySelectorAll<HTMLElement>('.a4-page'),
       )
-      const pdf = new jsPDF({ unit: 'mm', format: 'a4', compress: true })
+      const pdf = new jsPDF({
+        unit: 'mm',
+        format: options.pageFormat.toLowerCase(),
+        orientation: options.orientation,
+        compress: true,
+      })
       for (const [index, pageEl] of pageEls.entries()) {
         const canvas = await domToCanvas(pageEl, {
           scale: 3,
@@ -1068,6 +1093,7 @@
 
 <svelte:head>
   <title>MathALÉA - Impression A4</title>
+  {@html `<style>@page { size: ${PAGE_WIDTH_MM}mm ${PAGE_HEIGHT_MM}mm; margin: 0; }</style>`}
 </svelte:head>
 
 <main
@@ -1249,7 +1275,7 @@
               <section
                 class="a4-page"
                 class:a4-page-correction={section.kind === 'correction'}
-                style="padding: {options.marginVMm}mm {options.marginHMm}mm; font-size: {options.fontSizePt}pt;"
+                style="width: {PAGE_WIDTH_MM}mm; height: {PAGE_HEIGHT_MM}mm; padding: {options.marginVMm}mm {options.marginHMm}mm; font-size: {options.fontSizePt}pt;"
               >
                 {#if pageIndex === 0}
                   {#if section.kind === 'subject' && (options.showHeader || options.nbVersions > 1)}
@@ -1647,26 +1673,36 @@
         </h3>
         
         <div class="flex items-center justify-between gap-4 text-sm">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              bind:checked={options.showHeader}
-              on:change={() => scheduleRefresh(false, 0)}
-            />
-            Afficher l'en-tête
-          </label>
-          {#if options.showHeader}
-            <button
-              type="button"
-              class="flex items-center gap-1 text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
-              on:click={resetHeader}
+          <span>Format</span>
+          <div class="flex items-center gap-4">
+            <select
+              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={options.pageFormat}
+              on:change={() => scheduleRefresh(true, 0)}
             >
-              <i class="bx bx-reset"></i>
-              Réinitialiser
-            </button>
-          {/if}
+              <option value="A4">A4</option>
+              <option value="A5">A5</option>
+            </select>
+            <select
+              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={options.orientation}
+              on:change={() => scheduleRefresh(true, 0)}
+            >
+              <option value="portrait">Portrait</option>
+              <option value="landscape">Paysage</option>
+            </select>
+          </div>
         </div>
-        
+
+        <label class="flex items-center gap-2 text-sm cursor-pointer">
+          <input
+            type="checkbox"
+            bind:checked={options.showHeader}
+            on:change={() => scheduleRefresh(false, 0)}
+          />
+          Afficher l'en-tête
+        </label>
+
         <label class="flex items-center gap-2 text-sm cursor-pointer">
           <input
             type="checkbox"
@@ -1729,6 +1765,15 @@
             </div>
           </div>
         </div>
+
+        <button
+          type="button"
+          class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+          on:click={resetPageSettings}
+        >
+          <i class="bx bx-reset"></i>
+          Réinitialiser les réglages de la page
+        </button>
       </div>
     </div>
   {/if}
@@ -1819,8 +1864,6 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 210mm;
-    height: 297mm;
     flex: none;
     background: white;
     color: black;
@@ -2043,11 +2086,6 @@
     background: white;
     color: black;
     line-height: 1.4;
-  }
-
-  @page {
-    size: A4;
-    margin: 0;
   }
 
   @media print {
