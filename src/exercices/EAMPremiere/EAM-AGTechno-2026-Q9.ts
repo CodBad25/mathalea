@@ -48,20 +48,24 @@ export default class AutoQ9AGt2026 extends ExerciceQcmA {
     const f0 = params.image0
     const imInf = params.imageInf
     const imSup = params.imageSup
+    const xMinRep = inf - 1
+    const xMaxRep = sup + 2
+    const yMinRep = Math.floor(Math.min(mM1, mM2)) - 1
+    const yMaxRep = Math.ceil(Math.max(mM1, mM2)) + 1
     const repere = new RepereBuilder({
-      xMin: params.borneInf - 0.7,
-      xMax: params.borneSup + 1.5,
-      yMin: Math.min(mM1, mM2) - 1,
-      yMax: Math.max(mM1, mM2) + 1,
+      xMin: xMinRep,
+      xMax: xMaxRep,
+      yMin: yMinRep,
+      yMax: yMaxRep,
     })
       .setGrille({
-        grilleX: { dx: 1, style: 'pointilles' },
-        grilleY: { dy: 1, style: 'pointilles' },
+        grilleX: { dx: 1 },
+        grilleY: { dy: 1 },
       })
-      .setThickX({ xMax: sup, xMin: inf, dx: 1 })
+      .setThickX({ xMax: sup+1, xMin: inf, dx: 1 })
       .setThickY({
-        yMax: Math.max(mM1, mM2) + 1,
-        yMin: Math.min(mM1, mM2) - 1,
+        yMax: yMaxRep,
+        yMin: yMinRep,
         dy: 1,
       })
       .setLabelsX([{ valeur: 1, texte: '1' }])
@@ -112,6 +116,7 @@ export default class AutoQ9AGt2026 extends ExerciceQcmA {
       },
     ]
     const s = spline(noeuds)
+    
     const largeurPremiereColonne = 2 // Première colonne
     const deltacl = 0.8 // Distance entre la bordure et les premiers et derniers antécédents
     const espcl = context.isHtml ? 2 : 2 // Espace entre les antécédents
@@ -243,8 +248,12 @@ export default class AutoQ9AGt2026 extends ExerciceQcmA {
     })
 
     const figure = mathalea2d(
-      { xmin: -6, xmax: 6.5, ymin: -5, ymax: 5, scale: 0.5 },
-      [repere, s.courbe()],
+      { xmin: xMinRep, xmax: xMaxRep, ymin: yMinRep, ymax: yMaxRep, scale: 0.5 },
+      [repere, s.courbe({
+    color: 'red',
+    epaisseur: 1,
+    ajouteNoeuds: true,
+  })],
     )
     this.reponses = ['a', 'b', 'c', 'd'].map((x) => `$${x}$`)
     this.enonce = `Dans le repère ci-dessous, on a représenté la fonction $f$ définie sur l'intervalle $[${inf};${sup}]$.<br>

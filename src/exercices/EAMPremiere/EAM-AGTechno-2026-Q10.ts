@@ -28,15 +28,15 @@ export default class AutoQ10AGt2026 extends ExerciceQcmA {
     max: number,
     choixVariable: 1 | 2 | 3,
   ): void {
-    this.enonce = `Les paramètres statistiques d’une série de notes d’un contrôle noté sur 20 sont donnés dans le tableau ci-dessous.<br>
+    this.enonce = `Les paramètres statistiques d’une série de notes d’un contrôle noté sur 20 sont donnés dans le tableau ci-dessous.<br><br>
     $\\begin{array}{|c|c|c|c|c|}
     \\hline
     \\text{Minimum}&\\text{Premier quartile}&\\text{Médiane}&\\text{Troisième quartile}&\\text{Maximum}\\\\
     \\hline
     ${min}&${q1}&${q2}&${q3}&${max}\\\\
     \\hline
-    \\end{array}$<br>
-    La proportion d’élèves ayant une note inférieure ou égale à ${choixVariable === 1 ? q1 : choixVariable === 2 ? q2 : q3} est :`
+    \\end{array}$<br><br>
+    La proportion d’élèves ayant une note inférieure ou égale à $${choixVariable === 1 ? q1 : choixVariable === 2 ? q2 : q3}$ est :`
     let pourcentage = 0
     switch (choixVariable) {
       case 1:

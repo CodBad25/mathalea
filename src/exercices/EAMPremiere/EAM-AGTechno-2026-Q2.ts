@@ -40,7 +40,7 @@ export default class AutoQ2AGt2026 extends ExerciceQcmA {
 
     this.correction = `Prendre $${pourcentage1}\\,\\%$ des personnes, c'est multiplier leur nombre par $\\dfrac{${texNombre(pourcentage1, 2)}}{100} = ${texNombre(pourcentage1 / 100, 2)}$.<br>
     $${texNombre(pourcentage2, 2)}\\,\\%$ de ces personnes ${categorie2}, soit $${texNombre(pourcentage2 / 100, 2)}$ fois le nombre des personnes qui ${categorie1}.<br>
-    La proportion de ${categorie2.split('sont ')[1]} dans ${lieu2} est donc : $ = ${texNombre(pourcentage1 / 100, 2)}\\times${texNombre(pourcentage2 / 100, 2)}= ${miseEnEvidence(texNombre(sol, 2))}$.`
+    La proportion de ${categorie2.split('sont ')[1]} dans ${lieu2} est donc égale à  : $${texNombre(pourcentage1 / 100, 2)}\\times${texNombre(pourcentage2 / 100, 2)}= ${miseEnEvidence(texNombre(sol, 2))}$.`
 
     this.reponses = [
       `$${texNombre(sol, 2)}$`,

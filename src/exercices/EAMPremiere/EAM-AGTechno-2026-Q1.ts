@@ -2,6 +2,7 @@ import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre, texPrix } from '../../lib/outils/texNombre'
+import FractionEtendue from '../../modules/FractionEtendue'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '6eff5'
@@ -27,13 +28,14 @@ export default class AutoQ1AGt2026 extends ExerciceQcmA {
     const dist1 = prixApres / prixAvant
     const dist2 = prixApres // ne pas prendre un prix Apres = à la remise
     const dist3 = (prixAvant - prixApres) / prixAvant
-
-    this.enonce = `Un Objet coûtait $${texPrix(prixAvant)}\\text{ €}$.<br>
+    const remise = prixAvant - prixApres
+    const fraction = new FractionEtendue(remise, prixAvant)
+    this.enonce = `Un objet coûtait $${texPrix(prixAvant)}\\text{ €}$.<br>
     Après une remise, il coûte $${texPrix(prixApres)}\\text{ €}$.<br>
     Quel était le pourcentage de cette remise ?`
-
-    this.correction = `Le prix à payer après la remise est de $${texPrix(prixApres)}\\text{ €}$, soit $\\dfrac{${texNombre(prixApres, 0)}}{${texNombre(prixAvant, 0)}} \\times 100 = ${texNombre((prixApres / prixAvant) * 100, 0)}\\%$ du prix initial.<br>
-    Il y a donc $100\\,\\%- ${texNombre((prixApres / prixAvant) * 100, 0)}\\,\\%=${miseEnEvidence(texNombre(sol, 0) + '\\,\\%')}$ de remise.`
+    this.correction = `La  remise est de $${remise}$ €. Elle s'applique sur le prix initial de $${texPrix(prixAvant)}\\text{ €}$.<br>
+    $\\dfrac{\\text{remise}}{\\text{prix initial}}=\\dfrac{${texNombre(remise, 0)}}{${texNombre(prixAvant, 0)}}=${fraction.texFractionSimplifiee}=${texNombre(sol / 100, 2)}=${texNombre(sol, 0)}\\,\\%$.<br>
+    La remise est donc de $${miseEnEvidence(texNombre(sol, 0) + '\\,\\%')}$.`
 
     this.reponses = [
       `$${texNombre(sol, 2)}\\,\\%$`,

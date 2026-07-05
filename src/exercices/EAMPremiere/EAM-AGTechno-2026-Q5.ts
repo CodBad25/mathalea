@@ -39,9 +39,9 @@ export default class AutoQ5AGt2026 extends ExerciceQcmA {
     this.enonce = `${debutPhrase}<br>
     ${finPhrase} est donc :<br>`
 
-    this.correction = `On part de $${resultat}=${texNombre(a, 1)}${variable} ${ecritureAlgebrique(b)}$ et on isole ${variable} :<br>
+    this.correction = `On part de $${resultat}=${texNombre(a, 1)}${variable} ${ecritureAlgebrique(b)}$ et on isole $${variable}$ :<br>
     $${resultat}=${texNombre(a, 1)}${variable} ${ecritureAlgebrique(b)} \\Leftrightarrow ${resultat} ${ecritureAlgebrique(-b)}=${texNombre(a, 1)}${variable} \\Leftrightarrow \\dfrac{${resultat} ${ecritureAlgebrique(-b)}}{${texNombre(a, 1)}}=${variable}$<br>
-    Donc $${variable} = ${miseEnEvidence(`\\dfrac{${resultat} ${ecritureAlgebrique(-b)}}{${texNombre(a, 1)}}`)}$`
+    Donc $${variable} = ${miseEnEvidence(`\\dfrac{${resultat} ${ecritureAlgebrique(-b)}}{${texNombre(a, 1)}}`)}$.`
 
     this.reponses = [sol, dist1, dist2, dist3].map((x) => `$${x}$`)
   }
@@ -69,9 +69,9 @@ export default class AutoQ5AGt2026 extends ExerciceQcmA {
       const a = randint(5, 15)
       const b = randint(10, 50) * choice([-1, 1])
 
-      const debutPhrase = `On considère la droite d'équation $y = ${a}x ${ecritureAlgebrique(b)}$`
+      const debutPhrase = `On considère la relation $y = ${a}x ${ecritureAlgebrique(b)}$`
       const finPhrase =
-        'La formule qui permet de trouver x en fonction de y pour tout point de cette droite.'
+        'La formule qui permet de trouver $x$ en fonction de $y$ '
       const resultat = 'y'
       const variable = 'x'
       this.appliquerLesValeurs(debutPhrase, a, b, variable, resultat, finPhrase)
