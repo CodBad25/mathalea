@@ -174,9 +174,9 @@ export default class PerimetreAireDisques extends Exercice {
           this.consigne +=
             '<br> On donnera une valeur approchée au dixième près '
           if (this.sup === 1) {
-            this.consigne += 'de$\\text{cm}$.'
+            this.consigne += 'de $\\text{cm}$.'
           } else if (this.sup === 2) {
-            this.consigne += 'de$\\text{cm}^2$.'
+            this.consigne += 'de $\\text{cm}^2$.'
           } else {
             this.consigne += 'des unités respectives ci-dessus.'
           }
@@ -188,9 +188,9 @@ export default class PerimetreAireDisques extends Exercice {
           this.consigne +=
             '<br> On donnera la valeur exacte ou une valeur approchée au dixième près '
           if (this.sup === 1) {
-            this.consigne += 'de$\\text{cm}$.'
+            this.consigne += 'de $\\text{cm}$.'
           } else if (this.sup === 2) {
-            this.consigne += 'de$\\text{cm}^2$.'
+            this.consigne += 'de $\\text{cm}^2$.'
           } else {
             this.consigne += 'des unités respectives ci-dessus.'
           }
@@ -200,9 +200,9 @@ export default class PerimetreAireDisques extends Exercice {
           this.consigne +=
             '<br> On donnera la valeur exacte puis une valeur approchée au dixième près '
           if (this.sup === 1) {
-            this.consigne += 'de$\\text{cm}$.'
+            this.consigne += 'de $\\text{cm}$.'
           } else if (this.sup === 2) {
-            this.consigne += 'de$\\text{cm}^2$.'
+            this.consigne += 'de $\\text{cm}^2$.'
           } else {
             this.consigne += 'des unités respectives ci-dessus.'
           }
