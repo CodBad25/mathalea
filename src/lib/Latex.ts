@@ -296,7 +296,10 @@ class Latex {
           )
           contentCorr += '\n\\end{EXO}\n'
           content += `\n% @see : ${getUrlFromExercice(exercice)}`
-          content += `\n\\begin{EXO}{${testIfLoaded([exercice.introduction, exercice.consigne, ...exercice.listeQuestions], '\\anote{', '\n\\resetcustomnotes ')}${format(exercice.consigne, false)}}{${String(exercice.id).replace('.js', '')}}\n`
+          // content += `\n\\begin{EXO}{${testIfLoaded([exercice.introduction, exercice.consigne, ...exercice.listeQuestions], '\\anote{', '\n\\resetcustomnotes ')}${format(exercice.consigne, false)}}{${String(exercice.id).replace('.js', '')}}\n`
+          content += `\n\\begin{EXO}{${testIfLoaded([exercice.introduction, exercice.consigne, ...exercice.listeQuestions], '\\anote{', '\n\\resetcustomnotes ')}}{${String(exercice.id).replace('.js', '')}}\n`
+          content += format(exercice.consigne, false) + `\n\n` // J'ai sorti la consigne de l'environnement car des retours lignes cassaient l'environnement.
+
           content += writeIntroduction(exercice.introduction)
           content += buildContent(
             exercice.listeQuestions,
