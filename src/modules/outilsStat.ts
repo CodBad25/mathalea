@@ -66,11 +66,11 @@ function desTabEffCumul(
       }
       sortie += '\\hline  ' + `\\text{${lignes[1]}} `
       for (let j = 0; j < Math.round(tirages.length / 2); j++) {
-        sortie += '&' + tirages[j][0]
+        sortie += '&' + texNombre(tirages[j][0], 0)
       }
       sortie += '\\\\\\hline ' + `\\text{${lignes[2]}} `
       for (let j = 0; j < Math.round(tirages.length / 2); j++) {
-        sortie += '&' + tirages[j][1]
+        sortie += '&' + texNombre(tirages[j][1], 0)
       }
       sortie += '\\\\\\hline\\end{array}$<br><br>'
 
@@ -88,11 +88,11 @@ function desTabEffCumul(
       }
       sortie += '\\hline ' + `\\text{${lignes[1]}} `
       for (let j = Math.round(tirages.length / 2); j < tirages.length; j++) {
-        sortie += '&' + tirages[j][0]
+        sortie += '&' + texNombre(tirages[j][0], 0)
       }
       sortie += '\\\\\\hline ' + `\\text{${lignes[2]}} `
       for (let j = Math.round(tirages.length / 2); j < tirages.length; j++) {
-        sortie += '&' + tirages[j][1]
+        sortie += '&' + texNombre(tirages[j][1], 0)
       }
       sortie += '\\\\\\hline\\end{array}$'
     } else {
@@ -110,11 +110,11 @@ function desTabEffCumul(
       }
       sortie += '\\hline  ' + `\\text{${lignes[1]}} `
       for (let j = 0; j < tirages.length; j++) {
-        sortie += '&' + tirages[j][0]
+        sortie += '&' + texNombre(tirages[j][0], 0)
       }
       sortie += '\\\\\\hline ' + `\\text{${lignes[2]}} `
       for (let j = 0; j < tirages.length; j++) {
-        sortie += '&' + tirages[j][1]
+        sortie += '&' + texNombre(tirages[j][1], 0)
       }
       sortie += '\\\\\\hline\\end{array}$'
     }
@@ -135,11 +135,11 @@ function desTabEffCumul(
       }
       sortie += '\\hline  ' + `\\text{${lignes[1]}} `
       for (let j = 0; j < Math.round(tirages.length / 2); j++) {
-        sortie += '&' + tirages[j][0]
+        sortie += '&' + texNombre(tirages[j][0], 0)
       }
       sortie += '\\\\\\hline  ' + `\\text{${lignes[2]}} `
       for (let j = 0; j < Math.round(tirages.length / 2); j++) {
-        sortie += '&' + tirages[j][1]
+        sortie += '&' + texNombre(tirages[j][1], 0)
       }
       sortie += '\\\\\\hline ' + `\\text{${lignes[3]}} `
       for (let j = 0; j < Math.round(tirages.length / 2); j++) {
@@ -147,7 +147,7 @@ function desTabEffCumul(
         for (let k = 0; k <= j; k++) {
           cumul += tirages[k][1]
         }
-        sortie += '&' + cumul // tirages[j][1];
+        sortie += '&' + texNombre(cumul, 0) // tirages[j][1];
       }
       sortie += '\\\\\\hline\\end{array}$<br><br>'
 
@@ -165,11 +165,11 @@ function desTabEffCumul(
       }
       sortie += '\\hline  ' + `\\text{${lignes[1]}} `
       for (let j = Math.round(tirages.length / 2); j < tirages.length; j++) {
-        sortie += '&' + tirages[j][0]
+        sortie += '&' + texNombre(tirages[j][0], 0)
       }
       sortie += '\\\\\\hline ' + `\\text{${lignes[2]}} `
       for (let j = Math.round(tirages.length / 2); j < tirages.length; j++) {
-        sortie += '&' + tirages[j][1]
+        sortie += '&' + texNombre(tirages[j][1], 0)
       }
       sortie += '\\\\\\hline ' + `\\text{${lignes[3]}} `
       for (let j = Math.round(tirages.length / 2); j < tirages.length; j++) {
@@ -177,7 +177,7 @@ function desTabEffCumul(
         for (let k = 0; k <= j; k++) {
           cumul += tirages[k][1]
         }
-        sortie += '&' + cumul // tirages[j][1];
+        sortie += '&' + texNombre(cumul, 0) // tirages[j][1];
       }
       sortie += '\\\\\\hline\\end{array}$'
     } else {
@@ -195,11 +195,11 @@ function desTabEffCumul(
       }
       sortie += '\\hline  ' + `\\text{${lignes[1]}} `
       for (let j = 0; j < tirages.length; j++) {
-        sortie += '&' + tirages[j][0]
+        sortie += '&' + texNombre(tirages[j][0], 0)
       }
       sortie += '\\\\\\hline ' + `\\text{${lignes[2]}} `
       for (let j = 0; j < tirages.length; j++) {
-        sortie += '&' + tirages[j][1]
+        sortie += '&' + texNombre(tirages[j][1], 0)
       }
       sortie += '\\\\\\hline ' + `\\text{${lignes[3]}} `
       for (let j = 0; j < tirages.length; j++) {
@@ -207,7 +207,7 @@ function desTabEffCumul(
         for (let k = 0; k <= j; k++) {
           cumul += tirages[k][1]
         }
-        sortie += '&' + cumul // tirages[j][1];
+        sortie += '&' + texNombre(cumul, 0) // tirages[j][1];
       }
       sortie += '\\\\\\hline\\end{array}$'
     }
@@ -349,38 +349,40 @@ function texteCorrMoyenneNotes(
     // tableau à deux entrées
     const noteSeries = notesSeries as number[][]
     texteCorr += '$\\text{Moyenne} = '
-    texteCorr += `\\dfrac{${notesSeries[0][0]} \\times ${notesSeries[0][1]}`
+    texteCorr += `\\dfrac{${texNombre(notesSeries[0][0], 2)} \\times ${texNombre(notesSeries[0][1], 0)}`
     let eff = `${notesSeries[0][1]}`
     for (let j = 1; j < notesSeries.length; j++) {
       if (notesSeries.length < 10) {
-        texteCorr += `+ ${noteSeries[j][0]} \\times ${noteSeries[j][1]}`
-        eff += `+ ${noteSeries[j][1]}`
+        texteCorr += `+ ${texNombre(noteSeries[j][0], 2)} \\times ${texNombre(noteSeries[j][1], 0)}`
+        eff += `+ ${texNombre(noteSeries[j][1], 0)}`
       } else {
         if (j < 3)
-          texteCorr += `+ ${noteSeries[j][0]} \\times ${noteSeries[j][1]}`
-        if (j < 3) eff += `+ ${noteSeries[j][1]}`
+          texteCorr += `+ ${texNombre(noteSeries[j][0], 2)} \\times ${texNombre(noteSeries[j][1], 0)}`
+        if (j < 3) eff += `+ ${texNombre(noteSeries[j][1], 0)}`
         if (j === 3) texteCorr += '+ \\ldots '
         if (j === 3) eff += '+ \\ldots '
         if (j + 3 >= noteSeries.length)
-          texteCorr += `+ ${noteSeries[j][0]} \\times ${noteSeries[j][1]}`
-        if (j + 3 >= noteSeries.length) eff += `+ ${noteSeries[j][1]}`
+          texteCorr += `+ ${texNombre(noteSeries[j][0], 2)} \\times ${texNombre(noteSeries[j][1], 0)}`
+        if (j + 3 >= noteSeries.length)
+          eff += `+ ${texNombre(noteSeries[j][1], 0)}`
       }
     }
     texteCorr += `}{${eff}}=\\dfrac{${texNombre(somme, 0)}}{${texNombre(nombreNotes, 0)}}$. <br>`
   } else {
     // tableau à une entrée
     texteCorr += '$\\text{Moyenne} = '
-    texteCorr += `\\dfrac{${notesSeries[0]} `
+    texteCorr += `\\dfrac{${texNombre(Number(notesSeries[0]), 2)}`
     for (let j = 1; j < notesSeries.length; j++) {
       if (notesSeries.length < 10) {
-        texteCorr += `+ ${notesSeries[j]}`
+        texteCorr += `+ ${texNombre(Number(notesSeries[j]), 2)}`
       } else {
-        if (j < 3) texteCorr += `+ ${notesSeries[j]}`
+        if (j < 3) texteCorr += `+ ${texNombre(Number(notesSeries[j]), 2)}`
         if (j === 3) texteCorr += '+ \\ldots '
-        if (j + 3 >= notesSeries.length) texteCorr += `+ ${notesSeries[j]}`
+        if (j + 3 >= notesSeries.length)
+          texteCorr += `+ ${texNombre(Number(notesSeries[j]), 2)}`
       }
     }
-    texteCorr += `}{${notesSeries.length}}=\\dfrac{${texNombre(somme, 0)}}{${texNombre(nombreNotes, 0)}}$. <br>`
+    texteCorr += `}{${texNombre(notesSeries.length, 0)}}=\\dfrac{${texNombre(somme, 2)}}{${texNombre(nombreNotes, 0)}}$. <br>`
   }
   texteCorr += `La somme des ${notes} est : $${texNombre(somme, 0)}$.<br> Il y a $${texNombre(nombreNotes, 0)}$ ${notes}.<br>`
   texteCorr += `Donc ${noteStr[1]} est $${new FractionEtendue(somme, nombreNotes).texFSD}`
@@ -526,7 +528,7 @@ function texteCorrMedianeTirages2DSalaires(
       'F',
       'la médiane des notes',
       '',
-      `Le nombre de notes est $${nombreTirages}$.`,
+      `Le nombre de notes est $${texNombre(nombreTirages, 0)}$.`,
       ['', 'Note', 'Coefficient (Effectif)', 'Effectif cumulé'],
     ],
     [
@@ -534,7 +536,7 @@ function texteCorrMedianeTirages2DSalaires(
       'M',
       'le salaire médian',
       ' €',
-      `Dans l'entreprise, le nombre de salariés est $${nombreTirages}$.`,
+      `Dans l'entreprise, le nombre de salariés est $${texNombre(nombreTirages, 0)}$.`,
       ['Catégorie', 'Salaire en €', 'Effectif', 'Effectif cumulé'],
     ],
     [
@@ -542,7 +544,7 @@ function texteCorrMedianeTirages2DSalaires(
       'M',
       'la pointure médiane',
       '',
-      `Le nombre de pointures relevées est $${nombreTirages}$.`,
+      `Le nombre de pointures relevées est $${texNombre(nombreTirages, 0)}$.`,
       ['', 'Pointure', 'Effectif', 'Effectif cumulé'],
     ],
   ]
@@ -594,15 +596,15 @@ function texteCorrMedianeTirages2D(
   scoresMedians: [number, number] | [number],
   tirages: number[][],
 ) {
-  let texteCorr = `Au total, $${nombreTirages}$ lancers ont été réalisés.<br>`
+  let texteCorr = `Au total, $${texNombre(nombreTirages, 0)}$ lancers ont été réalisés.<br>`
   if (nombreTirages % 2 === 0) {
     texteCorr += `Le nombre de lancers est pair, les scores sont rangés dans l'ordre croissant.<br>
-              Les deux valeurs centrales sont la $${nombreTirages / 2}^{e}$ et la $${nombreTirages / 2 + 1}^{e}$ valeur.<br>
+              Les deux valeurs centrales sont la $${texNombre(nombreTirages / 2, 0)}^{e}$ et la $${texNombre(nombreTirages / 2 + 1, 0)}^{e}$ valeur.<br>
               En effet, ${underbraceMediane(nombreTirages)} <br>
               Une médiane peut être la demi-somme des deux valeurs centrales. <br>
               On peut ajouter une ligne avec les effectifs cumulés pour trouver ces deux valeurs.<br><br>
               ${desTabEffCumul(tirages, true)}<br><br>
-              La $${nombreTirages / 2}^{e}$ valeur est $${scoresMedians[0]}$ et la $${nombreTirages / 2 + 1}^{e}$ valeur est $${scoresMedians[1]}$.<br>`
+              La $${texNombre(nombreTirages / 2, 0)}^{e}$ valeur est $${scoresMedians[0]}$ et la $${texNombre(nombreTirages / 2 + 1, 0)}^{e}$ valeur est $${scoresMedians[1]}$.<br>`
     texteCorr += `D'où le score médian est ${scoresMedians[0] === scoresMedians[1] ? '' : `$(${scoresMedians[0]} + ${scoresMedians[1]}) \\div 2=$`} $${miseEnEvidence(texNombre(medianeCorr))}$.<br>`
     /* texteCorr += lampeMessage({
       titre: 'Interprétation',
@@ -727,10 +729,10 @@ function texteTirages2D(
 ) {
   let texte = ''
   if (nombreDes > 1) {
-    texte = `On a réalisé $${nombreTirages}$ lancers de $${nombreDes}$ dés à $${nombreFaces}$ faces.<br>
+    texte = `On a réalisé $${texNombre(nombreTirages, 0)}$ lancers de $${nombreDes}$ dés à $${nombreFaces}$ faces.<br>
             On a relevé la somme des $${nombreDes}$ dés.<br>`
   } else {
-    texte = `On a réalisé $${nombreTirages}$ lancers d'un dé à $${nombreFaces}$ faces.<br>`
+    texte = `On a réalisé $${texNombre(nombreTirages, 0)}$ lancers d'un dé à $${nombreFaces}$ faces.<br>`
   }
   texte += aveclampeMessage
     ? lampeMessage({
