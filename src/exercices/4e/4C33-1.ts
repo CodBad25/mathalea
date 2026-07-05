@@ -302,7 +302,7 @@ export default class PuissancesDunRelatif1 extends Exercice {
           exposantInteractif = exp[0] - exp[1]
           break
         case 3: // exponentiation
-          exp = [randint(2, 4), randint(2, 4)] // on redéfinit les deux exposants pour ne pas avoir d'écritures trop longues et pour éviter 1
+          exp = [randint(2, 3), randint(2, 3)] // on redéfinit les deux exposants pour ne pas avoir d'écritures trop longues et pour éviter 1
           texte = `$${lettre}=(${baseUtile}^{${exp[0]}})^{${exp[1]}}$`
 
           if (this.correctionDetaillee) {
@@ -360,7 +360,7 @@ export default class PuissancesDunRelatif1 extends Exercice {
             (this.sup2 === 1 ? 1 : this.sup2 === 2 ? -1 : choice([-1, 1])) // on choisit une base sauf 1 ... penser à gérer le cas des bases qui sont des puissances
 
           base = [base0, base1] // on choisit 2 bases différentes c'est mieux
-          exp = randint(2, 5, 6) // on choisit un exposant
+          exp = randint(2, 4) // on choisit un exposant
           texte = `$${lettre}=${ecritureParentheseSiNegatif(base0)}^{${exp}}\\times ${ecritureParentheseSiNegatif(base1)}^{${exp}}$`
           texteCorr += texte
 
