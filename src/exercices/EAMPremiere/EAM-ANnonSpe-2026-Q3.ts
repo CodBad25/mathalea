@@ -26,7 +26,7 @@ export default class AutoQ3ANns2026 extends ExerciceQcmA {
   private appliquerLesValeurs(c: number, p: number, q: number): void {
     this.enonce = `On considère le nombre $D=${c}\\times 2^{${p}}\\times 2^{${q}}$.<br>On a :`
 
-    this.correction = `POn utilise la propriété $a^n\\times a^p=a^{n+p}$ :<br>
+    this.correction = `On utilise la propriété $a^n\\times a^p=a^{n+p}$ :<br>
 $\\begin{aligned}
 D&=${c}\\times 2^{${p}}\\times 2^{${q}}\\\\
 &=${c}\\times 2^{${p}+${q}}\\\\

@@ -63,7 +63,7 @@ export default class AutoQ3ANt2026 extends ExerciceQcmA {
         d3 = `${prix} \\times \\dfrac{${taux}}{100}` // Erreur : on calcule seulement la remise
 
         this.correction = `Diminuer un prix de $${taux}\\,\\%$ revient à soustraire $${taux}\\,\\%$ de ce prix.<br>`
-        this.correction += `Cela revient à multiplier le prix de départ par $\\left(1 - \\dfrac{${taux}}{100}\\right)$.<br>`
+        this.correction += `Cela revient à multiplier le prix de départ par : $\\left(1 - \\dfrac{${taux}}{100}\\right)$.<br>`
         this.correction += `Le nouveau prix s'obtient donc par le calcul : $${prix} \\times \\left(1 - \\dfrac{${taux}}{100}\\right)$.<br>`
         this.correction += `La bonne réponse est $${miseEnEvidence(correct)}$.`
       } else {
