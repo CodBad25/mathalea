@@ -154,7 +154,7 @@ export default class ConvertirVitesse extends Exercice {
           texteCorr += `${texteEnCouleurEtGras('Règle : Pour convertir des m/s en km/h, on multiplie par 3,6', 'green')}.<br><br>`
 
           texteCorr += `${texteEnCouleurEtGras('Étape 4 : Application numérique', 'green')}.<br>`
-          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,m/s} = ${texNombre(valeur, 2)} \\times 3,6 = ${miseEnEvidence(`${texNombre(reponse, 2)}\\text{\\,km/h}`)}.$`
+          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,m/s} = ${texNombre(valeur, 2)} \\times 3,6 = ${miseEnEvidence(`${texNombre(reponse, 2)}`)}\\text{\\,km/h}.$`
         } else {
           // km/h → m/s
           texteCorr = `Pour convertir des vitesses de $\\text{\\,km/h}$ en $\\text{\\,m/s}$, nous devons établir la relation entre ces unités.<br><br>`
@@ -173,16 +173,16 @@ export default class ConvertirVitesse extends Exercice {
           texteCorr += `${texteEnCouleurEtGras('Règle : Pour convertir des km/h en m/s, on divise par 3,6', 'green')}.<br><br>`
 
           texteCorr += `${texteEnCouleurEtGras('Étape 4 : Application numérique', 'green')}.<br>`
-          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,km/h} = ${texNombre(valeur, 2)} \\div 3,6 = ${miseEnEvidence(`${texNombre(reponse, 2)}\\text{\\,m/s}`)}.$`
+          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,km/h} = ${texNombre(valeur, 2)} \\div 3,6 = ${miseEnEvidence(`${texNombre(reponse, 2)}`)}\\text{\\,m/s}.$`
         }
       } else {
         // Correction simple
         if (typeDeQuestion === 1) {
           texteCorr = `${texteEnCouleurEtGras('Conversion m/s → km/h : multiplier par 3,6', 'green')}.<br><br>`
-          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,m/s} = ${texNombre(valeur, 2)} \\times 3,6 = ${miseEnEvidence(`${texNombre(reponse, 2)}\\text{\\,km/h}`)}.$`
+          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,m/s} = ${texNombre(valeur, 2)} \\times 3,6 = ${miseEnEvidence(`${texNombre(reponse, 2)}`)}\\text{\\,km/h}.$`
         } else {
           texteCorr = `${texteEnCouleurEtGras('Conversion km/h → m/s : diviser par 3,6', 'green')}<br><br>`
-          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,km/h} = ${texNombre(valeur, 2)} \\div 3,6 = ${miseEnEvidence(`${texNombre(reponse, 2)}\\text{\\,m/s}`)}.$`
+          texteCorr += `$${texNombre(valeur, 2)}\\text{\\,km/h} = ${texNombre(valeur, 2)} \\div 3,6 = ${miseEnEvidence(`${texNombre(reponse, 2)}`)}\\text{\\,m/s}.$`
         }
       }
 
