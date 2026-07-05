@@ -165,8 +165,9 @@ P_{${texX}}(${texY}) &= 1 - P_{${texX}}(${texYbar})\\\\
     let compteur = 0
     do {
       const casChoisi = choice(cas)
+      // Q11 : la probabilité demandée se LIT sur une branche affichée de l'arbre.
       const xEstBarre = choice([true, false])
-      const yEstBarre = choice([true, false])
+      const yEstBarre = xEstBarre // branche affichée : P_A(B) ou P_barA(barB)
       this.appliquerLesValeurs(
         casChoisi.numA,
         casChoisi.numB_A,

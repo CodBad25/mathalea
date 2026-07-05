@@ -164,8 +164,9 @@ P_{${texX}}(${texY}) &= 1 - P_{${texX}}(${texYbar})\\\\
     let compteur = 0
     do {
       const casChoisi = choice(cas)
+      // Q12 : la probabilité demandée n'est PAS affichée ; on la calcule par complément.
       const xEstBarre = choice([true, false])
-      const yEstBarre = choice([true, false])
+      const yEstBarre = !xEstBarre // branche cachée : P_A(barB) ou P_barA(B)
       this.appliquerLesValeurs(
         casChoisi.numA,
         casChoisi.numB_A,
