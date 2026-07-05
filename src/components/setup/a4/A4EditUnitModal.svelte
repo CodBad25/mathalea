@@ -422,12 +422,16 @@
     min-height: 3em;
   }
   .a4-edit-text {
+    display: inline-block;
     outline: none;
     white-space: pre-wrap;
   }
-  .a4-edit-text:empty::before {
-    /* zone cliquable même vide */
-    content: '\200b';
+  .a4-edit-text:empty {
+    /* un span vide est inline et ne peut donc pas être visible ni
+       cliquable sans largeur/hauteur propres : sans ça, il n'y a rien
+       à voir ni où faire apparaître le curseur clignotant */
+    min-width: 1.5em;
+    min-height: 1.2em;
   }
   .a4-edit-text:focus {
     background: #eef4fb;

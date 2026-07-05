@@ -220,7 +220,8 @@
     if (previewAreaEl == null) return
     const rect = previewAreaEl.getBoundingClientRect()
     const style = getComputedStyle(previewAreaEl)
-    const paddingX = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)
+    const paddingX =
+      parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)
     const paddingTop = parseFloat(style.paddingTop)
     const paddingBottom = parseFloat(style.paddingBottom)
     previewWidthPx = previewAreaEl.clientWidth - paddingX
@@ -1242,6 +1243,7 @@
         text={isGeneratingPdf ? 'PDF en cours...' : 'Télécharger le PDF'}
         icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-download'}
         inverted={true}
+        class="rounded-lg py-1 px-2 min-w-42.5"
         on:click={downloadPdf}
       />
       <ButtonTextAction
@@ -1267,315 +1269,320 @@
         class="a4-zoom-wrapper"
         style="zoom: {isGeneratingPdf ? 1 : computedZoomPercent / 100}"
       >
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <div class="a4-pages" bind:this={pagesEl} on:mouseleave={clearHover}>
-        {#key layoutVersion}
-          {#each sections as section, sectionIndex}
-            {#each section.pages as pageColumns, pageIndex}
-              <section
-                class="a4-page"
-                class:a4-page-correction={section.kind === 'correction'}
-                style="width: {PAGE_WIDTH_MM}mm; height: {PAGE_HEIGHT_MM}mm; padding: {options.marginVMm}mm {options.marginHMm}mm; font-size: {options.fontSizePt}pt;"
-              >
-                {#if pageIndex === 0}
-                  {#if section.kind === 'subject' && (options.showHeader || options.nbVersions > 1)}
-                    <header
-                      class="a4-doc-header"
-                      style="margin-bottom: {HEADER_GAP_MM}mm;"
-                    >
-                      {#if options.showHeader}
-                        {#if sectionIndex === 0}
-                          {#key headerVersion}
-                            <div
-                              class="a4-doc-title"
-                              contenteditable="true"
-                              role="textbox"
-                              aria-label="Titre de la fiche"
-                              spellcheck="false"
-                              use:initEditable={docTitle}
-                              on:input={onTitleInput}
-                            ></div>
-                            <div class="a4-doc-meta-row">
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div class="a4-pages" bind:this={pagesEl} on:mouseleave={clearHover}>
+          {#key layoutVersion}
+            {#each sections as section, sectionIndex}
+              {#each section.pages as pageColumns, pageIndex}
+                <section
+                  class="a4-page"
+                  class:a4-page-correction={section.kind === 'correction'}
+                  style="width: {PAGE_WIDTH_MM}mm; height: {PAGE_HEIGHT_MM}mm; padding: {options.marginVMm}mm {options.marginHMm}mm; font-size: {options.fontSizePt}pt;"
+                >
+                  {#if pageIndex === 0}
+                    {#if section.kind === 'subject' && (options.showHeader || options.nbVersions > 1)}
+                      <header
+                        class="a4-doc-header"
+                        style="margin-bottom: {HEADER_GAP_MM}mm;"
+                      >
+                        {#if options.showHeader}
+                          {#if sectionIndex === 0}
+                            {#key headerVersion}
                               <div
-                                class="a4-doc-meta"
+                                class="a4-doc-title"
                                 contenteditable="true"
                                 role="textbox"
-                                aria-label="Ligne d'en-tête (nom, classe...)"
+                                aria-label="Titre de la fiche"
                                 spellcheck="false"
-                                use:initEditable={headerLine}
-                                on:input={onHeaderLineInput}
+                                use:initEditable={docTitle}
+                                on:input={onTitleInput}
                               ></div>
+                              <div class="a4-doc-meta-row">
+                                <div
+                                  class="a4-doc-meta"
+                                  contenteditable="true"
+                                  role="textbox"
+                                  aria-label="Ligne d'en-tête (nom, classe...)"
+                                  spellcheck="false"
+                                  use:initEditable={headerLine}
+                                  on:input={onHeaderLineInput}
+                                ></div>
+                                {#if options.nbVersions > 1}
+                                  <div class="a4-doc-version">
+                                    Sujet {versionLetter(section.version)}
+                                  </div>
+                                {/if}
+                              </div>
+                            {/key}
+                          {:else}
+                            <div class="a4-doc-title">{docTitle}</div>
+                            <div class="a4-doc-meta-row">
+                              <div class="a4-doc-meta">{headerLine}</div>
                               {#if options.nbVersions > 1}
                                 <div class="a4-doc-version">
                                   Sujet {versionLetter(section.version)}
                                 </div>
                               {/if}
                             </div>
-                          {/key}
-                        {:else}
-                          <div class="a4-doc-title">{docTitle}</div>
-                          <div class="a4-doc-meta-row">
-                            <div class="a4-doc-meta">{headerLine}</div>
-                            {#if options.nbVersions > 1}
-                              <div class="a4-doc-version">
-                                Sujet {versionLetter(section.version)}
-                              </div>
-                            {/if}
+                          {/if}
+                        {:else if options.nbVersions > 1}
+                          <div class="a4-doc-version a4-doc-version-standalone">
+                            Sujet {versionLetter(section.version)}
                           </div>
                         {/if}
-                      {:else if options.nbVersions > 1}
-                        <div class="a4-doc-version a4-doc-version-standalone">
-                          Sujet {versionLetter(section.version)}
+                      </header>
+                    {:else if section.kind === 'correction'}
+                      <header
+                        class="a4-doc-header"
+                        style="margin-bottom: {HEADER_GAP_MM}mm;"
+                      >
+                        <div class="a4-doc-title">
+                          Corrigé{options.nbVersions > 1
+                            ? ` — Sujet ${versionLetter(section.version)}`
+                            : ''}
                         </div>
-                      {/if}
-                    </header>
-                  {:else if section.kind === 'correction'}
-                    <header
-                      class="a4-doc-header"
-                      style="margin-bottom: {HEADER_GAP_MM}mm;"
-                    >
-                      <div class="a4-doc-title">
-                        Corrigé{options.nbVersions > 1
-                          ? ` — Sujet ${versionLetter(section.version)}`
-                          : ''}
-                      </div>
-                    </header>
+                      </header>
+                    {/if}
                   {/if}
-                {/if}
-                <div class="a4-columns" style="gap: {COLUMN_GAP_MM}mm;">
-                  {#each pageColumns as column, columnIndex}
-                    <!-- svelte-ignore a11y-no-static-element-interactions -->
-                    <div
-                      class="a4-column"
-                      style="width: {columnWidthMm}mm;"
-                      on:mouseenter={() =>
-                        (hoveredColumnKey = `${sectionIndex}-${pageIndex}-${columnIndex}`)}
-                    >
-                      {#each column as unit, unitIndex (unit.id)}
-                        {#if section.kind === 'subject' && breaksBefore.includes(unit.exerciseIndex) && unit.id === section.firstUnitIds[unit.exerciseIndex]}
-                          <div class="a4-break-marker a4-print-hidden">
-                            <span>saut de colonne</span>
-                            <button
-                              type="button"
-                              title="Retirer le saut de colonne"
-                              aria-label="Retirer le saut de colonne"
-                              on:click={() =>
-                                toggleBreakBefore(unit.exerciseIndex)}
+                  <div class="a4-columns" style="gap: {COLUMN_GAP_MM}mm;">
+                    {#each pageColumns as column, columnIndex}
+                      <!-- svelte-ignore a11y-no-static-element-interactions -->
+                      <div
+                        class="a4-column"
+                        style="width: {columnWidthMm}mm;"
+                        on:mouseenter={() =>
+                          (hoveredColumnKey = `${sectionIndex}-${pageIndex}-${columnIndex}`)}
+                      >
+                        {#each column as unit, unitIndex (unit.id)}
+                          {#if section.kind === 'subject' && breaksBefore.includes(unit.exerciseIndex) && unit.id === section.firstUnitIds[unit.exerciseIndex]}
+                            <div class="a4-break-marker a4-print-hidden">
+                              <span>saut de colonne</span>
+                              <button
+                                type="button"
+                                title="Retirer le saut de colonne"
+                                aria-label="Retirer le saut de colonne"
+                                on:click={() =>
+                                  toggleBreakBefore(unit.exerciseIndex)}
+                              >
+                                <i class="bx bx-x"></i>
+                              </button>
+                            </div>
+                          {/if}
+                          {#if section.kind === 'subject' && unit.kind === 'textblock'}
+                            <!-- svelte-ignore a11y-no-static-element-interactions -->
+                            <div
+                              class="a4-unit-wrapper a4-textblock-wrapper"
+                              title="Double-clic pour modifier le bloc de texte"
+                              on:mouseenter={() => handleUnitHover(unit)}
+                              on:dblclick={() => openEditor(unit)}
                             >
-                              <i class="bx bx-x"></i>
-                            </button>
-                          </div>
-                        {/if}
-                        {#if section.kind === 'subject' && unit.kind === 'textblock'}
-                          <!-- svelte-ignore a11y-no-static-element-interactions -->
-                          <div
-                            class="a4-unit-wrapper a4-textblock-wrapper"
-                            title="Double-clic pour modifier le bloc de texte"
-                            on:mouseenter={() => handleUnitHover(unit)}
-                            on:dblclick={() => openEditor(unit)}
-                          >
-                            <button
-                              type="button"
-                              class="a4-textblock-delete a4-print-hidden"
-                              title="Supprimer le bloc de texte"
-                              aria-label="Supprimer le bloc de texte"
-                              on:click={() =>
-                                deleteTextBlock(unit.exerciseIndex)}
-                            >
-                              <i class="bx bx-x"></i>
-                            </button>
-                            {#if hoveredExercise === unit.exerciseIndex && hoveredColumnKey === `${sectionIndex}-${pageIndex}-${columnIndex}` && unit.id === section.firstUnitIds[unit.exerciseIndex]}
-                              <div class="a4-insert a4-print-hidden">
-                                <button
-                                  type="button"
-                                  class="a4-insert-plus"
-                                  title="Insérer au-dessus"
-                                  aria-label="Insérer au-dessus"
-                                  on:click|stopPropagation={() =>
-                                    toggleInsertMenu(unit.exerciseIndex)}
-                                >
-                                  <i class="bx bx-plus"></i>
-                                </button>
-                                {#if insertMenuExercise === unit.exerciseIndex}
-                                  <div class="a4-insert-menu">
-                                    {#if unit.exerciseIndex > 0}
-                                      <button
-                                        type="button"
-                                        on:click={() =>
-                                          toggleBreakBefore(unit.exerciseIndex)}
-                                      >
-                                        <i class="bx bx-arrow-to-right"></i>
-                                        {breaksBefore.includes(
-                                          unit.exerciseIndex,
-                                        )
-                                          ? 'Retirer le saut de colonne'
-                                          : 'Saut de colonne'}
-                                      </button>
-                                    {/if}
-                                    <button
-                                      type="button"
-                                      disabled={textBlocksBefore[
-                                        unit.exerciseIndex
-                                      ] != null}
-                                      on:click={() =>
-                                        insertTextBlockAbove(
-                                          unit.exerciseIndex,
-                                        )}
-                                    >
-                                      <i class="bx bx-text"></i>
-                                      Bloc de texte
-                                    </button>
-                                  </div>
-                                {/if}
-                              </div>
-                            {/if}
-                            <A4Unit {unit} />
-                          </div>
-                        {:else if section.kind === 'subject'}
-                          <!-- svelte-ignore a11y-no-static-element-interactions -->
-                          <div
-                            class="a4-unit-wrapper"
-                            class:a4-exo-hovered={hoveredExercise ===
-                              unit.exerciseIndex}
-                            title={unit.source != null
-                              ? "Double-clic pour modifier l'énoncé"
-                              : undefined}
-                            on:mouseenter={() => handleUnitHover(unit)}
-                            on:dblclick={() => openEditor(unit)}
-                          >
-                            {#if hoveredExercise === unit.exerciseIndex && hoveredColumnKey === `${sectionIndex}-${pageIndex}-${columnIndex}` && unit.id === section.firstUnitIds[unit.exerciseIndex]}
-                              <div class="a4-insert a4-print-hidden">
-                                <button
-                                  type="button"
-                                  class="a4-insert-plus"
-                                  title="Insérer au-dessus"
-                                  aria-label="Insérer au-dessus"
-                                  on:click|stopPropagation={() =>
-                                    toggleInsertMenu(unit.exerciseIndex)}
-                                >
-                                  <i class="bx bx-plus"></i>
-                                </button>
-                                {#if insertMenuExercise === unit.exerciseIndex}
-                                  <div class="a4-insert-menu">
-                                    {#if unit.exerciseIndex > 0}
-                                      <button
-                                        type="button"
-                                        on:click={() =>
-                                          toggleBreakBefore(unit.exerciseIndex)}
-                                      >
-                                        <i class="bx bx-arrow-to-right"></i>
-                                        {breaksBefore.includes(
-                                          unit.exerciseIndex,
-                                        )
-                                          ? 'Retirer le saut de colonne'
-                                          : 'Saut de colonne'}
-                                      </button>
-                                    {/if}
-                                    <button
-                                      type="button"
-                                      disabled={textBlocksBefore[
-                                        unit.exerciseIndex
-                                      ] != null}
-                                      on:click={() =>
-                                        insertTextBlockAbove(
-                                          unit.exerciseIndex,
-                                        )}
-                                    >
-                                      <i class="bx bx-text"></i>
-                                      Bloc de texte
-                                    </button>
-                                  </div>
-                                {/if}
-                              </div>
-                            {/if}
-                            {#if hoveredExercise === unit.exerciseIndex && hoveredColumnKey === `${sectionIndex}-${pageIndex}-${columnIndex}` && (unitIndex === 0 || column[unitIndex - 1].exerciseIndex !== unit.exerciseIndex || column[unitIndex - 1].kind === 'textblock')}
-                              <div class="a4-hover-toolbar">
-                                <button
-                                  type="button"
-                                  title="Monter l'exercice"
-                                  aria-label="Monter l'exercice"
-                                  disabled={unit.exerciseIndex === 0}
-                                  on:click={() =>
-                                    moveExercise(unit.exerciseIndex, -1)}
-                                >
-                                  <i class="bx bx-up-arrow-alt"></i>
-                                </button>
-                                <button
-                                  type="button"
-                                  title="Descendre l'exercice"
-                                  aria-label="Descendre l'exercice"
-                                  disabled={unit.exerciseIndex ===
-                                    exercises.length - 1}
-                                  on:click={() =>
-                                    moveExercise(unit.exerciseIndex, 1)}
-                                >
-                                  <i class="bx bx-down-arrow-alt"></i>
-                                </button>
-                                {#if exercises[unit.exerciseIndex] != null}
+                              <button
+                                type="button"
+                                class="a4-textblock-delete a4-print-hidden"
+                                title="Supprimer le bloc de texte"
+                                aria-label="Supprimer le bloc de texte"
+                                on:click={() =>
+                                  deleteTextBlock(unit.exerciseIndex)}
+                              >
+                                <i class="bx bx-x"></i>
+                              </button>
+                              {#if hoveredExercise === unit.exerciseIndex && hoveredColumnKey === `${sectionIndex}-${pageIndex}-${columnIndex}` && unit.id === section.firstUnitIds[unit.exerciseIndex]}
+                                <div class="a4-insert a4-print-hidden">
                                   <button
                                     type="button"
-                                    title="Réglages de l'exercice"
-                                    aria-label="Réglages de l'exercice"
+                                    class="a4-insert-plus"
+                                    title="Insérer au-dessus"
+                                    aria-label="Insérer au-dessus"
+                                    on:click|stopPropagation={() =>
+                                      toggleInsertMenu(unit.exerciseIndex)}
+                                  >
+                                    <i class="bx bx-plus"></i>
+                                  </button>
+                                  {#if insertMenuExercise === unit.exerciseIndex}
+                                    <div class="a4-insert-menu">
+                                      {#if unit.exerciseIndex > 0}
+                                        <button
+                                          type="button"
+                                          on:click={() =>
+                                            toggleBreakBefore(
+                                              unit.exerciseIndex,
+                                            )}
+                                        >
+                                          <i class="bx bx-arrow-to-right"></i>
+                                          {breaksBefore.includes(
+                                            unit.exerciseIndex,
+                                          )
+                                            ? 'Retirer le saut de colonne'
+                                            : 'Saut de colonne'}
+                                        </button>
+                                      {/if}
+                                      <button
+                                        type="button"
+                                        disabled={textBlocksBefore[
+                                          unit.exerciseIndex
+                                        ] != null}
+                                        on:click={() =>
+                                          insertTextBlockAbove(
+                                            unit.exerciseIndex,
+                                          )}
+                                      >
+                                        <i class="bx bx-text"></i>
+                                        Bloc de texte
+                                      </button>
+                                    </div>
+                                  {/if}
+                                </div>
+                              {/if}
+                              <A4Unit {unit} />
+                            </div>
+                          {:else if section.kind === 'subject'}
+                            <!-- svelte-ignore a11y-no-static-element-interactions -->
+                            <div
+                              class="a4-unit-wrapper"
+                              class:a4-exo-hovered={hoveredExercise ===
+                                unit.exerciseIndex}
+                              title={unit.source != null
+                                ? "Double-clic pour modifier l'énoncé"
+                                : undefined}
+                              on:mouseenter={() => handleUnitHover(unit)}
+                              on:dblclick={() => openEditor(unit)}
+                            >
+                              {#if hoveredExercise === unit.exerciseIndex && hoveredColumnKey === `${sectionIndex}-${pageIndex}-${columnIndex}` && unit.id === section.firstUnitIds[unit.exerciseIndex]}
+                                <div class="a4-insert a4-print-hidden">
+                                  <button
+                                    type="button"
+                                    class="a4-insert-plus"
+                                    title="Insérer au-dessus"
+                                    aria-label="Insérer au-dessus"
+                                    on:click|stopPropagation={() =>
+                                      toggleInsertMenu(unit.exerciseIndex)}
+                                  >
+                                    <i class="bx bx-plus"></i>
+                                  </button>
+                                  {#if insertMenuExercise === unit.exerciseIndex}
+                                    <div class="a4-insert-menu">
+                                      {#if unit.exerciseIndex > 0}
+                                        <button
+                                          type="button"
+                                          on:click={() =>
+                                            toggleBreakBefore(
+                                              unit.exerciseIndex,
+                                            )}
+                                        >
+                                          <i class="bx bx-arrow-to-right"></i>
+                                          {breaksBefore.includes(
+                                            unit.exerciseIndex,
+                                          )
+                                            ? 'Retirer le saut de colonne'
+                                            : 'Saut de colonne'}
+                                        </button>
+                                      {/if}
+                                      <button
+                                        type="button"
+                                        disabled={textBlocksBefore[
+                                          unit.exerciseIndex
+                                        ] != null}
+                                        on:click={() =>
+                                          insertTextBlockAbove(
+                                            unit.exerciseIndex,
+                                          )}
+                                      >
+                                        <i class="bx bx-text"></i>
+                                        Bloc de texte
+                                      </button>
+                                    </div>
+                                  {/if}
+                                </div>
+                              {/if}
+                              {#if hoveredExercise === unit.exerciseIndex && hoveredColumnKey === `${sectionIndex}-${pageIndex}-${columnIndex}` && (unitIndex === 0 || column[unitIndex - 1].exerciseIndex !== unit.exerciseIndex || column[unitIndex - 1].kind === 'textblock')}
+                                <div class="a4-hover-toolbar">
+                                  <button
+                                    type="button"
+                                    title="Monter l'exercice"
+                                    aria-label="Monter l'exercice"
+                                    disabled={unit.exerciseIndex === 0}
                                     on:click={() =>
-                                      (settingsExerciseIndex =
-                                        unit.exerciseIndex)}
+                                      moveExercise(unit.exerciseIndex, -1)}
                                   >
-                                    <i class="bx bx-cog"></i>
+                                    <i class="bx bx-up-arrow-alt"></i>
                                   </button>
                                   <button
                                     type="button"
-                                    title="Nouvelles données"
-                                    aria-label="Nouvelles données"
-                                    on:click={() => newData(unit.exerciseIndex)}
+                                    title="Descendre l'exercice"
+                                    aria-label="Descendre l'exercice"
+                                    disabled={unit.exerciseIndex ===
+                                      exercises.length - 1}
+                                    on:click={() =>
+                                      moveExercise(unit.exerciseIndex, 1)}
                                   >
-                                    <i class="bx bx-refresh"></i>
+                                    <i class="bx bx-down-arrow-alt"></i>
                                   </button>
-                                {/if}
-                                <button
-                                  type="button"
-                                  title="Supprimer l'exercice"
-                                  aria-label="Supprimer l'exercice"
-                                  on:click={() =>
-                                    removeExercise(unit.exerciseIndex)}
-                                >
-                                  <i class="bx bx-trash"></i>
-                                </button>
-                              </div>
-                            {/if}
-                            <A4Unit {unit} />
-                          </div>
-                        {:else}
-                          <!-- svelte-ignore a11y-no-static-element-interactions -->
-                          <div
-                            class="a4-unit-wrapper"
-                            title={unit.source != null
-                              ? 'Double-clic pour modifier la correction'
-                              : undefined}
-                            on:dblclick={() => openEditor(unit)}
-                          >
-                            <A4Unit {unit} />
-                          </div>
-                        {/if}
-                      {/each}
+                                  {#if exercises[unit.exerciseIndex] != null}
+                                    <button
+                                      type="button"
+                                      title="Réglages de l'exercice"
+                                      aria-label="Réglages de l'exercice"
+                                      on:click={() =>
+                                        (settingsExerciseIndex =
+                                          unit.exerciseIndex)}
+                                    >
+                                      <i class="bx bx-cog"></i>
+                                    </button>
+                                    <button
+                                      type="button"
+                                      title="Nouvelles données"
+                                      aria-label="Nouvelles données"
+                                      on:click={() =>
+                                        newData(unit.exerciseIndex)}
+                                    >
+                                      <i class="bx bx-refresh"></i>
+                                    </button>
+                                  {/if}
+                                  <button
+                                    type="button"
+                                    title="Supprimer l'exercice"
+                                    aria-label="Supprimer l'exercice"
+                                    on:click={() =>
+                                      removeExercise(unit.exerciseIndex)}
+                                  >
+                                    <i class="bx bx-trash"></i>
+                                  </button>
+                                </div>
+                              {/if}
+                              <A4Unit {unit} />
+                            </div>
+                          {:else}
+                            <!-- svelte-ignore a11y-no-static-element-interactions -->
+                            <div
+                              class="a4-unit-wrapper"
+                              title={unit.source != null
+                                ? 'Double-clic pour modifier la correction'
+                                : undefined}
+                              on:dblclick={() => openEditor(unit)}
+                            >
+                              <A4Unit {unit} />
+                            </div>
+                          {/if}
+                        {/each}
+                      </div>
+                    {/each}
+                  </div>
+                  {#if options.showFooter}
+                    <div
+                      class="a4-footer-license"
+                      style="left: {options.marginHMm}mm;"
+                    >
+                      <span class="font-logo9">MathALÉA</span> CC-BY-SA
                     </div>
-                  {/each}
-                </div>
-                {#if options.showFooter}
-                  <div
-                    class="a4-footer-license"
-                    style="left: {options.marginHMm}mm;"
-                  >
-                    <span class="font-logo9">MathALÉA</span> CC-BY-SA
-                  </div>
-                  <div class="a4-page-number">
-                    {pageIndex + 1} / {section.pages.length}
-                  </div>
-                {/if}
-              </section>
+                    <div class="a4-page-number">
+                      {pageIndex + 1} / {section.pages.length}
+                    </div>
+                  {/if}
+                </section>
+              {/each}
             {/each}
-          {/each}
-        {/key}
-      </div>
+          {/key}
+        </div>
       </div>
     </div>
   {/if}
@@ -1671,7 +1678,7 @@
         >
           Réglages de la page
         </h3>
-        
+
         <div class="flex items-center justify-between gap-4 text-sm">
           <span>Format</span>
           <div class="flex items-center gap-4">
