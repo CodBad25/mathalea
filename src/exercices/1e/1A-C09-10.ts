@@ -1,9 +1,7 @@
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 import { choice } from '../../lib/outils/arrayOutils'
-import {
-  reduireAxPlusB,
-} from '../../lib/outils/ecritures'
+import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -20,7 +18,7 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Factoriser ou développer une expression du type $A^2-B^2$'
 export default class Puissances extends ExerciceQcmA {
-   appliquerLesValeurs = (
+  appliquerLesValeurs = (
     a: number,
     b: number,
     c: number,
@@ -38,8 +36,14 @@ export default class Puissances extends ExerciceQcmA {
     const fact2b = b + d
 
     const polyBon = new Polynome({ rand: false, coeffs: [C, B, A] }).toLatex()
-    const polyFaux1 = new Polynome({ rand: false, coeffs: [C, -B, A] }).toLatex()
-    const polyFaux2 = new Polynome({ rand: false, coeffs: [-C, B, A] }).toLatex()
+    const polyFaux1 = new Polynome({
+      rand: false,
+      coeffs: [C, -B, A],
+    }).toLatex()
+    const polyFaux2 = new Polynome({
+      rand: false,
+      coeffs: [-C, B, A],
+    }).toLatex()
 
     const factBonne = `\\left(${reduireAxPlusB(fact1a, fact1b)}\\right)\\left(${reduireAxPlusB(fact2a, fact2b)}\\right)`
     // Erreur : (ax+b) - (cx+d) mal distribué en (ax+b-cx+d), soit ((a-c)x+(b+d))
@@ -51,13 +55,9 @@ export default class Puissances extends ExerciceQcmA {
     this.enonce += `À quelle expression est égale $\\left(${reduireAxPlusB(a, b)}\\right)^2-\\left(${reduireAxPlusB(c, d)}\\right)^2$ ?`
 
     const ligneFact =
-      cas === 1
-        ? `&=${miseEnEvidence(factBonne)}\\\\`
-        : `&=${factBonne}\\\\`
+      cas === 1 ? `&=${miseEnEvidence(factBonne)}\\\\` : `&=${factBonne}\\\\`
     const ligneDev =
-      cas === 2
-        ? `&=${miseEnEvidence(polyBon)}.`
-        : `&=${polyBon}.`
+      cas === 2 ? `&=${miseEnEvidence(polyBon)}.` : `&=${polyBon}.`
 
     this.correction = `On reconnaît une différence de deux carrés $A^2-B^2$ avec $A=${reduireAxPlusB(a, b)}$ et $B=${reduireAxPlusB(c, d)}$, qui se factorise en $(A-B)(A+B)$ .<br>
     $\\begin{aligned}
@@ -104,10 +104,7 @@ export default class Puissances extends ExerciceQcmA {
       const cas = choice([1, 2])
       this.appliquerLesValeurs(a, b, c, d, cas)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

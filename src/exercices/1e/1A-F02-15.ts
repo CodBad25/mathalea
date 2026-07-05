@@ -111,10 +111,7 @@ export default class auto1AF2g extends ExerciceQcmA {
 
       this.appliquerLesValeurs(a, b, c, d)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { fractionEgale: true })
-    ) // Limiter le nombre de tentatives pour éviter une boucle infinie
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // Limiter le nombre de tentatives pour éviter une boucle infinie
   }
 
   constructor() {

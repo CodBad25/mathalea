@@ -95,7 +95,7 @@ export default class AutoQ10AGt2026 extends ExerciceQcmA {
         choice([true, false]),
       )
       compteur++
-    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4))
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

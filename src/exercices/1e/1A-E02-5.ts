@@ -125,10 +125,7 @@ Ainsi, le prix initial est donné par : $${miseEnEvidence(`${texNombre(prixFinal
 
       this.appliquerLesValeurs(prixFinal, pourcentage)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

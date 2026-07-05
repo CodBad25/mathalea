@@ -73,10 +73,7 @@ export default class TauxReciproqueP extends ExerciceQcmA {
 
       this.appliquerLesValeurs(augmentation, taux)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { fractionEgale: true })
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

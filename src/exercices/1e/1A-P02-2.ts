@@ -238,10 +238,7 @@ $P(A) = 1 - ${texNombre(probAucun, 3)} = ${texNombre(probAuMoinsUn, 3)}$`
         probAucun,
       )
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true })
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

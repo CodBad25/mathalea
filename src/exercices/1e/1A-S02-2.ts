@@ -155,7 +155,7 @@ export default class QuartileQCM extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, this.reponses.length, true, {})
+      !aLeBonNombreDePropsDifferentes(this, this.reponses.length, true)
     ) // On s'assure d'avoir 5 réponses différentes, sinon on régénère
   }
 

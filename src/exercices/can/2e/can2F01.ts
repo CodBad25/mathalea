@@ -319,7 +319,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
       compteur++
     } while (
       compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, nombreSouhaites, true, {})
+      !aLeBonNombreDePropsDifferentes(this, nombreSouhaites, true)
     )
   }
 }

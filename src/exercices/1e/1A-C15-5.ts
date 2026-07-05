@@ -133,10 +133,7 @@ export default class Auto1C15r extends ExerciceQcmA {
 
       this.appliquerLesValeurs(config.puissance, config.duree, appareil)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true })
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

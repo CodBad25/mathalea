@@ -1,9 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import ExerciceQcm from '../../src/exercices/ExerciceQcm.js'
-import {
-  aLeBonNombreDePropsDifferentes,
-  guessOptionsForReponses,
-} from '../../src/lib/interactif/qcm.js'
+import { aLeBonNombreDePropsDifferentes } from '../../src/lib/interactif/qcm.js'
 import { mathaleaLoadExerciceFromUuid } from '../../src/lib/mathalea.js'
 import { findStatic, findUuid } from '../e2e/helpers/filter.js'
 
@@ -87,9 +84,8 @@ async function testQcmExercice(uuid: string) {
     ]
   }
   const expected = getExpectedCount(exercice)
-  const options =
-    exercice.optionsDeComparaison || guessOptionsForReponses(reponses)
-  const ok = aLeBonNombreDePropsDifferentes(exercice, expected, true, options)
+
+  const ok = aLeBonNombreDePropsDifferentes(exercice, expected, true)
   if (!ok) {
     // Pour debug :
     console.error(

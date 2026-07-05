@@ -542,9 +542,9 @@ function handleIntervalle(saisie: string, answer: string): ResultType {
     )
     // Nettoie le code saisi pour uniformiser toute saisie
     const clean = generateCleaner([
+      'espaces',
       'virgules',
       'parentheses',
-      'espaces',
       'accolades',
     ])
 
@@ -1362,7 +1362,6 @@ function handleFraction(
   // options.fractionEgale
   return mathEqual(parse(saisie), parse(answer)) ? ok() : fail()
 }
-
 /*
 function handleFractionIrreductible(
   saisie: string,

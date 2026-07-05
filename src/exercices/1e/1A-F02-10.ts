@@ -155,10 +155,7 @@ export default class AutoFO2j extends ExerciceQcmA {
         distracteur3,
       })
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

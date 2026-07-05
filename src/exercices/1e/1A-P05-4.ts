@@ -194,9 +194,7 @@ export default class auto1AP3a extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, this.reponses.length, true, {
-        fractionEgale: true,
-      })
+      !aLeBonNombreDePropsDifferentes(this, this.reponses.length, true)
     ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 

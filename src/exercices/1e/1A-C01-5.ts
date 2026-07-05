@@ -332,10 +332,7 @@ $a^2 > b^2$ : Faux. La fonction carré est croissante sur $[0\\,;+\\infty[$, don
       const cas = randint(1, 4)
       this.appliquerLesValeurs(cas)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true })
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

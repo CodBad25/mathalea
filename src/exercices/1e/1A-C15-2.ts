@@ -144,10 +144,7 @@ export default class Auto1C19b extends ExerciceQcmA {
         `$${fausseReponse3.texFractionSimplifiee}\\text{ du crédit.}$`,
       ]
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true })
-    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
     if (compteur >= 100) {
       console.warn(
         '100 tentatives de génération aléatoire sans succès pour obtenir 4 réponses différentes. Vérifiez la liste des fractions ou les conditions de génération.',
