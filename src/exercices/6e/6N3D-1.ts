@@ -2,19 +2,20 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment, segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
+import { orangeMathalea } from '../../lib/colors'
 import { demiDroiteInteractive } from '../../lib/interactif/demi_droite_interactive'
+import { choice } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
+import { adverbeNumeral } from '../../modules/nombreEnLettres'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const dateDePublication = '05/07/2026'
 export const titre =
-  'Placer une abscisse fractionnaire sur une demi-droite graduée'
+  'Placer une abscisse fractionnaire sur une demi-droite (fraction quotient)'
 export const interactifReady = true
 export const interactifType = 'custom'
-export const amcReady = true
-export const amcType = 'AMCHybride'
 
 /** Placer une abscisse fractionnaire sur une demi-droite graduée
  * @author Jean-Claude Lhote
@@ -22,7 +23,7 @@ export const amcType = 'AMCHybride'
 export const uuid = 'cff13'
 
 export const refs = {
-  'fr-fr': ['6N3D-1'],
+  'fr-fr': [],
   'fr-2016': [],
   'fr-ch': [],
 }
@@ -33,26 +34,41 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 5
-    this.exoCustomResultat = true
     this.correctionDetaillee = true
     this.correctionDetailleeDisponible = true
     this.besoinFormulaireCaseACocher = ['Avec une multiplication', false]
-    // this.besoinFormulaire2Numerique = ['Nombre de points à placer', 3]
-    // this.besoinFormulaire3CaseACocher = ['Avec les abscisses négatives', false]
-    // this.sup2 = 1
+    this.besoinFormulaire2CaseACocher = [
+      'Avec partage en 5 et 10 pour la version latex',
+      false,
+    ]
     this.sup = false
-    // this.sup3 = false
+    this.sup2 = false
+    this.comment = `Cet exercice se distingue de la série CM2N2E par le fait qu'on utilise la notion de quotient pour placer le point A.<br>
+    En version HTML, on peut avoir un diviseur allant de 2 à 10 (le bouton |+ permet de modifier le nombre de parts).<br>
+    En version LaTex, les diviseurs sont limités à 2, 4, 5 et 10 (ou 2 et 4 seulement si la case est décochée), car l'élève doit effectuer lui même le partage du segment [OT] après avoir placé le point T.`
   }
 
   nouvelleVersion() {
+    this.consigne = context.isHtml
+      ? 'Utiliser les boutons pour modifier la demi-droite graduée et créer les graduations nécessaires pour placer le point $A$.'
+      : "L'unité est le cm. Un segment [OT] est à construire sur la demi-droite graduée, puis à partager en parties égales pour placer le point $A$."
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const abscisseT = randint(4, 9)
-      const den = randint(3, 7, abscisseT)
+      const den = context.isHtml
+        ? randint(2, 10, abscisseT)
+        : this.sup2
+          ? choice([2, 4, 5, 10])
+          : choice([2, 4])
       const num = this.sup ? randint(2, den - 1) * abscisseT : abscisseT
 
       let texte = `Placer le point $A$ d'abscisse $\\dfrac{${num}}{${den}}$ sur la demi-droite graduée ci-dessous.<br><br>`
-      let texteCorr = `Le point d'abscisse $\\dfrac{${num}}{${den}}$ est placé sur la demi-droite graduée ci-dessous.<br><br>`
-
+      let texteCorr = `On construit le segment [OT] de longueur ${abscisseT} cm, puis on le partage en ${den} parties égales.<br>
+        Le point A est placé sur la ${adverbeNumeral(num / abscisseT)} graduation après $O$.<br>`
+      texteCorr +=
+        this.correctionDetaillee && this.sup
+          ? `En effet, $\\dfrac{${num}}{${den}} =${num / abscisseT} \\times \\dfrac{${abscisseT}}{${den}}$.<br><br>`
+          : ''
+      texteCorr += `Le point d'abscisse $\\dfrac{${num}}{${den}}$ est placé sur la demi-droite graduée ci-dessous.<br><br>`
       if (context.isHtml) {
         texte += demiDroiteInteractive(this, i, {
           initialT: 2,
@@ -66,6 +82,8 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
           interactivityOn: false,
           partsCount: den,
           points: [{ pointValue: num / den, label: 'A' }],
+          id: `demi-droite-gradueeEx${this.numeroExercice}Q${i}Corr`,
+          pointsColor: orangeMathalea,
         })
       } else {
         const O = pointAbstrait(0, 0, 'O', 'above')
@@ -102,6 +120,7 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
       `#demi-droite-gradueeEx${this.numeroExercice}Q${i}`,
     ) as
       | (HTMLElement & {
+          disableControls: () => void
           value: {
             partsCount: number
             maxT: number
@@ -124,6 +143,8 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
       this.reponsesAttendues[i].num / this.reponsesAttendues[i].den
     const saisi = value.points[0]?.pointValue
     const ok = saisi !== undefined && Math.abs(saisi - attendu) < 1e-9
+
+    host.disableControls()
 
     if (spanResultat) {
       spanResultat.innerHTML = ok ? '😎' : '☹️'
