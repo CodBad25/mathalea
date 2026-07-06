@@ -4,6 +4,7 @@ import { polygone, polygoneAvecNom } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
 import { homothetie } from '../../lib/2d/transformations'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -18,7 +19,7 @@ import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
-import { nombreDeChiffresDe } from '../../lib/outils/nombres'
+import { nombreDeChiffresDe, rangeMinMax } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
 import { prenom } from '../../lib/outils/Personne'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -31,8 +32,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Mettre en équation un problème et le résoudre'
 export const interactifReady = true
@@ -60,6 +59,113 @@ export const refs = {
 }
 
 // fonctions problèmes
+
+// arithmétique
+function sommeDenombresConsecutifs() {
+  const x = randint(17, 27) // variables.x // nombre du milieu de la suite de trois ou 5 nombres
+  const nbTermes = choice([3, 5]) // variables.nombreTermes // nombre de termes de la suite
+  const equation =
+    nbTermes === 3
+      ? `(x-1)+x+(x+1)=${3 * x}`
+      : `(x-2)+ (x-1)+x+(x+1)+(x+2)=${5 * x}`
+  const resolution = {
+    equation,
+    texteCorr: `${texteEnCouleurEtGras('Résolvons cette équation :', 'black')}<br>
+    Commençons par réduire le membre de gauche :<br>
+    ${
+      nbTermes === 3
+        ? `$\\begin{aligned}x \\cancel{- 1} + x + x \\cancel{+ 1} &= ${3 * x}\\\\
+    3x &= ${3 * x}\\\\
+    x=${x}\\\\
+    \\end{aligned}$`
+        : `$\\begin{aligned}x \\cancel{- 2} + x \\cancel{- 1} + x + x \\cancel{+ 1} + x \\cancel{+ 2} &= ${5 * x}\\\\
+    5x &= ${5 * x}\\\\
+    x&=${x}\\\\
+    \\end{aligned}$<br>`
+    }`,
+  }
+  const enonce = `On considère une suite de ${nbTermes} nombres consécutifs. La somme de ces ${nbTermes} nombres est $${nbTermes * x}$.<br>
+  Trouver cette suite de ${nbTermes} nombres consécutifs.`
+  const intro = `Posons $x$ le terme du milieu de cette suite.<br>
+  La somme de ces ${nbTermes} nombres fournit l'équation suivante :<br>`
+  const conclusion = `Les nombres consécutifs sont : ${rangeMinMax(
+    -Math.floor(nbTermes / 2),
+    Math.floor(nbTermes / 2),
+  )
+    .map((n) => `$${x + n}$`)
+    .join(' ; ')}.<br>`
+  const figure = ''
+  const uniteOptions = ['', '', '']
+  const verification = `${texteEnCouleurEtGras('Vérification :', 'black')}<br>
+   $${rangeMinMax(-Math.floor(nbTermes / 2), Math.floor(nbTermes / 2))
+     .map((n) => `${x + n}`)
+     .join('+ ')} = ${nbTermes * x}$<br>`
+
+  return {
+    enonce,
+    intro,
+    conclusion,
+    figure,
+    uniteOptions,
+    verification,
+    x: rangeMinMax(-Math.floor(nbTermes / 2), Math.floor(nbTermes / 2))
+      .map((n) => `${x + n}`)
+      .join(' ; '),
+    resolution,
+  }
+}
+
+function ageDuPereEtDuFils() {
+  let n: number
+  let xn: number
+  let an: number
+  let x: number
+  let a: number
+  do {
+    n = randint(2, 5) // variables.n // nombre d'années dans le futur
+    xn = randint(20, 30) // variables.x // âge du fils dans n années
+    an = 2 * xn // variables.a // âge du père dans n années
+    x = xn - n // variables.x // âge du fils aujourd'hui
+    a = an - n // variables.a // âge du père aujourd'hui
+  } while (a < 20 || x < 0)
+  const enonce = `Un père a ${a - x} ans de plus que son fils. Dans ${n} ans, l'age du père sera le double de l'âge du fils.<br>
+  Quels sont les âges du fils et du père aujourd'hui ?<br>`
+  const intro = `Posons $x$ l'âge du fils aujourd'hui.<br>
+  L'âge du père aujourd'hui est donc $${a - x}+x$.<br>
+  Dans ${n} ans, l'âge du fils sera $x+${n}$ et l'âge du père sera $2\\times(x+${n})$.<br>
+  L'énoncé se traduit par l'équation suivante :<br>`
+  const equation = `2\\times(x+${n})=${a - x}+x+${n}`
+  const resolution = {
+    equation,
+    texteCorr: `${texteEnCouleurEtGras('Résolvons cette équation :', 'black')}<br>
+    Commençons par développer et réduire les deux membres :<br>
+    $\\begin{aligned}2\\times(x + ${n}) &= 2x + ${2 * n}\\\\
+    2x + ${2 * n} &= ${a - x} + x + ${n}\\\\
+    2x + ${2 * n} &= ${a} + ${n}\\\\
+    2x &= ${a} + ${n} - ${2 * n}\\\\
+    2x &= ${a - n}\\\\
+    x &= ${x}\\\\
+    \\end{aligned}$<br>`,
+  }
+  const conclusion = `Le fils a donc $${miseEnEvidence(x)}$ ans et le père a $${miseEnEvidence(a)}$ ans.<br>`
+  const figure = ''
+  const uniteOptions = ['', '', '']
+  const verification = `${texteEnCouleurEtGras('Vérification :', 'black')}<br>
+  Dans ${n} ans, le fils aura $${x + n}$ ans et le père aura $${a + n}$ ans.<br>
+  Le double de l'âge du fils sera $2\\times ${x + n} = ${2 * (x + n)}$ ans et l'âge du père sera $${a + n}$ ans.<br>
+  Ainsi, le double de l'âge du fils est bien égal à l'âge du père dans ${n} ans.<br>`
+
+  return {
+    enonce,
+    intro,
+    conclusion,
+    figure,
+    uniteOptions,
+    verification,
+    x: `${x};${a}`,
+    resolution,
+  }
+}
 // figures
 function triangleIsocele1(): string {
   const O = pointAbstrait(6, 1.5)
@@ -846,6 +952,8 @@ const listeDeFonction = [
   isocele,
   thales,
   thales2,
+  sommeDenombresConsecutifs,
+  ageDuPereEtDuFils,
 ]
 
 export default class ProblemesEnEquation extends Exercice {
@@ -856,9 +964,9 @@ export default class ProblemesEnEquation extends Exercice {
     this.spacingCorr = 1.5
     this.besoinFormulaireTexte = [
       'Choix des problèmes',
-      'Nombres séparés par des tirets :\n1 : basket\n2 : basket2\n3 : achats\n4 : polygone\n5 : programmes (produit vs produit,\n ... solution entière positive)\n6 : programmes (produit vs produit,\n ... solution entière négative)\n7 : tarifs\n8 : spectacle\n9 : isocèle\n10 : Thalès\n11 : Thalès2\n12 : Mélange',
+      'Nombres séparés par des tirets :\n0 : Mélange\n1 : basket\n2 : basket2\n3 : achats\n4 : polygone\n5 : programmes (produit vs produit,\n ... solution entière positive)\n6 : programmes (produit vs produit,\n ... solution entière négative)\n7 : tarifs\n8 : spectacle\n9 : isocèle\n10 : Thalès\n11 : Thalès2\n12 : Somme de nombres consécutifs\n13 : Age du père et de son fils',
     ]
-    this.sup = '12'
+    this.sup = '0'
     this.besoinFormulaire2CaseACocher = ['Uniquement des nombres entiers']
     this.sup2 = false
     this.correctionDetaillee = true
@@ -868,9 +976,9 @@ export default class ProblemesEnEquation extends Exercice {
     const listeDeProblemes = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
-      max: 11,
-      melange: 12,
-      defaut: 1,
+      max: 13,
+      melange: 0,
+      defaut: 0,
       shuffle: true,
       nbQuestions: this.nbQuestions,
     }).map(Number)
@@ -895,10 +1003,16 @@ export default class ProblemesEnEquation extends Exercice {
             ? KeyboardType.longueur
             : KeyboardType.clavierDeBase,
           {
-            texteApres:
+            texteApres: `${
               uniteOptions[0] !== ''
                 ? '<em class="ml-2">(Une unité est attendue.)</em>'
-                : sp(2) + uniteOptions[2],
+                : sp(2) + uniteOptions[2]
+            }
+          ${
+            listeDeProblemes[i] >= 12
+              ? '<em class="ml-2">(Les nombres sont à donner dans l\'ordre croissant séparés par des points-virgules)</em>'
+              : ''
+          }`,
           },
         )
       let texteCorr = intro
@@ -932,10 +1046,40 @@ export default class ProblemesEnEquation extends Exercice {
                   texte: '',
                   statut: '',
                   reponse: {
-                    texte: 'Réponse au problème : ',
-                    valeur: [x],
+                    texte:
+                      listeDeProblemes[i] === 12
+                        ? 'On donnera le terme du mileu : '
+                        : listeDeProblemes[i] === 13
+                          ? "On donnera l'age du père : "
+                          : 'Réponse au problème : ',
+                    valeur: [
+                      typeof x === 'number'
+                        ? x
+                        : listeDeProblemes[i] === 12
+                          ? Number(
+                              x
+                                .split(';')
+                                [Math.floor(x.split(';').length / 2)].trim(),
+                            )
+                          : Number(x.split(';')[1].trim()),
+                    ],
                     param: {
-                      digits: Math.max(nombreDeChiffresDe(x), 2),
+                      digits: Math.max(
+                        nombreDeChiffresDe(
+                          typeof x === 'number'
+                            ? x
+                            : listeDeProblemes[i] === 12
+                              ? Number(
+                                  x
+                                    .split(';')
+                                    [
+                                      Math.floor(x.split(';').length / 2)
+                                    ].trim(),
+                                )
+                              : Number(x.split(';')[1].trim()),
+                        ),
+                        2,
+                      ),
                       signe: true,
                     },
                   },
@@ -950,8 +1094,14 @@ export default class ProblemesEnEquation extends Exercice {
       if (this.questionJamaisPosee(i, x, resolution.texteCorr)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
-
-        if (uniteOptions[0] === '')
+        if (listeDeProblemes[i] >= 12) {
+          handleAnswers(this, i, {
+            reponse: {
+              value: x,
+              options: { suiteDeNombres: true },
+            },
+          })
+        } else if (uniteOptions[0] === '')
           handleAnswers(this, i, { reponse: { value: x } })
         else
           handleAnswers(this, i, {

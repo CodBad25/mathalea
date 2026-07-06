@@ -3,6 +3,7 @@ Code inspiré de Sylvain, merci!
 https://stackoverflow.com/questions/55020193/is-it-possible-to-create-a-typescript-type-from-an-array
 */
 const VueTypeArray = <const>[
+  'a4',
   'alacarte',
   'diaporama',
   'can',

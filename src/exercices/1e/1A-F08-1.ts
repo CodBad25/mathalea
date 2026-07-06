@@ -157,10 +157,7 @@ export default class AutoF3a extends ExerciceQcmA {
         distracteur3,
       })
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

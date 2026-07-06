@@ -63,12 +63,7 @@ export default class Binomiale extends ExerciceQcm {
       this.correction = correction
       this.enonce = texte
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {
-        egaliteExpression: true,
-      })
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

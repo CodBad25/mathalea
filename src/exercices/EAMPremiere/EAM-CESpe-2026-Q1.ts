@@ -18,7 +18,8 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Calculer une probabilité à partir d\'un arbre de probabilités'
+export const titre =
+  "Calculer une probabilité à partir d'un arbre de probabilités"
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -27,12 +28,12 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ1CEs2026 extends ExerciceQcmA {
- appliquerLesValeurs = (
+  appliquerLesValeurs = (
     numA: number,
     numB_A: number,
     numB_NotA: number,
     xEstBarre: boolean,
-    yEstBarre: boolean
+    yEstBarre: boolean,
   ) => {
     const rationnel = false
 
@@ -68,7 +69,11 @@ export default class AutoQ1CEs2026 extends ExerciceQcmA {
           proba: pNotA.toNumber(),
           enfants: [
             new Arbre({ rationnel, nom: 'B', proba: pB_NotA.toNumber() }),
-            new Arbre({ rationnel, nom: '\\bar B', proba: pNotB_NotA.toNumber() }),
+            new Arbre({
+              rationnel,
+              nom: '\\bar B',
+              proba: pNotB_NotA.toNumber(),
+            }),
           ],
         }),
       ],
@@ -89,9 +94,13 @@ export default class AutoQ1CEs2026 extends ExerciceQcmA {
     // Résultat exact : P(X) × P_X(Y)
     const resAns = pX.mul(pY_X)
 
-    this.enonce = "Soient $A$ et $B$ deux événements.<br>On donne l'arbre de probabilités ci-dessous :<br>"
+    this.enonce =
+      "Soient $A$ et $B$ deux événements.<br>On donne l'arbre de probabilités ci-dessous :<br>"
     this.enonce += mathalea2d(
-      Object.assign({ display: 'inline' , scale:0.5} as const, fixeBordures(objets)),
+      Object.assign(
+        { display: 'inline', scale: 0.5 } as const,
+        fixeBordures(objets),
+      ),
       objets,
     )
     this.enonce += `<br>On peut alors affirmer que $P(${texX} \\cap ${texY})$ est égale à :`
@@ -108,12 +117,17 @@ export default class AutoQ1CEs2026 extends ExerciceQcmA {
     const d3 = pX.mul(pYbar_X) // mauvaise sous-branche : 0,6 × 0,3 = 0,18
 
     const distracteurs = [texNombre(d1), texNombre(d2), texNombre(d3)]
-    const distracteursUniques = [...new Set(distracteurs)].filter(d => d !== texNombre(resAns))
+    const distracteursUniques = [...new Set(distracteurs)].filter(
+      (d) => d !== texNombre(resAns),
+    )
 
     // Filet de sécurité : garantir 3 distracteurs uniques
     while (distracteursUniques.length < 3) {
       const texVal = texNombre(new Decimal(randint(1, 99)).div(100))
-      if (texVal !== texNombre(resAns) && !distracteursUniques.includes(texVal)) {
+      if (
+        texVal !== texNombre(resAns) &&
+        !distracteursUniques.includes(texVal)
+      ) {
         distracteursUniques.push(texVal)
       }
     }
@@ -165,11 +179,11 @@ export default class AutoQ1CEs2026 extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, this.reponses.length)
+      !aLeBonNombreDePropsDifferentes(this, this.reponses.length, true)
     )
   }
 
-  constructor () {
+  constructor() {
     super()
     this.versionAleatoire()
     this.spacingCorr = 2

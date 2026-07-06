@@ -13,8 +13,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 
-import ExerciceQcmA from '../ExerciceQcmA'
 import { bleuMathalea } from '../../lib/colors'
+import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '03/01/2026'
 export const uuid = '26795'
 
@@ -221,10 +221,7 @@ export default class AutoF01d extends ExerciceQcmA {
 
       this.appliquerLesValeurs(noeudsCourbe, coeffX, abs1, abs2, estSomme)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

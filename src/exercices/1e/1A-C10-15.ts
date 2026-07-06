@@ -152,10 +152,7 @@ Ainsi, l'inéquation dont $${x0}$ est solution est $${miseEnEvidence(`${bonneIne
         this.cas2(x0)
       }
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true })
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

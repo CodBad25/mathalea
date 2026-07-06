@@ -64,10 +64,7 @@ Diviser par $${nbPaiements}$ revient à multiplier par $\\dfrac{1}{${nbPaiements
     do {
       this.appliquerLesValeurs(1, 5, 3, 'Léa', 'elle')
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { fractionEgale: true })
-    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   versionAleatoire: () => void = () => {
@@ -96,10 +93,7 @@ Diviser par $${nbPaiements}$ revient à multiplier par $\\dfrac{1}{${nbPaiements
         personne.pronom,
       )
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { fractionEgale: true })
-    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {

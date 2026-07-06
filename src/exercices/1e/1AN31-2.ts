@@ -9,6 +9,7 @@ import {
   ecritureAlgebriqueSauf1,
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
+  reduirePolynomeDegre3,
   rienSi1,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -44,9 +45,9 @@ export default class DeriveeExp1AN312 extends Exercice {
     this.nbQuestions = 1
     this.besoinFormulaireTexte = [
       'Choix des questions',
-      'Nombres séparés par des tirets :\n1 : $a*e^x+bx+c$\n2 : $(ax+b)e^x  $\n3 : $\\dfrac{k*e^x}{a*x+b}$\n4 : $\\dfrac{ax+b}{e^x}$\n5 :   $(ax^2+bx+c)e^x$\n6 : $\\dfrac{k*e^x}{ax^2+b}$\n7 : Mélange',
+      'Nombres séparés par des tirets :\n0: Mélange\n1 : $a*e^x+bx+c$\n2 : $(ax+b)e^x  $\n3 : $\\dfrac{k*e^x}{a*x+b}$\n4 : $\\dfrac{ax+b}{e^x}$\n5 :   $(ax^2+bx+c)e^x$\n6 : $\\dfrac{k*e^x}{ax^2+b}$\n7 : $\\dfrac{ax^2+bx+c}{e^x}$',
     ]
-    this.sup = '7'
+    this.sup = '0'
     this.spacing = 1.5
     this.spacingCorr = 1.5
   }
@@ -55,9 +56,9 @@ export default class DeriveeExp1AN312 extends Exercice {
     const listeDeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
-      max: 6,
-      melange: 7,
-      defaut: 7,
+      max: 7,
+      melange: 0,
+      defaut: 0,
       nbQuestions: this.nbQuestions,
     })
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
@@ -258,6 +259,33 @@ export default class DeriveeExp1AN312 extends Exercice {
             handleAnswers(this, i, {
               reponse: { value, options: { fonction: true } },
             })
+          }
+          break
+        case 7: // \dfrac{ax^2+bx+c}{e^x}
+          {
+            const a = randint(-10, 10, 0)
+            const b = randint(-10, 10)
+            const c = randint(-10, 10, 0)
+            const k = randint(-5, 5, [0, 1, -1])
+            texte =
+              texteIntro +
+              ` $f(x) = \\dfrac{${reduirePolynomeDegre3(0, a, b, c)}}{\\mathrm{e}^x}$. <br> Calculer $f'(x)$ .`
+            texte += ajouteChampTexteMathLive(
+              this,
+              i,
+              KeyboardType.clavierFonctionsTerminales,
+              { texteAvant: "<br>$f'(x)=$" },
+            )
+            texteCorr = `On reconnaît que $f = \\dfrac{u}{v}$ avec $u(x) = ${reduirePolynomeDegre3(0, a, b, c)}$ et $v(x) = \\mathrm{e}^x$. <br>
+          On a $u'(x) = ${reduireAxPlusB(2 * a, b)}$ et $v'(x) = \\mathrm{e}^x$. <br>
+          Par conséquent, <br>$\\begin{aligned}f'(x) &= \\dfrac{u'(x) \\times v(x) - u(x) \\times v'(x)}{v(x)^2}\\\\
+          & = \\dfrac{(${reduireAxPlusB(2 * a, b)})\\times\\mathrm{e}^x   -  (${reduirePolynomeDegre3(0, a, b, c)})\\times\\mathrm{e}^x}{\\left(\\mathrm{e}^x\\right)^2} \\\\
+          & = \\dfrac{\\mathrm{e}^x \\left(${reduireAxPlusB(2 * a, b)} - (${reduirePolynomeDegre3(0, a, b, c)})\\right)}{\\left(\\mathrm{e}^x\\right)^2} \\\\
+           &=  \\dfrac{\\mathrm{e}^x(${reduirePolynomeDegre3(0, -a, 2 * a - b, b - c)})}{\\mathrm{e}^{2x}} \\\\
+           &=  ${miseEnEvidence(`\\dfrac{${reduirePolynomeDegre3(0, -a, 2 * a - b, b - c)}}{\\mathrm{e}^x}`)}
+          \\end{aligned}$.`
+            value = `\\dfrac{${reduirePolynomeDegre3(0, -a, 2 * a - b, b - c)}}{\\mathrm{e}^x}`
+            handleAnswers(this, i, { reponse: { value } })
           }
           break
       }

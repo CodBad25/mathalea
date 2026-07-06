@@ -55,12 +55,16 @@ export default class AutoQ3AGt2026 extends ExerciceQcmA {
       2,
     )}\\,\\%$.<br>
     Quelle est l'évolution globale de ce prix ?`
-
-    this.correction = `L'évolution globale se calcule en multipliant les coefficients multiplicateurs :<br>
-     $\\dfrac{100${ecritureAlgebrique(pourcentage1)}}{100} \\times \\dfrac{100${ecritureAlgebrique(pourcentage2)}}{100} =
-     ${texNombre((100 + pourcentage1) / 100, 2)}\\times ${texNombre((100 + pourcentage2) / 100, 2)} = ${texNombre(pGlobal / 100, 2)}=${texNombre(pGlobal, 2)}\\,\\%$.<br>
-     Ce coefficient multiplicateur correspond à une ${texteEnCouleurEtGras(`${pGlobal > 100 ? 'hausse de ' : 'baisse de '}`)}$${miseEnEvidence(texNombre(Math.abs(pGlobal - 100), 2) + '\\,\\%')}$.`
-
+this.correction = `On calcule les coefficients multiplicateurs de chaque évolution ($CM=1+T$, avec $T$ le taux d'évolution) :<br>
+    $CM_1=1${pourcentage1 >= 0 ? '+' : '-'}${texNombre(Math.abs(pourcentage1) / 100, 1)}=${texNombre((100 + pourcentage1) / 100, 1)}$ et $CM_2=1${pourcentage2 >= 0 ? '+' : '-'}${texNombre(Math.abs(pourcentage2) / 100, 1)}=${texNombre((100 + pourcentage2) / 100, 1)}$.<br><br>
+    Le coefficient multiplicateur global est donné par  :<br>
+    $CM_G=CM_1\\times CM_2=${texNombre((100 + pourcentage1) / 100, 1)}\\times ${texNombre((100 + pourcentage2) / 100, 1)}=${texNombre(pGlobal / 100, 2)}$.<br><br>
+    Le taux global d'évolution est : <br>
+    $T_G=CM_G-1=${texNombre(pGlobal / 100, 2)}-1=${texNombre(pGlobal / 100 - 1, 2)}=${texNombre(pGlobal - 100, 2)}\\,\\%$.<br><br>
+   L'évolution globale est une ${texteEnCouleurEtGras(`${pGlobal > 100 ? 'hausse de ' : 'baisse de '}`)}$${miseEnEvidence(texNombre(Math.abs(pGlobal - 100), 2) + '\\,\\%')}$.`
+   
+   
+   
     this.reponses = [sol, dist1, dist2, dist3]
   }
 
@@ -82,7 +86,6 @@ export default class AutoQ3AGt2026 extends ExerciceQcmA {
       const pourcentage1 = choice([10, 20, 30, 40])
       const pourcentage2 = choice([10, 20, 30, 40], pourcentage1)
 
-      const categorie2 = choice(['sont mineurs', 'sont étudiants'])
       this.appliquerLesValeurs(signe1 * pourcentage1, signe2 * pourcentage2)
       compteur++
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))

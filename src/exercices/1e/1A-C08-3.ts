@@ -320,10 +320,7 @@ $\\dfrac{${p}+${q}}{${r}} = ${miseEnEvidence(`\\dfrac{${p}}{${r}}+\\dfrac{${q}}{
     do {
       this.genererExercice(randint(1, 16))
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true })
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

@@ -24,7 +24,7 @@ export const dateDeModifImportante = '24/10/2021' // Une date de modification im
 export const uuid = '1aad3'
 
 export const refs = {
-  'fr-fr': ['1Tec-P12'],
+  'fr-fr': [''],
   'fr-ch': ['4mProbStat-11'],
 }
 export default class nomExercice extends Exercice {
@@ -78,9 +78,9 @@ export default class nomExercice extends Exercice {
           $\\quad\\bullet\\quad p_{T\\cup B}$ la proportion de personnes du club qui jouent au tarot ${texteGras('ou')} à la belote.<br>
           $\\quad\\bullet\\quad p_{T\\cap B}$ la proportion de personnes du club qui jouent au tarot ${texteGras('et')} à la belote.<br>
         La population de référence est l'ensemble des membres du club, son effectif est $${effectif}$.<br>
-        <br>D'après le cours, pour calculer la proportion d'une sous-population dans une population, on calcule :<br>
-        <br>$p=\\dfrac{\\text{effectif de la sous-population}}{\\text{effectif de la population de référence}}$<br>
-        <br>On a donc :  $p_T=\\dfrac{${tarot}}{${effectif}}\\quad;\\quad p_B=\\dfrac{${belote}}{${effectif}} \\quad;\\quad p_{T\\cap B}=\\dfrac{${inter}}{${effectif}}$<br>
+        D'après le cours, pour calculer la proportion d'une sous-population dans une population, on calcule :<br>
+        $p=\\dfrac{\\text{effectif de la sous-population}}{\\text{effectif de la population de référence}}$<br>
+        On a donc :  $p_T=\\dfrac{${tarot}}{${effectif}}\\quad;\\quad p_B=\\dfrac{${belote}}{${effectif}} \\quad;\\quad p_{T\\cap B}=\\dfrac{${inter}}{${effectif}}$<br>
           On sait que  $p_{T\\cup B} = p_T + p_B -  p_{T\\cap B}$.<br>
          Ce qui revient, en appliquant les données de l'énoncé, à écrire :<br>
          $p_{T\\cup B} = \\dfrac{${tarot}}{${effectif}} +\\dfrac{${belote}}{${effectif}}-\\dfrac{${inter}}{${effectif}}=\\dfrac{${union}}{${effectif}} \\approx ${miseEnEvidence(texNombre(union / effectif, 2))}$<br>
@@ -97,10 +97,10 @@ export default class nomExercice extends Exercice {
           $\\quad\\bullet\\quad p_{T\\cup B}$ la proportion de personnes du club qui jouent au tarot ${texteGras('ou')} à la belote.<br>
           $\\quad\\bullet\\quad p_{T\\cap B}$ la proportion de personnes du club qui jouent au tarot ${texteGras('et')} à la belote.<br>
         La population de référence est l'ensemble des membres du club, son effectif est $${effectif}$.<br>
-       <br>
+      
         D'après le cours, pour calculer la proportion d'une sous-population dans une population, on calcule :<br>
-        <br>$p=\\dfrac{\\text{effectif de la sous-population}}{\\text{effectif de la population de référence}}$<br>
-        <br>On a donc :  $p_T=\\dfrac{${tarot}}{${effectif}}\\quad ; \\quad p_B=\\dfrac{${belote}}{${effectif}}\\quad ; \\quad p_{T\\cup B}=\\dfrac{${union}}{${effectif}}$<br>
+        $p=\\dfrac{\\text{effectif de la sous-population}}{\\text{effectif de la population de référence}}$<br>
+        On a donc :  $p_T=\\dfrac{${tarot}}{${effectif}}\\quad ; \\quad p_B=\\dfrac{${belote}}{${effectif}}\\quad ; \\quad p_{T\\cup B}=\\dfrac{${union}}{${effectif}}$<br>
          On note
          On sait que  $p_{T\\cup B} = p_T + p_B -  p_{T\\cap B}$.<br>
          Ce qui revient, en appliquant les données de l'énoncé, à écrire :

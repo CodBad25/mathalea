@@ -324,12 +324,7 @@ L'équation qui modélise la situation est $${miseEnEvidence(`${nbCroissants}x-$
         }
       }
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {
-        egaliteExpression: true,
-      })
-    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {

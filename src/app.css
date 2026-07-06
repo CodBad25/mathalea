@@ -726,6 +726,32 @@ input[type='radio']:focus {
       url('/fonts/source-code-pro-900-italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
+/* OpenDyslexic : police pour élèves dyslexiques (vue Impression A4) */
+@font-face {
+  font-family: 'OpenDyslexic';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/OpenDyslexic-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  font-style: italic;
+  font-weight: 400;
+  src: url('/fonts/OpenDyslexic-Italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  font-style: normal;
+  font-weight: 700;
+  src: url('/fonts/OpenDyslexic-Bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  font-style: italic;
+  font-weight: 700;
+  src: url('/fonts/OpenDyslexic-Bold-Italic.woff2') format('woff2');
+}
+
 /* 
 888b     d888                                                                
 8888b   d8888                                                                

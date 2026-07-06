@@ -12,8 +12,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 
-import ExerciceQcmA from '../ExerciceQcmA'
 import { bleuMathalea } from '../../lib/colors'
+import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '11/11/2025'
 export const uuid = '3833f'
 
@@ -291,7 +291,7 @@ export default class AutoF01c extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true }) // on ne peut pas faire mieux vu les props
+      !aLeBonNombreDePropsDifferentes(this, 4, true) // on ne peut pas faire mieux vu les props
     ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 

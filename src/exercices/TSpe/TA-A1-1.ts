@@ -48,10 +48,7 @@ export default class Puissances extends ExerciceQcmA {
         'Aucune de ces propositions.',
       ]
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true })
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

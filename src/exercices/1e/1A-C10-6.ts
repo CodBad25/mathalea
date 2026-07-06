@@ -1,19 +1,19 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { droiteParPointEtPente } from '../../lib/2d/droites'
+import { crochetD, crochetG } from '../../lib/2d/intervalles'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-import { crochetD, crochetG } from '../../lib/2d/intervalles'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
-import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '02/10/2025'
 export const dateDeModifImportante = '12/10/2025'
 export const uuid = 'cc015'
@@ -110,7 +110,7 @@ export default class Auto1AC10f extends ExerciceQcmA {
     if (typeInequation === 'inf') {
       const sOAx = segment(O, Ax, 'red')
       sOAx.epaisseur = 2
-      const c1 = crochetD(O, 'red')                                         // [ en O (domaine [0;+∞[, toujours fermé)
+      const c1 = crochetD(O, 'red') // [ en O (domaine [0;+∞[, toujours fermé)
       const c2 = estInegStrict ? crochetD(Ax, 'red') : crochetG(Ax, 'red') // ] strict ou [ large en Ax
       segmentsSolution = [sOAx]
       crochets = [c1, c2]
@@ -118,7 +118,7 @@ export default class Auto1AC10f extends ExerciceQcmA {
       const AInf = pointAbstrait(5, 0)
       const sAxAInf = segment(Ax, AInf, 'red')
       sAxAInf.epaisseur = 2
-      const c = estInegStrict ? crochetG(Ax, 'red') : crochetD(Ax, 'red')  // ] strict ou [ large en Ax
+      const c = estInegStrict ? crochetG(Ax, 'red') : crochetD(Ax, 'red') // ] strict ou [ large en Ax
       segmentsSolution = [sAxAInf]
       crochets = [c]
     }
@@ -310,10 +310,7 @@ export default class Auto1AC10f extends ExerciceQcmA {
 
       this.appliquerLesValeurs(val, estInegStrict, typeInequation)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, { intervalle: true })
-    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {

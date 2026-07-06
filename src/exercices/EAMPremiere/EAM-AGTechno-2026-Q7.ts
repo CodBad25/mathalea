@@ -52,13 +52,13 @@ export default class AutoQ7AGt2026 extends ExerciceQcmA {
     const y = latex2d('y', -0.5, 4.8, { letterSize: 'small' })
     const rep = new RepereBuilder({
       xMin: -6,
-      xMax: 6.5,
+      xMax: 7,
       yMin: -1,
-      yMax: 4.8,
+      yMax: 5,
     })
       .setGrille({
-        grilleX: { dx: 1, style: 'pointilles' },
-        grilleY: { dy: 1, style: 'pointilles' },
+        grilleX: { dx: 1 },
+        grilleY: { dy: 1 },
       })
       .setThickX({ xMax: 6, xMin: -6, dx: 1 })
       .setThickY({ yMax: 4, yMin: -1, dy: 1 })
@@ -93,7 +93,7 @@ export default class AutoQ7AGt2026 extends ExerciceQcmA {
     this.correction = `La droite $(d)$ passe par les points $A(${texNombre(abscisseAOrigine, 2)};0)$ et $B(0;${texNombre(ordonneeAOrigine, 2)})$.<br>
     Son coefficient directeur est donc :<br>
     $a=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${texNombre(ordonneeAOrigine, 2)}-0}{0-${ecritureParentheseSiNegatif(-abscisseAOrigine)}}=\\dfrac{${texNombre(ordonneeAOrigine, 2)}}{${ecritureAlgebrique(-abscisseAOrigine)}}=${texNombre(coefficientDirecteur, 2)}$<br>
-    Et sont ordonnée à l'origine est : $x_B=${ordonneeAOrigine}$<br>
+   Son ordonnée à l'origine est : $y_B=${ordonneeAOrigine}$<br>
     L'équation réduite de la droite $(d)$ est donc :<br>
     $${miseEnEvidence(`y=${texNombre(coefficientDirecteur, 2)}x+${texNombre(ordonneeAOrigine, 2)}`)}$`
   }

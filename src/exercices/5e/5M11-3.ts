@@ -174,9 +174,9 @@ export default class PerimetreAireDisques extends Exercice {
           this.consigne +=
             '<br> On donnera une valeur approchée au dixième près '
           if (this.sup === 1) {
-            this.consigne += 'de$\\text{cm}$.'
+            this.consigne += 'de $\\text{cm}$.'
           } else if (this.sup === 2) {
-            this.consigne += 'de$\\text{cm}^2$.'
+            this.consigne += 'de $\\text{cm}^2$.'
           } else {
             this.consigne += 'des unités respectives ci-dessus.'
           }
@@ -188,9 +188,9 @@ export default class PerimetreAireDisques extends Exercice {
           this.consigne +=
             '<br> On donnera la valeur exacte ou une valeur approchée au dixième près '
           if (this.sup === 1) {
-            this.consigne += 'de$\\text{cm}$.'
+            this.consigne += 'de $\\text{cm}$.'
           } else if (this.sup === 2) {
-            this.consigne += 'de$\\text{cm}^2$.'
+            this.consigne += 'de $\\text{cm}^2$.'
           } else {
             this.consigne += 'des unités respectives ci-dessus.'
           }
@@ -200,9 +200,9 @@ export default class PerimetreAireDisques extends Exercice {
           this.consigne +=
             '<br> On donnera la valeur exacte puis une valeur approchée au dixième près '
           if (this.sup === 1) {
-            this.consigne += 'de$\\text{cm}$.'
+            this.consigne += 'de $\\text{cm}$.'
           } else if (this.sup === 2) {
-            this.consigne += 'de$\\text{cm}^2$.'
+            this.consigne += 'de $\\text{cm}^2$.'
           } else {
             this.consigne += 'des unités respectives ci-dessus.'
           }
@@ -311,7 +311,7 @@ export default class PerimetreAireDisques extends Exercice {
                 dataTemplate =
                   'Valeur exacte du périmètre : %{champ1}$\\text{cm}$'
                 dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
+                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
                 }
                 reponses = {
                   champ1: {
@@ -327,7 +327,7 @@ export default class PerimetreAireDisques extends Exercice {
                 dataTemplate =
                   'Valeur approchée du périmètre : %{champ1}$\\text{cm}$'
                 dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
+                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
                 }
                 reponses = {
                   champ1: { value: [reponseL2, reponseL2bis] },
@@ -338,8 +338,8 @@ export default class PerimetreAireDisques extends Exercice {
                 dataTemplate =
                   'Valeur exacte du périmètre : %{champ1}$\\text{cm}$\nValeur approchée du périmètre : %{champ2}$\\text{cm}$'
                 dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
-                  champ2: { keyboaed: KeyboardType.clavierNumbers },
+                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ2: { keyboard: KeyboardType.clavierNumbers, ldots: true },
                 }
                 reponses = {
                   champ1: {
@@ -407,7 +407,7 @@ export default class PerimetreAireDisques extends Exercice {
                 dataTemplate =
                   "Valeur exacte de l'aire : %{champ1}$\\text{cm}^2$"
                 dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
+                  champ1: { keyboard: KeyboardType.clavierNumbers,ldots: true },
                 }
                 reponses = {
                   champ1: {
@@ -423,7 +423,7 @@ export default class PerimetreAireDisques extends Exercice {
                 dataTemplate =
                   "Valeur approchée de l'aire : %{champ1}$\\text{cm}^2$"
                 dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
+                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
                 }
                 reponses = {
                   champ1: { value: [reponseA2, reponseA2bis] },
@@ -434,8 +434,8 @@ export default class PerimetreAireDisques extends Exercice {
                 dataTemplate =
                   "Valeur exacte de l'aire : %{champ1}$\\text{cm}^2$\nValeur approchée de l'aire : %{champ2}$\\text{cm}^2$"
                 dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
-                  champ2: { keyboaed: KeyboardType.clavierNumbers },
+                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ2: { keyboard: KeyboardType.clavierNumbers, ldots: true },
                 }
                 reponses = {
                   champ1: {
@@ -540,8 +540,8 @@ export default class PerimetreAireDisques extends Exercice {
                 dataTemplate =
                   "Valeur exacte du périmètre : %{champ1}$\\text{cm}$\nValeur exacte de l'aire : %{champ2}$\\text{cm}^2$"
                 dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
-                  champ2: { keyboaed: KeyboardType.clavierNumbers },
+                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ2: { keyboard: KeyboardType.clavierNumbers, ldots: true },
                 }
                 reponses = {
                   champ1: {
@@ -564,8 +564,8 @@ export default class PerimetreAireDisques extends Exercice {
                 dataTemplate =
                   "Valeur approchée du périmètre : %{champ1}$\\text{cm}$\nValeur approchée de l'aire : %{champ2}$\\text{cm}^2$"
                 dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
-                  champ2: { keyboaed: KeyboardType.clavierNumbers },
+                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ2: { keyboard: KeyboardType.clavierNumbers, ldots: true },
                 }
                 reponses = {
                   champ1: { value: [reponseL2, reponseL2bis] },
@@ -577,10 +577,10 @@ export default class PerimetreAireDisques extends Exercice {
                 dataTemplate =
                   "Valeur exacte du périmètre : %{champ1}$\\text{cm}$\nValeur approchée du périmètre : %{champ2}$\\text{cm}$\nValeur exacte de l'aire : %{champ3}$\\text{cm}^2$\nValeur approchée de l'aire : %{champ4}$\\text{cm}^2$"
                 dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
-                  champ2: { keyboaed: KeyboardType.clavierNumbers },
-                  champ3: { keyboaed: KeyboardType.clavierNumbers },
-                  champ4: { keyboaed: KeyboardType.clavierNumbers },
+                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ2: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ3: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ4: { keyboard: KeyboardType.clavierNumbers, ldots: true },
                 }
                 reponses = {
                   champ1: {

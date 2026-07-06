@@ -28,7 +28,7 @@ export const interactifType = 'mathLive'
 export const uuid = '76231'
 
 export const refs = {
-  'fr-fr': ['3S20-2', '1Tec-P11'],
+  'fr-fr': ['3S20-2', '1Tec-P20'],
   'fr-ch': ['3mP-7'],
 }
 export default class CalculProbaTab2Entrées extends Exercice {

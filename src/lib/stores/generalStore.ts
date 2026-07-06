@@ -17,6 +17,12 @@ import { globalOptions } from './globalOptions'
 export const freezeUrl = writable<boolean>(false)
 
 /**
+ * Réglages encodés (base64) de la vue Impression, maintenus dans l'URL
+ * par updateGlobalOptionsInURL. Alimenté par la vue A4 elle-même.
+ */
+export const a4ParamStore = writable<string>('')
+
+/**
  * Pour signaler que MathALÉA est dans une iframe
  */
 export const isInIframe = writable<boolean>(false)
@@ -204,6 +210,13 @@ export function updateGlobalOptionsInURL(url: URL) {
     )
   ) {
     url.searchParams.append('pdfParam', pdfParam)
+  }
+  // La vue A4 alimente son propre store plutôt que l'URL courante :
+  // on évite ainsi toute course entre son history.replaceState et
+  // l'écriture débouncée réalisée ici.
+  const a4Param = get(a4ParamStore)
+  if (options.v === 'a4' && a4Param.length > 0) {
+    url.searchParams.append('a4Param', a4Param)
   }
   urlToWrite = url
   // On ne met à jour l'url qu'une fois toutes les 0,5 s

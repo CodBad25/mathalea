@@ -19,7 +19,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre = 'Programmer des calculs sur tableur'
-export const dateDePublication = '14/01/2026'
+export const dateDePublication = '05/07/2026'
 
 export const interactifReady = true
 export const interactifType = 'tableur'
@@ -33,7 +33,7 @@ export const interactifType = 'tableur'
 export const uuid = 'ae07e'
 
 export const refs = {
-  'fr-fr': ['3T10'],
+  'fr-fr': ['3I13-1'],
   'fr-ch': [],
 }
 

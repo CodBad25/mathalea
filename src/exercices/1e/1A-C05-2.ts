@@ -73,10 +73,7 @@ export default class auto1AC5a extends ExerciceQcmA {
         this.appliquerLesValeurs(a, b, 3)
       }
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

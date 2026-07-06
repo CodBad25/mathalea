@@ -32,7 +32,15 @@ export default class AutoQ6AGt2026 extends ExerciceQcmA {
 
     this.enonce = `On considère $A=\\dfrac{\\dfrac{${num}}{${den}}}{${den2}}$ :<br>`
 
-    this.correction = `$A=\\dfrac{\\dfrac{${num}}{${den}}}{${den2}}=\\dfrac{${num}}{${den}}\\times \\dfrac{1}{${den2}}=\\dfrac{${num}}{${den} \\times ${den2}}=\\dfrac{\\cancel{${num}}}{${den} \\times \\cancel{${num}}\\times${den2 / num}} = ${miseEnEvidence(sol)}$`
+    this.correction = `Diviser par $${den2}$ revient à multiplier par son inverse : $\\dfrac{1}{${den2}}$<br>
+    Ainsi :<br>
+    $\\begin{aligned}
+    A&=\\dfrac{\\dfrac{${num}}{${den}}}{${den2}}\\\\
+    &=\\dfrac{${num}}{${den}}\\times \\dfrac{1}{${den2}}\\\\
+    &=\\dfrac{${num}}{${den} \\times ${den2}}\\\\
+    &=\\dfrac{\\cancel{${num}}}{${den} \\times \\cancel{${num}}\\times${den2 / num}} \\\\
+    &= ${miseEnEvidence(sol)}
+    \\end{aligned}$`
 
     this.reponses = [sol, dist1, dist2, dist3].map((x) => `$A=${x}$`)
   }

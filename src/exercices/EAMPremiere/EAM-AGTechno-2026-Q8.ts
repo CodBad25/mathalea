@@ -44,12 +44,12 @@ export default class AutoQ8AGt2026 extends ExerciceQcmA {
     const dist3 = fraction(yA - xA, yB - xB).texFractionSimplifiee
 
     this.reponses = [sol, dist1, dist2, dist3].map((x) => `$${x}$`)
-    this.enonce = `Dans un repère, on considère les points $${nomA}$ de coordonnées $(${xA};${yA})$ et $${nomB}$ de coordonnées $(${xB};${yB})$.
+    this.enonce = `Dans un repère, on considère les points $${nomA}$ de coordonnées $(${xA}\\,;\\,${yA})$ et $${nomB}$ de coordonnées $(${xB}\\,;\\, ${yB})$.<br>
 Le coefficient directeur de la droite $(${nomA}${nomB})$ est alors égal à :
     `
 
     this.correction = `Le coefficient directeur de la droite $(${nomA}${nomB})$ est donné par la formule :<br>
-    $a=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${yB}-${ecritureParentheseSiNegatif(yA)}}{${xB}-${ecritureParentheseSiNegatif(xA)}}=\\dfrac{${yB - yA}}{${xB - xA}}=${miseEnEvidence(sol)}$`
+    $a=\\dfrac{y_${nomB}-y_${nomA}}{x_${nomB}-x_${nomA}}=\\dfrac{${yB}-${ecritureParentheseSiNegatif(yA)}}{${xB}-${ecritureParentheseSiNegatif(xA)}}=\\dfrac{${yB - yA}}{${xB - xA}}=${miseEnEvidence(sol)}$`
   }
 
   versionOriginale: () => void = () => {

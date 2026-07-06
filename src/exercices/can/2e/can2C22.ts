@@ -184,9 +184,7 @@ Calculer $F$ lorsque $a=${a}$, $b=${b.texFraction}$, $c=${c}$ et $d=${d.texFract
       compteur++
     } while (
       compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, nombreSouhaites, true, {
-        avecFractions: true,
-      })
+      !aLeBonNombreDePropsDifferentes(this, nombreSouhaites, true)
     )
   }
 }

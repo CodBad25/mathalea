@@ -64,10 +64,7 @@ export default class Puissances extends ExerciceQcmA {
         `$\\left( x${distracteur.simplifie().ecritureAlgebrique}\\right)\\left( ${reduireAxPlusB(a2, b2)}\\right)$`,
       ]
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
-    )
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
     // Ici, on doit avoir une bonne réponse et 3 distracteurs distincts.
   }
 

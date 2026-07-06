@@ -1,12 +1,9 @@
 {
   "slides": [
     {
-      "title": "Le brevet et le bac approchent !",
-      "message": "Des conseils et des exercices pour réviser les examens de fin d'année",
-      "image": "revisions.png",
-      "link": "https://coopmaths.fr/www/revisions/",
-      "buttonTitle": "Accéder aux ressources pour réviser",
-      "mobileVisible": true
+      "title": "Cahier d'automatismes",
+      "message": "Nous proposerons bientôt un cahier libre et gratuit pour travailler tous les automatismes en classes de 1re et de 2nde.",
+      "image": "automatismes1re.png"
     },
     {
       "background": "carousel05.jpg",

@@ -112,10 +112,7 @@ export default class AugmentationsSuccessives extends ExerciceQcmA {
       // Construction du tableau final avec exactement 4 réponses
       this.reponses = [bonneReponse, ...troisDistracteurs]
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
-    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {

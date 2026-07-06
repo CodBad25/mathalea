@@ -229,7 +229,7 @@ export default class AutoQ6ANs2026 extends ExerciceQcmA {
     const texteCorrection = `Attention, le repère n'est pas orthonormé : on lit les coordonnées des points, on ne compte pas les carreaux.<br>
 La droite coupe l'axe des ordonnées en $A(0\\,;\\,${b})$ : l'ordonnée à l'origine est $${b}$.<br>
 Elle coupe l'axe des abscisses en $B(${a}\\,;\\,0)$.<br>
-En se déplaçant du point le plus à gauche ($${ptDep}$) vers le point le plus à droite ($${ptArr}$), le coefficient directeur vaut :<br>
+On calcule à l'aide de la formule du coefficient directeur :<br>
 $m=\\dfrac{y_${ptArr}-y_${ptDep}}{x_${ptArr}-x_${ptDep}}=\\dfrac{${miseEnEvidence(
       String(deltaY),
       'blue',

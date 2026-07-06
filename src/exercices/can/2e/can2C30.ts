@@ -69,7 +69,7 @@ On cherche $n$ tel que $2^{${p}n+1} = 2^{${k}}$, soit $${p}n+1=${k}$, d'où $n=\
     } while (
       this.versionQcm &&
       compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 5, true, {})
+      !aLeBonNombreDePropsDifferentes(this, 5, true)
     )
   }
 }
