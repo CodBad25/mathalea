@@ -17,7 +17,7 @@ import { globalOptions } from './globalOptions'
 export const freezeUrl = writable<boolean>(false)
 
 /**
- * Réglages encodés (base64) de la vue Impression A4, maintenus dans l'URL
+ * Réglages encodés (base64) de la vue Impression, maintenus dans l'URL
  * par updateGlobalOptionsInURL. Alimenté par la vue A4 elle-même.
  */
 export const a4ParamStore = writable<string>('')

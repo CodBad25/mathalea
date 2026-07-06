@@ -136,7 +136,7 @@
 {#if showA4}
 <ButtonIconTooltip
   icon="bx-printer text-3xl"
-  tooltip="Impression A4"
+  tooltip="Impression"
   on:click={() => handleExport('a4')}
 />
 {/if}

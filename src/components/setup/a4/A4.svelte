@@ -211,7 +211,10 @@
       ? 'font-family: Verdana, sans-serif;'
       : options.fontFamily === 'opendyslexic'
         ? "font-family: 'OpenDyslexic', Verdana, sans-serif;"
-        : '') + (options.doubleWordSpacing ? ' word-spacing: 0.25em;' : '')
+        : '') +
+    (options.wordSpacingEm > 0
+      ? ` word-spacing: ${options.wordSpacingEm}em;`
+      : '')
 
   const escapeHtml = (text: string) =>
     text
@@ -273,14 +276,24 @@
     previewHeightPx = window.innerHeight - rect.top - paddingTop - paddingBottom
   }
 
+  /** Certains exercices (CAN) chargent leurs questions de façon asynchrone et
+   * affichent des placeholders « chargement... » en attendant ; ils signalent
+   * la fin du chargement via cet événement, sinon la vue A4 resterait bloquée
+   * sur ces placeholders. */
+  function onAsyncExUpdated() {
+    refreshLayout(true)
+  }
+
   onMount(() => {
     loadExercises()
     window.addEventListener('resize', measurePreviewArea)
+    document.addEventListener('updateAsyncEx', onAsyncExUpdated)
     return () => window.removeEventListener('resize', measurePreviewArea)
   })
 
   onDestroy(() => {
     clearTimeout(refreshTimer)
+    document.removeEventListener('updateAsyncEx', onAsyncExUpdated)
     for (const exercise of exercises) {
       if (exercise == null) continue
       exercise.reinit?.()
@@ -378,17 +391,17 @@
           id: `${idPrefix}${k}-warning`,
           exerciseIndex: k,
           kind: 'warning',
-          html: "Cet exercice n'a pas pu être chargé : il n'est pas pris en charge par l'impression A4.",
+          html: "Cet exercice n'a pas pu être chargé : il n'est pas pris en charge pour l'impression directe.",
         })
         continue
       }
-      if (options.showExerciseTitles && !merged[k]) {
+      if (options.exerciseLabel !== '' && !merged[k]) {
         list.push({
           id: `${idPrefix}${k}-title`,
           exerciseIndex: k,
           kind: 'title',
           html: exerciseTitleHtml(k, titleNumbers[k], !grouped[k]),
-          style: `padding-top: ${exerciseGapEm}em;`,
+          style: `padding-top: ${k > 0 ? exerciseGapEm : 0}em;`,
         })
       }
       if (
@@ -454,7 +467,7 @@
     let previousExercise: number | null = null
     for (const [index, unit] of list.entries()) {
       const hasTitle =
-        options.showExerciseTitles && !merged[unit.exerciseIndex]
+        options.exerciseLabel !== '' && !merged[unit.exerciseIndex]
       if (index > 0 && unit.exerciseIndex !== previousExercise && !hasTitle) {
         unit.style = `padding-top: ${exerciseGapEm}em; ${unit.style ?? ''}`
       }
@@ -489,7 +502,7 @@
           exerciseIndex: k,
           kind: 'title',
           html: exerciseTitleHtml(k, titleNumbers[k], !grouped[k]),
-          style: `padding-top: ${exerciseGapEm}em;`,
+          style: `padding-top: ${list.length > 0 ? exerciseGapEm : 0}em;`,
         })
       }
       if (
@@ -684,10 +697,7 @@
       heightsBySection[sectionIndex]?.push(el.offsetHeight)
     }
     const columnHeightPx =
-      (PAGE_HEIGHT_MM -
-        2 * options.marginVMm -
-        (options.showFooter ? FOOTER_MM : 0)) *
-      MM_TO_PX
+      (PAGE_HEIGHT_MM - 2 * options.marginVMm - FOOTER_MM) * MM_TO_PX
     const subjectHeaderPx =
       galleySubjectHeaderEl != null
         ? galleySubjectHeaderEl.offsetHeight + HEADER_GAP_MM * MM_TO_PX
@@ -828,8 +838,7 @@
       orientation: defaultA4Options.orientation,
       fontFamily: defaultA4Options.fontFamily,
       showHeader: defaultA4Options.showHeader,
-      showFooter: defaultA4Options.showFooter,
-      showExerciseTitles: defaultA4Options.showExerciseTitles,
+      showPageNumbers: defaultA4Options.showPageNumbers,
       showExerciseRefs: defaultA4Options.showExerciseRefs,
       exerciseLabel: defaultA4Options.exerciseLabel,
       mergeExercises: defaultA4Options.mergeExercises,
@@ -837,7 +846,7 @@
       marginVMm: defaultA4Options.marginVMm,
       questionSpacing: defaultA4Options.questionSpacing,
       exerciseSpacing: defaultA4Options.exerciseSpacing,
-      doubleWordSpacing: defaultA4Options.doubleWordSpacing,
+      wordSpacingEm: defaultA4Options.wordSpacingEm,
     }
     docTitle = DEFAULT_TITLE
     headerLine = DEFAULT_HEADER_LINE
@@ -1255,7 +1264,7 @@
 </script>
 
 <svelte:head>
-  <title>MathALÉA - Impression A4</title>
+  <title>MathALÉA - Impression</title>
   {@html `<style>@page { size: ${PAGE_WIDTH_MM}mm ${PAGE_HEIGHT_MM}mm; margin: 0; }</style>`}
 </svelte:head>
 
@@ -1267,7 +1276,7 @@
 >
   <div class="a4-print-hidden bg-coopmaths-canvas dark:bg-coopmathsdark-canvas">
     <NavBar
-      subtitle="Impression A4"
+      subtitle="Impression"
       subtitleType="export"
       handleLanguage={() => {}}
       locale={$referentielLocale}
@@ -1773,13 +1782,13 @@
                       </div>
                     {/each}
                   </div>
-                  {#if options.showFooter}
-                    <div
-                      class="a4-footer-license"
-                      style="left: {options.marginHMm}mm;"
-                    >
-                      <span class="font-logo9">MathALÉA</span> CC-BY-SA
-                    </div>
+                  <div
+                    class="a4-footer-license"
+                    style="left: {options.marginHMm}mm;"
+                  >
+                    <span class="font-logo9">MathALÉA</span> CC-BY-SA
+                  </div>
+                  {#if options.showPageNumbers}
                     <div class="a4-page-number">
                       {pageIndex + 1} / {section.pages.length}
                     </div>
@@ -1887,25 +1896,62 @@
           Réglages de la page
         </h3>
 
+        <label class="flex items-center justify-between gap-4 text-sm">
+          Format
+          <select
+            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={options.pageFormat}
+            on:change={() => scheduleRefresh(true, 0)}
+          >
+            <option value="A4">A4</option>
+            <option value="A5">A5</option>
+          </select>
+        </label>
+
+        <label class="flex items-center justify-between gap-4 text-sm">
+          Orientation
+          <select
+            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={options.orientation}
+            on:change={() => scheduleRefresh(true, 0)}
+          >
+            <option value="portrait">Portrait</option>
+            <option value="landscape">Paysage</option>
+          </select>
+        </label>
+
+        <!-- Input hors du label (for/id) : un input number imbriqué dans un
+             label reçoit un second clic synthétique lors d'un clic sur le
+             spinner, ce qui incrémente deux fois. -->
         <div class="flex items-center justify-between gap-4 text-sm">
-          <span>Format</span>
-          <div class="flex items-center gap-4">
-            <select
-              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-              bind:value={options.pageFormat}
-              on:change={() => scheduleRefresh(true, 0)}
-            >
-              <option value="A4">A4</option>
-              <option value="A5">A5</option>
-            </select>
-            <select
-              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-              bind:value={options.orientation}
-              on:change={() => scheduleRefresh(true, 0)}
-            >
-              <option value="portrait">Portrait</option>
-              <option value="landscape">Paysage</option>
-            </select>
+          <label for="a4-margin-h-input">Marge horizontale</label>
+          <div class="flex items-center gap-2">
+            <input
+              id="a4-margin-h-input"
+              type="number"
+              min="5"
+              max="30"
+              class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={options.marginHMm}
+              on:change={() => scheduleRefresh(false, 0)}
+            />
+            mm
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between gap-4 text-sm">
+          <label for="a4-margin-v-input">Marge verticale</label>
+          <div class="flex items-center gap-2">
+            <input
+              id="a4-margin-v-input"
+              type="number"
+              min="5"
+              max="30"
+              class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={options.marginVMm}
+              on:change={() => scheduleRefresh(false, 0)}
+            />
+            mm
           </div>
         </div>
 
@@ -1922,47 +1968,61 @@
           </select>
         </label>
 
-        <label class="flex items-center gap-2 text-sm cursor-pointer">
+        <div class="flex items-center justify-between gap-4 text-sm">
+          <label for="a4-question-spacing-input">Espacement entre les questions</label>
           <input
-            type="checkbox"
-            bind:checked={options.doubleWordSpacing}
-            on:change={() => scheduleRefresh(false, 0)}
+            id="a4-question-spacing-input"
+            type="number"
+            min="1"
+            max="12"
+            step="0.5"
+            class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={options.questionSpacing}
+            on:change={() => scheduleRefresh(true, 0)}
           />
-          Doubler l'espacement entre les mots
-        </label>
+        </div>
 
         <div class="flex items-center justify-between gap-4 text-sm">
-          <span>Espacement</span>
-          <div class="flex items-center gap-4">
-            <!-- Inputs hors des labels (for/id) : voir le commentaire des marges -->
-            <div class="flex items-center gap-2">
-              <label for="a4-question-spacing-input">Questions</label>
-              <input
-                id="a4-question-spacing-input"
-                type="number"
-                min="1"
-                max="12"
-                step="0.5"
-                class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-                bind:value={options.questionSpacing}
-                on:change={() => scheduleRefresh(true, 0)}
-              />
-            </div>
-            <div class="flex items-center gap-2">
-              <label for="a4-exercise-spacing-input">Exercices</label>
-              <input
-                id="a4-exercise-spacing-input"
-                type="number"
-                min="0"
-                max="12"
-                step="0.5"
-                class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-                bind:value={options.exerciseSpacing}
-                on:change={() => scheduleRefresh(true, 0)}
-              />
-            </div>
-          </div>
+          <label for="a4-exercise-spacing-input">Espacement entre les exercices</label>
+          <input
+            id="a4-exercise-spacing-input"
+            type="number"
+            min="0"
+            max="12"
+            step="0.5"
+            class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={options.exerciseSpacing}
+            on:change={() => scheduleRefresh(true, 0)}
+          />
         </div>
+
+        <div class="flex items-center justify-between gap-4 text-sm">
+          <label for="a4-word-spacing-input">Espacement supplémentaire entre les mots</label>
+          <input
+            id="a4-word-spacing-input"
+            type="number"
+            min="0"
+            max="1"
+            step="0.05"
+            class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={options.wordSpacingEm}
+            on:change={() => scheduleRefresh(false, 0)}
+          />
+        </div>
+
+        <label class="flex items-center justify-between gap-4 text-sm">
+          Libellé de la numérotation
+          <select
+            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={options.exerciseLabel}
+            on:change={() => scheduleRefresh(true, 0)}
+          >
+            <option value="Exercice">Exercice</option>
+            <option value="Question">Question</option>
+            <option value="Activité">Activité</option>
+            <option value="">Aucun</option>
+          </select>
+        </label>
 
         <label class="flex items-center gap-2 text-sm cursor-pointer">
           <input
@@ -1976,31 +2036,12 @@
         <label class="flex items-center gap-2 text-sm cursor-pointer">
           <input
             type="checkbox"
-            bind:checked={options.showFooter}
+            bind:checked={options.showPageNumbers}
             on:change={() => scheduleRefresh(false, 0)}
           />
-          Afficher le pied de page (numéros de page)
+          Afficher les numéros de page
         </label>
-        <label class="flex items-center gap-2 text-sm cursor-pointer">
-          <input
-            type="checkbox"
-            bind:checked={options.showExerciseTitles}
-            on:change={() => scheduleRefresh(true, 0)}
-          />
-          Afficher la numérotation des exercices
-        </label>
-        <label class="flex items-center justify-between gap-4 text-sm">
-          Libellé de la numérotation
-          <select
-            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-            bind:value={options.exerciseLabel}
-            on:change={() => scheduleRefresh(true, 0)}
-          >
-            <option value="Exercice">Exercice</option>
-            <option value="Question">Question</option>
-            <option value="Activité">Activité</option>
-          </select>
-        </label>
+
         <label class="flex items-center gap-2 text-sm cursor-pointer">
           <input
             type="checkbox"
@@ -2012,48 +2053,15 @@
             Afficher la référence des exercices
           </span>
         </label>
+
         <label class="flex items-center gap-2 text-sm cursor-pointer">
           <input
             type="checkbox"
             bind:checked={options.mergeExercises}
             on:change={() => scheduleRefresh(true, 0)}
           />
-          Fusionner les exercices (questions numérotées à la suite)
+          Fusionner tous les exercices (questions numérotées à la suite)
         </label>
-        <div class="flex items-center justify-between gap-4 text-sm">
-          <span>Marges</span>
-          <div class="flex items-center gap-4">
-            <!-- Inputs hors des labels (for/id) : un input number imbriqué
-                 dans un label reçoit un second clic synthétique lors d'un
-                 clic sur le spinner, ce qui incrémente deux fois. -->
-            <div class="flex items-center gap-2">
-              <label for="a4-margin-h-input">Horizontale</label>
-              <input
-                id="a4-margin-h-input"
-                type="number"
-                min="5"
-                max="30"
-                class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-                bind:value={options.marginHMm}
-                on:change={() => scheduleRefresh(false, 0)}
-              />
-              mm
-            </div>
-            <div class="flex items-center gap-2">
-              <label for="a4-margin-v-input">Verticale</label>
-              <input
-                id="a4-margin-v-input"
-                type="number"
-                min="5"
-                max="30"
-                class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-                bind:value={options.marginVMm}
-                on:change={() => scheduleRefresh(false, 0)}
-              />
-              mm
-            </div>
-          </div>
-        </div>
 
         <button
           type="button"

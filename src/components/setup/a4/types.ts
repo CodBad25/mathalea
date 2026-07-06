@@ -49,12 +49,14 @@ export interface A4Options {
   /** Marge verticale (haut/bas) */
   marginVMm: number
   showHeader: boolean
-  showExerciseTitles: boolean
   /** Affiche la référence du référentiel à côté de la numérotation */
   showExerciseRefs: boolean
-  /** Affiche le pied de page (numérotation des pages) */
-  showFooter: boolean
-  /** Libellé de la numérotation : « Exercice 1 », « Question 1 »... */
+  /** Affiche les numéros de page (le pied de page lui-même reste obligatoire) */
+  showPageNumbers: boolean
+  /**
+   * Libellé de la numérotation : « Exercice 1 », « Question 1 »...
+   * Chaîne vide = « Aucun » : la numérotation des exercices n'est pas affichée.
+   */
   exerciseLabel: string
   /**
    * Fusionne tous les exercices en un seul : les questions sont numérotées
@@ -69,8 +71,8 @@ export interface A4Options {
   questionSpacing: number
   /** Facteur d'espacement entre les exercices (1 par défaut) */
   exerciseSpacing: number
-  /** Double l'espacement entre les mots (aide à la lecture) */
-  doubleWordSpacing: boolean
+  /** Espacement additionnel entre les mots, en em (0 = normal) */
+  wordSpacingEm: number
   /** Niveau de zoom (en %) utilisé quand zoomMode vaut 'fixed' */
   zoom: number
   /** 'fixed' : zoom manuel ; 'width'/'page' : zoom recalculé pour adapter la page à l'espace disponible */
@@ -86,16 +88,15 @@ export const defaultA4Options: A4Options = {
   marginHMm: 12,
   marginVMm: 12,
   showHeader: true,
-  showExerciseTitles: true,
   showExerciseRefs: false,
-  showFooter: true,
+  showPageNumbers: true,
   exerciseLabel: 'Exercice',
   mergeExercises: false,
   showCorrection: false,
   nbVersions: 1,
   questionSpacing: 1,
   exerciseSpacing: 1,
-  doubleWordSpacing: false,
+  wordSpacingEm: 0,
   zoom: 100,
   zoomMode: 'fixed',
 }
