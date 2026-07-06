@@ -367,7 +367,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: [],
   },
   eam_specifique_2026_06_etrangers_2: {
     annee: '2026',
@@ -376,7 +376,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: [],
   },
   eam_specifique_2026_06_etrangers_3: {
     annee: '2026',
@@ -385,7 +385,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: [],
   },
   eam_specifique_2026_06_etrangers_automatismes: {
     annee: '2026',
@@ -394,7 +394,7 @@ export const dictionnaireEAM = {
     numeroInitial: 'automatismes',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: [],
   },
   eam_specialite_2026_06_antilles_1: {
     annee: '2026',
@@ -403,7 +403,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: [],
   },
   eam_specialite_2026_06_antilles_2: {
     annee: '2026',
@@ -412,7 +412,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: [],
   },
   eam_specialite_2026_06_antilles_3: {
     annee: '2026',
@@ -421,7 +421,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: [],
   },
   eam_specialite_2026_06_metropole_1: {
     annee: '2026',
@@ -430,7 +430,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: [],
   },
   eam_specialite_2026_06_metropole_2: {
     annee: '2026',
@@ -439,7 +439,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: [],
   },
   eam_specialite_2026_06_metropole_3: {
     annee: '2026',
@@ -448,7 +448,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: [],
   },
   eam_specialite_2026_06_metropole_automatismes: {
     annee: '2026',
@@ -457,7 +457,7 @@ export const dictionnaireEAM = {
     numeroInitial: 'automatismes',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: [],
   },
   eam_specialite_2026_06_polynesie_1: {
     annee: '2026',
@@ -466,7 +466,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: [],
   },
   eam_specialite_2026_06_polynesie_2: {
     annee: '2026',
@@ -475,7 +475,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: [],
   },
   eam_specialite_2026_06_polynesie_automatismes: {
     annee: '2026',
@@ -484,7 +484,7 @@ export const dictionnaireEAM = {
     numeroInitial: 'automatismes',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: [],
   },
   eam_specifique_2026_06_antilles_1: {
     annee: '2026',
@@ -493,7 +493,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: [],
   },
   eam_specifique_2026_06_antilles_2: {
     annee: '2026',
@@ -502,7 +502,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: [],
   },
   eam_specifique_2026_06_antilles_automatismes: {
     annee: '2026',
@@ -511,7 +511,7 @@ export const dictionnaireEAM = {
     numeroInitial: 'automatismes',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: [],
   },
   eam_specifique_2026_06_metropole_1: {
     annee: '2026',
@@ -520,7 +520,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: [],
   },
   eam_specifique_2026_06_metropole_2: {
     annee: '2026',
@@ -529,7 +529,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: [],
   },
   eam_specifique_2026_06_metropole_automatismes: {
     annee: '2026',
@@ -538,7 +538,7 @@ export const dictionnaireEAM = {
     numeroInitial: 'automatismes',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: [],
   },
   eam_specifique_2026_06_polynesie_1: {
     annee: '2026',
@@ -547,7 +547,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: [],
   },
   eam_specifique_2026_06_polynesie_2: {
     annee: '2026',
@@ -556,7 +556,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: [],
   },
   eam_specifique_2026_06_polynesie_3: {
     annee: '2026',
@@ -565,7 +565,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: [],
   },
   eam_specifique_2026_06_polynesie_automatismes: {
     annee: '2026',
@@ -574,7 +574,7 @@ export const dictionnaireEAM = {
     numeroInitial: 'automatismes',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: [],
   },
   eam_technologique_2026_06_antilles_1: {
     annee: '2026',
@@ -583,7 +583,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: [],
   },
   eam_technologique_2026_06_antilles_2: {
     annee: '2026',
@@ -592,7 +592,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: [],
   },
   eam_technologique_2026_06_antilles_3: {
     annee: '2026',
@@ -601,7 +601,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: [],
   },
   eam_technologique_2026_06_antilles_automatismes: {
     annee: '2026',
@@ -610,7 +610,7 @@ export const dictionnaireEAM = {
     numeroInitial: 'automatismes',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: [],
   },
   eam_technologique_2026_06_metropole_1: {
     annee: '2026',
@@ -619,7 +619,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: [],
   },
   eam_technologique_2026_06_metropole_2: {
     annee: '2026',
@@ -628,7 +628,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: [],
   },
   eam_technologique_2026_06_metropole_3: {
     annee: '2026',
@@ -637,7 +637,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: [],
   },
   eam_technologique_2026_06_polynesie_1: {
     annee: '2026',
@@ -646,7 +646,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: [],
   },
   eam_technologique_2026_06_polynesie_2: {
     annee: '2026',
@@ -655,7 +655,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: [],
   },
   eam_technologique_2026_06_polynesie_3: {
     annee: '2026',
@@ -664,7 +664,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: [],
   },
   eam_technologique_2026_06_polynesie_automatismes: {
     annee: '2026',
@@ -673,7 +673,7 @@ export const dictionnaireEAM = {
     numeroInitial: 'automatismes',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: [],
   },
   eam_specialite_2026_06_antilles_automatismes: {                
                 annee: '2026',                
@@ -682,7 +682,7 @@ export const dictionnaireEAM = {
                 numeroInitial: 'automatismes',
                 typeExercice: 'eam',  
                 filiere: 'Specialite',           
-                tags: ['']            
+                tags: []            
             },
   eam_specialite_2026_06_asie_1: {                
                 annee: '2026',                
@@ -691,7 +691,7 @@ export const dictionnaireEAM = {
                 numeroInitial: '1',
                 typeExercice: 'eam',  
                 filiere: 'Specialite',           
-                tags: ['']            
+                tags: []            
             },
   eam_specialite_2026_06_asie_2: {                
                 annee: '2026',                
@@ -700,7 +700,7 @@ export const dictionnaireEAM = {
                 numeroInitial: '2',
                 typeExercice: 'eam',  
                 filiere: 'Specialite',           
-                tags: ['']            
+                tags: []            
             },
   eam_specialite_2026_06_asie_automatismes: {                
                 annee: '2026',                
@@ -709,7 +709,7 @@ export const dictionnaireEAM = {
                 numeroInitial: 'automatismes',
                 typeExercice: 'eam',  
                 filiere: 'Specialite',           
-                tags: ['']            
+                tags: []            
             },
   eam_technologique_2026_06_metropole_automatismes: {                
                 annee: '2026',                
@@ -718,7 +718,7 @@ export const dictionnaireEAM = {
                 numeroInitial: 'automatismes',
                 typeExercice: 'eam',  
                 filiere: 'Technologique',           
-                tags: ['']            
+                tags: []            
             },
 
 }
