@@ -15,7 +15,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Interpréter un histogramme d’effectifs'
+export const titre = 'Interpréter un diagramme en barres'
 export const dateDePublication = '03/07/2026'
 
 type SensCumul = 'auPlus' | 'auMoins'
@@ -89,9 +89,8 @@ export default class LireEffectifCumuleHistogramme extends ExerciceQcmA {
     const sommeTex = valeursConcernees
       .map(([, effectif]) => texNombre(effectif, 0))
       .join('+')
-    const sommeTotaleTex = serie
-      .map(([, effectif]) => texNombre(effectif, 0))
-      .join('+')
+   
+      
 
     const distracteurs = [
       effectifExact,
@@ -114,7 +113,7 @@ export default class LireEffectifCumuleHistogramme extends ExerciceQcmA {
     ${histogramme}<br><br>
     ${question}`
 
-    this.correction = `On commence par calculer l'effectif total : $${sommeTotaleTex}=${total}$.<br>
+    this.correction = `
     ${sens === 'auPlus' ? `« Au plus $${seuil}$ exercices » signifie $${seuil}$ exercices ou moins.` : `« Au moins $${seuil}$ exercices » signifie $${seuil}$ exercices ou plus.`}<br>
     On additionne donc les effectifs correspondant aux nombres d'exercices suivants : ${valeursTex}.<br>
     On obtient $${sommeTex}=${miseEnEvidence(texNombre(reponse, 0))}$.`
