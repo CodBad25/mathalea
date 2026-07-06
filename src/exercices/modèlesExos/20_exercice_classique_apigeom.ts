@@ -20,10 +20,6 @@ export const refs = {
  * @author
  */
 export default class nomExercice extends Exercice {
-  // declare : typage seul (champ hérité de Exercice), sans réémettre le champ.
-  // Sans cette redéclaration, le champ de base étant optionnel, il serait
-  // typé possiblement undefined (accès this.figuresApiGeom[i] en erreur).
-  declare figuresApiGeom: Figure[]
   constructor() {
     super()
     this.consigne = 'Consigne'
@@ -69,7 +65,7 @@ export default class nomExercice extends Exercice {
   correctionInteractive = (i: number) => {
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figuresApiGeom[i].id] = this.figuresApiGeom[i].json
+    this.answers[this.figuresApiGeom![i].id] = this.figuresApiGeom![i].json
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,
     )
