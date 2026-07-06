@@ -16,7 +16,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Calculer une proportion à partir d’un histogramme'
+export const titre = 'Calculer une proportion à partir d’un diagramme en barres'
 export const dateDePublication = '03/07/2026'
 
 type SensCumul = 'auPlus' | 'auMoins'
@@ -108,8 +108,8 @@ export default class CalculProportionCumuleeHistogramme extends ExerciceQcmA {
 
     const question =
       sens === 'auPlus'
-        ? `Quelle proportion des élèves a réalisé au plus $${seuil}$ exercices ?`
-        : `Quelle proportion des élèves a réalisé au moins $${seuil}$ exercices ?`
+        ? `Quelle proportion d'élèves a réalisé au plus $${seuil}$ exercices ?`
+        : `Quelle proportion d'élèves a réalisé au moins $${seuil}$ exercices ?`
     const valeursConcernees = serie.filter(([valeur]) =>
       sens === 'auPlus' ? valeur <= seuil : valeur >= seuil,
     )
