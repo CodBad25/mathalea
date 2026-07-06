@@ -38,10 +38,6 @@ export const refs = {
 }
 
 export default class DonnerSensDefinitionQuotient extends Exercice {
-  // declare : typage seul (champ hérité de Exercice), sans réémettre le champ.
-  // Sans cette redéclaration, le champ de base étant optionnel, il serait
-  // typé possiblement undefined (accès this.figuresApiGeom[i] en erreur).
-  declare figuresApiGeom: Figure[]
   constructor() {
     super()
 
@@ -118,7 +114,7 @@ export default class DonnerSensDefinitionQuotient extends Exercice {
       figureEnonce.figure.options.labelAutomaticBeginsWith = label
       figureEnonce.figure.options.pointDescriptionWithCoordinates = false
       figureEnonce.figure.options.labelIsVisible = false
-      this.figuresApiGeom[i] = figureEnonce.figure
+      this.figuresApiGeom![i] = figureEnonce.figure
 
       if (this.correctionDetaillee) {
         texteCorr = `Entre l'origine (repérée par $0$) et le point repéré par $${miseEnEvidence(num, bleuMathalea)}$, il y a $${miseEnEvidence(den, bleuMathalea)}$ intervalles de taille identique.<br>`

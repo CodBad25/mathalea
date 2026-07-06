@@ -15,6 +15,7 @@ import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../lib/2d/textes'
 import { TracePoint } from '../../lib/2d/TracePoint'
 import { rotation } from '../../lib/2d/transformations'
+import { bleuMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { shuffle } from '../../lib/outils/arrayOutils'
@@ -23,7 +24,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { contraindreValeur, egal, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Construire des symétriques de points par rapport à un point'
@@ -76,10 +76,6 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
   centresApiGeom!: PointApigeom[]
   exoCustomResultat: boolean
   nbPoints!: number
-  // declare : typage seul (champ hérité de Exercice), sans réémettre le champ.
-  // Sans cette redéclaration, le champ de base étant optionnel, il serait
-  // typé possiblement undefined (accès this.figuresApiGeom[i] en erreur).
-  declare figuresApiGeom: Figure[]
   constructor() {
     super()
     this.exoCustomResultat = true
@@ -241,7 +237,7 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
       if (this.questionJamaisPosee(i, labelCentre, this.labels.join())) {
         if (context.isHtml && this.interactif) {
           // On crée la figure avec apigeom pour l'interactif
-          this.figuresApiGeom[i] = new Figure(
+          this.figuresApiGeom![i] = new Figure(
             Object.assign(options, {
               xMin: -10,
               yMin: -10,
@@ -249,9 +245,9 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
               height: 600,
             }),
           )
-          this.figuresApiGeom[i].scale = 1
-          this.figuresApiGeom[i].options.labelPointAfterCreation = true
-          this.figuresApiGeom[i].setToolbar({
+          this.figuresApiGeom![i].scale = 1
+          this.figuresApiGeom![i].options.labelPointAfterCreation = true
+          this.figuresApiGeom![i].setToolbar({
             nbCols: 10,
             tools: [
               'POINT',
@@ -267,7 +263,7 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
             ],
             position: 'top',
           })
-          this.centresApiGeom[i] = this.figuresApiGeom[i].create('Point', {
+          this.centresApiGeom[i] = this.figuresApiGeom![i].create('Point', {
             x: 0,
             y: 0,
             isVisible: true,
@@ -277,7 +273,7 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
           this.antecedentsApiGeom[i] = []
           for (let k = 0; k < this.nbPoints; k++) {
             ;(this.antecedentsApiGeom[i][k] as PointApigeom) =
-              this.figuresApiGeom[i].create('Point', {
+              this.figuresApiGeom![i].create('Point', {
                 x: antecedents2d[k].x,
                 y: antecedents2d[k].y,
                 isFree: false,
@@ -286,7 +282,7 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
               })
           }
           if (this.sup === 1) {
-            this.figuresApiGeom[i].create('Grid', {
+            this.figuresApiGeom![i].create('Grid', {
               xMin: -10,
               yMin: -10,
               xMax: 10,
@@ -302,7 +298,7 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
           }
           if (this.sup === 2) {
             for (let k = 0; k < this.nbPoints; k++) {
-              this.figuresApiGeom[i].create('Ray', {
+              this.figuresApiGeom![i].create('Ray', {
                 point1: this.antecedentsApiGeom[i][k] as PointApigeom,
                 point2: this.centresApiGeom[i] as PointApigeom,
                 isDashed: true,
@@ -312,8 +308,8 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
           }
           if (this.sup === 3) {
             for (let k = 0; k < this.nbPoints; k++) {
-              this.figuresApiGeom[i].create('CircleCenterPoint', {
-                center: this.figuresApiGeom[i].create('Point', {
+              this.figuresApiGeom![i].create('CircleCenterPoint', {
+                center: this.figuresApiGeom![i].create('Point', {
                   isVisible: false,
                   x: this.centresApiGeom[i].x,
                   y: this.centresApiGeom[i].y,
@@ -327,7 +323,7 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
           const emplacementPourFigure = figureApigeom({
             exercice: this,
             i,
-            figure: this.figuresApiGeom[i],
+            figure: this.figuresApiGeom![i],
           })
           this.listeQuestions[i] = enonce + '<br><br>' + emplacementPourFigure
         } else {
@@ -358,7 +354,7 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
   correctionInteractive = (i: number) => {
     if (this.answers === undefined) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figuresApiGeom[i].id] = this.figuresApiGeom[i].json
+    this.answers[this.figuresApiGeom![i].id] = this.figuresApiGeom![i].json
     const resultat = []
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,
@@ -372,7 +368,7 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
         this.centresApiGeom[i],
         180,
       )
-      const elts = Array.from(this.figuresApiGeom[i].elements.values())
+      const elts = Array.from(this.figuresApiGeom![i].elements.values())
       const points = elts.filter(
         (e) =>
           e.type !== 'pointer' &&
@@ -411,9 +407,9 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
       }
     }
     if (divFeedback) divFeedback.innerHTML = feedback
-    this.figuresApiGeom[i].isDynamic = false
-    this.figuresApiGeom[i].divButtons.style.display = 'none'
-    this.figuresApiGeom[i].divUserMessage.style.display = 'none'
+    this.figuresApiGeom![i].isDynamic = false
+    this.figuresApiGeom![i].divButtons.style.display = 'none'
+    this.figuresApiGeom![i].divUserMessage.style.display = 'none'
     return resultat
   }
 }
