@@ -129,11 +129,9 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
           }
         })
       | null
-    const spanResultat = document.querySelector(
-      `#resultatCheckEx${this.numeroExercice}Q${i}`,
-    ) as HTMLDivElement | null
 
     if (host === null || this.reponsesAttendues[i] === undefined) return ''
+    host.disableControls()
 
     const value = host.value
     this.answers ??= {}
@@ -144,7 +142,9 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
     const saisi = value.points[0]?.pointValue
     const ok = saisi !== undefined && Math.abs(saisi - attendu) < 1e-9
 
-    host.disableControls()
+    const spanResultat = document.querySelector(
+      `#resultatCheckEx${this.numeroExercice}Q${i}`,
+    ) as HTMLDivElement | null
 
     if (spanResultat) {
       spanResultat.innerHTML = ok ? '😎' : '☹️'
