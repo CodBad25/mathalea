@@ -49,6 +49,16 @@ export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0
   }
 ]`
 
+/** Import du paquet taskize (mise en colonnes des propositions de QCM) */
+export const TASKIZE_IMPORT = '#import "@preview/taskize:0.2.5": tasks'
+
+/**
+ * Aides Typst pour les QCM : une case à cocher (vide dans l'énoncé, remplie
+ * pour la bonne réponse dans le corrigé) et le nombre de colonnes réglable.
+ */
+export const MATHALEA_QCM_HELPERS =
+  '#let qcm-bonne(corps) = text(fill: couleur, weight: "bold", corps)'
+
 const LATEX_SIZE_TO_TYPST_SIZE: Record<string, string> = {
   tiny: '0.55em',
   scriptsize: '0.7em',
@@ -122,6 +132,9 @@ function preprocessTex(tex: string): string {
   output = output.replace(/(\d),(?=\d)/g, '$1\\dcomma ')
   // \phantom n'a pas d'équivalent direct : on le remplace par une espace
   output = output.replace(/\\(?:phantom|hphantom)\s*\{[^{}]*\}/g, '\\;')
+  // \hspace*{0.4cm} : tex2typst produirait `#h(*) 0.4 c m` (étoile invalide) ;
+  // ces espaces servent surtout à élargir des colonnes, on les neutralise
+  output = output.replace(/\\hspace\s*\*?\s*\{[^{}]*\}/g, '\\;')
   return output
 }
 
@@ -177,8 +190,19 @@ function readBraced(
 function splitTopLevel(text: string, separator: string): string[] {
   const parts: string[] = []
   let depth = 0
+  let arrayDepth = 0
   let start = 0
   for (let index = 0; index < text.length; index++) {
+    if (text.startsWith('\\begin{array}', index)) {
+      arrayDepth++
+      index += '\\begin{array}'.length - 1
+      continue
+    }
+    if (text.startsWith('\\end{array}', index)) {
+      arrayDepth = Math.max(0, arrayDepth - 1)
+      index += '\\end{array}'.length - 1
+      continue
+    }
     const char = text[index]
     if (char === '\\') {
       index++
@@ -186,7 +210,7 @@ function splitTopLevel(text: string, separator: string): string[] {
     }
     if (char === '{') depth++
     else if (char === '}') depth = Math.max(0, depth - 1)
-    else if (char === separator && depth === 0) {
+    else if (char === separator && depth === 0 && arrayDepth === 0) {
       parts.push(text.slice(start, index))
       start = index + 1
     }
@@ -350,8 +374,21 @@ function parseLatexTableBody(body: string): ParsedTableItem[] {
     row = ''
   }
 
+  // Un `array` imbriqué dans une cellule ne doit pas voir ses `\\`/`\hline`
+  // interprétés comme des séparateurs du tableau extérieur.
+  let arrayDepth = 0
   for (let index = 0; index < body.length; index++) {
-    if (body.startsWith('\\hline', index)) {
+    if (body.startsWith('\\begin{array}', index)) {
+      arrayDepth++
+      row += '\\begin{array}'
+      index += '\\begin{array}'.length - 1
+    } else if (body.startsWith('\\end{array}', index)) {
+      arrayDepth = Math.max(0, arrayDepth - 1)
+      row += '\\end{array}'
+      index += '\\end{array}'.length - 1
+    } else if (arrayDepth > 0) {
+      row += body[index]
+    } else if (body.startsWith('\\hline', index)) {
       pushRow()
       items.push({ type: 'hline' })
       index += '\\hline'.length - 1
@@ -698,6 +735,9 @@ export function latexMathToTypst(tex: string): string {
 
 const NAMED_ENTITIES: Record<string, string> = {
   nbsp: '\u00a0',
+  emsp: '\u2003',
+  ensp: '\u2002',
+  thinsp: '\u2009',
   amp: '&',
   lt: '<',
   gt: '>',
@@ -1007,6 +1047,77 @@ function protectMathalea2dContainers(
 }
 
 /**
+ * Convertit un groupe de propositions de QCM en un bloc `#tasks(...)`
+ * (paquet taskize) présenté sur `qcm-colonnes` colonnes, avec des étiquettes
+ * A) B) C)... Dans le corrigé, la bonne réponse est mise en évidence.
+ */
+function qcmToTypst(choices: { correct: boolean; body: string }[]): string {
+  const items = choices
+    .map(
+      (choice) =>
+        `  + ${choice.correct ? `#qcm-bonne[${choice.body}]` : choice.body}`,
+    )
+    .join('\n')
+  return `#tasks(columns: qcm-colonnes, label: "A)", above: 0.4em, below: 0.4em)[\n${items}\n]`
+}
+
+/**
+ * Une proposition est « correcte » (dans un corrigé) si sa case est cochée
+ * (format `case`) ou si sa lettre est colorée (format `lettre`, la mauvaise
+ * réponse étant barrée).
+ */
+function qcmChoiceIsCorrect(choice: Element): boolean {
+  const checkbox = choice.querySelector<HTMLInputElement>(
+    'input[type="checkbox"]',
+  )
+  if (checkbox != null) return checkbox.checked
+  return choice.querySelector('label:not([id]) span[style*="color"]') != null
+}
+
+/**
+ * Détecte les propositions de QCM produites par `propositionsQcm` : chaque
+ * proposition porte un libellé `<label id="labelEx{N}Q{i}R{rep}">` (présent
+ * quel que soit le format, `case` ou `lettre`). Les propositions d'un même
+ * conteneur sont regroupées dans un `#tasks(...)`. Traité avant les formules :
+ * les libellés sont reconvertis récursivement par `htmlToTypst`.
+ */
+function protectQcm(
+  html: string,
+  protect: (typst: string) => string,
+  figures?: string[],
+): string {
+  if (typeof document === 'undefined') return html
+  const template = document.createElement('template')
+  template.innerHTML = html
+  const labels = [
+    ...template.content.querySelectorAll<HTMLLabelElement>('label[id]'),
+  ].filter((label) => /^labelEx\d+Q\d+R\d+$/.test(label.id))
+  if (labels.length === 0) return html
+
+  const groups = new Map<Element, { correct: boolean; body: string }[]>()
+  const order: Element[] = []
+  for (const label of labels) {
+    const choice = label.closest('div')
+    const container = choice?.parentElement
+    if (choice == null || container == null) continue
+    const body = htmlToTypst(label.innerHTML, figures)
+    if (body.length === 0) continue
+    if (!groups.has(container)) {
+      groups.set(container, [])
+      order.push(container)
+    }
+    groups.get(container)!.push({ correct: qcmChoiceIsCorrect(choice), body })
+  }
+  if (order.length === 0) return html
+  for (const container of order) {
+    container.replaceWith(
+      document.createTextNode(protect(qcmToTypst(groups.get(container)!))),
+    )
+  }
+  return template.innerHTML
+}
+
+/**
  * Convertit les tableaux HTML en Typst avant tout autre traitement (leurs
  * cellules contiennent des formules et éventuellement des figures, reconverties
  * récursivement par `htmlToTypst`).
@@ -1079,7 +1190,8 @@ export function htmlToTypst(html: string, figures?: string[]): string {
     return `\u0000${protectedSegments.length - 1}\u0000`
   }
 
-  let text = protectHtmlTables(html, protect, figures)
+  let text = protectQcm(html, protect, figures)
+  text = protectHtmlTables(text, protect, figures)
   text = protectMathalea2dContainers(text, protect, figures)
   text = protectKatexSpans(text, protect)
   text = text.replace(/\\\[([\s\S]+?)\\\]/g, (_, tex: string) =>

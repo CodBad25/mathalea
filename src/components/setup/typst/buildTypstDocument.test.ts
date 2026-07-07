@@ -92,6 +92,23 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('#table(')
   })
 
+  it('importe taskize et règle les colonnes quand un QCM est présent', () => {
+    const code = buildTypstDocument([
+      exercise({
+        questions: [
+          '<div class="my-3">' +
+            '<div class="ex1 inline-block"><input type="checkbox" disabled><label id="labelEx1Q0R0">$1$</label></div>' +
+            '<div class="ex1 inline-block"><input type="checkbox" disabled><label id="labelEx1Q0R1">$2$</label></div>' +
+            '</div>',
+        ],
+      }),
+    ])
+    expect(code).toContain('#import "@preview/taskize:0.2.5": tasks')
+    expect(code).toContain('#let qcm-colonnes = 2')
+    expect(code).toContain('#let qcm-bonne(')
+    expect(code).toContain('#tasks(columns: qcm-colonnes')
+  })
+
   it("n'ajoute pas de section figures sans figure", () => {
     const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
     expect(code).not.toContain('----- Figures')

@@ -1,5 +1,7 @@
 import {
   MATHALEA_FIGURE_HELPERS,
+  MATHALEA_QCM_HELPERS,
+  TASKIZE_IMPORT,
   escapeTypstText,
   htmlToTypst,
 } from './latexToTypst'
@@ -140,14 +142,21 @@ export function buildTypstDocument(
     correctionLines.push('')
   }
 
-  const usesMathaleaFigure = [...exerciseLines, ...correctionLines].some(
-    (line) => line.includes('#mathalea-figure('),
+  const allLines = [...exerciseLines, ...correctionLines]
+  const usesMathaleaFigure = allLines.some((line) =>
+    line.includes('#mathalea-figure('),
   )
+  const usesQcm = allLines.some((line) => line.includes('#tasks('))
 
   const lines: string[] = []
   lines.push('// Fiche générée par MathALÉA — https://coopmaths.fr/alea')
   lines.push("// Ce code est modifiable : l'aperçu se met à jour tout seul.")
   lines.push('')
+  if (usesQcm) {
+    lines.push('// ----- Paquets -----')
+    lines.push(TASKIZE_IMPORT)
+    lines.push('')
+  }
   if (usesMathaleaFigure) {
     lines.push('// ----- Figures mathalea2d -----')
     lines.push(MATHALEA_FIGURE_HELPERS)
@@ -157,6 +166,9 @@ export function buildTypstDocument(
   lines.push('#let colonnes = 1 // nombre de colonnes (1, 2 ou 3)')
   lines.push('#let corrige = true // afficher les corrections')
   lines.push('#let couleur = rgb("#f15929") // couleur des titres')
+  if (usesQcm) {
+    lines.push('#let qcm-colonnes = 2 // colonnes des propositions de QCM')
+  }
   lines.push('')
   lines.push(
     '#set page(paper: "a4", margin: (x: 15mm, y: 15mm), numbering: "1/1")',
@@ -167,6 +179,10 @@ export function buildTypstDocument(
   lines.push('#let titre-exercice(corps) = block(above: 1.6em, below: 0.9em,')
   lines.push('  text(weight: "bold", fill: couleur, size: 1.1em, corps))')
   lines.push('#let reference(ref) = text(size: 0.75em, fill: gray, ref)')
+  if (usesQcm) {
+    lines.push('// ----- QCM (case à cocher) -----')
+    lines.push(MATHALEA_QCM_HELPERS)
+  }
   lines.push('')
   if (figures.length > 0) {
     lines.push('// ----- Figures (SVG embarqués) -----')

@@ -102,6 +102,21 @@ describe('htmlToTypst', () => {
     expect(result).not.toContain('cellcolor')
   })
 
+  it('neutralise \\hspace* (évite le `#h(*)` invalide en Typst)', () => {
+    const result = latexMathToTypst('\\hspace*{0.4cm}')
+    expect(result).not.toContain('*')
+  })
+
+  it('ne fragmente pas un array imbriqué dans une cellule', () => {
+    const result = htmlToTypst(
+      '$\\begin{array}{|c|c|}\\hline a & \\begin{array}{c|c} x & y\\end{array} \\\\ \\hline b & c \\\\ \\hline\\end{array}$',
+    )
+    expect(result).toContain('#table(')
+    expect(result).toContain('columns: 2')
+    // le `\begin{array}` imbriqué ne doit pas être recraché en littéral éclaté
+    expect(result).not.toContain('\\\\begin{array}')
+  })
+
   it('convertit les tableaux LaTeX délimités par \\[...\\]', () => {
     const result = htmlToTypst(
       '\\[\\def\\arraystretch{1.5}\\begin{array}{|l|c|}\\hline x & 1 \\\\ \\hline f(x) & 2 \\\\ \\hline\\end{array}\\]',
@@ -199,6 +214,31 @@ describe('htmlToTypst', () => {
 
   it('remplace les images par un encart', () => {
     expect(htmlToTypst('<img src="a.png">')).toContain('image non convertie')
+  })
+
+  it('convertit les propositions de QCM (format case) en colonnes taskize', () => {
+    const result = htmlToTypst(
+      '<div class="my-3">' +
+        '<div class="ex1 inline-block my-2 align-center"><input type="checkbox" disabled><label id="labelEx1Q0R0" class="ml-2">$1$&emsp;</label></div>' +
+        '<div class="ex1 inline-block my-2 align-center"><input type="checkbox" disabled><label id="labelEx1Q0R1" class="ml-2">$2$&emsp;</label></div>' +
+        '</div><div class="m-2" id="resultatCheckEx1Q0"></div>',
+    )
+    expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
+    expect(result).toContain('+ $1$')
+    expect(result).toContain('+ $2$')
+    expect(result).not.toContain('#qcm-bonne')
+  })
+
+  it('détecte le format lettre et met en évidence la bonne réponse du corrigé', () => {
+    const result = htmlToTypst(
+      '<div class="my-3">' +
+        '<div class="inline-block"><label class="ml-2"><span style="color:#f15929;font-weight: bold;">A</span>.</label><label id="labelEx1Q0R0" class="ml-2">$8$</label></div>' +
+        '<div class="inline-block"><label class="ml-2"><b><span class="oblique-strike">B</span></b>.</label><label id="labelEx1Q0R1" class="ml-2">$4$</label></div>' +
+        '</div>',
+    )
+    expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
+    expect(result).toContain('+ #qcm-bonne[$8$]')
+    expect(result).toContain('+ $4$')
   })
 
   it('convertit un tableau HTML MathALÉA en tableau natif', () => {

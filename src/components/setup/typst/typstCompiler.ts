@@ -1,4 +1,9 @@
-import { $typst } from '@myriaddreamin/typst.ts'
+import {
+  $typst,
+  FetchPackageRegistry,
+  MemoryAccessModel,
+  initOptions,
+} from '@myriaddreamin/typst.ts'
 import compilerWasmUrl from '@myriaddreamin/typst-ts-web-compiler/pkg/typst_ts_web_compiler_bg.wasm?url'
 import rendererWasmUrl from '@myriaddreamin/typst-ts-renderer/pkg/typst_ts_renderer_bg.wasm?url'
 
@@ -16,6 +21,18 @@ function ensureInitialized() {
   initialized = true
   $typst.setCompilerInitOptions({ getModule: () => compilerWasmUrl })
   $typst.setRendererInitOptions({ getModule: () => rendererWasmUrl })
+  // Autorise l'import des paquets `@preview` (ex : taskize pour les QCM)
+  // depuis packages.typst.org. Le paquet est mis en cache après le premier
+  // téléchargement.
+  const accessModel = new MemoryAccessModel()
+  $typst.use({
+    key: 'package-registry$fetch',
+    forRoles: ['compiler'],
+    provides: [
+      initOptions.withAccessModel(accessModel),
+      initOptions.withPackageRegistry(new FetchPackageRegistry(accessModel)),
+    ],
+  })
 }
 
 export interface TypstCompileResult {
