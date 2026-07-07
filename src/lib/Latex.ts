@@ -241,13 +241,17 @@ class Latex {
       /** On supprime les lignes vides car elles posent problème dans l'environnement TableauCan */
       //  content = content.replace(/\n\s*\n/gm, '\n') // En quoi elle posent problème ? On perd les sauts de ligne entre les questions, c'est pas top pour la lisibilité
     } else {
+      const withReferences = latexFileInfos.withReferences ?? false
       for (const exercice of this.exercices) {
         if (exercice.typeExercice === 'statique') {
           if (exercice.content === '') {
             content += "% Cet exercice n'est pas disponible au format LaTeX"
           } else {
             content += `\n% @see : ${getUrlFromExercice(exercice)}`
-            content += `\n\\begin{EXO}{${exercice.examen || ''} ${exercice.mois || ''} ${exercice.annee || ''} ${exercice.lieu || ''}}{}\n`
+            const staticReference = withReferences
+              ? `${exercice.examen || ''} ${exercice.mois || ''} ${exercice.annee || ''} ${exercice.lieu || ''}`.trim()
+              : ''
+            content += `\n\\begin{EXO}{${staticReference}}{}\n`
             content += testIfLoaded(
               [exercice.content ?? ''],
               '\\anote{',
@@ -297,7 +301,7 @@ class Latex {
           contentCorr += '\n\\end{EXO}\n'
           content += `\n% @see : ${getUrlFromExercice(exercice)}`
           // content += `\n\\begin{EXO}{${testIfLoaded([exercice.introduction, exercice.consigne, ...exercice.listeQuestions], '\\anote{', '\n\\resetcustomnotes ')}${format(exercice.consigne, false)}}{${String(exercice.id).replace('.js', '')}}\n`
-          content += `\n\\begin{EXO}{${testIfLoaded([exercice.introduction, exercice.consigne, ...exercice.listeQuestions], '\\anote{', '\n\\resetcustomnotes ')}}{${String(exercice.id).replace('.js', '')}}\n`
+          content += `\n\\begin{EXO}{${testIfLoaded([exercice.introduction, exercice.consigne, ...exercice.listeQuestions], '\\anote{', '\n\\resetcustomnotes ')}}{${withReferences ? String(exercice.id).replace('.js', '') : ''}}\n`
           content += format(exercice.consigne, false) + `\n\n` // J'ai sorti la consigne de l'environnement car des retours lignes cassaient l'environnement.
 
           content += writeIntroduction(exercice.introduction)

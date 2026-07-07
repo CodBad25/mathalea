@@ -31,6 +31,7 @@ export type ExamConfig = {
 export interface LatexFileInfos {
   title: string
   reference: string
+  withReferences?: boolean
   subtitle: string
   dysTailleFontOption: number
   tailleFontOption: number
