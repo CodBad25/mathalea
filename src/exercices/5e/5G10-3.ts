@@ -195,7 +195,7 @@ const triangleLoinDeD = (d: IDroite, noms: string[]) => {
   return pol.listePoints as [PointAbstrait, PointAbstrait, PointAbstrait]
 }
 
-export default class SymetrieAxialeProprietes extends Exercice {
+export default class SymetrieProprietes extends Exercice {
   constructor() {
     super()
     this.consigne = texteEnCouleurEtGras(
@@ -218,7 +218,7 @@ export default class SymetrieAxialeProprietes extends Exercice {
 
     this.sup = '5'
     this.sup2 = true
-    this.sup3 = 2
+    this.sup3 = 3
   }
 
   nouvelleVersion() {
