@@ -16,13 +16,12 @@ export const amcType = 'AMCNum'
 
 /**
  * @author Jean-claude Lhote
- * Créé pendant l'été 2021
-
  */
+
 export const uuid = 'e4b95'
 
 export const refs = {
-  'fr-fr': ['can5C12'],
+  'fr-fr': ['can5C12', '6N3L-flash1'],
   'fr-ch': [],
 }
 export default class FractionDEntierQuiVaBien extends ExerciceSimple {
