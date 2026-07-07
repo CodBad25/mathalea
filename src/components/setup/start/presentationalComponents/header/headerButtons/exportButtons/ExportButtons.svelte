@@ -139,6 +139,11 @@
   tooltip="Impression"
   on:click={() => handleExport('a4')}
 />
+<ButtonIconTooltip
+  icon="bx-code-alt text-3xl"
+  tooltip="PDF via Typst"
+  on:click={() => handleExport('typst')}
+/>
 {/if}
 <ButtonIconTooltip
   icon="bx-dots-horizontal-rounded text-3xl"
