@@ -21,7 +21,7 @@ export const refs = {
 export default class FractionsCalculsSimples2 extends FractionsCalculsSimples {
   constructor() {
     super()
-    this.sup2 = 4
+    this.sup2 = 5
     this.besoinFormulaire2Texte = false
     this.nbQuestions = 4
   }
