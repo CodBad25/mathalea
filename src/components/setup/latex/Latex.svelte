@@ -32,6 +32,7 @@
   import ButtonCompileLatexToPDF from '../../shared/forms/ButtonCompileLatexToPDF.svelte'
   import ButtonOverleaf from '../../shared/forms/ButtonOverleaf.svelte'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
+  import CheckboxWithLabel from '../../shared/forms/CheckboxWithLabel.svelte'
   import InputNumber from '../../shared/forms/InputNumber.svelte'
   import InputText from '../../shared/forms/InputText.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
@@ -53,6 +54,7 @@
   let latexFileInfos: LatexFileInfos = {
     title: '',
     reference: '',
+    withReferences: false,
     subtitle: '',
     style: 'Coopmaths',
     fontOption: 'StandardFont',
@@ -103,6 +105,11 @@
   let promise: Promise<void>
   let isDownloadPicsModalDisplayed = false
   let pdfParam = ''
+  let previewForm: HTMLFormElement
+  let isPreviewCompiling = false
+  let hasPreviewLoaded = false
+  let previewError = ''
+  let hasAutoCompiledPreview = false
 
   const latex = new Latex()
 
@@ -230,6 +237,12 @@
     // console.log('onMount')
     promise = initExercices()
       .then(() => updateLatexWithAbortController())
+      .then(async () => {
+        if (!hasAutoCompiledPreview) {
+          hasAutoCompiledPreview = true
+          await compilePreviewPdf()
+        }
+      })
       .catch((err) => {
         if (err.name === 'AbortError') {
           log('Promise Aborted')
@@ -293,6 +306,122 @@
       <p class="font-bold text-coopmaths-warn-darkest">Ne pas oublier de télécharger les figures !</p>`
     } else {
       return 'Le code LaTeX a été copié dans le presse-papier.'
+    }
+  }
+
+  function addInput(form: HTMLFormElement, name: string, value: string) {
+    const input = document.createElement('input')
+    input.setAttribute('type', 'text')
+    input.setAttribute('name', name)
+    input.value = encodeURIComponent(value)
+    form.appendChild(input)
+  }
+
+  function addInputNoEncode(
+    form: HTMLFormElement,
+    name: string,
+    value: string,
+  ) {
+    const input = document.createElement('input')
+    input.setAttribute('type', 'text')
+    input.setAttribute('name', name)
+    input.value = value
+    form.appendChild(input)
+  }
+
+  function addTextarea(form: HTMLFormElement, name: string, value: string) {
+    const textarea = document.createElement('textarea')
+    textarea.setAttribute('type', 'text')
+    textarea.setAttribute('name', name)
+    textarea.textContent = value
+    form.appendChild(textarea)
+  }
+
+  function resetPreviewIframe() {
+    const iframe = document.getElementById('latex-preview-iframe')
+    const parent = iframe?.parentElement
+    if (!iframe || !parent) {
+      return null
+    }
+    parent.removeChild(iframe)
+    const freshIframe = document.createElement('iframe')
+    freshIframe.setAttribute('id', 'latex-preview-iframe')
+    freshIframe.setAttribute('title', 'Prévisualisation PDF')
+    freshIframe.setAttribute('name', 'latex-preview-iframe')
+    freshIframe.setAttribute('width', '100%')
+    freshIframe.setAttribute('height', '100%')
+    freshIframe.setAttribute('class', 'w-full h-full rounded-md border-0')
+    parent.appendChild(freshIframe)
+    return freshIframe
+  }
+
+  function submitPreviewForm(formData: FormData) {
+    previewForm.innerHTML = ''
+    previewForm.action = 'https://texlive.net/cgi-bin/latexcgi'
+    previewForm.method = 'POST'
+    previewForm.target = 'latex-preview-iframe'
+    previewForm.enctype = 'multipart/form-data'
+
+    for (const [name, value] of formData.entries()) {
+      if (name === 'filecontents[]') {
+        addTextarea(previewForm, name, value.toString())
+      } else if (name === 'filename[]') {
+        addInputNoEncode(previewForm, name, value.toString())
+      } else {
+        addInput(previewForm, name, value.toString())
+      }
+    }
+
+    previewForm.style.display = 'none'
+    previewForm.submit()
+  }
+
+  async function compilePreviewPdf() {
+    if (isPreviewCompiling) return
+
+    isPreviewCompiling = true
+    previewError = ''
+    hasPreviewLoaded = false
+
+    try {
+      await promise
+
+      const iframe = resetPreviewIframe()
+      if (!iframe) {
+        previewError = "Impossible d'initialiser la prévisualisation PDF."
+        return
+      }
+
+      const formData = new FormData()
+      formData.append('filecontents[]', latexFile.latexWithPreamble)
+      formData.append('filename[]', 'document.tex')
+      formData.append('engine', 'lualatex')
+      formData.append('return', 'pdfjs')
+
+      const imagesUrls = picsWanted ? makeImageFilesUrls(exercices) : []
+      for (const imageUrl of imagesUrls) {
+        const imageResponse = await fetch(imageUrl)
+        const imageBlob = await imageResponse.blob()
+        const imageText = await imageBlob.text()
+        formData.append('filecontents[]', imageText)
+        formData.append('filename[]', imageUrl.split('/').slice(-1)[0])
+      }
+
+      iframe.addEventListener(
+        'load',
+        () => {
+          hasPreviewLoaded = true
+          isPreviewCompiling = false
+        },
+        { once: true },
+      )
+
+      submitPreviewForm(formData)
+    } catch (error) {
+      console.error('Erreur lors de la prévisualisation PDF :', error)
+      previewError =
+        'La compilation initiale du PDF a échoué. Utiliser le bouton pour relancer.'
+      isPreviewCompiling = false
     }
   }
 </script>
@@ -371,6 +500,14 @@
             showTitle={false}
             classAddenda="placeholder:opacity-40"
           />
+          <CheckboxWithLabel
+            id="export-latex-with-references-checkbox"
+            label="Avec les références"
+            isChecked={latexFileInfos.withReferences ?? false}
+            on:change={(event) => {
+              latexFileInfos.withReferences = event.detail as boolean
+            }}
+          />
         </div>
       </SimpleCard>
       <SimpleCard icon={''} title={'Nombre de versions des exercices'}>
@@ -384,7 +521,45 @@
         </span>
       </SimpleCard>
     </div>
-
+    <h1
+      class="mt-12 md:mt-8 text-center md:text-left text-coopmaths-struct dark:text-coopmathsdark-struct text-2xl md:text-4xl font-bold"
+    >
+      Prévisualisation PDF
+    </h1>
+    <div
+      class="my-6 rounded-lg bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark p-4 shadow-md"
+    >
+      <div class="flex items-center justify-between gap-4 mb-3">
+        <p class="text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus">
+          {#if isPreviewCompiling}
+            Compilation PDF en cours...
+          {:else if previewError}
+            {previewError}
+          {:else if hasPreviewLoaded}
+            Prévisualisation à jour.
+          {:else}
+            Prévisualisation en attente.
+          {/if}
+        </p>
+        <ButtonTextAction
+          class="px-2 py-1 rounded-md"
+          id="refreshPdfPreview"
+          on:click={compilePreviewPdf}
+          text="Relancer la prévisualisation"
+        />
+      </div>
+      <div
+        class="w-full h-[65vh] min-h-105 bg-white rounded-md overflow-hidden border border-coopmaths-canvas-light dark:border-coopmathsdark-canvas-light"
+      >
+        <iframe
+          id="latex-preview-iframe"
+          title="Prévisualisation PDF"
+          name="latex-preview-iframe"
+          class="w-full h-full border-0"
+        ></iframe>
+      </div>
+      <form bind:this={previewForm}></form>
+    </div>
     <div bind:this={divText}>
       <h1
         class="mt-12 mb-4 text-center md:text-left text-coopmaths-struct dark:text-coopmathsdark-struct text-2xl md:text-4xl font-bold"
