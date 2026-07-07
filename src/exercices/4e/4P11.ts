@@ -1,12 +1,12 @@
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
 import { context } from '../../modules/context'
+import type FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { propositionsQcm } from '../../lib/interactif/qcm'
-import type FractionEtendue from '../../modules/FractionEtendue'
+import Exercice from '../Exercice'
 
 export const titre =
   'Manipuler fractions égales et égalité des produits en croix'
@@ -111,7 +111,7 @@ function justifyEq(
   return strOut
 }
 
-export default class EqResolvantesThales extends Exercice {
+export default class EqResolvantesThalesBis extends Exercice {
   niveau: string
   constructor() {
     super()
@@ -142,7 +142,6 @@ export default class EqResolvantesThales extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // On a besoin d'un booléen pour que tout ne soit pas vrai ou faux
       let equalOrNot
