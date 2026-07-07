@@ -1,4 +1,4 @@
-import DefinitionProprietesTriangles from '../5e/5G25'
+import DefinitionProprietesTriangles from '../5e/DefinitionProprietesTriangles'
 export const titre = 'Connaitre notamment la somme des angles dans un triangle'
 export const dateDePublication = '10/06/2026'
 export const interactifReady = true

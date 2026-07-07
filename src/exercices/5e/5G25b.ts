@@ -1,4 +1,4 @@
-import DefinitionProprietesTriangles from './5G25'
+import DefinitionProprietesTriangles from './DefinitionProprietesTriangles'
 export const titre = "Connaitre notamment l'inégalité triangulaire"
 export const dateDePublication = '10/06/2026'
 export const interactifReady = true
