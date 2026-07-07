@@ -33,7 +33,7 @@ export const amcType = 'AMCOpen'
 export const uuid = '4828d'
 
 export const refs = {
-  'fr-fr': ['5A10'],
+  'fr-fr': [],
   'fr-ch': ['9NO4-6'],
 }
 export default class ListeDesDiviseurs5e extends Exercice {
@@ -57,8 +57,9 @@ export default class ListeDesDiviseurs5e extends Exercice {
       ].join('\n'),
     ]
 
-    context.isHtml ? (this.spacing = 2) : (this.spacing = 1)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    this.spacing = context.isHtml ? 2 : 1
+    this.spacingCorr = context.isHtml ? 2 : 1
+
     this.nbQuestions = 3
 
     this.sup = 2
