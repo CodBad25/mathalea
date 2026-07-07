@@ -1,6 +1,9 @@
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+} from '../../modules/outils'
 import Exercice from '../Exercice'
-import { listeQuestionsToContenu } from '../../modules/outils'
 export const titre = "Connaitre le cours sur le périmètre et l'aire"
 
 /**
@@ -11,36 +14,113 @@ export const titre = "Connaitre le cours sur le périmètre et l'aire"
 export const uuid = 'dc7ba'
 
 export const refs = {
-  'fr-fr': ['5M10-2'],
+  'fr-fr': [],
   'fr-2016': ['6M25'],
   'fr-ch': ['10GM1-4'],
 }
 export default class ConnaitreFormulesDePerimetreEtAires extends Exercice {
+  version: string
   constructor() {
     super()
 
     this.nbQuestions = 4
+    this.besoinFormulaireTexte = [
+      'Type de questions',
+      [
+        'Nombres séparés par des tirets  :',
+        '1 : Définition du nombre $\\pi$',
+        "2 : Longueur d'un cercle",
+        '3 : Périmètre du rectangle',
+        '4 : Périmètre du carré',
+        '5 : Aire du rectangle',
+        '6 : Aire du carré',
+        '7 : Aire du triangle rectangle',
+        '8 : Aire du triangle quelconque',
+        "9 : Aire d'un disque",
+        '10 : Mélange',
+      ].join('\n'),
+    ]
+    this.sup = 10
+    this.version = '5M10-2'
   }
 
   nouvelleVersion() {
+    let typesDeQuestionsDisponibles
+    if (this.version === '6M1B')
+      typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
+        max: 2,
+        defaut: 3,
+        nbQuestions: this.nbQuestions,
+        melange: 3,
+        saisie: this.sup,
+        enleveDoublons: true,
+        listeOfCase: ['pi', 'pcercle'],
+      })
+    else if (this.version === 'auto6M1E-4')
+      typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
+        max: 4,
+        defaut: 5,
+        nbQuestions: this.nbQuestions,
+        melange: 5,
+        saisie: this.sup,
+        enleveDoublons: true,
+        listeOfCase: ['prectangle', 'pcarre', 'acarre', 'arectangle'],
+      })
+    else if (this.version === '5M10-2a')
+      typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
+        max: 6,
+        defaut: 7,
+        nbQuestions: this.nbQuestions,
+        melange: 7,
+        saisie: this.sup,
+        enleveDoublons: true,
+        listeOfCase: [
+          'prectangle',
+          'pcarre',
+          'acarre',
+          'arectangle',
+          'atrianglerectangle',
+          'atriangle',
+        ],
+      })
+    else if (this.version === '5M10-2b')
+      typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
+        max: 3,
+        defaut: 4,
+        nbQuestions: this.nbQuestions,
+        melange: 4,
+        saisie: this.sup,
+        enleveDoublons: true,
+        listeOfCase: ['pi', 'pcercle', 'adisque'],
+      })
+    else
+      typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
+        max: 9,
+        defaut: 10,
+        nbQuestions: this.nbQuestions,
+        melange: 10,
+        saisie: this.sup,
+        enleveDoublons: true,
+        listeOfCase: [
+          'pi',
+          'pcercle',
+          'prectangle',
+          'pcarre',
+          'acarre',
+          'arectangle',
+          'atrianglerectangle',
+          'atriangle',
+          'adisque',
+        ],
+      })
+
     const listeTypeDeQuestions = combinaisonListes(
-      [
-        'pi',
-        'prectangle',
-        'pcarre',
-        'acarre',
-        'arectangle',
-        'pcercle',
-        'acercle',
-        'atrianglerectangle',
-        'atriangle',
-      ],
+      typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (listeTypeDeQuestions[i]) {
         case 'pi':
@@ -89,7 +169,7 @@ export default class ConnaitreFormulesDePerimetreEtAires extends Exercice {
             '$\\mathcal{P}_{\\text{cercle}}=D\\times \\pi = 2\\times R \\times \\pi = 2\\pi{}R$<br><br>'
           texteCorr += 'Avec $D$ le diamètre et $R$ le rayon de ce cercle.'
           break
-        case 'acercle':
+        case 'adisque':
         default:
           texte = "Donner une formule de l'aire d'un disque."
           texteCorr =
