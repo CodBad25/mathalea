@@ -5,7 +5,7 @@ import Alea2iep from '../../modules/Alea2iep'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre =
-  'Réaliser le quotient de deux longueurs à la règle non graduée et au compas'
+  'Réaliser le produit de deux longueurs à la règle non graduée et au compas'
 
 export const dateDePublication = '1/11/2021'
 
@@ -13,13 +13,13 @@ export const dateDePublication = '1/11/2021'
  * @author Rémi Angot
 
 */
-export const uuid = 'f9dd2'
+export const uuid = 'b976a'
 
 export const refs = {
-  'fr-fr': ['PEG24'],
+  'fr-fr': ['PEG23'],
   'fr-ch': [],
 }
-export default class QuotientDeDeuxLongueurs extends Exercice {
+export default class ProduitDeDeuxLongueurs extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = ["Longueur de l'unité en cm", 10]
@@ -33,11 +33,17 @@ export default class QuotientDeDeuxLongueurs extends Exercice {
     this.sup3 = 0
   }
 
-  nouvelleVersion(numeroExercice) {
+  nouvelleVersion(numeroExercice: number) {
     const anim = new Alea2iep()
     const unite = this.sup
-    const a = (this.sup2 < 1 || this.sup2 === this.sup) ? randint(2, 5, this.sup) : this.sup2
-    const b = (this.sup3 < 1 || this.sup3 === this.sup) ? randint(2, 5, [this.sup, a]) : this.sup3
+    const a =
+      this.sup2 < 1 || this.sup2 === this.sup
+        ? randint(2, 5, this.sup)
+        : this.sup2
+    const b =
+      this.sup3 < 1 || this.sup3 === this.sup
+        ? randint(2, 5, [this.sup, a])
+        : this.sup3
     const monAngle = 40
     const u1 = pointAbstrait(1, 5)
     const u2 = pointAbstrait(u1.x + unite, u1.y)
@@ -74,7 +80,7 @@ export default class QuotientDeDeuxLongueurs extends Exercice {
     anim.textePosition('b', bm.x - 0.2, bm.y + 0.8)
     const O = pointAbstrait(1, -2, 'O')
     const A = pointAbstrait(O.x + a, O.y, 'A')
-    const M = pointAbstrait(O.x + a / b / unite, O.y, 'M')
+    const M = pointAbstrait(O.x + (a * b) / unite, O.y, 'M')
     anim.regleMasquerGraduations()
     anim.regleDemiDroiteOriginePoint(O, M)
     anim.regleMasquer()
@@ -97,33 +103,33 @@ export default class QuotientDeDeuxLongueurs extends Exercice {
     anim.compasTracerArcCentrePoint(O, B)
     anim.pointCreer(B, { dx: -0.3, dy: 0.8 })
     anim.compasMasquer()
-    anim.regleSegment(B, A)
+    anim.regleSegment(I, A)
     anim.regleMasquer()
     anim.crayonMasquer()
-    const m = anim.paralleleAuCompas(B, A, I)
-    if (m.y > M.y) anim.regleSegment(I, M)
+    const m = anim.paralleleAuCompas(I, A, B)
+    if (m.y > M.y) anim.regleSegment(B, M)
     anim.pointCreer(M, { dx: -0.3, dy: -0.4 })
     anim.regleSegment(O, M, { couleur: 'red', epaisseur: 3 })
     anim.regleMasquer()
     anim.crayonMasquer()
 
     const texte =
-      "À partir d'un segment unité, d'un segment de longueur $a$ et d'un segment de longueur $b$, construire un segment de longueur $\\dfrac{a}{b}$."
+      "À partir d'un segment unité, d'un segment de longueur $a$ et d'un segment de longueur $b$, construire un segment de longueur $a\\times b$."
     let texteCorr = texteGras('Programme de construction :')
     texteCorr += '<br>On trace une demi-droite $[OA)$ telle que $OA = a$.'
     texteCorr +=
       '<br>On trace une demi-droite de même origine $[OB)$ telle que $OB = b$.'
     texteCorr += '<br>On place le point $I$ sur $[OB)$ tel que $OI = 1u$.'
-    texteCorr += '<br>On trace le segment $[BA]$.'
-    texteCorr += '<br>On trace la parallèle à $(BA)$ passant par $I$.'
+    texteCorr += '<br>On trace le segment $[IA]$.'
+    texteCorr += '<br>On trace la parallèle à $(IA)$ passant par $B$.'
     texteCorr += '<br>Elle coupe $[OA)$ en $M$.'
 
     texteCorr += '<br><br>' + texteGras('Justification :')
     texteCorr +=
-      "<br> Les droites $(BA)$ et $(IM)$ sont parallèles donc d'après le théorème de Thalès, on a  :"
+      "<br> Les droites $(IA)$ et $(BM)$ sont parallèles donc d'après le théorème de Thalès, on a  :"
     texteCorr +=
-      '<br> $\\dfrac{OM}{OA}=\\dfrac{OI}{OB}$ soit $\\dfrac{OM}{a}=\\dfrac{1}{b}$'
-    texteCorr += '<br><br> Finalement, on a $OM=\\dfrac{a}{b}$.'
+      '<br> $\\dfrac{OA}{OM}=\\dfrac{OI}{OB}$ soit $\\dfrac{a}{OM}=\\dfrac{1}{b}$'
+    texteCorr += '<br><br> Finalement, on a $OM=ab$.'
     texteCorr += anim.html(numeroExercice)
 
     this.listeQuestions = [texte]

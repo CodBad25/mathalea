@@ -35,7 +35,7 @@ export default class RacineCarrAvecTheoremeHauteur extends Exercice {
     this.nbQuestionsModifiable = false
   }
 
-  nouvelleVersion(numeroExercice) {
+  nouvelleVersion(numeroExercice: number) {
     const couplesPossibles = [
       [1, 5],
       [2, 3],
