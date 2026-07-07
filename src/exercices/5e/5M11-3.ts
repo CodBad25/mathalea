@@ -14,7 +14,6 @@ import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMath
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
-import { sp } from '../../lib/outils/outilString'
 import { stringNombre, texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -147,18 +146,18 @@ export default class PerimetreAireDisques extends Exercice {
       if (this.sup === 1) {
         this.consigne =
           this.nbQuestions > 1
-            ? 'Calculer le périmètre (en $\\text{cm}$) des disques suivants.'
-            : 'Calculer le périmètre (en $\\text{cm}$) du disque suivant.'
+            ? 'Calculer le périmètre (en $\\text{ cm}$) des disques suivants.'
+            : 'Calculer le périmètre (en $\\text{ cm}$) du disque suivant.'
       } else if (this.sup === 2) {
         this.consigne =
           this.nbQuestions > 1
-            ? "Calculer l'aire (en $\\text{cm}^2$) des disques suivants."
-            : "Calculer l'aire (en $\\text{cm}^2$) du disque suivant."
+            ? "Calculer l'aire (en $\\text{ cm}^2$) des disques suivants."
+            : "Calculer l'aire (en $\\text{ cm}^2$) du disque suivant."
       } else {
         this.consigne =
           this.nbQuestions > 1
-            ? "Calculer le périmètre (en $\\text{cm}$) et l'aire (en $\\text{cm}^2$) des disques suivants."
-            : "Calculer le périmètre (en $\\text{cm}$) et l'aire (en $\\text{cm}^2$) du disque suivant."
+            ? "Calculer le périmètre (en $\\text{ cm}$) et l'aire (en $\\text{ cm}^2$) des disques suivants."
+            : "Calculer le périmètre (en $\\text{ cm}$) et l'aire (en $\\text{ cm}^2$) du disque suivant."
       }
       reponseL1 = this.sup === 2 ? 0 : arrondi(2 * r, 2)
       reponseL2 =
@@ -174,9 +173,9 @@ export default class PerimetreAireDisques extends Exercice {
           this.consigne +=
             '<br> On donnera une valeur approchée au dixième près '
           if (this.sup === 1) {
-            this.consigne += 'de $\\text{cm}$.'
+            this.consigne += 'de $\\text{ cm}$.'
           } else if (this.sup === 2) {
-            this.consigne += 'de $\\text{cm}^2$.'
+            this.consigne += 'de $\\text{ cm}^2$.'
           } else {
             this.consigne += 'des unités respectives ci-dessus.'
           }
@@ -188,9 +187,9 @@ export default class PerimetreAireDisques extends Exercice {
           this.consigne +=
             '<br> On donnera la valeur exacte ou une valeur approchée au dixième près '
           if (this.sup === 1) {
-            this.consigne += 'de $\\text{cm}$.'
+            this.consigne += 'de $\\text{ cm}$.'
           } else if (this.sup === 2) {
-            this.consigne += 'de $\\text{cm}^2$.'
+            this.consigne += 'de $\\text{ cm}^2$.'
           } else {
             this.consigne += 'des unités respectives ci-dessus.'
           }
@@ -200,9 +199,9 @@ export default class PerimetreAireDisques extends Exercice {
           this.consigne +=
             '<br> On donnera la valeur exacte puis une valeur approchée au dixième près '
           if (this.sup === 1) {
-            this.consigne += 'de $\\text{cm}$.'
+            this.consigne += 'de $\\text{ cm}$.'
           } else if (this.sup === 2) {
-            this.consigne += 'de $\\text{cm}^2$.'
+            this.consigne += 'de $\\text{ cm}^2$.'
           } else {
             this.consigne += 'des unités respectives ci-dessus.'
           }
@@ -216,15 +215,15 @@ export default class PerimetreAireDisques extends Exercice {
               2 * r,
             )}\\pi\\approx${texNombre(
               arrondi(2 * r * Math.PI, 2),
-            )}${sp()}\\text{cm}$<br>`
+            )}\\text{ cm}$<br>`
       texteCorr +=
         this.sup === 2
           ? ''
           : (this.sup3 !== 1
-              ? `La valeur exacte du périmètre de ce disque est $${miseEnEvidence(`${texNombre(2 * r)}\\pi`)}${sp()}\\text{cm}$.<br>`
+              ? `La valeur exacte du périmètre de ce disque est $${miseEnEvidence(`${texNombre(2 * r)}\\pi`)}\\text{ cm}$.<br>`
               : '') +
             (this.sup3 !== 2
-              ? `Les valeurs approchées au dixième de$\\text{cm}$ du périmètre de ce disque sont $${miseEnEvidence(texNombre(reponseL2))}${sp()}\\text{cm}$ et $${miseEnEvidence(texNombre(reponseL2bis))}${sp()}\\text{cm}$.<br>`
+              ? `Les valeurs approchées au dixième de$\\text{ cm}$ du périmètre de ce disque sont $${miseEnEvidence(texNombre(reponseL2))}\\text{ cm}$ et $${miseEnEvidence(texNombre(reponseL2bis))}\\text{ cm}$.<br>`
               : '')
       texteCorr +=
         this.sup === 1
@@ -234,15 +233,15 @@ export default class PerimetreAireDisques extends Exercice {
               r * r,
             )}\\pi\\approx${texNombre(
               arrondi(r * r * Math.PI, 2),
-            )}${sp()}\\text{cm}^2$<br>`
+            )}\\text{ cm}^2$<br>`
       texteCorr +=
         this.sup === 1
           ? ''
           : (this.sup3 !== 1
-              ? `La valeur exacte de l'aire de ce disque est $${miseEnEvidence(`${texNombre(r * r)}\\pi`)}${sp()}\\text{cm}^2$.<br>`
+              ? `La valeur exacte de l'aire de ce disque est $${miseEnEvidence(`${texNombre(r * r)}\\pi`)}\\text{ cm}^2$.<br>`
               : '') +
             (this.sup3 !== 2
-              ? `Les valeurs approchées au dixième de$\\text{cm}^2$ de l'aire de ce disque sont $${miseEnEvidence(texNombre(reponseA2))}${sp()}\\text{cm}^2$ et $${miseEnEvidence(texNombre(reponseA2bis))}${sp()}\\text{cm}^2$.<br>`
+              ? `Les valeurs approchées au dixième de$\\text{ cm}^2$ de l'aire de ce disque sont $${miseEnEvidence(texNombre(reponseA2))}\\text{ cm}^2$ et $${miseEnEvidence(texNombre(reponseA2bis))}\\text{ cm}^2$.<br>`
               : '')
 
       if (
@@ -309,9 +308,12 @@ export default class PerimetreAireDisques extends Exercice {
             switch ([choixValeurExacte, choixValeurApprochee].toString()) {
               case 'true,false':
                 dataTemplate =
-                  'Valeur exacte du périmètre : %{champ1}$\\text{cm}$'
+                  'Valeur exacte du périmètre : %{champ1}$\\text{ cm}$'
                 dataOptions = {
-                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ1: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
                 }
                 reponses = {
                   champ1: {
@@ -325,9 +327,12 @@ export default class PerimetreAireDisques extends Exercice {
                 break
               case 'false,true':
                 dataTemplate =
-                  'Valeur approchée du périmètre : %{champ1}$\\text{cm}$'
+                  'Valeur approchée du périmètre : %{champ1}$\\text{ cm}$'
                 dataOptions = {
-                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ1: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
                 }
                 reponses = {
                   champ1: { value: [reponseL2, reponseL2bis] },
@@ -336,10 +341,16 @@ export default class PerimetreAireDisques extends Exercice {
               case 'true,true':
               default:
                 dataTemplate =
-                  'Valeur exacte du périmètre : %{champ1}$\\text{cm}$\nValeur approchée du périmètre : %{champ2}$\\text{cm}$'
+                  'Valeur exacte du périmètre : %{champ1}$\\text{ cm}$\nValeur approchée du périmètre : %{champ2}$\\text{ cm}$'
                 dataOptions = {
-                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
-                  champ2: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ1: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
+                  champ2: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
                 }
                 reponses = {
                   champ1: {
@@ -405,9 +416,12 @@ export default class PerimetreAireDisques extends Exercice {
             switch ([choixValeurExacte, choixValeurApprochee].toString()) {
               case 'true,false':
                 dataTemplate =
-                  "Valeur exacte de l'aire : %{champ1}$\\text{cm}^2$"
+                  "Valeur exacte de l'aire : %{champ1}$\\text{ cm}^2$"
                 dataOptions = {
-                  champ1: { keyboard: KeyboardType.clavierNumbers,ldots: true },
+                  champ1: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
                 }
                 reponses = {
                   champ1: {
@@ -421,9 +435,12 @@ export default class PerimetreAireDisques extends Exercice {
                 break
               case 'false,true':
                 dataTemplate =
-                  "Valeur approchée de l'aire : %{champ1}$\\text{cm}^2$"
+                  "Valeur approchée de l'aire : %{champ1}$\\text{ cm}^2$"
                 dataOptions = {
-                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ1: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
                 }
                 reponses = {
                   champ1: { value: [reponseA2, reponseA2bis] },
@@ -432,10 +449,16 @@ export default class PerimetreAireDisques extends Exercice {
               case 'true,true':
               default:
                 dataTemplate =
-                  "Valeur exacte de l'aire : %{champ1}$\\text{cm}^2$\nValeur approchée de l'aire : %{champ2}$\\text{cm}^2$"
+                  "Valeur exacte de l'aire : %{champ1}$\\text{ cm}^2$\nValeur approchée de l'aire : %{champ2}$\\text{ cm}^2$"
                 dataOptions = {
-                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
-                  champ2: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ1: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
+                  champ2: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
                 }
                 reponses = {
                   champ1: {
@@ -538,10 +561,16 @@ export default class PerimetreAireDisques extends Exercice {
             switch ([choixValeurExacte, choixValeurApprochee].toString()) {
               case 'true,false':
                 dataTemplate =
-                  "Valeur exacte du périmètre : %{champ1}$\\text{cm}$\nValeur exacte de l'aire : %{champ2}$\\text{cm}^2$"
+                  "Valeur exacte du périmètre : %{champ1}$\\text{ cm}$\nValeur exacte de l'aire : %{champ2}$\\text{ cm}^2$"
                 dataOptions = {
-                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
-                  champ2: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ1: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
+                  champ2: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
                 }
                 reponses = {
                   champ1: {
@@ -562,10 +591,16 @@ export default class PerimetreAireDisques extends Exercice {
                 break
               case 'false,true':
                 dataTemplate =
-                  "Valeur approchée du périmètre : %{champ1}$\\text{cm}$\nValeur approchée de l'aire : %{champ2}$\\text{cm}^2$"
+                  "Valeur approchée du périmètre : %{champ1}$\\text{ cm}$\nValeur approchée de l'aire : %{champ2}$\\text{ cm}^2$"
                 dataOptions = {
-                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
-                  champ2: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ1: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
+                  champ2: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
                 }
                 reponses = {
                   champ1: { value: [reponseL2, reponseL2bis] },
@@ -575,12 +610,24 @@ export default class PerimetreAireDisques extends Exercice {
               case 'true,true':
               default:
                 dataTemplate =
-                  "Valeur exacte du périmètre : %{champ1}$\\text{cm}$\nValeur approchée du périmètre : %{champ2}$\\text{cm}$\nValeur exacte de l'aire : %{champ3}$\\text{cm}^2$\nValeur approchée de l'aire : %{champ4}$\\text{cm}^2$"
+                  "Valeur exacte du périmètre : %{champ1}$\\text{ cm}$\nValeur approchée du périmètre : %{champ2}$\\text{ cm}$\nValeur exacte de l'aire : %{champ3}$\\text{ cm}^2$\nValeur approchée de l'aire : %{champ4}$\\text{ cm}^2$"
                 dataOptions = {
-                  champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
-                  champ2: { keyboard: KeyboardType.clavierNumbers, ldots: true },
-                  champ3: { keyboard: KeyboardType.clavierNumbers, ldots: true },
-                  champ4: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+                  champ1: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
+                  champ2: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
+                  champ3: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
+                  champ4: {
+                    keyboard: KeyboardType.clavierNumbers,
+                    ldots: true,
+                  },
                 }
                 reponses = {
                   champ1: {
@@ -607,7 +654,7 @@ export default class PerimetreAireDisques extends Exercice {
         texte += addMultiMathfield(this, i, {
           dataTemplate,
           dataOptions,
-        })
+        }).replaceAll('\\ldots', '\\ldots\\ldots')
         handleAnswers(
           this,
           i,

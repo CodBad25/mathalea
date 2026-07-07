@@ -26,6 +26,8 @@ export interface A4UnitData {
 export interface A4ExerciseOverrides {
   /** Zoom des figures SVG (1 par défaut) */
   svgZoom?: number
+  /** Zoom de l'image d'un exercice statique (1 par défaut) */
+  staticZoom?: number
   /** Facteur d'espacement entre les questions (le réglage global par défaut) */
   spacing?: number
   /**

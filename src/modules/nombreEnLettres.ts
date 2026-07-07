@@ -2,6 +2,48 @@ import Decimal from 'decimal.js'
 import { nombreDeChiffresDansLaPartieEntiere } from '../lib/outils/nombres'
 import { estentier } from './outils'
 
+export const adverbeNumeral = (x: number): string => {
+  const entier = Math.round(x) - 1
+  switch (entier) {
+    case 0:
+      return 'première'
+    case 1:
+      return 'deuxième'
+    case 2:
+      return 'troisième'
+    case 3:
+      return 'quatrième'
+    case 4:
+      return 'cinquième'
+    case 5:
+      return 'sixième'
+    case 6:
+      return 'septième'
+    case 7:
+      return 'huitième'
+    case 8:
+      return 'neuvième'
+    case 9:
+      return 'dixième'
+    default:
+      if (nombreEnLettres(entier).slice(-1) === 'e') {
+        return nombreEnLettres(entier).slice(0, -1) + 'ième'
+      } else if (nombreEnLettres(entier).slice(-1) === 't') {
+        return nombreEnLettres(entier) + 'ième'
+      } else if (nombreEnLettres(entier).slice(-1) === 'q') {
+        return nombreEnLettres(entier) + 'uième'
+      } else if (nombreEnLettres(entier).slice(-1) === 'f') {
+        return nombreEnLettres(entier).slice(0, -1) + 'vième'
+      } else if (nombreEnLettres(entier).slice(-1) === 'x') {
+        return nombreEnLettres(entier).slice(0, -1) + 'xième'
+      } else if (nombreEnLettres(entier).slice(-1) === 's') {
+        return nombreEnLettres(entier).slice(0, -1) + 'sième'
+      } else {
+        return nombreEnLettres(entier) + 'ième'
+      }
+  }
+}
+
 export function nombreEnLettres(nb: number, type = 1) {
   let partieEntiere, partieDecimale, nbstring, nbDec, decstring
   if (estentier(nb)) return partieEntiereEnLettres(nb)
@@ -1122,9 +1164,11 @@ export function partieEntiereEnLettres(nb: number) {
   }
   let result = ''
   if (classeDesMilliards.length > 1) {
-    classeDesMilliards === 'un'
-      ? (result += classeDesMilliards + '-milliard')
-      : (result += classeDesMilliards + '-milliards')
+    if (classeDesMilliards === 'un') {
+      result += classeDesMilliards + '-milliard'
+    } else {
+      result += classeDesMilliards + '-milliards'
+    }
     if (
       classeDesMillions !== 'zéro' ||
       classeDesMilliers !== 'zéro' ||
@@ -1134,17 +1178,21 @@ export function partieEntiereEnLettres(nb: number) {
     }
   }
   if (classeDesMillions.length > 1 && classeDesMillions !== 'zéro') {
-    classeDesMillions === 'un'
-      ? (result += classeDesMillions + '-million')
-      : (result += classeDesMillions + '-millions')
+    if (classeDesMillions === 'un') {
+      result += classeDesMillions + '-million'
+    } else {
+      result += classeDesMillions + '-millions'
+    }
     if (classeDesMilliers !== 'zéro' || classeDesUnites !== 'zéro') {
       result += '-'
     }
   }
   if (classeDesMilliers.length > 1 && classeDesMilliers !== 'zéro') {
-    classeDesMilliers === 'un'
-      ? (result += 'mille')
-      : (result += classeDesMilliers + '-mille')
+    if (classeDesMilliers === 'un') {
+      result += 'mille'
+    } else {
+      result += classeDesMilliers + '-mille'
+    }
     if (classeDesUnites !== 'zéro') {
       result += '-'
     }

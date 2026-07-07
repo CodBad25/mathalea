@@ -84,7 +84,7 @@
     const available = node.clientWidth
     if (available <= 0) return
     for (const el of node.querySelectorAll<HTMLElement>(
-      'table, .katex-display, .scratchblocks, .svgContainer > div',
+      'table, .katex-display, .katex, .scratchblocks, .svgContainer > div',
     )) {
       // déjà réduit via un ancêtre (tableau imbriqué, formule dans un tableau)
       if (el.parentElement?.closest('[data-a4-fit]') != null) continue
@@ -93,6 +93,13 @@
       const ratio = available / width
       const height = el.offsetHeight
       el.dataset.a4Fit = ''
+      // transform n'a aucun effet sur les éléments display:inline (cas du
+      // span.katex d'une formule inline, contrairement à .katex-display) :
+      // il faut le rendre transformable sans changer son flux (seul sur sa
+      // ligne dans tous les cas d'usage ciblés ici).
+      if (getComputedStyle(el).display === 'inline') {
+        el.style.display = 'inline-block'
+      }
       el.style.transform = `scale(${ratio})`
       el.style.transformOrigin = 'top left'
       el.style.marginBottom = `${-height * (1 - ratio)}px`

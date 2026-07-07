@@ -203,7 +203,7 @@ export default class PlusOuMoins extends ExerciceSimple {
               this.question = `${prenom1} a $${a}$ ${objets}. Il a $${b}$ ${objets} ${choix1 ? 'de plus' : ' de moins '}
                 que ${prenom2}. <br>
 
-                Combien ${prenom2} a-t-il de ${objets} ?`
+                Combien ${prenom2} a-t-elle de ${objets} ?`
             } else {
               this.question = `${prenom1} a $${b}$ ${objets} ${choix1 ? 'de plus' : ' de moins '}
                 que ${prenom2}. <br>
@@ -211,7 +211,7 @@ export default class PlusOuMoins extends ExerciceSimple {
                 Sachant qu'il a $${a}$ ${objets}, combien de ${objets} possède ${prenom2} ?`
             }
             this.correction = `${prenom1} a $${b}$ ${objets} ${choix1 ? 'de plus' : ' de moins '} que ${prenom2} donc ${prenom2}  a $${b}$ ${objets} ${choix1 ? 'de moins' : ' de plus '} que ${prenom1}.<br>
-                Il en a donc  (${choix1 ? `$${a}-${b}$` : `$${a}+${b}$`}), soit  ${choix1 ? `$${miseEnEvidence(a - b)}$` : `$${miseEnEvidence(a + b)}$`}. `
+                Elle en a donc  (${choix1 ? `$${a}-${b}$` : `$${a}+${b}$`}), soit  ${choix1 ? `$${miseEnEvidence(a - b)}$` : `$${miseEnEvidence(a + b)}$`}. `
           } else {
             reponse1 = a + b
             reponse2 = a - b
@@ -220,15 +220,15 @@ export default class PlusOuMoins extends ExerciceSimple {
               this.question = `${prenom1} a $${a}$ ${objets}. ${prenom2} a $${b}$ ${objets} ${choix1 ? 'de plus' : ' de moins '}
                 que lui. <br>
 
-                Combien ${prenom2} a-t-il de ${objets} ?`
+                Combien ${prenom2} a-t-elle de ${objets} ?`
             } else {
               this.question = `${prenom2} a $${b}$ ${objets} ${choix1 ? 'de plus' : ' de moins '}
                 que ${prenom1} qui en a $${a}$.  <br>
 
-                Combien ${prenom2} a-t-il de ${objets} ?`
+                Combien ${prenom2} a-t-elle de ${objets} ?`
             }
-            this.correction = `${prenom1} a $${b}$ ${objets} ${choix1 ? 'de plus' : ' de moins '} que ${prenom2}.
-           Il en a donc  (${choix1 ? `$${a}+${b}$` : `$${a}-${b}$`}), soit  ${choix1 ? `$${miseEnEvidence(a + b)}$` : `$${miseEnEvidence(a - b)}$`}. `
+            this.correction = `${prenom2} a $${b}$ ${objets} ${choix1 ? 'de plus' : ' de moins '} que ${prenom1}.
+           Elle en a donc  (${choix1 ? `$${a}+${b}$` : `$${a}-${b}$`}), soit  ${choix1 ? `$${miseEnEvidence(a + b)}$` : `$${miseEnEvidence(a - b)}$`}. `
           }
         }
         if (this.interactif) {

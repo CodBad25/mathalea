@@ -325,7 +325,10 @@ for (const tag of tagsEAM) {
   for (const filiere of ['Specialite', 'Specifique', 'Technologique']) {
     referentielFR['40_Épreuves de Première - Par thème'][filiere][tag] = {}
     for (const ex in dictionnaireEAM) {
-      if (dictionnaireEAM[ex].tags.includes(tag)) {
+      if (
+        dictionnaireEAM[ex].tags.includes(tag) &&
+        dictionnaireEAM[ex].filiere === filiere
+      ) {
         referentielFR['40_Épreuves de Première - Par thème'][filiere][tag][ex] =
           { uuid: ex, ...dictionnaireEAM[ex] }
       }

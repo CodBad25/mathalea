@@ -2,7 +2,7 @@ import type { IPolygone } from './Interfaces'
 import { mediatrice } from './Mediatrice'
 import { pointAbstrait, PointAbstrait } from './PointAbstrait'
 import { Droite, droite } from './droites'
-import { projectionOrtho } from './transformations'
+import { homothetie, projectionOrtho } from './transformations'
 import { milieu, pointIntersectionDD } from './utilitairesPoint'
 
 /**
@@ -144,4 +144,67 @@ export function centreCercleCirconscrit(
   const x = p.x
   const y = p.y
   return pointAbstrait(x, y, nom, positionLabel)
+}
+
+/**
+ * Crée le centre du cercle inscrit au triangle ABC
+ * @param {PointAbstrait} A Premier sommet du triangle
+ * @param {PointAbstrait} B Deuxième sommet du triangle
+ * @param {PointAbstrait} C Troisième sommet du triangle
+ * @param {string} [nom=''] Nom du centre
+ * @param {string} [positionLabel = 'above'] Position du nom par rapport au point
+ * @example G = centreCercleInscrit(F,C,N)
+ * // Crée G, le centre du cercle inscrit au triangle FCN,sans être nommé.
+ * @example G = centreCercleInscrit(F,C,N,'G','below')
+ * // Crée G, le centre du cercle inscrit au triangle FCN, en notant G sous le point, s'il est tracé et labellisé.
+ * @return {PointAbstrait}
+ * @author Olivier Mimeau
+ */
+
+export function centreCercleInscrit(
+  A: PointAbstrait,
+  B: PointAbstrait,
+  C: PointAbstrait,
+  nom = '',
+  positionLabel = 'above',
+) {
+  const B1 = piedBissectrice(A, B, C)
+  const C1 = piedBissectrice(B, C, A)
+  const d = droite(B, B1)
+  const e = droite(C, C1)
+  const p = pointIntersectionDD(d, e)
+  const x = p.x
+  const y = p.y
+  return pointAbstrait(x, y, nom, positionLabel)
+}
+
+/* Pied de la bissectrice issue du sommet B du triangle ABC.
+ *
+ */
+/**
+ * Crée le Pied de la bissectrice issue du sommet B du triangle ABC.
+ * @param {PointAbstrait} A Premier sommet du triangle
+ * @param {PointAbstrait} B Deuxième sommet du triangle
+ * @param {PointAbstrait} C Troisième sommet du triangle
+ * @param {string} [nom=''] Nom du centre
+ * @param {string} [positionLabel = 'above'] Position du nom par rapport au point
+ * @example I = piedBissectrice(F,C,N)
+ * // Crée I, le pied de la bissectrice issue du sommet C du triangle FCN,sans être nommé.
+ * @example I = piedBissectrice(F,C,N,'I','below')
+ * // Crée I, le pied de la bissectrice issue du sommet C du triangle FCN, en notant I sous le point, s'il est tracé et labellisé.
+ * @return {PointAbstrait}
+ * @author Olivier Mimeau
+ */
+export function piedBissectrice(
+  A: PointAbstrait,
+  B: PointAbstrait,
+  C: PointAbstrait,
+  nom?: string,
+  positionLabel?: string,
+): PointAbstrait {
+  //  Le point est sur le segment [AC] tel que MA/MC=BA/BC.
+  const AB = Math.sqrt((B.x - A.x) ** 2 + (B.y - A.y) ** 2)
+  const BC = Math.sqrt((C.x - B.x) ** 2 + (C.y - B.y) ** 2)
+  const M = homothetie(C, A, AB / (AB + BC))
+  return pointAbstrait(M.x, M.y, nom, positionLabel)
 }

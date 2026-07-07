@@ -933,10 +933,10 @@ export function additionMultiplePosee(
     return code
   } else {
     return calculer
-      ? `\\opmanyadd[lineheight=\\baselineskip,columnwidth=2ex,decimalsepsymbol=,,voperator=bottom,voperation=top]{${operandes
+      ? `\\opmanyadd[lineheight=\\baselineskip,columnwidth=2ex,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operandes
           .map((op) => texNombre(op, 5).replace(',', '.'))
           .join('}{')}}`
-      : `\\opmanyadd[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\whitedecimalsepsymbol=,,voperator=bottom,voperation=top]{${operandes
+      : `\\opmanyadd[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\whitedecimalsepsymbol={,},voperator=bottom,voperation=top]{${operandes
           .map((op) => texNombre(op, 5).replace(',', '.'))
           .join('}{')}}`
   }
@@ -1338,19 +1338,19 @@ export default function operation({
           )
         } else {
           Code = options.solution
-            ? `\\opsub[resultstyle={\\color[HTML]{${orangeMathalea.slice(1)}}},lineheight=\\baselineskip,columnwidth=3ex,carrysub,lastcarry,decimalsepsymbol=,,voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
-            : `\\opsub[lineheight=\\baselineskip,columnwidth=3ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,decimalsepsymbol=,,voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
+            ? `\\opsub[resultstyle={\\color[HTML]{${orangeMathalea.slice(1)}}},lineheight=\\baselineskip,columnwidth=3ex,carrysub,lastcarry,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
+            : `\\opsub[lineheight=\\baselineskip,columnwidth=3ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
         }
         break
       case 'multiplication':
         Code = options.solution
-          ? `\\opmul[resultstyle={\\color[HTML]{${orangeMathalea.slice(1)}}},lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=all,decimalsepsymbol=,,voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
-          : `\\opmul[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,decimalsepsymbol=,,voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
+          ? `\\opmul[resultstyle={\\color[HTML]{${orangeMathalea.slice(1)}}},lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=all,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
+          : `\\opmul[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
         break
       case 'division':
         Code = options.solution
-          ? `\\opdiv[resultstyle={\\color[HTML]{${orangeMathalea.slice(1)}}},lineheight=\\baselineskip,columnwidth=2ex,displayintermediary=all,voperation=top,period,decimalsepsymbol=,,shiftdecimalsep=none]{${operande1}}{${operande2}}`
-          : `\\opdiv[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,voperation=top,period,decimalsepsymbol=,,shiftdecimalsep=none]{${operande1}}{${operande2}}`
+          ? `\\opdiv[resultstyle={\\color[HTML]{${orangeMathalea.slice(1)}}},lineheight=\\baselineskip,columnwidth=2ex,displayintermediary=all,voperation=top,period,decimalsepsymbol={,},shiftdecimalsep=none]{${operande1}}{${operande2}}`
+          : `\\opdiv[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,voperation=top,period,decimalsepsymbol={,},shiftdecimalsep=none]{${operande1}}{${operande2}}`
         break
       case 'divisionE':
         Code = options.solution
@@ -1360,8 +1360,8 @@ export default function operation({
       case 'addition':
       default:
         Code = options.solution
-          ? `\\opadd[resultstyle={\\color[HTML]{${orangeMathalea.slice(1)}}},lineheight=\\baselineskip,columnwidth=2ex,decimalsepsymbol=,,voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
-          : `\\opadd[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\whitedecimalsepsymbol=,,voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
+          ? `\\opadd[resultstyle={\\color[HTML]{${orangeMathalea.slice(1)}}},lineheight=\\baselineskip,columnwidth=2ex,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
+          : `\\opadd[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
         break
     }
   }

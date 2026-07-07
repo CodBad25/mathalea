@@ -1,4 +1,3 @@
-
 import { arc } from '../../lib/2d/Arc'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
@@ -20,7 +19,8 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Retrouver un pourcentage à partir d\'un diagramme circulaire'
+export const titre =
+  "Retrouver un pourcentage à partir d'un diagramme circulaire"
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -29,14 +29,19 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ12FMt2026 extends ExerciceQcmA {
-private appliquerLesValeurs(
+  private appliquerLesValeurs(
     valBerlines: number,
     valMonospaces: number,
     valCabriolets: number,
     valToutTerrain: number,
-    distracteurs: string[]
+    distracteurs: string[],
   ): void {
-    const proportions = [valBerlines, valMonospaces, valCabriolets, valToutTerrain]
+    const proportions = [
+      valBerlines,
+      valMonospaces,
+      valCabriolets,
+      valToutTerrain,
+    ]
     const labels = ['Berlines', 'Monospaces', 'Cabriolets', 'Tout terrain']
 
     // --- CRÉATION MANUELLE DU DIAGRAMME ET DE LA LÉGENDE ---
@@ -61,15 +66,23 @@ private appliquerLesValeurs(
       const pt1 = pointAbstrait(5, 2 - i * 1.5)
       const pt2 = pointAbstrait(6, 2 - i * 1.5)
       const carreLegende = carre(pt1, pt2, 'black')
-      
+
       // On utilise la fonction de conversion pour satisfaire TypeScript
-      carreLegende.couleurDeRemplissage = colorToLatexOrHTML('black') 
-      carreLegende.opaciteDeRemplissage = opacites[i] 
-      
+      carreLegende.couleurDeRemplissage = colorToLatexOrHTML('black')
+      carreLegende.opaciteDeRemplissage = opacites[i]
+
       objets2d.push(carreLegende)
 
       // 3. Tracé du texte à côté du carré
-      const texteLegende = texteParPosition(labels[i], 6.5, 2.5 - i * 1.5, 0, 'black', 1.2, 'gauche')
+      const texteLegende = texteParPosition(
+        labels[i],
+        6.5,
+        2.5 - i * 1.5,
+        0,
+        'black',
+        1.2,
+        'gauche',
+      )
       objets2d.push(texteLegende)
 
       alpha += angle // On avance l'angle pour la part suivante
@@ -78,10 +91,15 @@ private appliquerLesValeurs(
     // On englobe le tout en s'assurant que rxmax va jusqu'à 13 pour inclure la légende
     const figure = mathalea2d(
       Object.assign(
-        { display: 'block', center: true, pixelsParCm: 20, scale: 0.5 } as const,
-        fixeBordures(objets2d, { rxmin: 0, rymin: 0, rxmax: 0, rymax: 0 })
+        {
+          display: 'block',
+          center: true,
+          pixelsParCm: 20,
+          scale: 0.5,
+        } as const,
+        fixeBordures(objets2d, { rxmin: 0, rymin: 0, rxmax: 0, rymax: 0 }),
       ),
-      objets2d
+      objets2d,
     )
     // -------------------------------------------------------------
 
@@ -96,14 +114,15 @@ private appliquerLesValeurs(
     this.correction += `$\\bullet$ Le secteur des ${texteGras('Cabriolets')} est visiblement plus grand que celui des ${texteGras('Tout terrain')}. Il représente donc plus de la moitié de ces $25 \\%$, c'est-à-dire plus de $12,5 \\%$.<br><br>`
     this.correction += `Parmi les propositions données, seule la valeur de $${valCabriolets} \\,\\%$ est cohérente avec cette observation (les autres valeurs étant soit trop petites, soit supérieures au quart restant du disque).`
 
-    this.reponses = [
-      `$${valCabriolets} \\%$`,
-      ...distracteurs
-    ]
+    this.reponses = [`$${valCabriolets} \\%$`, ...distracteurs]
   }
 
   versionOriginale: () => void = () => {
-    this.appliquerLesValeurs(50, 25, 18, 7, ['$51 \\%$', '$29 \\%$', '$11 \\%$', '$14 \\%$'])
+    this.appliquerLesValeurs(50, 25, 18, 7, [
+      '$52 \\%$',
+      '$12 \\%$',
+      '$30 \\%$',
+    ])
   }
 
   versionAleatoire: () => void = () => {
@@ -116,25 +135,29 @@ private appliquerLesValeurs(
     let numEssais = 0
     do {
       numEssais++
-      
+
       const valBerlines = 50
       const valMonospaces = 25
       const valCabriolets = 14 + Math.floor(Math.random() * 6)
       const valToutTerrain = 25 - valCabriolets
 
-      const dist1 = `${valBerlines + Math.floor(Math.random() * 5) - 2} \\%` 
-      const dist2 = `${Math.floor(25 / 2) - Math.floor(Math.random() * 3)} \\%` 
-      const dist3 = `${valMonospaces + Math.floor(Math.random() * 7) + 2} \\%` 
+      const dist1 = `${valBerlines + Math.floor(Math.random() * 5) - 2} \\%`
+      const dist2 = `${Math.floor(25 / 2) - Math.floor(Math.random() * 3)} \\%`
+      const dist3 = `${valMonospaces + Math.floor(Math.random() * 7) + 2} \\%`
 
       this.appliquerLesValeurs(
-        valBerlines, 
-        valMonospaces, 
-        valCabriolets, 
-        valToutTerrain, 
-        [`$${dist1}$`, `$${dist2}$`, `$${dist3}$`]
+        valBerlines,
+        valMonospaces,
+        valCabriolets,
+        valToutTerrain,
+        [`$${dist1}$`, `$${dist2}$`, `$${dist3}$`],
       )
       compteur++
-    } while (compteur < 100 && numEssais < 500 && !aLeBonNombreDePropsDifferentes(this, 4, true))
+    } while (
+      compteur < 100 &&
+      numEssais < 500 &&
+      !aLeBonNombreDePropsDifferentes(this, 4, true)
+    )
   }
 
   constructor() {

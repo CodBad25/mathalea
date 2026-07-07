@@ -1,4 +1,5 @@
 import { context } from '../../modules/context'
+import { bleuMathalea } from '../colors'
 import type { IExercice } from '../types'
 
 type ValeurPoint = {
@@ -18,6 +19,7 @@ type DemiDroiteInteractiveIncomingValue = DemiDroiteInteractiveValue & {
 }
 
 class DemiDroiteInteractiveElement extends HTMLElement {
+  private pointsColor = bleuMathalea
   private tMax = 2
   private initialTMax = 2
   private partsCount = 1
@@ -37,6 +39,7 @@ class DemiDroiteInteractiveElement extends HTMLElement {
   id: string = ''
 
   connectedCallback() {
+    this.pointsColor = this.getAttribute('points-color') ?? bleuMathalea
     this.id = String(this.getAttribute('id'))
     this.minT = Number(this.getAttribute('min-t') ?? '2')
     this.maxT = Number(this.getAttribute('max-t') ?? '10')
@@ -47,7 +50,7 @@ class DemiDroiteInteractiveElement extends HTMLElement {
     this.tMax = Math.max(this.minT, Math.min(this.maxT, this.tMax))
     this.initialPartsCount = Math.max(
       1,
-      Math.min(10, Number(this.getAttribute('parts-count') ?? '1')),
+      Number(this.getAttribute('parts-count') ?? '1'),
     )
     this.partsCount = this.initialPartsCount
     this.showNegative = this.getAttribute('show-negative') === 'true'
@@ -106,7 +109,7 @@ class DemiDroiteInteractiveElement extends HTMLElement {
 
     const partsCount = Number(nextValue.partsCount)
     if (Number.isFinite(partsCount)) {
-      this.partsCount = Math.max(1, Math.min(10, Math.floor(partsCount)))
+      this.partsCount = Math.max(1, Math.floor(partsCount))
     }
 
     const incomingShowNegative =
@@ -135,6 +138,12 @@ class DemiDroiteInteractiveElement extends HTMLElement {
 
   public getValue(): DemiDroiteInteractiveValue {
     return this.value
+  }
+
+  public disableControls(): void {
+    this.clearPlacementMode()
+    this.interactivityOn = false
+    this.render()
   }
 
   private getParts(): number {
@@ -171,10 +180,15 @@ class DemiDroiteInteractiveElement extends HTMLElement {
     text: string,
     onClick: () => void,
     selected = false,
+    description?: string,
   ): HTMLButtonElement {
     const button = document.createElement('button')
     button.type = 'button'
-    button.textContent = text
+    button.innerHTML = text
+    if (description) {
+      button.title = description
+      button.setAttribute('aria-label', description)
+    }
     button.style.padding = '0.2rem 0.55rem'
     button.style.border = '1px solid #999'
     button.style.borderRadius = '6px'
@@ -245,61 +259,84 @@ class DemiDroiteInteractiveElement extends HTMLElement {
       this.controls.style.gap = '0.5rem'
       this.controls.style.alignItems = 'center'
       this.controls.style.marginBottom = '0.6rem'
+      const tMinus = this.createButton(
+        'T-',
+        () => {
+          this.clearPlacementMode()
+          if (this.tMax > this.minT) {
+            this.tMax--
+            this.points = this.points.filter((point) =>
+              this.valueExistsOnAxis(point.pointValue),
+            )
+            this.render()
+            this.emitChange()
+          }
+        },
+        false,
+        'Diminuer la valeur de T',
+      )
+      const tPlus = this.createButton(
+        'T+',
+        () => {
+          this.clearPlacementMode()
+          if (this.tMax < this.maxT) {
+            this.tMax++
+            this.render()
+            this.emitChange()
+          }
+        },
+        false,
+        'Augmenter la valeur de T',
+      )
 
-      const tMinus = this.createButton('T ↓', () => {
-        this.clearPlacementMode()
-        if (this.tMax > this.minT) {
-          this.tMax--
-          this.points = this.points.filter((point) =>
-            this.valueExistsOnAxis(point.pointValue),
-          )
-          this.render()
-          this.emitChange()
-        }
-      })
-      const tPlus = this.createButton('T ↑', () => {
-        this.clearPlacementMode()
-        if (this.tMax < this.maxT) {
-          this.tMax++
-          this.render()
-          this.emitChange()
-        }
-      })
+      const dMinus = this.createButton(
+        '|-',
+        () => {
+          this.clearPlacementMode()
+          if (this.partsCount > 1) {
+            this.partsCount--
+            this.points = this.points.filter((point) =>
+              this.valueExistsOnAxis(point.pointValue),
+            )
+            this.render()
+            this.emitChange()
+          }
+        },
+        false,
+        'Diminuer le nombre de graduations intermédiaires',
+      )
+      const dPlus = this.createButton(
+        '|+',
+        () => {
+          this.clearPlacementMode()
 
-      const dMinus = this.createButton('🧻', () => {
-        this.clearPlacementMode()
-        if (this.partsCount > 1) {
-          this.partsCount--
-          this.points = this.points.filter((point) =>
-            this.valueExistsOnAxis(point.pointValue),
-          )
-          this.render()
-          this.emitChange()
-        }
-      })
-      const dPlus = this.createButton('✂️', () => {
-        this.clearPlacementMode()
-        const upperBound = 10
-        if (this.partsCount < upperBound) {
           this.partsCount++
           this.render()
           this.emitChange()
-        }
-      })
+        },
+        false,
+        'Augmenter le nombre de graduations intermédiaires',
+      )
 
       const deletePoints = this.createButton(
-        '🧽',
+        '⌫',
         () => {
           this.clearPlacementMode()
           this.isPointEraseArmed = true
           this.render()
         },
         this.isPointEraseArmed,
+        'Supprimer un point placé',
       )
 
-      const resetAxis = this.createButton('↺', () => {
-        this.resetToInitialState()
-      })
+      const resetAxis = this.createButton(
+        '↺',
+        () => {
+          this.resetToInitialState()
+        },
+        false,
+        'Réinitialiser la demi-droite',
+      )
 
       const addPoint = this.createButton(
         this.allowMultiplePoints
@@ -311,19 +348,20 @@ class DemiDroiteInteractiveElement extends HTMLElement {
           this.render()
         },
         this.isPointPlacementArmed,
+        this.allowMultiplePoints
+          ? 'Activer le mode ajout de points'
+          : 'Activer le mode placement du point',
       )
-
-      this.controls.append(
-        tMinus,
-        tPlus,
-        dMinus,
-        dPlus,
-        deletePoints,
-        resetAxis,
-        addPoint,
-      )
+      if (this.minT < this.maxT) {
+        this.controls.append(tMinus, tPlus)
+      }
+      this.controls.append(dMinus, dPlus, deletePoints, resetAxis, addPoint)
       this.appendChild(this.controls)
     }
+    const resultatCheck = document.createElement('span')
+    resultatCheck.id = this.id
+      ? `${this.id.replace('demi-droite-graduee', 'resultatCheck')}`
+      : `demi-droite-graduee-resultat`
 
     const width = 600
     const height = 70
@@ -361,6 +399,69 @@ class DemiDroiteInteractiveElement extends HTMLElement {
     axis.setAttribute('stroke-width', '2')
     this.svg.appendChild(axis)
 
+    const parts = this.getParts()
+    if (parts >= 2) {
+      const markerYOffset = 0
+      const markerHalfWidth = 4
+      const markerHalfHeight = 5
+      const ranges = this.showNegative
+        ? [
+            { start: -this.tMax, end: 0 },
+            { start: 0, end: this.tMax },
+          ]
+        : [{ start: 0, end: this.tMax }]
+
+      for (const range of ranges) {
+        for (let partIndex = 0; partIndex < parts; partIndex++) {
+          const segmentStartValue =
+            range.start + (partIndex * (range.end - range.start)) / parts
+          const segmentEndValue =
+            range.start + ((partIndex + 1) * (range.end - range.start)) / parts
+          const midValue = (segmentStartValue + segmentEndValue) / 2
+          const ratio = totalAxis === 0 ? 0 : (midValue - minValue) / totalAxis
+          const markerX = axisStart + ratio * valuesLength
+
+          const equalityMarker1 = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'line',
+          )
+          const equalityMarker2 = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'line',
+          )
+          equalityMarker1.setAttribute('x1', String(markerX - markerHalfWidth))
+          equalityMarker1.setAttribute(
+            'y1',
+            String(axisY - markerYOffset - markerHalfHeight),
+          )
+          equalityMarker1.setAttribute('x2', String(markerX))
+          equalityMarker1.setAttribute(
+            'y2',
+            String(axisY - markerYOffset + markerHalfHeight),
+          )
+
+          equalityMarker2.setAttribute('x1', String(markerX))
+          equalityMarker2.setAttribute(
+            'y1',
+            String(axisY - markerYOffset - markerHalfHeight),
+          )
+          equalityMarker2.setAttribute('x2', String(markerX + markerHalfWidth))
+          equalityMarker2.setAttribute(
+            'y2',
+            String(axisY - markerYOffset + markerHalfHeight),
+          )
+          equalityMarker1.setAttribute('stroke', '#f050d0')
+          equalityMarker1.setAttribute('stroke-width', '1')
+          equalityMarker1.setAttribute('stroke-linecap', 'round')
+          this.svg.appendChild(equalityMarker1)
+          equalityMarker2.setAttribute('stroke', '#f050d0')
+          equalityMarker2.setAttribute('stroke-width', '1')
+          equalityMarker2.setAttribute('stroke-linecap', 'round')
+          this.svg.appendChild(equalityMarker2)
+        }
+      }
+    }
+
     const arrow = document.createElementNS(
       'http://www.w3.org/2000/svg',
       'polygon',
@@ -375,11 +476,10 @@ class DemiDroiteInteractiveElement extends HTMLElement {
     for (const value of availableValues) {
       const ratio = totalAxis === 0 ? 0 : (value - minValue) / totalAxis
       const x = axisStart + ratio * valuesLength
-      const isOriginOrUnitOrTerminal =
-        Math.abs(value) < 1e-9 ||
-        Math.abs(value - 1) < 1e-9 ||
-        Math.abs(value - this.tMax) < 1e-9
-      const tickHeight = isOriginOrUnitOrTerminal ? 18 : 12
+      const isOriginOrTerminal =
+        Math.abs(value) < 1e-9 || Math.abs(value - this.tMax) < 1e-9
+      const isUnitValue = Math.abs(value - 1) < 1e-9
+      const tickHeight = isOriginOrTerminal ? 18 : 12
 
       const tick = document.createElementNS(
         'http://www.w3.org/2000/svg',
@@ -389,11 +489,17 @@ class DemiDroiteInteractiveElement extends HTMLElement {
       tick.setAttribute('y1', String(axisY - tickHeight / 2))
       tick.setAttribute('x2', String(x))
       tick.setAttribute('y2', String(axisY + tickHeight / 2))
-      tick.setAttribute('stroke', isOriginOrUnitOrTerminal ? '#111' : '#333')
-      tick.setAttribute('stroke-width', isOriginOrUnitOrTerminal ? '3' : '2')
+      tick.setAttribute(
+        'stroke',
+        isOriginOrTerminal ? '#111' : isUnitValue ? '#666' : '#444',
+      )
+      tick.setAttribute(
+        'stroke-width',
+        isOriginOrTerminal ? '3' : isUnitValue ? '1' : '2',
+      )
       this.svg.appendChild(tick)
 
-      if (isOriginOrUnitOrTerminal && Number.isInteger(value)) {
+      if (isOriginOrTerminal || isUnitValue) {
         const label = document.createElementNS(
           'http://www.w3.org/2000/svg',
           'text',
@@ -444,9 +550,9 @@ class DemiDroiteInteractiveElement extends HTMLElement {
         )
         iLabel.setAttribute('x', String(x))
         iLabel.setAttribute('y', String(axisY - 12))
-        iLabel.setAttribute('font-size', '14')
+        iLabel.setAttribute('font-size', '12')
         iLabel.setAttribute('text-anchor', 'middle')
-        iLabel.setAttribute('font-weight', '700')
+        iLabel.setAttribute('font-weight', '100')
         iLabel.setAttribute('font-family', mathLabelFontFamily)
         iLabel.textContent = 'I'
         this.svg.appendChild(iLabel)
@@ -493,7 +599,7 @@ class DemiDroiteInteractiveElement extends HTMLElement {
       crossStroke.setAttribute('y1', String(axisY - 5))
       crossStroke.setAttribute('x2', String(x + 5))
       crossStroke.setAttribute('y2', String(axisY + 5))
-      crossStroke.setAttribute('stroke', '#1a577b')
+      crossStroke.setAttribute('stroke', this.pointsColor)
       crossStroke.setAttribute('stroke-width', '2')
       crossStroke.setAttribute('stroke-linecap', 'round')
       cross.appendChild(crossStroke)
@@ -506,7 +612,7 @@ class DemiDroiteInteractiveElement extends HTMLElement {
       crossStrokeOpposite.setAttribute('y1', String(axisY + 5))
       crossStrokeOpposite.setAttribute('x2', String(x + 5))
       crossStrokeOpposite.setAttribute('y2', String(axisY - 5))
-      crossStrokeOpposite.setAttribute('stroke', '#1a577b')
+      crossStrokeOpposite.setAttribute('stroke', this.pointsColor)
       crossStrokeOpposite.setAttribute('stroke-width', '2')
       crossStrokeOpposite.setAttribute('stroke-linecap', 'round')
       cross.appendChild(crossStrokeOpposite)
@@ -522,7 +628,7 @@ class DemiDroiteInteractiveElement extends HTMLElement {
       pLabel.setAttribute('text-anchor', 'middle')
       pLabel.setAttribute('font-size', '14')
       pLabel.setAttribute('font-weight', '700')
-      pLabel.setAttribute('fill', '#1a577b')
+      pLabel.setAttribute('fill', this.pointsColor)
       pLabel.textContent = point.label
       pLabel.style.pointerEvents = 'none'
       this.svg.appendChild(pLabel)
@@ -537,12 +643,13 @@ class DemiDroiteInteractiveElement extends HTMLElement {
       help.setAttribute('y', '148')
       help.setAttribute('text-anchor', 'middle')
       help.setAttribute('font-size', '12')
-      help.setAttribute('fill', '#3f3f3f')
+      help.setAttribute('fill', this.pointsColor)
       help.textContent = 'Cliquer sur une graduation pour y placer le point.'
       this.svg.appendChild(help)
     }
 
     this.appendChild(this.svg)
+    this.appendChild(resultatCheck)
   }
 }
 
@@ -559,6 +666,8 @@ type DemiDroiteInteractiveOptions = {
   multiplePoints?: boolean
   interactivityOn?: boolean
   points?: ValeurPoint[]
+  id?: string
+  pointsColor?: string
 }
 
 export function demiDroiteInteractive(
@@ -567,7 +676,8 @@ export function demiDroiteInteractive(
   options?: DemiDroiteInteractiveOptions,
 ): string {
   if (!context.isHtml) return ''
-  const id = `demi-droite-gradueeEx${exercice.numeroExercice}Q${question}`
+  const id =
+    options?.id || `demi-droite-gradueeEx${exercice.numeroExercice}Q${question}`
   const initialT = options?.initialT ?? 2
   const minT = options?.minT ?? 2
   const maxT = options?.maxT ?? 10
@@ -575,12 +685,13 @@ export function demiDroiteInteractive(
   const showNegative = options?.showNegative ?? false
   const multiplePoints = options?.multiplePoints ?? false
   const interactivityOn = options?.interactivityOn ?? true
+  const pointsColor = options?.pointsColor ?? bleuMathalea
   const idAttribute = id ? ` id="${id}"` : ''
   const pointsAttribute = escapeHtmlAttribute(
     JSON.stringify(options?.points ?? []),
   )
 
-  return `<demi-droite-interactive${idAttribute} initial-t="${initialT}" min-t="${minT}" max-t="${maxT}" show-negative="${showNegative}" multiple-points="${multiplePoints}" interactivity-on="${interactivityOn}" parts-count="${partsCount}" points="${pointsAttribute}"></demi-droite-interactive>`
+  return `<demi-droite-interactive${idAttribute} initial-t="${initialT}" min-t="${minT}" max-t="${maxT}" show-negative="${showNegative}" multiple-points="${multiplePoints}" interactivity-on="${interactivityOn}" parts-count="${partsCount}" points="${pointsAttribute}" points-color="${pointsColor}"></demi-droite-interactive>`
 }
 
 function escapeHtmlAttribute(value: string): string {

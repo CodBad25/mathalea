@@ -1,12 +1,14 @@
 <script lang="ts">
   import HeaderExerciceVueProf from '../../shared/headerExerciceVueProf/HeaderExerciceVueProf.svelte'
-  import { retrieveResourceFromUuid } from '../../../../../lib/components/refUtils'
+  import {
+    computeStaticExercicePngUrls,
+    retrieveResourceFromUuid,
+  } from '../../../../../lib/components/refUtils'
   import {
     resourceHasPlace,
     isStaticType,
     type JSONReferentielObject,
     isCrpeType,
-    isStaticWithoutPngUrl,
   } from '../../../../../lib/types/referentiels'
   /**
    * Gestion du référentiel pour la recherche de l'uuid
@@ -36,37 +38,11 @@
   export let zoomFactor: string
   export let isSolutionAccessible: boolean
   const foundResource = retrieveResourceFromUuid(allStaticReferentiels, uuid)
-  if (isStaticWithoutPngUrl(foundResource)) {
-    const [examen, filiere] = foundResource.uuid.split('_')
-    if (examen === 'eam') {
-      foundResource.png = `https://coopmaths.fr/alea/static/eam/${foundResource.annee}/tex/png/${foundResource.uuid}.png`
-      foundResource.pngCor = `https://coopmaths.fr/alea/static/eam/${foundResource.annee}/tex/png/${foundResource.uuid}_cor.png`
-    } else if (examen === 'STL') {
-      foundResource.png = `https://coopmaths.fr/alea/static/stl/${foundResource.annee}/tex/png/${foundResource.uuid}.png`
-      foundResource.pngCor = `https://coopmaths.fr/alea/static/stl/${foundResource.annee}/tex/png/${foundResource.uuid}_cor.png`
-    } else {
-      foundResource.png = `https://coopmaths.fr/alea/static/${examen}/${foundResource.annee}/tex/png/${foundResource.uuid}.png`
-      foundResource.pngCor = `https://coopmaths.fr/alea/static/${examen}/${foundResource.annee}/tex/png/${foundResource.uuid}_cor.png`
-    }
-    console.log(foundResource)
-  }
+  const exercice = computeStaticExercicePngUrls(foundResource)
   const resourceToDisplay =
     isStaticType(foundResource) || isCrpeType(foundResource)
       ? { ...foundResource }
       : null
-  const exercice =
-    resourceToDisplay === null
-      ? null
-      : {
-          png:
-            typeof resourceToDisplay.png === 'string'
-              ? [resourceToDisplay.png]
-              : resourceToDisplay.png,
-          pngCor:
-            typeof resourceToDisplay.pngCor === 'string'
-              ? [resourceToDisplay.pngCor]
-              : resourceToDisplay.pngCor,
-        }
   let isCorrectionVisible = false
   let isContentVisible = true
   let headerExerciceProps: HeaderProps
@@ -120,7 +96,7 @@
         <img
           src={url}
           class="mb-6"
-          style="width: calc(100% * {zoomFactor}"
+          style="width: calc(100% * {zoomFactor})"
           alt="énoncé"
         />
       {/each}
@@ -141,7 +117,7 @@
               <img
                 src={url}
                 class="p-2"
-                style="width: calc(100% * {zoomFactor}"
+                style="width: calc(100% * {zoomFactor})"
                 alt="correction"
                 on:error={handleNoCorrectionAvailable}
               />

@@ -313,6 +313,10 @@
       exercise.applyNewSeed()
     }
     seedrandom(exercise.seed, { global: true })
+    if (exercise.typeExercice === 'statique') {
+      // Contenu figé (images/texte fixes) : rien à régénérer.
+      return
+    }
     if (exercise.typeExercice === 'simple') {
       mathaleaHandleExerciceSimple(exercise, false, k)
     } else if (typeof exercise.nouvelleVersionWrapper === 'function') {
@@ -444,7 +448,10 @@
         const questionId = `${idPrefix}${k}-q-${i}`
         const questionSource =
           customContent[questionId] ??
-          mathaleaFormatExercice(question).replaceAll('{zoomFactor}', '1')
+          mathaleaFormatExercice(question).replaceAll(
+            '{zoomFactor}',
+            String(overrides.staticZoom ?? 1),
+          )
         let html = questionSource
         if (numbered) {
           const number = (offsets[k] ?? 0) + i + 1
@@ -529,7 +536,10 @@
         const correctionId = `${idPrefix}${k}-q-${i}`
         const correctionSource =
           customContent[correctionId] ??
-          mathaleaFormatExercice(correction).replaceAll('{zoomFactor}', '1')
+          mathaleaFormatExercice(correction).replaceAll(
+            '{zoomFactor}',
+            String(overrides.staticZoom ?? 1),
+          )
         let html = correctionSource
         if (numbered) {
           const number = (offsets[k] ?? 0) + i + 1
@@ -1006,6 +1016,13 @@
     // des unités bloquerait le mouseup du spinner assez longtemps pour que
     // son auto-répétition native (500 ms) ajoute un second incrément.
     scheduleRefresh(true, 0)
+  }
+
+  /** Ajuste le zoom de l'image d'un exercice statique (bornes : 20 % à 300 %) */
+  function adjustStaticZoom(k: number, deltaPercent: number) {
+    const current = (exOverrides[k]?.staticZoom ?? 1) * 100
+    const next = Math.min(300, Math.max(20, current + deltaPercent))
+    applyA4Overrides(k, { staticZoom: next / 100 })
   }
 
   /** Nouvelle graine pour l'exercice d'indice k (sans rafraîchir) */
@@ -1743,6 +1760,34 @@
                                     >
                                       <i class="bx bx-cog"></i>
                                     </button>
+                                  {/if}
+                                  {#if exercises[unit.exerciseIndex]?.typeExercice === 'statique'}
+                                    <button
+                                      type="button"
+                                      title="Réduire l'image"
+                                      aria-label="Réduire l'image"
+                                      on:click={() =>
+                                        adjustStaticZoom(
+                                          unit.exerciseIndex,
+                                          -10,
+                                        )}
+                                    >
+                                      <i class="bx bx-zoom-out"></i>
+                                    </button>
+                                    <button
+                                      type="button"
+                                      title="Agrandir l'image"
+                                      aria-label="Agrandir l'image"
+                                      on:click={() =>
+                                        adjustStaticZoom(
+                                          unit.exerciseIndex,
+                                          10,
+                                        )}
+                                    >
+                                      <i class="bx bx-zoom-in"></i>
+                                    </button>
+                                  {/if}
+                                  {#if exercises[unit.exerciseIndex] != null}
                                     <button
                                       type="button"
                                       title="Nouvelles données"

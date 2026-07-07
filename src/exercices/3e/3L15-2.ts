@@ -1,6 +1,12 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { rienSi1 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import { getLang } from '../../lib/stores/languagesStore'
+import type { Valeur } from '../../lib/types'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -8,7 +14,8 @@ import Exercice from '../Exercice'
 export const titre =
   "Résoudre une équation du second degré à l'aide la racine carrée"
 export const dateDePublication = '14/05/2024'
-export const interactifReady = false
+export const interactifReady = true
+export const inteeractifReady = 'mathLive'
 export const uuid = '0f844'
 export const refs = {
   'fr-fr': ['3L15-2'],
@@ -35,6 +42,7 @@ export default class nomExercice extends Exercice {
   }
 
   nouvelleVersion() {
+    const lang = getLang()
     if (this.nbQuestions === 1) {
       this.consigne = "Résoudre l'équation suivante."
     } else {
@@ -42,7 +50,9 @@ export default class nomExercice extends Exercice {
     }
     if (this.interactif) {
       this.consigne +=
-        " Entrer les solutions sous forme d'un ensemble en séparant chaque élément par un point-virgule. Si une équation n'a pas de solution entrer l'ensemble vide."
+        lang === 'fr-CH'
+          ? " Entrer les solutions sous forme d'un ensemble en séparant chaque élément par un point-virgule. Si une équation n'a pas de solution entrer l'ensemble vide."
+          : " Entrer les solutions sous forme d'une liste en séparant chaque valeur par un point-virgule. Si une équation n'a pas de solution entrer $\\emptyset$."
     }
     let typeQuestionsDisponibles = []
     if (this.sup === 1) {
@@ -73,6 +83,7 @@ export default class nomExercice extends Exercice {
       let coeffConstant = new FractionEtendue(0, 1)
       let expReduite = ''
       let sol = ''
+      let reponse: Valeur
 
       switch (listeTypeQuestions[i]) {
         case 'entier':
@@ -88,6 +99,18 @@ export default class nomExercice extends Exercice {
             coeffConstant.num === 0 ||
             Math.abs(coeffX * coeffConstant.num) > 144
           )
+          reponse = {
+            reponse: {
+              value:
+                lang === 'fr-CH'
+                  ? `\\left\\{-${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texRacineCarree(false)};${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texRacineCarree(false)}\\right\\}`
+                  : `-${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texRacineCarree(false)};${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texRacineCarree(false)}`,
+              options:
+                lang === 'fr-CH'
+                  ? { ensembleDeNombres: true }
+                  : { suiteDeNombres: true },
+            },
+          }
           break
         case 'entierPasDeSol':
           do {
@@ -102,6 +125,15 @@ export default class nomExercice extends Exercice {
             coeffConstant.num === 0 ||
             Math.abs(coeffX * coeffConstant.num) > 144
           )
+          reponse = {
+            reponse: {
+              value: '\\emptyset',
+              options:
+                lang === 'fr-CH'
+                  ? { ensembleDeNombres: true }
+                  : { suiteDeNombres: true },
+            },
+          }
           break
         case 'fraction':
           {
@@ -114,6 +146,18 @@ export default class nomExercice extends Exercice {
             coeffConstant = new FractionEtendue(num, den)
             if (coeffX > 0) {
               coeffConstant = coeffConstant.multiplieEntier(-1)
+            }
+            reponse = {
+              reponse: {
+                value:
+                  lang === 'fr-CH'
+                    ? `\\left\\{-${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texRacineCarree(false)};${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texRacineCarree(false)}\\right\\}`
+                    : `-${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texRacineCarree(false)};${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texRacineCarree(false)}`,
+                options:
+                  lang === 'fr-CH'
+                    ? { ensembleDeNombres: true }
+                    : { suiteDeNombres: true },
+              },
             }
           }
           break
@@ -128,6 +172,15 @@ export default class nomExercice extends Exercice {
             coeffConstant = new FractionEtendue(num, den)
             if (coeffX < 0) {
               coeffConstant = coeffConstant.multiplieEntier(-1)
+            }
+            reponse = {
+              reponse: {
+                value: '\\emptyset',
+                options:
+                  lang === 'fr-CH'
+                    ? { ensembleDeNombres: true }
+                    : { suiteDeNombres: true },
+              },
             }
           }
           break
@@ -152,9 +205,22 @@ export default class nomExercice extends Exercice {
             if (coeffX > 0) {
               coeffConstant = coeffConstant.multiplieEntier(-1)
             }
+            reponse = {
+              reponse: {
+                value:
+                  lang === 'fr-CH'
+                    ? `\\left\\{-\\sqrt{${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texFractionSimplifiee}};\\sqrt{${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texFractionSimplifiee}}\\right\\}`
+                    : `-\\sqrt{${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texFractionSimplifiee}};\\sqrt{${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texFractionSimplifiee}`,
+                options:
+                  lang === 'fr-CH'
+                    ? { ensembleDeNombres: true }
+                    : { suiteDeNombres: true },
+              },
+            }
           }
           break
         case 'racinePasDeSol':
+        default:
           {
             coeffX = choice([1, -1])
             const num = randint(1, 100, [1, 4, 9, 16, 25, 36, 49, 64, 81, 100])
@@ -175,29 +241,47 @@ export default class nomExercice extends Exercice {
             if (coeffX < 0) {
               coeffConstant = coeffConstant.multiplieEntier(-1)
             }
+            reponse = {
+              reponse: {
+                value: '\\emptyset',
+                options:
+                  lang === 'fr-CH'
+                    ? { ensembleDeNombres: true }
+                    : { suiteDeNombres: true },
+              },
+            }
           }
           break
       }
       expReduite = `$${rienSi1(coeffX)}x^2  ${coeffConstant.texFractionSignee}=0$`
       texte = `${expReduite}.`
-      texteCorr = `On commence par isoler le terme en $x^2$ : \\[${rienSi1(coeffX)}x^2=${coeffConstant.multiplieEntier(-1).texFSD}.\\]`
+      texteCorr = `On commence par isoler le terme en $x^2$ : \\[${rienSi1(coeffX)}x^2=${coeffConstant.multiplieEntier(-1).texFSD}.\\]<br>`
       if (!(coeffX === 1)) {
-        texteCorr += `On divise par $${texNombre(coeffX)}$ et on s'assure que la fraction est irréductible pour obtenir $x^2=${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texFractionSimplifiee}$.`
+        texteCorr += `On divise par $${texNombre(coeffX)}$ et on s'assure que la fraction est irréductible pour obtenir $x^2=${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texFractionSimplifiee}$.<br>`
       } else if (!coeffConstant.estIrreductible) {
-        texteCorr += ` On réduit pour obtenir $x^2=${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texFractionSimplifiee}$.`
+        texteCorr += ` On réduit pour obtenir $x^2=${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texFractionSimplifiee}$.<br>`
       }
       if (coeffConstant.multiplieEntier(-1).entierDivise(coeffX).signe === -1) {
-        texteCorr += " On en déduit que l'équation n'a pas de solution réelle."
+        texteCorr += ` On en déduit que l'équation n'a pas de solution ${lang === 'fr-CH' ? 'réelle' : 'car un carré est toujours positif'}.`
       } else {
-        texteCorr += ` On en déduit que $x=\\pm\\sqrt{${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texFractionSimplifiee}}`
+        texteCorr +=
+          lang === 'fr-CH'
+            ? ` On en déduit que $x=\\pm\\sqrt{${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texFractionSimplifiee}}`
+            : coeffConstant.multiplieEntier(-1).entierDivise(coeffX).estParfaite
+              ? ` On en déduit que les solutions sont $x=${miseEnEvidence(`-${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).simplifie().texRacineCarree(false)}`)}$ et $x=${miseEnEvidence(coeffConstant.multiplieEntier(-1).entierDivise(coeffX).simplifie().texRacineCarree(false))}$.<br>`
+              : ` On en déduit que les solutions sont $x=${miseEnEvidence(`-\\sqrt{${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texFractionSimplifiee}}`)}$ et $x=${miseEnEvidence(`\\sqrt{${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texFractionSimplifiee}}`)}$.<br>`
       }
       if (
         !(listeTypeQuestions[i] === 'racine') &&
         !listeTypeQuestions[i].includes('PasDeSol')
       ) {
-        texteCorr += `=\\pm${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texRacineCarree(false)}$.`
+        texteCorr +=
+          lang === 'fr-CH'
+            ? `=\\pm${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texRacineCarree(false)}$.`
+            : ''
       } else if (listeTypeQuestions[i] === 'racine') {
-        texteCorr += '$.'
+        if (lang === 'fr-CH') texteCorr += '$.<br>'
+        else texteCorr += '<br>'
       }
       if (listeTypeQuestions[i].includes('PasDeSol')) {
         sol = '\\emptyset$.'
@@ -206,9 +290,17 @@ export default class nomExercice extends Exercice {
       } else {
         sol = `\\left\\{-${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texRacineCarree(false)};${coeffConstant.multiplieEntier(-1).entierDivise(coeffX).texRacineCarree(false)}\\right\\}$.`
       }
-      texteCorr += ` L'ensemble de solutions est $S=${sol}`
+      texteCorr +=
+        lang === 'fr-CH' ? ` L'ensemble de solutions est $S=${sol}` : ''
       if (this.questionJamaisPosee(i, coeffConstant, coeffX)) {
-        this.listeQuestions[i] = texte
+        this.listeQuestions[i] =
+          texte +
+          ajouteChampTexteMathLive(this, i, KeyboardType.clavierEnsemble, {
+            texteAvant: '<br>$S=$',
+          })
+        if (this.interactif) {
+          handleAnswers(this, i, reponse)
+        }
         this.listeCorrections[i] = texteCorr
         i++
       }
