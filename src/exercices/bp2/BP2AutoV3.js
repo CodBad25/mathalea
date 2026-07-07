@@ -43,7 +43,7 @@ export const interactifReady = true
 export const uuid = 'eb45a'
 
 export const refs = {
-  'fr-fr': ['5M11', 'BP2AutoV3'],
+  'fr-fr': ['BP2AutoV3'],
   'fr-2016': ['6M11', 'BP2AutoV3'],
   'fr-ch': ['9GM1-2'],
 }
