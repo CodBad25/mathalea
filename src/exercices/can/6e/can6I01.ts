@@ -78,7 +78,7 @@ export default class CanNoteLaCouleur6 extends Exercice {
     this.besoinFormulaire2CaseACocher = ['Graduations', true]
     // this.besoinFormulaire3Numerique = ['Nombre de couleurs (Maximum 6)', 6]
     this.besoinFormulaire4CaseACocher = ['Plateau de jeu original', false]
-    this.typeExercice = 'Scratch'
+
     this.sup = 1
     this.sup2 = true
     this.sup3 = 1

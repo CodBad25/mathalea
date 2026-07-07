@@ -74,7 +74,7 @@ export default class NoteLaCouleur6e extends Exercice {
     this.besoinFormulaire3Numerique = ['Nombre de couleurs (Maximum 6)', 6]
     this.besoinFormulaire4CaseACocher = ['Plateau de jeu original', false]
     this.nbQuestions = 1
-    this.typeExercice = 'Scratch'
+
     this.sup = 1
     this.sup2 = 1
     this.sup3 = 4
@@ -794,7 +794,10 @@ export default class NoteLaCouleur6e extends Exercice {
     <animateMotion path="M ${lutin.listeTraces[0][0] * context.pixelsParCm} ${-lutin.listeTraces[0][1] * context.pixelsParCm} L`
 
       for (let i = 0; i < lutin.listeTraces.length; i++) {
-        const B = pointAbstrait(lutin.listeTraces[i][2], lutin.listeTraces[i][3])
+        const B = pointAbstrait(
+          lutin.listeTraces[i][2],
+          lutin.listeTraces[i][3],
+        )
         lutin.animation += ` ${B.xSVG(context.pixelsParCm)} ${B.ySVG(context.pixelsParCm)} `
       }
       lutin.animation +=

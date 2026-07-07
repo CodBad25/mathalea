@@ -45,7 +45,7 @@ export default class ExosScratch extends Exercice {
     super()
 
     this.nbQuestions = 5
-    this.typeExercice = 'Scratch'
+
     this.nbCols = 2
   }
 

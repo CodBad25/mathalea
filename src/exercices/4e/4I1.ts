@@ -40,7 +40,7 @@ export default class TracerAvecScratch extends Exercice {
     super()
     this.consigne =
       'Laquelle des 4 figures ci-dessous va être tracée avec le script fourni ?'
-    this.typeExercice = 'Scratch'
+
     this.nbQuestions = 3
   }
 
