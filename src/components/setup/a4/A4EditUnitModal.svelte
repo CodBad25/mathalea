@@ -45,7 +45,14 @@
 
   type Segment = { type: 'text' | 'math'; value: string }
 
-  let segments: Segment[] = parseSegments(source)
+  /** Tags de structure (tableau, liste, image...) que le découpage par
+   * segments ne sait pas traverser sans casser le HTML : dans ce cas on
+   * bascule sur une édition HTML brute, non segmentée par formule. */
+  const structuralTagsRegex = /<(table|ul|ol|img|figure|svg)[\s>]/i
+  const isStructural = structuralTagsRegex.test(source)
+
+  let rawHtml = source
+  let segments: Segment[] = isStructural ? [] : parseSegments(source)
   /** Incrémenté quand la structure (nombre/ordre des segments) change,
    * pour recréer les champs sans perturber la saisie de texte courante */
   let structureVersion = 0
@@ -78,6 +85,7 @@
   }
 
   function assemble(): string {
+    if (isStructural) return rawHtml
     return segments
       .map((segment) =>
         segment.type === 'math'
@@ -87,6 +95,21 @@
           : segment.value,
       )
       .join('')
+  }
+
+  /** Initialise le bloc HTML brut (mode structurel) sans le rendre réactif */
+  function initRawHtml(node: HTMLElement, value: string) {
+    node.innerHTML = value
+    return {
+      update() {
+        // volontairement vide
+      },
+    }
+  }
+
+  function onRawHtmlInput(event: Event) {
+    rawHtml = (event.currentTarget as HTMLElement).innerHTML
+    updatePreview()
   }
 
   function updatePreview() {
@@ -305,53 +328,70 @@
 
     {#if isReady}
       <div class="overflow-y-auto px-4 py-3 space-y-4">
-        <p class="text-xs opacity-70">
-          Modifiez le texte directement ; les formules s'éditent dans les champs
-          mathématiques. Placez le curseur dans le texte puis «&nbsp;Insérer une
-          formule&nbsp;» pour en ajouter une.
-        </p>
-        {#key structureVersion}
+        {#if isStructural}
+          <p class="text-xs opacity-70">
+            Ce contenu comporte un tableau, une liste ou une image : il
+            s'édite directement en HTML ci-dessous (les formules restent au
+            format <code>$...$</code>).
+          </p>
           <div
-            bind:this={editorEl}
             class="a4-edit-flow rounded border border-coopmaths-action/40 bg-white text-black p-3"
+            contenteditable="true"
+            role="textbox"
+            aria-label="Contenu de l'énoncé"
+            spellcheck="false"
+            use:initRawHtml={rawHtml}
+            on:input={onRawHtmlInput}
+          ></div>
+        {:else}
+          <p class="text-xs opacity-70">
+            Modifiez le texte directement ; les formules s'éditent dans les
+            champs mathématiques. Placez le curseur dans le texte puis «&nbsp;Insérer
+            une formule&nbsp;» pour en ajouter une.
+          </p>
+          {#key structureVersion}
+            <div
+              bind:this={editorEl}
+              class="a4-edit-flow rounded border border-coopmaths-action/40 bg-white text-black p-3"
+            >
+              {#each segments as segment, index}
+                {#if segment.type === 'text'}
+                  <span
+                    class="a4-edit-text"
+                    data-seg={index}
+                    contenteditable="true"
+                    role="textbox"
+                    aria-label="Texte de l'énoncé"
+                    spellcheck="false"
+                    use:initTextSegment={segment.value}
+                    on:input={(event) => onTextInput(index, event)}
+                  ></span>
+                {:else}
+                  <span class="a4-edit-math" data-seg={index}>
+                    <span use:mathField={{ index }}></span>
+                    <button
+                      type="button"
+                      class="a4-edit-math-remove"
+                      title="Supprimer la formule"
+                      aria-label="Supprimer la formule"
+                      on:click={() => removeFormula(index)}
+                    >
+                      <i class="bx bx-x"></i>
+                    </button>
+                  </span>
+                {/if}
+              {/each}
+            </div>
+          {/key}
+          <button
+            type="button"
+            class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+            on:click={insertFormula}
           >
-            {#each segments as segment, index}
-              {#if segment.type === 'text'}
-                <span
-                  class="a4-edit-text"
-                  data-seg={index}
-                  contenteditable="true"
-                  role="textbox"
-                  aria-label="Texte de l'énoncé"
-                  spellcheck="false"
-                  use:initTextSegment={segment.value}
-                  on:input={(event) => onTextInput(index, event)}
-                ></span>
-              {:else}
-                <span class="a4-edit-math" data-seg={index}>
-                  <span use:mathField={{ index }}></span>
-                  <button
-                    type="button"
-                    class="a4-edit-math-remove"
-                    title="Supprimer la formule"
-                    aria-label="Supprimer la formule"
-                    on:click={() => removeFormula(index)}
-                  >
-                    <i class="bx bx-x"></i>
-                  </button>
-                </span>
-              {/if}
-            {/each}
-          </div>
-        {/key}
-        <button
-          type="button"
-          class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
-          on:click={insertFormula}
-        >
-          <i class="bx bx-math"></i>
-          Insérer une formule
-        </button>
+            <i class="bx bx-math"></i>
+            Insérer une formule
+          </button>
+        {/if}
 
         <div>
           <div
