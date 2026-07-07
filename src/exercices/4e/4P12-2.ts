@@ -44,7 +44,7 @@ export const dateDeModificationImportante = '30/05/2026'
 export const uuid = '2621f'
 
 export const refs = {
-  'fr-fr': ['5P12-2'],
+  'fr-fr': ['4P12-2'],
   'fr-ch': ['NR'],
 }
 
@@ -358,7 +358,8 @@ Si aucun motif prédéfini n'est choisi et si le nombre de questions est supéri
                 id: `Motif${i}Correction`,
                 pixelsParCm: 20,
                 scale: 0.6,
-                display: 'block' as const, center: true,
+                display: 'block' as const,
+                center: true,
                 optionsTikz: 'transform shape',
               }),
               figureCorr,
@@ -429,7 +430,8 @@ Si aucun motif prédéfini n'est choisi et si le nombre de questions est supéri
                   id: `Motif${i}Correction`,
                   pixelsParCm: 20,
                   scale: 0.6,
-                  display: 'block' as const, center: true,
+                  display: 'block' as const,
+                  center: true,
                   optionsTikz: 'transform shape',
                 }),
                 figureCorr,
