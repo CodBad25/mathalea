@@ -68,41 +68,87 @@
   }
 
   /**
-   * Réduit (transform: scale) les blocs plus larges que la colonne —
-   * tableaux, formules KaTeX en display, blocs Scratch, figures mathalea2d —
-   * pour que rien ne dépasse en mode multi-colonnes. La hauteur de mise en
-   * page perdue par le transform (qui ne l'affecte pas) est compensée par une
-   * marge négative, pour que la mesure de pagination reste exacte. Le HTML
+   * Largeur réellement disponible pour un élément : celle du premier ancêtre
+   * dont clientWidth est significatif (un ancêtre display:inline — ex.
+   * .svgContainer — rapporte toujours 0 et doit être ignoré). Certains
+   * énoncés (schémas associés deux par deux) placent leur contenu dans des
+   * colonnes flottantes à moitié moins larges que l'unité entière : se baser
+   * sur node.clientWidth laisserait alors passer un débordement.
+   */
+  function containerWidth(el: HTMLElement, fallback: number): number {
+    let parent = el.parentElement
+    while (parent != null) {
+      if (parent.clientWidth > 0) return parent.clientWidth
+      parent = parent.parentElement
+    }
+    return fallback
+  }
+
+  /** offsetWidth/offsetHeight ne sont pas fiables sur un <svg> racine (pas
+   * un HTMLElement) : on retombe sur ses attributs width/height, posés en px
+   * par mathalea2d, plutôt que getBoundingClientRect (sensible au zoom CSS
+   * de l'aperçu). */
+  function elementSize(el: HTMLElement): { width: number; height: number } {
+    if (el instanceof SVGElement) {
+      const width = Number.parseFloat(el.getAttribute('width') ?? '')
+      const height = Number.parseFloat(el.getAttribute('height') ?? '')
+      if (Number.isFinite(width) && Number.isFinite(height)) {
+        return { width, height }
+      }
+      const rect = el.getBoundingClientRect()
+      return { width: rect.width, height: rect.height }
+    }
+    return {
+      width: Math.max(el.offsetWidth, el.scrollWidth),
+      height: el.offsetHeight,
+    }
+  }
+
+  /**
+   * Réduit (transform: scale) les blocs plus larges que leur conteneur —
+   * tableaux, formules KaTeX en display ou inline, blocs Scratch, figures
+   * mathalea2d — pour que rien ne dépasse en mode multi-colonnes. La hauteur
+   * (et la largeur, pour les blocs flottants côte à côte) de mise en page
+   * perdues par le transform (qui ne les affecte pas) sont compensées par des
+   * marges négatives, pour que la mesure de pagination reste exacte. Le HTML
    * étant réinjecté brut à chaque rendu, la réduction ne se cumule jamais.
-   * offsetWidth/scrollWidth (et non getBoundingClientRect) : insensibles au
-   * zoom CSS de l'aperçu.
-   * Pour mathalea2d, on scale le wrapper (.svgContainer > div) et non le SVG
-   * (pas de max-width CSS) : les étiquettes .divLatex sont positionnées en px
-   * absolus dans ce wrapper, seul un scale de l'ensemble les garde alignées.
+   * Pour mathalea2d, on scale .svgContainer en entier plutôt que le SVG :
+   * selon les cas, mathalea2d y place le SVG seul, ou le SVG accompagné
+   * d'étiquettes .divLatex (positionnées en px absolus, en frères ou dans un
+   * wrapper commun) — scaler l'ancêtre commun les garde alignées dans tous
+   * les cas, sans avoir à connaître sa structure interne exacte.
    */
   function fitWideContent(node: HTMLElement) {
-    const available = node.clientWidth
-    if (available <= 0) return
+    const nodeWidth = node.clientWidth
+    if (nodeWidth <= 0) return
     for (const el of node.querySelectorAll<HTMLElement>(
-      'table, .katex-display, .katex, .scratchblocks, .svgContainer > div',
+      'table, .katex-display, .katex, .scratchblocks, .svgContainer',
     )) {
       // déjà réduit via un ancêtre (tableau imbriqué, formule dans un tableau)
       if (el.parentElement?.closest('[data-a4-fit]') != null) continue
-      const width = Math.max(el.offsetWidth, el.scrollWidth)
-      if (width <= available + 1) continue
-      const ratio = available / width
-      const height = el.offsetHeight
-      el.dataset.a4Fit = ''
       // transform n'a aucun effet sur les éléments display:inline (cas du
-      // span.katex d'une formule inline, contrairement à .katex-display) :
-      // il faut le rendre transformable sans changer son flux (seul sur sa
-      // ligne dans tous les cas d'usage ciblés ici).
+      // span.katex d'une formule inline, ou de .svgContainer, posé en
+      // display:inline par mathalea2d) : il faut le rendre transformable
+      // sans changer son flux (seul sur sa ligne dans tous les cas ciblés
+      // ici), et ce avant de mesurer sa largeur (0 tant qu'il est inline).
       if (getComputedStyle(el).display === 'inline') {
         el.style.display = 'inline-block'
       }
+      // Un ancêtre auto-dimensionné à son contenu (donc lui-même trop large)
+      // peut rapporter un clientWidth non nul mais tout aussi débordant :
+      // l'unité entière reste le plafond ultime.
+      const available = Math.min(containerWidth(el, nodeWidth), nodeWidth)
+      const { width, height } = elementSize(el)
+      if (width <= available + 1) continue
+      const ratio = available / width
+      el.dataset.a4Fit = ''
       el.style.transform = `scale(${ratio})`
       el.style.transformOrigin = 'top left'
       el.style.marginBottom = `${-height * (1 - ratio)}px`
+      // Le transform ne libère pas l'espace occupé dans le flux (float,
+      // largeur de ligne...) : sans cette marge, un élément flottant à côté
+      // (schémas associés deux par deux) continue de déborder même réduit.
+      el.style.marginRight = `${-width * (1 - ratio)}px`
     }
   }
 </script>
