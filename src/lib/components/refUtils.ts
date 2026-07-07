@@ -6,8 +6,11 @@ import {
     type JSONReferentielEnding,
     type JSONReferentielObject,
     type ResourceAndItsPath,
+    isCrpeType,
     isExerciceItemInReferentiel,
     isJSONReferentielEnding,
+    isStaticType,
+    isStaticWithoutPngUrl,
 } from '../types/referentiels'
 import { toMap } from './toMap'
 
@@ -138,6 +141,44 @@ export function findResourcesAndPaths(
   }
   find(referentiel)
   return harvest
+}
+
+/**
+ * Détermine les URLs des images (énoncé et correction) d'une ressource statique
+ * (annales DNB, BAC...). Certaines entrées du référentiel n'ont pas de champ
+ * `png`/`pngCor` : les URLs sont alors reconstruites à partir de l'uuid.
+ * @param foundResource la terminaison de référentiel trouvée pour un uuid
+ * @returns les listes d'URLs png/pngCor, ou `null` si la ressource n'est pas statique
+ */
+export function computeStaticExercicePngUrls(
+  foundResource: JSONReferentielEnding | null,
+): { png: string[]; pngCor: string[] } | null {
+  if (isStaticWithoutPngUrl(foundResource)) {
+    const [examen] = foundResource.uuid.split('_')
+    if (examen === 'eam') {
+      foundResource.png = `https://coopmaths.fr/alea/static/eam/${foundResource.annee}/tex/png/${foundResource.uuid}.png`
+      foundResource.pngCor = `https://coopmaths.fr/alea/static/eam/${foundResource.annee}/tex/png/${foundResource.uuid}_cor.png`
+    } else if (examen === 'STL') {
+      foundResource.png = `https://coopmaths.fr/alea/static/stl/${foundResource.annee}/tex/png/${foundResource.uuid}.png`
+      foundResource.pngCor = `https://coopmaths.fr/alea/static/stl/${foundResource.annee}/tex/png/${foundResource.uuid}_cor.png`
+    } else {
+      foundResource.png = `https://coopmaths.fr/alea/static/${examen}/${foundResource.annee}/tex/png/${foundResource.uuid}.png`
+      foundResource.pngCor = `https://coopmaths.fr/alea/static/${examen}/${foundResource.annee}/tex/png/${foundResource.uuid}_cor.png`
+    }
+  }
+  if (isStaticType(foundResource) || isCrpeType(foundResource)) {
+    return {
+      png:
+        typeof foundResource.png === 'string'
+          ? [foundResource.png]
+          : foundResource.png,
+      pngCor:
+        typeof foundResource.pngCor === 'string'
+          ? [foundResource.pngCor]
+          : foundResource.pngCor,
+    }
+  }
+  return null
 }
 
 /**

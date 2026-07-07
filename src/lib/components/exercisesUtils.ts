@@ -3,9 +3,12 @@ import { get } from 'svelte/store'
 import Exercice from '../../exercices/Exercice'
 import referentielStaticCH from '../../json/referentielStaticCH.json'
 import referentielStaticFR from '../../json/referentielStaticFR.json'
-import { retrieveResourceFromUuid } from '../../lib/components/refUtils'
 import {
-  isStaticType,
+  computeStaticExercicePngUrls,
+  retrieveResourceFromUuid,
+} from '../../lib/components/refUtils'
+import {
+  resourceHasPlace,
   type JSONReferentielObject,
 } from '../../lib/types/referentiels'
 import {
@@ -48,23 +51,35 @@ export const buildExercisesList = (
       const p = new Promise<IExercice>((resolve) => {
         // console.log('id' + paramsExercice.id)
         const exo = new Exercice()
+        exo.typeExercice = 'statique'
         exo.titre = `Uuid ${paramsExercice.uuid}`
-        exo.listeQuestions[0] = `Uuid ${paramsExercice.uuid}<br>`
-        exo.listeCorrections[0] = `Uuid ${paramsExercice.uuid}<br>`
+        exo.listeQuestions[0] = ''
+        exo.listeCorrections[0] = ''
         exo.nbQuestions = 1
         const foundResource = retrieveResourceFromUuid(
           allStaticReferentiels,
           paramsExercice.uuid,
         )
-        if (isStaticType(foundResource)) {
-          exo.listeQuestions[0] =
-            exo.listeQuestions[0] +
-            `<br>
-          <img src="${foundResource.png || ''}" style="width: calc(100% * {zoomFactor}" alt="énoncé" />`
-          exo.listeCorrections[0] =
-            exo.listeCorrections[0] +
-            `<br>
-          <img src="${foundResource.pngCor || ''}" style="width: calc(100% * {zoomFactor}" alt="correction" />`
+        if (resourceHasPlace(foundResource)) {
+          exo.titre = `${foundResource.typeExercice.toUpperCase()} ${foundResource.mois || ''} ${foundResource.annee} ${foundResource.lieu} ${foundResource.jour || ''} Ex ${foundResource.numeroInitial}`
+        }
+        const pngUrls = computeStaticExercicePngUrls(foundResource)
+        if (pngUrls != null) {
+          exo.listeQuestions[0] = pngUrls.png
+            .map(
+              (url) =>
+                `<img src="${url}" style="width: calc(100% * {zoomFactor})" alt="énoncé" />`,
+            )
+            .join('<br>')
+          exo.listeCorrections[0] = pngUrls.pngCor
+            .map(
+              (url) =>
+                `<img src="${url}" style="width: calc(100% * {zoomFactor})" alt="correction" />`,
+            )
+            .join('<br>')
+        } else {
+          exo.listeQuestions[0] = `Uuid ${paramsExercice.uuid}<br>`
+          exo.listeCorrections[0] = `Uuid ${paramsExercice.uuid}<br>`
         }
         mathaleaHandleParamOfOneExercice(exo, paramsExercice)
         if (options.setInteractive === '1' && exo?.interactifReady) {
