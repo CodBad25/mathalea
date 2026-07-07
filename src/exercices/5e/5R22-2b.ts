@@ -1,4 +1,4 @@
-import ExerciceSimplificationSommeAlgebrique from './5R22-2'
+import ExerciceSimplificationSommeAlgebrique from './SimplificationSommeAlgebrique'
 export const dateDePublication = '01/07/2026'
 
 export const interactifReady = true
