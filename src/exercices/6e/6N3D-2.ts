@@ -66,9 +66,9 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
         }.`
       : "L'unité est le cm. Un segment $[OT]$ est à construire sur la demi-droite graduée, puis à partager en parties égales pour placer le point $A$."
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      const abscisseT = randint(3, 5)
+      const abscisseT = randint(2, 4)
       const den = context.isHtml
-        ? randint(2, 7)
+        ? randint(2, 5)
         : this.sup2
           ? choice([2, 4, 5])
           : choice([2, 4])
@@ -169,11 +169,9 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
           }
         })
       | null
-    const spanResultat = document.querySelector(
-      `#resultatCheckEx${this.numeroExercice}Q${i}`,
-    ) as HTMLDivElement | null
 
     if (host === null || this.reponsesAttendues[i] === undefined) return []
+    host.disableControls()
 
     const value = host.value
     this.answers ??= {}
@@ -185,13 +183,16 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
       const saisi = value.points[j]?.pointValue
       const ok = saisi !== undefined && Math.abs(saisi - attendu) < 1e-9
 
-      host.disableControls()
-
-      if (spanResultat) {
-        spanResultat.innerHTML = ok ? '😎' : '☹️'
-      }
       results.push(ok ? 'OK' : 'KO')
     }
+    const spanResultat = document.querySelector(
+      `#resultatCheckEx${this.numeroExercice}Q${i}`,
+    ) as HTMLDivElement | null
+    if (spanResultat) {
+      const ok = results.every((r) => r === 'OK')
+      spanResultat.innerHTML = ok ? '😎' : '☹️'
+    }
+
     return results
   }
 }
