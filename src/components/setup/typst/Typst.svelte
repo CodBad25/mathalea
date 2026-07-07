@@ -265,6 +265,12 @@
     scheduleCompile(code, 0)
   }
 
+  /** Relance la compilation du code courant sans regénérer les exercices */
+  function compileAgain() {
+    clearTimeout(compileTimer)
+    compile(currentCode())
+  }
+
   /** Nouvelles données aléatoires pour tous les exercices */
   function newDataForAll() {
     if (!confirmOverwrite()) return
@@ -400,6 +406,20 @@
       >
         <i class="bx bx-reset text-xl"></i>
         Regénérer le code
+      </button>
+
+      <button
+        type="button"
+        title="Compiler à nouveau le code Typst courant"
+        class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+        on:click={compileAgain}
+      >
+        <i
+          class="bx {isCompiling
+            ? 'bx-loader-alt bx-spin'
+            : 'bx-play-circle'} text-xl"
+        ></i>
+        Compiler à nouveau
       </button>
 
       <div class="grow"></div>

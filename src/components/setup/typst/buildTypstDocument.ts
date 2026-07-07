@@ -1,4 +1,8 @@
-import { escapeTypstText, htmlToTypst } from './latexToTypst'
+import {
+  MATHALEA_FIGURE_HELPERS,
+  escapeTypstText,
+  htmlToTypst,
+} from './latexToTypst'
 
 /**
  * Construction du document Typst complet (fiche d'exercices + corrections)
@@ -136,16 +140,27 @@ export function buildTypstDocument(
     correctionLines.push('')
   }
 
+  const usesMathaleaFigure = [...exerciseLines, ...correctionLines].some(
+    (line) => line.includes('#mathalea-figure('),
+  )
+
   const lines: string[] = []
   lines.push('// Fiche générée par MathALÉA — https://coopmaths.fr/alea')
   lines.push("// Ce code est modifiable : l'aperçu se met à jour tout seul.")
   lines.push('')
+  if (usesMathaleaFigure) {
+    lines.push('// ----- Figures mathalea2d -----')
+    lines.push(MATHALEA_FIGURE_HELPERS)
+    lines.push('')
+  }
   lines.push('// ----- Réglages -----')
   lines.push('#let colonnes = 1 // nombre de colonnes (1, 2 ou 3)')
   lines.push('#let corrige = true // afficher les corrections')
   lines.push('#let couleur = rgb("#f15929") // couleur des titres')
   lines.push('')
-  lines.push('#set page(paper: "a4", margin: (x: 15mm, y: 15mm), numbering: "1/1")')
+  lines.push(
+    '#set page(paper: "a4", margin: (x: 15mm, y: 15mm), numbering: "1/1")',
+  )
   lines.push('#set text(size: 11pt, lang: "fr")')
   lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
   lines.push('')

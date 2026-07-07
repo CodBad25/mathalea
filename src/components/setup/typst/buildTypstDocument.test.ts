@@ -61,12 +61,41 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('Figure : #fig-1')
     expect(code).toContain('Corrigé : #fig-2')
     // les définitions doivent précéder les références
-    expect(code.indexOf('#let fig-1')).toBeLessThan(code.indexOf('Figure : #fig-1'))
+    expect(code.indexOf('#let fig-1')).toBeLessThan(
+      code.indexOf('Figure : #fig-1'),
+    )
+  })
+
+  it('ajoute les helpers mathalea2d quand une figure contient des labels Typst', () => {
+    const code = buildTypstDocument([
+      exercise({
+        questions: [
+          '<div class="svgContainer"><div><svg class="mathalea2d" width="96" height="48"></svg><div class="divLatex" style="top: 10px; left: 20px; transform: rotate(0deg);" data-top=10 data-left=20><span class="katex"><span class="katex-mathml"><math><semantics><annotation encoding="application/x-tex">1</annotation></semantics></math></span></span></div></div></div>',
+        ],
+      }),
+    ])
+    expect(code).toContain('// ----- Figures mathalea2d -----')
+    expect(code).toContain('#let mathalea-figure')
+    expect(code).toContain('#mathalea-figure(72.0pt, 36.0pt, fig-1, labels: (')
+    expect(code).toContain('mathalea-label(15.0pt, 7.5pt, [$1$])')
+  })
+
+  it('génère un tableau natif sans dépendance externe', () => {
+    const code = buildTypstDocument([
+      exercise({
+        questions: [
+          '$\\def\\arraystretch{1.5}\\begin{array}{|l|c|}\\hline x & 1 \\\\ \\hline\\end{array}$',
+        ],
+      }),
+    ])
+    expect(code).not.toContain('@preview/tblr')
+    expect(code).toContain('#table(')
   })
 
   it("n'ajoute pas de section figures sans figure", () => {
     const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
     expect(code).not.toContain('----- Figures')
+    expect(code).not.toContain('mathalea-figure')
   })
 
   it('affiche un avertissement pour un exercice non exportable', () => {

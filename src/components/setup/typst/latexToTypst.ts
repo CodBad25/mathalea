@@ -6,8 +6,9 @@ import { tex2typst } from 'tex2typst'
  *
  * Le HTML traité est celui produit par les exercices en contexte HTML
  * (le même que celui affiché par la vue A4) : texte, balises simples
- * (br, b, i, sup, listes...), formules KaTeX et figures SVG.
- * Les figures et tableaux ne sont pas convertis : ils sont remplacés par
+ * (br, b, i, sup, listes...), formules KaTeX, tableaux et figures SVG.
+ * Les tableaux (HTML ou array LaTeX) deviennent des `#table(...)` natifs ;
+ * les figures SVG sont embarquées. Les images restantes sont remplacées par
  * un encart signalant l'élément manquant.
  */
 
@@ -20,6 +21,50 @@ const CUSTOM_TEX_MACROS: Record<string, string> = {
   '\\degre': '{}^\\circ',
   '\\np': '\\text{np}',
 }
+
+export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0deg, size: auto, fill: auto) = {
+  let content = if size == auto and fill == auto {
+    body
+  } else if fill == auto {
+    text(size: size, body)
+  } else if size == auto {
+    text(fill: fill, body)
+  } else {
+    text(size: size, fill: fill, body)
+  }
+  (x: x, y: y, angle: angle, body: content)
+}
+
+#let mathalea-figure(width, height, graphic, labels: ()) = box(width: width, height: height)[
+  #place(top + left, graphic)
+  #for label in labels {
+    let body = if label.angle == 0deg {
+      label.body
+    } else {
+      rotate(label.angle, origin: center, label.body)
+    }
+    // ancre de taille nulle posée sur le point : le label y est centré
+    place(top + left, dx: label.x, dy: label.y,
+      box(width: 0pt, height: 0pt, place(center + horizon, body)))
+  }
+]`
+
+const LATEX_SIZE_TO_TYPST_SIZE: Record<string, string> = {
+  tiny: '0.55em',
+  scriptsize: '0.7em',
+  footnotesize: '0.8em',
+  small: '0.9em',
+  normalsize: '1em',
+  large: '1.2em',
+  Large: '1.44em',
+  LARGE: '1.73em',
+  huge: '2.07em',
+  Huge: '2.49em',
+}
+
+const LATEX_SIZE_COMMANDS = Object.keys(LATEX_SIZE_TO_TYPST_SIZE)
+  .sort((a, b) => b.length - a.length)
+  .join('|')
 
 /**
  * Remplace `{\color{X}CONTENU}` (produit par miseEnEvidence) par
@@ -61,6 +106,7 @@ function replaceColorGroups(tex: string): string {
 function preprocessTex(tex: string): string {
   // le contenu vient du HTML : il peut contenir des entités (&nbsp;...)
   let output = replaceColorGroups(decodeEntities(tex))
+  output = stripLatexSizeCommands(output)
   // \textbf en mode mathématique (produit par miseEnEvidence)
   output = output.replace(/\\textbf\s*\{/g, '\\mathbf{')
   // \num{12\,345,6} et \numprint{...} : on garde le contenu tel quel,
@@ -88,10 +134,543 @@ function postprocessTypst(typst: string): string {
         /fill: #([0-9a-fA-F]{3,8})\b/g,
         (_, hex: string) => `fill: rgb("#${hex}")`,
       )
+      // Les labels mathalea2d peuvent fournir des couleurs HTML sans `#`.
+      .replace(
+        /fill: ([0-9a-fA-F]{3,8})\b/g,
+        (_, hex: string) => `fill: rgb("#${hex}")`,
+      )
+      // tex2typst laisse parfois passer les macros LaTeX explicites
+      // \thinspace, \medspace, \thickspace, absentes de Typst.
+      .replace(/\bthinspace\b/g, 'thin')
+      .replace(/\bmedspace\b/g, 'med')
+      .replace(/\bthickspace\b/g, 'thick')
+      .replace(/\bnegthinspace\b/g, '#h(-math.thin.amount)')
       // virgule décimale : Typst la colle aux chiffres seulement si la
       // chaîne `","` est écrite sans espaces autour
       .replace(/(\d) ?"," ?(?=\d)/g, '$1","')
   )
+}
+
+function readBraced(
+  text: string,
+  openIndex: number,
+): { value: string; end: number } | null {
+  if (text[openIndex] !== '{') return null
+  let depth = 0
+  for (let index = openIndex; index < text.length; index++) {
+    const char = text[index]
+    if (char === '\\') {
+      index++
+      continue
+    }
+    if (char === '{') depth++
+    else if (char === '}') {
+      depth--
+      if (depth === 0) {
+        return { value: text.slice(openIndex + 1, index), end: index + 1 }
+      }
+    }
+  }
+  return null
+}
+
+function splitTopLevel(text: string, separator: string): string[] {
+  const parts: string[] = []
+  let depth = 0
+  let start = 0
+  for (let index = 0; index < text.length; index++) {
+    const char = text[index]
+    if (char === '\\') {
+      index++
+      continue
+    }
+    if (char === '{') depth++
+    else if (char === '}') depth = Math.max(0, depth - 1)
+    else if (char === separator && depth === 0) {
+      parts.push(text.slice(start, index))
+      start = index + 1
+    }
+  }
+  parts.push(text.slice(start))
+  return parts
+}
+
+function stripLatexSizeCommands(text: string): string {
+  let output = ''
+  let index = 0
+  const sizeCommand = new RegExp(`\\\\(${LATEX_SIZE_COMMANDS})\\b`, 'g')
+  while (index < text.length) {
+    sizeCommand.lastIndex = index
+    const match = sizeCommand.exec(text)
+    if (match == null) {
+      output += text.slice(index)
+      break
+    }
+    output += text.slice(index, match.index)
+    let cursor = match.index + match[0].length
+    while (/\s/.test(text[cursor] ?? '')) cursor++
+    if (text[cursor] === '{') {
+      const arg = readBraced(text, cursor)
+      if (arg != null) {
+        output += arg.value
+        index = arg.end
+        continue
+      }
+    }
+    index = cursor
+  }
+  return output
+}
+
+function findMatchingEndEnvironment(
+  text: string,
+  env: string,
+  bodyStart: number,
+): number {
+  const begin = `\\begin{${env}}`
+  const end = `\\end{${env}}`
+  let depth = 1
+  let cursor = bodyStart
+  while (cursor < text.length) {
+    const nextBegin = text.indexOf(begin, cursor)
+    const nextEnd = text.indexOf(end, cursor)
+    if (nextEnd === -1) return -1
+    if (nextBegin !== -1 && nextBegin < nextEnd) {
+      depth++
+      cursor = nextBegin + begin.length
+    } else {
+      depth--
+      if (depth === 0) return nextEnd
+      cursor = nextEnd + end.length
+    }
+  }
+  return -1
+}
+
+function expandColumnSpecRepeats(spec: string): string {
+  let output = spec
+  for (let guard = 0; guard < 10; guard++) {
+    const next = output.replace(
+      /\*\s*\{(\d+)\}\s*\{([^{}]*)\}/g,
+      (_, count: string, content: string) => content.repeat(Number(count)),
+    )
+    if (next === output) break
+    output = next
+  }
+  return output
+}
+
+function removeColumnSpecModifiers(spec: string): string {
+  let output = spec
+  for (const marker of ['>', '<']) {
+    let index = 0
+    let rebuilt = ''
+    while (index < output.length) {
+      const start = output.indexOf(`${marker}{`, index)
+      if (start === -1) {
+        rebuilt += output.slice(index)
+        break
+      }
+      rebuilt += output.slice(index, start)
+      const arg = readBraced(output, start + marker.length)
+      if (arg == null) {
+        rebuilt += output[start]
+        index = start + 1
+      } else {
+        index = arg.end
+      }
+    }
+    output = rebuilt
+  }
+  return output
+}
+
+interface ParsedColumnSpec {
+  aligns: ('left' | 'center' | 'right')[]
+  vlines: number[]
+}
+
+function parseLatexColumnSpec(
+  spec: string,
+  fallbackColumns = 0,
+): ParsedColumnSpec {
+  const normalized = removeColumnSpecModifiers(expandColumnSpecRepeats(spec))
+  const aligns: ('left' | 'center' | 'right')[] = []
+  const vlines: number[] = []
+  for (let index = 0; index < normalized.length; index++) {
+    const char = normalized[index]
+    if (char === '|') {
+      vlines.push(aligns.length)
+    } else if (char === 'l') {
+      aligns.push('left')
+    } else if (char === 'c' || char === 'X' || char === 'S') {
+      aligns.push('center')
+    } else if (char === 'r') {
+      aligns.push('right')
+    } else if (['p', 'm', 'b'].includes(char)) {
+      aligns.push('left')
+      while (
+        index + 1 < normalized.length &&
+        /\s/.test(normalized[index + 1])
+      ) {
+        index++
+      }
+      if (normalized[index + 1] === '{') {
+        const arg = readBraced(normalized, index + 1)
+        if (arg != null) index = arg.end - 1
+      }
+    }
+  }
+  while (aligns.length < fallbackColumns) aligns.push('center')
+  return { aligns, vlines: [...new Set(vlines)] }
+}
+
+function parseTblrOptions(options: string): {
+  colspec: string
+  hlines: boolean
+  vlines: boolean
+} {
+  const colspecMatch = options.match(/colspec\s*=\s*\{([^}]*)\}/)
+  return {
+    colspec: colspecMatch?.[1] ?? '',
+    hlines: /(?:^|,)\s*hlines\s*(?:,|$)/.test(options),
+    vlines: /(?:^|,)\s*vlines\s*(?:,|$)/.test(options),
+  }
+}
+
+type ParsedTableItem = { type: 'hline' } | { type: 'row'; cells: string[] }
+
+function parseLatexTableBody(body: string): ParsedTableItem[] {
+  const items: ParsedTableItem[] = []
+  let row = ''
+  const pushRow = () => {
+    const cells = splitTopLevel(row, '&').map((cell) => cell.trim())
+    if (cells.some((cell) => cell.length > 0))
+      items.push({ type: 'row', cells })
+    row = ''
+  }
+
+  for (let index = 0; index < body.length; index++) {
+    if (body.startsWith('\\hline', index)) {
+      pushRow()
+      items.push({ type: 'hline' })
+      index += '\\hline'.length - 1
+    } else if (body.startsWith('\\cline', index)) {
+      pushRow()
+      items.push({ type: 'hline' })
+      index += '\\cline'.length
+      while (/\s/.test(body[index] ?? '')) index++
+      const arg = readBraced(body, index)
+      if (arg != null) index = arg.end - 1
+    } else if (body.startsWith('\\tabularnewline', index)) {
+      pushRow()
+      index += '\\tabularnewline'.length - 1
+    } else if (body.startsWith('\\\\', index)) {
+      pushRow()
+      index++
+    } else {
+      row += body[index]
+    }
+  }
+  pushRow()
+  return items
+}
+
+function stripCellLatex(cell: string): string {
+  return cell
+    .replace(/\\cellcolor(?:\[[^\]]+\])?\s*\{[^{}]*\}/g, '')
+    .replace(
+      /\\(?:displaystyle|textstyle|scriptstyle|scriptscriptstyle)\b/g,
+      '',
+    )
+    .replace(/\\(?:centering|arraybackslash)\b/g, '')
+    .replace(/\\rule\s*(?:\[[^\]]*\])?\s*\{[^{}]*\}\s*\{[^{}]*\}/g, '')
+    .replace(/~/g, '\\;')
+    .trim()
+}
+
+function unwrapWholeTextCommand(cell: string): string | null {
+  const trimmed = cell.trim()
+  if (!trimmed.startsWith('\\text')) return null
+  const commandEnd = '\\text'.length
+  let cursor = commandEnd
+  while (/\s/.test(trimmed[cursor] ?? '')) cursor++
+  const arg = readBraced(trimmed, cursor)
+  if (arg == null || arg.end !== trimmed.length) return null
+  return arg.value
+}
+
+/** Couleurs nommées CSS/LaTeX absentes de Typst, converties en hexadécimal */
+const NAMED_COLOR_TO_HEX: Record<string, string> = {
+  lightgray: '#d3d3d3',
+  lightgrey: '#d3d3d3',
+  gray: '#808080',
+  grey: '#808080',
+  darkgray: '#a9a9a9',
+  darkgrey: '#a9a9a9',
+  lightblue: '#add8e6',
+  lightgreen: '#90ee90',
+  lightyellow: '#ffffe0',
+  lightpink: '#ffb6c1',
+  pink: '#ffc0cb',
+}
+
+/** Couleurs nommées directement comprises par Typst */
+const TYPST_NAMED_COLORS = new Set([
+  'black', 'white', 'silver', 'navy', 'blue', 'aqua', 'teal', 'eastern',
+  'purple', 'fuchsia', 'maroon', 'red', 'orange', 'yellow', 'olive',
+  'green', 'lime',
+])
+
+/**
+ * Convertit une couleur (CSS `rgb(...)`, hexadécimale ou nommée) en une
+ * expression Typst, ou `null` si la couleur est absente/transparente.
+ */
+function colorToTypst(raw: string): string | null {
+  const color = raw.trim().toLowerCase()
+  if (color === '' || color === 'transparent' || color === 'inherit') {
+    return null
+  }
+  const rgb = color.match(/^rgba?\(([^)]+)\)/)
+  if (rgb != null) {
+    const parts = rgb[1].split(',').map((part) => part.trim())
+    if (parts.length >= 3) return `rgb(${parts[0]}, ${parts[1]}, ${parts[2]})`
+  }
+  const hex = color.replace(/^#/, '')
+  if (/^(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/.test(hex)) {
+    return `rgb("#${hex}")`
+  }
+  if (color in NAMED_COLOR_TO_HEX) return `rgb("${NAMED_COLOR_TO_HEX[color]}")`
+  if (TYPST_NAMED_COLORS.has(color)) return color
+  return null
+}
+
+/** Extrait `\cellcolor{...}` (ou `\cellcolor[HTML]{...}`) d'une cellule LaTeX */
+function extractCellColor(cell: string): { color: string | null; rest: string } {
+  const match = cell.match(/\\cellcolor(\[[^\]]+\])?\s*\{([^{}]*)\}/)
+  if (match == null) return { color: null, rest: cell }
+  const raw = match[1] === '[HTML]' ? `#${match[2]}` : match[2]
+  return { color: colorToTypst(raw), rest: cell.replace(match[0], '') }
+}
+
+/** Cellule d'un tableau Typst : contenu déjà converti et couleur de fond */
+interface TypstTableCell {
+  body: string
+  fill: string | null
+}
+
+function latexTableCell(cell: string): TypstTableCell {
+  const { color, rest } = extractCellColor(cell)
+  const stripped = stripCellLatex(rest)
+  if (stripped.length === 0) return { body: '', fill: color }
+  const textContent = unwrapWholeTextCommand(stripped)
+  if (textContent != null) {
+    return { body: escapeTypstText(textContent), fill: color }
+  }
+  return { body: `$${latexMathToTypst(stripped)}$`, fill: color }
+}
+
+function formatTypstArray(values: string[]): string {
+  if (values.length === 0) return '()'
+  return `(${values.join(', ')},)`
+}
+
+function stripArrayStretchCommands(text: string): string {
+  return text
+    .replace(/\\def\s*\\arraystretch\s*\{[\d.]+\}/g, '')
+    .replace(/\\renewcommand\s*\{\\arraystretch\}\s*\{[\d.]+\}/g, '')
+    .trim()
+}
+
+interface LatexTableEnvironment {
+  env: 'array' | 'tabular' | 'tblr'
+  start: number
+  end: number
+  colspec: string
+  body: string
+  stretch: number
+  hlines: boolean
+  vlines: boolean
+}
+
+function findLatexTableEnvironment(tex: string): LatexTableEnvironment | null {
+  const match = /\\begin\{(array|tabular|tblr)\}/.exec(tex)
+  if (match == null || match.index == null) return null
+  const env = match[1] as LatexTableEnvironment['env']
+  let cursor = match.index + match[0].length
+  while (/\s/.test(tex[cursor] ?? '')) cursor++
+  const firstArg = readBraced(tex, cursor)
+  if (firstArg == null) return null
+  cursor = firstArg.end
+  const bodyStart = cursor
+  const bodyEnd = findMatchingEndEnvironment(tex, env, bodyStart)
+  if (bodyEnd === -1) return null
+  const body = tex.slice(bodyStart, bodyEnd)
+  const end = bodyEnd + `\\end{${env}}`.length
+  let colspec = firstArg.value
+  let hlines = false
+  let vlines = false
+  if (env === 'tblr') {
+    const options = parseTblrOptions(firstArg.value)
+    colspec = options.colspec
+    hlines = options.hlines
+    vlines = options.vlines
+  }
+  const prefix = tex.slice(0, match.index)
+  const stretchMatch =
+    prefix.match(/\\def\s*\\arraystretch\s*\{([\d.]+)\}/) ??
+    prefix.match(/\\renewcommand\s*\{\\arraystretch\}\s*\{([\d.]+)\}/)
+  return {
+    env,
+    start: match.index,
+    end,
+    colspec,
+    body,
+    stretch: stretchMatch != null ? Number(stretchMatch[1]) : 1,
+    hlines,
+    vlines,
+  }
+}
+
+function shouldConvertAsVisualTable(table: LatexTableEnvironment): boolean {
+  if (table.env === 'tabular' || table.env === 'tblr') return true
+  return (
+    table.colspec.includes('|') ||
+    /\\(?:hline|cline|tabularnewline)\b/.test(table.body)
+  )
+}
+
+/**
+ * Rend un tableau au format Typst natif (`#table(...)`).
+ * Une grille entièrement bordée (cas des tableaux MathALÉA) utilise un
+ * `stroke` global ; sinon les traits sont posés un à un. L'interligne
+ * (`inset.y`) reprend le `\arraystretch` LaTeX, qui n'est pas géré par
+ * tex2typst.
+ */
+function renderTypstTable(
+  aligns: ('left' | 'center' | 'right')[],
+  rows: TypstTableCell[][],
+  insetY: number,
+  vlines: number[],
+  hlineYs: number[],
+): string {
+  const columns = aligns.length
+  const uniform = aligns.every((align) => align === aligns[0])
+  const fullBorder =
+    vlines.length === columns + 1 && hlineYs.length === rows.length + 1
+
+  const header: string[] = [
+    `columns: ${columns}`,
+    uniform
+      ? `align: ${aligns[0] ?? 'center'}`
+      : `align: ${formatTypstArray(aligns)}`,
+    `inset: (x: 5pt, y: ${insetY.toFixed(1)}pt)`,
+    `stroke: ${fullBorder ? '0.5pt' : 'none'}`,
+  ]
+
+  const strokes: string[] = []
+  if (!fullBorder) {
+    for (const x of vlines) strokes.push(`table.vline(x: ${x}, stroke: 0.5pt)`)
+    for (const y of hlineYs) strokes.push(`table.hline(y: ${y}, stroke: 0.5pt)`)
+  }
+
+  const cells = rows.map((row) =>
+    Array.from({ length: columns }, (_, index) => {
+      const cell = row[index] ?? { body: '', fill: null }
+      return cell.fill != null
+        ? `table.cell(fill: ${cell.fill})[${cell.body}]`
+        : `[${cell.body}]`
+    }).join(', '),
+  )
+
+  return `#table(\n  ${[...header, ...strokes, ...cells].join(',\n  ')},\n)`
+}
+
+function latexVisualTableToTypst(tex: string): string | null {
+  const table = findLatexTableEnvironment(tex)
+  if (table == null || !shouldConvertAsVisualTable(table)) return null
+
+  const items = parseLatexTableBody(table.body)
+  const rows: TypstTableCell[][] = []
+  const hlineYs = new Set<number>()
+  for (const item of items) {
+    if (item.type === 'hline') hlineYs.add(rows.length)
+    else rows.push(item.cells.map(latexTableCell))
+  }
+  const maxColumns = Math.max(0, ...rows.map((row) => row.length))
+  if (maxColumns === 0) return null
+
+  const parsedColumns = parseLatexColumnSpec(table.colspec, maxColumns)
+  const aligns = parsedColumns.aligns.slice(0, maxColumns)
+  while (aligns.length < maxColumns) aligns.push('center')
+  const vlines = table.vlines
+    ? Array.from({ length: maxColumns + 1 }, (_, index) => index)
+    : [
+        ...new Set(
+          parsedColumns.vlines.filter(
+            (line) => line >= 0 && line <= maxColumns,
+          ),
+        ),
+      ]
+  if (table.hlines && hlineYs.size === 0) {
+    for (let y = 0; y <= rows.length; y++) hlineYs.add(y)
+  }
+  const insetY = Math.max(3, 3 * table.stretch)
+
+  const converted = renderTypstTable(
+    aligns,
+    rows,
+    insetY,
+    vlines,
+    [...hlineYs].sort((a, b) => a - b),
+  )
+  const before = stripArrayStretchCommands(tex.slice(0, table.start))
+  const after = stripArrayStretchCommands(tex.slice(table.end))
+  return [before, converted, after].filter(Boolean).join('\n')
+}
+
+/**
+ * Convertit un tableau HTML MathALÉA (`table.tableauMathlive`, produit par
+ * `tableauColonneLigne` et consorts) en `#table(...)` natif : chaque cellule
+ * est reconvertie depuis son HTML (formules incluses) et sa couleur de fond
+ * (`background-color`) est reportée.
+ */
+function htmlTableToTypst(
+  table: HTMLTableElement,
+  figures?: string[],
+): string {
+  const rows: TypstTableCell[][] = []
+  for (const tr of [...table.querySelectorAll('tr')]) {
+    const cells = [...tr.children].filter(
+      (child): child is HTMLTableCellElement =>
+        child.tagName === 'TD' || child.tagName === 'TH',
+    )
+    if (cells.length === 0) continue
+    rows.push(
+      cells.map((cell) => ({
+        body: htmlToTypst(cell.innerHTML, figures),
+        fill: colorToTypst(cell.style.backgroundColor ?? ''),
+      })),
+    )
+  }
+  const maxColumns = Math.max(0, ...rows.map((row) => row.length))
+  if (maxColumns === 0) return missingBox('tableau non converti')
+
+  const aligns = Array.from(
+    { length: maxColumns },
+    () => 'center' as const,
+  )
+  const vlines = Array.from({ length: maxColumns + 1 }, (_, index) => index)
+  const hlineYs = Array.from({ length: rows.length + 1 }, (_, index) => index)
+  return renderTypstTable(aligns, rows, 4, vlines, hlineYs)
+}
+
+function latexSegmentToTypst(tex: string, display: boolean): string {
+  const table = latexVisualTableToTypst(tex)
+  if (table != null) return table
+  const converted = latexMathToTypst(tex)
+  if (converted.length === 0) return ''
+  return display ? `$ ${converted} $` : `$${converted}$`
 }
 
 /**
@@ -168,23 +747,147 @@ function missingBox(label: string): string {
  * qui fait échouer la lecture de l'image.
  */
 export function sanitizeSvg(svg: string): string {
-  return (
-    svg
-      // attribut parasite tel que sérialisé par le DOM (`;=""`)
-      .replace(/\s;=""/g, '')
-      // point-virgule orphelin après la valeur d'un attribut
-      .replace(/=\s*("[^"]*")\s*;/g, '=$1 ')
-      // entités HTML indéfinies en XML
-      .replace(/&nbsp;/g, '&#160;')
-      // esperluettes nues
-      .replace(/&(?!(?:[a-zA-Z]+|#\d+|#x[0-9a-fA-F]+);)/g, '&amp;')
-      .replace(/\s+/g, ' ')
+  const cleaned = svg
+    // attribut parasite tel que sérialisé par le DOM (`;=""`)
+    .replace(/\s;=""/g, '')
+    // point-virgule orphelin après la valeur d'un attribut
+    .replace(/=\s*("[^"]*")\s*;/g, '=$1 ')
+    // entités HTML indéfinies en XML
+    .replace(/&nbsp;/g, '&#160;')
+    // esperluettes nues
+    .replace(/&(?!(?:[a-zA-Z]+|#\d+|#x[0-9a-fA-F]+);)/g, '&amp;')
+    .replace(/\s+/g, ' ')
+  return cleaned.replace(
+    /<([a-zA-Z][\w:.-]*)([^<>]*)>/g,
+    (_tag, name: string, attrs: string) => {
+      const selfClosing = /\/\s*$/.test(attrs)
+      const attrText = selfClosing ? attrs.replace(/\/\s*$/, '') : attrs
+      const seen = new Set<string>()
+      const parsed = [...attrText.matchAll(/\s+([:\w.-]+)(?:\s*=\s*"[^"]*")?/g)]
+      const kept: string[] = []
+      for (let index = parsed.length - 1; index >= 0; index--) {
+        const attr = parsed[index]
+        const attrName = attr[1]
+        if (seen.has(attrName)) continue
+        seen.add(attrName)
+        kept.unshift(attr[0].trim())
+      }
+      return `<${name}${kept.length > 0 ? ' ' + kept.join(' ') : ''}${selfClosing ? '/>' : '>'}`
+    },
   )
 }
 
 /** Chaîne littérale Typst (`"..."`) */
 function typstStringLiteral(text: string): string {
   return `"${text.replaceAll('\\', '\\\\').replaceAll('"', '\\"')}"`
+}
+
+function stripOuterBraces(text: string): string {
+  let output = text.trim()
+  while (output.startsWith('{')) {
+    const arg = readBraced(output, 0)
+    if (arg == null || arg.end !== output.length) break
+    output = arg.value.trim()
+  }
+  return output
+}
+
+function extractLatexSizeCommand(tex: string): string | null {
+  const match = new RegExp(`\\\\(${LATEX_SIZE_COMMANDS})\\b`).exec(tex)
+  return match?.[1] ?? null
+}
+
+function extractLatexColor(tex: string): string | null {
+  const match = /\\(?:text)?color(?:\[[^\]]+\])?\s*\{([^{}]+)\}/.exec(tex)
+  return match?.[1]?.trim() ?? null
+}
+
+function unwrapTextColorCommands(text: string): string {
+  let output = ''
+  let index = 0
+  const marker = '\\textcolor'
+  while (index < text.length) {
+    const start = text.indexOf(marker, index)
+    if (start === -1) {
+      output += text.slice(index)
+      break
+    }
+    output += text.slice(index, start)
+    let cursor = start + marker.length
+    while (/\s/.test(text[cursor] ?? '')) cursor++
+    if (text[cursor] === '[') {
+      const close = text.indexOf(']', cursor)
+      if (close === -1) {
+        output += text.slice(start, cursor)
+        index = cursor
+        continue
+      }
+      cursor = close + 1
+      while (/\s/.test(text[cursor] ?? '')) cursor++
+    }
+    const color = readBraced(text, cursor)
+    if (color == null) {
+      output += text.slice(start, cursor)
+      index = cursor
+      continue
+    }
+    cursor = color.end
+    while (/\s/.test(text[cursor] ?? '')) cursor++
+    const content = readBraced(text, cursor)
+    if (content == null) {
+      output += text.slice(start, cursor)
+      index = cursor
+      continue
+    }
+    output += content.value
+    index = content.end
+  }
+  return output
+}
+
+function removeLatexColorDeclarations(text: string): string {
+  return text.replace(/\\color(?:\[[^\]]+\])?\s*\{[^{}]+\}/g, '')
+}
+
+function typstColorExpression(color: string): string | null {
+  const normalized = color.trim()
+  const hex = normalized.replace(/^#/, '')
+  if (
+    /^(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(
+      hex,
+    )
+  ) {
+    return `rgb("#${hex}")`
+  }
+  const lower = normalized.toLowerCase()
+  if (lower === 'grey') return 'gray'
+  if (/^[a-z][a-z0-9-]*$/i.test(normalized)) return lower
+  return null
+}
+
+function isDefaultBlack(color: string): boolean {
+  const normalized = color.trim().toLowerCase().replace(/^#/, '')
+  return (
+    normalized === 'black' || normalized === '000' || normalized === '000000'
+  )
+}
+
+function normalizeOverlayLatex(tex: string): {
+  tex: string
+  color: string | null
+  size: string | null
+} {
+  const color = extractLatexColor(tex)
+  const sizeCommand = extractLatexSizeCommand(tex)
+  let body = unwrapTextColorCommands(tex)
+  body = removeLatexColorDeclarations(body)
+  body = stripLatexSizeCommands(body)
+  body = stripOuterBraces(body)
+  return {
+    tex: body.trim(),
+    color,
+    size: sizeCommand == null ? null : LATEX_SIZE_TO_TYPST_SIZE[sizeCommand],
+  }
 }
 
 /**
@@ -196,8 +899,167 @@ export function svgToTypstImage(svg: string): string {
   const cleaned = sanitizeSvg(svg)
   const width = cleaned.match(/<svg[^>]*?\swidth="([\d.]+)"/i)
   const widthPt =
-    width != null ? `, width: ${(parseFloat(width[1]) * 0.75).toFixed(1)}pt` : ''
+    width != null
+      ? `, width: ${(parseFloat(width[1]) * 0.75).toFixed(1)}pt`
+      : ''
   return `image(bytes(${typstStringLiteral(cleaned)}), format: "svg"${widthPt})`
+}
+
+function extractKatexTex(html: string): string | null {
+  const annotationMatch = html.match(
+    /<annotation[^>]*encoding=["']application\/x-tex["'][^>]*>([\s\S]*?)<\/annotation>/i,
+  )
+  if (annotationMatch != null) return decodeEntities(annotationMatch[1])
+  return null
+}
+
+function divLatexToTypstLabel(divHtml: string): string | null {
+  const tex = extractKatexTex(divHtml)
+  if (tex == null) return null
+  const label = normalizeOverlayLatex(tex)
+  if (label.tex.length === 0) return null
+  const left = divHtml.match(/\bdata-left=(?:"([^"]+)"|'([^']+)'|([^\s>]+))/i)
+  const top = divHtml.match(/\bdata-top=(?:"([^"]+)"|'([^']+)'|([^\s>]+))/i)
+  if (left == null || top == null) return null
+  const leftPx = Number(left[1] ?? left[2] ?? left[3])
+  const topPx = Number(top[1] ?? top[2] ?? top[3])
+  if (!Number.isFinite(leftPx) || !Number.isFinite(topPx)) return null
+  const rotate = divHtml.match(/rotate\((-?[\d.]+)deg\)/i)
+  const angle = rotate != null ? Number(rotate[1]) : 0
+  const options: string[] = []
+  if (label.size != null && label.size !== '1em') {
+    options.push(`size: ${label.size}`)
+  }
+  if (label.color != null && !isDefaultBlack(label.color)) {
+    const color = typstColorExpression(label.color)
+    if (color != null) options.push(`fill: ${color}`)
+  }
+  if (Number.isFinite(angle) && angle !== 0) {
+    options.push(`angle: ${angle}deg`)
+  }
+  const args = [
+    `${(leftPx * 0.75).toFixed(1)}pt`,
+    `${(topPx * 0.75).toFixed(1)}pt`,
+    `[$${latexMathToTypst(label.tex)}$]`,
+    ...options,
+  ]
+  return `mathalea-label(${args.join(', ')})`
+}
+
+function mathalea2dContainerToTypst(
+  html: string,
+  figures?: string[],
+): string | null {
+  if (!/\bsvgContainer\b/.test(html)) return null
+  const svgMatch = html.match(/<svg\b[\s\S]*?<\/svg>/i)
+  if (svgMatch == null) return null
+  if (figures == null) return missingBox('figure non convertie')
+  figures.push(svgToTypstImage(svgMatch[0]))
+  const figureName = `fig-${figures.length}`
+  const figureRef = `#${figureName}`
+  const width = svgMatch[0].match(/<svg[^>]*?\swidth="([\d.]+)"/i)
+  const height = svgMatch[0].match(/<svg[^>]*?\sheight="([\d.]+)"/i)
+  const widthPt =
+    width != null ? (parseFloat(width[1]) * 0.75).toFixed(1) : '160.0'
+  const heightPt =
+    height != null ? (parseFloat(height[1]) * 0.75).toFixed(1) : '90.0'
+  const labels = [
+    ...html.matchAll(
+      /<div\b[^>]*\bclass=["'][^"']*\bdivLatex\b[^"']*["'][\s\S]*?<\/div>/gi,
+    ),
+  ]
+    .map((match) => divLatexToTypstLabel(match[0]))
+    .filter((label): label is string => label != null)
+  if (labels.length === 0) return figureRef
+  return [
+    `#mathalea-figure(${widthPt}pt, ${heightPt}pt, ${figureName}, labels: (`,
+    ...labels.map((label) => `  ${label},`),
+    '))',
+  ].join('\n')
+}
+
+function protectMathalea2dContainers(
+  html: string,
+  protect: (typst: string) => string,
+  figures?: string[],
+): string {
+  if (typeof document !== 'undefined') {
+    const template = document.createElement('template')
+    template.innerHTML = html
+    const containers = [
+      ...template.content.querySelectorAll<HTMLElement>('.svgContainer'),
+    ]
+    if (containers.length > 0) {
+      for (const container of containers) {
+        const typst = mathalea2dContainerToTypst(container.outerHTML, figures)
+        if (typst != null) {
+          container.replaceWith(document.createTextNode(protect(typst)))
+        }
+      }
+      return template.innerHTML
+    }
+  }
+  return html.replace(
+    /<div\b[^>]*\bclass=["'][^"']*\bsvgContainer\b[^"']*["'][\s\S]*?<\/div>\s*<\/div>/gi,
+    (container) =>
+      protect(mathalea2dContainerToTypst(container, figures) ?? container),
+  )
+}
+
+/**
+ * Convertit les tableaux HTML en Typst avant tout autre traitement (leurs
+ * cellules contiennent des formules et éventuellement des figures, reconverties
+ * récursivement par `htmlToTypst`).
+ */
+function protectHtmlTables(
+  html: string,
+  protect: (typst: string) => string,
+  figures?: string[],
+): string {
+  if (typeof document === 'undefined') {
+    return html.replace(/<table[\s\S]*?<\/table>/gi, () =>
+      protect(missingBox('tableau non converti')),
+    )
+  }
+  const template = document.createElement('template')
+  template.innerHTML = html
+  const tables = [...template.content.querySelectorAll('table')]
+  if (tables.length === 0) return html
+  for (const table of tables) {
+    table.replaceWith(
+      document.createTextNode(protect(htmlTableToTypst(table, figures))),
+    )
+  }
+  return template.innerHTML
+}
+
+function protectKatexSpans(
+  html: string,
+  protect: (typst: string) => string,
+): string {
+  if (typeof document !== 'undefined') {
+    const template = document.createElement('template')
+    template.innerHTML = html
+    const spans = [...template.content.querySelectorAll<HTMLElement>('.katex')]
+    if (spans.length > 0) {
+      for (const span of spans) {
+        const tex = extractKatexTex(span.outerHTML)
+        if (tex != null) {
+          span.replaceWith(
+            document.createTextNode(protect(latexSegmentToTypst(tex, false))),
+          )
+        }
+      }
+      return template.innerHTML
+    }
+  }
+  return html.replace(
+    /<span\b[^>]*\bclass=["'][^"']*\bkatex\b[^"']*["'][\s\S]*?<\/span>/gi,
+    (span) => {
+      const tex = extractKatexTex(span)
+      return tex == null ? span : protect(latexSegmentToTypst(tex, false))
+    },
+  )
 }
 
 /**
@@ -217,13 +1079,21 @@ export function htmlToTypst(html: string, figures?: string[]): string {
     return `\u0000${protectedSegments.length - 1}\u0000`
   }
 
-  let text = html.replace(
-    /\$\$([\s\S]+?)\$\$/g,
-    (_, tex: string) => protect(`$ ${latexMathToTypst(tex)} $`),
+  let text = protectHtmlTables(html, protect, figures)
+  text = protectMathalea2dContainers(text, protect, figures)
+  text = protectKatexSpans(text, protect)
+  text = text.replace(/\\\[([\s\S]+?)\\\]/g, (_, tex: string) =>
+    protect(latexSegmentToTypst(tex, true)),
+  )
+  text = text.replace(/\\\(([\s\S]+?)\\\)/g, (_, tex: string) =>
+    protect(latexSegmentToTypst(tex, false)),
+  )
+  text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, tex: string) =>
+    protect(latexSegmentToTypst(tex, true)),
   )
   text = text.replace(/\$([^$]+?)\$/g, (_, tex: string) => {
-    const converted = latexMathToTypst(tex)
-    return converted.length > 0 ? protect(`$${converted}$`) : ''
+    const converted = latexSegmentToTypst(tex, false)
+    return converted.length > 0 ? protect(converted) : ''
   })
 
   // 2. Figures SVG (embarquées dans le document), puis éléments non
@@ -233,9 +1103,6 @@ export function htmlToTypst(html: string, figures?: string[]): string {
     figures.push(svgToTypstImage(svg))
     return protect(`#fig-${figures.length}`)
   })
-  text = text.replace(/<table[\s\S]*?<\/table>/gi, () =>
-    protect(missingBox('tableau non converti')),
-  )
   text = text.replace(/<img[^>]*>/gi, () =>
     protect(missingBox('image non convertie')),
   )
