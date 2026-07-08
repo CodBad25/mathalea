@@ -1,4 +1,4 @@
-import PoucentageP2 from '../can/5e/can5P02'
+import PoucentageP2 from '../can/4e/can4P09'
 export const titre = 'Calculer avec un pourcentage de proportion'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true

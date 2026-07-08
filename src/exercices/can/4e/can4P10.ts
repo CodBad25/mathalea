@@ -1,9 +1,9 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { abs } from '../../../lib/outils/nombres'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une évolution en pourcentage'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -19,7 +19,7 @@ export const dateDePublication = '15/07/2025'
 export const uuid = '66b7e'
 
 export const refs = {
-  'fr-fr': ['can5P10'],
+  'fr-fr': ['can4P10'],
   'fr-ch': [],
 }
 export default class PoucentageE2 extends ExerciceSimple {
