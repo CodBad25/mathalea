@@ -149,8 +149,10 @@ function preprocessTex(tex: string): string {
   // \\[dim] (saut de ligne avec espacement optionnel, ex. dans \begin{cases}) :
   // tex2typst ne supporte pas l'argument optionnel — on le supprime
   output = output.replace(/\\\\\s*\[[^\]]*\]/g, '\\\\')
-  // \phantom n'a pas d'équivalent direct : on le remplace par une espace
-  output = output.replace(/\\(?:phantom|hphantom)\s*\{[^{}]*\}/g, '\\;')
+  // \phantom n'a pas d'équivalent direct : on le remplace par une espace.
+  // Le contenu peut avoir un niveau d'imbrication (ex. \phantom{\frac{a}{b}})
+  // → [^{}]|\{[^{}]*\} capture les groupes imbriqués
+  output = output.replace(/\\(?:phantom|hphantom)\s*\{(?:[^{}]|\{[^{}]*\})*\}/g, '\\;')
   // \hspace*{0.4cm} : tex2typst produirait `#h(*) 0.4 c m` (étoile invalide) ;
   // ces espaces servent surtout à élargir des colonnes, on les neutralise
   output = output.replace(/\\hspace\s*\*?\s*\{[^{}]*\}/g, '\\;')
@@ -203,6 +205,15 @@ function postprocessTypst(typst: string): string {
   }
 
   return result
+    // tex2typst convertit \left]...\right[ en lr(]...[), \left[...\right[ en
+    // lr([...[). En Typst, ] et [ juste après/avant lr()/lr() sont parsés comme
+    // délimiteurs → "unclosed delimiter". On remplace par bracket.r/bracket.l.
+    // Cas 1 : ]...[ → intervalles ouverts
+    .replace(/lr\(\]([^\[\]]*)\[\)/g, 'lr(bracket.r $1 bracket.l)')
+    // Cas 2 : [...[ → semi-ouvert fermé à gauche, ouvert à droite
+    .replace(/lr\(\[([^\[\]]*)\[\)/g, 'lr(bracket.l $1 bracket.l)')
+    // Cas 3 : ]...] → semi-ouvert ouvert à gauche, fermé à droite
+    .replace(/lr\(\]([^\[\]]*)\]\)/g, 'lr(bracket.r $1 bracket.r)')
     // virgule décimale : Typst la colle aux chiffres seulement si la
     // chaîne `","` est écrite sans espaces autour
     .replace(/(\d) ?"," ?(?=\d)/g, '$1","')

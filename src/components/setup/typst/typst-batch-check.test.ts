@@ -27,6 +27,7 @@ import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'path'
 import seedrandom from 'seedrandom'
 import { fileURLToPath, pathToFileURL } from 'url'
+import { Worker } from 'node:worker_threads'
 import { afterAll, beforeAll, describe, it, vi } from 'vitest'
 import { context } from '../../../modules/context'
 import {
@@ -284,7 +285,14 @@ function compileTypst(source: string): { ok: boolean; diagnostics: string[]; sou
       }
     }
 
-    return { ok: result.status === 0, diagnostics, sourceSnippet }
+    const ok = result.status === 0
+    if (!ok) {
+      // Sauvegarde le source Typst en erreur pour débogage
+      const debugFile = `/tmp/typst-debug-${Date.now()}.typ`
+      try { writeFileSync(debugFile, source) } catch {}
+      process.stderr.write(`\n[debug] typst error source: ${debugFile}\n[debug] stderr: ${stderr.slice(0, 400)}\n`)
+    }
+    return { ok, diagnostics, sourceSnippet }
   } finally {
     try { rmSync(tmpFile) } catch { /* ignore */ }
   }
@@ -347,18 +355,106 @@ function isInteractiveOnly(exercice: any): boolean {
   )
 }
 
-// ─── Core check logic ─────────────────────────────────────────────────────────
+// ─── Long-running worker pool ─────────────────────────────────────────────────
 
-/** Délai maximal par exercice pour éviter les boucles infinies.
- *  Niveau 1 (source uniquement) : 20 s — génération + analyse source.
- *  Niveau 2 (compilation typst) : 50 s — inclut `typst compile` (30 s max). */
+/**
+ * Délai maximal par exercice (hors startup worker).
+ * Niveau 1 : 20 s. Niveau 2 : 50 s (inclut `typst compile`).
+ * Le worker charge mathalea une seule fois au démarrage (~15-20s),
+ * puis traite les exercices séquentiellement.
+ */
 const EXERCISE_TIMEOUT_MS = CHECK_LEVEL < 2 ? 20_000 : 50_000
 
-function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
-  ])
+/** Timeout pour le démarrage du worker (chargement de mathalea.ts) */
+const WORKER_STARTUP_TIMEOUT_MS = 60_000
+
+const WORKER_FILE = resolve(__dirname, 'typst-batch-worker.ts')
+const WORKER_LOADER_FILE = pathToFileURL(resolve(__dirname, 'typst-worker-loader.mjs')).href
+
+function spawnWorker(): Promise<Worker> {
+  return new Promise((res, rej) => {
+    const w = new Worker(WORKER_FILE, {
+      execArgv: ['--loader', WORKER_LOADER_FILE, '--experimental-vm-modules'],
+    })
+    const timer = setTimeout(() => {
+      w.terminate()
+      rej(new Error(`Worker startup timeout (${WORKER_STARTUP_TIMEOUT_MS / 1000}s)`))
+    }, WORKER_STARTUP_TIMEOUT_MS)
+    w.once('message', (msg: any) => {
+      if (msg?.type === 'ready') { clearTimeout(timer); res(w) }
+    })
+    w.once('error', (err) => { clearTimeout(timer); rej(err) })
+    w.once('exit', (code) => { clearTimeout(timer); if (code !== 0) rej(new Error(`Worker exited with code ${code}`)) })
+  })
+}
+
+let sharedWorker: Worker | null = null
+
+async function getOrCreateWorker(): Promise<Worker> {
+  if (sharedWorker) return sharedWorker
+  sharedWorker = await spawnWorker()
+  sharedWorker.once('exit', () => { sharedWorker = null })
+  sharedWorker.once('error', () => { sharedWorker = null })
+  return sharedWorker
+}
+
+function checkExerciseWithWorker(
+  filePath: string,
+  uuid: string,
+  ref: string,
+): Promise<ExerciseEntry> {
+  const timeoutEntry: ExerciseEntry = {
+    uuid, ref, file: filePath.replace(ROOT + '/', ''),
+    lastChecked: new Date().toISOString(),
+    status: 'failing', checkedLevel: 0,
+    failureMode: 'runtime_error',
+    notes: `Timeout (>${EXERCISE_TIMEOUT_MS / 1000}s) : exercice bloqué`,
+    variationsTested: [], diagnostics: [],
+  }
+
+  return new Promise<ExerciseEntry>((promiseResolve) => {
+    let settled = false
+    const settle = (entry: ExerciseEntry) => {
+      if (settled) return
+      settled = true
+      promiseResolve(entry)
+    }
+
+    getOrCreateWorker().then((worker) => {
+      const responseHandler = (msg: any) => {
+        if (msg?.type !== 'result') return
+        worker.off('message', responseHandler)
+        clearTimeout(timer)
+        settle(msg.result as ExerciseEntry)
+      }
+
+      const timer = setTimeout(async () => {
+        worker.off('message', responseHandler)
+        // Terminate the stuck worker; the shared worker will be recreated next time
+        await worker.terminate()
+        sharedWorker = null
+        settle(timeoutEntry)
+      }, EXERCISE_TIMEOUT_MS)
+
+      worker.on('message', responseHandler)
+      worker.once('error', (err) => {
+        clearTimeout(timer)
+        worker.off('message', responseHandler)
+        sharedWorker = null
+        settle({ ...timeoutEntry, notes: `Worker error: ${String(err?.message ?? err).slice(0, 200)}` })
+      })
+      worker.once('exit', (code) => {
+        clearTimeout(timer)
+        worker.off('message', responseHandler)
+        sharedWorker = null
+        if (code !== 0) settle(timeoutEntry)
+      })
+
+      worker.postMessage({ type: 'check', filePath, uuid, ref, checkLevel: CHECK_LEVEL, root: ROOT })
+    }).catch((err) => {
+      settle({ ...timeoutEntry, notes: `Worker startup failed: ${String(err?.message ?? err).slice(0, 200)}` })
+    })
+  })
 }
 
 async function checkExerciseFile(
@@ -599,8 +695,9 @@ describe('Typst batch check', () => {
     mkdirSync(TMP_DIR, { recursive: true })
   })
 
-  afterAll(() => {
+  afterAll(async () => {
     try { rmSync(TMP_DIR, { recursive: true }) } catch { /* ignore */ }
+    if (sharedWorker) { await sharedWorker.terminate(); sharedWorker = null }
   })
 
   it('vérifie tous les exercices en Typst', async () => {
@@ -659,19 +756,7 @@ describe('Typst batch check', () => {
       const ref = getUuidRef(uuid, refToUuid)
       process.stdout.write(`  ${ref} (${uuid})…`)
 
-      const timeoutEntry: ExerciseEntry = {
-        uuid, ref, file: filePath.replace(ROOT + '/', ''),
-        lastChecked: new Date().toISOString(),
-        status: 'failing', checkedLevel: 0,
-        failureMode: 'runtime_error',
-        notes: `Timeout (>${EXERCISE_TIMEOUT_MS / 1000}s) : exercice bloqué`,
-        variationsTested: [], diagnostics: [],
-      }
-      const entry = await withTimeout(
-        checkExerciseFile(filePath, uuid, ref),
-        EXERCISE_TIMEOUT_MS,
-        timeoutEntry,
-      )
+      const entry = await checkExerciseWithWorker(filePath, uuid, ref)
       db.exercises[ref] = entry
       saveStatus(db)
 

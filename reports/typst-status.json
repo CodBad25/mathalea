@@ -1,654 +1,330 @@
 {
   "version": 1,
-  "lastRun": "2026-07-08T09:46:22.858Z",
+  "lastRun": "2026-07-08T11:29:26.824Z",
   "exercises": {
     "10151": {
       "uuid": "10151",
       "ref": "10151",
       "file": "src/exercices/EAMPremiere/EAM-CESpe-2026-Q2.ts",
-      "lastChecked": "2026-07-08T09:42:40.519Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:54:52.571Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508092570-rrfj5ei3tq8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "10886": {
       "uuid": "10886",
       "ref": "10886",
       "file": "src/exercices/can/canNY-2025/can1NY-2025-Q15.ts",
-      "lastChecked": "2026-07-08T09:42:53.186Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:55:28.588Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508128588-bgoiegmdh8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "12773": {
       "uuid": "12773",
       "ref": "12773",
       "file": "src/exercices/6e/6N1H-2-old.ts",
-      "lastChecked": "2026-07-08T09:43:55.745Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:57:04.318Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508224317-2lvd8j2m8m2.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "13440": {
       "uuid": "13440",
       "ref": "13440",
       "file": "src/exercices/can/can1a-2025/can1a-2025-Q15.ts",
-      "lastChecked": "2026-07-08T09:44:04.623Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:57:33.695Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508253695-4kgu92cw5ks.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "13606": {
       "uuid": "13606",
       "ref": "13606",
       "file": "src/exercices/EAMPremiere/EAM-CENonSpe-2026-Q4.ts",
-      "lastChecked": "2026-07-08T09:44:06.191Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:57:48.092Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508268091-rrfj5ei3tq8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "14546": {
       "uuid": "14546",
       "ref": "14546",
       "file": "src/exercices/can/canTspea-2025/canTspea-2025-Q29.ts",
-      "lastChecked": "2026-07-08T09:44:19.146Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:58:17.279Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508297279-tlab1afzj2d.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "14867": {
       "uuid": "14867",
       "ref": "14867",
       "file": "src/exercices/can/canNY-2025/can6NY-2025-Q20.ts",
-      "lastChecked": "2026-07-08T09:44:23.539Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:59:15.136Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508355136-6pgwbi1omok.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "17654": {
       "uuid": "17654",
       "ref": "17654",
       "file": "src/exercices/can/canNY-2025/can5NY-2025-Q17.ts",
-      "lastChecked": "2026-07-08T09:44:49.894Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:01:31.204Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508491204-6pgwbi1omok.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "17868": {
       "uuid": "17868",
       "ref": "17868",
       "file": "src/exercices/can/can1a-2024/can1a-2024-Q17.ts",
-      "lastChecked": "2026-07-08T09:44:51.342Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:01:47.834Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508507833-tlab1afzj2d.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "19067": {
       "uuid": "19067",
       "ref": "19067",
       "file": "src/exercices/can/can5a-2024/can5a-2024-Q8.ts",
-      "lastChecked": "2026-07-08T09:45:30.601Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:03:38.296Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508618296-o2sa5dx2i6b.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "21957": {
       "uuid": "21957",
       "ref": "21957",
       "file": "src/exercices/can/canNY-2025/can4NY-2025-Q26.ts",
-      "lastChecked": "2026-07-08T09:05:21.938Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:05:53.821Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508753820-6pgwbi1omok.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "22207": {
       "uuid": "22207",
       "ref": "22207",
       "file": "src/exercices/EAMPremiere/EAM-FMSpe-2026-Q3.ts",
-      "lastChecked": "2026-07-08T09:05:23.211Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:06:09.716Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508769716-rrfj5ei3tq8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "22787": {
       "uuid": "22787",
       "ref": "22787",
       "file": "src/exercices/can/canNY-2025/can4NY-2025-Q17.ts",
-      "lastChecked": "2026-07-08T09:05:40.903Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:07:05.141Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508825140-6pgwbi1omok.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "22907": {
       "uuid": "22907",
       "ref": "22907",
       "file": "src/exercices/can/canc3a-CM1-2025/canc3a-CM1-2025-Q11.ts",
-      "lastChecked": "2026-07-08T09:05:44.823Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:07:38.118Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508858117-bgoiegmdh8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "23241": {
       "uuid": "23241",
       "ref": "23241",
       "file": "src/exercices/EAMPremiere/EAM-CESpe-2026-Q7.ts",
-      "lastChecked": "2026-07-08T09:05:49.990Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:08:07.959Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508887958-rrfj5ei3tq8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "24246": {
       "uuid": "24246",
       "ref": "24246",
       "file": "src/exercices/can/canNY-2025/can3NY-2025-Q1.ts",
-      "lastChecked": "2026-07-08T09:06:02.361Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:08:22.874Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508902874-6pgwbi1omok.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "24396": {
       "uuid": "24396",
       "ref": "24396",
       "file": "src/exercices/can/can2a-2024/can2a-2024-Q24.ts",
-      "lastChecked": "2026-07-08T09:41:13.598Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:08:38.452Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508918452-s98pajqxsnd.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "25430": {
       "uuid": "25430",
       "ref": "25430",
       "file": "src/exercices/ch/2mFctPoly1-3.ts",
-      "lastChecked": "2026-07-08T09:06:25.006Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:09:57.693Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508997692-ihtd5ptcz1n.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "26434": {
       "uuid": "26434",
       "ref": "26434",
       "file": "src/exercices/EAMPremiere/EAM-CETechno-2026-Q8.ts",
-      "lastChecked": "2026-07-08T09:06:43.240Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:10:11.514Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783509011513-rrfj5ei3tq8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "26491": {
       "uuid": "26491",
       "ref": "26491",
       "file": "src/exercices/can/can2a-2025/can2a-2025-Q1.ts",
-      "lastChecked": "2026-07-08T09:06:54.643Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:10:25.539Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783509025539-4kgu92cw5ks.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "27504": {
       "uuid": "27504",
       "ref": "27504",
       "file": "src/exercices/can/canNY-2025/can1NY-2025-Q2.ts",
-      "lastChecked": "2026-07-08T09:07:12.519Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:11:22.334Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783509082333-bgoiegmdh8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "28997": {
       "uuid": "28997",
       "ref": "28997",
       "file": "src/exercices/2e/2F20-4-old.ts",
-      "lastChecked": "2026-07-08T09:07:15.368Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:11:52.557Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Erreur d'import: Directory import '/home/nathan/Documents/projets/mathalea/node_modules/.pnpm/apigeom@git+https+++forge.apps.education.fr",
+      "variationsTested": [],
       "diagnostics": []
     },
     "29066": {
-      "uuid": "29066",
-      "ref": "29066",
-      "file": "src/exercices/can/can3a-2024/can3-2024-Q12.ts",
-      "lastChecked": "2026-07-08T09:07:48.451Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "29202": {
-      "uuid": "29202",
-      "ref": "29202",
-      "file": "src/exercices/1e/1AN10-1-old.ts",
-      "lastChecked": "2026-07-08T09:07:49.942Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=5:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=9:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "29676": {
-      "uuid": "29676",
-      "ref": "29676",
-      "file": "src/exercices/EAMPremiere/EAM-ANnonSpe-2026-Q7.ts",
-      "lastChecked": "2026-07-08T09:08:03.266Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "29736": {
-      "uuid": "29736",
-      "ref": "29736",
-      "file": "src/exercices/can/canc3a-2025/canc3a-2025-Q17.ts",
-      "lastChecked": "2026-07-08T09:08:14.727Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "29957": {
-      "uuid": "29957",
-      "ref": "29957",
-      "file": "src/exercices/can/c3/canc3C26.ts",
-      "lastChecked": "2026-07-08T09:08:33.257Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "31049": {
-      "uuid": "31049",
-      "ref": "31049",
-      "file": "src/exercices/EAMPremiere/EAM-CENonSpe-2026-Q12.ts",
-      "lastChecked": "2026-07-08T09:08:40.487Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "31871": {
-      "uuid": "31871",
-      "ref": "31871",
-      "file": "src/exercices/can/canNY-2025/can6NY-2025-Q13.ts",
-      "lastChecked": "2026-07-08T09:08:55.991Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "32037": {
-      "uuid": "32037",
-      "ref": "32037",
-      "file": "src/exercices/can/canNY-2025/can6NY-2025-Q5.ts",
-      "lastChecked": "2026-07-08T09:09:09.412Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "34155": {
-      "uuid": "34155",
-      "ref": "34155",
-      "file": "src/exercices/can/can3a-2024/can3-2024-Q23.ts",
-      "lastChecked": "2026-07-08T09:09:18.922Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "34224": {
-      "uuid": "34224",
-      "ref": "34224",
-      "file": "src/exercices/can/can4a-2025/can4a-2025-Q17.ts",
-      "lastChecked": "2026-07-08T09:09:20.429Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=false:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "35282": {
-      "uuid": "35282",
-      "ref": "35282",
-      "file": "src/exercices/6e/6G10-7Old.ts",
-      "lastChecked": "2026-07-08T09:27:01.069Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=true:sup3=1:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=true:sup3=4:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=true:sup3=6:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=false:sup3=1:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=false:sup3=4:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=false:sup3=6:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=true:sup3=1:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=true:sup3=4:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=true:sup3=6:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=false:sup3=1:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=false:sup3=4:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=false:sup3=6:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=true:sup3=1:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=true:sup3=4:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=true:sup3=6:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=false:sup3=1:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=false:sup3=4:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=false:sup3=6:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "35553": {
-      "uuid": "35553",
-      "ref": "35553",
-      "file": "src/exercices/EAMPremiere/EAM-CETechno-2026-Q4.ts",
-      "lastChecked": "2026-07-08T09:10:04.505Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "36031": {
-      "uuid": "36031",
-      "ref": "36031",
-      "file": "src/exercices/can/canc3a-2024/canc3a-2024-Q21.ts",
-      "lastChecked": "2026-07-08T09:10:16.844Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "37267": {
-      "uuid": "37267",
-      "ref": "37267",
-      "file": "src/exercices/6e/6N2K-3-old.ts",
-      "lastChecked": "2026-07-08T09:10:49.365Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "41187": {
-      "uuid": "41187",
-      "ref": "41187",
-      "file": "src/exercices/4e/4G20-4-old.ts",
-      "lastChecked": "2026-07-08T09:10:58.907Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "41254": {
       "uuid": "41254",
       "ref": "41254",
       "file": "src/exercices/5e/5R20-5Old.ts",
-      "lastChecked": "2026-07-08T09:11:01.880Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:25:57.853Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Timeout (>50s) : exercice bloqué",
+      "variationsTested": [],
       "diagnostics": []
     },
     "42368": {
-      "uuid": "42368",
-      "ref": "42368",
-      "file": "src/exercices/EAMPremiere/EAM-FMnonSpe-2026-Q3.ts",
-      "lastChecked": "2026-07-08T09:11:05.833Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "43038": {
       "uuid": "43038",
@@ -1667,1254 +1343,556 @@
       "uuid": "10148",
       "ref": "5G24-1",
       "file": "src/exercices/5e/5G24-1.ts",
-      "lastChecked": "2026-07-08T09:42:38.356Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:54:36.440Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508076439-djwza3xs7s6.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "can6M20": {
       "uuid": "10697",
       "ref": "can6M20",
       "file": "src/exercices/can/6e/can6M20.ts",
-      "lastChecked": "2026-07-08T09:42:51.862Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:55:10.989Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508110989-bgoiegmdh8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "1A-F02-14": {
       "uuid": "11090",
       "ref": "1A-F02-14",
       "file": "src/exercices/1e/1A-F02-14.ts",
-      "lastChecked": "2026-07-08T09:42:54.458Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:55:44.891Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508144891-rrfj5ei3tq8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "3L13-7": {
       "uuid": "11569",
       "ref": "3L13-7",
       "file": "src/exercices/3e/3L13-7.ts",
-      "lastChecked": "2026-07-08T09:43:04.659Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=1:sup3=0:sup4=1:sup5=true",
-        "sup=1:sup2=1:sup3=0:sup4=1:sup5=false",
-        "sup=1:sup2=1:sup3=0:sup4=2:sup5=true",
-        "sup=1:sup2=1:sup3=0:sup4=2:sup5=false",
-        "sup=1:sup2=1:sup3=0:sup4=3:sup5=true",
-        "sup=1:sup2=1:sup3=0:sup4=3:sup5=false",
-        "sup=1:sup2=1:sup3=100:sup4=1:sup5=true",
-        "sup=1:sup2=1:sup3=100:sup4=1:sup5=false",
-        "sup=1:sup2=1:sup3=100:sup4=2:sup5=true",
-        "sup=1:sup2=1:sup3=100:sup4=2:sup5=false",
-        "sup=1:sup2=1:sup3=100:sup4=3:sup5=true",
-        "sup=1:sup2=1:sup3=100:sup4=3:sup5=false",
-        "sup=1:sup2=1:sup3=101:sup4=1:sup5=true",
-        "sup=1:sup2=1:sup3=101:sup4=1:sup5=false",
-        "sup=1:sup2=1:sup3=101:sup4=2:sup5=true",
-        "sup=1:sup2=1:sup3=101:sup4=2:sup5=false",
-        "sup=1:sup2=1:sup3=101:sup4=3:sup5=true",
-        "sup=1:sup2=1:sup3=101:sup4=3:sup5=false",
-        "sup=1:sup2=4:sup3=0:sup4=1:sup5=true",
-        "sup=1:sup2=4:sup3=0:sup4=1:sup5=false",
-        "sup=1:sup2=4:sup3=0:sup4=2:sup5=true",
-        "sup=1:sup2=4:sup3=0:sup4=2:sup5=false",
-        "sup=1:sup2=4:sup3=0:sup4=3:sup5=true",
-        "sup=1:sup2=4:sup3=0:sup4=3:sup5=false",
-        "sup=1:sup2=4:sup3=100:sup4=1:sup5=true",
-        "sup=1:sup2=4:sup3=100:sup4=1:sup5=false",
-        "sup=1:sup2=4:sup3=100:sup4=2:sup5=true"
-      ],
+      "lastChecked": "2026-07-08T10:56:01.764Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508161763-upy6qhsmcwa.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "can1D22": {
       "uuid": "12089",
       "ref": "can1D22",
       "file": "src/exercices/can/1e/can1D22.ts",
-      "lastChecked": "2026-07-08T09:43:49.476Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:56:17.252Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508177251-tlab1afzj2d.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "2S11-2": {
       "uuid": "12444",
       "ref": "2S11-2",
       "file": "src/exercices/2e/2S11-2.ts",
-      "lastChecked": "2026-07-08T09:43:50.706Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:56:32.747Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508192746-xe1isg82x1.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "can4L04": {
       "uuid": "12514",
       "ref": "can4L04",
       "file": "src/exercices/can/4e/can4L04.ts",
-      "lastChecked": "2026-07-08T09:43:54.532Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:56:48.498Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508208498-tlab1afzj2d.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "6N1H-2": {
       "uuid": "12774",
       "ref": "6N1H-2",
       "file": "src/exercices/6e/6N1H-2.ts",
-      "lastChecked": "2026-07-08T09:44:00.189Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:57:19.464Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508239464-2lvd8j2m8m2.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "can3G03": {
       "uuid": "14145",
       "ref": "can3G03",
       "file": "src/exercices/can/3e/can3G03.ts",
-      "lastChecked": "2026-07-08T09:44:17.644Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:58:02.135Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508282135-0w1wo33qv9b.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "1A-C04-6": {
       "uuid": "14552",
       "ref": "1A-C04-6",
       "file": "src/exercices/1e/1A-C04-6.ts",
-      "lastChecked": "2026-07-08T09:44:20.622Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:58:32.422Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508312421-9kqtqkz711s.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "CM2N3B-1": {
       "uuid": "14688",
       "ref": "CM2N3B-1",
       "file": "src/exercices/CM2/CM2N3B-1.ts",
-      "lastChecked": "2026-07-08T09:44:22.070Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:58:46.745Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508326745-pdx2cmldp1.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "1A-F03-4": {
       "uuid": "15233",
       "ref": "1A-F03-4",
       "file": "src/exercices/1e/1A-F03-4.ts",
-      "lastChecked": "2026-07-08T09:44:25.015Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T10:59:45.914Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508385913-fxns4fs30bi.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "TSG2-20": {
       "uuid": "15404",
       "ref": "TSG2-20",
       "file": "src/exercices/TSpe/TSG2-20.ts",
-      "lastChecked": "2026-07-08T09:44:28.397Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:00:02.689Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508402688-0w1wo33qv9b.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "1A-C11-5": {
       "uuid": "15638",
       "ref": "1A-C11-5",
       "file": "src/exercices/1e/1A-C11-5.ts",
-      "lastChecked": "2026-07-08T09:44:29.901Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:00:19.817Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508419817-9kqtqkz711s.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "can3G06": {
       "uuid": "15803",
       "ref": "can3G06",
       "file": "src/exercices/can/3e/can3G06.ts",
-      "lastChecked": "2026-07-08T09:44:31.314Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:00:38.898Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508438897-bgoiegmdh8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "6N2A-2": {
       "uuid": "15841",
       "ref": "6N2A-2",
       "file": "src/exercices/6e/6N2A-2.ts",
-      "lastChecked": "2026-07-08T09:44:32.895Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:00:57.485Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508457484-dbvk5062hqn.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "4C2QCM-04": {
       "uuid": "16773",
       "ref": "4C2QCM-04",
       "file": "src/exercices/QCMBrevet/A2021/MS22E1Q1.ts",
-      "lastChecked": "2026-07-08T09:44:39.009Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:01:14.348Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508474347-ti3temz04kd.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "can3F06": {
       "uuid": "17987",
       "ref": "can3F06",
       "file": "src/exercices/can/3e/can3F06.ts",
-      "lastChecked": "2026-07-08T09:44:52.669Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:02:04.978Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508524977-tlab1afzj2d.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "1A-C07-4": {
       "uuid": "18326",
       "ref": "1A-C07-4",
       "file": "src/exercices/1e/1A-C07-4.ts",
-      "lastChecked": "2026-07-08T09:44:54.028Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:02:22.619Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508542618-rrfj5ei3tq8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "6N2B-4": {
       "uuid": "18559",
       "ref": "6N2B-4",
       "file": "src/exercices/6e/6N2B-4.ts",
-      "lastChecked": "2026-07-08T09:45:05.030Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=1:sup4=undefined:sup5=undefined",
-        "sup=true:sup2=true:sup3=2:sup4=undefined:sup5=undefined",
-        "sup=true:sup2=true:sup3=3:sup4=undefined:sup5=undefined",
-        "sup=true:sup2=false:sup3=1:sup4=undefined:sup5=undefined",
-        "sup=true:sup2=false:sup3=2:sup4=undefined:sup5=undefined",
-        "sup=true:sup2=false:sup3=3:sup4=undefined:sup5=undefined",
-        "sup=false:sup2=true:sup3=1:sup4=undefined:sup5=undefined",
-        "sup=false:sup2=true:sup3=2:sup4=undefined:sup5=undefined",
-        "sup=false:sup2=true:sup3=3:sup4=undefined:sup5=undefined",
-        "sup=false:sup2=false:sup3=1:sup4=undefined:sup5=undefined",
-        "sup=false:sup2=false:sup3=2:sup4=undefined:sup5=undefined",
-        "sup=false:sup2=false:sup3=3:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:02:41.492Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508561492-raevrekx6fp.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "6G0-6": {
       "uuid": "18672",
       "ref": "6G0-6",
       "file": "src/exercices/6e/6G0-6.ts",
-      "lastChecked": "2026-07-08T09:45:24.247Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:03:00.796Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508580795-bd5f5tkdvq.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "5R13": {
       "uuid": "19060",
       "ref": "5R13",
       "file": "src/exercices/5e/5R13.ts",
-      "lastChecked": "2026-07-08T09:45:25.891Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=0:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=4:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:03:18.383Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508598381-2lvd8j2m8m2.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "5G30-2": {
       "uuid": "19812",
       "ref": "5G30-2",
       "file": "src/exercices/5e/5G30-2.ts",
-      "lastChecked": "2026-07-08T09:45:32.117Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=5:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:03:59.360Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508639360-tmp9epk583b.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "TSG1-05": {
       "uuid": "20106",
       "ref": "TSG1-05",
       "file": "src/exercices/TSpe/TSG1-05.ts",
-      "lastChecked": "2026-07-08T09:45:37.106Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:04:18.928Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508658928-bgoiegmdh8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "2G11-3": {
       "uuid": "20907",
       "ref": "2G11-3",
       "file": "src/exercices/2e/2G11-3.ts",
-      "lastChecked": "2026-07-08T09:45:38.647Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=false:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:04:39.530Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508679530-9vbujsh106a.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "1A-F04-2": {
       "uuid": "21516",
       "ref": "1A-F04-2",
       "file": "src/exercices/1e/1A-F04-2.ts",
-      "lastChecked": "2026-07-08T09:45:42.012Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:05:00.063Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508700060-ggebw9e21i.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "1Gen-A100": {
       "uuid": "21517",
       "ref": "1Gen-A100",
       "file": "src/exercices/1eGen/1Gen-A101.ts",
-      "lastChecked": "2026-07-08T09:05:10.819Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=6:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=6:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=11:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=11:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:05:21.303Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508721302-e3y4u5c7ztv.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "1Gen-A102": {
       "uuid": "21518",
       "ref": "1Gen-A102",
       "file": "src/exercices/1eGen/1Gen-A102.ts",
-      "lastChecked": "2026-07-08T09:05:18.232Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=4:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:05:39.909Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508739908-dastexw1uc.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "3L13-3": {
       "uuid": "22412",
       "ref": "3L13-3",
       "file": "src/exercices/3e/3L13-3.ts",
-      "lastChecked": "2026-07-08T09:05:33.149Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=0:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=0:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=7:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=7:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=13:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=13:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:06:36.598Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508796597-vmbr0bdz7fj.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "4G41": {
       "uuid": "22810",
       "ref": "4G41",
       "file": "src/exercices/4e/4G41.ts",
-      "lastChecked": "2026-07-08T09:05:42.127Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=false:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:07:20.654Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508840654-v18yp8necy.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "1G10-4": {
       "uuid": "23033",
       "ref": "1G10-4",
       "file": "src/exercices/1e/1G10-4.ts",
-      "lastChecked": "2026-07-08T09:05:46.127Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=4:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:07:55.277Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508875277-dastexw1uc.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "1A-P05-3": {
       "uuid": "24438",
       "ref": "1A-P05-3",
       "file": "src/exercices/1e/1A-P05-3.ts",
-      "lastChecked": "2026-07-08T09:06:03.855Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:08:57.101Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508937100-rrfj5ei3tq8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "1A-A01-3": {
       "uuid": "24962",
       "ref": "1A-A01-3",
       "file": "src/exercices/1e/1A-A01-3.ts",
-      "lastChecked": "2026-07-08T09:06:16.927Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=1-2-3-4-5-6-7-8:sup3=false:sup4=undefined:sup5=undefined",
-        "sup=false:sup2=1-2-3-4-5-6-7-8:sup3=false:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:09:13.358Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508953358-rrfj5ei3tq8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "TSA5-31": {
       "uuid": "25135",
       "ref": "TSA5-31",
       "file": "src/exercices/TSpe/TSA5-31.ts",
-      "lastChecked": "2026-07-08T09:46:20.869Z",
+      "lastChecked": "2026-07-08T11:09:28.364Z",
       "status": "failing",
-      "checkedLevel": 2,
-      "failureMode": "compile_error",
-      "notes": "[sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter | error: unclosed delimiter",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=4:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": [
-        "error: unclosed delimiter",
-        "error: unclosed delimiter",
-        "error: unclosed delimiter",
-        "error: unclosed delimiter",
-        "error: unclosed delimiter"
-      ]
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508968364-3p8wwo3n9vp.typ'",
+      "variationsTested": [],
+      "diagnostics": []
     },
     "can2F12": {
       "uuid": "25143",
       "ref": "can2F12",
       "file": "src/exercices/can/2e/can2F12.ts",
-      "lastChecked": "2026-07-08T09:06:23.518Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:09:42.507Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783508982506-dastexw1uc.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "1A-F01-4": {
       "uuid": "26795",
       "ref": "1A-F01-4",
       "file": "src/exercices/1e/1A-F01-4.ts",
-      "lastChecked": "2026-07-08T09:06:56.009Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:10:40.898Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783509040897-rrfj5ei3tq8.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "1A-C10-5": {
       "uuid": "26802",
       "ref": "1A-C10-5",
       "file": "src/exercices/1e/1A-C10-5.ts",
-      "lastChecked": "2026-07-08T09:41:16.555Z",
+      "lastChecked": "2026-07-08T11:10:55.480Z",
       "status": "failing",
-      "checkedLevel": 2,
-      "failureMode": "compile_error",
-      "notes": "[sup=true:sup2=true:sup3=undefined:sup4=true:sup5=true] error: unclosed delimiter | error: unclosed delimiter",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=true",
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=false",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=true",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=false",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=true",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=false",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=true",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=false",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=true",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=false",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=true",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=false",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=true",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=false",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=true",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=false"
-      ],
-      "diagnostics": [
-        "error: unclosed delimiter",
-        "error: unclosed delimiter"
-      ]
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783509055480-rrfj5ei3tq8.typ'",
+      "variationsTested": [],
+      "diagnostics": []
     },
     "1A-F02-11": {
       "uuid": "27154",
       "ref": "1A-F02-11",
       "file": "src/exercices/1e/1A-F02-11.ts",
-      "lastChecked": "2026-07-08T09:07:11.027Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:11:09.772Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783509069772-8ksczuzah3d.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "2N50-2": {
       "uuid": "27741",
       "ref": "2N50-2",
       "file": "src/exercices/2e/2N50-2.ts",
-      "lastChecked": "2026-07-08T09:07:13.910Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
+      "lastChecked": "2026-07-08T11:11:36.591Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Worker error: ENOENT: no such file or directory, open '/tmp/typst-batch-check-worker/1783509096590-bd5f5tkdvq.typ'",
+      "variationsTested": [],
       "diagnostics": []
     },
     "2F20-4": {
-      "uuid": "28998",
-      "ref": "2F20-4",
-      "file": "src/exercices/2e/2F20-4.ts",
-      "lastChecked": "2026-07-08T09:07:32.715Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "1AN10-1": {
-      "uuid": "29212",
-      "ref": "1AN10-1",
-      "file": "src/exercices/1e/1AN10-1.ts",
-      "lastChecked": "2026-07-08T09:07:54.447Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=5:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=9:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "6G3B-2": {
-      "uuid": "29407",
-      "ref": "6G3B-2",
-      "file": "src/exercices/6e/6G3B-2.ts",
-      "lastChecked": "2026-07-08T09:07:58.917Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=5:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "2N30-3": {
-      "uuid": "29919",
-      "ref": "2N30-3",
-      "file": "src/exercices/2e/2N30-3.ts",
-      "lastChecked": "2026-07-08T09:41:23.450Z",
-      "status": "failing",
-      "checkedLevel": 2,
-      "failureMode": "compile_error",
-      "notes": "[sup=1:sup2=true:sup3=true:sup4=true:sup5=2] error: unclosed delimiter | error: unclosed delimiter | error: unexpected underscore",
-      "variationsTested": [
-        "sup=1:sup2=true:sup3=true:sup4=true:sup5=1",
-        "sup=1:sup2=true:sup3=true:sup4=true:sup5=2",
-        "sup=1:sup2=true:sup3=true:sup4=true:sup5=3",
-        "sup=1:sup2=true:sup3=true:sup4=false:sup5=1",
-        "sup=1:sup2=true:sup3=true:sup4=false:sup5=2",
-        "sup=1:sup2=true:sup3=true:sup4=false:sup5=3",
-        "sup=1:sup2=true:sup3=false:sup4=true:sup5=1",
-        "sup=1:sup2=true:sup3=false:sup4=true:sup5=2",
-        "sup=1:sup2=true:sup3=false:sup4=true:sup5=3",
-        "sup=1:sup2=true:sup3=false:sup4=false:sup5=1",
-        "sup=1:sup2=true:sup3=false:sup4=false:sup5=2",
-        "sup=1:sup2=true:sup3=false:sup4=false:sup5=3",
-        "sup=1:sup2=false:sup3=true:sup4=true:sup5=1",
-        "sup=1:sup2=false:sup3=true:sup4=true:sup5=2",
-        "sup=1:sup2=false:sup3=true:sup4=true:sup5=3",
-        "sup=1:sup2=false:sup3=true:sup4=false:sup5=1",
-        "sup=1:sup2=false:sup3=true:sup4=false:sup5=2",
-        "sup=1:sup2=false:sup3=true:sup4=false:sup5=3",
-        "sup=1:sup2=false:sup3=false:sup4=true:sup5=1",
-        "sup=1:sup2=false:sup3=false:sup4=true:sup5=2",
-        "sup=1:sup2=false:sup3=false:sup4=true:sup5=3",
-        "sup=1:sup2=false:sup3=false:sup4=false:sup5=1",
-        "sup=1:sup2=false:sup3=false:sup4=false:sup5=2",
-        "sup=1:sup2=false:sup3=false:sup4=false:sup5=3",
-        "sup=3:sup2=true:sup3=true:sup4=true:sup5=1",
-        "sup=3:sup2=true:sup3=true:sup4=true:sup5=2",
-        "sup=3:sup2=true:sup3=true:sup4=true:sup5=3"
-      ],
-      "diagnostics": [
-        "error: unclosed delimiter",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unclosed delimiter",
-        "error: unexpected underscore",
-        "error: unexpected hat",
-        "error: unexpected underscore",
-        "error: unexpected hat"
-      ]
+      "type": "ready"
     },
     "canc3C25": {
-      "uuid": "29956",
-      "ref": "canc3C25",
-      "file": "src/exercices/can/c3/canc3C25.ts",
-      "lastChecked": "2026-07-08T09:08:31.732Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "CM2N3J-1": {
-      "uuid": "30800",
-      "ref": "CM2N3J-1",
-      "file": "src/exercices/CM2/CM2N3J-1.ts",
-      "lastChecked": "2026-07-08T09:08:34.583Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "2N52-5": {
-      "uuid": "31017",
-      "ref": "2N52-5",
-      "file": "src/exercices/2e/2N52-5.ts",
-      "lastChecked": "2026-07-08T09:08:36.064Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "can6C26": {
-      "uuid": "31096",
-      "ref": "can6C26",
-      "file": "src/exercices/can/6e/can6C26.ts",
-      "lastChecked": "2026-07-08T09:08:52.962Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "2G12-3": {
-      "uuid": "31760",
-      "ref": "2G12-3",
-      "file": "src/exercices/2e/2G12-3.ts",
-      "lastChecked": "2026-07-08T09:08:54.442Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "1A-C01-5": {
-      "uuid": "32014",
-      "ref": "1A-C01-5",
-      "file": "src/exercices/1e/1A-C01-5.ts",
-      "lastChecked": "2026-07-08T09:08:57.481Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "can1P02": {
-      "uuid": "32394",
-      "ref": "can1P02",
-      "file": "src/exercices/can/1e/can1P02.ts",
-      "lastChecked": "2026-07-08T09:09:10.960Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "can1P02-1": {
-      "uuid": "32395",
-      "ref": "can1P02-1",
-      "file": "src/exercices/can/1e/can1P02-1.ts",
-      "lastChecked": "2026-07-08T09:09:12.748Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "5G11-3": {
-      "uuid": "34032",
-      "ref": "5G11-3",
-      "file": "src/exercices/5e/5G11-3.ts",
-      "lastChecked": "2026-07-08T09:09:14.230Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "1A-E05-2": {
-      "uuid": "34543",
-      "ref": "1A-E05-2",
-      "file": "src/exercices/1e/1A-E05-2.ts",
-      "lastChecked": "2026-07-08T09:09:23.565Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "6N1A-2": {
-      "uuid": "34579",
-      "ref": "6N1A-2",
-      "file": "src/exercices/6e/6N1A-2.js",
-      "lastChecked": "2026-07-08T09:09:35.424Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "TSG2-34": {
-      "uuid": "34648",
-      "ref": "TSG2-34",
-      "file": "src/exercices/TSpe/TSG2-34.ts",
-      "lastChecked": "2026-07-08T09:09:49.166Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "1A-P03-2": {
-      "uuid": "35408",
-      "ref": "1A-P03-2",
-      "file": "src/exercices/1e/1A-P03-2.ts",
-      "lastChecked": "2026-07-08T09:09:52.829Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
-        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "5A12-1": {
-      "uuid": "36074",
-      "ref": "5A12-1",
-      "file": "src/exercices/5e/5A12-1.ts",
-      "lastChecked": "2026-07-08T09:10:18.570Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "5G20-0": {
-      "uuid": "36116",
-      "ref": "5G20-0",
-      "file": "src/exercices/5e/5G20-0.ts",
-      "lastChecked": "2026-07-08T09:10:20.290Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "TSG2-33": {
-      "uuid": "36144",
-      "ref": "TSG2-33",
-      "file": "src/exercices/TSpe/TSG2-33.ts",
-      "lastChecked": "2026-07-08T09:10:30.249Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=true:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=false:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "6N2E-2": {
-      "uuid": "36573",
-      "ref": "6N2E-2",
-      "file": "src/exercices/6e/6N2E-2.ts",
-      "lastChecked": "2026-07-08T09:10:33.585Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "2F20-1": {
-      "uuid": "36795",
-      "ref": "2F20-1",
-      "file": "src/exercices/2e/2F20-1.ts",
-      "lastChecked": "2026-07-08T09:10:35.217Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=1:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=3:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "6N2K-3": {
-      "uuid": "37268",
-      "ref": "6N2K-3",
-      "file": "src/exercices/6e/6N2K-3.ts",
-      "lastChecked": "2026-07-08T09:10:52.708Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
-        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "can2P02": {
-      "uuid": "38207",
-      "ref": "can2P02",
-      "file": "src/exercices/can/2e/can2P02.ts",
-      "lastChecked": "2026-07-08T09:10:55.961Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "can6N15": {
-      "uuid": "41030",
-      "ref": "can6N15",
-      "file": "src/exercices/can/6e/can6N15.ts",
-      "lastChecked": "2026-07-08T09:10:57.437Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=4:sup2=0:sup3=2:sup4=false:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "4G20-4": {
-      "uuid": "41188",
-      "ref": "4G20-4",
-      "file": "src/exercices/4e/4G20-4.ts",
-      "lastChecked": "2026-07-08T09:11:00.323Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "1A-C12-1": {
-      "uuid": "42237",
-      "ref": "1A-C12-1",
-      "file": "src/exercices/1e/1A-C12-1.ts",
-      "lastChecked": "2026-07-08T09:11:04.032Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "canc3N05": {
-      "uuid": "42453",
-      "ref": "canc3N05",
-      "file": "src/exercices/can/c3/canc3N05.ts",
-      "lastChecked": "2026-07-08T09:11:18.810Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "1A-C07-2": {
-      "uuid": "42707",
-      "ref": "1A-C07-2",
-      "file": "src/exercices/1e/1A-C07-2.ts",
-      "lastChecked": "2026-07-08T09:11:20.243Z",
-      "status": "passing",
-      "checkedLevel": 2,
-      "failureMode": null,
-      "notes": "",
-      "variationsTested": [
-        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
-      ],
-      "diagnostics": []
+      "type": "ready"
     },
     "1AL11-1": {
       "uuid": "42983",
@@ -18701,6 +17679,18 @@
         "sup=1:sup2=1:sup3=3:sup4=3:sup5=2",
         "sup=1:sup2=1:sup3=3:sup4=3:sup5=3"
       ],
+      "diagnostics": []
+    },
+    "4b495": {
+      "uuid": "4b495",
+      "ref": "4b495",
+      "file": "src/exercices/3e/3L11-13.ts",
+      "lastChecked": "2026-07-08T11:28:44.551Z",
+      "status": "failing",
+      "checkedLevel": 0,
+      "failureMode": "runtime_error",
+      "notes": "Timeout (>20s) : exercice bloqué",
+      "variationsTested": [],
       "diagnostics": []
     }
   }
