@@ -203,8 +203,8 @@ export default class Exercice implements IExercice {
     // ///////////////////////////////////////////////
     // Mise en forme de l'exercice
     // ///////////////////////////////////////////////
-    this.spacing = 1 // Interligne des questions
-    this.spacingCorr = 1 // Interligne des réponses
+    this.spacing = 0 // Interligne des questions 0 ou 1 ne change rien en HTML mis change la sortie LaTeX !
+    this.spacingCorr = 0 // Interligne des réponses 0 ou 1 ne change rien en HTML mis change la sortie LaTeX !
 
     // ////////////////////////////////////////////
     // Gestion de la sortie LateX
