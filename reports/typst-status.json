@@ -1,14 +1,14 @@
 {
   "version": 1,
-  "lastRun": "2026-07-08T13:06:53.996Z",
+  "lastRun": "2026-07-08T13:39:57.029Z",
   "exercises": {
     "10151": {
       "uuid": "10151",
       "ref": "10151",
       "file": "src/exercices/EAMPremiere/EAM-CESpe-2026-Q2.ts",
-      "lastChecked": "2026-07-08T11:36:39.246Z",
+      "lastChecked": "2026-07-08T13:30:59.261Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -27,9 +27,9 @@
       "uuid": "10886",
       "ref": "10886",
       "file": "src/exercices/can/canNY-2025/can1NY-2025-Q15.ts",
-      "lastChecked": "2026-07-08T11:36:39.875Z",
+      "lastChecked": "2026-07-08T13:31:05.468Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -41,9 +41,9 @@
       "uuid": "12773",
       "ref": "12773",
       "file": "src/exercices/6e/6N1H-2-old.ts",
-      "lastChecked": "2026-07-08T11:36:49.833Z",
+      "lastChecked": "2026-07-08T13:31:37.123Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -57,9 +57,9 @@
       "uuid": "13440",
       "ref": "13440",
       "file": "src/exercices/can/can1a-2025/can1a-2025-Q15.ts",
-      "lastChecked": "2026-07-08T11:36:50.666Z",
+      "lastChecked": "2026-07-08T13:31:41.559Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -71,9 +71,9 @@
       "uuid": "13606",
       "ref": "13606",
       "file": "src/exercices/EAMPremiere/EAM-CENonSpe-2026-Q4.ts",
-      "lastChecked": "2026-07-08T11:36:50.720Z",
+      "lastChecked": "2026-07-08T13:31:42.253Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -92,9 +92,9 @@
       "uuid": "14546",
       "ref": "14546",
       "file": "src/exercices/can/canTspea-2025/canTspea-2025-Q29.ts",
-      "lastChecked": "2026-07-08T11:36:50.935Z",
+      "lastChecked": "2026-07-08T13:31:48.311Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -106,9 +106,9 @@
       "uuid": "14867",
       "ref": "14867",
       "file": "src/exercices/can/canNY-2025/can6NY-2025-Q20.ts",
-      "lastChecked": "2026-07-08T11:36:51.080Z",
+      "lastChecked": "2026-07-08T13:31:50.417Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -120,9 +120,9 @@
       "uuid": "17654",
       "ref": "17654",
       "file": "src/exercices/can/canNY-2025/can5NY-2025-Q17.ts",
-      "lastChecked": "2026-07-08T11:36:54.011Z",
+      "lastChecked": "2026-07-08T13:32:02.903Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -134,9 +134,9 @@
       "uuid": "17868",
       "ref": "17868",
       "file": "src/exercices/can/can1a-2024/can1a-2024-Q17.ts",
-      "lastChecked": "2026-07-08T11:36:54.071Z",
+      "lastChecked": "2026-07-08T13:32:03.620Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -148,9 +148,9 @@
       "uuid": "19067",
       "ref": "19067",
       "file": "src/exercices/can/can5a-2024/can5a-2024-Q8.ts",
-      "lastChecked": "2026-07-08T11:36:57.050Z",
+      "lastChecked": "2026-07-08T13:32:22.169Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -162,9 +162,9 @@
       "uuid": "21957",
       "ref": "21957",
       "file": "src/exercices/can/canNY-2025/can4NY-2025-Q26.ts",
-      "lastChecked": "2026-07-08T11:36:58.881Z",
+      "lastChecked": "2026-07-08T13:32:34.647Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -176,9 +176,9 @@
       "uuid": "22207",
       "ref": "22207",
       "file": "src/exercices/EAMPremiere/EAM-FMSpe-2026-Q3.ts",
-      "lastChecked": "2026-07-08T11:36:58.905Z",
+      "lastChecked": "2026-07-08T13:32:35.517Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -197,9 +197,9 @@
       "uuid": "22787",
       "ref": "22787",
       "file": "src/exercices/can/canNY-2025/can4NY-2025-Q17.ts",
-      "lastChecked": "2026-07-08T11:36:59.349Z",
+      "lastChecked": "2026-07-08T13:32:46.301Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -211,9 +211,9 @@
       "uuid": "22907",
       "ref": "22907",
       "file": "src/exercices/can/canc3a-CM1-2025/canc3a-CM1-2025-Q11.ts",
-      "lastChecked": "2026-07-08T11:36:59.543Z",
+      "lastChecked": "2026-07-08T13:32:48.697Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -225,9 +225,9 @@
       "uuid": "23241",
       "ref": "23241",
       "file": "src/exercices/EAMPremiere/EAM-CESpe-2026-Q7.ts",
-      "lastChecked": "2026-07-08T11:36:59.739Z",
+      "lastChecked": "2026-07-08T13:32:51.619Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -246,9 +246,9 @@
       "uuid": "24246",
       "ref": "24246",
       "file": "src/exercices/can/canNY-2025/can3NY-2025-Q1.ts",
-      "lastChecked": "2026-07-08T11:37:00.330Z",
+      "lastChecked": "2026-07-08T13:32:57.864Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -260,9 +260,9 @@
       "uuid": "24396",
       "ref": "24396",
       "file": "src/exercices/can/can2a-2024/can2a-2024-Q24.ts",
-      "lastChecked": "2026-07-08T11:37:00.356Z",
+      "lastChecked": "2026-07-08T13:32:58.651Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -274,9 +274,9 @@
       "uuid": "25430",
       "ref": "25430",
       "file": "src/exercices/ch/2mFctPoly1-3.ts",
-      "lastChecked": "2026-07-08T11:37:03.761Z",
+      "lastChecked": "2026-07-08T13:33:11.054Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -296,9 +296,9 @@
       "uuid": "26434",
       "ref": "26434",
       "file": "src/exercices/EAMPremiere/EAM-CETechno-2026-Q8.ts",
-      "lastChecked": "2026-07-08T11:37:08.020Z",
+      "lastChecked": "2026-07-08T13:33:21.191Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -317,9 +317,9 @@
       "uuid": "26491",
       "ref": "26491",
       "file": "src/exercices/can/can2a-2025/can2a-2025-Q1.ts",
-      "lastChecked": "2026-07-08T11:37:08.200Z",
+      "lastChecked": "2026-07-08T13:33:27.237Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -331,9 +331,9 @@
       "uuid": "27504",
       "ref": "27504",
       "file": "src/exercices/can/canNY-2025/can1NY-2025-Q2.ts",
-      "lastChecked": "2026-07-08T11:37:10.783Z",
+      "lastChecked": "2026-07-08T13:33:48.805Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -345,9 +345,9 @@
       "uuid": "28997",
       "ref": "28997",
       "file": "src/exercices/2e/2F20-4-old.ts",
-      "lastChecked": "2026-07-08T12:21:23.507Z",
+      "lastChecked": "2026-07-08T13:33:50.263Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -367,9 +367,9 @@
       "uuid": "29066",
       "ref": "29066",
       "file": "src/exercices/can/can3a-2024/can3-2024-Q12.ts",
-      "lastChecked": "2026-07-08T11:37:14.428Z",
+      "lastChecked": "2026-07-08T13:34:05.487Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -381,9 +381,9 @@
       "uuid": "29202",
       "ref": "29202",
       "file": "src/exercices/1e/1AN10-1-old.ts",
-      "lastChecked": "2026-07-08T11:37:14.461Z",
+      "lastChecked": "2026-07-08T13:34:06.182Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -397,9 +397,9 @@
       "uuid": "29676",
       "ref": "29676",
       "file": "src/exercices/EAMPremiere/EAM-ANnonSpe-2026-Q7.ts",
-      "lastChecked": "2026-07-08T11:37:14.758Z",
+      "lastChecked": "2026-07-08T13:34:12.654Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -418,9 +418,9 @@
       "uuid": "29736",
       "ref": "29736",
       "file": "src/exercices/can/canc3a-2025/canc3a-2025-Q17.ts",
-      "lastChecked": "2026-07-08T11:37:14.927Z",
+      "lastChecked": "2026-07-08T13:34:19.219Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -432,9 +432,9 @@
       "uuid": "29957",
       "ref": "29957",
       "file": "src/exercices/can/c3/canc3C26.ts",
-      "lastChecked": "2026-07-08T11:37:15.707Z",
+      "lastChecked": "2026-07-08T13:34:39.169Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -446,9 +446,9 @@
       "uuid": "31049",
       "ref": "31049",
       "file": "src/exercices/EAMPremiere/EAM-CENonSpe-2026-Q12.ts",
-      "lastChecked": "2026-07-08T11:37:15.922Z",
+      "lastChecked": "2026-07-08T13:34:42.915Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -467,9 +467,9 @@
       "uuid": "31871",
       "ref": "31871",
       "file": "src/exercices/can/canNY-2025/can6NY-2025-Q13.ts",
-      "lastChecked": "2026-07-08T11:37:16.928Z",
+      "lastChecked": "2026-07-08T13:34:51.156Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -481,9 +481,9 @@
       "uuid": "32037",
       "ref": "32037",
       "file": "src/exercices/can/canNY-2025/can6NY-2025-Q5.ts",
-      "lastChecked": "2026-07-08T11:37:17.278Z",
+      "lastChecked": "2026-07-08T13:34:57.731Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -495,9 +495,9 @@
       "uuid": "34155",
       "ref": "34155",
       "file": "src/exercices/can/can3a-2024/can3-2024-Q23.ts",
-      "lastChecked": "2026-07-08T11:37:18.151Z",
+      "lastChecked": "2026-07-08T13:35:03.133Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -509,9 +509,9 @@
       "uuid": "34224",
       "ref": "34224",
       "file": "src/exercices/can/can4a-2025/can4a-2025-Q17.ts",
-      "lastChecked": "2026-07-08T11:37:18.203Z",
+      "lastChecked": "2026-07-08T13:35:03.974Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -524,9 +524,9 @@
       "uuid": "35282",
       "ref": "35282",
       "file": "src/exercices/6e/6G10-7Old.ts",
-      "lastChecked": "2026-07-08T11:37:18.690Z",
+      "lastChecked": "2026-07-08T13:35:18.605Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -555,9 +555,9 @@
       "uuid": "35553",
       "ref": "35553",
       "file": "src/exercices/EAMPremiere/EAM-CETechno-2026-Q4.ts",
-      "lastChecked": "2026-07-08T11:37:20.207Z",
+      "lastChecked": "2026-07-08T13:35:38.151Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -576,9 +576,9 @@
       "uuid": "36031",
       "ref": "36031",
       "file": "src/exercices/can/canc3a-2024/canc3a-2024-Q21.ts",
-      "lastChecked": "2026-07-08T11:37:20.352Z",
+      "lastChecked": "2026-07-08T13:35:43.503Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -590,9 +590,9 @@
       "uuid": "37267",
       "ref": "37267",
       "file": "src/exercices/6e/6N2K-3-old.ts",
-      "lastChecked": "2026-07-08T11:37:22.062Z",
+      "lastChecked": "2026-07-08T13:35:58.017Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -605,9 +605,9 @@
       "uuid": "41187",
       "ref": "41187",
       "file": "src/exercices/4e/4G20-4-old.ts",
-      "lastChecked": "2026-07-08T11:37:22.422Z",
+      "lastChecked": "2026-07-08T13:36:02.218Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -619,9 +619,9 @@
       "uuid": "41254",
       "ref": "41254",
       "file": "src/exercices/5e/5R20-5Old.ts",
-      "lastChecked": "2026-07-08T11:37:22.552Z",
+      "lastChecked": "2026-07-08T13:36:03.610Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -633,9 +633,9 @@
       "uuid": "42368",
       "ref": "42368",
       "file": "src/exercices/EAMPremiere/EAM-FMnonSpe-2026-Q3.ts",
-      "lastChecked": "2026-07-08T11:37:22.743Z",
+      "lastChecked": "2026-07-08T13:36:05.047Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -654,9 +654,9 @@
       "uuid": "43038",
       "ref": "43038",
       "file": "src/exercices/can/can5a-2024/can5a-2024-Q17.ts",
-      "lastChecked": "2026-07-08T11:37:23.944Z",
+      "lastChecked": "2026-07-08T13:36:12.844Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -668,9 +668,9 @@
       "uuid": "45105",
       "ref": "45105",
       "file": "src/exercices/can/can3a-2026/can3a-2026-Q1.ts",
-      "lastChecked": "2026-07-08T11:37:24.160Z",
+      "lastChecked": "2026-07-08T13:36:18.944Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -683,9 +683,9 @@
       "uuid": "46234",
       "ref": "46234",
       "file": "src/exercices/5e/5L12-1Old.ts",
-      "lastChecked": "2026-07-08T11:37:24.406Z",
+      "lastChecked": "2026-07-08T13:36:23.107Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -699,9 +699,9 @@
       "uuid": "48568",
       "ref": "48568",
       "file": "src/exercices/can/canc3a-CM1-2025/canc3a-CM1-2025-Q28.ts",
-      "lastChecked": "2026-07-08T11:37:26.685Z",
+      "lastChecked": "2026-07-08T13:36:46.900Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -713,9 +713,9 @@
       "uuid": "49275",
       "ref": "49275",
       "file": "src/exercices/EAMPremiere/EAM-CENonSpe-2026-Q5.ts",
-      "lastChecked": "2026-07-08T11:37:26.718Z",
+      "lastChecked": "2026-07-08T13:36:47.609Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -734,9 +734,9 @@
       "uuid": "50663",
       "ref": "50663",
       "file": "src/exercices/4e/4A10-1Old.ts",
-      "lastChecked": "2026-07-08T11:37:31.914Z",
+      "lastChecked": "2026-07-08T13:37:10.252Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -774,9 +774,9 @@
       "uuid": "51599",
       "ref": "51599",
       "file": "src/exercices/1e/1A-P5.ts",
-      "lastChecked": "2026-07-08T11:37:36.790Z",
+      "lastChecked": "2026-07-08T13:37:41.553Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -788,9 +788,9 @@
       "uuid": "54342",
       "ref": "54342",
       "file": "src/exercices/can/can1a-2025/can1a-2025-Q26.ts",
-      "lastChecked": "2026-07-08T11:37:41.415Z",
+      "lastChecked": "2026-07-08T13:37:55.646Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -802,9 +802,9 @@
       "uuid": "56772",
       "ref": "56772",
       "file": "src/exercices/6e/6N2D-1-old.ts",
-      "lastChecked": "2026-07-08T11:37:41.561Z",
+      "lastChecked": "2026-07-08T13:37:57.681Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -842,9 +842,9 @@
       "uuid": "57117",
       "ref": "57117",
       "file": "src/exercices/can/can1a-2022/can1a-2022-Q1.ts",
-      "lastChecked": "2026-07-08T11:37:46.800Z",
+      "lastChecked": "2026-07-08T13:38:34.634Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -857,9 +857,9 @@
       "uuid": "57201",
       "ref": "57201",
       "file": "src/exercices/can/canc3a-CM1-2025/canc3a-CM1-2025-Q22.ts",
-      "lastChecked": "2026-07-08T11:37:46.829Z",
+      "lastChecked": "2026-07-08T13:38:35.956Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -871,9 +871,9 @@
       "uuid": "57688",
       "ref": "57688",
       "file": "src/exercices/can/can2a-2025/can2a-2025-Q23.ts",
-      "lastChecked": "2026-07-08T11:37:48.282Z",
+      "lastChecked": "2026-07-08T13:38:55.994Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -885,9 +885,9 @@
       "uuid": "58656",
       "ref": "58656",
       "file": "src/exercices/can/canTspea-2025/canTspea-2025-Q19.ts",
-      "lastChecked": "2026-07-08T11:37:52.177Z",
+      "lastChecked": "2026-07-08T13:39:10.622Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -899,9 +899,9 @@
       "uuid": "59072",
       "ref": "59072",
       "file": "src/exercices/can/canc3a-2024/canc3a-2024-Q13.ts",
-      "lastChecked": "2026-07-08T11:37:52.471Z",
+      "lastChecked": "2026-07-08T13:39:12.027Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -913,9 +913,9 @@
       "uuid": "60909",
       "ref": "60909",
       "file": "src/exercices/can/can4a-2024/can4-2024-Q15.ts",
-      "lastChecked": "2026-07-08T11:37:53.388Z",
+      "lastChecked": "2026-07-08T13:39:17.132Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -927,9 +927,9 @@
       "uuid": "61128",
       "ref": "61128",
       "file": "src/exercices/can/can6a-2025/can6a-2025-Q27.ts",
-      "lastChecked": "2026-07-08T11:37:53.693Z",
+      "lastChecked": "2026-07-08T13:39:19.912Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -941,9 +941,9 @@
       "uuid": "62111",
       "ref": "62111",
       "file": "src/exercices/3e/3L11-12.ts",
-      "lastChecked": "2026-07-08T11:37:54.780Z",
+      "lastChecked": "2026-07-08T13:39:25.767Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -981,9 +981,9 @@
       "uuid": "63897",
       "ref": "63897",
       "file": "src/exercices/can/can6a-2024/can6a-2024-Q20.ts",
-      "lastChecked": "2026-07-08T11:37:55.966Z",
+      "lastChecked": "2026-07-08T13:39:45.021Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1667,9 +1667,9 @@
       "uuid": "10148",
       "ref": "5G24-1",
       "file": "src/exercices/5e/5G24-1.ts",
-      "lastChecked": "2026-07-08T11:36:38.005Z",
+      "lastChecked": "2026-07-08T13:30:58.043Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1681,9 +1681,9 @@
       "uuid": "10697",
       "ref": "can6M20",
       "file": "src/exercices/can/6e/can6M20.ts",
-      "lastChecked": "2026-07-08T11:36:39.740Z",
+      "lastChecked": "2026-07-08T13:31:04.785Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1695,9 +1695,9 @@
       "uuid": "11090",
       "ref": "1A-F02-14",
       "file": "src/exercices/1e/1A-F02-14.ts",
-      "lastChecked": "2026-07-08T11:36:39.945Z",
+      "lastChecked": "2026-07-08T13:31:06.146Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1716,9 +1716,9 @@
       "uuid": "11569",
       "ref": "3L13-7",
       "file": "src/exercices/3e/3L13-7.ts",
-      "lastChecked": "2026-07-08T11:36:40.805Z",
+      "lastChecked": "2026-07-08T13:31:11.701Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1756,9 +1756,9 @@
       "uuid": "12089",
       "ref": "can1D22",
       "file": "src/exercices/can/1e/can1D22.ts",
-      "lastChecked": "2026-07-08T11:36:49.557Z",
+      "lastChecked": "2026-07-08T13:31:33.610Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1770,9 +1770,9 @@
       "uuid": "12444",
       "ref": "2S11-2",
       "file": "src/exercices/2e/2S11-2.ts",
-      "lastChecked": "2026-07-08T11:36:49.611Z",
+      "lastChecked": "2026-07-08T13:31:34.314Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1786,9 +1786,9 @@
       "uuid": "12514",
       "ref": "can4L04",
       "file": "src/exercices/can/4e/can4L04.ts",
-      "lastChecked": "2026-07-08T11:36:49.803Z",
+      "lastChecked": "2026-07-08T13:31:36.442Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1800,9 +1800,9 @@
       "uuid": "12774",
       "ref": "6N1H-2",
       "file": "src/exercices/6e/6N1H-2.ts",
-      "lastChecked": "2026-07-08T11:36:50.351Z",
+      "lastChecked": "2026-07-08T13:31:39.403Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1816,9 +1816,9 @@
       "uuid": "14145",
       "ref": "can3G03",
       "file": "src/exercices/can/3e/can3G03.ts",
-      "lastChecked": "2026-07-08T11:36:50.868Z",
+      "lastChecked": "2026-07-08T13:31:47.586Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1830,9 +1830,9 @@
       "uuid": "14552",
       "ref": "1A-C04-6",
       "file": "src/exercices/1e/1A-C04-6.ts",
-      "lastChecked": "2026-07-08T11:36:50.963Z",
+      "lastChecked": "2026-07-08T13:31:48.987Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1844,9 +1844,9 @@
       "uuid": "14688",
       "ref": "CM2N3B-1",
       "file": "src/exercices/CM2/CM2N3B-1.ts",
-      "lastChecked": "2026-07-08T11:36:51.022Z",
+      "lastChecked": "2026-07-08T13:31:49.705Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1858,9 +1858,9 @@
       "uuid": "15233",
       "ref": "1A-F03-4",
       "file": "src/exercices/1e/1A-F03-4.ts",
-      "lastChecked": "2026-07-08T11:36:51.113Z",
+      "lastChecked": "2026-07-08T13:31:51.111Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1873,9 +1873,9 @@
       "uuid": "15404",
       "ref": "TSG2-20",
       "file": "src/exercices/TSpe/TSG2-20.ts",
-      "lastChecked": "2026-07-08T11:36:51.765Z",
+      "lastChecked": "2026-07-08T13:31:52.685Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1887,9 +1887,9 @@
       "uuid": "15638",
       "ref": "1A-C11-5",
       "file": "src/exercices/1e/1A-C11-5.ts",
-      "lastChecked": "2026-07-08T11:36:51.810Z",
+      "lastChecked": "2026-07-08T13:31:53.366Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1901,9 +1901,9 @@
       "uuid": "15803",
       "ref": "can3G06",
       "file": "src/exercices/can/3e/can3G06.ts",
-      "lastChecked": "2026-07-08T11:36:51.852Z",
+      "lastChecked": "2026-07-08T13:31:54.071Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1915,9 +1915,9 @@
       "uuid": "15841",
       "ref": "6N2A-2",
       "file": "src/exercices/6e/6N2A-2.ts",
-      "lastChecked": "2026-07-08T11:36:51.918Z",
+      "lastChecked": "2026-07-08T13:31:54.759Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1931,9 +1931,9 @@
       "uuid": "16773",
       "ref": "4C2QCM-04",
       "file": "src/exercices/QCMBrevet/A2021/MS22E1Q1.ts",
-      "lastChecked": "2026-07-08T11:36:53.826Z",
+      "lastChecked": "2026-07-08T13:31:57.539Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1952,9 +1952,9 @@
       "uuid": "17987",
       "ref": "can3F06",
       "file": "src/exercices/can/3e/can3F06.ts",
-      "lastChecked": "2026-07-08T11:36:54.120Z",
+      "lastChecked": "2026-07-08T13:32:04.314Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1966,9 +1966,9 @@
       "uuid": "18326",
       "ref": "1A-C07-4",
       "file": "src/exercices/1e/1A-C07-4.ts",
-      "lastChecked": "2026-07-08T11:36:54.208Z",
+      "lastChecked": "2026-07-08T13:32:05.041Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -1987,9 +1987,9 @@
       "uuid": "18559",
       "ref": "6N2B-4",
       "file": "src/exercices/6e/6N2B-4.ts",
-      "lastChecked": "2026-07-08T11:36:54.451Z",
+      "lastChecked": "2026-07-08T13:32:10.421Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2012,9 +2012,9 @@
       "uuid": "18672",
       "ref": "6G0-6",
       "file": "src/exercices/6e/6G0-6.ts",
-      "lastChecked": "2026-07-08T11:36:56.848Z",
+      "lastChecked": "2026-07-08T13:32:19.390Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2026,9 +2026,9 @@
       "uuid": "19060",
       "ref": "5R13",
       "file": "src/exercices/5e/5R13.ts",
-      "lastChecked": "2026-07-08T11:36:56.956Z",
+      "lastChecked": "2026-07-08T13:32:20.133Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2042,9 +2042,9 @@
       "uuid": "19812",
       "ref": "5G30-2",
       "file": "src/exercices/5e/5G30-2.ts",
-      "lastChecked": "2026-07-08T11:36:57.075Z",
+      "lastChecked": "2026-07-08T13:32:22.850Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2058,9 +2058,9 @@
       "uuid": "20106",
       "ref": "TSG1-05",
       "file": "src/exercices/TSpe/TSG1-05.ts",
-      "lastChecked": "2026-07-08T11:36:57.467Z",
+      "lastChecked": "2026-07-08T13:32:25.057Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2072,9 +2072,9 @@
       "uuid": "20907",
       "ref": "2G11-3",
       "file": "src/exercices/2e/2G11-3.ts",
-      "lastChecked": "2026-07-08T11:36:57.497Z",
+      "lastChecked": "2026-07-08T13:32:25.752Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2087,9 +2087,9 @@
       "uuid": "21516",
       "ref": "1A-F04-2",
       "file": "src/exercices/1e/1A-F04-2.ts",
-      "lastChecked": "2026-07-08T11:36:57.822Z",
+      "lastChecked": "2026-07-08T13:32:27.342Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2101,9 +2101,9 @@
       "uuid": "21517",
       "ref": "1Gen-A100",
       "file": "src/exercices/1eGen/1Gen-A101.ts",
-      "lastChecked": "2026-07-08T11:36:58.651Z",
+      "lastChecked": "2026-07-08T13:32:28.411Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2120,9 +2120,9 @@
       "uuid": "21518",
       "ref": "1Gen-A102",
       "file": "src/exercices/1eGen/1Gen-A102.ts",
-      "lastChecked": "2026-07-08T11:36:58.816Z",
+      "lastChecked": "2026-07-08T13:32:32.495Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2136,9 +2136,9 @@
       "uuid": "22412",
       "ref": "3L13-3",
       "file": "src/exercices/3e/3L13-3.ts",
-      "lastChecked": "2026-07-08T11:36:59.045Z",
+      "lastChecked": "2026-07-08T13:32:41.687Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2155,9 +2155,9 @@
       "uuid": "22810",
       "ref": "4G41",
       "file": "src/exercices/4e/4G41.ts",
-      "lastChecked": "2026-07-08T11:36:59.389Z",
+      "lastChecked": "2026-07-08T13:32:47.053Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2170,9 +2170,9 @@
       "uuid": "23033",
       "ref": "1G10-4",
       "file": "src/exercices/1e/1G10-4.ts",
-      "lastChecked": "2026-07-08T11:36:59.584Z",
+      "lastChecked": "2026-07-08T13:32:49.445Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2186,9 +2186,9 @@
       "uuid": "24438",
       "ref": "1A-P05-3",
       "file": "src/exercices/1e/1A-P05-3.ts",
-      "lastChecked": "2026-07-08T11:37:00.394Z",
+      "lastChecked": "2026-07-08T13:32:59.399Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2207,9 +2207,9 @@
       "uuid": "24962",
       "ref": "1A-A01-3",
       "file": "src/exercices/1e/1A-A01-3.ts",
-      "lastChecked": "2026-07-08T11:37:01.726Z",
+      "lastChecked": "2026-07-08T13:33:05.569Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2222,9 +2222,9 @@
       "uuid": "25135",
       "ref": "TSA5-31",
       "file": "src/exercices/TSpe/TSA5-31.ts",
-      "lastChecked": "2026-07-08T11:37:03.202Z",
+      "lastChecked": "2026-07-08T13:33:07.795Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2238,9 +2238,9 @@
       "uuid": "25143",
       "ref": "can2F12",
       "file": "src/exercices/can/2e/can2F12.ts",
-      "lastChecked": "2026-07-08T11:37:03.557Z",
+      "lastChecked": "2026-07-08T13:33:10.291Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2252,9 +2252,9 @@
       "uuid": "26795",
       "ref": "1A-F01-4",
       "file": "src/exercices/1e/1A-F01-4.ts",
-      "lastChecked": "2026-07-08T11:37:08.242Z",
+      "lastChecked": "2026-07-08T13:33:27.984Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2273,9 +2273,9 @@
       "uuid": "26802",
       "ref": "1A-C10-5",
       "file": "src/exercices/1e/1A-C10-5.ts",
-      "lastChecked": "2026-07-08T11:37:09.291Z",
+      "lastChecked": "2026-07-08T13:33:35.111Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2302,9 +2302,9 @@
       "uuid": "27154",
       "ref": "1A-F02-11",
       "file": "src/exercices/1e/1A-F02-11.ts",
-      "lastChecked": "2026-07-08T11:37:10.741Z",
+      "lastChecked": "2026-07-08T13:33:48.083Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2316,9 +2316,9 @@
       "uuid": "27741",
       "ref": "2N50-2",
       "file": "src/exercices/2e/2N50-2.ts",
-      "lastChecked": "2026-07-08T11:37:10.817Z",
+      "lastChecked": "2026-07-08T13:33:49.560Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2330,9 +2330,9 @@
       "uuid": "28998",
       "ref": "2F20-4",
       "file": "src/exercices/2e/2F20-4.ts",
-      "lastChecked": "2026-07-08T11:37:11.575Z",
+      "lastChecked": "2026-07-08T13:33:57.972Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2352,9 +2352,9 @@
       "uuid": "29212",
       "ref": "1AN10-1",
       "file": "src/exercices/1e/1AN10-1.ts",
-      "lastChecked": "2026-07-08T11:37:14.578Z",
+      "lastChecked": "2026-07-08T13:34:08.371Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2368,9 +2368,9 @@
       "uuid": "29407",
       "ref": "6G3B-2",
       "file": "src/exercices/6e/6G3B-2.ts",
-      "lastChecked": "2026-07-08T11:37:14.691Z",
+      "lastChecked": "2026-07-08T13:34:10.538Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2384,9 +2384,9 @@
       "uuid": "29919",
       "ref": "2N30-3",
       "file": "src/exercices/2e/2N30-3.ts",
-      "lastChecked": "2026-07-08T11:37:14.987Z",
+      "lastChecked": "2026-07-08T13:34:20.006Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2424,9 +2424,9 @@
       "uuid": "29956",
       "ref": "canc3C25",
       "file": "src/exercices/can/c3/canc3C25.ts",
-      "lastChecked": "2026-07-08T11:37:15.663Z",
+      "lastChecked": "2026-07-08T13:34:38.464Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2438,9 +2438,9 @@
       "uuid": "30800",
       "ref": "CM2N3J-1",
       "file": "src/exercices/CM2/CM2N3J-1.ts",
-      "lastChecked": "2026-07-08T11:37:15.767Z",
+      "lastChecked": "2026-07-08T13:34:39.953Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2452,9 +2452,9 @@
       "uuid": "31017",
       "ref": "2N52-5",
       "file": "src/exercices/2e/2N52-5.ts",
-      "lastChecked": "2026-07-08T11:37:15.809Z",
+      "lastChecked": "2026-07-08T13:34:40.676Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2468,9 +2468,9 @@
       "uuid": "31096",
       "ref": "can6C26",
       "file": "src/exercices/can/6e/can6C26.ts",
-      "lastChecked": "2026-07-08T11:37:16.722Z",
+      "lastChecked": "2026-07-08T13:34:49.739Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2482,9 +2482,9 @@
       "uuid": "31760",
       "ref": "2G12-3",
       "file": "src/exercices/2e/2G12-3.ts",
-      "lastChecked": "2026-07-08T11:37:16.758Z",
+      "lastChecked": "2026-07-08T13:34:50.426Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2496,9 +2496,9 @@
       "uuid": "32014",
       "ref": "1A-C01-5",
       "file": "src/exercices/1e/1A-C01-5.ts",
-      "lastChecked": "2026-07-08T11:37:17.053Z",
+      "lastChecked": "2026-07-08T13:34:51.905Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2517,9 +2517,9 @@
       "uuid": "32394",
       "ref": "can1P02",
       "file": "src/exercices/can/1e/can1P02.ts",
-      "lastChecked": "2026-07-08T11:37:17.338Z",
+      "lastChecked": "2026-07-08T13:34:58.526Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2531,9 +2531,9 @@
       "uuid": "32395",
       "ref": "can1P02-1",
       "file": "src/exercices/can/1e/can1P02-1.ts",
-      "lastChecked": "2026-07-08T11:37:17.506Z",
+      "lastChecked": "2026-07-08T13:34:59.425Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2545,9 +2545,9 @@
       "uuid": "34032",
       "ref": "5G11-3",
       "file": "src/exercices/5e/5G11-3.ts",
-      "lastChecked": "2026-07-08T11:37:17.674Z",
+      "lastChecked": "2026-07-08T13:35:00.345Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2561,9 +2561,9 @@
       "uuid": "34543",
       "ref": "1A-E05-2",
       "file": "src/exercices/1e/1A-E05-2.ts",
-      "lastChecked": "2026-07-08T11:37:18.273Z",
+      "lastChecked": "2026-07-08T13:35:05.779Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2582,9 +2582,9 @@
       "uuid": "34579",
       "ref": "6N1A-2",
       "file": "src/exercices/6e/6N1A-2.js",
-      "lastChecked": "2026-07-08T11:37:18.413Z",
+      "lastChecked": "2026-07-08T13:35:11.563Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2604,9 +2604,9 @@
       "uuid": "34648",
       "ref": "TSG2-34",
       "file": "src/exercices/TSpe/TSG2-34.ts",
-      "lastChecked": "2026-07-08T11:37:18.621Z",
+      "lastChecked": "2026-07-08T13:35:17.871Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2618,9 +2618,9 @@
       "uuid": "35408",
       "ref": "1A-P03-2",
       "file": "src/exercices/1e/1A-P03-2.ts",
-      "lastChecked": "2026-07-08T11:37:19.998Z",
+      "lastChecked": "2026-07-08T13:35:32.302Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2639,9 +2639,9 @@
       "uuid": "36074",
       "ref": "5A12-1",
       "file": "src/exercices/5e/5A12-1.ts",
-      "lastChecked": "2026-07-08T11:37:20.404Z",
+      "lastChecked": "2026-07-08T13:35:44.171Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2653,9 +2653,9 @@
       "uuid": "36116",
       "ref": "5G20-0",
       "file": "src/exercices/5e/5G20-0.ts",
-      "lastChecked": "2026-07-08T11:37:20.484Z",
+      "lastChecked": "2026-07-08T13:35:44.964Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2672,9 +2672,9 @@
       "uuid": "36144",
       "ref": "TSG2-33",
       "file": "src/exercices/TSpe/TSG2-33.ts",
-      "lastChecked": "2026-07-08T11:37:21.403Z",
+      "lastChecked": "2026-07-08T13:35:49.578Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2687,9 +2687,9 @@
       "uuid": "36573",
       "ref": "6N2E-2",
       "file": "src/exercices/6e/6N2E-2.ts",
-      "lastChecked": "2026-07-08T11:37:21.618Z",
+      "lastChecked": "2026-07-08T13:35:51.143Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2701,9 +2701,9 @@
       "uuid": "36795",
       "ref": "2F20-1",
       "file": "src/exercices/2e/2F20-1.ts",
-      "lastChecked": "2026-07-08T11:37:21.745Z",
+      "lastChecked": "2026-07-08T13:35:52.037Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2723,9 +2723,9 @@
       "uuid": "37268",
       "ref": "6N2K-3",
       "file": "src/exercices/6e/6N2K-3.ts",
-      "lastChecked": "2026-07-08T11:37:22.182Z",
+      "lastChecked": "2026-07-08T13:35:59.398Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2738,9 +2738,9 @@
       "uuid": "38207",
       "ref": "can2P02",
       "file": "src/exercices/can/2e/can2P02.ts",
-      "lastChecked": "2026-07-08T11:37:22.311Z",
+      "lastChecked": "2026-07-08T13:36:00.824Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2752,9 +2752,9 @@
       "uuid": "41030",
       "ref": "can6N15",
       "file": "src/exercices/can/6e/can6N15.ts",
-      "lastChecked": "2026-07-08T11:37:22.341Z",
+      "lastChecked": "2026-07-08T13:36:01.516Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2766,9 +2766,9 @@
       "uuid": "41188",
       "ref": "4G20-4",
       "file": "src/exercices/4e/4G20-4.ts",
-      "lastChecked": "2026-07-08T11:37:22.484Z",
+      "lastChecked": "2026-07-08T13:36:02.910Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2780,9 +2780,9 @@
       "uuid": "42237",
       "ref": "1A-C12-1",
       "file": "src/exercices/1e/1A-C12-1.ts",
-      "lastChecked": "2026-07-08T11:37:22.656Z",
+      "lastChecked": "2026-07-08T13:36:04.341Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2794,9 +2794,9 @@
       "uuid": "42453",
       "ref": "canc3N05",
       "file": "src/exercices/can/c3/canc3N05.ts",
-      "lastChecked": "2026-07-08T11:37:23.798Z",
+      "lastChecked": "2026-07-08T13:36:10.754Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2808,9 +2808,9 @@
       "uuid": "42707",
       "ref": "1A-C07-2",
       "file": "src/exercices/1e/1A-C07-2.ts",
-      "lastChecked": "2026-07-08T11:37:23.840Z",
+      "lastChecked": "2026-07-08T13:36:11.433Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2822,9 +2822,9 @@
       "uuid": "42983",
       "ref": "1AL11-1",
       "file": "src/exercices/1e/1AL11-1.ts",
-      "lastChecked": "2026-07-08T11:37:23.881Z",
+      "lastChecked": "2026-07-08T13:36:12.121Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2836,9 +2836,9 @@
       "uuid": "43516",
       "ref": "1A-C04-5",
       "file": "src/exercices/1e/1A-C04-5.ts",
-      "lastChecked": "2026-07-08T11:37:23.977Z",
+      "lastChecked": "2026-07-08T13:36:13.553Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2857,9 +2857,9 @@
       "uuid": "45511",
       "ref": "can1D11",
       "file": "src/exercices/can/1e/can1D11.ts",
-      "lastChecked": "2026-07-08T11:37:24.198Z",
+      "lastChecked": "2026-07-08T13:36:20.280Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2871,9 +2871,9 @@
       "uuid": "45726",
       "ref": "2N30-1",
       "file": "src/exercices/2e/2N30-1.ts",
-      "lastChecked": "2026-07-08T12:21:25.723Z",
+      "lastChecked": "2026-07-08T13:36:20.969Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2886,9 +2886,9 @@
       "uuid": "45885",
       "ref": "can6D10",
       "file": "src/exercices/can/6e/can6D10.ts",
-      "lastChecked": "2026-07-08T11:37:24.349Z",
+      "lastChecked": "2026-07-08T13:36:22.400Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2900,9 +2900,9 @@
       "uuid": "46429",
       "ref": "CM2G2B-1",
       "file": "src/exercices/CM2/CM2G2B-1.ts",
-      "lastChecked": "2026-07-08T11:37:24.550Z",
+      "lastChecked": "2026-07-08T13:36:25.176Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2919,9 +2919,9 @@
       "uuid": "46593",
       "ref": "TSG2-QCM10",
       "file": "src/exercices/QCMBac/A2024/sujetzero2024Ex4Q1.ts",
-      "lastChecked": "2026-07-08T11:37:25.130Z",
+      "lastChecked": "2026-07-08T13:36:29.331Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2934,9 +2934,9 @@
       "uuid": "46799",
       "ref": "CM1N3J-flash1",
       "file": "src/exercices/CM1/CM1N3J-flash1.ts",
-      "lastChecked": "2026-07-08T11:37:25.361Z",
+      "lastChecked": "2026-07-08T13:36:30.816Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2948,9 +2948,9 @@
       "uuid": "47142",
       "ref": "can3S01",
       "file": "src/exercices/can/3e/can3S01.ts",
-      "lastChecked": "2026-07-08T11:37:25.467Z",
+      "lastChecked": "2026-07-08T13:36:31.566Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2962,9 +2962,9 @@
       "uuid": "47802",
       "ref": "can5D02",
       "file": "src/exercices/can/5e/can5D02.ts",
-      "lastChecked": "2026-07-08T11:37:25.500Z",
+      "lastChecked": "2026-07-08T13:36:32.285Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -2976,9 +2976,9 @@
       "uuid": "47868",
       "ref": "5R22-2b",
       "file": "src/exercices/5e/5R22-2b.ts",
-      "lastChecked": "2026-07-08T11:37:25.539Z",
+      "lastChecked": "2026-07-08T13:36:32.981Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3007,9 +3007,9 @@
       "uuid": "48253",
       "ref": "4G11-1",
       "file": "src/exercices/4e/4G11-1.ts",
-      "lastChecked": "2026-07-08T11:37:26.236Z",
+      "lastChecked": "2026-07-08T13:36:45.371Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3021,9 +3021,9 @@
       "uuid": "48334",
       "ref": "can4C08",
       "file": "src/exercices/can/4e/can4C08.ts",
-      "lastChecked": "2026-07-08T11:37:26.643Z",
+      "lastChecked": "2026-07-08T13:36:46.215Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3035,9 +3035,9 @@
       "uuid": "49570",
       "ref": "2G24-2",
       "file": "src/exercices/2e/2G24-2.ts",
-      "lastChecked": "2026-07-08T11:37:28.236Z",
+      "lastChecked": "2026-07-08T13:36:54.575Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3051,9 +3051,9 @@
       "uuid": "49786",
       "ref": "5G11-2",
       "file": "src/exercices/5e/5G11-2.ts",
-      "lastChecked": "2026-07-08T11:37:28.320Z",
+      "lastChecked": "2026-07-08T13:36:56.673Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3070,9 +3070,9 @@
       "uuid": "50614",
       "ref": "6N1G-1",
       "file": "src/exercices/6e/6N1G-1.ts",
-      "lastChecked": "2026-07-08T11:37:28.753Z",
+      "lastChecked": "2026-07-08T13:37:00.910Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3095,9 +3095,9 @@
       "uuid": "51125",
       "ref": "1A-S02-8",
       "file": "src/exercices/1e/1A-S02-8.ts",
-      "lastChecked": "2026-07-08T11:37:36.165Z",
+      "lastChecked": "2026-07-08T13:37:31.271Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3109,9 +3109,9 @@
       "uuid": "51242",
       "ref": "canc3D04",
       "file": "src/exercices/can/c3/canc3D04.ts",
-      "lastChecked": "2026-07-08T11:37:36.228Z",
+      "lastChecked": "2026-07-08T13:37:32.096Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3124,9 +3124,9 @@
       "uuid": "51360",
       "ref": "3L11-6",
       "file": "src/exercices/3e/3L11-6.ts",
-      "lastChecked": "2026-07-08T11:37:36.313Z",
+      "lastChecked": "2026-07-08T13:37:33.643Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3146,9 +3146,9 @@
       "uuid": "52336",
       "ref": "can5C04",
       "file": "src/exercices/can/5e/can5C04.ts",
-      "lastChecked": "2026-07-08T11:37:36.949Z",
+      "lastChecked": "2026-07-08T13:37:42.398Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3160,9 +3160,9 @@
       "uuid": "52939",
       "ref": "6N2E-1",
       "file": "src/exercices/6e/6N2E-1.ts",
-      "lastChecked": "2026-07-08T11:37:36.982Z",
+      "lastChecked": "2026-07-08T13:37:43.225Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3179,9 +3179,9 @@
       "uuid": "53034",
       "ref": "can6C24",
       "file": "src/exercices/can/6e/can6C24.ts",
-      "lastChecked": "2026-07-08T11:37:41.181Z",
+      "lastChecked": "2026-07-08T13:37:51.551Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3195,9 +3195,9 @@
       "uuid": "53762",
       "ref": "2N52-1",
       "file": "src/exercices/2e/2N52-1.ts",
-      "lastChecked": "2026-07-08T11:37:41.263Z",
+      "lastChecked": "2026-07-08T13:37:53.580Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3211,9 +3211,9 @@
       "uuid": "55354",
       "ref": "4C22-2",
       "file": "src/exercices/4e/4C22-2.ts",
-      "lastChecked": "2026-07-08T11:37:41.455Z",
+      "lastChecked": "2026-07-08T13:37:56.329Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3226,9 +3226,9 @@
       "uuid": "56773",
       "ref": "6N2D-1",
       "file": "src/exercices/6e/6N2D-1.ts",
-      "lastChecked": "2026-07-08T11:37:44.497Z",
+      "lastChecked": "2026-07-08T13:38:16.019Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3266,9 +3266,9 @@
       "uuid": "57239",
       "ref": "canc3a-2023",
       "file": "src/exercices/can/c3/canc3a-2023.ts",
-      "lastChecked": "2026-07-08T11:37:46.868Z",
+      "lastChecked": "2026-07-08T13:38:36.641Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3280,9 +3280,9 @@
       "uuid": "57502",
       "ref": "auto6N3D-3",
       "file": "src/exercices/6e/auto6N3D-3.ts",
-      "lastChecked": "2026-07-08T11:37:47.214Z",
+      "lastChecked": "2026-07-08T13:38:37.512Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3320,9 +3320,9 @@
       "uuid": "57692",
       "ref": "1AL23-72",
       "file": "src/exercices/1e/1AL23-72.ts",
-      "lastChecked": "2026-07-08T11:37:48.336Z",
+      "lastChecked": "2026-07-08T13:38:56.689Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3351,9 +3351,9 @@
       "uuid": "57777",
       "ref": "can5P03",
       "file": "src/exercices/can/5e/can5P03.ts",
-      "lastChecked": "2026-07-08T11:37:52.086Z",
+      "lastChecked": "2026-07-08T13:39:09.976Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3365,9 +3365,9 @@
       "uuid": "58784",
       "ref": "can2C18",
       "file": "src/exercices/can/2e/can2C18.ts",
-      "lastChecked": "2026-07-08T11:37:52.424Z",
+      "lastChecked": "2026-07-08T13:39:11.362Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3379,9 +3379,9 @@
       "uuid": "59129",
       "ref": "can6C50",
       "file": "src/exercices/can/6e/can6C50.ts",
-      "lastChecked": "2026-07-08T11:37:52.519Z",
+      "lastChecked": "2026-07-08T13:39:12.678Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3393,9 +3393,9 @@
       "uuid": "59144",
       "ref": "can6M13",
       "file": "src/exercices/can/6e/can6M13.ts",
-      "lastChecked": "2026-07-08T11:37:52.570Z",
+      "lastChecked": "2026-07-08T13:39:13.417Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3407,9 +3407,9 @@
       "uuid": "59365",
       "ref": "can3C11",
       "file": "src/exercices/can/3e/can3C11.ts",
-      "lastChecked": "2026-07-08T11:37:52.614Z",
+      "lastChecked": "2026-07-08T13:39:14.103Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3421,9 +3421,9 @@
       "uuid": "60504",
       "ref": "1AL23-1",
       "file": "src/exercices/1e/1AL23-1.ts",
-      "lastChecked": "2026-07-08T11:37:52.662Z",
+      "lastChecked": "2026-07-08T13:39:14.783Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3436,9 +3436,9 @@
       "uuid": "60563",
       "ref": "can4a-2021",
       "file": "src/exercices/can/4e/can4a-2021.js",
-      "lastChecked": "2026-07-08T11:37:52.751Z",
+      "lastChecked": "2026-07-08T13:39:16.139Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3450,7 +3450,7 @@
       "uuid": "60653",
       "ref": "canTExa-NY2024",
       "file": "src/exercices/can/Ex/canTExa-NY2024.ts",
-      "lastChecked": "2026-07-08T13:06:52.987Z",
+      "lastChecked": "2026-07-08T13:39:16.899Z",
       "status": "failing",
       "checkedLevel": 2,
       "failureMode": "compile_error",
@@ -3467,9 +3467,9 @@
       "uuid": "60910",
       "ref": "5P12",
       "file": "src/exercices/5e/5P12.ts",
-      "lastChecked": "2026-07-08T11:37:53.456Z",
+      "lastChecked": "2026-07-08T13:39:17.825Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3483,9 +3483,9 @@
       "uuid": "61217",
       "ref": "3A10DNB1",
       "file": "src/exercices/3e/3A10DNB1.ts",
-      "lastChecked": "2026-07-08T11:37:53.749Z",
+      "lastChecked": "2026-07-08T13:39:20.597Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3498,9 +3498,9 @@
       "uuid": "61271",
       "ref": "can2F22",
       "file": "src/exercices/can/2e/can2F22.ts",
-      "lastChecked": "2026-07-08T11:37:54.073Z",
+      "lastChecked": "2026-07-08T13:39:22.039Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3512,9 +3512,9 @@
       "uuid": "61592",
       "ref": "2S20-5",
       "file": "src/exercices/2e/2S20-5.ts",
-      "lastChecked": "2026-07-08T11:37:54.245Z",
+      "lastChecked": "2026-07-08T13:39:22.821Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3526,9 +3526,9 @@
       "uuid": "61772",
       "ref": "auto6M2D",
       "file": "src/exercices/6e/auto6M2D.ts",
-      "lastChecked": "2026-07-08T11:37:54.656Z",
+      "lastChecked": "2026-07-08T13:39:23.712Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3542,9 +3542,9 @@
       "uuid": "62450",
       "ref": "can6D05",
       "file": "src/exercices/can/6e/can6D05.ts",
-      "lastChecked": "2026-07-08T11:37:55.931Z",
+      "lastChecked": "2026-07-08T13:39:44.296Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3556,9 +3556,9 @@
       "uuid": "64422",
       "ref": "6N3K",
       "file": "src/exercices/6e/6N3K.ts",
-      "lastChecked": "2026-07-08T11:37:56.010Z",
+      "lastChecked": "2026-07-08T13:39:45.743Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3572,9 +3572,9 @@
       "uuid": "65288",
       "ref": "6P3D",
       "file": "src/exercices/6e/6P3D.ts",
-      "lastChecked": "2026-07-08T11:37:56.100Z",
+      "lastChecked": "2026-07-08T13:39:47.821Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -3764,7 +3764,7 @@
       "uuid": "67469",
       "ref": "2N11-3",
       "file": "src/exercices/2e/2N11-3.ts",
-      "lastChecked": "2026-07-08T12:51:49.378Z",
+      "lastChecked": "2026-07-08T13:10:21.364Z",
       "status": "failing",
       "checkedLevel": 2,
       "failureMode": "compile_error",
@@ -4641,16 +4641,18 @@
       "uuid": "91563",
       "ref": "canTSpea-NY2026",
       "file": "src/exercices/can/TSpe/canTspea-NY2026.ts",
-      "lastChecked": "2026-07-08T11:38:46.153Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:10:22.119Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=false:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined] error: unclosed delimiter",
       "variationsTested": [
         "sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined",
         "sup=false:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
     },
     "6G5A-1": {
       "uuid": "91875",
@@ -4678,17 +4680,19 @@
       "uuid": "92022",
       "ref": "2S30-5",
       "file": "src/exercices/2e/2S30-5.ts",
-      "lastChecked": "2026-07-08T11:38:51.329Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:10:23.371Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=5:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: lightgray",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=5:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: lightgray"
+      ]
     },
     "can4C09": {
       "uuid": "92186",
@@ -4722,15 +4726,17 @@
       "uuid": "94237",
       "ref": "can2L21",
       "file": "src/exercices/can/2e/can2L21.ts",
-      "lastChecked": "2026-07-08T11:38:52.088Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:10:24.922Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter",
       "variationsTested": [
         "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
     },
     "auto6M2A": {
       "uuid": "95313",
@@ -4805,9 +4811,9 @@
       "uuid": "96187",
       "ref": "1A-C10-9",
       "file": "src/exercices/1e/1A-C10-9.ts",
-      "lastChecked": "2026-07-08T11:38:52.749Z",
+      "lastChecked": "2026-07-08T13:10:24.956Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -5047,16 +5053,18 @@
       "uuid": "ea612",
       "ref": "1A-A01-12",
       "file": "src/exercices/1e/1A-A01-12.ts",
-      "lastChecked": "2026-07-08T11:39:00.756Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:10:30.379Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=true:sup2=1-2-3-4-5-6-7-8:sup3=false:sup4=undefined:sup5=undefined] error: unclosed delimiter",
       "variationsTested": [
         "sup=true:sup2=1-2-3-4-5-6-7-8:sup3=false:sup4=undefined:sup5=undefined",
         "sup=false:sup2=1-2-3-4-5-6-7-8:sup3=false:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
     },
     "1A-A01-13": {
       "uuid": "psp26",
@@ -5182,16 +5190,18 @@
       "uuid": "d2665",
       "ref": "1A-A01-9",
       "file": "src/exercices/1e/1A-A01-9.ts",
-      "lastChecked": "2026-07-08T11:39:09.846Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:10:31.076Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=false:sup2=1-2-3-4-5-6-7-8:sup3=false:sup4=undefined:sup5=undefined] error: unclosed delimiter",
       "variationsTested": [
         "sup=true:sup2=1-2-3-4-5-6-7-8:sup3=false:sup4=undefined:sup5=undefined",
         "sup=false:sup2=1-2-3-4-5-6-7-8:sup3=false:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
     },
     "1A": {
       "uuid": "722e4",
@@ -6234,9 +6244,9 @@
       "uuid": "3b917",
       "ref": "1A-C10-10",
       "file": "src/exercices/1e/1A-C10-10.ts",
-      "lastChecked": "2026-07-08T11:39:18.117Z",
+      "lastChecked": "2026-07-08T13:10:32.515Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -6664,11 +6674,11 @@
       "uuid": "d7ba2",
       "ref": "1A-C14-4",
       "file": "src/exercices/1e/1A-C14-4.ts",
-      "lastChecked": "2026-07-08T11:39:30.346Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:10:37.900Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined] error: unclosed delimiter",
       "variationsTested": [
         "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
         "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
@@ -6679,15 +6689,17 @@
         "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
         "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
     },
     "1A-C14-5": {
       "uuid": "af470",
       "ref": "1A-C14-5",
       "file": "src/exercices/1e/1A-C14-5.ts",
-      "lastChecked": "2026-07-08T11:39:31.707Z",
+      "lastChecked": "2026-07-08T13:10:38.578Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -7581,9 +7593,9 @@
       "uuid": "4c3c0",
       "ref": "1A-F03-1",
       "file": "src/exercices/1e/1A-F03-1.ts",
-      "lastChecked": "2026-07-08T11:39:42.767Z",
+      "lastChecked": "2026-07-08T13:10:44.193Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -7668,9 +7680,9 @@
       "uuid": "0b1fc",
       "ref": "1A-F04-3",
       "file": "src/exercices/1e/1A-F04-3.ts",
-      "lastChecked": "2026-07-08T11:39:45.104Z",
+      "lastChecked": "2026-07-08T13:10:49.647Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -7710,11 +7722,11 @@
       "uuid": "6d6ea",
       "ref": "1A-F04-5",
       "file": "src/exercices/1e/1A-F04-5.ts",
-      "lastChecked": "2026-07-08T11:39:47.023Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:10:55.527Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
       "variationsTested": [
         "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
         "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
@@ -7725,7 +7737,10 @@
         "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
         "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
     },
     "1A-F05-1": {
       "uuid": "a6341",
@@ -9329,9 +9344,9 @@
       "uuid": "b8c14",
       "ref": "1AL10-4",
       "file": "src/exercices/1e/1AL10-4.ts",
-      "lastChecked": "2026-07-08T11:40:26.701Z",
+      "lastChecked": "2026-07-08T13:10:58.713Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -9574,9 +9589,9 @@
       "uuid": "33e54",
       "ref": "1AL13-1",
       "file": "src/exercices/1e/1AL13-1.ts",
-      "lastChecked": "2026-07-08T11:40:28.382Z",
+      "lastChecked": "2026-07-08T13:11:04.819Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -9810,9 +9825,9 @@
       "uuid": "2a6c7",
       "ref": "1AL23-24",
       "file": "src/exercices/1e/1AL23-24.ts",
-      "lastChecked": "2026-07-08T11:40:33.473Z",
+      "lastChecked": "2026-07-08T13:11:07.029Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -10278,17 +10293,20 @@
       "uuid": "61ed2",
       "ref": "1AN30-5",
       "file": "src/exercices/1e/1AN30-5.ts",
-      "lastChecked": "2026-07-08T11:40:47.059Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:11:08.501Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
     },
     "1AN30-6": {
       "uuid": "61ed3",
@@ -10747,9 +10765,9 @@
       "uuid": "227f0",
       "ref": "227f0",
       "file": "src/exercices/1e/1P10-1-old.ts",
-      "lastChecked": "2026-07-08T11:40:54.395Z",
+      "lastChecked": "2026-07-08T13:11:09.233Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -10763,9 +10781,9 @@
       "uuid": "227f1",
       "ref": "1P10-1",
       "file": "src/exercices/1e/1P10-1.ts",
-      "lastChecked": "2026-07-08T11:40:54.551Z",
+      "lastChecked": "2026-07-08T13:11:11.318Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -11211,17 +11229,20 @@
       "uuid": "e46e6",
       "ref": "200F3-02",
       "file": "src/exercices/2e/200F3-02.ts",
-      "lastChecked": "2026-07-08T11:41:04.150Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:11:13.408Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
     },
     "200-G11": {
       "uuid": "a9111",
@@ -11271,9 +11292,9 @@
       "uuid": "93f13",
       "ref": "2F10-2",
       "file": "src/exercices/2e/2F10-2.ts",
-      "lastChecked": "2026-07-08T11:41:05.961Z",
+      "lastChecked": "2026-07-08T13:11:14.338Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -11762,9 +11783,9 @@
       "uuid": "1e362",
       "ref": "2F25-2",
       "file": "src/exercices/2e/2F25-2.ts",
-      "lastChecked": "2026-07-08T11:41:40.663Z",
+      "lastChecked": "2026-07-08T13:11:18.774Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -11843,9 +11864,9 @@
       "uuid": "2f857",
       "ref": "2F31-3",
       "file": "src/exercices/2e/2F31-3.ts",
-      "lastChecked": "2026-07-08T11:41:42.560Z",
+      "lastChecked": "2026-07-08T13:11:19.487Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -12269,11 +12290,11 @@
       "uuid": "6cf42",
       "ref": "2G21-2",
       "file": "src/exercices/2e/2G21-2.ts",
-      "lastChecked": "2026-07-08T12:22:08.254Z",
-      "status": "failing",
-      "checkedLevel": 1,
-      "failureMode": "runtime_error",
-      "notes": "[sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] Runtime: window.matchMedia is not a function",
+      "lastChecked": "2026-07-08T13:11:21.650Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
@@ -12285,11 +12306,11 @@
       "uuid": "3a3ec",
       "ref": "2G22-1",
       "file": "src/exercices/2e/2G22-1.ts",
-      "lastChecked": "2026-07-08T12:22:09.154Z",
-      "status": "failing",
-      "checkedLevel": 1,
-      "failureMode": "runtime_error",
-      "notes": "[sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] Runtime: window.matchMedia is not a function",
+      "lastChecked": "2026-07-08T13:11:24.502Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
@@ -12823,9 +12844,9 @@
       "uuid": "ccb71",
       "ref": "2G34-3",
       "file": "src/exercices/2e/2G34-3.ts",
-      "lastChecked": "2026-07-08T11:42:05.051Z",
+      "lastChecked": "2026-07-08T13:11:27.634Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -12988,11 +13009,11 @@
       "uuid": "31c01",
       "ref": "2N11-1",
       "file": "src/exercices/2e/2N11-1.ts",
-      "lastChecked": "2026-07-08T11:42:07.198Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:11:29.724Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=1:sup3=1:sup4=undefined:sup5=undefined] error: unclosed delimiter",
       "variationsTested": [
         "sup=1:sup2=1:sup3=1:sup4=undefined:sup5=undefined",
         "sup=1:sup2=1:sup3=4:sup4=undefined:sup5=undefined",
@@ -13022,21 +13043,26 @@
         "sup=3:sup2=9:sup3=4:sup4=undefined:sup5=undefined",
         "sup=3:sup2=9:sup3=9:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
     },
     "2N11-2": {
       "uuid": "dc2a5",
       "ref": "2N11-2",
       "file": "src/exercices/2e/2N11-2.ts",
-      "lastChecked": "2026-07-08T11:42:07.481Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:11:42.569Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
       "variationsTested": [
         "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
     },
     "2N11-4": {
       "uuid": "d6d2a",
@@ -13308,9 +13334,9 @@
       "uuid": "d5a6d",
       "ref": "2N20-2",
       "file": "src/exercices/2e/2N20-2.ts",
-      "lastChecked": "2026-07-08T11:42:10.358Z",
+      "lastChecked": "2026-07-08T13:11:42.720Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -13801,9 +13827,9 @@
       "uuid": "d9495",
       "ref": "2N32-3",
       "file": "src/exercices/2e/2N32-3.ts",
-      "lastChecked": "2026-07-08T11:42:17.226Z",
+      "lastChecked": "2026-07-08T13:11:43.490Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -13915,9 +13941,9 @@
       "uuid": "0a01e",
       "ref": "2N40-1",
       "file": "src/exercices/2e/2N40-1.ts",
-      "lastChecked": "2026-07-08T11:42:18.039Z",
+      "lastChecked": "2026-07-08T13:11:44.908Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -14051,11 +14077,11 @@
       "uuid": "80c0e",
       "ref": "2N40-7",
       "file": "src/exercices/2e/2N40-7.ts",
-      "lastChecked": "2026-07-08T11:42:19.612Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:11:46.303Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=1:sup3=1:sup4=true:sup5=undefined] error: missing argument: body",
       "variationsTested": [
         "sup=1:sup2=1:sup3=1:sup4=true:sup5=undefined",
         "sup=1:sup2=1:sup3=1:sup4=false:sup5=undefined",
@@ -14085,7 +14111,9 @@
         "sup=2:sup2=2:sup3=1:sup4=false:sup5=undefined",
         "sup=2:sup2=2:sup3=2:sup4=true:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: missing argument: body"
+      ]
     },
     "2N40-8": {
       "uuid": "74c5a",
@@ -14285,9 +14313,9 @@
       "uuid": "877a9",
       "ref": "2N41-4",
       "file": "src/exercices/2e/2N41-4.ts",
-      "lastChecked": "2026-07-08T11:42:35.410Z",
+      "lastChecked": "2026-07-08T13:11:47.291Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -14301,9 +14329,9 @@
       "uuid": "5a4ad",
       "ref": "2N41-5",
       "file": "src/exercices/2e/2N41-5.ts",
-      "lastChecked": "2026-07-08T11:42:35.535Z",
+      "lastChecked": "2026-07-08T13:11:49.347Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -14317,9 +14345,9 @@
       "uuid": "04b0a",
       "ref": "2N41-6",
       "file": "src/exercices/2e/2N41-6.ts",
-      "lastChecked": "2026-07-08T11:42:35.713Z",
+      "lastChecked": "2026-07-08T13:11:51.431Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -14475,9 +14503,9 @@
       "uuid": "874e8",
       "ref": "874e8",
       "file": "src/exercices/2e/2N41-7b.js",
-      "lastChecked": "2026-07-08T11:42:38.879Z",
+      "lastChecked": "2026-07-08T13:11:57.591Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -14667,15 +14695,17 @@
       "uuid": "ad208",
       "ref": "2N51-2",
       "file": "src/exercices/2e/2N51-2.ts",
-      "lastChecked": "2026-07-08T11:42:41.406Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:11:59.684Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: missing argument: body",
       "variationsTested": [
         "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: missing argument: body"
+      ]
     },
     "2N51-3a": {
       "uuid": "7959f",
@@ -14887,11 +14917,11 @@
       "uuid": "fa1c5",
       "ref": "2N61-2",
       "file": "src/exercices/2e/2N61-2.ts",
-      "lastChecked": "2026-07-08T11:42:43.558Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:11:59.779Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=3:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter | error: unclosed delimiter",
       "variationsTested": [
         "sup=1:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=1:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined",
@@ -14900,33 +14930,41 @@
         "sup=3:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=3:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
     },
     "014a4": {
       "uuid": "014a4",
       "ref": "014a4",
       "file": "src/exercices/2e/2N61-2Old.ts",
-      "lastChecked": "2026-07-08T11:42:47.736Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:12:04.234Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter | error: unclosed delimiter",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
     },
     "2N61-4": {
       "uuid": "0c09b",
       "ref": "2N61-4",
       "file": "src/exercices/2e/2N61-4.ts",
-      "lastChecked": "2026-07-08T11:42:50.516Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:12:06.409Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=2:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
       "variationsTested": [
         "sup=1:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=1:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined",
@@ -14935,7 +14973,10 @@
         "sup=3:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=3:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
     },
     "0716b": {
       "uuid": "0716b",
@@ -15051,17 +15092,19 @@
       "uuid": "018f3",
       "ref": "2S12-2",
       "file": "src/exercices/2e/2S12-2.ts",
-      "lastChecked": "2026-07-08T11:42:58.616Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:12:09.516Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: none_2",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: none_2"
+      ]
     },
     "2S12-3": {
       "uuid": "509db",
@@ -15269,25 +15312,27 @@
       "uuid": "e1938",
       "ref": "e1938",
       "file": "src/exercices/2e/2S30-5Old.ts",
-      "lastChecked": "2026-07-08T11:43:03.489Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:12:10.918Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=5:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: lightgray",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=5:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: lightgray"
+      ]
     },
     "2S30-6": {
       "uuid": "ea35b",
       "ref": "2S30-6",
       "file": "src/exercices/2e/2S30-6.ts",
-      "lastChecked": "2026-07-08T11:43:03.790Z",
+      "lastChecked": "2026-07-08T13:12:12.424Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -17403,33 +17448,37 @@
       "uuid": "d4088",
       "ref": "3G10-1",
       "file": "src/exercices/3e/3G10-1.ts",
-      "lastChecked": "2026-07-08T11:45:12.080Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:12:14.526Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: brown",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=7:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: brown"
+      ]
     },
     "3G10-2": {
       "uuid": "d5f34",
       "ref": "3G10-2",
       "file": "src/exercices/3e/3G10-2.ts",
-      "lastChecked": "2026-07-08T11:45:13.717Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:12:16.287Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: brown",
       "variationsTested": [
         "sup=7:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=10:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: brown"
+      ]
     },
     "3G10-3": {
       "uuid": "19ce6",
@@ -17501,13 +17550,40 @@
       "uuid": "442e0",
       "ref": "3G12",
       "file": "src/exercices/3e/3G12.ts",
-      "lastChecked": "2026-07-08T12:22:09.721Z",
+      "lastChecked": "2026-07-08T13:12:19.128Z",
       "status": "failing",
-      "checkedLevel": 0,
-      "failureMode": "runtime_error",
-      "notes": "Timeout (>20s) : exercice bloqué",
-      "variationsTested": [],
-      "diagnostics": []
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=true:sup3=1:sup4=true:sup5=undefined] error: unknown variable: violet",
+      "variationsTested": [
+        "sup=1:sup2=true:sup3=1:sup4=true:sup5=undefined",
+        "sup=1:sup2=true:sup3=1:sup4=false:sup5=undefined",
+        "sup=1:sup2=true:sup3=2:sup4=true:sup5=undefined",
+        "sup=1:sup2=true:sup3=2:sup4=false:sup5=undefined",
+        "sup=1:sup2=true:sup3=3:sup4=true:sup5=undefined",
+        "sup=1:sup2=true:sup3=3:sup4=false:sup5=undefined",
+        "sup=1:sup2=false:sup3=1:sup4=true:sup5=undefined",
+        "sup=1:sup2=false:sup3=1:sup4=false:sup5=undefined",
+        "sup=1:sup2=false:sup3=2:sup4=true:sup5=undefined",
+        "sup=1:sup2=false:sup3=2:sup4=false:sup5=undefined",
+        "sup=1:sup2=false:sup3=3:sup4=true:sup5=undefined",
+        "sup=1:sup2=false:sup3=3:sup4=false:sup5=undefined",
+        "sup=2:sup2=true:sup3=1:sup4=true:sup5=undefined",
+        "sup=2:sup2=true:sup3=1:sup4=false:sup5=undefined",
+        "sup=2:sup2=true:sup3=2:sup4=true:sup5=undefined",
+        "sup=2:sup2=true:sup3=2:sup4=false:sup5=undefined",
+        "sup=2:sup2=true:sup3=3:sup4=true:sup5=undefined",
+        "sup=2:sup2=true:sup3=3:sup4=false:sup5=undefined",
+        "sup=2:sup2=false:sup3=1:sup4=true:sup5=undefined",
+        "sup=2:sup2=false:sup3=1:sup4=false:sup5=undefined",
+        "sup=2:sup2=false:sup3=2:sup4=true:sup5=undefined",
+        "sup=2:sup2=false:sup3=2:sup4=false:sup5=undefined",
+        "sup=2:sup2=false:sup3=3:sup4=true:sup5=undefined",
+        "sup=2:sup2=false:sup3=3:sup4=false:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unknown variable: violet"
+      ]
     },
     "3G13": {
       "uuid": "6f383",
@@ -17569,9 +17645,9 @@
       "uuid": "6fd12",
       "ref": "3G20-2",
       "file": "src/exercices/3e/3G20-2.js",
-      "lastChecked": "2026-07-08T11:45:54.907Z",
+      "lastChecked": "2026-07-08T13:12:41.606Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -17585,9 +17661,9 @@
       "uuid": "74eac",
       "ref": "3G20",
       "file": "src/exercices/3e/3G20.js",
-      "lastChecked": "2026-07-08T11:45:55.206Z",
+      "lastChecked": "2026-07-08T13:12:44.503Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -17812,9 +17888,9 @@
       "uuid": "bd6b1",
       "ref": "3G30",
       "file": "src/exercices/3e/3G30.ts",
-      "lastChecked": "2026-07-08T11:46:00.123Z",
+      "lastChecked": "2026-07-08T13:12:47.272Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -18027,12 +18103,37 @@
       "uuid": "75ea2",
       "ref": "3G40",
       "file": "src/exercices/3e/3G40.js",
-      "lastChecked": "2026-07-08T12:22:29.802Z",
-      "status": "failing",
-      "checkedLevel": 0,
-      "failureMode": "runtime_error",
-      "notes": "Timeout (>20s) : exercice bloqué",
-      "variationsTested": [],
+      "lastChecked": "2026-07-08T13:12:57.738Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=true:sup3=true:sup4=true:sup5=undefined",
+        "sup=1:sup2=true:sup3=true:sup4=false:sup5=undefined",
+        "sup=1:sup2=true:sup3=false:sup4=true:sup5=undefined",
+        "sup=1:sup2=true:sup3=false:sup4=false:sup5=undefined",
+        "sup=1:sup2=false:sup3=true:sup4=true:sup5=undefined",
+        "sup=1:sup2=false:sup3=true:sup4=false:sup5=undefined",
+        "sup=1:sup2=false:sup3=false:sup4=true:sup5=undefined",
+        "sup=1:sup2=false:sup3=false:sup4=false:sup5=undefined",
+        "sup=2:sup2=true:sup3=true:sup4=true:sup5=undefined",
+        "sup=2:sup2=true:sup3=true:sup4=false:sup5=undefined",
+        "sup=2:sup2=true:sup3=false:sup4=true:sup5=undefined",
+        "sup=2:sup2=true:sup3=false:sup4=false:sup5=undefined",
+        "sup=2:sup2=false:sup3=true:sup4=true:sup5=undefined",
+        "sup=2:sup2=false:sup3=true:sup4=false:sup5=undefined",
+        "sup=2:sup2=false:sup3=false:sup4=true:sup5=undefined",
+        "sup=2:sup2=false:sup3=false:sup4=false:sup5=undefined",
+        "sup=3:sup2=true:sup3=true:sup4=true:sup5=undefined",
+        "sup=3:sup2=true:sup3=true:sup4=false:sup5=undefined",
+        "sup=3:sup2=true:sup3=false:sup4=true:sup5=undefined",
+        "sup=3:sup2=true:sup3=false:sup4=false:sup5=undefined",
+        "sup=3:sup2=false:sup3=true:sup4=true:sup5=undefined",
+        "sup=3:sup2=false:sup3=true:sup4=false:sup5=undefined",
+        "sup=3:sup2=false:sup3=false:sup4=true:sup5=undefined",
+        "sup=3:sup2=false:sup3=false:sup4=false:sup5=undefined"
+      ],
       "diagnostics": []
     },
     "3G41-1": {
@@ -18568,11 +18669,11 @@
       "uuid": "4b495",
       "ref": "4b495",
       "file": "src/exercices/3e/3L11-13.ts",
-      "lastChecked": "2026-07-08T12:22:56.716Z",
+      "lastChecked": "2026-07-08T13:13:37.438Z",
       "status": "failing",
       "checkedLevel": 0,
       "failureMode": "runtime_error",
-      "notes": "Timeout (>20s) : exercice bloqué",
+      "notes": "Timeout (>50s) : exercice bloqué",
       "variationsTested": [],
       "diagnostics": []
     },
@@ -18741,11 +18842,11 @@
       "uuid": "d28ff",
       "ref": "3L11-3b",
       "file": "src/exercices/3e/3L11-3b.ts",
-      "lastChecked": "2026-07-08T11:47:45.021Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:14:32.752Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=1:sup3=1:sup4=true:sup5=undefined] error: missing argument: body",
       "variationsTested": [
         "sup=1:sup2=1:sup3=1:sup4=true:sup5=undefined",
         "sup=1:sup2=1:sup3=1:sup4=false:sup5=undefined",
@@ -18775,7 +18876,9 @@
         "sup=2:sup2=2:sup3=1:sup4=false:sup5=undefined",
         "sup=2:sup2=2:sup3=2:sup4=true:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: missing argument: body"
+      ]
     },
     "3L11-4": {
       "uuid": "5f5a6",
@@ -19672,17 +19775,19 @@
       "uuid": "04f53",
       "ref": "04f53",
       "file": "src/exercices/3e/3S20.ts",
-      "lastChecked": "2026-07-08T11:49:07.014Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:14:33.918Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=5:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: lightgray",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=5:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: lightgray"
+      ]
     },
     "3S20DNB": {
       "uuid": "d11ae",
@@ -21164,17 +21269,19 @@
       "uuid": "5c9c2",
       "ref": "4C32-3",
       "file": "src/exercices/4e/4C32-3.ts",
-      "lastChecked": "2026-07-08T11:49:49.682Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:14:35.665Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=9:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: none_2",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=4:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=9:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: none_2"
+      ]
     },
     "051c7": {
       "uuid": "051c7",
@@ -21422,17 +21529,19 @@
       "uuid": "7b40c",
       "ref": "4G10-1",
       "file": "src/exercices/4e/4G10-1.ts",
-      "lastChecked": "2026-07-08T11:49:53.995Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:14:37.206Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: brown",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=7:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: brown"
+      ]
     },
     "4G10-2": {
       "uuid": "6a2dd",
@@ -21484,17 +21593,19 @@
       "uuid": "cf7ce",
       "ref": "4G10",
       "file": "src/exercices/4e/4G10.ts",
-      "lastChecked": "2026-07-08T11:49:58.487Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:14:39.309Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: brown",
       "variationsTested": [
         "sup=7:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=10:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: brown"
+      ]
     },
     "4G11": {
       "uuid": "3bfb6",
@@ -21709,7 +21820,7 @@
       "uuid": "c0f90",
       "ref": "c0f90",
       "file": "src/exercices/4e/4G20-7.ts",
-      "lastChecked": "2026-07-08T12:23:46.613Z",
+      "lastChecked": "2026-07-08T13:14:41.540Z",
       "status": "failing",
       "checkedLevel": 1,
       "failureMode": "runtime_error",
@@ -21926,9 +22037,9 @@
       "uuid": "ff410",
       "ref": "4G30-1",
       "file": "src/exercices/4e/4G30-1.ts",
-      "lastChecked": "2026-07-08T11:50:50.864Z",
+      "lastChecked": "2026-07-08T13:14:41.690Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -21940,9 +22051,9 @@
       "uuid": "18a21",
       "ref": "4G30",
       "file": "src/exercices/4e/4G30.ts",
-      "lastChecked": "2026-07-08T11:50:51.007Z",
+      "lastChecked": "2026-07-08T13:14:42.923Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -22046,9 +22157,9 @@
       "uuid": "3303a",
       "ref": "4G40",
       "file": "src/exercices/4e/4G40.ts",
-      "lastChecked": "2026-07-08T11:50:53.046Z",
+      "lastChecked": "2026-07-08T13:14:43.946Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -22649,15 +22760,17 @@
       "uuid": "df5a3",
       "ref": "4L15-0",
       "file": "src/exercices/4e/4L15-0.ts",
-      "lastChecked": "2026-07-08T11:51:28.698Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:14:55.175Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: missing argument: body",
       "variationsTested": [
         "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: missing argument: body"
+      ]
     },
     "4L15-1": {
       "uuid": "ce00c",
@@ -22748,15 +22861,17 @@
       "uuid": "c668a",
       "ref": "4P10-1",
       "file": "src/exercices/4e/4P10-1.ts",
-      "lastChecked": "2026-07-08T11:51:30.484Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:14:55.312Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter",
       "variationsTested": [
         "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
     },
     "4P10-2": {
       "uuid": "a6b5b",
@@ -22794,7 +22909,7 @@
       "uuid": "63cdb",
       "ref": "4P16",
       "file": "src/exercices/4e/4P16.ts",
-      "lastChecked": "2026-07-08T12:23:46.846Z",
+      "lastChecked": "2026-07-08T13:14:55.624Z",
       "status": "partial",
       "checkedLevel": 1,
       "failureMode": "unprocessed_math",
@@ -22814,11 +22929,11 @@
       "uuid": "26ea7",
       "ref": "4S10",
       "file": "src/exercices/4e/4S10.ts",
-      "lastChecked": "2026-07-08T11:51:31.985Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:14:57.737Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=1:sup3=3:sup4=true:sup5=undefined] error: failed to parse SVG (width, height, or viewbox is invalid)",
       "variationsTested": [
         "sup=1:sup2=1:sup3=1:sup4=true:sup5=undefined",
         "sup=1:sup2=1:sup3=1:sup4=false:sup5=undefined",
@@ -22848,7 +22963,9 @@
         "sup=3:sup2=1:sup3=1:sup4=false:sup5=undefined",
         "sup=3:sup2=1:sup3=2:sup4=true:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: failed to parse SVG (width, height, or viewbox is invalid)"
+      ]
     },
     "4S11-1": {
       "uuid": "7c068",
@@ -23322,9 +23439,9 @@
       "uuid": "a55d2",
       "ref": "a55d2",
       "file": "src/exercices/5e/5A11-4.ts",
-      "lastChecked": "2026-07-08T11:52:32.699Z",
+      "lastChecked": "2026-07-08T13:15:23.881Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -23353,9 +23470,9 @@
       "uuid": "fa3ec",
       "ref": "5A11-4",
       "file": "src/exercices/5e/5A11.ts",
-      "lastChecked": "2026-07-08T11:52:33.467Z",
+      "lastChecked": "2026-07-08T13:15:25.340Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -23368,9 +23485,9 @@
       "uuid": "fa2eb",
       "ref": "fa2eb",
       "file": "src/exercices/5e/5A11Old.ts",
-      "lastChecked": "2026-07-08T11:52:33.723Z",
+      "lastChecked": "2026-07-08T13:15:26.765Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -24137,17 +24254,19 @@
       "uuid": "da157",
       "ref": "5G10",
       "file": "src/exercices/5e/5G10.ts",
-      "lastChecked": "2026-07-08T11:53:14.626Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:15:28.197Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: brown",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=4:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: brown"
+      ]
     },
     "5G11-1": {
       "uuid": "8d4bf",
@@ -24216,17 +24335,19 @@
       "uuid": "08f60",
       "ref": "5G11-4",
       "file": "src/exercices/5e/5G11-4.ts",
-      "lastChecked": "2026-07-08T11:53:18.144Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:15:28.767Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: brown",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=7:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: brown"
+      ]
     },
     "5G11-41": {
       "uuid": "d4089",
@@ -24292,17 +24413,19 @@
       "uuid": "ec32b",
       "ref": "ec32b",
       "file": "src/exercices/5e/5G11.ts",
-      "lastChecked": "2026-07-08T11:53:23.419Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:15:30.132Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: brown",
       "variationsTested": [
         "sup=7:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=10:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: brown"
+      ]
     },
     "5G11b": {
       "uuid": "9f711",
@@ -24779,33 +24902,37 @@
       "uuid": "329fe",
       "ref": "5G32",
       "file": "src/exercices/5e/5G32.ts",
-      "lastChecked": "2026-07-08T11:54:44.888Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:15:31.969Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: pink",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=6:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=15:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: pink"
+      ]
     },
     "5G33-1": {
       "uuid": "5bac3",
       "ref": "5G33-1",
       "file": "src/exercices/5e/5G33-1.ts",
-      "lastChecked": "2026-07-08T11:54:46.761Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:15:32.615Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: brown",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: brown"
+      ]
     },
     "5G33-2": {
       "uuid": "c46e8",
@@ -25166,11 +25293,11 @@
       "uuid": "37e38",
       "ref": "5G42-2",
       "file": "src/exercices/5e/5G42-2.ts",
-      "lastChecked": "2026-07-08T12:24:26.665Z",
+      "lastChecked": "2026-07-08T13:15:33.072Z",
       "status": "failing",
       "checkedLevel": 0,
       "failureMode": "runtime_error",
-      "notes": "Timeout (>20s) : exercice bloqué",
+      "notes": "Timeout (>50s) : exercice bloqué",
       "variationsTested": [],
       "diagnostics": []
     },
@@ -25178,11 +25305,11 @@
       "uuid": "37e39",
       "ref": "5G42-3",
       "file": "src/exercices/5e/5G42-3.ts",
-      "lastChecked": "2026-07-08T12:24:46.756Z",
+      "lastChecked": "2026-07-08T13:16:23.172Z",
       "status": "failing",
       "checkedLevel": 0,
       "failureMode": "runtime_error",
-      "notes": "Timeout (>20s) : exercice bloqué",
+      "notes": "Timeout (>50s) : exercice bloqué",
       "variationsTested": [],
       "diagnostics": []
     },
@@ -25561,9 +25688,9 @@
       "uuid": "12bb6",
       "ref": "5L10-2",
       "file": "src/exercices/5e/5L10-2.ts",
-      "lastChecked": "2026-07-08T11:58:28.542Z",
+      "lastChecked": "2026-07-08T13:17:23.405Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -25595,7 +25722,7 @@
       "uuid": "0024b",
       "ref": "5L10-4",
       "file": "src/exercices/5e/5L10-4.ts",
-      "lastChecked": "2026-07-08T12:25:20.686Z",
+      "lastChecked": "2026-07-08T13:17:24.965Z",
       "status": "partial",
       "checkedLevel": 1,
       "failureMode": "unprocessed_math",
@@ -25619,7 +25746,7 @@
       "uuid": "7aba6",
       "ref": "7aba6",
       "file": "src/exercices/5e/5L10-4Old.ts",
-      "lastChecked": "2026-07-08T12:25:21.656Z",
+      "lastChecked": "2026-07-08T13:17:31.451Z",
       "status": "partial",
       "checkedLevel": 1,
       "failureMode": "unprocessed_math",
@@ -26718,9 +26845,9 @@
       "uuid": "f4d29",
       "ref": "5M22-1",
       "file": "src/exercices/5e/5M22-1.ts",
-      "lastChecked": "2026-07-08T11:58:52.556Z",
+      "lastChecked": "2026-07-08T13:17:33.113Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -26749,9 +26876,9 @@
       "uuid": "33ac2",
       "ref": "5M22",
       "file": "src/exercices/5e/5M22.ts",
-      "lastChecked": "2026-07-08T11:58:54.439Z",
+      "lastChecked": "2026-07-08T13:17:46.770Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -27411,23 +27538,51 @@
       "uuid": "2621f",
       "ref": "5P12-2",
       "file": "src/exercices/5e/5P12-2.ts",
-      "lastChecked": "2026-07-08T12:25:21.808Z",
-      "status": "failing",
-      "checkedLevel": 0,
-      "failureMode": "runtime_error",
-      "notes": "Timeout (>20s) : exercice bloqué",
-      "variationsTested": [],
+      "lastChecked": "2026-07-08T13:18:07.498Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=1:sup3=0:sup4=true:sup5=undefined",
+        "sup=1:sup2=1:sup3=0:sup4=false:sup5=undefined",
+        "sup=1:sup2=1:sup3=101:sup4=true:sup5=undefined",
+        "sup=1:sup2=1:sup3=101:sup4=false:sup5=undefined",
+        "sup=1:sup2=1:sup3=103:sup4=true:sup5=undefined",
+        "sup=1:sup2=1:sup3=103:sup4=false:sup5=undefined",
+        "sup=1:sup2=2:sup3=0:sup4=true:sup5=undefined",
+        "sup=1:sup2=2:sup3=0:sup4=false:sup5=undefined",
+        "sup=1:sup2=2:sup3=101:sup4=true:sup5=undefined",
+        "sup=1:sup2=2:sup3=101:sup4=false:sup5=undefined",
+        "sup=1:sup2=2:sup3=103:sup4=true:sup5=undefined",
+        "sup=1:sup2=2:sup3=103:sup4=false:sup5=undefined",
+        "sup=1:sup2=4:sup3=0:sup4=true:sup5=undefined",
+        "sup=1:sup2=4:sup3=0:sup4=false:sup5=undefined",
+        "sup=1:sup2=4:sup3=101:sup4=true:sup5=undefined",
+        "sup=1:sup2=4:sup3=101:sup4=false:sup5=undefined",
+        "sup=1:sup2=4:sup3=103:sup4=true:sup5=undefined",
+        "sup=1:sup2=4:sup3=103:sup4=false:sup5=undefined",
+        "sup=2:sup2=1:sup3=0:sup4=true:sup5=undefined",
+        "sup=2:sup2=1:sup3=0:sup4=false:sup5=undefined",
+        "sup=2:sup2=1:sup3=101:sup4=true:sup5=undefined",
+        "sup=2:sup2=1:sup3=101:sup4=false:sup5=undefined",
+        "sup=2:sup2=1:sup3=103:sup4=true:sup5=undefined",
+        "sup=2:sup2=1:sup3=103:sup4=false:sup5=undefined",
+        "sup=2:sup2=2:sup3=0:sup4=true:sup5=undefined",
+        "sup=2:sup2=2:sup3=0:sup4=false:sup5=undefined",
+        "sup=2:sup2=2:sup3=101:sup4=true:sup5=undefined"
+      ],
       "diagnostics": []
     },
     "5P13": {
       "uuid": "edb61",
       "ref": "5P13",
       "file": "src/exercices/5e/5P13.ts",
-      "lastChecked": "2026-07-08T12:00:05.908Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:18:42.625Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=4:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined] error: missing argument: body",
       "variationsTested": [
         "sup=1:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=1:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined",
@@ -27436,7 +27591,9 @@
         "sup=4:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=4:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: missing argument: body"
+      ]
     },
     "5P14-1": {
       "uuid": "542be",
@@ -27572,24 +27729,80 @@
       "uuid": "ab968",
       "ref": "ab968",
       "file": "src/exercices/5e/5R12-2-old.ts",
-      "lastChecked": "2026-07-08T12:25:50.922Z",
-      "status": "failing",
-      "checkedLevel": 0,
-      "failureMode": "runtime_error",
-      "notes": "Timeout (>20s) : exercice bloqué",
-      "variationsTested": [],
+      "lastChecked": "2026-07-08T13:18:47.112Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=true:sup3=1:sup4=true:sup5=undefined",
+        "sup=1:sup2=true:sup3=1:sup4=false:sup5=undefined",
+        "sup=1:sup2=true:sup3=2:sup4=true:sup5=undefined",
+        "sup=1:sup2=true:sup3=2:sup4=false:sup5=undefined",
+        "sup=1:sup2=true:sup3=3:sup4=true:sup5=undefined",
+        "sup=1:sup2=true:sup3=3:sup4=false:sup5=undefined",
+        "sup=1:sup2=false:sup3=1:sup4=true:sup5=undefined",
+        "sup=1:sup2=false:sup3=1:sup4=false:sup5=undefined",
+        "sup=1:sup2=false:sup3=2:sup4=true:sup5=undefined",
+        "sup=1:sup2=false:sup3=2:sup4=false:sup5=undefined",
+        "sup=1:sup2=false:sup3=3:sup4=true:sup5=undefined",
+        "sup=1:sup2=false:sup3=3:sup4=false:sup5=undefined",
+        "sup=2:sup2=true:sup3=1:sup4=true:sup5=undefined",
+        "sup=2:sup2=true:sup3=1:sup4=false:sup5=undefined",
+        "sup=2:sup2=true:sup3=2:sup4=true:sup5=undefined",
+        "sup=2:sup2=true:sup3=2:sup4=false:sup5=undefined",
+        "sup=2:sup2=true:sup3=3:sup4=true:sup5=undefined",
+        "sup=2:sup2=true:sup3=3:sup4=false:sup5=undefined",
+        "sup=2:sup2=false:sup3=1:sup4=true:sup5=undefined",
+        "sup=2:sup2=false:sup3=1:sup4=false:sup5=undefined",
+        "sup=2:sup2=false:sup3=2:sup4=true:sup5=undefined",
+        "sup=2:sup2=false:sup3=2:sup4=false:sup5=undefined",
+        "sup=2:sup2=false:sup3=3:sup4=true:sup5=undefined",
+        "sup=2:sup2=false:sup3=3:sup4=false:sup5=undefined",
+        "sup=3:sup2=true:sup3=1:sup4=true:sup5=undefined",
+        "sup=3:sup2=true:sup3=1:sup4=false:sup5=undefined",
+        "sup=3:sup2=true:sup3=2:sup4=true:sup5=undefined"
+      ],
       "diagnostics": []
     },
     "5R12-2": {
       "uuid": "ab969",
       "ref": "5R12-2",
       "file": "src/exercices/5e/5R12-2.ts",
-      "lastChecked": "2026-07-08T12:26:10.996Z",
-      "status": "failing",
-      "checkedLevel": 0,
-      "failureMode": "runtime_error",
-      "notes": "Timeout (>20s) : exercice bloqué",
-      "variationsTested": [],
+      "lastChecked": "2026-07-08T13:19:20.940Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=true:sup3=1:sup4=true:sup5=undefined",
+        "sup=1:sup2=true:sup3=1:sup4=false:sup5=undefined",
+        "sup=1:sup2=true:sup3=2:sup4=true:sup5=undefined",
+        "sup=1:sup2=true:sup3=2:sup4=false:sup5=undefined",
+        "sup=1:sup2=true:sup3=3:sup4=true:sup5=undefined",
+        "sup=1:sup2=true:sup3=3:sup4=false:sup5=undefined",
+        "sup=1:sup2=false:sup3=1:sup4=true:sup5=undefined",
+        "sup=1:sup2=false:sup3=1:sup4=false:sup5=undefined",
+        "sup=1:sup2=false:sup3=2:sup4=true:sup5=undefined",
+        "sup=1:sup2=false:sup3=2:sup4=false:sup5=undefined",
+        "sup=1:sup2=false:sup3=3:sup4=true:sup5=undefined",
+        "sup=1:sup2=false:sup3=3:sup4=false:sup5=undefined",
+        "sup=2:sup2=true:sup3=1:sup4=true:sup5=undefined",
+        "sup=2:sup2=true:sup3=1:sup4=false:sup5=undefined",
+        "sup=2:sup2=true:sup3=2:sup4=true:sup5=undefined",
+        "sup=2:sup2=true:sup3=2:sup4=false:sup5=undefined",
+        "sup=2:sup2=true:sup3=3:sup4=true:sup5=undefined",
+        "sup=2:sup2=true:sup3=3:sup4=false:sup5=undefined",
+        "sup=2:sup2=false:sup3=1:sup4=true:sup5=undefined",
+        "sup=2:sup2=false:sup3=1:sup4=false:sup5=undefined",
+        "sup=2:sup2=false:sup3=2:sup4=true:sup5=undefined",
+        "sup=2:sup2=false:sup3=2:sup4=false:sup5=undefined",
+        "sup=2:sup2=false:sup3=3:sup4=true:sup5=undefined",
+        "sup=2:sup2=false:sup3=3:sup4=false:sup5=undefined",
+        "sup=3:sup2=true:sup3=1:sup4=true:sup5=undefined",
+        "sup=3:sup2=true:sup3=1:sup4=false:sup5=undefined",
+        "sup=3:sup2=true:sup3=2:sup4=true:sup5=undefined"
+      ],
       "diagnostics": []
     },
     "5R12": {
@@ -27771,15 +27984,22 @@
       "uuid": "6667e",
       "ref": "5R20-4",
       "file": "src/exercices/5e/5R20-4.ts",
-      "lastChecked": "2026-07-08T12:01:56.307Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:19:54.083Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter | error: unclosed delimiter",
       "variationsTested": [
         "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter",
+        "error: unclosed delimiter",
+        "error: unclosed delimiter",
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
     },
     "5R20-5": {
       "uuid": "4125e",
@@ -28146,11 +28366,11 @@
       "uuid": "d3ca7",
       "ref": "5S12",
       "file": "src/exercices/5e/5S12.ts",
-      "lastChecked": "2026-07-08T12:02:23.837Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:19:54.170Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=1:sup3=3:sup4=true:sup5=undefined] error: failed to parse SVG (width, height, or viewbox is invalid)",
       "variationsTested": [
         "sup=1:sup2=1:sup3=1:sup4=true:sup5=undefined",
         "sup=1:sup2=1:sup3=1:sup4=false:sup5=undefined",
@@ -28180,7 +28400,9 @@
         "sup=3:sup2=1:sup3=1:sup4=false:sup5=undefined",
         "sup=3:sup2=1:sup3=2:sup4=true:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: failed to parse SVG (width, height, or viewbox is invalid)"
+      ]
     },
     "5S13-1": {
       "uuid": "7d42a",
@@ -28576,11 +28798,11 @@
       "uuid": "f8dee",
       "ref": "6G2B",
       "file": "src/exercices/6e/6G2B.ts",
-      "lastChecked": "2026-07-08T12:27:02.733Z",
-      "status": "failing",
-      "checkedLevel": 1,
-      "failureMode": "runtime_error",
-      "notes": "[sup=1:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined] Runtime: window.matchMedia is not a function",
+      "lastChecked": "2026-07-08T13:20:19.436Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
       "variationsTested": [
         "sup=1:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=1:sup2=2:sup3=undefined:sup4=undefined:sup5=undefined",
@@ -28642,11 +28864,11 @@
       "uuid": "0dbe7",
       "ref": "6G3B",
       "file": "src/exercices/6e/6G3B.ts",
-      "lastChecked": "2026-07-08T12:27:03.431Z",
-      "status": "failing",
-      "checkedLevel": 1,
-      "failureMode": "runtime_error",
-      "notes": "[sup=1:sup2=1:sup3=0:sup4=undefined:sup5=undefined] Runtime: window.matchMedia is not a function",
+      "lastChecked": "2026-07-08T13:20:25.933Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
       "variationsTested": [
         "sup=1:sup2=1:sup3=0:sup4=undefined:sup5=undefined",
         "sup=1:sup2=1:sup3=1:sup4=undefined:sup5=undefined",
@@ -28802,11 +29024,11 @@
       "uuid": "ff2ce",
       "ref": "6G4B-1",
       "file": "src/exercices/6e/6G4B-1.ts",
-      "lastChecked": "2026-07-08T12:27:04.097Z",
+      "lastChecked": "2026-07-08T13:20:45.201Z",
       "status": "failing",
       "checkedLevel": 0,
       "failureMode": "runtime_error",
-      "notes": "Timeout (>20s) : exercice bloqué",
+      "notes": "Timeout (>50s) : exercice bloqué",
       "variationsTested": [],
       "diagnostics": []
     },
@@ -28814,11 +29036,11 @@
       "uuid": "ff2cc",
       "ref": "ff2cc",
       "file": "src/exercices/6e/6G4B-1Old.ts",
-      "lastChecked": "2026-07-08T12:27:24.177Z",
+      "lastChecked": "2026-07-08T13:21:35.393Z",
       "status": "failing",
       "checkedLevel": 0,
       "failureMode": "runtime_error",
-      "notes": "Timeout (>20s) : exercice bloqué",
+      "notes": "Timeout (>50s) : exercice bloqué",
       "variationsTested": [],
       "diagnostics": []
     },
@@ -29093,7 +29315,7 @@
       "uuid": "c2f77",
       "ref": "6G6D-1",
       "file": "src/exercices/6e/6G6D-1.ts",
-      "lastChecked": "2026-07-08T12:41:05.092Z",
+      "lastChecked": "2026-07-08T13:22:53.697Z",
       "status": "partial",
       "checkedLevel": 1,
       "failureMode": "unprocessed_math",
@@ -29440,16 +29662,18 @@
       "uuid": "49cb2",
       "ref": "6G7B-5",
       "file": "src/exercices/6e/6G7B-5.ts",
-      "lastChecked": "2026-07-08T12:04:51.891Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:22:57.911Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=true:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: magenta",
       "variationsTested": [
         "sup=true:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=false:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: magenta"
+      ]
     },
     "6G7B-6": {
       "uuid": "f5569",
@@ -29469,12 +29693,40 @@
       "uuid": "328b1",
       "ref": "6G7B-7",
       "file": "src/exercices/6e/6G7B-7.ts",
-      "lastChecked": "2026-07-08T12:27:58.348Z",
-      "status": "failing",
-      "checkedLevel": 0,
-      "failureMode": "runtime_error",
-      "notes": "Timeout (>20s) : exercice bloqué",
-      "variationsTested": [],
+      "lastChecked": "2026-07-08T13:22:59.828Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=true:sup3=1:sup4=1:sup5=undefined",
+        "sup=1:sup2=true:sup3=1:sup4=2:sup5=undefined",
+        "sup=1:sup2=true:sup3=1:sup4=3:sup5=undefined",
+        "sup=1:sup2=true:sup3=2:sup4=1:sup5=undefined",
+        "sup=1:sup2=true:sup3=2:sup4=2:sup5=undefined",
+        "sup=1:sup2=true:sup3=2:sup4=3:sup5=undefined",
+        "sup=1:sup2=true:sup3=3:sup4=1:sup5=undefined",
+        "sup=1:sup2=true:sup3=3:sup4=2:sup5=undefined",
+        "sup=1:sup2=true:sup3=3:sup4=3:sup5=undefined",
+        "sup=1:sup2=false:sup3=1:sup4=1:sup5=undefined",
+        "sup=1:sup2=false:sup3=1:sup4=2:sup5=undefined",
+        "sup=1:sup2=false:sup3=1:sup4=3:sup5=undefined",
+        "sup=1:sup2=false:sup3=2:sup4=1:sup5=undefined",
+        "sup=1:sup2=false:sup3=2:sup4=2:sup5=undefined",
+        "sup=1:sup2=false:sup3=2:sup4=3:sup5=undefined",
+        "sup=1:sup2=false:sup3=3:sup4=1:sup5=undefined",
+        "sup=1:sup2=false:sup3=3:sup4=2:sup5=undefined",
+        "sup=1:sup2=false:sup3=3:sup4=3:sup5=undefined",
+        "sup=2:sup2=true:sup3=1:sup4=1:sup5=undefined",
+        "sup=2:sup2=true:sup3=1:sup4=2:sup5=undefined",
+        "sup=2:sup2=true:sup3=1:sup4=3:sup5=undefined",
+        "sup=2:sup2=true:sup3=2:sup4=1:sup5=undefined",
+        "sup=2:sup2=true:sup3=2:sup4=2:sup5=undefined",
+        "sup=2:sup2=true:sup3=2:sup4=3:sup5=undefined",
+        "sup=2:sup2=true:sup3=3:sup4=1:sup5=undefined",
+        "sup=2:sup2=true:sup3=3:sup4=2:sup5=undefined",
+        "sup=2:sup2=true:sup3=3:sup4=3:sup5=undefined"
+      ],
       "diagnostics": []
     },
     "6G7B-8": {
@@ -29496,17 +29748,19 @@
       "uuid": "e9d29",
       "ref": "6G7B",
       "file": "src/exercices/6e/6G7B.ts",
-      "lastChecked": "2026-07-08T12:05:28.129Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:23:39.093Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: brown",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=4:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: brown"
+      ]
     },
     "6G8A-1": {
       "uuid": "5f115",
@@ -29583,11 +29837,11 @@
       "uuid": "594ee",
       "ref": "6I1B-1",
       "file": "src/exercices/6e/6I1B-1.ts",
-      "lastChecked": "2026-07-08T12:05:42.194Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:23:39.915Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=true:sup3=true:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
       "variationsTested": [
         "sup=1:sup2=true:sup3=true:sup4=undefined:sup5=undefined",
         "sup=1:sup2=true:sup3=false:sup4=undefined:sup5=undefined",
@@ -29602,17 +29856,20 @@
         "sup=3:sup2=false:sup3=true:sup4=undefined:sup5=undefined",
         "sup=3:sup2=false:sup3=false:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
     },
     "594eb": {
       "uuid": "594eb",
       "ref": "594eb",
       "file": "src/exercices/6e/6I1B-1Old.ts",
-      "lastChecked": "2026-07-08T12:05:52.357Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:23:43.579Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=true:sup3=true:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
       "variationsTested": [
         "sup=1:sup2=true:sup3=true:sup4=undefined:sup5=undefined",
         "sup=1:sup2=true:sup3=false:sup4=undefined:sup5=undefined",
@@ -29627,7 +29884,10 @@
         "sup=3:sup2=false:sup3=true:sup4=undefined:sup5=undefined",
         "sup=3:sup2=false:sup3=false:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
     },
     "6I1B-2": {
       "uuid": "0e016",
@@ -29804,11 +30064,11 @@
       "uuid": "e9dac",
       "ref": "6I1B-8",
       "file": "src/exercices/6e/6I1B-8.ts",
-      "lastChecked": "2026-07-08T12:28:18.398Z",
+      "lastChecked": "2026-07-08T13:23:47.018Z",
       "status": "failing",
       "checkedLevel": 0,
       "failureMode": "runtime_error",
-      "notes": "Timeout (>20s) : exercice bloqué",
+      "notes": "Timeout (>50s) : exercice bloqué",
       "variationsTested": [],
       "diagnostics": []
     },
@@ -29816,11 +30076,11 @@
       "uuid": "c8fee",
       "ref": "6I1B",
       "file": "src/exercices/6e/6I1B.ts",
-      "lastChecked": "2026-07-08T12:28:51.824Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:24:41.993Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=true:sup3=true:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
       "variationsTested": [
         "sup=1:sup2=true:sup3=true:sup4=undefined:sup5=undefined",
         "sup=1:sup2=true:sup3=false:sup4=undefined:sup5=undefined",
@@ -29835,17 +30095,20 @@
         "sup=3:sup2=false:sup3=true:sup4=undefined:sup5=undefined",
         "sup=3:sup2=false:sup3=false:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
     },
     "c8fe9": {
       "uuid": "c8fe9",
       "ref": "c8fe9",
       "file": "src/exercices/6e/6I1BOld.ts",
-      "lastChecked": "2026-07-08T12:08:39.941Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:24:45.432Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=true:sup3=true:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
       "variationsTested": [
         "sup=1:sup2=true:sup3=true:sup4=undefined:sup5=undefined",
         "sup=1:sup2=true:sup3=false:sup4=undefined:sup5=undefined",
@@ -29860,7 +30123,10 @@
         "sup=3:sup2=false:sup3=true:sup4=undefined:sup5=undefined",
         "sup=3:sup2=false:sup3=false:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
     },
     "6I1D": {
       "uuid": "f320c",
@@ -30107,9 +30373,9 @@
       "uuid": "6225c",
       "ref": "6M2A-1",
       "file": "src/exercices/6e/6M2A-1.ts",
-      "lastChecked": "2026-07-08T12:09:13.024Z",
+      "lastChecked": "2026-07-08T13:24:48.308Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -30466,17 +30732,19 @@
       "uuid": "e960d",
       "ref": "6M4A-1",
       "file": "src/exercices/6e/6M4A-1.ts",
-      "lastChecked": "2026-07-08T12:09:33.118Z",
-      "status": "passing",
-      "checkedLevel": 1,
-      "failureMode": null,
-      "notes": "",
+      "lastChecked": "2026-07-08T13:25:06.126Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: xrightarrow",
       "variationsTested": [
         "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
         "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
-      "diagnostics": []
+      "diagnostics": [
+        "error: unknown variable: xrightarrow"
+      ]
     },
     "6M4A": {
       "uuid": "5f315",
@@ -30973,9 +31241,9 @@
       "uuid": "2be1d",
       "ref": "6N0B-4",
       "file": "src/exercices/6e/6N0B-4.ts",
-      "lastChecked": "2026-07-08T12:09:51.688Z",
+      "lastChecked": "2026-07-08T13:25:06.964Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -31529,6 +31797,1300 @@
         "sup=3:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
       "diagnostics": []
+    },
+    "6P3E": {
+      "uuid": "9c78f",
+      "ref": "6P3E",
+      "file": "src/exercices/6e/6P3E.ts",
+      "lastChecked": "2026-07-08T13:25:07.665Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=4:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined] error: missing argument: body",
+      "variationsTested": [
+        "sup=1:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=4:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=4:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: missing argument: body"
+      ]
+    },
+    "auto6M1C-1": {
+      "uuid": "ab9ff",
+      "ref": "auto6M1C-1",
+      "file": "src/exercices/6e/auto6M1C-1.ts",
+      "lastChecked": "2026-07-08T13:25:12.472Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=true:sup3=true:sup4=1:sup5=undefined",
+        "sup=1:sup2=true:sup3=true:sup4=2:sup5=undefined",
+        "sup=1:sup2=true:sup3=false:sup4=1:sup5=undefined",
+        "sup=1:sup2=true:sup3=false:sup4=2:sup5=undefined",
+        "sup=1:sup2=false:sup3=true:sup4=1:sup5=undefined",
+        "sup=1:sup2=false:sup3=true:sup4=2:sup5=undefined",
+        "sup=1:sup2=false:sup3=false:sup4=1:sup5=undefined",
+        "sup=1:sup2=false:sup3=false:sup4=2:sup5=undefined",
+        "sup=3:sup2=true:sup3=true:sup4=1:sup5=undefined",
+        "sup=3:sup2=true:sup3=true:sup4=2:sup5=undefined",
+        "sup=3:sup2=true:sup3=false:sup4=1:sup5=undefined",
+        "sup=3:sup2=true:sup3=false:sup4=2:sup5=undefined",
+        "sup=3:sup2=false:sup3=true:sup4=1:sup5=undefined",
+        "sup=3:sup2=false:sup3=true:sup4=2:sup5=undefined",
+        "sup=3:sup2=false:sup3=false:sup4=1:sup5=undefined",
+        "sup=3:sup2=false:sup3=false:sup4=2:sup5=undefined",
+        "sup=5:sup2=true:sup3=true:sup4=1:sup5=undefined",
+        "sup=5:sup2=true:sup3=true:sup4=2:sup5=undefined",
+        "sup=5:sup2=true:sup3=false:sup4=1:sup5=undefined",
+        "sup=5:sup2=true:sup3=false:sup4=2:sup5=undefined",
+        "sup=5:sup2=false:sup3=true:sup4=1:sup5=undefined",
+        "sup=5:sup2=false:sup3=true:sup4=2:sup5=undefined",
+        "sup=5:sup2=false:sup3=false:sup4=1:sup5=undefined",
+        "sup=5:sup2=false:sup3=false:sup4=2:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "3cb1d": {
+      "uuid": "3cb1d",
+      "ref": "3cb1d",
+      "file": "src/exercices/6e/auto6M1C-1Old.ts",
+      "lastChecked": "2026-07-08T13:25:30.015Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=true:sup3=true:sup4=1:sup5=undefined",
+        "sup=1:sup2=true:sup3=true:sup4=2:sup5=undefined",
+        "sup=1:sup2=true:sup3=true:sup4=3:sup5=undefined",
+        "sup=1:sup2=true:sup3=false:sup4=1:sup5=undefined",
+        "sup=1:sup2=true:sup3=false:sup4=2:sup5=undefined",
+        "sup=1:sup2=true:sup3=false:sup4=3:sup5=undefined",
+        "sup=1:sup2=false:sup3=true:sup4=1:sup5=undefined",
+        "sup=1:sup2=false:sup3=true:sup4=2:sup5=undefined",
+        "sup=1:sup2=false:sup3=true:sup4=3:sup5=undefined",
+        "sup=1:sup2=false:sup3=false:sup4=1:sup5=undefined",
+        "sup=1:sup2=false:sup3=false:sup4=2:sup5=undefined",
+        "sup=1:sup2=false:sup3=false:sup4=3:sup5=undefined",
+        "sup=2:sup2=true:sup3=true:sup4=1:sup5=undefined",
+        "sup=2:sup2=true:sup3=true:sup4=2:sup5=undefined",
+        "sup=2:sup2=true:sup3=true:sup4=3:sup5=undefined",
+        "sup=2:sup2=true:sup3=false:sup4=1:sup5=undefined",
+        "sup=2:sup2=true:sup3=false:sup4=2:sup5=undefined",
+        "sup=2:sup2=true:sup3=false:sup4=3:sup5=undefined",
+        "sup=2:sup2=false:sup3=true:sup4=1:sup5=undefined",
+        "sup=2:sup2=false:sup3=true:sup4=2:sup5=undefined",
+        "sup=2:sup2=false:sup3=true:sup4=3:sup5=undefined",
+        "sup=2:sup2=false:sup3=false:sup4=1:sup5=undefined",
+        "sup=2:sup2=false:sup3=false:sup4=2:sup5=undefined",
+        "sup=2:sup2=false:sup3=false:sup4=3:sup5=undefined",
+        "sup=3:sup2=true:sup3=true:sup4=1:sup5=undefined",
+        "sup=3:sup2=true:sup3=true:sup4=2:sup5=undefined",
+        "sup=3:sup2=true:sup3=true:sup4=3:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "can1a-2022": {
+      "uuid": "779b0",
+      "ref": "can1a-2022",
+      "file": "src/exercices/can/1e/can1a-2022.ts",
+      "lastChecked": "2026-07-08T13:25:48.405Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined",
+        "sup=false:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "can1a-2024": {
+      "uuid": "640f2",
+      "ref": "can1a-2024",
+      "file": "src/exercices/can/1e/can1a-2024.ts",
+      "lastChecked": "2026-07-08T13:25:51.106Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined",
+        "sup=false:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "can1a-2025": {
+      "uuid": "389e8",
+      "ref": "can1a-2025",
+      "file": "src/exercices/can/1e/can1a-2025.ts",
+      "lastChecked": "2026-07-08T13:25:51.719Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined",
+        "sup=false:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "can1a-NY2025": {
+      "uuid": "7244e",
+      "ref": "can1a-NY2025",
+      "file": "src/exercices/can/1e/can1a-NY2025.ts",
+      "lastChecked": "2026-07-08T13:25:53.474Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined",
+        "sup=false:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "can1a-NY2026": {
+      "uuid": "214cd",
+      "ref": "can1a-NY2026",
+      "file": "src/exercices/can/1e/can1a-NY2026.ts",
+      "lastChecked": "2026-07-08T13:25:54.088Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=false:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined",
+        "sup=false:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "can1S02": {
+      "uuid": "3f032",
+      "ref": "can1S02",
+      "file": "src/exercices/can/1e/can1S02.ts",
+      "lastChecked": "2026-07-08T13:25:55.142Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "can1S03": {
+      "uuid": "fccb4",
+      "ref": "can1S03",
+      "file": "src/exercices/can/1e/can1S03.ts",
+      "lastChecked": "2026-07-08T13:25:55.796Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "can1S05": {
+      "uuid": "0f014",
+      "ref": "can1S05",
+      "file": "src/exercices/can/1e/can1S05.ts",
+      "lastChecked": "2026-07-08T13:25:56.470Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "can1SD18": {
+      "uuid": "7c76a",
+      "ref": "can1SD18",
+      "file": "src/exercices/can/1e/can1SD18.ts",
+      "lastChecked": "2026-07-08T13:25:57.141Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "can1SD19": {
+      "uuid": "b53ea",
+      "ref": "can1SD19",
+      "file": "src/exercices/can/1e/can1SD19.ts",
+      "lastChecked": "2026-07-08T13:25:57.191Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
+    },
+    "can2a-2022": {
+      "uuid": "2a4b1",
+      "ref": "can2a-2022",
+      "file": "src/exercices/can/2e/can2a-2022.ts",
+      "lastChecked": "2026-07-08T13:25:57.241Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "can2a-2025": {
+      "uuid": "4581b",
+      "ref": "can2a-2025",
+      "file": "src/exercices/can/2e/can2a-2025.ts",
+      "lastChecked": "2026-07-08T13:25:58.008Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined",
+        "sup=false:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "can2a-NY2024": {
+      "uuid": "dd9d0",
+      "ref": "can2a-NY2024",
+      "file": "src/exercices/can/2e/can2a-NY2024.ts",
+      "lastChecked": "2026-07-08T13:25:58.863Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
+      "variationsTested": [
+        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
+    },
+    "can2G07": {
+      "uuid": "651a5",
+      "ref": "can2G07",
+      "file": "src/exercices/can/2e/can2G07.ts",
+      "lastChecked": "2026-07-08T13:25:59.063Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: missing argument: body",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: missing argument: body"
+      ]
+    },
+    "can2G08": {
+      "uuid": "eaebb",
+      "ref": "can2G08",
+      "file": "src/exercices/can/2e/can2G08.ts",
+      "lastChecked": "2026-07-08T13:25:59.126Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: missing argument: body",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: missing argument: body"
+      ]
+    },
+    "can2G14": {
+      "uuid": "0dfad",
+      "ref": "can2G14",
+      "file": "src/exercices/can/2e/can2G14.ts",
+      "lastChecked": "2026-07-08T13:25:59.176Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: missing argument: body",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: missing argument: body"
+      ]
+    },
+    "can2G17": {
+      "uuid": "dacc1",
+      "ref": "can2G17",
+      "file": "src/exercices/can/2e/can2G17.ts",
+      "lastChecked": "2026-07-08T13:25:59.216Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: missing argument: body",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: missing argument: body"
+      ]
+    },
+    "can2G19": {
+      "uuid": "6082f",
+      "ref": "can2G19",
+      "file": "src/exercices/can/2e/can2G19.ts",
+      "lastChecked": "2026-07-08T13:25:59.263Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: missing argument: body",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: missing argument: body"
+      ]
+    },
+    "can2G22": {
+      "uuid": "9ff07",
+      "ref": "can2G22",
+      "file": "src/exercices/can/2e/can2G22.ts",
+      "lastChecked": "2026-07-08T13:25:59.392Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: missing argument: body",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: missing argument: body"
+      ]
+    },
+    "can2L15": {
+      "uuid": "1f55b",
+      "ref": "can2L15",
+      "file": "src/exercices/can/2e/can2L15.ts",
+      "lastChecked": "2026-07-08T13:25:59.427Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "can2L16": {
+      "uuid": "bdc96",
+      "ref": "can2L16",
+      "file": "src/exercices/can/2e/can2L16.ts",
+      "lastChecked": "2026-07-08T13:25:59.498Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "can2N04": {
+      "uuid": "bb947",
+      "ref": "can2N04",
+      "file": "src/exercices/can/2e/can2N04.ts",
+      "lastChecked": "2026-07-08T13:25:59.555Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "can2N08": {
+      "uuid": "7e24e",
+      "ref": "can2N08",
+      "file": "src/exercices/can/2e/can2N08.ts",
+      "lastChecked": "2026-07-08T13:25:59.598Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=1:sup3=1:sup4=undefined:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=1:sup2=1:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=1:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=1:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=4:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=4:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=4:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=9:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=9:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=9:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=1:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=1:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=1:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=4:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=4:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=4:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=9:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=9:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=9:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=1:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=1:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=1:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=4:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=4:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=4:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=9:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=9:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=9:sup3=9:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "can2N09": {
+      "uuid": "0ff65",
+      "ref": "can2N09",
+      "file": "src/exercices/can/2e/can2N09.ts",
+      "lastChecked": "2026-07-08T13:26:11.940Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=1:sup3=1:sup4=undefined:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=1:sup2=1:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=1:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=1:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=4:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=4:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=4:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=9:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=9:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=9:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=1:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=1:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=1:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=4:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=4:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=4:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=9:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=9:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=9:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=1:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=1:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=1:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=4:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=4:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=4:sup3=9:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=9:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=9:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=9:sup3=9:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "can3a-2023": {
+      "uuid": "798ec",
+      "ref": "can3a-2023",
+      "file": "src/exercices/can/3e/can3a-2023.js",
+      "lastChecked": "2026-07-08T13:26:36.925Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: textbf",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unknown variable: textbf"
+      ]
+    },
+    "can3a-2024": {
+      "uuid": "f3ceb",
+      "ref": "can3a-2024",
+      "file": "src/exercices/can/3e/can3a-2024.ts",
+      "lastChecked": "2026-07-08T13:26:37.241Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined",
+        "sup=false:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "can3F11": {
+      "uuid": "d85c2",
+      "ref": "can3F11",
+      "file": "src/exercices/can/3e/can3F11.ts",
+      "lastChecked": "2026-07-08T13:26:40.861Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "can3G02": {
+      "uuid": "8e651",
+      "ref": "can3G02",
+      "file": "src/exercices/can/3e/can3G02.ts",
+      "lastChecked": "2026-07-08T13:26:42.022Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: brown",
+      "variationsTested": [
+        "sup=7:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=10:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unknown variable: brown"
+      ]
+    },
+    "can4a-2023": {
+      "uuid": "cae4f",
+      "ref": "can4a-2023",
+      "file": "src/exercices/can/4e/can4a-2023.js",
+      "lastChecked": "2026-07-08T13:26:47.034Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: textbf",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unknown variable: textbf"
+      ]
+    },
+    "can4G02": {
+      "uuid": "a77ed",
+      "ref": "can4G02",
+      "file": "src/exercices/can/4e/can4G02.ts",
+      "lastChecked": "2026-07-08T13:26:47.559Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: brown",
+      "variationsTested": [
+        "sup=7:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=10:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unknown variable: brown"
+      ]
+    },
+    "can5a-2023": {
+      "uuid": "312eb",
+      "ref": "can5a-2023",
+      "file": "src/exercices/can/5e/can5a-2023.js",
+      "lastChecked": "2026-07-08T13:26:52.329Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: textbf",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unknown variable: textbf"
+      ]
+    },
+    "can5G01": {
+      "uuid": "6314c",
+      "ref": "can5G01",
+      "file": "src/exercices/can/5e/can5G01.ts",
+      "lastChecked": "2026-07-08T13:26:52.940Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: brown",
+      "variationsTested": [
+        "sup=7:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=10:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unknown variable: brown"
+      ]
+    },
+    "can6G01": {
+      "uuid": "135d4",
+      "ref": "can6G01",
+      "file": "src/exercices/can/6e/can6G01.ts",
+      "lastChecked": "2026-07-08T13:26:57.521Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: brown",
+      "variationsTested": [
+        "sup=7:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=8:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=10:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unknown variable: brown"
+      ]
+    },
+    "can6N05": {
+      "uuid": "22f41",
+      "ref": "can6N05",
+      "file": "src/exercices/can/6e/can6N05.ts",
+      "lastChecked": "2026-07-08T13:27:01.199Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: textbf",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unknown variable: textbf"
+      ]
+    },
+    "6ca15": {
+      "uuid": "6ca15",
+      "ref": "6ca15",
+      "file": "src/exercices/can/6e/CANSpeciale2024.ts",
+      "lastChecked": "2026-07-08T13:27:01.258Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=0:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
+      "variationsTested": [
+        "sup=0:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=7:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
+    },
+    "can6C62": {
+      "uuid": "cb93a",
+      "ref": "can6C62",
+      "file": "src/exercices/can/c3/canc3C23.ts",
+      "lastChecked": "2026-07-08T13:27:02.877Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "ko2fq": {
+      "uuid": "ko2fq",
+      "ref": "ko2fq",
+      "file": "src/exercices/can/can1a-2022/can1a-2022-Q12.ts",
+      "lastChecked": "2026-07-08T13:27:03.535Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=true:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=false:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "5uv2z": {
+      "uuid": "5uv2z",
+      "ref": "5uv2z",
+      "file": "src/exercices/can/can1a-2022/can1a-2022-Q26.ts",
+      "lastChecked": "2026-07-08T13:27:04.807Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=true:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=false:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "f0f67": {
+      "uuid": "f0f67",
+      "ref": "f0f67",
+      "file": "src/exercices/can/can1a-2024/can1a-2024-Q23.ts",
+      "lastChecked": "2026-07-08T13:27:06.146Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "9e9fb": {
+      "uuid": "9e9fb",
+      "ref": "9e9fb",
+      "file": "src/exercices/can/can1a-2025/can1a-2025-Q12.ts",
+      "lastChecked": "2026-07-08T13:27:06.170Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "gletu": {
+      "uuid": "gletu",
+      "ref": "gletu",
+      "file": "src/exercices/can/can1a-2026/can1a-2026-Q27.ts",
+      "lastChecked": "2026-07-08T13:27:06.840Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=true:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
+      "variationsTested": [
+        "sup=true:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=false:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
+    },
+    "can2a-2024-2": {
+      "uuid": "can2a-2024-2",
+      "ref": "can2a-2024-2",
+      "file": "src/exercices/can/can2a-2024-2/can2a-2024-mai.ts",
+      "lastChecked": "2026-07-08T13:27:06.903Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "ca805": {
+      "uuid": "ca805",
+      "ref": "ca805",
+      "file": "src/exercices/can/can2a-2025/can2a-2025-Q12.ts",
+      "lastChecked": "2026-07-08T13:27:07.445Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "67a5b": {
+      "uuid": "67a5b",
+      "ref": "67a5b",
+      "file": "src/exercices/can/can2a-2025/can2a-2025-Q14.ts",
+      "lastChecked": "2026-07-08T13:27:08.149Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "b18a9": {
+      "uuid": "b18a9",
+      "ref": "b18a9",
+      "file": "src/exercices/can/can2a-2025/can2a-2025-Q26.ts",
+      "lastChecked": "2026-07-08T13:27:08.207Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: missing argument: body",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: missing argument: body"
+      ]
+    },
+    "4dc1d": {
+      "uuid": "4dc1d",
+      "ref": "4dc1d",
+      "file": "src/exercices/can/can3a-2024/can3-2024-Q29.ts",
+      "lastChecked": "2026-07-08T13:27:08.323Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "0244d": {
+      "uuid": "0244d",
+      "ref": "0244d",
+      "file": "src/exercices/can/canNY-2025/can1NY-2025-Q16.ts",
+      "lastChecked": "2026-07-08T13:27:08.966Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
+    },
+    "b3jon": {
+      "uuid": "b3jon",
+      "ref": "b3jon",
+      "file": "src/exercices/can/canNY-2026/can1NY-2026-Q16.ts",
+      "lastChecked": "2026-07-08T13:27:08.988Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
+    },
+    "85bf3": {
+      "uuid": "85bf3",
+      "ref": "85bf3",
+      "file": "src/exercices/can/canTspea-2025/canTspea-2025-Q28.ts",
+      "lastChecked": "2026-07-08T13:27:09.012Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
+    },
+    "31vj3": {
+      "uuid": "31vj3",
+      "ref": "31vj3",
+      "file": "src/exercices/can/canTspea-2026/canTspea-2026-Q12.ts",
+      "lastChecked": "2026-07-08T13:27:09.051Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=true:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=false:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "gnx1c": {
+      "uuid": "gnx1c",
+      "ref": "gnx1c",
+      "file": "src/exercices/can/canTspea-2026/canTspea-2026-Q20.ts",
+      "lastChecked": "2026-07-08T13:27:10.385Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=true:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=false:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "canTSpea-2026": {
+      "uuid": "3aa48",
+      "ref": "canTSpea-2026",
+      "file": "src/exercices/can/TSpe/canTspea-2026.ts",
+      "lastChecked": "2026-07-08T13:27:11.803Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
+      "variationsTested": [
+        "sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined",
+        "sup=false:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
+    },
+    "canTSpea-NY2025": {
+      "uuid": "90dad",
+      "ref": "canTSpea-NY2025",
+      "file": "src/exercices/can/TSpe/canTSpea-NY2025.ts",
+      "lastChecked": "2026-07-08T13:27:13.107Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=true:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined",
+        "sup=false:sup2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30:sup3=false:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "bfd77": {
+      "uuid": "bfd77",
+      "ref": "bfd77",
+      "file": "src/exercices/ch/2mLogExp-5.ts",
+      "lastChecked": "2026-07-08T13:27:13.362Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=7:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "bfc45": {
+      "uuid": "bfc45",
+      "ref": "bfc45",
+      "file": "src/exercices/ch/2mLogExp-6.ts",
+      "lastChecked": "2026-07-08T13:27:15.417Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=5:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=5:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=4:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=4:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=4:sup2=5:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "bfce3": {
+      "uuid": "bfce3",
+      "ref": "bfce3",
+      "file": "src/exercices/ch/2mLogExp-7.ts",
+      "lastChecked": "2026-07-08T13:27:21.636Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=6:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "bfc77": {
+      "uuid": "bfc77",
+      "ref": "bfc77",
+      "file": "src/exercices/ch/2mLogExp-8.ts",
+      "lastChecked": "2026-07-08T13:27:23.959Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=5:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=5:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=7:sup2=1:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=7:sup2=3:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=7:sup2=5:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "9b4e1": {
+      "uuid": "9b4e1",
+      "ref": "9b4e1",
+      "file": "src/exercices/ch/3G99-12.ts",
+      "lastChecked": "2026-07-08T13:27:29.860Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "7c2e9": {
+      "uuid": "7c2e9",
+      "ref": "7c2e9",
+      "file": "src/exercices/ch/3G99-3b.ts",
+      "lastChecked": "2026-07-08T13:27:30.798Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "04b1e": {
+      "uuid": "04b1e",
+      "ref": "04b1e",
+      "file": "src/exercices/ch/3mLimCont-1.ts",
+      "lastChecked": "2026-07-08T13:27:31.493Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=true:sup3=true:sup4=true:sup5=undefined",
+        "sup=1:sup2=true:sup3=true:sup4=false:sup5=undefined",
+        "sup=1:sup2=true:sup3=false:sup4=true:sup5=undefined",
+        "sup=1:sup2=true:sup3=false:sup4=false:sup5=undefined",
+        "sup=1:sup2=false:sup3=true:sup4=true:sup5=undefined",
+        "sup=1:sup2=false:sup3=true:sup4=false:sup5=undefined",
+        "sup=1:sup2=false:sup3=false:sup4=true:sup5=undefined",
+        "sup=1:sup2=false:sup3=false:sup4=false:sup5=undefined",
+        "sup=3:sup2=true:sup3=true:sup4=true:sup5=undefined",
+        "sup=3:sup2=true:sup3=true:sup4=false:sup5=undefined",
+        "sup=3:sup2=true:sup3=false:sup4=true:sup5=undefined",
+        "sup=3:sup2=true:sup3=false:sup4=false:sup5=undefined",
+        "sup=3:sup2=false:sup3=true:sup4=true:sup5=undefined",
+        "sup=3:sup2=false:sup3=true:sup4=false:sup5=undefined",
+        "sup=3:sup2=false:sup3=false:sup4=true:sup5=undefined",
+        "sup=3:sup2=false:sup3=false:sup4=false:sup5=undefined",
+        "sup=7:sup2=true:sup3=true:sup4=true:sup5=undefined",
+        "sup=7:sup2=true:sup3=true:sup4=false:sup5=undefined",
+        "sup=7:sup2=true:sup3=false:sup4=true:sup5=undefined",
+        "sup=7:sup2=true:sup3=false:sup4=false:sup5=undefined",
+        "sup=7:sup2=false:sup3=true:sup4=true:sup5=undefined",
+        "sup=7:sup2=false:sup3=true:sup4=false:sup5=undefined",
+        "sup=7:sup2=false:sup3=false:sup4=true:sup5=undefined",
+        "sup=7:sup2=false:sup3=false:sup4=false:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "e70ce": {
+      "uuid": "e70ce",
+      "ref": "e70ce",
+      "file": "src/exercices/EAMPremiere/EAM-AGSpe-2026-Q3.ts",
+      "lastChecked": "2026-07-08T13:27:46.855Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
+        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
+        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
+        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
+        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
+        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
+        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
+        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "5701a": {
+      "uuid": "5701a",
+      "ref": "5701a",
+      "file": "src/exercices/EAMPremiere/EAM-AGSpe-2026-Q4.ts",
+      "lastChecked": "2026-07-08T13:27:52.512Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
+        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
+        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
+        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
+        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
+        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
+        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
+        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "ps265": {
+      "uuid": "ps265",
+      "ref": "ps265",
+      "file": "src/exercices/EAMPremiere/EAM-PolynesieSpe-2026-Q5.ts",
+      "lastChecked": "2026-07-08T13:27:55.256Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined] error: unclosed delimiter",
+      "variationsTested": [
+        "sup=true:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
+        "sup=true:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
+        "sup=true:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
+        "sup=true:sup2=false:sup3=undefined:sup4=false:sup5=undefined",
+        "sup=false:sup2=true:sup3=undefined:sup4=true:sup5=undefined",
+        "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
+        "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
+        "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter"
+      ]
+    },
+    "P015": {
+      "uuid": "085ed",
+      "ref": "P015",
+      "file": "src/exercices/profs/P015.ts",
+      "lastChecked": "2026-07-08T13:27:56.307Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=true:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=false:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "debc6": {
+      "uuid": "debc6",
+      "ref": "debc6",
+      "file": "src/exercices/TSpe/TSA7-20-old.ts",
+      "lastChecked": "2026-07-08T13:28:00.622Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unknown variable: boxed",
+      "variationsTested": [
+        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=4:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unknown variable: boxed"
+      ]
+    },
+    "TSP4-10": {
+      "uuid": "6da5f",
+      "ref": "TSP4-10",
+      "file": "src/exercices/TSpe/TSP4-10.ts",
+      "lastChecked": "2026-07-08T13:28:00.706Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=5:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "TSP4-20": {
+      "uuid": "f25ef",
+      "ref": "TSP4-20",
+      "file": "src/exercices/TSpe/TSP4-20.ts",
+      "lastChecked": "2026-07-08T13:28:02.811Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=4:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "TTE-9": {
+      "uuid": "364dd",
+      "ref": "TTE-9",
+      "file": "src/exercices/TT/TTE-9.ts",
+      "lastChecked": "2026-07-08T13:28:04.894Z",
+      "status": "failing",
+      "checkedLevel": 2,
+      "failureMode": "compile_error",
+      "notes": "[sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined] error: unclosed delimiter | error: unclosed delimiter",
+      "variationsTested": [
+        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": [
+        "error: unclosed delimiter",
+        "error: unclosed delimiter"
+      ]
     }
   }
 }

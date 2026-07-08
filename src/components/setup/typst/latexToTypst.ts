@@ -571,6 +571,10 @@ const NAMED_COLOR_TO_HEX: Record<string, string> = {
   lightyellow: '#ffffe0',
   lightpink: '#ffb6c1',
   pink: '#ffc0cb',
+  brown: '#964b00',
+  violet: '#7f00ff',
+  magenta: '#ff00ff',
+  cyan: '#00ffff',
 }
 
 /** Couleurs nommées directement comprises par Typst */
@@ -1020,17 +1024,15 @@ function removeLatexColorDeclarations(text: string): string {
 
 function typstColorExpression(color: string): string | null {
   const normalized = color.trim()
+  const lower = normalized.toLowerCase()
+  if (lower === '' || lower === 'transparent' || lower === 'inherit' || /^none/.test(lower)) return null
   const hex = normalized.replace(/^#/, '')
-  if (
-    /^(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(
-      hex,
-    )
-  ) {
+  if (/^(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(hex)) {
     return `rgb("#${hex}")`
   }
-  const lower = normalized.toLowerCase()
   if (lower === 'grey') return 'gray'
-  if (/^[a-z][a-z0-9-]*$/i.test(normalized)) return lower
+  if (lower in NAMED_COLOR_TO_HEX) return `rgb("${NAMED_COLOR_TO_HEX[lower]}")`
+  if (TYPST_NAMED_COLORS.has(lower)) return lower
   return null
 }
 
@@ -1325,6 +1327,11 @@ export function htmlToTypst(html: string, figures?: string[]): string {
   text = protectHtmlTables(text, protect, figures)
   text = protectMathalea2dContainers(text, protect, figures)
   text = protectKatexSpans(text, protect)
+  // `~$€$` (pattern produit par `texPrix(val)~$€$`) : le `$€$` est un bloc math
+  // imbriqué dans un autre `$...$`. En mode texte brut (pas de KaTeX rendu),
+  // on remplace `~$€$` par `~\euro` pour éviter la confusion des délimiteurs $.
+  text = text.replace(/~\$€\$/g, '~\\euro ')
+  text = text.replace(/\$€\$/g, '\\euro ')
   text = text.replace(/\\\[([\s\S]+?)\\\]/g, (_, tex: string) =>
     protect(latexSegmentToTypst(tex, true)),
   )
