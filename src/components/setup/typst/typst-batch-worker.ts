@@ -228,7 +228,9 @@ function compileTypst(source: string): { ok: boolean; diagnostics: string[]; sou
       }
       for (const ln of [...lineNums].sort((a, b) => a - b)) sourceSnippet.push(`${ln + 1}: ${sourceLines[ln]}`)
     }
-    return { ok: result.status === 0, diagnostics, sourceSnippet }
+    const ok = result.status === 0
+    if (!ok) { try { writeFileSync('/tmp/typst-last-error.typ', source) } catch {} }
+    return { ok, diagnostics, sourceSnippet }
   } finally {
     try { rmSync(tmpFile) } catch {}
   }

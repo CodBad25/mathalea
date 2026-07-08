@@ -147,6 +147,13 @@ function preprocessTex(tex: string): string {
   // \big, \Big, \bigg, \Bigg (avec suffixes l/r/m optionnels) : tex2typst
   // laisse les variantes sans suffixe comme variable nue — on les supprime
   output = output.replace(/\\[Bb]igg?[lrm]?\b/g, '')
+  // \{ et \} (accolades littérales en mode math, ex. ensemble {a; b}) :
+  // tex2typst les convertit en { et } nus → en Typst math, { est un délimiteur
+  // de groupe, non un glyphe → erreur "unclosed delimiter".
+  // On remplace par \lbrace / \rbrace que tex2typst convertit correctement en
+  // brace.l / brace.r (glyphes Typst pour les accolades affichées).
+  output = output.replace(/\\{/g, '\\lbrace ')
+  output = output.replace(/\\}/g, '\\rbrace ')
   // ; en mode mathématique : Typst l'interprète comme séparateur de lignes
   // dans mat() et vec() (ex. M(a;b) → erreur "expected content, found array")
   // → on le neutralise via \text{;} sauf s'il fait partie de \; (espace)
@@ -313,6 +320,29 @@ function postprocessTypst(typst: string): string {
     .replace(/\bbold\(\]+\)\b/g, 'bold(bracket.r)')
     .replace(/\bupright\(\[+\)\b/g, 'upright(bracket.l)')
     .replace(/\bupright\(\]+\)\b/g, 'upright(bracket.r)')
+    // \mathbf{)} produit bold() vide (le ) ferme immédiatement bold() sans contenu).
+    // bold() sans corps → "missing argument: body" dans Typst. On remplace par paren.r.
+    .replace(/\bupright\(bold\(\)\)/g, 'upright(bold(paren.r))')
+    .replace(/\bbold\(\)\b/g, 'bold(paren.r)')
+    // \left[...\right] dans \mathbf{} produit [...] (crochets nus). Si plusieurs [A]×[B]
+    // se suivent, la séquence ]×[ crée de faux intervalles. On convertit TOUTES les paires
+    // équilibrées [...] en bracket.l/bracket.r sans délimiteurs actifs.
+    // Cas 1 : contenu avec caractères non-alphabétiques (ex. [(-6)×(-6)])
+    .replace(/\[([^\[\]]*[^a-zA-Z \t][^\[\]]*)\]/g, 'lr(bracket.l $1 bracket.r)')
+    // Cas 2 : contenu purement alphabétique entre crochets (ex. [union], [sect]).
+    // Contexte 2a : [union] ou [ union ] entre délimiteurs ']' et '[' —
+    //   on enlève les crochets : ]A[union]B[ → ]A union B[ → règle ] suivante.
+    // Contexte 2b : ']'+espaces+mot+espaces+'[' — l'opérateur d'ensemble (\cup, \cap)
+    //   apparaît ENTRE deux crochets d'intervalles ; on doit aussi l'extraire.
+    // Traitement unifié : tous les [alpha+] et ]alpha+[ sans autre contenu sont nettoyés.
+    .replace(/\[([a-zA-Z ]+)\]/g, ' $1 ')
+    // ]opérateur[ (ex. ]\cup[ devenu ] union [) entre deux délimiteurs d'intervalles :
+    // supprimer les crochets parasites autour du mot pour que l'intervalle englobant
+    // soit correctement reconnu par la règle ]...[  ci-après.
+    .replace(/\] {0,4}([a-zA-Z]+) {0,4}\[/g, ' $1 ')
+    // tex2typst produit #none_N pour un indice sans base LaTeX (ex. $_2$) →
+    // variable inconnue en Typst. On supprime le préfixe invalide.
+    .replace(/#none_\w+/g, '')
     // tex2typst convertit \left]...\right[ en lr(]...[), \left[...\right[ en
     // lr([...[). En Typst, ] et [ juste après/avant lr()/lr() sont parsés comme
     // délimiteurs → "unclosed delimiter". On remplace par bracket.r/bracket.l.
@@ -1503,5 +1533,7 @@ export function htmlToTypst(html: string, figures?: string[]): string {
     /\u0000(\d+)\u0000/g,
     (_, index: string) => protectedSegments[Number(index)],
   )
-  return output.trim()
+  // Un \ en fin de contenu (issu d'un <br> final) formerait \] avec l'accolade
+  // fermante d'un bloc [contenu] Typst → délimiteur non fermé.
+  return output.trim().replace(/\\+$/, '')
 }
