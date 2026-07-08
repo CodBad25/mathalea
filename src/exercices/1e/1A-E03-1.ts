@@ -1,4 +1,4 @@
-import PoucentageE2 from '../can/5e/can5P10'
+import PoucentageE2 from '../can/4e/can4P10'
 export const titre = 'Calculer une évolution en pourcentage'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true

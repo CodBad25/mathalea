@@ -21,7 +21,7 @@ export const amcType = 'AMCNum'
 export const uuid = '7487c'
 
 export const refs = {
-  'fr-fr': ['can5P01'],
+  'fr-fr': ['can4P08'],
   'fr-ch': [],
 }
 export default class PoucentageE extends ExerciceSimple {
