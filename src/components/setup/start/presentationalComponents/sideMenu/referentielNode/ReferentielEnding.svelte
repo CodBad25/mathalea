@@ -85,10 +85,17 @@
    * Ajouter l'exercice courant à la liste
    */
   function addToList() {
+    const isExerciceInteractif =
+      isExerciceItemInReferentiel(ending) &&
+      (
+        ending as Parameters<typeof isExerciceItemInReferentiel>[0] & {
+          features?: { interactif?: { isActive?: boolean } }
+        }
+      ).features?.interactif?.isActive
     const newExercise = {
       uuid: ending.uuid,
       alea: mathaleaGenerateSeed(),
-      interactif: isGeoDynamic(ending) ? '1' : '0',
+      interactif: isGeoDynamic(ending) || isExerciceInteractif ? '1' : '0',
     } as InterfaceParams
     if (isExerciceItemInReferentiel(ending) || isTool(ending)) {
       newExercise.id = ending.id
