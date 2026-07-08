@@ -108,12 +108,12 @@ const waitForElement = async (
 
 export function mathaleaWriteStudentPreviousAnswers(answers?: {
   [key: string]: string
-}): Promise<Boolean>[] {
-  const promiseAnswers: Promise<Boolean>[] = []
+}): Promise<boolean>[] {
+  const promiseAnswers: Promise<boolean>[] = []
   const starttime = window.performance.now()
   for (const answer in answers) {
     if (answer.includes('svgSelection')) {
-      const p = new Promise<Boolean>((resolve) => {
+      const p = new Promise<boolean>((resolve) => {
         waitForElement(`[id$='${answer}']`)
           .then((eles) => {
             eles.forEach((ele) => {
@@ -134,7 +134,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
       })
       promiseAnswers.push(p)
     } else if (answer.includes('MetaInteractif2d')) {
-      const p = new Promise<Boolean>((resolve) => {
+      const p = new Promise<boolean>((resolve) => {
         const saisies = JSON.parse(answers[answer])
         const selectors = Object.keys(saisies).map((field) => `#${field}`)
 
@@ -162,7 +162,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
       })
       promiseAnswers.push(p)
     } else if (answer.includes('sheet')) {
-      const p = new Promise<Boolean>((resolve) => {
+      const p = new Promise<boolean>((resolve) => {
         waitForElement('#' + answer)
           .then(() => {
             // La réponse correspond à une feuille de calcul jspreadsheet
@@ -187,7 +187,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
       answer.includes('apigeom') ||
       answers[answer].includes('apiGeomVersion')
     ) {
-      const p = new Promise<Boolean>((resolve) => {
+      const p = new Promise<boolean>((resolve) => {
         waitForElement('#' + answer)
           .then(() => {
             // La réponse correspond à une figure apigeom
@@ -216,7 +216,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
       })
       promiseAnswers.push(p)
     } else if (answer.includes('cliquefigure')) {
-      const p = new Promise<Boolean>((resolve) => {
+      const p = new Promise<boolean>((resolve) => {
         waitForElement('#' + answer)
           .then(() => {
             // La réponse correspond à une figure cliquefigures
@@ -239,7 +239,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
     } else if (answer.includes('cliquePoint')) {
       // "answers": {"cliquePointfigEx7Q0P60" : "svg[id$='Ex7Q0'] g:nth-of-type(61)"}
       // On active le point 60 (61ème enfant) par exemple ici...
-      const p = new Promise<Boolean>((resolve) => {
+      const p = new Promise<boolean>((resolve) => {
         waitForElement(answers[answer])
           .then(() => {
             // La réponse correspond à un cliquePoint
@@ -265,12 +265,12 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
       promiseAnswers.push(p)
     } else if (answer.includes('texteDND')) {
       // on ignore ce champ, il est juste pour le debug et il ne sert pas!
-      const p = new Promise<Boolean>((resolve) => {
+      const p = new Promise<boolean>((resolve) => {
         resolve(true)
       })
       promiseAnswers.push(p)
     } else if (answer.includes('rectangleDND')) {
-      const p = new Promise<Boolean>((resolve) => {
+      const p = new Promise<boolean>((resolve) => {
         waitForElement(`div#${answer.replace('DND', '')}`)
           .then(() => {
             const rectangle = document.querySelector(
@@ -315,7 +315,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
       })
       promiseAnswers.push(p)
     } else if (answer.includes('clockEx')) {
-      const p = new Promise<Boolean>((resolve) => {
+      const p = new Promise<boolean>((resolve) => {
         waitForElement('#' + answer)
           .then(() => {
             // La réponse correspond à une horloge
@@ -349,7 +349,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
       })
       promiseAnswers.push(p)
     } else if (answer.includes('sheet-')) {
-      const p = new Promise<Boolean>((resolve) => {
+      const p = new Promise<boolean>((resolve) => {
         waitForElement('#' + answer)
           .then(() => {
             // La réponse correspond à une feuille de calcul univer
@@ -374,7 +374,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
       })
       promiseAnswers.push(p)
     } else if (answer.startsWith('labyrintheEx')) {
-      const p = new Promise<Boolean>((resolve) => {
+      const p = new Promise<boolean>((resolve) => {
         waitForElement('#' + answer)
           .then(() => {
             const labyrinthe = document.querySelector(
@@ -395,7 +395,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
       })
       promiseAnswers.push(p)
     } else if (answer.startsWith('multiMathfieldEx')) {
-      const p = new Promise<Boolean>((resolve) => {
+      const p = new Promise<boolean>((resolve) => {
         waitForElement('#' + answer)
           .then(() => {
             const multiMathfield = document.querySelector(
@@ -417,7 +417,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
       })
       promiseAnswers.push(p)
     } else {
-      const p = new Promise<Boolean>((resolve) => {
+      const p = new Promise<boolean>((resolve) => {
         waitForElement(`[id$='${answer}']`)
           .then((eles) => {
             eles.forEach((ele) => {
