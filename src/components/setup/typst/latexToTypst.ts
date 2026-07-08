@@ -128,6 +128,8 @@ function preprocessTex(tex: string): string {
   )
   // \textbf en mode mathématique (produit par miseEnEvidence)
   output = output.replace(/\\textbf\s*\{/g, '\\mathbf{')
+  // \textbf sans accolades (\textbf, ou \textbf; etc.) : suppression de la commande
+  output = output.replace(/\\textbf(?!\s*\{)/g, '')
   // \boldsymbol{X} → \mathbf{X} (tex2typst ne connaît pas \boldsymbol)
   output = output.replace(/\\boldsymbol\s*\{/g, '\\mathbf{')
   // \texttt{X} → \text{X} (police machine à écrire, tex2typst décompose lettre par lettre)
@@ -256,17 +258,17 @@ function postprocessTypst(typst: string): string {
 
   // tex2typst produit #text(fill: C)[$math$] pour \textcolor{C}{math} :
   // les $ imbriqués font sortir du mode math → "unclosed delimiter".
-  // → on convertit en text(fill: #C, math). Les couleurs imbriquées (ex.
+  // → on convertit en text(fill: C, math). Les couleurs imbriquées (ex.
   //   #text(fill: A)[$x + #text(fill: B)[$y$]$]) nécessitent de traiter
-  //   l'intérieur en premier : on utilise [^$]* (pas de $ dans le corps)
-  //   et on itère jusqu'à ce qu'il n'y ait plus de correspondance.
-  const colorRe = /#text\(fill: ([^)]+(?:\([^)]*\))*)\)\[\$([^$]*)\$\]/g
+  //   l'intérieur en premier : on itère jusqu'à ce qu'il n'y ait plus de match.
+  // Le fill peut être `rgb("#hex")` (parens imbriquées) → on le match explicitement
+  // avant le fallback [^)]+.
+  const colorRe = /#text\(fill: (rgb\("[^"]*"\)|[^)]+)\)\[\$([^$]*)\$\]/g
   let prev = ''
   while (prev !== result) {
     prev = result
     result = result.replace(colorRe, (_, fill: string, math: string) => {
-      const mathFill = fill.startsWith('#') ? fill : `#${fill}`
-      return `text(fill: ${mathFill}, ${math})`
+      return `text(fill: ${fill}, ${math})`
     })
   }
 
