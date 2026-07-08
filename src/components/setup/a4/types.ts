@@ -69,6 +69,8 @@ export interface A4Options {
   showCorrection: boolean
   /** Nombre de versions du sujet (données aléatoires différentes) */
   nbVersions: number
+  /** Facteur multiplicatif appliqué à l'interligne de chaque exercice (1 par défaut) */
+  lineHeightFactor: number
   /** Facteur d'espacement global entre les questions (1 par défaut) */
   questionSpacing: number
   /** Facteur d'espacement entre les exercices (1 par défaut) */
@@ -96,6 +98,7 @@ export const defaultA4Options: A4Options = {
   mergeExercises: false,
   showCorrection: false,
   nbVersions: 1,
+  lineHeightFactor: 1,
   questionSpacing: 1,
   exerciseSpacing: 1,
   wordSpacingEm: 0,

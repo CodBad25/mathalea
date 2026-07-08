@@ -258,10 +258,10 @@
       // Update si nécessaire
       exercicesParams.update((params: InterfaceParams[]) => {
         params.forEach((param, i) => {
-          if (
-            param.alea &&
-            param.alea !== newExercises[i].seed?.substring(0, 4)
-          )
+          // Toujours synchroniser (même si param.alea n'était pas encore
+          // défini) : sinon la vue A4 régénère une graine aléatoire au lieu
+          // de reprendre celle utilisée par le diaporama.
+          if (param.alea !== newExercises[i].seed?.substring(0, 4))
             param.alea = newExercises[i].seed?.substring(0, 4)
         })
         return params

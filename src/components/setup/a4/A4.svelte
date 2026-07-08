@@ -463,7 +463,7 @@
           kind: 'question',
           html,
           source: questionSource,
-          style: `line-height: ${exercise.spacing || 1.4}; padding-bottom: ${paddingEm}em;`,
+          style: `line-height: ${(exercise.spacing || 1.4) * options.lineHeightFactor}; padding-bottom: ${paddingEm}em;`,
           svgZoom,
         })
       }
@@ -551,7 +551,7 @@
           kind: 'question',
           html,
           source: correctionSource,
-          style: `line-height: ${exercise.spacingCorr || 1.4}; padding-bottom: ${QUESTION_PADDING_EM}em;`,
+          style: `line-height: ${(exercise.spacingCorr || 1.4) * options.lineHeightFactor}; padding-bottom: ${QUESTION_PADDING_EM}em;`,
           svgZoom,
         })
       }
@@ -621,8 +621,10 @@
       for (const [k, exercise] of exercises.entries()) {
         if (exercise == null) continue
         const base = baseSeeds[k]
+        // Même formule de graine que les vues du diaporama (Diaporama.svelte
+        // `reroll`) : pour que la 2e série du PDF corresponde à la 2e vue.
         exercise.seed =
-          version === 0 || base === undefined ? base : `${base}V${version}`
+          version === 0 || base === undefined ? base : `${base}${version}`
         regenerate(k)
       }
       const units = buildUnits(`v${version}-`)
@@ -854,6 +856,7 @@
       mergeExercises: defaultA4Options.mergeExercises,
       marginHMm: defaultA4Options.marginHMm,
       marginVMm: defaultA4Options.marginVMm,
+      lineHeightFactor: defaultA4Options.lineHeightFactor,
       questionSpacing: defaultA4Options.questionSpacing,
       exerciseSpacing: defaultA4Options.exerciseSpacing,
       wordSpacingEm: defaultA4Options.wordSpacingEm,
@@ -2012,6 +2015,20 @@
             <option value="opendyslexic">OpenDyslexic</option>
           </select>
         </label>
+
+        <div class="flex items-center justify-between gap-4 text-sm">
+          <label for="a4-line-height-input">Interligne</label>
+          <input
+            id="a4-line-height-input"
+            type="number"
+            min="0.8"
+            max="3"
+            step="0.1"
+            class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={options.lineHeightFactor}
+            on:change={() => scheduleRefresh(true, 0)}
+          />
+        </div>
 
         <div class="flex items-center justify-between gap-4 text-sm">
           <label for="a4-question-spacing-input">Espacement entre les questions</label>
