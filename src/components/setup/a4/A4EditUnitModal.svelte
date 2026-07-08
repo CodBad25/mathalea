@@ -297,6 +297,79 @@
   function save() {
     closeWith('save', { source: assemble() })
   }
+
+  /** Place le curseur au point (x, y), y compris dans un span non-éditable
+   * (ex: séparateur d'un champ math), en API standard ou WebKit */
+  function caretPositionAt(
+    x: number,
+    y: number,
+  ): { node: Node; offset: number } | null {
+    const doc = document as Document & {
+      caretPositionFromPoint?: (
+        x: number,
+        y: number,
+      ) => { offsetNode: Node; offset: number } | null
+      caretRangeFromPoint?: (x: number, y: number) => Range | null
+    }
+    const pos = doc.caretPositionFromPoint?.(x, y)
+    if (pos != null) return { node: pos.offsetNode, offset: pos.offset }
+    const range = doc.caretRangeFromPoint?.(x, y)
+    if (range != null)
+      return { node: range.startContainer, offset: range.startOffset }
+    return null
+  }
+
+  /** Focus le segment de texte le plus proche verticalement du clic, curseur
+   * placé en fin de segment */
+  function focusNearestTextSegment(clientY: number) {
+    const textSpans = Array.from(
+      editorEl.querySelectorAll<HTMLElement>('.a4-edit-text'),
+    )
+    if (textSpans.length === 0) return
+    let target = textSpans[textSpans.length - 1]
+    for (const span of textSpans) {
+      if (clientY < span.getBoundingClientRect().top) {
+        target = span
+        break
+      }
+    }
+    target.focus()
+    const selection = window.getSelection()
+    if (selection == null) return
+    const range = document.createRange()
+    range.selectNodeContents(target)
+    range.collapse(false)
+    selection.removeAllRanges()
+    selection.addRange(range)
+  }
+
+  /** Le rectangle orange n'est éditable que via les spans texte qu'il
+   * contient : un clic dans l'espace vide autour (marges, fin de ligne,
+   * sous un texte court...) tombe sur ce conteneur sans rien focus. On
+   * redirige alors le focus vers le segment de texte le plus proche du
+   * point cliqué. */
+  function focusEditorArea(event: MouseEvent) {
+    if (event.target !== editorEl) return
+    const position = caretPositionAt(event.clientX, event.clientY)
+    const container =
+      position != null
+        ? position.node instanceof Element
+          ? position.node
+          : position.node.parentElement
+        : null
+    const span = container?.closest<HTMLElement>('.a4-edit-text')
+    if (span != null && editorEl.contains(span)) {
+      span.focus()
+      const selection = window.getSelection()
+      const range = document.createRange()
+      range.setStart(position!.node, position!.offset)
+      range.collapse(true)
+      selection?.removeAllRanges()
+      selection?.addRange(range)
+      return
+    }
+    focusNearestTextSegment(event.clientY)
+  }
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
@@ -350,9 +423,11 @@
             une formule&nbsp;» pour en ajouter une.
           </p>
           {#key structureVersion}
+            <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
             <div
               bind:this={editorEl}
               class="a4-edit-flow rounded border border-coopmaths-action/40 bg-white text-black p-3"
+              on:click={focusEditorArea}
             >
               {#each segments as segment, index}
                 {#if segment.type === 'text'}
