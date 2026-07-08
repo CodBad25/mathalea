@@ -1,4 +1,4 @@
-import AireCarresRectanglesTriangles from '../5e/5M11'
+import AireCarresRectanglesTriangles from '../bp2/BP2AutoV3'
 
 export const titre = "Calculer l'aire de carré, rectangle ou triangle rectangle"
 export const dateDePublication = '30/07/2025'
@@ -9,7 +9,7 @@ export const amcType = 'AMCNum'
 
 /**
  * Calculer l'aire de carré, rectangle ou triangle rectangle
- * @author Éric Elter (comme clone de 6M11 de Rémi Angot)
+ * @author Éric Elter
  */
 
 export const uuid = 'c6fb2'

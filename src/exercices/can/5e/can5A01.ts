@@ -34,7 +34,7 @@ export const refs = {
 export default class RepetitionScratch extends Exercice {
   constructor() {
     super()
-    this.typeExercice = 'Scratch'
+
     this.nbQuestions = 1
 
     this.listeAvecNumerotation = false

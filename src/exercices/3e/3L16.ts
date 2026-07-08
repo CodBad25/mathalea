@@ -1,4 +1,4 @@
-import PaternRatio from '../5e/5P12-2'
+import PaternRatio from '../4e/4P12-2'
 export const titre =
   "Trouver le terme général d'un ratio d'évolution d'un motif géométrique itératif"
 export const dateDePublication = '30/05/2026'

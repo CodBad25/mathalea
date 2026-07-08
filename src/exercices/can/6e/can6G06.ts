@@ -1,4 +1,4 @@
-import NombreDeFacesEtDAretes from '../../5e/5G53'
+import NombreDeFacesEtDAretes from '../../6e/6G0-9'
 
 export const titre = 'Compter les arêtes et les faces'
 export const interactifReady = true

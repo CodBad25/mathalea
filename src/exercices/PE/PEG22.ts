@@ -35,7 +35,7 @@ export default class RacineCarrAvecTheoremePythagore extends Exercice {
     this.sup = 2
   }
 
-  nouvelleVersion(numeroExercice) {
+  nouvelleVersion(numeroExercice: number) {
     let AB, BC, r
     AB = randint(2, 5)
     BC = randint(2, 5)
@@ -103,7 +103,7 @@ export default class RacineCarrAvecTheoremePythagore extends Exercice {
     anim.pointCreer(C, { dx: 0.2, dy: 0.4 })
     if (this.sup === 1) {
       anim.epaisseur = 3
-      anim.regleSegment(A, C, { color: 'red' })
+      anim.regleSegment(A, C, { couleur: 'red' })
       anim.regleMasquer()
       anim.codageAngleDroit(A, B, C)
       anim.crayonMasquer()

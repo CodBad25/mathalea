@@ -1,7 +1,13 @@
+import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment, segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
-import { labelPoint } from '../../lib/2d/textes'
+import { labelPoint, latex2d, Latex2d } from '../../lib/2d/textes'
+import { tracePoint } from '../../lib/2d/TracePoint'
+import {
+  tracePointSurDroite,
+  type TracePointSurDroite,
+} from '../../lib/2d/TracePointSurDroite'
 import { orangeMathalea } from '../../lib/colors'
 import { demiDroiteInteractive } from '../../lib/interactif/demi_droite_interactive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -9,6 +15,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { adverbeNumeral } from '../../modules/nombreEnLettres'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 export const dateDePublication = '05/07/2026'
@@ -23,7 +30,7 @@ export const interactifType = 'custom'
 export const uuid = 'cff13'
 
 export const refs = {
-  'fr-fr': [],
+  'fr-fr': ['6N3D-1'],
   'fr-2016': [],
   'fr-ch': [],
 }
@@ -57,8 +64,8 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
       const den = context.isHtml
         ? randint(2, 10, abscisseT)
         : this.sup2
-          ? choice([2, 4, 5, 10])
-          : choice([2, 4])
+          ? choice([2, 4, 5, 10], abscisseT)
+          : choice([2, 4], abscisseT)
       const num = this.sup ? randint(2, den - 1) * abscisseT : abscisseT
 
       let texte = `Placer le point $A$ d'abscisse $\\dfrac{${num}}{${den}}$ sur la demi-droite graduée ci-dessous.<br><br>`
@@ -89,14 +96,61 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
         const O = pointAbstrait(0, 0, 'O', 'above')
         const I = pointAbstrait(1, 0, 'I', 'above')
         const u = segmentAvecExtremites(O, I)
-        u.epaisseur = 2
+        u.epaisseur = 1
         const axe = segment(O, pointAbstrait(10, 0))
-        axe.epaisseur = 2
+        axe.epaisseur = 1.5
         axe.styleExtremites = '->'
-        const objets = [u, labelPoint(O, I), axe]
+        const objets: NestedObjetMathalea2dArray = [u, labelPoint(O, I), axe]
         texte += mathalea2d(
-          Object.assign({ scale: 1 }, fixeBordures(objets)),
+          Object.assign({ scale: 1 }, fixeBordures(objets, { rxmin: 0 })),
           objets,
+        )
+        const objetsCorr: NestedObjetMathalea2dArray = [
+          u,
+          labelPoint(O, I),
+          axe,
+        ]
+        const ticks: TracePointSurDroite[] = []
+        const d = droite(O, pointAbstrait(10, 0))
+        const labels: Latex2d[] = []
+        for (let j = 0; j <= abscisseT; j++) {
+          const tick = tracePointSurDroite(pointAbstrait(j, 0), d, 'black')
+          tick.taille = 0.1
+          ticks.push(tick)
+          labels.push(latex2d(`$${j}$`, j, -0.7, {}))
+        }
+        const cuts: TracePointSurDroite[] = []
+        const marques: Latex2d[] = []
+        for (let k = 1; k <= den; k++) {
+          const cut = tracePointSurDroite(
+            pointAbstrait((k * abscisseT) / den, 0),
+            d,
+          )
+          cut.epaisseur = 2
+          cuts.push(cut)
+          const marque: Latex2d = latex2d(
+            `//`,
+            (((2 * k - 1) / 2) * abscisseT) / den,
+            0,
+            { letterSize: 'tiny', gras: true, color: 'red' },
+          )
+
+          marque.gras = true
+          marques.push(marque)
+        }
+        const A = pointAbstrait(abscisseT / den, 0, 'A', 'above')
+        const labelPointA = latex2d('A', A.x, A.y + 0.5, {
+          color: orangeMathalea,
+          gras: true,
+          letterSize: 'normalsize',
+        })
+        const tracePointA = tracePoint(A, orangeMathalea)
+        tracePointA.epaisseur = 2
+
+        objetsCorr.push(ticks, labels, marques, cuts, tracePointA, labelPointA)
+        texteCorr += mathalea2d(
+          Object.assign({ scale: 1 }, fixeBordures(objetsCorr, { rxmin: 0 })),
+          objetsCorr,
         )
       }
 

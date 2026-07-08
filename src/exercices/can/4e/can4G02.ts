@@ -16,7 +16,7 @@ export const refs = {
   'fr-fr': ['can4G02'],
   'fr-ch': [],
 }
-export default class SymetriqueD1Point extends Transformations {
+export default class SymetriqueD1Point4eme extends Transformations {
   constructor() {
     super()
     this.can = true

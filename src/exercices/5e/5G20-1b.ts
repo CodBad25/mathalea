@@ -1,4 +1,4 @@
-import VocabulaireDesTriangles from './5G20-1'
+import VocabulaireDesTriangles from './VocabulaireDesTriangles'
 export const titre = 'Reconnaître des triangles'
 export const interactifReady = false
 

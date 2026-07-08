@@ -29,17 +29,16 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
-export const dateDeModificationImportante = '07/07/2026'
 
 /**
  * Lire l'abscisse décimale d'un point
  * @author Jean-claude Lhote et Rémi Angot
  */
-export const uuid = '4ca19'
+export const uuid = '4ca10'
 
 export const refs = {
-  'fr-fr': ['5R11', '3AutoN15-1'],
-  'fr-ch': ['9NO9-1'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 
 const changeCoord = function (x: number, abs0: number, pas1: number) {
@@ -81,7 +80,6 @@ export default class LireAbscisseRelative extends Exercice {
       defaut: 0,
       nbQuestions: this.nbQuestions,
       listeOfCase: typesDeQuestionsDisponibles,
-      shuffle: false,
     }) as string[]
 
     let objets: NestedObjetMathalea2dArray = []

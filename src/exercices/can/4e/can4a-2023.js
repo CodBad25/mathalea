@@ -73,7 +73,7 @@ export default class SujetCAN2023Quatrieme extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 30
-    this.typeExercice = 'Scratch'
+
     this.comment = `Cet exercice fait partie des annales des Courses Aux Nombres.<br>
   Il est composé de 30 questions réparties de la façon suivante :<br>
   Les 10 premières questions, parfois communes à plusieurs niveaux, font appel à des questions élémentaires et les 20 suivantes (qui ne sont pas rangées dans un ordre de difficulté) sont un peu plus « coûteuses » cognitivement.<br>

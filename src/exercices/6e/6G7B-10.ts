@@ -9,6 +9,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { pointEstSur } from '../../lib/2d/utilitairesGeometriques'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { texcolors, texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -26,7 +27,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 const cleaner = generateCleaner(['parentheses', 'espaces'])
 export const titre =
@@ -48,7 +48,7 @@ export const dateDeModifImportante = '27/06/2024' // EE : Rajout du paramètre d
 export const uuid = 'cd69a'
 
 export const refs = {
-  'fr-fr': ['5G10-4'],
+  'fr-fr': ['6G7B-10'],
   'fr-2016': ['6G32-1'],
   'fr-ch': ['9ES6-26'],
 }

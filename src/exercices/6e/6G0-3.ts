@@ -19,6 +19,6 @@ export const refs = {
 export default class UtiliserLeCodagePourDecrire6e extends UtiliserLeCodagePourDecrire {
   constructor() {
     super()
-    this.classe = 6
+    this.classe = 5 // Et non 6, pour mettre les angles en 6e
   }
 }

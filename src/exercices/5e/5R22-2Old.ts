@@ -34,7 +34,7 @@ export const refs = {
   'fr-fr': [],
   'fr-ch': [],
 }
-export default class ExerciceSimplificationSommeAlgebrique extends Exercice {
+export default class ExerciceSimplificationSommeAlgebriqueOld extends Exercice {
   constructor(max = 20) {
     super()
     this.besoinFormulaireNumerique = ['Valeur maximale', 99999]

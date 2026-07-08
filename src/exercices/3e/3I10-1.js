@@ -68,8 +68,6 @@ export default class ScratchMultiScript extends Exercice {
     this.spacing = 2
     this.nbQuestions = 1
 
-    this.typeExercice = 'Scratch'
-
     this.sup = '2'
     this.correctionDetailleeDisponible = true
     this.correctionDetaille = false

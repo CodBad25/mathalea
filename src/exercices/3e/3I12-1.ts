@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { lampeMessage } from '../../lib/format/message'
 import { choice, compteOccurences } from '../../lib/outils/arrayOutils'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
@@ -9,7 +10,6 @@ import {
 } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = 'Compléter un script Scratch - 1'
 export const amcReady = true
@@ -54,7 +54,6 @@ export default class CompleterScriptMultiple extends Exercice {
     this.sup4 = 3
     this.spacing = 2
     this.nbQuestions = 1
-    this.typeExercice = 'Scratch'
   }
 
   nouvelleVersion() {
@@ -303,7 +302,9 @@ export default class CompleterScriptMultiple extends Exercice {
             propositions: [{ statut: 3, sanscadre: true }],
           },
         ]
-        this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) => amcConvert(questionAMC))
+        this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) =>
+          amcConvert(questionAMC),
+        )
       }
 
       if (this.questionJamaisPosee(i, texte)) {

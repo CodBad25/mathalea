@@ -5,46 +5,53 @@ import { tracePoint } from '../../lib/2d/TracePoint'
 import { bleuMathalea } from '../../lib/colors'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { lettreIndiceeDepuisChiffre } from '../../lib/outils/outilString'
-import { pointCliquable } from '../../modules/2dinteractif'
+import { PointCliquable, pointCliquable } from '../../modules/2dinteractif'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-export const titre = 'Utiliser des abscisses fractionnaires (niv 2)'
-export const interactifReady = false
+export const titre =
+  'Placer un point sur une droite graduée (abscisses fractionnaires niv 2)'
+export const interactifReady = true
 // remettre interactif_Ready à true qd point_Cliquable sera de nouveau opérationnel
 export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDePublication = '11/05/2023'
+export const dateDeModificationImportante = '07/07/2026'
 
 /**
  * Description didactique de l'exercice :
  * Cherche des abscisses sous forme de fractions avec possibilté d'avoir des fractions simplifiées
  * @author Mickael Guironnet
- * Référence 6N21-1
+ * Refactorisation de l'exercice pour le rendre interactif, réécriture en typescript lintage  @author Jean-Claude Lhote
+ * Référence CM2N2E-3
  * publié le 10/05/2023
  */
 
 export const uuid = 'a2582'
 
 export const refs = {
-  'fr-fr': [],
+  'fr-fr': ['CM2N2E-3'],
+  'fr-2016': ['6G24-4'],
   'fr-ch': [],
 }
 export default class PlacerPointsAbscissesFractionnairesComplexes extends Exercice {
+  pointsSolution: PointCliquable[] = []
+  pointsNonSolution: PointCliquable[][] = [] // Pour chaque question, la liste des points qui ne doivent pas être cliqués
+  niveau: number = 6
   constructor() {
     super()
-
     this.consigne = ''
+    this.niveau = 6
     this.nbQuestions = 5
     this.nbCols = 1 // Uniquement pour la sortie LaTeX
     this.nbColsCorr = 1 // Uniquement pour la sortie LaTeX
     this.sup = 1 // Niveau de difficulté
     this.sup2 = true // avec des fractions simplifiées
     this.sup3 = false // valeurs positives si false sinon valeurs positives et négatives
-    this.tailleDiaporama = 3 // Pour les exercices chronométrés. 50 par défaut pour les exercices avec du texte
     this.video = '' // Id YouTube ou url
     this.besoinFormulaireNumerique = [
       'Niveau de difficulté :',
@@ -52,11 +59,12 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
       '1 : Graduation en 1/4, 1/6, 1/8, 1/9, 1/10\n2 : Graduation en 1/12, 1/14, 1/16, 1/18 et 1/20\n3 : Mélange',
     ]
     this.besoinFormulaire2CaseACocher = ['Avec des fractions simplifiées', true]
-    this.besoinFormulaire3CaseACocher = ['Avec des valeurs négatives', false]
+    // this.besoinFormulaire3CaseACocher = ['Avec des valeurs négatives', false] // faire un clone en 5e avec ce formulaire
   }
 
   nouvelleVersion() {
     this.sup = parseInt(this.sup)
+    this.sup2 = this.niveau === 6 ? false : this.sup2
     this.listeQuestions = [] // Liste de questions
     this.listeCorrections = [] // Liste de questions corrigées
     this.autoCorrection = []
@@ -70,7 +78,9 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
         this.nbQuestions,
       )
     }
-    const data = {
+    const data: {
+      [key: number]: { id: number; den: number[]; max: number; min: number }
+    } = {
       4: {
         id: 4,
         den: [2, 4],
@@ -143,9 +153,7 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
       [12, 14, 15, 16, 18, 20],
     ]
 
-    const tableUtilisées = [[], []]
-    const pointsSolutions = []
-    const pointsNonSolutions = [] // Pour chaque question, la liste des points qui ne doivent pas être cliqués
+    const tableUtilisées: number[][] = [[], []]
     const fractionsUtilisees = [] // Pour s'assurer de ne pas poser 2 fois la même question
     for (
       let i = 0, texte, texteCorr, cpt = 0;
@@ -164,7 +172,10 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
       )
       tableUtilisées[typeDeQuestions[i]].push(tab)
 
-      let num2, num3, den2, den3
+      let num2 = 0,
+        num3 = 0,
+        den2 = 0,
+        den3 = 0
       const den1 = !this.sup2 ? data[tab].id : choice(data[tab].den)
       const num1 = trouveNumérateur(den1, data[tab].min, data[tab].max)
       const texFraction = new FractionEtendue(num1, den1).texFraction
@@ -199,8 +210,8 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
         thickSecDist: 1 / data[tab].id,
         thickEpaisseur: 3,
       })
-      const mesObjets = [d]
-      pointsNonSolutions[i] = []
+      const mesObjets: NestedObjetMathalea2dArray = [d]
+      this.pointsNonSolution[i] = []
       if (this.interactif) {
         for (
           let indicePoint = 0, monPoint;
@@ -222,9 +233,9 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
             Math.abs(indicePoint / data[tab].id + origine - num1 / den1) <
             0.5 / data[tab].id
           ) {
-            pointsSolutions[i] = monPoint
+            this.pointsSolution[i] = monPoint
           } else {
-            pointsNonSolutions[i].push(monPoint)
+            this.pointsNonSolution[i].push(monPoint)
           }
         }
       }
@@ -237,6 +248,7 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
             ymin: -1,
             ymax: 2.5,
             scale: 0.6,
+            id: `figEx${this.numeroExercice}Q${i}`,
           },
           mesObjets,
         )
@@ -299,7 +311,9 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
         traceC.taille = 3
         labels = labelPoint(A, B, C)
       }
-
+      const mesObjetsCorr: NestedObjetMathalea2dArray = [d, traceA, labels]
+      if (traceB) mesObjetsCorr.push(traceB)
+      if (traceC) mesObjetsCorr.push(traceC)
       if (!context.isHtml) {
         A.positionLabel = 'above = 0.2'
         if (B) B.positionLabel = 'above = 0.2'
@@ -317,9 +331,7 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
               ymax: 3.5,
               scale: 0.6,
             },
-            d,
-            traceA,
-            labels,
+            mesObjetsCorr,
           )
       } else {
         const texFraction2 = new FractionEtendue(num2, den2).texFraction
@@ -335,11 +347,7 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
               ymax: 2.25,
               scale: 1,
             },
-            d,
-            traceA,
-            traceB,
-            traceC,
-            labels,
+            mesObjetsCorr,
           )
       }
 
@@ -350,7 +358,7 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
         fractionsUtilisees[i] = [num1, den1]
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: texte + '\n',
             propositions: [
               {
@@ -369,29 +377,51 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
     }
 
     // Pour distinguer les deux types de codage de recuperation des résultats
-    this.exoCustomResultat = true
     // Gestion de la correction
-    this.correctionInteractive = (i) => {
-      let resultat
-      let aucunMauvaisPointsCliques = true
-      pointsSolutions[i].stopCliquable()
-      for (const monPoint of pointsNonSolutions[i]) {
-        if (monPoint.etat) aucunMauvaisPointsCliques = false
-        monPoint.stopCliquable()
+
+    listeQuestionsToContenu(this)
+  }
+  correctionInteractive = (i: number) => {
+    let resultat: string = 'KO'
+    let aucunMauvaisPointsCliques = true
+    this.pointsSolution[i].stopCliquable()
+    const figure = document.querySelector(`#figEx${this.numeroExercice}Q${i}`)
+    if (figure === null) return 'KO'
+    if (this.answers === undefined) this.answers = {}
+    for (const monPoint of [
+      ...this.pointsNonSolution[i],
+      this.pointsSolution[i],
+    ]) {
+      if (monPoint.etat && monPoint.groupe) {
+        const groups = Array.from(
+          figure.querySelectorAll(':scope > g'),
+        ) as SVGGElement[]
+        if (monPoint.groupe instanceof SVGGElement) {
+          const pos = groups.indexOf(monPoint.groupe)
+          if (pos === -1) continue
+          this.answers[`cliquePointfigEx${this.numeroExercice}Q${i}P${pos}`] =
+            `svg[id$='Ex${this.numeroExercice}Q${i}'] g:nth-of-type(${pos + 1})`
+        }
       }
-      const divFeedback = document.querySelector(
-        `#resultatCheckEx${this.numeroExercice}Q${i}`,
-      )
-      if (aucunMauvaisPointsCliques && pointsSolutions[i].etat) {
+    }
+    for (const monPoint of this.pointsNonSolution[i]) {
+      if (monPoint.etat) aucunMauvaisPointsCliques = false
+      monPoint.stopCliquable()
+    }
+    const divFeedback = document.querySelector(
+      `#resultatCheckEx${this.numeroExercice}Q${i}`,
+    )
+    if (divFeedback != null) {
+      if (aucunMauvaisPointsCliques && this.pointsSolution[i].etat) {
         divFeedback.innerHTML = '😎'
         resultat = 'OK'
       } else {
         divFeedback.innerHTML = '☹️'
         resultat = 'KO'
       }
-      return resultat
     }
-    listeQuestionsToContenu(this)
+
+    return resultat
   }
 }
 
@@ -401,7 +431,7 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
  * @param {array} item
  * @returns {boolean}
  */
-function isArrayInArray(arr, item) {
+function isArrayInArray(arr: any[], item: any[]): boolean {
   const itemAsString = JSON.stringify(item)
   const contains = arr.some(function (ele) {
     return JSON.stringify(ele) === itemAsString
@@ -409,8 +439,13 @@ function isArrayInArray(arr, item) {
   return contains
 }
 
-function trouveNumérateur(den, min, max, fractionsAEviter = []) {
-  const isNombreEntier = function (nu, de) {
+function trouveNumérateur(
+  den: number,
+  min: number,
+  max: number,
+  fractionsAEviter: { num: number; den: number }[] = [],
+) {
+  const isNombreEntier = function (nu: number, de: number) {
     if (nu % de === 0) return true
     return false
   }

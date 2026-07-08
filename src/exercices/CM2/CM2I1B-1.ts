@@ -75,7 +75,7 @@ export default class NoteLaCouleurC3 extends Exercice {
     this.besoinFormulaire4CaseACocher = ['Plateau de jeu original', false]
 
     this.nbQuestions = 1
-    this.typeExercice = 'Scratch'
+
     this.sup = 1
     this.sup2 = true
     this.sup3 = 4

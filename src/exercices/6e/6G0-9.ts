@@ -37,7 +37,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'da6a4'
 
 export const refs = {
-  'fr-fr': ['5G53', 'BP2G2'],
+  'fr-fr': ['6G0-9', 'BP2G2'],
   'fr-2016': ['6G44', 'BP2G2'],
   'fr-ch': ['9ES7-7'],
 }
