@@ -61,7 +61,7 @@ export default class AlgoTortue extends Exercice {
     this.exoCustomResultat = false
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
-    this.typeExercice = 'Scratch'
+
     this.sup2 = 1 // types d'instructionsde déplacement (ici seulement avancer et tourner)
     this.listeAvecNumerotation = false
     this.besoinFormulaireTexte = [

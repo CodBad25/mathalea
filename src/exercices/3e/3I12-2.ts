@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { lampeMessage } from '../../lib/format/message'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
@@ -12,7 +13,6 @@ import {
 } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = 'Comprendre un script Scratch - 1'
 export const amcReady = true
@@ -59,7 +59,6 @@ export default class ComprendreScriptMultiples extends Exercice {
     this.spacing = 2
     this.spacingCorr = 2
     this.nbQuestions = 1
-    this.typeExercice = 'Scratch'
   }
 
   nouvelleVersion() {

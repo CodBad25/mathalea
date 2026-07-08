@@ -62,7 +62,7 @@ export default class ColorierDeplacementV2 extends Exercice {
     ]
     this.besoinFormulaire2CaseACocher = ['Avec une boucle']
     this.besoinFormulaire3CaseACocher = ['Inclure la possibilité de reculer']
-    this.typeExercice = 'Scratch'
+
     this.sup = 1 // nombre de commandes = this.sup + 2
     this.sup2 = false // 1 : sans boucle ; true : avec boucle
     this.nbQuestions = 1

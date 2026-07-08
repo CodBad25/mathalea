@@ -26,7 +26,7 @@ export const refs = {
 export default class BlocPersonnaliseScratch extends Exercice {
   constructor() {
     super()
-    this.typeExercice = 'Scratch'
+
     this.besoinFormulaireCaseACocher = ['Sujet original', false]
     this.sup = false
     this.nbQuestions = 1
