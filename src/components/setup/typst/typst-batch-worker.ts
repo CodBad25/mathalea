@@ -43,7 +43,14 @@ for (const [key, value] of [
   ['Node', w.Node],
   ['Element', w.Element],
   ['HTMLElement', w.HTMLElement],
+  ['HTMLButtonElement', w.HTMLButtonElement],
+  ['HTMLInputElement', w.HTMLInputElement],
+  ['HTMLSelectElement', w.HTMLSelectElement],
+  ['HTMLTextAreaElement', w.HTMLTextAreaElement],
+  ['HTMLDivElement', w.HTMLDivElement],
+  ['HTMLSpanElement', w.HTMLSpanElement],
   ['SVGElement', w.SVGElement],
+  ['XMLSerializer', w.XMLSerializer],
   ['Event', w.Event],
   ['CustomEvent', w.CustomEvent],
   ['requestAnimationFrame', (fn: () => void) => setTimeout(fn, 16)],
@@ -79,6 +86,9 @@ if (w.HTMLCanvasElement?.prototype) {
     }),
   })
 }
+
+// APP_VERSION est une define Vite — non disponible dans le worker, on le stub
+;(globalThis as any).APP_VERSION = 'test'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

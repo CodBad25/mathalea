@@ -376,6 +376,7 @@ function spawnWorker(): Promise<Worker> {
     const w = new Worker(WORKER_FILE, {
       execArgv: ['--loader', WORKER_LOADER_FILE, '--experimental-vm-modules'],
     })
+    w.setMaxListeners(0)
     const timer = setTimeout(() => {
       w.terminate()
       rej(new Error(`Worker startup timeout (${WORKER_STARTUP_TIMEOUT_MS / 1000}s)`))
@@ -421,15 +422,30 @@ function checkExerciseWithWorker(
     }
 
     getOrCreateWorker().then((worker) => {
+      const cleanup = () => {
+        clearTimeout(timer)
+        worker.off('message', responseHandler)
+        worker.off('error', errorHandler)
+        worker.off('exit', exitHandler)
+      }
       const responseHandler = (msg: any) => {
         if (msg?.type !== 'result') return
-        worker.off('message', responseHandler)
-        clearTimeout(timer)
+        cleanup()
         settle(msg.result as ExerciseEntry)
+      }
+      const errorHandler = (err: Error) => {
+        cleanup()
+        sharedWorker = null
+        settle({ ...timeoutEntry, notes: `Worker error: ${String(err?.message ?? err).slice(0, 200)}` })
+      }
+      const exitHandler = (code: number) => {
+        cleanup()
+        sharedWorker = null
+        if (code !== 0) settle(timeoutEntry)
       }
 
       const timer = setTimeout(async () => {
-        worker.off('message', responseHandler)
+        cleanup()
         // Terminate the stuck worker; the shared worker will be recreated next time
         await worker.terminate()
         sharedWorker = null
@@ -437,18 +453,8 @@ function checkExerciseWithWorker(
       }, EXERCISE_TIMEOUT_MS)
 
       worker.on('message', responseHandler)
-      worker.once('error', (err) => {
-        clearTimeout(timer)
-        worker.off('message', responseHandler)
-        sharedWorker = null
-        settle({ ...timeoutEntry, notes: `Worker error: ${String(err?.message ?? err).slice(0, 200)}` })
-      })
-      worker.once('exit', (code) => {
-        clearTimeout(timer)
-        worker.off('message', responseHandler)
-        sharedWorker = null
-        if (code !== 0) settle(timeoutEntry)
-      })
+      worker.on('error', errorHandler)
+      worker.on('exit', exitHandler)
 
       worker.postMessage({ type: 'check', filePath, uuid, ref, checkLevel: CHECK_LEVEL, root: ROOT })
     }).catch((err) => {

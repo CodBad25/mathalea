@@ -128,6 +128,22 @@ function preprocessTex(tex: string): string {
   )
   // \textbf en mode mathématique (produit par miseEnEvidence)
   output = output.replace(/\\textbf\s*\{/g, '\\mathbf{')
+  // \boldsymbol{X} → \mathbf{X} (tex2typst ne connaît pas \boldsymbol)
+  output = output.replace(/\\boldsymbol\s*\{/g, '\\mathbf{')
+  // \texttt{X} → \text{X} (police machine à écrire, tex2typst décompose lettre par lettre)
+  output = output.replace(/\\texttt\s*\{/g, '\\text{')
+  // \text X (sans accolades, token unique) → \text{X} (tex2typst exige les accolades)
+  output = output.replace(/\\text\s+([^{\\])/g, '\\text{$1}')
+  // " en mode math : Typst traite " comme délimiteur de chaîne → on le remplace par ''
+  output = output.replace(/"/g, "''")
+  //   (espace insécable HTML, produit par &nbsp; ou sp()) → espace normale
+  // Note : le fallback latexSegmentToTypst fait déjà ce remplacement après une erreur,
+  // mais on le fait ici pour éviter l'aller-retour
+  output = output.replace(/ /g, ' ')
+  // \color{X}{CONTENT} (forme deux-arguments, alias de \textcolor) :
+  // replaceColorGroups ne traite que la forme scope {\color{X}...} ;
+  // ici on convertit la forme explicite \color{X}{...} → \textcolor{X}{...}
+  output = output.replace(/\\color\s*\{([^{}]+)\}\s*\{/g, '\\textcolor{$1}{')
   // \big, \Big, \bigg, \Bigg (avec suffixes l/r/m optionnels) : tex2typst
   // laisse les variantes sans suffixe comme variable nue — on les supprime
   output = output.replace(/\\[Bb]igg?[lrm]?\b/g, '')
@@ -135,6 +151,11 @@ function preprocessTex(tex: string): string {
   // dans mat() et vec() (ex. M(a;b) → erreur "expected content, found array")
   // → on le neutralise via \text{;} sauf s'il fait partie de \; (espace)
   output = output.replace(/(?<!\\);/g, '\\text{;}')
+  // Les \text{} imbriqués (produits par le remplacement des ; ou par \text{\text{m}}) :
+  // \text{ \text{;} } → \text{ ; }  ou  \text{ \text{m} } → \text{ m }
+  // On répète deux fois pour gérer les doubles imbrications
+  output = output.replace(/\\text\{([^{}]*?)\\text\{([^{}]*?)\}([^{}]*?)\}/g, '\\text{$1$2$3}')
+  output = output.replace(/\\text\{([^{}]*?)\\text\{([^{}]*?)\}([^{}]*?)\}/g, '\\text{$1$2$3}')
   // \num{12\,345,6} et \numprint{...} : on garde le contenu tel quel,
   // la virgule décimale devenant \dcomma (voir CUSTOM_TEX_MACROS)
   output = output.replace(

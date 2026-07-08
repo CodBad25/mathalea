@@ -72,18 +72,31 @@ export async function resolve(specifier, context, nextResolve) {
     }
   }
 
+  // blockly: browser-only visual programming library, not compatible with Node.js/jsdom
+  if (specifier === 'blockly/core' || specifier.startsWith('blockly/')) {
+    return {
+      url: 'data:text/javascript,export const setLocale = () => {}; export default { setLocale: () => {}, Blocks: {}, JavaScript: { ORDER_NONE: 0, ORDER_ATOMIC: 0, valueToCode: () => \'\', statementToCode: () => \'\', addReservedWords: () => {} } }',
+      shortCircuit: true,
+    }
+  }
+
   // JSON files: add required type: json attribute
   if (specifier.endsWith('.json')) {
     const resolved = await nextResolve(specifier, context)
     return { ...resolved, importAttributes: { type: 'json' } }
   }
 
-  // For any specifier without an extension, try .ts / .js / /index.ts / /index.js
+  // Try to resolve specifier, with .ts / .js / /index.ts / /index.js fallbacks.
+  // We always try the fallbacks even when the specifier already has an extension,
+  // because some filenames have numeric segments (e.g. CourbeInterpolee.1 → CourbeInterpolee.1.ts).
+  const knownExtensions = new Set(['.ts', '.mts', '.cts', '.js', '.mjs', '.cjs', '.json'])
   try {
     const result = await nextResolve(specifier, context)
     return result
   } catch (originalErr) {
-    if (extname(specifier) !== '') throw originalErr
+    const ext = extname(specifier)
+    // If it already has a recognised JS/TS/JSON extension, don't try further fallbacks
+    if (knownExtensions.has(ext)) throw originalErr
     // Try .ts
     try {
       return await nextResolve(specifier + '.ts', context)
