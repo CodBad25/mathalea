@@ -65,6 +65,10 @@ for (const [key, value] of [
   }
 }
 
+// jsdom ne fournit pas window.matchMedia — on le stubble directement sur l'objet window
+const matchMediaStub = () => ({ matches: false, media: '', onchange: null, addEventListener: () => {}, removeEventListener: () => {}, addListener: () => {}, removeListener: () => {}, dispatchEvent: () => false })
+try { Object.defineProperty(w, 'matchMedia', { value: matchMediaStub, writable: true, configurable: true }) } catch { /* ignore */ }
+
 if (w.SVGElement?.prototype) {
   Object.defineProperty(w.SVGElement.prototype, 'getBBox', {
     configurable: true,

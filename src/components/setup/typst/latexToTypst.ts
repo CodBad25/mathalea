@@ -136,14 +136,12 @@ function preprocessTex(tex: string): string {
   output = output.replace(/\\text\s+([^{\\])/g, '\\text{$1}')
   // " en mode math : Typst traite " comme délimiteur de chaîne → on le remplace par ''
   output = output.replace(/"/g, "''")
-  //   (espace insécable HTML, produit par &nbsp; ou sp()) → espace normale
-  // Note : le fallback latexSegmentToTypst fait déjà ce remplacement après une erreur,
-  // mais on le fait ici pour éviter l'aller-retour
-  output = output.replace(/ /g, ' ')
-  // \color{X}{CONTENT} (forme deux-arguments, alias de \textcolor) :
-  // replaceColorGroups ne traite que la forme scope {\color{X}...} ;
-  // ici on convertit la forme explicite \color{X}{...} → \textcolor{X}{...}
+  // \color{X}{CONTENT} (forme deux-arguments) → \textcolor{X}{CONTENT}
+  // replaceColorGroups gère {\color{X}...} ; ici on traite \color{X}{...}
   output = output.replace(/\\color\s*\{([^{}]+)\}\s*\{/g, '\\textcolor{$1}{')
+  // \color{X} (sans accolades de contenu) — commande de scope LaTeX non supportée
+  // par tex2typst qui la passe telle quelle → on la supprime
+  output = output.replace(/\\color\s*\{[^{}]+\}/g, '')
   // \big, \Big, \bigg, \Bigg (avec suffixes l/r/m optionnels) : tex2typst
   // laisse les variantes sans suffixe comme variable nue — on les supprime
   output = output.replace(/\\[Bb]igg?[lrm]?\b/g, '')
@@ -170,10 +168,57 @@ function preprocessTex(tex: string): string {
   // \\[dim] (saut de ligne avec espacement optionnel, ex. dans \begin{cases}) :
   // tex2typst ne supporte pas l'argument optionnel — on le supprime
   output = output.replace(/\\\\\s*\[[^\]]*\]/g, '\\\\')
-  // \phantom n'a pas d'équivalent direct : on le remplace par une espace.
+  // \phantom / \vphantom n'ont pas d'équivalent direct : on les remplace par une espace.
   // Le contenu peut avoir un niveau d'imbrication (ex. \phantom{\frac{a}{b}})
   // → [^{}]|\{[^{}]*\} capture les groupes imbriqués
-  output = output.replace(/\\(?:phantom|hphantom)\s*\{(?:[^{}]|\{[^{}]*\})*\}/g, '\\;')
+  output = output.replace(/\\(?:phantom|hphantom|vphantom)\s*\{(?:[^{}]|\{[^{}]*\})*\}/g, '\\;')
+  // \xrightarrow{X} → \overset{X}{\rightarrow} (tex2typst ne connaît pas \xrightarrow)
+  output = output.replace(/\\xrightarrow\s*(?:\[[^\]]*\])?\s*\{([^{}]*)\}/g, '\\overset{$1}{\\rightarrow}')
+  // \xleftarrow{X} → \overset{X}{\leftarrow}
+  output = output.replace(/\\xleftarrow\s*(?:\[[^\]]*\])?\s*\{([^{}]*)\}/g, '\\overset{$1}{\\leftarrow}')
+  // \stackrel{A}{B} → \overset{A}{B} (tex2typst ne connaît pas \stackrel)
+  output = output.replace(/\\stackrel\s*\{/g, '\\overset{')
+  // \bf{X} (ancienne commande LaTeX) → \mathbf{X}
+  output = output.replace(/\\bf\s*\{/g, '\\mathbf{')
+  // \fbox{X} → \text{[X]} (boîte autour du texte — approximation)
+  output = output.replace(/\\fbox\s*\{([^{}]*)\}/g, '\\text{[$1]}')
+  // \fcolorbox{bord}{fond}{X} → \textcolor{bord}{X} (ignoré fond)
+  output = output.replace(/\\fcolorbox\s*\{[^{}]*\}\s*\{[^{}]*\}\s*\{([^{}]*)\}/g, '\\text{[$1]}')
+  // \boxed{X} → rect(math.X) approximation ; tex2typst produit "boxed x" qui est inconnu
+  // On préprocesse comme \fbox pour obtenir une représentation visuelle acceptable
+  output = output.replace(/\\boxed\s*\{([^{}]*)\}/g, '\\text{[$1]}')
+  // \lvert..\rvert → |..|  /  \lVert..\rVert → ‖..‖
+  output = output.replace(/\\lvert\b/g, '|').replace(/\\rvert\b/g, '|')
+  output = output.replace(/\\lVert\b/g, '\\|').replace(/\\rVert\b/g, '\\|')
+  // \leadstoH, \leadstoV, \leadsto* : flèches personnalisées MathALÉA → \rightarrow
+  output = output.replace(/\\leadstoH\b/g, '\\rightarrow')
+  output = output.replace(/\\leadstoV\b/g, '\\downarrow')
+  // \circlearrowright / \circlearrowleft → flèche Typst
+  output = output.replace(/\\circlearrowright\b/g, '\\rightarrow')
+  output = output.replace(/\\circlearrowleft\b/g, '\\leftarrow')
+  // \overgroup{X} → \overline{X} (approximation)
+  output = output.replace(/\\overgroup\s*\{/g, '\\overline{')
+  // \iffx → \Leftrightarrow (custom macro "si et seulement si")
+  output = output.replace(/\\iffx\b/g, '\\Leftrightarrow')
+  // \cfrac → \dfrac (tex2typst gère \dfrac ; \cfrac produit "cfrac")
+  output = output.replace(/\\cfrac\b/g, '\\dfrac')
+  // Couleurs LaTeX non reconnues par Typst → équivalents RGB
+  // (tex2typst passe la couleur telle quelle ; Typst ne connaît que ses propres noms)
+  output = output
+    .replace(/\\textcolor\s*\{brown\}/g, '\\textcolor{#964B00}')
+    .replace(/\\textcolor\s*\{violet\}/g, '\\textcolor{#7F00FF}')
+    .replace(/\\textcolor\s*\{pink\}/g, '\\textcolor{#FF69B4}')
+    .replace(/\\textcolor\s*\{darkgray\}/g, '\\textcolor{#555555}')
+    .replace(/\\textcolor\s*\{magenta\}/g, '\\textcolor{#FF00FF}')
+    .replace(/\\textcolor\s*\{cyan\}/g, '\\textcolor{#00FFFF}')
+    .replace(/\\textcolor\s*\{none_2\}/g, '')
+    .replace(/\\textcolor\s*\{none_?\}/g, '')
+    .replace(/\\textcolor\s*\{none\}/g, '')
+  // Même chose pour {\color{X}...} que replaceColorGroups aura déjà converti en \textcolor
+  // (si le nom de couleur n'est pas reconnu, on traite aussi le cas \color{X} restant)
+  output = output
+    .replace(/\{\\color\s*\{brown\}([^}]*)\}/g, '\\textcolor{#964B00}{$1}')
+    .replace(/\{\\color\s*\{violet\}([^}]*)\}/g, '\\textcolor{#7F00FF}{$1}')
   // \hspace*{0.4cm} : tex2typst produirait `#h(*) 0.4 c m` (étoile invalide) ;
   // ces espaces servent surtout à élargir des colonnes, on les neutralise
   output = output.replace(/\\hspace\s*\*?\s*\{[^{}]*\}/g, '\\;')
@@ -1289,13 +1334,16 @@ export function htmlToTypst(html: string, figures?: string[]): string {
   text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, tex: string) =>
     protect(latexSegmentToTypst(tex, true)),
   )
-  // deux $ adjacents (ex. `=$ $\textcolor{...}`) : évite qu'ils soient
-  // consommés comme un bloc $espace$ en laissant le LaTeX suivant sans délimiteur
-  text = text.replace(/\$\s*\$/g, '')
+  // Traite $...$ avant de supprimer les $ adjacents : cela évite que
+  // `$\bullet$ $f(x)$` soit fusionné en `$\bulletf(x)$` (bulletf = variable inconnue).
+  // Quand deux blocs `$A$ $B$` sont adjacents, chacun est converti séparément ;
+  // le bloc espace `$ $` produit une chaîne vide, ce qui est correct.
   text = text.replace(/\$([^$]+?)\$/g, (_, tex: string) => {
     const converted = latexSegmentToTypst(tex, false)
     return converted.length > 0 ? protect(converted) : ''
   })
+  // Supprime les $ orphelins restants (ne contenant que des espaces)
+  text = text.replace(/\$\s*\$/g, '')
 
   // 2. Figures SVG (embarquées dans le document), puis éléments non
   //    convertis : images et tableaux
