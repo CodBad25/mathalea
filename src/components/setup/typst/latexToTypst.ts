@@ -114,11 +114,27 @@ function replaceColorGroups(tex: string): string {
 
 /** Prépare une formule LaTeX de MathALÉA avant sa conversion par tex2typst */
 function preprocessTex(tex: string): string {
-  // le contenu vient du HTML : il peut contenir des entités (&nbsp;...)
-  let output = replaceColorGroups(decodeEntities(tex))
+  // les jetons de protection htmlToTypst (\x00N\x00) ne sont pas du LaTeX
+  // valide ; ils peuvent fuir dans un bloc $…$ via des $$ adjacents — on les supprime
+  let output = replaceColorGroups(decodeEntities(tex.replace(/\x00\d+\x00/g, '')))
   output = stripLatexSizeCommands(output)
+  // \textit{} en mode math → \text{} (tex2typst ne reconnaît pas \textit)
+  output = output.replace(/\\textit\s*\{/g, '\\text{')
+  // \text{\textbf{X}} ou \text{\textit{X}} : tex2typst ne supporte pas les
+  // commandes LaTeX imbriquées dans \text{} — on supprime le wrapper interne
+  output = output.replace(
+    /\\text\s*\{\s*\\text(?:bf|it)\s*\{([^{}]*)\}\s*\}/g,
+    '\\text{$1}',
+  )
   // \textbf en mode mathématique (produit par miseEnEvidence)
   output = output.replace(/\\textbf\s*\{/g, '\\mathbf{')
+  // \big, \Big, \bigg, \Bigg (avec suffixes l/r/m optionnels) : tex2typst
+  // laisse les variantes sans suffixe comme variable nue — on les supprime
+  output = output.replace(/\\[Bb]igg?[lrm]?\b/g, '')
+  // ; en mode mathématique : Typst l'interprète comme séparateur de lignes
+  // dans mat() et vec() (ex. M(a;b) → erreur "expected content, found array")
+  // → on le neutralise via \text{;} sauf s'il fait partie de \; (espace)
+  output = output.replace(/(?<!\\);/g, '\\text{;}')
   // \num{12\,345,6} et \numprint{...} : on garde le contenu tel quel,
   // la virgule décimale devenant \dcomma (voir CUSTOM_TEX_MACROS)
   output = output.replace(
@@ -130,11 +146,23 @@ function preprocessTex(tex: string): string {
   // virgule décimale française : 3,5 ou 3{,}5 -> 3\dcomma 5
   output = output.replace(/(\d)\s*\{,\}\s*(?=\d)/g, '$1\\dcomma ')
   output = output.replace(/(\d),(?=\d)/g, '$1\\dcomma ')
+  // \\[dim] (saut de ligne avec espacement optionnel, ex. dans \begin{cases}) :
+  // tex2typst ne supporte pas l'argument optionnel — on le supprime
+  output = output.replace(/\\\\\s*\[[^\]]*\]/g, '\\\\')
   // \phantom n'a pas d'équivalent direct : on le remplace par une espace
   output = output.replace(/\\(?:phantom|hphantom)\s*\{[^{}]*\}/g, '\\;')
   // \hspace*{0.4cm} : tex2typst produirait `#h(*) 0.4 c m` (étoile invalide) ;
   // ces espaces servent surtout à élargir des colonnes, on les neutralise
   output = output.replace(/\\hspace\s*\*?\s*\{[^{}]*\}/g, '\\;')
+  // & d'alignement hors environnement (ex. `a \leqslant & b \\ c & d`) :
+  // on enveloppe dans \begin{aligned}...\end{aligned} pour que tex2typst
+  // accepte la formule sans erreur
+  if (
+    output.includes('&') &&
+    !/\\begin\{(?:array|tabular|tblr|align|aligned|alignedat|cases)\}/.test(output)
+  ) {
+    output = `\\begin{aligned}${output}\\end{aligned}`
+  }
   return output
 }
 
@@ -158,6 +186,18 @@ function postprocessTypst(typst: string): string {
       .replace(/\bmedspace\b/g, 'med')
       .replace(/\bthickspace\b/g, 'thick')
       .replace(/\bnegthinspace\b/g, '#h(-math.thin.amount)')
+      // tex2typst produit #text(fill: C)[$math$] pour \textcolor{C}{math} :
+      // les $ imbriqués font sortir du mode math et causent "unclosed delimiter"
+      // → on convertit en text(fill: C, math) (appel de fonction math natif)
+      .replace(
+        /#text\(fill: ([^)]+(?:\([^)]*\))*)\)\[\$([\s\S]*?)\$\]/g,
+        (_, fill: string, math: string) => {
+          // En mode math Typst, rgb(), red, etc. nécessitent le préfixe # pour
+          // être résolus comme expressions de code
+          const mathFill = fill.startsWith('#') ? fill : `#${fill}`
+          return `text(fill: ${mathFill}, ${math})`
+        },
+      )
       // virgule décimale : Typst la colle aux chiffres seulement si la
       // chaîne `","` est écrite sans espaces autour
       .replace(/(\d) ?"," ?(?=\d)/g, '$1","')
@@ -718,18 +758,26 @@ function latexSegmentToTypst(tex: string, display: boolean): string {
 export function latexMathToTypst(tex: string): string {
   const trimmed = tex.trim()
   if (trimmed.length === 0) return ''
-  try {
-    const converted = tex2typst(preprocessTex(trimmed), {
-      customTexMacros: CUSTOM_TEX_MACROS,
-    })
-    return (
-      postprocessTypst(converted)
-        .trim()
-        // un saut de ligne (`\`) final échapperait le `$` fermant
-        .replace(/(\s*\\)+$/, '')
+
+  function convert(preprocessed: string): string {
+    return postprocessTypst(
+      tex2typst(preprocessed, { customTexMacros: CUSTOM_TEX_MACROS }),
     )
+      .trim()
+      .replace(/(\s*\\)+$/, '')
+  }
+
+  const preprocessed = preprocessTex(trimmed)
+  try {
+    return convert(preprocessed)
   } catch {
-    return `"${trimmed.replaceAll('\\', '\\\\').replaceAll('"', '\\"')}"`
+    //   (espace insécable du HTML) échoue en mode math : on remplace par espace
+    if (preprocessed.includes(' ')) {
+      try {
+        return convert(preprocessed.replaceAll(' ', ' '))
+      } catch { /* fall through to literal */ }
+    }
+    return `"${preprocessed.replaceAll('\\', '\\\\').replaceAll('"', '\\"')}"`
   }
 }
 
@@ -996,7 +1044,9 @@ function mathalea2dContainerToTypst(
   if (figures == null) return missingBox('figure non convertie')
   figures.push(svgToTypstImage(svgMatch[0]))
   const figureName = `fig-${figures.length}`
-  const figureRef = `#${figureName}`
+  // #(fig-N) isole le nom de variable pour éviter que le texte suivant
+  // soit fusionné dans l'identifiant (ex. #fig-1On → erreur de compilation)
+  const figureRef = `#(${figureName})`
   const width = svgMatch[0].match(/<svg[^>]*?\swidth="([\d.]+)"/i)
   const height = svgMatch[0].match(/<svg[^>]*?\sheight="([\d.]+)"/i)
   const widthPt =
@@ -1203,6 +1253,9 @@ export function htmlToTypst(html: string, figures?: string[]): string {
   text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, tex: string) =>
     protect(latexSegmentToTypst(tex, true)),
   )
+  // deux $ adjacents (ex. `=$ $\textcolor{...}`) : évite qu'ils soient
+  // consommés comme un bloc $espace$ en laissant le LaTeX suivant sans délimiteur
+  text = text.replace(/\$\s*\$/g, '')
   text = text.replace(/\$([^$]+?)\$/g, (_, tex: string) => {
     const converted = latexSegmentToTypst(tex, false)
     return converted.length > 0 ? protect(converted) : ''
@@ -1213,7 +1266,7 @@ export function htmlToTypst(html: string, figures?: string[]): string {
   text = text.replace(/<svg[\s\S]*?<\/svg>/gi, (svg) => {
     if (figures == null) return protect(missingBox('figure non convertie'))
     figures.push(svgToTypstImage(svg))
-    return protect(`#fig-${figures.length}`)
+    return protect(`#(fig-${figures.length})`)
   })
   text = text.replace(/<img[^>]*>/gi, () =>
     protect(missingBox('image non convertie')),

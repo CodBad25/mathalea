@@ -184,7 +184,7 @@ describe('htmlToTypst', () => {
       'Figure 1 : <svg width="96" height="48"><rect/></svg> et figure 2 : <svg><circle/></svg>',
       figures,
     )
-    expect(result).toBe('Figure 1 : #fig-1 et figure 2 : #fig-2')
+    expect(result).toBe('Figure 1 : #(fig-1) et figure 2 : #(fig-2)')
     expect(figures).toHaveLength(2)
     expect(figures[0]).toBe(
       'image(bytes("<svg width=\\"96\\" height=\\"48\\"><rect/></svg>"), format: "svg", width: 72.0pt)',

@@ -501,6 +501,7 @@
         </div>
         {#if diagnostics.length > 0}
           <div
+            data-testid="typst-diagnostics"
             class="max-h-40 overflow-auto shrink-0 px-4 py-2 text-sm font-mono bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-200 border-t border-red-300 dark:border-red-800"
           >
             {#each diagnostics as diagnostic}

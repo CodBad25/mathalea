@@ -58,11 +58,11 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('// ----- Figures (SVG embarqués) -----')
     expect(code).toContain('#let fig-1 = image(bytes(')
     expect(code).toContain('#let fig-2 = image(bytes(')
-    expect(code).toContain('Figure : #fig-1')
-    expect(code).toContain('Corrigé : #fig-2')
+    expect(code).toContain('Figure : #(fig-1)')
+    expect(code).toContain('Corrigé : #(fig-2)')
     // les définitions doivent précéder les références
     expect(code.indexOf('#let fig-1')).toBeLessThan(
-      code.indexOf('Figure : #fig-1'),
+      code.indexOf('Figure : #(fig-1)'),
     )
   })
 
