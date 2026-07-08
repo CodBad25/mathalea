@@ -1147,7 +1147,11 @@ function normalizeOverlayLatex(tex: string): {
  */
 export function svgToTypstImage(svg: string): string {
   const cleaned = sanitizeSvg(svg)
+  // SVG with zero width or height is rejected by Typst's parser
+  const h = cleaned.match(/<svg[^>]*?\sheight="([\d.]+)"/i)
+  if (h != null && parseFloat(h[1]) === 0) return 'box(width: 0pt, height: 0pt)[]'
   const width = cleaned.match(/<svg[^>]*?\swidth="([\d.]+)"/i)
+  if (width != null && parseFloat(width[1]) === 0) return 'box(width: 0pt, height: 0pt)[]'
   const widthPt =
     width != null
       ? `, width: ${(parseFloat(width[1]) * 0.75).toFixed(1)}pt`
