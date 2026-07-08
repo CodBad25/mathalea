@@ -5,6 +5,7 @@ import { papierPointe } from '../../lib/2d/reperes'
 import { TracePoint } from '../../lib/2d/TracePoint'
 import { symetrieAxiale } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { PointCliquable, pointCliquable } from '../../modules/2dinteractif'
@@ -12,11 +13,10 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = 'Compléter un nuage de points symétriques'
 export const dateDePublication = '18/12/2021'
-export const interactifReady = false
+export const interactifReady = true
 // remettre interactif_Ready à true qd l'exo sera refait avec apiGEom
 export const interactifType = 'custom'
 export const amcReady = true
@@ -275,7 +275,14 @@ export default class CompleterParSymetrie6e extends Exercice {
         : "Voici une grille contenant des points et un axe de symétrie.<br>Ajouter un minimum de points afin que la figure soit symétrique par rapport à l'axe.<br>"
       // On prépare la figure...
       texte += mathalea2d(
-        { xmin: -1, ymin: -1, xmax: 11, ymax: 11, scale: 0.5 },
+        {
+          xmin: -1,
+          ymin: -1,
+          xmax: 11,
+          ymax: 11,
+          scale: 0.5,
+          id: `figEx${this.numeroExercice}Q${i}`,
+        },
         ...objetsEnonce[i],
         ...this.pointsCliquables[i],
       )
@@ -345,8 +352,28 @@ export default class CompleterParSymetrie6e extends Exercice {
   correctionInteractive = (i: number) => {
     let resultat = 'Ok'
     let aucunMauvaisPointsCliques = true
+    const figure = document.querySelector(`#figEx${this.numeroExercice}Q${i}`)
+    if (figure === null) return 'KO'
     if (this.pointsCliques == null) this.pointsCliques = []
     if (this.pointsCliques[i] == null) this.pointsCliques[i] = []
+    if (this.answers === undefined) this.answers = {}
+    // Sauvegarde de la réponse pour Capytale
+    for (const monPoint of [
+      ...this.pointsNonSolution[i],
+      ...this.pointsSolution[i],
+    ]) {
+      if (monPoint.etat && monPoint.groupe) {
+        const groups = Array.from(
+          figure.querySelectorAll(':scope > g'),
+        ) as SVGGElement[]
+        if (monPoint.groupe instanceof SVGGElement) {
+          const pos = groups.indexOf(monPoint.groupe)
+          if (pos === -1) continue
+          this.answers[`cliquePointfigEx${this.numeroExercice}Q${i}P${pos}`] =
+            `svg[id$='Ex${this.numeroExercice}Q${i}'] g:nth-of-type(${pos + 1})`
+        }
+      }
+    }
     for (const monPoint of this.pointsNonSolution[i]) {
       if (monPoint.etat) {
         aucunMauvaisPointsCliques = false
