@@ -935,7 +935,7 @@ function writeIntroduction(introduction = ''): string {
 
 function buildContent(
   questions: string[],
-  spacing = 1,
+  spacing = 0,
   numbersNeeded: boolean,
   nbCols: number = 1,
   confExo: {
@@ -954,7 +954,7 @@ function buildContent(
     if (confExo.itemsep !== undefined && confExo.itemsep !== null) {
       specs.push(`itemsep=${confExo.itemsep}em`)
     } else if (spacing !== 0) {
-      specs.push(`itemsep=${spacing}em`)
+      specs.push(`itemsep=${Math.min(spacing, 1)}em`)
     }
     if (confExo.labels) {
       specs.push(`label=${confExo.labels}`)
