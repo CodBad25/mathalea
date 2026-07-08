@@ -174,21 +174,22 @@ function preprocessTex(tex: string): string {
   // Le contenu peut avoir un niveau d'imbrication (ex. \phantom{\frac{a}{b}})
   // → [^{}]|\{[^{}]*\} capture les groupes imbriqués
   output = output.replace(/\\(?:phantom|hphantom|vphantom)\s*\{(?:[^{}]|\{[^{}]*\})*\}/g, '\\;')
+  // Contenu LaTeX avec un niveau d'imbrication de {} (ex. \xrightarrow{+x~\text{min}})
+  const B1 = '(?:[^{}]|\\{[^{}]*\\})*'
   // \xrightarrow{X} → \overset{X}{\rightarrow} (tex2typst ne connaît pas \xrightarrow)
-  output = output.replace(/\\xrightarrow\s*(?:\[[^\]]*\])?\s*\{([^{}]*)\}/g, '\\overset{$1}{\\rightarrow}')
+  output = output.replace(new RegExp(`\\\\xrightarrow\\s*(?:\\[[^\\]]*\\])?\\s*\\{(${B1})\\}`, 'g'), '\\overset{$1}{\\rightarrow}')
   // \xleftarrow{X} → \overset{X}{\leftarrow}
-  output = output.replace(/\\xleftarrow\s*(?:\[[^\]]*\])?\s*\{([^{}]*)\}/g, '\\overset{$1}{\\leftarrow}')
+  output = output.replace(new RegExp(`\\\\xleftarrow\\s*(?:\\[[^\\]]*\\])?\\s*\\{(${B1})\\}`, 'g'), '\\overset{$1}{\\leftarrow}')
   // \stackrel{A}{B} → \overset{A}{B} (tex2typst ne connaît pas \stackrel)
   output = output.replace(/\\stackrel\s*\{/g, '\\overset{')
   // \bf{X} (ancienne commande LaTeX) → \mathbf{X}
   output = output.replace(/\\bf\s*\{/g, '\\mathbf{')
   // \fbox{X} → \text{[X]} (boîte autour du texte — approximation)
-  output = output.replace(/\\fbox\s*\{([^{}]*)\}/g, '\\text{[$1]}')
-  // \fcolorbox{bord}{fond}{X} → \textcolor{bord}{X} (ignoré fond)
-  output = output.replace(/\\fcolorbox\s*\{[^{}]*\}\s*\{[^{}]*\}\s*\{([^{}]*)\}/g, '\\text{[$1]}')
-  // \boxed{X} → rect(math.X) approximation ; tex2typst produit "boxed x" qui est inconnu
-  // On préprocesse comme \fbox pour obtenir une représentation visuelle acceptable
-  output = output.replace(/\\boxed\s*\{([^{}]*)\}/g, '\\text{[$1]}')
+  output = output.replace(new RegExp(`\\\\fbox\\s*\\{(${B1})\\}`, 'g'), '\\text{[$1]}')
+  // \fcolorbox{bord}{fond}{X} → \text{[X]} (approximation)
+  output = output.replace(new RegExp(`\\\\fcolorbox\\s*\\{[^{}]*\\}\\s*\\{[^{}]*\\}\\s*\\{(${B1})\\}`, 'g'), '\\text{[$1]}')
+  // \boxed{X} → \text{[X]} approximation (tex2typst produit "boxed x" qui est inconnu)
+  output = output.replace(new RegExp(`\\\\boxed\\s*\\{(${B1})\\}`, 'g'), '\\text{[$1]}')
   // \lvert..\rvert → |..|  /  \lVert..\rVert → ‖..‖
   output = output.replace(/\\lvert\b/g, '|').replace(/\\rvert\b/g, '|')
   output = output.replace(/\\lVert\b/g, '\\|').replace(/\\rVert\b/g, '\\|')
@@ -268,7 +269,10 @@ function postprocessTypst(typst: string): string {
   while (prev !== result) {
     prev = result
     result = result.replace(colorRe, (_, fill: string, math: string) => {
-      return `text(fill: ${fill}, ${math})`
+      // rgb(...) et noms de couleur sont du code, pas des symboles math
+      // → préfixer # pour les évaluer en mode code à l'intérieur de $…$
+      const mathFill = /^(?:rgb\(|[a-z])/.test(fill) ? `#${fill}` : fill
+      return `text(fill: ${mathFill}, ${math})`
     })
   }
 
@@ -282,6 +286,11 @@ function postprocessTypst(typst: string): string {
     .replace(/lr\(\[([^\[\]]*)\[\)/g, 'lr(bracket.l $1 bracket.l)')
     // Cas 3 : ]...] → semi-ouvert ouvert à gauche, fermé à droite
     .replace(/lr\(\]([^\[\]]*)\]\)/g, 'lr(bracket.r $1 bracket.r)')
+    // Intervalles français nus (sans \left\right) : ]a;b[, ]a;b], [a;b[
+    // (après le traitement des lr(), il ne reste que des crochets résiduels)
+    .replace(/\]([^\[\]]*)\[/g, 'lr(bracket.r $1 bracket.l)')
+    .replace(/\]([^\[\]]*)\]/g, 'lr(bracket.r $1 bracket.r)')
+    .replace(/\[([^\[\]]*)\[/g, 'lr(bracket.l $1 bracket.l)')
     // virgule décimale : Typst la colle aux chiffres seulement si la
     // chaîne `","` est écrite sans espaces autour
     .replace(/(\d) ?"," ?(?=\d)/g, '$1","')
