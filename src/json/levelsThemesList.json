@@ -2436,6 +2436,123 @@
   "200": {
     "titre": "Automatismes"
   },
+  "2A": {
+    "titre": "Automatismes"
+  },
+  "2A-A": {
+    "titre": "Annales"
+  },
+  "2A-A01": {
+    "titre": "Extraits des sujets années 2026"
+  },
+  "2A-N": {
+    "titre": "Calcul numérique"
+  },
+  "2A-N1": {
+    "titre": "Comparer deux nombres directement ou par calcul"
+  },
+  "2A-N2": {
+    "titre": "Effectuer des opérations et des comparaisons entre des fractions simples"
+  },
+  "2A-N3": {
+    "titre": "Effectuer des opérations sur les puissances"
+  },
+  "2A-N4": {
+    "titre": "Passer d’une écriture d’un nombre à une autre"
+  },
+  "2A-N5": {
+    "titre": "Estimer un ordre de grandeur"
+  },
+  "2A-N6": {
+    "titre": "S’assurer de la vraisemblance et de la cohérence d’un résultat"
+  },
+  "2A-N7": {
+    "titre": "Effectuer des conversions d’unités"
+  },
+  "2A-C": {
+    "titre": "Calcul algébrique"
+  },
+  "2A-C1": {
+    "titre": "Effectuer un calcul littéral élémentaire"
+  },
+  "2A-C2": {
+    "titre": "Développer, factoriser, réduire une expression algébrique simple"
+  },
+  "2A-C3": {
+    "titre": "Résoudre une équation du type : x²=a, ax+b=cx+d ou a/x=b, ou une inéquation du premier degré"
+  },
+  "2A-C4": {
+    "titre": "Isoler une variable dans une égalité qui en comporte plusieurs"
+  },
+  "2A-C5": {
+    "titre": "Effectuer une application numérique d’une formule"
+  },
+  "2A-F": {
+    "titre": "Fonctions"
+  },
+  "2A-F1": {
+    "titre": "Déterminer graphiquement des images et des antécédents"
+  },
+  "2A-F2": {
+    "titre": "Exploiter une équation de courbe : appartenance d’un point, calcul de coordonnées"
+  },
+  "2A-F3": {
+    "titre": "Reconnaitre l’expression d’une fonction linéaire ou d’une fonction affine"
+  },
+  "2A-G": {
+    "titre": "Géométrie"
+  },
+  "2A-G1": {
+    "titre": "Sur une droite graduée, repérer ou placer un point dont l’abscisse est un nombre relatif"
+  },
+  "2A-G2": {
+    "titre": "Dans le plan muni d’un repère orthogonal, lire les coordonnées d’un point donné, placer un point de coordonnées données"
+  },
+  "2A-G3": {
+    "titre": "Calculer des périmètres, des aires et des volumes"
+  },
+  "2A-G4": {
+    "titre": "Faire une application simple du théorème de Pythagore et du théorème de Thalès"
+  },
+  "2A-G5": {
+    "titre": "Connaitre et utiliser les lignes trigonométriques dans le triangle rectangle : cosinus, sinus, tangente"
+  },
+  "2A-S": {
+    "titre": "Statistiques"
+  },
+  "2A-S1": {
+    "titre": "Lire et commenter des graphiques usuels"
+  },
+  "2A-S2": {
+    "titre": "Calculer et interpréter des indicateurs statistiques : moyenne, médiane, quartiles"
+  },
+  "2A-S3": {
+    "titre": "Comparer des distributions à l’aide de boites à moustaches"
+  },
+  "2A-P": {
+    "titre": "Probabilités"
+  },
+  "2A-P1": {
+    "titre": "Savoir qu’une probabilité est un nombre entre 0 et 1"
+  },
+  "2A-P2": {
+    "titre": "Savoir calculer la probabilité de l’évènement contraire"
+  },
+  "2A-P3": {
+    "titre": "Calculer la probabilité d’un évènement comme somme des probabilités des issues qui le composent"
+  },
+  "2A-P4": {
+    "titre": "Utiliser la relation P(A)=Card(A)/Card(Ω) dans le cas de l’équiprobabilité"
+  },
+  "2A-R": {
+    "titre": "Proportion-Pourcentage"
+  },
+  "2A-R1": {
+    "titre": "Calculer, appliquer, exprimer une proportion sous différentes formes"
+  },
+  "2A-R2": {
+    "titre": "Utiliser une proportion pour calculer une partie connaissant le tout, ou le tout connaissant une partie"
+  },
   "2N1": {
     "titre": "Manipuler les nombres réels"
   },

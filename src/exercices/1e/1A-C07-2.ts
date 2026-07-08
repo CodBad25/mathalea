@@ -2,7 +2,7 @@ import HeureDecimalesMinutes from '../can/6e/can6D09'
 
 export const uuid = '42707'
 export const refs = {
-  'fr-fr': ['1A-C07-2'],
+  'fr-fr': ['1A-C07-2', '2A-N7-2'],
   'fr-ch': ['10QCM-1'],
 }
 export const interactifReady = true

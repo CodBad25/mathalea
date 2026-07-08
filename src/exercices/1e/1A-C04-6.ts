@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = '14552'
 
 export const refs = {
-  'fr-fr': ['1A-C04-6'],
+  'fr-fr': ['1A-C04-6', '2A-N4-6'],
   'fr-ch': [''],
 }
 export default class Auto1AC4f extends ÉcrirePourcentage {
