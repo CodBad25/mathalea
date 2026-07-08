@@ -205,6 +205,16 @@ function preprocessTex(tex: string): string {
   output = output.replace(/\\iffx\b/g, '\\Leftrightarrow')
   // \cfrac → \dfrac (tex2typst gère \dfrac ; \cfrac produit "cfrac")
   output = output.replace(/\\cfrac\b/g, '\\dfrac')
+  // \empty → \emptyset (alias standard de l'ensemble vide, tex2typst → nothing)
+  output = output.replace(/\\empty(?!set)\b/g, '\\emptyset')
+  // \overset{\rule{w}{h}}{X} → \overline{X} : filet horizontal au-dessus d'un symbole
+  // (utilisé pour le complément d'un événement, ex. \overset{\rule{0.8em}{0.08em}}{A})
+  output = output.replace(
+    new RegExp(`\\\\overset\\s*\\{\\\\rule\\s*\\{[^{}]*\\}\\s*\\{[^{}]*\\}\\}\\s*\\{(${B1})\\}`, 'g'),
+    '\\overline{$1}',
+  )
+  // \rule{w}{h} résiduel → supprimé (ligne horizontale sans équivalent Typst direct)
+  output = output.replace(/\\rule\s*\{[^{}]*\}\s*\{[^{}]*\}/g, '')
   // Couleurs LaTeX non reconnues par Typst → équivalents RGB
   // (tex2typst passe la couleur telle quelle ; Typst ne connaît que ses propres noms)
   output = output
@@ -212,6 +222,8 @@ function preprocessTex(tex: string): string {
     .replace(/\\textcolor\s*\{violet\}/g, '\\textcolor{#7F00FF}')
     .replace(/\\textcolor\s*\{pink\}/g, '\\textcolor{#FF69B4}')
     .replace(/\\textcolor\s*\{darkgray\}/g, '\\textcolor{#555555}')
+    .replace(/\\textcolor\s*\{lightgray\}/g, '\\textcolor{#D3D3D3}')
+    .replace(/\\textcolor\s*\{lightgrey\}/g, '\\textcolor{#D3D3D3}')
     .replace(/\\textcolor\s*\{magenta\}/g, '\\textcolor{#FF00FF}')
     .replace(/\\textcolor\s*\{cyan\}/g, '\\textcolor{#00FFFF}')
     .replace(/\\textcolor\s*\{none_2\}/g, '')
@@ -269,9 +281,24 @@ function postprocessTypst(typst: string): string {
   while (prev !== result) {
     prev = result
     result = result.replace(colorRe, (_, fill: string, math: string) => {
-      // rgb(...) et noms de couleur sont du code, pas des symboles math
-      // → préfixer # pour les évaluer en mode code à l'intérieur de $…$
-      const mathFill = /^(?:rgb\(|[a-z])/.test(fill) ? `#${fill}` : fill
+      // Résout la couleur pour le mode code Typst :
+      // – rgb(...) → #rgb(...) (appel de fonction Typst)
+      // – noms CSS absents de Typst (ex. lightgray) → #rgb("#hex") via NAMED_COLOR_TO_HEX
+      // – none / none_2 / transparent → supprimer la couleur, garder le contenu
+      // – noms Typst natifs (black, red…) → #nom (variable Typst)
+      // – littéraux hex (#F15929) → inchangés (littéral couleur Typst)
+      const lower = fill.toLowerCase()
+      if (/^none/.test(lower)) return math
+      let mathFill: string
+      if (/^rgb\(/.test(fill)) {
+        mathFill = `#${fill}`
+      } else if (lower in NAMED_COLOR_TO_HEX) {
+        mathFill = `#rgb("${NAMED_COLOR_TO_HEX[lower]}")`
+      } else if (/^[a-z]/.test(fill)) {
+        mathFill = `#${fill}`
+      } else {
+        mathFill = fill
+      }
       return `text(fill: ${mathFill}, ${math})`
     })
   }
@@ -288,9 +315,11 @@ function postprocessTypst(typst: string): string {
     .replace(/lr\(\]([^\[\]]*)\]\)/g, 'lr(bracket.r $1 bracket.r)')
     // Intervalles français nus (sans \left\right) : ]a;b[, ]a;b], [a;b[
     // (après le traitement des lr(), il ne reste que des crochets résiduels)
-    .replace(/\]([^\[\]]*)\[/g, 'lr(bracket.r $1 bracket.l)')
-    .replace(/\]([^\[\]]*)\]/g, 'lr(bracket.r $1 bracket.r)')
-    .replace(/\[([^\[\]]*)\[/g, 'lr(bracket.l $1 bracket.l)')
+    // L'espace initial évite la concaténation d'identifiants : tex2typst peut
+    // coller des symboles contre ] sans espace (ex. "union]" → "union lr(…)").
+    .replace(/\]([^\[\]]*)\[/g, ' lr(bracket.r $1 bracket.l)')
+    .replace(/\]([^\[\]]*)\]/g, ' lr(bracket.r $1 bracket.r)')
+    .replace(/\[([^\[\]]*)\[/g, ' lr(bracket.l $1 bracket.l)')
     // virgule décimale : Typst la colle aux chiffres seulement si la
     // chaîne `","` est écrite sans espaces autour
     .replace(/(\d) ?"," ?(?=\d)/g, '$1","')
