@@ -8,6 +8,7 @@ import { rotation } from '../../lib/2d/transformations'
 import { triangle2points2longueurs } from '../../lib/2d/triangles'
 import { angleOriente } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -30,8 +31,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   "Agrandir ou réduire des figures, d'après une situation de proportionnalité"
@@ -79,6 +78,7 @@ class AgrandirReduireFigure extends Exercice {
     this.nbQuestions = 4
 
     this.spacing = 2
+    this.consigne = `Lorsqu'une figure est agrandie ou réduite, tous les côtés de la nouvelle figure sont proportionnels à ceux de la figure initiale, et sa forme est conservée.<br><br>`
   }
 
   nouvelleVersion() {
@@ -198,7 +198,7 @@ class AgrandirReduireFigure extends Exercice {
                 nommePolygone(polygoneInit, nom),
               )
               const enonceInit = `On décide d'effectuer un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ du triangle équilatéral ${nom}. Quelle sera la longueur du côté du triangle à construire ?`
-              texte = enonceInit
+              texte += enonceInit
               const enonceAMC =
                 '<br>' +
                 mathalea2d(
@@ -220,7 +220,7 @@ class AgrandirReduireFigure extends Exercice {
                 texte += enonceAMC
                 handleAnswers(this, i, { reponse: { value: reponse } })
               } else if (!context.isAmc) {
-                texte = `Trace un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ du triangle ${nom}.`
+                texte += `Trace un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ du triangle ${nom}.`
                 texte +=
                   '<br>' +
                   mathalea2d(
@@ -412,7 +412,7 @@ class AgrandirReduireFigure extends Exercice {
                 codageAngleDroit(B, A, D),
               )
               const enonceInit = `On décide d'effectuer un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$, du carré ${nom}. Quelle sera la longueur du côté du carré à construire ?`
-              texte = enonceInit
+              texte += enonceInit
               const enonceAMC =
                 '<br>' +
                 mathalea2d(
@@ -434,7 +434,7 @@ class AgrandirReduireFigure extends Exercice {
                 texte += enonceAMC
                 handleAnswers(this, i, { reponse: { value: reponse } })
               } else if (!context.isAmc) {
-                texte = `Trace un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ du carré ${nom}.`
+                texte += `Trace un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ du carré ${nom}.`
                 texte +=
                   '<br>' +
                   mathalea2d(
@@ -629,7 +629,7 @@ class AgrandirReduireFigure extends Exercice {
                 )
               let correctionParticularite = ''
               if (this.interactif) {
-                texte = enonceInit
+                texte += enonceInit
                 texte += enonceAMC
                 switch (choice([1, 2, 3])) {
                   case 1:
@@ -705,7 +705,7 @@ class AgrandirReduireFigure extends Exercice {
                   }
                 }
               } else if (!context.isAmc) {
-                texte = `Trace un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ du triangle ${nom}.`
+                texte += `Trace un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ du triangle ${nom}.`
                 texte +=
                   '<br>' +
                   mathalea2d(
@@ -995,7 +995,7 @@ class AgrandirReduireFigure extends Exercice {
                 )
               let correctionParticularite = ''
               if (this.interactif) {
-                texte = enonceInit
+                texte += enonceInit
                 texte += enonceAMC
                 switch (choice([1, 2])) {
                   case 1:
@@ -1032,7 +1032,7 @@ class AgrandirReduireFigure extends Exercice {
                     break
                 }
               } else if (!context.isAmc) {
-                texte = `Trace un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du triangle ${nom} de telle sorte que la longueur du côté associé à [${lettreDepuisChiffre(numB) + lettreDepuisChiffre(numC)}] mesurera $${texNombre(reponse2)}$.`
+                texte += `Trace un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du triangle ${nom} de telle sorte que la longueur du côté associé à [${lettreDepuisChiffre(numB) + lettreDepuisChiffre(numC)}] mesurera $${texNombre(reponse2)}$.`
                 texte +=
                   '<br>' +
                   mathalea2d(
@@ -1281,7 +1281,7 @@ class AgrandirReduireFigure extends Exercice {
                 )
               let correctionParticularite = ''
               if (this.interactif) {
-                texte = enonceInit
+                texte += enonceInit
                 texte += enonceAMC
                 switch (choice([1, 2])) {
                   case 1:
@@ -1318,7 +1318,7 @@ class AgrandirReduireFigure extends Exercice {
                     break
                 }
               } else if (!context.isAmc) {
-                texte = `Trace un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ du rectangle ${nom}.`
+                texte += `Trace un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ du rectangle ${nom}.`
                 texte +=
                   '<br>' +
                   mathalea2d(
@@ -1618,7 +1618,7 @@ class AgrandirReduireFigure extends Exercice {
                   objets,
                 )
               if (this.interactif) {
-                texte = enonceInit
+                texte += enonceInit
                 texte += ajouteChampTexteMathLive(
                   this,
                   i,
@@ -1627,7 +1627,7 @@ class AgrandirReduireFigure extends Exercice {
                 texte += enonceAMC
                 handleAnswers(this, i, { reponse: { value: reponse1 } })
               } else if (!context.isAmc) {
-                texte = `Trace un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du rectangle ${nom} de telle sorte que la longueur du côté associé à [${lettreDepuisChiffre(numA) + lettreDepuisChiffre(numB)}] mesurera $${texNombre(reponse)}$.`
+                texte += `Trace un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du rectangle ${nom} de telle sorte que la longueur du côté associé à [${lettreDepuisChiffre(numA) + lettreDepuisChiffre(numB)}] mesurera $${texNombre(reponse)}$.`
                 texte +=
                   '<br>' +
                   mathalea2d(
