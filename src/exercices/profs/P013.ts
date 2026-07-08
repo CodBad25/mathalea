@@ -6,7 +6,6 @@ import { repere } from '../../lib/2d/reperes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { mathalea2d } from '../../modules/mathalea2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Effectuer une interpolation cosinusoïdale'
 
 export const refs = {
@@ -48,9 +47,11 @@ export default class TraceCourbeInterpolee1 extends Exercice {
     this.besoinFormulaire2CaseACocher = ['Afficher les points ', true]
     this.besoinFormulaire3Numerique = [
       'Modèles de couleur ',
-      3,
-      '1 : Points rouges sur courbe noire\n2 : Points bleus sur courbe rouge\n3 : Points verts sur courbe bleue',
+      5,
+      '1 : Points rouges sur courbe noire\n2 : Points bleus sur courbe rouge\n3 : Points noirs sur courbe bleue\n4 : Points noirs sur courbe verte\n5 : Points rouges sur courbe bleue',
     ]
+    this.besoinFormulaire4Numerique = ['Style de point', 3, '1: +\n2: x\n3: o']
+    this.sup4 = 3
 
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
@@ -76,8 +77,10 @@ export default class TraceCourbeInterpolee1 extends Exercice {
     const objets = []
     const couleurs = [
       { colPoint: 'red', colCourbe: 'black' },
-      { colPoint: bleuMathalea, colCourbe: 'red' },
-      { colPoint: 'green', colCourbe: bleuMathalea },
+      { colPoint: 'blue', colCourbe: 'red' },
+      { colPoint: 'black', colCourbe: 'blue' },
+      { colPoint: 'black', colCourbe: 'green' },
+      { colPoint: 'red', colCourbe: 'blue' },
     ]
     for (let i = 0, coords; i < liste.length; i++) {
       coords = liste[i].split(';')
@@ -122,8 +125,12 @@ export default class TraceCourbeInterpolee1 extends Exercice {
     if (this.sup2) {
       for (let i = 0, p; i < points.length; i++) {
         p = tracePoint(pointAbstrait(points[i][0], points[i][1]))
-        p.style = '+'
-        p.epaisseur = 2
+        p.style = this.sup4 === 1 ? '+' : this.sup4 === 2 ? 'x' : 'o'
+        p.epaisseur = this.sup4 === 1 ? 2 : this.sup4 === 2 ? 1 : 2
+        p.taille = this.sup4 < 3 ? 3 : 2
+        p.couleurDeRemplissage = colorToLatexOrHTML(
+          couleurs[parseInt(this.sup3) - 1].colPoint,
+        )
         p.color = colorToLatexOrHTML(couleurs[parseInt(this.sup3) - 1].colPoint)
         objets.push(p)
       }
