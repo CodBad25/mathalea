@@ -66,6 +66,7 @@ export class TracePointSurDroite extends ObjetMathalea2D {
       (-this.taille * 20) / coeff,
     )
     const s = segment(A1, A2, this.stringColor)
+    s.epaisseur = this.epaisseur
     this.id = s.id
     return s.svg(coeff)
   }
@@ -82,6 +83,7 @@ export class TracePointSurDroite extends ObjetMathalea2D {
       -this.taille / context.scale,
     )
     const s = segment(A1, A2, this.stringColor)
+    s.epaisseur = this.epaisseur
     return s.tikz()
   }
 }
