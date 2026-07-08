@@ -1,7 +1,12 @@
+import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { segment, segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
-import { labelPoint } from '../../lib/2d/textes'
+import { segment } from '../../lib/2d/segmentsVecteurs'
+import { Latex2d, latex2d } from '../../lib/2d/textes'
+import {
+  TracePointSurDroite,
+  tracePointSurDroite,
+} from '../../lib/2d/TracePointSurDroite'
 import { orangeMathalea } from '../../lib/colors'
 import { demiDroiteInteractive } from '../../lib/interactif/demi_droite_interactive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -25,7 +30,7 @@ export const amcType = 'AMCHybride'
 export const uuid = 'cff14'
 
 export const refs = {
-  'fr-fr': [],
+  'fr-fr': ['6N3D-2'],
   'fr-2016': [],
   'fr-ch': [],
 }
@@ -43,18 +48,31 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
       'Nombres de points à placer (de 1 à 3)',
       3,
     ]
-    this.besoinFormulaire2CaseACocher = [
-      'Avec partage en 5 pour la version latex',
-      false,
+    this.besoinFormulaire2CaseACocher = ['Origine visible', true]
+    this.besoinFormulaire3Numerique = [
+      'Nombre de clics nécessaires pour graduer',
+      3,
+      '1: 10 ou moins\n2: 15 ou moins\n3: 20 ou moins',
+    ]
+    this.besoinFormulaire4Numerique = [
+      "Nombre d'unités visibles sur la demi-droite graduée (en LaTeX : 3 maxi)",
+      3,
+      '1: 2 unités\n2: 3 unités\n3: 4 unités',
     ]
     this.sup = 2
-    this.sup2 = false
-    this.comment = `Cet exercice est dans la lignée de la série CM2N2E, mais il se distingue par le fait que l'élève doit lui-même graduer l'axe.<br>
+    this.sup2 = true
+    this.sup3 = 1
+    this.sup4 = 2
+
+    this.comment = `Pour des exercices de placement de points d'abscisses fractionnaires, voir la série CM2N2E.<br>
+    Celui-ci demande à l'élève de graduer l'axe.<br>
     En version HTML, on peut avoir un diviseur allant de 2 à 7 (le bouton |+ permet de modifier le nombre de parts).<br>
-    En version LaTex, les diviseurs sont limités à 2, 4 et 5 (ou 2 et 4 seulement si la case est décochée), car l'élève doit effectuer lui même le partage du segment $[OT]$.`
+    En version LaTeX, les diviseurs sont limités à 2, 4 et 5 avec une unité à 4 cm pour faciliter la graduation de l'axe.`
   }
 
   nouvelleVersion() {
+    const nbClicsMax = (1 + this.sup3) * 5
+    const nbUnits = 1 + (context.isHtml ? this.sup4 : Math.min(this.sup4, 2))
     this.consigne = context.isHtml
       ? `Utiliser les boutons pour modifier la demi-droite graduée et créer les graduations nécessaires pour placer ${
           this.sup === 1
@@ -64,32 +82,43 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
                 .map((p) => `$${p}$`)
                 .join(', ')}` + `et $${['A', 'B', 'C'][this.sup - 1]}$`
         }.`
-      : "L'unité est le cm. Un segment $[OT]$ est à construire sur la demi-droite graduée, puis à partager en parties égales pour placer le point $A$."
+      : `L'unité fait 4 cm. Graduer régulièrement l'axe et placer  ${
+          this.sup === 1
+            ? 'le point $A$'
+            : `les points ${['A', 'B', 'C']
+                .slice(0, this.sup - 1)
+                .map((p) => `$${p}$`)
+                .join(', ')}` + `et $${['A', 'B', 'C'][this.sup - 1]}$`
+        }.`
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      const abscisseT = randint(2, 4)
-      const den = context.isHtml
-        ? randint(2, 5)
-        : this.sup2
-          ? choice([2, 4, 5])
-          : choice([2, 4])
+      const x0 = this.sup2 ? 0 : randint(1, 3)
+      let den: number
+      const abscisseT = x0 + nbUnits
+      do {
+        den = context.isHtml ? randint(2, 5) : choice([2, 4, 5])
+      } while (den * (abscisseT - x0) > nbClicsMax)
+
       const nums: number[] = []
       for (let j = 0; j < this.sup; j++) {
-        nums.push(randint(1, den * abscisseT - 1, [...nums, den]))
+        nums.push(randint(den * x0 + 1, den * abscisseT - 1, [...nums, den]))
       }
       let texte =
         this.sup === 1
           ? `Placer le point $A$ d'abscisse $\\dfrac{${nums[0]}}{${den}}$ sur la demi-droite graduée ci-dessous.<br><br>`
           : `Placer les points ${nums.map((n, i) => `$${`${['A', 'B', 'C'][i]}(\\dfrac{${n}}{${den}})`}$`).join(', ')} sur la demi-droite graduée ci-dessous.<br><br>`
-      let texteCorr = `On partage $[OT]$ en $${den * abscisseT}$ parties égales.<br>`
+      let texteCorr = `On partage le segment de $${nbUnits}$ unités en $${den * (abscisseT - x0)}$ parties égales.<br>`
       if (this.correctionDetaillee) {
-        texteCorr += `En effet, $${abscisseT} = ${den * abscisseT} \\times \\dfrac{${1}}{${den}}$.<br><br>`
+        texteCorr += `En effet, $${abscisseT - x0} = ${den * (abscisseT - x0)} \\times \\dfrac{${1}}{${den}}$.<br><br>`
+      }
+      if (!this.sup2) {
+        texteCorr += `À compter de l'abscisse $${x0}$...<br>`
       }
       if (this.sup === 1) {
-        texteCorr += `Le point A est placé sur la ${adverbeNumeral(nums[0])} graduation après $O$.<br>`
+        texteCorr += `Le point A est placé sur la ${adverbeNumeral(nums[0] - x0 * den)} graduation${nums[0] - x0 * den < den ? '' : `, soit $${Math.floor((nums[0] - x0 * den) / den)}$ unités plus $${(nums[0] - x0 * den) % den}$ graduation${(nums[0] - x0 * den) % den < 2 ? '' : 's'}`}.<br>`
       } else {
         texteCorr += `${nums
           .map((num, i) => {
-            return `Le point ${['A', 'B', 'C'][i]} est placé sur la ${adverbeNumeral(num)} graduation après $O$.<br>`
+            return `Le point ${['A', 'B', 'C'][i]} est placé sur la ${adverbeNumeral(num - x0 * den)} graduation${num - x0 * den < den ? '' : `, soit $${Math.floor((num - x0 * den) / den)}$ unités plus $${(num - x0 * den) % den}$ graduation${(num - x0 * den) % den < 2 ? '' : 's'}`}.<br>`
           })
           .join('')}`
       }
@@ -109,13 +138,15 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
           minT: abscisseT,
           maxT: abscisseT,
           multiplePoints: this.sup > 1,
+          x0,
         })
         texteCorr += demiDroiteInteractive(this, i, {
           initialT: abscisseT,
+          x0,
           minT: abscisseT,
           maxT: abscisseT,
           interactivityOn: false,
-          partsCount: den * abscisseT,
+          partsCount: den * (abscisseT - x0),
           points: nums.map((num, i) => ({
             pointValue: num / den,
             label: ['A', 'B', 'C'][i],
@@ -125,16 +156,25 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
           multiplePoints: this.sup > 1,
         })
       } else {
-        const O = pointAbstrait(0, 0, 'O', 'above')
-        const I = pointAbstrait(1, 0, 'I', 'above')
-        const u = segmentAvecExtremites(O, I)
-        u.epaisseur = 2
-        const axe = segment(O, pointAbstrait(10, 0))
+        const O = pointAbstrait(0, 0)
+        const I = pointAbstrait(2, 0)
+
+        const F = pointAbstrait((abscisseT - x0) * 4 + 0.5, 0)
+        const axe = segment(O, F)
+        const d = droite(O, F)
         axe.epaisseur = 2
         axe.styleExtremites = '->'
-        const objets = [u, labelPoint(O, I), axe]
+        const ticks: TracePointSurDroite[] = []
+        const labels: Latex2d[] = []
+        for (let j = 0; j <= abscisseT - x0; j++) {
+          const tick = tracePointSurDroite(pointAbstrait(j * 4, 0), d, 'black')
+          ticks.push(tick)
+          labels.push(latex2d(`$${j + x0}$`, j * 4, -0.7, {}))
+        }
+
+        const objets = [axe, ...ticks, ...labels]
         texte += mathalea2d(
-          Object.assign({ scale: 1 }, fixeBordures(objets)),
+          Object.assign({ scale: 1 }, fixeBordures(objets, { rxmin: 0 })),
           objets,
         )
       }
