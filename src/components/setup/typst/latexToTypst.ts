@@ -364,6 +364,38 @@ function postprocessTypst(typst: string): string {
     .replace(/(\d) ?"," ?(?=\d)/g, '$1","')
 }
 
+/**
+ * En Typst math, `(` est un délimiteur groupant qui doit toujours être fermé.
+ * Quand un bloc $…$ est un fragment d'expression (ex. $)\times(4$ dans une
+ * phrase mixte), les parenthèses peuvent être déséquilibrées et provoquer
+ * « unclosed delimiter ». On remplace les ( et ) orphelins par paren.l / paren.r.
+ */
+function balanceTypstMathParens(s: string): string {
+  // Passe 1 : aller de gauche à droite, remplacer les ) sans ( précédent
+  let depth = 0
+  let pass1 = ''
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i]
+    if (ch === '(') { depth++; pass1 += ch }
+    else if (ch === ')') {
+      if (depth > 0) { depth--; pass1 += ch }
+      else { pass1 += 'paren.r ' }
+    } else { pass1 += ch }
+  }
+  // Passe 2 : aller de droite à gauche, remplacer les ( sans ) suivant
+  depth = 0
+  let pass2 = ''
+  for (let i = pass1.length - 1; i >= 0; i--) {
+    const ch = pass1[i]
+    if (ch === ')') { depth++; pass2 = ch + pass2 }
+    else if (ch === '(') {
+      if (depth > 0) { depth--; pass2 = ch + pass2 }
+      else { pass2 = ' paren.l ' + pass2 }
+    } else { pass2 = ch + pass2 }
+  }
+  return pass2
+}
+
 function readBraced(
   text: string,
   openIndex: number,
@@ -924,11 +956,11 @@ export function latexMathToTypst(tex: string): string {
   if (trimmed.length === 0) return ''
 
   function convert(preprocessed: string): string {
-    return postprocessTypst(
+    return balanceTypstMathParens(postprocessTypst(
       tex2typst(preprocessed, { customTexMacros: CUSTOM_TEX_MACROS }),
     )
       .trim()
-      .replace(/(\s*\\)+$/, '')
+      .replace(/(\s*\\)+$/, ''))
   }
 
   const preprocessed = preprocessTex(trimmed)
