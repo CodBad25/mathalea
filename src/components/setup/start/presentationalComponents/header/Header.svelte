@@ -56,6 +56,7 @@
         {locale}
         {handleLanguage}
         {isFlowmath}
+        {handleExport}
       />
     </div>
   {:else}

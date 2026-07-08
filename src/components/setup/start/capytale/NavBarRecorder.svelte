@@ -7,6 +7,7 @@
   import LanguageIcon from '../../../shared/ui/LanguageIcon.svelte'
   import ButtonsDeck from '../../../shared/ui/ButtonsDeck.svelte'
   import type { Language } from '../../../../lib/types/languages'
+  import type { VueType } from '../../../../lib/VueType'
 
   export let zoomUpdate: (plusMinus: '+' | '-') => void
   export let newDataForAll: () => void
@@ -20,6 +21,7 @@
   export let locale: Language
   export let handleLanguage: (lang: string) => void
   export let isFlowmath: boolean
+  export let handleExport: (vue: VueType) => void
 
   let urlFeuilleEleve: string = ''
   let showLanguageChoiceModal: boolean = false
@@ -137,6 +139,16 @@
             disabled={isExercisesListEmpty}
             on:click={showSettingsDialog}
           />
+        {/if}
+        {#if isCapytale}
+          <div>
+            <ButtonIconTooltip
+              icon="bx-printer text-3xl"
+              tooltip="Imprimer"
+              disabled={isExercisesListEmpty}
+              on:click={() => handleExport('a4')}
+            />
+          </div>
         {/if}
         <div>
           <ButtonIconTooltip
