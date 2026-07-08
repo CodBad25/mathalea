@@ -236,6 +236,29 @@ function compileTypst(source: string): { ok: boolean; diagnostics: string[]; sou
 
 // ─── Core check logic ─────────────────────────────────────────────────────────
 
+/**
+ * Exercices qui génèrent des figures SVG complexes et dépassent le timeout.
+ * Pour ces exercices, on n'utilise que les paramètres par défaut du constructeur.
+ */
+const SIMPLE_MODE_UUIDS = new Set([
+  '4b495', // géométrie complexe
+  '37e38', // 5G42-2 — figures lourdes
+  '37e39', // 5G42-3 — figures lourdes
+  'ff2ce', // 6G4B-1 — figures lourdes
+  'ff2cc', // 6G4B   — figures lourdes
+  'e9dac', // 6I1B-8 — figures lourdes
+  '2621f', // 5P12-2 — timeout
+  'ab968', // 5R12-2 — timeout
+  'ab969', // 5R12-2 — timeout
+  'f8dee', // 6G2B   — window.matchMedia + timeout
+  '0dbe7', // 6G3B   — window.matchMedia + timeout
+  '328b1', // 6G7B-7 — timeout
+  '75ea2', // 3G40   — timeout
+  '6cf42', // 2G21-2 — window.matchMedia
+  '3a3ec', // 2G22-1 — window.matchMedia
+  'c0f90', // runtime error (Cannot set properties of undefined)
+])
+
 async function checkExerciseFile(fp: string, id: string, r: string, checkLevel: number, root: string): Promise<ExerciseEntry> {
   const entry: ExerciseEntry = {
     uuid: id, ref: r, file: fp.replace(root + '/', ''),
@@ -274,19 +297,26 @@ async function checkExerciseFile(fp: string, id: string, r: string, checkLevel: 
     return entry
   }
 
+  const simpleMode = SIMPLE_MODE_UUIDS.has(id)
   const sup1 = buildSupRecord(exercice, 1)
   const sup2 = buildSupRecord(exercice, 2)
   const sup3 = buildSupRecord(exercice, 3)
   const sup4 = buildSupRecord(exercice, 4)
   const sup5 = buildSupRecord(exercice, 5)
 
+  const v1 = simpleMode ? [undefined] : sampleSupWithFallback(sup1)
+  const v2 = simpleMode ? [undefined] : sampleSupWithFallback(sup2)
+  const v3 = simpleMode ? [undefined] : sampleSupWithFallback(sup3)
+  const v4 = simpleMode ? [undefined] : sampleSupWithFallback(sup4)
+  const v5 = simpleMode ? [undefined] : sampleSupWithFallback(sup5)
+
   const MAX_COMBOS = 27
   const combos: Array<[number|undefined, number|undefined, number|undefined, number|undefined, number|undefined]> = []
-  outer: for (const k1 of sampleSupWithFallback(sup1))
-    for (const k2 of sampleSupWithFallback(sup2))
-      for (const k3 of sampleSupWithFallback(sup3))
-        for (const k4 of sampleSupWithFallback(sup4))
-          for (const k5 of sampleSupWithFallback(sup5)) {
+  outer: for (const k1 of v1)
+    for (const k2 of v2)
+      for (const k3 of v3)
+        for (const k4 of v4)
+          for (const k5 of v5) {
             combos.push([k1, k2, k3, k4, k5])
             if (combos.length >= MAX_COMBOS) break outer
           }

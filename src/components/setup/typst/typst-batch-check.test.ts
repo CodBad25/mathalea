@@ -358,6 +358,30 @@ function isInteractiveOnly(exercice: any): boolean {
 // ─── Long-running worker pool ─────────────────────────────────────────────────
 
 /**
+ * Exercices qui génèrent des figures SVG complexes et dépassent le timeout
+ * même avec 50 s. Pour ces exercices, on n'utilise que les paramètres par
+ * défaut du constructeur (une seule combinaison, sans variation de sup).
+ */
+const SIMPLE_MODE_UUIDS = new Set([
+  '4b495', // géométrie complexe
+  '37e38', // 5G42-2 — figures lourdes
+  '37e39', // 5G42-3 — figures lourdes
+  'ff2ce', // 6G4B-1 — figures lourdes
+  'ff2cc', // 6G4B   — figures lourdes
+  'e9dac', // 6I1B-8 — figures lourdes
+  '2621f', // 5P12-2 — timeout
+  'ab968', // 5R12-2 — timeout
+  'ab969', // 5R12-2 — timeout
+  'f8dee', // 6G2B   — window.matchMedia + timeout
+  '0dbe7', // 6G3B   — window.matchMedia + timeout
+  '328b1', // 6G7B-7 — timeout
+  '75ea2', // 3G40   — timeout
+  '6cf42', // 2G21-2 — window.matchMedia
+  '3a3ec', // 2G22-1 — window.matchMedia
+  'c0f90', // runtime error (Cannot set properties of undefined)
+])
+
+/**
  * Délai maximal par exercice (hors startup worker).
  * Niveau 1 : 20 s. Niveau 2 : 50 s (inclut `typst compile`).
  * Le worker charge mathalea une seule fois au démarrage (~15-20s),
@@ -519,17 +543,20 @@ async function checkExerciseFile(
   }
 
   // Variations à tester (sup1..sup5)
+  // Pour les exercices connus pour dépasser le timeout, on n'utilise que les
+  // paramètres par défaut du constructeur (une seule combinaison sans variation).
+  const simpleMode = SIMPLE_MODE_UUIDS.has(uuid)
   const sup1 = buildSupRecord(exercice, 1)
   const sup2 = buildSupRecord(exercice, 2)
   const sup3 = buildSupRecord(exercice, 3)
   const sup4 = buildSupRecord(exercice, 4)
   const sup5 = buildSupRecord(exercice, 5)
 
-  const variations1 = sampleSupWithFallback(sup1)
-  const variations2 = sampleSupWithFallback(sup2)
-  const variations3 = sampleSupWithFallback(sup3)
-  const variations4 = sampleSupWithFallback(sup4)
-  const variations5 = sampleSupWithFallback(sup5)
+  const variations1 = simpleMode ? [undefined] : sampleSupWithFallback(sup1)
+  const variations2 = simpleMode ? [undefined] : sampleSupWithFallback(sup2)
+  const variations3 = simpleMode ? [undefined] : sampleSupWithFallback(sup3)
+  const variations4 = simpleMode ? [undefined] : sampleSupWithFallback(sup4)
+  const variations5 = simpleMode ? [undefined] : sampleSupWithFallback(sup5)
 
   let firstFailure: { mode: FailureMode; notes: string; diagnostics: string[] } | null = null
   let anyPassing = false

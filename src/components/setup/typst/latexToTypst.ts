@@ -304,6 +304,15 @@ function postprocessTypst(typst: string): string {
   }
 
   return result
+    // \mathbf{[}, \mathbf{]}, \textbf{[} etc. produisent upright(bold([)) ou bold([) en
+    // Typst mathématique : [ est interprété comme délimiteur ouvrant → "unclosed delimiter".
+    // On remplace par bracket.l / bracket.r (glyphes Typst).
+    .replace(/\bupright\(bold\(\[+\)\)/g, 'upright(bold(bracket.l))')
+    .replace(/\bupright\(bold\(\]+\)\)/g, 'upright(bold(bracket.r))')
+    .replace(/\bbold\(\[+\)\b/g, 'bold(bracket.l)')
+    .replace(/\bbold\(\]+\)\b/g, 'bold(bracket.r)')
+    .replace(/\bupright\(\[+\)\b/g, 'upright(bracket.l)')
+    .replace(/\bupright\(\]+\)\b/g, 'upright(bracket.r)')
     // tex2typst convertit \left]...\right[ en lr(]...[), \left[...\right[ en
     // lr([...[). En Typst, ] et [ juste après/avant lr()/lr() sont parsés comme
     // délimiteurs → "unclosed delimiter". On remplace par bracket.r/bracket.l.
