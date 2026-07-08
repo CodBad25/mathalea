@@ -168,40 +168,44 @@ function preprocessTex(tex: string): string {
 
 /** Corrige la sortie de tex2typst pour qu'elle compile avec Typst */
 function postprocessTypst(typst: string): string {
-  return (
-    typst
-      // tex2typst émet `fill: #f15929` pour \textcolor : Typst attend rgb("...")
-      .replace(
-        /fill: #([0-9a-fA-F]{3,8})\b/g,
-        (_, hex: string) => `fill: rgb("#${hex}")`,
-      )
-      // Les labels mathalea2d peuvent fournir des couleurs HTML sans `#`.
-      .replace(
-        /fill: ([0-9a-fA-F]{3,8})\b/g,
-        (_, hex: string) => `fill: rgb("#${hex}")`,
-      )
-      // tex2typst laisse parfois passer les macros LaTeX explicites
-      // \thinspace, \medspace, \thickspace, absentes de Typst.
-      .replace(/\bthinspace\b/g, 'thin')
-      .replace(/\bmedspace\b/g, 'med')
-      .replace(/\bthickspace\b/g, 'thick')
-      .replace(/\bnegthinspace\b/g, '#h(-math.thin.amount)')
-      // tex2typst produit #text(fill: C)[$math$] pour \textcolor{C}{math} :
-      // les $ imbriqués font sortir du mode math et causent "unclosed delimiter"
-      // → on convertit en text(fill: C, math) (appel de fonction math natif)
-      .replace(
-        /#text\(fill: ([^)]+(?:\([^)]*\))*)\)\[\$([\s\S]*?)\$\]/g,
-        (_, fill: string, math: string) => {
-          // En mode math Typst, rgb(), red, etc. nécessitent le préfixe # pour
-          // être résolus comme expressions de code
-          const mathFill = fill.startsWith('#') ? fill : `#${fill}`
-          return `text(fill: ${mathFill}, ${math})`
-        },
-      )
-      // virgule décimale : Typst la colle aux chiffres seulement si la
-      // chaîne `","` est écrite sans espaces autour
-      .replace(/(\d) ?"," ?(?=\d)/g, '$1","')
-  )
+  let result = typst
+    // tex2typst émet `fill: #f15929` pour \textcolor : Typst attend rgb("...")
+    .replace(
+      /fill: #([0-9a-fA-F]{3,8})\b/g,
+      (_, hex: string) => `fill: rgb("#${hex}")`,
+    )
+    // Les labels mathalea2d peuvent fournir des couleurs HTML sans `#`.
+    .replace(
+      /fill: ([0-9a-fA-F]{3,8})\b/g,
+      (_, hex: string) => `fill: rgb("#${hex}")`,
+    )
+    // tex2typst laisse parfois passer les macros LaTeX explicites
+    // \thinspace, \medspace, \thickspace, absentes de Typst.
+    .replace(/\bthinspace\b/g, 'thin')
+    .replace(/\bmedspace\b/g, 'med')
+    .replace(/\bthickspace\b/g, 'thick')
+    .replace(/\bnegthinspace\b/g, '#h(-math.thin.amount)')
+
+  // tex2typst produit #text(fill: C)[$math$] pour \textcolor{C}{math} :
+  // les $ imbriqués font sortir du mode math → "unclosed delimiter".
+  // → on convertit en text(fill: #C, math). Les couleurs imbriquées (ex.
+  //   #text(fill: A)[$x + #text(fill: B)[$y$]$]) nécessitent de traiter
+  //   l'intérieur en premier : on utilise [^$]* (pas de $ dans le corps)
+  //   et on itère jusqu'à ce qu'il n'y ait plus de correspondance.
+  const colorRe = /#text\(fill: ([^)]+(?:\([^)]*\))*)\)\[\$([^$]*)\$\]/g
+  let prev = ''
+  while (prev !== result) {
+    prev = result
+    result = result.replace(colorRe, (_, fill: string, math: string) => {
+      const mathFill = fill.startsWith('#') ? fill : `#${fill}`
+      return `text(fill: ${mathFill}, ${math})`
+    })
+  }
+
+  return result
+    // virgule décimale : Typst la colle aux chiffres seulement si la
+    // chaîne `","` est écrite sans espaces autour
+    .replace(/(\d) ?"," ?(?=\d)/g, '$1","')
 }
 
 function readBraced(

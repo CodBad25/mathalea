@@ -1,0 +1,5 @@
+{
+  "name": "typst-tools",
+  "version": "1.0.0",
+  "description": "Outils pour valider et suivre le rendu Typst des exercices MathALÉA"
+}
