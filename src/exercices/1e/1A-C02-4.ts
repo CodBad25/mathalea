@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'efc17'
 
 export const refs = {
-  'fr-fr': ['1A-C02-4'],
+  'fr-fr': ['1A-C02-4', '2A-N2-4'],
   'fr-ch': [],
 }
 export default class Auto1AC2a extends NombreInverse {

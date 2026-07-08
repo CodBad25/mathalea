@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'f32dd'
 
 export const refs = {
-  'fr-fr': ['1A-F01-1'],
+  'fr-fr': ['1A-F01-1','2A-F1-1'],
   'fr-ch': [],
 }
 export default class Auto1AF1c extends ImageSpline {

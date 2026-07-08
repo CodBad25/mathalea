@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'e0d49'
 
 export const refs = {
-  'fr-fr': ['1A-C03-16'],
+  'fr-fr': ['1A-C03-16', '2A-N3-16'],
   'fr-ch': [],
 }
 export default class Auto1AC3p extends calculPuissancesAvecn {

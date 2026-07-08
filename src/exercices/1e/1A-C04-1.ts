@@ -14,13 +14,13 @@ export const interactifType = 'mathLive'
 export const uuid = '1ac8c'
 
 export const refs = {
-  'fr-fr': ['1A-C04-1'],
+  'fr-fr': ['1A-C04-1', '2A-N4-1'],
   'fr-ch': ['10QCM-3'],
 }
 export default class Auto1AC4 extends FractionDecimaleEcritureDecimale2 {
   constructor() {
     super()
-     this.tip = `
+    this.tip = `
   <p style="margin: 0 0 10px 0;">
     Il faut convertir une somme de fractions décimales en un nombre décimal.<br>
     Le plus simple consiste à écrire chaque fraction décimale en nombre décimal puis d'effectuer la somme.

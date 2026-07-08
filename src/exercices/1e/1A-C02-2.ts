@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = '1252f'
 
 export const refs = {
-  'fr-fr': ['1A-C02-2'],
+  'fr-fr': ['1A-C02-2', '2A-N2-2'],
   'fr-ch': ['11QCM-6', '1mQCM-9'],
 }
 export default class Auto1AC2c extends CalculComplexeFraction {
