@@ -69,6 +69,14 @@ export interface A4Options {
   showCorrection: boolean
   /** Nombre de versions du sujet (données aléatoires différentes) */
   nbVersions: number
+  /** Facteur multiplicatif appliqué à l'interligne de chaque exercice (1 par défaut) */
+  lineHeightFactor: number
+  /**
+   * Hauteur (en multiple de la taille de police) des lignes vides d'une
+   * question, indépendante de `lineHeightFactor` : sans ce plafond, une ligne
+   * vide grossit comme du texte et gaspille beaucoup d'espace.
+   */
+  blankLineHeight: number
   /** Facteur d'espacement global entre les questions (1 par défaut) */
   questionSpacing: number
   /** Facteur d'espacement entre les exercices (1 par défaut) */
@@ -96,6 +104,8 @@ export const defaultA4Options: A4Options = {
   mergeExercises: false,
   showCorrection: false,
   nbVersions: 1,
+  lineHeightFactor: 1,
+  blankLineHeight: 0,
   questionSpacing: 1,
   exerciseSpacing: 1,
   wordSpacingEm: 0,

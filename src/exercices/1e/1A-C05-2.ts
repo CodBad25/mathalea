@@ -6,7 +6,7 @@ export const dateDePublication = '15/10/2025'
 export const uuid = 'edf86'
 // @Author Gilles Mora
 export const refs = {
-  'fr-fr': ['1A-C05-2'],
+  'fr-fr': ['1A-C05-2', '2A-N5-2'],
   'fr-ch': [],
 }
 export const interactifReady = true

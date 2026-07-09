@@ -121,7 +121,7 @@ function createOriginalReferentiels(lang: Language): ReferentielInMenu[] {
       referentiel: geometrieDynamiqueReferentiel,
     },
     {
-      title: 'Outils',
+      title: 'Outils du professeur',
       name: 'outils',
       searchable: false,
       referentiel: referentielOutils,

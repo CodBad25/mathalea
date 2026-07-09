@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { afterUpdate, beforeUpdate, onDestroy, onMount } from 'svelte'
+  import { afterUpdate, beforeUpdate, onDestroy, onMount, tick } from 'svelte'
   import { get } from 'svelte/store'
   import {
     downloadFile,
@@ -105,11 +105,11 @@
   let promise: Promise<void>
   let isDownloadPicsModalDisplayed = false
   let pdfParam = ''
-  let previewForm: HTMLFormElement
-  let isPreviewCompiling = false
-  let hasPreviewLoaded = false
-  let previewError = ''
-  let hasAutoCompiledPreview = false
+  let isInlinePreviewVisible = false
+  let isCodeExpanded = false
+  let previewContainer: HTMLDivElement
+  let editedLatexWithPreamble = ''
+  let restoreParamsInput: HTMLInputElement
 
   const latex = new Latex()
 
@@ -237,12 +237,6 @@
     // console.log('onMount')
     promise = initExercices()
       .then(() => updateLatexWithAbortController())
-      .then(async () => {
-        if (!hasAutoCompiledPreview) {
-          hasAutoCompiledPreview = true
-          await compilePreviewPdf()
-        }
-      })
       .catch((err) => {
         if (err.name === 'AbortError') {
           log('Promise Aborted')
@@ -290,10 +284,21 @@
 
   async function handleDownloadLatexMaterial() {
     await promise
-    if (picsWanted) {
-      downloadTexWithImagesZip('coopmaths', latexFile, exercices)
+    const latexForDownload: latexFileType = editedLatexWithPreamble
+      ? {
+          ...latexFile,
+          latexWithPreamble: latexForCopyWithPreamble,
+          latexWithoutPreamble: latexForCopyWithoutPreamble,
+        }
+      : latexFile
+
+    const picsWantedForDownload =
+      picsWanted || /\\includegraphics/.test(latexForDownload.latexWithPreamble)
+
+    if (picsWantedForDownload) {
+      downloadTexWithImagesZip('coopmaths', latexForDownload, exercices)
     } else {
-      downloadFile(latexFile.latexWithPreamble, 'coopmaths.tex')
+      downloadFile(latexForDownload.latexWithPreamble, 'coopmaths.tex')
     }
   }
 
@@ -309,121 +314,103 @@
     }
   }
 
-  function addInput(form: HTMLFormElement, name: string, value: string) {
-    const input = document.createElement('input')
-    input.setAttribute('type', 'text')
-    input.setAttribute('name', name)
-    input.value = encodeURIComponent(value)
-    form.appendChild(input)
+  async function openInlinePreviewAndScroll() {
+    isInlinePreviewVisible = true
+    await tick()
+    previewContainer?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
-  function addInputNoEncode(
-    form: HTMLFormElement,
-    name: string,
-    value: string,
+  function handleLaunchPreview() {
+    void openInlinePreviewAndScroll()
+  }
+
+  function handleClosePreview() {
+    isInlinePreviewVisible = false
+  }
+
+  function toggleCodePreview() {
+    isCodeExpanded = !isCodeExpanded
+  }
+
+  function extractLatexWithoutPreamble(latexWithPreamble: string): string {
+    const bodyMatch = latexWithPreamble.match(
+      /\\begin\{document\}([\s\S]*?)\\end\{document\}/,
+    )
+    if (bodyMatch?.[1] !== undefined) {
+      return bodyMatch[1].trim()
+    }
+    return latexWithPreamble
+  }
+
+  function handleLatexEditorChange(
+    event: CustomEvent<{ latexWithPreamble: string }>,
   ) {
-    const input = document.createElement('input')
-    input.setAttribute('type', 'text')
-    input.setAttribute('name', name)
-    input.value = value
-    form.appendChild(input)
+    editedLatexWithPreamble = event.detail.latexWithPreamble
   }
 
-  function addTextarea(form: HTMLFormElement, name: string, value: string) {
-    const textarea = document.createElement('textarea')
-    textarea.setAttribute('type', 'text')
-    textarea.setAttribute('name', name)
-    textarea.textContent = value
-    form.appendChild(textarea)
+  function getExportableParams() {
+    const { signal, ...exportableInfos } = latexFileInfos
+    return exportableInfos
   }
 
-  function resetPreviewIframe() {
-    const iframe = document.getElementById('latex-preview-iframe')
-    const parent = iframe?.parentElement
-    if (!iframe || !parent) {
-      return null
+  function handleSaveParams() {
+    const payload = {
+      type: 'mathalea-latex-params',
+      version: 1,
+      savedAt: new Date().toISOString(),
+      params: getExportableParams(),
     }
-    parent.removeChild(iframe)
-    const freshIframe = document.createElement('iframe')
-    freshIframe.setAttribute('id', 'latex-preview-iframe')
-    freshIframe.setAttribute('title', 'Prévisualisation PDF')
-    freshIframe.setAttribute('name', 'latex-preview-iframe')
-    freshIframe.setAttribute('width', '100%')
-    freshIframe.setAttribute('height', '100%')
-    freshIframe.setAttribute('class', 'w-full h-full rounded-md border-0')
-    parent.appendChild(freshIframe)
-    return freshIframe
+    const jsonContent = JSON.stringify(payload, null, 2)
+    const blob = new Blob([jsonContent], { type: 'application/json' })
+    const blobUrl = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = blobUrl
+    link.download = 'mathalea-latex-params.json'
+    link.click()
+    URL.revokeObjectURL(blobUrl)
   }
 
-  function submitPreviewForm(formData: FormData) {
-    previewForm.innerHTML = ''
-    previewForm.action = 'https://texlive.net/cgi-bin/latexcgi'
-    previewForm.method = 'POST'
-    previewForm.target = 'latex-preview-iframe'
-    previewForm.enctype = 'multipart/form-data'
+  function handleRestoreParamsClick() {
+    restoreParamsInput?.click()
+  }
 
-    for (const [name, value] of formData.entries()) {
-      if (name === 'filecontents[]') {
-        addTextarea(previewForm, name, value.toString())
-      } else if (name === 'filename[]') {
-        addInputNoEncode(previewForm, name, value.toString())
-      } else {
-        addInput(previewForm, name, value.toString())
-      }
+  async function handleRestoreParamsUpload(event: Event) {
+    const input = event.currentTarget as HTMLInputElement
+    const file = input.files?.[0]
+    if (!file) {
+      return
     }
-
-    previewForm.style.display = 'none'
-    previewForm.submit()
-  }
-
-  async function compilePreviewPdf() {
-    if (isPreviewCompiling) return
-
-    isPreviewCompiling = true
-    previewError = ''
-    hasPreviewLoaded = false
 
     try {
-      await promise
+      const rawText = await file.text()
+      const parsed = JSON.parse(rawText)
+      const restoredParams =
+        parsed && typeof parsed === 'object' && 'params' in parsed
+          ? parsed.params
+          : parsed
 
-      const iframe = resetPreviewIframe()
-      if (!iframe) {
-        previewError = "Impossible d'initialiser la prévisualisation PDF."
-        return
+      if (!restoredParams || typeof restoredParams !== 'object') {
+        throw new Error('Format JSON invalide')
       }
 
-      const formData = new FormData()
-      formData.append('filecontents[]', latexFile.latexWithPreamble)
-      formData.append('filename[]', 'document.tex')
-      formData.append('engine', 'lualatex')
-      formData.append('return', 'pdfjs')
-
-      const imagesUrls = picsWanted ? makeImageFilesUrls(exercices) : []
-      for (const imageUrl of imagesUrls) {
-        const imageResponse = await fetch(imageUrl)
-        const imageBlob = await imageResponse.blob()
-        const imageText = await imageBlob.text()
-        formData.append('filecontents[]', imageText)
-        formData.append('filename[]', imageUrl.split('/').slice(-1)[0])
+      latexFileInfos = {
+        ...latexFileInfos,
+        ...(restoredParams as Partial<LatexFileInfos>),
       }
-
-      iframe.addEventListener(
-        'load',
-        () => {
-          hasPreviewLoaded = true
-          isPreviewCompiling = false
-        },
-        { once: true },
-      )
-
-      submitPreviewForm(formData)
+      editedLatexWithPreamble = ''
     } catch (error) {
-      console.error('Erreur lors de la prévisualisation PDF :', error)
-      previewError =
-        'La compilation initiale du PDF a échoué. Utiliser le bouton pour relancer.'
-      isPreviewCompiling = false
+      console.error('Impossible de restaurer les paramètres :', error)
+      window.alert('Le fichier JSON de paramètres est invalide.')
+    } finally {
+      input.value = ''
     }
   }
+
+  $: latexForCopyWithPreamble =
+    editedLatexWithPreamble || latexFile.latexWithPreamble
+  $: latexForCopyWithoutPreamble = editedLatexWithPreamble
+    ? extractLatexWithoutPreamble(editedLatexWithPreamble)
+    : latexFile.latexWithoutPreamble
 </script>
 
 <main
@@ -502,7 +489,7 @@
           />
           <CheckboxWithLabel
             id="export-latex-with-references-checkbox"
-            label="Avec les références"
+            label="Afficher les références des exercices"
             isChecked={latexFileInfos.withReferences ?? false}
             on:change={(event) => {
               latexFileInfos.withReferences = event.detail as boolean
@@ -519,6 +506,28 @@
             bind:value={latexFileInfos.nbVersions}
           />
         </span>
+        <div class="mt-3 flex flex-col w-full gap-2">
+          <ButtonTextAction
+            class="px-2 py-1 rounded-md"
+            id="saveLatexParams"
+            on:click={handleSaveParams}
+            text="Sauvegarder les paramètres"
+          />
+          <ButtonTextAction
+            class="px-2 py-1 rounded-md"
+            id="restoreLatexParams"
+            on:click={handleRestoreParamsClick}
+            text="Restaurer les paramètres"
+          />
+          <input
+            bind:this={restoreParamsInput}
+            id="restoreLatexParamsInput"
+            type="file"
+            accept="application/json,.json"
+            class="hidden"
+            on:change={handleRestoreParamsUpload}
+          />
+        </div>
       </SimpleCard>
     </div>
     <h1
@@ -527,38 +536,50 @@
       Prévisualisation PDF
     </h1>
     <div
+      bind:this={previewContainer}
       class="my-6 rounded-lg bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark p-4 shadow-md"
     >
-      <div class="flex items-center justify-between gap-4 mb-3">
+      {#await promise}
         <p class="text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus">
-          {#if isPreviewCompiling}
-            Compilation PDF en cours...
-          {:else if previewError}
-            {previewError}
-          {:else if hasPreviewLoaded}
-            Prévisualisation à jour.
-          {:else}
-            Prévisualisation en attente.
-          {/if}
+          Chargement de la prévisualisation...
         </p>
-        <ButtonTextAction
-          class="px-2 py-1 rounded-md"
-          id="refreshPdfPreview"
-          on:click={compilePreviewPdf}
-          text="Relancer la prévisualisation"
-        />
-      </div>
-      <div
-        class="w-full h-[65vh] min-h-105 bg-white rounded-md overflow-hidden border border-coopmaths-canvas-light dark:border-coopmathsdark-canvas-light"
-      >
-        <iframe
-          id="latex-preview-iframe"
-          title="Prévisualisation PDF"
-          name="latex-preview-iframe"
-          class="w-full h-full border-0"
-        ></iframe>
-      </div>
-      <form bind:this={previewForm}></form>
+      {:then}
+        <div class="flex items-center justify-end mb-3">
+          {#if !isInlinePreviewVisible}
+            <ButtonTextAction
+              class="px-2 py-1 rounded-md"
+              id="launchInlinePreview"
+              on:click={handleLaunchPreview}
+              text="Lancer la prévisualisation"
+            />
+          {:else}
+            <ButtonTextAction
+              class="px-2 py-1 rounded-md"
+              id="closeInlinePreview"
+              on:click={handleClosePreview}
+              text="Fermer la prévisualisation"
+            />
+          {/if}
+        </div>
+        <div
+          class="w-full rounded-md overflow-hidden border border-coopmaths-canvas-light dark:border-coopmathsdark-canvas-light {isInlinePreviewVisible
+            ? 'bg-transparent h-auto min-h-105'
+            : 'bg-white h-20 min-h-20'}"
+        >
+          {#if isInlinePreviewVisible}
+            <ButtonCompileLatexToPDF
+              class="w-full"
+              {latex}
+              {latexFileInfos}
+              id="preview"
+              inlinePreview={true}
+              autoCompileOnInit={true}
+              initialLatexWithPreamble={editedLatexWithPreamble}
+              on:latexChange={handleLatexEditorChange}
+            />
+          {/if}
+        </div>
+      {/await}
     </div>
     <div bind:this={divText}>
       <h1
@@ -591,6 +612,8 @@
                     {latex}
                     {latexFileInfos}
                     id="0"
+                    redirectToInlinePreview={true}
+                    on:openInlinePreview={openInlinePreviewAndScroll}
                   />
                 </div>
               {/await}
@@ -629,7 +652,7 @@
                 <div>
                   <ButtonActionInfo
                     action="copy"
-                    textToCopy={latexFile.latexWithoutPreamble}
+                    textToCopy={latexForCopyWithoutPreamble}
                     text="Code seul"
                     successMessage={messageForCopyPasteModal}
                     errorMessage="Impossible de copier le code LaTeX dans le presse-papier"
@@ -645,7 +668,7 @@
                 <div>
                   <ButtonActionInfo
                     action="copy"
-                    textToCopy={latexFile.latexWithPreamble}
+                    textToCopy={latexForCopyWithPreamble}
                     text="Code + préambule"
                     successMessage={messageForCopyPasteModal}
                     errorMessage="Impossible de copier le code LaTeX dans le presse-papier"
@@ -760,14 +783,26 @@
     >
       Code
     </h1>
-    <pre
-      class="my-10 shadow-md bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark text-coopmaths-corpus dark:text-coopmathsdark-corpus p-4 w-full overflow-y-auto overflow-x-scroll text-xs">
-      {#await promise}
-        <p>Chargement en cours...</p>
-      {:then}
-        {latexFile.latexWithoutPreamble}
-      {/await}
-    </pre>
+    <div class="mt-6 mb-10 flex justify-start">
+      <ButtonTextAction
+        class="px-2 py-1 rounded-md"
+        id="toggleLatexCodeVisibility"
+        on:click={toggleCodePreview}
+        text={isCodeExpanded
+          ? 'Masquer le code LaTeX'
+          : 'Afficher le code LaTeX'}
+      />
+    </div>
+    {#if isCodeExpanded}
+      <pre
+        class="mb-10 shadow-md bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark text-coopmaths-corpus dark:text-coopmathsdark-corpus p-4 w-full overflow-y-auto overflow-x-scroll text-xs">
+        {#await promise}
+          <p>Chargement en cours...</p>
+        {:then}
+          {latexForCopyWithoutPreamble}
+        {/await}
+      </pre>
+    {/if}
   </section>
   <footer>
     <Footer />

@@ -4,12 +4,11 @@ import ce from '../../lib/interactif/comparisonFunctions'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '21eb5'
 export const refs = {
-  'fr-fr': ['1A-C01-6'],
+  'fr-fr': ['1A-C01-6', '2A-N1-6'],
   'fr-ch': [],
 }
 export const interactifReady = true
@@ -39,6 +38,10 @@ export default class Auto1AC16 extends ExerciceQcmA {
     const valeursNum = valeurs.map((v) =>
       parseFloat(ce.parse(v.replace(',', '.')).N().toString()),
     )
+    const numForDec = Math.pow(
+      10,
+      dec.toFixed(5).replace(/0+$/, '').split('.')[1].length,
+    )
     const isGood = new Set(valeursNum).size === 4
     const greater = Math.max(...valeursNum)
     const smaller = Math.min(...valeursNum)
@@ -51,16 +54,12 @@ export default class Auto1AC16 extends ExerciceQcmA {
     this.enonce = `Quel est le ${plusGrand ? 'plus grand' : 'plus petit'} nombre parmi les quatre suivants ?`
     this.correction = `$${valeur1} = \\dfrac{1}{${den1}^{${exp1}}} = \\dfrac{1}{${texNombre(Math.pow(den1, exp1), 0)}}$<br><br>
     $${valeur2} = \\dfrac{1}{${exp1}^{${den1}}} = \\dfrac{1}{${texNombre(Math.pow(exp1, den1), 0)}}$<br><br>
-    $${valeur3} = \\dfrac{${texNombre(dec * 100, 0)}}{100}${dec.toFixed(2) === '0.01' ? '' : dec.toFixed(2) === '0.03' ? `=\\dfrac{1}{33,3_{\\dots}}` : `=\\dfrac{1}{${(1 / dec).toFixed(0)}}`}$<br><br>
+    $${valeur3} = \\dfrac{${texNombre(dec * numForDec, 0)}}{${texNombre(numForDec, 0)}}=\\dfrac{1}{${(1 / dec).toFixed(0)}}$<br><br>
 $${valeur4} = \\dfrac{1}{${denExp}^{${denExp}}} = \\dfrac{1}{${texNombre(Math.pow(denExp, denExp), 0)}}$<br><br>`
     const denominateurs = [
       texNombre(Math.pow(den1, exp1), 0),
       texNombre(Math.pow(exp1, den1), 0),
-      dec.toFixed(2) === '0.01'
-        ? '100'
-        : dec.toFixed(2) === '0.03'
-          ? `33,3_{\\dots}`
-          : (1 / dec).toFixed(0),
+      (1 / dec).toFixed(0),
       texNombre(Math.pow(denExp, denExp), 0),
     ]
 
@@ -93,9 +92,11 @@ $${valeur4} = \\dfrac{1}{${denExp}^{${denExp}}} = \\dfrac{1}{${texNombre(Math.po
     let denExp: number
     let plusGrand: boolean
     do {
-      den1 = choice([2, 3, 5, 10])
-      exp1 = choice([2, 3, 5, 10], den1)
-      dec = parseFloat((randint(1, 4) / 100).toFixed(2))
+      den1 = choice([2, 3, 4])
+      exp1 = choice([2, 3, 4], den1)
+      dec = choice([
+        0.01, 0.02, 0.04, 0.05, 0.0125, 0.025, 0.002, 0.0025, 0.005, 0.00125,
+      ])
       denExp = choice([2, 3, 4], [den1, exp1])
       plusGrand = choice([true, false])
       this.appliquerLesValeurs(den1, exp1, dec, denExp, plusGrand)

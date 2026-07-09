@@ -29,8 +29,9 @@
 </script>
 
 <script lang="ts">
-  import { createEventDispatcher, onMount, tick } from 'svelte'
+  import { onMount, tick } from 'svelte'
   import { renderKatex } from '../../../lib/mathalea'
+  import { markBlankLines } from './blankLines'
 
   /** Source de l'unité : HTML avec les formules en `$...$` */
   export let source: string
@@ -40,8 +41,12 @@
   export let title: string = "Modifier l'énoncé"
   /** Libellé du bouton de suppression (null : pas de suppression possible) */
   export let deleteLabel: string | null = null
-
-  const dispatch = createEventDispatcher()
+  /** Hauteur (en multiple de la taille de police) des lignes vides d'une question */
+  export let blankLineHeight: number = 0
+  export let onSave: (source: string) => void
+  export let onRestore: () => void
+  export let onDelete: () => void
+  export let onClose: () => void
 
   type Segment = { type: 'text' | 'math'; value: string }
 
@@ -49,7 +54,7 @@
    * segments ne sait pas traverser sans casser le HTML : dans ce cas on
    * bascule sur une édition HTML brute, non segmentée par formule. */
   const structuralTagsRegex = /<(table|ul|ol|img|figure|svg)[\s>]/i
-  const isStructural = structuralTagsRegex.test(source)
+  let isStructural = structuralTagsRegex.test(source)
 
   let rawHtml = source
   let segments: Segment[] = isStructural ? [] : parseSegments(source)
@@ -60,6 +65,10 @@
   let editorEl: HTMLDivElement
   let previewEl: HTMLDivElement
   let previewTimer: ReturnType<typeof setTimeout>
+  /** Mode code : texte brut modifiable directement (formules en `$...$`,
+   * balises HTML telles quelles), en alternative aux champs MathLive */
+  let codeMode = false
+  let codeText = source
 
   onMount(async () => {
     // Enregistre l'élément <math-field> (no-op si déjà chargé)
@@ -76,12 +85,26 @@
     let lastIndex = 0
     let match
     while ((match = regex.exec(text)) !== null) {
-      result.push({ type: 'text', value: text.slice(lastIndex, match.index) })
+      result.push({
+        type: 'text',
+        value: normalizeWhitespace(text.slice(lastIndex, match.index)),
+      })
       result.push({ type: 'math', value: match[1] })
       lastIndex = match.index + match[0].length
     }
-    result.push({ type: 'text', value: text.slice(lastIndex) })
+    result.push({ type: 'text', value: normalizeWhitespace(text.slice(lastIndex)) })
     return result
+  }
+
+  /**
+   * Aplatit les espaces/retours à la ligne d'indentation de la source générée
+   * (non significatifs en HTML normal) en un espace unique : sans ça, le
+   * `white-space: pre-wrap` de `.a4-edit-text` (nécessaire pour respecter les
+   * espaces tapés par l'utilisateur) les affiche tels quels et l'énoncé
+   * semble éclaté dans tous les sens.
+   */
+  function normalizeWhitespace(text: string): string {
+    return text.replace(/\s+/g, ' ')
   }
 
   function assemble(): string {
@@ -95,6 +118,36 @@
           : segment.value,
       )
       .join('')
+  }
+
+  /** Source actuellement affichée, quel que soit le mode d'édition */
+  function currentSource(): string {
+    return codeMode ? codeText : assemble()
+  }
+
+  /** Ré-analyse un texte brut (sortie du mode code) en segments ou HTML brut */
+  function applySource(newSource: string) {
+    isStructural = structuralTagsRegex.test(newSource)
+    if (isStructural) {
+      rawHtml = newSource
+    } else {
+      segments = parseSegments(newSource)
+    }
+    structureVersion++
+  }
+
+  function toggleCodeMode() {
+    if (codeMode) {
+      applySource(codeText)
+    } else {
+      codeText = assemble()
+    }
+    codeMode = !codeMode
+    updatePreview()
+  }
+
+  function onCodeInput() {
+    updatePreview()
   }
 
   /** Initialise le bloc HTML brut (mode structurel) sans le rendre réactif */
@@ -116,7 +169,8 @@
     clearTimeout(previewTimer)
     previewTimer = setTimeout(() => {
       if (previewEl == null) return
-      previewEl.innerHTML = assemble()
+      previewEl.innerHTML = currentSource()
+      markBlankLines(previewEl, blankLineHeight)
       try {
         renderKatex(previewEl)
       } catch {
@@ -139,6 +193,37 @@
   function onTextInput(index: number, event: Event) {
     segments[index].value = (event.currentTarget as HTMLElement).innerHTML
     updatePreview()
+  }
+
+  /**
+   * Sur Backspace juste après une ligne vide (deux <br> consécutifs),
+   * supprime la ligne vide entière en un seul appui plutôt qu'un <br> à la
+   * fois : sans ça, une ligne vide sans aucun texte est difficile à cibler
+   * précisément pour la supprimer d'un span à l'autre.
+   */
+  function collapseBlankLineOnBackspace(event: KeyboardEvent) {
+    if (event.key !== 'Backspace') return
+    const selection = window.getSelection()
+    if (selection == null || !selection.isCollapsed || selection.rangeCount === 0)
+      return
+    const { startContainer, startOffset } = selection.getRangeAt(0)
+    const nodeBefore =
+      startContainer.nodeType === Node.TEXT_NODE
+        ? startOffset === 0
+          ? startContainer.previousSibling
+          : null
+        : startOffset > 0
+          ? startContainer.childNodes[startOffset - 1]
+          : null
+    if (!(nodeBefore instanceof HTMLElement) || nodeBefore.tagName !== 'BR')
+      return
+    const secondBr = nodeBefore.previousSibling
+    if (!(secondBr instanceof HTMLElement) || secondBr.tagName !== 'BR') return
+    event.preventDefault()
+    const target = event.currentTarget as HTMLElement
+    nodeBefore.remove()
+    secondBr.remove()
+    target.dispatchEvent(new Event('input', { bubbles: true }))
   }
 
   /** Crée un champ MathLive dans le span porteur */
@@ -214,10 +299,13 @@
 
   function closeWith(
     type: 'close' | 'restore' | 'save' | 'delete',
-    detail?: unknown,
+    detail?: { source: string },
   ) {
     blurMathFields()
-    dispatch(type, detail)
+    if (type === 'save') onSave(detail!.source)
+    else if (type === 'restore') onRestore()
+    else if (type === 'delete') onDelete()
+    else onClose()
   }
 
   /** Insère une formule vide au niveau du curseur (ou en fin d'énoncé) */
@@ -295,7 +383,80 @@
   }
 
   function save() {
-    closeWith('save', { source: assemble() })
+    closeWith('save', { source: currentSource() })
+  }
+
+  /** Place le curseur au point (x, y), y compris dans un span non-éditable
+   * (ex: séparateur d'un champ math), en API standard ou WebKit */
+  function caretPositionAt(
+    x: number,
+    y: number,
+  ): { node: Node; offset: number } | null {
+    const doc = document as Document & {
+      caretPositionFromPoint?: (
+        x: number,
+        y: number,
+      ) => { offsetNode: Node; offset: number } | null
+      caretRangeFromPoint?: (x: number, y: number) => Range | null
+    }
+    const pos = doc.caretPositionFromPoint?.(x, y)
+    if (pos != null) return { node: pos.offsetNode, offset: pos.offset }
+    const range = doc.caretRangeFromPoint?.(x, y)
+    if (range != null)
+      return { node: range.startContainer, offset: range.startOffset }
+    return null
+  }
+
+  /** Focus le segment de texte le plus proche verticalement du clic, curseur
+   * placé en fin de segment */
+  function focusNearestTextSegment(clientY: number) {
+    const textSpans = Array.from(
+      editorEl.querySelectorAll<HTMLElement>('.a4-edit-text'),
+    )
+    if (textSpans.length === 0) return
+    let target = textSpans[textSpans.length - 1]
+    for (const span of textSpans) {
+      if (clientY < span.getBoundingClientRect().top) {
+        target = span
+        break
+      }
+    }
+    target.focus()
+    const selection = window.getSelection()
+    if (selection == null) return
+    const range = document.createRange()
+    range.selectNodeContents(target)
+    range.collapse(false)
+    selection.removeAllRanges()
+    selection.addRange(range)
+  }
+
+  /** Le rectangle orange n'est éditable que via les spans texte qu'il
+   * contient : un clic dans l'espace vide autour (marges, fin de ligne,
+   * sous un texte court...) tombe sur ce conteneur sans rien focus. On
+   * redirige alors le focus vers le segment de texte le plus proche du
+   * point cliqué. */
+  function focusEditorArea(event: MouseEvent) {
+    if (event.target !== editorEl) return
+    const position = caretPositionAt(event.clientX, event.clientY)
+    const container =
+      position != null
+        ? position.node instanceof Element
+          ? position.node
+          : position.node.parentElement
+        : null
+    const span = container?.closest<HTMLElement>('.a4-edit-text')
+    if (span != null && editorEl.contains(span)) {
+      span.focus()
+      const selection = window.getSelection()
+      const range = document.createRange()
+      range.setStart(position!.node, position!.offset)
+      range.collapse(true)
+      selection?.removeAllRanges()
+      selection?.addRange(range)
+      return
+    }
+    focusNearestTextSegment(event.clientY)
   }
 </script>
 
@@ -315,20 +476,47 @@
       >
         {title}
       </h3>
-      <button
-        type="button"
-        aria-label="Fermer"
-        on:click={() => closeWith('close')}
-      >
-        <i
-          class="bx bx-x text-2xl text-coopmaths-action dark:text-coopmathsdark-action"
-        ></i>
-      </button>
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+          title={codeMode
+            ? "Revenir à l'édition assistée"
+            : 'Modifier le code source (LaTeX et balises HTML)'}
+          on:click={toggleCodeMode}
+        >
+          <i class="bx {codeMode ? 'bx-edit-alt' : 'bx-code-alt'}"></i>
+          {codeMode ? 'Mode assisté' : 'Mode code'}
+        </button>
+        <button
+          type="button"
+          aria-label="Fermer"
+          on:click={() => closeWith('close')}
+        >
+          <i
+            class="bx bx-x text-2xl text-coopmaths-action dark:text-coopmathsdark-action"
+          ></i>
+        </button>
+      </div>
     </div>
 
     {#if isReady}
       <div class="overflow-y-auto px-4 py-3 space-y-4">
-        {#if isStructural}
+        {#if codeMode}
+          <p class="text-xs opacity-70">
+            Mode code&nbsp;: le texte brut est modifiable directement (formules
+            en <code>$...$</code>, balises HTML comme <code>&lt;br&gt;</code>
+            visibles telles quelles).
+          </p>
+          <textarea
+            class="a4-edit-code w-full rounded border border-coopmaths-action/40 bg-white text-black p-3"
+            rows="10"
+            spellcheck="false"
+            aria-label="Code source de l'énoncé"
+            bind:value={codeText}
+            on:input={onCodeInput}
+          ></textarea>
+        {:else if isStructural}
           <p class="text-xs opacity-70">
             Ce contenu comporte un tableau, une liste ou une image : il
             s'édite directement en HTML ci-dessous (les formules restent au
@@ -338,10 +526,12 @@
             class="a4-edit-flow rounded border border-coopmaths-action/40 bg-white text-black p-3"
             contenteditable="true"
             role="textbox"
+            tabindex="0"
             aria-label="Contenu de l'énoncé"
             spellcheck="false"
             use:initRawHtml={rawHtml}
             on:input={onRawHtmlInput}
+            on:keydown={collapseBlankLineOnBackspace}
           ></div>
         {:else}
           <p class="text-xs opacity-70">
@@ -350,9 +540,11 @@
             une formule&nbsp;» pour en ajouter une.
           </p>
           {#key structureVersion}
+            <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
             <div
               bind:this={editorEl}
               class="a4-edit-flow rounded border border-coopmaths-action/40 bg-white text-black p-3"
+              on:click={focusEditorArea}
             >
               {#each segments as segment, index}
                 {#if segment.type === 'text'}
@@ -361,10 +553,12 @@
                     data-seg={index}
                     contenteditable="true"
                     role="textbox"
+                    tabindex="0"
                     aria-label="Texte de l'énoncé"
                     spellcheck="false"
                     use:initTextSegment={segment.value}
                     on:input={(event) => onTextInput(index, event)}
+                    on:keydown={collapseBlankLineOnBackspace}
                   ></span>
                 {:else}
                   <span class="a4-edit-math" data-seg={index}>
@@ -401,7 +595,7 @@
           </div>
           <div
             bind:this={previewEl}
-            class="rounded border border-dashed border-coopmaths-action/40 bg-white text-black p-3"
+            class="a4-edit-preview rounded border border-dashed border-coopmaths-action/40 bg-white text-black p-3"
           ></div>
         </div>
       </div>
@@ -460,6 +654,12 @@
   .a4-edit-flow {
     line-height: 2;
     min-height: 3em;
+  }
+  .a4-edit-code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.85em;
+    line-height: 1.5;
+    resize: vertical;
   }
   .a4-edit-text {
     display: inline-block;

@@ -1,9 +1,12 @@
 <script lang="ts">
   import { renderKatex } from '../../../lib/mathalea'
   import { renderScratchDiv } from '../../../lib/renderScratch'
+  import { markBlankLines } from './blankLines'
   import type { A4UnitData } from './types'
 
   export let unit: A4UnitData
+  /** Hauteur (en multiple de la taille de police) des lignes vides d'une question */
+  export let blankLineHeight: number = 0
 
   /**
    * Injecte le HTML impérativement (plutôt qu'avec {@html}) puis rend
@@ -13,10 +16,19 @@
    */
   function setHtml(
     node: HTMLElement,
-    content: { html: string; svgZoom?: number },
+    content: { html: string; svgZoom?: number; blankLineHeight: number },
   ) {
-    const render = ({ html, svgZoom }: { html: string; svgZoom?: number }) => {
+    const render = ({
+      html,
+      svgZoom,
+      blankLineHeight,
+    }: {
+      html: string
+      svgZoom?: number
+      blankLineHeight: number
+    }) => {
       node.innerHTML = html
+      markBlankLines(node, blankLineHeight)
       try {
         renderKatex(node)
         renderScratchDiv(node)
@@ -28,7 +40,13 @@
     }
     render(content)
     return {
-      update(newContent: { html: string; svgZoom?: number }) {
+      update(
+        newContent: {
+          html: string
+          svgZoom?: number
+          blankLineHeight: number
+        },
+      ) {
         render(newContent)
       },
     }
@@ -165,7 +183,7 @@
 <div
   class="a4-unit a4-unit-{unit.kind}"
   style={unit.style ?? ''}
-  use:setHtml={{ html: unit.html, svgZoom: unit.svgZoom }}
+  use:setHtml={{ html: unit.html, svgZoom: unit.svgZoom, blankLineHeight }}
 ></div>
 
 <style>

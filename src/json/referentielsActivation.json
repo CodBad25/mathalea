@@ -1,5 +1,5 @@
 {
-  "outils": false,
+  "outils": true,
   "aleatoires": true,
   "statiques": false,
   "ressources": true,

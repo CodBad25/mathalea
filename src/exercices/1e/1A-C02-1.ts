@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'dac3c'
 
 export const refs = {
-  'fr-fr': ['1A-C02-1'],
+  'fr-fr': ['1A-C02-1', '2A-N2-1'],
   'fr-ch': [],
 }
 export default class Auto1AC2b extends ProgrammeCalcul2 {

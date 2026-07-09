@@ -6,7 +6,7 @@ export const dateDePublication = '22/02/2026'
 export const uuid = '8148b'
 // @Author Gilles Mora
 export const refs = {
-  'fr-fr': ['1A-C07-6'],
+  'fr-fr': ['1A-C07-6', '2A-N7-6'],
   'fr-ch': [],
 }
 export const interactifReady = true

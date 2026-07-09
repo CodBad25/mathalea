@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { EditorView, keymap } from '@codemirror/view'
-  import { EditorState } from '@codemirror/state'
   import { defaultKeymap, history, historyKeymap } from '@codemirror/commands'
-  import { search, searchKeymap } from '@codemirror/search'
   import { StreamLanguage } from '@codemirror/language'
   import { stex } from '@codemirror/legacy-modes/mode/stex'
+  import { search, searchKeymap } from '@codemirror/search'
+  import { EditorState } from '@codemirror/state'
   import { oneDark } from '@codemirror/theme-one-dark'
+  import { EditorView, keymap } from '@codemirror/view'
+  import { createEventDispatcher } from 'svelte'
 
   import { onDestroy, onMount, tick } from 'svelte'
   import { tweened, type Tweened } from 'svelte/motion'
@@ -22,6 +23,12 @@
   export let latex: Latex
   export let latexFileInfos: LatexFileInfos
   export let id: string
+  export let inlinePreview: boolean = false
+  export let autoCompileOnInit: boolean = false
+  export let redirectToInlinePreview: boolean = false
+  export let initialLatexWithPreamble: string = ''
+
+  const dispatch = createEventDispatcher()
 
   let clockAbled: boolean = false
   let editorView: EditorView | null = null
@@ -33,11 +40,30 @@
   const defaultengine = 'lualatex'
   const defaultreturn = 'pdfjs'
 
-  onMount(() => {
-    window.addEventListener('keydown', handleKeyDown)
+  onMount(async () => {
+    if (!inlinePreview && !redirectToInlinePreview) {
+      window.addEventListener('keydown', handleKeyDown)
+      return
+    }
+
+    if (redirectToInlinePreview) {
+      return
+    }
+
+    const { latexWithPreamble } = await latex.getFile(latexFileInfos)
+    await tick()
+    initEditor(latexWithPreamble)
+    resetIframe()
+    updateImagesCounter()
+    if (autoCompileOnInit) {
+      await tick()
+      await compileToPDF()
+    }
   })
   onDestroy(() => {
-    window.removeEventListener('keydown', handleKeyDown)
+    if (!inlinePreview && !redirectToInlinePreview) {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
     editorView?.destroy()
     editorView = null
   })
@@ -62,11 +88,22 @@
           oneDark,
           search({ top: true }),
           keymap.of([...defaultKeymap, ...historyKeymap, ...searchKeymap]),
-          EditorView.theme({ '&': { height: '100%' }, '.cm-scroller': { overflow: 'auto' } }),
+          EditorView.updateListener.of((update) => {
+            if (update.docChanged) {
+              dispatch('latexChange', {
+                latexWithPreamble: update.state.doc.toString(),
+              })
+            }
+          }),
+          EditorView.theme({
+            '&': { height: '100%' },
+            '.cm-scroller': { overflow: 'auto' },
+          }),
         ],
       }),
       parent: container,
     })
+    dispatch('latexChange', { latexWithPreamble: content })
   }
 
   // ------ dont need to modify code below
@@ -192,7 +229,9 @@
       clockAbled = false
       dialog.close()
     } else {
-      const { latexWithPreamble } = await latex.getFile(latexFileInfos)
+      const latexWithPreamble =
+        initialLatexWithPreamble ||
+        (await latex.getFile(latexFileInfos)).latexWithPreamble
 
       const contents = await latex.getContents(latexFileInfos)
       const picsWanted = doesLatexNeedsPics(contents)
@@ -202,7 +241,9 @@
         ? buildImagesUrlsList(exosContentList, picsNames)
         : []
 
-      const imageLatex = document.getElementById('imagesLatex') as HTMLElement
+      const imageLatex = document.getElementById(
+        `imagesLatex${idkey}`,
+      ) as HTMLElement
       imageLatex.innerHTML = "Nombre d'images: " + imagesUrls.length
       dialog.showModal()
       await tick()
@@ -210,6 +251,26 @@
       initEditor(latexWithPreamble)
       resetIframe()
       compileToPDF()
+    }
+  }
+
+  function updateImagesCounter() {
+    const exosContentList = getExosContentList(latex.exercices)
+    const picsNames = getPicsNames(exosContentList)
+    const imagesUrls: string[] = doesLatexNeedsPics({
+      content: exosContentList.map((exo) => exo.content || '').join(' '),
+      contentCorr: exosContentList
+        .map((exo) => exo.contentCorr || '')
+        .join(' '),
+    })
+      ? buildImagesUrlsList(exosContentList, picsNames)
+      : []
+
+    const imageLatex = document.getElementById(
+      `imagesLatex${idkey}`,
+    ) as HTMLElement
+    if (imageLatex) {
+      imageLatex.innerHTML = "Nombre d'images: " + imagesUrls.length
     }
   }
 </script>
@@ -234,71 +295,118 @@
   ```
  -->
 
-<form
-  class="{`${$$props.class || 'flex flex-col md:flex-row mx-4 pb-4 md:pb-8 md:space-x-4 space-y-3 justify-center md:justify-start items-center'}`}"
-  target="_blank"
->
-  <button
-    id="btn_overleaf"
-    type="submit"
-    on:click|preventDefault="{dialogToDisplayToggle}"
-    class="px-2 py-1 rounded-md text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-action hover:bg-coopmaths-action-lightest dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest"
+{#if !inlinePreview}
+  <div
+    class={`${$$props.class || 'flex flex-col md:flex-row mx-4 pb-4 md:pb-8 md:space-x-4 space-y-3 justify-center md:justify-start items-center'}`}
   >
-    Compiler et obtenir le PDF
-  </button>
-</form>
+    <button
+      id="btn_overleaf"
+      type="button"
+      on:click={() => {
+        if (redirectToInlinePreview) {
+          dispatch('openInlinePreview')
+        } else {
+          dialogToDisplayToggle()
+        }
+      }}
+      class="px-2 py-1 rounded-md text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-action hover:bg-coopmaths-action-lightest dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest"
+    >
+      Compiler et obtenir le PDF
+    </button>
+  </div>
 
-<dialog
-  class="fixed rounded-xl p-6 bg-coopmaths-canvas text-coopmaths-corpus left-[2%] top-[2%] w-[96%] h-[96%] dark:bg-coopmathsdark-canvas-dark dark:text-coopmathsdark-corpus-light shadow-lg"
-  id="editorLatex{idkey}"
->
-  <div class="mt-3 text-center">
-    <div class="text-3xl font-medium text-coopmaths-warn-dark">
-      <span class="header">
-        <div class="absolute top-2 right-3">
-          <button
-            type="button"
-            aria-label="Close editor"
-            on:click="{() => {
-              dialogToDisplayToggle()
-            }}"
-          >
-            <i
-              class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest text-xl bx bx-x"
-            ></i>
-          </button>
-        </div>
-      </span>
-    </div>
-    <div class="font-light">
-      <div class="flex h-[80vh] flex-row max-md:portrait:flex-col">
-        <div id="editor{idkey}" class="flex flex-grow flex-1 text-left overflow-auto"></div>
-        <div class="bg-gray-100 flex flex-grow flex-1">
-          {#if clockAbled}
-            <div class="loader">
-              <span
-                ><progress value="{$timer / original}"
-                ></progress>{$timer.toFixed(0)}s</span
+  {#if !redirectToInlinePreview}
+    <dialog
+      class="fixed rounded-xl p-6 bg-coopmaths-canvas text-coopmaths-corpus left-[2%] top-[2%] w-[96%] h-[96%] dark:bg-coopmathsdark-canvas-dark dark:text-coopmathsdark-corpus-light shadow-lg"
+      id="editorLatex{idkey}"
+    >
+      <div class="mt-3 text-center">
+        <div class="text-3xl font-medium text-coopmaths-warn-dark">
+          <span class="header">
+            <div class="absolute top-2 right-3">
+              <button
+                type="button"
+                aria-label="Close editor"
+                on:click={() => {
+                  dialogToDisplayToggle()
+                }}
               >
+                <i
+                  class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest text-xl bx bx-x"
+                ></i>
+              </button>
             </div>
-          {/if}
-          <iframe
-            title="output"
-            width="100%"
-            height="100%"
-            id="pre0ifr{idkey}"
-            name="pre0ifr{idkey}"
-          ></iframe>
+          </span>
+        </div>
+        <div class="font-light">
+          <div class="flex h-[80vh] flex-row max-md:portrait:flex-col">
+            <div
+              id="editor{idkey}"
+              class="flex grow flex-1 text-left overflow-auto"
+            ></div>
+            <div class="bg-gray-100 flex grow flex-1">
+              {#if clockAbled}
+                <div class="loader">
+                  <span
+                    ><progress value={$timer / original}
+                    ></progress>{$timer.toFixed(0)}s</span
+                  >
+                </div>
+              {/if}
+              <iframe
+                title="output"
+                width="100%"
+                height="100%"
+                id="pre0ifr{idkey}"
+                name="pre0ifr{idkey}"
+              ></iframe>
+            </div>
+          </div>
+          <div id="imagesLatex{idkey}"></div>
+          <ButtonTextAction
+            disabled={clockAbled}
+            class="px-2 py-1 rounded-md"
+            text="Compiler en PDF"
+            on:click={compileToPDF}
+          />
+          <form id="form{idkey}"></form>
         </div>
       </div>
-      <div id="imagesLatex"></div>
-      <ButtonTextAction
-        disabled="{clockAbled}"
-        class="px-2 py-1 rounded-md"
-        text="Compiler en PDF"
-        on:click="{compileToPDF}"
-      />
-      <form id="form{idkey}"></form>
+    </dialog>
+  {/if}
+{:else}
+  <div class="font-light">
+    <div class="flex h-[80vh] flex-row max-md:portrait:flex-col">
+      <div
+        id="editor{idkey}"
+        class="flex grow flex-1 text-left overflow-auto"
+      ></div>
+      <div class="bg-gray-100 flex grow flex-1">
+        {#if clockAbled}
+          <div class="loader">
+            <span
+              ><progress value={$timer / original}></progress>{$timer.toFixed(
+                0,
+              )}s</span
+            >
+          </div>
+        {/if}
+        <iframe
+          title="output"
+          width="100%"
+          height="100%"
+          id="pre0ifr{idkey}"
+          name="pre0ifr{idkey}"
+        ></iframe>
+      </div>
     </div>
+    <div id="imagesLatex{idkey}"></div>
+    <ButtonTextAction
+      disabled={clockAbled}
+      class="px-2 py-1 rounded-md"
+      text="Compiler en PDF"
+      on:click={compileToPDF}
+    />
+    <form id="form{idkey}"></form>
   </div>
-</dialog>
+{/if}

@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'ba2ec'
 
 export const refs = {
-  'fr-fr': ['1A-C04-7'],
+  'fr-fr': ['1A-C04-7', '2A-N4-7'],
   'fr-ch': [],
 }
 export default class Auto1AC4g extends ProgrammeCalcul2 {

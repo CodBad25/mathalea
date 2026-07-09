@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = '71eba'
 
 export const refs = {
-  'fr-fr': ['1A-C03-2'],
+  'fr-fr': ['1A-C03-2', '2A-N3-2'],
   'fr-ch': [],
 }
 export default class Auto1AC3b extends CalculPuissancesOperation {

@@ -1,4 +1,4 @@
-import PoucentageE from '../can/5e/can5P01'
+import PoucentageE from '../can/4e/can4P08'
 export const titre = 'Calculer un prix après une évolution en pourcentage'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
