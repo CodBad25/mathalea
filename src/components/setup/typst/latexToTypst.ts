@@ -114,9 +114,9 @@ function replaceColorGroups(tex: string): string {
 
 /** Prépare une formule LaTeX de MathALÉA avant sa conversion par tex2typst */
 function preprocessTex(tex: string): string {
-  // les jetons de protection htmlToTypst (\x00N\x00) ne sont pas du LaTeX
+  // les jetons de protection htmlToTypst (\uE000N\uE001) ne sont pas du LaTeX
   // valide ; ils peuvent fuir dans un bloc $…$ via des $$ adjacents — on les supprime
-  let output = replaceColorGroups(decodeEntities(tex.replace(/\x00\d+\x00/g, '')))
+  let output = replaceColorGroups(decodeEntities(tex.replace(/\uE000\d+\uE001/g, '')))
   output = stripLatexSizeCommands(output)
   // \textit{} en mode math → \text{} (tex2typst ne reconnaît pas \textit)
   output = output.replace(/\\textit\s*\{/g, '\\text{')
@@ -1281,7 +1281,10 @@ function protectMathalea2dContainers(
       for (const container of containers) {
         const typst = mathalea2dContainerToTypst(container.outerHTML, figures)
         if (typst != null) {
-          container.replaceWith(document.createTextNode(protect(typst)))
+          // ligne vide après la figure : le texte qui suit reprend dans
+          // un nouveau paragraphe du code généré (l'espacement fait partie
+          // du segment protégé pour survivre à la normalisation des blancs)
+          container.replaceWith(document.createTextNode(protect(typst + '\n\n')))
         }
       }
       return template.innerHTML
@@ -1290,7 +1293,9 @@ function protectMathalea2dContainers(
   return html.replace(
     /<div\b[^>]*\bclass=["'][^"']*\bsvgContainer\b[^"']*["'][\s\S]*?<\/div>\s*<\/div>/gi,
     (container) =>
-      protect(mathalea2dContainerToTypst(container, figures) ?? container),
+      protect(
+        (mathalea2dContainerToTypst(container, figures) ?? container) + '\n\n',
+      ),
   )
 }
 
@@ -1358,8 +1363,13 @@ function protectQcm(
   }
   if (order.length === 0) return html
   for (const container of order) {
+    // le bloc #tasks(...) commence et finit sur sa propre ligne dans le
+    // code généré (l'espacement fait partie du segment protégé pour
+    // survivre à la normalisation des blancs)
     container.replaceWith(
-      document.createTextNode(protect(qcmToTypst(groups.get(container)!))),
+      document.createTextNode(
+        protect('\n' + qcmToTypst(groups.get(container)!) + '\n'),
+      ),
     )
   }
   return template.innerHTML
@@ -1435,7 +1445,7 @@ export function htmlToTypst(html: string, figures?: string[]): string {
   const protectedSegments: string[] = []
   const protect = (typst: string): string => {
     protectedSegments.push(typst)
-    return `\u0000${protectedSegments.length - 1}\u0000`
+    return `\uE000${protectedSegments.length - 1}\uE001`
   }
 
   let text = protectQcm(html, protect, figures)
@@ -1472,7 +1482,9 @@ export function htmlToTypst(html: string, figures?: string[]): string {
   text = text.replace(/<svg[\s\S]*?<\/svg>/gi, (svg) => {
     if (figures == null) return protect(missingBox('figure non convertie'))
     figures.push(svgToTypstImage(svg))
-    return protect(`#(fig-${figures.length})`)
+    // ligne vide après la figure : le texte qui suit reprend dans un
+    // nouveau paragraphe du code généré
+    return protect(`#(fig-${figures.length})\n\n`)
   })
   text = text.replace(/<img[^>]*>/gi, () =>
     protect(missingBox('image non convertie')),
@@ -1566,7 +1578,7 @@ export function htmlToTypst(html: string, figures?: string[]): string {
     .join('\n')
   output = output.replace(/\n{3,}/g, '\n\n')
   output = output.replace(
-    /\u0000(\d+)\u0000/g,
+    /\uE000(\d+)\uE001/g,
     (_, index: string) => protectedSegments[Number(index)],
   )
   // Un \ en fin de contenu (issu d'un <br> final) formerait \] avec l'accolade

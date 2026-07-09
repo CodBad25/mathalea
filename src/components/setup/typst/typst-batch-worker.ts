@@ -375,6 +375,11 @@ async function checkExerciseFile(fp: string, id: string, r: string, checkLevel: 
       continue
     }
 
+    if (process.env.DUMP_TYPST) {
+      const dumpFile = join(process.env.DUMP_TYPST, `${r.replaceAll('/', '_')}-${testedSigs.length}.typ`)
+      try { mkdirSync(process.env.DUMP_TYPST, { recursive: true }); writeFileSync(dumpFile, typstSource) } catch {}
+    }
+
     const unprocessedMath = detectUnprocessedMath(typstSource)
     const htmlRemnants = detectHtmlRemnants(typstSource)
 

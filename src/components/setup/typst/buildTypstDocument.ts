@@ -39,11 +39,33 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
 }
 
 /**
- * Indente les lignes suivantes d'un contenu pour qu'il reste à l'intérieur
- * d'un élément de liste Typst (`+ ...`).
+ * Repères de sous-questions produits par `numAlpha`/`numAlphaNum`
+ * (`<span style="color:...; font-weight:bold">a)&nbsp;</span>`).
  */
-function indentListItem(content: string): string {
-  return content.split('\n').join('\n  ')
+const SUB_QUESTION_MARKER =
+  /<span style="color:[^"]*;\s*font-weight:\s*bold">\s*([a-z]|\d{1,2})\)(?:&nbsp;|\s)*<\/span>/gi
+
+/**
+ * Découpe une question unique contenant ses propres repères (`a)`, `b)`...)
+ * en une liste de sous-questions, pour la mettre dans un environnement
+ * `tasks`. Renvoie `null` quand la question n'a pas cette structure.
+ */
+function splitSubQuestions(
+  html: string,
+): { head: string; items: string[]; label: string } | null {
+  const matches = [...html.matchAll(SUB_QUESTION_MARKER)]
+  if (matches.length < 2) return null
+  const first = matches[0][1].toLowerCase()
+  if (first !== 'a' && first !== '1') return null
+  const head = html.slice(0, matches[0].index).replace(/(<br\s*\/?>\s*)+$/i, '')
+  const items = matches.map((match, i) => {
+    const start = match.index! + match[0].length
+    const end = i + 1 < matches.length ? matches[i + 1].index! : html.length
+    // les <br> de fin d'item servaient à séparer les sous-questions :
+    // l'espacement est maintenant assuré par l'environnement tasks
+    return html.slice(start, end).replace(/(<br\s*\/?>\s*)+$/i, '')
+  })
+  return { head, items, label: first === 'a' ? '"a)"' : '"1)"' }
 }
 
 /** Corps d'un exercice (ou de sa correction) : intro puis questions */
@@ -52,24 +74,49 @@ function exerciseBody(
   questions: string[],
   numbered: boolean,
   figures: string[],
+  /** Préfixe des variables de mise en page (ex : `ex1`) pour les questions numérotées */
+  tasksPrefix?: string,
 ): string {
   const parts: string[] = []
   if (intro.trim().length > 0) {
     parts.push(htmlToTypst(intro, figures))
   }
-  const items: string[] = []
-  for (const question of questions) {
-    const converted = htmlToTypst(question, figures)
-    if (converted.length === 0) continue
-    if (numbered) {
-      // les items d'une même liste `enum` doivent se suivre sans ligne
-      // vide, sinon la numérotation repart à 1
-      items.push(`+ ${indentListItem(converted)}`)
-    } else {
-      parts.push(converted)
+  let questionList = questions
+  let label = numbered ? '"1."' : 'none'
+  // une question unique portant ses propres repères (`a)`, `b)`...) est
+  // découpée : ses sous-questions deviennent la liste de premier niveau
+  if (questions.length === 1) {
+    const split = splitSubQuestions(questions[0])
+    if (split != null) {
+      if (split.head.trim().length > 0) {
+        const head = htmlToTypst(split.head, figures)
+        if (head.length > 0) parts.push(head)
+      }
+      questionList = split.items
+      label = split.label
     }
   }
-  if (items.length > 0) parts.push(items.join('\n'))
+  const converted = questionList
+    .map((question) => htmlToTypst(question, figures))
+    .filter((question) => question.length > 0)
+  // une liste d'au moins deux questions est mise dans un environnement
+  // `tasks` : le nombre de colonnes et l'espacement sont réglables par
+  // exercice (`#let ex1-colonnes = ...` en tête de document) ; les
+  // questions non numérotées (l'exercice écrit ses propres repères)
+  // gardent l'environnement mais sans étiquette
+  if (tasksPrefix != null && converted.length > 1) {
+    // les items d'une même liste doivent se suivre sans ligne vide, sinon
+    // la numérotation repart à 1 ; les lignes suivantes d'un item restent
+    // indentées à l'intérieur de celui-ci
+    const items = converted.map(
+      (question) => `  + ${question.split('\n').join('\n    ')}`,
+    )
+    parts.push(
+      `#tasks(columns: ${tasksPrefix}-colonnes, label: ${label}, row-gutter: ${tasksPrefix}-gutter)[\n${items.join('\n')}\n]`,
+    )
+  } else {
+    parts.push(...converted)
+  }
   return parts.join('\n\n')
 }
 
@@ -105,6 +152,7 @@ export function buildTypstDocument(
           exercise.questions,
           exercise.numbered,
           figures,
+          `ex${k + 1}`,
         ),
       )
     }
@@ -135,6 +183,7 @@ export function buildTypstDocument(
         exercise.corrections,
         exercise.numbered,
         figures,
+        `ex${k + 1}`,
       )
       correctionLines.push(indentContentBlock(body))
     }
@@ -146,13 +195,20 @@ export function buildTypstDocument(
   const usesMathaleaFigure = allLines.some((line) =>
     line.includes('#mathalea-figure('),
   )
-  const usesQcm = allLines.some((line) => line.includes('#tasks('))
+  const usesTasks = allLines.some((line) => line.includes('#tasks('))
+  const usesQcm = allLines.some((line) => line.includes('qcm-'))
+  // variables de mise en page des questions référencées par les corps
+  const tasksPrefixes = [...new Set(
+    allLines
+      .flatMap((line) => [...line.matchAll(/#tasks\(columns: (ex\d+)-colonnes/g)])
+      .map((m) => m[1]),
+  )].sort((a, b) => Number(a.slice(2)) - Number(b.slice(2)))
 
   const lines: string[] = []
   lines.push('// Fiche générée par MathALÉA — https://coopmaths.fr/alea')
   lines.push("// Ce code est modifiable : l'aperçu se met à jour tout seul.")
   lines.push('')
-  if (usesQcm) {
+  if (usesTasks) {
     lines.push('// ----- Paquets -----')
     lines.push(TASKIZE_IMPORT)
     lines.push('')
@@ -168,6 +224,14 @@ export function buildTypstDocument(
   lines.push('#let couleur = rgb("#f15929") // couleur des titres')
   if (usesQcm) {
     lines.push('#let qcm-colonnes = 2 // colonnes des propositions de QCM')
+  }
+  if (tasksPrefixes.length > 0) {
+    lines.push('// Questions de chaque exercice : nombre de colonnes et')
+    lines.push('// espacement vertical entre les questions')
+    for (const prefix of tasksPrefixes) {
+      lines.push(`#let ${prefix}-colonnes = 1`)
+      lines.push(`#let ${prefix}-gutter = 1em`)
+    }
   }
   lines.push('')
   lines.push(

@@ -29,9 +29,49 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('#set page(paper: "a4"')
     expect(code).toContain("Fiche d'exercices")
     expect(code).toContain('#titre-exercice[Exercice 1 #reference("6e23-1")]')
-    expect(code).toContain('+ $2 + 2$\n+ $3 times 4$')
+    expect(code).toContain('#import "@preview/taskize:0.2.5": tasks')
+    expect(code).toContain('#let ex1-colonnes = 1')
+    expect(code).toContain('#let ex1-gutter = 1em')
+    expect(code).toContain(
+      '#tasks(columns: ex1-colonnes, label: "1.", row-gutter: ex1-gutter)[\n  + $2 + 2$\n  + $3 times 4$\n]',
+    )
     expect(code).toContain('#if corrige [')
     expect(code).toContain('$3 times 4 = 12$')
+  })
+
+  it("ne déclare pas de réglages de questions pour un exercice à question unique", () => {
+    const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
+    expect(code).not.toContain('#tasks(')
+    expect(code).not.toContain('ex1-colonnes')
+    expect(code).not.toContain('taskize')
+  })
+
+  it('découpe une question unique à repères numAlpha en liste de sous-questions', () => {
+    const marker = (letter: string) =>
+      `<span style="color:#f15929; font-weight:bold">${letter})&nbsp;</span>`
+    const code = buildTypstDocument([
+      exercise({
+        questions: [
+          `Voici la figure.<br>${marker('a')}Question une.<br><br>${marker('b')}Question deux.<br>`,
+        ],
+        numbered: false,
+      }),
+    ])
+    expect(code).toContain(
+      '#tasks(columns: ex1-colonnes, label: "a)", row-gutter: ex1-gutter)[\n  + Question une.\n  + Question deux.\n]',
+    )
+    expect(code).toContain('Voici la figure.')
+    expect(code).toContain('#let ex1-colonnes = 1')
+  })
+
+  it('met les questions non numérotées dans un environnement tasks sans étiquette', () => {
+    const code = buildTypstDocument([
+      exercise({ questions: ['a) $1+1$', 'b) $2+2$'], numbered: false }),
+    ])
+    expect(code).toContain(
+      '#tasks(columns: ex1-colonnes, label: none, row-gutter: ex1-gutter)[\n  + a) $1 + 1$\n  + b) $2 + 2$\n]',
+    )
+    expect(code).toContain('#let ex1-colonnes = 1')
   })
 
   it("n'ajoute pas de section corrections quand il n'y en a pas", () => {

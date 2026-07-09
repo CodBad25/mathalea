@@ -194,6 +194,73 @@
     compileTimer = setTimeout(() => compile(code), delay)
   }
 
+  /** Espace entre deux pages de l'aperçu, en unités SVG (pt) */
+  const PAGE_GAP = 16
+
+  /**
+   * Le SVG de typst.ts empile les pages sans séparation : on insère un
+   * fond blanc bordé derrière chaque page (`g.typst-page`) et un espace
+   * entre les pages, sur le fond gris du panneau d'aperçu.
+   */
+  function separatePages(svg: string): string {
+    try {
+      // parseur HTML (pas XML) : le SVG de typst.ts embarque un <script>
+      // et des styles qui ne sont pas du XML strict
+      const doc = new DOMParser().parseFromString(svg, 'text/html')
+      const root = doc.querySelector('svg')
+      if (root == null) return svg
+      const pages = [...root.querySelectorAll('g.typst-page')]
+      if (pages.length === 0) return svg
+      const viewBox = (root.getAttribute('viewBox') ?? '')
+        .trim()
+        .split(/\s+/)
+        .map(Number)
+      if (viewBox.length !== 4 || viewBox.some(Number.isNaN)) return svg
+      let cumulatedY = 0
+      for (const [i, page] of pages.entries()) {
+        const width = parseFloat(page.getAttribute('data-page-width') ?? '0')
+        const height = parseFloat(page.getAttribute('data-page-height') ?? '0')
+        // la position verticale de la page est celle de son transform
+        // (les pages sont empilées) ; à défaut, la somme des hauteurs
+        const translate = (page.getAttribute('transform') ?? '').match(
+          /translate\(\s*[\d.e+-]+[ ,]+([\d.e+-]+)\s*\)/i,
+        )
+        const pageY = translate != null ? parseFloat(translate[1]) : cumulatedY
+        cumulatedY += height
+        const wrapper = doc.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'g',
+        )
+        wrapper.setAttribute('transform', `translate(0, ${i * PAGE_GAP})`)
+        const sheet = doc.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'rect',
+        )
+        sheet.setAttribute('x', '0')
+        sheet.setAttribute('y', String(pageY))
+        sheet.setAttribute('width', String(width))
+        sheet.setAttribute('height', String(height))
+        sheet.setAttribute('fill', '#ffffff')
+        sheet.setAttribute('stroke', '#c8c8c8')
+        sheet.setAttribute('stroke-width', '1')
+        page.replaceWith(wrapper)
+        wrapper.appendChild(sheet)
+        wrapper.appendChild(page)
+      }
+      const totalGap = (pages.length - 1) * PAGE_GAP
+      viewBox[3] += totalGap
+      root.setAttribute('viewBox', viewBox.join(' '))
+      const heightAttr = parseFloat(root.getAttribute('height') ?? '')
+      if (!Number.isNaN(heightAttr)) {
+        root.setAttribute('height', String(heightAttr + totalGap))
+      }
+      return root.outerHTML
+    } catch {
+      // aperçu dégradé (pages non séparées) plutôt que pas d'aperçu
+      return svg
+    }
+  }
+
   async function compile(code: string) {
     const token = ++compileToken
     isCompiling = true
@@ -203,7 +270,7 @@
       const result = await compileTypstToSvg(code)
       if (token !== compileToken) return
       diagnostics = result.diagnostics
-      if (result.svg != null) svgContent = result.svg
+      if (result.svg != null) svgContent = separatePages(result.svg)
     } catch (error) {
       if (token !== compileToken) return
       console.error('Erreur lors de la compilation Typst', error)
@@ -493,7 +560,8 @@
                 <i class="bx bx-loader-alt bx-spin text-2xl"></i>
               </div>
             {/if}
-            <div class="typst-svg-container mx-auto bg-white shadow-md">
+            <!-- le fond blanc des pages est dessiné dans le SVG (separatePages) -->
+            <div class="typst-svg-container mx-auto">
               <!-- eslint-disable-next-line svelte/no-at-html-tags -->
               {@html svgContent}
             </div>

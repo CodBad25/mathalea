@@ -184,7 +184,9 @@ describe('htmlToTypst', () => {
       'Figure 1 : <svg width="96" height="48"><rect/></svg> et figure 2 : <svg><circle/></svg>',
       figures,
     )
-    expect(result).toBe('Figure 1 : #(fig-1) et figure 2 : #(fig-2)')
+    // ligne vide après chaque figure : le texte suivant reprend dans un
+    // nouveau paragraphe du code généré
+    expect(result).toBe('Figure 1 : #(fig-1)\n\n et figure 2 : #(fig-2)')
     expect(figures).toHaveLength(2)
     expect(figures[0]).toBe(
       'image(bytes("<svg width=\\"96\\" height=\\"48\\"><rect/></svg>"), format: "svg", width: 72.0pt)',
@@ -239,6 +241,30 @@ describe('htmlToTypst', () => {
     expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
     expect(result).toContain('+ #qcm-bonne[$8$]')
     expect(result).toContain('+ $4$')
+  })
+
+  it('conserve le QCM quand une figure mathalea2d suit dans le même contenu', () => {
+    // régression : les étapes suivantes (figures, tableaux, katex) re-parsent
+    // le HTML via template.innerHTML — le jeton de protection du QCM doit
+    // survivre à ce round-trip (les caractères U+0000 étaient supprimés)
+    const figures: string[] = []
+    const result = htmlToTypst(
+      'Question ?<br>' +
+        '<div class="svgContainer" style="display: inline;"><div style="position: relative; display: inline-block">' +
+        '<svg class="mathalea2d" width="96" height="48"><line x1="0" y1="0" x2="10" y2="10"/></svg>' +
+        '</div></div><br><br>' +
+        '<div class="my-3">' +
+        '<div class="ex0 inline-block my-2 align-center"><label class="ml-2"><b>A</b>.</label><label id="labelEx0Q0R0" class="ml-2">$1$&emsp;</label></div>' +
+        '<div class="ex0 inline-block my-2 align-center"><label class="ml-2"><b>B</b>.</label><label id="labelEx0Q0R1" class="ml-2">$2$&emsp;</label></div>' +
+        '</div><div class="m-2" id="resultatCheckEx0Q0"></div>',
+      figures,
+    )
+    expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
+    expect(result).toContain('+ $1$')
+    expect(result).toContain('+ $2$')
+    expect(result).toContain('#(fig-1)')
+    expect(result).not.toMatch(/(^|[^-\w])0($|[^.\w])/m)
+    expect(figures).toHaveLength(1)
   })
 
   it('convertit un tableau HTML MathALÉA en tableau natif', () => {
