@@ -302,6 +302,21 @@ describe('buildTypstDocument', () => {
     expect(cadre).toContain('CC BY-SA · MathALÉA')
   })
 
+  it('règle la police, la police des maths et la taille du texte', () => {
+    const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      font: 'Noto Sans',
+      mathFont: 'Noto Sans Math',
+      fontSize: 12.5,
+    })
+    expect(code).toContain('#let police-texte = "Noto Sans"')
+    expect(code).toContain('#let police-maths = "Noto Sans Math"')
+    expect(code).toContain('#let taille-texte = 12.5pt')
+    expect(code).toContain('#set text(font: police-texte, size: taille-texte')
+    expect(code).toContain('#show math.equation: set text(font: police-maths)')
+    expect(code).toContain('#let txt(corps) = text(font: police-texte, corps)')
+  })
+
   it('règle la couleur des badges', () => {
     const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
       ...defaultTypstDocumentOptions,

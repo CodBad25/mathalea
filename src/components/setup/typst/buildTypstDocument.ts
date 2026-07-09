@@ -39,6 +39,12 @@ export interface TypstDocumentOptions {
   headerLine: string
   /** Style de l'en-tête et du pied de page */
   headerStyle: HeaderStyle
+  /** Police du texte (nom d'une police libre embarquée dans le compilateur) */
+  font: string
+  /** Police des formules mathématiques */
+  mathFont: string
+  /** Taille du texte en points */
+  fontSize: number
   /** Interligne des paragraphes, en em (0.65 = valeur par défaut de Typst) */
   lineSpacing: number
   /** Espace au-dessus du titre de chaque exercice, en em */
@@ -72,7 +78,32 @@ export interface TypstDocumentOptions {
 export const HEADER_STYLES = ['epure', 'cartouche', 'cadre'] as const
 export type HeaderStyle = (typeof HEADER_STYLES)[number]
 
-/** Styles de badge proposés par le paquet exercise-bank */
+/**
+ * Polices de texte libres embarquées dans le compilateur Typst (rendu
+ * identique dans l'aperçu du navigateur et dans le PDF exporté).
+ */
+export const TEXT_FONTS = [
+  'Libertinus Serif',
+  'New Computer Modern',
+  'Noto Serif',
+  'Lora',
+  'Noto Sans',
+  'Source Sans 3',
+] as const
+
+/** Polices mathématiques (embarquée + libres servies par MathALÉA) */
+export const MATH_FONTS = [
+  'New Computer Modern Math',
+  'STIX Two Math',
+  'Noto Sans Math',
+] as const
+
+/**
+ * Styles de badge proposés par le paquet exercise-bank.
+ * Le style « margin » du paquet est volontairement absent : il réserve une
+ * colonne de titre figée à 3,35 cm (non réglable), ce qui décale trop le
+ * contenu ; `border-accent` couvre le besoin d'un titre en marge.
+ */
 export const BADGE_STYLES = [
   'border-accent',
   'box',
@@ -83,7 +114,6 @@ export const BADGE_STYLES = [
   'tag',
   'circled',
   'filled-circle',
-  'margin',
 ] as const
 export type BadgeStyle = (typeof BADGE_STYLES)[number]
 
@@ -113,6 +143,9 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   title: "Fiche d'exercices",
   subtitle: '',
   headerStyle: 'epure',
+  font: 'Libertinus Serif',
+  mathFont: 'New Computer Modern Math',
+  fontSize: 11,
   headerLine:
     'Nom : ______________________ Prénom : ______________________ Classe : ______',
   lineSpacing: 0.65,
@@ -422,6 +455,9 @@ export function buildTypstDocument(
   lines.push(`#let titre = ${typstString(options.title)}`)
   lines.push(`#let sous-titre = ${typstString(options.subtitle)}`)
   lines.push(`#let entete = ${typstString(options.headerLine)}`)
+  lines.push(`#let police-texte = ${typstString(options.font)}`)
+  lines.push(`#let police-maths = ${typstString(options.mathFont)}`)
+  lines.push(`#let taille-texte = ${options.fontSize}pt`)
   if (usesQcm) {
     lines.push('#let qcm-colonnes = 2 // colonnes des propositions de QCM')
   }
@@ -443,9 +479,14 @@ export function buildTypstDocument(
   )
   lines.push(...pageFooter(options.headerStyle).map((line) => `  ${line}`))
   lines.push(')')
-  lines.push('#set text(size: 11pt, lang: "fr")')
+  lines.push('#set text(font: police-texte, size: taille-texte, lang: "fr")')
   lines.push(`#set par(leading: ${options.lineSpacing}em)`)
   lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
+  // police des formules ; les nombres et symboles restent en police maths
+  lines.push('#show math.equation: set text(font: police-maths)')
+  // #txt : texte inséré dans une formule mais rendu avec la police du texte
+  // (unités, mots) — le parseur convertit \text{…} en #txt("…")
+  lines.push('#let txt(corps) = text(font: police-texte, corps)')
   // \dfrac plutôt que \frac : les fractions gardent leur taille normale
   // (« display ») même au milieu d'une phrase, comme dans la version LaTeX
   lines.push('#show math.frac: it => math.display(it)')

@@ -129,12 +129,69 @@ function replaceColorGroups(tex: string): string {
   return result
 }
 
+/**
+ * Remplace les blocs `$…$` en tenant compte des accolades : un `$` situé
+ * dans un `{…}` (mode texte d'un `\text{…}`) ne referme pas le bloc. Sans
+ * cela, `$387\text{ m$^2$/h}…$` serait coupé au premier `$` intérieur.
+ */
+function replaceBalancedInlineMath(
+  text: string,
+  convert: (tex: string) => string,
+): string {
+  let out = ''
+  let i = 0
+  while (i < text.length) {
+    if (text[i] !== '$') {
+      out += text[i]
+      i++
+      continue
+    }
+    // début d'un bloc : cherche le `$` fermant au niveau d'accolade 0
+    let depth = 0
+    let close = -1
+    for (let j = i + 1; j < text.length; j++) {
+      const ch = text[j]
+      if (ch === '{') depth++
+      else if (ch === '}') {
+        if (depth > 0) depth--
+      } else if (ch === '$' && depth === 0) {
+        close = j
+        break
+      }
+    }
+    if (close === -1) {
+      // `$` non apparié : laissé tel quel
+      out += text[i]
+      i++
+      continue
+    }
+    out += convert(text.slice(i + 1, close))
+    i = close + 1
+  }
+  return out
+}
+
 /** Prépare une formule LaTeX de MathALÉA avant sa conversion par tex2typst */
 function preprocessTex(tex: string): string {
   // les jetons de protection htmlToTypst (\uE000N\uE001) ne sont pas du LaTeX
   // valide ; ils peuvent fuir dans un bloc $…$ via des $$ adjacents — on les supprime
   let output = replaceColorGroups(decodeEntities(tex.replace(/\uE000\d+\uE001/g, '')))
   output = stripLatexSizeCommands(output)
+  // Unités écrites avec des $ imbriqués dans \text{} (ex. `m$^2$`,
+  // `$\text{cm}^2$` de MathALÉA) : à l'intérieur de \text{}, `$…$` rebascule
+  // en mode mathématique. On sort explicitement du texte pour cette partie :
+  // `\text{ m$^2$/h}` → `\text{ m}^2\text{/h}` (que tex2typst convertit en
+  // `" m"^2 "/h"`). Répété pour plusieurs $…$ dans un même \text{}.
+  let prevNested = ''
+  while (prevNested !== output) {
+    prevNested = output
+    output = output.replace(
+      /\\text\s*\{([^{}$]*)\$([^$]+)\$([^{}$]*)\}/g,
+      // n'émet pas de \text{} vide (tex2typst échoue sur un texte vide)
+      (_, before: string, math: string, after: string) =>
+        `${before ? `\\text{${before}}` : ''}${math}${after ? `\\text{${after}}` : ''}`,
+    )
+  }
   // \textit{} en mode math → \text{} (tex2typst ne reconnaît pas \textit)
   output = output.replace(/\\textit\s*\{/g, '\\text{')
   // \text{\textbf{X}} ou \text{\textit{X}} : tex2typst ne supporte pas les
@@ -270,12 +327,32 @@ function preprocessTex(tex: string): string {
   ) {
     output = `\\begin{aligned}${output}\\end{aligned}`
   }
+  // Marque le contenu des \text{…} qui contient une lettre (unités, mots)
+  // pour le rendre ensuite avec la police du texte via #txt. La ponctuation
+  // seule (\text{,} décimale, \text{;}) n'est pas marquée : elle reste collée.
+  output = output.replace(
+    /\\text\s*\{([^{}]*[a-zA-Z][^{}]*)\}/g,
+    `\\text{${TXT_MARK_OPEN}$1${TXT_MARK_CLOSE}}`,
+  )
   return output
 }
+
+/** Marqueurs (zone privée Unicode) délimitant le texte à rendre via #txt */
+const TXT_MARK_OPEN = '\uE010'
+const TXT_MARK_CLOSE = '\uE011'
 
 /** Corrige la sortie de tex2typst pour qu'elle compile avec Typst */
 function postprocessTypst(typst: string): string {
   let result = typst
+    // Texte marqué (unités, mots issus de \text{…}) : rendu avec la police
+    // du texte via #txt. tex2typst a transformé \text{⟨mark⟩X⟨mark⟩} en la
+    // chaîne "⟨mark⟩X⟨mark⟩" ; on la remplace par #txt("X"). Un indice ou
+    // exposant (`_"…"`, `^"…"`) reçoit des parenthèses pour rester valide.
+    .replace(
+      new RegExp(`([_^]?)"${TXT_MARK_OPEN}([^"]*)${TXT_MARK_CLOSE}"`, 'g'),
+      (_m, script: string, body: string) =>
+        script ? `${script}(#txt("${body}"))` : `#txt("${body}")`,
+    )
     // tex2typst émet `fill: #f15929` pour \textcolor : Typst attend rgb("...")
     .replace(
       /fill: #([0-9a-fA-F]{3,8})\b/g,
@@ -369,6 +446,10 @@ function postprocessTypst(typst: string): string {
     .replace(/lr\(\[([^\[\]]*)\[\)/g, 'lr(bracket.l $1 bracket.l)')
     // Cas 3 : ]...] → semi-ouvert ouvert à gauche, fermé à droite
     .replace(/lr\(\]([^\[\]]*)\]\)/g, 'lr(bracket.r $1 bracket.r)')
+    // Cas 4 : crochet + parenthèse mixtes (demi-droite [Oz), intervalle [a;b))
+    // produits par \left[…\right) → lr([… )). Le crochet resterait non fermé.
+    .replace(/lr\(\[([^\[\]()]*)\)\)/g, 'lr(bracket.l $1 paren.r)')
+    .replace(/lr\(\(([^\[\]()]*)\]\)/g, 'lr(paren.l $1 bracket.r)')
     // Intervalles français nus (sans \left\right) : ]a;b[, ]a;b], [a;b[
     // (après le traitement des lr(), il ne reste que des crochets résiduels)
     // L'espace initial évite la concaténation d'identifiants : tex2typst peut
@@ -376,6 +457,10 @@ function postprocessTypst(typst: string): string {
     .replace(/\]([^\[\]]*)\[/g, ' lr(bracket.r $1 bracket.l)')
     .replace(/\]([^\[\]]*)\]/g, ' lr(bracket.r $1 bracket.r)')
     .replace(/\[([^\[\]]*)\[/g, ' lr(bracket.l $1 bracket.l)')
+    // demi-droites / intervalles mixtes nus ([Oz), (a;b]) : crochet et
+    // parenthèse dépareillés → délimiteurs explicites dans un lr()
+    .replace(/\[([^\[\]()]*)\)/g, ' lr(bracket.l $1 paren.r)')
+    .replace(/\(([^\[\]()]*)\]/g, ' lr(paren.l $1 bracket.r)')
     // virgule décimale : Typst la colle aux chiffres seulement si la
     // chaîne `","` est écrite sans espaces autour
     .replace(/(\d) ?"," ?(?=\d)/g, '$1","')
@@ -978,6 +1063,9 @@ export function latexMathToTypst(tex: string): string {
     )
       .trim()
       .replace(/(\s*\\)+$/, ''))
+      // filet de sécurité : aucun marqueur #txt ne doit fuir dans la sortie
+      .replaceAll(TXT_MARK_OPEN, '')
+      .replaceAll(TXT_MARK_CLOSE, '')
   }
 
   const preprocessed = preprocessTex(trimmed)
@@ -1534,7 +1622,10 @@ export function htmlToTypst(html: string, figures?: string[]): string {
   // `$\bullet$ $f(x)$` soit fusionné en `$\bulletf(x)$` (bulletf = variable inconnue).
   // Quand deux blocs `$A$ $B$` sont adjacents, chacun est converti séparément ;
   // le bloc espace `$ $` produit une chaîne vide, ce qui est correct.
-  text = text.replace(/\$([^$]+?)\$/g, (_, tex: string) => {
+  // Le repérage tient compte des accolades : un `$` situé dans un `{…}`
+  // (ex. `\text{ m$^2$/h}`, unité avec exposant) fait partie du bloc et ne
+  // le referme pas.
+  text = replaceBalancedInlineMath(text, (tex) => {
     const converted = latexSegmentToTypst(tex, false)
     return converted.length > 0 ? protect(converted) : ''
   })
