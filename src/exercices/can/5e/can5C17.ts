@@ -15,7 +15,7 @@ export const dateDeModifImportante = '31/03/2023'
 export const uuid = 'b1881'
 
 export const refs = {
-  'fr-fr': ['can5C17', 'auto6N2B-flash5'],
+  'fr-fr': ['can5C17', 'auto6N2B-flash5', 'auto5N3B-flash1'],
   'fr-ch': [],
 }
 export default class EntierPlusFractionVersDecimal extends ExerciceSimple {

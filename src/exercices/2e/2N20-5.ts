@@ -1,4 +1,4 @@
-import ExerciceDecomposerEnFacteursPremiers from '../5e/5A13'
+import ExerciceDecomposerEnFacteursPremiers from '../5e/5N1L-4'
 export const titre = 'Décomposer en facteurs premiers'
 export const dateDeModifImportante = '2/11/2021'
 export const interactifReady = true

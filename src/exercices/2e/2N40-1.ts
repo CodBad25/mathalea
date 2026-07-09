@@ -1,4 +1,4 @@
-import TraduireUnProgrammeDeCalcul from '../5e/5L10-2'
+import TraduireUnProgrammeDeCalcul from '../5e/5N5A-2'
 export const titre =
   'Traduire un programme de calcul par une expression littérale'
 export const amcReady = true

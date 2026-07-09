@@ -16,7 +16,7 @@ export const interactifType = 'mathLive'
 export const uuid = '7d21c'
 
 export const refs = {
-  'fr-fr': ['can5C16'],
+  'fr-fr': ['can5C16', '5N1H-flash3'],
   'fr-ch': [],
 }
 export default class CalculAstucieuxAvecFactorisation extends ExerciceSimple {

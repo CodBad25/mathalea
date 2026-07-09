@@ -28,7 +28,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'af3c8'
 
 export const refs = {
-  'fr-fr': ['can5A01'],
+  'fr-fr': ['can5A01', '5I1G-flash1'],
   'fr-ch': [],
 }
 export default class RepetitionScratch extends Exercice {

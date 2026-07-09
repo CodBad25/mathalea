@@ -22,7 +22,7 @@ export const dateDeModifImportante = '07/02/2024'
 export const uuid = '802cc'
 
 export const refs = {
-  'fr-fr': ['can5P06'],
+  'fr-fr': ['can5P06', '6N1E-flash1'],
   'fr-ch': [],
 }
 export default class ÉcrirePourcentage extends ExerciceSimple {

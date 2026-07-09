@@ -17,7 +17,7 @@ export const dateDePublication = '11/05/2022'
 export const uuid = '843e1'
 
 export const refs = {
-  'fr-fr': ['can5C21'],
+  'fr-fr': ['can5C21', 'auto5N1F-flash3'],
   'fr-ch': [],
 }
 export default class SommeDecimaux extends ExerciceSimple {

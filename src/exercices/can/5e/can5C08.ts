@@ -16,7 +16,7 @@ export const amcType = 'AMCNum'
 export const uuid = '2aa64'
 
 export const refs = {
-  'fr-fr': ['can5C08'],
+  'fr-fr': ['can5C08', '5N1J-flash1'],
   'fr-ch': ['9NO4-33'],
 }
 export default class ProchainMultipleDeTroisOuDeNeuf extends ExerciceSimple {

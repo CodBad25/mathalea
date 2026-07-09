@@ -1,4 +1,4 @@
-import EgaliteDAngles from '../5e/5G30-1'
+import EgaliteDAngles from '../5e/5G4A-1'
 export const titre = "Déterminer des angles en utilisant les cas d'égalité"
 export const interactifReady = false
 export const amcReady = true

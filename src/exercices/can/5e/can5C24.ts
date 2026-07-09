@@ -17,7 +17,7 @@ export const dateDePublication = '30/03/2023'
 export const uuid = '4d164'
 
 export const refs = {
-  'fr-fr': ['can5C24'],
+  'fr-fr': ['can5C24', 'auto5N3B-flash2'],
   'fr-ch': [],
 }
 export default class FractionVersDecimal extends ExerciceSimple {

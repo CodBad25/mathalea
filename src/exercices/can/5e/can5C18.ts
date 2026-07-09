@@ -18,7 +18,7 @@ export const dateDePublication = '24/02/2022' // La date de publication initiale
 export const uuid = '1f71c'
 
 export const refs = {
-  'fr-fr': ['can5C18'],
+  'fr-fr': ['can5C18', '5N1F-flash1'],
   'fr-ch': ['NR'],
 }
 export default class ReconnaitreExp extends Exercice {
