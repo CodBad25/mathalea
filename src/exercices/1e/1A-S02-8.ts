@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = '51125'
 
 export const refs = {
-  'fr-fr': ['1A-S02-8', '3AutoP03-1'],
+  'fr-fr': ['1A-S02-8', '2A-S2-8', '3AutoP03-1'],
   'fr-ch': ['QCM9-1'],
 }
 export default class Auto1AS4 extends MoyenneStat {

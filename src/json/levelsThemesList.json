@@ -2541,6 +2541,9 @@
   "2A-S3": {
     "titre": "Comparer des distributions à l’aide de boites à moustaches"
   },
+  "2A-S4": {
+    "titre": "Passer du graphique aux données et vice-versa"
+  },
   "2A-P": {
     "titre": "Probabilités"
   },
