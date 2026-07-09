@@ -255,7 +255,7 @@ function compileTypst(source: string): { ok: boolean; diagnostics: string[]; sou
   const tmpFile = join(TMP_DIR, `${Date.now()}-${Math.random().toString(36).slice(2)}.typ`)
   try {
     writeFileSync(tmpFile, source, 'utf8')
-    const result = spawnSync('typst', ['compile', tmpFile, '--format', 'pdf', '/dev/null'], {
+    const result = spawnSync('typst', ['compile', tmpFile, '--font-path', resolve(ROOT, 'public/fonts/typst'), '--format', 'pdf', '/dev/null'], {
       timeout: 30_000,
       encoding: 'utf8',
     })

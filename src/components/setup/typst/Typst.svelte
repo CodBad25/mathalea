@@ -21,6 +21,8 @@
   import {
     BADGE_STYLES,
     HEADER_STYLES,
+    MATH_FONTS,
+    TEXT_FONTS,
     buildTypstDocument,
     defaultTypstDocumentOptions,
     type TypstDocumentOptions,
@@ -45,7 +47,6 @@
     tag: 'Étiquette (marge)',
     circled: 'Numéro cerclé (marge)',
     'filled-circle': 'Numéro plein (marge)',
-    margin: 'Titre en marge',
   }
 
   /** Palette de couleurs proposées pour les badges (expression Typst) */
@@ -90,6 +91,23 @@
             ...defaultTypstDocumentOptions,
             ...parsed.documentOptions,
           }
+          // assainit les réglages issus d'anciennes versions : une valeur qui
+          // n'existe plus (ex. style de badge « margin » retiré) retombe sur
+          // la valeur par défaut
+          const has = (list: readonly string[], value: string) =>
+            list.includes(value)
+          if (!has(BADGE_STYLES, documentOptions.badgeStyle)) {
+            documentOptions.badgeStyle = defaultTypstDocumentOptions.badgeStyle
+          }
+          if (!has(HEADER_STYLES, documentOptions.headerStyle)) {
+            documentOptions.headerStyle = defaultTypstDocumentOptions.headerStyle
+          }
+          if (!has(TEXT_FONTS, documentOptions.font)) {
+            documentOptions.font = defaultTypstDocumentOptions.font
+          }
+          if (!has(MATH_FONTS, documentOptions.mathFont)) {
+            documentOptions.mathFont = defaultTypstDocumentOptions.mathFont
+          }
         }
       }
     } catch {
@@ -103,6 +121,13 @@
   let isEdited = false
   let isCompiling = false
   let isCompilerLoading = false
+  /**
+   * Vrai seulement une fois confirmé que le compilateur n'est PAS en cache
+   * (téléchargement à prévoir). Par défaut faux : on affiche un message
+   * neutre tant qu'on ne sait pas, pour éviter un clignotement « première
+   * visite » sur les rechargements où le compilateur est déjà en cache.
+   */
+  let compilerFirstVisit = false
   let isGeneratingPdf = false
   let diagnostics: string[] = []
   let svgContent = ''
@@ -337,7 +362,12 @@
     isCompiling = true
     if (svgContent === '') isCompilerLoading = true
     try {
-      const { compileTypstToSvg } = await import('./typstCompiler')
+      const { compileTypstToSvg, isCompilerCached } = await import(
+        './typstCompiler'
+      )
+      // adapte le message d'attente : « première visite » seulement si le
+      // compilateur n'est pas déjà en cache (téléchargement à prévoir)
+      if (isCompilerLoading) compilerFirstVisit = !(await isCompilerCached())
       const result = await compileTypstToSvg(code)
       if (token !== compileToken) return
       diagnostics = result.diagnostics
@@ -431,24 +461,94 @@
     URL.revokeObjectURL(url)
   }
 
+  /** Compile un code Typst en PDF et le télécharge (nom `filename.pdf`) */
+  async function compileAndDownload(
+    code: string,
+    filename: string,
+  ): Promise<boolean> {
+    const { compileTypstToPdf } = await import('./typstCompiler')
+    const pdf = await compileTypstToPdf(code)
+    if (pdf == null) return false
+    downloadBlob(
+      new Blob([pdf as BlobPart], { type: 'application/pdf' }),
+      `${filename}.pdf`,
+    )
+    return true
+  }
+
   async function downloadPdf() {
     if (isGeneratingPdf) return
     isGeneratingPdf = true
     try {
-      const { compileTypstToPdf } = await import('./typstCompiler')
-      const pdf = await compileTypstToPdf(currentCode())
-      if (pdf == null) {
+      const ok = await compileAndDownload(currentCode(), exportFilename())
+      if (!ok) {
         window.alert(
           'La compilation du PDF a échoué : corrigez les erreurs signalées sous l’aperçu.',
         )
-        return
       }
-      downloadBlob(
-        new Blob([pdf as BlobPart], { type: 'application/pdf' }),
-        `${exportFilename()}.pdf`,
-      )
     } catch (error) {
       console.error("Erreur lors de l'export PDF", error)
+    } finally {
+      isGeneratingPdf = false
+    }
+  }
+
+  /**
+   * Code de l'énoncé seul : `corrige = false` masque le corrigé
+   * (le paquet exercise-bank passe alors en affichage « ex »).
+   */
+  function enonceCode(code: string): string {
+    return code.replace('#let corrige = true', '#let corrige = false')
+  }
+
+  /**
+   * Code du corrigé seul (mode banque exercise-bank) : affichage « sol » —
+   * chaque exercice rend sa correction à la place de l'énoncé. `corrige`
+   * repasse à false pour ignorer le bloc de corrections regroupées (sinon un
+   * titre « Corrections » vide s'ajouterait). En mode fusionné (pas de banque),
+   * la séparation n'est pas possible : on garde le document complet.
+   */
+  function corrigeCode(code: string): string {
+    const bankDisplay = 'display: if corrige { "both" } else { "ex" }'
+    if (!code.includes(bankDisplay)) return code
+    return (
+      code
+        .replace('#let corrige = true', '#let corrige = false')
+        .replace(bankDisplay, 'display: "sol"')
+        // on garde le titre mais on retire la ligne Nom/Prénom/Classe
+        // (inutile sur le corrigé) en vidant la variable `entete`
+        .replace(/#let entete = .*/, '#let entete = ""')
+    )
+  }
+
+  /**
+   * Télécharge deux PDF à la suite : `titre_enonce.pdf` puis
+   * `titre_corrige.pdf`, à partir du code courant.
+   */
+  async function downloadPdfSeparate() {
+    if (isGeneratingPdf) return
+    isGeneratingPdf = true
+    try {
+      const code = currentCode()
+      const base = exportFilename()
+      const okEnonce = await compileAndDownload(
+        enonceCode(code),
+        `${base}_enonce`,
+      )
+      // court délai : certains navigateurs ignorent deux téléchargements
+      // déclenchés dans le même tick
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      const okCorrige = await compileAndDownload(
+        corrigeCode(code),
+        `${base}_corrige`,
+      )
+      if (!okEnonce || !okCorrige) {
+        window.alert(
+          'La compilation du PDF a échoué : corrigez les erreurs signalées sous l’aperçu.',
+        )
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'export PDF séparé", error)
     } finally {
       isGeneratingPdf = false
     }
@@ -557,6 +657,16 @@
         class="rounded-lg py-1 px-2 min-w-42.5"
         on:click={downloadPdf}
       />
+      <ButtonTextAction
+        text={isGeneratingPdf
+          ? 'PDF en cours...'
+          : 'Énoncé + corrigé séparés'}
+        icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-copy'}
+        inverted={true}
+        class="rounded-lg py-1 px-2 min-w-42.5"
+        title="Télécharge deux PDF : l'énoncé seul puis le corrigé seul"
+        on:click={downloadPdfSeparate}
+      />
     </div>
   </div>
 
@@ -589,9 +699,11 @@
               class="flex flex-col items-center gap-2 py-24 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
             >
               <i class="bx bx-loader-alt bx-spin text-4xl"></i>
-              <span class="text-sm"
-                >Chargement du compilateur Typst (première visite)...</span
-              >
+              <span class="text-sm">
+                {compilerFirstVisit
+                  ? 'Chargement du compilateur Typst (première visite, ~30 Mo)…'
+                  : 'Chargement du compilateur Typst…'}
+              </span>
             </div>
           {:else if svgContent !== ''}
             {#if isCompiling}
@@ -748,6 +860,46 @@
             on:change={applyDocumentOptions}
           />
         </label>
+
+        <label class="flex items-center justify-between gap-4 text-sm">
+          Police du texte
+          <select
+            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={documentOptions.font}
+            on:change={applyDocumentOptions}
+          >
+            {#each TEXT_FONTS as font}
+              <option value={font}>{font}</option>
+            {/each}
+          </select>
+        </label>
+
+        <label class="flex items-center justify-between gap-4 text-sm">
+          Police des maths
+          <select
+            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={documentOptions.mathFont}
+            on:change={applyDocumentOptions}
+          >
+            {#each MATH_FONTS as font}
+              <option value={font}>{font}</option>
+            {/each}
+          </select>
+        </label>
+
+        <div class="flex items-center justify-between gap-4 text-sm">
+          <label for="typst-font-size-input">Taille du texte (pt)</label>
+          <input
+            id="typst-font-size-input"
+            type="number"
+            min="7"
+            max="16"
+            step="0.5"
+            class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={documentOptions.fontSize}
+            on:change={applyDocumentOptions}
+          />
+        </div>
 
         <div class="flex items-center justify-between gap-4 text-sm">
           <label for="typst-line-spacing-input">Interligne</label>

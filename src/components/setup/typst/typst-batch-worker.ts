@@ -16,9 +16,16 @@ import { parentPort } from 'node:worker_threads'
 import { existsSync, writeFileSync, rmSync, mkdirSync } from 'fs'
 import { spawnSync } from 'node:child_process'
 import { tmpdir } from 'node:os'
-import { join } from 'path'
-import { pathToFileURL } from 'url'
+import { dirname, join, resolve } from 'path'
+import { fileURLToPath, pathToFileURL } from 'url'
 import seedrandom from 'seedrandom'
+
+// polices libres servies par MathALÉA : chargées aussi pour la compilation
+// CLI afin que l'aperçu navigateur et les tests rendent les mêmes polices
+const FONT_PATH = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  '../../../../public/fonts/typst',
+)
 
 // ─── Setup jsdom (une fois au démarrage) ─────────────────────────────────────
 
@@ -210,7 +217,7 @@ function compileTypst(source: string): { ok: boolean; diagnostics: string[]; sou
   const tmpFile = join(TMP_DIR, `${Date.now()}-${Math.random().toString(36).slice(2)}.typ`)
   try {
     writeFileSync(tmpFile, source, 'utf8')
-    const result = spawnSync('typst', ['compile', tmpFile, '--format', 'pdf', '/dev/null'], {
+    const result = spawnSync('typst', ['compile', tmpFile, '--font-path', FONT_PATH, '--format', 'pdf', '/dev/null'], {
       timeout: 30_000, encoding: 'utf8',
     })
     const stderr = (result.stderr ?? '') + (result.stdout ?? '')

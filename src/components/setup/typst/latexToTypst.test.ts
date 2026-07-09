@@ -35,8 +35,28 @@ describe('latexMathToTypst', () => {
     expect(result).toContain('bold(x = 2)')
   })
 
-  it('convertit le texte inclus dans les formules', () => {
-    expect(latexMathToTypst('5\\,\\text{cm}')).toBe('5 thin "cm"')
+  it('convertit le texte inclus dans les formules via #txt (police du texte)', () => {
+    expect(latexMathToTypst('5\\,\\text{cm}')).toBe('5 thin #txt("cm")')
+  })
+
+  it('gère les unités avec exposant et $ imbriqués dans \\text{}', () => {
+    // unités MathALÉA écrites `m$^2$` / `$\\text{cm}^2$` : le $ intérieur
+    // rebascule en mode math dans \text{} — ne doit pas casser la conversion
+    expect(latexMathToTypst('387\\text{ m$^2$/h}')).toBe(
+      '387 #txt(" m")^2 #txt("/h")',
+    )
+    expect(latexMathToTypst('\\text{ dam$^2$}')).toBe('#txt(" dam")^2')
+    expect(latexMathToTypst('648\\text{ $\\text{cm}^2$/h}')).toBe(
+      '648 " " #txt("cm")^2 #txt("/h")',
+    )
+  })
+
+  it('ne coupe pas un bloc $…$ sur un $ imbriqué dans une accolade', () => {
+    // le $ de `m$^2$` est dans les accolades de \text{} : il fait partie du
+    // bloc et ne le referme pas prématurément
+    expect(
+      htmlToTypst('$387\\text{ m$^2$/h} = \\dfrac{387\\text{ m$^2$}}{1}$'),
+    ).toBe('$387 #txt(" m")^2 #txt("/h") = frac(387 #txt(" m")^2, 1)$')
   })
 
   it('supprime le saut de ligne final qui échapperait le $ fermant', () => {
@@ -47,7 +67,9 @@ describe('latexMathToTypst', () => {
   })
 
   it('décode les entités HTML présentes dans la formule', () => {
-    expect(latexMathToTypst('\\text{Donc&nbsp;: }x=2')).toBe('"Donc : " x = 2')
+    expect(latexMathToTypst('\\text{Donc&nbsp;: }x=2')).toBe(
+      '#txt("Donc\u00a0: ") x = 2',
+    )
   })
 
   it('convertit \\textbf en mode mathématique', () => {
