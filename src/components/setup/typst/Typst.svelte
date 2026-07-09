@@ -19,11 +19,57 @@
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
   import {
+    BADGE_STYLES,
+    HEADER_STYLES,
     buildTypstDocument,
     defaultTypstDocumentOptions,
     type TypstDocumentOptions,
     type TypstExerciseInput,
   } from './buildTypstDocument'
+
+  /** Libellés des habillages d'en-tête/pied de page */
+  const HEADER_STYLE_LABELS: Record<(typeof HEADER_STYLES)[number], string> = {
+    epure: 'Épuré',
+    cartouche: 'Cartouche',
+    cadre: 'Cadre',
+  }
+
+  /** Libellés des styles de badge du paquet exercise-bank */
+  const BADGE_STYLE_LABELS: Record<(typeof BADGE_STYLES)[number], string> = {
+    'border-accent': 'Barre latérale',
+    box: 'Encadré (marge)',
+    'rounded-box': 'Encadré arrondi',
+    'header-card': 'Bandeau',
+    underline: 'Souligné',
+    pill: 'Pastille (marge)',
+    tag: 'Étiquette (marge)',
+    circled: 'Numéro cerclé (marge)',
+    'filled-circle': 'Numéro plein (marge)',
+    margin: 'Titre en marge',
+  }
+
+  /** Palette de couleurs proposées pour les badges (expression Typst) */
+  const BADGE_COLORS: { label: string; value: string; css: string }[] = [
+    { label: 'Noir', value: 'black', css: '#000000' },
+    { label: 'Orange', value: 'rgb("#f15929")', css: '#f15929' },
+    { label: 'Bleu', value: 'rgb("#1d4ed8")', css: '#1d4ed8' },
+    { label: 'Vert', value: 'rgb("#4a7c59")', css: '#4a7c59' },
+    { label: 'Rouge', value: 'rgb("#dc2626")', css: '#dc2626' },
+    { label: 'Violet', value: 'rgb("#7c3aed")', css: '#7c3aed' },
+  ]
+
+  /** Couleur des badges au format `#rrggbb` pour le sélecteur natif */
+  $: badgeColorHex = (() => {
+    const value = documentOptions.badgeColor
+    const hex = value.match(/#([0-9a-fA-F]{6})/)
+    if (hex != null) return `#${hex[1]}`
+    if (value === 'black') return '#000000'
+    return '#000000'
+  })()
+  /** La couleur active ne fait pas partie des pastilles prédéfinies */
+  $: isCustomBadgeColor = !BADGE_COLORS.some(
+    (color) => color.value === documentOptions.badgeColor,
+  )
 
   type DisplayMode = 'code' | 'split' | 'preview'
   const STORAGE_KEY = 'mathaleaTypstView'
@@ -661,11 +707,34 @@
         </label>
 
         <label class="flex items-center justify-between gap-4 text-sm">
+          Habillage en-tête
+          <select
+            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={documentOptions.headerStyle}
+            on:change={applyDocumentOptions}
+          >
+            {#each HEADER_STYLES as style}
+              <option value={style}>{HEADER_STYLE_LABELS[style]}</option>
+            {/each}
+          </select>
+        </label>
+
+        <label class="flex items-center justify-between gap-4 text-sm">
           Titre
           <input
             type="text"
             class="w-40 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
             bind:value={documentOptions.title}
+            on:change={applyDocumentOptions}
+          />
+        </label>
+
+        <label class="flex items-center justify-between gap-4 text-sm">
+          Sous-titre (niveau, classe…)
+          <input
+            type="text"
+            class="w-40 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={documentOptions.subtitle}
             on:change={applyDocumentOptions}
           />
         </label>
@@ -718,6 +787,64 @@
           />
           Numéros des questions en gras
         </label>
+
+        <label
+          class="flex items-center justify-between gap-4 text-sm"
+          class:opacity-50={documentOptions.mergeExercises}
+        >
+          Style des exercices
+          <select
+            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={documentOptions.badgeStyle}
+            disabled={documentOptions.mergeExercises}
+            on:change={applyDocumentOptions}
+          >
+            {#each BADGE_STYLES as style}
+              <option value={style}>{BADGE_STYLE_LABELS[style]}</option>
+            {/each}
+          </select>
+        </label>
+
+        <div
+          class="flex items-center justify-between gap-4 text-sm"
+          class:opacity-50={documentOptions.mergeExercises}
+        >
+          <span>Couleur des titres</span>
+          <div class="flex items-center gap-1.5">
+            {#each BADGE_COLORS as color}
+              <button
+                type="button"
+                title={color.label}
+                aria-label={color.label}
+                aria-pressed={documentOptions.badgeColor === color.value}
+                disabled={documentOptions.mergeExercises}
+                class="h-6 w-6 rounded-full border-2 transition {documentOptions.badgeColor ===
+                color.value
+                  ? 'border-coopmaths-action dark:border-coopmathsdark-action scale-110'
+                  : 'border-transparent'}"
+                style="background-color: {color.css};"
+                on:click={() => {
+                  documentOptions.badgeColor = color.value
+                  applyDocumentOptions()
+                }}
+              ></button>
+            {/each}
+            <input
+              type="color"
+              title="Couleur personnalisée"
+              aria-label="Couleur personnalisée"
+              disabled={documentOptions.mergeExercises}
+              class="h-6 w-6 cursor-pointer rounded-full border-2 {isCustomBadgeColor
+                ? 'border-coopmaths-action dark:border-coopmathsdark-action scale-110'
+                : 'border-transparent'} bg-transparent p-0"
+              value={badgeColorHex}
+              on:input={(e) => {
+                documentOptions.badgeColor = `rgb("${e.currentTarget.value}")`
+                applyDocumentOptions()
+              }}
+            />
+          </div>
+        </div>
 
         <p class="text-xs opacity-75">
           Ces réglages régénèrent le code Typst à partir des exercices : vos
