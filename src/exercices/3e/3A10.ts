@@ -324,9 +324,7 @@ export default class DivisionEuclidienneMultiplesDiviseursCriteres extends Exerc
           texteCorr += `Il est suffisant de chercher des diviseurs inférieurs au plus grand nombre dont le carré est inférieur à $${M}$, par exemple ici, $${Math.trunc(Math.sqrt(M))}\\times${Math.trunc(Math.sqrt(M))} = ${Math.trunc(Math.sqrt(M)) * Math.trunc(Math.sqrt(M))}<${M}$`
           texteCorr += ` et $${Math.trunc(Math.sqrt(M)) + 1}\\times${Math.trunc(Math.sqrt(M)) + 1} = ${(Math.trunc(Math.sqrt(M)) + 1) * (Math.trunc(Math.sqrt(M)) + 1)}>${M}$ donc il suffit d'arrêter la recherche de facteurs à $${Math.trunc(Math.sqrt(M))}$.`
           if (this.correctionDetaillee) {
-            context.isHtml
-              ? (texteCorr += '<hr>')
-              : (texteCorr += '\\par \\hrulefill \\par')
+            texteCorr += context.isHtml ? '<hr>' : '\\par \\hrulefill \\par'
             texteCorr += `$\\textbf{Preuve du propos précédent}$ <br>
             Supposons que $${M}$ soit le produit de deux entiers $p \\times q$ avec $p < q$ :`
             if (context.isHtml) {
@@ -339,11 +337,9 @@ export default class DivisionEuclidienneMultiplesDiviseursCriteres extends Exerc
               \\end{itemize}`
             }
             texteCorr += `Donc il est bien suffisant d'arrêter la recherche lorsque le carré de $p$ dépasse $${M}$.`
-            context.isHtml
-              ? (texteCorr += '<hr>')
-              : (texteCorr += '\\par \\hrulefill \\par')
+            texteCorr += context.isHtml ? '<hr>' : '\\par \\hrulefill \\par'
           }
-          context.isHtml ? (texteCorr += '<br>') : (texteCorr += '\\par')
+          texteCorr += context.isHtml ? '<br>' : '\\par'
           if (listeDiviseursM.length % 2 === 0) {
             // si il y a un nombre pair de diviseurs
             for (let m = 0; m < listeDiviseursM.length / 2; m++) {
