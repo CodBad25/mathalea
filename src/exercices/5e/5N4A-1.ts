@@ -6,7 +6,6 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
- * Clone de can4C35 pour la 5e
  * @author Rémi Angot
  */
 
