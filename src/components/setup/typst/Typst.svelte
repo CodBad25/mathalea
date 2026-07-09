@@ -741,7 +741,7 @@
       on:click|self={() => (isSettingsOpen = false)}
     >
       <div
-        class="relative w-full max-w-md rounded-lg shadow-xl bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus p-5 space-y-4"
+        class="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-lg shadow-xl bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus p-5 space-y-4"
       >
         <button
           type="button"
