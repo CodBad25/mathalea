@@ -30,12 +30,50 @@ export interface TypstExerciseInput {
 export interface TypstDocumentOptions {
   title: string
   headerLine: string
+  /** Interligne des paragraphes, en em (0.65 = valeur par défaut de Typst) */
+  lineSpacing: number
+  /** Espace au-dessus du titre de chaque exercice, en em */
+  exerciseSpacing: number
+  /** Numéros des questions (et sous-questions) en gras */
+  boldQuestionNumbers: boolean
+  /** Affiche la référence du référentiel à côté de la numérotation */
+  showExerciseRefs: boolean
+  /** Nombre de colonnes du document (1, 2 ou 3) */
+  columns: number
+  /** Format de page */
+  pageFormat: 'a4' | 'a5'
+  /** Orientation de la page */
+  orientation: 'portrait' | 'landscape'
+  /**
+   * Fusionne tous les exercices en un seul : les questions sont numérotées
+   * à la suite (le numéro ne se réinitialise pas à chaque exercice) et les
+   * titres « Exercice N » disparaissent.
+   */
+  mergeExercises: boolean
 }
 
 export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   title: "Fiche d'exercices",
   headerLine:
     'Nom : ______________________ Prénom : ______________________ Classe : ______',
+  lineSpacing: 0.65,
+  exerciseSpacing: 1.6,
+  boldQuestionNumbers: true,
+  showExerciseRefs: false,
+  columns: 1,
+  pageFormat: 'a4',
+  orientation: 'portrait',
+  mergeExercises: false,
+}
+
+/**
+ * Étiquette de numérotation d'un environnement `tasks` : un littéral Typst
+ * (`"1."`, `"a)"`, `none`). En gras, elle devient une fonction qui délègue
+ * le motif à `numbering()` puis met en forme le résultat.
+ */
+function boldableLabel(pattern: string, bold: boolean): string {
+  if (pattern === 'none' || !bold) return pattern
+  return `(..n) => strong(numbering(${pattern}, ..n))`
 }
 
 /**
@@ -68,6 +106,13 @@ function splitSubQuestions(
   return { head, items, label: first === 'a' ? '"a)"' : '"1)"' }
 }
 
+/** Corps d'un exercice (ou de sa correction), et nombre de questions numérotées qu'il contient */
+interface ExerciseBodyResult {
+  code: string
+  /** Nombre de questions affichées dans un environnement `tasks` (0 si aucune) */
+  itemCount: number
+}
+
 /** Corps d'un exercice (ou de sa correction) : intro puis questions */
 function exerciseBody(
   intro: string,
@@ -76,7 +121,10 @@ function exerciseBody(
   figures: string[],
   /** Préfixe des variables de mise en page (ex : `ex1`) pour les questions numérotées */
   tasksPrefix?: string,
-): string {
+  boldQuestionNumbers = false,
+  /** Numéro de la première question (exercices fusionnés : la numérotation continue) */
+  startNumber = 1,
+): ExerciseBodyResult {
   const parts: string[] = []
   if (intro.trim().length > 0) {
     parts.push(htmlToTypst(intro, figures))
@@ -111,13 +159,16 @@ function exerciseBody(
     const items = converted.map(
       (question) => `  + ${question.split('\n').join('\n    ')}`,
     )
+    // `above`/`below` : sans eux, la liste colle au texte qui la précède et
+    // la suit (les fractions dfrac, plus hautes, rendent ce collage très
+    // visible : le dernier item peut chevaucher le paragraphe suivant)
     parts.push(
-      `#tasks(columns: ${tasksPrefix}-colonnes, label: ${label}, row-gutter: ${tasksPrefix}-gutter)[\n${items.join('\n')}\n]`,
+      `#tasks(columns: ${tasksPrefix}-colonnes, label: ${boldableLabel(label, boldQuestionNumbers)}, row-gutter: ${tasksPrefix}-gutter, above: 0.8em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
     )
-  } else {
-    parts.push(...converted)
+    return { code: parts.join('\n\n'), itemCount: converted.length }
   }
-  return parts.join('\n\n')
+  parts.push(...converted)
+  return { code: parts.join('\n\n'), itemCount: 0 }
 }
 
 /**
@@ -134,27 +185,34 @@ export function buildTypstDocument(
   // de document, ce qui garde le corps du code lisible.
   const figures: string[] = []
   const exerciseLines: string[] = []
+  // en mode fusionné, les questions sont numérotées à la suite d'un
+  // exercice à l'autre plutôt que de repartir à 1
+  let nextStart = 1
   for (const [k, exercise] of exercises.entries()) {
     exerciseLines.push(`// ----- Exercice ${k + 1} -----`)
-    const ref =
-      exercise.ref.trim().length > 0
-        ? ` #reference("${exercise.ref.trim().replaceAll('"', '\\"')}")`
-        : ''
-    exerciseLines.push(`#titre-exercice[Exercice ${k + 1}${ref}]`)
+    if (!options.mergeExercises) {
+      const ref =
+        options.showExerciseRefs && exercise.ref.trim().length > 0
+          ? ` #reference("${exercise.ref.trim().replaceAll('"', '\\"')}")`
+          : ''
+      exerciseLines.push(`#titre-exercice[Exercice ${k + 1}${ref}]`)
+    }
     if (exercise.warning != null) {
       exerciseLines.push(
         `#text(fill: gray)[_${escapeTypstText(exercise.warning)}_]`,
       )
     } else {
-      exerciseLines.push(
-        exerciseBody(
-          exercise.intro,
-          exercise.questions,
-          exercise.numbered,
-          figures,
-          `ex${k + 1}`,
-        ),
+      const { code, itemCount } = exerciseBody(
+        exercise.intro,
+        exercise.questions,
+        exercise.numbered,
+        figures,
+        `ex${k + 1}`,
+        options.boldQuestionNumbers,
+        options.mergeExercises ? nextStart : 1,
       )
+      exerciseLines.push(code)
+      if (options.mergeExercises) nextStart += itemCount
     }
     exerciseLines.push('')
   }
@@ -175,17 +233,23 @@ export function buildTypstDocument(
     correctionLines.push(
       '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
     )
+    let nextCorrectionStart = 1
     for (const { exercise, k } of corrected) {
       correctionLines.push('')
-      correctionLines.push(`  #titre-exercice[Exercice ${k + 1}]`)
-      const body = exerciseBody(
+      if (!options.mergeExercises) {
+        correctionLines.push(`  #titre-exercice[Exercice ${k + 1}]`)
+      }
+      const { code, itemCount } = exerciseBody(
         exercise.introCorrection,
         exercise.corrections,
         exercise.numbered,
         figures,
         `ex${k + 1}`,
+        options.boldQuestionNumbers,
+        options.mergeExercises ? nextCorrectionStart : 1,
       )
-      correctionLines.push(indentContentBlock(body))
+      correctionLines.push(indentContentBlock(code))
+      if (options.mergeExercises) nextCorrectionStart += itemCount
     }
     correctionLines.push(']')
     correctionLines.push('')
@@ -219,9 +283,11 @@ export function buildTypstDocument(
     lines.push('')
   }
   lines.push('// ----- Réglages -----')
-  lines.push('#let colonnes = 1 // nombre de colonnes (1, 2 ou 3)')
+  lines.push(
+    `#let colonnes = ${options.columns} // nombre de colonnes (1, 2 ou 3)`,
+  )
   lines.push('#let corrige = true // afficher les corrections')
-  lines.push('#let couleur = rgb("#f15929") // couleur des titres')
+  lines.push('#let couleur = black // couleur des titres')
   if (usesQcm) {
     lines.push('#let qcm-colonnes = 2 // colonnes des propositions de QCM')
   }
@@ -230,17 +296,25 @@ export function buildTypstDocument(
     lines.push('// espacement vertical entre les questions')
     for (const prefix of tasksPrefixes) {
       lines.push(`#let ${prefix}-colonnes = 1`)
-      lines.push(`#let ${prefix}-gutter = 1em`)
+      // fractions en dfrac (voir #show math.frac) : plus hautes que la
+      // ligne de texte, il faut plus d'espace pour éviter le chevauchement
+      lines.push(`#let ${prefix}-gutter = 1.8em`)
     }
   }
   lines.push('')
   lines.push(
-    '#set page(paper: "a4", margin: (x: 15mm, y: 15mm), numbering: "1/1")',
+    `#set page(paper: "${options.pageFormat}", flipped: ${options.orientation === 'landscape'}, margin: (x: 15mm, y: 15mm), numbering: "1/1")`,
   )
   lines.push('#set text(size: 11pt, lang: "fr")')
+  lines.push(`#set par(leading: ${options.lineSpacing}em)`)
   lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
+  // \dfrac plutôt que \frac : les fractions gardent leur taille normale
+  // (« display ») même au milieu d'une phrase, comme dans la version LaTeX
+  lines.push('#show math.frac: it => math.display(it)')
   lines.push('')
-  lines.push('#let titre-exercice(corps) = block(above: 1.6em, below: 0.9em,')
+  lines.push(
+    `#let titre-exercice(corps) = block(above: ${options.exerciseSpacing}em, below: 0.9em,`,
+  )
   lines.push('  text(weight: "bold", fill: couleur, size: 1.1em, corps))')
   lines.push('#let reference(ref) = text(size: 0.75em, fill: gray, ref)')
   if (usesQcm) {

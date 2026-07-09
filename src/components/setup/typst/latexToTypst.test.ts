@@ -189,10 +189,10 @@ describe('htmlToTypst', () => {
     expect(result).toBe('Figure 1 : #(fig-1)\n\n et figure 2 : #(fig-2)')
     expect(figures).toHaveLength(2)
     expect(figures[0]).toBe(
-      'image(bytes("<svg width=\\"96\\" height=\\"48\\"><rect/></svg>"), format: "svg", width: 72.0pt)',
+      'image(bytes("<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"96\\" height=\\"48\\"><rect/></svg>"), format: "svg", width: 72.0pt)',
     )
     expect(figures[1]).toBe(
-      'image(bytes("<svg><circle/></svg>"), format: "svg")',
+      'image(bytes("<svg xmlns=\\"http://www.w3.org/2000/svg\\"><circle/></svg>"), format: "svg")',
     )
   })
 
@@ -327,13 +327,13 @@ describe('sanitizeSvg', () => {
 describe('svgToTypstImage', () => {
   it('reprend la largeur de la figure en points (96 px = 72 pt)', () => {
     expect(svgToTypstImage('<svg width="170.4" height="105.8"></svg>')).toBe(
-      'image(bytes("<svg width=\\"170.4\\" height=\\"105.8\\"></svg>"), format: "svg", width: 127.8pt)',
+      'image(bytes("<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"170.4\\" height=\\"105.8\\"></svg>"), format: "svg", width: 127.8pt)',
     )
   })
 
   it('omet la largeur quand la figure ne la précise pas', () => {
     expect(svgToTypstImage('<svg viewBox="0 0 10 10"></svg>')).toBe(
-      'image(bytes("<svg viewBox=\\"0 0 10 10\\"></svg>"), format: "svg")',
+      'image(bytes("<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 10 10\\"></svg>"), format: "svg")',
     )
   })
 })

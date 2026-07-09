@@ -21,6 +21,7 @@
   import {
     buildTypstDocument,
     defaultTypstDocumentOptions,
+    type TypstDocumentOptions,
     type TypstExerciseInput,
   } from './buildTypstDocument'
 
@@ -28,6 +29,8 @@
   const STORAGE_KEY = 'mathaleaTypstView'
 
   let displayMode: DisplayMode = 'split'
+  let documentOptions: TypstDocumentOptions = { ...defaultTypstDocumentOptions }
+  let isSettingsOpen = false
   if (isLocalStorageAvailable()) {
     try {
       const saved = window.localStorage.getItem(STORAGE_KEY)
@@ -35,6 +38,12 @@
         const parsed = JSON.parse(saved)
         if (['code', 'split', 'preview'].includes(parsed.displayMode)) {
           displayMode = parsed.displayMode
+        }
+        if (parsed.documentOptions != null) {
+          documentOptions = {
+            ...defaultTypstDocumentOptions,
+            ...parsed.documentOptions,
+          }
         }
       }
     } catch {
@@ -59,7 +68,10 @@
   function persistPreferences() {
     if (!isLocalStorageAvailable()) return
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ displayMode }))
+      window.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ displayMode, documentOptions }),
+      )
     } catch {
       // stockage plein ou indisponible : sans conséquence
     }
@@ -68,6 +80,19 @@
   function setDisplayMode(mode: DisplayMode) {
     displayMode = mode
     persistPreferences()
+  }
+
+  /** Regénère le code à partir des réglages du document (interligne...) */
+  function applyDocumentOptions() {
+    persistPreferences()
+    const code = buildCode()
+    setEditorContent(code)
+    scheduleCompile(code, 0)
+  }
+
+  function resetDocumentOptions() {
+    documentOptions = { ...defaultTypstDocumentOptions }
+    applyDocumentOptions()
   }
 
   /** Regénère le contenu (listeQuestions, listeCorrections...) de l'exercice k */
@@ -137,7 +162,7 @@
   }
 
   function buildCode(): string {
-    return buildTypstDocument(buildInputs(), defaultTypstDocumentOptions)
+    return buildTypstDocument(buildInputs(), documentOptions)
   }
 
   function initEditor(content: string) {
@@ -324,20 +349,6 @@
     )
   }
 
-  /** Regénère le code Typst à partir des exercices */
-  function regenerateCode() {
-    if (!confirmOverwrite()) return
-    const code = buildCode()
-    setEditorContent(code)
-    scheduleCompile(code, 0)
-  }
-
-  /** Relance la compilation du code courant sans regénérer les exercices */
-  function compileAgain() {
-    clearTimeout(compileTimer)
-    compile(currentCode())
-  }
-
   /** Nouvelles données aléatoires pour tous les exercices */
   function newDataForAll() {
     if (!confirmOverwrite()) return
@@ -358,7 +369,7 @@
 
   function exportFilename() {
     return (
-      defaultTypstDocumentOptions.title
+      documentOptions.title
         .trim()
         .replace(/[^\p{L}\p{N} _-]/gu, '')
         .replace(/\s+/g, '_') || 'fiche'
@@ -457,36 +468,22 @@
 
       <button
         type="button"
+        title="Réglages du document"
+        class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+        on:click={() => (isSettingsOpen = true)}
+      >
+        <i class="bx bx-cog text-xl"></i>
+        Réglages
+      </button>
+
+      <button
+        type="button"
         title="Nouvelles données aléatoires pour tous les exercices"
         class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
         on:click={newDataForAll}
       >
         <i class="bx bx-refresh text-xl"></i>
         Nouvelles données
-      </button>
-
-      <button
-        type="button"
-        title="Regénérer le code Typst à partir des exercices"
-        class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
-        on:click={regenerateCode}
-      >
-        <i class="bx bx-reset text-xl"></i>
-        Regénérer le code
-      </button>
-
-      <button
-        type="button"
-        title="Compiler à nouveau le code Typst courant"
-        class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
-        on:click={compileAgain}
-      >
-        <i
-          class="bx {isCompiling
-            ? 'bx-loader-alt bx-spin'
-            : 'bx-play-circle'} text-xl"
-        ></i>
-        Compiler à nouveau
       </button>
 
       <div class="grow"></div>
@@ -500,15 +497,13 @@
       >
         <i class="bx {copied ? 'bx-check' : 'bx-copy'} text-2xl"></i>
       </button>
-      <button
-        type="button"
-        title="Télécharger le fichier .typ"
-        aria-label="Télécharger le fichier .typ"
-        class="flex items-center text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+      <ButtonTextAction
+        text="Télécharger le .typ"
+        icon="bx-file-blank"
+        inverted={true}
+        class="rounded-lg py-1 px-2"
         on:click={downloadTyp}
-      >
-        <i class="bx bx-save text-2xl"></i>
-      </button>
+      />
       <ButtonTextAction
         text={isGeneratingPdf ? 'PDF en cours...' : 'Télécharger le PDF'}
         icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-download'}
@@ -577,6 +572,166 @@
             {/each}
           </div>
         {/if}
+      </div>
+    </div>
+  {/if}
+
+  {#if isSettingsOpen}
+    <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      on:click|self={() => (isSettingsOpen = false)}
+    >
+      <div
+        class="relative w-full max-w-md rounded-lg shadow-xl bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus p-5 space-y-4"
+      >
+        <button
+          type="button"
+          class="absolute top-3 right-3"
+          aria-label="Fermer"
+          on:click={() => (isSettingsOpen = false)}
+        >
+          <i
+            class="bx bx-x text-2xl text-coopmaths-action dark:text-coopmathsdark-action"
+          ></i>
+        </button>
+        <h3
+          class="font-bold text-coopmaths-struct dark:text-coopmathsdark-struct"
+        >
+          Réglages du document
+        </h3>
+
+        <label class="flex items-center justify-between gap-4 text-sm">
+          Format
+          <select
+            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={documentOptions.pageFormat}
+            on:change={applyDocumentOptions}
+          >
+            <option value="a4">A4</option>
+            <option value="a5">A5</option>
+          </select>
+        </label>
+
+        <label class="flex items-center justify-between gap-4 text-sm">
+          Orientation
+          <select
+            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={documentOptions.orientation}
+            on:change={applyDocumentOptions}
+          >
+            <option value="portrait">Portrait</option>
+            <option value="landscape">Paysage</option>
+          </select>
+        </label>
+
+        <div class="flex items-center justify-between gap-4 text-sm">
+          <label for="typst-columns-input">Nombre de colonnes</label>
+          <input
+            id="typst-columns-input"
+            type="number"
+            min="1"
+            max="3"
+            step="1"
+            class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={documentOptions.columns}
+            on:change={applyDocumentOptions}
+          />
+        </div>
+
+        <label class="flex items-center gap-2 text-sm cursor-pointer">
+          <input
+            type="checkbox"
+            bind:checked={documentOptions.mergeExercises}
+            on:change={applyDocumentOptions}
+          />
+          Fusionner tous les exercices (questions numérotées à la suite)
+        </label>
+
+        <label class="flex items-center gap-2 text-sm cursor-pointer">
+          <input
+            type="checkbox"
+            bind:checked={documentOptions.showExerciseRefs}
+            disabled={documentOptions.mergeExercises}
+            on:change={applyDocumentOptions}
+          />
+          <span class:opacity-50={documentOptions.mergeExercises}>
+            Afficher la référence des exercices
+          </span>
+        </label>
+
+        <label class="flex items-center justify-between gap-4 text-sm">
+          Titre
+          <input
+            type="text"
+            class="w-40 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={documentOptions.title}
+            on:change={applyDocumentOptions}
+          />
+        </label>
+
+        <label class="flex items-center justify-between gap-4 text-sm">
+          Ligne d'en-tête
+          <input
+            type="text"
+            class="w-40 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={documentOptions.headerLine}
+            on:change={applyDocumentOptions}
+          />
+        </label>
+
+        <div class="flex items-center justify-between gap-4 text-sm">
+          <label for="typst-line-spacing-input">Interligne</label>
+          <input
+            id="typst-line-spacing-input"
+            type="number"
+            min="0.3"
+            max="2"
+            step="0.05"
+            class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={documentOptions.lineSpacing}
+            on:change={applyDocumentOptions}
+          />
+        </div>
+
+        <div class="flex items-center justify-between gap-4 text-sm">
+          <label for="typst-exercise-spacing-input"
+            >Espacement entre les exercices</label
+          >
+          <input
+            id="typst-exercise-spacing-input"
+            type="number"
+            min="0"
+            max="6"
+            step="0.1"
+            class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={documentOptions.exerciseSpacing}
+            on:change={applyDocumentOptions}
+          />
+        </div>
+
+        <label class="flex items-center gap-2 text-sm cursor-pointer">
+          <input
+            type="checkbox"
+            bind:checked={documentOptions.boldQuestionNumbers}
+            on:change={applyDocumentOptions}
+          />
+          Numéros des questions en gras
+        </label>
+
+        <p class="text-xs opacity-75">
+          Ces réglages régénèrent le code Typst à partir des exercices : vos
+          modifications manuelles du code seront perdues.
+        </p>
+
+        <button
+          type="button"
+          class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+          on:click={resetDocumentOptions}
+        >
+          <i class="bx bx-reset"></i>
+          Réinitialiser les réglages du document
+        </button>
       </div>
     </div>
   {/if}

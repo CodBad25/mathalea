@@ -1041,6 +1041,17 @@ export function sanitizeSvg(svg: string): string {
     // esperluettes nues
     .replace(/&(?!(?:[a-zA-Z]+|#\d+|#x[0-9a-fA-F]+);)/g, '&amp;')
     .replace(/\s+/g, ' ')
+    // `currentColor` (fill/stroke/color, en attribut ou en style) hérite de
+    // la couleur du texte ambiant dans le navigateur ; une fois le SVG extrait
+    // et embarqué seul dans le PDF Typst, plus aucun ancêtre ne le résout et
+    // le tracé devient invisible. On le remplace par du noir, la couleur du
+    // document imprimé.
+    .replace(/currentColor/g, 'black')
+    // Le SVG mathalea2d est sérialisé sans `xmlns` (inutile en HTML, où le
+    // contexte suffit à déterminer l'espace de noms). Une fois embarqué en
+    // image autonome (`data:image/svg+xml` dans le PDF Typst), son absence
+    // fait échouer le décodage : l'image ne s'affiche pas du tout.
+    .replace(/<svg(?![\w-])(?![^>]*\bxmlns=)/i, '<svg xmlns="http://www.w3.org/2000/svg"')
   return cleaned.replace(
     /<([a-zA-Z][\w:.-]*)([^<>]*)>/g,
     (_tag, name: string, attrs: string) => {
@@ -1173,9 +1184,34 @@ function normalizeOverlayLatex(tex: string): {
 }
 
 /**
+ * Largeur maximale (en pt) d'une figure mathalea2d dans le document : ces
+ * figures sont dessinées pour la pleine largeur du navigateur (souvent
+ * 750 px CSS, soit 562,5 pt une fois converti) — bien plus large qu'une
+ * page A4 (596 pt). Sans plafond, l'image déborde de la page (ou de la
+ * colonne/liste qui la contient) et devient invisible dans l'aperçu.
+ */
+const MAX_FIGURE_WIDTH_PT = 380
+
+/** Dimensions (pt) d'une figure, mises à l'échelle pour ne pas dépasser `MAX_FIGURE_WIDTH_PT` */
+function scaledFigureDimensions(
+  widthPx: number,
+  heightPx: number,
+): { widthPt: number; heightPt: number } {
+  let widthPt = widthPx * 0.75
+  let heightPt = heightPx * 0.75
+  if (widthPt > MAX_FIGURE_WIDTH_PT) {
+    const factor = MAX_FIGURE_WIDTH_PT / widthPt
+    widthPt *= factor
+    heightPt *= factor
+  }
+  return { widthPt, heightPt }
+}
+
+/**
  * Expression Typst affichant un SVG mathalea2d embarqué dans le code
  * (le document reste autonome : il compile aussi avec le CLI typst).
- * La largeur reprend celle de la figure (96 px CSS = 72 pt).
+ * La largeur reprend celle de la figure (96 px CSS = 72 pt), plafonnée à
+ * `MAX_FIGURE_WIDTH_PT`.
  */
 export function svgToTypstImage(svg: string): string {
   const cleaned = sanitizeSvg(svg)
@@ -1184,10 +1220,12 @@ export function svgToTypstImage(svg: string): string {
   if (h != null && parseFloat(h[1]) === 0) return 'box(width: 0pt, height: 0pt)[]'
   const width = cleaned.match(/<svg[^>]*?\swidth="([\d.]+)"/i)
   if (width != null && parseFloat(width[1]) === 0) return 'box(width: 0pt, height: 0pt)[]'
-  const widthPt =
-    width != null
-      ? `, width: ${(parseFloat(width[1]) * 0.75).toFixed(1)}pt`
-      : ''
+  let widthPt = ''
+  if (width != null) {
+    const heightPx = h != null ? parseFloat(h[1]) : parseFloat(width[1])
+    const scaled = scaledFigureDimensions(parseFloat(width[1]), heightPx)
+    widthPt = `, width: ${scaled.widthPt.toFixed(1)}pt`
+  }
   return `image(bytes(${typstStringLiteral(cleaned)}), format: "svg"${widthPt})`
 }
 
@@ -1199,7 +1237,10 @@ function extractKatexTex(html: string): string | null {
   return null
 }
 
-function divLatexToTypstLabel(divHtml: string): string | null {
+function divLatexToTypstLabel(
+  divHtml: string,
+  scaleFactor: number,
+): string | null {
   const tex = extractKatexTex(divHtml)
   if (tex == null) return null
   const label = normalizeOverlayLatex(tex)
@@ -1224,8 +1265,8 @@ function divLatexToTypstLabel(divHtml: string): string | null {
     options.push(`angle: ${angle}deg`)
   }
   const args = [
-    `${(leftPx * 0.75).toFixed(1)}pt`,
-    `${(topPx * 0.75).toFixed(1)}pt`,
+    `${(leftPx * 0.75 * scaleFactor).toFixed(1)}pt`,
+    `${(topPx * 0.75 * scaleFactor).toFixed(1)}pt`,
     `[$${latexMathToTypst(label.tex)}$]`,
     ...options,
   ]
@@ -1247,16 +1288,21 @@ function mathalea2dContainerToTypst(
   const figureRef = `#(${figureName})`
   const width = svgMatch[0].match(/<svg[^>]*?\swidth="([\d.]+)"/i)
   const height = svgMatch[0].match(/<svg[^>]*?\sheight="([\d.]+)"/i)
-  const widthPt =
-    width != null ? (parseFloat(width[1]) * 0.75).toFixed(1) : '160.0'
-  const heightPt =
-    height != null ? (parseFloat(height[1]) * 0.75).toFixed(1) : '90.0'
+  const widthPx = width != null ? parseFloat(width[1]) : 213.3
+  const heightPx = height != null ? parseFloat(height[1]) : 120
+  const scaled = scaledFigureDimensions(widthPx, heightPx)
+  // les positions des labels sont en pixels de la figure d'origine : le
+  // même facteur d'échelle que l'image doit leur être appliqué, sinon ils
+  // se retrouvent mal placés une fois la figure plafonnée à MAX_FIGURE_WIDTH_PT
+  const scaleFactor = scaled.widthPt / (widthPx * 0.75)
+  const widthPt = scaled.widthPt.toFixed(1)
+  const heightPt = scaled.heightPt.toFixed(1)
   const labels = [
     ...html.matchAll(
       /<div\b[^>]*\bclass=["'][^"']*\bdivLatex\b[^"']*["'][\s\S]*?<\/div>/gi,
     ),
   ]
-    .map((match) => divLatexToTypstLabel(match[0]))
+    .map((match) => divLatexToTypstLabel(match[0], scaleFactor))
     .filter((label): label is string => label != null)
   if (labels.length === 0) return figureRef
   return [

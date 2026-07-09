@@ -60,6 +60,17 @@
       component: MoodleIcon,
       action: () => exportAndClose('moodle'),
     },
+    ...(showA4
+      ? [
+          {
+            id: 'typst',
+            label: 'PDF via Typst',
+            description: 'Pour générer un PDF avec le moteur de composition Typst',
+            icon: 'bx bx-code-alt',
+            action: () => exportAndClose('typst'),
+          } satisfies ExportOption,
+        ]
+      : []),
     {
       id: 'alacarte',
       label: 'À la carte',
@@ -138,11 +149,6 @@
   icon="bx-printer text-3xl"
   tooltip="Impression"
   on:click={() => handleExport('a4')}
-/>
-<ButtonIconTooltip
-  icon="bx-code-alt text-3xl"
-  tooltip="PDF via Typst"
-  on:click={() => handleExport('typst')}
 />
 {/if}
 <ButtonIconTooltip
