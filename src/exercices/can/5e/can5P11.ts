@@ -18,7 +18,7 @@ export const dateDePublication = '21/07/2025' // La date de publication initiale
 export const uuid = '6a3da'
 
 export const refs = {
-  'fr-fr': ['can5P11'],
+  'fr-fr': ['can5P11', '5P1C-flash4'],
   'fr-ch': [],
 }
 export default class CalculPartieAvecTout extends ExerciceSimple {

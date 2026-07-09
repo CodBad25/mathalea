@@ -1,4 +1,4 @@
-import CalculerLaValeurDUneExpressionLitterale from './5L14-1'
+import CalculerLaValeurDUneExpressionLitterale from './5N5B-1'
 export const titre =
   "Calculer la valeur d'une expression littérale de degré 1 à 1 inconnue"
 export const interactifReady = true

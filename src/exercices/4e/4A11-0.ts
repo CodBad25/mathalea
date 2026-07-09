@@ -1,4 +1,4 @@
-import ExerciceDecomposerEnFacteursPremiers from '../5e/5A13'
+import ExerciceDecomposerEnFacteursPremiers from '../5e/5N1L-4'
 export const titre =
   'Décomposer un nombre entier en produit de (petits) facteurs premiers'
 export const dateDeModifImportante = '02/11/2021'

@@ -1,4 +1,4 @@
-import DefinitionUnitesVolumes from '../5e/5M21'
+import DefinitionUnitesVolumes from '../5e/auto5N4B'
 
 export const titre = "Connaître la définition d'un centimètre cube"
 export const interactifReady = true

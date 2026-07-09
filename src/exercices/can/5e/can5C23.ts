@@ -22,7 +22,7 @@ export const dateDePublication = '08/12/2022'
 export const uuid = 'cb5d5'
 
 export const refs = {
-  'fr-fr': ['can5C23'],
+  'fr-fr': ['can5C23', '5N1H-flash4'],
   'fr-ch': [],
 }
 export default class MultiplierPar extends ExerciceSimple {

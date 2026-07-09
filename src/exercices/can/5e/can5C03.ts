@@ -15,7 +15,7 @@ export const amcType = 'AMCNum'
 export const uuid = '62e1f'
 
 export const refs = {
-  'fr-fr': ['can5C03'],
+  'fr-fr': ['can5C03', 'auto5N1F-flash6'],
   'fr-ch': [],
 }
 export default class DifferenceEntiers5e extends ExerciceSimple {

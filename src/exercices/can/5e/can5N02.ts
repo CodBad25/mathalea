@@ -17,7 +17,7 @@ export const dateDeModifImportante = '04/08/2025'
 export const uuid = 'b850a'
 
 export const refs = {
-  'fr-fr': ['can5N02'],
+  'fr-fr': ['can5N02', 'auto6N3C-flash2'],
   'fr-ch': [],
 }
 export default class FractionDecimaleEcritureDecimale2 extends ExerciceSimple {

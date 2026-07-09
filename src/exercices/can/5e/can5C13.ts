@@ -20,7 +20,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'ca4ce'
 
 export const refs = {
-  'fr-fr': ['can5C13'],
+  'fr-fr': ['can5C13', 'auto5N1E-flash1'],
   'fr-ch': [],
 }
 export default class CalculAstucieux1 extends ExerciceSimple {

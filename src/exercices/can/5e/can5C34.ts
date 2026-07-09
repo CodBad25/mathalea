@@ -19,7 +19,7 @@ export const dateDePublication = '28/03/2026'
 export const uuid = '7a19e'
 
 export const refs = {
-  'fr-fr': ['can5C34'],
+  'fr-fr': ['can5C34', '5N2I-flash4'],
   'fr-ch': [],
 }
 export default class PyramideAdd3EtagesBaseInconnue extends ExerciceSimple {

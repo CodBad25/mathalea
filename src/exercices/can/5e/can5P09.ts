@@ -23,7 +23,7 @@ export const dateDePublication = '13/11/2022'
 export const uuid = '7b350'
 
 export const refs = {
-  'fr-fr': ['can5P09'],
+  'fr-fr': ['can5P09', '5P1C-flash3'],
   'fr-ch': [],
 }
 export default class CalculPrix extends ExerciceSimple {

@@ -15,7 +15,7 @@ export const dateDePublication = '17/04/2023'
 export const uuid = 'ed8da'
 
 export const refs = {
-  'fr-fr': ['can5N03'],
+  'fr-fr': ['can5N03', '5N1I-flash1'],
   'fr-ch': [],
 }
 export default class PlusGrandMultiple extends ExerciceSimple {

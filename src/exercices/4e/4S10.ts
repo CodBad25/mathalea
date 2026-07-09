@@ -1,4 +1,4 @@
-import ConstruireUnDiagramme from '../5e/5S12'
+import ConstruireUnDiagramme from '../5e/5D1D'
 export const titre = 'Construire un diagramme'
 export const interactifReady = false
 export const uuid = '26ea7'

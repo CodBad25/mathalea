@@ -15,7 +15,7 @@ export const amcType = 'AMCNum'
 export const uuid = '14b41'
 
 export const refs = {
-  'fr-fr': ['can5C07'],
+  'fr-fr': ['can5C07', '5N1G-flash1'],
   'fr-ch': ['NR'],
 }
 export default class PrioriteOperatoire5e extends ExerciceSimple {

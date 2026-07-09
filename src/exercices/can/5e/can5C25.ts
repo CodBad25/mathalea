@@ -17,7 +17,7 @@ export const dateDePublication = '04/10/2023'
 export const uuid = 'a7061'
 
 export const refs = {
-  'fr-fr': ['can5C25'],
+  'fr-fr': ['can5C25', '5N2G-flash1'],
   'fr-ch': [],
 }
 export default class AdditionRelatifCAN extends ExerciceSimple {

@@ -29,7 +29,7 @@ export const amcType = 'AMCNum'
 export const uuid = '36f08'
 
 export const refs = {
-  'fr-fr': ['can5G03'],
+  'fr-fr': ['can5G03', '5G3A-flash1'],
   'fr-ch': [],
 }
 export default class CompterlesSymetriquesCan5e extends Exercice {
