@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastRun": "2026-07-09T05:28:36.174Z",
+  "lastRun": "2026-07-09T09:15:34.416Z",
   "exercises": {
     "10151": {
       "uuid": "10151",
@@ -11332,7 +11332,7 @@
       "uuid": "03b71",
       "ref": "2F10-5",
       "file": "src/exercices/2e/2F10-5.ts",
-      "lastChecked": "2026-07-08T15:53:55.060Z",
+      "lastChecked": "2026-07-09T08:57:56.142Z",
       "status": "passing",
       "checkedLevel": 2,
       "failureMode": null,
@@ -21437,9 +21437,9 @@
       "uuid": "b429f",
       "ref": "4F12",
       "file": "src/exercices/4e/4F12.ts",
-      "lastChecked": "2026-07-08T11:49:52.704Z",
+      "lastChecked": "2026-07-09T08:54:03.257Z",
       "status": "passing",
-      "checkedLevel": 1,
+      "checkedLevel": 2,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -28678,9 +28678,9 @@
       "uuid": "03b49",
       "ref": "6G2A",
       "file": "src/exercices/6e/6G2A.ts",
-      "lastChecked": "2026-07-09T05:28:17.157Z",
+      "lastChecked": "2026-07-09T09:12:52.570Z",
       "status": "passing",
-      "checkedLevel": 2,
+      "checkedLevel": 1,
       "failureMode": null,
       "notes": "",
       "variationsTested": [
@@ -32919,6 +32919,22 @@
         "sup=false:sup2=true:sup3=undefined:sup4=false:sup5=undefined",
         "sup=false:sup2=false:sup3=undefined:sup4=true:sup5=undefined",
         "sup=false:sup2=false:sup3=undefined:sup4=false:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "CM2G3C-1": {
+      "uuid": "60b02",
+      "ref": "CM2G3C-1",
+      "file": "src/exercices/CM2/CM2G3C-1.ts",
+      "lastChecked": "2026-07-09T09:15:34.272Z",
+      "status": "passing",
+      "checkedLevel": 1,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
       "diagnostics": []
     }

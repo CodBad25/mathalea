@@ -1,10 +1,15 @@
 import {
   MATHALEA_FIGURE_HELPERS,
+  MATHALEA_FIT_HELPER,
   MATHALEA_QCM_HELPERS,
   TASKIZE_IMPORT,
   escapeTypstText,
   htmlToTypst,
 } from './latexToTypst'
+
+/** Import du paquet exercise-bank (badges Exercice/Correction, banque) */
+export const EXERCISE_BANK_IMPORT =
+  '#import "@preview/exercise-bank:0.5.2": exo, exo-setup, exo-print-solutions'
 
 /**
  * Construction du document Typst complet (fiche d'exercices + corrections)
@@ -29,7 +34,11 @@ export interface TypstExerciseInput {
 
 export interface TypstDocumentOptions {
   title: string
+  /** Sous-titre affiché à côté du titre (niveau, classe…) */
+  subtitle: string
   headerLine: string
+  /** Style de l'en-tête et du pied de page */
+  headerStyle: HeaderStyle
   /** Interligne des paragraphes, en em (0.65 = valeur par défaut de Typst) */
   lineSpacing: number
   /** Espace au-dessus du titre de chaque exercice, en em */
@@ -50,10 +59,60 @@ export interface TypstDocumentOptions {
    * titres « Exercice N » disparaissent.
    */
   mergeExercises: boolean
+  /** Style des badges du paquet exercise-bank */
+  badgeStyle: BadgeStyle
+  /**
+   * Couleur des badges d'exercice, de correction et des titres
+   * (expression Typst, ex : `black`). La correction suit la même couleur.
+   */
+  badgeColor: string
+}
+
+/** Habillage de l'en-tête et du pied de page */
+export const HEADER_STYLES = ['epure', 'cartouche', 'cadre'] as const
+export type HeaderStyle = (typeof HEADER_STYLES)[number]
+
+/** Styles de badge proposés par le paquet exercise-bank */
+export const BADGE_STYLES = [
+  'border-accent',
+  'box',
+  'rounded-box',
+  'header-card',
+  'underline',
+  'pill',
+  'tag',
+  'circled',
+  'filled-circle',
+  'margin',
+] as const
+export type BadgeStyle = (typeof BADGE_STYLES)[number]
+
+/**
+ * Styles où le badge est placé dans une colonne à gauche du contenu.
+ * Par défaut le paquet réserve une colonne large (dimensionnée sur
+ * « Correction 100 ») et décale le bloc dans la marge de la page, ce qui
+ * rend le contenu beaucoup trop étroit. On fixe donc une largeur de
+ * colonne compacte par style (`margin-position`) et on annule le décalage
+ * (`label-extra: 0pt`). Les autres styles occupent toute la largeur.
+ */
+/**
+ * Largeur de la colonne du badge, par style. Les énoncés (« Exercice N »)
+ * demandent moins de place que les corrections (« Correction N ») ; comme
+ * ils sont rendus dans des sections séparées, on rétrécit la colonne pour
+ * les énoncés et on l'élargit juste avant les corrections.
+ */
+const MARGIN_BADGE_WIDTH: Partial<Record<BadgeStyle, { exo: string; corr: string }>> = {
+  box: { exo: '2.2cm', corr: '2.9cm' },
+  pill: { exo: '2.5cm', corr: '3.2cm' },
+  tag: { exo: '2.7cm', corr: '3.5cm' },
+  circled: { exo: '1.4cm', corr: '1.4cm' },
+  'filled-circle': { exo: '1.4cm', corr: '1.4cm' },
 }
 
 export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   title: "Fiche d'exercices",
+  subtitle: '',
+  headerStyle: 'epure',
   headerLine:
     'Nom : ______________________ Prénom : ______________________ Classe : ______',
   lineSpacing: 0.65,
@@ -64,6 +123,8 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   pageFormat: 'a4',
   orientation: 'portrait',
   mergeExercises: false,
+  badgeStyle: 'border-accent',
+  badgeColor: 'black',
 }
 
 /**
@@ -78,10 +139,14 @@ function boldableLabel(pattern: string, bold: boolean): string {
 
 /**
  * Repères de sous-questions produits par `numAlpha`/`numAlphaNum`
- * (`<span style="color:...; font-weight:bold">a)&nbsp;</span>`).
+ * (`<span style="color:...; font-weight:bold">a)&nbsp;</span>`) ou par
+ * `stylizeItems` (multiMathfield), qui ajoute d'autres propriétés de style
+ * après `font-weight:bold` (`display:inline-block; margin-left:...`). Le
+ * style peut donc contenir des propriétés supplémentaires ; on exige
+ * seulement `font-weight:bold` et un contenu limité au repère `X)`.
  */
 const SUB_QUESTION_MARKER =
-  /<span style="color:[^"]*;\s*font-weight:\s*bold">\s*([a-z]|\d{1,2})\)(?:&nbsp;|\s)*<\/span>/gi
+  /<span[^>]*\bstyle="[^"]*font-weight:\s*bold[^"]*"[^>]*>\s*([a-z]|\d{1,2})\)(?:&nbsp;|\s)*<\/span>/gi
 
 /**
  * Découpe une question unique contenant ses propres repères (`a)`, `b)`...)
@@ -184,62 +249,40 @@ export function buildTypstDocument(
   // collectées pour être déclarées (`#let fig-N = image(...)`) en tête
   // de document, ce qui garde le corps du code lisible.
   const figures: string[] = []
-  const exerciseLines: string[] = []
+  // Banque d'exercices (paquet exercise-bank) : chaque exercice regroupe
+  // son énoncé et sa correction dans un `#let exN = exo.with(...)`, puis
+  // la section Énoncés appelle `#exN()` — réordonnez-les librement.
+  const bankLines: string[] = []
   // en mode fusionné, les questions sont numérotées à la suite d'un
   // exercice à l'autre plutôt que de repartir à 1
   let nextStart = 1
-  for (const [k, exercise] of exercises.entries()) {
-    exerciseLines.push(`// ----- Exercice ${k + 1} -----`)
-    if (!options.mergeExercises) {
-      const ref =
-        options.showExerciseRefs && exercise.ref.trim().length > 0
-          ? ` #reference("${exercise.ref.trim().replaceAll('"', '\\"')}")`
-          : ''
-      exerciseLines.push(`#titre-exercice[Exercice ${k + 1}${ref}]`)
-    }
-    if (exercise.warning != null) {
-      exerciseLines.push(
-        `#text(fill: gray)[_${escapeTypstText(exercise.warning)}_]`,
-      )
-    } else {
-      const { code, itemCount } = exerciseBody(
-        exercise.intro,
-        exercise.questions,
-        exercise.numbered,
-        figures,
-        `ex${k + 1}`,
-        options.boldQuestionNumbers,
-        options.mergeExercises ? nextStart : 1,
-      )
-      exerciseLines.push(code)
-      if (options.mergeExercises) nextStart += itemCount
-    }
-    exerciseLines.push('')
+  let nextCorrectionStart = 1
+  let hasCorrections = false
+  interface BuiltExercise {
+    enonce: string
+    correction: string | null
   }
-
-  const correctionLines: string[] = []
-  const corrected = exercises
-    .map((exercise, k) => ({ exercise, k }))
-    .filter(({ exercise }) => exercise.corrections.length > 0)
-  if (corrected.length > 0) {
-    correctionLines.push('// ----- Corrections -----')
-    correctionLines.push('#if corrige [')
-    correctionLines.push(
-      '  // saut de page (ou de colonne si le document est en colonnes)',
-    )
-    correctionLines.push(
-      '  #if colonnes > 1 { colbreak(weak: true) } else { pagebreak(weak: true) }',
-    )
-    correctionLines.push(
-      '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
-    )
-    let nextCorrectionStart = 1
-    for (const { exercise, k } of corrected) {
-      correctionLines.push('')
-      if (!options.mergeExercises) {
-        correctionLines.push(`  #titre-exercice[Exercice ${k + 1}]`)
+  const built: BuiltExercise[] = exercises.map((exercise, k) => {
+    if (exercise.warning != null) {
+      return {
+        enonce: `#text(fill: gray)[_${escapeTypstText(exercise.warning)}_]`,
+        correction: null,
       }
-      const { code, itemCount } = exerciseBody(
+    }
+    const enonce = exerciseBody(
+      exercise.intro,
+      exercise.questions,
+      exercise.numbered,
+      figures,
+      `ex${k + 1}`,
+      options.boldQuestionNumbers,
+      options.mergeExercises ? nextStart : 1,
+    )
+    if (options.mergeExercises) nextStart += enonce.itemCount
+    let correction: string | null = null
+    if (exercise.corrections.length > 0) {
+      hasCorrections = true
+      const body = exerciseBody(
         exercise.introCorrection,
         exercise.corrections,
         exercise.numbered,
@@ -248,14 +291,90 @@ export function buildTypstDocument(
         options.boldQuestionNumbers,
         options.mergeExercises ? nextCorrectionStart : 1,
       )
-      correctionLines.push(indentContentBlock(code))
-      if (options.mergeExercises) nextCorrectionStart += itemCount
+      if (options.mergeExercises) nextCorrectionStart += body.itemCount
+      correction = body.code
     }
-    correctionLines.push(']')
-    correctionLines.push('')
+    return { enonce: enonce.code, correction }
+  })
+
+  const renderLines: string[] = []
+  if (options.mergeExercises) {
+    // pas de banque : les contenus sont fusionnés en un seul exercice
+    renderLines.push('// ----- Énoncés -----')
+    renderLines.push('#en-colonnes[')
+    for (const { enonce } of built) {
+      renderLines.push(indentContentBlock(enonce))
+      renderLines.push('')
+    }
+    renderLines.push(']')
+    renderLines.push('')
+    if (hasCorrections) {
+      renderLines.push('// ----- Corrections -----')
+      renderLines.push('#if corrige [')
+      renderLines.push('  // les corrections commencent sur une nouvelle page')
+      renderLines.push('  #pagebreak(weak: true)')
+      renderLines.push(
+        '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
+      )
+      renderLines.push('  #en-colonnes[')
+      for (const { correction } of built) {
+        if (correction == null) continue
+        renderLines.push(indentContentBlock(indentContentBlock(correction)))
+        renderLines.push('')
+      }
+      renderLines.push('  ]')
+      renderLines.push(']')
+      renderLines.push('')
+    }
+  } else {
+    for (const [k, { enonce, correction }] of built.entries()) {
+      bankLines.push(`// ----- Exercice ${k + 1} -----`)
+      bankLines.push(`#let ex${k + 1} = exo.with(`)
+      const ref = exercises[k].ref.trim()
+      if (ref.length > 0) {
+        bankLines.push(`  id: "${ref.replaceAll('"', '\\"')}",`)
+      }
+      bankLines.push('  exercise: [')
+      bankLines.push(indentContentBlock(indentContentBlock(enonce)))
+      bankLines.push('  ],')
+      if (correction != null) {
+        bankLines.push('  solution: [')
+        bankLines.push(indentContentBlock(indentContentBlock(correction)))
+        bankLines.push('  ],')
+      }
+      bankLines.push(')')
+    }
+
+    renderLines.push('// ----- Énoncés -----')
+    renderLines.push('#en-colonnes[')
+    for (const [k] of built.entries()) {
+      renderLines.push(`  #ex${k + 1}()`)
+    }
+    renderLines.push(']')
+    renderLines.push('')
+    if (hasCorrections) {
+      renderLines.push('// ----- Corrections -----')
+      renderLines.push('#if corrige [')
+      renderLines.push('  // les corrections commencent sur une nouvelle page')
+      renderLines.push('  #pagebreak(weak: true)')
+      renderLines.push(
+        '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
+      )
+      // les libellés « Correction N » sont plus larges : on élargit la
+      // colonne des badges juste pour cette section
+      const corrWidth = MARGIN_BADGE_WIDTH[options.badgeStyle]
+      if (corrWidth != null && corrWidth.corr !== corrWidth.exo) {
+        renderLines.push(`  #exo-setup(margin-position: ${corrWidth.corr})`)
+      }
+      renderLines.push('  #en-colonnes[')
+      renderLines.push('    #exo-print-solutions(title: none)')
+      renderLines.push('  ]')
+      renderLines.push(']')
+      renderLines.push('')
+    }
   }
 
-  const allLines = [...exerciseLines, ...correctionLines]
+  const allLines = [...bankLines, ...renderLines]
   const usesMathaleaFigure = allLines.some((line) =>
     line.includes('#mathalea-figure('),
   )
@@ -272,9 +391,19 @@ export function buildTypstDocument(
   lines.push('// Fiche générée par MathALÉA — https://coopmaths.fr/alea')
   lines.push("// Ce code est modifiable : l'aperçu se met à jour tout seul.")
   lines.push('')
-  if (usesTasks) {
+  const usesExerciseBank = !options.mergeExercises
+  if (usesTasks || usesExerciseBank) {
     lines.push('// ----- Paquets -----')
-    lines.push(TASKIZE_IMPORT)
+    if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
+    if (usesTasks) lines.push(TASKIZE_IMPORT)
+    lines.push('')
+  }
+  // mathalea-fit (adaptation de la largeur des figures) est requis dès
+  // qu'une figure est présente ; mathalea-figure l'utilise pour ses figures
+  // à labels, il doit donc être défini avant.
+  if (figures.length > 0) {
+    lines.push('// ----- Figures : adaptation à la largeur -----')
+    lines.push(MATHALEA_FIT_HELPER)
     lines.push('')
   }
   if (usesMathaleaFigure) {
@@ -287,24 +416,33 @@ export function buildTypstDocument(
     `#let colonnes = ${options.columns} // nombre de colonnes (1, 2 ou 3)`,
   )
   lines.push('#let corrige = true // afficher les corrections')
-  lines.push('#let couleur = black // couleur des titres')
+  lines.push(
+    `#let couleur = ${options.badgeColor} // couleur des badges d'exercice et des titres`,
+  )
+  lines.push(`#let titre = ${typstString(options.title)}`)
+  lines.push(`#let sous-titre = ${typstString(options.subtitle)}`)
+  lines.push(`#let entete = ${typstString(options.headerLine)}`)
   if (usesQcm) {
     lines.push('#let qcm-colonnes = 2 // colonnes des propositions de QCM')
   }
   if (tasksPrefixes.length > 0) {
-    lines.push('// Questions de chaque exercice : nombre de colonnes et')
-    lines.push('// espacement vertical entre les questions')
+    lines.push(
+      '// espacement vertical entre les questions (défaut de tous les exercices)',
+    )
+    lines.push('#let interligne-questions = 1em')
+    lines.push('// Nombre de colonnes et espacement des questions, par exercice :')
+    lines.push('// remplacez interligne-questions par une valeur pour en dévier.')
     for (const prefix of tasksPrefixes) {
       lines.push(`#let ${prefix}-colonnes = 1`)
-      // fractions en dfrac (voir #show math.frac) : plus hautes que la
-      // ligne de texte, il faut plus d'espace pour éviter le chevauchement
-      lines.push(`#let ${prefix}-gutter = 1.8em`)
+      lines.push(`#let ${prefix}-gutter = interligne-questions`)
     }
   }
   lines.push('')
   lines.push(
-    `#set page(paper: "${options.pageFormat}", flipped: ${options.orientation === 'landscape'}, margin: (x: 15mm, y: 15mm), numbering: "1/1")`,
+    `#set page(paper: "${options.pageFormat}", flipped: ${options.orientation === 'landscape'}, margin: (x: 15mm, y: 15mm),`,
   )
+  lines.push(...pageFooter(options.headerStyle).map((line) => `  ${line}`))
+  lines.push(')')
   lines.push('#set text(size: 11pt, lang: "fr")')
   lines.push(`#set par(leading: ${options.lineSpacing}em)`)
   lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
@@ -313,10 +451,39 @@ export function buildTypstDocument(
   lines.push('#show math.frac: it => math.display(it)')
   lines.push('')
   lines.push(
-    `#let titre-exercice(corps) = block(above: ${options.exerciseSpacing}em, below: 0.9em,`,
+    '// mise en colonnes d’une section (les sauts de page restent possibles',
+    '// entre les sections, contrairement à une mise en colonnes globale)',
   )
-  lines.push('  text(weight: "bold", fill: couleur, size: 1.1em, corps))')
-  lines.push('#let reference(ref) = text(size: 0.75em, fill: gray, ref)')
+  lines.push('#let en-colonnes(corps) = if colonnes > 1 {')
+  lines.push('  columns(colonnes, gutter: 8mm, corps)')
+  lines.push('} else { corps }')
+  if (usesExerciseBank) {
+    lines.push('// réglages du paquet exercise-bank (badges Exercice/Correction)')
+    lines.push('#exo-setup(')
+    lines.push('  exercise-label: "Exercice",')
+    lines.push('  solution-label: "Correction",')
+    lines.push('  // les corrections sont regroupées en fin de fiche')
+    lines.push('  corr-loc: "end-chapter",')
+    lines.push('  display: if corrige { "both" } else { "ex" },')
+    lines.push(`  badge-style: "${options.badgeStyle}",`)
+    lines.push('  badge-color: couleur,')
+    // le corrigé est placé dans le champ `solution` (étiquette « Correction ») :
+    // sa couleur suit donc `solution-color`, réglée sur la couleur des badges
+    lines.push('  solution-color: couleur,')
+    lines.push('  correction-color: couleur,')
+    lines.push(`  show-id: ${options.showExerciseRefs},`)
+    lines.push(`  exercise-above: ${options.exerciseSpacing}em,`)
+    // styles « en marge » : colonne compacte pour ne pas étrangler le
+    // contenu (le paquet dimensionne sinon la colonne sur « Correction 100 »).
+    // On règle ici la largeur des énoncés ; celle des corrections est
+    // élargie juste avant leur affichage.
+    const marginWidth = MARGIN_BADGE_WIDTH[options.badgeStyle]
+    if (marginWidth != null) {
+      lines.push('  label-extra: 0pt,')
+      lines.push(`  margin-position: ${marginWidth.exo},`)
+    }
+    lines.push(')')
+  }
   if (usesQcm) {
     lines.push('// ----- QCM (case à cocher) -----')
     lines.push(MATHALEA_QCM_HELPERS)
@@ -329,21 +496,119 @@ export function buildTypstDocument(
     }
     lines.push('')
   }
+  lines.push(...bankLines)
+  lines.push('')
   lines.push('// ----- En-tête -----')
-  lines.push(
-    `#align(center, text(size: 1.4em, weight: "bold")[${escapeTypstText(options.title)}])`,
-  )
-  lines.push('#v(0.4em)')
-  lines.push(escapeTypstText(options.headerLine))
-  lines.push('#line(length: 100%, stroke: 0.5pt + gray)')
+  lines.push(...headerBlock(options.headerStyle))
   lines.push('')
-  lines.push('#show: corps => if colonnes > 1 {')
-  lines.push('  columns(colonnes, gutter: 8mm, corps)')
-  lines.push('} else { corps }')
-  lines.push('')
-  lines.push(...exerciseLines, ...correctionLines)
+  lines.push(...renderLines)
 
   return lines.join('\n')
+}
+
+/** Chaîne littérale Typst (échappe backslash et guillemets) */
+function typstString(text: string): string {
+  return `"${text.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
+}
+
+/**
+ * Bloc de titre de la fiche (`titre`, `sous-titre`, `entete` déclarés dans
+ * les réglages), selon l'habillage choisi.
+ */
+function headerBlock(style: HeaderStyle): string[] {
+  if (style === 'cadre') {
+    return [
+      '#block(width: 100%, stroke: (top: 1pt + couleur, bottom: 1pt + couleur), inset: (y: 8pt))[',
+      '  #set align(center)',
+      '  #text(size: 1.4em, weight: "bold", fill: couleur, tracking: 0.5pt)[#smallcaps(titre)]',
+      '  #if sous-titre != "" [',
+      '    #v(2pt)',
+      '    #text(size: 0.85em, fill: gray, style: "italic")[#sous-titre]',
+      '  ]',
+      ']',
+      '#if entete != "" [ #v(3pt) #align(center, text(fill: gray.darken(20%))[#entete]) ]',
+      '#v(8pt)',
+    ]
+  }
+  if (style === 'cartouche') {
+    // carte à fond très clair (peu d'encre) avec un filet d'accent à gauche
+    return [
+      '#block(width: 100%, fill: couleur.transparentize(90%), stroke: (left: 3pt + couleur),',
+      '  inset: 9pt, radius: (right: 4pt))[',
+      '  #text(size: 1.5em, weight: "bold", fill: couleur)[#titre]',
+      '  #if sous-titre != "" [',
+      '    #h(1fr)',
+      '    #box(baseline: 30%, stroke: 0.6pt + couleur, inset: (x: 6pt, y: 2pt), radius: 3pt,',
+      '      text(fill: couleur, weight: "bold", size: 0.85em)[#sous-titre])',
+      '  ]',
+      ']',
+      '#if entete != "" [',
+      '  #v(4pt)',
+      '  #block(width: 100%, stroke: 0.6pt + couleur.lighten(40%), radius: 3pt, inset: 6pt,',
+      '    text(fill: gray.darken(20%))[#entete])',
+      ']',
+      '#v(6pt)',
+    ]
+  }
+  // style « épuré » (défaut)
+  return [
+    '#block(width: 100%, inset: (y: 4pt))[',
+    '  #text(size: 1.5em, weight: "bold", fill: couleur)[#titre]',
+    '  #if sous-titre != "" [ #h(1fr) #text(fill: gray)[#sous-titre] ]',
+    '  #v(-3pt)',
+    '  #line(length: 100%, stroke: 1.2pt + couleur)',
+    ']',
+    '#if entete != "" [ #v(2pt) #text(fill: gray.darken(20%))[#entete] ]',
+    '#v(6pt)',
+  ]
+}
+
+/**
+ * Pied de page (crédit MathALÉA, pagination, titre) selon l'habillage.
+ * Renvoie l'argument `footer: ...` du `#set page(...)`.
+ */
+function pageFooter(style: HeaderStyle): string[] {
+  const pagination = '#counter(page).display("1 / 1", both: true)'
+  if (style === 'cadre') {
+    return [
+      'footer: context [',
+      '  #set text(size: 8pt, style: "italic")',
+      '  #line(length: 100%, stroke: 0.4pt)',
+      '  #v(-2pt)',
+      '  #grid(columns: (1fr, auto, 1fr),',
+      '    align(left)[CC BY-SA · MathALÉA],',
+      `    align(center)[${pagination}],`,
+      '    align(right)[#if sous-titre != "" { sous-titre } else { titre }],',
+      '  )',
+      '],',
+    ]
+  }
+  if (style === 'cartouche') {
+    return [
+      'footer: context [',
+      '  #set text(size: 8pt, fill: couleur)',
+      '  #line(length: 100%, stroke: 0.6pt + couleur.lighten(30%))',
+      '  #v(-2pt)',
+      '  #grid(columns: (1fr, auto, 1fr),',
+      '    align(left)[MathALÉA · coopmaths.fr],',
+      `    align(center)[${pagination}],`,
+      '    align(right)[#emph(titre)],',
+      '  )',
+      '],',
+    ]
+  }
+  return [
+    'footer: context [',
+    '  #set text(size: 8pt, fill: gray)',
+    '  #line(length: 100%, stroke: 0.4pt + gray.lighten(30%))',
+    '  #v(-2pt)',
+    '  #grid(columns: (1fr, auto, 1fr),',
+    '    align(left)[MathALÉA — coopmaths.fr],',
+    `    align(center)[${pagination}],`,
+    '    align(right)[#emph(titre)],',
+    '  )',
+    '],',
+  ]
 }
 
 /** Indente un bloc pour l'inscrire dans le `#if corrige [...]` */

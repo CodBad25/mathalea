@@ -22,6 +22,18 @@ const CUSTOM_TEX_MACROS: Record<string, string> = {
   '\\np': '\\text{np}',
 }
 
+/**
+ * Réduit une figure si elle est plus large que la place disponible (sinon
+ * elle déborde de la colonne / de la page). La largeur naturelle est mesurée,
+ * puis le contenu est mis à l'échelle avec ses labels. Inclus dès qu'une
+ * figure est présente.
+ */
+export const MATHALEA_FIT_HELPER = `#let mathalea-fit(body) = layout(size => {
+  let natural = measure(body).width
+  let f = if natural > 0pt { calc.min(1.0, size.width / natural) } else { 1.0 }
+  if f < 1.0 { box(scale(f * 100%, origin: top + left, reflow: true, body)) } else { body }
+})`
+
 export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0deg, size: auto, fill: auto) = {
   let content = if size == auto and fill == auto {
     body
@@ -35,7 +47,7 @@ export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0
   (x: x, y: y, angle: angle, body: content)
 }
 
-#let mathalea-figure(width, height, graphic, labels: ()) = box(width: width, height: height)[
+#let mathalea-figure(width, height, graphic, labels: ()) = mathalea-fit(box(width: width, height: height)[
   #place(top + left, graphic)
   #for label in labels {
     let body = if label.angle == 0deg {
@@ -43,11 +55,16 @@ export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0
     } else {
       rotate(label.angle, origin: center, label.body)
     }
-    // ancre de taille nulle posée sur le point : le label y est centré
-    place(top + left, dx: label.x, dy: label.y,
-      box(width: 0pt, height: 0pt, place(center + horizon, body)))
+    // le label est centré sur son point : on mesure sa largeur naturelle et
+    // on décale le placement de la moitié. Un placement par alignement dans
+    // une ancre de largeur nulle contraindrait le label à 0pt et couperait
+    // les formules à chaque opérateur (f(x) =, -2x +, 3...).
+    context {
+      let m = measure(box(body))
+      place(top + left, dx: label.x - m.width / 2, dy: label.y - m.height / 2, box(body))
+    }
   }
-]`
+])`
 
 /** Import du paquet taskize (mise en colonnes des propositions de QCM) */
 export const TASKIZE_IMPORT = '#import "@preview/taskize:0.2.5": tasks'
@@ -1283,9 +1300,10 @@ function mathalea2dContainerToTypst(
   if (figures == null) return missingBox('figure non convertie')
   figures.push(svgToTypstImage(svgMatch[0]))
   const figureName = `fig-${figures.length}`
-  // #(fig-N) isole le nom de variable pour éviter que le texte suivant
-  // soit fusionné dans l'identifiant (ex. #fig-1On → erreur de compilation)
-  const figureRef = `#(${figureName})`
+  // #mathalea-fit(...) réduit la figure si elle dépasse la largeur
+  // disponible (colonne étroite) ; l'appel isole aussi le nom de variable
+  // pour éviter que le texte suivant soit fusionné dans l'identifiant
+  const figureRef = `#mathalea-fit(${figureName})`
   const width = svgMatch[0].match(/<svg[^>]*?\swidth="([\d.]+)"/i)
   const height = svgMatch[0].match(/<svg[^>]*?\sheight="([\d.]+)"/i)
   const widthPx = width != null ? parseFloat(width[1]) : 213.3
@@ -1528,9 +1546,10 @@ export function htmlToTypst(html: string, figures?: string[]): string {
   text = text.replace(/<svg[\s\S]*?<\/svg>/gi, (svg) => {
     if (figures == null) return protect(missingBox('figure non convertie'))
     figures.push(svgToTypstImage(svg))
+    // mathalea-fit réduit la figure si elle dépasse la largeur disponible ;
     // ligne vide après la figure : le texte qui suit reprend dans un
     // nouveau paragraphe du code généré
-    return protect(`#(fig-${figures.length})\n\n`)
+    return protect(`#mathalea-fit(fig-${figures.length})\n\n`)
   })
   text = text.replace(/<img[^>]*>/gi, () =>
     protect(missingBox('image non convertie')),
@@ -1541,6 +1560,8 @@ export function htmlToTypst(html: string, figures?: string[]): string {
   /** Profondeur des blocs de contenu Typst ouverts (#strong[, #emph[...]) */
   let bracketDepth = 0
   const listStack: ('ul' | 'ol')[] = []
+  /** Nombre de blocs Typst ouverts par chaque <span> imbriqué */
+  const spanStack: number[] = []
   const openBlock = (markup: string) => {
     bracketDepth++
     return markup
@@ -1606,8 +1627,36 @@ export function htmlToTypst(html: string, figures?: string[]): string {
       case 'div':
         output += '\n'
         break
+      case 'span': {
+        // les spans stylés (texteEnCouleur, texteEnCouleurEtGras...)
+        // conservent leur couleur et leur graisse
+        if (isClosing) {
+          for (let n = spanStack.pop() ?? 0; n > 0; n--) {
+            output += closeBlock()
+          }
+          break
+        }
+        const style = token.match(/style\s*=\s*(?:"([^"]*)"|'([^']*)')/i)
+        const styleValue = style?.[1] ?? style?.[2] ?? ''
+        const colorValue = styleValue.match(/(?:^|;)\s*color\s*:\s*([^;]+)/i)
+        const isBold = /font-weight\s*:\s*(?:bold|[6-9]00)/i.test(styleValue)
+        let opened = 0
+        if (colorValue != null && !isDefaultBlack(colorValue[1])) {
+          const color = typstColorExpression(colorValue[1])
+          if (color != null) {
+            output += openBlock(`#text(fill: ${color})[`)
+            opened++
+          }
+        }
+        if (isBold) {
+          output += openBlock('#strong[')
+          opened++
+        }
+        spanStack.push(opened)
+        break
+      }
       default:
-        // balise inconnue ou span : ignorée, seul son contenu est conservé
+        // balise inconnue : ignorée, seul son contenu est conservé
         break
     }
   }

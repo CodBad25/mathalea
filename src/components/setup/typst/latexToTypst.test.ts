@@ -184,9 +184,11 @@ describe('htmlToTypst', () => {
       'Figure 1 : <svg width="96" height="48"><rect/></svg> et figure 2 : <svg><circle/></svg>',
       figures,
     )
-    // ligne vide après chaque figure : le texte suivant reprend dans un
-    // nouveau paragraphe du code généré
-    expect(result).toBe('Figure 1 : #(fig-1)\n\n et figure 2 : #(fig-2)')
+    // #mathalea-fit adapte la figure à la largeur ; ligne vide après chaque
+    // figure : le texte suivant reprend dans un nouveau paragraphe
+    expect(result).toBe(
+      'Figure 1 : #mathalea-fit(fig-1)\n\n et figure 2 : #mathalea-fit(fig-2)',
+    )
     expect(figures).toHaveLength(2)
     expect(figures[0]).toBe(
       'image(bytes("<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"96\\" height=\\"48\\"><rect/></svg>"), format: "svg", width: 72.0pt)',
@@ -212,6 +214,19 @@ describe('htmlToTypst', () => {
     expect(result).not.toContain('78∘')
     expect(figures).toHaveLength(1)
     expect(figures[0]).toContain('image(bytes("<svg')
+  })
+
+  it('convertit les spans colorés (texteEnCouleur, texteEnCouleurEtGras)', () => {
+    expect(
+      htmlToTypst('Un losange est <span style="color:#f15929;">un quadrilatère</span>.'),
+    ).toBe('Un losange est #text(fill: rgb("#f15929"))[un quadrilatère].')
+    expect(
+      htmlToTypst('<span style="color:#f15929;font-weight: bold;">réponse B</span>'),
+    ).toBe('#text(fill: rgb("#f15929"))[#strong[réponse B]]')
+    // span sans style : contenu conservé tel quel
+    expect(htmlToTypst('<span class="katex-html">x</span>')).toBe('x')
+    // couleur noire par défaut : pas de mise en couleur
+    expect(htmlToTypst('<span style="color:black;">x</span>')).toBe('x')
   })
 
   it('remplace les images par un encart', () => {
@@ -262,7 +277,7 @@ describe('htmlToTypst', () => {
     expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
     expect(result).toContain('+ $1$')
     expect(result).toContain('+ $2$')
-    expect(result).toContain('#(fig-1)')
+    expect(result).toContain('#mathalea-fit(fig-1)')
     expect(result).not.toMatch(/(^|[^-\w])0($|[^.\w])/m)
     expect(figures).toHaveLength(1)
   })
