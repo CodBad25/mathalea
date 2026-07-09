@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = '79057'
 
 export const refs = {
-  'fr-fr': ['1A-P03-4'],
+  'fr-fr': ['1A-P03-4', '2A-P3-4'],
   'fr-ch': [],
 }
 export default class Auto1AP03d extends CalculProbaSimple {
