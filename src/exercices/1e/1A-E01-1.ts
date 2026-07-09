@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = '6ffd3'
 
 export const refs = {
-  'fr-fr': ['1A-E01-1'],
+  'fr-fr': ['1A-E01-1', '2A-E1-1'],
   'fr-ch': [],
 }
 export default class Auto1AE1 extends TauxCoeff {
