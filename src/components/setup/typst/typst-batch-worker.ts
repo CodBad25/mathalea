@@ -12,13 +12,13 @@
  * Le worker reste actif jusqu'à ce qu'il soit terminé (worker.terminate()).
  */
 
-import { parentPort } from 'node:worker_threads'
-import { existsSync, writeFileSync, rmSync, mkdirSync } from 'fs'
+import { mkdirSync, rmSync, writeFileSync } from 'fs'
 import { spawnSync } from 'node:child_process'
 import { tmpdir } from 'node:os'
+import { parentPort } from 'node:worker_threads'
 import { dirname, join, resolve } from 'path'
-import { fileURLToPath, pathToFileURL } from 'url'
 import seedrandom from 'seedrandom'
+import { fileURLToPath, pathToFileURL } from 'url'
 
 // polices libres servies par MathALÉA : chargées aussi pour la compilation
 // CLI afin que l'aperçu navigateur et les tests rendent les mêmes polices
@@ -41,12 +41,38 @@ for (const [key, value] of [
   ['navigator', w.navigator],
   ['location', w.location],
   ['history', w.history],
-  ['localStorage', { getItem: () => null, setItem: () => {}, removeItem: () => {}, clear: () => {} }],
-  ['sessionStorage', { getItem: () => null, setItem: () => {}, removeItem: () => {}, clear: () => {} }],
+  [
+    'localStorage',
+    {
+      getItem: () => null,
+      setItem: () => {},
+      removeItem: () => {},
+      clear: () => {},
+    },
+  ],
+  [
+    'sessionStorage',
+    {
+      getItem: () => null,
+      setItem: () => {},
+      removeItem: () => {},
+      clear: () => {},
+    },
+  ],
   ['MutationObserver', w.MutationObserver],
-  ['ResizeObserver', w.ResizeObserver ?? class ResizeObserver { observe() {} disconnect() {} }],
+  [
+    'ResizeObserver',
+    w.ResizeObserver ??
+      class ResizeObserver {
+        observe() {}
+        disconnect() {}
+      },
+  ],
   ['XMLHttpRequest', w.XMLHttpRequest],
-  ['fetch', w.fetch ?? (() => Promise.reject(new Error('fetch not available')))],
+  [
+    'fetch',
+    w.fetch ?? (() => Promise.reject(new Error('fetch not available'))),
+  ],
   ['Node', w.Node],
   ['Element', w.Element],
   ['HTMLElement', w.HTMLElement],
@@ -62,19 +88,62 @@ for (const [key, value] of [
   ['CustomEvent', w.CustomEvent],
   ['requestAnimationFrame', (fn: () => void) => setTimeout(fn, 16)],
   ['cancelAnimationFrame', clearTimeout],
-  ['matchMedia', () => ({ matches: false, media: '', onchange: null, addEventListener: () => {}, removeEventListener: () => {}, addListener: () => {}, removeListener: () => {}, dispatchEvent: () => false })],
-  ['customElements', w.customElements ?? { define: () => {}, get: () => undefined, whenDefined: () => Promise.resolve(), upgrade: () => {} }],
+  [
+    'matchMedia',
+    () => ({
+      matches: false,
+      media: '',
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    }),
+  ],
+  [
+    'customElements',
+    w.customElements ?? {
+      define: () => {},
+      get: () => undefined,
+      whenDefined: () => Promise.resolve(),
+      upgrade: () => {},
+    },
+  ],
 ] as const) {
   if (!(key in globalThis) || key === 'window') {
     try {
-      Object.defineProperty(globalThis, key, { value, writable: true, configurable: true })
-    } catch { /* ignore */ }
+      Object.defineProperty(globalThis, key, {
+        value,
+        writable: true,
+        configurable: true,
+      })
+    } catch {
+      /* ignore */
+    }
   }
 }
 
 // jsdom ne fournit pas window.matchMedia — on le stubble directement sur l'objet window
-const matchMediaStub = () => ({ matches: false, media: '', onchange: null, addEventListener: () => {}, removeEventListener: () => {}, addListener: () => {}, removeListener: () => {}, dispatchEvent: () => false })
-try { Object.defineProperty(w, 'matchMedia', { value: matchMediaStub, writable: true, configurable: true }) } catch { /* ignore */ }
+const matchMediaStub = () => ({
+  matches: false,
+  media: '',
+  onchange: null,
+  addEventListener: () => {},
+  removeEventListener: () => {},
+  addListener: () => {},
+  removeListener: () => {},
+  dispatchEvent: () => false,
+})
+try {
+  Object.defineProperty(w, 'matchMedia', {
+    value: matchMediaStub,
+    writable: true,
+    configurable: true,
+  })
+} catch {
+  /* ignore */
+}
 
 if (w.SVGElement?.prototype) {
   Object.defineProperty(w.SVGElement.prototype, 'getBBox', {
@@ -87,13 +156,29 @@ if (w.HTMLCanvasElement?.prototype) {
   Object.defineProperty(w.HTMLCanvasElement.prototype, 'getContext', {
     configurable: true,
     value: () => ({
-      fillRect: () => {}, clearRect: () => {}, getImageData: () => ({ data: [] }),
-      putImageData: () => {}, createImageData: () => [], setTransform: () => {},
-      drawImage: () => {}, save: () => {}, restore: () => {}, beginPath: () => {},
-      moveTo: () => {}, lineTo: () => {}, closePath: () => {}, stroke: () => {},
-      translate: () => {}, scale: () => {}, rotate: () => {}, arc: () => {},
-      fill: () => {}, measureText: () => ({ width: 0 }), transform: () => {},
-      rect: () => {}, clip: () => {},
+      fillRect: () => {},
+      clearRect: () => {},
+      getImageData: () => ({ data: [] }),
+      putImageData: () => {},
+      createImageData: () => [],
+      setTransform: () => {},
+      drawImage: () => {},
+      save: () => {},
+      restore: () => {},
+      beginPath: () => {},
+      moveTo: () => {},
+      lineTo: () => {},
+      closePath: () => {},
+      stroke: () => {},
+      translate: () => {},
+      scale: () => {},
+      rotate: () => {},
+      arc: () => {},
+      fill: () => {},
+      measureText: () => ({ width: 0 }),
+      transform: () => {},
+      rect: () => {},
+      clip: () => {},
     }),
   })
 }
@@ -105,14 +190,25 @@ if (w.HTMLCanvasElement?.prototype) {
 
 type ExerciseStatus = 'untested' | 'passing' | 'failing' | 'partial' | 'skip'
 type FailureMode =
-  | 'compile_error' | 'missing_figure' | 'unprocessed_math' | 'interactive_only'
-  | 'missing_package' | 'runtime_error' | null
+  | 'compile_error'
+  | 'missing_figure'
+  | 'unprocessed_math'
+  | 'interactive_only'
+  | 'missing_package'
+  | 'runtime_error'
+  | null
 
 interface ExerciseEntry {
-  uuid: string; ref: string; file: string; lastChecked: string
-  status: ExerciseStatus; checkedLevel: 0 | 1 | 2
-  failureMode: FailureMode; notes: string
-  variationsTested: string[]; diagnostics: string[]
+  uuid: string
+  ref: string
+  file: string
+  lastChecked: string
+  status: ExerciseStatus
+  checkedLevel: 0 | 1 | 2
+  failureMode: FailureMode
+  notes: string
+  variationsTested: string[]
+  diagnostics: string[]
 }
 
 interface CheckRequest {
@@ -126,14 +222,17 @@ interface CheckRequest {
 
 // ─── Imports dynamiques (une fois au démarrage) ───────────────────────────────
 
-const { context } = await import('../../../modules/context.ts')
-const { mathaleaHandleExerciceSimple, mathaleaFormatExercice } = await import('../../../lib/mathalea.ts')
-const { buildTypstDocument } = await import('./buildTypstDocument.ts')
+const { context } = await import('../../../modules/context')
+const { mathaleaHandleExerciceSimple, mathaleaFormatExercice } =
+  await import('../../../lib/mathalea')
+const { buildTypstDocument } = await import('./buildTypstDocument')
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const TMP_DIR = join(tmpdir(), 'typst-batch-check-worker')
-try { mkdirSync(TMP_DIR, { recursive: true }) } catch {}
+try {
+  mkdirSync(TMP_DIR, { recursive: true })
+} catch {}
 
 function parseMappingFromText(text: string): Record<number, string> {
   const mapping: Record<number, string> = {}
@@ -144,25 +243,35 @@ function parseMappingFromText(text: string): Record<number, string> {
   return mapping
 }
 
-function buildSupRecord(exercice: any, level: 1 | 2 | 3 | 4 | 5): Record<number, any> {
+function buildSupRecord(
+  exercice: any,
+  level: 1 | 2 | 3 | 4 | 5,
+): Record<number, any> {
   const sup: Record<number, any> = {}
   const form = exercice[`besoinFormulaire${level === 1 ? '' : level}Texte`]
-  const formNum = exercice[`besoinFormulaire${level === 1 ? '' : level}Numerique`]
-  const formCheck = exercice[`besoinFormulaire${level === 1 ? '' : level}CaseACocher`]
+  const formNum =
+    exercice[`besoinFormulaire${level === 1 ? '' : level}Numerique`]
+  const formCheck =
+    exercice[`besoinFormulaire${level === 1 ? '' : level}CaseACocher`]
   if (Array.isArray(form) && form.length >= 2) {
     const values = parseMappingFromText(form[1])
-    Object.keys(values).forEach((k) => { sup[parseInt(k, 10)] = String(parseInt(k, 10)) })
+    Object.keys(values).forEach((k) => {
+      sup[parseInt(k, 10)] = String(parseInt(k, 10))
+    })
   } else if (Array.isArray(formNum) && formNum.length > 0) {
     const max = Math.min(isNaN(Number(formNum[1])) ? 2 : Number(formNum[1]), 3)
     for (let i = 0; i < max; i++) sup[i] = i + 1
   } else if (formCheck) {
-    sup[0] = true; sup[1] = false
+    sup[0] = true
+    sup[1] = false
   }
   return sup
 }
 
 function sampleSup<T extends Record<number, any>>(sup: T): number[] {
-  const keys = Object.keys(sup).map(Number).sort((a, b) => a - b)
+  const keys = Object.keys(sup)
+    .map(Number)
+    .sort((a, b) => a - b)
   const n = keys.length
   if (n === 0) return []
   if (n <= 3) return keys
@@ -170,7 +279,9 @@ function sampleSup<T extends Record<number, any>>(sup: T): number[] {
   return [keys[0], keys[Math.round(step)], keys[n - 1]]
 }
 
-function sampleSupWithFallback<T extends Record<number, any>>(sup: T): Array<number | undefined> {
+function sampleSupWithFallback<T extends Record<number, any>>(
+  sup: T,
+): Array<number | undefined> {
   const s = sampleSup(sup)
   return s.length > 0 ? s : [undefined]
 }
@@ -198,30 +309,62 @@ function detectHtmlRemnants(source: string): string[] {
   for (const line of source.split('\n')) {
     const trimmed = line.trim()
     if (!trimmed || trimmed.startsWith('//') || /^#/.test(trimmed)) continue
-    const tagMatch = line.match(/<\/?(span|div|p|br|em|strong|sub|sup|table|tr|td|th|ul|ol|li|h[1-6]|img|a)\b[^>]*>/i)
-    if (tagMatch) { problems.push(trimmed.slice(0, 120)); if (problems.length >= 3) return problems }
+    const tagMatch = line.match(
+      /<\/?(span|div|p|br|em|strong|sub|sup|table|tr|td|th|ul|ol|li|h[1-6]|img|a)\b[^>]*>/i,
+    )
+    if (tagMatch) {
+      problems.push(trimmed.slice(0, 120))
+      if (problems.length >= 3) return problems
+    }
     const entityMatch = line.match(/&(amp|lt|gt|nbsp|quot|apos);/)
-    if (entityMatch) { problems.push(trimmed.slice(0, 120)); if (problems.length >= 3) return problems }
+    if (entityMatch) {
+      problems.push(trimmed.slice(0, 120))
+      if (problems.length >= 3) return problems
+    }
   }
   return problems
 }
 
 function classifyError(diagnostics: string[]): FailureMode {
   const text = diagnostics.join('\n')
-  if (text.includes('package not found') || text.includes('@preview')) return 'missing_package'
+  if (text.includes('package not found') || text.includes('@preview'))
+    return 'missing_package'
   if (/undefined variable.*fig-/.test(text)) return 'missing_figure'
   return 'compile_error'
 }
 
-function compileTypst(source: string): { ok: boolean; diagnostics: string[]; sourceSnippet: string[] } {
-  const tmpFile = join(TMP_DIR, `${Date.now()}-${Math.random().toString(36).slice(2)}.typ`)
+function compileTypst(source: string): {
+  ok: boolean
+  diagnostics: string[]
+  sourceSnippet: string[]
+} {
+  const tmpFile = join(
+    TMP_DIR,
+    `${Date.now()}-${Math.random().toString(36).slice(2)}.typ`,
+  )
   try {
     writeFileSync(tmpFile, source, 'utf8')
-    const result = spawnSync('typst', ['compile', tmpFile, '--font-path', FONT_PATH, '--format', 'pdf', '/dev/null'], {
-      timeout: 30_000, encoding: 'utf8',
-    })
+    const result = spawnSync(
+      'typst',
+      [
+        'compile',
+        tmpFile,
+        '--font-path',
+        FONT_PATH,
+        '--format',
+        'pdf',
+        '/dev/null',
+      ],
+      {
+        timeout: 30_000,
+        encoding: 'utf8',
+      },
+    )
     const stderr = (result.stderr ?? '') + (result.stdout ?? '')
-    const diagnostics = stderr.split('\n').filter((l) => l.trim()).filter((l) => /error:|warning:/.test(l))
+    const diagnostics = stderr
+      .split('\n')
+      .filter((l) => l.trim())
+      .filter((l) => /error:|warning:/.test(l))
     const sourceSnippet: string[] = []
     if (result.status !== 0) {
       const sourceLines = source.split('\n')
@@ -230,16 +373,28 @@ function compileTypst(source: string): { ok: boolean; diagnostics: string[]; sou
         const m = diag.match(/:(\d+):\d+:/)
         if (m) {
           const ln = parseInt(m[1], 10) - 1
-          for (let i = Math.max(0, ln - 1); i <= Math.min(sourceLines.length - 1, ln + 1); i++) lineNums.add(i)
+          for (
+            let i = Math.max(0, ln - 1);
+            i <= Math.min(sourceLines.length - 1, ln + 1);
+            i++
+          )
+            lineNums.add(i)
         }
       }
-      for (const ln of [...lineNums].sort((a, b) => a - b)) sourceSnippet.push(`${ln + 1}: ${sourceLines[ln]}`)
+      for (const ln of [...lineNums].sort((a, b) => a - b))
+        sourceSnippet.push(`${ln + 1}: ${sourceLines[ln]}`)
     }
     const ok = result.status === 0
-    if (!ok) { try { writeFileSync('/tmp/typst-last-error.typ', source) } catch {} }
+    if (!ok) {
+      try {
+        writeFileSync('/tmp/typst-last-error.typ', source)
+      } catch {}
+    }
     return { ok, diagnostics, sourceSnippet }
   } finally {
-    try { rmSync(tmpFile) } catch {}
+    try {
+      rmSync(tmpFile)
+    } catch {}
   }
 }
 
@@ -268,25 +423,40 @@ const SIMPLE_MODE_UUIDS = new Set([
   'c0f90', // runtime error (Cannot set properties of undefined)
 ])
 
-async function checkExerciseFile(fp: string, id: string, r: string, checkLevel: number, root: string): Promise<ExerciseEntry> {
+async function checkExerciseFile(
+  fp: string,
+  id: string,
+  r: string,
+  checkLevel: number,
+  root: string,
+): Promise<ExerciseEntry> {
   const entry: ExerciseEntry = {
-    uuid: id, ref: r, file: fp.replace(root + '/', ''),
-    lastChecked: new Date().toISOString(), status: 'untested', checkedLevel: 0,
-    failureMode: null, notes: '', variationsTested: [], diagnostics: [],
+    uuid: id,
+    ref: r,
+    file: fp.replace(root + '/', ''),
+    lastChecked: new Date().toISOString(),
+    status: 'untested',
+    checkedLevel: 0,
+    failureMode: null,
+    notes: '',
+    variationsTested: [],
+    diagnostics: [],
   }
 
   let mod: any
   try {
     mod = await import(pathToFileURL(fp).href)
   } catch (err: any) {
-    entry.status = 'failing'; entry.failureMode = 'runtime_error'
+    entry.status = 'failing'
+    entry.failureMode = 'runtime_error'
     entry.notes = `Erreur d'import: ${String(err?.message ?? err).slice(0, 120)}`
     return entry
   }
 
   const ExerciceClass = mod.default
   if (typeof ExerciceClass !== 'function') {
-    entry.status = 'skip'; entry.notes = 'Pas de classe exportée par défaut'
+    entry.status = 'skip'
+    entry.notes = 'Pas de classe exportée par défaut'
     return entry
   }
 
@@ -294,14 +464,22 @@ async function checkExerciseFile(fp: string, id: string, r: string, checkLevel: 
   try {
     exercice = new ExerciceClass()
   } catch (err: any) {
-    entry.status = 'failing'; entry.failureMode = 'runtime_error'
+    entry.status = 'failing'
+    entry.failureMode = 'runtime_error'
     entry.notes = `Erreur de construction: ${String(err?.message ?? err).slice(0, 120)}`
     return entry
   }
 
   const type = exercice.typeExercice ?? ''
-  if (type === 'html' || (type !== 'simple' && type !== '' && type !== 'statique' && !exercice.nouvelleVersion)) {
-    entry.status = 'skip'; entry.failureMode = 'interactive_only'
+  if (
+    type === 'html' ||
+    (type !== 'simple' &&
+      type !== '' &&
+      type !== 'statique' &&
+      !exercice.nouvelleVersion)
+  ) {
+    entry.status = 'skip'
+    entry.failureMode = 'interactive_only'
     entry.notes = `typeExercice="${type}" — pas de rendu Typst attendu`
     return entry
   }
@@ -320,7 +498,15 @@ async function checkExerciseFile(fp: string, id: string, r: string, checkLevel: 
   const v5 = simpleMode ? [undefined] : sampleSupWithFallback(sup5)
 
   const MAX_COMBOS = 27
-  const combos: Array<[number|undefined, number|undefined, number|undefined, number|undefined, number|undefined]> = []
+  const combos: Array<
+    [
+      number | undefined,
+      number | undefined,
+      number | undefined,
+      number | undefined,
+      number | undefined,
+    ]
+  > = []
   outer: for (const k1 of v1)
     for (const k2 of v2)
       for (const k3 of v3)
@@ -330,7 +516,11 @@ async function checkExerciseFile(fp: string, id: string, r: string, checkLevel: 
             if (combos.length >= MAX_COMBOS) break outer
           }
 
-  let firstFailure: { mode: FailureMode; notes: string; diagnostics: string[] } | null = null
+  let firstFailure: {
+    mode: FailureMode
+    notes: string
+    diagnostics: string[]
+  } | null = null
   let anyPassing = false
   const testedSigs: string[] = []
 
@@ -346,7 +536,8 @@ async function checkExerciseFile(fp: string, id: string, r: string, checkLevel: 
 
     try {
       const prevCtx = { isHtml: context.isHtml, isAmc: context.isAmc }
-      context.isHtml = true; context.isAmc = false
+      context.isHtml = true
+      context.isAmc = false
       seedrandom('typst-check', { global: true })
       exercice.numeroExercice = 0
       if (typeof exercice.applyNewSeed === 'function') exercice.applyNewSeed()
@@ -359,41 +550,74 @@ async function checkExerciseFile(fp: string, id: string, r: string, checkLevel: 
       } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
         exercice.nouvelleVersionWrapper(0)
       }
-      context.isHtml = prevCtx.isHtml; context.isAmc = prevCtx.isAmc
+      context.isHtml = prevCtx.isHtml
+      context.isAmc = prevCtx.isAmc
     } catch (err: any) {
-      if (!firstFailure) firstFailure = { mode: 'runtime_error', notes: `[${sig}] Runtime: ${String(err?.message ?? err).slice(0, 120)}`, diagnostics: [] }
+      if (!firstFailure)
+        firstFailure = {
+          mode: 'runtime_error',
+          notes: `[${sig}] Runtime: ${String(err?.message ?? err).slice(0, 120)}`,
+          diagnostics: [],
+        }
       continue
     }
 
-    const fmt = (text: string) => mathaleaFormatExercice(text).replaceAll('{zoomFactor}', '1')
+    const fmt = (text: string) =>
+      mathaleaFormatExercice(text).replaceAll('{zoomFactor}', '1')
     const questions = (exercice.listeQuestions ?? []).map(fmt)
     const corrections = (exercice.listeCorrections ?? []).map(fmt)
     const intro = mathaleaFormatExercice(
-      [exercice.consigne, exercice.introduction].filter((t: any) => t != null && String(t).length > 0).join('<br>'),
+      [exercice.consigne, exercice.introduction]
+        .filter((t: any) => t != null && String(t).length > 0)
+        .join('<br>'),
     )
-    const introCorrection = mathaleaFormatExercice(exercice.consigneCorrection ?? '')
-    const numbered = questions.length > 1 && exercice.listeAvecNumerotation !== false
+    const introCorrection = mathaleaFormatExercice(
+      exercice.consigneCorrection ?? '',
+    )
+    const numbered =
+      questions.length > 1 && exercice.listeAvecNumerotation !== false
 
     let typstSource = ''
     try {
-      typstSource = buildTypstDocument([{ ref: r, intro, questions, corrections, introCorrection, numbered }])
+      typstSource = buildTypstDocument([
+        { ref: r, intro, questions, corrections, introCorrection, numbered },
+      ])
     } catch (err: any) {
-      if (!firstFailure) firstFailure = { mode: 'compile_error', notes: `[${sig}] buildTypstDocument: ${String(err?.message ?? err).slice(0, 120)}`, diagnostics: [] }
+      if (!firstFailure)
+        firstFailure = {
+          mode: 'compile_error',
+          notes: `[${sig}] buildTypstDocument: ${String(err?.message ?? err).slice(0, 120)}`,
+          diagnostics: [],
+        }
       continue
     }
 
     if (process.env.DUMP_TYPST) {
-      const dumpFile = join(process.env.DUMP_TYPST, `${r.replaceAll('/', '_')}-${testedSigs.length}.typ`)
-      try { mkdirSync(process.env.DUMP_TYPST, { recursive: true }); writeFileSync(dumpFile, typstSource) } catch {}
+      const dumpFile = join(
+        process.env.DUMP_TYPST,
+        `${r.replaceAll('/', '_')}-${testedSigs.length}.typ`,
+      )
+      try {
+        mkdirSync(process.env.DUMP_TYPST, { recursive: true })
+        writeFileSync(dumpFile, typstSource)
+      } catch {}
     }
 
     const unprocessedMath = detectUnprocessedMath(typstSource)
     const htmlRemnants = detectHtmlRemnants(typstSource)
 
     if (unprocessedMath.length > 0 && !firstFailure) {
-      firstFailure = { mode: 'unprocessed_math', notes: `[${sig}] Maths non converties : ${unprocessedMath.join(' | ')}`, diagnostics: unprocessedMath }
+      firstFailure = {
+        mode: 'unprocessed_math',
+        notes: `[${sig}] Maths non converties : ${unprocessedMath.join(' | ')}`,
+        diagnostics: unprocessedMath,
+      }
     } else if (htmlRemnants.length > 0 && !firstFailure) {
-      firstFailure = { mode: 'unprocessed_math', notes: `[${sig}] HTML non converti : ${htmlRemnants.join(' | ')}`, diagnostics: htmlRemnants }
+      firstFailure = {
+        mode: 'unprocessed_math',
+        notes: `[${sig}] HTML non converti : ${htmlRemnants.join(' | ')}`,
+        diagnostics: htmlRemnants,
+      }
     }
 
     if (checkLevel < 2) {
@@ -408,21 +632,37 @@ async function checkExerciseFile(fp: string, id: string, r: string, checkLevel: 
       const mode = classifyError(diagnostics)
       if (!firstFailure) {
         const errorLines = diagnostics.slice(0, 3).join(' | ')
-        const contextLines = sourceSnippet.length > 0 ? '\n' + sourceSnippet.join('\n') : ''
-        firstFailure = { mode, notes: `[${sig}] ${errorLines}${contextLines}`, diagnostics: [...diagnostics, ...sourceSnippet] }
+        const contextLines =
+          sourceSnippet.length > 0 ? '\n' + sourceSnippet.join('\n') : ''
+        firstFailure = {
+          mode,
+          notes: `[${sig}] ${errorLines}${contextLines}`,
+          diagnostics: [...diagnostics, ...sourceSnippet],
+        }
       }
     }
   }
 
   entry.variationsTested = testedSigs
   if (firstFailure) {
-    entry.status = firstFailure.mode === 'unprocessed_math' ? 'partial' : 'failing'
-    entry.failureMode = firstFailure.mode; entry.notes = firstFailure.notes; entry.diagnostics = firstFailure.diagnostics
-    entry.checkedLevel = (firstFailure.mode === 'compile_error' || firstFailure.mode === 'missing_figure' || firstFailure.mode === 'missing_package') ? 2 : 1
+    entry.status =
+      firstFailure.mode === 'unprocessed_math' ? 'partial' : 'failing'
+    entry.failureMode = firstFailure.mode
+    entry.notes = firstFailure.notes
+    entry.diagnostics = firstFailure.diagnostics
+    entry.checkedLevel =
+      firstFailure.mode === 'compile_error' ||
+      firstFailure.mode === 'missing_figure' ||
+      firstFailure.mode === 'missing_package'
+        ? 2
+        : 1
   } else if (anyPassing) {
-    entry.status = 'passing'; entry.checkedLevel = checkLevel as 1 | 2
+    entry.status = 'passing'
+    entry.checkedLevel = checkLevel as 1 | 2
   } else {
-    entry.status = 'skip'; entry.notes = 'Aucune variation générée'; entry.checkedLevel = checkLevel as 1 | 2
+    entry.status = 'skip'
+    entry.notes = 'Aucune variation générée'
+    entry.checkedLevel = checkLevel as 1 | 2
   }
   return entry
 }
@@ -434,17 +674,28 @@ parentPort!.postMessage({ type: 'ready' })
 parentPort!.on('message', async (msg: CheckRequest) => {
   if (msg.type !== 'check') return
   try {
-    const result = await checkExerciseFile(msg.filePath, msg.uuid, msg.ref, msg.checkLevel, msg.root)
+    const result = await checkExerciseFile(
+      msg.filePath,
+      msg.uuid,
+      msg.ref,
+      msg.checkLevel,
+      msg.root,
+    )
     parentPort!.postMessage({ type: 'result', result })
   } catch (err: any) {
     parentPort!.postMessage({
       type: 'result',
       result: {
-        uuid: msg.uuid, ref: msg.ref, file: msg.filePath.replace(msg.root + '/', ''),
+        uuid: msg.uuid,
+        ref: msg.ref,
+        file: msg.filePath.replace(msg.root + '/', ''),
         lastChecked: new Date().toISOString(),
-        status: 'failing', checkedLevel: 0, failureMode: 'runtime_error',
+        status: 'failing',
+        checkedLevel: 0,
+        failureMode: 'runtime_error',
         notes: `Worker error: ${String(err?.message ?? err).slice(0, 200)}`,
-        variationsTested: [], diagnostics: [],
+        variationsTested: [],
+        diagnostics: [],
       } satisfies ExerciseEntry,
     })
   }

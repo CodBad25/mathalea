@@ -113,6 +113,7 @@
     "@myriaddreamin/typst.ts": "^0.7.0",
     "@scratch2latex/scratch-core": "git+https://forge.apps.education.fr/coopmaths/scratch-core.git#main",
     "@svgdotjs/svg.js": "^3.2.5",
+    "@types/jsdom": "^28.0.3",
     "@types/jspreadsheet-ce": "^4.7.9",
     "@types/nunjucks": "^3.2.6",
     "@types/three": "^0.182.0",
