@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'c9efa'
 
 export const refs = {
-  'fr-fr': ['1A-E03-1'],
+  'fr-fr': ['1A-E03-1', '2A-E3-1'],
   'fr-ch': [],
 }
 export default class Auto1AE3 extends PoucentageE2 {

@@ -2487,6 +2487,18 @@
   "2A-C5": {
     "titre": "Effectuer une application numérique d’une formule"
   },
+  "2A-E": {
+    "titre": "Évolutions et variations"
+  },
+  "2A-E1": {
+    "titre": "Passer d’une formulation additive à une formulation multiplicative"
+  },
+  "2A-E2": {
+    "titre": "Appliquer un taux d’évolution pour calculer une valeur finale ou initiale"
+  },
+  "2A-E3": {
+    "titre": "Calculer un taux d’évolution, l’exprimer en pourcentage"
+  },
   "2A-F": {
     "titre": "Fonctions"
   },
