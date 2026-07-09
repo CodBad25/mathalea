@@ -857,6 +857,7 @@
       marginHMm: defaultA4Options.marginHMm,
       marginVMm: defaultA4Options.marginVMm,
       lineHeightFactor: defaultA4Options.lineHeightFactor,
+      blankLineHeight: defaultA4Options.blankLineHeight,
       questionSpacing: defaultA4Options.questionSpacing,
       exerciseSpacing: defaultA4Options.exerciseSpacing,
       wordSpacingEm: defaultA4Options.wordSpacingEm,
@@ -1646,7 +1647,7 @@
                                   {/if}
                                 </div>
                               {/if}
-                              <A4Unit {unit} />
+                              <A4Unit {unit} blankLineHeight={options.blankLineHeight} />
                             </div>
                           {:else if section.kind === 'subject'}
                             <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -1812,7 +1813,7 @@
                                   </button>
                                 </div>
                               {/if}
-                              <A4Unit {unit} />
+                              <A4Unit {unit} blankLineHeight={options.blankLineHeight} />
                             </div>
                           {:else}
                             <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -1823,7 +1824,7 @@
                                 : undefined}
                               on:dblclick={() => openEditor(unit)}
                             >
-                              <A4Unit {unit} />
+                              <A4Unit {unit} blankLineHeight={options.blankLineHeight} />
                             </div>
                           {/if}
                         {/each}
@@ -1859,7 +1860,7 @@
       {#each sections as section, sectionIndex}
         {#each section.units as unit (unit.id)}
           <div data-unit data-section={sectionIndex}>
-            <A4Unit {unit} />
+            <A4Unit {unit} blankLineHeight={options.blankLineHeight} />
           </div>
         {/each}
       {/each}
@@ -1908,14 +1909,15 @@
       textBlocksBefore[editing.exerciseIndex] != null
         ? 'Supprimer le bloc'
         : null}
-      on:save={(event) => saveEditing(event.detail.source)}
-      on:restore={restoreCustomContent}
-      on:delete={() => {
+      blankLineHeight={options.blankLineHeight}
+      onSave={(source) => saveEditing(source)}
+      onRestore={restoreCustomContent}
+      onDelete={() => {
         if (editing?.type === 'textblock') {
           deleteTextBlock(editing.exerciseIndex)
         }
       }}
-      on:close={() => (editing = null)}
+      onClose={() => (editing = null)}
     />
   {/if}
 
@@ -2029,6 +2031,20 @@
             on:change={() => scheduleRefresh(true, 0)}
           />
         </div>
+
+        <!-- <div class="flex items-center justify-between gap-4 text-sm">
+          <label for="a4-blank-line-height-input">Hauteur des lignes vides</label>
+          <input
+            id="a4-blank-line-height-input"
+            type="number"
+            min="0"
+            max="2"
+            step="0.1"
+            class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            bind:value={options.blankLineHeight}
+            on:change={() => scheduleRefresh(true, 0)}
+          />
+        </div> -->
 
         <div class="flex items-center justify-between gap-4 text-sm">
           <label for="a4-question-spacing-input">Espacement entre les questions</label>
