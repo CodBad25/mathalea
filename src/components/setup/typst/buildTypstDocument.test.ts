@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   buildTypstDocument,
   defaultTypstDocumentOptions,
+  harvestCarryOver,
   type TypstExerciseInput,
 } from './buildTypstDocument'
 
@@ -44,12 +45,17 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('solution: [')
     expect(code).toContain('#ex1()')
     expect(code).toContain('#exo-print-solutions(title: none)')
-    expect(code).toContain('#import "@preview/taskize:0.2.5": tasks')
+    expect(code).toContain('#import "@preview/taskize:0.2.6": tasks')
     expect(code).toContain('#let ex1-colonnes = 1')
-    expect(code).toContain('#let interligne-questions = 1em')
+    expect(code).toContain('#let interligne-questions = 1.2em')
     expect(code).toContain('#let ex1-gutter = interligne-questions')
+    // la correction a ses propres réglages, indépendants de l'énoncé
+    expect(code).toContain('#let ex1-corr-colonnes = 1')
+    expect(code).toContain('#let ex1-corr-gutter = interligne-questions')
+    expect(code).toContain('#tasks(columns: ex1-corr-colonnes')
+    expect(code).toContain('#mathalea-anchor("tasks-corr", 1)')
     expect(code).toContain(
-      '#tasks(columns: ex1-colonnes, label: "1.", row-gutter: ex1-gutter, above: 0.8em, below: 0.8em, start: 1)[\n      + $2 + 2$\n      + $3 times 4$\n    ]',
+      '#tasks(columns: ex1-colonnes, label: "1.", row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + $2 + 2$\n      + $3 times 4$\n    ]',
     )
     expect(code).toContain('#if corrige [')
     // les corrections démarrent sur une nouvelle page
@@ -79,7 +85,7 @@ describe('buildTypstDocument', () => {
       { ...defaultTypstDocumentOptions, boldQuestionNumbers: false },
     )
     expect(code).toContain(
-      '#tasks(columns: ex1-colonnes, label: "a)", row-gutter: ex1-gutter, above: 0.8em, below: 0.8em, start: 1)[\n      + Question une.\n      + Question deux.\n    ]',
+      '#tasks(columns: ex1-colonnes, label: "a)", row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + Question une.\n      + Question deux.\n    ]',
     )
     expect(code).toContain('Voici la figure.')
     expect(code).toContain('#let ex1-colonnes = 1')
@@ -101,7 +107,7 @@ describe('buildTypstDocument', () => {
       { ...defaultTypstDocumentOptions, boldQuestionNumbers: false },
     )
     expect(code).toContain(
-      '#tasks(columns: ex1-colonnes, label: "a)", row-gutter: ex1-gutter, above: 0.8em, below: 0.8em, start: 1)[',
+      '#tasks(columns: ex1-colonnes, label: "a)", row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[',
     )
     expect(code).toContain('+ Première question ?')
     expect(code).toContain('+ Deuxième question ?')
@@ -113,7 +119,7 @@ describe('buildTypstDocument', () => {
       exercise({ questions: ['a) $1+1$', 'b) $2+2$'], numbered: false }),
     ])
     expect(code).toContain(
-      '#tasks(columns: ex1-colonnes, label: none, row-gutter: ex1-gutter, above: 0.8em, below: 0.8em, start: 1)[\n      + a) $1 + 1$\n      + b) $2 + 2$\n    ]',
+      '#tasks(columns: ex1-colonnes, label: none, row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + a) $1 + 1$\n      + b) $2 + 2$\n    ]',
     )
     expect(code).toContain('#let ex1-colonnes = 1')
   })
@@ -191,7 +197,7 @@ describe('buildTypstDocument', () => {
         ],
       }),
     ])
-    expect(code).toContain('#import "@preview/taskize:0.2.5": tasks')
+    expect(code).toContain('#import "@preview/taskize:0.2.6": tasks')
     expect(code).toContain('#let qcm-colonnes = 2')
     expect(code).toContain('#let qcm-bonne(')
     expect(code).toContain('#tasks(columns: qcm-colonnes')
@@ -241,18 +247,19 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('#set page(paper: "a5", flipped: true,')
   })
 
-  it('utilise des badges noirs par défaut', () => {
+  it('utilise des badges soulignés orange par défaut', () => {
     const code = buildTypstDocument([
       exercise({ questions: ['$1+1$', '$2+2$'] }),
     ])
-    expect(code).toContain('#let couleur = black')
-    expect(code).toContain('badge-style: "border-accent",')
+    expect(code).toContain('#let couleur = rgb("#f15929")')
+    expect(code).toContain('badge-style: "underline",')
   })
 
   it('choisit le style de badge et compacte la colonne des styles en marge', () => {
-    const borderAccent = buildTypstDocument([
-      exercise({ questions: ['$1+1$'] }),
-    ])
+    const borderAccent = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      { ...defaultTypstDocumentOptions, badgeStyle: 'border-accent' },
+    )
     expect(borderAccent).toContain('badge-style: "border-accent",')
     expect(borderAccent).toContain('margin: (x: 15mm, y: 15mm)')
     // style pleine largeur : pas de réglage de colonne
@@ -323,6 +330,95 @@ describe('buildTypstDocument', () => {
       badgeColor: 'rgb("#f15929")',
     })
     expect(code).toContain('#let couleur = rgb("#f15929")')
+  })
+
+  it('émet les repères de la palette de mise en page', () => {
+    const code = buildTypstDocument([
+      exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
+      exercise({ questions: ['$3+3$'], ref: '' }),
+    ])
+    expect(code).toContain('#let mathalea-anchor(kind, num)')
+    // un repère devant chaque environnement tasks
+    expect(code).toContain('#mathalea-anchor("tasks", 1)\n    #tasks(')
+    // un repère de gap avant le premier exercice et après chacun, et un
+    // repère "exo" (contrôles de l'exercice) devant chaque exercice
+    expect(code).toContain(
+      '#mathalea-anchor("gap", 0)\n  #mathalea-anchor("exo", 1)\n  #ex1()',
+    )
+    expect(code).toContain('#ex1()\n  #mathalea-anchor("gap", 1)')
+    expect(code).toContain('#ex2()\n  #mathalea-anchor("gap", 2)')
+    // le helper est défini avant la banque (exo.with évalue son contenu)
+    expect(code.indexOf('#let mathalea-anchor')).toBeLessThan(
+      code.indexOf('#let ex1 = exo.with('),
+    )
+    // titre de section insérable entre les exercices
+    expect(code).toContain('#let section(titre)')
+    // repère du bloc de titre (édition du titre/en-tête depuis l'aperçu)
+    expect(code).toContain('#mathalea-anchor("header", 0)')
+  })
+
+  it('émet les repères de gap aussi en mode fusionné', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })],
+      { ...defaultTypstDocumentOptions, mergeExercises: true },
+    )
+    expect(code).toContain('#let mathalea-anchor(kind, num)')
+    expect(code).toContain('#mathalea-anchor("gap", 1)')
+  })
+
+  it('reprend les réglages de la palette (carry-over) à la régénération', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })],
+      defaultTypstDocumentOptions,
+      {
+        tasksLayout: { ex1: { columns: '2', gutter: '1.5em' } },
+        insertions: {
+          0: ['Consignes générales.'],
+          1: ['#section[Monômes]', 'Un texte libre'],
+        },
+      },
+    )
+    expect(code).toContain('#let ex1-colonnes = 2')
+    expect(code).toContain('#let ex1-gutter = 1.5em')
+    expect(code).toContain('  #section[Monômes] // mathalea:insertion')
+    expect(code).toContain('  Un texte libre // mathalea:insertion')
+    // l'insertion « avant le premier exercice » précède l'exercice 1
+    expect(code.indexOf('Consignes générales.')).toBeLessThan(
+      code.indexOf('#ex1()'),
+    )
+    // les insertions suivent le repère de gap de leur exercice
+    expect(code.indexOf('#mathalea-anchor("gap", 1)')).toBeLessThan(
+      code.indexOf('#section[Monômes]'),
+    )
+  })
+
+  it('harvestCarryOver relit colonnes, espacement et insertions du code', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: ['$1+1$', '$2+2$'],
+          corrections: ['$2$', '$4$'],
+          numbered: true,
+        }),
+        exercise({ questions: ['$3+3$', '$4+4$'], numbered: true, ref: '' }),
+      ],
+      defaultTypstDocumentOptions,
+      {
+        tasksLayout: { ex2: { columns: '3' }, 'ex1-corr': { gutter: '0.5em' } },
+        insertions: { 0: ['Consignes générales.'], 1: ['#section[Monômes]'] },
+      },
+    )
+    const harvested = harvestCarryOver(code)
+    // les valeurs par défaut (1 colonne, interligne-questions) ne sont pas
+    // reprises ; la correction (ex1-corr) est indépendante de l'énoncé
+    expect(harvested.tasksLayout).toEqual({
+      ex2: { columns: '3' },
+      'ex1-corr': { gutter: '0.5em' },
+    })
+    expect(harvested.insertions).toEqual({
+      0: ['Consignes générales.'],
+      1: ['#section[Monômes]'],
+    })
   })
 
   it('affiche la référence (show-id) des exercices seulement si demandé', () => {

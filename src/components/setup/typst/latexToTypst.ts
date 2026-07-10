@@ -67,7 +67,7 @@ export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0
 ])`
 
 /** Import du paquet taskize (mise en colonnes des propositions de QCM) */
-export const TASKIZE_IMPORT = '#import "@preview/taskize:0.2.5": tasks'
+export const TASKIZE_IMPORT = '#import "@preview/taskize:0.2.6": tasks'
 
 /**
  * Aides Typst pour les QCM : une case à cocher (vide dans l'énoncé, remplie
@@ -75,6 +75,23 @@ export const TASKIZE_IMPORT = '#import "@preview/taskize:0.2.5": tasks'
  */
 export const MATHALEA_QCM_HELPERS =
   '#let qcm-bonne(corps) = text(fill: couleur, weight: "bold", corps)'
+
+/**
+ * Aide Typst pour les schémas en barres (SchemaEnBoite) : une accolade ou une
+ * flèche étirée sur toute la largeur de sa cellule, avec son étiquette.
+ */
+export const MATHALEA_SCHEMA_HELPER = `#let mathalea-schema-span(label, kind: "brace", flip: false, color: black) = layout(size => {
+  let deco = text(fill: color, size: 0.9em,
+    if kind == "arrow" {
+      $ stretch(<->, size: #size.width) $
+    } else if flip {
+      $ stretch(brace.b, size: #size.width) $
+    } else {
+      $ stretch(brace.t, size: #size.width) $
+    })
+  let lbl = align(center, text(fill: color, label))
+  if flip { stack(spacing: 2pt, deco, lbl) } else { stack(spacing: 2pt, lbl, deco) }
+})`
 
 const LATEX_SIZE_TO_TYPST_SIZE: Record<string, string> = {
   tiny: '0.55em',
@@ -175,7 +192,9 @@ function replaceBalancedInlineMath(
 function preprocessTex(tex: string): string {
   // les jetons de protection htmlToTypst (\uE000N\uE001) ne sont pas du LaTeX
   // valide ; ils peuvent fuir dans un bloc $…$ via des $$ adjacents — on les supprime
-  let output = replaceColorGroups(decodeEntities(tex.replace(/\uE000\d+\uE001/g, '')))
+  let output = replaceColorGroups(
+    decodeEntities(tex.replace(/\uE000\d+\uE001/g, '')),
+  )
   output = stripLatexSizeCommands(output)
   // Unités écrites avec des $ imbriqués dans \text{} (ex. `m$^2$`,
   // `$\text{cm}^2$` de MathALÉA) : à l'intérieur de \text{}, `$…$` rebascule
@@ -235,8 +254,14 @@ function preprocessTex(tex: string): string {
   // Les \text{} imbriqués (produits par le remplacement des ; ou par \text{\text{m}}) :
   // \text{ \text{;} } → \text{ ; }  ou  \text{ \text{m} } → \text{ m }
   // On répète deux fois pour gérer les doubles imbrications
-  output = output.replace(/\\text\{([^{}]*?)\\text\{([^{}]*?)\}([^{}]*?)\}/g, '\\text{$1$2$3}')
-  output = output.replace(/\\text\{([^{}]*?)\\text\{([^{}]*?)\}([^{}]*?)\}/g, '\\text{$1$2$3}')
+  output = output.replace(
+    /\\text\{([^{}]*?)\\text\{([^{}]*?)\}([^{}]*?)\}/g,
+    '\\text{$1$2$3}',
+  )
+  output = output.replace(
+    /\\text\{([^{}]*?)\\text\{([^{}]*?)\}([^{}]*?)\}/g,
+    '\\text{$1$2$3}',
+  )
   // \num{12\,345,6} et \numprint{...} : on garde le contenu tel quel,
   // la virgule décimale devenant \dcomma (voir CUSTOM_TEX_MACROS)
   output = output.replace(
@@ -254,23 +279,44 @@ function preprocessTex(tex: string): string {
   // \phantom / \vphantom n'ont pas d'équivalent direct : on les remplace par une espace.
   // Le contenu peut avoir un niveau d'imbrication (ex. \phantom{\frac{a}{b}})
   // → [^{}]|\{[^{}]*\} capture les groupes imbriqués
-  output = output.replace(/\\(?:phantom|hphantom|vphantom)\s*\{(?:[^{}]|\{[^{}]*\})*\}/g, '\\;')
+  output = output.replace(
+    /\\(?:phantom|hphantom|vphantom)\s*\{(?:[^{}]|\{[^{}]*\})*\}/g,
+    '\\;',
+  )
   // Contenu LaTeX avec un niveau d'imbrication de {} (ex. \xrightarrow{+x~\text{min}})
   const B1 = '(?:[^{}]|\\{[^{}]*\\})*'
   // \xrightarrow{X} → \overset{X}{\rightarrow} (tex2typst ne connaît pas \xrightarrow)
-  output = output.replace(new RegExp(`\\\\xrightarrow\\s*(?:\\[[^\\]]*\\])?\\s*\\{(${B1})\\}`, 'g'), '\\overset{$1}{\\rightarrow}')
+  output = output.replace(
+    new RegExp(`\\\\xrightarrow\\s*(?:\\[[^\\]]*\\])?\\s*\\{(${B1})\\}`, 'g'),
+    '\\overset{$1}{\\rightarrow}',
+  )
   // \xleftarrow{X} → \overset{X}{\leftarrow}
-  output = output.replace(new RegExp(`\\\\xleftarrow\\s*(?:\\[[^\\]]*\\])?\\s*\\{(${B1})\\}`, 'g'), '\\overset{$1}{\\leftarrow}')
+  output = output.replace(
+    new RegExp(`\\\\xleftarrow\\s*(?:\\[[^\\]]*\\])?\\s*\\{(${B1})\\}`, 'g'),
+    '\\overset{$1}{\\leftarrow}',
+  )
   // \stackrel{A}{B} → \overset{A}{B} (tex2typst ne connaît pas \stackrel)
   output = output.replace(/\\stackrel\s*\{/g, '\\overset{')
   // \bf{X} (ancienne commande LaTeX) → \mathbf{X}
   output = output.replace(/\\bf\s*\{/g, '\\mathbf{')
   // \fbox{X} → \text{[X]} (boîte autour du texte — approximation)
-  output = output.replace(new RegExp(`\\\\fbox\\s*\\{(${B1})\\}`, 'g'), '\\text{[$1]}')
+  output = output.replace(
+    new RegExp(`\\\\fbox\\s*\\{(${B1})\\}`, 'g'),
+    '\\text{[$1]}',
+  )
   // \fcolorbox{bord}{fond}{X} → \text{[X]} (approximation)
-  output = output.replace(new RegExp(`\\\\fcolorbox\\s*\\{[^{}]*\\}\\s*\\{[^{}]*\\}\\s*\\{(${B1})\\}`, 'g'), '\\text{[$1]}')
+  output = output.replace(
+    new RegExp(
+      `\\\\fcolorbox\\s*\\{[^{}]*\\}\\s*\\{[^{}]*\\}\\s*\\{(${B1})\\}`,
+      'g',
+    ),
+    '\\text{[$1]}',
+  )
   // \boxed{X} → \text{[X]} approximation (tex2typst produit "boxed x" qui est inconnu)
-  output = output.replace(new RegExp(`\\\\boxed\\s*\\{(${B1})\\}`, 'g'), '\\text{[$1]}')
+  output = output.replace(
+    new RegExp(`\\\\boxed\\s*\\{(${B1})\\}`, 'g'),
+    '\\text{[$1]}',
+  )
   // \lvert..\rvert → |..|  /  \lVert..\rVert → ‖..‖
   output = output.replace(/\\lvert\b/g, '|').replace(/\\rvert\b/g, '|')
   output = output.replace(/\\lVert\b/g, '\\|').replace(/\\rVert\b/g, '\\|')
@@ -291,7 +337,10 @@ function preprocessTex(tex: string): string {
   // \overset{\rule{w}{h}}{X} → \overline{X} : filet horizontal au-dessus d'un symbole
   // (utilisé pour le complément d'un événement, ex. \overset{\rule{0.8em}{0.08em}}{A})
   output = output.replace(
-    new RegExp(`\\\\overset\\s*\\{\\\\rule\\s*\\{[^{}]*\\}\\s*\\{[^{}]*\\}\\}\\s*\\{(${B1})\\}`, 'g'),
+    new RegExp(
+      `\\\\overset\\s*\\{\\\\rule\\s*\\{[^{}]*\\}\\s*\\{[^{}]*\\}\\}\\s*\\{(${B1})\\}`,
+      'g',
+    ),
     '\\overline{$1}',
   )
   // \rule{w}{h} résiduel → supprimé (ligne horizontale sans équivalent Typst direct)
@@ -323,7 +372,9 @@ function preprocessTex(tex: string): string {
   // accepte la formule sans erreur
   if (
     output.includes('&') &&
-    !/\\begin\{(?:array|tabular|tblr|align|aligned|alignedat|cases)\}/.test(output)
+    !/\\begin\{(?:array|tabular|tblr|align|aligned|alignedat|cases)\}/.test(
+      output,
+    )
   ) {
     output = `\\begin{aligned}${output}\\end{aligned}`
   }
@@ -404,66 +455,71 @@ function postprocessTypst(typst: string): string {
     })
   }
 
-  return result
-    // \mathbf{[}, \mathbf{]}, \textbf{[} etc. produisent upright(bold([)) ou bold([) en
-    // Typst mathématique : [ est interprété comme délimiteur ouvrant → "unclosed delimiter".
-    // On remplace par bracket.l / bracket.r (glyphes Typst).
-    .replace(/\bupright\(bold\(\[+\)\)/g, 'upright(bold(bracket.l))')
-    .replace(/\bupright\(bold\(\]+\)\)/g, 'upright(bold(bracket.r))')
-    .replace(/\bbold\(\[+\)\b/g, 'bold(bracket.l)')
-    .replace(/\bbold\(\]+\)\b/g, 'bold(bracket.r)')
-    .replace(/\bupright\(\[+\)\b/g, 'upright(bracket.l)')
-    .replace(/\bupright\(\]+\)\b/g, 'upright(bracket.r)')
-    // \mathbf{)} produit bold() vide (le ) ferme immédiatement bold() sans contenu).
-    // bold() sans corps → "missing argument: body" dans Typst. On remplace par paren.r.
-    .replace(/\bupright\(bold\(\)\)/g, 'upright(bold(paren.r))')
-    .replace(/\bbold\(\)\b/g, 'bold(paren.r)')
-    // \left[...\right] dans \mathbf{} produit [...] (crochets nus). Si plusieurs [A]×[B]
-    // se suivent, la séquence ]×[ crée de faux intervalles. On convertit TOUTES les paires
-    // équilibrées [...] en bracket.l/bracket.r sans délimiteurs actifs.
-    // Cas 1 : contenu avec caractères non-alphabétiques (ex. [(-6)×(-6)])
-    .replace(/\[([^\[\]]*[^a-zA-Z \t][^\[\]]*)\]/g, 'lr(bracket.l $1 bracket.r)')
-    // Cas 2 : contenu purement alphabétique entre crochets (ex. [union], [sect]).
-    // Contexte 2a : [union] ou [ union ] entre délimiteurs ']' et '[' —
-    //   on enlève les crochets : ]A[union]B[ → ]A union B[ → règle ] suivante.
-    // Contexte 2b : ']'+espaces+mot+espaces+'[' — l'opérateur d'ensemble (\cup, \cap)
-    //   apparaît ENTRE deux crochets d'intervalles ; on doit aussi l'extraire.
-    // Traitement unifié : tous les [alpha+] et ]alpha+[ sans autre contenu sont nettoyés.
-    .replace(/\[([a-zA-Z ]+)\]/g, ' $1 ')
-    // ]opérateur[ (ex. ]\cup[ devenu ] union [) entre deux délimiteurs d'intervalles :
-    // supprimer les crochets parasites autour du mot pour que l'intervalle englobant
-    // soit correctement reconnu par la règle ]...[  ci-après.
-    .replace(/\] {0,4}([a-zA-Z]+) {0,4}\[/g, ' $1 ')
-    // tex2typst produit #none_N pour un indice sans base LaTeX (ex. $_2$) →
-    // variable inconnue en Typst. On supprime le préfixe invalide.
-    .replace(/#none_\w+/g, '')
-    // tex2typst convertit \left]...\right[ en lr(]...[), \left[...\right[ en
-    // lr([...[). En Typst, ] et [ juste après/avant lr()/lr() sont parsés comme
-    // délimiteurs → "unclosed delimiter". On remplace par bracket.r/bracket.l.
-    // Cas 1 : ]...[ → intervalles ouverts
-    .replace(/lr\(\]([^\[\]]*)\[\)/g, 'lr(bracket.r $1 bracket.l)')
-    // Cas 2 : [...[ → semi-ouvert fermé à gauche, ouvert à droite
-    .replace(/lr\(\[([^\[\]]*)\[\)/g, 'lr(bracket.l $1 bracket.l)')
-    // Cas 3 : ]...] → semi-ouvert ouvert à gauche, fermé à droite
-    .replace(/lr\(\]([^\[\]]*)\]\)/g, 'lr(bracket.r $1 bracket.r)')
-    // Cas 4 : crochet + parenthèse mixtes (demi-droite [Oz), intervalle [a;b))
-    // produits par \left[…\right) → lr([… )). Le crochet resterait non fermé.
-    .replace(/lr\(\[([^\[\]()]*)\)\)/g, 'lr(bracket.l $1 paren.r)')
-    .replace(/lr\(\(([^\[\]()]*)\]\)/g, 'lr(paren.l $1 bracket.r)')
-    // Intervalles français nus (sans \left\right) : ]a;b[, ]a;b], [a;b[
-    // (après le traitement des lr(), il ne reste que des crochets résiduels)
-    // L'espace initial évite la concaténation d'identifiants : tex2typst peut
-    // coller des symboles contre ] sans espace (ex. "union]" → "union lr(…)").
-    .replace(/\]([^\[\]]*)\[/g, ' lr(bracket.r $1 bracket.l)')
-    .replace(/\]([^\[\]]*)\]/g, ' lr(bracket.r $1 bracket.r)')
-    .replace(/\[([^\[\]]*)\[/g, ' lr(bracket.l $1 bracket.l)')
-    // demi-droites / intervalles mixtes nus ([Oz), (a;b]) : crochet et
-    // parenthèse dépareillés → délimiteurs explicites dans un lr()
-    .replace(/\[([^\[\]()]*)\)/g, ' lr(bracket.l $1 paren.r)')
-    .replace(/\(([^\[\]()]*)\]/g, ' lr(paren.l $1 bracket.r)')
-    // virgule décimale : Typst la colle aux chiffres seulement si la
-    // chaîne `","` est écrite sans espaces autour
-    .replace(/(\d) ?"," ?(?=\d)/g, '$1","')
+  return (
+    result
+      // \mathbf{[}, \mathbf{]}, \textbf{[} etc. produisent upright(bold([)) ou bold([) en
+      // Typst mathématique : [ est interprété comme délimiteur ouvrant → "unclosed delimiter".
+      // On remplace par bracket.l / bracket.r (glyphes Typst).
+      .replace(/\bupright\(bold\(\[+\)\)/g, 'upright(bold(bracket.l))')
+      .replace(/\bupright\(bold\(\]+\)\)/g, 'upright(bold(bracket.r))')
+      .replace(/\bbold\(\[+\)\b/g, 'bold(bracket.l)')
+      .replace(/\bbold\(\]+\)\b/g, 'bold(bracket.r)')
+      .replace(/\bupright\(\[+\)\b/g, 'upright(bracket.l)')
+      .replace(/\bupright\(\]+\)\b/g, 'upright(bracket.r)')
+      // \mathbf{)} produit bold() vide (le ) ferme immédiatement bold() sans contenu).
+      // bold() sans corps → "missing argument: body" dans Typst. On remplace par paren.r.
+      .replace(/\bupright\(bold\(\)\)/g, 'upright(bold(paren.r))')
+      .replace(/\bbold\(\)\b/g, 'bold(paren.r)')
+      // \left[...\right] dans \mathbf{} produit [...] (crochets nus). Si plusieurs [A]×[B]
+      // se suivent, la séquence ]×[ crée de faux intervalles. On convertit TOUTES les paires
+      // équilibrées [...] en bracket.l/bracket.r sans délimiteurs actifs.
+      // Cas 1 : contenu avec caractères non-alphabétiques (ex. [(-6)×(-6)])
+      .replace(
+        /\[([^\[\]]*[^a-zA-Z \t][^\[\]]*)\]/g,
+        'lr(bracket.l $1 bracket.r)',
+      )
+      // Cas 2 : contenu purement alphabétique entre crochets (ex. [union], [sect]).
+      // Contexte 2a : [union] ou [ union ] entre délimiteurs ']' et '[' —
+      //   on enlève les crochets : ]A[union]B[ → ]A union B[ → règle ] suivante.
+      // Contexte 2b : ']'+espaces+mot+espaces+'[' — l'opérateur d'ensemble (\cup, \cap)
+      //   apparaît ENTRE deux crochets d'intervalles ; on doit aussi l'extraire.
+      // Traitement unifié : tous les [alpha+] et ]alpha+[ sans autre contenu sont nettoyés.
+      .replace(/\[([a-zA-Z ]+)\]/g, ' $1 ')
+      // ]opérateur[ (ex. ]\cup[ devenu ] union [) entre deux délimiteurs d'intervalles :
+      // supprimer les crochets parasites autour du mot pour que l'intervalle englobant
+      // soit correctement reconnu par la règle ]...[  ci-après.
+      .replace(/\] {0,4}([a-zA-Z]+) {0,4}\[/g, ' $1 ')
+      // tex2typst produit #none_N pour un indice sans base LaTeX (ex. $_2$) →
+      // variable inconnue en Typst. On supprime le préfixe invalide.
+      .replace(/#none_\w+/g, '')
+      // tex2typst convertit \left]...\right[ en lr(]...[), \left[...\right[ en
+      // lr([...[). En Typst, ] et [ juste après/avant lr()/lr() sont parsés comme
+      // délimiteurs → "unclosed delimiter". On remplace par bracket.r/bracket.l.
+      // Cas 1 : ]...[ → intervalles ouverts
+      .replace(/lr\(\]([^\[\]]*)\[\)/g, 'lr(bracket.r $1 bracket.l)')
+      // Cas 2 : [...[ → semi-ouvert fermé à gauche, ouvert à droite
+      .replace(/lr\(\[([^\[\]]*)\[\)/g, 'lr(bracket.l $1 bracket.l)')
+      // Cas 3 : ]...] → semi-ouvert ouvert à gauche, fermé à droite
+      .replace(/lr\(\]([^\[\]]*)\]\)/g, 'lr(bracket.r $1 bracket.r)')
+      // Cas 4 : crochet + parenthèse mixtes (demi-droite [Oz), intervalle [a;b))
+      // produits par \left[…\right) → lr([… )). Le crochet resterait non fermé.
+      .replace(/lr\(\[([^\[\]()]*)\)\)/g, 'lr(bracket.l $1 paren.r)')
+      .replace(/lr\(\(([^\[\]()]*)\]\)/g, 'lr(paren.l $1 bracket.r)')
+      // Intervalles français nus (sans \left\right) : ]a;b[, ]a;b], [a;b[
+      // (après le traitement des lr(), il ne reste que des crochets résiduels)
+      // L'espace initial évite la concaténation d'identifiants : tex2typst peut
+      // coller des symboles contre ] sans espace (ex. "union]" → "union lr(…)").
+      .replace(/\]([^\[\]]*)\[/g, ' lr(bracket.r $1 bracket.l)')
+      .replace(/\]([^\[\]]*)\]/g, ' lr(bracket.r $1 bracket.r)')
+      .replace(/\[([^\[\]]*)\[/g, ' lr(bracket.l $1 bracket.l)')
+      // demi-droites / intervalles mixtes nus ([Oz), (a;b]) : crochet et
+      // parenthèse dépareillés → délimiteurs explicites dans un lr()
+      .replace(/\[([^\[\]()]*)\)/g, ' lr(bracket.l $1 paren.r)')
+      .replace(/\(([^\[\]()]*)\]/g, ' lr(paren.l $1 bracket.r)')
+      // virgule décimale : Typst la colle aux chiffres seulement si la
+      // chaîne `","` est écrite sans espaces autour
+      .replace(/(\d) ?"," ?(?=\d)/g, '$1","')
+  )
 }
 
 /**
@@ -478,22 +534,38 @@ function balanceTypstMathParens(s: string): string {
   let pass1 = ''
   for (let i = 0; i < s.length; i++) {
     const ch = s[i]
-    if (ch === '(') { depth++; pass1 += ch }
-    else if (ch === ')') {
-      if (depth > 0) { depth--; pass1 += ch }
-      else { pass1 += 'paren.r ' }
-    } else { pass1 += ch }
+    if (ch === '(') {
+      depth++
+      pass1 += ch
+    } else if (ch === ')') {
+      if (depth > 0) {
+        depth--
+        pass1 += ch
+      } else {
+        pass1 += 'paren.r '
+      }
+    } else {
+      pass1 += ch
+    }
   }
   // Passe 2 : aller de droite à gauche, remplacer les ( sans ) suivant
   depth = 0
   let pass2 = ''
   for (let i = pass1.length - 1; i >= 0; i--) {
     const ch = pass1[i]
-    if (ch === ')') { depth++; pass2 = ch + pass2 }
-    else if (ch === '(') {
-      if (depth > 0) { depth--; pass2 = ch + pass2 }
-      else { pass2 = ' paren.l ' + pass2 }
-    } else { pass2 = ch + pass2 }
+    if (ch === ')') {
+      depth++
+      pass2 = ch + pass2
+    } else if (ch === '(') {
+      if (depth > 0) {
+        depth--
+        pass2 = ch + pass2
+      } else {
+        pass2 = ' paren.l ' + pass2
+      }
+    } else {
+      pass2 = ch + pass2
+    }
   }
   return pass2
 }
@@ -556,7 +628,12 @@ function splitTopLevel(text: string, separator: string): string[] {
 function stripLatexSizeCommands(text: string): string {
   let output = ''
   let index = 0
-  const sizeCommand = new RegExp(`\\\\(${LATEX_SIZE_COMMANDS})\\b`, 'g')
+  // fin de commande = tout sauf une lettre : `\large5` est du LaTeX valide,
+  // et `\b` ne coupe pas entre une lettre et un chiffre
+  const sizeCommand = new RegExp(
+    `\\\\(${LATEX_SIZE_COMMANDS})(?![a-zA-Z])`,
+    'g',
+  )
   while (index < text.length) {
     sizeCommand.lastIndex = index
     const match = sizeCommand.exec(text)
@@ -792,9 +869,23 @@ const NAMED_COLOR_TO_HEX: Record<string, string> = {
 
 /** Couleurs nommées directement comprises par Typst */
 const TYPST_NAMED_COLORS = new Set([
-  'black', 'white', 'silver', 'navy', 'blue', 'aqua', 'teal', 'eastern',
-  'purple', 'fuchsia', 'maroon', 'red', 'orange', 'yellow', 'olive',
-  'green', 'lime',
+  'black',
+  'white',
+  'silver',
+  'navy',
+  'blue',
+  'aqua',
+  'teal',
+  'eastern',
+  'purple',
+  'fuchsia',
+  'maroon',
+  'red',
+  'orange',
+  'yellow',
+  'olive',
+  'green',
+  'lime',
 ])
 
 /**
@@ -821,7 +912,10 @@ function colorToTypst(raw: string): string | null {
 }
 
 /** Extrait `\cellcolor{...}` (ou `\cellcolor[HTML]{...}`) d'une cellule LaTeX */
-function extractCellColor(cell: string): { color: string | null; rest: string } {
+function extractCellColor(cell: string): {
+  color: string | null
+  rest: string
+} {
   const match = cell.match(/\\cellcolor(\[[^\]]+\])?\s*\{([^{}]*)\}/)
   if (match == null) return { color: null, rest: cell }
   const raw = match[1] === '[HTML]' ? `#${match[2]}` : match[2]
@@ -1010,10 +1104,7 @@ function latexVisualTableToTypst(tex: string): string | null {
  * est reconvertie depuis son HTML (formules incluses) et sa couleur de fond
  * (`background-color`) est reportée.
  */
-function htmlTableToTypst(
-  table: HTMLTableElement,
-  figures?: string[],
-): string {
+function htmlTableToTypst(table: HTMLTableElement, figures?: string[]): string {
   const rows: TypstTableCell[][] = []
   for (const tr of [...table.querySelectorAll('tr')]) {
     const cells = [...tr.children].filter(
@@ -1031,10 +1122,7 @@ function htmlTableToTypst(
   const maxColumns = Math.max(0, ...rows.map((row) => row.length))
   if (maxColumns === 0) return missingBox('tableau non converti')
 
-  const aligns = Array.from(
-    { length: maxColumns },
-    () => 'center' as const,
-  )
+  const aligns = Array.from({ length: maxColumns }, () => 'center' as const)
   const vlines = Array.from({ length: maxColumns + 1 }, (_, index) => index)
   const hlineYs = Array.from({ length: rows.length + 1 }, (_, index) => index)
   return renderTypstTable(aligns, rows, 4, vlines, hlineYs)
@@ -1058,14 +1146,18 @@ export function latexMathToTypst(tex: string): string {
   if (trimmed.length === 0) return ''
 
   function convert(preprocessed: string): string {
-    return balanceTypstMathParens(postprocessTypst(
-      tex2typst(preprocessed, { customTexMacros: CUSTOM_TEX_MACROS }),
+    return (
+      balanceTypstMathParens(
+        postprocessTypst(
+          tex2typst(preprocessed, { customTexMacros: CUSTOM_TEX_MACROS }),
+        )
+          .trim()
+          .replace(/(\s*\\)+$/, ''),
+      )
+        // filet de sécurité : aucun marqueur #txt ne doit fuir dans la sortie
+        .replaceAll(TXT_MARK_OPEN, '')
+        .replaceAll(TXT_MARK_CLOSE, '')
     )
-      .trim()
-      .replace(/(\s*\\)+$/, ''))
-      // filet de sécurité : aucun marqueur #txt ne doit fuir dans la sortie
-      .replaceAll(TXT_MARK_OPEN, '')
-      .replaceAll(TXT_MARK_CLOSE, '')
   }
 
   const preprocessed = preprocessTex(trimmed)
@@ -1076,7 +1168,9 @@ export function latexMathToTypst(tex: string): string {
     if (preprocessed.includes(' ')) {
       try {
         return convert(preprocessed.replaceAll(' ', ' '))
-      } catch { /* fall through to literal */ }
+      } catch {
+        /* fall through to literal */
+      }
     }
     return `"${preprocessed.replaceAll('\\', '\\\\').replaceAll('"', '\\"')}"`
   }
@@ -1156,7 +1250,10 @@ export function sanitizeSvg(svg: string): string {
     // contexte suffit à déterminer l'espace de noms). Une fois embarqué en
     // image autonome (`data:image/svg+xml` dans le PDF Typst), son absence
     // fait échouer le décodage : l'image ne s'affiche pas du tout.
-    .replace(/<svg(?![\w-])(?![^>]*\bxmlns=)/i, '<svg xmlns="http://www.w3.org/2000/svg"')
+    .replace(
+      /<svg(?![\w-])(?![^>]*\bxmlns=)/i,
+      '<svg xmlns="http://www.w3.org/2000/svg"',
+    )
   return cleaned.replace(
     /<([a-zA-Z][\w:.-]*)([^<>]*)>/g,
     (_tag, name: string, attrs: string) => {
@@ -1193,7 +1290,7 @@ function stripOuterBraces(text: string): string {
 }
 
 function extractLatexSizeCommand(tex: string): string | null {
-  const match = new RegExp(`\\\\(${LATEX_SIZE_COMMANDS})\\b`).exec(tex)
+  const match = new RegExp(`\\\\(${LATEX_SIZE_COMMANDS})(?![a-zA-Z])`).exec(tex)
   return match?.[1] ?? null
 }
 
@@ -1252,9 +1349,19 @@ function removeLatexColorDeclarations(text: string): string {
 function typstColorExpression(color: string): string | null {
   const normalized = color.trim()
   const lower = normalized.toLowerCase()
-  if (lower === '' || lower === 'transparent' || lower === 'inherit' || /^none/.test(lower)) return null
+  if (
+    lower === '' ||
+    lower === 'transparent' ||
+    lower === 'inherit' ||
+    /^none/.test(lower)
+  )
+    return null
   const hex = normalized.replace(/^#/, '')
-  if (/^(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(hex)) {
+  if (
+    /^(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(
+      hex,
+    )
+  ) {
     return `rgb("#${hex}")`
   }
   if (lower === 'grey') return 'gray'
@@ -1322,9 +1429,11 @@ export function svgToTypstImage(svg: string): string {
   const cleaned = sanitizeSvg(svg)
   // SVG with zero width or height is rejected by Typst's parser
   const h = cleaned.match(/<svg[^>]*?\sheight="([\d.]+)"/i)
-  if (h != null && parseFloat(h[1]) === 0) return 'box(width: 0pt, height: 0pt)[]'
+  if (h != null && parseFloat(h[1]) === 0)
+    return 'box(width: 0pt, height: 0pt)[]'
   const width = cleaned.match(/<svg[^>]*?\swidth="([\d.]+)"/i)
-  if (width != null && parseFloat(width[1]) === 0) return 'box(width: 0pt, height: 0pt)[]'
+  if (width != null && parseFloat(width[1]) === 0)
+    return 'box(width: 0pt, height: 0pt)[]'
   let widthPt = ''
   if (width != null) {
     const heightPx = h != null ? parseFloat(h[1]) : parseFloat(width[1])
@@ -1436,7 +1545,9 @@ function protectMathalea2dContainers(
           // ligne vide après la figure : le texte qui suit reprend dans
           // un nouveau paragraphe du code généré (l'espacement fait partie
           // du segment protégé pour survivre à la normalisation des blancs)
-          container.replaceWith(document.createTextNode(protect(typst + '\n\n')))
+          container.replaceWith(
+            document.createTextNode(protect(typst + '\n\n')),
+          )
         }
       }
       return template.innerHTML
@@ -1464,6 +1575,281 @@ function qcmToTypst(choices: { correct: boolean; body: string }[]): string {
     )
     .join('\n')
   return `#tasks(columns: qcm-colonnes, label: "A)", above: 0.4em, below: 0.4em)[\n${items}\n]`
+}
+
+/**
+ * Rendu SVG d'une figure `<canvas-3d>` (empilements de cubes des exercices
+ * de motifs). L'élément est un canvas WebGL (Three.js), sans image
+ * extractible : on redessine les cubes décrits par son attribut `content`
+ * en projection isométrique (la caméra de Canvas3DElement regarde l'origine
+ * depuis la diagonale (8, 8, 8)), faces triées de l'arrière vers l'avant.
+ * Renvoie `null` si le contenu n'est pas un empilement de cubes.
+ */
+function canvas3dToSvg(tag: string): string | null {
+  const content = tag.match(/content=(?:'([^']*)'|"([^"]*)")/)
+  if (content == null) return null
+  let cubes: { pos: number[]; size: number; color: string }[]
+  try {
+    const parsed = JSON.parse(decodeURIComponent(content[1] ?? content[2]))
+    const objects: unknown[] = Array.isArray(parsed?.objects)
+      ? parsed.objects
+      : []
+    cubes = objects
+      .filter(
+        (object): object is { type: string; pos: number[]; size?: unknown; color?: unknown } =>
+          object != null &&
+          typeof object === 'object' &&
+          (object as { type?: unknown }).type === 'cube' &&
+          Array.isArray((object as { pos?: unknown }).pos),
+      )
+      .map((cube) => ({
+        pos: cube.pos,
+        size: typeof cube.size === 'number' ? cube.size : 1,
+        color: typeof cube.color === 'string' ? cube.color : '#ffffff',
+      }))
+  } catch {
+    return null
+  }
+  if (cubes.length === 0) return null
+  // projection orthographique le long de la diagonale (axes y vers le haut)
+  const UNIT = 24
+  const project = ([x, y, z]: number[]): [number, number] => [
+    (x - z) * 0.70710678 * UNIT,
+    -(-x + 2 * y - z) * 0.40824829 * UNIT,
+  ]
+  /** Assombrit une couleur hexadécimale (faces latérales) */
+  const shade = (hex: string, factor: number): string => {
+    const value = hex.replace('#', '')
+    if (!/^[0-9a-fA-F]{6}$/.test(value)) return hex
+    const channels = [0, 2, 4].map((index) =>
+      Math.round(parseInt(value.slice(index, index + 2), 16) * factor),
+    )
+    return `#${channels.map((c) => c.toString(16).padStart(2, '0')).join('')}`
+  }
+  interface Face {
+    points: [number, number][]
+    fill: string
+  }
+  const faces: Face[] = []
+  // cubes triés de l'arrière (x+y+z petit) vers l'avant
+  for (const cube of [...cubes].sort(
+    (a, b) => a.pos[0] + a.pos[1] + a.pos[2] - (b.pos[0] + b.pos[1] + b.pos[2]),
+  )) {
+    const [x, y, z] = cube.pos
+    const s = cube.size / 2
+    const corners: Record<string, number[]> = {}
+    for (const dx of [-s, s]) {
+      for (const dy of [-s, s]) {
+        for (const dz of [-s, s]) {
+          corners[`${dx > 0 ? '+' : '-'}${dy > 0 ? '+' : '-'}${dz > 0 ? '+' : '-'}`] =
+            [x + dx, y + dy, z + dz]
+        }
+      }
+    }
+    // seules les trois faces tournées vers la caméra sont visibles
+    const visible: { keys: string[]; factor: number }[] = [
+      { keys: ['-+-', '++-', '+++', '-++'], factor: 1 }, // dessus (+y)
+      { keys: ['--+', '+-+', '+++', '-++'], factor: 0.87 }, // face +z
+      { keys: ['+--', '++-', '+++', '+-+'], factor: 0.72 }, // face +x
+    ]
+    for (const face of visible) {
+      faces.push({
+        points: face.keys.map((key) => project(corners[key])),
+        fill: shade(cube.color, face.factor),
+      })
+    }
+  }
+  const xs = faces.flatMap((face) => face.points.map((point) => point[0]))
+  const ys = faces.flatMap((face) => face.points.map((point) => point[1]))
+  const pad = 2
+  const minX = Math.min(...xs) - pad
+  const minY = Math.min(...ys) - pad
+  const width = Math.max(...xs) + pad - minX
+  const height = Math.max(...ys) + pad - minY
+  const polygons = faces.map(
+    (face) =>
+      `<polygon points="${face.points
+        .map(
+          ([px, py]) => `${(px - minX).toFixed(1)},${(py - minY).toFixed(1)}`,
+        )
+        .join(' ')}" fill="${face.fill}" stroke="black" stroke-width="1" stroke-linejoin="round"/>`,
+  )
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width.toFixed(1)}" height="${height.toFixed(1)}" viewBox="0 0 ${width.toFixed(1)} ${height.toFixed(1)}">${polygons.join('')}</svg>`
+}
+
+/** Valeur d'une propriété dans un style CSS en ligne */
+function inlineStyleProp(style: string, name: string): string | null {
+  const match = new RegExp(`(?:^|[;\\s])${name}\\s*:\\s*([^;]+)`).exec(style)
+  return match?.[1]?.trim() ?? null
+}
+
+/** Contenu d'une cellule de schéma : HTML converti, replié sur une ligne */
+function schemaCellContent(html: string): string {
+  return htmlToTypst(html).replace(/\s*\n+\s*/g, ' ').trim()
+}
+
+/**
+ * Bordure Typst d'une boîte de schéma : les barres partagent leurs bordures
+ * en HTML (`border-left: none` sur les boîtes suivantes), on reproduit les
+ * côtés omis pour ne pas doubler les traits.
+ */
+function schemaCellStroke(style: string): string {
+  if (/(?:^|[;\s])border\s*:\s*none/.test(style)) return 'none'
+  const omitted = ['left', 'right', 'top', 'bottom'].filter((side) =>
+    new RegExp(`border-${side}\\s*:\\s*none`).test(style),
+  )
+  if (omitted.length === 0) return '0.6pt + black'
+  return `(${omitted.map((side) => `${side}: none`).join(', ')}, rest: 0.6pt + black)`
+}
+
+/**
+ * Convertit un schéma en barres (`SchemaEnBoite`, HTML en grille CSS) en une
+ * grille Typst : boîtes (`SchemaItem`) reproduites par des cellules avec
+ * fond et bordure, accolades et flèches (`SchemaTop`/`SchemaBottom`) par le
+ * helper `mathalea-schema-span` (accolade/flèche étirée sur la largeur).
+ * Les accolades latérales (`latexAccoladeRight`, rares) ne sont pas rendues.
+ */
+function schemaEnBoiteToTypst(container: HTMLElement): string {
+  interface SchemaCell {
+    row: number
+    colStart: number
+    colEnd: number
+    body: (y: number, x: number, colspan: number) => string
+  }
+  const cells: SchemaCell[] = []
+  for (const element of [...container.children] as HTMLElement[]) {
+    const className = element.getAttribute('class') ?? ''
+    if (/\blatexAccoladeRight\b/.test(className)) continue
+    const style = element.getAttribute('style') ?? ''
+    const row = parseInt(inlineStyleProp(style, 'grid-row') ?? '', 10)
+    const colStart = parseInt(
+      inlineStyleProp(style, 'grid-column-start') ?? '',
+      10,
+    )
+    const colEnd = parseInt(inlineStyleProp(style, 'grid-column-end') ?? '', 10)
+    if ([row, colStart, colEnd].some(Number.isNaN) || colEnd <= colStart) {
+      continue
+    }
+    if (/\bSchemaTop\b|\bSchemaBottom\b/.test(className)) {
+      const flip = /\bSchemaBottom\b/.test(className)
+      // le type flèche se reconnaît à sa couleur `--arrow-color` (l'accolade
+      // note la sienne hors de l'attribut style, guillemet mal placé)
+      const arrow = element.outerHTML.includes('--arrow-color')
+      const labelElement = element.querySelector<HTMLElement>(
+        '.latexAccoladeTop, .latexAccoladeBottom',
+      )
+      const label = schemaCellContent(labelElement?.innerHTML ?? '')
+      const color = colorToTypst(
+        inlineStyleProp(
+          labelElement?.getAttribute('style') ?? '',
+          'color',
+        ) ?? '',
+      )
+      const options = [
+        arrow ? 'kind: "arrow"' : null,
+        flip ? 'flip: true' : null,
+        color != null && color !== 'black' ? `color: ${color}` : null,
+      ].filter((option): option is string => option != null)
+      const optionsCode = options.length > 0 ? `, ${options.join(', ')}` : ''
+      cells.push({
+        row,
+        colStart,
+        colEnd,
+        body: (y, x, colspan) =>
+          `grid.cell(x: ${x}, y: ${y}, colspan: ${colspan}, mathalea-schema-span([${label}]${optionsCode}))`,
+      })
+      continue
+    }
+    if (!/\bSchemaItem\b/.test(className)) continue
+    const height = inlineStyleProp(style, 'height')
+    let content = schemaCellContent(element.innerHTML)
+    // ligne d'espacement entre deux schémas superposés
+    if (content.length === 0 && height != null) {
+      content = `#v(${height})`
+    }
+    const fill = colorToTypst(
+      inlineStyleProp(style, 'background-color') ?? '',
+    )
+    const stroke = schemaCellStroke(style)
+    const bold = inlineStyleProp(style, 'font-weight') === 'bold'
+    const textColor = colorToTypst(inlineStyleProp(style, 'color') ?? '')
+    if (bold) content = `#strong[${content}]`
+    if (textColor != null && textColor !== 'black') {
+      content = `#text(fill: ${textColor})[${content}]`
+    }
+    const align =
+      inlineStyleProp(style, 'justify-content') === 'center'
+        ? 'center + horizon'
+        : 'left + horizon'
+    const cellOptions = [
+      fill != null ? `fill: ${fill}` : null,
+      `stroke: ${stroke}`,
+      'inset: 4pt',
+      `align: ${align}`,
+    ].filter((option): option is string => option != null)
+    cells.push({
+      row,
+      colStart,
+      colEnd,
+      body: (y, x, colspan) =>
+        `grid.cell(x: ${x}, y: ${y}, colspan: ${colspan}, ${cellOptions.join(', ')})[${content}]`,
+    })
+  }
+  if (cells.length === 0) return missingBox('schéma non converti')
+  const totalCols = Math.max(...cells.map((cell) => cell.colEnd)) - 1
+  const rowIndex = new Map(
+    [...new Set(cells.map((cell) => cell.row))]
+      .sort((a, b) => a - b)
+      .map((row, index) => [row, index]),
+  )
+  const lines = cells.map(
+    (cell) =>
+      `  ${cell.body(
+        rowIndex.get(cell.row) ?? 0,
+        cell.colStart - 1,
+        Math.min(cell.colEnd, totalCols + 1) - cell.colStart,
+      )},`,
+  )
+  return [
+    '#block(width: 100%, inset: (y: 2pt))[#grid(',
+    `  columns: (1fr,) * ${totalCols},`,
+    '  row-gutter: 2pt,',
+    ...lines,
+    ')]',
+  ].join('\n')
+}
+
+/**
+ * Repère les schémas en barres (`<div class="SchemaContainer">`) et les
+ * convertit avant le reste du HTML (leur contenu interne serait sinon
+ * aplati en texte).
+ */
+function protectSchemaContainers(
+  html: string,
+  protect: (typst: string) => string,
+): string {
+  if (!/\bSchemaContainer\b/.test(html)) return html
+  if (typeof document === 'undefined') {
+    // sans DOM : encart plutôt que du texte aplati illisible
+    return html.replace(
+      /<div\b[^>]*\bclass=["'][^"']*\bSchemaContainer\b[\s\S]*$/i,
+      () => protect(missingBox('schéma non converti') + '\n\n'),
+    )
+  }
+  const template = document.createElement('template')
+  template.innerHTML = html
+  const containers = [
+    ...template.content.querySelectorAll<HTMLElement>('.SchemaContainer'),
+  ]
+  if (containers.length === 0) return html
+  for (const container of containers) {
+    container.replaceWith(
+      document.createTextNode(
+        protect(schemaEnBoiteToTypst(container) + '\n\n'),
+      ),
+    )
+  }
+  return template.innerHTML
 }
 
 /**
@@ -1601,6 +1987,7 @@ export function htmlToTypst(html: string, figures?: string[]): string {
   }
 
   let text = protectQcm(html, protect, figures)
+  text = protectSchemaContainers(text, protect)
   text = protectHtmlTables(text, protect, figures)
   text = protectMathalea2dContainers(text, protect, figures)
   text = protectKatexSpans(text, protect)
@@ -1645,6 +2032,16 @@ export function htmlToTypst(html: string, figures?: string[]): string {
   text = text.replace(/<img[^>]*>/gi, () =>
     protect(missingBox('image non convertie')),
   )
+  // figures 3D (Three.js) : les empilements de cubes sont redessinés en SVG
+  // isométrique à partir de leur description JSON, le reste est signalé
+  text = text.replace(/<canvas-3d[^>]*>(?:[\s\S]*?<\/canvas-3d>)?/gi, (tag) => {
+    const svg = canvas3dToSvg(tag)
+    if (svg == null || figures == null) {
+      return protect(missingBox('figure 3D non convertie'))
+    }
+    figures.push(svgToTypstImage(svg))
+    return protect(`#mathalea-fit(fig-${figures.length})\n\n`)
+  })
 
   // 3. Parcours des balises restantes
   let output = ''

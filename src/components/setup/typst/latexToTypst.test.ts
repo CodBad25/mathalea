@@ -93,6 +93,84 @@ describe('escapeTypstText', () => {
   })
 })
 
+describe('latexMathToTypst — commandes de taille', () => {
+  it('supprime \\large même collé à un chiffre', () => {
+    // miseEnEvidence(`\\large${n}`) produit `\large5` sans espace
+    expect(latexMathToTypst('\\large5')).toBe('5')
+    expect(
+      latexMathToTypst('{\\color{#216D9A}\\boldsymbol{\\large5}}'),
+    ).not.toContain('large')
+    expect(latexMathToTypst('\\Large 12 + \\small3')).toBe('12 + 3')
+  })
+})
+
+describe('htmlToTypst — schémas en barres (SchemaEnBoite)', () => {
+  const schemaHtml =
+    '<div class="SchemaContainer">' +
+    '<div class="SchemaTop" style="grid-row: 1; grid-column-start: 1; grid-column-end: 10; text-align:center; border: none"; --brace-color: black">' +
+    '<div class="latexAccoladeTop" style="text-align: center; color: black; font-size: 1em; font-weight: normal; line-height: 1.2em">42</div>' +
+    '<div class="braceTop"><div class="braceTopLeft"></div></div>' +
+    '</div>' +
+    '<div class="SchemaItem" style="grid-row: 2; grid-column-start: 1; grid-column-end: 4; background-color:lightgray; justify-content:center; color:black; font-size:1em; font-weight:normal; border: solid 1px black;">9</div>' +
+    '<div class="SchemaItem" style="grid-row: 2; grid-column-start: 4; grid-column-end: 7; background-color:lightgray; justify-content:center; color:black; border-left: none;">12</div>' +
+    '<div class="SchemaItem" style="grid-row: 2; grid-column-start: 7; grid-column-end: 10; background-color:lightgray; justify-content:center; color:black; border-left: none;">....</div>' +
+    '<div class="SchemaTop" style="grid-row: 3; grid-column-start: 1; grid-column-end: 7; text-align:center; border: none; --arrow-color: #f15929">' +
+    '<div class="latexAccoladeTop" style="text-align: center; color: #f15929; font-size: 1em; font-weight: bold; line-height: 1.2em">29</div>' +
+    '</div>' +
+    '</div>'
+
+  it('convertit le schéma en grille Typst avec accolades et flèches', () => {
+    const typst = htmlToTypst(schemaHtml)
+    expect(typst).toContain('#grid(')
+    expect(typst).toContain('columns: (1fr,) * 9,')
+    // accolade supérieure sur toute la largeur
+    expect(typst).toContain(
+      'grid.cell(x: 0, y: 0, colspan: 9, mathalea-schema-span([42]))',
+    )
+    // boîtes grises : fond, bordure (côtés partagés omis), texte centré
+    expect(typst).toContain(
+      'grid.cell(x: 0, y: 1, colspan: 3, fill: rgb("#d3d3d3"), stroke: 0.6pt + black, inset: 4pt, align: center + horizon)[9]',
+    )
+    expect(typst).toContain(
+      'stroke: (left: none, rest: 0.6pt + black), inset: 4pt, align: center + horizon)[12]',
+    )
+    // flèche colorée
+    expect(typst).toContain(
+      'mathalea-schema-span([29], kind: "arrow", color: rgb("#f15929"))',
+    )
+  })
+
+  it('redessine les empilements de cubes canvas-3d en SVG isométrique', () => {
+    const content = encodeURIComponent(
+      JSON.stringify({
+        objects: [
+          { type: 'cube', pos: [0, 0, 0], size: 1, color: '#ffffff' },
+          { type: 'cube', pos: [1, 0, 0], size: 1, color: '#ffffff' },
+          { type: 'ambientLight', color: 0xffffff, intensity: 1.2 },
+        ],
+      }),
+    )
+    const figures: string[] = []
+    const typst = htmlToTypst(
+      `<canvas-3d id="m1" content='${content}' width="250" height="250"></canvas-3d>`,
+      figures,
+    )
+    expect(typst).toContain('#mathalea-fit(fig-1)')
+    expect(figures).toHaveLength(1)
+    // 2 cubes × 3 faces visibles
+    expect(figures[0].match(/<polygon /g)).toHaveLength(6)
+    expect(typst).not.toContain('canvas-3d')
+  })
+
+  it("remplace les figures 3D sans cubes par un encart", () => {
+    const typst = htmlToTypst(
+      '<canvas-3d id="m1" content=\'%7B%7D\' width="250"></canvas-3d>',
+    )
+    expect(typst).toContain('figure 3D non convertie')
+    expect(typst).not.toContain('canvas-3d')
+  })
+})
+
 describe('htmlToTypst', () => {
   it('convertit du texte avec formules', () => {
     expect(htmlToTypst('Calculer $\\dfrac{1}{2}+\\dfrac{1}{3}$.')).toBe(

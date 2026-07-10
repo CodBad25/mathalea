@@ -2,6 +2,7 @@ import {
   MATHALEA_FIGURE_HELPERS,
   MATHALEA_FIT_HELPER,
   MATHALEA_QCM_HELPERS,
+  MATHALEA_SCHEMA_HELPER,
   TASKIZE_IMPORT,
   escapeTypstText,
   htmlToTypst,
@@ -10,6 +11,86 @@ import {
 /** Import du paquet exercise-bank (badges Exercice/Correction, banque) */
 export const EXERCISE_BANK_IMPORT =
   '#import "@preview/exercise-bank:0.5.2": exo, exo-setup, exo-print-solutions'
+
+/**
+ * Repère invisible pour la palette de mise en page de l'aperçu : publie la
+ * position du point d'insertion (page, x et y en pt) dans une métadonnée,
+ * interrogée après compilation (`query(<mathalea-anchor>)`) pour placer les
+ * contrôles (colonnes/espacement des questions, insertions) sur l'aperçu.
+ * Aucun impact sur la mise en page : une métadonnée n'occupe aucune place.
+ */
+export const MATHALEA_ANCHOR_HELPER = `#let mathalea-anchor(kind, num) = context {
+  let position = here().position()
+  [#metadata((kind: kind, num: num, page: position.page, x: position.x.pt(), y: position.y.pt())) <mathalea-anchor>]
+}`
+
+/** Marqueur de fin de ligne des insertions faites via la palette */
+export const INSERTION_TAG = '// mathalea:insertion'
+
+/**
+ * Saut de page insérable entre deux exercices : `#pagebreak` est interdit
+ * dans un conteneur (`columns`), la ligne ferme donc le bloc `en-colonnes`
+ * courant, saute la page au niveau du document, puis rouvre le bloc.
+ * Fonctionne aussi en une colonne (`en-colonnes` rend alors son corps tel quel).
+ */
+export const PAGE_BREAK_SNIPPET = '] #pagebreak(weak: true) #en-colonnes['
+
+/** Saut de colonne insérable entre deux exercices (page suivante en 1 colonne) */
+export const COLUMN_BREAK_SNIPPET = '#colbreak(weak: true)'
+
+/**
+ * Réglages repris du code courant lors d'une régénération : les ajustements
+ * faits via la palette de mise en page (colonnes/espacement des questions par
+ * exercice, textes et sections insérés entre les exercices) survivent ainsi
+ * aux changements de réglages et aux « Nouvelles données ».
+ */
+export interface TypstCarryOver {
+  /**
+   * Valeurs de `#let exN-colonnes`/`#let exN-gutter` divergeant des défauts,
+   * par préfixe d'exercice (`ex1`). Expressions Typst brutes.
+   */
+  tasksLayout?: Record<string, { columns?: string; gutter?: string }>
+  /**
+   * Lignes de code Typst insérées entre les exercices (sans le marqueur
+   * `// mathalea:insertion`), par numéro de l'exercice qui les précède.
+   */
+  insertions?: Record<number, string[]>
+}
+
+/** Extrait du code Typst courant les réglages de la palette à conserver */
+export function harvestCarryOver(code: string): TypstCarryOver {
+  const tasksLayout: Record<string, { columns?: string; gutter?: string }> = {}
+  for (const match of code.matchAll(
+    /^#let (ex\d+(?:-corr)?)-colonnes = (.+?)\s*$/gm,
+  )) {
+    if (match[2] !== '1') {
+      tasksLayout[match[1]] = { ...tasksLayout[match[1]], columns: match[2] }
+    }
+  }
+  for (const match of code.matchAll(
+    /^#let (ex\d+(?:-corr)?)-gutter = (.+?)\s*$/gm,
+  )) {
+    if (match[2] !== 'interligne-questions') {
+      tasksLayout[match[1]] = { ...tasksLayout[match[1]], gutter: match[2] }
+    }
+  }
+  // une insertion suit le repère de gap de l'exercice qui la précède : on
+  // associe chaque ligne marquée au dernier repère rencontré
+  const insertions: Record<number, string[]> = {}
+  let currentGap: number | null = null
+  for (const line of code.split('\n')) {
+    const gap = line.match(/#mathalea-anchor\("gap", (\d+)\)/)
+    if (gap != null) {
+      currentGap = Number(gap[1])
+      continue
+    }
+    const insertion = line.match(/^\s*(.*?)\s*\/\/ mathalea:insertion\s*$/)
+    if (insertion != null && currentGap != null && insertion[1].length > 0) {
+      ;(insertions[currentGap] ??= []).push(insertion[1])
+    }
+  }
+  return { tasksLayout, insertions }
+}
 
 /**
  * Construction du document Typst complet (fiche d'exercices + corrections)
@@ -131,7 +212,9 @@ export type BadgeStyle = (typeof BADGE_STYLES)[number]
  * ils sont rendus dans des sections séparées, on rétrécit la colonne pour
  * les énoncés et on l'élargit juste avant les corrections.
  */
-const MARGIN_BADGE_WIDTH: Partial<Record<BadgeStyle, { exo: string; corr: string }>> = {
+const MARGIN_BADGE_WIDTH: Partial<
+  Record<BadgeStyle, { exo: string; corr: string }>
+> = {
   box: { exo: '2.2cm', corr: '2.9cm' },
   pill: { exo: '2.5cm', corr: '3.2cm' },
   tag: { exo: '2.7cm', corr: '3.5cm' },
@@ -156,8 +239,8 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   pageFormat: 'a4',
   orientation: 'portrait',
   mergeExercises: false,
-  badgeStyle: 'border-accent',
-  badgeColor: 'black',
+  badgeStyle: 'underline',
+  badgeColor: 'rgb("#f15929")',
 }
 
 /**
@@ -260,8 +343,12 @@ function exerciseBody(
     // `above`/`below` : sans eux, la liste colle au texte qui la précède et
     // la suit (les fractions dfrac, plus hautes, rendent ce collage très
     // visible : le dernier item peut chevaucher le paragraphe suivant)
+    // Le repère `mathalea-anchor` (invisible) permet à la palette de mise en
+    // page de l'aperçu de placer ses contrôles à côté de l'environnement ;
+    // les corrections (préfixe `exN-corr`) ont leurs propres réglages
+    const anchorKind = tasksPrefix.endsWith('-corr') ? 'tasks-corr' : 'tasks'
     parts.push(
-      `#tasks(columns: ${tasksPrefix}-colonnes, label: ${boldableLabel(label, boldQuestionNumbers)}, row-gutter: ${tasksPrefix}-gutter, above: 0.8em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
+      `#mathalea-anchor("${anchorKind}", ${parseInt(tasksPrefix.slice(2), 10)})\n#tasks(columns: ${tasksPrefix}-colonnes, label: ${boldableLabel(label, boldQuestionNumbers)}, row-gutter: ${tasksPrefix}-gutter, above: 1.2em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
     )
     return { code: parts.join('\n\n'), itemCount: converted.length }
   }
@@ -277,7 +364,13 @@ function exerciseBody(
 export function buildTypstDocument(
   exercises: TypstExerciseInput[],
   options: TypstDocumentOptions = defaultTypstDocumentOptions,
+  carryOver: TypstCarryOver = {},
 ): string {
+  /** Insertions de la palette à réémettre après l'exercice `num` */
+  const insertionLines = (num: number, indent: string): string[] =>
+    (carryOver.insertions?.[num] ?? []).map(
+      (line) => `${indent}${line} ${INSERTION_TAG}`,
+    )
   // Les corps sont convertis d'abord : les figures SVG rencontrées sont
   // collectées pour être déclarées (`#let fig-N = image(...)`) en tête
   // de document, ce qui garde le corps du code lisible.
@@ -315,12 +408,14 @@ export function buildTypstDocument(
     let correction: string | null = null
     if (exercise.corrections.length > 0) {
       hasCorrections = true
+      // préfixe distinct : la mise en page de la correction (colonnes,
+      // espacement) se règle indépendamment de celle de l'énoncé
       const body = exerciseBody(
         exercise.introCorrection,
         exercise.corrections,
         exercise.numbered,
         figures,
-        `ex${k + 1}`,
+        `ex${k + 1}-corr`,
         options.boldQuestionNumbers,
         options.mergeExercises ? nextCorrectionStart : 1,
       )
@@ -335,8 +430,14 @@ export function buildTypstDocument(
     // pas de banque : les contenus sont fusionnés en un seul exercice
     renderLines.push('// ----- Énoncés -----')
     renderLines.push('#en-colonnes[')
-    for (const { enonce } of built) {
+    // le repère 0 permet une insertion avant le premier exercice
+    renderLines.push('  #mathalea-anchor("gap", 0)')
+    renderLines.push(...insertionLines(0, '  '))
+    for (const [k, { enonce }] of built.entries()) {
+      renderLines.push(`  #mathalea-anchor("exo", ${k + 1})`)
       renderLines.push(indentContentBlock(enonce))
+      renderLines.push(`  #mathalea-anchor("gap", ${k + 1})`)
+      renderLines.push(...insertionLines(k + 1, '  '))
       renderLines.push('')
     }
     renderLines.push(']')
@@ -380,8 +481,16 @@ export function buildTypstDocument(
 
     renderLines.push('// ----- Énoncés -----')
     renderLines.push('#en-colonnes[')
+    // le repère 0 permet une insertion avant le premier exercice
+    renderLines.push('  #mathalea-anchor("gap", 0)')
+    renderLines.push(...insertionLines(0, '  '))
     for (const [k] of built.entries()) {
+      // repère "exo" : contrôles de l'exercice (nombre de questions,
+      // suppression) dans la palette de l'aperçu
+      renderLines.push(`  #mathalea-anchor("exo", ${k + 1})`)
       renderLines.push(`  #ex${k + 1}()`)
+      renderLines.push(`  #mathalea-anchor("gap", ${k + 1})`)
+      renderLines.push(...insertionLines(k + 1, '  '))
     }
     renderLines.push(']')
     renderLines.push('')
@@ -413,12 +522,27 @@ export function buildTypstDocument(
   )
   const usesTasks = allLines.some((line) => line.includes('#tasks('))
   const usesQcm = allLines.some((line) => line.includes('qcm-'))
+  const usesAnchors = allLines.some((line) =>
+    line.includes('#mathalea-anchor('),
+  )
+  const usesSchema = allLines.some((line) =>
+    line.includes('mathalea-schema-span'),
+  )
   // variables de mise en page des questions référencées par les corps
-  const tasksPrefixes = [...new Set(
-    allLines
-      .flatMap((line) => [...line.matchAll(/#tasks\(columns: (ex\d+)-colonnes/g)])
-      .map((m) => m[1]),
-  )].sort((a, b) => Number(a.slice(2)) - Number(b.slice(2)))
+  // (`ex1`, et `ex1-corr` pour les corrections, réglables indépendamment)
+  const tasksPrefixes = [
+    ...new Set(
+      allLines
+        .flatMap((line) => [
+          ...line.matchAll(/#tasks\(columns: (ex\d+(?:-corr)?)-colonnes/g),
+        ])
+        .map((m) => m[1]),
+    ),
+  ].sort(
+    (a, b) =>
+      parseInt(a.slice(2), 10) - parseInt(b.slice(2), 10) ||
+      a.length - b.length,
+  )
 
   const lines: string[] = []
   lines.push('// Fiche générée par MathALÉA — https://coopmaths.fr/alea')
@@ -429,6 +553,18 @@ export function buildTypstDocument(
     lines.push('// ----- Paquets -----')
     if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
     if (usesTasks) lines.push(TASKIZE_IMPORT)
+    lines.push('')
+  }
+  if (usesAnchors) {
+    lines.push(
+      '// ----- Repères invisibles de la palette de mise en page -----',
+    )
+    lines.push(MATHALEA_ANCHOR_HELPER)
+    lines.push('')
+  }
+  if (usesSchema) {
+    lines.push('// ----- Schémas en barres (accolades/flèches étirées) -----')
+    lines.push(MATHALEA_SCHEMA_HELPER)
     lines.push('')
   }
   // mathalea-fit (adaptation de la largeur des figures) est requis dès
@@ -465,12 +601,22 @@ export function buildTypstDocument(
     lines.push(
       '// espacement vertical entre les questions (défaut de tous les exercices)',
     )
-    lines.push('#let interligne-questions = 1em')
-    lines.push('// Nombre de colonnes et espacement des questions, par exercice :')
-    lines.push('// remplacez interligne-questions par une valeur pour en dévier.')
+    lines.push('#let interligne-questions = 1.2em')
+    lines.push(
+      '// Nombre de colonnes et espacement des questions, par exercice',
+    )
+    lines.push(
+      '// (les corrections, préfixe exN-corr, se règlent indépendamment) :',
+    )
+    lines.push(
+      '// remplacez interligne-questions par une valeur pour en dévier.',
+    )
     for (const prefix of tasksPrefixes) {
-      lines.push(`#let ${prefix}-colonnes = 1`)
-      lines.push(`#let ${prefix}-gutter = interligne-questions`)
+      const layout = carryOver.tasksLayout?.[prefix]
+      lines.push(`#let ${prefix}-colonnes = ${layout?.columns ?? '1'}`)
+      lines.push(
+        `#let ${prefix}-gutter = ${layout?.gutter ?? 'interligne-questions'}`,
+      )
     }
   }
   lines.push('')
@@ -498,8 +644,25 @@ export function buildTypstDocument(
   lines.push('#let en-colonnes(corps) = if colonnes > 1 {')
   lines.push('  columns(colonnes, gutter: 8mm, corps)')
   lines.push('} else { corps }')
+  lines.push(
+    '// titre de section, insérable entre les exercices : #section[Fractions]',
+  )
+  lines.push(
+    '#let section(titre) = block(width: 100%, above: 1.2em, below: 0.9em,',
+  )
+  lines.push(
+    '  grid(columns: (1fr, auto, 1fr), align: horizon, column-gutter: 8pt,',
+  )
+  lines.push('    line(length: 100%, stroke: 0.8pt + couleur),')
+  lines.push(
+    '    text(weight: "bold", fill: couleur, size: 1.15em, smallcaps(titre)),',
+  )
+  lines.push('    line(length: 100%, stroke: 0.8pt + couleur),')
+  lines.push('  ))')
   if (usesExerciseBank) {
-    lines.push('// réglages du paquet exercise-bank (badges Exercice/Correction)')
+    lines.push(
+      '// réglages du paquet exercise-bank (badges Exercice/Correction)',
+    )
     lines.push('#exo-setup(')
     lines.push('  exercise-label: "Exercice",')
     lines.push('  solution-label: "Correction",')
@@ -540,6 +703,9 @@ export function buildTypstDocument(
   lines.push(...bankLines)
   lines.push('')
   lines.push('// ----- En-tête -----')
+  // repère du bloc de titre : la palette de l'aperçu propose d'y modifier
+  // les variables titre, sous-titre et entete
+  lines.push('#mathalea-anchor("header", 0)')
   lines.push(...headerBlock(options.headerStyle))
   lines.push('')
   lines.push(...renderLines)
