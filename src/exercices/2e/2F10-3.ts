@@ -170,12 +170,12 @@ export default class Representerfonctionaffine extends Exercice {
                 ${
                   this.sup3
                     ? `La droite représentant la fonction linéaire passe par l'origine et sa pente est égale à $${a}$.<br>
-                    Elle passe donc par le point $B$ de coordonnées $(1;${a})$`
+                    Elle passe donc par le point $B$ de coordonnées $(1;${a})$.<br>`
                     : `
               L'ordonnée à l'origine est $${b}$, on place donc le point $A$ de coordonnées $(0\\,;\\,${b})$.<br>
              Le coefficient directeur est égal à $${a}$. En se décalant d'une unité vers la droite à partir du point $A$, on ${a > 0 ? 'monte' : 'descend'} de $${abs(a)}$ ${a === 1 || a === -1 ? 'unité' : 'unités'}. <br>
              On obtient alors le point $B$. <br>
-             On trace la droite $(AB)$.`
+             On trace la droite $(AB)$.<br>`
                 }`
               } else {
                 texteCorr += `Il s'agit d'une fonction ${this.sup3 ? 'linéaire' : 'affine'} particulière constante ($f(x)=0x${ecritureAlgebrique(b)}$).<br>
@@ -184,7 +184,7 @@ export default class Representerfonctionaffine extends Exercice {
                  ? ``
                  : `
              L'ordonnée à l'origine est $${b}$, on place donc le point $A$ de coordonnées $(0\\,;\\,${b})$.<br>
-              Le coefficient directeur de la droite est nul, on trace la droite horizontale qui passe par $A$.`
+              Le coefficient directeur de la droite est nul, on trace la droite horizontale qui passe par $A$.<br>`
              }`
               }
             } else {
@@ -203,7 +203,7 @@ export default class Representerfonctionaffine extends Exercice {
               ? [lB, monRepere, droiteAB, tB, textO]
               : [lA, lB, monRepere, droiteAB, tA, tB, textO]
             texteCorr += mathalea2d(
-              Object.assign({}, fixeBordures(objets)),
+              Object.assign({ scale: 0.6 }, fixeBordures(objets)),
               objets,
             )
           }
@@ -257,12 +257,12 @@ export default class Representerfonctionaffine extends Exercice {
             if (this.sup2 === 1) {
               texteCorr += this.sup3
                 ? `On sait que la pente de la droite est égale à $${aFrac.texFSD}$. En se décalant de $${d}$ unités vers la droite à partir de l'origine, on ${a > 0 ? 'monte' : 'descend'} de $${abs(a)}$  ${a === 1 || a === -1 ? 'unité' : 'unités'}. <br>On obtient alors le point $B$. <br>
-             On trace la droite $(OB)$.`
+             On trace la droite $(OB)$.<br>`
                 : `La droite a pour équation $y=${reduireAxPlusB(aFrac, b)}$. <br>
               L'ordonnée à l'origine est $${b}$, on place donc le point $A$ de coordonnées $(0\\,;\\,${b})$.<br>
              Le coefficient directeur est égal à $${aFrac.texFSD}$. En se décalant de $${d}$ unités vers la droite à partir du point $A$, on ${a > 0 ? 'monte' : 'descend'} de $${abs(a)}$  ${a === 1 || a === -1 ? 'unité' : 'unités'}. <br>
              On obtient alors le point $B$. <br>
-             On trace la droite $(AB)$.`
+             On trace la droite $(AB)$.<br>`
             } else {
               texteCorr += `Il suffit donc de déterminer les coordonnées de deux points pour pouvoir représenter $f$.<br>
             Comme $f(${xA})=${yA}$, on a : $A(${xA};${yA}) \\in \\mathcal{C_f}$.<br>
@@ -281,7 +281,7 @@ export default class Representerfonctionaffine extends Exercice {
               ? [lB, monRepere, droiteAB, tB, textO]
               : [lA, lB, monRepere, droiteAB, tA, tB, textO]
             texteCorr += mathalea2d(
-              Object.assign({}, fixeBordures(objetsCorr)),
+              Object.assign({ scale: 0.6 }, fixeBordures(objetsCorr)),
               objetsCorr,
             )
             // On trace le graphique
