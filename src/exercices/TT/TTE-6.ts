@@ -32,6 +32,7 @@ export default class ExerciceCalculsProprietesLn extends Exercice {
     this.version = 'log'
     this.nbQuestions = 2
     this.spacingCorr = 3
+    this.interactif = true
     this.sup = '3'
     this.besoinFormulaireTexte = [
       'Type de question',

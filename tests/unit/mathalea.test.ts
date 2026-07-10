@@ -1,9 +1,11 @@
 import Decimal from 'decimal.js'
 import { describe, expect, it, vi } from 'vitest'
+import Exercice from '../../src/exercices/Exercice'
 import ExerciceSimple from '../../src/exercices/ExerciceSimple'
 import { mathaleaEnsureAMCCompatibility } from '../../src/lib/amc/amcInference'
 import {
   getDistracteurs,
+  mathaleaHandleParamOfOneExercice,
   mathaleaHandleExerciceSimple,
 } from '../../src/lib/mathalea'
 import FractionEtendue from '../../src/modules/FractionEtendue'
@@ -162,6 +164,29 @@ describe('getDistracteurs', () => {
     distracteurs.forEach((d) =>
       expect([hms1.toString(), hms4.toString()]).toContain(d),
     )
+  })
+})
+
+describe('mathaleaHandleParamOfOneExercice', () => {
+  it("force l'interactivité des exercices obligatoires malgré i=0", () => {
+    const exercice = new Exercice()
+    exercice.interactifObligatoire = true
+    const params = { uuid: 'test', interactif: '0' as const }
+
+    mathaleaHandleParamOfOneExercice(exercice, params)
+
+    expect(exercice.interactif).toBe(true)
+    expect(params.interactif).toBe('1')
+  })
+
+  it('respecte i=0 pour un exercice sans interactivité obligatoire', () => {
+    const exercice = new Exercice()
+    const params = { uuid: 'test', interactif: '0' as const }
+
+    mathaleaHandleParamOfOneExercice(exercice, params)
+
+    expect(exercice.interactif).toBe(false)
+    expect(params.interactif).toBe('0')
   })
 })
 

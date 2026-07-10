@@ -50,6 +50,7 @@
     {...headerExerciceProps}
     id={exercise.id ?? ''}
     interactifReady={exercise.interactifReady}
+    interactifObligatoire={exercise.interactifObligatoire}
     {indiceLastExercice}
     on:exerciseRemoved
   />

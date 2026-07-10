@@ -42,7 +42,9 @@
   let divExercice: HTMLDivElement
   let divScore: HTMLDivElement
   let buttonScore: HTMLButtonElement
-  let isInteractif = exercise.interactif && exercise?.interactifReady
+  let isInteractif =
+    exercise.interactifObligatoire ||
+    (exercise.interactif && exercise?.interactifReady)
 
   /*
    * MGu Attention interfaceParams est un objet qui est une copie du store,
@@ -69,6 +71,15 @@
       // MGu c'est une comparaison par référence
       log('new interfaceParams subscribe:' + JSON.stringify(interfaceParams))
       interfaceParams = value[exerciseIndex]
+    }
+    if (
+      exercise.interactifObligatoire &&
+      interfaceParams &&
+      interfaceParams.interactif !== '1'
+    ) {
+      exercise.interactif = true
+      interfaceParams.interactif = '1'
+      exercicesParams.update((params) => params)
     }
   })
 
@@ -307,7 +318,11 @@
     }
   }
   async function removeAllInteractif() {
-    if (exercise?.interactifReady && isInteractif) {
+    if (
+      exercise?.interactifReady &&
+      isInteractif &&
+      !exercise.interactifObligatoire
+    ) {
       isInteractif = false
       updateInterfaceParamsAndReLoadExerciseIfNeed()
     }
@@ -322,6 +337,7 @@
         ', v:' +
         $globalOptions.v,
     )
+    if (exercise.interactifObligatoire) isInteractif = true
     if (reloadExercise && exercise.typeExercice === 'simple') {
       if (exercise.seed === undefined) exercise.seed = generateFreshSeed()
       seedrandom(exercise.seed, { global: true })
@@ -611,6 +627,12 @@
   }
 
   function switchInteractif() {
+    if (exercise.interactifObligatoire) {
+      isInteractif = true
+      exercise.interactif = true
+      updateInterfaceParamsAndReLoadExerciseIfNeed()
+      return
+    }
     if (isCorrectVisible) switchCorrectionVisible()
     isInteractif = !isInteractif
     exercise.interactif = isInteractif

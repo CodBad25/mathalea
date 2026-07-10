@@ -77,13 +77,22 @@
     if (exercicesNumber !== value.length) {
       exercicesNumber = value.length
     }
+    if (
+      exercise.interactifObligatoire &&
+      interfaceParams &&
+      interfaceParams.interactif !== '1'
+    ) {
+      exercise.interactif = true
+      interfaceParams.interactif = '1'
+      exercicesParams.update((params) => params)
+    }
   })
 
   let columnsCount = interfaceParams.cols || 1
   let isVisible = true
   let isContentVisible = true
   let isSettingsVisible = true
-  let isInteractif = exercise.interactif
+  let isInteractif = exercise.interactif || exercise.interactifObligatoire
   const interactifReady = exercise.interactifReady
   const exerciceHasNoSettings =
     !exercise.nbQuestionsModifiable &&
@@ -250,7 +259,8 @@
           exercise.seed !== undefined &&
           window.localStorage.getItem(`${exercise.id}|${exercise.seed}`) !=
             null &&
-          isContentVisible
+          isContentVisible &&
+          !isCorrectionVisible
         ) {
           await newData()
         }
@@ -297,7 +307,8 @@
     await updateDisplay()
   }
   async function removeAllInteractif() {
-    if (exercise?.interactifReady) isInteractif = false
+    if (exercise?.interactifReady && !exercise.interactifObligatoire)
+      isInteractif = false
     await updateDisplay()
   }
 
@@ -377,6 +388,7 @@
     ) {
       return
     }
+    if (exercise.interactifObligatoire) isInteractif = true
     if (
       exercise.seed === undefined &&
       typeof exercise.applyNewSeed === 'function'
@@ -619,7 +631,7 @@
       ) {
         window.localStorage.setItem(`${exercise.id}|${exercise.seed}`, 'true')
       }
-      if (isInteractif) {
+      if (isInteractif && !exercise.interactifObligatoire) {
         isInteractif = !isInteractif
         exercise.interactif = isInteractif
         await updateDisplay()
@@ -627,7 +639,9 @@
       await adjustMathalea2dFiguresWidth()
     }}
     on:clickInteractif={async (event) => {
-      isInteractif = event.detail.isInteractif
+      isInteractif = exercise.interactifObligatoire
+        ? true
+        : event.detail.isInteractif
       exercise.interactif = isInteractif
       exercicesParams.update((params) => {
         params[exerciseIndex].interactif = isInteractif ? '1' : '0'
@@ -636,6 +650,7 @@
       await updateDisplay()
     }}
     on:clickNewData={newData}
+    interactifObligatoire={exercise.interactifObligatoire}
     interactifReady={Boolean(
       exercise?.interactifReady &&
       !isCorrectionVisible &&
