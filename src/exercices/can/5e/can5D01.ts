@@ -24,7 +24,7 @@ export const dateDeModifImportante = '08/02/2022' // Une date de modification im
 export const uuid = 'd8797'
 
 export const refs = {
-  'fr-fr': ['can5D01', '6M4C-flash7'],
+  'fr-fr': ['can5D01', '6M4C-flash8'],
   'fr-ch': [],
 }
 export default class ConversionHeuresDecimalesMinutes extends Exercice {
