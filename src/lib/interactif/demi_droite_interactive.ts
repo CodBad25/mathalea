@@ -1,5 +1,6 @@
 import { context } from '../../modules/context'
 import { bleuMathalea } from '../colors'
+import MathaleaCustomElement from '../customElements/MathaleaCustomElement'
 import type { IExercice } from '../types'
 
 type ValeurPoint = {
@@ -18,7 +19,9 @@ type DemiDroiteInteractiveIncomingValue = DemiDroiteInteractiveValue & {
   showNegative?: boolean
 }
 
-class DemiDroiteInteractiveElement extends HTMLElement {
+class DemiDroiteInteractiveElement extends MathaleaCustomElement {
+  static readonly elementTag = 'demi-droite-interactive'
+
   private pointsColor = bleuMathalea
   private x0 = 0
   private initialX0 = 0
@@ -31,7 +34,6 @@ class DemiDroiteInteractiveElement extends HTMLElement {
   private showNegative = false
   private initialShowNegative = false
   private allowMultiplePoints = false
-  private interactivityOn = true
   private points: ValeurPoint[] = []
   private initialPoints: ValeurPoint[] = []
   private isPointPlacementArmed = false
@@ -39,6 +41,24 @@ class DemiDroiteInteractiveElement extends HTMLElement {
   private svg: SVGSVGElement | null = null
   private controls: HTMLDivElement | null = null
   id: string = ''
+
+  static create(options: DemiDroiteInteractiveOptions = {}): string {
+    const idAttribute = options.id ? ` id="${options.id}"` : ''
+    const x0 = options.x0 ?? 0
+    const initialT = options.initialT ?? 2
+    const minT = options.minT ?? 2
+    const maxT = options.maxT ?? 10
+    const partsCount = options.partsCount ?? 1
+    const showNegative = options.showNegative ?? false
+    const multiplePoints = options.multiplePoints ?? false
+    const interactivityOn = options.interactivityOn ?? true
+    const pointsColor = options.pointsColor ?? bleuMathalea
+    const pointsAttribute = escapeHtmlAttribute(
+      JSON.stringify(options.points ?? []),
+    )
+
+    return `<demi-droite-interactive${idAttribute} x0="${x0}" initial-t="${initialT}" min-t="${minT}" max-t="${maxT}" show-negative="${showNegative}" multiple-points="${multiplePoints}" interactivity-on="${interactivityOn}" parts-count="${partsCount}" points="${pointsAttribute}" points-color="${pointsColor}"></demi-droite-interactive>`
+  }
 
   connectedCallback() {
     this.pointsColor = this.getAttribute('points-color') ?? bleuMathalea
@@ -629,23 +649,12 @@ export function demiDroiteInteractive(
   options?: DemiDroiteInteractiveOptions,
 ): string {
   if (!context.isHtml) return ''
-  const id =
-    options?.id || `demi-droite-gradueeEx${exercice.numeroExercice}Q${question}`
-  const x0 = options?.x0 ?? 0
-  const initialT = options?.initialT ?? 2
-  const minT = options?.minT ?? 2
-  const maxT = options?.maxT ?? 10
-  const partsCount = options?.partsCount ?? 1
-  const showNegative = options?.showNegative ?? false
-  const multiplePoints = options?.multiplePoints ?? false
-  const interactivityOn = options?.interactivityOn ?? true
-  const pointsColor = options?.pointsColor ?? bleuMathalea
-  const idAttribute = id ? ` id="${id}"` : ''
-  const pointsAttribute = escapeHtmlAttribute(
-    JSON.stringify(options?.points ?? []),
-  )
-
-  return `<demi-droite-interactive${idAttribute} x0="${x0}" initial-t="${initialT}" min-t="${minT}" max-t="${maxT}" show-negative="${showNegative}" multiple-points="${multiplePoints}" interactivity-on="${interactivityOn}" parts-count="${partsCount}" points="${pointsAttribute}" points-color="${pointsColor}"></demi-droite-interactive>`
+  return DemiDroiteInteractiveElement.create({
+    ...options,
+    id:
+      options?.id ||
+      `demi-droite-gradueeEx${exercice.numeroExercice}Q${question}`,
+  })
 }
 
 function escapeHtmlAttribute(value: string): string {

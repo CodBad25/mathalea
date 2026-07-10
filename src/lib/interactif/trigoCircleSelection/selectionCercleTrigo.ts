@@ -7,6 +7,7 @@ import {
 } from '../../mathFonctions/trigo'
 import type { IExercice } from '../../types'
 import './TrigoCircleSelectionElement'
+import TrigoCircleSelectionElement from './TrigoCircleSelectionElement'
 
 export function trigoCircleSelectionValue(
   angles: Array<number | FractionEtendue>,
@@ -41,11 +42,13 @@ export function selectionCercleTrigo(
     label: compactTexForSvg(angle.angleTex),
     coordinateLabel: `(${compactTexForSvg(angle.cosTex)};${compactTexForSvg(angle.sinTex)})`,
   }))
-  const style = options.style ? ` style="${options.style}"` : ''
-  const angleLabels =
-    options.showAngleLabels === false ? ' show-angle-labels="false"' : ''
-  const coordinates = options.showCoordinateLabels
-    ? ' show-coordinate-labels'
-    : ''
-  return `<trigo-circle-selection-v2 class="mx-2 trigoCircleSelection" id="svgSelectionEx${exercice.numeroExercice}Q${i}"${style}${angleLabels}${coordinates} points="${encodeURIComponent(JSON.stringify(points))}"></trigo-circle-selection-v2><span id="resultatCheckEx${exercice.numeroExercice}Q${i}"></span>`
+  const html = TrigoCircleSelectionElement.create({
+    className: 'mx-2 trigoCircleSelection',
+    id: `svgSelectionEx${exercice.numeroExercice}Q${i}`,
+    style: options.style,
+    showAngleLabels: options.showAngleLabels,
+    showCoordinateLabels: options.showCoordinateLabels,
+    points,
+  })
+  return `${html}<span id="resultatCheckEx${exercice.numeroExercice}Q${i}"></span>`
 }

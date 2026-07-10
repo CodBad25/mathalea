@@ -1,3 +1,5 @@
+import MathaleaCustomElement from '../../customElements/MathaleaCustomElement'
+
 type TrigoCircleSelectionPoint = {
   angleDeg: number
   value: number
@@ -6,12 +8,14 @@ type TrigoCircleSelectionPoint = {
 }
 
 const svgNamespace = 'http://www.w3.org/2000/svg'
-const BaseHTMLElement: typeof HTMLElement =
+const BaseHTMLElement: typeof MathaleaCustomElement =
   typeof HTMLElement === 'undefined'
-    ? (class {} as unknown as typeof HTMLElement)
-    : HTMLElement
+    ? (class {} as unknown as typeof MathaleaCustomElement)
+    : MathaleaCustomElement
 
 class TrigoCircleSelectionElement extends BaseHTMLElement {
+  static readonly elementTag = 'trigo-circle-selection-v2'
+
   private _points: TrigoCircleSelectionPoint[] = []
   private _selectedValues: Set<number> = new Set()
   private _updatingValueAttr = false
@@ -21,6 +25,31 @@ class TrigoCircleSelectionElement extends BaseHTMLElement {
   constructor() {
     super()
     this.attachShadow({ mode: 'open' })
+  }
+
+  static create({
+    id,
+    className,
+    points,
+    style,
+    showAngleLabels,
+    showCoordinateLabels,
+  }: {
+    id?: string
+    className?: string
+    points: TrigoCircleSelectionPoint[]
+    style?: string
+    showAngleLabels?: boolean
+    showCoordinateLabels?: boolean
+  }): string {
+    const attrs: string[] = []
+    if (id) attrs.push(`id="${id}"`)
+    if (className) attrs.push(`class="${className}"`)
+    if (style) attrs.push(`style="${style}"`)
+    if (showAngleLabels === false) attrs.push('show-angle-labels="false"')
+    if (showCoordinateLabels) attrs.push('show-coordinate-labels')
+    attrs.push(`points="${encodeURIComponent(JSON.stringify(points))}"`)
+    return `<trigo-circle-selection-v2 ${attrs.join(' ')}></trigo-circle-selection-v2>`
   }
 
   static get observedAttributes() {
@@ -214,7 +243,11 @@ class TrigoCircleSelectionElement extends BaseHTMLElement {
     return 80
   }
 
-  private createFractionLabel(cx: number, cy: number, label: string): SVGElement {
+  private createFractionLabel(
+    cx: number,
+    cy: number,
+    label: string,
+  ): SVGElement {
     const slash = label.indexOf('/')
     if (slash === -1) {
       const t = this.createSvgElement('text')
@@ -398,7 +431,11 @@ svg {
         const lr = this.labelRadius(point.angleDeg)
         const labelText = point.label ?? this.angleLabel(point.angleDeg)
         svg.appendChild(
-          this.createFractionLabel(Math.cos(angle) * lr, -Math.sin(angle) * lr, labelText),
+          this.createFractionLabel(
+            Math.cos(angle) * lr,
+            -Math.sin(angle) * lr,
+            labelText,
+          ),
         )
       }
       if (this._showCoordinateLabels && point.coordinateLabel) {

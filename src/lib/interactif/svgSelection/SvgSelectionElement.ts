@@ -1,4 +1,5 @@
 type SvgWithValue = { svg: string; value: number }
+import MathaleaCustomElement from '../../customElements/MathaleaCustomElement'
 /**
  * Composant de sélection d'éléments SVG avec valeurs associées
  * Permet de sélectionner une ou plusieurs options représentées par des SVG
@@ -9,7 +10,9 @@ type SvgWithValue = { svg: string; value: number }
  * Le composant est accessible et réactif aux changements d'attributs
  * @author Jean-claude Lhote
  */
-class SvgSelectionElement extends HTMLElement {
+class SvgSelectionElement extends MathaleaCustomElement {
+  static readonly elementTag = 'svg-selection'
+
   private _svgsWithValue: SvgWithValue[][] = []
   private _selectedIndices: Set<number> = new Set()
   private _updatingValueAttr = false
@@ -20,6 +23,34 @@ class SvgSelectionElement extends HTMLElement {
   constructor() {
     super()
     this.attachShadow({ mode: 'open' })
+  }
+
+  static create({
+    id,
+    className,
+    svgs,
+    style,
+    gapX,
+    gapY,
+    itemPadding,
+  }: {
+    id?: string
+    className?: string
+    svgs: SvgWithValue[][] | SvgWithValue[]
+    style?: string
+    gapX?: string
+    gapY?: string
+    itemPadding?: string
+  }): string {
+    const attrs: string[] = []
+    if (id) attrs.push(`id="${id}"`)
+    if (className) attrs.push(`class="${className}"`)
+    if (style) attrs.push(`style="${style}"`)
+    if (gapX) attrs.push(`gap-x="${gapX}"`)
+    if (gapY) attrs.push(`gap-y="${gapY}"`)
+    if (itemPadding) attrs.push(`item-padding="${itemPadding}"`)
+    attrs.push(`svgs="${encodeURIComponent(JSON.stringify(svgs))}"`)
+    return `<svg-selection ${attrs.join(' ')}></svg-selection>`
   }
 
   static get observedAttributes() {

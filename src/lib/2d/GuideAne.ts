@@ -1,4 +1,5 @@
 // Importer renderKatex de mathalea
+import MathaleaCustomElement from '../customElements/MathaleaCustomElement'
 import { renderKatex } from '../mathalea'
 
 function detectPixelsPerCm() {
@@ -69,7 +70,30 @@ function formatFraction(decimal: number, showDecimal = true) {
 
   return fractionStr
 }
-export class GuideAne extends HTMLElement {
+export class GuideAne extends MathaleaCustomElement {
+  static readonly elementTag = 'guide-ane'
+
+  static create({
+    id,
+    className,
+    width = '800px',
+    height = '400px',
+    data,
+  }: {
+    id?: string
+    className?: string
+    width?: string
+    height?: string
+    data: Record<string, unknown>
+  }): string {
+    const attributes: string[] = []
+    if (id) attributes.push(`id="${id}"`)
+    if (className) attributes.push(`class="${className}"`)
+    attributes.push(`style="width: ${width}; height: ${height}"`)
+    attributes.push(`data="${JSON.stringify(data).replace(/"/g, '&quot;')}"`)
+    return `<guide-ane ${attributes.join(' ')}></guide-ane>`
+  }
+
   n: number // Nombre de parties (calculé selon la position de C)
   p: number // part place du point D sur [AB]
   alpha: number // angle en degrés entre [AB] et [AC]
@@ -1291,17 +1315,6 @@ export function addGuideAne(
 
   // SUPPRIMER : Ne plus passer B dans les données car il sera toujours à 10 cm
 
-  // Construire les attributs HTML
-  const attributes: string[] = []
-
-  if (config.id) {
-    attributes.push(`id="${config.id}"`)
-  }
-
-  if (config.className) {
-    attributes.push(`class="${config.className}"`)
-  }
-
   if (config.targetValue !== null) {
     data.target = config.targetValue
   }
@@ -1314,17 +1327,13 @@ export function addGuideAne(
     data.displayTargetOn = config.displayTargetOn
   }
 
-  // Ajouter les styles inline
-  const styles = [`width: ${config.width}`, `height: ${config.height}`]
-  attributes.push(`style="${styles.join('; ')}"`)
-
-  // Encoder les données en JSON pour l'attribut data
-  const dataJson = JSON.stringify(data).replace(/"/g, '&quot;')
-  attributes.push(`data="${dataJson}"`)
-
-  // Construire et retourner la balise HTML
-  const attributesStr = attributes.length > 0 ? ` ${attributes.join(' ')}` : ''
-  return `<guide-ane${attributesStr}></guide-ane>`
+  return GuideAne.create({
+    id: config.id,
+    className: config.className,
+    width: config.width,
+    height: config.height,
+    data,
+  })
 }
 
 /**

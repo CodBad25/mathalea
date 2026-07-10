@@ -1,3 +1,4 @@
+import MathaleaCustomElement from '../customElements/MathaleaCustomElement'
 import ce from '../interactif/comparisonFunctions'
 
 /**
@@ -9,7 +10,9 @@ import ce from '../interactif/comparisonFunctions'
  * <my-calculator></my-calculator>
  * <my-calculator broken-keys="*,5"></my-calculator>
  */
-class CalculatorElement extends HTMLElement {
+class CalculatorElement extends MathaleaCustomElement {
+  static readonly elementTag = 'my-calculator'
+
   private fullText: string = '0' // Texte complet affiché
   private displayElement: HTMLElement | null = null
   private history: Array<{ expression: string; result: string }> = [] // Historique des calculs

@@ -73,7 +73,7 @@ export function compareSheetFunction(
   let maxMessages = ''
   // sinon contrôler que les résultats sont corrects pour différentes valeurs avec les formules saisies par l'utilisateur
 
-  const testSheetForGoodAnswers = MySpreadsheetElement.create({
+  const testSheetForGoodAnswers = MySpreadsheetElement.createEltToAppendToDom({
     data: userData,
     minDimensions: userSheet.getMinDimensions(),
     style: userSheet.getStyle(),
@@ -82,14 +82,16 @@ export function compareSheetFunction(
     id: 'testSheet',
   })
 
-  const testSheetForUserResponses = MySpreadsheetElement.create({
-    data: userData,
-    minDimensions: userSheet.getMinDimensions(),
-    style: userSheet.getStyle(),
-    columns: userSheet.getColumns(),
-    interactif: false,
-    id: 'testSheetUser',
-  })
+  const testSheetForUserResponses = MySpreadsheetElement.createEltToAppendToDom(
+    {
+      data: userData,
+      minDimensions: userSheet.getMinDimensions(),
+      style: userSheet.getStyle(),
+      columns: userSheet.getColumns(),
+      interactif: false,
+      id: 'testSheetUser',
+    },
+  )
   testSheetForGoodAnswers.style.position = 'absolute'
   testSheetForGoodAnswers.style.left = '-9999px'
   document.body.appendChild(testSheetForGoodAnswers)
@@ -377,23 +379,24 @@ export function addSheet({
   nbColonnesCachees?: number
   readOnlyCells?: string[]
 }): string {
+  const sheetHtml = MySpreadsheetElement.create({
+    id: `sheet-Ex${numeroExercice}Q${question}`,
+    data,
+    minDimensions,
+    style,
+    columns,
+    interactif,
+    showVerifyButton,
+    nbLignesCachees,
+    nbColonnesCachees,
+    readOnlyCells,
+  })
+
   return (
-    `<my-spreadsheet
-  id="sheet-Ex${numeroExercice}Q${question}"
-  data='${JSON.stringify(data)}'
-  min-dimensions='${JSON.stringify(minDimensions)}'
-  ${style ? `style='${JSON.stringify(style)}'` : ''}
-  columns='${JSON.stringify(columns)}'
-  interactif='${interactif}'
-    ${showVerifyButton !== undefined ? `show-verify-button='${showVerifyButton}'` : ''}
-    ${nbLignesCachees !== undefined ? `nb-lignes-cachees='${nbLignesCachees}'` : ''}
-    ${nbColonnesCachees !== undefined ? `nb-colonnes-cachees='${nbColonnesCachees}'` : ''}
-    ${readOnlyCells && readOnlyCells.length > 0 ? `readonly-cells='${JSON.stringify(readOnlyCells)}'` : ''}
->` +
+    sheetHtml +
     (interactif
       ? `<div class="ml-2 py-2" id="resultatCheckEx${numeroExercice}Q${question}"></div>
 <div class ="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${numeroExercice}Q${question}"}></div>`
-      : '') +
-    '</my-spreadsheet>'
+      : '')
   )
 }

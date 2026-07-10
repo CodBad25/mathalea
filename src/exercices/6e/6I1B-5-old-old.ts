@@ -116,7 +116,7 @@ export default class ExerciceTableur extends Exercice {
     // 1. Récupère les données de l'utilisateur
     const userData = userSheet.getData()
     const nbSteps = nbLignes[q]
-    const testSheet = MySpreadsheetElement.create({
+    const testSheet = MySpreadsheetElement.createEltToAppendToDom({
       data: userData,
       minDimensions: userSheet.getMinDimensions(),
       style: userSheet.getStyle(),
@@ -128,7 +128,7 @@ export default class ExerciceTableur extends Exercice {
     testSheet.style.left = '-9999px'
     document.body.appendChild(testSheet)
 
-    const correctionSheet = MySpreadsheetElement.create({
+    const correctionSheet = MySpreadsheetElement.createEltToAppendToDom({
       data: userData,
       minDimensions: userSheet.getMinDimensions(),
       style: userSheet.getStyle(),

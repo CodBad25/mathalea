@@ -3,6 +3,7 @@ import katexCss from 'katex/dist/katex.min.css?inline'
 import { MathfieldElement } from 'mathlive'
 import { context } from '../../../modules/context'
 import { bleuMathalea } from '../../colors'
+import MathaleaCustomElement from '../../customElements/MathaleaCustomElement'
 import type { IExercice, ValeurNames } from '../../types'
 import { buildDataKeyboardFromStyle, KeyboardType } from '../claviers/keyboard'
 import { setMathfield, setMathfieldListener } from './setMathfield'
@@ -68,7 +69,9 @@ const buildDataKeyboardString = (style = '') => {
   return blocks.join(' ')
 }
 
-export class MultiMathfieldElement extends HTMLElement {
+export class MultiMathfieldElement extends MathaleaCustomElement {
+  static readonly elementTag = 'multi-mathfield'
+
   private readonly contentHost: HTMLSpanElement
 
   constructor() {
@@ -118,6 +121,26 @@ export class MultiMathfieldElement extends HTMLElement {
       result[champ] = valeur
     }
     return result
+  }
+
+  static create({
+    id,
+    dataTemplate,
+    dataOptions,
+    feedbackId,
+  }: {
+    id: string
+    dataTemplate: string
+    dataOptions: DataOptionsMultiMathfield
+    feedbackId?: string
+  }): string {
+    const dataOptionsStr = encodeURIComponent(JSON.stringify(dataOptions))
+      .replace(/'/g, '%27')
+      .replace(/"/g, '%22')
+
+    const html = `<multi-mathfield id="${id}" data-template="${dataTemplate.replace(/"/g, '&quot;')}" data-options="${dataOptionsStr}"></multi-mathfield>`
+    if (!feedbackId) return html
+    return `${html}<div class="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="${feedbackId}" style="display: none;"></div>`
   }
 
   connectedCallback() {
@@ -332,6 +355,14 @@ export class MultiMathfieldElement extends HTMLElement {
     return result
   }
 
+  get value() {
+    return this.getValue()
+  }
+
+  set value(answers: Record<string, any>) {
+    this.setAnswers(answers)
+  }
+
   getSpansResultats() {
     const result: Record<string, HTMLElement> = {}
     if (this.shadowRoot) {
@@ -395,11 +426,12 @@ export function addMultiMathfield(
     if (!customElements.get('multi-mathfield')) {
       customElements.define('multi-mathfield', MultiMathfieldElement)
     }
-    // On encode la chaîne JSON et on échappe les guillemets doubles pour l'attribut HTML
-    const dataOptionsStr = encodeURIComponent(JSON.stringify(enrichedOptions))
-      .replace(/'/g, '%27')
-      .replace(/"/g, '%22')
-    return `<multi-mathfield id="multiMathfieldEx${exercice.numeroExercice}Q${questionIndex}" data-template="${dataTemplate.replace(/"/g, '&quot;')}" data-options="${dataOptionsStr}"></multi-mathfield><div class="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${exercice.numeroExercice}Q${questionIndex}" style="display: none;"></div>`
+    return MultiMathfieldElement.create({
+      id: `multiMathfieldEx${exercice.numeroExercice}Q${questionIndex}`,
+      dataTemplate,
+      dataOptions: enrichedOptions,
+      feedbackId: `feedbackEx${exercice.numeroExercice}Q${questionIndex}`,
+    })
   } else {
     // On traite ligne par ligne pour détecter les items a), b), ... en début de ligne
     const lines = dataTemplate.split('\n')

@@ -1,4 +1,5 @@
 import { orangeMathalea } from '../lib/colors'
+import MathaleaCustomElement from './customElements/MathaleaCustomElement'
 /**
  * Horloge interactive
  * @author Rémi Angot
@@ -10,7 +11,9 @@ import { orangeMathalea } from '../lib/colors'
  * @attr {boolean} [showHands=true] - Indique si les aiguilles de l'horloge doivent être affichées
  * @attr {boolean} [showSecond=true] - Indique si l'aiguille des secondes doit être affichée
  */
-class InteractiveClock extends HTMLElement {
+class InteractiveClock extends MathaleaCustomElement {
+  static readonly elementTag = 'interactive-clock'
+
   static readonly BASE_RENDER_SIZE_EM = 12.5
   svgHandHour!: SVGElement
   svgHandMinute!: SVGElement

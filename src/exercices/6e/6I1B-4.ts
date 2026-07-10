@@ -115,7 +115,7 @@ export default class ExerciceTableur extends Exercice {
     // 1. Récupère les données de l'utilisateur
     const userData = userSheet.getData()
     const nbSteps = this.listeSteps[q].length
-    const testSheet = MySpreadsheetElement.create({
+    const testSheet = MySpreadsheetElement.createEltToAppendToDom({
       data: userData,
       minDimensions: userSheet.getMinDimensions(),
       style: userSheet.getStyle(),

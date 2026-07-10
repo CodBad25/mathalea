@@ -1,11 +1,37 @@
+import MathaleaCustomElement from '../../customElements/MathaleaCustomElement'
 import ListeDeroulante, { type AllChoicesType } from './ListeDeroulante'
 
-class ListeDeroulanteElement extends HTMLElement {
+class ListeDeroulanteElement extends MathaleaCustomElement {
+  static readonly elementTag = 'liste-deroulante'
+
   private _listeDeroulante?: ListeDeroulante
 
   constructor() {
     super()
     this.attachShadow({ mode: 'open' })
+  }
+
+  static create({
+    id,
+    className,
+    choices,
+    choix0,
+  }: {
+    id?: string
+    className?: string
+    choices?: AllChoicesType
+    choix0?: boolean
+  } = {}): string {
+    const attrs: string[] = []
+    if (id) attrs.push(`id="${id}"`)
+    if (className) attrs.push(`class="${className}"`)
+    if (choices) {
+      attrs.push(`choices="${encodeURIComponent(JSON.stringify(choices))}"`)
+    }
+    if (choix0 !== undefined) {
+      attrs.push(`choix0="${choix0 ? 'true' : 'false'}"`)
+    }
+    return `<liste-deroulante ${attrs.join(' ')}></liste-deroulante>`
   }
 
   static get observedAttributes() {

@@ -1,11 +1,86 @@
 import jspreadsheet from 'jspreadsheet-ce'
 import 'jspreadsheet-ce/src/jspreadsheet.css'
+import MathaleaCustomElement from '../customElements/MathaleaCustomElement'
 
-export class MySpreadsheetElement extends HTMLElement {
-  private _spreadsheet: any = null
+type SpreadsheetStyle = Record<string, string>
+
+type SpreadsheetLike = {
+  getValueFromCoords: (
+    column: number,
+    row: number,
+    processed: boolean,
+  ) => unknown
+  setValueFromCoords: (
+    column: number,
+    row: number,
+    value: string | number,
+    force: boolean,
+  ) => void
+  getData: () => (string | number)[][]
+  setData: (data: unknown[]) => void
+  setStyle: (style: SpreadsheetStyle) => void
+  setReadOnly: (cellRef: string, value: boolean) => void
+  showRow: (rowIndex: number) => void
+  hideRow: (rowIndex: number) => void
+  showColumn: (colIndex: number) => void
+  hideColumn: (colIndex: number) => void
+  minDimensions?: [number, number]
+  style?: Record<string, unknown>
+  columns?: unknown[]
+}
+
+export class MySpreadsheetElement extends MathaleaCustomElement {
+  static readonly elementTag = 'my-spreadsheet'
+
+  static create({
+    id,
+    data = [],
+    minDimensions = [5, 5],
+    style,
+    columns = [],
+    interactif = false,
+    showVerifyButton,
+    nbLignesCachees,
+    nbColonnesCachees,
+    readOnlyCells,
+  }: {
+    id?: string
+    data?: (string | number)[][]
+    minDimensions?: [number, number]
+    style?: unknown
+    columns?: unknown[]
+    interactif?: boolean
+    showVerifyButton?: boolean
+    nbLignesCachees?: number
+    nbColonnesCachees?: number
+    readOnlyCells?: string[]
+  } = {}): string {
+    return super.create({
+      id,
+      data,
+      minDimensions,
+      style,
+      columns,
+      interactif,
+      showVerifyButton,
+      nbLignesCachees,
+      nbColonnesCachees,
+      readOnlyCells:
+        readOnlyCells && readOnlyCells.length > 0 ? readOnlyCells : undefined,
+    })
+  }
+
+  private _spreadsheet: SpreadsheetLike | null = null
   private _buttonListener?: EventListener
   private _customListeners: { [eventName: string]: EventListener } = {}
   private showVerifyButton: boolean = true
+
+  private get spreadsheet(): SpreadsheetLike {
+    if (this._spreadsheet == null) {
+      throw new Error('Spreadsheet is not mounted yet.')
+    }
+    return this._spreadsheet
+  }
 
   constructor() {
     super()
@@ -23,7 +98,7 @@ export class MySpreadsheetElement extends HTMLElement {
   /**
    * Méthode statique pour créer et configurer un MySpreadsheetElement
    */
-  static create({
+  static createEltToAppendToDom({
     id,
     data = [],
     minDimensions = [5, 5],
@@ -36,8 +111,8 @@ export class MySpreadsheetElement extends HTMLElement {
     id?: string
     data?: (string | number)[][]
     minDimensions?: [number, number]
-    style?: any
-    columns?: any[]
+    style?: Record<string, unknown>
+    columns?: unknown[]
     interactif?: boolean
     showVerifyButton?: boolean
     readOnlyCells?: string[]
@@ -67,9 +142,9 @@ export class MySpreadsheetElement extends HTMLElement {
       document.createElement('div')) as HTMLDivElement
 
     let data: (number | string)[][] = []
-    let minDimensions = [5, 5]
-    let style = {}
-    let columns = []
+    let minDimensions: [number, number] = [5, 5]
+    let style: Record<string, unknown> = {}
+    let columns: unknown[] = []
     let nbLignesCachees = 0
     let nbColonnesCachees = 0
     let readOnlyCells: string[] = []
@@ -79,33 +154,51 @@ export class MySpreadsheetElement extends HTMLElement {
           | string
           | number
         )[][]
-    } catch {}
+    } catch {
+      // Attribut data invalide, on conserve la valeur par défaut.
+    }
     try {
-      if (this.getAttribute('min-dimensions'))
-        minDimensions = JSON.parse(this.getAttribute('min-dimensions') ?? '')
-    } catch {}
+      if (this.getAttribute('min-dimensions')) {
+        const parsed = JSON.parse(this.getAttribute('min-dimensions') ?? '')
+        if (Array.isArray(parsed) && parsed.length >= 2) {
+          minDimensions = [Number(parsed[0]), Number(parsed[1])]
+        }
+      }
+    } catch {
+      // Attribut min-dimensions invalide, on conserve la valeur par défaut.
+    }
     try {
       if (this.getAttribute('style'))
         style = JSON.parse(this.getAttribute('style') ?? '')
-    } catch {}
+    } catch {
+      // Attribut style invalide, on conserve la valeur par défaut.
+    }
     try {
       if (this.getAttribute('columns'))
         columns = JSON.parse(this.getAttribute('columns') ?? '[]')
-    } catch {}
+    } catch {
+      // Attribut columns invalide, on conserve la valeur par défaut.
+    }
     try {
       if (this.getAttribute('nb-lignes-cachees'))
         nbLignesCachees = Number(this.getAttribute('nb-lignes-cachees') ?? '0')
-    } catch {}
+    } catch {
+      // Attribut nb-lignes-cachees invalide, on conserve la valeur par défaut.
+    }
     try {
       if (this.getAttribute('nb-colonnes-cachees'))
         nbColonnesCachees = Number(
           this.getAttribute('nb-colonnes-cachees') ?? '0',
         )
-    } catch {}
+    } catch {
+      // Attribut nb-colonnes-cachees invalide, on conserve la valeur par défaut.
+    }
     try {
       if (this.getAttribute('readonly-cells'))
         readOnlyCells = JSON.parse(this.getAttribute('readonly-cells') ?? '[]')
-    } catch {}
+    } catch {
+      // Attribut readonly-cells invalide, on conserve la valeur par défaut.
+    }
     const expandReadOnlyCells = (cells: string[]) => {
       const toIndex = (letters: string) => {
         let index = 0
@@ -163,18 +256,19 @@ export class MySpreadsheetElement extends HTMLElement {
           minDimensions,
           tableOverflow: true,
           tableHeight: '300px',
-          style,
-          columns,
-        } as any,
+          style: style as Record<string, string>,
+          columns: columns as never,
+        },
       ],
-    })[0]
+    })[0] as unknown as SpreadsheetLike
+    const spreadsheet = this.spreadsheet
     container.addEventListener('contextmenu', (e) => {
       e.preventDefault()
       e.stopPropagation()
     })
     if (readOnlyCells.length > 0) {
       expandReadOnlyCells(readOnlyCells).forEach((cellRef) => {
-        this._spreadsheet.setReadOnly(cellRef, true)
+        spreadsheet.setReadOnly(cellRef, true)
       })
     }
     for (let i = 0; i < nbLignesCachees; i++) {
@@ -278,31 +372,31 @@ export class MySpreadsheetElement extends HTMLElement {
   }
 
   getCellValue(column: number, row: number) {
-    return this._spreadsheet.getValueFromCoords(column, row, true)
+    return this.spreadsheet.getValueFromCoords(column, row, true)
   }
 
   getCellFormula(column: number, row: number) {
     return String(
-      this._spreadsheet.getValueFromCoords(column, row, false),
+      this.spreadsheet.getValueFromCoords(column, row, false),
     ).toUpperCase()
   }
 
   getData() {
     // Retourne les données de la première worksheet
-    return this._spreadsheet.getData() ?? []
+    return this.spreadsheet.getData() ?? []
   }
 
   setCellValue(column: number, row: number, value: string | number) {
-    this._spreadsheet.setValueFromCoords(column, row, value, true)
+    this.spreadsheet.setValueFromCoords(column, row, value, true)
   }
 
   setCellFormula(column: number, row: number, formula: string) {
     if (!formula.startsWith('=')) formula = '=' + formula.toUpperCase()
-    this._spreadsheet.setValueFromCoords(column, row, formula, true)
+    this.spreadsheet.setValueFromCoords(column, row, formula, true)
   }
 
-  setData(data: any[]) {
-    this._spreadsheet.setData(data)
+  setData(data: unknown[]) {
+    this.spreadsheet.setData(data)
   }
 
   isMounted() {
@@ -310,35 +404,35 @@ export class MySpreadsheetElement extends HTMLElement {
   }
 
   getMinDimensions() {
-    return this._spreadsheet.minDimensions ?? [5, 5]
+    return this.spreadsheet.minDimensions ?? [5, 5]
   }
 
-  getStyle() {
-    return this._spreadsheet.style ?? {}
+  getStyle(): Record<string, unknown> {
+    return this.spreadsheet.style ?? {}
   }
 
-  setCellStyle(style: Record<string, string>) {
-    this._spreadsheet.setStyle(style)
+  setCellStyle(style: SpreadsheetStyle) {
+    this.spreadsheet.setStyle(style)
   }
 
-  getColumns() {
-    return this._spreadsheet.columns ?? []
+  getColumns(): unknown[] {
+    return this.spreadsheet.columns ?? []
   }
 
   showRow(rowIndex: number) {
-    this._spreadsheet.showRow(rowIndex)
+    this.spreadsheet.showRow(rowIndex)
   }
 
   hideRow(rowIndex: number) {
-    this._spreadsheet.hideRow(rowIndex)
+    this.spreadsheet.hideRow(rowIndex)
   }
 
   showColumn(colIndex: number) {
-    this._spreadsheet.showColumn(colIndex)
+    this.spreadsheet.showColumn(colIndex)
   }
 
   hideColumn(colIndex: number) {
-    this._spreadsheet.hideColumn(colIndex)
+    this.spreadsheet.hideColumn(colIndex)
   }
 }
 
