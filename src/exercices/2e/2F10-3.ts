@@ -178,7 +178,7 @@ export default class Representerfonctionaffine extends Exercice {
              On trace la droite $(AB)$.`
                 }`
               } else {
-                texteCorr += `Il s'agit d'une fonction $${this.sup3 ? 'linéaire' : 'affine'} particulière constante ($f(x)=0x${ecritureAlgebrique(b)}$).<br>
+                texteCorr += `Il s'agit d'une fonction ${this.sup3 ? 'linéaire' : 'affine'} particulière constante ($f(x)=0x${ecritureAlgebrique(b)}$).<br>
              ${
                this.sup3
                  ? ``

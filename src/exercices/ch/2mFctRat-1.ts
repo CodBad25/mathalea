@@ -69,7 +69,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
         a = this.sup2 ? 0 : randint(1, 5, [0])
         b = randint(-10, 10, [0])
         c = randint(-10, 10, [0])
-        d = randint(-10, 10)
+        d = randint(-10, 10, [0])
         xInterditFrac = new FractionEtendue(-d, c)
         xInterdit = xInterditFrac.valeurDecimale
       } while (xInterdit > 4 || xInterdit < -4)
@@ -253,7 +253,12 @@ export default class ExerciceTangenteCourbe extends Exercice {
           ],
           -15,
           15,
-          { nomFonction: '$f(x)$', fractionTex: true },
+          {
+            nomFonction: '$f(x)$',
+            fractionTex: true,
+            borneInf: '-\\infty',
+            borneSup: '+\\infty',
+          },
         )
       } else {
         tableHtml = tableauSignesFacteurs(
@@ -271,7 +276,12 @@ export default class ExerciceTangenteCourbe extends Exercice {
           ],
           -15,
           15,
-          { nomFonction: '$f(x)$', fractionTex: true },
+          {
+            nomFonction: '$f(x)$',
+            fractionTex: true,
+            borneInf: '-\\infty',
+            borneSup: '+\\infty',
+          },
         )
       }
       const cor4 = `Le tableau de signes de la fonction $f$ est donné par :<br>${tableHtml}.`

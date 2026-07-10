@@ -633,6 +633,10 @@ export type TableauSignesFacteursOptions = {
   nomVariable?: string
   nomFonction?: string
   espcl?: number
+  lgt?: number
+  afficherBornes?: boolean
+  borneInf?: string | number
+  borneSup?: string | number
 }
 /**
  * renvoie le tableau de signes d'une fonction
@@ -784,6 +788,10 @@ export function tableauSignesFacteurs(
     nomVariable = 'x',
     nomFonction = 'f(x)',
     espcl,
+    lgt,
+    afficherBornes = true,
+    borneInf,
+    borneSup,
   }: TableauSignesFacteursOptions = {},
 ) {
   const EPSILON = 1e-9
@@ -954,38 +962,52 @@ export function tableauSignesFacteurs(
   const premiereLigne: (string | number)[] = []
   const largeurFraction = context.isHtml ? 28 : 22
   const largeurStandard = context.isHtml ? 16 : 12
+  const contientCommandeFraction = (valeur: string | number) =>
+    typeof valeur === 'string' && /\\d?frac\b/.test(valeur)
   const largeurPremiereLigne = (
     valeur: string | number,
     point?: BoundaryPoint,
   ) => {
-    const formatFraction =
-      typeof valeur === 'string' &&
-      (valeur.includes('\\frac') || valeur.includes('\\dfrac'))
     const valeurFraction =
       point?.valeur instanceof FractionEtendue &&
       point.valeur.denIrred !== 1 &&
       point.valeur.numIrred !== 0
-    if (formatFraction || valeurFraction) return largeurFraction
+    if (contientCommandeFraction(valeur) || valeurFraction)
+      return largeurFraction
     return largeurStandard
   }
 
   let fractionsDansEntete = fractionTex
 
+  const textePoint = (point: BoundaryPoint) => {
+    if (fractionTex === false) {
+      if (point.valeur instanceof FractionEtendue) {
+        return texNombre(point.valeur.toNumber())
+      }
+      return stringNombre(point.valeur, 2)
+    }
+    if (point.valeur instanceof FractionEtendue) {
+      return point.valeur.texFractionSimplifiee
+    }
+    return new FractionEtendue(point.valeur, 1).texFractionSimplifiee
+  }
+
   for (let index = 0; index < points.length; index++) {
     const point = points[index]
+    const estBorneInf = index === 0
+    const estBorneSup = index === points.length - 1
+    const borneAffichee = estBorneInf
+      ? borneInf
+      : estBorneSup
+        ? borneSup
+        : undefined
     let texte: string | number = ''
-    if (index !== 0 && index !== points.length - 1) {
-      if (fractionTex === false) {
-        if (point.valeur instanceof FractionEtendue) {
-          texte = texNombre(point.valeur.toNumber())
-        } else {
-          texte = stringNombre(point.valeur, 2)
-        }
-      } else if (point.valeur instanceof FractionEtendue) {
-        texte = point.valeur.texFractionSimplifiee
-      } else {
-        texte = new FractionEtendue(point.valeur, 1).texFractionSimplifiee
-      }
+    if (
+      borneAffichee !== undefined ||
+      afficherBornes ||
+      (!estBorneInf && !estBorneSup)
+    ) {
+      texte = borneAffichee ?? textePoint(point)
       if (
         point.valeur instanceof FractionEtendue &&
         point.valeur.denIrred !== 1 &&
@@ -998,19 +1020,24 @@ export function tableauSignesFacteurs(
   }
 
   if (substituts && Array.isArray(substituts)) {
-    for (let i = 0; i < premiereLigne.length; i += 2) {
+    for (let index = 0; index < points.length; index++) {
+      const i = index * 2
       if (premiereLigne[i] === '') continue
-      const nb: number = Number(
-        String(premiereLigne[i]).replaceAll(/\s/g, '').replace(',', '.'),
-      )
+      if (index === 0 && borneInf !== undefined) continue
+      if (index === points.length - 1 && borneSup !== undefined) continue
       const substitut: Substitut | undefined = substituts.find(
-        (el: Substitut) => egal(el.antVal, nb, 0.01),
+        (el: Substitut) => egal(el.antVal, points[index].numeric, 0.01),
       )
       if (substitut) {
         premiereLigne[i] = substitut.antTex
       }
     }
   }
+
+  const contientFractionAffichee = premiereLigne.some(
+    (valeur, index) => index % 2 === 0 && contientCommandeFraction(valeur),
+  )
+  fractionsDansEntete = fractionsDansEntete || contientFractionAffichee
 
   const segments = points.length - 1
   const lignes: (string | number)[][] = []
@@ -1093,11 +1120,26 @@ export function tableauSignesFacteurs(
   }
   lignes.push(ligneFinale)
 
-  const entetes: [string, number, number][] = [[nomVariable, 1.5, 10]]
+  const hauteurEntete = contientFractionAffichee ? 2 : 1.5
+  const entetes: [string, number, number][] = [[nomVariable, hauteurEntete, 10]]
   for (const facteur of facteurs) {
     entetes.push([facteur.nom, 1.5, 10])
   }
   entetes.push([nomFonction, 1.5, 10])
+
+  const largeurLibelle = (libelle: string) => {
+    const sansDollars =
+      libelle[0] === '$' && libelle[libelle.length - 1] === '$'
+        ? libelle.substring(1, libelle.length - 1)
+        : libelle
+    const longueurApprox = sansDollars
+      .replaceAll(/\\d?frac\{([^}]*)\}\{([^}]*)\}/g, '$1$2')
+      .replaceAll(/\\[a-zA-Z]+/g, '')
+      .replaceAll(/[{}]/g, '').length
+    return Math.min(8, Math.max(3.4, 1.2 + longueurApprox * 0.35))
+  }
+  const largeurPremiereColonne =
+    lgt ?? Math.max(...entetes.map(([libelle]) => largeurLibelle(libelle)))
 
   const espacementColonnes =
     espcl ??
@@ -1114,7 +1156,7 @@ export function tableauSignesFacteurs(
     tabLines: lignes,
     espcl: espacementColonnes,
     deltacl: 0.8,
-    lgt: 3,
+    lgt: largeurPremiereColonne,
   })
 }
 
