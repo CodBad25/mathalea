@@ -92,6 +92,8 @@ export default class TableauSignePolyDegre3 extends Exercice {
         fractionTex: true,
         nomVariable: 'x',
         nomFonction: 'f(x)',
+        borneInf: '-\\infty',
+        borneSup: '+\\infty',
       })
 
       // Fonction correcte

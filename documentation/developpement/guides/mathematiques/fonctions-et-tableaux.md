@@ -4,14 +4,14 @@ Ce guide sert a coder un exercice qui etudie une fonction, trace une courbe defi
 
 ## Choisir le bon helper
 
-| Besoin | Helper a utiliser | Quand l'eviter |
-| --- | --- | --- |
-| Courbe definie par des points de controle | `spline()` ou `new Spline()` | Si la fonction a une expression simple et une derivee connue. |
-| Lire images, antecedents, extrema ou signes sur une courbe par noeuds | Methodes de `Spline` : `fonction`, `solve()`, `zeros()`, `signes()`, `variations()`, `tableauSignes()` | Si les valeurs exactes doivent venir d'une expression algebrique. |
-| Tableau de signes d'une fonction numerique | `tableauSignesFonction()` | Si la fonction a des valeurs interdites ou plusieurs facteurs a detailler. |
-| Tableau de signes factorise, quotient, valeur interdite | `tableauSignesFacteurs()` | Si un seul tableau global suffit et que les zeros numeriques sont fiables. |
-| Tableau de variations d'une fonction avec derivee connue | `tableauVariationsFonction()` | Si vous n'avez pas de derivee fiable. |
-| Tableau tres specifique deja code en syntaxe `tkz-tab` | `tableauDeVariation()` | Pour un premier exercice : privilegier les wrappers precedents. |
+| Besoin                                                                | Helper a utiliser                                                                                      | Quand l'eviter                                                             |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| Courbe definie par des points de controle                             | `spline()` ou `new Spline()`                                                                           | Si la fonction a une expression simple et une derivee connue.              |
+| Lire images, antecedents, extrema ou signes sur une courbe par noeuds | Methodes de `Spline` : `fonction`, `solve()`, `zeros()`, `signes()`, `variations()`, `tableauSignes()` | Si les valeurs exactes doivent venir d'une expression algebrique.          |
+| Tableau de signes d'une fonction numerique                            | `tableauSignesFonction()`                                                                              | Si la fonction a des valeurs interdites ou plusieurs facteurs a detailler. |
+| Tableau de signes factorise, quotient, valeur interdite               | `tableauSignesFacteurs()`                                                                              | Si un seul tableau global suffit et que les zeros numeriques sont fiables. |
+| Tableau de variations d'une fonction avec derivee connue              | `tableauVariationsFonction()`                                                                          | Si vous n'avez pas de derivee fiable.                                      |
+| Tableau tres specifique deja code en syntaxe `tkz-tab`                | `tableauDeVariation()`                                                                                 | Pour un premier exercice : privilegier les wrappers precedents.            |
 
 Regle pratique : partez du helper le plus mathematique possible. N'ecrivez la syntaxe `tabInit` / `tabLines` de `tableauDeVariation()` que si les wrappers ne savent pas representer le cas.
 
@@ -170,11 +170,14 @@ const tableau = tableauSignesFacteurs(
     fractionTex: true,
     nomVariable: 'x',
     nomFonction: 'f(x)',
+    borneInf: '-\\infty',
+    borneSup: '+\\infty',
   },
 )
 ```
 
 Dans un tableau de quotient, marquez le zero du denominateur avec `interdit: true`. La ligne finale affichera une double barre a cette abscisse.
+Par defaut, `tableauSignesFacteurs()` affiche aussi les deux bornes de l'intervalle, comme `tableauSignesFonction()`. Les bornes peuvent rester les valeurs de `xMin` et `xMax`, ou etre remplacees par n'importe quel affichage avec `borneInf` et `borneSup` : `-\\infty`, `+\\infty`, `a`, `b`, une fraction deja formatee, etc. Utilisez `afficherBornes: false` pour conserver des bornes vides. La premiere colonne est elargie automatiquement a partir des libelles ; utilisez `lgt` si un tableau particulier demande une largeur imposee.
 
 ## Faire un tableau de variations
 
@@ -309,16 +312,16 @@ Pour un exercice precis, verifiez aussi manuellement :
 
 ## Erreurs frequentes
 
-| Symptome | Cause probable | Correction |
-| --- | --- | --- |
-| Le tableau affiche des decimaux au lieu de fractions | Les zeros n'ont pas ete fournis comme `FractionEtendue` ou `fractionTex` vaut `false` | Passer `zeros: [new FractionEtendue(num, den)]` ou `zero: new FractionEtendue(num, den)` et `fractionTex: true`. |
-| Le tableau de quotient met `0` au lieu d'une double barre | Le zero du denominateur n'est pas marque interdit | Utiliser `zero: { valeur: fraction, interdit: true }`. |
-| Les infinis changent le calcul | Confusion entre borne numerique et affichage | Garder des bornes numeriques finies et utiliser `substituts` seulement pour l'affichage. |
-| La spline renvoie `NaN` | On evalue hors de son domaine | Verifier `f.x[0] <= x <= f.x[f.n - 1]`. |
-| La spline signale un probleme de noeuds | Deux noeuds ont la meme abscisse ou il y a moins de deux noeuds | Corriger le nuage avant `spline(noeuds)`. |
-| La courbe affiche trop ou pas assez de points visibles | Mauvaise interpretation de `isVisible` | Mettre `ajouteNoeuds: true`, puis regler `isVisible` noeud par noeud. |
-| Le tableau est trop serre | Largeurs par defaut trop petites | Ajuster `lgt`, `espcl`, `deltacl` ou `longueurDefaut`. |
-| Le rendu LaTeX casse | Chaine deja entouree de `$...$` au mauvais niveau | Ne pas entourer le tableau complet de dollars ; mettre seulement les expressions internes attendues. |
+| Symptome                                                  | Cause probable                                                                        | Correction                                                                                                                          |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Le tableau affiche des decimaux au lieu de fractions      | Les zeros n'ont pas ete fournis comme `FractionEtendue` ou `fractionTex` vaut `false` | Passer `zeros: [new FractionEtendue(num, den)]` ou `zero: new FractionEtendue(num, den)` et `fractionTex: true`.                    |
+| Le tableau de quotient met `0` au lieu d'une double barre | Le zero du denominateur n'est pas marque interdit                                     | Utiliser `zero: { valeur: fraction, interdit: true }`.                                                                              |
+| Les infinis changent le calcul                            | Confusion entre borne numerique et affichage                                          | Garder des bornes numeriques finies ; avec `tableauSignesFacteurs()`, utiliser `borneInf` et `borneSup` seulement pour l'affichage. |
+| La spline renvoie `NaN`                                   | On evalue hors de son domaine                                                         | Verifier `f.x[0] <= x <= f.x[f.n - 1]`.                                                                                             |
+| La spline signale un probleme de noeuds                   | Deux noeuds ont la meme abscisse ou il y a moins de deux noeuds                       | Corriger le nuage avant `spline(noeuds)`.                                                                                           |
+| La courbe affiche trop ou pas assez de points visibles    | Mauvaise interpretation de `isVisible`                                                | Mettre `ajouteNoeuds: true`, puis regler `isVisible` noeud par noeud.                                                               |
+| Le tableau est trop serre                                 | Largeurs par defaut trop petites                                                      | Ajuster `lgt`, `espcl`, `deltacl` ou `longueurDefaut`.                                                                              |
+| Le rendu LaTeX casse                                      | Chaine deja entouree de `$...$` au mauvais niveau                                     | Ne pas entourer le tableau complet de dollars ; mettre seulement les expressions internes attendues.                                |
 
 ## Depannage rapide
 
