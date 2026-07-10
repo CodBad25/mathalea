@@ -508,6 +508,19 @@ export function mathaleaHandleParamOfOneExercice(
   if (param.versionQcm !== undefined && exercice instanceof ExerciceSimple)
     exercice.versionQcm = param.versionQcm === '1'
   if (param.interactif) exercice.interactif = param.interactif === '1'
+  // Un exercice interactif obligatoire ne possède pas de version HTML non
+  // interactive. Ce réglage est donc prioritaire sur celui de l'URL.
+  if (exercice.interactifObligatoire) {
+    exercice.interactif = true
+    if (param.interactif !== '1') {
+      param.interactif = '1'
+      // Le paramètre appartient généralement au store : notifier ses abonnés
+      // permet notamment de réécrire immédiatement l'URL partagée.
+      if (get(exercicesParams).includes(param)) {
+        exercicesParams.update((params) => params)
+      }
+    }
+  }
   if (param.alea) exercice.seed = param.alea
   if (param.cols !== undefined && param.cols > 1) exercice.nbCols = param.cols
   if (param.cd !== undefined) exercice.correctionDetaillee = param.cd === '1'
