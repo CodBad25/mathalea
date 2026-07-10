@@ -1,4 +1,4 @@
-import ProprietesParallelesPerpendiculaires from '../5e/5G33-2'
+import ProprietesParallelesPerpendiculaires from '../5e/5G4A-3'
 
 export const amcReady = true
 export const amcType = 'AMCOpen'

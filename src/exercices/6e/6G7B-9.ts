@@ -1,4 +1,4 @@
-import SymetrieProprietes from '../5e/5G10-3'
+import SymetrieProprietes from '../5e/5G3B-3'
 
 export const titre = 'Utiliser les propriétés de conservation de la symétrie'
 export const dateDePublication = '07/07/2026'

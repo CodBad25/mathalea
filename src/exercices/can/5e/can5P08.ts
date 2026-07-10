@@ -22,7 +22,7 @@ export const dateDePublication = '19/07/2022'
 export const uuid = 'c3a01'
 
 export const refs = {
-  'fr-fr': ['can5P08'],
+  'fr-fr': ['can5P08', '5P1C-flash2'],
   'fr-ch': [],
 }
 export default class Proportionnalite3 extends ExerciceSimple {

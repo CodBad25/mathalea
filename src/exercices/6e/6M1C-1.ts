@@ -1,4 +1,4 @@
-import PerimetreAireEtPortionsDeDisques from '../5e/5M11-4'
+import PerimetreAireEtPortionsDeDisques from '../5e/5G2E-2'
 
 export const titre = 'Calculer périmètre de portions de disques'
 export const dateDePublication = '27/07/2025'

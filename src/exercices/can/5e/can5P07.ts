@@ -19,7 +19,7 @@ export const dateDePublication = '19/07/2022'
 export const uuid = 'afbda'
 
 export const refs = {
-  'fr-fr': ['can5P07'],
+  'fr-fr': ['can5P07', '5P1C-flash1'],
   'fr-ch': [],
 }
 export default class Proportionnalite2 extends ExerciceSimple {

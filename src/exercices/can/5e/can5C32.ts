@@ -18,7 +18,7 @@ export const dateDePublication = '02/01/2026'
 export const uuid = '6ccf5'
 
 export const refs = {
-  'fr-fr': ['can5C32'],
+  'fr-fr': ['can5C32', 'auto5N1D-flash1'],
   'fr-ch': [],
 }
 export default class MultiplicationATrou extends ExerciceSimple {

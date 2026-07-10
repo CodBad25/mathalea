@@ -1,4 +1,4 @@
-import ConservationTransformation from '../5e/5G13'
+import ConservationTransformation from '../5e/5G3B-1'
 export const titre =
   'Utiliser les propriétés de conservation du parallélisme, des longueurs et des angles'
 export const interactifReady = false

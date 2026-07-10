@@ -15,7 +15,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'cc70a'
 
 export const refs = {
-  'fr-fr': ['can5L01'],
+  'fr-fr': ['can5L01', '5N5B-flash1'],
   'fr-ch': [],
 }
 export default class MoitiePlusOuMoinsUn extends ExerciceSimple {

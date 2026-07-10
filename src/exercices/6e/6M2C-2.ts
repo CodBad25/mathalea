@@ -1,4 +1,4 @@
-import AiresCalculMental from '../5e/5M11-6'
+import AiresCalculMental from '../5e/5G5D-2'
 
 export const titre =
   "Calculer l'aire de carrés et de rectangles (calcul mental)"

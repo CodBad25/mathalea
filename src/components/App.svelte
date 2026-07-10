@@ -34,6 +34,7 @@
   import Moodle from './setup/moodle/Moodle.svelte'
   import Start from './setup/start/Start.svelte'
   import Tools from './setup/tools/Tools.svelte'
+  import Typst from './setup/typst/Typst.svelte'
   import CheckTest from './devtools/CheckTest.svelte'
   import Popup from './shared/modal/Popup.svelte'
 
@@ -227,6 +228,8 @@
     <Pdf />
   {:else if $globalOptions.v === 'tools'}
     <Tools />
+  {:else if $globalOptions.v === 'typst'}
+    <Typst />
   {:else if $globalOptions.v === 'check-test'}
     <CheckTest />
   {:else if $globalOptions.v !== undefined}

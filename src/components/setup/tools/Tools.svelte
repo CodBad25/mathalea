@@ -4,7 +4,7 @@
 </script>
 
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import { flip } from 'svelte/animate'
   import { get } from 'svelte/store'
   import referentielProfs from '../../../json/referentielProfs.json'
@@ -14,24 +14,24 @@
   } from '../../../lib/stores/generalStore'
   import { globalOptions } from '../../../lib/stores/globalOptions'
   import {
-    referentielLocale,
     localisedIDToUuid,
+    referentielLocale,
   } from '../../../lib/stores/languagesStore'
+  import type { InterfaceParams } from '../../../lib/types'
   import {
     ALLOWED_LANGUAGES,
     isLanguage,
     type Language,
   } from '../../../lib/types/languages'
-  import type { InterfaceParams } from '../../../lib/types'
   import type { VueType } from '../../../lib/VueType'
-  import Exercice from '../../shared/exercice/Exercice.svelte'
-  import NavBar from '../../shared/header/NavBar.svelte'
-  import ButtonIconTooltip from '../../shared/forms/ButtonIconTooltip.svelte'
-  import PdfTextIcon from '../../shared/icons/PdfTextIcon.svelte'
-  import SelectedIndicator from '../../shared/forms/SelectedIndicator.svelte'
-  import SideMenuWrapper from '../start/presentationalComponents/header/SideMenuWrapper.svelte'
-  import SetupShell from '../SetupShell.svelte'
   import Footer from '../../Footer.svelte'
+  import Exercice from '../../shared/exercice/Exercice.svelte'
+  import ButtonIconTooltip from '../../shared/forms/ButtonIconTooltip.svelte'
+  import SelectedIndicator from '../../shared/forms/SelectedIndicator.svelte'
+  import NavBar from '../../shared/header/NavBar.svelte'
+  import PdfTextIcon from '../../shared/icons/PdfTextIcon.svelte'
+  import SetupShell from '../SetupShell.svelte'
+  import SideMenuWrapper from '../start/presentationalComponents/header/SideMenuWrapper.svelte'
 
   interface ToolEntry {
     id: string
@@ -41,10 +41,11 @@
     typeExercice: string
   }
 
-  // Liste triée par id
-  const tools: ToolEntry[] = Object.values(referentielProfs).sort((a, b) =>
-    a.id.localeCompare(b.id, undefined, { numeric: true }),
-  )
+  // Le référentiel des outils est structuré par rubriques.
+  // Il faut aplatir d'abord les rubriques pour obtenir les entrées d'outils.
+  const tools: ToolEntry[] = Object.values(referentielProfs)
+    .flatMap((group) => Object.values(group as Record<string, ToolEntry>))
+    .sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }))
 
   // Map qui compte combien de fois chaque outil est sélectionné dans exercicesParams.
   // Dérivée réactivement depuis $exercicesParams : couvre à la fois les ajouts via

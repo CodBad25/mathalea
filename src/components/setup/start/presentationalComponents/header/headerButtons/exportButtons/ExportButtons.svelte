@@ -61,6 +61,13 @@
       action: () => exportAndClose('moodle'),
     },
     {
+      id: 'typst',
+      label: 'PDF via Typst',
+      description: 'Pour générer un PDF avec le moteur de composition Typst',
+      icon: 'bx bx-code-alt',
+      action: () => exportAndClose('typst'),
+    },
+    {
       id: 'alacarte',
       label: 'À la carte',
       description:
@@ -134,11 +141,11 @@
   />
 </button>
 {#if showA4}
-<ButtonIconTooltip
-  icon="bx-printer text-3xl"
-  tooltip="Impression"
-  on:click={() => handleExport('a4')}
-/>
+  <ButtonIconTooltip
+    icon="bx-printer text-3xl"
+    tooltip="Impression"
+    on:click={() => handleExport('a4')}
+  />
 {/if}
 <ButtonIconTooltip
   icon="bx-dots-horizontal-rounded text-3xl"

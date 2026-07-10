@@ -17,7 +17,7 @@ export const amcType = 'AMCNum'
 export const uuid = '1a593'
 
 export const refs = {
-  'fr-fr': ['can5C09'],
+  'fr-fr': ['can5C09', '5N1H-flash2'],
   'fr-ch': ['NR'],
 }
 export default class MutliplierParN0N extends ExerciceSimple {

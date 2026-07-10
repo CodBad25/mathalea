@@ -1,4 +1,4 @@
-import DeterminerDerniereOperationExpressionLitterale from '../5e/5L14-4'
+import DeterminerDerniereOperationExpressionLitterale from '../5e/5N5D-1'
 export const titre =
   'Déterminer si ces expressions sont des sommes, des différences, des produits ou des quotients'
 export const interactifReady = true

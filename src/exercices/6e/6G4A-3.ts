@@ -1,4 +1,4 @@
-import VocabulaireAngles from '../5e/5G30-3'
+import VocabulaireAngles from '../5e/auto5G4A'
 export const interactifReady = true
 export const interactifType = 'listeDeroulante'
 export const titre = 'Connaître le vocabulaire sur les angles'

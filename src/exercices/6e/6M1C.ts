@@ -1,4 +1,4 @@
-import PerimetreAireDisques from '../5e/5M11-3'
+import PerimetreAireDisques from '../5e/5G2E-1'
 
 export const titre = 'Calculer périmètre de disques'
 export const dateDePublication = '27/07/2025'
@@ -9,7 +9,7 @@ export const amcType = 'AMCHybride'
 
 /**
  * Calculer périmètre de disques
- * @author Éric Elter (comme clone de 6M22-1 de Rémi Angot)
+ * @author Éric Elter (comme clone de 5M11-3 de Rémi Angot)
  */
 
 export const uuid = 'f2a18'

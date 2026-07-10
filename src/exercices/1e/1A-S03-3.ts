@@ -8,7 +8,7 @@ import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '0cb7a'
 export const refs = {
-  'fr-fr': ['1A-S03-3'],
+  'fr-fr': ['1A-S03-3', '2A-S3-3'],
   'fr-ch': [],
 }
 export const interactifReady = true

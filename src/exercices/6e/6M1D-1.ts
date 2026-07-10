@@ -1,4 +1,4 @@
-import PerimetreOuAireDeFiguresComposees from '../5e/5M11-5'
+import PerimetreOuAireDeFiguresComposees from '../5e/5G2E-5'
 
 export const titre = 'Décomposer une figure complexe en figures simples'
 export const amcReady = true

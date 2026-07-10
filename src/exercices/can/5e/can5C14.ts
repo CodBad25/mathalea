@@ -20,7 +20,7 @@ export const dateDeModifImportante = '05/01/2026'
 export const uuid = '4fc0e'
 
 export const refs = {
-  'fr-fr': ['can5C14'],
+  'fr-fr': ['can5C14', '5N1C-flash1'],
   'fr-ch': [],
 }
 export default class DivisionAvecDecimaux extends ExerciceSimple {

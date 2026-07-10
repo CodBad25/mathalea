@@ -1,4 +1,4 @@
-import ÉcrireUneExpressionLitterale from '../5e/5L10'
+import ÉcrireUneExpressionLitterale from '../5e/5N5A'
 export const titre = 'Écrire une expression littérale'
 export const amcReady = true
 export const amcType = 'qcmMult'

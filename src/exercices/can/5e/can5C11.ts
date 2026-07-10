@@ -15,7 +15,7 @@ export const amcType = 'AMCNum'
 export const uuid = '606fd'
 
 export const refs = {
-  'fr-fr': ['can5C11'],
+  'fr-fr': ['can5C11', '5N2I-flash1'],
   'fr-ch': [],
 }
 export default class DifferenceNegative extends ExerciceSimple {

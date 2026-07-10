@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = '04c8b'
 
 export const refs = {
-  'fr-fr': ['1A-E01-3'],
+  'fr-fr': ['1A-E01-3', '2A-E1-3'],
   'fr-ch': ['NR'],
 }
 export default class Auto1AE1b extends CoeffMul {
