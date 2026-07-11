@@ -1,4 +1,4 @@
-import MathaleaCustomElement from '../../customElements/MathaleaCustomElement'
+import MathaleaCustomElement from './MathaleaCustomElement'
 
 type TrigoCircleSelectionPoint = {
   angleDeg: number

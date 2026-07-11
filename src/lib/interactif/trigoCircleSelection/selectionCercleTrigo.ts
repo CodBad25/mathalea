@@ -1,13 +1,13 @@
 import type FractionEtendue from '../../../modules/FractionEtendue'
 import { context } from '../../../modules/context'
 import { compactTexForSvg } from '../../2d/cercleTrigo'
+import '../../customElements/TrigoCircleSelectionElement'
+import TrigoCircleSelectionElement from '../../customElements/TrigoCircleSelectionElement'
 import {
   normalizeAnglePiFraction,
   trigoCircleAngles,
 } from '../../mathFonctions/trigo'
 import type { IExercice } from '../../types'
-import './TrigoCircleSelectionElement'
-import TrigoCircleSelectionElement from './TrigoCircleSelectionElement'
 
 export function trigoCircleSelectionValue(
   angles: Array<number | FractionEtendue>,
