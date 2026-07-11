@@ -9,6 +9,7 @@ import { labelPoint } from '../../lib/2d/textes'
 import { rotation } from '../../lib/2d/transformations'
 import { angleModulo } from '../../lib/2d/utilitairesGeometriques'
 import { pointSurSegment } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -27,7 +28,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Calculer un angle, déduit de figures simples'
 export const amcReady = true
@@ -46,7 +46,7 @@ export const dateDeModifImportante = '09/05/2023'
 export const uuid = '329fe'
 
 export const refs = {
-  'fr-fr': ['5G32'],
+  'fr-fr': ['6G4A-4'],
   'fr-2016': ['6G23-5'],
   'fr-ch': ['9ES5-8'],
 }

@@ -23,6 +23,7 @@
   export let correctionReady = true
   export let correctionExists = true
   export let isInteractif: boolean = false
+  export let interactifObligatoire = false
   export let isSortable: boolean = true
   export let isDeletable: boolean = true
   export let isHidable: boolean = true
@@ -195,18 +196,18 @@
               : 'bx-check-circle'}"
           ></i>
         </button>
-        <button
-          class="mx-2 tooltip tooltip-left tooltip-neutral {interactifReady
-            ? ''
-            : 'hidden'}"
-          data-tip={isInteractif
-            ? "Désactiver l'interactivité"
-            : 'Rendre interactif'}
-          type="button"
-          on:click={switchInteractif}
-        >
-          <InteractivityIcon isOnStateActive={isInteractif} />
-        </button>
+        {#if interactifReady && !interactifObligatoire}
+          <button
+            class="mx-2 tooltip tooltip-left tooltip-neutral"
+            data-tip={isInteractif
+              ? "Désactiver l'interactivité"
+              : 'Rendre interactif'}
+            type="button"
+            on:click={switchInteractif}
+          >
+            <InteractivityIcon isOnStateActive={isInteractif} />
+          </button>
+        {/if}
         <button
           class="mx-2 tooltip tooltip-left"
           data-tip="Nouvel énoncé"

@@ -2,6 +2,10 @@
 
 Le système d'interactivité permet aux exercices de recevoir des réponses dans le navigateur, de les normaliser, puis de les vérifier avec un comparateur adapté. Le guide de mise en oeuvre est séparé dans [rendre un exercice interactif](../guides/rendre-un-exercice-interactif.md).
 
+## Interactivité obligatoire
+
+Un exercice peut définir `interactifObligatoire = true` lorsqu'il ne possède pas de version HTML non interactive. Dans les vues HTML, ce drapeau impose `interactif = true`, remplace un éventuel paramètre URL `i=0` par `i=1` et masque le bouton de bascule. Les exports papier restent libres de désactiver l'interactivité pour leur rendu.
+
 ## Formats interactifs
 
 Les formats sont définis par `InteractivityType` dans `src/lib/types.ts`. Les formats courants sont :

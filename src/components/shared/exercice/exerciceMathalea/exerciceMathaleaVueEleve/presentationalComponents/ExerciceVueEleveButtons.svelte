@@ -81,7 +81,7 @@
       />
     </div>
   {/if}
-  {#if showInteractivityButton}
+  {#if showInteractivityButton && !exercise.interactifObligatoire}
     <button
       class={globalOptions.isInteractiveFree && exercise?.interactifReady
         ? 'w-5 ml-2 tooltip tooltip-right tooltip-neutral '

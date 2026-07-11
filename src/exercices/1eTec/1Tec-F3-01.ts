@@ -23,7 +23,7 @@ export const dateDePublication = '12/04/2026'
 */
 export const uuid = '49fca'
 export const refs = {
-  'fr-fr': ['1Tec-F31'],
+  'fr-fr': ['2F23-2'],
   'fr-ch': [],
 }
 
@@ -90,6 +90,8 @@ export default class TableauSignePolyDegre3 extends Exercice {
 
       const tableau = tableauSignesFacteurs(facteurs, xMin, xMax, {
         fractionTex: true,
+        borneInf: '-\\infty',
+        borneSup: '+\\infty',
         nomVariable: 'x',
         nomFonction: 'f(x)',
       })

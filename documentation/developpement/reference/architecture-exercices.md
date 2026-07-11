@@ -36,6 +36,10 @@ Les exercices classiques héritent de la classe commune `Exercice` définie dans
 
 L'interactivité moderne passe par `handleAnswers()` dans `src/lib/interactif/gestionInteractif.ts`. Les formats et le pipeline sont décrits dans [système d'interactivité](systeme-interactivite.md).
 
+## Synchronisation de l'URL
+
+Les composants qui modifient le store `exercicesParams` doivent appeler `exercicesParams.update()`, sans réécrire eux-mêmes l'URL. `App.svelte` centralise cette synchronisation via son abonnement au store. Les appels explicites à `mathaleaUpdateUrlFromExercicesParams()` restent réservés aux tableaux de paramètres qui ne sont pas le store global.
+
 ## Tests
 
 Les tests et rapports sont décrits dans [tests et CI](../../tests/README.md). Avant commit, la commande de référence pour les tests unitaires est :

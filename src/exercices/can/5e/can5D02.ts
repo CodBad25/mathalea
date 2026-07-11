@@ -25,7 +25,7 @@ export const dateDeModifImportante = '06/02/2025'
 export const uuid = '47802'
 
 export const refs = {
-  'fr-fr': ['can5D02', '6M4C-flash8'],
+  'fr-fr': ['can5D02', '6M4C-flash9'],
   'fr-ch': ['10GM3-11'],
 }
 export default class HeuresDecimalesHeuresMinutes2 extends Exercice {

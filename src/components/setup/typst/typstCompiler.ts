@@ -110,11 +110,55 @@ export async function isCompilerCached(): Promise<boolean> {
   }
 }
 
+/**
+ * Repère de la palette de mise en page : position (en pt, depuis le coin
+ * haut-gauche de sa page) d'un point d'intérêt du document, publiée par le
+ * helper Typst `mathalea-anchor` de `buildTypstDocument`.
+ */
+export interface TypstAnchor {
+  /**
+   * `tasks`/`tasks-corr` : liste de questions réglable (énoncé/correction) ;
+   * `exo` : début d'un exercice (nombre de questions, suppression) ;
+   * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche
+   */
+  kind: 'tasks' | 'tasks-corr' | 'exo' | 'gap' | 'header'
+  /** Numéro de l'exercice concerné (0 = avant le premier exercice) */
+  num: number
+  page: number
+  x: number
+  y: number
+}
+
+const ANCHOR_KINDS = new Set(['tasks', 'tasks-corr', 'exo', 'gap', 'header'])
+
+/** Valide et filtre les métadonnées renvoyées par `query(<mathalea-anchor>)` */
+function parseAnchors(values: unknown): TypstAnchor[] {
+  if (!Array.isArray(values)) return []
+  const anchors: TypstAnchor[] = []
+  for (const value of values) {
+    if (value == null || typeof value !== 'object') continue
+    const { kind, num, page, x, y } = value as Record<string, unknown>
+    if (
+      typeof kind === 'string' &&
+      ANCHOR_KINDS.has(kind) &&
+      typeof num === 'number' &&
+      typeof page === 'number' &&
+      typeof x === 'number' &&
+      typeof y === 'number'
+    ) {
+      anchors.push({ kind: kind as TypstAnchor['kind'], num, page, x, y })
+    }
+  }
+  return anchors
+}
+
 export interface TypstCompileResult {
   /** Document rendu (toutes les pages) en SVG, si la compilation a abouti */
   svg?: string
   /** Diagnostics (erreurs et avertissements) au format `fichier:ligne:col: message` */
   diagnostics: string[]
+  /** Repères de la palette de mise en page (vide si le code n'en émet pas) */
+  anchors?: TypstAnchor[]
 }
 
 /** Compile la source et rend le document en SVG pour l'aperçu */
@@ -124,16 +168,28 @@ export async function compileTypstToSvg(
   await ensureInitialized()
   const compiler = await $typst.getCompiler()
   await compiler.addSource(MAIN_FILE, source)
-  const compiled = await compiler.compile({
-    mainFilePath: MAIN_FILE,
-    diagnostics: 'unix',
-  })
-  const diagnostics: string[] = (compiled?.diagnostics ?? []).map(
-    (diagnostic: unknown) => String(diagnostic),
+  // un seul « monde » de compilation : l'artefact SVG et la requête des
+  // repères de mise en page partagent le même document compilé
+  return await compiler.runWithWorld(
+    { mainFilePath: MAIN_FILE },
+    async (world) => {
+      const compiled = await world.vector({ diagnostics: 'unix' })
+      const diagnostics: string[] = (compiled?.diagnostics ?? []).map(
+        (diagnostic: unknown) => String(diagnostic),
+      )
+      if (compiled?.result == null) return { diagnostics }
+      const svg = await $typst.svg({ vectorData: compiled.result })
+      let anchors: TypstAnchor[] = []
+      try {
+        anchors = parseAnchors(
+          await world.query({ selector: '<mathalea-anchor>', field: 'value' }),
+        )
+      } catch {
+        // document sans repère (code réécrit à la main) : pas de palette
+      }
+      return { svg, diagnostics, anchors }
+    },
   )
-  if (compiled?.result == null) return { diagnostics }
-  const svg = await $typst.svg({ vectorData: compiled.result })
-  return { svg, diagnostics }
 }
 
 /** Compile la source en PDF (octets du fichier) */

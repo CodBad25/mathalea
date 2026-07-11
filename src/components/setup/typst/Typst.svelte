@@ -21,13 +21,20 @@
   import {
     BADGE_STYLES,
     HEADER_STYLES,
+    INSERTION_TAG,
     MATH_FONTS,
     TEXT_FONTS,
     buildTypstDocument,
     defaultTypstDocumentOptions,
+    harvestCarryOver,
     type TypstDocumentOptions,
     type TypstExerciseInput,
   } from './buildTypstDocument'
+  import TypstLayoutOverlay, {
+    type OverlayWidget,
+    type TasksLayoutValue,
+  } from './TypstLayoutOverlay.svelte'
+  import type { TypstAnchor } from './typstCompiler'
 
   /** Libellés des habillages d'en-tête/pied de page */
   const HEADER_STYLE_LABELS: Record<(typeof HEADER_STYLES)[number], string> = {
@@ -78,6 +85,8 @@
   let displayMode: DisplayMode = 'split'
   let documentOptions: TypstDocumentOptions = { ...defaultTypstDocumentOptions }
   let isSettingsOpen = false
+  /** Affiche la palette de mise en page sur l'aperçu */
+  let showOverlay = true
   if (isLocalStorageAvailable()) {
     try {
       const saved = window.localStorage.getItem(STORAGE_KEY)
@@ -85,6 +94,9 @@
         const parsed = JSON.parse(saved)
         if (['code', 'split', 'preview'].includes(parsed.displayMode)) {
           displayMode = parsed.displayMode
+        }
+        if (typeof parsed.showOverlay === 'boolean') {
+          showOverlay = parsed.showOverlay
         }
         if (parsed.documentOptions != null) {
           documentOptions = {
@@ -117,8 +129,30 @@
 
   let exercises: (IExercice | null)[] = []
   let isLoading = true
-  /** Le code a été modifié à la main depuis sa génération */
+  /**
+   * Le code a été modifié à la main depuis sa génération. Les éditions
+   * faites par la palette de mise en page ne comptent pas : elles sont
+   * reprises telles quelles à la régénération (carry-over), il n'y a donc
+   * rien à perdre — l'avertissement ne concerne que la frappe directe.
+   */
   let isEdited = false
+  /** Édition en cours déclenchée par la palette (et non par la frappe) */
+  let isPaletteEdit = false
+
+  /** Édition du code par la palette : ne marque pas le code comme modifié */
+  function dispatchPaletteEdit(changes: {
+    from: number
+    to?: number
+    insert: string
+  }) {
+    if (editorView == null) return
+    isPaletteEdit = true
+    try {
+      editorView.dispatch({ changes })
+    } finally {
+      isPaletteEdit = false
+    }
+  }
   let isCompiling = false
   let isCompilerLoading = false
   /**
@@ -136,12 +170,335 @@
   let editorEl: HTMLDivElement
   let editorView: EditorView | null = null
 
+  /** Géométrie d'une page dans le SVG de l'aperçu (unités pt du viewBox) */
+  interface PreviewPageGeometry {
+    /** Ordonnée du haut de la page (espacement entre pages inclus) */
+    y: number
+    width: number
+    height: number
+  }
+  let previewPages: PreviewPageGeometry[] = []
+  let previewViewBox = { width: 0, height: 0 }
+  /** Repères publiés par le document compilé (palette de mise en page) */
+  let anchors: TypstAnchor[] = []
+  /**
+   * Mise en page des questions, lue dans le code courant, par préfixe de
+   * variables (`ex1` pour l'énoncé, `ex1-corr` pour la correction)
+   */
+  let tasksLayoutValues: Record<string, TasksLayoutValue> = {}
+  /** Insertions (texte/section) présentes dans le code, par repère de gap */
+  let insertionValues: Record<number, string[]> = {}
+  /** Variables d'en-tête de la fiche, lues dans le code courant */
+  let headerValues = { titre: '', 'sous-titre': '', entete: '' }
+  /** Nombre de colonnes du document (`#let colonnes`), lu dans le code */
+  let documentColumns = 1
+
+  /** Convertit les repères (pt, par page) en positions % sur l'aperçu */
+  function computeOverlayWidgets(
+    anchorList: TypstAnchor[],
+    pages: PreviewPageGeometry[],
+    viewBox: { width: number; height: number },
+  ): OverlayWidget[] {
+    if (viewBox.width <= 0 || viewBox.height <= 0) return []
+    const widgets: OverlayWidget[] = []
+    for (const anchor of anchorList) {
+      const page = pages[anchor.page - 1]
+      if (page == null) continue
+      const isTasks = anchor.kind === 'tasks' || anchor.kind === 'tasks-corr'
+      widgets.push({
+        kind: isTasks ? 'tasks' : (anchor.kind as 'exo' | 'gap' | 'header'),
+        num: anchor.num,
+        // les variables de la correction sont indépendantes de l'énoncé
+        target: isTasks
+          ? anchor.kind === 'tasks-corr'
+            ? `ex${anchor.num}-corr`
+            : `ex${anchor.num}`
+          : undefined,
+        left: (anchor.x / viewBox.width) * 100,
+        top: ((page.y + anchor.y) / viewBox.height) * 100,
+        // les contrôles des questions vont dans la marge la plus proche :
+        // à gauche pour la colonne de gauche, à droite sinon
+        side: anchor.x < page.width / 2 ? 'left' : 'right',
+      })
+    }
+    return widgets
+  }
+  $: overlayWidgets = computeOverlayWidgets(anchors, previewPages, previewViewBox)
+
+  /**
+   * Relit dans le code les données de la palette : valeurs
+   * `#let exN-colonnes`/`#let exN-gutter` (et variantes `-corr`), variables
+   * d'en-tête et insertions marquées.
+   */
+  function refreshTasksLayout(code: string) {
+    const values: Record<string, TasksLayoutValue> = {}
+    const defaults = (): TasksLayoutValue => ({
+      columns: 1,
+      gutter: 'interligne-questions',
+    })
+    for (const match of code.matchAll(
+      /^#let (ex\d+(?:-corr)?)-colonnes = (\d+)/gm,
+    )) {
+      ;(values[match[1]] ??= defaults()).columns = Number(match[2])
+    }
+    for (const match of code.matchAll(
+      /^#let (ex\d+(?:-corr)?)-gutter = (\S+)/gm,
+    )) {
+      ;(values[match[1]] ??= defaults()).gutter = match[2]
+    }
+    tasksLayoutValues = values
+    insertionValues = harvestCarryOver(code).insertions ?? {}
+    const columns = code.match(/^#let colonnes = (\d+)/m)
+    documentColumns = columns != null ? Number(columns[1]) : 1
+    const header = { titre: '', 'sous-titre': '', entete: '' }
+    for (const name of ['titre', 'sous-titre', 'entete'] as const) {
+      const match = new RegExp(`^#let ${name} = "((?:[^"\\\\]|\\\\.)*)"`, 'm').exec(
+        code,
+      )
+      if (match != null) {
+        header[name] = match[1].replace(/\\(.)/g, '$1')
+      }
+    }
+    headerValues = header
+  }
+
+  /** Modifie la ligne `#let <prefix>-<clef> = ...` (édition ciblée, annulable) */
+  function setTasksVariable(
+    target: string,
+    key: 'colonnes' | 'gutter',
+    value: string,
+  ) {
+    if (editorView == null) return
+    const doc = editorView.state.doc.toString()
+    const match = new RegExp(`^#let ${target}-${key} = .*$`, 'm').exec(doc)
+    if (match == null) return
+    dispatchPaletteEdit({
+      from: match.index,
+      to: match.index + match[0].length,
+      insert: `#let ${target}-${key} = ${value}`,
+    })
+  }
+
+  function adjustColumns(target: string, delta: number) {
+    const current = tasksLayoutValues[target]?.columns ?? 1
+    const next = Math.min(4, Math.max(1, current + delta))
+    if (next !== current) setTasksVariable(target, 'colonnes', String(next))
+  }
+
+  /** Pas d'ajustement de l'espacement vertical des questions, en em */
+  const GUTTER_STEP = 0.25
+  function adjustGutter(target: string, delta: number) {
+    const raw = tasksLayoutValues[target]?.gutter ?? 'interligne-questions'
+    // « interligne-questions » (le défaut global) vaut 1,2 em : le premier
+    // clic le remplace par une valeur explicite pour cet exercice
+    const current = raw.endsWith('em') ? parseFloat(raw) : 1.2
+    const next = Math.max(
+      0,
+      Math.round((current + delta * GUTTER_STEP) * 100) / 100,
+    )
+    setTasksVariable(target, 'gutter', `${next}em`)
+  }
+
+  /** Nombre de questions par exercice (null : non réglable), pour la palette */
+  $: questionCounts = Object.fromEntries(
+    exercises.map((exercise, k) => [k + 1, exercise?.nbQuestions ?? null]),
+  ) as Record<number, number | null>
+
+  /** Change le nombre de questions de l'exercice num et régénère le code */
+  function changeQuestionCount(num: number, delta: number) {
+    const exercise = exercises[num - 1]
+    if (exercise?.nbQuestions == null) return
+    const next = Math.max(1, exercise.nbQuestions + delta)
+    if (next === exercise.nbQuestions || !confirmOverwrite()) return
+    // fige le contenu courant : les questions déjà affichées gardent leurs
+    // valeurs (la régénération avec un autre nbQuestions rebrasse les tirages)
+    const current = buildInputs()[num - 1]
+    if (current.warning == null) {
+      frozenInputs.set(exercise, {
+        intro: current.intro,
+        introCorrection: current.introCorrection,
+        questions: current.questions,
+        corrections: current.corrections,
+      })
+    }
+    exercise.nbQuestions = next
+    const params = get(exercicesParams)
+    if (params[num - 1] != null) params[num - 1].nbQuestions = next
+    exercicesParams.update((list) => list)
+    exercises = exercises
+    const code = buildCode()
+    setEditorContent(code)
+    scheduleCompile(code, 0)
+  }
+
+  /**
+   * Décale les réglages de la palette après la suppression de l'exercice
+   * `removed` : `ex3` devient `ex2`, etc. Les insertions qui suivaient
+   * l'exercice supprimé sont rattachées au repère précédent.
+   */
+  function shiftCarryOver(
+    carryOver: ReturnType<typeof harvestCarryOver>,
+    removed: number,
+  ): ReturnType<typeof harvestCarryOver> {
+    const tasksLayout: NonNullable<typeof carryOver.tasksLayout> = {}
+    for (const [prefix, layout] of Object.entries(
+      carryOver.tasksLayout ?? {},
+    )) {
+      const match = prefix.match(/^ex(\d+)(-corr)?$/)
+      if (match == null) continue
+      const n = Number(match[1])
+      if (n === removed) continue
+      tasksLayout[n > removed ? `ex${n - 1}${match[2] ?? ''}` : prefix] = layout
+    }
+    const insertions: NonNullable<typeof carryOver.insertions> = {}
+    for (const [key, lines] of Object.entries(carryOver.insertions ?? {})) {
+      const n = Number(key)
+      const target = n >= removed ? Math.max(0, n - 1) : n
+      insertions[target] = [...(insertions[target] ?? []), ...lines]
+    }
+    return { tasksLayout, insertions }
+  }
+
+  /** Retire l'exercice num de la fiche et régénère le code */
+  function deleteExercise(num: number) {
+    if (!window.confirm(`Supprimer l'exercice ${num} de la fiche ?`)) return
+    const carryOver =
+      editorView != null
+        ? shiftCarryOver(harvestCarryOver(currentCode()), num)
+        : {}
+    const exercise = exercises[num - 1]
+    exercise?.reinit?.()
+    exercise?.destroy?.()
+    exercises = exercises.filter((_, k) => k !== num - 1)
+    exercicesParams.update((list) => list.filter((_, k) => k !== num - 1))
+    const code = buildTypstDocument(buildInputs(), documentOptions, carryOver)
+    setEditorContent(code)
+    scheduleCompile(code, 0)
+  }
+
+  /**
+   * Modifie une variable d'en-tête (`#let titre = "..."`) dans le code et
+   * reporte la valeur dans les réglages persistés (elle survit ainsi à une
+   * régénération).
+   */
+  function updateHeaderValue(
+    name: 'titre' | 'sous-titre' | 'entete',
+    value: string,
+  ) {
+    if (editorView == null) return
+    const doc = editorView.state.doc.toString()
+    const match = new RegExp(`^#let ${name} = ".*"`, 'm').exec(doc)
+    if (match == null) return
+    const escaped = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+    dispatchPaletteEdit({
+      from: match.index,
+      to: match.index + match[0].length,
+      insert: `#let ${name} = "${escaped}"`,
+    })
+    if (name === 'titre') documentOptions.title = value
+    else if (name === 'sous-titre') documentOptions.subtitle = value
+    else documentOptions.headerLine = value
+    persistPreferences()
+  }
+
+  /** Repère de gap `num` dans le code (indentation et fin de sa ligne) */
+  function findGapAnchor(
+    doc: string,
+    num: number,
+  ): { indent: string; lineEnd: number } | null {
+    const match = new RegExp(
+      `^([ \\t]*)#mathalea-anchor\\("gap", ${num}\\).*$`,
+      'm',
+    ).exec(doc)
+    if (match == null) return null
+    return { indent: match[1], lineEnd: match.index + match[0].length }
+  }
+
+  /**
+   * Bornes de la ligne de la `index`-ième insertion qui suit le repère de
+   * gap `num` (sans son saut de ligne initial). La recherche s'arrête au
+   * repère suivant.
+   */
+  function findInsertionLine(
+    doc: string,
+    num: number,
+    index: number,
+  ): { from: number; to: number } | null {
+    const anchor = findGapAnchor(doc, num)
+    if (anchor == null) return null
+    let offset = anchor.lineEnd
+    let count = 0
+    while (offset < doc.length) {
+      const from = offset + 1 // saute le saut de ligne
+      let to = doc.indexOf('\n', from)
+      if (to === -1) to = doc.length
+      const line = doc.slice(from, to)
+      if (line.includes('#mathalea-anchor(')) return null
+      if (/\/\/ mathalea:insertion\s*$/.test(line)) {
+        if (count === index) return { from, to }
+        count++
+      }
+      offset = to
+    }
+    return null
+  }
+
+  /** Insère un fragment (texte, #section[...]) juste après l'exercice num */
+  function insertAfterExercise(num: number, snippet: string) {
+    if (editorView == null) return
+    const doc = editorView.state.doc.toString()
+    const anchor = findGapAnchor(doc, num)
+    if (anchor == null) return
+    // la nouvelle ligne s'ajoute après les insertions déjà présentes
+    // (leur ordre d'affichage est conservé)
+    let insertAt = anchor.lineEnd
+    let offset = anchor.lineEnd
+    while (offset < doc.length) {
+      const from = offset + 1
+      let to = doc.indexOf('\n', from)
+      if (to === -1) to = doc.length
+      const line = doc.slice(from, to)
+      if (line.includes('#mathalea-anchor(')) break
+      if (/\/\/ mathalea:insertion\s*$/.test(line)) insertAt = to
+      else if (line.trim().length > 0) break
+      offset = to
+    }
+    dispatchPaletteEdit({
+      from: insertAt,
+      insert: `\n${anchor.indent}${snippet} ${INSERTION_TAG}`,
+    })
+  }
+
+  /** Remplace la `index`-ième insertion qui suit l'exercice num */
+  function updateInsertion(num: number, index: number, snippet: string) {
+    if (editorView == null) return
+    const doc = editorView.state.doc.toString()
+    const line = findInsertionLine(doc, num, index)
+    if (line == null) return
+    const indent = doc.slice(line.from, line.to).match(/^[ \t]*/)?.[0] ?? ''
+    dispatchPaletteEdit({
+      from: line.from,
+      to: line.to,
+      insert: `${indent}${snippet} ${INSERTION_TAG}`,
+    })
+  }
+
+  /** Supprime la `index`-ième insertion qui suit l'exercice num */
+  function deleteInsertion(num: number, index: number) {
+    if (editorView == null) return
+    const doc = editorView.state.doc.toString()
+    const line = findInsertionLine(doc, num, index)
+    if (line == null) return
+    // la ligne entière disparaît, saut de ligne précédent compris
+    dispatchPaletteEdit({ from: line.from - 1, to: line.to, insert: '' })
+  }
+
   function persistPreferences() {
     if (!isLocalStorageAvailable()) return
     try {
       window.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ displayMode, documentOptions }),
+        JSON.stringify({ displayMode, documentOptions, showOverlay }),
       )
     } catch {
       // stockage plein ou indisponible : sans conséquence
@@ -163,7 +520,12 @@
 
   function resetDocumentOptions() {
     documentOptions = { ...defaultTypstDocumentOptions }
-    applyDocumentOptions()
+    persistPreferences()
+    // réinitialisation complète : les réglages de la palette de mise en page
+    // (colonnes/espacement par exercice, insertions) ne sont pas repris
+    const code = buildTypstDocument(buildInputs(), documentOptions)
+    setEditorContent(code)
+    scheduleCompile(code, 0)
   }
 
   /** Regénère le contenu (listeQuestions, listeCorrections...) de l'exercice k */
@@ -188,6 +550,23 @@
       exercise.nouvelleVersionWrapper(k)
     }
   }
+
+  /**
+   * Contenu figé des exercices dont le nombre de questions a été changé via
+   * la palette : régénérer un exercice avec un autre `nbQuestions` rebrasse
+   * toutes ses valeurs (mêmes graines, tirages décalés). Les questions déjà
+   * affichées sont donc figées ; seules les questions ajoutées prennent le
+   * contenu fraîchement généré. Vidé par « Nouvelles données ».
+   */
+  const frozenInputs = new Map<
+    IExercice,
+    {
+      intro: string
+      introCorrection: string
+      questions: string[]
+      corrections: string[]
+    }
+  >()
 
   /** Contenu HTML (avec formules `$...$`) de chaque exercice */
   function buildInputs(): TypstExerciseInput[] {
@@ -228,12 +607,31 @@
       )
       input.numbered =
         input.questions.length > 1 && exercise.listeAvecNumerotation !== false
+      // questions figées par la palette (nombre de questions modifié) : les
+      // questions déjà affichées gardent leur contenu, seules les questions
+      // ajoutées prennent le contenu fraîchement généré
+      const frozen = frozenInputs.get(exercise)
+      if (frozen != null) {
+        input.intro = frozen.intro
+        input.introCorrection = frozen.introCorrection
+        input.questions = input.questions.map(
+          (question, i) => frozen.questions[i] ?? question,
+        )
+        input.corrections = input.corrections.map(
+          (correction, i) => frozen.corrections[i] ?? correction,
+        )
+      }
       return input
     })
   }
 
   function buildCode(): string {
-    return buildTypstDocument(buildInputs(), documentOptions)
+    // les ajustements faits via la palette de mise en page (colonnes,
+    // espacement, insertions) sont repris du code courant pour survivre
+    // à la régénération
+    const carryOver =
+      editorView != null ? harvestCarryOver(currentCode()) : {}
+    return buildTypstDocument(buildInputs(), documentOptions, carryOver)
   }
 
   function initEditor(content: string) {
@@ -248,8 +646,12 @@
           keymap.of([...defaultKeymap, ...historyKeymap, ...searchKeymap]),
           EditorView.updateListener.of((update) => {
             if (update.docChanged) {
-              isEdited = true
-              scheduleCompile(update.state.doc.toString())
+              // les éditions de la palette survivent à la régénération :
+              // seule la frappe directe arme l'avertissement d'écrasement
+              if (!isPaletteEdit) isEdited = true
+              const code = update.state.doc.toString()
+              refreshTasksLayout(code)
+              scheduleCompile(code)
             }
           }),
           EditorView.theme({
@@ -261,6 +663,7 @@
       }),
       parent: editorEl,
     })
+    refreshTasksLayout(content)
   }
 
   function setEditorContent(content: string) {
@@ -293,25 +696,39 @@
   /** Espace entre deux pages de l'aperçu, en unités SVG (pt) */
   const PAGE_GAP = 16
 
+  /** Aperçu préparé : SVG retouché et géométrie des pages pour la palette */
+  interface SeparatedPreview {
+    svg: string
+    pages: PreviewPageGeometry[]
+    viewBox: { width: number; height: number }
+  }
+
   /**
    * Le SVG de typst.ts empile les pages sans séparation : on insère un
    * fond blanc bordé derrière chaque page (`g.typst-page`) et un espace
-   * entre les pages, sur le fond gris du panneau d'aperçu.
+   * entre les pages, sur le fond gris du panneau d'aperçu. La géométrie des
+   * pages est renvoyée pour positionner la palette de mise en page.
    */
-  function separatePages(svg: string): string {
+  function separatePages(svg: string): SeparatedPreview {
+    const degraded: SeparatedPreview = {
+      svg,
+      pages: [],
+      viewBox: { width: 0, height: 0 },
+    }
     try {
       // parseur HTML (pas XML) : le SVG de typst.ts embarque un <script>
       // et des styles qui ne sont pas du XML strict
       const doc = new DOMParser().parseFromString(svg, 'text/html')
       const root = doc.querySelector('svg')
-      if (root == null) return svg
+      if (root == null) return degraded
       const pages = [...root.querySelectorAll('g.typst-page')]
-      if (pages.length === 0) return svg
+      if (pages.length === 0) return degraded
       const viewBox = (root.getAttribute('viewBox') ?? '')
         .trim()
         .split(/\s+/)
         .map(Number)
-      if (viewBox.length !== 4 || viewBox.some(Number.isNaN)) return svg
+      if (viewBox.length !== 4 || viewBox.some(Number.isNaN)) return degraded
+      const geometry: PreviewPageGeometry[] = []
       let cumulatedY = 0
       for (const [i, page] of pages.entries()) {
         const width = parseFloat(page.getAttribute('data-page-width') ?? '0')
@@ -323,6 +740,7 @@
         )
         const pageY = translate != null ? parseFloat(translate[1]) : cumulatedY
         cumulatedY += height
+        geometry.push({ y: pageY + i * PAGE_GAP, width, height })
         const wrapper = doc.createElementNS(
           'http://www.w3.org/2000/svg',
           'g',
@@ -350,10 +768,14 @@
       if (!Number.isNaN(heightAttr)) {
         root.setAttribute('height', String(heightAttr + totalGap))
       }
-      return root.outerHTML
+      return {
+        svg: root.outerHTML,
+        pages: geometry,
+        viewBox: { width: viewBox[2], height: viewBox[3] },
+      }
     } catch {
-      // aperçu dégradé (pages non séparées) plutôt que pas d'aperçu
-      return svg
+      // aperçu dégradé (pages non séparées, pas de palette) plutôt que rien
+      return degraded
     }
   }
 
@@ -371,7 +793,13 @@
       const result = await compileTypstToSvg(code)
       if (token !== compileToken) return
       diagnostics = result.diagnostics
-      if (result.svg != null) svgContent = separatePages(result.svg)
+      if (result.svg != null) {
+        const separated = separatePages(result.svg)
+        svgContent = separated.svg
+        previewPages = separated.pages
+        previewViewBox = separated.viewBox
+        anchors = result.anchors ?? []
+      }
     } catch (error) {
       if (token !== compileToken) return
       console.error('Erreur lors de la compilation Typst', error)
@@ -428,6 +856,8 @@
   /** Nouvelles données aléatoires pour tous les exercices */
   function newDataForAll() {
     if (!confirmOverwrite()) return
+    // nouvelles graines : les questions figées par la palette sont libérées
+    frozenInputs.clear()
     const params = get(exercicesParams)
     for (const [k, exercise] of exercises.entries()) {
       if (exercise == null) continue
@@ -632,6 +1062,22 @@
         Nouvelles données
       </button>
 
+      <button
+        type="button"
+        title="Afficher sur l'aperçu les contrôles de mise en page (colonnes et espacement des questions, insertions entre les exercices)"
+        aria-pressed={showOverlay}
+        class="flex items-center gap-1 text-sm {showOverlay
+          ? 'text-coopmaths-action font-semibold dark:text-coopmathsdark-action'
+          : 'text-coopmaths-action/60 hover:text-coopmaths-action dark:text-coopmathsdark-action/60 dark:hover:text-coopmathsdark-action'}"
+        on:click={() => {
+          showOverlay = !showOverlay
+          persistPreferences()
+        }}
+      >
+        <i class="bx bx-slider text-xl"></i>
+        Mise en page
+      </button>
+
       <div class="grow"></div>
 
       <button
@@ -714,9 +1160,27 @@
               </div>
             {/if}
             <!-- le fond blanc des pages est dessiné dans le SVG (separatePages) -->
-            <div class="typst-svg-container mx-auto">
+            <div class="typst-svg-container relative mx-auto">
               <!-- eslint-disable-next-line svelte/no-at-html-tags -->
               {@html svgContent}
+              {#if showOverlay && overlayWidgets.length > 0}
+                <TypstLayoutOverlay
+                  widgets={overlayWidgets}
+                  layoutValues={tasksLayoutValues}
+                  insertions={insertionValues}
+                  header={headerValues}
+                  {documentColumns}
+                  {questionCounts}
+                  onAdjustColumns={adjustColumns}
+                  onAdjustGutter={adjustGutter}
+                  onInsert={insertAfterExercise}
+                  onUpdateInsertion={updateInsertion}
+                  onDeleteInsertion={deleteInsertion}
+                  onUpdateHeader={updateHeaderValue}
+                  onChangeQuestionCount={changeQuestionCount}
+                  onDeleteExercise={deleteExercise}
+                />
+              {/if}
             </div>
           {/if}
         </div>
@@ -831,35 +1295,11 @@
           </select>
         </label>
 
-        <label class="flex items-center justify-between gap-4 text-sm">
-          Titre
-          <input
-            type="text"
-            class="w-40 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-            bind:value={documentOptions.title}
-            on:change={applyDocumentOptions}
-          />
-        </label>
-
-        <label class="flex items-center justify-between gap-4 text-sm">
-          Sous-titre (niveau, classe…)
-          <input
-            type="text"
-            class="w-40 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-            bind:value={documentOptions.subtitle}
-            on:change={applyDocumentOptions}
-          />
-        </label>
-
-        <label class="flex items-center justify-between gap-4 text-sm">
-          Ligne d'en-tête
-          <input
-            type="text"
-            class="w-40 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-            bind:value={documentOptions.headerLine}
-            on:change={applyDocumentOptions}
-          />
-        </label>
+        <p class="text-xs opacity-75">
+          Le titre, le sous-titre et la ligne d'en-tête se modifient
+          directement sur l'aperçu (bouton
+          <i class="bx bx-edit"></i> à gauche du titre).
+        </p>
 
         <label class="flex items-center justify-between gap-4 text-sm">
           Police du texte
