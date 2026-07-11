@@ -240,7 +240,10 @@ async function checkLatexVariation(
     // le test AMC doit être refait.
     // await openAmcFromMoreExports(page)
   } else {
-    await page.locator('button[data-tip="PDF via LaTeX"]').click()
+    const latexExportButton = page.locator(
+      'button[data-tip="PDF via LaTeX"], [data-tip="PDF via LaTeX"] button',
+    )
+    await latexExportButton.first().click()
     await page.click(`input[type="radio"][value="${variation}"]`)
     await waitForLatex(page, variation)
     await callback(page, description, view, variation)
@@ -249,6 +252,14 @@ async function checkLatexVariation(
 }
 
 async function waitForLatex(page: Page, model: LatexVariation | AMCVariation) {
+  const toggleCodeButton = page.locator('#toggleLatexCodeVisibility')
+  if ((await toggleCodeButton.count()) > 0) {
+    const label = (await toggleCodeButton.innerText()).trim()
+    if (label.includes('Afficher le code LaTeX')) {
+      await toggleCodeButton.click()
+    }
+  }
+
   switch (model) {
     case 'Coopmaths':
       await page.waitForFunction(() => {
