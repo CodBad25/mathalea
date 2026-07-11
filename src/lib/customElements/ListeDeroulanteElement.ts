@@ -1,5 +1,7 @@
-import MathaleaCustomElement from '../../customElements/MathaleaCustomElement'
-import ListeDeroulante, { type AllChoicesType } from './ListeDeroulante'
+import MathaleaCustomElement from './MathaleaCustomElement'
+import ListeDeroulante, {
+  type AllChoicesType,
+} from '../interactif/listeDeroulante/ListeDeroulante'
 
 class ListeDeroulanteElement extends MathaleaCustomElement {
   static readonly elementTag = 'liste-deroulante'

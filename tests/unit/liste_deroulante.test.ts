@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Assure-toi d'importer le custom element pour l'enregistrer
-import '../../src/lib/interactif/listeDeroulante/ListeDeroulanteElement'
+import '../../src/lib/customElements/ListeDeroulanteElement'
 
 describe('<liste-deroulante>', () => {
   let el: HTMLElement
