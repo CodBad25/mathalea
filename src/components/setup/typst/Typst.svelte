@@ -758,6 +758,38 @@
     }
   >()
 
+  /**
+   * Lien vers l'exercice seul sur MathALÉA (réglages et graine inclus),
+   * encodé dans le QR-code. Mêmes paramètres que la sortie LaTeX.
+   */
+  function exerciceUrl(exercise: IExercice): string {
+    const url = new URL('https://coopmaths.fr/alea')
+    url.searchParams.append('uuid', String(exercise.uuid))
+    if (exercise.id !== undefined) url.searchParams.append('id', exercise.id)
+    if (exercise.nbQuestions !== undefined) {
+      url.searchParams.append('n', exercise.nbQuestions.toString())
+    }
+    if (exercise.duration !== undefined) {
+      url.searchParams.append('d', exercise.duration.toString())
+    }
+    if (exercise.sup !== undefined) url.searchParams.append('s', String(exercise.sup))
+    if (exercise.sup2 !== undefined) url.searchParams.append('s2', String(exercise.sup2))
+    if (exercise.sup3 !== undefined) url.searchParams.append('s3', String(exercise.sup3))
+    if (exercise.sup4 !== undefined) url.searchParams.append('s4', String(exercise.sup4))
+    if (exercise.sup5 !== undefined) url.searchParams.append('s5', String(exercise.sup5))
+    if (exercise.seed !== undefined) url.searchParams.append('alea', exercise.seed)
+    if (exercise.correctionDetaillee !== undefined) {
+      url.searchParams.append('cd', exercise.correctionDetaillee ? '1' : '0')
+    }
+    if (exercise.nbCols !== undefined) {
+      url.searchParams.append('cols', exercise.nbCols.toString())
+    }
+    // vue élève, sans réglages affichés (comme le QR-code de la sortie LaTeX)
+    url.searchParams.append('v', 'eleve')
+    url.searchParams.append('es', '0211')
+    return url.href
+  }
+
   /** Contenu HTML (avec formules `$...$`) de chaque exercice */
   function buildInputs(): TypstExerciseInput[] {
     const params = get(exercicesParams)
@@ -783,6 +815,7 @@
         return input
       }
       regenerate(k)
+      input.url = exerciceUrl(exercise)
       input.intro = mathaleaFormatExercice(
         [exercise.consigne, exercise.introduction]
           .filter((text) => text != null && text.length > 0)
@@ -1397,6 +1430,18 @@
             />
             <span class:opacity-50={documentOptions.mergeExercises}>
               Afficher la référence des exercices
+            </span>
+          </label>
+
+          <label class="flex items-center gap-2 text-sm cursor-pointer">
+            <input
+              type="checkbox"
+              bind:checked={documentOptions.showQrCode}
+              disabled={documentOptions.mergeExercises}
+              on:change={applyDocumentOptions}
+            />
+            <span class:opacity-50={documentOptions.mergeExercises}>
+              QR-code vers chaque exercice
             </span>
           </label>
 

@@ -13,6 +13,12 @@ import {
 export const EXERCISE_BANK_IMPORT =
   '#import "@preview/exercise-bank:0.5.2": exo, exo-setup, exo-print-solutions'
 
+/** Import du paquet tiaoma (génération des QR-codes) */
+export const TIAOMA_IMPORT = '#import "@preview/tiaoma:0.3.0"'
+
+/** Hauteur (et largeur) des QR-codes placés au coin des exercices */
+const QRCODE_SIZE = '1.8cm'
+
 /**
  * Repère invisible pour la palette de mise en page de l'aperçu : publie la
  * position du point d'insertion (page, x et y en pt) dans une métadonnée,
@@ -120,6 +126,12 @@ export function harvestCarryOver(code: string): TypstCarryOver {
 export interface TypstExerciseInput {
   /** Référence affichée à côté du titre (ex : 6e23-1) */
   ref: string
+  /**
+   * Lien vers l'exercice seul sur MathALÉA (avec ses réglages et sa graine),
+   * encodé dans un QR-code quand `showQrCode` est actif. Absent si l'exercice
+   * n'a pas d'URL (exercice non chargé).
+   */
+  url?: string
   /** Consigne et introduction, déjà concaténées */
   intro: string
   questions: string[]
@@ -155,6 +167,11 @@ export interface TypstDocumentOptions {
   boldQuestionNumbers: boolean
   /** Affiche la référence du référentiel à côté de la numérotation */
   showExerciseRefs: boolean
+  /**
+   * Ajoute au coin de chaque exercice un QR-code pointant vers l'exercice
+   * seul sur MathALÉA (comme la sortie LaTeX). Sans effet en mode fusionné.
+   */
+  showQrCode: boolean
   /** Nombre de colonnes du document (1, 2 ou 3) */
   columns: number
   /** Format de page */
@@ -274,6 +291,7 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   pageFormat: 'a4',
   orientation: 'portrait',
   mergeExercises: false,
+  showQrCode: false,
   badgeStyle: 'underline',
   badgeColor: 'black',
 }
@@ -392,6 +410,15 @@ function exerciseBody(
 }
 
 /**
+ * QR-code placé au coin haut-droit d'un exercice (hors du flux, comme
+ * l'ancre `north east` de la sortie LaTeX). Le lien mène à l'exercice seul
+ * sur MathALÉA (réglages et graine inclus).
+ */
+function qrCodeSnippet(url: string): string {
+  return `#place(top + right, dx: 2pt, dy: 0pt, tiaoma.qrcode(${typstString(url)}, height: ${QRCODE_SIZE}))`
+}
+
+/**
  * Génère le code Typst complet de la fiche.
  * Le préambule expose des variables (`colonnes`, `corrige`...) que
  * l'utilisateur peut modifier directement dans l'éditeur.
@@ -457,7 +484,19 @@ export function buildTypstDocument(
       if (options.mergeExercises) nextCorrectionStart += body.itemCount
       correction = body.code
     }
-    return { enonce: enonce.code, correction }
+    let enonceCode = enonce.code
+    if (
+      options.showQrCode &&
+      !options.mergeExercises &&
+      exercise.url != null &&
+      exercise.url.length > 0
+    ) {
+      // le QR-code est hors flux (coin haut-droit du bloc de l'exercice) :
+      // il précède le contenu. En mode fusionné il n'y a pas de bloc par
+      // exercice où l'ancrer, la case est donc désactivée dans ce mode.
+      enonceCode = `${qrCodeSnippet(exercise.url)}\n${enonceCode}`
+    }
+    return { enonce: enonceCode, correction }
   })
 
   const renderLines: string[] = []
@@ -560,6 +599,7 @@ export function buildTypstDocument(
   const usesAnchors = allLines.some((line) =>
     line.includes('#mathalea-anchor('),
   )
+  const usesQrCode = allLines.some((line) => line.includes('tiaoma.qrcode('))
   const usesSchema = allLines.some((line) =>
     line.includes('mathalea-schema-span'),
   )
@@ -588,6 +628,11 @@ export function buildTypstDocument(
     lines.push('// ----- Paquets -----')
     if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
     if (usesTasks) lines.push(TASKIZE_IMPORT)
+    if (usesQrCode) lines.push(TIAOMA_IMPORT)
+    lines.push('')
+  } else if (usesQrCode) {
+    lines.push('// ----- Paquets -----')
+    lines.push(TIAOMA_IMPORT)
     lines.push('')
   }
   if (usesAnchors) {

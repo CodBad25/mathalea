@@ -436,4 +436,30 @@ describe('buildTypstDocument', () => {
     ])
     expect(withoutRef).toContain('show-id: false,')
   })
+
+  it('ajoute un QR-code vers chaque exercice quand demandé', () => {
+    const url = 'https://coopmaths.fr/alea?uuid=abc&alea=xyz&v=eleve&es=0211'
+    const withQr = buildTypstDocument(
+      [exercise({ url, questions: ['$1+1$'] })],
+      { ...defaultTypstDocumentOptions, showQrCode: true },
+    )
+    expect(withQr).toContain('#import "@preview/tiaoma:0.3.0"')
+    expect(withQr).toContain(
+      `#place(top + right, dx: 2pt, dy: 0pt, tiaoma.qrcode("${url}", height: 1.8cm))`,
+    )
+
+    // absent par défaut, et sans le paquet tiaoma
+    const withoutQr = buildTypstDocument([
+      exercise({ url, questions: ['$1+1$'] }),
+    ])
+    expect(withoutQr).not.toContain('tiaoma')
+
+    // en mode fusionné, il n'y a pas de bloc par exercice : pas de QR-code
+    const merged = buildTypstDocument([exercise({ url, questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      showQrCode: true,
+      mergeExercises: true,
+    })
+    expect(merged).not.toContain('tiaoma')
+  })
 })
