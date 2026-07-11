@@ -8,6 +8,8 @@ Objectif : avoir une API homogène pour l'injection HTML, la mise à jour d'affi
 
 Toute nouvelle classe doit étendre `MathaleaCustomElement` dans `src/lib/customElements/MathaleaCustomElement.ts`.
 
+L'implémentation du custom element doit être placée dans `src/lib/customElements/`. Les helpers métier qui appellent `create(...)` ou encapsulent le composant peuvent rester dans un autre dossier (`src/lib/interactif/`, `src/lib/tableur/`, etc.) si cela clarifie l'API utilisée par les exercices.
+
 Exemple de signature minimale :
 
 ```ts
@@ -22,6 +24,7 @@ export class MonElement extends MathaleaCustomElement {
 
 - La classe étend `MathaleaCustomElement`.
 - Le tag est déclaré via `static readonly elementTag`.
+- Le fichier de la classe se trouve dans `src/lib/customElements/`.
 
 2. Méthode statique create
 
@@ -81,9 +84,10 @@ Ordre recommandé :
 1. Faire hériter la classe de `MathaleaCustomElement`.
 2. Ajouter `elementTag`.
 3. Introduire `create(...)` et rebrancher le helper historique (`addXxx`) dessus.
-4. Uniformiser `value` et `interactivityOn`.
-5. Ajouter le nettoyage dans `disconnectedCallback()`.
-6. Vérifier les usages dans les fichiers de vérification interactive.
+4. Déplacer la classe dans `src/lib/customElements/` si elle vivait ailleurs.
+5. Uniformiser `value` et `interactivityOn`.
+6. Ajouter le nettoyage dans `disconnectedCallback()`.
+7. Vérifier les usages dans les fichiers de vérification interactive.
 
 ## Fichiers utiles
 
