@@ -285,7 +285,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     this.emitChange()
   }
 
-  private render() {
+  render() {
     this.innerHTML = ''
 
     if (this.interactivityOn) {
