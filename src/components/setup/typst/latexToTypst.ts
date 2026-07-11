@@ -378,11 +378,43 @@ function preprocessTex(tex: string): string {
   ) {
     output = `\\begin{aligned}${output}\\end{aligned}`
   }
-  // Marque le contenu des \text{…} qui contient une lettre (unités, mots)
-  // pour le rendre ensuite avec la police du texte via #txt. La ponctuation
-  // seule (\text{,} décimale, \text{;}) n'est pas marquée : elle reste collée.
+  // Mot comportant une lettre latine accentuée et non protégé par \text{}
+  // (erreur d'auteur d'exercice, ex. `n^{ième}` ou `à` oubliés hors de
+  // \text{}) : tex2typst décompose un tel mot lettre par lettre en
+  // identifiants nus (`n^{ième}` → `n^(i è m e)`), ce qui isole chaque
+  // lettre accentuée comme un caractère seul en mode maths. Certaines
+  // polices maths (ex. Noto Sans Math) n'ont pas ces glyphes précomposés :
+  // Typst refuse alors de les afficher (« shaping ... yielded more than
+  // one glyph »), quelle que soit la police de repli. On protège d'abord
+  // les \text{} déjà présents (ne doivent pas être ré-enveloppés), puis on
+  // enveloppe tout mot accentué restant dans \text{} : tex2typst le rend
+  // alors en chaîne Typst, toujours affichée correctement quelle que soit
+  // la police maths active (contrairement à un caractère nu).
+  {
+    const protectedTextBlocks: string[] = []
+    output = output.replace(/\\text\s*\{[^{}]*\}/g, (match) => {
+      protectedTextBlocks.push(match)
+      return `${protectedTextBlocks.length - 1}`
+    })
+    output = output.replace(
+      /[a-zA-Z]*[àâäéèêëîïôöùûüÿçœæÀÂÄÉÈÊËÎÏÔÖÙÛÜŸÇŒÆ][a-zA-ZàâäéèêëîïôöùûüÿçœæÀÂÄÉÈÊËÎÏÔÖÙÛÜŸÇŒÆ-]*/g,
+      (word) => `\\text{${word}}`,
+    )
+    output = output.replace(
+      /(\d+)/g,
+      (_, i: string) => protectedTextBlocks[Number(i)],
+    )
+  }
+  // Marque le contenu des \text{…} qui contient une lettre, y compris
+  // accentuée (unités, mots), pour le rendre ensuite avec la police du texte
+  // via #txt. La ponctuation seule (\text{,} décimale, \text{;}) n'est pas
+  // marquée : elle reste collée. Un mot entièrement accentué (ex. « à »,
+  // sans lettre ASCII) doit être marqué comme les autres : laissé en chaîne
+  // Typst nue, il hérite de la police maths ambiante, dont le repli
+  // automatique de glyphe peut mal composer un accent en position
+  // d'exposant/indice (accent flottant au lieu du caractère composé).
   output = output.replace(
-    /\\text\s*\{([^{}]*[a-zA-Z][^{}]*)\}/g,
+    /\\text\s*\{([^{}]*[a-zA-ZàâäéèêëîïôöùûüÿçœæÀÂÄÉÈÊËÎÏÔÖÙÛÜŸÇŒÆ][^{}]*)\}/g,
     `\\text{${TXT_MARK_OPEN}$1${TXT_MARK_CLOSE}}`,
   )
   return output
@@ -455,40 +487,56 @@ function postprocessTypst(typst: string): string {
     })
   }
 
+  result = result
+    // \mathbf{[}, \mathbf{]}, \textbf{[} etc. produisent upright(bold([)) ou bold([) en
+    // Typst mathématique : [ est interprété comme délimiteur ouvrant → "unclosed delimiter".
+    // On remplace par bracket.l / bracket.r (glyphes Typst).
+    .replace(/\bupright\(bold\(\[+\)\)/g, 'upright(bold(bracket.l))')
+    .replace(/\bupright\(bold\(\]+\)\)/g, 'upright(bold(bracket.r))')
+    .replace(/\bbold\(\[+\)\b/g, 'bold(bracket.l)')
+    .replace(/\bbold\(\]+\)\b/g, 'bold(bracket.r)')
+    .replace(/\bupright\(\[+\)\b/g, 'upright(bracket.l)')
+    .replace(/\bupright\(\]+\)\b/g, 'upright(bracket.r)')
+    // \mathbf{)} produit bold() vide (le ) ferme immédiatement bold() sans contenu).
+    // bold() sans corps → "missing argument: body" dans Typst. On remplace par paren.r.
+    .replace(/\bupright\(bold\(\)\)/g, 'upright(bold(paren.r))')
+    .replace(/\bbold\(\)\b/g, 'bold(paren.r)')
+
+  // \left[...\right] dans \mathbf{} produit [...] (crochets nus). Si plusieurs [A]×[B]
+  // se suivent, la séquence ]×[ crée de faux intervalles. On convertit TOUTES les paires
+  // équilibrées [...] en bracket.l/bracket.r sans délimiteurs actifs.
+  // Cas 1 (contenu non-alphabétique, ex. [(-6)×(-6)]) et Cas 2 (contenu purement
+  // alphabétique, ex. [union]) doivent s'enchaîner : Cas 2 peut réduire une paire
+  // imbriquée (ex. [-4;-2[union]3;4], produit par un intervalle-union où le "[union]"
+  // interne coïncide textuellement avec une paire de crochets) à une paire simple que
+  // Cas 1 doit ensuite traiter — d'où la boucle jusqu'à stabilité. Le Cas 1 exclut
+  // explicitement [ et ] de son caractère « spécial » central pour ne jamais franchir
+  // une paire imbriquée non encore réduite par le Cas 2 (sinon la paire imbriquée est
+  // engloutie dans une capture bancale qui laisse un crochet orphelin).
+  {
+    let prevBrackets = ''
+    while (prevBrackets !== result) {
+      prevBrackets = result
+      result = result
+        .replace(
+          /\[([^\[\]]*[^a-zA-Z \t\[\]][^\[\]]*)\]/g,
+          'lr(bracket.l $1 bracket.r)',
+        )
+        // Contexte 2a : [union] ou [ union ] entre délimiteurs ']' et '[' —
+        //   on enlève les crochets : ]A[union]B[ → ]A union B[ → règle ] suivante.
+        // Contexte 2b : ']'+espaces+mot+espaces+'[' — l'opérateur d'ensemble (\cup, \cap)
+        //   apparaît ENTRE deux crochets d'intervalles ; on doit aussi l'extraire.
+        // Traitement unifié : tous les [alpha+] et ]alpha+[ sans autre contenu sont nettoyés.
+        .replace(/\[([a-zA-Z ]+)\]/g, ' $1 ')
+        // ]opérateur[ (ex. ]\cup[ devenu ] union [) entre deux délimiteurs d'intervalles :
+        // supprimer les crochets parasites autour du mot pour que l'intervalle englobant
+        // soit correctement reconnu par la règle ]...[  ci-après.
+        .replace(/\] {0,4}([a-zA-Z]+) {0,4}\[/g, ' $1 ')
+    }
+  }
+
   return (
     result
-      // \mathbf{[}, \mathbf{]}, \textbf{[} etc. produisent upright(bold([)) ou bold([) en
-      // Typst mathématique : [ est interprété comme délimiteur ouvrant → "unclosed delimiter".
-      // On remplace par bracket.l / bracket.r (glyphes Typst).
-      .replace(/\bupright\(bold\(\[+\)\)/g, 'upright(bold(bracket.l))')
-      .replace(/\bupright\(bold\(\]+\)\)/g, 'upright(bold(bracket.r))')
-      .replace(/\bbold\(\[+\)\b/g, 'bold(bracket.l)')
-      .replace(/\bbold\(\]+\)\b/g, 'bold(bracket.r)')
-      .replace(/\bupright\(\[+\)\b/g, 'upright(bracket.l)')
-      .replace(/\bupright\(\]+\)\b/g, 'upright(bracket.r)')
-      // \mathbf{)} produit bold() vide (le ) ferme immédiatement bold() sans contenu).
-      // bold() sans corps → "missing argument: body" dans Typst. On remplace par paren.r.
-      .replace(/\bupright\(bold\(\)\)/g, 'upright(bold(paren.r))')
-      .replace(/\bbold\(\)\b/g, 'bold(paren.r)')
-      // \left[...\right] dans \mathbf{} produit [...] (crochets nus). Si plusieurs [A]×[B]
-      // se suivent, la séquence ]×[ crée de faux intervalles. On convertit TOUTES les paires
-      // équilibrées [...] en bracket.l/bracket.r sans délimiteurs actifs.
-      // Cas 1 : contenu avec caractères non-alphabétiques (ex. [(-6)×(-6)])
-      .replace(
-        /\[([^\[\]]*[^a-zA-Z \t][^\[\]]*)\]/g,
-        'lr(bracket.l $1 bracket.r)',
-      )
-      // Cas 2 : contenu purement alphabétique entre crochets (ex. [union], [sect]).
-      // Contexte 2a : [union] ou [ union ] entre délimiteurs ']' et '[' —
-      //   on enlève les crochets : ]A[union]B[ → ]A union B[ → règle ] suivante.
-      // Contexte 2b : ']'+espaces+mot+espaces+'[' — l'opérateur d'ensemble (\cup, \cap)
-      //   apparaît ENTRE deux crochets d'intervalles ; on doit aussi l'extraire.
-      // Traitement unifié : tous les [alpha+] et ]alpha+[ sans autre contenu sont nettoyés.
-      .replace(/\[([a-zA-Z ]+)\]/g, ' $1 ')
-      // ]opérateur[ (ex. ]\cup[ devenu ] union [) entre deux délimiteurs d'intervalles :
-      // supprimer les crochets parasites autour du mot pour que l'intervalle englobant
-      // soit correctement reconnu par la règle ]...[  ci-après.
-      .replace(/\] {0,4}([a-zA-Z]+) {0,4}\[/g, ' $1 ')
       // tex2typst produit #none_N pour un indice sans base LaTeX (ex. $_2$) →
       // variable inconnue en Typst. On supprime le préfixe invalide.
       .replace(/#none_\w+/g, '')

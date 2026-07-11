@@ -128,6 +128,8 @@ export interface TypstDocumentOptions {
   fontSize: number
   /** Interligne des paragraphes, en em (0.65 = valeur par défaut de Typst) */
   lineSpacing: number
+  /** Espacement entre les mots, en % de sa valeur normale (100 = défaut) */
+  wordSpacing: number
   /** Espace au-dessus du titre de chaque exercice, en em */
   exerciseSpacing: number
   /** Numéros des questions (et sous-questions) en gras */
@@ -170,11 +172,24 @@ export const TEXT_FONTS = [
   'Lora',
   'Noto Sans',
   'Source Sans 3',
+  'Luciole',
+  'Ubuntu',
+  'OpenDyslexic',
 ] as const
 
-/** Polices mathématiques (embarquée + libres servies par MathALÉA) */
+/**
+ * Polices mathématiques (embarquée + libres servies par MathALÉA).
+ * Noto Sans Math n'a pas de lettres latines accentuées dans sa table cmap
+ * (é, à, ê… absents) : un caractère accentué isolé en mode maths doit se
+ * dessiner en un seul glyphe, et Noto Sans Math le décompose en base + accent
+ * (2 glyphes), ce que Typst refuse. `latexToTypst.ts` protège désormais tout
+ * mot accentué en mode maths dans une chaîne Typst rendue via `#txt()`
+ * (police de texte explicite, jamais celle des maths) — voir le commentaire
+ * « Mot comportant une lettre latine accentuée » dans `preprocessTex`.
+ */
 export const MATH_FONTS = [
   'New Computer Modern Math',
+  'Libertinus Math',
   'STIX Two Math',
   'Noto Sans Math',
 ] as const
@@ -227,11 +242,12 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   subtitle: '',
   headerStyle: 'epure',
   font: 'Libertinus Serif',
-  mathFont: 'New Computer Modern Math',
+  mathFont: 'Libertinus Math',
   fontSize: 11,
   headerLine:
     'Nom : ______________________ Prénom : ______________________ Classe : ______',
   lineSpacing: 0.65,
+  wordSpacing: 100,
   exerciseSpacing: 1.6,
   boldQuestionNumbers: true,
   showExerciseRefs: false,
@@ -240,7 +256,7 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   orientation: 'portrait',
   mergeExercises: false,
   badgeStyle: 'underline',
-  badgeColor: 'rgb("#f15929")',
+  badgeColor: 'black',
 }
 
 /**
@@ -625,7 +641,9 @@ export function buildTypstDocument(
   )
   lines.push(...pageFooter(options.headerStyle).map((line) => `  ${line}`))
   lines.push(')')
-  lines.push('#set text(font: police-texte, size: taille-texte, lang: "fr")')
+  lines.push(
+    `#set text(font: police-texte, size: taille-texte, lang: "fr", spacing: ${options.wordSpacing}%)`,
+  )
   lines.push(`#set par(leading: ${options.lineSpacing}em)`)
   lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
   // police des formules ; les nombres et symboles restent en police maths

@@ -247,11 +247,11 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('#set page(paper: "a5", flipped: true,')
   })
 
-  it('utilise des badges soulignés orange par défaut', () => {
+  it('utilise des badges soulignés noirs par défaut', () => {
     const code = buildTypstDocument([
       exercise({ questions: ['$1+1$', '$2+2$'] }),
     ])
-    expect(code).toContain('#let couleur = rgb("#f15929")')
+    expect(code).toContain('#let couleur = black')
     expect(code).toContain('badge-style: "underline",')
   })
 

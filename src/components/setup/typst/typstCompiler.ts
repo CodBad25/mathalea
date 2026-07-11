@@ -19,8 +19,12 @@ const TYPST_FONT_FILES = [
   'NotoSerif.ttf',
   'Lora.ttf',
   'SourceSans3.ttf',
+  'Luciole.ttf',
+  'Ubuntu.ttf',
+  'OpenDyslexic.otf',
   'NotoSansMath.ttf',
   'STIXTwoMath.ttf',
+  'LibertinusMath.otf',
 ]
 const TYPST_FONT_URLS = TYPST_FONT_FILES.map(
   (file) => `${import.meta.env.BASE_URL}fonts/typst/${file}`,
@@ -33,8 +37,13 @@ const TYPST_FONT_URLS = TYPST_FONT_FILES.map(
  */
 
 const MAIN_FILE = '/main.typ'
-/** Cache persistant (survit aux rechargements de page) des gros fichiers */
-const ASSET_CACHE = 'typst-assets-v1'
+/**
+ * Cache persistant (survit aux rechargements de page) des gros fichiers.
+ * Le suffixe de version invalide le cache existant des utilisateurs quand le
+ * contenu d'une URL déjà en cache change (ex : polices variables remplacées
+ * par des instances statiques, non détecté sinon puisque l'URL est stable).
+ */
+const ASSET_CACHE = 'typst-assets-v2'
 
 /**
  * Récupère un fichier depuis le Cache API (téléchargé une seule fois, même

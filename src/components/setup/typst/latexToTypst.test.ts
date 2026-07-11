@@ -35,6 +35,24 @@ describe('latexMathToTypst', () => {
     expect(result).toContain('bold(x = 2)')
   })
 
+  it('convertit une union d\'intervalles en notation française mise en évidence sans casser les crochets', () => {
+    // notation française "à crochets inversés" ([-4;-2[∪]3;4]) mêlée à
+    // \color{} : le "[union]" produit par tex2typst pour \cup coïncide
+    // textuellement avec une paire de crochets imbriquée dans les crochets
+    // d'intervalle — un bug antérieur y voyait une paire [...] mal formée,
+    // laissant un crochet orphelin qui désynchronisait tout le parenthésage.
+    const result = latexMathToTypst(
+      '{\\color{#f15929}\\boldsymbol{[-4\\,;\\,-2[\\cup ]3\\,;\\,4]}}',
+    )
+    expect(result).not.toMatch(/[[\]]/)
+    const opens = (result.match(/\(/g) ?? []).length
+    const closes = (result.match(/\)/g) ?? []).length
+    expect(opens).toBe(closes)
+    expect(result).toContain('bracket.l')
+    expect(result).toContain('bracket.r')
+    expect(result).toContain('union')
+  })
+
   it('convertit le texte inclus dans les formules via #txt (police du texte)', () => {
     expect(latexMathToTypst('5\\,\\text{cm}')).toBe('5 thin #txt("cm")')
   })
@@ -81,6 +99,39 @@ describe('latexMathToTypst', () => {
     expect(latexMathToTypst('\\begin{tabular}{cc}a&b\\end{tabular}')).toBe(
       '"\\\\begin{tabular}{cc}a&b\\\\end{tabular}"',
     )
+  })
+})
+
+describe('latexMathToTypst — accents nus en mode maths', () => {
+  // Un mot accentué oublié hors de \text{} (erreur d'auteur d'exercice, ex.
+  // ordinaux « ième », « ère ») est décomposé lettre par lettre par
+  // tex2typst (`n^{ième}` → `n^(i è m e)`) : chaque lettre accentuée devient
+  // alors un caractère isolé en mode maths, que certaines polices maths
+  // (ex. Noto Sans Math, dépourvue des lettres latines accentuées dans sa
+  // table cmap) ne peuvent pas afficher (« shaping ... yielded more than
+  // one glyph »). `preprocessTex` protège ces mots en les enveloppant dans
+  // \text{}, rendus ensuite via #txt (police du texte, jamais celle des
+  // maths — sûr même quand la police maths ne couvre pas les accents).
+  it('protège un mot accentué en exposant oublié hors de \\text{}', () => {
+    expect(latexMathToTypst('n^{ième}')).toBe('n^(#txt("ième"))')
+  })
+
+  it('protège un mot accentué en indice oublié hors de \\text{}', () => {
+    expect(latexMathToTypst('a_{à}')).toBe('a_(#txt("à"))')
+  })
+
+  it('protège un mot entièrement accentué (aucune lettre ASCII)', () => {
+    // "à" seul : aucune lettre a-z, cas particulier qui échappait à
+    // l'ancien marquage (qui exigeait une lettre ASCII avant #txt)
+    expect(latexMathToTypst('à')).toBe('#txt("à")')
+  })
+
+  it('protège un caractère accentué isolé au milieu d\'une formule', () => {
+    expect(latexMathToTypst('x = é')).toBe('x = #txt("é")')
+  })
+
+  it('laisse les mots déjà protégés par \\text{} inchangés', () => {
+    expect(latexMathToTypst('3 \\text{ à } 5')).toBe('3 #txt(" à ") 5')
   })
 })
 

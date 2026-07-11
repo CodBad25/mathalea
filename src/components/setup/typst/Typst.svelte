@@ -1045,8 +1045,11 @@
       <button
         type="button"
         title="Réglages du document"
-        class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
-        on:click={() => (isSettingsOpen = true)}
+        aria-pressed={isSettingsOpen}
+        class="flex items-center gap-1 text-sm {isSettingsOpen
+          ? 'text-coopmaths-action font-semibold dark:text-coopmathsdark-action'
+          : 'text-coopmaths-action/60 hover:text-coopmaths-action dark:text-coopmathsdark-action/60 dark:hover:text-coopmathsdark-action'}"
+        on:click={() => (isSettingsOpen = !isSettingsOpen)}
       >
         <i class="bx bx-cog text-xl"></i>
         Réglages
@@ -1124,20 +1127,291 @@
     </div>
   {:else}
     <div class="flex flex-row grow min-h-0">
+      {#if isSettingsOpen}
+        <div
+          class="typst-settings-pane w-80 shrink-0 overflow-y-auto border-r border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus p-5 space-y-4"
+        >
+          <div class="flex items-center justify-between">
+            <h3
+              class="font-bold text-coopmaths-struct dark:text-coopmathsdark-struct"
+            >
+              Réglages du document
+            </h3>
+            <button
+              type="button"
+              aria-label="Fermer les réglages"
+              on:click={() => (isSettingsOpen = false)}
+            >
+              <i
+                class="bx bx-x text-2xl text-coopmaths-action dark:text-coopmathsdark-action"
+              ></i>
+            </button>
+          </div>
+
+          <label class="flex items-center justify-between gap-4 text-sm">
+            Format
+            <select
+              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.pageFormat}
+              on:change={applyDocumentOptions}
+            >
+              <option value="a4">A4</option>
+              <option value="a5">A5</option>
+            </select>
+          </label>
+
+          <label class="flex items-center justify-between gap-4 text-sm">
+            Orientation
+            <select
+              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.orientation}
+              on:change={applyDocumentOptions}
+            >
+              <option value="portrait">Portrait</option>
+              <option value="landscape">Paysage</option>
+            </select>
+          </label>
+
+          <div class="flex items-center justify-between gap-4 text-sm">
+            <label for="typst-columns-input">Nombre de colonnes</label>
+            <input
+              id="typst-columns-input"
+              type="number"
+              min="1"
+              max="3"
+              step="1"
+              class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.columns}
+              on:change={applyDocumentOptions}
+            />
+          </div>
+
+          <label class="flex items-center gap-2 text-sm cursor-pointer">
+            <input
+              type="checkbox"
+              bind:checked={documentOptions.mergeExercises}
+              on:change={applyDocumentOptions}
+            />
+            Fusionner tous les exercices (questions numérotées à la suite)
+          </label>
+
+          <label class="flex items-center gap-2 text-sm cursor-pointer">
+            <input
+              type="checkbox"
+              bind:checked={documentOptions.showExerciseRefs}
+              disabled={documentOptions.mergeExercises}
+              on:change={applyDocumentOptions}
+            />
+            <span class:opacity-50={documentOptions.mergeExercises}>
+              Afficher la référence des exercices
+            </span>
+          </label>
+
+          <label class="flex items-center justify-between gap-4 text-sm">
+            Habillage en-tête
+            <select
+              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.headerStyle}
+              on:change={applyDocumentOptions}
+            >
+              {#each HEADER_STYLES as style}
+                <option value={style}>{HEADER_STYLE_LABELS[style]}</option>
+              {/each}
+            </select>
+          </label>
+
+          <p class="text-xs opacity-75">
+            Le titre, le sous-titre et la ligne d'en-tête se modifient
+            directement sur l'aperçu (bouton
+            <i class="bx bx-edit"></i> à gauche du titre).
+          </p>
+
+          <label class="flex items-center justify-between gap-4 text-sm">
+            Police du texte
+            <select
+              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.font}
+              on:change={applyDocumentOptions}
+            >
+              {#each TEXT_FONTS as font}
+                <option value={font}>{font}</option>
+              {/each}
+            </select>
+          </label>
+
+          <label class="flex items-center justify-between gap-4 text-sm">
+            Police des maths
+            <select
+              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.mathFont}
+              on:change={applyDocumentOptions}
+            >
+              {#each MATH_FONTS as font}
+                <option value={font}>{font}</option>
+              {/each}
+            </select>
+          </label>
+
+          <div class="flex items-center justify-between gap-4 text-sm">
+            <label for="typst-font-size-input">Taille du texte (pt)</label>
+            <input
+              id="typst-font-size-input"
+              type="number"
+              min="7"
+              max="16"
+              step="0.5"
+              class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.fontSize}
+              on:change={applyDocumentOptions}
+            />
+          </div>
+
+          <div class="flex items-center justify-between gap-4 text-sm">
+            <label for="typst-line-spacing-input">Interligne</label>
+            <input
+              id="typst-line-spacing-input"
+              type="number"
+              min="0.3"
+              max="2"
+              step="0.05"
+              class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.lineSpacing}
+              on:change={applyDocumentOptions}
+            />
+          </div>
+
+          <div class="flex items-center justify-between gap-4 text-sm">
+            <label for="typst-word-spacing-input"
+              >Espacement entre les mots (%)</label
+            >
+            <input
+              id="typst-word-spacing-input"
+              type="number"
+              min="50"
+              max="300"
+              step="5"
+              class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.wordSpacing}
+              on:change={applyDocumentOptions}
+            />
+          </div>
+
+          <div class="flex items-center justify-between gap-4 text-sm">
+            <label for="typst-exercise-spacing-input"
+              >Espacement entre les exercices</label
+            >
+            <input
+              id="typst-exercise-spacing-input"
+              type="number"
+              min="0"
+              max="6"
+              step="0.1"
+              class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.exerciseSpacing}
+              on:change={applyDocumentOptions}
+            />
+          </div>
+
+          <label class="flex items-center gap-2 text-sm cursor-pointer">
+            <input
+              type="checkbox"
+              bind:checked={documentOptions.boldQuestionNumbers}
+              on:change={applyDocumentOptions}
+            />
+            Numéros des questions en gras
+          </label>
+
+          <label
+            class="flex items-center justify-between gap-4 text-sm"
+            class:opacity-50={documentOptions.mergeExercises}
+          >
+            Style des exercices
+            <select
+              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.badgeStyle}
+              disabled={documentOptions.mergeExercises}
+              on:change={applyDocumentOptions}
+            >
+              {#each BADGE_STYLES as style}
+                <option value={style}>{BADGE_STYLE_LABELS[style]}</option>
+              {/each}
+            </select>
+          </label>
+
+          <div
+            class="flex items-center justify-between gap-4 text-sm"
+            class:opacity-50={documentOptions.mergeExercises}
+          >
+            <span>Couleur des titres</span>
+            <div class="flex items-center gap-1.5">
+              {#each BADGE_COLORS as color}
+                <button
+                  type="button"
+                  title={color.label}
+                  aria-label={color.label}
+                  aria-pressed={documentOptions.badgeColor === color.value}
+                  disabled={documentOptions.mergeExercises}
+                  class="h-6 w-6 rounded-full border-2 transition {documentOptions.badgeColor ===
+                  color.value
+                    ? 'border-coopmaths-action dark:border-coopmathsdark-action scale-110'
+                    : 'border-transparent'}"
+                  style="background-color: {color.css};"
+                  on:click={() => {
+                    documentOptions.badgeColor = color.value
+                    applyDocumentOptions()
+                  }}
+                ></button>
+              {/each}
+              <input
+                type="color"
+                title="Couleur personnalisée"
+                aria-label="Couleur personnalisée"
+                disabled={documentOptions.mergeExercises}
+                class="h-6 w-6 cursor-pointer rounded-full border-2 {isCustomBadgeColor
+                  ? 'border-coopmaths-action dark:border-coopmathsdark-action scale-110'
+                  : 'border-transparent'} bg-transparent p-0"
+                value={badgeColorHex}
+                on:input={(e) => {
+                  documentOptions.badgeColor = `rgb("${e.currentTarget.value}")`
+                  applyDocumentOptions()
+                }}
+              />
+            </div>
+          </div>
+
+          <p class="text-xs opacity-75">
+            Ces réglages régénèrent le code Typst à partir des exercices : vos
+            modifications manuelles du code seront perdues.
+          </p>
+
+          <button
+            type="button"
+            class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+            on:click={resetDocumentOptions}
+          >
+            <i class="bx bx-reset"></i>
+            Réinitialiser les réglages du document
+          </button>
+        </div>
+      {/if}
       <div
-        class="typst-editor-pane {displayMode === 'code'
-          ? 'w-full'
-          : displayMode === 'split'
-            ? 'w-1/2'
-            : 'hidden'} min-h-0"
+        class="typst-editor-pane {isSettingsOpen
+          ? 'hidden'
+          : displayMode === 'code'
+            ? 'w-full'
+            : displayMode === 'split'
+              ? 'w-1/2'
+              : 'hidden'} min-h-0"
         bind:this={editorEl}
       ></div>
       <div
-        class="typst-preview-pane {displayMode === 'preview'
-          ? 'w-full'
-          : displayMode === 'split'
-            ? 'w-1/2'
-            : 'hidden'} min-h-0 flex flex-col"
+        class="typst-preview-pane {isSettingsOpen
+          ? 'grow'
+          : displayMode === 'preview'
+            ? 'w-full'
+            : displayMode === 'split'
+              ? 'w-1/2'
+              : 'hidden'} min-h-0 flex flex-col"
       >
         <div class="relative grow overflow-auto p-4">
           {#if isCompilerLoading}
@@ -1194,263 +1468,6 @@
             {/each}
           </div>
         {/if}
-      </div>
-    </div>
-  {/if}
-
-  {#if isSettingsOpen}
-    <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
-    <div
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-      on:click|self={() => (isSettingsOpen = false)}
-    >
-      <div
-        class="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-lg shadow-xl bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus p-5 space-y-4"
-      >
-        <button
-          type="button"
-          class="absolute top-3 right-3"
-          aria-label="Fermer"
-          on:click={() => (isSettingsOpen = false)}
-        >
-          <i
-            class="bx bx-x text-2xl text-coopmaths-action dark:text-coopmathsdark-action"
-          ></i>
-        </button>
-        <h3
-          class="font-bold text-coopmaths-struct dark:text-coopmathsdark-struct"
-        >
-          Réglages du document
-        </h3>
-
-        <label class="flex items-center justify-between gap-4 text-sm">
-          Format
-          <select
-            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-            bind:value={documentOptions.pageFormat}
-            on:change={applyDocumentOptions}
-          >
-            <option value="a4">A4</option>
-            <option value="a5">A5</option>
-          </select>
-        </label>
-
-        <label class="flex items-center justify-between gap-4 text-sm">
-          Orientation
-          <select
-            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-            bind:value={documentOptions.orientation}
-            on:change={applyDocumentOptions}
-          >
-            <option value="portrait">Portrait</option>
-            <option value="landscape">Paysage</option>
-          </select>
-        </label>
-
-        <div class="flex items-center justify-between gap-4 text-sm">
-          <label for="typst-columns-input">Nombre de colonnes</label>
-          <input
-            id="typst-columns-input"
-            type="number"
-            min="1"
-            max="3"
-            step="1"
-            class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-            bind:value={documentOptions.columns}
-            on:change={applyDocumentOptions}
-          />
-        </div>
-
-        <label class="flex items-center gap-2 text-sm cursor-pointer">
-          <input
-            type="checkbox"
-            bind:checked={documentOptions.mergeExercises}
-            on:change={applyDocumentOptions}
-          />
-          Fusionner tous les exercices (questions numérotées à la suite)
-        </label>
-
-        <label class="flex items-center gap-2 text-sm cursor-pointer">
-          <input
-            type="checkbox"
-            bind:checked={documentOptions.showExerciseRefs}
-            disabled={documentOptions.mergeExercises}
-            on:change={applyDocumentOptions}
-          />
-          <span class:opacity-50={documentOptions.mergeExercises}>
-            Afficher la référence des exercices
-          </span>
-        </label>
-
-        <label class="flex items-center justify-between gap-4 text-sm">
-          Habillage en-tête
-          <select
-            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-            bind:value={documentOptions.headerStyle}
-            on:change={applyDocumentOptions}
-          >
-            {#each HEADER_STYLES as style}
-              <option value={style}>{HEADER_STYLE_LABELS[style]}</option>
-            {/each}
-          </select>
-        </label>
-
-        <p class="text-xs opacity-75">
-          Le titre, le sous-titre et la ligne d'en-tête se modifient
-          directement sur l'aperçu (bouton
-          <i class="bx bx-edit"></i> à gauche du titre).
-        </p>
-
-        <label class="flex items-center justify-between gap-4 text-sm">
-          Police du texte
-          <select
-            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-            bind:value={documentOptions.font}
-            on:change={applyDocumentOptions}
-          >
-            {#each TEXT_FONTS as font}
-              <option value={font}>{font}</option>
-            {/each}
-          </select>
-        </label>
-
-        <label class="flex items-center justify-between gap-4 text-sm">
-          Police des maths
-          <select
-            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-            bind:value={documentOptions.mathFont}
-            on:change={applyDocumentOptions}
-          >
-            {#each MATH_FONTS as font}
-              <option value={font}>{font}</option>
-            {/each}
-          </select>
-        </label>
-
-        <div class="flex items-center justify-between gap-4 text-sm">
-          <label for="typst-font-size-input">Taille du texte (pt)</label>
-          <input
-            id="typst-font-size-input"
-            type="number"
-            min="7"
-            max="16"
-            step="0.5"
-            class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-            bind:value={documentOptions.fontSize}
-            on:change={applyDocumentOptions}
-          />
-        </div>
-
-        <div class="flex items-center justify-between gap-4 text-sm">
-          <label for="typst-line-spacing-input">Interligne</label>
-          <input
-            id="typst-line-spacing-input"
-            type="number"
-            min="0.3"
-            max="2"
-            step="0.05"
-            class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-            bind:value={documentOptions.lineSpacing}
-            on:change={applyDocumentOptions}
-          />
-        </div>
-
-        <div class="flex items-center justify-between gap-4 text-sm">
-          <label for="typst-exercise-spacing-input"
-            >Espacement entre les exercices</label
-          >
-          <input
-            id="typst-exercise-spacing-input"
-            type="number"
-            min="0"
-            max="6"
-            step="0.1"
-            class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-            bind:value={documentOptions.exerciseSpacing}
-            on:change={applyDocumentOptions}
-          />
-        </div>
-
-        <label class="flex items-center gap-2 text-sm cursor-pointer">
-          <input
-            type="checkbox"
-            bind:checked={documentOptions.boldQuestionNumbers}
-            on:change={applyDocumentOptions}
-          />
-          Numéros des questions en gras
-        </label>
-
-        <label
-          class="flex items-center justify-between gap-4 text-sm"
-          class:opacity-50={documentOptions.mergeExercises}
-        >
-          Style des exercices
-          <select
-            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-            bind:value={documentOptions.badgeStyle}
-            disabled={documentOptions.mergeExercises}
-            on:change={applyDocumentOptions}
-          >
-            {#each BADGE_STYLES as style}
-              <option value={style}>{BADGE_STYLE_LABELS[style]}</option>
-            {/each}
-          </select>
-        </label>
-
-        <div
-          class="flex items-center justify-between gap-4 text-sm"
-          class:opacity-50={documentOptions.mergeExercises}
-        >
-          <span>Couleur des titres</span>
-          <div class="flex items-center gap-1.5">
-            {#each BADGE_COLORS as color}
-              <button
-                type="button"
-                title={color.label}
-                aria-label={color.label}
-                aria-pressed={documentOptions.badgeColor === color.value}
-                disabled={documentOptions.mergeExercises}
-                class="h-6 w-6 rounded-full border-2 transition {documentOptions.badgeColor ===
-                color.value
-                  ? 'border-coopmaths-action dark:border-coopmathsdark-action scale-110'
-                  : 'border-transparent'}"
-                style="background-color: {color.css};"
-                on:click={() => {
-                  documentOptions.badgeColor = color.value
-                  applyDocumentOptions()
-                }}
-              ></button>
-            {/each}
-            <input
-              type="color"
-              title="Couleur personnalisée"
-              aria-label="Couleur personnalisée"
-              disabled={documentOptions.mergeExercises}
-              class="h-6 w-6 cursor-pointer rounded-full border-2 {isCustomBadgeColor
-                ? 'border-coopmaths-action dark:border-coopmathsdark-action scale-110'
-                : 'border-transparent'} bg-transparent p-0"
-              value={badgeColorHex}
-              on:input={(e) => {
-                documentOptions.badgeColor = `rgb("${e.currentTarget.value}")`
-                applyDocumentOptions()
-              }}
-            />
-          </div>
-        </div>
-
-        <p class="text-xs opacity-75">
-          Ces réglages régénèrent le code Typst à partir des exercices : vos
-          modifications manuelles du code seront perdues.
-        </p>
-
-        <button
-          type="button"
-          class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
-          on:click={resetDocumentOptions}
-        >
-          <i class="bx bx-reset"></i>
-          Réinitialiser les réglages du document
-        </button>
       </div>
     </div>
   {/if}
