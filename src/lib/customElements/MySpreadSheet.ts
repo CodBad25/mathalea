@@ -1,6 +1,6 @@
 import jspreadsheet from 'jspreadsheet-ce'
 import 'jspreadsheet-ce/src/jspreadsheet.css'
-import MathaleaCustomElement from '../customElements/MathaleaCustomElement'
+import MathaleaCustomElement from './MathaleaCustomElement'
 
 type SpreadsheetStyle = Record<string, string>
 

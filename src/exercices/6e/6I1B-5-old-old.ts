@@ -1,4 +1,4 @@
-import { MySpreadsheetElement } from '../../lib/tableur/MySpreadSheet'
+import { MySpreadsheetElement } from '../../lib/customElements/MySpreadSheet'
 import { addSheet, createTableurLatex } from '../../lib/tableur/outilsTableur'
 import { context } from '../../modules/context'
 

@@ -1,8 +1,8 @@
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
+import { MySpreadsheetElement } from '../customElements/MySpreadSheet'
 import { toutPourUnPoint } from '../interactif/mathLive'
 import type { GoodAnswersFormulas, IExercice, SheetTestDatas } from '../types'
-import { MySpreadsheetElement } from './MySpreadSheet'
 
 export function compareSheetFunction(
   exercice: IExercice,
