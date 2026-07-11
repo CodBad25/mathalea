@@ -444,9 +444,14 @@ describe('buildTypstDocument', () => {
       { ...defaultTypstDocumentOptions, showQrCode: true },
     )
     expect(withQr).toContain('#import "@preview/tiaoma:0.3.0"')
+    // le QR-code est dans une cellule de grille réservée (jamais par-dessus
+    // le texte), pas dans un #place hors flux
+    expect(withQr).toContain('#grid(columns: (1fr, auto)')
+    // QR-code cliquable dans le PDF (#link vers la même URL)
     expect(withQr).toContain(
-      `#place(top + right, dx: 2pt, dy: 0pt, tiaoma.qrcode("${url}", height: 1.8cm))`,
+      `#link("${url}", tiaoma.qrcode("${url}", height: 1.8cm))`,
     )
+    expect(withQr).not.toContain('#place(')
 
     // absent par défaut, et sans le paquet tiaoma
     const withoutQr = buildTypstDocument([

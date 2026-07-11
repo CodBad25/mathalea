@@ -358,10 +358,20 @@ function exerciseBody(
   boldQuestionNumbers = false,
   /** Numéro de la première question (exercices fusionnés : la numérotation continue) */
   startNumber = 1,
+  /**
+   * QR-code (`#tiaoma.qrcode(...)`) à réserver en haut à droite de l'exercice.
+   * Placé dans une cellule de grille à côté de l'introduction pour ne jamais
+   * recouvrir le texte (contrairement à un `#place` hors flux).
+   */
+  topRight?: string,
 ): ExerciseBodyResult {
   const parts: string[] = []
+  // nombre de parts de tête (intro, amorce des sous-questions) : ce sont
+  // celles qui partagent la première ligne avec le QR-code éventuel
+  let leadCount = 0
   if (intro.trim().length > 0) {
     parts.push(htmlToTypst(intro, figures))
+    leadCount++
   }
   let questionList = questions
   let label = numbered ? '"1."' : 'none'
@@ -372,7 +382,10 @@ function exerciseBody(
     if (split != null) {
       if (split.head.trim().length > 0) {
         const head = htmlToTypst(split.head, figures)
-        if (head.length > 0) parts.push(head)
+        if (head.length > 0) {
+          parts.push(head)
+          leadCount++
+        }
       }
       questionList = split.items
       label = split.label
@@ -403,19 +416,45 @@ function exerciseBody(
     parts.push(
       `#mathalea-anchor("${anchorKind}", ${parseInt(tasksPrefix.slice(2), 10)})\n#tasks(columns: ${tasksPrefix}-colonnes, label: ${boldableLabel(label, boldQuestionNumbers)}, row-gutter: ${tasksPrefix}-gutter, above: 1.2em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
     )
-    return { code: parts.join('\n\n'), itemCount: converted.length }
+    return { code: assembleBody(parts, leadCount, topRight), itemCount: converted.length }
   }
   parts.push(...converted)
-  return { code: parts.join('\n\n'), itemCount: 0 }
+  return { code: assembleBody(parts, leadCount, topRight), itemCount: 0 }
 }
 
 /**
- * QR-code placé au coin haut-droit d'un exercice (hors du flux, comme
- * l'ancre `north east` de la sortie LaTeX). Le lien mène à l'exercice seul
- * sur MathALÉA (réglages et graine inclus).
+ * Assemble le corps d'un exercice. Sans QR-code, les parts se suivent
+ * simplement. Avec un QR-code (`topRight`), les parts de tête (`leadCount`)
+ * sont mises dans une grille à côté du QR-code : celui-ci occupe ainsi une
+ * cellule réservée et ne peut jamais recouvrir le texte ; le reste du contenu
+ * s'écrit sur toute la largeur en dessous.
+ */
+function assembleBody(
+  parts: string[],
+  leadCount: number,
+  topRight?: string,
+): string {
+  if (topRight == null) return parts.join('\n\n')
+  const indent = (body: string) =>
+    body
+      .split('\n')
+      .map((line) => (line.length > 0 ? `  ${line}` : line))
+      .join('\n')
+  const cell = (body: string) => (body.length > 0 ? `[\n${indent(body)}\n]` : '[]')
+  const lead = parts.slice(0, leadCount).join('\n\n')
+  const rest = parts.slice(leadCount)
+  const grid = `#grid(columns: (1fr, auto), column-gutter: 8pt, ${cell(lead)}, ${cell(topRight)})`
+  return [grid, ...rest].join('\n\n')
+}
+
+/**
+ * QR-code du coin haut-droit d'un exercice, menant à l'exercice seul sur
+ * MathALÉA (réglages et graine inclus). Rendu dans une cellule de grille
+ * réservée (voir `assembleBody`) pour ne jamais recouvrir le texte. Le
+ * `#link` rend le QR-code cliquable dans le PDF (vers la même URL).
  */
 function qrCodeSnippet(url: string): string {
-  return `#place(top + right, dx: 2pt, dy: 0pt, tiaoma.qrcode(${typstString(url)}, height: ${QRCODE_SIZE}))`
+  return `#link(${typstString(url)}, tiaoma.qrcode(${typstString(url)}, height: ${QRCODE_SIZE}))`
 }
 
 /**
@@ -457,6 +496,16 @@ export function buildTypstDocument(
         correction: null,
       }
     }
+    // QR-code vers l'exercice seul, réservé en haut à droite (mode banque
+    // uniquement : en mode fusionné il n'y a pas de bloc par exercice où
+    // l'ancrer, la case est donc désactivée dans ce mode)
+    const qr =
+      options.showQrCode &&
+      !options.mergeExercises &&
+      exercise.url != null &&
+      exercise.url.length > 0
+        ? qrCodeSnippet(exercise.url)
+        : undefined
     const enonce = exerciseBody(
       exercise.intro,
       exercise.questions,
@@ -465,6 +514,7 @@ export function buildTypstDocument(
       `ex${k + 1}`,
       options.boldQuestionNumbers,
       options.mergeExercises ? nextStart : 1,
+      qr,
     )
     if (options.mergeExercises) nextStart += enonce.itemCount
     let correction: string | null = null
@@ -484,19 +534,7 @@ export function buildTypstDocument(
       if (options.mergeExercises) nextCorrectionStart += body.itemCount
       correction = body.code
     }
-    let enonceCode = enonce.code
-    if (
-      options.showQrCode &&
-      !options.mergeExercises &&
-      exercise.url != null &&
-      exercise.url.length > 0
-    ) {
-      // le QR-code est hors flux (coin haut-droit du bloc de l'exercice) :
-      // il précède le contenu. En mode fusionné il n'y a pas de bloc par
-      // exercice où l'ancrer, la case est donc désactivée dans ce mode.
-      enonceCode = `${qrCodeSnippet(exercise.url)}\n${enonceCode}`
-    }
-    return { enonce: enonceCode, correction }
+    return { enonce: enonce.code, correction }
   })
 
   const renderLines: string[] = []
