@@ -1,6 +1,6 @@
+import { addMultiMathfield } from '../../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../../lib/interactif/MultiMathfield/MultiMathfield'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
