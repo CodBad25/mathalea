@@ -1,4 +1,5 @@
 import {
+  MATHALEA_FIGURE_BLOCK_HELPER,
   MATHALEA_FIGURE_HELPERS,
   MATHALEA_FIT_HELPER,
   MATHALEA_QCM_HELPERS,
@@ -57,6 +58,11 @@ export interface TypstCarryOver {
   insertions?: Record<number, string[]>
   /** Zoom de chaque figure (`#let fig-N-zoom = ...`), par numéro de figure */
   figureZoom?: Record<number, number>
+  /**
+   * Alignement de chaque figure (`#let fig-N-align = ...`), par numéro de
+   * figure. Expression Typst brute (`left`, `center` ou `right`).
+   */
+  figureAlign?: Record<number, string>
 }
 
 /** Extrait du code Typst courant les réglages de la palette à conserver */
@@ -96,7 +102,13 @@ export function harvestCarryOver(code: string): TypstCarryOver {
     const value = Number(match[2])
     if (value !== 1) figureZoom[Number(match[1])] = value
   }
-  return { tasksLayout, insertions, figureZoom }
+  const figureAlign: Record<number, string> = {}
+  for (const match of code.matchAll(
+    /^#let fig-(\d+)-align = (left|center|right)/gm,
+  )) {
+    if (match[2] !== 'left') figureAlign[Number(match[1])] = match[2]
+  }
+  return { tasksLayout, insertions, figureZoom, figureAlign }
 }
 
 /**
@@ -541,7 +553,7 @@ export function buildTypstDocument(
 
   const allLines = [...bankLines, ...renderLines]
   const usesMathaleaFigure = allLines.some((line) =>
-    line.includes('#mathalea-figure('),
+    line.includes('mathalea-figure('),
   )
   const usesTasks = allLines.some((line) => line.includes('#tasks('))
   const usesQcm = allLines.some((line) => line.includes('qcm-'))
@@ -594,8 +606,10 @@ export function buildTypstDocument(
   // qu'une figure est présente ; mathalea-figure l'utilise pour ses figures
   // à labels, il doit donc être défini avant.
   if (figures.length > 0) {
-    lines.push('// ----- Figures : adaptation à la largeur -----')
+    lines.push('// ----- Figures : adaptation à la largeur et alignement -----')
     lines.push(MATHALEA_FIT_HELPER)
+    lines.push('')
+    lines.push(MATHALEA_FIGURE_BLOCK_HELPER)
     lines.push('')
   }
   if (usesMathaleaFigure) {
@@ -724,6 +738,7 @@ export function buildTypstDocument(
       const figNum = index + 1
       lines.push(`#let fig-${figNum} = ${figure}`)
       lines.push(`#let fig-${figNum}-zoom = ${carryOver.figureZoom?.[figNum] ?? 1}`)
+      lines.push(`#let fig-${figNum}-align = ${carryOver.figureAlign?.[figNum] ?? 'left'}`)
     }
     lines.push('')
   }

@@ -34,6 +34,28 @@ export const MATHALEA_FIT_HELPER = `#let mathalea-fit(body, zoom: 1.0) = layout(
   if f != 1.0 { box(scale(f * 100%, origin: top + left, reflow: true, body)) } else { body }
 })`
 
+/**
+ * Réduit une figure (mathalea2d, avec ou sans labels) si elle dépasse la
+ * largeur disponible, applique le zoom choisi par le professeur, l'aligne
+ * (gauche/centre/droite) et place le repère invisible de la palette de mise
+ * en page (contrôle de zoom) au coin haut-droit de son rendu final. Le zoom
+ * et l'alignement sont résolus dans un seul passage de layout (measure()
+ * d'un contenu encore différé par un layout() imbriqué ne donnerait pas sa
+ * taille finale) puis appliqués manuellement (scale + pad), plutôt que via
+ * mathalea-fit/align, pour rester cohérents entre eux.
+ */
+export const MATHALEA_FIGURE_BLOCK_HELPER = `#let mathalea-figure-block(num, alignment, zoom, body) = layout(size => {
+  let natural = measure(body).width
+  let f = if natural > 0pt { calc.min(zoom, size.width / natural) } else { zoom }
+  let scaled = if f != 1.0 { box(scale(f * 100%, origin: top + left, reflow: true, body)) } else { body }
+  let content-width = natural * f
+  let left = if alignment == center { calc.max(0pt, (size.width - content-width) / 2) }
+    else if alignment == right { calc.max(0pt, size.width - content-width) }
+    else { 0pt }
+  mathalea-anchor("figure", num, dx: left + content-width)
+  pad(left: left)[#scaled]
+})`
+
 export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0deg, size: auto, fill: auto) = {
   let content = if size == auto and fill == auto {
     body
@@ -47,7 +69,7 @@ export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0
   (x: x, y: y, angle: angle, body: content)
 }
 
-#let mathalea-figure(width, height, graphic, labels: (), zoom: 1.0) = mathalea-fit(box(width: width, height: height)[
+#let mathalea-figure(width, height, graphic, labels: ()) = box(width: width, height: height)[
   #place(top + left, graphic)
   #for label in labels {
     let body = if label.angle == 0deg {
@@ -64,7 +86,7 @@ export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0
       place(top + left, dx: label.x - m.width / 2, dy: label.y - m.height / 2, box(body))
     }
   }
-], zoom: zoom)`
+]`
 
 /** Import du paquet taskize (mise en colonnes des propositions de QCM) */
 export const TASKIZE_IMPORT = '#import "@preview/taskize:0.2.6": tasks'
@@ -1547,6 +1569,7 @@ function mathalea2dContainerToTypst(
   const figureIndex = figures.length
   const figureName = `fig-${figureIndex}`
   const zoomVar = `${figureName}-zoom`
+  const alignVar = `${figureName}-align`
   const width = svgMatch[0].match(/<svg[^>]*?\swidth="([\d.]+)"/i)
   const height = svgMatch[0].match(/<svg[^>]*?\sheight="([\d.]+)"/i)
   const widthPx = width != null ? parseFloat(width[1]) : 213.3
@@ -1558,15 +1581,6 @@ function mathalea2dContainerToTypst(
   const scaleFactor = scaled.widthPt / (widthPx * 0.75)
   const widthPt = scaled.widthPt.toFixed(1)
   const heightPt = scaled.heightPt.toFixed(1)
-  // repère invisible : permet à la palette de mise en page de placer le
-  // contrôle de zoom au-dessus du coin haut-droit de la figure (dx : largeur
-  // de la figure, pour décaler le repère par rapport à son coin haut-gauche)
-  const anchor = `#mathalea-anchor("figure", ${figureIndex}, dx: ${widthPt}pt)`
-  // #mathalea-fit(...) réduit la figure si elle dépasse la largeur
-  // disponible (colonne étroite) et applique le zoom choisi par le
-  // professeur ; l'appel isole aussi le nom de variable pour éviter que le
-  // texte suivant soit fusionné dans l'identifiant
-  const figureRef = `${anchor}\n#mathalea-fit(${figureName}, zoom: ${zoomVar})`
   const labels = [
     ...html.matchAll(
       /<div\b[^>]*\bclass=["'][^"']*\bdivLatex\b[^"']*["'][\s\S]*?<\/div>/gi,
@@ -1574,12 +1588,22 @@ function mathalea2dContainerToTypst(
   ]
     .map((match) => divLatexToTypstLabel(match[0], scaleFactor))
     .filter((label): label is string => label != null)
-  if (labels.length === 0) return figureRef
+  const body =
+    labels.length === 0
+      ? figureName
+      : [
+          `mathalea-figure(${widthPt}pt, ${heightPt}pt, ${figureName}, labels: (`,
+          ...labels.map((label) => `  ${label},`),
+          '))',
+        ].join('\n')
+  // mathalea-figure-block réduit la figure si elle dépasse la largeur
+  // disponible, applique le zoom choisi par le professeur, l'aligne et place
+  // le repère invisible de la palette de mise en page au coin haut-droit de
+  // son rendu final
   return [
-    anchor,
-    `#mathalea-figure(${widthPt}pt, ${heightPt}pt, ${figureName}, labels: (`,
-    ...labels.map((label) => `  ${label},`),
-    `), zoom: ${zoomVar})`,
+    `#mathalea-figure-block(${figureIndex}, ${alignVar}, ${zoomVar},`,
+    body,
+    ')',
   ].join('\n')
 }
 

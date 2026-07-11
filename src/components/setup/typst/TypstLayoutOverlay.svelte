@@ -70,11 +70,18 @@
   export let documentColumns = 1
   /** Zoom de chaque figure, par numéro de figure (`fig-N`) */
   export let figureZoomValues: Record<number, number> = {}
+  /** Alignement de chaque figure, par numéro de figure (`fig-N`) */
+  export let figureAlignValues: Record<number, 'left' | 'center' | 'right'> =
+    {}
   /** Nombre total d'exercices (borne les boutons monter/descendre) */
   export let exerciseCount = 0
   export let onChangeQuestionCount: (num: number, delta: number) => void
   export let onDeleteExercise: (num: number) => void
   export let onAdjustFigureZoom: (num: number, delta: number) => void
+  export let onSetFigureAlign: (
+    num: number,
+    align: 'left' | 'center' | 'right',
+  ) => void
   export let onMoveExercise: (num: number, delta: -1 | 1) => void
   export let onNewData: (num: number) => void
   export let onOpenSettings: (num: number) => void
@@ -367,12 +374,14 @@
         </button>
       </div>
     {:else if widget.kind === 'figure'}
-      <!-- zoom d'une figure mathalea2d embarquée : le repère est déjà placé
-           au coin haut-droit (dx = largeur de la figure, voir mathalea2dContainerToTypst) ;
-           on ne décale la pastille que vers le haut pour qu'elle ne recouvre pas l'image -->
+      <!-- zoom et alignement d'une figure mathalea2d embarquée : le repère
+           est déjà placé au coin haut-droit de son rendu final (zoom et
+           alignement compris, voir mathalea-figure-block) ; on ne décale la
+           pastille que vers le haut pour qu'elle ne recouvre pas l'image -->
       {@const zoom = figureZoomValues[widget.num] ?? 1}
+      {@const figAlign = figureAlignValues[widget.num] ?? 'left'}
       <div
-        class="pointer-events-auto absolute flex -translate-y-full items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class="pointer-events-auto absolute flex -translate-x-full -translate-y-full items-center gap-0.5 typst-pill typst-pill-round px-1"
         style="left: {widget.left}%; top: {widget.top}%;"
         data-testid="typst-overlay-figure"
       >
@@ -395,6 +404,23 @@
         >
           <i class="bx bx-zoom-in"></i>
         </button>
+        <span class="typst-pill-sep"></span>
+        {#each [{ align: 'left', icon: 'bx-align-left', label: 'Aligner à gauche' }, { align: 'center', icon: 'bx-align-middle', label: 'Centrer' }, { align: 'right', icon: 'bx-align-right', label: 'Aligner à droite' }] as choice}
+          <button
+            type="button"
+            title={choice.label}
+            aria-label={choice.label}
+            aria-pressed={figAlign === choice.align}
+            class:typst-pill-active={figAlign === choice.align}
+            on:click={() =>
+              onSetFigureAlign(
+                widget.num,
+                choice.align as 'left' | 'center' | 'right',
+              )}
+          >
+            <i class="bx {choice.icon}"></i>
+          </button>
+        {/each}
       </div>
     {:else}
       {@const gapInsertions = insertions[widget.num] ?? []}

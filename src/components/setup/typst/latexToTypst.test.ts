@@ -356,7 +356,10 @@ describe('htmlToTypst', () => {
       figures,
     )
     expect(result).toContain(
-      '#mathalea-figure(72.0pt, 36.0pt, fig-1, labels: (',
+      '#mathalea-figure-block(1, fig-1-align, fig-1-zoom,',
+    )
+    expect(result).toContain(
+      'mathalea-figure(72.0pt, 36.0pt, fig-1, labels: (',
     )
     expect(result).toContain(
       'mathalea-label(15.0pt, 7.5pt, [$78^circle.small$], size: 0.7em)',
@@ -428,7 +431,7 @@ describe('htmlToTypst', () => {
     expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
     expect(result).toContain('+ $1$')
     expect(result).toContain('+ $2$')
-    expect(result).toContain('#mathalea-fit(fig-1)')
+    expect(result).toContain('#mathalea-figure-block(1, fig-1-align, fig-1-zoom,')
     expect(result).not.toMatch(/(^|[^-\w])0($|[^.\w])/m)
     expect(figures).toHaveLength(1)
   })

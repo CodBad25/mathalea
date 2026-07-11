@@ -197,6 +197,8 @@
   let documentColumns = 1
   /** Zoom de chaque figure (`#let fig-N-zoom`), lu dans le code courant */
   let figureZoomValues: Record<number, number> = {}
+  /** Alignement de chaque figure (`#let fig-N-align`), lu dans le code courant */
+  let figureAlignValues: Record<number, 'left' | 'center' | 'right'> = {}
   /** Exercice dont la modale de réglages (panneau Settings) est ouverte */
   let settingsExerciseIndex: number | null = null
   $: settingsExercise =
@@ -268,6 +270,13 @@
       figureZoom[Number(match[1])] = Number(match[2])
     }
     figureZoomValues = figureZoom
+    const figureAlign: Record<number, 'left' | 'center' | 'right'> = {}
+    for (const match of code.matchAll(
+      /^#let fig-(\d+)-align = (left|center|right)/gm,
+    )) {
+      figureAlign[Number(match[1])] = match[2] as 'left' | 'center' | 'right'
+    }
+    figureAlignValues = figureAlign
     const header = { titre: '', 'sous-titre': '', entete: '' }
     for (const name of ['titre', 'sous-titre', 'entete'] as const) {
       const match = new RegExp(`^#let ${name} = "((?:[^"\\\\]|\\\\.)*)"`, 'm').exec(
@@ -333,6 +342,22 @@
       from: match.index,
       to: match.index + match[0].length,
       insert: `#let fig-${figNum}-zoom = ${next}`,
+    })
+  }
+
+  /** Alignement d'une figure : gauche, centré ou à droite */
+  function setFigureAlign(
+    figNum: number,
+    align: 'left' | 'center' | 'right',
+  ) {
+    if (editorView == null) return
+    const doc = editorView.state.doc.toString()
+    const match = new RegExp(`^#let fig-${figNum}-align = .*$`, 'm').exec(doc)
+    if (match == null) return
+    dispatchPaletteEdit({
+      from: match.index,
+      to: match.index + match[0].length,
+      insert: `#let fig-${figNum}-align = ${align}`,
     })
   }
 
@@ -471,6 +496,11 @@
   function applyNewSeedTo(k: number) {
     const exercise = exercises[k]
     if (exercise == null) return
+    // regenerate() (via seedrandom(..., { global: true })) laisse Math.random
+    // verrouillé sur la graine du dernier exercice régénéré : sans ce
+    // réamorçage sur de l'entropie réelle, le tirage de la nouvelle graine
+    // serait déterministe et se figerait au bout de quelques clics.
+    seedrandom(undefined, { global: true })
     exercise.seed = undefined
     if (typeof exercise.applyNewSeed === 'function') exercise.applyNewSeed()
     const params = get(exercicesParams)[k]
@@ -1018,6 +1048,9 @@
     if (!confirmOverwrite()) return
     // nouvelles graines : les questions figées par la palette sont libérées
     frozenInputs.clear()
+    // voir applyNewSeedTo : Math.random peut être verrouillé sur la graine
+    // du dernier exercice régénéré, il faut le réamorcer avant de tirer
+    seedrandom(undefined, { global: true })
     const params = get(exercicesParams)
     for (const [k, exercise] of exercises.entries()) {
       if (exercise == null) continue
@@ -1606,10 +1639,12 @@
                   {documentColumns}
                   {questionCounts}
                   {figureZoomValues}
+                  {figureAlignValues}
                   exerciseCount={exercises.length}
                   onAdjustColumns={adjustColumns}
                   onAdjustGutter={adjustGutter}
                   onAdjustFigureZoom={adjustFigureZoom}
+                  onSetFigureAlign={setFigureAlign}
                   onInsert={insertAfterExercise}
                   onUpdateInsertion={updateInsertion}
                   onDeleteInsertion={deleteInsertion}
