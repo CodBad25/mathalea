@@ -7,15 +7,18 @@
   import seedrandom from 'seedrandom'
   import { onDestroy, onMount } from 'svelte'
   import { get } from 'svelte/store'
+  import ExerciceSimple from '../../../exercices/ExerciceSimple'
   import { buildExercisesList } from '../../../lib/components/exercisesUtils'
   import {
     mathaleaFormatExercice,
     mathaleaHandleExerciceSimple,
+    mathaleaHandleSup,
   } from '../../../lib/mathalea'
   import { darkMode, exercicesParams } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
   import { isLocalStorageAvailable } from '../../../lib/stores/storage'
   import type { IExercice } from '../../../lib/types'
+  import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
   import {
@@ -192,6 +195,14 @@
   let headerValues = { titre: '', 'sous-titre': '', entete: '' }
   /** Nombre de colonnes du document (`#let colonnes`), lu dans le code */
   let documentColumns = 1
+  /** Zoom de chaque figure (`#let fig-N-zoom`), lu dans le code courant */
+  let figureZoomValues: Record<number, number> = {}
+  /** Exercice dont la modale de réglages (panneau Settings) est ouverte */
+  let settingsExerciseIndex: number | null = null
+  $: settingsExercise =
+    settingsExerciseIndex !== null
+      ? (exercises[settingsExerciseIndex] ?? null)
+      : null
 
   /** Convertit les repères (pt, par page) en positions % sur l'aperçu */
   function computeOverlayWidgets(
@@ -206,7 +217,9 @@
       if (page == null) continue
       const isTasks = anchor.kind === 'tasks' || anchor.kind === 'tasks-corr'
       widgets.push({
-        kind: isTasks ? 'tasks' : (anchor.kind as 'exo' | 'gap' | 'header'),
+        kind: isTasks
+          ? 'tasks'
+          : (anchor.kind as 'exo' | 'gap' | 'header' | 'figure'),
         num: anchor.num,
         // les variables de la correction sont indépendantes de l'énoncé
         target: isTasks
@@ -250,6 +263,11 @@
     insertionValues = harvestCarryOver(code).insertions ?? {}
     const columns = code.match(/^#let colonnes = (\d+)/m)
     documentColumns = columns != null ? Number(columns[1]) : 1
+    const figureZoom: Record<number, number> = {}
+    for (const match of code.matchAll(/^#let fig-(\d+)-zoom = ([\d.]+)/gm)) {
+      figureZoom[Number(match[1])] = Number(match[2])
+    }
+    figureZoomValues = figureZoom
     const header = { titre: '', 'sous-titre': '', entete: '' }
     for (const name of ['titre', 'sous-titre', 'entete'] as const) {
       const match = new RegExp(`^#let ${name} = "((?:[^"\\\\]|\\\\.)*)"`, 'm').exec(
@@ -297,6 +315,25 @@
       Math.round((current + delta * GUTTER_STEP) * 100) / 100,
     )
     setTasksVariable(target, 'gutter', `${next}em`)
+  }
+
+  /** Pas d'ajustement du zoom d'une figure, et bornes (20 % à 300 %) */
+  const FIGURE_ZOOM_STEP = 0.1
+  function adjustFigureZoom(figNum: number, delta: number) {
+    if (editorView == null) return
+    const doc = editorView.state.doc.toString()
+    const match = new RegExp(`^#let fig-${figNum}-zoom = .*$`, 'm').exec(doc)
+    if (match == null) return
+    const current = figureZoomValues[figNum] ?? 1
+    const next = Math.min(
+      3,
+      Math.max(0.2, Math.round((current + delta * FIGURE_ZOOM_STEP) * 100) / 100),
+    )
+    dispatchPaletteEdit({
+      from: match.index,
+      to: match.index + match[0].length,
+      insert: `#let fig-${figNum}-zoom = ${next}`,
+    })
   }
 
   /** Nombre de questions par exercice (null : non réglable), pour la palette */
@@ -372,6 +409,129 @@
     exercises = exercises.filter((_, k) => k !== num - 1)
     exercicesParams.update((list) => list.filter((_, k) => k !== num - 1))
     const code = buildTypstDocument(buildInputs(), documentOptions, carryOver)
+    setEditorContent(code)
+    scheduleCompile(code, 0)
+  }
+
+  /**
+   * Échange les réglages de la palette (colonnes/espacement des questions,
+   * insertions) entre les exercices `numA` et `numB` : ce que le professeur
+   * avait réglé « pour cet exercice » le suit quand il change de position.
+   */
+  function swapCarryOver(
+    carryOver: ReturnType<typeof harvestCarryOver>,
+    numA: number,
+    numB: number,
+  ): ReturnType<typeof harvestCarryOver> {
+    const swapNum = (n: number) => (n === numA ? numB : n === numB ? numA : n)
+    const tasksLayout: NonNullable<typeof carryOver.tasksLayout> = {}
+    for (const [prefix, layout] of Object.entries(
+      carryOver.tasksLayout ?? {},
+    )) {
+      const match = prefix.match(/^ex(\d+)(-corr)?$/)
+      if (match == null) continue
+      tasksLayout[`ex${swapNum(Number(match[1]))}${match[2] ?? ''}`] = layout
+    }
+    const insertions: NonNullable<typeof carryOver.insertions> = {}
+    for (const [key, lines] of Object.entries(carryOver.insertions ?? {})) {
+      // le repère de gap `g` précède l'exercice `g + 1`
+      const newGap = swapNum(Number(key) + 1) - 1
+      insertions[newGap] = [...(insertions[newGap] ?? []), ...lines]
+    }
+    return { tasksLayout, insertions }
+  }
+
+  /** Échange l'exercice num avec son voisin (delta : -1 monter, 1 descendre) */
+  function moveExercise(num: number, delta: -1 | 1) {
+    const k = num - 1
+    const target = k + delta
+    if (target < 0 || target >= exercises.length) return
+    if (!confirmOverwrite()) return
+    const carryOver =
+      editorView != null
+        ? swapCarryOver(harvestCarryOver(currentCode()), k + 1, target + 1)
+        : {}
+    const newExercises = [...exercises]
+    ;[newExercises[k], newExercises[target]] = [
+      newExercises[target],
+      newExercises[k],
+    ]
+    exercises = newExercises
+    exercicesParams.update((list) => {
+      const copy = [...list]
+      ;[copy[k], copy[target]] = [copy[target], copy[k]]
+      return copy
+    })
+    const code = buildTypstDocument(buildInputs(), documentOptions, carryOver)
+    setEditorContent(code)
+    scheduleCompile(code, 0)
+  }
+
+  /** Nouvelle graine pour l'exercice d'indice k (sans régénérer le code) */
+  function applyNewSeedTo(k: number) {
+    const exercise = exercises[k]
+    if (exercise == null) return
+    exercise.seed = undefined
+    if (typeof exercise.applyNewSeed === 'function') exercise.applyNewSeed()
+    const params = get(exercicesParams)[k]
+    if (params != null && exercise.seed !== undefined) {
+      params.alea = exercise.seed
+    }
+    frozenInputs.delete(exercise)
+  }
+
+  /** Nouvelles données aléatoires pour l'exercice num */
+  function newDataForExercise(num: number) {
+    if (!confirmOverwrite()) return
+    applyNewSeedTo(num - 1)
+    exercicesParams.update((list) => list)
+    const code = buildCode()
+    setEditorContent(code)
+    scheduleCompile(code, 0)
+  }
+
+  function openSettings(num: number) {
+    settingsExerciseIndex = num - 1
+  }
+
+  /** Applique les réglages émis par le panneau Settings de la vue prof */
+  function applyNewSettings(k: number, detail: Record<string, unknown>) {
+    const exercise = exercises[k]
+    const params = get(exercicesParams)[k]
+    if (exercise == null || params == null) return
+    if (!confirmOverwrite()) return
+    if (detail.nbQuestions != null) {
+      exercise.nbQuestions = detail.nbQuestions as number
+      params.nbQuestions = exercise.nbQuestions
+    }
+    if (detail.duration != null) {
+      exercise.duration = detail.duration as number
+      params.duration = exercise.duration
+    }
+    const supKeys = ['sup', 'sup2', 'sup3', 'sup4', 'sup5'] as const
+    for (const key of supKeys) {
+      if (detail[key] !== undefined) {
+        exercise[key] = detail[key] as boolean | number | string
+        params[key] = mathaleaHandleSup(
+          exercise[key] as boolean | number | string,
+        )
+      }
+    }
+    if (detail.versionQcm !== undefined && exercise instanceof ExerciceSimple) {
+      exercise.versionQcm = detail.versionQcm as boolean
+      params.versionQcm = exercise.versionQcm ? '1' : '0'
+    }
+    if (detail.alea !== undefined) {
+      exercise.seed = detail.alea as string
+      params.alea = exercise.seed
+    }
+    if (detail.correctionDetaillee !== undefined) {
+      exercise.correctionDetaillee = detail.correctionDetaillee as boolean
+      params.cd = exercise.correctionDetaillee ? '1' : '0'
+    }
+    exercicesParams.update((list) => list)
+    frozenInputs.delete(exercise)
+    const code = buildCode()
     setEditorContent(code)
     scheduleCompile(code, 0)
   }
@@ -1445,14 +1605,20 @@
                   header={headerValues}
                   {documentColumns}
                   {questionCounts}
+                  {figureZoomValues}
+                  exerciseCount={exercises.length}
                   onAdjustColumns={adjustColumns}
                   onAdjustGutter={adjustGutter}
+                  onAdjustFigureZoom={adjustFigureZoom}
                   onInsert={insertAfterExercise}
                   onUpdateInsertion={updateInsertion}
                   onDeleteInsertion={deleteInsertion}
                   onUpdateHeader={updateHeaderValue}
                   onChangeQuestionCount={changeQuestionCount}
                   onDeleteExercise={deleteExercise}
+                  onMoveExercise={moveExercise}
+                  onNewData={newDataForExercise}
+                  onOpenSettings={openSettings}
                 />
               {/if}
             </div>
@@ -1468,6 +1634,32 @@
             {/each}
           </div>
         {/if}
+      </div>
+    </div>
+  {/if}
+
+  {#if settingsExerciseIndex !== null && settingsExercise != null}
+    <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      on:click|self={() => (settingsExerciseIndex = null)}
+    >
+      <div
+        class="relative w-full max-w-xl max-h-[85vh] overflow-y-auto rounded-lg shadow-xl bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark"
+      >
+        {#key settingsExerciseIndex}
+          <Settings
+            exercice={settingsExercise}
+            exerciceIndex={settingsExerciseIndex}
+            inModal={true}
+            on:settings={(event) => {
+              if (settingsExerciseIndex !== null) {
+                applyNewSettings(settingsExerciseIndex, event.detail)
+              }
+            }}
+            on:clickSettings={() => (settingsExerciseIndex = null)}
+          />
+        {/key}
       </div>
     </div>
   {/if}

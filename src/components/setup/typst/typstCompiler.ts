@@ -128,17 +128,25 @@ export interface TypstAnchor {
   /**
    * `tasks`/`tasks-corr` : liste de questions réglable (énoncé/correction) ;
    * `exo` : début d'un exercice (nombre de questions, suppression) ;
-   * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche
+   * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche ;
+   * `figure` : figure mathalea2d embarquée (zoom)
    */
-  kind: 'tasks' | 'tasks-corr' | 'exo' | 'gap' | 'header'
-  /** Numéro de l'exercice concerné (0 = avant le premier exercice) */
+  kind: 'tasks' | 'tasks-corr' | 'exo' | 'gap' | 'header' | 'figure'
+  /** Numéro de l'exercice concerné (0 = avant le premier exercice), ou de la figure */
   num: number
   page: number
   x: number
   y: number
 }
 
-const ANCHOR_KINDS = new Set(['tasks', 'tasks-corr', 'exo', 'gap', 'header'])
+const ANCHOR_KINDS = new Set([
+  'tasks',
+  'tasks-corr',
+  'exo',
+  'gap',
+  'header',
+  'figure',
+])
 
 /** Valide et filtre les métadonnées renvoyées par `query(<mathalea-anchor>)` */
 function parseAnchors(values: unknown): TypstAnchor[] {

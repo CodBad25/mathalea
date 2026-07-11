@@ -19,9 +19,9 @@ export const EXERCISE_BANK_IMPORT =
  * contrôles (colonnes/espacement des questions, insertions) sur l'aperçu.
  * Aucun impact sur la mise en page : une métadonnée n'occupe aucune place.
  */
-export const MATHALEA_ANCHOR_HELPER = `#let mathalea-anchor(kind, num) = context {
+export const MATHALEA_ANCHOR_HELPER = `#let mathalea-anchor(kind, num, dx: 0pt) = context {
   let position = here().position()
-  [#metadata((kind: kind, num: num, page: position.page, x: position.x.pt(), y: position.y.pt())) <mathalea-anchor>]
+  [#metadata((kind: kind, num: num, page: position.page, x: (position.x + dx).pt(), y: position.y.pt())) <mathalea-anchor>]
 }`
 
 /** Marqueur de fin de ligne des insertions faites via la palette */
@@ -55,6 +55,8 @@ export interface TypstCarryOver {
    * `// mathalea:insertion`), par numéro de l'exercice qui les précède.
    */
   insertions?: Record<number, string[]>
+  /** Zoom de chaque figure (`#let fig-N-zoom = ...`), par numéro de figure */
+  figureZoom?: Record<number, number>
 }
 
 /** Extrait du code Typst courant les réglages de la palette à conserver */
@@ -89,7 +91,12 @@ export function harvestCarryOver(code: string): TypstCarryOver {
       ;(insertions[currentGap] ??= []).push(insertion[1])
     }
   }
-  return { tasksLayout, insertions }
+  const figureZoom: Record<number, number> = {}
+  for (const match of code.matchAll(/^#let fig-(\d+)-zoom = ([\d.]+)/gm)) {
+    const value = Number(match[2])
+    if (value !== 1) figureZoom[Number(match[1])] = value
+  }
+  return { tasksLayout, insertions, figureZoom }
 }
 
 /**
@@ -714,7 +721,9 @@ export function buildTypstDocument(
   if (figures.length > 0) {
     lines.push('// ----- Figures (SVG embarqués) -----')
     for (const [index, figure] of figures.entries()) {
-      lines.push(`#let fig-${index + 1} = ${figure}`)
+      const figNum = index + 1
+      lines.push(`#let fig-${figNum} = ${figure}`)
+      lines.push(`#let fig-${figNum}-zoom = ${carryOver.figureZoom?.[figNum] ?? 1}`)
     }
     lines.push('')
   }
