@@ -1,6 +1,6 @@
 import type { MathfieldElement } from 'mathlive'
-import ListeDeroulanteElement from '../../../src/lib/interactif/listeDeroulante/ListeDeroulanteElement'
-import { MySpreadsheetElement } from '../../../src/lib/tableur/MySpreadSheet'
+import ListeDeroulanteElement from '../../../src/lib/customElements/ListeDeroulanteElement'
+import { MySpreadsheetElement } from '../../../src/lib/customElements/MySpreadSheet'
 import type {
   GoodAnswersFormulas,
   SheetTestDatas,

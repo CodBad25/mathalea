@@ -1,7 +1,7 @@
 import { context } from '../../../modules/context'
+import '../../customElements/SvgSelectionElement'
+import SvgSelectionElement from '../../customElements/SvgSelectionElement'
 import type { IExercice } from '../../types'
-import '../svgSelection/SvgSelectionElement'
-import SvgSelectionElement from '../svgSelection/SvgSelectionElement'
 
 export type SvgWithValue = { svg: string; value: number }
 

@@ -1,5 +1,5 @@
 type SvgWithValue = { svg: string; value: number }
-import MathaleaCustomElement from '../../customElements/MathaleaCustomElement'
+import MathaleaCustomElement from './MathaleaCustomElement'
 /**
  * Composant de sélection d'éléments SVG avec valeurs associées
  * Permet de sélectionner une ou plusieurs options représentées par des SVG
