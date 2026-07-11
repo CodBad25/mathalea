@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = '458eb'
 
 export const refs = {
-  'fr-fr': ['1A-R02-1'],
+  'fr-fr': ['1A-R02-1', '2A-R2-1'],
   'fr-ch': [],
 }
 export default class Auto1AR4 extends CalculPartieAvecTout {
