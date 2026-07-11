@@ -1,5 +1,5 @@
-import MathaleaCustomElement from '../customElements/MathaleaCustomElement'
 import ce from '../interactif/comparisonFunctions'
+import MathaleaCustomElement from './MathaleaCustomElement'
 
 /**
  * Calculatrice Web Component autonome
