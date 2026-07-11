@@ -7,10 +7,7 @@ import {
   buildDataKeyboardFromStyle,
   KeyboardType,
 } from '../interactif/claviers/keyboard'
-import {
-  setMathfield,
-  setMathfieldListener,
-} from '../interactif/MultiMathfield/setMathfield'
+import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
 import type { IExercice, ValeurNames } from '../types'
 import MathaleaCustomElement from './MathaleaCustomElement'
 
@@ -69,6 +66,15 @@ export type DataOptionsMultiMathfield = Partial<
     }
   >
 >
+
+type MultiMathfieldAnswers = Record<string, string>
+type MultiMathfieldOption = {
+  keyboard?: string
+  placeholder?: string
+  minWidth?: number
+  texteApres?: string
+  ldots?: boolean
+}
 
 const buildDataKeyboardString = (style = '') => {
   const blocks = buildDataKeyboardFromStyle(style)
@@ -348,7 +354,7 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
   }
 
   getValue() {
-    const result: Record<string, any> = {}
+    const result: MultiMathfieldAnswers = {}
     if (this.shadowRoot) {
       this.shadowRoot.querySelectorAll('math-field').forEach((el) => {
         const mf = el as MathfieldElement
@@ -365,7 +371,7 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
     return this.getValue()
   }
 
-  set value(answers: Record<string, any>) {
+  set value(answers: MultiMathfieldAnswers) {
     this.setAnswers(answers)
   }
 
@@ -381,7 +387,7 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
     return result
   }
 
-  setAnswers(answers: Record<string, any>) {
+  setAnswers(answers: MultiMathfieldAnswers) {
     if (this.shadowRoot) {
       this.shadowRoot.querySelectorAll('math-field').forEach((el) => {
         const mf = el as MathfieldElement
@@ -405,7 +411,9 @@ export function addMultiMathfield(
   // Extraction des noms de champs %{name}
   const regex = /%\{([^}]+)\}/g
   let match
-  const enrichedOptions: Record<string, any> = { ...dataOptions }
+  const enrichedOptions: Record<string, MultiMathfieldOption> = {
+    ...(dataOptions as Record<string, MultiMathfieldOption>),
+  }
   while ((match = regex.exec(dataTemplate)) !== null) {
     const name = match[1]
     if (!(name in enrichedOptions)) {
