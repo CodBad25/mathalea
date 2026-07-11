@@ -1,5 +1,5 @@
-import { orangeMathalea } from '../lib/colors'
-import MathaleaCustomElement from './customElements/MathaleaCustomElement'
+import { orangeMathalea } from '../colors'
+import MathaleaCustomElement from './MathaleaCustomElement'
 /**
  * Horloge interactive
  * @author Rémi Angot

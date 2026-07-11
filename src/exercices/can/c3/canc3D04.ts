@@ -3,7 +3,7 @@
  */
 
 import Horloge from '../../../lib/2d/horloge'
-import handleInteractiveClock from '../../../lib/InteractiveClock'
+import handleInteractiveClock from '../../../lib/customElements/InteractiveClock'
 import { combinaisonListes } from '../../../lib/outils/arrayOutils'
 import { sp } from '../../../lib/outils/outilString'
 import { formatMinute } from '../../../lib/outils/texNombre'
