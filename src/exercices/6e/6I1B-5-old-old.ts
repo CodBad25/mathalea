@@ -160,7 +160,9 @@ export default class ExerciceTableur extends Exercice {
     for (let i = 0; i < nbSteps; i++) {
       const index = i + q * nbSteps
       cell = toRefCellule(corrections[index].ref)
-      resultats.push(parseFloat(testSheet.getCellValue(cell.col, cell.lig)))
+      resultats.push(
+        parseFloat(String(testSheet.getCellValue(cell.col, cell.lig))),
+      )
     }
     // Recupere les données B1, C1, D1 ... pour les comparer aux résultats attendus
     const correctionResultats: number[] = []
@@ -168,7 +170,7 @@ export default class ExerciceTableur extends Exercice {
       const index = i + q * nbSteps
       cell = toRefCellule(corrections[index].ref)
       correctionResultats.push(
-        parseFloat(correctionSheet.getCellValue(cell.col, cell.lig)),
+        parseFloat(String(correctionSheet.getCellValue(cell.col, cell.lig))),
       )
     }
 

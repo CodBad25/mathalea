@@ -133,7 +133,7 @@ export default class ExerciceTableur extends Exercice {
       const a1 = randint(1, 10)
       testSheet.setCellValue(0, 0, a1) // A1
       const resultats = range1(nbSteps).map((i) =>
-        parseFloat(testSheet.getCellValue(i, 0)),
+        parseFloat(String(testSheet.getCellValue(i, 0))),
       )
 
       // compare les résultats
@@ -160,7 +160,7 @@ export default class ExerciceTableur extends Exercice {
         for (let i = 1; i < nbSteps + 1; i++) {
           const steps = this.listeSteps[q]
           result = evaluate(result, steps[i - 1].op, steps[i - 1].val)
-          const computed = parseFloat(testSheet.getCellValue(i, 0))
+          const computed = parseFloat(String(testSheet.getCellValue(i, 0)))
           if (Math.abs(computed - result) > 1e-9) {
             messages[n].push(
               `Mauvaise formule dans la cellule ${String.fromCharCode(65 + i)}1.<br>`,
