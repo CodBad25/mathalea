@@ -1,19 +1,18 @@
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
-import { randint } from '../../modules/outils'
-import { listeQuestionsToContenu } from '../../modules/outils'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { repere } from '../../lib/2d/reperes'
-import { mathalea2d } from '../../modules/mathalea2d'
-import { point } from '../../lib/2d/PointAbstrait'
-import { tracePoint } from '../../lib/2d/TracePoint'
 import { plot } from '../../lib/2d/Plot'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { point } from '../../lib/2d/PointAbstrait'
+import { repere } from '../../lib/2d/reperes'
+import { tracePoint } from '../../lib/2d/TracePoint'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
+import { mathalea2d } from '../../modules/mathalea2d'
 
 export const titre =
   "Calculer les coordonnées du point moyen d'un nuage de points"

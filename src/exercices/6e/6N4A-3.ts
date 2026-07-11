@@ -3,10 +3,10 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polyline } from '../../lib/2d/Polyline'
 import { latex2d } from '../../lib/2d/textes'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -250,8 +250,14 @@ export default class ResoudreDesProblemes extends Exercice {
         dataTemplate: `Quelle est la masse  d'${shape1.articleSingulier} ${shape1.nomSingulier} ? %{champ1}<br>
         Quelle est la masse d'${shape2.articleSingulier} ${shape2.nomSingulier} ? %{champ2}`,
         dataOptions: {
-          champ1: { keyboard: KeyboardType.masse, texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' },
-          champ2: { keyboard: KeyboardType.masse, texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' },
+          champ1: {
+            keyboard: KeyboardType.masse,
+            texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+          },
+          champ2: {
+            keyboard: KeyboardType.masse,
+            texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+          },
         },
       }).replaceAll(': $\\ldots\\ldots$', '')
 

@@ -3,7 +3,7 @@ import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { numAlpha } from '../../lib/outils/outilString'
 import Exercice from '../Exercice'
 
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'

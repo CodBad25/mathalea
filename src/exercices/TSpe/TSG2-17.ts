@@ -3,9 +3,9 @@ import { pointAbstrait, type PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
@@ -343,7 +343,10 @@ export default class VecteursRepCube extends Exercice {
         '$(O,\\overrightarrow{OI},\\overrightarrow{OJ},\\overrightarrow{OK})$'
 
       const fig = mathalea2d(
-        Object.assign({ scale: 0.6, display: 'inline' } as const, fixeBordures(objets)),
+        Object.assign(
+          { scale: 0.6, display: 'inline' } as const,
+          fixeBordures(objets),
+        ),
         objets,
         tracePoint(pO),
         tracePoint(pI),
