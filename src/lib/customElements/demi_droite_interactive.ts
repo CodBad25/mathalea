@@ -1,7 +1,7 @@
 import { context } from '../../modules/context'
 import { bleuMathalea } from '../colors'
-import MathaleaCustomElement from '../customElements/MathaleaCustomElement'
 import type { IExercice } from '../types'
+import MathaleaCustomElement from './MathaleaCustomElement'
 
 type ValeurPoint = {
   pointValue: number

@@ -8,7 +8,7 @@ import {
   tracePointSurDroite,
 } from '../../lib/2d/TracePointSurDroite'
 import { orangeMathalea } from '../../lib/colors'
-import { demiDroiteInteractive } from '../../lib/interactif/demi_droite_interactive'
+import { demiDroiteInteractive } from '../../lib/customElements/demi_droite_interactive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
