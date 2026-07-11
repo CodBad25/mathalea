@@ -1,6 +1,6 @@
 // Importer renderKatex de mathalea
-import MathaleaCustomElement from '../customElements/MathaleaCustomElement'
 import { renderKatex } from '../mathalea'
+import MathaleaCustomElement from './MathaleaCustomElement'
 
 function detectPixelsPerCm() {
   try {
