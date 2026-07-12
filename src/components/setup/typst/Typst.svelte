@@ -123,6 +123,13 @@
           if (!has(MATH_FONTS, documentOptions.mathFont)) {
             documentOptions.mathFont = defaultTypstDocumentOptions.mathFont
           }
+          if (
+            !Number.isInteger(documentOptions.nbVersions) ||
+            documentOptions.nbVersions < 1 ||
+            documentOptions.nbVersions > 4
+          ) {
+            documentOptions.nbVersions = defaultTypstDocumentOptions.nbVersions
+          }
         }
       }
     } catch {
@@ -168,7 +175,6 @@
   let isGeneratingPdf = false
   let diagnostics: string[] = []
   let svgContent = ''
-  let copied = false
 
   let editorEl: HTMLDivElement
   let editorView: EditorView | null = null
@@ -848,13 +854,40 @@
     })
   }
 
+  /**
+   * Contenu de chaque version du sujet (Sujet A, B...) : la version 0 utilise
+   * la graine de base (visible dans les réglages), les suivantes une graine
+   * dérivée — même formule que la vue A4 (`Diaporama.svelte` `reroll`), pour
+   * que la 2e version corresponde à la 2e vue du diaporama.
+   */
+  function buildAllVersionInputs(): TypstExerciseInput[][] {
+    const baseSeeds = exercises.map((exercise) => exercise?.seed)
+    const nbVersions = Math.max(1, documentOptions.nbVersions)
+    const perVersion: TypstExerciseInput[][] = []
+    for (let version = 0; version < nbVersions; version++) {
+      for (const [k, exercise] of exercises.entries()) {
+        if (exercise == null) continue
+        const base = baseSeeds[k]
+        exercise.seed =
+          version === 0 || base === undefined ? base : `${base}${version}`
+      }
+      perVersion.push(buildInputs())
+    }
+    // on restaure la graine de base : c'est elle que montrent les réglages
+    for (const [k, exercise] of exercises.entries()) {
+      if (exercise != null) exercise.seed = baseSeeds[k]
+    }
+    return perVersion
+  }
+
   function buildCode(): string {
     // les ajustements faits via la palette de mise en page (colonnes,
     // espacement, insertions) sont repris du code courant pour survivre
     // à la régénération
     const carryOver =
       editorView != null ? harvestCarryOver(currentCode()) : {}
-    return buildTypstDocument(buildInputs(), documentOptions, carryOver)
+    const [primary, ...extraVersions] = buildAllVersionInputs()
+    return buildTypstDocument(primary, documentOptions, carryOver, extraVersions)
   }
 
   function initEditor(content: string) {
@@ -1216,16 +1249,6 @@
       `${exportFilename()}.typ`,
     )
   }
-
-  async function copyCode() {
-    try {
-      await navigator.clipboard.writeText(currentCode())
-      copied = true
-      setTimeout(() => (copied = false), 2000)
-    } catch (error) {
-      console.error('Copie impossible', error)
-    }
-  }
 </script>
 
 <svelte:head>
@@ -1307,41 +1330,50 @@
         Mise en page
       </button>
 
+      <label class="flex items-center gap-2 text-sm">
+        <i class="bx bx-copy text-xl"></i>
+        Versions
+        <select
+          class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+          bind:value={documentOptions.nbVersions}
+          on:change={applyDocumentOptions}
+        >
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+        </select>
+      </label>
+
       <div class="grow"></div>
 
-      <button
-        type="button"
-        title="Copier le code Typst"
-        aria-label="Copier le code Typst"
-        class="flex items-center text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
-        on:click={copyCode}
-      >
-        <i class="bx {copied ? 'bx-check' : 'bx-copy'} text-2xl"></i>
-      </button>
-      <ButtonTextAction
-        text="Télécharger le .typ"
-        icon="bx-file-blank"
-        inverted={true}
-        class="rounded-lg py-1 px-2"
-        on:click={downloadTyp}
-      />
-      <ButtonTextAction
-        text={isGeneratingPdf ? 'PDF en cours...' : 'Télécharger le PDF'}
-        icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-download'}
-        inverted={true}
-        class="rounded-lg py-1 px-2 min-w-42.5"
-        on:click={downloadPdf}
-      />
-      <ButtonTextAction
-        text={isGeneratingPdf
-          ? 'PDF en cours...'
-          : 'Énoncé + corrigé séparés'}
-        icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-copy'}
-        inverted={true}
-        class="rounded-lg py-1 px-2 min-w-42.5"
-        title="Télécharge deux PDF : l'énoncé seul puis le corrigé seul"
-        on:click={downloadPdfSeparate}
-      />
+      {#if displayMode === 'code'}
+        <ButtonTextAction
+          text="Télécharger le .typ"
+          icon="bx-file-blank"
+          inverted={true}
+          class="rounded-lg py-1 px-2"
+          on:click={downloadTyp}
+        />
+      {:else}
+        <ButtonTextAction
+          text={isGeneratingPdf ? 'PDF en cours...' : 'Télécharger le PDF'}
+          icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-download'}
+          inverted={true}
+          class="rounded-lg py-1 px-2 min-w-42.5"
+          on:click={downloadPdf}
+        />
+        <ButtonTextAction
+          text={isGeneratingPdf
+            ? 'PDF en cours...'
+            : 'Énoncé + corrigé séparés'}
+          icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-copy'}
+          inverted={true}
+          class="rounded-lg py-1 px-2 min-w-42.5"
+          title="Télécharge deux PDF : l'énoncé seul puis le corrigé seul"
+          on:click={downloadPdfSeparate}
+        />
+      {/if}
     </div>
   </div>
 

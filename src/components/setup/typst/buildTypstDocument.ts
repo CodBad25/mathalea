@@ -11,7 +11,7 @@ import {
 
 /** Import du paquet exercise-bank (badges Exercice/Correction, banque) */
 export const EXERCISE_BANK_IMPORT =
-  '#import "@preview/exercise-bank:0.5.2": exo, exo-setup, exo-print-solutions'
+  '#import "@preview/exercise-bank:0.5.2": exo, exo-setup, exo-print-solutions, exo-counter'
 
 /** Import du paquet tiaoma (génération des QR-codes) */
 export const TIAOMA_IMPORT = '#import "@preview/tiaoma:0.3.0"'
@@ -191,6 +191,8 @@ export interface TypstDocumentOptions {
    * (expression Typst, ex : `black`). La correction suit la même couleur.
    */
   badgeColor: string
+  /** Nombre de versions du sujet (Sujet A, B...) générées à la suite */
+  nbVersions: number
 }
 
 /** Habillage de l'en-tête et du pied de page */
@@ -294,6 +296,7 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   showQrCode: false,
   badgeStyle: 'underline',
   badgeColor: 'black',
+  nbVersions: 1,
 }
 
 /**
@@ -364,6 +367,8 @@ function exerciseBody(
    * recouvrir le texte (contrairement à un `#place` hors flux).
    */
   topRight?: string,
+  /** Publie le repère `mathalea-anchor` de la liste `tasks` (palette de l'aperçu) */
+  emitAnchor = true,
 ): ExerciseBodyResult {
   const parts: string[] = []
   // nombre de parts de tête (intro, amorce des sous-questions) : ce sont
@@ -413,8 +418,11 @@ function exerciseBody(
     // page de l'aperçu de placer ses contrôles à côté de l'environnement ;
     // les corrections (préfixe `exN-corr`) ont leurs propres réglages
     const anchorKind = tasksPrefix.endsWith('-corr') ? 'tasks-corr' : 'tasks'
+    const anchorLine = emitAnchor
+      ? `#mathalea-anchor("${anchorKind}", ${parseInt(tasksPrefix.slice(2), 10)})\n`
+      : ''
     parts.push(
-      `#mathalea-anchor("${anchorKind}", ${parseInt(tasksPrefix.slice(2), 10)})\n#tasks(columns: ${tasksPrefix}-colonnes, label: ${boldableLabel(label, boldQuestionNumbers)}, row-gutter: ${tasksPrefix}-gutter, above: 1.2em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
+      `${anchorLine}#tasks(columns: ${tasksPrefix}-colonnes, label: ${boldableLabel(label, boldQuestionNumbers)}, row-gutter: ${tasksPrefix}-gutter, above: 1.2em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
     )
     return { code: assembleBody(parts, leadCount, topRight), itemCount: converted.length }
   }
@@ -457,25 +465,41 @@ function qrCodeSnippet(url: string): string {
   return `#link(${typstString(url)}, tiaoma.qrcode(${typstString(url)}, height: ${QRCODE_SIZE}))`
 }
 
+/** Contenu Typst (définitions + rendu) d'une version du sujet */
+interface VersionContent {
+  bankLines: string[]
+  renderLines: string[]
+  hasCorrections: boolean
+}
+
+/** Lettre affichée pour une version 0-based (0 → A, 1 → B...) */
+function versionLetter(version: number): string {
+  return String.fromCharCode(65 + version)
+}
+
 /**
- * Génère le code Typst complet de la fiche.
- * Le préambule expose des variables (`colonnes`, `corrige`...) que
- * l'utilisateur peut modifier directement dans l'éditeur.
+ * Construit les définitions et le rendu (Énoncés + Corrections) d'une seule
+ * version du sujet. `varPrefix` distingue les variables de banque
+ * (`#let <prefix>exN = ...`) d'une version à l'autre ; les variables de mise
+ * en page des questions (`exN-colonnes`...) restent, elles, partagées entre
+ * toutes les versions d'un même exercice. `emitAnchors` n'est activé que
+ * pour la première version : les autres sont des copies (graine différente)
+ * du même sujet, la palette de mise en page n'a donc besoin d'y contrôler
+ * qu'une seule instance.
  */
-export function buildTypstDocument(
+function buildVersionContent(
   exercises: TypstExerciseInput[],
-  options: TypstDocumentOptions = defaultTypstDocumentOptions,
-  carryOver: TypstCarryOver = {},
-): string {
+  options: TypstDocumentOptions,
+  carryOver: TypstCarryOver,
+  figures: string[],
+  varPrefix: string,
+  emitAnchors: boolean,
+): VersionContent {
   /** Insertions de la palette à réémettre après l'exercice `num` */
   const insertionLines = (num: number, indent: string): string[] =>
     (carryOver.insertions?.[num] ?? []).map(
       (line) => `${indent}${line} ${INSERTION_TAG}`,
     )
-  // Les corps sont convertis d'abord : les figures SVG rencontrées sont
-  // collectées pour être déclarées (`#let fig-N = image(...)`) en tête
-  // de document, ce qui garde le corps du code lisible.
-  const figures: string[] = []
   // Banque d'exercices (paquet exercise-bank) : chaque exercice regroupe
   // son énoncé et sa correction dans un `#let exN = exo.with(...)`, puis
   // la section Énoncés appelle `#exN()` — réordonnez-les librement.
@@ -515,6 +539,7 @@ export function buildTypstDocument(
       options.boldQuestionNumbers,
       options.mergeExercises ? nextStart : 1,
       qr,
+      emitAnchors,
     )
     if (options.mergeExercises) nextStart += enonce.itemCount
     let correction: string | null = null
@@ -530,6 +555,8 @@ export function buildTypstDocument(
         `ex${k + 1}-corr`,
         options.boldQuestionNumbers,
         options.mergeExercises ? nextCorrectionStart : 1,
+        undefined,
+        emitAnchors,
       )
       if (options.mergeExercises) nextCorrectionStart += body.itemCount
       correction = body.code
@@ -543,12 +570,12 @@ export function buildTypstDocument(
     renderLines.push('// ----- Énoncés -----')
     renderLines.push('#en-colonnes[')
     // le repère 0 permet une insertion avant le premier exercice
-    renderLines.push('  #mathalea-anchor("gap", 0)')
+    if (emitAnchors) renderLines.push('  #mathalea-anchor("gap", 0)')
     renderLines.push(...insertionLines(0, '  '))
     for (const [k, { enonce }] of built.entries()) {
-      renderLines.push(`  #mathalea-anchor("exo", ${k + 1})`)
+      if (emitAnchors) renderLines.push(`  #mathalea-anchor("exo", ${k + 1})`)
       renderLines.push(indentContentBlock(enonce))
-      renderLines.push(`  #mathalea-anchor("gap", ${k + 1})`)
+      if (emitAnchors) renderLines.push(`  #mathalea-anchor("gap", ${k + 1})`)
       renderLines.push(...insertionLines(k + 1, '  '))
       renderLines.push('')
     }
@@ -575,7 +602,7 @@ export function buildTypstDocument(
   } else {
     for (const [k, { enonce, correction }] of built.entries()) {
       bankLines.push(`// ----- Exercice ${k + 1} -----`)
-      bankLines.push(`#let ex${k + 1} = exo.with(`)
+      bankLines.push(`#let ${varPrefix}ex${k + 1} = exo.with(`)
       const ref = exercises[k].ref.trim()
       if (ref.length > 0) {
         bankLines.push(`  id: "${ref.replaceAll('"', '\\"')}",`)
@@ -591,17 +618,24 @@ export function buildTypstDocument(
       bankLines.push(')')
     }
 
+    const marginWidth = MARGIN_BADGE_WIDTH[options.badgeStyle]
     renderLines.push('// ----- Énoncés -----')
+    // à partir de la 2e version, la colonne des badges a pu être élargie par
+    // la section Corrections de la version précédente (réglage global du
+    // paquet) : on la remet à sa largeur d'énoncé avant de reprendre
+    if (varPrefix !== '' && marginWidth != null) {
+      renderLines.push(`#exo-setup(margin-position: ${marginWidth.exo})`)
+    }
     renderLines.push('#en-colonnes[')
     // le repère 0 permet une insertion avant le premier exercice
-    renderLines.push('  #mathalea-anchor("gap", 0)')
+    if (emitAnchors) renderLines.push('  #mathalea-anchor("gap", 0)')
     renderLines.push(...insertionLines(0, '  '))
     for (const [k] of built.entries()) {
       // repère "exo" : contrôles de l'exercice (nombre de questions,
       // suppression) dans la palette de l'aperçu
-      renderLines.push(`  #mathalea-anchor("exo", ${k + 1})`)
-      renderLines.push(`  #ex${k + 1}()`)
-      renderLines.push(`  #mathalea-anchor("gap", ${k + 1})`)
+      if (emitAnchors) renderLines.push(`  #mathalea-anchor("exo", ${k + 1})`)
+      renderLines.push(`  #${varPrefix}ex${k + 1}()`)
+      if (emitAnchors) renderLines.push(`  #mathalea-anchor("gap", ${k + 1})`)
       renderLines.push(...insertionLines(k + 1, '  '))
     }
     renderLines.push(']')
@@ -616,9 +650,8 @@ export function buildTypstDocument(
       )
       // les libellés « Correction N » sont plus larges : on élargit la
       // colonne des badges juste pour cette section
-      const corrWidth = MARGIN_BADGE_WIDTH[options.badgeStyle]
-      if (corrWidth != null && corrWidth.corr !== corrWidth.exo) {
-        renderLines.push(`  #exo-setup(margin-position: ${corrWidth.corr})`)
+      if (marginWidth != null && marginWidth.corr !== marginWidth.exo) {
+        renderLines.push(`  #exo-setup(margin-position: ${marginWidth.corr})`)
       }
       renderLines.push('  #en-colonnes[')
       renderLines.push('    #exo-print-solutions(title: none)')
@@ -628,7 +661,54 @@ export function buildTypstDocument(
     }
   }
 
-  const allLines = [...bankLines, ...renderLines]
+  return { bankLines, renderLines, hasCorrections }
+}
+
+/**
+ * Génère le code Typst complet de la fiche.
+ * Le préambule expose des variables (`colonnes`, `corrige`...) que
+ * l'utilisateur peut modifier directement dans l'éditeur.
+ * `extraVersions` contient le contenu (graine différente) des sujets B, C...
+ * générés à la suite du sujet principal (Sujet A), chacun avec sa propre
+ * pagination et ses propres corrections.
+ */
+export function buildTypstDocument(
+  exercises: TypstExerciseInput[],
+  options: TypstDocumentOptions = defaultTypstDocumentOptions,
+  carryOver: TypstCarryOver = {},
+  extraVersions: TypstExerciseInput[][] = [],
+): string {
+  // Les corps sont convertis d'abord : les figures SVG rencontrées sont
+  // collectées pour être déclarées (`#let fig-N = image(...)`) en tête
+  // de document, ce qui garde le corps du code lisible. Partagée entre
+  // toutes les versions : chaque occurrence de figure y ajoute une entrée,
+  // avec son propre réglage de zoom/alignement.
+  const figures: string[] = []
+  const primary = buildVersionContent(
+    exercises,
+    options,
+    carryOver,
+    figures,
+    '',
+    true,
+  )
+  const extra = extraVersions.map((versionExercises, i) =>
+    buildVersionContent(
+      versionExercises,
+      options,
+      carryOver,
+      figures,
+      `v${i + 1}`,
+      false,
+    ),
+  )
+  const totalVersions = 1 + extraVersions.length
+  const bankLines = [...primary.bankLines, ...extra.flatMap((v) => v.bankLines)]
+  const allLines = [
+    ...bankLines,
+    ...primary.renderLines,
+    ...extra.flatMap((v) => v.renderLines),
+  ]
   const usesMathaleaFigure = allLines.some((line) =>
     line.includes('mathalea-figure('),
   )
@@ -831,9 +911,27 @@ export function buildTypstDocument(
   // repère du bloc de titre : la palette de l'aperçu propose d'y modifier
   // les variables titre, sous-titre et entete
   lines.push('#mathalea-anchor("header", 0)')
-  lines.push(...headerBlock(options.headerStyle))
+  lines.push(
+    ...headerBlock(
+      options.headerStyle,
+      totalVersions > 1 ? `Sujet ${versionLetter(0)}` : undefined,
+    ),
+  )
   lines.push('')
-  lines.push(...renderLines)
+  lines.push(...primary.renderLines)
+  for (const [i, version] of extra.entries()) {
+    lines.push('#pagebreak(weak: true)')
+    // chaque sujet recommence sa propre pagination et sa numérotation
+    // d'exercices (compteur global du paquet exercise-bank)
+    lines.push('#counter(page).update(1)')
+    if (!options.mergeExercises) lines.push('#exo-counter.update(0)')
+    lines.push('')
+    lines.push(
+      ...headerBlock(options.headerStyle, `Sujet ${versionLetter(i + 1)}`),
+    )
+    lines.push('')
+    lines.push(...version.renderLines)
+  }
 
   return lines.join('\n')
 }
@@ -847,7 +945,29 @@ function typstString(text: string): string {
  * Bloc de titre de la fiche (`titre`, `sous-titre`, `entete` déclarés dans
  * les réglages), selon l'habillage choisi.
  */
-function headerBlock(style: HeaderStyle): string[] {
+function headerBlock(style: HeaderStyle, versionLabel?: string): string[] {
+  // avec plusieurs versions, l'étiquette « Sujet A/B... » termine la ligne
+  // d'en-tête (Nom/Prénom/Classe) plutôt que d'ajouter une ligne à part ;
+  // dans ce cas la ligne s'affiche même si `entete` est vide (l'étiquette
+  // doit rester visible sur chaque sujet)
+  const label =
+    versionLabel != null
+      ? `text(weight: "bold", fill: couleur)[${escapeTypstText(versionLabel)}]`
+      : null
+  /**
+   * Ligne d'en-tête (`entete`), avec l'étiquette de version à sa droite
+   * quand il y en a une ; sans étiquette, rendu inchangé (simple `text`,
+   * centré pour l'habillage « cadre »).
+   */
+  const enteteLine = (centered: boolean): string => {
+    if (label != null) {
+      const align = centered ? 'center' : 'left'
+      return `grid(columns: (1fr, auto), align: (${align}, horizon), text(fill: gray.darken(20%))[#entete], ${label})`
+    }
+    const plain = 'text(fill: gray.darken(20%))[#entete]'
+    return centered ? `align(center, ${plain})` : plain
+  }
+  const enteteCondition = label != null ? 'true' : 'entete != ""'
   if (style === 'cadre') {
     return [
       '#block(width: 100%, stroke: (top: 1pt + couleur, bottom: 1pt + couleur), inset: (y: 8pt))[',
@@ -858,7 +978,7 @@ function headerBlock(style: HeaderStyle): string[] {
       '    #text(size: 0.85em, fill: gray, style: "italic")[#sous-titre]',
       '  ]',
       ']',
-      '#if entete != "" [ #v(3pt) #align(center, text(fill: gray.darken(20%))[#entete]) ]',
+      `#if ${enteteCondition} [ #v(3pt) #${enteteLine(true)} ]`,
       '#v(8pt)',
     ]
   }
@@ -874,10 +994,10 @@ function headerBlock(style: HeaderStyle): string[] {
       '      text(fill: couleur, weight: "bold", size: 0.85em)[#sous-titre])',
       '  ]',
       ']',
-      '#if entete != "" [',
+      `#if ${enteteCondition} [`,
       '  #v(4pt)',
       '  #block(width: 100%, stroke: 0.6pt + couleur.lighten(40%), radius: 3pt, inset: 6pt,',
-      '    text(fill: gray.darken(20%))[#entete])',
+      `    ${enteteLine(false)})`,
       ']',
       '#v(6pt)',
     ]
@@ -890,7 +1010,7 @@ function headerBlock(style: HeaderStyle): string[] {
     '  #v(-3pt)',
     '  #line(length: 100%, stroke: 1.2pt + couleur)',
     ']',
-    '#if entete != "" [ #v(2pt) #text(fill: gray.darken(20%))[#entete] ]',
+    `#if ${enteteCondition} [ #v(2pt) #${enteteLine(false)} ]`,
     '#v(6pt)',
   ]
 }
