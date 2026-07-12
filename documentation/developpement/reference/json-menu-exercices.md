@@ -29,6 +29,8 @@ Entrées manuelles utilisées par le script :
 - `tasks/emptyRef2022.json`, `tasks/emptyRefCH.json` : squelette des niveaux/catégories (sans exercices) servant de point de départ à `referentiel2022*.json`. À mettre à jour en cas de création de niveau ou de chapitre.
 - `src/json/levelsThemesList.json`, `src/json/levelsThemesListCH.json` : libellés (titres humains) des niveaux, thèmes et sous-thèmes affichés dans le menu, utilisés par `ReferentielNode.svelte` (pas régénérés par le script).
 
+L'apparence d'un noeud du menu dépend à la fois de sa profondeur dans `emptyRef2022.json` et de la fonction `themeCodeisSubthemeCode()` dans `ReferentielNode.svelte`. Cette fonction détecte certains formats de codes comme des sous-thèmes pour masquer le code et appliquer une typographie plus discrète. Si un nouveau format de code est ajouté au référentiel, il peut donc être correctement placé dans l'arbre tout en étant affiché comme un thème principal tant que cette fonction ne reconnait pas son motif.
+
 ## Génération par `tasks/dictionnaireToReferentiel.js`
 
 - `src/json/dictionnaireBAC.js`, `dictionnaireDNB.js`, `dictionnaireDNBPRO.js`, `dictionnaireC3.js`, `dictionnaireCrpeCoop.js`, `dictionnaireCrpeDida.js`, `dictionnaireE3C.js`, `dictionnaireEAM.js`, `dictionnaireEVACOM.js`, `dictionnaireFlashBac.js`, `dictionnaireSTI2D.js`, `dictionnaireSTL.js` : sources maintenues à la main listant chaque annale statique (tags, chemins d'images/LaTeX). Ce sont les entrées du script.

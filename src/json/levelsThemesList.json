@@ -2274,7 +2274,7 @@
     "titre": "Géométrie"
   },
   "2A-G1": {
-    "titre": "Sur une droite graduée, repérer ou placer un point dont l’abscisse est un nombre relatif"
+    "titre": "Repérer ou placer un point sur une droite graduée"
   },
   "2A-G2": {
     "titre": "Dans le plan muni d’un repère orthogonal, lire les coordonnées d’un point donné, placer un point de coordonnées données"
@@ -2286,7 +2286,7 @@
     "titre": "Faire une application simple du théorème de Pythagore et du théorème de Thalès"
   },
   "2A-G5": {
-    "titre": "Connaitre et utiliser les lignes trigonométriques dans le triangle rectangle : cosinus, sinus, tangente"
+    "titre": "Connaitre et utiliser cosinus, sinus, tangente"
   },
   "2A-S": {
     "titre": "Statistiques"
