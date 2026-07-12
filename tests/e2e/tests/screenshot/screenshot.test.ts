@@ -28,7 +28,7 @@ async function test(page: Page) {
   await page.click('text=Voir la correction')
   await page.screenshot({ path: `screenshots/${uuid}/correction3.png` })
   await page.screenshot({ path: 'screenshots/last/correction3.png' })
-  await page.locator('button[data-tip="Rendre interactif"]').click()
+  await page.click('text=Rendre interactif')
   await page.screenshot({ path: `screenshots/${uuid}/interactif.png` })
   await page.screenshot({ path: 'screenshots/last/interactif.png' })
   await page.locator('.rounded-full.bx-plus').click({ clickCount: 8 })
