@@ -256,6 +256,7 @@
           aria-label="Modifier le titre, le sous-titre et la ligne d'en-tête"
           aria-expanded={headerOpen}
           class="typst-pill typst-pill-round flex h-6 w-6 -translate-x-1/2 items-center justify-center"
+          class:typst-pill-force-visible={headerOpen}
           data-testid="typst-overlay-header"
           on:click={toggleHeader}
         >
@@ -437,6 +438,7 @@
            pour ne pas recouvrir le titre de l'exercice qui suit. -->
       <div
         class="pointer-events-auto absolute flex -translate-x-2 -translate-y-[135%] items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class:typst-pill-force-visible={openInsertion === widget.num}
         style="left: {widget.left}%; top: {widget.top}%;"
       >
         <button
@@ -605,6 +607,13 @@
     background: white;
     border: 1px solid #b9d4f1;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    opacity: 0.25;
+    transition: opacity 0.15s ease;
+  }
+  .typst-pill:hover,
+  .typst-pill:focus-within,
+  .typst-pill-force-visible {
+    opacity: 1;
   }
   .typst-pill-round {
     border-radius: 999px;

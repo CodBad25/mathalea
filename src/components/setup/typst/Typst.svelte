@@ -38,6 +38,7 @@
     type TasksLayoutValue,
   } from './TypstLayoutOverlay.svelte'
   import type { TypstAnchor } from './typstCompiler'
+  import { setStaticImagePaths } from './latexToTypst'
 
   /** Libellés des habillages d'en-tête/pied de page */
   const HEADER_STYLE_LABELS: Record<(typeof HEADER_STYLES)[number], string> = {
@@ -1071,6 +1072,58 @@
     }
   }
 
+  /**
+   * Récupère les images (PNG) des exercices statiques (annales scannées) et
+   * les charge dans le compilateur Typst (système de fichiers virtuel), pour
+   * qu'elles s'affichent dans l'aperçu au lieu d'un encart « non convertie ».
+   * Une image dont la récupération échoue reste absente du registre : elle
+   * s'affiche alors comme un encart, sans bloquer le reste de la fiche.
+   */
+  /**
+   * Récrit une URL `https://coopmaths.fr/alea/...` en URL de même origine
+   * que l'application (proxyée vers coopmaths.fr en développement, voir
+   * `vite.config.ts`) : coopmaths.fr n'envoie pas d'en-têtes CORS, un fetch
+   * direct échouerait sinon dès que l'appli n'est pas servie depuis ce domaine.
+   */
+  function toSameOriginUrl(url: string): string {
+    const prefix = 'https://coopmaths.fr/alea/'
+    return url.startsWith(prefix)
+      ? `${window.location.origin}${import.meta.env.BASE_URL}${url.slice(prefix.length)}`
+      : url
+  }
+
+  async function prefetchStaticImages() {
+    const urls = new Set<string>()
+    const imgSrc = /<img[^>]*\ssrc=["']([^"']+)["']/gi
+    for (const exercise of exercises) {
+      if (exercise == null || exercise.typeExercice !== 'statique') continue
+      const html = [
+        ...(exercise.listeQuestions ?? []),
+        ...(exercise.listeCorrections ?? []),
+      ].join('')
+      for (const match of html.matchAll(imgSrc)) urls.add(match[1])
+    }
+    if (urls.size === 0) return
+    const { cachedBytes, setStaticImageBytes } = await import('./typstCompiler')
+    const paths = new Map<string, string>()
+    const bytes = new Map<string, Uint8Array>()
+    await Promise.all(
+      [...urls].map(async (url, i) => {
+        try {
+          bytes.set(
+            `/static-img-${i}.png`,
+            await cachedBytes(toSameOriginUrl(url)),
+          )
+          paths.set(url, `/static-img-${i}.png`)
+        } catch {
+          // image indisponible : elle apparaîtra comme un encart
+        }
+      }),
+    )
+    setStaticImagePaths(paths)
+    setStaticImageBytes(bytes)
+  }
+
   async function loadExercises() {
     isLoading = true
     const results = await Promise.allSettled(buildExercisesList())
@@ -1080,6 +1133,7 @@
     for (const exercise of exercises) {
       if (exercise != null) exercise.interactif = false
     }
+    await prefetchStaticImages()
     isLoading = false
   }
 

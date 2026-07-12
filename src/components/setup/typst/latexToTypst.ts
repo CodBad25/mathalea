@@ -12,6 +12,29 @@ import { tex2typst } from 'tex2typst'
  * un encart signalant l'élément manquant.
  */
 
+/**
+ * URLs des images d'exercices statiques (annales scannées) déjà récupérées,
+ * associées au chemin virtuel où leurs octets sont chargés dans le
+ * compilateur (`mapShadow`, voir `typstCompiler.ts`). Alimenté par
+ * `Typst.svelte` avant la génération du code ; une image absente de ce
+ * registre est affichée comme un encart « image non convertie ».
+ */
+let staticImagePaths: Map<string, string> = new Map()
+
+/** Renseigne le registre des images d'exercices statiques (voir `staticImagePaths`) */
+export function setStaticImagePaths(paths: Map<string, string>): void {
+  staticImagePaths = paths
+}
+
+/**
+ * Largeur intrinsèque (pt) donnée à une image d'exercice statique avant son
+ * passage dans `mathalea-fit` : volontairement bien plus grande que
+ * n'importe quelle page (A4 paysage compris, ~842pt), pour que la figure
+ * soit toujours réduite à la largeur disponible plutôt que conserver une
+ * largeur fixe plus étroite que la colonne/page qui la contient.
+ */
+const STATIC_IMAGE_INTRINSIC_WIDTH_PT = 2000
+
 /** Macros LaTeX propres à MathALÉA (ou absentes de tex2typst) */
 const CUSTOM_TEX_MACROS: Record<string, string> = {
   // virgule décimale française : sans espace après la virgule
@@ -2107,6 +2130,22 @@ export function htmlToTypst(html: string, figures?: string[]): string {
     // mathalea-fit réduit la figure si elle dépasse la largeur disponible ;
     // ligne vide après la figure : le texte qui suit reprend dans un
     // nouveau paragraphe du code généré
+    return protect(`#mathalea-fit(fig-${figures.length})\n\n`)
+  })
+  // images d'exercices statiques (annales scannées) : l'image est déjà
+  // chargée dans le compilateur (voir `staticImagePaths`/`mapShadow`), sinon
+  // (référentiel sans image, ou récupération réseau échouée) c'est un encart
+  text = text.replace(/<img[^>]*\ssrc=["']([^"']+)["'][^>]*>/gi, (_, src: string) => {
+    const path = staticImagePaths.get(src)
+    if (path == null || figures == null) {
+      return protect(missingBox('image non convertie'))
+    }
+    // largeur intrinsèque volontairement bien plus grande que n'importe
+    // quelle colonne/page (A4 paysage compris) : mathalea-fit la réduit
+    // alors toujours pour occuper exactement toute la largeur disponible,
+    // là où MAX_FIGURE_WIDTH_PT (calibré pour les figures mathalea2d) la
+    // laisserait plus étroite que la page
+    figures.push(`image(${typstStringLiteral(path)}, width: ${STATIC_IMAGE_INTRINSIC_WIDTH_PT}pt)`)
     return protect(`#mathalea-fit(fig-${figures.length})\n\n`)
   })
   text = text.replace(/<img[^>]*>/gi, () =>

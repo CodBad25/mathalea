@@ -1,9 +1,10 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 import {
   escapeTypstText,
   htmlToTypst,
   latexMathToTypst,
   sanitizeSvg,
+  setStaticImagePaths,
   svgToTypstImage,
 } from './latexToTypst'
 
@@ -385,6 +386,35 @@ describe('htmlToTypst', () => {
 
   it('remplace les images par un encart', () => {
     expect(htmlToTypst('<img src="a.png">')).toContain('image non convertie')
+  })
+
+  describe('images d’exercices statiques (registre `setStaticImagePaths`)', () => {
+    afterEach(() => setStaticImagePaths(new Map()))
+
+    it('affiche une image enregistrée à la place de l’encart', () => {
+      setStaticImagePaths(new Map([['a.png', '/static-img-0.png']]))
+      const figures: string[] = []
+      const result = htmlToTypst('<img src="a.png" alt="énoncé" />', figures)
+      expect(result).not.toContain('image non convertie')
+      expect(figures).toHaveLength(1)
+      expect(figures[0]).toContain('"/static-img-0.png"')
+      expect(result).toContain('#mathalea-fit(fig-1)')
+    })
+
+    it("affiche l'encart si l'image n'est pas dans le registre", () => {
+      setStaticImagePaths(new Map([['a.png', '/static-img-0.png']]))
+      const figures: string[] = []
+      expect(htmlToTypst('<img src="b.png">', figures)).toContain(
+        'image non convertie',
+      )
+    })
+
+    it('affiche l’encart si aucun collecteur de figures n’est fourni', () => {
+      setStaticImagePaths(new Map([['a.png', '/static-img-0.png']]))
+      expect(htmlToTypst('<img src="a.png">')).toContain(
+        'image non convertie',
+      )
+    })
   })
 
   it('convertit les propositions de QCM (format case) en colonnes taskize', () => {

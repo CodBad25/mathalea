@@ -20,10 +20,6 @@
     new URLSearchParams(window.location.search).get('kutsum') === '1' ||
     window.location.hostname === 'localhost'
 
-  const showA4 =
-    new URLSearchParams(window.location.search).get('beta') === '1' ||
-    window.location.hostname === 'localhost'
-
   let showMoreModal = false
   let moreDialog: HTMLDialogElement
   let downloadContentDisplayed: 'success' | 'error' | 'none' = 'none'
@@ -62,10 +58,10 @@
     },
     {
       id: 'typst',
-      label: 'PDF via Typst',
-      description: 'Pour générer un PDF avec le moteur de composition Typst',
+      label: 'PDF via HTML',
+      description: 'Pour générer un PDF à partir de la mise en page HTML',
       icon: 'bx bx-code-alt',
-      action: () => exportAndClose('typst'),
+      action: () => exportAndClose('a4'),
     },
     {
       id: 'alacarte',
@@ -140,13 +136,11 @@
     class="w-7 h-7 hover:fill-coopmaths-action-lightest fill-coopmaths-action dark:fill-coopmathsdark-action dark:hover:fill-coopmathsdark-action-lightest"
   />
 </button>
-{#if showA4}
-  <ButtonIconTooltip
-    icon="bx-printer text-3xl"
-    tooltip="Impression"
-    on:click={() => handleExport('a4')}
-  />
-{/if}
+<ButtonIconTooltip
+  icon="bx-printer text-3xl"
+  tooltip="Impression"
+  on:click={() => handleExport('typst')}
+/>
 <ButtonIconTooltip
   icon="bx-dots-horizontal-rounded text-3xl"
   tooltip="Plus d'exports"
