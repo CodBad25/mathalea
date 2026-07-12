@@ -62,6 +62,13 @@ export interface TypstCarryOver {
    * `// mathalea:insertion`), par numéro de l'exercice qui les précède.
    */
   insertions?: Record<number, string[]>
+  /**
+   * Numéros (1-based) des exercices fusionnés avec le précédent (bouton de
+   * la palette, indépendant de l'option globale `mergeExercises`) : ils
+   * rejoignent le groupe `exo.with(...)` de leur prédécesseur (un seul
+   * titre pour le groupe) et leurs questions continuent la numérotation.
+   */
+  merges?: number[]
   /** Zoom de chaque figure (`#let fig-N-zoom = ...`), par numéro de figure */
   figureZoom?: Record<number, number>
   /**
@@ -114,7 +121,15 @@ export function harvestCarryOver(code: string): TypstCarryOver {
   )) {
     if (match[2] !== 'left') figureAlign[Number(match[1])] = match[2]
   }
-  return { tasksLayout, insertions, figureZoom, figureAlign }
+  // un exercice fusionné avec le précédent porte cette mention dans le
+  // commentaire qui précède sa définition (voir buildVersionContent)
+  const merges: number[] = []
+  for (const match of code.matchAll(
+    /^\/\/ ----- Exercice (\d+) \(fusionné avec le précédent\) -----$/gm,
+  )) {
+    merges.push(Number(match[1]))
+  }
+  return { tasksLayout, insertions, figureZoom, figureAlign, merges }
 }
 
 /**
@@ -369,6 +384,13 @@ function exerciseBody(
   topRight?: string,
   /** Publie le repère `mathalea-anchor` de la liste `tasks` (palette de l'aperçu) */
   emitAnchor = true,
+  /**
+   * Exercice fusionné (avec le précédent et/ou le suivant) : une question
+   * unique rejoint quand même l'environnement `tasks` pour participer à la
+   * numérotation continue du groupe (seule au sein de son propre exercice,
+   * elle n'aurait sinon pas de numéro).
+   */
+  forceList = false,
 ): ExerciseBodyResult {
   const parts: string[] = []
   // nombre de parts de tête (intro, amorce des sous-questions) : ce sont
@@ -403,8 +425,13 @@ function exerciseBody(
   // `tasks` : le nombre de colonnes et l'espacement sont réglables par
   // exercice (`#let ex1-colonnes = ...` en tête de document) ; les
   // questions non numérotées (l'exercice écrit ses propres repères)
-  // gardent l'environnement mais sans étiquette
-  if (tasksPrefix != null && converted.length > 1) {
+  // gardent l'environnement mais sans étiquette. Une question unique
+  // rejoint aussi l'environnement quand l'exercice est fusionné : sinon
+  // elle resterait sans numéro alors que la suite du groupe est numérotée.
+  if (
+    tasksPrefix != null &&
+    (converted.length > 1 || (forceList && converted.length === 1))
+  ) {
     // les items d'une même liste doivent se suivre sans ligne vide, sinon
     // la numérotation repart à 1 ; les lignes suivantes d'un item restent
     // indentées à l'intérieur de celui-ci
@@ -504,8 +531,28 @@ function buildVersionContent(
   // son énoncé et sa correction dans un `#let exN = exo.with(...)`, puis
   // la section Énoncés appelle `#exN()` — réordonnez-les librement.
   const bankLines: string[] = []
-  // en mode fusionné, les questions sont numérotées à la suite d'un
-  // exercice à l'autre plutôt que de repartir à 1
+  // exercice fusionné avec le précédent (bouton de la palette) : rejoint le
+  // groupe `exo.with(...)` de son prédécesseur (un seul titre pour le
+  // groupe). Sans effet quand tous les exercices sont déjà fusionnés
+  // (`options.mergeExercises`, branche sans banque ci-dessous).
+  const mergedWithPrevious = exercises.map(
+    (_, k) =>
+      k > 0 &&
+      !options.mergeExercises &&
+      (carryOver.merges?.includes(k + 1) ?? false),
+  )
+  // exercice appartenant à un groupe fusionné (avec le précédent et/ou le
+  // suivant), global ou local : une question unique y rejoint quand même
+  // l'environnement `tasks` pour être numérotée à la suite des autres (voir
+  // `forceList` dans exerciseBody), et son QR-code individuel disparaît.
+  const isGrouped = exercises.map(
+    (_, k) =>
+      options.mergeExercises ||
+      mergedWithPrevious[k] ||
+      (mergedWithPrevious[k + 1] ?? false),
+  )
+  // en mode fusionné (global ou local), les questions sont numérotées à la
+  // suite d'un exercice à l'autre plutôt que de repartir à 1
   let nextStart = 1
   let nextCorrectionStart = 1
   let hasCorrections = false
@@ -514,22 +561,26 @@ function buildVersionContent(
     correction: string | null
   }
   const built: BuiltExercise[] = exercises.map((exercise, k) => {
+    const continued = options.mergeExercises || mergedWithPrevious[k]
     if (exercise.warning != null) {
+      if (!continued) nextStart = 1
       return {
         enonce: `#text(fill: gray)[_${escapeTypstText(exercise.warning)}_]`,
         correction: null,
       }
     }
-    // QR-code vers l'exercice seul, réservé en haut à droite (mode banque
-    // uniquement : en mode fusionné il n'y a pas de bloc par exercice où
-    // l'ancrer, la case est donc désactivée dans ce mode)
+    // QR-code vers l'exercice seul, réservé en haut à droite (mode banque,
+    // exercice non fusionné uniquement : dans un groupe fusionné (global ou
+    // local) il n'y a pas de bloc par exercice où l'ancrer, la case est donc
+    // désactivée dans ce cas)
     const qr =
       options.showQrCode &&
-      !options.mergeExercises &&
+      !isGrouped[k] &&
       exercise.url != null &&
       exercise.url.length > 0
         ? qrCodeSnippet(exercise.url)
         : undefined
+    if (!continued) nextStart = 1
     const enonce = exerciseBody(
       exercise.intro,
       exercise.questions,
@@ -537,14 +588,16 @@ function buildVersionContent(
       figures,
       `ex${k + 1}`,
       options.boldQuestionNumbers,
-      options.mergeExercises ? nextStart : 1,
+      nextStart,
       qr,
       emitAnchors,
+      isGrouped[k],
     )
-    if (options.mergeExercises) nextStart += enonce.itemCount
+    nextStart += enonce.itemCount
     let correction: string | null = null
     if (exercise.corrections.length > 0) {
       hasCorrections = true
+      if (!continued) nextCorrectionStart = 1
       // préfixe distinct : la mise en page de la correction (colonnes,
       // espacement) se règle indépendamment de celle de l'énoncé
       const body = exerciseBody(
@@ -554,11 +607,12 @@ function buildVersionContent(
         figures,
         `ex${k + 1}-corr`,
         options.boldQuestionNumbers,
-        options.mergeExercises ? nextCorrectionStart : 1,
+        nextCorrectionStart,
         undefined,
         emitAnchors,
+        isGrouped[k],
       )
-      if (options.mergeExercises) nextCorrectionStart += body.itemCount
+      nextCorrectionStart += body.itemCount
       correction = body.code
     }
     return { enonce: enonce.code, correction }
@@ -600,19 +654,85 @@ function buildVersionContent(
       renderLines.push('')
     }
   } else {
-    for (const [k, { enonce, correction }] of built.entries()) {
-      bankLines.push(`// ----- Exercice ${k + 1} -----`)
-      bankLines.push(`#let ${varPrefix}ex${k + 1} = exo.with(`)
-      const ref = exercises[k].ref.trim()
-      if (ref.length > 0) {
-        bankLines.push(`  id: "${ref.replaceAll('"', '\\"')}",`)
+    // Regroupe les exercices fusionnés (bouton de la palette) avec leur
+    // prédécesseur : un groupe (un seul exercice, ou plusieurs fusionnés à
+    // la suite) ne produit qu'une seule définition `exo.with(...)`, donc un
+    // seul titre pour tout le groupe.
+    interface ExerciseGroup {
+      /** Indice (0-based) du premier exercice du groupe */
+      head: number
+      /** Indices (0-based) des exercices du groupe, dans l'ordre */
+      members: number[]
+    }
+    const groups: ExerciseGroup[] = []
+    for (const [k] of exercises.entries()) {
+      if (mergedWithPrevious[k]) {
+        groups[groups.length - 1].members.push(k)
+      } else {
+        groups.push({ head: k, members: [k] })
+      }
+    }
+
+    /**
+     * Contenu de l'énoncé d'un membre du groupe. Les membres autres que la
+     * tête n'ont pas leur propre appel `#exN()` (ils sont regroupés dans
+     * celui de la tête) : leurs repères « exo » (contrôles de l'exercice
+     * dans la palette) sont donc émis ici, à l'intérieur du contenu, plutôt
+     * qu'au niveau du document. Le repère « gap » de chaque membre les y
+     * rejoint, sauf celui du dernier membre du groupe (voir plus bas) : à
+     * l'intérieur d'un groupe, un saut de page casserait la compilation
+     * (interdit dans un conteneur Typst) et un saut de colonne ou une
+     * insertion de texte n'auraient pas de sens ; seule la limite entre
+     * deux groupes reste un point d'insertion valide.
+     */
+    const memberEnonce = (
+      k: number,
+      isHead: boolean,
+      isLast: boolean,
+    ): string => {
+      const parts: string[] = []
+      if (!isHead && emitAnchors) {
+        parts.push(`#mathalea-anchor("exo", ${k + 1})`)
+      }
+      parts.push(built[k].enonce)
+      if (!isLast && emitAnchors) {
+        parts.push(`#mathalea-anchor("gap", ${k + 1})`)
+      }
+      return parts.join('\n')
+    }
+
+    for (const group of groups) {
+      for (const k of group.members) {
+        const suffix =
+          k === group.head ? '' : ' (fusionné avec le précédent)'
+        bankLines.push(`// ----- Exercice ${k + 1}${suffix} -----`)
+      }
+      bankLines.push(`#let ${varPrefix}ex${group.head + 1} = exo.with(`)
+      // la référence n'est affichée que pour un groupe d'un seul exercice
+      // (elle ne peut pas représenter tout un groupe fusionné)
+      if (group.members.length === 1) {
+        const ref = exercises[group.head].ref.trim()
+        if (ref.length > 0) {
+          bankLines.push(`  id: "${ref.replaceAll('"', '\\"')}",`)
+        }
       }
       bankLines.push('  exercise: [')
-      bankLines.push(indentContentBlock(indentContentBlock(enonce)))
+      const enonceBody = group.members
+        .map((k, i) =>
+          memberEnonce(k, k === group.head, i === group.members.length - 1),
+        )
+        .join('\n\n')
+      bankLines.push(indentContentBlock(indentContentBlock(enonceBody)))
       bankLines.push('  ],')
-      if (correction != null) {
+      const correctionMembers = group.members.filter(
+        (k) => built[k].correction != null,
+      )
+      if (correctionMembers.length > 0) {
         bankLines.push('  solution: [')
-        bankLines.push(indentContentBlock(indentContentBlock(correction)))
+        const correctionBody = correctionMembers
+          .map((k) => built[k].correction as string)
+          .join('\n\n')
+        bankLines.push(indentContentBlock(indentContentBlock(correctionBody)))
         bankLines.push('  ],')
       }
       bankLines.push(')')
@@ -630,13 +750,18 @@ function buildVersionContent(
     // le repère 0 permet une insertion avant le premier exercice
     if (emitAnchors) renderLines.push('  #mathalea-anchor("gap", 0)')
     renderLines.push(...insertionLines(0, '  '))
-    for (const [k] of built.entries()) {
+    for (const group of groups) {
+      const last = group.members[group.members.length - 1]
       // repère "exo" : contrôles de l'exercice (nombre de questions,
       // suppression) dans la palette de l'aperçu
-      if (emitAnchors) renderLines.push(`  #mathalea-anchor("exo", ${k + 1})`)
-      renderLines.push(`  #${varPrefix}ex${k + 1}()`)
-      if (emitAnchors) renderLines.push(`  #mathalea-anchor("gap", ${k + 1})`)
-      renderLines.push(...insertionLines(k + 1, '  '))
+      if (emitAnchors) {
+        renderLines.push(`  #mathalea-anchor("exo", ${group.head + 1})`)
+      }
+      renderLines.push(`  #${varPrefix}ex${group.head + 1}()`)
+      // repère "gap" du dernier membre du groupe : seule limite, entre deux
+      // groupes, où un saut de page/colonne ou une insertion a un sens
+      if (emitAnchors) renderLines.push(`  #mathalea-anchor("gap", ${last + 1})`)
+      renderLines.push(...insertionLines(last + 1, '  '))
     }
     renderLines.push(']')
     renderLines.push('')

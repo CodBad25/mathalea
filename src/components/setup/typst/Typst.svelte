@@ -216,6 +216,11 @@
   let tasksLayoutValues: Record<string, TasksLayoutValue> = {}
   /** Insertions (texte/section) présentes dans le code, par repère de gap */
   let insertionValues: Record<number, string[]> = {}
+  /**
+   * Numéros (1-based) des exercices fusionnés avec le précédent, lus dans
+   * le code courant (bouton de la palette de mise en page).
+   */
+  let mergedExercises: number[] = []
   /** Variables d'en-tête de la fiche, lues dans le code courant */
   let headerValues = { titre: '', 'sous-titre': '', entete: '' }
   /** Nombre de colonnes du document (`#let colonnes`), lu dans le code */
@@ -287,7 +292,9 @@
       ;(values[match[1]] ??= defaults()).gutter = match[2]
     }
     tasksLayoutValues = values
-    insertionValues = harvestCarryOver(code).insertions ?? {}
+    const harvested = harvestCarryOver(code)
+    insertionValues = harvested.insertions ?? {}
+    mergedExercises = harvested.merges ?? []
     const columns = code.match(/^#let colonnes = (\d+)/m)
     documentColumns = columns != null ? Number(columns[1]) : 1
     const figureZoom: Record<number, number> = {}
@@ -443,7 +450,11 @@
       const target = n >= removed ? Math.max(0, n - 1) : n
       insertions[target] = [...(insertions[target] ?? []), ...lines]
     }
-    return { tasksLayout, insertions }
+    // l'exercice supprimé ne peut plus être fusionné ; les suivants décalent
+    const merges = (carryOver.merges ?? [])
+      .filter((n) => n !== removed)
+      .map((n) => (n > removed ? n - 1 : n))
+    return { tasksLayout, insertions, merges }
   }
 
   /** Retire l'exercice num de la fiche et régénère le code */
@@ -488,7 +499,8 @@
       const newGap = swapNum(Number(key) + 1) - 1
       insertions[newGap] = [...(insertions[newGap] ?? []), ...lines]
     }
-    return { tasksLayout, insertions }
+    const merges = (carryOver.merges ?? []).map(swapNum)
+    return { tasksLayout, insertions, merges }
   }
 
   /** Échange l'exercice num avec son voisin (delta : -1 monter, 1 descendre) */
@@ -547,6 +559,32 @@
 
   function openSettings(num: number) {
     settingsExerciseIndex = num - 1
+  }
+
+  /**
+   * Fusionne/sépare l'exercice num avec celui qui le précède : ils partagent
+   * alors un seul titre (banque exercise-bank) et la numérotation de ses
+   * questions continue celle de son prédécesseur. Régénère le code (comme
+   * suppression/déplacement) plutôt que d'éditer le texte : la fusion
+   * change la structure du document (les deux exercices rejoignent la même
+   * définition `exo.with(...)`).
+   */
+  function toggleMergeBefore(num: number) {
+    if (!confirmOverwrite()) return
+    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
+    const merges = carryOver.merges ?? []
+    carryOver.merges = merges.includes(num)
+      ? merges.filter((n) => n !== num)
+      : [...merges, num]
+    const [primary, ...extraVersions] = buildAllVersionInputs()
+    const code = buildTypstDocument(
+      primary,
+      documentOptions,
+      carryOver,
+      extraVersions,
+    )
+    setEditorContent(code)
+    scheduleCompile(code, 0)
   }
 
   /** Applique les réglages émis par le panneau Settings de la vue prof */
@@ -853,8 +891,11 @@
       input.introCorrection = mathaleaFormatExercice(
         exercise.consigneCorrection ?? '',
       )
-      input.numbered =
-        input.questions.length > 1 && exercise.listeAvecNumerotation !== false
+      // le nombre de questions n'entre pas en jeu ici : un exercice à
+      // question unique n'est de toute façon jamais mis dans un
+      // environnement `tasks` (donc jamais numéroté), sauf s'il rejoint un
+      // groupe fusionné (voir `forceList` dans buildTypstDocument)
+      input.numbered = exercise.listeAvecNumerotation !== false
       // questions figées par la palette (nombre de questions modifié) : les
       // questions déjà affichées gardent leur contenu, seules les questions
       // ajoutées prennent le contenu fraîchement généré
@@ -1334,7 +1375,7 @@
 >
   <div class="bg-coopmaths-canvas dark:bg-coopmathsdark-canvas">
     <NavBar
-      subtitle="Typst"
+      subtitle="Impression"
       subtitleType="export"
       handleLanguage={() => {}}
       locale={$referentielLocale}
@@ -1790,6 +1831,8 @@
                   {figureZoomValues}
                   {figureAlignValues}
                   exerciseCount={exercises.length}
+                  {mergedExercises}
+                  mergeExercisesEnabled={!documentOptions.mergeExercises}
                   onAdjustColumns={adjustColumns}
                   onAdjustGutter={adjustGutter}
                   onAdjustFigureZoom={adjustFigureZoom}
@@ -1803,6 +1846,7 @@
                   onMoveExercise={moveExercise}
                   onNewData={newDataForExercise}
                   onOpenSettings={openSettings}
+                  onToggleMergeBefore={toggleMergeBefore}
                 />
               {/if}
             </div>

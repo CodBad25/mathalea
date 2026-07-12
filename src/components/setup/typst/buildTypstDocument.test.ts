@@ -467,4 +467,164 @@ describe('buildTypstDocument', () => {
     })
     expect(merged).not.toContain('tiaoma')
   })
+
+  describe('fusion locale (bouton de la palette)', () => {
+    it("fusionne l'exercice 2 avec le précédent : un seul exo.with, numérotation continue", () => {
+      const code = buildTypstDocument(
+        [
+          exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
+          exercise({
+            questions: ['$3+3$', '$4+4$'],
+            numbered: true,
+            ref: '6e23-2',
+          }),
+        ],
+        defaultTypstDocumentOptions,
+        { merges: [2] },
+      )
+      // un seul #let ex1 = exo.with(...), pas de ex2
+      expect(code).toContain('#let ex1 = exo.with(')
+      expect(code).not.toContain('#let ex2 = exo.with(')
+      expect(code).toContain('#ex1()')
+      expect(code).not.toContain('#ex2()')
+      // marqueurs de section pour les deux exercices dans le même groupe
+      expect(code).toContain('// ----- Exercice 1 -----')
+      expect(code).toContain('// ----- Exercice 2 (fusionné avec le précédent) -----')
+      // numérotation continue : questions 1-2 puis 3-4
+      expect(code).toContain('start: 1)')
+      expect(code).toContain('start: 3)')
+      // pas de référence affichée pour le groupe fusionné
+      expect(code).not.toContain('id: "6e23-2"')
+      // repère "exo" du membre fusionné, à l'intérieur du contenu
+      expect(code).toContain('#mathalea-anchor("exo", 2)')
+      // le repère de gap du groupe reste au niveau du document, après ex1()
+      expect(code).toContain('#ex1()\n  #mathalea-anchor("gap", 2)')
+    })
+
+    it('numérote deux exercices à question unique une fois fusionnés', () => {
+      const code = buildTypstDocument(
+        [
+          exercise({ questions: ['$1+1$'], numbered: true }),
+          exercise({ questions: ['$2+2$'], numbered: true }),
+        ],
+        defaultTypstDocumentOptions,
+        { merges: [2] },
+      )
+      // sans fusion, un exercice à question unique n'est jamais dans un
+      // environnement tasks ; fusionné, il doit y participer pour être
+      // numéroté à la suite du groupe
+      expect(code).toContain('#tasks(')
+      expect(code).toContain('start: 1)')
+      expect(code).toContain('start: 2)')
+    })
+
+    it("ne numérote pas une question unique restée seule dans son exercice", () => {
+      const code = buildTypstDocument([
+        exercise({ questions: ['$1+1$'], numbered: true }),
+        exercise({ questions: ['$2+2$', '$3+3$'], numbered: true }),
+      ])
+      expect(code).not.toContain('#let ex1-colonnes')
+    })
+
+    it("numérote une question unique fusionnée avec l'option globale mergeExercises", () => {
+      const code = buildTypstDocument(
+        [
+          exercise({ questions: ['$1+1$'], numbered: true }),
+          exercise({ questions: ['$2+2$'], numbered: true }),
+        ],
+        { ...defaultTypstDocumentOptions, mergeExercises: true },
+      )
+      expect(code).toContain('start: 1)')
+      expect(code).toContain('start: 2)')
+    })
+
+    it('reprend la fusion locale au round-trip (harvestCarryOver)', () => {
+      const code = buildTypstDocument(
+        [
+          exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
+          exercise({ questions: ['$3+3$', '$4+4$'], numbered: true }),
+        ],
+        defaultTypstDocumentOptions,
+        { merges: [2] },
+      )
+      expect(harvestCarryOver(code).merges).toEqual([2])
+    })
+
+    it("l'option globale mergeExercises prime sur la fusion locale", () => {
+      const code = buildTypstDocument(
+        [
+          exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
+          exercise({ questions: ['$3+3$', '$4+4$'], numbered: true }),
+        ],
+        { ...defaultTypstDocumentOptions, mergeExercises: true },
+        { merges: [2] },
+      )
+      expect(code).not.toContain('exo.with(')
+      expect(code).not.toContain('fusionné avec le précédent')
+    })
+
+    it('fusionne trois exercices à la suite (groupe de 3)', () => {
+      const code = buildTypstDocument(
+        [
+          exercise({ questions: ['$1$', '$2$'], numbered: true }),
+          exercise({ questions: ['$3$', '$4$'], numbered: true }),
+          exercise({ questions: ['$5$', '$6$'], numbered: true }),
+        ],
+        defaultTypstDocumentOptions,
+        { merges: [2, 3] },
+      )
+      expect(code).toContain('#let ex1 = exo.with(')
+      expect(code).not.toContain('#let ex2 = exo.with(')
+      expect(code).not.toContain('#let ex3 = exo.with(')
+      expect(code).toContain('#ex1()')
+      // un seul appel au groupe, un seul repère de gap final (num 3)
+      expect(code).toContain('#ex1()\n  #mathalea-anchor("gap", 3)')
+      expect(code).toContain('start: 1)')
+      expect(code).toContain('start: 3)')
+      expect(code).toContain('start: 5)')
+    })
+
+    it('sans corrections dans le groupe : pas de champ solution', () => {
+      const code = buildTypstDocument(
+        [
+          exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
+          exercise({ questions: ['$3+3$'], numbered: true }),
+        ],
+        defaultTypstDocumentOptions,
+        { merges: [2] },
+      )
+      expect(code).not.toContain('solution: [')
+    })
+
+    it('compile avec typst : groupe fusionné valide', async () => {
+      const code = buildTypstDocument(
+        [
+          exercise({
+            questions: ['$1+1$', '$2+2$'],
+            corrections: ['$2$', '$4$'],
+            numbered: true,
+          }),
+          exercise({
+            questions: ['$3+3$', '$4+4$'],
+            corrections: ['$6$', '$8$'],
+            numbered: true,
+          }),
+        ],
+        defaultTypstDocumentOptions,
+        { merges: [2] },
+      )
+      const { execFileSync } = await import('node:child_process')
+      const { writeFileSync, mkdtempSync } = await import('node:fs')
+      const { tmpdir } = await import('node:os')
+      const { join } = await import('node:path')
+      const dir = mkdtempSync(join(tmpdir(), 'typst-merge-'))
+      const file = join(dir, 'doc.typ')
+      writeFileSync(file, code, 'utf-8')
+      expect(() =>
+        execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+          stdio: 'pipe',
+        }),
+      ).not.toThrow()
+    })
+  })
 })

@@ -75,8 +75,17 @@
     {}
   /** Nombre total d'exercices (borne les boutons monter/descendre) */
   export let exerciseCount = 0
+  /**
+   * Numéros (1-based) des exercices fusionnés avec le précédent : ils
+   * partagent le titre de leur prédécesseur et la numérotation de leurs
+   * questions continue la sienne.
+   */
+  export let mergedExercises: number[] = []
+  /** Fusion locale désactivée quand tous les exercices sont déjà fusionnés */
+  export let mergeExercisesEnabled = true
   export let onChangeQuestionCount: (num: number, delta: number) => void
   export let onDeleteExercise: (num: number) => void
+  export let onToggleMergeBefore: (num: number) => void
   export let onAdjustFigureZoom: (num: number, delta: number) => void
   export let onSetFigureAlign: (
     num: number,
@@ -431,6 +440,16 @@
         (snippet) =>
           snippet !== PAGE_BREAK_SNIPPET && snippet !== COLUMN_BREAK_SNIPPET,
       )}
+      <!-- l'exercice qui suit ce repère est fusionné avec celui qui le
+           précède : le repère est interne au groupe (un saut de page y est
+           impossible à compiler, un saut de colonne ou une insertion n'y
+           auraient pas de sens) — seul le bouton de séparation reste -->
+      {@const isMergeGap = mergedExercises.includes(widget.num + 1)}
+      {@const canMerge =
+        !isMergeGap &&
+        mergeExercisesEnabled &&
+        widget.num >= 1 &&
+        widget.num < exerciseCount}
       <!-- entre deux exercices (et avant le premier) : insertion/modification
            d'un texte ou d'un titre de section, et sauts de page/colonne. Le
            repère est au bord gauche de la page (déjà proche du bord) : on ne
@@ -441,51 +460,79 @@
         class:typst-pill-force-visible={openInsertion === widget.num}
         style="left: {widget.left}%; top: {widget.top}%;"
       >
-        <button
-          type="button"
-          title="Insérer ou modifier un texte ou un titre de section ici"
-          aria-label="Insérer ou modifier un texte ou un titre de section ici"
-          aria-expanded={openInsertion === widget.num}
-          data-testid="typst-overlay-insert"
-          on:click={() => toggleInsertion(widget.num)}
-        >
-          <i class="bx {hasText ? 'bx-edit' : 'bx-plus'}"></i>
-        </button>
-        <span class="typst-pill-sep"></span>
-        <button
-          type="button"
-          title={hasPageBreak
-            ? 'Retirer le saut de page'
-            : 'Insérer un saut de page ici'}
-          aria-label={hasPageBreak
-            ? 'Retirer le saut de page'
-            : 'Insérer un saut de page ici'}
-          class:typst-pill-active={hasPageBreak}
-          data-testid={hasPageBreak
-            ? 'typst-overlay-pagebreak-active'
-            : 'typst-overlay-pagebreak'}
-          on:click={() => toggleBreak(widget.num, PAGE_BREAK_SNIPPET)}
-        >
-          <i class="bx bx-arrow-to-bottom"></i>
-        </button>
-        <!-- saut de colonne : seulement en document multicolonne (le bouton
-             actif reste visible en 1 colonne pour pouvoir le retirer) -->
-        {#if hasColumnBreak || documentColumns > 1}
+        {#if !isMergeGap}
           <button
             type="button"
-            title={hasColumnBreak
-              ? 'Retirer le saut de colonne'
-              : 'Insérer un saut de colonne ici'}
-            aria-label={hasColumnBreak
-              ? 'Retirer le saut de colonne'
-              : 'Insérer un saut de colonne ici'}
-            class:typst-pill-active={hasColumnBreak}
-            data-testid={hasColumnBreak
-              ? 'typst-overlay-colbreak-active'
-              : 'typst-overlay-colbreak'}
-            on:click={() => toggleBreak(widget.num, COLUMN_BREAK_SNIPPET)}
+            title="Insérer ou modifier un texte ou un titre de section ici"
+            aria-label="Insérer ou modifier un texte ou un titre de section ici"
+            aria-expanded={openInsertion === widget.num}
+            data-testid="typst-overlay-insert"
+            on:click={() => toggleInsertion(widget.num)}
           >
-            <i class="bx bx-arrow-to-right"></i>
+            <i class="bx {hasText ? 'bx-edit' : 'bx-plus'}"></i>
+          </button>
+          <span class="typst-pill-sep"></span>
+          <button
+            type="button"
+            title={hasPageBreak
+              ? 'Retirer le saut de page'
+              : 'Insérer un saut de page ici'}
+            aria-label={hasPageBreak
+              ? 'Retirer le saut de page'
+              : 'Insérer un saut de page ici'}
+            class:typst-pill-active={hasPageBreak}
+            data-testid={hasPageBreak
+              ? 'typst-overlay-pagebreak-active'
+              : 'typst-overlay-pagebreak'}
+            on:click={() => toggleBreak(widget.num, PAGE_BREAK_SNIPPET)}
+          >
+            <i class="bx bx-arrow-to-bottom"></i>
+          </button>
+          <!-- saut de colonne : seulement en document multicolonne (le bouton
+               actif reste visible en 1 colonne pour pouvoir le retirer) -->
+          {#if hasColumnBreak || documentColumns > 1}
+            <button
+              type="button"
+              title={hasColumnBreak
+                ? 'Retirer le saut de colonne'
+                : 'Insérer un saut de colonne ici'}
+              aria-label={hasColumnBreak
+                ? 'Retirer le saut de colonne'
+                : 'Insérer un saut de colonne ici'}
+              class:typst-pill-active={hasColumnBreak}
+              data-testid={hasColumnBreak
+                ? 'typst-overlay-colbreak-active'
+                : 'typst-overlay-colbreak'}
+              on:click={() => toggleBreak(widget.num, COLUMN_BREAK_SNIPPET)}
+            >
+              <i class="bx bx-arrow-to-right"></i>
+            </button>
+          {/if}
+        {/if}
+        {#if isMergeGap}
+          <button
+            type="button"
+            title="Séparer de l'exercice précédent"
+            aria-label="Séparer de l'exercice précédent"
+            class="typst-pill-active"
+            data-testid="typst-overlay-unmerge"
+            on:click={() => onToggleMergeBefore(widget.num + 1)}
+          >
+            <i class="bx bx-unlink"></i>
+          </button>
+        {:else if canMerge}
+          <span class="typst-pill-sep"></span>
+          <button
+            type="button"
+            title={hasPageBreak || hasColumnBreak || hasText
+              ? "Retirez d'abord le saut ou l'insertion pour fusionner"
+              : "Fusionner avec l'exercice précédent"}
+            aria-label="Fusionner avec l'exercice précédent"
+            disabled={hasPageBreak || hasColumnBreak || hasText}
+            data-testid="typst-overlay-merge"
+            on:click={() => onToggleMergeBefore(widget.num + 1)}
+          >
+            <i class="bx bx-link"></i>
           </button>
         {/if}
         {#if openInsertion === widget.num}
