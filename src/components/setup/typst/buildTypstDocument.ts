@@ -76,6 +76,23 @@ export interface TypstCarryOver {
    * figure. Expression Typst brute (`left`, `center` ou `right`).
    */
   figureAlign?: Record<number, string>
+  /**
+   * Code Typst saisi à la main (modale d'édition de la palette) qui remplace
+   * l'énoncé généré d'un exercice, par numéro d'exercice. Désactive le QR-code
+   * et le décompte de questions (numérotation continue en cas de fusion) de
+   * cet exercice, dont le contenu échappe désormais à la génération.
+   */
+  codeOverrides?: Record<number, string>
+}
+
+/** Repère de début d'une surcharge de code (voir `codeOverrides`) */
+const CODE_OVERRIDE_START = /^([ \t]*)\/\/ mathalea:override\((\d+)\)\s*$/
+/** Repère de fin d'une surcharge de code */
+const CODE_OVERRIDE_END = /^[ \t]*\/\/ mathalea:override-end\s*$/
+
+/** Enveloppe le code saisi par le professeur entre ses repères, pour l'exercice `num` */
+function wrapCodeOverride(num: number, code: string): string {
+  return `// mathalea:override(${num})\n${code}\n// mathalea:override-end`
 }
 
 /** Extrait du code Typst courant les réglages de la palette à conserver */
@@ -129,7 +146,34 @@ export function harvestCarryOver(code: string): TypstCarryOver {
   )) {
     merges.push(Number(match[1]))
   }
-  return { tasksLayout, insertions, figureZoom, figureAlign, merges }
+  // une surcharge peut s'étendre sur plusieurs lignes : on ne peut pas la
+  // lire avec un simple matchAll, il faut avancer ligne à ligne et retirer
+  // l'indentation ajoutée par les blocs englobants (mêmes marges pour le
+  // repère et son contenu, voir `wrapCodeOverride`)
+  const codeOverrides: Record<number, string> = {}
+  const codeLines = code.split('\n')
+  for (let i = 0; i < codeLines.length; i++) {
+    const start = codeLines[i].match(CODE_OVERRIDE_START)
+    if (start == null) continue
+    const indent = start[1]
+    const num = Number(start[2])
+    const content: string[] = []
+    i++
+    while (i < codeLines.length && !CODE_OVERRIDE_END.test(codeLines[i])) {
+      const line = codeLines[i]
+      content.push(line.startsWith(indent) ? line.slice(indent.length) : line)
+      i++
+    }
+    codeOverrides[num] = content.join('\n')
+  }
+  return {
+    tasksLayout,
+    insertions,
+    figureZoom,
+    figureAlign,
+    merges,
+    codeOverrides,
+  }
 }
 
 /**
@@ -504,33 +548,27 @@ function versionLetter(version: number): string {
   return String.fromCharCode(65 + version)
 }
 
+/** Énoncé et correction générés pour un exercice, avant surcharge éventuelle */
+interface GeneratedExercise {
+  enonce: string
+  correction: string | null
+}
+
 /**
- * Construit les définitions et le rendu (Énoncés + Corrections) d'une seule
- * version du sujet. `varPrefix` distingue les variables de banque
- * (`#let <prefix>exN = ...`) d'une version à l'autre ; les variables de mise
- * en page des questions (`exN-colonnes`...) restent, elles, partagées entre
- * toutes les versions d'un même exercice. `emitAnchors` n'est activé que
- * pour la première version : les autres sont des copies (graine différente)
- * du même sujet, la palette de mise en page n'a donc besoin d'y contrôler
- * qu'une seule instance.
+ * Calcule l'énoncé et la correction générés de chaque exercice, sans
+ * appliquer les surcharges de code Typst manuelles (`carryOver.codeOverrides`) :
+ * partagé par `buildVersionContent` (assemblage du document complet, qui
+ * applique les surcharges après coup sur `enonce`) et par
+ * `getGeneratedExerciseCode` (préremplissage de la modale d'édition avec le
+ * code actuellement généré d'un seul exercice, avant toute surcharge).
  */
-function buildVersionContent(
+function computeGeneratedExercises(
   exercises: TypstExerciseInput[],
   options: TypstDocumentOptions,
   carryOver: TypstCarryOver,
   figures: string[],
-  varPrefix: string,
   emitAnchors: boolean,
-): VersionContent {
-  /** Insertions de la palette à réémettre après l'exercice `num` */
-  const insertionLines = (num: number, indent: string): string[] =>
-    (carryOver.insertions?.[num] ?? []).map(
-      (line) => `${indent}${line} ${INSERTION_TAG}`,
-    )
-  // Banque d'exercices (paquet exercise-bank) : chaque exercice regroupe
-  // son énoncé et sa correction dans un `#let exN = exo.with(...)`, puis
-  // la section Énoncés appelle `#exN()` — réordonnez-les librement.
-  const bankLines: string[] = []
+): GeneratedExercise[] {
   // exercice fusionné avec le précédent (bouton de la palette) : rejoint le
   // groupe `exo.with(...)` de son prédécesseur (un seul titre pour le
   // groupe). Sans effet quand tous les exercices sont déjà fusionnés
@@ -555,12 +593,7 @@ function buildVersionContent(
   // suite d'un exercice à l'autre plutôt que de repartir à 1
   let nextStart = 1
   let nextCorrectionStart = 1
-  let hasCorrections = false
-  interface BuiltExercise {
-    enonce: string
-    correction: string | null
-  }
-  const built: BuiltExercise[] = exercises.map((exercise, k) => {
+  return exercises.map((exercise, k) => {
     const continued = options.mergeExercises || mergedWithPrevious[k]
     if (exercise.warning != null) {
       if (!continued) nextStart = 1
@@ -596,7 +629,6 @@ function buildVersionContent(
     nextStart += enonce.itemCount
     let correction: string | null = null
     if (exercise.corrections.length > 0) {
-      hasCorrections = true
       if (!continued) nextCorrectionStart = 1
       // préfixe distinct : la mise en page de la correction (colonnes,
       // espacement) se règle indépendamment de celle de l'énoncé
@@ -616,6 +648,85 @@ function buildVersionContent(
       correction = body.code
     }
     return { enonce: enonce.code, correction }
+  })
+}
+
+/**
+ * Code Typst actuellement généré pour l'énoncé d'un exercice (préremplissage
+ * de la modale d'édition), sans appliquer sa surcharge existante : c'est le
+ * texte de départ que le professeur affine, pas la surcharge déjà enregistrée
+ * (celle-ci est lue directement dans `carryOver.codeOverrides`).
+ */
+export function getGeneratedExerciseCode(
+  exercises: TypstExerciseInput[],
+  num: number,
+  options: TypstDocumentOptions = defaultTypstDocumentOptions,
+  carryOver: TypstCarryOver = {},
+): string {
+  const figures: string[] = []
+  const generated = computeGeneratedExercises(
+    exercises,
+    options,
+    carryOver,
+    figures,
+    false,
+  )
+  return generated[num - 1]?.enonce ?? ''
+}
+
+/**
+ * Construit les définitions et le rendu (Énoncés + Corrections) d'une seule
+ * version du sujet. `varPrefix` distingue les variables de banque
+ * (`#let <prefix>exN = ...`) d'une version à l'autre ; les variables de mise
+ * en page des questions (`exN-colonnes`...) restent, elles, partagées entre
+ * toutes les versions d'un même exercice. `emitAnchors` n'est activé que
+ * pour la première version : les autres sont des copies (graine différente)
+ * du même sujet, la palette de mise en page n'a donc besoin d'y contrôler
+ * qu'une seule instance.
+ */
+function buildVersionContent(
+  exercises: TypstExerciseInput[],
+  options: TypstDocumentOptions,
+  carryOver: TypstCarryOver,
+  figures: string[],
+  varPrefix: string,
+  emitAnchors: boolean,
+): VersionContent {
+  /** Insertions de la palette à réémettre après l'exercice `num` */
+  const insertionLines = (num: number, indent: string): string[] =>
+    (carryOver.insertions?.[num] ?? []).map(
+      (line) => `${indent}${line} ${INSERTION_TAG}`,
+    )
+  // Banque d'exercices (paquet exercise-bank) : chaque exercice regroupe
+  // son énoncé et sa correction dans un `#let exN = exo.with(...)`, puis
+  // la section Énoncés appelle `#exN()` — réordonnez-les librement.
+  const bankLines: string[] = []
+  // même calcul que dans `computeGeneratedExercises`, nécessaire ici pour le
+  // regroupement des exercices fusionnés (bankLines) ci-dessous
+  const mergedWithPrevious = exercises.map(
+    (_, k) =>
+      k > 0 &&
+      !options.mergeExercises &&
+      (carryOver.merges?.includes(k + 1) ?? false),
+  )
+  const generated = computeGeneratedExercises(
+    exercises,
+    options,
+    carryOver,
+    figures,
+    emitAnchors,
+  )
+  const hasCorrections = generated.some((g) => g.correction != null)
+  // surcharge manuelle (modale d'édition de la palette) : remplace le code
+  // émis pour l'exercice concerné, sans QR-code dans le rendu final (ses
+  // figures et son décompte de questions restent ceux du texte généré,
+  // calculés par computeGeneratedExercises avant la surcharge)
+  const built = generated.map((g, k) => {
+    const override = carryOver.codeOverrides?.[k + 1]
+    return {
+      enonce: override != null ? wrapCodeOverride(k + 1, override) : g.enonce,
+      correction: g.correction,
+    }
   })
 
   const renderLines: string[] = []

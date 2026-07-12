@@ -71,8 +71,7 @@
   /** Zoom de chaque figure, par numéro de figure (`fig-N`) */
   export let figureZoomValues: Record<number, number> = {}
   /** Alignement de chaque figure, par numéro de figure (`fig-N`) */
-  export let figureAlignValues: Record<number, 'left' | 'center' | 'right'> =
-    {}
+  export let figureAlignValues: Record<number, 'left' | 'center' | 'right'> = {}
   /** Nombre total d'exercices (borne les boutons monter/descendre) */
   export let exerciseCount = 0
   /**
@@ -94,6 +93,9 @@
   export let onMoveExercise: (num: number, delta: -1 | 1) => void
   export let onNewData: (num: number) => void
   export let onOpenSettings: (num: number) => void
+  /** Surcharges de code Typst existantes, par numéro d'exercice (voir onEditCode) */
+  export let codeOverrides: Record<number, string> = {}
+  export let onEditCode: (num: number) => void
 
   /** Numéro du repère de gap dont le panneau d'insertion est ouvert */
   let openInsertion: number | null = null
@@ -132,10 +134,7 @@
   }
   let drafts: InsertionDraft[] = []
 
-  function parseSnippet(
-    snippet: string,
-    index: number,
-  ): InsertionDraft {
+  function parseSnippet(snippet: string, index: number): InsertionDraft {
     const section = snippet.match(/^#section\[(.*)\]$/)
     return section != null
       ? { kind: 'section', text: section[1], index }
@@ -168,7 +167,6 @@
     else onInsert(num, snippet)
   }
 
-
   function toggleInsertion(num: number) {
     openInsertion = openInsertion === num ? null : num
     insertionText = ''
@@ -185,6 +183,110 @@
     insertionText = ''
   }
 </script>
+
+{#snippet insertionPanel(gapNum: number, positionClass: string)}
+  <!-- panneau d'insertion/modification d'un texte ou d'un titre de section
+       pour le repère de gap `gapNum` ; partagé entre le bouton du repère
+       (barre d'exercice qui suit, ou barre du dernier repère) -->
+  {#if openInsertion === gapNum}
+    <div
+      class="absolute top-6 z-20 w-72 space-y-2 typst-panel p-2 {positionClass}"
+    >
+      {#if drafts.length > 0}
+        <!-- insertions existantes : modification et suppression
+             (draft.index : position réelle dans le code, les sauts de
+             page/colonne étant filtrés de cette liste) -->
+        {#each drafts as draft (draft.index)}
+          <div class="flex items-center gap-1">
+            <span
+              class="shrink-0 rounded bg-gray-100 px-1 py-0.5 text-[0.6rem] uppercase text-gray-500"
+            >
+              {draft.kind}
+            </span>
+            <input
+              type="text"
+              class="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
+              bind:value={draft.text}
+              on:keydown={(e) => {
+                if (e.key === 'Enter' && draft.text.trim().length > 0) {
+                  onUpdateInsertion(gapNum, draft.index, composeSnippet(draft))
+                }
+                if (e.key === 'Escape') openInsertion = null
+              }}
+            />
+            <button
+              type="button"
+              title="Enregistrer la modification"
+              aria-label="Enregistrer la modification"
+              class="hover:text-coopmaths-action disabled:opacity-40"
+              disabled={draft.text.trim().length === 0}
+              on:click={() =>
+                onUpdateInsertion(gapNum, draft.index, composeSnippet(draft))}
+            >
+              <i class="bx bx-check text-base"></i>
+            </button>
+            <button
+              type="button"
+              title="Supprimer cette insertion"
+              aria-label="Supprimer cette insertion"
+              class="hover:text-red-600"
+              on:click={() => onDeleteInsertion(gapNum, draft.index)}
+            >
+              <i class="bx bx-trash text-base"></i>
+            </button>
+          </div>
+        {/each}
+        <hr class="border-gray-200" />
+      {/if}
+      <div class="flex overflow-hidden rounded border border-gray-300">
+        {#each [{ kind: 'section', label: 'Section' }, { kind: 'texte', label: 'Texte' }] as choice}
+          <button
+            type="button"
+            class="flex-1 px-2 py-0.5 {insertionKind === choice.kind
+              ? 'bg-coopmaths-action text-coopmaths-canvas'
+              : 'bg-coopmaths-canvas text-coopmaths-corpus hover:bg-coopmaths-canvas-dark'}"
+            aria-pressed={insertionKind === choice.kind}
+            on:click={() =>
+              (insertionKind = choice.kind as 'section' | 'texte')}
+          >
+            {choice.label}
+          </button>
+        {/each}
+      </div>
+      <!-- svelte-ignore a11y-autofocus : le formulaire vient d'être ouvert au clic -->
+      <input
+        type="text"
+        autofocus={drafts.length === 0}
+        class="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
+        placeholder={insertionKind === 'section'
+          ? 'Titre de la section (ex : Monômes)'
+          : 'Texte (code Typst accepté)'}
+        bind:value={insertionText}
+        on:keydown={(e) => {
+          if (e.key === 'Enter') submitInsertion()
+          if (e.key === 'Escape') openInsertion = null
+        }}
+      />
+      <div class="flex justify-end gap-2">
+        <button
+          type="button"
+          class="px-2 py-0.5 hover:text-coopmaths-action"
+          on:click={() => (openInsertion = null)}
+        >
+          Fermer
+        </button>
+        <button
+          type="button"
+          class="rounded bg-coopmaths-action px-2 py-0.5 text-white disabled:opacity-50"
+          disabled={insertionText.trim().length === 0}
+          on:click={submitInsertion}
+        >
+          Insérer
+        </button>
+      </div>
+    </div>
+  {/if}
+{/snippet}
 
 <div class="pointer-events-none absolute inset-0 z-10 text-xs text-gray-700">
   {#each widgets as widget, i (i)}
@@ -272,7 +374,9 @@
           <i class="bx bx-edit"></i>
         </button>
         {#if headerOpen}
-          <div class="absolute left-4 top-0 z-20 w-80 space-y-2 typst-panel p-2">
+          <div
+            class="absolute left-4 top-0 z-20 w-80 space-y-2 typst-panel p-2"
+          >
             {#each HEADER_FIELDS as field}
               <label class="block space-y-0.5">
                 <span class="text-[0.65rem] uppercase text-gray-500">
@@ -309,11 +413,29 @@
         {/if}
       </div>
     {:else if widget.kind === 'exo'}
-      <!-- contrôles de l'exercice : déplacement, réglages, nouvelles
-           données, nombre de questions, suppression -->
+      <!-- insertion avant cet exercice : repère de gap qui précède -->
+      {@const insertGapNum = widget.num - 1}
+      {@const insertGapInsertions = insertions[insertGapNum] ?? []}
+      {@const insertHasText = insertGapInsertions.some(
+        (snippet) =>
+          snippet !== PAGE_BREAK_SNIPPET && snippet !== COLUMN_BREAK_SNIPPET,
+      )}
+      <!-- exercice fusionné avec le précédent : le repère de gap qui le
+           précède est interne au groupe, l'insertion n'y a pas de sens -->
+      {@const showInsert = !mergedExercises.includes(widget.num)}
+      <!-- bord droit de la colonne qui contient l'exercice (et non celui de
+           la page) : en document multicolonne, la barre doit rester dans la
+           même colonne que le titre qu'elle contrôle, sous peine de se
+           retrouver au-dessus d'un autre exercice -->
+      {@const columnWidth = 100 / Math.max(documentColumns, 1)}
+      {@const columnRight =
+        (Math.floor(widget.left / columnWidth) + 1) * columnWidth}
+      <!-- contrôles de l'exercice : insertion avant l'exercice, déplacement,
+           réglages, nouvelles données, nombre de questions, suppression -->
       <div
-        class="pointer-events-auto absolute flex -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
-        style="top: {widget.top}%; right: 0.3%;"
+        class="pointer-events-auto absolute flex -translate-x-full -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class:typst-pill-force-visible={openInsertion === insertGapNum}
+        style="top: {widget.top}%; left: {columnRight - 0.3}%;"
         data-testid="typst-overlay-exo"
       >
         <button
@@ -334,6 +456,19 @@
         >
           <i class="bx bx-down-arrow-alt"></i>
         </button>
+        {#if showInsert}
+          <button
+            type="button"
+            title="Insérer ou modifier un texte ou un titre de section avant l'exercice"
+            aria-label="Insérer ou modifier un texte ou un titre de section avant l'exercice {widget.num}"
+            aria-expanded={openInsertion === insertGapNum}
+            data-testid="typst-overlay-insert"
+            on:click={() => toggleInsertion(insertGapNum)}
+          >
+            <i class="bx bx-plus-circle"></i>
+          </button>
+          <span class="typst-pill-sep"></span>
+        {/if}
         <button
           type="button"
           title="Réglages de l'exercice {widget.num}"
@@ -341,6 +476,18 @@
           on:click={() => onOpenSettings(widget.num)}
         >
           <i class="bx bx-cog"></i>
+        </button>
+        <button
+          type="button"
+          title={codeOverrides[widget.num] != null
+            ? 'Modifier le code Typst de cet exercice'
+            : 'Éditer le code Typst de cet exercice'}
+          aria-label="Éditer le code Typst de l'exercice {widget.num}"
+          class:typst-pill-active={codeOverrides[widget.num] != null}
+          data-testid="typst-overlay-edit-code"
+          on:click={() => onEditCode(widget.num)}
+        >
+          <i class="bx bx-pencil"></i>
         </button>
         <button
           type="button"
@@ -382,6 +529,7 @@
         >
           <i class="bx bx-trash"></i>
         </button>
+        {@render insertionPanel(insertGapNum, 'right-0')}
       </div>
     {:else if widget.kind === 'figure'}
       <!-- zoom et alignement d'une figure mathalea2d embarquée : le repère
@@ -450,28 +598,43 @@
         mergeExercisesEnabled &&
         widget.num >= 1 &&
         widget.num < exerciseCount}
+      <!-- ce repère précède un exercice : son bouton d'insertion vit dans la
+           barre de cet exercice (kind 'exo'), juste avant les réglages ;
+           seul le dernier repère (après le dernier exercice) garde le sien
+           ici, faute de barre d'exercice suivante où le placer. -->
+      {@const hasFollowingExo = widget.num < exerciseCount}
+      <!-- un saut actif éloigne l'exercice suivant (page ou colonne d'après) :
+           le repère reste au bas de l'exercice courant, donc la barre doit y
+           rester aussi plutôt que remonter vers un titre qui n'est plus juste
+           en dessous -->
+      {@const hasBreak = hasPageBreak || hasColumnBreak}
       <!-- entre deux exercices (et avant le premier) : insertion/modification
            d'un texte ou d'un titre de section, et sauts de page/colonne. Le
            repère est au bord gauche de la page (déjà proche du bord) : on ne
            le décale que légèrement vers la gauche, et nettement vers le haut,
-           pour ne pas recouvrir le titre de l'exercice qui suit. -->
+           pour ne pas recouvrir le titre de l'exercice qui suit — sauf
+           lorsqu'un saut est actif, où le repère reste sous l'exercice. -->
       <div
-        class="pointer-events-auto absolute flex -translate-x-2 -translate-y-[135%] items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class="pointer-events-auto absolute flex -translate-x-2 {hasBreak
+          ? 'translate-y-2'
+          : '-translate-y-[135%]'} items-center gap-0.5 typst-pill typst-pill-round px-1"
         class:typst-pill-force-visible={openInsertion === widget.num}
         style="left: {widget.left}%; top: {widget.top}%;"
       >
         {#if !isMergeGap}
-          <button
-            type="button"
-            title="Insérer ou modifier un texte ou un titre de section ici"
-            aria-label="Insérer ou modifier un texte ou un titre de section ici"
-            aria-expanded={openInsertion === widget.num}
-            data-testid="typst-overlay-insert"
-            on:click={() => toggleInsertion(widget.num)}
-          >
-            <i class="bx {hasText ? 'bx-edit' : 'bx-plus'}"></i>
-          </button>
-          <span class="typst-pill-sep"></span>
+          {#if !hasFollowingExo}
+            <button
+              type="button"
+              title="Insérer ou modifier un texte ou un titre de section ici"
+              aria-label="Insérer ou modifier un texte ou un titre de section ici"
+              aria-expanded={openInsertion === widget.num}
+              data-testid="typst-overlay-insert"
+              on:click={() => toggleInsertion(widget.num)}
+            >
+              <i class="bx bx-plus-circle"></i>
+            </button>
+            <span class="typst-pill-sep"></span>
+          {/if}
           <button
             type="button"
             title={hasPageBreak
@@ -535,111 +698,8 @@
             <i class="bx bx-link"></i>
           </button>
         {/if}
-        {#if openInsertion === widget.num}
-          <div
-            class="absolute left-1/2 top-6 z-20 w-72 -translate-x-1/2 space-y-2 typst-panel p-2"
-          >
-            {#if drafts.length > 0}
-              <!-- insertions existantes : modification et suppression
-                   (draft.index : position réelle dans le code, les sauts de
-                   page/colonne étant filtrés de cette liste) -->
-              {#each drafts as draft (draft.index)}
-                <div class="flex items-center gap-1">
-                  <span
-                    class="shrink-0 rounded bg-gray-100 px-1 py-0.5 text-[0.6rem] uppercase text-gray-500"
-                  >
-                    {draft.kind}
-                  </span>
-                  <input
-                    type="text"
-                    class="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
-                    bind:value={draft.text}
-                    on:keydown={(e) => {
-                      if (e.key === 'Enter' && draft.text.trim().length > 0) {
-                        onUpdateInsertion(
-                          widget.num,
-                          draft.index,
-                          composeSnippet(draft),
-                        )
-                      }
-                      if (e.key === 'Escape') openInsertion = null
-                    }}
-                  />
-                  <button
-                    type="button"
-                    title="Enregistrer la modification"
-                    aria-label="Enregistrer la modification"
-                    class="hover:text-coopmaths-action disabled:opacity-40"
-                    disabled={draft.text.trim().length === 0}
-                    on:click={() =>
-                      onUpdateInsertion(
-                        widget.num,
-                        draft.index,
-                        composeSnippet(draft),
-                      )}
-                  >
-                    <i class="bx bx-check text-base"></i>
-                  </button>
-                  <button
-                    type="button"
-                    title="Supprimer cette insertion"
-                    aria-label="Supprimer cette insertion"
-                    class="hover:text-red-600"
-                    on:click={() => onDeleteInsertion(widget.num, draft.index)}
-                  >
-                    <i class="bx bx-trash text-base"></i>
-                  </button>
-                </div>
-              {/each}
-              <hr class="border-gray-200" />
-            {/if}
-            <div class="flex overflow-hidden rounded border border-gray-300">
-              {#each [{ kind: 'section', label: 'Section' }, { kind: 'texte', label: 'Texte' }] as choice}
-                <button
-                  type="button"
-                  class="flex-1 px-2 py-0.5 {insertionKind === choice.kind
-                    ? 'bg-coopmaths-action text-coopmaths-canvas'
-                    : 'bg-coopmaths-canvas text-coopmaths-corpus hover:bg-coopmaths-canvas-dark'}"
-                  aria-pressed={insertionKind === choice.kind}
-                  on:click={() =>
-                    (insertionKind = choice.kind as 'section' | 'texte')}
-                >
-                  {choice.label}
-                </button>
-              {/each}
-            </div>
-            <!-- svelte-ignore a11y-autofocus : le formulaire vient d'être ouvert au clic -->
-            <input
-              type="text"
-              autofocus={drafts.length === 0}
-              class="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
-              placeholder={insertionKind === 'section'
-                ? 'Titre de la section (ex : Monômes)'
-                : 'Texte (code Typst accepté)'}
-              bind:value={insertionText}
-              on:keydown={(e) => {
-                if (e.key === 'Enter') submitInsertion()
-                if (e.key === 'Escape') openInsertion = null
-              }}
-            />
-            <div class="flex justify-end gap-2">
-              <button
-                type="button"
-                class="px-2 py-0.5 hover:text-coopmaths-action"
-                on:click={() => (openInsertion = null)}
-              >
-                Fermer
-              </button>
-              <button
-                type="button"
-                class="rounded bg-coopmaths-action px-2 py-0.5 text-white disabled:opacity-50"
-                disabled={insertionText.trim().length === 0}
-                on:click={submitInsertion}
-              >
-                Insérer
-              </button>
-            </div>
-          </div>
+        {#if !hasFollowingExo}
+          {@render insertionPanel(widget.num, 'left-1/2 -translate-x-1/2')}
         {/if}
       </div>
     {/if}
@@ -654,7 +714,7 @@
     background: white;
     border: 1px solid #b9d4f1;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-    opacity: 0.25;
+    opacity: 0.5;
     transition: opacity 0.15s ease;
   }
   .typst-pill:hover,

@@ -37,6 +37,7 @@
     TEXT_FONTS,
     buildTypstDocument,
     defaultTypstDocumentOptions,
+    getGeneratedExerciseCode,
     harvestCarryOver,
     type TypstCarryOver,
     type TypstDocumentOptions,
@@ -252,6 +253,12 @@
     settingsExerciseIndex !== null
       ? (exercises[settingsExerciseIndex] ?? null)
       : null
+  /** Surcharges de code Typst par exercice (modale d'édition), lues dans le code */
+  let codeOverrideValues: Record<number, string> = {}
+  /** Numéro de l'exercice dont la modale d'édition du code Typst est ouverte */
+  let codeEditNum: number | null = null
+  /** Brouillon de la modale d'édition du code Typst */
+  let codeEditDraft = ''
 
   /** Convertit les repères (pt, par page) en positions % sur l'aperçu */
   function computeOverlayWidgets(
@@ -312,6 +319,7 @@
     const harvested = harvestCarryOver(code)
     insertionValues = harvested.insertions ?? {}
     mergedExercises = harvested.merges ?? []
+    codeOverrideValues = harvested.codeOverrides ?? {}
     const columns = code.match(/^#let colonnes = (\d+)/m)
     documentColumns = columns != null ? Number(columns[1]) : 1
     const figureZoom: Record<number, number> = {}
@@ -471,7 +479,13 @@
     const merges = (carryOver.merges ?? [])
       .filter((n) => n !== removed)
       .map((n) => (n > removed ? n - 1 : n))
-    return { tasksLayout, insertions, merges }
+    const codeOverrides: NonNullable<typeof carryOver.codeOverrides> = {}
+    for (const [key, value] of Object.entries(carryOver.codeOverrides ?? {})) {
+      const n = Number(key)
+      if (n === removed) continue
+      codeOverrides[n > removed ? n - 1 : n] = value
+    }
+    return { tasksLayout, insertions, merges, codeOverrides }
   }
 
   /** Retire l'exercice num de la fiche et régénère le code */
@@ -517,7 +531,11 @@
       insertions[newGap] = [...(insertions[newGap] ?? []), ...lines]
     }
     const merges = (carryOver.merges ?? []).map(swapNum)
-    return { tasksLayout, insertions, merges }
+    const codeOverrides: NonNullable<typeof carryOver.codeOverrides> = {}
+    for (const [key, value] of Object.entries(carryOver.codeOverrides ?? {})) {
+      codeOverrides[swapNum(Number(key))] = value
+    }
+    return { tasksLayout, insertions, merges, codeOverrides }
   }
 
   /** Échange l'exercice num avec son voisin (delta : -1 monter, 1 descendre) */
@@ -576,6 +594,60 @@
 
   function openSettings(num: number) {
     settingsExerciseIndex = num - 1
+  }
+
+  /**
+   * Ouvre la modale d'édition du code Typst de l'exercice num, préremplie
+   * avec sa surcharge existante ou, à défaut, le code actuellement généré
+   * pour cet exercice (voir `getGeneratedExerciseCode`).
+   */
+  function openCodeEdit(num: number) {
+    const carryOver =
+      editorView != null ? harvestCarryOver(currentCode()) : {}
+    codeEditDraft =
+      carryOver.codeOverrides?.[num] ??
+      getGeneratedExerciseCode(buildInputs(), num, documentOptions, carryOver)
+    codeEditNum = num
+  }
+
+  /**
+   * Retire la surcharge de l'exercice num : son énoncé redevient celui
+   * généré automatiquement (icône crayon désactivée, « Nouvelles données »
+   * de nouveau opérant sur son contenu). Contrairement au brouillon de la
+   * modale, une surcharge n'est un texte figé que tant qu'elle existe : la
+   * restaurer doit donc réellement la supprimer, pas seulement préremplir le
+   * brouillon avec un instantané du texte généré.
+   */
+  function restoreGeneratedCode(num: number) {
+    updateExerciseCode(num, '')
+  }
+
+  /**
+   * Applique (ou retire, si `code` est vide) la surcharge de code Typst de
+   * l'exercice num, saisie dans la modale d'édition. Régénère le document
+   * (comme suppression/déplacement/fusion) : la surcharge change la
+   * structure du code (elle remplace l'énoncé généré), un simple patch de
+   * texte comme pour les insertions ne suffit pas.
+   */
+  function updateExerciseCode(num: number, code: string) {
+    if (!confirmOverwrite()) return
+    const carryOver =
+      editorView != null ? harvestCarryOver(currentCode()) : {}
+    const codeOverrides = { ...(carryOver.codeOverrides ?? {}) }
+    const trimmed = code.trim()
+    if (trimmed.length === 0) delete codeOverrides[num]
+    else codeOverrides[num] = code
+    carryOver.codeOverrides = codeOverrides
+    const [primary, ...extraVersions] = buildAllVersionInputs()
+    const newCode = buildTypstDocument(
+      primary,
+      documentOptions,
+      carryOver,
+      extraVersions,
+    )
+    setEditorContent(newCode)
+    scheduleCompile(newCode, 0)
+    codeEditNum = null
   }
 
   /**
@@ -1898,6 +1970,7 @@
                   {questionCounts}
                   {figureZoomValues}
                   {figureAlignValues}
+                  codeOverrides={codeOverrideValues}
                   exerciseCount={exercises.length}
                   {mergedExercises}
                   mergeExercisesEnabled={!documentOptions.mergeExercises}
@@ -1914,6 +1987,7 @@
                   onMoveExercise={moveExercise}
                   onNewData={newDataForExercise}
                   onOpenSettings={openSettings}
+                  onEditCode={openCodeEdit}
                   onToggleMergeBefore={toggleMergeBefore}
                 />
               {/if}
@@ -1956,6 +2030,61 @@
             on:clickSettings={() => (settingsExerciseIndex = null)}
           />
         {/key}
+      </div>
+    </div>
+  {/if}
+
+  {#if codeEditNum !== null}
+    {@const num = codeEditNum}
+    <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      on:click|self={() => (codeEditNum = null)}
+    >
+      <div
+        class="relative flex w-full max-w-2xl flex-col gap-3 rounded-lg bg-coopmaths-canvas-dark p-4 shadow-xl dark:bg-coopmathsdark-canvas-dark"
+      >
+        <h2 class="text-base font-semibold">
+          Code Typst de l'exercice {num}
+        </h2>
+        <p class="text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus">
+          Modifiez le code ci-dessous : il remplacera l'énoncé généré de cet
+          exercice (QR-code et numérotation continue des questions désactivés
+          pour lui). Videz le champ pour revenir à l'énoncé généré
+          automatiquement.
+        </p>
+        <textarea
+          class="h-64 w-full rounded border border-gray-300 p-2 font-mono text-xs"
+          bind:value={codeEditDraft}
+          on:keydown={(e) => {
+            if (e.key === 'Escape') codeEditNum = null
+          }}
+        ></textarea>
+        <div class="flex justify-between gap-2">
+          <button
+            type="button"
+            class="px-3 py-1 hover:text-coopmaths-action"
+            on:click={() => restoreGeneratedCode(num)}
+          >
+            Restaurer le code d'origine
+          </button>
+          <div class="flex gap-2">
+            <button
+              type="button"
+              class="px-3 py-1 hover:text-coopmaths-action"
+              on:click={() => (codeEditNum = null)}
+            >
+              Annuler
+            </button>
+            <button
+              type="button"
+              class="rounded bg-coopmaths-action px-3 py-1 text-white"
+              on:click={() => updateExerciseCode(num, codeEditDraft)}
+            >
+              Enregistrer
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   {/if}
