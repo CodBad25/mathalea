@@ -761,6 +761,7 @@
 
   function setDisplayMode(mode: DisplayMode) {
     displayMode = mode
+    isSettingsOpen = false
     persistPreferences()
   }
 
