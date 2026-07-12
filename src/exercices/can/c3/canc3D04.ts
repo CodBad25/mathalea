@@ -126,7 +126,7 @@ export default class ExerciceInteractiveClock extends Exercice {
     clock.isDynamic = false
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[id] = answer
+    this.answers[id] = JSON.stringify(answer)
     if (
       this.goodAnswers[i].hour === answer.hour &&
       this.goodAnswers[i].minute === answer.minute

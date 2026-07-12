@@ -324,7 +324,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
               `#${answer}`,
             ) as InteractiveClock
             if (clock !== null) {
-              clock.value = answers[answer]
+              clock.value = JSON.parse(answers[answer])
               const time = window.performance.now()
               log(`duration ${answer}: ${time - starttime}`)
               resolve(true)
