@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastRun": "2026-07-09T11:34:29.578Z",
+  "lastRun": "2026-07-12T14:55:20.647Z",
   "exercises": {
     "10151": {
       "uuid": "10151",
@@ -19900,7 +19900,7 @@
       "uuid": "bc6ad",
       "ref": "3Z1DNB-22",
       "file": "src/exercices/3e/3Z1DNB-22.ts",
-      "lastChecked": "2026-07-08T11:49:13.629Z",
+      "lastChecked": "2026-07-12T14:53:01.017Z",
       "status": "passing",
       "checkedLevel": 1,
       "failureMode": null,
@@ -32923,6 +32923,53 @@
       "ref": "CM2G3C-1",
       "file": "src/exercices/CM2/CM2G3C-1.ts",
       "lastChecked": "2026-07-09T09:15:34.272Z",
+      "status": "passing",
+      "checkedLevel": 1,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=2:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "a7c64": {
+      "uuid": "a7c64",
+      "ref": "a7c64",
+      "file": "src/exercices/ch/2mTrigoFct-6.ts",
+      "lastChecked": "2026-07-12T14:54:53.229Z",
+      "status": "passing",
+      "checkedLevel": 1,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=1:sup2=true:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=true:sup3=2:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=true:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=false:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=false:sup3=2:sup4=undefined:sup5=undefined",
+        "sup=1:sup2=false:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=true:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=true:sup3=2:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=true:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=false:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=false:sup3=2:sup4=undefined:sup5=undefined",
+        "sup=3:sup2=false:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=6:sup2=true:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=6:sup2=true:sup3=2:sup4=undefined:sup5=undefined",
+        "sup=6:sup2=true:sup3=4:sup4=undefined:sup5=undefined",
+        "sup=6:sup2=false:sup3=1:sup4=undefined:sup5=undefined",
+        "sup=6:sup2=false:sup3=2:sup4=undefined:sup5=undefined",
+        "sup=6:sup2=false:sup3=4:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "2F23-2": {
+      "uuid": "49fca",
+      "ref": "2F23-2",
+      "file": "src/exercices/1eTec/1Tec-F3-01.ts",
+      "lastChecked": "2026-07-12T14:55:20.134Z",
       "status": "passing",
       "checkedLevel": 1,
       "failureMode": null,

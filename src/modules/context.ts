@@ -2,6 +2,7 @@
 export const context = {
   isInEditor: false,
   isHtml: true,
+  isTypst: false, // vrai pendant la régénération d'un exercice pour l'export Typst (isHtml reste true pour la conversion HTML→Typst)
   isAmc: false,
   isAlc: false,
   isMoodle: false,

@@ -311,7 +311,10 @@ export function createTableurLatex(
   ${options.firstColHeaderWidth ? `>{\\centering \\arraybackslash}p{${options.firstColHeaderWidth}}|` : '>{\\centering \\arraybackslash}X|'}
   *{${colNbr - 1}}{>{\\centering \\arraybackslash}X|}}\\hline\n`
 
-  if (options.formule) {
+  if (options.formule && !context.isTypst) {
+    // en sortie Typst, cette ligne imite la barre de formule d'un tableur
+    // interactif (référence de cellule, flèche, zone de saisie) : elle n'a
+    // pas de sens sur un document imprimé/statique.
     output += `\\multicolumn{1}{|l}{${options.formuleCellule}}&\\multicolumn{1}{r|}{▼}&\\multicolumn{${colNbr - 1}}{l|}{${options.formuleTexte}}\\\\ \\hline\n`
   }
   // en-tête
@@ -329,14 +332,21 @@ export function createTableurLatex(
       const cell = rowData[colIndex] || {}
       const styleCell = styles[cell.s ?? ''] || {}
       let color = ''
-      if (!context.isHtml && styleCell.bg?.startsWith('#')) {
+      if (
+        (!context.isHtml || context.isTypst) &&
+        styleCell.bg?.startsWith('#')
+      ) {
         color = `\\cellcolor[HTML]{${styleCell.bg.replace('#', '')}}`
       } else if (styleCell.bg) {
         color = `\\cellcolor{${styleCell.bg}}`
       }
       if (cell?.t === 1) {
         // texte
-        output += `\\raggedright ${color} ${cell.v || ''}  &`
+        const texte = cell.v || ''
+        // en sortie Typst, le tableau est converti comme un segment maths
+        // (voir plus bas) : \text{} évite que les espaces entre les mots
+        // soient perdus et que le texte soit mis en italique comme des variables
+        output += `\\raggedright ${color} ${context.isTypst ? `\\text{${texte}}` : texte}  &`
       } else if (cell?.t === 2) {
         // number
         output += `\\raggedleft ${color} ${cell.v || ''}  &`
@@ -351,7 +361,10 @@ export function createTableurLatex(
     output += '\\\\ \\hline\n'
   }
   output += '\\end{tabularx}\n'
-  return output
+  // En sortie Typst, le tableau brut n'est repéré et converti que s'il est
+  // délimité comme un segment LaTeX (voir htmlToTypst/latexSegmentToTypst) ;
+  // en LaTeX classique, l'environnement tabularx ne doit pas être en mode maths.
+  return context.isTypst ? `$${output}$` : output
 }
 
 export function addSheet({

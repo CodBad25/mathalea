@@ -23,6 +23,7 @@
   import { isLocalStorageAvailable } from '../../../lib/stores/storage'
   import type { IExercice } from '../../../lib/types'
   import { decodeBase64 } from '../latex/LatexConfig'
+  import { context } from '../../../modules/context'
   import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
@@ -91,9 +92,9 @@
   type DisplayMode = 'code' | 'split' | 'preview'
   const STORAGE_KEY = 'mathaleaTypstView'
 
-  let displayMode: DisplayMode = 'split'
+  let displayMode: DisplayMode = 'preview'
   let documentOptions: TypstDocumentOptions = { ...defaultTypstDocumentOptions }
-  let isSettingsOpen = false
+  let isSettingsOpen = true
   /** Affiche la palette de mise en page sur l'aperçu */
   let showOverlay = true
   if (isLocalStorageAvailable()) {
@@ -797,10 +798,15 @@
       // Contenu figé (images/texte fixes) : rien à régénérer.
       return
     }
-    if (exercise.typeExercice === 'simple') {
-      mathaleaHandleExerciceSimple(exercise, false, k)
-    } else if (typeof exercise.nouvelleVersionWrapper === 'function') {
-      exercise.nouvelleVersionWrapper(k)
+    context.isTypst = true
+    try {
+      if (exercise.typeExercice === 'simple') {
+        mathaleaHandleExerciceSimple(exercise, false, k)
+      } else if (typeof exercise.nouvelleVersionWrapper === 'function') {
+        exercise.nouvelleVersionWrapper(k)
+      }
+    } finally {
+      context.isTypst = false
     }
   }
 

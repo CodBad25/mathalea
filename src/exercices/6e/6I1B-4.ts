@@ -281,7 +281,7 @@ export default class ExerciceTableur extends Exercice {
         steps.length,
       )
 
-      if (context.isHtml) {
+      if (context.isHtml && !context.isTypst) {
         texte += addSheet({
           numeroExercice: this.numeroExercice ?? 0,
           question: q,

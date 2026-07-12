@@ -481,6 +481,75 @@ describe('htmlToTypst', () => {
     expect(result).toContain('[$f(x)$]')
   })
 
+  describe('protection des `&` bruts (tableau LaTeX) contre le round-trip DOM', () => {
+    // régression : protectQcm/protectSchemaContainers/protectHtmlTables font
+    // `template.innerHTML = html` puis renvoient `template.innerHTML` dès
+    // qu'ils trouvent une correspondance — cette sérialisation ré-échappe
+    // tout `&` littéral présent ailleurs dans le texte (ex. séparateur de
+    // colonnes d'un tableau LaTeX brut `$\begin{array}...&...&...\end{array}$`
+    // pas encore extrait) en `&amp;`. `latexSegmentToTypst` décode ce `&amp;`
+    // avant conversion (voir son premier `.replace`), ce qui neutralise le
+    // problème quelle que soit la fonction qui l'a provoqué.
+    const rawTable =
+      '$\\begin{array}{|c|c|}\\hline a & b \\\\ \\hline c & d \\\\ \\hline\\end{array}$'
+
+    it('un QCM suivi d’un tableau LaTeX brut ne corrompt pas les `&` du tableau', () => {
+      const result = htmlToTypst(
+        '<div class="my-3">' +
+          '<div class="ex1 inline-block my-2 align-center"><input type="checkbox" disabled><label id="labelEx1Q0R0" class="ml-2">$1$&emsp;</label></div>' +
+          '</div><div class="m-2" id="resultatCheckEx1Q0"></div>' +
+          rawTable,
+      )
+      expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
+      expect(result).toContain('#table(')
+      expect(result).not.toContain('&amp;')
+      expect(result).not.toContain('amp;')
+      expect(result).toContain('[$a$]')
+      expect(result).toContain('[$b$]')
+    })
+
+    it('un SchemaContainer suivi d’un tableau LaTeX brut ne corrompt pas les `&` du tableau', () => {
+      const result = htmlToTypst(
+        '<div class="SchemaContainer">' +
+          '<div class="SchemaItem" style="grid-row: 1; grid-column-start: 1; grid-column-end: 2;">9</div>' +
+          '</div>' +
+          rawTable,
+      )
+      expect(result).toContain('#grid(')
+      expect(result).toContain('#table(')
+      expect(result).not.toContain('&amp;')
+      expect(result).not.toContain('amp;')
+      expect(result).toContain('[$a$]')
+      expect(result).toContain('[$b$]')
+    })
+
+    it('un tableau HTML suivi d’un tableau LaTeX brut ne corrompt pas les `&` du second', () => {
+      const result = htmlToTypst(
+        '<table class="tableauMathlive"><tr><th><span>$x$</span></th><td><span>$1$</span></td></tr></table>' +
+          rawTable,
+      )
+      // les deux tableaux (HTML converti, puis LaTeX brut) doivent apparaître
+      expect(result.match(/#table\(/g)).toHaveLength(2)
+      expect(result).not.toContain('&amp;')
+      expect(result).not.toContain('amp;')
+      expect(result).toContain('[$a$]')
+      expect(result).toContain('[$b$]')
+    })
+
+    it('un span KaTeX suivi d’un tableau LaTeX brut ne corrompt pas les `&` du tableau', () => {
+      const result = htmlToTypst(
+        '<span class="katex"><span class="katex-mathml"><math><semantics><mrow></mrow><annotation encoding="application/x-tex">78^\\circ</annotation></semantics></math></span><span class="katex-html">78∘</span></span>' +
+          rawTable,
+      )
+      expect(result).toContain('$78^circle.small$')
+      expect(result).toContain('#table(')
+      expect(result).not.toContain('&amp;')
+      expect(result).not.toContain('amp;')
+      expect(result).toContain('[$a$]')
+      expect(result).toContain('[$b$]')
+    })
+  })
+
   it('ignore les balises inconnues en gardant leur contenu', () => {
     expect(htmlToTypst('<span class="katex">du texte</span>')).toBe('du texte')
   })

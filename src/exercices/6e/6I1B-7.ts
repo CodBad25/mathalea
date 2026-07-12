@@ -94,7 +94,7 @@ export default class ExerciceTableurCalculs6e extends Exercice {
       ? `Saisir dans la cellule A2 la formule pour obtenir la somme de ces résultats.<br>`
       : 'Quelle formule doit-on saisir dans la cellule A2 pour obtenir la somme de ces résultats ?<br>'
 
-    if (context.isHtml) {
+    if (context.isHtml && !context.isTypst) {
       texte += addSheet({
         numeroExercice: this.numeroExercice ?? 0,
         question: q,
@@ -190,7 +190,7 @@ export default class ExerciceTableurCalculs6e extends Exercice {
     data[2][1] = cellDatas[2][1].v
     data[3][0] = cellDatas[3][0].v
 
-    if (context.isHtml) {
+    if (context.isHtml && !context.isTypst) {
       texte += addSheet({
         numeroExercice: this.numeroExercice ?? 0,
         question: q,
@@ -274,7 +274,7 @@ export default class ExerciceTableurCalculs6e extends Exercice {
     data[0][1] = c
     data[1][0] = b
 
-    if (context.isHtml) {
+    if (context.isHtml && !context.isTypst) {
       texte += addSheet({
         numeroExercice: this.numeroExercice ?? 0,
         question: q,
@@ -369,7 +369,7 @@ export default class ExerciceTableurCalculs6e extends Exercice {
     data[1][0] = cellDatas[1][0].v
     data[1][1] = cellDatas[1][1].v
 
-    if (context.isHtml) {
+    if (context.isHtml && !context.isTypst) {
       texte += addSheet({
         numeroExercice: this.numeroExercice ?? 0,
         question: q,

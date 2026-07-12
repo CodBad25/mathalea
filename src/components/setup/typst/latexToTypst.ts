@@ -777,14 +777,29 @@ function findMatchingEndEnvironment(
 }
 
 function expandColumnSpecRepeats(spec: string): string {
-  let output = spec
-  for (let guard = 0; guard < 10; guard++) {
-    const next = output.replace(
-      /\*\s*\{(\d+)\}\s*\{([^{}]*)\}/g,
-      (_, count: string, content: string) => content.repeat(Number(count)),
-    )
-    if (next === output) break
-    output = next
+  // Scanner par accolades (via `readBraced`) plutôt que regex `[^{}]*` :
+  // le contenu répété (ex. `*{3}{>{\centering \arraybackslash}X|}`)
+  // contient lui-même des accolades imbriquées (`>{...}`), qu'une regex
+  // sans suivi de profondeur ne referme pas au bon endroit.
+  let output = ''
+  for (let index = 0; index < spec.length; index++) {
+    if (spec[index] === '*') {
+      let cursor = index + 1
+      while (/\s/.test(spec[cursor] ?? '')) cursor++
+      const countArg = readBraced(spec, cursor)
+      const count = countArg?.value.trim()
+      if (countArg != null && count != null && /^\d+$/.test(count)) {
+        cursor = countArg.end
+        while (/\s/.test(spec[cursor] ?? '')) cursor++
+        const contentArg = readBraced(spec, cursor)
+        if (contentArg != null) {
+          output += contentArg.value.repeat(Number(count))
+          index = contentArg.end - 1
+          continue
+        }
+      }
+    }
+    output += spec[index]
   }
   return output
 }
@@ -920,12 +935,20 @@ function parseLatexTableBody(body: string): ParsedTableItem[] {
 
 function stripCellLatex(cell: string): string {
   return cell
+    .replace(
+      /\\multicolumn\s*\{[^{}]*\}\s*\{[^{}]*\}\s*\{([^{}]*)\}/g,
+      '$1',
+    )
+    .replace(/\\rowcolor(?:\[[^\]]+\])?\s*\{[^{}]*\}/g, '')
     .replace(/\\cellcolor(?:\[[^\]]+\])?\s*\{[^{}]*\}/g, '')
     .replace(
       /\\(?:displaystyle|textstyle|scriptstyle|scriptscriptstyle)\b/g,
       '',
     )
-    .replace(/\\(?:centering|arraybackslash)\b/g, '')
+    .replace(
+      /\\(?:centering|arraybackslash|raggedright|raggedleft|sffamily|rmfamily|ttfamily)\b/g,
+      '',
+    )
     .replace(/\\rule\s*(?:\[[^\]]*\])?\s*\{[^{}]*\}\s*\{[^{}]*\}/g, '')
     .replace(/~/g, '\\;')
     .trim()
@@ -1046,7 +1069,7 @@ function stripArrayStretchCommands(text: string): string {
 }
 
 interface LatexTableEnvironment {
-  env: 'array' | 'tabular' | 'tblr'
+  env: 'array' | 'tabular' | 'tabularx' | 'tblr'
   start: number
   end: number
   colspec: string
@@ -1057,11 +1080,18 @@ interface LatexTableEnvironment {
 }
 
 function findLatexTableEnvironment(tex: string): LatexTableEnvironment | null {
-  const match = /\\begin\{(array|tabular|tblr)\}/.exec(tex)
+  const match = /\\begin\{(array|tabular|tabularx|tblr)\}/.exec(tex)
   if (match == null || match.index == null) return null
   const env = match[1] as LatexTableEnvironment['env']
   let cursor = match.index + match[0].length
   while (/\s/.test(tex[cursor] ?? '')) cursor++
+  if (env === 'tabularx') {
+    // \begin{tabularx}{largeur}{colspec} : la largeur précède la spec de colonnes
+    const widthArg = readBraced(tex, cursor)
+    if (widthArg == null) return null
+    cursor = widthArg.end
+    while (/\s/.test(tex[cursor] ?? '')) cursor++
+  }
   const firstArg = readBraced(tex, cursor)
   if (firstArg == null) return null
   cursor = firstArg.end
@@ -1096,7 +1126,8 @@ function findLatexTableEnvironment(tex: string): LatexTableEnvironment | null {
 }
 
 function shouldConvertAsVisualTable(table: LatexTableEnvironment): boolean {
-  if (table.env === 'tabular' || table.env === 'tblr') return true
+  if (table.env === 'tabular' || table.env === 'tabularx' || table.env === 'tblr')
+    return true
   return (
     table.colspec.includes('|') ||
     /\\(?:hline|cline|tabularnewline)\b/.test(table.body)
@@ -1223,6 +1254,12 @@ function htmlTableToTypst(table: HTMLTableElement, figures?: string[]): string {
 }
 
 function latexSegmentToTypst(tex: string, display: boolean): string {
+  // Un `&` brut (séparateur de colonnes `array`/`tabular`/`tblr`/`tabularx`)
+  // peut avoir traversé un aller-retour DOM (`template.innerHTML`, utilisé par
+  // les `protect*Containers` pour repérer figures/QCM/tableaux/KaTeX) et se
+  // retrouver ré-échappé en `&amp;` avant d'atteindre ce segment : aucun texte
+  // LaTeX destiné à ce convertisseur ne contient légitimement `&amp;`.
+  tex = tex.replace(/&amp;/g, '&')
   const table = latexVisualTableToTypst(tex)
   if (table != null) return table
   const converted = latexMathToTypst(tex)
@@ -1724,6 +1761,12 @@ function protectMathalea2dContainers(
           )
         }
       }
+      // `template.innerHTML` (sérialisation DOM complète) ré-échappe les `&`
+      // bruts présents ailleurs dans le texte (ex. tableau LaTeX
+      // `\begin{tabularx}...&...&...\end{tabularx}` protégé plus loin par
+      // `latexSegmentToTypst`) en `&amp;` : c'est `latexSegmentToTypst` qui
+      // les décode avant conversion, plutôt que de contourner cette
+      // sérialisation ici (peu fiable pour les conteneurs complexes/imbriqués).
       return template.innerHTML
     }
   }
@@ -2232,6 +2275,12 @@ export function htmlToTypst(html: string, figures?: string[]): string {
     figures.push(svgToTypstImage(svg))
     return protect(`#mathalea-fit(fig-${figures.length})\n\n`)
   })
+
+  // les <svg> ont déjà été extraits ci-dessus : les <style>/<script>
+  // restants sont hors SVG (CSS/JS d'affichage HTML sans équivalent Typst)
+  // et doivent être retirés pour ne pas apparaître comme texte brut
+  text = text.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+  text = text.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
 
   // 3. Parcours des balises restantes
   let output = ''
