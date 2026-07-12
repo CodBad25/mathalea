@@ -240,10 +240,11 @@ async function checkLatexVariation(
     // le test AMC doit être refait.
     // await openAmcFromMoreExports(page)
   } else {
-    const latexExportButton = page.locator(
-      'button[data-tip="PDF via LaTeX"], [data-tip="PDF via LaTeX"] button',
-    )
-    await latexExportButton.first().click()
+    await page.locator('[data-tip="Plus d\'exports"] button').click()
+    await page
+      .getByRole('dialog')
+      .locator('button:has(p:text-is("PDF via LaTeX"))')
+      .click()
     await page.click(`input[type="radio"][value="${variation}"]`)
     await waitForLatex(page, variation)
     await callback(page, description, view, variation)
