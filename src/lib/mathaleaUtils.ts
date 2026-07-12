@@ -2,6 +2,7 @@ import type LabyrintheElement from 'labyrinthe/src/LabyrintheElement'
 import type { MathfieldElement } from 'mathlive'
 import { get } from 'svelte/store'
 import { type MathaleaSVG } from '../lib/types'
+import type { InteractiveClock } from './customElements/InteractiveClock'
 import type ListeDeroulanteElement from './customElements/ListeDeroulanteElement'
 import { MultiMathfieldElement } from './customElements/MultiMathfield'
 import type { MySpreadsheetElement } from './customElements/MySpreadSheet'
@@ -319,23 +320,11 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
         waitForElement('#' + answer)
           .then(() => {
             // La réponse correspond à une horloge
-            const clock = document.querySelector(`#${answer}`)
+            const clock = document.querySelector(
+              `#${answer}`,
+            ) as InteractiveClock
             if (clock !== null) {
-              const [hour, minute] = answers[answer].split('h')
-              clock.setAttribute('hour', hour)
-              clock.setAttribute('minute', minute)
-              if (
-                'updateHandHour' in clock &&
-                typeof clock.updateHandHour === 'function'
-              ) {
-                clock.updateHandHour()
-              }
-              if (
-                'updateHandMinute' in clock &&
-                typeof clock.updateHandMinute === 'function'
-              ) {
-                clock.updateHandMinute()
-              }
+              clock.value = answers[answer]
               const time = window.performance.now()
               log(`duration ${answer}: ${time - starttime}`)
               resolve(true)

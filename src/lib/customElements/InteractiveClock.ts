@@ -3,7 +3,7 @@ import MathaleaCustomElement from './MathaleaCustomElement'
 /**
  * Horloge interactive
  * @author Rémi Angot
- *
+ * Refactorisé par Jean-Claude Lhote pour suivre le modèle MathaleaCustomElement
  * @attr {number} hour - L'heure initiale de l'horloge (0-12)
  * @attr {number} minute - La minute initiale de l'horloge (0-59)
  * @attr {number} [second=0] - La seconde initiale de l'horloge (0-59)
@@ -11,7 +11,7 @@ import MathaleaCustomElement from './MathaleaCustomElement'
  * @attr {boolean} [showHands=true] - Indique si les aiguilles de l'horloge doivent être affichées
  * @attr {boolean} [showSecond=true] - Indique si l'aiguille des secondes doit être affichée
  */
-class InteractiveClock extends MathaleaCustomElement {
+export class InteractiveClock extends MathaleaCustomElement {
   static readonly elementTag = 'interactive-clock'
 
   static readonly BASE_RENDER_SIZE_EM = 12.5
@@ -26,6 +26,20 @@ class InteractiveClock extends MathaleaCustomElement {
   previousSecond = 0
   private _isDynamic = true
   private _currentAction?: 'hour' | 'minute' | 'second'
+  private _svgElement?: SVGSVGElement
+  private _preventDefaultHandler?: (event: PointerEvent | TouchEvent) => void
+  private _pointerDownHandler?: (event: PointerEvent | TouchEvent) => void
+  private _pointerUpHandler?: () => void
+  private _pointerMoveHandler?: (event: PointerEvent) => void
+  private _touchStartHandler?: (event: TouchEvent) => void
+  private _touchEndHandler?: () => void
+  private _touchMoveHandler?: (event: TouchEvent) => void
+  private _hourPointerDownHandler?: (event: PointerEvent) => void
+  private _hourPointerUpHandler?: () => void
+  private _minutePointerDownHandler?: (event: PointerEvent) => void
+  private _minutePointerUpHandler?: () => void
+  private _secondPointerDownHandler?: (event: PointerEvent) => void
+  private _secondPointerUpHandler?: () => void
 
   constructor() {
     super()
@@ -59,6 +73,13 @@ class InteractiveClock extends MathaleaCustomElement {
    * Méthode appelée lorsque l'élément est ajouté au DOM
    */
   connectedCallback() {
+    this.render()
+  }
+
+  render() {
+    this.cleanupInteractiveListeners()
+    this.innerHTML = ''
+
     const container = document.createElement('div')
     container.className = 'flex flex-wrap items-center'
 
@@ -66,6 +87,7 @@ class InteractiveClock extends MathaleaCustomElement {
     svgContainer.className = 'flex-1 flex justify-center items-center p-8'
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    this._svgElement = svg
     svgContainer.appendChild(svg)
     svg.setAttribute(
       'width',
@@ -174,53 +196,92 @@ class InteractiveClock extends MathaleaCustomElement {
 
     if (this.isDynamic) {
       this.currentAction = 'minute'
-      const preventDefault = (event: PointerEvent | TouchEvent) => {
+
+      this._preventDefaultHandler = (event: PointerEvent | TouchEvent) => {
         event.preventDefault()
       }
 
-      const handlePointerDown = (event: PointerEvent | TouchEvent) => {
+      this._pointerDownHandler = (_event: PointerEvent | TouchEvent) => {
         this.draggingHand = true
         // Empêche le défilement pendant le drag
-        svg.addEventListener('pointermove', preventDefault, { passive: false })
-        svg.addEventListener('touchmove', preventDefault, { passive: false })
+        if (this._preventDefaultHandler) {
+          svg.addEventListener('pointermove', this._preventDefaultHandler, {
+            passive: false,
+          })
+          svg.addEventListener('touchmove', this._preventDefaultHandler, {
+            passive: false,
+          })
+        }
       }
 
-      const handlePointerUp = () => {
+      this._pointerUpHandler = () => {
         this.draggingHand = false
         // Réactive le défilement après le drag
-        svg.removeEventListener('pointermove', preventDefault)
-        svg.removeEventListener('touchmove', preventDefault)
+        if (this._preventDefaultHandler) {
+          svg.removeEventListener('pointermove', this._preventDefaultHandler)
+          svg.removeEventListener('touchmove', this._preventDefaultHandler)
+        }
       }
 
-      svg.addEventListener('pointerdown', handlePointerDown)
-      svg.addEventListener('pointerup', handlePointerUp)
-      svg.addEventListener('pointermove', (event) => this.dragHand(event))
+      this._pointerMoveHandler = (event: PointerEvent) => this.dragHand(event)
+      this._touchStartHandler = (event: TouchEvent) => {
+        this._pointerDownHandler?.(event)
+      }
+      this._touchEndHandler = () => {
+        this._pointerUpHandler?.()
+      }
+      this._touchMoveHandler = (event: TouchEvent) => this.dragHand(event)
 
-      svg.addEventListener('touchstart', handlePointerDown)
-      svg.addEventListener('touchend', handlePointerUp)
-      svg.addEventListener('touchmove', (event) => this.dragHand(event))
+      svg.addEventListener('pointerdown', this._pointerDownHandler)
+      svg.addEventListener('pointerup', this._pointerUpHandler)
+      svg.addEventListener('pointermove', this._pointerMoveHandler)
 
-      this.svgHandHour.addEventListener('pointerdown', (event) => {
+      svg.addEventListener('touchstart', this._touchStartHandler)
+      svg.addEventListener('touchend', this._touchEndHandler)
+      svg.addEventListener('touchmove', this._touchMoveHandler)
+
+      this._hourPointerDownHandler = (event: PointerEvent) => {
         this.draggingHand = true
         this.currentAction = 'hour'
-        handlePointerDown(event)
-      })
-      this.svgHandHour.addEventListener('pointerup', handlePointerUp)
+        this._pointerDownHandler?.(event)
+      }
+      this._hourPointerUpHandler = this._pointerUpHandler
+      this.svgHandHour.addEventListener(
+        'pointerdown',
+        this._hourPointerDownHandler,
+      )
+      this.svgHandHour.addEventListener('pointerup', this._hourPointerUpHandler)
 
-      this.svgHandMinute.addEventListener('pointerdown', (event) => {
+      this._minutePointerDownHandler = (event: PointerEvent) => {
         this.draggingHand = true
         this.currentAction = 'minute'
-        handlePointerDown(event)
-      })
-      this.svgHandMinute.addEventListener('pointerup', handlePointerUp)
+        this._pointerDownHandler?.(event)
+      }
+      this._minutePointerUpHandler = this._pointerUpHandler
+      this.svgHandMinute.addEventListener(
+        'pointerdown',
+        this._minutePointerDownHandler,
+      )
+      this.svgHandMinute.addEventListener(
+        'pointerup',
+        this._minutePointerUpHandler,
+      )
 
       if (this.showSecond) {
-        this.svgHandSecond.addEventListener('pointerdown', (event) => {
+        this._secondPointerDownHandler = (event: PointerEvent) => {
           this.draggingHand = true
           this.currentAction = 'second'
-          handlePointerDown(event)
-        })
-        this.svgHandSecond.addEventListener('pointerup', handlePointerUp)
+          this._pointerDownHandler?.(event)
+        }
+        this._secondPointerUpHandler = this._pointerUpHandler
+        this.svgHandSecond.addEventListener(
+          'pointerdown',
+          this._secondPointerDownHandler,
+        )
+        this.svgHandSecond.addEventListener(
+          'pointerup',
+          this._secondPointerUpHandler,
+        )
       }
     }
   }
@@ -310,8 +371,88 @@ class InteractiveClock extends MathaleaCustomElement {
     this.updateHandSecond()
   }
 
+  private cleanupInteractiveListeners() {
+    const svg = this._svgElement
+    if (!svg) return
+
+    if (this._pointerDownHandler) {
+      svg.removeEventListener('pointerdown', this._pointerDownHandler)
+    }
+    if (this._pointerUpHandler) {
+      svg.removeEventListener('pointerup', this._pointerUpHandler)
+    }
+    if (this._pointerMoveHandler) {
+      svg.removeEventListener('pointermove', this._pointerMoveHandler)
+    }
+    if (this._touchStartHandler) {
+      svg.removeEventListener('touchstart', this._touchStartHandler)
+    }
+    if (this._touchEndHandler) {
+      svg.removeEventListener('touchend', this._touchEndHandler)
+    }
+    if (this._touchMoveHandler) {
+      svg.removeEventListener('touchmove', this._touchMoveHandler)
+    }
+    if (this._preventDefaultHandler) {
+      svg.removeEventListener('pointermove', this._preventDefaultHandler)
+      svg.removeEventListener('touchmove', this._preventDefaultHandler)
+    }
+
+    if (this._hourPointerDownHandler) {
+      this.svgHandHour.removeEventListener(
+        'pointerdown',
+        this._hourPointerDownHandler,
+      )
+    }
+    if (this._hourPointerUpHandler) {
+      this.svgHandHour.removeEventListener(
+        'pointerup',
+        this._hourPointerUpHandler,
+      )
+    }
+    if (this._minutePointerDownHandler) {
+      this.svgHandMinute.removeEventListener(
+        'pointerdown',
+        this._minutePointerDownHandler,
+      )
+    }
+    if (this._minutePointerUpHandler) {
+      this.svgHandMinute.removeEventListener(
+        'pointerup',
+        this._minutePointerUpHandler,
+      )
+    }
+    if (this._secondPointerDownHandler) {
+      this.svgHandSecond.removeEventListener(
+        'pointerdown',
+        this._secondPointerDownHandler,
+      )
+    }
+    if (this._secondPointerUpHandler) {
+      this.svgHandSecond.removeEventListener(
+        'pointerup',
+        this._secondPointerUpHandler,
+      )
+    }
+
+    this._svgElement = undefined
+    this._preventDefaultHandler = undefined
+    this._pointerDownHandler = undefined
+    this._pointerUpHandler = undefined
+    this._pointerMoveHandler = undefined
+    this._touchStartHandler = undefined
+    this._touchEndHandler = undefined
+    this._touchMoveHandler = undefined
+    this._hourPointerDownHandler = undefined
+    this._hourPointerUpHandler = undefined
+    this._minutePointerDownHandler = undefined
+    this._minutePointerUpHandler = undefined
+    this._secondPointerDownHandler = undefined
+    this._secondPointerUpHandler = undefined
+  }
+
   disconnectedCallback() {
-    // Code pour gérer la suppression de l'horloge du DOM
+    this.cleanupInteractiveListeners()
   }
 
   get currentAction() {
@@ -377,6 +518,40 @@ class InteractiveClock extends MathaleaCustomElement {
   set minute(value) {
     this.setAttribute('minute', value.toString())
     this.previousMinute = this.minute
+  }
+
+  get value() {
+    return `${this.hour}h${this.minute}min${this.second}s`
+  }
+
+  set value(value: string) {
+    const match = value.match(/^(\d+)h(\d+)min(\d+)s$/)
+    if (!match) return
+
+    const hour = Number(match[1])
+    const minute = Number(match[2])
+    const second = Number(match[3])
+    if (
+      !Number.isFinite(hour) ||
+      !Number.isFinite(minute) ||
+      !Number.isFinite(second)
+    ) {
+      return
+    }
+
+    this.hour = hour
+    this.minute = minute
+    this.second = second
+
+    if (this.showHands) {
+      this.updateHandHour()
+      this.updateHandMinute()
+      if (this.showSecond) {
+        this.updateHandSecond()
+      }
+    }
+
+    this.render()
   }
 }
 
