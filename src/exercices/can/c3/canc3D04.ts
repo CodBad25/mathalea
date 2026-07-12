@@ -29,7 +29,7 @@ export const refs = {
 
 */
 export default class ExerciceInteractiveClock extends Exercice {
-  goodAnswers: { hour: string; minute: string }[] = []
+  goodAnswers: string[] = []
   constructor() {
     super()
     this.nbQuestions = 1
@@ -96,13 +96,11 @@ export default class ExerciceInteractiveClock extends Exercice {
       if (this.questionJamaisPosee(i, hour, minute)) {
         this.listeQuestions[i] = enonce
         this.listeCorrections[i] = correction
-        this.goodAnswers[i] = {
-          hour: hour.toString(),
-          minute: minute.toString(),
-        }
+        this.goodAnswers[i] =
+          `${formatHour012(`${hour}h${minute.toString().padStart(2, '0')}`)}`
         this.autoCorrection[i] = {
           valeur: {
-            reponse: { value: hour.toString() + 'h' + minute.toString() },
+            reponse: { value: this.goodAnswers[i] },
           },
           formatInteractif: 'custom',
         }
@@ -119,16 +117,12 @@ export default class ExerciceInteractiveClock extends Exercice {
     if (clock == null) {
       return 'KO'
     }
+    const answer = clock.value
     clock.isDynamic = false
-    const hour: string = clock.getAttribute('hour')
-    const minute: string = clock.getAttribute('minute')
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[id] = `${hour}h${minute.toString().padStart(2, '0')}`
-    if (
-      hour === formatHour012(this.goodAnswers[i].hour) &&
-      minute === this.goodAnswers[i].minute
-    ) {
+    this.answers[id] = answer
+    if (this.goodAnswers[i] === answer.split('min')[0]) {
       const divFeedback = document.createElement('div')
       divFeedback.innerHTML = '😎'
       clock.parentElement?.appendChild(divFeedback)
@@ -143,10 +137,14 @@ export default class ExerciceInteractiveClock extends Exercice {
 }
 
 function formatHour012(hour: string): string {
-  const hourNumber = parseInt(hour)
+  const hours = hour.split('h')
+  if (hours.length !== 2) {
+    return hour
+  }
+  const hourNumber = parseInt(hours[0])
   if (hourNumber > 12) {
     return (hourNumber - 12).toString()
   } else {
-    return hourNumber.toString()
+    return hour
   }
 }
