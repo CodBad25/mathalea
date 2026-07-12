@@ -81,7 +81,7 @@ export default class ExerciceLabyrintheDivisibilite extends Exercice {
       defaut: choice([2, 5, 10]),
       nbQuestions: this.nbQuestions,
       saisie: this.sup,
-      shuffle: false,
+      shuffle: true, // EE : laisser true
       melange: 0,
     }).map(Number)
 
@@ -91,6 +91,12 @@ export default class ExerciceLabyrintheDivisibilite extends Exercice {
         enleveElement(tablesPossibles, i)
       }
       if (tablesPossibles.length === 0) tablesPossibles.push(3, 9)
+    } else if (this.version === 'Que25et10') {
+      for (let i = 2; i <= 20; i++) {
+        if (i === 2 || i === 5 || i === 10) i++
+        enleveElement(tablesPossibles, i)
+      }
+      if (tablesPossibles.length === 0) tablesPossibles.push(2, 5, 10)
     }
 
     const tables = combinaisonListes(tablesPossibles, this.nbQuestions)
