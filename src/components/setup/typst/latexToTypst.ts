@@ -28,10 +28,32 @@ const CUSTOM_TEX_MACROS: Record<string, string> = {
  * puis le contenu est mis à l'échelle avec ses labels. Inclus dès qu'une
  * figure est présente.
  */
-export const MATHALEA_FIT_HELPER = `#let mathalea-fit(body) = layout(size => {
+export const MATHALEA_FIT_HELPER = `#let mathalea-fit(body, zoom: 1.0) = layout(size => {
   let natural = measure(body).width
-  let f = if natural > 0pt { calc.min(1.0, size.width / natural) } else { 1.0 }
-  if f < 1.0 { box(scale(f * 100%, origin: top + left, reflow: true, body)) } else { body }
+  let f = if natural > 0pt { calc.min(zoom, size.width / natural) } else { zoom }
+  if f != 1.0 { box(scale(f * 100%, origin: top + left, reflow: true, body)) } else { body }
+})`
+
+/**
+ * Réduit une figure (mathalea2d, avec ou sans labels) si elle dépasse la
+ * largeur disponible, applique le zoom choisi par le professeur, l'aligne
+ * (gauche/centre/droite) et place le repère invisible de la palette de mise
+ * en page (contrôle de zoom) au coin haut-droit de son rendu final. Le zoom
+ * et l'alignement sont résolus dans un seul passage de layout (measure()
+ * d'un contenu encore différé par un layout() imbriqué ne donnerait pas sa
+ * taille finale) puis appliqués manuellement (scale + pad), plutôt que via
+ * mathalea-fit/align, pour rester cohérents entre eux.
+ */
+export const MATHALEA_FIGURE_BLOCK_HELPER = `#let mathalea-figure-block(num, alignment, zoom, body) = layout(size => {
+  let natural = measure(body).width
+  let f = if natural > 0pt { calc.min(zoom, size.width / natural) } else { zoom }
+  let scaled = if f != 1.0 { box(scale(f * 100%, origin: top + left, reflow: true, body)) } else { body }
+  let content-width = natural * f
+  let left = if alignment == center { calc.max(0pt, (size.width - content-width) / 2) }
+    else if alignment == right { calc.max(0pt, size.width - content-width) }
+    else { 0pt }
+  mathalea-anchor("figure", num, dx: left + content-width)
+  pad(left: left)[#scaled]
 })`
 
 export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0deg, size: auto, fill: auto) = {
@@ -47,7 +69,7 @@ export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0
   (x: x, y: y, angle: angle, body: content)
 }
 
-#let mathalea-figure(width, height, graphic, labels: ()) = mathalea-fit(box(width: width, height: height)[
+#let mathalea-figure(width, height, graphic, labels: ()) = box(width: width, height: height)[
   #place(top + left, graphic)
   #for label in labels {
     let body = if label.angle == 0deg {
@@ -64,7 +86,7 @@ export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0
       place(top + left, dx: label.x - m.width / 2, dy: label.y - m.height / 2, box(body))
     }
   }
-])`
+]`
 
 /** Import du paquet taskize (mise en colonnes des propositions de QCM) */
 export const TASKIZE_IMPORT = '#import "@preview/taskize:0.2.6": tasks'
@@ -378,11 +400,43 @@ function preprocessTex(tex: string): string {
   ) {
     output = `\\begin{aligned}${output}\\end{aligned}`
   }
-  // Marque le contenu des \text{…} qui contient une lettre (unités, mots)
-  // pour le rendre ensuite avec la police du texte via #txt. La ponctuation
-  // seule (\text{,} décimale, \text{;}) n'est pas marquée : elle reste collée.
+  // Mot comportant une lettre latine accentuée et non protégé par \text{}
+  // (erreur d'auteur d'exercice, ex. `n^{ième}` ou `à` oubliés hors de
+  // \text{}) : tex2typst décompose un tel mot lettre par lettre en
+  // identifiants nus (`n^{ième}` → `n^(i è m e)`), ce qui isole chaque
+  // lettre accentuée comme un caractère seul en mode maths. Certaines
+  // polices maths (ex. Noto Sans Math) n'ont pas ces glyphes précomposés :
+  // Typst refuse alors de les afficher (« shaping ... yielded more than
+  // one glyph »), quelle que soit la police de repli. On protège d'abord
+  // les \text{} déjà présents (ne doivent pas être ré-enveloppés), puis on
+  // enveloppe tout mot accentué restant dans \text{} : tex2typst le rend
+  // alors en chaîne Typst, toujours affichée correctement quelle que soit
+  // la police maths active (contrairement à un caractère nu).
+  {
+    const protectedTextBlocks: string[] = []
+    output = output.replace(/\\text\s*\{[^{}]*\}/g, (match) => {
+      protectedTextBlocks.push(match)
+      return `${protectedTextBlocks.length - 1}`
+    })
+    output = output.replace(
+      /[a-zA-Z]*[àâäéèêëîïôöùûüÿçœæÀÂÄÉÈÊËÎÏÔÖÙÛÜŸÇŒÆ][a-zA-ZàâäéèêëîïôöùûüÿçœæÀÂÄÉÈÊËÎÏÔÖÙÛÜŸÇŒÆ-]*/g,
+      (word) => `\\text{${word}}`,
+    )
+    output = output.replace(
+      /(\d+)/g,
+      (_, i: string) => protectedTextBlocks[Number(i)],
+    )
+  }
+  // Marque le contenu des \text{…} qui contient une lettre, y compris
+  // accentuée (unités, mots), pour le rendre ensuite avec la police du texte
+  // via #txt. La ponctuation seule (\text{,} décimale, \text{;}) n'est pas
+  // marquée : elle reste collée. Un mot entièrement accentué (ex. « à »,
+  // sans lettre ASCII) doit être marqué comme les autres : laissé en chaîne
+  // Typst nue, il hérite de la police maths ambiante, dont le repli
+  // automatique de glyphe peut mal composer un accent en position
+  // d'exposant/indice (accent flottant au lieu du caractère composé).
   output = output.replace(
-    /\\text\s*\{([^{}]*[a-zA-Z][^{}]*)\}/g,
+    /\\text\s*\{([^{}]*[a-zA-ZàâäéèêëîïôöùûüÿçœæÀÂÄÉÈÊËÎÏÔÖÙÛÜŸÇŒÆ][^{}]*)\}/g,
     `\\text{${TXT_MARK_OPEN}$1${TXT_MARK_CLOSE}}`,
   )
   return output
@@ -455,40 +509,56 @@ function postprocessTypst(typst: string): string {
     })
   }
 
+  result = result
+    // \mathbf{[}, \mathbf{]}, \textbf{[} etc. produisent upright(bold([)) ou bold([) en
+    // Typst mathématique : [ est interprété comme délimiteur ouvrant → "unclosed delimiter".
+    // On remplace par bracket.l / bracket.r (glyphes Typst).
+    .replace(/\bupright\(bold\(\[+\)\)/g, 'upright(bold(bracket.l))')
+    .replace(/\bupright\(bold\(\]+\)\)/g, 'upright(bold(bracket.r))')
+    .replace(/\bbold\(\[+\)\b/g, 'bold(bracket.l)')
+    .replace(/\bbold\(\]+\)\b/g, 'bold(bracket.r)')
+    .replace(/\bupright\(\[+\)\b/g, 'upright(bracket.l)')
+    .replace(/\bupright\(\]+\)\b/g, 'upright(bracket.r)')
+    // \mathbf{)} produit bold() vide (le ) ferme immédiatement bold() sans contenu).
+    // bold() sans corps → "missing argument: body" dans Typst. On remplace par paren.r.
+    .replace(/\bupright\(bold\(\)\)/g, 'upright(bold(paren.r))')
+    .replace(/\bbold\(\)\b/g, 'bold(paren.r)')
+
+  // \left[...\right] dans \mathbf{} produit [...] (crochets nus). Si plusieurs [A]×[B]
+  // se suivent, la séquence ]×[ crée de faux intervalles. On convertit TOUTES les paires
+  // équilibrées [...] en bracket.l/bracket.r sans délimiteurs actifs.
+  // Cas 1 (contenu non-alphabétique, ex. [(-6)×(-6)]) et Cas 2 (contenu purement
+  // alphabétique, ex. [union]) doivent s'enchaîner : Cas 2 peut réduire une paire
+  // imbriquée (ex. [-4;-2[union]3;4], produit par un intervalle-union où le "[union]"
+  // interne coïncide textuellement avec une paire de crochets) à une paire simple que
+  // Cas 1 doit ensuite traiter — d'où la boucle jusqu'à stabilité. Le Cas 1 exclut
+  // explicitement [ et ] de son caractère « spécial » central pour ne jamais franchir
+  // une paire imbriquée non encore réduite par le Cas 2 (sinon la paire imbriquée est
+  // engloutie dans une capture bancale qui laisse un crochet orphelin).
+  {
+    let prevBrackets = ''
+    while (prevBrackets !== result) {
+      prevBrackets = result
+      result = result
+        .replace(
+          /\[([^\[\]]*[^a-zA-Z \t\[\]][^\[\]]*)\]/g,
+          'lr(bracket.l $1 bracket.r)',
+        )
+        // Contexte 2a : [union] ou [ union ] entre délimiteurs ']' et '[' —
+        //   on enlève les crochets : ]A[union]B[ → ]A union B[ → règle ] suivante.
+        // Contexte 2b : ']'+espaces+mot+espaces+'[' — l'opérateur d'ensemble (\cup, \cap)
+        //   apparaît ENTRE deux crochets d'intervalles ; on doit aussi l'extraire.
+        // Traitement unifié : tous les [alpha+] et ]alpha+[ sans autre contenu sont nettoyés.
+        .replace(/\[([a-zA-Z ]+)\]/g, ' $1 ')
+        // ]opérateur[ (ex. ]\cup[ devenu ] union [) entre deux délimiteurs d'intervalles :
+        // supprimer les crochets parasites autour du mot pour que l'intervalle englobant
+        // soit correctement reconnu par la règle ]...[  ci-après.
+        .replace(/\] {0,4}([a-zA-Z]+) {0,4}\[/g, ' $1 ')
+    }
+  }
+
   return (
     result
-      // \mathbf{[}, \mathbf{]}, \textbf{[} etc. produisent upright(bold([)) ou bold([) en
-      // Typst mathématique : [ est interprété comme délimiteur ouvrant → "unclosed delimiter".
-      // On remplace par bracket.l / bracket.r (glyphes Typst).
-      .replace(/\bupright\(bold\(\[+\)\)/g, 'upright(bold(bracket.l))')
-      .replace(/\bupright\(bold\(\]+\)\)/g, 'upright(bold(bracket.r))')
-      .replace(/\bbold\(\[+\)\b/g, 'bold(bracket.l)')
-      .replace(/\bbold\(\]+\)\b/g, 'bold(bracket.r)')
-      .replace(/\bupright\(\[+\)\b/g, 'upright(bracket.l)')
-      .replace(/\bupright\(\]+\)\b/g, 'upright(bracket.r)')
-      // \mathbf{)} produit bold() vide (le ) ferme immédiatement bold() sans contenu).
-      // bold() sans corps → "missing argument: body" dans Typst. On remplace par paren.r.
-      .replace(/\bupright\(bold\(\)\)/g, 'upright(bold(paren.r))')
-      .replace(/\bbold\(\)\b/g, 'bold(paren.r)')
-      // \left[...\right] dans \mathbf{} produit [...] (crochets nus). Si plusieurs [A]×[B]
-      // se suivent, la séquence ]×[ crée de faux intervalles. On convertit TOUTES les paires
-      // équilibrées [...] en bracket.l/bracket.r sans délimiteurs actifs.
-      // Cas 1 : contenu avec caractères non-alphabétiques (ex. [(-6)×(-6)])
-      .replace(
-        /\[([^\[\]]*[^a-zA-Z \t][^\[\]]*)\]/g,
-        'lr(bracket.l $1 bracket.r)',
-      )
-      // Cas 2 : contenu purement alphabétique entre crochets (ex. [union], [sect]).
-      // Contexte 2a : [union] ou [ union ] entre délimiteurs ']' et '[' —
-      //   on enlève les crochets : ]A[union]B[ → ]A union B[ → règle ] suivante.
-      // Contexte 2b : ']'+espaces+mot+espaces+'[' — l'opérateur d'ensemble (\cup, \cap)
-      //   apparaît ENTRE deux crochets d'intervalles ; on doit aussi l'extraire.
-      // Traitement unifié : tous les [alpha+] et ]alpha+[ sans autre contenu sont nettoyés.
-      .replace(/\[([a-zA-Z ]+)\]/g, ' $1 ')
-      // ]opérateur[ (ex. ]\cup[ devenu ] union [) entre deux délimiteurs d'intervalles :
-      // supprimer les crochets parasites autour du mot pour que l'intervalle englobant
-      // soit correctement reconnu par la règle ]...[  ci-après.
-      .replace(/\] {0,4}([a-zA-Z]+) {0,4}\[/g, ' $1 ')
       // tex2typst produit #none_N pour un indice sans base LaTeX (ex. $_2$) →
       // variable inconnue en Typst. On supprime le préfixe invalide.
       .replace(/#none_\w+/g, '')
@@ -1496,11 +1566,10 @@ function mathalea2dContainerToTypst(
   if (svgMatch == null) return null
   if (figures == null) return missingBox('figure non convertie')
   figures.push(svgToTypstImage(svgMatch[0]))
-  const figureName = `fig-${figures.length}`
-  // #mathalea-fit(...) réduit la figure si elle dépasse la largeur
-  // disponible (colonne étroite) ; l'appel isole aussi le nom de variable
-  // pour éviter que le texte suivant soit fusionné dans l'identifiant
-  const figureRef = `#mathalea-fit(${figureName})`
+  const figureIndex = figures.length
+  const figureName = `fig-${figureIndex}`
+  const zoomVar = `${figureName}-zoom`
+  const alignVar = `${figureName}-align`
   const width = svgMatch[0].match(/<svg[^>]*?\swidth="([\d.]+)"/i)
   const height = svgMatch[0].match(/<svg[^>]*?\sheight="([\d.]+)"/i)
   const widthPx = width != null ? parseFloat(width[1]) : 213.3
@@ -1519,11 +1588,22 @@ function mathalea2dContainerToTypst(
   ]
     .map((match) => divLatexToTypstLabel(match[0], scaleFactor))
     .filter((label): label is string => label != null)
-  if (labels.length === 0) return figureRef
+  const body =
+    labels.length === 0
+      ? figureName
+      : [
+          `mathalea-figure(${widthPt}pt, ${heightPt}pt, ${figureName}, labels: (`,
+          ...labels.map((label) => `  ${label},`),
+          '))',
+        ].join('\n')
+  // mathalea-figure-block réduit la figure si elle dépasse la largeur
+  // disponible, applique le zoom choisi par le professeur, l'aligne et place
+  // le repère invisible de la palette de mise en page au coin haut-droit de
+  // son rendu final
   return [
-    `#mathalea-figure(${widthPt}pt, ${heightPt}pt, ${figureName}, labels: (`,
-    ...labels.map((label) => `  ${label},`),
-    '))',
+    `#mathalea-figure-block(${figureIndex}, ${alignVar}, ${zoomVar},`,
+    body,
+    ')',
   ].join('\n')
 }
 

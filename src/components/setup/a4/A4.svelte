@@ -1033,6 +1033,11 @@
   function applyNewSeedTo(k: number) {
     const exercise = exercises[k]
     if (exercise == null) return
+    // regenerate() (via seedrandom(..., { global: true })) laisse Math.random
+    // verrouillé sur la graine du dernier exercice régénéré : sans ce
+    // réamorçage sur de l'entropie réelle, le tirage de la nouvelle graine
+    // serait déterministe et se figerait au bout de quelques clics.
+    seedrandom(undefined, { global: true })
     exercise.seed = undefined
     if (typeof exercise.applyNewSeed === 'function') exercise.applyNewSeed()
     const params = get(exercicesParams)[k]

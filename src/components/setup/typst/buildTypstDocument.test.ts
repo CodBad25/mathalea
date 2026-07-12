@@ -153,7 +153,7 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('Figure : #mathalea-fit(fig-1)')
     expect(code).toContain('Corrigé : #mathalea-fit(fig-2)')
     // le helper mathalea-fit est déclaré dès qu'une figure est présente
-    expect(code).toContain('#let mathalea-fit(body)')
+    expect(code).toContain('#let mathalea-fit(body, zoom: 1.0)')
     // les définitions doivent précéder les références
     expect(code.indexOf('#let fig-1')).toBeLessThan(
       code.indexOf('Figure : #mathalea-fit(fig-1)'),
@@ -170,7 +170,8 @@ describe('buildTypstDocument', () => {
     ])
     expect(code).toContain('// ----- Figures mathalea2d -----')
     expect(code).toContain('#let mathalea-figure')
-    expect(code).toContain('#mathalea-figure(72.0pt, 36.0pt, fig-1, labels: (')
+    expect(code).toContain('#mathalea-figure-block(1, fig-1-align, fig-1-zoom,')
+    expect(code).toContain('mathalea-figure(72.0pt, 36.0pt, fig-1, labels: (')
     expect(code).toContain('mathalea-label(15.0pt, 7.5pt, [$1$])')
   })
 
@@ -247,11 +248,11 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('#set page(paper: "a5", flipped: true,')
   })
 
-  it('utilise des badges soulignés orange par défaut', () => {
+  it('utilise des badges soulignés noirs par défaut', () => {
     const code = buildTypstDocument([
       exercise({ questions: ['$1+1$', '$2+2$'] }),
     ])
-    expect(code).toContain('#let couleur = rgb("#f15929")')
+    expect(code).toContain('#let couleur = black')
     expect(code).toContain('badge-style: "underline",')
   })
 
@@ -337,7 +338,7 @@ describe('buildTypstDocument', () => {
       exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
       exercise({ questions: ['$3+3$'], ref: '' }),
     ])
-    expect(code).toContain('#let mathalea-anchor(kind, num)')
+    expect(code).toContain('#let mathalea-anchor(kind, num, dx: 0pt)')
     // un repère devant chaque environnement tasks
     expect(code).toContain('#mathalea-anchor("tasks", 1)\n    #tasks(')
     // un repère de gap avant le premier exercice et après chacun, et un
@@ -362,7 +363,7 @@ describe('buildTypstDocument', () => {
       [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })],
       { ...defaultTypstDocumentOptions, mergeExercises: true },
     )
-    expect(code).toContain('#let mathalea-anchor(kind, num)')
+    expect(code).toContain('#let mathalea-anchor(kind, num, dx: 0pt)')
     expect(code).toContain('#mathalea-anchor("gap", 1)')
   })
 
@@ -434,5 +435,36 @@ describe('buildTypstDocument', () => {
       exercise({ ref: '6e23-1', questions: ['$1+1$'] }),
     ])
     expect(withoutRef).toContain('show-id: false,')
+  })
+
+  it('ajoute un QR-code vers chaque exercice quand demandé', () => {
+    const url = 'https://coopmaths.fr/alea?uuid=abc&alea=xyz&v=eleve&es=0211'
+    const withQr = buildTypstDocument(
+      [exercise({ url, questions: ['$1+1$'] })],
+      { ...defaultTypstDocumentOptions, showQrCode: true },
+    )
+    expect(withQr).toContain('#import "@preview/tiaoma:0.3.0"')
+    // le QR-code est dans une cellule de grille réservée (jamais par-dessus
+    // le texte), pas dans un #place hors flux
+    expect(withQr).toContain('#grid(columns: (1fr, auto)')
+    // QR-code cliquable dans le PDF (#link vers la même URL)
+    expect(withQr).toContain(
+      `#link("${url}", tiaoma.qrcode("${url}", height: 1.8cm))`,
+    )
+    expect(withQr).not.toContain('#place(')
+
+    // absent par défaut, et sans le paquet tiaoma
+    const withoutQr = buildTypstDocument([
+      exercise({ url, questions: ['$1+1$'] }),
+    ])
+    expect(withoutQr).not.toContain('tiaoma')
+
+    // en mode fusionné, il n'y a pas de bloc par exercice : pas de QR-code
+    const merged = buildTypstDocument([exercise({ url, questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      showQrCode: true,
+      mergeExercises: true,
+    })
+    expect(merged).not.toContain('tiaoma')
   })
 })

@@ -19,8 +19,12 @@ const TYPST_FONT_FILES = [
   'NotoSerif.ttf',
   'Lora.ttf',
   'SourceSans3.ttf',
+  'Luciole.ttf',
+  'Ubuntu.ttf',
+  'OpenDyslexic.otf',
   'NotoSansMath.ttf',
   'STIXTwoMath.ttf',
+  'LibertinusMath.otf',
 ]
 const TYPST_FONT_URLS = TYPST_FONT_FILES.map(
   (file) => `${import.meta.env.BASE_URL}fonts/typst/${file}`,
@@ -33,8 +37,13 @@ const TYPST_FONT_URLS = TYPST_FONT_FILES.map(
  */
 
 const MAIN_FILE = '/main.typ'
-/** Cache persistant (survit aux rechargements de page) des gros fichiers */
-const ASSET_CACHE = 'typst-assets-v1'
+/**
+ * Cache persistant (survit aux rechargements de page) des gros fichiers.
+ * Le suffixe de version invalide le cache existant des utilisateurs quand le
+ * contenu d'une URL déjà en cache change (ex : polices variables remplacées
+ * par des instances statiques, non détecté sinon puisque l'URL est stable).
+ */
+const ASSET_CACHE = 'typst-assets-v2'
 
 /**
  * Récupère un fichier depuis le Cache API (téléchargé une seule fois, même
@@ -119,17 +128,25 @@ export interface TypstAnchor {
   /**
    * `tasks`/`tasks-corr` : liste de questions réglable (énoncé/correction) ;
    * `exo` : début d'un exercice (nombre de questions, suppression) ;
-   * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche
+   * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche ;
+   * `figure` : figure mathalea2d embarquée (zoom)
    */
-  kind: 'tasks' | 'tasks-corr' | 'exo' | 'gap' | 'header'
-  /** Numéro de l'exercice concerné (0 = avant le premier exercice) */
+  kind: 'tasks' | 'tasks-corr' | 'exo' | 'gap' | 'header' | 'figure'
+  /** Numéro de l'exercice concerné (0 = avant le premier exercice), ou de la figure */
   num: number
   page: number
   x: number
   y: number
 }
 
-const ANCHOR_KINDS = new Set(['tasks', 'tasks-corr', 'exo', 'gap', 'header'])
+const ANCHOR_KINDS = new Set([
+  'tasks',
+  'tasks-corr',
+  'exo',
+  'gap',
+  'header',
+  'figure',
+])
 
 /** Valide et filtre les métadonnées renvoyées par `query(<mathalea-anchor>)` */
 function parseAnchors(values: unknown): TypstAnchor[] {

@@ -3,10 +3,11 @@
   export interface OverlayWidget {
     /**
      * `tasks` : liste de questions réglable ; `exo` : début d'un exercice ;
-     * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche
+     * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche ;
+     * `figure` : figure mathalea2d embarquée (zoom)
      */
-    kind: 'tasks' | 'exo' | 'gap' | 'header'
-    /** Numéro de l'exercice concerné (0 = avant le premier exercice) */
+    kind: 'tasks' | 'exo' | 'gap' | 'header' | 'figure'
+    /** Numéro de l'exercice concerné (0 = avant le premier exercice), ou de la figure */
     num: number
     /** Préfixe des variables visées par un contrôle `tasks` (`ex1`, `ex1-corr`) */
     target?: string
@@ -67,8 +68,23 @@
   export let questionCounts: Record<number, number | null> = {}
   /** Nombre de colonnes du document (le saut de colonne n'a de sens qu'à > 1) */
   export let documentColumns = 1
+  /** Zoom de chaque figure, par numéro de figure (`fig-N`) */
+  export let figureZoomValues: Record<number, number> = {}
+  /** Alignement de chaque figure, par numéro de figure (`fig-N`) */
+  export let figureAlignValues: Record<number, 'left' | 'center' | 'right'> =
+    {}
+  /** Nombre total d'exercices (borne les boutons monter/descendre) */
+  export let exerciseCount = 0
   export let onChangeQuestionCount: (num: number, delta: number) => void
   export let onDeleteExercise: (num: number) => void
+  export let onAdjustFigureZoom: (num: number, delta: number) => void
+  export let onSetFigureAlign: (
+    num: number,
+    align: 'left' | 'center' | 'right',
+  ) => void
+  export let onMoveExercise: (num: number, delta: -1 | 1) => void
+  export let onNewData: (num: number) => void
+  export let onOpenSettings: (num: number) => void
 
   /** Numéro du repère de gap dont le panneau d'insertion est ouvert */
   let openInsertion: number | null = null
@@ -175,7 +191,7 @@
         gutter == null || gutter === 'interligne-questions' ? 'auto' : gutter}
       <!-- contrôles des questions, dans la marge la plus proche -->
       <div
-        class="pointer-events-auto absolute flex -translate-y-1/2 flex-col rounded border border-gray-300 bg-white/80 shadow opacity-50 transition-opacity hover:opacity-100"
+        class="pointer-events-auto absolute flex -translate-y-1/2 flex-col typst-pill typst-pill-box"
         style="top: {widget.top}%; {widget.side === 'right'
           ? 'right: 0.3%'
           : 'left: 0.3%'}"
@@ -188,7 +204,6 @@
           <button
             type="button"
             aria-label="Moins de colonnes"
-            class="hover:text-coopmaths-action"
             on:click={() => onAdjustColumns(target, -1)}
           >
             <i class="bx bx-chevron-left"></i>
@@ -201,20 +216,18 @@
           <button
             type="button"
             aria-label="Plus de colonnes"
-            class="hover:text-coopmaths-action"
             on:click={() => onAdjustColumns(target, 1)}
           >
             <i class="bx bx-chevron-right"></i>
           </button>
         </div>
         <div
-          class="flex items-center justify-between border-t border-gray-200"
+          class="flex items-center justify-between typst-pill-divider-top"
           title="Espacement vertical des questions de {label}"
         >
           <button
             type="button"
             aria-label="Réduire l'espacement des questions"
-            class="hover:text-coopmaths-action"
             on:click={() => onAdjustGutter(target, -1)}
           >
             <i class="bx bx-minus"></i>
@@ -225,7 +238,6 @@
           <button
             type="button"
             aria-label="Augmenter l'espacement des questions"
-            class="hover:text-coopmaths-action"
             on:click={() => onAdjustGutter(target, 1)}
           >
             <i class="bx bx-plus"></i>
@@ -243,16 +255,14 @@
           title="Modifier le titre, le sous-titre et la ligne d'en-tête"
           aria-label="Modifier le titre, le sous-titre et la ligne d'en-tête"
           aria-expanded={headerOpen}
-          class="flex h-5 w-5 -translate-x-1/2 items-center justify-center rounded-full border border-gray-300 bg-white/85 shadow opacity-60 transition-opacity hover:opacity-100 hover:text-coopmaths-action"
+          class="typst-pill typst-pill-round flex h-6 w-6 -translate-x-1/2 items-center justify-center"
           data-testid="typst-overlay-header"
           on:click={toggleHeader}
         >
           <i class="bx bx-edit"></i>
         </button>
         {#if headerOpen}
-          <div
-            class="absolute left-4 top-0 z-20 w-80 space-y-2 rounded-lg border border-gray-300 bg-white p-2 shadow-lg"
-          >
+          <div class="absolute left-4 top-0 z-20 w-80 space-y-2 typst-panel p-2">
             {#each HEADER_FIELDS as field}
               <label class="block space-y-0.5">
                 <span class="text-[0.65rem] uppercase text-gray-500">
@@ -289,37 +299,53 @@
         {/if}
       </div>
     {:else if widget.kind === 'exo'}
-      <!-- contrôles de l'exercice : texte avant l'exercice (repère de gap
-           précédent), nombre de questions, suppression -->
-      {@const gapNum = widget.num - 1}
-      {@const exoInsertions = insertions[gapNum] ?? []}
-      {@const hasContent = exoInsertions.some(
-        (snippet) =>
-          snippet !== PAGE_BREAK_SNIPPET && snippet !== COLUMN_BREAK_SNIPPET,
-      )}
+      <!-- contrôles de l'exercice : déplacement, réglages, nouvelles
+           données, nombre de questions, suppression -->
       <div
-        class="pointer-events-auto absolute flex -translate-y-1/2 items-center gap-0.5 rounded-full border border-gray-300 bg-white/85 px-1 shadow opacity-50 transition-opacity hover:opacity-100"
+        class="pointer-events-auto absolute flex -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
         style="top: {widget.top}%; right: 0.3%;"
         data-testid="typst-overlay-exo"
       >
         <button
           type="button"
-          title="Insérer ou modifier un texte ou un titre de section avant l'exercice {widget.num}"
-          aria-label="Insérer ou modifier un texte ou un titre de section avant l'exercice {widget.num}"
-          aria-expanded={openInsertion === gapNum}
-          class="hover:text-coopmaths-action"
-          data-testid="typst-overlay-insert"
-          on:click={() => toggleInsertion(gapNum)}
+          title="Monter l'exercice"
+          aria-label="Monter l'exercice {widget.num}"
+          disabled={widget.num <= 1}
+          on:click={() => onMoveExercise(widget.num, -1)}
         >
-          <i class="bx {hasContent ? 'bx-edit' : 'bx-plus'}"></i>
+          <i class="bx bx-up-arrow-alt"></i>
         </button>
-        <span class="h-3 w-px bg-gray-300"></span>
+        <button
+          type="button"
+          title="Descendre l'exercice"
+          aria-label="Descendre l'exercice {widget.num}"
+          disabled={widget.num >= exerciseCount}
+          on:click={() => onMoveExercise(widget.num, 1)}
+        >
+          <i class="bx bx-down-arrow-alt"></i>
+        </button>
+        <button
+          type="button"
+          title="Réglages de l'exercice {widget.num}"
+          aria-label="Réglages de l'exercice {widget.num}"
+          on:click={() => onOpenSettings(widget.num)}
+        >
+          <i class="bx bx-cog"></i>
+        </button>
+        <button
+          type="button"
+          title="Nouvelles données pour l'exercice {widget.num}"
+          aria-label="Nouvelles données pour l'exercice {widget.num}"
+          on:click={() => onNewData(widget.num)}
+        >
+          <i class="bx bx-refresh"></i>
+        </button>
         {#if questionCounts[widget.num] != null}
+          <span class="typst-pill-sep"></span>
           <button
             type="button"
             title="Une question de moins"
             aria-label="Une question de moins dans l'exercice {widget.num}"
-            class="hover:text-coopmaths-action"
             on:click={() => onChangeQuestionCount(widget.num, -1)}
           >
             <i class="bx bx-minus"></i>
@@ -331,25 +357,138 @@
             type="button"
             title="Une question de plus"
             aria-label="Une question de plus dans l'exercice {widget.num}"
-            class="hover:text-coopmaths-action"
             on:click={() => onChangeQuestionCount(widget.num, 1)}
           >
             <i class="bx bx-plus"></i>
           </button>
-          <span class="h-3 w-px bg-gray-300"></span>
         {/if}
+        <span class="typst-pill-sep"></span>
         <button
           type="button"
           title="Supprimer l'exercice {widget.num} de la fiche"
           aria-label="Supprimer l'exercice {widget.num} de la fiche"
-          class="hover:text-red-600"
+          class="typst-danger"
           on:click={() => onDeleteExercise(widget.num)}
         >
           <i class="bx bx-trash"></i>
         </button>
-        {#if openInsertion === gapNum}
+      </div>
+    {:else if widget.kind === 'figure'}
+      <!-- zoom et alignement d'une figure mathalea2d embarquée : le repère
+           est déjà placé au coin haut-droit de son rendu final (zoom et
+           alignement compris, voir mathalea-figure-block) ; on ne décale la
+           pastille que vers le haut pour qu'elle ne recouvre pas l'image -->
+      {@const zoom = figureZoomValues[widget.num] ?? 1}
+      {@const figAlign = figureAlignValues[widget.num] ?? 'left'}
+      <div
+        class="pointer-events-auto absolute flex -translate-x-full -translate-y-full items-center gap-0.5 typst-pill typst-pill-round px-1"
+        style="left: {widget.left}%; top: {widget.top}%;"
+        data-testid="typst-overlay-figure"
+      >
+        <button
+          type="button"
+          title="Réduire la figure"
+          aria-label="Réduire la figure"
+          on:click={() => onAdjustFigureZoom(widget.num, -1)}
+        >
+          <i class="bx bx-zoom-out"></i>
+        </button>
+        <span class="tabular-nums px-0.5 text-[0.6rem]">
+          {Math.round(zoom * 100)}%
+        </span>
+        <button
+          type="button"
+          title="Agrandir la figure"
+          aria-label="Agrandir la figure"
+          on:click={() => onAdjustFigureZoom(widget.num, 1)}
+        >
+          <i class="bx bx-zoom-in"></i>
+        </button>
+        <span class="typst-pill-sep"></span>
+        {#each [{ align: 'left', icon: 'bx-align-left', label: 'Aligner à gauche' }, { align: 'center', icon: 'bx-align-middle', label: 'Centrer' }, { align: 'right', icon: 'bx-align-right', label: 'Aligner à droite' }] as choice}
+          <button
+            type="button"
+            title={choice.label}
+            aria-label={choice.label}
+            aria-pressed={figAlign === choice.align}
+            class:typst-pill-active={figAlign === choice.align}
+            on:click={() =>
+              onSetFigureAlign(
+                widget.num,
+                choice.align as 'left' | 'center' | 'right',
+              )}
+          >
+            <i class="bx {choice.icon}"></i>
+          </button>
+        {/each}
+      </div>
+    {:else}
+      {@const gapInsertions = insertions[widget.num] ?? []}
+      {@const hasPageBreak = gapInsertions.includes(PAGE_BREAK_SNIPPET)}
+      {@const hasColumnBreak = gapInsertions.includes(COLUMN_BREAK_SNIPPET)}
+      {@const hasText = gapInsertions.some(
+        (snippet) =>
+          snippet !== PAGE_BREAK_SNIPPET && snippet !== COLUMN_BREAK_SNIPPET,
+      )}
+      <!-- entre deux exercices (et avant le premier) : insertion/modification
+           d'un texte ou d'un titre de section, et sauts de page/colonne. Le
+           repère est au bord gauche de la page (déjà proche du bord) : on ne
+           le décale que légèrement vers la gauche, et nettement vers le haut,
+           pour ne pas recouvrir le titre de l'exercice qui suit. -->
+      <div
+        class="pointer-events-auto absolute flex -translate-x-2 -translate-y-[135%] items-center gap-0.5 typst-pill typst-pill-round px-1"
+        style="left: {widget.left}%; top: {widget.top}%;"
+      >
+        <button
+          type="button"
+          title="Insérer ou modifier un texte ou un titre de section ici"
+          aria-label="Insérer ou modifier un texte ou un titre de section ici"
+          aria-expanded={openInsertion === widget.num}
+          data-testid="typst-overlay-insert"
+          on:click={() => toggleInsertion(widget.num)}
+        >
+          <i class="bx {hasText ? 'bx-edit' : 'bx-plus'}"></i>
+        </button>
+        <span class="typst-pill-sep"></span>
+        <button
+          type="button"
+          title={hasPageBreak
+            ? 'Retirer le saut de page'
+            : 'Insérer un saut de page ici'}
+          aria-label={hasPageBreak
+            ? 'Retirer le saut de page'
+            : 'Insérer un saut de page ici'}
+          class:typst-pill-active={hasPageBreak}
+          data-testid={hasPageBreak
+            ? 'typst-overlay-pagebreak-active'
+            : 'typst-overlay-pagebreak'}
+          on:click={() => toggleBreak(widget.num, PAGE_BREAK_SNIPPET)}
+        >
+          <i class="bx bx-arrow-to-bottom"></i>
+        </button>
+        <!-- saut de colonne : seulement en document multicolonne (le bouton
+             actif reste visible en 1 colonne pour pouvoir le retirer) -->
+        {#if hasColumnBreak || documentColumns > 1}
+          <button
+            type="button"
+            title={hasColumnBreak
+              ? 'Retirer le saut de colonne'
+              : 'Insérer un saut de colonne ici'}
+            aria-label={hasColumnBreak
+              ? 'Retirer le saut de colonne'
+              : 'Insérer un saut de colonne ici'}
+            class:typst-pill-active={hasColumnBreak}
+            data-testid={hasColumnBreak
+              ? 'typst-overlay-colbreak-active'
+              : 'typst-overlay-colbreak'}
+            on:click={() => toggleBreak(widget.num, COLUMN_BREAK_SNIPPET)}
+          >
+            <i class="bx bx-arrow-to-right"></i>
+          </button>
+        {/if}
+        {#if openInsertion === widget.num}
           <div
-            class="absolute right-0 top-6 z-20 w-72 space-y-2 rounded-lg border border-gray-300 bg-white p-2 shadow-lg"
+            class="absolute left-1/2 top-6 z-20 w-72 -translate-x-1/2 space-y-2 typst-panel p-2"
           >
             {#if drafts.length > 0}
               <!-- insertions existantes : modification et suppression
@@ -369,7 +508,7 @@
                     on:keydown={(e) => {
                       if (e.key === 'Enter' && draft.text.trim().length > 0) {
                         onUpdateInsertion(
-                          gapNum,
+                          widget.num,
                           draft.index,
                           composeSnippet(draft),
                         )
@@ -385,7 +524,7 @@
                     disabled={draft.text.trim().length === 0}
                     on:click={() =>
                       onUpdateInsertion(
-                        gapNum,
+                        widget.num,
                         draft.index,
                         composeSnippet(draft),
                       )}
@@ -397,7 +536,7 @@
                     title="Supprimer cette insertion"
                     aria-label="Supprimer cette insertion"
                     class="hover:text-red-600"
-                    on:click={() => onDeleteInsertion(gapNum, draft.index)}
+                    on:click={() => onDeleteInsertion(widget.num, draft.index)}
                   >
                     <i class="bx bx-trash text-base"></i>
                   </button>
@@ -454,74 +593,70 @@
           </div>
         {/if}
       </div>
-    {:else}
-      {@const gapInsertions = insertions[widget.num] ?? []}
-      {@const hasPageBreak = gapInsertions.includes(PAGE_BREAK_SNIPPET)}
-      {@const hasColumnBreak = gapInsertions.includes(COLUMN_BREAK_SNIPPET)}
-      <!-- entre deux exercices : seulement les sauts de page/colonne (le
-           texte s'insère depuis les contrôles de l'exercice suivant) -->
-      <div
-        class="pointer-events-auto absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-0.5"
-        style="left: {widget.left}%; top: {widget.top}%;"
-      >
-        <!-- boutons d'insertion de saut : seulement quand le saut est absent
-             (une fois inséré, il devient un badge séparé, retirable) -->
-        {#if !hasPageBreak}
-          <button
-            type="button"
-            title="Insérer un saut de page ici"
-            aria-label="Insérer un saut de page ici"
-            class="flex h-5 w-5 items-center justify-center rounded-full border border-gray-300 bg-white/85 shadow opacity-60 transition-opacity hover:opacity-100 hover:text-coopmaths-action"
-            data-testid="typst-overlay-pagebreak"
-            on:click={() => toggleBreak(widget.num, PAGE_BREAK_SNIPPET)}
-          >
-            <i class="bx bx-arrow-to-bottom"></i>
-          </button>
-        {/if}
-        <!-- saut de colonne : seulement en document multicolonne (le badge
-             actif reste visible en 1 colonne pour pouvoir le retirer) -->
-        {#if !hasColumnBreak && documentColumns > 1}
-          <button
-            type="button"
-            title="Insérer un saut de colonne ici"
-            aria-label="Insérer un saut de colonne ici"
-            class="flex h-5 w-5 items-center justify-center rounded-full border border-gray-300 bg-white/85 shadow opacity-60 transition-opacity hover:opacity-100 hover:text-coopmaths-action"
-            data-testid="typst-overlay-colbreak"
-            on:click={() => toggleBreak(widget.num, COLUMN_BREAK_SNIPPET)}
-          >
-            <i class="bx bx-arrow-to-right"></i>
-          </button>
-        {/if}
-        <!-- sauts actifs : badges bien visibles, retirables d'un clic -->
-        {#if hasPageBreak}
-          <button
-            type="button"
-            title="Retirer le saut de page"
-            aria-label="Retirer le saut de page"
-            class="flex items-center gap-1 rounded-full border border-coopmaths-action bg-coopmaths-action px-2 py-0.5 text-white shadow hover:bg-coopmaths-action-lightest"
-            data-testid="typst-overlay-pagebreak-active"
-            on:click={() => toggleBreak(widget.num, PAGE_BREAK_SNIPPET)}
-          >
-            <i class="bx bx-arrow-to-bottom"></i>
-            Saut de page
-            <i class="bx bx-x"></i>
-          </button>
-        {/if}
-        {#if hasColumnBreak}
-          <button
-            type="button"
-            title="Retirer le saut de colonne"
-            aria-label="Retirer le saut de colonne"
-            class="flex items-center gap-1 rounded-full border border-coopmaths-action bg-coopmaths-action px-2 py-0.5 text-white shadow hover:bg-coopmaths-action-lightest"
-            data-testid="typst-overlay-colbreak-active"
-            on:click={() => toggleBreak(widget.num, COLUMN_BREAK_SNIPPET)}
-          >
-            <i class="bx bx-arrow-to-right"></i>
-            Saut de colonne
-            <i class="bx bx-x"></i>
-          </button>
-        {/if}
-      </div>
     {/if}
   {/each}
 </div>
+
+<style>
+  /* Toolbars de la palette de mise en page : même style que la vue A4
+     (fond blanc plein, bordure bleu clair, ombre nette) pour une bonne
+     visibilité par-dessus le document. */
+  .typst-pill {
+    background: white;
+    border: 1px solid #b9d4f1;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+  .typst-pill-round {
+    border-radius: 999px;
+  }
+  .typst-pill-box {
+    border-radius: 6px;
+  }
+  .typst-pill :global(button) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 3px;
+    border-radius: 4px;
+    font-size: 15px;
+    color: #145a9d;
+  }
+  .typst-pill :global(button:hover) {
+    background: #e3eefa;
+  }
+  .typst-pill :global(button:disabled) {
+    color: #b0b0b0;
+    cursor: default;
+  }
+  .typst-pill :global(button:disabled:hover) {
+    background: transparent;
+  }
+  .typst-pill-sep {
+    width: 1px;
+    height: 12px;
+    background: #b9d4f1;
+    flex-shrink: 0;
+  }
+  .typst-pill-divider-top {
+    border-top: 1px solid #d7e6f7;
+  }
+  .typst-pill-active {
+    background: #145a9d;
+    color: white !important;
+  }
+  .typst-pill-active:hover {
+    background: #1d76cc !important;
+  }
+  .typst-danger:hover {
+    background: #fbe2e2 !important;
+    color: #c0392b !important;
+  }
+  .typst-panel {
+    background: white;
+    border: 1px solid #b9d4f1;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+</style>

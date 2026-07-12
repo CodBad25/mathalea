@@ -1,4 +1,5 @@
 import {
+  MATHALEA_FIGURE_BLOCK_HELPER,
   MATHALEA_FIGURE_HELPERS,
   MATHALEA_FIT_HELPER,
   MATHALEA_QCM_HELPERS,
@@ -12,6 +13,12 @@ import {
 export const EXERCISE_BANK_IMPORT =
   '#import "@preview/exercise-bank:0.5.2": exo, exo-setup, exo-print-solutions'
 
+/** Import du paquet tiaoma (génération des QR-codes) */
+export const TIAOMA_IMPORT = '#import "@preview/tiaoma:0.3.0"'
+
+/** Hauteur (et largeur) des QR-codes placés au coin des exercices */
+const QRCODE_SIZE = '1.8cm'
+
 /**
  * Repère invisible pour la palette de mise en page de l'aperçu : publie la
  * position du point d'insertion (page, x et y en pt) dans une métadonnée,
@@ -19,9 +26,9 @@ export const EXERCISE_BANK_IMPORT =
  * contrôles (colonnes/espacement des questions, insertions) sur l'aperçu.
  * Aucun impact sur la mise en page : une métadonnée n'occupe aucune place.
  */
-export const MATHALEA_ANCHOR_HELPER = `#let mathalea-anchor(kind, num) = context {
+export const MATHALEA_ANCHOR_HELPER = `#let mathalea-anchor(kind, num, dx: 0pt) = context {
   let position = here().position()
-  [#metadata((kind: kind, num: num, page: position.page, x: position.x.pt(), y: position.y.pt())) <mathalea-anchor>]
+  [#metadata((kind: kind, num: num, page: position.page, x: (position.x + dx).pt(), y: position.y.pt())) <mathalea-anchor>]
 }`
 
 /** Marqueur de fin de ligne des insertions faites via la palette */
@@ -55,6 +62,13 @@ export interface TypstCarryOver {
    * `// mathalea:insertion`), par numéro de l'exercice qui les précède.
    */
   insertions?: Record<number, string[]>
+  /** Zoom de chaque figure (`#let fig-N-zoom = ...`), par numéro de figure */
+  figureZoom?: Record<number, number>
+  /**
+   * Alignement de chaque figure (`#let fig-N-align = ...`), par numéro de
+   * figure. Expression Typst brute (`left`, `center` ou `right`).
+   */
+  figureAlign?: Record<number, string>
 }
 
 /** Extrait du code Typst courant les réglages de la palette à conserver */
@@ -89,7 +103,18 @@ export function harvestCarryOver(code: string): TypstCarryOver {
       ;(insertions[currentGap] ??= []).push(insertion[1])
     }
   }
-  return { tasksLayout, insertions }
+  const figureZoom: Record<number, number> = {}
+  for (const match of code.matchAll(/^#let fig-(\d+)-zoom = ([\d.]+)/gm)) {
+    const value = Number(match[2])
+    if (value !== 1) figureZoom[Number(match[1])] = value
+  }
+  const figureAlign: Record<number, string> = {}
+  for (const match of code.matchAll(
+    /^#let fig-(\d+)-align = (left|center|right)/gm,
+  )) {
+    if (match[2] !== 'left') figureAlign[Number(match[1])] = match[2]
+  }
+  return { tasksLayout, insertions, figureZoom, figureAlign }
 }
 
 /**
@@ -101,6 +126,12 @@ export function harvestCarryOver(code: string): TypstCarryOver {
 export interface TypstExerciseInput {
   /** Référence affichée à côté du titre (ex : 6e23-1) */
   ref: string
+  /**
+   * Lien vers l'exercice seul sur MathALÉA (avec ses réglages et sa graine),
+   * encodé dans un QR-code quand `showQrCode` est actif. Absent si l'exercice
+   * n'a pas d'URL (exercice non chargé).
+   */
+  url?: string
   /** Consigne et introduction, déjà concaténées */
   intro: string
   questions: string[]
@@ -128,12 +159,19 @@ export interface TypstDocumentOptions {
   fontSize: number
   /** Interligne des paragraphes, en em (0.65 = valeur par défaut de Typst) */
   lineSpacing: number
+  /** Espacement entre les mots, en % de sa valeur normale (100 = défaut) */
+  wordSpacing: number
   /** Espace au-dessus du titre de chaque exercice, en em */
   exerciseSpacing: number
   /** Numéros des questions (et sous-questions) en gras */
   boldQuestionNumbers: boolean
   /** Affiche la référence du référentiel à côté de la numérotation */
   showExerciseRefs: boolean
+  /**
+   * Ajoute au coin de chaque exercice un QR-code pointant vers l'exercice
+   * seul sur MathALÉA (comme la sortie LaTeX). Sans effet en mode fusionné.
+   */
+  showQrCode: boolean
   /** Nombre de colonnes du document (1, 2 ou 3) */
   columns: number
   /** Format de page */
@@ -170,11 +208,24 @@ export const TEXT_FONTS = [
   'Lora',
   'Noto Sans',
   'Source Sans 3',
+  'Luciole',
+  'Ubuntu',
+  'OpenDyslexic',
 ] as const
 
-/** Polices mathématiques (embarquée + libres servies par MathALÉA) */
+/**
+ * Polices mathématiques (embarquée + libres servies par MathALÉA).
+ * Noto Sans Math n'a pas de lettres latines accentuées dans sa table cmap
+ * (é, à, ê… absents) : un caractère accentué isolé en mode maths doit se
+ * dessiner en un seul glyphe, et Noto Sans Math le décompose en base + accent
+ * (2 glyphes), ce que Typst refuse. `latexToTypst.ts` protège désormais tout
+ * mot accentué en mode maths dans une chaîne Typst rendue via `#txt()`
+ * (police de texte explicite, jamais celle des maths) — voir le commentaire
+ * « Mot comportant une lettre latine accentuée » dans `preprocessTex`.
+ */
 export const MATH_FONTS = [
   'New Computer Modern Math',
+  'Libertinus Math',
   'STIX Two Math',
   'Noto Sans Math',
 ] as const
@@ -227,11 +278,12 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   subtitle: '',
   headerStyle: 'epure',
   font: 'Libertinus Serif',
-  mathFont: 'New Computer Modern Math',
+  mathFont: 'Libertinus Math',
   fontSize: 11,
   headerLine:
     'Nom : ______________________ Prénom : ______________________ Classe : ______',
   lineSpacing: 0.65,
+  wordSpacing: 100,
   exerciseSpacing: 1.6,
   boldQuestionNumbers: true,
   showExerciseRefs: false,
@@ -239,8 +291,9 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   pageFormat: 'a4',
   orientation: 'portrait',
   mergeExercises: false,
+  showQrCode: false,
   badgeStyle: 'underline',
-  badgeColor: 'rgb("#f15929")',
+  badgeColor: 'black',
 }
 
 /**
@@ -305,10 +358,20 @@ function exerciseBody(
   boldQuestionNumbers = false,
   /** Numéro de la première question (exercices fusionnés : la numérotation continue) */
   startNumber = 1,
+  /**
+   * QR-code (`#tiaoma.qrcode(...)`) à réserver en haut à droite de l'exercice.
+   * Placé dans une cellule de grille à côté de l'introduction pour ne jamais
+   * recouvrir le texte (contrairement à un `#place` hors flux).
+   */
+  topRight?: string,
 ): ExerciseBodyResult {
   const parts: string[] = []
+  // nombre de parts de tête (intro, amorce des sous-questions) : ce sont
+  // celles qui partagent la première ligne avec le QR-code éventuel
+  let leadCount = 0
   if (intro.trim().length > 0) {
     parts.push(htmlToTypst(intro, figures))
+    leadCount++
   }
   let questionList = questions
   let label = numbered ? '"1."' : 'none'
@@ -319,7 +382,10 @@ function exerciseBody(
     if (split != null) {
       if (split.head.trim().length > 0) {
         const head = htmlToTypst(split.head, figures)
-        if (head.length > 0) parts.push(head)
+        if (head.length > 0) {
+          parts.push(head)
+          leadCount++
+        }
       }
       questionList = split.items
       label = split.label
@@ -350,10 +416,45 @@ function exerciseBody(
     parts.push(
       `#mathalea-anchor("${anchorKind}", ${parseInt(tasksPrefix.slice(2), 10)})\n#tasks(columns: ${tasksPrefix}-colonnes, label: ${boldableLabel(label, boldQuestionNumbers)}, row-gutter: ${tasksPrefix}-gutter, above: 1.2em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
     )
-    return { code: parts.join('\n\n'), itemCount: converted.length }
+    return { code: assembleBody(parts, leadCount, topRight), itemCount: converted.length }
   }
   parts.push(...converted)
-  return { code: parts.join('\n\n'), itemCount: 0 }
+  return { code: assembleBody(parts, leadCount, topRight), itemCount: 0 }
+}
+
+/**
+ * Assemble le corps d'un exercice. Sans QR-code, les parts se suivent
+ * simplement. Avec un QR-code (`topRight`), les parts de tête (`leadCount`)
+ * sont mises dans une grille à côté du QR-code : celui-ci occupe ainsi une
+ * cellule réservée et ne peut jamais recouvrir le texte ; le reste du contenu
+ * s'écrit sur toute la largeur en dessous.
+ */
+function assembleBody(
+  parts: string[],
+  leadCount: number,
+  topRight?: string,
+): string {
+  if (topRight == null) return parts.join('\n\n')
+  const indent = (body: string) =>
+    body
+      .split('\n')
+      .map((line) => (line.length > 0 ? `  ${line}` : line))
+      .join('\n')
+  const cell = (body: string) => (body.length > 0 ? `[\n${indent(body)}\n]` : '[]')
+  const lead = parts.slice(0, leadCount).join('\n\n')
+  const rest = parts.slice(leadCount)
+  const grid = `#grid(columns: (1fr, auto), column-gutter: 8pt, ${cell(lead)}, ${cell(topRight)})`
+  return [grid, ...rest].join('\n\n')
+}
+
+/**
+ * QR-code du coin haut-droit d'un exercice, menant à l'exercice seul sur
+ * MathALÉA (réglages et graine inclus). Rendu dans une cellule de grille
+ * réservée (voir `assembleBody`) pour ne jamais recouvrir le texte. Le
+ * `#link` rend le QR-code cliquable dans le PDF (vers la même URL).
+ */
+function qrCodeSnippet(url: string): string {
+  return `#link(${typstString(url)}, tiaoma.qrcode(${typstString(url)}, height: ${QRCODE_SIZE}))`
 }
 
 /**
@@ -395,6 +496,16 @@ export function buildTypstDocument(
         correction: null,
       }
     }
+    // QR-code vers l'exercice seul, réservé en haut à droite (mode banque
+    // uniquement : en mode fusionné il n'y a pas de bloc par exercice où
+    // l'ancrer, la case est donc désactivée dans ce mode)
+    const qr =
+      options.showQrCode &&
+      !options.mergeExercises &&
+      exercise.url != null &&
+      exercise.url.length > 0
+        ? qrCodeSnippet(exercise.url)
+        : undefined
     const enonce = exerciseBody(
       exercise.intro,
       exercise.questions,
@@ -403,6 +514,7 @@ export function buildTypstDocument(
       `ex${k + 1}`,
       options.boldQuestionNumbers,
       options.mergeExercises ? nextStart : 1,
+      qr,
     )
     if (options.mergeExercises) nextStart += enonce.itemCount
     let correction: string | null = null
@@ -518,13 +630,14 @@ export function buildTypstDocument(
 
   const allLines = [...bankLines, ...renderLines]
   const usesMathaleaFigure = allLines.some((line) =>
-    line.includes('#mathalea-figure('),
+    line.includes('mathalea-figure('),
   )
   const usesTasks = allLines.some((line) => line.includes('#tasks('))
   const usesQcm = allLines.some((line) => line.includes('qcm-'))
   const usesAnchors = allLines.some((line) =>
     line.includes('#mathalea-anchor('),
   )
+  const usesQrCode = allLines.some((line) => line.includes('tiaoma.qrcode('))
   const usesSchema = allLines.some((line) =>
     line.includes('mathalea-schema-span'),
   )
@@ -553,6 +666,11 @@ export function buildTypstDocument(
     lines.push('// ----- Paquets -----')
     if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
     if (usesTasks) lines.push(TASKIZE_IMPORT)
+    if (usesQrCode) lines.push(TIAOMA_IMPORT)
+    lines.push('')
+  } else if (usesQrCode) {
+    lines.push('// ----- Paquets -----')
+    lines.push(TIAOMA_IMPORT)
     lines.push('')
   }
   if (usesAnchors) {
@@ -571,8 +689,10 @@ export function buildTypstDocument(
   // qu'une figure est présente ; mathalea-figure l'utilise pour ses figures
   // à labels, il doit donc être défini avant.
   if (figures.length > 0) {
-    lines.push('// ----- Figures : adaptation à la largeur -----')
+    lines.push('// ----- Figures : adaptation à la largeur et alignement -----')
     lines.push(MATHALEA_FIT_HELPER)
+    lines.push('')
+    lines.push(MATHALEA_FIGURE_BLOCK_HELPER)
     lines.push('')
   }
   if (usesMathaleaFigure) {
@@ -625,7 +745,9 @@ export function buildTypstDocument(
   )
   lines.push(...pageFooter(options.headerStyle).map((line) => `  ${line}`))
   lines.push(')')
-  lines.push('#set text(font: police-texte, size: taille-texte, lang: "fr")')
+  lines.push(
+    `#set text(font: police-texte, size: taille-texte, lang: "fr", spacing: ${options.wordSpacing}%)`,
+  )
   lines.push(`#set par(leading: ${options.lineSpacing}em)`)
   lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
   // police des formules ; les nombres et symboles restent en police maths
@@ -696,7 +818,10 @@ export function buildTypstDocument(
   if (figures.length > 0) {
     lines.push('// ----- Figures (SVG embarqués) -----')
     for (const [index, figure] of figures.entries()) {
-      lines.push(`#let fig-${index + 1} = ${figure}`)
+      const figNum = index + 1
+      lines.push(`#let fig-${figNum} = ${figure}`)
+      lines.push(`#let fig-${figNum}-zoom = ${carryOver.figureZoom?.[figNum] ?? 1}`)
+      lines.push(`#let fig-${figNum}-align = ${carryOver.figureAlign?.[figNum] ?? 'left'}`)
     }
     lines.push('')
   }
