@@ -1,4 +1,5 @@
 import { tex2typst } from 'tex2typst'
+import { renderScratchDiv } from '../../../lib/renderScratch'
 
 /**
  * Conversion du contenu HTML des exercices (avec formules LaTeX en `$...$`)
@@ -1536,6 +1537,76 @@ export function svgToTypstImage(svg: string): string {
   return `image(bytes(${typstStringLiteral(cleaned)}), format: "svg"${widthPt})`
 }
 
+/**
+ * Propriétés dont la valeur calculée (résolue via les règles `.sb3-*` que la
+ * librairie `scratchblocks` injecte dans `<head>`) est reportée en attribut
+ * `style` inline sur chaque élément d'un bloc Scratch rendu : une fois le SVG
+ * extrait et embarqué seul dans le PDF Typst, il n'a plus accès à cette
+ * feuille de style de la page (les blocs seraient sans couleur de catégorie).
+ */
+const SCRATCHBLOCKS_INLINE_PROPERTIES = [
+  'fill',
+  'stroke',
+  'stroke-width',
+  'font-family',
+  'font-size',
+  'font-weight',
+]
+
+function inlineScratchblocksStyles(svg: SVGElement): void {
+  for (const el of [svg, ...svg.querySelectorAll('*')]) {
+    if (el.getAttribute('class') == null) continue
+    const computed = getComputedStyle(el)
+    el.setAttribute(
+      'style',
+      SCRATCHBLOCKS_INLINE_PROPERTIES.map(
+        (prop) => `${prop}:${computed.getPropertyValue(prop)}`,
+      ).join(';'),
+    )
+  }
+}
+
+/** Détecte le balisage scratchblocks non encore rendu (`scratchblock()`, `createScratchSimulatorElement()`) */
+const UNRENDERED_SCRATCH_MARKUP =
+  /<pre\b[^>]*\bclass=["'][^"']*\bblocks2?\b|<code\b[^>]*\bclass=["'][^"']*\bb\b[^"']*["']|<scratch-simulator\b/i
+
+/**
+ * Rend en SVG les blocs Scratch encore à l'état de balisage scratchblocks
+ * (`<pre class="blocks">`, produit par `scratchblock()`/
+ * `createScratchSimulatorElement()` en contexte HTML). Contrairement aux
+ * figures mathalea2d (déjà du SVG dans la chaîne HTML), ce balisage n'est
+ * converti en SVG que par un rendu DOM de la librairie `scratchblocks`
+ * (`renderScratchDiv`, utilisé par la vue A4/prof mais jamais par la vue
+ * Typst, qui ne fait que lire les chaînes produites par `nouvelleVersion()`).
+ * Le rendu se fait hors-écran mais attaché au document : `renderMatching`
+ * (appelé par `renderScratchDiv`) cherche ses éléments via
+ * `document.querySelectorAll`, qui ignore un fragment détaché.
+ */
+function renderScratchBlocksToSvg(html: string): string {
+  if (typeof document === 'undefined') return html
+  if (!UNRENDERED_SCRATCH_MARKUP.test(html)) return html
+  const container = document.createElement('div')
+  container.style.position = 'fixed'
+  container.style.left = '-99999px'
+  container.style.top = '0'
+  document.body.appendChild(container)
+  try {
+    // le composant <scratch-simulator> (simulateur interactif) ajoute un
+    // bouton "Exécuter" à sa connexion au DOM : on ignore son wrapper pour ne
+    // garder que son contenu (le balisage scratchblocks à rendre)
+    container.innerHTML = html.replace(/<\/?scratch-simulator[^>]*>/gi, '')
+    renderScratchDiv(container)
+    for (const svg of container.querySelectorAll<SVGElement>(
+      'svg[class*="scratchblocks-style-"]',
+    )) {
+      inlineScratchblocksStyles(svg)
+    }
+    return container.innerHTML
+  } finally {
+    container.remove()
+  }
+}
+
 function extractKatexTex(html: string): string | null {
   const annotationMatch = html.match(
     /<annotation[^>]*encoding=["']application\/x-tex["'][^>]*>([\s\S]*?)<\/annotation>/i,
@@ -2089,7 +2160,7 @@ export function htmlToTypst(html: string, figures?: string[]): string {
     return `\uE000${protectedSegments.length - 1}\uE001`
   }
 
-  let text = protectQcm(html, protect, figures)
+  let text = protectQcm(renderScratchBlocksToSvg(html), protect, figures)
   text = protectSchemaContainers(text, protect)
   text = protectHtmlTables(text, protect, figures)
   text = protectMathalea2dContainers(text, protect, figures)

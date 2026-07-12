@@ -148,6 +148,7 @@ vi.mock('../../../lib/components/version', () => ({
 }))
 vi.mock('../../../lib/renderScratch', () => ({
   renderScratch: vi.fn(() => 'mocked-scratch'),
+  renderScratchDiv: vi.fn(),
 }))
 vi.mock('apigeom', async (original) => {
   const real = await original()
