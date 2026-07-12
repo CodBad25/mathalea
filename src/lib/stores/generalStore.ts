@@ -23,6 +23,12 @@ export const freezeUrl = writable<boolean>(false)
 export const a4ParamStore = writable<string>('')
 
 /**
+ * Réglages encodés (base64) de la vue Typst, maintenus dans l'URL
+ * par updateGlobalOptionsInURL. Alimenté par la vue Typst elle-même.
+ */
+export const typstParamStore = writable<string>('')
+
+/**
  * Pour signaler que MathALÉA est dans une iframe
  */
 export const isInIframe = writable<boolean>(false)
@@ -217,6 +223,11 @@ export function updateGlobalOptionsInURL(url: URL) {
   const a4Param = get(a4ParamStore)
   if (options.v === 'a4' && a4Param.length > 0) {
     url.searchParams.append('a4Param', a4Param)
+  }
+  // Même principe pour la vue Typst.
+  const typstParam = get(typstParamStore)
+  if (options.v === 'typst' && typstParam.length > 0) {
+    url.searchParams.append('typstParam', typstParam)
   }
   urlToWrite = url
   // On ne met à jour l'url qu'une fois toutes les 0,5 s

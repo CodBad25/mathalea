@@ -12,7 +12,7 @@
   import { isIntegerInRange0to4 } from '../../../../lib/types/integerInRange'
   import ButtonIconTooltip from '../../../shared/forms/ButtonIconTooltip.svelte'
   import NavBar from '../../../shared/header/NavBar.svelte'
-  import { goToA4WithSeries } from '../goToA4WithSeries'
+  import { goToTypstWithSeries } from '../goToTypstWithSeries'
   import type { SlideshowHistoryOptions } from '../types'
   import DisplaySettings from './presentationalComponents/DisplaySettings.svelte'
   import ExercisesSettings from './presentationalComponents/ExercisesSettings.svelte'
@@ -207,7 +207,7 @@
           <ButtonIconTooltip
             icon="bx-printer text-3xl"
             tooltip="PDF sujets + corrigés"
-            on:click={goToA4WithSeries}
+            on:click={goToTypstWithSeries}
           />
           <button
             type="button"

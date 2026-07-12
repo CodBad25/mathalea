@@ -14,10 +14,15 @@
     mathaleaHandleExerciceSimple,
     mathaleaHandleSup,
   } from '../../../lib/mathalea'
-  import { darkMode, exercicesParams } from '../../../lib/stores/generalStore'
+  import {
+    darkMode,
+    exercicesParams,
+    typstParamStore,
+  } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
   import { isLocalStorageAvailable } from '../../../lib/stores/storage'
   import type { IExercice } from '../../../lib/types'
+  import { decodeBase64 } from '../latex/LatexConfig'
   import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
@@ -135,6 +140,19 @@
       }
     } catch {
       // préférences illisibles : on garde les valeurs par défaut
+    }
+  }
+  // Le diaporama (bouton « PDF sujets + corrigés ») transmet ici son nombre
+  // de vues via typstParam — comme le fait la vue A4 avec a4Param — pour que
+  // le nombre de sujets Typst corresponde au nombre de vues jouées.
+  const typstUrlParam = new URL(window.location.href).searchParams.get(
+    'typstParam',
+  )
+  if (typstUrlParam != null) {
+    typstParamStore.set(typstUrlParam)
+    const parsed = decodeBase64(typstUrlParam)
+    if (parsed.options != null) {
+      documentOptions = { ...documentOptions, ...parsed.options }
     }
   }
 
