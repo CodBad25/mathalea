@@ -19,7 +19,6 @@ export const titre = 'Utiliser les critères de divisibilité'
  * * 2, 3, 5, 9, 10 ?
  * * 2, 3, 5, 9, 10  et un autre nombre qui peut être 7, 13, 17, ou 19 ?
  * @author Rémi Angot
- * 6N43
  */
 export const uuid = '4a128'
 
