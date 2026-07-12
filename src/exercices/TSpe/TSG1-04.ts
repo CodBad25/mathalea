@@ -7,9 +7,9 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { factorielle, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { numAlpha } from '../../lib/outils/outilString'
 export const titre =
   'Utiliser le dénombrement et les probabilités élémentaires.'

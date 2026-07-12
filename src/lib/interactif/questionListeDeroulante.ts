@@ -1,8 +1,8 @@
 // import { addElement, get, setStyles } from '../html/dom'
 import type { IExercice } from '../../lib/types'
 import { context } from '../../modules/context'
+import '../customElements/ListeDeroulanteElement'
 import type { AllChoicesType } from './listeDeroulante/ListeDeroulante'
-import './listeDeroulante/ListeDeroulanteElement'
 
 /**
  * Vérifie la réponse à une question à liste déroulante

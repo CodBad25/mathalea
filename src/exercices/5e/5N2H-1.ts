@@ -1,7 +1,7 @@
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { texPrix, texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,

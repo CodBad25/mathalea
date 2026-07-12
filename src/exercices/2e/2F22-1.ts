@@ -17,10 +17,10 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { bleuMathalea } from '../../lib/colors'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Résoudre graphiquement une équation du type $f(x)=k$'
 export const interactifReady = true
@@ -211,7 +211,12 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
         '',
         '#009900',
       )
-      const horizontale2 = droiteParPointEtPente(pointAbstrait(0, y2), 0, '', '#009900')
+      const horizontale2 = droiteParPointEtPente(
+        pointAbstrait(0, y2),
+        0,
+        '',
+        '#009900',
+      )
       const nomD1 = latex2d(`y=${y1}`, bornes.xMin - 0.5, Number(y1) + 0.4, {
         color: '#009900',
         letterSize: 'small',
@@ -299,7 +304,12 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
         epaisseur: 1.2,
         color: bleuMathalea,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: bleuMathalea, taille: 1, style: '.', epaisseur: 1.5 },
+        optionsNoeuds: {
+          color: bleuMathalea,
+          taille: 1,
+          style: '.',
+          epaisseur: 1.5,
+        },
       })
       for (let j = 0; j < nombreAntecedentCherches1; j++) {
         for (let k = 0; k < theSpline.visibles.length; k++) {
@@ -310,7 +320,12 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
         epaisseur: 1.2,
         color: bleuMathalea,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: bleuMathalea, taille: 1, style: '.', epaisseur: 1.5 },
+        optionsNoeuds: {
+          color: bleuMathalea,
+          taille: 1,
+          style: '.',
+          epaisseur: 1.5,
+        },
       })
 
       objetsEnonce.push(repere1, courbeATracer)

@@ -1,6 +1,6 @@
 # Système d'interactivité
 
-Le système d'interactivité permet aux exercices de recevoir des réponses dans le navigateur, de les normaliser, puis de les vérifier avec un comparateur adapté. Le guide de mise en oeuvre est séparé dans [rendre un exercice interactif](../guides/rendre-un-exercice-interactif.md).
+Le système d'interactivité permet aux exercices de recevoir des réponses dans le navigateur, de les normaliser, puis de les vérifier avec un comparateur adapté. Les guides de mise en oeuvre sont séparés dans [rendre un exercice interactif](../guides/rendre-un-exercice-interactif.md) et [créer un custom element (convention MathALÉA)](../guides/creer-un-custom-element.md).
 
 ## Interactivité obligatoire
 
@@ -10,21 +10,23 @@ Un exercice peut définir `interactifObligatoire = true` lorsqu'il ne possède p
 
 Les formats sont définis par `InteractivityType` dans `src/lib/types.ts`. Les formats courants sont :
 
-| Format | Usage | Fichiers principaux |
-| --- | --- | --- |
-| `mathlive` | Champ MathLive pour une réponse mathématique | `src/lib/interactif/questionMathLive.ts`, `src/lib/interactif/mathLive.ts` |
-| `fillInTheBlank` | Texte à trous MathLive, réponses `champ1`, `champ2`, ... | `src/lib/interactif/questionMathLive.ts` |
-| `tableauMathlive` | Cellules MathLive nommées `L1C1`, `L1C2`, ... | `src/lib/interactif/questionMathLive.ts`, `src/lib/interactif/tableaux/AjouteTableauMathlive.ts` |
-| `texte` | Champ texte HTML | `src/lib/interactif/questionMathLive.ts` |
-| `qcm` | Cases à cocher ou boutons radio | `src/lib/interactif/qcm.ts` |
-| `listeDeroulante` | Liste déroulante HTML custom | `src/lib/interactif/questionListeDeroulante.ts`, `src/lib/interactif/listeDeroulante/` |
-| `dnd` | Glisser-déposer | `src/lib/interactif/DragAndDrop.ts` |
-| `cliqueFigure` | Clics sur objets de figure | `src/lib/interactif/cliqueFigure.ts`, `src/lib/interactif/gestionInteractif.ts` |
-| `svgSelection` | Sélection de SVG avec somme de valeurs | `src/lib/interactif/questionSvgSelection/questionSvgSelection.ts`, `src/lib/interactif/svgSelection/` |
-| `custom` | Vérification fournie par l'exercice ou un méta-exercice | `src/lib/interactif/gestionInteractif.ts` |
-| `tableur` | Réponse de type feuille de calcul | `src/lib/tableur/MySpreadSheet.ts`, `src/lib/tableur/outilsTableur.ts` |
-| `MetaInteractif2d` | Champs dans une figure MathALÉA 2D | `src/lib/2d/interactif2d.ts`, `src/lib/interactif/gestionInteractif.ts` |
-| `multiMathfield` | Plusieurs champs MathLive coordonnés | `src/lib/interactif/MultiMathfield/` |
+Les custom elements maison sont désormais centralisés dans `src/lib/customElements/`. Les helpers métier d'injection et de vérification restent, selon les cas, dans `src/lib/interactif/` ou `src/lib/tableur/`.
+
+| Format             | Usage                                                    | Fichiers principaux                                                                                                                                          |
+| ------------------ | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `mathlive`         | Champ MathLive pour une réponse mathématique             | `src/lib/interactif/questionMathLive.ts`, `src/lib/interactif/mathLive.ts`                                                                                   |
+| `fillInTheBlank`   | Texte à trous MathLive, réponses `champ1`, `champ2`, ... | `src/lib/interactif/questionMathLive.ts`                                                                                                                     |
+| `tableauMathlive`  | Cellules MathLive nommées `L1C1`, `L1C2`, ...            | `src/lib/interactif/questionMathLive.ts`, `src/lib/interactif/tableaux/AjouteTableauMathlive.ts`                                                             |
+| `texte`            | Champ texte HTML                                         | `src/lib/interactif/questionMathLive.ts`                                                                                                                     |
+| `qcm`              | Cases à cocher ou boutons radio                          | `src/lib/interactif/qcm.ts`                                                                                                                                  |
+| `listeDeroulante`  | Liste déroulante HTML custom                             | `src/lib/interactif/questionListeDeroulante.ts`, `src/lib/customElements/ListeDeroulanteElement.ts`, `src/lib/interactif/listeDeroulante/ListeDeroulante.ts` |
+| `dnd`              | Glisser-déposer                                          | `src/lib/interactif/DragAndDrop.ts`                                                                                                                          |
+| `cliqueFigure`     | Clics sur objets de figure                               | `src/lib/interactif/cliqueFigure.ts`, `src/lib/interactif/gestionInteractif.ts`                                                                              |
+| `svgSelection`     | Sélection de SVG avec somme de valeurs                   | `src/lib/interactif/questionSvgSelection/questionSvgSelection.ts`, `src/lib/customElements/SvgSelectionElement.ts`                                           |
+| `custom`           | Vérification fournie par l'exercice ou un méta-exercice  | `src/lib/interactif/gestionInteractif.ts`                                                                                                                    |
+| `tableur`          | Réponse de type feuille de calcul                        | `src/lib/customElements/MySpreadSheet.ts`, `src/lib/tableur/outilsTableur.ts`                                                                                |
+| `MetaInteractif2d` | Champs dans une figure MathALÉA 2D                       | `src/lib/2d/interactif2d.ts`, `src/lib/interactif/gestionInteractif.ts`                                                                                      |
+| `multiMathfield`   | Plusieurs champs MathLive coordonnés                     | `src/lib/customElements/MultiMathfield.ts`, `src/lib/interactif/setMathfield.ts`                                                                             |
 
 ## Réponses attendues
 
@@ -38,17 +40,17 @@ La fonction initialise `autoCorrection[question]`, choisit ou déduit `formatInt
 
 Les clés de `reponses` dépendent du format :
 
-| Clé | Format |
-| --- | --- |
-| `reponse` | Champ unique `mathlive`, `texte`, `listeDeroulante`, `svgSelection` |
-| `champ1`, `champ2`, ... | `fillInTheBlank` |
-| `L1C1`, `L1C2`, ... | `tableauMathlive` |
-| `rectangle1`, `rectangle2`, ... | `dnd` |
-| `field0`, `field1`, ... | `multiMathfield`, `MetaInteractif2d` |
-| `sheetAnswer` | `tableur` |
-| `bareme` | Fonction de barème partiel |
-| `feedback` | Fonction de feedback global |
-| `callback` | Vérification personnalisée avec score détaillé pour les formats vérifiés par `verifQuestionMathLive()` |
+| Clé                             | Format                                                                                                 |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `reponse`                       | Champ unique `mathlive`, `texte`, `listeDeroulante`, `svgSelection`                                    |
+| `champ1`, `champ2`, ...         | `fillInTheBlank`                                                                                       |
+| `L1C1`, `L1C2`, ...             | `tableauMathlive`                                                                                      |
+| `rectangle1`, `rectangle2`, ... | `dnd`                                                                                                  |
+| `field0`, `field1`, ...         | `multiMathfield`, `MetaInteractif2d`                                                                   |
+| `sheetAnswer`                   | `tableur`                                                                                              |
+| `bareme`                        | Fonction de barème partiel                                                                             |
+| `feedback`                      | Fonction de feedback global                                                                            |
+| `callback`                      | Vérification personnalisée avec score détaillé pour les formats vérifiés par `verifQuestionMathLive()` |
 
 Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métier comme `FractionEtendue`, `Decimal`, `Grandeur`, `Hms`, `Complexe` et `number` sont converties en chaînes avant comparaison. Sans options explicites, une réponse numériquement valide reçoit automatiquement l'option `nombreDecimalSeulement`.
 
@@ -58,18 +60,18 @@ Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métie
 
 `exerciceInteractif()` dans `src/lib/interactif/gestionInteractif.ts` parcourt les questions et délègue selon `formatInteractif`.
 
-| Format | Vérification |
-| --- | --- |
-| `mathlive`, `fillInTheBlank`, `tableauMathlive`, `texte` | `verifQuestionMathLive()` dans `src/lib/interactif/mathLive.ts` |
-| `multiMathfield` | `verifQuestionMultiMathfield()` |
-| `MetaInteractif2d` | `verifQuestionMetaInteractif2d()` |
-| `qcm` | `verifQuestionQcm()` dans `src/lib/interactif/qcm.ts` |
-| `listeDeroulante` | `verifQuestionListeDeroulante()` |
-| `svgSelection` | `verifQuestionSvgSelection()` |
-| `dnd` | `verifDragAndDrop()` |
-| `tableur` | `verifQuestionTableur()` dans `src/lib/tableur/outilsTableur.ts` |
-| `cliqueFigure` | `verifQuestionCliqueFigure()` dans `src/lib/interactif/cliqueFigure.ts` |
-| `custom` | correction globale de l'exercice quand `exercice.interactifType === 'custom'`, ou fonction `correctionInteractives` à l'index de question pour un méta-exercice |
+| Format                                                   | Vérification                                                                                                                                                    |
+| -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mathlive`, `fillInTheBlank`, `tableauMathlive`, `texte` | `verifQuestionMathLive()` dans `src/lib/interactif/mathLive.ts`                                                                                                 |
+| `multiMathfield`                                         | `verifQuestionMultiMathfield()`                                                                                                                                 |
+| `MetaInteractif2d`                                       | `verifQuestionMetaInteractif2d()`                                                                                                                               |
+| `qcm`                                                    | `verifQuestionQcm()` dans `src/lib/interactif/qcm.ts`                                                                                                           |
+| `listeDeroulante`                                        | `verifQuestionListeDeroulante()`                                                                                                                                |
+| `svgSelection`                                           | `verifQuestionSvgSelection()`                                                                                                                                   |
+| `dnd`                                                    | `verifDragAndDrop()`                                                                                                                                            |
+| `tableur`                                                | `verifQuestionTableur()` dans `src/lib/tableur/outilsTableur.ts`                                                                                                |
+| `cliqueFigure`                                           | `verifQuestionCliqueFigure()` dans `src/lib/interactif/cliqueFigure.ts`                                                                                         |
+| `custom`                                                 | correction globale de l'exercice quand `exercice.interactifType === 'custom'`, ou fonction `correctionInteractives` à l'index de question pour un méta-exercice |
 
 Les fonctions de vérification retournent un résultat exploitable par le score et affichent le retour visuel associé à la question.
 
@@ -81,6 +83,7 @@ Pour les exercices qui ont besoin de critères multiples ou d'un score partiel, 
 
 ## Fichiers clefs
 
+- `src/lib/customElements/` : implémentations des custom elements MathALÉA.
 - `src/lib/types.ts` : types transverses, dont `InteractivityType`.
 - `src/lib/interactif/gestionInteractif.ts` : orchestration, `handleAnswers()`, `setReponse()`, `exerciceInteractif()` et dispatch des corrections custom.
 - `src/lib/interactif/comparisonFunctions.ts` : `fonctionComparaison()`.
@@ -91,4 +94,6 @@ Pour les exercices qui ont besoin de critères multiples ou d'un score partiel, 
 - `src/lib/interactif/DragAndDrop.ts` : glisser-déposer.
 - `src/lib/interactif/questionListeDeroulante.ts` : listes déroulantes.
 - `src/lib/interactif/questionSvgSelection/questionSvgSelection.ts` : sélection SVG.
+- `src/lib/interactif/trigoCircleSelection/selectionCercleTrigo.ts` : helper métier de sélection sur cercle trigonométrique.
+- `src/lib/interactif/setMathfield.ts` : configuration partagée des `math-field` interactifs.
 - `src/lib/tableur/outilsTableur.ts` : vérification des réponses `tableur`.

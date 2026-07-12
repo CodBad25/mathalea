@@ -1,4 +1,4 @@
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { prenoms } from '../../lib/outils/Personne'

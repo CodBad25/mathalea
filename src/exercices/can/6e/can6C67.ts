@@ -1,6 +1,6 @@
-import '../../../lib/calculatrice/CalculatorElement'
 import { defisCalculatriceCassee } from '../../../lib/calculatrice/defisCalculatriceCassee'
 import { latexCalculator } from '../../../lib/calculatrice/latexCalculator'
+import '../../../lib/customElements/CalculatorElement'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { context } from '../../../modules/context'

@@ -6,13 +6,13 @@ import {
 import { egal, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
 import {
   addMultiMathfield,
   MultiMathfieldElement,
-} from '../../../lib/interactif/MultiMathfield/MultiMathfield'
+} from '../../../lib/customElements/MultiMathfield'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 export const titre =

@@ -3,7 +3,7 @@
  */
 
 import Horloge from '../../../lib/2d/horloge'
-import handleInteractiveClock from '../../../lib/InteractiveClock'
+import handleInteractiveClock from '../../../lib/customElements/InteractiveClock'
 import { combinaisonListes } from '../../../lib/outils/arrayOutils'
 import { sp } from '../../../lib/outils/outilString'
 import { formatMinute } from '../../../lib/outils/texNombre'
@@ -29,7 +29,7 @@ export const refs = {
 
 */
 export default class ExerciceInteractiveClock extends Exercice {
-  goodAnswers: { hour: string; minute: string }[] = []
+  goodAnswers: { hour: number; minute: number }[] = []
   constructor() {
     super()
     this.nbQuestions = 1
@@ -96,13 +96,16 @@ export default class ExerciceInteractiveClock extends Exercice {
       if (this.questionJamaisPosee(i, hour, minute)) {
         this.listeQuestions[i] = enonce
         this.listeCorrections[i] = correction
-        this.goodAnswers[i] = {
-          hour: hour.toString(),
-          minute: minute.toString(),
-        }
+        this.goodAnswers[i] = { hour, minute }
+
         this.autoCorrection[i] = {
           valeur: {
-            reponse: { value: hour.toString() + 'h' + minute.toString() },
+            reponse: {
+              value: new Hms({
+                hour: this.goodAnswers[i].hour,
+                minute: this.goodAnswers[i].minute,
+              }).toString(),
+            },
           },
           formatInteractif: 'custom',
         }
@@ -119,15 +122,14 @@ export default class ExerciceInteractiveClock extends Exercice {
     if (clock == null) {
       return 'KO'
     }
+    const answer = clock.value
     clock.isDynamic = false
-    const hour: string = clock.getAttribute('hour')
-    const minute: string = clock.getAttribute('minute')
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[id] = `${hour}h${minute.toString().padStart(2, '0')}`
+    this.answers[id] = JSON.stringify(answer)
     if (
-      hour === formatHour012(this.goodAnswers[i].hour) &&
-      minute === this.goodAnswers[i].minute
+      this.goodAnswers[i].hour === answer.hour &&
+      this.goodAnswers[i].minute === answer.minute
     ) {
       const divFeedback = document.createElement('div')
       divFeedback.innerHTML = '😎'

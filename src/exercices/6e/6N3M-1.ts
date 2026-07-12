@@ -14,13 +14,13 @@ import Exercice from '../Exercice'
 
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { bleuMathalea } from '../../lib/colors'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import {
   addMultiMathfield,
   type DataOptionsMultiMathfield,
-} from '../../lib/interactif/MultiMathfield/MultiMathfield'
+} from '../../lib/customElements/MultiMathfield'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { fraction } from '../../modules/fractions'
 import {

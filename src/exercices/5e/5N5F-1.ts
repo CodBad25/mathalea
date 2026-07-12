@@ -1,7 +1,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import {
   choice,
   combinaisonListes,

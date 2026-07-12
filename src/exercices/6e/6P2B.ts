@@ -1,7 +1,7 @@
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { personne } from '../../lib/outils/Personne'
@@ -65,10 +65,12 @@ export default class Probabilites6e extends Exercice {
         Donner la réponse sous forme d'un nombre décimal : %{champ2}.
         Donner la réponse sous forme d'un pourcentage : %{champ3}$\\%$.`,
         dataOptions: {
-          champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction, ldots: true },
+          champ1: {
+            keyboard: KeyboardType.clavierDeBaseAvecFraction,
+            ldots: true,
+          },
           champ2: { keyboard: KeyboardType.clavierDeBase, ldots: true },
           champ3: { keyboard: KeyboardType.clavierDeBase, ldots: true },
-          
         },
       })
       const reponseFrac = new FractionEtendue(boule1, boule1 + boule2)

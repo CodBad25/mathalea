@@ -2,16 +2,13 @@ import { Courbe } from '../../lib/2d/Courbe'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { repere } from '../../lib/2d/reperes'
 import { bleuMathalea } from '../../lib/colors'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { all, isEqual, isReduced } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { texPiFraction, type FractionData } from '../../lib/mathFonctions/trigo'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import {
-  texPiFraction,
-  type FractionData,
-} from '../../lib/mathFonctions/trigo'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import {

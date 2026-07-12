@@ -1,4 +1,4 @@
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import {
@@ -126,10 +126,8 @@ export default class MesureAngleEntreZeroEtDeuxPi extends Exercice {
       texteCorr += `On cherche donc la mesure qui diffère d'un facteur $2\\pi$ et qui appartient à $[0;2\\pi[$. On enlève pour cela un multiple de $2\\pi$ à l'angle initial.<br>`
       texteCorr += `Ici, $2\\pi=\\dfrac{${2 * denominateur}\\pi}{${denominateur}}$.<br>`
       texteCorr += `On effectue la division euclidienne du numérateur par $${2 * denominateur}$ :<br>`
-      const quotientTex = new FractionEtendue(
-        quotient,
-        1,
-      ).ecritureParentheseSiNegatif
+      const quotientTex = new FractionEtendue(quotient, 1)
+        .ecritureParentheseSiNegatif
       const resteTex = new FractionEtendue(reste, 1).ecritureAlgebrique
       texteCorr += `$${numerateur}=${2 * denominateur}\\times ${quotientTex}${resteTex}$.<br>`
       texteCorr += `Ainsi, $${angle}=${angleReduit}${this.texMultipleDeuxPi(quotient)}$.<br>`

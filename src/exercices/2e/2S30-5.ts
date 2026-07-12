@@ -18,9 +18,9 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif' // foncti
 
 import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { bleuMathalea } from '../../lib/colors'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { enumeration } from '../../lib/outils/ecritures'
 import {
   miseEnEvidence,

@@ -1,6 +1,6 @@
+import type { Page } from 'playwright'
 import { expect } from 'vitest'
 import { runTest } from '../../helpers/run'
-import type { Page } from 'playwright'
 
 async function test(page: Page) {
   const url = 'http://localhost:5173/alea/?uuid=424b2&i=0'
@@ -14,6 +14,7 @@ async function test(page: Page) {
       )
       .count(),
   ).toBe(0)
+  await page.waitForTimeout(3000)
   expect(new URL(page.url()).searchParams.get('i')).toBe('1')
   const seed = new URL(page.url()).searchParams.get('alea')
 

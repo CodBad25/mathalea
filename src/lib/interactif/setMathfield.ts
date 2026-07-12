@@ -1,13 +1,15 @@
 import { MathfieldElement } from 'mathlive'
 import { get } from 'svelte/store'
-import { keyboardState } from '../../../components/keyboard/stores/keyboardStore'
-import type { BlockForKeyboard } from '../../../components/keyboard/types/keyboardContent'
-import { injectFontInMetaInteractif2d } from '../../../modules/loaders'
-import { globalOptions } from '../../stores/globalOptions'
-import { getKeyboardShortcusts } from '../claviers/keyboard'
-import { isMathfieldFocused } from '../mathfieldFocus'
+import { keyboardState } from '../../components/keyboard/stores/keyboardStore'
+import type { BlockForKeyboard } from '../../components/keyboard/types/keyboardContent'
+import { injectFontInMetaInteractif2d } from '../../modules/loaders'
+import { globalOptions } from '../stores/globalOptions'
+import { getKeyboardShortcusts } from './claviers/keyboard'
+import { isMathfieldFocused } from './mathfieldFocus'
+
 export const setMathfieldListener = (e: Event) =>
   setMathfield(e.currentTarget as MathfieldElement)
+
 export function setMathfield(mf: MathfieldElement) {
   if ('mathVirtualKeyboardPolicy' in mf) mf.mathVirtualKeyboardPolicy = 'manual'
   if ('menuItems' in mf) mf.menuItems = []
