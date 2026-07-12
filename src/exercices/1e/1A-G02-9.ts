@@ -10,13 +10,13 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
-export const titre = "Calculer le volume d'un cylindre"
+export const titre = "Calculer le volume d'un cylindre (avec figure)"
 export const dateDePublication = '23/06/2026'
 
 export const uuid = 'c7b58'
 
 export const refs = {
-  'fr-fr': ['1A-G02-9', '2A-G2-9'],
+  'fr-fr': ['1A-G02-9', '2A-G3-9'],
   'fr-ch': [],
 }
 
