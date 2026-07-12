@@ -13,16 +13,18 @@
     mathaleaFormatExercice,
     mathaleaHandleExerciceSimple,
     mathaleaHandleSup,
+    mathaleaUpdateUrlFromExercicesParams,
   } from '../../../lib/mathalea'
   import {
     darkMode,
     exercicesParams,
+    freezeUrl,
     typstParamStore,
   } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
   import { isLocalStorageAvailable } from '../../../lib/stores/storage'
   import type { IExercice } from '../../../lib/types'
-  import { decodeBase64 } from '../latex/LatexConfig'
+  import { decodeBase64, encodeBase64 } from '../latex/LatexConfig'
   import { context } from '../../../modules/context'
   import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
@@ -36,6 +38,7 @@
     buildTypstDocument,
     defaultTypstDocumentOptions,
     harvestCarryOver,
+    type TypstCarryOver,
     type TypstDocumentOptions,
     type TypstExerciseInput,
   } from './buildTypstDocument'
@@ -143,9 +146,19 @@
       // préférences illisibles : on garde les valeurs par défaut
     }
   }
+  /**
+   * Réglages de la palette de mise en page (colonnes/espacement des
+   * questions, textes et sections insérés, sauts de page/colonne, fusions,
+   * zoom/alignement des figures) restaurés depuis l'URL. Injectés dans la
+   * première génération du code ; les modifications suivantes sont relues
+   * dans le code courant.
+   */
+  let urlCarryOver: TypstCarryOver | null = null
   // Le diaporama (bouton « PDF sujets + corrigés ») transmet ici son nombre
   // de vues via typstParam — comme le fait la vue A4 avec a4Param — pour que
-  // le nombre de sujets Typst corresponde au nombre de vues jouées.
+  // le nombre de sujets Typst corresponde au nombre de vues jouées. Depuis
+  // que la vue Typst réécrit ce paramètre à chaque modification, il porte
+  // aussi tous les réglages du document et de la mise en page (rechargeables).
   const typstUrlParam = new URL(window.location.href).searchParams.get(
     'typstParam',
   )
@@ -154,6 +167,9 @@
     const parsed = decodeBase64(typstUrlParam)
     if (parsed.options != null) {
       documentOptions = { ...documentOptions, ...parsed.options }
+    }
+    if (parsed.carryOver != null) {
+      urlCarryOver = parsed.carryOver
     }
   }
 
@@ -748,6 +764,7 @@
   }
 
   function persistPreferences() {
+    persistToUrl()
     if (!isLocalStorageAvailable()) return
     try {
       window.localStorage.setItem(
@@ -756,6 +773,40 @@
       )
     } catch {
       // stockage plein ou indisponible : sans conséquence
+    }
+  }
+
+  /** Dernière valeur écrite dans `typstParam` (évite les réécritures inutiles) */
+  let lastTypstParam = typstUrlParam ?? ''
+
+  /**
+   * Sauvegarde dans l'URL (`typstParam`) tous les réglages du document et de
+   * la mise en page (colonnes/espacement des questions, textes et sections
+   * insérés, sauts de page/colonne, fusions, zoom/alignement des figures) pour
+   * pouvoir recharger la fiche à l'identique. La liste des exercices, leurs
+   * graines et leurs réglages sont déjà portés par l'URL (`exercicesParams`).
+   */
+  function persistToUrl() {
+    const carryOver =
+      editorView != null
+        ? harvestCarryOver(currentCode())
+        : (urlCarryOver ?? {})
+    const encoded = encodeBase64({ options: documentOptions, carryOver })
+    // le store est la source de vérité ; on redéclenche ensuite l'écrivain
+    // d'URL de l'app pour que sa prochaine écriture (débouncée) reparte de
+    // cette valeur et ne réécrive pas l'URL sans typstParam (comme la vue A4)
+    typstParamStore.set(encoded)
+    mathaleaUpdateUrlFromExercicesParams()
+    if (encoded === lastTypstParam) return
+    lastTypstParam = encoded
+    // l'URL est bloquée dans un iframe (recorder Capytale/Moodle…)
+    if (get(freezeUrl)) return
+    try {
+      const url = new URL(window.location.href)
+      url.searchParams.set('typstParam', encoded)
+      window.history.replaceState(null, '', url)
+    } catch {
+      // URL non modifiable (iframe sandboxée…) : sans conséquence
     }
   }
 
@@ -950,9 +1001,12 @@
   function buildCode(): string {
     // les ajustements faits via la palette de mise en page (colonnes,
     // espacement, insertions) sont repris du code courant pour survivre
-    // à la régénération
+    // à la régénération ; au tout premier rendu (éditeur pas encore créé),
+    // on repart des réglages restaurés depuis l'URL le cas échéant
     const carryOver =
-      editorView != null ? harvestCarryOver(currentCode()) : {}
+      editorView != null
+        ? harvestCarryOver(currentCode())
+        : (urlCarryOver ?? {})
     const [primary, ...extraVersions] = buildAllVersionInputs()
     return buildTypstDocument(primary, documentOptions, carryOver, extraVersions)
   }
@@ -974,6 +1028,10 @@
               if (!isPaletteEdit) isEdited = true
               const code = update.state.doc.toString()
               refreshTasksLayout(code)
+              // toute modification structurée (palette, régénération) est
+              // reportée dans l'URL ; le garde-fou sur la valeur encodée
+              // évite d'écrire à chaque frappe qui ne change pas les réglages
+              persistToUrl()
               scheduleCompile(code)
             }
           }),
@@ -1207,6 +1265,9 @@
     await loadExercises()
     const code = buildCode()
     initEditor(code)
+    // normalise l'URL : elle porte désormais l'ensemble des réglages
+    // (document + mise en page) tels qu'appliqués au premier rendu
+    persistToUrl()
     compile(code)
   })
 
