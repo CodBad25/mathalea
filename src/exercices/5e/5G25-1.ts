@@ -19,13 +19,13 @@ import { pointAdistance, pointSurSegment } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { vide2d } from '../../lib/2d/Vide2d'
 import { bleuMathalea } from '../../lib/colors'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   addMultiMathfield,
   MultiMathfieldElement,
-} from '../../lib/interactif/MultiMathfield/MultiMathfield'
+} from '../../lib/customElements/MultiMathfield'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   choice,
   combinaisonListes,
