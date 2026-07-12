@@ -1,4 +1,4 @@
-import TableauCriteresDeDivisibilite from '../5e/5NIJ-3'
+import TableauCriteresDeDivisibilite from '../5e/5N1J-3'
 export const titre =
   'Utiliser les critères de divisibilité (plusieurs possibles)'
 export const interactifReady = true
