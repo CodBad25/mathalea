@@ -598,8 +598,8 @@
                 <button
                   type="button"
                   class="flex-1 px-2 py-0.5 {insertionKind === choice.kind
-                    ? 'bg-coopmaths-action text-white'
-                    : 'bg-white hover:bg-gray-100'}"
+                    ? 'bg-coopmaths-action text-coopmaths-canvas'
+                    : 'bg-coopmaths-canvas text-coopmaths-corpus hover:bg-coopmaths-canvas-dark'}"
                   aria-pressed={insertionKind === choice.kind}
                   on:click={() =>
                     (insertionKind = choice.kind as 'section' | 'texte')}
@@ -668,7 +668,10 @@
   .typst-pill-box {
     border-radius: 6px;
   }
-  .typst-pill :global(button) {
+  /* Sélecteur d'enfant direct : ne doit viser que les boutons de la barre
+     d'outils, pas ceux du panneau d'insertion (.typst-panel) qu'elle peut
+     contenir, qui ont leurs propres couleurs. */
+  .typst-pill > :global(button) {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -679,14 +682,14 @@
     font-size: 15px;
     color: #145a9d;
   }
-  .typst-pill :global(button:hover) {
+  .typst-pill > :global(button:hover) {
     background: #e3eefa;
   }
-  .typst-pill :global(button:disabled) {
+  .typst-pill > :global(button:disabled) {
     color: #b0b0b0;
     cursor: default;
   }
-  .typst-pill :global(button:disabled:hover) {
+  .typst-pill > :global(button:disabled:hover) {
     background: transparent;
   }
   .typst-pill-sep {

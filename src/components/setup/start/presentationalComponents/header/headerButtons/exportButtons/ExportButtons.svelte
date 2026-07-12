@@ -50,11 +50,11 @@
 
   const exportOptions: ExportOption[] = [
     {
-      id: 'moodle',
-      label: 'Moodle',
-      description: 'Pour importer dans la plateforme Moodle ou ÉLÉA',
-      component: MoodleIcon,
-      action: () => exportAndClose('moodle'),
+      id: 'latex',
+      label: 'PDF via LaTeX',
+      description: 'Pour générer un PDF à partir du moteur de composition LaTeX',
+      icon: 'bx bx-code-alt',
+      action: () => exportAndClose('latex'),
     },
     {
       id: 'typst',
@@ -62,6 +62,13 @@
       description: 'Pour générer un PDF à partir de la mise en page HTML',
       icon: 'bx bx-code-alt',
       action: () => exportAndClose('a4'),
+    },
+    {
+      id: 'moodle',
+      label: 'Moodle',
+      description: 'Pour importer dans la plateforme Moodle ou ÉLÉA',
+      component: MoodleIcon,
+      action: () => exportAndClose('moodle'),
     },
     {
       id: 'alacarte',
@@ -127,15 +134,6 @@
   tooltip="Lien pour les élèves"
   on:click={() => handleExport('confeleve')}
 />
-<button
-  class="tooltip tooltip-bottom tooltip-neutral"
-  data-tip="PDF via LaTeX"
-  on:click={() => handleExport('latex')}
->
-  <PdfTextIcon
-    class="w-7 h-7 hover:fill-coopmaths-action-lightest fill-coopmaths-action dark:fill-coopmathsdark-action dark:hover:fill-coopmathsdark-action-lightest"
-  />
-</button>
 <ButtonIconTooltip
   icon="bx-printer text-3xl"
   tooltip="Impression"
