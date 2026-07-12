@@ -29,7 +29,7 @@ export const refs = {
 
 */
 export default class ExerciceInteractiveClock extends Exercice {
-  goodAnswers: string[] = []
+  goodAnswers: { hour: number; minute: number }[] = []
   constructor() {
     super()
     this.nbQuestions = 1
@@ -96,11 +96,16 @@ export default class ExerciceInteractiveClock extends Exercice {
       if (this.questionJamaisPosee(i, hour, minute)) {
         this.listeQuestions[i] = enonce
         this.listeCorrections[i] = correction
-        this.goodAnswers[i] =
-          `${formatHour012(`${hour}h${minute.toString().padStart(2, '0')}`)}`
+        this.goodAnswers[i] = { hour, minute }
+
         this.autoCorrection[i] = {
           valeur: {
-            reponse: { value: this.goodAnswers[i] },
+            reponse: {
+              value: new Hms({
+                hour: this.goodAnswers[i].hour,
+                minute: this.goodAnswers[i].minute,
+              }).toString(),
+            },
           },
           formatInteractif: 'custom',
         }
@@ -122,7 +127,10 @@ export default class ExerciceInteractiveClock extends Exercice {
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
     this.answers[id] = answer
-    if (this.goodAnswers[i] === answer.split('min')[0]) {
+    if (
+      this.goodAnswers[i].hour === answer.hour &&
+      this.goodAnswers[i].minute === answer.minute
+    ) {
       const divFeedback = document.createElement('div')
       divFeedback.innerHTML = '😎'
       clock.parentElement?.appendChild(divFeedback)
@@ -137,14 +145,10 @@ export default class ExerciceInteractiveClock extends Exercice {
 }
 
 function formatHour012(hour: string): string {
-  const hours = hour.split('h')
-  if (hours.length !== 2) {
-    return hour
-  }
-  const hourNumber = parseInt(hours[0])
+  const hourNumber = parseInt(hour)
   if (hourNumber > 12) {
     return (hourNumber - 12).toString()
   } else {
-    return hour
+    return hourNumber.toString()
   }
 }

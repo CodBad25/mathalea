@@ -1,9 +1,12 @@
+import Hms from '../../modules/Hms'
+import { mathalea2d } from '../../modules/mathalea2d'
+import Horloge from '../2d/horloge'
 import { orangeMathalea } from '../colors'
 import MathaleaCustomElement from './MathaleaCustomElement'
 /**
  * Horloge interactive
  * @author Rémi Angot
- * Refactorisé par Jean-Claude Lhote pour suivre le modèle MathaleaCustomElement
+ * Refactorisé par Jean-Claude Lhote pour suivre le modèle MathaleaCustomElement + quelques ajustements
  * @attr {number} hour - L'heure initiale de l'horloge (0-12)
  * @attr {number} minute - La minute initiale de l'horloge (0-59)
  * @attr {number} [second=0] - La seconde initiale de l'horloge (0-59)
@@ -24,6 +27,7 @@ export class InteractiveClock extends MathaleaCustomElement {
   draggingHand: boolean
   previousMinute = 0
   previousSecond = 0
+  private previousHour = 12
   private _isDynamic = true
   private _currentAction?: 'hour' | 'minute' | 'second'
   private _svgElement?: SVGSVGElement
@@ -48,6 +52,9 @@ export class InteractiveClock extends MathaleaCustomElement {
       : 12
     this.minute = this.getAttribute('minute')
       ? Number(this.getAttribute('minute'))
+      : 0
+    this.second = this.getAttribute('second')
+      ? Number(this.getAttribute('second'))
       : 0
     this.svgHandHour = document.createElementNS(
       'http://www.w3.org/2000/svg',
@@ -74,6 +81,26 @@ export class InteractiveClock extends MathaleaCustomElement {
    */
   connectedCallback() {
     this.render()
+  }
+
+  renderLatex() {
+    const horloge = new Horloge(
+      0,
+      0,
+      2,
+      new Hms({ hour: this.hour, minute: this.minute }),
+    )
+    return mathalea2d(
+      {
+        xmin: -3,
+        ymin: -3,
+        xmax: 3,
+        ymax: 3,
+        scale: 0.6,
+        center: true,
+      },
+      horloge,
+    )
   }
 
   render() {
@@ -459,17 +486,17 @@ export class InteractiveClock extends MathaleaCustomElement {
     return this._currentAction
   }
 
-  set currentAction(value: 'hour' | 'minute' | 'second' | undefined) {
-    this._currentAction = value
-    if (value === 'hour') {
+  set currentAction(val: 'hour' | 'minute' | 'second' | undefined) {
+    this._currentAction = val
+    if (val === 'hour') {
       this.svgHandHour.setAttribute('stroke', '#216D9A')
       this.svgHandMinute.setAttribute('stroke', orangeMathalea)
       this.svgHandSecond.setAttribute('stroke', orangeMathalea)
-    } else if (value === 'minute') {
+    } else if (val === 'minute') {
       this.svgHandHour.setAttribute('stroke', orangeMathalea)
       this.svgHandMinute.setAttribute('stroke', '#216D9A')
       this.svgHandSecond.setAttribute('stroke', orangeMathalea)
-    } else if (value === 'second') {
+    } else if (val === 'second') {
       this.svgHandHour.setAttribute('stroke', orangeMathalea)
       this.svgHandMinute.setAttribute('stroke', orangeMathalea)
       this.svgHandSecond.setAttribute('stroke', '#216D9A')
@@ -484,19 +511,19 @@ export class InteractiveClock extends MathaleaCustomElement {
     return Number(this.getAttribute('hour'))
   }
 
-  set hour(value: number) {
-    if (value === 0) {
-      value = 12
+  set hour(val: number) {
+    if (val === 0) {
+      val = 12
     }
-    this.setAttribute('hour', value.toString())
+    this.setAttribute('hour', val.toString())
   }
 
   get second() {
     return Number(this.getAttribute('second')) || 0
   }
 
-  set second(value: number) {
-    this.setAttribute('second', value.toString())
+  set second(val: number) {
+    this.setAttribute('second', val.toString())
     this.previousSecond = this.second
   }
 
@@ -504,9 +531,9 @@ export class InteractiveClock extends MathaleaCustomElement {
     return this._isDynamic
   }
 
-  set isDynamic(value: boolean) {
-    this._isDynamic = value
-    if (!value) {
+  set isDynamic(val: boolean) {
+    this._isDynamic = val
+    if (!val) {
       this.currentAction = undefined
     }
   }
@@ -515,22 +542,29 @@ export class InteractiveClock extends MathaleaCustomElement {
     return Number(this.getAttribute('minute'))
   }
 
-  set minute(value) {
-    this.setAttribute('minute', value.toString())
+  set minute(val) {
+    this.setAttribute('minute', val.toString())
     this.previousMinute = this.minute
   }
 
   get value() {
-    return `${this.hour}h${this.minute}min${this.second}s`
+    return { hour: this.hour, minute: this.minute, second: this.second }
   }
 
-  set value(value: string) {
-    const match = value.match(/^(\d+)h(\d+)min(\d+)s$/)
-    if (!match) return
-
-    const hour = Number(match[1])
-    const minute = Number(match[2])
-    const second = Number(match[3])
+  set value({
+    hour,
+    minute,
+    second,
+  }: {
+    hour: number
+    minute: number
+    second: number
+  }) {
+    hour = hour == null || hour < 0 ? 0 : hour > 12 ? hour - 12 : hour
+    minute = minute == null ? 0 : minute
+    second = second == null ? 0 : second
+    minute = minute < 0 ? 0 : minute >= 60 ? minute - 60 : minute
+    second = second < 0 ? 0 : second >= 60 ? second - 60 : second
     if (
       !Number.isFinite(hour) ||
       !Number.isFinite(minute) ||
