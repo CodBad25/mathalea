@@ -2,15 +2,12 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { randint } from '../../modules/outils'
 import ExerciceLabyrinthe from '../_Exercice_labyrinthe'
 export const titre =
-  'Parcourir un labyrinthe des multiples basé sur des critères de divisibilité'
-
-export const dateDePublication = '30/10/2026'
-export const interactifReady = true
+  'Parcourir un labyrinthe des multiples basé sur des critères de divisibilité de 2, 3, 5 ou 9'
 export const interactifType = 'custom'
 
 export const uuid = '424b2'
 export const refs = {
-  'fr-fr': ['5NIJ-1'],
+  'fr-fr': ['5N1J-1'],
   'fr-2016': ['5A11-1v2'],
   'fr-ch': [],
 }
@@ -25,7 +22,7 @@ export default class ExerciceLabyrintheMultiplesDe2a9 extends ExerciceLabyrinthe
     this.cols = 7
     this.rows = 5
     this.orientation = 'horizontal'
-    this.sup = choice([3, 9])
+    this.sup = 5
     this.besoinFormulaireNumerique = [
       'Critère de divisibilité',
       5,

@@ -24,7 +24,7 @@ export const titre = 'Utiliser les critères de divisibilité'
 export const uuid = '4a128'
 
 export const refs = {
-  'fr-fr': ['5NIJ-2'],
+  'fr-fr': ['5N1J-2'],
   'fr-2016': ['6N43', '5A11-3'],
   'fr-ch': ['9NO4-4'],
 }
