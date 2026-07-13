@@ -3,7 +3,9 @@
  */
 
 import Horloge from '../../../lib/2d/horloge'
-import handleInteractiveClock from '../../../lib/customElements/InteractiveClock'
+import handleInteractiveClock, {
+  InteractiveClock,
+} from '../../../lib/customElements/InteractiveClock'
 import { combinaisonListes } from '../../../lib/outils/arrayOutils'
 import { sp } from '../../../lib/outils/outilString'
 import { formatMinute } from '../../../lib/outils/texNombre'
@@ -58,7 +60,17 @@ export default class ExerciceInteractiveClock extends Exercice {
       }
       let enonce = `Placer correctement les aiguilles pour indiquer ${hour}${sp(1)}h${sp(1)}${formatMinute(minute)}.<br>`
       if (context.isHtml) {
-        enonce += `<br><br><interactive-clock id="clockEx${this.numeroExercice}Q${i}" isDynamic="${this.interactif}" showHands="${this.interactif}"/>`
+        enonce += `<br><br>${InteractiveClock.create({
+          exercice: this,
+          questionIndex: i,
+          dataOptions: {
+            hour: 0,
+            minute: 0,
+            isDynamic: true,
+            showHands: true,
+            showSecond: false,
+          },
+        })}`
       } else {
         const horloge = new Horloge(0, 0, 2)
         enonce += mathalea2d(
@@ -75,7 +87,17 @@ export default class ExerciceInteractiveClock extends Exercice {
       }
       let correction = ''
       if (context.isHtml) {
-        correction = `<interactive-clock hour="${hour}" minute="${minute}" isDynamic="false"/>`
+        correction = `${InteractiveClock.create({
+          exercice: this,
+          questionIndex: i,
+          dataOptions: {
+            hour,
+            minute,
+            isDynamic: false,
+            showHands: true,
+            showSecond: false,
+          },
+        })}`
       } else {
         const horloge = new Horloge(0, 0, 2, new Hms({ hour, minute }))
         correction = mathalea2d(
@@ -117,7 +139,7 @@ export default class ExerciceInteractiveClock extends Exercice {
   }
 
   correctionInteractive = (i: number) => {
-    const id = `clockEx${this.numeroExercice}Q${i}`
+    const id = `interactive-clockEx${this.numeroExercice}Q${i}`
     const clock = document.querySelector(`#${id}`) as any
     if (clock == null) {
       return 'KO'

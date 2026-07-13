@@ -26,7 +26,9 @@ export function verifQuestionListeDeroulante(exercice: IExercice, i: number) {
       { exercice: JSON.stringify(exercice) },
     )
   }
-  const liste = document.querySelector(`#ex${exercice.numeroExercice}Q${i}`)
+  const liste = document.querySelector(
+    `#liste-deroulanteEx${exercice.numeroExercice}Q${i}`,
+  )
   let value
 
   if (liste) {
@@ -85,7 +87,7 @@ export function choixDeroulant(
     exercice.autoCorrection[i].formatInteractif = 'listeDeroulante'
   }
   let result =
-    `<liste-deroulante class="mx-2 listeDeroulante" id="ex${exercice.numeroExercice}Q${i}"${style} choices="` +
+    `<liste-deroulante class="mx-2 listeDeroulante" id="liste-deroulanteEx${exercice.numeroExercice}Q${i}"${style} choices="` +
     encodeURIComponent(JSON.stringify(choix)) +
     `" choix0="${choix0}"></liste-deroulante>`
   /* let result = `<select class="mx-2 listeDeroulante" id="Ex${exercice.numeroExercice}Q${i}" ${style}>

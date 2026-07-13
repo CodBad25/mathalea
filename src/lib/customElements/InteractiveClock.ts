@@ -2,7 +2,24 @@ import Hms from '../../modules/Hms'
 import { mathalea2d } from '../../modules/mathalea2d'
 import Horloge from '../2d/horloge'
 import { orangeMathalea } from '../colors'
+import type { IExercice } from '../types'
 import MathaleaCustomElement from './MathaleaCustomElement'
+export type ClockDataOptions = {
+  hour?: number
+  minute?: number
+  second?: number
+  isDynamic?: boolean
+  showHands?: boolean
+  showSecond?: boolean
+}
+
+type ClockValueInput =
+  | string
+  | {
+      hour?: number
+      minute?: number
+      second?: number
+    }
 /**
  * Horloge interactive
  * @author Rémi Angot
@@ -81,6 +98,18 @@ export class InteractiveClock extends MathaleaCustomElement {
    */
   connectedCallback() {
     this.render()
+  }
+
+  static create({
+    exercice,
+    questionIndex,
+    dataOptions,
+  }: {
+    exercice: IExercice
+    questionIndex: number
+    dataOptions: ClockDataOptions
+  }): string {
+    return `<interactive-clock id="interactive-clockEx${exercice.numeroExercice}Q${questionIndex}" hour="${dataOptions.hour ?? 0}" minute="${dataOptions.minute ?? 0}" second="${dataOptions.second ?? 0}" isDynamic="${dataOptions.isDynamic ?? true}" showHands="${dataOptions.showHands ?? true}" showSecond="${dataOptions.showSecond ?? false}"></interactive-clock>`
   }
 
   renderLatex() {
@@ -551,15 +580,54 @@ export class InteractiveClock extends MathaleaCustomElement {
     return { hour: this.hour, minute: this.minute, second: this.second }
   }
 
-  set value({
-    hour,
-    minute,
-    second,
-  }: {
-    hour: number
-    minute: number
-    second: number
-  }) {
+  set value(value: ClockValueInput) {
+    let hour: number | undefined
+    let minute: number | undefined
+    let second: number | undefined
+
+    if (typeof value === 'string') {
+      const trimmedValue = value.trim()
+      const hmsMatch = trimmedValue.match(
+        /^(\d{1,2})h(?:\s*(\d{1,2})(?:\s*min)?(?:\s*(\d{1,2})s)?)?$/i,
+      )
+      const colonMatch = trimmedValue.match(
+        /^(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?$/,
+      )
+      // Ici on traite les cas où la valeur est une chaîne de caractères représentant les heures, minutes et secondes.
+      // Peut être utilisée pour créer une horloge pour la correction par exemple. (on peut aussi utiliser JSON.strigify({hour:..., minute:..., second:...}) pour créer la valeur)
+      if (hmsMatch) {
+        hour = Number(hmsMatch[1])
+        minute = hmsMatch[2] == null ? 0 : Number(hmsMatch[2])
+        second = hmsMatch[3] == null ? 0 : Number(hmsMatch[3])
+      } else if (colonMatch) {
+        hour = Number(colonMatch[1])
+        minute = colonMatch[2] == null ? 0 : Number(colonMatch[2])
+        second = colonMatch[3] == null ? 0 : Number(colonMatch[3])
+      } else {
+        // C'est sans doute l'objet JSON {hour:..., minute:..., second:...}
+        // C'est la pratique dans mathaleaWriteStudentPreviousAnswers pour injecter les réponses sauvegardées dans les customElements
+        try {
+          const parsedValue = JSON.parse(trimmedValue)
+          if (
+            typeof parsedValue === 'object' &&
+            parsedValue !== null &&
+            'hour' in parsedValue &&
+            'minute' in parsedValue
+          ) {
+            hour = Number(parsedValue.hour)
+            minute = Number(parsedValue.minute)
+            second = 'second' in parsedValue ? Number(parsedValue.second) : 0
+          }
+        } catch (e) {
+          // Si la chaîne n'est pas un JSON valide, on ignore l'erreur et on ne fait rien.
+        }
+      }
+    } else {
+      hour = value.hour
+      minute = value.minute
+      second = value.second
+    }
+
     hour = hour == null || hour < 0 ? 0 : hour > 12 ? hour - 12 : hour
     minute = minute == null ? 0 : minute
     second = second == null ? 0 : second

@@ -1,4 +1,9 @@
 import { context } from '../../modules/context'
+export const listOfCustomElements = [
+  'interactive-clock',
+  'multi-mathfield',
+  'liste-deroulante',
+]
 
 type CreateAttributes = Record<string, unknown>
 

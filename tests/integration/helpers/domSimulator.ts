@@ -284,7 +284,7 @@ export function injectInteractiveClockDOM(
   hour: string,
   minute: string,
 ) {
-  const id = `clockEx${exerciceIndex}Q${questionIndex}`
+  const id = `interactive-clockEx${exerciceIndex}Q${questionIndex}`
   document.getElementById(id)?.remove()
 
   const wrapper = document.createElement('div')

@@ -2,6 +2,7 @@
   import type { MathfieldElement } from 'mathlive'
   import { afterUpdate, onDestroy, onMount } from 'svelte'
   import { setSizeWithinSvgContainer } from '../../../../lib/components/sizeTools'
+  import type ListeDeroulanteElement from '../../../../lib/customElements/ListeDeroulanteElement'
   import {
     questionCliqueFigure,
     type FigureClicable,
@@ -29,6 +30,15 @@
       mf.removeEventListener('keyup', handleKeyUp)
       mf.removeEventListener('input', handleMathfieldElement)
     }
+    const listesDeroulantes = questionContainer?.querySelectorAll(
+      '[id^="liste-deroulanteEx"]',
+    ) as NodeListOf<ListeDeroulanteElement>
+    for (const listeDeroulante of listesDeroulantes ?? []) {
+      listeDeroulante.removeEventListener(
+        'change',
+        handleListeDeroulanteElement,
+      )
+    }
   })
   onMount(() => {
     const questionContent = document.getElementById(
@@ -37,6 +47,9 @@
     if (questionContent) {
       mathaleaRenderDiv(questionContent)
       setSizeWithinSvgContainer(questionContent)
+      if (visible) {
+        updateInteractivity()
+      }
     }
     loadMathLive()
   })
@@ -84,6 +97,32 @@
     }
   }
 
+  function syncListeDeroulantesState() {
+    const listesDeroulantes = questionContainer?.querySelectorAll(
+      '[id^="liste-deroulanteEx"]',
+    ) as NodeListOf<ListeDeroulanteElement>
+    const hasAnswer = Array.from(listesDeroulantes ?? []).some(
+      (listeDeroulante) => listeDeroulante.value !== '',
+    )
+    if ($canOptions.questionGetAnswer[index] !== hasAnswer) {
+      $canOptions.questionGetAnswer[index] = hasAnswer
+    }
+  }
+
+  function handleListeDeroulanteElement(_ev: Event) {
+    syncListeDeroulantesState()
+  }
+
+  function ensureKeyboardVisibleForMathfield(mf: MathfieldElement) {
+    if (mf.readOnly || mf.classList.contains('corrected')) {
+      return
+    }
+    if (!$keyboardState.isVisible || $keyboardState.idMathField !== mf.id) {
+      $keyboardState.idMathField = mf.id
+      $keyboardState.isVisible = true
+    }
+  }
+
   function updateInteractivity() {
     if (questionContainer) {
       const multiMf = questionContainer.querySelector('multi-mathfield')
@@ -109,7 +148,14 @@
               mathfields.includes(shadowRoot.activeElement as MathfieldElement)
             if (!hasFocus) {
               const mf = mathfields[0]
-              if (mf) mf.focus()
+              if (mf) {
+                mf.focus()
+                ensureKeyboardVisibleForMathfield(mf)
+              }
+            } else if (shadowRoot.activeElement) {
+              ensureKeyboardVisibleForMathfield(
+                shadowRoot.activeElement as MathfieldElement,
+              )
             }
           }, 0)
         }
@@ -133,7 +179,14 @@
               listeMf.includes(document.activeElement as MathfieldElement)
             if (!hasFocus) {
               const mf = listeMf[0]
-              if (mf) mf.focus()
+              if (mf) {
+                mf.focus()
+                ensureKeyboardVisibleForMathfield(mf)
+              }
+            } else if (document.activeElement) {
+              ensureKeyboardVisibleForMathfield(
+                document.activeElement as MathfieldElement,
+              )
             }
           }, 0)
         }
@@ -152,6 +205,7 @@
         $keyboardState.idMathField = mf.id
         window.setTimeout(() => {
           mf.focus()
+          ensureKeyboardVisibleForMathfield(mf)
         }, 0)
         return
       }
@@ -184,8 +238,9 @@
         return
       }
 
-      const clocks =
-        questionContainer?.querySelectorAll<HTMLInputElement>('[id^="clockEx"]')
+      const clocks = questionContainer?.querySelectorAll<HTMLInputElement>(
+        '[id^="interactive-clockEx"]',
+      )
       if (clocks.length > 0) {
         $keyboardState.isVisible = false
         if (!clocks[0].dataset.listenerAdded) {
@@ -229,8 +284,6 @@
       if (apigeoms.length > 0) {
         $keyboardState.isVisible = false
         if (!apigeoms[0].dataset.listenerAdded) {
-          apigeoms[0].dataset.listenerAdded = 'true' // Marquer comme ajouté
-
           function handleApigeomClick(this: HTMLElement, ev: Event) {
             // MGu: il faudrait faire mieux mais bon...
             // Un click sur la figure ne fonctionne pas car dans apigeom, il ne se propage pas...
@@ -239,35 +292,37 @@
               $canOptions.questionGetAnswer[index] = true
             }
           }
-          apigeoms[0]
-            .querySelector('#divFigure > svg')
-            ?.addEventListener('pointerleave', handleApigeomClick)
+          const figureSvg = apigeoms[0].querySelector('#divFigure > svg')
+          if (figureSvg) {
+            apigeoms[0].dataset.listenerAdded = 'true' // Marquer comme ajouté
+            figureSvg.addEventListener('pointerleave', handleApigeomClick)
+          } else {
+            // Le SVG peut être injecté avec un léger délai: on retente ensuite.
+            window.setTimeout(() => {
+              if (visible) {
+                updateInteractivity()
+              }
+            }, 50)
+          }
         }
         return
       }
 
-      const selects =
-        questionContainer?.querySelectorAll<HTMLSelectElement>(
-          'select[id^="ex"]',
-        )
-      if (selects.length > 0) {
+      const listesDeroulantes = questionContainer?.querySelectorAll(
+        '[id^="liste-deroulanteEx"]',
+      ) as NodeListOf<ListeDeroulanteElement>
+      if (listesDeroulantes.length > 0) {
         $keyboardState.isVisible = false
-        for (const select of selects) {
-          if (!select.dataset.listenerAdded) {
-            select.dataset.listenerAdded = 'true' // Marquer comme ajouté
-            select.addEventListener('change', function () {
-              if (select.selectedIndex > 0) {
-                if ($canOptions.questionGetAnswer[index] !== true) {
-                  $canOptions.questionGetAnswer[index] = true
-                }
-              } else {
-                if ($canOptions.questionGetAnswer[index] !== false) {
-                  $canOptions.questionGetAnswer[index] = false
-                }
-              }
-            })
+        for (const listeDeroulante of listesDeroulantes) {
+          if (!listeDeroulante.dataset.listenerAdded) {
+            listeDeroulante.dataset.listenerAdded = 'true'
+            listeDeroulante.addEventListener(
+              'change',
+              handleListeDeroulanteElement,
+            )
           }
         }
+        syncListeDeroulantesState()
         return
       }
 

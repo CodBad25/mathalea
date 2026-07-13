@@ -56,14 +56,21 @@
         ? '$' + answer + '$'
         : answer
     } // Pour les QCM
-    if (question.includes('<liste-deroulante')) return answer // Pour les listeDeroulante
-    if (question.includes('interactive-clock'))
-      return `$${answer.split('h')[0]}$ h $${answer.split('h')[1]}$` // Pour les horloges interactives
+    if (question.includes('liste-deroulante')) return answer // Pour les listeDeroulante
+    if (question.includes('interactive-clock')) {
+      const answerObject = JSON.parse(answer) as {
+        hour: number
+        minute: number
+        second: number
+      }
+      return `$${answerObject.hour}$ h $${answerObject.minute}$` // Pour les horloges interactives
+    }
     if (question.includes('<input') && question.includes('champTexteEx'))
       return answer // Pour les champTexte
     if (question.includes('apigeomEx')) return answer // Pour le "Voir figure" des figures apigeom
     if (question.includes('divDragAndDropEx')) return answer // Pour les drag and drop
-    if (question.includes('multiMathfield')) return cleanMultiMathfield(answer)
+    if (question.includes('multi-mathfieldEx'))
+      return cleanMultiMathfield(answer)
     if (question.includes('metaInteractif2d'))
       return cleanMetaInteractif2d(answer)
     return '$' + cleanFillInTheBlanks(answer, false) + '$'
@@ -93,7 +100,7 @@
         // Ajoute des dollars autour de la valeur, en évitant les doubles dollars
         let v = valeur.trim()
         if (!v.startsWith('$')) v = '$' + v
-        if (!v.endsWith('$')) v = v + '$'
+        if (!v.endsWith('$')) v += '$'
         return v
       },
     )
