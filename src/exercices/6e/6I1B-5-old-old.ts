@@ -1,4 +1,4 @@
-import { MySpreadsheetElement } from '../../lib/tableur/MySpreadSheet'
+import { MySpreadsheetElement } from '../../lib/customElements/MySpreadSheet'
 import { addSheet, createTableurLatex } from '../../lib/tableur/outilsTableur'
 import { context } from '../../modules/context'
 
@@ -116,7 +116,7 @@ export default class ExerciceTableur extends Exercice {
     // 1. Récupère les données de l'utilisateur
     const userData = userSheet.getData()
     const nbSteps = nbLignes[q]
-    const testSheet = MySpreadsheetElement.create({
+    const testSheet = MySpreadsheetElement.createEltToAppendToDom({
       data: userData,
       minDimensions: userSheet.getMinDimensions(),
       style: userSheet.getStyle(),
@@ -128,7 +128,7 @@ export default class ExerciceTableur extends Exercice {
     testSheet.style.left = '-9999px'
     document.body.appendChild(testSheet)
 
-    const correctionSheet = MySpreadsheetElement.create({
+    const correctionSheet = MySpreadsheetElement.createEltToAppendToDom({
       data: userData,
       minDimensions: userSheet.getMinDimensions(),
       style: userSheet.getStyle(),
@@ -160,7 +160,9 @@ export default class ExerciceTableur extends Exercice {
     for (let i = 0; i < nbSteps; i++) {
       const index = i + q * nbSteps
       cell = toRefCellule(corrections[index].ref)
-      resultats.push(parseFloat(testSheet.getCellValue(cell.col, cell.lig)))
+      resultats.push(
+        parseFloat(String(testSheet.getCellValue(cell.col, cell.lig))),
+      )
     }
     // Recupere les données B1, C1, D1 ... pour les comparer aux résultats attendus
     const correctionResultats: number[] = []
@@ -168,7 +170,7 @@ export default class ExerciceTableur extends Exercice {
       const index = i + q * nbSteps
       cell = toRefCellule(corrections[index].ref)
       correctionResultats.push(
-        parseFloat(correctionSheet.getCellValue(cell.col, cell.lig)),
+        parseFloat(String(correctionSheet.getCellValue(cell.col, cell.lig))),
       )
     }
 

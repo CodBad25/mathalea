@@ -128,7 +128,7 @@ function verifyCustomQuestion(
 
   const clockValues = extractClockValuesForCustom(ac)
   const questionText = exercice.listeQuestions[questionIndex] ?? ''
-  if (clockValues != null && questionText.includes('clockEx')) {
+  if (clockValues != null && questionText.includes('interactive-clockEx')) {
     const rawHour = Number.parseInt(clockValues.hour, 10)
     const domHour = Number.isNaN(rawHour)
       ? clockValues.hour

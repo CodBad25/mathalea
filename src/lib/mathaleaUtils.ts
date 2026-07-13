@@ -2,11 +2,12 @@ import type LabyrintheElement from 'labyrinthe/src/LabyrintheElement'
 import type { MathfieldElement } from 'mathlive'
 import { get } from 'svelte/store'
 import { type MathaleaSVG } from '../lib/types'
-import type ListeDeroulanteElement from './interactif/listeDeroulante/ListeDeroulanteElement'
-import { MultiMathfieldElement } from './interactif/MultiMathfield/MultiMathfield'
+import MathaleaCustomElement, {
+  listOfCustomElements,
+} from './customElements/MathaleaCustomElement'
+import type { MySpreadsheetElement } from './customElements/MySpreadSheet'
 import { previousView } from './stores/generalStore'
 import { globalOptions } from './stores/globalOptions'
-import type { MySpreadsheetElement } from './tableur/MySpreadSheet'
 import type { VueType } from './VueType'
 
 export function mathaleaGoToView(destinationView: '' | VueType) {
@@ -112,7 +113,26 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
   const promiseAnswers: Promise<boolean>[] = []
   const starttime = window.performance.now()
   for (const answer in answers) {
-    if (answer.includes('svgSelection')) {
+    if (listOfCustomElements.includes(answer.split('Ex')[0])) {
+      const p = new Promise<boolean>((resolve) => {
+        waitForElement('#' + answer)
+          .then(() => {
+            // La réponse correspond à un customElement quel qu'il soit
+            const element = document.querySelector(
+              `#${answer}`,
+            ) as MathaleaCustomElement
+            if (element !== null) {
+              element.value = answers[answer]
+              resolve(true)
+            }
+          })
+          .catch((reason) => {
+            console.error(reason)
+            window.notify(`Erreur dans la réponse ${answer} : ${reason}`, {})
+            resolve(true)
+          })
+      })
+    } else if (answer.includes('svgSelection')) {
       const p = new Promise<boolean>((resolve) => {
         waitForElement(`[id$='${answer}']`)
           .then((eles) => {
@@ -314,40 +334,6 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
           })
       })
       promiseAnswers.push(p)
-    } else if (answer.includes('clockEx')) {
-      const p = new Promise<boolean>((resolve) => {
-        waitForElement('#' + answer)
-          .then(() => {
-            // La réponse correspond à une horloge
-            const clock = document.querySelector(`#${answer}`)
-            if (clock !== null) {
-              const [hour, minute] = answers[answer].split('h')
-              clock.setAttribute('hour', hour)
-              clock.setAttribute('minute', minute)
-              if (
-                'updateHandHour' in clock &&
-                typeof clock.updateHandHour === 'function'
-              ) {
-                clock.updateHandHour()
-              }
-              if (
-                'updateHandMinute' in clock &&
-                typeof clock.updateHandMinute === 'function'
-              ) {
-                clock.updateHandMinute()
-              }
-              const time = window.performance.now()
-              log(`duration ${answer}: ${time - starttime}`)
-              resolve(true)
-            }
-          })
-          .catch((reason) => {
-            console.error(reason)
-            window.notify(`Erreur dans la réponse ${answer} : ${reason}`, {})
-            resolve(true)
-          })
-      })
-      promiseAnswers.push(p)
     } else if (answer.includes('sheet-')) {
       const p = new Promise<boolean>((resolve) => {
         waitForElement('#' + answer)
@@ -394,46 +380,17 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
           })
       })
       promiseAnswers.push(p)
-    } else if (answer.startsWith('multiMathfieldEx')) {
-      const p = new Promise<boolean>((resolve) => {
-        waitForElement('#' + answer)
-          .then(() => {
-            const multiMathfield = document.querySelector(
-              `#${answer}`,
-            ) as any as MultiMathfieldElement
-
-            const answersMulti =
-              MultiMathfieldElement.answersFromFilledTemplate(answers[answer])
-            if (multiMathfield !== null) {
-              multiMathfield.setAnswers(answersMulti)
-            }
-            resolve(true)
-          })
-          .catch((reason) => {
-            console.error(reason)
-            window.notify(`Erreur dans la réponse ${answer} : ${reason}`, {})
-            resolve(true)
-          })
-      })
-      promiseAnswers.push(p)
     } else {
       const p = new Promise<boolean>((resolve) => {
         waitForElement(`[id$='${answer}']`)
           .then((eles) => {
             eles.forEach((ele) => {
-              if (ele.tagName === 'LISTE-DEROULANTE') {
-                // La réponse correspond à un select
-                ;(ele as ListeDeroulanteElement).value = answers[answer]
-                const time = window.performance.now()
-                log(`duration ${answer}: ${time - starttime}`)
-                resolve(true)
-              } else if (ele.id.includes('check')) {
+              if (ele.id.includes('check')) {
                 // La réponse correspond à une case à cocher qui doit être cochée
                 if (answers[answer] === '1') {
                   ;(ele as HTMLInputElement).checked = true
                 }
-                const time = window.performance.now()
-                log(`duration ${answer}: ${time - starttime}`)
+
                 resolve(true)
               } else if (
                 ele.tagName === 'MATH-FIELD' &&
@@ -442,13 +399,11 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
               ) {
                 // La réponse correspond à un champs texte
                 ;(ele as any).setValue(answers[answer])
-                const time = window.performance.now()
-                log(`duration ${answer}: ${time - starttime}`)
+
                 resolve(true)
               } else if (ele.tagName === 'INPUT') {
                 ;(ele as HTMLInputElement).value = answers[answer]
-                const time = window.performance.now()
-                log(`duration ${answer}: ${time - starttime}`)
+
                 resolve(true)
               }
             })

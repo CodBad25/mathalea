@@ -535,9 +535,14 @@ async function checkExerciseFile(
     testedSigs.push(sig)
 
     try {
-      const prevCtx = { isHtml: context.isHtml, isAmc: context.isAmc }
+      const prevCtx = {
+        isHtml: context.isHtml,
+        isAmc: context.isAmc,
+        isTypst: context.isTypst,
+      }
       context.isHtml = true
       context.isAmc = false
+      context.isTypst = true
       seedrandom('typst-check', { global: true })
       exercice.numeroExercice = 0
       if (typeof exercice.applyNewSeed === 'function') exercice.applyNewSeed()
@@ -552,6 +557,7 @@ async function checkExerciseFile(
       }
       context.isHtml = prevCtx.isHtml
       context.isAmc = prevCtx.isAmc
+      context.isTypst = prevCtx.isTypst
     } catch (err: any) {
       if (!firstFailure)
         firstFailure = {

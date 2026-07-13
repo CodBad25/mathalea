@@ -201,7 +201,7 @@ export default class TrouverLeBonProgramme extends Exercice {
         createScratchSimulatorElement(
           code.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
           delai,
-          false,
+          context.isTypst,
         ),
       )
       if (context.isHtml) {

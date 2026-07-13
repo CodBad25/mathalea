@@ -34,9 +34,10 @@ pnpm check
 ### Ajouter ou corriger l'interactivité
 
 1. Lire [Rendre un exercice interactif](rendre-un-exercice-interactif.md) pour choisir le bon format : champ MathLive, texte à trous, tableau, QCM, liste déroulante, glisser-déposer ou sélection SVG.
-2. Consulter [Système d'interactivité](../reference/systeme-interactivite.md) si vous devez comprendre les structures `handleAnswers`, les comparateurs ou les formats de réponses.
-3. Vérifier que l'exercice reste lisible en HTML non interactif et en LaTeX.
-4. Pour les exercices interactifs déclarés prêts, utiliser les rapports décrits dans [Rapports d'exercices](../../tests/rapports-exercices.md) si la modification touche `autoCorrection`, AMC ou les formats de réponse.
+2. Lire [Créer un custom element (convention MathALÉA)](creer-un-custom-element.md) si vous créez ou refactorez un composant interactif maison.
+3. Consulter [Système d'interactivité](../reference/systeme-interactivite.md) si vous devez comprendre les structures `handleAnswers`, les comparateurs ou les formats de réponses.
+4. Vérifier que l'exercice reste lisible en HTML non interactif et en LaTeX.
+5. Pour les exercices interactifs déclarés prêts, utiliser les rapports décrits dans [Rapports d'exercices](../../tests/rapports-exercices.md) si la modification touche `autoCorrection`, AMC ou les formats de réponse.
 
 ### Travailler sur un export imprimable ou AMC
 
@@ -52,15 +53,15 @@ pnpm check
 
 ## Choisir le bon guide
 
-| Objectif | Commencer par | Compléter avec |
-| --- | --- | --- |
-| Installer le projet, lancer le site, préparer un commit | [Installation et workflows](installation-et-workflows.md) | [Tests et CI](../../tests/README.md) |
-| Créer un exercice génératif simple | [Coder un exercice classique](coder-un-exercice-classique.md) | [Guides mathématiques](mathematiques/README.md) |
-| Créer un QCM | [Coder un QCM](coder-un-qcm.md) | [Rendre un exercice interactif](rendre-un-exercice-interactif.md) |
-| Ajouter une saisie ou une correction interactive | [Rendre un exercice interactif](rendre-un-exercice-interactif.md) | [Système d'interactivité](../reference/systeme-interactivite.md) |
-| Préparer un export AMC | [Export AMC](export-amc.md) | [Rapports d'exercices](../../tests/rapports-exercices.md) |
-| Utiliser les helpers mathématiques | [Guides mathématiques](mathematiques/README.md) | [Référence mathématique](../reference/mathematiques/README.md) |
-| Ajouter une figure 3D | [Faire un exercice 3D](faire-un-exercice-3d.md) | [Rendre un exercice interactif](rendre-un-exercice-interactif.md) |
+| Objectif                                                | Commencer par                                                     | Compléter avec                                                                                                                                |
+| ------------------------------------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Installer le projet, lancer le site, préparer un commit | [Installation et workflows](installation-et-workflows.md)         | [Tests et CI](../../tests/README.md)                                                                                                          |
+| Créer un exercice génératif simple                      | [Coder un exercice classique](coder-un-exercice-classique.md)     | [Guides mathématiques](mathematiques/README.md)                                                                                               |
+| Créer un QCM                                            | [Coder un QCM](coder-un-qcm.md)                                   | [Rendre un exercice interactif](rendre-un-exercice-interactif.md)                                                                             |
+| Ajouter une saisie ou une correction interactive        | [Rendre un exercice interactif](rendre-un-exercice-interactif.md) | [Créer un custom element (convention MathALÉA)](creer-un-custom-element.md), [Système d'interactivité](../reference/systeme-interactivite.md) |
+| Préparer un export AMC                                  | [Export AMC](export-amc.md)                                       | [Rapports d'exercices](../../tests/rapports-exercices.md)                                                                                     |
+| Utiliser les helpers mathématiques                      | [Guides mathématiques](mathematiques/README.md)                   | [Référence mathématique](../reference/mathematiques/README.md)                                                                                |
+| Ajouter une figure 3D                                   | [Faire un exercice 3D](faire-un-exercice-3d.md)                   | [Rendre un exercice interactif](rendre-un-exercice-interactif.md)                                                                             |
 
 ## Vérifications courantes
 
@@ -75,12 +76,13 @@ Pour une modification limitée à quelques exercices, consultez aussi [Rapports 
 
 ## Tous les guides
 
-| Guide | À utiliser quand... |
-| --- | --- |
-| [Installation et workflows](installation-et-workflows.md) | Vous préparez l'environnement local, lancez le site ou cherchez les commandes quotidiennes. |
-| [Coder un exercice classique](coder-un-exercice-classique.md) | Vous créez ou reprenez la structure d'un exercice génératif. |
-| [Coder un QCM](coder-un-qcm.md) | Vous ajoutez des propositions, une correction de QCM ou un rendu non interactif de QCM. |
-| [Rendre un exercice interactif](rendre-un-exercice-interactif.md) | Vous ajoutez une saisie élève, choisissez un comparateur ou adaptez `autoCorrection`. |
-| [Export AMC](export-amc.md) | Vous rendez un exercice compatible avec Auto Multiple Choice. |
-| [Faire un exercice 3D](faire-un-exercice-3d.md) | Vous travaillez sur un exercice avec rendu 3D. |
-| [Guides mathématiques](mathematiques/README.md) | Vous avez besoin d'un helper pour les nombres, décimaux, grandeurs, fonctions, tableaux ou figures 2D. |
+| Guide                                                                       | À utiliser quand...                                                                                    |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| [Installation et workflows](installation-et-workflows.md)                   | Vous préparez l'environnement local, lancez le site ou cherchez les commandes quotidiennes.            |
+| [Coder un exercice classique](coder-un-exercice-classique.md)               | Vous créez ou reprenez la structure d'un exercice génératif.                                           |
+| [Coder un QCM](coder-un-qcm.md)                                             | Vous ajoutez des propositions, une correction de QCM ou un rendu non interactif de QCM.                |
+| [Rendre un exercice interactif](rendre-un-exercice-interactif.md)           | Vous ajoutez une saisie élève, choisissez un comparateur ou adaptez `autoCorrection`.                  |
+| [Créer un custom element (convention MathALÉA)](creer-un-custom-element.md) | Vous créez, refactorez ou standardisez un custom element du projet.                                    |
+| [Export AMC](export-amc.md)                                                 | Vous rendez un exercice compatible avec Auto Multiple Choice.                                          |
+| [Faire un exercice 3D](faire-un-exercice-3d.md)                             | Vous travaillez sur un exercice avec rendu 3D.                                                         |
+| [Guides mathématiques](mathematiques/README.md)                             | Vous avez besoin d'un helper pour les nombres, décimaux, grandeurs, fonctions, tableaux ou figures 2D. |

@@ -1336,7 +1336,7 @@ export function verifQuestionMultiMathfield(
     )
   }
   const multi = document.getElementById(
-    `multiMathfieldEx${exercice.numeroExercice}Q${i}`,
+    `multi-mathfieldEx${exercice.numeroExercice}Q${i}`,
   ) as HTMLElement
   const template = multi?.getAttribute('data-template')
   const reponses = exercice.autoCorrection[i].valeur
@@ -1381,7 +1381,7 @@ export function verifQuestionMultiMathfield(
     // Récupère le composant MultiMathfield puis le Mathfield dans son shadowRoot
 
     const mf = multi?.shadowRoot?.querySelector(
-      `#multiMathfieldEx${exercice.numeroExercice}Q${i}-${field}`,
+      `#multi-mathfieldEx${exercice.numeroExercice}Q${i}-${field}`,
     ) as MathfieldElement
     const saisie = mf.getValue()
     mf.readOnly = true
@@ -1392,7 +1392,7 @@ export function verifQuestionMultiMathfield(
       continue
     }
     const eltFeedback = multi?.shadowRoot?.querySelector(
-      `#check-multiMathfieldEx${exercice.numeroExercice}Q${i}-${field}`,
+      `#check-multi-mathfieldEx${exercice.numeroExercice}Q${i}-${field}`,
     ) as HTMLSpanElement
     if (eltFeedback) {
       setStyles(eltFeedback, 'marginBottom: 20px')
@@ -1471,9 +1471,9 @@ export function verifQuestionMultiMathfield(
     Object.entries(saisies).forEach(([champ, valeur]) => {
       // Remplace toutes les occurrences de %{champ} par %{champ:"valeur"}
       const regex = new RegExp(`%\\{${champ}\\}`, 'g')
-      filledTemplate = filledTemplate.replace(regex, `%{${champ}:"${valeur}"}`)
+      filledTemplate = filledTemplate.replace(regex, `${valeur}`)
     })
-    exercice.answers[`multiMathfieldEx${exercice.numeroExercice}Q${i}`] =
+    exercice.answers[`multi-mathfieldEx${exercice.numeroExercice}Q${i}`] =
       filledTemplate
   }
 

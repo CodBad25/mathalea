@@ -1,23 +1,23 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPosition } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { spline, type NoeudSpline } from '../../lib/mathFonctions/Spline'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Déterminer graphiquement les extremums'
 export const interactifReady = true
 export const interactifType = 'multiMathfield'
 
 export const dateDePublication = '27/06/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModificationImportante = '06/04/2026' 
+export const dateDeModificationImportante = '06/04/2026'
 export const uuid = 'd6c25' // @todo à changer dans un nouvel exo (utiliser pnpm getNewUuid)
 
 export const refs = {
@@ -130,7 +130,12 @@ export default class BetaModeleSpline extends Exercice {
       const courbe1 = maSpline.courbe({
         epaisseur: 1.5,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: bleuMathalea, taille: 1, style: '.', epaisseur: 2 },
+        optionsNoeuds: {
+          color: bleuMathalea,
+          taille: 1,
+          style: '.',
+          epaisseur: 2,
+        },
         color: bleuMathalea,
       })
       const objetsEnonce = [repere1, courbe1]
@@ -143,7 +148,8 @@ export default class BetaModeleSpline extends Exercice {
         o,
       )
       texteEnonce += `${addMultiMathfield(this, i, {
-        dataTemplate: 'Le maximum de $f$ est : %{champ1}. Il est atteint en $x=$ %{champ2}\nLe minimum de $f$ est : %{champ3}. Il est atteint en $x=$ %{champ4}',
+        dataTemplate:
+          'Le maximum de $f$ est : %{champ1}. Il est atteint en $x=$ %{champ2}\nLe minimum de $f$ est : %{champ3}. Il est atteint en $x=$ %{champ4}',
         dataOptions: {
           champ1: { keyboard: KeyboardType.clavierDeBase },
           champ2: { keyboard: KeyboardType.clavierDeBase },
@@ -156,12 +162,17 @@ export default class BetaModeleSpline extends Exercice {
       const fMin = Math.min(...nuage.map((el) => el.y))
       const solutionMax = nuage.find((el) => el.y === fMax)!.x
       const solutionMin = nuage.find((el) => el.y === fMin)!.x
-      handleAnswers(this, i, {
-        champ1: { value: `${fMax}` },
-        champ2: { value: `${solutionMax}` },
-        champ3: { value: `${fMin}` },
-        champ4: { value: `${solutionMin}` },
-      }, { formatInteractif: 'multiMathfield' })
+      handleAnswers(
+        this,
+        i,
+        {
+          champ1: { value: `${fMax}` },
+          champ2: { value: `${solutionMax}` },
+          champ3: { value: `${fMin}` },
+          champ4: { value: `${solutionMin}` },
+        },
+        { formatInteractif: 'multiMathfield' },
+      )
 
       const texteCorrection = `Le point le plus haut de la courbe a pour coordonnées $(${solutionMax}\\,;\\,${fMax})$.<br>
       On en déduit que le maximum de $f$ est $${miseEnEvidence(fMax)}$. Il est atteint en $x=${miseEnEvidence(solutionMax)}$.<br>

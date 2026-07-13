@@ -6,14 +6,14 @@ import { grille } from '../../lib/2d/Grille'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { carre } from '../../lib/2d/polygonesParticuliers'
 import { latex2d, type Latex2d } from '../../lib/2d/textes'
+import {
+  addMultiMathfield,
+  type DataOptionsMultiMathfield,
+} from '../../lib/customElements/MultiMathfield'
 import { createList } from '../../lib/format/lists'
 import { deuxColonnesResp, troisColonnes } from '../../lib/format/miseEnPage'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import {
-  addMultiMathfield,
-  type DataOptionsMultiMathfield,
-} from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { choice } from '../../lib/outils/arrayOutils'
 import { numAlpha, sp } from '../../lib/outils/outilString'
 import type { Valeur } from '../../lib/types'

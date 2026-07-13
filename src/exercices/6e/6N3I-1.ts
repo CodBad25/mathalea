@@ -11,18 +11,17 @@ import {
 import Exercice from '../Exercice'
 
 import Figure from 'apigeom/src/Figure'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import handleApigeomFigureElement from '../../lib/apigeom/apigeom-figure'
 import { bleuMathalea } from '../../lib/colors'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleEntiersConsecutifs } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { ajouterAide } from '../../lib/outils/enrichissements'
 import { fraction } from '../../modules/fractions'
 import { representationFraction } from '../../modules/representationsFractions'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   'Encadrer une fraction entre deux nombres entiers consécutifs'

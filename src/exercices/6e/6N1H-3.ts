@@ -12,12 +12,11 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Lire une abscisse décimale grâce à des zooms successifs'
 

@@ -20,10 +20,6 @@
     new URLSearchParams(window.location.search).get('kutsum') === '1' ||
     window.location.hostname === 'localhost'
 
-  const showA4 =
-    new URLSearchParams(window.location.search).get('beta') === '1' ||
-    window.location.hostname === 'localhost'
-
   let showMoreModal = false
   let moreDialog: HTMLDialogElement
   let downloadContentDisplayed: 'success' | 'error' | 'none' = 'none'
@@ -54,18 +50,25 @@
 
   const exportOptions: ExportOption[] = [
     {
+      id: 'latex',
+      label: 'PDF via LaTeX',
+      description: 'Pour générer un PDF à partir du moteur de composition LaTeX',
+      icon: 'bx bx-code-alt',
+      action: () => exportAndClose('latex'),
+    },
+    {
+      id: 'typst',
+      label: 'PDF via HTML',
+      description: 'Pour générer un PDF à partir de la mise en page HTML',
+      icon: 'bx bx-code-alt',
+      action: () => exportAndClose('a4'),
+    },
+    {
       id: 'moodle',
       label: 'Moodle',
       description: 'Pour importer dans la plateforme Moodle ou ÉLÉA',
       component: MoodleIcon,
       action: () => exportAndClose('moodle'),
-    },
-    {
-      id: 'typst',
-      label: 'PDF via Typst',
-      description: 'Pour générer un PDF avec le moteur de composition Typst',
-      icon: 'bx bx-code-alt',
-      action: () => exportAndClose('typst'),
     },
     {
       id: 'alacarte',
@@ -131,22 +134,11 @@
   tooltip="Lien pour les élèves"
   on:click={() => handleExport('confeleve')}
 />
-<button
-  class="tooltip tooltip-bottom tooltip-neutral"
-  data-tip="PDF via LaTeX"
-  on:click={() => handleExport('latex')}
->
-  <PdfTextIcon
-    class="w-7 h-7 hover:fill-coopmaths-action-lightest fill-coopmaths-action dark:fill-coopmathsdark-action dark:hover:fill-coopmathsdark-action-lightest"
-  />
-</button>
-{#if showA4}
-  <ButtonIconTooltip
-    icon="bx-printer text-3xl"
-    tooltip="Impression"
-    on:click={() => handleExport('a4')}
-  />
-{/if}
+<ButtonIconTooltip
+  icon="bx-printer text-3xl"
+  tooltip="Impression"
+  on:click={() => handleExport('typst')}
+/>
 <ButtonIconTooltip
   icon="bx-dots-horizontal-rounded text-3xl"
   tooltip="Plus d'exports"

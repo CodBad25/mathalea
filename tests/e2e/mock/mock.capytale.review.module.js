@@ -128,7 +128,7 @@ const activityParams = {
       state: 'done',
       alea: 'stG6',
       answers: {
-        clockEx0Q0: '12h6',
+        'interactive-clockEx0Q0': '12h6',
       },
       numberOfPoints: 0,
       numberOfQuestions: 1,
@@ -199,10 +199,10 @@ const activityParams = {
       state: 'done',
       alea: 'fdfj',
       answers: {
-        ex5Q0: 'somme',
-        ex5Q1: 'quotient',
-        ex5Q2: 'produit',
-        ex5Q3: 'différence',
+        'liste-deroulanteEx5Q0': 'somme',
+        'liste-deroulanteEx5Q1': 'quotient',
+        'liste-deroulanteEx5Q2': 'produit',
+        'liste-deroulanteEx5Q3': 'différence',
       },
       numberOfPoints: 0,
       numberOfQuestions: 4,

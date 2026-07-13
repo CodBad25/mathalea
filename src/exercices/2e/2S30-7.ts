@@ -3,7 +3,7 @@ import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import Exercice from '../Exercice'
 
 import { tableauColonneLigne } from '../../lib/2d/tableau'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'

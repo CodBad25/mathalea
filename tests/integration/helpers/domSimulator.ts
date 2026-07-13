@@ -1,6 +1,6 @@
 import type { MathfieldElement } from 'mathlive'
-import ListeDeroulanteElement from '../../../src/lib/interactif/listeDeroulante/ListeDeroulanteElement'
-import { MySpreadsheetElement } from '../../../src/lib/tableur/MySpreadSheet'
+import ListeDeroulanteElement from '../../../src/lib/customElements/ListeDeroulanteElement'
+import { MySpreadsheetElement } from '../../../src/lib/customElements/MySpreadSheet'
 import type {
   GoodAnswersFormulas,
   SheetTestDatas,
@@ -284,7 +284,7 @@ export function injectInteractiveClockDOM(
   hour: string,
   minute: string,
 ) {
-  const id = `clockEx${exerciceIndex}Q${questionIndex}`
+  const id = `interactive-clockEx${exerciceIndex}Q${questionIndex}`
   document.getElementById(id)?.remove()
 
   const wrapper = document.createElement('div')

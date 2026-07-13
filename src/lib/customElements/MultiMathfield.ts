@@ -1,11 +1,15 @@
 // Utilitaire pour styliser les items a), b), ... dans un texte brut
 import katexCss from 'katex/dist/katex.min.css?inline'
 import { MathfieldElement } from 'mathlive'
-import { context } from '../../../modules/context'
-import { bleuMathalea } from '../../colors'
-import type { IExercice, ValeurNames } from '../../types'
-import { buildDataKeyboardFromStyle, KeyboardType } from '../claviers/keyboard'
-import { setMathfield, setMathfieldListener } from './setMathfield'
+import { context } from '../../modules/context'
+import { bleuMathalea } from '../colors'
+import {
+  buildDataKeyboardFromStyle,
+  KeyboardType,
+} from '../interactif/claviers/keyboard'
+import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
+import type { IExercice, ValeurNames } from '../types'
+import MathaleaCustomElement from './MathaleaCustomElement'
 
 function stylizeItems(text: string, output: 'html' | 'latex' = 'html'): string {
   const itemRegex = /(^|\s+)([a-z]\))/g
@@ -63,12 +67,23 @@ export type DataOptionsMultiMathfield = Partial<
   >
 >
 
+type MultiMathfieldAnswers = Record<string, string>
+type MultiMathfieldOption = {
+  keyboard?: string
+  placeholder?: string
+  minWidth?: number
+  texteApres?: string
+  ldots?: boolean
+}
+
 const buildDataKeyboardString = (style = '') => {
   const blocks = buildDataKeyboardFromStyle(style)
   return blocks.join(' ')
 }
 
-export class MultiMathfieldElement extends HTMLElement {
+export class MultiMathfieldElement extends MathaleaCustomElement {
+  static readonly elementTag = 'multi-mathfield'
+
   private readonly contentHost: HTMLSpanElement
 
   constructor() {
@@ -109,15 +124,35 @@ export class MultiMathfieldElement extends HTMLElement {
   ): Record<string, string> {
     const result: Record<string, string> = {}
     if (typeof filledTemplate !== 'string') return result
-    // Regex pour trouver %{champ:"valeur"}
-    const regex = /%\{([a-zA-Z0-9_]+):"([^"]*)"\}/g
+    // Parcourt le template rempli et récupère les valeurs injectées
+    // Exemple: %{champ1:"7"} ou %{champ2}
+    const regex = /%\{([a-zA-Z0-9_]+)(?::"([^"]*)")?\}/g
     let match
     while ((match = regex.exec(filledTemplate)) !== null) {
       const champ = match[1]
-      const valeur = match[2]
+      const valeur = match[2] ?? ''
       result[champ] = valeur
     }
     return result
+  }
+
+  static create({
+    exercice,
+    questionIndex,
+    dataTemplate,
+    dataOptions,
+  }: {
+    exercice: IExercice
+    questionIndex: number
+    dataTemplate: string
+    dataOptions: DataOptionsMultiMathfield
+  }): string {
+    const dataOptionsStr = encodeURIComponent(JSON.stringify(dataOptions))
+      .replace(/'/g, '%27')
+      .replace(/"/g, '%22')
+
+    const html = `<multi-mathfield id="multi-mathfieldEx${exercice.numeroExercice}Q${questionIndex}" data-template="${dataTemplate.replace(/"/g, '&quot;')}" data-options="${dataOptionsStr}"></multi-mathfield>`
+    return `${html}<div class="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${exercice.numeroExercice}Q${questionIndex}" style="display: none;"></div>`
   }
 
   connectedCallback() {
@@ -319,7 +354,7 @@ export class MultiMathfieldElement extends HTMLElement {
   }
 
   getValue() {
-    const result: Record<string, any> = {}
+    const result: MultiMathfieldAnswers = {}
     if (this.shadowRoot) {
       this.shadowRoot.querySelectorAll('math-field').forEach((el) => {
         const mf = el as MathfieldElement
@@ -330,6 +365,30 @@ export class MultiMathfieldElement extends HTMLElement {
       })
     }
     return result
+  }
+
+  get value() {
+    return this.getValue()
+  }
+
+  set value(answers: MultiMathfieldAnswers | string) {
+    let parsedAnswers: MultiMathfieldAnswers
+    if (typeof answers === 'string') {
+      // Format attendu: filledDataTemplate fabriqué par verifQuestionMultiMathfield
+      parsedAnswers = MultiMathfieldElement.answersFromFilledTemplate(answers)
+
+      // Compatibilité avec un éventuel ancien format JSON.stringify
+      if (Object.keys(parsedAnswers).length === 0) {
+        try {
+          parsedAnswers = JSON.parse(answers)
+        } catch {
+          return
+        }
+      }
+    } else {
+      parsedAnswers = answers
+    }
+    this.setAnswers(parsedAnswers)
   }
 
   getSpansResultats() {
@@ -344,7 +403,7 @@ export class MultiMathfieldElement extends HTMLElement {
     return result
   }
 
-  setAnswers(answers: Record<string, any>) {
+  setAnswers(answers: MultiMathfieldAnswers) {
     if (this.shadowRoot) {
       this.shadowRoot.querySelectorAll('math-field').forEach((el) => {
         const mf = el as MathfieldElement
@@ -368,7 +427,9 @@ export function addMultiMathfield(
   // Extraction des noms de champs %{name}
   const regex = /%\{([^}]+)\}/g
   let match
-  const enrichedOptions: Record<string, any> = { ...dataOptions }
+  const enrichedOptions: Record<string, MultiMathfieldOption> = {
+    ...(dataOptions as Record<string, MultiMathfieldOption>),
+  }
   while ((match = regex.exec(dataTemplate)) !== null) {
     const name = match[1]
     if (!(name in enrichedOptions)) {
@@ -395,11 +456,12 @@ export function addMultiMathfield(
     if (!customElements.get('multi-mathfield')) {
       customElements.define('multi-mathfield', MultiMathfieldElement)
     }
-    // On encode la chaîne JSON et on échappe les guillemets doubles pour l'attribut HTML
-    const dataOptionsStr = encodeURIComponent(JSON.stringify(enrichedOptions))
-      .replace(/'/g, '%27')
-      .replace(/"/g, '%22')
-    return `<multi-mathfield id="multiMathfieldEx${exercice.numeroExercice}Q${questionIndex}" data-template="${dataTemplate.replace(/"/g, '&quot;')}" data-options="${dataOptionsStr}"></multi-mathfield><div class="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${exercice.numeroExercice}Q${questionIndex}" style="display: none;"></div>`
+    return MultiMathfieldElement.create({
+      exercice,
+      questionIndex,
+      dataTemplate,
+      dataOptions: enrichedOptions,
+    })
   } else {
     // On traite ligne par ligne pour détecter les items a), b), ... en début de ligne
     const lines = dataTemplate.split('\n')

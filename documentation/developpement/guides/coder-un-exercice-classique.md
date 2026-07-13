@@ -247,6 +247,17 @@ texte = context.isHtml
 
 Ne mettre `this.pasDeVersionLatex = true` que si une version LaTeX est réellement impossible.
 
+### `context.isTypst`
+
+L'export [vue Typst](../reference/vue-typst.md) régénère l'exercice avec `context.isHtml = true` **et** `context.isTypst = true` : il réutilise le rendu HTML (pas le rendu LaTeX) puis le convertit en Typst via `htmlToTypst`. Un test `context.isHtml` seul ne distingue donc pas un vrai navigateur d'un export Typst.
+
+Cela pose problème pour tout ce qui dépend de JavaScript exécuté après le montage dans le DOM (composant interactif, web component qui se redessine via `connectedCallback`, etc.) : `htmlToTypst` ne lit que le HTML tel que produit par `nouvelleVersion()`, sans exécuter ce JavaScript. Deux cas concrets rencontrés :
+
+- `tableauColonneLigne()` (`src/lib/2d/tableau.ts`) génère, quand `context.isHtml` est vrai, un tableau MathLive interactif (`AddTabDbleEntryMathlive`) non convertible en Typst — et qui, en prime, n'a pas la même hauteur de ligne que la version LaTeX (qui applique `\arraystretch`, utile pour les fractions). Corrigé en testant `context.isHtml && !context.isTypst` pour ne prendre la branche interactive qu'en vrai navigateur ; l'export Typst prend alors la branche LaTeX, déjà convertie par le pipeline (voir [Tableaux](../reference/vue-typst.md#tableaux)).
+- `createScratchSimulatorElement()` (simulateur Scratch) accepte un paramètre `insertProgramme` : à `false`, il ne pose qu'un bouton « Exécuter » et régénère le contenu par JS au clic — vide pour l'export Typst tant que rien n'a été cliqué. Corrigé en passant `context.isTypst` (au lieu de `false`) à ce paramètre : le balisage scratchblocks statique est alors présent dans le HTML source, que le pipeline Typst sait détecter et convertir en SVG (voir `renderScratchBlocksToSvg` dans `latexToTypst.ts`).
+
+Règle pratique : dès qu'une branche `context.isHtml` insère un composant interactif (custom element, bouton qui déclenche du rendu JS différé, contenu qui n'existe qu'après une interaction utilisateur), vérifier `context.isHtml && !context.isTypst` avant d'y entrer, ou fournir/activer explicitement un rendu statique équivalent quand `context.isTypst` est vrai. Un simple `context.isHtml`, lui, reste correct pour distinguer HTML de LaTeX classique (PDF/AMC) : `context.isTypst` ne sert qu'à isoler le cas particulier de l'export Typst à l'intérieur du HTML.
+
 ## 8. Ajouter une interactivité ensuite
 
 Ne commencez pas par l'interactivité. Validez d'abord l'exercice classique : énoncés, corrections, unicité, rendu LaTeX.

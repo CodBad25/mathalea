@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
@@ -300,13 +299,12 @@ export default class CanNoteLaCouleur6 extends Exercice {
       }
       pion.codeScratch += '\\end{scratch}'
       if (context.isHtml && context.vue !== 'diap') {
-        texte = `Cet exercice est tiré de l'excellente activité débranchée ${ajouterLien('https://www.monclasseurdemaths.fr/profs/algorithmique-scratch/note-la-couleur/', 'Note la couleur')} de Jean-Yves Labouche.<br>`
-        texte +=
-          'Il a été conçu pour étendre les possibilités de fiches proposées.<br>'
-        texte += `N'hésitez pas à vous rendre sur le site ${ajouterLien('https://www.monclasseurdemaths.fr', 'Mon classeur de Maths.fr')} de Jean-Yves pour y découvrir la multitude de ressources qu'il propose.<br>`
-        texte += `Pour jouer, regarder les ${ajouterLien('https://coopmaths.fr/alea/assets/pdf/reglesnlc.pdf', 'Règles du jeu')} .<br>`
+        this.consigne = `Cet exercice est tiré de l'excellente activité débranchée ${ajouterLien('https://www.monclasseurdemaths.fr/profs/algorithmique-scratch/note-la-couleur/', 'Note la couleur')} de Jean-Yves Labouche.<br>
+        Il a été conçu pour étendre les possibilités de fiches proposées.<br>
+    N'hésitez pas à vous rendre sur le site ${ajouterLien('https://www.monclasseurdemaths.fr', 'Mon classeur de Maths.fr')} de Jean-Yves pour y découvrir les nombreuses ressources qu'il propose.<br>
+    Pour jouer, regarder les ${ajouterLien('https://coopmaths.fr/alea/assets/pdf/reglesnlc.pdf', 'Règles du jeu')} .<br>`
       } else {
-        texte = ''
+        this.consigne = ''
       }
       texte += `Exécuter le programme et trouver la couleur à noter. ${ajouteChampTexteMathLive(this, q, KeyboardType.alphanumeric)}<br><br>`
       if (context.isHtml) {

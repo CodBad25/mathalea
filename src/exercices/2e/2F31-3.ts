@@ -58,7 +58,7 @@ export default class ComparerImagesTableau extends Exercice {
       let props
 
       const enonce = `On donne ci-dessous, le tableau de variations d'une fonction $f$. <br>
- Comparer si possible : `
+ Comparer, si possible, `
       const choix = choice([true, false])
       const a = randint(-3, 3, 0)
       const alpha = randint(-5, 5, 0)

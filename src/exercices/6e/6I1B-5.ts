@@ -479,7 +479,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
       texte +=
         ' fonctionner même si le nombre de départ change (dans la cellule B1).<br><br>'
 
-      if (context.isHtml) {
+      if (context.isHtml && !context.isTypst) {
         texte += addSheet({
           numeroExercice: this.numeroExercice ?? 0,
           question: q,

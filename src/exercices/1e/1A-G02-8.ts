@@ -3,13 +3,13 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
-export const titre = "Calculer le volume d'un cylindre"
+export const titre = "Calculer le volume d'un cylindre (sans figure)"
 export const dateDePublication = '23/06/2026'
 
 export const uuid = 'e4c72'
 
 export const refs = {
-  'fr-fr': ['1A-G02-8', '2A-G2-8'],
+  'fr-fr': ['1A-G02-8', '2A-G3-8'],
   'fr-ch': [],
 }
 

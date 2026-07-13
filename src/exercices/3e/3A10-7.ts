@@ -9,13 +9,12 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { context } from '../../modules/context'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const dateDePublication = '12/10/2022'
 export const dateDeModifImportante = '29/10/2024'

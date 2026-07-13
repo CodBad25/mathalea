@@ -7,17 +7,16 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import type { AMCUneProposition } from '../../lib/amc/amcTypes'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { egalOuApprox } from '../../lib/outils/ecritures'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Augmenter ou diminuer d'un pourcentage"
 export const interactifReady = true

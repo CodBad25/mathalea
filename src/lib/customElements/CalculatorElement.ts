@@ -1,4 +1,5 @@
 import ce from '../interactif/comparisonFunctions'
+import MathaleaCustomElement from './MathaleaCustomElement'
 
 /**
  * Calculatrice Web Component autonome
@@ -9,7 +10,9 @@ import ce from '../interactif/comparisonFunctions'
  * <my-calculator></my-calculator>
  * <my-calculator broken-keys="*,5"></my-calculator>
  */
-class CalculatorElement extends HTMLElement {
+class CalculatorElement extends MathaleaCustomElement {
+  static readonly elementTag = 'my-calculator'
+
   private fullText: string = '0' // Texte complet affiché
   private displayElement: HTMLElement | null = null
   private history: Array<{ expression: string; result: string }> = [] // Historique des calculs
@@ -163,7 +166,7 @@ class CalculatorElement extends HTMLElement {
     calculator.insertAdjacentElement('afterend', span)
   }
 
-  private render() {
+  render() {
     // Récupérer les touches cassées
     const brokenKeysAttr = this.getAttribute('broken-keys')
     const brokenKeys = brokenKeysAttr
@@ -438,10 +441,11 @@ class CalculatorElement extends HTMLElement {
       if (this.linkedInput) {
         this.linkedInput.value = resultStr
       }
-    } catch (e) {
-      this.fullText = 'Erreur'
-      this.cursorPosition = 6
-      this.updateDisplay()
+    } catch (error) {
+      const cause = error instanceof Error ? error : new Error(String(error))
+      window.notify(`Erreur d'évaluation: ${cause.message}`, {
+        expression: this.fullText,
+      })
     }
   }
 
@@ -513,10 +517,9 @@ class CalculatorElement extends HTMLElement {
       }
 
       return result
-    } catch (e) {
-      throw new Error(
-        `Erreur dans l'évaluation: ${e instanceof Error ? e.message : String(e)}`,
-      )
+    } catch (e: unknown) {
+      const cause = e instanceof Error ? e : new Error(String(e))
+      throw new Error("Erreur d'évaluation", { cause })
     }
   }
 

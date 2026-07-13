@@ -114,7 +114,7 @@ export default class ExerciceTableur3T10 extends Exercice {
       ? `Saisir dans la cellule A2 la formule pour obtenir la moyenne de cette série.<br>`
       : 'Quelle formule doit-on saisir dans la cellule A2 pour obtenir la moyenne de cette série ?<br>'
 
-    if (context.isHtml) {
+    if (context.isHtml && !context.isTypst) {
       texte += addSheet({
         numeroExercice: this.numeroExercice ?? 0,
         question: q,
@@ -204,7 +204,7 @@ export default class ExerciceTableur3T10 extends Exercice {
       ? `Saisir dans la cellule A2 la formule pour obtenir la somme de ces résultats.<br>`
       : 'Quelle formule doit-on saisir dans la cellule A2 pour obtenir la somme de ces résultats ?<br>'
 
-    if (context.isHtml) {
+    if (context.isHtml && !context.isTypst) {
       texte += addSheet({
         numeroExercice: this.numeroExercice ?? 0,
         question: q,
@@ -293,7 +293,7 @@ export default class ExerciceTableur3T10 extends Exercice {
     data[1][1] = cellDatas[1][1].v
     data[2][0] = cellDatas[2][0].v
 
-    if (context.isHtml) {
+    if (context.isHtml && !context.isTypst) {
       texte += addSheet({
         numeroExercice: this.numeroExercice ?? 0,
         question: q,
@@ -379,7 +379,7 @@ export default class ExerciceTableur3T10 extends Exercice {
     data[1][1] = cellDatas[1][1].v
     data[2][0] = cellDatas[2][0].v
 
-    if (context.isHtml) {
+    if (context.isHtml && !context.isTypst) {
       texte += addSheet({
         numeroExercice: this.numeroExercice ?? 0,
         question: q,
@@ -463,7 +463,7 @@ export default class ExerciceTableur3T10 extends Exercice {
     data[0][1] = c
     data[1][0] = b
 
-    if (context.isHtml) {
+    if (context.isHtml && !context.isTypst) {
       texte += addSheet({
         numeroExercice: this.numeroExercice ?? 0,
         question: q,
@@ -562,7 +562,7 @@ export default class ExerciceTableur3T10 extends Exercice {
     data[1][3] = cellDatas[1][3].v
     data[1][4] = cellDatas[1][4].v
 
-    if (context.isHtml) {
+    if (context.isHtml && !context.isTypst) {
       texte += addSheet({
         numeroExercice: this.numeroExercice ?? 0,
         question: q,
@@ -665,7 +665,7 @@ export default class ExerciceTableur3T10 extends Exercice {
     data[1][5] = cellDatas[1][5].v
     data[1][6] = cellDatas[1][6].v
 
-    if (context.isHtml) {
+    if (context.isHtml && !context.isTypst) {
       texte += addSheet({
         numeroExercice: this.numeroExercice ?? 0,
         question: q,

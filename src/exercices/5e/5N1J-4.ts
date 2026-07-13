@@ -20,7 +20,7 @@ export const dateDePublication = '07/11/2025'
 
 export const uuid = 'bc570'
 export const refs = {
-  'fr-fr': ['5NIJ-4'],
+  'fr-fr': ['5N1J-4'],
   'fr-2016': ['5A11-5'],
   'fr-ch': [],
 }
@@ -55,6 +55,7 @@ function formaterReponse(reponse: (number | string)[]): string {
 }
 
 export default class TrouverNombre extends Exercice {
+  version: string
   constructor() {
     super()
     this.besoinFormulaireTexte = [
@@ -74,6 +75,7 @@ export default class TrouverNombre extends Exercice {
     ]
     this.sup = '1-2-4'
     this.nbQuestions = 4
+    this.version = '5N1J-4'
   }
 
   nouvelleVersion() {
@@ -85,14 +87,24 @@ export default class TrouverNombre extends Exercice {
       ? " Si aucun nombre n'est possible, indiquer $\\emptyset$ comme réponse."
       : ''
 
-    const typeQuestionsDisponibles = gestionnaireFormulaireTexte({
-      saisie: this.sup,
-      max: 8,
-      melange: 9,
-      defaut: 9,
-      nbQuestions: this.nbQuestions,
-      listeOfCase: [2, 3, 4, 5, 6, 9, 10, 15],
-    }).map(Number)
+    const typeQuestionsDisponibles =
+      this.version === 'auto5N1A4-4'
+        ? gestionnaireFormulaireTexte({
+            saisie: this.sup,
+            max: 3,
+            melange: 4,
+            defaut: 4,
+            nbQuestions: this.nbQuestions,
+            listeOfCase: [2, 5, 10],
+          }).map(Number)
+        : gestionnaireFormulaireTexte({
+            saisie: this.sup,
+            max: 8,
+            melange: 9,
+            defaut: 9,
+            nbQuestions: this.nbQuestions,
+            listeOfCase: [2, 3, 4, 5, 6, 9, 10, 15],
+          }).map(Number)
 
     const listeTypeQuestions = combinaisonListes(
       typeQuestionsDisponibles,

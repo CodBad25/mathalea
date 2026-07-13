@@ -9,9 +9,9 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -199,7 +199,10 @@ export default class NomExercice extends Exercice {
         `On considère un cube $ABCDEFGH$.` +
         '<br>' +
         mathalea2d(
-          Object.assign({ scale: 0.6, display: 'inline' } as const, fixeBordures(objets)),
+          Object.assign(
+            { scale: 0.6, display: 'inline' } as const,
+            fixeBordures(objets),
+          ),
           objets,
           traceA,
           traceB,

@@ -1,4 +1,5 @@
 import { tex2typst } from 'tex2typst'
+import { renderScratchDiv } from '../../../lib/renderScratch'
 
 /**
  * Conversion du contenu HTML des exercices (avec formules LaTeX en `$...$`)
@@ -11,6 +12,29 @@ import { tex2typst } from 'tex2typst'
  * les figures SVG sont embarquées. Les images restantes sont remplacées par
  * un encart signalant l'élément manquant.
  */
+
+/**
+ * URLs des images d'exercices statiques (annales scannées) déjà récupérées,
+ * associées au chemin virtuel où leurs octets sont chargés dans le
+ * compilateur (`mapShadow`, voir `typstCompiler.ts`). Alimenté par
+ * `Typst.svelte` avant la génération du code ; une image absente de ce
+ * registre est affichée comme un encart « image non convertie ».
+ */
+let staticImagePaths: Map<string, string> = new Map()
+
+/** Renseigne le registre des images d'exercices statiques (voir `staticImagePaths`) */
+export function setStaticImagePaths(paths: Map<string, string>): void {
+  staticImagePaths = paths
+}
+
+/**
+ * Largeur intrinsèque (pt) donnée à une image d'exercice statique avant son
+ * passage dans `mathalea-fit` : volontairement bien plus grande que
+ * n'importe quelle page (A4 paysage compris, ~842pt), pour que la figure
+ * soit toujours réduite à la largeur disponible plutôt que conserver une
+ * largeur fixe plus étroite que la colonne/page qui la contient.
+ */
+const STATIC_IMAGE_INTRINSIC_WIDTH_PT = 2000
 
 /** Macros LaTeX propres à MathALÉA (ou absentes de tex2typst) */
 const CUSTOM_TEX_MACROS: Record<string, string> = {
@@ -753,14 +777,29 @@ function findMatchingEndEnvironment(
 }
 
 function expandColumnSpecRepeats(spec: string): string {
-  let output = spec
-  for (let guard = 0; guard < 10; guard++) {
-    const next = output.replace(
-      /\*\s*\{(\d+)\}\s*\{([^{}]*)\}/g,
-      (_, count: string, content: string) => content.repeat(Number(count)),
-    )
-    if (next === output) break
-    output = next
+  // Scanner par accolades (via `readBraced`) plutôt que regex `[^{}]*` :
+  // le contenu répété (ex. `*{3}{>{\centering \arraybackslash}X|}`)
+  // contient lui-même des accolades imbriquées (`>{...}`), qu'une regex
+  // sans suivi de profondeur ne referme pas au bon endroit.
+  let output = ''
+  for (let index = 0; index < spec.length; index++) {
+    if (spec[index] === '*') {
+      let cursor = index + 1
+      while (/\s/.test(spec[cursor] ?? '')) cursor++
+      const countArg = readBraced(spec, cursor)
+      const count = countArg?.value.trim()
+      if (countArg != null && count != null && /^\d+$/.test(count)) {
+        cursor = countArg.end
+        while (/\s/.test(spec[cursor] ?? '')) cursor++
+        const contentArg = readBraced(spec, cursor)
+        if (contentArg != null) {
+          output += contentArg.value.repeat(Number(count))
+          index = contentArg.end - 1
+          continue
+        }
+      }
+    }
+    output += spec[index]
   }
   return output
 }
@@ -896,12 +935,20 @@ function parseLatexTableBody(body: string): ParsedTableItem[] {
 
 function stripCellLatex(cell: string): string {
   return cell
+    .replace(
+      /\\multicolumn\s*\{[^{}]*\}\s*\{[^{}]*\}\s*\{([^{}]*)\}/g,
+      '$1',
+    )
+    .replace(/\\rowcolor(?:\[[^\]]+\])?\s*\{[^{}]*\}/g, '')
     .replace(/\\cellcolor(?:\[[^\]]+\])?\s*\{[^{}]*\}/g, '')
     .replace(
       /\\(?:displaystyle|textstyle|scriptstyle|scriptscriptstyle)\b/g,
       '',
     )
-    .replace(/\\(?:centering|arraybackslash)\b/g, '')
+    .replace(
+      /\\(?:centering|arraybackslash|raggedright|raggedleft|sffamily|rmfamily|ttfamily)\b/g,
+      '',
+    )
     .replace(/\\rule\s*(?:\[[^\]]*\])?\s*\{[^{}]*\}\s*\{[^{}]*\}/g, '')
     .replace(/~/g, '\\;')
     .trim()
@@ -1022,7 +1069,7 @@ function stripArrayStretchCommands(text: string): string {
 }
 
 interface LatexTableEnvironment {
-  env: 'array' | 'tabular' | 'tblr'
+  env: 'array' | 'tabular' | 'tabularx' | 'tblr'
   start: number
   end: number
   colspec: string
@@ -1033,11 +1080,18 @@ interface LatexTableEnvironment {
 }
 
 function findLatexTableEnvironment(tex: string): LatexTableEnvironment | null {
-  const match = /\\begin\{(array|tabular|tblr)\}/.exec(tex)
+  const match = /\\begin\{(array|tabular|tabularx|tblr)\}/.exec(tex)
   if (match == null || match.index == null) return null
   const env = match[1] as LatexTableEnvironment['env']
   let cursor = match.index + match[0].length
   while (/\s/.test(tex[cursor] ?? '')) cursor++
+  if (env === 'tabularx') {
+    // \begin{tabularx}{largeur}{colspec} : la largeur précède la spec de colonnes
+    const widthArg = readBraced(tex, cursor)
+    if (widthArg == null) return null
+    cursor = widthArg.end
+    while (/\s/.test(tex[cursor] ?? '')) cursor++
+  }
   const firstArg = readBraced(tex, cursor)
   if (firstArg == null) return null
   cursor = firstArg.end
@@ -1072,7 +1126,8 @@ function findLatexTableEnvironment(tex: string): LatexTableEnvironment | null {
 }
 
 function shouldConvertAsVisualTable(table: LatexTableEnvironment): boolean {
-  if (table.env === 'tabular' || table.env === 'tblr') return true
+  if (table.env === 'tabular' || table.env === 'tabularx' || table.env === 'tblr')
+    return true
   return (
     table.colspec.includes('|') ||
     /\\(?:hline|cline|tabularnewline)\b/.test(table.body)
@@ -1199,6 +1254,12 @@ function htmlTableToTypst(table: HTMLTableElement, figures?: string[]): string {
 }
 
 function latexSegmentToTypst(tex: string, display: boolean): string {
+  // Un `&` brut (séparateur de colonnes `array`/`tabular`/`tblr`/`tabularx`)
+  // peut avoir traversé un aller-retour DOM (`template.innerHTML`, utilisé par
+  // les `protect*Containers` pour repérer figures/QCM/tableaux/KaTeX) et se
+  // retrouver ré-échappé en `&amp;` avant d'atteindre ce segment : aucun texte
+  // LaTeX destiné à ce convertisseur ne contient légitimement `&amp;`.
+  tex = tex.replace(/&amp;/g, '&')
   const table = latexVisualTableToTypst(tex)
   if (table != null) return table
   const converted = latexMathToTypst(tex)
@@ -1513,6 +1574,76 @@ export function svgToTypstImage(svg: string): string {
   return `image(bytes(${typstStringLiteral(cleaned)}), format: "svg"${widthPt})`
 }
 
+/**
+ * Propriétés dont la valeur calculée (résolue via les règles `.sb3-*` que la
+ * librairie `scratchblocks` injecte dans `<head>`) est reportée en attribut
+ * `style` inline sur chaque élément d'un bloc Scratch rendu : une fois le SVG
+ * extrait et embarqué seul dans le PDF Typst, il n'a plus accès à cette
+ * feuille de style de la page (les blocs seraient sans couleur de catégorie).
+ */
+const SCRATCHBLOCKS_INLINE_PROPERTIES = [
+  'fill',
+  'stroke',
+  'stroke-width',
+  'font-family',
+  'font-size',
+  'font-weight',
+]
+
+function inlineScratchblocksStyles(svg: SVGElement): void {
+  for (const el of [svg, ...svg.querySelectorAll('*')]) {
+    if (el.getAttribute('class') == null) continue
+    const computed = getComputedStyle(el)
+    el.setAttribute(
+      'style',
+      SCRATCHBLOCKS_INLINE_PROPERTIES.map(
+        (prop) => `${prop}:${computed.getPropertyValue(prop)}`,
+      ).join(';'),
+    )
+  }
+}
+
+/** Détecte le balisage scratchblocks non encore rendu (`scratchblock()`, `createScratchSimulatorElement()`) */
+const UNRENDERED_SCRATCH_MARKUP =
+  /<pre\b[^>]*\bclass=["'][^"']*\bblocks2?\b|<code\b[^>]*\bclass=["'][^"']*\bb\b[^"']*["']|<scratch-simulator\b/i
+
+/**
+ * Rend en SVG les blocs Scratch encore à l'état de balisage scratchblocks
+ * (`<pre class="blocks">`, produit par `scratchblock()`/
+ * `createScratchSimulatorElement()` en contexte HTML). Contrairement aux
+ * figures mathalea2d (déjà du SVG dans la chaîne HTML), ce balisage n'est
+ * converti en SVG que par un rendu DOM de la librairie `scratchblocks`
+ * (`renderScratchDiv`, utilisé par la vue A4/prof mais jamais par la vue
+ * Typst, qui ne fait que lire les chaînes produites par `nouvelleVersion()`).
+ * Le rendu se fait hors-écran mais attaché au document : `renderMatching`
+ * (appelé par `renderScratchDiv`) cherche ses éléments via
+ * `document.querySelectorAll`, qui ignore un fragment détaché.
+ */
+function renderScratchBlocksToSvg(html: string): string {
+  if (typeof document === 'undefined') return html
+  if (!UNRENDERED_SCRATCH_MARKUP.test(html)) return html
+  const container = document.createElement('div')
+  container.style.position = 'fixed'
+  container.style.left = '-99999px'
+  container.style.top = '0'
+  document.body.appendChild(container)
+  try {
+    // le composant <scratch-simulator> (simulateur interactif) ajoute un
+    // bouton "Exécuter" à sa connexion au DOM : on ignore son wrapper pour ne
+    // garder que son contenu (le balisage scratchblocks à rendre)
+    container.innerHTML = html.replace(/<\/?scratch-simulator[^>]*>/gi, '')
+    renderScratchDiv(container)
+    for (const svg of container.querySelectorAll<SVGElement>(
+      'svg[class*="scratchblocks-style-"]',
+    )) {
+      inlineScratchblocksStyles(svg)
+    }
+    return container.innerHTML
+  } finally {
+    container.remove()
+  }
+}
+
 function extractKatexTex(html: string): string | null {
   const annotationMatch = html.match(
     /<annotation[^>]*encoding=["']application\/x-tex["'][^>]*>([\s\S]*?)<\/annotation>/i,
@@ -1630,6 +1761,12 @@ function protectMathalea2dContainers(
           )
         }
       }
+      // `template.innerHTML` (sérialisation DOM complète) ré-échappe les `&`
+      // bruts présents ailleurs dans le texte (ex. tableau LaTeX
+      // `\begin{tabularx}...&...&...\end{tabularx}` protégé plus loin par
+      // `latexSegmentToTypst`) en `&amp;` : c'est `latexSegmentToTypst` qui
+      // les décode avant conversion, plutôt que de contourner cette
+      // sérialisation ici (peu fiable pour les conteneurs complexes/imbriqués).
       return template.innerHTML
     }
   }
@@ -2066,7 +2203,7 @@ export function htmlToTypst(html: string, figures?: string[]): string {
     return `\uE000${protectedSegments.length - 1}\uE001`
   }
 
-  let text = protectQcm(html, protect, figures)
+  let text = protectQcm(renderScratchBlocksToSvg(html), protect, figures)
   text = protectSchemaContainers(text, protect)
   text = protectHtmlTables(text, protect, figures)
   text = protectMathalea2dContainers(text, protect, figures)
@@ -2109,6 +2246,22 @@ export function htmlToTypst(html: string, figures?: string[]): string {
     // nouveau paragraphe du code généré
     return protect(`#mathalea-fit(fig-${figures.length})\n\n`)
   })
+  // images d'exercices statiques (annales scannées) : l'image est déjà
+  // chargée dans le compilateur (voir `staticImagePaths`/`mapShadow`), sinon
+  // (référentiel sans image, ou récupération réseau échouée) c'est un encart
+  text = text.replace(/<img[^>]*\ssrc=["']([^"']+)["'][^>]*>/gi, (_, src: string) => {
+    const path = staticImagePaths.get(src)
+    if (path == null || figures == null) {
+      return protect(missingBox('image non convertie'))
+    }
+    // largeur intrinsèque volontairement bien plus grande que n'importe
+    // quelle colonne/page (A4 paysage compris) : mathalea-fit la réduit
+    // alors toujours pour occuper exactement toute la largeur disponible,
+    // là où MAX_FIGURE_WIDTH_PT (calibré pour les figures mathalea2d) la
+    // laisserait plus étroite que la page
+    figures.push(`image(${typstStringLiteral(path)}, width: ${STATIC_IMAGE_INTRINSIC_WIDTH_PT}pt)`)
+    return protect(`#mathalea-fit(fig-${figures.length})\n\n`)
+  })
   text = text.replace(/<img[^>]*>/gi, () =>
     protect(missingBox('image non convertie')),
   )
@@ -2122,6 +2275,12 @@ export function htmlToTypst(html: string, figures?: string[]): string {
     figures.push(svgToTypstImage(svg))
     return protect(`#mathalea-fit(fig-${figures.length})\n\n`)
   })
+
+  // les <svg> ont déjà été extraits ci-dessus : les <style>/<script>
+  // restants sont hors SVG (CSS/JS d'affichage HTML sans équivalent Typst)
+  // et doivent être retirés pour ne pas apparaître comme texte brut
+  text = text.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+  text = text.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
 
   // 3. Parcours des balises restantes
   let output = ''

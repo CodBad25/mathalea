@@ -1,4 +1,4 @@
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { all, isEqual, isReduced } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'

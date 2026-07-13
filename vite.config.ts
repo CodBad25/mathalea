@@ -59,7 +59,20 @@ export default defineConfig({
       },
     },
   },
-  server: process.env.CI ? { port: 80, watch: null } : { port: 5173 },
+  server: process.env.CI
+    ? { port: 80, watch: null }
+    : {
+        port: 5173,
+        proxy: {
+          // Sert les images des exercices statiques (annales scannées) en
+          // développement : coopmaths.fr n'envoie pas d'en-têtes CORS, un
+          // fetch direct depuis localhost échouerait sinon (vue Typst).
+          '/alea/static': {
+            target: 'https://coopmaths.fr',
+            changeOrigin: true,
+          },
+        },
+      },
   define: {
     APP_VERSION: JSON.stringify(process.env.npm_package_version),
     // Injecte dans le bundle final

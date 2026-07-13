@@ -1,7 +1,7 @@
 import Figure from 'apigeom'
 import type Point from 'apigeom/src/elements/points/Point'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
@@ -15,7 +15,7 @@ export const refs = {
 }
 export const interactifReady = true
 export const interactifType = 'multiMathfield'
-export const titre = 'Lire les coordonnées d\'un point dans un repère'
+export const titre = "Lire les coordonnées d'un point dans un repère"
 export const dateDePublication = '06/06/2026'
 
 /**
@@ -28,7 +28,12 @@ export default class AutoQ5ANbrevet2026 extends ExerciceCan {
     this.formatInteractif = 'multiMathfield'
   }
 
-  private construireFigure(xA: number, yA: number, xB: number, yB: number): string {
+  private construireFigure(
+    xA: number,
+    yA: number,
+    xB: number,
+    yB: number,
+  ): string {
     const xMin = -5
     const xMax = 5
     const yMin = -5
@@ -43,10 +48,24 @@ export default class AutoQ5ANbrevet2026 extends ExerciceCan {
     })
     figure.options.color = 'black'
     figure.create('Grid', { xMin, yMin, xMax, yMax })
-    figure.create('Point', { x: xA, y: yA, label: 'A', shape: 'x', color: 'black' }) as Point
-    figure.create('Point', { x: xB, y: yB, label: 'B', shape: 'x', color: 'black' }) as Point
+    figure.create('Point', {
+      x: xA,
+      y: yA,
+      label: 'A',
+      shape: 'x',
+      color: 'black',
+    }) as Point
+    figure.create('Point', {
+      x: xB,
+      y: yB,
+      label: 'B',
+      shape: 'x',
+      color: 'black',
+    }) as Point
     figure.optimizeLabels()
-    return context.isHtml ? figure.getStaticHtml({ center: true }) : figure.tikz()
+    return context.isHtml
+      ? figure.getStaticHtml({ center: true })
+      : figure.tikz()
   }
 
   enonce(xA?: number, yA?: number, xB?: number, yB?: number) {
@@ -83,8 +102,8 @@ ${numAlpha(1)}Les coordonnées du point $B$ sont $${miseEnEvidence(`(${xB}\\,;\\
 
   nouvelleVersion() {
     // A(−2 ; 2) et B(−2 ; −1)
-     if (this.canOfficielle) {
-    this.enonce(-2, 2, -2, -1)
+    if (this.canOfficielle) {
+      this.enonce(-2, 2, -2, -1)
     } else {
       this.enonce()
     }

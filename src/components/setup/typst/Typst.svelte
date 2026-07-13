@@ -13,11 +13,19 @@
     mathaleaFormatExercice,
     mathaleaHandleExerciceSimple,
     mathaleaHandleSup,
+    mathaleaUpdateUrlFromExercicesParams,
   } from '../../../lib/mathalea'
-  import { darkMode, exercicesParams } from '../../../lib/stores/generalStore'
+  import {
+    darkMode,
+    exercicesParams,
+    freezeUrl,
+    typstParamStore,
+  } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
   import { isLocalStorageAvailable } from '../../../lib/stores/storage'
   import type { IExercice } from '../../../lib/types'
+  import { decodeBase64, encodeBase64 } from '../latex/LatexConfig'
+  import { context } from '../../../modules/context'
   import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
@@ -29,7 +37,9 @@
     TEXT_FONTS,
     buildTypstDocument,
     defaultTypstDocumentOptions,
+    getGeneratedExerciseCode,
     harvestCarryOver,
+    type TypstCarryOver,
     type TypstDocumentOptions,
     type TypstExerciseInput,
   } from './buildTypstDocument'
@@ -38,6 +48,7 @@
     type TasksLayoutValue,
   } from './TypstLayoutOverlay.svelte'
   import type { TypstAnchor } from './typstCompiler'
+  import { setStaticImagePaths } from './latexToTypst'
 
   /** Libellés des habillages d'en-tête/pied de page */
   const HEADER_STYLE_LABELS: Record<(typeof HEADER_STYLES)[number], string> = {
@@ -85,9 +96,9 @@
   type DisplayMode = 'code' | 'split' | 'preview'
   const STORAGE_KEY = 'mathaleaTypstView'
 
-  let displayMode: DisplayMode = 'split'
+  let displayMode: DisplayMode = 'preview'
   let documentOptions: TypstDocumentOptions = { ...defaultTypstDocumentOptions }
-  let isSettingsOpen = false
+  let isSettingsOpen = true
   /** Affiche la palette de mise en page sur l'aperçu */
   let showOverlay = true
   if (isLocalStorageAvailable()) {
@@ -123,10 +134,43 @@
           if (!has(MATH_FONTS, documentOptions.mathFont)) {
             documentOptions.mathFont = defaultTypstDocumentOptions.mathFont
           }
+          if (
+            !Number.isInteger(documentOptions.nbVersions) ||
+            documentOptions.nbVersions < 1 ||
+            documentOptions.nbVersions > 4
+          ) {
+            documentOptions.nbVersions = defaultTypstDocumentOptions.nbVersions
+          }
         }
       }
     } catch {
       // préférences illisibles : on garde les valeurs par défaut
+    }
+  }
+  /**
+   * Réglages de la palette de mise en page (colonnes/espacement des
+   * questions, textes et sections insérés, sauts de page/colonne, fusions,
+   * zoom/alignement des figures) restaurés depuis l'URL. Injectés dans la
+   * première génération du code ; les modifications suivantes sont relues
+   * dans le code courant.
+   */
+  let urlCarryOver: TypstCarryOver | null = null
+  // Le diaporama (bouton « PDF sujets + corrigés ») transmet ici son nombre
+  // de vues via typstParam — comme le fait la vue A4 avec a4Param — pour que
+  // le nombre de sujets Typst corresponde au nombre de vues jouées. Depuis
+  // que la vue Typst réécrit ce paramètre à chaque modification, il porte
+  // aussi tous les réglages du document et de la mise en page (rechargeables).
+  const typstUrlParam = new URL(window.location.href).searchParams.get(
+    'typstParam',
+  )
+  if (typstUrlParam != null) {
+    typstParamStore.set(typstUrlParam)
+    const parsed = decodeBase64(typstUrlParam)
+    if (parsed.options != null) {
+      documentOptions = { ...documentOptions, ...parsed.options }
+    }
+    if (parsed.carryOver != null) {
+      urlCarryOver = parsed.carryOver
     }
   }
 
@@ -168,7 +212,6 @@
   let isGeneratingPdf = false
   let diagnostics: string[] = []
   let svgContent = ''
-  let copied = false
 
   let editorEl: HTMLDivElement
   let editorView: EditorView | null = null
@@ -191,6 +234,11 @@
   let tasksLayoutValues: Record<string, TasksLayoutValue> = {}
   /** Insertions (texte/section) présentes dans le code, par repère de gap */
   let insertionValues: Record<number, string[]> = {}
+  /**
+   * Numéros (1-based) des exercices fusionnés avec le précédent, lus dans
+   * le code courant (bouton de la palette de mise en page).
+   */
+  let mergedExercises: number[] = []
   /** Variables d'en-tête de la fiche, lues dans le code courant */
   let headerValues = { titre: '', 'sous-titre': '', entete: '' }
   /** Nombre de colonnes du document (`#let colonnes`), lu dans le code */
@@ -205,6 +253,12 @@
     settingsExerciseIndex !== null
       ? (exercises[settingsExerciseIndex] ?? null)
       : null
+  /** Surcharges de code Typst par exercice (modale d'édition), lues dans le code */
+  let codeOverrideValues: Record<number, string> = {}
+  /** Numéro de l'exercice dont la modale d'édition du code Typst est ouverte */
+  let codeEditNum: number | null = null
+  /** Brouillon de la modale d'édition du code Typst */
+  let codeEditDraft = ''
 
   /** Convertit les repères (pt, par page) en positions % sur l'aperçu */
   function computeOverlayWidgets(
@@ -262,7 +316,10 @@
       ;(values[match[1]] ??= defaults()).gutter = match[2]
     }
     tasksLayoutValues = values
-    insertionValues = harvestCarryOver(code).insertions ?? {}
+    const harvested = harvestCarryOver(code)
+    insertionValues = harvested.insertions ?? {}
+    mergedExercises = harvested.merges ?? []
+    codeOverrideValues = harvested.codeOverrides ?? {}
     const columns = code.match(/^#let colonnes = (\d+)/m)
     documentColumns = columns != null ? Number(columns[1]) : 1
     const figureZoom: Record<number, number> = {}
@@ -418,7 +475,17 @@
       const target = n >= removed ? Math.max(0, n - 1) : n
       insertions[target] = [...(insertions[target] ?? []), ...lines]
     }
-    return { tasksLayout, insertions }
+    // l'exercice supprimé ne peut plus être fusionné ; les suivants décalent
+    const merges = (carryOver.merges ?? [])
+      .filter((n) => n !== removed)
+      .map((n) => (n > removed ? n - 1 : n))
+    const codeOverrides: NonNullable<typeof carryOver.codeOverrides> = {}
+    for (const [key, value] of Object.entries(carryOver.codeOverrides ?? {})) {
+      const n = Number(key)
+      if (n === removed) continue
+      codeOverrides[n > removed ? n - 1 : n] = value
+    }
+    return { tasksLayout, insertions, merges, codeOverrides }
   }
 
   /** Retire l'exercice num de la fiche et régénère le code */
@@ -463,7 +530,12 @@
       const newGap = swapNum(Number(key) + 1) - 1
       insertions[newGap] = [...(insertions[newGap] ?? []), ...lines]
     }
-    return { tasksLayout, insertions }
+    const merges = (carryOver.merges ?? []).map(swapNum)
+    const codeOverrides: NonNullable<typeof carryOver.codeOverrides> = {}
+    for (const [key, value] of Object.entries(carryOver.codeOverrides ?? {})) {
+      codeOverrides[swapNum(Number(key))] = value
+    }
+    return { tasksLayout, insertions, merges, codeOverrides }
   }
 
   /** Échange l'exercice num avec son voisin (delta : -1 monter, 1 descendre) */
@@ -522,6 +594,86 @@
 
   function openSettings(num: number) {
     settingsExerciseIndex = num - 1
+  }
+
+  /**
+   * Ouvre la modale d'édition du code Typst de l'exercice num, préremplie
+   * avec sa surcharge existante ou, à défaut, le code actuellement généré
+   * pour cet exercice (voir `getGeneratedExerciseCode`).
+   */
+  function openCodeEdit(num: number) {
+    const carryOver =
+      editorView != null ? harvestCarryOver(currentCode()) : {}
+    codeEditDraft =
+      carryOver.codeOverrides?.[num] ??
+      getGeneratedExerciseCode(buildInputs(), num, documentOptions, carryOver)
+    codeEditNum = num
+  }
+
+  /**
+   * Retire la surcharge de l'exercice num : son énoncé redevient celui
+   * généré automatiquement (icône crayon désactivée, « Nouvelles données »
+   * de nouveau opérant sur son contenu). Contrairement au brouillon de la
+   * modale, une surcharge n'est un texte figé que tant qu'elle existe : la
+   * restaurer doit donc réellement la supprimer, pas seulement préremplir le
+   * brouillon avec un instantané du texte généré.
+   */
+  function restoreGeneratedCode(num: number) {
+    updateExerciseCode(num, '')
+  }
+
+  /**
+   * Applique (ou retire, si `code` est vide) la surcharge de code Typst de
+   * l'exercice num, saisie dans la modale d'édition. Régénère le document
+   * (comme suppression/déplacement/fusion) : la surcharge change la
+   * structure du code (elle remplace l'énoncé généré), un simple patch de
+   * texte comme pour les insertions ne suffit pas.
+   */
+  function updateExerciseCode(num: number, code: string) {
+    if (!confirmOverwrite()) return
+    const carryOver =
+      editorView != null ? harvestCarryOver(currentCode()) : {}
+    const codeOverrides = { ...(carryOver.codeOverrides ?? {}) }
+    const trimmed = code.trim()
+    if (trimmed.length === 0) delete codeOverrides[num]
+    else codeOverrides[num] = code
+    carryOver.codeOverrides = codeOverrides
+    const [primary, ...extraVersions] = buildAllVersionInputs()
+    const newCode = buildTypstDocument(
+      primary,
+      documentOptions,
+      carryOver,
+      extraVersions,
+    )
+    setEditorContent(newCode)
+    scheduleCompile(newCode, 0)
+    codeEditNum = null
+  }
+
+  /**
+   * Fusionne/sépare l'exercice num avec celui qui le précède : ils partagent
+   * alors un seul titre (banque exercise-bank) et la numérotation de ses
+   * questions continue celle de son prédécesseur. Régénère le code (comme
+   * suppression/déplacement) plutôt que d'éditer le texte : la fusion
+   * change la structure du document (les deux exercices rejoignent la même
+   * définition `exo.with(...)`).
+   */
+  function toggleMergeBefore(num: number) {
+    if (!confirmOverwrite()) return
+    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
+    const merges = carryOver.merges ?? []
+    carryOver.merges = merges.includes(num)
+      ? merges.filter((n) => n !== num)
+      : [...merges, num]
+    const [primary, ...extraVersions] = buildAllVersionInputs()
+    const code = buildTypstDocument(
+      primary,
+      documentOptions,
+      carryOver,
+      extraVersions,
+    )
+    setEditorContent(code)
+    scheduleCompile(code, 0)
   }
 
   /** Applique les réglages émis par le panneau Settings de la vue prof */
@@ -684,6 +836,7 @@
   }
 
   function persistPreferences() {
+    persistToUrl()
     if (!isLocalStorageAvailable()) return
     try {
       window.localStorage.setItem(
@@ -695,8 +848,43 @@
     }
   }
 
+  /** Dernière valeur écrite dans `typstParam` (évite les réécritures inutiles) */
+  let lastTypstParam = typstUrlParam ?? ''
+
+  /**
+   * Sauvegarde dans l'URL (`typstParam`) tous les réglages du document et de
+   * la mise en page (colonnes/espacement des questions, textes et sections
+   * insérés, sauts de page/colonne, fusions, zoom/alignement des figures) pour
+   * pouvoir recharger la fiche à l'identique. La liste des exercices, leurs
+   * graines et leurs réglages sont déjà portés par l'URL (`exercicesParams`).
+   */
+  function persistToUrl() {
+    const carryOver =
+      editorView != null
+        ? harvestCarryOver(currentCode())
+        : (urlCarryOver ?? {})
+    const encoded = encodeBase64({ options: documentOptions, carryOver })
+    // le store est la source de vérité ; on redéclenche ensuite l'écrivain
+    // d'URL de l'app pour que sa prochaine écriture (débouncée) reparte de
+    // cette valeur et ne réécrive pas l'URL sans typstParam (comme la vue A4)
+    typstParamStore.set(encoded)
+    mathaleaUpdateUrlFromExercicesParams()
+    if (encoded === lastTypstParam) return
+    lastTypstParam = encoded
+    // l'URL est bloquée dans un iframe (recorder Capytale/Moodle…)
+    if (get(freezeUrl)) return
+    try {
+      const url = new URL(window.location.href)
+      url.searchParams.set('typstParam', encoded)
+      window.history.replaceState(null, '', url)
+    } catch {
+      // URL non modifiable (iframe sandboxée…) : sans conséquence
+    }
+  }
+
   function setDisplayMode(mode: DisplayMode) {
     displayMode = mode
+    isSettingsOpen = false
     persistPreferences()
   }
 
@@ -734,10 +922,15 @@
       // Contenu figé (images/texte fixes) : rien à régénérer.
       return
     }
-    if (exercise.typeExercice === 'simple') {
-      mathaleaHandleExerciceSimple(exercise, false, k)
-    } else if (typeof exercise.nouvelleVersionWrapper === 'function') {
-      exercise.nouvelleVersionWrapper(k)
+    context.isTypst = true
+    try {
+      if (exercise.typeExercice === 'simple') {
+        mathaleaHandleExerciceSimple(exercise, false, k)
+      } else if (typeof exercise.nouvelleVersionWrapper === 'function') {
+        exercise.nouvelleVersionWrapper(k)
+      }
+    } finally {
+      context.isTypst = false
     }
   }
 
@@ -828,8 +1021,11 @@
       input.introCorrection = mathaleaFormatExercice(
         exercise.consigneCorrection ?? '',
       )
-      input.numbered =
-        input.questions.length > 1 && exercise.listeAvecNumerotation !== false
+      // le nombre de questions n'entre pas en jeu ici : un exercice à
+      // question unique n'est de toute façon jamais mis dans un
+      // environnement `tasks` (donc jamais numéroté), sauf s'il rejoint un
+      // groupe fusionné (voir `forceList` dans buildTypstDocument)
+      input.numbered = exercise.listeAvecNumerotation !== false
       // questions figées par la palette (nombre de questions modifié) : les
       // questions déjà affichées gardent leur contenu, seules les questions
       // ajoutées prennent le contenu fraîchement généré
@@ -848,13 +1044,43 @@
     })
   }
 
+  /**
+   * Contenu de chaque version du sujet (Sujet A, B...) : la version 0 utilise
+   * la graine de base (visible dans les réglages), les suivantes une graine
+   * dérivée — même formule que la vue A4 (`Diaporama.svelte` `reroll`), pour
+   * que la 2e version corresponde à la 2e vue du diaporama.
+   */
+  function buildAllVersionInputs(): TypstExerciseInput[][] {
+    const baseSeeds = exercises.map((exercise) => exercise?.seed)
+    const nbVersions = Math.max(1, documentOptions.nbVersions)
+    const perVersion: TypstExerciseInput[][] = []
+    for (let version = 0; version < nbVersions; version++) {
+      for (const [k, exercise] of exercises.entries()) {
+        if (exercise == null) continue
+        const base = baseSeeds[k]
+        exercise.seed =
+          version === 0 || base === undefined ? base : `${base}${version}`
+      }
+      perVersion.push(buildInputs())
+    }
+    // on restaure la graine de base : c'est elle que montrent les réglages
+    for (const [k, exercise] of exercises.entries()) {
+      if (exercise != null) exercise.seed = baseSeeds[k]
+    }
+    return perVersion
+  }
+
   function buildCode(): string {
     // les ajustements faits via la palette de mise en page (colonnes,
     // espacement, insertions) sont repris du code courant pour survivre
-    // à la régénération
+    // à la régénération ; au tout premier rendu (éditeur pas encore créé),
+    // on repart des réglages restaurés depuis l'URL le cas échéant
     const carryOver =
-      editorView != null ? harvestCarryOver(currentCode()) : {}
-    return buildTypstDocument(buildInputs(), documentOptions, carryOver)
+      editorView != null
+        ? harvestCarryOver(currentCode())
+        : (urlCarryOver ?? {})
+    const [primary, ...extraVersions] = buildAllVersionInputs()
+    return buildTypstDocument(primary, documentOptions, carryOver, extraVersions)
   }
 
   function initEditor(content: string) {
@@ -874,6 +1100,10 @@
               if (!isPaletteEdit) isEdited = true
               const code = update.state.doc.toString()
               refreshTasksLayout(code)
+              // toute modification structurée (palette, régénération) est
+              // reportée dans l'URL ; le garde-fou sur la valeur encodée
+              // évite d'écrire à chaque frappe qui ne change pas les réglages
+              persistToUrl()
               scheduleCompile(code)
             }
           }),
@@ -1038,6 +1268,58 @@
     }
   }
 
+  /**
+   * Récupère les images (PNG) des exercices statiques (annales scannées) et
+   * les charge dans le compilateur Typst (système de fichiers virtuel), pour
+   * qu'elles s'affichent dans l'aperçu au lieu d'un encart « non convertie ».
+   * Une image dont la récupération échoue reste absente du registre : elle
+   * s'affiche alors comme un encart, sans bloquer le reste de la fiche.
+   */
+  /**
+   * Récrit une URL `https://coopmaths.fr/alea/...` en URL de même origine
+   * que l'application (proxyée vers coopmaths.fr en développement, voir
+   * `vite.config.ts`) : coopmaths.fr n'envoie pas d'en-têtes CORS, un fetch
+   * direct échouerait sinon dès que l'appli n'est pas servie depuis ce domaine.
+   */
+  function toSameOriginUrl(url: string): string {
+    const prefix = 'https://coopmaths.fr/alea/'
+    return url.startsWith(prefix)
+      ? `${window.location.origin}${import.meta.env.BASE_URL}${url.slice(prefix.length)}`
+      : url
+  }
+
+  async function prefetchStaticImages() {
+    const urls = new Set<string>()
+    const imgSrc = /<img[^>]*\ssrc=["']([^"']+)["']/gi
+    for (const exercise of exercises) {
+      if (exercise == null || exercise.typeExercice !== 'statique') continue
+      const html = [
+        ...(exercise.listeQuestions ?? []),
+        ...(exercise.listeCorrections ?? []),
+      ].join('')
+      for (const match of html.matchAll(imgSrc)) urls.add(match[1])
+    }
+    if (urls.size === 0) return
+    const { cachedBytes, setStaticImageBytes } = await import('./typstCompiler')
+    const paths = new Map<string, string>()
+    const bytes = new Map<string, Uint8Array>()
+    await Promise.all(
+      [...urls].map(async (url, i) => {
+        try {
+          bytes.set(
+            `/static-img-${i}.png`,
+            await cachedBytes(toSameOriginUrl(url)),
+          )
+          paths.set(url, `/static-img-${i}.png`)
+        } catch {
+          // image indisponible : elle apparaîtra comme un encart
+        }
+      }),
+    )
+    setStaticImagePaths(paths)
+    setStaticImageBytes(bytes)
+  }
+
   async function loadExercises() {
     isLoading = true
     const results = await Promise.allSettled(buildExercisesList())
@@ -1047,6 +1329,7 @@
     for (const exercise of exercises) {
       if (exercise != null) exercise.interactif = false
     }
+    await prefetchStaticImages()
     isLoading = false
   }
 
@@ -1054,6 +1337,9 @@
     await loadExercises()
     const code = buildCode()
     initEditor(code)
+    // normalise l'URL : elle porte désormais l'ensemble des réglages
+    // (document + mise en page) tels qu'appliqués au premier rendu
+    persistToUrl()
     compile(code)
   })
 
@@ -1216,16 +1502,6 @@
       `${exportFilename()}.typ`,
     )
   }
-
-  async function copyCode() {
-    try {
-      await navigator.clipboard.writeText(currentCode())
-      copied = true
-      setTimeout(() => (copied = false), 2000)
-    } catch (error) {
-      console.error('Copie impossible', error)
-    }
-  }
 </script>
 
 <svelte:head>
@@ -1239,7 +1515,7 @@
 >
   <div class="bg-coopmaths-canvas dark:bg-coopmathsdark-canvas">
     <NavBar
-      subtitle="Typst"
+      subtitle="Impression"
       subtitleType="export"
       handleLanguage={() => {}}
       locale={$referentielLocale}
@@ -1307,41 +1583,50 @@
         Mise en page
       </button>
 
+      <label class="flex items-center gap-2 text-sm">
+        <i class="bx bx-copy text-xl"></i>
+        Versions
+        <select
+          class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+          bind:value={documentOptions.nbVersions}
+          on:change={applyDocumentOptions}
+        >
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+        </select>
+      </label>
+
       <div class="grow"></div>
 
-      <button
-        type="button"
-        title="Copier le code Typst"
-        aria-label="Copier le code Typst"
-        class="flex items-center text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
-        on:click={copyCode}
-      >
-        <i class="bx {copied ? 'bx-check' : 'bx-copy'} text-2xl"></i>
-      </button>
-      <ButtonTextAction
-        text="Télécharger le .typ"
-        icon="bx-file-blank"
-        inverted={true}
-        class="rounded-lg py-1 px-2"
-        on:click={downloadTyp}
-      />
-      <ButtonTextAction
-        text={isGeneratingPdf ? 'PDF en cours...' : 'Télécharger le PDF'}
-        icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-download'}
-        inverted={true}
-        class="rounded-lg py-1 px-2 min-w-42.5"
-        on:click={downloadPdf}
-      />
-      <ButtonTextAction
-        text={isGeneratingPdf
-          ? 'PDF en cours...'
-          : 'Énoncé + corrigé séparés'}
-        icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-copy'}
-        inverted={true}
-        class="rounded-lg py-1 px-2 min-w-42.5"
-        title="Télécharge deux PDF : l'énoncé seul puis le corrigé seul"
-        on:click={downloadPdfSeparate}
-      />
+      {#if displayMode === 'code'}
+        <ButtonTextAction
+          text="Télécharger le .typ"
+          icon="bx-file-blank"
+          inverted={true}
+          class="rounded-lg py-1 px-2"
+          on:click={downloadTyp}
+        />
+      {:else}
+        <ButtonTextAction
+          text={isGeneratingPdf ? 'PDF en cours...' : 'Télécharger le PDF'}
+          icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-download'}
+          inverted={true}
+          class="rounded-lg py-1 px-2 min-w-42.5"
+          on:click={downloadPdf}
+        />
+        <ButtonTextAction
+          text={isGeneratingPdf
+            ? 'PDF en cours...'
+            : 'Énoncé + corrigé séparés'}
+          icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-copy'}
+          inverted={true}
+          class="rounded-lg py-1 px-2 min-w-42.5"
+          title="Télécharge deux PDF : l'énoncé seul puis le corrigé seul"
+          on:click={downloadPdfSeparate}
+        />
+      {/if}
     </div>
   </div>
 
@@ -1685,7 +1970,10 @@
                   {questionCounts}
                   {figureZoomValues}
                   {figureAlignValues}
+                  codeOverrides={codeOverrideValues}
                   exerciseCount={exercises.length}
+                  {mergedExercises}
+                  mergeExercisesEnabled={!documentOptions.mergeExercises}
                   onAdjustColumns={adjustColumns}
                   onAdjustGutter={adjustGutter}
                   onAdjustFigureZoom={adjustFigureZoom}
@@ -1699,6 +1987,8 @@
                   onMoveExercise={moveExercise}
                   onNewData={newDataForExercise}
                   onOpenSettings={openSettings}
+                  onEditCode={openCodeEdit}
+                  onToggleMergeBefore={toggleMergeBefore}
                 />
               {/if}
             </div>
@@ -1740,6 +2030,61 @@
             on:clickSettings={() => (settingsExerciseIndex = null)}
           />
         {/key}
+      </div>
+    </div>
+  {/if}
+
+  {#if codeEditNum !== null}
+    {@const num = codeEditNum}
+    <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      on:click|self={() => (codeEditNum = null)}
+    >
+      <div
+        class="relative flex w-full max-w-2xl flex-col gap-3 rounded-lg bg-coopmaths-canvas-dark p-4 shadow-xl dark:bg-coopmathsdark-canvas-dark"
+      >
+        <h2 class="text-base font-semibold">
+          Code Typst de l'exercice {num}
+        </h2>
+        <p class="text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus">
+          Modifiez le code ci-dessous : il remplacera l'énoncé généré de cet
+          exercice (QR-code et numérotation continue des questions désactivés
+          pour lui). Videz le champ pour revenir à l'énoncé généré
+          automatiquement.
+        </p>
+        <textarea
+          class="h-64 w-full rounded border border-gray-300 p-2 font-mono text-xs"
+          bind:value={codeEditDraft}
+          on:keydown={(e) => {
+            if (e.key === 'Escape') codeEditNum = null
+          }}
+        ></textarea>
+        <div class="flex justify-between gap-2">
+          <button
+            type="button"
+            class="px-3 py-1 hover:text-coopmaths-action"
+            on:click={() => restoreGeneratedCode(num)}
+          >
+            Restaurer le code d'origine
+          </button>
+          <div class="flex gap-2">
+            <button
+              type="button"
+              class="px-3 py-1 hover:text-coopmaths-action"
+              on:click={() => (codeEditNum = null)}
+            >
+              Annuler
+            </button>
+            <button
+              type="button"
+              class="rounded bg-coopmaths-action px-3 py-1 text-white"
+              on:click={() => updateExerciseCode(num, codeEditDraft)}
+            >
+              Enregistrer
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   {/if}

@@ -1,8 +1,8 @@
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
+import { MySpreadsheetElement } from '../customElements/MySpreadSheet'
 import { toutPourUnPoint } from '../interactif/mathLive'
 import type { GoodAnswersFormulas, IExercice, SheetTestDatas } from '../types'
-import { MySpreadsheetElement } from './MySpreadSheet'
 
 export function compareSheetFunction(
   exercice: IExercice,
@@ -73,7 +73,7 @@ export function compareSheetFunction(
   let maxMessages = ''
   // sinon contrôler que les résultats sont corrects pour différentes valeurs avec les formules saisies par l'utilisateur
 
-  const testSheetForGoodAnswers = MySpreadsheetElement.create({
+  const testSheetForGoodAnswers = MySpreadsheetElement.createEltToAppendToDom({
     data: userData,
     minDimensions: userSheet.getMinDimensions(),
     style: userSheet.getStyle(),
@@ -82,14 +82,16 @@ export function compareSheetFunction(
     id: 'testSheet',
   })
 
-  const testSheetForUserResponses = MySpreadsheetElement.create({
-    data: userData,
-    minDimensions: userSheet.getMinDimensions(),
-    style: userSheet.getStyle(),
-    columns: userSheet.getColumns(),
-    interactif: false,
-    id: 'testSheetUser',
-  })
+  const testSheetForUserResponses = MySpreadsheetElement.createEltToAppendToDom(
+    {
+      data: userData,
+      minDimensions: userSheet.getMinDimensions(),
+      style: userSheet.getStyle(),
+      columns: userSheet.getColumns(),
+      interactif: false,
+      id: 'testSheetUser',
+    },
+  )
   testSheetForGoodAnswers.style.position = 'absolute'
   testSheetForGoodAnswers.style.left = '-9999px'
   document.body.appendChild(testSheetForGoodAnswers)
@@ -309,7 +311,10 @@ export function createTableurLatex(
   ${options.firstColHeaderWidth ? `>{\\centering \\arraybackslash}p{${options.firstColHeaderWidth}}|` : '>{\\centering \\arraybackslash}X|'}
   *{${colNbr - 1}}{>{\\centering \\arraybackslash}X|}}\\hline\n`
 
-  if (options.formule) {
+  if (options.formule && !context.isTypst) {
+    // en sortie Typst, cette ligne imite la barre de formule d'un tableur
+    // interactif (référence de cellule, flèche, zone de saisie) : elle n'a
+    // pas de sens sur un document imprimé/statique.
     output += `\\multicolumn{1}{|l}{${options.formuleCellule}}&\\multicolumn{1}{r|}{▼}&\\multicolumn{${colNbr - 1}}{l|}{${options.formuleTexte}}\\\\ \\hline\n`
   }
   // en-tête
@@ -327,14 +332,21 @@ export function createTableurLatex(
       const cell = rowData[colIndex] || {}
       const styleCell = styles[cell.s ?? ''] || {}
       let color = ''
-      if (!context.isHtml && styleCell.bg?.startsWith('#')) {
+      if (
+        (!context.isHtml || context.isTypst) &&
+        styleCell.bg?.startsWith('#')
+      ) {
         color = `\\cellcolor[HTML]{${styleCell.bg.replace('#', '')}}`
       } else if (styleCell.bg) {
         color = `\\cellcolor{${styleCell.bg}}`
       }
       if (cell?.t === 1) {
         // texte
-        output += `\\raggedright ${color} ${cell.v || ''}  &`
+        const texte = cell.v || ''
+        // en sortie Typst, le tableau est converti comme un segment maths
+        // (voir plus bas) : \text{} évite que les espaces entre les mots
+        // soient perdus et que le texte soit mis en italique comme des variables
+        output += `\\raggedright ${color} ${context.isTypst ? `\\text{${texte}}` : texte}  &`
       } else if (cell?.t === 2) {
         // number
         output += `\\raggedleft ${color} ${cell.v || ''}  &`
@@ -349,7 +361,10 @@ export function createTableurLatex(
     output += '\\\\ \\hline\n'
   }
   output += '\\end{tabularx}\n'
-  return output
+  // En sortie Typst, le tableau brut n'est repéré et converti que s'il est
+  // délimité comme un segment LaTeX (voir htmlToTypst/latexSegmentToTypst) ;
+  // en LaTeX classique, l'environnement tabularx ne doit pas être en mode maths.
+  return context.isTypst ? `$${output}$` : output
 }
 
 export function addSheet({
@@ -377,23 +392,24 @@ export function addSheet({
   nbColonnesCachees?: number
   readOnlyCells?: string[]
 }): string {
+  const sheetHtml = MySpreadsheetElement.create({
+    id: `sheet-Ex${numeroExercice}Q${question}`,
+    data,
+    minDimensions,
+    style,
+    columns,
+    interactif,
+    showVerifyButton,
+    nbLignesCachees,
+    nbColonnesCachees,
+    readOnlyCells,
+  })
+
   return (
-    `<my-spreadsheet
-  id="sheet-Ex${numeroExercice}Q${question}"
-  data='${JSON.stringify(data)}'
-  min-dimensions='${JSON.stringify(minDimensions)}'
-  ${style ? `style='${JSON.stringify(style)}'` : ''}
-  columns='${JSON.stringify(columns)}'
-  interactif='${interactif}'
-    ${showVerifyButton !== undefined ? `show-verify-button='${showVerifyButton}'` : ''}
-    ${nbLignesCachees !== undefined ? `nb-lignes-cachees='${nbLignesCachees}'` : ''}
-    ${nbColonnesCachees !== undefined ? `nb-colonnes-cachees='${nbColonnesCachees}'` : ''}
-    ${readOnlyCells && readOnlyCells.length > 0 ? `readonly-cells='${JSON.stringify(readOnlyCells)}'` : ''}
->` +
+    sheetHtml +
     (interactif
       ? `<div class="ml-2 py-2" id="resultatCheckEx${numeroExercice}Q${question}"></div>
 <div class ="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${numeroExercice}Q${question}"}></div>`
-      : '') +
-    '</my-spreadsheet>'
+      : '')
   )
 }

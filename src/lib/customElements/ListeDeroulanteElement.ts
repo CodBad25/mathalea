@@ -1,11 +1,48 @@
-import ListeDeroulante, { type AllChoicesType } from './ListeDeroulante'
+import ListeDeroulante, {
+  type AllChoicesType,
+} from '../interactif/listeDeroulante/ListeDeroulante'
+import type { IExercice } from '../types'
+import MathaleaCustomElement from './MathaleaCustomElement'
+export type ListeDeroulanteDataOptions = {
+  choix0?: boolean
+  className?: string
+  choices?: AllChoicesType
+}
 
-class ListeDeroulanteElement extends HTMLElement {
+class ListeDeroulanteElement extends MathaleaCustomElement {
+  static readonly elementTag = 'liste-deroulante'
+
   private _listeDeroulante?: ListeDeroulante
+  private _lastValue = ''
 
   constructor() {
     super()
     this.attachShadow({ mode: 'open' })
+  }
+
+  static create({
+    exercice,
+    questionIndex,
+    dataOptions,
+  }: {
+    exercice: IExercice
+    questionIndex: number
+    dataOptions: ListeDeroulanteDataOptions
+  }): string {
+    const attrs: string[] = []
+    attrs.push(
+      `id="liste-deroulanteEx${exercice.numeroExercice}Q${questionIndex}"`,
+    )
+    if (dataOptions.className) attrs.push(`class="${dataOptions.className}"`)
+    if (dataOptions.choices) {
+      attrs.push(
+        `choices="${encodeURIComponent(JSON.stringify(dataOptions.choices))}"`,
+      )
+    }
+    if (dataOptions.choix0 !== undefined) {
+      attrs.push(`choix0="${dataOptions.choix0 ? 'true' : 'false'}"`)
+    }
+    return `<liste-deroulante ${attrs.join(' ')}></liste-deroulante>`
   }
 
   static get observedAttributes() {
@@ -32,6 +69,21 @@ class ListeDeroulanteElement extends HTMLElement {
   }
 
   private _choices: AllChoicesType = []
+
+  private emitValueChangedIfNeeded() {
+    const currentValue = this.value
+    if (currentValue === this._lastValue) return
+    this._lastValue = currentValue
+    this.dispatchEvent(new Event('input', { bubbles: true, composed: true }))
+    this.dispatchEvent(new Event('change', { bubbles: true, composed: true }))
+    this.dispatchEvent(
+      new CustomEvent('value-changed', {
+        detail: { value: currentValue },
+        bubbles: true,
+        composed: true,
+      }),
+    )
+  }
 
   render() {
     if (this.shadowRoot) this.shadowRoot.innerHTML = ''
@@ -189,7 +241,7 @@ span.listeDeroulante ul li svg.svgChoice {
       try {
         const attr = decodeURIComponent(this.getAttribute('choices')!)
         choices = JSON.parse(attr)
-      } catch (e) {
+      } catch {
         choices = []
       }
     }
@@ -200,6 +252,18 @@ span.listeDeroulante ul li svg.svgChoice {
     // Création de la liste déroulante
     this._listeDeroulante = new ListeDeroulante(choices, { choix0 })
     this._listeDeroulante._init({ conteneur: container })
+    const originalSelect = this._listeDeroulante.select.bind(
+      this._listeDeroulante,
+    )
+    this._listeDeroulante.select = (
+      index: number,
+      options?: { withoutOffset?: boolean },
+    ) => {
+      const result = originalSelect(index, options)
+      this.emitValueChangedIfNeeded()
+      return result
+    }
+    this._lastValue = this.value
   }
 
   // API JS pour récupérer la valeur sélectionnée
@@ -213,6 +277,7 @@ span.listeDeroulante ul li svg.svgChoice {
         this._listeDeroulante.choices.findIndex((el) => el.value === val) +
           this._listeDeroulante._offset,
       )
+      this.emitValueChangedIfNeeded()
     }
   }
 }

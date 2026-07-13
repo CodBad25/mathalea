@@ -51,7 +51,7 @@ const ASSET_CACHE = 'typst-assets-v2'
  * Les URL du WASM sont hashées par Vite : changer de version invalide
  * naturellement l'entrée de cache.
  */
-async function cachedBytes(url: string): Promise<Uint8Array> {
+export async function cachedBytes(url: string): Promise<Uint8Array> {
   try {
     if (typeof caches !== 'undefined') {
       const cache = await caches.open(ASSET_CACHE)
@@ -67,6 +67,28 @@ async function cachedBytes(url: string): Promise<Uint8Array> {
     // Cache API indisponible/pleine : on retombe sur un fetch normal
   }
   return new Uint8Array(await (await fetch(url)).arrayBuffer())
+}
+
+/**
+ * Octets des images d'exercices statiques (annales scannées), par chemin
+ * virtuel (`mapShadow`). Renseigné par `Typst.svelte` une fois les images
+ * récupérées ; appliqué au compilateur juste avant chaque compilation, ce qui
+ * couvre aussi bien l'aperçu (SVG) que l'export PDF.
+ */
+let staticImageBytes: Map<string, Uint8Array> = new Map()
+
+/** Renseigne le registre des images d'exercices statiques (voir `staticImageBytes`) */
+export function setStaticImageBytes(bytes: Map<string, Uint8Array>): void {
+  staticImageBytes = bytes
+}
+
+/** Charge les images d'exercices statiques dans le système de fichiers virtuel du compilateur */
+async function mapStaticImages(): Promise<void> {
+  if (staticImageBytes.size === 0) return
+  const compiler = await $typst.getCompiler()
+  for (const [path, bytes] of staticImageBytes) {
+    compiler.mapShadow(path, bytes)
+  }
 }
 
 /** Initialisation unique par session (mémorisée par la promesse) */
@@ -183,6 +205,7 @@ export async function compileTypstToSvg(
   source: string,
 ): Promise<TypstCompileResult> {
   await ensureInitialized()
+  await mapStaticImages()
   const compiler = await $typst.getCompiler()
   await compiler.addSource(MAIN_FILE, source)
   // un seul « monde » de compilation : l'artefact SVG et la requête des
@@ -214,5 +237,6 @@ export async function compileTypstToPdf(
   source: string,
 ): Promise<Uint8Array | undefined> {
   await ensureInitialized()
+  await mapStaticImages()
   return await $typst.pdf({ mainContent: source })
 }

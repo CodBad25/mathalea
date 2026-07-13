@@ -42,7 +42,7 @@ export default class PuissanceDecimaleOuFractionnaire extends Exercice {
   }
 
   nouvelleVersion() {
-    this.consigne = `Calculer de tête l'écriture décimale ${this.classe === 4 ? 'ou fractionnaire' : ''} des nombres suivants.`
+    this.consigne = `Calculer, de tête, l'écriture décimale ${this.classe === 4 ? 'ou fractionnaire' : ''} des nombres suivants.`
     const typeQuestionsDisponibles = [
       'puissancePos',
       'puissanceNeg',

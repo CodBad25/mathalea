@@ -479,7 +479,7 @@ export function tableauColonneLigne(
       ? tabEntetesLignes.length
       : tabLignes.length / tabEntetesColonnes.length + 1
   // On construit le string pour obtenir le tableau pour compatibilité HTML et LaTeX
-  if (context.isHtml) {
+  if (context.isHtml && !context.isTypst) {
     const tableauCL = AddTabDbleEntryMathlive.create(
       exo,
       question,
