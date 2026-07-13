@@ -36,10 +36,10 @@ export default class EvolSuccEffet extends ExerciceQcmA {
    Par conséquent, la somme retirée est plus importante que la somme ajoutée initialement.<br>
    ${texteEnCouleurEtGras('Le prix final sera donc strictement inférieur au prix initial.')}`
     this.reponses = [
-      'Le prix est strictement inférieur à sa valeur de départ. ',
-      'Le prix est égal à sa valeur de départ. ',
-      'Le prix est strictement supérieur à sa valeur de départ. ',
-      ' On ne peut pas savoir : cela dépend de la valeur de départ.  ',
+      'le prix est strictement inférieur à sa valeur de départ. ',
+      'le prix est égal à sa valeur de départ. ',
+      'le prix est strictement supérieur à sa valeur de départ. ',
+      'on ne peut pas savoir : cela dépend de la valeur de départ.  ',
     ]
   }
 
@@ -66,10 +66,10 @@ export default class EvolSuccEffet extends ExerciceQcmA {
    Ainsi le prix final sera  strictement inférieur au prix initial.`
 
           this.reponses = [
-            'Le prix est strictement inférieur à sa valeur de départ. ',
-            'Le prix est égal à sa valeur de départ. ',
-            'Le prix est strictement supérieur à sa valeur de départ. ',
-            ' On ne peut pas savoir : cela dépend de la valeur de départ.  ',
+            'le prix est strictement inférieur à sa valeur de départ. ',
+            'le prix est égal à sa valeur de départ. ',
+            'le prix est strictement supérieur à sa valeur de départ. ',
+            'on ne peut pas savoir : cela dépend de la valeur de départ.  ',
           ]
         }
         break
