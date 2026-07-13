@@ -51,7 +51,7 @@ async function testV(page: Page) {
 
   await expect(page.locator('body')).toContainText('bonjour')
   await page.waitForSelector('#iframe')
-  await page.waitForTimeout(10_000) // attendre 10_000 ms de plus pour assurer le rendu
+  await page.waitForTimeout(3_000) // attendre 3_000 ms de plus pour assurer le rendu
   if (page.frames().length > 0) {
     await Promise.all(
       page.frames().map((frame) => frame.waitForLoadState('networkidle')),
@@ -76,7 +76,7 @@ async function testV(page: Page) {
   const box2 = await page
     .locator('#iframe')
     .contentFrame()
-    .locator('#clockEx0Q0 > div > div > svg > text:nth-child(5)')
+    .locator('#interactive-clockEx0Q0 > div > div > svg > text:nth-child(5)')
     .boundingBox()
   if (box !== null && box2 !== null) {
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
@@ -184,7 +184,7 @@ async function testV(page: Page) {
   const liste0 = page
     .locator('#iframe')
     .contentFrame()
-    .locator('liste-deroulante#ex5Q0')
+    .locator('#liste-deroulanteEx5Q0')
   await liste0.click()
   await liste0.locator('li', { hasText: 'une différence' }).click()
   await page
@@ -197,7 +197,7 @@ async function testV(page: Page) {
   const liste1 = page
     .locator('#iframe')
     .contentFrame()
-    .locator('liste-deroulante#ex5Q1')
+    .locator('#liste-deroulanteEx5Q1')
   await liste1.click()
   await liste1.locator('li', { hasText: 'une différence' }).click()
   await page
@@ -210,7 +210,7 @@ async function testV(page: Page) {
   const liste2 = page
     .locator('#iframe')
     .contentFrame()
-    .locator('liste-deroulante#ex5Q2')
+    .locator('#liste-deroulanteEx5Q2')
   await liste2.click()
   await liste2.locator('li', { hasText: 'une différence' }).click()
   await page
@@ -223,7 +223,7 @@ async function testV(page: Page) {
   const liste3 = page
     .locator('#iframe')
     .contentFrame()
-    .locator('liste-deroulante#ex5Q3')
+    .locator('#liste-deroulanteEx5Q3')
   await liste3.click()
   await liste3.locator('li', { hasText: 'une différence' }).click()
   await page
@@ -269,7 +269,7 @@ async function testV(page: Page) {
   expect(value).not.toBe(null)
   expect(value.studentAssignment.length).toEqual(11)
   const responses = [
-    { clockEx0Q0: '12h15' },
+    { 'interactive-clockEx0Q0': '{"hour":12,"minute":15,"second":0}' },
     {
       Ex1Q0R0: '1',
       Ex1Q0R1: '0',
@@ -285,10 +285,10 @@ async function testV(page: Page) {
     },
     { cliquefigure2Ex4Q0: '1' },
     { cliquefigure0Ex4Q1: '1' },
-    { ex5Q0: 'différence' },
-    { ex5Q1: 'différence' },
-    { ex5Q2: 'différence' },
-    { ex5Q3: 'différence' },
+    { 'liste-deroulanteEx5Q0': 'différence' },
+    { 'liste-deroulanteEx5Q1': 'différence' },
+    { 'liste-deroulanteEx5Q2': 'différence' },
+    { 'liste-deroulanteEx5Q3': 'différence' },
     {
       rectangleDNDEx6Q0R1: 'etiquetteEx6Q0I20-clone-1741033348514',
       texteDNDEx6Q0R1: 'deux',

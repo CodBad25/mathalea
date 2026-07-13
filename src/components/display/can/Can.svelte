@@ -319,20 +319,15 @@
             indiceQuestionInExercice[i],
           ) === 'OK',
         )
-        answers[i] =
-          exercice.answers?.[
-            `ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-          ] ??
-          exercice.answers?.[
-            `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-          ] ??
-          ''
+        const listeKey = `liste-deroulanteEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+        answers[i] = exercice.answers?.[listeKey] ?? ''
         answersType[i] = {
           type,
           index: i,
           answers: Object.keys(exercice.answers ?? {})
             .filter(
               (key: string) =>
+                key.startsWith(listeKey) ||
                 key.startsWith(
                   `ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
                 ) ||
@@ -477,14 +472,14 @@
           type,
           index: i,
           answers: {
-            [`Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
+            [`multi-mathfieldEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
               exercice.answers![
-                `multiMathfieldEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+                `multi-mathfieldEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
               ],
           },
           answerTxt:
             exercice.answers![
-              `multiMathfieldEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+              `multi-mathfieldEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
             ],
         }
         answers[i] = answersType[i].answerTxt

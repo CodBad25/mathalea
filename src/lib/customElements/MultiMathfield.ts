@@ -124,35 +124,35 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
   ): Record<string, string> {
     const result: Record<string, string> = {}
     if (typeof filledTemplate !== 'string') return result
-    // Regex pour trouver %{champ:"valeur"}
-    const regex = /%\{([a-zA-Z0-9_]+):"([^"]*)"\}/g
+    // Parcourt le template rempli et récupère les valeurs injectées
+    // Exemple: %{champ1:"7"} ou %{champ2}
+    const regex = /%\{([a-zA-Z0-9_]+)(?::"([^"]*)")?\}/g
     let match
     while ((match = regex.exec(filledTemplate)) !== null) {
       const champ = match[1]
-      const valeur = match[2]
+      const valeur = match[2] ?? ''
       result[champ] = valeur
     }
     return result
   }
 
   static create({
-    id,
+    exercice,
+    questionIndex,
     dataTemplate,
     dataOptions,
-    feedbackId,
   }: {
-    id: string
+    exercice: IExercice
+    questionIndex: number
     dataTemplate: string
     dataOptions: DataOptionsMultiMathfield
-    feedbackId?: string
   }): string {
     const dataOptionsStr = encodeURIComponent(JSON.stringify(dataOptions))
       .replace(/'/g, '%27')
       .replace(/"/g, '%22')
 
-    const html = `<multi-mathfield id="${id}" data-template="${dataTemplate.replace(/"/g, '&quot;')}" data-options="${dataOptionsStr}"></multi-mathfield>`
-    if (!feedbackId) return html
-    return `${html}<div class="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="${feedbackId}" style="display: none;"></div>`
+    const html = `<multi-mathfield id="multi-mathfieldEx${exercice.numeroExercice}Q${questionIndex}" data-template="${dataTemplate.replace(/"/g, '&quot;')}" data-options="${dataOptionsStr}"></multi-mathfield>`
+    return `${html}<div class="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${exercice.numeroExercice}Q${questionIndex}" style="display: none;"></div>`
   }
 
   connectedCallback() {
@@ -371,8 +371,24 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
     return this.getValue()
   }
 
-  set value(answers: MultiMathfieldAnswers) {
-    this.setAnswers(answers)
+  set value(answers: MultiMathfieldAnswers | string) {
+    let parsedAnswers: MultiMathfieldAnswers
+    if (typeof answers === 'string') {
+      // Format attendu: filledDataTemplate fabriqué par verifQuestionMultiMathfield
+      parsedAnswers = MultiMathfieldElement.answersFromFilledTemplate(answers)
+
+      // Compatibilité avec un éventuel ancien format JSON.stringify
+      if (Object.keys(parsedAnswers).length === 0) {
+        try {
+          parsedAnswers = JSON.parse(answers)
+        } catch {
+          return
+        }
+      }
+    } else {
+      parsedAnswers = answers
+    }
+    this.setAnswers(parsedAnswers)
   }
 
   getSpansResultats() {
@@ -441,10 +457,10 @@ export function addMultiMathfield(
       customElements.define('multi-mathfield', MultiMathfieldElement)
     }
     return MultiMathfieldElement.create({
-      id: `multiMathfieldEx${exercice.numeroExercice}Q${questionIndex}`,
+      exercice,
+      questionIndex,
       dataTemplate,
       dataOptions: enrichedOptions,
-      feedbackId: `feedbackEx${exercice.numeroExercice}Q${questionIndex}`,
     })
   } else {
     // On traite ligne par ligne pour détecter les items a), b), ... en début de ligne
