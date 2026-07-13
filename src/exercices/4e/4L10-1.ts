@@ -14,7 +14,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre =
-  'Réduire et simplifier, si possible, une expression littérale simple'
+  'Réduire, si possible, une expression littérale simple'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
@@ -54,7 +54,7 @@ export default class ReductionsPiegesClassiques extends Exercice {
   }
 
   nouvelleVersion() {
-    this.consigne = 'Réduire et simplifier, si possible, '
+    this.consigne = 'Réduire, si possible, '
     this.consigne +=
       this.nbQuestions > 1
         ? 'les expressions suivantes.'

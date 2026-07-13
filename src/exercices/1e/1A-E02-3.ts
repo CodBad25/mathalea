@@ -27,7 +27,7 @@ export const titre =
 export default class AugmentationsSuccessives extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     this.enonce =
-      "Le prix d'un article est noté $P$. Il connaît deux augmentations de $20\\,\\%$.<br> Le prix après ces augmentations est :"
+      "Le prix d'un article est noté $P$. Il connaît deux augmentations de $20\\,\\%$.<br> Le prix, après ces augmentations, est :"
     this.correction = `Après une augmentation de $20\\,\\%$, le nouveau prix est $P \\times 1,2$.<br>
  Après une deuxième augmentation de $20\\,\\%$, le prix devient : $(P \\times 1,2) \\times 1,2 = P \\times 1,2^2 = ${miseEnEvidence('P \\times 1,44')}$`
 
@@ -61,7 +61,7 @@ export default class AugmentationsSuccessives extends ExerciceQcmA {
       // Texte pour le nombre d'augmentations
       const texteNombre = nombreAugmentations === 2 ? 'deux' : 'trois'
 
-      this.enonce = `Le prix d'un article est noté $P$. Il connaît ${texteNombre} augmentations successives de $${pourcentage}\\,\\%$. <br>Le prix après ces augmentations est :`
+      this.enonce = `Le prix d'un article est noté $P$. Il connaît ${texteNombre} augmentations successives de $${pourcentage}\\,\\%$. <br>Le prix, après ces augmentations, est :`
 
       // Bonne réponse (plusieurs formes possibles)
       const bonnesReponses = [
