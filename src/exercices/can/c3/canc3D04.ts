@@ -3,9 +3,7 @@
  */
 
 import Horloge from '../../../lib/2d/horloge'
-import handleInteractiveClock, {
-  InteractiveClock,
-} from '../../../lib/customElements/InteractiveClock'
+import handleInteractiveClock from '../../../lib/customElements/InteractiveClock'
 import { combinaisonListes } from '../../../lib/outils/arrayOutils'
 import { sp } from '../../../lib/outils/outilString'
 import { formatMinute } from '../../../lib/outils/texNombre'
@@ -59,18 +57,8 @@ export default class ExerciceInteractiveClock extends Exercice {
         minute = 30
       }
       let enonce = `Placer correctement les aiguilles pour indiquer ${hour}${sp(1)}h${sp(1)}${formatMinute(minute)}.<br>`
-      if (context.isHtml) {
-        enonce += `<br><br>${InteractiveClock.create({
-          exercice: this,
-          questionIndex: i,
-          dataOptions: {
-            hour: 0,
-            minute: 0,
-            isDynamic: true,
-            showHands: true,
-            showSecond: false,
-          },
-        })}`
+      if (context.isHtml && !context.isTypst) {
+        enonce += `<br><br><interactive-clock id="interactive-clockEx${this.numeroExercice}Q${i}" isDynamic="${this.interactif}" showHands="${this.interactif}"/>`
       } else {
         const horloge = new Horloge(0, 0, 2)
         enonce += mathalea2d(
@@ -86,18 +74,8 @@ export default class ExerciceInteractiveClock extends Exercice {
         )
       }
       let correction = ''
-      if (context.isHtml) {
-        correction = `${InteractiveClock.create({
-          exercice: this,
-          questionIndex: i,
-          dataOptions: {
-            hour,
-            minute,
-            isDynamic: false,
-            showHands: true,
-            showSecond: false,
-          },
-        })}`
+      if (context.isHtml && !context.isTypst) {
+        correction = `<interactive-clock hour="${hour}" minute="${minute}" isDynamic="false"/>`
       } else {
         const horloge = new Horloge(0, 0, 2, new Hms({ hour, minute }))
         correction = mathalea2d(

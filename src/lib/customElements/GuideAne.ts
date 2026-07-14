@@ -1,6 +1,9 @@
 // Importer renderKatex de mathalea
 import { renderKatex } from '../mathalea'
-import MathaleaCustomElement from './MathaleaCustomElement'
+import type { IExercice } from '../types'
+import MathaleaCustomElement, {
+  registerMathaleaCustomElement,
+} from './MathaleaCustomElement'
 
 function detectPixelsPerCm() {
   try {
@@ -73,21 +76,88 @@ function formatFraction(decimal: number, showDecimal = true) {
 export class GuideAne extends MathaleaCustomElement {
   static readonly elementTag = 'guide-ane'
 
+  static formatStudentAnswer(rawAnswer: string): string {
+    if (typeof rawAnswer !== 'string' || rawAnswer.trim() === '')
+      return rawAnswer
+
+    type GuideAneStudentState = {
+      n?: number
+      p?: number
+      alpha?: number
+      lengthAD?: number
+      lengthAB?: number
+      ratio?: string
+      target?: number | null
+      targetReached?: boolean
+      targetFraction?: string
+    }
+
+    let parsed: GuideAneStudentState
+    try {
+      parsed = JSON.parse(rawAnswer) as GuideAneStudentState
+    } catch {
+      return rawAnswer
+    }
+
+    const formatNumber = (value: unknown, maxDigits = 3): string | null => {
+      if (typeof value !== 'number' || !Number.isFinite(value)) return null
+      return new Intl.NumberFormat('fr-FR', {
+        maximumFractionDigits: maxDigits,
+      }).format(value)
+    }
+
+    const ratio =
+      typeof parsed.ratio === 'string' && parsed.ratio.trim() !== ''
+        ? parsed.ratio
+        : typeof parsed.p === 'number' && typeof parsed.n === 'number'
+          ? `${parsed.p}/${parsed.n}`
+          : null
+
+    const lines: string[] = []
+
+    if (ratio) lines.push(`Rapport choisi : ${ratio}`)
+
+    const lengthAD = formatNumber(parsed.lengthAD)
+    if (lengthAD != null) lines.push(`AD = ${lengthAD} cm`)
+
+    const lengthAB = formatNumber(parsed.lengthAB)
+    if (lengthAB != null) lines.push(`AB = ${lengthAB} cm`)
+
+    const alpha = formatNumber(parsed.alpha, 1)
+    if (alpha != null) lines.push(`Angle = ${alpha}°`)
+
+    if (parsed.targetFraction) {
+      lines.push(`Cible : $AD = ${parsed.targetFraction} AB$`)
+    }
+
+    const target = formatNumber(parsed.target)
+    if (target != null) lines.push(`Valeur cible : ${target} cm`)
+
+    if (typeof parsed.targetReached === 'boolean') {
+      lines.push(`Cible atteinte : ${parsed.targetReached ? 'oui' : 'non'}`)
+    }
+
+    return lines.length > 0 ? lines.join('<br>') : rawAnswer
+  }
+
   static create({
-    id,
+    exercice,
+    questionIndex,
     className,
     width = '800px',
     height = '400px',
     data,
   }: {
-    id?: string
+    exercice: IExercice
+    questionIndex: number
     className?: string
     width?: string
     height?: string
     data: Record<string, unknown>
   }): string {
+    const id = `guideAneEx${exercice.numeroExercice}Q${questionIndex}`
     const attributes: string[] = []
-    if (id) attributes.push(`id="${id}"`)
+    attributes.push(`id="${id}"`)
     if (className) attributes.push(`class="${className}"`)
     attributes.push(`style="width: ${width}; height: ${height}"`)
     attributes.push(`data="${JSON.stringify(data).replace(/"/g, '&quot;')}"`)
@@ -172,7 +242,7 @@ export class GuideAne extends MathaleaCustomElement {
     return this.alpha
   }
 
-  public getValue(): number {
+  public getValue() {
     return this.value
   }
 
@@ -209,7 +279,7 @@ export class GuideAne extends MathaleaCustomElement {
   }
 
   // Méthode pour obtenir un rapport détaillé de l'état du guide-âne
-  public getState(): {
+  public get value(): {
     n: number
     p: number
     alpha: number
@@ -224,7 +294,7 @@ export class GuideAne extends MathaleaCustomElement {
       n: this.n,
       p: this.p,
       alpha: this.alpha,
-      lengthAD: this.value,
+      lengthAD: this.getLengthAB() * (this.p / this.n),
       lengthAB: this.getLengthAB(),
       ratio: `${this.p}/${this.n}`,
       target: this.target,
@@ -233,13 +303,45 @@ export class GuideAne extends MathaleaCustomElement {
     }
   }
 
+  public set value(val: {
+    n: number
+    p: number
+    alpha: number
+    lengthAB: number
+    target: number | null
+    targetFraction: string
+    targetColor: string | null
+    printAD: boolean
+    printRatio: boolean
+    fractionToDecimalAD: boolean
+    displayTargetOn: boolean
+  }) {
+    this.n = val.n
+    this.p = val.p
+    this.alpha = val.alpha
+    this.lengthAB = val.lengthAB
+    this.target = val.target
+    this.targetFraction = val.targetFraction
+    this.targetColor = val.targetColor
+    this.printAD = val.printAD
+    this.printRatio = val.printRatio
+    this.fractionToDecimalAD = val.fractionToDecimalAD
+    this.displayTargetOn = val.displayTargetOn
+    this.B = {
+      x: this.A.x + this.lengthAB * this.pixelsParCm,
+      y: this.A.y,
+    }
+    this.C = this.calculateInitialC()
+    this.redraw()
+  }
+
   // Méthode pour définir un callback personnalisé si on veut
-  public setOnChangeCallback(callback: (state: any) => void) {
+  public setOnChangeCallback(callback: (state: unknown) => void) {
     // Ajouter un listener pour les changements
     const originalRedraw = this.redraw.bind(this)
     this.redraw = () => {
       originalRedraw()
-      callback(this.getState())
+      callback(this.value)
     }
   }
 
@@ -655,20 +757,26 @@ export class GuideAne extends MathaleaCustomElement {
     C: { x: number; y: number },
     Dp: { x: number; y: number },
   ) {
+    const isInteractive = this.interactivityOn
+
     // Point A (non draggable, juste un marqueur)
     const aCircle = this.createCircle(A.x, A.y, 2, '#007bff', 'Point A')
     this.svg.appendChild(aCircle)
 
     // Point B (contraint horizontalement)
     const bCircle = this.createCircle(B.x, B.y, 3, '#28a745', 'Point B')
-    bCircle.setAttribute('data-draggable', 'B')
-    bCircle.style.cursor = 'ew-resize'
+    if (isInteractive) {
+      bCircle.setAttribute('data-draggable', 'B')
+      bCircle.style.cursor = 'ew-resize'
+    }
     this.svg.appendChild(bCircle)
 
     // Point C (contraint sur la demi-droite)
     const cCircle = this.createCircle(C.x, C.y, 4, '#ff6b35', 'Point C')
-    cCircle.setAttribute('data-draggable', 'C')
-    cCircle.style.cursor = 'ew-resize'
+    if (isInteractive) {
+      cCircle.setAttribute('data-draggable', 'C')
+      cCircle.style.cursor = 'ew-resize'
+    }
     this.svg.appendChild(cCircle)
 
     // Point Dp : toujours créer une zone de drag, même si p = 0
@@ -679,8 +787,10 @@ export class GuideAne extends MathaleaCustomElement {
       'transparent',
       `Point D${this.p}`,
     )
-    dpZone.setAttribute('data-draggable', 'Dp')
-    dpZone.style.cursor = 'ew-resize'
+    if (isInteractive) {
+      dpZone.setAttribute('data-draggable', 'Dp')
+      dpZone.style.cursor = 'ew-resize'
+    }
     dpZone.setAttribute('stroke', 'none')
     dpZone.setAttribute('fill-opacity', '0')
     this.svg.appendChild(dpZone)
@@ -747,23 +857,6 @@ export class GuideAne extends MathaleaCustomElement {
     return path
   }
 
-  // Mettre à jour la propriété value pour retourner la longueur ACp
-  get value() {
-    if (this.p === 0) {
-      return 0 // AD0 = 0
-    }
-
-    const A = this.A
-    const B = this.B
-
-    const ABx = B.x - A.x
-    const ABy = B.y - A.y
-    const ABLength = Math.sqrt(ABx * ABx + ABy * ABy)
-
-    const lengthCm = (this.p / this.n) * (ABLength / this.pixelsParCm)
-    return parseFloat(lengthCm.toFixed(3))
-  }
-
   // Calculer la longueur AB en cm
   getLengthAB() {
     const A = this.A
@@ -784,16 +877,26 @@ export class GuideAne extends MathaleaCustomElement {
     this.svg.style.height = '100%'
 
     this.appendChild(this.svg)
+    const resultatCheck = document.createElement('span')
+    resultatCheck.id = this.id
+      ? `${this.id.replace('guideAne', 'resultatCheck')}`
+      : `guideAne-resultat`
+    this.appendChild(resultatCheck)
   }
 
   connectedCallback() {
+    this.hydrateCommonAttributes()
+
     // Récupérer les paramètres depuis l'attribut data
     this.parseDataAttributes()
 
     this.createSVG()
     this.createLengthDisplay()
-    // Plus besoin d'initEventListeners() car plus d'inputs externes
-    this.setupDragListeners()
+    // Plus besoin d'initEventListeners() car plus d'inputs externes.
+    // En mode non interactif (correction), on n'attache aucun listener.
+    if (this.interactivityOn) {
+      this.setupDragListeners()
+    }
     this.redraw()
   }
 
@@ -805,6 +908,7 @@ export class GuideAne extends MathaleaCustomElement {
   // Nouvelle méthode pour parser les attributs data
   parseDataAttributes() {
     try {
+      const pixelsPerCm = detectPixelsPerCm()
       const dataAttr = this.getAttribute('data')
       if (dataAttr) {
         const data = JSON.parse(dataAttr)
@@ -826,12 +930,9 @@ export class GuideAne extends MathaleaCustomElement {
         ) {
           this.A = { x: data.A.x, y: data.A.y }
         }
-
-        // MODIFIER : Changer 10 en 1 pour correspondre au constructeur
-        // FORCER AB = 1 cm peu importe les données passées
-        this.B = {
-          x: this.A.x + 1 * this.pixelsParCm,
-          y: this.A.y,
+        console.log(`targetAB: ${data.targetAB}, type: ${typeof data.targetAB}`)
+        if (data.targetAB != null && typeof data.targetAB === 'number') {
+          this.B = { x: this.A.x + data.targetAB * pixelsPerCm, y: this.A.y }
         }
 
         // Puis définir n et recalculer C
@@ -848,13 +949,6 @@ export class GuideAne extends MathaleaCustomElement {
           this.p = data.p
         } else if (typeof data.p === 'number') {
           this.p = Math.max(0, Math.min(this.n - 1, data.p)) // Limiter entre 0 et n-1
-        }
-
-        // SUPPRIMER : Ne plus utiliser lengthAB pour fixer la longueur
-        // L'élève devra ajuster manuellement la position de B
-        if (typeof data.lengthAB === 'number' && data.lengthAB > 0) {
-          // Stocker la longueur cible pour l'affichage, mais ne pas l'appliquer
-          this.lengthAB = data.lengthAB
         }
 
         // Fraction cible (targetFraction)
@@ -891,6 +985,10 @@ export class GuideAne extends MathaleaCustomElement {
 
         if (data.id) {
           this.id = data.id
+        }
+
+        if (data.interactivityOn === false) {
+          this.interactivityOn = false
         }
 
         // Callback optionnel pour quand la target est atteinte
@@ -986,6 +1084,8 @@ export class GuideAne extends MathaleaCustomElement {
   }
 
   onMouseDown(e: MouseEvent) {
+    if (!this.interactivityOn) return
+
     const target = e.target as SVGElement
     const draggable = target.getAttribute('data-draggable')
 
@@ -1037,6 +1137,8 @@ export class GuideAne extends MathaleaCustomElement {
   }
 
   onTouchStart(e: TouchEvent) {
+    if (!this.interactivityOn) return
+
     e.preventDefault()
     // const touch = e.touches[0]
     const target = e.target as SVGElement
@@ -1112,7 +1214,8 @@ export class GuideAne extends MathaleaCustomElement {
     const threshold = 0.02 // Seuil de tolérance en cm
 
     const wasReached = this.targetReached
-    this.targetReached = Math.abs(currentValue - this.target) <= threshold
+    this.targetReached =
+      Math.abs(currentValue.lengthAD - this.target) <= threshold
 
     // Si la target vient d'être atteinte (pas déjà atteinte avant)
     if (this.targetReached && !wasReached) {
@@ -1127,7 +1230,7 @@ export class GuideAne extends MathaleaCustomElement {
           detail: {
             currentValue,
             target: this.target,
-            difference: Math.abs(currentValue - this.target),
+            difference: Math.abs(currentValue.lengthAD - this.target),
           },
         }),
       )
@@ -1191,7 +1294,7 @@ export class GuideAne extends MathaleaCustomElement {
   }
 
   updateLengthDisplay() {
-    const lengthCm = this.value
+    const lengthCm = this.value.lengthAD
     const lengthAB = this.getLengthAB()
 
     let targetDisplay = ''
@@ -1250,7 +1353,7 @@ export class GuideAne extends MathaleaCustomElement {
     }
   }
 }
-customElements.define('guide-ane', GuideAne)
+registerMathaleaCustomElement(GuideAne)
 
 /**
  * Fonction utilitaire pour créer facilement un guide-âne dans les exercices Mathalea
@@ -1258,6 +1361,8 @@ customElements.define('guide-ane', GuideAne)
  * @returns Le code HTML de la balise <guide-âne>
  */
 export function addGuideAne(
+  exercice: IExercice,
+  questionIndex: number,
   options: {
     alpha?: number // Angle en degrés (défaut: 45)
     targetAB?: number // Longueur AB cible en cm (pour affichage seulement)
@@ -1265,17 +1370,19 @@ export function addGuideAne(
     A?: { x: number; y: number } // Position du point A (optionnel)
     width?: string // Largeur du composant (défaut: "800px")
     height?: string // Hauteur du composant (défaut: "400px")
-    id?: string // ID unique pour le composant (optionnel)
     className?: string // Classes CSS additionnelles (optionnel)
     printAD?: boolean // Afficher la longueur AD (défaut: false)
     printRatio?: boolean // Afficher le rapport (défaut: false)
     fractionToDecimalAD?: boolean // Afficher AD en décimal si possible (défaut: false)
     targetFraction?: string // Fraction cible (optionnel)
     displayTargetOn?: boolean // Afficher l'état de la target (défaut: false)
+    interactivityOn?: boolean // Activer l'interactivité (défaut: true)
   } = {},
 ): string {
   // Valeurs par défaut
   const config = {
+    exercice,
+    questionIndex,
     n: 1,
     p: 0,
     alpha: options.alpha ?? 45,
@@ -1284,7 +1391,7 @@ export function addGuideAne(
     // SUPPRIMER B car il sera toujours calculé à 10 cm de A
     width: options.width ?? '800px',
     height: options.height ?? '400px',
-    id: options.id,
+
     className: options.className,
     targetValue: options.targetValue ?? null,
     printAD: options.printAD ?? false,
@@ -1292,16 +1399,18 @@ export function addGuideAne(
     fractionToDecimalAD: options.fractionToDecimalAD ?? false,
     targetFraction: options.targetFraction ?? '0/1',
     displayTargetOn: options.displayTargetOn ?? false,
+    interactivityOn: options.interactivityOn ?? true,
   }
 
   // Construire l'objet data pour passer au composant
-  const data: any = {
+  const data: Record<string, unknown> = {
     n: config.n,
     p: config.p,
     alpha: config.alpha,
     printAD: config.printAD,
     printRatio: config.printRatio,
     fractionToDecimalAD: config.fractionToDecimalAD,
+    interactivityOn: config.interactivityOn,
   }
 
   // Ajouter les paramètres optionnels s'ils sont définis
@@ -1328,7 +1437,8 @@ export function addGuideAne(
   }
 
   return GuideAne.create({
-    id: config.id,
+    exercice: config.exercice,
+    questionIndex: config.questionIndex,
     className: config.className,
     width: config.width,
     height: config.height,
@@ -1343,37 +1453,48 @@ export const GuideAnePresets = {
   /**
    * Guide-âne basique avec paramètres essentiels
    */
-  basic: (alpha: number = 45) => addGuideAne({ alpha }),
+  basic: (exercice: IExercice, questionIndex: number, alpha: number = 45) =>
+    addGuideAne(exercice, questionIndex, { alpha }),
 
   /**
    * Guide-âne avec longueur AB cible (l'élève doit ajuster manuellement)
    */
-  withTargetLength: (targetAB: number, alpha: number = 45) =>
-    addGuideAne({ alpha, targetAB }),
+  withTargetLength: (
+    exercice: IExercice,
+    questionIndex: number,
+    targetAB: number,
+    alpha: number = 45,
+  ) => addGuideAne(exercice, questionIndex, { alpha, targetAB }),
 
   /**
    * Guide-âne avec position personnalisée du point A
    */
-  withPosition: (A: { x: number; y: number }, alpha: number = 45) =>
-    addGuideAne({ alpha, A }),
+  withPosition: (
+    exercice: IExercice,
+    questionIndex: number,
+    A: { x: number; y: number },
+    alpha: number = 45,
+  ) => addGuideAne(exercice, questionIndex, { alpha, A }),
 
   /**
    * Guide-âne compact (plus petit)
    */
-  compact: (alpha: number = 45) =>
-    addGuideAne({ alpha, width: '600px', height: '300px' }),
-
-  /**
-   * Guide-âne avec ID et classe pour styling personnalisé
-   */
-  styled: (id: string, className: string = '', alpha: number = 45) =>
-    addGuideAne({ alpha, id, className }),
+  compact: (exercice: IExercice, questionIndex: number, alpha: number = 45) =>
+    addGuideAne(exercice, questionIndex, {
+      alpha,
+      width: '600px',
+      height: '300px',
+    }),
 
   /**
    * Guide-âne pour exercice aléatoire
    */
-  random: (alphaChoices: number[] = [30, 45, 60]) => {
+  random: (
+    exercice: IExercice,
+    questionIndex: number,
+    alphaChoices: number[] = [30, 45, 60],
+  ) => {
     const alpha = alphaChoices[Math.floor(Math.random() * alphaChoices.length)]
-    return addGuideAne({ alpha })
+    return addGuideAne(exercice, questionIndex, { alpha })
   },
 }

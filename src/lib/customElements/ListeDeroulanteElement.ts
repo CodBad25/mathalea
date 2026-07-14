@@ -2,7 +2,9 @@ import ListeDeroulante, {
   type AllChoicesType,
 } from '../interactif/listeDeroulante/ListeDeroulante'
 import type { IExercice } from '../types'
-import MathaleaCustomElement from './MathaleaCustomElement'
+import MathaleaCustomElement, {
+  registerMathaleaCustomElement,
+} from './MathaleaCustomElement'
 export type ListeDeroulanteDataOptions = {
   choix0?: boolean
   className?: string
@@ -56,6 +58,7 @@ class ListeDeroulanteElement extends MathaleaCustomElement {
   }
 
   connectedCallback() {
+    this.hydrateCommonAttributes()
     this.render()
   }
 
@@ -252,6 +255,11 @@ span.listeDeroulante ul li svg.svgChoice {
     // Création de la liste déroulante
     this._listeDeroulante = new ListeDeroulante(choices, { choix0 })
     this._listeDeroulante._init({ conteneur: container })
+    if (!this.interactivityOn) {
+      this._listeDeroulante.disabled = true
+      container.classList.add('disabled')
+      container.setAttribute('aria-disabled', 'true')
+    }
     const originalSelect = this._listeDeroulante.select.bind(
       this._listeDeroulante,
     )
@@ -282,5 +290,7 @@ span.listeDeroulante ul li svg.svgChoice {
   }
 }
 
-customElements.define('liste-deroulante', ListeDeroulanteElement)
+// La réponse stockée est déjà lisible et l'élément peut rester affiché dans
+// les corrections : les hooks par défaut de MathaleaCustomElement suffisent.
+registerMathaleaCustomElement(ListeDeroulanteElement)
 export default ListeDeroulanteElement

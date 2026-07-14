@@ -3,7 +3,9 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import Horloge from '../2d/horloge'
 import { orangeMathalea } from '../colors'
 import type { IExercice } from '../types'
-import MathaleaCustomElement from './MathaleaCustomElement'
+import MathaleaCustomElement, {
+  registerMathaleaCustomElement,
+} from './MathaleaCustomElement'
 export type ClockDataOptions = {
   hour?: number
   minute?: number
@@ -33,6 +35,26 @@ type ClockValueInput =
  */
 export class InteractiveClock extends MathaleaCustomElement {
   static readonly elementTag = 'interactive-clock'
+
+  /** La valeur stockée est un JSON `{hour, minute, second}` : on affiche « h h m ». */
+  static formatStudentAnswer(rawAnswer: string): string {
+    try {
+      const { hour, minute } = JSON.parse(rawAnswer) as {
+        hour: number
+        minute: number
+      }
+      return `$${hour}$ h $${minute}$`
+    } catch {
+      return rawAnswer
+    }
+  }
+
+  /** L'horloge interactive ne doit pas apparaître dans la liste des corrections. */
+  static stripFromQuestionHtml(questionHtml: string): string {
+    return questionHtml
+      .replace(/<interactive-clock[^>]*\/>/g, '')
+      .replace(/<interactive-clock[^>]*>[^]*?<\/interactive-clock>/g, '')
+  }
 
   static readonly BASE_RENDER_SIZE_EM = 12.5
   svgHandHour!: SVGElement
@@ -658,7 +680,5 @@ export class InteractiveClock extends MathaleaCustomElement {
 }
 
 export default function handleInteractiveClock() {
-  if (customElements.get('interactive-clock') === undefined) {
-    customElements.define('interactive-clock', InteractiveClock)
-  }
+  registerMathaleaCustomElement(InteractiveClock)
 }

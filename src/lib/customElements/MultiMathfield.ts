@@ -9,7 +9,9 @@ import {
 } from '../interactif/claviers/keyboard'
 import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
 import type { IExercice, ValeurNames } from '../types'
-import MathaleaCustomElement from './MathaleaCustomElement'
+import MathaleaCustomElement, {
+  registerMathaleaCustomElement,
+} from './MathaleaCustomElement'
 
 function stylizeItems(text: string, output: 'html' | 'latex' = 'html'): string {
   const itemRegex = /(^|\s+)([a-z]\))/g
@@ -82,6 +84,26 @@ const buildDataKeyboardString = (style = '') => {
 }
 
 export class MultiMathfieldElement extends MathaleaCustomElement {
+  /**
+   * La valeur stockée est de la forme `%{champ:"valeur"} %{champ2:"valeur2"}` :
+   * on remplace chaque champ par sa valeur entourée de dollars.
+   */
+  static formatStudentAnswer(rawAnswer: string): string {
+    if (typeof rawAnswer !== 'string') return ''
+    const cleaned = rawAnswer.replace(
+      /%\{([a-zA-Z0-9_]+):"([^"]*)"\}/g,
+      (_match, _champ, valeur: string) => {
+        // Ajoute des dollars autour de la valeur, en évitant les doubles dollars
+        let v = valeur.trim()
+        if (!v.startsWith('$')) v = '$' + v
+        if (!v.endsWith('$')) v += '$'
+        return v
+      },
+    )
+    // Nettoie les doubles dollars successifs
+    return cleaned.replace(/\${2,}/g, '')
+  }
+
   static readonly elementTag = 'multi-mathfield'
 
   private readonly contentHost: HTMLSpanElement
@@ -453,9 +475,7 @@ export function addMultiMathfield(
     }
   }
   if (context.isHtml && exercice.interactif) {
-    if (!customElements.get('multi-mathfield')) {
-      customElements.define('multi-mathfield', MultiMathfieldElement)
-    }
+    registerMathaleaCustomElement(MultiMathfieldElement)
     return MultiMathfieldElement.create({
       exercice,
       questionIndex,
@@ -499,6 +519,4 @@ export function addMultiMathfield(
   }
 }
 
-if (!customElements.get('multi-mathfield')) {
-  customElements.define('multi-mathfield', MultiMathfieldElement)
-}
+registerMathaleaCustomElement(MultiMathfieldElement)
