@@ -2,7 +2,6 @@
   import type { InterfaceGlobalOptions } from '../../../../../../lib/types'
   import type TypeExercice from '../../../../../../exercices/Exercice'
   import ButtonTextAction from '../../../../forms/ButtonTextAction.svelte'
-  import InteractivityIcon from '../../../../icons/TwoStatesIcon.svelte'
   import BasicClassicModal from '../../../../modal/BasicClassicModal.svelte'
   export let exercise: TypeExercice
 
@@ -82,18 +81,21 @@
     </div>
   {/if}
   {#if showInteractivityButton && !exercise.interactifObligatoire}
-    <button
+    <div
       class={globalOptions.isInteractiveFree && exercise?.interactifReady
-        ? 'w-5 ml-2 tooltip tooltip-right tooltip-neutral '
+        ? 'flex ml-2'
         : 'hidden'}
-      data-tip={isInteractif
-        ? "Désactiver l'interactivité"
-        : 'Rendre interactif'}
-      type="button"
-      on:click={switchInteractif}
     >
-      <InteractivityIcon isOnStateActive={isInteractif} size={4} />
-    </button>
+      <ButtonTextAction
+        text={isInteractif
+          ? "Désactiver l'interactivité"
+          : 'Rendre interactif'}
+        icon={isInteractif ? 'bx-toggle-right' : 'bx-toggle-left'}
+        class="py-[2px] px-2 text-[0.7rem]"
+        inverted={true}
+        on:click={switchInteractif}
+      />
+    </div>
   {/if}
   {#if globalOptions.recorder === undefined}
     <div
