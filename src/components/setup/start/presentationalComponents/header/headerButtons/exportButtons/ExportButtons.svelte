@@ -79,6 +79,14 @@
       action: () => exportAndClose('alacarte'),
     },
     {
+      id: 'flashcards',
+      label: 'Flash-cards',
+      description:
+        "Pour imprimer des cartes recto (question) / verso (réponse) à découper, idéal avec les exercices de course aux nombres",
+      icon: 'bx bx-credit-card-front',
+      action: () => exportAndClose('flashcards'),
+    },
+    {
       id: 'qcmcam',
       label: 'QCM Cam',
       description: "La web'app pour sonder avec une webcam ou un smartphone",
