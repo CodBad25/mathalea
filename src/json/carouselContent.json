@@ -2,12 +2,16 @@
   "slides": [
     {
       "title": "Cahier d'automatismes",
-      "message": "Nous proposerons bientôt un cahier libre et gratuit pour travailler tous les automatismes en classes de 1re et de 2nde.",
-      "image": "automatismes1re.png"
+      "message": "Nous proposons un cahier libre et gratuit pour les élèves de 1re générale et technologique afin des les aider à travailler tous les automatismes au programme.",
+      "image": "automatismes1re.png",
+      "link": "https://coopmaths.fr/www/automatismes/",
+      "buttonTitle": "Voir le cahier",
+      "mobileVisible": true
     },
     {
       "title": "Programme de 5e",
-      "message": "Un nouveau référentiel est en ligne et sera complété durant l'été."
+      "message": "Un nouveau référentiel est en ligne et sera complété durant l'été.",
+      "mobileVisible": false
     },
     {
       "background": "carousel05.jpg",
