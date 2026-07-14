@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'cd464'
 
 export const refs = {
-  'fr-fr': ['1A-R01-2'],
+  'fr-fr': ['1A-R01-2', '2A-R1-2'],
   'fr-ch': [],
 }
 export default class Auto1AR1a extends PourcentageARetrouver {

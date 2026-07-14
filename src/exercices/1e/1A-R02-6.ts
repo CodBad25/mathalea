@@ -37,7 +37,7 @@ import ExerciceQcmA from '../ExerciceQcmA'
 // MÉTADONNÉES
 // ============================================================================
 export const uuid = 'a4b8f'
-export const refs = { 'fr-fr': ['1A-R02-6'], 'fr-ch': [] }
+export const refs = { 'fr-fr': ['1A-R02-6', '2A-R2-6'], 'fr-ch': [] }
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
