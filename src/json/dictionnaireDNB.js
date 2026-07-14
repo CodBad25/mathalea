@@ -7130,7 +7130,8 @@ export const dictionnaireDNB = {
     mois: 'Juin',
     numeroInitial: '2',
     typeExercice: 'dnb',
-    tags: ['Géométrie plane', 'Volumes', 'Recherche d’informations'],
+    tags: ['Géométrie plane', 'Volumes', "Recherche d'informations",
+    ],
   },
   dnb_2026_06_etrangers_3: {
     annee: '2026',
@@ -7225,7 +7226,7 @@ export const dictionnaireDNB = {
     mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Pythagore', 'Trigonométrie', 'Thalès', 'Transformations', 'Agrandissement-réduction'],
   },
   dnb_2026_06_antilles_2: {
     annee: '2026',
@@ -7233,7 +7234,7 @@ export const dictionnaireDNB = {
     mois: 'Juin',
     numeroInitial: '2',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Programme de calculs', 'Calcul littéral', 'Équations', 'Algorithmique-programmation'],
   },
   dnb_2026_06_antilles_3: {
     annee: '2026',
@@ -7241,7 +7242,7 @@ export const dictionnaireDNB = {
     mois: 'Juin',
     numeroInitial: '3',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Fonctions', 'Proportionnalité', 'Lecture graphique', 'Tableur'],
   },
   dnb_2026_06_antilles_automatismes: {
     annee: '2026',
@@ -7249,7 +7250,7 @@ export const dictionnaireDNB = {
     mois: 'Juin',
     numeroInitial: 'automatismes',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Repérage', 'Transformations', 'Aires et périmètres', 'Probabilités', 'Calcul littéral', 'Durées', 'Statistiques', 'Géométrie plane', 'Vitesses'],
   },
   dnb_2026_06_polynesie_1: {
     annee: '2026',
@@ -7257,7 +7258,7 @@ export const dictionnaireDNB = {
     mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Calcul littéral', 'Aires et périmètres', 'Algorithmique-programmation', 'Tableur', "Prise d'initiatives", 'Équations'],
   },
   dnb_2026_06_polynesie_2: {
     annee: '2026',
@@ -7265,7 +7266,7 @@ export const dictionnaireDNB = {
     mois: 'Juin',
     numeroInitial: '2',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Géométrie plane', 'Pythagore', 'Trigonométrie'],
   },
   dnb_2026_06_polynesie_3: {
     annee: '2026',
@@ -7273,7 +7274,7 @@ export const dictionnaireDNB = {
     mois: 'Juin',
     numeroInitial: '3',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Coordonnées terrestres', 'Durées', "Recherche d'informations", 'Volumes', 'Grandeurs composées'],
   },
   dnb_2026_06_polynesie_automatismes: {
     annee: '2026',
@@ -7281,6 +7282,6 @@ export const dictionnaireDNB = {
     mois: 'Juin',
     numeroInitial: 'automatismes',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Statistiques', 'Puissances', 'Aires et périmètres', 'Probabilités', 'Pourcentages', 'Calcul littéral', 'Volumes', 'Fonctions', 'Géométrie plane'],
   },
 }
