@@ -10,6 +10,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const interactifReady = true
 export const interactifType = 'custom'
@@ -198,7 +199,7 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
     const figure = this.figuresApiGeom![i]
     if (this.answers === undefined) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[figure.id] = figure.json
+    this.answers[figure.id] = figureAnswerJson(figure)
     figure.isDynamic = false
     figure.divButtons.style.display = 'none'
     figure.divUserMessage.style.display = 'none'

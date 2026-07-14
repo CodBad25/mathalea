@@ -6,6 +6,7 @@ import { shuffle } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = 'Placer des points dans un repère'
 export const dateDePublication = '27/10/2023'
@@ -181,7 +182,7 @@ class ReperagePointDuPlan extends ExerciceSimple {
     const figure = this.figuresApiGeom[0]
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[figure.id] = figure.json
+    this.answers[figure.id] = figureAnswerJson(figure)
     const resultat = [] // Tableau de 'OK' ou de'KO' pour le calcul du score
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q0`,

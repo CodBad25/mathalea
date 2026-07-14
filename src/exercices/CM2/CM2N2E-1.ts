@@ -14,6 +14,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const dateDePublication = '28/01/2023'
 export const dateDeModifImportante = '08/06/2024'
@@ -298,7 +299,7 @@ class PlacerPointsAbscissesFractionnairesBis extends Exercice {
     if (this.figuresApiGeom == null) return ['KO']
     if (this.figuresApiGeom[i] == null) return ['KO']
     if (!(this.figuresApiGeom[i] instanceof Figure)) return ['KO']
-    this.answers[this.figuresApiGeom[i].id] = this.figuresApiGeom[i].json
+    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(this.figuresApiGeom[i])
     const result: ('OK' | 'KO')[] = []
     const figure = this.figuresApiGeom[i]
     figure.isDynamic = false

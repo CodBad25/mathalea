@@ -14,6 +14,7 @@
     mathaleaRenderDiv,
     mathaleaUpdateUrlFromExercicesParams,
   } from '../../../../../lib/mathalea'
+  import { decodeAnswers } from '../../../../../lib/lms/answersCodec'
   import { mathaleaWriteStudentPreviousAnswers } from '../../../../../lib/mathaleaUtils'
   import {
     capytaleStudentAssignment,
@@ -134,7 +135,7 @@
     exercise.numeroExercice = exerciseIndex
   }
 
-  function updateAnswers() {
+  async function updateAnswers() {
     if ($globalOptions.done === '1' && $globalOptions.recorder !== 'capytale') {
       const q1 = document.querySelector<HTMLElement>(
         '#exercice' + exercise.numeroExercice + 'Q0',
@@ -145,14 +146,9 @@
         field.setAttribute('disabled', 'true')
       })
       const url = new URL(window.location.href)
-      // Pour Moodle, les réponses sont dans l'URL
+      // Pour Moodle, les réponses sont dans l'URL, compressées ou en JSON brut
       const answers = url.searchParams.get('answers')
-      const objAnswers = answers ? JSON.parse(answers) : undefined
-      if (
-        JSON.stringify($globalOptions.answers) === JSON.stringify(objAnswers)
-      ) {
-        $globalOptions.answers = objAnswers
-      }
+      const objAnswers = answers ? await decodeAnswers(answers) : undefined
       mathaleaUpdateUrlFromExercicesParams()
       Promise.all(mathaleaWriteStudentPreviousAnswers(objAnswers)).then(() => {
         // une fois que les réponses sont chargées et on en est sûr, on clique...

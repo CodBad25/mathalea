@@ -4,6 +4,7 @@ import Point from 'apigeom/src/elements/points/Point'
 import figureApigeom from '../../lib/figureApigeom'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import ExerciceSimple from '../ExerciceSimple'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = 'Tracer segment, droite et demi-droite (depuis notation)'
 export const dateDePublication = '29/01/2024'
@@ -180,7 +181,7 @@ class ConstructionSegmentRayLine extends ExerciceSimple {
     const resultat: ('OK' | 'KO')[] = []
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figure.id] = this.figure.json
+    this.answers[this.figure.id] = figureAnswerJson(this.figure)
     let feedback = ''
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${0}`,

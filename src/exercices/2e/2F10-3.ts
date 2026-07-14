@@ -25,6 +25,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = 'Représenter graphiquement une fonction affine'
 export const dateDeModifImportante = '06/07/2026'
@@ -329,7 +330,7 @@ export default class Representerfonctionaffine extends Exercice {
     const figure = this.figuresApiGeom[i]
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[figure.id] = figure.json
+    this.answers[figure.id] = figureAnswerJson(figure)
     figure.isDynamic = false
     figure.divButtons.style.display = 'none'
     figure.divUserMessage.style.display = 'none'

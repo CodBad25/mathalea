@@ -37,6 +37,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { egal, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = 'Construire des symétriques de points'
 export const dateDePublication = '07/01/2024'
@@ -496,7 +497,7 @@ class ConstrctionsSymetriquesPoints extends Exercice {
     if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     if (this.answers === undefined) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figuresApiGeom[i].id] = this.figuresApiGeom[i].json
+    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(this.figuresApiGeom[i])
     const resultat = []
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,

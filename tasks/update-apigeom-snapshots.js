@@ -79,10 +79,12 @@ const vitestResult = spawnSync(
   [
     'vitest',
     '--config',
-    'tests/e2e/vitest.config.view.js',
+    'tests/e2e/vitest.config.views.js',
     '--run',
-    TEST_SAVE,
-    TEST_SAVE_CAN,
+    // Les filtres sont comparés aux chemins relatifs à la racine de la config
+    // (tests/e2e), d'où les chemins sans ce préfixe.
+    TEST_SAVE.replace('tests/e2e/', ''),
+    TEST_SAVE_CAN.replace('tests/e2e/', ''),
   ],
   {
     cwd: ROOT_DIR,

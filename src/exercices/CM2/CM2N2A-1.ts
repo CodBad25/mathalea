@@ -11,6 +11,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { representeFractionSurBarre } from '../../modules/representationsFractions'
 import Exercice from '../Exercice'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = "Représenter une fraction de l'unité"
 export const amcReady = true
@@ -182,7 +183,7 @@ export default class FractionsDunite extends Exercice {
     const figure = this.figuresApigeom[i]
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[figure.id] = figure.json
+    this.answers[figure.id] = figureAnswerJson(figure)
     figure.isDynamic = false
     figure.divButtons.style.display = 'none'
     figure.divUserMessage.style.display = 'none'

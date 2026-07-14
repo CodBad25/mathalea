@@ -19,6 +19,7 @@ import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const dateDePublication = '08/07/2025'
 export const titre = "Donner du sens à la définition d'un quotient"
@@ -334,7 +335,7 @@ export default class DonnerSensDefinitionQuotient extends Exercice {
     if (this.figuresApiGeom == null) return ['KO']
     const result: ('OK' | 'KO')[] = []
 
-    this.answers[this.figuresApiGeom[i].id] = this.figuresApiGeom[i].json
+    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(this.figuresApiGeom[i])
     const figure = this.figuresApiGeom[i]
     figure.isDynamic = false
     figure.divButtons.style.display = 'none'
