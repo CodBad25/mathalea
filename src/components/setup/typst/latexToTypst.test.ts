@@ -85,6 +85,16 @@ describe('latexMathToTypst', () => {
     ).toBe('2 x &= 4 \\ x &= 2')
   })
 
+  it('normalise displaystyle dans un environnement aligned', () => {
+    const result = latexMathToTypst(
+      String.raw`\begin{aligned}\displaystyle\int_0^1 x\,\mathrm{d}x &= \displaystyle\int_0^1 x\,\mathrm{d}x\\ &= 1\end{aligned}`,
+    )
+    expect(result.startsWith('"')).toBe(false)
+    expect(result).not.toContain('\\begin{aligned}')
+    expect(result).toContain('integral_0^1')
+    expect(result).toContain('&=')
+  })
+
   it('décode les entités HTML présentes dans la formule', () => {
     expect(latexMathToTypst('\\text{Donc&nbsp;: }x=2')).toBe(
       '#txt("Donc\u00a0: ") x = 2',
