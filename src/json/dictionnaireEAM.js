@@ -780,7 +780,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['Vrai/Faux', 'Probabilités', "Analyse de l'information"],
   },
   eam_specifique_2026_06_asie_2: {
     annee: '2026',
@@ -789,7 +789,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ["Analyse de l'information",'Suites'],
   },
   eam_specifique_2026_06_asie_3: {
     annee: '2026',
@@ -798,7 +798,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['Dérivation'],
   },
   eam_specifique_2026_06_asie_automatismes: {
     annee: '2026',
@@ -807,6 +807,6 @@ export const dictionnaireEAM = {
     numeroInitial: 'automatismes',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['Automatismes'],
   },
 }
