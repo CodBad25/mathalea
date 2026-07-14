@@ -11,6 +11,7 @@ import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 import bluePoint from './svg/blueCirclePoint.svg'
 import redPoint from './svg/redPoint.svg'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const dateDePublication = '15/07/2024'
 export const titre = 'Résoudre une grille de SquarO'
@@ -356,7 +357,7 @@ class squaro extends Exercice {
   correctionInteractive = () => {
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figure.id] = this.figure.json
+    this.answers[this.figure.id] = figureAnswerJson(this.figure)
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${0}`,
     ) as HTMLDivElement

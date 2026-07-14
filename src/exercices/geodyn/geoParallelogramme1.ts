@@ -1,6 +1,7 @@
 import ExerciceSimple from '../ExerciceSimple'
 import Figure from 'apigeom'
 import figureApigeom from '../../lib/figureApigeom'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = 'Tracer un parallélogramme'
 export const dateDePublication = '9/11/2023'
@@ -88,7 +89,7 @@ class ConstructionParallelogramme extends ExerciceSimple {
   correctionInteractive = () => {
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figure.id] = this.figure.json
+    this.answers[this.figure.id] = figureAnswerJson(this.figure)
     const resultat = []
     let feedback = ''
     const divFeedback = document.querySelector(

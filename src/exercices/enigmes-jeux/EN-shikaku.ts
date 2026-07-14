@@ -12,6 +12,7 @@ import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 import bluePolygon from './svg/bluePolygon.svg'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const dateDePublication = '31/07/2024'
 export const dateDeModifImportante = '03/09/2024'
@@ -504,7 +505,7 @@ export default class shikaku extends Exercice {
   correctionInteractive = () => {
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figure.id] = this.figure.json
+    this.answers[this.figure.id] = figureAnswerJson(this.figure)
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${0}`,
     ) as HTMLDivElement

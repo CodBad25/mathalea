@@ -5,6 +5,7 @@ import { creerNomDePolygone } from '../../lib/outils/outilString'
 import { randint } from '../../modules/outils'
 import { mathaleaRenderDiv } from '../../lib/mathalea'
 import { context } from '../../modules/context'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = 'Tracer un triangle à partir de longueurs des 3 côtés'
 export const dateDePublication = '29/10/2023'
@@ -110,7 +111,7 @@ class ConstructionTriangle extends ExerciceSimple {
   correctionInteractive = () => {
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figure.id] = this.figure.json
+    this.answers[this.figure.id] = figureAnswerJson(this.figure)
     const resultat = []
     // 1 point par distance correcte + 2 points si tout est correct (on ne vérifie pas que le triangle est tracé)
     const divFeedback = document.querySelector(

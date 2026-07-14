@@ -940,7 +940,7 @@ function squareO() {
   % Squaro
   %%%
 
-  \\setKVdefault[Squaro]{Solution=false,Longueur=8,Largeur=8,Echelle=8mm,Graines=false,Perso=false}
+  \\setKVdefault[Squaro]{Solution=false,Longueur=8,Largeur=8,Echelle=8mm,Graines=false,Graine=1,Perso=false}
   \\defKV[Squaro]{Graine=\\setKV[Squaro]{Graines}}%
 
 
