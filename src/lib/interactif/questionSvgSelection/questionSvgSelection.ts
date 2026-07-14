@@ -5,13 +5,6 @@ import type { IExercice } from '../../types'
 
 export type SvgWithValue = { svg: string; value: number }
 
-export type SvgSelectionOptions = {
-  gapX?: string
-  gapY?: string
-  itemPadding?: string
-  style?: string
-}
-
 /**
  * Vérifie la réponse à une question avec sélection d'SVG
  * @param {object} exercice l'exercice appelant pour pouvoir atteindre ses propriétés.
@@ -30,7 +23,7 @@ export function verifQuestionSvgSelection(exercice: IExercice, i: number) {
     )
   }
   const selection = document.querySelector(
-    `#svgSelectionEx${exercice.numeroExercice}Q${i}`,
+    `#svg-selectionEx${exercice.numeroExercice}Q${i}`,
   ) as any
   let value: string = ''
 
@@ -85,12 +78,19 @@ export function verifQuestionSvgSelection(exercice: IExercice, i: number) {
 export function selectionSvg(
   exercice: IExercice,
   i: number,
-  svgs: SvgWithValue[][] | SvgWithValue[],
-  options?: SvgSelectionOptions,
+  params: {
+    svgs: SvgWithValue[][] | SvgWithValue[]
+    options?: {
+      gapX?: string
+      gapY?: string
+      itemPadding?: string
+      style?: string
+    }
+  },
 ) {
   if (!context.isHtml) return ''
 
-  const { gapX, gapY, itemPadding, style } = options || {}
+  const { gapX, gapY, itemPadding, style } = params.options || {}
   if (
     context.isHtml &&
     exercice?.autoCorrection[i]?.formatInteractif !== 'svgSelection'
@@ -99,17 +99,14 @@ export function selectionSvg(
     if (exercice?.autoCorrection[i] == null) exercice.autoCorrection[i] = {}
     exercice.autoCorrection[i].formatInteractif = 'svgSelection'
   }
-  let result = SvgSelectionElement.create({
-    id: `svgSelectionEx${exercice.numeroExercice}Q${i}`,
+  return SvgSelectionElement.create({
+    exercice,
+    questionIndex: i,
     className: 'mx-2 svgSelection',
     style,
     gapX,
     gapY,
     itemPadding,
-    svgs,
+    svgs: params.svgs,
   })
-  result += `<span id="resultatCheckEx${exercice.numeroExercice}Q${i}"></span>`
-
-  // Stocker la réponse correcte
-  return result
 }

@@ -1,7 +1,10 @@
 import { context } from '../../modules/context'
+import { fraction } from '../../modules/fractions'
 import { bleuMathalea } from '../colors'
 import type { IExercice } from '../types'
-import MathaleaCustomElement from './MathaleaCustomElement'
+import MathaleaCustomElement, {
+  registerMathaleaCustomElement,
+} from './MathaleaCustomElement'
 
 type ValeurPoint = {
   pointValue: number
@@ -13,6 +16,7 @@ type DemiDroiteInteractiveValue = {
   maxT: number
   showwNegative: boolean
   points: ValeurPoint[]
+  x0: number
 }
 
 type DemiDroiteInteractiveIncomingValue = DemiDroiteInteractiveValue & {
@@ -115,6 +119,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       maxT: this.tMax,
       showwNegative: this.showNegative,
       points: this.points.map((point) => ({ ...point })),
+      x0: this.x0,
     }
   }
 
@@ -623,11 +628,52 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     this.appendChild(this.svg)
     this.appendChild(resultatCheck)
   }
+  static formatStudentAnswer(rawAnswer: string): string {
+    const parsed = JSON.parse(rawAnswer)
+    if (
+      typeof parsed !== 'object' ||
+      parsed === null ||
+      !('partsCount' in parsed) ||
+      !('maxT' in parsed) ||
+      !('showwNegative' in parsed) ||
+      !('points' in parsed) ||
+      !('x0' in parsed)
+    ) {
+      return rawAnswer
+    }
+    const { partsCount, maxT, showwNegative, points, x0 } = parsed
+    if (
+      !Number.isFinite(partsCount) ||
+      !Number.isFinite(maxT) ||
+      typeof showwNegative !== 'boolean' ||
+      !Array.isArray(points) ||
+      !Number.isFinite(x0)
+    ) {
+      return rawAnswer
+    }
+    const pointsDescriptions = points.map((point: unknown) => {
+      if (
+        typeof point !== 'object' ||
+        point === null ||
+        !('pointValue' in point) ||
+        !('label' in point)
+      ) {
+        return null
+      }
+      const pointRecord = point as { pointValue: unknown; label: unknown }
+      const { pointValue, label } = pointRecord
+      const numericPointValue = Number(pointValue)
+      if (!Number.isFinite(numericPointValue) || typeof label !== 'string') {
+        return null
+      }
+      return `${label}(${fraction(numericPointValue * partsCount, partsCount).texFraction})`
+    })
+    return `Un segment de longueur $${maxT - x0}$ unités a été partagé en $${partsCount}$ parties.<br>
+    ${points.length > 1 ? 'Les points suivants sont placés :' : 'Le point suivant est placé :'} $${pointsDescriptions.filter((v): v is string => !!v).join(';')}$`
+  }
 }
 
-if (customElements.get('demi-droite-interactive') === undefined) {
-  customElements.define('demi-droite-interactive', DemiDroiteInteractiveElement)
-}
+registerMathaleaCustomElement(DemiDroiteInteractiveElement)
 
 type DemiDroiteInteractiveOptions = {
   x0?: number

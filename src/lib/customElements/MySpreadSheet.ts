@@ -1,6 +1,8 @@
 import jspreadsheet from 'jspreadsheet-ce'
 import 'jspreadsheet-ce/src/jspreadsheet.css'
-import MathaleaCustomElement from './MathaleaCustomElement'
+import MathaleaCustomElement, {
+  registerMathaleaCustomElement,
+} from './MathaleaCustomElement'
 
 type SpreadsheetStyle = Record<string, string>
 
@@ -31,6 +33,107 @@ type SpreadsheetLike = {
 
 export class MySpreadsheetElement extends MathaleaCustomElement {
   static readonly elementTag = 'my-spreadsheet'
+
+  static formatStudentAnswer(rawAnswer: string, questionHtml?: string): string {
+    const studentData = this.parse2DArray(rawAnswer)
+    if (studentData == null) return rawAnswer
+
+    const initialData = this.extractInitialDataFromQuestionHtml(questionHtml)
+    const changes = this.extractChangedCells(initialData, studentData)
+    if (changes.length === 0) return 'aucune'
+
+    return changes
+      .map(({ cellRef, value }) => `${cellRef}: ${this.formatCellValue(value)}`)
+      .join('<br>')
+  }
+
+  private static extractInitialDataFromQuestionHtml(
+    questionHtml?: string,
+  ): unknown[][] {
+    if (typeof questionHtml !== 'string') return []
+    const tagMatch = questionHtml.match(/<my-spreadsheet\b[^>]*>/i)
+    if (!tagMatch) return []
+    const dataAttrMatch = tagMatch[0].match(/\sdata="([^"]*)"/i)
+    if (!dataAttrMatch) return []
+
+    const dataAttr = this.decodeHtmlEntities(dataAttrMatch[1])
+    const parsed = this.parse2DArray(dataAttr)
+    return parsed ?? []
+  }
+
+  private static parse2DArray(rawValue: string): unknown[][] | null {
+    try {
+      const parsed: unknown = JSON.parse(rawValue)
+      if (!Array.isArray(parsed)) return null
+      return parsed.map((row) => (Array.isArray(row) ? row : []))
+    } catch {
+      return null
+    }
+  }
+
+  private static extractChangedCells(
+    initialData: unknown[][],
+    studentData: unknown[][],
+  ): Array<{ cellRef: string; value: unknown }> {
+    const maxRows = Math.max(initialData.length, studentData.length)
+    const changes: Array<{ cellRef: string; value: unknown }> = []
+
+    for (let row = 0; row < maxRows; row++) {
+      const initialRow = initialData[row] ?? []
+      const studentRow = studentData[row] ?? []
+      const maxCols = Math.max(initialRow.length, studentRow.length)
+      for (let col = 0; col < maxCols; col++) {
+        const initialValue = initialRow[col]
+        const studentValue = studentRow[col]
+        const normalizedInitial = this.normalizeCellValue(initialValue)
+        const normalizedStudent = this.normalizeCellValue(studentValue)
+
+        // Dans CAN, on veut surtout lister ce que l'élève a effectivement saisi.
+        if (normalizedStudent === '') continue
+        if (normalizedStudent === normalizedInitial) continue
+
+        changes.push({
+          cellRef: `${this.columnIndexToLetters(col)}${row + 1}`,
+          value: studentValue,
+        })
+      }
+    }
+
+    return changes
+  }
+
+  private static normalizeCellValue(value: unknown): string {
+    if (value == null) return ''
+    return String(value).trim()
+  }
+
+  private static formatCellValue(value: unknown): string {
+    if (typeof value === 'number') return `${value}`
+    return JSON.stringify(String(value ?? ''))
+  }
+
+  private static columnIndexToLetters(index: number): string {
+    let n = index + 1
+    let letters = ''
+    while (n > 0) {
+      const rem = (n - 1) % 26
+      letters = String.fromCharCode(65 + rem) + letters
+      n = Math.floor((n - 1) / 26)
+    }
+    return letters
+  }
+
+  private static decodeHtmlEntities(value: string): string {
+    return value
+      .replaceAll('&quot;', '"')
+      .replaceAll('&amp;', '&')
+      .replaceAll('&lt;', '<')
+      .replaceAll('&gt;', '>')
+  }
+
+  private static toCellRef(colIndex: number, rowIndex: number): string {
+    return `${this.columnIndexToLetters(colIndex)}${rowIndex + 1}`
+  }
 
   static create({
     id,
@@ -137,6 +240,7 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
   }
 
   connectedCallback() {
+    this.hydrateCommonAttributes()
     this.innerHTML = '<div></div>'
     const container = (this.firstElementChild ??
       document.createElement('div')) as HTMLDivElement
@@ -148,6 +252,7 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
     let nbLignesCachees = 0
     let nbColonnesCachees = 0
     let readOnlyCells: string[] = []
+    const shouldBeReadOnly = !this.interactivityOn
     try {
       if (this.getAttribute('data'))
         data = JSON.parse(this.getAttribute('data') ?? '') as (
@@ -271,6 +376,21 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
         spreadsheet.setReadOnly(cellRef, true)
       })
     }
+    if (shouldBeReadOnly) {
+      const colCount = Math.max(
+        minDimensions[0] ?? 0,
+        ...data.map((row) => row.length),
+      )
+      const rowCount = Math.max(minDimensions[1] ?? 0, data.length)
+      for (let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+        for (let colIndex = 0; colIndex < colCount; colIndex++) {
+          spreadsheet.setReadOnly(
+            MySpreadsheetElement.toCellRef(colIndex, rowIndex),
+            true,
+          )
+        }
+      }
+    }
     for (let i = 0; i < nbLignesCachees; i++) {
       this.hideRow(i)
     }
@@ -327,7 +447,8 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
     }
     bouton.style.display =
       this.getAttribute('interactif') === 'true' ||
-      this.showVerifyButton === false
+      this.showVerifyButton === false ||
+      shouldBeReadOnly
         ? 'none'
         : 'block'
     container.appendChild(bouton)
@@ -436,4 +557,4 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
   }
 }
 
-customElements.define('my-spreadsheet', MySpreadsheetElement)
+registerMathaleaCustomElement(MySpreadsheetElement)

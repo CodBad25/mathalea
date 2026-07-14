@@ -5,6 +5,44 @@ export const listOfCustomElements = [
   'liste-deroulante',
 ]
 
+/**
+ * Registre tag → classe des customElements MathALÉA.
+ *
+ * Il est alimenté par `registerMathaleaCustomElement` au chargement du module
+ * de chaque composant. Il permet un traitement générique des customElements
+ * (ex : affichage des réponses élèves dans les corrections de la CAN via
+ * `src/lib/components/canSolutions.ts`) sans multiplier les cas particuliers.
+ */
+export const mathaleaCustomElementsRegistry = new Map<
+  string,
+  typeof MathaleaCustomElement
+>()
+
+/**
+ * Définit le customElement dans le navigateur (si ce n'est pas déjà fait)
+ * et l'ajoute au registre `mathaleaCustomElementsRegistry`.
+ *
+ * À utiliser à la place d'un appel direct à `customElements.define` pour
+ * toute classe qui étend `MathaleaCustomElement`.
+ */
+export function registerMathaleaCustomElement(
+  elementClass: typeof MathaleaCustomElement,
+): void {
+  const tag = elementClass.elementTag
+  if (!tag) {
+    throw new Error(
+      `registerMathaleaCustomElement : elementTag manquant sur ${elementClass.name}`,
+    )
+  }
+  if (customElements.get(tag) === undefined) {
+    customElements.define(
+      tag,
+      elementClass as unknown as CustomElementConstructor,
+    )
+  }
+  mathaleaCustomElementsRegistry.set(tag, elementClass)
+}
+
 type CreateAttributes = Record<string, unknown>
 
 export default class MathaleaCustomElement extends HTMLElement {
@@ -62,6 +100,69 @@ export default class MathaleaCustomElement extends HTMLElement {
       .replaceAll('"', '&quot;')
       .replaceAll('<', '&lt;')
       .replaceAll('>', '&gt;')
+  }
+
+  /**
+   * Formate la réponse brute de l'élève (telle que stockée dans
+   * `exercice.answers`) pour l'affichage « Réponse donnée : ... » de la vue
+   * des corrections (CAN).
+   *
+   * Par défaut la valeur brute est affichée telle quelle (cas d'une valeur
+   * déjà lisible, comme celle de `liste-deroulante`). À surcharger quand la
+   * valeur stockée n'est pas directement affichable (JSON, format interne...).
+   */
+  static formatStudentAnswer(
+    rawAnswer: string,
+    _questionHtml?: string,
+  ): string {
+    return rawAnswer
+  }
+
+  /**
+   * Transforme le HTML de la question pour l'affichage dans la liste
+   * des corrections (CAN)
+   * Par défaut l'attribut `interactivity-on` est forcé à false pour avoir la version non interactive du composant et éviter que l'élève puisse interagir avec
+   * (vide) dans la correction.
+   * À surcharger si le composant ne doit pas
+   * apparaître (voir `InteractiveClock`) ou pour tout autre traitement spécifique.
+   */
+  static stripFromQuestionHtml(questionHtml: string): string {
+    const tag = (this as typeof MathaleaCustomElement).elementTag
+    if (!tag) return questionHtml
+
+    return this.replaceBooleanAttributeInTagHtml(
+      questionHtml,
+      tag,
+      'interactivity-on',
+      false,
+    )
+  }
+
+  protected static replaceBooleanAttributeInTagHtml(
+    html: string,
+    tag: string,
+    attrName: string,
+    value: boolean,
+  ): string {
+    const escapedTag = this.escapeRegExp(tag)
+    const escapedAttr = this.escapeRegExp(attrName)
+    const normalized = value ? 'true' : 'false'
+    const tagPattern = new RegExp(`<${escapedTag}\\b([^>]*)>`, 'gi')
+
+    return html.replace(tagPattern, (_match, attrs: string) => {
+      const attrPattern = new RegExp(
+        `(\\s${escapedAttr}\\s*=\\s*")[^"]*(")`,
+        'i',
+      )
+      if (attrPattern.test(attrs)) {
+        return `<${tag}${attrs.replace(attrPattern, `$1${normalized}$2`)}>`
+      }
+      return `<${tag}${attrs} ${attrName}="${normalized}">`
+    })
+  }
+
+  protected static escapeRegExp(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   }
 
   connectedCallback() {

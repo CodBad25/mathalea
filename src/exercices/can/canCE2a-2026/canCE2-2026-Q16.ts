@@ -127,7 +127,7 @@ export default class Can2026CE2Q16 extends ExerciceCan {
       ]
         */
 
-      this.question += selectionSvg(this, 0, svgItems)
+      this.question += selectionSvg(this, 0, { svgs: svgItems })
     } else {
       this.question = this.question + figure
     }

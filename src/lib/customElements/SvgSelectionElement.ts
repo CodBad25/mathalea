@@ -1,5 +1,18 @@
 type SvgWithValue = { svg: string; value: number }
-import MathaleaCustomElement from './MathaleaCustomElement'
+import type { IExercice } from '../types'
+import MathaleaCustomElement, {
+  registerMathaleaCustomElement,
+} from './MathaleaCustomElement'
+export type SvgSelectionOptions = {
+  exercice: IExercice
+  questionIndex: number
+  className?: string
+  gapX?: string
+  gapY?: string
+  itemPadding?: string
+  style?: string
+  svgs: SvgWithValue[][] | SvgWithValue[]
+}
 /**
  * Composant de sélection d'éléments SVG avec valeurs associées
  * Permet de sélectionner une ou plusieurs options représentées par des SVG
@@ -12,6 +25,123 @@ import MathaleaCustomElement from './MathaleaCustomElement'
  */
 class SvgSelectionElement extends MathaleaCustomElement {
   static readonly elementTag = 'svg-selection'
+
+  static formatStudentAnswer(rawAnswer: string, questionHtml?: string): string {
+    const selectedValue = Number(rawAnswer)
+    if (!Number.isFinite(selectedValue) || selectedValue < 0) return rawAnswer
+    if (selectedValue === 0) return 'aucune'
+    if (typeof questionHtml !== 'string') return rawAnswer
+
+    const tagMatch = questionHtml.match(/<svg-selection\b[^>]*>/i)
+    if (!tagMatch) return rawAnswer
+    const svgsAttr = tagMatch[0].match(/\ssvgs="([^"]*)"/i)
+    if (!svgsAttr) return rawAnswer
+
+    const svgsWithValue = this.parseSvgsAttributeStatic(svgsAttr[1])
+    if (svgsWithValue.length === 0) return rawAnswer
+
+    const selectedIndices = this.decodeValueStatic(selectedValue, svgsWithValue)
+    if (selectedIndices.size === 0) return rawAnswer
+
+    const flatSvgs = svgsWithValue.flatMap((row) => row.map((item) => item.svg))
+    const selectedSvgs = Array.from(selectedIndices)
+      .sort((a, b) => a - b)
+      .map((index) => flatSvgs[index])
+      .filter((svg): svg is string => typeof svg === 'string' && svg.length > 0)
+
+    return selectedSvgs.length > 0 ? selectedSvgs.join(' ') : rawAnswer
+  }
+
+  private static parseSvgsAttributeStatic(value: string): SvgWithValue[][] {
+    if (!value) return []
+    try {
+      const decoded = decodeURIComponent(value)
+      const parsed = JSON.parse(decoded)
+      return this.convertToSvgWithValueStatic(parsed)
+    } catch {
+      try {
+        const parsed = JSON.parse(value)
+        return this.convertToSvgWithValueStatic(parsed)
+      } catch {
+        return []
+      }
+    }
+  }
+
+  private static convertToSvgWithValueStatic(
+    parsed: unknown,
+  ): SvgWithValue[][] {
+    if (!Array.isArray(parsed)) return []
+
+    if (parsed.length > 0 && Array.isArray(parsed[0])) {
+      const firstRow = parsed[0] as unknown[]
+      if (
+        firstRow.length > 0 &&
+        typeof firstRow[0] === 'object' &&
+        firstRow[0] !== null &&
+        'svg' in firstRow[0] &&
+        'value' in firstRow[0]
+      ) {
+        return parsed as SvgWithValue[][]
+      }
+
+      let globalIndex = 0
+      return (parsed as unknown[][]).map((row) =>
+        row.map((svg) => ({ svg: String(svg), value: globalIndex++ })),
+      )
+    }
+
+    if (parsed.length > 0) {
+      const first = parsed[0] as unknown
+      if (
+        typeof first === 'object' &&
+        first !== null &&
+        'svg' in first &&
+        'value' in first
+      ) {
+        return [parsed as SvgWithValue[]]
+      }
+
+      return [
+        (parsed as unknown[]).map((svg, index) => ({
+          svg: String(svg),
+          value: index,
+        })),
+      ]
+    }
+    return []
+  }
+
+  private static decodeValueStatic(
+    value: number,
+    svgsWithValue: SvgWithValue[][],
+  ): Set<number> {
+    const indices = new Set<number>()
+    if (svgsWithValue.length === 0 || value === 0) return indices
+
+    const items: Array<{ index: number; value: number }> = []
+    let globalIndex = 0
+    for (const row of svgsWithValue) {
+      for (const item of row) {
+        items.push({ index: globalIndex, value: item.value })
+        globalIndex++
+      }
+    }
+
+    const sortedItems = [...items].sort((a, b) => b.value - a.value)
+    let remaining = value
+
+    for (const item of sortedItems) {
+      if (remaining === 0) break
+      if (item.value <= remaining) {
+        indices.add(item.index)
+        remaining -= item.value
+      }
+    }
+
+    if (remaining !== 0) return new Set<number>()
+    return indices
+  }
 
   private _svgsWithValue: SvgWithValue[][] = []
   private _selectedIndices: Set<number> = new Set()
@@ -26,24 +156,18 @@ class SvgSelectionElement extends MathaleaCustomElement {
   }
 
   static create({
-    id,
+    exercice,
+    questionIndex,
     className,
     svgs,
     style,
     gapX,
     gapY,
     itemPadding,
-  }: {
-    id?: string
-    className?: string
-    svgs: SvgWithValue[][] | SvgWithValue[]
-    style?: string
-    gapX?: string
-    gapY?: string
-    itemPadding?: string
-  }): string {
+  }: SvgSelectionOptions): string {
     const attrs: string[] = []
-    if (id) attrs.push(`id="${id}"`)
+    const id = `svg-selectionEx${exercice!.numeroExercice}Q${questionIndex}`
+    attrs.push(`id="${id}"`)
     if (className) attrs.push(`class="${className}"`)
     if (style) attrs.push(`style="${style}"`)
     if (gapX) attrs.push(`gap-x="${gapX}"`)
@@ -207,7 +331,7 @@ class SvgSelectionElement extends MathaleaCustomElement {
     }
   }
 
-  private convertToSvgWithValue(parsed: any): SvgWithValue[][] {
+  private convertToSvgWithValue(parsed: unknown): SvgWithValue[][] {
     if (!Array.isArray(parsed)) return []
 
     if (parsed.length > 0 && Array.isArray(parsed[0])) {
@@ -224,7 +348,10 @@ class SvgSelectionElement extends MathaleaCustomElement {
         // Format string[][], convertir avec value = index global
         let globalIndex = 0
         return parsed.map((row) =>
-          row.map((svg: any) => ({ svg: String(svg), value: globalIndex++ })),
+          row.map((svg: unknown) => ({
+            svg: String(svg),
+            value: globalIndex++,
+          })),
         )
       }
     } else if (parsed.length > 0) {
@@ -235,7 +362,7 @@ class SvgSelectionElement extends MathaleaCustomElement {
       } else {
         // Format string[], convertir avec value = index
         return [
-          parsed.map((svg: any, index: number) => ({
+          parsed.map((svg: unknown, index: number) => ({
             svg: String(svg),
             value: index,
           })),
@@ -460,11 +587,14 @@ class SvgSelectionElement extends MathaleaCustomElement {
     this.shadowRoot.appendChild(container)
     this.updateSelectionState()
     this.updateDisabledState()
+    const resultatCheck = document.createElement('span')
+    resultatCheck.id = this.id
+      ? `${this.id.replace('svg-selection', 'resultatCheck')}`
+      : `svg-selection-resultat`
+    this.appendChild(resultatCheck)
   }
 }
 
-if (customElements.get('svg-selection') === undefined) {
-  customElements.define('svg-selection', SvgSelectionElement)
-}
+registerMathaleaCustomElement(SvgSelectionElement)
 
 export default SvgSelectionElement

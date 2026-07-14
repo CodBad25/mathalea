@@ -6,7 +6,7 @@ import { segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePointSurDroite } from '../../lib/2d/TracePointSurDroite'
 import { homothetie, similitude } from '../../lib/2d/transformations'
-import { addGuideAne, type GuideAne } from '../../lib/customElements/GuideAne'
+import { addGuideAne, GuideAne } from '../../lib/customElements/GuideAne'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { egalOuApprox } from '../../lib/outils/ecritures'
@@ -48,10 +48,9 @@ export default class MonExoGuideAne extends Exercice {
       const targetFraction = `\\dfrac{${targetP}}{${targetN}}`
       const targetValue = (targetAB * targetP) / targetN
       let texte = `Représenter en rouge un segment de longueur $${targetFraction}\\times AB$ lorsque $AB$ mesure $${targetAB}\\text{ cm}$`
-
+      let texteCorr = ''
       if (context.isHtml) {
         const guideAneData = {
-          id: `guideAneEx${this.numeroExercice}Q${i}`,
           alpha,
           targetAB,
           targetFraction,
@@ -64,8 +63,22 @@ export default class MonExoGuideAne extends Exercice {
           displayTargetOn: false,
         }
         texte += `.<br>Utilisez les points draggables pour ajuster la construction du guide-âne.<br>
-       ${addGuideAne(guideAneData)}<span id="resultatCheckEx${this.numeroExercice}Q${0}"></span><br>
+       ${addGuideAne(this, i, guideAneData)}<br>
        ${ajouteFeedback(this, i)}`
+
+        texteCorr = GuideAne.create({
+          exercice: this,
+          questionIndex: i,
+          data: {
+            A: { x: 100, y: 300 },
+            n: targetN,
+            p: targetP,
+            alpha: 60,
+            targetAB,
+            disableADrag: true,
+            displayTargetOn: true,
+          },
+        })
       } else {
         // contexte latex
         texte += ' sans utiliser les graduations de la règle.<br>'
@@ -88,7 +101,7 @@ export default class MonExoGuideAne extends Exercice {
       }
       if (this.questionJamaisPosee(i, targetAB, targetN, targetP)) {
         this.listeQuestions.push(texte)
-        this.listeCorrections.push('')
+        this.listeCorrections.push(texteCorr)
         i++
       }
       cpt++
@@ -110,6 +123,12 @@ export default class MonExoGuideAne extends Exercice {
       window.notify(`Pas trouvé le guide-âne dans cet exercice pour i=${i}`, {})
       return 'KO'
     }
+    const answer = guideAne.value
+    if (this.answers == null) this.answers = {}
+    // Sauvegarde de la réponse pour Capytale
+    this.answers[`guideAneEx${this.numeroExercice}Q${i}`] =
+      JSON.stringify(answer)
+
     isOk = guideAne.isTargetReached()
     let feedback = ''
     if (!isOk) {

@@ -414,10 +414,13 @@ export default class RepresenterUneFractionAvecUnePlaqueDeChocolat extends Exerc
         plaqueForSelection.push(rawFigures)
       }
       if (context.isHtml && this.interactif) {
-        texte += selectionSvg(this, i, plaqueForSelection, {
-          gapX: '0px',
-          gapY: '0px',
-          itemPadding: '0px',
+        texte += selectionSvg(this, i, {
+          svgs: plaqueForSelection,
+          options: {
+            gapX: '0px',
+            gapY: '0px',
+            itemPadding: '0px',
+          },
         })
       } else {
         texte += mathalea2d(

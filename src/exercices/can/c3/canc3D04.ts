@@ -58,7 +58,7 @@ export default class ExerciceInteractiveClock extends Exercice {
       }
       let enonce = `Placer correctement les aiguilles pour indiquer ${hour}${sp(1)}h${sp(1)}${formatMinute(minute)}.<br>`
       if (context.isHtml && !context.isTypst) {
-        enonce += `<br><br><interactive-clock id="clockEx${this.numeroExercice}Q${i}" isDynamic="${this.interactif}" showHands="${this.interactif}"/>`
+        enonce += `<br><br><interactive-clock id="interactive-clockEx${this.numeroExercice}Q${i}" isDynamic="${this.interactif}" showHands="${this.interactif}"/>`
       } else {
         const horloge = new Horloge(0, 0, 2)
         enonce += mathalea2d(
@@ -117,7 +117,7 @@ export default class ExerciceInteractiveClock extends Exercice {
   }
 
   correctionInteractive = (i: number) => {
-    const id = `clockEx${this.numeroExercice}Q${i}`
+    const id = `interactive-clockEx${this.numeroExercice}Q${i}`
     const clock = document.querySelector(`#${id}`) as any
     if (clock == null) {
       return 'KO'
