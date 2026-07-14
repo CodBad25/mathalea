@@ -1,7 +1,24 @@
+<!--
+  @component
+  Vue des corrections d'une Course aux nombres.
+
+  Deux modes (store `canOptions.solutionsMode`) :
+  - `split` : une question par écran avec navigation ;
+  - `gathered` : toutes les questions sur une même page (capture d'écran facile).
+
+  En mode interactif, on affiche aussi ce que l'élève avait répondu
+  (« Réponse donnée : ... »). Le formatage des réponses et le nettoyage du HTML
+  des questions sont délégués à `src/lib/components/canSolutions.ts` : c'est
+  là-bas (et dans les hooks statiques des customElements) qu'il faut intervenir
+  pour gérer un nouveau type d'interactivité, pas ici.
+-->
 <script lang="ts">
   import { afterUpdate, onMount } from 'svelte'
+  import {
+    formatStudentAnswer,
+    stripInteractiveWidgets,
+  } from '../../../../lib/components/canSolutions'
   import { mathaleaRenderDiv } from '../../../../lib/mathalea'
-  import { enumeration } from '../../../../lib/outils/ecritures'
   import { canOptions } from '../../../../lib/stores/canStore'
   import type { QuestionResult } from '../../../../lib/types'
   import ButtonToggle from '../../../shared/forms/ButtonToggle.svelte'
@@ -19,6 +36,8 @@
   export let time: string
   export let score: string
   const numberOfQuestions: number = questions.length
+  // En mode « correction uniquement des mauvaises réponses », les corrections
+  // des bonnes réponses sont masquées mais restent affichables une à une.
   const solutionDisplayed: boolean[] = new Array(numberOfQuestions).fill(false)
 
   let displayCorrection = true
@@ -46,91 +65,16 @@
     document.dispatchEvent(exercicesAffiches)
   })
 
-  function formatAnswer(question: string, answer: string) {
-    if (!answer) return 'aucune'
-    if (
-      question.includes('checkbox') ||
-      (question.includes('<input') && question.includes('checkEx'))
-    ) {
-      return answer.includes('\\') && !answer.includes('$')
-        ? '$' + answer + '$'
-        : answer
-    } // Pour les QCM
-    if (question.includes('liste-deroulante')) return answer // Pour les listeDeroulante
-    if (question.includes('interactive-clock')) {
-      const answerObject = JSON.parse(answer) as {
-        hour: number
-        minute: number
-        second: number
-      }
-      return `$${answerObject.hour}$ h $${answerObject.minute}$` // Pour les horloges interactives
-    }
-    if (question.includes('<input') && question.includes('champTexteEx'))
-      return answer // Pour les champTexte
-    if (question.includes('apigeomEx')) return answer // Pour le "Voir figure" des figures apigeom
-    if (question.includes('divDragAndDropEx')) return answer // Pour les drag and drop
-    if (question.includes('multi-mathfieldEx'))
-      return cleanMultiMathfield(answer)
-    if (question.includes('metaInteractif2d'))
-      return cleanMetaInteractif2d(answer)
-    return '$' + cleanFillInTheBlanks(answer, false) + '$'
-  }
-
-  function removeMathField(text: string, removeDollar: boolean = true) {
-    if (typeof text !== 'string') return ''
-    if (text.includes('placeholder'))
-      return cleanFillInTheBlanks(text, removeDollar) // Pour les fillInTheBlanks
-    if (text.includes('interactive-clock')) return removeInteractiveClock(text) // Pour les horloges interactives
-    if (text.includes('<select')) return cleanSelect(text) // Pour les listeDeroulante
-    const regex = /<math-field[^>]*>[^]*?<\/math-field>/g
-    return text.replace(regex, ' ... ')
-  }
-
-  function cleanSelect(text: string) {
-    const regex = /<select[^>]*>[^]*?<\/select>/g
-    return text.replace(regex, '')
-  }
-
-  function cleanMultiMathfield(text: string) {
-    if (typeof text !== 'string') return ''
-    // Remplace %{champ:"valeur"} par $valeur$
-    let cleaned = text.replace(
-      /%\{([a-zA-Z0-9_]+):"([^"]*)"\}/g,
-      (_match, champ, valeur) => {
-        // Ajoute des dollars autour de la valeur, en évitant les doubles dollars
-        let v = valeur.trim()
-        if (!v.startsWith('$')) v = '$' + v
-        if (!v.endsWith('$')) v += '$'
-        return v
-      },
-    )
-    // Nettoie les doubles dollars successifs
-    cleaned = cleaned.replace(/\${2,}/g, '')
-
-    return cleaned
-  }
-
-  function cleanMetaInteractif2d(text: string) {
-    const saisies = JSON.parse(text)
-    const reponses = Object.entries(saisies).map(
-      ([key, value]) => `$${String(value)}$`,
-    )
-    return enumeration(reponses)
-  }
-
-  function cleanFillInTheBlanks(text: string, removeDollar: boolean = true) {
-    if (typeof text !== 'string') return ''
-    if (removeDollar) text = text.replace(/\$/g, '')
-    return text
-      .replace(/\\placeholder(\[[^\]]*\])+/g, '')
-      .replace(/\{\}/g, '{...}')
-  }
-
-  function removeInteractiveClock(text: string) {
-    if (typeof text !== 'string') return ''
-    const regex = /<interactive-clock[^>]*\/>/g
-    return text.replace(regex, '')
-  }
+  // La correction de la question i est masquée si elle est juste et que le
+  // mode « correction uniquement des mauvaises réponses » est actif, sauf si
+  // elle a été dépliée à la main (solutionDisplayed). Calculé de façon
+  // réactive : une fonction appelée dans le template ne serait pas
+  // réinvalidée par un clic sur le bouton.
+  let correctionHidden: boolean[] = []
+  $: correctionHidden = questions.map(
+    (_question, i) =>
+      !solutionDisplayed[i] && Boolean(resultsByQuestion[i]) && displayCorrection,
+  )
 </script>
 
 <div
@@ -172,7 +116,7 @@
               id="answer-{current}"
               class="text-coopmaths-warn-800 dark:text-coopmathsdark-warn font-medium"
             >
-              {@html formatAnswer(questions[current], answers[current])}
+              {@html formatStudentAnswer(questions[current], answers[current])}
             </span>
           </div>
         {/if}
@@ -207,7 +151,7 @@
         </div>
       {/if}
       <div
-        id="score"
+        id="time"
         class="text-normal text-center text-coopmaths-corpus dark:text-coopmathsdark-corpus font-light"
       >
         Temps : <span
@@ -260,18 +204,14 @@
           <div class="flex flex-col">
             <div
               class="p-2 text-pretty text-coopmaths-corpus dark:text-coopmathsdark-corpus"
-              hidden={!solutionDisplayed[i] &&
-                resultsByQuestion[i] &&
-                displayCorrection}
+              hidden={correctionHidden[i]}
             >
               <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-              {@html removeMathField(questions[i], false)}
+              {@html stripInteractiveWidgets(questions[i])}
             </div>
             <div
               class="p-2 text-pretty bg-coopmaths-warn-200 dark:bg-coopmathsdark-warn-lightest text-coopmaths-corpus dark:text-coopmathsdark-corpus-darkest"
-              hidden={!solutionDisplayed[i] &&
-                resultsByQuestion[i] &&
-                displayCorrection}
+              hidden={correctionHidden[i]}
             >
               <!-- eslint-disable-next-line svelte/no-at-html-tags -->
               {@html consignesCorrections[i]}
@@ -290,7 +230,7 @@
                 id="answer-{i}"
                 class="text-coopmaths-warn-1000 dark:text-coopmathsdark-warn font-medium"
               >
-                {@html formatAnswer(questions[i], answers[i])}
+                {@html formatStudentAnswer(questions[i], answers[i])}
               </span>
             </div>
           </div>

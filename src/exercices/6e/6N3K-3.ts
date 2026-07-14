@@ -1,5 +1,6 @@
 import { BoiteBuilder } from '../../lib/2d/BoiteBuilder'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { bleuMathalea } from '../../lib/colors'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   selectionSvg,
@@ -12,7 +13,6 @@ import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { gestionnaireFormulaireTexte } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Ajouter des barres fractionnaires'
 export const interactifReady = true
@@ -182,13 +182,13 @@ Dans ${this.nbQuestions > 1 ? 'les questions suivantes' : 'la question suivante'
         case 1:
           frac = choice(fractionsPourCase1)
           handleAnswers(this, i, { reponse: { value: frac.num / frac.den } })
-          texte += `$${frac.texFraction}$ :<br><br> ${context.isHtml ? selectionSvg(this, i, [[...svgItems1], [...svgItems1]]) : figureLatex}`
+          texte += `$${frac.texFraction}$ :<br><br> ${context.isHtml ? selectionSvg(this, i, { svgs: [[...svgItems1], [...svgItems1]] }) : figureLatex}`
           break
         case 2:
         default:
           frac = choice(fractionsPourCase2)
           handleAnswers(this, i, { reponse: { value: frac.num / frac.den } })
-          texte += `$${frac.texFraction}$ :<br><br> ${context.isHtml ? selectionSvg(this, i, [[...svgItems1], [...svgItems1], [...svgItems1]]) : figureLatex}`
+          texte += `$${frac.texFraction}$ :<br><br> ${context.isHtml ? selectionSvg(this, i, { svgs: [[...svgItems1], [...svgItems1], [...svgItems1]] }) : figureLatex}`
           break
       }
 
