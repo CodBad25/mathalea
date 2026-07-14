@@ -242,6 +242,14 @@ function preprocessTex(tex: string): string {
     decodeEntities(tex.replace(/\uE000\d+\uE001/g, '')),
   )
   output = stripLatexSizeCommands(output)
+  // tex2typst échoue sur \displaystyle à l'intérieur des environnements
+  // d'alignement, alors que la commande y est redondante : les lignes sont
+  // déjà rendues en mode affiché par aligned/align. On la retire uniquement
+  // dans ces environnements pour conserver son effet dans les formules
+  // mathématiques ordinaires.
+  if (/\\begin\{(?:align|aligned|alignedat)\}/.test(output)) {
+    output = output.replace(/\\displaystyle\b/g, '')
+  }
   // Unités écrites avec des $ imbriqués dans \text{} (ex. `m$^2$`,
   // `$\text{cm}^2$` de MathALÉA) : à l'intérieur de \text{}, `$…$` rebascule
   // en mode mathématique. On sort explicitement du texte pour cette partie :
