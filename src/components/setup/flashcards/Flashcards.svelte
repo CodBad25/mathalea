@@ -249,6 +249,15 @@
   /** Repères publiés par le document compilé (un par face de carte) */
   let anchors: TypstAnchor[] = []
 
+  /** Couleurs proposées pour le titre des cartes (palette + personnalisée) */
+  const TITLE_COLORS = [
+    { label: 'Gris', value: '#6b7280' },
+    { label: 'Noir', value: '#000000' },
+    { label: 'Orange', value: '#f15929' },
+    { label: 'Bleu', value: '#1d4ed8' },
+    { label: 'Vert', value: '#4a7c59' },
+  ]
+
   /** Aperçu préparé : SVG retouché et géométrie des pages pour les contrôles */
   interface SeparatedPreview {
     svg: string
@@ -357,6 +366,39 @@
     return widgets
   }
   $: cardWidgets = computeCardWidgets(anchors, previewPages, previewViewBox)
+
+  /** Modale de réglage du style du titre (ancrage, taille, couleur, opacité) */
+  let isTitleStyleModalOpen = false
+
+  /** Couleur hexadécimale courante du titre (pour le sélecteur personnalisé) */
+  $: isCustomTitleColor = !TITLE_COLORS.some(
+    (color) => color.value === documentOptions.titleColor,
+  )
+
+  function setTitlePosition(
+    position: FlashcardsDocumentOptions['titlePosition'],
+  ) {
+    documentOptions.titlePosition = position
+    applyDocumentOptions()
+  }
+
+  function adjustTitleSize(delta: number) {
+    documentOptions.titleSize = Math.min(
+      24,
+      Math.max(6, documentOptions.titleSize + delta),
+    )
+    applyDocumentOptions()
+  }
+
+  function setTitleColor(hex: string) {
+    documentOptions.titleColor = hex
+    applyDocumentOptions()
+  }
+
+  function setTitleOpacity(opacity: number) {
+    documentOptions.titleOpacity = opacity
+    applyDocumentOptions()
+  }
 
   /** Pas d'ajustement du facteur de taille d'une face, et ses bornes */
   const CARD_SCALE_STEP = 0.1
@@ -750,6 +792,51 @@
             Numéroter les cartes (pour réapparier recto et verso)
           </label>
 
+          <div class="flex items-center justify-between">
+            <span
+              class="text-sm font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
+            >
+              Titre des cartes
+            </span>
+            <button
+              type="button"
+              title="Réglages du titre (ancrage, taille, couleur, opacité)"
+              aria-label="Réglages du titre (ancrage, taille, couleur, opacité)"
+              class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+              on:click={() => (isTitleStyleModalOpen = true)}
+            >
+              <i class="bx bx-cog text-lg"></i>
+            </button>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-sm" for="flashcards-front-title-input">
+              Titre recto
+            </label>
+            <input
+              id="flashcards-front-title-input"
+              type="text"
+              placeholder="Affiché sur chaque recto"
+              class="w-full rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.frontTitle}
+              on:change={applyDocumentOptions}
+            />
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-sm" for="flashcards-back-title-input">
+              Titre verso
+            </label>
+            <input
+              id="flashcards-back-title-input"
+              type="text"
+              placeholder="Affiché sur chaque verso"
+              class="w-full rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.backTitle}
+              on:change={applyDocumentOptions}
+            />
+          </div>
+
           <button
             type="button"
             class="text-sm text-coopmaths-action underline dark:text-coopmathsdark-action"
@@ -839,6 +926,146 @@
             {/each}
           </div>
         {/if}
+      </div>
+    </div>
+  {/if}
+
+  {#if isTitleStyleModalOpen}
+    <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+      on:click|self={() => (isTitleStyleModalOpen = false)}
+    >
+      <div
+        class="w-80 rounded-lg bg-coopmaths-canvas dark:bg-coopmathsdark-canvas p-5 space-y-4 text-coopmaths-corpus dark:text-coopmathsdark-corpus shadow-lg"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Réglages du titre des cartes"
+      >
+        <div class="flex items-center justify-between">
+          <h3
+            class="font-bold text-coopmaths-struct dark:text-coopmathsdark-struct"
+          >
+            Réglages du titre
+          </h3>
+          <button
+            type="button"
+            aria-label="Fermer"
+            on:click={() => (isTitleStyleModalOpen = false)}
+          >
+            <i
+              class="bx bx-x text-2xl text-coopmaths-action dark:text-coopmathsdark-action"
+            ></i>
+          </button>
+        </div>
+
+        <p class="text-xs opacity-75">
+          Ancrage, taille, couleur et opacité sont communs au titre recto et
+          au titre verso, sur toutes les cartes.
+        </p>
+
+        <div class="space-y-1.5">
+          <span class="text-sm">Point d'ancrage</span>
+          <!-- mini-carte : 6 points cliquables (2 lignes × 3 colonnes) -->
+          <div
+            class="mx-auto grid h-16 w-28 grid-cols-3 grid-rows-2 gap-1 rounded border-2 border-dashed border-coopmaths-action/40 p-1 dark:border-coopmathsdark-action/40"
+          >
+            {#each [{ position: 'top-left', label: 'Ancrer le titre en haut à gauche' }, { position: 'top-center', label: 'Ancrer le titre en haut au centre' }, { position: 'top-right', label: 'Ancrer le titre en haut à droite' }, { position: 'bottom-left', label: 'Ancrer le titre en bas à gauche' }, { position: 'bottom-center', label: 'Ancrer le titre en bas au centre' }, { position: 'bottom-right', label: 'Ancrer le titre en bas à droite' }] as choice}
+              <button
+                type="button"
+                title={choice.label}
+                aria-label={choice.label}
+                aria-pressed={documentOptions.titlePosition ===
+                  choice.position}
+                class="flex items-center justify-center rounded {documentOptions.titlePosition ===
+                choice.position
+                  ? 'bg-coopmaths-action/20 dark:bg-coopmathsdark-action/20'
+                  : 'hover:bg-coopmaths-action/10 dark:hover:bg-coopmathsdark-action/10'}"
+                on:click={() =>
+                  setTitlePosition(
+                    choice.position as FlashcardsDocumentOptions['titlePosition'],
+                  )}
+              >
+                <span
+                  class="h-2.5 w-2.5 rounded-full {documentOptions.titlePosition ===
+                  choice.position
+                    ? 'scale-125 bg-coopmaths-action dark:bg-coopmathsdark-action'
+                    : 'bg-coopmaths-action/40 dark:bg-coopmathsdark-action/40'}"
+                ></span>
+              </button>
+            {/each}
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between gap-4 text-sm">
+          <span>Taille</span>
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              title="Réduire le titre"
+              class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+              on:click={() => adjustTitleSize(-1)}
+            >
+              <i class="bx bx-minus text-lg"></i>
+            </button>
+            <span class="w-10 text-center tabular-nums">
+              {documentOptions.titleSize}pt
+            </span>
+            <button
+              type="button"
+              title="Agrandir le titre"
+              class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+              on:click={() => adjustTitleSize(1)}
+            >
+              <i class="bx bx-plus text-lg"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between gap-4 text-sm">
+          <span>Couleur</span>
+          <div class="flex items-center gap-1.5">
+            {#each TITLE_COLORS as color}
+              <button
+                type="button"
+                title={color.label}
+                aria-label={color.label}
+                aria-pressed={documentOptions.titleColor === color.value}
+                class="h-6 w-6 rounded-full border-2 transition {documentOptions.titleColor ===
+                color.value
+                  ? 'border-coopmaths-action dark:border-coopmathsdark-action scale-110'
+                  : 'border-transparent'}"
+                style="background-color: {color.value};"
+                on:click={() => setTitleColor(color.value)}
+              ></button>
+            {/each}
+            <input
+              type="color"
+              title="Couleur personnalisée du titre"
+              aria-label="Couleur personnalisée du titre"
+              class="h-6 w-6 cursor-pointer rounded-full border-2 {isCustomTitleColor
+                ? 'border-coopmaths-action dark:border-coopmathsdark-action scale-110'
+                : 'border-transparent'} bg-transparent p-0"
+              value={documentOptions.titleColor}
+              on:input={(e) => setTitleColor(e.currentTarget.value)}
+            />
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between gap-4 text-sm">
+          <span>Opacité</span>
+          <input
+            type="range"
+            min="0.1"
+            max="1"
+            step="0.1"
+            title="Opacité du titre"
+            aria-label="Opacité du titre"
+            class="w-32 cursor-pointer"
+            value={documentOptions.titleOpacity}
+            on:change={(e) => setTitleOpacity(Number(e.currentTarget.value))}
+          />
+        </div>
       </div>
     </div>
   {/if}

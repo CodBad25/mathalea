@@ -44,6 +44,24 @@ export interface FlashcardsDocumentOptions {
   showNumbers: boolean
   pageFormat: 'a4' | 'a5'
   orientation: 'portrait' | 'landscape'
+  /** Texte affiché en bas de chaque recto (ex. titre du thème) */
+  frontTitle: string
+  /** Texte affiché en bas de chaque verso */
+  backTitle: string
+  /** Point d'ancrage du titre sur la carte, commun aux deux faces */
+  titlePosition:
+    | 'top-left'
+    | 'top-center'
+    | 'top-right'
+    | 'bottom-left'
+    | 'bottom-center'
+    | 'bottom-right'
+  /** Taille du titre en points, commune aux deux faces */
+  titleSize: number
+  /** Couleur du titre (hexadécimal), commune aux deux faces */
+  titleColor: string
+  /** Opacité du titre (0 à 1), commune aux deux faces */
+  titleOpacity: number
 }
 
 export const defaultFlashcardsDocumentOptions: FlashcardsDocumentOptions = {
@@ -57,6 +75,12 @@ export const defaultFlashcardsDocumentOptions: FlashcardsDocumentOptions = {
   showNumbers: true,
   pageFormat: 'a4',
   orientation: 'portrait',
+  frontTitle: '',
+  backTitle: '',
+  titlePosition: 'bottom-center',
+  titleSize: 9,
+  titleColor: '#6b7280',
+  titleOpacity: 1,
 }
 
 /**
@@ -90,6 +114,14 @@ export function harvestFlashcardsCarryOver(code: string): FlashcardsCarryOver {
 /** Chaîne littérale Typst (échappe backslash et guillemets) */
 function typstString(text: string): string {
   return `"${text.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
+}
+
+/** Couleur Typst à partir d'un hexadécimal et d'une opacité (0 à 1) */
+function typstColorWithOpacity(hex: string, opacity: number): string {
+  const base = `rgb(${typstString(hex)})`
+  const clamped = Math.min(1, Math.max(0, opacity))
+  if (clamped >= 1) return base
+  return `${base}.transparentize(${Math.round((1 - clamped) * 100)}%)`
 }
 
 /** Indente un contenu multi-ligne pour l'insérer dans un bloc `[...]` */
@@ -189,6 +221,13 @@ export function buildFlashcardsDocument(
   lines.push(`#let police-maths = ${typstString(options.mathFont)}`)
   lines.push(`#let taille-questions = ${options.questionFontSize}pt`)
   lines.push(`#let taille-reponses = ${options.answerFontSize}pt`)
+  lines.push(`#let titre-recto = ${typstString(options.frontTitle)}`)
+  lines.push(`#let titre-verso = ${typstString(options.backTitle)}`)
+  lines.push(`#let titre-position = ${typstString(options.titlePosition)}`)
+  lines.push(`#let titre-taille = ${options.titleSize}pt`)
+  lines.push(
+    `#let titre-couleur = ${typstColorWithOpacity(options.titleColor, options.titleOpacity)}`,
+  )
   if (usesQcm) {
     lines.push('#let couleur = black // couleur des bonnes réponses de QCM')
     lines.push('#let qcm-colonnes = 2 // colonnes des propositions de QCM')
@@ -241,6 +280,18 @@ export function buildFlashcardsDocument(
     '  #set text(size: (if verso { taille-reponses } else { taille-questions }) * taille)',
   )
   lines.push('  #align(center + horizon, corps)')
+  lines.push('  // titre ancré à un coin de la carte (recto/verso), commun à toutes les cartes')
+  lines.push('  #let titre = if verso { titre-verso } else { titre-recto }')
+  lines.push('  #if titre.trim() != "" {')
+  lines.push('    place(')
+  lines.push(
+    '      (if titre-position.starts-with("top") { top } else { bottom })',
+  )
+  lines.push('      + (if titre-position.ends-with("left") { left }')
+  lines.push('        else if titre-position.ends-with("right") { right }')
+  lines.push('        else { center }),')
+  lines.push('      text(size: titre-taille, fill: titre-couleur, titre))')
+  lines.push('  }')
   lines.push(']')
   lines.push('// une planche : la grille des cartes, traits de découpe en')
   lines.push('// pointillés (les pistes fractionnées remplissent la page)')
