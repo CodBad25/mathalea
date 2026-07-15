@@ -114,7 +114,8 @@ export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0
 ]`
 
 /** Import du paquet taskize (mise en colonnes des propositions de QCM) */
-export const TASKIZE_IMPORT = '#import "@preview/taskize:0.2.6": tasks'
+export const TASKIZE_IMPORT =
+  '#import "@preview/taskize:0.2.7": tasks, tasks-setup'
 
 /**
  * Aides Typst pour les QCM : une case à cocher (vide dans l'énoncé, remplie

@@ -19,7 +19,7 @@
 
   /** Mise en page courante des questions d'un exercice (lue dans le code) */
   export interface TasksLayoutValue {
-    columns: number
+    columns: number | string
     /** Expression Typst (`1em`, `interligne-questions`…) */
     gutter: string
   }
@@ -320,7 +320,9 @@
             <i class="bx bx-chevron-left"></i>
           </button>
           <span class="tabular-nums">
-            {layoutValues[target]?.columns ?? 1}<i
+            {layoutValues[target]?.columns === '"auto-fit"'
+              ? 'auto'
+              : (layoutValues[target]?.columns ?? 'auto')}<i
               class="bx bx-columns text-[0.6rem]"
             ></i>
           </span>

@@ -302,13 +302,16 @@
   function refreshTasksLayout(code: string) {
     const values: Record<string, TasksLayoutValue> = {}
     const defaults = (): TasksLayoutValue => ({
-      columns: 1,
+      columns: '"auto-fit"',
       gutter: 'interligne-questions',
     })
     for (const match of code.matchAll(
-      /^#let (ex\d+(?:-corr)?)-colonnes = (\d+)/gm,
+      /^#let (ex\d+(?:-corr)?)-colonnes = (.+?)\s*$/gm,
     )) {
-      ;(values[match[1]] ??= defaults()).columns = Number(match[2])
+      const value = match[2].trim()
+      ;(values[match[1]] ??= defaults()).columns = /^\d+$/.test(value)
+        ? Number(value)
+        : value
     }
     for (const match of code.matchAll(
       /^#let (ex\d+(?:-corr)?)-gutter = (\S+)/gm,
@@ -364,7 +367,12 @@
   }
 
   function adjustColumns(target: string, delta: number) {
-    const current = tasksLayoutValues[target]?.columns ?? 1
+    const raw = tasksLayoutValues[target]?.columns ?? '"auto-fit"'
+    if (typeof raw !== 'number') {
+      setTasksVariable(target, 'colonnes', String(delta < 0 ? 3 : 4))
+      return
+    }
+    const current = raw
     const next = Math.min(4, Math.max(1, current + delta))
     if (next !== current) setTasksVariable(target, 'colonnes', String(next))
   }
