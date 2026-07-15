@@ -58,7 +58,7 @@ export default class IntegraleAffine extends ExerciceSimple {
     this.correction += `Comme pour tout $x\\in [${a} ; ${b}]$, $u(x)>0$, on en déduit qu'une primitive de $\\dfrac{u'(x)}{u(x)}$ est $\\ln(u)$.<br>`
     this.correction += ` $\\begin{aligned}\\displaystyle\\int_{${a}}^{${b}} \\left(\\dfrac{${c}}{${reduireAxPlusB(c, d)}} \\right)\\mathrm{d}x
     &=\\displaystyle\\int_{${a}}^{${b}} \\left(\\dfrac{u'(x)}{u(x)}\\right) \\mathrm{d}x\\\\
-    &=\\Bigl[\\ln(u(x)\\Bigr]_{${a}}^{${b}}\\\\
+    &=\\Bigl[\\ln(u(x))\\Bigr]_{${a}}^{${b}}\\\\
     &=\\Bigl[\\ln\\left(${reduireAxPlusB(c, d)}\\right)\\Bigr]_{${a}}^{${b}}\\\\
    &=\\ln\\left(${c}\\times${ecritureParentheseSiNegatif(b)}${ecritureAlgebrique(d)}\\right)-\\ln\\left(${c}\\times${ecritureParentheseSiNegatif(a)}${ecritureAlgebrique(d)}\\right)\\\\
     &=\\ln\\left(${c * b + d}\\right)-\\ln\\left(${c * a + d}\\right)\\\\

@@ -11,6 +11,7 @@ import { bleuMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { fraction } from '../../modules/fractions'
 import { representationFraction } from '../../modules/representationsFractions'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = 'Représenter des fractions'
 export const amcReady = true
@@ -198,7 +199,7 @@ export default class RepresenterUneFraction extends Exercice {
 
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figuresApiGeom[i].id] = this.figuresApiGeom[i].json
+    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(this.figuresApiGeom[i])
     let result = 'KO'
     const divCheck = document.querySelector(
       `#resultatCheckEx${this.numeroExercice}Q${i}`,

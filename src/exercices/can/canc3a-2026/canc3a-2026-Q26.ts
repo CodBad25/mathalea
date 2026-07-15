@@ -12,6 +12,7 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
 import { bleuMathalea } from '../../../lib/colors'
+import { figureAnswerJson } from '../../../lib/apigeom/figureAnswer'
 
 export const titre = 'Tracer un segment de longueur fractionnaire'
 export const interactifReady = true
@@ -196,7 +197,7 @@ export default class Can2026CM2Q26 extends ExerciceCan {
     figure.divUserMessage.style.display = 'none'
 
     if (this.answers == null) this.answers = {}
-    this.answers[figure.id] = figure.json
+    this.answers[figure.id] = figureAnswerJson(figure)
 
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,

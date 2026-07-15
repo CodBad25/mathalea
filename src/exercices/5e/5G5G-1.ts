@@ -37,6 +37,7 @@ import {
 import { Triangle } from '../../modules/Triangle'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = 'Tracer une médiane dans un triangle'
 
@@ -373,7 +374,7 @@ export default class nomExercice extends Exercice {
     if (this.answers == null) this.answers = {}
     if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figuresApiGeom![i].id] = this.figuresApiGeom![i].json
+    this.answers[this.figuresApiGeom![i].id] = figureAnswerJson(this.figuresApiGeom![i])
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,
     )

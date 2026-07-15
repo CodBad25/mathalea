@@ -1,5 +1,38 @@
 const scorm = window.pipwerks.SCORM
 
+/*
+  Encodage des réponses (voir src/lib/lms/answersCodec.ts, dont ceci est le pendant :
+  ce script est servi tel quel au SCO Moodle et ne peut pas importer de module).
+
+  SCORM 1.2 limite cmi.suspend_data à 4096 caractères et student_response à 255 :
+  une seule figure ApiGeom suffisait à les dépasser. Les réponses sont donc
+  compressées en gzip puis encodées en base64url, ce qui les rend transportables
+  telles quelles dans une URL, sans échappement %xx.
+
+  Le préfixe 'z:' permet de distinguer ce format du JSON brut, de sorte que les
+  copies enregistrées avant la compression restent lisibles.
+*/
+const COMPRESSED_PREFIX = 'z:'
+
+async function encodeAnswers(answers) {
+  const json = JSON.stringify(answers)
+  if (typeof CompressionStream !== 'function') return json
+  const bytes = new TextEncoder().encode(json)
+  const stream = new Blob([bytes]).stream().pipeThrough(new CompressionStream('gzip'))
+  const gzipped = new Uint8Array(await new Response(stream).arrayBuffer())
+  let binary = ''
+  for (const byte of gzipped) binary += String.fromCharCode(byte)
+  const base64url = btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  return COMPRESSED_PREFIX + base64url
+}
+
+/* Le base64url passe tel quel dans une URL ; le JSON brut du repli doit être échappé. */
+function answersForUrl(encodedAnswers) {
+  return encodedAnswers.startsWith(COMPRESSED_PREFIX)
+    ? encodedAnswers
+    : encodeURIComponent(encodedAnswers)
+}
+
 window.onload = function () {
   const style = document.createElement('style')
   style.innerHTML = 'body, html { margin: 0px; padding: 0px; height: 100%; overflow: auto; }'
@@ -84,7 +117,7 @@ window.onunload = function () {
   scorm.quit()
 }
 
-window.addEventListener('message', (event) => {
+window.addEventListener('message', async (event) => {
   if (typeof event.data.action !== 'undefined' && event.data.action.startsWith('mathalea:')) {
     if (event.data.action === 'mathalea:score') {
       const seed = event.data.resultsByExercice[0].alea
@@ -100,12 +133,12 @@ window.addEventListener('message', (event) => {
       scorm.set('cmi.core.score.raw', score)
       scorm.set('cmi.core.score.min', '0')
       scorm.set('cmi.core.score.max', scoreMax.toString())
-      let answers = event.data.resultsByExercice.map(x => x.answers)
       // todo : gérer les can où il y a plusieurs exos
-      scorm.set('cmi.suspend_data', seed + '|' + JSON.stringify(event.data.resultsByExercice[0].answers))
+      const encodedAnswers = await encodeAnswers(event.data.resultsByExercice[0].answers)
+      scorm.set('cmi.suspend_data', seed + '|' + encodedAnswers)
       let copieEleveUrl = document.getElementsByTagName('iframe')[0].src
       copieEleveUrl = copieEleveUrl.replace(/&alea=[^&]+/, '&alea=' + seed) // On remplace la seed au cas où qu'elle ait changé
-      copieEleveUrl += '&done=1&answers=' + encodeURIComponent(JSON.stringify(event.data.resultsByExercice[0].answers))
+      copieEleveUrl += '&done=1&answers=' + answersForUrl(encodedAnswers)
       scorm.set('cmi.interactions_0.student_response', copieEleveUrl)
       // scorm.set("cmi.success_status", "passed");
       scorm.save()

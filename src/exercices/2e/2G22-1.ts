@@ -30,6 +30,7 @@ import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre =
   'Représenter un vecteur dans un repère, à partir de ses coordonnées'
@@ -335,7 +336,7 @@ export default class RepresenterUnVecteur extends Exercice {
     if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figuresApiGeom[i].id] = this.figuresApiGeom[i].json
+    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(this.figuresApiGeom[i])
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,
     ) as HTMLDivElement

@@ -151,9 +151,18 @@ export interface TypstAnchor {
    * `tasks`/`tasks-corr` : liste de questions réglable (énoncé/correction) ;
    * `exo` : début d'un exercice (nombre de questions, suppression) ;
    * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche ;
-   * `figure` : figure mathalea2d embarquée (zoom)
+   * `figure` : figure mathalea2d embarquée (zoom) ;
+   * `carte-recto`/`carte-verso` : carte de la vue Flash-cards (taille du texte)
    */
-  kind: 'tasks' | 'tasks-corr' | 'exo' | 'gap' | 'header' | 'figure'
+  kind:
+    | 'tasks'
+    | 'tasks-corr'
+    | 'exo'
+    | 'gap'
+    | 'header'
+    | 'figure'
+    | 'carte-recto'
+    | 'carte-verso'
   /** Numéro de l'exercice concerné (0 = avant le premier exercice), ou de la figure */
   num: number
   page: number
@@ -168,6 +177,8 @@ const ANCHOR_KINDS = new Set([
   'gap',
   'header',
   'figure',
+  'carte-recto',
+  'carte-verso',
 ])
 
 /** Valide et filtre les métadonnées renvoyées par `query(<mathalea-anchor>)` */

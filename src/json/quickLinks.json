@@ -7,6 +7,12 @@
       "url": "https://coopmaths.fr/www/cahiers-de-vacances/"
     },
     {
+      "title": "Cahier d'automatismes",
+      "subtitle": "1re",
+      "icon": "bx bx-book",
+      "url": "https://coopmaths.fr/www/automatismes/"
+    },
+    {
       "title": "Révisions d'examens",
       "subtitle": "Brevet · Bac",
       "icon": "bx bx-task",

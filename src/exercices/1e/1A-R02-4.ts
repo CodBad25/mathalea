@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'c40dc'
 
 export const refs = {
-  'fr-fr': ['1A-R02-4'],
+  'fr-fr': ['1A-R02-4', '2A-R2-4'],
   'fr-ch': [],
 }
 export default class Auto1AR5b extends PoucentageP2 {

@@ -9,6 +9,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = "Placer un point d'abscisse décimale"
 export const dateDeModifImportante = '03/05/2024'
@@ -197,7 +198,7 @@ class PlacerPointsSurAxe extends Exercice {
     const figure = this.figuresApiGeom[i]
     // Sauvegarde de la réponse pour Capytale
     if (this.answers === undefined) this.answers = {}
-    this.answers[figure.id] = figure.json
+    this.answers[figure.id] = figureAnswerJson(figure)
 
     figure.isDynamic = false
     figure.divButtons.style.display = 'none'

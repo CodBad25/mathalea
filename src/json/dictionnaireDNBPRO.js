@@ -195,7 +195,7 @@ export const dictionnaireDNBPRO = {
     mois: 'Juin',
     numeroInitial: '2',
     typeExercice: 'dnbpro',
-    tags: ['Volumes', 'Réduction-agrandissement'],
+    tags: ['Volumes', 'Agrandissement-réduction'],
   },
   dnbpro_2023_06_metropole_3: {
     annee: '2023',
