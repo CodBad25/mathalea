@@ -12,13 +12,12 @@ export const dateDePublication = '24/01/2023'
 /**
  * @author Gilles Mora
  *
-
  */
 
 export const uuid = 'aa8af'
 
 export const refs = {
-  'fr-fr': ['canc3C15'],
+  'fr-fr': ['canc3C15', 'auto5N1C-flash1'],
   'fr-ch': [],
 }
 export default class TablesPhrase extends ExerciceSimple {
