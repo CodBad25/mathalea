@@ -369,12 +369,17 @@
   function adjustColumns(target: string, delta: number) {
     const raw = tasksLayoutValues[target]?.columns ?? '"auto-fit"'
     if (typeof raw !== 'number') {
-      setTasksVariable(target, 'colonnes', String(delta < 0 ? 3 : 4))
+      if (delta > 0) setTasksVariable(target, 'colonnes', String(1))
       return
     }
     const current = raw
-    const next = Math.min(4, Math.max(1, current + delta))
-    if (next !== current) setTasksVariable(target, 'colonnes', String(next))
+    const next = current + delta
+    if (next < 1) {
+      setTasksVariable(target, 'colonnes', '"auto-fit"')
+      return
+    }
+    const clamped = Math.min(4, next)
+    if (clamped !== current) setTasksVariable(target, 'colonnes', String(clamped))
   }
 
   /** Pas d'ajustement de l'espacement vertical des questions, en em */
