@@ -5,7 +5,6 @@ import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { Polygone, polygone } from '../../../lib/2d/polygones'
 import { carre } from '../../../lib/2d/polygonesParticuliers'
 import { latex2d } from '../../../lib/2d/textes'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
@@ -67,7 +66,7 @@ export default class AireUsuelleParComptageCan extends ExerciceSimple {
     let objet: Polygone
     let value: string[]
     let aire: string
-    const choix = choice([true, false])
+    const choix = this.quotaChoice('choix', [true, false])
     do {
       if (choix) {
         a = randint(4, 8)

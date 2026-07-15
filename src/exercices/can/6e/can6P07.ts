@@ -49,7 +49,7 @@ export default class PoucentageProportion extends ExerciceSimple {
       ['musiciens', 'Ils'],
     ]
     let a, b, c, n, d, carac, choix
-    switch (randint(1, 2)) {
+    switch (this.quotaRandint('cas', 1, 2)) {
       case 1:
         if (choice([true, false])) {
           a = choice([20, 40])

@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -29,7 +28,7 @@ export default class ConvertirEnM extends ExerciceSimple {
 
   nouvelleVersion() {
     let a
-    if (choice([true, false])) {
+    if (this.quotaChoice('typeConversion', [true, false])) {
       a = randint(0, 5) * 10 + randint(1, 9)
       this.reponse = a * 1000
       this.question = `$${a}\\text{ km}$ font combien de mètres ?`

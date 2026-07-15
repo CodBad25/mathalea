@@ -54,7 +54,7 @@ export default class ProblemesDeLongueursEtPerimetre extends ExerciceSimple {
     let s3
     let s4
     switch (
-      choice([1, 2, 3, 4]) //, 2, 3, 4
+      this.quotaChoice('typeProbleme', [1, 2, 3, 4]) //, 2, 3, 4
     ) {
       case 1: // périmètre
         choix = choice([true, false])

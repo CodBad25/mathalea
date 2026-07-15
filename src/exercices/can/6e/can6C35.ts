@@ -49,7 +49,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
       m1,
       m2
     switch (
-      choice([1, 1, 1, 2, 3, 3, 3]) //
+      this.quotaChoice('typeDeQuestions', [1, 1, 1, 2, 3, 3, 3]) //
     ) {
       case 1:
         choix = choice(['a', 'b', 'c', 'd']) //

@@ -35,8 +35,8 @@ export default class VolumePaveSimple extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const l = randint(2, 3)
-    const L = randint(3, 5)
+    const l = this.quotaRandint('l', 2, 3)
+    const L = this.quotaRandint('L', 3, 5)
     const h = randint(2, 7, [l, L])
     const pav = pave(L, l, h)
     this.question = `Quel est le volume du pavé droit ci-dessous ?<br>

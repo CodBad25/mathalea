@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -31,7 +30,7 @@ export default class MinutesHeuresDecimale extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choixType = choice([1, 2, 2])
+    const choixType = this.quotaChoice('choixType', [1, 2, 2])
 
     switch (choixType) {
       case 1:

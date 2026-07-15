@@ -34,7 +34,7 @@ export default class AbscisseDroiteDecimaux extends ExerciceSimple {
   nouvelleVersion() {
     let d, abs0, abs1, abs2, x1, partieDec1, partieDec2, partieDec3
 
-    const choix1 = choice(['a', 'b']) //, 'b'
+    const choix1 = this.quotaChoice('choix1', ['a', 'b']) //, 'b'
     if (choix1 === 'a') {
       // graduation de 0,02 en 0,02
       partieDec1 = new Decimal(randint(1, 9)).div(choice([10, 100]))

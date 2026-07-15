@@ -42,7 +42,7 @@ export default class RenduMonnaie extends ExerciceSimple {
     ]
     let a, b, e, prenom1, v, p, pu, t, nbre
 
-    switch (choice([1, 2, 3, 4])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2, 3, 4])) {
       case 1:
         a = randint(1, 3) * 10
         e = randint(1, 4)

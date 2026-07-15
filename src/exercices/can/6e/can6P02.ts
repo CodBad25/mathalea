@@ -1,5 +1,4 @@
 import { texPrix } from '../../../lib/format/style'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -42,8 +41,10 @@ export default class ProportionnaliteCompliquee extends ExerciceSimple {
       ['bananes', 1.5, 3, 8],
     ]
 
-    const a = randint(0, 7) // index du fruit
-    const b = (fruits[a][1] as number) * choice([1.1, 1.2, 1.3, 0.9, 0.8, 0.7]) // prix au kg
+    const a = this.quotaRandint('a', 0, 7) // index du fruit
+    const b =
+      (fruits[a][1] as number) *
+      this.quotaChoice('coeff', [1.1, 1.2, 1.3, 0.9, 0.8, 0.7]) // prix au kg
     // const b = new Decimal(fruits[a][1] * (1 + choice([-1, 1]) * randint(1, 3) * 0.1)) // prix au kg
     const c = randint(fruits[a][2] as number, fruits[a][3] as number) // nombre de kg première valeur
     const d = randint(3, 6, c) // nombre de kg supplémentaires

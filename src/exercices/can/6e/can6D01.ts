@@ -1,5 +1,4 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Convertir des heures/minutes en minutes'
 export const interactifReady = true
@@ -28,8 +27,8 @@ export default class ConversionHeuresEtMinutesVersMinutes extends ExerciceSimple
   }
 
   nouvelleVersion() {
-    const a = randint(2, 4)
-    const b = randint(10, 59)
+    const a = this.quotaRandint('a', 2, 4)
+    const b = this.quotaRandint('b', 10, 59)
     const d = a * 60 + b
     this.question = `Compléter : <br> $${a}$ heures $${b}$ minutes $=$`
     if (!this.interactif) {

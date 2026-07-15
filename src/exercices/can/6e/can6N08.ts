@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -27,11 +26,11 @@ export default class NombreDeDizaines extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(0, 4)
+    const a = this.quotaRandint('a', 0, 4)
     const b = randint(1, 9, a)
     const c = randint(1, 9, [a, b])
     const d = randint(1, 9, [a, b, c])
-    const m = choice(['centaines', 'dizaines'])
+    const m = this.quotaChoice('m', ['centaines', 'dizaines'])
     const n = a * 1000 + b * 100 + c * 10 + d
     this.question = `Quel est le nombre entier de ${m} dans $${texNombre(n)}$ ? `
     if (a !== 0) {

@@ -28,14 +28,14 @@ export default class CombienDeFois extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const unite = choice(['g', 'm', 'L'])
-    const choix = choice([true, false])
+    const unite = this.quotaChoice('unite', ['g', 'm', 'L'])
+    const choix = this.quotaChoice('choix', [true, false])
     this.optionsChampTexte = { texteApres: 'fois.' }
     this.canReponseACompleter =
       'La réponse correcte à cette question est : <br>$\\ldots$'
     let Choixprefixes: [number, string][]
     let prefixes: [number, string] = [10, 'h']
-    switch (choice([0, 1, 1, 2, 2, 3, 3, 4])) {
+    switch (this.quotaChoice('typePrefixe', [0, 1, 1, 2, 2, 3, 3, 4])) {
       case 0:
         Choixprefixes = [
           [10, 'h'],

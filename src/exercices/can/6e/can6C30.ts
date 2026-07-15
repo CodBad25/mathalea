@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -36,7 +35,7 @@ export default class MultiplierDeuxDecimaux extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, b, c, d
-    switch (choice([1, 2, 3, 4])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2, 3, 4])) {
       case 1: // un entier par un décimal avec une chiffre après la virgule
         a = randint(2, 9)
         b = new Decimal(a).div(10)

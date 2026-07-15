@@ -79,7 +79,7 @@ export default class ProblemeResteFraction extends ExerciceSimple {
       ['Strasbourg'],
       ['Toulouse'],
     ]
-    const fraction1 = choice(listeFractions1)
+    const fraction1 = this.quotaChoice('fraction1', listeFractions1)
     const Ville1 = choice(listeVille)
     const n1 = fraction1[0]
     const d1 = fraction1[1]
@@ -96,7 +96,7 @@ export default class ProblemeResteFraction extends ExerciceSimple {
       liste2: rangeMinMax(n1 + 1, n1 + d1),
     })
     this.reponse = new FractionEtendue(d1 - n1, d1)
-    if (choice([true, false])) {
+    if (this.quotaChoice('typeDeQuestions', [true, false])) {
       this.question = `${p1} rejoint une amie à ${Ville1} en voiture. <br>
     Elle a déjà parcouru $${f1.texFraction}$ de la distance. <br>
     Quelle fraction de la distance lui reste-t-il à parcourir ?`

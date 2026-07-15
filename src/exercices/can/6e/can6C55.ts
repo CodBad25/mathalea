@@ -72,7 +72,7 @@ export default class FractionsSimplesEgalite extends ExerciceSimple {
     }
 
     // Cas possibles
-    switch (choice([1, 2, 3, 4, 5, 6])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2, 3, 4, 5, 6])) {
       case 1: {
         const cas = choice(['un', 'demi'])
         const trou = choice(['resultat', 'terme1', 'terme2'] as const)

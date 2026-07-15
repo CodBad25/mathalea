@@ -1,6 +1,5 @@
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -37,7 +36,7 @@ export default class QuartOuTiers extends ExerciceSimple {
   nouvelleVersion() {
     const a = randint(5, 10)
     let b
-    if (choice([true, false])) {
+    if (this.quotaChoice('quartOuTiers', [true, false])) {
       b = a * 8
       this.reponse = a * 2
       this.question = `Quel est le quart de $${b}$ ?`

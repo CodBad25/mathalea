@@ -1,7 +1,6 @@
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -36,7 +35,7 @@ export default class SoustraireEntierDecimal extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, u, d, c
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2])) {
       case 1: // 5-2,6 par ex
         a = randint(2, 15)
         u = randint(1, a - 1)

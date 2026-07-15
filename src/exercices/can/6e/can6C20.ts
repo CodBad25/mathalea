@@ -1,10 +1,8 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
@@ -38,9 +36,9 @@ export default class ComplementAUn extends ExerciceSimple {
   nouvelleVersion() {
     let a
     let correctionSup
-    switch (choice([1, 2, 3])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2, 3])) {
       case 1:
-        a = randint(2, 9) / 10
+        a = this.quotaRandint('a', 2, 9) / 10
         correctionSup = texteEnCouleur(
           `Mentalement : <br>
     $1$ unité = $10$ dixièmes.<br>
@@ -50,7 +48,7 @@ export default class ComplementAUn extends ExerciceSimple {
         )
         break
       case 2:
-        a = randint(2, 9) / 100
+        a = this.quotaRandint('a', 2, 9) / 100
         correctionSup = texteEnCouleur(
           `Mentalement : <br>
     $1$ unité = $100$ centièmes.<br>
@@ -61,7 +59,7 @@ export default class ComplementAUn extends ExerciceSimple {
         break
       case 3:
       default:
-        a = randint(2, 9) / 1000
+        a = this.quotaRandint('a', 2, 9) / 1000
         correctionSup = texteEnCouleur(
           `Mentalement : <br>
     $1$ unité = $1000$ millièmes.<br>

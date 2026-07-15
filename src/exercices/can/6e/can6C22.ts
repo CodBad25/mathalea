@@ -1,11 +1,9 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 
 import { bleuMathalea } from '../../../lib/colors'
 import { arrondi } from '../../../lib/outils/nombres'
@@ -36,9 +34,9 @@ export default class ValeursDecimalesFractions extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, b
-    switch (choice([1, 2, 3, 4])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2, 3, 4])) {
       case 1:
-        a = randint(1, 9, 5)
+        a = this.quotaRandint('a', 1, 9, [5])
         this.reponse = arrondi(a / 5)
         this.question = `Donner la valeur décimale de  $\\dfrac{${a}}{5}$.`
         this.correction = `$\\dfrac{${a}}{5}=${miseEnEvidence(texNombre(this.reponse))}$<br>`
@@ -58,7 +56,7 @@ export default class ValeursDecimalesFractions extends ExerciceSimple {
         }
         break
       case 2:
-        b = choice([1, 3, 5, 7, 9, 11])
+        b = this.quotaChoice('bQuarts', [1, 3, 5, 7, 9, 11])
         this.question = `Donner la valeur décimale de  $\\dfrac{${b}}{4}$.`
         this.reponse = arrondi(b / 4)
         this.correction = `$\\dfrac{${b}}{4}=${miseEnEvidence(texNombre(this.reponse))}$<br>`
@@ -80,7 +78,7 @@ export default class ValeursDecimalesFractions extends ExerciceSimple {
         }
         break
       case 3:
-        b = choice([1, 3, 5, 7, 9, 11, 13, 17, 19])
+        b = this.quotaChoice('bDixiemes', [1, 3, 5, 7, 9, 11, 13, 17, 19])
         this.question = `Donner la valeur décimale de  $\\dfrac{${b}}{10}$.`
         this.reponse = arrondi(b / 10)
         this.correction = `$\\dfrac{${b}}{10}=${miseEnEvidence(texNombre(this.reponse))}$<br>`
@@ -94,7 +92,7 @@ export default class ValeursDecimalesFractions extends ExerciceSimple {
         }
         break
       case 4:
-        b = choice([3, 5, 7, 9, 11, 13, 17, 19])
+        b = this.quotaChoice('bDemis', [3, 5, 7, 9, 11, 13, 17, 19])
         this.question = `Donner la valeur décimale de  $\\dfrac{${b}}{2}$.`
         this.reponse = arrondi(b / 2)
 

@@ -1,8 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Multiplier par 0,1, 0,01 ou 0,001'
 export const interactifReady = true
@@ -33,11 +31,11 @@ export default class Multiplier extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, resultat
     switch (
-      choice([1, 2]) //, 2, 3
+      this.quotaChoice('typeDeQuestions', [1, 2]) //, 2, 3
     ) {
       case 1: // entier
-        a = randint(2, 1000)
-        b = choice([0.1, 0.01, 0.001])
+        a = this.quotaRandint('a', 2, 1000)
+        b = this.quotaChoice('b', [0.1, 0.01, 0.001])
         resultat = texNombre(a * b, 3)
         this.question = `Calculer $${texNombre(a, 0)}\\times${texNombre(b, 3)}$.`
         this.correction = `$${texNombre(a)}\\times ${texNombre(b, 3)} = ${miseEnEvidence(resultat)}$`
@@ -57,8 +55,8 @@ export default class Multiplier extends ExerciceSimple {
         this.reponse = resultat
         break
       case 2: // nombre décimal
-        a = randint(2, 999) / choice([10, 100])
-        b = choice([0.1, 0.01, 0.001])
+        a = this.quotaRandint('aDecimal', 2, 999) / this.quotaChoice('diviseur', [10, 100])
+        b = this.quotaChoice('b', [0.1, 0.01, 0.001])
         resultat = texNombre(a * b, 7)
         this.question = `Calculer $${texNombre(a, 4)}\\times${texNombre(b, 3)}$.`
         this.correction = `$${texNombre(a, 4)}\\times ${texNombre(b, 3)} = ${miseEnEvidence(resultat)}$`

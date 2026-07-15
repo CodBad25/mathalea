@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -31,7 +30,7 @@ export default class PerimetreCarreRectangle extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, b
-    switch (choice(['a', 'b'])) {
+    switch (this.quotaChoice('typeProbleme', ['a', 'b'])) {
       case 'a':
         a = randint(5, 10) * 2
         this.question = `Le périmètre d'un carré est $${a}\\text{ cm}$.<br>

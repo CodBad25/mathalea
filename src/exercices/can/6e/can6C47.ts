@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -34,18 +33,18 @@ export default class AdditionnerAstucieusement extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const A = randint(2, 4) * 100
-    const B = randint(1, 2) * 100
-    const a = randint(1, 5) * 5
+    const A = this.quotaRandint('A', 2, 4) * 100
+    const B = this.quotaRandint('B', 1, 2) * 100
+    const a = this.quotaRandint('a', 1, 5) * 5
     const c = A - a
     const b = randint(1, B)
     const d = B - b
-    const e = randint(1, 40)
+    const e = this.quotaRandint('e', 1, 40)
     const correction = texteEnCouleur(
       'Mentalement : <br>On regroupe astucieusement les termes pour les additionner plus simplement. <br><br><br>',
       bleuMathalea,
     )
-    switch (choice([1, 2, 3, 4])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2, 3, 4])) {
       case 1:
         this.reponse = A + e
         this.question = `Calculer $${texNombre(a, 0)} + ${texNombre(e, 0)} + ${texNombre(c, 0)}$.`

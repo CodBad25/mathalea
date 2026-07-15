@@ -1,9 +1,7 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Connaître les relations entre unités consécutives de longueurs'
@@ -39,8 +37,11 @@ export default class ConversionUnitesMetriquesConsecutives extends ExerciceSimpl
       ['dm', 'cm'],
       ['cm', 'mm'],
     ]
-    const choixPlusGdVerPlusPetit = choice([true, false])
-    const choixPaires = randint(0, 5)
+    const choixPlusGdVerPlusPetit = this.quotaChoice('choixPlusGdVerPlusPetit', [
+      true,
+      false,
+    ])
+    const choixPaires = this.quotaRandint('choixPaires', 0, 5)
     const unite1 = pairesMetriques[choixPaires][choixPlusGdVerPlusPetit ? 0 : 1]
     const unite2 = pairesMetriques[choixPaires][choixPlusGdVerPlusPetit ? 1 : 0]
 

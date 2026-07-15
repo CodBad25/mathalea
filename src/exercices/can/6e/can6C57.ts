@@ -39,7 +39,7 @@ export default class SommeDiffFractionsCompatibles extends ExerciceSimple {
     let frac2: FractionEtendue
     let resultat: FractionEtendue
     let p: number
-    switch (choice([1, 2, 3, 4])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2, 3, 4])) {
       case 1: // addition
         do {
           frac1 = choice(obtenirListeFractionsIrreductibles())

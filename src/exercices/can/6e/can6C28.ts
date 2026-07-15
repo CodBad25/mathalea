@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
@@ -30,9 +29,9 @@ export default class PetitsProblemeDeFraction extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = choice([12, 24, 36, 48])
-    const b = choice([15, 20, 25, 30, 35, 40, 45])
-    const N = choice([
+    const a = this.quotaChoice('a', [12, 24, 36, 48])
+    const b = this.quotaChoice('b', [15, 20, 25, 30, 35, 40, 45])
+    const N = this.quotaChoice('N', [
       'quart',
       'tiers',
       'cinquième',
@@ -49,9 +48,9 @@ export default class PetitsProblemeDeFraction extends ExerciceSimple {
       [5, 6],
     ]
 
-    const fraction = choice(listeFractions)
+    const fraction = this.quotaChoice('fraction', listeFractions)
     const frac = new FractionEtendue(fraction[0], fraction[1])
-    const nbre = frac.d * choice([2, 3, 4, 5, 6, 7, 8])
+    const nbre = frac.d * this.quotaChoice('multiplicateur', [2, 3, 4, 5, 6, 7, 8])
     const reste = new FractionEtendue(frac.d - frac.n, frac.d)
     const reponse = (nbre * reste.n) / frac.d
 

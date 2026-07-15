@@ -7,7 +7,6 @@ import { texteParPosition } from '../../../lib/2d/textes'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Mesurer un périmètre par comptage'
@@ -46,10 +45,10 @@ export default class PerimetreParComptageCan extends ExerciceSimple {
   nouvelleVersion() {
     const aire =
       this.sup === 1
-        ? randint(5, 9)
+        ? this.quotaRandint('aire1', 5, 9)
         : this.sup === 2
-          ? randint(10, 19)
-          : randint(20, 29)
+          ? this.quotaRandint('aire2', 10, 19)
+          : this.quotaRandint('aire3', 20, 29)
     const tetris = new Polyquad(aire, 0, 0)
     if (tetris.rectangle.xMax < tetris.rectangle.yMax)
       tetris.rotate(choice([true, false]))
