@@ -1,4 +1,5 @@
 import { tex2typst } from 'tex2typst'
+import { colours } from '../../../lib/2d/colorToLatexOrHtml'
 import { renderScratchDiv } from '../../../lib/renderScratch'
 
 /**
@@ -234,6 +235,42 @@ function replaceBalancedInlineMath(
   return out
 }
 
+/** Couleurs prédéfinies de Typst : passées telles quelles à tex2typst */
+const TYPST_NATIVE_COLORS = new Set([
+  'black',
+  'gray',
+  'silver',
+  'white',
+  'navy',
+  'blue',
+  'aqua',
+  'teal',
+  'eastern',
+  'purple',
+  'fuchsia',
+  'maroon',
+  'red',
+  'orange',
+  'yellow',
+  'olive',
+  'green',
+  'lime',
+])
+
+/**
+ * Teintes ajustées par rapport à la table CSS `colours` : les valeurs CSS de
+ * ces noms sont trop claires (darkgray est plus clair que gray !) ou trop
+ * pâles pour rester lisibles en tant que couleur de texte sur fond blanc.
+ */
+const TYPST_COLOR_OVERRIDES: Record<string, string> = {
+  brown: '#964B00',
+  violet: '#7F00FF',
+  pink: '#FF69B4',
+  darkgray: '#555555',
+  darkgrey: '#555555',
+  grey: '#808080',
+}
+
 /** Prépare une formule LaTeX de MathALÉA avant sa conversion par tex2typst */
 function preprocessTex(tex: string): string {
   // les jetons de protection htmlToTypst (\uE000N\uE001) ne sont pas du LaTeX
@@ -339,15 +376,20 @@ function preprocessTex(tex: string): string {
   )
   // Contenu LaTeX avec un niveau d'imbrication de {} (ex. \xrightarrow{+x~\text{min}})
   const B1 = '(?:[^{}]|\\{[^{}]*\\})*'
-  // \xrightarrow{X} → \overset{X}{\rightarrow} (tex2typst ne connaît pas \xrightarrow)
+  // \xrightarrow[dessous]{dessus} → \overset/\underset autour de la flèche
+  // (tex2typst ne connaît pas \xrightarrow ; l'étiquette peut être dans
+  // l'argument optionnel, ex. `\xleftarrow[\div 2]{}` de 6N0B-4)
   output = output.replace(
-    new RegExp(`\\\\xrightarrow\\s*(?:\\[[^\\]]*\\])?\\s*\\{(${B1})\\}`, 'g'),
-    '\\overset{$1}{\\rightarrow}',
-  )
-  // \xleftarrow{X} → \overset{X}{\leftarrow}
-  output = output.replace(
-    new RegExp(`\\\\xleftarrow\\s*(?:\\[[^\\]]*\\])?\\s*\\{(${B1})\\}`, 'g'),
-    '\\overset{$1}{\\leftarrow}',
+    new RegExp(
+      `\\\\x(right|left)arrow\\s*(?:\\[([^\\]]*)\\])?\\s*\\{(${B1})\\}`,
+      'g',
+    ),
+    (_, direction: string, below = '', above = '') => {
+      let arrow = direction === 'right' ? '\\rightarrow' : '\\leftarrow'
+      if (above.trim() !== '') arrow = `\\overset{${above}}{${arrow}}`
+      if (below.trim() !== '') arrow = `\\underset{${below}}{${arrow}}`
+      return arrow
+    },
   )
   // \stackrel{A}{B} → \overset{A}{B} (tex2typst ne connaît pas \stackrel)
   output = output.replace(/\\stackrel\s*\{/g, '\\overset{')
@@ -399,25 +441,33 @@ function preprocessTex(tex: string): string {
   )
   // \rule{w}{h} résiduel → supprimé (ligne horizontale sans équivalent Typst direct)
   output = output.replace(/\\rule\s*\{[^{}]*\}\s*\{[^{}]*\}/g, '')
-  // Couleurs LaTeX non reconnues par Typst → équivalents RGB
-  // (tex2typst passe la couleur telle quelle ; Typst ne connaît que ses propres noms)
-  output = output
-    .replace(/\\textcolor\s*\{brown\}/g, '\\textcolor{#964B00}')
-    .replace(/\\textcolor\s*\{violet\}/g, '\\textcolor{#7F00FF}')
-    .replace(/\\textcolor\s*\{pink\}/g, '\\textcolor{#FF69B4}')
-    .replace(/\\textcolor\s*\{darkgray\}/g, '\\textcolor{#555555}')
-    .replace(/\\textcolor\s*\{lightgray\}/g, '\\textcolor{#D3D3D3}')
-    .replace(/\\textcolor\s*\{lightgrey\}/g, '\\textcolor{#D3D3D3}')
-    .replace(/\\textcolor\s*\{magenta\}/g, '\\textcolor{#FF00FF}')
-    .replace(/\\textcolor\s*\{cyan\}/g, '\\textcolor{#00FFFF}')
-    .replace(/\\textcolor\s*\{none_2\}/g, '')
-    .replace(/\\textcolor\s*\{none_?\}/g, '')
-    .replace(/\\textcolor\s*\{none\}/g, '')
-  // Même chose pour {\color{X}...} que replaceColorGroups aura déjà converti en \textcolor
-  // (si le nom de couleur n'est pas reconnu, on traite aussi le cas \color{X} restant)
-  output = output
-    .replace(/\{\\color\s*\{brown\}([^}]*)\}/g, '\\textcolor{#964B00}{$1}')
-    .replace(/\{\\color\s*\{violet\}([^}]*)\}/g, '\\textcolor{#7F00FF}{$1}')
+  // tex2typst ne parenthèse pas l'étiquette de \overset/\underset :
+  // `\overset{\div 2}{\rightarrow}` deviendrait `limits(->)^div 2` (seul
+  // `div` en exposant, le `2` et la suite de la formule absorbés à côté).
+  // On parenthèse l'étiquette nous-mêmes : des parenthèses de groupe après
+  // ^/_ sont invisibles au rendu Typst. Une étiquette vide est supprimée
+  // (le second argument reste, en simple groupe).
+  output = output.replace(
+    new RegExp(`\\\\(overset|underset)\\s*\\{(${B1})\\}`, 'g'),
+    (_, command: string, label: string) =>
+      label.trim() === '' ? '' : `\\${command}{(${label})}`,
+  )
+  // \textcolor{none}, \textcolor{none_2}... (marqueurs « sans couleur ») → supprimés
+  output = output.replace(/\\textcolor\s*\{none[_\d]*\}/g, '')
+  // Couleurs LaTeX nommées non reconnues par Typst (ex. DarkOrange, darkgray)
+  // → équivalent hexadécimal (table CSS `colours`) ; les couleurs natives
+  // Typst restent nommées, quelques teintes sont ajustées pour la lisibilité
+  output = output.replace(
+    /\\textcolor\s*\{([a-zA-Z][a-zA-Z_\d]*)\}/g,
+    (match, name: string) => {
+      const lower = name.toLowerCase()
+      if (TYPST_NATIVE_COLORS.has(lower)) return match
+      const hex =
+        TYPST_COLOR_OVERRIDES[lower] ??
+        (colours as Record<string, string>)[lower]
+      return hex ? `\\textcolor{${hex}}` : match
+    },
+  )
   // \hspace*{0.4cm} : tex2typst produirait `#h(*) 0.4 c m` (étoile invalide) ;
   // ces espaces servent surtout à élargir des colonnes, on les neutralise
   output = output.replace(/\\hspace\s*\*?\s*\{[^{}]*\}/g, '\\;')
@@ -506,6 +556,12 @@ function postprocessTypst(typst: string): string {
     .replace(/\bmedspace\b/g, 'med')
     .replace(/\bthickspace\b/g, 'thick')
     .replace(/\bnegthinspace\b/g, '#h(-math.thin.amount)')
+    // \lim\limits_{…} / \sum\nolimits_{…} : tex2typst laisse \limits et
+    // \nolimits comme mots nus → Typst les rend en toutes lettres.
+    // On applique les fonctions Typst équivalentes à l'opérateur précédent :
+    // `lim limits_(…)` → `limits(lim)_(…)`, `sum nolimits_(…)` → `scripts(sum)_(…)`.
+    .replace(/\b([A-Za-z]+(?:\.[A-Za-z]+)*) limits(?=[_^])/g, 'limits($1)')
+    .replace(/\b([A-Za-z]+(?:\.[A-Za-z]+)*) nolimits(?=[_^])/g, 'scripts($1)')
 
   // tex2typst produit #text(fill: C)[$math$] pour \textcolor{C}{math} :
   // les $ imbriqués font sortir du mode math → "unclosed delimiter".
