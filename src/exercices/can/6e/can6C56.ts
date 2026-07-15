@@ -35,7 +35,7 @@ export default class SommeDiffFractionsMemeDen extends ExerciceSimple {
 
   nouvelleVersion() {
     let frac1, frac2, resultat
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2])) {
       case 1:
         frac1 = choice(obtenirListeFractionsIrreductibles())
         frac2 = new FractionEtendue(randint(1, 10, frac1.den), frac1.den)

@@ -34,7 +34,7 @@ export default class DenominateurCommun extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const frac1 = choice(obtenirListeFractionsIrreductibles())
+    const frac1 = this.quotaChoice('frac1', obtenirListeFractionsIrreductibles())
 
     let frac2: FractionEtendue
     do {

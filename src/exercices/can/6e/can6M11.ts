@@ -38,8 +38,8 @@ export default class VolumePaveCubes extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const l = randint(2, 5)
-    const L = randint(2, 4)
+    const l = this.quotaRandint('l', 2, 5)
+    const L = this.quotaRandint('L', 2, 4)
     const h = randint(2, 6, [l, L])
     this.question = ''
     if (this.sup && context.isHtml) {

@@ -4,7 +4,6 @@ import {
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer une distance avec une vitesse'
 export const interactifReady = true
@@ -33,8 +32,8 @@ export default class QuestionDeVitesse extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(2, 6) * 20
-    const b = randint(1, 6)
+    const a = this.quotaRandint('a', 2, 6) * 20
+    const b = this.quotaRandint('b', 1, 6)
     this.reponse = Math.round(a * (b + 0.5))
     this.question = `Une voiture roule à une vitesse constante de $${a}\\text{ km/h}$. <br>
     

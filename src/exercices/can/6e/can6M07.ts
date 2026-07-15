@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -32,7 +31,7 @@ export default class CompleterVolumeAuLitre extends ExerciceSimple {
 
   nouvelleVersion() {
     let a
-    switch (choice(['a', 'b', 'c', 'd'])) {
+    switch (this.quotaChoice('typeConversion', ['a', 'b', 'c', 'd'])) {
       case 'a':
         a = randint(2, 8) * 10
         this.question = `Compléter : <br>$${a}$ cL $+$ $ \\ldots$ cL $ = 1$ L`

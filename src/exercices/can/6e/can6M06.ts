@@ -42,7 +42,7 @@ export default class Perimetre extends ExerciceSimple {
 
   nouvelleVersion() {
     const nom = creerNomDePolygone(4, ['QD'])
-    const a = randint(3, 6) //
+    const a = this.quotaRandint('a', 3, 6) //
     const c = (randint(3, 5) * 10 + randint(3, 9)) / 10
     const A = pointAbstrait(0, 0, nom[0])
     const B = pointAdistance(A, c, 0, nom[1])

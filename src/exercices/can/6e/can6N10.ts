@@ -32,7 +32,7 @@ export default class FractionDecimaleEcritureDecimale1 extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, c, u
     switch (
-      choice(['a', 'b', 'c', 'd', 'e']) //,
+      this.quotaChoice('cas', ['a', 'b', 'c', 'd', 'e']) //,
     ) {
       case 'a':
         a = randint(1, 9)

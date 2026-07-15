@@ -44,8 +44,8 @@ export default class LectureDiagrammeBarre extends ExerciceSimple {
       ['nombre de vêtements', 'une armoire', ['chemises', 'T-shirts', 'pulls']],
     ]
     const quidam = prenom()
-    const n = randint(0, 2)
-    const a = randint(2, 10)
+    const n = this.quotaRandint('n', 0, 2)
+    const a = this.quotaRandint('a', 2, 10)
     const b = randint(2, 10, a)
     const c = randint(2, 10, [a, b])
     const r = repere({

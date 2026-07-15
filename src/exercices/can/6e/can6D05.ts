@@ -1,5 +1,4 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Connaître les unités de mesure de durées courtes et les relations qui les lient'
@@ -33,7 +32,7 @@ export default class AutoDureeMinutes extends ExerciceSimple {
       ['heure', 'minutes', 60],
       ['minute', 'secondes', 60],
     ]
-    const choix = randint(0, 2)
+    const choix = this.quotaRandint('choix', 0, 2)
 
     this.reponse = durees[choix][2]
     this.question = `$1$ ${durees[choix][0]} = `

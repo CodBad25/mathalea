@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { randint } from '../../../modules/outils'
 
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -33,7 +32,7 @@ export default class DoubleOuTriple extends ExerciceSimple {
     const a = randint(1, 3)
     const b = randint(1, 9, a)
     const c = a * 10 + b
-    if (choice([true, false])) {
+    if (this.quotaChoice('doubleOuTriple', [true, false])) {
       this.reponse = 3 * c
       this.question = `Quel est le triple de $${c}$ ?`
       this.correction = `Le triple de $${c}$ est $3 \\times ${c}=${miseEnEvidence(3 * c)}$.`

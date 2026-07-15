@@ -41,9 +41,9 @@ export default class ProblemesDeLongueurs extends ExerciceSimple {
     const objets = []
     const pointsSurDE = []
     const pointsSurAB = []
-    const b = randint(2, 5)
+    const b = this.quotaRandint('b', 2, 5)
     const a = randint(2, 8 - b)
-    const c = randint(2, 9)
+    const c = this.quotaRandint('c', 2, 9)
     const A = pointAbstrait(0, 0, 'A', 'below')
     const B = pointAbstrait(16, 0, 'B', 'below')
     const AB = segmentAvecExtremites(A, B)

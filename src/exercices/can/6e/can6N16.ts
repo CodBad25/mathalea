@@ -33,7 +33,16 @@ export default class AbscisseDroiteEntiers extends ExerciceSimple {
 
   nouvelleVersion() {
     let d, abs0, abs1, abs2, x1
-    const choix1 = choice(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']) //, 'b', 'c', 'd', 'e', 'f', 'g', 'h'
+    const choix1 = this.quotaChoice('choix1', [
+      'a',
+      'b',
+      'c',
+      'd',
+      'e',
+      'f',
+      'g',
+      'h',
+    ]) //, 'b', 'c', 'd', 'e', 'f', 'g', 'h'
     if (choix1 === 'a') {
       // graduation de 200 en 200
       abs0 = randint(1, 9) * choice([1000, 10000])

@@ -1213,13 +1213,14 @@ export function createTableurLatex(
   styles: SpreadsheetLatexStyles,
   options: SpreadsheetLatexOptions = {},
 ) {
-  let output = `\\begin{tabularx}{0.9\\linewidth}
+  let output = context.isTypst ? '' : '\\begin{minipage}{0.9\\linewidth}\n'
+  output += `\\begin{tabularx}{${context.isTypst ? '0.9\\linewidth' : '\\linewidth'}}
   {|>{\\cellcolor{lightgray}}c|
   ${options.firstColHeaderWidth ? `>{\\centering \\arraybackslash}p{${options.firstColHeaderWidth}}|` : '>{\\centering \\arraybackslash}X|'}
   *{${colNbr - 1}}{>{\\centering \\arraybackslash}X|}}\\hline\n`
 
   if (options.formule && !context.isTypst) {
-    output += `\\multicolumn{1}{|l}{${options.formuleCellule}}&\\multicolumn{1}{r|}{▼}&\\multicolumn{${colNbr - 1}}{l|}{${options.formuleTexte}}\\\\ \\hline\n`
+    output += `\\multicolumn{1}{|l}{${options.formuleCellule}}&\\multicolumn{1}{r|}{$\\nabla$}&\\multicolumn{${colNbr - 1}}{l|}{${options.formuleTexte}}\\\\ \\hline\n`
   }
 
   output += '\\rowcolor{lightgray} &'
@@ -1247,11 +1248,11 @@ export function createTableurLatex(
       }
       if (cell?.t === 1) {
         const texte = cell.v || ''
-        output += `\\raggedright ${color} ${context.isTypst ? `\\text{${texte}}` : texte}  &`
+        output += `\\raggedright\\arraybackslash ${color} ${context.isTypst ? `\\text{${texte}}` : texte}  &`
       } else if (cell?.t === 2) {
-        output += `\\raggedleft ${color} ${cell.v || ''}  &`
+        output += `\\raggedleft\\arraybackslash ${color} ${cell.v || ''}  &`
       } else if (cell?.t === 3) {
-        output += `\\centering ${color} ${cell.v ? 'VRAI' : 'FAUX'}  &`
+        output += `\\centering\\arraybackslash ${color} ${cell.v ? 'VRAI' : 'FAUX'}  &`
       } else {
         output += `${color} ${cell.v || ''}  &`
       }
@@ -1260,6 +1261,7 @@ export function createTableurLatex(
     output += '\\\\ \\hline\n'
   }
   output += '\\end{tabularx}\n'
+  if (!context.isTypst) output += '\\end{minipage}\n'
 
   return context.isTypst ? `$${output}$` : output
 }

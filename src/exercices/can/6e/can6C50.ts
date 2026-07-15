@@ -32,7 +32,7 @@ export default class RelationUniteDixiemeCentiemeMillieme extends ExerciceSimple
   nouvelleVersion() {
     let a, b, resultat
     switch (
-      choice([1, 2]) //, 2, 3
+      this.quotaChoice('typeDeQuestions', [1, 2]) //, 2, 3
     ) {
       case 1:
         a = choice([1, 10, 100, 1000])

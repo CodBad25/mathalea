@@ -31,8 +31,8 @@ export default class ResteDivisionEuclidienne2 extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, c, d, q, r
 
-    q = randint(11, 15)
-    b = randint(8, 11)
+    q = this.quotaRandint('q', 11, 15)
+    b = this.quotaRandint('b', 8, 11)
     r = randint(1, b - 1)
     a = b * q + r
     this.question = `   En utilisant l'égalité $${a}=(${b}\\times ${q})+${r}$, donner le reste de la division euclidienne de $${a}$ par $${b}$.`

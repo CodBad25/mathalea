@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -29,7 +28,7 @@ export default class ConversionM3EtLitres extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, resultat
-    switch (choice(['a', 'b'])) {
+    switch (this.quotaChoice('typeConversion', ['a', 'b'])) {
       case 'a':
         a = randint(1, 12) + randint(1, 9) / 10
         resultat = a * 1000

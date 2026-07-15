@@ -29,7 +29,7 @@ export default class ProduitParDeduction extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2])) {
       case 1: // avec deux entiers
         {
           const coeff = choice([10, 100, 1000])

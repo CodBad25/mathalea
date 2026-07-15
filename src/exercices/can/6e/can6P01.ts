@@ -41,7 +41,7 @@ export default class ProportionnaliteSimple extends ExerciceSimple {
       ['citrons', 1.5, 15, 30],
       ['bananes', 1.5, 15, 25],
     ]
-    const a = randint(0, 7)
+    const a = this.quotaRandint('a', 0, 7)
     const b = fruits[a][1] as number
     const c = randint(fruits[a][2] as number, fruits[a][3] as number)
     this.reponse = arrondi((c / 5) * b, 2)

@@ -37,7 +37,7 @@ export default class SommeDiffEntierFraction extends ExerciceSimple {
   nouvelleVersion() {
     let resultat: FractionEtendue
 
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2])) {
       case 1: // addition
         {
           const frac = choice(obtenirListeFractionsIrreductibles())

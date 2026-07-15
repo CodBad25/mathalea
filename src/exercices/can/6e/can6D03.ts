@@ -33,10 +33,10 @@ export default class CalculDureeMinutes extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(13, 15)
+    const a = this.quotaRandint('a', 13, 15)
     const b = a + 1
-    const c = choice([10, 20, 30, 40])
-    const d = randint(11, 58, [20, 30, 40, 50])
+    const c = this.quotaChoice('c', [10, 20, 30, 40])
+    const d = this.quotaRandint('d', 11, 58, [20, 30, 40, 50])
     const { prenom, pronom } = choice(prenoms)
     const pronomMajuscule = prenom.charAt(0).toUpperCase() + prenom.slice(1)
     this.reponse = b * 60 + d - (a * 60 + c)

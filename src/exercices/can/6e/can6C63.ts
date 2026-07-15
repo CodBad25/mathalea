@@ -1,6 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Écrire une fraction le plus simplement possible'
 export const interactifReady = true
@@ -32,8 +31,8 @@ export default class SimplifierFractionEntier extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const d = randint(2, 10)
-    const k = randint(2, 10)
+    const d = this.quotaRandint('d', 2, 10)
+    const k = this.quotaRandint('k', 2, 10)
     const n = d * k
 
     this.reponse = k

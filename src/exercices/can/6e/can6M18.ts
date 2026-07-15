@@ -33,7 +33,7 @@ export default class ConversionEnTousSensLongueur extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, resultat
-    switch (choice(['b', 'd'])) {
+    switch (this.quotaChoice('cas', ['b', 'd'])) {
       case 'b':
         if (choice([true, false])) {
           a = randint(1, 13) * 5
