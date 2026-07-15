@@ -50,6 +50,7 @@ export function exportedReinit(this: IExerciceSimple) {
   this.autoCorrection = []
   this.autoCorrectionAMC = []
   this.distracteurs = []
+  this.tiragesParQuestion = undefined
   this.checkSum = undefined
   if (this.figuresApiGeom) {
     // figures apigeom auto-enregistrées par figureApigeom()

@@ -966,6 +966,8 @@ export interface IExerciceSimple extends IExercice {
   distracteurs: (string | number)[]
   versionQcmDisponible?: boolean
   versionQcm?: boolean
+  /** Plans de tirages partagés entre les questions d'une même version (voir ExerciceSimple.fromQuestionPlan()) */
+  tiragesParQuestion?: Map<string, unknown[]>
 }
 
 export interface IExerciceStatique {
