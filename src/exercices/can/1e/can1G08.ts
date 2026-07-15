@@ -84,9 +84,13 @@ export default class VecteurNormEqCart extends Exercice {
 
   correctionInteractive = (i: number) => {
     let resultat = 'KO'
-    const multiMF = document.getElementById(
-      `multiMathfieldEx${this.numeroExercice}Q${i}`,
-    ) as MultiMathfieldElement
+    const multiMF =
+      (document.getElementById(
+        `multi-mathfieldEx${this.numeroExercice}Q${i}`,
+      ) as MultiMathfieldElement | null) ??
+      (document.getElementById(
+        `multiMathfieldEx${this.numeroExercice}Q${i}`,
+      ) as MultiMathfieldElement | null)
     if (multiMF) {
       const values = multiMF.getValue()
       const saisie1 = String(values.champ1).replace(',', '.')

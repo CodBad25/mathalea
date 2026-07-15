@@ -1,9 +1,8 @@
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
+import { renderSheetMarkup } from '../../lib/customElements/MySpreadSheet'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import { addSheet, createTableurLatex } from '../../lib/tableur/outilsTableur'
-import { context } from '../../modules/context'
 
 import {
   gestionnaireFormulaireTexte,
@@ -26,6 +25,38 @@ export const refs = {
 
 export default class ExerciceTableurCalculs6e extends Exercice {
   destroyers: (() => void)[] = []
+
+  private renderSheetMarkup(
+    q: number,
+    options: {
+      data: (number | string)[][]
+      minDimensions: [number, number]
+      columns: unknown[]
+      interactif: boolean
+      showVerifyButton: boolean
+      style?: Record<string, string>
+      nbColonnesCachees?: number
+      nbLignesCachees?: number
+      readOnlyCells?: string[]
+    },
+    latexData: Record<number, Record<number, { v: string | number }>>,
+    latexOptions: {
+      formule?: boolean
+      formuleTexte?: string
+      formuleCellule?: string
+      firstColHeaderWidth?: string
+    },
+  ): string {
+    return renderSheetMarkup({
+      ...options,
+      numeroExercice: this.numeroExercice,
+      questionIndex: q,
+      latexData,
+      latexStyles: ExerciceTableurCalculs6e.styles,
+      latexOptions,
+      appendFeedbackBlocks: options.interactif,
+    })
+  }
 
   constructor() {
     super()
@@ -94,16 +125,23 @@ export default class ExerciceTableurCalculs6e extends Exercice {
       ? `Saisir dans la cellule A2 la formule pour obtenir la somme de ces résultats.<br>`
       : 'Quelle formule doit-on saisir dans la cellule A2 pour obtenir la somme de ces résultats ?<br>'
 
-    if (context.isHtml && !context.isTypst) {
-      texte += addSheet({
-        numeroExercice: this.numeroExercice ?? 0,
-        question: q,
+    texte += this.renderSheetMarkup(
+      q,
+      {
         data,
         minDimensions: [4, 2],
         columns: [{ width: 90 }, { width: 90 }, { width: 90 }, { width: 90 }],
         interactif: this.interactif,
         showVerifyButton: false,
-      })
+      },
+      cellDatas,
+      {
+        formule: true,
+        formuleTexte: '=?',
+        formuleCellule: 'A2',
+      },
+    )
+    if (this.interactif) {
       handleAnswers(
         this,
         q,
@@ -128,24 +166,6 @@ export default class ExerciceTableurCalculs6e extends Exercice {
           },
         },
         { formatInteractif: 'tableur' },
-      )
-    } else {
-      const options: {
-        formule?: boolean
-        formuleTexte?: string
-        formuleCellule?: string
-        firstColHeaderWidth?: string
-      } = {}
-      options.formule = true
-      options.formuleTexte = '=?'
-      options.formuleCellule = 'A2'
-
-      texte += createTableurLatex(
-        2,
-        nbDes + 1,
-        cellDatas,
-        ExerciceTableurCalculs6e.styles,
-        options,
       )
     }
     const texteCorr = `Voici la formule à saisir en cellule A2 :<br>${texteEnCouleurEtGras(
@@ -190,16 +210,24 @@ export default class ExerciceTableurCalculs6e extends Exercice {
     data[2][1] = cellDatas[2][1].v
     data[3][0] = cellDatas[3][0].v
 
-    if (context.isHtml && !context.isTypst) {
-      texte += addSheet({
-        numeroExercice: this.numeroExercice ?? 0,
-        question: q,
+    texte += this.renderSheetMarkup(
+      q,
+      {
         data,
         minDimensions: [2, 3],
         columns: [{ width: 300 }, { width: 90 }],
         interactif: this.interactif,
         showVerifyButton: false,
-      })
+      },
+      cellDatas,
+      {
+        formule: true,
+        formuleTexte: '=?',
+        formuleCellule: 'B4',
+        firstColHeaderWidth: '3cm',
+      },
+    )
+    if (this.interactif) {
       handleAnswers(
         this,
         q,
@@ -220,25 +248,6 @@ export default class ExerciceTableurCalculs6e extends Exercice {
           },
         },
         { formatInteractif: 'tableur' },
-      )
-    } else {
-      const options: {
-        formule?: boolean
-        formuleTexte?: string
-        formuleCellule?: string
-        firstColHeaderWidth?: string
-      } = {}
-      options.formule = true
-      options.formuleTexte = '=?'
-      options.formuleCellule = 'B4'
-      options.firstColHeaderWidth = '3cm'
-
-      texte += createTableurLatex(
-        4,
-        2,
-        cellDatas,
-        ExerciceTableurCalculs6e.styles,
-        options,
       )
     }
     const texteCorr = `Voici la formule à saisir en cellule B4 :<br>${texteEnCouleurEtGras(
@@ -274,16 +283,23 @@ export default class ExerciceTableurCalculs6e extends Exercice {
     data[0][1] = c
     data[1][0] = b
 
-    if (context.isHtml && !context.isTypst) {
-      texte += addSheet({
-        numeroExercice: this.numeroExercice ?? 0,
-        question: q,
+    texte += this.renderSheetMarkup(
+      q,
+      {
         data,
         minDimensions: [2, 2],
         columns: [{ width: 90 }, { width: 90 }],
         interactif: this.interactif,
         showVerifyButton: false,
-      })
+      },
+      cellDatas,
+      {
+        formule: true,
+        formuleTexte: '=?',
+        formuleCellule: 'B2',
+      },
+    )
+    if (this.interactif) {
       handleAnswers(
         this,
         q,
@@ -308,24 +324,6 @@ export default class ExerciceTableurCalculs6e extends Exercice {
           },
         },
         { formatInteractif: 'tableur' },
-      )
-    } else {
-      const options: {
-        formule?: boolean
-        formuleTexte?: string
-        formuleCellule?: string
-        firstColHeaderWidth?: string
-      } = {}
-      options.formule = true
-      options.formuleTexte = '=?'
-      options.formuleCellule = 'B2'
-
-      texte += createTableurLatex(
-        2,
-        2,
-        cellDatas,
-        ExerciceTableurCalculs6e.styles,
-        options,
       )
     }
 
@@ -369,10 +367,9 @@ export default class ExerciceTableurCalculs6e extends Exercice {
     data[1][0] = cellDatas[1][0].v
     data[1][1] = cellDatas[1][1].v
 
-    if (context.isHtml && !context.isTypst) {
-      texte += addSheet({
-        numeroExercice: this.numeroExercice ?? 0,
-        question: q,
+    texte += this.renderSheetMarkup(
+      q,
+      {
         data,
         minDimensions: [2, 3],
         columns: [{ width: 300 }, { width: 300 }],
@@ -380,7 +377,15 @@ export default class ExerciceTableurCalculs6e extends Exercice {
         showVerifyButton: false,
         nbColonnesCachees: 0,
         nbLignesCachees: 0,
-      })
+      },
+      cellDatas,
+      {
+        formule: true,
+        formuleTexte: '=?',
+        formuleCellule: 'A3',
+      },
+    )
+    if (this.interactif) {
       handleAnswers(
         this,
         q,
@@ -401,24 +406,6 @@ export default class ExerciceTableurCalculs6e extends Exercice {
           },
         },
         { formatInteractif: 'tableur' },
-      )
-    } else {
-      const options: {
-        formule?: boolean
-        formuleTexte?: string
-        formuleCellule?: string
-        firstColHeaderWidth?: string
-      } = {}
-      options.formule = true
-      options.formuleTexte = '=?'
-      options.formuleCellule = `A3`
-
-      texte += createTableurLatex(
-        2,
-        4,
-        cellDatas,
-        ExerciceTableurCalculs6e.styles,
-        options,
       )
     }
     const texteCorr = `Voici la formule à saisir en cellule A3 :<br>${texteEnCouleurEtGras(

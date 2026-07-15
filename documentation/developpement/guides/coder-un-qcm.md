@@ -1,6 +1,6 @@
 # Coder un QCM
 
-Ce guide explique le cas le plus courant : ajouter un QCM à un exercice classique qui hérite de `Exercice`. Les helpers et contrats cités ont été vérifiés dans `src/lib/interactif/qcm.ts`, `src/lib/types.ts`, `src/lib/interactif/qcmBuilder.ts`, `src/lib/interactif/questionListeDeroulante.ts`, ainsi que dans des exercices réels comme `src/exercices/can/6e/can6M01.ts`, `src/exercices/can/6e/can6M02.ts` et `src/exercices/6e/6G0-2.ts`.
+Ce guide explique le cas le plus courant : ajouter un QCM à un exercice classique qui hérite de `Exercice`. Les helpers et contrats cités ont été vérifiés dans `src/lib/interactif/qcm.ts`, `src/lib/types.ts`, `src/lib/interactif/qcmBuilder.ts`, `src/lib/customElements/ListeDeroulanteElement.ts`, ainsi que dans des exercices réels comme `src/exercices/can/6e/can6M01.ts`, `src/exercices/can/6e/can6M02.ts` et `src/exercices/6e/6G0-2.ts`.
 
 Pour le cycle général d'un exercice, lire aussi [coder un exercice classique](coder-un-exercice-classique.md). Pour le pipeline de vérification, voir [système d'interactivité](../reference/systeme-interactivite.md).
 
@@ -120,7 +120,9 @@ Chaque proposition est un objet de type :
 Pour une réponse unique :
 
 ```ts
-options: { radio: true }
+options: {
+  radio: true
+}
 ```
 
 Pour plusieurs bonnes réponses :
@@ -135,13 +137,13 @@ Dans ce cas, toutes les propositions dont `statut` vaut `true` doivent être coc
 
 Les options de `autoCorrection[i].options` sont définies par `ParamForQcmInteractif` dans `src/lib/types.ts`.
 
-| Option | Effet |
-| --- | --- |
-| `radio: true` | Utilise des boutons radio. À réserver aux QCM avec une seule bonne réponse. |
-| `ordered: true` | Conserve l'ordre déclaré des propositions. Sans cette option, les propositions peuvent être mélangées. |
-| `vertical: true` | Affiche une proposition par ligne en HTML. |
-| `lastChoice: n` | Mélange seulement les propositions avant cet index ; utile pour garder une proposition finale fixe. |
-| `correction: '...'` | Texte de correction utilisé lors de la synchronisation vers AMC. |
+| Option              | Effet                                                                                                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------ |
+| `radio: true`       | Utilise des boutons radio. À réserver aux QCM avec une seule bonne réponse.                            |
+| `ordered: true`     | Conserve l'ordre déclaré des propositions. Sans cette option, les propositions peuvent être mélangées. |
+| `vertical: true`    | Affiche une proposition par ligne en HTML.                                                             |
+| `lastChoice: n`     | Mélange seulement les propositions avant cet index ; utile pour garder une proposition finale fixe.    |
+| `correction: '...'` | Texte de correction utilisé lors de la synchronisation vers AMC.                                       |
 
 Exemples :
 
@@ -245,8 +247,16 @@ const qcmData = buildQcmForExercise(this, i, {
   correction: texteCorr,
   propositions: [
     { texte: '$2x$', statut: true, correction: 'Correct.' },
-    { texte: '$x^2$', statut: false, correction: 'On confond ici fonction et dérivée.' },
-    { texte: '$2$', statut: false, correction: 'Ce serait la dérivée de $2x$.' },
+    {
+      texte: '$x^2$',
+      statut: false,
+      correction: 'On confond ici fonction et dérivée.',
+    },
+    {
+      texte: '$2$',
+      statut: false,
+      correction: 'Ce serait la dérivée de $2x$.',
+    },
   ],
   options: { radio: true },
 })
@@ -282,7 +292,7 @@ Sans `qcm=1`, l'exercice peut rester en version saisie libre même si `versionQc
 
 ## Liste déroulante vers QCM
 
-Quand un exercice utilise une liste déroulante mais qu'un rendu QCM est nécessaire, notamment pour un rendu non interactif ou une réflexion AMC, utiliser `listeDeroulanteToQcm()` depuis `src/lib/interactif/questionListeDeroulante.ts`.
+Quand un exercice utilise une liste déroulante mais qu'un rendu QCM est nécessaire, notamment pour un rendu non interactif ou une réflexion AMC, utiliser `listeDeroulanteToQcm()` depuis `src/lib/customElements/ListeDeroulanteElement.ts`.
 
 ```ts
 listeDeroulanteToQcm(this, i, choix, bonneReponse, {

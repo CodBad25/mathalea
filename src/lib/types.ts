@@ -340,6 +340,8 @@ export type InteractivityType =
   | 'MetaInteractif2d' // Difficile à faire rentrer dans AMC
   | 'svgSelection' // inadapté clairement pour AMC
   | 'multiMathfield' // On pourra essayer de faire mieux qu'AmcOpen
+  | 'trigo-circle-selection' // Non compatible AMC
+  | 'interactive-clock' // Non compatible AMC
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {

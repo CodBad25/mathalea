@@ -34,7 +34,7 @@ export const interactifType = 'mathLive'
 Dans `nouvelleVersion()`, garder le modèle habituel :
 
 ```ts
-for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
+for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
   let texte = ''
   let texteCorr = ''
 
@@ -56,18 +56,18 @@ Si l'exercice écrit déjà `this.autoCorrection[i]` pour un QCM, une liste ou u
 
 Choisir le format selon ce que l'élève doit faire, pas selon la forme interne de la réponse.
 
-| Besoin côté élève | Format | Helper principal | Déclaration de réponse |
-| --- | --- | --- | --- |
-| Saisir un nombre, une fraction, une expression, une unité | `mathlive` | `ajouteChampTexteMathLive()` | `reponse` |
-| Saisir plusieurs valeurs dans une phrase ou une formule | `fillInTheBlank` | `remplisLesBlancs()` | `champ1`, `champ2`, ... |
-| Saisir des valeurs dans un tableau | `tableauMathlive` | `AddTabPropMathlive` ou `AddTabDbleEntryMathlive` | `L1C1`, `L1C2`, ... |
-| Saisir du texte libre sans MathLive | `texte` | `ajouteChampTexte()` | `reponse`, avec `{ formatInteractif: 'texte' }` |
-| Cocher une ou plusieurs propositions | `qcm` | `propositionsQcm()` | `this.autoCorrection[i].propositions` |
-| Choisir une valeur dans un menu | `listeDeroulante` | `choixDeroulant()` | `reponse`, avec `{ formatInteractif: 'listeDeroulante' }` |
-| Déplacer des étiquettes | `dnd` | `new DragAndDrop(...)` | `rectangle1`, `rectangle2`, ... |
-| Sélectionner des SVG | `svgSelection` | `selectionSvg()` | `reponse`, avec `{ formatInteractif: 'svgSelection' }` |
-| Cliquer dans une figure | `cliqueFigure` | objets SVG + `cliqueFiguresArray` | `this.autoCorrection[i].formatInteractif = 'cliqueFigure'` |
-| Vérification impossible avec les formats existants | `custom` | code propre à l'exercice | `correctionInteractive(i)` |
+| Besoin côté élève                                         | Format            | Helper principal                                  | Déclaration de réponse                                     |
+| --------------------------------------------------------- | ----------------- | ------------------------------------------------- | ---------------------------------------------------------- |
+| Saisir un nombre, une fraction, une expression, une unité | `mathlive`        | `ajouteChampTexteMathLive()`                      | `reponse`                                                  |
+| Saisir plusieurs valeurs dans une phrase ou une formule   | `fillInTheBlank`  | `remplisLesBlancs()`                              | `champ1`, `champ2`, ...                                    |
+| Saisir des valeurs dans un tableau                        | `tableauMathlive` | `AddTabPropMathlive` ou `AddTabDbleEntryMathlive` | `L1C1`, `L1C2`, ...                                        |
+| Saisir du texte libre sans MathLive                       | `texte`           | `ajouteChampTexte()`                              | `reponse`, avec `{ formatInteractif: 'texte' }`            |
+| Cocher une ou plusieurs propositions                      | `qcm`             | `propositionsQcm()`                               | `this.autoCorrection[i].propositions`                      |
+| Choisir une valeur dans un menu                           | `listeDeroulante` | `choixDeroulant()`                                | `reponse`, avec `{ formatInteractif: 'listeDeroulante' }`  |
+| Déplacer des étiquettes                                   | `dnd`             | `new DragAndDrop(...)`                            | `rectangle1`, `rectangle2`, ...                            |
+| Sélectionner des SVG                                      | `svgSelection`    | `selectionSvg()`                                  | `reponse`, avec `{ formatInteractif: 'svgSelection' }`     |
+| Cliquer dans une figure                                   | `cliqueFigure`    | objets SVG + `cliqueFiguresArray`                 | `this.autoCorrection[i].formatInteractif = 'cliqueFigure'` |
+| Vérification impossible avec les formats existants        | `custom`          | code propre à l'exercice                          | `correctionInteractive(i)`                                 |
 
 Commencer par le format le plus simple. Si un champ MathLive avec les bonnes options de comparaison suffit, ne pas écrire de correction personnalisée.
 
@@ -279,7 +279,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   choixDeroulant,
   listeDeroulanteToQcm,
-} from '../../lib/interactif/questionListeDeroulante'
+} from '../../lib/customElements/ListeDeroulanteElement'
 import { context } from '../../modules/context'
 
 const choix = [
@@ -290,7 +290,7 @@ const choix = [
 const reponse = condition ? 'oui' : 'non'
 
 if (this.interactif) {
-  texte += choixDeroulant(this, i, choix, false)
+  texte += choixDeroulant(this, i, { choices: choix, choix0: false })
   handleAnswers(
     this,
     i,
@@ -400,27 +400,27 @@ Dans la majorité des cas, ne pas fournir `compare` : `handleAnswers()` utilise 
 
 Options fréquentes :
 
-| Réponse attendue | Exemple |
-| --- | --- |
-| Nombre final uniquement | `{ nombreDecimalSeulement: true }` |
-| Calcul et pas seulement résultat | `{ expressionNumerique: true }` |
-| Addition uniquement | `{ additionSeulementEtNonResultat: true }` |
-| Fraction égale, pas forcément irréductible | `{ fractionEgale: true }` |
-| Fraction exactement identique | `{ fractionIdentique: true }` |
-| Fraction irréductible | `{ fractionIrreductible: true }` |
-| Fraction simplifiée | `{ fractionSimplifiee: true }` ou `{ fractionReduite: true }` |
-| Fraction décimale | `{ fractionDecimale: true }` |
-| Notation scientifique | `{ ecritureScientifique: true }` |
-| Puissance | `{ puissance: true }` |
-| Intervalle | `{ intervalle: true }` |
-| Nombre dans un intervalle | `{ estDansIntervalle: true }` |
-| Ensemble de nombres | `{ ensembleDeNombres: true }` |
-| Suite de nombres | `{ suiteDeNombres: true }` |
-| Coordonnées | `{ coordonnees: true }` |
-| Expression littérale équivalente | `{ egaliteExpression: true }` ou `{ fonction: true }` selon le cas |
-| Grandeur avec unité | `{ unite: true }` |
-| Texte sensible à la casse | `{ texteAvecCasse: true }` |
-| Texte sans tenir compte de la casse | `{ texteSansCasse: true }` |
+| Réponse attendue                           | Exemple                                                            |
+| ------------------------------------------ | ------------------------------------------------------------------ |
+| Nombre final uniquement                    | `{ nombreDecimalSeulement: true }`                                 |
+| Calcul et pas seulement résultat           | `{ expressionNumerique: true }`                                    |
+| Addition uniquement                        | `{ additionSeulementEtNonResultat: true }`                         |
+| Fraction égale, pas forcément irréductible | `{ fractionEgale: true }`                                          |
+| Fraction exactement identique              | `{ fractionIdentique: true }`                                      |
+| Fraction irréductible                      | `{ fractionIrreductible: true }`                                   |
+| Fraction simplifiée                        | `{ fractionSimplifiee: true }` ou `{ fractionReduite: true }`      |
+| Fraction décimale                          | `{ fractionDecimale: true }`                                       |
+| Notation scientifique                      | `{ ecritureScientifique: true }`                                   |
+| Puissance                                  | `{ puissance: true }`                                              |
+| Intervalle                                 | `{ intervalle: true }`                                             |
+| Nombre dans un intervalle                  | `{ estDansIntervalle: true }`                                      |
+| Ensemble de nombres                        | `{ ensembleDeNombres: true }`                                      |
+| Suite de nombres                           | `{ suiteDeNombres: true }`                                         |
+| Coordonnées                                | `{ coordonnees: true }`                                            |
+| Expression littérale équivalente           | `{ egaliteExpression: true }` ou `{ fonction: true }` selon le cas |
+| Grandeur avec unité                        | `{ unite: true }`                                                  |
+| Texte sensible à la casse                  | `{ texteAvecCasse: true }`                                         |
+| Texte sans tenir compte de la casse        | `{ texteSansCasse: true }`                                         |
 
 Exemples :
 
@@ -481,10 +481,7 @@ Pour une question à plusieurs champs, on peut ajouter :
 handleAnswers(this, i, {
   champ1: { value: numerateur, options: { nombreDecimalSeulement: true } },
   champ2: { value: denominateur, options: { nombreDecimalSeulement: true } },
-  bareme: (listePoints) => [
-    Math.min(listePoints[0], listePoints[1]),
-    1,
-  ],
+  bareme: (listePoints) => [Math.min(listePoints[0], listePoints[1]), 1],
   feedback: (saisies) =>
     saisies.champ2 === '0' ? 'Le dénominateur ne peut pas être nul.' : '',
 })

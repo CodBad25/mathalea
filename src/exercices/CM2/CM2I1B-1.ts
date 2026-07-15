@@ -8,7 +8,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import {
   choixDeroulant,
   listeDeroulanteToQcm,
-} from '../../lib/interactif/questionListeDeroulante'
+} from '../../lib/customElements/ListeDeroulanteElement'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
@@ -456,7 +456,7 @@ export default class NoteLaCouleurC3 extends Exercice {
       if (this.interactif && context.isHtml) {
         texte +=
           'Couleur n°1 : ' +
-          choixDeroulant(this, q * couleurs.length, [
+          choixDeroulant(this, q * couleurs.length, { choices: [
             { label: 'Choisir une couleur', value: '' },
             ...choixListeDeroulante[(this.sup - 1) % 2].map(
               (item: CouleurNLC) =>
@@ -470,7 +470,7 @@ export default class NoteLaCouleurC3 extends Exercice {
                     }
                   : { label: item, value: item },
             ),
-          ]) +
+          ] }) +
           '<br>'
         handleAnswers(
           this,
@@ -520,7 +520,7 @@ export default class NoteLaCouleurC3 extends Exercice {
             'Couleur n°' +
             (i + 1) +
             ' : ' +
-            choixDeroulant(this, q * couleurs.length + i, [
+            choixDeroulant(this, q * couleurs.length + i, { choices: [
               { label: 'Choisir une couleur', value: '' },
               ...choixListeDeroulante[(this.sup - 1) % 2].map((item) =>
                 this.sup === 1
@@ -533,7 +533,7 @@ export default class NoteLaCouleurC3 extends Exercice {
                     }
                   : { label: item, value: item },
               ),
-            ]) +
+            ] }) +
             '<br>'
           handleAnswers(
             this,

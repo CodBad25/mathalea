@@ -7,7 +7,6 @@ import { MySpreadsheetElement } from '../../lib/customElements/MySpreadSheet'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { range1 } from '../../lib/outils/nombres'
 import { listeDesDiviseurs } from '../../lib/outils/primalite'
-import { addSheet, createTableurLatex } from '../../lib/tableur/outilsTableur'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 
@@ -281,36 +280,42 @@ export default class ExerciceTableur extends Exercice {
         steps.length,
       )
 
-      if (context.isHtml && !context.isTypst) {
-        texte += addSheet({
-          numeroExercice: this.numeroExercice ?? 0,
-          question: q,
-          data,
-          minDimensions: [4, 4],
-          style,
-          columns: [{ width: 90 }, { width: 90 }, { width: 90 }, { width: 90 }],
-          interactif: this.interactif,
-          showVerifyButton: true,
-        })
-      } else {
-        const options: {
-          formule?: boolean
-          formuleTexte?: string
-          formuleCellule?: string
-          firstColHeaderWidth?: string
-        } = {}
-        options.formule = true
-        options.formuleTexte = '=?'
-        options.formuleCellule = 'B1'
-
-        texte += createTableurLatex(
-          2,
-          steps.length + 1,
-          cellDatas,
-          ExerciceTableur.styles,
-          options,
-        )
+      const latexOptions: {
+        formule?: boolean
+        formuleTexte?: string
+        formuleCellule?: string
+        firstColHeaderWidth?: string
+      } = {
+        formule: true,
+        formuleTexte: '=?',
+        formuleCellule: 'B1',
       }
+
+      const sheetElement = MySpreadsheetElement.createEltToAppendToDom({
+        id: `my-spreadsheetEx${this.numeroExercice ?? 0}Q${q}`,
+        data,
+        minDimensions: [4, 4],
+        style,
+        columns: [{ width: 90 }, { width: 90 }, { width: 90 }, { width: 90 }],
+        interactif: this.interactif,
+        showVerifyButton: true,
+      })
+      sheetElement.setAttribute('latex-data', JSON.stringify(cellDatas))
+      sheetElement.setAttribute(
+        'latex-styles',
+        JSON.stringify(ExerciceTableur.styles),
+      )
+      sheetElement.setAttribute('latex-options', JSON.stringify(latexOptions))
+
+      const sheetMarkup =
+        context.isHtml && !context.isTypst
+          ? sheetElement.outerHTML +
+            (this.interactif
+              ? `<div class="ml-2 py-2" id="resultatCheckEx${this.numeroExercice}Q${q}"></div>
+<div class ="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${this.numeroExercice}Q${q}"></div>`
+              : '')
+          : sheetElement.render()
+      texte += sheetMarkup
 
       texteCorr = 'Voici les formules à saisir dans le tableur :<br>'
       for (let i = 0; i < steps.length; i++) {
@@ -358,17 +363,16 @@ export default class ExerciceTableur extends Exercice {
     if (i === undefined) return ''
     if (this.answers === undefined) this.answers = {}
     let result = 'KO'
-    const sheetElement = document.getElementById(
-      `sheet-Ex${this.numeroExercice}Q${i}`,
-    ) as MySpreadsheetElement
+    const sheetId = `my-spreadsheetEx${this.numeroExercice}Q${i}`
+    const legacySheetId = `sheet-Ex${this.numeroExercice}Q${i}`
+    const sheetElement = (document.getElementById(sheetId) ??
+      document.getElementById(legacySheetId)) as MySpreadsheetElement
     if (!sheetElement) {
-      console.error(`sheet-Ex${this.numeroExercice}Q${i} not found`)
+      console.error(`${sheetId} not found`)
       return result
     }
     if (sheetElement && sheetElement.isMounted()) {
-      this.answers[`sheet-Ex${this.numeroExercice}Q${i}`] = JSON.stringify(
-        sheetElement.getData(),
-      )
+      this.answers[sheetId] = JSON.stringify(sheetElement.getData())
       const spanResultat = document.querySelector(
         `#resultatCheckEx${this.numeroExercice}Q${i}`,
       )

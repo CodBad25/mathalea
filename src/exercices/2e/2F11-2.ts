@@ -1,5 +1,5 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -426,15 +426,15 @@ export default class ComparerAvecFonctionRef extends Exercice {
         texte +=
           `<br><br>La fonction $${nom}$ est ` +
           (this.interactif
-            ? choixDeroulant(this, 3 * i, choixListeDeroulante1)
+            ? choixDeroulant(this, 3 * i, { choices: choixListeDeroulante1 })
             : '$\\ldots\\ldots\\ldots\\ldots$') +
           ` sur ` +
           (this.interactif
-            ? choixDeroulant(this, 3 * i + 1, choixListeDeroulante2)
+            ? choixDeroulant(this, 3 * i + 1, { choices: choixListeDeroulante2 })
             : '$\\ldots\\ldots\\ldots\\ldots$') +
           `  donc  $${nom}(${texNombre(x1, 3)})$` +
           (this.interactif
-            ? choixDeroulant(this, 3 * i + 2, choixListeDeroulante3)
+            ? choixDeroulant(this, 3 * i + 2, { choices: choixListeDeroulante3 })
             : '$\\ldots\\ldots\\ldots\\ldots$') +
           ` $${nom}(${texNombre(x2, 3)})$.`
 

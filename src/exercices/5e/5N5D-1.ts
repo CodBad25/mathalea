@@ -2,7 +2,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   choixDeroulant,
   listeDeroulanteToQcm,
-} from '../../lib/interactif/questionListeDeroulante'
+} from '../../lib/customElements/ListeDeroulanteElement'
 import { texteEnCouleur } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
@@ -133,7 +133,7 @@ export default class DeterminerDerniereOperationExpressionLitterale extends Exer
       }
 
       if (this.interactif) {
-        texte += sp(10) + choixDeroulant(this, i, choix)
+        texte += sp(10) + choixDeroulant(this, i, { choices: choix })
         handleAnswers(
           this,
           i,

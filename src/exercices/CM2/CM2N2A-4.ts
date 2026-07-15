@@ -1,11 +1,11 @@
 import { BoiteBuilder } from '../../lib/2d/BoiteBuilder'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import type { IPolygone } from '../../lib/2d/Interfaces'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
-  selectionSvg,
+  addSvgSelection,
   type SvgWithValue,
-} from '../../lib/interactif/questionSvgSelection/questionSvgSelection'
+} from '../../lib/customElements/SvgSelectionElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
@@ -414,7 +414,7 @@ export default class RepresenterUneFractionAvecUnePlaqueDeChocolat extends Exerc
         plaqueForSelection.push(rawFigures)
       }
       if (context.isHtml && this.interactif) {
-        texte += selectionSvg(this, i, {
+        texte += addSvgSelection(this, i, {
           svgs: plaqueForSelection,
           options: {
             gapX: '0px',

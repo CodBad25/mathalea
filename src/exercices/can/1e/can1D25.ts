@@ -1,7 +1,7 @@
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../../lib/customElements/ListeDeroulanteElement'
 import { tableauSignesFonction } from '../../../lib/mathFonctions/etudeFonction'
 import { spline, type NoeudSpline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -182,11 +182,11 @@ export default class SignesTabGSpline extends Exercice {
         texte += choixInteractif
         texte +=
           '<br> Réponse : ' +
-          choixDeroulant(this, i, [
+          choixDeroulant(this, i, { choices: [
             { label: 'Choisir la réponse', value: '' },
             { label: 'Vrai', value: 'Vrai' },
             { label: 'Faux', value: 'Faux' },
-          ])
+          ] })
         handleAnswers(this, i, {
           reponse: {
             value: choixInteractif === tableauD ? 'Vrai' : 'Faux',

@@ -1,6 +1,6 @@
+import { renderSheetMarkup } from '../../lib/customElements/MySpreadSheet'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { addSheet, createTableurLatex } from '../../lib/tableur/outilsTableur'
 import type { GoodAnswersFormulas } from '../../lib/types'
 import { context } from '../../modules/context'
 
@@ -349,23 +349,34 @@ export default class ExerciceTableurVocabulaireOld extends Exercice {
       texte +=
         ' fonctionner même si le nombre de départ change (Cellule B1).<br>'
 
-      if (context.isHtml) {
-        texte += addSheet({
-          numeroExercice: this.numeroExercice ?? 0,
-          question: q,
-          data,
-          minDimensions: [nbColTableur, 2], // listeMotsEnonce.length + 1],
-          style,
-          columns: [
-            { width: 180 },
-            { width: 90 },
-            { width: 90 },
-            { width: 90 },
-          ],
-          interactif: this.interactif,
-          showVerifyButton: false,
-          readOnlyCells: [`A1:A${nbLignes + 1}`],
-        })
+      const latexOptions: {
+        formule?: boolean
+        formuleTexte?: string
+        formuleCellule?: string
+        firstColHeaderWidth?: string
+      } = {
+        formule: true,
+        formuleTexte: '=?',
+        formuleCellule: 'B1',
+      }
+
+      texte += renderSheetMarkup({
+        numeroExercice: this.numeroExercice,
+        questionIndex: q,
+        data,
+        minDimensions: [nbColTableur, 2],
+        style,
+        columns: [{ width: 180 }, { width: 90 }, { width: 90 }, { width: 90 }],
+        interactif: this.interactif,
+        showVerifyButton: false,
+        readOnlyCells: [`A1:A${nbLignes + 1}`],
+        latexData: cellDatas,
+        latexStyles: ExerciceTableurVocabulaireOld.styles,
+        latexOptions,
+        appendFeedbackBlocks: this.interactif,
+      })
+
+      if (this.interactif) {
         handleAnswers(
           this,
           q,
@@ -381,24 +392,6 @@ export default class ExerciceTableurVocabulaireOld extends Exercice {
             },
           },
           { formatInteractif: 'tableur' },
-        )
-      } else {
-        const options: {
-          formule?: boolean
-          formuleTexte?: string
-          formuleCellule?: string
-          firstColHeaderWidth?: string
-        } = {}
-        options.formule = true
-        options.formuleTexte = '=?'
-        options.formuleCellule = 'B1'
-
-        texte += createTableurLatex(
-          nbLignes + 1,
-          4,
-          cellDatas,
-          ExerciceTableurVocabulaireOld.styles,
-          options,
         )
       }
 

@@ -1,7 +1,7 @@
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import {
   ajouteChampTexteMathLive,
   remplisLesBlancs,
@@ -142,7 +142,7 @@ export default class ConvertirM2EnDm2 extends Exercice {
             texte += ' est égal à '
             texteCorr = texte
             texte += this.interactif
-              ? choixDeroulant(this, i, choixListeDeroulante)
+              ? choixDeroulant(this, i, { choices: choixListeDeroulante })
               : '$\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots$ '
             texte += `de $1~${pairesMetriques[listeConversions[cpt] - 1][1]}^2$.`
             reponse =

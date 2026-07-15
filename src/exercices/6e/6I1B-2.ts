@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { texteParPositionEchelle } from '../../lib/2d/textes'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
@@ -718,7 +718,7 @@ export default class NoteLaCouleur6e extends Exercice {
       texte += !this.interactif
         ? ''
         : 'Couleur n°1 : ' +
-          choixDeroulant(this, q * couleurs.length, [
+          choixDeroulant(this, q * couleurs.length, { choices: [
             { label: 'Choisir une couleur', value: '' },
             ...choixListeDeroulante[(this.sup - 1) % 2].map((item) =>
               this.sup === 1
@@ -731,7 +731,7 @@ export default class NoteLaCouleur6e extends Exercice {
                   }
                 : { label: item, value: item },
             ),
-          ]) +
+          ] }) +
           '<br>'
       handleAnswers(
         this,
@@ -763,7 +763,7 @@ export default class NoteLaCouleur6e extends Exercice {
           : 'Couleur n°' +
             (i + 1) +
             ' : ' +
-            choixDeroulant(this, q * couleurs.length + i, [
+            choixDeroulant(this, q * couleurs.length + i, { choices: [
               { label: 'Choisir une couleur', value: '' },
               ...choixListeDeroulante[(this.sup - 1) % 2].map((item) =>
                 this.sup === 1
@@ -776,7 +776,7 @@ export default class NoteLaCouleur6e extends Exercice {
                     }
                   : { label: item, value: item },
               ),
-            ]) +
+            ] }) +
             '<br>'
         handleAnswers(
           this,
