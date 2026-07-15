@@ -3,7 +3,6 @@ import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../../lib/2d/textes'
 import { bleuMathalea } from '../../../lib/colors'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
@@ -35,7 +34,7 @@ export default class CalculLongueurThalesMilieu extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, A, B, C, D, E, objets, nom
-    if (choice([true, false])) {
+    if (this.quotaChoice('sens', [true, false])) {
       nom = creerNomDePolygone(5, ['QD'])
       a = randint(1, 9) + randint(1, 5) / 10 + randint(1, 9) / 100
 

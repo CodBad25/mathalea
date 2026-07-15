@@ -37,7 +37,7 @@ export default class DivisionAvecDecimaux extends ExerciceSimple {
     let b: number
     if (context.isAmc) this.versionQcm = false
     switch (
-      choice(['a', 'b', 'c', 'd', 'e']) //
+      this.quotaChoice('typeDeQuestions', ['a', 'b', 'c', 'd', 'e']) //
     ) {
       case 'a':
         a = randint(3, 9, 5) / 10

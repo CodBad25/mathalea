@@ -2,7 +2,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
-import { randint } from '../../../modules/outils'
 export const titre = "Calculer le périmètre d'un carré connaissant son aire"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -27,7 +26,7 @@ export default class QuestionsAiresEtPerimetres2 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 10)
+    const a = this.quotaRandint('a', 1, 10)
     const c = a * a
     this.reponse = 4 * a
     this.question = `Déterminer le périmètre  d'un carré d'aire $${c}\\text{ cm}^2$. `

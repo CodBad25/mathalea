@@ -29,11 +29,11 @@ export default class Soustraire2Decimaux2 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(2, 9)
+    const a = this.quotaRandint('a', 2, 9)
     const b = randint(1, a - 1)
-    const d1 = randint(1, 6)
+    const d1 = this.quotaRandint('d1', 1, 6)
     const d2 = randint(d1, 9)
-    const c2 = randint(1, 9)
+    const c2 = this.quotaRandint('c2', 1, 9)
     this.question = `Calculer $${texNombre(a + d1 / 10, 1)}-${texNombre(b + d2 / 10 + c2 / 100, 2)}$.`
     this.correction = `$${texNombre(a + d1 / 10, 1)}-${texNombre(b + d2 / 10 + c2 / 100, 2)}=${texNombre(a + d1 / 10 - b - d2 / 10 - c2 / 100, 2)}$<br>`
     this.reponse = arrondi(a + d1 / 10 - b - d2 / 10 - c2 / 100, 2)

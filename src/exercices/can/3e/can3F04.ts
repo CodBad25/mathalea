@@ -31,7 +31,7 @@ export default class CalculAntecedentLineaire extends ExerciceSimple {
 
   nouvelleVersion() {
     let nomF, x, n, m
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('cas', [1, 2])) {
       case 1:
         x = randint(-10, 10, [-1, 0, 1])
         m = randint(-9, 9, [-1, 0, 1])

@@ -28,7 +28,7 @@ export default class anneeATrouver2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const a = this.canOfficielle ? 30 : randint(30, 50)
+    const a = this.canOfficielle ? 30 : this.quotaRandint('a', 30, 50)
     const prenom = prenomF(1)
     this.question =
       'Si ' +

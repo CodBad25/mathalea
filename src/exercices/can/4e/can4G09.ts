@@ -54,7 +54,7 @@ export default class TripletsPythagoriciens extends ExerciceSimple {
       [12, 16, 20],
       [15, 20, 25],
     ]
-    const triplet = choice(listeTripletsPythagoriciens)
+    const triplet = this.quotaChoice('triplet', listeTripletsPythagoriciens)
     const nom = Array.from(creerNomDePolygone(3, ['QD']))
     const scale = 4 / triplet[1]
     const A = pointAbstrait(0, 0)
@@ -96,7 +96,12 @@ export default class TripletsPythagoriciens extends ExerciceSimple {
       true,
     )
     const objets: NestedObjetMathalea2dArray = [poly, angleDroit]
-    let index = this.sup === 1 ? 0 : this.sup === 2 ? 1 : choice([0, 1]) // on choisit le type de question ou on laisse le hasard (option mélange)
+    let index =
+      this.sup === 1
+        ? 0
+        : this.sup === 2
+          ? 1
+          : this.quotaChoice('index', [0, 1]) // on choisit le type de question ou on laisse le hasard (option mélange)
     this.question = `Dans le triangle $${nom.join('')}$ rectangle en $${nom[1]}$, `
     if (index === 0) {
       // calcul de l'hypoténuse

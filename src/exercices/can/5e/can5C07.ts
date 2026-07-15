@@ -1,5 +1,4 @@
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Utiliser une priorité opératoire'
 export const interactifReady = true
@@ -27,9 +26,9 @@ export default class PrioriteOperatoire5e extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(5, 9)
+    const a = this.quotaRandint('a', 5, 9)
     const b = 20 - a
-    const c = randint(3, 9)
+    const c = this.quotaRandint('c', 3, 9)
     this.reponse = b + a * c
     this.question = `Calculer $${b} + ${a} \\times ${c}$.`
     this.correction = `$${b} + ${a} \\times ${c}= ${b} + ${a * c} = ${this.reponse}$<br>`

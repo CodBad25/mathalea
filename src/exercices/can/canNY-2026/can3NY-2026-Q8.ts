@@ -1,9 +1,7 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec des décimaux'
@@ -35,7 +33,9 @@ export default class calcAvecDecimaux2026 extends ExerciceSimple {
     const annee = 2026
     const a = this.canOfficielle
       ? new Decimal(0.4)
-      : new Decimal(randint(1, 29, [10, 20])).div(choice([10, 100]))
+      : new Decimal(this.quotaRandint('numerateur', 1, 29, [10, 20])).div(
+          this.quotaChoice('diviseur', [10, 100]),
+        )
     this.reponse = texNombre(new Decimal(annee).sub(a), 2)
     this.question = `$${texNombre(annee)}-${texNombre(a, 2)}$`
     this.correction = `$${texNombre(annee)}-${texNombre(a, 2)}=${miseEnEvidence(this.reponse)}$`

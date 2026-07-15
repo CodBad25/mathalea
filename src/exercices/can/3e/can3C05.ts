@@ -30,11 +30,11 @@ export default class CalculPuissance10 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 6)
-    const n = arrondi(2 * randint(1, 6) + 1) / 2
+    const a = this.quotaRandint('a', 1, 6)
+    const n = arrondi(2 * this.quotaRandint('n', 1, 6) + 1) / 2
     const N = arrondi(2 * randint(1, 6, a) + 1) / 2
-    const c = randint(1, 3)
-    const d = randint(1, 3)
+    const c = this.quotaRandint('c', 1, 3)
+    const d = this.quotaRandint('d', 1, 3)
     this.question = `Calculer sous forme décimale $B=${texNombre(n)}\\times 10^{${rienSi1(c)}}+${texNombre(N)}\\times 10^{${rienSi1(d)}}$.`
     this.correction = `$B=${texNombre(n)}\\times 10^{${rienSi1(c)}}+${texNombre(N)}\\times 10^{${rienSi1(d)}}=${texNombre(n * 10 ** c)}+${texNombre(N * 10 ** d)}=${texNombre(n * 10 ** c + N * 10 ** d)}$.`
     this.reponse = arrondi(n * 10 ** c + N * 10 ** d)

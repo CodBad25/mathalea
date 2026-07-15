@@ -3,7 +3,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 export const titre = "Calculer avec un coefficient d'agrandissement/réduction"
@@ -30,7 +29,7 @@ export default class QuestionsAiresEtPerimetres5 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const N = choice(['a', 'b', 'c'])
+    const N = this.quotaChoice('N', ['a', 'b', 'c'])
     if (N === 'a') {
       const a = randint(2, 7) // aire
       const c = randint(2, 4) // coefficient

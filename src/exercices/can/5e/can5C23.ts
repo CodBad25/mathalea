@@ -1,11 +1,9 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Multiplier par 1,5 ou 2,5 ou ...'
 export const interactifReady = true
@@ -34,8 +32,8 @@ export default class MultiplierPar extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(6, 29, [10, 20, 30])
-    const b = choice([15, 25, 35, 45, 55]) / 10
+    const a = this.quotaRandint('a', 6, 29, [10, 20, 30])
+    const b = this.quotaChoice('b', [15, 25, 35, 45, 55]) / 10
 
     this.question = `Calculer $${a}\\times ${texNombre(b, 1)}$.`
     this.correction = `$${a}\\times ${texNombre(b, 1)}=${miseEnEvidence(texNombre(a * b, 1))}$<br>`

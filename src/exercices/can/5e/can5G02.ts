@@ -5,11 +5,9 @@ import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { bleuMathalea } from '../../../lib/colors'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 /**
@@ -46,13 +44,13 @@ export default class AngleTriangleIsocele extends ExerciceSimple {
   nouvelleVersion() {
     let objets
     const nom = creerNomDePolygone(3, ['QD'])
-    const a = randint(8, 14, 12) * 5
+    const a = this.quotaRandint('a', 8, 14, [12]) * 5
     const A = pointAbstrait(0, 0, nom[0])
     const B = pointAbstrait(5, 0, nom[1])
     const C = pointAbstrait(2.5, 2.5 * degTan(a), nom[2])
     const pol = polygoneAvecNom(A, B, C)
 
-    switch (choice(['a', 'b'])) {
+    switch (this.quotaChoice('typeDeQuestions', ['a', 'b'])) {
       case 'a':
         objets = []
 

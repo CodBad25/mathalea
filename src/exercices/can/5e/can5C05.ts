@@ -1,5 +1,4 @@
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un quotient entier'
 export const interactifReady = true
@@ -27,8 +26,8 @@ export default class Division5e extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(11, 15)
-    const b = randint(3, 6)
+    const a = this.quotaRandint('a', 11, 15)
+    const b = this.quotaRandint('b', 3, 6)
     const c = a * b
     this.reponse = a
     this.question = `Calculer $${c} \\div ${b}$.`

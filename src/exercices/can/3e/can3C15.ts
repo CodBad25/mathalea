@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -30,7 +29,7 @@ export default class CalculPuissance10B extends ExerciceSimple {
 
   nouvelleVersion() {
     let reponse, n1, n2, n3
-    switch (choice([1, 2, 3])) {
+    switch (this.quotaChoice('cas', [1, 2, 3])) {
       case 1:
         n1 = randint(2, 4)
         n2 = randint(-3, 0)

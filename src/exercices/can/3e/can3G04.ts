@@ -41,7 +41,7 @@ export default class RechercheValeurPythagore extends ExerciceSimple {
   nouvelleVersion() {
     let a, A, B, C, objets, nom, pol
 
-    switch (choice(['a', 'b'])) {
+    switch (this.quotaChoice('cas', ['a', 'b'])) {
       case 'a':
         nom = creerNomDePolygone(3, ['QD'])
         a = randint(1, 5) * 2 //

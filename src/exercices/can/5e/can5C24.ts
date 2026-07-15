@@ -31,7 +31,7 @@ export default class FractionVersDecimal extends ExerciceSimple {
     let a, b, c, maFraction
     let resultat
 
-    switch (choice([1, 2, 3])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2, 3])) {
       case 1: // conversion fraction <->décimale cinquième
         a = randint(1, 12, [5, 10])
 

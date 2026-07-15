@@ -30,7 +30,7 @@ export default class SommeDecimaux extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, b, c, e, f, g, k
-    const choix = randint(1, 3)
+    const choix = this.quotaRandint('choix', 1, 3)
     if (choix === 1) {
       a = randint(1, 9)
       b = randint(1, 9)

@@ -4,7 +4,6 @@ import Pyramide from '../../../modules/pyramide'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -37,7 +36,7 @@ export default class Pyramide3Etages extends ExerciceSimple {
       nombreEtages: 3,
       rangeData: [
         [1, 10],
-        choice([
+        this.quotaChoice('range', [
           [5, 10],
           [2, 6],
           [4, 8],

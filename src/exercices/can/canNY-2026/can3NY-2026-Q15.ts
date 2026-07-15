@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -28,10 +27,10 @@ export default class canQ152026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const b = this.canOfficielle ? 26 : choice([6, 20, 26])
+    const b = this.canOfficielle ? 26 : this.quotaChoice('b', [6, 20, 26])
     const r1 = annee - b
     const r2 = -annee + b
-    if (this.canOfficielle ? true : choice([true, false])) {
+    if (this.canOfficielle ? true : this.quotaChoice('sens', [true, false])) {
       this.reponse = `${reduireAxPlusB(r1, 0)}`
       this.question = `Réduire l'écriture de $${texNombre(annee, 0)}x -${texNombre(b, 0)}x$.`
       this.correction = `$${texNombre(annee)}x -${texNombre(b, 0)}x= (${texNombre(annee, 0)} -${texNombre(b, 1)})x=${miseEnEvidence(texNombre(r1, 1) + 'x')}$ `

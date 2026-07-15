@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { obtenirListeFractionsIrreductibles } from '../../../lib/outils/deprecatedFractions'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -33,8 +32,8 @@ export default class FractionIrreductibleCan extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const maFraction = choice(obtenirListeFractionsIrreductibles())
-    const k = choice([2, 3, 4, 5, 9, 10, 20])
+    const maFraction = this.quotaChoice('maFraction', obtenirListeFractionsIrreductibles())
+    const k = this.quotaChoice('k', [2, 3, 4, 5, 9, 10, 20])
     const a = k * maFraction[0]
     const b = k * maFraction[1]
     const frac = new FractionEtendue(a, b)
