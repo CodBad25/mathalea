@@ -3,7 +3,7 @@
  */
 
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -312,7 +312,7 @@ export default class systemeEquationsPremDegComp extends Exercice {
         texte +=
           '<br>' +
           "Le système d'équations" +
-          choixDeroulant(this, i, choix) +
+          choixDeroulant(this, i, { choices: choix }) +
           '.'
         handleAnswers(
           this,

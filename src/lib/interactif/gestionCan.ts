@@ -1,12 +1,12 @@
+import { orangeMathalea } from '../../lib/colors'
 import type { IExercice } from '../../lib/types'
 import { context } from '../../modules/context'
+import { SvgSelectionElement } from '../customElements/SvgSelectionElement'
 import { addElement, get } from '../html/dom'
 import type { ButtonWithMathaleaListener } from '../types/can'
 import { verifQuestionCliqueFigure } from './cliqueFigure'
 import { verifQuestionMathLive } from './mathLive'
 import { verifQuestionQcm } from './qcm'
-import { verifQuestionSvgSelection } from './questionSvgSelection/questionSvgSelection'
-import { orangeMathalea } from '../../lib/colors'
 
 export function gestionCan(exercice: IExercice) {
   context.nbBonnesReponses = 0
@@ -35,7 +35,7 @@ export function gestionCan(exercice: IExercice) {
             resultat = exercice.correctionInteractive(i)
           }
           if (exercice.interactifType === 'svgSelection') {
-            resultat = verifQuestionSvgSelection(exercice, i)
+            resultat = SvgSelectionElement.verifQuestion(exercice, i)
           }
           if (exercice.interactifType === 'MetaInteractif2d') {
             resultat = verifQuestionMathLive(exercice, i)?.isOk ? 'OK' : 'KO'

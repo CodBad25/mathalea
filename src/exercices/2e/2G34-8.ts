@@ -8,7 +8,7 @@ import {
 } from '../../lib/outils/ecritures'
 import { texNombre } from '../../lib/outils/texNombre'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { ppcm } from '../../lib/outils/primalite'
@@ -380,7 +380,7 @@ export default class systemeEquationsPremDeg extends Exercice {
         texte +=
           '<br>' +
           "Le système d'équations" +
-          choixDeroulant(this, i, choix) +
+          choixDeroulant(this, i, { choices: choix }) +
           '.'
         handleAnswers(
           this,

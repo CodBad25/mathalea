@@ -2,6 +2,7 @@ import Hms from '../../modules/Hms'
 import { mathalea2d } from '../../modules/mathalea2d'
 import Horloge from '../2d/horloge'
 import { orangeMathalea } from '../colors'
+import { formatMinute } from '../outils/texNombre'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
@@ -13,6 +14,12 @@ export type ClockDataOptions = {
   isDynamic?: boolean
   showHands?: boolean
   showSecond?: boolean
+  id?: string
+}
+
+export type InteractiveClockCreateOptions = ClockDataOptions & {
+  numeroExercice?: number
+  questionIndex?: number
 }
 
 type ClockValueInput =
@@ -122,16 +129,60 @@ export class InteractiveClock extends MathaleaCustomElement {
     this.render()
   }
 
+  static verifQuestion(exercice: IExercice, i: number): 'KO' | 'OK' {
+    const id = `interactive-clockEx${exercice.numeroExercice}Q${i}`
+    const clock = document.querySelector(`#${id}`) as any
+    if (clock == null) {
+      return 'KO'
+    }
+    const spanResultatCheck = document.querySelector(
+      `#resultatCheckEx${exercice.numeroExercice}Q${i}`,
+    )
+    const divFeedback = document.querySelector(
+      `#feedbackEx${exercice.numeroExercice}Q${i}`,
+    )
+    const answer = clock.value
+    clock.isDynamic = false
+    if (exercice.answers == null) exercice.answers = {}
+    // Sauvegarde de la réponse pour Capytale
+    exercice.answers[id] = JSON.stringify(answer)
+    const goodAnswer = Hms.fromString(
+      String(exercice.autoCorrection?.[i]?.valeur?.reponse?.value),
+    )
+    if (
+      goodAnswer.hour === answer.hour &&
+      goodAnswer.minute === answer.minute
+    ) {
+      if (spanResultatCheck) {
+        spanResultatCheck.innerHTML = '😎'
+      }
+      return 'OK'
+    } else {
+      if (spanResultatCheck) {
+        spanResultatCheck.innerHTML = '☹️'
+      }
+      if (divFeedback) {
+        divFeedback.innerHTML = `Les aiguilles indiquent ${clock.getAttribute('hour')} h ${formatMinute(clock.getAttribute('minute'))}.`
+      }
+      return 'KO'
+    }
+  }
+
   static create({
-    exercice,
+    id,
+    numeroExercice,
     questionIndex,
-    dataOptions,
-  }: {
-    exercice: IExercice
-    questionIndex: number
-    dataOptions: ClockDataOptions
-  }): string {
-    return `<interactive-clock id="interactive-clockEx${exercice.numeroExercice}Q${questionIndex}" hour="${dataOptions.hour ?? 0}" minute="${dataOptions.minute ?? 0}" second="${dataOptions.second ?? 0}" isDynamic="${dataOptions.isDynamic ?? true}" showHands="${dataOptions.showHands ?? true}" showSecond="${dataOptions.showSecond ?? false}"></interactive-clock>`
+    hour = 0,
+    minute = 0,
+    second = 0,
+    isDynamic = true,
+    showHands = true,
+    showSecond = false,
+  }: InteractiveClockCreateOptions): string {
+    const computedId =
+      id ??
+      `${InteractiveClock.elementTag}Ex${numeroExercice ?? 0}Q${questionIndex ?? 0}`
+    return `<interactive-clock id="${computedId}" hour="${hour}" minute="${minute}" second="${second}" isDynamic="${isDynamic}" showHands="${showHands}" showSecond="${showSecond}"></interactive-clock>`
   }
 
   renderLatex() {
@@ -271,6 +322,15 @@ export class InteractiveClock extends MathaleaCustomElement {
 
     container.appendChild(svgContainer)
     this.appendChild(container)
+    const resultatCheck = document.createElement('span')
+    resultatCheck.id = this.id.replace('interactive-clock', 'resultatCheck')
+    container.parentElement!.appendChild(resultatCheck)
+    const divFeedback = document.createElement('div')
+    divFeedback.id = this.id.replace('interactive-clock', 'feedback')
+    divFeedback.className =
+      'ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest'
+    divFeedback.style.display = 'block'
+    container.parentElement!.appendChild(divFeedback)
 
     if (this.isDynamic) {
       this.currentAction = 'minute'
@@ -677,6 +737,18 @@ export class InteractiveClock extends MathaleaCustomElement {
 
     this.render()
   }
+}
+
+export function addInteractiveClock(
+  exercice: IExercice,
+  questionIndex: number,
+  options: ClockDataOptions = {},
+): string {
+  return InteractiveClock.create({
+    ...options,
+    numeroExercice: exercice.numeroExercice,
+    questionIndex,
+  })
 }
 
 export default function handleInteractiveClock() {

@@ -1,5 +1,7 @@
 import ce from '../interactif/comparisonFunctions'
-import MathaleaCustomElement from './MathaleaCustomElement'
+import MathaleaCustomElement, {
+  registerMathaleaCustomElement,
+} from './MathaleaCustomElement'
 
 /**
  * Calculatrice Web Component autonome
@@ -790,11 +792,6 @@ class CalculatorElement extends MathaleaCustomElement {
 }
 
 // Enregistrer le Web Component (uniquement si pas déjà défini)
-if (
-  typeof customElements !== 'undefined' &&
-  !customElements.get('my-calculator')
-) {
-  customElements.define('my-calculator', CalculatorElement)
-}
+registerMathaleaCustomElement(CalculatorElement)
 
 export default CalculatorElement

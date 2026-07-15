@@ -1,6 +1,6 @@
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { PieceBuilder } from '../../../lib/2d/pieces'
-import { selectionSvg } from '../../../lib/interactif/questionSvgSelection/questionSvgSelection'
+import { addSvgSelection } from '../../../lib/customElements/SvgSelectionElement'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texPrix } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
@@ -127,7 +127,7 @@ export default class Can2026CE2Q16 extends ExerciceCan {
       ]
         */
 
-      this.question += selectionSvg(this, 0, { svgs: svgItems })
+      this.question += addSvgSelection(this, 0, { svgs: svgItems })
     } else {
       this.question = this.question + figure
     }

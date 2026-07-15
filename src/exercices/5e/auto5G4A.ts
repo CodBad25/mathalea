@@ -11,7 +11,7 @@ import { rotation, translation2Points } from '../../lib/2d/transformations'
 import { angleOriente, longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointSurDroite } from '../../lib/2d/utilitairesPoint'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { mathalea2d } from '../../modules/mathalea2d'
 import {
   gestionnaireFormulaireTexte,
@@ -1327,7 +1327,7 @@ export default class VocabulaireAngles extends Exercice {
       if (choixQuestion !== 2 && choixQuestion !== 4)
         choixTypeAngles.push({ label: 'adjacents', value: 'adjacents' })
       if (this.interactif) {
-        texteSousFigure += choixDeroulant(this, i, choixTypeAngles)
+        texteSousFigure += choixDeroulant(this, i, { choices: choixTypeAngles })
         handleAnswers(
           this,
           i,

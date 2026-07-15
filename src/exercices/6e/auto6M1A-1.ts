@@ -1,4 +1,4 @@
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -113,13 +113,13 @@ export default class sensDesPrefixes extends Exercice {
           if (this.interactif) {
             texte =
               `${prefixe} : ` +
-              choixDeroulant(this, i, [
+              choixDeroulant(this, i, { choices: [
                 { label: 'Choisit le bon calcul', value: '' },
                 ...listeDePrefixesDisponibles.map((item) => ({
                   latex: item[1],
                   value: item[0],
                 })),
-              ])
+              ] })
           }
           break
         case 'OnPartDuCalcul':
@@ -135,13 +135,13 @@ export default class sensDesPrefixes extends Exercice {
           if (this.interactif) {
             texte =
               `$${calcul}$ : ` +
-              choixDeroulant(this, i, [
+              choixDeroulant(this, i, { choices: [
                 { label: 'Choisit le bon préfixe', value: '' },
                 ...listeDePrefixesDisponibles.map((item) => ({
                   label: item[0],
                   value: item[0],
                 })),
-              ])
+              ] })
           }
           break
       }

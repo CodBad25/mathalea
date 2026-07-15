@@ -1,10 +1,10 @@
-import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
+import {
+  addMultiMathfield,
+  MultiMathfieldElement,
+} from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
-import {
-  handleAnswers,
-  verifQuestionMultiMathfield,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm, verifQuestionQcm } from '../../lib/interactif/qcm'
 import { texPiCoefficient } from '../../lib/mathFonctions/trigo'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -148,7 +148,7 @@ export default class MesureAngleEntreZeroEtDeuxPi extends Exercice {
   }
 
   correctionInteractive(i: number): string[] {
-    const resultatMesure = verifQuestionMultiMathfield(this, i).isOk
+    const resultatMesure = MultiMathfieldElement.verifQuestion(this, i).isOk
 
     if (!this.sup) return [resultatMesure ? 'OK' : 'KO']
 

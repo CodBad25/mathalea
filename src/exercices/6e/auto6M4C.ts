@@ -1,5 +1,5 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -57,12 +57,12 @@ export default class AutoChoisirDureeMinutes extends Exercice {
         const texte = unite1ATrouver
           ? '$1$ ' +
             (this.interactif
-              ? choixDeroulant(this, i, choixListeDeroulante)
+              ? choixDeroulant(this, i, { choices: choixListeDeroulante })
               : '$\\ldots\\ldots\\ldots\\ldots$') +
             ` = $${durees[choix][2]}$ ${durees[choix][1]}`
           : `$1$ ${durees[choix][0]} = $${durees[choix][2]}$ ` +
             (this.interactif
-              ? choixDeroulant(this, i, choixListeDeroulante)
+              ? choixDeroulant(this, i, { choices: choixListeDeroulante })
               : '$\\ldots\\ldots\\ldots\\ldots$')
 
         const texteCorr = unite1ATrouver

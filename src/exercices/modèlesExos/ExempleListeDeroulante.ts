@@ -2,7 +2,7 @@ import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { shapeDefToShapeSvg } from '../../lib/2d/figures2d/shapes2d'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 
 export const titre = "Reconnaitre une fonction d'après sa courbe"
 export const interactifReady = true
@@ -42,7 +42,7 @@ export default class BetaListeDeroulante extends Exercice {
     // Voilà ce qu'il faut pour mettre une liste déroulante interactive.
     // Attention, il n'y a pas de version latex ou html non intéractive.
     // Il faudra prévoir une autre version pour ça.
-    const enonce = `Choisir l'expression mathématique<br>${choixDeroulant(this, 0, choix, false)}`
+    const enonce = `Choisir l'expression mathématique<br>${choixDeroulant(this, 0, { choices: choix, choix0: false })}`
 
     const texteCorrection =
       "Vous avez choisi : <span id='choixEffectué'></span>." // Je mets un span vide ici pour y déposer le choix de l'utilisateur après correction.

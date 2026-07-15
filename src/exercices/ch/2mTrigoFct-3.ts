@@ -1,19 +1,19 @@
-import { orangeMathalea } from '../../lib/colors'
 import { cercleTrigo } from '../../lib/2d/cercleTrigo'
-import {
+import { orangeMathalea } from '../../lib/colors'
+import TrigoCircleSelectionElement, {
   selectionCercleTrigo,
   trigoCircleSelectionValue,
-} from '../../lib/interactif/trigoCircleSelection/selectionCercleTrigo'
+} from '../../lib/customElements/TrigoCircleSelectionElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   exactSquaredTrigoValues,
   exactTrigoValues,
+  texTrigoFunction,
   TrigoExact,
   type ExactSquaredTrigValueKey,
   type ExactTrigoValueKey,
   type SinCosTrigoFunctionName,
   type TrigoCircleAngle,
-  texTrigoFunction,
 } from '../../lib/mathFonctions/trigo'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnCouleur, miseEnEvidence } from '../../lib/outils/embellissements'
@@ -28,7 +28,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Placer les solutions d’une équation trigonométrique sur le cercle'
 export const interactifReady = true
-export const interactifType = 'svgSelection'
+export const interactifType = 'trigo-circle-selection'
 export const dateDePublication = '08/05/2026'
 export const uuid = 'd9a41'
 export const refs = {
@@ -148,7 +148,24 @@ function renderCorrectionCircle(branches: CorrectionBranch[]) {
   )
 }
 
-function renderFinalAnswerCircle(solutions: TrigoCircleAngle[]) {
+function renderFinalAnswerCircle(
+  solutions: TrigoCircleAngle[],
+  /* exercice: IExercice,
+  questionIndex: number,*/
+) {
+  /*  if (context.isHtml) {
+    const cercleCorr = selectionCercleTrigo(exercice, questionIndex, {
+      showAngleLabels: true,
+      showCoordinateLabels: true,
+      style: 'display:block; max-width: 40rem;',
+      value: trigoCircleSelectionValue(
+        solutions.map((solution) => solution.angleRad),
+      ),
+      interactivityOn: false,
+    })
+    return cercleCorr
+  }
+*/
   return mathalea2d(
     {
       xmin: -3.6,
@@ -289,13 +306,18 @@ export default class PlacerSolutionsEquationTrigoCercle extends Exercice {
 
       let texte = `Résoudre graphiquement dans $[0;2\\pi[$ l'équation $${equation}$ en plaçant les points correspondants sur le cercle trigonométrique.<br>`
 
-      handleAnswers(this, i, {
-        reponse: {
-          value: trigoCircleSelectionValue(
-            question.solutions.map((solution) => solution.angleRad),
-          ),
+      handleAnswers(
+        this,
+        i,
+        {
+          reponse: {
+            value: trigoCircleSelectionValue(
+              question.solutions.map((solution) => solution.angleRad),
+            ),
+          },
         },
-      })
+        { formatInteractif: 'trigo-circle-selection' },
+      )
       texte += renderCircleQuestion(this, i)
 
       const branches = getCorrectionBranches(question)
@@ -312,7 +334,7 @@ export default class PlacerSolutionsEquationTrigoCercle extends Exercice {
       texteCorr += `${renderBranchDetails(branches)}<br>`
       texteCorr += renderCorrectionCircle(branches)
       texteCorr += `Sur $[0;2\\pi[$, on obtient donc $S=${miseEnEvidence(texSolutionList(question.solutions))}$.<br>`
-      texteCorr += renderFinalAnswerCircle(question.solutions)
+      texteCorr += renderFinalAnswerCircle(question.solutions /* this, i*/)
 
       if (this.questionJamaisPosee(i, equation)) {
         this.listeQuestions[i] = texte
@@ -322,5 +344,9 @@ export default class PlacerSolutionsEquationTrigoCercle extends Exercice {
       cpt++
     }
     listeQuestionsToContenu(this)
+  }
+
+  correctionInteractive = (i: number) => {
+    return TrigoCircleSelectionElement.verifQuestion(this, i)
   }
 }

@@ -3,10 +3,13 @@ import katexCss from 'katex/dist/katex.min.css?inline'
 import { MathfieldElement } from 'mathlive'
 import { context } from '../../modules/context'
 import { bleuMathalea } from '../colors'
+import { setStyles } from '../html/dom'
 import {
   buildDataKeyboardFromStyle,
   KeyboardType,
 } from '../interactif/claviers/keyboard'
+import { fonctionComparaison } from '../interactif/comparisonFunctions'
+import { toutAUnPoint } from '../interactif/mathLive'
 import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
 import type { IExercice, ValeurNames } from '../types'
 import MathaleaCustomElement, {
@@ -69,6 +72,17 @@ export type DataOptionsMultiMathfield = Partial<
   >
 >
 
+export type MultiMathfieldOptions = {
+  dataTemplate: string
+  dataOptions: DataOptionsMultiMathfield
+  id?: string
+}
+
+export type MultiMathfieldCreateOptions = MultiMathfieldOptions & {
+  numeroExercice?: number
+  questionIndex?: number
+}
+
 type MultiMathfieldAnswers = Record<string, string>
 type MultiMathfieldOption = {
   keyboard?: string
@@ -84,6 +98,11 @@ const buildDataKeyboardString = (style = '') => {
 }
 
 export class MultiMathfieldElement extends MathaleaCustomElement {
+  private static scoreFromResult(result: { isOk: boolean }): number {
+    const score = (result as { score?: unknown }).score
+    return typeof score === 'number' ? score : result.isOk ? 1 : 0
+  }
+
   /**
    * La valeur stockée est de la forme `%{champ:"valeur"} %{champ2:"valeur2"}` :
    * on remplace chaque champ par sa valeur entourée de dollars.
@@ -159,22 +178,21 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
   }
 
   static create({
-    exercice,
+    id,
+    numeroExercice,
     questionIndex,
     dataTemplate,
     dataOptions,
-  }: {
-    exercice: IExercice
-    questionIndex: number
-    dataTemplate: string
-    dataOptions: DataOptionsMultiMathfield
-  }): string {
+  }: MultiMathfieldCreateOptions): string {
+    const computedId =
+      id ??
+      `${MultiMathfieldElement.elementTag}Ex${numeroExercice ?? 0}Q${questionIndex ?? 0}`
     const dataOptionsStr = encodeURIComponent(JSON.stringify(dataOptions))
       .replace(/'/g, '%27')
       .replace(/"/g, '%22')
 
-    const html = `<multi-mathfield id="multi-mathfieldEx${exercice.numeroExercice}Q${questionIndex}" data-template="${dataTemplate.replace(/"/g, '&quot;')}" data-options="${dataOptionsStr}"></multi-mathfield>`
-    return `${html}<div class="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${exercice.numeroExercice}Q${questionIndex}" style="display: none;"></div>`
+    const html = `<multi-mathfield id="${computedId}" data-template="${dataTemplate.replace(/"/g, '&quot;')}" data-options="${dataOptionsStr}"></multi-mathfield>`
+    return `${html}<div class="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${numeroExercice ?? 0}Q${questionIndex ?? 0}" style="display: none;"></div>`
   }
 
   connectedCallback() {
@@ -393,10 +411,10 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
     return this.getValue()
   }
 
-  set value(answers: MultiMathfieldAnswers | string) {
+  update(answers: MultiMathfieldAnswers | string) {
     let parsedAnswers: MultiMathfieldAnswers
     if (typeof answers === 'string') {
-      // Format attendu: filledDataTemplate fabriqué par verifQuestionMultiMathfield
+      // Format attendu: filledDataTemplate fabriqué par MultiMathfieldElement.verifQuestion
       parsedAnswers = MultiMathfieldElement.answersFromFilledTemplate(answers)
 
       // Compatibilité avec un éventuel ancien format JSON.stringify
@@ -411,6 +429,10 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
       parsedAnswers = answers
     }
     this.setAnswers(parsedAnswers)
+  }
+
+  set value(answers: MultiMathfieldAnswers | string) {
+    this.update(answers)
   }
 
   getSpansResultats() {
@@ -436,15 +458,192 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
       })
     }
   }
+
+  static verifQuestion(
+    exercice: IExercice,
+    i: number,
+  ): {
+    isOk: boolean
+    feedback: string
+    score: { nbBonnesReponses: number; nbReponses: number }
+  } {
+    if (exercice.autoCorrection[i]?.valeur == null) {
+      throw Error(
+        `MultiMathfieldElement.verifQuestion appelé sur une question sans réponse: ${JSON.stringify(
+          {
+            exercice,
+            question: i,
+            autoCorrection: exercice.autoCorrection[i],
+          },
+        )}`,
+      )
+    }
+
+    const multiId = `${this.elementTag}Ex${exercice.numeroExercice}Q${i}`
+    const multi = document.getElementById(multiId) as HTMLElement | null
+    const template = multi?.getAttribute('data-template')
+    const reponses = exercice.autoCorrection[i].valeur
+
+    if (reponses == null) {
+      window.notify(
+        `MultiMathfieldElement.verifQuestion: reponses est null pour la question ${i} de l'exercice ${exercice.id}`,
+        { exercice, i },
+      )
+      return {
+        isOk: false,
+        feedback: 'erreur dans le programme',
+        score: { nbBonnesReponses: 0, nbReponses: 1 },
+      }
+    }
+
+    if (typeof reponses !== 'object') {
+      window.notify(
+        `MultiMathfieldElement.verifQuestion: reponses n'est pas un objet pour la question ${i} de l'exercice ${exercice.id}`,
+        { exercice, i, reponses },
+      )
+      return {
+        isOk: false,
+        feedback: 'erreur dans le programme',
+        score: { nbBonnesReponses: 0, nbReponses: 1 },
+      }
+    }
+
+    const bareme: (arg: number[]) => [number, number] =
+      reponses.bareme ?? toutAUnPoint
+    const feedbackFunction = reponses.feedback ?? undefined
+    const variables = Object.entries(reponses).filter(
+      ([key]) => key !== 'bareme' && key !== 'feedback',
+    )
+    const points = []
+    const saisies: Record<string, string> = {}
+    let compteurSaisiesVides = 0
+    let compteurBonnesReponses = 0
+    let noFeedback = false
+    let feedback = ''
+    const feedbackMessages = new Set<string>()
+
+    for (const [field, reponse] of variables) {
+      const options = reponse.options
+      noFeedback = noFeedback || Boolean(options?.noFeedback)
+      const compareFunction = reponse.compare ?? fonctionComparaison
+
+      const mf = multi?.shadowRoot?.querySelector(
+        `#${multiId}-${field}`,
+      ) as MathfieldElement | null
+      if (mf == null) {
+        points.push(0)
+        continue
+      }
+
+      const saisie = mf.getValue()
+      mf.readOnly = true
+      mf.classList.add('corrected')
+      if (saisie === '') {
+        compteurSaisiesVides++
+        points.push(0)
+        continue
+      }
+
+      const eltFeedback = multi?.shadowRoot?.querySelector(
+        `#check-${multiId}-${field}`,
+      ) as HTMLSpanElement | null
+      if (eltFeedback) {
+        setStyles(eltFeedback, 'marginBottom: 20px')
+        eltFeedback.innerHTML = ''
+      }
+
+      saisies[field] = saisie
+      let result
+      if (Array.isArray(reponse.value)) {
+        if (options.estDansIntervalle) {
+          result = compareFunction(saisie, reponse.value, options)
+        } else {
+          let ii = 0
+          while (!result?.isOk && ii < reponse.value.length) {
+            result = compareFunction(saisie, reponse.value[ii], options)
+            ii++
+          }
+        }
+      } else {
+        result = compareFunction(saisie, reponse.value, options)
+      }
+
+      if (result.isOk) {
+        compteurBonnesReponses++
+        points.push(this.scoreFromResult(result))
+        if (eltFeedback) eltFeedback.innerHTML = '😎'
+      } else {
+        points.push(this.scoreFromResult(result))
+        if (eltFeedback) eltFeedback.innerHTML = '☹️'
+        if (result.feedback === 'saisieVide') result.feedback = ''
+        else {
+          result = {
+            isOk: false,
+            feedback: result.feedback ?? '',
+          }
+        }
+      }
+
+      mf.classList.add('corrected')
+      if (result.feedback != null && result.feedback !== '') {
+        for (const message of result.feedback.split('\n')) {
+          if (message !== '') feedbackMessages.add(message)
+        }
+      }
+    }
+
+    feedback = Array.from(feedbackMessages)
+      .map((message) => `${message}<br>`)
+      .join('')
+
+    if (compteurBonnesReponses === variables.length) {
+      feedback = feedback ?? ''
+    } else if (compteurSaisiesVides > 0) {
+      feedback = `Il manque ${compteurSaisiesVides} réponse${compteurSaisiesVides > 1 ? 's' : ''}.`
+    } else {
+      feedback = feedback ?? `Certaines réponses sont incorrectes.`
+    }
+
+    if (feedbackFunction != null) {
+      const feedbackFunctionResult = feedbackFunction(saisies)
+      if (typeof feedbackFunctionResult === 'string') {
+        feedback += feedbackFunctionResult
+      }
+    }
+
+    const [nbBonnesReponses, nbReponses] = bareme(points)
+    const spanReponseLigne = document.querySelector(
+      `#resultatCheckEx${exercice.numeroExercice}Q${i}`,
+    ) as HTMLSpanElement | null
+    if (spanReponseLigne != null) {
+      spanReponseLigne.innerHTML =
+        compteurBonnesReponses === variables.length ? '😎' : '☹️'
+    }
+
+    if (typeof exercice.answers === 'object' && exercice.answers !== null) {
+      let filledTemplate = template ?? ''
+      Object.entries(saisies).forEach(([champ, valeur]) => {
+        const regex = new RegExp(`%\\{${champ}\\}`, 'g')
+        filledTemplate = filledTemplate.replace(regex, `${valeur}`)
+      })
+      exercice.answers[multiId] = filledTemplate
+    }
+
+    return {
+      isOk: compteurBonnesReponses === variables.length,
+      feedback: noFeedback ? '' : feedback !== '' ? feedback : '',
+      score: {
+        nbBonnesReponses,
+        nbReponses,
+      },
+    }
+  }
 }
 
 export function addMultiMathfield(
   exercice: IExercice,
   questionIndex: number,
-  {
-    dataTemplate,
-    dataOptions,
-  }: { dataTemplate: string; dataOptions: DataOptionsMultiMathfield },
+  { dataTemplate, dataOptions, id }: MultiMathfieldOptions,
 ) {
   // Extraction des noms de champs %{name}
   const regex = /%\{([^}]+)\}/g
@@ -477,7 +676,8 @@ export function addMultiMathfield(
   if (context.isHtml && exercice.interactif) {
     registerMathaleaCustomElement(MultiMathfieldElement)
     return MultiMathfieldElement.create({
-      exercice,
+      id,
+      numeroExercice: exercice.numeroExercice,
       questionIndex,
       dataTemplate,
       dataOptions: enrichedOptions,

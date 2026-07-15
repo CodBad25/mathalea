@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import ListeDeroulante, {
   type AllChoicesType,
 } from '../interactif/listeDeroulante/ListeDeroulante'
@@ -9,10 +10,215 @@ export type ListeDeroulanteDataOptions = {
   choix0?: boolean
   className?: string
   choices?: AllChoicesType
+  style?: string
+}
+
+export type ListeDeroulanteCreateOptions = {
+  id?: string
+  numeroExercice?: number
+  questionIndex?: number
+} & ListeDeroulanteDataOptions
+
+export type ChoixDeroulantOptions = Omit<
+  ListeDeroulanteDataOptions,
+  'choices'
+> & {
+  choices: AllChoicesType
+}
+
+export type ListeDeroulanteToQcmOptions = {
+  vertical?: boolean
+  ordered?: boolean
+  [key: string]: unknown
+}
+
+/**
+ * Fonction pour créer une liste déroulante dans un exercice interactif.
+ */
+export function choixDeroulant(
+  exercice: IExercice,
+  questionIndex: number,
+  options: ChoixDeroulantOptions,
+) {
+  if (!exercice.interactif || !context.isHtml) return ''
+
+  const {
+    choices,
+    choix0 = false,
+    style,
+    className = 'mx-2 listeDeroulante',
+  } = options
+
+  if (
+    context.isHtml &&
+    exercice?.autoCorrection[questionIndex]?.formatInteractif !==
+      'listeDeroulante'
+  ) {
+    if (exercice?.autoCorrection == null) exercice.autoCorrection = []
+    if (exercice?.autoCorrection[questionIndex] == null)
+      exercice.autoCorrection[questionIndex] = {}
+    exercice.autoCorrection[questionIndex].formatInteractif = 'listeDeroulante'
+  }
+
+  const result = ListeDeroulanteElement.create({
+    numeroExercice: exercice.numeroExercice,
+    questionIndex,
+    className,
+    choices,
+    choix0: Boolean(choix0),
+    style,
+  })
+  return result
+}
+
+/**
+ * Fonction pour transformer une liste déroulante en QCM.
+ */
+export function listeDeroulanteToQcm(
+  exercice: IExercice,
+  question: number,
+  choix: AllChoicesType,
+  reponse: string,
+  options: ListeDeroulanteToQcmOptions,
+  correction?: string,
+) {
+  if (correction == null) correction = ''
+  if (exercice == null || choix == null || reponse == null) {
+    window.notify(
+      'Il manque des paramètres pour transformer la liste déroulante en qcm',
+      { exercice, question, choix, reponse },
+    )
+    return
+  }
+  if (!choix.some((el) => el.value === reponse)) {
+    window.notify('La réponse doit faire partie de la liste !', {
+      choix,
+      reponse,
+    })
+    return
+  }
+  const vertical = options?.vertical ?? true
+  const ordered = options?.ordered ?? true
+  if (
+    exercice.autoCorrection == null ||
+    !Array.isArray(exercice.autoCorrection)
+  ) {
+    exercice.autoCorrection = []
+  }
+  if (exercice.autoCorrection[question] == null)
+    exercice.autoCorrection[question] = {}
+  exercice.autoCorrection[question] = {}
+  exercice.autoCorrection[question].options = { vertical, ordered, ...options }
+  exercice.autoCorrection[question].propositions = []
+  let feedbackAttached = false
+
+  const getFeedback = () => {
+    if (!feedbackAttached) {
+      feedbackAttached = true
+      return correction
+    }
+    return undefined
+  }
+
+  for (let j = 0; j < choix.length; j++) {
+    if (choix[j].value === '') continue
+    if (choix[j].label != null) {
+      exercice.autoCorrection[question].propositions.push({
+        texte: String(choix[j].label),
+        statut: choix[j].value === reponse,
+        feedback: getFeedback(),
+      })
+    } else if (choix[j].latex != null) {
+      exercice.autoCorrection[question].propositions.push({
+        texte: `$${choix[j].latex}$`,
+        statut: choix[j].value === reponse,
+        feedback: getFeedback(),
+      })
+    } else if (choix[j].svg != null) {
+      const body = document.querySelector('body')
+      if (body == null) {
+        window.notify(
+          "Impossible de créer le QCM à partir de la liste déroulante car le body n'existe pas",
+          {},
+        )
+        return
+      }
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+      body.appendChild(svg)
+      svg.setAttribute('viewBox', '-10 -10 20 20')
+      svg.classList.add('svgChoice')
+      svg.style.display = 'inline-block'
+      svg.style.width = '20px'
+      svg.style.height = '20px'
+      svg.style.verticalAlign = 'middle'
+      svg.innerHTML = choix[j].svg ?? ''
+      exercice.autoCorrection[question].propositions.push({
+        texte: svg.outerHTML,
+        statut: choix[j].value === reponse,
+        feedback: getFeedback(),
+      })
+      setTimeout(() => {
+        if (svg) body.removeChild(svg)
+      }, 0)
+    } else if (choix[j].image != null) {
+      const image = document.createElement('img')
+      image.src = choix[j].image ?? choix[j].value
+      image.style.width = '30px'
+      image.style.height = '30px'
+      exercice.autoCorrection[question].propositions.push({
+        texte: image.outerHTML,
+        statut: choix[j].value === reponse,
+        feedback: getFeedback(),
+      })
+    } else {
+      console.warn(
+        'La liste déroulante à convertir en qcm contient un choix de type inconnu',
+        JSON.stringify(choix[j]),
+      )
+    }
+  }
 }
 
 class ListeDeroulanteElement extends MathaleaCustomElement {
   static readonly elementTag = 'liste-deroulante'
+
+  static verifQuestion(
+    exercice: IExercice,
+    questionIndex: number,
+  ): 'OK' | 'KO' {
+    const spanReponseLigne = document.getElementById(
+      `resultatCheckEx${exercice.numeroExercice}Q${questionIndex}`,
+    )
+    if (spanReponseLigne == null) {
+      window.notify(
+        "l'exercice ayant appelé ListeDeroulanteElement.verifQuestion() n'a pas correctement défini le span pour le smiley",
+        { exercice: JSON.stringify(exercice) },
+      )
+    }
+
+    const liste = document.querySelector(
+      `#liste-deroulanteEx${exercice.numeroExercice}Q${questionIndex}`,
+    ) as ListeDeroulanteElement | null
+
+    const value = liste?.value
+    const reponse =
+      exercice.autoCorrection[questionIndex]?.valeur?.reponse?.value
+
+    if (exercice.answers === undefined) {
+      exercice.answers = {}
+    }
+    if (liste) {
+      exercice.answers[liste.id] = value ?? ''
+    }
+
+    const resultat: 'OK' | 'KO' = value === reponse ? 'OK' : 'KO'
+    if (spanReponseLigne) {
+      spanReponseLigne.innerHTML = resultat === 'OK' ? '😎' : '☹️'
+      ;(spanReponseLigne as HTMLElement).style.fontSize = 'large'
+    }
+
+    return resultat
+  }
 
   private _listeDeroulante?: ListeDeroulante
   private _lastValue = ''
@@ -23,26 +229,25 @@ class ListeDeroulanteElement extends MathaleaCustomElement {
   }
 
   static create({
-    exercice,
+    id,
+    numeroExercice,
     questionIndex,
-    dataOptions,
-  }: {
-    exercice: IExercice
-    questionIndex: number
-    dataOptions: ListeDeroulanteDataOptions
-  }): string {
+    className,
+    choices,
+    choix0,
+    style,
+  }: ListeDeroulanteCreateOptions): string {
     const attrs: string[] = []
     attrs.push(
-      `id="liste-deroulanteEx${exercice.numeroExercice}Q${questionIndex}"`,
+      `id="${id ?? `${ListeDeroulanteElement.elementTag}Ex${numeroExercice ?? 0}Q${questionIndex ?? 0}`}"`,
     )
-    if (dataOptions.className) attrs.push(`class="${dataOptions.className}"`)
-    if (dataOptions.choices) {
-      attrs.push(
-        `choices="${encodeURIComponent(JSON.stringify(dataOptions.choices))}"`,
-      )
+    if (className) attrs.push(`class="${className}"`)
+    if (style) attrs.push(`style="${style}"`)
+    if (choices) {
+      attrs.push(`choices="${encodeURIComponent(JSON.stringify(choices))}"`)
     }
-    if (dataOptions.choix0 !== undefined) {
-      attrs.push(`choix0="${dataOptions.choix0 ? 'true' : 'false'}"`)
+    if (choix0 !== undefined) {
+      attrs.push(`choix0="${choix0 ? 'true' : 'false'}"`)
     }
     return `<liste-deroulante ${attrs.join(' ')}></liste-deroulante>`
   }
@@ -60,6 +265,10 @@ class ListeDeroulanteElement extends MathaleaCustomElement {
   connectedCallback() {
     this.hydrateCommonAttributes()
     this.render()
+    const spanId = this.id.replace('liste-deroulante', 'resultatCheck')
+    const resultatCheck = document.createElement('span')
+    resultatCheck.id = spanId
+    this.appendChild(resultatCheck)
   }
 
   set choices(val: AllChoicesType) {

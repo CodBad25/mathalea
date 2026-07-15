@@ -19,7 +19,7 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { fraction } from '../../modules/fractions'
 import Exercice from '../Exercice'
 export const dateDeModifImportante = '20/06/2024'
@@ -157,7 +157,7 @@ export default class FonctionsProbabilite2 extends Exercice {
               "Est-ce une expérience en situation d'équiprobabilité ?" +
                 (!this.interactif
                   ? ' Justifier.'
-                  : choixDeroulant(this, iInteractif + 2, [
+                  : choixDeroulant(this, iInteractif + 2, { choices: [
                       {
                         label: 'Choisir une des réponses suivantes',
                         value: '',
@@ -165,7 +165,7 @@ export default class FonctionsProbabilite2 extends Exercice {
                       { label: 'oui', value: 'oui' },
                       { label: 'non', value: 'non' },
                       { label: 'je sais pas', value: 'je sais pas' },
-                    ])),
+                    ] })),
               `Calculer la probabilité que ${quidame} et ${quidam} aient choisi tous les deux un yaourt ${qualites[0][p]}.` +
                 (this.interactif
                   ? ajouteChampTexteMathLive(

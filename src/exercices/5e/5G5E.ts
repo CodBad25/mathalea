@@ -16,7 +16,7 @@ import {
 } from '../../lib/2d/utilitairesTriangle'
 import { bleuMathalea } from '../../lib/colors'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -158,7 +158,7 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
       if (this.interactif) {
         texte +=
           '<br>La droite tracée en bleu est ' +
-          choixDeroulant(this, i, choix) +
+          choixDeroulant(this, i, { choices: choix }) +
           '.'
         handleAnswers(
           this,

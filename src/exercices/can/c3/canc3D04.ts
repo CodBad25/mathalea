@@ -3,7 +3,9 @@
  */
 
 import Horloge from '../../../lib/2d/horloge'
-import handleInteractiveClock from '../../../lib/customElements/InteractiveClock'
+import handleInteractiveClock, {
+  addInteractiveClock,
+} from '../../../lib/customElements/InteractiveClock'
 import { combinaisonListes } from '../../../lib/outils/arrayOutils'
 import { sp } from '../../../lib/outils/outilString'
 import { formatMinute } from '../../../lib/outils/texNombre'
@@ -14,7 +16,7 @@ import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 export const titre = "Indiquer l'heure sur une horloge"
 export const interactifReady = true
-export const interactifType = 'custom'
+export const interactifType = 'interactive-clock'
 
 export const dateDePublication = '21/2/2025'
 
@@ -58,7 +60,10 @@ export default class ExerciceInteractiveClock extends Exercice {
       }
       let enonce = `Placer correctement les aiguilles pour indiquer ${hour}${sp(1)}h${sp(1)}${formatMinute(minute)}.<br>`
       if (context.isHtml && !context.isTypst) {
-        enonce += `<br><br><interactive-clock id="interactive-clockEx${this.numeroExercice}Q${i}" isDynamic="${this.interactif}" showHands="${this.interactif}"/>`
+        enonce += `<br><br>${addInteractiveClock(this, i, {
+          isDynamic: this.interactif,
+          showHands: this.interactif,
+        })}`
       } else {
         const horloge = new Horloge(0, 0, 2)
         enonce += mathalea2d(
@@ -75,7 +80,13 @@ export default class ExerciceInteractiveClock extends Exercice {
       }
       let correction = ''
       if (context.isHtml && !context.isTypst) {
-        correction = `<interactive-clock hour="${hour}" minute="${minute}" isDynamic="false"/>`
+        correction = addInteractiveClock(this, i, {
+          id: `interactive-clock-correctionEx${this.numeroExercice}Q${i}`,
+          hour,
+          minute,
+          isDynamic: false,
+          showHands: true,
+        })
       } else {
         const horloge = new Horloge(0, 0, 2, new Hms({ hour, minute }))
         correction = mathalea2d(
@@ -107,40 +118,13 @@ export default class ExerciceInteractiveClock extends Exercice {
               }).toString(),
             },
           },
-          formatInteractif: 'custom',
+          formatInteractif: 'interactive-clock',
         }
         i++
       }
       cpt++
     }
     listeQuestionsToContenu(this)
-  }
-
-  correctionInteractive = (i: number) => {
-    const id = `interactive-clockEx${this.numeroExercice}Q${i}`
-    const clock = document.querySelector(`#${id}`) as any
-    if (clock == null) {
-      return 'KO'
-    }
-    const answer = clock.value
-    clock.isDynamic = false
-    if (this.answers == null) this.answers = {}
-    // Sauvegarde de la réponse pour Capytale
-    this.answers[id] = JSON.stringify(answer)
-    if (
-      this.goodAnswers[i].hour === answer.hour &&
-      this.goodAnswers[i].minute === answer.minute
-    ) {
-      const divFeedback = document.createElement('div')
-      divFeedback.innerHTML = '😎'
-      clock.parentElement?.appendChild(divFeedback)
-      return 'OK'
-    } else {
-      const divFeedback = document.createElement('div')
-      divFeedback.innerHTML = `☹️ Les aiguilles indiquent ${clock.getAttribute('hour')} h ${formatMinute(clock.getAttribute('minute'))}.`
-      clock.parentElement?.appendChild(divFeedback)
-      return 'KO'
-    }
   }
 }
 

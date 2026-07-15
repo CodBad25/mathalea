@@ -1,8 +1,14 @@
 import { context } from '../../modules/context'
+import type { IExercice } from '../types'
 export const listOfCustomElements = [
   'interactive-clock',
   'multi-mathfield',
   'liste-deroulante',
+  'my-spreadsheet',
+  'guide-ane',
+  'svg-selection',
+  'demi-droite-interactive',
+  'trigo-circle-selection',
 ]
 
 /**
@@ -119,6 +125,16 @@ export default class MathaleaCustomElement extends HTMLElement {
   }
 
   /**
+   * Vérification interactive spécifique à un custom element.
+   *
+   * Ce hook est optionnel et peut être surchargé par les classes filles
+   * qui portent leur propre logique de correction (ex: svg-selection).
+   */
+  static verifQuestion(_exercice: IExercice, _i: number): unknown {
+    return null
+  }
+
+  /**
    * Transforme le HTML de la question pour l'affichage dans la liste
    * des corrections (CAN)
    * Par défaut l'attribut `interactivity-on` est forcé à false pour avoir la version non interactive du composant et éviter que l'élève puisse interagir avec
@@ -179,7 +195,7 @@ export default class MathaleaCustomElement extends HTMLElement {
    * En contexte LaTeX: retourne la représentation LaTeX (ou '').
    */
   render(): string | void {
-    if (!context.isHtml) {
+    if (!context.isHtml || context.isTypst) {
       return this.renderLatex()
     }
     return ''

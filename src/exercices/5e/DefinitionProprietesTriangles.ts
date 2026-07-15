@@ -1,5 +1,5 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import {
   gestionnaireFormulaireTexte,
@@ -159,7 +159,7 @@ export default class DefinitionProprietesTriangles extends Exercice {
           break
       }
       if (this.interactif) {
-        texte += choixDeroulant(this, i, choixFinal)
+        texte += choixDeroulant(this, i, { choices: choixFinal })
         handleAnswers(
           this,
           i,
