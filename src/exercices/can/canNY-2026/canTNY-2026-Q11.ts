@@ -29,8 +29,10 @@ export default class calcAntecedent2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const a = this.canOfficielle ? 3 : randint(-5, 5, 0)
-    const ant = this.canOfficielle ? annee : randint(2020, 2030)
+    const a = this.canOfficielle ? 3 : this.quotaRandint('a', -5, 5, [0])
+    const ant = this.canOfficielle
+      ? annee
+      : this.quotaRandint('ant', 2020, 2030)
     this.question = `Déterminer l'antécédent de $${texNombre(ant)}$ par la fonction $f$ définie par : $f(x)=${rienSi1(a)}x+${texNombre(annee, 0)}$.`
     this.reponse = new FractionEtendue(ant - annee, a).simplifie().texFSD
     this.correction = `L'antécédent est la solution de l'équation  $${rienSi1(a)}x+${texNombre(annee, 0)}=${texNombre(ant)}$.<br>

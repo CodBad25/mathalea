@@ -76,7 +76,7 @@ export default class Trigo extends ExerciceSimple {
     )
     objets.push(pol[0], pol[1])
     switch (
-      choice(['a', 'b', 'c', 'd', 'e', 'f']) //, 'b'
+      this.quotaChoice('cas', ['a', 'b', 'c', 'd', 'e', 'f']) //, 'b'
     ) {
       case 'a':
         this.question = `Donner la valeur de $\\cos${lang === 'fr-CH' ? `\\widehat{${nom[0] + nom[2] + nom[1]}}` : `\\widehat{${nom[2]}}`}$  sous la forme d'une fraction irréductible.<br>

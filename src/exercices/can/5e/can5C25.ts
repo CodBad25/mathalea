@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureNombreRelatif,
   ecritureNombreRelatifc,
@@ -31,7 +30,7 @@ export default class AdditionRelatifCAN extends ExerciceSimple {
   nouvelleVersion() {
     let a = randint(1, this.sup)
     let b = randint(1, this.sup)
-    const k = choice([
+    const k = this.quotaChoice('k', [
       [-1, -1],
       [-1, 1],
       [1, -1],

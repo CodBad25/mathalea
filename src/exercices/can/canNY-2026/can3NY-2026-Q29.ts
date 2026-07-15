@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 
@@ -7,7 +6,6 @@ import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 export const titre = ''
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -34,9 +32,9 @@ export default class ComparerFractions2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const a = 2026
-    const b = this.canOfficielle ? a - 1 : choice([a - 1, a + 1])
-    const choix = this.canOfficielle ? true : choice([true, false])
-    switch (this.canOfficielle ? 1 : randint(1, 2)) {
+    const b = this.canOfficielle ? a - 1 : this.quotaChoice('b', [a - 1, a + 1])
+    const choix = this.canOfficielle ? true : this.quotaChoice('choix', [true, false])
+    switch (this.canOfficielle ? 1 : this.quotaRandint('cas', 1, 2)) {
       case 1:
         this.consigne = choix
           ? `L'image de $${texNombre(a, 0)}$ par la fonction $f$ est $${texNombre(b, 0)}$.`

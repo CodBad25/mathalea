@@ -1,6 +1,5 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { pgcd } from '../../../lib/outils/primalite'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -37,7 +36,7 @@ export default class DecimalVersFractionIr extends ExerciceSimple {
   nouvelleVersion() {
     let a, d, maFraction, d1
     switch (
-      choice([1, 2, 3]) //, 2, 3
+      this.quotaChoice('cas', [1, 2, 3]) //, 2, 3
     ) {
       case 1: // division par 10
         a = randint(1, 39, [10, 20, 30])

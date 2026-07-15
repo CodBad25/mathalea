@@ -5,7 +5,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { shuffle } from '../../../lib/outils/arrayOutils'
 import { sp } from '../../../lib/outils/outilString'
-import { randint } from '../../../modules/outils'
 export const titre = ''
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -28,8 +27,8 @@ export default class CalculDivers2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const d = this.canOfficielle ? 3 : randint(3, 6)
-    const u = this.canOfficielle ? 3 : randint(1, 9)
+    const d = this.canOfficielle ? 3 : this.quotaRandint('d', 3, 6)
+    const u = this.canOfficielle ? 3 : this.quotaRandint('u', 1, 9)
     const a = d * 10 + u
     const annee = 2026
     const listeResultat = [annee * a, annee * a + 1, annee * a - 1]

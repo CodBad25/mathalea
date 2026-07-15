@@ -38,7 +38,7 @@ export default class CalculLongueurThales2 extends ExerciceSimple {
 
   nouvelleVersion() {
     let nom, a, b, c, k, A, B, C, D, E, objets
-    if (choice([true, false])) {
+    if (this.quotaChoice('cas', [true, false])) {
       nom = creerNomDePolygone(5, ['QD'])
       k = choice([1.5, 2, 2.5])
       b = randint(2, 5) * 2 //

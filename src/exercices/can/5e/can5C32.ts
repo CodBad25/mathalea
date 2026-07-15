@@ -35,7 +35,7 @@ export default class MultiplicationATrou extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = choice([1, 2])
+    const choix = this.quotaChoice('choix', [1, 2])
     const a = randint(2, 9) * choice([10, 100, 1000])
     const numB = randint(2, 9)
     const denB = choice([10, 100, 1000])

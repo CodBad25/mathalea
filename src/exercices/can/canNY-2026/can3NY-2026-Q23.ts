@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
@@ -29,9 +28,12 @@ export default class canQ232026 extends ExerciceSimple {
     const annee = 2026
     const a = this.canOfficielle
       ? 120
-      : randint(7, 29) * 10 + randint(1, 9, annee % 10)
-    const exposantannee = this.canOfficielle ? 1 : randint(1, 2)
-    const exposantA = this.canOfficielle ? 1 : randint(1, 2)
+      : this.quotaRandint('aDizaines', 7, 29) * 10 +
+        this.quotaRandint('aUnites', 1, 9, [annee % 10])
+    const exposantannee = this.canOfficielle
+      ? 1
+      : this.quotaRandint('exposantannee', 1, 2)
+    const exposantA = this.canOfficielle ? 1 : this.quotaRandint('exposantA', 1, 2)
     const aDiv = new Decimal(a).div(new Decimal(10).pow(exposantA))
     const NbanneeDiv = new Decimal(annee).div(
       new Decimal(10).pow(exposantannee),

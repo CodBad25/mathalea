@@ -1,6 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -27,7 +26,7 @@ export default class calculImage2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const c = this.canOfficielle ? -3 : randint(-5, -1)
+    const c = this.canOfficielle ? -3 : this.quotaRandint('c', -5, -1)
     this.question = `$f(x)=x^2+${texNombre(annee, 0)}$<br>`
     this.reponse = c * c + annee
     this.correction = `$f(${c})=(${c})^2+${texNombre(annee, 0)}$<br>`

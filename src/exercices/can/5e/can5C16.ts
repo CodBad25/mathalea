@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -29,7 +28,7 @@ export default class CalculAstucieuxAvecFactorisation extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, c, d
     switch (
-      choice(['a', 'b', 'c', 'c', 'd', 'e']) //
+      this.quotaChoice('typeDeQuestions', ['a', 'b', 'c', 'c', 'd', 'e']) //
     ) {
       case 'a':
         a = randint(5, 99) / 10

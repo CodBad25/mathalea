@@ -43,7 +43,7 @@ export default class PoucentageP1 extends ExerciceSimple {
       'un sac à roulettes',
     ])
 
-    switch (choice(['a', 'b', 'c', 'd', 'e', 'f'])) {
+    switch (this.quotaChoice('typeDeQuestions', ['a', 'b', 'c', 'd', 'e', 'f'])) {
       case 'a':
         b = randint(3, 7) * 5
         this.question = `$\\dfrac{1}{5}$ des élèves d'une classe de $${b}$ élèves a ${caractere}.<br>

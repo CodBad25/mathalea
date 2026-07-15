@@ -3,7 +3,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 export const titre = ''
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -31,8 +30,8 @@ export default class CalculAnnee2026 extends ExerciceSimple {
     const annee = 2026
     const anneePrecedente = annee - 1
 
-    const date = this.canOfficielle ? 30 : randint(29, 30)
-    const nbre = this.canOfficielle ? 10 : randint(1, 23)
+    const date = this.canOfficielle ? 30 : this.quotaRandint('date', 29, 30)
+    const nbre = this.canOfficielle ? 10 : this.quotaRandint('nbre', 1, 23)
     this.question = `Nous sommes le $${date}$ décembre $${anneePrecedente}$. Il est $${nbre}$ h${nbre < 12 ? ' du matin' : ''}.<br>
             Combien  d'heures faut-il attendre avant de pouvoir se souhaiter la nouvelle année $${annee}$ (à minuit le $31$ décembre $${anneePrecedente}$) ?`
     this.correction = ` Jusqu'au $${date}$ décembre minuit, il y a $${24 - nbre}$ heures.  <br>

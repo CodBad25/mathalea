@@ -1,7 +1,5 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -30,9 +28,11 @@ export default class EgaliteACompleter2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const a = 2026
-    const b = this.canOfficielle ? 2 : randint(2, 5)
-    const c = this.canOfficielle ? 1 : randint(1, 5)
-    const choix = this.canOfficielle ? true : choice([true, false])
+    const b = this.canOfficielle ? 2 : this.quotaRandint('b', 2, 5)
+    const c = this.canOfficielle ? 1 : this.quotaRandint('c', 1, 5)
+    const choix = this.canOfficielle
+      ? true
+      : this.quotaChoice('choix', [true, false])
     this.reponse = texNombre(a + b + c, 0)
     this.question = "Compléter l'égalité.<br>"
     if (this.interactif) {

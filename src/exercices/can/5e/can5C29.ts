@@ -29,7 +29,7 @@ export default class fractionsDecimaux extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2, 3])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2, 3])) {
       case 1: // quart
         {
           const b = new Decimal(randint(1, 16, [5, 10])).div(10)

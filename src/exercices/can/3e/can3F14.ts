@@ -38,7 +38,7 @@ export default class CalculProduitSommeImageParFonctionAffine extends ExerciceSi
   }
 
   nouvelleVersion() {
-    const typeOperation = choice([1, 2, 3]) // 1 = produit, 2 = somme 3=différence
+    const typeOperation = this.quotaChoice('typeOperation', [1, 2, 3]) // 1 = produit, 2 = somme 3=différence
 
     // Paramètres selon le type d'opération
     let a, b

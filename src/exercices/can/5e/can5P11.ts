@@ -33,7 +33,7 @@ export default class CalculPartieAvecTout extends ExerciceSimple {
   nouvelleVersion() {
     let taux, total, matiere
 
-    switch (randint(1, 2)) {
+    switch (this.quotaRandint('typeDeQuestions', 1, 2)) {
       case 1:
         taux = choice([1, 2, 4, 5, 10])
         total = randint(4, 15) * 100

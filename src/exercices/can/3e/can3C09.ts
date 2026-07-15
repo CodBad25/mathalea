@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -29,14 +28,14 @@ export default class CalculAvecRacineCarree1 extends ExerciceSimple {
 
   nouvelleVersion() {
     let d
-    const a = randint(2, 10)
-    const b = randint(2, 10)
-    const c = randint(1, 10)
+    const a = this.quotaRandint('a', 2, 10)
+    const b = this.quotaRandint('b', 2, 10)
+    const c = this.quotaRandint('c', 1, 10)
     d = randint(1, 10)
     while (c === d) {
       d = randint(1, 10)
     }
-    if (choice([true, false])) {
+    if (this.quotaChoice('operation', [true, false])) {
       this.question = `Calculer $${a}\\sqrt{${c ** 2}}+${b}\\sqrt{${d ** 2}}$.`
       this.correction = `$\\sqrt{${c ** 2}}=${c}$ et $\\sqrt{${d ** 2}}=${d}$<br>
       Donc $${a}\\sqrt{${c ** 2}}+${b}\\sqrt{${d ** 2}}=${a}\\times ${c}+${b}\\times ${d}=${miseEnEvidence(a * c + b * d)}$.`

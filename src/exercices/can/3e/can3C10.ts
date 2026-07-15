@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -28,8 +27,8 @@ export default class EncadrementAvecPuissancesDe10 extends ExerciceSimple {
 
   nouvelleVersion() {
     let a
-    const choix = choice(['$a$', '$b$'])
-    switch (choice(['a', 'b', 'c', 'd', 'e'])) {
+    const choix = this.quotaChoice('choix', ['$a$', '$b$'])
+    switch (this.quotaChoice('cas', ['a', 'b', 'c', 'd', 'e'])) {
       case 'a':
         a =
           randint(2, 9) * 10 ** 4 +

@@ -41,7 +41,7 @@ export default class ProchainMultipleDeTroisOuDeNeuf extends ExerciceSimple {
       sommeB += parseInt(bString[i])
     }
 
-    if (choice([0, 1])) {
+    if (this.quotaChoice('typeDeQuestions', [0, 1])) {
       this.reponse = a + 3 - (a % 3)
       this.question = `Quel est le plus petit entier supérieur strictement à $${texNombre(a)}$ qui soit divisible par $3$ ?`
       this.correction = `On calcule mentalement la somme des chiffres de $${texNombre(a)}$, on trouve $${texNombre(sommeA)}$.<br>`

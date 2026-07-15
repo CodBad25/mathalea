@@ -39,7 +39,11 @@ export default class CalculImageParFonctionAffine extends ExerciceSimple {
 
   nouvelleVersion() {
     let nomF, x, n, m, y
-    switch (this.versionQcm ? choice([2, 3]) : choice([1, 2, 3])) {
+    switch (
+      this.versionQcm
+        ? this.quotaChoice('cas', [2, 3])
+        : this.quotaChoice('cas', [1, 2, 3])
+    ) {
       case 1:
         x = randint(-9, 9, [0, 1, -1])
         n = choice([2, 4, 5])

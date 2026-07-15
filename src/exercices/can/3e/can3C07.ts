@@ -7,7 +7,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer l’abscisse d’un milieu'
 export const interactifReady = true
@@ -34,9 +33,9 @@ export default class MilieuEntre1EtFraction extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 5)
-    const c = randint(1, 9)
-    const b = arrondi(a + c + randint(1, 9, 5) / 5)
+    const a = this.quotaRandint('a', 1, 5)
+    const c = this.quotaRandint('c', 1, 9)
+    const b = arrondi(a + c + this.quotaRandint('b', 1, 9, [5]) / 5)
     const A = pointAbstrait(0, 0, '1', 'below')
     const B = pointAbstrait(4, 0, 'M', 'below')
     const C = pointAbstrait(8, 0)

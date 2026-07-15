@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { abs, arrondi } from '../../../lib/outils/nombres'
 import { randint } from '../../../modules/outils'
@@ -33,7 +32,7 @@ export default class CalculDivers1 extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, c
     switch (
-      choice(['a', 'b', 'c', 'd']) //
+      this.quotaChoice('cas', ['a', 'b', 'c', 'd']) //
     ) {
       case 'a':
         a = randint(-5, 5, [0, 1])

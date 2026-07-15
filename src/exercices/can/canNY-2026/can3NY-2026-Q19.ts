@@ -2,7 +2,6 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { shuffle } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { sp } from '../../../lib/outils/outilString'
@@ -28,8 +27,8 @@ export default class canQ192026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const choix = this.canOfficielle ? 1 : randint(1, 2)
-    const a = this.canOfficielle ? 6 : randint(5, 10)
+    const choix = this.canOfficielle ? 1 : this.quotaRandint('choix', 1, 2)
+    const a = this.canOfficielle ? 6 : this.quotaRandint('a', 5, 10)
     const c = annee - a
     const b = annee + a
     const listeNombre1 = [annee, b, c]
