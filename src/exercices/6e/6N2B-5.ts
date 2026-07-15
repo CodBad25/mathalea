@@ -1,12 +1,12 @@
+import Decimal from 'decimal.js'
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, creerCouples } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import {
+  gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
-  gestionnaireFormulaireTexte,
 } from '../../modules/outils'
-import { propositionsQcm } from '../../lib/interactif/qcm'
-import Decimal from 'decimal.js'
 import Exercice from '../Exercice'
 
 export const amcReady = true
@@ -20,12 +20,12 @@ export const titre =
 /**
  * Multiplier deux nombres décimaux
  * @author Rémi Angot
-
  */
+
 export const uuid = 'a5c5a'
 
 export const refs = {
-  'fr-fr': ['6N2B-5'],
+  'fr-fr': ['6N2B-5, auto5N1D'],
   'fr-2016': ['6C10-3'],
   'fr-ch': ['9NO8-7'],
 }
