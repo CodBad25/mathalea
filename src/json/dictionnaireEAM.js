@@ -631,7 +631,7 @@ export const dictionnaireEAM = {
   },
   eam_technologique_2026_06_antilles_1: {
     annee: '2026',
-    lieu: 'antilles',
+    lieu: 'Antilles',
     mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'eam',
@@ -640,7 +640,7 @@ export const dictionnaireEAM = {
   },
   eam_technologique_2026_06_antilles_2: {
     annee: '2026',
-    lieu: 'antilles',
+    lieu: 'Antilles',
     mois: 'Juin',
     numeroInitial: '2',
     typeExercice: 'eam',
@@ -649,7 +649,7 @@ export const dictionnaireEAM = {
   },
   eam_technologique_2026_06_antilles_3: {
     annee: '2026',
-    lieu: 'antilles',
+    lieu: 'Antilles',
     mois: 'Juin',
     numeroInitial: '3',
     typeExercice: 'eam',
@@ -658,7 +658,7 @@ export const dictionnaireEAM = {
   },
   eam_technologique_2026_06_antilles_automatismes: {
     annee: '2026',
-    lieu: 'antilles',
+    lieu: 'Antilles',
     mois: 'Juin',
     numeroInitial: 'automatismes',
     typeExercice: 'eam',
@@ -789,7 +789,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: ["Analyse de l'information",'Suites'],
+    tags: ["Analyse de l'information", 'Suites'],
   },
   eam_specifique_2026_06_asie_3: {
     annee: '2026',

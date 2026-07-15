@@ -1106,7 +1106,7 @@ export const dictionnaireSTL = {
   },
   stl_2026_06_antilles_j2_mq1: {
     annee: '2026',
-    lieu: 'antilles',
+    lieu: 'Antilles',
     mois: 'Juin',
     numeroInitial: 'J2 - mq1 ',
     typeExercice: 'stl',
@@ -1114,7 +1114,7 @@ export const dictionnaireSTL = {
   },
   stl_2026_06_antilles_j2_mq2: {
     annee: '2026',
-    lieu: 'antilles',
+    lieu: 'Antilles',
     mois: 'Juin',
     numeroInitial: 'J2 - mq2 ',
     typeExercice: 'stl',

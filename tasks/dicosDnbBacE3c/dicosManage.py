@@ -58,7 +58,7 @@ def locationName(text:str)->str:
     elif text == 'sujet0vb' :
         return 'Sujet O Version A'
     else :
-        return text
+        return text[0].upper() + text[1:] if text else text
 
 def monthName(mm:str)->str:
     """Une fonction pour transformer le numéro du mois en texte
