@@ -340,7 +340,7 @@ export function injectMetaInteractif2dDOM(
 /**
  * Injects DOM for multiMathfield questions.
  * Creates a host element with the expected shadow DOM structure used by
- * verifQuestionMultiMathfield().
+ * MultiMathfieldElement.verifQuestion().
  */
 export function injectMultiMathfieldDOM(
   exerciceIndex: number,
@@ -543,7 +543,7 @@ export function injectTableurDOM(
   const data = Array.from({ length: rowCount }, () => Array(colCount).fill(''))
   const columns = Array.from({ length: colCount }, () => ({ width: 90 }))
 
-  const sheet = MySpreadsheetElement.create({
+  const sheet = MySpreadsheetElement.createEltToAppendToDom({
     id: sheetId,
     data,
     minDimensions: [colCount, rowCount],

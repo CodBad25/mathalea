@@ -31,7 +31,7 @@ export default class ConversionEnTousSens extends ExerciceSimple {
   nouvelleVersion() {
     let a, resultat
     switch (
-      choice(['a', 'b', 'c', 'd']) //
+      this.quotaChoice('typeConversion', ['a', 'b', 'c', 'd']) //
     ) {
       case 'a':
         if (choice([true, false])) {

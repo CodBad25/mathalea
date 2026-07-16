@@ -5,17 +5,17 @@
     buildExercisesList,
     splitExercisesIntoQuestions,
   } from '../../../lib/components/exercisesUtils'
+  import ListeDeroulanteElement from '../../../lib/customElements/ListeDeroulanteElement'
+  import { MultiMathfieldElement } from '../../../lib/customElements/MultiMathfield'
+  import { SvgSelectionElement } from '../../../lib/customElements/SvgSelectionElement'
   import { verifQuestionCliqueFigure } from '../../../lib/interactif/cliqueFigure'
   import {
     prepareExerciceCliqueFigure,
     uniformiseResults,
     verifQuestionMetaInteractif2d,
-    verifQuestionMultiMathfield,
   } from '../../../lib/interactif/gestionInteractif'
   import { verifQuestionMathLive } from '../../../lib/interactif/mathLive'
   import { verifQuestionQcm } from '../../../lib/interactif/qcm'
-  import { verifQuestionListeDeroulante } from '../../../lib/interactif/questionListeDeroulante'
-  import { verifQuestionSvgSelection } from '../../../lib/interactif/questionSvgSelection/questionSvgSelection'
   import {
     mathaleaFormatExercice,
     mathaleaGenerateSeed,
@@ -154,7 +154,7 @@
       )
     } else if (type === 'listeDeroulante') {
       resultsByQuestion[i] = uniformiseResults(
-        verifQuestionListeDeroulante(
+        ListeDeroulanteElement.verifQuestion(
           exercices[indiceExercice[i]],
           indiceQuestionInExercice[i],
         ),
@@ -174,7 +174,7 @@
       )
     } else if (type === 'multiMathfield') {
       const resu = uniformiseResults(
-        verifQuestionMultiMathfield(
+        MultiMathfieldElement.verifQuestion(
           exercices[indiceExercice[i]],
           indiceQuestionInExercice[i],
         ),
@@ -190,7 +190,7 @@
       resultsByQuestion[i] = resu
     } else if (type === 'svgSelection') {
       const resu = uniformiseResults(
-        verifQuestionSvgSelection(
+        SvgSelectionElement.verifQuestion(
           exercices[indiceExercice[i]],
           indiceQuestionInExercice[i],
         ),

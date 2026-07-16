@@ -2,7 +2,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import {
   choixDeroulant,
   listeDeroulanteToQcm,
-} from '../../lib/interactif/questionListeDeroulante'
+} from '../../lib/customElements/ListeDeroulanteElement'
 import { sp } from '../../lib/outils/outilString'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
@@ -48,7 +48,7 @@ export default class TestListDeroulante extends ExerciceSimple {
     }
     this.question = this.interactif
       ? `On propose ci-après une liste déroulante de nombres dont il faut déterminer le plus grand :<br><br>
-        ${sp(30)}${choixDeroulant(this, 0, choix)}<br><br>`
+        ${sp(30)}${choixDeroulant(this, 0, { choices: choix })}<br><br>`
       : `On propose ci-après une liste de nombres dont il faut déterminer le plus grand :<br><br>
         ${sp(30)}${propositionsQcm(this, 0).texte}<br><br>`
 

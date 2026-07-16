@@ -1,17 +1,24 @@
-type SvgWithValue = { svg: string; value: number }
+import { context } from '../../modules/context'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
+
+export type SvgWithValue = { svg: string; value: number }
+
 export type SvgSelectionOptions = {
-  exercice: IExercice
-  questionIndex: number
   className?: string
   gapX?: string
   gapY?: string
   itemPadding?: string
   style?: string
   svgs: SvgWithValue[][] | SvgWithValue[]
+  id?: string
+}
+
+export type SvgSelectionCreateOptions = SvgSelectionOptions & {
+  numeroExercice?: number
+  questionIndex?: number
 }
 /**
  * Composant de sélection d'éléments SVG avec valeurs associées
@@ -23,7 +30,7 @@ export type SvgSelectionOptions = {
  * Le composant est accessible et réactif aux changements d'attributs
  * @author Jean-claude Lhote
  */
-class SvgSelectionElement extends MathaleaCustomElement {
+export class SvgSelectionElement extends MathaleaCustomElement {
   static readonly elementTag = 'svg-selection'
 
   static formatStudentAnswer(rawAnswer: string, questionHtml?: string): string {
@@ -156,7 +163,8 @@ class SvgSelectionElement extends MathaleaCustomElement {
   }
 
   static create({
-    exercice,
+    id,
+    numeroExercice,
     questionIndex,
     className,
     svgs,
@@ -164,10 +172,12 @@ class SvgSelectionElement extends MathaleaCustomElement {
     gapX,
     gapY,
     itemPadding,
-  }: SvgSelectionOptions): string {
+  }: SvgSelectionCreateOptions): string {
     const attrs: string[] = []
-    const id = `svg-selectionEx${exercice!.numeroExercice}Q${questionIndex}`
-    attrs.push(`id="${id}"`)
+    const computedId =
+      id ??
+      `${SvgSelectionElement.elementTag}Ex${numeroExercice ?? 0}Q${questionIndex ?? 0}`
+    attrs.push(`id="${computedId}"`)
     if (className) attrs.push(`class="${className}"`)
     if (style) attrs.push(`style="${style}"`)
     if (gapX) attrs.push(`gap-x="${gapX}"`)
@@ -175,6 +185,49 @@ class SvgSelectionElement extends MathaleaCustomElement {
     if (itemPadding) attrs.push(`item-padding="${itemPadding}"`)
     attrs.push(`svgs="${encodeURIComponent(JSON.stringify(svgs))}"`)
     return `<svg-selection ${attrs.join(' ')}></svg-selection>`
+  }
+
+  static verifQuestion(exercice: IExercice, i: number): 'OK' | 'KO' {
+    const spanReponseLigne = document.querySelector(
+      `#resultatCheckEx${exercice.numeroExercice}Q${i}`,
+    )
+    if (spanReponseLigne == null) {
+      window.notify(
+        "l'exercice ayant appelé verifQuestionSvgSelection() n'a pas correctement défini le span pour le smiley",
+        { exercice: JSON.stringify(exercice) },
+      )
+    }
+    const selection = document.querySelector(
+      `#svg-selectionEx${exercice.numeroExercice}Q${i}`,
+    ) as SvgSelectionElement | null
+    let value = ''
+
+    if (selection) {
+      value = String(selection.value)
+    }
+
+    const repValue = exercice.autoCorrection[i]?.valeur?.reponse?.value
+    if (exercice.answers === undefined) {
+      exercice.answers = {}
+    }
+    if (selection) {
+      exercice.answers[selection.id] = String(selection.value)
+    }
+
+    const resultat: 'OK' | 'KO' = Array.isArray(repValue)
+      ? repValue.map(String).includes(value)
+        ? 'OK'
+        : 'KO'
+      : value === String(repValue)
+        ? 'OK'
+        : 'KO'
+
+    if (spanReponseLigne) {
+      spanReponseLigne.innerHTML = resultat === 'OK' ? '😎' : '☹️'
+      ;(spanReponseLigne as HTMLElement).style.fontSize = 'large'
+    }
+
+    return resultat
   }
 
   static get observedAttributes() {
@@ -593,6 +646,46 @@ class SvgSelectionElement extends MathaleaCustomElement {
       : `svg-selection-resultat`
     this.appendChild(resultatCheck)
   }
+}
+
+export function addSvgSelection(
+  exercice: IExercice,
+  questionIndex: number,
+  params: {
+    svgs: SvgWithValue[][] | SvgWithValue[]
+    options?: {
+      gapX?: string
+      gapY?: string
+      itemPadding?: string
+      style?: string
+    }
+    id?: string
+  },
+): string {
+  if (!context.isHtml) return ''
+
+  const { gapX, gapY, itemPadding, style } = params.options || {}
+  if (
+    context.isHtml &&
+    exercice?.autoCorrection[questionIndex]?.formatInteractif !== 'svgSelection'
+  ) {
+    if (exercice?.autoCorrection == null) exercice.autoCorrection = []
+    if (exercice?.autoCorrection[questionIndex] == null)
+      exercice.autoCorrection[questionIndex] = {}
+    exercice.autoCorrection[questionIndex].formatInteractif = 'svgSelection'
+  }
+
+  return SvgSelectionElement.create({
+    id: params.id,
+    numeroExercice: exercice.numeroExercice,
+    questionIndex,
+    className: 'mx-2 svgSelection',
+    style,
+    gapX,
+    gapY,
+    itemPadding,
+    svgs: params.svgs,
+  })
 }
 
 registerMathaleaCustomElement(SvgSelectionElement)

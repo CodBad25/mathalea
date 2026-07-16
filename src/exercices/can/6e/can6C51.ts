@@ -35,8 +35,8 @@ export default class MultiplieFractionDPar10Par100Par1000 extends ExerciceSimple
 
   nouvelleVersion() {
     const a = choice([randint(11, 99), randint(100, 999), randint(2, 9)])
-    const den = choice([10, 100, 1000])
-    const b = choice([10, 100, 1000])
+    const den = this.quotaChoice('den', [10, 100, 1000])
+    const b = this.quotaChoice('b', [10, 100, 1000])
     const resultat = arrondi((a * b) / den, 3)
     this.question = `Calculer sous la forme d'un entier ou d'un décimal : $${texFractionFromString(a, den)}\\times${texNombre(b)}$.`
     this.correction = `$\\begin{aligned}

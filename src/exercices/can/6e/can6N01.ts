@@ -1,11 +1,9 @@
 import { bleuMathalea } from '../../../lib/colors'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Recomposer un entier'
 export const interactifReady = true
@@ -34,9 +32,9 @@ export default class RecomposerEntier extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(2, 5)
-    const b = randint(2, 9)
-    const c = randint(2, 9)
+    const a = this.quotaRandint('a', 2, 5)
+    const b = this.quotaRandint('b', 2, 9)
+    const c = this.quotaRandint('c', 2, 9)
     this.reponse = a * 1000 + b * 10 + c * 100
     let correction = `<br><br> Mentalement : <br>
     On décompose le calcul (milliers, centaines puis dizaines) : <br>
@@ -46,7 +44,7 @@ export default class RecomposerEntier extends ExerciceSimple {
     Ainsi,  <br>
     $\\begin{aligned}`
 
-    if (choice([true, false])) {
+    if (this.quotaChoice('ordre', [true, false])) {
       this.question = this.sup
         ? `Calculer $(${texNombre(a)}\\times ${texNombre(1000)}) + (${texNombre(b)}\\times 10) + (${texNombre(c)}\\times 100)$.`
         : `Calculer $${texNombre(a)}\\times ${texNombre(1000)} + ${texNombre(b)}\\times 10 + ${texNombre(c)}\\times 100$.`

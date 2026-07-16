@@ -2,7 +2,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
-import { randint } from '../../../modules/outils'
 export const titre = "Calculer le côté d'un carré connaissant son périmètre"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -27,7 +26,7 @@ export default class QuestionsAiresEtPerimetres3 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a1 = randint(5, 20)
+    const a1 = this.quotaRandint('a1', 5, 20)
     const a = a1 * 4
     this.reponse = a1
     this.question = `Le périmètre d'un carré est $${a}\\text{ cm}$. <br>Quelle est la longueur du côté du carré ? `

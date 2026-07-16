@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 
@@ -26,8 +25,10 @@ export default class InverseOppose2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const nbre = this.canOfficielle ? annee : choice([-annee, annee])
-    if (this.canOfficielle ? true : choice([true, false])) {
+    const nbre = this.canOfficielle
+      ? annee
+      : this.quotaChoice('nbre', [-annee, annee])
+    if (this.canOfficielle ? true : this.quotaChoice('choix', [true, false])) {
       this.question = `Quel est l'opposé de  $${texNombre(nbre)}$ ? `
       this.correction = `L'opposé de $${texNombre(nbre)}$ est $${miseEnEvidence(`${texNombre(-nbre)}`)}$.`
       this.reponse = -nbre

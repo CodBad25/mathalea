@@ -1,7 +1,5 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Multiplier par les multiples de 101'
 export const interactifReady = true
@@ -29,8 +27,8 @@ export default class MutliplierParN0N extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(2, 4)
-    const b = choice([6, 7, 8, 9, 11, 15])
+    const a = this.quotaRandint('a', 2, 4)
+    const b = this.quotaChoice('b', [6, 7, 8, 9, 11, 15])
     this.reponse = 101 * a * b
     this.question = `Calculer $${b}\\times ${texNombre(a * 101)}$.`
     this.correction = ''

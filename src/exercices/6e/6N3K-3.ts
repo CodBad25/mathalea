@@ -1,11 +1,11 @@
 import { BoiteBuilder } from '../../lib/2d/BoiteBuilder'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { bleuMathalea } from '../../lib/colors'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
-  selectionSvg,
+  addSvgSelection,
   type SvgWithValue,
-} from '../../lib/interactif/questionSvgSelection/questionSvgSelection'
+} from '../../lib/customElements/SvgSelectionElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import type FractionEtendue from '../../modules/FractionEtendue'
@@ -182,13 +182,13 @@ Dans ${this.nbQuestions > 1 ? 'les questions suivantes' : 'la question suivante'
         case 1:
           frac = choice(fractionsPourCase1)
           handleAnswers(this, i, { reponse: { value: frac.num / frac.den } })
-          texte += `$${frac.texFraction}$ :<br><br> ${context.isHtml ? selectionSvg(this, i, { svgs: [[...svgItems1], [...svgItems1]] }) : figureLatex}`
+          texte += `$${frac.texFraction}$ :<br><br> ${context.isHtml ? addSvgSelection(this, i, { svgs: [[...svgItems1], [...svgItems1]] }) : figureLatex}`
           break
         case 2:
         default:
           frac = choice(fractionsPourCase2)
           handleAnswers(this, i, { reponse: { value: frac.num / frac.den } })
-          texte += `$${frac.texFraction}$ :<br><br> ${context.isHtml ? selectionSvg(this, i, { svgs: [[...svgItems1], [...svgItems1], [...svgItems1]] }) : figureLatex}`
+          texte += `$${frac.texFraction}$ :<br><br> ${context.isHtml ? addSvgSelection(this, i, { svgs: [[...svgItems1], [...svgItems1], [...svgItems1]] }) : figureLatex}`
           break
       }
 

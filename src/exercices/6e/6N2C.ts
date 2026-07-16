@@ -1,5 +1,5 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import {
   miseEnEvidence,
   texteEnCouleurEtGras,
@@ -92,13 +92,13 @@ export default class DiviserPar10 extends Exercice {
         if (operationsPossibles[i] === 1) {
           texte += `Diviser par $${texNombre(combien)}$ revient à `
           texte += this.interactif
-            ? choixDeroulant(this, 2 * i, [
+            ? choixDeroulant(this, 2 * i, { choices: [
                 { label: 'Choisir un verbe', value: '' },
                 { label: 'ajouter', value: 'ajouter' },
                 { label: 'diviser', value: 'diviser' },
                 { label: 'multiplier', value: 'multiplier' },
                 { label: 'soustraire', value: 'soustraire' },
-              ])
+              ] })
             : '$\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots$'
           handleAnswers(
             this,
@@ -108,12 +108,12 @@ export default class DiviserPar10 extends Exercice {
           )
           texte += ' par '
           texte += this.interactif
-            ? choixDeroulant(this, 2 * i + 1, [
+            ? choixDeroulant(this, 2 * i + 1, { choices: [
                 { label: 'Choisir la bonne valeur', value: '' },
                 { latex: '0,1', value: `${texNombre(0.1)}` },
                 { latex: '0,01', value: `${texNombre(0.01)}` },
                 { latex: '0,001', value: `${texNombre(0.001)}` },
-              ])
+              ] })
             : '$\\ldots\\ldots\\ldots\\ldots$'
           handleAnswers(
             this,
@@ -125,13 +125,13 @@ export default class DiviserPar10 extends Exercice {
         } else {
           texte += `Multiplier par $${reponse}$ revient à `
           texte += this.interactif
-            ? choixDeroulant(this, 2 * i, [
+            ? choixDeroulant(this, 2 * i, { choices: [
                 { label: 'Choisir un verbe', value: '' },
                 { label: 'ajouter', value: 'ajouter' },
                 { label: 'diviser', value: 'diviser' },
                 { label: 'multiplier', value: 'multiplier' },
                 { label: 'soustraire', value: 'soustraire' },
-              ])
+              ] })
             : '$\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots$'
           handleAnswers(
             this,
@@ -141,12 +141,12 @@ export default class DiviserPar10 extends Exercice {
           )
           texte += ' par '
           texte += this.interactif
-            ? choixDeroulant(this, 2 * i + 1, [
+            ? choixDeroulant(this, 2 * i + 1, { choices: [
                 { label: 'Choisir la bonne valeur', value: '' },
                 { latex: '10', value: '10' },
                 { latex: '100', value: '100' },
                 { latex: '1\\,000', value: '1 000' },
-              ])
+              ] })
             : '$\\ldots\\ldots\\ldots\\ldots$'
           handleAnswers(
             this,

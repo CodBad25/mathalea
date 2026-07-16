@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -28,12 +27,12 @@ export default class ArrondiDixiemeCentieme extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 20)
-    const b = randint(0, 9, 5)
+    const a = this.quotaRandint('a', 1, 20)
+    const b = this.quotaRandint('b', 0, 9, [5])
     const c = randint(1, 9, b)
-    const e = randint(1, 9)
+    const e = this.quotaRandint('e', 1, 9)
     const d = a + b * 0.1 + c * 0.01 + e * 0.001
-    if (choice([true, false])) {
+    if (this.quotaChoice('ordre', [true, false])) {
       this.question = `Quel est l'arrondi au dixième de $${texNombre(d)}$ ?`
       if (c > 4) {
         this.correction = `Pour arrondir au dixième, on regarde le chiffre des centièmes : $${c}$.<br>

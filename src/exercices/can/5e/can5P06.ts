@@ -56,7 +56,7 @@ export default class ÉcrirePourcentage extends ExerciceSimple {
       [17, 20],
     ]
     switch (
-      choice(['a', 'b', 'c', 'd']) //
+      this.quotaChoice('typeDeQuestions', ['a', 'b', 'c', 'd']) //
     ) {
       case 'a':
         {

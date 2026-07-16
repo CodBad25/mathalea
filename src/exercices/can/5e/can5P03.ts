@@ -50,7 +50,7 @@ export default class PoucentageP2 extends ExerciceSimple {
       ['beignets'],
     ]
     switch (
-      choice([1, 2, 3, 4, 5]) //
+      this.quotaChoice('typeDeQuestions', [1, 2, 3, 4, 5]) //
     ) {
       case 1: // proportionnalité avec fruits
         a = randint(0, 7) // index du fruit

@@ -1,12 +1,10 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
 
 import { bleuMathalea } from '../../../lib/colors'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Résoudre un problème de partage'
@@ -46,12 +44,12 @@ export default class Partage extends ExerciceSimple {
       ['Huit', 'huit', 8],
       ['Neuf', 'neuf', 9],
     ]
-    const nombre = choice(nbrePers)
+    const nombre = this.quotaChoice('nombre', nbrePers)
 
     const a = nombre[0]
     const b = nombre[1]
     const n = nombre[2] as number
-    this.reponse = randint(21, 29) // La réponse, c'est ce nombre
+    this.reponse = this.quotaRandint('reponse', 21, 29) // La réponse, c'est ce nombre
     const prix = this.reponse * n // calcul n'est pas utile pour la multiplication d'entiers
     this.question = `${a} amis mangent au restaurant. L'addition s'élève à $${prix}$ euros.
     Les amis décident de partager la note en ${b}.<br>

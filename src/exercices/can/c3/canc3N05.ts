@@ -33,7 +33,7 @@ export default class CompositionDeNombreDecimalC3 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 9)
+    const a = this.quotaRandint('a', 1, 9)
     const b = randint(1, 9, a)
     const c = randint(1, 9, [a, b])
     switch (choice([1, 2, 3])) {

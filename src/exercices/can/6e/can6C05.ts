@@ -45,7 +45,7 @@ export default class MultiplierAstucieusement extends ExerciceSimple {
     const c = randint(1, 9, [a, b])
     const d = randint(1, 9, [a, b, c])
     // typeDeQuestions :  1, 2, 3, 4 : *100 // 5, 6 : *10
-    const typeDeQuestions = choice([1, 2, 3, 4, 5, 6])
+    const typeDeQuestions = this.quotaChoice('typeDeQuestions', [1, 2, 3, 4, 5, 6])
     let nombre = a * 1000 + b * 100
     nombre += this.sup ? choice([c * 10 + d, c * 10, 0]) : c * 10
     const facteur = nombre / 1000

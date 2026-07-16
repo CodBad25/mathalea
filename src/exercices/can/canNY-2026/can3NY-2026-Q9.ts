@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -27,8 +26,10 @@ export default class calcAvecChiffresPrio2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const b = this.canOfficielle ? 10 : choice([2, 5, 10, 20, 100, 1000])
-    if (this.canOfficielle ? true : choice([true, false])) {
+    const b = this.canOfficielle
+      ? 10
+      : this.quotaChoice('b', [2, 5, 10, 20, 100, 1000])
+    if (this.canOfficielle ? true : this.quotaChoice('choix', [true, false])) {
       this.question = `Quel est le plus grand entier multiple de $${texNombre(b)}$ strictement inférieur à $${texNombre(annee, 0)}$ ?`
       if (annee % b === 0) {
         this.reponse = texNombre(annee - b, 0)

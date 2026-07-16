@@ -302,13 +302,16 @@
   function refreshTasksLayout(code: string) {
     const values: Record<string, TasksLayoutValue> = {}
     const defaults = (): TasksLayoutValue => ({
-      columns: 1,
+      columns: '"auto-fit"',
       gutter: 'interligne-questions',
     })
     for (const match of code.matchAll(
-      /^#let (ex\d+(?:-corr)?)-colonnes = (\d+)/gm,
+      /^#let (ex\d+(?:-corr)?)-colonnes = (.+?)\s*$/gm,
     )) {
-      ;(values[match[1]] ??= defaults()).columns = Number(match[2])
+      const value = match[2].trim()
+      ;(values[match[1]] ??= defaults()).columns = /^\d+$/.test(value)
+        ? Number(value)
+        : value
     }
     for (const match of code.matchAll(
       /^#let (ex\d+(?:-corr)?)-gutter = (\S+)/gm,
@@ -364,9 +367,19 @@
   }
 
   function adjustColumns(target: string, delta: number) {
-    const current = tasksLayoutValues[target]?.columns ?? 1
-    const next = Math.min(4, Math.max(1, current + delta))
-    if (next !== current) setTasksVariable(target, 'colonnes', String(next))
+    const raw = tasksLayoutValues[target]?.columns ?? '"auto-fit"'
+    if (typeof raw !== 'number') {
+      if (delta > 0) setTasksVariable(target, 'colonnes', String(1))
+      return
+    }
+    const current = raw
+    const next = current + delta
+    if (next < 1) {
+      setTasksVariable(target, 'colonnes', '"auto-fit"')
+      return
+    }
+    const clamped = Math.min(4, next)
+    if (clamped !== current) setTasksVariable(target, 'colonnes', String(clamped))
   }
 
   /** Pas d'ajustement de l'espacement vertical des questions, en em */

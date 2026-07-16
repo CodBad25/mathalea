@@ -1,7 +1,6 @@
 import Decimal from 'decimal.js'
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -40,7 +39,7 @@ export default class DoubleOuTripleDecimal extends ExerciceSimple {
     const e = a * 10 + b
     const d = new Decimal(randint(1, 9)).div(10)
     const c = d.add(e)
-    if (choice([true, false])) {
+    if (this.quotaChoice('doubleOuTriple', [true, false])) {
       this.reponse = c.mul(3)
       this.question = `Quel est le triple de $${texNombre(c, 1)}$ ?`
       this.correction = `Le triple de $${texNombre(c, 1)}$ est $3 \\times ${texNombre(c, 1)}=${miseEnEvidence(texNombre(Number(this.reponse), 1))}$.<br>`

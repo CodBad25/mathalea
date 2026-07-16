@@ -1,5 +1,5 @@
 import type { AllChoicesType } from '../../lib/interactif/listeDeroulante/ListeDeroulante'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -232,15 +232,15 @@ export default class FormulesAireCarreRectangle extends Exercice {
 
         texte = texteFixe[0]
         texte += this.interactif
-          ? choixDeroulant(this, 3 * i, choixListeDeroulantePourCeCas[0])
+          ? choixDeroulant(this, 3 * i, { choices: choixListeDeroulantePourCeCas[0] })
           : '$\\ldots\\ldots\\ldots$'
         texte += texteFixe[1]
         texte += this.interactif
-          ? choixDeroulant(this, 3 * i + 1, choixListeDeroulantePourCeCas[1])
+          ? choixDeroulant(this, 3 * i + 1, { choices: choixListeDeroulantePourCeCas[1] })
           : '$\\ldots\\ldots\\ldots$'
         texte += texteFixe[2]
         texte += this.interactif
-          ? choixDeroulant(this, 3 * i + 2, choixListeDeroulantePourCeCas[2]) +
+          ? choixDeroulant(this, 3 * i + 2, { choices: choixListeDeroulantePourCeCas[2] }) +
             '.'
           : '$\\ldots\\ldots\\ldots$'
         this.listeQuestions.push(texte)

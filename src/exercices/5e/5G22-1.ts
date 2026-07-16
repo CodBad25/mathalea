@@ -34,7 +34,7 @@ import { vecteur } from '../../lib/2d/Vecteur'
 import { vide2d } from '../../lib/2d/Vide2d'
 import { bleuMathalea } from '../../lib/colors'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import {
   choice,
   combinaisonListes,
@@ -456,7 +456,7 @@ export default class DroitesRemarquablesPointsConcours extends Exercice {
           monObjet.genre === 'droite'
             ? 'La droite tracée en bleu est '
             : `Le point ${nomPt} est `
-        texte += choixDeroulant(this, i, choix) + '.'
+        texte += choixDeroulant(this, i, { choices: choix }) + '.'
         handleAnswers(
           this,
           i,

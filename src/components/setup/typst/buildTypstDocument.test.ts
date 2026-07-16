@@ -45,12 +45,17 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('solution: [')
     expect(code).toContain('#ex1()')
     expect(code).toContain('#exo-print-solutions(title: none)')
-    expect(code).toContain('#import "@preview/taskize:0.2.6": tasks')
-    expect(code).toContain('#let ex1-colonnes = 1')
+    expect(code).toContain(
+      '#import "@preview/taskize:0.2.7": tasks, tasks-setup',
+    )
+    expect(code).toContain(
+      '#tasks-setup(columns: "auto-fit", auto-fit-mode: "uniform", max-columns: 4)',
+    )
+    expect(code).toContain('#let ex1-colonnes = "auto-fit"')
     expect(code).toContain('#let interligne-questions = 1.2em')
     expect(code).toContain('#let ex1-gutter = interligne-questions')
     // la correction a ses propres réglages, indépendants de l'énoncé
-    expect(code).toContain('#let ex1-corr-colonnes = 1')
+    expect(code).toContain('#let ex1-corr-colonnes = "auto-fit"')
     expect(code).toContain('#let ex1-corr-gutter = interligne-questions')
     expect(code).toContain('#tasks(columns: ex1-corr-colonnes')
     expect(code).toContain('#mathalea-anchor("tasks-corr", 1)')
@@ -88,7 +93,7 @@ describe('buildTypstDocument', () => {
       '#tasks(columns: ex1-colonnes, label: "a)", row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + Question une.\n      + Question deux.\n    ]',
     )
     expect(code).toContain('Voici la figure.')
-    expect(code).toContain('#let ex1-colonnes = 1')
+    expect(code).toContain('#let ex1-colonnes = "auto-fit"')
   })
 
   it('découpe aussi les repères stylizeItems (multiMathfield) en sous-questions', () => {
@@ -121,7 +126,7 @@ describe('buildTypstDocument', () => {
     expect(code).toContain(
       '#tasks(columns: ex1-colonnes, label: none, row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + a) $1 + 1$\n      + b) $2 + 2$\n    ]',
     )
-    expect(code).toContain('#let ex1-colonnes = 1')
+    expect(code).toContain('#let ex1-colonnes = "auto-fit"')
   })
 
   it("n'ajoute pas de section corrections quand il n'y en a pas", () => {
@@ -198,7 +203,9 @@ describe('buildTypstDocument', () => {
         ],
       }),
     ])
-    expect(code).toContain('#import "@preview/taskize:0.2.6": tasks')
+    expect(code).toContain(
+      '#import "@preview/taskize:0.2.7": tasks, tasks-setup',
+    )
     expect(code).toContain('#let qcm-colonnes = 2')
     expect(code).toContain('#let qcm-bonne(')
     expect(code).toContain('#tasks(columns: qcm-colonnes')

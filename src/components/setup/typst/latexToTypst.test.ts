@@ -26,8 +26,51 @@ describe('latexMathToTypst', () => {
     expect(latexMathToTypst('\\dfrac{3,5}{2}')).toBe('frac(3","5, 2)')
   })
 
+  it('convertit \\limits et \\nolimits en fonctions Typst', () => {
+    expect(latexMathToTypst('\\lim\\limits_{h \\to 0} 5+h')).toBe(
+      'limits(lim)_(h -> 0) 5 + h',
+    )
+    expect(latexMathToTypst('\\sum\\nolimits_{i=1}^{n} i')).toBe(
+      'scripts(sum)_(i = 1)^n i',
+    )
+  })
+
+  it('convertit \\xrightarrow/\\xleftarrow en parenthésant les étiquettes', () => {
+    // programmes de calcul (ex. 6N0B-4) : sans parenthèses, seul le premier
+    // jeton irait en exposant et le reste de la formule serait absorbé à côté
+    expect(latexMathToTypst('\\ldots \\xrightarrow{\\div 2} 15')).toBe(
+      '... limits(->)^(div 2) 15',
+    )
+    // l'étiquette peut être dans l'argument optionnel (rendue sous la flèche)
+    expect(latexMathToTypst('14 \\xleftarrow[\\times 2]{} 7')).toBe(
+      '14 limits(<-)_(times 2) 7',
+    )
+    // sans étiquette : flèche nue, pas d'exposant vide qui gobe la suite
+    expect(latexMathToTypst('a \\xrightarrow{} b')).toBe('a -> b')
+  })
+
+  it('parenthèse les étiquettes multi-jetons de \\overset/\\underset', () => {
+    expect(latexMathToTypst('x \\overset{a+b}{=} y')).toBe(
+      'x limits(=)^(a + b) y',
+    )
+    // le filet \overset{\rule{...}{...}}{A} reste converti en overline
+    expect(latexMathToTypst('\\overset{\\rule{0.8em}{0.08em}}{A}')).toBe(
+      'overline(A)',
+    )
+  })
+
   it('convertit \\num et \\numprint en gardant les espaces fines', () => {
     expect(latexMathToTypst('\\num{12\\,345,6}')).toBe('12 thin 345","6')
+  })
+
+  it('convertit les couleurs nommées inconnues de Typst en hexadécimal', () => {
+    // DarkOrange (ex. 6G10 « nommer les angles ») n'existe pas en Typst :
+    // sans conversion, la compilation échoue avec « unknown variable: DarkOrange »
+    const result = latexMathToTypst('\\textcolor{DarkOrange}{\\hat{FNG}}')
+    expect(result).toContain('rgb("#ff8c00")')
+    expect(result).not.toContain('DarkOrange')
+    // les couleurs natives Typst restent nommées
+    expect(latexMathToTypst('\\textcolor{red}{x}')).toContain('red')
   })
 
   it('convertit la mise en évidence colorée de MathALÉA', () => {

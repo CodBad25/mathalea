@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -28,9 +27,9 @@ export default class ResteDivision5e extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = choice([25, 20, 50, 40, 15])
+    const a = this.quotaChoice('a', [25, 20, 50, 40, 15])
     const b = randint(5, a - 1)
-    const c = randint(3, 9)
+    const c = this.quotaRandint('c', 3, 9)
     const d = c * a + b
     this.question = `Quel est le reste de la division de $${d}$ par $${a}$ ?`
     this.correction = `$${d}=${a} \\times ${c} + ${b}$ avec $${b}<${a}$ donc le reste de la division de $${d}$ par $${a}$ est $${b}$.<br>`

@@ -46,8 +46,16 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
   private controls: HTMLDivElement | null = null
   id: string = ''
 
-  static create(options: DemiDroiteInteractiveOptions = {}): string {
-    const idAttribute = options.id ? ` id="${options.id}"` : ''
+  static create(
+    options: DemiDroiteInteractiveOptions & {
+      id?: string
+      numeroExercice?: number
+      questionIndex?: number
+    },
+  ): string {
+    const idAttribute = options.id
+      ? ` id="${options.id}"`
+      : `id="demi-droite-interactiveEx${options.numeroExercice ?? 0}Q${options.questionIndex ?? 0}"`
     const x0 = options.x0 ?? 0
     const initialT = options.initialT ?? 2
     const minT = options.minT ?? 2
@@ -61,7 +69,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       JSON.stringify(options.points ?? []),
     )
 
-    return `<demi-droite-interactive${idAttribute} x0="${x0}" initial-t="${initialT}" min-t="${minT}" max-t="${maxT}" show-negative="${showNegative}" multiple-points="${multiplePoints}" interactivity-on="${interactivityOn}" parts-count="${partsCount}" points="${pointsAttribute}" points-color="${pointsColor}"></demi-droite-interactive>`
+    return `<demi-droite-interactive ${idAttribute} x0="${x0}" initial-t="${initialT}" min-t="${minT}" max-t="${maxT}" show-negative="${showNegative}" multiple-points="${multiplePoints}" interactivity-on="${interactivityOn}" parts-count="${partsCount}" points="${pointsAttribute}" points-color="${pointsColor}"></demi-droite-interactive>`
   }
 
   connectedCallback() {
@@ -401,8 +409,8 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     }
     const resultatCheck = document.createElement('span')
     resultatCheck.id = this.id
-      ? `${this.id.replace('demi-droite-graduee', 'resultatCheck')}`
-      : `demi-droite-graduee-resultat`
+      ? `${this.id.replace('demi-droite-interactive', 'resultatCheck')}`
+      : `demi-droite-interactive-resultat`
 
     const width = 600
     const height = 70
@@ -691,15 +699,14 @@ type DemiDroiteInteractiveOptions = {
 
 export function demiDroiteInteractive(
   exercice: IExercice,
-  question: number,
+  questionIndex: number,
   options?: DemiDroiteInteractiveOptions,
 ): string {
   if (!context.isHtml) return ''
   return DemiDroiteInteractiveElement.create({
     ...options,
-    id:
-      options?.id ||
-      `demi-droite-gradueeEx${exercice.numeroExercice}Q${question}`,
+    numeroExercice: exercice.numeroExercice,
+    questionIndex,
   })
 }
 

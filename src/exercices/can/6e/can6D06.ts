@@ -1,6 +1,5 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Connaître des unités de mesure de durées longues et les relations qui les lient'
@@ -35,7 +34,7 @@ export default class AutoDureeAnnees extends ExerciceSimple {
       ['année non bissextile', 'jours', 365],
       ['année bissextile', 'jours', 366],
     ]
-    const choix = randint(0, 3)
+    const choix = this.quotaRandint('choix', 0, 3)
 
     this.reponse = durees[choix][2]
     this.question = `$1$ ${durees[choix][0]} = `

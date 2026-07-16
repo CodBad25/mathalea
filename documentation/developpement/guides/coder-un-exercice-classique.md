@@ -218,6 +218,66 @@ for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
 
 Si le choix doit venir d'un formulaire utilisateur, utiliser `gestionnaireFormulaireTexte()` depuis `src/modules/outils.ts` et déclarer le formulaire dans le constructeur. Copier la structure d'un exercice récent proche avant d'ajouter ce niveau de paramétrage.
 
+### Dans un exercice de type simple
+
+Dans un exercice héritant de `ExerciceSimple`, `nouvelleVersion()` est appelée une fois **par question** par `mathaleaHandleExerciceSimple()` (`src/lib/mathalea.ts`), avec une graine différente à chaque appel : un `choice()` ou un `randint()` y est donc retiré indépendamment à chaque question, sans contrôle possible de la répartition globale (rien n'empêche que les 10 questions tombent toutes sur le même cas). `ExerciceSimple` (`src/exercices/ExerciceSimple.ts`) fournit trois méthodes pour contrôler ce hasard entre les questions d'une même version : `quotaChoice()`, `quotaRandint()`, et la primitive générique `fromQuestionPlan()`.
+
+#### `quotaChoice(key, values)`
+
+Équivalent, pour un exercice simple, du `combinaisonListes()` des exercices classiques. Comme `choice()`, mais garantit une répartition équilibrée entre les questions :
+
+```ts
+nouvelleVersion() {
+  // Répartition équilibrée garantie : sur 10 questions, exactement 5 seront faciles
+  const niveau = this.quotaChoice('niveau', ['facile', 'difficile'])
+  // Pondération : répéter une valeur (ici 2 questions faciles sur 3)
+  // const niveau = this.quotaChoice('niveau', ['facile', 'facile', 'difficile'])
+  // ...
+}
+```
+
+#### `quotaRandint(key, min, max, listeAEviter?)`
+
+Variante de `quotaChoice()` pour un entier tiré entre `min` et `max` (bornes incluses), avec le même paramètre `listeAEviter` que `randint()`. Sur 9 questions avec `quotaRandint('n', 1, 3)`, chacune des valeurs 1, 2 et 3 revient exactement 3 fois :
+
+```ts
+nouvelleVersion() {
+  const denominateur = this.quotaRandint('denominateur', 2, 5)
+  // ...
+}
+```
+
+#### `fromQuestionPlan(key, buildPlan)` — la primitive commune
+
+`quotaChoice()` et `quotaRandint()` sont tous deux des raccourcis autour de `fromQuestionPlan()`, à utiliser directement pour un plan sur mesure (règle de répartition personnalisée, ou plusieurs variables liées entre elles qu'on ne peut pas tirer indépendamment).
+
+Fonctionnement : au premier appel pour une `key` donnée, `buildPlan(nbQuestions)` est invoqué pour construire un tableau de `nbQuestions` valeurs (une par question de la version). Ce plan est mémorisé sur l'exercice (dans `this.tiragesParQuestion`) et réutilisé pour toutes les questions suivantes de la même version : chaque appel renvoie simplement la valeur planifiée pour la question en cours, déduite de `listeQuestions.length` (le nombre de questions déjà validées). Une `key` différente donne un plan indépendant, ce qui permet de contrôler plusieurs variables séparément (voir l'exemple `quotaChoice('niveau', ...)` / `quotaChoice('operation', ...)` dans les tests unitaires `tests/unit/exerciceSimpleQuestionPlan.test.ts`).
+
+Deux points de comportement à connaître :
+
+- Une question retirée pour cause de doublon (`questionJamaisPosee()` renvoie `false`) fait rappeler `nouvelleVersion()` sans faire avancer `listeQuestions` : l'exercice retombe donc sur la **même** valeur planifiée plutôt que de consommer la suivante du plan.
+- Le plan est vidé par `reinit()` à chaque nouvelle version : deux versions avec la même graine produisent le même plan (déterminisme garanti), une autre graine peut en tirer un autre plan — mais la règle de répartition imposée par `buildPlan` reste garantie dans tous les cas.
+
+Exemple de plan sur mesure — variables liées, ici une opération dont le sens dépend du niveau :
+
+```ts
+nouvelleVersion() {
+  const { niveau, operation } = this.fromQuestionPlan('tirage', (n) => {
+    const plan = combinaisonListes(
+      [
+        { niveau: 'facile', operation: '+' },
+        { niveau: 'difficile', operation: '-' },
+      ],
+      n,
+    )
+    return plan
+  })
+  // ...
+}
+```
+
+Pour importer `combinaisonListes()` ou `shuffle()` dans un plan personnalisé, ils viennent de `src/lib/outils/arrayOutils.ts`, comme pour les exercices classiques (§6 ci-dessus).
+
 ## 7. Prévoir HTML, LaTeX et correction
 
 Un exercice classique doit rester compréhensible :

@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -54,8 +53,8 @@ export default class MultiplierParPuissanceDixNeg extends ExerciceSimple {
     let typeQuestionsDisponibles = ['multiplier', 'diviser']
     if (this.sup === 1) typeQuestionsDisponibles = ['multiplier']
     else if (this.sup === 2) typeQuestionsDisponibles = ['diviser']
-    const typeQuestion = choice(typeQuestionsDisponibles)
-    const d = choice([0.1, 0.01, 0.001])
+    const typeQuestion = this.quotaChoice('typeQuestion', typeQuestionsDisponibles)
+    const d = this.quotaChoice('d', [0.1, 0.01, 0.001])
     this.reponse = arrondi(facteur * d)
     this.distracteurs = [
       arrondi(facteur / d),

@@ -40,7 +40,7 @@ export default class CalculPrix extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, n, b1, b2, reponse
     switch (
-      choice([1, 2, 3]) //,
+      this.quotaChoice('typeDeQuestions', [1, 2, 3]) //,
     ) {
       case 1:
         a = randint(2, 6)

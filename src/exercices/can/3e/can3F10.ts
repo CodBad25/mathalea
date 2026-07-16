@@ -38,7 +38,7 @@ export default class OrdonneeAbscisseFonctionLineaire extends ExerciceSimple {
 
   nouvelleVersion() {
     let xA, yB
-    const a = choice([0.5, 1.5, 2, 2.5, 3, 3.5, 4])
+    const a = this.quotaChoice('a', [0.5, 1.5, 2, 2.5, 3, 3.5, 4])
     if (a === 0.5 || a === 1.5 || a === 2) {
       xA = choice([2, 4])
     } else {
@@ -118,7 +118,7 @@ export default class OrdonneeAbscisseFonctionLineaire extends ExerciceSimple {
       sAAx,
       sAAy,
     )
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('cas', [1, 2])) {
       case 1: //
         this.question = `$B(${xB}\\,;\\, \\ldots)$ est un point de la droite $(OA)$.<br>
         Quelle est son ordonnée ?<br>

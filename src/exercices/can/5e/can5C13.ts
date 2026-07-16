@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -39,7 +38,7 @@ export default class CalculAstucieux1 extends ExerciceSimple {
     const f = randint(1, 9) - 0.2
     const g = randint(10, 90)
     switch (
-      choice(['a', 'b', 'c', 'd', 'e', 'f', 'g']) //
+      this.quotaChoice('typeDeQuestions', ['a', 'b', 'c', 'd', 'e', 'f', 'g']) //
     ) {
       case 'a':
         this.question = `Calculer $4 \\times ${texNombre(d)}\\times 25$.`

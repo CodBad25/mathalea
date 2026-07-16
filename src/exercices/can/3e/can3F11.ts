@@ -30,7 +30,7 @@ export default class VocabulaireImageAntecedent extends ExerciceSimple {
   nouvelleVersion() {
     const ListeNomF = ['f', 'g', 'h', 'u', 'v', 'w', 'c', 'd']
     switch (
-      choice([1, 2, 3]) //, 2, 3, 4, 5, 6
+      this.quotaChoice('cas', [1, 2, 3]) //, 2, 3, 4, 5, 6
     ) {
       case 1:
         {

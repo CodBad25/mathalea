@@ -73,6 +73,56 @@ function formatFraction(decimal: number, showDecimal = true) {
 
   return fractionStr
 }
+
+type GuideAneState = {
+  n: number
+  p: number
+  alpha: number
+  lengthAB: number
+  target: number | null
+  targetFraction: string
+  targetColor: string | null
+  printAD: boolean
+  printRatio: boolean
+  fractionToDecimalAD: boolean
+  displayTargetOn: boolean
+}
+
+type GuideAneValue = GuideAneState & {
+  lengthAD: number
+  ratio: string
+  targetReached: boolean
+}
+
+type GuideAnePoint = { x: number; y: number }
+
+export type GuideAneOptions = {
+  id?: string
+  className?: string
+  width?: string
+  height?: string
+  n?: number
+  p?: number
+  alpha?: number
+  targetAB?: number
+  A?: GuideAnePoint
+  target?: number
+  targetValue?: number
+  targetFraction?: string
+  printAD?: boolean
+  printRatio?: boolean
+  fractionToDecimalAD?: boolean
+  displayTargetOn?: boolean
+  interactivityOn?: boolean
+  disableADrag?: boolean
+  snapToCentimeter?: boolean
+}
+
+export type GuideAneCreateOptions = GuideAneOptions & {
+  numeroExercice?: number
+  questionIndex?: number
+}
+
 export class GuideAne extends MathaleaCustomElement {
   static readonly elementTag = 'guide-ane'
 
@@ -141,23 +191,51 @@ export class GuideAne extends MathaleaCustomElement {
   }
 
   static create({
-    exercice,
+    id,
+    numeroExercice,
     questionIndex,
     className,
     width = '800px',
     height = '400px',
-    data,
-  }: {
-    exercice: IExercice
-    questionIndex: number
-    className?: string
-    width?: string
-    height?: string
-    data: Record<string, unknown>
-  }): string {
-    const id = `guideAneEx${exercice.numeroExercice}Q${questionIndex}`
+    n = 1,
+    p = 0,
+    alpha = 45,
+    targetAB,
+    A,
+    target,
+    targetValue,
+    targetFraction = '0/1',
+    printAD = false,
+    printRatio = false,
+    fractionToDecimalAD = false,
+    displayTargetOn = false,
+    interactivityOn = true,
+    disableADrag,
+    snapToCentimeter,
+  }: GuideAneCreateOptions): string {
+    const computedId =
+      id ??
+      `${GuideAne.elementTag}Ex${numeroExercice ?? 0}Q${questionIndex ?? 0}`
+    const data: Record<string, unknown> = {
+      n,
+      p,
+      alpha,
+      printAD,
+      printRatio,
+      fractionToDecimalAD,
+      interactivityOn,
+      targetFraction,
+      displayTargetOn,
+      disableADrag,
+      snapToCentimeter,
+    }
+    if (typeof targetAB === 'number') data.targetAB = targetAB
+    if (A) data.A = A
+    const effectiveTarget = targetValue ?? target
+    if (typeof effectiveTarget === 'number') data.target = effectiveTarget
+
     const attributes: string[] = []
-    attributes.push(`id="${id}"`)
+    attributes.push(`id="${computedId}"`)
     if (className) attributes.push(`class="${className}"`)
     attributes.push(`style="width: ${width}; height: ${height}"`)
     attributes.push(`data="${JSON.stringify(data).replace(/"/g, '&quot;')}"`)
@@ -279,17 +357,7 @@ export class GuideAne extends MathaleaCustomElement {
   }
 
   // Méthode pour obtenir un rapport détaillé de l'état du guide-âne
-  public get value(): {
-    n: number
-    p: number
-    alpha: number
-    lengthAD: number
-    lengthAB: number
-    ratio: string
-    target: number | null
-    targetReached: boolean
-    targetFraction: string
-  } {
+  public get value(): GuideAneValue {
     return {
       n: this.n,
       p: this.p,
@@ -300,22 +368,15 @@ export class GuideAne extends MathaleaCustomElement {
       target: this.target,
       targetReached: this.targetReached,
       targetFraction: this.targetFraction,
+      targetColor: this.targetColor,
+      printAD: this.printAD,
+      printRatio: this.printRatio,
+      fractionToDecimalAD: this.fractionToDecimalAD,
+      displayTargetOn: this.displayTargetOn,
     }
   }
 
-  public set value(val: {
-    n: number
-    p: number
-    alpha: number
-    lengthAB: number
-    target: number | null
-    targetFraction: string
-    targetColor: string | null
-    printAD: boolean
-    printRatio: boolean
-    fractionToDecimalAD: boolean
-    displayTargetOn: boolean
-  }) {
+  public update(val: GuideAneState | GuideAneValue) {
     this.n = val.n
     this.p = val.p
     this.alpha = val.alpha
@@ -332,7 +393,14 @@ export class GuideAne extends MathaleaCustomElement {
       y: this.A.y,
     }
     this.C = this.calculateInitialC()
+
+    // targetReached est dérivé : il sera recalculé dans redraw().
+    this.targetReached = false
     this.redraw()
+  }
+
+  public set value(val: GuideAneState | GuideAneValue) {
+    this.update(val)
   }
 
   // Méthode pour définir un callback personnalisé si on veut
@@ -879,8 +947,8 @@ export class GuideAne extends MathaleaCustomElement {
     this.appendChild(this.svg)
     const resultatCheck = document.createElement('span')
     resultatCheck.id = this.id
-      ? `${this.id.replace('guideAne', 'resultatCheck')}`
-      : `guideAne-resultat`
+      ? `${this.id.replace(/^[^E]*Ex/, 'resultatCheckEx')}`
+      : `guide-ane-resultat`
     this.appendChild(resultatCheck)
   }
 
@@ -930,9 +998,14 @@ export class GuideAne extends MathaleaCustomElement {
         ) {
           this.A = { x: data.A.x, y: data.A.y }
         }
-        console.log(`targetAB: ${data.targetAB}, type: ${typeof data.targetAB}`)
-        if (data.targetAB != null && typeof data.targetAB === 'number') {
-          this.B = { x: this.A.x + data.targetAB * pixelsPerCm, y: this.A.y }
+        const targetAB =
+          typeof data.targetAB === 'number'
+            ? data.targetAB
+            : typeof data.lengthAB === 'number'
+              ? data.lengthAB
+              : null
+        if (targetAB != null) {
+          this.B = { x: this.A.x + targetAB * pixelsPerCm, y: this.A.y }
         }
 
         // Puis définir n et recalculer C
@@ -1363,86 +1436,12 @@ registerMathaleaCustomElement(GuideAne)
 export function addGuideAne(
   exercice: IExercice,
   questionIndex: number,
-  options: {
-    alpha?: number // Angle en degrés (défaut: 45)
-    targetAB?: number // Longueur AB cible en cm (pour affichage seulement)
-    targetValue?: number // Valeur cible pour ADp en cm (optionnel)
-    A?: { x: number; y: number } // Position du point A (optionnel)
-    width?: string // Largeur du composant (défaut: "800px")
-    height?: string // Hauteur du composant (défaut: "400px")
-    className?: string // Classes CSS additionnelles (optionnel)
-    printAD?: boolean // Afficher la longueur AD (défaut: false)
-    printRatio?: boolean // Afficher le rapport (défaut: false)
-    fractionToDecimalAD?: boolean // Afficher AD en décimal si possible (défaut: false)
-    targetFraction?: string // Fraction cible (optionnel)
-    displayTargetOn?: boolean // Afficher l'état de la target (défaut: false)
-    interactivityOn?: boolean // Activer l'interactivité (défaut: true)
-  } = {},
+  options: GuideAneOptions = {},
 ): string {
-  // Valeurs par défaut
-  const config = {
-    exercice,
-    questionIndex,
-    n: 1,
-    p: 0,
-    alpha: options.alpha ?? 45,
-    targetAB: options.targetAB, // Renommer lengthAB en targetAB
-    A: options.A,
-    // SUPPRIMER B car il sera toujours calculé à 10 cm de A
-    width: options.width ?? '800px',
-    height: options.height ?? '400px',
-
-    className: options.className,
-    targetValue: options.targetValue ?? null,
-    printAD: options.printAD ?? false,
-    printRatio: options.printRatio ?? false,
-    fractionToDecimalAD: options.fractionToDecimalAD ?? false,
-    targetFraction: options.targetFraction ?? '0/1',
-    displayTargetOn: options.displayTargetOn ?? false,
-    interactivityOn: options.interactivityOn ?? true,
-  }
-
-  // Construire l'objet data pour passer au composant
-  const data: Record<string, unknown> = {
-    n: config.n,
-    p: config.p,
-    alpha: config.alpha,
-    printAD: config.printAD,
-    printRatio: config.printRatio,
-    fractionToDecimalAD: config.fractionToDecimalAD,
-    interactivityOn: config.interactivityOn,
-  }
-
-  // Ajouter les paramètres optionnels s'ils sont définis
-  if (config.targetAB !== undefined) {
-    data.lengthAB = config.targetAB // Stocker comme cible pour l'affichage
-  }
-
-  if (config.A) {
-    data.A = config.A
-  }
-
-  // SUPPRIMER : Ne plus passer B dans les données car il sera toujours à 10 cm
-
-  if (config.targetValue !== null) {
-    data.target = config.targetValue
-  }
-
-  if (config.targetFraction) {
-    data.targetFraction = config.targetFraction
-  }
-
-  if (config.displayTargetOn) {
-    data.displayTargetOn = config.displayTargetOn
-  }
-
   return GuideAne.create({
-    exercice: config.exercice,
-    questionIndex: config.questionIndex,
-    className: config.className,
-    width: config.width,
-    height: config.height,
-    data,
+    ...options,
+    numeroExercice: exercice.numeroExercice,
+    questionIndex,
   })
 }
 

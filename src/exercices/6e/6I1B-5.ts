@@ -1,9 +1,8 @@
+import { renderSheetMarkup } from '../../lib/customElements/MySpreadSheet'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { addSheet, createTableurLatex } from '../../lib/tableur/outilsTableur'
 import type { GoodAnswersFormulas } from '../../lib/types'
-import { context } from '../../modules/context'
 
 import {
   gestionnaireFormulaireTexte,
@@ -479,40 +478,50 @@ export default class ExerciceTableurVocabulaire extends Exercice {
       texte +=
         ' fonctionner même si le nombre de départ change (dans la cellule B1).<br><br>'
 
-      if (context.isHtml && !context.isTypst) {
-        texte += addSheet({
-          numeroExercice: this.numeroExercice ?? 0,
-          question: q,
-          data,
-          minDimensions: [nbColTableur, 2], // listeMotsEnonce.length + 1],
-          style,
-          columns: [
-            { width: 320 }, // Suffisamment large pour que toutes les textes rentrent
-            { width: 90 },
-            { width: 90 },
-            { width: 90 },
-          ],
-          interactif: this.interactif,
-          showVerifyButton: false,
-          readOnlyCells: [`A1:A${nbLignes + 1}`, `C1:D${nbLignes + 1}`],
-        })
+      const latexOptions: {
+        formule?: boolean
+        formuleTexte?: string
+        formuleCellule?: string
+        firstColHeaderWidth?: string
+      } = {
+        formule: true,
+        formuleTexte: '=?',
+        formuleCellule: 'B1',
+      }
 
-        texteCorr += addSheet({
-          numeroExercice: this.numeroExercice ?? 0,
-          question: q,
-          data: dataCorr,
-          minDimensions: [nbColTableur, 2], // listeMotsEnonce.length + 1],
-          style,
-          columns: [
-            { width: 320 }, // Suffisamment large pour que toutes les textes rentrent
-            { width: 90 },
-            { width: 90 },
-            { width: 90 },
-          ],
-          interactif: false,
-          showVerifyButton: false,
-          readOnlyCells: [`A1:D${nbLignes + 1}`],
-        })
+      const questionMarkup = renderSheetMarkup({
+        numeroExercice: this.numeroExercice,
+        questionIndex: q,
+        data,
+        minDimensions: [nbColTableur, 2],
+        style,
+        columns: [{ width: 320 }, { width: 90 }, { width: 90 }, { width: 90 }],
+        interactif: this.interactif,
+        showVerifyButton: false,
+        readOnlyCells: [`A1:A${nbLignes + 1}`, `C1:D${nbLignes + 1}`],
+        latexData: cellDatas,
+        latexStyles: ExerciceTableurVocabulaire.styles,
+        latexOptions,
+        appendFeedbackBlocks: this.interactif,
+      })
+      const correctionMarkup = renderSheetMarkup({
+        data: dataCorr,
+        minDimensions: [nbColTableur, 2],
+        style,
+        columns: [{ width: 320 }, { width: 90 }, { width: 90 }, { width: 90 }],
+        interactif: false,
+        showVerifyButton: false,
+        readOnlyCells: [`A1:D${nbLignes + 1}`],
+        latexData: cellDatasCorr,
+        latexStyles: ExerciceTableurVocabulaire.styles,
+        latexOptions,
+        appendFeedbackBlocks: false,
+      })
+
+      texte += questionMarkup
+      texteCorr += correctionMarkup
+
+      if (this.interactif) {
         handleAnswers(
           this,
           q,
@@ -528,31 +537,6 @@ export default class ExerciceTableurVocabulaire extends Exercice {
             },
           },
           { formatInteractif: 'tableur' },
-        )
-      } else {
-        const options: {
-          formule?: boolean
-          formuleTexte?: string
-          formuleCellule?: string
-          firstColHeaderWidth?: string
-        } = {}
-        options.formule = true
-        options.formuleTexte = '=?'
-        options.formuleCellule = 'B1'
-
-        texte += createTableurLatex(
-          nbLignes + 1,
-          4,
-          cellDatas,
-          ExerciceTableurVocabulaire.styles,
-          options,
-        )
-        texteCorr += createTableurLatex(
-          nbLignes + 1,
-          4,
-          cellDatasCorr,
-          ExerciceTableurVocabulaire.styles,
-          options,
         )
       }
 

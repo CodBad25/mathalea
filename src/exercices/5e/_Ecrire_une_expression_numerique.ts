@@ -1,6 +1,6 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import {
@@ -363,7 +363,7 @@ export default class EcrireUneExpressionNumerique extends Exercice {
           } else {
             texte +=
               sp(10) +
-              choixDeroulant(this, i, [
+              choixDeroulant(this, i, { choices: [
                 { label: '?', value: '' },
                 ...shuffle([
                   { label: 'une somme', value: 'somme' },
@@ -371,7 +371,7 @@ export default class EcrireUneExpressionNumerique extends Exercice {
                   { label: 'un produit', value: 'produit' },
                   { label: 'un quotient', value: 'quotient' },
                 ]),
-              ])
+              ] })
             const val =
               typeof expNom === 'string'
                 ? expNom.replace('une ', '').replace('un ', '')

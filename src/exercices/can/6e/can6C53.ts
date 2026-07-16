@@ -29,7 +29,7 @@ export default class ComprendreDivisionEuclidienne extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2, 3])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2, 3])) {
       case 1:
         {
           const diviseur = choice([7, 8, 9])

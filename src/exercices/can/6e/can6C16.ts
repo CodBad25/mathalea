@@ -4,7 +4,6 @@ import {
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 
 import { bleuMathalea } from '../../../lib/colors'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -34,7 +33,7 @@ export default class DoubleEtMoitie extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 25) // variables aléatoires
+    const a = this.quotaRandint('a', 1, 25) // variables aléatoires
     this.question = `Le double d'un nombre vaut $${4 * a}$, combien vaut sa moitié ?`
     this.correction = `Sa moitié vaut : $${miseEnEvidence(texNombre(a))}$.<br><br>`
     this.correction += texteEnCouleur(

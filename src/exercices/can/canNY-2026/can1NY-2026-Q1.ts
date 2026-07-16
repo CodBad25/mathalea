@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -26,7 +25,7 @@ export default class calcAvecChiffres2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = this.canOfficielle ? 3 : choice([1, 2, 3, 4])
+    const choix = this.canOfficielle ? 3 : this.quotaChoice('choix', [1, 2, 3, 4])
     const annee = 2026
     if (choix === 1) {
       this.question = `$20\\times ${annee % 100}$`

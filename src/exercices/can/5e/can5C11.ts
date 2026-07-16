@@ -1,5 +1,4 @@
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une différence'
 export const interactifReady = true
@@ -27,8 +26,8 @@ export default class DifferenceNegative extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(8, 15)
-    const b = randint(18, 30)
+    const a = this.quotaRandint('a', 8, 15)
+    const b = this.quotaRandint('b', 18, 30)
     this.question = `Calculer $${a}-${b}$.`
     this.correction = `$${a}-${b}=${a - b}$`
     this.reponse = a - b

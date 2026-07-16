@@ -1,6 +1,4 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Connaître des rapports entre fraction d'heure et minutes"
 export const dateDePublication = '02/08/2025'
@@ -33,10 +31,10 @@ export default class AutoFractionHeures extends ExerciceSimple {
       ['Une demi-heure', '\\dfrac12', '30', 'est égale'],
       ["Trois quarts d'heure", '\\dfrac34', '45', 'sont égaux'],
     ]
-    const choix = randint(0, 2)
+    const choix = this.quotaRandint('choix', 0, 2)
 
     this.reponse = durees[choix][2]
-    const avecFraction = choice([true, false])
+    const avecFraction = this.quotaChoice('avecFraction', [true, false])
     this.question = avecFraction
       ? `$${durees[choix][1]}$ h = `
       : `${durees[choix][0]} ${durees[choix][3]} à `

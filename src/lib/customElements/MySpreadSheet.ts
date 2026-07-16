@@ -1,10 +1,83 @@
 import jspreadsheet from 'jspreadsheet-ce'
 import 'jspreadsheet-ce/src/jspreadsheet.css'
+import { context } from '../../modules/context'
+import { randint } from '../../modules/outils'
+import { toutPourUnPoint } from '../interactif/mathLive'
+import type { GoodAnswersFormulas, IExercice, SheetTestDatas } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
 
 type SpreadsheetStyle = Record<string, string>
+type SpreadsheetData = (string | number)[][]
+type SpreadsheetLatexCell = { t?: number; v?: unknown; s?: string }
+type SpreadsheetLatexData =
+  | Array<Record<number, SpreadsheetLatexCell>>
+  | Record<number, Record<number, SpreadsheetLatexCell>>
+type SpreadsheetLatexStyles = Record<string, { bg?: string }>
+type SpreadsheetLatexOptions = {
+  formule?: boolean
+  formuleTexte?: string
+  formuleCellule?: string
+  firstColHeaderWidth?: string
+}
+
+export type MySpreadsheetOptions = {
+  id?: string
+  data?: SpreadsheetData
+  minDimensions?: [number, number]
+  style?: unknown
+  columns?: unknown[]
+  latexData?: SpreadsheetLatexData
+  latexStyles?: SpreadsheetLatexStyles
+  latexOptions?: SpreadsheetLatexOptions
+  interactif?: boolean
+  showVerifyButton?: boolean
+  nbLignesCachees?: number
+  nbColonnesCachees?: number
+  readOnlyCells?: string[]
+}
+
+export type MySpreadsheetCreateOptions = MySpreadsheetOptions & {
+  numeroExercice?: number
+  questionIndex?: number
+}
+
+export type AddSheetOptions = Omit<
+  MySpreadsheetOptions,
+  | 'id'
+  | 'data'
+  | 'minDimensions'
+  | 'columns'
+  | 'interactif'
+  | 'showVerifyButton'
+> & {
+  id?: string
+  data: (string | number)[][]
+  minDimensions: [number, number]
+  columns: unknown[]
+  interactif: boolean
+  showVerifyButton: boolean
+}
+
+export type RenderSheetMarkupOptions = {
+  id?: string
+  numeroExercice?: number
+  questionIndex?: number
+  data?: (string | number)[][]
+  minDimensions?: [number, number]
+  style?: unknown
+  columns?: unknown[]
+  latexData?: SpreadsheetLatexData
+  latexStyles?: SpreadsheetLatexStyles
+  latexOptions?: SpreadsheetLatexOptions
+  interactif?: boolean
+  showVerifyButton?: boolean
+  nbLignesCachees?: number
+  nbColonnesCachees?: number
+  readOnlyCells?: string[]
+  appendFeedbackBlocks?: boolean
+}
 
 type SpreadsheetLike = {
   getValueFromCoords: (
@@ -33,6 +106,34 @@ type SpreadsheetLike = {
 
 export class MySpreadsheetElement extends MathaleaCustomElement {
   static readonly elementTag = 'my-spreadsheet'
+
+  static getDefaultSheetId(
+    numeroExercice: number,
+    questionIndex: number,
+  ): string {
+    return `${MySpreadsheetElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
+  }
+
+  static getLegacySheetId(
+    numeroExercice: number,
+    questionIndex: number,
+  ): string {
+    return `sheet-Ex${numeroExercice}Q${questionIndex}`
+  }
+
+  static findSheetElement(
+    numeroExercice: number,
+    questionIndex: number,
+  ): MySpreadsheetElement | null {
+    const defaultId = this.getDefaultSheetId(numeroExercice, questionIndex)
+    const byDefaultId = document.getElementById(
+      defaultId,
+    ) as MySpreadsheetElement | null
+    if (byDefaultId) return byDefaultId
+
+    const legacyId = this.getLegacySheetId(numeroExercice, questionIndex)
+    return document.getElementById(legacyId) as MySpreadsheetElement | null
+  }
 
   static formatStudentAnswer(rawAnswer: string, questionHtml?: string): string {
     const studentData = this.parse2DArray(rawAnswer)
@@ -137,33 +238,33 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
 
   static create({
     id,
+    numeroExercice,
+    questionIndex,
     data = [],
     minDimensions = [5, 5],
     style,
     columns = [],
+    latexData,
+    latexStyles,
+    latexOptions,
     interactif = false,
     showVerifyButton,
     nbLignesCachees,
     nbColonnesCachees,
     readOnlyCells,
-  }: {
-    id?: string
-    data?: (string | number)[][]
-    minDimensions?: [number, number]
-    style?: unknown
-    columns?: unknown[]
-    interactif?: boolean
-    showVerifyButton?: boolean
-    nbLignesCachees?: number
-    nbColonnesCachees?: number
-    readOnlyCells?: string[]
-  } = {}): string {
+  }: MySpreadsheetCreateOptions = {}): string {
+    const computedId =
+      id ??
+      `${MySpreadsheetElement.elementTag}Ex${numeroExercice ?? 0}Q${questionIndex ?? 0}`
     return super.create({
-      id,
+      id: computedId,
       data,
       minDimensions,
       style,
       columns,
+      latexData,
+      latexStyles,
+      latexOptions,
       interactif,
       showVerifyButton,
       nbLignesCachees,
@@ -173,10 +274,352 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
     })
   }
 
+  static compareSheetFunction(
+    exercice: IExercice,
+    question: number,
+    goodAnswers: GoodAnswersFormulas,
+    sheetTestDatas: SheetTestDatas,
+    userSheet: MySpreadsheetElement,
+  ): { isOk: boolean; messages: string } {
+    const userData = userSheet.getData()
+    const messages: string[] = []
+    let testFormulas = true
+    let goodFormulas = 0
+
+    goodAnswers.forEach((cellData) => {
+      const cellRef = cellData.ref
+      const col = cellRef.charCodeAt(0) - 65
+      const row = parseInt(cellRef.slice(1)) - 1
+      if (cellData.formula && cellData.value === undefined) {
+        const userFormula = userSheet.getCellFormula(col, row)
+        if (!userFormula.startsWith('=')) {
+          messages.push(
+            `La cellule ${cellRef} devrait contenir une formule mais elle ne contient pas de formule.<br>`,
+          )
+          testFormulas = false
+          const style: Record<string, string> = {}
+          style[cellRef] =
+            'background-color: #ffcccc; border: 2px solid #ff0000; border-radius: 8px; padding: 4px;'
+          userSheet.setCellStyle(style)
+          return
+        }
+        if (
+          String(userFormula).toUpperCase() === cellData.formula.toUpperCase()
+        ) {
+          const style: Record<string, string> = {}
+          style[cellRef] =
+            'background-color: #ccffcc; border: 2px solid #008000; border-radius: 8px; padding: 4px;'
+          userSheet.setCellStyle(style)
+          goodFormulas++
+        }
+      } else if (cellData.value !== undefined) {
+        const userValue = userSheet.getCellValue(col, row)
+        if (userValue === cellData.value) {
+          const style: Record<string, string> = {}
+          style[cellRef] =
+            'background-color: #ccffcc; border: 2px solid #008000; border-radius: 8px; padding: 4px;'
+          userSheet.setCellStyle(style)
+          goodFormulas++
+        }
+      } else {
+        window.notify(
+          `compareSheetFunction: cellData invalide ${JSON.stringify(
+            cellData,
+          )} pour la question ${question} de l'exercice ${exercice.id}`,
+          { exercice, question, cellData },
+        )
+      }
+    })
+
+    if (testFormulas && goodFormulas === goodAnswers.length) {
+      return {
+        isOk: true,
+        messages:
+          goodAnswers.length === 1
+            ? '✅ La saisie est correcte !'
+            : '✅ Toutes les saisies sont correctes !',
+      }
+    }
+
+    let maxMessages = ''
+
+    const testSheetForGoodAnswers = MySpreadsheetElement.createEltToAppendToDom(
+      {
+        data: userData,
+        minDimensions: userSheet.getMinDimensions(),
+        style: userSheet.getStyle(),
+        columns: userSheet.getColumns(),
+        interactif: false,
+        id: 'testSheet',
+      },
+    )
+
+    const testSheetForUserResponses =
+      MySpreadsheetElement.createEltToAppendToDom({
+        data: userData,
+        minDimensions: userSheet.getMinDimensions(),
+        style: userSheet.getStyle(),
+        columns: userSheet.getColumns(),
+        interactif: false,
+        id: 'testSheetUser',
+      })
+
+    testSheetForGoodAnswers.style.position = 'absolute'
+    testSheetForGoodAnswers.style.left = '-9999px'
+    document.body.appendChild(testSheetForGoodAnswers)
+
+    goodAnswers.forEach((cellData) => {
+      const cellRef = cellData.ref
+      const col = cellRef.charCodeAt(0) - 65
+      const row = parseInt(cellRef.slice(1)) - 1
+      if (cellData.formula) {
+        testSheetForGoodAnswers.setCellFormula(col, row, cellData.formula)
+      } else if (cellData.value !== undefined) {
+        testSheetForGoodAnswers.setCellValue(col, row, cellData.value)
+      }
+    })
+
+    testSheetForUserResponses.style.position = 'absolute'
+    testSheetForUserResponses.style.left = '-5999px'
+    document.body.appendChild(testSheetForUserResponses)
+
+    const messagesPerTest: string[][] = []
+    goodAnswers.forEach(() => {
+      messagesPerTest.push([])
+    })
+
+    goodAnswers.forEach((cellData, answerIndex) => {
+      const cellRef = cellData.ref
+      const col = cellRef.charCodeAt(0) - 65
+      const row = parseInt(cellRef.slice(1)) - 1
+
+      sheetTestDatas.forEach((testData) => {
+        const testCellRef = testData.ref
+        if (testCellRef.includes(':')) {
+          const [startRef, endRef] = testCellRef.split(':')
+          const startCol = startRef.charCodeAt(0) - 65
+          const startRow = parseInt(startRef.slice(1)) - 1
+          const endCol = endRef.charCodeAt(0) - 65
+          const endRow = parseInt(endRef.slice(1)) - 1
+          for (let r = startRow; r <= endRow; r++) {
+            for (let c = startCol; c <= endCol; c++) {
+              const [min, max] = testData.rangeValues
+              const randomValue = randint(min, max)
+              testSheetForGoodAnswers.setCellValue(c, r, randomValue)
+              testSheetForUserResponses.setCellValue(c, r, randomValue)
+            }
+          }
+          const goodAnswerValue = testSheetForGoodAnswers.getCellValue(col, row)
+          const userAnswerValue = testSheetForUserResponses.getCellValue(
+            col,
+            row,
+          )
+          if (goodAnswerValue !== userAnswerValue) {
+            const style: Record<string, string> = {}
+            style[cellRef] =
+              'background-color: #ffcccc; border: 2px solid #ff0000; border-radius: 8px; padding: 4px;'
+            userSheet.setCellStyle(style)
+            messagesPerTest[answerIndex].push(
+              `La saisie de la cellule ${cellRef} [${userSheet.getCellFormula(col, row)}] est incorrecte .<br>`,
+            )
+          }
+        } else {
+          const testCol = testCellRef.charCodeAt(0) - 65
+          const testRow = parseInt(testCellRef.slice(1)) - 1
+          const [min, max] = testData.rangeValues
+          const randomValue = randint(min, max)
+          testSheetForGoodAnswers.setCellValue(testCol, testRow, randomValue)
+          testSheetForUserResponses.setCellValue(testCol, testRow, randomValue)
+          const goodAnswerValue = testSheetForGoodAnswers.getCellValue(col, row)
+          const userAnswerValue = testSheetForUserResponses.getCellValue(
+            col,
+            row,
+          )
+          if (goodAnswerValue !== userAnswerValue) {
+            const style: Record<string, string> = {}
+            style[cellRef] =
+              'background-color: #ffcccc; border: 2px solid #ff0000; border-radius: 8px; padding: 4px;'
+            userSheet.setCellStyle(style)
+            messagesPerTest[answerIndex].push(
+              `La saisie de la cellule ${cellRef} [${userSheet.getCellFormula(col, row)}] est incorrecte .<br>`,
+            )
+          }
+        }
+      })
+    })
+
+    messages.push(...messagesPerTest.flat())
+    maxMessages = messages.sort((a, b) => b.length - a.length)[0] ?? ''
+
+    document.body.removeChild(testSheetForGoodAnswers)
+    document.body.removeChild(testSheetForUserResponses)
+
+    const feedback =
+      maxMessages.length === 0
+        ? '✅ Toutes les saisies sont correctes !'
+        : '❌ Des erreurs ont été détectées.'
+
+    return {
+      isOk: maxMessages.length === 0,
+      messages: maxMessages + feedback,
+    }
+  }
+
+  static verifQuestion(
+    exercice: IExercice,
+    questionIndex: number,
+  ): {
+    isOk: boolean
+    feedback: string
+    score: { nbBonnesReponses: number; nbReponses: number }
+  } {
+    if (exercice.autoCorrection[questionIndex]?.valeur == null) {
+      throw Error(
+        `verifQuestionMathlive appelé sur une question sans réponse: ${JSON.stringify(
+          {
+            exercice,
+            question: questionIndex,
+            autoCorrection: exercice.autoCorrection[questionIndex],
+          },
+        )}`,
+      )
+    }
+
+    if (exercice.answers === undefined) exercice.answers = {}
+    const reponses = exercice.autoCorrection[questionIndex].valeur
+    if (reponses == null) {
+      window.notify(
+        `verifQuestionTableur: reponses est null pour la question ${questionIndex} de l'exercice ${exercice.id}`,
+        { exercice, questionIndex },
+      )
+      return {
+        isOk: false,
+        feedback: 'erreur dans le programme',
+        score: { nbBonnesReponses: 0, nbReponses: 1 },
+      }
+    }
+    const bareme: (arg: number[]) => [number, number] =
+      reponses.bareme ?? toutPourUnPoint
+    const sheetAnswer = reponses.sheetAnswer
+    if (sheetAnswer == null) {
+      window.notify(
+        `verifQuestionTableur: sheetAnswer est null pour la question ${questionIndex} de l'exercice ${exercice.id}`,
+        { exercice, questionIndex },
+      )
+      return {
+        isOk: false,
+        feedback: 'erreur dans le programme',
+        score: { nbBonnesReponses: 0, nbReponses: 1 },
+      }
+    }
+
+    const numeroExercice = exercice.numeroExercice ?? 0
+    let result: string[] = []
+    const goodAnswersFormulas = sheetAnswer.goodAnswerFormulas
+    const sheetTestDatas = sheetAnswer.sheetTestDatas
+
+    const sheetElement = this.findSheetElement(numeroExercice, questionIndex)
+    if (!sheetElement) {
+      console.error(
+        `${this.getDefaultSheetId(numeroExercice, questionIndex)} not found`,
+      )
+      result = goodAnswersFormulas.map(() => 'KO')
+      return {
+        isOk: false,
+        feedback: 'erreur dans le programme',
+        score: { nbBonnesReponses: 0, nbReponses: result.length },
+      }
+    }
+
+    if (sheetElement.isMounted()) {
+      exercice.answers[this.getDefaultSheetId(numeroExercice, questionIndex)] =
+        JSON.stringify(sheetElement.getData())
+      const spanResultat = document.querySelector(
+        `#resultatCheckEx${numeroExercice}Q${questionIndex}`,
+      )
+      const divFeedback = document.querySelector<HTMLElement>(
+        `#feedbackEx${numeroExercice}Q${questionIndex}`,
+      )
+      const { isOk, messages } = this.compareSheetFunction(
+        exercice,
+        questionIndex,
+        goodAnswersFormulas,
+        sheetTestDatas,
+        sheetElement,
+      )
+      if (messages.length > 0 && spanResultat && divFeedback) {
+        divFeedback.innerHTML = messages
+        if (!isOk) {
+          spanResultat.innerHTML = '☹️'
+          result = goodAnswersFormulas.map(() => 'KO')
+        } else {
+          spanResultat.innerHTML = '😎'
+          result = goodAnswersFormulas.map(() => 'OK')
+        }
+      }
+    } else {
+      console.error(
+        `${this.getDefaultSheetId(numeroExercice, questionIndex)} is not mounted`,
+      )
+      result = goodAnswersFormulas.map(() => 'KO')
+    }
+
+    const [nbBonnesReponses, nbReponses] = bareme(
+      result.map((res) => (res === 'OK' ? 1 : 0)),
+    )
+    return {
+      isOk: nbBonnesReponses === nbReponses,
+      feedback: '',
+      score: { nbBonnesReponses, nbReponses },
+    }
+  }
+
   private _spreadsheet: SpreadsheetLike | null = null
   private _buttonListener?: EventListener
   private _customListeners: { [eventName: string]: EventListener } = {}
   private showVerifyButton: boolean = true
+  private _readOnlyCursorObserver: MutationObserver | null = null
+
+  private normalizeData(value: unknown): SpreadsheetData {
+    if (!Array.isArray(value)) return []
+    return value.map((row) => {
+      if (!Array.isArray(row)) return []
+      return row.map((cell) => {
+        if (typeof cell === 'string' || typeof cell === 'number') return cell
+        return cell == null ? '' : String(cell)
+      })
+    })
+  }
+
+  private parseDataValue(value: unknown): SpreadsheetData {
+    if (typeof value === 'string') {
+      try {
+        return this.normalizeData(JSON.parse(value))
+      } catch {
+        return []
+      }
+    }
+    return this.normalizeData(value)
+  }
+
+  private applyReadOnlyCursor(container: HTMLElement) {
+    const applyCursor = () => {
+      const cells = container.querySelectorAll('td')
+      cells.forEach((cell) => {
+        ;(cell as HTMLElement).style.cursor = 'not-allowed'
+      })
+    }
+
+    applyCursor()
+    this._readOnlyCursorObserver?.disconnect()
+    this._readOnlyCursorObserver = new MutationObserver(() => {
+      applyCursor()
+    })
+    this._readOnlyCursorObserver.observe(container, {
+      childList: true,
+      subtree: true,
+    })
+  }
 
   private get spreadsheet(): SpreadsheetLike {
     if (this._spreadsheet == null) {
@@ -220,7 +663,9 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
     showVerifyButton?: boolean
     readOnlyCells?: string[]
   } = {}) {
-    const elt = new MySpreadsheetElement()
+    const elt = document.createElement(
+      MySpreadsheetElement.elementTag,
+    ) as MySpreadsheetElement
     if (id) elt.id = id
     elt.setAttribute('data', JSON.stringify(data))
     elt.setAttribute('min-dimensions', JSON.stringify(minDimensions))
@@ -390,6 +835,8 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
           )
         }
       }
+
+      this.applyReadOnlyCursor(container)
     }
     for (let i = 0; i < nbLignesCachees; i++) {
       this.hideRow(i)
@@ -399,7 +846,7 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
     }
     let numeroExercice = 0
     let question = 0
-    const idMatch = this.id.match(/sheet-Ex(\d+)Q(\d+)$/)
+    const idMatch = this.id.match(/(?:sheet-|my-spreadsheet)Ex(\d+)Q(\d+)$/)
     if (idMatch) {
       numeroExercice = Number(idMatch[1])
       question = Number(idMatch[2])
@@ -463,6 +910,9 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
   }
 
   disconnectedCallback() {
+    this._readOnlyCursorObserver?.disconnect()
+    this._readOnlyCursorObserver = null
+
     if (this._spreadsheet) {
       this._spreadsheet = null
     }
@@ -505,6 +955,34 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
   getData() {
     // Retourne les données de la première worksheet
     return this.spreadsheet.getData() ?? []
+  }
+
+  public get value(): SpreadsheetData {
+    if (this.isMounted()) {
+      return this.normalizeData(this.getData())
+    }
+
+    const dataAttr = this.getAttribute('data')
+    if (dataAttr == null) return []
+    return this.parseDataValue(dataAttr)
+  }
+
+  public update(nextValue: unknown) {
+    const parsed = this.parseDataValue(nextValue)
+
+    if (this.isMounted()) {
+      this.setData(parsed)
+    } else {
+      this.setAttribute('data', JSON.stringify(parsed))
+    }
+  }
+
+  public set value(nextValue: unknown) {
+    this.update(nextValue)
+  }
+
+  public getValue(): SpreadsheetData {
+    return this.value
   }
 
   setCellValue(column: number, row: number, value: string | number) {
@@ -555,6 +1033,237 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
   hideColumn(colIndex: number) {
     this.spreadsheet.hideColumn(colIndex)
   }
+
+  protected renderLatex(): string {
+    const parseJsonAttribute = <T>(attributeName: string): T | null => {
+      const raw = this.getAttribute(attributeName)
+      if (raw == null) return null
+      try {
+        return JSON.parse(raw) as T
+      } catch {
+        return null
+      }
+    }
+
+    const parsedData = this.parseDataValue(this.getAttribute('data') ?? '[]')
+    const latexDataAttr = parseJsonAttribute<SpreadsheetLatexData>('latex-data')
+    const latexStyles =
+      parseJsonAttribute<SpreadsheetLatexStyles>('latex-styles') ?? {}
+    const latexOptions =
+      parseJsonAttribute<SpreadsheetLatexOptions>('latex-options') ?? {}
+
+    let minDimensions: [number, number] = [5, 5]
+    try {
+      const raw = this.getAttribute('min-dimensions')
+      if (raw != null) {
+        const parsed = JSON.parse(raw)
+        if (Array.isArray(parsed) && parsed.length >= 2) {
+          minDimensions = [Number(parsed[0]), Number(parsed[1])]
+        }
+      }
+    } catch {
+      // Si l'attribut est invalide, on garde la valeur par défaut.
+    }
+
+    const rowCountFromLatexData = latexDataAttr
+      ? Array.isArray(latexDataAttr)
+        ? latexDataAttr.length
+        : Object.keys(latexDataAttr).length
+      : 0
+
+    const colCountFromLatexData = latexDataAttr
+      ? (() => {
+          const rows = Array.isArray(latexDataAttr)
+            ? latexDataAttr
+            : Object.values(latexDataAttr)
+          return rows.reduce((max, row) => {
+            const cols = Object.keys(row ?? {})
+              .map((key) => Number(key))
+              .filter((value) => Number.isFinite(value) && value >= 0)
+            const rowMax = cols.length > 0 ? Math.max(...cols) + 1 : 0
+            return Math.max(max, rowMax)
+          }, 0)
+        })()
+      : 0
+
+    const rowNbr = Math.max(
+      minDimensions[1] ?? 0,
+      parsedData.length,
+      rowCountFromLatexData,
+    )
+    const colNbr = Math.max(
+      minDimensions[0] ?? 0,
+      ...parsedData.map((row) => row.length),
+      colCountFromLatexData,
+    )
+
+    const generatedLatexData: Array<
+      Record<number, { t?: number; v?: unknown; s?: string }>
+    > = []
+    for (let rowIndex = 0; rowIndex < rowNbr; rowIndex++) {
+      const row: Record<number, { t?: number; v?: unknown; s?: string }> = {}
+      for (let colIndex = 0; colIndex < colNbr; colIndex++) {
+        const value = parsedData[rowIndex]?.[colIndex] ?? ''
+        row[colIndex] = {
+          t: typeof value === 'number' ? 2 : 1,
+          v: value,
+        }
+      }
+      generatedLatexData.push(row)
+    }
+
+    const dataForLatex = latexDataAttr ?? generatedLatexData
+    return createTableurLatex(
+      rowNbr,
+      colNbr,
+      dataForLatex,
+      latexStyles,
+      latexOptions,
+    )
+  }
+}
+
+export function addSheet(
+  exercice: IExercice,
+  questionIndex: number,
+  options: AddSheetOptions,
+): string
+export function addSheet(
+  exercice: IExercice,
+  questionIndex: number,
+  options: AddSheetOptions,
+): string {
+  return renderSheetMarkup({
+    ...options,
+    numeroExercice: exercice.numeroExercice,
+    questionIndex,
+    appendFeedbackBlocks: options.interactif,
+  })
+}
+
+export function renderSheetMarkup({
+  id,
+  numeroExercice,
+  questionIndex,
+  data = [],
+  minDimensions = [5, 5],
+  style,
+  columns = [],
+  latexData,
+  latexStyles,
+  latexOptions,
+  interactif = false,
+  showVerifyButton = false,
+  nbLignesCachees,
+  nbColonnesCachees,
+  readOnlyCells,
+  appendFeedbackBlocks,
+}: RenderSheetMarkupOptions): string {
+  const computedId =
+    id ??
+    (numeroExercice != null && questionIndex != null
+      ? MySpreadsheetElement.getDefaultSheetId(numeroExercice, questionIndex)
+      : undefined)
+
+  const sheetElement = MySpreadsheetElement.createEltToAppendToDom({
+    id: computedId,
+    data,
+    minDimensions,
+    style: style as Record<string, unknown> | undefined,
+    columns,
+    interactif,
+    showVerifyButton,
+    readOnlyCells,
+  })
+
+  if (nbColonnesCachees != null) {
+    sheetElement.setAttribute('nb-colonnes-cachees', String(nbColonnesCachees))
+  }
+  if (nbLignesCachees != null) {
+    sheetElement.setAttribute('nb-lignes-cachees', String(nbLignesCachees))
+  }
+  if (latexData != null) {
+    sheetElement.setAttribute('latex-data', JSON.stringify(latexData))
+  }
+  if (latexStyles != null) {
+    sheetElement.setAttribute('latex-styles', JSON.stringify(latexStyles))
+  }
+  if (latexOptions != null) {
+    sheetElement.setAttribute('latex-options', JSON.stringify(latexOptions))
+  }
+
+  if (context.isHtml && !context.isTypst) {
+    const shouldAppendFeedback = appendFeedbackBlocks ?? interactif
+    return (
+      sheetElement.outerHTML +
+      (shouldAppendFeedback && numeroExercice != null && questionIndex != null
+        ? `<div class="ml-2 py-2" id="resultatCheckEx${numeroExercice}Q${questionIndex}"></div>
+<div class ="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${numeroExercice}Q${questionIndex}"></div>`
+        : '')
+    )
+  }
+
+  return sheetElement.render() ?? ''
+}
+
+export function createTableurLatex(
+  rowNbr: number,
+  colNbr: number,
+  data: SpreadsheetLatexData,
+  styles: SpreadsheetLatexStyles,
+  options: SpreadsheetLatexOptions = {},
+) {
+  let output = context.isTypst ? '' : '\\begin{minipage}{0.9\\linewidth}\n'
+  output += `\\begin{tabularx}{${context.isTypst ? '0.9\\linewidth' : '\\linewidth'}}
+  {|>{\\cellcolor{lightgray}}c|
+  ${options.firstColHeaderWidth ? `>{\\centering \\arraybackslash}p{${options.firstColHeaderWidth}}|` : '>{\\centering \\arraybackslash}X|'}
+  *{${colNbr - 1}}{>{\\centering \\arraybackslash}X|}}\\hline\n`
+
+  if (options.formule && !context.isTypst) {
+    output += `\\multicolumn{1}{|l}{${options.formuleCellule}}&\\multicolumn{1}{r|}{$\\nabla$}&\\multicolumn{${colNbr - 1}}{l|}{${options.formuleTexte}}\\\\ \\hline\n`
+  }
+
+  output += '\\rowcolor{lightgray} &'
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  for (let colIndex = 0; colIndex < colNbr - 1; colIndex++) {
+    output += `\\textbf{\\sffamily ${alphabet[colIndex]}}  & `
+  }
+  output += `\\textbf{\\sffamily ${alphabet[colNbr - 1]}} \\\\ \\hline\n`
+
+  for (let rowIndex = 0; rowIndex < rowNbr; rowIndex++) {
+    const rowData =
+      (Array.isArray(data) ? data[rowIndex] : data[rowIndex]) || {}
+    output += `\\textbf{\\sffamily ${rowIndex + 1}} &`
+    for (let colIndex = 0; colIndex < colNbr; colIndex++) {
+      const cell = rowData[colIndex] || {}
+      const styleCell = styles[cell.s ?? ''] || {}
+      let color = ''
+      if (
+        (!context.isHtml || context.isTypst) &&
+        styleCell.bg?.startsWith('#')
+      ) {
+        color = `\\cellcolor[HTML]{${styleCell.bg.replace('#', '')}}`
+      } else if (styleCell.bg) {
+        color = `\\cellcolor{${styleCell.bg}}`
+      }
+      if (cell?.t === 1) {
+        const texte = cell.v || ''
+        output += `\\raggedright\\arraybackslash ${color} ${context.isTypst ? `\\text{${texte}}` : texte}  &`
+      } else if (cell?.t === 2) {
+        output += `\\raggedleft\\arraybackslash ${color} ${cell.v || ''}  &`
+      } else if (cell?.t === 3) {
+        output += `\\centering\\arraybackslash ${color} ${cell.v ? 'VRAI' : 'FAUX'}  &`
+      } else {
+        output += `${color} ${cell.v || ''}  &`
+      }
+    }
+    output = output.slice(0, -1)
+    output += '\\\\ \\hline\n'
+  }
+  output += '\\end{tabularx}\n'
+  if (!context.isTypst) output += '\\end{minipage}\n'
+
+  return context.isTypst ? `$${output}$` : output
 }
 
 registerMathaleaCustomElement(MySpreadsheetElement)

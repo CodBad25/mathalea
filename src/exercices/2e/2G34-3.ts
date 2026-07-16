@@ -2,7 +2,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   choixDeroulant,
   listeDeroulanteToQcm,
-} from '../../lib/interactif/questionListeDeroulante'
+} from '../../lib/customElements/ListeDeroulanteElement'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -377,7 +377,7 @@ export default class systemeEquationsPremDegSol extends Exercice {
         texteCorr +
         `<br> ${texteEnCouleurEtGras(`${choix.find((el) => el.value === rep)?.label ?? ''}`)}`
       if (this.interactif) {
-        texte = texte + choixDeroulant(this, i, choix, false)
+        texte = texte + choixDeroulant(this, i, { choices: choix, choix0: false })
         handleAnswers(
           this,
           i,

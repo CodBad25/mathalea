@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -28,7 +27,7 @@ export default class ChiffreDes extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 3)
+    const a = this.quotaRandint('a', 1, 3)
     const b = randint(1, 9, a)
     const c = randint(1, 9, [a, b])
     const d = randint(1, 9, [a, b, c])
@@ -38,7 +37,7 @@ export default class ChiffreDes extends ExerciceSimple {
       a * 100000 + b * 10000 + c * 1000 + d * 100 + e * 10 + f,
     )
     const n = chiffres.div(1000)
-    const m = choice([
+    const m = this.quotaChoice('m', [
       'centaines',
       'dizaines',
       'dixièmes',

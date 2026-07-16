@@ -1,6 +1,5 @@
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -37,7 +36,7 @@ export default class NombreFois4Ou8 extends ExerciceSimple {
   nouvelleVersion() {
     const a = randint(1, 4) * 10 + randint(1, 9, 5)
     this.reponse = 0
-    if (choice([4, 8]) === 4) {
+    if (this.quotaChoice('multiplicateur', [4, 8]) === 4) {
       this.reponse = a * 4
       this.question = `Calculer $${a}\\times 4$.`
       this.correction = `$${a}\\times 4 = ${miseEnEvidence(this.reponse)}$<br>`

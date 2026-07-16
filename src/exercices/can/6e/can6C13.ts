@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -37,7 +36,7 @@ export default class FSomme2Decimaux extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, b, c, d, e
-    if (choice([true, false])) {
+    if (this.quotaChoice('typeDeQuestions', [true, false])) {
       a = randint(3, 9)
       b = randint(1, 9, a)
       c = randint(1, 9, [a, b])

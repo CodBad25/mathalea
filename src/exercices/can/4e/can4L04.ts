@@ -1,6 +1,5 @@
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une expression pour une valeur particulière'
 export const interactifReady = true
@@ -28,9 +27,9 @@ export default class SubstitutionRelatif extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = -randint(2, 6)
-    const b = randint(12, 25)
-    const c = randint(3, 7)
+    const a = -this.quotaRandint('a', 2, 6)
+    const b = this.quotaRandint('b', 12, 25)
+    const c = this.quotaRandint('c', 3, 7)
     this.question = `Calculer $${b}+${c}x$ pour $x=${a}$.`
     this.correction = `$${b}+${c}x=${b}+${c}\\times (${a})=${b}${ecritureAlgebrique(c * a)}=${b + c * a}$ `
     this.correction += texteEnCouleur(`<br> Mentalement : <br>

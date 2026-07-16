@@ -17,7 +17,7 @@ import { vecteur, type Vecteur } from '../../lib/2d/Vecteur'
 import { vide2d, Vide2d } from '../../lib/2d/Vide2d'
 import { texcolors } from '../../lib/format/style'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import {
   choice,
   combinaisonListes,
@@ -952,7 +952,7 @@ export default class TrouverLaTransformation extends Exercice {
         })
         texte +=
           objetEnonce[ee].textePossible +
-          choixDeroulant(this, i * nbSousQuestions + ee, propositions[ee])
+          choixDeroulant(this, i * nbSousQuestions + ee, { choices: propositions[ee] })
         texteCorrComplement += ee > 0 ? '<br>' : ''
         texteCorrComplement += nbSousQuestions > 1 ? numAlpha(ee) : ''
         texteCorrComplement += objetEnonce[ee].texteCorrPossible

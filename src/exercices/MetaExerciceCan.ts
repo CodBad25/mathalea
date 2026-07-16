@@ -175,6 +175,10 @@ export default class MetaExercice extends Exercice {
               const n = Question.numeroExercice
               const questionHtml = String(Question.question)
                 .replaceAll(
+                  `multi-mathfieldEx${n}Q0`,
+                  `multi-mathfieldEx${n}Q${indexQuestion}`,
+                )
+                .replaceAll(
                   `multiMathfieldEx${n}Q0`,
                   `multiMathfieldEx${n}Q${indexQuestion}`,
                 )

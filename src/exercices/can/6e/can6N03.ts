@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -30,11 +29,11 @@ export default class RecomposerEntierMoinsSimple extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const c = randint(2, 30)
+    const c = this.quotaRandint('c', 2, 30)
     const d = randint(2, 30, c)
     const u = randint(2, 30, [c, d])
     switch (
-      choice([1, 2, 3]) //
+      this.quotaChoice('cas', [1, 2, 3]) //
     ) {
       case 1:
         this.reponse = c * 100 + d * 10

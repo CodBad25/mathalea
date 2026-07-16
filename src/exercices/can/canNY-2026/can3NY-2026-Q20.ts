@@ -1,8 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import FractionEtendue from '../../../modules/FractionEtendue'
@@ -29,11 +27,11 @@ export default class additionFraction2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = this.canOfficielle ? 2 : randint(1, 10)
+    const a = this.canOfficielle ? 2 : this.quotaRandint('a', 1, 10)
     const annee = 2026
     // this.question = `Calculer sous la forme d'une fraction :<br>`
     this.question = `Calculer :<br>`
-    if (this.canOfficielle ? true : choice([true, false])) {
+    if (this.canOfficielle ? true : this.quotaChoice('sens', [true, false])) {
       this.reponse = new FractionEtendue(1 + 2 * a, 2 * annee).toLatex()
       this.question += `$\\dfrac{${a}}{${texNombre(annee, 0)}} +\\dfrac{1}{${texNombre(2 * annee)}}$`
 

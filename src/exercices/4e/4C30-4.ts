@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import {
@@ -85,7 +85,7 @@ export default class PuissancesEtPrefixe extends Exercice {
       if (this.sup === 1) {
         texte =
           `$10^{${exposant}}$` +
-          choixDeroulant(this, i, [
+          choixDeroulant(this, i, { choices: [
             { label: 'Choisir le bon préfixe', value: '' },
             ...shuffle([
               { label: 'nano', value: 'nano' },
@@ -100,7 +100,7 @@ export default class PuissancesEtPrefixe extends Exercice {
               { label: 'giga', value: 'giga' },
               //    { label: 'téra', value: 'téra' },
             ]),
-          ])
+          ] })
         handleAnswers(
           this,
           i,

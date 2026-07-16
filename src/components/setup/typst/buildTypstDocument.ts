@@ -45,6 +45,9 @@ export const PAGE_BREAK_SNIPPET = '] #pagebreak(weak: true) #en-colonnes['
 /** Saut de colonne insérable entre deux exercices (page suivante en 1 colonne) */
 export const COLUMN_BREAK_SNIPPET = '#colbreak(weak: true)'
 
+/** Colonnes par défaut des blocs #tasks : taskize choisit jusqu'à 4 colonnes uniformes. */
+const DEFAULT_TASKS_COLUMNS = '"auto-fit"'
+
 /**
  * Réglages repris du code courant lors d'une régénération : les ajustements
  * faits via la palette de mise en page (colonnes/espacement des questions par
@@ -101,7 +104,7 @@ export function harvestCarryOver(code: string): TypstCarryOver {
   for (const match of code.matchAll(
     /^#let (ex\d+(?:-corr)?)-colonnes = (.+?)\s*$/gm,
   )) {
-    if (match[2] !== '1') {
+    if (match[2] !== DEFAULT_TASKS_COLUMNS) {
       tasksLayout[match[1]] = { ...tasksLayout[match[1]], columns: match[2] }
     }
   }
@@ -1035,6 +1038,9 @@ export function buildTypstDocument(
   }
   if (tasksPrefixes.length > 0) {
     lines.push(
+      '#tasks-setup(columns: "auto-fit", auto-fit-mode: "uniform", max-columns: 4)',
+    )
+    lines.push(
       '// espacement vertical entre les questions (défaut de tous les exercices)',
     )
     lines.push('#let interligne-questions = 1.2em')
@@ -1049,7 +1055,9 @@ export function buildTypstDocument(
     )
     for (const prefix of tasksPrefixes) {
       const layout = carryOver.tasksLayout?.[prefix]
-      lines.push(`#let ${prefix}-colonnes = ${layout?.columns ?? '1'}`)
+      lines.push(
+        `#let ${prefix}-colonnes = ${layout?.columns ?? DEFAULT_TASKS_COLUMNS}`,
+      )
       lines.push(
         `#let ${prefix}-gutter = ${layout?.gutter ?? 'interligne-questions'}`,
       )

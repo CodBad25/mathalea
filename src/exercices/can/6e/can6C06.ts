@@ -1,6 +1,5 @@
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -38,7 +37,7 @@ export default class DivisionPar9 extends ExerciceSimple {
   nouvelleVersion() {
     const b = randint(2, 9)
     let a
-    switch (choice([1, 2, 3])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2, 3])) {
       case 1:
         a = b * 90 + 9
         this.question = `Calculer $${texNombre(a, 0)}\\div 9$.`

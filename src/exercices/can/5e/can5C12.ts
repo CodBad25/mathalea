@@ -1,5 +1,4 @@
 import { bleuMathalea } from '../../../lib/colors'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -33,8 +32,8 @@ export default class FractionDEntierQuiVaBien extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = choice(obtenirListeFractionsIrreductibles())
-    const c = choice([2, 3, 4, 5, 6])
+    const a = this.quotaChoice('a', obtenirListeFractionsIrreductibles())
+    const c = this.quotaChoice('c', [2, 3, 4, 5, 6])
     const b = a.d * c
     this.reponse = new FractionEtendue(a.n * c, 1).num
     this.question = `Calculer $${a.texFraction}\\times ${b}$ sous la forme d'un entier.`

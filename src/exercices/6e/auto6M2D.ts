@@ -1,5 +1,5 @@
 import type { AllChoicesType } from '../../lib/interactif/listeDeroulante/ListeDeroulante'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import {
   choice,
@@ -109,7 +109,7 @@ export default class EgalitesUnitesAires extends Exercice {
       let choix = choice([true, false])
       if (choix) {
         texte += this.interactif
-          ? choixDeroulant(this, 4 * i, choixListeDeroulantePourCoefficient)
+          ? choixDeroulant(this, 4 * i, { choices: choixListeDeroulantePourCoefficient })
           : '$\\ldots\\ldots\\ldots$'
         texte += ` ${unite} `
         this.listeReponses[i].push('1')
@@ -117,7 +117,7 @@ export default class EgalitesUnitesAires extends Exercice {
       } else {
         texte += ' $1$ '
         texte += this.interactif
-          ? choixDeroulant(this, 4 * i, choixListeDeroulantePourUnite)
+          ? choixDeroulant(this, 4 * i, { choices: choixListeDeroulantePourUnite })
           : '$\\ldots\\ldots\\ldots$'
         this.listeReponses[i].push(unite)
         texteCorr += `$1$ ${texteEnCouleurEtGras(unite)} `
@@ -133,7 +133,7 @@ export default class EgalitesUnitesAires extends Exercice {
             ? choixDeroulant(
                 this,
                 4 * i + 1,
-                choixListeDeroulantePourCoefficient,
+                { choices: choixListeDeroulantePourCoefficient },
               )
             : '$\\ldots\\ldots\\ldots$'
           texte += ` ${sousUnite} `
@@ -142,7 +142,7 @@ export default class EgalitesUnitesAires extends Exercice {
         } else {
           texte += ' 10 '
           texte += this.interactif
-            ? choixDeroulant(this, 4 * i + 1, choixListeDeroulantePourUnite)
+            ? choixDeroulant(this, 4 * i + 1, { choices: choixListeDeroulantePourUnite })
             : '$\\ldots\\ldots\\ldots$'
           this.listeReponses[i].push(sousUnite)
           texteCorr += `10 ${texteEnCouleurEtGras(sousUnite)} `
@@ -158,7 +158,7 @@ export default class EgalitesUnitesAires extends Exercice {
             ? choixDeroulant(
                 this,
                 4 * i + 1,
-                choixListeDeroulantePourCoefficient,
+                { choices: choixListeDeroulantePourCoefficient },
               )
             : '$\\ldots\\ldots\\ldots$'
           texte += ` ${sousUnite} `
@@ -167,7 +167,7 @@ export default class EgalitesUnitesAires extends Exercice {
         } else {
           texte += ' 10 '
           texte += this.interactif
-            ? choixDeroulant(this, 4 * i + 1, choixListeDeroulantePourUnite)
+            ? choixDeroulant(this, 4 * i + 1, { choices: choixListeDeroulantePourUnite })
             : '$\\ldots\\ldots\\ldots$'
           this.listeReponses[i].push(sousUnite)
           texteCorr += `10 ${texteEnCouleurEtGras(sousUnite)} `
@@ -180,14 +180,14 @@ export default class EgalitesUnitesAires extends Exercice {
       this.listeReponses[i].push('10')
       if (choix) {
         texte += this.interactif
-          ? choixDeroulant(this, 4 * i + 2, choixListeDeroulantePourCoefficient)
+          ? choixDeroulant(this, 4 * i + 2, { choices: choixListeDeroulantePourCoefficient })
           : '$\\ldots\\ldots\\ldots$'
         texte += '$\\times$ 10 '
         texteCorr += `${texteEnCouleurEtGras('10')} $\\times$ 10`
       } else {
         texte += ' 10 $\\times$ '
         texte += this.interactif
-          ? choixDeroulant(this, 4 * i + 2, choixListeDeroulantePourUnite)
+          ? choixDeroulant(this, 4 * i + 2, { choices: choixListeDeroulantePourUnite })
           : '$\\ldots\\ldots\\ldots$'
         texteCorr += `10 $\\times$ ${texteEnCouleurEtGras('10')}`
       }
@@ -200,7 +200,7 @@ export default class EgalitesUnitesAires extends Exercice {
         ...shuffle(choixListeDeroulante[0]),
       ]
       texte += this.interactif
-        ? choixDeroulant(this, 4 * i + 3, choixListeDeroulantePourCoefficient)
+        ? choixDeroulant(this, 4 * i + 3, { choices: choixListeDeroulantePourCoefficient })
         : '$\\ldots\\ldots\\ldots$'
       this.listeReponses[i].push('100')
 

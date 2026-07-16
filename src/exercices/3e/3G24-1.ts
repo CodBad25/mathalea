@@ -28,7 +28,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif' // foncti
 import {
   choixDeroulant,
   listeDeroulanteToQcm,
-} from '../../lib/interactif/questionListeDeroulante'
+} from '../../lib/customElements/ListeDeroulanteElement'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import {
   choice,
@@ -387,7 +387,7 @@ export default class TrianglesSemblables extends Exercice {
           if (this.interactif) {
             texte +=
               `$[${A.nom + B.nom}]$ et ` +
-              choixDeroulant(this, indiceChampReponse, auChoixCote) +
+              choixDeroulant(this, indiceChampReponse, { choices: auChoixCote }) +
               ' sont homologues.<br>'
             handleAnswers(
               this,
@@ -397,7 +397,7 @@ export default class TrianglesSemblables extends Exercice {
             )
             texte +=
               `$[${A.nom + C.nom}]$ et ` +
-              choixDeroulant(this, indiceChampReponse + 1, auChoixCote) +
+              choixDeroulant(this, indiceChampReponse + 1, { choices: auChoixCote }) +
               ' sont homologues.<br>'
             handleAnswers(
               this,
@@ -407,7 +407,7 @@ export default class TrianglesSemblables extends Exercice {
             )
             texte +=
               `$[${B.nom + C.nom}]$ et ` +
-              choixDeroulant(this, indiceChampReponse + 2, auChoixCote) +
+              choixDeroulant(this, indiceChampReponse + 2, { choices: auChoixCote }) +
               ' sont homologues.<br>'
             handleAnswers(
               this,
@@ -417,7 +417,7 @@ export default class TrianglesSemblables extends Exercice {
             )
             texte +=
               `Les sommets $${A.nom}$ et ` +
-              choixDeroulant(this, indiceChampReponse + 3, auChoixSommet) +
+              choixDeroulant(this, indiceChampReponse + 3, { choices: auChoixSommet }) +
               ' sont homologues.<br>'
             handleAnswers(
               this,
@@ -427,7 +427,7 @@ export default class TrianglesSemblables extends Exercice {
             )
             texte +=
               `Les sommets $${B.nom}$ et ` +
-              choixDeroulant(this, indiceChampReponse + 4, auChoixSommet) +
+              choixDeroulant(this, indiceChampReponse + 4, { choices: auChoixSommet }) +
               ' sont homologues.<br>'
             handleAnswers(
               this,
@@ -437,7 +437,7 @@ export default class TrianglesSemblables extends Exercice {
             )
             texte +=
               `Les sommets $${C.nom}$ et ` +
-              choixDeroulant(this, indiceChampReponse + 5, auChoixSommet) +
+              choixDeroulant(this, indiceChampReponse + 5, { choices: auChoixSommet }) +
               ' sont homologues.<br>'
             handleAnswers(
               this,
@@ -1048,7 +1048,7 @@ export default class TrianglesSemblables extends Exercice {
           texte +=
             ' ' +
             texteInit +
-            choixDeroulant(this, indiceChampReponse, choices) +
+            choixDeroulant(this, indiceChampReponse, { choices: choices }) +
             '.'
           handleAnswers(
             this,

@@ -1,14 +1,12 @@
+import ListeDeroulanteElement from '../../../src/lib/customElements/ListeDeroulanteElement'
+import { MultiMathfieldElement } from '../../../src/lib/customElements/MultiMathfield'
+import { MySpreadsheetElement } from '../../../src/lib/customElements/MySpreadSheet'
+import { SvgSelectionElement } from '../../../src/lib/customElements/SvgSelectionElement'
 import { verifQuestionCliqueFigure } from '../../../src/lib/interactif/cliqueFigure'
 import { verifDragAndDrop } from '../../../src/lib/interactif/DragAndDrop'
-import {
-  verifQuestionMetaInteractif2d,
-  verifQuestionMultiMathfield,
-} from '../../../src/lib/interactif/gestionInteractif'
+import { verifQuestionMetaInteractif2d } from '../../../src/lib/interactif/gestionInteractif'
 import { verifQuestionMathLive } from '../../../src/lib/interactif/mathLive'
 import { verifQuestionQcm } from '../../../src/lib/interactif/qcm'
-import { verifQuestionListeDeroulante } from '../../../src/lib/interactif/questionListeDeroulante'
-import { verifQuestionSvgSelection } from '../../../src/lib/interactif/questionSvgSelection/questionSvgSelection'
-import { verifQuestionTableur } from '../../../src/lib/tableur/outilsTableur'
 import type { AutoCorrection, IExercice } from '../../../src/lib/types'
 import {
   injectCliqueFigureDOM,
@@ -415,7 +413,7 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
             ? String(dropdownAnswer[0])
             : String(dropdownAnswer)
           injectListeDeroulanteDOM(exIdx, i, answerStr)
-          const result = verifQuestionListeDeroulante(exercice, i)
+          const result = ListeDeroulanteElement.verifQuestion(exercice, i)
           results.push({
             questionIndex: i,
             format,
@@ -449,7 +447,7 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
             ? String(selectionValue[0])
             : String(selectionValue)
           injectSvgSelectionDOM(exIdx, i, answerStr)
-          const result = verifQuestionSvgSelection(exercice, i)
+          const result = SvgSelectionElement.verifQuestion(exercice, i)
           results.push({
             questionIndex: i,
             format,
@@ -521,7 +519,7 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
-              verificationFunctionName: 'verifQuestionMultiMathfield',
+              verificationFunctionName: 'MultiMathfieldElement.verifQuestion',
               simulatedInput: '',
               goodAnswer: '',
               isOk: false,
@@ -533,11 +531,7 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
           }
           const fieldValues: Record<string, string> = {}
           for (const [key, answer] of Object.entries(valeur)) {
-            if (
-              key === 'bareme' ||
-              key === 'feedback' ||
-              answer?.value == null
-            ) {
+            if (key === 'bareme' || key === 'feedback' || !answer?.value) {
               continue
             }
             const val = answer.value
@@ -553,7 +547,7 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
-              verificationFunctionName: 'verifQuestionMultiMathfield',
+              verificationFunctionName: 'MultiMathfieldElement.verifQuestion',
               simulatedInput: '',
               goodAnswer: '',
               isOk: false,
@@ -564,11 +558,11 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
             break
           }
           injectMultiMathfieldDOM(exIdx, i, fieldValues)
-          const result = verifQuestionMultiMathfield(exercice, i)
+          const result = MultiMathfieldElement.verifQuestion(exercice, i)
           results.push({
             questionIndex: i,
             format,
-            verificationFunctionName: 'verifQuestionMultiMathfield',
+            verificationFunctionName: 'MultiMathfieldElement.verifQuestion',
             simulatedInput: stringifyRecord(fieldValues),
             goodAnswer: stringifyRecord(fieldValues),
             isOk: result?.isOk === true,
@@ -579,7 +573,10 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
         }
 
         case 'cliqueFigure': {
-          if (exercice.figures == null || !Array.isArray(exercice.figures[i])) {
+          if (
+            exercice.cliqueFiguresArray == null ||
+            !Array.isArray(exercice.cliqueFiguresArray[i])
+          ) {
             results.push({
               questionIndex: i,
               format,
@@ -595,7 +592,7 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
           }
 
           const figures: CliqueFigureItem[] = []
-          for (const candidate of exercice.figures[i] as unknown[]) {
+          for (const candidate of exercice.cliqueFiguresArray[i] as unknown[]) {
             if (isCliqueFigureItem(candidate)) {
               figures.push(candidate)
             }
@@ -706,7 +703,7 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
           }
 
           injectTableurDOM(exIdx, i, goodAnswers, testDatas)
-          const result = verifQuestionTableur(exercice, i)
+          const result = MySpreadsheetElement.verifQuestion(exercice, i)
           results.push({
             questionIndex: i,
             format,

@@ -27,7 +27,7 @@ export default class FractionsEgalesACompleter extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2])) {
       case 1:
         {
           const k = randint(2, 10)

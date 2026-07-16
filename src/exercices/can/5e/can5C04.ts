@@ -1,6 +1,5 @@
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec triple et moitié'
 export const interactifReady = true
@@ -28,7 +27,7 @@ export default class TripleEtMoitie extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(3, 20)
+    const a = this.quotaRandint('a', 3, 20)
     this.question = `Le triple d'un nombre vaut $${3 * a}$, combien vaut sa moitié ?`
     this.correction = `Le nombre est $${a}$, sa moitié est $${texNombre(a / 2)}$.<br><br>`
     this.correction += texteEnCouleur(`

@@ -31,7 +31,7 @@ export default class PoucentageP2 extends ExerciceSimple {
   nouvelleVersion() {
     let a, u, b
     switch (
-      choice(['a', 'a', 'b', 'c', 'c', 'd', 'd']) //
+      this.quotaChoice('typeDeQuestions', ['a', 'a', 'b', 'c', 'c', 'd', 'd']) //
     ) {
       case 'a':
         a = randint(10, 99)

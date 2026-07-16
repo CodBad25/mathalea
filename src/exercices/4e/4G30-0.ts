@@ -66,10 +66,10 @@ export default class MonExoGuideAne extends Exercice {
        ${addGuideAne(this, i, guideAneData)}<br>
        ${ajouteFeedback(this, i)}`
 
-        texteCorr = GuideAne.create({
-          exercice: this,
-          questionIndex: i,
-          data: {
+        texteCorr =
+          GuideAne.create({
+            numeroExercice: this.numeroExercice,
+            questionIndex: i,
             A: { x: 100, y: 300 },
             n: targetN,
             p: targetP,
@@ -77,8 +77,12 @@ export default class MonExoGuideAne extends Exercice {
             targetAB,
             disableADrag: true,
             displayTargetOn: true,
-          },
-        })
+          }) +
+          `<br>
+        Le segment $[AB]$ mesurant $${targetAB}$ cm, on place un point $C$ sur une demi-droite issue de $A$ tel que $AC=${targetN}$ unités.<br>
+        Ensuite, on trace $${targetN - 1}$ parallèles à $[CB]$ passant par les points sur cette demi-droite.<br>
+        Ces parallèles coupent le segment $[AB]$ en $${targetN}$ segments de même longueur.<br>
+         Le point $D$ est placé sur la $${targetP}^\\text{ème}$ parallèle, ce qui donne $AD=\\dfrac{${targetP}}{${targetN}}AB=${egalOuApprox(targetValue, 2)}$ cm.`
       } else {
         // contexte latex
         texte += ' sans utiliser les graduations de la règle.<br>'
@@ -117,7 +121,7 @@ export default class MonExoGuideAne extends Exercice {
     )
     let isOk = false
     const guideAne = document.getElementById(
-      `guideAneEx${this.numeroExercice}Q${i}`,
+      `guide-aneEx${this.numeroExercice}Q${i}`,
     ) as GuideAne
     if (guideAne == null) {
       window.notify(`Pas trouvé le guide-âne dans cet exercice pour i=${i}`, {})
@@ -126,7 +130,7 @@ export default class MonExoGuideAne extends Exercice {
     const answer = guideAne.value
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[`guideAneEx${this.numeroExercice}Q${i}`] =
+    this.answers[`guide-aneEx${this.numeroExercice}Q${i}`] =
       JSON.stringify(answer)
 
     isOk = guideAne.isTargetReached()

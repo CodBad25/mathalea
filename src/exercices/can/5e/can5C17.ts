@@ -29,7 +29,7 @@ export default class EntierPlusFractionVersDecimal extends ExerciceSimple {
     let a, b, c, maFraction, maFraction2
     let resultat
 
-    switch (choice([1, 2, 3, 4])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2, 3, 4])) {
       case 1: // fraction addition avec un entier
         c = choice([2, 4, 5])
         b = randint(1, c - 1)

@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec les chiffres (relatifs)'
@@ -28,7 +27,7 @@ export default class calcAvecChiffresRel extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const a = this.canOfficielle ? 5 : randint(1, 9)
+    const a = this.canOfficielle ? 5 : this.quotaRandint('a', 1, 9)
 
     this.reponse = a - annee
     this.question = `$${a}-${texNombre(annee, 0)}$`

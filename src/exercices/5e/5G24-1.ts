@@ -11,7 +11,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif' // foncti
 import {
   choixDeroulant,
   listeDeroulanteToQcm,
-} from '../../lib/interactif/questionListeDeroulante'
+} from '../../lib/customElements/ListeDeroulanteElement'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import {
   combinaisonListes,
@@ -404,7 +404,7 @@ export default class TrianglesEgaux extends Exercice {
       if (this.interactif) {
         texte +=
           `$[${A.nom}${B.nom}]$ et ` +
-          choixDeroulant(this, 3 * i, auChoixCote) +
+          choixDeroulant(this, 3 * i, { choices: auChoixCote }) +
           ' sont homologues.<br>'
         handleAnswers(
           this,
@@ -414,7 +414,7 @@ export default class TrianglesEgaux extends Exercice {
         )
         texte +=
           `$[${A.nom + C.nom}]$ et ` +
-          choixDeroulant(this, 3 * i + 1, auChoixCote) +
+          choixDeroulant(this, 3 * i + 1, { choices: auChoixCote }) +
           ' sont homologues.<br>'
         handleAnswers(
           this,
@@ -424,7 +424,7 @@ export default class TrianglesEgaux extends Exercice {
         )
         texte +=
           `$[${B.nom + C.nom}]$ et ` +
-          choixDeroulant(this, 3 * i + 2, auChoixCote) +
+          choixDeroulant(this, 3 * i + 2, { choices: auChoixCote }) +
           ' sont homologues.<br>'
         handleAnswers(
           this,

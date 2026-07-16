@@ -37,7 +37,7 @@ export default class ProblemeFraction extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2])) {
       case 1:
         {
           const listeFractions: [string, number, number][] = [

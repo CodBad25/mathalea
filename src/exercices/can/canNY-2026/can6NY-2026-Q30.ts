@@ -32,7 +32,7 @@ export default class CalculDivers extends ExerciceSimple {
 
     let a
     let b
-    switch (this.canOfficielle ? 1 : randint(1, 2)) {
+    switch (this.canOfficielle ? 1 : this.quotaRandint('typeDeQuestions', 1, 2)) {
       case 1:
         a = this.canOfficielle ? 12 : randint(8, 12, 10)
         b = 20 - a

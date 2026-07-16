@@ -9,7 +9,7 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { rangeMinMax } from '../../lib/outils/nombres'
 import { lettreDepuisChiffre, numAlpha, sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
@@ -215,11 +215,11 @@ export default class constructionElementaire extends Exercice {
           colonne2 +=
             numAlpha(questind) +
             `$${points[ind].nom}${sp(3)}$` +
-            choixDeroulant(this, i * this.sup2 + k, [
+            choixDeroulant(this, i * this.sup2 + k, { choices: [
               { label: '?', value: '' },
               { latex: '\\in', value: 'in' },
               { latex: '\\notin', value: 'notin' },
-            ]) +
+            ] }) +
             `$${sp(3)}${lettre[0]}${points[ind1].nom}${points[ind2].nom}${lettre[1]}$<br>`
           handleAnswers(
             this,

@@ -52,7 +52,7 @@ export default class Proportionnalite3 extends ExerciceSimple {
       ['citrouilles', 'citrouille'],
     ]
     switch (
-      choice([1, 2]) //
+      this.quotaChoice('typeDeQuestions', [1, 2]) //
     ) {
       case 1: // proportionnalité avec fruits
         choix = choice(['a', 'b'])

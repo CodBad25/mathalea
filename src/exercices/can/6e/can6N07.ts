@@ -36,7 +36,7 @@ export default class LireAbscisseDecimaleDeFraction extends ExerciceSimple {
   nouvelleVersion() {
     let a
     switch (
-      choice([1, 2]) //
+      this.quotaChoice('cas', [1, 2]) //
     ) {
       case 1: // droite graduée     /4 resultat décimal
         a = choice([1, 3, 5, 6, 7, 9, 10, 11]) // numérateur
