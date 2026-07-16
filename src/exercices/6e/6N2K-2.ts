@@ -20,7 +20,7 @@ export const titre =
 export const dateDePublication = '11/12/2023'
 export const dateDeModifImportante = '09/01/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 /**
  * Résolution de problèmes utilisant la division Euclidienne
@@ -144,7 +144,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
                   nbPerlesRouge * Math.min(nbColliersRouge, nbColliersJaune),
               },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
           // indiceInteractif += 3
           break

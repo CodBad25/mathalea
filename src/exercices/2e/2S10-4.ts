@@ -20,7 +20,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 export const titre = "Compléter et utiliser un tableau d'effectif"
 export const dateDePublication = '08/01/2024'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDeModifImportante = '08/01/2026'
 /**
  * Compléter ou utiliser un tableau
@@ -359,7 +359,7 @@ export default class TableauProportion extends Exercice {
                   : arrondi((GAetT * 100) / totalGA, 0),
               },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
           /*    texte += `<br><br>${numAlpha(0)}  Quelle est la proportion de ${choix ? 'filles' : 'garçons'} en première technologique parmi les élèves de ce lycée ?<br>`
           handleAnswers(this, index, {

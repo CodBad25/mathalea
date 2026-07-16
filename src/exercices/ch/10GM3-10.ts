@@ -19,7 +19,7 @@ export const titre =
 export const dateDePublication = '19/08/2025'
 export const dateDeModifImportante = '19/03/2026'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const uuid = '31e62'
 export const refs = {
   'fr-ch': ['10GM3-10'],
@@ -471,7 +471,7 @@ export default class ConvertirDuree extends Exercice {
                   : {},
               ),
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
         } else {
           handleAnswers(
@@ -485,7 +485,7 @@ export default class ConvertirDuree extends Exercice {
                 },
               },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
         }
       }

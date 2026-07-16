@@ -1,12 +1,12 @@
-import { listeQuestionsToContenu } from '../../modules/outils'
-import Exercice from '../Exercice'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { shapeDefToShapeSvg } from '../../lib/2d/figures2d/shapes2d'
 import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { listeQuestionsToContenu } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = "Reconnaitre une fonction d'après sa courbe"
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 
 export const dateDePublication = '22/06/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const uuid = 'addd5' // @todo à changer dans un nouvel exo (utiliser pnpm getNewUuid)
@@ -50,7 +50,7 @@ export default class BetaListeDeroulante extends Exercice {
       this,
       0,
       { reponse: { value: 'phi' } },
-      { formatInteractif: 'listeDeroulante' },
+      { formatInteractif: 'liste-deroulante' },
     )
 
     this.listeQuestions.push(enonce)

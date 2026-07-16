@@ -130,8 +130,19 @@ export default class MathaleaCustomElement extends HTMLElement {
    * Ce hook est optionnel et peut être surchargé par les classes filles
    * qui portent leur propre logique de correction (ex: svg-selection).
    */
-  static verifQuestion(_exercice: IExercice, _i: number): unknown {
-    return null
+  static verifQuestion(
+    _exercice: IExercice,
+    _i: number,
+  ): {
+    isOk: boolean
+    feedback: string
+    score: { nbBonnesReponses: number; nbReponses: number }
+  } {
+    return {
+      isOk: true,
+      feedback: '',
+      score: { nbBonnesReponses: 0, nbReponses: 0 },
+    }
   }
 
   /**

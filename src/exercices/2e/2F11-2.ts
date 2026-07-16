@@ -1,5 +1,5 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -8,7 +8,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 
 export const titre = 'Comparer deux images avec une fonction de référence'
 export const dateDePublication = '14/02/2023'
@@ -430,11 +430,15 @@ export default class ComparerAvecFonctionRef extends Exercice {
             : '$\\ldots\\ldots\\ldots\\ldots$') +
           ` sur ` +
           (this.interactif
-            ? choixDeroulant(this, 3 * i + 1, { choices: choixListeDeroulante2 })
+            ? choixDeroulant(this, 3 * i + 1, {
+                choices: choixListeDeroulante2,
+              })
             : '$\\ldots\\ldots\\ldots\\ldots$') +
           `  donc  $${nom}(${texNombre(x1, 3)})$` +
           (this.interactif
-            ? choixDeroulant(this, 3 * i + 2, { choices: choixListeDeroulante3 })
+            ? choixDeroulant(this, 3 * i + 2, {
+                choices: choixListeDeroulante3,
+              })
             : '$\\ldots\\ldots\\ldots\\ldots$') +
           ` $${nom}(${texNombre(x2, 3)})$.`
 
@@ -442,19 +446,19 @@ export default class ComparerAvecFonctionRef extends Exercice {
           this,
           3 * i,
           { reponse: { value: reponse[0], options: { texteSansCasse: true } } },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
         handleAnswers(
           this,
           3 * i + 1,
           { reponse: { value: reponse[1], options: { texteSansCasse: true } } },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
         handleAnswers(
           this,
           3 * i + 2,
           { reponse: { value: reponse[2], options: { texteSansCasse: true } } },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
       }
       if (this.questionJamaisPosee(i, variables.map(String).join(''))) {

@@ -23,12 +23,12 @@ import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { vide2d } from '../../lib/2d/Vide2d'
 import { bleuMathalea } from '../../lib/colors'
-import { deuxColonnesResp } from '../../lib/format/miseEnPage'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import {
   choixDeroulant,
   listeDeroulanteToQcm,
 } from '../../lib/customElements/ListeDeroulanteElement'
+import { deuxColonnesResp } from '../../lib/format/miseEnPage'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import {
   choice,
@@ -55,7 +55,7 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 export const interactifReady = true // pour définir qu'exercice peut s'afficher en mode interactif.
-export const interactifType = 'listeDeroulante' // 'mathLive'
+export const interactifType = 'liste-deroulante' // 'mathLive'
 export const amcReady = true // pour définir que l'exercice peut servir à AMC
 export const amcType = 'qcmMono'
 
@@ -387,63 +387,75 @@ export default class TrianglesSemblables extends Exercice {
           if (this.interactif) {
             texte +=
               `$[${A.nom + B.nom}]$ et ` +
-              choixDeroulant(this, indiceChampReponse, { choices: auChoixCote }) +
+              choixDeroulant(this, indiceChampReponse, {
+                choices: auChoixCote,
+              }) +
               ' sont homologues.<br>'
             handleAnswers(
               this,
               indiceChampReponse,
               { reponse: { value: repCote[0] } },
-              { formatInteractif: 'listeDeroulante' },
+              { formatInteractif: 'liste-deroulante' },
             )
             texte +=
               `$[${A.nom + C.nom}]$ et ` +
-              choixDeroulant(this, indiceChampReponse + 1, { choices: auChoixCote }) +
+              choixDeroulant(this, indiceChampReponse + 1, {
+                choices: auChoixCote,
+              }) +
               ' sont homologues.<br>'
             handleAnswers(
               this,
               indiceChampReponse + 1,
               { reponse: { value: repCote[1] } },
-              { formatInteractif: 'listeDeroulante' },
+              { formatInteractif: 'liste-deroulante' },
             )
             texte +=
               `$[${B.nom + C.nom}]$ et ` +
-              choixDeroulant(this, indiceChampReponse + 2, { choices: auChoixCote }) +
+              choixDeroulant(this, indiceChampReponse + 2, {
+                choices: auChoixCote,
+              }) +
               ' sont homologues.<br>'
             handleAnswers(
               this,
               indiceChampReponse + 2,
               { reponse: { value: repCote[2] } },
-              { formatInteractif: 'listeDeroulante' },
+              { formatInteractif: 'liste-deroulante' },
             )
             texte +=
               `Les sommets $${A.nom}$ et ` +
-              choixDeroulant(this, indiceChampReponse + 3, { choices: auChoixSommet }) +
+              choixDeroulant(this, indiceChampReponse + 3, {
+                choices: auChoixSommet,
+              }) +
               ' sont homologues.<br>'
             handleAnswers(
               this,
               indiceChampReponse + 3,
               { reponse: { value: repSommet[0] } },
-              { formatInteractif: 'listeDeroulante' },
+              { formatInteractif: 'liste-deroulante' },
             )
             texte +=
               `Les sommets $${B.nom}$ et ` +
-              choixDeroulant(this, indiceChampReponse + 4, { choices: auChoixSommet }) +
+              choixDeroulant(this, indiceChampReponse + 4, {
+                choices: auChoixSommet,
+              }) +
               ' sont homologues.<br>'
             handleAnswers(
               this,
               indiceChampReponse + 4,
               { reponse: { value: repSommet[1] } },
-              { formatInteractif: 'listeDeroulante' },
+              { formatInteractif: 'liste-deroulante' },
             )
             texte +=
               `Les sommets $${C.nom}$ et ` +
-              choixDeroulant(this, indiceChampReponse + 5, { choices: auChoixSommet }) +
+              choixDeroulant(this, indiceChampReponse + 5, {
+                choices: auChoixSommet,
+              }) +
               ' sont homologues.<br>'
             handleAnswers(
               this,
               indiceChampReponse + 5,
               { reponse: { value: repSommet[2] } },
-              { formatInteractif: 'listeDeroulante' },
+              { formatInteractif: 'liste-deroulante' },
             )
           } else if (context.isAmc) {
             const options = { ordered: true, vertical: true }
@@ -1054,7 +1066,7 @@ export default class TrianglesSemblables extends Exercice {
             this,
             indiceChampReponse,
             { reponse: { value: repSemblables } },
-            { formatInteractif: 'listeDeroulante' },
+            { formatInteractif: 'liste-deroulante' },
           )
         } else if (context.isAmc) {
           const options = { ordered: true, vertical: true }

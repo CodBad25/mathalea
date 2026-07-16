@@ -168,7 +168,7 @@ export default class MetaExercice extends Exercice {
               break
             }
 
-            if (Question.formatInteractif === 'multiMathfield') {
+            if (Question.formatInteractif === 'multi-mathfield') {
               // La question a construit elle-même son composant <multi-mathfield>
               // (via addMultiMathfield) avec l'indice 0 : on réindexe les identifiants
               // sur la position réelle de la question dans le méta-exercice.
@@ -179,8 +179,8 @@ export default class MetaExercice extends Exercice {
                   `multi-mathfieldEx${n}Q${indexQuestion}`,
                 )
                 .replaceAll(
-                  `multiMathfieldEx${n}Q0`,
-                  `multiMathfieldEx${n}Q${indexQuestion}`,
+                  `multi-mathfieldEx${n}Q0`,
+                  `multi-mathfieldEx${n}Q${indexQuestion}`,
                 )
                 .replaceAll(
                   `feedbackEx${n}Q0`,
@@ -188,7 +188,7 @@ export default class MetaExercice extends Exercice {
                 )
               this.listeQuestions[indexQuestion] = consigne + questionHtml
               handleAnswers(this, indexQuestion, Question.reponse as Valeur, {
-                formatInteractif: 'multiMathfield',
+                formatInteractif: 'multi-mathfield',
               })
             } else if (
               Question.formatInteractif === 'fillInTheBlank' ||
@@ -262,16 +262,16 @@ export default class MetaExercice extends Exercice {
                 formatInteractif: 'MetaInteractif2d',
               })
               this.listeQuestions[indexQuestion] = consigne + Question.question
-            } else if (Question.formatInteractif === 'svgSelection') {
+            } else if (Question.formatInteractif === 'svg-selection') {
               const n = Question.numeroExercice
               if (Question.question != null) {
                 const svgSelection = Question.question.match(
-                  /id="svgSelectionEx\d+Q\d+"/g,
+                  /id="svg-selectionEx\d+Q\d+"/g,
                 )
                 if (svgSelection != null) {
                   Question.question = Question.question.replace(
-                    `svgSelectionEx${n}Q0`,
-                    `svgSelectionEx${n}Q${indexQuestion}`,
+                    `svg-selectionEx${n}Q0`,
+                    `svg-selectionEx${n}Q${indexQuestion}`,
                   )
                   Question.question = Question.question.replace(
                     `resultatCheckEx${n}Q0`,
@@ -283,13 +283,13 @@ export default class MetaExercice extends Exercice {
                     this,
                     indexQuestion,
                     { reponse: { value: reponse } },
-                    { formatInteractif: 'svgSelection' },
+                    { formatInteractif: 'svg-selection' },
                   )
                   this.listeQuestions[indexQuestion] =
                     consigne + Question.question
                 } else {
                   throw new Error(
-                    `Erreur avec cette question de type svgSelection qui ne contient pas d'id de svgSelection: ${Question.question}`,
+                    `Erreur avec cette question de type svg-selection qui ne contient pas d'id de svg-selection: ${Question.question}`,
                   )
                 }
               }
@@ -511,7 +511,10 @@ export default class MetaExercice extends Exercice {
             )
             this.listeQuestions[indexQuestion] = this.listeQuestions[
               indexQuestion
-            ].replaceAll('clockEx0Q0', `clockEx0Q${indexQuestion}`)
+            ].replaceAll(
+              'interactive-clockEx0Q0',
+              `interactive-clockEx0Q${indexQuestion}`,
+            )
 
             // fin d'alimentation des listes de question et de correction pour cette question
             const formatInteractif =

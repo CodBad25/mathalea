@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Représenter une fraction avec une plaque de chocolat'
 export const interactifReady = true
-export const interactifType = 'svgSelection'
+export const interactifType = 'svg-selection'
 export const dateDePublication = '10/02/2026'
 export const uuid = '1574a'
 export const refs = {

@@ -393,13 +393,13 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
           break
         }
 
-        case 'listeDeroulante': {
+        case 'liste-deroulante': {
           const dropdownAnswer = valeur?.reponse?.value
           if (dropdownAnswer == null) {
             results.push({
               questionIndex: i,
               format,
-              verificationFunctionName: 'verifQuestionListeDeroulante',
+              verificationFunctionName: 'ListeDeroulanteElement.verifQuestion',
               simulatedInput: '',
               goodAnswer: '',
               isOk: false,
@@ -417,29 +417,29 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
           results.push({
             questionIndex: i,
             format,
-            verificationFunctionName: 'verifQuestionListeDeroulante',
+            verificationFunctionName: 'ListeDeroulanteElement.verifQuestion',
             simulatedInput: answerStr,
             goodAnswer: answerStr,
-            isOk: result === 'OK',
+            isOk: result.isOk,
             feedback: '',
             skipped: false,
           })
           break
         }
 
-        case 'svgSelection': {
+        case 'svg-selection': {
           const selectionValue = valeur?.reponse?.value
           if (selectionValue == null) {
             results.push({
               questionIndex: i,
               format,
-              verificationFunctionName: 'verifQuestionSvgSelection',
+              verificationFunctionName: 'SvgSelectionElement.verifQuestion',
               simulatedInput: '',
               goodAnswer: '',
               isOk: false,
-              feedback: 'No svgSelection value',
+              feedback: 'No svg-selection value',
               skipped: true,
-              skipReason: 'no-svgSelection-value',
+              skipReason: 'no-svg-selection-value',
             })
             break
           }
@@ -451,10 +451,10 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
           results.push({
             questionIndex: i,
             format,
-            verificationFunctionName: 'verifQuestionSvgSelection',
+            verificationFunctionName: 'SvgSelectionElement.verifQuestion',
             simulatedInput: answerStr,
             goodAnswer: answerStr,
-            isOk: result === 'OK',
+            isOk: result.isOk,
             feedback: '',
             skipped: false,
           })
@@ -514,7 +514,7 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
           break
         }
 
-        case 'multiMathfield': {
+        case 'multi-mathfield': {
           if (!valeur) {
             results.push({
               questionIndex: i,
@@ -669,13 +669,13 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
           break
         }
 
-        case 'tableur': {
+        case 'my-spreadsheet': {
           const sheetAnswer = valeur?.sheetAnswer
           if (!sheetAnswer) {
             results.push({
               questionIndex: i,
               format,
-              verificationFunctionName: 'verifQuestionTableur',
+              verificationFunctionName: 'MySpreadsheetElement.verifQuestion',
               simulatedInput: '',
               goodAnswer: '',
               isOk: false,
@@ -691,7 +691,7 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
-              verificationFunctionName: 'verifQuestionTableur',
+              verificationFunctionName: 'MySpreadsheetElement.verifQuestion',
               simulatedInput: '',
               goodAnswer: '',
               isOk: false,
@@ -707,7 +707,7 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
           results.push({
             questionIndex: i,
             format,
-            verificationFunctionName: 'verifQuestionTableur',
+            verificationFunctionName: 'MySpreadsheetElement.verifQuestion',
             simulatedInput: JSON.stringify(goodAnswers),
             goodAnswer: JSON.stringify(goodAnswers),
             isOk: result?.isOk === true,

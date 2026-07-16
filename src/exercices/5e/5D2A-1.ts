@@ -12,7 +12,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 export const titre = 'Trouver des probabilités simples'
 export const dateDePublication = '01/05/2021'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 /**
  *
  * @author Rémi Angot et Matthieu Devillers
@@ -85,7 +85,7 @@ export default class ProbabilitesSimples extends Exercice {
             champ2: { value: reponse2 },
             bareme: toutAUnPoint,
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = correction1

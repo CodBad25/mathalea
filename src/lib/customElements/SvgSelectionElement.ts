@@ -187,7 +187,14 @@ export class SvgSelectionElement extends MathaleaCustomElement {
     return `<svg-selection ${attrs.join(' ')}></svg-selection>`
   }
 
-  static verifQuestion(exercice: IExercice, i: number): 'OK' | 'KO' {
+  static verifQuestion(
+    exercice: IExercice,
+    i: number,
+  ): {
+    isOk: boolean
+    feedback: string
+    score: { nbBonnesReponses: number; nbReponses: number }
+  } {
     const spanReponseLigne = document.querySelector(
       `#resultatCheckEx${exercice.numeroExercice}Q${i}`,
     )
@@ -213,7 +220,7 @@ export class SvgSelectionElement extends MathaleaCustomElement {
     if (selection) {
       exercice.answers[selection.id] = String(selection.value)
     }
-
+    selection!.interactivityOn = false
     const resultat: 'OK' | 'KO' = Array.isArray(repValue)
       ? repValue.map(String).includes(value)
         ? 'OK'
@@ -227,7 +234,11 @@ export class SvgSelectionElement extends MathaleaCustomElement {
       ;(spanReponseLigne as HTMLElement).style.fontSize = 'large'
     }
 
-    return resultat
+    return {
+      isOk: resultat === 'OK',
+      feedback: '',
+      score: { nbBonnesReponses: resultat === 'OK' ? 1 : 0, nbReponses: 1 },
+    }
   }
 
   static get observedAttributes() {
@@ -667,12 +678,13 @@ export function addSvgSelection(
   const { gapX, gapY, itemPadding, style } = params.options || {}
   if (
     context.isHtml &&
-    exercice?.autoCorrection[questionIndex]?.formatInteractif !== 'svgSelection'
+    exercice?.autoCorrection[questionIndex]?.formatInteractif !==
+      'svg-selection'
   ) {
     if (exercice?.autoCorrection == null) exercice.autoCorrection = []
     if (exercice?.autoCorrection[questionIndex] == null)
       exercice.autoCorrection[questionIndex] = {}
-    exercice.autoCorrection[questionIndex].formatInteractif = 'svgSelection'
+    exercice.autoCorrection[questionIndex].formatInteractif = 'svg-selection'
   }
 
   return SvgSelectionElement.create({

@@ -23,7 +23,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Lire l'image d'un nombre à partir d'un graphique"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -272,7 +272,7 @@ export default class ImageGraphique extends Exercice {
               champ2: { value: `${fx2}` },
               bareme: toutAUnPoint,
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
         } else {
           texte += `${addMultiMathfield(this, i, {
@@ -292,7 +292,7 @@ export default class ImageGraphique extends Exercice {
               champ3: { value: `${fx3}` },
               bareme: toutAUnPoint,
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
         }
       }

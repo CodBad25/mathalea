@@ -17,7 +17,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const titre = "Modéliser une situation à l'aide d'une fonction"
 export const dateDePublication = '06/07/2026'
 /**
@@ -241,7 +241,7 @@ On a mesuré que la vitesse de rotation du  hand-spinner diminue de ${texNombre(
         texte += addMultiMathfield(this, i, { dataTemplate, dataOptions })
         if (this.interactif) {
           handleAnswers(this, i, reponses, {
-            formatInteractif: 'multiMathfield',
+            formatInteractif: 'multi-mathfield',
           })
         }
         // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)

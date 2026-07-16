@@ -26,7 +26,7 @@ import {
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 export const titre = 'Calculer un nombre dérivé à partir de la définition'
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const interactifReady = true
 
 export const dateDePublication = '16/12/2021'
@@ -465,7 +465,7 @@ $\\lim\\limits_{h \\rightarrow 0} \\dfrac{${coefNumOppose}}{(h${ecritureAlgebriq
               value: reponse2,
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       }
 

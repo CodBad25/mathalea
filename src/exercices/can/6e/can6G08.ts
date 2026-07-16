@@ -23,7 +23,7 @@ import Exercice from '../../Exercice'
 export const titre = 'Trouver le symétrique'
 export const dateDePublication = '03/05/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 /**
  * Symétrie axiale sur papier pointé
@@ -153,7 +153,7 @@ export default class TrouverLeSym extends Exercice {
         dataOptions[`champ${j + 1}`] = {}
         reponses[`champ${j + 1}`] = { value: numerosSymChoisis[j] }
       }
-      handleAnswers(this, i, reponses, { formatInteractif: 'multiMathfield' })
+      handleAnswers(this, i, reponses, { formatInteractif: 'multi-mathfield' })
       let texte = this.interactif
         ? addMultiMathfield(this, i, { dataTemplate, dataOptions })
         : `Donner ${this.sup2 > 1 ? 'les' : 'le'} symétrique${this.sup2 > 1 ? 's' : ''} ${this.sup2 > 1 ? 'des' : 'du'} point${this.sup2 > 1 ? 's' : ''} ${numerosChoisis.map(String).join(', ')} par rapport à $(d)$.<br>`

@@ -30,7 +30,7 @@ export const titre =
   'Calculer périmètre et/ou aire de carrés, rectangles et triangles rectangles'
 export const amcReady = true
 export const amcType = 'AMCHybride'
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const interactifReady = true
 // export const dateDeModifImportante = '12/04/2023' // Ajout de trois paramètres - séparation des figures, des demandes d'aires et/ ou de périmètres, affichage ou pas des figures - par EE
 export const dateDeModifImportante = '14/04/2026' // Passage en MultiMathfield JCL
@@ -490,7 +490,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
               ]),
             ),
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       }
       if (this.questionJamaisPosee(i, texte)) {

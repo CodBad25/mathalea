@@ -15,7 +15,7 @@ export const titre = 'Effectuer des calculs sur tableur'
 export const dateDePublication = '15/06/2026'
 export const dateDeModifImportante = '23/05/2026'
 export const interactifReady = true
-export const interactifType = 'tableur'
+export const interactifType = 'my-spreadsheet'
 export const uuid = 'e0f6b'
 
 export const refs = {
@@ -165,7 +165,7 @@ export default class ExerciceTableurCalculs6e extends Exercice {
             ],
           },
         },
-        { formatInteractif: 'tableur' },
+        { formatInteractif: 'my-spreadsheet' },
       )
     }
     const texteCorr = `Voici la formule à saisir en cellule A2 :<br>${texteEnCouleurEtGras(
@@ -247,7 +247,7 @@ export default class ExerciceTableurCalculs6e extends Exercice {
             ],
           },
         },
-        { formatInteractif: 'tableur' },
+        { formatInteractif: 'my-spreadsheet' },
       )
     }
     const texteCorr = `Voici la formule à saisir en cellule B4 :<br>${texteEnCouleurEtGras(
@@ -323,7 +323,7 @@ export default class ExerciceTableurCalculs6e extends Exercice {
             ],
           },
         },
-        { formatInteractif: 'tableur' },
+        { formatInteractif: 'my-spreadsheet' },
       )
     }
 
@@ -405,7 +405,7 @@ export default class ExerciceTableurCalculs6e extends Exercice {
             ],
           },
         },
-        { formatInteractif: 'tableur' },
+        { formatInteractif: 'my-spreadsheet' },
       )
     }
     const texteCorr = `Voici la formule à saisir en cellule A3 :<br>${texteEnCouleurEtGras(

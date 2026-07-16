@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Comprendre le sens d'un pourcentage"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDePublication = '22/07/2025'
 
 /** Comprendre le sens d'un pourcentage
@@ -352,7 +352,7 @@ export default class ComprendreSensPourcentage extends Exercice {
             options: { nombreDecimalSeulement: true },
           },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       const itemsCorr = []

@@ -1,5 +1,7 @@
 // Importer renderKatex de mathalea
 import { renderKatex } from '../mathalea'
+import { egalOuApprox } from '../outils/ecritures'
+import { texNombre } from '../outils/texNombre'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
@@ -190,6 +192,96 @@ export class GuideAne extends MathaleaCustomElement {
     return lines.length > 0 ? lines.join('<br>') : rawAnswer
   }
 
+  static verifQuestion(
+    exercice: IExercice,
+    questionIndex: number,
+  ): {
+    isOk: boolean
+    feedback: string
+    score: { nbBonnesReponses: number; nbReponses: number }
+  } {
+    const goodAnswerJson =
+      exercice.autoCorrection[questionIndex].valeur?.reponse?.value
+    if (goodAnswerJson == null || typeof goodAnswerJson !== 'string') {
+      window.notify(
+        'Il y a un problème avec cet exercice, et la question, car autoCorrection ne contient pas la réponse attendue',
+        {
+          uuid: exercice.uuid,
+          question: questionIndex,
+          autoCorrection: JSON.stringify(exercice.autoCorrection),
+        },
+      )
+      return {
+        isOk: false,
+        feedback: 'Problème dans le programme',
+        score: { nbBonnesReponses: 0, nbReponses: 1 },
+      }
+    }
+    const parsed = JSON.parse(String(goodAnswerJson))
+    const n = parsed.n
+    const p = parsed.p
+    const targetAD = parsed.lengthAD
+    const targetAB = parsed.lengthAB
+    const guideAne = document.getElementById(
+      `guide-aneEx${exercice.numeroExercice}Q${questionIndex}`,
+    ) as GuideAne
+    if (guideAne == null) {
+      window.notify(
+        `Pas trouvé le guide-âne dans cet exercice pour i=${questionIndex}`,
+        { question: exercice.listeQuestions[questionIndex] },
+      )
+      return {
+        isOk: false,
+        feedback: 'Problème dans le programme',
+        score: { nbBonnesReponses: 0, nbReponses: 1 },
+      }
+    }
+    const spanReponseLigne = guideAne.querySelector(
+      `#resultatCheckEx${exercice.numeroExercice}Q${questionIndex}`,
+    )
+    const divFeedback = guideAne.querySelector(
+      `#feedbackEx${exercice.numeroExercice}Q${questionIndex}`,
+    ) as HTMLDivElement
+    let isOk = false
+    const answer = guideAne.value
+    if (exercice.answers == null) exercice.answers = {}
+    // Sauvegarde de la réponse pour Capytale
+    exercice.answers[`guide-aneEx${exercice.numeroExercice}Q${questionIndex}`] =
+      JSON.stringify(answer)
+
+    isOk = guideAne.isTargetReached()
+    guideAne.interactivityOn = false
+    let feedback = ''
+    if (!isOk) {
+      const saisie = guideAne.value
+      const AD = saisie.lengthAD
+      feedback = `Votre segment $[AD]$ mesure $${texNombre(AD, 2)}$ cm.<br>
+      Le segment $[AD]$ doit mesurer $\\dfrac{${p}}{${n}}\\times ${targetAB}${egalOuApprox((p * targetAB) / n, 2)}${texNombre((p * targetAB) / n, 2)}$ cm pour que le rapport $\\dfrac{AD}{AB}$ soit égal à $\\dfrac{${p}}{${n}}$.<br>`
+      if (n !== saisie.n)
+        feedback += `Il fallait partager le segment $[AB]$ en ${n} parts.<br>`
+      if (p !== saisie.p)
+        feedback += `Il fallait choisir la ${p}e graduation.<br>`
+    }
+
+    if (spanReponseLigne) {
+      if (isOk) {
+        spanReponseLigne.innerHTML = '😎'
+      } else {
+        spanReponseLigne.innerHTML = '☹️'
+      }
+    }
+    if (divFeedback && feedback !== '') {
+      divFeedback.innerHTML = feedback
+    }
+    divFeedback.style.display = feedback !== '' ? 'block' : 'none'
+
+    return {
+      isOk,
+      feedback,
+      score: { nbBonnesReponses: isOk ? 1 : 0, nbReponses: 1 },
+    }
+  }
+
   static create({
     id,
     numeroExercice,
@@ -301,7 +393,7 @@ export class GuideAne extends MathaleaCustomElement {
 
     this.style.display = 'block'
     this.style.width = '800px'
-    this.style.height = '400px'
+    this.style.height = '500px'
     this.style.border = '1px solid #ccc'
     this.style.background = '#f9f9f9'
     this.style.position = 'relative'
@@ -939,17 +1031,26 @@ export class GuideAne extends MathaleaCustomElement {
     // Créer le SVG
     this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     this.svg.setAttribute('width', '800')
-    this.svg.setAttribute('height', '400')
-    this.svg.setAttribute('viewBox', '0 0 800 400')
+    this.svg.setAttribute('height', '320')
+    this.svg.setAttribute('viewBox', '0 0 800 320')
     this.svg.style.width = '100%'
-    this.svg.style.height = '100%'
+    //this.svg.style.height = '100%'
 
     this.appendChild(this.svg)
     const resultatCheck = document.createElement('span')
     resultatCheck.id = this.id
       ? `${this.id.replace(/^[^E]*Ex/, 'resultatCheckEx')}`
       : `guide-ane-resultat`
+    const divFeedback = document.createElement('div')
+    divFeedback.id = this.id.replace('guide-ane', 'feedback')
+    divFeedback.classList.add(
+      'py-2',
+      'italic',
+      'text-coopmaths-warn-darkest',
+      'dark:text-coopmathsdark-warn-darkest',
+    )
     this.appendChild(resultatCheck)
+    this.appendChild(divFeedback)
   }
 
   connectedCallback() {

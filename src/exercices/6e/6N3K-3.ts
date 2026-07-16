@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Ajouter des barres fractionnaires'
 export const interactifReady = true
-export const interactifType = 'svgSelection'
+export const interactifType = 'svg-selection'
 export const uuid = '1574f'
 export const refs = {
   'fr-fr': [],

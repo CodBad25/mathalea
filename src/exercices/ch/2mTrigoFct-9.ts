@@ -288,7 +288,7 @@ export default class MinMaxFonctionTrigonometrique extends Exercice {
             },
           ]),
         ),
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       const texteCorr =

@@ -26,7 +26,7 @@ import { numAlpha, sp } from '../../lib/outils/outilString'
 
 export const titre =
   "Résoudre un problème s'appuyant sur la lecture d'une représentation graphique"
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -154,7 +154,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 },
                 bareme: toutAUnPoint,
               },
-              { formatInteractif: 'multiMathfield' },
+              { formatInteractif: 'multi-mathfield' },
             )
             texteCorr = `${numAlpha(0)} Au bout de $${miseEnEvidence(
               texNombre(t1) + sp() + '\\text{s}',
@@ -285,7 +285,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 },
                 bareme: toutAUnPoint,
               },
-              { formatInteractif: 'multiMathfield' },
+              { formatInteractif: 'multi-mathfield' },
             )
             texteCorr = `${numAlpha(0)} Le projectile retombe au sol à une distance de $${miseEnEvidence(texNombre(t1) + sp() + '\\text{m}')}$, car la courbe passe par le point de coordonnées $(${texNombre(
               t1,
@@ -453,7 +453,7 @@ c) Quelle distance a-t-elle parcourue au total ? %{champ3}`,
                 },
                 bareme: toutAUnPoint,
               },
-              { formatInteractif: 'multiMathfield' },
+              { formatInteractif: 'multi-mathfield' },
             )
             texteCorr = `${numAlpha(0)} Après ${tempsPause} minutes de vélo, ${fille} fait une pause car la courbe devient horizontale.<br>`
             texteCorr += `${numAlpha(1)} ${fille} est partie 40 min et a fait une pause de 10 min donc elle a fait réellement du vélo pendant $${miseEnEvidence(texNombre(30) + sp() + '\\text{min}')}$.<br>
@@ -627,7 +627,7 @@ c) Quelle distance a-t-elle parcourue au total ? %{champ3}`,
                 },
                 bareme: toutAUnPoint,
               },
-              { formatInteractif: 'multiMathfield' },
+              { formatInteractif: 'multi-mathfield' },
             )
 
             texteCorr = `${numAlpha(0)} La température la plus basse est $${miseEnEvidence(`${tmin}^\\circ\\text{C}`)}$.<br>

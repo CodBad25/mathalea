@@ -24,7 +24,7 @@ export const titre = 'Résoudre une équation simple avec le logarithme'
 export const dateDePublication = '22/7/2024'
 export const uuid = 'f1f9e'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const refs = {
   'fr-fr': ['TTE-7'],
   'fr-ch': [],
@@ -306,7 +306,7 @@ export default class EquationsLog extends Exercice {
               champ1: { value: domaine, options: { intervalle: true } },
               champ2: { value: solution, options: { intervalle: true } },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
         }
         this.listeQuestions[i] = texte

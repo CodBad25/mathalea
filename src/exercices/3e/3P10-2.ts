@@ -143,7 +143,7 @@ export default class VariationsCumulees extends Exercice {
               : probleme.valeur2,
           {
             formatInteractif:
-              progressivite === 1 ? 'mathlive' : 'multiMathfield',
+              progressivite === 1 ? 'mathlive' : 'multi-mathfield',
           },
         )
         // Si la question n'a jamais été posée, on en créé une autre

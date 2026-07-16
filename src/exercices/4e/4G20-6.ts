@@ -13,7 +13,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Encadrer une racine carrée et en donner un arrondi'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -142,7 +142,7 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
               value: parseFloat(reponse.replaceAll(',', '.')),
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
         texteCorr = `$\\sqrt{${a}} \\approx ${texNombre(Math.sqrt(a), 6)}$.<br>`
         texteCorr += `Or $${reponseG} < ${texNombre(Math.sqrt(a), 6)} < ${reponseD}$,<br>`
@@ -176,7 +176,7 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
             champ1: { value: reponseG },
             champ2: { value: reponseD },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
 
         texteCorr = `$${reponseG}^2 = ${reponseG ** 2}$ et $${reponseD}^2 = ${reponseD ** 2}$.<br>`

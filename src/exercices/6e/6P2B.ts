@@ -13,7 +13,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Trouver une probabilité sous forme fractionnaire, décimale et en pourcentage'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 /**
  * @author Éric Elter
@@ -92,7 +92,7 @@ export default class Probabilites6e extends Exercice {
             options: { nombreDecimalSeulement: true },
           },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       const texteCorr = `La probabilité que ${quidam.prenom} pioche une boule ${choixCouleur[choix ? 0 : 1]} est de $${miseEnEvidence(reponseFrac)}$, soit $${miseEnEvidence(texNombre(reponseDecimale))}$, soit encore $${miseEnEvidence(texNombre(frac[2]))}$ %.`

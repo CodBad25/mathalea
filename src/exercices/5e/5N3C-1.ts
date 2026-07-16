@@ -34,7 +34,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDeModificationImportante = '12/04/2026'
 export const titre = 'Résoudre un problème en utilisant des fractions'
 
@@ -507,7 +507,7 @@ ${situations.last_question[3]} vers ${situations.categories[2].destination} vaut
               options: { nombreDecimalSeulement: true },
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
         i++
       }

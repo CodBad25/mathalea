@@ -11,7 +11,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Parcourir un labyrinthe de numération décimale'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDePublication = '9/12/2020'
@@ -268,7 +268,7 @@ export default class ExerciceLabyrintheNumeration extends Exercice {
           champ1: { value: numeroDeSortie },
           champ2: { value: nbDeNombresRencontres },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
     }
     texteCorr = `Voici le chemin en couleur ($${miseEnEvidence(laby.chemin2d.length - 1)}$ nombres rencontrés avant la sortie) et la sortie est le numéro $${miseEnEvidence(nbL - monchemin[monchemin.length - 1][1])}$.<br>`

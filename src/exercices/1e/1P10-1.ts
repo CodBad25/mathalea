@@ -13,7 +13,7 @@ import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { sp } from '../../lib/outils/outilString'
 export const titre = 'Écrire ou reconnaitre une probabilité dans un énoncé'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const dateDePublication = '29/04/2025'
 
@@ -283,7 +283,7 @@ Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contract
                 options: { texteAvecCasse: true },
               },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
           texteCorr = ` ${calc1C}${calc2C}${calc3C}`
         } else {
@@ -329,7 +329,7 @@ Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contract
                 options: { texteAvecCasse: true },
               },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
           texteCorr = ` ${calc4C}${calc5C}${calc6C}`
         }
@@ -374,7 +374,7 @@ Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contract
                 value: texNombre(Pev2sachantev1b, 3),
               },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
 
           texteCorr = ` ${calc1C}${sp(10)}${calc2C}${sp(10)}${calc3C}`
@@ -402,7 +402,7 @@ Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contract
                 value: texNombre(Pev1, 3),
               },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
 
           texteCorr = `${calc4C}${sp(10)}${calc5C}${sp(10)}${calc6C}`

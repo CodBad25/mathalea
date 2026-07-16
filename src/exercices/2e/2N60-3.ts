@@ -352,7 +352,7 @@ ${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${m}\\times x &${m > 0 ? `${choix2[0]
               options: { nombreDecimalSeulement: true },
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       if (this.questionJamaisPosee(i, a, m, p)) {
         // Si la question n'a jamais été posée, on en crée une autre

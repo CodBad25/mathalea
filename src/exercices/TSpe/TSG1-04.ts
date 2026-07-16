@@ -14,7 +14,7 @@ import { numAlpha } from '../../lib/outils/outilString'
 export const titre =
   'Utiliser le dénombrement et les probabilités élémentaires.'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDePublication = '21/04/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
 export const uuid = '5121f'
@@ -77,7 +77,7 @@ export default class nomExercice extends Exercice {
           champ1: { value: resultat },
           champ2: { value: reponse2 },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
       if (this.questionJamaisPosee(i, resultat, reponse2)) {
         this.listeQuestions[i] =

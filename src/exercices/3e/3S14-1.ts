@@ -30,7 +30,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Calculer des caractéristiques d'une série"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -782,7 +782,7 @@ export default class CalculerCaracteristiques extends Exercice {
               ]),
             ),
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       }
       texte =

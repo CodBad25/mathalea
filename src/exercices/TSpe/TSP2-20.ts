@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Tirer des boules avec remise dans une urne.'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDePublication = '18/11/2024'
 export const dateDeModifImportante = '10/12/2025'
 export const uuid = 'daabf'
@@ -217,7 +217,7 @@ export default class LoiBinomialeUrne extends Exercice {
         })),
       )
       handleAnswers(this, i, objetsReponses, {
-        formatInteractif: 'multiMathfield',
+        formatInteractif: 'multi-mathfield',
       })
 
       if (this.questionJamaisPosee(i, r, b, n, k)) {

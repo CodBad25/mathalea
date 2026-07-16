@@ -10,6 +10,7 @@ import {
 } from '../../lib/2d/TracePointSurDroite'
 import { orangeMathalea } from '../../lib/colors'
 import { demiDroiteInteractive } from '../../lib/customElements/demi_droite_interactive'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -22,7 +23,7 @@ export const dateDePublication = '05/07/2026'
 export const titre =
   'Placer une abscisse fractionnaire sur une demi-droite (fraction quotient)'
 export const interactifReady = true
-export const interactifType = 'custom'
+export const interactifType = 'demi-droite-interactive'
 
 /** Placer une abscisse fractionnaire sur une demi-droite graduée
  * @author Jean-Claude Lhote
@@ -155,6 +156,22 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
       }
 
       if (this.questionJamaisPosee(i, num, den)) {
+        handleAnswers(
+          this,
+          i,
+          {
+            reponse: {
+              value: JSON.stringify({
+                partsCount: den,
+                maxT: num,
+                showwNegative: false,
+                points: [{ pointValue: num / den, label: 'A' }],
+                x0: 0,
+              }),
+            },
+          },
+          { formatInteractif: 'demi-droite-interactive' },
+        )
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

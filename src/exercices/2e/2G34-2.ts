@@ -2,8 +2,8 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/liste-deroulante.test.ts ⚠️
  */
 
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -18,7 +18,7 @@ import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 export const titre =
   "Déterminer la position relative de deux droites à l'aide de leur équation et en déduire le nombre de solution d'un système d'équations"
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 export const dateDePublication = '08/04/2024'
 export const uuid = '2eee3'
 export const refs = {
@@ -324,7 +324,7 @@ export default class systemeEquationsPremDegComp extends Exercice {
             ],
             reponse: { value: rep, options: { texteSansCasse: true } },
           },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
       }
       if (this.questionJamaisPosee(i, solX, solY)) {

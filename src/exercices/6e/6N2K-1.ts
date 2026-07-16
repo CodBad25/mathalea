@@ -25,7 +25,7 @@ export const titre =
 export const dateDePublication = '11/12/2023'
 export const dateDeModifImportante = '09/01/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 /**
  * Résolution de problèmes utilisant la division Euclidienne
@@ -368,7 +368,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
           champ1: { value: reponse1 },
           champ2: { value: reponse2 },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
       if (this.questionJamaisPosee(i, dividende, diviseur)) {
         // Si la question n'a jamais été posée, on en crée une autre

@@ -1,5 +1,5 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   miseEnEvidence,
   texteEnCouleurEtGras,
@@ -12,7 +12,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 export const titre = 'Diviser par 10, 100, 1 000 revient à ....'
 export const dateDePublication = '07/06/2025'
 
@@ -92,67 +92,75 @@ export default class DiviserPar10 extends Exercice {
         if (operationsPossibles[i] === 1) {
           texte += `Diviser par $${texNombre(combien)}$ revient à `
           texte += this.interactif
-            ? choixDeroulant(this, 2 * i, { choices: [
-                { label: 'Choisir un verbe', value: '' },
-                { label: 'ajouter', value: 'ajouter' },
-                { label: 'diviser', value: 'diviser' },
-                { label: 'multiplier', value: 'multiplier' },
-                { label: 'soustraire', value: 'soustraire' },
-              ] })
+            ? choixDeroulant(this, 2 * i, {
+                choices: [
+                  { label: 'Choisir un verbe', value: '' },
+                  { label: 'ajouter', value: 'ajouter' },
+                  { label: 'diviser', value: 'diviser' },
+                  { label: 'multiplier', value: 'multiplier' },
+                  { label: 'soustraire', value: 'soustraire' },
+                ],
+              })
             : '$\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots$'
           handleAnswers(
             this,
             2 * i,
             { reponse: { value: 'multiplier' } },
-            { formatInteractif: 'listeDeroulante' },
+            { formatInteractif: 'liste-deroulante' },
           )
           texte += ' par '
           texte += this.interactif
-            ? choixDeroulant(this, 2 * i + 1, { choices: [
-                { label: 'Choisir la bonne valeur', value: '' },
-                { latex: '0,1', value: `${texNombre(0.1)}` },
-                { latex: '0,01', value: `${texNombre(0.01)}` },
-                { latex: '0,001', value: `${texNombre(0.001)}` },
-              ] })
+            ? choixDeroulant(this, 2 * i + 1, {
+                choices: [
+                  { label: 'Choisir la bonne valeur', value: '' },
+                  { latex: '0,1', value: `${texNombre(0.1)}` },
+                  { latex: '0,01', value: `${texNombre(0.01)}` },
+                  { latex: '0,001', value: `${texNombre(0.001)}` },
+                ],
+              })
             : '$\\ldots\\ldots\\ldots\\ldots$'
           handleAnswers(
             this,
             2 * i + 1,
             { reponse: { value: reponse } },
-            { formatInteractif: 'listeDeroulante' },
+            { formatInteractif: 'liste-deroulante' },
           )
           texteCorr = `Diviser par $${texNombre(combien)}$ revient à ${texteEnCouleurEtGras('multiplier')} par $${miseEnEvidence(reponse)}$.`
         } else {
           texte += `Multiplier par $${reponse}$ revient à `
           texte += this.interactif
-            ? choixDeroulant(this, 2 * i, { choices: [
-                { label: 'Choisir un verbe', value: '' },
-                { label: 'ajouter', value: 'ajouter' },
-                { label: 'diviser', value: 'diviser' },
-                { label: 'multiplier', value: 'multiplier' },
-                { label: 'soustraire', value: 'soustraire' },
-              ] })
+            ? choixDeroulant(this, 2 * i, {
+                choices: [
+                  { label: 'Choisir un verbe', value: '' },
+                  { label: 'ajouter', value: 'ajouter' },
+                  { label: 'diviser', value: 'diviser' },
+                  { label: 'multiplier', value: 'multiplier' },
+                  { label: 'soustraire', value: 'soustraire' },
+                ],
+              })
             : '$\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots$'
           handleAnswers(
             this,
             2 * i,
             { reponse: { value: 'diviser' } },
-            { formatInteractif: 'listeDeroulante' },
+            { formatInteractif: 'liste-deroulante' },
           )
           texte += ' par '
           texte += this.interactif
-            ? choixDeroulant(this, 2 * i + 1, { choices: [
-                { label: 'Choisir la bonne valeur', value: '' },
-                { latex: '10', value: '10' },
-                { latex: '100', value: '100' },
-                { latex: '1\\,000', value: '1 000' },
-              ] })
+            ? choixDeroulant(this, 2 * i + 1, {
+                choices: [
+                  { label: 'Choisir la bonne valeur', value: '' },
+                  { latex: '10', value: '10' },
+                  { latex: '100', value: '100' },
+                  { latex: '1\\,000', value: '1 000' },
+                ],
+              })
             : '$\\ldots\\ldots\\ldots\\ldots$'
           handleAnswers(
             this,
             2 * i + 1,
             { reponse: { value: combien } },
-            { formatInteractif: 'listeDeroulante' },
+            { formatInteractif: 'liste-deroulante' },
           )
           texteCorr = `Multiplier par $${reponse}$ revient à ${texteEnCouleurEtGras('diviser')} par $${miseEnEvidence(texNombre(combien))}$.`
         }

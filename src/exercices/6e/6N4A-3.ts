@@ -22,7 +22,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Résoudre des problèmes algébriques avec des balances'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const dateDePublication = '3/06/2025'
 
@@ -275,7 +275,7 @@ export default class ResoudreDesProblemes extends Exercice {
             options: { unite: true },
           },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       switch (niveaux[i]) {

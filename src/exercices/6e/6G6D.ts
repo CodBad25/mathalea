@@ -33,7 +33,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer la valeur d'un angle en utilisant la somme des mesures des angles dans un triangle"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '06/04/2025'
@@ -1367,7 +1367,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
           }
         }
 
-        handleAnswers(this, i, answers, { formatInteractif: 'multiMathfield' })
+        handleAnswers(this, i, answers, { formatInteractif: 'multi-mathfield' })
       }
 
       const nom = nommePolygone(triangle)

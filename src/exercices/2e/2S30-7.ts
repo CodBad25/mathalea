@@ -19,7 +19,7 @@ export const titre =
   'Calculer des probabilités dans une situation concrète (union et intersection)'
 export const dateDePublication = '26/05/2024'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 /**
  *
  * @author Gilles Mora
@@ -259,7 +259,7 @@ export default class ProbaConcret extends Exercice {
           champ3: { value: EvCond[4] },
           bareme: toutAUnPoint,
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
       texteCorr = `${numAlpha(0)} La probabilité est donnée par : <br>
           $P(${EvInter[0]})=\\dfrac{\\text{Nombre ${EvInter[3]}}}{\\text{Effectif total}}=${miseEnEvidence(EvInter[2])}$.

@@ -17,7 +17,7 @@ export const titre =
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 /**
  * Détermination du reste et quotient à partir de l'égalité découlant de la division euclidienne
  * @author Cédric GROLLEAU
@@ -127,7 +127,7 @@ export default class DivisionsEuclidiennesEgalite2 extends Exercice {
           bareme: toutAUnPoint,
         },
         {
-          formatInteractif: 'multiMathfield',
+          formatInteractif: 'multi-mathfield',
         },
       )
       if (context.isAmc) {

@@ -20,7 +20,7 @@ import { toutAUnPoint } from '../../lib/interactif/mathLive'
 export const dateDePublication = '16/11/2021'
 export const dateDeModifImportante = '29/10/2024'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const titre =
   'Parcourir un labyrinthe de multiples avec critères choisis équilibrés '
 
@@ -157,7 +157,7 @@ export default class ExerciceLabyrintheDivisibilite2 extends Exercice {
 
           // ...
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
       texteCorr = `Voici le chemin en couleur ($${miseEnEvidence(laby.chemin2d.length - 1)}$ nombres rencontrés avant la sortie) et la sortie est le numéro $${miseEnEvidence(nbL - monChemin[monChemin.length - 1][1])}$.<br>`
       texteCorr += mathalea2d(

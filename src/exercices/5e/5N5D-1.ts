@@ -1,8 +1,8 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   choixDeroulant,
   listeDeroulanteToQcm,
 } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { texteEnCouleur } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 import ChoisirExpressionLitterale from './_Choisir_expression_litterale'
 
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const dateDeModifImportante = '23/03/2026'
@@ -138,7 +138,7 @@ export default class DeterminerDerniereOperationExpressionLitterale extends Exer
           this,
           i,
           { reponse: { value: reponse } },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
       } else if (context.isAmc) {
         const options = { ordered: true, vertical: true }

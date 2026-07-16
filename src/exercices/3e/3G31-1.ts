@@ -38,7 +38,7 @@ function radToDeg(rad: number) {
 }
 
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '21/05/2024'
@@ -204,7 +204,7 @@ export default class CalculDAngleFigureComplexe extends Exercice {
                 champ2: { value: String(90 - BAC) },
                 champ3: { value: String(90 - ACD) },
               },
-              { formatInteractif: 'multiMathfield' },
+              { formatInteractif: 'multi-mathfield' },
             )
 
             texte +=
@@ -313,7 +313,7 @@ export default class CalculDAngleFigureComplexe extends Exercice {
                 champ2: { value: String(90 - ACB) },
                 champ3: { value: String(90 - ACD) },
               },
-              { formatInteractif: 'multiMathfield' },
+              { formatInteractif: 'multi-mathfield' },
             )
 
             texte +=

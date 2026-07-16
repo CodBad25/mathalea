@@ -1,7 +1,7 @@
 import calculEffectifFrequence from '../3e/3S12'
 export const titre = 'Calculer des effectifs et des fréquences'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const uuid = 'dc3d3'

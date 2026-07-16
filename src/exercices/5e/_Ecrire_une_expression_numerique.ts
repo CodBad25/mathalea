@@ -1,6 +1,7 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import {
@@ -18,8 +19,6 @@ import {
 import Exercice from '../Exercice'
 import ChoisirExpressionLitterale from './_Choisir_expression_litterale'
 import choisirExpressionNumerique from './_choisirExpressionNumerique'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const interactifReady = true
 export const interactifType = ['mathLive', 'listeDeroulante']
@@ -363,15 +362,17 @@ export default class EcrireUneExpressionNumerique extends Exercice {
           } else {
             texte +=
               sp(10) +
-              choixDeroulant(this, i, { choices: [
-                { label: '?', value: '' },
-                ...shuffle([
-                  { label: 'une somme', value: 'somme' },
-                  { label: 'une différence', value: 'différence' },
-                  { label: 'un produit', value: 'produit' },
-                  { label: 'un quotient', value: 'quotient' },
-                ]),
-              ] })
+              choixDeroulant(this, i, {
+                choices: [
+                  { label: '?', value: '' },
+                  ...shuffle([
+                    { label: 'une somme', value: 'somme' },
+                    { label: 'une différence', value: 'différence' },
+                    { label: 'un produit', value: 'produit' },
+                    { label: 'un quotient', value: 'quotient' },
+                  ]),
+                ],
+              })
             const val =
               typeof expNom === 'string'
                 ? expNom.replace('une ', '').replace('un ', '')
@@ -381,7 +382,7 @@ export default class EcrireUneExpressionNumerique extends Exercice {
               this,
               i,
               { reponse: { value: String(val) } },
-              { formatInteractif: 'listeDeroulante' },
+              { formatInteractif: 'liste-deroulante' },
             )
           }
         }
