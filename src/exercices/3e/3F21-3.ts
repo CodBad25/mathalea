@@ -25,7 +25,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Lire graphiquement les caractéristiques de la courbe représentative d'une fonction affine ou linéaire"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '28/05/2023'
@@ -262,7 +262,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
                 },
           ),
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       texte =

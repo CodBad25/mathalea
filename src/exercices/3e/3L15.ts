@@ -20,7 +20,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Résoudre une équation du second degré se ramenant au premier degré'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDeModifImportante = '21/05/2026'
 
 /**

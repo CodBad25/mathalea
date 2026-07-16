@@ -23,7 +23,7 @@ export const titre =
   "Résoudre une équation à l'aide de la méthode de complétion du carré"
 export const dateDePublication = '31/10/2024'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const uuid = '7f0dd'
 export const refs = {
   'fr-fr': [],
@@ -269,7 +269,7 @@ export default class ExerciceEquationSecondDegre extends Exercice {
             },
           },
           {
-            formatInteractif: 'multiMathfield',
+            formatInteractif: 'multi-mathfield',
           },
         )
       }

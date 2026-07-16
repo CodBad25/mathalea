@@ -27,15 +27,15 @@ AMC imprime un sujet et corrige des cases ou des zones codées. Un exercice dont
 
 Commencer par décider si l'exercice peut être corrigé automatiquement par AMC.
 
-| Situation | Type conseillé | À prévoir |
-| --- | --- | --- |
-| Une seule réponse numérique, décimale ou fractionnaire | `AMCNum` | Une valeur unique et les paramètres de codage |
-| Une réponse sous forme de puissance `base^exposant` | `AMCNum` | `basePuissance`, `exposantPuissance`, `baseNbChiffres`, `exposantNbChiffres` |
-| Plusieurs réponses ou sous-réponses numériques indépendantes | `AMCHybride` | Un bloc `AMCNum` par champ |
-| Un QCM avec une seule bonne réponse | `qcmMono` | Une seule proposition vraie |
-| Un QCM avec plusieurs bonnes réponses | `qcmMult` | Au moins une proposition vraie |
-| Réponse rédigée, construction, preuve, figure ou méthode | `AMCOpen` | Une zone de réponse et une correction indicative |
-| Plusieurs sous-questions de types différents | `AMCHybride` | Un énoncé commun et une liste de blocs |
+| Situation                                                    | Type conseillé | À prévoir                                                                    |
+| ------------------------------------------------------------ | -------------- | ---------------------------------------------------------------------------- |
+| Une seule réponse numérique, décimale ou fractionnaire       | `AMCNum`       | Une valeur unique et les paramètres de codage                                |
+| Une réponse sous forme de puissance `base^exposant`          | `AMCNum`       | `basePuissance`, `exposantPuissance`, `baseNbChiffres`, `exposantNbChiffres` |
+| Plusieurs réponses ou sous-réponses numériques indépendantes | `AMCHybride`   | Un bloc `AMCNum` par champ                                                   |
+| Un QCM avec une seule bonne réponse                          | `qcmMono`      | Une seule proposition vraie                                                  |
+| Un QCM avec plusieurs bonnes réponses                        | `qcmMult`      | Au moins une proposition vraie                                               |
+| Réponse rédigée, construction, preuve, figure ou méthode     | `AMCOpen`      | Une zone de réponse et une correction indicative                             |
+| Plusieurs sous-questions de types différents                 | `AMCHybride`   | Un énoncé commun et une liste de blocs                                       |
 
 Une puissance reste donc en `AMCNum` quand elle représente une seule réponse mathématique, même si AMC affiche deux zones de codage internes, une pour la base et une pour l'exposant. Utilisez `AMCHybride` quand la question contient réellement plusieurs blocs ou plusieurs sous-réponses indépendantes, par exemple un QCM suivi d'un nombre, ou deux champs qui ont chacun leur propre libellé et leur propre correction.
 
@@ -64,12 +64,12 @@ Pour un exercice dont le type varie selon les paramètres, il est possible d'aff
 
 Un débutant doit retenir cette règle : le rendu AMC lit d'abord `autoCorrectionAMC`. Si ce tableau existe, c'est lui qui est utilisé pour produire le LaTeX AMC. Sinon, certains chemins peuvent retomber sur `autoCorrection`, surtout pour les QCM, mais il ne faut pas compter sur ce fallback pour un exercice officiellement compatible.
 
-| Structure | Rôle |
-| --- | --- |
-| `autoCorrection` | Correction interactive HTML et données QCM communes |
-| `autoCorrectionAMC` | Structure principale consommée par l'export AMC |
-| `questionsAMC` | Ancienne structure typée encore remplie par certains exercices historiques |
-| `amcConvert()` | Convertit une entrée legacy `autoCorrectionAMC` vers `questionsAMC` |
+| Structure           | Rôle                                                                       |
+| ------------------- | -------------------------------------------------------------------------- |
+| `autoCorrection`    | Correction interactive HTML et données QCM communes                        |
+| `autoCorrectionAMC` | Structure principale consommée par l'export AMC                            |
+| `questionsAMC`      | Ancienne structure typée encore remplie par certains exercices historiques |
+| `amcConvert()`      | Convertit une entrée legacy `autoCorrectionAMC` vers `questionsAMC`        |
 
 Pour un nouvel exercice, remplissez `autoCorrectionAMC` et vérifiez l'export. `questionsAMC` n'est pas nécessaire dans le chemin de rendu actuel. Appelez `amcConvert()` seulement si vous modifiez un exercice existant qui remplit déjà `questionsAMC`, ou si vous migrez progressivement un vieux modèle qui en dépend. Dans ce cas, la règle est : construire d'abord `this.autoCorrectionAMC[i]`, puis faire `this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])`.
 
@@ -82,17 +82,17 @@ Pour un nouvel exercice, remplissez `autoCorrectionAMC` et vérifiez l'export. `
 
 Les paramètres courants sont :
 
-| Paramètre | Rôle |
-| --- | --- |
-| `digits` | Nombre total de chiffres à coder |
-| `decimals` | Nombre de chiffres après la virgule |
-| `signe` | Affiche une case de signe |
-| `approx` | Tolérance acceptée par AMC |
-| `aussiCorrect` | Autre valeur exacte acceptée |
-| `digitsNum`, `digitsDen` | Chiffres du numérateur et du dénominateur pour les fractions |
-| `exposantNbChiffres`, `exposantSigne` | Codage d'un exposant en notation scientifique |
-| `basePuissance`, `exposantPuissance`, `baseNbChiffres` | Codage d'une puissance en deux blocs |
-| `vertical`, `tpoint` | Présentation des cases AMC |
+| Paramètre                                              | Rôle                                                         |
+| ------------------------------------------------------ | ------------------------------------------------------------ |
+| `digits`                                               | Nombre total de chiffres à coder                             |
+| `decimals`                                             | Nombre de chiffres après la virgule                          |
+| `signe`                                                | Affiche une case de signe                                    |
+| `approx`                                               | Tolérance acceptée par AMC                                   |
+| `aussiCorrect`                                         | Autre valeur exacte acceptée                                 |
+| `digitsNum`, `digitsDen`                               | Chiffres du numérateur et du dénominateur pour les fractions |
+| `exposantNbChiffres`, `exposantSigne`                  | Codage d'un exposant en notation scientifique                |
+| `basePuissance`, `exposantPuissance`, `baseNbChiffres` | Codage d'une puissance en deux blocs                         |
+| `vertical`, `tpoint`                                   | Présentation des cases AMC                                   |
 
 ### Exercice simple à une réponse
 
@@ -414,22 +414,22 @@ Le rapport AMCNum génère `reports/amcnum-report.md` en cas de problème.
 - AMC corrige une valeur numérique codée, pas une infinité d'écritures mathématiques équivalentes.
 - Les comparateurs interactifs (`fonctionComparaison`, options `fractionEgale`, `calculFormel`, `unite`, etc.) ne sont pas tous transposables dans AMC.
 - Les champs multiples `multiMathfield`, `fillInTheBlank` à plusieurs trous et `tableauMathlive` demandent souvent un `AMCHybride` explicite.
-- `cliqueFigure`, `dnd`, `svgSelection`, `tableur`, `apiGeom`, `MetaInteractif2d` et `custom` doivent généralement devenir `AMCOpen` ou être réécrits en QCM/AMCNum imprimable.
+- `cliqueFigure`, `dnd`, `svg-selection`, `tableur`, `apiGeom`, `MetaInteractif2d` et `custom` doivent généralement devenir `AMCOpen` ou être réécrits en QCM/AMCNum imprimable.
 - Les réponses textuelles libres doivent être en `AMCOpen`, sauf si elles sont transformées en QCM.
 - Donner automatiquement le nombre exact de chiffres peut aider l'élève. Fixez `digits`, `decimals`, `digitsNum` ou `digitsDen` si cette indication est trop forte.
 
 ## Dépannage
 
-| Symptôme | Cause probable | Correction |
-| --- | --- | --- |
+| Symptôme                                                                    | Cause probable                                                                | Correction                                                                                                                      |
+| --------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | `autoCorrectionAMC-manquante-ou-incomplete` dans `reports/amcnum-report.md` | `amcType='AMCNum'` sans `autoCorrectionAMC[i].reponse.valeur` ou sans `param` | Ajouter une structure `autoCorrectionAMC` en contexte AMC, ou vérifier que `handleAnswers()` reçoit une valeur numérique simple |
-| `autoCorrection-html-absente` | L'exercice interactif ne remplit pas `autoCorrection` | Appeler `handleAnswers()` ou construire correctement `this.autoCorrection[i]` |
-| QCM mono avec plusieurs bonnes réponses | Plusieurs propositions ont `statut: true` | Passer en `qcmMult` ou corriger les statuts |
-| QCM AMC sans correction détaillée | La correction n'est pas transmise aux options QCM | Renseigner `options.correction`, car le template QCM AMC lit ce champ |
-| AMCNum accepte une mauvaise précision | `approx`, `digits` ou `decimals` mal choisis | Fixer explicitement les paramètres de codage |
-| Fraction attendue mais mauvais affichage AMC | Valeur fournie comme texte non reconnu ou chiffres non adaptés | Utiliser `{ num, den }` et préciser `digitsNum` / `digitsDen` |
-| L'export affiche des éléments HTML | L'énoncé interactif est réutilisé en AMC | Encadrer l'ajout HTML par `if (!context.isAmc)` et fournir un énoncé AMC imprimable |
-| Une figure interactive disparaît ou devient inutilisable | Le composant n'a pas de rendu papier | Fournir une figure statique ou choisir `AMCOpen` |
+| `autoCorrection-html-absente`                                               | L'exercice interactif ne remplit pas `autoCorrection`                         | Appeler `handleAnswers()` ou construire correctement `this.autoCorrection[i]`                                                   |
+| QCM mono avec plusieurs bonnes réponses                                     | Plusieurs propositions ont `statut: true`                                     | Passer en `qcmMult` ou corriger les statuts                                                                                     |
+| QCM AMC sans correction détaillée                                           | La correction n'est pas transmise aux options QCM                             | Renseigner `options.correction`, car le template QCM AMC lit ce champ                                                           |
+| AMCNum accepte une mauvaise précision                                       | `approx`, `digits` ou `decimals` mal choisis                                  | Fixer explicitement les paramètres de codage                                                                                    |
+| Fraction attendue mais mauvais affichage AMC                                | Valeur fournie comme texte non reconnu ou chiffres non adaptés                | Utiliser `{ num, den }` et préciser `digitsNum` / `digitsDen`                                                                   |
+| L'export affiche des éléments HTML                                          | L'énoncé interactif est réutilisé en AMC                                      | Encadrer l'ajout HTML par `if (!context.isAmc)` et fournir un énoncé AMC imprimable                                             |
+| Une figure interactive disparaît ou devient inutilisable                    | Le composant n'a pas de rendu papier                                          | Fournir une figure statique ou choisir `AMCOpen`                                                                                |
 
 Quand un exercice échoue seulement en contexte AMC, cherchez d'abord les champs réellement générés :
 

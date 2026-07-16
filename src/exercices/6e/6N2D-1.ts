@@ -19,7 +19,7 @@ import Exercice from '../Exercice'
 export const dateDePublication = '06/05/2025'
 export const dateDeModifImportante = '25/05/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const titre =
   'Calculer le produit (en ligne) de deux décimaux connaissant le produit de deux entiers'
 
@@ -196,7 +196,7 @@ export default class ProduitDeDecimauxAPartirProduitConnu extends Exercice {
               options: { nombreDecimalSeulement: true },
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
         reponse[0] = 0
       } else {
@@ -227,7 +227,7 @@ export default class ProduitDeDecimauxAPartirProduitConnu extends Exercice {
               options: { nombreDecimalSeulement: true },
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       }
 

@@ -1,7 +1,7 @@
 import TrouverLaTransformation from '../4e/4G12-1'
 export const titre = 'Identifier une transformation'
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 export const dateDePublication = '4/12/2021'
 export const dateDeModifImportante = '25/11/2025'
 export const uuid = '2d343'

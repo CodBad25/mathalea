@@ -34,8 +34,10 @@ export function gestionCan(exercice: IExercice) {
           ) {
             resultat = exercice.correctionInteractive(i)
           }
-          if (exercice.interactifType === 'svgSelection') {
-            resultat = SvgSelectionElement.verifQuestion(exercice, i)
+          if (exercice.interactifType === 'svg-election') {
+            resultat = SvgSelectionElement.verifQuestion(exercice, i).isOk
+              ? 'OK'
+              : 'KO'
           }
           if (exercice.interactifType === 'MetaInteractif2d') {
             resultat = verifQuestionMathLive(exercice, i)?.isOk ? 'OK' : 'KO'

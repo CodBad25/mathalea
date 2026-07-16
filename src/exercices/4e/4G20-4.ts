@@ -18,7 +18,7 @@ function degCos(deg: number): number {
 }
 
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDePublication = '27/06/2021'
 export const dateDeModifImportante = '18/09/2024'
 export const titre = 'Arrondir une racine carrée'
@@ -104,7 +104,7 @@ export default class ArrondirUneValeur4e extends Exercice {
           champ2: { value: n.toDP(1).toString() },
           champ3: { value: n.toDP(2).toString() },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       // texteCorr = `Quand on écrit sur la calculatrice $${nb}$, elle renvoie : $${texNombre(n, 10)}.$`

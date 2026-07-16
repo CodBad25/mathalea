@@ -23,7 +23,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Calculer des probabilités dans une expérience aléatoire à une épreuve'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 /**
  * Calculs de probabilités sur une expérience aléatoire à une épreuve.
@@ -154,7 +154,7 @@ export default class FonctionsProbabilite6e extends Exercice {
             champ4: { value: new FractionEtendue(n[m] + n[p], somme).texFSD },
           },
           {
-            formatInteractif: 'multiMathfield',
+            formatInteractif: 'multi-mathfield',
           },
         )
 

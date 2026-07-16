@@ -2,7 +2,7 @@ import DroiteRemarquableDuTriangle from './5G5E'
 
 export const titre = "Déterminer la nature d'une droite remarquable - 2"
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 
 /**
  * @author Éric Elter (pour ce clone)

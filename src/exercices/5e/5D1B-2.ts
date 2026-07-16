@@ -26,7 +26,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = 'Calculer des fréquences statistiques'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -489,7 +489,7 @@ function questionsEtCorrections(
           champ1: { value: serie.effectifs[serie.rangEffectifCache] },
           champ2: { value: frequenceDemandee },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
       questions = [
         preambule,

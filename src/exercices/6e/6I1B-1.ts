@@ -36,7 +36,7 @@ export const titre = 'Programmer des déplacements relatifs (Scratch)'
 export const dateDePublication = '05/02/2023'
 export const dateDeModifImportante = '09/06/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 /**
  * * Colorier le déplacement d'un lutin
@@ -432,7 +432,7 @@ export default class ColorierDeplacementV2 extends Exercice {
             options: { texteSansCasse: true },
           },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       texteCorr += `<br>

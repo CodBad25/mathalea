@@ -7,6 +7,7 @@
     splitExercisesIntoQuestions,
   } from '../../../lib/components/exercisesUtils'
   import { millisecondToMinSec } from '../../../lib/components/time'
+  import { GuideAne } from '../../../lib/customElements/GuideAne'
   import { InteractiveClock } from '../../../lib/customElements/InteractiveClock'
   import ListeDeroulanteElement from '../../../lib/customElements/ListeDeroulanteElement'
   import { MultiMathfieldElement } from '../../../lib/customElements/MultiMathfield'
@@ -312,35 +313,6 @@
             }, {}),
           answerTxt: answers[i],
         }
-      } else if (type === 'listeDeroulante') {
-        resultsByQuestion[i] = oneResultToBoolean(
-          ListeDeroulanteElement.verifQuestion(
-            exercice,
-            indiceQuestionInExercice[i],
-          ) === 'OK',
-        )
-        const listeKey = `liste-deroulanteEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-        answers[i] = exercice.answers?.[listeKey] ?? ''
-        answersType[i] = {
-          type,
-          index: i,
-          answers: Object.keys(exercice.answers ?? {})
-            .filter(
-              (key: string) =>
-                key.startsWith(listeKey) ||
-                key.startsWith(
-                  `ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                ) ||
-                key.startsWith(
-                  `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                ),
-            )
-            .reduce((result: { [key: string]: any }, k) => {
-              result[k] = exercice.answers![k]
-              return result
-            }, {}),
-          answerTxt: answers[i],
-        }
       } else if (type === 'cliqueFigure') {
         resultsByQuestion[i] = oneResultToBoolean(
           verifQuestionCliqueFigure(exercice, indiceQuestionInExercice[i]) ===
@@ -422,27 +394,54 @@
         answers[i] = answersType[i].answerTxt.includes('apiGeomVersion')
           ? 'Voir figure'
           : answersType[i].answerTxt
-      } else if (type === 'svgSelection') {
-        resultsByQuestion[i] = oneResultToBoolean(
-          SvgSelectionElement.verifQuestion(
-            exercice,
-            indiceQuestionInExercice[i],
-          ) === 'OK',
-        )
+      }
+      // MathaleaCustomElements
+      else if (type === 'liste-deroulante') {
+        resultsByQuestion[i] = ListeDeroulanteElement.verifQuestion(
+          exercice,
+          indiceQuestionInExercice[i],
+        ).isOk
+        const listeKey = `liste-deroulanteEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+        answers[i] = exercice.answers?.[listeKey] ?? ''
+        answersType[i] = {
+          type,
+          index: i,
+          answers: Object.keys(exercice.answers ?? {})
+            .filter(
+              (key: string) =>
+                key.startsWith(listeKey) ||
+                key.startsWith(
+                  `ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
+                ) ||
+                key.startsWith(
+                  `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
+                ),
+            )
+            .reduce((result: { [key: string]: any }, k) => {
+              result[k] = exercice.answers![k]
+              return result
+            }, {}),
+          answerTxt: answers[i],
+        }
+      } else if (type === 'svg-selection') {
+        resultsByQuestion[i] = SvgSelectionElement.verifQuestion(
+          exercice,
+          indiceQuestionInExercice[i],
+        ).isOk
 
         // récupération de la réponse
         answersType[i] = {
           type,
           index: i,
           answers: {
-            [`Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
+            [`svg-selectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
               exercice.answers![
-                `svgSelectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+                `svg-selectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
               ],
           },
           answerTxt:
             exercice.answers![
-              `svgSelectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+              `svg-selectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
             ],
         }
         answers[i] = answersType[i].answerTxt
@@ -466,7 +465,7 @@
             ],
         }
         answers[i] = answersType[i].answerTxt
-      } else if (type === 'multiMathfield') {
+      } else if (type === 'multi-mathfield') {
         resultsByQuestion[i] = oneResultToBoolean(
           MultiMathfieldElement.verifQuestion(
             exercice,
@@ -489,11 +488,10 @@
         }
         answers[i] = answersType[i].answerTxt
       } else if (type === 'interactive-clock') {
-        ;((resultsByQuestion[i] =
-          InteractiveClock.verifQuestion(
-            exercice,
-            indiceQuestionInExercice[i],
-          ) === 'OK'),
+        ;((resultsByQuestion[i] = InteractiveClock.verifQuestion(
+          exercice,
+          indiceQuestionInExercice[i],
+        ).isOk),
           // récupération de la réponse
           (answersType[i] = {
             type,
@@ -510,27 +508,47 @@
               ],
           }))
         answers[i] = answersType[i].answerTxt
+      } else if (type === 'guide-ane') {
+        resultsByQuestion[i] = GuideAne.verifQuestion(
+          exercice,
+          indiceQuestionInExercice[i],
+        ).isOk
+        // récupération de la réponse
+        answersType[i] = {
+          type,
+          index: i,
+          answers: {
+            [`guide-aneEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
+              exercice.answers![
+                `guide-aneEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+              ],
+          },
+          answerTxt:
+            exercice.answers![
+              `guide-aneEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+            ],
+        }
+        answers[i] = answersType[i].answerTxt
       } else if (type === 'trigo-circle-selection') {
-        ;((resultsByQuestion[i] =
-          TrigoCircleSelectionElement.verifQuestion(
-            exercice,
-            indiceQuestionInExercice[i],
-          ) === 'OK'),
-          // récupération de la réponse
-          (answersType[i] = {
-            type,
-            index: i,
-            answers: {
-              [`trigo-circle-selectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
-                exercice.answers![
-                  `trigo-circle-selectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-                ],
-            },
-            answerTxt:
+        resultsByQuestion[i] = TrigoCircleSelectionElement.verifQuestion(
+          exercice,
+          indiceQuestionInExercice[i],
+        ).isOk
+        // récupération de la réponse
+        answersType[i] = {
+          type,
+          index: i,
+          answers: {
+            [`trigo-circle-selectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
               exercice.answers![
                 `trigo-circle-selectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
               ],
-          }))
+          },
+          answerTxt:
+            exercice.answers![
+              `trigo-circle-selectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+            ],
+        }
         answers[i] = answersType[i].answerTxt
       } else {
         answersType[i] = {

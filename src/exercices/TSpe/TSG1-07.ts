@@ -15,7 +15,7 @@ import {
 import Exercice from '../Exercice'
 export const titre = 'Effectuer un dénombrement'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDePublication = '21/04/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
 export const uuid = '3a385'
@@ -110,7 +110,7 @@ export default class denombrement extends Exercice {
           champ2: { value: reponse2 },
           champ3: { value: reponse3 },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
       let correction1 = `On doit choisir ${ca} adhérents parmi ${n}. <br>`
       correction1 += `L'ordre des candidats ne compte pas dans ce choix. Il s'agit donc de déterminer le nombre de combinaisons de  $${ca}$ membres parmi $${n}$.<br>`

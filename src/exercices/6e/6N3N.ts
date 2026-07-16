@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Résoudre des problèmes mettant en jeu des fractions'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDePublication = '27/08/2025'
 export const uuid = '67f73'
 
@@ -450,7 +450,7 @@ export default class ProblemesFractions extends Exercice {
           },
           bareme: toutAUnPoint,
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       if (

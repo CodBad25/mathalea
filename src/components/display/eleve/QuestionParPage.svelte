@@ -152,7 +152,7 @@
           indiceQuestionInExercice[i],
         ),
       )
-    } else if (type === 'listeDeroulante') {
+    } else if (type === 'liste-deroulante') {
       resultsByQuestion[i] = uniformiseResults(
         ListeDeroulanteElement.verifQuestion(
           exercices[indiceExercice[i]],
@@ -172,7 +172,7 @@
           indiceQuestionInExercice[i],
         ),
       )
-    } else if (type === 'multiMathfield') {
+    } else if (type === 'multi-mathfield') {
       const resu = uniformiseResults(
         MultiMathfieldElement.verifQuestion(
           exercices[indiceExercice[i]],
@@ -188,7 +188,7 @@
         ),
       )
       resultsByQuestion[i] = resu
-    } else if (type === 'svgSelection') {
+    } else if (type === 'svg-selection') {
       const resu = uniformiseResults(
         SvgSelectionElement.verifQuestion(
           exercices[indiceExercice[i]],

@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 
 export const dateDePublication = '08/09/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre =
@@ -207,7 +207,7 @@ export default class PuissancesEncadrementCoefficients extends Exercice {
             options: { ecritureScientifique: true },
           },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       texteCorr = `$${miseEnEvidence(borneInfExpr)} \\leqslant ${nombreTexte} \\leqslant ${miseEnEvidence(borneSupExpr)}$`

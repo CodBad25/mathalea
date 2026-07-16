@@ -291,7 +291,7 @@ export default class PeriodeFrequenceFonctionTrigonometrique extends Exercice {
             },
           ]),
         ),
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       const correction: string[] = []

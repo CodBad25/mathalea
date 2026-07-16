@@ -46,6 +46,105 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
   private controls: HTMLDivElement | null = null
   id: string = ''
 
+  static verifQuestion(
+    exercice: IExercice,
+    questionIndex: number,
+  ): {
+    isOk: boolean
+    feedback: string
+    score: { nbBonnesReponses: number; nbReponses: number }
+  } {
+    if (questionIndex === undefined)
+      return {
+        isOk: false,
+        feedback: 'Problème dans le programme',
+        score: { nbBonnesReponses: 0, nbReponses: 1 },
+      }
+    const goodAnswersJson =
+      exercice.autoCorrection[questionIndex].valeur?.reponse?.value
+    if (goodAnswersJson == null || typeof goodAnswersJson !== 'string') {
+      window.notify(
+        'Il y a un problème avec cet exercice, et la question, car autoCorrection ne contient pas la réponse attendue',
+        {
+          uuid: exercice.uuid,
+          question: questionIndex,
+          autoCorrection: JSON.stringify(exercice.autoCorrection),
+        },
+      )
+      return {
+        isOk: false,
+        feedback: 'Problème dans le programme',
+        score: { nbBonnesReponses: 0, nbReponses: 1 },
+      }
+    }
+    const parsed = JSON.parse(String(goodAnswersJson))
+    const nbPoints = parsed.points.length
+
+    const host = document.getElementById(
+      `demi-droite-interactiveEx${exercice.numeroExercice}Q${questionIndex}`,
+    ) as DemiDroiteInteractiveElement
+
+    if (host == null) {
+      window.notify(
+        'Il y a un problème avec cet exercice : la question ne contient pas la demi-droite-interactive souhaitée',
+        {
+          uuid: exercice.uuid,
+          question: exercice.listeQuestions[questionIndex],
+        },
+      )
+      return {
+        isOk: false,
+        feedback: 'Problème dans le programme',
+        score: { nbBonnesReponses: 0, nbReponses: 1 },
+      }
+    }
+    host.disableControls()
+
+    const value = host.value
+    const den = host.value.partsCount
+    exercice.answers ??= {}
+    exercice.answers[`Ex${exercice.numeroExercice}Q${questionIndex}`] =
+      JSON.stringify(value)
+    const results: ('OK' | 'KO')[] = []
+    let feedback = ''
+    for (let j = 0; j < nbPoints; j++) {
+      const attendu = parsed.points[j].pointValue
+      const saisi = value.points[j]?.pointValue
+      const ok = saisi !== undefined && Math.abs(saisi - attendu) < 1e-9
+      results.push(ok ? 'OK' : 'KO')
+      if (!ok) {
+        feedback += `Le point ${parsed.points[j].label} est attendu à l'abscisse $${fraction(parsed.points[j].pointValue * parsed.partsCount, parsed.partsCount).texFraction}$, mais il est placé à l'abscisse $${fraction(saisi * den, den).texFraction}$.<br>`
+      }
+    }
+    const spanResultat = host.querySelector(
+      `#resultatCheckEx${exercice.numeroExercice}Q${questionIndex}`,
+    ) as HTMLDivElement | null
+    const divFeedback = host.querySelector(
+      `#feedbackEx${exercice.numeroExercice}Q${questionIndex}`,
+    ) as HTMLDivElement | null
+    if (spanResultat) {
+      const ok = results.every((r) => r === 'OK')
+      spanResultat.innerHTML = ok ? '😎' : '☹️'
+      if (divFeedback) {
+        divFeedback.innerHTML = feedback
+        divFeedback.style.display = feedback.length > 0 ? 'block' : 'none'
+      }
+      return {
+        isOk: ok,
+        feedback,
+        score: {
+          nbBonnesReponses: results.filter((r) => r === 'OK').length,
+          nbReponses: results.length,
+        },
+      }
+    }
+    return {
+      isOk: false,
+      feedback: 'Problème dans le programme',
+      score: { nbBonnesReponses: 0, nbReponses: 1 },
+    }
+  }
+
   static create(
     options: DemiDroiteInteractiveOptions & {
       id?: string
@@ -635,6 +734,17 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
 
     this.appendChild(this.svg)
     this.appendChild(resultatCheck)
+    const divFeedback = document.createElement('div')
+    divFeedback.classList.add(
+      'py-2',
+      'italic',
+      'text-coopmaths-warn-darkest',
+      'dark:text-coopmathsdark-warn-darkest',
+    )
+    divFeedback.id = this.id
+      ? `${this.id.replace('demi-droite-interactive', 'feedback')}`
+      : `demi-droite-interactive-feedback`
+    this.appendChild(divFeedback)
   }
   static formatStudentAnswer(rawAnswer: string): string {
     const parsed = JSON.parse(rawAnswer)

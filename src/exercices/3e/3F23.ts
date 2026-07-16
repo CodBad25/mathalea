@@ -26,7 +26,7 @@ export const dateDeModifImportante = '11/04/2026'
 export const titre =
   "Trouver l'intersection des droites représentant des fonctions affines"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 /**
  * Trouver les coordonnées du point d'intersection des droites représentant des fonctions affines
@@ -157,7 +157,7 @@ export default class IntersectionDroites extends Exercice {
           },
           bareme: toutAUnPoint,
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       if (this.questionJamaisPosee(i, a, b, c, d)) {

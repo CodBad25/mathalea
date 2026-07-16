@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Encadrer avec les racines carrées'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDePublication = '28/09/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModificationImportante = '05/04/2026' // Passage en MultiMathfield par Jean-claude Lhote
 /**
@@ -95,7 +95,7 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
               champ2: { value: reponse + 1 },
               bareme: toutAUnPoint,
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
           break
         case 'Encadrer2':
@@ -138,7 +138,7 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
                   champ2: { value: reponse2 },
                   bareme: toutAUnPoint,
                 },
-                { formatInteractif: 'multiMathfield' },
+                { formatInteractif: 'multi-mathfield' },
               )
             } else {
               texteCorr += `$\\begin{aligned}
@@ -157,7 +157,7 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
                   champ2: { value: reponse1 },
                   bareme: toutAUnPoint,
                 },
-                { formatInteractif: 'multiMathfield' },
+                { formatInteractif: 'multi-mathfield' },
               )
             }
           }
@@ -203,7 +203,7 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
                   champ2: { value: r2b },
                   bareme: toutAUnPoint,
                 },
-                { formatInteractif: 'multiMathfield' },
+                { formatInteractif: 'multi-mathfield' },
               )
             } else {
               texteCorr += `$\\begin{aligned}
@@ -222,7 +222,7 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
                   champ2: { value: r1b },
                   bareme: toutAUnPoint,
                 },
-                { formatInteractif: 'multiMathfield' },
+                { formatInteractif: 'multi-mathfield' },
               )
             }
           }

@@ -22,7 +22,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer périmètre et/ou aire de disques'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '20/11/2023'
@@ -659,7 +659,7 @@ export default class PerimetreAireDisques extends Exercice {
           this,
           i,
           { bareme: toutAUnPoint, ...reponses },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

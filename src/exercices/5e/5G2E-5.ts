@@ -45,7 +45,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer périmètre et aire de figures composées'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '31/03/2026'
@@ -1509,7 +1509,7 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 ]),
               ),
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
         }
         this.listeQuestions[i] = texte

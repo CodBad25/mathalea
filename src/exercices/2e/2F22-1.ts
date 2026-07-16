@@ -24,7 +24,7 @@ import { toutAUnPoint } from '../../lib/interactif/mathLive'
 
 export const titre = 'Résoudre graphiquement une équation du type $f(x)=k$'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const dateDePublication = '06/07/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '08/09/2024'
@@ -271,7 +271,7 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
           champ2: { value: reponse1, options: { ensembleDeNombres: true } },
           champ3: { value: reponseQ3 },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       const correctionPartA = `${numAlpha(0)} Le nombre de solutions de l'équation $f(x)=${y0}$ est donné par le nombre d'antécédents de $${y0}$ par $f$. <br>

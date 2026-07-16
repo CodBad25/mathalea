@@ -191,7 +191,7 @@ export default class MedianeMoyenneSalaires extends Exercice {
           champ1: { value: moyenne },
           champ2: { value: S3 },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       const props = propositionsQcm(this, 2 * i + 1)

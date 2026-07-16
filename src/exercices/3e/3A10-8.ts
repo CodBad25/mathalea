@@ -24,7 +24,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Decomposer et rechercher le plus grand diviseur commun de deux nombres'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDePublication = '13/11/2024'
 export const dateDeModifImportante = '12/04/2026'
 export const uuid = 'eb844'
@@ -447,7 +447,7 @@ export default class LireUnePuissance extends Exercice {
           bareme: toutAUnPoint,
           ...champs,
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       const listeCorr =

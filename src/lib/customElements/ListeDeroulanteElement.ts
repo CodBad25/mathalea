@@ -1,4 +1,5 @@
 import { context } from '../../modules/context'
+import { uniformiseResults } from '../interactif/gestionInteractif'
 import ListeDeroulante, {
   type AllChoicesType,
 } from '../interactif/listeDeroulante/ListeDeroulante'
@@ -52,12 +53,12 @@ export function choixDeroulant(
   if (
     context.isHtml &&
     exercice?.autoCorrection[questionIndex]?.formatInteractif !==
-      'listeDeroulante'
+      'liste-deroulante'
   ) {
     if (exercice?.autoCorrection == null) exercice.autoCorrection = []
     if (exercice?.autoCorrection[questionIndex] == null)
       exercice.autoCorrection[questionIndex] = {}
-    exercice.autoCorrection[questionIndex].formatInteractif = 'listeDeroulante'
+    exercice.autoCorrection[questionIndex].formatInteractif = 'liste-deroulante'
   }
 
   const result = ListeDeroulanteElement.create({
@@ -185,7 +186,11 @@ class ListeDeroulanteElement extends MathaleaCustomElement {
   static verifQuestion(
     exercice: IExercice,
     questionIndex: number,
-  ): 'OK' | 'KO' {
+  ): {
+    isOk: boolean
+    feedback: string
+    score: { nbBonnesReponses: number; nbReponses: number }
+  } {
     const spanReponseLigne = document.getElementById(
       `resultatCheckEx${exercice.numeroExercice}Q${questionIndex}`,
     )
@@ -199,7 +204,7 @@ class ListeDeroulanteElement extends MathaleaCustomElement {
     const liste = document.querySelector(
       `#liste-deroulanteEx${exercice.numeroExercice}Q${questionIndex}`,
     ) as ListeDeroulanteElement | null
-
+    liste!.interactivityOn = false
     const value = liste?.value
     const reponse =
       exercice.autoCorrection[questionIndex]?.valeur?.reponse?.value
@@ -217,7 +222,7 @@ class ListeDeroulanteElement extends MathaleaCustomElement {
       ;(spanReponseLigne as HTMLElement).style.fontSize = 'large'
     }
 
-    return resultat
+    return uniformiseResults(resultat)
   }
 
   private _listeDeroulante?: ListeDeroulante

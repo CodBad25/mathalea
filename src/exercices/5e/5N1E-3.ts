@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Écrire un enchaînement de calculs à partir d'un problème"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const dateDePublication = '10/09/2025'
 
@@ -529,7 +529,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
                 options: { nombreDecimalSeulement: true },
               },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
         } else {
           texte +=
@@ -553,7 +553,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
                 options: { expressionNumerique: true },
               },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
         }
       }

@@ -63,9 +63,9 @@ Choisir le format selon ce que l'élève doit faire, pas selon la forme interne 
 | Saisir des valeurs dans un tableau                        | `tableauMathlive` | `AddTabPropMathlive` ou `AddTabDbleEntryMathlive` | `L1C1`, `L1C2`, ...                                        |
 | Saisir du texte libre sans MathLive                       | `texte`           | `ajouteChampTexte()`                              | `reponse`, avec `{ formatInteractif: 'texte' }`            |
 | Cocher une ou plusieurs propositions                      | `qcm`             | `propositionsQcm()`                               | `this.autoCorrection[i].propositions`                      |
-| Choisir une valeur dans un menu                           | `listeDeroulante` | `choixDeroulant()`                                | `reponse`, avec `{ formatInteractif: 'listeDeroulante' }`  |
+| Choisir une valeur dans un menu                           | `listeDeroulante` | `choixDeroulant()`                                | `reponse`, avec `{ formatInteractif: 'liste-deroulante' }` |
 | Déplacer des étiquettes                                   | `dnd`             | `new DragAndDrop(...)`                            | `rectangle1`, `rectangle2`, ...                            |
-| Sélectionner des SVG                                      | `svgSelection`    | `selectionSvg()`                                  | `reponse`, avec `{ formatInteractif: 'svgSelection' }`     |
+| Sélectionner des SVG                                      | `svg-selection`   | `selectionSvg()`                                  | `reponse`, avec `{ formatInteractif: 'svg-selection' }`    |
 | Cliquer dans une figure                                   | `cliqueFigure`    | objets SVG + `cliqueFiguresArray`                 | `this.autoCorrection[i].formatInteractif = 'cliqueFigure'` |
 | Vérification impossible avec les formats existants        | `custom`          | code propre à l'exercice                          | `correctionInteractive(i)`                                 |
 
@@ -295,7 +295,7 @@ if (this.interactif) {
     this,
     i,
     { reponse: { value: reponse } },
-    { formatInteractif: 'listeDeroulante' },
+    { formatInteractif: 'liste-deroulante' },
   )
 } else if (context.isAmc) {
   listeDeroulanteToQcm(this, i, choix, reponse, {
@@ -305,7 +305,7 @@ if (this.interactif) {
 }
 ```
 
-Le quatrième argument de `handleAnswers()` est obligatoire ici. Sans `{ formatInteractif: 'listeDeroulante' }`, le moteur cherchera un champ MathLive.
+Le quatrième argument de `handleAnswers()` est obligatoire ici. Sans `{ formatInteractif: 'liste-deroulante' }`, le moteur cherchera un champ MathLive.
 
 ## Glisser-déposer
 
@@ -367,7 +367,7 @@ handleAnswers(
   this,
   i,
   { reponse: { value: 3 } },
-  { formatInteractif: 'svgSelection' },
+  { formatInteractif: 'svg-selection' },
 )
 ```
 
@@ -575,7 +575,7 @@ Ce test d'intégration vérifie que les réponses attendues sont acceptées par 
 - Ajouter un champ dans `texte` mais oublier `handleAnswers()` : le champ s'affiche, mais la validation ne connaît pas la réponse.
 - Appeler `handleAnswers()` avec `{ value: ... }` au lieu de `{ reponse: { value: ... } }` pour un champ simple.
 - Utiliser `champ1` dans `remplisLesBlancs()` et `reponse` dans `handleAnswers()` : les noms doivent correspondre.
-- Oublier `{ formatInteractif: 'listeDeroulante' }`, `{ formatInteractif: 'dnd' }` ou `{ formatInteractif: 'svgSelection' }` pour les formats non MathLive.
+- Oublier `{ formatInteractif: 'liste-deroulante' }`, `{ formatInteractif: 'dnd' }` ou `{ formatInteractif: 'svg-selection' }` pour les formats non MathLive.
 - Comparer le `label` d'une liste déroulante au lieu de sa `value`.
 - Utiliser un clavier trop limité : l'élève ne peut pas saisir une fraction, une unité ou une lettre nécessaire.
 - Mettre le helper interactif uniquement dans une branche `if (context.isHtml)` et oublier le rendu LaTeX.
@@ -597,7 +597,7 @@ Changer les `options` de comparaison avant d'écrire un comparateur. Par exemple
 Préciser une option plus stricte : `nombreDecimalSeulement`, `fractionIdentique`, `texteAvecCasse`, `expressionNumerique`, ou une combinaison de checks.
 
 **La liste déroulante ne se corrige pas.**  
-Vérifier que chaque choix a une `value`, que la réponse attendue est une de ces `value`, et que `handleAnswers()` reçoit `{ formatInteractif: 'listeDeroulante' }`.
+Vérifier que chaque choix a une `value`, que la réponse attendue est une de ces `value`, et que `handleAnswers()` reçoit `{ formatInteractif: 'liste-deroulante' }`.
 
 **Le QCM ne s'affiche pas ou ne se corrige pas.**  
 Vérifier que `this.autoCorrection[i].propositions` contient au moins deux propositions, que chaque proposition a un `statut` booléen, puis que `propositionsQcm(this, i)` est bien appelé avant d'affecter `this.listeQuestions[i]`.

@@ -2,6 +2,7 @@ import Hms from '../../modules/Hms'
 import { mathalea2d } from '../../modules/mathalea2d'
 import Horloge from '../2d/horloge'
 import { orangeMathalea } from '../colors'
+import { uniformiseResults } from '../interactif/gestionInteractif'
 import { formatMinute } from '../outils/texNombre'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
@@ -11,7 +12,7 @@ export type ClockDataOptions = {
   hour?: number
   minute?: number
   second?: number
-  isDynamic?: boolean
+  interactivityOn?: boolean
   showHands?: boolean
   showSecond?: boolean
   id?: string
@@ -36,7 +37,7 @@ type ClockValueInput =
  * @attr {number} hour - L'heure initiale de l'horloge (0-12)
  * @attr {number} minute - La minute initiale de l'horloge (0-59)
  * @attr {number} [second=0] - La seconde initiale de l'horloge (0-59)
- * @attr {boolean} [isDynamic=true] - Indique si l'horloge est interactive
+ * @attr {boolean} [interactivityOn=true] - Indique si l'horloge est interactive
  * @attr {boolean} [showHands=true] - Indique si les aiguilles de l'horloge doivent être affichées
  * @attr {boolean} [showSecond=true] - Indique si l'aiguille des secondes doit être affichée
  */
@@ -74,7 +75,6 @@ export class InteractiveClock extends MathaleaCustomElement {
   previousMinute = 0
   previousSecond = 0
   private previousHour = 12
-  private _isDynamic = true
   private _currentAction?: 'hour' | 'minute' | 'second'
   private _svgElement?: SVGSVGElement
   private _preventDefaultHandler?: (event: PointerEvent | TouchEvent) => void
@@ -118,7 +118,7 @@ export class InteractiveClock extends MathaleaCustomElement {
     this.showSecond = this.hasAttribute('showSecond')
       ? !(this.getAttribute('showSecond') === 'false')
       : false
-    this.isDynamic = !(this.getAttribute('isDynamic') === 'false')
+    this.interactivityOn = !(this.getAttribute('interactivity-on') === 'false')
     this.draggingHand = false
   }
 
@@ -129,11 +129,25 @@ export class InteractiveClock extends MathaleaCustomElement {
     this.render()
   }
 
-  static verifQuestion(exercice: IExercice, i: number): 'KO' | 'OK' {
+  static verifQuestion(
+    exercice: IExercice,
+    i: number,
+  ): {
+    isOk: boolean
+    feedback: string
+    score: { nbBonnesReponses: number; nbReponses: number }
+  } {
     const id = `interactive-clockEx${exercice.numeroExercice}Q${i}`
     const clock = document.querySelector(`#${id}`) as any
     if (clock == null) {
-      return 'KO'
+      return {
+        isOk: false,
+        feedback: "Erreur dans le programme : pas d'horloge dans la question",
+        score: {
+          nbBonnesReponses: 0,
+          nbReponses: 1,
+        },
+      }
     }
     const spanResultatCheck = document.querySelector(
       `#resultatCheckEx${exercice.numeroExercice}Q${i}`,
@@ -142,13 +156,14 @@ export class InteractiveClock extends MathaleaCustomElement {
       `#feedbackEx${exercice.numeroExercice}Q${i}`,
     )
     const answer = clock.value
-    clock.isDynamic = false
+    clock.interactivityOn = false
     if (exercice.answers == null) exercice.answers = {}
     // Sauvegarde de la réponse pour Capytale
     exercice.answers[id] = JSON.stringify(answer)
     const goodAnswer = Hms.fromString(
       String(exercice.autoCorrection?.[i]?.valeur?.reponse?.value),
     )
+
     if (
       goodAnswer.hour === answer.hour &&
       goodAnswer.minute === answer.minute
@@ -156,7 +171,7 @@ export class InteractiveClock extends MathaleaCustomElement {
       if (spanResultatCheck) {
         spanResultatCheck.innerHTML = '😎'
       }
-      return 'OK'
+      return uniformiseResults('OK')
     } else {
       if (spanResultatCheck) {
         spanResultatCheck.innerHTML = '☹️'
@@ -164,7 +179,7 @@ export class InteractiveClock extends MathaleaCustomElement {
       if (divFeedback) {
         divFeedback.innerHTML = `Les aiguilles indiquent ${clock.getAttribute('hour')} h ${formatMinute(clock.getAttribute('minute'))}.`
       }
-      return 'KO'
+      return uniformiseResults('KO')
     }
   }
 
@@ -175,14 +190,14 @@ export class InteractiveClock extends MathaleaCustomElement {
     hour = 0,
     minute = 0,
     second = 0,
-    isDynamic = true,
+    interactivityOn = true,
     showHands = true,
     showSecond = false,
   }: InteractiveClockCreateOptions): string {
     const computedId =
       id ??
       `${InteractiveClock.elementTag}Ex${numeroExercice ?? 0}Q${questionIndex ?? 0}`
-    return `<interactive-clock id="${computedId}" hour="${hour}" minute="${minute}" second="${second}" isDynamic="${isDynamic}" showHands="${showHands}" showSecond="${showSecond}"></interactive-clock>`
+    return `<interactive-clock id="${computedId}" hour="${hour}" minute="${minute}" second="${second}" interactivity-on="${interactivityOn}" showHands="${showHands}" showSecond="${showSecond}"></interactive-clock>`
   }
 
   renderLatex() {
@@ -332,7 +347,7 @@ export class InteractiveClock extends MathaleaCustomElement {
     divFeedback.style.display = 'block'
     container.parentElement!.appendChild(divFeedback)
 
-    if (this.isDynamic) {
+    if (this.interactivityOn) {
       this.currentAction = 'minute'
 
       this._preventDefaultHandler = (event: PointerEvent | TouchEvent) => {
@@ -472,7 +487,7 @@ export class InteractiveClock extends MathaleaCustomElement {
   }
 
   dragHand(event: MouseEvent | TouchEvent) {
-    if (!this.isDynamic) return
+    if (!this.interactivityOn) return
     if (!this.draggingHand) return
     const rect = (event.target as SVGElement).getBoundingClientRect()
     const clientX =
@@ -638,15 +653,16 @@ export class InteractiveClock extends MathaleaCustomElement {
     this.previousSecond = this.second
   }
 
-  get isDynamic() {
-    return this._isDynamic
-  }
-
-  set isDynamic(val: boolean) {
-    this._isDynamic = val
-    if (!val) {
+  set interactivityOn(isOn: boolean) {
+    this.interactivityOn = isOn
+    if (!isOn) {
       this.currentAction = undefined
     }
+    this.setAttribute('interactivity-on', isOn ? 'true' : 'false')
+    this.onInteractivityChanged(isOn)
+  }
+  get interactivityOn() {
+    return this.interactivityOn
   }
 
   get minute() {

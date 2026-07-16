@@ -20,7 +20,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Résoudre des problèmes avec recherche de diviseurs communs'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '17/08/2021'
@@ -234,7 +234,7 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
           champ3: { value: var2 },
           bareme: toutAUnPoint,
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       if (this.questionJamaisPosee(i, var1, var2, objet)) {

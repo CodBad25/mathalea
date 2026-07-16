@@ -157,7 +157,7 @@ b) ${sousQuestions[1]} : $d\\;:\\;y=$%{champ3}.`,
             options: { fonction: true, variable: 'x' },
           },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       if (this.questionJamaisPosee(i, xA, yA, xB, yB, xC, yC)) {

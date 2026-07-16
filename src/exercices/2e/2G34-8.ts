@@ -1,21 +1,21 @@
-import { combinaisonListes, choice } from '../../lib/outils/arrayOutils'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
   rienSi1,
 } from '../../lib/outils/ecritures'
 import { texNombre } from '../../lib/outils/texNombre'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { ppcm } from '../../lib/outils/primalite'
 export const titre =
   "Déterminer la nature des solutions d'un système linéaire de deux équations à deux inconnues"
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 export const dateDePublication = '28/03/2024'
 export const uuid = 'fade2'
 export const refs = {
@@ -386,7 +386,7 @@ export default class systemeEquationsPremDeg extends Exercice {
           this,
           i,
           { reponse: { value: rep, options: { texteSansCasse: true } } },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
       }
       if (this.questionJamaisPosee(i, solX, solY)) {

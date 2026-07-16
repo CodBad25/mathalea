@@ -66,7 +66,7 @@ export default class VecteurNormEqCart extends Exercice {
           champ1: { value: a },
           champ2: { value: b },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
       texteCorr = `Si l'équation est de la forme $ax+by+c=0$, on sait d'après le cours, qu'un vecteur normal $\\vec{u}$ a pour coordonnées $(a\\,;\\,b)$.<br>
     On en déduit qu'un vecteur normal de $d$ est $${miseEnEvidence(`\\vec{u}(${a}\\,;\\,${b})`)}$.<br>

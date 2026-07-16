@@ -2,7 +2,7 @@ import DefinitionProprietesTriangles from '../5e/DefinitionProprietesTriangles'
 export const titre = 'Connaitre notamment la somme des angles dans un triangle'
 export const dateDePublication = '10/06/2026'
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 
 /**
  * Pour les nouveaux programmes de 6ème

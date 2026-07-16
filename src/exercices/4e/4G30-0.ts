@@ -7,9 +7,11 @@ import { labelPoint } from '../../lib/2d/textes'
 import { tracePointSurDroite } from '../../lib/2d/TracePointSurDroite'
 import { homothetie, similitude } from '../../lib/2d/transformations'
 import { addGuideAne, GuideAne } from '../../lib/customElements/GuideAne'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { egalOuApprox } from '../../lib/outils/ecritures'
+import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
@@ -20,7 +22,7 @@ export const titre =
   'Utiliser le guide-âne pour construire un segment de longueur donnée'
 export const uuid = '327f2'
 export const interactifReady = true
-export const interactifType = 'custom'
+export const interactifType = 'guide-ane'
 export const refs = {
   'fr-fr': ['4G30-0'],
   'fr-ch': [],
@@ -66,23 +68,21 @@ export default class MonExoGuideAne extends Exercice {
        ${addGuideAne(this, i, guideAneData)}<br>
        ${ajouteFeedback(this, i)}`
 
-        texteCorr =
-          GuideAne.create({
-            numeroExercice: this.numeroExercice,
-            questionIndex: i,
-            A: { x: 100, y: 300 },
-            n: targetN,
-            p: targetP,
-            alpha: 60,
-            targetAB,
-            disableADrag: true,
-            displayTargetOn: true,
-          }) +
-          `<br>
-        Le segment $[AB]$ mesurant $${targetAB}$ cm, on place un point $C$ sur une demi-droite issue de $A$ tel que $AC=${targetN}$ unités.<br>
+        texteCorr = `Le segment $[AB]$ mesurant $${targetAB}$ cm, on place un point $C$ sur une demi-droite issue de $A$ tel que $AC=${targetN}$ unités.<br>
         Ensuite, on trace $${targetN - 1}$ parallèles à $[CB]$ passant par les points sur cette demi-droite.<br>
         Ces parallèles coupent le segment $[AB]$ en $${targetN}$ segments de même longueur.<br>
-         Le point $D$ est placé sur la $${targetP}^\\text{ème}$ parallèle, ce qui donne $AD=\\dfrac{${targetP}}{${targetN}}AB=${egalOuApprox(targetValue, 2)}$ cm.`
+         Le point $D$ est placé sur la $${targetP}^\\text{ème}$ parallèle, ce qui donne $AD=\\dfrac{${targetP}}{${targetN}}AB${egalOuApprox(targetValue, 2)}${texNombre(targetValue, 2)}$ cm.<br>
+         ${GuideAne.create({
+           numeroExercice: this.numeroExercice,
+           questionIndex: i,
+           A: { x: 100, y: 300 },
+           n: targetN,
+           p: targetP,
+           alpha: 60,
+           targetAB,
+           disableADrag: true,
+           displayTargetOn: true,
+         })}`
       } else {
         // contexte latex
         texte += ' sans utiliser les graduations de la règle.<br>'
@@ -104,56 +104,27 @@ export default class MonExoGuideAne extends Exercice {
         texte += mathalea2d(Object.assign({}, fixeBordures(objets)), objets)
       }
       if (this.questionJamaisPosee(i, targetAB, targetN, targetP)) {
+        // GuideAne.verifQuestion() n'utilise pas exercice.autoCorrection[i], mais on remplit quand-même pour harmoniser les usages
+        handleAnswers(
+          this,
+          i,
+          {
+            reponse: {
+              value: JSON.stringify({
+                n: targetN,
+                p: targetP,
+                lengthAD: targetValue,
+                lengthAB: targetAB,
+              }),
+            },
+          },
+          { formatInteractif: 'guide-ane' },
+        )
         this.listeQuestions.push(texte)
         this.listeCorrections.push(texteCorr)
         i++
       }
       cpt++
     }
-  }
-
-  correctionInteractive = (i: number) => {
-    const spanReponseLigne = document.querySelector(
-      `#resultatCheckEx${this.numeroExercice}Q${i}`,
-    )
-    const divFeedback = document.querySelector(
-      `#feedbackEx${this.numeroExercice}Q${i}`,
-    )
-    let isOk = false
-    const guideAne = document.getElementById(
-      `guide-aneEx${this.numeroExercice}Q${i}`,
-    ) as GuideAne
-    if (guideAne == null) {
-      window.notify(`Pas trouvé le guide-âne dans cet exercice pour i=${i}`, {})
-      return 'KO'
-    }
-    const answer = guideAne.value
-    if (this.answers == null) this.answers = {}
-    // Sauvegarde de la réponse pour Capytale
-    this.answers[`guide-aneEx${this.numeroExercice}Q${i}`] =
-      JSON.stringify(answer)
-
-    isOk = guideAne.isTargetReached()
-    let feedback = ''
-    if (!isOk) {
-      const AB = guideAne.getLengthABValue()
-      const n = guideAne.getN()
-      const p = guideAne.getP()
-      feedback = `Votre segment $[AB]$ mesure $${AB}$ cm.<br>
-      Le segment $[AD]$ doit mesurer $\\dfrac{${p}}{${n}}\\times ${AB}${egalOuApprox((p * AB) / n, 2)}$ cm pour que le rapport $\\dfrac{AD}{AB}$ soit égal à $\\dfrac{${p}}{${n}}$.`
-    }
-
-    if (spanReponseLigne) {
-      if (isOk) {
-        spanReponseLigne.innerHTML = '😎'
-      } else {
-        spanReponseLigne.innerHTML = '☹️'
-      }
-    }
-    if (divFeedback && feedback !== '') {
-      divFeedback.innerHTML = feedback
-    }
-
-    return isOk ? 'OK' : 'KO'
   }
 }

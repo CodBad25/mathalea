@@ -19,7 +19,7 @@ export const dateDePublication = '05/10/2024' // fonctions de mise en place des 
 export const dateDeModifImportante = '13/10/2024'
 
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const uuid = 'a33ba'
 export const refs = {
@@ -125,7 +125,7 @@ export default class resoudreProblemeRelatifs extends Exercice {
             ),
           },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       texteCorr =

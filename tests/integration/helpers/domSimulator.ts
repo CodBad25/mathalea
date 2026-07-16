@@ -250,8 +250,8 @@ export function injectListeDeroulanteDOM(
 }
 
 /**
- * Injects DOM for svgSelection questions.
- * verifQuestionSvgSelection() reads #svgSelectionEx{exIdx}Q{qIdx}.value and
+ * Injects DOM for svg-selection questions.
+ * verifQuestionSvgSelection() reads #svg-selectionEx{exIdx}Q{qIdx}.value and
  * writes feedback to #resultatCheckEx{exIdx}Q{qIdx}.
  */
 export function injectSvgSelectionDOM(
@@ -259,7 +259,7 @@ export function injectSvgSelectionDOM(
   questionIndex: number,
   selectedValue: string,
 ) {
-  const selectId = `svgSelectionEx${exerciceIndex}Q${questionIndex}`
+  const selectId = `svg-selectionEx${exerciceIndex}Q${questionIndex}`
   const resultId = `resultatCheckEx${exerciceIndex}Q${questionIndex}`
   document.getElementById(selectId)?.remove()
   document.getElementById(resultId)?.remove()

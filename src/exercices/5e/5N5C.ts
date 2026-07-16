@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 export const titre = 'Tester une égalité'
 export const dateDeModifImportante = '18/11/2023'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -309,7 +309,7 @@ export default class TesterUneEgalite extends Exercice {
                   : ['N', 'Non', 'non', 'NON'],
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
         texte += `<br>`
         const chainePourReponses1 = `${sp(10)}Pour $x=${x1}$, d'une part, ${sp(5)} ${expression.split('=')[0]} =$ %{champ1} \n`

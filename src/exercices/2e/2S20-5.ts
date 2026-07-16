@@ -20,7 +20,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDePublication = '05/05/2024'
 export const dateDeModifImportante = '07/04/2026'
 export const titre = 'Lire graphiquement des quartiles et des EIQ'
@@ -371,7 +371,7 @@ export default class Quartiles extends Exercice {
           },
           bareme: toutAUnPoint,
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       let texteCorr = 'Par lecture graphique, on trouve :<br>'

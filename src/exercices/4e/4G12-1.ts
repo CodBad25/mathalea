@@ -15,9 +15,10 @@ import {
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { vecteur, type Vecteur } from '../../lib/2d/Vecteur'
 import { vide2d, Vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { texcolors } from '../../lib/format/style'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import {
   choice,
   combinaisonListes,
@@ -46,13 +47,12 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const dateDePublication = '3/12/2021'
 export const dateDeModifImportante = '25/11/2025'
 export const titre = 'Trouver la transformation'
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 
 export const uuid = '8ac93'
 
@@ -952,7 +952,9 @@ export default class TrouverLaTransformation extends Exercice {
         })
         texte +=
           objetEnonce[ee].textePossible +
-          choixDeroulant(this, i * nbSousQuestions + ee, { choices: propositions[ee] })
+          choixDeroulant(this, i * nbSousQuestions + ee, {
+            choices: propositions[ee],
+          })
         texteCorrComplement += ee > 0 ? '<br>' : ''
         texteCorrComplement += nbSousQuestions > 1 ? numAlpha(ee) : ''
         texteCorrComplement += objetEnonce[ee].texteCorrPossible
@@ -962,7 +964,7 @@ export default class TrouverLaTransformation extends Exercice {
           this,
           i * nbSousQuestions + ee,
           { reponse: { value: objetEnonce[ee].reponsePossible } },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
       }
 

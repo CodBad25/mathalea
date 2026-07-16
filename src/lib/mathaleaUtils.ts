@@ -132,13 +132,13 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
             resolve(true)
           })
       })
-    } else if (answer.includes('svgSelection')) {
+    } else if (answer.includes('svg-selection')) {
       const p = new Promise<boolean>((resolve) => {
         waitForElement(`[id$='${answer}']`)
           .then((eles) => {
             eles.forEach((ele) => {
               if (ele.tagName === 'SVG-SELECTION') {
-                // La réponse correspond à un svgSelection
+                // La réponse correspond à un svg-selection
                 ;(ele as any).value = Number(answers[answer])
                 const time = window.performance.now()
                 log(`duration ${answer}: ${time - starttime}`)
@@ -334,7 +334,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
           })
       })
       promiseAnswers.push(p)
-    } else if (answer.includes('sheet-')) {
+    } else if (answer.includes('my-spreadsheet')) {
       const p = new Promise<boolean>((resolve) => {
         waitForElement('#' + answer)
           .then(() => {

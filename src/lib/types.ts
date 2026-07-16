@@ -334,14 +334,17 @@ export type InteractivityType =
   | 'texte' // à priori non compatible AMC
   | 'cliqueFigure' // Non compatible AMC
   | 'dnd' // Non compatible AMC
-  | 'listeDeroulante' // Compatible AMC si on remplace par un qcm
   | 'custom' // Non compatible AMC
-  | 'tableur' // Difficile à faire rentrer dans AMC
+  // MathaleaCustomElement
+  | 'liste-deroulante' // Compatible AMC si on remplace par un qcm
+  | 'my-spreadsheet' // Difficile à faire rentrer dans AMC
   | 'MetaInteractif2d' // Difficile à faire rentrer dans AMC
-  | 'svgSelection' // inadapté clairement pour AMC
-  | 'multiMathfield' // On pourra essayer de faire mieux qu'AmcOpen
+  | 'svg-selection' // inadapté clairement pour AMC
+  | 'multi-mathfield' // On pourra essayer de faire mieux qu'AmcOpen
   | 'trigo-circle-selection' // Non compatible AMC
   | 'interactive-clock' // Non compatible AMC
+  | 'guide-ane' // Non compatible AMC
+  | 'demi-droite-interactive'
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -353,12 +356,17 @@ export function isInteractivityType(
     value === 'texte' ||
     value === 'cliqueFigure' ||
     value === 'dnd' ||
-    value === 'listeDeroulante' ||
     value === 'custom' ||
-    value === 'tableur' ||
+    // MathleaCustomElement
+    value === 'liste-deroulante' ||
+    value === 'my-spreadsheet' ||
     value === 'MetaInteractif2d' ||
-    value === 'svgSelection' ||
-    value === 'multiMathfield'
+    value === 'svg-selection' ||
+    value === 'multi-mathfield' ||
+    value === 'trigo-circle-selection' ||
+    value === 'interactive-clock' ||
+    value === 'guide-ane' ||
+    value === 'demi-droite-interactive'
   )
 }
 

@@ -1,7 +1,7 @@
 import NoteLaCouleur6e from '../6e/6I1B-2'
 export const titre = 'Noter la couleur avec Scratch'
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 export const dateDeModifImportante = '27/12/2023'
 export const uuid = 'a7650'
 export const refs = {

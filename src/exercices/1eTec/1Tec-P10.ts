@@ -17,7 +17,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 export const titre =
   "Calculer les coordonnées du point moyen d'un nuage de points"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const dateDePublication = '06/07/2026'
 
@@ -207,7 +207,7 @@ export default class CalculerPointMoyenNuage extends Exercice {
           champ2: { value: yG },
           bareme: toutAUnPoint,
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       texteCorr =

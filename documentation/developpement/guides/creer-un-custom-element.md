@@ -8,7 +8,7 @@ Objectif : avoir une API homogène pour l'injection HTML, la mise à jour d'affi
 
 Toute nouvelle classe doit étendre `MathaleaCustomElement` dans `src/lib/customElements/MathaleaCustomElement.ts`.
 
-L'implémentation du custom element doit être placée dans `src/lib/customElements/`. Les helpers métier qui appellent `create(...)` ou encapsulent le composant peuvent rester dans un autre dossier (par exemple `src/lib/interactif/`) si cela clarifie l'API utilisée par les exercices.
+L'implémentation du custom element doit être placée dans `src/lib/customElements/`. Les helpers métier qui appellent `create(...)` ou encapsulent le composant doivent prendre place dans le même fichier que le composant.
 
 Exemple de signature minimale :
 
@@ -24,11 +24,13 @@ export class MonElement extends MathaleaCustomElement {
 
 - La classe étend `MathaleaCustomElement`.
 - Le tag est déclaré via `static readonly elementTag`.
+- Le tag est en kebab-case (suite de mots en minuscules où les espaces sont remplacés par des tirets - ).
+- Le tag sert de référence pour interactifType et formatInteractif.
 - Le fichier de la classe se trouve dans `src/lib/customElements/`.
 
 2. Méthode statique create
 
-- `create(...)` retourne la chaîne HTML à injecter dans l'énoncé.
+- `create(...)` retourne la chaîne HTML à injecter dans l'énoncé (ou le latex selon le contexte)
 - `create(...)` prend un seul argument objet.
 - Cet objet contient au minimum :
   - `id?: string`
@@ -44,7 +46,7 @@ export class MonElement extends MathaleaCustomElement {
 - Chaque composant expose une fonction helper (par exemple `addXxx(...)`) servant d'interface stable pour les exercices.
 - Signature attendue du helper :
   - 1er argument : `exercice` (instance `IExercice`)
-  - 2e argument : `questionIndex`
+  - 2e argument : `questionIndex` (un nombre entier)
   - 3e argument : objet d'options du composant (incluant éventuellement `id`).
 - Le helper appelle `create(...)` en transmettant `numeroExercice: exercice.numeroExercice` et `questionIndex`.
 - Le type du 3e argument doit être exporté (ex. `XxxOptions`) pour un usage typé dans les exercices.
@@ -116,6 +118,23 @@ Convention recommandée pour éviter les divergences getter/setter :
 - Ne pas appeler `customElements.define(...)` directement : utiliser `registerMathaleaCustomElement(MaClasse)` (exporté par `src/lib/customElements/MathaleaCustomElement.ts`).
 - Ce helper définit l'élément dans le navigateur (de façon idempotente) et l'ajoute au registre `mathaleaCustomElementsRegistry`, qui permet les traitements génériques (corrections CAN notamment).
 
+## Intégration dans l'intéractivité de MathAléa
+
+Afin que le custom élément soit correctement pris en charge par le système d'interactivité, il y plusieurs étapes à réaliser :
+
+- Ajouter dans types.ts le tag à l'union InteractivityType. Les exercices concernés devront exporter cet interactifType.
+- La méthode statique `verifQuestion(exercice,questionIndex)` doit être implémentée dans l'élément. Elle correspond à la méthode correctionInteractive(i) de la classe Exercice lorsque celui-ci a un interactifType = 'custom'. Il suffit donc d'en transposer la logique : vérification, hydratation de exercice.answers, du span#resultatCheckEx et du div#feedbackEx...
+- Le retour de la fonction doit être : `{
+  isOk: boolean
+  feedback: string
+  score: { nbBonnesReponses: number; nbReponses: number }
+}`. comme pour les callbacks de corrections.
+- Cette méthode est ensuite à brancher en plusieurs endroits :
+  - Dans la fonction exerciceInteractif() de gestionInteractif.ts ou il faut ajouter le case correspondant dans le switch. (à terme de l'harmonisation, on pourra avoir un comportement générique pour tous les MathaleaCustomElement, ce qui évitera cette passe)
+  - Dans la fonction checkAnswers() de Can.svelte où une succession de if else permet de renseigner les 'answers' du metaExercice. Il remplace pour la vue Race le flux gestionInteractif déclenché par le bouton "vérifier les réponses" (là aussi, l'harmonisation totale effectuée permettra de faire un traitement générique évitant cette passe)
+  - Voir le paragraphe suivant sur l'affichage des corrections de la Can si la 'value' n'est pas 'humanisée' et correspond à un objet JSON.
+- Dans les exercices utilisant ces éléments, handleAnswers doit être utilisé pour assigner exercice.autoCorrection[questionIndex].Valeur.reponse.value qui sera utilisé par la méthode verifQuestion afin d'obtenir la "goodAnswer" de l'élément pour cette question. Si la goodAnswer doit être un objet, alors celui-ci sera transformé en string via JSON.stringify() et verifQuestion devra faire un JSON.parse pour récupérer l'objet. À l'identique, la 'value' correspondant à la réponse de l'élève sera elle aussi un JSON 'stringifié'
+
 ## Affichage dans les corrections de la CAN
 
 La vue des corrections de la CAN (`Solutions.svelte`, via `src/lib/components/canSolutions.ts`) traite les customElements enregistrés de façon générique grâce à deux hooks statiques de `MathaleaCustomElement`, à surcharger si besoin :
@@ -137,6 +156,8 @@ Ce nommage évite de mélanger :
 
 - API HTML standard (`create`) ;
 - API technique d'instanciation DOM interne.
+
+Un exemple avec MySpreadSheetElement qui permet d'instancier des feuilles de calcul dans le DOM (invisibilisées) pour y faire des tests de formules et valider les saisies de l'élève
 
 ## Cas avancé : `MySpreadsheetElement` (tableur)
 

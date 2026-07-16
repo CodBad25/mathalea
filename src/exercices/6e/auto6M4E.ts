@@ -1,5 +1,5 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -11,7 +11,7 @@ import Exercice from '../Exercice'
 export const dateDePublication = '02/08/2025'
 export const titre = "Choisir des rapports entre fraction d'heure et minutes"
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 
 /**
  * Choisir des rapports entre fraction d\'heure et minutes
@@ -77,7 +77,7 @@ export default class AutoChoisirFractionHeure extends Exercice {
           this,
           i,
           { reponse: { value: reponse } },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
 
         this.listeQuestions[i] = texte

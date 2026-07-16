@@ -3,7 +3,7 @@ export const titre =
   "Connaitre notamment la définition d'une hauteur dans un triangle"
 export const dateDePublication = '10/06/2026'
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 
 /**
  * Pour les nouveaux programmes de 5ème
