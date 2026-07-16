@@ -1,263 +1,159 @@
-import { courbe } from '../../lib/2d/Courbe'
-import type { ObjetMathalea2D } from '../../lib/2d/ObjetMathalea2D'
-import { repere } from '../../lib/2d/reperes'
-import { latex2d } from '../../lib/2d/textes'
-import {
-  bleuMathalea,
-  coopmathsAction,
-  coopmathsCorpus,
-  vertMathalea,
-} from '../../lib/colors'
-import { shuffle } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { reduireAxPlusB } from '../../lib/outils/ecritures'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
+import { choice, shuffle } from '../../lib/outils/arrayOutils'
+import { ecritureAlgebrique, ecritureAlgebriqueSauf1, rienSi1 } from '../../lib/outils/ecritures'
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
-import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+export const dateDePublication = '16/07/2026'
+export const uuid = 'c1978'
 
-export const titre = "Reconnaître la représentation graphique d'une fonction affine"
-export const dateDePublication = '29/06/2026'
-
-export const uuid = 'efa32'
-/**
- * @author Stéphane Guyon
- *
- */
 export const refs = {
   'fr-fr': ['1A-F03-2'],
   'fr-ch': [],
 }
-
 export const interactifReady = true
 export const interactifType = 'qcm'
-export const amcReady = true
+export const amcReady = 'true'
 export const amcType = 'qcmMono'
+export const titre = 'Reconnaître une fonction affine (2)'
+/**
+ * Reconnaître  une fonction affine.
+ * @author Gilles Mora
+ */
 
-type DroiteAffine = {
-  pente: number
-  ordonneeOrigine: number
-  estBonneReponse: boolean
-  couleur: string
-  numero?: number
+// expr : l'expression affichée ; a, b : les coefficients ; etape (optionnel) : le calcul intermédiaire
+type Affine = { expr: string, a: string, b: string, etape?: string }
+
+// Tableau des fonctions AFFINES : on en pioche UNE (la bonne réponse)
+const affines: Array<() => Affine> = [
+  () => { 
+    const a = randint(-10, 10, 0); const b = randint(-10, 10, 0); 
+    return { 
+      expr: `${b}${ecritureAlgebriqueSauf1(a)}x`, 
+      a: `${a}`, 
+      b: `${b}`,
+      etape: `${b}${ecritureAlgebriqueSauf1(a)}x = ${rienSi1(a)}x${ecritureAlgebrique(b)}` 
+    } 
+  },
+  () => { 
+    const a = randint(3, 10); const b = randint(-10, 10, 0); 
+    return { expr: `\\dfrac{${a}}{${a + 1}}x${ecritureAlgebrique(b)}`, a: `\\dfrac{${a}}{${a + 1}}`, b: `${b}` } 
+  },
+  () => { 
+    const a = randint(2, 10); const b = randint(-10, 10, 0); 
+    return { expr: `\\dfrac{1}{${a}}x${ecritureAlgebrique(b)}`, a: `\\dfrac{1}{${a}}`, b: `${b}` } 
+  },
+  () => { 
+    const a = randint(-10, 10, 0); const b = randint(-10, 10, 0); const c = randint(2, 10); 
+    const signeB = b > 0 ? '+' : '-';
+    return { 
+      expr: `\\dfrac{${rienSi1(a)}x${ecritureAlgebrique(b)}}{${c}}`, 
+      a: `\\dfrac{${a}}{${c}}`, 
+      b: `\\dfrac{${b}}{${c}}`,
+      etape: `\\dfrac{${rienSi1(a)}x${ecritureAlgebrique(b)}}{${c}} = \\dfrac{${rienSi1(a)}x}{${c}} ${signeB} \\dfrac{${Math.abs(b)}}{${c}} = \\dfrac{${a}}{${c}}x ${signeB} \\dfrac{${Math.abs(b)}}{${c}}`
+    } 
+  },
+  () => { 
+    const a = randint(-10, 10, 0); const b = randint(-10, 10, 0); 
+    const produit = a * b;
+    const signeProduit = produit > 0 ? '+' : '';
+    return { 
+      expr: `${rienSi1(a)}(x${ecritureAlgebrique(b)})`, 
+      a: `${a}`, 
+      b: `${produit}`,
+      etape: `${rienSi1(a)}(x${ecritureAlgebrique(b)}) = ${rienSi1(a)}x ${signeProduit} ${produit}`
+    } 
+  },
+  () => { 
+    const a = randint(-10, 10, 0); const b = choice([2, 3, 5, 7]); 
+    return { expr: `${rienSi1(a)}x+\\sqrt{${b}}`, a: `${a}`, b: `\\sqrt{${b}}` } 
+  },
+  () => { 
+    const a = choice([2, 3, 5, 7]); const b = randint(-10, 10, 0); 
+    return { expr: `\\sqrt{${a}}x${ecritureAlgebrique(b)}`, a: `\\sqrt{${a}}`, b: `${b}` } 
+  },
+]
+
+// Tableau des fonctions NON AFFINES : on en pioche TROIS de types différents
+const nonAffines: Array<() => string> = [
+  () => { const a = randint(-10, 10, 0); const b = randint(-10, 10, 0); return `${rienSi1(a)}x^2${ecritureAlgebrique(b)}` },
+  () => { const a = randint(-10, 10, 0); const b = randint(-10, 10, 0); return `\\dfrac{${a}}{x}${ecritureAlgebrique(b)}` },
+  () => { const a = randint(-10, 10, 0); const b = randint(-10, 10, 0); return `\\dfrac{${rienSi1(a)}x${ecritureAlgebrique(b)}}{x}` },
+  () => { const a = randint(-10, 10, 0); const b = randint(-10, 10, 0); return `${rienSi1(a)}(x^2${ecritureAlgebrique(b)})` },
+  () => { const a = randint(-10, 10, 0); const b = randint(-10, 10, 0); return `${rienSi1(a)}x^3${ecritureAlgebrique(b)}` },
+  () => { const a = randint(-10, 10, 0); const b = randint(-10, 10, 0); return `${rienSi1(a)}x${b > 0 ? '+' : '-'}\\dfrac{${Math.abs(b)}}{x}` },
+  () => { const a = randint(-10, 10, 0); const b = randint(-10, 10, 0); return `${rienSi1(a)}\\sqrt{x}${ecritureAlgebrique(b)}` },
+]
+
+// Fonction pour piocher 3 distracteurs différents
+function troisNonAffines(): string[] {
+  const indices = [...nonAffines.keys()]
+  const choisis: string[] = []
+  for (let i = 0; i < 3; i++) {
+    const idx = choice(indices)
+    indices.splice(indices.indexOf(idx), 1)
+    choisis.push(nonAffines[idx]())
+  }
+  return choisis
 }
 
-/**
- * Reconnaître graphiquement la droite représentant une fonction affine.
- * @author Stéphane
- */
-export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA {
-  private sontDistinctes(droites: DroiteAffine[]) {
-    return droites.every((droite, index) =>
-      droites
-        .slice(index + 1)
-        .every(
-          (autreDroite) =>
-            droite.pente !== autreDroite.pente ||
-            droite.ordonneeOrigine !== autreDroite.ordonneeOrigine,
-        ),
-    )
-  }
+export default class ReconnaitreFonctionAffine extends ExerciceQcmA {
+  private appliquerLesValeurs(bonne: Affine, distracteurs: string[], nomsForces?: string[]) {
+    // Si des noms sont forcés (version originale), on les utilise, sinon on mélange
+    const noms = nomsForces || shuffle(['f', 'g', 'h', 'u'])
+    const nomBonne = noms[0]
+    const nomD1 = noms[1]
+    const nomD2 = noms[2]
+    const nomD3 = noms[3]
 
-  private positionLabel(
-    pente: number,
-    ordonneeOrigine: number,
-    xMin: number,
-    xMax: number,
-    yMin: number,
-    yMax: number,
-    labelsUtilises: { x: number; y: number }[],
-  ) {
-    const distanceMinimale = 1
-    const ecartExterieur = 0.55
-    const candidats = [
-      { x: xMax + ecartExterieur, y: pente * xMax + ordonneeOrigine },
-      { x: xMin - ecartExterieur, y: pente * xMin + ordonneeOrigine },
-      { x: (yMax - ordonneeOrigine) / pente, y: yMax + ecartExterieur },
-      { x: (yMin - ordonneeOrigine) / pente, y: yMin - ecartExterieur },
-    ].filter(
-      ({ x, y }) =>
-        x >= xMin - ecartExterieur &&
-        x <= xMax + ecartExterieur &&
-        y >= yMin - ecartExterieur &&
-        y <= yMax + ecartExterieur,
-    )
+    this.enonce = `Parmi les $4$ fonctions définies ci-dessous, une seule est une fonction affine. <br>
+    Laquelle ?`
 
-    const label =
-      candidats.find(({ x, y }) =>
-        labelsUtilises.every(
-          (labelUtilise) =>
-            Math.hypot(x - labelUtilise.x, y - labelUtilise.y) >
-            distanceMinimale,
-        ),
-      ) ??
-      candidats[0] ?? {
-        x: xMax + ecartExterieur,
-        y: Math.max(
-          yMin + ecartExterieur,
-          Math.min(yMax - ecartExterieur, pente * xMax + ordonneeOrigine),
-        ),
-      }
+    this.correction = `L'expression algébrique d'une fonction affine s'écrit sous la forme $ax+b$ (où $a$ et $b$ sont des nombres réels).<br>
+Seule la fonction $${nomBonne}$ vérifie cette condition.<br>`
 
-    labelsUtilises.push(label)
-    return label
-  }
-
-  private creerFigure(droites: DroiteAffine[]) {
-    const xMin = -5
-    const xMax = 5
-    const yMin = -6
-    const yMax = 6
-    const r = repere({
-      xMin,
-      xMax,
-      yMin,
-      yMax,
-      grilleX: true,
-      grilleY: true,
-      grilleSecondaire: true,
-      grilleOpacite: 0.45,
-      grilleSecondaireOpacite: 0.18,
-      xLabelMin: xMin,
-      xLabelMax: xMax,
-      yLabelMin: yMin,
-      yLabelMax: yMax,
-      axeXStyle: '->',
-      axeYStyle: '->',
-    })
-    const origine = latex2d('\\text{O}', -0.25, -0.35, {
-      letterSize: 'scriptsize',
-    })
-
-    const objets: ObjetMathalea2D[] = [r, origine]
-    const labelsUtilises: { x: number; y: number }[] = []
-    for (const droite of droites) {
-      objets.push(
-        courbe((x: number) => droite.pente * x + droite.ordonneeOrigine, {
-          repere: r,
-          color: droite.couleur,
-          epaisseur: 2,
-          xMin,
-          xMax,
-          yMin,
-          yMax,
-        }),
-      )
-      const label = this.positionLabel(
-        droite.pente,
-        droite.ordonneeOrigine,
-        xMin,
-        xMax,
-        yMin,
-        yMax,
-        labelsUtilises,
-      )
-      objets.push(
-        latex2d(`\\left(d_${droite.numero}\\right)`, label.x, label.y, {
-          color: droite.couleur,
-          backgroundColor: 'white',
-          letterSize: 'scriptsize',
-        }),
-      )
+    if (bonne.etape) {
+      this.correction += `En effet, on a : $${nomBonne}(x) = ${bonne.etape}$.<br>`
     }
 
-    return mathalea2d(
-      {
-        xmin: xMin - 1.1,
-        xmax: xMax + 1.1,
-        ymin: yMin - 1,
-        ymax: yMax + 1,
-        pixelsParCm: 25,
-        scale: 0.72,
-        center: true,
-      },
-      objets,
-    )
-  }
-
-  private appliquerLesValeurs(a: number, b: number) {
-    let droites: DroiteAffine[] = [
-      {
-        pente: a,
-        ordonneeOrigine: b,
-        estBonneReponse: true,
-        couleur: bleuMathalea,
-      },
-      {
-        pente: -a,
-        ordonneeOrigine: b,
-        estBonneReponse: false,
-        couleur: coopmathsAction,
-      },
-      {
-        pente: 1 / a,
-        ordonneeOrigine: b,
-        estBonneReponse: false,
-        couleur: vertMathalea,
-      },
-      {
-        pente: -1 / a,
-        ordonneeOrigine: -b,
-        estBonneReponse: false,
-        couleur: coopmathsCorpus,
-      },
-    ]
-
-    if (!this.sontDistinctes(droites)) {
-      droites[3] = {
-        pente: a + 1,
-        ordonneeOrigine: b - 1,
-        estBonneReponse: false,
-        couleur: coopmathsCorpus,
-      }
-    }
-
-    droites = shuffle(droites).map((droite, index) => ({
-      ...droite,
-      numero: index + 1,
-    }))
-
-    const bonneDroite = droites.find((droite) => droite.estBonneReponse)
-    if (bonneDroite == null) {
-      throw new Error('Aucune bonne droite générée.')
-    }
-    const mauvaisesDroites = droites.filter((droite) => !droite.estBonneReponse)
-    const figure = this.creerFigure(droites)
-    const fonction = reduireAxPlusB(a, b)
-
-    this.enonce = `On considère la fonction affine $f$ définie sur $\\mathbb{R}$ par $f(x)=${fonction}$.<br>
-On a représenté ci-dessous quatre droites dans un repère.<br><br>
-${figure}<br>
-La droite qui représente la fonction $f$ est`
+    this.correction += `On identifie ainsi $a=${bonne.a}$ et $b=${bonne.b}$.`
 
     this.reponses = [
-      `$\\left(d_${bonneDroite?.numero}\\right)$`,
-      ...mauvaisesDroites.map((droite) => `$\\left(d_${droite.numero}\\right)$`),
+      `$${nomBonne}(x) = ${bonne.expr}$`,
+      `$${nomD1}(x) = ${distracteurs[0]}$`,
+      `$${nomD2}(x) = ${distracteurs[1]}$`,
+      `$${nomD3}(x) = ${distracteurs[2]}$`,
     ]
-
-    this.correction = `La représentation graphique de la fonction $f$ est la droite d'équation $y=${fonction}$.<br>
-Elle coupe l'axe des ordonnées en $${texNombre(b)}$ et son coefficient directeur est $${texNombre(a)}$.<br>
-La droite qui possède ces deux caractéristiques est $${miseEnEvidence(`\\left(d_${bonneDroite?.numero}\\right)`)}$.`
   }
 
   versionOriginale = () => {
-    this.appliquerLesValeurs(2, 3)
+    // Version figée qui nécessite une étape de calcul pour bien montrer le fonctionnement
+    const bonne: Affine = {
+      expr: '\\dfrac{3x-4}{5}',
+      a: '\\dfrac{3}{5}',
+      b: '-\\dfrac{4}{5}',
+      etape: '\\dfrac{3x-4}{5} = \\dfrac{3x}{5} - \\dfrac{4}{5} = \\dfrac{3}{5}x - \\dfrac{4}{5}'
+    }
+    const distracteurs = [
+      '\\dfrac{3x^2-4}{5}',
+      '\\dfrac{3}{5x}-4',
+      '3x^3-4'
+    ]
+    // On force l'ordre des noms pour la version figée ('g' sera la bonne réponse)
+    this.appliquerLesValeurs(bonne, distracteurs, ['g', 'f', 'h', 'u'])
   }
 
   versionAleatoire = () => {
-    const a = randint(-3, 3, [-1, 0, 1])
-    let b = randint(-4, 4, 0)
-    while (b === a * a || b === -a * a) {
-      b = randint(-4, 4, 0)
-    }
-    this.appliquerLesValeurs(a, b)
+    const bonne = choice(affines)()
+    const distracteurs = troisNonAffines()
+    this.appliquerLesValeurs(bonne, distracteurs)
   }
 
   constructor() {
     super()
-    this.versionAleatoire()
     this.options = { vertical: false, ordered: false }
-    this.besoinFormulaireCaseACocher = false
-    this.besoinFormulaire4CaseACocher = false
+    this.versionAleatoire()
   }
 }
