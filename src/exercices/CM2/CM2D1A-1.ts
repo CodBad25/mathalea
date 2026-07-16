@@ -188,7 +188,7 @@ export default class OrganiserDonneesDepuisTexte extends Exercice {
       const ligne = Math.floor(i / (nbFruits + 1))
       const colonne = i % (nbFruits + 1)
       const ref = `L${ligne + 1}C${colonne + 1}`
-      const valeur = Object.assign({}, { value: `${tabLinesCorr[i]}` })
+      const valeur = Object.assign({}, { value: `${tabLines2[i]}` })
       const cellule = Object.fromEntries([[ref, valeur]])
       objetReponse = Object.assign(objetReponse, cellule)
     }

@@ -24,7 +24,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true // pour définir qu'exercice peut s'afficher en mode interactif.
-export const interactifType = 'liste-deroulante' // 'mathLive'
+export const interactifType = 'liste-deroulante'
 export const amcReady = true // pour définir que l'exercice peut servir à AMC
 export const amcType = 'qcmMono'
 export const titre =

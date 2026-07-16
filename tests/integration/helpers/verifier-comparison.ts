@@ -17,8 +17,8 @@ export function verifyComparisonOnly(
 
   for (let i = 0; i < exercice.autoCorrection.length; i++) {
     const ac = exercice.autoCorrection[i]
-    const format = ac?.reponse?.param?.formatInteractif ?? 'mathlive'
-    const valeur = ac?.reponse?.valeur
+    const format = ac?.formatInteractif ?? 'mathlive'
+    const valeur = ac?.valeur
 
     if (
       ![
@@ -27,7 +27,7 @@ export function verifyComparisonOnly(
         'fillInTheBlank',
         'tableauMathlive',
         'MetaInteractif2d',
-        'multiMathfield',
+        'multi-mathfield',
       ].includes(format)
     ) {
       results.push({
