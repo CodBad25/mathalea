@@ -29,6 +29,31 @@ export function init() {
     },
   }
 
+  Blockly.Blocks['demarrer'] = {
+    init: function () {
+      this.appendDummyInput().appendField('Demarrer')
+      this.setInputsInline(true)
+      this.setNextStatement(true, null)
+      this.setStyle('hat_blocks')
+      this.setColour(50)
+      this.setTooltip('Point de depart du script')
+      this.setHelpUrl('')
+    },
+  }
+
+  Blockly.Blocks['dire_2s'] = {
+    init: function () {
+      this.appendValueInput('MESSAGE').setCheck(null).appendField('dire')
+      this.appendDummyInput().appendField('pendant 2 s')
+      this.setInputsInline(true)
+      this.setPreviousStatement(true, null)
+      this.setNextStatement(true, null)
+      this.setColour(160)
+      this.setTooltip('Affiche une valeur pendant 2 secondes')
+      this.setHelpUrl('')
+    },
+  }
+
   Blockly.Blocks['reciproque'] = {
     init: function () {
       this.appendDummyInput().appendField(

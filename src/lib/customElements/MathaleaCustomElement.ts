@@ -2,6 +2,7 @@ import { context } from '../../modules/context'
 import type { IExercice } from '../types'
 export const listOfCustomElements = [
   'interactive-clock',
+  'blockly-editor',
   'multi-mathfield',
   'liste-deroulante',
   'my-spreadsheet',

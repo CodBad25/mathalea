@@ -3,6 +3,7 @@ import Decimal from 'decimal.js'
 import type { MathfieldElement } from 'mathlive'
 import {
   isInteractivityType,
+  isMathliveCompatible,
   type AnswerValueType,
   type AutoCorrection,
   type ClickFigures,
@@ -24,14 +25,10 @@ import {
   inferNumericValueForAMC,
 } from '../amc/amcInferenceHelpers'
 import type { AutoCorrectionAMC, ReponseParams } from '../amc/amcTypes'
-import DemiDroiteInteractiveElement from '../customElements/demi_droite_interactive'
-import { GuideAne } from '../customElements/GuideAne'
-import { InteractiveClock } from '../customElements/InteractiveClock'
-import ListeDeroulanteElement from '../customElements/ListeDeroulanteElement'
-import { MultiMathfieldElement } from '../customElements/MultiMathfield'
-import { MySpreadsheetElement } from '../customElements/MySpreadSheet'
-import { SvgSelectionElement } from '../customElements/SvgSelectionElement'
-import TrigoCircleSelectionElement from '../customElements/TrigoCircleSelectionElement'
+import {
+  listOfCustomElements,
+  mathaleaCustomElementsRegistry,
+} from '../customElements/MathaleaCustomElement'
 import { addElement, get, setStyles } from '../html/dom'
 import { Complexe } from '../mathFonctions/Complexe'
 import { afficheScore } from './afficheScore'
@@ -114,271 +111,171 @@ export function exerciceInteractif(
   }
 
   for (let i = 0; i < exercice.autoCorrection.length; i++) {
-    const format = exercice.autoCorrection[i]?.formatInteractif
+    const format = exercice.autoCorrection[i]?.formatInteractif ?? 'mathlive'
     let resultat: string
-    switch (format) {
-      case 'custom':
-        {
-          if (isMetaExercice(exercice)) {
-            const result = exercice.correctionInteractives[i](i)
-            if (result === 'OK') nbQuestionsValidees++
-            else nbQuestionsNonValidees++
-          }
-        }
-        break
-      case 'dnd':
-        {
-          const result = verifDragAndDrop(exercice, i)
-          nbQuestionsValidees += result.score.nbBonnesReponses
-          nbQuestionsNonValidees +=
-            result.score.nbReponses - result.score.nbBonnesReponses
-          if (result.feedback !== '') {
-            const spanFeedback = document.querySelector(
-              `#feedbackEx${exercice.numeroExercice}Q${i}`,
-            )
-            if (spanFeedback != null) {
-              spanFeedback.innerHTML = `💡 ${result.feedback}`
-              spanFeedback.classList.add(
-                'py-2',
-                'italic',
-                'text-coopmaths-warn-darkest',
-                'dark:text-coopmathsdark-warn-darkest',
-              )
-            }
-          }
-        }
-        break
-      case 'qcm':
-        resultat = verifQuestionQcm(exercice, i)
-        if (resultat === 'OK') nbQuestionsValidees++
-        else nbQuestionsNonValidees++
-        break
-      case 'MetaInteractif2d':
-        {
-          const result = verifQuestionMetaInteractif2d(exercice, i)
-          if (result == null) {
-            window.notify('erreur dans la correction de la question', {
-              exercice,
-              i,
-            })
-          } else {
-            nbQuestionsValidees += result.score.nbBonnesReponses
-            nbQuestionsNonValidees +=
-              result.score.nbReponses - result.score.nbBonnesReponses
-            if (result.feedback && result.feedback !== '') {
-              const divFeedback = document.querySelector(
-                `#feedbackEx${exercice.numeroExercice}Q${i}`,
-              )
-              if (divFeedback != null) {
-                divFeedback.innerHTML = `💡 ${result.feedback}`
-                divFeedback.classList.add(
-                  'py-2',
-                  'italic',
-                  'text-coopmaths-warn-darkest',
-                  'dark:text-coopmathsdark-warn-darkest',
-                )
-                ;(divFeedback as HTMLDivElement).style.display = 'block'
-              }
-            }
-          }
-        }
-        break
-
-      case 'liste-deroulante':
-        {
-          const result = ListeDeroulanteElement.verifQuestion(exercice, i)
-          if (result.isOk) nbQuestionsValidees++
-          else nbQuestionsNonValidees++
-        }
-        break
-      case 'cliqueFigure':
-        if ('callback' in exercice && typeof exercice.callback === 'function') {
-          resultat = verifQuestionCliqueFigure(
-            exercice,
-            i,
-            exercice.callback as (exercice: IExercice, i: number) => void,
+    // On traite déjà la grande majorité des cas : verifQuestionMathlive condense Plus de 80% des exos sans doute
+    if (isMathliveCompatible(format)) {
+      const result = verifQuestionMathLive(exercice, i)
+      if (result == null) {
+        window.notify('erreur dans la correction de la question', {
+          exercice,
+          i,
+        })
+      } else {
+        nbQuestionsValidees += result.score.nbBonnesReponses
+        nbQuestionsNonValidees +=
+          result.score.nbReponses - result.score.nbBonnesReponses
+        if (result.feedback && result.feedback !== '') {
+          const divFeedback = document.querySelector(
+            `#feedbackEx${exercice.numeroExercice}Q${i}`,
           )
-        } else {
-          resultat = verifQuestionCliqueFigure(exercice, i)
-        }
-        if (resultat === 'OK') nbQuestionsValidees++
-        else nbQuestionsNonValidees++
-        break
-      // MathaleaCustomElements
-      case 'multi-mathfield':
-        {
-          const result = MultiMathfieldElement.verifQuestion(exercice, i)
-          if (result == null) {
-            window.notify('erreur dans la correction de la question', {
-              exercice,
-              i,
-            })
-          } else {
-            nbQuestionsValidees += result.score.nbBonnesReponses
-            nbQuestionsNonValidees +=
-              result.score.nbReponses - result.score.nbBonnesReponses
-            if (result.feedback && result.feedback !== '') {
-              const divFeedback = document.querySelector(
-                `#feedbackEx${exercice.numeroExercice}Q${i}`,
-              )
-              if (divFeedback != null) {
-                divFeedback.innerHTML = `💡 ${result.feedback}`
-                divFeedback.classList.add(
-                  'py-2',
-                  'italic',
-                  'text-coopmaths-warn-darkest',
-                  'dark:text-coopmathsdark-warn-darkest',
-                )
-                ;(divFeedback as HTMLDivElement).style.display = 'block'
-              }
-            }
-          }
-        }
-        break
-      case 'interactive-clock':
-        {
-          const result = InteractiveClock.verifQuestion(exercice, i)
-          if (result == null) {
-            window.notify('erreur dans la correction de la question', {
-              exercice,
-              i,
-            })
-          } else {
-            if (result.isOk) nbQuestionsValidees++
-            else nbQuestionsNonValidees++
-          }
-        }
-        break
-      case 'guide-ane':
-        {
-          const result = GuideAne.verifQuestion(exercice, i)
-          if (result == null) {
-            window.notify('erreur dans la correction de la question', {
-              exercice,
-              i,
-            })
-          } else {
-            if (result.isOk) nbQuestionsValidees++
-            else nbQuestionsNonValidees++
-          }
-        }
-        break
-      case 'trigo-circle-selection':
-        {
-          const result = TrigoCircleSelectionElement.verifQuestion(exercice, i)
-          if (result == null) {
-            window.notify('erreur dans la correction de la question', {
-              exercice,
-              i,
-            })
-          } else {
-            if (result.isOk) nbQuestionsValidees++
-            else nbQuestionsNonValidees++
-          }
-        }
-        break
-      case 'svg-selection':
-        {
-          const result = SvgSelectionElement.verifQuestion(exercice, i)
-          if (result == null) {
-            window.notify('erreur dans la correction de la question', {
-              exercice,
-              i,
-            })
-          } else {
-            if (result.isOk) nbQuestionsValidees++
-            else nbQuestionsNonValidees++
-          }
-        }
-        break
-      case 'my-spreadsheet':
-        {
-          const result = MySpreadsheetElement.verifQuestion(exercice, i)
-          if (result == null) {
-            window.notify('erreur dans la correction de la question', {
-              exercice,
-              i,
-            })
-          } else {
-            nbQuestionsValidees += result.score.nbBonnesReponses
-            nbQuestionsNonValidees +=
-              result.score.nbReponses - result.score.nbBonnesReponses
-            if (result.feedback && result.feedback !== '') {
-              const divFeedback = document.querySelector(
-                `#feedbackEx${exercice.numeroExercice}Q${i}`,
-              )
-              if (divFeedback != null) {
-                divFeedback.innerHTML = `💡 ${result.feedback}`
-                divFeedback.classList.add(
-                  'py-2',
-                  'italic',
-                  'text-coopmaths-warn-darkest',
-                  'dark:text-coopmathsdark-warn-darkest',
-                )
-                ;(divFeedback as HTMLDivElement).style.display = 'block'
-              }
-            }
-          }
-        }
-        break
-      case 'demi-droite-interactive':
-        {
-          const result = DemiDroiteInteractiveElement.verifQuestion(exercice, i)
-          if (result == null) {
-            window.notify('erreur dans la correction de la question', {
-              exercice,
-              i,
-            })
-          } else {
-            nbQuestionsValidees += result.score.nbBonnesReponses
-            nbQuestionsNonValidees +=
-              result.score.nbReponses - result.score.nbBonnesReponses
-            if (result.feedback && result.feedback !== '') {
-              const divFeedback = document.querySelector(
-                `#feedbackEx${exercice.numeroExercice}Q${i}`,
-              )
-              if (divFeedback != null) {
-                divFeedback.innerHTML = `💡 ${result.feedback}`
-                divFeedback.classList.add(
-                  'py-2',
-                  'italic',
-                  'text-coopmaths-warn-darkest',
-                  'dark:text-coopmathsdark-warn-darkest',
-                )
-                ;(divFeedback as HTMLDivElement).style.display = 'block'
-              }
-            }
-          }
-        }
-        break
-
-      default: {
-        const result = verifQuestionMathLive(exercice, i)
-        if (result == null) {
-          window.notify('erreur dans la correction de la question', {
-            exercice,
-            i,
-          })
-        } else {
-          nbQuestionsValidees += result.score.nbBonnesReponses
-          nbQuestionsNonValidees +=
-            result.score.nbReponses - result.score.nbBonnesReponses
-          if (result.feedback && result.feedback !== '') {
-            const divFeedback = document.querySelector(
-              `#feedbackEx${exercice.numeroExercice}Q${i}`,
+          if (divFeedback != null) {
+            divFeedback.innerHTML = `💡 ${result.feedback}`
+            divFeedback.classList.add(
+              'py-2',
+              'italic',
+              'text-coopmaths-warn-darkest',
+              'dark:text-coopmathsdark-warn-darkest',
             )
-            if (divFeedback != null) {
-              divFeedback.innerHTML = `💡 ${result.feedback}`
-              divFeedback.classList.add(
-                'py-2',
-                'italic',
-                'text-coopmaths-warn-darkest',
-                'dark:text-coopmathsdark-warn-darkest',
-              )
-              ;(divFeedback as HTMLDivElement).style.display = 'block'
-            }
+            ;(divFeedback as HTMLDivElement).style.display = 'block'
           }
         }
+      }
+    } else if (listOfCustomElements.includes(format)) {
+      // On traite le cas de tous les MathaleaCustomElement ici
+      const liste = Array.from(mathaleaCustomElementsRegistry)
+      const [tag, elementClasse] =
+        liste.find((custom) => custom[0] === format) ?? []
+      if (tag == null || elementClasse == null) {
+        throw Error(
+          "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
+        )
+      }
+      if (
+        elementClasse.verifQuestion == null ||
+        typeof elementClasse.verifQuestion !== 'function'
+      ) {
+        throw Error(
+          `L'élément '${tag}' n'a pas de méthode verifQuestion ou celle-ci n'est pas une fonction`,
+        )
+      }
+      const result = elementClasse.verifQuestion(exercice, i)
+      if (
+        result == null ||
+        typeof result !== 'object' ||
+        !('isOk' in result) ||
+        !('score' in result)
+      ) {
+        throw Error(
+          `L'élément '${tag}' a une fonction verifQuestion qui n'a pas retourné une valeur conforme.`,
+        )
+      }
+
+      nbQuestionsValidees += result.score.nbBonnesReponses
+      nbQuestionsNonValidees +=
+        result.score.nbReponses - result.score.nbBonnesReponses
+      if (result.feedback && result.feedback !== '') {
+        const divFeedback = document.querySelector(
+          `#feedbackEx${exercice.numeroExercice}Q${i}`,
+        )
+        if (divFeedback != null) {
+          divFeedback.innerHTML = `💡 ${result.feedback}`
+          divFeedback.classList.add(
+            'py-2',
+            'italic',
+            'text-coopmaths-warn-darkest',
+            'dark:text-coopmathsdark-warn-darkest',
+          )
+          ;(divFeedback as HTMLDivElement).style.display = 'block'
+        }
+      }
+    }
+    // Ensuite on traite tout ce qui va dans verifQuestionMathlive soit l'essentiel de tous les exos
+    else {
+      // On traite les autres cas ici
+      switch (format) {
+        case 'custom': // cas particulier d'un MetaExercice : il n'as pa d'interactifType mais il peut avoir des "questions" venant d'exercices 'custom'
+          {
+            if (isMetaExercice(exercice)) {
+              const result = exercice.correctionInteractives[i](i)
+              if (result === 'OK') nbQuestionsValidees++
+              else nbQuestionsNonValidees++
+            }
+          }
+          break
+        case 'dnd':
+          {
+            const result = verifDragAndDrop(exercice, i)
+            nbQuestionsValidees += result.score.nbBonnesReponses
+            nbQuestionsNonValidees +=
+              result.score.nbReponses - result.score.nbBonnesReponses
+            if (result.feedback !== '') {
+              const spanFeedback = document.querySelector(
+                `#feedbackEx${exercice.numeroExercice}Q${i}`,
+              )
+              if (spanFeedback != null) {
+                spanFeedback.innerHTML = `💡 ${result.feedback}`
+                spanFeedback.classList.add(
+                  'py-2',
+                  'italic',
+                  'text-coopmaths-warn-darkest',
+                  'dark:text-coopmathsdark-warn-darkest',
+                )
+              }
+            }
+          }
+          break
+        case 'qcm':
+          resultat = verifQuestionQcm(exercice, i)
+          if (resultat === 'OK') nbQuestionsValidees++
+          else nbQuestionsNonValidees++
+          break
+        case 'MetaInteractif2d':
+          {
+            const result = verifQuestionMetaInteractif2d(exercice, i)
+            if (result == null) {
+              window.notify('erreur dans la correction de la question', {
+                exercice,
+                i,
+              })
+            } else {
+              nbQuestionsValidees += result.score.nbBonnesReponses
+              nbQuestionsNonValidees +=
+                result.score.nbReponses - result.score.nbBonnesReponses
+              if (result.feedback && result.feedback !== '') {
+                const divFeedback = document.querySelector(
+                  `#feedbackEx${exercice.numeroExercice}Q${i}`,
+                )
+                if (divFeedback != null) {
+                  divFeedback.innerHTML = `💡 ${result.feedback}`
+                  divFeedback.classList.add(
+                    'py-2',
+                    'italic',
+                    'text-coopmaths-warn-darkest',
+                    'dark:text-coopmathsdark-warn-darkest',
+                  )
+                  ;(divFeedback as HTMLDivElement).style.display = 'block'
+                }
+              }
+            }
+          }
+          break
+        case 'cliqueFigure':
+          if (
+            'callback' in exercice &&
+            typeof exercice.callback === 'function'
+          ) {
+            resultat = verifQuestionCliqueFigure(
+              exercice,
+              i,
+              exercice.callback as (exercice: IExercice, i: number) => void,
+            )
+          } else {
+            resultat = verifQuestionCliqueFigure(exercice, i)
+          }
+          if (resultat === 'OK') nbQuestionsValidees++
+          else nbQuestionsNonValidees++
+          break
       }
     }
   }

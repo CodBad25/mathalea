@@ -345,6 +345,7 @@ export type InteractivityType =
   | 'interactive-clock' // Non compatible AMC
   | 'guide-ane' // Non compatible AMC
   | 'demi-droite-interactive'
+  | 'blockly-editor'
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -366,7 +367,18 @@ export function isInteractivityType(
     value === 'trigo-circle-selection' ||
     value === 'interactive-clock' ||
     value === 'guide-ane' ||
-    value === 'demi-droite-interactive'
+    value === 'demi-droite-interactive' ||
+    value === 'blockly-editor'
+  )
+}
+
+export function isMathliveCompatible(value: string): boolean {
+  const lowCaseValue = value.toLowerCase()
+  return (
+    lowCaseValue === 'mathlive' ||
+    lowCaseValue === 'fillintheblank' ||
+    lowCaseValue === 'tableaumathlive' ||
+    lowCaseValue === 'texte'
   )
 }
 
