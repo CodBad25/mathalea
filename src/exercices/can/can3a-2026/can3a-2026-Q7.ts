@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -28,7 +27,7 @@ export default class Can32026Q7 extends ExerciceCan {
   enonce(a?: string, b?: number) {
     let c = 3
     if (a == null || b == null) {
-      a = choice(['La moitié', 'Le tiers', 'Le quart'])
+      a = this.quotaChoice('a', ['La moitié', 'Le tiers', 'Le quart'])
       c = a === 'La moitié' ? 2 : a === 'Le tiers' ? 3 : 4
       b =
         ((c === 4 ? randint(1, 2) : c === 3 ? randint(1, 3) : randint(1, 4)) +

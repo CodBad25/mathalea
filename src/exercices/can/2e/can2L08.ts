@@ -6,7 +6,6 @@ import {
 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { abs } from '../../../lib/outils/nombres'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation du type $\\dfrac{x+a}{b}=c$'
 export const interactifReady = true
@@ -34,9 +33,9 @@ export default class ResoudreEquationAvecQuotient extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(-10, 10, 0)
-    const b = randint(-10, 10, [-1, 0, 1])
-    const c = randint(-10, 10, 0)
+    const a = this.quotaRandint('a', -10, 10, [0])
+    const b = this.quotaRandint('b', -10, 10, [-1, 0, 1])
+    const c = this.quotaRandint('c', -10, 10, [0])
     switch (choice([1])) {
       case 1:
         if (!this.interactif) {

@@ -3,7 +3,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { sp } from '../../../lib/outils/outilString'
-import { randint } from '../../../modules/outils'
 export const titre = 'Ajouter une durée'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -28,7 +27,7 @@ export default class AjouterMinutes extends ExerciceSimple {
   nouvelleVersion() {
     const annee = 2026
     const h = 20
-    const k = this.canOfficielle ? 50 : randint(8, 11) * 5
+    const k = this.canOfficielle ? 50 : this.quotaRandint('k', 8, 11) * 5
     this.question = `Ajouter $${k}$ minutes à $20$ h $${annee % 100}$ minutes.`
 
     this.correction = `$20$ h $${annee % 100}$ minutes + $${k}$ minutes  $=$$20$ h $${annee % 100}$ minutes + $${60 - (annee % 100)}$ minutes  + $${k - (60 - (annee % 100))}$ minutes  $=${miseEnEvidence(`${h + 1}\\text{ h } ${(annee % 100) + k - 60}\\text{ min}`)}$.`

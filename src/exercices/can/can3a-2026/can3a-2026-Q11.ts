@@ -38,7 +38,7 @@ export default class Can32026Q11 extends ExerciceCan {
         b = randint(-2, 2)
         a = randint(-2, 4, [b])
       } while (a === 0 && b === 0)
-      choix = choice([true, false])
+      choix = this.quotaChoice('choix', [true, false])
     }
 
     this.reponse = choix ? a : b

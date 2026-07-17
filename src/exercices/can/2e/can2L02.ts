@@ -4,7 +4,6 @@ import {
 } from '../../../lib/outils/ecritures'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer les coordonnées d’un point sur une droite'
 export const interactifReady = true
@@ -30,9 +29,9 @@ export default class CoordonneesPointDroite extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(-10, 10, 0)
-    const b = randint(-10, 10, 0)
-    const c = randint(-10, 10, 0)
+    const a = this.quotaRandint('a', -10, 10, [0])
+    const b = this.quotaRandint('b', -10, 10, [0])
+    const c = this.quotaRandint('c', -10, 10, [0])
 
     this.reponse = `${c};${a * c + b}`
     this.question = ` Déterminer les coordonnées du point ${context.isDiaporama ? '<br>' : ''} de la   droite 

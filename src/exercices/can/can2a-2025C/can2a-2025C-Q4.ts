@@ -1,9 +1,7 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
-import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer une somme d\'un entier et d\'une fraction'
 export const interactifReady = true
@@ -21,8 +19,8 @@ export const refs = {
 export default class Can2a2025CQ4 extends ExerciceCan {
   enonce(a?: number, num?: number, den?: number): void {
     if (a == null || num == null || den == null) {
-      a = randint(-5, -1)
-      den = choice([3, 4, 5, 6, 7])
+      a = this.quotaRandint('a', -5, -1)
+      den = this.quotaChoice('den', [3, 4, 5, 6, 7])
       num = den - 1
     }
 

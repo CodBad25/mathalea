@@ -3,7 +3,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
-import { choice, shuffle } from '../../../lib/outils/arrayOutils'
+import { shuffle } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -40,7 +40,7 @@ export default class DeveloppementDouble extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2, 3])) {
+    switch (this.quotaChoice('type', [1, 2, 3])) {
       case 1: // (ax+b)(cx+d) avec a et c =1
         {
           const a = 1

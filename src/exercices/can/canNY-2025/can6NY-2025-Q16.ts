@@ -7,7 +7,6 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { sp } from '../../../lib/outils/outilString'
-import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = 'Trouver le plus grand nombre'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -31,7 +30,7 @@ export default class PlusGrandNombre extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const [aa, bb, cc] = choice([
+    const [aa, bb, cc] = this.quotaChoice('typeFraction', [
       [2025, 'dixièmes', 10],
       [2025, 'centièmes', 100],
       [2025, 'millièmes', 1000],

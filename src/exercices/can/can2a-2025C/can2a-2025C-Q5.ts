@@ -1,6 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer un produit par 11'
 export const interactifReady = true
@@ -18,7 +17,7 @@ export const refs = {
 export default class Can2a2025CQ5 extends ExerciceCan {
   enonce(a?: number): void {
     if (a == null) {
-      a = randint(52, 99, [60, 70, 80, 90])
+      a = this.quotaRandint('a', 52, 99, [60, 70, 80, 90])
     }
 
     const resultat = a * 11

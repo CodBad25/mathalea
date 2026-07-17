@@ -1,7 +1,6 @@
 import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { sp } from '../../../lib/outils/outilString'
 import { minToHoraire } from '../../../lib/outils/dateEtHoraires'
@@ -29,7 +28,7 @@ export default class SuiteACompleterHeures extends ExerciceSimple {
 
   nouvelleVersion() {
     const h = 20
-    const k = randint(14, 16)
+    const k = this.quotaRandint('k', 14, 16)
     const minutes1Aff = minToHoraire(20 * 60 + 25, true)
     const minutes2Aff = minToHoraire(20 * 60 + 25 + k, true)
     const minutes3Aff = minToHoraire(20 * 60 + 25 + 2 * k, true)

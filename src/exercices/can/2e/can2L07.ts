@@ -1,6 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Factoriser une expression'
@@ -29,8 +27,8 @@ export default class Factoriser extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const r = choice([2, 3, 5])
-    const couplenm = choice([
+    const r = this.quotaChoice('r', [2, 3, 5])
+    const couplenm = this.quotaChoice('couplenm', [
       [2, 3],
       [3, 4],
       [2, 5],
@@ -57,9 +55,9 @@ export default class Factoriser extends ExerciceSimple {
     const n = couplenm[0]
     const m = couplenm[1]
 
-    const a = randint(1, 9)
-    const b = randint(2, 9)
-    switch (choice([1, 2, 3, 4, 5])) {
+    const a = this.quotaRandint('a', 1, 9)
+    const b = this.quotaRandint('b', 2, 9)
+    switch (this.quotaChoice('cas', [1, 2, 3, 4, 5])) {
       case 1:
         this.question = ` Factoriser au maximum  $${n * r}x+${m * r}x^2$.` //
         this.correction = `$${r}x$ est un facteur commun aux deux termes : $${n * r}x$ et $${m * r}x^2$.<br>

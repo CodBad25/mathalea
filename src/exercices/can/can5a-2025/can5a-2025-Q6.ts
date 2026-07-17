@@ -19,9 +19,9 @@ export const refs = {
 export default class Can2025N5Q6 extends ExerciceCan {
   enonce(a?: number, b?: number, c?: number) {
     if (a == null || b == null || c == null) {
-      a = randint(2, 4)
+      a = this.quotaRandint('a', 2, 4)
       b = randint(2, 9 - a)
-      c = randint(2, 5)
+      c = this.quotaRandint('c', 2, 5)
     }
     this.reponse = a + b * c
     this.question = `$${a} + ${b}\\times ${c}$`

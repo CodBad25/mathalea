@@ -7,7 +7,6 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Compter le nombre d'axe de symétrie d'une figure"
@@ -63,7 +62,7 @@ this.optionsChampTexte = { texteApres: '.' }
     objets1.push(P1, code1, code2, code3)
     objets2.push(P2, code1b, code1c, code2c, code3c, code4c, code2b, code3)
     objets3.push(P3, code1c, code3d, code4d)
-    const choix = randint(1, 3)
+    const choix = this.quotaRandint('choix', 1, 3)
     if (this.canOfficielle) {
       this.reponse = 2
       this.question = mathalea2d(

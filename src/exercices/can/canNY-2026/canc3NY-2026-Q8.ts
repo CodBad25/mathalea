@@ -1,10 +1,8 @@
 import Decimal from 'decimal.js'
 import { latex2d } from '../../../lib/2d/textes'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
@@ -33,13 +31,13 @@ export default class CompleterUneSuite extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const pas = this.canOfficielle ? 2 : choice([1, 2, 3, 4, 5]) // Graduation de 2, 3, 4 ou 5
+    const pas = this.canOfficielle ? 2 : this.quotaChoice('pas', [1, 2, 3, 4, 5]) // Graduation de 2, 3, 4 ou 5
     const abs0 = annee - 5 * pas // 5 intervalles avant l'année
     const abs1 = annee // L'année est le repère central
     const abs2 = annee + 5 * pas // 5 intervalles après l'année
     const x1 = this.canOfficielle
       ? new Decimal(0.6)
-      : new Decimal(randint(1, 9, 5) * 2).div(10)
+      : new Decimal(this.quotaRandint('x1', 1, 9, [5]) * 2).div(10)
     const x1B = Number(x1.toFixed(1))
     const x2 = x1.mul(5 * pas).add(abs0)
     const d = droiteGraduee({

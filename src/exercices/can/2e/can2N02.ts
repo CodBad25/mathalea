@@ -45,7 +45,7 @@ export default class PlusPetitEnsemble extends ExerciceSimple {
     this.question =
       'Parmi $\\mathbb{R}$, $\\mathbb{Q}$, $\\mathbb{D}$, $\\mathbb{Z}$ et $\\mathbb{N}$, quel est le plus petit ensemble de nombres auquel appartient '
     switch (
-      choice(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']) //
+      this.quotaChoice('type', ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']) //
     ) {
       case 'a':
         a = randint(0, 150)

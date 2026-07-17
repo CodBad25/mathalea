@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -27,7 +26,7 @@ export default class ChangerUnites extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = choice([true, false])
+    const choix = this.quotaChoice('choix', [true, false])
     if (choix) {
       this.reponse = 20.25
       this.question = `$${texNombre(2025)}\\text{ cm}$  `

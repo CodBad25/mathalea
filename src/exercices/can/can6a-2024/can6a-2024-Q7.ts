@@ -1,7 +1,6 @@
 import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Compléter une table de multiplication'
@@ -23,8 +22,8 @@ export default class NomExercice extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = this.canOfficielle ? 9 : randint(4, 9)
-    const b = this.canOfficielle ? 4 : randint(4, 9)
+    const a = this.canOfficielle ? 9 : this.quotaRandint('a', 4, 9)
+    const b = this.canOfficielle ? 4 : this.quotaRandint('b', 4, 9)
 
     this.reponse = texNombre(b, 0)
     this.consigne = 'Complète. '

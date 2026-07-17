@@ -34,7 +34,7 @@ export default class ReunionIntervalles extends ExerciceSimple {
     const cours =
       'La réunion de deux intervalles $I$ et $J$ (notée $I\\cup J$) est l’ensemble qui contient les nombres appartenant à  au moins un des deux intervalles $I$ ou $J$.<br>'
     switch (
-      choice([1, 2, 3, 4, 5, 6, 7]) //, 2,3,4,5,6,7
+      this.quotaChoice('type', [1, 2, 3, 4, 5, 6, 7]) //, 2,3,4,5,6,7
     ) {
       case 1: //  [a;b] union [c;d] avec c<b resultat [a;d]
         {

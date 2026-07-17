@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -26,8 +25,8 @@ export default class calcAvecChiffresPrio extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const b = choice([2, 5, 10, 20, 100, 1000])
-    if (choice([true, false])) {
+    const b = this.quotaChoice('b', [2, 5, 10, 20, 100, 1000])
+    if (this.quotaChoice('choix', [true, false])) {
       this.question = `Quel est le plus grand entier multiple de $${texNombre(b)}$ strictement inférieur à $${texNombre(2025, 0)}$ ?`
       if (2025 % b === 0) {
         this.reponse = texNombre(2025 - b, 0)

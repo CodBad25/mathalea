@@ -3,7 +3,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
-import { randint } from '../../../modules/outils'
 export const titre = 'Compléter une égalité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -29,7 +28,7 @@ export default class EgaliteCompleter2026 extends ExerciceSimple {
   nouvelleVersion() {
     const annee = 2026
 
-    switch (this.canOfficielle ? 1 : randint(1, 3)) {
+    switch (this.canOfficielle ? 1 : this.quotaRandint('choix', 1, 3)) {
       case 1:
         this.question = 'Compléter :<br>'
         this.optionsDeComparaison = { texteAvecCasse: true }

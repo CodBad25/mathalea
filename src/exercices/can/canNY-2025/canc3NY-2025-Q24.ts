@@ -4,7 +4,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 export const titre = 'Utiliser une égalité pour compléter un calcul'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -29,7 +28,7 @@ export default class CalculDivers extends ExerciceSimple {
 
   nouvelleVersion() {
     this.consigne = `En utilisant l'égalité $${texNombre(2025, 0)}=9\\times 9 \\times 5\\times 5$, compléter :`
-    switch (randint(1, 4)) {
+    switch (this.quotaRandint('typeDeQuestions', 1, 4)) {
       case 1:
         this.reponse = texNombre(81, 0)
         this.question = `${texNombre(2025, 0)}= ~25 \\times %{champ1} `

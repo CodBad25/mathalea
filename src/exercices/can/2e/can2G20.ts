@@ -13,7 +13,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer une équation de droite (graphique)'
 export const interactifReady = true
@@ -44,9 +43,9 @@ export default class EquationDroite extends ExerciceSimple {
 
   nouvelleVersion() {
     const xA = 0
-    const yA = randint(1, 4)
-    const xB = randint(-5, 5, 0)
-    const yB = randint(0, 4)
+    const yA = this.quotaRandint('yA', 1, 4)
+    const xB = this.quotaRandint('xB', -5, 5, [0])
+    const yB = this.quotaRandint('yB', 0, 4)
 
     const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
     const A = pointAbstrait(xA, yA)

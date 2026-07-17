@@ -4,7 +4,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { prenomF } from '../../../lib/outils/Personne'
-import { randint } from '../../../modules/outils'
 export const titre = 'Trouver une année'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -27,7 +26,7 @@ export default class anneeATrouver extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(30, 50)
+    const a = this.quotaRandint('a', 30, 50)
     const prenom = prenomF(1)
     this.question =
       'Si ' +

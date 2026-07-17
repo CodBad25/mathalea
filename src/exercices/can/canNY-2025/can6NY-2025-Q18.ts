@@ -2,7 +2,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Déterminer un chiffre'
 export const interactifReady = true
@@ -26,8 +25,8 @@ export default class ChiffreADeterminer extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const u = randint(4, 9)
-    const d = randint(1, 9)
+    const u = this.quotaRandint('u', 4, 9)
+    const d = this.quotaRandint('d', 1, 9)
     const nbre = d * 10 + u
     this.question = `Le chiffre des unités de $${texNombre(2025)}+${nbre}$ est : `
     if (u < 5) {

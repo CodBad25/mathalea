@@ -1,6 +1,5 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceCan from '../../ExerciceCan'
@@ -45,7 +44,7 @@ export default class Can2a2025CQ7 extends ExerciceCan {
     ]
 
     if (cas == null) {
-      cas = choice([1, 2, 3, 4, 5, 6, 7])
+      cas = this.quotaChoice('cas', [1, 2, 3, 4, 5, 6, 7])
     }
 
     const choix = tableauCas[cas]

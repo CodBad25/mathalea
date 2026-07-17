@@ -7,7 +7,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une longueur avec le théorème de Pythagore'
 export const interactifReady = true
@@ -36,8 +35,8 @@ export default class CalculCotePythagore extends ExerciceSimple {
 
   nouvelleVersion() {
     const nom = creerNomDePolygone(3, ['QD'])
-    const a = randint(1, 5) //
-    const b = randint(6, 10) //
+    const a = this.quotaRandint('a', 1, 5) //
+    const b = this.quotaRandint('b', 6, 10) //
     const A = pointAbstrait(0, 0, nom[0])
     const B = pointAdistance(A, a, 90, nom[1])
     const C = pointAdistance(B, Math.sqrt(b ** 2 - a ** 2), 0, nom[2])

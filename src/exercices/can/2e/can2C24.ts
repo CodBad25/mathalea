@@ -39,7 +39,7 @@ export default class CoeffMul extends ExerciceSimple {
     let prix1, prix2, CM, choix
 
     switch (
-      choice([1, 2]) //
+      this.quotaChoice('cas', [1, 2]) //
     ) {
       case 1:
         choix = choice([true, true, true, false])

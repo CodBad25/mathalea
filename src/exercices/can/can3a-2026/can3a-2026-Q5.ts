@@ -1,8 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Multiplier un décimal par 10, 100, 1000'
@@ -27,10 +25,10 @@ export default class Can32026Q5 extends ExerciceCan {
 
   enonce(nombre?: number, multiplicateur?: number) {
     if (nombre == null || multiplicateur == null) {
-      const b = randint(0, 2) / 100
-      const e = randint(1, 9) / 1000
-      nombre = randint(1, 9) + b + e
-      multiplicateur = choice([10, 100, 1000])
+      const b = this.quotaRandint('b', 0, 2) / 100
+      const e = this.quotaRandint('e', 1, 9) / 1000
+      nombre = this.quotaRandint('nombre', 1, 9) + b + e
+      multiplicateur = this.quotaChoice('multiplicateur', [10, 100, 1000])
     }
 
     const reponse = nombre * multiplicateur

@@ -1,7 +1,5 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
-import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Répartition'
@@ -21,8 +19,8 @@ export default class Can2025N5Q10 extends ExerciceCan {
   enonce(a?: number, b?: number) {
     let c = 25
     if (a == null || b == null) {
-      b = randint(4, 6)
-      c = choice([15, 20, 25, 30, 35, 40])
+      b = this.quotaRandint('b', 4, 6)
+      c = this.quotaChoice('c', [15, 20, 25, 30, 35, 40])
       a = b * c
     }
     this.reponse = c

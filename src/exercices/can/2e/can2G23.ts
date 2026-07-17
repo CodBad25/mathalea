@@ -5,7 +5,6 @@ import {
   rienSi1,
 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -35,9 +34,9 @@ export default class TrouverpDroite extends ExerciceSimple {
   nouvelleVersion() {
     const nom = ['A', 'B', 'C']
     const nomP = choice(nom)
-    const a = randint(-10, 10, 0)
-    const b = randint(-10, 10, 0)
-    const m = randint(-10, 10, 0)
+    const a = this.quotaRandint('a', -10, 10, [0])
+    const b = this.quotaRandint('b', -10, 10, [0])
+    const m = this.quotaRandint('m', -10, 10, [0])
     const p = b - m * a
     this.reponse = texNombre(p, 0)
     this.question = `$d$ est  la droite d'équation $y=${rienSi1(m)}x+p$.<br>

@@ -33,7 +33,7 @@ export default class NomExercice extends ExerciceSimple {
       this.correction = `$1,8+\\underbrace{5,3+4,7}_{=10}=${miseEnEvidence(texNombre(reponse, 1))}$`
     } else {
       const choix1 = choice([true, false])
-      const choix = randint(1, 2)
+      const choix = this.quotaRandint('choix', 1, 2)
       if (choix === 1) {
         const a = randint(11, 49, [15, 20, 25, 30, 35, 40, 45]) / 10
         const b = 10 - a

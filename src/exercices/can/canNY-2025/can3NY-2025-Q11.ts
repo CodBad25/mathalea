@@ -1,9 +1,7 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Écrire sous forme décimale'
@@ -28,12 +26,12 @@ export default class ecrireDecimale extends ExerciceSimple {
 
   nouvelleVersion() {
     const a = 2025
-    const b = randint(11, 59, [20, 30, 40, 50])
+    const b = this.quotaRandint('b', 11, 59, [20, 30, 40, 50])
     const c = new Decimal(a).div(10)
     const d = new Decimal(b).div(100)
     const e = new Decimal(a).div(100)
     const f = new Decimal(b).div(10)
-    if (choice([true, false])) {
+    if (this.quotaChoice('choix', [true, false])) {
       this.reponse = texNombre(new Decimal(c).add(d), 3)
       this.question = `Écrire sous forme décimale $\\dfrac{${texNombre(a)}}{10}+\\dfrac{${b}}{100}$. `
       this.correction = `$\\dfrac{${texNombre(a)}}{10}+\\dfrac{${b}}{100}=${texNombre(a / 10, 1)}+${texNombre(b / 100, 2)}=${miseEnEvidence(this.reponse)}$<br>`

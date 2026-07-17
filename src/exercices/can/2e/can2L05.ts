@@ -4,7 +4,6 @@ import {
   miseEnCouleur,
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -44,13 +43,13 @@ export default class SolutionInequation extends ExerciceSimple {
     if (context.isAmc) this.versionQcm = false
     switch (choice([1])) {
       case 1: {
-        a = randint(-6, 6, [-1, 0, 1])
-        n = randint(2, 7) * choice([-1, 1])
+        a = this.quotaRandint('a', -6, 6, [-1, 0, 1])
+        n = this.quotaRandint('n', 2, 7) * this.quotaChoice('signeN', [-1, 1])
         b = n * a
         racine = -n
         const symbols = ['\\leqslant', '<', '\\geqslant', '>']
         const [INF, STRINF, SUP, STRSUP] = symbols
-        const index = randint(0, 3)
+        const index = this.quotaRandint('index', 0, 3)
         const symbol = symbols[index]
         const symbolInverse = [SUP, STRSUP, INF, STRINF][index]
         const symbolFinal = a < 0 ? symbolInverse : symbol

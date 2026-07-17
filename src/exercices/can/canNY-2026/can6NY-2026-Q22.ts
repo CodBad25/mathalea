@@ -4,7 +4,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 export const titre = ''
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -27,7 +26,7 @@ export default class CalculDivers2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = this.canOfficielle ? 2 : randint(1, 5)
+    const choix = this.canOfficielle ? 2 : this.quotaRandint('choix', 1, 5)
     const annee = 2026
     if (choix === 1) {
       this.question = `À quel nombre décimal est égal $${texNombre(annee)}$ dixièmes ? `

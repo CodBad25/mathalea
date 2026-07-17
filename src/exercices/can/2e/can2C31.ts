@@ -1,7 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Transformer une racine carrée'
 export const interactifReady = true
@@ -31,8 +29,8 @@ export default class TransformerRacineCarree extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(2, 4)
-    const b = choice([2, 3, 5, 6])
+    const a = this.quotaRandint('a', 2, 4)
+    const b = this.quotaChoice('b', [2, 3, 5, 6])
 
     const c = a ** 2 * b
 

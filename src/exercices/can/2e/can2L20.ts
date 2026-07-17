@@ -7,7 +7,6 @@ import {
   rienSi1,
 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer $f(x+a)$ avec $f$ affine'
 export const interactifReady = true
@@ -39,9 +38,9 @@ export default class CalculCompose extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(-3, 3, [0, 1])
-    const b = randint(-10, 10, 0)
-    const c = randint(-3, 3, 0)
+    const a = this.quotaRandint('a', -3, 3, [0, 1])
+    const b = this.quotaRandint('b', -10, 10, [0])
+    const c = this.quotaRandint('c', -3, 3, [0])
     const nomF = choice(['f', 'g', 'h', 'u', 'v', 'w', 'p', 'm', 't', 'k'])
     this.question = `Soit $${nomF}$ la fonction définie par : $${nomF}(x)=${reduireAxPlusB(a, b)}$.<br>`
     this.question += this.versionQcm

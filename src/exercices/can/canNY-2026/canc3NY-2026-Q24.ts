@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Utiliser une égalité pour compléter un calcul'
 export const interactifReady = true
@@ -25,7 +24,7 @@ export default class CalculDivers2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const a = this.canOfficielle ? 18 : randint(15, 25)
+    const a = this.canOfficielle ? 18 : this.quotaRandint('a', 15, 25)
     this.reponse = a
     this.question = `Quel nombre doit-on soustraire à $${annee}$ pour obtenir $${texNombre(annee - a, 0)}$ ?`
 

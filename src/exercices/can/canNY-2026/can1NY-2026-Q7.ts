@@ -4,7 +4,6 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
-import { randint } from '../../../modules/outils'
 export const titre = 'Donner une écriture scientifique'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -28,7 +27,9 @@ export default class ecritureScien2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const exposant = this.canOfficielle ? 0 : randint(0, 2)
+    const exposant = this.canOfficielle
+      ? 0
+      : this.quotaRandint('exposant', 0, 2)
     const a = new Decimal(annee).div(new Decimal(10).pow(exposant))
     this.question = `Donner l'écriture scientifique de $${texNombre(a)}$.`
     this.reponse = `${texNombre(annee / 1000, 3)}\\times10^${3 - exposant}`

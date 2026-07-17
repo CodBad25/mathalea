@@ -1,7 +1,6 @@
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre =
@@ -34,10 +33,10 @@ export default class TranslationVecteur extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const xA = randint(-5, 5)
-    const yA = randint(-5, 5)
-    const ux = randint(-5, 5, 0)
-    const uy = randint(-5, 5)
+    const xA = this.quotaRandint('xA', -5, 5)
+    const yA = this.quotaRandint('yA', -5, 5)
+    const ux = this.quotaRandint('ux', -5, 5, [0])
+    const uy = this.quotaRandint('uy', -5, 5)
 
     this.question = `Dans un repère orthonormé, on donne un point $A$ de coordonnées $A\\left(${xA}${sp(1)} ; ${sp(1)}${yA}\\right)$ et un vecteur $\\vec{u}$ de coordonnées $\\vec{u}\\begin{pmatrix}${ux} \\\\ ${uy}\\end{pmatrix}$.<br>
     Donner les coordonnées du point $B$ image du point $A$ par la translation de vecteur $\\vec{u}$.<br><br>`

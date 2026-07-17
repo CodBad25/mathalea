@@ -1,6 +1,5 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -33,7 +32,9 @@ export default class calcAvecDecimaux extends ExerciceSimple {
   nouvelleVersion() {
     const annee = 2026
     const a = new Decimal(annee).div(
-      this.canOfficielle ? 100 : choice([10, 100, 1000, 10000]),
+      this.canOfficielle
+        ? 100
+        : this.quotaChoice('diviseur', [10, 100, 1000, 10000]),
     )
     this.reponse = texNombre(new Decimal(annee).add(a), 5)
     this.question = `$${texNombre(annee)}+${texNombre(a, 4)}$`

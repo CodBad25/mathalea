@@ -1,7 +1,5 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texRacineCarree } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer le nombre de solutions d’une équation se ramenant à $x^2=a$'
@@ -30,10 +28,10 @@ export default class EquationPlusMoinsX2PlusAEgalB extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 20)
-    const b = randint(1, 20)
+    const a = this.quotaRandint('a', 1, 20)
+    const b = this.quotaRandint('b', 1, 20)
     switch (
-      choice(['a', 'b', 'c', 'd']) //
+      this.quotaChoice('cas', ['a', 'b', 'c', 'd']) //
     ) {
       case 'a':
         this.question = ` Combien de solutions réelles possède l'équation  $-x^2+${a}=${b}$ ?<br>`

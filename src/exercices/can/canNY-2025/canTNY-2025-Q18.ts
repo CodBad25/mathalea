@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -27,7 +26,7 @@ export default class ValeurRemarquable extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = choice([1, 2, 3, 4, 5])
+    const choix = this.quotaChoice('choix', [1, 2, 3, 4, 5])
     if (choix === 1) {
       this.question = `$\\cos(${texNombre(2025, 0)}\\pi)$ `
       this.correction = `$\\cos(${texNombre(2025, 0)}\\pi)=\\cos(${texNombre(2024, 0)}\\pi+\\pi)=\\cos(2\\times${texNombre(1012, 0)}\\pi+\\pi)=\\cos(\\pi)=${miseEnEvidence('-1')}$`

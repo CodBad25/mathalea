@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
@@ -21,8 +20,8 @@ export default class Can2a2025CQ2 extends ExerciceCan {
     if (a == null || b == null || c == null || d == null) {
       // a + c = cible1 (nombre rond), b + d = cible2 (nombre rond)
       // Aucun des 4 nombres ne doit être multiple de 10
-      const cible1 = choice([150, 200, 250, 300])
-      const cible2 = randint(3, 6) * 10
+      const cible1 = this.quotaChoice('cible1', [150, 200, 250, 300])
+      const cible2 = this.quotaRandint('cible2', 3, 6) * 10
       let partA: number
       let partC: number
       do {

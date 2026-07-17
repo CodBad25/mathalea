@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec les tables de multiplication'
 export const interactifReady = true
@@ -30,8 +29,8 @@ export default class NomExercice extends ExerciceSimple {
       this.question = '$6\\times 3$ '
       this.correction = `$6\\times 3=${miseEnEvidence(18)}$`
     } else {
-      const a = randint(3, 6)
-      const b = randint(5, 9)
+      const a = this.quotaRandint('a', 3, 6)
+      const b = this.quotaRandint('b', 5, 9)
       this.reponse = a * b
       this.question = `$${a} \\times ${b}$ `
       this.correction = `$${a} \\times ${b}=${miseEnEvidence(texNombre(this.reponse, 0))}$`

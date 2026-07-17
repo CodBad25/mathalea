@@ -1,7 +1,6 @@
 import { texFractionReduite } from '../../../lib/outils/deprecatedFractions'
 import { rienSi1 } from '../../../lib/outils/ecritures'
 import { context } from '../../../modules/context'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Calculer les coordonnées du point d’intersection entre l’axe des ordonnées et une droite'
@@ -30,9 +29,9 @@ export default class CoordonneesPointIntersectionAxeOrdonneesDroite extends Exer
   }
 
   nouvelleVersion() {
-    const a = randint(-10, 10, 0)
-    const b = randint(1, 10)
-    const n = randint(-5, 5, 0)
+    const a = this.quotaRandint('a', -10, 10, [0])
+    const b = this.quotaRandint('b', 1, 10)
+    const n = this.quotaRandint('n', -5, 5, [0])
     const c = n * b
 
     this.reponse = `0;${-c / b}`

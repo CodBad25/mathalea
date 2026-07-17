@@ -3,7 +3,6 @@ import { rienSi1 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer un antécédent'
@@ -28,8 +27,8 @@ export default class calcAntecedent extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(-5, 5, 0)
-    const ant = randint(2020, 2030)
+    const a = this.quotaRandint('a', -5, 5, [0])
+    const ant = this.quotaRandint('ant', 2020, 2030)
     this.question = `Déterminer l'antécédent de $${texNombre(ant)}$ par la fonction $f$ définie par : $f(x)=${rienSi1(a)}x+${texNombre(2025, 0)}$.`
     this.reponse = new FractionEtendue(ant - 2025, a).simplifie().texFSD
     this.correction = `L'antécédent est la solution de l'équation  $${rienSi1(a)}x+${texNombre(2025, 0)}=${texNombre(ant)}$.<br>

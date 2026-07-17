@@ -40,7 +40,7 @@ export default class NormeVecteur extends ExerciceSimple {
     let a, b, nom
     switch (choice(['a'])) {
       case 'a':
-        a = randint(-9, 9)
+        a = this.quotaRandint('a', -9, 9)
         b = randint(-6, 6, a)
         nom = lettreMinusculeDepuisChiffre(randint(11, 26, [15, 24, 25]))
         if (

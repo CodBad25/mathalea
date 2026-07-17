@@ -1,6 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Ajouter un nombre se finissant par 9'
 export const interactifReady = true
@@ -29,8 +28,8 @@ export default class NomExercice extends ExerciceSimple {
       a = 35
       b = 19
     } else {
-      a = randint(3, 6) * 10 + randint(3, 8)
-      b = randint(1, 3) * 10 + 9
+      a = this.quotaRandint('aDizaine', 3, 6) * 10 + this.quotaRandint('aUnite', 3, 8)
+      b = this.quotaRandint('bDizaine', 1, 3) * 10 + 9
     }
     this.reponse = String(a + b)
     this.question = `$${a}+${b}$`

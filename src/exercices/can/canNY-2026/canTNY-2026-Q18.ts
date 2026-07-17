@@ -88,8 +88,8 @@ export default class ValeurRemarquable2026 extends ExerciceSimple {
       this.canReponseACompleter = `$\\sin(${texNombre(annee, 0)}\\pi)+\\cos(${texNombre(annee, 0)}\\pi)=\\ldots$`
     } else {
       // a·sin(annee·π) + b·cos(annee·π)
-      const a = choice([2, 3, 4, 5])
-      const b = choice([2, 3, 4, 5])
+      const a = this.quotaChoice('a', [2, 3, 4, 5])
+      const b = this.quotaChoice('b', [2, 3, 4, 5])
       const valSin = 0 // sin(n·π) = 0 pour tout n entier
       let valCos
       let corrCos

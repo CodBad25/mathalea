@@ -67,7 +67,10 @@ export default class InequationsGSpline extends ExerciceSimple {
       { x: 6, y: -4, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
     ]
 
-    const maFonction: Noeud[] = choice([noeuds1, noeuds3]) //
+    const maFonction: Noeud[] = this.quotaChoice('maFonction', [
+      noeuds1,
+      noeuds3,
+    ]) //
     const mesFonctions: Noeud[][] = [maFonction]
     function aleatoiriseCourbe(listeFonctions: Noeud[][]): Noeud[] {
       const coeffX = 1 //  // symétries ou pas
@@ -140,7 +143,12 @@ export default class InequationsGSpline extends ExerciceSimple {
       ) || 0
 
     const solutions1 = theSpline.solve(y1) || []
-    const symbole = choice(['<', '\\leqslant', '>', '\\geqslant']) //
+    const symbole = this.quotaChoice('symbole', [
+      '<',
+      '\\leqslant',
+      '>',
+      '\\geqslant',
+    ]) //
     const correction = `Les solutions de l'inéquation $f(x)${symbole}${y1}$ sont les abscisses des points de $\\mathscr{C}_f$ 
 qui se situent  ${symbole === '>' || symbole === '<' ? 'strictement' : 'sur ou '} ${symbole === '>' || symbole === '\\geqslant' ? 'au-dessus' : 'en dessous'} de la droite d'équation $y=${y1}$.<br>
 On en déduit `

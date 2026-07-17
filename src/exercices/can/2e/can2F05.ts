@@ -31,7 +31,7 @@ export default class AntecedentFonctionRacine extends ExerciceSimple {
 
   nouvelleVersion() {
     if (context.isHtml) this.spacingCorr = 2
-    const m = randint(2, 5)
+    const m = this.quotaRandint('m', 2, 5)
     const p = randint(1, 4) * m
     const a = randint(5, 10) * m
     const maFraction = fraction(a - p, m)

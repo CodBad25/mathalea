@@ -27,7 +27,7 @@ export default class nombreEntreDeuxValeurs extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const valInf = new Decimal(2025).div(choice([100, 1000]))
+    const valInf = new Decimal(2025).div(this.quotaChoice('diviseur', [100, 1000]))
     const valSup = choice([valInf.add(0.01), valInf.add(0.001)])
     this.reponse = {
       reponse: {

@@ -1,7 +1,6 @@
 import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 
 export const titre = 'Complément à 100'
 export const interactifReady = true
@@ -19,7 +18,7 @@ export const refs = {
 export default class Can2025N5Q4 extends ExerciceCan {
   enonce(a?: number) {
     if (a == null) {
-      a = randint(2, 8) * 10 + randint(1, 9)
+      a = this.quotaRandint('a1', 2, 8) * 10 + this.quotaRandint('a2', 1, 9)
     }
     this.reponse = 100 - a
     this.question = `$${a} + \\text{?} = 100$`

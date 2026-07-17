@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import {
   miseEnEvidence,
@@ -36,7 +35,7 @@ export default class DistanceRepere extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, c, d
     const nom = creerNomDePolygone(2, 'OPQD')
-    switch (choice(['a', 'a', 'b'])) {
+    switch (this.quotaChoice('type', ['a', 'a', 'b'])) {
       case 'a':
         a = randint(1, 6)
         b = randint(1, 6, a)

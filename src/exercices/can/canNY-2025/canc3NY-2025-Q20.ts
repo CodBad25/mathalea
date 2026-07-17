@@ -4,7 +4,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { prenomF } from '../../../lib/outils/Personne'
-import { randint } from '../../../modules/outils'
 export const titre = 'Résoudre un problème'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -30,7 +29,7 @@ export default class resoudreUnProblemeArgent extends ExerciceSimple {
   nouvelleVersion() {
     const prenoms = prenomF(2)
 
-    const a = randint(5, 15) * 100
+    const a = this.quotaRandint('a', 5, 15) * 100
     this.reponse = 2025 - a
     this.question = `${prenoms[0]} et ${prenoms[1]} ont ensemble $${texNombre(2025, 0)}$ €.<br>
      ${prenoms[0]} a $${texNombre(a, 0)}$ €.<br>

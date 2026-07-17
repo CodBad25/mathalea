@@ -37,10 +37,10 @@ export default class TrouverpDroite extends ExerciceSimple {
 
     const nomlisteB = ['D', 'E', 'F']
     const nomB = choice(nomlisteB)
-    const xA = randint(-10, 10, 0)
-    const yA = randint(-10, 10, 0)
+    const xA = this.quotaRandint('xA', -10, 10, [0])
+    const yA = this.quotaRandint('yA', -10, 10, [0])
     const xB = randint(-10, 10, [0, xA])
-    const yB = randint(-10, 10, 0)
+    const yB = this.quotaRandint('yB', -10, 10, [0])
     const m = new FractionEtendue(yB - yA, xB - xA)
     if (context.isAmc) this.versionQcm = false
     this.reponse = this.versionQcm

@@ -1,7 +1,6 @@
 import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 import { texNombre } from '../../../lib/outils/texNombre'
 
 export const titre = 'Compléter une égalité'
@@ -25,9 +24,9 @@ export default class NomExercice extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = this.canOfficielle ? 7 : randint(5, 9)
-    const b = this.canOfficielle ? 3 : randint(2, 6)
-    const c = this.canOfficielle ? 2 : randint(2, 6)
+    const a = this.canOfficielle ? 7 : this.quotaRandint('a', 5, 9)
+    const b = this.canOfficielle ? 3 : this.quotaRandint('b', 2, 6)
+    const c = this.canOfficielle ? 2 : this.quotaRandint('c', 2, 6)
 
     this.reponse = texNombre(a + b + c, 0)
     this.consigne = 'Complète. '

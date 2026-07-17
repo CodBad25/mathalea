@@ -1,7 +1,6 @@
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer le déterminant de deux vecteurs'
@@ -33,10 +32,10 @@ export default class DeterminantVecteur extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const vx = randint(-5, 5)
-    const vy = randint(-5, 5)
-    const ux = randint(-5, 5, 0)
-    const uy = randint(-5, 5)
+    const vx = this.quotaRandint('vx', -5, 5)
+    const vy = this.quotaRandint('vy', -5, 5)
+    const ux = this.quotaRandint('ux', -5, 5, [0])
+    const uy = this.quotaRandint('uy', -5, 5)
     const det = ux * vy - uy * vx
 
     this.question = `Dans un repère orthonormé, on donne les vecteurs $\\vec{u}\\begin{pmatrix}${ux}${sp(1)} \\\\ ${sp(1)}${uy}\\end{pmatrix}$ et $\\vec{v}\\begin{pmatrix}${vx}${sp(1)} \\\\ ${sp(1)}${vy}\\end{pmatrix}$.<br>
