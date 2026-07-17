@@ -473,6 +473,19 @@ describe('buildTypstDocument', () => {
     expect(merged).not.toContain('qr:')
   })
 
+  it('active breather (espaces verticaux automatiques) par défaut', () => {
+    const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
+    expect(code).toContain('#import "@preview/breather:0.1.0": breathe')
+    expect(code).toContain('#show: breathe')
+
+    const without = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      autoVerticalSpacing: false,
+    })
+    expect(without).not.toContain('breather')
+    expect(without).not.toContain('#show: breathe')
+  })
+
   describe('fusion locale (bouton de la palette)', () => {
     it("fusionne l'exercice 2 avec le précédent : un seul exo.with, numérotation continue", () => {
       const code = buildTypstDocument(

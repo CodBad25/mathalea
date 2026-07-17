@@ -21,6 +21,14 @@ export const EXERCISE_BANK_IMPORT =
 const QRCODE_SIZE = '1.8cm'
 
 /**
+ * Import du paquet breather (gestion automatique des espaces verticaux) :
+ * `#show: breathe` écarte les lignes contenant des maths hautes (fractions
+ * « display », matrices…) juste ce qu'il faut, sans toucher aux autres.
+ */
+export const BREATHER_IMPORT =
+  '#import "@preview/breather:0.1.0": breathe'
+
+/**
  * Repère invisible pour la palette de mise en page de l'aperçu : publie la
  * position du point d'insertion (page, x et y en pt) dans une métadonnée,
  * interrogée après compilation (`query(<mathalea-anchor>)`) pour placer les
@@ -226,6 +234,13 @@ export interface TypstDocumentOptions {
   wordSpacing: number
   /** Espace au-dessus du titre de chaque exercice, en em */
   exerciseSpacing: number
+  /**
+   * Gestion automatique des espaces verticaux (paquet breather) : les lignes
+   * contenant des maths hautes (fractions « display », matrices, racines
+   * imbriquées…) s'écartent juste ce qu'il faut, sans toucher à l'interligne
+   * des lignes ordinaires.
+   */
+  autoVerticalSpacing: boolean
   /** Numéros des questions (et sous-questions) en gras */
   boldQuestionNumbers: boolean
   /** Affiche la référence du référentiel à côté de la numérotation */
@@ -350,6 +365,7 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   lineSpacing: 0.65,
   wordSpacing: 100,
   exerciseSpacing: 1.6,
+  autoVerticalSpacing: true,
   boldQuestionNumbers: true,
   showExerciseRefs: false,
   columns: 1,
@@ -949,10 +965,11 @@ export function buildTypstDocument(
   lines.push("// Ce code est modifiable : l'aperçu se met à jour tout seul.")
   lines.push('')
   const usesExerciseBank = !options.mergeExercises
-  if (usesTasks || usesExerciseBank) {
+  if (usesTasks || usesExerciseBank || options.autoVerticalSpacing) {
     lines.push('// ----- Paquets -----')
     if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
     if (usesTasks) lines.push(TASKIZE_IMPORT)
+    if (options.autoVerticalSpacing) lines.push(BREATHER_IMPORT)
     lines.push('')
   }
   if (usesAnchors) {
@@ -1045,6 +1062,13 @@ export function buildTypstDocument(
   // \dfrac plutôt que \frac : les fractions gardent leur taille normale
   // (« display ») même au milieu d'une phrase, comme dans la version LaTeX
   lines.push('#show math.frac: it => math.display(it)')
+  if (options.autoVerticalSpacing) {
+    lines.push(
+      '// gestion automatique des espaces verticaux : les lignes aux maths',
+      "// hautes s'écartent juste ce qu'il faut (paquet breather)",
+      '#show: breathe',
+    )
+  }
   lines.push('')
   lines.push(
     '// mise en colonnes d’une section (les sauts de page restent possibles',
