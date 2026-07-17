@@ -36,7 +36,7 @@ export default class ComparerFractionsAvecDifference extends ExerciceQcmA {
 
     this.reponses = [
       `$${fraction1} < ${fraction2}$`,
-      `$${fraction1} > ${fraction2}$`,
+      `$\\dfrac{${n + 1}}{${n}} < \\dfrac{${n + 1}}{${n + 2}}$`,
       `$\\dfrac{${n + 1}}{${n}} < \\dfrac{${n + 2}}{${n + 1}}$`,
       `$\\dfrac{${n + 1}}{${n + 1}} < \\dfrac{${n}}{${n + 2}}$`,
     ]
