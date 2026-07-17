@@ -8,25 +8,24 @@ import {
   coopmathsCorpus,
   vertMathalea,
 } from '../../lib/colors'
-import { choice, shuffle } from '../../lib/outils/arrayOutils'
-import { reduireAxPlusB } from '../../lib/outils/ecritures'
+import { shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import FractionEtendue from '../../modules/FractionEtendue'
+import { reduireAxPlusB } from '../../lib/outils/ecritures'
+import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
-export const titre =
-  "Reconnaître la représentation graphique d'une fonction affine (coefficient directeur fractionnaire)"
+export const titre = "Reconnaître la représentation graphique d'une fonction affine (coefficient directeur entier)"
 export const dateDePublication = '29/06/2026'
 
-export const uuid = '15233'
+export const uuid = 'efa32'
 /**
  * @author Stéphane Guyon
  *
  */
 export const refs = {
-  'fr-fr': ['1A-F03-4'],
+  'fr-fr': ['1A-F03-3'],
   'fr-ch': [],
 }
 
@@ -45,7 +44,7 @@ type DroiteAffine = {
 
 /**
  * Reconnaître graphiquement la droite représentant une fonction affine.
- * @author Stéphane Guyon
+ * @author Stéphane
  */
 export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA {
   private sontDistinctes(droites: DroiteAffine[]) {
@@ -84,12 +83,14 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
         y <= yMax + ecartExterieur,
     )
 
-    const label = candidats.find(({ x, y }) =>
-      labelsUtilises.every(
-        (labelUtilise) =>
-          Math.hypot(x - labelUtilise.x, y - labelUtilise.y) > distanceMinimale,
-      ),
-    ) ??
+    const label =
+      candidats.find(({ x, y }) =>
+        labelsUtilises.every(
+          (labelUtilise) =>
+            Math.hypot(x - labelUtilise.x, y - labelUtilise.y) >
+            distanceMinimale,
+        ),
+      ) ??
       candidats[0] ?? {
         x: xMax + ecartExterieur,
         y: Math.max(
@@ -174,30 +175,28 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
     )
   }
 
-  private appliquerLesValeurs(a: FractionEtendue, b: number) {
-    const pente = a.valeurDecimale
-    const penteInverse = a.inverse().simplifie().valeurDecimale
+  private appliquerLesValeurs(a: number, b: number) {
     let droites: DroiteAffine[] = [
       {
-        pente,
+        pente: a,
         ordonneeOrigine: b,
         estBonneReponse: true,
         couleur: bleuMathalea,
       },
       {
-        pente: -pente,
+        pente: -a,
         ordonneeOrigine: b,
         estBonneReponse: false,
         couleur: coopmathsAction,
       },
       {
-        pente: penteInverse,
+        pente: 1 / a,
         ordonneeOrigine: b,
         estBonneReponse: false,
         couleur: vertMathalea,
       },
       {
-        pente: -penteInverse,
+        pente: -1 / a,
         ordonneeOrigine: -b,
         estBonneReponse: false,
         couleur: coopmathsCorpus,
@@ -206,7 +205,7 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
 
     if (!this.sontDistinctes(droites)) {
       droites[3] = {
-        pente: pente + 1,
+        pente: a + 1,
         ordonneeOrigine: b - 1,
         estBonneReponse: false,
         couleur: coopmathsCorpus,
@@ -233,37 +232,22 @@ La droite qui représente la fonction $f$ est :`
 
     this.reponses = [
       `$\\left(d_${bonneDroite?.numero}\\right)$`,
-      ...mauvaisesDroites.map(
-        (droite) => `$\\left(d_${droite.numero}\\right)$`,
-      ),
+      ...mauvaisesDroites.map((droite) => `$\\left(d_${droite.numero}\\right)$`),
     ]
 
     this.correction = `La représentation graphique de la fonction $f$ est la droite d'équation $y=${fonction}$.<br>
-Elle coupe l'axe des ordonnées en $${b}$ et son coefficient directeur est $${a.texFractionSimplifiee}$.<br>
+Elle coupe l'axe des ordonnées en $${texNombre(b)}$ et son coefficient directeur est $${texNombre(a)}$.<br>
 La droite qui possède ces deux caractéristiques est $${miseEnEvidence(`\\left(d_${bonneDroite?.numero}\\right)`)}$.`
   }
 
   versionOriginale = () => {
-    this.appliquerLesValeurs(new FractionEtendue(2, 3), 3)
+    this.appliquerLesValeurs(2, 3)
   }
 
   versionAleatoire = () => {
-    const [num, den] = choice([
-      [1, 2],
-      [1, 3],
-      [2, 3],
-      [3, 4],
-      [-1, 2],
-      [-1, 3],
-      [-2, 3],
-      [-3, 4],
-    ])
-    const a = new FractionEtendue(num, den).simplifie()
+    const a = randint(-3, 3, [-1, 0, 1])
     let b = randint(-4, 4, 0)
-    while (
-      b === a.valeurDecimale * a.valeurDecimale ||
-      b === -a.valeurDecimale * a.valeurDecimale
-    ) {
+    while (b === a * a || b === -a * a) {
       b = randint(-4, 4, 0)
     }
     this.appliquerLesValeurs(a, b)

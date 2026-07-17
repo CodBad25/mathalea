@@ -15,7 +15,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Reconnaître une fonction affine'
+export const titre = 'Reconnaître une fonction affine (1)'
 export default class AutoF3 extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     this.enonce = `On considère les trois fonctions définies sur $\\mathbb{R}$ par : <br>
