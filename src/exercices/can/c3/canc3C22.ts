@@ -18,7 +18,7 @@ export const dateDePublication = '03/07/2025'
 export const uuid = '4ce49'
 
 export const refs = {
-  'fr-fr': ['canc3C22'],
+  'fr-fr': ['canc3C22', 'auto5N1E-flash2'],
   'fr-ch': [],
 }
 export default class MultiplierPar10Par100Par1000 extends ExerciceSimple {
