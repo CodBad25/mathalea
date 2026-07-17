@@ -18,7 +18,7 @@ import {
   parseExpression,
   type Expression,
   type Operator,
-} from '../../lib/types/expression'
+} from '../../lib/mathFonctions/expression'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

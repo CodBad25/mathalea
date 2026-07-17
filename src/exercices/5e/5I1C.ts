@@ -1,29 +1,42 @@
 import * as Blockly from 'blockly/core'
 import * as En from 'blockly/msg/en'
-import { init } from '../../lib/blockly/blocks'
+import { ensureBlocklyBlocksInitialized } from '../../lib/blockly/blocks'
 import {
   addBloklyEditor,
+  BlocklyEditor,
   type BlocklyEditorOptions,
 } from '../../lib/customElements/BlocklyEditor'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
+import {
+  areArithmeticAstsEquivalent,
+  arithmeticAstToLatex,
+  blocklyWorkspaceToArithmeticAst,
+  buildBlocklySaySolutionBlocks,
+  generateArithmeticAst,
+} from '../../lib/mathFonctions/expression'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre =
-  'Calculs numériques à représenter en code Blockly (expérimentation)'
+export const titre = 'Calculs numériques à représenter en code par blocs'
 export const interactifReady = true
 export const interactifType = 'blockly-editor'
+export const dateDePublication = '17/07/2026'
 
 /**
- * Exercice expérimental pour BlocklyEditor.
+ * Exercice pour manipuler les langages mathématiques et algorithmiques.
  * @author Jean-Claude Lhote
  */
 export const uuid = 'c1f91'
 
 export const refs = {
-  'fr-fr': [],
+  'fr-fr': ['5I1C'],
   'fr-ch': [],
 }
 
@@ -51,92 +64,125 @@ const toolbox: Blockly.utils.toolbox.ToolboxDefinition = {
   ],
 }
 
-type OperationType = 'plus' | 'moins' | 'multi' | 'divise'
+const VERIFY_CALLBACK_NAME = '5I1C_AST_EQUIVALENCE'
 
-function operationLabel(op: OperationType): string {
-  if (op === 'plus') return '+'
-  if (op === 'moins') return '-'
-  if (op === 'multi') return '×'
-  return '÷'
-}
+BlocklyEditor.registerVerificationCallback(
+  VERIFY_CALLBACK_NAME,
+  ({ studentJson, expectedSolution }) => {
+    if (expectedSolution == null) {
+      return {
+        isOk: false,
+        feedback: 'Réponse attendue invalide.',
+      }
+    }
 
-function buildExpectedBlocks(
-  a: number,
-  b: number,
-  op: OperationType,
-): Record<string, unknown> {
-  return {
-    blocks: {
-      blocks: [
-        {
-          type: 'demarrer',
-          next: {
-            block: {
-              type: 'dire_2s',
-              inputs: {
-                MESSAGE: {
-                  block: {
-                    type: 'operation',
-                    fields: {
-                      op,
-                    },
-                    inputs: {
-                      op1: {
-                        block: {
-                          type: 'textinput',
-                          fields: {
-                            NUM: String(a),
-                          },
-                        },
-                      },
-                      op2: {
-                        block: {
-                          type: 'textinput',
-                          fields: {
-                            NUM: String(b),
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      ],
-    },
-  }
-}
+    const studentAst = blocklyWorkspaceToArithmeticAst(studentJson)
+    if (studentAst == null) {
+      return {
+        isOk: false,
+        feedback:
+          "Impossible d'interpréter ta réponse Blockly en expression arithmétique, il semble que tu aies oublié de coder ta réponse.",
+      }
+    }
+
+    const expectedAst = blocklyWorkspaceToArithmeticAst(expectedSolution)
+    if (expectedAst == null) {
+      return {
+        isOk: false,
+        feedback:
+          "Impossible d'interpréter la correction attendue Blockly en AST.",
+      }
+    }
+
+    const isOk = areArithmeticAstsEquivalent(studentAst, expectedAst)
+    return {
+      isOk,
+      feedback: isOk
+        ? 'Bravo !'
+        : "L'expression ne correspond pas au calcul attendu.",
+    }
+  },
+)
 
 export default class CalculerFormuleParBlockly extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 2
+    this.besoinFormulaireTexte = [
+      "Types d'expressions",
+      'Nombres séparés par des tirets :\n0: Mélange\n1: Une seule opération\n2:Deux opérations dont une prioritaire\n3: Trois opérations avec parenthèses\n4: Trois opérations sans parenthèses',
+    ]
+    this.sup = '0'
+    this.besoinFormulaire2CaseACocher = [
+      "Utiliser l'écriture fractionnaire pour les divisions",
+      false,
+    ]
+    this.sup2 = false
+    this.besoinFormulaire3CaseACocher = [
+      'Autoriser les nombres négatifs',
+      false,
+    ]
+    this.sup3 = false
+    this.besoinFormulaire4CaseACocher = [
+      'Toutes les opérations tombent justes',
+      true,
+    ]
+    this.sup4 = true
   }
 
   nouvelleVersion(_numeroExercice: number) {
+    const listeTypesDeQuestion = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      min: 1,
+      max: 4,
+      melange: 0,
+      nbQuestions: this.nbQuestions,
+      shuffle: false,
+      defaut: 0,
+    }).map(Number)
     this.consigne =
       'Représenter chaque calcul avec les blocs (Demarrer puis dire le resultat pendant 2 s).'
 
-    const operationTypes: OperationType[] = ['plus', 'moins', 'multi', 'divise']
-
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      const op = operationTypes[randint(0, operationTypes.length - 1)]
-      const a = randint(2, 30)
-      const b = op === 'divise' ? randint(2, 10) : randint(2, 30)
+      const requestedType = listeTypesDeQuestion[i]
+      const operationCount: 1 | 2 | 3 =
+        requestedType <= 1 ? 1 : requestedType === 2 ? 2 : 3
+      const requireParentheses = requestedType === 3
+      const expressionAst = generateArithmeticAst(requestedType, randint, {
+        operationCount,
+        requireParentheses,
+        negativeAllowed: this.sup3,
+        strictInteger: this.sup4,
+      })
+      const texteOperation = arithmeticAstToLatex(expressionAst, !this.sup2)
+      const expressionJson = JSON.stringify(expressionAst)
 
-      const texteOperation = `${a} ${operationLabel(op)} ${b}`
-      let texte = `Représenter ce calcul en Blockly : <b>${texteOperation}</b><br>`
-      const texteCorr =
-        'La rédaction attendue est composée de Demarrer puis dire [operation] pendant 2 s.'
-
-      const solutionBlocks = buildExpectedBlocks(a, b, op)
+      let texte = `Représenter ce calcul en Blockly : $${miseEnEvidence(texteOperation, 'black')}$<br>`
+      const solutionBlocks = buildBlocklySaySolutionBlocks(expressionAst)
+      const correctionEditorId = `blockly-editorCorrEx${this.numeroExercice}Q${i}`
+      const texteCorr = context.isHtml
+        ? [
+            'La solution Blockly est :<br>',
+            BlocklyEditor.create({
+              id: correctionEditorId,
+              options: {
+                toolbox,
+                initialBlocks: solutionBlocks,
+                height: '80px',
+                interactivityOn: false,
+              },
+            }),
+          ].join('')
+        : `La solution Blockly correspond au calcul : ${texteOperation}`
 
       if (context.isHtml) {
         const options: BlocklyEditorOptions = {
           toolbox,
           solutionBlocks,
+          verifyCallbackName: VERIFY_CALLBACK_NAME,
+          height: '200px',
+          interactivityOn: true,
+          width: '100%',
         }
         texte += addBloklyEditor(this, i, options)
         texte += `<div class="ml-2 py-2" id="resultatCheckEx${this.numeroExercice}Q${i}"></div>`
@@ -154,7 +200,7 @@ export default class CalculerFormuleParBlockly extends Exercice {
         )
       }
 
-      if (this.questionJamaisPosee(i, a, b, op)) {
+      if (this.questionJamaisPosee(i, expressionJson)) {
         this.listeQuestions.push(texte)
         this.listeCorrections.push(texteCorr)
         i++
@@ -163,6 +209,6 @@ export default class CalculerFormuleParBlockly extends Exercice {
     }
 
     listeQuestionsToContenu(this)
-    init()
+    ensureBlocklyBlocksInitialized()
   }
 }

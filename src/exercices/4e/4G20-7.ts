@@ -7,7 +7,7 @@ import { nommePolygone, polygone } from '../../lib/2d/polygones'
 import { rotation, similitude } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import blocklypyt from '../../lib/blockly/blocklypyt.json'
-import { init } from '../../lib/blockly/blocks'
+import { ensureBlocklyBlocksInitialized } from '../../lib/blockly/blocks'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { combinaisonListesSansChangerOrdre } from '../../lib/outils/arrayOutils'
 import { stringNombre } from '../../lib/outils/texNombre'
@@ -216,7 +216,7 @@ export default class Pythagore2DBlockly extends Exercice {
     }
     listeQuestionsToContenu(this)
 
-    init() // blockly initialisation
+    ensureBlocklyBlocksInitialized() // blockly initialisation
     const createAllBlockly = function (this: Pythagore2DBlockly) {
       const nbQ = this.nbQuestions
       const numExercice = numeroExercice
