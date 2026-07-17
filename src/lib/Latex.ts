@@ -13,7 +13,9 @@ import {
   type IExercice,
   type IExerciceStatique,
 } from '../lib/types'
+import { isMathadataUuid } from './components/mathadataReferentiel'
 import genericPreamble from './latex/preambule.tex?raw'
+import mathadataCompatTex from './latex/mathadata-compat.tex?raw'
 import { decodeExosGrouping, findExoPosition } from './LatexGroup'
 import type {
   ExoContent,
@@ -92,6 +94,10 @@ class Latex {
 
   isExerciceStaticInTheList() {
     return this.exercices.some((e) => e.typeExercice === 'statique')
+  }
+
+  isMathadataExerciceInTheList() {
+    return this.exercices.some((e) => isMathadataUuid(String(e.uuid)))
   }
 
   getExercices() {
@@ -728,6 +734,9 @@ class Latex {
         contents.preamble += `\\Theme[${latexFileInfos.style}]{nombres}{${sanitizeLatexInput(latexFileInfos.title)}}{${sanitizeLatexInput(latexFileInfos.reference)}}{${sanitizeLatexInput(latexFileInfos.subtitle)}}`
         contents.intro += '\n\\begin{document}\n'
       }
+    }
+    if (this.isMathadataExerciceInTheList()) {
+      contents.preamble += '\n' + mathadataCompatTex
     }
     contents.content = contents.content
       .replaceAll('\\\\\\\\', '\n\\medskip\n\n')

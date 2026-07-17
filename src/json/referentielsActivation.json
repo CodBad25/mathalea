@@ -6,5 +6,6 @@
   "geometrieDynamique": true,
   "bibliotheque": false,
   "apps": true,
-  "examens": true
+  "examens": true,
+  "partenaires": true
 }

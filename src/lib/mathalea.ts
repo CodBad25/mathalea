@@ -32,6 +32,7 @@ import {
   inferNumericValueForAMC,
 } from './amc/amcInferenceHelpers'
 import { isStatic, isSvelte } from './components/componentsUtils'
+import { referentielMathadata } from './components/mathadataReferentiel'
 import {
   showDialogForLimitedTime,
   showPopupAndWait,
@@ -370,12 +371,15 @@ export async function mathaleaGetExercicesFromParams(
       param.uuid.substring(0, 4) === 'bac_' ||
       param.uuid.startsWith('sti2d_') ||
       param.uuid.substring(0, 7) === 'evacom_' ||
-      param.uuid.startsWith('2nd_')
+      param.uuid.startsWith('2nd_') ||
+      param.uuid.startsWith('md-')
     ) {
       const infosExerciceStatique =
         param.uuid.substring(0, 7) === 'evacom_'
           ? getExerciceByUuid(referentielStaticCH, param.uuid)
-          : getExerciceByUuid(referentielStaticFR, param.uuid)
+          : param.uuid.startsWith('md-')
+            ? getExerciceByUuid(referentielMathadata, param.uuid)
+            : getExerciceByUuid(referentielStaticFR, param.uuid)
 
       // Vérifier que infosExerciceStatique n'est pas null
       if (!infosExerciceStatique) {

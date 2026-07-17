@@ -21,7 +21,8 @@ export function isStatic(uuid: string | undefined) {
     uuid.startsWith('eam_') ||
     uuid.startsWith('stl_') ||
     uuid.startsWith('sti2d_') ||
-    uuid.startsWith('2nd_')
+    uuid.startsWith('2nd_') ||
+    uuid.startsWith('md-')
   )
 }
 

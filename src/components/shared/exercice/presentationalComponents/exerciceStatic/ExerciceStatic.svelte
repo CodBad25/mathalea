@@ -17,12 +17,14 @@
   import referentielStaticCH from '../../../../../json/referentielStaticCH.json'
 
   import referentielBibliotheque from '../../../../../json/referentielBibliotheque.json'
+  import { referentielMathadata } from '../../../../../lib/components/mathadataReferentiel'
   import type { HeaderProps } from '../../../../../lib/types/ui'
   // on rassemble les deux référentiel statique
   const allStaticReferentiels: JSONReferentielObject = {
     ...referentielBibliotheque,
     ...referentielStaticFR,
     ...referentielStaticCH,
+    ...referentielMathadata,
   }
   // on supprime les entrées par thème qui entraîne des doublons
   delete allStaticReferentiels['Brevet des collèges par thème - APMEP']
@@ -63,6 +65,8 @@
       headerExerciceProps.title = `${resourceToDisplay.typeExercice.toUpperCase()} ${
         resourceToDisplay.mois || ''
       } ${resourceToDisplay.annee} ${resourceToDisplay.lieu} ${resourceToDisplay.jour || ''} Ex ${resourceToDisplay.numeroInitial}`
+    } else if ('titre' in resourceToDisplay && resourceToDisplay.titre) {
+      headerExerciceProps.title = resourceToDisplay.titre
     } else {
       headerExerciceProps.title = resourceToDisplay.uuid
     }

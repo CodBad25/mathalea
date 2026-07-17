@@ -126,6 +126,7 @@ export interface StaticItemInreferentiel extends BaseItemInReferentiel {
   pngCor: string
   tex: string
   texCor: string
+  titre?: string
   typeExercice: 'static' | 'dnb' | 'dnbpro' | 'bac' | 'e3c' | 'evacom'
 }
 

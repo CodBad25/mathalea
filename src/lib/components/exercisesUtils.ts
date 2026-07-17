@@ -21,10 +21,12 @@ import { exercicesParams } from '../stores/generalStore'
 import { globalOptions } from '../stores/globalOptions'
 import type { IExercice } from '../types'
 import { isStatic } from './componentsUtils'
+import { referentielMathadata } from './mathadataReferentiel'
 
 const allStaticReferentiels: JSONReferentielObject = {
   ...referentielStaticFR,
   ...referentielStaticCH,
+  ...referentielMathadata,
 }
 
 // on supprime les entrées par thème qui entraîne des doublons

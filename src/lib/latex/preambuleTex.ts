@@ -500,8 +500,8 @@ export function loadPackagesFromContent(contents: contentsType) {
 \\reserved@a
 }
 \\def\\dummy@environ{}
-\\makeatother
-\\provideenvironment{figure}{}{}\\renewenvironment{figure}{}{}`,
+\\provideenvironment{figure}{}{}\\renewenvironment{figure}{\\def\\@captype{figure}}{}
+\\makeatother`,
     contents,
     'begin{figure}',
   )

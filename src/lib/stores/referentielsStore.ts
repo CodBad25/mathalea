@@ -14,6 +14,7 @@ import {
   getAllEndings,
   getRecentExercices,
 } from '../components/refUtils'
+import { referentielMathadata } from '../components/mathadataReferentiel'
 import {
   sortArrayOfResourcesBasedOnProp,
   triAnnales,
@@ -114,6 +115,16 @@ function createOriginalReferentiels(lang: Language): ReferentielInMenu[] {
     //   searchable: true,
     //   referentiel: orderedExamsReferentiel,
     // },
+    ...(isFR
+      ? [
+          {
+            title: 'Ressources partenaires',
+            name: 'partenaires' as ActivationName,
+            searchable: false,
+            referentiel: referentielMathadata,
+          },
+        ]
+      : []),
     {
       title: 'Géométrie dynamique',
       name: 'geometrieDynamique',
