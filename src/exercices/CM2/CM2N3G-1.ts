@@ -1,4 +1,4 @@
-import MultiplierDecimauxPar101001000 from '../6e/6C30-1'
+import MultiplierDecimauxPar101001000 from '../6e/_MultiplierDecimauxPar101001000'
 export const titre =
   'Multiplier un nombre entier (ou décimal) par 10, 100 ou 1 000'
 export const amcReady = true
