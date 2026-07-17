@@ -40,7 +40,7 @@ export default class CalculAvecRacineCarree3 extends ExerciceSimple {
       [5, 45],
     ] // couples pour simplifier des produits de racines carrées
     let racine, a, b, reduction
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('cas', [1, 2])) {
       case 1:
         racine = choice(listeRacines1)
         a = racine[0]

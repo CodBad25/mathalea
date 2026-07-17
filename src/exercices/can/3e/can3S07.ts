@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 
@@ -32,7 +31,7 @@ export default class EnFonctionDe extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('cas', [1, 2])) {
       case 1: //
         {
           const val1 = randint(-10, 20, 0)

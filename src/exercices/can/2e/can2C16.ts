@@ -42,7 +42,7 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
     let a, b, reponse, f1, f2
 
     switch (
-      choice([1, 2, 3, 4, 5, 6, 7, 8]) //
+      this.quotaChoice('cas', [1, 2, 3, 4, 5, 6, 7, 8]) //
     ) {
       case 1: // x^2+y^2
         a = randint(-6, 6, 0)

@@ -35,7 +35,7 @@ export default class CalculPuissance1 extends ExerciceSimple {
   nouvelleVersion() {
     let a, b
     switch (
-      choice(['a', 'b', 'c', 'd', 'e']) //
+      this.quotaChoice('type', ['a', 'b', 'c', 'd', 'e']) //
     ) {
       case 'a':
         a = choice([0.25, 0.5])

@@ -46,7 +46,7 @@ export default class ReduireExp extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, c, choix, d, e
     let reponse
-    switch (randint(1, 3)) {
+    switch (this.quotaRandint('cas', 1, 3)) {
       case 1: // ax+bx+c
         choix = choice([1, 2, 3]) // 1,2
         if (choix === 1) {

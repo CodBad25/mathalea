@@ -29,7 +29,7 @@ export default class PuissancesDe2345 extends ExerciceSimple {
 
   nouvelleVersion() {
     let b, a
-    switch (choice([2, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9, 10])) {
+    switch (this.quotaChoice('cas', [2, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9, 10])) {
       case 2:
         a = choice([-2, 2])
         b = randint(0, 6)

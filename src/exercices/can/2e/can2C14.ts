@@ -35,7 +35,7 @@ export default class CalculAvecRacineDef extends ExerciceSimple {
   nouvelleVersion() {
     let a, choix
     switch (
-      choice([1, 2, 3, 4, 5]) //
+      this.quotaChoice('cas', [1, 2, 3, 4, 5]) //
     ) {
       case 1:
         a = choice([1, 4, 9, 16, 25, 36, 49, 64, 81, 100])

@@ -58,7 +58,7 @@ export default class ProduitScalaireNormesAngles extends ExerciceSimple {
       [135, '\\dfrac{3\\pi}{4}', '\\dfrac{3\\pi}{4}', 2],
       [150, '\\dfrac{5\\pi}{6}', '\\dfrac{5\\pi}{6}', 1.5],
     ]
-    const angle = choice(Angle)
+    const angle = this.quotaChoice('angle', Angle)
     const C = pointAdistance(A, b, angle[0], nom[2], 'above')
     const vAB = segment(A, B, bleuMathalea, '->')
     vAB.epaisseur = 2

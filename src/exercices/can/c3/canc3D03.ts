@@ -42,7 +42,7 @@ export default class AjouterDesDurees extends ExerciceSimple {
       30,
     ])
     const c = randint(1, 3)
-    const variante = choice([true, false])
+    const variante = this.quotaChoice('variante', [true, false])
     const d = 60 - b - (variante ? choice([10, 20]) : 0)
     this.question = `Calculer $${a}\\text{ h } ${b}$ min + $${c}\\text{ h } ${d}$ min.`
     this.correction = variante

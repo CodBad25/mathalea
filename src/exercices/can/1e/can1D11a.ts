@@ -89,7 +89,7 @@ export default class CalculFonctionDeriveeAffine2 extends ExerciceSimple {
     let fraction = []
     let fraction2 = []
     switch (
-      choice([1, 2, 3, 4]) //
+      this.quotaChoice('type', [1, 2, 3, 4]) //
     ) {
       case 1: // x/a+p
         a = randint(2, 15)

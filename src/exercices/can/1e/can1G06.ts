@@ -71,7 +71,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
       ymin,
       ymax,
       xmax
-    switch (choice([1, 2, 3, 4])) {
+    switch (this.quotaChoice('type', [1, 2, 3, 4])) {
       case 1: // parallelogramme
         choix = choice(['a', 'b'])
         A = pointAbstrait(0, 0, 'A', 'below')

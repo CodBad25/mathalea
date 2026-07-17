@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { simplificationDeFractionAvecEtapes } from '../../../lib/outils/deprecatedFractions'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { fraction } from '../../../modules/fractions'
@@ -34,9 +33,9 @@ export default class SommeDifferenceFractionsEgyptiennes extends ExerciceSimple 
   }
 
   nouvelleVersion() {
-    const a = randint(2, 7)
+    const a = this.quotaRandint('a', 2, 7)
     const b = randint(2, 7, a)
-    if (choice([true, false])) {
+    if (this.quotaChoice('booleen', [true, false])) {
       const laFraction = fraction(b + a, a * b).simplifie()
       this.reponse = laFraction
       this.question = `Calculer sous la forme d'une fraction simplifiée $\\dfrac{1}{${a}}+\\dfrac{1}{${b}}$.`

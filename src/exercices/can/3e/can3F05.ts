@@ -30,8 +30,8 @@ export default class CalculAntecedentAffine extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const x = randint(-9, 9, [0, 1, -1])
-    const m = randint(-9, 9, [0, 1, -1])
+    const x = this.quotaRandint('x', -9, 9, [0, 1, -1])
+    const m = this.quotaRandint('m', -9, 9, [0, 1, -1])
     const y = randint(-9, 9, [x, 0])
     const nomF = choice(['f', 'g', 'h', 'u', 'v', 'w', 'p', 'm', 't', 'k'])
     this.question = `Soit $${nomF}$ la fonction définie par : $${nomF}(x)=${m}x${ecritureAlgebrique(y)}$.<br>

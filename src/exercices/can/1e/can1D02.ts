@@ -36,7 +36,7 @@ export default class NombreDerivee extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, c, nbre
     switch (
-      choice([1, 2, 3]) //
+      this.quotaChoice('type', [1, 2, 3]) //
     ) {
       case 1: // second degre ax^2+bx+c
         a = randint(-5, 5, [0])

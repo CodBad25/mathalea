@@ -52,7 +52,7 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
     let s3
     let s4
     switch (
-      choice([1, 2, 3, 4]) //
+      this.quotaChoice('cas', [1, 2, 3, 4]) //
     ) {
       case 1: // périmètre/aire carré
         choix = choice([true, false])

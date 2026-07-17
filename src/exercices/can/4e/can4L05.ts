@@ -36,7 +36,7 @@ export default class DeveloppementNiveau1 extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, b, k, inconnue
-    switch (randint(1, 2)) {
+    switch (this.quotaRandint('cas', 1, 2)) {
       case 1: // developpement k*(a+b)
         a = randint(-5, 4, 0)
         b = randint(1, 10) * choice([-1, 1])

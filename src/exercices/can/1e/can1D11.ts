@@ -40,7 +40,7 @@ export default class CalculFonctionDeriveeAffine extends ExerciceSimple {
   nouvelleVersion() {
     let m, p, f
     switch (
-      choice([1, 2, 3]) //
+      this.quotaChoice('type', [1, 2, 3]) //
     ) {
       case 1: // mx+p
         m = choice([

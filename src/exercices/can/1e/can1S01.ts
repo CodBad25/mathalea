@@ -40,7 +40,7 @@ export default class CalculTermeSuiteExp extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, c, k, p, choix, listeFractions1, fraction1
     switch (
-      choice(['a', 'b', 'c', 'd']) //, 'b', 'c', 'd'
+      this.quotaChoice('cas', ['a', 'b', 'c', 'd']) //, 'b', 'c', 'd'
     ) {
       case 'a': // fonction affine
         a = randint(-6, 7, 0)

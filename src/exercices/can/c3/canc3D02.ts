@@ -37,7 +37,7 @@ export default class LireUneDuree extends ExerciceSimple {
 
   nouvelleVersion() {
     let h1, m1, h2, m2, enonce
-    const matinOuSoir = choice(['matin', 'soir'])
+    const matinOuSoir = this.quotaChoice('matinOuSoir', ['matin', 'soir'])
     const quidam = personne()
     const OccupationsMatinales = [
       'a lu un livre',

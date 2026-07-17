@@ -5,7 +5,6 @@ import {
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Diviser par 9'
@@ -35,7 +34,7 @@ export default class DivisionPar9 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const b = randint(2, 9)
+    const b = this.quotaRandint('b', 2, 9)
     let a
     switch (this.quotaChoice('typeDeQuestions', [1, 2, 3])) {
       case 1:

@@ -34,10 +34,10 @@ export default class DoubleOuTripleDecimal extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 3)
+    const a = this.quotaRandint('a', 1, 3)
     const b = randint(1, 9, a)
     const e = a * 10 + b
-    const d = new Decimal(randint(1, 9)).div(10)
+    const d = new Decimal(this.quotaRandint('d', 1, 9)).div(10)
     const c = d.add(e)
     if (this.quotaChoice('doubleOuTriple', [true, false])) {
       this.reponse = c.mul(3)

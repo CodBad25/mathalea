@@ -56,7 +56,7 @@ export default class CalculLongueurThales extends ExerciceSimple {
       ymax,
       objets,
       pol
-    if (choice([true, false])) {
+    if (this.quotaChoice('cas', [true, false])) {
       nom = creerNomDePolygone(5, ['QD'])
       k = choice([1.5, 2, 2.5])
       b = randint(2, 5) //

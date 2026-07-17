@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -30,7 +29,7 @@ export default class NombreDeNombresEntiersEntreDeuxValeurs2 extends ExerciceSim
 
   nouvelleVersion() {
     let a, b
-    switch (choice(['a', 'b', 'c'])) {
+    switch (this.quotaChoice('type', ['a', 'b', 'c'])) {
       case 'a':
         a = randint(3, 5)
         b = randint(8, 18)

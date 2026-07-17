@@ -1,6 +1,5 @@
 import { texFractionFromString } from '../../../lib/outils/deprecatedFractions'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation du type $ax+b=0$'
 export const interactifReady = true
@@ -28,8 +27,8 @@ export default class EquationAXPlusBEgalZero extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(-5, 5, [0, -1, 1])
-    this.reponse = randint(-9, 9, [-1, 0, 1])
+    const a = this.quotaRandint('a', -5, 5, [0, -1, 1])
+    this.reponse = this.quotaRandint('reponse', -9, 9, [-1, 0, 1])
     const b = -a * this.reponse
     this.question = `Donner la solution de l'équation :<br> $${a}x${ecritureAlgebrique(b)}=0$`
     this.correction = `On procède par étapes successives :<br>

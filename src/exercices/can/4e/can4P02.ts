@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -31,9 +30,9 @@ export default class ProblemesDeVitesse extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = choice([2, 3, 5, 6, 10]) // diviseur de l'heure
+    const a = this.quotaChoice('a', [2, 3, 5, 6, 10]) // diviseur de l'heure
     const b = 60 / a // nombre de minutes de l'énoncé
-    const c = choice([30, 60, 90, 120])
+    const c = this.quotaChoice('c', [30, 60, 90, 120])
     this.reponse = c / a
     this.question = `Une voiture roule à $${c}\\text{ km/h}$. <br>
     

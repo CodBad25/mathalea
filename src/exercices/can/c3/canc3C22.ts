@@ -33,7 +33,7 @@ export default class MultiplierPar10Par100Par1000 extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, resultat
     switch (
-      choice([1, 2]) //, 2, 3
+      this.quotaChoice('cas', [1, 2]) //, 2, 3
     ) {
       case 1: // entier
         a = choice([randint(11, 99), randint(100, 999)])

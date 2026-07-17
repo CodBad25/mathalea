@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
@@ -30,9 +29,15 @@ export default class mesureAngleCosSin extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix1 = choice(['[0\\,;\\,2\\pi[', ']-\\pi\\,;\\,\\pi]'])
-    const choix2 = choice(['a', 'b', 'c', 'd'])
-    const choix3 = choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13])
+    const choix1 = this.quotaChoice('choix1', [
+      '[0\\,;\\,2\\pi[',
+      ']-\\pi\\,;\\,\\pi]',
+    ])
+    const choix2 = this.quotaChoice('choix2', ['a', 'b', 'c', 'd'])
+    const choix3 = this.quotaChoice(
+      'choix3',
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+    )
     switch (choix3) {
       case 1: // pi/6
         this.question = `$\\alpha$ est un réel de $${choix1}$ vérifiant $\\cos(\\alpha)=\\dfrac{\\sqrt{3}}{2}$ et $\\sin(\\alpha)=\\dfrac{1}{2}$. <br>

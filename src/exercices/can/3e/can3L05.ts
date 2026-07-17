@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
@@ -41,7 +40,11 @@ export default class SolutionsEquationProduit extends ExerciceSimple {
   nouvelleVersion() {
     const cours =
       "On reconnaît une équation produit nul. <br>Un produit de facteurs est nul, si et seulement si l'un au moins de ses facteurs est nul.<br>"
-    switch (this.versionQcm ? choice([2, 3]) : choice([1, 2, 3])) {
+    switch (
+      this.versionQcm
+        ? this.quotaChoice('casQcm', [2, 3])
+        : this.quotaChoice('cas', [1, 2, 3])
+    ) {
       case 1: // cas (x+b)(x+p)=0
         {
           const b = randint(-10, 10)

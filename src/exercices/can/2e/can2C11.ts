@@ -35,7 +35,7 @@ export default class CoeffTaux extends ExerciceSimple {
     let taux, coeff
 
     switch (
-      choice(['a', 'b', 'b']) //, 'b', 'b'
+      this.quotaChoice('type', ['a', 'b', 'b']) //, 'b', 'b'
     ) {
       case 'a':
         taux = choice([

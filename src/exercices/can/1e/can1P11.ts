@@ -3,7 +3,6 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence, texteGras } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre =
@@ -32,8 +31,8 @@ export default class ProbaCond extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(2, 10) // nombre de jetons rouges
-    const b = randint(2, 10) // nombre de jetons noirs
+    const a = this.quotaRandint('a', 2, 10) // nombre de jetons rouges
+    const b = this.quotaRandint('b', 2, 10) // nombre de jetons noirs
     const total = a + b
 
     /**
@@ -59,7 +58,7 @@ export default class ProbaCond extends ExerciceSimple {
 
     if (context.isAmc) this.versionQcm = false
     let reponse = new FractionEtendue(1, 1)
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('cas', [1, 2])) {
       case 1:
         {
           // Formulation en langage courant

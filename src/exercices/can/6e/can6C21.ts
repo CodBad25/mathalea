@@ -3,7 +3,6 @@ import {
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
@@ -35,7 +34,9 @@ export default class ComplementAUn extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 9) / 10 + randint(1, 9) / 100
+    const a =
+      this.quotaRandint('dixieme', 1, 9) / 10 +
+      this.quotaRandint('centieme', 1, 9) / 100
     this.question = `Calculer $1-${texNombre(a)}$.`
     this.correction = `$1-${texNombre(a)}=${miseEnEvidence(texNombre(1 - a))}$<br><br>`
     this.correction += texteEnCouleur(

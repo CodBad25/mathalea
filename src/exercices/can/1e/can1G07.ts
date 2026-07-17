@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -44,7 +43,7 @@ export default class RechercheCoordonneesProdScal extends ExerciceSimple {
     const f1 = new FractionEtendue(-ux * vx, vy)
     const f2 = new FractionEtendue(-uy * vy, ux)
     switch (
-      choice([1, 2]) //
+      this.quotaChoice('type', [1, 2]) //
     ) {
       case 1:
         this.question = ` Dans un repère orthonormé $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$, on considère les vecteurs :<br>

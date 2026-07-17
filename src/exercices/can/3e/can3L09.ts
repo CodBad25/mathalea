@@ -35,7 +35,7 @@ export default class ReduireAvecParentheses extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('cas', [1, 2])) {
       case 1: // ax+(cx+d) ou a+(cx+d)
         {
           const variable = choice(['x', 'y', 'a', 'b', 'n'])

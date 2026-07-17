@@ -3,7 +3,6 @@ import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
@@ -41,7 +40,7 @@ export default class ImageSpline extends ExerciceSimple {
     const r = repere({ xMin: -7, xMax: 7, yMin: -6, yMax: 6 })
     let c
     let pente: number
-    const type = choice(['lineaire', 'affine'])
+    const type = this.quotaChoice('type', ['lineaire', 'affine'])
     switch (type) {
       case 'lineaire':
         {

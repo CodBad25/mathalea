@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -67,7 +66,7 @@ export default class DecomposerFraction extends ExerciceSimple {
       [13, 11],
       [9, 4],
     ]
-    const fraction1 = choice(listeFractions)
+    const fraction1 = this.quotaChoice('fraction1', listeFractions)
     const n = fraction1[0]
     const d = fraction1[1]
     const frac = new FractionEtendue(n - Math.trunc(n / d) * d, d)

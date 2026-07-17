@@ -36,7 +36,7 @@ export default class CalculFonctionDeriveeFctRef extends ExerciceSimple {
     let a
     let b
     switch (
-      choice([1, 2]) //
+      this.quotaChoice('type', [1, 2]) //
     ) {
       case 1: // a/x
         a = randint(2, 15) * choice([-1, 1])

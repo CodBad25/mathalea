@@ -62,7 +62,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
     let frac: FractionEtendue
     let valueFrac: number
     let fraction = []
-    switch (choice([1, 2, 3, 4, 5])) {
+    switch (this.quotaChoice('type', [1, 2, 3, 4, 5])) {
       case 1:
         a = randint(1, 2)
         nbre = randint(-1, 1)

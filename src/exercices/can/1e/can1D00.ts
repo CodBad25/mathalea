@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Simplifier un taux de variation'
 export const interactifReady = true
@@ -30,7 +29,7 @@ export default class SimplifierTauxVariations extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(-12, 12, [0])
+    const a = this.quotaRandint('a', -12, 12, [0])
 
     this.question = `Simplifier le plus possible : $\\dfrac{(${a}+h)^2-${a ** 2}}{h}$.`
     this.correction = `$\\dfrac{(${a}+h)^2-${a ** 2}}{h}=\\dfrac{\\cancel{${a ** 2}}${ecritureAlgebrique(2 * a)}h+h^2-\\cancel{${a ** 2}}}{h}=

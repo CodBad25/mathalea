@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -88,7 +87,7 @@ export default class CalculMoitieFraction extends ExerciceSimple {
       [9, 10],
     ]
 
-    const a = choice(listeFractions)
+    const a = this.quotaChoice('a', listeFractions)
     const f = new FractionEtendue(a[0], a[1])
     const reponse = new FractionEtendue(a[0], a[1] * 2)
     this.reponse = reponse.simplifie()

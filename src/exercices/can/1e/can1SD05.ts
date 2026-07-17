@@ -1,6 +1,5 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
@@ -44,7 +43,7 @@ export default class AxeSymetrieParabole extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, x1, x2, somme, moinsb, b, c, maFraction, alpha, beta
-    switch (choice([1, 2, 3])) {
+    switch (this.quotaChoice('cas', [1, 2, 3])) {
       case 1: // forme factorisée
         a = randint(-9, 9, 0)
         x1 = randint(-9, 9)

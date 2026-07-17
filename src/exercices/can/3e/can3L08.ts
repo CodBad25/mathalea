@@ -34,7 +34,7 @@ export default class EnFonctionDeAire extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('cas', [1, 2])) {
       case 1:
         {
           const a = randint(1, 3)

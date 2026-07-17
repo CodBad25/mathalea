@@ -45,7 +45,7 @@ export default class LectureGraphiqueTangente extends ExerciceSimple {
   nouvelleVersion() {
     let f, F, nbre, alpha: number, beta: number
     switch (
-      choice([1, 2]) //, 2
+      this.quotaChoice('type', [1, 2]) //, 2
     ) {
       case 1: // second degré (x-alpha)^2+beta
         {
