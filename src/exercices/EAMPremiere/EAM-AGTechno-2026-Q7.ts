@@ -3,6 +3,7 @@ import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
+import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -43,11 +44,42 @@ export default class AutoQ7AGt2026 extends ExerciceQcmA {
     const dist1 = `y=${texNombre(coefficientDirecteur, 2)}x${ecritureAlgebrique(abscisseAOrigine)}`
     const dist2 = `y=${texNombre(coeffBis, 2)}x+${texNombre(ordonneeAOrigine, 2)}`
     const dist3 = `y=${texNombre(coeffBis, 2)}x${ecritureAlgebrique(abscisseAOrigine)}`
-    const f = (x: number) =>
-      (-ordonneeAOrigine / abscisseAOrigine) * x + ordonneeAOrigine
-    const A = pointAbstrait(abscisseAOrigine, 0)
-    const B = pointAbstrait(0, ordonneeAOrigine)
-    const d = droite(A, B)
+
+    // Bornes du cadre de tracé
+    const xmin = -6
+    const xmax = 7
+    const ymin = -1
+    const ymax = 5
+    const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
+
+    // Points d'intersection de la droite y = m x + p avec le cadre : on trace
+    // uniquement le segment visible, pour ne jamais déborder de la fenêtre.
+    const p = ordonneeAOrigine
+    const pts: Array<[number, number]> = []
+    const yGauche = coefficientDirecteur * xmin + p
+    if (yGauche >= ymin && yGauche <= ymax) pts.push([xmin, yGauche])
+    const yDroite = coefficientDirecteur * xmax + p
+    if (yDroite >= ymin && yDroite <= ymax) pts.push([xmax, yDroite])
+    if (coefficientDirecteur !== 0) {
+      const xBas = (ymin - p) / coefficientDirecteur
+      if (xBas > xmin && xBas < xmax) pts.push([xBas, ymin])
+      const xHaut = (ymax - p) / coefficientDirecteur
+      if (xHaut > xmin && xHaut < xmax) pts.push([xHaut, ymax])
+    }
+    pts.sort((u, v) => u[0] - v[0])
+    const P1 = pts[0]
+    const P2 = pts[pts.length - 1]
+
+    const d = segment(P1[0], P1[1], P2[0], P2[1], 'red')
+    d.epaisseur = 1.5
+
+    // Étiquette (d) : près de l'extrémité haute du segment, mais gardée dans le cadre
+    const haut = P1[1] >= P2[1] ? P1 : P2
+    const bas = P1[1] >= P2[1] ? P2 : P1
+    const lx = clamp(haut[0] + 0.15 * (bas[0] - haut[0]) - 0.5, xmin + 0.3, xmax - 0.8)
+    const ly = clamp(haut[1] + 0.15 * (bas[1] - haut[1]), ymin + 0.3, ymax - 0.3)
+    const labelD = latex2d('(d)', lx, ly, { letterSize: 'small', color: 'red' })
+
     const x = latex2d('x', 6.5, -0.4, { letterSize: 'small' })
     const y = latex2d('y', -0.5, 4.8, { letterSize: 'small' })
     const rep = new RepereBuilder({
@@ -66,11 +98,6 @@ export default class AutoQ7AGt2026 extends ExerciceQcmA {
       .setLabelsY([{ valeur: 1, texte: '1' }])
       .buildCustom()
 
-    d.color = colorToLatexOrHTML('red')
-    const labelD = latex2d('(d)', -2, f(-2) + 1, {
-      letterSize: 'small',
-      color: 'red',
-    })
     const objets = [rep, d, x, labelD, y]
     const figure = mathalea2d(
       Object.assign(
