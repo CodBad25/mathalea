@@ -9,14 +9,15 @@ import {
   htmlToTypst,
 } from './latexToTypst'
 
-/** Import du paquet exercise-bank (badges Exercice/Correction, banque) */
+/**
+ * Import du paquet exercise-bank (badges Exercice/Correction, banque).
+ * Depuis la 0.6.0, le paquet gère lui-même les QR-codes (via tiaoma en
+ * interne) : plus besoin d'importer tiaoma séparément.
+ */
 export const EXERCISE_BANK_IMPORT =
-  '#import "@preview/exercise-bank:0.5.2": exo, exo-setup, exo-print-solutions, exo-counter'
+  '#import "@preview/exercise-bank:0.6.0": exo, exo-setup, exo-print-solutions, exo-counter'
 
-/** Import du paquet tiaoma (génération des QR-codes) */
-export const TIAOMA_IMPORT = '#import "@preview/tiaoma:0.3.0"'
-
-/** Hauteur (et largeur) des QR-codes placés au coin des exercices */
+/** Hauteur (et largeur) des QR-codes placés au coin des exercices (`qr-size`) */
 const QRCODE_SIZE = '1.8cm'
 
 /**
@@ -423,12 +424,6 @@ function exerciseBody(
   boldQuestionNumbers = false,
   /** Numéro de la première question (exercices fusionnés : la numérotation continue) */
   startNumber = 1,
-  /**
-   * QR-code (`#tiaoma.qrcode(...)`) à réserver en haut à droite de l'exercice.
-   * Placé dans une cellule de grille à côté de l'introduction pour ne jamais
-   * recouvrir le texte (contrairement à un `#place` hors flux).
-   */
-  topRight?: string,
   /** Publie le repère `mathalea-anchor` de la liste `tasks` (palette de l'aperçu) */
   emitAnchor = true,
   /**
@@ -440,12 +435,8 @@ function exerciseBody(
   forceList = false,
 ): ExerciseBodyResult {
   const parts: string[] = []
-  // nombre de parts de tête (intro, amorce des sous-questions) : ce sont
-  // celles qui partagent la première ligne avec le QR-code éventuel
-  let leadCount = 0
   if (intro.trim().length > 0) {
     parts.push(htmlToTypst(intro, figures))
-    leadCount++
   }
   let questionList = questions
   let label = numbered ? '"1."' : 'none'
@@ -458,7 +449,6 @@ function exerciseBody(
         const head = htmlToTypst(split.head, figures)
         if (head.length > 0) {
           parts.push(head)
-          leadCount++
         }
       }
       questionList = split.items
@@ -498,45 +488,10 @@ function exerciseBody(
     parts.push(
       `${anchorLine}#tasks(columns: ${tasksPrefix}-colonnes, label: ${boldableLabel(label, boldQuestionNumbers)}, row-gutter: ${tasksPrefix}-gutter, above: 1.2em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
     )
-    return { code: assembleBody(parts, leadCount, topRight), itemCount: converted.length }
+    return { code: parts.join('\n\n'), itemCount: converted.length }
   }
   parts.push(...converted)
-  return { code: assembleBody(parts, leadCount, topRight), itemCount: 0 }
-}
-
-/**
- * Assemble le corps d'un exercice. Sans QR-code, les parts se suivent
- * simplement. Avec un QR-code (`topRight`), les parts de tête (`leadCount`)
- * sont mises dans une grille à côté du QR-code : celui-ci occupe ainsi une
- * cellule réservée et ne peut jamais recouvrir le texte ; le reste du contenu
- * s'écrit sur toute la largeur en dessous.
- */
-function assembleBody(
-  parts: string[],
-  leadCount: number,
-  topRight?: string,
-): string {
-  if (topRight == null) return parts.join('\n\n')
-  const indent = (body: string) =>
-    body
-      .split('\n')
-      .map((line) => (line.length > 0 ? `  ${line}` : line))
-      .join('\n')
-  const cell = (body: string) => (body.length > 0 ? `[\n${indent(body)}\n]` : '[]')
-  const lead = parts.slice(0, leadCount).join('\n\n')
-  const rest = parts.slice(leadCount)
-  const grid = `#grid(columns: (1fr, auto), column-gutter: 8pt, ${cell(lead)}, ${cell(topRight)})`
-  return [grid, ...rest].join('\n\n')
-}
-
-/**
- * QR-code du coin haut-droit d'un exercice, menant à l'exercice seul sur
- * MathALÉA (réglages et graine inclus). Rendu dans une cellule de grille
- * réservée (voir `assembleBody`) pour ne jamais recouvrir le texte. Le
- * `#link` rend le QR-code cliquable dans le PDF (vers la même URL).
- */
-function qrCodeSnippet(url: string): string {
-  return `#link(${typstString(url)}, tiaoma.qrcode(${typstString(url)}, height: ${QRCODE_SIZE}))`
+  return { code: parts.join('\n\n'), itemCount: 0 }
 }
 
 /** Contenu Typst (définitions + rendu) d'une version du sujet */
@@ -555,6 +510,11 @@ function versionLetter(version: number): string {
 interface GeneratedExercise {
   enonce: string
   correction: string | null
+  /**
+   * URL de l'exercice seul, à passer en paramètre `qr:` de `exo.with(...)` :
+   * le paquet exercise-bank génère et place lui-même le QR-code.
+   */
+  qrUrl?: string
 }
 
 /**
@@ -605,16 +565,17 @@ function computeGeneratedExercises(
         correction: null,
       }
     }
-    // QR-code vers l'exercice seul, réservé en haut à droite (mode banque,
-    // exercice non fusionné uniquement : dans un groupe fusionné (global ou
-    // local) il n'y a pas de bloc par exercice où l'ancrer, la case est donc
-    // désactivée dans ce cas)
-    const qr =
+    // QR-code vers l'exercice seul (mode banque, exercice non fusionné
+    // uniquement : dans un groupe fusionné (global ou local) il n'y a pas de
+    // bloc `exo.with(...)` par exercice où l'accrocher, la case est donc
+    // désactivée dans ce cas). Le paquet exercise-bank génère et place le
+    // QR-code lui-même à partir de cette URL (voir `buildVersionContent`).
+    const qrUrl =
       options.showQrCode &&
       !isGrouped[k] &&
       exercise.url != null &&
       exercise.url.length > 0
-        ? qrCodeSnippet(exercise.url)
+        ? exercise.url
         : undefined
     if (!continued) nextStart = 1
     const enonce = exerciseBody(
@@ -625,7 +586,6 @@ function computeGeneratedExercises(
       `ex${k + 1}`,
       options.boldQuestionNumbers,
       nextStart,
-      qr,
       emitAnchors,
       isGrouped[k],
     )
@@ -643,14 +603,13 @@ function computeGeneratedExercises(
         `ex${k + 1}-corr`,
         options.boldQuestionNumbers,
         nextCorrectionStart,
-        undefined,
         emitAnchors,
         isGrouped[k],
       )
       nextCorrectionStart += body.itemCount
       correction = body.code
     }
-    return { enonce: enonce.code, correction }
+    return { enonce: enonce.code, correction, qrUrl }
   })
 }
 
@@ -822,12 +781,21 @@ function buildVersionContent(
         bankLines.push(`// ----- Exercice ${k + 1}${suffix} -----`)
       }
       bankLines.push(`#let ${varPrefix}ex${group.head + 1} = exo.with(`)
-      // la référence n'est affichée que pour un groupe d'un seul exercice
-      // (elle ne peut pas représenter tout un groupe fusionné)
+      // la référence et le QR-code ne sont affichés que pour un groupe d'un
+      // seul exercice (ils ne peuvent pas représenter tout un groupe fusionné)
       if (group.members.length === 1) {
         const ref = exercises[group.head].ref.trim()
         if (ref.length > 0) {
           bankLines.push(`  id: "${ref.replaceAll('"', '\\"')}",`)
+        }
+        // une surcharge de code (modale d'édition) remplace tout le contenu
+        // généré de l'exercice : le QR-code s'y désactive avec elle
+        const qrUrl = generated[group.head].qrUrl
+        if (
+          qrUrl != null &&
+          carryOver.codeOverrides?.[group.head + 1] == null
+        ) {
+          bankLines.push(`  qr: ${typstString(qrUrl)},`)
         }
       }
       bankLines.push('  exercise: [')
@@ -956,7 +924,7 @@ export function buildTypstDocument(
   const usesAnchors = allLines.some((line) =>
     line.includes('#mathalea-anchor('),
   )
-  const usesQrCode = allLines.some((line) => line.includes('tiaoma.qrcode('))
+  const usesQrCode = allLines.some((line) => /^\s*qr: /.test(line))
   const usesSchema = allLines.some((line) =>
     line.includes('mathalea-schema-span'),
   )
@@ -985,11 +953,6 @@ export function buildTypstDocument(
     lines.push('// ----- Paquets -----')
     if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
     if (usesTasks) lines.push(TASKIZE_IMPORT)
-    if (usesQrCode) lines.push(TIAOMA_IMPORT)
-    lines.push('')
-  } else if (usesQrCode) {
-    lines.push('// ----- Paquets -----')
-    lines.push(TIAOMA_IMPORT)
     lines.push('')
   }
   if (usesAnchors) {
@@ -1123,6 +1086,7 @@ export function buildTypstDocument(
     lines.push('  correction-color: couleur,')
     lines.push(`  show-id: ${options.showExerciseRefs},`)
     lines.push(`  exercise-above: ${options.exerciseSpacing}em,`)
+    if (usesQrCode) lines.push(`  qr-size: ${QRCODE_SIZE},`)
     // styles « en marge » : colonne compacte pour ne pas étrangler le
     // contenu (le paquet dimensionne sinon la colonne sur « Correction 100 »).
     // On règle ici la largeur des énoncés ; celle des corrections est
