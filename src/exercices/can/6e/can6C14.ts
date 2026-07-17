@@ -33,10 +33,10 @@ export default class Somme4EntiersQuiSeMarient extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 9)
+    const a = this.quotaRandint('a', 1, 9)
     const b = randint(1, 9, a)
-    const c = randint(3, 7) * 10
-    const d = randint(10, 15) * 10 - c
+    const c = this.quotaRandint('c', 3, 7) * 10
+    const d = this.quotaRandint('d', 10, 15) * 10 - c
     this.reponse = 2 * (c + d)
     this.question = `Calculer $${c - a} + ${d + b} + ${c + a} + ${d - b}$.`
     this.correction = `$${c - a} + ${d + b} + ${c + a} + ${d - b} =  ${miseEnEvidence(2 * (c + d))}$<br>`

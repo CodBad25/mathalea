@@ -38,7 +38,7 @@ export default class CalculAvecUnite extends ExerciceSimple {
     let k
     const a = randint(1, 9)
     const b = randint(1, 19)
-    switch (choice([1, 2, 3])) {
+    switch (this.quotaChoice('cas', [1, 2, 3])) {
       case 1:
         k = randint(0, 5)
         if (choice([true, false])) {

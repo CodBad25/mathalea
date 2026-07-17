@@ -1,7 +1,6 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Écrire un nombre avec une puissance'
 export const interactifReady = true
@@ -32,7 +31,7 @@ export default class EcrireAvecPuissances extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const cas = randint(1, 2)
+    const cas = this.quotaRandint('cas', 1, 2)
     
     if (cas === 1) {
       // Cas avec des entiers

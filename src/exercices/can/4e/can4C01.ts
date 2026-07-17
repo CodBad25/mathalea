@@ -1,10 +1,8 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
 } from '../../../lib/outils/ecritures'
 import { context } from '../../../modules/context'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Utiliser les priorités opératoires avec des relatifs'
 export const interactifReady = true
@@ -31,13 +29,13 @@ export default class PrioriteOperatoireEtRelatifs extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    let a = randint(-12, 12, 0)
-    const b = randint(-4, 4, [-1, 0, 1])
-    const c = randint(2, 6)
+    let a = this.quotaRandint('a', -12, 12, [0])
+    const b = this.quotaRandint('b', -4, 4, [-1, 0, 1])
+    const c = this.quotaRandint('c', 2, 6)
     if (a > 0 && b > 0) {
       a = -a
     }
-    if (choice([true, false])) {
+    if (this.quotaChoice('booleen', [true, false])) {
       this.question = `Calculer $${a}${ecritureAlgebrique(b)}\\times ${c}$.`
       if (context.isDiaporama) {
         this.question = `$${a}${ecritureAlgebrique(b)}\\times ${c}$`

@@ -1,12 +1,10 @@
 import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import Decimal from 'decimal.js'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { sp } from '../../../lib/outils/outilString'
 import { tableauColonneLigne } from '../../../lib/2d/tableau'
-import { choice } from '../../../lib/outils/arrayOutils'
 
 export const titre = 'Calculer une espérance'
 export const interactifReady = true
@@ -30,8 +28,8 @@ export default class esperance extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = new Decimal(5 * randint(1, 5)).div(100)
-    const b = new Decimal(5 * randint(1, 5)).div(100)
+    const a = new Decimal(5 * this.quotaRandint('a', 1, 5)).div(100)
+    const b = new Decimal(5 * this.quotaRandint('b', 1, 5)).div(100)
     const c = new Decimal(a).plus(b).mul(-1).plus(1)
     const listeValeurs = [
       [-2, 0, 1],
@@ -40,7 +38,7 @@ export default class esperance extends ExerciceSimple {
       [0, 1, 2],
       [-2, 0, 2],
     ]
-    const val = choice(listeValeurs)
+    const val = this.quotaChoice('val', listeValeurs)
     this.reponse = texNombre(
       a.mul(val[0]).plus(b.mul(val[1])).plus(c.mul(val[2])),
       2,

@@ -41,7 +41,7 @@ export default class CalculTermeSuiteRec extends ExerciceSimple {
     const nomSuite = ['u', 'v', 'w']
     const s = choice(nomSuite)
     switch (
-      choice(['a', 'b', 'c', 'd']) //
+      this.quotaChoice('cas', ['a', 'b', 'c', 'd']) //
     ) {
       case 'a': // suite arithmétique
         if (!this.interactif) {

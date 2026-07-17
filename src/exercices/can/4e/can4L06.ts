@@ -25,7 +25,7 @@ export default class CalculSubstitution extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, b, d
-    switch (randint(1, 4)) {
+    switch (this.quotaRandint('cas', 1, 4)) {
       case 1:
         a = randint(-5, -1)
         b = randint(1, 9)

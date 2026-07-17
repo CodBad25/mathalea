@@ -1,8 +1,6 @@
 import Decimal from 'decimal.js'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une probabilité avec des événements indépendants'
@@ -28,11 +26,11 @@ export default class esperance extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = new Decimal(randint(1, 9)).div(10)
-    const b = new Decimal(randint(1, 9)).div(10)
+    const a = new Decimal(this.quotaRandint('a', 1, 9)).div(10)
+    const b = new Decimal(this.quotaRandint('b', 1, 9)).div(10)
     const pAinterB = a.mul(b)
     switch (
-      choice([1, 2]) //, 2, 3
+      this.quotaChoice('cas', [1, 2]) //, 2, 3
     ) {
       case 1:
         this.reponse = texNombre(pAinterB, 2)

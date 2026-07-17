@@ -4,7 +4,6 @@ import {
   reduirePolynomeDegre3,
 } from '../../../lib/outils/ecritures'
 import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 export const titre = 'Calculer un discriminant'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -30,9 +29,9 @@ export default class Discriminant extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 5) * choice([-1, 1, 1, 1])
-    const b = randint(-5, 5)
-    const c = randint(-5, 5)
+    const a = this.quotaRandint('a', 1, 5) * choice([-1, 1, 1, 1])
+    const b = this.quotaRandint('b', -5, 5)
+    const c = this.quotaRandint('c', -5, 5)
     const d = b * b - 4 * a * c
     this.question = `Calculer le discriminant de cette expression : $${reduirePolynomeDegre3(0, a, b, c)}$.<br>
     $\\Delta=$`

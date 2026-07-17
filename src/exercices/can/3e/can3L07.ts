@@ -46,7 +46,7 @@ export default class EnFonctionDe extends ExerciceSimple {
     const AB = segmentAvecExtremites(A, B) // grand sement de départ
     AB.styleExtremites = '-|'
     AB.tailleExtremites = 5
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('cas', [1, 2])) {
       case 1: //
         {
           const listeValeurs = [

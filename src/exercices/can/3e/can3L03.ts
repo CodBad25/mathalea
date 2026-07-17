@@ -1,6 +1,5 @@
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation du type $ax+b=c$'
 export const interactifReady = true
@@ -28,9 +27,9 @@ export default class EquationAXPlusBEgalC extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(-5, 5, [0, -1, 1])
-    this.reponse = randint(-9, 9, [-1, 0, 1])
-    const c = randint(-9, 9, [0])
+    const a = this.quotaRandint('a', -5, 5, [0, -1, 1])
+    this.reponse = this.quotaRandint('reponse', -9, 9, [-1, 0, 1])
+    const c = this.quotaRandint('c', -9, 9, [0])
     const b = c - a * this.reponse
     this.question = `Donner la solution de l'équation : <br>$${a}x${ecritureAlgebrique(b)}=${c}$`
     this.correction = `On procède par étapes successives :<br>

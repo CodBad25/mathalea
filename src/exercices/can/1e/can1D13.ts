@@ -38,7 +38,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, c, d
     switch (
-      choice([1, 2, 3, 4, 5, 6]) //
+      this.quotaChoice('type', [1, 2, 3, 4, 5, 6]) //
     ) {
       case 1: // troisième degre ax^3+bx^2+cx+d
         a = randint(-10, 10, [0])

@@ -36,7 +36,7 @@ export default class ReduireAvecFraction extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const couplend = choice([
+    const couplend = this.quotaChoice('couplend', [
       [1, 2],
       [3, 2],
       [5, 2],
@@ -69,7 +69,7 @@ export default class ReduireAvecFraction extends ExerciceSimple {
     ]) // n et m sont premiers entre eux
     const n = couplend[0]
     const d = couplend[1]
-    const a = randint(1, 9)
+    const a = this.quotaRandint('a', 1, 9)
     const frac = fraction(n, d).texFraction
     const frac2 = fraction(a * d, d).texFraction
     const decompo = `\\dfrac{${a}\\times${d}}{${d}}`
@@ -78,7 +78,11 @@ export default class ReduireAvecFraction extends ExerciceSimple {
     this.correction = ''
     const lettre = lettreDepuisChiffre(randint(1, 26, [15, 17, 24]))
     if (this.sup) this.spacingCorr = 3
-    switch (this.versionQcm ? choice([2, 4]) : choice([1, 2, 3, 4])) {
+    switch (
+      this.versionQcm
+        ? this.quotaChoice('cas', [2, 4])
+        : this.quotaChoice('cas', [1, 2, 3, 4])
+    ) {
       case 1:
         {
           const frac3 = fraction(n + a * d, d).texFraction

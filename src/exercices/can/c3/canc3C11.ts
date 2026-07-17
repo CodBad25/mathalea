@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer la moitié d’un nombre impair'
 export const interactifReady = true
@@ -32,7 +31,7 @@ export default class CalculMoitieImpair extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(3, 48) * 2 + 1
+    const a = this.quotaRandint('a', 3, 48) * 2 + 1
     this.reponse = a / 2
     this.question = `Calculer la moitié de $${a}$. `
     this.correction = `$${a}\\div 2=${miseEnEvidence(texNombre(this.reponse))}$

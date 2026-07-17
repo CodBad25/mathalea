@@ -51,7 +51,7 @@ export default class CalculProduitSommeImageParFonctionAffine extends ExerciceSi
       a = randint(-6, 6, [0])
       b = randint(-6, 6, [0])
     }
-    const x1 = randint(-4, 4)
+    const x1 = this.quotaRandint('x1', -4, 4)
     const x2 = randint(-3, 3, x1)
     const nomF = choice(['f', 'g', 'h', 'u', 'v', 'w', 'p', 'm', 't', 'k'])
 

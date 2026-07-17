@@ -41,7 +41,7 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
     }
     let a, b, n, p, s
     switch (
-      choice(['a', 'b', 'c', 'd', 'e']) //
+      this.quotaChoice('type', ['a', 'b', 'c', 'd', 'e']) //
     ) {
       case 'a':
         a = randint(-9, 9, [0, 1, -1])

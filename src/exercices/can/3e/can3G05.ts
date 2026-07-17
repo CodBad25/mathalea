@@ -7,11 +7,9 @@ import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { rotation, similitude } from '../../../lib/2d/transformations'
 import { pointAdistance } from '../../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { getLang } from '../../../lib/stores/languagesStore'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Utiliser la trigonométrie'
@@ -52,13 +50,13 @@ export default class Trigo extends ExerciceSimple {
       [9, 40, 41],
       [11, 60, 61],
     ] // triplets Pythagore
-    const triplet = choice(listeTriplet)
+    const triplet = this.quotaChoice('triplet', listeTriplet)
     const nom = creerNomDePolygone(3, ['QD'])
     const a = triplet[0]
     const b = triplet[1]
     const c = triplet[2]
     const A = pointAbstrait(0, 0, nom[0])
-    const alpha = randint(0, 135)
+    const alpha = this.quotaRandint('alpha', 0, 135)
     const B = rotation(pointAdistance(A, a, 0), A, alpha, nom[1])
     const C = similitude(A, B, 90, b / a, nom[2])
     const pol = polygoneAvecNom(A, B, C, (10 * c) / 170) // 10 *c / 170 => on arrête à 10 pixels du points...  lié à pixelsParCm: 170 / c plus bas

@@ -33,9 +33,9 @@ export default class ResteDivisionEuclidienne1 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(7, 9)
+    const a = this.quotaRandint('a', 7, 9)
     const b = randint(1, a - 1)
-    const d = randint(5, 9)
+    const d = this.quotaRandint('d', 5, 9)
     const c = d * a + b
     this.reponse = c % a
     this.question = `Je possède $${c}$ bonbons et je fabrique des sacs de $${a}$ bonbons.<br>

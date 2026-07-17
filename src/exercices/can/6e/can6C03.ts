@@ -1,6 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Rechercher un terme dans une somme'
@@ -29,10 +28,10 @@ export default class AdditionATrou extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(5, 9)
-    const b = randint(6, 9)
-    const c = randint(1, 5)
-    const d = randint(1, 4)
+    const a = this.quotaRandint('a', 5, 9)
+    const b = this.quotaRandint('b', 6, 9)
+    const c = this.quotaRandint('c', 1, 5)
+    const d = this.quotaRandint('d', 1, 4)
     this.reponse = d * 10 + b
     this.question = `Compléter : $${c * 10 + a} + \\dots = ${(c + d) * 10 + b + a}$`
     this.canEnonce = 'Compléter.'

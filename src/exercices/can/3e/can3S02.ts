@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer la probabilité d’un évènement contraire'
@@ -61,7 +60,7 @@ export default class ProbaEvenementContraire extends ExerciceSimple {
       [7, 10],
       [9, 10],
     ] // Couples de nombres premiers entre eux
-    const fraction = choice(listeFractions)
+    const fraction = this.quotaChoice('fraction', listeFractions)
     const n = fraction[0]
     const d = fraction[1]
     const nSurD = new FractionEtendue(n, d)

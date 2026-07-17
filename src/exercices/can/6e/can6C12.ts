@@ -29,7 +29,7 @@ export default class DoubleOuTriple extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 3)
+    const a = this.quotaRandint('a', 1, 3)
     const b = randint(1, 9, a)
     const c = a * 10 + b
     if (this.quotaChoice('doubleOuTriple', [true, false])) {

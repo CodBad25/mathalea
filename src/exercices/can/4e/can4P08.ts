@@ -37,7 +37,7 @@ export default class PoucentageE extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, n
     switch (
-      choice(['a', 'b', 'c', 'd', 'e']) //
+      this.quotaChoice('cas', ['a', 'b', 'c', 'd', 'e']) //
     ) {
       case 'a':
         a = randint(4, 13) * 5

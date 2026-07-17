@@ -33,8 +33,8 @@ export default class PolyTableauSignes extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(-9, 9, 0) // coefficient a
-    const b = randint(-9, 9) // racine1
+    const a = this.quotaRandint('a', -9, 9, [0]) // coefficient a
+    const b = this.quotaRandint('b', -9, 9) // racine1
     const c = randint(-9, 9, b) // racine2
     const fonction = (x: number | FractionEtendue) => {
       if (typeof x !== 'number') {

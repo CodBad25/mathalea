@@ -3,7 +3,6 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer l'image d'une fraction par une fonction affine"
 export const interactifReady = true
@@ -35,10 +34,10 @@ export default class CalculImageParFonctionAffineFraction extends ExerciceSimple
 
   nouvelleVersion() {
     // Coefficient directeur a (entier non nul)
-    const a = randint(-6, 6, [0])
+    const a = this.quotaRandint('a', -6, 6, [0])
 
     // Ordonnée à l'origine b (entier)
-    const b = randint(-8, 8, 0)
+    const b = this.quotaRandint('b', -8, 8, [0])
 
     // Nom de la fonction
     const nomF = choice(['f', 'g', 'h', 'u', 'v', 'w', 'p', 'm', 't', 'k'])
@@ -62,8 +61,8 @@ export default class CalculImageParFonctionAffineFraction extends ExerciceSimple
       [1, 7],
     ]
 
-    const [num, den] = choice(fractionsSimples)
-    const signe = choice([-1, 1])
+    const [num, den] = this.quotaChoice('fraction', fractionsSimples)
+    const signe = this.quotaChoice('signe', [-1, 1])
 
     // Création de la fraction x
     const fractionX = new FractionEtendue(signe * num, den)

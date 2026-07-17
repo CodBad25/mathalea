@@ -30,8 +30,8 @@ export default class ResteDivisionPar3 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const b = randint(1, 9)
-    const c = randint(0, 9)
+    const b = this.quotaRandint('b', 1, 9)
+    const c = this.quotaRandint('c', 0, 9)
     const d = randint(0, 9, [b, c])
     const a = b * 100 + c * 10 + d
     this.reponse = a % 3

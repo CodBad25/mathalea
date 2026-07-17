@@ -8,7 +8,6 @@ import { texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
 import { bleuMathalea, orangeMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -68,7 +67,7 @@ export default class MilieuEntre1EtFraction extends ExerciceSimple {
       [13, 12],
       [14, 11],
     ] // Couples de nombres premiers entre eux >1
-    const fractionR = choice(listeFractions1)
+    const fractionR = this.quotaChoice('fractionR', listeFractions1)
     const n = fractionR[0]
     const d = fractionR[1]
     // Ajouts par J-C

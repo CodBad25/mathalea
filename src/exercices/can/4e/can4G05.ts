@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -33,7 +32,7 @@ export default class DiagonaleCarre extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('cas', [1, 2])) {
       case 1:
         {
           const a = randint(1, 10) //

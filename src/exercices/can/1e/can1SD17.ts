@@ -37,9 +37,9 @@ export default class EquationSecondDegreParticuliere extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(-10, 10, 0)
+    const a = this.quotaRandint('a', -10, 10, [0])
     const b = randint(-10, 10, [0, a, -a])
-    const c = randint(-10, 10, 0)
+    const c = this.quotaRandint('c', -10, 10, [0])
     const f = new FractionEtendue(-b, a)
     if (this.versionQcm) {
       this.question = `L'ensemble des solutions $\\mathscr{S}$ de l'équation  $${reduirePolynomeDegre3(0, a, b, c)}=${c}$ est :`

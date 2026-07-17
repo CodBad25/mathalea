@@ -32,7 +32,9 @@ export default class MoyenneStat extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, c, d, e, f, N
     switch (
-      this.versionQcm ? choice([1, 2]) : choice([1, 2, 3, 3]) //
+      this.versionQcm
+        ? this.quotaChoice('cas', [1, 2])
+        : this.quotaChoice('cas', [1, 2, 3, 3]) //
     ) {
       case 1:
         a = randint(2, 6)

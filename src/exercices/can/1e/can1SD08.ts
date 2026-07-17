@@ -36,7 +36,7 @@ export default class EcondDegreAbscisseOrdonneeSommet extends ExerciceSimple {
   nouvelleVersion() {
     const nomF = [['f'], ['g'], ['h'], ['u'], ['v']]
     let a, b, c, r, alpha, nom
-    if (choice([true, false])) {
+    if (this.quotaChoice('cas', [true, false])) {
       a = randint(-3, 3, 0)
       b = randint(-9, 9)
       c = randint(-9, 9)

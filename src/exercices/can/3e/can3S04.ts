@@ -2,7 +2,6 @@ import { listeDeNotes } from '../../../lib/outils/aleatoires'
 import { sp } from '../../../lib/outils/outilString'
 import { prenom } from '../../../lib/outils/Personne'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une étendue'
 export const interactifReady = true
@@ -30,8 +29,12 @@ export default class Etendue extends ExerciceSimple {
 
   nouvelleVersion() {
     let min, max
-    const nombreNotes = randint(4, 7)
-    const notes = listeDeNotes(nombreNotes, randint(0, 7), randint(13, 20)) // on récupère une série de notes (série brute)
+    const nombreNotes = this.quotaRandint('nombreNotes', 4, 7)
+    const notes = listeDeNotes(
+      nombreNotes,
+      this.quotaRandint('min', 0, 7),
+      this.quotaRandint('max', 13, 20),
+    ) // on récupère une série de notes (série brute)
     min = 20
     max = 0
     for (let j = 0; j < nombreNotes; j++) {

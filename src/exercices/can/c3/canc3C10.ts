@@ -60,7 +60,7 @@ export default class FoisPlusFoisMoins2 extends ExerciceSimple {
       clubs,
       choix2
     switch (
-      choice([1, 2, 3]) // 1, 2
+      this.quotaChoice('cas', [1, 2, 3]) // 1, 2
     ) {
       case 1:
         choix1 = choice([true, false])

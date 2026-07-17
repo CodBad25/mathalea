@@ -46,7 +46,7 @@ export default class OrdonneeAbscisseFonctionLineaire extends ExerciceSimple {
     }
     const yA = a * xA
     const f = (x: number) => a * x
-    const xB = randint(5, 10)
+    const xB = this.quotaRandint('xB', 5, 10)
     if (a === 0.5) {
       yB = randint(6, 10) * 2
     } else if (a === 1.5) {

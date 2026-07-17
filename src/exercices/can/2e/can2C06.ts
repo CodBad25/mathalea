@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { extraireRacineCarree } from '../../../lib/outils/calculs'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -30,7 +29,7 @@ export default class SimplificationsRacinesCarrees extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = choice([
+    const a = this.quotaChoice('a', [
       8, 18, 32, 50, 72, 98, 40, 200, 12, 27, 48, 75, 20, 45, 24, 28, 300, 500,
       600, 700, 40, 44, 52, 60, 63, 90, 54,
     ])

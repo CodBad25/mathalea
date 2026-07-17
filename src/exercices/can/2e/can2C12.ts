@@ -1,4 +1,4 @@
-import { choice, shuffle } from '../../../lib/outils/arrayOutils'
+import { shuffle } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -43,7 +43,7 @@ export default class TauxGlobal extends ExerciceSimple {
     let listeCalculs = []
     this.reponse = 0
     switch (
-      choice(['a', 'b', 'c', 'd']) //
+      this.quotaChoice('type', ['a', 'b', 'c', 'd']) //
     ) {
       case 'a': // augmente puis diminue
         a = randint(1, 9) * 10

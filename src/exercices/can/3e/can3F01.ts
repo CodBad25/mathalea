@@ -79,7 +79,7 @@ export default class ImageSpline extends ExerciceSimple {
       )
     }
     let bornes = { xMin: 0, xMax: 0, yMin: 0, yMax: 0 }
-    const antecedent = randint(0, 8)
+    const antecedent = this.quotaRandint('antecedent', 0, 8)
     const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
     const nuage = aleatoiriseCourbe(mesFonctions)
     const theSpline = spline(nuage)

@@ -1,8 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 export const titre = 'Trouver le nombre dans une table de multiplication '
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -31,10 +29,10 @@ export default class TableMultiplicationTrous extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(2, 9)
-    const b = randint(4, 10)
+    const a = this.quotaRandint('a', 2, 9)
+    const b = this.quotaRandint('b', 4, 10)
     const c = a * b
-    if (choice([true, false])) {
+    if (this.quotaChoice('ordre', [true, false])) {
       this.question = `Compléter : <br>$${a}\\times .... =${c}$`
       this.correction = `$${a}\\times ${miseEnEvidence(b)} =${c}$`
       this.canEnonce = 'Compléter.'

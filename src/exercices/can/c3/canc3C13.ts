@@ -1,8 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 export const titre = 'Trouver un nombre dans un produit de trois facteurs '
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -32,11 +30,11 @@ export default class TableMultiplicationTrous3 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(2, 4)
-    const b = randint(2, 5)
-    const c = randint(4, 10)
+    const a = this.quotaRandint('a', 2, 4)
+    const b = this.quotaRandint('b', 2, 5)
+    const c = this.quotaRandint('c', 4, 10)
     const d = a * b * c
-    if (choice([true, false])) {
+    if (this.quotaChoice('ordre', [true, false])) {
       this.question = `Compléter : <br>$${a}\\times \\ldots \\times ${b} =${d}$`
       this.correction = `$${a}\\times ${miseEnEvidence(c)} \\times ${b} =${d}$`
       this.canEnonce = 'Compléter.'

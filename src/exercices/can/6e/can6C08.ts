@@ -4,7 +4,6 @@ import {
   miseEnEvidence,
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer le quart ou le tiers'
@@ -34,7 +33,7 @@ export default class QuartOuTiers extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(5, 10)
+    const a = this.quotaRandint('a', 5, 10)
     let b
     if (this.quotaChoice('quartOuTiers', [true, false])) {
       b = a * 8

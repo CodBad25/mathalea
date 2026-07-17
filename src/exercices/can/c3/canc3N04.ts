@@ -31,7 +31,7 @@ export default class ArrondiUnite extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 20)
+    const a = this.quotaRandint('a', 1, 20)
     const b = randint(0, 9, 5)
     const c = randint(0, 9, b)
     const d = arrondi(a + b * 0.1 + c * 0.01, 2)
