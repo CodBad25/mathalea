@@ -15,7 +15,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 
 export const titre = "Extrapoler une grandeur à partir d'un ajustement affine"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const dateDePublication = '06/07/2026'
 
@@ -204,7 +204,7 @@ export default class ExtrapolerTendanceLineaire extends Exercice {
         {
           champ1: { value: yExtra },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       texteCorr = `On utilise l'équation de la droite en remplaçant $x$ par $${xExtra}$ : <br>`

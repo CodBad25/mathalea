@@ -15,8 +15,8 @@ import {
   medianeTriangle,
 } from '../../lib/2d/utilitairesTriangle'
 import { bleuMathalea } from '../../lib/colors'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -25,7 +25,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Déterminer la nature d'une droite remarquable - 1"
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 export const dateDeModifImportante = '25/04/2026' // Rémi Angot ajout interactivité
 
 /**
@@ -164,7 +164,7 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
           this,
           i,
           { reponse: { value: rep, options: { texteSansCasse: true } } },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
       }
 

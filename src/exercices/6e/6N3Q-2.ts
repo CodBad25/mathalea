@@ -20,7 +20,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 
 export const titre = "Augmenter ou diminuer d'un pourcentage"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '23/07/2021'
@@ -406,7 +406,7 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
               champ1: { value: Math.abs(prixFinal - prixIntial) },
               champ2: { value: prixFinal },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
         }
         this.listeQuestions[i] = texte

@@ -21,7 +21,7 @@ export const titre = 'Programmer des calculs sur tableur'
 export const dateDePublication = '05/07/2026'
 
 export const interactifReady = true
-export const interactifType = 'tableur'
+export const interactifType = 'my-spreadsheet'
 
 /*
  * Programmer des calculs sur tableur : New programme de 6eme 2025
@@ -185,7 +185,7 @@ export default class ExerciceTableur3T10 extends Exercice {
             ],
           },
         },
-        { formatInteractif: 'tableur' },
+        { formatInteractif: 'my-spreadsheet' },
       )
     }
     const texteCorr = `Voici la formule à saisir en cellule A2 :<br>${texteEnCouleurEtGras(
@@ -264,7 +264,7 @@ export default class ExerciceTableur3T10 extends Exercice {
             ],
           },
         },
-        { formatInteractif: 'tableur' },
+        { formatInteractif: 'my-spreadsheet' },
       )
     }
     const texteCorr = `Voici la formule à saisir en cellule A2 :<br>${texteEnCouleurEtGras(
@@ -339,7 +339,7 @@ export default class ExerciceTableur3T10 extends Exercice {
             ],
           },
         },
-        { formatInteractif: 'tableur' },
+        { formatInteractif: 'my-spreadsheet' },
       )
     }
     const texteCorr = `Voici la formule à saisir en cellule B3 :<br>${texteEnCouleurEtGras(
@@ -414,7 +414,7 @@ export default class ExerciceTableur3T10 extends Exercice {
             ],
           },
         },
-        { formatInteractif: 'tableur' },
+        { formatInteractif: 'my-spreadsheet' },
       )
     }
     const texteCorr = `Voici la formule à saisir en cellule B3 :<br>${texteEnCouleurEtGras(
@@ -490,7 +490,7 @@ export default class ExerciceTableur3T10 extends Exercice {
             ],
           },
         },
-        { formatInteractif: 'tableur' },
+        { formatInteractif: 'my-spreadsheet' },
       )
     }
 
@@ -574,7 +574,7 @@ export default class ExerciceTableur3T10 extends Exercice {
             ],
           },
         },
-        { formatInteractif: 'tableur' },
+        { formatInteractif: 'my-spreadsheet' },
       )
     }
 
@@ -676,7 +676,7 @@ export default class ExerciceTableur3T10 extends Exercice {
             ],
           },
         },
-        { formatInteractif: 'tableur' },
+        { formatInteractif: 'my-spreadsheet' },
       )
     }
     const texteCorr = `Voici la formule à saisir en cellule H2 :<br>${texteEnCouleurEtGras(

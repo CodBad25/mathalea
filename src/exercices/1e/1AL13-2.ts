@@ -17,7 +17,7 @@ import { context } from '../../modules/context'
 export const titre = 'Étudier une suite arithmético-géométrique'
 export const dateDePublication = '30/11/2024'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDeModificationImportante = '18/04/2026' // Passage en MultiMathfield, ce qui sous-entend la 1e question en Mathlive et plus en Qcm.
 
 /**
@@ -105,7 +105,7 @@ Montrer que  $(${NomSA}_n)$ est une suite géométrique.<br>
             value: `${u0 - k}\\times ${ecritureParentheseSiNegatif(a)}^n ${ecritureAlgebrique(k)}`,
           },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       texteCorr = createList({

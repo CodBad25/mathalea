@@ -7,11 +7,11 @@ import { rotation, similitude, translation } from '../../lib/2d/transformations'
 import { triangle2points2longueurs } from '../../lib/2d/triangles'
 import { angle, longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import {
   choixDeroulant,
   listeDeroulanteToQcm,
 } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import {
   combinaisonListes,
@@ -24,10 +24,11 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true // pour définir qu'exercice peut s'afficher en mode interactif.
-export const interactifType = 'listeDeroulante' // 'mathLive'
+export const interactifType = 'liste-deroulante'
 export const amcReady = true // pour définir que l'exercice peut servir à AMC
 export const amcType = 'qcmMono'
-export const titre = 'Effectuer un lien entre triangles égaux et côtés homologues'
+export const titre =
+  'Effectuer un lien entre triangles égaux et côtés homologues'
 
 /**
  * Deux triangles égaux sont codés, il faut reconnaitre les côtés homologues
@@ -410,7 +411,7 @@ export default class TrianglesEgaux extends Exercice {
           this,
           3 * i,
           { reponse: { value: repCote[0] } },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
         texte +=
           `$[${A.nom + C.nom}]$ et ` +
@@ -420,7 +421,7 @@ export default class TrianglesEgaux extends Exercice {
           this,
           3 * i + 1,
           { reponse: { value: repCote[1] } },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
         texte +=
           `$[${B.nom + C.nom}]$ et ` +
@@ -430,7 +431,7 @@ export default class TrianglesEgaux extends Exercice {
           this,
           3 * i + 2,
           { reponse: { value: repCote[2] } },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
       } else if (context.isAmc) {
         const options = { ordered: true, vertical: true }

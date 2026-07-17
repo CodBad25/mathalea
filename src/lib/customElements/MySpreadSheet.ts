@@ -519,6 +519,7 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
     const sheetTestDatas = sheetAnswer.sheetTestDatas
 
     const sheetElement = this.findSheetElement(numeroExercice, questionIndex)
+    sheetElement!.interactivityOn = false
     if (!sheetElement) {
       console.error(
         `${this.getDefaultSheetId(numeroExercice, questionIndex)} not found`,

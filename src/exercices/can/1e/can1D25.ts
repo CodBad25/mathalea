@@ -1,16 +1,16 @@
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { bleuMathalea } from '../../../lib/colors'
 import { choixDeroulant } from '../../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { tableauSignesFonction } from '../../../lib/mathFonctions/etudeFonction'
 import { spline, type NoeudSpline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import { bleuMathalea } from '../../../lib/colors'
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 export const titre =
   "Dresser le tableau de signes d'une fonction dérivée à partir d'un graphique"
 export const dateDePublication = '18/11/2023'
@@ -182,11 +182,13 @@ export default class SignesTabGSpline extends Exercice {
         texte += choixInteractif
         texte +=
           '<br> Réponse : ' +
-          choixDeroulant(this, i, { choices: [
-            { label: 'Choisir la réponse', value: '' },
-            { label: 'Vrai', value: 'Vrai' },
-            { label: 'Faux', value: 'Faux' },
-          ] })
+          choixDeroulant(this, i, {
+            choices: [
+              { label: 'Choisir la réponse', value: '' },
+              { label: 'Vrai', value: 'Vrai' },
+              { label: 'Faux', value: 'Faux' },
+            ],
+          })
         handleAnswers(this, i, {
           reponse: {
             value: choixInteractif === tableauD ? 'Vrai' : 'Faux',

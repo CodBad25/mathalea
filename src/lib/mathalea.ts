@@ -1111,7 +1111,7 @@ export function mathaleaHandleExerciceSimple(
             }
           }
           exercice.listeQuestions.push(exercice.question || '')
-        } else if (exercice.formatInteractif === 'listeDeroulante') {
+        } else if (exercice.formatInteractif === 'liste-deroulante') {
           const n = exercice.numeroExercice
           exercice.question = exercice.question?.replace(
             `id="ex${n}Q0"`,
@@ -1144,11 +1144,11 @@ export function mathaleaHandleExerciceSimple(
             )
             exercice.listeQuestions.push(exercice.question ?? '')
           }
-        } else if (exercice.formatInteractif === 'svgSelection') {
+        } else if (exercice.formatInteractif === 'svg-selection') {
           const n = exercice.numeroExercice
           exercice.question = exercice.question?.replace(
-            `id="svgSelectionEx${n}Q0"`,
-            `id="svgSelectionEx${n}Q${i}"`,
+            `id="svg-selectionEx${n}Q0"`,
+            `id="svg-selectionEx${n}Q${i}"`,
           )
           exercice.question = exercice.question?.replace(
             `checkSvgSelectionEx${n}Q0"`,

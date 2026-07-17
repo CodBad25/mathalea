@@ -217,9 +217,8 @@ export default class Pythagore2DBlockly extends Exercice {
     listeQuestionsToContenu(this)
 
     init() // blockly initialisation
-    const that = this
-    const createAllBlockly = function () {
-      const nbQ = that.nbQuestions
+    const createAllBlockly = function (this: Pythagore2DBlockly) {
+      const nbQ = this.nbQuestions
       const numExercice = numeroExercice
       // console log('nbQ:' + nbQ)
       for (let k = 0; k < nbQ; k++) {
@@ -227,12 +226,12 @@ export default class Pythagore2DBlockly extends Exercice {
         createBlockly(
           k,
           numExercice,
-          that.saveArguments[k].nomDuPolygone,
-          that.saveArguments[k].longueurBC,
-          that.saveArguments[k].longueurAC,
-          that.saveArguments[k].longueurAB,
-          that.saveArguments[k].listeTypeDeQuestion,
-          that.saveArguments[k].key,
+          this.saveArguments[k].nomDuPolygone,
+          this.saveArguments[k].longueurBC,
+          this.saveArguments[k].longueurAC,
+          this.saveArguments[k].longueurAB,
+          this.saveArguments[k].listeTypeDeQuestion,
+          this.saveArguments[k].key,
         )
       }
     }

@@ -21,7 +21,7 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const titre = 'Parcourir un labyrinthe de multiples'
 export const dateDePublication = '06/12/2020'
 export const dateDeModifImportante = '29/10/2024'
@@ -177,7 +177,7 @@ export default class ExerciceLabyrintheMultiples extends Exercice {
               options: { nombreDecimalSeulement: true },
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       }
       texteCorr = `Voici le chemin en couleur ($${miseEnEvidence(String(laby.chemin2d.length - 1))}$ nombres rencontrés avant la sortie) et la sortie est le numéro $${miseEnEvidence(String(nbL - monChemin[monChemin.length - 1][1]))}$.<br>`

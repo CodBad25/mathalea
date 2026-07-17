@@ -1,6 +1,6 @@
 import { cercleTrigo } from '../../lib/2d/cercleTrigo'
 import { orangeMathalea } from '../../lib/colors'
-import TrigoCircleSelectionElement, {
+import {
   selectionCercleTrigo,
   trigoCircleSelectionValue,
 } from '../../lib/customElements/TrigoCircleSelectionElement'
@@ -344,9 +344,5 @@ export default class PlacerSolutionsEquationTrigoCercle extends Exercice {
       cpt++
     }
     listeQuestionsToContenu(this)
-  }
-
-  correctionInteractive = (i: number) => {
-    return TrigoCircleSelectionElement.verifQuestion(this, i)
   }
 }

@@ -20,7 +20,7 @@ export const dateDePublication = '12/10/2022'
 export const dateDeModifImportante = '29/10/2024'
 export const titre = 'Explorer un labyrinthe de nombres premiers'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 
@@ -172,7 +172,7 @@ export default class ExerciceLabyrinthePremiers3e extends Exercice {
             champ1: { value: numeroDeSortie },
             champ2: { value: nbDeNombresRencontres },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       }
       texteCorr += mathalea2d(

@@ -23,7 +23,7 @@ export const titre = 'Lire une abscisse décimale grâce à des zooms successifs
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const dateDeModifImportante = '05/04/2026' // Passage à MultiMathfield
 /**
@@ -717,7 +717,7 @@ export default class LireUneAbscisseAvecZoom extends Exercice {
             champ3: { value: reponse3, options: { fractionDecimale: true } },
             bareme: toutAUnPoint,
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
 
         texte += addMultiMathfield(this, i, {

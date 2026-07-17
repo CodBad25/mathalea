@@ -14,7 +14,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const titre = "Lire les coordonnées d'un point dans un repère"
 export const dateDePublication = '06/06/2026'
 
@@ -25,7 +25,7 @@ export const dateDePublication = '06/06/2026'
 export default class AutoQ5ANbrevet2026 extends ExerciceCan {
   constructor() {
     super()
-    this.formatInteractif = 'multiMathfield'
+    this.formatInteractif = 'multi-mathfield'
   }
 
   private construireFigure(

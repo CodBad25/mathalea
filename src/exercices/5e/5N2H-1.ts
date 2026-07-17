@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Résoudre un problème en utilisant une somme algébrique de relatifs'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDeModifImportante = '15/04/2026'
 
 /**
@@ -226,7 +226,7 @@ Globalement, ${situations.prenom} ${situations.bilan[3]} $${miseEnEvidence(situa
             options: { nombreDecimalSeulement: true },
           },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       texteCorr = `${enonces[0].correction}`

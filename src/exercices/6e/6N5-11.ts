@@ -21,7 +21,7 @@ import {
 import type { OptionsComparaisonType } from '../../lib/types'
 
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const titre = 'Résoudre des problèmes (plus complexes)'
 export const dateDePublication = '27/11/2022'
 export const dateDeModifImportante = '17/02/2025'
@@ -620,7 +620,7 @@ export default class ExerciceProblemesComplexes extends Exercice {
             bareme: toutAUnPoint,
             ...answers,
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       }
 

@@ -457,7 +457,7 @@ export default class DeplacerReperer extends Exercice {
               .join(''),
           }
         }
-        handleAnswers(this, i, valeur, { formatInteractif: 'multiMathfield' })
+        handleAnswers(this, i, valeur, { formatInteractif: 'multi-mathfield' })
       }
 
       const texteCorr = `À la fin de son déplacement, le robot se trouve sur la case $${numerosPositionsSuccessives[numerosPositionsSuccessives.length - 1]}$, et il regarde vers le ${directions[positionCourante.angle as 0 | 90 | 180 | 270]}.<br>

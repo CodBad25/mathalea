@@ -33,8 +33,8 @@ import {
 import { vecteur } from '../../lib/2d/Vecteur'
 import { vide2d } from '../../lib/2d/Vide2d'
 import { bleuMathalea } from '../../lib/colors'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   choice,
   combinaisonListes,
@@ -51,7 +51,7 @@ import { Triangle } from '../../modules/Triangle'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 export const titre =
   'Reconnaitre de droites remarquables et des points de concours dans le triangle'
 
@@ -466,7 +466,7 @@ export default class DroitesRemarquablesPointsConcours extends Exercice {
               options: { texteSansCasse: true },
             },
           },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
       } else {
         texte += `Quelle est la nature `

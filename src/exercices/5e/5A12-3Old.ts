@@ -1,7 +1,7 @@
 import ExerciceLabyrinthePremiers3eOld from '../3e/3A10-7Old'
 export const titre = 'Parcourir un labyrinthe de nombres premiers'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDePublication = '12/10/2022'

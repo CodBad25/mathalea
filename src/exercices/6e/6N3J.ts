@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Ordonner une liste de nombres écrits sous forme de fractions ou de nombres mixtes'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDePublication = '21/07/2025'
 export const dateDeModificationImportante = '02/04/2026'
 
@@ -224,7 +224,7 @@ export default class ComparerFractionsNombresMixtes extends Exercice {
               value: fractionsTrieesFinales[4],
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
 
         let texteCorr = ''

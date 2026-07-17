@@ -7,9 +7,9 @@ import { pointSurDroite } from '../../lib/2d/utilitairesPoint'
 import { vide2d } from '../../lib/2d/Vide2d'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { rangeMinMax } from '../../lib/outils/nombres'
 import { lettreDepuisChiffre, numAlpha, sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
@@ -22,7 +22,7 @@ export const dateDePublication = '05/10/2022'
 export const dateDeModifImportante = '4/10/2023'
 // Ajout de l'interactivité et suppression de (AB] par Rémi Angot
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 /**
@@ -215,17 +215,19 @@ export default class constructionElementaire extends Exercice {
           colonne2 +=
             numAlpha(questind) +
             `$${points[ind].nom}${sp(3)}$` +
-            choixDeroulant(this, i * this.sup2 + k, { choices: [
-              { label: '?', value: '' },
-              { latex: '\\in', value: 'in' },
-              { latex: '\\notin', value: 'notin' },
-            ] }) +
+            choixDeroulant(this, i * this.sup2 + k, {
+              choices: [
+                { label: '?', value: '' },
+                { latex: '\\in', value: 'in' },
+                { latex: '\\notin', value: 'notin' },
+              ],
+            }) +
             `$${sp(3)}${lettre[0]}${points[ind1].nom}${points[ind2].nom}${lettre[1]}$<br>`
           handleAnswers(
             this,
             i * this.sup2 + k,
             { reponse: { value: sol.replace('\\', '') } },
-            { formatInteractif: 'listeDeroulante' },
+            { formatInteractif: 'liste-deroulante' },
           )
         } else {
           const enonce = `$${points[ind].nom}${sp(3)}\\ldots\\ldots\\ldots${sp(3)}${lettre[0]}${points[ind1].nom}${points[ind2].nom}${lettre[1]}$`

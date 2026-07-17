@@ -12,7 +12,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = 'Calculer  une probabilité avec un tableau'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const dateDePublication = '29/04/2025'
 export const dateDeModifImportante = '06/04/2026'
@@ -207,7 +207,7 @@ export default class CalculerProbaTableau extends Exercice {
           champ3: { value: reponse[2] },
           bareme: toutAUnPoint,
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
       texteCorr = `$${calculCorr[0]}$<br>
           $${calculCorr[1]}$ <br>

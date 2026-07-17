@@ -24,7 +24,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre = 'Calculer périmètre et aire de portions de disques'
@@ -269,7 +269,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
               reponses.map((r, j) => [`champ${j + 1}`, { value: r[j] }]),
             ),
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
 
         this.listeQuestions[i] =

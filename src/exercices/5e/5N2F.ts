@@ -17,7 +17,7 @@ export const dateDePublication = '1/08/2024'
 export const dateDeModifImportante = '01/08/2024'
 export const uuid = '19060'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+export const interactifType = 'fillInTheBlank'
 export const refs = {
   'fr-fr': ['5N2F', 'BP2AutoG3', '3AutoN02-1'],
   'fr-2016': ['5R13', 'BP2AutoG3', '3AutoN02-1'],
@@ -299,9 +299,14 @@ export default class InequationsLog extends Exercice {
         answer = '='
       }
       if (this.interactif) {
-        handleAnswers(this, i, {
-          champ1: { value: answer },
-        })
+        handleAnswers(
+          this,
+          i,
+          {
+            champ1: { value: answer },
+          },
+          { formatInteractif: 'fillInTheBlank' },
+        )
         texte = remplisLesBlancs(
           this,
           i,

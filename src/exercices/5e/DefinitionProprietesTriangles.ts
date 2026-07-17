@@ -1,5 +1,5 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import {
   gestionnaireFormulaireTexte,
@@ -11,7 +11,7 @@ export const titre =
   'Connaitre les définitions et propriétés du triangle et des droites remarquables'
 
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 
 export const dateDePublication = '18/1/2025'
 export const dateDeModifImportante = '25/04/2026' // Rémi Angot ajout interactivité
@@ -169,7 +169,7 @@ export default class DefinitionProprietesTriangles extends Exercice {
               options: { texteSansCasse: true },
             },
           },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
       } else texte += '$\\ldots$'
       if (this.questionJamaisPosee(i, listeTypeQuestions[i])) {

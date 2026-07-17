@@ -34,7 +34,7 @@ export const dateDeModifImportante = '20/06/2024'
 export const titre =
   'Résoudre un problème basé sur une expérience aléatoire à deux épreuves'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const uuid = '92022'
 
@@ -213,7 +213,7 @@ export default class FonctionsProbabilite2 extends Exercice {
                 options: { fractionEgale: true },
               },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
 
           texteCorr = ''
@@ -419,7 +419,7 @@ export default class FonctionsProbabilite2 extends Exercice {
                 options: { fractionEgale: true },
               },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
 
           break
@@ -528,7 +528,7 @@ export default class FonctionsProbabilite2 extends Exercice {
                   options: { fractionEgale: true },
                 },
               },
-              { formatInteractif: 'multiMathfield' },
+              { formatInteractif: 'multi-mathfield' },
             )
           }
           break
@@ -842,7 +842,7 @@ export default class FonctionsProbabilite2 extends Exercice {
                         : '\\emptyset',
                   },
                 },
-                { formatInteractif: 'multiMathfield' },
+                { formatInteractif: 'multi-mathfield' },
               )
             }
           }

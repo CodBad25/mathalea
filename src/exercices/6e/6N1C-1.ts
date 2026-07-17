@@ -22,7 +22,7 @@ import { toutAUnPoint } from '../../lib/interactif/mathLive'
 
 export const titre = "Lire l'abscisse entière d'un point (grands nombres)"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '26/08/2024'
@@ -221,7 +221,7 @@ export default class LireAbscisseEntiere2d extends Exercice {
               options: { nombreAvecEspace: true },
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       } else if (context.isAmc) {
         this.autoCorrectionAMC[i] = {

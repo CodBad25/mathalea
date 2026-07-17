@@ -12,7 +12,7 @@ export const titre =
   'Calculer mentalement une longueur avec le théorème de Pythagore'
 export const dateDePublication = '05/10/2024'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const uuid = '6dc46'
 export const refs = {
   'fr-fr': ['4G20-8', 'BP2AutoR3'],
@@ -74,7 +74,7 @@ export default class CalculMentalPythagore extends Exercice {
                 champ1: { value: reponse0 },
                 champ2: { value: String(reponse) },
               },
-              { formatInteractif: 'multiMathfield' },
+              { formatInteractif: 'multi-mathfield' },
             )
             texteCorr = RedactionPythagore(
               `${sommetA}`,
@@ -114,7 +114,7 @@ export default class CalculMentalPythagore extends Exercice {
                 champ1: { value: reponse0 },
                 champ2: { value: String(reponse) },
               },
-              { formatInteractif: 'multiMathfield' },
+              { formatInteractif: 'multi-mathfield' },
             )
           }
           break
@@ -140,7 +140,7 @@ export default class CalculMentalPythagore extends Exercice {
               champ1: { value: reponse0 },
               champ2: { value: String(reponse) },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
           texteCorr = RedactionPythagore(
             `${sommetA}`,

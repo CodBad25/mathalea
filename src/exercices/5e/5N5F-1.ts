@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Réduire et simplifier, si possible, un produit et une somme'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDeModifImportante = '19/11/2023'
@@ -163,7 +163,7 @@ export default class ReduireDinstinctionSommeProduit extends Exercice {
               options: { expressionsForcementReduites: true },
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       }
       texteCorr =

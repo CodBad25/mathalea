@@ -7,7 +7,7 @@ export const titre = 'Traduire une expression par une phrase'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 export const dateDePublication = '08/10/2023'
 
 /**

@@ -3,7 +3,7 @@ export const titre = 'Convertir des durées en heures décimales ou en minutes'
 export const dateDePublication = '24/09/2025'
 export const dateDeModifImportante = '19/03/2026'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const uuid = '185f8'
 export const refs = {
   'fr-fr': ['6M4C-3'],

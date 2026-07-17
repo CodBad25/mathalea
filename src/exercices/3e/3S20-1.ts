@@ -26,7 +26,7 @@ export const titre =
 export const dateDePublication = '15/01/2022'
 export const dateDeModifImportante = '20/06/2024'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 /**
  * On doit calculer la probabilité qu'un événement se réalise après une expérience aléatoire à deux épreuves
@@ -335,7 +335,7 @@ function unePieceDeuxUrnes(
         champ1: { value: proba1.texFraction, options: { fractionEgale: true } },
         champ2: { value: proba2.texFraction, options: { fractionEgale: true } },
       },
-      { formatInteractif: 'multiMathfield' },
+      { formatInteractif: 'multi-mathfield' },
     )
   q++
   texteCorr += `La probabilité de cet événement est donc de $${!proba1.estIrreductible ? proba1.texFraction + '=' + miseEnEvidence(proba1.texFractionSimplifiee) : miseEnEvidence(proba1.texFraction)}$.<br>`
@@ -583,7 +583,7 @@ function urneDeuxTiragesAvecRemise(
         },
         champ3: { value: proba4.texFraction, options: { fractionEgale: true } },
       },
-      { formatInteractif: 'multiMathfield' },
+      { formatInteractif: 'multi-mathfield' },
     )
 
   return {

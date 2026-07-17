@@ -2,7 +2,7 @@ import PuissancesEncadrement from '../4e/4C30-1'
 export const titre = 'Encadrer des nombres relatifs avec des puissances de 10'
 export const dateDeModifImportante = '06/10/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const uuid = '8f56f'
 export const refs = {
   'fr-fr': ['2N12-2', 'BP2AutoE1'],

@@ -16,7 +16,7 @@ export const titre = 'Résoudre des problèmes (impliquant diverses opérations)
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDePublication = '24/05/2025'
 
 /**
@@ -148,7 +148,7 @@ export default class ProblèmesBalance extends Exercice {
               champ1: { value: mult[0] === 1 ? masseEtoile : masseBoule },
               champ2: { value: mult[0] === 1 ? masseBoule : masseEtoile },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
           break
         }
@@ -244,7 +244,7 @@ export default class ProblèmesBalance extends Exercice {
               champ1: { value: gaucheMinMult === 1 ? masseEtoile : masseBoule },
               champ2: { value: gaucheMinMult === 1 ? masseBoule : masseEtoile },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
           break
         }

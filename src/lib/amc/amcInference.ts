@@ -121,15 +121,15 @@ export function mathaleaEnsureAMCCompatibility(
     return exercice as IExerciceAMC
   }
 
-  // type interactifs non supportés par AMC : svgSelection, cliqueFigure, DragAndDrop, apiGeom, tableur, MetaInteractif2d : on les considère comme des AMCOpen car ils ne sont pas incompatibles avec AMC, mais ils nécessitent une correction personnalisée.
+  // type interactifs non supportés par AMC : svg-selection, cliqueFigure, DragAndDrop, apiGeom, tableur, MetaInteractif2d : on les considère comme des AMCOpen car ils ne sont pas incompatibles avec AMC, mais ils nécessitent une correction personnalisée.
   if (
     [
-      'svgSelection', // inadapté clairement pour AMC
+      'svg-selection', // inadapté clairement pour AMC
       'cliqueFigure', // inadapté clairement pour AMC
       'dnd', // inadapté clairement pour AMC
-      'tableur', // Difficile à faire rentrer dans AMC
+      'my-spreadsheet', // Difficile à faire rentrer dans AMC
       'MetaInteractif2d', // Difficile à faire rentrer dans AMC
-      'multiMathfield', // On pourra essayer de faire mieux qu'AmcOpen
+      'multi-mathfield', // On pourra essayer de faire mieux qu'AmcOpen
       'tableauMathlive', // On pourra essayer de faire mieux qu'AmcOpen
       'fillInTheBlank', // On pourra essayer de faire mieux qu'AmcOpen
       'texte', // inadapté pour AMC, mais on peut faire du AMCOpen
@@ -229,7 +229,7 @@ export function mathaleaEnsureAMCCompatibility(
         extractAMCValue(item.valeur?.champ1.value),
       )
     } else if (
-      item.formatInteractif === 'multiMathfield' &&
+      item.formatInteractif === 'multi-mathfield' &&
       item.valeur?.champ1 != null &&
       !('champ2' in item.valeur)
     ) {

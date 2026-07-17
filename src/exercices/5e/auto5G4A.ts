@@ -10,8 +10,8 @@ import { tracePoint } from '../../lib/2d/TracePoint'
 import { rotation, translation2Points } from '../../lib/2d/transformations'
 import { angleOriente, longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointSurDroite } from '../../lib/2d/utilitairesPoint'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { mathalea2d } from '../../modules/mathalea2d'
 import {
   gestionnaireFormulaireTexte,
@@ -31,7 +31,7 @@ import { arrondi, range } from '../../lib/outils/nombres'
 import { context } from '../../modules/context'
 
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 export const titre = 'Connaitre le vocabulaire sur les angles'
 export const dateDePublication = '29/11/2024'
 export const dateDeModifImportante = '24/12/2024'
@@ -1341,7 +1341,7 @@ export default class VocabulaireAngles extends Exercice {
               options: { texteSansCasse: true },
             },
           },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
       }
 

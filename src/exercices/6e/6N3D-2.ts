@@ -9,6 +9,7 @@ import {
 } from '../../lib/2d/TracePointSurDroite'
 import { orangeMathalea } from '../../lib/colors'
 import { demiDroiteInteractive } from '../../lib/customElements/demi_droite_interactive'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -20,7 +21,7 @@ export const dateDePublication = '05/07/2026'
 export const titre =
   'Placer une abscisse fractionnaire sur une demi-droite graduée'
 export const interactifReady = true
-export const interactifType = 'custom'
+export const interactifType = 'demi-droite-interactive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -180,6 +181,25 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
       }
 
       if (this.questionJamaisPosee(i, nums.join(''), den)) {
+        handleAnswers(
+          this,
+          i,
+          {
+            reponse: {
+              value: JSON.stringify({
+                partsCount: den,
+                maxT: abscisseT,
+                showwNegative: false,
+                points: nums.map((num, i) => ({
+                  pointValue: num / den,
+                  label: ['A', 'B', 'C'][i],
+                })),
+                x0: 0,
+              }),
+            },
+          },
+          { formatInteractif: 'demi-droite-interactive' },
+        )
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
@@ -188,51 +208,6 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
       }
       cpt++
     }
-
     listeQuestionsToContenu(this)
-  }
-
-  correctionInteractive = (i?: number): string[] => {
-    if (i === undefined) return []
-    const nbPoints = this.sup
-
-    const host = document.querySelector(
-      `#demi-droite-gradueeEx${this.numeroExercice}Q${i}`,
-    ) as
-      | (HTMLElement & {
-          disableControls: () => void
-          value: {
-            partsCount: number
-            maxT: number
-            showwNegative: boolean
-            points: { pointValue: number; label: string }[]
-          }
-        })
-      | null
-
-    if (host === null || this.reponsesAttendues[i] === undefined) return []
-    host.disableControls()
-
-    const value = host.value
-    this.answers ??= {}
-    this.answers[`Ex${this.numeroExercice}Q${i}`] = JSON.stringify(value)
-    const results: ('OK' | 'KO')[] = []
-    for (let j = 0; j < nbPoints; j++) {
-      const attendu =
-        this.reponsesAttendues[i].nums[j] / this.reponsesAttendues[i].den
-      const saisi = value.points[j]?.pointValue
-      const ok = saisi !== undefined && Math.abs(saisi - attendu) < 1e-9
-
-      results.push(ok ? 'OK' : 'KO')
-    }
-    const spanResultat = document.querySelector(
-      `#resultatCheckEx${this.numeroExercice}Q${i}`,
-    ) as HTMLDivElement | null
-    if (spanResultat) {
-      const ok = results.every((r) => r === 'OK')
-      spanResultat.innerHTML = ok ? '😎' : '☹️'
-    }
-
-    return results
   }
 }

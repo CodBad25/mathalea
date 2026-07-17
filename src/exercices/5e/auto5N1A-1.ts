@@ -1,7 +1,7 @@
 import ExerciceLabyrintheDivisibilite from './5N1I-4'
 export const dateDePublication = '12/07/2027'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const titre =
   'Parcourir un labyrinthe de multiples basé sur les critères de divisibilité par 2, par 5 ou par 10'

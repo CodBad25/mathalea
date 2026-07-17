@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Déterminer graphiquement les extremums'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const dateDePublication = '27/06/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModificationImportante = '06/04/2026'
@@ -171,7 +171,7 @@ export default class BetaModeleSpline extends Exercice {
           champ3: { value: `${fMin}` },
           champ4: { value: `${solutionMin}` },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       const texteCorrection = `Le point le plus haut de la courbe a pour coordonnées $(${solutionMax}\\,;\\,${fMax})$.<br>

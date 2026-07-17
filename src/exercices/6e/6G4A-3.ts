@@ -1,6 +1,6 @@
 import VocabulaireAngles from '../5e/auto5G4A'
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 export const titre = 'Connaître le vocabulaire sur les angles'
 export const dateDePublication = '05/08/2025'
 

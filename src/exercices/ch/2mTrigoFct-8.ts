@@ -364,7 +364,7 @@ export default class ExpressionDepuisGraphiqueTrigonometrique extends Exercice {
             compare: compareReducedFunction,
           },
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
 
       if (

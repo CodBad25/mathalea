@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Lire l'abscisse décimale d'un point"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDeModifImportante = '31/10/2023'
@@ -208,7 +208,7 @@ export default class LireAbscisseDecimale extends Exercice {
             champ2: { value: arrondi(xB / pas1 + abs0, 1 + Math.log10(pas1)) },
             champ3: { value: arrondi(xC / pas1 + abs0, 1 + Math.log10(pas1)) },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
 
         texte += `<br><br>`

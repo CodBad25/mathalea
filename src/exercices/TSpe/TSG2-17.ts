@@ -25,7 +25,7 @@ export const refs = {
   'fr-ch': ['3G91-10'],
 }
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 // 8 cube vertices in base frame [x,y,z], all coords in {0,1}
 // Correspondence with TSG2-10 labels: V0=A, V1=B, V2=C, V3=D(hidden), V4=E, V5=F, V6=G, V7=H
@@ -412,7 +412,7 @@ export default class VecteursRepCube extends Exercice {
             field7: { value: frac(AD[1]) },
             field8: { value: frac(AD[2]) },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       }
 

@@ -14,7 +14,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const titre = 'Effectuer des divisions euclidiennes'
 export const dateDeModifImportante = '01/02/2026'
@@ -177,7 +177,7 @@ export default class DivisionsEuclidiennes extends Exercice {
           },
           bareme: toutAUnPoint,
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
       texteCorr += `${numAlpha(0)} Le quotient de la division euclidienne de $${texNombre(a)}$ par $${b}$ est $${miseEnEvidence(texNombre(q))}$.<br>`
       texteCorr += `${numAlpha(1)} Le reste de la division euclidienne de $${texNombre(a)}$ par $${b}$ est $${miseEnEvidence(String(r))}$.`

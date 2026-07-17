@@ -1,7 +1,7 @@
 import { bleuMathalea } from '../../lib/colors'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import {
   ajouteChampTexteMathLive,
   remplisLesBlancs,
@@ -152,7 +152,7 @@ export default class ConvertirM2EnDm2 extends Exercice {
               this,
               i,
               { reponse: { value: reponse } },
-              { formatInteractif: 'listeDeroulante' },
+              { formatInteractif: 'liste-deroulante' },
             )
             break
           case 2:

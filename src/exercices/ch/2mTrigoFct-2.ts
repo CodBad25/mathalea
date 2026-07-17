@@ -104,7 +104,7 @@ export default class MesureAngleEntreZeroEtDeuxPi extends Exercice {
               compare: fonctionComparaison,
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
         if (this.sup) {
           this.autoCorrection[i].enonce = texte

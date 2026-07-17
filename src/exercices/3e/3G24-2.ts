@@ -40,7 +40,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 export const titre = 'Calculer des longueurs avec des triangles semblables'
 export const dateDePublication = '30/12/2024' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
@@ -365,7 +365,7 @@ export default class nomExercice extends Exercice {
             champ1: { value: texNombre(longueurAC * coeff, 1) },
             champ2: { value: texNombre(longueurBC * coeff, 1) },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       } else {
         texte += `Calculer les longueurs des segments $[${D.nom}${F.nom}]$ et $[${E.nom}${F.nom}]$. Justifier.<br>`

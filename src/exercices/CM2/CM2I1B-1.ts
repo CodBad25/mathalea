@@ -3,12 +3,12 @@ import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { texteParPositionEchelle } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { propositionsQcm } from '../../lib/interactif/qcm'
 import {
   choixDeroulant,
   listeDeroulanteToQcm,
 } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { ajouterLien } from '../../lib/outils/enrichissements'
@@ -44,7 +44,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Noter la couleur avec Scratch'
 export const interactifReady = true
-export const interactifType = 'listeDeroulante'
+export const interactifType = 'liste-deroulante'
 export const dateDeModifImportante = '14/09/2024'
 export const dateDePublication = '11/04/2021'
 
@@ -456,27 +456,29 @@ export default class NoteLaCouleurC3 extends Exercice {
       if (this.interactif && context.isHtml) {
         texte +=
           'Couleur n°1 : ' +
-          choixDeroulant(this, q * couleurs.length, { choices: [
-            { label: 'Choisir une couleur', value: '' },
-            ...choixListeDeroulante[(this.sup - 1) % 2].map(
-              (item: CouleurNLC) =>
-                this.sup === 1
-                  ? {
-                      svg:
-                        '<rect x="-10" y="-10" width="20" height="20" stroke="black" fill="' +
-                        traducColor(item) +
-                        '"/>',
-                      value: item,
-                    }
-                  : { label: item, value: item },
-            ),
-          ] }) +
+          choixDeroulant(this, q * couleurs.length, {
+            choices: [
+              { label: 'Choisir une couleur', value: '' },
+              ...choixListeDeroulante[(this.sup - 1) % 2].map(
+                (item: CouleurNLC) =>
+                  this.sup === 1
+                    ? {
+                        svg:
+                          '<rect x="-10" y="-10" width="20" height="20" stroke="black" fill="' +
+                          traducColor(item) +
+                          '"/>',
+                        value: item,
+                      }
+                    : { label: item, value: item },
+              ),
+            ],
+          }) +
           '<br>'
         handleAnswers(
           this,
           q * couleurs.length,
           { reponse: { value: couleurs[0] } },
-          { formatInteractif: 'listeDeroulante' },
+          { formatInteractif: 'liste-deroulante' },
         )
       } else if (context.isHtml) {
         listeDeroulanteToQcm(
@@ -520,26 +522,28 @@ export default class NoteLaCouleurC3 extends Exercice {
             'Couleur n°' +
             (i + 1) +
             ' : ' +
-            choixDeroulant(this, q * couleurs.length + i, { choices: [
-              { label: 'Choisir une couleur', value: '' },
-              ...choixListeDeroulante[(this.sup - 1) % 2].map((item) =>
-                this.sup === 1
-                  ? {
-                      svg:
-                        '<rect x="-10" y="-10" width="20" height="20" fill="' +
-                        traducColor(item) +
-                        '"/>',
-                      value: item,
-                    }
-                  : { label: item, value: item },
-              ),
-            ] }) +
+            choixDeroulant(this, q * couleurs.length + i, {
+              choices: [
+                { label: 'Choisir une couleur', value: '' },
+                ...choixListeDeroulante[(this.sup - 1) % 2].map((item) =>
+                  this.sup === 1
+                    ? {
+                        svg:
+                          '<rect x="-10" y="-10" width="20" height="20" fill="' +
+                          traducColor(item) +
+                          '"/>',
+                        value: item,
+                      }
+                    : { label: item, value: item },
+                ),
+              ],
+            }) +
             '<br>'
           handleAnswers(
             this,
             q * couleurs.length + i,
             { reponse: { value: couleurs[i] } },
-            { formatInteractif: 'listeDeroulante' },
+            { formatInteractif: 'liste-deroulante' },
           )
         } else if (context.isHtml) {
           listeDeroulanteToQcm(

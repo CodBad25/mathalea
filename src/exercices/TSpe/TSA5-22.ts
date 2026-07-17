@@ -2,7 +2,7 @@ import EquationsLog from '../TT/TTE-7'
 export const titre = 'Résoudre une équation simple avec le logarithme'
 export const dateDePublication = '04/08/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 /**
  * Clone de CanTspeE01 pour les auto 1er

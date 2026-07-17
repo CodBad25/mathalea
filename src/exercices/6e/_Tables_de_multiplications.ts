@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -10,8 +11,6 @@ import {
   listeQuestionsToContenu,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -42,7 +41,7 @@ export default class TablesDeMultiplications extends Exercice {
     ] // Texte, tooltip
     this.besoinFormulaire2Texte = [
       'Type de questions',
-      'Nombres séparés par des tirets :\n1 : Classique\n2 : À trous\n3 : Quotient\n4: Mélange',
+      'Nombres séparés par des tirets :\n1 : Classique\n2 : À trous\n3 : Quotient\n4 : Mélange',
     ]
     this.besoinFormulaire3CaseACocher = [
       'Le facteur de gauche est celui de la table',

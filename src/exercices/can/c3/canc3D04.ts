@@ -61,7 +61,7 @@ export default class ExerciceInteractiveClock extends Exercice {
       let enonce = `Placer correctement les aiguilles pour indiquer ${hour}${sp(1)}h${sp(1)}${formatMinute(minute)}.<br>`
       if (context.isHtml && !context.isTypst) {
         enonce += `<br><br>${addInteractiveClock(this, i, {
-          isDynamic: this.interactif,
+          interactivityOn: this.interactif,
           showHands: this.interactif,
         })}`
       } else {
@@ -84,7 +84,7 @@ export default class ExerciceInteractiveClock extends Exercice {
           id: `interactive-clock-correctionEx${this.numeroExercice}Q${i}`,
           hour,
           minute,
-          isDynamic: false,
+          interactivityOn: false,
           showHands: true,
         })
       } else {

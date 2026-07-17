@@ -2,7 +2,7 @@ import ExerciceTableurVocabulaire from '../6e/6I1B-5'
 export const titre = 'Saisir une formule simple sur tableur'
 export const dateDePublication = '23/05/2026'
 export const interactifReady = true
-export const interactifType = 'tableur'
+export const interactifType = 'my-spreadsheet'
 
 /**
  * @author Éric Elter

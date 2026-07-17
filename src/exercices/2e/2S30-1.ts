@@ -4,7 +4,7 @@ export const titre =
 export const dateDePublication = '26/06/2024'
 export const dateDeModificationImportante = '18/04/2026' // passage en multiMathfield
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const uuid = '4e68b'
 export const refs = {
   'fr-fr': ['2S30-1'],

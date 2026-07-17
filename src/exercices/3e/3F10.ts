@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Lire images et antécédents depuis un tableau de valeurs'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -216,7 +216,7 @@ f) Compléter $f($%{champ6}$)=${c}$`,
           champ6: { value: f },
         },
         {
-          formatInteractif: 'multiMathfield',
+          formatInteractif: 'multi-mathfield',
         },
       )
       if (context.isAmc) {

@@ -1,6 +1,7 @@
 import { context } from '../../modules/context'
 import type FractionEtendue from '../../modules/FractionEtendue'
 import { compactTexForSvg } from '../2d/cercleTrigo'
+import { uniformiseResults } from '../interactif/gestionInteractif'
 import {
   normalizeAnglePiFraction,
   trigoCircleAngles,
@@ -46,7 +47,14 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
     this.attachShadow({ mode: 'open' })
   }
 
-  static verifQuestion(exercice: IExercice, questionIndex: number) {
+  static verifQuestion(
+    exercice: IExercice,
+    questionIndex: number,
+  ): {
+    isOk: boolean
+    feedback: string
+    score: { nbBonnesReponses: number; nbReponses: number }
+  } {
     if (exercice.answers == null) exercice.answers = {}
 
     const goodAnswer =
@@ -54,6 +62,7 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
     const cercleSelectionElement = document.getElementById(
       `trigo-circle-selectionEx${exercice.numeroExercice}Q${questionIndex}`,
     ) as TrigoCircleSelectionElement | null
+    cercleSelectionElement!.interactivityOn = false
     const resultatMesure = cercleSelectionElement?.value ?? 0 // 0 signifie pas de réponse.
     const isCorrect = resultatMesure === Number(goodAnswer)
     exercice.answers[
@@ -65,7 +74,7 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
     if (spanResultat != null) {
       spanResultat.innerHTML = isCorrect ? '😎' : '☹️'
     }
-    return isCorrect ? 'OK' : 'KO'
+    return uniformiseResults(isCorrect ? 'OK' : 'KO')
   }
 
   static create({

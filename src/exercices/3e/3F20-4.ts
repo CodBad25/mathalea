@@ -24,7 +24,7 @@ export const titre =
 export const dateDePublication = '19/05/2025'
 export const dateDeModification = '10/04/2026'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 
 /**
  * Reconnaitre coefficient directeur et ordonnée à l'origine d'une fonction affine
@@ -339,7 +339,7 @@ export default class CoefficientDirecteur extends Exercice {
           champ2: { value: reponse2 },
           bareme: toutAUnPoint,
         },
-        { formatInteractif: 'multiMathfield' },
+        { formatInteractif: 'multi-mathfield' },
       )
       texteCorr = ` $${nomFonction}_{${i + 1}}(${nomVariable})=${fonctionF}$.<br>`
       texteCorr += texteCorSelonCase

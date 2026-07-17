@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 
 export const dateDeModifImportante = '06/10/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre = 'Encadrer des nombres positifs avec des puissances de 10'
@@ -207,7 +207,7 @@ export default class PuissancesEncadrement extends Exercice {
               options: { puissance: true },
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
 
         texteCorr = `$${miseEnEvidence(entPos[listeTypeDeQuestions[i] - 1].puissance_inf)} \\leqslant ${entPos[listeTypeDeQuestions[i] - 1].val} \\leqslant ${miseEnEvidence(entPos[listeTypeDeQuestions[i] - 1].puissance_sup)}$`
@@ -247,7 +247,7 @@ export default class PuissancesEncadrement extends Exercice {
               options: { puissance: true },
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
 
         texteCorr = `$${miseEnEvidence(decPos[listeTypeDeQuestions[i] - 7].puissance_inf)} \\leqslant ${decPos[listeTypeDeQuestions[i] - 7].val} \\leqslant ${miseEnEvidence(decPos[listeTypeDeQuestions[i] - 7].puissance_sup)}$`
@@ -287,7 +287,7 @@ export default class PuissancesEncadrement extends Exercice {
               options: { puissance: true },
             },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
 
         texteCorr = `$${miseEnEvidence(decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_inf)} \\leqslant ${decPosInfUn[listeTypeDeQuestions[i] - 11].val} \\leqslant ${miseEnEvidence(decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_sup)}$`

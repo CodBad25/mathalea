@@ -25,7 +25,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = 'Lire des abscisses décimales sous trois formes'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -271,7 +271,7 @@ export default class LireAbscisseDecimaleTroisFormes extends Exercice {
             },
             bareme: toutAUnPoint,
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       } else {
         let texte3 = `Donner l'abscisse de $${noms[2]}$ sous la forme d'une fraction décimale.`

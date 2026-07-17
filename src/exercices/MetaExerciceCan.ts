@@ -1,4 +1,8 @@
 import Decimal from 'decimal.js'
+import {
+  listOfCustomElements,
+  mathaleaCustomElementsRegistry,
+} from '../lib/customElements/MathaleaCustomElement'
 import { fonctionComparaison } from '../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../lib/interactif/qcm'
@@ -16,7 +20,7 @@ import type {
   OptionsComparaisonType,
   Valeur,
 } from '../lib/types'
-import { isValeur } from '../lib/types'
+import { isValeur, type InteractivityType } from '../lib/types'
 import FractionEtendue from '../modules/FractionEtendue'
 import Grandeur from '../modules/Grandeur'
 import Hms from '../modules/Hms'
@@ -167,20 +171,25 @@ export default class MetaExercice extends Exercice {
               indexQuestion++
               break
             }
-
-            if (Question.formatInteractif === 'multiMathfield') {
-              // La question a construit elle-même son composant <multi-mathfield>
-              // (via addMultiMathfield) avec l'indice 0 : on réindexe les identifiants
-              // sur la position réelle de la question dans le méta-exercice.
+            if (
+              listOfCustomElements.includes(Question.formatInteractif ?? '')
+            ) {
+              const liste = Array.from(mathaleaCustomElementsRegistry)
+              const [tag, elementClasse] =
+                liste.find(
+                  (custom) => custom[0] === Question.formatInteractif,
+                ) ?? []
+              if (tag == null || elementClasse == null) {
+                throw Error(
+                  "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
+                )
+              }
               const n = Question.numeroExercice
               const questionHtml = String(Question.question)
+                .replaceAll(`${tag}Ex${n}Q0`, `${tag}Ex${n}Q${indexQuestion}`)
                 .replaceAll(
-                  `multi-mathfieldEx${n}Q0`,
-                  `multi-mathfieldEx${n}Q${indexQuestion}`,
-                )
-                .replaceAll(
-                  `multiMathfieldEx${n}Q0`,
-                  `multiMathfieldEx${n}Q${indexQuestion}`,
+                  `resultatCheckEx${n}Q0`,
+                  `resultatCheckEx${n}Q${indexQuestion}`,
                 )
                 .replaceAll(
                   `feedbackEx${n}Q0`,
@@ -188,11 +197,12 @@ export default class MetaExercice extends Exercice {
                 )
               this.listeQuestions[indexQuestion] = consigne + questionHtml
               handleAnswers(this, indexQuestion, Question.reponse as Valeur, {
-                formatInteractif: 'multiMathfield',
+                formatInteractif: tag as InteractivityType,
               })
             } else if (
               Question.formatInteractif === 'fillInTheBlank' ||
-              (typeof Question.reponse === 'object' &&
+              (Question.formatInteractif === 'mathlive' &&
+                typeof Question.reponse === 'object' &&
                 'champ1' in Question.reponse)
             ) {
               this.listeQuestions[indexQuestion] =
@@ -262,37 +272,6 @@ export default class MetaExercice extends Exercice {
                 formatInteractif: 'MetaInteractif2d',
               })
               this.listeQuestions[indexQuestion] = consigne + Question.question
-            } else if (Question.formatInteractif === 'svgSelection') {
-              const n = Question.numeroExercice
-              if (Question.question != null) {
-                const svgSelection = Question.question.match(
-                  /id="svgSelectionEx\d+Q\d+"/g,
-                )
-                if (svgSelection != null) {
-                  Question.question = Question.question.replace(
-                    `svgSelectionEx${n}Q0`,
-                    `svgSelectionEx${n}Q${indexQuestion}`,
-                  )
-                  Question.question = Question.question.replace(
-                    `resultatCheckEx${n}Q0`,
-                    `resultatCheckEx${n}Q${indexQuestion}`,
-                  )
-                  const reponse = Question.reponse as AnswerValueType
-
-                  handleAnswers(
-                    this,
-                    indexQuestion,
-                    { reponse: { value: reponse } },
-                    { formatInteractif: 'svgSelection' },
-                  )
-                  this.listeQuestions[indexQuestion] =
-                    consigne + Question.question
-                } else {
-                  throw new Error(
-                    `Erreur avec cette question de type svgSelection qui ne contient pas d'id de svgSelection: ${Question.question}`,
-                  )
-                }
-              }
             } else {
               if (Question.formatInteractif === 'custom') {
                 this.correctionInteractives[indexQuestion] =
@@ -309,10 +288,6 @@ export default class MetaExercice extends Exercice {
                   .replaceAll(
                     `resultatCheckEx${this.numeroExercice}Q0`,
                     `resultatCheckEx${this.numeroExercice}Q${indexQuestion}`,
-                  )
-                  .replaceAll(
-                    `clockEx${this.numeroExercice}Q0`,
-                    `clockEx${this.numeroExercice}Q${indexQuestion}`,
                   )
                   .replaceAll(
                     `apigeomEx${this.numeroExercice}F0`,
@@ -499,53 +474,88 @@ export default class MetaExercice extends Exercice {
             this.listeQuestions[indexQuestion] = Question.listeQuestions[0]
             this.listeCorrections[indexQuestion] = Question.listeCorrections[0]
             this.autoCorrection[indexQuestion] = Question.autoCorrection[0]
-
-            this.listeQuestions[indexQuestion] = this.listeQuestions[
-              indexQuestion
-            ].replaceAll('champTexteEx0Q0', `champTexteEx0Q${indexQuestion}`)
-            this.listeQuestions[indexQuestion] = this.listeQuestions[
-              indexQuestion
-            ].replaceAll(
-              'resultatCheckEx0Q0',
-              `resultatCheckEx0Q${indexQuestion}`,
-            )
-            this.listeQuestions[indexQuestion] = this.listeQuestions[
-              indexQuestion
-            ].replaceAll('clockEx0Q0', `clockEx0Q${indexQuestion}`)
-
-            // fin d'alimentation des listes de question et de correction pour cette question
-            const formatInteractif =
-              Question.autoCorrection[0]?.formatInteractif
-            if (formatInteractif === 'custom') {
-              Question.reinit()
-              Question.nouvelleVersionWrapper(
-                this.numeroExercice,
-                indexQuestion,
+            if (
+              listOfCustomElements.includes(
+                Question.autoCorrection[0]?.formatInteractif ?? '',
               )
-              const that = this
-              this.correctionInteractives[indexQuestion] = function (
-                i: number,
-              ) {
-                const result = Question.correctionInteractive!(i)
-                if (Question.answers) {
-                  that.answers = { ...that.answers, ...Question.answers }
-                }
-                return result
+            ) {
+              const liste = Array.from(mathaleaCustomElementsRegistry)
+              const [tag, elementClasse] =
+                liste.find(
+                  (custom) =>
+                    custom[0] === Question.autoCorrection[0]?.formatInteractif,
+                ) ?? []
+              if (tag == null || elementClasse == null) {
+                throw Error(
+                  "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
+                )
               }
-              this.autoCorrection[indexQuestion] =
-                Question.autoCorrection[indexQuestion]
+              const n = Question.numeroExercice
+              const questionHtml = String(Question.listeQuestions[0])
+                .replaceAll(`${tag}Ex${n}Q0`, `${tag}Ex${n}Q${indexQuestion}`)
+                .replaceAll(
+                  'resultatCheckEx0Q0',
+                  `resultatCheckEx0Q${indexQuestion}`,
+                )
+                .replaceAll(`feedbackEx0Q0`, `feedbackEx0Q${indexQuestion}`)
+
               this.listeQuestions[indexQuestion] =
-                Question.listeQuestions[indexQuestion]
-              this.listeCorrections[indexQuestion] =
-                Question.listeCorrections[indexQuestion]
-            } else if (formatInteractif === 'qcm') {
-              this.autoCorrection[indexQuestion] = Question.autoCorrection[0]
+                Question.consigne + questionHtml
+              handleAnswers(
+                this,
+                indexQuestion,
+                Question.autoCorrection[0].valeur as Valeur,
+                {
+                  formatInteractif: tag as InteractivityType,
+                },
+              )
             } else {
-              const reponse = Question.autoCorrection[0]?.valeur
-              if (reponse != null)
-                handleAnswers(this, indexQuestion, reponse as Valeur, {
-                  formatInteractif,
-                })
+              this.listeQuestions[indexQuestion] = this.listeQuestions[
+                indexQuestion
+              ].replaceAll('champTexteEx0Q0', `champTexteEx0Q${indexQuestion}`)
+              this.listeQuestions[indexQuestion] = this.listeQuestions[
+                indexQuestion
+              ]
+                .replaceAll(
+                  'resultatCheckEx0Q0',
+                  `resultatCheckEx0Q${indexQuestion}`,
+                )
+                .replaceAll(`feedbackEx0Q0`, `feedbackEx0Q${indexQuestion}`)
+
+              // fin d'alimentation des listes de question et de correction pour cette question
+              const formatInteractif =
+                Question.autoCorrection[0]?.formatInteractif
+              if (formatInteractif === 'custom') {
+                Question.reinit()
+                Question.nouvelleVersionWrapper(
+                  this.numeroExercice,
+                  indexQuestion,
+                )
+                this.correctionInteractives[indexQuestion] = function (
+                  this: MetaExercice,
+                  i: number,
+                ) {
+                  const result = Question.correctionInteractive!(i)
+                  if (Question.answers) {
+                    this.answers = { ...this.answers, ...Question.answers }
+                  }
+                  return result
+                }
+                this.autoCorrection[indexQuestion] =
+                  Question.autoCorrection[indexQuestion]
+                this.listeQuestions[indexQuestion] =
+                  Question.listeQuestions[indexQuestion]
+                this.listeCorrections[indexQuestion] =
+                  Question.listeCorrections[indexQuestion]
+              } else if (formatInteractif === 'qcm') {
+                this.autoCorrection[indexQuestion] = Question.autoCorrection[0]
+              } else {
+                const reponse = Question.autoCorrection[0]?.valeur
+                if (reponse != null)
+                  handleAnswers(this, indexQuestion, reponse as Valeur, {
+                    formatInteractif,
+                  })
+              }
             }
           }
           if (Question?.autoCorrection[0]?.propositions != null) {

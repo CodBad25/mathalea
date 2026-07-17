@@ -30,7 +30,7 @@ import {
 
 export const titre = "Calculer la fraction d'une quantité"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDeModifImportante = '01/04/2026'
 
 /**
@@ -264,7 +264,7 @@ export default class FractionDuneQuantite extends Exercice {
             bareme: toutAUnPoint,
             champ1: { value: reponse },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       } else {
         chaineDataTemplate =
@@ -290,7 +290,7 @@ export default class FractionDuneQuantite extends Exercice {
             champ1: { value: reponse },
             champ2: { value: reponse2 },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       }
       texte = texte.replace(

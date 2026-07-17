@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 export const titre = 'Effectuer produit et somme ou différence de décimaux'
 
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDeModifImportante = '14/01/2026'
 export const dateDePublication = '20/12/2022'
 
@@ -132,7 +132,7 @@ export default class ProduitEtSommeOuDifferenceDeDecimaux extends Exercice {
             },
             champ2: { value: couple.B.mul(couple.A) },
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
 
         texteCorr += `<br> Je sais que $${texNombre(A)}\\times${texNombre(B)}=${miseEnEvidence(texNombre(B.mul(A)), bleuMathalea)}$.`

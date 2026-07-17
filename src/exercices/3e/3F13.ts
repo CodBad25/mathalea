@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Lire les antécédents d'un nombre à partir d'un graphique"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const dateDeModifImportante = '23/09/2023'
 
 /**
@@ -121,7 +121,7 @@ export default class AntecedentGraphique extends Exercice {
               champ1: { value: x1, options: { suiteDeNombres: true } },
               champ2: { value: x2, options: { suiteDeNombres: true } },
             },
-            { formatInteractif: 'multiMathfield' },
+            { formatInteractif: 'multi-mathfield' },
           )
         }
 

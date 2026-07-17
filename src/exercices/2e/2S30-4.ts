@@ -24,7 +24,7 @@ export const dateDePublication = '28/12/2021'
 export const dateDeModifImportante = '30/08/2022' // Passage en intégralité interactif
 
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const amcReady = true
 export const amcType = 'AMCNum'
 
@@ -481,7 +481,7 @@ function urneDeuxTiragesAvecRemise(
       },
       champ3: { value: proba4.texFraction, options: { fractionEgale: true } },
     },
-    { formatInteractif: 'multiMathfield' },
+    { formatInteractif: 'multi-mathfield' },
   )
 
   let texteCorr = ''

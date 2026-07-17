@@ -319,7 +319,7 @@ export default class nomExercice extends Exercice {
           {
             bareme: toutPourUnPoint,
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       }
       if (this.questionJamaisPosee(i, texte)) {

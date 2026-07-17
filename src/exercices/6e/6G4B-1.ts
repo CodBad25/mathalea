@@ -28,7 +28,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre = 'Mesurer un angle avec rapporteur intégré'
-export const interactifType = 'multiMathfield'
+export const interactifType = 'multi-mathfield'
 export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -508,7 +508,7 @@ export default class MesurerUnAngleAvecRapporteur extends Exercice {
             bareme: toutAUnPoint,
             ...answers,
           },
-          { formatInteractif: 'multiMathfield' },
+          { formatInteractif: 'multi-mathfield' },
         )
       }
 
