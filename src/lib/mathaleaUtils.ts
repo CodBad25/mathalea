@@ -5,7 +5,6 @@ import { type MathaleaSVG } from '../lib/types'
 import MathaleaCustomElement, {
   listOfCustomElements,
 } from './customElements/MathaleaCustomElement'
-import type { MySpreadsheetElement } from './customElements/MySpreadSheet'
 import { previousView } from './stores/generalStore'
 import { globalOptions } from './stores/globalOptions'
 import type { VueType } from './VueType'
@@ -132,27 +131,6 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
             resolve(true)
           })
       })
-    } else if (answer.includes('svg-selection')) {
-      const p = new Promise<boolean>((resolve) => {
-        waitForElement(`[id$='${answer}']`)
-          .then((eles) => {
-            eles.forEach((ele) => {
-              if (ele.tagName === 'SVG-SELECTION') {
-                // La réponse correspond à un svg-selection
-                ;(ele as any).value = Number(answers[answer])
-                const time = window.performance.now()
-                log(`duration ${answer}: ${time - starttime}`)
-                resolve(true)
-              }
-            })
-          })
-          .catch((reason) => {
-            console.error(reason)
-            window.notify(`Erreur dans la réponse ${answer} : ${reason}`, {})
-            resolve(true)
-          })
-      })
-      promiseAnswers.push(p)
     } else if (answer.includes('MetaInteractif2d')) {
       const p = new Promise<boolean>((resolve) => {
         const saisies = JSON.parse(answers[answer])
@@ -169,28 +147,6 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
               ) {
                 mf.setPromptValue('champ1', saisies[field], { mode: 'auto' })
               }
-            }
-            const time = window.performance.now()
-            log(`duration ${answer}: ${time - starttime}`)
-            resolve(true)
-          })
-          .catch((reason) => {
-            console.error(reason)
-            window.notify(`Erreur dans la réponse ${answer} : ${reason}`, {})
-            resolve(true)
-          })
-      })
-      promiseAnswers.push(p)
-    } else if (answer.includes('sheet')) {
-      const p = new Promise<boolean>((resolve) => {
-        waitForElement('#' + answer)
-          .then(() => {
-            // La réponse correspond à une feuille de calcul jspreadsheet
-            const sheetElement = document.getElementById(
-              answer,
-            ) as MySpreadsheetElement
-            if (sheetElement != null) {
-              sheetElement.setData(JSON.parse(answers[answer]))
             }
             const time = window.performance.now()
             log(`duration ${answer}: ${time - starttime}`)
@@ -324,31 +280,6 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
               }
               const time = window.performance.now()
               log(`duration ${answer}: ${time - starttime}`)
-              resolve(true)
-            }
-          })
-          .catch((reason) => {
-            console.error(reason)
-            window.notify(`Erreur dans la réponse ${answer} : ${reason}`, {})
-            resolve(true)
-          })
-      })
-      promiseAnswers.push(p)
-    } else if (answer.includes('my-spreadsheet')) {
-      const p = new Promise<boolean>((resolve) => {
-        waitForElement('#' + answer)
-          .then(() => {
-            // La réponse correspond à une feuille de calcul univer
-            const ele = document.querySelector(
-              `#${answer}`,
-            ) as MySpreadsheetElement
-            if (ele) {
-              const actions = answers[answer].split('&')
-              for (const action of actions) {
-                const [cell, formula] = action.split('->')
-                console.info(cell, formula)
-              }
-              ele.style.pointerEvents = 'none' // Plus possible de modifier la feuille
               resolve(true)
             }
           })

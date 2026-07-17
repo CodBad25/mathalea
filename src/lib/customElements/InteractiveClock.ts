@@ -118,7 +118,6 @@ export class InteractiveClock extends MathaleaCustomElement {
     this.showSecond = this.hasAttribute('showSecond')
       ? !(this.getAttribute('showSecond') === 'false')
       : false
-    this.interactivityOn = !(this.getAttribute('interactivity-on') === 'false')
     this.draggingHand = false
   }
 
@@ -651,18 +650,6 @@ export class InteractiveClock extends MathaleaCustomElement {
   set second(val: number) {
     this.setAttribute('second', val.toString())
     this.previousSecond = this.second
-  }
-
-  set interactivityOn(isOn: boolean) {
-    this.interactivityOn = isOn
-    if (!isOn) {
-      this.currentAction = undefined
-    }
-    this.setAttribute('interactivity-on', isOn ? 'true' : 'false')
-    this.onInteractivityChanged(isOn)
-  }
-  get interactivityOn() {
-    return this.interactivityOn
   }
 
   get minute() {

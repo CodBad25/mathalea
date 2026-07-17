@@ -5,9 +5,10 @@
     buildExercisesList,
     splitExercisesIntoQuestions,
   } from '../../../lib/components/exercisesUtils'
-  import ListeDeroulanteElement from '../../../lib/customElements/ListeDeroulanteElement'
-  import { MultiMathfieldElement } from '../../../lib/customElements/MultiMathfield'
-  import { SvgSelectionElement } from '../../../lib/customElements/SvgSelectionElement'
+  import {
+    listOfCustomElements,
+    mathaleaCustomElementsRegistry,
+  } from '../../../lib/customElements/MathaleaCustomElement'
   import { verifQuestionCliqueFigure } from '../../../lib/interactif/cliqueFigure'
   import {
     prepareExerciceCliqueFigure,
@@ -33,6 +34,7 @@
   import { globalOptions } from '../../../lib/stores/globalOptions'
   import {
     isInteractivityType,
+    isMathliveCompatible,
     isOldFormatInteractifType,
     type IExercice,
     type InteractivityType,
@@ -133,11 +135,7 @@
       }
       return
     }
-    if (
-      type.toLowerCase() === 'mathlive' ||
-      type === 'fillInTheBlank' ||
-      type === 'tableauMathlive'
-    ) {
+    if (isMathliveCompatible(type)) {
       const resu = uniformiseResults(
         verifQuestionMathLive(
           exercices[indiceExercice[i]],
@@ -148,13 +146,6 @@
     } else if (type === 'qcm') {
       resultsByQuestion[i] = uniformiseResults(
         verifQuestionQcm(
-          exercices[indiceExercice[i]],
-          indiceQuestionInExercice[i],
-        ),
-      )
-    } else if (type === 'liste-deroulante') {
-      resultsByQuestion[i] = uniformiseResults(
-        ListeDeroulanteElement.verifQuestion(
           exercices[indiceExercice[i]],
           indiceQuestionInExercice[i],
         ),
@@ -172,14 +163,6 @@
           indiceQuestionInExercice[i],
         ),
       )
-    } else if (type === 'multi-mathfield') {
-      const resu = uniformiseResults(
-        MultiMathfieldElement.verifQuestion(
-          exercices[indiceExercice[i]],
-          indiceQuestionInExercice[i],
-        ),
-      )
-      resultsByQuestion[i] = resu // En attendant mieux, mais ça ne va pas du tout...
     } else if (type === 'MetaInteractif2d') {
       const resu = uniformiseResults(
         verifQuestionMetaInteractif2d(
@@ -188,14 +171,41 @@
         ),
       )
       resultsByQuestion[i] = resu
-    } else if (type === 'svg-selection') {
-      const resu = uniformiseResults(
-        SvgSelectionElement.verifQuestion(
+    } else if (listOfCustomElements.includes(type ?? '')) {
+      // On traite le cas de tous les MathaleaCustomElement ici
+      const liste = Array.from(mathaleaCustomElementsRegistry)
+      const [tag, elementClasse] =
+        liste.find((custom) => custom[0] === type) ?? []
+      if (tag == null || elementClasse == null) {
+        throw Error(
+          "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
+        )
+      }
+      if (
+        elementClasse.verifQuestion == null ||
+        typeof elementClasse.verifQuestion !== 'function'
+      ) {
+        throw Error(
+          `L'élément '${tag}' n'a pas de méthode verifQuestion ou celle-ci n'est pas une fonction`,
+        )
+      }
+      const result = elementClasse.verifQuestion(exercice, i)
+      if (
+        result == null ||
+        typeof result !== 'object' ||
+        !('isOk' in result) ||
+        !('score' in result)
+      ) {
+        throw Error(
+          `L'élément '${tag}' a une fonction verifQuestion qui n'a pas retourné une valeur conforme.`,
+        )
+      }
+      resultsByQuestion[i] = uniformiseResults(
+        elementClasse.verifQuestion(
           exercices[indiceExercice[i]],
           indiceQuestionInExercice[i],
         ),
       )
-      resultsByQuestion[i] = resu
     } else {
       window.notify(
         "Problème dans QuestionParPage.svelte : type d'interactif non géré",

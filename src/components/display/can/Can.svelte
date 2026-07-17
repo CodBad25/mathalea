@@ -7,12 +7,10 @@
     splitExercisesIntoQuestions,
   } from '../../../lib/components/exercisesUtils'
   import { millisecondToMinSec } from '../../../lib/components/time'
-  import { GuideAne } from '../../../lib/customElements/GuideAne'
-  import { InteractiveClock } from '../../../lib/customElements/InteractiveClock'
-  import ListeDeroulanteElement from '../../../lib/customElements/ListeDeroulanteElement'
-  import { MultiMathfieldElement } from '../../../lib/customElements/MultiMathfield'
-  import { SvgSelectionElement } from '../../../lib/customElements/SvgSelectionElement'
-  import TrigoCircleSelectionElement from '../../../lib/customElements/TrigoCircleSelectionElement'
+  import {
+    listOfCustomElements,
+    mathaleaCustomElementsRegistry,
+  } from '../../../lib/customElements/MathaleaCustomElement'
   import {
     answersFromCapytale,
     assignmentDataFromCapytale,
@@ -34,11 +32,12 @@
     resultsByExercice,
   } from '../../../lib/stores/generalStore'
   import { globalOptions } from '../../../lib/stores/globalOptions'
-  import type {
-    IExercice,
-    InteractivityType,
-    InterfaceResultExercice,
-    QuestionResult,
+  import {
+    isMathliveCompatible,
+    type IExercice,
+    type InteractivityType,
+    type InterfaceResultExercice,
+    type QuestionResult,
   } from '../../../lib/types'
   import type { CanState } from '../../../lib/types/can'
   import { context } from '../../../modules/context'
@@ -207,13 +206,11 @@
       const exercice = exercises[indiceExercice[i]]
       const type =
         exercice.autoCorrection?.[indiceQuestionInExercice[i]]
-          ?.formatInteractif ?? exercice.interactifType
+          ?.formatInteractif ??
+        exercice.interactifType ??
+        'mathlive'
 
-      if (
-        type === 'mathlive' ||
-        type === 'fillInTheBlank' ||
-        type === 'tableauMathlive'
-      ) {
+      if (isMathliveCompatible(type)) {
         resultsByQuestion[i] = oneResultToBoolean(
           verifQuestionMathLive(exercice, indiceQuestionInExercice[i]) ?? {
             // fallback en cas de problème avec verifQuestionMathlive
@@ -224,7 +221,7 @@
         )
         // récupération de la réponse
         answersType[i] = {
-          type,
+          type: type as InteractivityType,
           index: i,
           answers: {
             [`Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
@@ -394,57 +391,6 @@
         answers[i] = answersType[i].answerTxt.includes('apiGeomVersion')
           ? 'Voir figure'
           : answersType[i].answerTxt
-      }
-      // MathaleaCustomElements
-      else if (type === 'liste-deroulante') {
-        resultsByQuestion[i] = ListeDeroulanteElement.verifQuestion(
-          exercice,
-          indiceQuestionInExercice[i],
-        ).isOk
-        const listeKey = `liste-deroulanteEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-        answers[i] = exercice.answers?.[listeKey] ?? ''
-        answersType[i] = {
-          type,
-          index: i,
-          answers: Object.keys(exercice.answers ?? {})
-            .filter(
-              (key: string) =>
-                key.startsWith(listeKey) ||
-                key.startsWith(
-                  `ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                ) ||
-                key.startsWith(
-                  `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                ),
-            )
-            .reduce((result: { [key: string]: any }, k) => {
-              result[k] = exercice.answers![k]
-              return result
-            }, {}),
-          answerTxt: answers[i],
-        }
-      } else if (type === 'svg-selection') {
-        resultsByQuestion[i] = SvgSelectionElement.verifQuestion(
-          exercice,
-          indiceQuestionInExercice[i],
-        ).isOk
-
-        // récupération de la réponse
-        answersType[i] = {
-          type,
-          index: i,
-          answers: {
-            [`svg-selectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
-              exercice.answers![
-                `svg-selectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-              ],
-          },
-          answerTxt:
-            exercice.answers![
-              `svg-selectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-            ],
-        }
-        answers[i] = answersType[i].answerTxt
       } else if (type === 'MetaInteractif2d') {
         resultsByQuestion[i] = oneResultToBoolean(
           verifQuestionMetaInteractif2d(exercice, indiceQuestionInExercice[i]),
@@ -465,91 +411,54 @@
             ],
         }
         answers[i] = answersType[i].answerTxt
-      } else if (type === 'multi-mathfield') {
-        resultsByQuestion[i] = oneResultToBoolean(
-          MultiMathfieldElement.verifQuestion(
-            exercice,
-            indiceQuestionInExercice[i],
-          ),
+      }
+      // MathaleaCustomElements
+      else if (listOfCustomElements.includes(type)) {
+        const liste = Array.from(mathaleaCustomElementsRegistry)
+        const [tag, elementClasse] =
+          liste.find((custom) => custom[0] === type) ?? []
+        if (tag == null || elementClasse == null) {
+          throw Error(
+            "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
+          )
+        }
+        const result = elementClasse.verifQuestion(
+          exercice,
+          indiceQuestionInExercice[i],
         )
-        answersType[i] = {
-          type,
-          index: i,
-          answers: {
-            [`multi-mathfieldEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
-              exercice.answers![
-                `multi-mathfieldEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-              ],
-          },
-          answerTxt:
-            exercice.answers![
-              `multi-mathfieldEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-            ],
+        if (
+          result == null ||
+          typeof result !== 'object' ||
+          !('isOk' in result) ||
+          !('score' in result)
+        ) {
+          throw Error(
+            `L'élément '${tag}' n'a pas de méthode verifQuestion ou celle-ci n'a pas retourné une valeur conforme)`,
+          )
         }
-        answers[i] = answersType[i].answerTxt
-      } else if (type === 'interactive-clock') {
-        ;((resultsByQuestion[i] = InteractiveClock.verifQuestion(
-          exercice,
-          indiceQuestionInExercice[i],
-        ).isOk),
-          // récupération de la réponse
-          (answersType[i] = {
-            type,
-            index: i,
-            answers: {
-              [`interactive-clockEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
-                exercice.answers![
-                  `interactive-clockEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-                ],
-            },
-            answerTxt:
-              exercice.answers![
-                `interactive-clockEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-              ],
-          }))
-        answers[i] = answersType[i].answerTxt
-      } else if (type === 'guide-ane') {
-        resultsByQuestion[i] = GuideAne.verifQuestion(
-          exercice,
-          indiceQuestionInExercice[i],
-        ).isOk
-        // récupération de la réponse
+        resultsByQuestion[i] = result.isOk
+        const listeKey = `${tag}Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+        answers[i] = exercice.answers?.[listeKey] ?? ''
         answersType[i] = {
-          type,
+          type: type as InteractivityType,
           index: i,
-          answers: {
-            [`guide-aneEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
-              exercice.answers![
-                `guide-aneEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-              ],
-          },
-          answerTxt:
-            exercice.answers![
-              `guide-aneEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-            ],
+          answers: Object.keys(exercice.answers ?? {})
+            .filter(
+              (key: string) =>
+                key.startsWith(listeKey) ||
+                key.startsWith(
+                  `ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
+                ) ||
+                key.startsWith(
+                  `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
+                ),
+            )
+            .reduce((result: { [key: string]: any }, k) => {
+              result[k] = exercice.answers![k]
+              return result
+            }, {}),
+          answerTxt: answers[i],
         }
-        answers[i] = answersType[i].answerTxt
-      } else if (type === 'trigo-circle-selection') {
-        resultsByQuestion[i] = TrigoCircleSelectionElement.verifQuestion(
-          exercice,
-          indiceQuestionInExercice[i],
-        ).isOk
-        // récupération de la réponse
-        answersType[i] = {
-          type,
-          index: i,
-          answers: {
-            [`trigo-circle-selectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
-              exercice.answers![
-                `trigo-circle-selectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-              ],
-          },
-          answerTxt:
-            exercice.answers![
-              `trigo-circle-selectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-            ],
-        }
-        answers[i] = answersType[i].answerTxt
       } else {
         answersType[i] = {
           type: 'mathlive',
