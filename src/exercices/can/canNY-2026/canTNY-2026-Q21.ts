@@ -36,7 +36,7 @@ export default class calcDerivee2026 extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, c, pol
     const annee = 2026
-    if (this.canOfficielle ? true : choice([true, false])) {
+    if (this.canOfficielle ? true : this.quotaChoice('branche', [true, false])) {
       this.question = 'Soit $f$ la fonction définie sur $\\mathbb{R}$ par : '
       this.correction = "$f'(x)="
 

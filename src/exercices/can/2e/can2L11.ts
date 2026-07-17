@@ -5,7 +5,6 @@ import {
   reduireAxPlusB,
   rienSi1,
 } from '../../../lib/outils/ecritures'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -37,9 +36,9 @@ export default class ExprimerVariable extends ExerciceSimple {
 
   nouvelleVersion() {
     {
-      const a = randint(-9, 9, [0, 1, -1])
+      const a = this.quotaRandint('a', -9, 9, [0, 1, -1])
       const b = a * choice([-1, 1]) + choice([-1, 1])
-      const c = randint(1, 10)
+      const c = this.quotaRandint('c', 1, 10)
       const var1 = choice(['x', 'z', 'a'])
       const var2 = choice(['b', 'c', 'y'])
       const corr1 = `De la relation $${rienSi1(a)}${var1}${ecritureAlgebriqueSauf1(b)}${var2}=${c}$, on déduit en ajoutant $${rienSi1(-b)}${var2}$ dans chaque membre :
@@ -49,7 +48,7 @@ export default class ExprimerVariable extends ExerciceSimple {
           $${rienSi1(b)}${var2}=${c}${ecritureAlgebriqueSauf1(-a)}${var1}$`
       const corr4 = ` Puis, en divisant par $${b}$, on obtient : $${var2}=\\dfrac{${c}${ecritureAlgebriqueSauf1(-a)}${var1}}{${b}}$`
 
-      if (choice([true, false])) {
+      if (this.quotaChoice('ordre', [true, false])) {
         this.question = ` On donne la relation  : $${rienSi1(a)}${var1}${ecritureAlgebriqueSauf1(b)}${var2}=${c}$.<br>
       ${this.versionQcm ? `On cherche à isoler $${var1}$. On a : ` : `Exprimer $${var1}$ en fonction de $${var2}$ ${this.interactif ? `<br>$${var1}=$` : '.'}`}  `
         if (a === 1) {

@@ -36,7 +36,7 @@ export default class TrouverLongueur extends ExerciceSimple {
           ['une bouteille', 28, 35, 'cm', 'dm', 'mm', 'm'],
           ['une télévision', 50, 60, 'cm', 'dm', 'mm', 'm'],
         ]
-    const a = this.canOfficielle ? 0 : randint(0, 6)
+    const a = this.canOfficielle ? 0 : this.quotaRandint('a', 0, 6)
     const b = this.canOfficielle
       ? choix[a][1]
       : randint(choix[a][1] as number, choix[a][2] as number)

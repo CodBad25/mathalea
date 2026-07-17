@@ -33,7 +33,7 @@ export default class EquationsCarree extends ExerciceSimple {
 
   nouvelleVersion() {
     switch (
-      choice([1, 2, 3]) // 1, 1, 2, 2, 3
+      this.quotaChoice('type', [1, 2, 3]) // 1, 1, 2, 2, 3
     ) {
       case 1: // (x+a)^2=k k est un carré
         {

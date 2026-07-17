@@ -9,7 +9,6 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 import { bleuMathalea } from '../../../lib/colors'
 
@@ -36,7 +35,7 @@ export default class EquationsCarree extends ExerciceSimple {
 
   nouvelleVersion() {
     let reponse = ''
-    const a = randint(1, 12)
+    const a = this.quotaRandint('a', 1, 12)
     const o = latex2d('\\text{O}', -0.2, -0.3, {
       color: 'black',
       letterSize: 'scriptsize',
@@ -70,7 +69,7 @@ export default class EquationsCarree extends ExerciceSimple {
     const sBBx = segment(B, Bx)
     const f = (x: number): number => x ** 2
     const Cg = droite(pointAbstrait(-6, 3), pointAbstrait(6, 3), '', 'green')
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('type', [1, 2])) {
       case 1: // x^2<k
         {
           const choix = choice([true, false])

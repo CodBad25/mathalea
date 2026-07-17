@@ -3,7 +3,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
-import { randint } from '../../../modules/outils'
 export const titre = 'Calculer une différence de deux carrés'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -26,8 +25,8 @@ export default class diffDeDeuxCarres extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const choix = this.canOfficielle ? 1 : randint(1, 3)
-    const a = randint(1, 2)
+    const choix = this.canOfficielle ? 1 : this.quotaRandint('choix', 1, 3)
+    const a = this.quotaRandint('a', 1, 2)
 
     if (choix === 1) {
       // Cas 1 : 2026² - 2025²

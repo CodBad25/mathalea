@@ -27,7 +27,7 @@ export default class Convertir extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, b
-    switch (choice(['b', 'b'])) {
+    switch (this.quotaChoice('cas', ['b', 'b'])) {
       case 'a':
         b = 2025
         a = choice([

@@ -2,7 +2,6 @@ import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Soustraire un décimal'
@@ -29,7 +28,7 @@ export default class soustraireDecimal extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = new Decimal(2025)
-    const a = new Decimal(randint(0, 4) * 2 + 1).div(2)
+    const a = new Decimal(this.quotaRandint('a', 0, 4) * 2 + 1).div(2)
     this.reponse = annee.sub(a).toFixed(1)
     this.question = `$${texNombre(2025, 0)}-${texNombre(a, 1)}$`
     this.correction = `$${texNombre(2025, 0)}-${texNombre(a, 1)}=${miseEnEvidence(texNombre(annee.sub(a), 1))}$`

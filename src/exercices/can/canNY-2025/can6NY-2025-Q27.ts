@@ -5,7 +5,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { shuffle } from '../../../lib/outils/arrayOutils'
 import { sp } from '../../../lib/outils/outilString'
-import { randint } from '../../../modules/outils'
 export const titre = ''
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -28,8 +27,8 @@ export default class CalculDivers extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const d = randint(3, 6)
-    const u = randint(1, 9)
+    const d = this.quotaRandint('d', 3, 6)
+    const u = this.quotaRandint('u', 1, 9)
     const a = d * 10 + u
     const listeResultat = [2025 * a, 2025 * a + 1, 2025 * a - 1]
     const Resultat = shuffle(listeResultat)

@@ -2,8 +2,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
-import { randint } from '../../../modules/outils'
-
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
@@ -36,7 +34,7 @@ export default class SommeDeProduitsCompleter extends ExerciceSimple {
 
   nouvelleVersion() {
     const objets = []
-    const a = randint(11, 15) * 100
+    const a = this.quotaRandint('a', 11, 15) * 100
     const b = 2025
     const A = pointAbstrait(0, 0, 'A', 'below')
     const B = pointAbstrait(5, 0, 'B', 'below')

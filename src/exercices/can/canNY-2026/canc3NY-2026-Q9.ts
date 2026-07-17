@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -29,9 +28,9 @@ export default class ProduitACompleter2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const a = 2026
-    const b = this.canOfficielle ? 100 : choice([10, 100, 1000])
+    const b = this.canOfficielle ? 100 : this.quotaChoice('b', [10, 100, 1000])
     const resultat = new Decimal(a).mul(b)
-    const choix = this.canOfficielle ? true : choice([true, false])
+    const choix = this.canOfficielle ? true : this.quotaChoice('choix', [true, false])
     this.reponse = texNombre(b, 3)
     this.question = "Compléter l'égalité.<br>"
 

@@ -1,7 +1,6 @@
 import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import { sp } from '../../../lib/outils/outilString'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
@@ -27,7 +26,7 @@ export default class CompleterUneSuite extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const k = randint(3, 9)
+    const k = this.quotaRandint('k', 3, 9)
     const nbre2 = 2025 + k
     const nbre3 = nbre2 + k
     this.reponse = nbre3 + k

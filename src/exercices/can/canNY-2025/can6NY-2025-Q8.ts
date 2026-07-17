@@ -1,10 +1,8 @@
 import Decimal from 'decimal.js'
 import { latex2d } from '../../../lib/2d/textes'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
@@ -32,13 +30,13 @@ export default class CompleterUneSuite extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = choice([true, false])
+    const choix = this.quotaChoice('choix', [true, false])
     const abs0 = choix ? 2000 : 2005
     const abs1 = choix ? abs0 + 25 : abs0 + 20
     const abs2 = choix ? abs0 + 50 : abs0 + 40
     const x1 = this.canOfficielle
       ? new Decimal(0.6)
-      : new Decimal(randint(1, 9, 5) * 2).div(10)
+      : new Decimal(this.quotaRandint('x1', 1, 9, [5]) * 2).div(10)
     const x1B = Number(x1.toFixed(1))
     const x2 = x1.mul(choix ? 25 : 20).add(abs0)
     const d = droiteGraduee({

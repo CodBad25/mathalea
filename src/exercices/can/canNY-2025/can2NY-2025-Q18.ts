@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -25,8 +24,8 @@ export default class nombreATrouver extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = choice([1, 2, 3])
-    const nbre = choice([-2025, 2025])
+    const choix = this.quotaChoice('choix', [1, 2, 3])
+    const nbre = this.quotaChoice('nbre', [-2025, 2025])
     if (choix === 1) {
       this.question = `En multipliant un nombre positif par lui-même, on trouve $${texNombre(2025, 0)}$. <br>
             Quel est ce nombre ? `

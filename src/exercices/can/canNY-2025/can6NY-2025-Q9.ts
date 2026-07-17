@@ -37,7 +37,9 @@ export default class ProduitACompleter extends ExerciceSimple {
       choice([10, 100, 1000]),
     ])
     const resultat = new Decimal(2025).mul(b)
-    const choix = this.canOfficielle ? false : choice([true, false])
+    const choix = this.canOfficielle
+      ? false
+      : this.quotaChoice('choix', [true, false])
     this.reponse = texNombre(b, 3)
     this.consigne = "Compléter l'égalité.<br>"
     handleAnswers(this, 0, { champ1: { value: this.reponse } })

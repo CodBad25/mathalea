@@ -36,7 +36,7 @@ export default class SimplifierQuotient extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('cas', [1, 2])) {
       case 1: // ax/b
         {
           const a = randint(2, 9)

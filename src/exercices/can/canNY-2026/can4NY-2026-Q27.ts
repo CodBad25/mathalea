@@ -28,7 +28,7 @@ export default class Convertir extends ExerciceSimple {
   nouvelleVersion() {
     const annee = 2026
     let a, b
-    switch (this.canOfficielle ? 'a' : choice(['a', 'b'])) {
+    switch (this.canOfficielle ? 'a' : this.quotaChoice('cas', ['a', 'b'])) {
       case 'a':
         b = annee
         a = choice([

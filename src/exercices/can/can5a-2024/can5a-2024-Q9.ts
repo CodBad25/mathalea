@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
@@ -38,7 +37,7 @@ export default class NomExercice extends ExerciceSimple {
         this.question += `${context.isHtml ? '$\\ldots\\text{ m}$' : ''}`
       }
     } else {
-      if (choice([true, false])) {
+      if (this.quotaChoice('cas', [true, false])) {
         const a = randint(3, 15)
         this.reponse = new FractionEtendue(a, 10).texFraction
         this.question = `Complète : <br>$${a}\\text{ dm}=$`

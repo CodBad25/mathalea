@@ -3,8 +3,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
-import { choice } from '../../../lib/outils/arrayOutils'
-import { randint } from '../../../modules/outils'
 export const titre = 'Calculer avec des fractions'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -27,8 +25,8 @@ export default class calculsFractions extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(2023, 2026)
-    if (choice([true, false])) {
+    const a = this.quotaRandint('a', 2023, 2026)
+    if (this.quotaChoice('choix', [true, false])) {
       this.question = `Calculer  $\\left(\\dfrac{1}{${texNombre(2025, 0)}}\\div \\dfrac{1}{${texNombre(2025, 0)}}\\right)\\div\\dfrac{1}{${texNombre(a, 0)}}$.`
       this.reponse = a
       this.correction = `$\\left(\\dfrac{1}{${texNombre(2025, 0)}}\\div \\dfrac{1}{${texNombre(2025, 0)}}\\right)\\div\\dfrac{1}{${texNombre(a, 0)}}=1\\div \\dfrac{1}{${texNombre(a, 0)}}=${miseEnEvidence(texNombre(this.reponse, 0))}$`

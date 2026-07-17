@@ -1,11 +1,9 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
-import { randint } from '../../../modules/outils'
 export const titre = 'Écrire plus simplement'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -29,9 +27,9 @@ export default class aSimplifier extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = choice([1, 2])
-    const a = choice([-5, 3, 5, -3, 9, -9])
-    const b = randint(-10, 10, 0)
+    const choix = this.quotaChoice('choix', [1, 2])
+    const a = this.quotaChoice('a', [-5, 3, 5, -3, 9, -9])
+    const b = this.quotaRandint('b', -10, 10, [0])
     if (choix === 1) {
       this.question = `Écrire le plus simplement possible : $\\dfrac{${texNombre(2025, 0)}${ecritureAlgebrique(a)}}{${texNombre(2025, 0)}-${texNombre(2024, 0)}}$.`
       this.correction = `$\\dfrac{${texNombre(2025, 0)}${ecritureAlgebrique(a)}}{${texNombre(2025, 0)}-${texNombre(2024, 0)}}=${miseEnEvidence(texNombre(2025 + a, 0))}$`

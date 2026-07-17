@@ -22,7 +22,9 @@ export default class Can2025N5Q9 extends ExerciceCan {
     const a = 10
     if (b == null) {
       b =
-        randint(2, 9) * 10 + randint(1, 9) + choice([0, 0, randint(1, 9)]) * 100
+        this.quotaRandint('b1', 2, 9) * 10 +
+        this.quotaRandint('b2', 1, 9) +
+        choice([0, 0, randint(1, 9)]) * 100
     }
     this.reponse = (a * b) / 100
     this.question = `$${a}\\,\\%$ de $${b}$`

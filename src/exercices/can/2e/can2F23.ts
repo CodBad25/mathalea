@@ -5,7 +5,6 @@ import {
   rienSi1,
 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -36,9 +35,9 @@ export default class TrouverpFonctionAffine extends ExerciceSimple {
   nouvelleVersion() {
     const nom = ['f', 'g', 'h']
     const nomF = choice(nom)
-    const a = randint(-10, 10, 0)
-    const b = randint(-10, 10, 0)
-    const m = randint(-10, 10, 0)
+    const a = this.quotaRandint('a', -10, 10, [0])
+    const b = this.quotaRandint('b', -10, 10, [0])
+    const m = this.quotaRandint('m', -10, 10, [0])
     const p = b - m * a
     this.reponse = texNombre(p, 0)
     this.question = `$${nomF}$ est  la fonction définie par ${context.isDiaporama ? '<br>' : ''} $${nomF}(x)=${rienSi1(m)}x+p$.<br>

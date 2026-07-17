@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -217,7 +216,7 @@ export default class DecomposerUnNombre extends ExerciceSimple {
       },
     ]
 
-    const choix = choice(listeNombres)
+    const choix = this.quotaChoice('choix', listeNombres)
     const {
       nombre: a,
       mult,

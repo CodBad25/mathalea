@@ -26,8 +26,10 @@ export default class canQ23 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(7, 29) * 10 + randint(1, 9, 5)
-    const exposant2025 = randint(1, 3)
+    const a =
+      this.quotaRandint('aDizaines', 7, 29) * 10 +
+      this.quotaRandint('aUnites', 1, 9, [5])
+    const exposant2025 = this.quotaRandint('exposant2025', 1, 3)
     const exposantA = a < 100 ? randint(1, 2) : randint(1, 3)
     const aDiv = new Decimal(a).div(new Decimal(10).pow(exposantA))
     const Nb2025Div = new Decimal(2025).div(new Decimal(10).pow(exposant2025))

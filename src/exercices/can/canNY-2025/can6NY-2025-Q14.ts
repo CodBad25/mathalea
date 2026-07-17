@@ -50,8 +50,8 @@ export default class SommeDeProduitsCompleter extends ExerciceSimple {
       [8, 2018],
       [9, 2019],
     ]
-    const PlusGrand = choice(choixPG)
-    const PlusPetit = choice(choixPP)
+    const PlusGrand = this.quotaChoice('plusGrand', choixPG)
+    const PlusPetit = this.quotaChoice('plusPetit', choixPP)
     const PGouPP = choice([PlusGrand, PlusPetit])
     this.question = `Quel est le plus ${PGouPP === PlusGrand ? 'petit nombre entier strictement supérieur' : 'grand nombre entier strictement inférieur'} à $${texNombre(2025, 0)}$  dont le chiffre des unités est $${PGouPP[0]}$ ?`
     this.correction = '$'

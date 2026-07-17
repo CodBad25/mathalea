@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 
@@ -27,8 +26,8 @@ export default class ComparerFractions extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const oliveK = choice([100, 200])
-    const nbreBouteilles = choice([20, 25, 10])
+    const oliveK = this.quotaChoice('oliveK', [100, 200])
+    const nbreBouteilles = this.quotaChoice('nbreBouteilles', [20, 25, 10])
     const oliveParBouteille = new Decimal(oliveK).div(nbreBouteilles)
     this.reponse = new Decimal(2025).div(oliveParBouteille).floor()
     const reponse = texNombre(new Decimal(2025).div(oliveParBouteille).floor())

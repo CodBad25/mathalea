@@ -1,10 +1,8 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
-import { randint } from '../../../modules/outils'
 export const titre = 'Calculer avec des entiers relatifs'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -29,8 +27,8 @@ export default class CalculsEntiersRelatifs2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const choix = this.canOfficielle ? 1 : choice([1, 2])
-    const a = this.canOfficielle ? -15 : randint(-30, -5)
+    const choix = this.canOfficielle ? 1 : this.quotaChoice('choix', [1, 2])
+    const a = this.canOfficielle ? -15 : this.quotaRandint('a', -30, -5)
     if (choix === 1) {
       this.reponse = annee - a
       this.question = `$${texNombre(annee, 0)}-(${a})$`

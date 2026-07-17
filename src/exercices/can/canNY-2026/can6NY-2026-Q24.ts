@@ -2,10 +2,8 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
-import { randint } from '../../../modules/outils'
 export const titre = 'Calculer une valeur dans un tableau de proportionnalité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -28,8 +26,8 @@ export default class CalculTabProp2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 6) * 2
-    const k = this.canOfficielle ? 2 : choice([ 2, 0.5])
+    const a = this.quotaRandint('a', 1, 6) * 2
+    const k = this.canOfficielle ? 2 : this.quotaChoice('k', [2, 0.5])
     const b = a * k
     const annee = 2026
     const reponse = annee * k

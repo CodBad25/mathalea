@@ -1,10 +1,8 @@
 import { orangeMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { simplificationDeFractionAvecEtapes } from '../../../lib/outils/deprecatedFractions'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une probabilité'
 export const interactifReady = true
@@ -33,11 +31,13 @@ export default class CalculsDeProbabilites extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(2, 4)
-    const b = choice([2, 3])
-    const c = choice([2, 3, 11, 12])
+    const a = this.quotaRandint('a', 2, 4)
+    const b = this.quotaChoice('b', [2, 3])
+    const c = this.quotaChoice('c', [2, 3, 11, 12])
     const p = [1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1]
-    switch (choice(['a', 'b', 'b', 'b', 'c', 'c', 'd', 'd', 'd'])) {
+    switch (
+      this.quotaChoice('type', ['a', 'b', 'b', 'b', 'c', 'c', 'd', 'd', 'd'])
+    ) {
       case 'a':
         this.question = `On lance deux fois de suite un dé équilibré.<br>
         

@@ -34,7 +34,7 @@ export default class IntersectionIntervalles extends ExerciceSimple {
     const cours =
       'L’intersection de deux intervalles $I$ et $J$ est l’ensemble qui contient les nombres appartenant à $I$ et à $J$.<br>'
     switch (
-      choice([1, 1, 2, 3, 4, 5, 6, 7, 8, 9]) // 1,1,2,3,4,5,6,7,8
+      this.quotaChoice('type', [1, 1, 2, 3, 4, 5, 6, 7, 8, 9]) // 1,1,2,3,4,5,6,7,8
     ) {
       case 1: //  [a;b] inter [c;d] avec c<b resultat [c;b]
         {

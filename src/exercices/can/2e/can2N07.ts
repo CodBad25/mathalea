@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -26,7 +25,7 @@ export default class SuitesEv extends ExerciceSimple {
 
   nouvelleVersion() {
     switch (
-      choice([1, 2]) //, 2, 3
+      this.quotaChoice('type', [1, 2]) //, 2, 3
     ) {
       case 1:
         {

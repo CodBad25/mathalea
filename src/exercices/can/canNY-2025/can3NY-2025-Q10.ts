@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -25,7 +24,7 @@ export default class resteDivEuclido extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = choice([2, 5, 10, 20, 100, 1000, 2000])
+    const a = this.quotaChoice('a', [2, 5, 10, 20, 100, 1000, 2000])
 
     this.reponse = 2025 % a
     this.question = `Quel est le reste de la division euclidienne de $${texNombre(2025, 0)}$ par $${texNombre(a)}$ ?`

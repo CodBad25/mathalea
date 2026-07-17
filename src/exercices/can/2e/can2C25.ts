@@ -33,7 +33,11 @@ export default class EvolSuccessives extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const estAugmentation = choice([true, false, false])
+    const estAugmentation = this.quotaChoice('estAugmentation', [
+      true,
+      false,
+      false,
+    ])
     const taux = estAugmentation ? choice([10, 20, 30]) : randint(1, 9) * 10
     const CM = estAugmentation ? 1 + taux / 100 : 1 - taux / 100
     const CM2 = CM * CM

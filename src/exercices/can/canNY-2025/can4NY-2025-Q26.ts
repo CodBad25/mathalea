@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -27,7 +26,9 @@ export default class CalculsPourcentages extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = new Decimal(2025).div(choice([10, 100, 1000]))
+    const a = new Decimal(2025).div(
+      this.quotaChoice('diviseur', [10, 100, 1000]),
+    )
     this.reponse = texNombre(new Decimal(a).div(10), 5)
     this.question = `$10\\,\\%$ de $${texNombre(a, 4)}$`
     this.correction = `Prendre $10\\,\\%$ d'une quantité revient à la diviser par $10$.<br>

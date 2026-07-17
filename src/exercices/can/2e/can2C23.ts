@@ -35,7 +35,7 @@ export default class CalculToutAvecPartie extends ExerciceSimple {
   nouvelleVersion() {
     let taux, partie, matiere
 
-    switch (randint(1, 2)) {
+    switch (this.quotaRandint('cas', 1, 2)) {
       case 1:
         taux = choice([1, 2, 4, 5, 10])
         if (taux === 1) {

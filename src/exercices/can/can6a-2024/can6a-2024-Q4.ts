@@ -2,7 +2,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 export const titre = 'Calculer avec une proportionnalité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -25,9 +24,9 @@ export default class NomExercice extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const unit = this.canOfficielle ? 4 : randint(3, 6)
-    const a = this.canOfficielle ? 2 : randint(2, 4)
-    const b = this.canOfficielle ? 6 : randint(5, 7)
+    const unit = this.canOfficielle ? 4 : this.quotaRandint('unit', 3, 6)
+    const a = this.canOfficielle ? 2 : this.quotaRandint('a', 2, 4)
+    const b = this.canOfficielle ? 6 : this.quotaRandint('b', 5, 7)
 
     this.reponse = b * unit
     this.question = `$${a}$ carreaux de chocolats pèsent $${a * unit}$ g.<br>

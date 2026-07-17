@@ -4,7 +4,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { prenomM } from '../../../lib/outils/Personne'
-import { randint } from '../../../modules/outils'
 export const titre = ''
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -32,8 +31,8 @@ export default class CalculDivers2026 extends ExerciceSimple {
     const choixM = prenomM()
     const pm = this.canOfficielle
       ? 200 + (annee % 100)
-      : randint(1, 9) * 100 + (annee % 100)
-    switch (this.canOfficielle ? 2 : randint(1, 2)) {
+      : this.quotaRandint('pm', 1, 9) * 100 + (annee % 100)
+    switch (this.canOfficielle ? 2 : this.quotaRandint('choix', 1, 2)) {
       case 1:
         this.question = `Elsa a une collection de timbres qui est composée de $${texNombre(annee, 0)}$ timbres.<br>
          ${choixM} en possède $${pm}$ de plus.<br>

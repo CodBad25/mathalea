@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Trouver un nombre à partir d'un programme"
@@ -25,7 +24,7 @@ export default class programmeCalcul extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const b = randint(2, 10) * 100 + 25
+    const b = this.quotaRandint('b', 2, 10) * 100 + 25
     this.reponse = (2025 - b) / 100
     this.question = `Je pense à un nombre. <br>
     Je le multiplie par $100$, puis j'ajoute au résultat $${texNombre(b, 0)}$ et j'obtiens $${texNombre(2025, 0)}$. <br>

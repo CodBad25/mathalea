@@ -1,5 +1,4 @@
 import ExerciceSimple from '../../ExerciceSimple'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Calculer une somme'
@@ -44,7 +43,7 @@ export default class NomExercice extends ExerciceSimple {
           [39, 70],
           [37, 70],
         ]
-    const valeurs = choice(listeValeurs)
+    const valeurs = this.quotaChoice('valeurs', listeValeurs)
 
     this.reponse = valeurs[1]
     this.question = `J'ai reçu $${valeurs[0]}$ € puis $${valeurs[1] - valeurs[0]}$ €. <br>

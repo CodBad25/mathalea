@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { prenomF } from '../../../lib/outils/Personne'
 import FractionEtendue from '../../../modules/FractionEtendue'
@@ -60,7 +59,7 @@ export default class ProblemeFractions extends ExerciceSimple {
       [1, 9, 3, 7],
       [3, 7, 4, 7],
     ]
-    const fractions = choice(listeFractions)
+    const fractions = this.quotaChoice('fractions', listeFractions)
     const frac1 = new FractionEtendue(fractions[0], fractions[1])
     const frac2 = new FractionEtendue(fractions[2], fractions[3])
     const reste = frac1.entierMoinsFraction(1)

@@ -31,7 +31,7 @@ export default class FatorisationEgR extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2, 3])) {
+    switch (this.quotaChoice('type', [1, 2, 3])) {
       case 1: // (ax+b)^2
         {
           const a = randint(1, 2)

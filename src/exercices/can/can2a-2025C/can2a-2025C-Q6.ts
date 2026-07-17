@@ -1,9 +1,7 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = "Calculer une fraction d'un nombre décimal"
 export const interactifReady = true
@@ -21,10 +19,10 @@ export const refs = {
 export default class Can2a2025CQ6 extends ExerciceCan {
   enonce(diviseur?: number, nombre?: Decimal): void {
     if (diviseur == null || nombre == null) {
-      diviseur = choice([3, 4, 5])
+      diviseur = this.quotaChoice('diviseur', [3, 4, 5])
       // On génère un nombre dont la division tombe juste
-      const partieEntiere = randint(2, 15) * diviseur
-      const partieDecimale = randint(1, 9) * diviseur
+      const partieEntiere = this.quotaRandint('partieEntiere', 2, 15) * diviseur
+      const partieDecimale = this.quotaRandint('partieDecimale', 1, 9) * diviseur
       nombre = new Decimal(partieEntiere).add(
         new Decimal(partieDecimale).div(100),
       )

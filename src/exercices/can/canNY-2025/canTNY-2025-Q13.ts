@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   reduireAxPlusB,
@@ -7,7 +6,6 @@ import {
 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer un coefficient directeur'
@@ -31,9 +29,9 @@ export default class coeffDirecteur extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = choice([-1, 1])
-    const c = choice([-1, 1])
-    const b = randint(1, 4) * c
+    const a = this.quotaChoice('a', [-1, 1])
+    const c = this.quotaChoice('c', [-1, 1])
+    const b = this.quotaRandint('b', 1, 4) * c
     this.question = `Quel est le coefficient directeur de la tangente au point d'abscisse $${texNombre(2025, 0)}$ de la courbe d'équation $y=${reduirePolynomeDegre3(0, a, b, 2025)}$ ?`
     this.correction = `Si $f$ est la fonction définie par $f(x)=${reduirePolynomeDegre3(0, a, b, 2025)}$, le coeffcient directeur de la tangente au point d'abscisse  $${texNombre(2025, 0)}$ est donné par le nombre dérivé  $f'(${texNombre(2025, 0)})$.<br>
               Comme $f'(x)=${reduireAxPlusB(2 * a, b)}$, $f'(${texNombre(2025)})=${texNombre(2 * a)}\\times ${texNombre(2025)}${ecritureAlgebrique(b)}= ${miseEnEvidence(`${texNombre(2 * a * 2025 + b, 0)}`)}$.

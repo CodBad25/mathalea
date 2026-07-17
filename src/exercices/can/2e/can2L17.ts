@@ -1,6 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { tableauSignesFonction } from '../../../lib/mathFonctions/etudeFonction'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -32,20 +31,25 @@ export default class InequationTableau extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const m = randint(-10, 10, 0)
-    const rac = randint(-10, 10)
-    const a = randint(-10, 10, 0)
+    const m = this.quotaRandint('m', -10, 10, [0])
+    const rac = this.quotaRandint('rac', -10, 10)
+    const a = this.quotaRandint('a', -10, 10, [0])
     const p = m * -rac
-    const signe = choice(['<', '\\leqslant', '>', '\\geqslant'])
+    const signe = this.quotaChoice('signe', [
+      '<',
+      '\\leqslant',
+      '>',
+      '\\geqslant',
+    ])
     const fonctionAffine = (x: number | FractionEtendue) => m * Number(x) + p
-    const rac1 = randint(-5, 5, 0)
+    const rac1 = this.quotaRandint('rac1', -5, 5, [0])
     const rac2 = rac1 + 2 * randint(1, 4)
     const q = new Trinome(a, a * (-rac1 - rac2), a * (rac1 * rac2))
     q.defFormeFactorisee(a, rac1, rac2)
     const fonctionTrinome = (x: number | FractionEtendue) =>
       a * (Number(x) - rac1) * (Number(x) - rac2) // Forme factorisée
     switch (
-      choice([1, 2]) //
+      this.quotaChoice('type', [1, 2]) //
     ) {
       case 1:
         if (m > 0 && signe === '>') {

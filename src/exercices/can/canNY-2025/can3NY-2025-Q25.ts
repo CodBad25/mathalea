@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice, shuffle } from '../../../lib/outils/arrayOutils'
+import { shuffle } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { sp } from '../../../lib/outils/outilString'
@@ -28,11 +27,11 @@ export default class ComparerFractions extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(2026, 2027)
+    const a = this.quotaRandint('a', 2026, 2027)
     const f1 = new FractionEtendue(a, 2025)
     const f2 = new FractionEtendue(2025, a)
     const listeNombre1 = [f1.texFraction, f2.texFraction, 1]
-    const choix = choice([true, false])
+    const choix = this.quotaChoice('choix', [true, false])
     const Nombre1 = shuffle(listeNombre1)
     this.reponse = choix
       ? new FractionEtendue(a, 2025).toLatex()

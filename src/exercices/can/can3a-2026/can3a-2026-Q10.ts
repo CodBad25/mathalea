@@ -1,8 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Calculer 10, 20 ou 30  $\\%$ d'un nombre"
@@ -27,8 +25,8 @@ export default class Can32026Q10 extends ExerciceCan {
 
   enonce(a?: number, b?: number) {
     if (b == null || a == null) {
-      a = choice([10, 20, 30])
-      b = randint(2, 9) * 10
+      a = this.quotaChoice('a', [10, 20, 30])
+      b = this.quotaRandint('b', 2, 9) * 10
     }
 
     this.reponse = (a * b) / 100

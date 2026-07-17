@@ -32,8 +32,8 @@ this.optionsChampTexte = { texteApres: '.' }
       this.correction = `la somme de $2$ et de $4$ est égal à : $2+4=6$.<br>
       Le produit de $5$ par la somme de $2$ et de $4$ est donc égal à : $5\\times 6=${miseEnEvidence(30)}$.`
     } else {
-      const a = randint(3, 4)
-      const b = randint(2, 5)
+      const a = this.quotaRandint('a', 3, 4)
+      const b = this.quotaRandint('b', 2, 5)
       const c = randint(1, 6, b)
       this.reponse = a * (b + c)
       this.question = `Le produit de $${a}$ par la somme de $${b}$ et de $${c}$ est égal à : `

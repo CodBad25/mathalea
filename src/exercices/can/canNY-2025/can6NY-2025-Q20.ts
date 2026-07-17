@@ -4,7 +4,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { randint } from '../../../modules/outils'
 export const titre = 'Calculer une somme/différence'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -30,7 +29,7 @@ export default class CalculDivers extends ExerciceSimple {
 
   nouvelleVersion() {
     this.consigne = "Compléter l'égalité."
-    switch (randint(4, 4)) {
+    switch (this.quotaRandint('choix', 4, 4)) {
       case 1:
         this.reponse = texNombre(1000, 0)
         this.question = `(${texNombre(2, 0)}\\times ~%{champ1}) ~+25=${texNombre(2025, 0)}`

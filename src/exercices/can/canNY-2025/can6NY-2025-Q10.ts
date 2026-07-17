@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -27,7 +26,7 @@ export default class SommeDeProduitsCompleter extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const den = choice([10, 100, 1000])
+    const den = this.quotaChoice('den', [10, 100, 1000])
     const a = new Decimal(2025).div(den)
     this.reponse = texNombre(a, 3)
     this.question = 'Écrire, sous forme décimale, la fraction suivante.'

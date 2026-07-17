@@ -32,7 +32,7 @@ export default class CalculAvecRacineDefphrase extends ExerciceSimple {
   nouvelleVersion() {
     let a, choix
     switch (
-      choice([1, 2, 3]) //
+      this.quotaChoice('cas', [1, 2, 3]) //
     ) {
      
       case 1:

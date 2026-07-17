@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { arrondi } from '../../../lib/outils/nombres'
 import { prenomM } from '../../../lib/outils/Personne'
 import { randint } from '../../../modules/outils'
@@ -29,7 +28,7 @@ export default class Denombrement extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, b, c, prenom1
-    switch (choice(['a', 'b'])) {
+    switch (this.quotaChoice('type', ['a', 'b'])) {
       case 'a':
         a = randint(3, 5)
         b = randint(2, 4)

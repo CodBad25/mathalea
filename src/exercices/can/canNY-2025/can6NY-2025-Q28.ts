@@ -4,7 +4,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 export const titre = ''
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -27,10 +26,10 @@ export default class CalculDivers extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 9)
+    const a = this.quotaRandint('a', 1, 9)
     const d = new Decimal(a).div(10)
     const c = new Decimal(a).div(100)
-    switch (randint(1, 2)) {
+    switch (this.quotaRandint('typeDeQuestions', 1, 2)) {
       case 1:
         this.question = `Quel nombre obtient-on en retranchant $${a}$ ${a === 1 ? 'dixième' : 'dixièmes'} à $${texNombre(2025, 0)}$ ?`
         this.reponse = texNombre(new Decimal(2025).sub(d), 1)

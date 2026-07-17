@@ -1,6 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -36,9 +35,9 @@ export default class ordonneePointDroite extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const coeff = randint(-9, 9, 0) / 10
-    const a = randint(-10, 10, 0)
-    const absB = randint(1, 3)
+    const coeff = this.quotaRandint('coeff', -9, 9, [0]) / 10
+    const a = this.quotaRandint('a', -10, 10, [0])
+    const absB = this.quotaRandint('absB', 1, 3)
 
     this.question = ` Dans un repère du plan, on considère la droite $D$ de coefficient directeur $${texNombre(coeff, 1)}$, passant par le point $A(0\\,;\\,${a})$.<br>
       On note $B$ le point de la droite $D$ dont l'abscisse est égale à $${absB}$.<br>

@@ -35,7 +35,7 @@ Le prix de $10$ stylos est de : `
       this.correction = `$4$ stylos coûtent $8$ € donc $2$ stylos coûtent $8\\div 2=4$ €.<br>
       Ainsi, $10$ stylos coûtent $${miseEnEvidence(reponse)}$ €.`
     } else {
-      if (choice([true, false])) {
+      if (this.quotaChoice('cas', [true, false])) {
         const a = randint(2, 6)
         const k = randint(2, 4)
         const b = k * a

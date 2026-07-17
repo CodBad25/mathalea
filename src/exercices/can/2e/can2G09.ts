@@ -1,7 +1,5 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer le coefficient de colinéarité entre deux vecteurs'
@@ -31,9 +29,9 @@ export default class VecteursColineaires extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const p = choice([-2, 2, 3, 4, -4, -3])
-    const ux = randint(1, 5)
-    const uy = randint(1, 5)
+    const p = this.quotaChoice('p', [-2, 2, 3, 4, -4, -3])
+    const ux = this.quotaRandint('ux', 1, 5)
+    const uy = this.quotaRandint('uy', 1, 5)
     const vx = p * ux
     const vy = p * uy
     this.question = `Dans un repère orthonormé $\\big(O\\,;\\,\\vec \\imath,\\,\\vec \\jmath\\big)$, on a :<br>

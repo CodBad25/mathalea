@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
@@ -38,7 +37,7 @@ export default class Can32026Q2 extends ExerciceCan {
     ]
 
     if (numerateur == null || denominateur == null || minutes == null) {
-      const a = choice(listeHeures)
+      const a = this.quotaChoice('a', listeHeures)
       numerateur = a[0]
       denominateur = a[1]
       minutes = a[2]
