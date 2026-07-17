@@ -3,7 +3,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { propositionsQcm } from '../../lib/interactif/qcm'
-import { stringNombre, texNombre } from '../../lib/outils/texNombre'
+import { texNombre } from '../../lib/outils/texNombre'
 export const titre = 'Résoudre des problèmes (ordre de grandeurs)'
 export const amcReady = true
 export const interactifReady = true
@@ -40,10 +40,10 @@ function piqueNique() {
   ]
 
   return {
-    contexte: `Un groupe de ${a} amis décide de faire un pique-nique.<br>`,
-    question: `Ils achètent ${nbSandwichs} sandwichs, ${nbBoissons} boissons et ${nbFruits} fruits.<br><br>Combien de ${produit} chaque ami aura-t-il en moyenne ?<br>`,
+    contexte: `Un groupe de $${a}$ amis décide de faire un pique-nique.<br>`,
+    question: `Ils achètent $${nbSandwichs}$ sandwichs, $${nbBoissons}$ boissons et $${nbFruits}$ fruits.<br><br>Combien de ${produit} chaque ami aura-t-il en moyenne ?<br>`,
     reponses: [nbProduit, mr1, mr2, mr3, mr4],
-    reponseRedigee: `En moyenne chaque ami aura ${nbProduit} ${produit}, car $${a}\\times ${nbProduit}=${a * nbProduit}$<br>`,
+    reponseRedigee: `En moyenne chaque ami aura $${nbProduit}$ ${produit}, car $${a}\\times ${nbProduit}=${a * nbProduit}$<br>`,
   }
 }
 
@@ -54,11 +54,11 @@ function carrelage() {
   const [mr1, mr2, mr3, mr4] = [l + L, (l + L) * 2, s * 2, s * 10]
 
   return {
-    contexte: `Une salle de classe mesure ${L} mètres de long et ${l} mètres de large.<br>Les élèves veulent poser du carrelage au sol.<br>`,
+    contexte: `Une salle de classe mesure $${L}$ mètres de long et $${l}$ mètres de large.<br>Les élèves veulent poser du carrelage au sol.<br>`,
     question:
-      'Si un carreau mesure 1 mètre carré, combien de carreaux leur faudra-t-il pour couvrir toute la surface ?<br>',
+      'Si un carreau mesure $1$ mètre carré, combien de carreaux leur faudra-t-il pour couvrir toute la surface ?<br>',
     reponses: [s, mr1, mr2, mr3, mr4],
-    reponseRedigee: `Il faudra ${s} carreaux, car la surface de la salle est de $${l}\\times ${L}=${s}m^2$.<br>`,
+    reponseRedigee: `Il faudra $${s}$ carreaux, car la surface de la salle est de $${l}\\times ${L}=${s}\\text{ m}^2$.<br>`,
   }
 }
 
@@ -74,11 +74,11 @@ function bibliotheque() {
   ]
 
   return {
-    contexte: `Une bibliothèque a ${nbLivres} livres. Chaque étagère peut contenir ${nbLivresParEtagere} livres.<br>`,
+    contexte: `Une bibliothèque a $${texNombre(nbLivres)}$ livres. Chaque étagère peut contenir $${texNombre(nbLivresParEtagere)}$ livres.<br>`,
     question:
       "Combien d'étagères sont nécessaires pour ranger tous les livres ?<br>",
     reponses: [nbEtageres, mr1, mr2, mr3, mr4],
-    reponseRedigee: `Il faudra ${nbEtageres} étagères, car $${nbEtageres}\\times ${nbLivresParEtagere}=${nbLivres}$.<br>`,
+    reponseRedigee: `Il faudra $${texNombre(nbEtageres)}$ étagères, car $${texNombre(nbEtageres)}\\times ${texNombre(nbLivresParEtagere)}=${texNombre(nbLivres)}$.<br>`,
   }
 }
 function camion() {
@@ -93,11 +93,11 @@ function camion() {
   ]
 
   return {
-    contexte: `Un camion transporte des caisses de fruits.<br>Chaque caisse pèse environ ${masseParCaisse} kg.<br>Le camion peut transporter un maximum de ${chargeMaxi} kg.<br>`,
+    contexte: `Un camion transporte des caisses de fruits.<br>Chaque caisse pèse environ $${masseParCaisse}$ kg.<br>Le camion peut transporter un maximum de $${texNombre(chargeMaxi)}$ kg.<br>`,
     question:
       'Combien de caisses de fruits le camion peut-il transporter au maximum ?<br>',
     reponses: [nbCaisses, mr1, mr2, mr3, mr4],
-    reponseRedigee: `Le camion pourra transporter environ ${nbCaisses} caisses, car  $${nbCaisses}\\times ${masseParCaisse}=${nbCaisses * masseParCaisse}$ et $${nbCaisses * masseParCaisse}<${chargeMaxi}$.<br>`,
+    reponseRedigee: `Le camion pourra transporter environ $${nbCaisses}$ caisses, car  $${nbCaisses}\\times ${masseParCaisse}=${texNombre(nbCaisses * masseParCaisse)}$ et $${texNombre(nbCaisses * masseParCaisse)}<${texNombre(chargeMaxi)}$.<br>`,
   }
 }
 
@@ -113,10 +113,10 @@ function agriculteur() {
   ]
 
   return {
-    contexte: `Un agriculteur plante des arbres en rangées.<br>Il plante ${nbRangees} rangées d'arbres avec ${nbArbresParRangee} arbres par rangée.<br>`,
+    contexte: `Un agriculteur plante des arbres en rangées.<br>Il plante $${nbRangees}$ rangées d'arbres avec $${nbArbresParRangee}$ arbres par rangée.<br>`,
     question: "Combien d'arbres a-t-il plantés au total ?<br>",
     reponses: [nbArbres, mr1, mr2, mr3, mr4],
-    reponseRedigee: `L'agriculteur a planté ${nbArbres} arbres, car  $${nbRangees}\\times ${nbArbresParRangee}=${nbArbres}$.<br>`,
+    reponseRedigee: `L'agriculteur a planté $${nbArbres}$ arbres, car  $${nbRangees}\\times ${nbArbresParRangee}=${nbArbres}$.<br>`,
   }
 }
 function fleurs() {
@@ -133,10 +133,10 @@ function fleurs() {
   ]
 
   return {
-    contexte: `Un jardinier doit planter des fleurs dans un jardin rectangulaire de ${longueur} mètres de long et ${largeur} mètres de large.<br>Chaque mètre carré doit contenir ${fleursParM2} fleurs.<br>`,
+    contexte: `Un jardinier doit planter des fleurs dans un jardin rectangulaire de $${longueur}$ mètres de long et $${largeur}$ mètres de large.<br>Chaque mètre carré doit contenir $${fleursParM2}$ fleurs.<br>`,
     question: 'Combien de fleurs le jardinier doit-il planer au total ?<br>',
     reponses: [nbFleurs, mr1, mr2, mr3, mr4],
-    reponseRedigee: `Le jardinier a planté ${nbFleurs} fleurs, car  la surface du jardin est de $${longueur}\\times ${largeur}=${aire}m^2$ et $${aire}\\times ${fleursParM2}=${nbFleurs}$.<br>`,
+    reponseRedigee: `Le jardinier a planté $${nbFleurs}$ fleurs, car  la surface du jardin est de $${longueur}\\times ${largeur}=${aire}\\text{ m}^2$ et $${aire}\\times ${fleursParM2}=${nbFleurs}$.<br>`,
   }
 }
 
@@ -154,10 +154,10 @@ function magasin() {
   ]
 
   return {
-    contexte: `Un magasin vend des packs de bouteilles d'eau.<br>Chaque pack contient ${nbBouteillesParPack} bouteilles de ${stringNombre(masseParBouteille, 2)}L.<br>Un client achète ${nbPacks} packs.<br>`,
-    question: 'Quel volume de liquide le client a-til acheté ?<br>',
-    reponses: [masseTotale, mr1, mr2, mr3, mr4].map((el) => el + 'L'),
-    reponseRedigee: `Le client a acheté ${masseTotale} litres de liquide, car il a acheté $${nbPacks}\\times ${nbBouteillesParPack}=${nbBouteilles}$ bouteilles et $${nbBouteilles}\\times ${texNombre(masseParBouteille, 2)}=${masseTotale}$.<br>`,
+    contexte: `Un magasin vend des packs de bouteilles d'eau.<br>Chaque pack contient $${nbBouteillesParPack}$ bouteilles de $${texNombre(masseParBouteille, 2)}$ litres.<br>Un client achète $${nbPacks}$ packs.<br>`,
+    question: 'Quel volume de liquide le client a-t-il acheté ?<br>',
+    reponses: [masseTotale, mr1, mr2, mr3, mr4],
+    reponseRedigee: `Le client a acheté $${masseTotale}$ litres de liquide, car il a acheté $${nbPacks}\\times ${nbBouteillesParPack}=${nbBouteilles}$ bouteilles et $${nbBouteilles}\\times ${texNombre(masseParBouteille, 2)}=${masseTotale}$.<br>`,
   }
 }
 
@@ -173,10 +173,10 @@ function livre() {
   ]
 
   return {
-    contexte: `Un élève lit ${nbPagesParJour} pages de son livre chaque jour. Le livre contient ${nbPagesTotal} pages.<br>`,
+    contexte: `Un élève lit $${nbPagesParJour}$ pages de son livre chaque jour. Le livre contient $${nbPagesTotal}$ pages.<br>`,
     question: 'Combien de jours lui faudra-t-il pour lire tout le livre ?<br>',
     reponses: [nbJours, mr1, mr2, mr3, mr4],
-    reponseRedigee: `L'élève aura fini de lire son livre au bout de ${nbJours} jours, car $${nbJours}\\times ${nbPagesParJour}=${nbPagesTotal}$.<br>`,
+    reponseRedigee: `L'élève aura fini de lire son livre au bout de $${nbJours}$ jours, car $${nbJours}\\times ${nbPagesParJour}=${nbPagesTotal}$.<br>`,
   }
 }
 
@@ -193,7 +193,7 @@ function boulangerie() {
   ]
 
   return {
-    contexte: `Une boulangerie vend des lots de ${nbCroissantParLot}.<br> Un client achète ${nbLots} lots.<br>`,
+    contexte: `Une boulangerie vend des lots de $${nbCroissantParLot}$.<br> Un client achète $${nbLots}$ lots.<br>`,
     question: 'Combien ce client a-t-il acheté des croissants ?<br>',
     reponses: [nbCroissants, mr1, mr2, mr3, mr4],
     reponseRedigee: `Le client a acheté $${nbCroissants}$, car $${nbLots}\\times ${nbCroissantParLot}=${nbCroissants}$.<br>`,
@@ -209,10 +209,10 @@ function bus() {
   const [mr1, mr2, mr3, mr4] = [nbBus - 4, nbBus + 5, nbBus - 2, nbBus + 3]
 
   return {
-    contexte: `Un collège organise une sortie scolaire pour ${nbEleves} élèves.<br>Les élèves doivent être répartis dans des bus de ${nbPlaces} places.<br>`,
-    question: `Combien de bus faudra-t-il sachant qu'il y a ${nbAccompagnateurs} accompagnateurs adultes ?`,
+    contexte: `Un collège organise une sortie scolaire pour $${nbEleves}$ élèves.<br>Les élèves doivent être répartis dans des bus de $${nbPlaces}$ places.<br>`,
+    question: `Combien de bus faudra-t-il sachant qu'il y a $${nbAccompagnateurs}$ accompagnateurs adultes ?`,
     reponses: [nbBus, mr1, mr2, mr3, mr4],
-    reponseRedigee: `Il faudra ${nbBus} pour transporter les ${nbEleves} élèves et les ${nbAccompagnateurs} accompagnateurs, soit ${nbEleves + nbAccompagnateurs} passagers, car cela fait $${nbBus}\\times ${nbPlaces} = ${nbPlacesDispo}$ places disponibles et $${nbEleves + nbAccompagnateurs} \\leq ${nbPlacesDispo}$.<br>`,
+    reponseRedigee: `Il faudra $${nbBus}$ pour transporter les $${nbEleves}$ élèves et les $${nbAccompagnateurs}$ accompagnateurs, soit $${nbEleves + nbAccompagnateurs}$ passagers, car cela fait $${nbBus}\\times ${nbPlaces} = ${nbPlacesDispo}$ places disponibles et $${nbEleves + nbAccompagnateurs} \\leq ${nbPlacesDispo}$.<br>`,
   }
 }
 const listePb = [
@@ -233,9 +233,6 @@ export default class RepresenterUneFraction extends Exercice {
     this.consigne =
       'Trouver la bonne réponse en utilisant les ordres de grandeurs.'
     this.nbQuestions = 4
-
-    // this.sup = 3
-    // this.besoinFormulaireNumerique = ['Type de problèmes']
   }
 
   nouvelleVersion() {
@@ -243,28 +240,31 @@ export default class RepresenterUneFraction extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const probleme = listeDeProblemes[i]
       const { contexte, question, reponses, reponseRedigee } = probleme()
+      let lesReponses = reponses.map((r) => `$${texNombre(r)}$`)
+      if (probleme === magasin) lesReponses = lesReponses.map((el) => el + ' L')
+
       let texte = `${contexte}<br>${question}`
       this.autoCorrection[i] = {
         enonce: '',
         propositions: [
           {
-            texte: reponses[0].toString(),
+            texte: lesReponses[0],
             statut: true,
           },
           {
-            texte: reponses[1].toString(),
+            texte: lesReponses[1],
             statut: false,
           },
           {
-            texte: reponses[2].toString(),
+            texte: lesReponses[2],
             statut: false,
           },
           {
-            texte: reponses[3].toString(),
+            texte: lesReponses[3],
             statut: false,
           },
           {
-            texte: reponses[4].toString(),
+            texte: lesReponses[4],
             statut: false,
           },
         ],
@@ -283,56 +283,3 @@ export default class RepresenterUneFraction extends Exercice {
     listeQuestionsToContenu(this)
   }
 }
-/*
-
-A) 10
-B) 12 (Correct)
-C) 14
-D) 16
-Situation-Problème 9
-Contexte :
-  Une boulangerie vend des lots de 4 croissants pour 5 euros. Un client achète 5 lots.
-
-  Question :
-Combien de croissants le client achète-t-il en tout ?
-
-  Réponse attendue :
-Le client achète
-5
-×
-4
-  =
-  20
-5×4=20 croissants.
-
-  QCM :
-
-A) 16
-B) 18
-C) 20 (Correct)
-D) 22
-Situation-Problème 10
-Contexte :
-  Une école organise une sortie pour 120 élèves. Ils doivent être répartis dans des bus, chaque bus pouvant transporter 30 élèves.
-
-  Question :
-Combien de bus sont nécessaires pour transporter tous les élèves ?
-
-  Réponse attendue :
-Il faut
-120
-30
-  =
-  4
-30
-120
-
- =4 bus pour transporter tous les élèves.
-
-  QCM :
-
-A) 3
-B) 4 (Correct)
-C) 5
-D) 6
-*/
