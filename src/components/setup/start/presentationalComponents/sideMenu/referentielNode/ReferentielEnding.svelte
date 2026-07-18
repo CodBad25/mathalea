@@ -191,6 +191,19 @@
                 </span>
               </span>
             {/if}
+            {#if ending.egaliteFillesGarcons}
+              &nbsp;
+              <span
+                class="tooltip tooltip-bottom tooltip-neutral"
+                data-tip="Égalité filles-garçons : exercice sensibilisant aux stéréotypes de genre"
+              >
+                <span
+                  class="inline-flex flex-wrap items-center justify-center rounded-full bg-coopmaths dark:bg-coopmathsdark text-coopmaths-canvas dark:text-coopmathsdark-canvas text-[0.6rem] px-2 ml-2 font-semibold leading-normal whitespace-nowrap"
+                >
+                  ÉGALITÉ FG
+                </span>
+              </span>
+            {/if}
             {#if ending.features.qcmcam}
               &nbsp;
               <span
