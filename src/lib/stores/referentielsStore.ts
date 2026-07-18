@@ -51,6 +51,12 @@ function createOriginalReferentiels(lang: Language): ReferentielInMenu[] {
     ...referentielGeometrieDynamique,
   }
 
+  // "Égalité filles-garçons" : on la détache du référentiel scolaire
+  // classique pour la ranger dans "Ressources partenaires", aux côtés de MathAdata.
+  const egaliteFGReferentiel: JSONReferentielObject =
+    (baseReferentiel['Égalité filles-garçons'] as JSONReferentielObject) || {}
+  delete baseReferentiel['Égalité filles-garçons']
+
   // Traitement des examens
   let examens = getAllEndings(examsReferentiel)
   if (!isFR) {
@@ -121,7 +127,12 @@ function createOriginalReferentiels(lang: Language): ReferentielInMenu[] {
             title: 'Ressources partenaires',
             name: 'partenaires' as ActivationName,
             searchable: false,
-            referentiel: referentielMathadata,
+            referentiel: {
+              ...referentielMathadata,
+              ...(Object.keys(egaliteFGReferentiel).length > 0
+                ? { 'Égalité filles-garçons': egaliteFGReferentiel }
+                : {}),
+            },
           },
         ]
       : []),

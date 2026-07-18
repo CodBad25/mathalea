@@ -160,6 +160,15 @@ async function readInfos(
                 if (matchDateModif) {
                   infos.dateModification = matchDateModif[1]
                 }
+                const matchEgaliteFillesGarcons = data.match(
+                  /export const egaliteFillesGarcons = (.*)/,
+                )
+                if (
+                  matchEgaliteFillesGarcons &&
+                  matchEgaliteFillesGarcons[1].trim() === 'true'
+                ) {
+                  infos.egaliteFillesGarcons = true
+                }
                 infos.features = {}
                 const matchInteractif = data.match(
                   /export const interactifReady = (.*)/,
@@ -247,6 +256,15 @@ async function readInfos(
                 )
                 if (matchDateModif) {
                   infos.dateModification = matchDateModif[1]
+                }
+                const matchEgaliteFillesGarcons = data.match(
+                  /export const egaliteFillesGarcons = (.*)/,
+                )
+                if (
+                  matchEgaliteFillesGarcons &&
+                  matchEgaliteFillesGarcons[1].trim() === 'true'
+                ) {
+                  infos.egaliteFillesGarcons = true
                 }
                 infos.features = {}
                 const matchInteractif = data.match(

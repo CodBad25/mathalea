@@ -74,8 +74,14 @@ export const MATHALEA_FIGURE_BLOCK_HELPER = `#let mathalea-figure-block(num, ali
   let f = if natural > 0pt { calc.min(zoom, size.width / natural) } else { zoom }
   let scaled = if f != 1.0 { box(scale(f * 100%, origin: top + left, reflow: true, body)) } else { body }
   let content-width = natural * f
-  let left = if alignment == center { calc.max(0pt, (size.width - content-width) / 2) }
-    else if alignment == right { calc.max(0pt, size.width - content-width) }
+  // size.width peut être infini (conteneur sans largeur déterminée à ce
+  // stade du flux) : on le plafonne avant de calculer le padding gauche,
+  // sinon un centrage/alignement à droite déclenche une panique Typst
+  // (« assertion failed: size.is_finite() ») que le zoom évite déjà
+  // naturellement via calc.min(zoom, ...).
+  let available = calc.min(size.width, 1000pt)
+  let left = if alignment == center { calc.max(0pt, (available - content-width) / 2) }
+    else if alignment == right { calc.max(0pt, available - content-width) }
     else { 0pt }
   mathalea-anchor("figure", num, dx: left + content-width)
   pad(left: left)[#scaled]
@@ -2268,7 +2274,17 @@ export function htmlToTypst(html: string, figures?: string[]): string {
     return `\uE000${protectedSegments.length - 1}\uE001`
   }
 
-  let text = protectQcm(renderScratchBlocksToSvg(html), protect, figures)
+  // Passe-plat pour du code Typst natif écrit par un exercice (mise en page
+  // impossible à exprimer en HTML/CSS convertible, ex. un grid photo+texte
+  // dont l'ordre des colonnes dépend d'un réglage) : le contenu de
+  // <mathalea-typst> est inséré tel quel dans le document, sans échappement.
+  // Protégé en tout premier pour ne jamais être touché par l'échappement du
+  // texte ni par les remplacements suivants (tables, maths, balises...).
+  let text = html.replace(
+    /<mathalea-typst>([\s\S]*?)<\/mathalea-typst>/gi,
+    (_, code: string) => protect(decodeEntities(code)),
+  )
+  text = protectQcm(renderScratchBlocksToSvg(text), protect, figures)
   text = protectSchemaContainers(text, protect)
   text = protectHtmlTables(text, protect, figures)
   text = protectMathalea2dContainers(text, protect, figures)
@@ -2314,19 +2330,35 @@ export function htmlToTypst(html: string, figures?: string[]): string {
   // images d'exercices statiques (annales scannées) : l'image est déjà
   // chargée dans le compilateur (voir `staticImagePaths`/`mapShadow`), sinon
   // (référentiel sans image, ou récupération réseau échouée) c'est un encart
-  text = text.replace(/<img[^>]*\ssrc=["']([^"']+)["'][^>]*>/gi, (_, src: string) => {
-    const path = staticImagePaths.get(src)
-    if (path == null || figures == null) {
-      return protect(missingBox('image non convertie'))
-    }
-    // largeur intrinsèque volontairement bien plus grande que n'importe
-    // quelle colonne/page (A4 paysage compris) : mathalea-fit la réduit
-    // alors toujours pour occuper exactement toute la largeur disponible,
-    // là où MAX_FIGURE_WIDTH_PT (calibré pour les figures mathalea2d) la
-    // laisserait plus étroite que la page
-    figures.push(`image(${typstStringLiteral(path)}, width: ${STATIC_IMAGE_INTRINSIC_WIDTH_PT}pt)`)
-    return protect(`#mathalea-fit(fig-${figures.length})\n\n`)
-  })
+  text = text.replace(
+    /<img([^>]*)\ssrc=["']([^"']+)["']([^>]*)>/gi,
+    (_, before: string, src: string, after: string) => {
+      const path = staticImagePaths.get(src)
+      if (path == null || figures == null) {
+        return protect(missingBox('image non convertie'))
+      }
+      // une image avec des attributs width/height explicites (ex. photo
+      // dimensionnée par un exercice, contrairement aux scans d'annales qui
+      // n'en portent pas) est embarquée à cette taille (conversion CSS px →
+      // pt, 96 px = 72 pt comme pour les figures SVG) plutôt qu'étirée à la
+      // largeur de la colonne
+      const attrs = before + after
+      const width = /\swidth=["']?(\d+(?:\.\d+)?)["']?/i.exec(attrs)?.[1]
+      const height = /\sheight=["']?(\d+(?:\.\d+)?)["']?/i.exec(attrs)?.[1]
+      const widthPt =
+        width != null && height != null
+          ? Number(width) * 0.75
+          : // largeur intrinsèque volontairement bien plus grande que
+            // n'importe quelle colonne/page (A4 paysage compris) :
+            // mathalea-fit la réduit alors toujours pour occuper exactement
+            // toute la largeur disponible, là où MAX_FIGURE_WIDTH_PT
+            // (calibré pour les figures mathalea2d) la laisserait plus
+            // étroite que la page
+            STATIC_IMAGE_INTRINSIC_WIDTH_PT
+      figures.push(`image(${typstStringLiteral(path)}, width: ${widthPt}pt)`)
+      return protect(`#mathalea-fit(fig-${figures.length})\n\n`)
+    },
+  )
   text = text.replace(/<img[^>]*>/gi, () =>
     protect(missingBox('image non convertie')),
   )
