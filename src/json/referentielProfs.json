@@ -42,7 +42,7 @@
       "url": "OutilSpline.svelte"
     }
   },
-  "générateurs": {
+  "Générateurs": {
     "P007": {
       "id": "P007",
       "uuid": "ad5f8",
@@ -92,7 +92,7 @@
       "tags": {}
     }
   },
-  "Géomotrie animée": {
+  "Géométrie animée": {
     "P011": {
       "id": "P011",
       "uuid": "697a7",
@@ -119,7 +119,7 @@
       "tags": {}
     }
   },
-  "simulateurs": {
+  "Simulateurs": {
     "P008": {
       "id": "P008",
       "uuid": "691a6",
@@ -132,7 +132,7 @@
       "id": "P016",
       "uuid": "bc372",
       "url": "profs/P016.js",
-      "titre": "Simulateur de Dés",
+      "titre": "Simulateur de lancers de dés",
       "datePublication": "06/04/2022",
       "typeExercice": "outil",
       "tags": {}
