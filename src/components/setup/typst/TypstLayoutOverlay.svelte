@@ -29,6 +29,8 @@
   import {
     COLUMN_BREAK_SNIPPET,
     PAGE_BREAK_SNIPPET,
+    WRITING_LINES_POSITIONS,
+    type WritingLinesPosition,
   } from './buildTypstDocument'
 
   /**
@@ -96,6 +98,20 @@
   /** Surcharges de code Typst existantes, par numéro d'exercice (voir onEditCode) */
   export let codeOverrides: Record<number, string> = {}
   export let onEditCode: (num: number) => void
+  /** Lignes en pointillés réglées par exercice (valeurs lues dans le code) */
+  export let writingLinesValues: Record<
+    number,
+    { position: WritingLinesPosition; count: number; spacing: number }
+  > = {}
+  /** Règle (`value`) ou retire (`null`) les lignes en pointillés de l'exercice num */
+  export let onSetWritingLines: (
+    num: number,
+    value: {
+      position: WritingLinesPosition
+      count: number
+      spacing: number
+    } | null,
+  ) => void
 
   /** Numéro du repère de gap dont le panneau d'insertion est ouvert */
   let openInsertion: number | null = null
@@ -170,6 +186,7 @@
   function toggleInsertion(num: number) {
     openInsertion = openInsertion === num ? null : num
     insertionText = ''
+    openWritingLines = null
   }
 
   function submitInsertion() {
@@ -181,6 +198,62 @@
       insertionKind === 'section' ? `#section[${text}]` : text,
     )
     insertionText = ''
+  }
+
+  /** Libellés des emplacements des lignes en pointillés */
+  const WRITING_LINES_POSITION_LABELS: Record<WritingLinesPosition, string> = {
+    endOfExercise: "Fin d'exercice",
+    afterEachQuestion: 'Après chaque question',
+  }
+
+  /**
+   * Réglage par défaut à l'ouverture du panneau d'un exercice sans lignes :
+   * 0 ligne, pour qu'aucune n'apparaisse tant que le professeur n'a pas
+   * incrémenté le compteur lui-même.
+   */
+  const WRITING_LINES_DEFAULT: {
+    position: WritingLinesPosition
+    count: number
+    spacing: number
+  } = { position: 'endOfExercise', count: 0, spacing: 2 }
+
+  /** Numéro de l'exercice dont le panneau de lignes en pointillés est ouvert */
+  let openWritingLines: number | null = null
+  let writingLinesDraft = { ...WRITING_LINES_DEFAULT }
+
+  function toggleWritingLines(num: number) {
+    openWritingLines = openWritingLines === num ? null : num
+    openInsertion = null
+    if (openWritingLines != null) {
+      writingLinesDraft = writingLinesValues[num] ?? { ...WRITING_LINES_DEFAULT }
+    }
+  }
+
+  function setWritingLinesPosition(num: number, position: WritingLinesPosition) {
+    writingLinesDraft = { ...writingLinesDraft, position }
+    onSetWritingLines(num, writingLinesDraft)
+  }
+
+  function setWritingLinesCount(num: number, count: number) {
+    writingLinesDraft = {
+      ...writingLinesDraft,
+      count: Math.min(20, Math.max(0, count)),
+    }
+    onSetWritingLines(num, writingLinesDraft)
+  }
+
+  /** Espacement des lignes, réglable par pas de 0,5 em */
+  function setWritingLinesSpacing(num: number, spacing: number) {
+    writingLinesDraft = {
+      ...writingLinesDraft,
+      spacing: Math.min(6, Math.max(0.5, Math.round(spacing * 2) / 2)),
+    }
+    onSetWritingLines(num, writingLinesDraft)
+  }
+
+  function clearWritingLines(num: number) {
+    onSetWritingLines(num, null)
+    openWritingLines = null
   }
 </script>
 
@@ -282,6 +355,73 @@
           on:click={submitInsertion}
         >
           Insérer
+        </button>
+      </div>
+    </div>
+  {/if}
+{/snippet}
+
+{#snippet writingLinesPanel(num: number)}
+  <!-- panneau de réglage des lignes en pointillés (pour que l'élève y
+       écrive) de l'exercice `num` : emplacement, nombre de lignes,
+       espacement. Régénère le code à chaque changement (voir onSetWritingLines). -->
+  {#if openWritingLines === num}
+    <div class="absolute top-6 right-0 z-30 w-64 space-y-2 typst-panel p-2">
+      <div class="flex overflow-hidden rounded border border-gray-300">
+        {#each WRITING_LINES_POSITIONS as position}
+          <button
+            type="button"
+            class="flex-1 px-2 py-0.5 text-[0.7rem] {writingLinesDraft.position ===
+            position
+              ? 'bg-coopmaths-action text-coopmaths-canvas'
+              : 'bg-coopmaths-canvas text-coopmaths-corpus hover:bg-coopmaths-canvas-dark'}"
+            aria-pressed={writingLinesDraft.position === position}
+            on:click={() => setWritingLinesPosition(num, position)}
+          >
+            {WRITING_LINES_POSITION_LABELS[position]}
+          </button>
+        {/each}
+      </div>
+      <label class="flex items-center justify-between gap-2 text-xs">
+        Nombre de lignes
+        <input
+          type="number"
+          min="0"
+          max="20"
+          step="1"
+          class="w-14 rounded border border-gray-300 px-1 py-0.5 text-xs"
+          value={writingLinesDraft.count}
+          on:change={(e) =>
+            setWritingLinesCount(num, Number(e.currentTarget.value))}
+        />
+      </label>
+      <label class="flex items-center justify-between gap-2 text-xs">
+        Espacement (em)
+        <input
+          type="number"
+          min="0.5"
+          max="6"
+          step="0.5"
+          class="w-14 rounded border border-gray-300 px-1 py-0.5 text-xs"
+          value={writingLinesDraft.spacing}
+          on:change={(e) =>
+            setWritingLinesSpacing(num, Number(e.currentTarget.value))}
+        />
+      </label>
+      <div class="flex items-center justify-between gap-2">
+        <button
+          type="button"
+          class="px-2 py-0.5 text-xs text-red-600 hover:underline"
+          on:click={() => clearWritingLines(num)}
+        >
+          Retirer
+        </button>
+        <button
+          type="button"
+          class="px-2 py-0.5 text-xs hover:text-coopmaths-action"
+          on:click={() => (openWritingLines = null)}
+        >
+          Fermer
         </button>
       </div>
     </div>
@@ -436,7 +576,10 @@
            réglages, nouvelles données, nombre de questions, suppression -->
       <div
         class="pointer-events-auto absolute flex -translate-x-full -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
-        class:typst-pill-force-visible={openInsertion === insertGapNum}
+        class:typst-pill-force-visible={openInsertion === insertGapNum ||
+          openWritingLines === widget.num}
+        class:z-20={openInsertion === insertGapNum ||
+          openWritingLines === widget.num}
         style="top: {widget.top}%; left: {columnRight - 0.3}%;"
         data-testid="typst-overlay-exo"
       >
@@ -491,6 +634,20 @@
         >
           <i class="bx bx-pencil"></i>
         </button>
+        <button
+          type="button"
+          title={writingLinesValues[widget.num] != null
+            ? 'Modifier les lignes pour écrire de cet exercice'
+            : 'Ajouter des lignes pour écrire à cet exercice'}
+          aria-label="Lignes pour écrire, exercice {widget.num}"
+          aria-expanded={openWritingLines === widget.num}
+          class:typst-pill-active={writingLinesValues[widget.num] != null}
+          data-testid="typst-overlay-writing-lines"
+          on:click={() => toggleWritingLines(widget.num)}
+        >
+          <i class="bx bx-detail"></i>
+        </button>
+        {@render writingLinesPanel(widget.num)}
         <button
           type="button"
           title="Nouvelles données pour l'exercice {widget.num}"
@@ -621,6 +778,7 @@
           ? 'translate-y-2'
           : '-translate-y-[135%]'} items-center gap-0.5 typst-pill typst-pill-round px-1"
         class:typst-pill-force-visible={openInsertion === widget.num}
+        class:z-20={openInsertion === widget.num}
         style="left: {widget.left}%; top: {widget.top}%;"
       >
         {#if !isMergeGap}

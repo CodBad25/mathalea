@@ -42,6 +42,7 @@
     type TypstCarryOver,
     type TypstDocumentOptions,
     type TypstExerciseInput,
+    type WritingLinesPosition,
   } from './buildTypstDocument'
   import TypstLayoutOverlay, {
     type OverlayWidget,
@@ -255,6 +256,11 @@
       : null
   /** Surcharges de code Typst par exercice (modale d'édition), lues dans le code */
   let codeOverrideValues: Record<number, string> = {}
+  /** Lignes en pointillés réglées par exercice (palette), lues dans le code */
+  let writingLinesValues: Record<
+    number,
+    { position: WritingLinesPosition; count: number; spacing: number }
+  > = {}
   /** Numéro de l'exercice dont la modale d'édition du code Typst est ouverte */
   let codeEditNum: number | null = null
   /** Brouillon de la modale d'édition du code Typst */
@@ -323,6 +329,7 @@
     insertionValues = harvested.insertions ?? {}
     mergedExercises = harvested.merges ?? []
     codeOverrideValues = harvested.codeOverrides ?? {}
+    writingLinesValues = harvested.writingLines ?? {}
     const columns = code.match(/^#let colonnes = (\d+)/m)
     documentColumns = columns != null ? Number(columns[1]) : 1
     const figureZoom: Record<number, number> = {}
@@ -498,7 +505,13 @@
       if (n === removed) continue
       codeOverrides[n > removed ? n - 1 : n] = value
     }
-    return { tasksLayout, insertions, merges, codeOverrides }
+    const writingLines: NonNullable<typeof carryOver.writingLines> = {}
+    for (const [key, value] of Object.entries(carryOver.writingLines ?? {})) {
+      const n = Number(key)
+      if (n === removed) continue
+      writingLines[n > removed ? n - 1 : n] = value
+    }
+    return { tasksLayout, insertions, merges, codeOverrides, writingLines }
   }
 
   /** Retire l'exercice num de la fiche et régénère le code */
@@ -548,7 +561,11 @@
     for (const [key, value] of Object.entries(carryOver.codeOverrides ?? {})) {
       codeOverrides[swapNum(Number(key))] = value
     }
-    return { tasksLayout, insertions, merges, codeOverrides }
+    const writingLines: NonNullable<typeof carryOver.writingLines> = {}
+    for (const [key, value] of Object.entries(carryOver.writingLines ?? {})) {
+      writingLines[swapNum(Number(key))] = value
+    }
+    return { tasksLayout, insertions, merges, codeOverrides, writingLines }
   }
 
   /** Échange l'exercice num avec son voisin (delta : -1 monter, 1 descendre) */
@@ -678,6 +695,37 @@
     carryOver.merges = merges.includes(num)
       ? merges.filter((n) => n !== num)
       : [...merges, num]
+    const [primary, ...extraVersions] = buildAllVersionInputs()
+    const code = buildTypstDocument(
+      primary,
+      documentOptions,
+      carryOver,
+      extraVersions,
+    )
+    setEditorContent(code)
+    scheduleCompile(code, 0)
+  }
+
+  /**
+   * Règle (ou retire, `value` null) les lignes en pointillés de l'exercice
+   * num. Régénère le code (comme la fusion) plutôt que d'éditer le texte :
+   * le passage à « après chaque question » change la structure du document
+   * (les appels s'intercalent après chaque item de la liste `tasks`).
+   */
+  function setWritingLines(
+    num: number,
+    value: {
+      position: WritingLinesPosition
+      count: number
+      spacing: number
+    } | null,
+  ) {
+    if (!confirmOverwrite()) return
+    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
+    const writingLines = { ...(carryOver.writingLines ?? {}) }
+    if (value == null) delete writingLines[num]
+    else writingLines[num] = value
+    carryOver.writingLines = writingLines
     const [primary, ...extraVersions] = buildAllVersionInputs()
     const code = buildTypstDocument(
       primary,
@@ -2011,6 +2059,8 @@
                   onOpenSettings={openSettings}
                   onEditCode={openCodeEdit}
                   onToggleMergeBefore={toggleMergeBefore}
+                  {writingLinesValues}
+                  onSetWritingLines={setWritingLines}
                 />
               {/if}
             </div>

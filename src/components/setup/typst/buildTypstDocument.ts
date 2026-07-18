@@ -44,6 +44,15 @@ export const MATHALEA_ANCHOR_HELPER = `#let mathalea-anchor(kind, num, dx: 0pt) 
 export const INSERTION_TAG = '// mathalea:insertion'
 
 /**
+ * Lignes en pointillés insérables (fin d'exercice ou après chaque question),
+ * pour que l'élève y écrive. `n` lignes espacées de `gutter` ; sans effet
+ * visuel (ni espace) tant que `n` vaut 0, valeur de départ dans la palette.
+ */
+export const MATHALEA_WRITING_LINES_HELPER = `#let mathalea-lignes(n, gutter: 2em) = if n > 0 { block(above: 2em, below: 0.8em,
+  stack(spacing: gutter, ..range(n).map(i => line(length: 100%, stroke: (paint: luma(120), thickness: 0.6pt, dash: "dotted"))))
+) }`
+
+/**
  * Saut de page insérable entre deux exercices : `#pagebreak` est interdit
  * dans un conteneur (`columns`), la ligne ferme donc le bloc `en-colonnes`
  * courant, saute la page au niveau du document, puis rouvre le bloc.
@@ -95,6 +104,16 @@ export interface TypstCarryOver {
    * cet exercice, dont le contenu échappe désormais à la génération.
    */
   codeOverrides?: Record<number, string>
+  /**
+   * Lignes en pointillés (pour que l'élève y écrive) réglées via la palette,
+   * par numéro d'exercice (1-based) : après le corps entier de l'exercice,
+   * ou après chaque question (y compris la dernière). Ne s'applique jamais
+   * à la correction.
+   */
+  writingLines?: Record<
+    number,
+    { position: WritingLinesPosition; count: number; spacing: number }
+  >
 }
 
 /** Repère de début d'une surcharge de code (voir `codeOverrides`) */
@@ -178,6 +197,23 @@ export function harvestCarryOver(code: string): TypstCarryOver {
     }
     codeOverrides[num] = content.join('\n')
   }
+  // lignes en pointillés (palette, par exercice) : chaque appel émis par
+  // `writingLinesCall` porte un marqueur identifiant l'exercice et
+  // l'emplacement ; en mode « après chaque question » plusieurs appels
+  // portent le même marqueur (un par question), avec les mêmes réglages
+  const writingLines: Record<
+    number,
+    { position: WritingLinesPosition; count: number; spacing: number }
+  > = {}
+  for (const match of code.matchAll(
+    /^\s*#mathalea-lignes\((\d+), gutter: ([\d.]+)em\) \/\/ mathalea:lignes-(fin|apres)\((\d+)\)\s*$/gm,
+  )) {
+    writingLines[Number(match[4])] = {
+      position: match[3] === 'fin' ? 'endOfExercise' : 'afterEachQuestion',
+      count: Number(match[1]),
+      spacing: Number(match[2]),
+    }
+  }
   return {
     tasksLayout,
     insertions,
@@ -185,6 +221,7 @@ export function harvestCarryOver(code: string): TypstCarryOver {
     figureAlign,
     merges,
     codeOverrides,
+    writingLines,
   }
 }
 
@@ -272,6 +309,16 @@ export interface TypstDocumentOptions {
   /** Nombre de versions du sujet (Sujet A, B...) générées à la suite */
   nbVersions: number
 }
+
+/**
+ * Emplacement des lignes en pointillés (voir `TypstCarryOver.writingLines`) :
+ * réglage par exercice (palette de mise en page), pas un réglage global.
+ */
+export const WRITING_LINES_POSITIONS = [
+  'endOfExercise',
+  'afterEachQuestion',
+] as const
+export type WritingLinesPosition = (typeof WRITING_LINES_POSITIONS)[number]
 
 /** Habillage de l'en-tête et du pied de page */
 export const HEADER_STYLES = ['epure', 'cartouche', 'cadre'] as const
@@ -449,6 +496,19 @@ function exerciseBody(
    * elle n'aurait sinon pas de numéro).
    */
   forceList = false,
+  /**
+   * Lignes en pointillés à insérer après chaque question (à l'intérieur de
+   * l'environnement `tasks`, y compris après la dernière) ou après le corps
+   * entier de l'exercice. N'est jamais passé pour une correction (voir
+   * `computeGeneratedExercises`).
+   */
+  writingLines?: {
+    /** Numéro (1-based) de l'exercice, pour le marqueur relu par `harvestCarryOver` */
+    num: number
+    position: WritingLinesPosition
+    count: number
+    spacing: number
+  },
 ): ExerciseBodyResult {
   const parts: string[] = []
   if (intro.trim().length > 0) {
@@ -487,10 +547,16 @@ function exerciseBody(
   ) {
     // les items d'une même liste doivent se suivre sans ligne vide, sinon
     // la numérotation repart à 1 ; les lignes suivantes d'un item restent
-    // indentées à l'intérieur de celui-ci
-    const items = converted.map(
-      (question) => `  + ${question.split('\n').join('\n    ')}`,
-    )
+    // indentées à l'intérieur de celui-ci ; en mode « après chaque question »,
+    // chaque item (y compris le dernier) se termine par le bloc de lignes,
+    // qui reste ainsi dans la liste (indenté avec l'item)
+    const items = converted.map((question) => {
+      const item = `  + ${question.split('\n').join('\n    ')}`
+      if (writingLines?.position === 'afterEachQuestion') {
+        return `${item}\n\n    ${writingLinesCall(writingLines)}`
+      }
+      return item
+    })
     // `above`/`below` : sans eux, la liste colle au texte qui la précède et
     // la suit (les fractions dfrac, plus hautes, rendent ce collage très
     // visible : le dernier item peut chevaucher le paragraphe suivant)
@@ -504,10 +570,47 @@ function exerciseBody(
     parts.push(
       `${anchorLine}#tasks(columns: ${tasksPrefix}-colonnes, label: ${boldableLabel(label, boldQuestionNumbers)}, row-gutter: ${tasksPrefix}-gutter, above: 1.2em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
     )
-    return { code: parts.join('\n\n'), itemCount: converted.length }
+    return {
+      code: appendEndOfExerciseLines(parts.join('\n\n'), writingLines),
+      itemCount: converted.length,
+    }
   }
   parts.push(...converted)
-  return { code: parts.join('\n\n'), itemCount: 0 }
+  return {
+    code: appendEndOfExerciseLines(parts.join('\n\n'), writingLines),
+    itemCount: 0,
+  }
+}
+
+/**
+ * Appel Typst du helper de lignes en pointillés (voir
+ * `MATHALEA_WRITING_LINES_HELPER`), tagué d'un marqueur identifiant
+ * l'exercice et l'emplacement, relu par `harvestCarryOver` à la régénération.
+ */
+function writingLinesCall(writingLines: {
+  num: number
+  position: WritingLinesPosition
+  count: number
+  spacing: number
+}): string {
+  const tag = writingLines.position === 'endOfExercise' ? 'fin' : 'apres'
+  return `#mathalea-lignes(${writingLines.count}, gutter: ${writingLines.spacing}em) // mathalea:lignes-${tag}(${writingLines.num})`
+}
+
+/** Ajoute le bloc de lignes en pointillés en fin de corps d'exercice, si demandé */
+function appendEndOfExerciseLines(
+  code: string,
+  writingLines?: {
+    num: number
+    position: WritingLinesPosition
+    count: number
+    spacing: number
+  },
+): string {
+  if (writingLines?.position !== 'endOfExercise' || code.trim().length === 0) {
+    return code
+  }
+  return `${code}\n\n${writingLinesCall(writingLines)}`
 }
 
 /** Contenu Typst (définitions + rendu) d'une version du sujet */
@@ -573,6 +676,13 @@ function computeGeneratedExercises(
   let nextStart = 1
   let nextCorrectionStart = 1
   return exercises.map((exercise, k) => {
+    // lignes en pointillés de cet exercice (palette, énoncé seulement,
+    // jamais dans la correction)
+    const writingLinesSetting = carryOver.writingLines?.[k + 1]
+    const writingLines =
+      writingLinesSetting == null
+        ? undefined
+        : { num: k + 1, ...writingLinesSetting }
     const continued = options.mergeExercises || mergedWithPrevious[k]
     if (exercise.warning != null) {
       if (!continued) nextStart = 1
@@ -604,6 +714,7 @@ function computeGeneratedExercises(
       nextStart,
       emitAnchors,
       isGrouped[k],
+      writingLines,
     )
     nextStart += enonce.itemCount
     let correction: string | null = null
@@ -944,6 +1055,9 @@ export function buildTypstDocument(
   const usesSchema = allLines.some((line) =>
     line.includes('mathalea-schema-span'),
   )
+  const usesWritingLines = allLines.some((line) =>
+    line.includes('#mathalea-lignes('),
+  )
   // variables de mise en page des questions référencées par les corps
   // (`ex1`, et `ex1-corr` pour les corrections, réglables indépendamment)
   const tasksPrefixes = [
@@ -982,6 +1096,11 @@ export function buildTypstDocument(
   if (usesSchema) {
     lines.push('// ----- Schémas en barres (accolades/flèches étirées) -----')
     lines.push(MATHALEA_SCHEMA_HELPER)
+    lines.push('')
+  }
+  if (usesWritingLines) {
+    lines.push('// ----- Lignes en pointillés (à compléter par l’élève) -----')
+    lines.push(MATHALEA_WRITING_LINES_HELPER)
     lines.push('')
   }
   // mathalea-fit (adaptation de la largeur des figures) est requis dès

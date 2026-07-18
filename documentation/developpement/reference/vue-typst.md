@@ -31,6 +31,12 @@ Les contrôles font des **éditions ciblées du code** dans CodeMirror (pas de r
 
 À la régénération (réglages, « Nouvelles données »), `harvestCarryOver` relit ces ajustements dans le code courant et les réémet (paramètre `carryOver` de `buildTypstDocument`) : ils survivent à la régénération, contrairement aux autres modifications manuelles. « Réinitialiser les réglages du document » les efface.
 
+## Lignes en pointillés (« Lignes pour écrire »)
+
+Bouton (icône liste, `bx-detail`) de la barre d'outils de chaque exercice (à côté de « Éditer le code Typst ») : ajoute des lignes en pointillés (pour que l'élève y écrive), réglées **par exercice** — soit après le corps entier de l'exercice, soit après chaque question de cet exercice (y compris la dernière). Le popover règle l'emplacement, le nombre de lignes (0 par défaut : rien ne s'affiche tant qu'il n'est pas incrémenté) et l'espacement (2 em par défaut, pas de 0,5) ; « Retirer » efface le réglage. Ne s'applique jamais à la correction.
+
+Comme la fusion d'exercices (`onToggleMergeBefore`), le réglage change la structure du document (les appels s'intercalent après chaque question en mode « Après chaque question ») : il régénère donc tout le code plutôt que de l'éditer ponctuellement. Porté par `TypstCarryOver.writingLines` (`Record<number, { position, count, spacing }>`, clé = numéro d'exercice 1-based), il survit à la régénération comme les autres réglages de la palette. Chaque appel généré `#mathalea-lignes(n, gutter: ...em)` est tagué d'un marqueur `// mathalea:lignes-fin(N)` ou `// mathalea:lignes-apres(N)`, relu par `harvestCarryOver` (comme `// mathalea:insertion` pour les insertions de texte) ; `shiftCarryOver`/`swapCarryOver` décalent ces réglages à la suppression/au déplacement d'un exercice, comme `tasksLayout`/`codeOverrides`. Le helper Typst réutilisable `#mathalea-lignes(n, gutter: ...)` (`MATHALEA_WRITING_LINES_HELPER` dans `buildTypstDocument.ts`) n'est déclaré dans le préambule que s'il est effectivement utilisé, et ne produit aucun rendu (ni espace) tant que `n` vaut 0.
+
 ## Persistance dans l'URL
 
 Toutes les modifications de la fiche sont sauvegardées dans l'URL (paramètre `typstParam`, JSON encodé en base64) pour pouvoir la recharger à l'identique ou la partager :
