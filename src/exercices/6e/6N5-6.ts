@@ -27,7 +27,7 @@ export const dateDePublication = '24/05/2025'
 export const uuid = '72e9e'
 
 export const refs = {
-  'fr-fr': ['6N5-6'],
+  'fr-fr': ['6N5-6', '5N1D-6'],
   'fr-2016': ['6C12-6'],
   'fr-ch': [],
 }
@@ -286,7 +286,7 @@ export default class ProblèmesBalance extends Exercice {
       `<circle cx="${x}" cy="${y}" r="10" fill="black" />`
     const etoileSVG = (x: number, y: number) =>
       `<text x="${x}" y="${y + 10}" font-size="30" text-anchor="middle" fill="gold">★</text>`
-    const masseSVG = (x: number, y: number, value: number) =>
+    const masseSVG = (x: number, y: number, _value: number) =>
       `<rect x="${x - 25}" y="${y - 20}" width="50" height="40" rx="5" ry="5" fill="#666" />
        <text x="${x}" y="${y + 5}" font-size="14" text-anchor="middle" fill="white">${Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 }).format(masse).toString()} g</text>`
     // Positionnement des objets sur les plateaux
