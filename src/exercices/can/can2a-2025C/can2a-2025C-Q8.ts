@@ -19,8 +19,8 @@ export const refs = {
 export default class Can2a2025CQ8 extends ExerciceCan {
   enonce(h?: number, m?: number): void {
     if (h == null || m == null) {
-      h = randint(2, 4)
-      m = choice([ 25,  35,  45, 55])
+      h = this.quotaRandint('h', 2, 4)
+      m = this.quotaChoice('m', [25, 35, 45, 55])
     }
 
     const resultat = h * 60 + m

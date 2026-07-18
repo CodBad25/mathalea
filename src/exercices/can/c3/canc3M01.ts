@@ -42,7 +42,7 @@ export default class TrouverLaBonneUnite extends ExerciceSimple {
       [1000, 'k'],
     ]
     const unite = choice(['g', 'm', 'L'])
-    const typeDeQuestion = randint(0, 1)
+    const typeDeQuestion = this.quotaRandint('typeDeQuestion', 0, 1)
     const a = randint(1, 9)
     switch (typeDeQuestion) {
       case 0:

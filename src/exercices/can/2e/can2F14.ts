@@ -39,7 +39,7 @@ export default class CalculOrdonneePoint extends ExerciceSimple {
     const pointM = [['M'], ['N'], ['P'], ['R'], ['S'], ['T']]
     let a, b, c, abs, ord, nom, point
     switch (
-      choice([1, 2]) //, , 'b', 'c', 'd'
+      this.quotaChoice('type', [1, 2]) //, , 'b', 'c', 'd'
     ) {
       case 1:
         a = randint(-10, 10, [0, 1])

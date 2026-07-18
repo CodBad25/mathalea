@@ -30,8 +30,8 @@ export default class ProgrammeCalculInverse extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(2, 20)
-    const b = randint(2, 5)
+    const a = this.quotaRandint('a', 2, 20)
+    const b = this.quotaRandint('b', 2, 5)
     const res = randint(b + 1, 15)
     this.reponse = b * res - a
     this.question = `Je pense à un nombre. J'ajoute $${a}$, puis je divise le résultat par $${b}$ et j'obtiens $${res}$. <br>

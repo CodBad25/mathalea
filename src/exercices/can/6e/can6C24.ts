@@ -45,7 +45,7 @@ export default class MultiplierParPuissanceDixNeg extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 9)
+    const a = this.quotaRandint('a', 1, 9)
     const b = randint(1, 9, a)
     const c = randint(1, 9, b)
     const facteur = arrondi(a * 100 + b * 10 + c)

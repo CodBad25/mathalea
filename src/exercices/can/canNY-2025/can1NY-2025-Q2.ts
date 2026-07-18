@@ -4,9 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { abs } from '../../../lib/outils/nombres'
-import { randint } from '../../../modules/outils'
 export const titre = 'Écrire un décimal sous une forme particulière'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -29,9 +27,9 @@ export default class decimalPuisance extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const puissance = randint(1, 5)
+    const puissance = this.quotaRandint('puissance', 1, 5)
     const puissance10 = 10 ** puissance
-    const a = choice([2025, -2025])
+    const a = this.quotaChoice('a', [2025, -2025])
     const dec = new Decimal(a).div(puissance10)
     this.reponse = [
       (a < 0 ? '-' : '') + `\\dfrac{${abs(a)}}{10^{${puissance}}}`,

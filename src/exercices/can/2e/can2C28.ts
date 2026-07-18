@@ -1,9 +1,7 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer $\\dfrac{1}{a}$ à la puissance $-1$ ou $-2$'
 export const interactifReady = true
@@ -37,8 +35,8 @@ export default class calculPuissancesNegativeFraction extends ExerciceSimple {
 
   nouvelleVersion() {
     if (context.isAmc) this.versionQcm = false
-    const a = randint(2, 12)
-    const puissance = choice([-2, -1])
+    const a = this.quotaRandint('a', 2, 12)
+    const puissance = this.quotaChoice('puissance', [-2, -1])
 
     this.question = `Calculer $\\left(\\dfrac{1}{${a}}\\right)^{${puissance}}$.`
     this.correction = `$\\left(\\dfrac{1}{${a}}\\right)^{${puissance}}=${a}^{${-puissance}}=${miseEnEvidence(a ** -puissance)}$`

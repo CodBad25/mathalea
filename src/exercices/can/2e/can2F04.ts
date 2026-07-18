@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { texFractionReduite } from '../../../lib/outils/deprecatedFractions'
 import { reduireAxPlusB, rienSi1 } from '../../../lib/outils/ecritures'
 import { sp } from '../../../lib/outils/outilString'
@@ -31,7 +30,7 @@ export default class ValeurInterdite extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, b, c, n
-    if (choice([true, false])) {
+    if (this.quotaChoice('type', [true, false])) {
       a = randint(-10, 10, 0)
       n = randint(-5, 5, 0)
       b = randint(-10, 10, 0)

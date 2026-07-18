@@ -1,6 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
@@ -36,11 +35,11 @@ export default class ReduireDecimaux extends ExerciceSimple {
 
   nouvelleVersion() {
     const variable = choice(['x', 'y', 'a', 'b', 'n'])
-    const b = new Decimal(randint(1, 99)).div(100)
-    const a = randint(1, 2)
+    const b = new Decimal(this.quotaRandint('b', 1, 99)).div(100)
+    const a = this.quotaRandint('a', 1, 2)
     let reduction: Decimal
     if (context.isAmc) this.versionQcm = false
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('cas', [1, 2])) {
       case 1: // x-ax ou 2x-ax
         reduction = b.mul(-1).plus(a)
         this.reponse = texNombre(reduction, 2) + `${variable}`

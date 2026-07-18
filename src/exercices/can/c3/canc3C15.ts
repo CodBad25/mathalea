@@ -1,6 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Connaitre les tables de multiplication (phrases)'
 export const interactifReady = true
@@ -31,8 +30,8 @@ export default class TablesPhrase extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(3, 9)
-    const b = randint(3, 9)
+    const a = this.quotaRandint('a', 3, 9)
+    const b = this.quotaRandint('b', 3, 9)
     const c = a * b
     this.reponse = b
     this.question = `Dans $${c}$, combien de fois $${a}$ ?`

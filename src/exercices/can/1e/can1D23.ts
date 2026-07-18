@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebriqueSauf1,
   ecritureParentheseSiNegatif,
@@ -41,7 +40,7 @@ export default class CalculFonctionDeriveeAsurU extends ExerciceSimple {
     let a
     let m
     let p
-    switch (choice([1, 2, 3])) {
+    switch (this.quotaChoice('type', [1, 2, 3])) {
       case 1: // //a/(mx+p)
         a = randint(-3, 5, [0, 1])
         m = randint(-4, 6, 0)

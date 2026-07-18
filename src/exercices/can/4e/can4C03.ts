@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -35,8 +34,8 @@ export default class QuotientEntierQuiVaBienParFraction extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = choice(obtenirListeFractionsIrreductibles())
-    const c = choice([2, 3, 4, 5, 6])
+    const a = this.quotaChoice('a', obtenirListeFractionsIrreductibles())
+    const c = this.quotaChoice('c', [2, 3, 4, 5, 6])
     const b = a.n * c
     this.question = `Calculer $${b}\\div ${a.texFraction}$.<br>`
     this.reponse = new FractionEtendue(b * a.d, a.n)

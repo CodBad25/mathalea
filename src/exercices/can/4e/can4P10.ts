@@ -2,7 +2,6 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { abs } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une évolution en pourcentage'
 export const interactifReady = true
@@ -33,8 +32,10 @@ export default class PoucentageE2 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = choice([true, false])
-    const a = this.versionQcm ? randint(4, 13) * 5 : randint(2, 6) * 10
+    const choix = this.quotaChoice('choix', [true, false])
+    const a = this.versionQcm
+      ? this.quotaRandint('a', 4, 13) * 5
+      : this.quotaRandint('a', 2, 6) * 10
     const n = choice(['pull', 'pantalon', 'vêtement', 'blouson', 'sweat'])
     const b = this.versionQcm
       ? choice([5, 10, 15, 20, 25, 30, 40, 50])

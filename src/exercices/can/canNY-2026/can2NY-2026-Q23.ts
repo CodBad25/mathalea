@@ -2,7 +2,6 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { reduireAxPlusB, rienSi1 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec les chiffres (relatifs)'
 export const interactifReady = true
@@ -29,7 +28,7 @@ export default class fctLineaire2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const a = this.canOfficielle ? -1 : randint(-2, 2, 0)
+    const a = this.canOfficielle ? -1 : this.quotaRandint('a', -2, 2, [0])
     this.reponse = `${reduireAxPlusB(a, 0)}`
     this.question = `Soit $f$ la fonction linéaire vérifiant $f(${texNombre(annee, 0)})=${texNombre(a * annee, 0)}$.<br>
     Compléter : $f(x)=$ `

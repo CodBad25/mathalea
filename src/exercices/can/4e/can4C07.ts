@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { simplificationDeFractionAvecEtapes } from '../../../lib/outils/deprecatedFractions'
 import {
   fraction,
@@ -34,8 +33,8 @@ export default class DifferenceFractionsCompatibles extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = choice(obtenirListeFractionsIrreductibles())
-    const c = choice([2, 3])
+    const a = this.quotaChoice('a', obtenirListeFractionsIrreductibles())
+    const c = this.quotaChoice('c', [2, 3])
     const b = fraction(1, a.d * c)
     this.question = `Calculer $${a.texFraction} - ${b.texFraction}$.`
     this.correction = `Pour soustraire des fractions, on les met au même dénominateur.<br>

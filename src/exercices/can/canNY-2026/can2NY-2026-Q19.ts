@@ -5,7 +5,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
-import { randint } from '../../../modules/outils'
 export const titre = 'Trouver un nombre'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -29,7 +28,7 @@ export default class nombreATrouver2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const a = 1
-    const b = this.canOfficielle ? 1 : randint(1, 9)
+    const b = this.canOfficielle ? 1 : this.quotaRandint('b', 1, 9)
     const c = 2026
     const fracbSurC = `\\dfrac{${texNombre(b)}}{${texNombre(c)}}`
     const d = new FractionEtendue(a * c + b, c)
@@ -38,7 +37,7 @@ export default class nombreATrouver2026 extends ExerciceSimple {
       ? ['R']
       : ['R', 'x', 'y', 'T', 'z', 'U', 'A', 'B', 'C']
     const Nom = choice(listeNom)
-    if (choice([true, false])) {
+    if (this.quotaChoice('choix', [true, false])) {
       this.reponse = new FractionEtendue(a * c + b, c).inverse().texFraction
       this.question = `Calculer $${Nom}$  sachant que : <br>
      $\\dfrac{1}{${Nom}}=${a}+${fracbSurC}$.`

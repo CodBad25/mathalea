@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une somme de deux décimaux'
@@ -31,8 +30,8 @@ export default class NomExercice extends ExerciceSimple {
       this.question = '$0,4+0,16$ '
       this.correction = `$0,4+0,16=${miseEnEvidence('0,56')}$`
     } else {
-      const a = randint(12, 49, [20, 30, 40]) / 100
-      const b = randint(31, 69, [40, 50, 60]) / 10
+      const a = this.quotaRandint('a', 12, 49, [20, 30, 40]) / 100
+      const b = this.quotaRandint('b', 31, 69, [40, 50, 60]) / 10
       reponse = a + b
       this.question = `$${texNombre(a, 2)}+${texNombre(b, 2)}$`
       this.correction = ` $${texNombre(a, 2)}+${texNombre(b, 2)}=${miseEnEvidence(texNombre(reponse, 2))}$`

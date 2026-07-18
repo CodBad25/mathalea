@@ -1,6 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -32,11 +31,11 @@ export default class ReduireAvecParentheses2 extends ExerciceSimple {
 
   nouvelleVersion() {
     const variable = choice(['x', 'y', 'a', 'b', 'n'])
-    const a = randint(-10, 10, 0)
-    const c = randint(-10, 10, 0)
-    const d = randint(-10, 10, 0)
-    const k = randint(-10, 10, [-1, 1, 0])
-    const choix = choice([true, false])
+    const a = this.quotaRandint('a', -10, 10, [0])
+    const c = this.quotaRandint('c', -10, 10, [0])
+    const d = this.quotaRandint('d', -10, 10, [0])
+    const k = this.quotaRandint('k', -10, 10, [-1, 1, 0])
+    const choix = this.quotaChoice('choix', [true, false])
     const reponse = choix
       ? reduireAxPlusB(a + k * c, k * d, variable)
       : reduireAxPlusB(k * c, k * d + a, variable) // texNombre(b).mul(-1).plus(a), 2) + `${variable}`

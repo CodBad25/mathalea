@@ -64,11 +64,12 @@ this.optionsChampTexte = { texteApres: '.' }
       Une graduation correspond donc à $0,25$.<br>
       Ainsi, l'abscisse du point $A$ est : $${miseEnEvidence(texNombre(1.25))}$.`
     } else {
-      const choix = choice([true, false])
-      const a = choice(
+      const choix = this.quotaChoice('choix', [true, false])
+      const a = this.quotaChoice(
+        'a',
         ['0.25', '0.75', '1.25', '1.5', '1.75', '2.25', '2.75'].map(Number),
       )
-      const b = randint(1, 14, [5, 10]) / 5
+      const b = this.quotaRandint('b', 1, 14, [5, 10]) / 5
       const d = droiteGraduee({
         Unite: 3,
         Min: 0,

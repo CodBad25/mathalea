@@ -1,7 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer une différence de deux entiers'
 export const interactifReady = true
@@ -19,8 +17,8 @@ export const refs = {
 export default class Can2a2025CQ3 extends ExerciceCan {
   enonce(a?: number, b?: number): void {
     if (a == null || b == null) {
-      a = choice([100, 200]) + randint(3, 8)
-      b = randint(2, 5) * 10 + 9
+      a = this.quotaChoice('aBase', [100, 200]) + this.quotaRandint('aEcart', 3, 8)
+      b = this.quotaRandint('b', 2, 5) * 10 + 9
     }
 
     const resultat = a - b

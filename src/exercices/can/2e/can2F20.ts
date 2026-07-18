@@ -37,11 +37,11 @@ export default class ImageFctAff extends ExerciceSimple {
   nouvelleVersion() {
     const nom = ['f', 'g', 'h']
     const nomF = choice(nom)
-    const x1 = randint(1, 10)
+    const x1 = this.quotaRandint('x1', 1, 10)
     const x2 = x1 + 1
-    const imx1 = randint(1, 5)
+    const imx1 = this.quotaRandint('imx1', 1, 5)
     const imx2 = randint(imx1 + 2, 10)
-    const n = choice([-3, -2, -1, 1, 2, 3]) //
+    const n = this.quotaChoice('n', [-3, -2, -1, 1, 2, 3]) //
     const val = n > 0 ? x2 + n : x1 + n
     const coeff = imx2 - imx1
     const imx2n = imx2 + coeff * n

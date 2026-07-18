@@ -31,8 +31,8 @@ export default class DevelopperEgalitesRemarquables extends ExerciceSimple {
 
   nouvelleVersion() {
     const inconnue = choice(['x', 'y', 'a'])
-    const a = randint(1, 9)
-    const b = randint(2, 5)
+    const a = this.quotaRandint('a', 1, 9)
+    const b = this.quotaRandint('b', 2, 5)
     const expression1 = `$(${inconnue}+${a})^2$` // (x+a)^2
     const expression2 = `$(${inconnue}-${a})^2$` // (x-a)^2
     const expression3 = `$(${inconnue}-${a})(${inconnue}+${a})$` // (x-a)(x+a)
@@ -40,7 +40,7 @@ export default class DevelopperEgalitesRemarquables extends ExerciceSimple {
     const expression5 = `$(${b}${inconnue}-${a})^2$` // (bx-a)^2 avec b>1
     const expression6 = `$(${b}${inconnue}-${a})(${b}${inconnue}+${a})$` // (bx-a)(bx+a) avec b>1
     switch (
-      randint(1, 6) //, 'b'
+      this.quotaRandint('cas', 1, 6) //, 'b'
     ) {
       case 1:
         if (this.versionQcm) {

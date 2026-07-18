@@ -60,7 +60,7 @@ export default class PlusOuMoins extends ExerciceSimple {
       objets,
       choix2,
       clubs
-    switch (choice([1, 2, 3])) {
+    switch (this.quotaChoice('cas', [1, 2, 3])) {
       case 1: // âge
         choix = choice(['a', 'b'])
         if (choix === 'a') {

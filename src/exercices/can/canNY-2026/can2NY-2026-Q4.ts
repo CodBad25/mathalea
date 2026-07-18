@@ -7,7 +7,6 @@ import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { latex2d } from '../../../lib/2d/textes'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Trouver le nombre à ajouter'
 export const interactifReady = true
@@ -33,7 +32,9 @@ export default class NombreAajouter extends ExerciceSimple {
     const abs0 = 2026
     const abs1 = abs0 + 1
     const abs2 = abs0 + 2
-    const graduation = this.canOfficielle ? 4 : randint(1, 9, 5)
+    const graduation = this.canOfficielle
+      ? 4
+      : this.quotaRandint('graduation', 1, 9, [5])
     const x1 = new Decimal(graduation).div(5)
     const x1B = Number(x1.toFixed(1))
     const d = droiteGraduee({

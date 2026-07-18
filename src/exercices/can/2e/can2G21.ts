@@ -2,11 +2,9 @@ import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Lire les coordonnées d'un point dans un repère"
 export const interactifReady = true
@@ -33,10 +31,10 @@ export default class LectureCoordonnees extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const k2 = choice([3, 4, 5])
-    const k1 = choice([3, 4, 5])
-    const b = randint(-5, 5) / k2
-    const a = randint(-8, 8) / k1
+    const k2 = this.quotaChoice('k2', [3, 4, 5])
+    const k1 = this.quotaChoice('k1', [3, 4, 5])
+    const b = this.quotaRandint('b', -5, 5) / k2
+    const a = this.quotaRandint('a', -8, 8) / k1
     const r = repere({
       xUnite: 1,
       yUnite: 1,

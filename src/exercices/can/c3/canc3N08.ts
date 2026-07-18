@@ -29,7 +29,7 @@ export default class SuitesRep extends ExerciceSimple {
 
   nouvelleVersion() {
     switch (
-      choice([1, 2]) //, 2, 3
+      this.quotaChoice('cas', [1, 2]) //, 2, 3
     ) {
       case 1:
         {

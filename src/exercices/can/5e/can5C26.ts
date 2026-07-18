@@ -27,7 +27,7 @@ export default class AdditionRelatifBisCAN extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    let a = randint(1, 10)
+    let a = this.quotaRandint('a', 1, 10)
     let b = randint(1, 10, a)
     do {
       const k = choice([

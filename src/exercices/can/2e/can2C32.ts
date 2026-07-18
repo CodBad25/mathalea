@@ -5,7 +5,6 @@ import {
   fraction,
   obtenirListeFractionsIrreductibles,
 } from '../../../modules/fractions'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Simplifier un quotient de nombre relatifs'
 export const interactifReady = true
@@ -37,8 +36,8 @@ export default class SimplifierQuotientNombresRelatifs extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const f = choice(fractionsIrreductibles)
-    const factor = randint(2, 12)
+    const f = this.quotaChoice('f', fractionsIrreductibles)
+    const factor = this.quotaRandint('factor', 2, 12)
     const signes = choice([
       [-1, 1],
       [1, -1],

@@ -1,10 +1,8 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureNombreRelatif,
   ecritureNombreRelatifc,
   ecritureParentheseSiNegatif,
 } from '../../../lib/outils/ecritures'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const interactifType = 'mathLive'
 export const interactifReady = true
@@ -30,9 +28,9 @@ export default class MultiplicationRelatifCAN extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    let a = randint(1, this.sup)
-    let b = randint(1, this.sup)
-    const k = choice([
+    let a = this.quotaRandint('a', 1, this.sup)
+    let b = this.quotaRandint('b', 1, this.sup)
+    const k = this.quotaChoice('k', [
       [-1, -1],
       [-1, 1],
       [1, -1],
@@ -45,7 +43,7 @@ export default class MultiplicationRelatifCAN extends ExerciceSimple {
     if (b === 1) {
       b = -1
     }
-    if (choice([true, false])) {
+    if (this.quotaChoice('booleen', [true, false])) {
       if (this.interactif) {
         this.question =
           '$ ' + a + ' \\times  ' + ecritureParentheseSiNegatif(b) + ' =$'

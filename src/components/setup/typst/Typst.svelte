@@ -1851,6 +1851,15 @@
           <label class="flex items-center gap-2 text-sm cursor-pointer">
             <input
               type="checkbox"
+              bind:checked={documentOptions.autoVerticalSpacing}
+              on:change={applyDocumentOptions}
+            />
+            Gestion automatique des espaces verticaux
+          </label>
+
+          <label class="flex items-center gap-2 text-sm cursor-pointer">
+            <input
+              type="checkbox"
               bind:checked={documentOptions.boldQuestionNumbers}
               on:change={applyDocumentOptions}
             />

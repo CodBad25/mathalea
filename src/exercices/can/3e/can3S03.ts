@@ -34,10 +34,10 @@ export default class CalculsProbabilite2 extends ExerciceSimple {
 
   nouvelleVersion() {
     let a: number, b: number
-    const choix = choice([true, false])
+    const choix = this.quotaChoice('choix', [true, false])
 
     // On choisit le "scénario" global : a (noire/blanche, fraction) ou b (bleue/rouge, décimal)
-    const scenario = choice(['a', 'a', 'b'])
+    const scenario = this.quotaChoice('scenario', ['a', 'a', 'b'])
     const formatDecimal = scenario === 'b'
 
     // Pour le scénario b, on peut avoir un total à 10 ou 100 (comme dans l'ancien code)

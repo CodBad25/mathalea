@@ -35,7 +35,7 @@ export default class CalculRaison extends ExerciceSimple {
     const nomSuite = ['u', 'v', 'w']
     const s = choice(nomSuite)
     switch (
-      choice(['a', 'b']) // 'b', 'c', 'd'
+      this.quotaChoice('cas', ['a', 'b']) // 'b', 'c', 'd'
     ) {
       case 'a': // suite arithmétique
         u = randint(-15, 15, 0)

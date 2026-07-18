@@ -30,7 +30,7 @@ export default class problemeSoustraction extends ExerciceSimple {
 
   nouvelleVersion() {
     switch (
-      randint(1, 7) // 1,2, 3
+      this.quotaRandint('cas', 1, 7) // 1,2, 3
     ) {
       case 1:
         {

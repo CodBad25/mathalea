@@ -46,7 +46,7 @@ export default class PoucentageP2 extends ExerciceSimple {
     ]
     let a, b, c, n, d, carac2, choix
 
-    switch (randint(1, 2)) {
+    switch (this.quotaRandint('cas', 1, 2)) {
       case 1:
         a = randint(1, 5) * 1000
         b = randint(1, 8) * 10

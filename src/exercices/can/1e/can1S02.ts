@@ -37,7 +37,7 @@ export default class CalculTermeSuiteRec extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, k, u, listeFractions1, fraction1, n1, d1
     switch (
-      choice(['a', 'b', 'c', 'd', 'e']) //
+      this.quotaChoice('cas', ['a', 'b', 'c', 'd', 'e']) //
     ) {
       case 'a': // suite arithmétique
         a = randint(1, 10) * choice([-1, 1])

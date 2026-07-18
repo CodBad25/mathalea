@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Déterminer un nombre manquant dans une somme'
@@ -26,8 +25,8 @@ export default class Can32026Q6 extends ExerciceCan {
 
   enonce(a?: number, b?: number) {
     if (a == null || b == null) {
-      a = randint(41, 59, 50)
-      b = randint(7, 9) * 10
+      a = this.quotaRandint('a', 41, 59, [50])
+      b = this.quotaRandint('b', 7, 9) * 10
     }
     this.reponse = b - a
     this.question = `$${a} + \\text{?} = ${b}$`

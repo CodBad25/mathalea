@@ -2,7 +2,6 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer les coordonnées d’un vecteur'
@@ -32,10 +31,10 @@ export default class CoordonneesVecteur1 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const xA = randint(-5, 5)
-    const yA = randint(-5, 5)
-    const ux = randint(-5, 5, 0)
-    const uy = randint(-5, 5)
+    const xA = this.quotaRandint('xA', -5, 5)
+    const yA = this.quotaRandint('yA', -5, 5)
+    const ux = this.quotaRandint('ux', -5, 5, [0])
+    const uy = this.quotaRandint('uy', -5, 5)
     const xB = xA + ux
 
     const yB = yA + uy

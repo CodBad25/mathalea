@@ -30,7 +30,7 @@ export default class AugmenterFraction extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2, 3, 4])) {
+    switch (this.quotaChoice('cas', [1, 2, 3, 4])) {
       case 1: // tiers
         {
           const n = randint(1, 25)

@@ -4,7 +4,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
@@ -33,8 +32,8 @@ export default class coordMilieu2026 extends ExerciceSimple {
   nouvelleVersion() {
     const annee = 2026
     const nom = creerNomDePolygone(2, ['PQDO'])
-    const b = this.canOfficielle ? -4 : randint(-5, 5) * 2
-    const c = this.canOfficielle ? 4 : randint(-5, 5) * 2
+    const b = this.canOfficielle ? -4 : this.quotaRandint('b', -5, 5) * 2
+    const c = this.canOfficielle ? 4 : this.quotaRandint('c', -5, 5) * 2
     const reponse1 = new FractionEtendue(annee + b, 2).texFraction
     const reponse2 = new FractionEtendue(annee + c, 2).texFraction
     this.consigne = `Dans un repère du plan, on donne $${nom[0]}(${texNombre(annee, 0)}\\,;\\,${c})$ et $${nom[1]}(${b}\\,;\\,${texNombre(annee, 0)})$.<br>

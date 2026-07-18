@@ -66,7 +66,7 @@ export default class PlusOuMoins2 extends ExerciceSimple {
       objets,
       choix2
     switch (
-      choice([1, 2, 3]) // 1, 2
+      this.quotaChoice('cas', [1, 2, 3]) // 1, 2
     ) {
       case 1:
         choix = choice(['a', 'b', 'c', 'd'])

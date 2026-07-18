@@ -19,7 +19,7 @@ export const refs = {
 export default class Can2025N5Q1 extends ExerciceCan {
   enonce(a?: number, b?: number) {
     if (a == null || b == null) {
-      a = choice([6, 7, 8, 9])
+      a = this.quotaChoice('a', [6, 7, 8, 9])
       b = choice([6, 7, 8, 9], [a])
     }
     this.reponse = a * b

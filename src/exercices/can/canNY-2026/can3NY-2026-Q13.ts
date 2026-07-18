@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { codageSegments } from '../../../lib/2d/CodageSegment'
@@ -34,7 +33,9 @@ export default class longueurDansTriangle2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const objets = []
-    const a = this.canOfficielle ? 1500 : randint(11, 15) * 100
+    const a = this.canOfficielle
+      ? 1500
+      : this.quotaRandint('a', 11, 15) * 100
     const b = 2026
     const A = pointAbstrait(0, 0, 'A', 'below')
     const B = pointAbstrait(5, 0, 'B', 'below')

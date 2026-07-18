@@ -17,7 +17,7 @@ import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const titre =
-  "Reconnaître la représentation graphique d'une fonction affine"
+  "Reconnaître la représentation graphique d'une fonction affine (coefficient directeur fractionnaire)"
 export const dateDePublication = '29/06/2026'
 
 export const uuid = '15233'
@@ -229,7 +229,7 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
     this.enonce = `On considère la fonction affine $f$ définie sur $\\mathbb{R}$ par $f(x)=${fonction}$.<br>
 On a représenté ci-dessous quatre droites dans un repère.<br><br>
 ${figure}<br>
-La droite qui représente la fonction $f$ est`
+La droite qui représente la fonction $f$ est :`
 
     this.reponses = [
       `$\\left(d_${bonneDroite?.numero}\\right)$`,

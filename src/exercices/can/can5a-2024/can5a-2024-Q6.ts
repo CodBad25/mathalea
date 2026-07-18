@@ -1,10 +1,8 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { prenomF } from '../../../lib/outils/Personne'
 import { formatMinute } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une durée en minutes'
@@ -34,10 +32,10 @@ export default class NomExercice extends ExerciceSimple {
       this.correction = `Pour atteindre $9$ h, il faut $50$ min, puis il faut ajouter encore $5$
       min pour atteindre $9$ h $05$ min. <br>Son trajet aura  duré  $${miseEnEvidence('55')}$ min.`
     } else {
-      const a = randint(14, 19)
-      const b = choice([20, 25, 35, 45, 55])
+      const a = this.quotaRandint('a', 14, 19)
+      const b = this.quotaChoice('b', [20, 25, 35, 45, 55])
 
-      const d = choice([5, 10, 15, 20, 25])
+      const d = this.quotaChoice('d', [5, 10, 15, 20, 25])
       this.reponse = 60 - b + d
       const prenom1 = prenomF()
       this.question = `${prenom1} part à  $${a}$ h $${b}$ min et arrive à  $${a + 1}$ h $${d}$ min.<br>

@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -28,8 +27,8 @@ export default class simplifierFractionSimple extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const n = choice([2025, -2025])
-    const d = choice([-1, 2025, -2025])
+    const n = this.quotaChoice('n', [2025, -2025])
+    const d = this.quotaChoice('d', [-1, 2025, -2025])
     const signe = n * d < 0 ? '-' : ''
     this.reponse = new FractionEtendue(n, d).texFractionSimplifiee
     this.question = `Écrire le plus simplement possible : $\\dfrac{${texNombre(n)}}{${texNombre(d)}}$.`

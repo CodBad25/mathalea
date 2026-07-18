@@ -41,7 +41,7 @@ export default class NombreSolutionsSecondDegre extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, b, c, d, maFraction
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('cas', [1, 2])) {
       case 1:
         a = randint(1, 4) * choice([-1, 1])
         b = randint(-4, 4, 0)

@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = ''
@@ -25,7 +24,7 @@ export default class canQ24 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (randint(1, 3)) {
+    switch (this.quotaRandint('cas', 1, 3)) {
       case 1:
         this.question = `Exprimer la somme de $a$ et $${texNombre(2025, 0)}$ en fonction de $a$.`
         this.reponse = '2025+a'

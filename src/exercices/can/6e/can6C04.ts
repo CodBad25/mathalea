@@ -5,7 +5,6 @@ import {
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Ajouter $10n + 9$'
@@ -35,9 +34,9 @@ export default class Ajoute10NPlus9 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(3, 9)
-    const b = randint(2, 8)
-    const c = randint(1, 5)
+    const a = this.quotaRandint('a', 3, 9)
+    const b = this.quotaRandint('b', 2, 8)
+    const c = this.quotaRandint('c', 1, 5)
     this.reponse = a * 10 + b + c * 10 + 9
     this.question = `Calculer $${texNombre(a * 10 + b, 0)} + ${texNombre(c * 10 + 9, 0)}$.`
 

@@ -53,8 +53,8 @@ export default class SommeDeProduitsCompleter2026 extends ExerciceSimple {
       [9, 2019],
     ]
     const annee = 2026
-    const PlusGrand = choice(choixPG)
-    const PlusPetit = choice(choixPP)
+    const PlusGrand = this.quotaChoice('plusGrand', choixPG)
+    const PlusPetit = this.quotaChoice('plusPetit', choixPP)
     const PGouPP = this.canOfficielle
       ? PlusGrand
       : choice([PlusGrand, PlusPetit])

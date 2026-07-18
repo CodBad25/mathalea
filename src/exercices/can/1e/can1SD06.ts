@@ -3,7 +3,6 @@ import { Repere } from '../../../lib/2d/reperes'
 import { latex2d, Latex2d, TexteParPoint } from '../../../lib/2d/textes'
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, rienSi1 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -43,7 +42,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
     let f: (x: number) => number
     let r: Repere
 
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('cas', [1, 2])) {
       case 1: // cas parabole a>0
         a = randint(1, 8) / 2
         b = randint(-6, 6, 0) / 2

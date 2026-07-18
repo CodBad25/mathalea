@@ -1,8 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec un quart, un tiers, ...'
@@ -32,9 +30,9 @@ export default class NomExercice extends ExerciceSimple {
       this.correction = `Prendre le quart d'un nombre revient à le diviser par $4$.<br>
       Ainsi, le quart de $24$ est : $24\\div 4 =${miseEnEvidence(6)}$.`
     } else {
-      const a = randint(6, 12) * 4
-      const b = randint(6, 15) * 3
-      const m = choice(['quart', 'tiers'])
+      const a = this.quotaRandint('a', 6, 12) * 4
+      const b = this.quotaRandint('b', 6, 15) * 3
+      const m = this.quotaChoice('m', ['quart', 'tiers'])
 
       if (m === 'quart') {
         this.question = `Le quart de $${a}$  `

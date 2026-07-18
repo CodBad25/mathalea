@@ -36,7 +36,7 @@ export default class CalculCoeffDir extends ExerciceSimple {
     let a
     let f
     switch (
-      choice([1, 1, 2, 2, 3, 3, 4]) //
+      this.quotaChoice('type', [1, 1, 2, 2, 3, 3, 4]) //
     ) {
       case 1: // x^2
         a = randint(2, 15) * choice([-1, 1])

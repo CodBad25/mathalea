@@ -15,12 +15,12 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Trouver le plus grand ou le plus petit nombre (bis)'
+export const titre = 'Trouver le plus grand ou le plus petit nombre avec des puissances'
 export const dateDePublication = '06/07/2026'
 /**
  *
- * @author Jean-Claude Lhote (sans IA)
- *
+ * @author Jean-Claude Lhote (sans IA) légèrement corrigé (avec IA !) par Stéphane Guyon
+ * correction parenthèses harmonisées, argumentation de la réponse reprise et choix de la valeur décimale réduite pour simplifier les calculs.
  */
 export default class Auto1AC16 extends ExerciceQcmA {
   private appliquerLesValeurs(
@@ -30,10 +30,10 @@ export default class Auto1AC16 extends ExerciceQcmA {
     denExp: number,
     plusGrand: boolean,
   ): void {
-    const valeur1 = `(\\frac{1}{${den1}})^{${exp1}}`
-    const valeur2 = `(\\frac{1}{${exp1}})^{${den1}}`
+    const valeur1 = `\\left(\\frac{1}{${den1}}\\right)^{${exp1}}`
+    const valeur2 = `\\left(\\frac{1}{${exp1}}\\right)^{${den1}}`
     const valeur3 = `${texNombre(dec, 5)}`
-    const valeur4 = `(\\frac{1}{${denExp}})^{${denExp}}`
+    const valeur4 = `\\left(\\frac{1}{${denExp}}\\right)^{${denExp}}`
     const valeurs = [valeur1, valeur2, valeur3, valeur4]
     const valeursNum = valeurs.map((v) =>
       parseFloat(ce.parse(v.replace(',', '.')).N().toString()),
@@ -52,23 +52,28 @@ export default class Auto1AC16 extends ExerciceQcmA {
       (v) => `$${v.replace('\\frac', '\\dfrac')}$`,
     )
     this.enonce = `Quel est le ${plusGrand ? 'plus grand' : 'plus petit'} nombre parmi les quatre suivants ?`
-    this.correction = `$${valeur1} = \\dfrac{1}{${den1}^{${exp1}}} = \\dfrac{1}{${texNombre(Math.pow(den1, exp1), 0)}}$<br><br>
-    $${valeur2} = \\dfrac{1}{${exp1}^{${den1}}} = \\dfrac{1}{${texNombre(Math.pow(exp1, den1), 0)}}$<br><br>
+    this.correction = `$${valeur1.replace('\\frac', '\\dfrac')} = \\dfrac{1}{${den1}^{${exp1}}} = \\dfrac{1}{${texNombre(Math.pow(den1, exp1), 0)}}$<br><br>
+    $${valeur2.replace('\\frac', '\\dfrac')} = \\dfrac{1}{${exp1}^{${den1}}} = \\dfrac{1}{${texNombre(Math.pow(exp1, den1), 0)}}$<br><br>
     $${valeur3} = \\dfrac{${texNombre(dec * numForDec, 0)}}{${texNombre(numForDec, 0)}}=\\dfrac{1}{${(1 / dec).toFixed(0)}}$<br><br>
-$${valeur4} = \\dfrac{1}{${denExp}^{${denExp}}} = \\dfrac{1}{${texNombre(Math.pow(denExp, denExp), 0)}}$<br><br>`
+$${valeur4.replace('\\frac', '\\dfrac')} = \\dfrac{1}{${denExp}^{${denExp}}} = \\dfrac{1}{${texNombre(Math.pow(denExp, denExp), 0)}}$<br><br>`
     const denominateurs = [
       texNombre(Math.pow(den1, exp1), 0),
       texNombre(Math.pow(exp1, den1), 0),
       (1 / dec).toFixed(0),
       texNombre(Math.pow(denExp, denExp), 0),
     ]
-
-    this.correction += `$${denominateurs
+    const denominateursOrdonnes = denominateurs
       .map<[string, number]>((v, i) => [v, valeursNum[i]])
       .sort((a, b) => (plusGrand ? b[1] - a[1] : a[1] - b[1]))
-      .map((v, i) => `${v[0]}`)
-      .join(`${plusGrand ? '<' : '>'}`)}$<br><br>
-      À numérateur égal, le plus ${plusGrand ? 'grand' : 'petit'} nombre est celui qui a le plus ${plusGrand ? 'petit' : 'grand'} dénominateur.<br><br>`
+      .map((v) => v[0])
+
+    this.correction += `$${denominateursOrdonnes.join(
+      plusGrand ? '<' : '>',
+    )}$<br><br>
+      La fonction inverse étant strictement décroissante sur $\\mathbb{R}_+^*$, on a :<br>
+      $${denominateursOrdonnes
+        .map((denominateur) => `\\dfrac{1}{${denominateur}}`)
+        .join(plusGrand ? '>' : '<')}$.<br><br>`
     this.correction += `$${[valeur1, valeur2, valeur3, valeur4]
       .map<[string, number]>((v, i) => [
         v.replace('\\frac', '\\dfrac'),
@@ -95,7 +100,7 @@ $${valeur4} = \\dfrac{1}{${denExp}^{${denExp}}} = \\dfrac{1}{${texNombre(Math.po
       den1 = choice([2, 3, 4])
       exp1 = choice([2, 3, 4], den1)
       dec = choice([
-        0.01, 0.02, 0.04, 0.05, 0.0125, 0.025, 0.002, 0.0025, 0.005, 0.00125,
+        0.01, 0.02, 0.04, 0.05, 0.025, 0.002, 0.005,
       ])
       denExp = choice([2, 3, 4], [den1, exp1])
       plusGrand = choice([true, false])

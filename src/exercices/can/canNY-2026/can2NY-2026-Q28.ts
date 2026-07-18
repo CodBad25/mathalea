@@ -3,7 +3,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 export const titre = 'Calculer avec des puissances'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -26,7 +25,7 @@ export default class calculPuissances2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const choix = this.canOfficielle ? 1 : randint(1, 5)
+    const choix = this.canOfficielle ? 1 : this.quotaRandint('choix', 1, 5)
     if (choix === 1) {
       this.reponse = 0
       this.question = `Calculer  $(-1)^{${texNombre(annee)}}+(-1)^{${texNombre(annee - 1)}}$.`

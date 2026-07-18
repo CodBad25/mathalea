@@ -32,7 +32,7 @@ export default class ComplementAuDixiemeOuALaDizaine extends ExerciceSimple {
 
   nouvelleVersion() {
     let a, b
-    if (choice([true, false])) {
+    if (this.quotaChoice('decimalOuEntier', [true, false])) {
       // décimal ou entier ?
       a = arrondi(randint(1, 5) * 10 + randint(1, 9) / 10)
       b = Math.ceil(a)

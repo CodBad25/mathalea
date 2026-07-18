@@ -34,7 +34,9 @@ export default class nbreMinutes2026 extends ExerciceSimple {
     const heureDebut = 20
     const minutesDebut = annee % 100
     const prenom = prenomF()
-    const dureeMinutes = this.canOfficielle ? 40 : randint(40, 55)
+    const dureeMinutes = this.canOfficielle
+      ? 40
+      : this.quotaRandint('dureeMinutes', 40, 55)
     const dureeHeures = 1
 
     // Calcul de l'heure de fin

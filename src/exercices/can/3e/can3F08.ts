@@ -44,8 +44,8 @@ export default class LectureGraphiqueFonctionAffine2 extends ExerciceSimple {
   nouvelleVersion() {
     const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1, 'milieu', true)
     let s1, s2
-    const a = randint(-5, 5, [0, 4]) // numérateut coefficient directeur non nul
-    const b = randint(-2, 2) // ordonnée à l'origine
+    const a = this.quotaRandint('a', -5, 5, [0, 4]) // numérateut coefficient directeur non nul
+    const b = this.quotaRandint('b', -2, 2) // ordonnée à l'origine
     const d = randint(2, 5, [-a, a, 2 * a, -2 * a]) // dénominateur coefficient directeur non multiple du numérateur pour éviter nombre entier
     const r = repere({ xMin: -5, yMin: -5, xMax: 6, yMax: 5 })
     const c = droite(a / d, -1, b)

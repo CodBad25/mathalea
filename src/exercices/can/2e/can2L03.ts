@@ -39,7 +39,7 @@ export default class CoordonneesPointIntersectionAxeAbscissesDroite extends Exer
 
   nouvelleVersion() {
     switch (
-      randint(1, 2) //,
+      this.quotaRandint('cas', 1, 2) //,
     ) {
       case 1:
         {

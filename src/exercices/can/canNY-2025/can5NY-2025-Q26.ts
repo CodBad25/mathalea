@@ -4,7 +4,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 export const titre = 'Déterminer un nombre de minutes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -30,7 +29,7 @@ export default class nbreMinutes extends ExerciceSimple {
 
   nouvelleVersion() {
     this.consigne = "Compléter l'égalité.<br>"
-    switch (randint(1, 4)) {
+    switch (this.quotaRandint('cas', 1, 4)) {
       case 1:
         this.reponse = texNombre(15, 0)
         this.question = `${texNombre(20.25, 2)} \\text{ h }=20 \\text{ h } ~%{champ1} \\text{ min }`

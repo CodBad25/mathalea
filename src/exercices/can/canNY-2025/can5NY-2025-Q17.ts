@@ -4,7 +4,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 export const titre = 'Compléter une égalité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -29,7 +28,7 @@ export default class CalculDivers extends ExerciceSimple {
 
   nouvelleVersion() {
     this.consigne = "Compléter l'égalité.<br>"
-    switch (randint(1, 5)) {
+    switch (this.quotaRandint('cas', 1, 5)) {
       case 1:
         this.reponse = texNombre(2, 0)
         this.question = `${texNombre(202.5, 1)}=202+\\dfrac{1}{%{champ1}}`

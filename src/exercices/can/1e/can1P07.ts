@@ -62,7 +62,7 @@ export default class CalculProbaTableauEff extends ExerciceSimple {
     let texteCorr = ''
     let reponse!: FractionEtendue
 
-    switch (choice([1, 2, 3, 4, 5, 6, 7, 8])) {
+    switch (this.quotaChoice('type', [1, 2, 3, 4, 5, 6, 7, 8])) {
       case 1: // p(F)
         this.question = enonce
         if (choice([true, false])) {

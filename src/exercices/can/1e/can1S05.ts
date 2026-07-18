@@ -34,7 +34,7 @@ export default class CalculSuitePython extends ExerciceSimple {
     let a, b, k, u, r, q
     let n = 0
     switch (
-      choice(['a', 'b', 'c']) //
+      this.quotaChoice('cas', ['a', 'b', 'c']) //
     ) {
       case 'a': // u=u+r
         a = randint(2, 5)

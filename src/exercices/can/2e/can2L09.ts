@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { rienSi1 } from '../../../lib/outils/ecritures'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -30,7 +29,7 @@ export default class ÉcrireUnQuotient extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) {
+    switch (this.quotaChoice('cas', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) {
       case 1:
         {
           const a = randint(1, 9)

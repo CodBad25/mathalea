@@ -2,7 +2,6 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { shuffle } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { sp } from '../../../lib/outils/outilString'
@@ -27,8 +26,8 @@ export default class canQ19 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = randint(1, 2)
-    const a = randint(5, 10)
+    const choix = this.quotaRandint('choix', 1, 2)
+    const a = this.quotaRandint('a', 5, 10)
     const c = 2025 - a
     const b = 2025 + a
     const listeNombre1 = [2025, b, c]

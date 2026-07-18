@@ -36,7 +36,7 @@ export default class FonctionAffAvec2Images extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (choice([1, 2])) {
+    switch (this.quotaChoice('type', [1, 2])) {
       case 1: // on donne f(1) et f(0)
         {
           const nom = ['f', 'g', 'h']

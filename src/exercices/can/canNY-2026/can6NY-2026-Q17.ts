@@ -1,7 +1,6 @@
 import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { sp } from '../../../lib/outils/outilString'
 import { minToHoraire } from '../../../lib/outils/dateEtHoraires'
@@ -29,7 +28,7 @@ export default class SuiteACompleterHeures2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const h = 20
-    const k = this.canOfficielle ? 16 : randint(14, 18)
+    const k = this.canOfficielle ? 16 : this.quotaRandint('k', 14, 18)
     const annee=26
     const minutes1Aff = minToHoraire(20 * 60 + annee, true)
     const minutes2Aff = minToHoraire(20 * 60 + annee + k, true)

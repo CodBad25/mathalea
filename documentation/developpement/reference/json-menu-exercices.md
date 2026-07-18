@@ -36,6 +36,13 @@ L'apparence d'un noeud du menu dépend à la fois de sa profondeur dans `emptyRe
 - `src/json/dictionnaireBAC.js`, `dictionnaireDNB.js`, `dictionnaireDNBPRO.js`, `dictionnaireC3.js`, `dictionnaireCrpeCoop.js`, `dictionnaireCrpeDida.js`, `dictionnaireE3C.js`, `dictionnaireEAM.js`, `dictionnaireEVACOM.js`, `dictionnaireFlashBac.js`, `dictionnaireSTI2D.js`, `dictionnaireSTL.js` : sources maintenues à la main listant chaque annale statique (tags, chemins d'images/LaTeX). Ce sont les entrées du script.
 - `src/json/referentielStaticFR.json`, `src/json/referentielStaticCH.json` : référentiel des annales d'examens statiques généré à partir des dictionnaires ci-dessus. Consommé par `refUtils.ts` (fusionné dans `baseReferentiel.static`) et par `referentielsStore.ts` (section « Annales examens »).
 
+## Ressources partenaires (MathAdata)
+
+- `src/json/dictionnaireMathadata.js` : source maintenue à la main (même esprit que `dictionnaireBAC.js` et consorts) listant, par chapitre, les exercices statiques partenaires MathAdata (`{ title, exercices: { 'md-000x': { title } } }`).
+- `src/lib/components/mathadataReferentiel.ts` : construit à la volée (pas de fichier généré) le référentiel `JSONReferentielObject` correspondant à partir de `dictionnaireMathadata.js`, avec pour chaque exercice `uuid` (préfixe `md-`), `titre`, et `png`/`pngCor`/`tex`/`texCor`/`url`/`urlcor` pointant vers `static/mathadata/tex/<uuid>(.tex|_cor.tex)` et `static/mathadata/tex/png/<uuid>(.png|_cor.png)`. Exporté en tant que `referentielMathadata`, il alimente la section « Ressources partenaires » du menu (`referentielsStore.ts`, FR uniquement) et est fusionné dans les référentiels statiques consommés par `ExerciceStatic.svelte` et `exercisesUtils.ts` pour que ces exercices s'affichent et s'exportent comme les autres statiques.
+- Le préfixe d'uuid `md-` est reconnu comme statique par `isStatic()` (`componentsUtils.ts`) et par `mathaleaGetExercicesFromParams()` (`mathalea.ts`, qui utilise `referentielMathadata` au lieu de `referentielStaticFR/CH` pour la résolution de l'uuid).
+- `MathadataBanner.svelte` affiche un encart d'information en haut de la liste d'exercices (`Exercices.svelte`) dès qu'un exercice `md-` est présent dans `exercicesParams`.
+
 ## Fichiers de contenu du menu (maintenus manuellement)
 
 | Fichier                                    | Rôle                                                                                                                                                                                          | Consommateur principal                                                                    |

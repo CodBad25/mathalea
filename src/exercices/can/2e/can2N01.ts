@@ -35,7 +35,7 @@ export default class Intervalles extends ExerciceSimple {
     let a, b, c, N, d, e
 
     switch (
-      choice([1, 2]) //, 2, 2
+      this.quotaChoice('type', [1, 2]) //, 2, 2
     ) {
       case 1:
         a = randint(1, 4) * -1

@@ -30,10 +30,10 @@ export default class CompositionDeNombreEntier extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(1, 9)
+    const a = this.quotaRandint('a', 1, 9)
     const b = randint(1, 9, a)
     const c = randint(1, 9, [a, b])
-    switch (choice([1, 2, 3])) {
+    switch (this.quotaChoice('cas', [1, 2, 3])) {
       case 1:
         this.reponse = a * 1000 + b * 100 + c
         this.question = `Calculer $(${a}\\times ${texNombre(1000)}) + (${b}\\times 100) + (${c}\\times 1)$.`

@@ -2,7 +2,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Trouver les coordonnées d'un point avec un milieu"
 export const interactifReady = true
@@ -31,8 +30,8 @@ export default class CoordonneesMilieuExtremite extends ExerciceSimple {
   nouvelleVersion() {
     const nom = creerNomDePolygone(2, 'PQDO')
 
-    const a = randint(-9, 9, 0)
-    const b = randint(-9, 9, 0)
+    const a = this.quotaRandint('a', -9, 9, [0])
+    const b = this.quotaRandint('b', -9, 9, [0])
     this.question = `Dans un repère du plan d'origine $O$, on donne $${nom[0]}(${a}\\,;\\,${b})$.<br>
         Déterminer les coordonnées du point $${nom[1]}$ de façon que $O$ soit le milieu de $[${nom[0]}${nom[1]}]$.<br><br>`
     this.optionsChampTexte = { texteAvant: `$${nom[1]}$ a pour coordonnées :` }

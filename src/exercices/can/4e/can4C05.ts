@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { simplificationDeFractionAvecEtapes } from '../../../lib/outils/deprecatedFractions'
 import {
   fraction,
@@ -31,10 +30,10 @@ export default class SommeFractionsCompatibles extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = choice(obtenirListeFractionsIrreductibles())
-    const c = choice([2, 4])
+    const a = this.quotaChoice('a', obtenirListeFractionsIrreductibles())
+    const c = this.quotaChoice('c', [2, 4])
     const b = fraction(1, a.d * c)
-    if (choice([true, false])) {
+    if (this.quotaChoice('booleen', [true, false])) {
       this.question = `Calculer $${a.texFraction} + ${b.texFraction}$.`
       this.correction = `Pour additionner des fractions, on les met au même dénominateur.<br>
      <br>

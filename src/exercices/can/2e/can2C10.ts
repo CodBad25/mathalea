@@ -50,7 +50,7 @@ export default class TauxCoeff extends ExerciceSimple {
         Ainsi, le coefficient multiplicateur associé à une réduction de  $${taux}~\\%$ est $\\dfrac{${texNombre(100 - taux)}}{100}$ soit $${miseEnEvidence(texNombre(coefficient))}$.`
     }
 
-    switch (choice(['a', 'a', 'b', 'b', 'c'])) {
+    switch (this.quotaChoice('type', ['a', 'a', 'b', 'b', 'c'])) {
       case 'a':
         taux = choice([
           randint(1, 9) * 10,

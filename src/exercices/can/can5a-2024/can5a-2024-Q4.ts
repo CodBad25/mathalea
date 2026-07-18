@@ -2,7 +2,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 import Decimal from 'decimal.js'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -25,7 +24,7 @@ export default class NomExercice extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const valInf = this.canOfficielle ? 3 : randint(1, 10)
+    const valInf = this.canOfficielle ? 3 : this.quotaRandint('valInf', 1, 10)
     const valSup = this.canOfficielle
       ? new Decimal(3.1)
       : choice([new Decimal(valInf).add(0.1), new Decimal(valInf).add(0.01)])

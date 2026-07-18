@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -7,7 +6,6 @@ import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { abs } from '../../../lib/outils/nombres'
-import { randint } from '../../../modules/outils'
 export const titre = 'Calculer avec une puissance de 10'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -32,12 +30,12 @@ export default class calcPuissanceDe10 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = choice([
+    const a = this.quotaChoice('a', [
       new Decimal(2025),
       new Decimal(2025).div(10),
       new Decimal(2025).div(100),
     ])
-    const exp = randint(-3, 3, 0)
+    const exp = this.quotaRandint('exp', -3, 3, [0])
     const expABS = abs(exp)
     this.consigne = 'Compléter.<br>'
     this.reponse = texNombre(exp, 0)

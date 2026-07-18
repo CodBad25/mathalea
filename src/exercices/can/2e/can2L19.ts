@@ -1,6 +1,5 @@
 import { texteCentre } from '../../../lib/format/miseEnPage'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -36,11 +35,11 @@ export default class ExprimerEnFonction extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choixQ = choice([true, false])
+    const choixQ = this.quotaChoice('choixQ', [true, false])
 
     if (context.isAmc) this.versionQcm = false
     switch (
-      choice([1, 2, 3, 4, 5]) //
+      this.quotaChoice('type', [1, 2, 3, 4, 5]) //
     ) {
       case 1:
         this.question = `Le degré Fahrenheit $F$ est une unité de mesure de la température utilisée aux États-Unis. <br>Il est lié au degré Celsius $C$ par la formule suivante : <br>`

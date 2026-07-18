@@ -1,7 +1,5 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer les coordonnées d’un vecteur (bis)'
@@ -31,9 +29,9 @@ export default class CoordonneesVecteur2 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(-6, 6, [0, 1, -1])
-    const b = randint(2, 10)
-    if (choice([true, false])) {
+    const a = this.quotaRandint('a', -6, 6, [0, 1, -1])
+    const b = this.quotaRandint('b', 2, 10)
+    if (this.quotaChoice('booleen', [true, false])) {
       this.question = `Dans un repère orthonormé $\\big(O\\,;\\,\\vec \\imath,\\,\\vec \\jmath\\big)$, on a : $\\vec{u}=${a}(\\vec \\imath+${b}\\vec \\jmath\\big)$.<br>
       Quelles sont les coordonnées du vecteur $\\vec{u}$ dans ce repère ?<br><br>`
       this.optionsChampTexte = { texteAvant: '$\\vec{u}$ a pour coordonnées :' }

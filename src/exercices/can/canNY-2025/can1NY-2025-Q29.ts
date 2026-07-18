@@ -3,7 +3,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
-import { randint } from '../../../modules/outils'
 export const titre = 'Calculer une différence de deux carrés'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -25,7 +24,7 @@ export default class diffDeDeuxCarres extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = randint(1, 3)
+    const choix = this.quotaRandint('choix', 1, 3)
     if (choix === 1) {
       this.question = `Calculer $${texNombre(2025, 0)}^2-${texNombre(2024, 0)}^2$.`
       this.correction = `On utilise l'égalité remarquable $a^2-b^2=(a-b)(a+b)$ avec $a=${texNombre(2025, 0)}$ et $b=${texNombre(2024, 0)}$.<br>

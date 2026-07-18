@@ -5,7 +5,6 @@ import {
 	ecritureParentheseSiNegatif,
 } from '../../../lib/outils/ecritures'
 import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnCouleur, miseEnEvidence } from '../../../lib/outils/embellissements'
 export const titre = 'Résoudre une inéquation du type $\\dfrac{x+a}{b}\\le c$'
@@ -33,12 +32,12 @@ export default class ResoudreInequationAvecQuotient extends ExerciceSimple {
 	}
 
 	nouvelleVersion() {
-		const a = randint(-10, 10, 0)
-		const b = randint(-10, 10, [-1, 0, 1])
-		const c = randint(-10, 10, 0)
+		const a = this.quotaRandint('a', -10, 10, [0])
+		const b = this.quotaRandint('b', -10, 10, [-1, 0, 1])
+		const c = this.quotaRandint('c', -10, 10, [0])
 		const symbols = ['\\leqslant', '<', '\\geqslant', '>']
 		const [INF, STRINF, SUP, STRSUP] = symbols
-		const index = randint(0, 3)
+		const index = this.quotaRandint('index', 0, 3)
 		const symbol = symbols[index]
 		const symbolInverse = [SUP, STRSUP, INF, STRINF][index]
 		const symbolFinal = b < 0 ? symbolInverse : symbol

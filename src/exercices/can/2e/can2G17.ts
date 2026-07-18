@@ -5,7 +5,6 @@ import {
   rienSi1,
 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre =
@@ -38,9 +37,9 @@ export default class VecteurDirEqCart extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(-9, 9, 0)
-    const b = randint(-9, 9, 0)
-    const c = randint(-5, 5, 0)
+    const a = this.quotaRandint('a', -9, 9, [0])
+    const b = this.quotaRandint('b', -9, 9, [0])
+    const c = this.quotaRandint('c', -5, 5, [0])
 
     this.question = `Dans un repère, la droite $d$ a pour équation :
       $${rienSi1(a)}x${ecritureAlgebriqueSauf1(b)}y${ecritureAlgebrique(c)}=0$<br>

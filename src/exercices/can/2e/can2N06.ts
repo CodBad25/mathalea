@@ -31,7 +31,7 @@ export default class DecimalForme extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const puissance = randint(1, 5)
+    const puissance = this.quotaRandint('puissance', 1, 5)
     const puissance10 = 10 ** puissance
     const a1 = randint(1, 9) * choice([1, -1])
     const a2 =

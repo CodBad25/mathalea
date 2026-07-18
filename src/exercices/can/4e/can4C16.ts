@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Multiplier des fractions'
@@ -89,8 +88,8 @@ export default class MultiplierFraction extends ExerciceSimple {
       [10, 9],
       [7, 10],
     ]
-    const fraction1 = choice(listeFractions1)
-    const fraction2 = choice(listeFractions2)
+    const fraction1 = this.quotaChoice('fraction1', listeFractions1)
+    const fraction2 = this.quotaChoice('fraction2', listeFractions2)
     const n1 = fraction1[0]
     const d1 = fraction1[1]
     const n2 = fraction2[0]

@@ -37,8 +37,11 @@ export default class NombreInverse extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const maFraction = choice(obtenirListeFractionsIrreductibles())
-    const a = randint(1, 4)
+    const maFraction = this.quotaChoice(
+      'maFraction',
+      obtenirListeFractionsIrreductibles(),
+    )
+    const a = this.quotaRandint('a', 1, 4)
     const b = maFraction[0]
     const c = maFraction[1]
     const d = new FractionEtendue(a * c + b, c)
@@ -47,7 +50,7 @@ export default class NombreInverse extends ExerciceSimple {
     const Nom = choice(listeNom)
 
     if (context.isAmc) this.versionQcm = false
-    if (choice([true, false])) {
+    if (this.quotaChoice('ordre', [true, false])) {
       this.reponse = this.versionQcm
         ? `$${Nom}=${new FractionEtendue(a * c + b, c).inverse().texFraction}$`
         : new FractionEtendue(a * c + b, c).inverse().texFraction

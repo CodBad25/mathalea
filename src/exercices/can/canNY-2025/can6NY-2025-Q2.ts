@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -27,7 +26,7 @@ export default class CalculsNombres extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = choice([1, 2, 3, 4])
+    const choix = this.quotaChoice('choix', [1, 2, 3, 4])
     if (choix === 1) {
       this.question = '$20+25$'
       this.correction = `$20+25=${miseEnEvidence(texNombre(45, 0))}$`

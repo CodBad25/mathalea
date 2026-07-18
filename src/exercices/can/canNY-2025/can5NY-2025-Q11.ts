@@ -5,7 +5,6 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
-import { randint } from '../../../modules/outils'
 export const titre = 'Calculer un rendu de monnaie'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -30,7 +29,7 @@ export default class calcRenduMonnaie extends ExerciceSimple {
 
   nouvelleVersion() {
     let prix
-    switch (randint(1, 5)) {
+    switch (this.quotaRandint('cas', 1, 5)) {
       case 1:
         prix = new Decimal(20.25)
         this.reponse = texNombre(new Decimal(30).sub(prix), 2)

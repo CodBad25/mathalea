@@ -245,6 +245,13 @@
           >
             <span class="font-bold">{ending.id} - </span>{ending.titre}
           </div>
+        {:else if 'titre' in ending && ending.titre}
+          <!-- Exercice statique avec titre (ex. ressources partenaires MathAdata) -->
+          <div
+            class="text-start text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+          >
+            {ending.titre}
+          </div>
         {:else}
           <!-- Exercice de la bibliothèque -->
           <div

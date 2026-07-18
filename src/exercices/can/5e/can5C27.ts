@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureNombreRelatif,
   ecritureNombreRelatifc,
@@ -29,9 +28,9 @@ export default class AdditionRelatifATrou extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    let a = randint(1, this.sup)
-    let b = randint(1, this.sup)
-    const k = choice([
+    let a = this.quotaRandint('a', 1, this.sup)
+    let b = this.quotaRandint('b', 1, this.sup)
+    const k = this.quotaChoice('k', [
       [-1, -1],
       [-1, 1],
       [1, -1],

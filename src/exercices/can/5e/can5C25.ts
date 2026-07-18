@@ -2,7 +2,6 @@ import {
   ecritureNombreRelatif,
   ecritureNombreRelatifc,
 } from '../../../lib/outils/ecritures'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const interactifType = 'mathLive'
 export const interactifReady = true
@@ -28,8 +27,8 @@ export default class AdditionRelatifCAN extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    let a = randint(1, this.sup)
-    let b = randint(1, this.sup)
+    let a = this.quotaRandint('a', 1, this.sup)
+    let b = this.quotaRandint('b', 1, this.sup)
     const k = this.quotaChoice('k', [
       [-1, -1],
       [-1, 1],

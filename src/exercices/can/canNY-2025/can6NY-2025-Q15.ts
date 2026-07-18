@@ -2,7 +2,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { sp } from '../../../lib/outils/outilString'
-import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = 'Déterminer un multiple'
 export const interactifType = 'qcm'
 export const uuid = 'b926b'
@@ -24,7 +23,7 @@ export default class multiple extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = choice([2, 5, 3, 9, 10])
+    const a = this.quotaChoice('a', [2, 5, 3, 9, 10])
     this.autoCorrection[0] = {
       options: { ordered: true },
       enonce: `$${texNombre(2025)}$ est-il un multiple de $${a}$ ? `,

@@ -34,6 +34,9 @@ export type BlocklyEditorOptions = {
   initialBlocks?: BlocklyWorkspaceJson
   solutionBlocks?: BlocklyWorkspaceJson
   verifyCallbackName?: string
+  interactivityOn?: boolean
+  height?: string
+  width?: string
 }
 
 export type BlocklyEditorCreateOptions = {
@@ -49,7 +52,8 @@ export class BlocklyEditor extends MathaleaCustomElement {
     string,
     BlocklyEditorVerificationCallback
   >()
-
+  private editorHeight: string | null = null
+  private editorWidth: string | null = null
   private workspace: Blockly.WorkspaceSvg | null = null
   private resizeHandler: (() => void) | null = null
 
@@ -68,6 +72,9 @@ export class BlocklyEditor extends MathaleaCustomElement {
       initialBlocks: options.initialBlocks,
       solutionBlocks: options.solutionBlocks,
       verifyCallbackName: options.verifyCallbackName,
+      interactivityOn: options.interactivityOn ?? true,
+      height: options.height ?? '500px',
+      width: options.width ?? '100%',
     })
   }
 
@@ -97,7 +104,14 @@ export class BlocklyEditor extends MathaleaCustomElement {
     if (options.verifyCallbackName) {
       elt.setAttribute('verify-callback-name', options.verifyCallbackName)
     }
-    elt.setAttribute('interactivity-on', readOnly ? 'false' : 'true')
+    if (options.height) {
+      elt.setAttribute('height', options.height)
+    }
+    if (options.width) {
+      elt.setAttribute('width', options.width)
+    }
+    const interactivityOn = options.interactivityOn ?? !readOnly
+    elt.setAttribute('interactivity-on', interactivityOn ? 'true' : 'false')
     elt.style.position = 'absolute'
     elt.style.left = '-9999px'
     elt.style.top = '-9999px'
@@ -142,7 +156,6 @@ export class BlocklyEditor extends MathaleaCustomElement {
         score: { nbBonnesReponses: 0, nbReponses: 1 },
       }
     }
-
     const spanResultat = document.querySelector(
       `#resultatCheckEx${exercice.numeroExercice}Q${i}`,
     )
@@ -277,6 +290,8 @@ export class BlocklyEditor extends MathaleaCustomElement {
 
   connectedCallback() {
     this.hydrateCommonAttributes()
+    this.editorHeight = this.getAttribute('height')
+    this.editorWidth = this.getAttribute('width')
     this.render()
   }
 
@@ -308,16 +323,31 @@ export class BlocklyEditor extends MathaleaCustomElement {
     const overlay = this.querySelector(
       '.blockly-editor-overlay',
     ) as HTMLDivElement | null
+    const area = this.querySelector(
+      '.blockly-editor-area',
+    ) as HTMLDivElement | null
+    const injectionDiv = this.querySelector(
+      '.injectionDiv',
+    ) as HTMLDivElement | null
     if (overlay) {
       overlay.style.display = isOn ? 'none' : 'block'
+    }
+    if (area) {
+      area.style.pointerEvents = isOn ? 'auto' : 'none'
+    }
+    if (injectionDiv) {
+      injectionDiv.style.pointerEvents = isOn ? 'auto' : 'none'
     }
   }
 
   render() {
+    const resolvedWidth = this.editorWidth ?? '100%'
+    const resolvedHeight = this.editorHeight ?? '500px'
+    const isInteractive = this.interactivityOn
     this.innerHTML = `
-      <div class="blockly-editor-wrapper" style="position: relative; width: 100%; min-height: 500px;">
-        <div class="blockly-editor-area" style="width: 100%; height: 500px;"></div>
-        <div class="blockly-editor-overlay" style="display: ${this.interactivityOn ? 'none' : 'block'}; position: absolute; inset: 0;"></div>
+      <div class="blockly-editor-wrapper" style="position: relative; width: ${resolvedWidth}; min-height: ${resolvedHeight};">
+        <div class="blockly-editor-area" style="width: ${resolvedWidth}; height: ${resolvedHeight}; pointer-events: ${isInteractive ? 'auto' : 'none'};"></div>
+        <div class="blockly-editor-overlay" style="display: ${isInteractive ? 'none' : 'block'}; position: absolute; inset: 0; z-index: 1000; pointer-events: auto; background: transparent;"></div>
       </div>
     `
 
@@ -348,7 +378,7 @@ export class BlocklyEditor extends MathaleaCustomElement {
       oneBasedIndex: false,
       readOnly: !this.interactivityOn,
       zoom: {
-        controls: true,
+        controls: isInteractive,
         wheel: false,
         startScale: 0.8,
         maxScale: 3,

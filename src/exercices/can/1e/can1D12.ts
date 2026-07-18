@@ -34,7 +34,7 @@ export default class DeriveePoly2 extends ExerciceSimple {
   nouvelleVersion() {
     let a, b, c
     switch (
-      choice([1, 2, 3]) //
+      this.quotaChoice('type', [1, 2, 3]) //
     ) {
       case 1: // second degre ax^2+bx+c
         a = randint(-10, 10, [0])

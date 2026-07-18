@@ -1,8 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
@@ -32,10 +30,10 @@ export default class calculerPythagore extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = choice([true, false])
+    const choix = this.quotaChoice('choix', [true, false])
 
     const nom = creerNomDePolygone(3, ['QD'])
-    const a = randint(1, 6)
+    const a = this.quotaRandint('a', 1, 6)
     const A = pointAbstrait(0, 0, nom[0], 'below')
     const B = pointAbstrait(6, 0, nom[1], 'below')
     const C = pointAbstrait(6, 2, nom[2], 'above')

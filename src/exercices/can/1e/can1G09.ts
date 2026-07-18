@@ -129,7 +129,7 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
       nom,
       o,
     )
-    switch (choice([1, 2, 3, 4, 5])) {
+    switch (this.quotaChoice('type', [1, 2, 3, 4, 5])) {
       case 1: // les 0
         a = choice([
           '0',

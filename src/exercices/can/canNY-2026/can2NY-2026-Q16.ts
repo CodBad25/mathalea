@@ -28,7 +28,7 @@ export default class entierDansIntervalle2026 extends ExerciceSimple {
     const annee = 2026
     const crochet1 = this.canOfficielle ? ']' : choice([']', '['])
     const crochet2 = this.canOfficielle ? ']' : choice([']', '['])
-    if (choice([true, false])) {
+    if (this.quotaChoice('choix', [true, false])) {
       this.question = `Quel est le plus grand entier relatif appartenant à l'intervalle $${crochet1} ${texNombre(-annee, 0)}\\,;\\,${texNombre(annee, 0)}${crochet2}$ ? `
       this.correction = `Le second crochet  étant ${crochet2 === ']' ? 'fermé' : 'ouvert'}, c'est $${miseEnEvidence(`${texNombre(crochet2 === ']' ? annee : annee - 1, 0)}`)}$.`
       this.reponse = `${crochet2 === ']' ? annee : annee - 1}`

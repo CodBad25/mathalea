@@ -26,7 +26,7 @@ export default class Can32026Q1 extends ExerciceCan {
 
   enonce(a?: number, b?: number) {
     if (a == null || b == null) {
-      a = choice([4, 6, 7, 8])
+      a = this.quotaChoice('a', [4, 6, 7, 8])
       b = choice([4, 6, 7, 8], [a])
     }
 

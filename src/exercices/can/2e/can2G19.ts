@@ -7,7 +7,6 @@ import { texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
@@ -67,7 +66,7 @@ export default class CoeffDirDroite extends ExerciceSimple {
       objet,
       objetC
     switch (
-      choice([1, 2]) //, 2, 2
+      this.quotaChoice('cas', [1, 2]) //, 2, 2
     ) {
       case 1:
         do {

@@ -1,8 +1,6 @@
 import Decimal from 'decimal.js'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Multiplier astucieusement'
 export const interactifReady = true
@@ -33,7 +31,7 @@ export default class SoustractionDecimaux extends ExerciceSimple {
       b = new Decimal('3.5')
       c = new Decimal('2')
     } else {
-      const [aa, cc] = choice([
+      const [aa, cc] = this.quotaChoice('aaCc', [
         [25, 4],
         [50, 2],
         [250, 4],
@@ -41,7 +39,7 @@ export default class SoustractionDecimaux extends ExerciceSimple {
       ])
       a = new Decimal(aa)
       c = new Decimal(cc)
-      b = new Decimal(randint(2, 9) * 2 + 1).div(2)
+      b = new Decimal(this.quotaRandint('b', 2, 9) * 2 + 1).div(2)
     }
     this.reponse = a.mul(b).mul(c).toFixed(0)
     this.question = `$${texNombre(a, 0)}\\times ${texNombre(b, 1)}\\times ${texNombre(c, 0)}$`

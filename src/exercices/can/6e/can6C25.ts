@@ -5,7 +5,6 @@ import { prenomF } from '../../../lib/outils/Personne'
 import { texNombre } from '../../../lib/outils/texNombre'
 
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Rechercher un prix unitaire'
 export const interactifReady = true
@@ -40,13 +39,13 @@ export default class RecherchePrix extends ExerciceSimple {
       ['cookies', 'un cookie'],
       ['brioches', 'une brioche'],
     ]
-    const a = randint(2, 6)
+    const a = this.quotaRandint('a', 2, 6)
     const v = choice(listeviennoiserie)
     const p = v[0]
     const s = v[1]
-    const t = choice([10, 20])
+    const t = this.quotaChoice('t', [10, 20])
     const prenom1 = prenomF()
-    const pu = choice([0.9, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6])
+    const pu = this.quotaChoice('pu', [0.9, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6])
     this.question = `À la boulangerie, ${prenom1} achète $${a}$ ${p}.<br>
      Elle paie avec un billet de $${t}$ euros.<br>
      On lui rend $${texPrix(t - a * pu)}$ euros.<br>

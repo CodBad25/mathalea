@@ -1,5 +1,7 @@
 import * as Blockly from 'blockly/core'
 
+let isBlocklyBlocksInitialized = false
+
 // Define the block styles: https://developers.google.com/blockly/guides/configure/web/themes#block_style
 /* const blockStyles = {
   hat_blocks: {
@@ -16,7 +18,9 @@ import * as Blockly from 'blockly/core'
 })
 */
 
-export function init() {
+export function ensureBlocklyBlocksInitialized() {
+  if (isBlocklyBlocksInitialized) return ''
+
   Blockly.Blocks['start'] = {
     init: function () {
       this.appendDummyInput().appendField('Démonstration')
@@ -547,5 +551,11 @@ export function init() {
     },
   }
 
+  isBlocklyBlocksInitialized = true
   return ''
+}
+
+// Compatibilite descendante pour les imports existants.
+export function init() {
+  return ensureBlocklyBlocksInitialized()
 }

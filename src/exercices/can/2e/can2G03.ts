@@ -4,7 +4,6 @@ import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { similitude } from '../../../lib/2d/transformations'
 import { milieu, pointAdistance } from '../../../lib/2d/utilitairesPoint'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -50,7 +49,7 @@ export default class CalculHypotenusePythagore extends ExerciceSimple {
     const ymin = Math.min(A.y, B.y, C.y) - 1
     const xmax = Math.max(A.x, B.x, C.x) + 1
     const ymax = Math.max(A.y, B.y, C.y) + 1
-    switch (choice(['a', 'b'])) {
+    switch (this.quotaChoice('type', ['a', 'b'])) {
       case 'a':
         objets.push(pol[0], pol[1], codageAngleDroit(A, B, C)) // pol[0], c'est le tracé et pol[1] ce sont les labels
         objets.push(

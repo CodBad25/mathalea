@@ -1,6 +1,5 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Somme de deux nombres décimaux'
@@ -19,8 +18,10 @@ export const refs = {
 export default class Can2025N5Q2 extends ExerciceCan {
   enonce(a?: number, b?: number) {
     if (a == null || b == null) {
-      a = randint(2, 5) * 0.1 + randint(1, 9) * 0.01
-      b = randint(1, 4) * 0.1
+      a =
+        this.quotaRandint('a1', 2, 5) * 0.1 +
+        this.quotaRandint('a2', 1, 9) * 0.01
+      b = this.quotaRandint('b', 1, 4) * 0.1
     }
     this.reponse = (a + b).toFixed(2)
     this.question = `$${texNombre(a, 2)} + ${texNombre(b, 2)}$ `

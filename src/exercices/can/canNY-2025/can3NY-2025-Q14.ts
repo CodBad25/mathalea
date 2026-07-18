@@ -3,7 +3,6 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = ''
@@ -28,8 +27,10 @@ export default class calcAvecChiffresPrio extends ExerciceSimple {
 
   nouvelleVersion() {
     const choix = choice([true, false])
-    const a = randint(1, 4)
-    const val = new Decimal(2025).div(choice([10, 100, 1000]))
+    const a = this.quotaRandint('a', 1, 4)
+    const val = new Decimal(2025).div(
+      this.quotaChoice('diviseur', [10, 100, 1000]),
+    )
     if (a === 1) {
       this.question = `Calculer $${choix ? `4 \\times ${texNombre(val, 3)}\\times 25` : `25 \\times ${texNombre(val, 3)}\\times 4`}$.`
       this.reponse = texNombre(new Decimal(val).mul(100), 3)

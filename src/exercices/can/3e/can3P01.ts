@@ -3,7 +3,6 @@ import {
   reduireAxPlusB,
 } from '../../../lib/outils/ecritures'
 import { sp } from '../../../lib/outils/outilString'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Utiliser la proportionnalité sur une expression algébrique'
@@ -32,10 +31,10 @@ export default class ProportionnaliteExpressionAlgebrique extends ExerciceSimple
   }
 
   nouvelleVersion() {
-    const a = randint(-3, 3, 0)
-    const b = randint(-5, 5, 0)
-    const c = randint(-5, 5, 0)
-    const n = randint(-7, -1)
+    const a = this.quotaRandint('a', -3, 3, [0])
+    const b = this.quotaRandint('b', -5, 5, [0])
+    const c = this.quotaRandint('c', -5, 5, [0])
+    const n = this.quotaRandint('n', -7, -1)
 
     this.question = `Si ${sp(1)}  $${reduireAxPlusB(a, b)}=${c}$, quelle est la valeur de  ${sp(1)} $${reduireAxPlusB(n * a, n * b)}$ ?
       

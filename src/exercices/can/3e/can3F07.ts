@@ -9,7 +9,6 @@ import { texFractionFromString } from '../../../lib/outils/deprecatedFractions'
 import { reduireAxPlusB } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Lire graphiquement une fonction affine'
@@ -39,8 +38,8 @@ export default class LectureGraphiqueFonctionAffine1 extends ExerciceSimple {
   nouvelleVersion() {
     const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1, 'milieu', true)
     let s1, s2
-    const a = randint(-4, 4, 0)
-    const b = randint(-4, 4, 0)
+    const a = this.quotaRandint('a', -4, 4, [0])
+    const b = this.quotaRandint('b', -4, 4, [0])
 
     const rep = repere({ xMin: -5, yMin: -5, xMax: 5, yMax: 5 })
 

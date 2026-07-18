@@ -4,7 +4,6 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { randint } from '../../../modules/outils'
 export const titre = 'Compléter une égalité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -29,7 +28,7 @@ export default class EgaliteCompleter extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (randint(1, 4)) {
+    switch (this.quotaRandint('choix', 1, 4)) {
       case 1:
         this.reponse = texNombre(45, 0)
         this.consigne = `En utilisant l'égalité $${texNombre(2025, 0)}=81\\times 25$, compléter :`

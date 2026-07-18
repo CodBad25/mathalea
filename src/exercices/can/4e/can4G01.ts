@@ -3,12 +3,10 @@ import { codageAngle } from '../../../lib/2d/angles'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { pointAdistance } from '../../../lib/2d/utilitairesPoint'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer une longueur avec des triangles semblables'
 export const interactifReady = true
@@ -37,7 +35,7 @@ export default class LongueurPythagore extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const triplet = choice([
+    const triplet = this.quotaChoice('triplet', [
       [6, 8, 10],
       [9, 12, 15],
       [12, 16, 20],
@@ -59,7 +57,7 @@ export default class LongueurPythagore extends ExerciceSimple {
     const lb = afficheLongueurSegment(A, C)
 
     const objets = []
-    switch (randint(0, 2)) {
+    switch (this.quotaRandint('cas', 0, 2)) {
       case 0: // calcul du côté horizontal de l'angle droit
         objets.push(pol[0], pol[1], la, lb, codageAngle(A, B, C))
         this.question = `Un triangle dont les côtés ont pour longueurs $3$, $4$ et $5$ est un triangle rectangle.<br>

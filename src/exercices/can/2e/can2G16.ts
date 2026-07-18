@@ -1,7 +1,6 @@
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { choisitLettresDifferentes } from '../../../lib/outils/aleatoires'
-import { choice } from '../../../lib/outils/arrayOutils'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
@@ -32,7 +31,7 @@ export default class VecteursCol extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(3, 10) // abscisse de C
+    const a = this.quotaRandint('a', 3, 10) // abscisse de C
     const b = randint(1, a - 1) // abscisse de B l'abscisse de A est 0
     const noms = choisitLettresDifferentes(3, 'O', true)
 
@@ -41,7 +40,7 @@ export default class VecteursCol extends ExerciceSimple {
     const f3 = new FractionEtendue(b, a).multiplieEntier(-1)
     const f4 = new FractionEtendue(a, b).multiplieEntier(-1)
     switch (
-      choice([1, 2, 3, 4]) //
+      this.quotaChoice('cas', [1, 2, 3, 4]) //
     ) {
       case 1:
         // ${texteCentre(`$\\overrightarrow{${noms[0]}${noms[1]}}= ....\\overrightarrow{${noms[0]}${noms[2]}}$`)}

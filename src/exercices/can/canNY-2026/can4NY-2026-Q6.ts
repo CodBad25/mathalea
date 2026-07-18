@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 
@@ -28,7 +27,7 @@ export default class valeurDecimale2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const c = this.canOfficielle ? 4 : choice([2, 4, 5])
+    const c = this.canOfficielle ? 4 : this.quotaChoice('c', [2, 4, 5])
     const b = this.canOfficielle ? 1 : randint(1, c - 1)
     const maFraction = new FractionEtendue(b, c)
     const a = annee

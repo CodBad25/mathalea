@@ -6,7 +6,6 @@ import {
 import { randint } from '../../../modules/outils'
 
 import { bleuMathalea } from '../../../lib/colors'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer le complément à 10, 100, 1000'
@@ -38,7 +37,7 @@ export default class ComplementADixCentMille extends ExerciceSimple {
 
   nouvelleVersion() {
     switch (
-      choice([1, 1, 1, 2, 3, 3, 3, 3]) //
+      this.quotaChoice('cas', [1, 1, 1, 2, 3, 3, 3, 3]) //
     ) {
       case 1: // complément à 100
         {

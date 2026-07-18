@@ -3,7 +3,6 @@ import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { abs } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation du type $1+\\dfrac{p}{100}=c$'
 export const interactifReady = true
@@ -31,7 +30,7 @@ export default class ResoudreEquationCM extends ExerciceSimple {
 
   nouvelleVersion() {
     // Générer k entre 0,01 et 2,99
-    const kCentimes = randint(1, 150)
+    const kCentimes = this.quotaRandint('kCentimes', 1, 150)
     const k = new Decimal(kCentimes).div(100)
 
     // Résoudre : 1 + p/100 = k

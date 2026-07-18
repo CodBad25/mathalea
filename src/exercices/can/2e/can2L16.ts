@@ -10,7 +10,6 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre =
@@ -40,7 +39,7 @@ export default class EquationsRacCarree extends ExerciceSimple {
 
   nouvelleVersion() {
     let reponse = ''
-    const a = randint(1, 12)
+    const a = this.quotaRandint('a', 1, 12)
     const o = latex2d('\\text{O}', -0.2, -0.3, {
       color: 'black',
       letterSize: 'scriptsize',
@@ -61,7 +60,7 @@ export default class EquationsRacCarree extends ExerciceSimple {
       letterSize: 'scriptsize',
       backgroundColor: '',
     })
-    const choix = choice([true, false])
+    const choix = this.quotaChoice('choix', [true, false])
     const A = pointAbstrait(2.25, 1.5)
     const Ax = pointAbstrait(A.x, 0)
     const sAAx = segment(A, Ax)

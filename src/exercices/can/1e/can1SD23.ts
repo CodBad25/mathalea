@@ -5,7 +5,6 @@ import {
   reduireAxPlusB,
 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer une forme canonique'
 export const interactifReady = true
@@ -33,8 +32,8 @@ export default class FormeCanonique extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const alpha = randint(-3, 3, [0])
-    const beta = randint(-5, 5, [0])
+    const alpha = this.quotaRandint('alpha', -3, 3, [0])
+    const beta = this.quotaRandint('beta', -5, 5, [0])
     const b = -2 * alpha
     const c = alpha * alpha + beta
     if (c !== 0) {

@@ -4,7 +4,6 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { choice } from '../../../lib/outils/arrayOutils'
-import { randint } from '../../../modules/outils'
 export const titre = "Trouver une intersection d'intervalles"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -29,8 +28,8 @@ export default class intersectionIntervalles extends ExerciceSimple {
   nouvelleVersion() {
     const annee = 2026
     const a = -annee - 1
-    const b = this.canOfficielle ? 3 : randint(-10, 5)
-    const c = this.canOfficielle ? a + 1 : a + randint(1, 9)
+    const b = this.canOfficielle ? 3 : this.quotaRandint('b', -10, 5)
+    const c = this.canOfficielle ? a + 1 : a + this.quotaRandint('c', 1, 9)
     const d = annee
     const choix = this.canOfficielle ? true : choice([true, false])
     const crochet1 = this.canOfficielle ? ']' : choice([']', '['])

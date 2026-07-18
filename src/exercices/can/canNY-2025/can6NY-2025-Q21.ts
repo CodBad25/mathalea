@@ -3,7 +3,6 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 export const titre = 'Rechercher un nombre'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -26,7 +25,7 @@ export default class rechercherUnNombre extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(5, 20)
+    const a = this.quotaRandint('a', 5, 20)
     this.reponse = texNombre(a, 0)
 
     this.question = `En ajoutant un nombre à $${texNombre(2025, 0)}$, on obtient $${texNombre(2025 + a, 0)}$.<br>

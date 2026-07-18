@@ -124,7 +124,7 @@ export default class MaxMinG extends ExerciceSimple {
     const objetsEnonce = [repere1, courbe1]
     const solsMax = theSpline.solve(Math.max(...nuage.map((el) => el.y))) || []
     const solsMin = theSpline.solve(Math.min(...nuage.map((el) => el.y))) || []
-    const choix = choice([true, false])
+    const choix = this.quotaChoice('choix', [true, false])
     this.reponse = choix
       ? Math.max(...nuage.map((el) => el.y))
       : Math.min(...nuage.map((el) => el.y))

@@ -4,7 +4,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { prenomF } from '../../../lib/outils/Personne'
-import { randint } from '../../../modules/outils'
 export const titre = 'Dtéreminer un reste à payer'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -32,7 +31,7 @@ export default class TrouverUnPrix2026 extends ExerciceSimple {
     const P = prenomF()
     const a = this.canOfficielle
       ? 1200 + (annee % 100)
-      : randint(11, 19) * 100 + (annee % 100)
+      : this.quotaRandint('a', 11, 19) * 100 + (annee % 100)
     this.question = `${P} a acheté un scooter électrique coûtant $${texNombre(annee, 0)}$ €.<br> 
             Elle règle $${texNombre(a, 0)}$ € à la livraison du scooter puis règlera la moitié du montant restant le mois suivant. <br>
             Quelle somme lui restera-t-il à payer ensuite pour le dernier versement ?  `

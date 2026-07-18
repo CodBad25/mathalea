@@ -1,6 +1,5 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -27,7 +26,9 @@ export default class ecrireDecimale2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const a = 2026
-    const choix = this.canOfficielle ? true : choice([true, false])
+    const choix = this.canOfficielle
+      ? true
+      : this.quotaChoice('choix', [true, false])
 
     if (choix) {
       this.reponse = texNombre(new Decimal(200).add((a % 100) / 100), 3)

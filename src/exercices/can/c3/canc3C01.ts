@@ -28,8 +28,8 @@ export default class CalculsAutomatiques extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = choice([50, 100, 40, 10, 20, 60, 200, 1000, 500])
-    if (choice([true, false])) {
+    const a = this.quotaChoice('a', [50, 100, 40, 10, 20, 60, 200, 1000, 500])
+    if (this.quotaChoice('estDoubleTripleOuDix', [true, false])) {
       switch (choice([1, 2, 3])) {
         case 1:
           this.reponse = a << 1

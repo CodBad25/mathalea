@@ -3,7 +3,6 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 export const titre = 'Déterminer un chiffre'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -28,8 +27,8 @@ export default class ChiffreADeterminer2026 extends ExerciceSimple {
   nouvelleVersion() {
     const annee = 2026
     const chiffreUnites = annee % 10
-    const u = this.canOfficielle ? 5 : randint(3, 9)
-    const d = this.canOfficielle ? 2 : randint(1, 9)
+    const u = this.canOfficielle ? 5 : this.quotaRandint('u', 3, 9)
+    const d = this.canOfficielle ? 2 : this.quotaRandint('d', 1, 9)
     const nbre = d * 10 + u
     this.question = `Le chiffre des unités de $${texNombre(annee)}+${nbre}$ est : `
     if (u < 10 - chiffreUnites) {

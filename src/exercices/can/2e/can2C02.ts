@@ -1,4 +1,3 @@
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
@@ -33,11 +32,11 @@ export default class CalculAstucieuxAvecDifferenceCarre extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = randint(15, 40)
+    const a = this.quotaRandint('a', 15, 40)
 
     if (context.isAmc) this.versionQcm = false
     const b = this.versionQcm ? a + randint(1, 2) : a + 1
-    if (choice([true, false])) {
+    if (this.quotaChoice('ordre', [true, false])) {
       this.question = this.versionQcm
         ? `$${b}^2-${a}^2$ est égal à : `
         : `Calculer $${b}^2-${a}^2$.`

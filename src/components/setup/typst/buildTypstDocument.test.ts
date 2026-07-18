@@ -38,7 +38,7 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('#set page(paper: "a4"')
     expect(code).toContain("Fiche d'exercices")
     // banque exercise-bank : énoncé et correction regroupés
-    expect(code).toContain('#import "@preview/exercise-bank:0.5.2"')
+    expect(code).toContain('#import "@preview/exercise-bank:0.6.0"')
     expect(code).toContain('#let ex1 = exo.with(')
     expect(code).toContain('id: "6e23-1",')
     expect(code).toContain('exercise: [')
@@ -450,21 +450,19 @@ describe('buildTypstDocument', () => {
       [exercise({ url, questions: ['$1+1$'] })],
       { ...defaultTypstDocumentOptions, showQrCode: true },
     )
-    expect(withQr).toContain('#import "@preview/tiaoma:0.3.0"')
-    // le QR-code est dans une cellule de grille réservée (jamais par-dessus
-    // le texte), pas dans un #place hors flux
-    expect(withQr).toContain('#grid(columns: (1fr, auto)')
-    // QR-code cliquable dans le PDF (#link vers la même URL)
-    expect(withQr).toContain(
-      `#link("${url}", tiaoma.qrcode("${url}", height: 1.8cm))`,
-    )
+    // depuis exercise-bank 0.6.0, le QR-code est un paramètre de exo.with(...)
+    // (le paquet le génère et le place lui-même, plus besoin de tiaoma)
+    expect(withQr).toContain(`  qr: "${url}",`)
+    expect(withQr).toContain(`  qr-size: 1.8cm,`)
+    expect(withQr).not.toContain('tiaoma')
     expect(withQr).not.toContain('#place(')
 
-    // absent par défaut, et sans le paquet tiaoma
+    // absent par défaut
     const withoutQr = buildTypstDocument([
       exercise({ url, questions: ['$1+1$'] }),
     ])
-    expect(withoutQr).not.toContain('tiaoma')
+    expect(withoutQr).not.toContain('qr:')
+    expect(withoutQr).not.toContain('qr-size')
 
     // en mode fusionné, il n'y a pas de bloc par exercice : pas de QR-code
     const merged = buildTypstDocument([exercise({ url, questions: ['$1+1$'] })], {
@@ -472,7 +470,20 @@ describe('buildTypstDocument', () => {
       showQrCode: true,
       mergeExercises: true,
     })
-    expect(merged).not.toContain('tiaoma')
+    expect(merged).not.toContain('qr:')
+  })
+
+  it('active breather (espaces verticaux automatiques) par défaut', () => {
+    const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
+    expect(code).toContain('#import "@preview/breather:0.1.0": breathe')
+    expect(code).toContain('#show: breathe')
+
+    const without = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      autoVerticalSpacing: false,
+    })
+    expect(without).not.toContain('breather')
+    expect(without).not.toContain('#show: breathe')
   })
 
   describe('fusion locale (bouton de la palette)', () => {

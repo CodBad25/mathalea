@@ -27,7 +27,7 @@ export default class entierDansIntervalle extends ExerciceSimple {
   nouvelleVersion() {
     const crochet1 = choice([']', '['])
     const crochet2 = choice([']', '['])
-    if (choice([true, false])) {
+    if (this.quotaChoice('choix', [true, false])) {
       this.question = `Quel est le plus grand entier relatif appartenant à l'intervalle $${crochet1} ${texNombre(-2025, 0)}\\,;\\,${texNombre(2025, 0)}${crochet2}$ ? `
       this.correction = `Le second crochet  étant ${crochet2 === ']' ? 'fermé' : 'ouvert'}, c'est $${miseEnEvidence(`${texNombre(crochet2 === ']' ? 2025 : 2024, 0)}`)}$.`
       this.reponse = `${crochet2 === ']' ? '2025' : '2024'}`

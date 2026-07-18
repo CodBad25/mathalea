@@ -3,7 +3,6 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = ''
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -33,7 +32,7 @@ export default class CalculDizCent2026 extends ExerciceSimple {
     const d = annee % 10
     const m = this.canOfficielle
       ? 'dizaines'
-      : choice(['centaines', 'dizaines'])
+      : this.quotaChoice('m', ['centaines', 'dizaines'])
     const n = a * 1000 + b * 100 + c * 10 + d
     this.question = `Quel est le nombre entier de ${m} dans $${texNombre(n)}$ ? `
     if (m === 'centaines') {

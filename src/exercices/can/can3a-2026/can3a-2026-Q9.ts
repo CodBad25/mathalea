@@ -26,9 +26,9 @@ export default class Can32026Q9 extends ExerciceCan {
 
   enonce(a?: number, b?: number, c?: number) {
     if (a == null || b == null || c == null) {
-      a = randint(2, 4)
+      a = this.quotaRandint('a', 2, 4)
       b = randint(5, 9 - a)
-      c = randint(5, 9)
+      c = this.quotaRandint('c', 5, 9)
     }
 
     this.reponse = a + b * c

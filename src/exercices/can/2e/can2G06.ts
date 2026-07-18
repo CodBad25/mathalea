@@ -50,7 +50,7 @@ export default class CoeffDirecteurDroite extends ExerciceSimple {
 
   nouvelleVersion() {
     switch (
-      choice([1, 2, 3, 4, 4, 5, 5, 6, 6]) //
+      this.quotaChoice('type', [1, 2, 3, 4, 4, 5, 5, 6, 6]) //
     ) {
       case 1:
         {

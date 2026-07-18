@@ -1,4 +1,4 @@
-import MultiplierDecimauxPar101001000 from '../6e/6C30-1'
+import MultiplierDecimauxPar101001000 from '../6e/_MultiplierDecimauxPar101001000'
 export const titre = 'Multiplier un nombre décimal par 10, 100 ou 1 000'
 export const amcReady = true
 export const amcType = 'AMCNum'
@@ -14,7 +14,7 @@ export const dateDeModifImportante = '11/02/2025'
 export const uuid = '7fa0e'
 
 export const refs = {
-  'fr-fr': ['CM2N3G-2'],
+  'fr-fr': ['CM2N3G-2', 'auto5N1E-2'],
   'fr-2016': ['c3C30'],
   'fr-ch': [],
 }

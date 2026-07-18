@@ -3,7 +3,6 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 export const titre = 'Calculer une somme/différence'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -25,7 +24,7 @@ export default class CalculDivers extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (randint(1, 7)) {
+    switch (this.quotaRandint('choix', 1, 7)) {
       case 1:
         this.question = `Combien vaut $${texNombre(2025)} + 20 + 5$ ?`
         this.reponse = 2050

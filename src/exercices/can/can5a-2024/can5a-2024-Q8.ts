@@ -3,7 +3,6 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Faire une somme avec des fractions décimales'
@@ -32,14 +31,14 @@ export default class NomExercice extends ExerciceSimple {
       this.question = `Écriture décimale de : <br> $205+\\dfrac{3}{100}+\\dfrac{7}{${texNombre(1000)}}$ `
       this.correction = `$205+\\dfrac{3}{100}+\\dfrac{7}{${texNombre(1000)}}=205+0,3+0,007=${miseEnEvidence('205,037')}$`
     } else {
-      const u = randint(21, 99)
-      const a = randint(1, 9)
-      const c = randint(1, 9)
+      const u = this.quotaRandint('u', 21, 99)
+      const a = this.quotaRandint('a', 1, 9)
+      const c = this.quotaRandint('c', 1, 9)
       const partieDec1 = new Decimal(a).div(100)
       const partieDec2 = new Decimal(c).div(1000)
       const partieDec3 = new Decimal(a).div(10)
 
-      if (choice([true, false])) {
+      if (this.quotaChoice('cas', [true, false])) {
         if (choice([true, false])) {
           this.question = `Écriture décimale de : <br> $${u}+\\dfrac{${a}}{100}+\\dfrac{${c}}{${texNombre(1000, 0)}}$ `
           this.correction = `$${u}+\\dfrac{${a}}{100}+\\dfrac{${c}}{${texNombre(1000, 0)}}=${u}+${texNombre(a / 100)}+${texNombre(c / 1000, 3)}=${miseEnEvidence(texNombre(u + a / 100 + c / 1000, 3))}$`

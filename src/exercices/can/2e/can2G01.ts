@@ -62,7 +62,7 @@ export default class AgrandissementReductionGFraction extends ExerciceSimple {
       [9, 10],
     ] // Couples de nombres premiers entre eux
     let n, d, fraction
-    switch (choice(['a', 'b'])) {
+    switch (this.quotaChoice('type', ['a', 'b'])) {
       case 'a':
         fraction = choice(listeFractions)
         n = fraction[0]
