@@ -35,7 +35,7 @@ export const dateDeModifImportante = '17/02/2025'
 export const uuid = 'e90ee'
 
 export const refs = {
-  'fr-fr': ['6N5-11'],
+  'fr-fr': ['6N5-11', '5N1D-1'],
   'fr-2016': ['6C32-1'],
   'fr-ch': ['9FA3-8'],
 }
@@ -577,8 +577,18 @@ export default class ExerciceProblemesComplexes extends Exercice {
       if (this.interactif) {
         const lettres = 'abcdefghijklmnopqrstuvwxyz'
 
-        const dataOptions: Record<string, any> = {}
-        const answers: Record<string, any> = {}
+        interface ChampOptions {
+          keyboard: string | undefined
+          texteApres: string
+        }
+
+        interface ChampAnswer {
+          value: string
+          options: OptionsComparaisonType
+        }
+
+        const dataOptions: Record<string, ChampOptions> = {}
+        const answers: Record<string, ChampAnswer> = {}
 
         const lignes = []
 

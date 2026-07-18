@@ -31,7 +31,7 @@ export const dateDePublication = '26/05/2025'
 export const uuid = 'a1378'
 
 export const refs = {
-  'fr-fr': ['6N5-7'],
+  'fr-fr': ['6N5-7', '5N1D-3'],
   'fr-2016': ['6C12-7'],
   'fr-ch': [],
 }
@@ -75,7 +75,6 @@ export default class ProblemesAvec4Opérations extends Exercice {
     for (
       let i = 0, texte, texteCorr, prixTartelettes, prixPains, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const n = precisions[i] as number
       switch (
