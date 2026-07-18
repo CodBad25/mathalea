@@ -346,6 +346,7 @@ export type InteractivityType =
   | 'guide-ane' // Non compatible AMC
   | 'demi-droite-interactive'
   | 'blockly-editor'
+  | 'tableau-signes-variations' // Non compatible AMC
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -368,7 +369,29 @@ export function isInteractivityType(
     value === 'interactive-clock' ||
     value === 'guide-ane' ||
     value === 'demi-droite-interactive' ||
-    value === 'blockly-editor'
+    value === 'blockly-editor' ||
+    value === 'tableau-signes-variations'
+  )
+}
+
+/**
+ * Types d'interactivité correspondant à un MathaleaCustomElement qui gère sa propre
+ * autoCorrection (comme un qcm) : un exercice simple utilisant l'un de ces formats
+ * n'a donc pas besoin de renseigner this.reponse.
+ */
+export function isMathaleaCustomElementFormat(value: unknown): boolean {
+  return (
+    value === 'liste-deroulante' ||
+    value === 'my-spreadsheet' ||
+    value === 'MetaInteractif2d' ||
+    value === 'svg-selection' ||
+    value === 'multi-mathfield' ||
+    value === 'trigo-circle-selection' ||
+    value === 'interactive-clock' ||
+    value === 'guide-ane' ||
+    value === 'demi-droite-interactive' ||
+    value === 'blockly-editor' ||
+    value === 'tableau-signes-variations'
   )
 }
 
