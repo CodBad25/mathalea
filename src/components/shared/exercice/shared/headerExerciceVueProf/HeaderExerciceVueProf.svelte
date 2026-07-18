@@ -209,16 +209,14 @@
           </button>
         {/if}
         <button
-          class="mx-2 tooltip tooltip-left"
+          class="mx-2 tooltip tooltip-left {randomReady ? '' : 'hidden'}"
           data-tip="Nouvel énoncé"
           type="button"
           aria-label="Nouvel énoncé"
           on:click={newData}
         >
           <i
-            class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-refresh {randomReady
-              ? ''
-              : 'hidden'}"
+            class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-refresh"
           ></i>
         </button>
         {#if isHidable}
