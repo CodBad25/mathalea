@@ -10,6 +10,7 @@ export const listOfCustomElements = [
   'svg-selection',
   'demi-droite-interactive',
   'trigo-circle-selection',
+  'tableau-signes-variations',
 ]
 
 /**

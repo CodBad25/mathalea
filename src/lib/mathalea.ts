@@ -20,6 +20,7 @@ import {
   type InterfaceParams,
   type Valeur,
   isAnswerValueType,
+  isMathaleaCustomElementFormat,
   isValeur,
 } from '../lib/types'
 import { context } from '../modules/context'
@@ -1069,9 +1070,12 @@ export function mathaleaHandleExerciceSimple(
           }
         }
       } else {
-        if (exercice.formatInteractif !== 'qcm')
+        if (
+          exercice.formatInteractif !== 'qcm' &&
+          !isMathaleaCustomElementFormat(exercice.interactifType)
+        )
           window.notify(
-            "Un exercice simple doit avoir un this.reponse sauf si c'est un qcm",
+            "Un exercice simple doit avoir un this.reponse sauf si c'est un qcm ou un MathaleaCustomElement avec sa propre autoCorrection",
             { exercice: JSON.stringify(exercice) },
           )
       }

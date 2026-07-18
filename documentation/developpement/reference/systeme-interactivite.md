@@ -31,6 +31,7 @@ Les custom elements maison sont désormais centralisés dans `src/lib/customElem
 | `demi-droite-interactive` | Pour placer des points d'abscisses fractionnaires        | `src/lib/customElements/demi_droite_interactive.ts`, `DemiDroiteInteractiveElement.verifQuestion()`    |
 | `interactive-clock`       | Une horloge interactive                                  | `src/lib/customElements/InteractiveClock.ts`, `InteractiveClock.verifQuestion()`                       |
 | `trigo-circle-selection`  | Un cercle trigo interactif                               | `src/lib/customElements/TrigoCircleSelectionElement.ts`, `TrigoCircleSelectionElement.verifQuestion()` |
+| `tableau-signes-variations` | Tableau de signes/variations interactif, export tkz-tab en LaTeX | `src/lib/customElements/TableauSignesVariationsElement.ts`, `TableauSignesVariationsElement.verifQuestion()` |
 
 ## Réponses attendues
 
@@ -78,6 +79,7 @@ Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métie
 | `trigo-circle-selection`                                 | `TrigCircleSelectionElement.verifQuestion()` dans `src/lib/customElements/TrigoCircleSelectionElement.ts`                                                       |
 | `demi-droite-interactive`                                | `DemiDroiteInteractiveElement.verifQuestion()` dans `src/lib/customElements/demi_droite_interactive.ts`                                                         |
 | `interactive-clock`                                      | `InteractiveClock.verifQuestion()` dans `src/lib/customElements/InteractiveClock.ts`                                                                            |
+| `tableau-signes-variations`                              | `TableauSignesVariationsElement.verifQuestion()` dans `src/lib/customElements/TableauSignesVariationsElement.ts`                                                |
 | `cliqueFigure`                                           | `verifQuestionCliqueFigure()` dans `src/lib/interactif/cliqueFigure.ts`                                                                                         |
 | `custom`                                                 | correction globale de l'exercice quand `exercice.interactifType === 'custom'`, ou fonction `correctionInteractives` à l'index de question pour un méta-exercice |
 
