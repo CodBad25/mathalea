@@ -94,6 +94,7 @@
     uuid={paramsExercice.uuid}
     zoomFactor={$globalOptions.z ?? '1'}
     isSolutionAccessible={!!$globalOptions.isSolutionAccessible}
+    vue={$globalOptions.v}
     on:exerciseRemoved
   />
 {:else if exerciseType === 'html'}

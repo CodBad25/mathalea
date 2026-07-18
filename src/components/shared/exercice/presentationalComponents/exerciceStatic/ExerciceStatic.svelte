@@ -1,5 +1,7 @@
 <script lang="ts">
   import HeaderExerciceVueProf from '../../shared/headerExerciceVueProf/HeaderExerciceVueProf.svelte'
+  import HeaderExerciceVueEleve from '../shared/HeaderExerciceVueEleve.svelte'
+  import ButtonTextAction from '../../../forms/ButtonTextAction.svelte'
   import {
     computeStaticExercicePngUrls,
     retrieveResourceFromUuid,
@@ -18,7 +20,10 @@
 
   import referentielBibliotheque from '../../../../../json/referentielBibliotheque.json'
   import { referentielMathadata } from '../../../../../lib/components/mathadataReferentiel'
+  import { isMenuNeededForExercises } from '../../../../../lib/stores/generalStore'
+  import { globalOptions } from '../../../../../lib/stores/globalOptions'
   import type { HeaderProps } from '../../../../../lib/types/ui'
+  import type { VueType } from '../../../../../lib/VueType'
   // on rassemble les deux référentiel statique
   const allStaticReferentiels: JSONReferentielObject = {
     ...referentielBibliotheque,
@@ -39,6 +44,9 @@
   export let indiceLastExercice: number
   export let zoomFactor: string
   export let isSolutionAccessible: boolean
+  export let vue: VueType | undefined = undefined
+  const isVueEleve =
+    vue === 'eleve' || vue === 'myriade' || vue === 'indices' || vue === 'indice'
   const foundResource = retrieveResourceFromUuid(allStaticReferentiels, uuid)
   const exercice = computeStaticExercicePngUrls(foundResource)
   const resourceToDisplay =
@@ -47,10 +55,22 @@
       : null
   let isCorrectionVisible = false
   let isContentVisible = true
+  let title = ''
+  if (resourceToDisplay !== null) {
+    if (resourceHasPlace(resourceToDisplay)) {
+      title = `${resourceToDisplay.typeExercice.toUpperCase()} ${
+        resourceToDisplay.mois || ''
+      } ${resourceToDisplay.annee} ${resourceToDisplay.lieu} ${resourceToDisplay.jour || ''} Ex ${resourceToDisplay.numeroInitial}`
+    } else if ('titre' in resourceToDisplay && resourceToDisplay.titre) {
+      title = resourceToDisplay.titre
+    } else {
+      title = resourceToDisplay.uuid
+    }
+  }
   let headerExerciceProps: HeaderProps
   if (resourceToDisplay !== null) {
     headerExerciceProps = {
-      title: '',
+      title,
       id: '',
       isInteractif: false,
       settingsReady: false,
@@ -61,15 +81,6 @@
       randomReady: false,
       correctionReady: isSolutionAccessible,
     }
-    if (resourceHasPlace(resourceToDisplay)) {
-      headerExerciceProps.title = `${resourceToDisplay.typeExercice.toUpperCase()} ${
-        resourceToDisplay.mois || ''
-      } ${resourceToDisplay.annee} ${resourceToDisplay.lieu} ${resourceToDisplay.jour || ''} Ex ${resourceToDisplay.numeroInitial}`
-    } else if ('titre' in resourceToDisplay && resourceToDisplay.titre) {
-      headerExerciceProps.title = resourceToDisplay.titre
-    } else {
-      headerExerciceProps.title = resourceToDisplay.uuid
-    }
   }
 
   let noCorrectionAvailable = false
@@ -79,19 +90,42 @@
   }
 </script>
 
-<HeaderExerciceVueProf
-  {...headerExerciceProps}
-  {indiceExercice}
-  {indiceLastExercice}
-  on:clickCorrection={(event) => {
-    isCorrectionVisible = event.detail.isCorrectionVisible
-  }}
-  on:clickVisible={(event) => {
-    isContentVisible = event.detail.isVisible
-    isCorrectionVisible = event.detail.isVisible
-  }}
-  on:exerciseRemoved
-/>
+{#if isVueEleve}
+  <HeaderExerciceVueEleve
+    {title}
+    {indiceExercice}
+    showNumber={indiceLastExercice > 0 &&
+      $globalOptions.presMode !== 'un_exo_par_page'}
+    isMenuNeededForExercises={$isMenuNeededForExercises}
+    presMode={$globalOptions.presMode}
+    seed={undefined}
+  />
+  {#if isSolutionAccessible}
+    <div class="flex flex-row items-center ml-2 mb-2">
+      <ButtonTextAction
+        text={isCorrectionVisible ? 'Masquer la correction' : 'Voir la correction'}
+        icon={isCorrectionVisible ? 'bx-hide' : 'bx-show'}
+        class="py-[2px] px-2 text-[0.7rem]"
+        inverted={true}
+        on:click={() => (isCorrectionVisible = !isCorrectionVisible)}
+      />
+    </div>
+  {/if}
+{:else}
+  <HeaderExerciceVueProf
+    {...headerExerciceProps}
+    {indiceExercice}
+    {indiceLastExercice}
+    on:clickCorrection={(event) => {
+      isCorrectionVisible = event.detail.isCorrectionVisible
+    }}
+    on:clickVisible={(event) => {
+      isContentVisible = event.detail.isVisible
+      isCorrectionVisible = event.detail.isVisible
+    }}
+    on:exerciseRemoved
+  />
+{/if}
 
 <div class="p-4">
   {#if isContentVisible}
