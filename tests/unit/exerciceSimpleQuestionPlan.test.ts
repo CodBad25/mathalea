@@ -1,6 +1,8 @@
 import seedrandom from 'seedrandom'
 import { describe, expect, it } from 'vitest'
 import ExerciceSimple from '../../src/exercices/ExerciceSimple'
+import { choice } from '../../src/lib/outils/arrayOutils'
+import { randint } from '../../src/modules/outils'
 
 type Niveau = 'facile' | 'difficile'
 
@@ -181,5 +183,49 @@ describe('ExerciceSimple.quotaRandint', () => {
     }
     expect(exercice.valeursTirees).not.toContain(2)
     expect([...new Set(exercice.valeursTirees)].sort()).toEqual([1, 3, 4])
+  })
+})
+
+describe('ExerciceSimple.quotaChoice / quotaRandint sur un exercice à une seule question', () => {
+  it("quotaChoice retombe sur choice(), pour ne pas changer les liens déjà générés", () => {
+    class ExerciceUneQuestion extends ExerciceSimple {
+      constructor() {
+        super()
+        this.nbQuestions = 1
+      }
+
+      nouvelleVersion() {
+        // ne consomme rien avant l'appel testé
+      }
+    }
+    const exercice = new ExerciceUneQuestion()
+    exercice.reinit()
+    seedrandom('graine1', { global: true })
+    const valeurQuota = exercice.quotaChoice('a', [6, 7, 8, 9])
+
+    seedrandom('graine1', { global: true })
+    const valeurChoice = choice([6, 7, 8, 9])
+
+    expect(valeurQuota).toBe(valeurChoice)
+  })
+
+  it("quotaRandint retombe sur randint(), pour ne pas changer les liens déjà générés", () => {
+    class ExerciceUneQuestion extends ExerciceSimple {
+      constructor() {
+        super()
+        this.nbQuestions = 1
+      }
+
+      nouvelleVersion() {}
+    }
+    const exercice = new ExerciceUneQuestion()
+    exercice.reinit()
+    seedrandom('graine1', { global: true })
+    const valeurQuota = exercice.quotaRandint('n', 1, 9, [5])
+
+    seedrandom('graine1', { global: true })
+    const valeurRandint = randint(1, 9, [5])
+
+    expect(valeurQuota).toBe(valeurRandint)
   })
 })

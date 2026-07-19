@@ -42,6 +42,7 @@
     type TypstCarryOver,
     type TypstDocumentOptions,
     type TypstExerciseInput,
+    type WritingLinesPosition,
   } from './buildTypstDocument'
   import TypstLayoutOverlay, {
     type OverlayWidget,
@@ -255,6 +256,11 @@
       : null
   /** Surcharges de code Typst par exercice (modale d'édition), lues dans le code */
   let codeOverrideValues: Record<number, string> = {}
+  /** Lignes en pointillés réglées par exercice (palette), lues dans le code */
+  let writingLinesValues: Record<
+    number,
+    { position: WritingLinesPosition; count: number; spacing: number }
+  > = {}
   /** Numéro de l'exercice dont la modale d'édition du code Typst est ouverte */
   let codeEditNum: number | null = null
   /** Brouillon de la modale d'édition du code Typst */
@@ -323,6 +329,7 @@
     insertionValues = harvested.insertions ?? {}
     mergedExercises = harvested.merges ?? []
     codeOverrideValues = harvested.codeOverrides ?? {}
+    writingLinesValues = harvested.writingLines ?? {}
     const columns = code.match(/^#let colonnes = (\d+)/m)
     documentColumns = columns != null ? Number(columns[1]) : 1
     const figureZoom: Record<number, number> = {}
@@ -498,7 +505,13 @@
       if (n === removed) continue
       codeOverrides[n > removed ? n - 1 : n] = value
     }
-    return { tasksLayout, insertions, merges, codeOverrides }
+    const writingLines: NonNullable<typeof carryOver.writingLines> = {}
+    for (const [key, value] of Object.entries(carryOver.writingLines ?? {})) {
+      const n = Number(key)
+      if (n === removed) continue
+      writingLines[n > removed ? n - 1 : n] = value
+    }
+    return { tasksLayout, insertions, merges, codeOverrides, writingLines }
   }
 
   /** Retire l'exercice num de la fiche et régénère le code */
@@ -548,7 +561,11 @@
     for (const [key, value] of Object.entries(carryOver.codeOverrides ?? {})) {
       codeOverrides[swapNum(Number(key))] = value
     }
-    return { tasksLayout, insertions, merges, codeOverrides }
+    const writingLines: NonNullable<typeof carryOver.writingLines> = {}
+    for (const [key, value] of Object.entries(carryOver.writingLines ?? {})) {
+      writingLines[swapNum(Number(key))] = value
+    }
+    return { tasksLayout, insertions, merges, codeOverrides, writingLines }
   }
 
   /** Échange l'exercice num avec son voisin (delta : -1 monter, 1 descendre) */
@@ -678,6 +695,37 @@
     carryOver.merges = merges.includes(num)
       ? merges.filter((n) => n !== num)
       : [...merges, num]
+    const [primary, ...extraVersions] = buildAllVersionInputs()
+    const code = buildTypstDocument(
+      primary,
+      documentOptions,
+      carryOver,
+      extraVersions,
+    )
+    setEditorContent(code)
+    scheduleCompile(code, 0)
+  }
+
+  /**
+   * Règle (ou retire, `value` null) les lignes en pointillés de l'exercice
+   * num. Régénère le code (comme la fusion) plutôt que d'éditer le texte :
+   * le passage à « après chaque question » change la structure du document
+   * (les appels s'intercalent après chaque item de la liste `tasks`).
+   */
+  function setWritingLines(
+    num: number,
+    value: {
+      position: WritingLinesPosition
+      count: number
+      spacing: number
+    } | null,
+  ) {
+    if (!confirmOverwrite()) return
+    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
+    const writingLines = { ...(carryOver.writingLines ?? {}) }
+    if (value == null) delete writingLines[num]
+    else writingLines[num] = value
+    carryOver.writingLines = writingLines
     const [primary, ...extraVersions] = buildAllVersionInputs()
     const code = buildTypstDocument(
       primary,
@@ -1282,11 +1330,13 @@
   }
 
   /**
-   * Récupère les images (PNG) des exercices statiques (annales scannées) et
-   * les charge dans le compilateur Typst (système de fichiers virtuel), pour
+   * Récupère les images référencées par un `<img>` dans le contenu HTML de
+   * n'importe quel exercice (pas seulement les annales scannées) et les
+   * charge dans le compilateur Typst (système de fichiers virtuel), pour
    * qu'elles s'affichent dans l'aperçu au lieu d'un encart « non convertie ».
-   * Une image dont la récupération échoue reste absente du registre : elle
-   * s'affiche alors comme un encart, sans bloquer le reste de la fiche.
+   * Une image dont la récupération échoue (réseau, ou hôte n'autorisant pas
+   * le CORS) reste absente du registre : elle s'affiche alors comme un
+   * encart, sans bloquer le reste de la fiche.
    */
   /**
    * Récrit une URL `https://coopmaths.fr/alea/...` en URL de même origine
@@ -1301,12 +1351,25 @@
       : url
   }
 
+  /** Extensions d'image reconnues par Typst pour le chemin virtuel du fichier */
+  const KNOWN_IMAGE_EXTENSIONS = new Set(['png', 'jpg', 'jpeg', 'gif', 'webp'])
+
   async function prefetchStaticImages() {
+    // régénère chaque exercice (avec context.isTypst, comme le fera buildCode()
+    // juste après) : pour un exercice non « statique » (dont son contenu est
+    // déjà figé par buildExercisesList), consigne/listeQuestions sont encore
+    // vides à ce stade, nouvelleVersion() n'ayant pas encore tourné — sans
+    // cette passe, aucun <img> ne serait trouvé. Idempotent (reseed
+    // déterministe par exercise.seed) : regenerate() est rappelée par
+    // buildCode() juste après sans changer son résultat.
+    for (const k of exercises.keys()) regenerate(k)
+
     const urls = new Set<string>()
     const imgSrc = /<img[^>]*\ssrc=["']([^"']+)["']/gi
     for (const exercise of exercises) {
-      if (exercise == null || exercise.typeExercice !== 'statique') continue
+      if (exercise == null) continue
       const html = [
+        exercise.consigne,
         ...(exercise.listeQuestions ?? []),
         ...(exercise.listeCorrections ?? []),
       ].join('')
@@ -1319,11 +1382,15 @@
     await Promise.all(
       [...urls].map(async (url, i) => {
         try {
-          bytes.set(
-            `/static-img-${i}.png`,
-            await cachedBytes(toSameOriginUrl(url)),
-          )
-          paths.set(url, `/static-img-${i}.png`)
+          // le chemin virtuel doit porter la vraie extension : Typst détermine
+          // le format d'une image d'après l'extension de son chemin (`format:
+          // auto`), une image JPEG enregistrée sous un chemin `.png` échoue au
+          // décodage
+          const rawExt = /\.([a-z0-9]+)(?:[?#]|$)/i.exec(url)?.[1]?.toLowerCase()
+          const ext = rawExt != null && KNOWN_IMAGE_EXTENSIONS.has(rawExt) ? rawExt : 'png'
+          const path = `/static-img-${i}.${ext}`
+          bytes.set(path, await cachedBytes(toSameOriginUrl(url)))
+          paths.set(url, path)
         } catch {
           // image indisponible : elle apparaîtra comme un encart
         }
@@ -2011,6 +2078,8 @@
                   onOpenSettings={openSettings}
                   onEditCode={openCodeEdit}
                   onToggleMergeBefore={toggleMergeBefore}
+                  {writingLinesValues}
+                  onSetWritingLines={setWritingLines}
                 />
               {/if}
             </div>
@@ -2076,7 +2145,7 @@
           automatiquement.
         </p>
         <textarea
-          class="h-64 w-full rounded border border-gray-300 p-2 font-mono text-xs"
+          class="h-64 w-full rounded border border-gray-300 bg-coopmaths-canvas p-2 font-mono text-xs text-coopmaths-corpus dark:border-coopmathsdark-corpus-lightest dark:bg-coopmathsdark-canvas dark:text-coopmathsdark-corpus"
           bind:value={codeEditDraft}
           on:keydown={(e) => {
             if (e.key === 'Escape') codeEditNum = null

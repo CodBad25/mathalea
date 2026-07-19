@@ -1,5 +1,6 @@
-import { combinaisonListes } from '../lib/outils/arrayOutils'
+import { choice, combinaisonListes } from '../lib/outils/arrayOutils'
 import type { IExerciceQcmOptions } from '../lib/types'
+import { randint } from '../modules/outils'
 import Exercice from './Exercice'
 
 export default class ExerciceSimple extends Exercice {
@@ -75,8 +76,13 @@ export default class ExerciceSimple extends Exercice {
    * Pour contrôler conjointement plusieurs variables, donner une `key` différente à chaque
    * appel (les plans sont indépendants), ou passer par fromQuestionPlan() si les variables
    * doivent être liées entre elles.
+   *
+   * Sur un exercice à une seule question, la répartition n'a pas de sens : on retombe alors
+   * sur choice(), pour ne pas changer les valeurs (et donc les liens) déjà produites par les
+   * exercices qui utilisaient choice() avant d'adopter quotaChoice().
    */
   quotaChoice<T>(key: string, values: T[]): T {
+    if (this.nbQuestions <= 1) return choice(values)
     return this.fromQuestionPlan(key, (nbQuestions) =>
       combinaisonListes(values, nbQuestions),
     )
@@ -90,6 +96,10 @@ export default class ExerciceSimple extends Exercice {
    *
    * `listeAEviter` retire certaines valeurs de l'intervalle avant répartition, comme le
    * `listeAEviter` de randint().
+   *
+   * Sur un exercice à une seule question, la répartition n'a pas de sens : on retombe alors
+   * sur randint(), pour ne pas changer les valeurs (et donc les liens) déjà produites par les
+   * exercices qui utilisaient randint() avant d'adopter quotaRandint().
    */
   quotaRandint(
     key: string,
@@ -97,6 +107,7 @@ export default class ExerciceSimple extends Exercice {
     max: number,
     listeAEviter: number[] = [],
   ): number {
+    if (this.nbQuestions <= 1) return randint(min, max, listeAEviter)
     return this.fromQuestionPlan(key, (nbQuestions) => {
       const values: number[] = []
       for (let i = min; i <= max; i++) {

@@ -3649,5 +3649,29 @@
   },
   "5I1": {
     "titre": "La pensée informatique"
+  },
+  "EgaliteFG1-6e": {
+    "titre": "Sixième"
+  },
+  "EgaliteFG2-5e": {
+    "titre": "Cinquième"
+  },
+  "EgaliteFG3-4e": {
+    "titre": "Quatrième"
+  },
+  "EgaliteFG4-3e": {
+    "titre": "Troisième"
+  },
+  "EgaliteFG5-2de": {
+    "titre": "Seconde"
+  },
+  "EgaliteFG6-1e": {
+    "titre": "Première"
+  },
+  "EgaliteFG7-Tle": {
+    "titre": "Terminale"
+  },
+  "Portraits": {
+    "titre": "Portraits"
   }
 }

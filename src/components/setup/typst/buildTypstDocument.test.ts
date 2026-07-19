@@ -486,6 +486,145 @@ describe('buildTypstDocument', () => {
     expect(without).not.toContain('#show: breathe')
   })
 
+  describe('lignes en pointillés (writingLines, réglage par exercice)', () => {
+    it("n'ajoute rien par défaut", () => {
+      const code = buildTypstDocument([
+        exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
+      ])
+      expect(code).not.toContain('mathalea-lignes')
+    })
+
+    it('ajoute le bloc de lignes après cet exercice (endOfExercise)', () => {
+      const code = buildTypstDocument(
+        [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })],
+        defaultTypstDocumentOptions,
+        {
+          writingLines: {
+            1: { position: 'endOfExercise', count: 4, spacing: 1.5 },
+          },
+        },
+      )
+      expect(code).toContain('#let mathalea-lignes(n, gutter: 2em)')
+      expect(code).toContain(
+        '#mathalea-lignes(4, gutter: 1.5em) // mathalea:lignes-fin(1)',
+      )
+      // une seule occurrence : le bloc suit l'environnement tasks, pas chaque question
+      expect(code.match(/#mathalea-lignes\(/g)).toHaveLength(1)
+    })
+
+    it("émet l'appel sans rendu visuel quand le compteur est à 0 (valeur de départ de la palette)", () => {
+      const code = buildTypstDocument(
+        [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })],
+        defaultTypstDocumentOptions,
+        {
+          writingLines: {
+            1: { position: 'endOfExercise', count: 0, spacing: 2 },
+          },
+        },
+      )
+      // le marqueur est émis (position retenue par la palette au round-trip)
+      // mais le helper n'affiche rien tant que n vaut 0
+      expect(code).toContain(
+        '#mathalea-lignes(0, gutter: 2em) // mathalea:lignes-fin(1)',
+      )
+      expect(code).toContain('if n > 0 { block(')
+      expect(harvestCarryOver(code).writingLines).toEqual({
+        1: { position: 'endOfExercise', count: 0, spacing: 2 },
+      })
+    })
+
+    it('ajoute le bloc de lignes après chaque question (afterEachQuestion), y compris la dernière', () => {
+      const code = buildTypstDocument(
+        [
+          exercise({
+            questions: ['$1+1$', '$2+2$', '$3+3$'],
+            numbered: true,
+          }),
+        ],
+        defaultTypstDocumentOptions,
+        {
+          writingLines: {
+            1: { position: 'afterEachQuestion', count: 2, spacing: 0.8 },
+          },
+        },
+      )
+      // 3 questions -> 3 blocs de lignes, y compris après la 3e
+      expect(
+        code.match(
+          /#mathalea-lignes\(2, gutter: 0\.8em\) \/\/ mathalea:lignes-apres\(1\)/g,
+        ),
+      ).toHaveLength(3)
+      const lastLinesIndex = code.lastIndexOf('#mathalea-lignes(')
+      const lastQuestionIndex = code.lastIndexOf('$3 + 3$')
+      expect(lastLinesIndex).toBeGreaterThan(lastQuestionIndex)
+    })
+
+    it("n'ajoute pas de lignes dans la correction", () => {
+      const code = buildTypstDocument(
+        [
+          exercise({
+            questions: ['$1+1$', '$2+2$'],
+            corrections: ['$1+1=2$', '$2+2=4$'],
+            numbered: true,
+          }),
+        ],
+        defaultTypstDocumentOptions,
+        { writingLines: { 1: { position: 'endOfExercise', count: 3, spacing: 1 } } },
+      )
+      const correctionSection = code.slice(code.indexOf('solution: ['))
+      expect(correctionSection).not.toContain('mathalea-lignes(')
+    })
+
+    it("n'ajoute pas de bloc après chaque question pour un exercice à question unique", () => {
+      const code = buildTypstDocument(
+        [exercise({ questions: ['$1+1$'] })],
+        defaultTypstDocumentOptions,
+        { writingLines: { 1: { position: 'afterEachQuestion', count: 3, spacing: 1 } } },
+      )
+      expect(code).not.toContain('mathalea-lignes')
+    })
+
+    it('règle chaque exercice indépendamment', () => {
+      const code = buildTypstDocument(
+        [
+          exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
+          exercise({ questions: ['$3+3$', '$4+4$'], numbered: true }),
+        ],
+        defaultTypstDocumentOptions,
+        {
+          writingLines: {
+            2: { position: 'endOfExercise', count: 5, spacing: 2 },
+          },
+        },
+      )
+      expect(
+        code.match(/#mathalea-lignes\(5, gutter: 2em\) \/\/ mathalea:lignes-fin\(2\)/g),
+      ).toHaveLength(1)
+      expect(code).not.toContain('mathalea:lignes-fin(1)')
+    })
+
+    it('harvestCarryOver relit les réglages par exercice (round-trip)', () => {
+      const code = buildTypstDocument(
+        [
+          exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
+          exercise({ questions: ['$3+3$', '$4+4$', '$5+5$'], numbered: true }),
+        ],
+        defaultTypstDocumentOptions,
+        {
+          writingLines: {
+            1: { position: 'endOfExercise', count: 4, spacing: 1.5 },
+            2: { position: 'afterEachQuestion', count: 2, spacing: 0.8 },
+          },
+        },
+      )
+      const harvested = harvestCarryOver(code)
+      expect(harvested.writingLines).toEqual({
+        1: { position: 'endOfExercise', count: 4, spacing: 1.5 },
+        2: { position: 'afterEachQuestion', count: 2, spacing: 0.8 },
+      })
+    })
+  })
+
   describe('fusion locale (bouton de la palette)', () => {
     it("fusionne l'exercice 2 avec le précédent : un seul exo.with, numérotation continue", () => {
       const code = buildTypstDocument(

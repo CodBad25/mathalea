@@ -2,6 +2,7 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/unit/6N5-2.test.ts ⚠️
  */
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -24,8 +25,6 @@ import {
   listeQuestionsToContenu,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   'Résoudre des problèmes de prix avec des aliments mettant en jeu diverses opérations'
@@ -50,7 +49,7 @@ export const dateDePublication = '02/11/2021'
 export const uuid = '4e2b2'
 
 export const refs = {
-  'fr-fr': ['6N5-2', 'BP2CCF4'],
+  'fr-fr': ['6N5-2', 'BP2CCF4', '5N1D-5'],
   'fr-2016': ['6C12-1', 'BP2CCF4'],
   'fr-ch': ['9FA3-6'],
 }
@@ -99,9 +98,11 @@ export default class QuestionsMasses extends Exercice {
         TabPrixUnitaire[kk] = choice(Chiffres, TabPrixUnitaire)
         TabAutrePrix[kk] = choice(Chiffres, TabAutrePrix)
       }
-      typesQuestionsDisponibles.length === 1 && this.nbQuestions === 1
-        ? (this.consigne = 'Répondre à la question suivante.')
-        : (this.consigne = 'Répondre aux questions suivantes.')
+
+      this.consigne =
+        typesQuestionsDisponibles.length === 1 && this.nbQuestions === 1
+          ? 'Répondre à la question suivante.'
+          : 'Répondre aux questions suivantes.'
       let PrixUnitaire
       let AutrePrix
       let PrixReduction

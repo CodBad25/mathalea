@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -15,8 +16,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Résoudre des problèmes de courses au marché'
 export const amcReady = true
@@ -33,7 +32,7 @@ export const dateDeModifImportante = '07/06/2025'
 export const uuid = '96b94'
 
 export const refs = {
-  'fr-fr': ['6N5-9'],
+  'fr-fr': ['6N5-9', '5N1D-7'],
   'fr-2016': ['6C32'],
   'fr-ch': ['9FA3-7'],
 }
@@ -70,7 +69,7 @@ function probleme4(calculFacile: boolean): {
   const schema = new SchemaEnBoite({
     topBraces: [
       {
-        text: `${aliment1} à $${texNombre(prixAliment1, 2)}$ €/kg`,
+        text: `${aliment1} à $${texPrix(prixAliment1)}$ €/kg`,
         start: 1,
         end: 2 * Math.round(masseEnKgDeAliment1) + 1,
         type: 'flèche',
@@ -80,8 +79,8 @@ function probleme4(calculFacile: boolean): {
       {
         spacing: 1,
         barres: [
-          ...range1(Math.round(masseEnKgDeAliment1)).map((el) => ({
-            content: `$${texNombre(prixAliment1, 2)}$ €`,
+          ...range1(Math.round(masseEnKgDeAliment1)).map((_el) => ({
+            content: `$${texPrix(prixAliment1)}$ €`,
             length: 2,
             color: 'lightgray',
           })),
@@ -91,7 +90,7 @@ function probleme4(calculFacile: boolean): {
         barres:
           masseEnGdeAliment2 === 750
             ? [
-                ...range1(3).map((el) => ({
+                ...range1(3).map((_el) => ({
                   content: '$250$ g',
                   length: 2,
                   color: 'lightgray',
@@ -117,13 +116,13 @@ function probleme4(calculFacile: boolean): {
                 ]
               : [
                   {
-                    content: `$${texNombre(masseEnGdeAliment2, 0)}$ g`,
+                    content: `$${texNombre(masseEnGdeAliment2)}$ g`,
                     length: 2,
                     color: 'lightgray',
                   },
                   ...range1(Math.round(1000 / masseEnGdeAliment2 - 1)).map(
-                    (el) => ({
-                      content: `$${texNombre(masseEnGdeAliment2, 0)}$ g`,
+                    (_el) => ({
+                      content: `$${texNombre(masseEnGdeAliment2)}$ g`,
                       length: 2,
                       color: 'white',
                     }),
@@ -133,7 +132,7 @@ function probleme4(calculFacile: boolean): {
     ],
     bottomBraces: [
       {
-        text: `1 kg de ${aliment2} : $${texNombre(prixAliment2, 2)}$ €`,
+        text: `1 kg de ${aliment2} : $${texPrix(prixAliment2)}$ €`,
         start: 1,
         end: masseEnGdeAliment2 === 200 ? 11 : 9,
         type: 'accolade',
@@ -141,20 +140,20 @@ function probleme4(calculFacile: boolean): {
     ],
     rightBraces: [
       {
-        text: `Prix total : $${texNombre(prixTotal, 2)}$ €`,
+        text: `Prix total : $${texPrix(prixTotal)}$ €`,
         start: 2,
         end: 5,
         type: 'accolade',
       },
     ],
   })
-  let texte = `${quidam} achète $${texNombre(masseEnKgDeAliment1, 3)}$ kg de ${aliment1} à $${texPrix(prixAliment1)}$ €/kg `
+  let texte = `${quidam} achète $${texNombre(masseEnKgDeAliment1)}$ kg de ${aliment1} à $${texPrix(prixAliment1)}$ €/kg `
   texte += `et $${texNombre(masseEnGdeAliment2, 0)}$ g de ${aliment2} à $${texPrix(prixAliment2)}$ €/kg. Quel est le prix total à payer ?`
-  let texteCorr = `Prix des ${aliment1} : $${texNombre(masseEnKgDeAliment1, 3)}\\text{ kg} \\times ${texPrix(prixAliment1)}$ €/kg $ = ${texPrix(prixTotalAliment1)}$ €<br>`
-  texteCorr += `Prix du ${aliment2} : $${texNombre(masseEnKgDeAliment2, 3)}\\text{ kg} \\times ${texPrix(prixAliment2)}$ €/kg $${egalOuApprox(prixTotalAliment2, 2)} ${texPrix(prixTotalAliment2)}$ €<br>`
+  let texteCorr = `Prix des ${aliment1} : $${texNombre(masseEnKgDeAliment1)}\\text{ kg} \\times ${texPrix(prixAliment1)}$ €/kg $ = ${texPrix(prixTotalAliment1)}$ €<br>`
+  texteCorr += `Prix du ${aliment2} : $${texNombre(masseEnKgDeAliment2)}\\text{ kg} \\times ${texPrix(prixAliment2)}$ €/kg $${egalOuApprox(prixTotalAliment2, 2)} ${texPrix(prixTotalAliment2)}$ €<br>`
   texteCorr += `Prix total à payer : $${texPrix(prixTotalAliment1)}\\text{ €} +${texPrix(prixTotalAliment2)}$ € `
   texteCorr += `$${egalOuApprox(prixTotal, 2)} ${texNombre(prixTotal, 2, true)}$ €<br>`
-  texteCorr += `<br>${context.isHtml ? '<i>' : ''}Le prix total aurait aussi pu être trouvé en un seul calcul${context.isHtml ? '<i>' : ''} :<br> $${texNombre(masseEnKgDeAliment1, 2)} \\text{ kg} \\times ${texPrix(prixAliment1)}$ €/kg + $${texNombre(masseEnKgDeAliment2, 3)} \\text{ kg} \\times ${texPrix(prixAliment2)}$ €/kg `
+  texteCorr += `<br>${context.isHtml ? '<i>' : ''}Le prix total aurait aussi pu être trouvé en un seul calcul${context.isHtml ? '<i>' : ''} :<br> $${texNombre(masseEnKgDeAliment1, 2)} \\text{ kg} \\times ${texPrix(prixAliment1)} \\text{ €/kg} + ${texNombre(masseEnKgDeAliment2)} \\text{ kg} \\times ${texPrix(prixAliment2)} \\text{ €/kg}$ `
   texteCorr += `$${egalOuApprox(prixTotal, 2)} ${texNombre(prixTotal, 2, true)}$ €<br>`
 
   texteCorr += calculFacile ? `<br>${schema.display()}<br>` : ''
@@ -183,9 +182,9 @@ function probleme3(calculFacile: boolean): {
     ? randint(2, 5)
     : randint(1, 3) + randint(1, 9) / 10
   const prixTotalAliment2 = masseEnKgDeAliment2 * prixAliment2
-  const texte = `${quidam} achète ${aliment1} à $${texNombre(prixAliment1, 2)}$ € et $${texNombre(masseEnKgDeAliment2, 3)}$ kg de ${aliment2} à $${texNombre(prixAliment2, 2)}$ € le kg. Quel est le prix total à payer ?`
-  let texteCorr = `Prix des $${texNombre(masseEnKgDeAliment2, 3, true)}$ kg de ${aliment2} : $${texNombre(masseEnKgDeAliment2, 2, true)}\\text{ kg}\\times ${texNombre(prixAliment2, 2, true)}\\text{ €/kg} ${egalOuApprox(prixTotalAliment2, 2)} ${texPrix(prixTotalAliment2)}$ €<br>`
-  texteCorr += `Prix total à payer : $${texNombre(prixTotalAliment2, 2, true)}\\text{ €}+ ${texNombre(prixAliment1, 2)}\\text{ €}=${texNombre(prixTotalAliment2 + prixAliment1, 2, true)}$ €<br>`
+  const texte = `${quidam} achète ${aliment1} à $${texPrix(prixAliment1)}$ € et $${texNombre(masseEnKgDeAliment2)}$ kg de ${aliment2} à $${texPrix(prixAliment2)}$ € le kg. Quel est le prix total à payer ?`
+  let texteCorr = `Prix des $${texNombre(masseEnKgDeAliment2)}$ kg de ${aliment2} : $${texNombre(masseEnKgDeAliment2)}\\text{ kg}\\times ${texNombre(prixAliment2, 2, true)}\\text{ €/kg} ${egalOuApprox(prixTotalAliment2, 2)} ${texPrix(prixTotalAliment2)}$ €<br>`
+  texteCorr += `Prix total à payer : $${texPrix(prixTotalAliment2)}\\text{ €}+ ${texPrix(prixAliment1)}\\text{ €}=${texPrix(prixTotalAliment2 + prixAliment1)}$ €<br>`
   if (calculFacile) {
     const schema = new SchemaEnBoite({
       topBraces: [
@@ -225,7 +224,7 @@ function probleme3(calculFacile: boolean): {
       ],
       rightBraces: [
         {
-          text: `Prix total : $${texNombre(prixTotalAliment2 + prixAliment1, 2)}$ €`,
+          text: `Prix total : $${texPrix(prixTotalAliment2 + prixAliment1)}$ €`,
           start: 2,
           end: 5,
           type: 'accolade',
@@ -253,9 +252,9 @@ function probleme2(calculFacile: boolean): {
   ])
   const nombreDeAliment1 = randint(2, 7)
   const prixTotal = nombreDeAliment1 * prixAliment1
-  const texte = `${quidam} achète ${nombreDeAliment1} ${aliment1} à $${texNombre(prixAliment1, 2)}$ € l'unité. Quel est le prix total à payer ?`
+  const texte = `${quidam} achète ${nombreDeAliment1} ${aliment1} à $${texPrix(prixAliment1)}$ € l'unité. Quel est le prix total à payer ?`
   let texteCorr = `Prix des ${nombreDeAliment1} ${aliment1} : $${nombreDeAliment1}\\times ${texNombre(prixAliment1, 2, true)}$ € $${egalOuApprox(prixTotal, 2)} ${texPrix(prixTotal)}$ €<br>`
-  texteCorr += `Prix total à payer : $${nombreDeAliment1}\\times ${texNombre(prixAliment1, 2, true)}\\text{ €}=${texNombre(prixTotal, 2, true)}$ €<br>`
+  texteCorr += `Prix total à payer : $${nombreDeAliment1}\\times ${texPrix(prixAliment1)}\\text{ €}=${texPrix(prixTotal)}$ €<br>`
   const longueur =
     nombreDeAliment1 === 2
       ? 6
@@ -306,13 +305,13 @@ function probleme1(calculFacile: boolean): {
   const aliment2 =
     'une cagette de ' + choice(['tomates', 'carottes', 'courgettes'])
   const prixTotal = prixAliment1 + prixAliment2
-  const texte = `${quidam} achète ${aliment1} à $${texNombre(prixAliment1, 2)}$ € et ${aliment2} à $${texNombre(prixAliment2, 2)}$ €. Quel est le prix total à payer ?`
-  let texteCorr = `Prix total à payer : $${texNombre(prixAliment1, 2)}\\text{ €}+ ${texNombre(prixAliment2, 2)}\\text{ €}=${texNombre(prixAliment2 + prixAliment1, 2)}\\text{ €}$<br>`
+  const texte = `${quidam} achète ${aliment1} à $${texPrix(prixAliment1)}$ € et ${aliment2} à $${texNombre(prixAliment2, 2)}$ €. Quel est le prix total à payer ?`
+  let texteCorr = `Prix total à payer : $${texPrix(prixAliment1)}\\text{ €}+ ${texPrix(prixAliment2)}\\text{ €}=${texPrix(prixAliment2 + prixAliment1)}\\text{ €}$<br>`
   if (calculFacile) {
     const schema = new SchemaEnBoite({
       topBraces: [
         {
-          text: `$${texNombre(prixTotal, 2)}$ €`,
+          text: `$${texPrix(prixTotal)}$ €`,
           start: 1,
           end: prixAliment1 + prixAliment2 + 1,
           type: 'accolade',
@@ -407,13 +406,13 @@ export default class ProblemeCourse extends Exercice {
 
       setReponse(this, i, reponse)
       if (context.isAmc) {
-        // @ts-ignore this.autoCorrection[i] est bien défini
+        // @ts-expect-error this.autoCorrection[i] est bien défini
         this.autoCorrectionAMC[i].reponse.valeur = arrondi(reponse, 2)
         this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-        // @ts-ignore this.autoCorrection[i] est bien défini
+        // @ts-expect-error this.autoCorrection[i] est bien défini
         this.autoCorrectionAMC[i].reponse.param.digits = 5
         this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-        // @ts-ignore this.autoCorrection[i] est bien défini
+        // @ts-expect-error this.autoCorrection[i] est bien défini
         this.autoCorrectionAMC[i].reponse.param.decimals = 2
         this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       }
