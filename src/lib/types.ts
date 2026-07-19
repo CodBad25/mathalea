@@ -346,6 +346,7 @@ export type InteractivityType =
   | 'guide-ane' // Non compatible AMC
   | 'demi-droite-interactive'
   | 'blockly-editor'
+  | 'scratch-editor'
   | 'tableau-signes-variations' // Non compatible AMC
 export function isInteractivityType(
   value: unknown,
@@ -370,6 +371,7 @@ export function isInteractivityType(
     value === 'guide-ane' ||
     value === 'demi-droite-interactive' ||
     value === 'blockly-editor' ||
+    value === 'scratch-editor' ||
     value === 'tableau-signes-variations'
   )
 }
@@ -391,7 +393,8 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'guide-ane' ||
     value === 'demi-droite-interactive' ||
     value === 'blockly-editor' ||
-    value === 'tableau-signes-variations'
+    value === 'tableau-signes-variations' ||
+    value === 'scratch-editor'
   )
 }
 

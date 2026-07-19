@@ -379,8 +379,9 @@ export default class Pythagore2DBlockly extends Exercice {
           // console log('dispatchEvent: dispose')
           workspaceExisting.dispose()
         }
+        const mediaPath = `${import.meta.env.BASE_URL}blockly/media/`
         const secondaryWorkspace = Blockly.inject(secondaryDiv, {
-          media: './node_modules/blockly/media/',
+          media: mediaPath,
           readOnly: true,
           zoom: {
             controls: true,
@@ -596,8 +597,9 @@ export default class Pythagore2DBlockly extends Exercice {
           // console log('dispatchEvent: dispose')
           workspaceExisting.dispose()
         }
+        const mediaPath = `${import.meta.env.BASE_URL}blockly/media/`
         const demoWorkspace = Blockly.inject(blocklyDiv, {
-          media: './node_modules/blockly/media/',
+          media: mediaPath,
           toolbox,
           collapse: false,
           comments: false,
