@@ -472,6 +472,8 @@
     buttonScore.classList.remove(...buttonScore.classList)
     buttonScore.classList.add(
       'inline-flex',
+      'self-start',
+      'w-auto',
       'px-6',
       'py-2.5',
       'ml-6',
@@ -660,9 +662,9 @@
   />
 
   {#if isVisible}
-    <div class="flex flex-col-reverse lg:flex-row">
+    <div class="flex flex-col-reverse lg:flex-row w-full">
       <div
-        class="flex flex-col justify-start items-start relative {isSettingsVisible
+        class="flex flex-col justify-start items-stretch relative {isSettingsVisible
           ? 'w-full lg:w-3/4'
           : 'w-full'} duration-500"
         id="exercice{exerciseIndex}"
@@ -700,7 +702,7 @@
           </button>
         </div>
         <article
-          class="lg:text-base relative"
+          class="lg:text-base relative w-full max-w-none"
           style="font-size: {(
             $globalOptions.z || 1
           ).toString()}rem; line-height: calc({$globalOptions.z || 1});"
@@ -726,7 +728,7 @@
               <div slot="content" class="text-left">{@html exercise.tip}</div>
             </BasicClassicModal>
           {/if}
-          <div class="mt-6 mb-4">
+          <div class="mt-6 mb-4 w-full max-w-none">
             {#key exercise.key + '-' + exerciseIndex}
               {#if typeof exercise.consigne !== 'undefined' && exercise.consigne.length !== 0}
                 <div>
@@ -752,19 +754,19 @@
           </div>
           <div
             style="columns: {columnsCount.toString()}"
-            class="mt-4 lg:mt-6 mb-5"
+            class="mt-4 lg:mt-6 mb-5 w-full max-w-none"
           >
             <ul
               class="{exercise.listeQuestions.length === 1 ||
               !exercise.listeAvecNumerotation
                 ? 'list-none'
-                : 'numbered-list'} w-full list-inside mb-2 mx-0 marker:text-coopmaths-struct dark:marker:text-coopmathsdark-struct marker:font-bold"
+                : 'numbered-list'} w-full max-w-none list-inside mb-2 mx-0 marker:text-coopmaths-struct dark:marker:text-coopmathsdark-struct marker:font-bold"
             >
               {#each exercise.listeQuestions as item, i (exercise.key + '-' + exerciseIndex + '-' + i)}
                 <div
                   style="break-inside:avoid"
                   id="consigne{exerciseIndex}-{i}"
-                  class="container w-full grid grid-cols-1 auto-cols-min gap-1 lg:gap-4 mb-2 lg:mb-4 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+                  class="w-full max-w-none grid grid-cols-1 auto-cols-min gap-1 lg:gap-4 mb-2 lg:mb-4 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
                 >
                   <li
                     id="exercice{exerciseIndex}Q{i}"
@@ -806,7 +808,7 @@
                         </div>
                       </div>
                       <div
-                        class="container overflow-x-scroll overflow-y-hidden md:overflow-x-auto py-1"
+                        class="w-full max-w-none overflow-x-scroll overflow-y-hidden md:overflow-x-auto py-1"
                         style="line-height: {exercise.spacingCorr ||
                           1}; break-inside:avoid"
                       >

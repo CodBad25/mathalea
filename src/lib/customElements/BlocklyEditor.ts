@@ -361,8 +361,10 @@ export class BlocklyEditor extends MathaleaCustomElement {
       this.workspace = null
     }
 
+    const mediaPath = `${import.meta.env.BASE_URL}blockly/media/`
+
     this.workspace = Blockly.inject(area, {
-      media: './node_modules/blockly/media/',
+      media: mediaPath,
       toolbox: this.getToolboxDefinition(),
       collapse: false,
       comments: false,
