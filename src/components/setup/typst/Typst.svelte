@@ -38,6 +38,7 @@
     INSERTION_TAG,
     MATH_FONTS,
     TEXT_FONTS,
+    buildStandaloneExerciseCode,
     buildTypstDocument,
     defaultTypstDocumentOptions,
     getGeneratedExerciseCode,
@@ -268,6 +269,48 @@
   let codeEditNum: number | null = null
   /** Brouillon de la modale d'édition du code Typst */
   let codeEditDraft = ''
+  /** Message de confirmation affiché après un clic sur un bouton « Copier » de la modale */
+  let codeCopyStatus = ''
+  let codeCopyStatusTimer: ReturnType<typeof setTimeout>
+
+  /** Copie `text` dans le presse-papier et affiche une confirmation temporaire */
+  async function copyToClipboard(text: string, label: string) {
+    try {
+      await navigator.clipboard.writeText(text)
+      codeCopyStatus = `${label} copié dans le presse-papier.`
+    } catch {
+      codeCopyStatus =
+        'Impossible de copier automatiquement : sélectionnez le texte et copiez-le manuellement.'
+    }
+    clearTimeout(codeCopyStatusTimer)
+    codeCopyStatusTimer = setTimeout(() => {
+      codeCopyStatus = ''
+    }, 3000)
+  }
+
+  /** Copie le brouillon de la modale tel quel, sans préambule */
+  function copyExerciseCode() {
+    void copyToClipboard(codeEditDraft, 'Le code')
+  }
+
+  /**
+   * Copie le brouillon de la modale précédé d'un préambule minimal (imports,
+   * aides et réglages qu'il utilise réellement) : contrairement au code seul,
+   * ce texte compile de façon autonome (`typst compile`), utile pour réutiliser
+   * l'exercice dans un autre fichier Typst.
+   */
+  function copyExerciseCodeWithPreamble(num: number) {
+    const carryOver =
+      editorView != null ? harvestCarryOver(currentCode()) : {}
+    const standalone = buildStandaloneExerciseCode(
+      buildInputs(),
+      num,
+      documentOptions,
+      carryOver,
+      codeEditDraft,
+    )
+    void copyToClipboard(standalone, 'Le code avec préambule')
+  }
 
   /** Convertit les repères (pt, par page) en positions % sur l'aperçu */
   function computeOverlayWidgets(
@@ -544,7 +587,9 @@
     exercise?.destroy?.()
     exercises = exercises.filter((_, k) => k !== num - 1)
     exercicesParams.update((list) => list.filter((_, k) => k !== num - 1))
-    const code = buildTypstDocument(buildInputs(), documentOptions, carryOver)
+    const code = buildTypstDocument(buildInputs(), documentOptions, carryOver, [], {
+      sourceUrl: currentUrl(),
+    })
     setEditorContent(code)
     scheduleCompile(code, 0)
   }
@@ -607,7 +652,9 @@
       ;[copy[k], copy[target]] = [copy[target], copy[k]]
       return copy
     })
-    const code = buildTypstDocument(buildInputs(), documentOptions, carryOver)
+    const code = buildTypstDocument(buildInputs(), documentOptions, carryOver, [], {
+      sourceUrl: currentUrl(),
+    })
     setEditorContent(code)
     scheduleCompile(code, 0)
   }
@@ -692,6 +739,7 @@
       documentOptions,
       carryOver,
       extraVersions,
+      { sourceUrl: currentUrl() },
     )
     setEditorContent(newCode)
     scheduleCompile(newCode, 0)
@@ -719,6 +767,7 @@
       documentOptions,
       carryOver,
       extraVersions,
+      { sourceUrl: currentUrl() },
     )
     setEditorContent(code)
     scheduleCompile(code, 0)
@@ -750,6 +799,7 @@
       documentOptions,
       carryOver,
       extraVersions,
+      { sourceUrl: currentUrl() },
     )
     setEditorContent(code)
     scheduleCompile(code, 0)
@@ -980,7 +1030,9 @@
     persistPreferences()
     // réinitialisation complète : les réglages de la palette de mise en page
     // (colonnes/espacement par exercice, insertions) ne sont pas repris
-    const code = buildTypstDocument(buildInputs(), documentOptions)
+    const code = buildTypstDocument(buildInputs(), documentOptions, {}, [], {
+      sourceUrl: currentUrl(),
+    })
     setEditorContent(code)
     scheduleCompile(code, 0)
   }
@@ -1165,7 +1217,9 @@
         ? harvestCarryOver(currentCode())
         : (urlCarryOver ?? {})
     const [primary, ...extraVersions] = buildAllVersionInputs()
-    return buildTypstDocument(primary, documentOptions, carryOver, extraVersions)
+    return buildTypstDocument(primary, documentOptions, carryOver, extraVersions, {
+      sourceUrl: currentUrl(),
+    })
   }
 
   function initEditor(content: string) {
@@ -1218,6 +1272,16 @@
 
   function currentCode(): string {
     return editorView?.state.doc.toString() ?? ''
+  }
+
+  /**
+   * URL complète permettant de régénérer cette fiche à l'identique (tenue à
+   * jour par `persistToUrl`) : inscrite en commentaire en tête du code
+   * Typst généré, pour un professeur qui en retrouve un exemplaire imprimé
+   * ou téléchargé.
+   */
+  function currentUrl(): string {
+    return window.location.href
   }
 
   /**
@@ -1670,9 +1734,25 @@
     }
   }
 
+  /**
+   * Code Typst « propre » pour la réutilisation hors de l'appli (fichier
+   * .typ téléchargé) : sans les repères `mathalea-anchor` ni les variables
+   * de mise en page des questions (`exN-colonnes`...), propres à la palette
+   * de l'éditeur intégré et sans effet une fois le code sorti de l'appli.
+   */
+  function buildExportCode(): string {
+    const carryOver =
+      editorView != null ? harvestCarryOver(currentCode()) : {}
+    const [primary, ...extraVersions] = buildAllVersionInputs()
+    return buildTypstDocument(primary, documentOptions, carryOver, extraVersions, {
+      exportMode: true,
+      sourceUrl: currentUrl(),
+    })
+  }
+
   function downloadTyp() {
     downloadBlob(
-      new Blob([currentCode()], { type: 'text/plain;charset=utf-8' }),
+      new Blob([buildExportCode()], { type: 'text/plain;charset=utf-8' }),
       `${exportFilename()}.typ`,
     )
   }
@@ -2246,6 +2326,27 @@
             if (e.key === 'Escape') codeEditNum = null
           }}
         ></textarea>
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            class="rounded border border-coopmaths-action px-3 py-1 text-coopmaths-action hover:bg-coopmaths-action hover:text-white"
+            on:click={copyExerciseCode}
+          >
+            Copier le code
+          </button>
+          <button
+            type="button"
+            class="rounded border border-coopmaths-action px-3 py-1 text-coopmaths-action hover:bg-coopmaths-action hover:text-white"
+            on:click={() => copyExerciseCodeWithPreamble(num)}
+          >
+            Copier avec le préambule
+          </button>
+          {#if codeCopyStatus !== ''}
+            <span class="text-xs text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+              >{codeCopyStatus}</span
+            >
+          {/if}
+        </div>
         <div class="flex justify-between gap-2">
           <button
             type="button"

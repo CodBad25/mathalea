@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
+  buildStandaloneExerciseCode,
   buildTypstDocument,
   defaultTypstDocumentOptions,
+  getGeneratedExerciseCode,
   harvestCarryOver,
   type TypstExerciseInput,
 } from './buildTypstDocument'
@@ -783,5 +785,156 @@ describe('buildTypstDocument', () => {
         }),
       ).not.toThrow()
     })
+  })
+})
+
+describe('sourceUrl (URL de régénération en commentaire)', () => {
+  it("n'ajoute pas de ligne quand aucune URL n'est fournie", () => {
+    const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
+    expect(code).not.toContain('Ce code est modifiable')
+    expect(code).not.toContain('Pour régénérer cette fiche')
+  })
+
+  it('inscrit l’URL fournie en commentaire, à la place de la mention modifiable', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      defaultTypstDocumentOptions,
+      {},
+      [],
+      { sourceUrl: 'https://coopmaths.fr/alea/?uuid=abc12&v=typst' },
+    )
+    expect(code).not.toContain('Ce code est modifiable')
+    expect(code).toContain(
+      '// Pour régénérer cette fiche : https://coopmaths.fr/alea/?uuid=abc12&v=typst',
+    )
+  })
+})
+
+describe('exportMode (fichier .typ téléchargé, bouton copier)', () => {
+  it('inline les colonnes/espacement des tasks, sans variables exN-colonnes/exN-gutter', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: ['$1+1$', '$2+2$'],
+          corrections: ['$2$', '$4$'],
+          numbered: true,
+        }),
+      ],
+      defaultTypstDocumentOptions,
+      { tasksLayout: { ex1: { columns: '2', gutter: '0.8em' } } },
+      [],
+      { exportMode: true },
+    )
+    expect(code).toContain('#tasks(columns: 2,')
+    expect(code).toContain('row-gutter: 0.8em,')
+    expect(code).not.toContain('ex1-colonnes')
+    expect(code).not.toContain('ex1-gutter')
+    expect(code).not.toContain('interligne-questions')
+    // la correction (ex1-corr), sans réglage de la palette, reprend les
+    // valeurs par défaut en littéral
+    expect(code).toContain('#tasks(columns: "auto-fit",')
+    expect(code).toContain('row-gutter: 1.2em,')
+  })
+
+  it("ne contient ni repère mathalea-anchor ni marqueur interne (insertion/surcharge)", () => {
+    const code = buildTypstDocument(
+      [
+        exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
+        exercise({ questions: ['$3+3$'] }),
+      ],
+      defaultTypstDocumentOptions,
+      {
+        insertions: { 0: ['#section[Fractions]'] },
+        codeOverrides: { 2: '#text[Contenu personnalisé]' },
+      },
+      [],
+      { exportMode: true },
+    )
+    expect(code).not.toContain('mathalea-anchor')
+    expect(code).not.toContain('mathalea:insertion')
+    expect(code).not.toContain('mathalea:override')
+    // le contenu inséré/surchargé reste bien présent, sans son marqueur
+    expect(code).toContain('#section[Fractions]')
+    expect(code).toContain('#text[Contenu personnalisé]')
+  })
+
+  it('compile avec typst : document export (tasks + figure avec labels + insertion)', async () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: [
+            '<div class="svgContainer"><div><svg class="mathalea2d" width="96" height="48"></svg><div class="divLatex" style="top: 10px; left: 20px; transform: rotate(0deg);" data-top=10 data-left=20><span class="katex"><span class="katex-mathml"><math><semantics><annotation encoding="application/x-tex">1</annotation></semantics></math></span></span></div></div></div>',
+            '$2+2$',
+          ],
+          numbered: true,
+        }),
+      ],
+      defaultTypstDocumentOptions,
+      { insertions: { 0: ['#section[Fractions]'] } },
+      [],
+      { exportMode: true },
+    )
+    const { execFileSync } = await import('node:child_process')
+    const { writeFileSync, mkdtempSync } = await import('node:fs')
+    const { tmpdir } = await import('node:os')
+    const { join } = await import('node:path')
+    const dir = mkdtempSync(join(tmpdir(), 'typst-export-'))
+    const file = join(dir, 'doc.typ')
+    writeFileSync(file, code, 'utf-8')
+    expect(() =>
+      execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+        stdio: 'pipe',
+      }),
+    ).not.toThrow()
+  })
+})
+
+describe('getGeneratedExerciseCode', () => {
+  it('utilise des colonnes/espacement littéraux (préremplissage de la modale d’édition)', () => {
+    const code = getGeneratedExerciseCode(
+      [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })],
+      1,
+    )
+    expect(code).toContain('#tasks(columns: "auto-fit",')
+    expect(code).toContain('row-gutter: 1.2em,')
+    expect(code).not.toContain('ex1-colonnes')
+    expect(code).not.toContain('mathalea-anchor')
+  })
+})
+
+describe('buildStandaloneExerciseCode', () => {
+  it("n'inclut que les aides utilisées et aucun repère/variable interne", () => {
+    const inputs = [
+      exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
+    ]
+    const code = buildStandaloneExerciseCode(inputs, 1)
+    expect(code).toContain('#import "@preview/taskize:0.2.7"')
+    expect(code).toContain('#let couleur =')
+    expect(code).not.toContain('mathalea-anchor')
+    expect(code).not.toContain('exercise-bank')
+    expect(code).not.toContain('ex1-colonnes')
+  })
+
+  it('compile seul avec typst (exercice avec figure mathalea2d à labels)', async () => {
+    const inputs = [
+      exercise({
+        questions: [
+          '<div class="svgContainer"><div><svg class="mathalea2d" width="96" height="48"></svg><div class="divLatex" style="top: 10px; left: 20px; transform: rotate(0deg);" data-top=10 data-left=20><span class="katex"><span class="katex-mathml"><math><semantics><annotation encoding="application/x-tex">1</annotation></semantics></math></span></span></div></div></div>',
+        ],
+      }),
+    ]
+    const code = buildStandaloneExerciseCode(inputs, 1)
+    const { execFileSync } = await import('node:child_process')
+    const { writeFileSync, mkdtempSync } = await import('node:fs')
+    const { tmpdir } = await import('node:os')
+    const { join } = await import('node:path')
+    const dir = mkdtempSync(join(tmpdir(), 'typst-standalone-'))
+    const file = join(dir, 'doc.typ')
+    writeFileSync(file, code, 'utf-8')
+    expect(() =>
+      execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+        stdio: 'pipe',
+      }),
+    ).not.toThrow()
   })
 })
