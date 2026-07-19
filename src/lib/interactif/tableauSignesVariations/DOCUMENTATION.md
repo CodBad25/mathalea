@@ -39,6 +39,7 @@ src/lib/interactif/tableauSignesVariations/
 ├── toolbar.ts                          # Barre d'édition contextuelle
 ├── render.ts                           # Rendu du tableau en HTML/SVG
 ├── latexExport.ts                      # Export tkz-tab pour LaTeX
+├── typstExport.ts                      # Export Typst (package vartable)
 └── DOCUMENTATION.md                    # Ce fichier
 ```
 
@@ -741,6 +742,58 @@ fleches: [
 - Les antécédents et valeurs sont supposés être du LaTeX valide
 - Utilisez des commandes : `\infty`, `\frac{a}{b}`, `\sqrt{x}`, etc.
 - L'export utilise le package `tkz-tab` pour les tableaux de variations
+
+### Export Typst
+
+`TableauSignesVariationsElement.create()` détecte `context.isTypst` (vrai
+pendant la régénération d'un exercice pour la [vue Typst](../../../../documentation/developpement/reference/vue-typst.md), alors même que
+`context.isHtml` reste vrai) et retourne, au lieu du custom element, du code
+Typst natif (package [`vartable`](https://typst.app/universe/package/vartable),
+fonction `tabvar`) inséré tel quel via le marqueur `<mathalea-typst>` reconnu
+par `htmlToTypst` (voir `src/components/setup/typst/latexToTypst.ts`).
+
+- Le code est produit par `toTypst(config, state)` dans `typstExport.ts`,
+  miroir de `toLatex()` (mêmes valeurs effectives via `resolveValues`, donc
+  les mêmes cellules apparaissent vides dans un tableau « à compléter »).
+- `latexFragmentToTypstMath` (interne à `typstExport.ts`) ne convertit qu'un
+  sous-ensemble volontairement restreint de LaTeX (`\infty`, `\frac`/`\dfrac`,
+  `\sqrt`, `\pm`, `\times`, `\cdot`) : suffisant pour les antécédents/valeurs
+  usuels d'un tableau de signes/variations, pas un convertisseur général (voir
+  la limitation de couches ci-dessous).
+- Limitation architecturale volontaire : ce fichier vit dans
+  `src/lib/interactif/` et ne doit pas importer `src/components/setup/typst/`
+  (romprait la séparation des couches, entraînerait du code DOM-dépendant dans
+  des contextes — tests unitaires notamment — où il n'a pas sa place). D'où le
+  mini-convertisseur local plutôt qu'une réutilisation de `latexMathToTypst`.
+- Limitations fonctionnelles : pas de rendu propre pour les lignes
+  `type: 'valeur'` (pas d'équivalent natif dans `vartable`, actuellement sans
+  incidence puisque ce type de ligne n'est pas exposé dans l'UI), pas de
+  hachurage pour les flèches `'interdite'`, pas de discontinuité gérée sur
+  l'antécédent extrême (première ou dernière colonne).
+- Marqueurs de barre (`signeToVartableBar` dans `typstExport.ts`) : contrairement
+  à l'export LaTeX (`signeToTkz`, où le marqueur tkz-tab `'z'` affiche toujours
+  le zéro), `vartable` distingue barre simple (`'|'` → pas de zéro) et barre
+  avec zéro (`'|0'` → zéro affiché), comme `SIGNE_DISPLAY` dans `render.ts`.
+  Un mapping naïf (traiter `'|'` comme `'|0'`) affiche un zéro sur *toutes*
+  les barres, y compris celles où l'antécédent est juste celui d'un autre
+  facteur (bug corrigé — vérifié sur l'exercice démo : plus de zéro parasite
+  ni dans l'énoncé (barres encore vides, jamais `'|0'`) ni dans le corrigé
+  (`configCorrige`/`corrigeSigneSymbol` ne produit `'|0'` que pour un vrai zéro)).
+- Lignes de signes : hauteur imposée à 9mm (`SIGN_ROW_HEIGHT` dans
+  `typstExport.ts`, via le 2ᵉ élément du `label` de `vartable`) pour éviter
+  le minimum par défaut de `vartable` (13,5mm), inutilement haut pour des
+  cellules ne contenant qu'un symbole. Volontairement **pas** appliqué aux
+  lignes de variations : leur hauteur code l'amplitude visuelle du zigzag
+  haut/bas des flèches, qu'une hauteur imposée trop petite aplatit au point
+  de rendre les sens indiscernables (vérifié empiriquement) ; ces lignes
+  gardent donc la hauteur automatique de `vartable`.
+- Tableau « à compléter » (élève) : si aucune flèche de variation n'a de
+  sens renseigné (`hasAnyFlecheSens` dans `typstExport.ts`), les flèches
+  sont masquées (`arrow-mark`/`arrow-style`) — sinon `vartable` trace par
+  défaut une flèche horizontale entre deux valeurs sans sens connu, ce qui
+  donnerait à tort l'impression que le sens de variation est déjà indiqué.
+  Le corrigé (`configCorrige`, qui remplit les flèches attendues) n'est pas
+  concerné et affiche les flèches normalement.
 
 ### Comparaison mathématique des antécédents
 

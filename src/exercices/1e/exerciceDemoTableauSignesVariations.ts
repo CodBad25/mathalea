@@ -15,6 +15,7 @@ import type {
   SigneSymbol,
   TableauSVConfig,
 } from '../../lib/interactif/tableauSignesVariations/types'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import { pgcd } from '../../lib/outils/primalite'
 import ExerciceSimple from '../ExerciceSimple'
@@ -40,6 +41,7 @@ export default class TableauSignesVariationsDemo extends ExerciceSimple {
   constructor() {
     super()
     this.typeExercice = 'simple'
+    this.formatChampTexte = 'none' // Pour un exercice de type simple qui n'utilise pas le champ de réponse
     this.nbQuestions = 1
     this.sup = 4
     this.besoinFormulaireNumerique = ['Barème (nombre de points)', 10]
@@ -171,8 +173,16 @@ export default class TableauSignesVariationsDemo extends ExerciceSimple {
       variableName: 'x',
       colonnes: [
         colonne('-\\infty'),
-        colonne('', { editable: true, expected: xLeftLatex }),
-        colonne('', { editable: true, expected: xRightLatex }),
+        colonne('', {
+          editable: true,
+          expected: xLeftLatex,
+          clavier: KeyboardType.clavierDeBaseAvecFraction,
+        }),
+        colonne('', {
+          editable: true,
+          expected: xRightLatex,
+          clavier: KeyboardType.clavierDeBaseAvecFraction,
+        }),
         colonne('+\\infty'),
       ],
       lignes: [

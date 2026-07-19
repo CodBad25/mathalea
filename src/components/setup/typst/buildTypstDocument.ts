@@ -5,6 +5,7 @@ import {
   MATHALEA_QCM_HELPERS,
   MATHALEA_SCHEMA_HELPER,
   TASKIZE_IMPORT,
+  VARTABLE_IMPORT,
   escapeTypstText,
   htmlToTypst,
 } from './latexToTypst'
@@ -1047,6 +1048,7 @@ export function buildTypstDocument(
     line.includes('mathalea-figure('),
   )
   const usesTasks = allLines.some((line) => line.includes('#tasks('))
+  const usesVarTable = allLines.some((line) => line.includes('#tabvar('))
   const usesQcm = allLines.some((line) => line.includes('qcm-'))
   const usesAnchors = allLines.some((line) =>
     line.includes('#mathalea-anchor('),
@@ -1079,11 +1081,12 @@ export function buildTypstDocument(
   lines.push("// Ce code est modifiable : l'aperçu se met à jour tout seul.")
   lines.push('')
   const usesExerciseBank = !options.mergeExercises
-  if (usesTasks || usesExerciseBank || options.autoVerticalSpacing) {
+  if (usesTasks || usesExerciseBank || options.autoVerticalSpacing || usesVarTable) {
     lines.push('// ----- Paquets -----')
     if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
     if (usesTasks) lines.push(TASKIZE_IMPORT)
     if (options.autoVerticalSpacing) lines.push(BREATHER_IMPORT)
+    if (usesVarTable) lines.push(VARTABLE_IMPORT)
     lines.push('')
   }
   if (usesAnchors) {
