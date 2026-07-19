@@ -68,6 +68,13 @@
   ) => void
   /** Nombre de questions par exercice (null : non réglable) */
   export let questionCounts: Record<number, number | null> = {}
+  /**
+   * Exercices statiques (annale scannée, éventuellement convertie en `.typ`),
+   * par numéro : contenu figé, sans génération possible de nouvelles données
+   * ni de questions supplémentaires, ni de réglages (nbQuestions, durée...)
+   * — masque les boutons « Nouvelles données » et « Réglages de l'exercice ».
+   */
+  export let staticExercises: Record<number, boolean> = {}
   /** Nombre de colonnes du document (le saut de colonne n'a de sens qu'à > 1) */
   export let documentColumns = 1
   /** Zoom de chaque figure, par numéro de figure (`fig-N`) */
@@ -614,14 +621,16 @@
           </button>
           <span class="typst-pill-sep"></span>
         {/if}
-        <button
-          type="button"
-          title="Réglages de l'exercice {widget.num}"
-          aria-label="Réglages de l'exercice {widget.num}"
-          on:click={() => onOpenSettings(widget.num)}
-        >
-          <i class="bx bx-cog"></i>
-        </button>
+        {#if !staticExercises[widget.num]}
+          <button
+            type="button"
+            title="Réglages de l'exercice {widget.num}"
+            aria-label="Réglages de l'exercice {widget.num}"
+            on:click={() => onOpenSettings(widget.num)}
+          >
+            <i class="bx bx-cog"></i>
+          </button>
+        {/if}
         <button
           type="button"
           title={codeOverrides[widget.num] != null
@@ -648,14 +657,16 @@
           <i class="bx bx-detail"></i>
         </button>
         {@render writingLinesPanel(widget.num)}
-        <button
-          type="button"
-          title="Nouvelles données pour l'exercice {widget.num}"
-          aria-label="Nouvelles données pour l'exercice {widget.num}"
-          on:click={() => onNewData(widget.num)}
-        >
-          <i class="bx bx-refresh"></i>
-        </button>
+        {#if !staticExercises[widget.num]}
+          <button
+            type="button"
+            title="Nouvelles données pour l'exercice {widget.num}"
+            aria-label="Nouvelles données pour l'exercice {widget.num}"
+            on:click={() => onNewData(widget.num)}
+          >
+            <i class="bx bx-refresh"></i>
+          </button>
+        {/if}
         {#if questionCounts[widget.num] != null}
           <span class="typst-pill-sep"></span>
           <button

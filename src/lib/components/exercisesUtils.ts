@@ -4,6 +4,7 @@ import Exercice from '../../exercices/Exercice'
 import referentielStaticCH from '../../json/referentielStaticCH.json'
 import referentielStaticFR from '../../json/referentielStaticFR.json'
 import {
+  computeStaticExerciceTypUrl,
   computeStaticExercicePngUrls,
   retrieveResourceFromUuid,
 } from '../../lib/components/refUtils'
@@ -114,6 +115,19 @@ export const buildExercisesList = (
     }
   }
   return promiseExos
+}
+
+/**
+ * Calcule l'URL locale du fichier source Typst d'une ressource statique
+ * (annales DNB, BAC...), si son entrée de référentiel déclare la clé
+ * `typ: true`. Utilisé par la vue Typst uniquement (voir `Typst.svelte`) :
+ * les autres vues (A4, QuestionParPage...) continuent d'afficher le png.
+ * @param uuid uuid de la ressource statique
+ * @returns l'URL relative du fichier `.typ`, ou `null` si non déclarée
+ */
+export const getStaticExerciceTypUrl = (uuid: string): string | null => {
+  const foundResource = retrieveResourceFromUuid(allStaticReferentiels, uuid)
+  return computeStaticExerciceTypUrl(foundResource)
 }
 
 export const splitExercisesIntoQuestions = (

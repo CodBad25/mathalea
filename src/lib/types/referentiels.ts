@@ -120,6 +120,8 @@ export interface crpeItemInreferentiel extends BaseItemInReferentiel {
  * @property {string[]} pngCor : liste des chemins vers les images des correction des contenus de la ressource
  * @property {string} tex: chemin vers le source LaTeX du contenu
  * @property {string} texCor: chemin vers le source LaTeX de la correction du contenu
+ * @property {boolean} typ: présence d'un fichier source Typst (`typ/<uuid>.typ`), utilisé à la
+ * place du png pour la vue Typst (optionnel, permet à l'utilisateur d'éditer le code de l'exercice)
  */
 export interface StaticItemInreferentiel extends BaseItemInReferentiel {
   png: string
@@ -127,6 +129,7 @@ export interface StaticItemInreferentiel extends BaseItemInReferentiel {
   tex: string
   texCor: string
   titre?: string
+  typ?: boolean
   typeExercice: 'static' | 'dnb' | 'dnbpro' | 'bac' | 'e3c' | 'evacom'
 }
 
@@ -340,6 +343,18 @@ export const isStaticWithoutPngUrl = (obj: any): obj is ExamItemInReferentiel =>
     obj.typeExercice === 'dnbpro' ||
     obj.typeExercice === 'eam' ||
     obj.typeExercice === 'bac')
+
+/**
+ * Détecte si une terminaison de référentiel déclare la présence d'un fichier
+ * source Typst (`typ/<uuid>.typ`) à utiliser à la place du png pour la vue Typst.
+ * @param obj {JSONReferentielEnding} terminaison à tester
+ * @returns `true` si la clé `typ` est présente et vaut `true`
+ */
+export const hasTypSource = (obj: any): boolean =>
+  obj !== null &&
+  typeof obj !== 'undefined' &&
+  Object.keys(obj).includes('typ') &&
+  obj.typ === true
 
 /**
  * Détecte si la terminaison d'un référentiel est un exercice de géométrie dynamique ou pas.
