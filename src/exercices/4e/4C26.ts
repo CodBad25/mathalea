@@ -28,7 +28,7 @@ export const description =
 export const uuid = 'd1fb2'
 
 export const refs = {
-  'fr-fr': ['5N14-3'],
+  'fr-fr': ['4C26'],
   'fr-ch': ['9NO12-7'],
 }
 
