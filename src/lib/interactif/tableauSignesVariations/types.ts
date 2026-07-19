@@ -117,5 +117,7 @@ export interface ActiveCellInfo {
   mode: ToolbarMode
   ligneIndex: number
   cellIndex: number
+  /** Configuration du clavier MathLive pour la cellule (cf. buildDataKeyboardFromStyle). */
+  clavier?: string
   secondaryCellId?: string
 }

@@ -2,6 +2,7 @@ import katexCss from 'katex/dist/katex.min.css?inline'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
 import { toLatex } from '../interactif/tableauSignesVariations/latexExport'
 import { renderTableau, updateCellDisplay } from '../interactif/tableauSignesVariations/render'
+import { toTypst } from '../interactif/tableauSignesVariations/typstExport'
 import {
   createToolbarController,
   type ToolbarController,
@@ -342,6 +343,15 @@ export class TableauSignesVariationsElement extends MathaleaCustomElement {
   }: TableauSignesVariationsCreateOptions): string {
     if (!context.isHtml) {
       return toLatex(config, {})
+    }
+    if (context.isTypst) {
+      // L'export Typst réutilise le rendu HTML (context.isHtml reste vrai),
+      // mais ce web component ne peut pas être « rejoué » par htmlToTypst
+      // (JS exécuté après montage dans le DOM, cf. documentation/developpement/
+      // guides/coder-un-exercice-classique.md#contextistypst). On insère donc
+      // directement le code Typst (package vartable) via le marqueur
+      // <mathalea-typst>, reconnu tel quel par htmlToTypst (latexToTypst.ts).
+      return `<mathalea-typst>${toTypst(config, {})}</mathalea-typst>`
     }
     const computedId =
       id ??
