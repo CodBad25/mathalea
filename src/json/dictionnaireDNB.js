@@ -7010,6 +7010,7 @@ export const dictionnaireDNB = {
     mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'dnb',
+    typ: true,
     tags: [
       'Pythagore',
       'Thalès',

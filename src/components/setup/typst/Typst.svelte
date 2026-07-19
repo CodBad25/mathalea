@@ -8,7 +8,10 @@
   import { onDestroy, onMount } from 'svelte'
   import { get } from 'svelte/store'
   import ExerciceSimple from '../../../exercices/ExerciceSimple'
-  import { buildExercisesList } from '../../../lib/components/exercisesUtils'
+  import {
+    buildExercisesList,
+    getStaticExerciceTypUrl,
+  } from '../../../lib/components/exercisesUtils'
   import {
     mathaleaFormatExercice,
     mathaleaHandleExerciceSimple,
@@ -438,9 +441,24 @@
     })
   }
 
-  /** Nombre de questions par exercice (null : non réglable), pour la palette */
+  /**
+   * Exercices statiques (annale scannée, éventuellement convertie en `.typ`),
+   * par numéro : contenu figé, aucune régénération possible (voir `regenerate`).
+   */
+  $: staticExercises = Object.fromEntries(
+    exercises.map((exercise, k) => [k + 1, exercise?.typeExercice === 'statique']),
+  ) as Record<number, boolean>
+
+  /**
+   * Nombre de questions par exercice (null : non réglable), pour la palette.
+   * Toujours `null` pour un exercice statique : son nombre de questions est
+   * figé par son contenu (image ou `.typ`), pas de génération possible.
+   */
   $: questionCounts = Object.fromEntries(
-    exercises.map((exercise, k) => [k + 1, exercise?.nbQuestions ?? null]),
+    exercises.map((exercise, k) => [
+      k + 1,
+      exercise?.typeExercice === 'statique' ? null : (exercise?.nbQuestions ?? null),
+    ]),
   ) as Record<number, number | null>
 
   /** Change le nombre de questions de l'exercice num et régénère le code */
@@ -1049,7 +1067,13 @@
     const params = get(exercicesParams)
     return exercises.map((exercise, k) => {
       const input: TypstExerciseInput = {
-        ref: params[k]?.id ?? '',
+        // un exercice statique n'a pas d'id de référentiel de compétences :
+        // sa référence affichée (réglage « Afficher la référence des
+        // exercices ») est alors son titre (ex. « DNB Juin 2026... Ex 1 »)
+        ref:
+          exercise?.typeExercice === 'statique'
+            ? (exercise.titre ?? '')
+            : (params[k]?.id ?? ''),
         intro: '',
         questions: [],
         introCorrection: '',
@@ -1351,6 +1375,75 @@
       : url
   }
 
+  /**
+   * Repère de début d'un item d'énumération Typst de premier niveau (`+ `
+   * en tout début de ligne, sans indentation : une sous-liste indentée
+   * n'est donc pas prise pour des questions séparées).
+   */
+  const TYP_QUESTION_ITEM = /^\+[ \t]+/m
+
+  /**
+   * Sépare le code Typst d'un exercice statique en énoncé fixe et questions
+   * individuelles, à partir de sa numérotation classique (`+ question`) :
+   * c'est l'affichage qui repère les questions, l'auteur du `.typ` écrit une
+   * énumération Typst ordinaire (toujours compilable seule avec
+   * `typst compile`, sans convention MathALÉA à connaître). Sans item de
+   * premier niveau, tout le fichier reste une question unique.
+   */
+  function splitTypQuestions(code: string): {
+    intro: string
+    questions: string[]
+  } {
+    const parts = code.split(TYP_QUESTION_ITEM)
+    if (parts.length === 1) return { intro: code, questions: [] }
+    const [intro, ...questions] = parts
+    return { intro, questions }
+  }
+
+  /**
+   * Remplace, pour chaque exercice statique (annale scannée) disposant d'un
+   * fichier source Typst (`typ: true` dans le référentiel), l'énoncé généré
+   * par `buildExercisesList` (un `<img>` pointant vers le png) par le code
+   * Typst du fichier, inséré tel quel via le marqueur `<mathalea-typst>`
+   * (voir `htmlToTypst`). Propre à la vue Typst : les autres vues
+   * (A4, QuestionParPage...) continuent d'afficher le png, `buildExercisesList`
+   * n'est pas modifiée. Un fichier absent ou vide laisse l'énoncé (png) inchangé.
+   *
+   * Les questions repérées par `splitTypQuestions` deviennent des entrées
+   * séparées de `listeQuestions` : la numérotation passe alors par le même
+   * environnement `#tasks(...)` que les autres exercices et respecte le
+   * réglage « Numéros des questions en gras ».
+   */
+  async function applyTypSourcesForStaticExercises() {
+    for (const exercise of exercises) {
+      if (exercise == null || exercise.typeExercice !== 'statique') continue
+      const uuid = exercise.uuid
+      if (uuid == null) continue
+      const typUrl = getStaticExerciceTypUrl(uuid)
+      if (typUrl == null) continue
+      try {
+        const response = await window.fetch(typUrl)
+        if (!response.ok) continue
+        const code = await response.text()
+        if (code.trim().length === 0) continue
+        const { intro, questions } = splitTypQuestions(code)
+        if (questions.length === 0) {
+          exercise.listeQuestions[0] = `<mathalea-typst>${code}</mathalea-typst>`
+          continue
+        }
+        if (intro.trim().length > 0) {
+          exercise.consigne = `<mathalea-typst>${intro}</mathalea-typst>`
+        }
+        exercise.listeQuestions = questions.map(
+          (question) => `<mathalea-typst>${question}</mathalea-typst>`,
+        )
+        exercise.nbQuestions = questions.length
+      } catch {
+        // fichier .typ absent ou inaccessible : l'énoncé (png) reste inchangé
+      }
+    }
+  }
+
   /** Extensions d'image reconnues par Typst pour le chemin virtuel du fichier */
   const KNOWN_IMAGE_EXTENSIONS = new Set(['png', 'jpg', 'jpeg', 'gif', 'webp'])
 
@@ -1409,6 +1502,7 @@
     for (const exercise of exercises) {
       if (exercise != null) exercise.interactif = false
     }
+    await applyTypSourcesForStaticExercises()
     await prefetchStaticImages()
     isLoading = false
   }
@@ -2057,6 +2151,7 @@
                   header={headerValues}
                   {documentColumns}
                   {questionCounts}
+                  {staticExercises}
                   {figureZoomValues}
                   {figureAlignValues}
                   codeOverrides={codeOverrideValues}
