@@ -1248,6 +1248,12 @@ export function buildTypstDocument(
     line.includes('#mathalea-anchor('),
   )
   const usesQrCode = allLines.some((line) => /^\s*qr: /.test(line))
+  const usesSchema = allLines.some((line) =>
+    line.includes('mathalea-schema-span'),
+  )
+  const usesWritingLines = allLines.some((line) =>
+    line.includes('#mathalea-lignes('),
+  )
   // variables de mise en page des questions référencées par les corps
   // (`ex1`, et `ex1-corr` pour les corrections, réglables indépendamment)
   const tasksPrefixes = [

@@ -3,8 +3,16 @@ import { beforeAll, describe, expect, it } from 'vitest'
 // L'import des customElements les enregistre dans mathaleaCustomElementsRegistry
 // (comme le fait le chargement d'un exercice qui les utilise).
 import handleInteractiveClock from '../../src/lib/customElements/InteractiveClock'
+import '../../src/lib/customElements/BlocklyEditor'
+import '../../src/lib/customElements/demi_droite_interactive'
+import '../../src/lib/customElements/GuideAne'
 import '../../src/lib/customElements/ListeDeroulanteElement'
 import '../../src/lib/customElements/MultiMathfield'
+import '../../src/lib/customElements/MySpreadSheet'
+import '../../src/lib/customElements/ScratchEditor'
+import '../../src/lib/customElements/SvgSelectionElement'
+import '../../src/lib/customElements/TableauSignesVariationsElement'
+import '../../src/lib/customElements/TrigoCircleSelectionElement'
 
 import {
   cleanFillInTheBlanks,
@@ -100,10 +108,12 @@ describe('stripInteractiveWidgets', () => {
     expect(stripInteractiveWidgets(question)).toBe('Quelle heure est-il ? ')
   })
 
-  it('laisse la liste déroulante affichée dans la question', () => {
+  it('laisse la liste déroulante affichée mais désactivée dans la question', () => {
     const question =
       'Cette équation <liste-deroulante id="liste-deroulanteEx0Q0"></liste-deroulante>'
-    expect(stripInteractiveWidgets(question)).toBe(question)
+    expect(stripInteractiveWidgets(question)).toBe(
+      'Cette équation <liste-deroulante id="liste-deroulanteEx0Q0" interactivity-on="false"></liste-deroulante>',
+    )
   })
 
   it('retire les <select> historiques', () => {

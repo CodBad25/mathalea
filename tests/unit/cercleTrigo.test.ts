@@ -7,7 +7,7 @@ import {
 } from '../../src/lib/mathFonctions/trigo'
 import {
   trigoCircleSelectionValue,
-} from '../../src/lib/interactif/trigoCircleSelection/selectionCercleTrigo'
+} from '../../src/lib/customElements/TrigoCircleSelectionElement'
 import { fraction } from '../../src/modules/fractions'
 
 describe('cercleTrigo', () => {

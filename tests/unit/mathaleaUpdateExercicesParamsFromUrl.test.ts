@@ -107,13 +107,13 @@ describe('mathaleaUpdateExercicesParamsFromUrl', () => {
     const expectedParams = [
       {
         uuid: 'edb61',
-        id: '5P13',
+        id: '5P1A-2',
         interactif: '0',
         alea: 'Wm22',
       },
       {
         uuid: '4623e',
-        id: '5L12-1',
+        id: '5N5F-1',
         interactif: '0',
         nbQuestions: 6,
         duration: 10,
