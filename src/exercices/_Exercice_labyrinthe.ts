@@ -38,7 +38,7 @@ export default class ExerciceLabyrinthe extends Exercice {
 
     let texte = ''
     let texteCorr = ''
-    if (context.isHtml) {
+    if (context.isHtml && !context.isTypst) {
       texte = `<div
         id="containerLabyrintheEx${this.numeroExercice}Q${0}">
       </div>
@@ -214,10 +214,33 @@ export default class ExerciceLabyrinthe extends Exercice {
         this.badAnswers.push(String(this.generateBadAnswers()))
       }
 
-      this.labyrinthe.setValues(this.goodAnswers, this.badAnswers)
-
-      texte = `\n\n\\bigskip\n${this.labyrinthe.generateLatex()}`
-      texteCorr = this.labyrinthe.generateLatexCorrection()
+      if (context.isTypst) {
+        // La conversion HTML→Typst ne traite le LaTeX que dans du texte
+        // délimité par des `$...$` : le tableau du labyrinthe doit donc y
+        // être enveloppé pour être reconnu et transformé en `#table(...)`.
+        // Chaque cellule est remise en mode maths par ce convertisseur : les
+        // réponses des sous-classes qui portent déjà leurs propres `$...$`
+        // (ex. fractions) doivent en être retirées pour éviter un `$...$`
+        // imbriqué.
+        const stripMathDelimiters = (s: string): string => {
+          const trimmed = s.trim()
+          return trimmed.startsWith('$') &&
+            trimmed.endsWith('$') &&
+            trimmed.length > 1
+            ? trimmed.slice(1, -1)
+            : trimmed
+        }
+        this.labyrinthe.setValues(
+          this.goodAnswers.map(stripMathDelimiters),
+          this.badAnswers.map(stripMathDelimiters),
+        )
+        texte = `$${this.labyrinthe.generateLatex()}$`
+        texteCorr = `$${this.labyrinthe.generateLatexCorrection()}$`
+      } else {
+        this.labyrinthe.setValues(this.goodAnswers, this.badAnswers)
+        texte = `\n\n\\bigskip\n${this.labyrinthe.generateLatex()}`
+        texteCorr = this.labyrinthe.generateLatexCorrection()
+      }
     }
 
     this.listeQuestions[0] = texte
