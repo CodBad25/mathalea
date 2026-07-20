@@ -21,6 +21,7 @@
   import { isLessThan1Month } from '../../../../../../lib/types/dates'
   import SelectedIndicator from '../../../../../shared/forms/SelectedIndicator.svelte'
   import NoInteractivityIcon from '../../../../../shared/icons/NoInteractivityIcon.svelte'
+  import NoRandomizationIcon from '../../../../../shared/icons/NoRandomizationIcon.svelte'
   import QcmCamIcon from '../../../../../shared/icons/QcmCamIcon.svelte'
 
   export let ending: JSONReferentielEnding
@@ -221,6 +222,16 @@
                 data-tip="Pas d'interactivité"
               >
                 <NoInteractivityIcon
+                  class="inline-flex h-3 w-3 text-coopmaths-warn-dark dark:text-coopmathsdark-warn-dark fill-coopmaths-warn-dark dark:fill-coopmathsdark-warn-dark stroke-coopmaths-warn-dark dark:stroke-coopmathsdark-warn-dark"
+                />
+              </span>
+            {/if}
+            {#if !ending.features.aleatoire?.isActive}
+              &nbsp;<span
+                class="tooltip tooltip-bottom tooltip-neutral"
+                data-tip="Pas de version aléatoire"
+              >
+                <NoRandomizationIcon
                   class="inline-flex h-3 w-3 text-coopmaths-warn-dark dark:text-coopmathsdark-warn-dark fill-coopmaths-warn-dark dark:fill-coopmathsdark-warn-dark stroke-coopmaths-warn-dark dark:stroke-coopmathsdark-warn-dark"
                 />
               </span>

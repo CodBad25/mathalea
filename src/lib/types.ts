@@ -923,6 +923,7 @@ export interface IExercice {
   spacing: number
   spacingCorr: number
   pasDeVersionLatex: boolean
+  pasDeVersionAleatoire?: boolean
   listePackages?: string[]
   consigneModifiable: boolean
   nbQuestionsModifiable: boolean

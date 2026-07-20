@@ -27,12 +27,14 @@ export interface FeatureParams {
  * @property {FeatureParams} interactif : interactivité dans l'exercice
  * @property {FeatureParams} amc : possibilité d'exportation pour utilisation dans AMC
  * @property {FeatureParams} qcm : possibilité d'exportation pour utilisation dans AMC
+ * @property {FeatureParams} aleatoire : l'exercice propose une version aléatoire (bouton « Nouvel énoncé »)
  */
 export interface Features {
   interactif?: FeatureParams
   amc?: FeatureParams
   qcm?: FeatureParams
   qcmcam?: FeatureParams
+  aleatoire?: FeatureParams
 }
 
 /**

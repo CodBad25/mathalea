@@ -138,8 +138,10 @@ export class AtLeastOneOfCriteria<T> implements Criterion<T> {
   const filteredReferentiel = buildReferentiel(filteredList)  // reconstitution du référentiel
   ```
  */
+export type FilterableFeature = 'interactif' | 'amc' | 'qcm' | 'qcmcam'
+
 export function featuresCriteria(
-  specs: ('interactif' | 'amc' | 'qcm' | 'qcmcam')[],
+  specs: FilterableFeature[],
 ): Criterion<ResourceAndItsPath> {
   // construction du critère pour la spécification `amc`
   const amcCriterion: Criterion<ResourceAndItsPath> = {
