@@ -31,7 +31,7 @@ export const titre =
 export const uuid = '56773'
 
 export const refs = {
-  'fr-fr': ['6N2D-1'],
+  'fr-fr': ['6N2D-1', 'auto5N2A-3'],
   'fr-2016': ['6C30-2b'],
   'fr-ch': ['9NO8-19'],
 }

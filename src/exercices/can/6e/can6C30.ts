@@ -22,7 +22,7 @@ export const dateDePublication = '04/03/2022'
 export const uuid = '16ea9'
 
 export const refs = {
-  'fr-fr': ['can6C30', '6N2E-flash1'],
+  'fr-fr': ['can6C30', '6N2E-flash1', 'auto5N2A-flash10'],
   'fr-ch': ['NR'],
 }
 export default class MultiplierDeuxDecimaux extends ExerciceSimple {

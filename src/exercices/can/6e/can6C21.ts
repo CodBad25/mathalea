@@ -9,7 +9,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { bleuMathalea } from '../../../lib/colors'
 import { arrondi } from '../../../lib/outils/nombres'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Trouver le complément à 1*'
+export const titre = 'Trouver le complément à 1 avec des centièmes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
@@ -21,7 +21,7 @@ export const amcType = 'AMCNum'
 export const uuid = '89135'
 
 export const refs = {
-  'fr-fr': ['can6C21', '6N2A-flash3'],
+  'fr-fr': ['can6C21', '6N2A-flash3', 'auto5N2A-flash6'],
   'fr-ch': [],
 }
 export default class ComplementAUn extends ExerciceSimple {

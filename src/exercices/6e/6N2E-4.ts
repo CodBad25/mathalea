@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
@@ -12,8 +13,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Déterminer le dernier chiffre d'un produit entre décimaux"
 export const dateDePublication = '28/01/2026'
@@ -30,7 +29,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'em8m3'
 
 export const refs = {
-  'fr-fr': ['6N2E-4'],
+  'fr-fr': ['6N2E-4', 'auto5N2A-4'],
   'fr-ch': [],
 }
 
@@ -71,7 +70,8 @@ export default class DernierChiffreProduitDécimaux extends Exercice {
       let exposant1 = randint(1, 3)
       let exposant2 = randint(1, 3, exposant1)
       if (this.sup3) {
-        choice([true, false]) ? (exposant1 = 0) : (exposant2 = 0)
+        if (choice([true, false])) exposant1 = 0
+        else exposant2 = 0
       }
       const chiffreA = randint(1, 9)
       const chiffreB = randint(1, 9)
