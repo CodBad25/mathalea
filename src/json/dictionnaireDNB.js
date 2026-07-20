@@ -6915,7 +6915,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_01_sujet0va_1: {
     annee: '2026',
-    typ: true,
     lieu: 'Sujet 0 Version A',
     mois: 'Janvier',
     numeroInitial: '1',
@@ -6924,7 +6923,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_01_sujet0va_2: {
     annee: '2026',
-    typ: true,
     lieu: 'Sujet 0 Version A',
     mois: 'Janvier',
     numeroInitial: '2',
@@ -7008,6 +7006,7 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_ameriquenord_1: {
     annee: '2026',
+    typ: true,
     lieu: 'Amérique du Nord',
     mois: 'Juin',
     numeroInitial: '1',
@@ -7022,6 +7021,7 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_ameriquenord_2: {
     annee: '2026',
+    typ: true,
     lieu: 'Amérique du Nord',
     mois: 'Juin',
     numeroInitial: '2',
