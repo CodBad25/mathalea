@@ -50,7 +50,6 @@ export default class VariationDUneSuiteDefinieExplicitement extends Exercice {
     this.autoCorrection = []
     const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup,
-      min: 1,
       max: 3,
       melange: 4,
       defaut: 4,
