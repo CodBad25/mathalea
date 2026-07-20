@@ -6933,7 +6933,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_01_sujet0va_3: {
     annee: '2026',
-    typ: true,
     lieu: 'Sujet 0 Version A',
     mois: 'Janvier',
     numeroInitial: '3',
@@ -6942,7 +6941,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_01_sujet0va_4: {
     annee: '2026',
-    typ: true,
     lieu: 'Sujet 0 Version A',
     mois: 'Janvier',
     numeroInitial: '4',
@@ -6956,7 +6954,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_01_sujet0vb_1: {
     annee: '2026',
-    typ: true,
     lieu: 'Sujet 0 Version B',
     mois: 'Janvier',
     numeroInitial: '1',
@@ -6965,7 +6962,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_01_sujet0vb_2: {
     annee: '2026',
-    typ: true,
     lieu: 'Sujet 0 Version B',
     mois: 'Janvier',
     numeroInitial: '2',
@@ -6974,7 +6970,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_01_sujet0vb_3: {
     annee: '2026',
-    typ: true,
     lieu: 'Sujet 0 Version B',
     mois: 'Janvier',
     numeroInitial: '3',
@@ -6989,7 +6984,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_01_sujet0vb_4: {
     annee: '2026',
-    typ: true,
     lieu: 'Sujet 0 Version B',
     mois: 'Janvier',
     numeroInitial: '4',
@@ -6998,7 +6992,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_01_sujet0va_automatismes: {
     annee: '2026',
-    typ: true,
     lieu: 'Sujet 0 Version B',
     mois: 'Janvier',
     numeroInitial: 'automatismes',
@@ -7007,7 +7000,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_01_sujet0vb_automatismes: {
     annee: '2026',
-    typ: true,
     lieu: 'Sujet 0 Version A',
     mois: 'Janvier',
     numeroInitial: 'automatismes',
@@ -7016,7 +7008,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_ameriquenord_1: {
     annee: '2026',
-    typ: true,
     lieu: 'Amérique du Nord',
     mois: 'Juin',
     numeroInitial: '1',
@@ -7031,7 +7022,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_ameriquenord_2: {
     annee: '2026',
-    typ: true,
     lieu: 'Amérique du Nord',
     mois: 'Juin',
     numeroInitial: '2',
@@ -7046,7 +7036,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_ameriquenord_3: {
     annee: '2026',
-    typ: true,
     lieu: 'Amérique du Nord',
     mois: 'Juin',
     numeroInitial: '3',
@@ -7055,7 +7044,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_ameriquenord_4: {
     annee: '2026',
-    typ: true,
     lieu: 'Amérique du Nord',
     mois: 'Juin',
     numeroInitial: '4',
@@ -7064,7 +7052,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_ameriquenord_automatismes: {
     annee: '2026',
-    typ: true,
     lieu: 'Amérique du Nord',
     mois: 'Juin',
     numeroInitial: 'automatismes',
@@ -7083,7 +7070,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_asie_1: {
     annee: '2026',
-    typ: true,
     lieu: 'Asie',
     mois: 'Juin',
     numeroInitial: '1',
@@ -7092,7 +7078,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_asie_2: {
     annee: '2026',
-    typ: true,
     lieu: 'Asie',
     mois: 'Juin',
     numeroInitial: '2',
@@ -7101,7 +7086,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_asie_3: {
     annee: '2026',
-    typ: true,
     lieu: 'Asie',
     mois: 'Juin',
     numeroInitial: '3',
@@ -7110,7 +7094,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_asie_4: {
     annee: '2026',
-    typ: true,
     lieu: 'Asie',
     mois: 'Juin',
     numeroInitial: '4',
@@ -7119,7 +7102,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_asie_automatismes: {
     annee: '2026',
-    typ: true,
     lieu: 'Asie',
     mois: 'Juin',
     numeroInitial: 'automatismes',
@@ -7138,7 +7120,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_etrangers_1: {
     annee: '2026',
-    typ: true,
     lieu: 'Centres étrangers',
     mois: 'Juin',
     numeroInitial: '1',
@@ -7147,7 +7128,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_etrangers_2: {
     annee: '2026',
-    typ: true,
     lieu: 'Centres étrangers',
     mois: 'Juin',
     numeroInitial: '2',
@@ -7156,7 +7136,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_etrangers_3: {
     annee: '2026',
-    typ: true,
     lieu: 'Centres étrangers',
     mois: 'Juin',
     numeroInitial: '3',
@@ -7170,7 +7149,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_etrangers_automatismes: {
     annee: '2026',
-    typ: true,
     lieu: 'Centres étrangers',
     mois: 'Juin',
     numeroInitial: 'automatismes',
@@ -7189,7 +7167,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_metropole_1: {
     annee: '2026',
-    typ: true,
     lieu: 'Métropole',
     mois: 'Juin',
     numeroInitial: '1',
@@ -7198,7 +7175,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_metropole_2: {
     annee: '2026',
-    typ: true,
     lieu: 'Métropole',
     mois: 'Juin',
     numeroInitial: '2',
@@ -7213,7 +7189,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_metropole_3: {
     annee: '2026',
-    typ: true,
     lieu: 'Métropole',
     mois: 'Juin',
     numeroInitial: '3',
@@ -7222,7 +7197,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_metropole_4: {
     annee: '2026',
-    typ: true,
     lieu: 'Métropole',
     mois: 'Juin',
     numeroInitial: '4',
@@ -7231,7 +7205,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_metropole_automatismes: {
     annee: '2026',
-    typ: true,
     lieu: 'Métropole',
     mois: 'Juin',
     numeroInitial: 'automatismes',
@@ -7250,7 +7223,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_antilles_1: {
     annee: '2026',
-    typ: true,
     lieu: 'Antilles',
     mois: 'Juin',
     numeroInitial: '1',
@@ -7265,7 +7237,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_antilles_2: {
     annee: '2026',
-    typ: true,
     lieu: 'Antilles',
     mois: 'Juin',
     numeroInitial: '2',
@@ -7279,7 +7250,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_antilles_3: {
     annee: '2026',
-    typ: true,
     lieu: 'Antilles',
     mois: 'Juin',
     numeroInitial: '3',
@@ -7288,7 +7258,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_antilles_automatismes: {
     annee: '2026',
-    typ: true,
     lieu: 'Antilles',
     mois: 'Juin',
     numeroInitial: 'automatismes',
@@ -7307,7 +7276,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_polynesie_1: {
     annee: '2026',
-    typ: true,
     lieu: 'Polynésie',
     mois: 'Juin',
     numeroInitial: '1',
@@ -7323,7 +7291,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_polynesie_2: {
     annee: '2026',
-    typ: true,
     lieu: 'Polynésie',
     mois: 'Juin',
     numeroInitial: '2',
@@ -7332,7 +7299,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_polynesie_3: {
     annee: '2026',
-    typ: true,
     lieu: 'Polynésie',
     mois: 'Juin',
     numeroInitial: '3',
@@ -7347,7 +7313,6 @@ export const dictionnaireDNB = {
   },
   dnb_2026_06_polynesie_automatismes: {
     annee: '2026',
-    typ: true,
     lieu: 'Polynésie',
     mois: 'Juin',
     numeroInitial: 'automatismes',
