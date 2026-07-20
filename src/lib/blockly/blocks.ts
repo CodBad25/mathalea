@@ -35,7 +35,7 @@ export function ensureBlocklyBlocksInitialized() {
 
   Blockly.Blocks['demarrer'] = {
     init: function () {
-      this.appendDummyInput().appendField('Demarrer')
+      this.appendDummyInput().appendField('Démarrer')
       this.setInputsInline(true)
       this.setNextStatement(true, null)
       this.setStyle('hat_blocks')

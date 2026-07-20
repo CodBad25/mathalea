@@ -5,6 +5,7 @@ import {
   MATHALEA_QCM_HELPERS,
   MATHALEA_SCHEMA_HELPER,
   TASKIZE_IMPORT,
+  VARTABLE_IMPORT,
   escapeTypstText,
   htmlToTypst,
 } from './latexToTypst'
@@ -65,6 +66,12 @@ export const COLUMN_BREAK_SNIPPET = '#colbreak(weak: true)'
 
 /** Colonnes par défaut des blocs #tasks : taskize choisit jusqu'à 4 colonnes uniformes. */
 const DEFAULT_TASKS_COLUMNS = '"auto-fit"'
+/**
+ * Espacement par défaut des questions, en mode export (voir `exportMode`) :
+ * valeur littérale reprise de `#let interligne-questions = 1.2em`, inlinée
+ * directement dans chaque `#tasks(...)` plutôt que déclarée en variable.
+ */
+const DEFAULT_GUTTER_LITERAL = '1.2em'
 
 /**
  * Réglages repris du code courant lors d'une régénération : les ajustements
@@ -124,6 +131,37 @@ const CODE_OVERRIDE_END = /^[ \t]*\/\/ mathalea:override-end\s*$/
 /** Enveloppe le code saisi par le professeur entre ses repères, pour l'exercice `num` */
 function wrapCodeOverride(num: number, code: string): string {
   return `// mathalea:override(${num})\n${code}\n// mathalea:override-end`
+}
+
+/**
+ * Retire l'appel à `mathalea-anchor` du bloc figure (`MATHALEA_FIGURE_BLOCK_HELPER`) :
+ * ce repère (contrôle de zoom de la palette de mise en page) n'a pas de sens
+ * en mode export, où `mathalea-anchor` n'est jamais défini.
+ */
+function stripAnchorCall(helper: string): string {
+  return helper.replace(/\n\s*mathalea-anchor\([^\n]*\)\n/, '\n')
+}
+
+/**
+ * Détecte, dans un ensemble de lignes de code Typst déjà généré, les aides
+ * dont il a besoin (imports/helpers à inclure) : partagé par
+ * `buildTypstDocument` (document complet) et `buildStandaloneExerciseCode`
+ * (fragment autonome d'un seul exercice, pour la modale d'édition).
+ */
+function detectUsedFeatures(lines: string[]): {
+  usesMathaleaFigure: boolean
+  usesTasks: boolean
+  usesQcm: boolean
+  usesSchema: boolean
+  usesWritingLines: boolean
+} {
+  return {
+    usesMathaleaFigure: lines.some((line) => line.includes('mathalea-figure(')),
+    usesTasks: lines.some((line) => line.includes('#tasks(')),
+    usesQcm: lines.some((line) => line.includes('qcm-')),
+    usesSchema: lines.some((line) => line.includes('mathalea-schema-span')),
+    usesWritingLines: lines.some((line) => line.includes('#mathalea-lignes(')),
+  }
 }
 
 /** Extrait du code Typst courant les réglages de la palette à conserver */
@@ -509,6 +547,16 @@ function exerciseBody(
     count: number
     spacing: number
   },
+  /**
+   * Code destiné à être exporté/copié hors de l'appli (fichier .typ,
+   * modale d'édition) : les colonnes et l'espacement des questions sont
+   * écrits en valeurs littérales dans le `#tasks(...)`, plutôt que de
+   * référencer les variables `${tasksPrefix}-colonnes`/`-gutter` (propres à
+   * la palette de mise en page de l'éditeur intégré, sans sens hors de lui).
+   */
+  exportMode = false,
+  /** Réglages de colonnes/espacement de la palette pour cet exercice, déjà résolus par l'appelant */
+  layoutOverride?: { columns?: string; gutter?: string },
 ): ExerciseBodyResult {
   const parts: string[] = []
   if (intro.trim().length > 0) {
@@ -567,8 +615,14 @@ function exerciseBody(
     const anchorLine = emitAnchor
       ? `#mathalea-anchor("${anchorKind}", ${parseInt(tasksPrefix.slice(2), 10)})\n`
       : ''
+    const columnsExpr = exportMode
+      ? (layoutOverride?.columns ?? DEFAULT_TASKS_COLUMNS)
+      : `${tasksPrefix}-colonnes`
+    const gutterExpr = exportMode
+      ? (layoutOverride?.gutter ?? DEFAULT_GUTTER_LITERAL)
+      : `${tasksPrefix}-gutter`
     parts.push(
-      `${anchorLine}#tasks(columns: ${tasksPrefix}-colonnes, label: ${boldableLabel(label, boldQuestionNumbers)}, row-gutter: ${tasksPrefix}-gutter, above: 1.2em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
+      `${anchorLine}#tasks(columns: ${columnsExpr}, label: ${boldableLabel(label, boldQuestionNumbers)}, row-gutter: ${gutterExpr}, above: 1.2em, below: 0.8em, start: ${startNumber})[\n${items.join('\n')}\n]`,
     )
     return {
       code: appendEndOfExerciseLines(parts.join('\n\n'), writingLines),
@@ -650,6 +704,8 @@ function computeGeneratedExercises(
   carryOver: TypstCarryOver,
   figures: string[],
   emitAnchors: boolean,
+  /** Voir `exerciseBody` : colonnes/espacement des `#tasks(...)` en valeurs littérales */
+  exportMode = false,
 ): GeneratedExercise[] {
   // exercice fusionné avec le précédent (bouton de la palette) : rejoint le
   // groupe `exo.with(...)` de son prédécesseur (un seul titre pour le
@@ -715,6 +771,8 @@ function computeGeneratedExercises(
       emitAnchors,
       isGrouped[k],
       writingLines,
+      exportMode,
+      carryOver.tasksLayout?.[`ex${k + 1}`],
     )
     nextStart += enonce.itemCount
     let correction: string | null = null
@@ -732,6 +790,9 @@ function computeGeneratedExercises(
         nextCorrectionStart,
         emitAnchors,
         isGrouped[k],
+        undefined,
+        exportMode,
+        carryOver.tasksLayout?.[`ex${k + 1}-corr`],
       )
       nextCorrectionStart += body.itemCount
       correction = body.code
@@ -759,8 +820,106 @@ export function getGeneratedExerciseCode(
     carryOver,
     figures,
     false,
+    true,
   )
   return generated[num - 1]?.enonce ?? ''
+}
+
+/**
+ * Code Typst autonome (compilable seul avec `typst compile`) d'un exercice :
+ * préambule minimal (imports, aides et réglages réellement utilisés par son
+ * contenu) suivi de son code. Pour le bouton « Copier avec le préambule »
+ * de la modale d'édition : contrairement au fragment inséré dans la fiche
+ * complète (qui référence des variables et aides définies ailleurs dans le
+ * document), ce code ne dépend de rien d'externe.
+ *
+ * `codeOverride`, s'il est fourni, remplace le code généré de l'exercice
+ * (reprend le brouillon en cours d'édition dans la modale, avec ses
+ * éventuelles retouches manuelles) ; les figures SVG restent celles du
+ * contenu d'origine de l'exercice (jamais stockées dans le texte du
+ * brouillon, seulement référencées par `fig-N`).
+ */
+export function buildStandaloneExerciseCode(
+  exercises: TypstExerciseInput[],
+  num: number,
+  options: TypstDocumentOptions = defaultTypstDocumentOptions,
+  carryOver: TypstCarryOver = {},
+  codeOverride?: string,
+): string {
+  const figures: string[] = []
+  const generated = computeGeneratedExercises(
+    exercises,
+    options,
+    carryOver,
+    figures,
+    false,
+    true,
+  )
+  const code = codeOverride ?? generated[num - 1]?.enonce ?? ''
+  const codeLines = code.split('\n')
+  const {
+    usesMathaleaFigure,
+    usesTasks,
+    usesQcm,
+    usesSchema,
+    usesWritingLines,
+  } = detectUsedFeatures(codeLines)
+  const usesFigures = figures.length > 0
+
+  const lines: string[] = []
+  const importLines: string[] = []
+  if (usesTasks) importLines.push(TASKIZE_IMPORT)
+  if (options.autoVerticalSpacing) importLines.push(BREATHER_IMPORT)
+  if (importLines.length > 0) lines.push(...importLines, '')
+  if (usesSchema) lines.push(MATHALEA_SCHEMA_HELPER, '')
+  if (usesFigures) {
+    lines.push(
+      MATHALEA_FIT_HELPER,
+      '',
+      stripAnchorCall(MATHALEA_FIGURE_BLOCK_HELPER),
+      '',
+    )
+  }
+  if (usesMathaleaFigure) lines.push(MATHALEA_FIGURE_HELPERS, '')
+  if (usesWritingLines) lines.push(MATHALEA_WRITING_LINES_HELPER, '')
+  lines.push(`#let couleur = ${options.badgeColor}`)
+  lines.push(`#let police-texte = ${typstString(options.font)}`)
+  lines.push(`#let police-maths = ${typstString(options.mathFont)}`)
+  lines.push(`#let taille-texte = ${options.fontSize}pt`)
+  if (usesQcm) {
+    lines.push('#let qcm-colonnes = 2 // colonnes des propositions de QCM')
+  }
+  if (usesTasks) {
+    lines.push(
+      '#tasks-setup(columns: "auto-fit", auto-fit-mode: "uniform", max-columns: 4)',
+    )
+  }
+  lines.push(
+    `#set text(font: police-texte, size: taille-texte, lang: "fr", spacing: ${options.wordSpacing}%)`,
+  )
+  lines.push(`#set par(leading: ${options.lineSpacing}em)`)
+  lines.push('#set enum(numbering: "1.", spacing: 1.2em)')
+  lines.push('#show math.equation: set text(font: police-maths)')
+  lines.push('#let txt(corps) = text(font: police-texte, corps)')
+  lines.push('#show math.frac: it => math.display(it)')
+  if (options.autoVerticalSpacing) lines.push('#show: breathe')
+  if (usesQcm) lines.push(MATHALEA_QCM_HELPERS)
+  lines.push('')
+  if (usesFigures) {
+    for (const [index, figure] of figures.entries()) {
+      const figNum = index + 1
+      lines.push(`#let fig-${figNum} = ${figure}`)
+      lines.push(
+        `#let fig-${figNum}-zoom = ${carryOver.figureZoom?.[figNum] ?? 1}`,
+      )
+      lines.push(
+        `#let fig-${figNum}-align = ${carryOver.figureAlign?.[figNum] ?? 'left'}`,
+      )
+    }
+    lines.push('')
+  }
+  lines.push(code)
+  return lines.join('\n')
 }
 
 /**
@@ -780,11 +939,17 @@ function buildVersionContent(
   figures: string[],
   varPrefix: string,
   emitAnchors: boolean,
+  /**
+   * Code destiné à être exporté/copié hors de l'appli : voir `exerciseBody`
+   * (colonnes/espacement littéraux) et `wrapCodeOverride`/`INSERTION_TAG`
+   * (repères de relecture par `harvestCarryOver`, inutiles hors de l'éditeur).
+   */
+  exportMode = false,
 ): VersionContent {
   /** Insertions de la palette à réémettre après l'exercice `num` */
   const insertionLines = (num: number, indent: string): string[] =>
-    (carryOver.insertions?.[num] ?? []).map(
-      (line) => `${indent}${line} ${INSERTION_TAG}`,
+    (carryOver.insertions?.[num] ?? []).map((line) =>
+      exportMode ? `${indent}${line}` : `${indent}${line} ${INSERTION_TAG}`,
     )
   // Banque d'exercices (paquet exercise-bank) : chaque exercice regroupe
   // son énoncé et sa correction dans un `#let exN = exo.with(...)`, puis
@@ -804,16 +969,24 @@ function buildVersionContent(
     carryOver,
     figures,
     emitAnchors,
+    exportMode,
   )
   const hasCorrections = generated.some((g) => g.correction != null)
   // surcharge manuelle (modale d'édition de la palette) : remplace le code
   // émis pour l'exercice concerné, sans QR-code dans le rendu final (ses
   // figures et son décompte de questions restent ceux du texte généré,
-  // calculés par computeGeneratedExercises avant la surcharge)
+  // calculés par computeGeneratedExercises avant la surcharge). En mode
+  // export, le repère de relecture (`wrapCodeOverride`) n'a pas d'utilité :
+  // rien ne relit plus jamais ce code exporté.
   const built = generated.map((g, k) => {
     const override = carryOver.codeOverrides?.[k + 1]
     return {
-      enonce: override != null ? wrapCodeOverride(k + 1, override) : g.enonce,
+      enonce:
+        override == null
+          ? g.enonce
+          : exportMode
+            ? override
+            : wrapCodeOverride(k + 1, override),
       correction: g.correction,
     }
   })
@@ -1006,11 +1179,31 @@ function buildVersionContent(
  * générés à la suite du sujet principal (Sujet A), chacun avec sa propre
  * pagination et ses propres corrections.
  */
+export interface TypstBuildOptions {
+  /**
+   * Code destiné à être exporté/copié hors de l'appli (bouton de
+   * téléchargement du .typ, modale d'édition) : sans les repères
+   * `mathalea-anchor` (palette de mise en page) ni les marqueurs de
+   * relecture (`harvestCarryOver`), colonnes et espacement des questions en
+   * valeurs littérales plutôt qu'en variables `exN-colonnes`/`exN-gutter`.
+   * Les réglages globaux (`titre`, `couleur`, `police-texte`...) restent en
+   * revanche des `#let` : un professeur les modifie en un seul endroit.
+   */
+  exportMode?: boolean
+  /**
+   * URL complète (avec ses paramètres) permettant de régénérer cette fiche
+   * à l'identique, inscrite en commentaire en tête du code. Omise si non
+   * fournie (contexte sans URL, comme les tests).
+   */
+  sourceUrl?: string
+}
+
 export function buildTypstDocument(
   exercises: TypstExerciseInput[],
   options: TypstDocumentOptions = defaultTypstDocumentOptions,
   carryOver: TypstCarryOver = {},
   extraVersions: TypstExerciseInput[][] = [],
+  { exportMode = false, sourceUrl }: TypstBuildOptions = {},
 ): string {
   // Les corps sont convertis d'abord : les figures SVG rencontrées sont
   // collectées pour être déclarées (`#let fig-N = image(...)`) en tête
@@ -1024,7 +1217,8 @@ export function buildTypstDocument(
     carryOver,
     figures,
     '',
-    true,
+    !exportMode,
+    exportMode,
   )
   const extra = extraVersions.map((versionExercises, i) =>
     buildVersionContent(
@@ -1034,6 +1228,7 @@ export function buildTypstDocument(
       figures,
       `v${i + 1}`,
       false,
+      exportMode,
     ),
   )
   const totalVersions = 1 + extraVersions.length
@@ -1047,17 +1242,12 @@ export function buildTypstDocument(
     line.includes('mathalea-figure('),
   )
   const usesTasks = allLines.some((line) => line.includes('#tasks('))
+  const usesVarTable = allLines.some((line) => line.includes('#tabvar('))
   const usesQcm = allLines.some((line) => line.includes('qcm-'))
   const usesAnchors = allLines.some((line) =>
     line.includes('#mathalea-anchor('),
   )
   const usesQrCode = allLines.some((line) => /^\s*qr: /.test(line))
-  const usesSchema = allLines.some((line) =>
-    line.includes('mathalea-schema-span'),
-  )
-  const usesWritingLines = allLines.some((line) =>
-    line.includes('#mathalea-lignes('),
-  )
   // variables de mise en page des questions référencées par les corps
   // (`ex1`, et `ex1-corr` pour les corrections, réglables indépendamment)
   const tasksPrefixes = [
@@ -1076,14 +1266,17 @@ export function buildTypstDocument(
 
   const lines: string[] = []
   lines.push('// Fiche générée par MathALÉA — https://coopmaths.fr/alea')
-  lines.push("// Ce code est modifiable : l'aperçu se met à jour tout seul.")
+  if (sourceUrl != null && sourceUrl !== '') {
+    lines.push(`// Pour régénérer cette fiche : ${sourceUrl}`)
+  }
   lines.push('')
   const usesExerciseBank = !options.mergeExercises
-  if (usesTasks || usesExerciseBank || options.autoVerticalSpacing) {
+  if (usesTasks || usesExerciseBank || options.autoVerticalSpacing || usesVarTable) {
     lines.push('// ----- Paquets -----')
     if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
     if (usesTasks) lines.push(TASKIZE_IMPORT)
     if (options.autoVerticalSpacing) lines.push(BREATHER_IMPORT)
+    if (usesVarTable) lines.push(VARTABLE_IMPORT)
     lines.push('')
   }
   if (usesAnchors) {
@@ -1110,7 +1303,13 @@ export function buildTypstDocument(
     lines.push('// ----- Figures : adaptation à la largeur et alignement -----')
     lines.push(MATHALEA_FIT_HELPER)
     lines.push('')
-    lines.push(MATHALEA_FIGURE_BLOCK_HELPER)
+    // le repère `mathalea-anchor` de ce bloc (contrôle de zoom de la
+    // palette) n'a pas de sens dans le code exporté, où il n'est jamais défini
+    lines.push(
+      exportMode
+        ? stripAnchorCall(MATHALEA_FIGURE_BLOCK_HELPER)
+        : MATHALEA_FIGURE_BLOCK_HELPER,
+    )
     lines.push('')
   }
   if (usesMathaleaFigure) {
@@ -1135,10 +1334,19 @@ export function buildTypstDocument(
   if (usesQcm) {
     lines.push('#let qcm-colonnes = 2 // colonnes des propositions de QCM')
   }
-  if (tasksPrefixes.length > 0) {
+  // réglage par défaut de "auto-fit" (colonnes/espacement littéraux du mode
+  // export y compris) : nécessaire dès qu'un `#tasks(...)` est présent, pas
+  // seulement quand des variables `exN-colonnes` sont déclarées ci-dessous
+  if (usesTasks) {
     lines.push(
       '#tasks-setup(columns: "auto-fit", auto-fit-mode: "uniform", max-columns: 4)',
     )
+  }
+  // en mode export, chaque `#tasks(...)` porte déjà ses valeurs littérales
+  // (voir `exerciseBody`) : `tasksPrefixes` est alors toujours vide, ces
+  // variables de plomberie (propres à la palette de mise en page) n'ont pas
+  // à être déclarées.
+  if (tasksPrefixes.length > 0) {
     lines.push(
       '// espacement vertical entre les questions (défaut de tous les exercices)',
     )
@@ -1260,8 +1468,8 @@ export function buildTypstDocument(
   lines.push('')
   lines.push('// ----- En-tête -----')
   // repère du bloc de titre : la palette de l'aperçu propose d'y modifier
-  // les variables titre, sous-titre et entete
-  lines.push('#mathalea-anchor("header", 0)')
+  // les variables titre, sous-titre et entete (sans objet en mode export)
+  if (!exportMode) lines.push('#mathalea-anchor("header", 0)')
   lines.push(
     ...headerBlock(
       options.headerStyle,

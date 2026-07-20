@@ -6,6 +6,7 @@ import {
     type JSONReferentielEnding,
     type JSONReferentielObject,
     type ResourceAndItsPath,
+    hasTypSource,
     isCrpeType,
     isExerciceItemInReferentiel,
     isJSONReferentielEnding,
@@ -179,6 +180,28 @@ export function computeStaticExercicePngUrls(
     }
   }
   return null
+}
+
+/**
+ * Calcule l'URL locale du fichier source Typst d'une ressource statique
+ * (annales DNB, BAC...), si sa terminaison de référentiel déclare la clé
+ * `typ: true`. Ce fichier, éditable par l'utilisateur, est alors utilisé à
+ * la place du png pour la vue Typst.
+ * @param foundResource la terminaison de référentiel trouvée pour un uuid
+ * @returns l'URL relative du fichier `.typ`, ou `null` si `typ` n'est pas déclarée
+ */
+export function computeStaticExerciceTypUrl(
+  foundResource: JSONReferentielEnding | null,
+): string | null {
+  if (!hasTypSource(foundResource) || foundResource === null) {
+    return null
+  }
+  const resource = foundResource as JSONReferentielEnding & {
+    uuid: string
+    annee: string
+  }
+  const [sujet] = resource.uuid.split('_')
+  return `static/${sujet}/${resource.annee}/typ/${resource.uuid}.typ`
 }
 
 /**

@@ -6,6 +6,10 @@ import {
   BlocklyEditor,
   type BlocklyEditorOptions,
 } from '../../lib/customElements/BlocklyEditor'
+import {
+  addScratchEditor,
+  type ScratchEditorOptions,
+} from '../../lib/customElements/ScratchEditor'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import {
@@ -81,7 +85,7 @@ BlocklyEditor.registerVerificationCallback(
       return {
         isOk: false,
         feedback:
-          "Impossible d'interpréter ta réponse Blockly en expression arithmétique, il semble que tu aies oublié de coder ta réponse.",
+          "Impossible d'interpréter ta réponse par blocs en expression arithmétique, il semble que tu aies oublié de coder ta réponse.",
       }
     }
 
@@ -90,7 +94,7 @@ BlocklyEditor.registerVerificationCallback(
       return {
         isOk: false,
         feedback:
-          "Impossible d'interpréter la correction attendue Blockly en AST.",
+          "Impossible d'interpréter la correction attendue par blocs en AST.", // message à destination du concepteur de l'exo (pas de l'élève)
       }
     }
 
@@ -99,7 +103,7 @@ BlocklyEditor.registerVerificationCallback(
       isOk,
       feedback: isOk
         ? 'Bravo !'
-        : "L'expression ne correspond pas au calcul attendu.",
+        : 'Le code ne correspond pas au calcul attendu.',
     }
   },
 )
@@ -107,6 +111,7 @@ BlocklyEditor.registerVerificationCallback(
 export default class CalculerFormuleParBlockly extends Exercice {
   constructor() {
     super()
+    this.interactifObligatoire = true
     this.nbQuestions = 2
     this.besoinFormulaireTexte = [
       "Types d'expressions",
@@ -128,6 +133,8 @@ export default class CalculerFormuleParBlockly extends Exercice {
       true,
     ]
     this.sup4 = true
+    this.besoinFormulaire5CaseACocher = ["Utiliser l'éditeur scratch", true]
+    this.sup5 = true
   }
 
   nouvelleVersion(_numeroExercice: number) {
@@ -140,8 +147,9 @@ export default class CalculerFormuleParBlockly extends Exercice {
       shuffle: false,
       defaut: 0,
     }).map(Number)
-    this.consigne =
-      'Représenter chaque calcul avec les blocs (Demarrer puis dire le resultat pendant 2 s).'
+    this.consigne = this.sup5
+      ? 'Traduire chaque calcul avec un programme Scratch.'
+      : 'Traduire chaque calcul avec les blocs (Démarrer => dire [le calcul] pendant $2$ s).'
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const requestedType = listeTypesDeQuestion[i]
@@ -157,34 +165,54 @@ export default class CalculerFormuleParBlockly extends Exercice {
       const texteOperation = arithmeticAstToLatex(expressionAst, !this.sup2)
       const expressionJson = JSON.stringify(expressionAst)
 
-      let texte = `Représenter ce calcul en Blockly : $${miseEnEvidence(texteOperation, 'black')}$<br>`
+      let texte = `Traduire ce calcul : $${miseEnEvidence(texteOperation, 'black')}$ par un programme.<br><br>`
       const solutionBlocks = buildBlocklySaySolutionBlocks(expressionAst)
-      const correctionEditorId = `blockly-editorCorrEx${this.numeroExercice}Q${i}`
+      const correctionEditorId = `${this.sup5 ? 'scratch-editor' : 'blockly-editor'}CorrEx${this.numeroExercice}Q${i}`
       const texteCorr = context.isHtml
         ? [
-            'La solution Blockly est :<br>',
-            BlocklyEditor.create({
-              id: correctionEditorId,
-              options: {
-                toolbox,
-                initialBlocks: solutionBlocks,
-                height: '80px',
-                interactivityOn: false,
-              },
-            }),
+            'La solution en blocs est :<br>',
+            this.sup5
+              ? addScratchEditor(this, i, {
+                  id: correctionEditorId,
+                  initialBlocks: solutionBlocks,
+                  height: '250px',
+                  width: '640px',
+                  interactivityOn: false,
+                  enableRun: false,
+                  enableStop: false,
+                })
+              : BlocklyEditor.create({
+                  id: correctionEditorId,
+                  options: {
+                    toolbox,
+                    initialBlocks: solutionBlocks,
+                    height: '80px',
+                    width: '100%',
+                    interactivityOn: false,
+                  },
+                }),
           ].join('')
-        : `La solution Blockly correspond au calcul : ${texteOperation}`
+        : `La solution en blocs correspond au calcul : ${texteOperation}`
 
       if (context.isHtml) {
-        const options: BlocklyEditorOptions = {
-          toolbox,
-          solutionBlocks,
-          verifyCallbackName: VERIFY_CALLBACK_NAME,
-          height: '200px',
-          interactivityOn: true,
-          width: '100%',
+        if (this.sup5) {
+          const scratchOptions: ScratchEditorOptions = {
+            height: '450px',
+            width: '100%',
+            interactivityOn: true,
+          }
+          texte += addScratchEditor(this, i, scratchOptions)
+        } else {
+          const options: BlocklyEditorOptions = {
+            toolbox,
+            solutionBlocks,
+            verifyCallbackName: VERIFY_CALLBACK_NAME,
+            height: '200px',
+            interactivityOn: true,
+            width: '100%',
+          }
+          texte += addBloklyEditor(this, i, options)
         }
-        texte += addBloklyEditor(this, i, options)
         texte += `<div class="ml-2 py-2" id="resultatCheckEx${this.numeroExercice}Q${i}"></div>`
         texte += ajouteFeedback(this, i)
 
@@ -196,7 +224,7 @@ export default class CalculerFormuleParBlockly extends Exercice {
               value: JSON.stringify({ solutionBlocks }),
             },
           },
-          { formatInteractif: 'blockly-editor' },
+          { formatInteractif: this.sup5 ? 'scratch-editor' : 'blockly-editor' },
         )
       }
 

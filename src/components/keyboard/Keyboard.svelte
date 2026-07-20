@@ -136,10 +136,13 @@
         let mf = document.querySelector(
           ('#' + idMathField).replace('-button', ''),
         ) as MathfieldElement | null
-        // Si non trouvé, cherche dans les shadowRoot des multi-mathfield
+        // Si non trouvé, cherche dans les shadowRoot des custom elements
+        // qui embarquent des math-field (multi-mathfield, tableau-signes-variations, ...)
         if (!mf) {
-          const multiMathfields = document.querySelectorAll('multi-mathfield')
-          for (const el of multiMathfields) {
+          const shadowHosts = document.querySelectorAll(
+            'multi-mathfield, tableau-signes-variations',
+          )
+          for (const el of shadowHosts) {
             const shadow = el.shadowRoot
             if (shadow) {
               const found = shadow.querySelector(
@@ -183,6 +186,7 @@
     role="none"
     transition:fly|global={{ y: '100%', opacity: 1 }}
     bind:this={divKeyboard}
+    id="mathalea-virtual-keyboard"
     class=" bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark p-2 md:p-4 w-full fixed bottom-0 left-0 right-0 z-[9999] drop-shadow-[0_-3px_5px_rgba(130,130,130,0.25)] dark:drop-shadow-[0_-3px_5px_rgba(250,250,250,0.25)]"
   >
     {#if alphanumericDisplayed}

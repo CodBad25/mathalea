@@ -14,7 +14,7 @@ export const amcType = 'AMCNum'
 export const uuid = '5ecdc'
 
 export const refs = {
-  'fr-fr': ['can5C02', 'auto5N1F-flash4'],
+  'fr-fr': ['can5C02', '6N0A-flash1'],
   'fr-ch': [],
 }
 export default class SommeEntiers5e extends ExerciceSimple {

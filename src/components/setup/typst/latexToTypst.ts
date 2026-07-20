@@ -124,6 +124,13 @@ export const TASKIZE_IMPORT =
   '#import "@preview/taskize:0.2.7": tasks, tasks-setup'
 
 /**
+ * Import du paquet vartable (tableaux de signes/variations, `#tabvar(...)`),
+ * inséré tel quel par `TableauSignesVariationsElement.create()` (voir
+ * `typstExport.ts`) via le marqueur `<mathalea-typst>`.
+ */
+export const VARTABLE_IMPORT = '#import "@preview/vartable:0.2.4": tabvar'
+
+/**
  * Aides Typst pour les QCM : une case à cocher (vide dans l'énoncé, remplie
  * pour la bonne réponse dans le corrigé) et le nombre de colonnes réglable.
  */

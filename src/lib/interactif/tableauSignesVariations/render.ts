@@ -129,6 +129,7 @@ export function renderTableau(opts: RenderOptions): RenderResult {
         onCellActivate,
         ligneIndex: 0,
         cellIndex: j,
+        clavier: config.colonnes[j].clavier,
       })
       td.classList.add('tab-sv__antecedent')
       cells.set(cellId, td)
@@ -353,6 +354,7 @@ function renderLigneVariation(args: {
           mode: 'valeurDroite',
           ligneIndex,
           cellIndex: j,
+          clavier: configVal.clavier,
         })
       }
 
@@ -372,6 +374,7 @@ function renderLigneVariation(args: {
           mode: 'valeurDroite',
           ligneIndex,
           cellIndex: j,
+          clavier: configVal.clavier,
         })
       }
 
@@ -422,6 +425,7 @@ function renderLigneVariation(args: {
           ligneIndex,
           cellIndex: j,
           secondaryCellId: valueEditable ? markerId : undefined,
+          clavier: valueEditable ? configVal.clavier : undefined,
         })
       }
       cells.set(valId, tdVal)
@@ -492,6 +496,7 @@ function renderLigneValeur(args: {
         onCellActivate,
         ligneIndex,
         cellIndex: j,
+        clavier: ligne.valeurs[j]?.clavier,
       })
       cells.set(cellId, td)
       tr.appendChild(td)
@@ -513,6 +518,7 @@ function createValueCell(args: {
   onCellActivate: (info: ActiveCellInfo, cellEl: HTMLElement) => void
   ligneIndex: number
   cellIndex: number
+  clavier?: string
 }): HTMLElement {
   const td = document.createElement('td')
   td.classList.add('tab-sv__cell', 'tab-sv__cell--valeur')
@@ -527,6 +533,7 @@ function createValueCell(args: {
       mode: args.mode,
       ligneIndex: args.ligneIndex,
       cellIndex: args.cellIndex,
+      clavier: args.clavier,
     })
   }
   return td
