@@ -24,7 +24,7 @@ export const amcType = 'AMCNum'
 export const interactifType = 'mathLive'
 export const interactifReady = true
 
-export const titre = 'Effectuer additions de plus de deux nombres décimaux'
+export const titre = 'Poser additions de plus de deux nombres décimaux'
 export const dateDePublication = '04/01/2025'
 /**
  * Additions de plus de deux nombres décimaux

@@ -1,6 +1,7 @@
 import Decimal from 'decimal.js'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, creerCouples } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import {
   gestionnaireFormulaireTexte,
@@ -25,7 +26,7 @@ export const titre =
 export const uuid = 'a5c5a'
 
 export const refs = {
-  'fr-fr': ['6N2B-5, auto5N1D'],
+  'fr-fr': ['6N2B-5, auto5N1D', 'auto5N2A-2'],
   'fr-2016': ['6C10-3'],
   'fr-ch': ['9NO8-7'],
 }
@@ -84,14 +85,14 @@ export default class ExerciceTablesMultiplicationsEtDecimaux extends Exercice {
       if (b.equals(1)) {
         b = new Decimal(1).div(10)
       }
-      texte = '$ ' + texNombre(a) + ' \\times ' + texNombre(b) + ' =  $'
+      texte = '$ ' + texNombre(a) + ' \\times ' + texNombre(b) + '$'
       texteCorr =
         '$ ' +
         texNombre(a) +
         ' \\times ' +
         texNombre(b) +
         ' = ' +
-        texNombre(a.times(b)) +
+        miseEnEvidence(texNombre(a.times(b))) +
         ' $'
       /**********************************/
       // QCM

@@ -20,7 +20,7 @@ export const dateDePublication = '21/10/2021'
 export const uuid = '02170'
 
 export const refs = {
-  'fr-fr': ['can6C27', '6N2A-flash4'],
+  'fr-fr': ['can6C27', '6N2A-flash4', 'auto5N2A-flash9'],
   'fr-ch': ['NR'],
 }
 export default class RenduMonnaie extends ExerciceSimple {
