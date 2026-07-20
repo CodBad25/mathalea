@@ -1,6 +1,7 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { apigeomGraduatedLine } from '../../lib/apigeom/apigeomGraduatedLine'
 import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import { orangeMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -10,7 +11,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const interactifReady = true
 export const interactifType = 'custom'
@@ -28,7 +28,7 @@ export const dateDeModifImportante = '03/05/2024'
 export const uuid = '6d576'
 
 export const refs = {
-  'fr-fr': ['5G1A-1', '3AutoN15-2'],
+  'fr-fr': ['5G1A-1', '3AutoN15-2', '5N2E-1'],
   'fr-2016': ['5R11-2', '3AutoN15-2'],
   'fr-ch': ['9NO9-2'],
 }
