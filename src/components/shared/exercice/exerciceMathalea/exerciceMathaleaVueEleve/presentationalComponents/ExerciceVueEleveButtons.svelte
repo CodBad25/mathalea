@@ -17,6 +17,7 @@
   export let columnsCountUpdate: (plusMinus: '+' | '-') => void
   export let showCorrectionButton: boolean = true
   export let showInteractivityButton: boolean = true
+  export let showNewDataButton: boolean = true
 </script>
 
 <div
@@ -47,7 +48,7 @@
     </BasicClassicModal>
   {/if}
   <div
-    class={!globalOptions.oneShot && globalOptions.done !== '1'
+    class={showNewDataButton && !globalOptions.oneShot && globalOptions.done !== '1'
       ? 'flex'
       : 'hidden'}
   >

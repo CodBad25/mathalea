@@ -188,6 +188,13 @@ async function readInfos(
                   }
                   exercicesNonInteractifs.push(filePath)
                 }
+                const matchAleatoire = data.match(
+                  /this\.pasDeVersionAleatoire\s*=\s*true/,
+                )
+                infos.features.aleatoire = {
+                  isActive: !matchAleatoire,
+                  type: '',
+                }
                 const matchAmcType = data.match(/export const amcType = '(.*)'/)
                 if (matchAmcType) {
                   infos.features.amc = {
@@ -284,6 +291,13 @@ async function readInfos(
                     type: '',
                   }
                   exercicesNonInteractifs.push(filePath)
+                }
+                const matchAleatoire = data.match(
+                  /this\.pasDeVersionAleatoire\s*=\s*true/,
+                )
+                infos.features.aleatoire = {
+                  isActive: !matchAleatoire,
+                  type: '',
                 }
                 const matchAmcType = data.match(/export const amcType = '(.*)'/)
                 if (matchAmcType) {

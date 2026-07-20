@@ -23,6 +23,7 @@ export const egaliteFillesGarcons = true
 export default class EgaliteFG3 extends Exercice {
   constructor() {
     super()
+    this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
       "D'après « Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles (source : femmes et maths)",
     )
