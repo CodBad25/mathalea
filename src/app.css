@@ -414,6 +414,19 @@ input[type='radio']:disabled {
   @apply opacity-30;
 }
 
+/* Certains navigateurs (Safari notamment) perdent le rendu ":checked" d'un input
+   radio à l'appearance personnalisée une fois qu'il est verrouillé après correction.
+   Cette classe, posée par verifQuestionQcm, force le même rendu indépendamment de
+   :checked et de tout état natif désactivé. */
+input[type='radio'].qcm-locked-checked {
+  background-color: #f15929 !important;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E") !important;
+  background-size: 100% 100% !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border-color: transparent !important;
+}
+
 input[type='radio']:focus {
   @apply ring-transparent outline-none;
 }
@@ -799,6 +812,38 @@ div[id^='lampeMessage']:before {
 }
 div[id^='title-lampeMessage'] {
   @apply font-bold pb-2 text-coopmaths-warn-dark dark:text-coopmathsdark-warn-dark;
+}
+
+/* feedback de fin de question QCM (verifQuestionQcm) */
+.qcm-feedback-face {
+  @apply flex items-center h-6 leading-none;
+}
+.qcm-feedback-msg {
+  @apply bg-coopmaths-canvas dark:bg-coopmathsdark-canvas border-l-4 pl-4 pr-2 py-2 mt-2 font-light;
+}
+.qcm-feedback-msg--error {
+  @apply border-l-coopmaths-action-dark dark:border-l-coopmathsdark-action-dark;
+}
+.qcm-feedback-msg--positive {
+  @apply border-l-coopmaths-warn-dark dark:border-l-coopmathsdark-warn-dark;
+}
+.qcm-feedback-detail {
+  @apply text-coopmaths-corpus dark:text-coopmathsdark-corpus;
+}
+.qcm-feedback-chips {
+  @apply flex flex-wrap gap-2 mt-2 pt-2 border-t border-t-coopmaths-backdark dark:border-t-coopmathsdark-canvas-darkest;
+}
+.qcm-feedback-chips-standalone {
+  @apply flex flex-wrap gap-2 mt-2;
+}
+.qcm-feedback-chip {
+  @apply inline-flex items-center rounded-full px-3 py-0.5 text-sm font-medium;
+}
+.qcm-feedback-chip--error {
+  @apply bg-coopmaths-action-200 text-coopmaths-action-darkest dark:bg-coopmathsdark-action dark:text-coopmathsdark-canvas;
+}
+.qcm-feedback-chip--positive {
+  @apply bg-coopmaths-warn-100 text-coopmaths-warn-darkest dark:bg-coopmathsdark-warn dark:text-coopmathsdark-canvas;
 }
 
 .katex {
