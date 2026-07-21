@@ -9,7 +9,7 @@ import {
   KeyboardType,
 } from '../interactif/claviers/keyboard'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
-import { toutAUnPoint } from '../interactif/mathLive'
+import { toutAUnPoint } from '../interactif/fonctionsBaremes'
 import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
 import type { IExercice, ValeurNames } from '../types'
 import MathaleaCustomElement, {

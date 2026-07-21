@@ -22,7 +22,6 @@
   } from '../../../lib/interactif/cliqueFigure'
   import { verifDragAndDrop } from '../../../lib/interactif/DragAndDrop'
   import { verifQuestionMetaInteractif2d } from '../../../lib/interactif/gestionInteractif'
-  import { verifQuestionMathLive } from '../../../lib/interactif/mathLive'
   import { verifQuestionQcm } from '../../../lib/interactif/qcm'
   import { mathaleaUpdateUrlFromExercicesParams } from '../../../lib/mathalea'
   import { canOptions } from '../../../lib/stores/canStore'
@@ -34,6 +33,7 @@
   import { globalOptions } from '../../../lib/stores/globalOptions'
   import {
     isMathliveCompatible,
+    mathliveCompatibleToCustomElementFormat,
     type IExercice,
     type InteractivityType,
     type InterfaceResultExercice,
@@ -209,16 +209,58 @@
           ?.formatInteractif ??
         exercice.interactifType ??
         'mathlive'
+      const customElementType =
+        mathliveCompatibleToCustomElementFormat(type) ?? type
 
-      if (isMathliveCompatible(type)) {
-        resultsByQuestion[i] = oneResultToBoolean(
-          verifQuestionMathLive(exercice, indiceQuestionInExercice[i]) ?? {
-            // fallback en cas de problème avec verifQuestionMathlive
-            isOk: false,
-            feedback: 'Un problème est survenu dans le programme',
-            score: { nbBonnesReponses: 0, nbReponses: 1 },
-          },
+      if (listOfCustomElements.includes(customElementType)) {
+        const liste = Array.from(mathaleaCustomElementsRegistry)
+        const [tag, elementClasse] =
+          liste.find((custom) => custom[0] === customElementType) ?? []
+        if (tag == null || elementClasse == null) {
+          throw Error(
+            "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
+          )
+        }
+        const result = elementClasse.verifQuestion(
+          exercice,
+          indiceQuestionInExercice[i],
         )
+        if (
+          result == null ||
+          typeof result !== 'object' ||
+          !('isOk' in result) ||
+          !('score' in result)
+        ) {
+          throw Error(
+            `L'élément '${tag}' n'a pas de méthode verifQuestion ou celle-ci n'a pas retourné une valeur conforme)`,
+          )
+        }
+        resultsByQuestion[i] = result.isOk
+        if (!isMathliveCompatible(type)) {
+          const listeKey = `${tag}Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+          answers[i] = exercice.answers?.[listeKey] ?? ''
+          answersType[i] = {
+            type: type as InteractivityType,
+            index: i,
+            answers: Object.keys(exercice.answers ?? {})
+              .filter(
+                (key: string) =>
+                  key.startsWith(listeKey) ||
+                  key.startsWith(
+                    `ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
+                  ) ||
+                  key.startsWith(
+                    `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
+                  ),
+              )
+              .reduce((result: { [key: string]: any }, k) => {
+                result[k] = exercice.answers![k]
+                return result
+              }, {}),
+            answerTxt: answers[i],
+          }
+          continue
+        }
         // récupération de la réponse
         answersType[i] = {
           type: type as InteractivityType,
@@ -411,54 +453,6 @@
             ],
         }
         answers[i] = answersType[i].answerTxt
-      }
-      // MathaleaCustomElements
-      else if (listOfCustomElements.includes(type)) {
-        const liste = Array.from(mathaleaCustomElementsRegistry)
-        const [tag, elementClasse] =
-          liste.find((custom) => custom[0] === type) ?? []
-        if (tag == null || elementClasse == null) {
-          throw Error(
-            "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
-          )
-        }
-        const result = elementClasse.verifQuestion(
-          exercice,
-          indiceQuestionInExercice[i],
-        )
-        if (
-          result == null ||
-          typeof result !== 'object' ||
-          !('isOk' in result) ||
-          !('score' in result)
-        ) {
-          throw Error(
-            `L'élément '${tag}' n'a pas de méthode verifQuestion ou celle-ci n'a pas retourné une valeur conforme)`,
-          )
-        }
-        resultsByQuestion[i] = result.isOk
-        const listeKey = `${tag}Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-        answers[i] = exercice.answers?.[listeKey] ?? ''
-        answersType[i] = {
-          type: type as InteractivityType,
-          index: i,
-          answers: Object.keys(exercice.answers ?? {})
-            .filter(
-              (key: string) =>
-                key.startsWith(listeKey) ||
-                key.startsWith(
-                  `ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                ) ||
-                key.startsWith(
-                  `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                ),
-            )
-            .reduce((result: { [key: string]: any }, k) => {
-              result[k] = exercice.answers![k]
-              return result
-            }, {}),
-          answerTxt: answers[i],
-        }
       } else {
         answersType[i] = {
           type: 'mathlive',

@@ -20,7 +20,7 @@ import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { bleuMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { enumeration } from '../../lib/outils/ecritures'
 import {
   miseEnEvidence,

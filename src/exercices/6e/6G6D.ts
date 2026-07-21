@@ -14,7 +14,7 @@ import {
 } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutPourUnPoint } from '../../lib/interactif/mathLive'
+import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'

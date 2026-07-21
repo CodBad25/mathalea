@@ -1,7 +1,7 @@
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'

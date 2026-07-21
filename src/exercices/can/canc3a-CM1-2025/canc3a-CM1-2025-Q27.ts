@@ -2,7 +2,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
+import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
 export const titre = 'Convertir des heures en heures/minutes'
 export const interactifReady = true
 export const interactifType = 'mathLive'

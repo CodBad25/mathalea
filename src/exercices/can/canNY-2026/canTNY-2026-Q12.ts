@@ -6,7 +6,7 @@ import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 
-import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
+import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import FractionEtendue from '../../../modules/FractionEtendue'
 export const titre = "Calculer les coordonnées d'un milieu"

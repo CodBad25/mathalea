@@ -1,6 +1,6 @@
 import type { MathfieldElement } from 'mathlive'
 import { generateCleaner } from '../../../lib/interactif/cleaners'
-import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
+import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import type { IExercice } from '../../../lib/types'

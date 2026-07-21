@@ -2,7 +2,7 @@ import jspreadsheet from 'jspreadsheet-ce'
 import 'jspreadsheet-ce/src/jspreadsheet.css'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
-import { toutPourUnPoint } from '../interactif/mathLive'
+import { toutPourUnPoint } from '../interactif/fonctionsBaremes'
 import type { GoodAnswersFormulas, IExercice, SheetTestDatas } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,

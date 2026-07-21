@@ -118,22 +118,24 @@ Convention recommandée pour éviter les divergences getter/setter :
 - Ne pas appeler `customElements.define(...)` directement : utiliser `registerMathaleaCustomElement(MaClasse)` (exporté par `src/lib/customElements/MathaleaCustomElement.ts`).
 - Ce helper définit l'élément dans le navigateur (de façon idempotente) et l'ajoute au registre `mathaleaCustomElementsRegistry`, qui permet les traitements génériques (corrections CAN notamment).
 
-## Intégration dans l'intéractivité de MathAléa
+## Intégration dans l'interactivité de MathALÉA
 
-Afin que le custom élément soit correctement pris en charge par le système d'interactivité, il y plusieurs étapes à réaliser :
+Afin que le custom element soit correctement pris en charge par le système d'interactivité, il y a plusieurs étapes à réaliser :
 
-- Ajouter dans types.ts le tag à l'union InteractivityType. Les exercices concernés devront exporter cet interactifType.
+- Ajouter dans `src/lib/types.ts` le tag à l'union `InteractivityType`.
+- Ajouter le tag à `listOfCustomElements` dans `src/lib/customElements/MathaleaCustomElement.ts`.
+- Enregistrer la classe avec `registerMathaleaCustomElement(MaClasse)`.
 - La méthode statique `verifQuestion(exercice,questionIndex)` doit être implémentée dans l'élément. Elle correspond à la méthode correctionInteractive(i) de la classe Exercice lorsque celui-ci a un interactifType = 'custom'. Il suffit donc d'en transposer la logique : vérification, hydratation de exercice.answers, du span#resultatCheckEx et du div#feedbackEx...
 - Le retour de la fonction doit être : `{
   isOk: boolean
   feedback: string
   score: { nbBonnesReponses: number; nbReponses: number }
 }`. comme pour les callbacks de corrections.
-- Cette méthode est ensuite à brancher en plusieurs endroits :
-  - Dans la fonction exerciceInteractif() de gestionInteractif.ts ou il faut ajouter le case correspondant dans le switch. (à terme de l'harmonisation, on pourra avoir un comportement générique pour tous les MathaleaCustomElement, ce qui évitera cette passe)
-  - Dans la fonction checkAnswers() de Can.svelte où une succession de if else permet de renseigner les 'answers' du metaExercice. Il remplace pour la vue Race le flux gestionInteractif déclenché par le bouton "vérifier les réponses" (là aussi, l'harmonisation totale effectuée permettra de faire un traitement générique évitant cette passe)
-  - Voir le paragraphe suivant sur l'affichage des corrections de la Can si la 'value' n'est pas 'humanisée' et correspond à un objet JSON.
-- Dans les exercices utilisant ces éléments, handleAnswers doit être utilisé pour assigner exercice.autoCorrection[questionIndex].Valeur.reponse.value qui sera utilisé par la méthode verifQuestion afin d'obtenir la "goodAnswer" de l'élément pour cette question. Si la goodAnswer doit être un objet, alors celui-ci sera transformé en string via JSON.stringify() et verifQuestion devra faire un JSON.parse pour récupérer l'objet. À l'identique, la 'value' correspondant à la réponse de l'élève sera elle aussi un JSON 'stringifié'
+- Le dispatch par le registre est générique : `exerciceInteractif()`, `gestionCan.ts`, `Can.svelte` et `QuestionParPage.svelte` consultent `listOfCustomElements` puis `mathaleaCustomElementsRegistry` pour appeler `verifQuestion()`. Il n'y a donc plus de branche spécifique à ajouter dans ces fichiers pour un custom element correctement enregistré.
+- Les formats historiques MathLive `mathlive`, `fillInTheBlank`, `tableauMathlive` et `texte` sont normalisés vers leurs tags (`mathalea-mathfield`, `fill-in-the-blank`, `tableau-mathlive`, `mathalea-textfield`) par `mathliveCompatibleToCustomElementFormat()` dans `src/lib/types.ts`. Ne pas ajouter de nouveau cas historique sans raison de compatibilité forte : préférer le tag du custom element comme `formatInteractif`.
+- Dans les exercices utilisant ces éléments, `handleAnswers()` doit être utilisé pour renseigner `exercice.autoCorrection[questionIndex].valeur`, qui sera lu par `verifQuestion()` afin d'obtenir la réponse attendue de l'élément pour cette question. Si la réponse attendue doit être un objet, la stocker dans un format que `verifQuestion()` sait relire explicitement. De même, la `value` correspondant à la réponse de l'élève doit rester compatible avec la restauration via `mathaleaWriteStudentPreviousAnswers()`.
+
+Les exercices concernés peuvent exporter `interactifType` avec le tag du composant si tout l'exercice utilise ce format. Quand plusieurs formats cohabitent, le routage fiable est celui de `autoCorrection[questionIndex].formatInteractif`, généralement posé par `handleAnswers()`.
 
 ## Affichage dans les corrections de la CAN
 
@@ -161,8 +163,8 @@ Exemple d'usage : `MySpreadsheetElement` instancie des feuilles de calcul techni
 
 ## Cas avancés
 
-- MySpreadsheetElement (tableur) : [my-spreadsheet-element.md](documentation/developpement/guides/my-spreadsheet-element.md)
-- BlocklyEditor : [blockly-editor.md](documentation/developpement/guides/blockly-editor.md)
+- MySpreadsheetElement (tableur) : [my-spreadsheet-element.md](my-spreadsheet-element.md)
+- BlocklyEditor : [blockly-editor.md](blockly-editor.md)
 
 ## Checklist avant merge
 
@@ -188,7 +190,19 @@ Ordre recommandé :
 4. Déplacer la classe dans `src/lib/customElements/` si elle vivait ailleurs.
 5. Uniformiser `value` et `interactivityOn`.
 6. Ajouter le nettoyage dans `disconnectedCallback()`.
-7. Vérifier les usages dans les fichiers de vérification interactive.
+7. Vérifier que le tag est présent dans `InteractivityType`, `listOfCustomElements` et le registre.
+8. Vérifier que le composant est traité correctement dans `exercice.answers`, dans les corrections CAN et dans la reprise des réponses élèves.
+
+### Migration d'un helper historique
+
+Quand le composant remplace un ancien helper déjà utilisé dans de nombreux exercices, conserver le helper comme API stable et le faire appeler `create(...)`.
+
+Principes appliqués aux wrappers MathLive :
+
+- le wrapper reçoit l'id conventionnel du custom element, par exemple `mathalea-mathfieldEx0Q0` ;
+- l'élément interne conserve l'id ou les sélecteurs legacy attendus par les exercices existants, par exemple `champTexteEx0Q0` ou `table#tabMathliveEx0Q0` ;
+- la vérification terminale vit dans `verifQuestion()` du wrapper ;
+- si une vérification très spécifique est nécessaire, le helper peut accepter une callback optionnelle et la transmettre au wrapper.
 
 ## Fichiers utiles
 

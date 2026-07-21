@@ -1,4 +1,4 @@
-import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
+import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'

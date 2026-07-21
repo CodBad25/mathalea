@@ -3,7 +3,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import {
   choice,
   combinaisonListes,
