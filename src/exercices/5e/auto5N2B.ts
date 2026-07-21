@@ -117,7 +117,7 @@ export default class CompteterUneAdditionATrou extends Exercice {
         }
         const bonneReponse = `${texNombre(c)}-${texNombre(a)}`
         texteCorr =
-          'Dans une addition à trou, le terme à trouver est toujours issu de la différence entre la somme et le terme connu :'
+          'Dans une addition à trou, le terme à trouver est toujours issu de la différence entre la somme et le terme connu : '
         texteCorr += `$${miseEnEvidence(bonneReponse)}$.`
         this.autoCorrection[i] = {}
         this.autoCorrection[i].enonce = `${texte}\n`
