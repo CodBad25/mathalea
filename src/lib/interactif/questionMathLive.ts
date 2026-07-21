@@ -6,6 +6,10 @@ import type {
 } from '../../lib/types'
 import { context } from '../../modules/context'
 import type { ReponseParams } from '../amc/amcTypes'
+import {
+  MathaleaMathfieldElement,
+  type MathaleaMathfieldVerificationCallback,
+} from '../customElements/MathaleaMathfield'
 import { sp } from '../outils/outilString'
 import './champTexte.scss'
 import { buildDataKeyboardFromStyle } from './claviers/keyboard'
@@ -182,6 +186,8 @@ type OptionsChamp = {
   blocCenter?: boolean
   espace?: boolean
   placeholder?: string
+  verifyCallbackName?: string
+  verifyCallback?: MathaleaMathfieldVerificationCallback
 }
 
 export function ajouteChampTexte(
@@ -230,8 +236,22 @@ function ajouteChamp(params: ParamsChamp, options: OptionsChamp = {}) {
   const dataKeyboard = buildDataKeyboardString(
     typeof style === 'string' ? style : '',
   )
-  const balise = type === 'mathlive' ? 'math-field' : 'input'
-  let html = `<label>${texteAvant}</label><${balise} data-keyboard="${dataKeyboard}" ${espace ? 'data-space="true"' : ''} ${placeholder ? `placeholder="${placeholder}"` : ''} virtual-keyboard-mode=manual class="${style}" id="champTexteEx${exercice.numeroExercice}Q${i}"></${balise}>${texteApres ? `<span>${texteApres}</span>` : ''} <span id="resultatCheckEx${exercice.numeroExercice}Q${i}"></span>`
+  const id = `champTexteEx${exercice.numeroExercice}Q${i}`
+  const balise =
+    type === 'mathlive' ? MathaleaMathfieldElement.elementTag : 'input'
+  const champ =
+    type === 'mathlive'
+      ? MathaleaMathfieldElement.create({
+          id,
+          dataKeyboard,
+          espace,
+          placeholder,
+          className: style,
+          verifyCallbackName: options.verifyCallbackName,
+          verifyCallback: options.verifyCallback,
+        })
+      : `<${balise} data-keyboard="${dataKeyboard}" ${espace ? 'data-space="true"' : ''} ${placeholder ? `placeholder="${placeholder}"` : ''} virtual-keyboard-mode=manual class="${style}" id="${id}"></${balise}>`
+  let html = `<label>${texteAvant}</label>${champ}${texteApres ? `<span>${texteApres}</span>` : ''} <span id="resultatCheckEx${exercice.numeroExercice}Q${i}"></span>`
   if (blocCenter) {
     html = `<div style='display: flex;justify-content: center; margin:5px;'>${html}<div>`
   }

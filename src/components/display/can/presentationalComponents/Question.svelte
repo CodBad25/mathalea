@@ -134,8 +134,8 @@
             shadowRoot.querySelectorAll('math-field'),
           ) as MathfieldElement[]
           for (const mf of mathfields) {
-            if (!mf.dataset.listenerAdded) {
-              mf.dataset.listenerAdded = 'true' // Marquer comme ajouté
+            if (!mf.dataset.canListenerAdded) {
+              mf.dataset.canListenerAdded = 'true' // Marquer comme ajouté
               //   mf.addEventListener('keyup', handleKeyUp) => Ne pas pas passer à la question suivante avec enter, il y a plusieurs champs
               mf.addEventListener('input', handleMultiMathfieldElement)
             }
@@ -168,8 +168,8 @@
         console.info('Je gère le metaInteractif2d')
         const listeMf = Array.from(metaI2d) as MathfieldElement[]
         for (const mf of listeMf) {
-          if (!mf.dataset.listenerAdded) {
-            mf.dataset.listenerAdded = 'true' // Marquer comme ajouté
+          if (!mf.dataset.canListenerAdded) {
+            mf.dataset.canListenerAdded = 'true' // Marquer comme ajouté
             mf.addEventListener('input', handleMathfieldElement)
           }
           $keyboardState.idMathField = mf.id
@@ -197,8 +197,8 @@
         'math-field',
       ) as MathfieldElement
       if (mf) {
-        if (!mf.dataset.listenerAdded) {
-          mf.dataset.listenerAdded = 'true' // Marquer comme ajouté
+        if (!mf.dataset.canListenerAdded) {
+          mf.dataset.canListenerAdded = 'true' // Marquer comme ajouté
           mf.addEventListener('keyup', handleKeyUp)
           mf.addEventListener('input', handleMathfieldElement)
         }

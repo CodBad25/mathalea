@@ -1,12 +1,12 @@
 import Decimal from 'decimal.js'
+import type { Page } from 'playwright'
+import prefs from '../../helpers/prefs.js'
 import {
   checkFeedback,
   getQuestions,
   inputAnswerById,
   runTest,
 } from '../../helpers/run'
-import type { Page } from 'playwright'
-import prefs from '../../helpers/prefs.js'
 
 async function test(page: Page) {
   const hostname = local
@@ -58,5 +58,6 @@ if (process.env.CI) {
   prefs.headless = true
   runTest(test, import.meta.url, { pauseOnError: false }) // true pendant le développement, false ensuite
 } else {
+  prefs.headless = false
   runTest(test, import.meta.url, { pauseOnError: true }) // true pendant le développement, false ensuite
 }

@@ -14,7 +14,7 @@ Les custom elements maison sont désormais centralisés dans `src/lib/customElem
 
 | Format                    | Usage                                                    | Fichiers principaux                                                                                    |
 | ------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `mathlive`                | Champ MathLive pour une réponse mathématique             | `src/lib/interactif/questionMathLive.ts`, `src/lib/interactif/mathLive.ts`                             |
+| `mathlive`                | Champ MathLive pour une réponse mathématique, injecté via `mathalea-mathfield` par `ajouteChampTexteMathLive()` | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaMathfield.ts`, `src/lib/interactif/mathLive.ts` |
 | `fillInTheBlank`          | Texte à trous MathLive, réponses `champ1`, `champ2`, ... | `src/lib/interactif/questionMathLive.ts`                                                               |
 | `tableauMathlive`         | Cellules MathLive nommées `L1C1`, `L1C2`, ...            | `src/lib/interactif/questionMathLive.ts`, `src/lib/interactif/tableaux/AjouteTableauMathlive.ts`       |
 | `texte`                   | Champ texte HTML                                         | `src/lib/interactif/questionMathLive.ts`                                                               |
@@ -27,6 +27,7 @@ Les custom elements maison sont désormais centralisés dans `src/lib/customElem
 | `my-spreadsheet`          | Réponse de type feuille de calcul                        | `src/lib/customElements/MySpreadSheet.ts`, `MySpreadSheet.verifQuestion()`                             |
 | `MetaInteractif2d`        | Champs dans une figure MathALÉA 2D                       | `src/lib/2d/interactif2d.ts`, `src/lib/interactif/gestionInteractif.ts`                                |
 | `multi-mathfield`         | Plusieurs champs MathLive coordonnés                     | `src/lib/customElements/MultiMathfield.ts`, `MultiMathfield.verifQuestion()`                           |
+| `mathalea-mathfield`      | Wrapper MathALÉA d'un champ MathLive simple, compatible avec les sélecteurs legacy `champTexteEx...` | `src/lib/customElements/MathaleaMathfield.ts`, `MathaleaMathfieldElement.verifQuestion()`              |
 | `guide-ane`               | Un guide-âne interactif                                  | `src/lib/customElements/GuideAne.ts`, `GuideAne.verifQuestion()`                                       |
 | `demi-droite-interactive` | Pour placer des points d'abscisses fractionnaires        | `src/lib/customElements/demi_droite_interactive.ts`, `DemiDroiteInteractiveElement.verifQuestion()`    |
 | `interactive-clock`       | Une horloge interactive                                  | `src/lib/customElements/InteractiveClock.ts`, `InteractiveClock.verifQuestion()`                       |
@@ -68,6 +69,7 @@ Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métie
 | Format                                                   | Vérification                                                                                                                                                    |
 | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `mathlive`, `fillInTheBlank`, `tableauMathlive`, `texte` | `verifQuestionMathLive()` dans `src/lib/interactif/mathLive.ts`                                                                                                 |
+| `mathalea-mathfield`                                    | `MathaleaMathfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaMathfield.ts`, avec délégation par défaut à `verifQuestionMathLive()`            |
 | `multi-mathfield`                                        | `MultiMathfieldElement.verifQuestion()` dans `src/lib/customElements/MultiMathfield.ts`                                                                         |
 | `MetaInteractif2d`                                       | `verifQuestionMetaInteractif2d()`                                                                                                                               |
 | `qcm`                                                    | `verifQuestionQcm()` dans `src/lib/interactif/qcm.ts`                                                                                                           |
