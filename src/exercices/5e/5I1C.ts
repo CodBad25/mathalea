@@ -148,8 +148,8 @@ export default class CalculerFormuleParBlockly extends Exercice {
       defaut: 0,
     }).map(Number)
     this.consigne = this.sup5
-      ? 'Traduire chaque calcul avec un programme Scratch.'
-      : 'Traduire chaque calcul avec les blocs (Démarrer => dire [le calcul] pendant $2$ s).'
+      ? 'Traduire chaque calcul avec les blocs (Quand drapeau vert cliqué => dire (le calcul) pendant $2$ s).'
+      : 'Traduire chaque calcul avec les blocs (Démarrer => dire (le calcul) pendant $2$ s).'
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const requestedType = listeTypesDeQuestion[i]
@@ -187,7 +187,7 @@ export default class CalculerFormuleParBlockly extends Exercice {
                     toolbox,
                     initialBlocks: solutionBlocks,
                     height: '80px',
-                    width: '100%',
+                    width: '640px',
                     interactivityOn: false,
                   },
                 }),
@@ -197,8 +197,8 @@ export default class CalculerFormuleParBlockly extends Exercice {
       if (context.isHtml) {
         if (this.sup5) {
           const scratchOptions: ScratchEditorOptions = {
-            height: '450px',
-            width: '100%',
+            height: '250px',
+            width: '640px',
             interactivityOn: true,
           }
           texte += addScratchEditor(this, i, scratchOptions)
@@ -207,9 +207,9 @@ export default class CalculerFormuleParBlockly extends Exercice {
             toolbox,
             solutionBlocks,
             verifyCallbackName: VERIFY_CALLBACK_NAME,
-            height: '200px',
+            height: '250px',
             interactivityOn: true,
-            width: '100%',
+            width: '640px',
           }
           texte += addBloklyEditor(this, i, options)
         }
