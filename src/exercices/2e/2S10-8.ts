@@ -2,6 +2,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -49,7 +50,7 @@ export default class nomExercice extends Exercice {
         case 'Basket':
           N = randint(200, 1500) * 2
           n = randint(50, N / 2)
-          texte = `Parmi les $${N}$ spectateurs d’un match de basket-ball, $${n}$ ont moins de $20$ ans. Calculer la proportion de spectateurs
+          texte = `Parmi les $${texNombre(N)}$ spectateurs d’un match de basket-ball, $${n}$ ont moins de $20$ ans. Calculer la proportion de spectateurs
           ayant moins de $20$ ans.<br>Exprimer le résultat sous la forme d'un pourcentage arrondi à l'unité près.`
           if (this.interactif) {
             texte += '<br><br>'
@@ -64,18 +65,18 @@ export default class nomExercice extends Exercice {
             })
           }
           texteCorr = `La population de référence est celle des spectateurs du match.<br>
-           On note $N=${N}$ son effectif.<br>
+           On note $N=${texNombre(N)}$ son effectif.<br>
           La sous-population étudiée est celle des spectateurs de moins de $20$ ans.<br>
            On note $n=${n}$ son effectif.<br>
           D'après le cours, on sait que la proportion d'une sous-population dans une population est :<br>
-          <br>$p=\\dfrac{\\text{Effectif de la sous population}}{\\text{Effectif de la population de référence}}=\\dfrac{n}{N}=\\dfrac{${n}}{${N}}\\approx${texNombre(n / N, 2)}$<br>
-          <br>La proportion de moins de $20$ ans parmi les spectateurs est $p\\approx${texNombre((n * 100) / N, 0)}\\%$`
+          <br>$p=\\dfrac{\\text{Effectif de la sous population}}{\\text{Effectif de la population de référence}}=\\dfrac{n}{N}=\\dfrac{${n}}{${texNombre(N)}}\\approx${texNombre(n / N, 2)}$<br>
+          <br>La proportion de moins de $20$ ans parmi les spectateurs est $p\\approx${miseEnEvidence(texNombre((n * 100) / N, 0))}~\\%$.`
           break
         case 'STMG':
         default:
           N = randint(12, 18) * 2
           n = randint(18, N / 2)
-          texte = `L’an passé, parmi les $${N}$ élèves de terminale STMG, $${n}$ ont obtenu une place en BTS ou en IUT.<br>
+          texte = `L’an passé, parmi les $${texNombre(N)}$ élèves de terminale STMG, $${n}$ ont obtenu une place en BTS ou en IUT.<br>
             Calculer la proportion d'élèves de cette classe qui ont obtenu une place en BTS ou en IUT.<br>Exprimer le résultat sous la forme d'un pourcentage arrondi à l'unité près.
             `
           if (this.interactif) {
@@ -91,12 +92,12 @@ export default class nomExercice extends Exercice {
             })
           }
           texteCorr = `La population de référence est celle des élèves de Terminale STMG.<br>
-             On note $N=${N}$ son effectif.<br>
+             On note $N=${texNombre(N)}$ son effectif.<br>
             La sous-population étudiée est celle des bacheliers de cette classe qui ont obtenu une place en BTS ou en IUT.<br>
              On note $n=${n}$ son effectif.<br>
             D'après le cours, on sait que la proportion d'une sous-population dans une population est :<br>
-            <br>$p=\\dfrac{\\text{Effectif de la sous population}}{\\text{Effectif de la population de référence}}=\\dfrac{n}{N}=\\dfrac{${n}}{${N}}\\approx${texNombre(n / N, 2)}$<br>
-            <br>La proportion d'élèves qui ont obtenu une place en BTS ou en IUT dans cette classe est $p\\approx${texNombre((n * 100) / N, 0)}\\%$`
+            <br>$p=\\dfrac{\\text{Effectif de la sous population}}{\\text{Effectif de la population de référence}}=\\dfrac{n}{N}=\\dfrac{${n}}{${texNombre(N)}}\\approx${texNombre(n / N, 2)}$<br>
+            <br>La proportion d'élèves qui ont obtenu une place en BTS ou en IUT dans cette classe est $p\\approx${miseEnEvidence(texNombre((n * 100) / N, 0))}~\\%$.`
           break
       }
       // Si la question n'a jamais été posée, on l'enregistre
