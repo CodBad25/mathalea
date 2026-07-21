@@ -6,6 +6,13 @@ import {
   BlocklyEditor,
   type BlocklyEditorOptions,
 } from '../../lib/customElements/BlocklyEditor'
+import {
+  addScratchEditor,
+  ScratchEditorElement,
+  scratchWorkspaceXmlToVariableValues,
+  type ScratchEditorOptions,
+  type ScratchToolboxDefinition,
+} from '../../lib/customElements/ScratchEditor'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -31,7 +38,7 @@ export const dateDePublication = '17/07/2026'
 export const uuid = 'c3f91'
 
 export const refs = {
-  'fr-fr': [],
+  'fr-fr': ['5I1D'],
   'fr-ch': [],
 }
 
@@ -54,6 +61,7 @@ const scenariosByLevel: Record<number, string[]> = {
 }
 
 const VERIFY_CALLBACK_NAME = '5I1D_AST_EQUIVALENCE'
+const SCRATCH_VERIFY_CALLBACK_NAME = '5I1D_SCRATCH_RESULT_VALUE_EQUIVALENCE'
 
 type OperationType = 'plus' | 'moins' | 'multi' | 'divise'
 type ValueExpr =
@@ -71,6 +79,7 @@ type ScenarioPayload = {
   data: Record<string, number | string>
   variableHints: string[]
   distractors: string[]
+  initialBlocks?: Record<string, unknown>
 }
 
 type ScenarioBlockTypes = {
@@ -199,6 +208,7 @@ function valueExprToBlocklyValue(
 function buildProgramSolutionBlocks(
   assignments: Array<{ variable: string; value: number }>,
   resultExpr: ValueExpr,
+  resultVariableName: string,
   blockTypes: ScenarioBlockTypes,
 ): Record<string, unknown> {
   const startBlock: Record<string, unknown> = {
@@ -228,12 +238,96 @@ function buildProgramSolutionBlocks(
     current = nextBlock
   }
 
+  const resultAssignmentBlock = {
+    type: blockTypes.assignType,
+    fields: {
+      VAR: resultVariableName,
+    },
+    inputs: {
+      VALUE: {
+        block: valueExprToBlocklyValue(resultExpr, blockTypes),
+      },
+    },
+  }
+
+  current.next = { block: resultAssignmentBlock }
+  current = resultAssignmentBlock
+
   current.next = {
     block: {
       type: 'dire_2s',
       inputs: {
         MESSAGE: {
-          block: valueExprToBlocklyValue(resultExpr, blockTypes),
+          block: valueExprToBlocklyValue(
+            { type: 'variable', name: resultVariableName },
+            blockTypes,
+          ),
+        },
+      },
+    },
+  }
+
+  return {
+    blocks: {
+      blocks: [startBlock],
+    },
+  }
+}
+
+function buildProgramInitialBlocks(
+  assignments: Array<{ variable: string; value: number }>,
+  resultVariableName: string,
+  blockTypes: ScenarioBlockTypes,
+): Record<string, unknown> {
+  const startBlock: Record<string, unknown> = {
+    type: 'demarrer',
+  }
+  const zeroBlock = () => ({
+    type: 'textinput',
+    fields: {
+      NUM: '0',
+    },
+  })
+
+  let current = startBlock
+  for (const assignment of assignments) {
+    const nextBlock = {
+      type: blockTypes.assignType,
+      fields: {
+        VAR: assignment.variable,
+      },
+      inputs: {
+        VALUE: {
+          block: zeroBlock(),
+        },
+      },
+    }
+
+    current.next = { block: nextBlock }
+    current = nextBlock
+  }
+
+  const resultAssignmentBlock = {
+    type: blockTypes.assignType,
+    fields: {
+      VAR: resultVariableName,
+    },
+    inputs: {
+      VALUE: {
+        block: zeroBlock(),
+      },
+    },
+  }
+
+  current.next = { block: resultAssignmentBlock }
+  current = resultAssignmentBlock
+
+  current.next = {
+    block: {
+      type: 'dire_2s',
+      inputs: {
+        MESSAGE: {
+          block: zeroBlock(),
         },
       },
     },
@@ -319,13 +413,197 @@ function buildToolboxForScenario(
   }
 }
 
+function buildScratchToolboxForScenario(
+  variableChoices: string[],
+): ScratchToolboxDefinition {
+  return {
+    categories: [
+      {
+        id: 'events',
+        name: 'Événements',
+        colour: '#FFBF00',
+        blocks: ['event_whenflagclicked'],
+      },
+      {
+        id: 'variables',
+        name: 'Variables',
+        colour: '#FF8C1A',
+        blocks: variableChoices.flatMap((name) => [
+          {
+            opcode: 'data_setvariableto',
+            fields: { VARIABLE: name },
+            inputs: { VALUE: 0 },
+          },
+          {
+            opcode: 'data_variable',
+            fields: { VARIABLE: name },
+          },
+        ]),
+      },
+      {
+        id: 'operators',
+        name: 'Opérateurs',
+        colour: '#59C059',
+        blocks: [
+          'operator_add',
+          'operator_subtract',
+          'operator_multiply',
+          'operator_divide',
+          'math_number',
+        ],
+      },
+      {
+        id: 'looks',
+        name: 'Apparence',
+        colour: '#9966FF',
+        blocks: ['looks_sayforsecs'],
+      },
+    ],
+  }
+}
+
+function blocklyValueExprToScratchValueXml(
+  expr: Record<string, unknown>,
+): string {
+  const type = expr.type
+  if (type === 'textinput') {
+    const num = (expr.fields as Record<string, unknown> | undefined)?.NUM ?? 0
+    return `<shadow type="math_number"><field name="NUM">${escapeXmlText(String(num))}</field></shadow>`
+  }
+
+  if (typeof type === 'string' && type.startsWith('variable_5i1d_')) {
+    const name = (expr.fields as Record<string, unknown> | undefined)?.VAR ?? ''
+    return `<block type="data_variable"><field name="VARIABLE">${escapeXmlText(String(name))}</field></block>`
+  }
+
+  if (type === 'operation') {
+    const op = (expr.fields as Record<string, unknown> | undefined)?.op
+    const opcodeByOp: Record<string, string> = {
+      plus: 'operator_add',
+      moins: 'operator_subtract',
+      multi: 'operator_multiply',
+      divise: 'operator_divide',
+    }
+    const opcode = typeof op === 'string' ? opcodeByOp[op] : undefined
+    const inputs = expr.inputs as Record<
+      string,
+      { block?: Record<string, unknown> }
+    >
+    if (
+      opcode == null ||
+      inputs?.op1?.block == null ||
+      inputs?.op2?.block == null
+    ) {
+      return '<shadow type="math_number"><field name="NUM">0</field></shadow>'
+    }
+    return [
+      `<block type="${opcode}">`,
+      '<value name="NUM1">',
+      blocklyValueExprToScratchValueXml(inputs.op1.block),
+      '</value>',
+      '<value name="NUM2">',
+      blocklyValueExprToScratchValueXml(inputs.op2.block),
+      '</value>',
+      '</block>',
+    ].join('')
+  }
+
+  return '<shadow type="math_number"><field name="NUM">0</field></shadow>'
+}
+
+function blocklyProgramToScratchXml(
+  solutionBlocks: Record<string, unknown>,
+): string {
+  const firstBlock = (
+    (solutionBlocks.blocks as Record<string, unknown> | undefined)?.blocks as
+      | Record<string, unknown>[]
+      | undefined
+  )?.[0]
+  if (firstBlock == null) {
+    return '<xml xmlns="https://developers.google.com/blockly/xml"></xml>'
+  }
+
+  const statementToXml = (current: Record<string, unknown>): string => {
+    const xml: string[] = []
+    if (
+      typeof current.type === 'string' &&
+      current.type.startsWith('affecter_variable_5i1d_')
+    ) {
+      const name =
+        (current.fields as Record<string, unknown> | undefined)?.VAR ?? ''
+      const value = (
+        current.inputs as
+          | Record<string, { block?: Record<string, unknown> }>
+          | undefined
+      )?.VALUE?.block
+      xml.push(
+        '<block type="data_setvariableto">',
+        `<field name="VARIABLE">${escapeXmlText(String(name))}</field>`,
+        '<value name="VALUE">',
+        value == null
+          ? '<shadow type="math_number"><field name="NUM">0</field></shadow>'
+          : blocklyValueExprToScratchValueXml(value),
+        '</value>',
+      )
+    } else if (current.type === 'dire_2s') {
+      const message = (
+        current.inputs as
+          | Record<string, { block?: Record<string, unknown> }>
+          | undefined
+      )?.MESSAGE?.block
+      xml.push(
+        '<block type="looks_sayforsecs">',
+        '<value name="MESSAGE">',
+        message == null
+          ? '<shadow type="math_number"><field name="NUM">0</field></shadow>'
+          : blocklyValueExprToScratchValueXml(message),
+        '</value>',
+        '<value name="SECS"><shadow type="math_number"><field name="NUM">2</field></shadow></value>',
+      )
+    } else {
+      xml.push('<block type="looks_sayforsecs">')
+    }
+
+    const next = (
+      current.next as { block?: Record<string, unknown> } | undefined
+    )?.block
+    if (next != null) xml.push('<next>', statementToXml(next), '</next>')
+    xml.push('</block>')
+    return xml.join('')
+  }
+
+  const firstStatement = (
+    firstBlock.next as { block?: Record<string, unknown> } | undefined
+  )?.block
+  return [
+    '<xml xmlns="https://developers.google.com/blockly/xml">',
+    '<block type="event_whenflagclicked" x="24" y="24">',
+    firstStatement == null
+      ? ''
+      : `<next>${statementToXml(firstStatement)}</next>`,
+    '</block>',
+    '</xml>',
+  ].join('')
+}
+
+function escapeXmlText(value: string): string {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+}
+
 function materialByScenario(
   scenario: string,
   blockTypeSuffix: string,
 ): {
   enonce: string
+  initialBlocks: Record<string, unknown>
   solutionBlocks: Record<string, unknown>
   toolbox: Blockly.utils.toolbox.ToolboxDefinition
+  initialScratchXml: string
+  scratchToolbox: ScratchToolboxDefinition
+  solutionScratchXml: string
   payload: ScenarioPayload
   variableChoices: string[]
 } {
@@ -345,7 +623,8 @@ function materialByScenario(
       const cote = randint(3, 12)
       assignments = [{ variable: abName, value: cote }]
       resultExpr = calc('multi', v(abName), v(abName))
-      enonce = `On veut réaliser un programme qui calcule l'aire du carré ${a}${b}${c}${d}. Écris le programme permettant de calculer l'aire sachant que ${abName} = ${cote}.<br>`
+      enonce = `On veut réaliser un programme qui calcule l'aire du carré ${a}${b}${c}${d}.<br>
+       Écrire le programme permettant de calculer l'aire sachant que ${abName} = ${cote}.<br><br>`
       payload = {
         scenarioType: 'aire_carre',
         data: { nom: `${a}${b}${c}${d}`, [abName]: cote },
@@ -363,7 +642,8 @@ function materialByScenario(
       const cote = randint(3, 12)
       assignments = [{ variable: coteName, value: cote }]
       resultExpr = calc('multi', n(3), v(coteName))
-      enonce = `On veut réaliser un programme qui calcule le périmètre du triangle équilatéral ${a}${b}${c}. Écris le programme permettant de calculer ce périmètre sachant que ${coteName} = ${cote}.<br>`
+      enonce = `On veut réaliser un programme qui calcule le périmètre du triangle équilatéral ${a}${b}${c}.<br>
+       Écrire le programme permettant de calculer ce périmètre sachant que ${coteName} = ${cote}.<br><br>`
       payload = {
         scenarioType: 'perimetre_triangle_equilateral',
         data: { nom: `${a}${b}${c}`, [coteName]: cote },
@@ -389,7 +669,8 @@ function materialByScenario(
         { variable: adName, value: ad },
       ]
       resultExpr = calc('multi', v(abName), v(adName))
-      enonce = `On veut réaliser un programme qui calcule l'aire du rectangle ${a}${b}${c}${d}. Écris le programme permettant de calculer l'aire du rectangle ${a}${b}${c}${d} tel que ${abName} = ${ab} et ${adName} = ${ad}.<br>`
+      enonce = `On veut réaliser un programme qui calcule l'aire du rectangle ${a}${b}${c}${d}.<br>
+       Écrire le programme permettant de calculer l'aire du rectangle ${a}${b}${c}${d} tel que ${abName} = ${ab} et ${adName} = ${ad}.<br><br>`
       payload = {
         scenarioType: 'aire_rectangle',
         data: { nom: `${a}${b}${c}${d}`, [abName]: ab, [adName]: ad },
@@ -402,7 +683,8 @@ function materialByScenario(
       const heures = randint(1, 12)
       assignments = [{ variable: 'heures', value: heures }]
       resultExpr = calc('multi', v('heures'), n(60))
-      enonce = `On veut convertir ${heures} h en minutes. Écris un programme qui calcule le nombre de minutes.<br>`
+      enonce = `On veut convertir ${heures} h en minutes.<br>
+       Écrire un programme qui calcule le nombre de minutes.<br><br>`
       payload = {
         scenarioType: 'conversion_heures_minutes',
         data: { heures },
@@ -426,7 +708,8 @@ function materialByScenario(
         { variable: adName, value: ad },
       ]
       resultExpr = calc('multi', n(2), calc('plus', v(abName), v(adName)))
-      enonce = `On veut calculer le périmètre du rectangle ${a}${b}${c}${d}. Écris le programme qui calcule ce périmètre sachant que ${abName} = ${ab} et ${adName} = ${ad}.<br>`
+      enonce = `On veut calculer le périmètre du rectangle ${a}${b}${c}${d}.<br>
+       Écrire le programme qui calcule ce périmètre sachant que ${abName} = ${ab} et ${adName} = ${ad}.<br><br>`
       payload = {
         scenarioType: 'perimetre_rectangle',
         data: { nom: `${a}${b}${c}${d}`, [abName]: ab, [adName]: ad },
@@ -447,7 +730,8 @@ function materialByScenario(
         v('prixInitial'),
         calc('divise', calc('multi', v('prixInitial'), v('remise')), n(100)),
       )
-      enonce = `Un article coûte ${prixInitial} €. Il bénéficie d'une remise de ${remise} %. Écris un programme qui calcule le prix final.<br>`
+      enonce = `Un article coûte ${prixInitial} €. Il bénéficie d'une remise de ${remise} %.<br>
+       Écrire un programme qui calcule le prix final.<br><br>`
       payload = {
         scenarioType: 'prix_apres_remise',
         data: { prixInitial, remise },
@@ -476,7 +760,8 @@ function materialByScenario(
               v('nombreGarcons'),
               calc('plus', v('nombreFilles'), v('nombreGarcons')),
             )
-      enonce = `Dans une classe, il y a ${filles} filles et ${garcons} garçons. Écris un programme qui calcule la fréquence des ${cible}.<br>`
+      enonce = `Dans une classe, il y a ${filles} filles et ${garcons} garçons.<br>
+       Écrire un programme qui calcule la fréquence des ${cible}.<br><br>`
       payload = {
         scenarioType: 'frequence_filles_garcons',
         data: { filles, garcons, cible },
@@ -493,7 +778,8 @@ function materialByScenario(
         { variable: 'hauteur', value: hauteur },
       ]
       resultExpr = calc('divise', calc('multi', v('base'), v('hauteur')), n(2))
-      enonce = `On veut calculer l'aire d'un triangle rectangle de base ${base} et de hauteur ${hauteur}. Écris un programme qui calcule cette aire.<br>`
+      enonce = `On veut calculer l'aire d'un triangle rectangle de base ${base} et de hauteur ${hauteur}.<br>
+       Écrire un programme qui calcule cette aire.<br><br>`
       payload = {
         scenarioType: 'aire_triangle_rectangle',
         data: { base, hauteur },
@@ -514,7 +800,8 @@ function materialByScenario(
         v('prixInitial'),
         calc('divise', calc('multi', v('prixInitial'), v('remise')), n(100)),
       )
-      enonce = `Un vêtement coûte ${prixInitial} €. La réduction est de ${remise} %. Écris un programme qui calcule le montant à payer.<br>`
+      enonce = `Un vêtement coûte ${prixInitial} €. La réduction est de ${remise} %.<br>
+       Écrire un programme qui calcule le montant à payer.<br><br>`
       payload = {
         scenarioType: 'reduction_prix_final',
         data: { prixInitial, remise },
@@ -535,7 +822,8 @@ function materialByScenario(
         v('prixHT'),
         calc('divise', calc('multi', v('prixHT'), v('tva')), n(100)),
       )
-      enonce = `Le prix HT est ${prixHT} € et la TVA est de ${tva} %. Écris un programme qui calcule le prix TTC.<br>`
+      enonce = `Le prix HT est ${prixHT} € et la TVA est de ${tva} %.<br>
+       Écrire un programme qui calcule le prix TTC.<br><br>`
       payload = {
         scenarioType: 'prix_ht_ttc',
         data: { prixHT, tva },
@@ -552,15 +840,17 @@ function materialByScenario(
         { variable: 'AD', value: b },
       ]
       resultExpr = calc('plus', v('AB'), v('AD'))
-      enonce = `Écris un programme qui calcule ${a} + ${b}.<br>`
+      enonce = `Écrire un programme qui calcule ${a} + ${b}.<br><br>`
       payload = {
         scenarioType: 'fallback',
         data: { a, b },
-        variableHints: ['AB', 'AD'],
+        variableHints: ['AB', 'AD', 'resultat'],
         distractors: ['AC', 'BD'],
       }
     }
   }
+  const resultVariableName =
+    payload.variableHints[payload.variableHints.length - 1] ?? 'resultat'
   const variableChoices = buildScenarioVariableChoices(
     assignments,
     resultExpr,
@@ -575,13 +865,26 @@ function materialByScenario(
   const solutionBlocks = buildProgramSolutionBlocks(
     assignments,
     resultExpr,
+    resultVariableName,
     blockTypes,
   )
+  const initialBlocks = buildProgramInitialBlocks(
+    assignments,
+    resultVariableName,
+    blockTypes,
+  )
+  const solutionScratchXml = blocklyProgramToScratchXml(solutionBlocks)
+  const initialScratchXml = blocklyProgramToScratchXml(initialBlocks)
+  payload.initialBlocks = initialBlocks
 
   return {
     enonce,
+    initialBlocks,
     solutionBlocks,
     toolbox: buildToolboxForScenario(blockTypes),
+    initialScratchXml,
+    scratchToolbox: buildScratchToolboxForScenario(variableChoices),
+    solutionScratchXml,
     payload,
     variableChoices,
   }
@@ -605,6 +908,59 @@ BlocklyEditor.registerVerificationCallback(
       feedback: isOk
         ? ''
         : "Le programme ne correspond pas à la suite d'instructions attendue.",
+    }
+  },
+)
+
+ScratchEditorElement.registerVerificationCallback(
+  SCRATCH_VERIFY_CALLBACK_NAME,
+  ({ studentValue, expectedRaw }) => {
+    if (typeof expectedRaw !== 'string') {
+      return {
+        isOk: false,
+        feedback: 'Réponse attendue invalide.',
+      }
+    }
+    try {
+      const expected = JSON.parse(expectedRaw) as {
+        payload?: ScenarioPayload
+        solutionScratchXml?: unknown
+      }
+      if (typeof expected.solutionScratchXml !== 'string') {
+        return {
+          isOk: false,
+          feedback: 'Réponse Scratch attendue invalide.',
+        }
+      }
+      const resultVariableName =
+        expected.payload?.variableHints[
+          expected.payload.variableHints.length - 1
+        ] ?? 'resultat'
+      const studentValues = scratchWorkspaceXmlToVariableValues(
+        studentValue.workspaceXml ?? '',
+      )
+      const expectedValues = scratchWorkspaceXmlToVariableValues(
+        expected.solutionScratchXml,
+      )
+      const studentResult = studentValues?.[resultVariableName]
+      const expectedResult = expectedValues?.[resultVariableName]
+      const isOk =
+        studentResult != null &&
+        expectedResult != null &&
+        Number.isFinite(studentResult) &&
+        Number.isFinite(expectedResult) &&
+        Math.abs(studentResult - expectedResult) < 1e-9
+      return {
+        isOk,
+        feedback: isOk
+          ? ''
+          : 'La valeur calculée pour la variable résultat ne correspond pas à la valeur attendue.',
+      }
+    } catch {
+      return {
+        isOk: false,
+        feedback: 'Réponse attendue invalide.',
+      }
     }
   },
 )
@@ -634,6 +990,8 @@ export default class CalculerFormuleParBlockly2 extends Exercice {
       true,
     ]
     this.sup4 = true
+    this.besoinFormulaire5CaseACocher = ["Utiliser l'éditeur scratch", true]
+    this.sup5 = true
   }
 
   nouvelleVersion(_numeroExercice: number) {
@@ -669,36 +1027,69 @@ export default class CalculerFormuleParBlockly2 extends Exercice {
           scenarioIndexByType[requestedType]++
         ]
 
-      const { enonce, solutionBlocks, toolbox, payload, variableChoices } =
-        materialByScenario(scenario, `${this.numeroExercice}_${i}`)
+      const {
+        enonce,
+        initialBlocks,
+        solutionBlocks,
+        toolbox,
+        initialScratchXml,
+        scratchToolbox,
+        solutionScratchXml,
+        payload,
+        variableChoices,
+      } = materialByScenario(scenario, `${this.numeroExercice}_${i}`)
 
       let texte = enonce
-      const correctionEditorId = `blockly-editorCorrEx${this.numeroExercice}Q${i}`
+      const correctionEditorId = `${this.sup5 ? 'scratch-editor' : 'blockly-editor'}CorrEx${this.numeroExercice}Q${i}`
       const texteCorr = context.isHtml
         ? [
-            'La solution Blockly est :<br>',
-            BlocklyEditor.create({
-              id: correctionEditorId,
-              options: {
-                toolbox,
-                initialBlocks: solutionBlocks,
-                height: '150px',
-                interactivityOn: false,
-              },
-            }),
+            `La solution ${this.sup5 ? 'Scratch' : 'Blockly'} est :<br>`,
+            this.sup5
+              ? addScratchEditor(this, i, {
+                  id: correctionEditorId,
+                  toolbox: scratchToolbox,
+                  initialValue: { workspaceXml: solutionScratchXml },
+                  height: '220px',
+                  width: '100%',
+                  interactivityOn: false,
+                  enableRun: false,
+                  enableStop: false,
+                })
+              : BlocklyEditor.create({
+                  id: correctionEditorId,
+                  options: {
+                    toolbox,
+                    initialBlocks: solutionBlocks,
+                    height: '150px',
+                    interactivityOn: false,
+                  },
+                }),
           ].join('')
         : ''
 
       if (context.isHtml) {
-        const options: BlocklyEditorOptions = {
-          toolbox,
-          solutionBlocks,
-          verifyCallbackName: VERIFY_CALLBACK_NAME,
-          height: '300px',
-          interactivityOn: true,
-          width: '100%',
+        if (this.sup5) {
+          const scratchOptions: ScratchEditorOptions = {
+            toolbox: scratchToolbox,
+            initialValue: { workspaceXml: initialScratchXml },
+            verifyCallbackName: SCRATCH_VERIFY_CALLBACK_NAME,
+            height: '300px',
+            interactivityOn: true,
+            width: '100%',
+          }
+          texte += addScratchEditor(this, i, scratchOptions)
+        } else {
+          const options: BlocklyEditorOptions = {
+            toolbox,
+            initialBlocks,
+            solutionBlocks,
+            verifyCallbackName: VERIFY_CALLBACK_NAME,
+            height: '300px',
+            interactivityOn: true,
+            width: '100%',
+          }
+          texte += addBloklyEditor(this, i, options)
         }
-        texte += addBloklyEditor(this, i, options)
         texte += `<div class="ml-2 py-2" id="resultatCheckEx${this.numeroExercice}Q${i}"></div>`
         texte += ajouteFeedback(this, i)
 
@@ -709,12 +1100,15 @@ export default class CalculerFormuleParBlockly2 extends Exercice {
             reponse: {
               value: JSON.stringify({
                 solutionBlocks,
+                initialBlocks,
+                initialScratchXml,
+                solutionScratchXml,
                 payload,
                 variableChoices,
               }),
             },
           },
-          { formatInteractif: 'blockly-editor' },
+          { formatInteractif: this.sup5 ? 'scratch-editor' : 'blockly-editor' },
         )
       }
 

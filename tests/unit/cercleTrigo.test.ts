@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { trigoCircleSelectionValue } from '../../src/lib/customElements/TrigoCircleSelectionElement'
 import {
   TrigoExact,
   angleTex,
