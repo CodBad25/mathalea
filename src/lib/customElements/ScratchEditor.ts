@@ -52,10 +52,29 @@ export type ScratchEditorOptions = {
   enableRun?: boolean
   enableStep?: boolean
   enableStop?: boolean
+  verifyCallbackName?: string
   interactivityOn?: boolean
   height?: string
   width?: string
 }
+
+type ScratchVerificationCallbackContext = {
+  exercice: IExercice
+  questionIndex: number
+  editor: ScratchEditorElement
+  studentValue: ScratchEditorValue
+  expectedRaw: unknown
+}
+
+type ScratchVerificationResult = {
+  isOk: boolean
+  feedback: string
+  score?: { nbBonnesReponses: number; nbReponses: number }
+}
+
+type ScratchVerificationCallback = (
+  ctx: ScratchVerificationCallbackContext,
+) => ScratchVerificationResult
 
 type ScratchBlocksWorkspace = {
   clear(): void
@@ -145,8 +164,7 @@ class ScratchToolboxBuilder {
           : ''
         const blocks = category.blocks
           .map((block) => {
-            const opcode = typeof block === 'string' ? block : block.opcode
-            return this.blockXml(opcode)
+            return this.blockXml(block)
           })
           .join('')
         return `<category name="${this.escapeAttribute(category.name ?? category.id)}" id="${this.escapeAttribute(category.id)}"${colour}${secondaryColour}>${blocks}</category>`
@@ -196,14 +214,33 @@ class ScratchToolboxBuilder {
     return [
       '<xml id="toolbox-blocks" style="display: none">',
       ...blocks.map((block) => {
-        const opcode = typeof block === 'string' ? block : block.opcode
-        return this.blockXml(opcode)
+        return this.blockXml(block)
       }),
       '</xml>',
     ].join('')
   }
 
-  private static blockXml(opcode: string): string {
+  private static blockXml(block: ScratchToolboxCategory['blocks'][number]): string {
+    const opcode = typeof block === 'string' ? block : block.opcode
+    const fields =
+      typeof block === 'string'
+        ? ''
+        : Object.entries(block.fields ?? {})
+            .map(
+              ([name, value]) =>
+                `<field name="${this.escapeAttribute(name)}">${this.escapeText(String(value))}</field>`,
+            )
+            .join('')
+    const inputs =
+      typeof block === 'string'
+        ? ''
+        : Object.entries(block.inputs ?? {})
+            .map(
+              ([name, value]) =>
+                `<value name="${this.escapeAttribute(name)}"><shadow type="math_number"><field name="NUM">${this.escapeText(String(value))}</field></shadow></value>`,
+            )
+            .join('')
+
     if (opcode === 'looks_sayforsecs') {
       return [
         '<block type="looks_sayforsecs">',
@@ -226,13 +263,20 @@ class ScratchToolboxBuilder {
       return '<block type="math_number"><field name="NUM">0</field></block>'
     }
 
-    return `<block type="${this.escapeAttribute(opcode)}"></block>`
+    return `<block type="${this.escapeAttribute(opcode)}">${fields}${inputs}</block>`
   }
 
   private static escapeAttribute(value: string): string {
     return value
       .replaceAll('&', '&amp;')
       .replaceAll('"', '&quot;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+  }
+
+  private static escapeText(value: string): string {
+    return value
+      .replaceAll('&', '&amp;')
       .replaceAll('<', '&lt;')
       .replaceAll('>', '&gt;')
   }
@@ -266,7 +310,7 @@ class ScratchWorkspaceAdapter {
       scrollbars: true,
       sounds: false,
       toolboxPosition: 'start',
-      trashcan: !readOnly,
+      trashcan: false,
       zoom: {
         controls: !readOnly,
         wheel: false,
@@ -307,6 +351,10 @@ class ScratchWorkspaceAdapter {
 
 export class ScratchEditorElement extends MathaleaCustomElement {
   static readonly elementTag = 'scratch-editor'
+  private static readonly verificationCallbacks = new Map<
+    string,
+    ScratchVerificationCallback
+  >()
 
   private editorHeight: string | null = null
   private editorWidth: string | null = null
@@ -330,10 +378,22 @@ export class ScratchEditorElement extends MathaleaCustomElement {
       enableRun: options.enableRun ?? false,
       enableStep: options.enableStep ?? false,
       enableStop: options.enableStop ?? false,
+      verifyCallbackName: options.verifyCallbackName,
       interactivityOn: options.interactivityOn ?? true,
       height: options.height ?? '260px',
       width: options.width ?? '100%',
     })
+  }
+
+  static registerVerificationCallback(
+    name: string,
+    callback: ScratchVerificationCallback,
+  ): void {
+    this.verificationCallbacks.set(name, callback)
+  }
+
+  static unregisterVerificationCallback(name: string): void {
+    this.verificationCallbacks.delete(name)
   }
 
   static formatStudentAnswer(rawAnswer: string): string {
@@ -384,10 +444,40 @@ export class ScratchEditorElement extends MathaleaCustomElement {
     exercice.answers[id] = JSON.stringify(currentValue)
     editor.interactivityOn = false
 
+    const expectedRaw = exercice.autoCorrection[i]?.valeur?.reponse?.value
+    const verifyCallbackName = editor.getAttribute('verify-callback-name')
+    const verifyCallback =
+      verifyCallbackName == null
+        ? undefined
+        : ScratchEditorElement.verificationCallbacks.get(verifyCallbackName)
+
+    if (verifyCallback != null) {
+      const result = verifyCallback({
+        exercice,
+        questionIndex: i,
+        editor,
+        studentValue: currentValue,
+        expectedRaw,
+      })
+      const isOk = result.isOk
+      if (spanResultat) spanResultat.innerHTML = isOk ? '😎' : '☹️'
+      if (divFeedback) {
+        divFeedback.innerHTML = result.feedback
+        divFeedback.style.display = 'block'
+      }
+      return {
+        isOk,
+        feedback: result.feedback,
+        score: result.score ?? {
+          nbBonnesReponses: isOk ? 1 : 0,
+          nbReponses: 1,
+        },
+      }
+    }
+
     const studentAst = scratchWorkspaceXmlToArithmeticAst(
       currentValue.workspaceXml ?? '',
     )
-    const expectedRaw = exercice.autoCorrection[i]?.valeur?.reponse?.value
     const expectedAst = expectedScratchEditorAst(expectedRaw)
     const isOk =
       studentAst != null &&
@@ -729,6 +819,186 @@ export function scratchWorkspaceXmlToArithmeticAst(
     if (ast != null) return ast
   }
   return null
+}
+
+export function normalizedScratchWorkspaceXml(xml: string): string {
+  if (xml.trim() === '') return ''
+  const doc = new DOMParser().parseFromString(xml, 'application/xml')
+  if (doc.querySelector('parsererror') != null) return xml
+
+  const cleanElement = (element: Element): Record<string, unknown> => {
+    const attributes = Array.from(element.attributes)
+      .filter(
+        (attribute) =>
+          !['id', 'variabletype', 'x', 'y', 'xmlns'].includes(attribute.name),
+      )
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((attribute) => [attribute.name, attribute.value])
+    const children = Array.from(element.children)
+      .filter((child) => child.tagName.toLowerCase() !== 'variables')
+      .map(cleanElement)
+    const text =
+      children.length === 0 ? (element.textContent ?? '').trim() : undefined
+
+    return {
+      tag:
+        element.tagName.toLowerCase() === 'shadow'
+          ? 'block'
+          : element.tagName.toLowerCase(),
+      attributes,
+      ...(text ? { text } : {}),
+      ...(children.length > 0 ? { children } : {}),
+    }
+  }
+
+  return JSON.stringify(cleanElement(doc.documentElement))
+}
+
+export function scratchWorkspaceXmlToScratchblockCode(xml: string): string {
+  if (xml.trim() === '') return ''
+  const doc = new DOMParser().parseFromString(xml, 'application/xml')
+  if (doc.querySelector('parsererror') != null) return ''
+
+  const topBlocks = Array.from(doc.documentElement.children).filter(
+    (element) => element.tagName.toLowerCase() === 'block',
+  )
+
+  return topBlocks
+    .map(scratchStatementBlockToScratchblockLines)
+    .flat()
+    .join('\n')
+}
+
+export function scratchWorkspaceXmlToVariableValues(
+  xml: string,
+): Record<string, number> | null {
+  if (xml.trim() === '') return null
+  const doc = new DOMParser().parseFromString(xml, 'application/xml')
+  if (doc.querySelector('parsererror') != null) return null
+
+  const variables: Record<string, number> = {}
+  const topBlocks = Array.from(doc.documentElement.children).filter(
+    (element) => element.tagName.toLowerCase() === 'block',
+  )
+  for (const block of topBlocks) {
+    executeScratchStatementBlock(block, variables)
+  }
+  return variables
+}
+
+function executeScratchStatementBlock(
+  block: Element,
+  variables: Record<string, number>,
+): void {
+  if (block.getAttribute('type') === 'data_setvariableto') {
+    const variable = readScratchFieldText(block, 'VARIABLE')
+    const valueBlock = readScratchValueBlock(block, 'VALUE')
+    if (variable !== '' && valueBlock != null) {
+      variables[variable] = evaluateScratchValueBlock(valueBlock, variables)
+    }
+  }
+
+  const nextBlock = firstElement(block, 'next')?.querySelector(':scope > block')
+  if (nextBlock != null) executeScratchStatementBlock(nextBlock, variables)
+}
+
+function evaluateScratchValueBlock(
+  block: Element,
+  variables: Record<string, number>,
+): number {
+  const type = block.getAttribute('type')
+
+  if (type === 'math_number') {
+    const value = Number(readScratchFieldText(block, 'NUM').replace(',', '.'))
+    return Number.isFinite(value) ? value : Number.NaN
+  }
+
+  if (type === 'data_variable') {
+    const variable = readScratchFieldText(block, 'VARIABLE')
+    return variables[variable] ?? 0
+  }
+
+  const operationByType: Record<string, (left: number, right: number) => number> =
+    {
+      operator_add: (left, right) => left + right,
+      operator_subtract: (left, right) => left - right,
+      operator_multiply: (left, right) => left * right,
+      operator_divide: (left, right) => left / right,
+    }
+  const operation = type == null ? undefined : operationByType[type]
+  if (operation != null) {
+    const leftBlock = readScratchValueBlock(block, 'NUM1')
+    const rightBlock = readScratchValueBlock(block, 'NUM2')
+    const left =
+      leftBlock == null ? 0 : evaluateScratchValueBlock(leftBlock, variables)
+    const right =
+      rightBlock == null ? 0 : evaluateScratchValueBlock(rightBlock, variables)
+    return operation(left, right)
+  }
+
+  return Number.NaN
+}
+
+function scratchStatementBlockToScratchblockLines(block: Element): string[] {
+  const type = block.getAttribute('type')
+  const lines: string[] = []
+
+  if (type === 'event_whenflagclicked') {
+    lines.push('quand drapeau vert est clique')
+  } else if (type === 'data_setvariableto') {
+    const variable = readScratchFieldText(block, 'VARIABLE')
+    const value = readScratchValueBlock(block, 'VALUE')
+    lines.push(
+      `mettre ${variable} a ${value == null ? '0' : scratchValueBlockToScratchblockCode(value)}`,
+    )
+  } else if (type === 'looks_sayforsecs') {
+    const message = readScratchValueBlock(block, 'MESSAGE')
+    const secs = readScratchValueBlock(block, 'SECS')
+    lines.push(
+      `dire ${message == null ? '' : scratchValueBlockToScratchblockCode(message)} pendant ${secs == null ? '2' : scratchValueBlockToScratchblockCode(secs)} secondes`,
+    )
+  }
+
+  const nextBlock = firstElement(block, 'next')?.querySelector(':scope > block')
+  if (nextBlock != null) {
+    lines.push(...scratchStatementBlockToScratchblockLines(nextBlock))
+  }
+
+  return lines
+}
+
+function scratchValueBlockToScratchblockCode(block: Element): string {
+  const type = block.getAttribute('type')
+
+  if (type === 'math_number') {
+    return readScratchFieldText(block, 'NUM') || '0'
+  }
+
+  if (type === 'text') {
+    return readScratchFieldText(block, 'TEXT')
+  }
+
+  if (type === 'data_variable') {
+    return readScratchFieldText(block, 'VARIABLE')
+  }
+
+  const operatorByType: Record<string, string> = {
+    operator_add: '+',
+    operator_subtract: '-',
+    operator_multiply: '*',
+    operator_divide: '/',
+  }
+  if (type != null && operatorByType[type] != null) {
+    const left = readScratchValueBlock(block, 'NUM1')
+    const right = readScratchValueBlock(block, 'NUM2')
+    return `(${left == null ? '0' : scratchValueBlockToScratchblockCode(left)} ${operatorByType[type]} ${right == null ? '0' : scratchValueBlockToScratchblockCode(right)})`
+  }
+
+  return ''
+}
+
+function readScratchFieldText(block: Element, fieldName: string): string {
+  return firstElement(block, 'field', fieldName)?.textContent?.trim() ?? ''
 }
 
 function findScratchMessageValueBlock(block: Element): Element | null {

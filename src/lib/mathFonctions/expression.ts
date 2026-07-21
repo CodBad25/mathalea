@@ -378,7 +378,7 @@ function randomOperation(
   allowed: ArithmeticOperation[],
   randInt: (min: number, max: number) => number,
 ): ArithmeticOperation {
-  return allowed[randInt(0, allowed.length - 1)]
+  return allowed[Math.floor((randInt(0, 99) * allowed.length) / 100)]
 }
 
 function randomNumberForOp(
@@ -386,6 +386,26 @@ function randomNumberForOp(
   randInt: (min: number, max: number) => number,
 ): number {
   return op === 'divise' ? randInt(2, 10) : randInt(2, 30)
+}
+
+function arithmeticAstRequiresParenthesesForLatex(
+  node: ArithmeticAst,
+  parentPrecedence = 0,
+  isRightChild = false,
+): boolean {
+  if (node.type === 'number') return false
+
+  const precedence = getArithmeticPrecedence(node.op)
+  const samePriorityNeedsWrap =
+    isRightChild && precedence === parentPrecedence && node.op !== 'plus'
+  const lowerPriorityNeedsWrap = precedence < parentPrecedence
+
+  return (
+    samePriorityNeedsWrap ||
+    lowerPriorityNeedsWrap ||
+    arithmeticAstRequiresParenthesesForLatex(node.left, precedence, false) ||
+    arithmeticAstRequiresParenthesesForLatex(node.right, precedence, true)
+  )
 }
 
 export function generateArithmeticAst(
@@ -413,6 +433,88 @@ export function generateArithmeticAst(
   const requireParentheses: boolean = options.requireParentheses ?? level === 3
 
   const buildCandidate = (): ArithmeticAst => {
+    const randomBoolean = (): boolean => randInt(0, 99) < 50
+
+    const buildAdditiveAstWithValue = (
+      value: number,
+      preferredOp?: ArithmeticOperation,
+    ): ArithmeticAst => {
+      const op = preferredOp ?? randomOperation(lowOps, randInt)
+      if (op === 'plus' && value > 4) {
+        const leftValue = randInt(2, value - 2)
+        return {
+          type: 'operation',
+          op,
+          left: { type: 'number', value: leftValue },
+          right: { type: 'number', value: value - leftValue },
+        }
+      }
+
+      const rightValue = randInt(2, 15)
+      return {
+        type: 'operation',
+        op: 'moins',
+        left: { type: 'number', value: value + rightValue },
+        right: { type: 'number', value: rightValue },
+      }
+    }
+
+    const buildAdditiveAst = (
+      max = 15,
+      preferredOp?: ArithmeticOperation,
+    ): ArithmeticAst => {
+      const op = preferredOp ?? randomOperation(lowOps, randInt)
+      return {
+        type: 'operation',
+        op,
+        left: { type: 'number', value: randInt(2, max) },
+        right: {
+          type: 'number',
+          value: randomNumberForOp(op, randInt),
+        },
+      }
+    }
+
+    const buildHighAstWithAdditiveChild = (
+      preferredOp?: ArithmeticOperation,
+      preferredAdditiveOp?: ArithmeticOperation,
+    ): ArithmeticAst => {
+      const op = preferredOp ?? randomOperation(highOps, randInt)
+      const additiveOnLeft = op === 'divise' || randomBoolean()
+      const rightValue = randomNumberForOp(op, randInt)
+      const additiveValue =
+        op === 'divise' ? rightValue * randInt(2, 12) : randInt(2, 15)
+      return {
+        type: 'operation',
+        op,
+        left: additiveOnLeft
+          ? buildAdditiveAstWithValue(additiveValue, preferredAdditiveOp)
+          : { type: 'number', value: randInt(2, 15) },
+        right: additiveOnLeft
+          ? { type: 'number', value: rightValue }
+          : buildAdditiveAst(15, preferredAdditiveOp),
+      }
+    }
+
+    const buildHighAstWithTwoAdditiveChildren = (): ArithmeticAst => {
+      const op = randomOperation(highOps, randInt)
+      const right = buildAdditiveAstWithValue(randInt(2, 12), 'moins')
+      const left =
+        op === 'divise'
+          ? buildAdditiveAstWithValue(
+              evaluateArithmeticAst(right) * randInt(2, 8),
+              'plus',
+            )
+          : buildAdditiveAstWithValue(randInt(2, 20), 'plus')
+
+      return {
+        type: 'operation',
+        op,
+        left,
+        right,
+      }
+    }
+
     if (operationCount === 1) {
       const op = randomOperation(allOps, randInt)
       return {
@@ -447,31 +549,37 @@ export function generateArithmeticAst(
     }
 
     if (requireParentheses) {
-      // Avec parenthèses obligatoires: on force un produit de deux sous-expressions additives.
-      // Exemple: (a + b) × (c - d)
-      const leftOp = randomOperation(lowOps, randInt)
-      const rightOp = randomOperation(lowOps, randInt)
+      const shape = randInt(0, 3)
+
+      if (shape === 0) {
+        return buildHighAstWithTwoAdditiveChildren()
+      }
+
+      if (shape === 1) {
+        return {
+          type: 'operation',
+          op: 'plus',
+          left: buildHighAstWithAdditiveChild('multi', 'moins'),
+          right: { type: 'number', value: randInt(2, 20) },
+        }
+      }
+
+      if (shape === 2) {
+        return {
+          type: 'operation',
+          op: 'moins',
+          left: buildHighAstWithAdditiveChild(
+            randomOperation(highOps, randInt),
+          ),
+          right: { type: 'number', value: randInt(2, 20) },
+        }
+      }
+
       return {
         type: 'operation',
-        op: 'multi',
-        left: {
-          type: 'operation',
-          op: leftOp,
-          left: { type: 'number', value: randInt(2, 15) },
-          right: {
-            type: 'number',
-            value: randomNumberForOp(leftOp, randInt),
-          },
-        },
-        right: {
-          type: 'operation',
-          op: rightOp,
-          left: { type: 'number', value: randInt(2, 15) },
-          right: {
-            type: 'number',
-            value: randomNumberForOp(rightOp, randInt),
-          },
-        },
+        op: 'moins',
+        left: { type: 'number', value: randInt(20, 60) },
+        right: buildHighAstWithAdditiveChild('divise'),
       }
     }
 
@@ -502,7 +610,9 @@ export function generateArithmeticAst(
     const candidate = buildCandidate()
     if (
       validateArithmeticAst(candidate, normalizedOptions).ok &&
-      !hasAtLeastTwoPlusOrMulti(candidate)
+      !hasAtLeastTwoPlusOrMulti(candidate) &&
+      (requireParentheses ||
+        !arithmeticAstRequiresParenthesesForLatex(candidate))
     ) {
       return candidate
     }

@@ -39,3 +39,11 @@ La classe expose notamment `convertirEn()`, `estEgal()`, `estUneApproximation()`
 ## Affichage des nombres
 
 L'affichage utilisateur passe principalement par les helpers de `src/lib/outils/texNombre.ts` et les fonctions associées. Ils évitent les problèmes fréquents de notation française, de séparateurs décimaux, d'espaces et de rendu LaTeX/HTML.
+
+## Expressions arithmétiques générées
+
+`generateArithmeticAst()` est défini dans `src/lib/mathFonctions/expression.ts`. Il construit un arbre de calcul pour les exercices qui demandent de traduire une expression numérique en blocs.
+
+Avec trois opérations et `requireParentheses: true`, le générateur tire plusieurs formes qui imposent de calculer une addition ou une soustraction avant une multiplication ou une division. Il peut notamment produire deux sous-expressions additives, par exemple `(a + b) \times (c - d)`, ou une seule sous-expression additive combinée avec un terme non parenthésé, par exemple `(a - b) \div c + d`.
+
+Avec trois opérations et `requireParentheses: false`, il construit au contraire une chaîne gauche de trois opérations, puis filtre les candidats qui exigeraient des parenthèses dans le rendu LaTeX.

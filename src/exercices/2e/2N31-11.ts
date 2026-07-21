@@ -49,7 +49,6 @@ export default class ComparerDeuxNombresAvecPuissances extends Exercice {
       </p>
     `
     this.nbQuestions = 1
-    this.nbQuestionsModifiable = false
     this.spacing = 2
     this.spacingCorr = 2
   }

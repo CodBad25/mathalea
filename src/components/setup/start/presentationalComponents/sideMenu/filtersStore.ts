@@ -5,6 +5,7 @@ import {
   levelCriterion,
   MultiCriteria,
   type Criterion,
+  type FilterableFeature,
 } from '../../../../../lib/components/filters'
 import {
   buildReferentiel,
@@ -16,7 +17,6 @@ import type {
   FilterType,
 } from '../../../../../lib/types'
 import type {
-  Features,
   JSONReferentielObject,
   Level,
   ResourceAndItsPath,
@@ -208,12 +208,12 @@ export function getSelectedFiltersObjects(): FilterObject<string | Level>[] {
  * Retourne la liste de toutes les fonctionnalités cochées (AMC, interactif)
  * @returns liste de toutes les fonctionnalités cochées
  */
-export function getSelectedFeatures(): (keyof Features)[] {
+export function getSelectedFeatures(): FilterableFeature[] {
   const filters = get(allFilters)
-  const selectedFeatures: (keyof Features)[] = []
+  const selectedFeatures: FilterableFeature[] = []
   Object.entries(filters.specs).forEach(([key, spec]) => {
     if (spec.isSelected) {
-      selectedFeatures.push(key as keyof Features)
+      selectedFeatures.push(key as FilterableFeature)
     }
   })
   return selectedFeatures
@@ -320,7 +320,7 @@ export function applyFilters(
   const original = [...collection]
   // on récupère dans le store les niveaux et les fonctionnalités cochés
   const selectedLevels: Level[] = getSelectedLevels()
-  const selectedSpecs: (keyof Features)[] = getSelectedFeatures()
+  const selectedSpecs: FilterableFeature[] = getSelectedFeatures()
   if (selectedLevels.length === 0 && selectedSpecs.length === 0) {
     // pas de filtre coché : on renvoie l'original
     return original

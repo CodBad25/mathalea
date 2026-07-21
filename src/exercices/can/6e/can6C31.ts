@@ -22,7 +22,7 @@ export const dateDePublication = '09/05/2022'
 export const uuid = '5b443'
 
 export const refs = {
-  'fr-fr': ['can6C31', '6N2A-flash5'],
+  'fr-fr': ['can6C31', '6N2A-flash5', 'auto5N2A-flash7'],
   'fr-ch': [],
 }
 export default class SoustraireEntierDecimal extends ExerciceSimple {

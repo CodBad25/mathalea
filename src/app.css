@@ -1286,7 +1286,8 @@ div.etiquettes {
 }
 
 /* Fixes issue where Blockly toolbox scrollbar doesn't hide - https://github.com/google/blockly/issues/5840*/
-svg[display='none'] {
+.blocklyScrollbarVertical svg[display='none'],
+.blocklyScrollbarHorizontal svg[display='none'] {
   display: none;
 }
 

@@ -95,6 +95,7 @@ export default class Exercice implements IExercice {
   spacing: number
   spacingCorr: number
   pasDeVersionLatex: boolean
+  pasDeVersionAleatoire?: boolean // booléen qui indique que l'exercice n'a pas de version aléatoire (le bouton « Nouvel énoncé » est alors masqué).
   listePackages?: string[]
   consigneModifiable: boolean
   nbQuestionsModifiable: boolean
@@ -210,6 +211,7 @@ export default class Exercice implements IExercice {
     // Gestion de la sortie LateX
     // ////////////////////////////////////////////
     this.pasDeVersionLatex = false // booléen qui indique qu'une sortie LateX est impossible.
+    this.pasDeVersionAleatoire = false // booléen qui indique que l'exercice n'a pas de version aléatoire (le bouton « Nouvel énoncé » est alors masqué).
     this.consigneModifiable = true // booléen pour déterminer si la consigne est modifiable en ligne dans la sortie LaTeX.
     this.nbQuestionsModifiable = true // booléen pour déterminer si le nombre de questions est modifiable en ligne.
     this.nbCols = 1 // Nombre de colonnes pour la sortie LaTeX des questions (environnement multicols).

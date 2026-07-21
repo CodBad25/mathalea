@@ -687,6 +687,7 @@
         showInteractivityButton={$globalOptions.recorder === 'flowmath'
           ? boutonInteractiviteUrlFlag
           : true}
+        showNewDataButton={!exercise.pasDeVersionAleatoire}
       />
       <article
         class=" {$isMenuNeededForExercises

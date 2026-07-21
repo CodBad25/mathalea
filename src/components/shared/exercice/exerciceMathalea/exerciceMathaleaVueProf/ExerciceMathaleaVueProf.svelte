@@ -143,6 +143,7 @@
     if (isContentVisible && isInteractif && buttonScore) initButtonScore()
     if (!isInteractif && divScore) divScore.innerHTML = ''
     headerProps.settingsReady = !exerciceHasNoSettings
+    headerProps.randomReady = !exercise.pasDeVersionAleatoire
     headerProps.isSortable = true
     headerProps.isDeletable = true
     headerProps.isHidable = true

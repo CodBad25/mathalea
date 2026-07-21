@@ -711,18 +711,20 @@ export function mathaleaUpdateExercicesParamsFromUrl(
       if (entry[0] === 'uuid') {
         indiceExercice++
         const uuid = entry[1]
-        const id = (
-          Object.keys(currentRefToUuid) as (keyof typeof currentRefToUuid)[]
-        ).find((key) => {
-          return currentRefToUuid[key] === uuid
-        })
         if (!newExercisesParams[indiceExercice])
-          newExercisesParams[indiceExercice] = { uuid, id }
+          newExercisesParams[indiceExercice] = { uuid, id: undefined }
         newExercisesParams[indiceExercice].uuid = uuid // string
-        newExercisesParams[indiceExercice].id = id // string
         newExercisesParams[indiceExercice].interactif = '0' // par défaut
+      } else if (entry[0] === 'id' && previousEntryWasUuid) {
+        // La référence précise choisie par l'utilisateur pour ce uuid :
+        // on ne la remplace par une référence par défaut que si elle ne
+        // correspond pas au uuid annoncé juste avant (URL corrompue ou obsolète)
+        const id = entry[1]
+        const uuid = newExercisesParams[indiceExercice].uuid
+        if (currentRefToUuid[id as keyof typeof currentRefToUuid] === uuid) {
+          newExercisesParams[indiceExercice].id = id
+        }
       } else if (entry[0] === 'id' && !previousEntryWasUuid) {
-        // En cas de présence d'un uuid juste avant, on ne tient pas compte de l'id
         indiceExercice++
         const id = entry[1]
         const uuid = currentRefToUuid[id as keyof typeof currentRefToUuid]
@@ -806,6 +808,15 @@ export function mathaleaUpdateExercicesParamsFromUrl(
 
       if (entry[0] === 'uuid') previousEntryWasUuid = true
       else previousEntryWasUuid = false
+    }
+    // Pour les uuid sans id valide dans l'URL (anciennes URLs ou URL corrompue),
+    // on se rabat sur une référence par défaut pour ce uuid
+    for (const params of newExercisesParams) {
+      if (params.uuid != null && params.id == null) {
+        params.id = (
+          Object.keys(currentRefToUuid) as (keyof typeof currentRefToUuid)[]
+        ).find((key) => currentRefToUuid[key] === params.uuid)
+      }
     }
   } catch (error) {
     // MOUCHARD SUR LES URLS FANTAISISTES

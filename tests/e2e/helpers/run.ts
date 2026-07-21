@@ -170,7 +170,7 @@ async function createDefaultRoutes(page: Page) {
 }
 
 export async function getQuestions(page: Page, urlExercice: string) {
-  const questionSelector = 'div#exo0 div.mb-5 div.container>li'
+  const questionSelector = 'div#exo0 div.mb-5 li'
 
   // console.log('getQuestions')
 
