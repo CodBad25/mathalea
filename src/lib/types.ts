@@ -349,6 +349,9 @@ export type InteractivityType =
   | 'scratch-editor'
   | 'tableau-signes-variations' // Non compatible AMC
   | 'mathalea-mathfield'
+  | 'fill-in-the-blank'
+  | 'mathalea-textfield'
+  | 'tableau-mathlive'
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -374,7 +377,10 @@ export function isInteractivityType(
     value === 'blockly-editor' ||
     value === 'scratch-editor' ||
     value === 'tableau-signes-variations' ||
-    value === 'mathalea-mathfield'
+    value === 'mathalea-mathfield' ||
+    value === 'fill-in-the-blank' ||
+    value === 'mathalea-textfield' ||
+    value === 'tableau-mathlive'
   )
 }
 
@@ -397,7 +403,10 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'blockly-editor' ||
     value === 'tableau-signes-variations' ||
     value === 'scratch-editor' ||
-    value === 'mathalea-mathfield'
+    value === 'mathalea-mathfield' ||
+    value === 'fill-in-the-blank' ||
+    value === 'mathalea-textfield' ||
+    value === 'tableau-mathlive'
   )
 }
 
@@ -409,6 +418,24 @@ export function isMathliveCompatible(value: string): boolean {
     lowCaseValue === 'tableaumathlive' ||
     lowCaseValue === 'texte'
   )
+}
+
+export function mathliveCompatibleToCustomElementFormat(
+  value: unknown,
+): InteractivityType | null {
+  if (typeof value !== 'string') return null
+  switch (value.toLowerCase()) {
+    case 'mathlive':
+      return 'mathalea-mathfield'
+    case 'fillintheblank':
+      return 'fill-in-the-blank'
+    case 'tableaumathlive':
+      return 'tableau-mathlive'
+    case 'texte':
+      return 'mathalea-textfield'
+    default:
+      return null
+  }
 }
 
 export type SharedQcmProposition = {

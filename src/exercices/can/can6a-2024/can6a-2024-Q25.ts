@@ -4,7 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 import Decimal from 'decimal.js'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
+import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
 
 export const titre = 'Encadrer un décimal par deux entiers consécutifs'
 export const interactifReady = true

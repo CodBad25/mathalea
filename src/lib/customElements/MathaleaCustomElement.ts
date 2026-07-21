@@ -13,6 +13,9 @@ export const listOfCustomElements = [
   'trigo-circle-selection',
   'tableau-signes-variations',
   'mathalea-mathfield',
+  'fill-in-the-blank',
+  'mathalea-textfield',
+  'tableau-mathlive',
 ]
 
 /**

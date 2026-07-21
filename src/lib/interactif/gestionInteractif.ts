@@ -3,7 +3,7 @@ import Decimal from 'decimal.js'
 import type { MathfieldElement } from 'mathlive'
 import {
   isInteractivityType,
-  isMathliveCompatible,
+  mathliveCompatibleToCustomElementFormat,
   type AnswerValueType,
   type AutoCorrection,
   type ClickFigures,
@@ -35,7 +35,7 @@ import { afficheScore } from './afficheScore'
 import type { CompareResult } from './checks/types'
 import { fonctionComparaison } from './comparisonFunctions'
 import { verifDragAndDrop } from './DragAndDrop'
-import { toutPourUnPoint, verifQuestionMathLive } from './mathLive'
+import { toutPourUnPoint } from './fonctionsBaremes'
 import { verifQuestionQcm } from './qcm'
 
 function scoreFromResult(result: { isOk: boolean }): number {
@@ -112,40 +112,14 @@ export function exerciceInteractif(
 
   for (let i = 0; i < exercice.autoCorrection.length; i++) {
     const format = exercice.autoCorrection[i]?.formatInteractif ?? 'mathlive'
+    const customElementFormat =
+      mathliveCompatibleToCustomElementFormat(format) ?? format
     let resultat: string
-    // On traite déjà la grande majorité des cas : verifQuestionMathlive condense Plus de 80% des exos sans doute
-    if (isMathliveCompatible(format)) {
-      const result = verifQuestionMathLive(exercice, i)
-      if (result == null) {
-        window.notify('erreur dans la correction de la question', {
-          exercice,
-          i,
-        })
-      } else {
-        nbQuestionsValidees += result.score.nbBonnesReponses
-        nbQuestionsNonValidees +=
-          result.score.nbReponses - result.score.nbBonnesReponses
-        if (result.feedback && result.feedback !== '') {
-          const divFeedback = document.querySelector(
-            `#feedbackEx${exercice.numeroExercice}Q${i}`,
-          )
-          if (divFeedback != null) {
-            divFeedback.innerHTML = `💡 ${result.feedback}`
-            divFeedback.classList.add(
-              'py-2',
-              'italic',
-              'text-coopmaths-warn-darkest',
-              'dark:text-coopmathsdark-warn-darkest',
-            )
-            ;(divFeedback as HTMLDivElement).style.display = 'block'
-          }
-        }
-      }
-    } else if (listOfCustomElements.includes(format)) {
+    if (listOfCustomElements.includes(customElementFormat)) {
       // On traite le cas de tous les MathaleaCustomElement ici
       const liste = Array.from(mathaleaCustomElementsRegistry)
       const [tag, elementClasse] =
-        liste.find((custom) => custom[0] === format) ?? []
+        liste.find((custom) => custom[0] === customElementFormat) ?? []
       if (tag == null || elementClasse == null) {
         throw Error(
           "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",

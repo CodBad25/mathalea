@@ -131,6 +131,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
             resolve(true)
           })
       })
+      promiseAnswers.push(p)
     } else if (answer.includes('MetaInteractif2d')) {
       const p = new Promise<boolean>((resolve) => {
         const saisies = JSON.parse(answers[answer])

@@ -3,7 +3,7 @@ import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 import { texNombre } from '../../../lib/outils/texNombre'
-import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
+import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
 
 export const titre = 'Encadrer une racine carrée par deux entiers consécutifs'
 export const interactifReady = true

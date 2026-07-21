@@ -1,5 +1,5 @@
 import { MathfieldElement } from 'mathlive'
-import { verifySingleMathLiveField } from '../interactif/mathLiveVerifications'
+import { verifyFillInTheBlankMathLive } from '../interactif/mathLiveVerifications'
 import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
@@ -9,40 +9,45 @@ import MathaleaCustomElement, {
 type PromptState = 'correct' | 'incorrect' | 'undefined' | undefined
 type MathfieldCommand = Parameters<MathfieldElement['executeCommand']>[0]
 
-export type MathaleaMathfieldVerificationResult = {
+function cleanFillInTheBlanksText(text: string): string {
+  if (typeof text !== 'string') return ''
+  return text
+    .replace(/\\placeholder(\[[^\]]*\])+/g, '')
+    .replace(/\{\}/g, '{...}')
+}
+
+export type FillInTheBlankVerificationResult = {
   isOk: boolean
   feedback: string
   score: { nbBonnesReponses: number; nbReponses: number }
 }
 
-export type MathaleaMathfieldVerificationCallback = (
+export type FillInTheBlankVerificationCallback = (
   exercice: IExercice,
   questionIndex: number,
-  mathfield: MathaleaMathfieldElement,
-) => MathaleaMathfieldVerificationResult
+  fillInTheBlank: FillInTheBlankElement,
+) => FillInTheBlankVerificationResult
 
-export type MathaleaMathfieldOptions = {
+export type FillInTheBlankOptions = {
   id?: string
   className?: string
   dataKeyboard?: string
-  espace?: boolean
-  placeholder?: string
-  readonly?: boolean
+  content?: string
   interactivityOn?: boolean
   verifyCallbackName?: string
-  verifyCallback?: MathaleaMathfieldVerificationCallback
+  verifyCallback?: FillInTheBlankVerificationCallback
 }
 
-type MathaleaMathfieldCreateOptions = MathaleaMathfieldOptions & {
+type FillInTheBlankCreateOptions = FillInTheBlankOptions & {
   numeroExercice: number
   questionIndex: number
 }
 
-export class MathaleaMathfieldElement extends MathaleaCustomElement {
-  static readonly elementTag = 'mathalea-mathfield'
+export class FillInTheBlankElement extends MathaleaCustomElement {
+  static readonly elementTag = 'fill-in-the-blank'
   private static readonly verificationCallbacks = new Map<
     string,
-    MathaleaMathfieldVerificationCallback
+    FillInTheBlankVerificationCallback
   >()
 
   private mathfield: MathfieldElement | null = null
@@ -53,88 +58,88 @@ export class MathaleaMathfieldElement extends MathaleaCustomElement {
     id,
     numeroExercice,
     questionIndex,
-    className = '',
+    className = 'fillInTheBlanks',
     dataKeyboard = '',
-    espace = false,
-    placeholder = '',
-    readonly = false,
+    content = '',
     interactivityOn = true,
     verifyCallbackName,
     verifyCallback,
-  }: MathaleaMathfieldCreateOptions): string {
+  }: FillInTheBlankCreateOptions): string {
     const legacyMathfieldId =
       id ?? `champTexteEx${numeroExercice}Q${questionIndex}`
-    const computedId = `${MathaleaMathfieldElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
+    const computedId = `${FillInTheBlankElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
     const computedCallbackName =
       verifyCallbackName ??
       (verifyCallback == null ? undefined : `${legacyMathfieldId}-verification`)
     if (verifyCallback != null && computedCallbackName != null) {
-      MathaleaMathfieldElement.registerVerificationCallback(
+      FillInTheBlankElement.registerVerificationCallback(
         computedCallbackName,
         verifyCallback,
       )
     }
-    return super.create({
+    const wrapperAttributes = this.buildAttributes({
       id: computedId,
       mathfieldId: legacyMathfieldId,
       className,
       dataKeyboard,
-      dataSpace: espace,
-      placeholder,
-      readonly: readonly ? true : null,
       interactivityOn,
       verifyCallbackName: computedCallbackName,
     })
+    const mathfieldAttributes = this.buildAttributes({
+      id: legacyMathfieldId,
+      dataKeyboard,
+      virtualKeyboardMode: 'manual',
+      readonly: true,
+      className,
+    })
+    return `<${FillInTheBlankElement.elementTag}${wrapperAttributes}><math-field${mathfieldAttributes}>${content}</math-field></${FillInTheBlankElement.elementTag}>`
   }
 
   static verifQuestion(
     exercice: IExercice,
     i: number,
-  ): MathaleaMathfieldVerificationResult {
+  ): FillInTheBlankVerificationResult {
     const id = `champTexteEx${exercice.numeroExercice}Q${i}`
-    const mathfield = document.querySelector(
-      `${MathaleaMathfieldElement.elementTag}[mathfield-id="${id}"]`,
-    ) as MathaleaMathfieldElement | null
-    const callbackName = mathfield?.getAttribute('verify-callback-name')
+    const fillInTheBlank = document.querySelector(
+      `${FillInTheBlankElement.elementTag}[mathfield-id="${id}"]`,
+    ) as FillInTheBlankElement | null
+    const callbackName = fillInTheBlank?.getAttribute('verify-callback-name')
     const callback =
       callbackName == null
         ? null
-        : MathaleaMathfieldElement.verificationCallbacks.get(callbackName)
-    if (mathfield != null && callback != null) {
-      return callback(exercice, i, mathfield)
+        : FillInTheBlankElement.verificationCallbacks.get(callbackName)
+    if (fillInTheBlank != null && callback != null) {
+      return callback(exercice, i, fillInTheBlank)
     }
-    return verifySingleMathLiveField(exercice, i, mathfield?.mathfield ?? null)
+    return verifyFillInTheBlankMathLive(
+      exercice,
+      i,
+      fillInTheBlank?.mathfield ?? null,
+    )
   }
 
   static registerVerificationCallback(
     name: string,
-    callback: MathaleaMathfieldVerificationCallback,
+    callback: FillInTheBlankVerificationCallback,
   ): void {
     if (name.trim().length === 0) {
-      throw new Error('Le nom du vérificateur MathLive ne peut pas être vide')
+      throw new Error(
+        'Le nom du vérificateur fill-in-the-blank ne peut pas être vide',
+      )
     }
-    MathaleaMathfieldElement.verificationCallbacks.set(name, callback)
+    FillInTheBlankElement.verificationCallbacks.set(name, callback)
   }
 
   static unregisterVerificationCallback(name: string): void {
-    MathaleaMathfieldElement.verificationCallbacks.delete(name)
+    FillInTheBlankElement.verificationCallbacks.delete(name)
   }
 
   static formatStudentAnswer(rawAnswer: string): string {
-    return `$${rawAnswer}$`
+    return `$${cleanFillInTheBlanksText(rawAnswer)}$`
   }
 
   static stripFromQuestionHtml(questionHtml: string): string {
-    return questionHtml
-      .replace(/<mathalea-mathfield[^>]*\/>/gi, ' ... ')
-      .replace(
-        /<mathalea-mathfield[^>]*>[^]*?<\/mathalea-mathfield>/gi,
-        ' ... ',
-      )
-  }
-
-  connectedCallback() {
-    super.connectedCallback()
+    return cleanFillInTheBlanksText(questionHtml)
   }
 
   render(): string | void {
@@ -202,20 +207,12 @@ export class MathaleaMathfieldElement extends MathaleaCustomElement {
     )
     this.mathfield.setAttribute('virtual-keyboard-mode', 'manual')
     this.mathfield.className = [
-      this.getAttribute('class-name') ?? '',
+      this.getAttribute('class-name') ?? 'fillInTheBlanks',
       this.getAttribute('class') ?? '',
     ]
       .join(' ')
       .trim()
-    const placeholder = this.getAttribute('placeholder')
-    if (placeholder != null && placeholder !== '') {
-      this.mathfield.setAttribute('placeholder', placeholder)
-    }
-    if (this.getAttribute('data-space') === 'true') {
-      this.mathfield.setAttribute('data-space', 'true')
-    }
-    this.mathfield.readOnly =
-      this.getAttribute('readonly') === 'true' || !this.interactivityOn
+    this.mathfield.readOnly = true
   }
 
   private setupMathfield(): void {
@@ -246,13 +243,7 @@ export class MathaleaMathfieldElement extends MathaleaCustomElement {
     })
     this.attributesObserver.observe(this, {
       attributes: true,
-      attributeFilter: [
-        'id',
-        'mathfield-id',
-        'class',
-        'class-name',
-        'readonly',
-      ],
+      attributeFilter: ['id', 'mathfield-id', 'class', 'class-name'],
     })
   }
 
@@ -267,4 +258,4 @@ export class MathaleaMathfieldElement extends MathaleaCustomElement {
   }
 }
 
-registerMathaleaCustomElement(MathaleaMathfieldElement)
+registerMathaleaCustomElement(FillInTheBlankElement)

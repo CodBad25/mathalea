@@ -14,10 +14,10 @@ Les custom elements maison sont désormais centralisés dans `src/lib/customElem
 
 | Format                    | Usage                                                    | Fichiers principaux                                                                                    |
 | ------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `mathlive`                | Champ MathLive pour une réponse mathématique, injecté via `mathalea-mathfield` par `ajouteChampTexteMathLive()` | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaMathfield.ts`, `src/lib/interactif/mathLive.ts` |
-| `fillInTheBlank`          | Texte à trous MathLive, réponses `champ1`, `champ2`, ... | `src/lib/interactif/questionMathLive.ts`                                                               |
-| `tableauMathlive`         | Cellules MathLive nommées `L1C1`, `L1C2`, ...            | `src/lib/interactif/questionMathLive.ts`, `src/lib/interactif/tableaux/AjouteTableauMathlive.ts`       |
-| `texte`                   | Champ texte HTML                                         | `src/lib/interactif/questionMathLive.ts`                                                               |
+| `mathlive`                | Champ MathLive pour une réponse mathématique, injecté via `mathalea-mathfield` par `ajouteChampTexteMathLive()` | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaMathfield.ts`, `src/lib/interactif/mathLiveVerifications.ts` |
+| `fillInTheBlank`          | Texte à trous MathLive, injecté via `fill-in-the-blank` par `remplisLesBlancs()` | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/FillInTheBlank.ts`                   |
+| `tableauMathlive`         | Cellules MathLive nommées `L1C1`, `L1C2`, ..., injectées via `tableau-mathlive` | `src/lib/interactif/questionMathLive.ts`, `src/lib/interactif/tableaux/AjouteTableauMathlive.ts`, `src/lib/customElements/TableauMathlive.ts` |
+| `texte`                   | Champ texte HTML, injecté via `mathalea-textfield` par `ajouteChampTexte()` | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaTextfield.ts`                |
 | `qcm`                     | Cases à cocher ou boutons radio                          | `src/lib/interactif/qcm.ts`                                                                            |
 | `liste-deroulante`        | Liste déroulante HTML custom                             | `src/lib/customElements/ListeDeroulanteElement.ts`, `ListeDeroulanteElement.verifQuestion()`           |
 | `dnd`                     | Glisser-déposer                                          | `src/lib/interactif/DragAndDrop.ts`                                                                    |
@@ -28,6 +28,9 @@ Les custom elements maison sont désormais centralisés dans `src/lib/customElem
 | `MetaInteractif2d`        | Champs dans une figure MathALÉA 2D                       | `src/lib/2d/interactif2d.ts`, `src/lib/interactif/gestionInteractif.ts`                                |
 | `multi-mathfield`         | Plusieurs champs MathLive coordonnés                     | `src/lib/customElements/MultiMathfield.ts`, `MultiMathfield.verifQuestion()`                           |
 | `mathalea-mathfield`      | Wrapper MathALÉA d'un champ MathLive simple, compatible avec les sélecteurs legacy `champTexteEx...` | `src/lib/customElements/MathaleaMathfield.ts`, `MathaleaMathfieldElement.verifQuestion()`              |
+| `fill-in-the-blank`       | Wrapper MathALÉA d'un texte à trous MathLive, compatible avec les sélecteurs legacy `champTexteEx...` | `src/lib/customElements/FillInTheBlank.ts`, `FillInTheBlankElement.verifQuestion()`                    |
+| `mathalea-textfield`      | Wrapper MathALÉA d'un champ texte HTML, compatible avec les sélecteurs legacy `champTexteEx...` | `src/lib/customElements/MathaleaTextfield.ts`, `MathaleaTextfieldElement.verifQuestion()`              |
+| `tableau-mathlive`        | Wrapper MathALÉA d'un tableau MathLive, compatible avec `table#tabMathliveEx...` et les cellules `champTexteEx...LxCy` | `src/lib/customElements/TableauMathlive.ts`, `TableauMathliveElement.verifQuestion()`                  |
 | `guide-ane`               | Un guide-âne interactif                                  | `src/lib/customElements/GuideAne.ts`, `GuideAne.verifQuestion()`                                       |
 | `demi-droite-interactive` | Pour placer des points d'abscisses fractionnaires        | `src/lib/customElements/demi_droite_interactive.ts`, `DemiDroiteInteractiveElement.verifQuestion()`    |
 | `interactive-clock`       | Une horloge interactive                                  | `src/lib/customElements/InteractiveClock.ts`, `InteractiveClock.verifQuestion()`                       |
@@ -53,10 +56,10 @@ Les clés de `reponses` dépendent du format :
 | `L1C1`, `L1C2`, ...             | `tableauMathlive`                                                                                                                                            |
 | `rectangle1`, `rectangle2`, ... | `dnd`                                                                                                                                                        |
 | `field0`, `field1`, ...         | `multi-mathfield`, `MetaInteractif2d`                                                                                                                        |
-| `sheetAnswer`                   | `my-spreedsheet`                                                                                                                                             |
+| `sheetAnswer`                   | `my-spreadsheet`                                                                                                                                             |
 | `bareme`                        | Fonction de barème partiel                                                                                                                                   |
 | `feedback`                      | Fonction de feedback global                                                                                                                                  |
-| `callback`                      | Vérification personnalisée avec score détaillé pour les formats vérifiés par `verifQuestionMathLive()`                                                       |
+| `callback`                      | Vérification personnalisée avec score détaillé, utilisée par certains formats historiques ou par des helpers spécialisés quand le comportement champ par champ ne suffit pas |
 
 Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métier comme `FractionEtendue`, `Decimal`, `Grandeur`, `Hms`, `Complexe` et `number` sont converties en chaînes avant comparaison. Sans options explicites, une réponse numériquement valide reçoit automatiquement l'option `nombreDecimalSeulement`.
 
@@ -66,15 +69,32 @@ Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métie
 
 `exerciceInteractif()` dans `src/lib/interactif/gestionInteractif.ts` parcourt les questions et délègue selon `formatInteractif`.
 
+Avant le dispatch, les anciens formats MathLive compatibles sont normalisés vers leur custom element :
+
+| Format historique | Custom element terminal |
+| ----------------- | ----------------------- |
+| `mathlive`        | `mathalea-mathfield`    |
+| `fillInTheBlank`  | `fill-in-the-blank`     |
+| `tableauMathlive` | `tableau-mathlive`      |
+| `texte`           | `mathalea-textfield`    |
+
+Cette normalisation est assurée par `mathliveCompatibleToCustomElementFormat()` dans `src/lib/types.ts`. Elle est utilisée dans le flux classique (`exerciceInteractif()`), les flux CAN (`gestionCan.ts`, `Can.svelte`) et les tests d'intégration. Les quatre wrappers appellent ensuite leur propre `verifQuestion()` terminale. Les helpers historiques restent donc utilisables dans les exercices, mais la correction passe par le registre des `MathaleaCustomElement`.
+
 | Format                                                   | Vérification                                                                                                                                                    |
 | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `mathlive`, `fillInTheBlank`, `tableauMathlive`, `texte` | `verifQuestionMathLive()` dans `src/lib/interactif/mathLive.ts`                                                                                                 |
-| `mathalea-mathfield`                                    | `MathaleaMathfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaMathfield.ts`, avec délégation par défaut à `verifQuestionMathLive()`            |
+| `mathlive`                                               | Routé vers `MathaleaMathfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaMathfield.ts`, vérification terminale d'un champ unique               |
+| `fillInTheBlank`                                         | Routé vers `FillInTheBlankElement.verifQuestion()` dans `src/lib/customElements/FillInTheBlank.ts`, vérification terminale des prompts `champ1`, `champ2`, ...   |
+| `tableauMathlive`                                        | Routé vers `TableauMathliveElement.verifQuestion()` dans `src/lib/customElements/TableauMathlive.ts`, vérification terminale des cellules `LxCy`                 |
+| `texte`                                                  | Routé vers `MathaleaTextfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaTextfield.ts`, vérification terminale d'un champ texte                |
+| `mathalea-mathfield`                                     | `MathaleaMathfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaMathfield.ts`, vérification terminale d'un champ unique                         |
+| `fill-in-the-blank`                                      | `FillInTheBlankElement.verifQuestion()` dans `src/lib/customElements/FillInTheBlank.ts`, vérification terminale des prompts `champ1`, `champ2`, ...              |
+| `mathalea-textfield`                                     | `MathaleaTextfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaTextfield.ts`, vérification terminale d'un champ texte                           |
+| `tableau-mathlive`                                      | `TableauMathliveElement.verifQuestion()` dans `src/lib/customElements/TableauMathlive.ts`, vérification terminale des cellules `LxCy`                            |
 | `multi-mathfield`                                        | `MultiMathfieldElement.verifQuestion()` dans `src/lib/customElements/MultiMathfield.ts`                                                                         |
 | `MetaInteractif2d`                                       | `verifQuestionMetaInteractif2d()`                                                                                                                               |
 | `qcm`                                                    | `verifQuestionQcm()` dans `src/lib/interactif/qcm.ts`                                                                                                           |
 | `liste-deroulante`                                       | `ListeDeroulanteElement.verifQuestion()`                                                                                                                        |
-| `svg-selection`                                          | `SvgSelectionElement.verifQuestion(()` dans `src/lib/customElements/SvgSelectionElement.ts` `                                                                   |
+| `svg-selection`                                          | `SvgSelectionElement.verifQuestion()` dans `src/lib/customElements/SvgSelectionElement.ts`                                                                      |
 | `dnd`                                                    | `verifDragAndDrop()`                                                                                                                                            |
 | `my-spreadsheet`                                         | `MySpreadsheetElement.verifQuestion()` dans `src/lib/customElements/MySpreadSheet.ts`                                                                           |
 | `guide-ane`                                              | `GuideAne.verifQuestion()` dans `src/lib/customElements/GuideAne.ts`                                                                                            |
@@ -105,6 +125,28 @@ La vue des corrections d'une Course aux nombres (`src/components/display/can/pre
 
 Les customElements y sont traités de façon générique via le registre `mathaleaCustomElementsRegistry` et les hooks statiques `formatStudentAnswer` / `stripFromQuestionHtml` de `MathaleaCustomElement` (voir [créer un custom element](../guides/creer-un-custom-element.md)). Les autres formats (QCM, champ texte, `MetaInteractif2d`, mathfield par défaut) sont détectés par des marqueurs dans le HTML de la question. Tests : `tests/unit/canSolutions.test.ts`.
 
+## Wrappers MathLive historiques
+
+Les helpers historiques de `src/lib/interactif/questionMathLive.ts` restent les points d'entrée pour les exercices existants :
+
+- `ajouteChampTexteMathLive()` crée un wrapper `mathalea-mathfield` autour du `math-field` interne ;
+- `remplisLesBlancs()` crée un wrapper `fill-in-the-blank` autour du `math-field` readonly à prompts ;
+- `ajouteChampTexte()` crée un wrapper `mathalea-textfield` autour de l'`input` HTML ;
+- `ajouteQuestionMathlive()` reste un helper pratique pour créer un tableau MathLive et déclarer les réponses, mais l'injection pure du composant est portée par `creeTableauMathliveElement()` dans `src/lib/interactif/tableaux/AjouteTableauMathlive.ts`.
+
+Pour préserver les anciens exercices et callbacks, l'identifiant legacy reste porté par l'élément interne :
+
+- champs simples : `champTexteEx${numeroExercice}Q${questionIndex}` ;
+- textes à trous : même identifiant sur le `math-field` interne, les prompts étant `champ1`, `champ2`, ... ;
+- tableaux : `table#tabMathliveEx${numeroExercice}Q${questionIndex}` et cellules `champTexteEx...LxCy`.
+
+Le wrapper suit la convention des custom elements : son id est préfixé par le tag, par exemple `mathalea-mathfieldEx0Q0`, `fill-in-the-blankEx0Q0`, `mathalea-textfieldEx0Q0` ou `tableau-mathliveEx0Q0`. Les sélecteurs legacy qui ciblent le champ interne continuent donc de fonctionner, tandis que les traitements génériques ciblent le wrapper.
+
+Deux niveaux de personnalisation existent :
+
+- dans `handleAnswers()`, une entrée `callback` sur `valeur` permet d'analyser globalement les saisies d'une question avant de calculer le score ;
+- côté custom element, `verifyCallback` / `verifyCallbackName` permettent de remplacer complètement la vérification du wrapper quand son helper ou son `create(...)` expose cette option.
+
 ## Comparateurs
 
 `fonctionComparaison()` centralise la comparaison des réponses MathLive. Elle applique des nettoyages de saisie, puis active des comportements via `options` : fractions, unités, intervalles, textes avec ou sans casse, coordonnées, suites, ensembles, écriture scientifique, factorisation, puissances, calcul formel, etc.
@@ -118,8 +160,9 @@ Pour les exercices qui ont besoin de critères multiples ou d'un score partiel, 
 - `src/lib/interactif/gestionInteractif.ts` : orchestration, `handleAnswers()`, `setReponse()`, `exerciceInteractif()` et dispatch des corrections custom.
 - `src/lib/interactif/comparisonFunctions.ts` : `fonctionComparaison()`.
 - `src/lib/interactif/checks/` : checks composables et tests unitaires.
-- `src/lib/interactif/questionMathLive.ts` : insertion des champs MathLive et textes à trous.
-- `src/lib/interactif/mathLive.ts` : vérification des champs MathLive.
+- `src/lib/interactif/questionMathLive.ts` : helpers historiques d'insertion des champs MathLive, textes à trous, champs texte et tableaux.
+- `src/lib/interactif/mathLiveVerifications.ts` : primitives terminales utilisées par les wrappers MathLive.
+- `src/lib/interactif/fonctionsBaremes.ts` : barèmes partagés comme `toutPourUnPoint` et `toutAUnPoint`.
 - `src/lib/interactif/qcm.ts` : QCM.
 - `src/lib/interactif/DragAndDrop.ts` : glisser-déposer.
 - `src/lib/interactif/setMathfield.ts` : configuration partagée des `math-field` interactifs.

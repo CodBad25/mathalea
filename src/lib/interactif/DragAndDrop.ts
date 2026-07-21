@@ -3,7 +3,7 @@ import { context } from '../../modules/context'
 import { messageFeedback } from '../../modules/messages'
 import { get } from '../html/dom'
 import { shuffle } from '../outils/arrayOutils'
-import { toutPourUnPoint } from './mathLive'
+import { toutPourUnPoint } from './fonctionsBaremes'
 
 export type Etiquette = {
   id: string // Un numéro unique par étiquette ! (valeur réservée : 0 pour signaler l'absence d'étiquette !)
