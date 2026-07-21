@@ -12,6 +12,7 @@ export const listOfCustomElements = [
   'demi-droite-interactive',
   'trigo-circle-selection',
   'tableau-signes-variations',
+  'mathalea-mathfield',
 ]
 
 /**

@@ -348,6 +348,7 @@ export type InteractivityType =
   | 'blockly-editor'
   | 'scratch-editor'
   | 'tableau-signes-variations' // Non compatible AMC
+  | 'mathalea-mathfield'
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -372,7 +373,8 @@ export function isInteractivityType(
     value === 'demi-droite-interactive' ||
     value === 'blockly-editor' ||
     value === 'scratch-editor' ||
-    value === 'tableau-signes-variations'
+    value === 'tableau-signes-variations' ||
+    value === 'mathalea-mathfield'
   )
 }
 
@@ -394,7 +396,8 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'demi-droite-interactive' ||
     value === 'blockly-editor' ||
     value === 'tableau-signes-variations' ||
-    value === 'scratch-editor'
+    value === 'scratch-editor' ||
+    value === 'mathalea-mathfield'
   )
 }
 
