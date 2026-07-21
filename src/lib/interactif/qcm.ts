@@ -13,7 +13,7 @@ import ExerciceQcm from '../../exercices/ExerciceQcm'
 import ExerciceSimple from '../../exercices/ExerciceSimple'
 import type { IExercice, UneProposition } from '../../lib/types'
 import { context } from '../../modules/context'
-import { messageFeedback } from '../../modules/messages'
+import { addFeedback } from '../../modules/messages'
 import type { AutoCorrectionAMC } from '../amc/amcTypes'
 import { get } from '../html/dom'
 import {
@@ -29,7 +29,7 @@ import { afficheScore } from './afficheScore'
 
 export function verifQuestionQcm(exercice: IExercice, i: number) {
   let resultat
-  let feedback = ''
+  const feedbackItems: { texte: string; feedback: string }[] = []
   // i est l'indice de la question
   let nbBonnesReponses = 0
   let nbMauvaisesReponses = 0
@@ -71,12 +71,14 @@ export function verifQuestionQcm(exercice: IExercice, i: number) {
             message: exercice.autoCorrection[i].propositions![indice].feedback,
             type: proposition.statut ? 'positive' : 'error',
           }) */
-          feedback +=
-            exercice.autoCorrection[i].propositions![indice].feedback &&
-            exercice.autoCorrection[i].propositions![indice].feedback !== ''
-              ? exercice.autoCorrection[i].propositions![indice].feedback +
-                '<br>'
-              : ''
+          const propositionFeedback =
+            exercice.autoCorrection[i].propositions![indice].feedback
+          if (propositionFeedback && propositionFeedback !== '') {
+            feedbackItems.push({
+              texte: proposition.texte,
+              feedback: propositionFeedback,
+            })
+          }
         }
       } else {
         exercice.answers![`Ex${exercice.numeroExercice}Q${i}R${indice}`] = '0'
@@ -93,8 +95,18 @@ export function verifQuestionQcm(exercice: IExercice, i: number) {
         label.classList.add('bg-coopmaths-action-200', 'rounded-lg', 'p-1')
         nbMauvaisesReponses++
       }
-      check.disabled = true
-      check.style.opacity = '1'
+      // On évite check.disabled = true : certains navigateurs perdent alors le
+      // rendu "coché" des boutons radio (appearance personnalisée), ce qui masque
+      // la réponse choisie par l'élève au moment de la correction.
+      check.style.pointerEvents = 'none'
+      check.tabIndex = -1
+      check.setAttribute('aria-disabled', 'true')
+      // Sur certains navigateurs (Safari notamment), un input radio coché perd
+      // quand même son rendu "coché" une fois verrouillé : on force donc l'affichage
+      // via une classe qui ne dépend pas de :checked ni d'un état natif désactivé.
+      if (check.type === 'radio' && check.checked) {
+        check.classList.add('qcm-locked-checked')
+      }
     }
   })
   let typeFeedback = 'positive'
@@ -102,48 +114,84 @@ export function verifQuestionQcm(exercice: IExercice, i: number) {
     nbMauvaisesReponses === 0 &&
     nbBonnesReponses === nbBonnesReponsesAttendues
   ) {
-    if (divReponseLigne) divReponseLigne.innerHTML = '😎'
+    if (divReponseLigne)
+      divReponseLigne.innerHTML = '<span class="qcm-feedback-face">😎</span>'
     resultat = 'OK'
   } else {
-    if (divReponseLigne) divReponseLigne.innerHTML = '☹️'
+    if (divReponseLigne)
+      divReponseLigne.innerHTML = '<span class="qcm-feedback-face">☹️</span>'
     typeFeedback = 'error'
     resultat = 'KO'
   }
   // Gestion du feedback global de la question
   if (divReponseLigne) divReponseLigne.style.fontSize = 'large'
   const eltFeedback = get(`feedbackEx${exercice.numeroExercice}Q${i}`, false)
-  let message = feedback
   if (eltFeedback) {
     eltFeedback.innerHTML = ''
   }
   if (resultat === 'KO') {
+    const isRadio = exercice.autoCorrection[i].options?.radio === true
+    const detailHtml = feedbackItems
+      .map((item) => `${item.texte} : ${item.feedback}`)
+      .join('<br>')
+
+    const chips: { label: string; tone: 'error' | 'positive' }[] = []
     // Juste mais incomplet
     if (
       nbBonnesReponses > 0 &&
       nbMauvaisesReponses === 0 &&
       nbBonnesReponses < nbBonnesReponsesAttendues
     ) {
-      message += `${nbBonnesReponses} bonne${nbBonnesReponses > 1 ? 's' : ''} réponse${nbBonnesReponses > 1 ? 's' : ''}`
-    } else if (nbBonnesReponses > 0 && nbMauvaisesReponses > 0) {
-      // Du juste et du faux
-      message += `${nbMauvaisesReponses} erreur${nbMauvaisesReponses > 1 ? 's' : ''}`
-    } else if (nbBonnesReponses === 0 && nbMauvaisesReponses > 0) {
-      // Que du faux
-      message += `${nbMauvaisesReponses} erreur${nbMauvaisesReponses > 1 ? 's' : ''}`
+      chips.push({
+        label: `${nbBonnesReponses} trouvée${nbBonnesReponses > 1 ? 's' : ''}`,
+        tone: 'positive',
+      })
+    } else if (nbMauvaisesReponses > 0 && !isRadio) {
+      // Du juste et du faux, ou que du faux (inutile de compter les erreurs
+      // sur un QCM à choix unique : une seule case peut être cochée)
+      chips.push({
+        label: `${nbMauvaisesReponses} erreur${nbMauvaisesReponses > 1 ? 's' : ''}`,
+        tone: 'error',
+      })
     }
-  } else {
-    message = ''
-  }
-  const isRadio = exercice.autoCorrection[i].options?.radio === true
-  if (!isRadio && nbBonnesReponsesAttendues > nbBonnesReponses) {
-    message += ` ${nbBonnesReponsesAttendues - nbBonnesReponses} bonne${nbBonnesReponsesAttendues - nbBonnesReponses > 1 ? 's' : ''} réponse${nbBonnesReponsesAttendues - nbBonnesReponses > 1 ? 's' : ''} manquante${nbBonnesReponsesAttendues - nbBonnesReponses > 1 ? 's' : ''}`
-  }
-  if (message !== '') {
-    messageFeedback({
-      id: `resultatCheckEx${exercice.numeroExercice}Q${i}`,
-      message,
-      type: typeFeedback,
-    })
+    if (!isRadio && nbBonnesReponsesAttendues > nbBonnesReponses) {
+      const nbManquantes = nbBonnesReponsesAttendues - nbBonnesReponses
+      chips.push({
+        label: `${nbManquantes} réponse${nbManquantes > 1 ? 's' : ''} manquante${nbManquantes > 1 ? 's' : ''}`,
+        tone: 'positive',
+      })
+    }
+    const chipSpans = chips
+      .map(
+        (chip) =>
+          `<span class="qcm-feedback-chip qcm-feedback-chip--${chip.tone}">${chip.label}</span>`,
+      )
+      .join('')
+
+    if (divReponseLigne) {
+      if (detailHtml !== '') {
+        // Le trait à gauche ne sert qu'à signaler un texte de correction :
+        // inutile quand il n'y a que le décompte des erreurs/réponses manquantes.
+        const chipsHtml =
+          chips.length > 0
+            ? `<div class="qcm-feedback-chips">${chipSpans}</div>`
+            : ''
+        const message = `<div class="qcm-feedback-detail">${detailHtml}</div>${chipsHtml}`
+        const div = addFeedback(divReponseLigne, {
+          message,
+          type: typeFeedback,
+        })
+        div.classList.add(
+          'qcm-feedback-msg',
+          `qcm-feedback-msg--${typeFeedback}`,
+        )
+      } else if (chips.length > 0) {
+        addFeedback(divReponseLigne, {
+          message: `<div class="qcm-feedback-chips-standalone">${chipSpans}</div>`,
+          type: typeFeedback,
+        })
+      }
+    }
   }
   return resultat
 }
@@ -362,7 +410,7 @@ export function propositionsQcm(
       if (nbCols > 1 && rep % nbCols === 0) texte += '<br>'
       texte += `<div class="ex${exercice.numeroExercice} ${vertical ? '' : 'inline-block'} my-2 align-center">
       ${formateQ(options?.format, rep)}
-      <label id="labelEx${exercice.numeroExercice}Q${i}R${rep}" ${classCss} >${exercice.autoCorrection[i].propositions[rep].texte + espace}</label>
+      <label id="labelEx${exercice.numeroExercice}Q${i}R${rep}" ${classCss} >${exercice.autoCorrection[i].propositions[rep].texte}</label>${espace}
       </div>`
       texteCorr += `<div class="${vertical ? '' : 'inline-block'}">
     ${
@@ -370,7 +418,7 @@ export function propositionsQcm(
         ? formateRV(options?.format, rep)
         : formateRF(options?.format, rep)
     }
-      <label id="labelEx${exercice.numeroExercice}Q${i}R${rep}" ${classCss} >${exercice.autoCorrection[i].propositions[rep].texte + espace}</label>
+      <label id="labelEx${exercice.numeroExercice}Q${i}R${rep}" ${classCss} >${exercice.autoCorrection[i].propositions[rep].texte}</label>${espace}
       </div>`
     }
     /* for (
