@@ -29,6 +29,7 @@ export default class Can20266Q17 extends ExerciceCan {
   }
 
   enonce(nbKilos?: number, prixUnitaire?: number, coeff?: number) {
+    const fruit = choice(['pommes', 'poires', 'pêches'])
     if (nbKilos == null || prixUnitaire == null || coeff == null) {
       nbKilos = randint(1, 3) * 2
       prixUnitaire = choice([1.5, 2.5])
