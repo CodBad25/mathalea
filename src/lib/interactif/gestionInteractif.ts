@@ -1,6 +1,5 @@
 import type Figure from 'apigeom/src/Figure'
 import Decimal from 'decimal.js'
-import type { MathfieldElement } from 'mathlive'
 import {
   isInteractivityType,
   isQcmValeur,
@@ -11,7 +10,6 @@ import {
   type IExercice,
   type LegacyReponse,
   type LegacyReponses,
-  type MathaleaSVG,
   type QcmValeur,
   type ResultOfExerciceInteractif,
   type Valeur,
@@ -31,19 +29,14 @@ import {
   listOfCustomElements,
   mathaleaCustomElementsRegistry,
 } from '../customElements/MathaleaCustomElement'
+import { prepareCliqueFigure } from '../customElements/CliqueFigureElement'
 import { addElement, get, setStyles } from '../html/dom'
 import { Complexe } from '../mathFonctions/Complexe'
 import { afficheScore } from './afficheScore'
-import type { CompareResult } from './checks/types'
 import { fonctionComparaison } from './comparisonFunctions'
-import { verifDragAndDrop } from './DragAndDrop'
-import { toutPourUnPoint } from './fonctionsBaremes'
 import { syncQcmAutoCorrectionToAmc } from './qcm'
-
-function scoreFromResult(result: { isOk: boolean }): number {
-  const score = (result as Partial<CompareResult>).score
-  return typeof score === 'number' ? score : result.isOk ? 1 : 0
-}
+import '../customElements/DragAndDropElement'
+import '../customElements/MetaInteractif2dElement'
 
 export function isClickFiguresArray(
   figures: Figure[] | ClickFigures[],
@@ -58,7 +51,7 @@ export function isClickFiguresArray(
  * @param objetReponse
  */
 export function setCliqueFigure(objetReponse: AutoCorrection) {
-  objetReponse.formatInteractif = 'cliqueFigure'
+  objetReponse.formatInteractif = 'clique-figure'
 }
 /**
  * Pour positionner le formatInteractif d'une question sur 'qcm'
@@ -116,7 +109,6 @@ export function exerciceInteractif(
     const format = exercice.autoCorrection[i]?.formatInteractif ?? 'mathlive'
     const customElementFormat =
       interactivityTypeToCustomElementFormat(format) ?? format
-    let resultat: string
     if (listOfCustomElements.includes(customElementFormat)) {
       // On traite le cas de tous les MathaleaCustomElement ici
       const liste = Array.from(mathaleaCustomElementsRegistry)
@@ -178,74 +170,6 @@ export function exerciceInteractif(
               else nbQuestionsNonValidees++
             }
           }
-          break
-        case 'dnd':
-          {
-            const result = verifDragAndDrop(exercice, i)
-            nbQuestionsValidees += result.score.nbBonnesReponses
-            nbQuestionsNonValidees +=
-              result.score.nbReponses - result.score.nbBonnesReponses
-            if (result.feedback !== '') {
-              const spanFeedback = document.querySelector(
-                `#feedbackEx${exercice.numeroExercice}Q${i}`,
-              )
-              if (spanFeedback != null) {
-                spanFeedback.innerHTML = `💡 ${result.feedback}`
-                spanFeedback.classList.add(
-                  'py-2',
-                  'italic',
-                  'text-coopmaths-warn-darkest',
-                  'dark:text-coopmathsdark-warn-darkest',
-                )
-              }
-            }
-          }
-          break
-        case 'MetaInteractif2d':
-          {
-            const result = verifQuestionMetaInteractif2d(exercice, i)
-            if (result == null) {
-              window.notify('erreur dans la correction de la question', {
-                exercice,
-                i,
-              })
-            } else {
-              nbQuestionsValidees += result.score.nbBonnesReponses
-              nbQuestionsNonValidees +=
-                result.score.nbReponses - result.score.nbBonnesReponses
-              if (result.feedback && result.feedback !== '') {
-                const divFeedback = document.querySelector(
-                  `#feedbackEx${exercice.numeroExercice}Q${i}`,
-                )
-                if (divFeedback != null) {
-                  divFeedback.innerHTML = `💡 ${result.feedback}`
-                  divFeedback.classList.add(
-                    'py-2',
-                    'italic',
-                    'text-coopmaths-warn-darkest',
-                    'dark:text-coopmathsdark-warn-darkest',
-                  )
-                  ;(divFeedback as HTMLDivElement).style.display = 'block'
-                }
-              }
-            }
-          }
-          break
-        case 'cliqueFigure':
-          if (
-            'callback' in exercice &&
-            typeof exercice.callback === 'function'
-          ) {
-            resultat = verifQuestionCliqueFigure(
-              exercice,
-              i,
-              exercice.callback as (exercice: IExercice, i: number) => void,
-            )
-          } else {
-            resultat = verifQuestionCliqueFigure(exercice, i)
-          }
-          if (resultat === 'OK') nbQuestionsValidees++
-          else nbQuestionsNonValidees++
           break
       }
     }
@@ -325,133 +249,7 @@ function verifExerciceCustom(
 }
 
 export function prepareExerciceCliqueFigure(exercice: IExercice) {
-  // Dès que l'exercice est affiché, on rajoute des listenners sur chaque éléments de this.figures.
-  for (let i = 0; i < exercice.nbQuestions; i++) {
-    if (
-      exercice.cliqueFiguresArray != null &&
-      exercice.cliqueFiguresArray[i] != null &&
-      isClickFiguresArray(exercice.cliqueFiguresArray)
-    ) {
-      const figures = exercice.cliqueFiguresArray[i]
-      for (const objetFigure of figures) {
-        const figSvg: unknown = document.getElementById(objetFigure.id)
-        if (figSvg != null) {
-          const fig = figSvg as MathaleaSVG
-          if (!fig.hasMathaleaListener) {
-            fig.addEventListener('mouseenter', mouseOverSvgEffect)
-            fig.addEventListener('mouseleave', mouseOutSvgEffect)
-            fig.addEventListener('click', mouseSvgClick)
-            if (fig.etat === true) {
-              // MGu : si l'état est true, c'est que ca a été coché par capytale
-              // il faudrait revoir le système de figure cliquable avec un customelement
-            } else {
-              fig.etat = false
-            }
-            // modification le 6/04/2026 suite à un signalement :
-            // ces marges et ce border décallent tous les divLatex.
-            // Un gros soucis pour les repères !
-            // fig.style.margin = '10px'
-            //   fig.style.border = '3px solid transparent'
-            fig.hasMathaleaListener = true
-            // On enregistre que l'élément a déjà un listenner pour ne pas lui remettre le même à l'appui sur "Nouvelles Données"
-          }
-        }
-      }
-    }
-  }
-}
-
-// callback est une fonction facultative qui sera appelée avant de vérifier la question
-// elle permet de faire des actions avant la vérification, comme par exemple mettre à jour la correction affichée (voir 6G45)
-function verifQuestionCliqueFigure(
-  exercice: IExercice,
-  i: number,
-  callback?: (exercice: IExercice, i: number) => void,
-): string {
-  // si il y a une callback, on l'appelle
-  if (callback != null) {
-    callback(exercice, i)
-  }
-  // suite du code habituel de verifQuestionCliqueFigure
-  // Le get est non strict car on sait que l'élément n'existe pas à la première itération de l'exercice
-  let eltFeedback = get(`resultatCheckEx${exercice.numeroExercice}Q${i}`, false)
-  // On ajoute le div pour le feedback
-  if (!eltFeedback) {
-    const eltExercice = get(
-      `exercice${exercice.numeroExercice}`,
-    ) as HTMLDivElement
-    eltFeedback = addElement(
-      eltExercice,
-      'div',
-      {
-        id: `resultatCheckEx${exercice.numeroExercice}Q${i}`,
-      },
-      '',
-    )
-  }
-  setStyles(eltFeedback, 'marginBottom: 20px')
-  if (eltFeedback) eltFeedback.innerHTML = ''
-  const figures = []
-  let erreur = false // Aucune erreur détectée
-  let nbFiguresCliquees = 0
-  if (
-    exercice.cliqueFiguresArray != null &&
-    exercice.cliqueFiguresArray[i] != null &&
-    Array.isArray(exercice.cliqueFiguresArray[i])
-  ) {
-    for (const objetFigure of exercice.cliqueFiguresArray[i]) {
-      const eltFigure: unknown = document.getElementById(objetFigure.id)
-      if (eltFigure != null) {
-        figures.push(eltFigure)
-        const fig = eltFigure as MathaleaSVG
-        fig.removeEventListener('mouseenter', mouseOverSvgEffect)
-        fig.removeEventListener('mouseleave', mouseOutSvgEffect)
-        fig.removeEventListener('click', mouseSvgClick)
-        fig.hasMathaleaListener = false
-        if (fig.etat) {
-          nbFiguresCliquees++
-          // Sauvegarde des reponses
-          if (exercice.answers) exercice.answers[objetFigure.id] = '1'
-        }
-        if (fig.etat !== objetFigure.solution) erreur = true
-      }
-    }
-  }
-
-  if (nbFiguresCliquees > 0 && !erreur) {
-    eltFeedback.innerHTML = '😎'
-    return 'OK'
-  }
-  eltFeedback.innerHTML = '☹️'
-  return 'KO'
-}
-
-function mouseOverSvgEffect(event: MouseEvent) {
-  const elt = event.currentTarget as MathaleaSVG
-  elt.style.border = '3px solid #1DA962'
-}
-
-function mouseOutSvgEffect(event: MouseEvent) {
-  const elt = event.currentTarget as MathaleaSVG
-  elt.style.border = '3px solid transparent'
-}
-
-function mouseSvgClick(event: MouseEvent) {
-  const elt = event.currentTarget as MathaleaSVG
-  if (elt.etat) {
-    // Déja choisi, donc on le réinitialise
-    elt.style.border = '3px solid transparent'
-    elt.addEventListener('mouseenter', mouseOverSvgEffect)
-    elt.addEventListener('mouseleave', mouseOutSvgEffect)
-    elt.addEventListener('click', mouseSvgClick)
-    elt.etat = false
-  } else {
-    // Passe à l'état choisi donc on désactive les listenners pour over et pour out
-    elt.removeEventListener('mouseenter', mouseOverSvgEffect)
-    elt.removeEventListener('mouseleave', mouseOutSvgEffect)
-    elt.style.border = '3px solid #f15929'
-    elt.etat = true
-  }
+  prepareCliqueFigure(exercice)
 }
 
 /**
@@ -1144,150 +942,6 @@ export function handleAnswers(
       `Réponses de l'exercice ${(exercice.numeroExercice ?? 0) + 1} - question ${question + 1} : `,
       questionAutoCorrection.valeur,
     )
-  }
-}
-
-export function verifQuestionMetaInteractif2d(
-  exercice: IExercice,
-  i: number,
-): {
-  isOk: boolean
-  feedback: string
-  score: { nbBonnesReponses: number; nbReponses: number }
-} {
-  let eltFeedback = document.querySelector(
-    `#resultatCheckEx${exercice.numeroExercice}Q${i}`,
-  ) as HTMLSpanElement
-  if (!eltFeedback) {
-    const firstField = document.querySelector(
-      `#MetaInteractif2dEx${exercice.numeroExercice}Q${i}field0`,
-    )
-    const svgContainer = firstField?.closest('div[style*="position: relative"]')
-    const insertAfter =
-      svgContainer ??
-      document.querySelector(`#exercice${exercice.numeroExercice}`)
-    if (insertAfter) {
-      eltFeedback = document.createElement('span')
-      eltFeedback.id = `resultatCheckEx${exercice.numeroExercice}Q${i}`
-      eltFeedback.style.display = 'block'
-      eltFeedback.style.marginTop = '4px'
-      eltFeedback.style.marginBottom = '16px'
-      insertAfter.insertAdjacentElement('afterend', eltFeedback)
-    }
-  }
-  if (eltFeedback) {
-    setStyles(eltFeedback, 'marginBottom: 20px')
-    eltFeedback.innerHTML = ''
-  }
-  if (exercice.autoCorrection[i]?.valeur == null) {
-    throw Error(
-      `verifQuestionMetaInteractif2d appelé sur une question sans réponse: ${JSON.stringify(
-        {
-          exercice,
-          question: i,
-          autoCorrection: exercice.autoCorrection[i],
-        },
-      )}`,
-    )
-  }
-  const reponses = exercice.autoCorrection[i].valeur
-  if (reponses == null) {
-    window.notify(
-      `verifQuestionMetaInteractif2d: reponses est null pour la question ${i} de l'exercice ${exercice.id}`,
-      { exercice, i },
-    )
-    return {
-      isOk: false,
-      feedback: 'erreur dans le programme',
-      score: { nbBonnesReponses: 0, nbReponses: 1 },
-    }
-  }
-  const bareme: (arg: number[]) => [number, number] =
-    reponses.bareme ?? toutPourUnPoint
-  const variables = Object.entries(reponses).filter(
-    ([key]) => key !== 'bareme' && key !== 'feedback',
-  )
-  const points = []
-  const saisies: Record<string, string> = {}
-  let feedback = ''
-  let compteurSaisiesVides = 0
-  let compteurBonnesReponses = 0
-  let noFeedback = false
-  for (const [field, reponse] of variables) {
-    const options = reponse.options
-    noFeedback = noFeedback || Boolean(options?.noFeedback)
-    const compareFunction = reponse.compare ?? fonctionComparaison
-    const index = parseInt(field.replace('field', ''), 10)
-    const mf = document.querySelector(
-      `#MetaInteractif2dEx${exercice.numeroExercice}Q${i}field${index}`,
-    ) as MathfieldElement
-    const saisie = mf.getPromptValue('champ1')
-    if (saisie === '') {
-      compteurSaisiesVides++
-      mf.classList.add('corrected')
-      points.push(0)
-      continue
-    }
-    saisies[`MetaInteractif2dEx${exercice.numeroExercice}Q${i}${field}`] =
-      saisie
-    let result
-    if (Array.isArray(reponse.value)) {
-      let ii = 0
-      while (!result?.isOk && ii < reponse.value.length) {
-        result = compareFunction(saisie, reponse.value[ii], options)
-        ii++
-      }
-    } else {
-      result = compareFunction(saisie, reponse.value, options)
-    }
-    if (result.isOk) {
-      compteurBonnesReponses++
-      points.push(scoreFromResult(result))
-      mf.setPromptState('champ1', 'correct', true)
-      mf.classList.add('correct')
-    } else {
-      points.push(scoreFromResult(result))
-      mf.setPromptState('champ1', 'incorrect', true)
-      mf.classList.add('incorrect')
-      if (result.feedback === 'saisieVide') result.feedback = null
-      else {
-        result = {
-          isOk: false,
-          feedback: '',
-        }
-      }
-    }
-    mf.classList.add('corrected')
-    if (result.feedback != null) feedback += result.feedback
-  }
-
-  if (compteurBonnesReponses === variables.length) {
-    feedback = ''
-  } else {
-    if (compteurSaisiesVides > 0) {
-      feedback = `Il manque ${compteurSaisiesVides} réponse${compteurSaisiesVides > 1 ? 's' : ''}.`
-    } else {
-      feedback = `Certaines réponses sont incorrectes.`
-    }
-  }
-
-  const [nbBonnesReponses, nbReponses] = bareme(points)
-  const spanReponseLigne = document.querySelector(
-    `#resultatCheckEx${exercice.numeroExercice}Q${i}`,
-  ) as HTMLSpanElement
-  if (spanReponseLigne != null) {
-    spanReponseLigne.innerHTML = nbBonnesReponses === nbReponses ? '😎' : '☹️'
-  }
-  if (typeof exercice.answers === 'object' && exercice.answers !== null) {
-    exercice.answers[`MetaInteractif2dEx${exercice.numeroExercice}Q${i}`] =
-      JSON.stringify(saisies)
-  }
-
-  // le feedback est déjà assuré par la fonction feedback(), donc on le met à ''
-  return {
-    isOk: nbBonnesReponses === nbReponses,
-    feedback: noFeedback ? '' : feedback,
-    score: { nbBonnesReponses, nbReponses },
   }
 }
 

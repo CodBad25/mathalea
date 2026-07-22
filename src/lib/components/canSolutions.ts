@@ -22,8 +22,6 @@
  */
 
 import { mathaleaCustomElementsRegistry } from '../customElements/MathaleaCustomElement'
-import { enumeration } from '../outils/ecritures'
-
 /**
  * Retourne la classe du customElement utilisé par la question, ou `null`.
  *
@@ -72,10 +70,6 @@ export function formatStudentAnswer(
   if (questionHtml.includes('apigeomEx')) return rawAnswer
   // Drag and drop : la réponse est le texte déposé, déjà lisible.
   if (questionHtml.includes('divDragAndDropEx')) return rawAnswer
-  // MetaInteractif2d : la réponse est un JSON champ → valeur.
-  if (questionHtml.includes('metaInteractif2d')) {
-    return formatMetaInteractif2dAnswer(rawAnswer)
-  }
   // Par défaut (mathfield, fillInTheBlanks...) : réponse LaTeX à entourer de dollars.
   return '$' + cleanFillInTheBlanks(rawAnswer) + '$'
 }
@@ -116,14 +110,4 @@ export function cleanFillInTheBlanks(text: string): string {
   return text
     .replace(/\\placeholder(\[[^\]]*\])+/g, '')
     .replace(/\{\}/g, '{...}')
-}
-
-/**
- * La réponse d'un MetaInteractif2d est un JSON champ → valeur : on énumère
- * les valeurs saisies.
- */
-function formatMetaInteractif2dAnswer(rawAnswer: string): string {
-  const saisies = JSON.parse(rawAnswer) as Record<string, unknown>
-  const reponses = Object.values(saisies).map((value) => `$${String(value)}$`)
-  return enumeration(reponses)
 }

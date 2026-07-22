@@ -6,6 +6,7 @@ import Horloge from '../../../lib/2d/horloge'
 import handleInteractiveClock, {
   addInteractiveClock,
 } from '../../../lib/customElements/InteractiveClock'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../../lib/outils/arrayOutils'
 import { sp } from '../../../lib/outils/outilString'
 import { formatMinute } from '../../../lib/outils/texNombre'
@@ -108,9 +109,10 @@ export default class ExerciceInteractiveClock extends Exercice {
         this.listeQuestions[i] = enonce
         this.listeCorrections[i] = correction
         this.goodAnswers[i] = { hour, minute }
-
-        this.autoCorrection[i] = {
-          valeur: {
+        handleAnswers(
+          this,
+          i,
+          {
             reponse: {
               value: new Hms({
                 hour: this.goodAnswers[i].hour,
@@ -118,8 +120,9 @@ export default class ExerciceInteractiveClock extends Exercice {
               }).toString(),
             },
           },
-          formatInteractif: 'interactive-clock',
-        }
+          { formatInteractif: 'interactive-clock' },
+        )
+
         i++
       }
       cpt++

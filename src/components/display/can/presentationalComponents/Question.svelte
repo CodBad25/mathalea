@@ -6,7 +6,7 @@
   import {
     questionCliqueFigure,
     type FigureClicable,
-  } from '../../../../lib/interactif/cliqueFigure'
+  } from '../../../../lib/customElements/CliqueFigureElement'
   import { mathaleaRenderDiv } from '../../../../lib/mathalea'
   import { canOptions } from '../../../../lib/stores/canStore'
   import { loadMathLive } from '../../../../modules/loaders'

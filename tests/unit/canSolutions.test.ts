@@ -4,8 +4,11 @@ import { beforeAll, describe, expect, it } from 'vitest'
 // (comme le fait le chargement d'un exercice qui les utilise).
 import handleInteractiveClock from '../../src/lib/customElements/InteractiveClock'
 import '../../src/lib/customElements/BlocklyEditor'
+import '../../src/lib/customElements/CliqueFigureElement'
 import '../../src/lib/customElements/demi_droite_interactive'
+import '../../src/lib/customElements/DragAndDropElement'
 import '../../src/lib/customElements/GuideAne'
+import '../../src/lib/customElements/MetaInteractif2dElement'
 import '../../src/lib/customElements/ListeDeroulanteElement'
 import '../../src/lib/customElements/MultiMathfield'
 import '../../src/lib/customElements/MySpreadSheet'
@@ -54,25 +57,26 @@ describe('formatStudentAnswer', () => {
   })
 
   it("formate la réponse JSON d'une horloge interactive", () => {
-    const question =
-      '<interactive-clock id="interactive-clockEx0Q0" hour="3"/>'
+    const question = '<interactive-clock id="interactive-clockEx0Q0" hour="3"/>'
     expect(
       formatStudentAnswer(question, '{"hour":5,"minute":30,"second":0}'),
     ).toBe('$5$ h $30$')
   })
 
   it("affiche la réponse brute d'une liste déroulante", () => {
-    const question = '<liste-deroulante id="liste-deroulanteEx0Q0"></liste-deroulante>'
+    const question =
+      '<liste-deroulante id="liste-deroulanteEx0Q0"></liste-deroulante>'
     expect(formatStudentAnswer(question, 'une infinité de solutions')).toBe(
       'une infinité de solutions',
     )
   })
 
-  it("formate la réponse %{champ:\"valeur\"} d'un multi-mathfield", () => {
-    const question = '<multi-mathfield id="multi-mathfieldEx0Q0"></multi-mathfield>'
-    expect(formatStudentAnswer(question, 'a) %{rep1:"3"} b) %{rep2:"x+1"}')).toBe(
-      'a) $3$ b) $x+1$',
-    )
+  it('formate la réponse %{champ:"valeur"} d\'un multi-mathfield', () => {
+    const question =
+      '<multi-mathfield id="multi-mathfieldEx0Q0"></multi-mathfield>'
+    expect(
+      formatStudentAnswer(question, 'a) %{rep1:"3"} b) %{rep2:"x+1"}'),
+    ).toBe('a) $3$ b) $x+1$')
   })
 
   it("affiche la réponse brute d'un champ texte", () => {
@@ -81,10 +85,11 @@ describe('formatStudentAnswer', () => {
   })
 
   it("énumère les valeurs d'un MetaInteractif2d", () => {
-    const question = '<div class="metaInteractif2d"></div>'
-    expect(
-      formatStudentAnswer(question, '{"champ1":"5","champ2":"7"}'),
-    ).toBe('$5$ et $7$')
+    const question =
+      '<meta-interactif-2d><math-field class="metaInteractif2d"></math-field></meta-interactif-2d>'
+    expect(formatStudentAnswer(question, '{"champ1":"5","champ2":"7"}')).toBe(
+      '$5$ et $7$',
+    )
   })
 
   it('entoure de dollars la réponse mathfield par défaut', () => {
@@ -125,9 +130,7 @@ describe('stripInteractiveWidgets', () => {
   it('remplace les mathfields par des pointillés', () => {
     const question =
       'La moitié de 90 est <math-field id="champTexteEx0Q0"></math-field>.'
-    expect(stripInteractiveWidgets(question)).toBe(
-      'La moitié de 90 est  ... .',
-    )
+    expect(stripInteractiveWidgets(question)).toBe('La moitié de 90 est  ... .')
   })
 
   it('conserve le mathfield des fillInTheBlanks en nettoyant les placeholders', () => {
