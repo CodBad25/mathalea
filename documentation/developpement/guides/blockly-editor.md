@@ -1,6 +1,60 @@
-# BlocklyEditor (guide avancé)
+# BlocklyEditor
 
-Ce guide détaille le custom element `blockly-editor` et son usage dans les exercices.
+Ce guide explique comment utiliser le custom element `blockly-editor` dans un exercice. Pour un exemple complet, partir de `src/exercices/5e/5I1C.ts`. Pour un cas avec variables et callback de vérification, voir `src/exercices/5e/5I1D.ts`.
+
+## Recette simple
+
+1. Initialiser les blocs Blockly avant l'affichage.
+2. Construire la boîte à outils (`toolbox`) et les blocs attendus (`solutionBlocks`).
+3. Injecter l'éditeur dans `texte` avec `addBloklyEditor()`.
+4. Écrire une correction lisible dans `texteCorr`, souvent avec un éditeur non interactif.
+5. Déclarer la réponse avec `handleAnswers()` au format `blockly-editor`.
+
+```ts
+import { ensureBlocklyBlocksInitialized } from '../../lib/blockly/blocks'
+import {
+  addBloklyEditor,
+  BlocklyEditor,
+  type BlocklyEditorOptions,
+} from '../../lib/customElements/BlocklyEditor'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+
+ensureBlocklyBlocksInitialized()
+
+const options: BlocklyEditorOptions = {
+  toolbox,
+  solutionBlocks,
+  height: '250px',
+  width: '640px',
+  interactivityOn: true,
+}
+
+texte += addBloklyEditor(this, i, options)
+
+texteCorr += BlocklyEditor.create({
+  id: `blockly-editorCorrEx${this.numeroExercice}Q${i}`,
+  options: {
+    toolbox,
+    initialBlocks: solutionBlocks,
+    height: '80px',
+    width: '640px',
+    interactivityOn: false,
+  },
+})
+
+handleAnswers(
+  this,
+  i,
+  {
+    reponse: {
+      value: JSON.stringify({ solutionBlocks }),
+    },
+  },
+  { formatInteractif: 'blockly-editor' },
+)
+```
+
+Dans `5I1C.ts`, `solutionBlocks` est produit par `buildBlocklySaySolutionBlocks(expressionAst)`. Le même objet sert à afficher la correction et à vérifier la réponse.
 
 ## Objectif
 
@@ -49,7 +103,7 @@ texte += addBloklyEditor(this, i, options)
 
 1. lit la réponse attendue depuis `exercice.autoCorrection[i].valeur.reponse.value` ;
 2. lit la réponse élève depuis le workspace courant ;
-3. compare les deux JSON normalisés (clé triées + métadonnées Blockly volatiles retirées) ;
+3. compare les deux JSON normalisés (clés triées + métadonnées Blockly volatiles retirées) ;
 4. met à jour `resultatCheckEx...`, `feedbackEx...` et `exercice.answers`.
 
 ## Registre de callbacks de vérification
@@ -105,7 +159,7 @@ handleAnswers(
 
 ## Bonnes pratiques
 
-- Toujours appeler `init()` (définition des blocs custom Blockly) avant affichage de l'exercice.
+- Toujours appeler `ensureBlocklyBlocksInitialized()` pour définir les blocs custom Blockly.
 - Garder `toolbox` et `solutionBlocks` cohérents.
 - Si un callback est utilisé, le nom doit être stable et enregistré avant la vérification.
 - Pour CAN, surcharger `formatStudentAnswer` si un affichage plus lisible est souhaité.

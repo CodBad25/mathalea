@@ -405,6 +405,24 @@
     mathaleaUpdateUrlFromExercicesParams()
   }
 
+  function getCapytaleSerializableAnswers(
+    sourceAnswers: Record<string, string> | undefined,
+  ) {
+    if (sourceAnswers == null) return sourceAnswers
+    const serializableAnswers = { ...sourceAnswers }
+    const hasLegacyCliqueFigureAnswer = Object.keys(sourceAnswers).some((key) =>
+      key.startsWith('cliquefigure'),
+    )
+    if (hasLegacyCliqueFigureAnswer) {
+      for (const key of Object.keys(serializableAnswers)) {
+        if (key.startsWith('clique-figureEx')) {
+          delete serializableAnswers[key]
+        }
+      }
+    }
+    return serializableAnswers
+  }
+
   async function verifExerciceVueEleve() {
     log('verifExerciceVueEleve')
     if (exercise.numeroExercice != null && !(exercise.isDone === true))
@@ -473,7 +491,7 @@
             indice: exercise.numeroExercice as number,
             state: 'done',
             alea: exercise.seed,
-            answers: exercise.answers,
+            answers: getCapytaleSerializableAnswers(exercise.answers),
             numberOfPoints,
             numberOfQuestions,
             bestScore,

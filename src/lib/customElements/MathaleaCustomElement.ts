@@ -17,6 +17,9 @@ export const listOfCustomElements = [
   'mathalea-textfield',
   'tableau-mathlive',
   'mathalea-qcm',
+  'clique-figure',
+  'drag-and-drop',
+  'meta-interactif-2d',
 ]
 
 /**

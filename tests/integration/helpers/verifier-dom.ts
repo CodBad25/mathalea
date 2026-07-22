@@ -6,9 +6,9 @@ import {
 import { MultiMathfieldElement } from '../../../src/lib/customElements/MultiMathfield'
 import { MySpreadsheetElement } from '../../../src/lib/customElements/MySpreadSheet'
 import { SvgSelectionElement } from '../../../src/lib/customElements/SvgSelectionElement'
-import { verifQuestionCliqueFigure } from '../../../src/lib/interactif/cliqueFigure'
-import { verifDragAndDrop } from '../../../src/lib/interactif/DragAndDrop'
-import { verifQuestionMetaInteractif2d } from '../../../src/lib/interactif/gestionInteractif'
+import { verifQuestionCliqueFigure } from '../../../src/lib/customElements/CliqueFigureElement'
+import { DragAndDropElement } from '../../../src/lib/customElements/DragAndDropElement'
+import { MetaInteractif2dElement } from '../../../src/lib/customElements/MetaInteractif2dElement'
 import type { AutoCorrection, IExercice } from '../../../src/lib/types'
 import { interactivityTypeToCustomElementFormat } from '../../../src/lib/types'
 import {
@@ -514,7 +514,7 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
-              verificationFunctionName: 'verifQuestionMetaInteractif2d',
+              verificationFunctionName: 'MetaInteractif2dElement.verifQuestion',
               simulatedInput: '',
               goodAnswer: '',
               isOk: false,
@@ -537,7 +537,7 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
-              verificationFunctionName: 'verifQuestionMetaInteractif2d',
+              verificationFunctionName: 'MetaInteractif2dElement.verifQuestion',
               simulatedInput: '',
               goodAnswer: '',
               isOk: false,
@@ -548,11 +548,11 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
             break
           }
           injectMetaInteractif2dDOM(exIdx, i, fieldValues)
-          const result = verifQuestionMetaInteractif2d(exercice, i)
+          const result = MetaInteractif2dElement.verifQuestion(exercice, i)
           results.push({
             questionIndex: i,
             format,
-            verificationFunctionName: 'verifQuestionMetaInteractif2d',
+            verificationFunctionName: 'MetaInteractif2dElement.verifQuestion',
             simulatedInput: stringifyRecord(fieldValues),
             goodAnswer: stringifyRecord(fieldValues),
             isOk: result?.isOk === true,
@@ -702,12 +702,12 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
           const dndValeur = toDndValeur(valeur)
           injectDndDOM(exIdx, i, dndValeur)
           ensureDragAndDropQuestion(exercice, i)
-          const result = verifDragAndDrop(exercice, i)
+          const result = DragAndDropElement.verifQuestion(exercice, i)
           const dndAnswer = stringifyDndValeur(dndValeur)
           results.push({
             questionIndex: i,
             format,
-            verificationFunctionName: 'verifDragAndDrop',
+            verificationFunctionName: 'DragAndDropElement.verifQuestion',
             simulatedInput: dndAnswer,
             goodAnswer: dndAnswer,
             isOk: result?.isOk === true,

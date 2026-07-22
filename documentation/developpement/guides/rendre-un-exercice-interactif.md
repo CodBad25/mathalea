@@ -56,22 +56,22 @@ Si l'exercice écrit déjà `this.autoCorrection[i]` pour un QCM, une liste ou u
 
 Choisir le format selon ce que l'élève doit faire, pas selon la forme interne de la réponse.
 
-| Besoin côté élève                                         | Format            | Helper principal                                  | Déclaration de réponse                                     |
-| --------------------------------------------------------- | ----------------- | ------------------------------------------------- | ---------------------------------------------------------- |
-| Saisir un nombre, une fraction, une expression, une unité | `mathlive`        | `ajouteChampTexteMathLive()`                      | `reponse`                                                  |
-| Saisir plusieurs valeurs dans une phrase ou une formule   | `fillInTheBlank`  | `remplisLesBlancs()`                              | `champ1`, `champ2`, ...                                    |
-| Saisir des valeurs dans un tableau                        | `tableauMathlive` | `creeTableauMathliveElement()`, `AddTabPropMathlive` ou `AddTabDbleEntryMathlive` | `L1C1`, `L1C2`, ... |
-| Saisir du texte libre sans MathLive                       | `texte`           | `ajouteChampTexte()`                              | `reponse`, avec `{ formatInteractif: 'texte' }`            |
-| Cocher une ou plusieurs propositions                      | `qcm`             | `propositionsQcm()`                               | `this.autoCorrection[i].propositions`                      |
-| Choisir une valeur dans un menu                           | `listeDeroulante` | `choixDeroulant()`                                | `reponse`, avec `{ formatInteractif: 'liste-deroulante' }` |
-| Déplacer des étiquettes                                   | `dnd`             | `new DragAndDrop(...)`                            | `rectangle1`, `rectangle2`, ...                            |
-| Sélectionner des SVG                                      | `svg-selection`   | `selectionSvg()`                                  | `reponse`, avec `{ formatInteractif: 'svg-selection' }`    |
-| Cliquer dans une figure                                   | `cliqueFigure`    | objets SVG + `cliqueFiguresArray`                 | `this.autoCorrection[i].formatInteractif = 'cliqueFigure'` |
-| Vérification impossible avec les formats existants        | `custom`          | code propre à l'exercice                          | `correctionInteractive(i)`                                 |
+| Besoin côté élève                                         | Format               | Helper principal                                                                  | Déclaration de réponse                                       |
+| --------------------------------------------------------- | -------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| Saisir un nombre, une fraction, une expression, une unité | `mathalea-mathfield` | `ajouteChampTexteMathLive()`                                                      | `reponse`, avec `{ formatInteractif: 'mathalea-mathfield' }` |
+| Saisir plusieurs valeurs dans une phrase ou une formule   | `fill-in-the-blank`  | `remplisLesBlancs()`                                                              | `champ1`, `champ2`, ...                                      |
+| Saisir des valeurs dans un tableau                        | `tableau-mathlive`   | `creeTableauMathliveElement()`, `AddTabPropMathlive` ou `AddTabDbleEntryMathlive` | `L1C1`, `L1C2`, ...                                          |
+| Saisir du texte libre sans MathLive                       | `mathalea-textfield` | `ajouteChampTexte()`                                                              | `reponse`, avec `{ formatInteractif: 'mathalea-textfield' }` |
+| Cocher une ou plusieurs propositions                      | `mathalea-qcm`       | `addMathaleaQcm()`                                                                | `qcm`, avec `{ formatInteractif: 'mathalea-qcm' }`           |
+| Choisir une valeur dans un menu                           | `listeDeroulante`    | `choixDeroulant()`                                                                | `reponse`, avec `{ formatInteractif: 'liste-deroulante' }`   |
+| Déplacer des étiquettes                                   | `drag-and-drop`      | `new DragAndDrop(...)`                                                            | `rectangle1`, `rectangle2`, ...                              |
+| Sélectionner des SVG                                      | `svg-selection`      | `addSvgSelection()`                                                               | `reponse`, avec `{ formatInteractif: 'svg-selection' }`      |
+| Cliquer dans une figure                                   | `clique-figure`      | objets SVG + `cliqueFiguresArray`                                                 | `addCliqueFigure()` renseigne le format                      |
+| Vérification impossible avec les formats existants        | `custom`             | code propre à l'exercice                                                          | `correctionInteractive(i)`                                   |
 
 Commencer par le format le plus simple. Si un champ MathLive avec les bonnes options de comparaison suffit, ne pas écrire de correction personnalisée.
 
-Les quatre formats historiques `mathlive`, `fillInTheBlank`, `tableauMathlive` et `texte` sont rendus par des `MathaleaCustomElement` (`mathalea-mathfield`, `fill-in-the-blank`, `tableau-mathlive`, `mathalea-textfield`). Les helpers ci-dessus restent les API à utiliser dans les exercices : ils préservent les identifiants internes historiques tout en permettant au pipeline de correction de passer par `verifQuestion()` du custom element.
+Les anciens noms (`mathlive`, `fillInTheBlank`, `tableauMathlive`, `texte`, `qcm`, `dnd`, `cliqueFigure`, etc.) restent acceptés pour ne pas casser les exercices existants. Dans un nouvel exercice, utiliser les formats modernes ci-dessus : ils correspondent directement aux tags des custom elements.
 
 ## Cas courant : champ MathLive simple
 
@@ -113,9 +113,14 @@ Le helper retourne un wrapper `mathalea-mathfield`. L'id du wrapper suit la conv
 Juste après avoir construit la réponse attendue, appeler `handleAnswers()` :
 
 ```ts
-handleAnswers(this, i, {
-  reponse: { value: resultat },
-})
+handleAnswers(
+  this,
+  i,
+  {
+    reponse: { value: resultat },
+  },
+  { formatInteractif: 'mathalea-mathfield' },
+)
 ```
 
 `value` peut être une chaîne, un nombre, un `FractionEtendue`, un `Decimal`, une `Grandeur`, un `Hms`, un `Complexe` ou certains tableaux de ces valeurs. La fonction normalise ces valeurs avant comparaison.
@@ -157,14 +162,19 @@ texte += remplisLesBlancs(
   '\\ldots',
 )
 
-handleAnswers(this, i, {
-  champ1: { value: a },
-  champ2: { value: b },
-  champ3: { value: a + b },
-})
+handleAnswers(
+  this,
+  i,
+  {
+    champ1: { value: a },
+    champ2: { value: b },
+    champ3: { value: a + b },
+  },
+  { formatInteractif: 'fill-in-the-blank' },
+)
 ```
 
-Les noms dans le modèle (`%{champ1}`, `%{champ2}`, ...) doivent être exactement les mêmes que les clés passées à `handleAnswers()`. La présence de `champ1` fait déduire le format `fillInTheBlank`.
+Les noms dans le modèle (`%{champ1}`, `%{champ2}`, ...) doivent être exactement les mêmes que les clés passées à `handleAnswers()`.
 
 Le barème par défaut du wrapper `fill-in-the-blank` est `toutPourUnPoint` : la question vaut 1 point seulement si tous les champs sont justes. C'est le bon choix quand les champs forment une seule réponse, par exemple une égalité complète ou une fraction.
 
@@ -213,7 +223,7 @@ handleAnswers(
   {
     L1C1: { value: prix },
   },
-  { formatInteractif: 'tableauMathlive' },
+  { formatInteractif: 'tableau-mathlive' },
 )
 ```
 
@@ -239,7 +249,7 @@ handleAnswers(
       options: { texteSansCasse: true },
     },
   },
-  { formatInteractif: 'texte' },
+  { formatInteractif: 'mathalea-textfield' },
 )
 ```
 
@@ -247,23 +257,33 @@ Utiliser `{ texteAvecCasse: true }` si la casse doit être respectée, `{ texteS
 
 ## QCM
 
-Un QCM ne passe pas par `handleAnswers()` pour ses propositions. Il faut remplir `this.autoCorrection[i]`, puis appeler `propositionsQcm()`.
+Pour un nouveau QCM, déclarer les propositions avec `handleAnswers()` au format `mathalea-qcm`, puis injecter le composant avec `addMathaleaQcm()`.
 
 ```ts
-import { propositionsQcm } from '../../lib/interactif/qcm'
+import { addMathaleaQcm } from '../../lib/customElements/MathaleaQcm'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 
-this.autoCorrection[i] = {
-  enonce: texte,
-  propositions: [
-    { texte: '$4$', statut: true },
-    { texte: '$5$', statut: false },
-    { texte: '$6$', statut: false },
-  ],
-  options: { ordered: false, radio: true },
-}
+const propositions = [
+  { texte: '$4$', statut: true },
+  { texte: '$5$', statut: false },
+  { texte: '$6$', statut: false },
+]
 
-const monQcm = propositionsQcm(this, i)
-texte += monQcm.texte
+handleAnswers(
+  this,
+  i,
+  {
+    qcm: {
+      enonce: texte,
+      propositions,
+      correction: texteCorr,
+      options: { ordered: false, radio: true },
+    },
+  },
+  { formatInteractif: 'mathalea-qcm' },
+)
+
+texte += addMathaleaQcm(this, i, { radio: true })
 ```
 
 Options utiles :
@@ -274,6 +294,8 @@ Options utiles :
 - `lastChoice` pour ne mélanger que le début de la liste.
 
 Pour AMC, les QCM sont les formats les plus simples à maintenir : garder `amcReady` et `amcType` cohérents avec le nombre de bonnes réponses (`qcmMono` ou `qcmMult`) si l'exercice est exportable.
+
+L'ancien helper `propositionsQcm()` reste accepté pour maintenir les exercices existants, mais il ne doit plus être le modèle à recopier pour un nouveau développement.
 
 ## Liste déroulante
 
@@ -347,7 +369,7 @@ handleAnswers(
   {
     rectangle1: { value: 'sept' },
   },
-  { formatInteractif: 'dnd' },
+  { formatInteractif: 'drag-and-drop' },
 )
 ```
 
@@ -355,11 +377,11 @@ Si plusieurs étiquettes sont acceptées pour une zone, les exemples existants u
 
 ## Sélection SVG
 
-`selectionSvg()` affiche une grille de SVG sélectionnables. La valeur retournée est la somme des `value` des éléments sélectionnés.
+`addSvgSelection()` affiche une grille de SVG sélectionnables. La valeur retournée est la somme des `value` des éléments sélectionnés.
 
 ```ts
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { selectionSvg } from '../../lib/interactif/questionSvgSelection/questionSvgSelection'
+import { addSvgSelection } from '../../lib/customElements/SvgSelectionElement'
 
 const items = [
   { svg: svgA, value: 1 },
@@ -367,7 +389,7 @@ const items = [
   { svg: svgC, value: 4 },
 ]
 
-texte += selectionSvg(this, i, items)
+texte += addSvgSelection(this, i, { svgs: items })
 handleAnswers(
   this,
   i,
@@ -380,11 +402,11 @@ Ici, sélectionner `svgA` et `svgB` donne `3`. `value` peut aussi être un table
 
 ## Figure cliquable et formats spécialisés
 
-Pour `cliqueFigure`, `MetaInteractif2d`, `multiMathfield`, `tableur` et les usages avancés, partir d'un exercice existant proche. Ces formats ont des conventions supplémentaires :
+Pour `clique-figure`, `meta-interactif-2d`, `multi-mathfield`, `tableur` et les usages avancés, partir d'un exercice existant proche. Ces formats ont des conventions supplémentaires :
 
-- `cliqueFigure` utilise `this.cliqueFiguresArray` avec des identifiants SVG et une propriété `solution` ;
-- `MetaInteractif2d` utilise les champs intégrés aux objets MathALÉA 2D et des clés `field0`, `field1`, ... ;
-- `multiMathfield` coordonne plusieurs champs MathLive et utilise aussi `field0`, `field1`, ... ;
+- `clique-figure` utilise `this.cliqueFiguresArray` avec des identifiants SVG et une propriété `solution` ;
+- `meta-interactif-2d` utilise les champs intégrés aux objets MathALÉA 2D et des clés `field0`, `field1`, ... ;
+- `multi-mathfield` coordonne plusieurs champs MathLive et utilise aussi `field0`, `field1`, ... ;
 - `tableur` utilise `sheetAnswer`.
 
 Dans tous les cas, le `formatInteractif` de la question doit correspondre à une valeur de `InteractivityType` dans `src/lib/types.ts`.
@@ -576,11 +598,11 @@ Ce test d'intégration vérifie que les réponses attendues sont acceptées par 
 ## Erreurs fréquentes
 
 - Oublier `export const interactifReady = true` : l'interface ne propose pas l'interactivité.
-- Utiliser `mathLive` comme `formatInteractif` dans `handleAnswers()` : les formats internes sont en minuscules, `mathlive`, sauf la métadonnée historique `interactifType = 'mathLive'`.
+- Utiliser `mathLive` comme `formatInteractif` dans `handleAnswers()` : la métadonnée historique reste `interactifType = 'mathLive'`, mais le format moderne du custom element est `mathalea-mathfield`.
 - Ajouter un champ dans `texte` mais oublier `handleAnswers()` : le champ s'affiche, mais la validation ne connaît pas la réponse.
 - Appeler `handleAnswers()` avec `{ value: ... }` au lieu de `{ reponse: { value: ... } }` pour un champ simple.
 - Utiliser `champ1` dans `remplisLesBlancs()` et `reponse` dans `handleAnswers()` : les noms doivent correspondre.
-- Oublier `{ formatInteractif: 'liste-deroulante' }`, `{ formatInteractif: 'dnd' }` ou `{ formatInteractif: 'svg-selection' }` pour les formats non MathLive.
+- Oublier `{ formatInteractif: 'liste-deroulante' }`, `{ formatInteractif: 'drag-and-drop' }` ou `{ formatInteractif: 'svg-selection' }` pour les formats non MathLive.
 - Comparer le `label` d'une liste déroulante au lieu de sa `value`.
 - Utiliser un clavier trop limité : l'élève ne peut pas saisir une fraction, une unité ou une lettre nécessaire.
 - Mettre le helper interactif uniquement dans une branche `if (context.isHtml)` et oublier le rendu LaTeX.

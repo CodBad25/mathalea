@@ -333,12 +333,15 @@ export type InteractivityType =
   | 'tableauMathlive' // On pourra essayer de faire mieux qu'AmcOpen si la correction n'est pas custom mais numérique simple
   | 'texte' // à priori non compatible AMC
   | 'cliqueFigure' // Non compatible AMC
+  | 'clique-figure' // Non compatible AMC
   | 'dnd' // Non compatible AMC
+  | 'drag-and-drop' // Non compatible AMC
   | 'custom' // Non compatible AMC
   // MathaleaCustomElement
   | 'liste-deroulante' // Compatible AMC si on remplace par un qcm
   | 'my-spreadsheet' // Difficile à faire rentrer dans AMC
   | 'MetaInteractif2d' // Difficile à faire rentrer dans AMC
+  | 'meta-interactif-2d' // Difficile à faire rentrer dans AMC
   | 'svg-selection' // inadapté clairement pour AMC
   | 'multi-mathfield' // On pourra essayer de faire mieux qu'AmcOpen
   | 'trigo-circle-selection' // Non compatible AMC
@@ -363,12 +366,15 @@ export function isInteractivityType(
     value === 'tableauMathlive' ||
     value === 'texte' ||
     value === 'cliqueFigure' ||
+    value === 'clique-figure' ||
     value === 'dnd' ||
+    value === 'drag-and-drop' ||
     value === 'custom' ||
     // MathleaCustomElement
     value === 'liste-deroulante' ||
     value === 'my-spreadsheet' ||
     value === 'MetaInteractif2d' ||
+    value === 'meta-interactif-2d' ||
     value === 'svg-selection' ||
     value === 'multi-mathfield' ||
     value === 'trigo-circle-selection' ||
@@ -382,7 +388,10 @@ export function isInteractivityType(
     value === 'fill-in-the-blank' ||
     value === 'mathalea-textfield' ||
     value === 'tableau-mathlive' ||
-    value === 'mathalea-qcm'
+    value === 'mathalea-qcm' ||
+    value === 'clique-figure' ||
+    value === 'drag-and-drop' ||
+    value === 'meta-interactif-2d'
   )
 }
 
@@ -396,6 +405,7 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'liste-deroulante' ||
     value === 'my-spreadsheet' ||
     value === 'MetaInteractif2d' ||
+    value === 'meta-interactif-2d' ||
     value === 'svg-selection' ||
     value === 'multi-mathfield' ||
     value === 'trigo-circle-selection' ||
@@ -409,7 +419,10 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'fill-in-the-blank' ||
     value === 'mathalea-textfield' ||
     value === 'tableau-mathlive' ||
-    value === 'mathalea-qcm'
+    value === 'mathalea-qcm' ||
+    value === 'clique-figure' ||
+    value === 'drag-and-drop' ||
+    value === 'meta-interactif-2d'
   )
 }
 
@@ -447,6 +460,9 @@ export function interactivityTypeToCustomElementFormat(
 ): InteractivityType | null {
   if (typeof value !== 'string') return null
   if (value.toLowerCase() === 'qcm') return 'mathalea-qcm'
+  if (value.toLowerCase() === 'cliquefigure') return 'clique-figure'
+  if (value.toLowerCase() === 'dnd') return 'drag-and-drop'
+  if (value.toLowerCase() === 'metainteractif2d') return 'meta-interactif-2d'
   return mathliveCompatibleToCustomElementFormat(value)
 }
 

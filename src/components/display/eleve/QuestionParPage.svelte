@@ -9,11 +9,10 @@
     listOfCustomElements,
     mathaleaCustomElementsRegistry,
   } from '../../../lib/customElements/MathaleaCustomElement'
-  import { verifQuestionCliqueFigure } from '../../../lib/interactif/cliqueFigure'
+  import { verifQuestionCliqueFigure } from '../../../lib/customElements/CliqueFigureElement'
   import {
     prepareExerciceCliqueFigure,
     uniformiseResults,
-    verifQuestionMetaInteractif2d,
   } from '../../../lib/interactif/gestionInteractif'
   import {
     mathaleaFormatExercice,
@@ -148,14 +147,6 @@
           indiceQuestionInExercice[i],
         ),
       )
-    } else if (type === 'MetaInteractif2d') {
-      const resu = uniformiseResults(
-        verifQuestionMetaInteractif2d(
-          exercices[indiceExercice[i]],
-          indiceQuestionInExercice[i],
-        ),
-      )
-      resultsByQuestion[i] = resu
     } else if (listOfCustomElements.includes(customElementType ?? '')) {
       // On traite le cas de tous les MathaleaCustomElement ici
       const liste = Array.from(mathaleaCustomElementsRegistry)

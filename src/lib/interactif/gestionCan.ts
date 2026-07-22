@@ -8,10 +8,9 @@ import {
   listOfCustomElements,
   mathaleaCustomElementsRegistry,
 } from '../customElements/MathaleaCustomElement'
+import { verifQuestionCliqueFigure } from '../customElements/CliqueFigureElement'
 import { addElement, get } from '../html/dom'
 import type { ButtonWithMathaleaListener } from '../types/can'
-import { verifQuestionCliqueFigure } from './cliqueFigure'
-import { verifQuestionMetaInteractif2d } from './gestionInteractif'
 
 export function gestionCan(exercice: IExercice) {
   context.nbBonnesReponses = 0
@@ -37,7 +36,10 @@ export function gestionCan(exercice: IExercice) {
             | string[] = 'KO'
           const customElementType =
             interactivityTypeToCustomElementFormat(type) ?? type
-          if (type === 'cliqueFigure') {
+          if (
+            type === 'cliqueFigure' &&
+            customElementType !== 'clique-figure'
+          ) {
             resultat = verifQuestionCliqueFigure(exercice, i)
           }
           if (type === 'custom' && exercice.correctionInteractive) {
@@ -73,11 +75,6 @@ export function gestionCan(exercice: IExercice) {
               )
             }
             resultat = result
-          }
-          if (type === 'MetaInteractif2d') {
-            resultat = verifQuestionMetaInteractif2d(exercice, i)?.isOk
-              ? 'OK'
-              : 'KO'
           }
           if (type === 'qcm_mathLive')
             throw Error(

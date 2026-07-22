@@ -5,6 +5,7 @@ import {
   buildDataKeyboardFromStyle,
   convertClasseToString,
 } from '../lib/interactif/claviers/keyboard'
+import { MetaInteractif2dElement } from '../lib/customElements/MetaInteractif2dElement'
 import type {
   MetaInteractif2dData,
   NestedObjetMathalea2dArray,
@@ -176,9 +177,15 @@ export function mathalea2d(
                     const transform = prefix
                       ? 'translate(0,-50%)'
                       : 'translate(-50%,-50%)'
+                    const inputIndex = input.index ?? 0
                     const divOuterHtml = `<div class="divLatex" style="position: absolute; top: ${ySvgInput}px; left: ${xSvgInput}px; transform: ${transform}; opacity: ${input.opacity}; display: inline-flex; align-items: center; gap: 2px;" data-top=${ySvgInput} data-left=${xSvgInput}>${prefixHtml}${
                       isInteractif
-                        ? `<math-field data-keyboard="${dataKeyboard}" virtual-keyboard-mode=manual readonly class="${input.classe} metaInteractif2d" id="MetaInteractif2dEx${code.exercice.numeroExercice}Q${code.question}field${input.index}">${mathFieldContent}</math-field>`
+                        ? MetaInteractif2dElement.create({
+                            numeroExercice: code.exercice.numeroExercice ?? 0,
+                            questionIndex: code.question,
+                            fieldIndex: inputIndex,
+                            innerHtml: `<math-field data-keyboard="${dataKeyboard}" virtual-keyboard-mode=manual readonly class="${input.classe} metaInteractif2d" id="MetaInteractif2dEx${code.exercice.numeroExercice}Q${code.question}field${inputIndex}">${mathFieldContent}</math-field>`,
+                          })
                         : `$${blancContent}$`
                     }</div>`
                     divsLatex.push(divOuterHtml)
