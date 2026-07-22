@@ -97,7 +97,7 @@ Il y a $${miseEnEvidence(reponse)}$ ${personnes} qui viennent ${moyensTransport2
       if (this.versionQcm) {
         this.reponse = '$' + this.reponse + '$'
         this.question = `${lieu}, $${N}$ ${personnes} viennent ${moyensTransport1}, ce qui représente $${p1}\\,\\%$ du total des ${personnes}.<br>
-Par ailleurs $${p2}\\,\\%$ des ${personnes} viennent ${moyensTransport2}.<br>
+Par ailleurs, $${p2}\\,\\%$ des ${personnes} viennent ${moyensTransport2}.<br>
 Le nombre ${de}${personnes} venant ${moyensTransport2} est :`
         this.distracteurs = [
           `$${texNombre((p1 * N) / 100, 0)}$`,

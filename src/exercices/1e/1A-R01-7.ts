@@ -1,5 +1,5 @@
 import calculAvecPourcentage from '../can/2e/can2C29'
-export const titre = "Calculer un effetif à partir d'un pourcentage"
+export const titre = "Calculer un effectif à partir d'un pourcentage"
 export const dateDePublication = '23/03/2026'
 export const amcReady = true
 export const amcType = 'qcmMono'
