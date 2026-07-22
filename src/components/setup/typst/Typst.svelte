@@ -4,6 +4,7 @@
   import { EditorState } from '@codemirror/state'
   import { oneDark } from '@codemirror/theme-one-dark'
   import { EditorView, keymap } from '@codemirror/view'
+  import JSZip from 'jszip'
   import seedrandom from 'seedrandom'
   import { onDestroy, onMount } from 'svelte'
   import { get } from 'svelte/store'
@@ -1544,6 +1545,25 @@
   /** Extensions d'image reconnues par Typst pour le chemin virtuel du fichier */
   const KNOWN_IMAGE_EXTENSIONS = new Set(['png', 'jpg', 'jpeg', 'gif', 'webp'])
 
+  /**
+   * Appel `#image("chemin relatif")` dans le code Typst brut d'un exercice
+   * statique (`typ: true`), tel qu'écrit par l'auteur du `.typ` (voir
+   * `applyTypSourcesForStaticExercises`). Ne capture que les chemins
+   * relatifs : une URL absolue (`https://...`) n'est pas prise en charge par
+   * `#image`, elle échouerait de toute façon à la compilation d'origine.
+   */
+  const TYP_IMAGE_CALL = /#image\(\s*"([^"]+)"/g
+
+  /**
+   * Octets des images nécessaires à la compilation du code courant, indexés
+   * par le chemin virtuel exact référencé par les `image(...)` du document
+   * généré (mêmes clés que `setStaticImageBytes`, voir `prefetchStaticImages`).
+   * Réutilisés par `downloadTyp` pour empaqueter le `.typ` téléchargé avec
+   * ses images : sans elles, le fichier téléchargé seul ne compile pas
+   * (chemins relatifs ou virtuels introuvables hors de l'appli).
+   */
+  let requiredImageAssets: Map<string, Uint8Array> = $state(new Map())
+
   async function prefetchStaticImages() {
     // régénère chaque exercice (avec context.isTypst, comme le fera buildCode()
     // juste après) : pour un exercice non « statique » (dont son contenu est
@@ -1556,6 +1576,10 @@
 
     const urls = new Set<string>()
     const imgSrc = /<img[^>]*\ssrc=["']([^"']+)["']/gi
+    // chemin virtuel (identique au chemin relatif du `#image(...)`, pour que
+    // le `.typ` reste utilisable tel quel) -> URL réelle, résolue par rapport
+    // au dossier du `.typ` source de l'exercice
+    const typImageUrls = new Map<string, string>()
     for (const exercise of exercises) {
       if (exercise == null) continue
       const html = [
@@ -1564,8 +1588,26 @@
         ...(exercise.listeCorrections ?? []),
       ].join('')
       for (const match of html.matchAll(imgSrc)) urls.add(match[1])
+
+      if (exercise.typeExercice === 'statique' && exercise.uuid != null) {
+        const typUrl = getStaticExerciceTypUrl(exercise.uuid)
+        if (typUrl != null) {
+          const typBase = new URL(typUrl, window.location.href)
+          for (const match of html.matchAll(TYP_IMAGE_CALL)) {
+            const relativePath = match[1]
+            if (/^[a-z][a-z0-9+.-]*:/i.test(relativePath)) continue // URL absolue : non gérée par #image
+            typImageUrls.set(
+              `/${relativePath}`,
+              new URL(relativePath, typBase).href,
+            )
+          }
+        }
+      }
     }
-    if (urls.size === 0) return
+    if (urls.size === 0 && typImageUrls.size === 0) {
+      requiredImageAssets = new Map()
+      return
+    }
     const { cachedBytes, setStaticImageBytes } = await import('./typstCompiler')
     const paths = new Map<string, string>()
     const bytes = new Map<string, Uint8Array>()
@@ -1586,8 +1628,18 @@
         }
       }),
     )
+    await Promise.all(
+      [...typImageUrls].map(async ([virtualPath, url]) => {
+        try {
+          bytes.set(virtualPath, await cachedBytes(toSameOriginUrl(url)))
+        } catch {
+          // image indisponible : #image() échouera pour cet exercice (diagnostic Typst)
+        }
+      }),
+    )
     setStaticImagePaths(paths)
     setStaticImageBytes(bytes)
+    requiredImageAssets = bytes
   }
 
   async function loadExercises() {
@@ -1783,11 +1835,27 @@
     })
   }
 
-  function downloadTyp() {
-    downloadBlob(
-      new Blob([buildExportCode()], { type: 'text/plain;charset=utf-8' }),
-      `${exportFilename()}.typ`,
-    )
+  /**
+   * Télécharge le `.typ` : seul s'il ne référence aucune image, sinon dans
+   * une archive ZIP avec les images nécessaires (mêmes chemins que ceux
+   * référencés par le code, voir `requiredImageAssets`) — sans elles, le
+   * `.typ` téléchargé seul ne compile pas hors de l'appli.
+   */
+  async function downloadTyp() {
+    const filename = exportFilename()
+    if (requiredImageAssets.size === 0) {
+      downloadBlob(
+        new Blob([buildExportCode()], { type: 'text/plain;charset=utf-8' }),
+        `${filename}.typ`,
+      )
+      return
+    }
+    const zip = new JSZip()
+    zip.file(`${filename}.typ`, buildExportCode())
+    for (const [virtualPath, bytes] of requiredImageAssets) {
+      zip.file(virtualPath.replace(/^\//, ''), bytes)
+    }
+    downloadBlob(await zip.generateAsync({ type: 'blob' }), `${filename}.zip`)
   }
 </script>
 
@@ -1887,15 +1955,21 @@
 
       <div class="grow"></div>
 
-      {#if displayMode === 'code'}
+      {#if displayMode === 'code' || displayMode === 'split'}
         <ButtonTextAction
-          text="Télécharger le .typ"
+          text={requiredImageAssets.size > 0
+            ? 'Télécharger le .typ (.zip)'
+            : 'Télécharger le .typ'}
           icon="bx-file-blank"
           inverted={true}
           class="rounded-lg py-1 px-2"
+          title={requiredImageAssets.size > 0
+            ? 'Archive ZIP contenant le .typ et les images dont il a besoin'
+            : ''}
           on:click={downloadTyp}
         />
-      {:else}
+      {/if}
+      {#if displayMode === 'preview' || displayMode === 'split'}
         <ButtonTextAction
           text={isGeneratingPdf ? 'PDF en cours...' : 'Télécharger le PDF'}
           icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-download'}
