@@ -1,17 +1,17 @@
-import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Multiplier par 0,1...'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '38fe5'
-/**
- * Modèle d'exercice très simple pour la course aux nombres
- * @author Jean-claude Lhote
 
-*/
+/**
+ * @author Jean-claude Lhote
+ */
+
 export default class MultiplieDixieme extends ExerciceSimple {
   constructor() {
     super()
@@ -20,7 +20,7 @@ export default class MultiplieDixieme extends ExerciceSimple {
     this.nbQuestions = 1
     this.formatInteractif = 'fillInTheBlank'
     this.canOfficielle = false
-    this.consigne = 'Complete :'
+    this.consigne = 'Complète :'
   }
 
   nouvelleVersion() {

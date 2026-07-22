@@ -3,13 +3,10 @@ import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { minToHour } from '../../lib/outils/dateEtHoraires'
-import {
-  miseEnEvidence,
-  texteEnCouleurEtGras,
-} from '../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { prenomF, prenomM } from '../../lib/outils/Personne'
-import { nombreAvecEspace, texNombre } from '../../lib/outils/texNombre'
+import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -141,7 +138,7 @@ export default class VitesseDistanceTemps extends Exercice {
           texte += this.interactif ? ' (en minutes)' : ''
           texte += ' lui faudra-t-'
           texte += `${pronomgenre}`
-          texte += `  pour aller ${destination} qui est à une distance de ${nombreAvecEspace(d)} $\\text{km}$ ?`
+          texte += `  pour aller ${destination} qui est à une distance de $${texNombre(d, 2)}$ $\\text{km}$ ?`
           if (this.sup2 === 1) {
             if (context.isHtml) {
               texteCorr = '$\\def\\arraystretch{2.5}\\begin{array}{|l|c|c|}\n'
@@ -164,14 +161,14 @@ export default class VitesseDistanceTemps extends Exercice {
           texteCorr += `${prenom} mettra`
           texteCorr += this.interactif
             ? ` $${miseEnEvidence(t)}$ min`
-            : ` ${texteEnCouleurEtGras(minToHour(t))}`
+            : ` $${miseEnEvidence(minToHour(t, true))}$`
           texteCorr += ` pour aller ${destination}.`
           texteApres = sp() + ' minutes'
           setReponse(this, i, t)
           break
         case 'distance':
         default:
-          texte = `${prenom} roule à $${v}\\text{ km/h}$ de moyenne pendant ${minToHour(t)}. Calculer la distance parcourue`
+          texte = `${prenom} roule à $${v}\\text{ km/h}$ de moyenne pendant $${minToHour(t, true)}$. Calculer la distance parcourue`
           texte += this.interactif ? ' : ' : '.'
           if (this.sup2 === 1) {
             if (context.isHtml) {
