@@ -29,7 +29,7 @@ export const refs = {
   'fr-fr': ['auto5N2B'],
   'fr-ch': [],
 }
-export default class CompteterUneAdditionATrou extends Exercice {
+export default class CompleterUneAdditionATrou extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 4
