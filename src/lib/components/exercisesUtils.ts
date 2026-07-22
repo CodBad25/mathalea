@@ -4,6 +4,7 @@ import Exercice from '../../exercices/Exercice'
 import referentielStaticCH from '../../json/referentielStaticCH.json'
 import referentielStaticFR from '../../json/referentielStaticFR.json'
 import {
+  computeStaticExerciceCorTypUrl,
   computeStaticExerciceTypUrl,
   computeStaticExercicePngUrls,
   retrieveResourceFromUuid,
@@ -128,6 +129,18 @@ export const buildExercisesList = (
 export const getStaticExerciceTypUrl = (uuid: string): string | null => {
   const foundResource = retrieveResourceFromUuid(allStaticReferentiels, uuid)
   return computeStaticExerciceTypUrl(foundResource)
+}
+
+/**
+ * Calcule l'URL locale du fichier source Typst de la correction d'une
+ * ressource statique (`<uuid>_cor.typ`), si son entrée de référentiel
+ * déclare la clé `typ: true`. Utilisé par la vue Typst uniquement.
+ * @param uuid uuid de la ressource statique
+ * @returns l'URL relative du fichier `_cor.typ`, ou `null` si non déclarée
+ */
+export const getStaticExerciceCorTypUrl = (uuid: string): string | null => {
+  const foundResource = retrieveResourceFromUuid(allStaticReferentiels, uuid)
+  return computeStaticExerciceCorTypUrl(foundResource)
 }
 
 export const splitExercisesIntoQuestions = (

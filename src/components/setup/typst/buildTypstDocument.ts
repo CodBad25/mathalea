@@ -14,9 +14,15 @@ import {
  * Import du paquet exercise-bank (badges Exercice/Correction, banque).
  * Depuis la 0.6.0, le paquet gère lui-même les QR-codes (via tiaoma en
  * interne) : plus besoin d'importer tiaoma séparément.
+ *
+ * `exo-solution-box` (plutôt que `exo-print-solutions`) : appelée directement
+ * par exercice/groupe dans la section Corrections, pour pouvoir y placer une
+ * insertion de la palette (texte, section) *avant* le badge « Correction N »
+ * — `exo-print-solutions` imprime tous les items en attente d'un coup, sans
+ * point d'insertion individuel entre eux (voir `buildVersionContent`).
  */
 export const EXERCISE_BANK_IMPORT =
-  '#import "@preview/exercise-bank:0.6.0": exo, exo-setup, exo-print-solutions, exo-counter'
+  '#import "@preview/exercise-bank:0.6.0": exo, exo-setup, exo-solution-box, exo-counter'
 
 /** Hauteur (et largeur) des QR-codes placés au coin des exercices (`qr-size`) */
 const QRCODE_SIZE = '1.8cm'
@@ -43,6 +49,8 @@ export const MATHALEA_ANCHOR_HELPER = `#let mathalea-anchor(kind, num, dx: 0pt) 
 
 /** Marqueur de fin de ligne des insertions faites via la palette */
 export const INSERTION_TAG = '// mathalea:insertion'
+/** Marqueur de fin de ligne des insertions faites via la palette, avant une correction */
+export const INSERTION_CORRECTION_TAG = '// mathalea:insertion-corr'
 
 /**
  * Lignes en pointillés insérables (fin d'exercice ou après chaque question),
@@ -112,6 +120,18 @@ export interface TypstCarryOver {
    */
   codeOverrides?: Record<number, string>
   /**
+   * Code Typst saisi à la main (modale d'édition de la palette) qui remplace
+   * la correction générée d'un exercice, par numéro d'exercice. Sans effet
+   * si l'exercice n'a pas de correction (rien à remplacer).
+   */
+  codeOverridesCorrection?: Record<number, string>
+  /**
+   * Lignes de code Typst insérées juste avant la correction d'un exercice
+   * (sans le marqueur `// mathalea:insertion-corr`), par numéro d'exercice.
+   * Pendant de `insertions` pour la correction.
+   */
+  insertionsCorrection?: Record<number, string[]>
+  /**
    * Lignes en pointillés (pour que l'élève y écrive) réglées via la palette,
    * par numéro d'exercice (1-based) : après le corps entier de l'exercice,
    * ou après chaque question (y compris la dernière). Ne s'applique jamais
@@ -127,10 +147,21 @@ export interface TypstCarryOver {
 const CODE_OVERRIDE_START = /^([ \t]*)\/\/ mathalea:override\((\d+)\)\s*$/
 /** Repère de fin d'une surcharge de code */
 const CODE_OVERRIDE_END = /^[ \t]*\/\/ mathalea:override-end\s*$/
+/** Repère de début d'une surcharge de code de correction (voir `codeOverridesCorrection`) */
+const CODE_OVERRIDE_CORRECTION_START =
+  /^([ \t]*)\/\/ mathalea:override-corr\((\d+)\)\s*$/
+/** Repère de fin d'une surcharge de code de correction */
+const CODE_OVERRIDE_CORRECTION_END =
+  /^[ \t]*\/\/ mathalea:override-corr-end\s*$/
 
 /** Enveloppe le code saisi par le professeur entre ses repères, pour l'exercice `num` */
 function wrapCodeOverride(num: number, code: string): string {
   return `// mathalea:override(${num})\n${code}\n// mathalea:override-end`
+}
+
+/** Enveloppe le code de correction saisi par le professeur entre ses repères */
+function wrapCodeOverrideCorrection(num: number, code: string): string {
+  return `// mathalea:override-corr(${num})\n${code}\n// mathalea:override-corr-end`
 }
 
 /**
@@ -182,18 +213,38 @@ export function harvestCarryOver(code: string): TypstCarryOver {
     }
   }
   // une insertion suit le repère de gap de l'exercice qui la précède : on
-  // associe chaque ligne marquée au dernier repère rencontré
+  // associe chaque ligne marquée au dernier repère rencontré. Une insertion
+  // de correction suit de la même façon le repère `corr` de l'exercice
+  // qu'elle précède (voir `insertionsCorrection`) — repères et marqueurs
+  // distincts, jamais confondus dans la même passe.
   const insertions: Record<number, string[]> = {}
+  const insertionsCorrection: Record<number, string[]> = {}
   let currentGap: number | null = null
+  let currentCorr: number | null = null
   for (const line of code.split('\n')) {
     const gap = line.match(/#mathalea-anchor\("gap", (\d+)\)/)
     if (gap != null) {
       currentGap = Number(gap[1])
       continue
     }
+    const corr = line.match(/#mathalea-anchor\("corr", (\d+)\)/)
+    if (corr != null) {
+      currentCorr = Number(corr[1])
+      continue
+    }
     const insertion = line.match(/^\s*(.*?)\s*\/\/ mathalea:insertion\s*$/)
     if (insertion != null && currentGap != null && insertion[1].length > 0) {
       ;(insertions[currentGap] ??= []).push(insertion[1])
+    }
+    const insertionCorr = line.match(
+      /^\s*(.*?)\s*\/\/ mathalea:insertion-corr\s*$/,
+    )
+    if (
+      insertionCorr != null &&
+      currentCorr != null &&
+      insertionCorr[1].length > 0
+    ) {
+      ;(insertionsCorrection[currentCorr] ??= []).push(insertionCorr[1])
     }
   }
   const figureZoom: Record<number, number> = {}
@@ -218,22 +269,29 @@ export function harvestCarryOver(code: string): TypstCarryOver {
   // une surcharge peut s'étendre sur plusieurs lignes : on ne peut pas la
   // lire avec un simple matchAll, il faut avancer ligne à ligne et retirer
   // l'indentation ajoutée par les blocs englobants (mêmes marges pour le
-  // repère et son contenu, voir `wrapCodeOverride`)
+  // repère et son contenu, voir `wrapCodeOverride`). Les surcharges d'énoncé
+  // et de correction partagent la même boucle : leurs repères sont distincts
+  // (`override`/`override-corr`) donc jamais confondus.
   const codeOverrides: Record<number, string> = {}
+  const codeOverridesCorrection: Record<number, string> = {}
   const codeLines = code.split('\n')
   for (let i = 0; i < codeLines.length; i++) {
     const start = codeLines[i].match(CODE_OVERRIDE_START)
-    if (start == null) continue
-    const indent = start[1]
-    const num = Number(start[2])
+    const startCorrection = codeLines[i].match(CODE_OVERRIDE_CORRECTION_START)
+    if (start == null && startCorrection == null) continue
+    const matched = (start ?? startCorrection) as RegExpMatchArray
+    const indent = matched[1]
+    const num = Number(matched[2])
+    const endRegex = start != null ? CODE_OVERRIDE_END : CODE_OVERRIDE_CORRECTION_END
     const content: string[] = []
     i++
-    while (i < codeLines.length && !CODE_OVERRIDE_END.test(codeLines[i])) {
+    while (i < codeLines.length && !endRegex.test(codeLines[i])) {
       const line = codeLines[i]
       content.push(line.startsWith(indent) ? line.slice(indent.length) : line)
       i++
     }
-    codeOverrides[num] = content.join('\n')
+    if (start != null) codeOverrides[num] = content.join('\n')
+    else codeOverridesCorrection[num] = content.join('\n')
   }
   // lignes en pointillés (palette, par exercice) : chaque appel émis par
   // `writingLinesCall` porte un marqueur identifiant l'exercice et
@@ -255,10 +313,12 @@ export function harvestCarryOver(code: string): TypstCarryOver {
   return {
     tasksLayout,
     insertions,
+    insertionsCorrection,
     figureZoom,
     figureAlign,
     merges,
     codeOverrides,
+    codeOverridesCorrection,
     writingLines,
   }
 }
@@ -826,6 +886,30 @@ export function getGeneratedExerciseCode(
 }
 
 /**
+ * Code Typst actuellement généré pour la correction d'un exercice
+ * (préremplissage de la modale d'édition), sans appliquer sa surcharge
+ * existante — voir `getGeneratedExerciseCode`, pendant pour l'énoncé.
+ * @returns le code généré, ou `''` si l'exercice n'a pas de correction
+ */
+export function getGeneratedCorrectionCode(
+  exercises: TypstExerciseInput[],
+  num: number,
+  options: TypstDocumentOptions = defaultTypstDocumentOptions,
+  carryOver: TypstCarryOver = {},
+): string {
+  const figures: string[] = []
+  const generated = computeGeneratedExercises(
+    exercises,
+    options,
+    carryOver,
+    figures,
+    false,
+    true,
+  )
+  return generated[num - 1]?.correction ?? ''
+}
+
+/**
  * Code Typst autonome (compilable seul avec `typst compile`) d'un exercice :
  * préambule minimal (imports, aides et réglages réellement utilisés par son
  * contenu) suivi de son code. Pour le bouton « Copier avec le préambule »
@@ -838,6 +922,7 @@ export function getGeneratedExerciseCode(
  * éventuelles retouches manuelles) ; les figures SVG restent celles du
  * contenu d'origine de l'exercice (jamais stockées dans le texte du
  * brouillon, seulement référencées par `fig-N`).
+ * `part` sélectionne l'énoncé (défaut) ou la correction de l'exercice.
  */
 export function buildStandaloneExerciseCode(
   exercises: TypstExerciseInput[],
@@ -845,6 +930,7 @@ export function buildStandaloneExerciseCode(
   options: TypstDocumentOptions = defaultTypstDocumentOptions,
   carryOver: TypstCarryOver = {},
   codeOverride?: string,
+  part: 'enonce' | 'correction' = 'enonce',
 ): string {
   const figures: string[] = []
   const generated = computeGeneratedExercises(
@@ -855,7 +941,9 @@ export function buildStandaloneExerciseCode(
     false,
     true,
   )
-  const code = codeOverride ?? generated[num - 1]?.enonce ?? ''
+  const generatedPart =
+    part === 'correction' ? generated[num - 1]?.correction : generated[num - 1]?.enonce
+  const code = codeOverride ?? generatedPart ?? ''
   const codeLines = code.split('\n')
   const {
     usesMathaleaFigure,
@@ -951,6 +1039,11 @@ function buildVersionContent(
     (carryOver.insertions?.[num] ?? []).map((line) =>
       exportMode ? `${indent}${line}` : `${indent}${line} ${INSERTION_TAG}`,
     )
+  /** Insertions de la palette à réémettre juste avant la correction de l'exercice `num` */
+  const insertionCorrectionLines = (num: number, indent: string): string[] =>
+    (carryOver.insertionsCorrection?.[num] ?? []).map((line) =>
+      exportMode ? `${indent}${line}` : `${indent}${line} ${INSERTION_CORRECTION_TAG}`,
+    )
   // Banque d'exercices (paquet exercise-bank) : chaque exercice regroupe
   // son énoncé et sa correction dans un `#let exN = exo.with(...)`, puis
   // la section Énoncés appelle `#exN()` — réordonnez-les librement.
@@ -980,6 +1073,7 @@ function buildVersionContent(
   // rien ne relit plus jamais ce code exporté.
   const built = generated.map((g, k) => {
     const override = carryOver.codeOverrides?.[k + 1]
+    const correctionOverride = carryOver.codeOverridesCorrection?.[k + 1]
     return {
       enonce:
         override == null
@@ -987,7 +1081,14 @@ function buildVersionContent(
           : exportMode
             ? override
             : wrapCodeOverride(k + 1, override),
-      correction: g.correction,
+      correction:
+        g.correction == null
+          ? null
+          : correctionOverride == null
+            ? g.correction
+            : exportMode
+              ? correctionOverride
+              : wrapCodeOverrideCorrection(k + 1, correctionOverride),
     }
   })
 
@@ -1017,8 +1118,14 @@ function buildVersionContent(
         '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
       )
       renderLines.push('  #en-colonnes[')
-      for (const { correction } of built) {
+      for (const [k, { correction }] of built.entries()) {
         if (correction == null) continue
+        // pas de badge en mode fusionné (contenu concaténé, sans exo-box) :
+        // le repère et l'insertion précèdent directement le contenu, déjà
+        // « avant la correction »
+        const num = k + 1
+        if (emitAnchors) renderLines.push(`    #mathalea-anchor("corr", ${num})`)
+        renderLines.push(...insertionCorrectionLines(num, '    '))
         renderLines.push(indentContentBlock(indentContentBlock(correction)))
         renderLines.push('')
       }
@@ -1106,6 +1213,14 @@ function buildVersionContent(
         .join('\n\n')
       bankLines.push(indentContentBlock(indentContentBlock(enonceBody)))
       bankLines.push('  ],')
+      // le champ `solution:` reste renseigné : `display: "sol"` (PDF
+      // « corrigé seul », voir corrigeCode dans Typst.svelte) en dépend pour
+      // imprimer la correction directement à l'appel de `#exN()`. En mode
+      // normal (« both »), `exo()` la mettrait aussi en attente (corr-loc:
+      // "end-chapter") mais rien ne relit plus cette file : la correction
+      // affichée dans la section Corrections vient de l'appel direct à
+      // `exo-solution-box` plus bas, qui garde un point d'insertion avant
+      // son badge (impossible via `exo-print-solutions`, voir plus bas).
       const correctionMembers = group.members.filter(
         (k) => built[k].correction != null,
       )
@@ -1161,7 +1276,41 @@ function buildVersionContent(
         renderLines.push(`  #exo-setup(margin-position: ${marginWidth.corr})`)
       }
       renderLines.push('  #en-colonnes[')
-      renderLines.push('    #exo-print-solutions(title: none)')
+      // appel direct de `exo-solution-box` (plutôt que `exo-print-solutions`,
+      // qui imprimerait tout d'un coup) : chaque correction garde son propre
+      // point d'insertion juste avant son badge. Numérotation : position
+      // (1-based) du groupe parmi les `#exN()` effectivement appelés — c'est
+      // aussi ce qu'incrémente `exo-counter` en interne (un exercice fusionné
+      // avec le précédent ne consomme pas de numéro à lui).
+      groups.forEach((group, groupIndex) => {
+        const num = groupIndex + 1
+        const correctionMembers = group.members.filter(
+          (k) => built[k].correction != null,
+        )
+        if (correctionMembers.length === 0) return
+        if (emitAnchors) {
+          renderLines.push(`    #mathalea-anchor("corr", ${group.head + 1})`)
+        }
+        renderLines.push(
+          ...insertionCorrectionLines(group.head + 1, '    '),
+        )
+        const correctionBody = correctionMembers
+          .map((k) => built[k].correction as string)
+          .join('\n\n')
+        // même identifiant que le badge de l'énoncé (voir la construction de
+        // `exo.with(...)` ci-dessus) : explicite (`ref`) pour un groupe d'un
+        // seul exercice, sinon celui qu'exo() aurait généré lui-même
+        const ref = group.members.length === 1 ? exercises[group.head].ref.trim() : ''
+        const exerciseId = ref.length > 0 ? ref : `exo-${num}`
+        renderLines.push('    #exo-solution-box(')
+        renderLines.push(`      number: ${num},`)
+        renderLines.push(`      exercise-id: ${typstString(exerciseId)},`)
+        renderLines.push(`      show-id: ${options.showExerciseRefs},`)
+        renderLines.push('      [')
+        renderLines.push(indentContentBlock(indentContentBlock(correctionBody)))
+        renderLines.push('      ],')
+        renderLines.push('    )')
+      })
       renderLines.push('  ]')
       renderLines.push(']')
       renderLines.push('')

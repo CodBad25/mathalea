@@ -205,6 +205,29 @@ export function computeStaticExerciceTypUrl(
 }
 
 /**
+ * Calcule l'URL locale du fichier source Typst de la **correction** d'une
+ * ressource statique (`<uuid>_cor.typ`, à côté de `<uuid>.typ`), si sa
+ * terminaison de référentiel déclare la clé `typ: true`. Ce fichier est
+ * optionnel : son absence (pas encore rédigé) n'empêche pas d'utiliser le
+ * `.typ` de l'énoncé, la correction reste alors le png scanné.
+ * @param foundResource la terminaison de référentiel trouvée pour un uuid
+ * @returns l'URL relative du fichier `_cor.typ`, ou `null` si `typ` n'est pas déclarée
+ */
+export function computeStaticExerciceCorTypUrl(
+  foundResource: JSONReferentielEnding | null,
+): string | null {
+  if (!hasTypSource(foundResource) || foundResource === null) {
+    return null
+  }
+  const resource = foundResource as JSONReferentielEnding & {
+    uuid: string
+    annee: string
+  }
+  const [sujet] = resource.uuid.split('_')
+  return `static/${sujet}/${resource.annee}/typ/${resource.uuid}_cor.typ`
+}
+
+/**
  * Recherche une ressource dans un référentiel donné correspondant à une uuid
  * passée en paramètre
  * @param referentiel le référentiel dans lequel on cherche l'uuid
