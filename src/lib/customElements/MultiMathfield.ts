@@ -142,10 +142,55 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         display: none;
       }
       math-field {
-        text-align: center;
+        color: var(--color-coopmaths-corpus, #1f2429);
+        --caret-color: hsl(212, 40%, 49%);
+        --selection-color: #000;
+        --selection-background-color: hsl(212, 70%, 85%);
+        --contains-highlight-color: hsl(212, 40%, 49%);
+        --contains-highlight-background-color: hsl(212, 40%, 95%);
+        --highlight-text: hsla(212, 40%, 50%, 0.1);
+        line-height: 1;
+        border-radius: 4px;
+        border: none;
+        background-color: transparent;
+        font-size: 1em;
+        margin-left: 5px;
+        display: inline-block;
+        vertical-align: middle;
+        min-width: 50px;
+      }
+      :host-context(.dark) math-field {
+        color: var(--color-coopmathsdark-corpus, #b0b0b0);
+        --caret-color: hsl(212, 65%, 55%);
+        --selection-color: #fff;
+        --selection-background-color: hsl(212, 65%, 55%);
+        --contains-highlight-color: hsl(212, 85%, 75%);
+        --contains-highlight-background-color: hsl(212, 30%, 40%);
+        --highlight-text: hsla(212, 40%, 50%, 0.6);
+      }
+      math-field::part(container) {
+        border-radius: 4px;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        min-width: 50px;
+        display: inline-block;
+        justify-content: center;
+      }
+      :host-context(.dark) math-field::part(container) {
+        border: 1px solid rgba(213, 206, 206, 0.917);
       }
       math-field::part(content) {
-        justify-content: start;
+        padding: 0;
+        justify-content: center;
+      }
+      math-field:focus-within {
+        outline: solid;
+        outline-width: 2px;
+        outline-color: var(--color-coopmaths-struct, #216d9a);
+        border: none;
+      }
+      math-field:focus-within::part(container) {
+        outline: none;
+        border: none;
       }
     `
     shadowRoot.appendChild(style)
@@ -261,8 +306,6 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         const name = token.slice(2, -1)
         const div = document.createElement('DIV')
         div.style.display = 'inline-block'
-        div.style.border = '1px solid #ccc'
-        div.style.borderRadius = '4px'
         div.classList.add('ml-1')
         div.style.marginLeft = '2px'
         div.style.marginRight = '2px'
@@ -295,6 +338,7 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         // On donne comme id la concaténation de l'id du MultiMathfield (this.id) et du name du champ pour être sûr d'avoir un id unique
         mathfield.id = (this.id ? this.id : 'multi-mathfield') + '-' + name
         mathfield.setAttribute('data-name', name)
+        mathfield.setAttribute('virtual-keyboard-mode', 'manual')
         mathfield.style.border = 'none'
 
         // mathfield.style.verticalAlign = 'middle'
