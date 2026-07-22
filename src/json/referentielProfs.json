@@ -117,6 +117,14 @@
       "titre": "Encadrer l'aire d'un disque",
       "typeExercice": "outil",
       "tags": {}
+    },
+    "P025": {
+      "id": "P025",
+      "uuid": "a9f31",
+      "url": "profs/P025.js",
+      "titre": "Créer une animation de construction aux instruments",
+      "typeExercice": "outil",
+      "tags": {}
     }
   },
   "Simulateurs": {
