@@ -352,6 +352,7 @@ export type InteractivityType =
   | 'fill-in-the-blank'
   | 'mathalea-textfield'
   | 'tableau-mathlive'
+  | 'mathalea-qcm'
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -380,7 +381,8 @@ export function isInteractivityType(
     value === 'mathalea-mathfield' ||
     value === 'fill-in-the-blank' ||
     value === 'mathalea-textfield' ||
-    value === 'tableau-mathlive'
+    value === 'tableau-mathlive' ||
+    value === 'mathalea-qcm'
   )
 }
 
@@ -406,7 +408,8 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'mathalea-mathfield' ||
     value === 'fill-in-the-blank' ||
     value === 'mathalea-textfield' ||
-    value === 'tableau-mathlive'
+    value === 'tableau-mathlive' ||
+    value === 'mathalea-qcm'
   )
 }
 
@@ -438,11 +441,51 @@ export function mathliveCompatibleToCustomElementFormat(
   }
 }
 
+/** Normalise les anciens formats vers le custom element qui les vérifie. */
+export function interactivityTypeToCustomElementFormat(
+  value: unknown,
+): InteractivityType | null {
+  if (typeof value !== 'string') return null
+  if (value.toLowerCase() === 'qcm') return 'mathalea-qcm'
+  return mathliveCompatibleToCustomElementFormat(value)
+}
+
 export type SharedQcmProposition = {
   texte: string
   statut: boolean
   correction?: string
   feedback?: string
+}
+
+export type QcmValeur = {
+  qcm: {
+    propositions: SharedQcmProposition[]
+    options?: IExerciceQcmOptions
+    enonce?: string
+    correction?: string
+  }
+}
+
+export function isQcmValeur(value: unknown): value is QcmValeur {
+  if (typeof value !== 'object' || value == null || !('qcm' in value)) {
+    return false
+  }
+  const qcm = value.qcm
+  return (
+    typeof qcm === 'object' &&
+    qcm != null &&
+    'propositions' in qcm &&
+    Array.isArray(qcm.propositions) &&
+    qcm.propositions.every(
+      (proposition) =>
+        typeof proposition === 'object' &&
+        proposition != null &&
+        'texte' in proposition &&
+        typeof proposition.texte === 'string' &&
+        'statut' in proposition &&
+        typeof proposition.statut === 'boolean',
+    )
+  )
 }
 
 export type QcmAutoCorrectionProposition = {
@@ -799,10 +842,10 @@ export function isAnswerValueType(value: unknown): value is AnswerValueType {
   )
 }
 
-export type ReponseComplexe = AnswerValueType | Valeur
+export type ReponseComplexe = AnswerValueType | Valeur | QcmValeur
 
 export function isReponseComplexe(value: unknown): value is ReponseComplexe {
-  return isAnswerValueType(value) || isValeur(value)
+  return isAnswerValueType(value) || isValeur(value) || isQcmValeur(value)
 }
 
 export type ParamForQcmInteractif = {

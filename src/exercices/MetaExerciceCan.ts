@@ -20,7 +20,7 @@ import { getDistracteurs } from '../lib/mathalea'
 import { Complexe } from '../lib/mathFonctions/Complexe'
 import { combinaisonListes, shuffle } from '../lib/outils/arrayOutils'
 import { range1 } from '../lib/outils/nombres'
-import type { AnswerValueType, Valeur } from '../lib/types'
+import type { AnswerValueType, AutoCorrection, Valeur } from '../lib/types'
 import {
   isValeur,
   mathliveCompatibleToCustomElementFormat,
@@ -41,6 +41,26 @@ export const interactifReady = true
 type QuestionWithOptionalTableau = ExerciceSimple & {
   tableau?: ItabDbleEntry | Itableau
   typeTableau?: TableauMathliveType
+}
+
+function getQcmAutoCorrection(
+  question: Exercice,
+  destinationIndex: number,
+): AutoCorrection | undefined {
+  const atDestination = question.autoCorrection[destinationIndex]
+  if (atDestination?.propositions != null) return atDestination
+  const first = question.autoCorrection[0]
+  return first?.propositions != null ? first : undefined
+}
+
+function cloneQcmAutoCorrection(source: AutoCorrection): AutoCorrection {
+  return {
+    ...source,
+    options: source.options == null ? undefined : { ...source.options },
+    propositions: source.propositions?.map((proposition) => ({
+      ...proposition,
+    })),
+  }
 }
 
 export default class MetaExercice extends Exercice {
@@ -192,7 +212,18 @@ export default class MetaExercice extends Exercice {
                 : (mathliveCompatibleToCustomElementFormat(
                     Question.formatInteractif,
                   ) ?? Question.formatInteractif)
-            if (listOfCustomElements.includes(customElementFormat ?? '')) {
+            const qcmAutoCorrection = getQcmAutoCorrection(
+              Question,
+              indexQuestion,
+            )
+            if (qcmAutoCorrection != null) {
+              this.autoCorrection[indexQuestion] =
+                cloneQcmAutoCorrection(qcmAutoCorrection)
+              this.listeQuestions[indexQuestion] =
+                consigne + String(Question.question ?? '')
+            } else if (
+              listOfCustomElements.includes(customElementFormat ?? '')
+            ) {
               const liste = Array.from(mathaleaCustomElementsRegistry)
               const [tag, elementClasse] =
                 liste.find((custom) => custom[0] === customElementFormat) ?? []
@@ -247,10 +278,7 @@ export default class MetaExercice extends Exercice {
                 }
               } else {
                 questionHtml = questionHtml
-                  .replaceAll(
-                    `${tag}Ex${n}Q0`,
-                    `${tag}Ex${n}Q${indexQuestion}`,
-                  )
+                  .replaceAll(`${tag}Ex${n}Q0`, `${tag}Ex${n}Q${indexQuestion}`)
                   .replaceAll(
                     `resultatCheckEx${n}Q0`,
                     `resultatCheckEx${n}Q${indexQuestion}`,
@@ -382,28 +410,14 @@ export default class MetaExercice extends Exercice {
                   { formatInteractif: tag as InteractivityType },
                 )
               } else if (isValeur(Question.reponse)) {
-                handleAnswers(
-                  this,
-                  indexQuestion,
-                  Question.reponse as Valeur,
-                  { formatInteractif: tag as InteractivityType },
-                )
+                handleAnswers(this, indexQuestion, Question.reponse as Valeur, {
+                  formatInteractif: tag as InteractivityType,
+                })
               } else {
                 handleAnswers(this, indexQuestion, Question.reponse as Valeur, {
                   formatInteractif: tag as InteractivityType,
                 })
               }
-            } else if (Question.formatInteractif === 'qcm') {
-              Question?.question?.replaceAll(
-                'labelEx0Q0',
-                `labelEx0Q${indexQuestion}`,
-              )
-              Question?.question?.replaceAll(
-                'resultatCheckEx0',
-                `resultatCheckEx${indexQuestion}`,
-              )
-              this.listeQuestions[indexQuestion] = consigne + Question.question
-              this.autoCorrection[indexQuestion] = Question.autoCorrection[0]
             } else if (Question.formatInteractif === 'MetaInteractif2d') {
               const n = Question.numeroExercice
               if (Question.question != null) {
@@ -630,12 +644,22 @@ export default class MetaExercice extends Exercice {
             //* ***************** Question Exo classique *****************//
             this.listeQuestions[indexQuestion] = Question.listeQuestions[0]
             this.listeCorrections[indexQuestion] = Question.listeCorrections[0]
-            this.autoCorrection[indexQuestion] = Question.autoCorrection[0]
+            const qcmAutoCorrection = getQcmAutoCorrection(
+              Question,
+              indexQuestion,
+            )
+            this.autoCorrection[indexQuestion] =
+              qcmAutoCorrection == null
+                ? Question.autoCorrection[0]
+                : cloneQcmAutoCorrection(qcmAutoCorrection)
             const customElementFormat =
               mathliveCompatibleToCustomElementFormat(
                 Question.autoCorrection[0]?.formatInteractif,
               ) ?? Question.autoCorrection[0]?.formatInteractif
-            if (listOfCustomElements.includes(customElementFormat ?? '')) {
+            if (
+              qcmAutoCorrection == null &&
+              listOfCustomElements.includes(customElementFormat ?? '')
+            ) {
               const liste = Array.from(mathaleaCustomElementsRegistry)
               const [tag, elementClasse] =
                 liste.find((custom) => custom[0] === customElementFormat) ?? []
@@ -663,7 +687,7 @@ export default class MetaExercice extends Exercice {
                   formatInteractif: tag as InteractivityType,
                 },
               )
-            } else {
+            } else if (qcmAutoCorrection == null) {
               this.listeQuestions[indexQuestion] = this.listeQuestions[
                 indexQuestion
               ].replaceAll('champTexteEx0Q0', `champTexteEx0Q${indexQuestion}`)
@@ -701,8 +725,6 @@ export default class MetaExercice extends Exercice {
                   Question.listeQuestions[indexQuestion]
                 this.listeCorrections[indexQuestion] =
                   Question.listeCorrections[indexQuestion]
-              } else if (formatInteractif === 'qcm') {
-                this.autoCorrection[indexQuestion] = Question.autoCorrection[0]
               } else {
                 const reponse = Question.autoCorrection[0]?.valeur
                 if (reponse != null)
@@ -712,8 +734,14 @@ export default class MetaExercice extends Exercice {
               }
             }
           }
-          if (Question?.autoCorrection[0]?.propositions != null) {
+          const qcmAutoCorrection = getQcmAutoCorrection(
+            Question,
+            indexQuestion,
+          )
+          if (qcmAutoCorrection != null) {
             // qcm
+            this.autoCorrection[indexQuestion] =
+              cloneQcmAutoCorrection(qcmAutoCorrection)
             // Les propositions ont déjà été mélangées par buildQcmForExercise et la correction
             // a été construite avec cet ordre. On empêche un second mélange pour que la lettre
             // annoncée dans la correction corresponde à ce qui est affiché dans la question.
@@ -725,6 +753,10 @@ export default class MetaExercice extends Exercice {
               style: 'margin:0 3px 0 3px;',
               format: this.interactif ? 'case' : 'lettre',
             }) // update les références HTML
+            if (qcmAutoCorrection.formatInteractif === 'mathalea-qcm') {
+              this.autoCorrection[indexQuestion].formatInteractif =
+                'mathalea-qcm'
+            }
             this.listeCanReponsesACompleter[indexQuestion] =
               Question.canReponseACompleter != null
                 ? Question.canReponseACompleter

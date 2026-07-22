@@ -10,36 +10,39 @@ Un exercice peut définir `interactifObligatoire = true` lorsqu'il ne possède p
 
 Les formats sont définis par `InteractivityType` dans `src/lib/types.ts`. Les formats courants sont :
 
-Les custom elements maison sont désormais centralisés dans `src/lib/customElements/`. Les helpers métier d'injection et de vérification sont dans le module du custom element concerné.
+Les custom elements maison sont centralisés dans `src/lib/customElements/`. Dans un exercice, utiliser le helper métier indiqué ci-dessous : il prépare le HTML périphérique et délègue à la méthode `create()` du custom element. Les méthodes `create()` sont des primitives destinées à l'implémentation des helpers et aux infrastructures qui doivent reconstruire un composant, comme `MetaExerciceCan`.
 
-| Format                    | Usage                                                    | Fichiers principaux                                                                                    |
-| ------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `mathlive`                | Champ MathLive pour une réponse mathématique, injecté via `mathalea-mathfield` par `ajouteChampTexteMathLive()` | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaMathfield.ts`, `src/lib/interactif/mathLiveVerifications.ts` |
-| `fillInTheBlank`          | Texte à trous MathLive, injecté via `fill-in-the-blank` par `remplisLesBlancs()` | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/FillInTheBlank.ts`                   |
-| `tableauMathlive`         | Cellules MathLive nommées `L1C1`, `L1C2`, ..., injectées via `tableau-mathlive` | `src/lib/interactif/questionMathLive.ts`, `src/lib/interactif/tableaux/AjouteTableauMathlive.ts`, `src/lib/customElements/TableauMathlive.ts` |
-| `texte`                   | Champ texte HTML, injecté via `mathalea-textfield` par `ajouteChampTexte()` | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaTextfield.ts`                |
-| `qcm`                     | Cases à cocher ou boutons radio                          | `src/lib/interactif/qcm.ts`                                                                            |
-| `liste-deroulante`        | Liste déroulante HTML custom                             | `src/lib/customElements/ListeDeroulanteElement.ts`, `ListeDeroulanteElement.verifQuestion()`           |
-| `dnd`                     | Glisser-déposer                                          | `src/lib/interactif/DragAndDrop.ts`                                                                    |
-| `cliqueFigure`            | Clics sur objets de figure                               | `src/lib/interactif/cliqueFigure.ts`, `src/lib/interactif/gestionInteractif.ts`                        |
-| `svg-selection`           | Sélection de SVG avec somme de valeurs                   | `SvgSelectionElement.verifQuestion()`, `src/lib/customElements/SvgSelectionElement.ts`                 |
-| `custom`                  | Vérification fournie par l'exercice ou un méta-exercice  | `src/lib/interactif/gestionInteractif.ts`                                                              |
-| `my-spreadsheet`          | Réponse de type feuille de calcul                        | `src/lib/customElements/MySpreadSheet.ts`, `MySpreadSheet.verifQuestion()`                             |
-| `MetaInteractif2d`        | Champs dans une figure MathALÉA 2D                       | `src/lib/2d/interactif2d.ts`, `src/lib/interactif/gestionInteractif.ts`                                |
-| `multi-mathfield`         | Plusieurs champs MathLive coordonnés                     | `src/lib/customElements/MultiMathfield.ts`, `MultiMathfield.verifQuestion()`                           |
-| `mathalea-mathfield`      | Wrapper MathALÉA d'un champ MathLive simple, compatible avec les sélecteurs legacy `champTexteEx...` | `src/lib/customElements/MathaleaMathfield.ts`, `MathaleaMathfieldElement.verifQuestion()`              |
-| `fill-in-the-blank`       | Wrapper MathALÉA d'un texte à trous MathLive, compatible avec les sélecteurs legacy `champTexteEx...` | `src/lib/customElements/FillInTheBlank.ts`, `FillInTheBlankElement.verifQuestion()`                    |
-| `mathalea-textfield`      | Wrapper MathALÉA d'un champ texte HTML, compatible avec les sélecteurs legacy `champTexteEx...` | `src/lib/customElements/MathaleaTextfield.ts`, `MathaleaTextfieldElement.verifQuestion()`              |
-| `tableau-mathlive`        | Wrapper MathALÉA d'un tableau MathLive, compatible avec `table#tabMathliveEx...` et les cellules `champTexteEx...LxCy` | `src/lib/customElements/TableauMathlive.ts`, `TableauMathliveElement.verifQuestion()`                  |
-| `guide-ane`               | Un guide-âne interactif                                  | `src/lib/customElements/GuideAne.ts`, `GuideAne.verifQuestion()`                                       |
-| `demi-droite-interactive` | Pour placer des points d'abscisses fractionnaires        | `src/lib/customElements/demi_droite_interactive.ts`, `DemiDroiteInteractiveElement.verifQuestion()`    |
-| `interactive-clock`       | Une horloge interactive                                  | `src/lib/customElements/InteractiveClock.ts`, `InteractiveClock.verifQuestion()`                       |
-| `trigo-circle-selection`  | Un cercle trigo interactif                               | `src/lib/customElements/TrigoCircleSelectionElement.ts`, `TrigoCircleSelectionElement.verifQuestion()` |
-| `tableau-signes-variations` | Tableau de signes/variations interactif, export tkz-tab en LaTeX | `src/lib/customElements/TableauSignesVariationsElement.ts`, `TableauSignesVariationsElement.verifQuestion()` |
+| Format                      | Statut     | Usage                                                            | Helper d'injection recommandé      | Fichiers principaux                                                                                                                    |
+| --------------------------- | ---------- | ---------------------------------------------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `mathlive`                  | Obsolète   | Alias historique de `mathalea-mathfield`                         | `ajouteChampTexteMathLive()`       | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaMathfield.ts`, `src/lib/interactif/mathLiveVerifications.ts` |
+| `fillInTheBlank`            | Obsolète   | Alias historique de `fill-in-the-blank`                          | `remplisLesBlancs()`               | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/FillInTheBlank.ts`                                                   |
+| `tableauMathlive`           | Obsolète   | Alias historique de `tableau-mathlive`                           | `creeTableauMathliveElement()`     | `src/lib/interactif/tableaux/AjouteTableauMathlive.ts`, `src/lib/customElements/TableauMathlive.ts`                                    |
+| `texte`                     | Obsolète   | Alias historique de `mathalea-textfield`                         | `ajouteChampTexte()`               | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaTextfield.ts`                                                |
+| `qcm`                       | Obsolète   | API historique des QCM, rendue en HTML par `mathalea-qcm`        | `propositionsQcm()`                | `src/lib/interactif/qcm.ts`, `src/lib/customElements/MathaleaQcm.ts`                                                                   |
+| `mathalea-qcm`              | Moderne    | QCM déclaré par `handleAnswers()`                                | `addMathaleaQcm()`                 | `src/lib/customElements/MathaleaQcm.ts`                                                                                                |
+| `liste-deroulante`          | Moderne    | Liste déroulante HTML custom                                     | `choixDeroulant()`                 | `src/lib/customElements/ListeDeroulanteElement.ts`                                                                                     |
+| `dnd`                       | Historique | Glisser-déposer                                                  | helpers de `DragAndDrop.ts`        | `src/lib/interactif/DragAndDrop.ts`                                                                                                    |
+| `cliqueFigure`              | Historique | Clics sur objets de figure                                       | objets SVG et `cliqueFiguresArray` | `src/lib/interactif/cliqueFigure.ts`, `src/lib/interactif/gestionInteractif.ts`                                                        |
+| `svg-selection`             | Moderne    | Sélection de SVG avec somme de valeurs                           | `addSvgSelection()`                | `src/lib/customElements/SvgSelectionElement.ts`                                                                                        |
+| `custom`                    | Historique | Vérification fournie par l'exercice ou un méta-exercice          | fourni par l'exercice              | `src/lib/interactif/gestionInteractif.ts`                                                                                              |
+| `my-spreadsheet`            | Moderne    | Réponse de type feuille de calcul                                | `addSheet()`                       | `src/lib/customElements/MySpreadSheet.ts`                                                                                              |
+| `MetaInteractif2d`          | Historique | Champs dans une figure MathALÉA 2D                               | helpers de `interactif2d.ts`       | `src/lib/2d/interactif2d.ts`, `src/lib/interactif/gestionInteractif.ts`                                                                |
+| `multi-mathfield`           | Moderne    | Plusieurs champs MathLive coordonnés                             | `addMultiMathfield()`              | `src/lib/customElements/MultiMathfield.ts`                                                                                             |
+| `mathalea-mathfield`        | Moderne    | Champ MathLive simple                                            | `ajouteChampTexteMathLive()`       | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaMathfield.ts`                                                |
+| `fill-in-the-blank`         | Moderne    | Texte à trous MathLive                                           | `remplisLesBlancs()`               | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/FillInTheBlank.ts`                                                   |
+| `mathalea-textfield`        | Moderne    | Champ texte HTML                                                 | `ajouteChampTexte()`               | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaTextfield.ts`                                                |
+| `tableau-mathlive`          | Moderne    | Tableau de cellules MathLive                                     | `creeTableauMathliveElement()`     | `src/lib/interactif/tableaux/AjouteTableauMathlive.ts`, `src/lib/customElements/TableauMathlive.ts`                                    |
+| `guide-ane`                 | Moderne    | Un guide-âne interactif                                          | `addGuideAne()`                    | `src/lib/customElements/GuideAne.ts`                                                                                                   |
+| `demi-droite-interactive`   | Moderne    | Pour placer des points d'abscisses fractionnaires                | `demiDroiteInteractive()`          | `src/lib/customElements/demi_droite_interactive.ts`                                                                                    |
+| `interactive-clock`         | Moderne    | Une horloge interactive                                          | `handleInteractiveClock()`         | `src/lib/customElements/InteractiveClock.ts`                                                                                           |
+| `trigo-circle-selection`    | Moderne    | Un cercle trigo interactif                                       | `selectionCercleTrigo()`           | `src/lib/customElements/TrigoCircleSelectionElement.ts`                                                                                |
+| `tableau-signes-variations` | Moderne    | Tableau de signes/variations interactif, export tkz-tab en LaTeX | `addTableauSignesVariations()`     | `src/lib/customElements/TableauSignesVariationsElement.ts`                                                                             |
+
+Pour un nouvel exercice, choisir le format moderne dans `handleAnswers()` tout en continuant d'utiliser le helper métier correspondant pour injecter le composant. Les formats obsolètes restent acceptés afin de ne pas migrer en bloc les exercices existants.
 
 ## Réponses attendues
 
-`handleAnswers()` dans `src/lib/interactif/gestionInteractif.ts` est l'entrée moderne pour déclarer les réponses attendues :
+`handleAnswers()` dans `src/lib/interactif/gestionInteractif.ts` est l'entrée moderne pour déclarer les réponses attendues. Les QCM historiques au format `qcm` alimentent encore directement `autoCorrection`, tandis que le format `mathalea-qcm` utilise désormais `handleAnswers()` :
 
 ```ts
 handleAnswers(exercice, question, reponses, params)
@@ -47,18 +50,20 @@ handleAnswers(exercice, question, reponses, params)
 
 La fonction initialise `autoCorrection[question]`, choisit ou déduit `formatInteractif`, normalise les valeurs et associe un comparateur. Par défaut, le comparateur est `fonctionComparaison()` depuis `src/lib/interactif/comparisonFunctions.ts`. Si `params.formatInteractif` n'est pas fourni, `handleAnswers()` déduit `fillInTheBlank` quand une clé `champ1` existe, `tableauMathlive` quand une clé `LxCy` existe, sinon il reprend le format déjà posé sur la question ou utilise `mathlive`.
 
+Pour `mathalea-qcm`, la valeur est `{ qcm: { propositions, options?, enonce?, correction? } }`. Cette branche copie les propositions vers `autoCorrection[question].propositions` et vers `autoCorrectionAMC` sans les faire passer par les comparateurs champ par champ.
+
 Les clés de `reponses` dépendent du format :
 
-| Clé                             | Format                                                                                                                                                       |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `reponse`                       | Champ unique `mathlive`, `texte`, `liste-deroulante`, `svg-selection`, `guide-ane`, `interactive-clock`, `demi-droite-interactive`, `trigo-circle-selection` |
-| `champ1`, `champ2`, ...         | `fillInTheBlank`                                                                                                                                             |
-| `L1C1`, `L1C2`, ...             | `tableauMathlive`                                                                                                                                            |
-| `rectangle1`, `rectangle2`, ... | `dnd`                                                                                                                                                        |
-| `field0`, `field1`, ...         | `multi-mathfield`, `MetaInteractif2d`                                                                                                                        |
-| `sheetAnswer`                   | `my-spreadsheet`                                                                                                                                             |
-| `bareme`                        | Fonction de barème partiel                                                                                                                                   |
-| `feedback`                      | Fonction de feedback global                                                                                                                                  |
+| Clé                             | Format                                                                                                                                                                       |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `reponse`                       | Champ unique `mathlive`, `texte`, `liste-deroulante`, `svg-selection`, `guide-ane`, `interactive-clock`, `demi-droite-interactive`, `trigo-circle-selection`                 |
+| `champ1`, `champ2`, ...         | `fillInTheBlank`                                                                                                                                                             |
+| `L1C1`, `L1C2`, ...             | `tableauMathlive`                                                                                                                                                            |
+| `rectangle1`, `rectangle2`, ... | `dnd`                                                                                                                                                                        |
+| `field0`, `field1`, ...         | `multi-mathfield`, `MetaInteractif2d`                                                                                                                                        |
+| `sheetAnswer`                   | `my-spreadsheet`                                                                                                                                                             |
+| `bareme`                        | Fonction de barème partiel                                                                                                                                                   |
+| `feedback`                      | Fonction de feedback global                                                                                                                                                  |
 | `callback`                      | Vérification personnalisée avec score détaillé, utilisée par certains formats historiques ou par des helpers spécialisés quand le comportement champ par champ ne suffit pas |
 
 Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métier comme `FractionEtendue`, `Decimal`, `Grandeur`, `Hms`, `Complexe` et `number` sont converties en chaînes avant comparaison. Sans options explicites, une réponse numériquement valide reçoit automatiquement l'option `nombreDecimalSeulement`.
@@ -69,7 +74,7 @@ Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métie
 
 `exerciceInteractif()` dans `src/lib/interactif/gestionInteractif.ts` parcourt les questions et délègue selon `formatInteractif`.
 
-Avant le dispatch, les anciens formats MathLive compatibles sont normalisés vers leur custom element :
+Avant le dispatch, les formats historiques compatibles sont normalisés vers leur custom element :
 
 | Format historique | Custom element terminal |
 | ----------------- | ----------------------- |
@@ -77,33 +82,37 @@ Avant le dispatch, les anciens formats MathLive compatibles sont normalisés ver
 | `fillInTheBlank`  | `fill-in-the-blank`     |
 | `tableauMathlive` | `tableau-mathlive`      |
 | `texte`           | `mathalea-textfield`    |
+| `qcm`             | `mathalea-qcm`          |
 
-Cette normalisation est assurée par `mathliveCompatibleToCustomElementFormat()` dans `src/lib/types.ts`. Elle est utilisée dans le flux classique (`exerciceInteractif()`), les flux CAN (`gestionCan.ts`, `Can.svelte`) et les tests d'intégration. Les quatre wrappers appellent ensuite leur propre `verifQuestion()` terminale. Les helpers historiques restent donc utilisables dans les exercices, mais la correction passe par le registre des `MathaleaCustomElement`.
+Le dispatch utilise `interactivityTypeToCustomElementFormat()` dans `src/lib/types.ts`. La fonction ajoute la compatibilité QCM à la normalisation MathLive sans affecter les branches de construction de `MetaExerciceCan`. Elle est utilisée dans le flux classique (`exerciceInteractif()`), les flux CAN (`gestionCan.ts`, `Can.svelte`) et `QuestionParPage.svelte`. Les wrappers appellent ensuite leur propre `verifQuestion()` terminale. Les helpers historiques restent donc utilisables dans les exercices, mais la correction passe par le registre des `MathaleaCustomElement`.
 
-| Format                                                   | Vérification                                                                                                                                                    |
-| -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `mathlive`                                               | Routé vers `MathaleaMathfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaMathfield.ts`, vérification terminale d'un champ unique               |
-| `fillInTheBlank`                                         | Routé vers `FillInTheBlankElement.verifQuestion()` dans `src/lib/customElements/FillInTheBlank.ts`, vérification terminale des prompts `champ1`, `champ2`, ...   |
-| `tableauMathlive`                                        | Routé vers `TableauMathliveElement.verifQuestion()` dans `src/lib/customElements/TableauMathlive.ts`, vérification terminale des cellules `LxCy`                 |
-| `texte`                                                  | Routé vers `MathaleaTextfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaTextfield.ts`, vérification terminale d'un champ texte                |
-| `mathalea-mathfield`                                     | `MathaleaMathfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaMathfield.ts`, vérification terminale d'un champ unique                         |
-| `fill-in-the-blank`                                      | `FillInTheBlankElement.verifQuestion()` dans `src/lib/customElements/FillInTheBlank.ts`, vérification terminale des prompts `champ1`, `champ2`, ...              |
-| `mathalea-textfield`                                     | `MathaleaTextfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaTextfield.ts`, vérification terminale d'un champ texte                           |
-| `tableau-mathlive`                                      | `TableauMathliveElement.verifQuestion()` dans `src/lib/customElements/TableauMathlive.ts`, vérification terminale des cellules `LxCy`                            |
-| `multi-mathfield`                                        | `MultiMathfieldElement.verifQuestion()` dans `src/lib/customElements/MultiMathfield.ts`                                                                         |
-| `MetaInteractif2d`                                       | `verifQuestionMetaInteractif2d()`                                                                                                                               |
-| `qcm`                                                    | `verifQuestionQcm()` dans `src/lib/interactif/qcm.ts`                                                                                                           |
-| `liste-deroulante`                                       | `ListeDeroulanteElement.verifQuestion()`                                                                                                                        |
-| `svg-selection`                                          | `SvgSelectionElement.verifQuestion()` dans `src/lib/customElements/SvgSelectionElement.ts`                                                                      |
-| `dnd`                                                    | `verifDragAndDrop()`                                                                                                                                            |
-| `my-spreadsheet`                                         | `MySpreadsheetElement.verifQuestion()` dans `src/lib/customElements/MySpreadSheet.ts`                                                                           |
-| `guide-ane`                                              | `GuideAne.verifQuestion()` dans `src/lib/customElements/GuideAne.ts`                                                                                            |
-| `trigo-circle-selection`                                 | `TrigCircleSelectionElement.verifQuestion()` dans `src/lib/customElements/TrigoCircleSelectionElement.ts`                                                       |
-| `demi-droite-interactive`                                | `DemiDroiteInteractiveElement.verifQuestion()` dans `src/lib/customElements/demi_droite_interactive.ts`                                                         |
-| `interactive-clock`                                      | `InteractiveClock.verifQuestion()` dans `src/lib/customElements/InteractiveClock.ts`                                                                            |
-| `tableau-signes-variations`                              | `TableauSignesVariationsElement.verifQuestion()` dans `src/lib/customElements/TableauSignesVariationsElement.ts`                                                |
-| `cliqueFigure`                                           | `verifQuestionCliqueFigure()` dans `src/lib/interactif/cliqueFigure.ts`                                                                                         |
-| `custom`                                                 | correction globale de l'exercice quand `exercice.interactifType === 'custom'`, ou fonction `correctionInteractives` à l'index de question pour un méta-exercice |
+Les QCM n'installent plus de listener de validation depuis `propositionsQcm()` : le bouton de la vue déclenche l'orchestrateur commun, qui route `qcm` vers `MathaleaQcmElement.verifQuestion()`. `verifQuestionQcm()` reste réexportée par `qcm.ts` pour les rares corrections d'exercice qui la composent explicitement avec une autre vérification.
+
+| Format                      | Vérification                                                                                                                                                    |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mathlive`                  | Routé vers `MathaleaMathfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaMathfield.ts`, vérification terminale d'un champ unique              |
+| `fillInTheBlank`            | Routé vers `FillInTheBlankElement.verifQuestion()` dans `src/lib/customElements/FillInTheBlank.ts`, vérification terminale des prompts `champ1`, `champ2`, ...  |
+| `tableauMathlive`           | Routé vers `TableauMathliveElement.verifQuestion()` dans `src/lib/customElements/TableauMathlive.ts`, vérification terminale des cellules `LxCy`                |
+| `texte`                     | Routé vers `MathaleaTextfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaTextfield.ts`, vérification terminale d'un champ texte               |
+| `mathalea-mathfield`        | `MathaleaMathfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaMathfield.ts`, vérification terminale d'un champ unique                         |
+| `fill-in-the-blank`         | `FillInTheBlankElement.verifQuestion()` dans `src/lib/customElements/FillInTheBlank.ts`, vérification terminale des prompts `champ1`, `champ2`, ...             |
+| `mathalea-textfield`        | `MathaleaTextfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaTextfield.ts`, vérification terminale d'un champ texte                          |
+| `tableau-mathlive`          | `TableauMathliveElement.verifQuestion()` dans `src/lib/customElements/TableauMathlive.ts`, vérification terminale des cellules `LxCy`                           |
+| `multi-mathfield`           | `MultiMathfieldElement.verifQuestion()` dans `src/lib/customElements/MultiMathfield.ts`                                                                         |
+| `MetaInteractif2d`          | `verifQuestionMetaInteractif2d()`                                                                                                                               |
+| `qcm`                       | Routé vers `MathaleaQcmElement.verifQuestion()` dans `src/lib/customElements/MathaleaQcm.ts`                                                                    |
+| `mathalea-qcm`              | `MathaleaQcmElement.verifQuestion()` dans `src/lib/customElements/MathaleaQcm.ts`                                                                               |
+| `liste-deroulante`          | `ListeDeroulanteElement.verifQuestion()`                                                                                                                        |
+| `svg-selection`             | `SvgSelectionElement.verifQuestion()` dans `src/lib/customElements/SvgSelectionElement.ts`                                                                      |
+| `dnd`                       | `verifDragAndDrop()`                                                                                                                                            |
+| `my-spreadsheet`            | `MySpreadsheetElement.verifQuestion()` dans `src/lib/customElements/MySpreadSheet.ts`                                                                           |
+| `guide-ane`                 | `GuideAne.verifQuestion()` dans `src/lib/customElements/GuideAne.ts`                                                                                            |
+| `trigo-circle-selection`    | `TrigCircleSelectionElement.verifQuestion()` dans `src/lib/customElements/TrigoCircleSelectionElement.ts`                                                       |
+| `demi-droite-interactive`   | `DemiDroiteInteractiveElement.verifQuestion()` dans `src/lib/customElements/demi_droite_interactive.ts`                                                         |
+| `interactive-clock`         | `InteractiveClock.verifQuestion()` dans `src/lib/customElements/InteractiveClock.ts`                                                                            |
+| `tableau-signes-variations` | `TableauSignesVariationsElement.verifQuestion()` dans `src/lib/customElements/TableauSignesVariationsElement.ts`                                                |
+| `cliqueFigure`              | `verifQuestionCliqueFigure()` dans `src/lib/interactif/cliqueFigure.ts`                                                                                         |
+| `custom`                    | correction globale de l'exercice quand `exercice.interactifType === 'custom'`, ou fonction `correctionInteractives` à l'index de question pour un méta-exercice |
 
 Les fonctions de vérification retournent un résultat exploitable par le score et affichent le retour visuel associé à la question.
 
@@ -164,5 +173,6 @@ Pour les exercices qui ont besoin de critères multiples ou d'un score partiel, 
 - `src/lib/interactif/mathLiveVerifications.ts` : primitives terminales utilisées par les wrappers MathLive.
 - `src/lib/interactif/fonctionsBaremes.ts` : barèmes partagés comme `toutPourUnPoint` et `toutAUnPoint`.
 - `src/lib/interactif/qcm.ts` : QCM.
+- `src/lib/customElements/MathaleaQcm.ts` : custom element `mathalea-qcm`, helper `addMathaleaQcm()` et vérification QCM partagée. En contexte HTML, `propositionsQcm()` injecte ce composant tout en conservant les identifiants internes historiques.
 - `src/lib/interactif/DragAndDrop.ts` : glisser-déposer.
 - `src/lib/interactif/setMathfield.ts` : configuration partagée des `math-field` interactifs.

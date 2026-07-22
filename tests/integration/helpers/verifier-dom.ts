@@ -9,9 +9,8 @@ import { SvgSelectionElement } from '../../../src/lib/customElements/SvgSelectio
 import { verifQuestionCliqueFigure } from '../../../src/lib/interactif/cliqueFigure'
 import { verifDragAndDrop } from '../../../src/lib/interactif/DragAndDrop'
 import { verifQuestionMetaInteractif2d } from '../../../src/lib/interactif/gestionInteractif'
-import { verifQuestionQcm } from '../../../src/lib/interactif/qcm'
 import type { AutoCorrection, IExercice } from '../../../src/lib/types'
-import { mathliveCompatibleToCustomElementFormat } from '../../../src/lib/types'
+import { interactivityTypeToCustomElementFormat } from '../../../src/lib/types'
 import {
   injectCliqueFigureDOM,
   injectCustomMathPromptDOM,
@@ -173,7 +172,7 @@ function verifyCustomElementQuestion(
   format: string,
 ) {
   const customElementFormat =
-    mathliveCompatibleToCustomElementFormat(format) ?? format
+    interactivityTypeToCustomElementFormat(format) ?? format
   if (!listOfCustomElements.includes(customElementFormat)) {
     throw Error(`Format custom element inconnu: ${format}`)
   }
@@ -423,15 +422,19 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
             break
           }
           injectQcmDOM(exIdx, i, propositions)
-          const result = verifQuestionQcm(exercice, i)
+          const { name, result } = verifyCustomElementQuestion(
+            exercice,
+            i,
+            format,
+          )
           const qcmSelections = stringifyQcmSelections(propositions)
           results.push({
             questionIndex: i,
             format,
-            verificationFunctionName: 'verifQuestionQcm',
+            verificationFunctionName: name,
             simulatedInput: qcmSelections,
             goodAnswer: qcmSelections,
-            isOk: result === 'OK',
+            isOk: result.isOk,
             feedback: '',
             skipped: false,
           })
