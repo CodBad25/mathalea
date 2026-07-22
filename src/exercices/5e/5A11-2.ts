@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 export const dateDePublication = '16/11/2021'
 export const dateDeModifImportante = '29/10/2024'
 export const interactifReady = true

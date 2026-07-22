@@ -5,7 +5,7 @@ import Exercice from '../Exercice'
 
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu } from '../../modules/outils'
 /**

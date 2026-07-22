@@ -1,7 +1,7 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { Tableau } from '../../lib/2d/tableau'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import {
   AddTabPropMathlive,
   type Icell,

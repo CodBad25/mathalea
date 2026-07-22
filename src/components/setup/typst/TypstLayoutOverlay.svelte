@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   /** Contrôle flottant, positionné en % du conteneur de l'aperçu */
   export interface OverlayWidget {
     /**
@@ -33,101 +33,132 @@
     type WritingLinesPosition,
   } from './buildTypstDocument'
 
-  /**
-   * Palette de mise en page de l'aperçu Typst : contrôles dessinés par-dessus
-   * le SVG aux positions publiées par les repères `mathalea-anchor` du code.
-   * - dans la marge, à hauteur de chaque liste de questions : colonnes et
-   *   espacement vertical ;
-   * - après chaque exercice (et avant le premier) : insertion, modification
-   *   et suppression d'un texte ou d'un titre de section.
-   */
-  export let widgets: OverlayWidget[] = []
-  /** Mise en page des questions par préfixe de variables (`ex1`, `ex1-corr`) */
-  export let layoutValues: Record<string, TasksLayoutValue> = {}
-  /** Insertions présentes dans le code, par repère de gap (code Typst brut) */
-  export let insertions: Record<number, string[]> = {}
-  /** Variables d'en-tête de la fiche (valeurs lues dans le code) */
-  export let header: { titre: string; 'sous-titre': string; entete: string } = {
-    titre: '',
-    'sous-titre': '',
-    entete: '',
+  interface Props {
+    /**
+     * Palette de mise en page de l'aperçu Typst : contrôles dessinés par-dessus
+     * le SVG aux positions publiées par les repères `mathalea-anchor` du code.
+     * - dans la marge, à hauteur de chaque liste de questions : colonnes et
+     *   espacement vertical ;
+     * - après chaque exercice (et avant le premier) : insertion, modification
+     *   et suppression d'un texte ou d'un titre de section.
+     */
+    widgets?: OverlayWidget[]
+    /** Mise en page des questions par préfixe de variables (`ex1`, `ex1-corr`) */
+    layoutValues?: Record<string, TasksLayoutValue>
+    /** Insertions présentes dans le code, par repère de gap (code Typst brut) */
+    insertions?: Record<number, string[]>
+    /** Variables d'en-tête de la fiche (valeurs lues dans le code) */
+    header?: { titre: string; 'sous-titre': string; entete: string }
+    onAdjustColumns: (target: string, delta: number) => void
+    onAdjustGutter: (target: string, delta: number) => void
+    /** Insère un fragment de code Typst juste après l'exercice `num` */
+    onInsert: (num: number, snippet: string) => void
+    onUpdateInsertion: (num: number, index: number, snippet: string) => void
+    onDeleteInsertion: (num: number, index: number) => void
+    onUpdateHeader: (
+      name: 'titre' | 'sous-titre' | 'entete',
+      value: string,
+    ) => void
+    /** Nombre de questions par exercice (null : non réglable) */
+    questionCounts?: Record<number, number | null>
+    /**
+     * Exercices statiques (annale scannée, éventuellement convertie en `.typ`),
+     * par numéro : contenu figé, sans génération possible de nouvelles données
+     * ni de questions supplémentaires, ni de réglages (nbQuestions, durée...)
+     * — masque les boutons « Nouvelles données » et « Réglages de l'exercice ».
+     */
+    staticExercises?: Record<number, boolean>
+    /**
+     * Exercices statiques sans fichier source Typst (`typ: true` absent du
+     * référentiel) : leur énoncé n'est qu'une image scannée, rien à éditer
+     * — masque le bouton « Éditer le code Typst de cet exercice ».
+     */
+    nonEditableStaticExercises?: Record<number, boolean>
+    /** Nombre de colonnes du document (le saut de colonne n'a de sens qu'à > 1) */
+    documentColumns?: number
+    /** Zoom de chaque figure, par numéro de figure (`fig-N`) */
+    figureZoomValues?: Record<number, number>
+    /** Alignement de chaque figure, par numéro de figure (`fig-N`) */
+    figureAlignValues?: Record<number, 'left' | 'center' | 'right'>
+    /** Nombre total d'exercices (borne les boutons monter/descendre) */
+    exerciseCount?: number
+    /**
+     * Numéros (1-based) des exercices fusionnés avec le précédent : ils
+     * partagent le titre de leur prédécesseur et la numérotation de leurs
+     * questions continue la sienne.
+     */
+    mergedExercises?: number[]
+    /** Fusion locale désactivée quand tous les exercices sont déjà fusionnés */
+    mergeExercisesEnabled?: boolean
+    onChangeQuestionCount: (num: number, delta: number) => void
+    onDeleteExercise: (num: number) => void
+    onToggleMergeBefore: (num: number) => void
+    onAdjustFigureZoom: (num: number, delta: number) => void
+    onSetFigureAlign: (num: number, align: 'left' | 'center' | 'right') => void
+    onMoveExercise: (num: number, delta: -1 | 1) => void
+    onNewData: (num: number) => void
+    onOpenSettings: (num: number) => void
+    /** Surcharges de code Typst existantes, par numéro d'exercice (voir onEditCode) */
+    codeOverrides?: Record<number, string>
+    onEditCode: (num: number) => void
+    /** Lignes en pointillés réglées par exercice (valeurs lues dans le code) */
+    writingLinesValues?: Record<
+      number,
+      { position: WritingLinesPosition; count: number; spacing: number }
+    >
+    /** Règle (`value`) ou retire (`null`) les lignes en pointillés de l'exercice num */
+    onSetWritingLines: (
+      num: number,
+      value: {
+        position: WritingLinesPosition
+        count: number
+        spacing: number
+      } | null,
+    ) => void
   }
-  export let onAdjustColumns: (target: string, delta: number) => void
-  export let onAdjustGutter: (target: string, delta: number) => void
-  /** Insère un fragment de code Typst juste après l'exercice `num` */
-  export let onInsert: (num: number, snippet: string) => void
-  export let onUpdateInsertion: (
-    num: number,
-    index: number,
-    snippet: string,
-  ) => void
-  export let onDeleteInsertion: (num: number, index: number) => void
-  export let onUpdateHeader: (
-    name: 'titre' | 'sous-titre' | 'entete',
-    value: string,
-  ) => void
-  /** Nombre de questions par exercice (null : non réglable) */
-  export let questionCounts: Record<number, number | null> = {}
-  /**
-   * Exercices statiques (annale scannée, éventuellement convertie en `.typ`),
-   * par numéro : contenu figé, sans génération possible de nouvelles données
-   * ni de questions supplémentaires, ni de réglages (nbQuestions, durée...)
-   * — masque les boutons « Nouvelles données » et « Réglages de l'exercice ».
-   */
-  export let staticExercises: Record<number, boolean> = {}
-  /** Nombre de colonnes du document (le saut de colonne n'a de sens qu'à > 1) */
-  export let documentColumns = 1
-  /** Zoom de chaque figure, par numéro de figure (`fig-N`) */
-  export let figureZoomValues: Record<number, number> = {}
-  /** Alignement de chaque figure, par numéro de figure (`fig-N`) */
-  export let figureAlignValues: Record<number, 'left' | 'center' | 'right'> = {}
-  /** Nombre total d'exercices (borne les boutons monter/descendre) */
-  export let exerciseCount = 0
-  /**
-   * Numéros (1-based) des exercices fusionnés avec le précédent : ils
-   * partagent le titre de leur prédécesseur et la numérotation de leurs
-   * questions continue la sienne.
-   */
-  export let mergedExercises: number[] = []
-  /** Fusion locale désactivée quand tous les exercices sont déjà fusionnés */
-  export let mergeExercisesEnabled = true
-  export let onChangeQuestionCount: (num: number, delta: number) => void
-  export let onDeleteExercise: (num: number) => void
-  export let onToggleMergeBefore: (num: number) => void
-  export let onAdjustFigureZoom: (num: number, delta: number) => void
-  export let onSetFigureAlign: (
-    num: number,
-    align: 'left' | 'center' | 'right',
-  ) => void
-  export let onMoveExercise: (num: number, delta: -1 | 1) => void
-  export let onNewData: (num: number) => void
-  export let onOpenSettings: (num: number) => void
-  /** Surcharges de code Typst existantes, par numéro d'exercice (voir onEditCode) */
-  export let codeOverrides: Record<number, string> = {}
-  export let onEditCode: (num: number) => void
-  /** Lignes en pointillés réglées par exercice (valeurs lues dans le code) */
-  export let writingLinesValues: Record<
-    number,
-    { position: WritingLinesPosition; count: number; spacing: number }
-  > = {}
-  /** Règle (`value`) ou retire (`null`) les lignes en pointillés de l'exercice num */
-  export let onSetWritingLines: (
-    num: number,
-    value: {
-      position: WritingLinesPosition
-      count: number
-      spacing: number
-    } | null,
-  ) => void
+
+  let {
+    widgets = [],
+    layoutValues = {},
+    insertions = {},
+    header = { titre: '', 'sous-titre': '', entete: '' },
+    onAdjustColumns,
+    onAdjustGutter,
+    onInsert,
+    onUpdateInsertion,
+    onDeleteInsertion,
+    onUpdateHeader,
+    questionCounts = {},
+    staticExercises = {},
+    nonEditableStaticExercises = {},
+    documentColumns = 1,
+    figureZoomValues = {},
+    figureAlignValues = {},
+    exerciseCount = 0,
+    mergedExercises = [],
+    mergeExercisesEnabled = true,
+    onChangeQuestionCount,
+    onDeleteExercise,
+    onToggleMergeBefore,
+    onAdjustFigureZoom,
+    onSetFigureAlign,
+    onMoveExercise,
+    onNewData,
+    onOpenSettings,
+    codeOverrides = {},
+    onEditCode,
+    writingLinesValues = {},
+    onSetWritingLines,
+  }: Props = $props()
 
   /** Numéro du repère de gap dont le panneau d'insertion est ouvert */
-  let openInsertion: number | null = null
-  let insertionKind: 'section' | 'texte' = 'section'
-  let insertionText = ''
+  let openInsertion: number | null = $state(null)
+  let insertionKind: 'section' | 'texte' = $state('section')
+  let insertionText = $state('')
 
   /** Panneau d'édition du titre/en-tête ouvert */
-  let headerOpen = false
-  let headerDraft = { titre: '', 'sous-titre': '', entete: '' }
+  let headerOpen = $state(false)
+  let headerDraft = $state({ titre: '', 'sous-titre': '', entete: '' })
   const HEADER_FIELDS = [
     { name: 'titre', label: 'Titre' },
     { name: 'sous-titre', label: 'Sous-titre (niveau, classe…)' },
@@ -155,7 +186,7 @@
     /** Position dans la liste complète des insertions du repère */
     index: number
   }
-  let drafts: InsertionDraft[] = []
+  let drafts: InsertionDraft[] = $state([])
 
   function parseSnippet(snippet: string, index: number): InsertionDraft {
     const section = snippet.match(/^#section\[(.*)\]$/)
@@ -173,15 +204,17 @@
   // resynchronise les brouillons quand le code change (après enregistrement
   // ou suppression) ; la frappe dans un brouillon ne repasse pas ici.
   // Les sauts de page/colonne sont pilotés par leurs boutons dédiés.
-  $: if (openInsertion != null) {
-    drafts = (insertions[openInsertion] ?? [])
-      .map(parseSnippet)
-      .filter(
-        (draft) =>
-          draft.text !== PAGE_BREAK_SNIPPET &&
-          draft.text !== COLUMN_BREAK_SNIPPET,
-      )
-  }
+  $effect(() => {
+    if (openInsertion != null) {
+      drafts = (insertions[openInsertion] ?? [])
+        .map(parseSnippet)
+        .filter(
+          (draft) =>
+            draft.text !== PAGE_BREAK_SNIPPET &&
+            draft.text !== COLUMN_BREAK_SNIPPET,
+        )
+    }
+  })
 
   /** Ajoute ou retire un saut de page/colonne au repère de gap `num` */
   function toggleBreak(num: number, snippet: string) {
@@ -225,8 +258,8 @@
   } = { position: 'endOfExercise', count: 0, spacing: 2 }
 
   /** Numéro de l'exercice dont le panneau de lignes en pointillés est ouvert */
-  let openWritingLines: number | null = null
-  let writingLinesDraft = { ...WRITING_LINES_DEFAULT }
+  let openWritingLines: number | null = $state(null)
+  let writingLinesDraft = $state({ ...WRITING_LINES_DEFAULT })
 
   function toggleWritingLines(num: number) {
     openWritingLines = openWritingLines === num ? null : num
@@ -287,7 +320,7 @@
               type="text"
               class="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
               bind:value={draft.text}
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter' && draft.text.trim().length > 0) {
                   onUpdateInsertion(gapNum, draft.index, composeSnippet(draft))
                 }
@@ -300,7 +333,7 @@
               aria-label="Enregistrer la modification"
               class="hover:text-coopmaths-action disabled:opacity-40"
               disabled={draft.text.trim().length === 0}
-              on:click={() =>
+              onclick={() =>
                 onUpdateInsertion(gapNum, draft.index, composeSnippet(draft))}
             >
               <i class="bx bx-check text-base"></i>
@@ -310,7 +343,7 @@
               title="Supprimer cette insertion"
               aria-label="Supprimer cette insertion"
               class="hover:text-red-600"
-              on:click={() => onDeleteInsertion(gapNum, draft.index)}
+              onclick={() => onDeleteInsertion(gapNum, draft.index)}
             >
               <i class="bx bx-trash text-base"></i>
             </button>
@@ -326,14 +359,14 @@
               ? 'bg-coopmaths-action text-coopmaths-canvas'
               : 'bg-coopmaths-canvas text-coopmaths-corpus hover:bg-coopmaths-canvas-dark'}"
             aria-pressed={insertionKind === choice.kind}
-            on:click={() =>
+            onclick={() =>
               (insertionKind = choice.kind as 'section' | 'texte')}
           >
             {choice.label}
           </button>
         {/each}
       </div>
-      <!-- svelte-ignore a11y-autofocus : le formulaire vient d'être ouvert au clic -->
+      <!-- svelte-ignore a11y_autofocus : le formulaire vient d'être ouvert au clic -->
       <input
         type="text"
         autofocus={drafts.length === 0}
@@ -342,7 +375,7 @@
           ? 'Titre de la section (ex : Monômes)'
           : 'Texte (code Typst accepté)'}
         bind:value={insertionText}
-        on:keydown={(e) => {
+        onkeydown={(e) => {
           if (e.key === 'Enter') submitInsertion()
           if (e.key === 'Escape') openInsertion = null
         }}
@@ -351,7 +384,7 @@
         <button
           type="button"
           class="px-2 py-0.5 hover:text-coopmaths-action"
-          on:click={() => (openInsertion = null)}
+          onclick={() => (openInsertion = null)}
         >
           Fermer
         </button>
@@ -359,7 +392,7 @@
           type="button"
           class="rounded bg-coopmaths-action px-2 py-0.5 text-white disabled:opacity-50"
           disabled={insertionText.trim().length === 0}
-          on:click={submitInsertion}
+          onclick={submitInsertion}
         >
           Insérer
         </button>
@@ -383,7 +416,7 @@
               ? 'bg-coopmaths-action text-coopmaths-canvas'
               : 'bg-coopmaths-canvas text-coopmaths-corpus hover:bg-coopmaths-canvas-dark'}"
             aria-pressed={writingLinesDraft.position === position}
-            on:click={() => setWritingLinesPosition(num, position)}
+            onclick={() => setWritingLinesPosition(num, position)}
           >
             {WRITING_LINES_POSITION_LABELS[position]}
           </button>
@@ -398,7 +431,7 @@
           step="1"
           class="w-14 rounded border border-gray-300 px-1 py-0.5 text-xs"
           value={writingLinesDraft.count}
-          on:change={(e) =>
+          onchange={(e) =>
             setWritingLinesCount(num, Number(e.currentTarget.value))}
         />
       </label>
@@ -411,7 +444,7 @@
           step="0.5"
           class="w-14 rounded border border-gray-300 px-1 py-0.5 text-xs"
           value={writingLinesDraft.spacing}
-          on:change={(e) =>
+          onchange={(e) =>
             setWritingLinesSpacing(num, Number(e.currentTarget.value))}
         />
       </label>
@@ -419,14 +452,14 @@
         <button
           type="button"
           class="px-2 py-0.5 text-xs text-red-600 hover:underline"
-          on:click={() => clearWritingLines(num)}
+          onclick={() => clearWritingLines(num)}
         >
           Retirer
         </button>
         <button
           type="button"
           class="px-2 py-0.5 text-xs hover:text-coopmaths-action"
-          on:click={() => (openWritingLines = null)}
+          onclick={() => (openWritingLines = null)}
         >
           Fermer
         </button>
@@ -462,7 +495,7 @@
           <button
             type="button"
             aria-label="Moins de colonnes"
-            on:click={() => onAdjustColumns(target, -1)}
+            onclick={() => onAdjustColumns(target, -1)}
           >
             <i class="bx bx-chevron-left"></i>
           </button>
@@ -476,7 +509,7 @@
           <button
             type="button"
             aria-label="Plus de colonnes"
-            on:click={() => onAdjustColumns(target, 1)}
+            onclick={() => onAdjustColumns(target, 1)}
           >
             <i class="bx bx-chevron-right"></i>
           </button>
@@ -488,7 +521,7 @@
           <button
             type="button"
             aria-label="Réduire l'espacement des questions"
-            on:click={() => onAdjustGutter(target, -1)}
+            onclick={() => onAdjustGutter(target, -1)}
           >
             <i class="bx bx-minus"></i>
           </button>
@@ -498,7 +531,7 @@
           <button
             type="button"
             aria-label="Augmenter l'espacement des questions"
-            on:click={() => onAdjustGutter(target, 1)}
+            onclick={() => onAdjustGutter(target, 1)}
           >
             <i class="bx bx-plus"></i>
           </button>
@@ -518,7 +551,7 @@
           class="typst-pill typst-pill-round flex h-6 w-6 -translate-x-1/2 items-center justify-center"
           class:typst-pill-force-visible={headerOpen}
           data-testid="typst-overlay-header"
-          on:click={toggleHeader}
+          onclick={toggleHeader}
         >
           <i class="bx bx-edit"></i>
         </button>
@@ -535,7 +568,7 @@
                   type="text"
                   class="w-full rounded border border-gray-300 px-1.5 py-0.5 text-xs"
                   bind:value={headerDraft[field.name]}
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') submitHeader()
                     if (e.key === 'Escape') headerOpen = false
                   }}
@@ -546,14 +579,14 @@
               <button
                 type="button"
                 class="px-2 py-0.5 hover:text-coopmaths-action"
-                on:click={() => (headerOpen = false)}
+                onclick={() => (headerOpen = false)}
               >
                 Annuler
               </button>
               <button
                 type="button"
                 class="rounded bg-coopmaths-action px-2 py-0.5 text-white"
-                on:click={submitHeader}
+                onclick={submitHeader}
               >
                 Enregistrer
               </button>
@@ -595,7 +628,7 @@
           title="Monter l'exercice"
           aria-label="Monter l'exercice {widget.num}"
           disabled={widget.num <= 1}
-          on:click={() => onMoveExercise(widget.num, -1)}
+          onclick={() => onMoveExercise(widget.num, -1)}
         >
           <i class="bx bx-up-arrow-alt"></i>
         </button>
@@ -604,7 +637,7 @@
           title="Descendre l'exercice"
           aria-label="Descendre l'exercice {widget.num}"
           disabled={widget.num >= exerciseCount}
-          on:click={() => onMoveExercise(widget.num, 1)}
+          onclick={() => onMoveExercise(widget.num, 1)}
         >
           <i class="bx bx-down-arrow-alt"></i>
         </button>
@@ -615,7 +648,7 @@
             aria-label="Insérer ou modifier un texte ou un titre de section avant l'exercice {widget.num}"
             aria-expanded={openInsertion === insertGapNum}
             data-testid="typst-overlay-insert"
-            on:click={() => toggleInsertion(insertGapNum)}
+            onclick={() => toggleInsertion(insertGapNum)}
           >
             <i class="bx bx-plus-circle"></i>
           </button>
@@ -626,23 +659,25 @@
             type="button"
             title="Réglages de l'exercice {widget.num}"
             aria-label="Réglages de l'exercice {widget.num}"
-            on:click={() => onOpenSettings(widget.num)}
+            onclick={() => onOpenSettings(widget.num)}
           >
             <i class="bx bx-cog"></i>
           </button>
         {/if}
-        <button
-          type="button"
-          title={codeOverrides[widget.num] != null
-            ? 'Modifier le code Typst de cet exercice'
-            : 'Éditer le code Typst de cet exercice'}
-          aria-label="Éditer le code Typst de l'exercice {widget.num}"
-          class:typst-pill-active={codeOverrides[widget.num] != null}
-          data-testid="typst-overlay-edit-code"
-          on:click={() => onEditCode(widget.num)}
-        >
-          <i class="bx bx-pencil"></i>
-        </button>
+        {#if !nonEditableStaticExercises[widget.num]}
+          <button
+            type="button"
+            title={codeOverrides[widget.num] != null
+              ? 'Modifier le code Typst de cet exercice'
+              : 'Éditer le code Typst de cet exercice'}
+            aria-label="Éditer le code Typst de l'exercice {widget.num}"
+            class:typst-pill-active={codeOverrides[widget.num] != null}
+            data-testid="typst-overlay-edit-code"
+            onclick={() => onEditCode(widget.num)}
+          >
+            <i class="bx bx-pencil"></i>
+          </button>
+        {/if}
         <button
           type="button"
           title={writingLinesValues[widget.num] != null
@@ -652,7 +687,7 @@
           aria-expanded={openWritingLines === widget.num}
           class:typst-pill-active={writingLinesValues[widget.num] != null}
           data-testid="typst-overlay-writing-lines"
-          on:click={() => toggleWritingLines(widget.num)}
+          onclick={() => toggleWritingLines(widget.num)}
         >
           <i class="bx bx-detail"></i>
         </button>
@@ -662,7 +697,7 @@
             type="button"
             title="Nouvelles données pour l'exercice {widget.num}"
             aria-label="Nouvelles données pour l'exercice {widget.num}"
-            on:click={() => onNewData(widget.num)}
+            onclick={() => onNewData(widget.num)}
           >
             <i class="bx bx-refresh"></i>
           </button>
@@ -673,7 +708,7 @@
             type="button"
             title="Une question de moins"
             aria-label="Une question de moins dans l'exercice {widget.num}"
-            on:click={() => onChangeQuestionCount(widget.num, -1)}
+            onclick={() => onChangeQuestionCount(widget.num, -1)}
           >
             <i class="bx bx-minus"></i>
           </button>
@@ -684,7 +719,7 @@
             type="button"
             title="Une question de plus"
             aria-label="Une question de plus dans l'exercice {widget.num}"
-            on:click={() => onChangeQuestionCount(widget.num, 1)}
+            onclick={() => onChangeQuestionCount(widget.num, 1)}
           >
             <i class="bx bx-plus"></i>
           </button>
@@ -695,7 +730,7 @@
           title="Supprimer l'exercice {widget.num} de la fiche"
           aria-label="Supprimer l'exercice {widget.num} de la fiche"
           class="typst-danger"
-          on:click={() => onDeleteExercise(widget.num)}
+          onclick={() => onDeleteExercise(widget.num)}
         >
           <i class="bx bx-trash"></i>
         </button>
@@ -717,7 +752,7 @@
           type="button"
           title="Réduire la figure"
           aria-label="Réduire la figure"
-          on:click={() => onAdjustFigureZoom(widget.num, -1)}
+          onclick={() => onAdjustFigureZoom(widget.num, -1)}
         >
           <i class="bx bx-zoom-out"></i>
         </button>
@@ -728,7 +763,7 @@
           type="button"
           title="Agrandir la figure"
           aria-label="Agrandir la figure"
-          on:click={() => onAdjustFigureZoom(widget.num, 1)}
+          onclick={() => onAdjustFigureZoom(widget.num, 1)}
         >
           <i class="bx bx-zoom-in"></i>
         </button>
@@ -740,7 +775,7 @@
             aria-label={choice.label}
             aria-pressed={figAlign === choice.align}
             class:typst-pill-active={figAlign === choice.align}
-            on:click={() =>
+            onclick={() =>
               onSetFigureAlign(
                 widget.num,
                 choice.align as 'left' | 'center' | 'right',
@@ -800,7 +835,7 @@
               aria-label="Insérer ou modifier un texte ou un titre de section ici"
               aria-expanded={openInsertion === widget.num}
               data-testid="typst-overlay-insert"
-              on:click={() => toggleInsertion(widget.num)}
+              onclick={() => toggleInsertion(widget.num)}
             >
               <i class="bx bx-plus-circle"></i>
             </button>
@@ -818,7 +853,7 @@
             data-testid={hasPageBreak
               ? 'typst-overlay-pagebreak-active'
               : 'typst-overlay-pagebreak'}
-            on:click={() => toggleBreak(widget.num, PAGE_BREAK_SNIPPET)}
+            onclick={() => toggleBreak(widget.num, PAGE_BREAK_SNIPPET)}
           >
             <i class="bx bx-arrow-to-bottom"></i>
           </button>
@@ -837,7 +872,7 @@
               data-testid={hasColumnBreak
                 ? 'typst-overlay-colbreak-active'
                 : 'typst-overlay-colbreak'}
-              on:click={() => toggleBreak(widget.num, COLUMN_BREAK_SNIPPET)}
+              onclick={() => toggleBreak(widget.num, COLUMN_BREAK_SNIPPET)}
             >
               <i class="bx bx-arrow-to-right"></i>
             </button>
@@ -850,7 +885,7 @@
             aria-label="Séparer de l'exercice précédent"
             class="typst-pill-active"
             data-testid="typst-overlay-unmerge"
-            on:click={() => onToggleMergeBefore(widget.num + 1)}
+            onclick={() => onToggleMergeBefore(widget.num + 1)}
           >
             <i class="bx bx-unlink"></i>
           </button>
@@ -864,7 +899,7 @@
             aria-label="Fusionner avec l'exercice précédent"
             disabled={hasPageBreak || hasColumnBreak || hasText}
             data-testid="typst-overlay-merge"
-            on:click={() => onToggleMergeBefore(widget.num + 1)}
+            onclick={() => onToggleMergeBefore(widget.num + 1)}
           >
             <i class="bx bx-link"></i>
           </button>

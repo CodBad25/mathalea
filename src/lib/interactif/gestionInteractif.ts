@@ -3,7 +3,8 @@ import Decimal from 'decimal.js'
 import type { MathfieldElement } from 'mathlive'
 import {
   isInteractivityType,
-  isMathliveCompatible,
+  isQcmValeur,
+  interactivityTypeToCustomElementFormat,
   type AnswerValueType,
   type AutoCorrection,
   type ClickFigures,
@@ -11,6 +12,7 @@ import {
   type LegacyReponse,
   type LegacyReponses,
   type MathaleaSVG,
+  type QcmValeur,
   type ResultOfExerciceInteractif,
   type Valeur,
   type ValeurNormalized,
@@ -35,8 +37,8 @@ import { afficheScore } from './afficheScore'
 import type { CompareResult } from './checks/types'
 import { fonctionComparaison } from './comparisonFunctions'
 import { verifDragAndDrop } from './DragAndDrop'
-import { toutPourUnPoint, verifQuestionMathLive } from './mathLive'
-import { verifQuestionQcm } from './qcm'
+import { toutPourUnPoint } from './fonctionsBaremes'
+import { syncQcmAutoCorrectionToAmc } from './qcm'
 
 function scoreFromResult(result: { isOk: boolean }): number {
   const score = (result as Partial<CompareResult>).score
@@ -112,40 +114,14 @@ export function exerciceInteractif(
 
   for (let i = 0; i < exercice.autoCorrection.length; i++) {
     const format = exercice.autoCorrection[i]?.formatInteractif ?? 'mathlive'
+    const customElementFormat =
+      interactivityTypeToCustomElementFormat(format) ?? format
     let resultat: string
-    // On traite déjà la grande majorité des cas : verifQuestionMathlive condense Plus de 80% des exos sans doute
-    if (isMathliveCompatible(format)) {
-      const result = verifQuestionMathLive(exercice, i)
-      if (result == null) {
-        window.notify('erreur dans la correction de la question', {
-          exercice,
-          i,
-        })
-      } else {
-        nbQuestionsValidees += result.score.nbBonnesReponses
-        nbQuestionsNonValidees +=
-          result.score.nbReponses - result.score.nbBonnesReponses
-        if (result.feedback && result.feedback !== '') {
-          const divFeedback = document.querySelector(
-            `#feedbackEx${exercice.numeroExercice}Q${i}`,
-          )
-          if (divFeedback != null) {
-            divFeedback.innerHTML = `💡 ${result.feedback}`
-            divFeedback.classList.add(
-              'py-2',
-              'italic',
-              'text-coopmaths-warn-darkest',
-              'dark:text-coopmathsdark-warn-darkest',
-            )
-            ;(divFeedback as HTMLDivElement).style.display = 'block'
-          }
-        }
-      }
-    } else if (listOfCustomElements.includes(format)) {
+    if (listOfCustomElements.includes(customElementFormat)) {
       // On traite le cas de tous les MathaleaCustomElement ici
       const liste = Array.from(mathaleaCustomElementsRegistry)
       const [tag, elementClasse] =
-        liste.find((custom) => custom[0] === format) ?? []
+        liste.find((custom) => custom[0] === customElementFormat) ?? []
       if (tag == null || elementClasse == null) {
         throw Error(
           "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
@@ -224,11 +200,6 @@ export function exerciceInteractif(
               }
             }
           }
-          break
-        case 'qcm':
-          resultat = verifQuestionQcm(exercice, i)
-          if (resultat === 'OK') nbQuestionsValidees++
-          else nbQuestionsNonValidees++
           break
         case 'MetaInteractif2d':
           {
@@ -1040,9 +1011,39 @@ function handleDefaultValeur(reponse: Valeur): ValeurNormalized {
 export function handleAnswers(
   exercice: IExercice,
   question: number,
-  reponses: Valeur,
+  reponses: Valeur | QcmValeur,
   params: ReponseParams | undefined = {},
 ) {
+  if (params?.formatInteractif === 'mathalea-qcm') {
+    if (!isQcmValeur(reponses)) {
+      window.notify(
+        "handleAnswers() attend une valeur QCM pour le format 'mathalea-qcm'",
+        { reponses, exercice: exercice.uuid, question },
+      )
+      return
+    }
+    exercice.autoCorrection ??= []
+    const qcm = reponses.qcm
+    exercice.autoCorrection[question] = {
+      enonce: qcm.enonce,
+      formatInteractif: 'mathalea-qcm',
+      options: { ...(qcm.options ?? {}) },
+      propositions: qcm.propositions.map((proposition) => ({
+        texte: proposition.texte,
+        statut: proposition.statut,
+        feedback: proposition.feedback,
+      })),
+    }
+    syncQcmAutoCorrectionToAmc(exercice, question, qcm.correction)
+    return
+  }
+  if (isQcmValeur(reponses)) {
+    window.notify(
+      "Une valeur QCM doit utiliser formatInteractif: 'mathalea-qcm'",
+      { reponses, exercice: exercice.uuid, question },
+    )
+    return
+  }
   let formatInteractif =
     params?.formatInteractif ??
     ('champ1' in reponses

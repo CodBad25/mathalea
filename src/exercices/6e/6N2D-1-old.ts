@@ -52,7 +52,7 @@ function nomUnitePourPuissance(p1: number): string {
   return ''
 }
 
-export default class ProduitDeDecimauxAPartirProduitConnu extends Exercice {
+export default class ProduitDeDecimauxAPartirProduitConnuOld extends Exercice {
   constructor() {
     super()
     this.sup = 4

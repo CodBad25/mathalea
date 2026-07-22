@@ -1,5 +1,8 @@
 import { orangeMathalea } from '../../lib/colors'
-import { isMathliveCompatible, type IExercice } from '../../lib/types'
+import {
+  interactivityTypeToCustomElementFormat,
+  type IExercice,
+} from '../../lib/types'
 import { context } from '../../modules/context'
 import {
   listOfCustomElements,
@@ -9,8 +12,6 @@ import { addElement, get } from '../html/dom'
 import type { ButtonWithMathaleaListener } from '../types/can'
 import { verifQuestionCliqueFigure } from './cliqueFigure'
 import { verifQuestionMetaInteractif2d } from './gestionInteractif'
-import { verifQuestionMathLive } from './mathLive'
-import { verifQuestionQcm } from './qcm'
 
 export function gestionCan(exercice: IExercice) {
   context.nbBonnesReponses = 0
@@ -34,23 +35,19 @@ export function gestionCan(exercice: IExercice) {
               }
             | string
             | string[] = 'KO'
-          if (isMathliveCompatible(type ?? '')) {
-            resultat = verifQuestionMathLive(exercice, i)?.isOk ? 'OK' : 'KO'
-          }
-          if (type === 'qcm') {
-            resultat = verifQuestionQcm(exercice, i)
-          }
+          const customElementType =
+            interactivityTypeToCustomElementFormat(type) ?? type
           if (type === 'cliqueFigure') {
             resultat = verifQuestionCliqueFigure(exercice, i)
           }
           if (type === 'custom' && exercice.correctionInteractive) {
             resultat = exercice.correctionInteractive(i)
           }
-          if (listOfCustomElements.includes(type ?? '')) {
+          if (listOfCustomElements.includes(customElementType ?? '')) {
             // On traite le cas de tous les MathaleaCustomElement ici
             const liste = Array.from(mathaleaCustomElementsRegistry)
             const [tag, elementClasse] =
-              liste.find((custom) => custom[0] === type) ?? []
+              liste.find((custom) => custom[0] === customElementType) ?? []
             if (tag == null || elementClasse == null) {
               throw Error(
                 "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",

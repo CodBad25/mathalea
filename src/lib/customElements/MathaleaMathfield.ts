@@ -1,7 +1,7 @@
 import { MathfieldElement } from 'mathlive'
-import type { IExercice } from '../types'
-import { verifQuestionMathLive } from '../interactif/mathLive'
+import { verifySingleMathLiveField } from '../interactif/mathLiveVerifications'
 import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
+import type { IExercice } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
@@ -34,8 +34,8 @@ export type MathaleaMathfieldOptions = {
 }
 
 type MathaleaMathfieldCreateOptions = MathaleaMathfieldOptions & {
-  numeroExercice?: number
-  questionIndex?: number
+  numeroExercice: number
+  questionIndex: number
 }
 
 export class MathaleaMathfieldElement extends MathaleaCustomElement {
@@ -61,18 +61,13 @@ export class MathaleaMathfieldElement extends MathaleaCustomElement {
     interactivityOn = true,
     verifyCallbackName,
     verifyCallback,
-  }: MathaleaMathfieldCreateOptions = {}): string {
+  }: MathaleaMathfieldCreateOptions): string {
     const legacyMathfieldId =
-      id ??
-      `champTexteEx${numeroExercice ?? 0}Q${questionIndex ?? 0}`
-    const computedId = `${MathaleaMathfieldElement.elementTag}Ex${
-      numeroExercice ?? 0
-    }Q${questionIndex ?? 0}`
+      id ?? `champTexteEx${numeroExercice}Q${questionIndex}`
+    const computedId = `${MathaleaMathfieldElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
     const computedCallbackName =
       verifyCallbackName ??
-      (verifyCallback == null
-        ? undefined
-        : `${legacyMathfieldId}-verification`)
+      (verifyCallback == null ? undefined : `${legacyMathfieldId}-verification`)
     if (verifyCallback != null && computedCallbackName != null) {
       MathaleaMathfieldElement.registerVerificationCallback(
         computedCallbackName,
@@ -108,13 +103,7 @@ export class MathaleaMathfieldElement extends MathaleaCustomElement {
     if (mathfield != null && callback != null) {
       return callback(exercice, i, mathfield)
     }
-    return (
-      verifQuestionMathLive(exercice, i) ?? {
-        isOk: false,
-        feedback: 'erreur dans le programme',
-        score: { nbBonnesReponses: 0, nbReponses: 1 },
-      }
-    )
+    return verifySingleMathLiveField(exercice, i, mathfield?.mathfield ?? null)
   }
 
   static registerVerificationCallback(

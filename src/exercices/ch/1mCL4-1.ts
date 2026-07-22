@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 import { bleuMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 
 export const titre =
   "Résoudre une équation à l'aide de la méthode de complétion du carré"

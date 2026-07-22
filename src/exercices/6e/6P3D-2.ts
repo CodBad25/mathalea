@@ -1,6 +1,6 @@
 import { bleuMathalea } from '../../lib/colors'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { AddTabPropMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 import {
   choice,

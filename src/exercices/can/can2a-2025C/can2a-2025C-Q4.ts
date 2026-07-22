@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
+import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceCan from '../../ExerciceCan'

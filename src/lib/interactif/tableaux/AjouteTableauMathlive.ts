@@ -1,4 +1,6 @@
 import { notify } from '../../../bugsnag'
+import { TableauMathliveElement } from '../../customElements/TableauMathlive'
+import type { TableauMathliveType } from '../../types'
 import { buildDataKeyboardFromStyle } from '../claviers/keyboard'
 import './tableauMathlive.scss'
 export interface Icell {
@@ -20,6 +22,58 @@ export type FlecheSens = 'bas' | 'haut'
 export type Fleche = [number, number, string, number] | [number, number, string]
 export type Raws = Array<Icell[]>
 type ObjetParams = Record<string, string>
+
+export function creeTableauMathliveElement({
+  numeroExercice,
+  question,
+  tableau,
+  typeTableau = 'doubleEntree',
+  classes = '',
+  texteAvant = '',
+  texteApres = '',
+  blocCenter = false,
+  espace = false,
+}: {
+  numeroExercice: number
+  question: number
+  tableau: ItabDbleEntry | Itableau
+  typeTableau?: TableauMathliveType
+  classes?: string
+  texteAvant?: string
+  texteApres?: string
+  blocCenter?: boolean
+  espace?: boolean
+}): string {
+  const leTableau =
+    typeTableau === 'doubleEntree'
+      ? AddTabDbleEntryMathlive.create(
+          numeroExercice,
+          question,
+          tableau as ItabDbleEntry,
+          classes,
+          true,
+          {
+            texteAvant,
+            texteApres,
+            blocCenter: blocCenter ? ' bloccenter' : '',
+            espace: espace ? ' ' : '',
+          },
+        )
+      : AddTabPropMathlive.create(
+          numeroExercice,
+          question,
+          tableau as Itableau,
+          classes,
+          true,
+          {
+            texteAvant,
+            texteApres,
+            blocCenter: blocCenter ? ' bloccenter' : '',
+            espace: espace ? ' ' : '',
+          },
+        )
+  return leTableau.output
+}
 
 // Le TabPropMathlive ne gère pas les flèches... alors, je ne sais pas pourquoi j'ai mis toutes ces propriétés faculatives... Pour l'avenir ?
 // Si quelqu'un sait faire, qu'il ne se gêne pas !
@@ -338,7 +392,12 @@ export class AddTabPropMathlive {
     const spanCheckOuterHTML = `<span id="resultatCheckEx${numeroExercice}Q${question}"></span>`
     // pour l'instant je retourne l'objet complet avec le HTML de la table dans sa propriété output,
     // mais il sera peut-être possible de ne retourner que le HTML comme pour ajouteChampTexteMathlive...
-    tableauMathlive.output = table.outerHTML + spanCheckOuterHTML
+    tableauMathlive.output = TableauMathliveElement.create({
+      numeroExercice: NoEx,
+      questionIndex: question,
+      tableHtml: table.outerHTML,
+      feedbackHtml: spanCheckOuterHTML,
+    })
     return tableauMathlive
   }
 
@@ -544,7 +603,12 @@ export class AddTabDbleEntryMathlive {
     const spanCheckOuterHTML = `<span id="feedbackEx${numeroExercice}Q${question}"></span>`
     // pour l'instant je retourne l'objet complet avec le HTML de la table dans sa propriété output,
     // mais il sera peut-être possible de ne retourner que le HTML comme pour ajouteChampTexteMathlive...
-    tableauMathlive.output = table.outerHTML + spanCheckOuterHTML
+    tableauMathlive.output = TableauMathliveElement.create({
+      numeroExercice: NoEx,
+      questionIndex: question,
+      tableHtml: table.outerHTML,
+      feedbackHtml: spanCheckOuterHTML,
+    })
     return tableauMathlive
   }
 

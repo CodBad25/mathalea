@@ -9,7 +9,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { sp } from '../../lib/outils/outilString'
 export const titre = 'Écrire ou reconnaitre une probabilité dans un énoncé'
 export const interactifReady = true

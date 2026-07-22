@@ -60,7 +60,7 @@ Choisir le format selon ce que l'élève doit faire, pas selon la forme interne 
 | --------------------------------------------------------- | ----------------- | ------------------------------------------------- | ---------------------------------------------------------- |
 | Saisir un nombre, une fraction, une expression, une unité | `mathlive`        | `ajouteChampTexteMathLive()`                      | `reponse`                                                  |
 | Saisir plusieurs valeurs dans une phrase ou une formule   | `fillInTheBlank`  | `remplisLesBlancs()`                              | `champ1`, `champ2`, ...                                    |
-| Saisir des valeurs dans un tableau                        | `tableauMathlive` | `AddTabPropMathlive` ou `AddTabDbleEntryMathlive` | `L1C1`, `L1C2`, ...                                        |
+| Saisir des valeurs dans un tableau                        | `tableauMathlive` | `creeTableauMathliveElement()`, `AddTabPropMathlive` ou `AddTabDbleEntryMathlive` | `L1C1`, `L1C2`, ... |
 | Saisir du texte libre sans MathLive                       | `texte`           | `ajouteChampTexte()`                              | `reponse`, avec `{ formatInteractif: 'texte' }`            |
 | Cocher une ou plusieurs propositions                      | `qcm`             | `propositionsQcm()`                               | `this.autoCorrection[i].propositions`                      |
 | Choisir une valeur dans un menu                           | `listeDeroulante` | `choixDeroulant()`                                | `reponse`, avec `{ formatInteractif: 'liste-deroulante' }` |
@@ -70,6 +70,8 @@ Choisir le format selon ce que l'élève doit faire, pas selon la forme interne 
 | Vérification impossible avec les formats existants        | `custom`          | code propre à l'exercice                          | `correctionInteractive(i)`                                 |
 
 Commencer par le format le plus simple. Si un champ MathLive avec les bonnes options de comparaison suffit, ne pas écrire de correction personnalisée.
+
+Les quatre formats historiques `mathlive`, `fillInTheBlank`, `tableauMathlive` et `texte` sont rendus par des `MathaleaCustomElement` (`mathalea-mathfield`, `fill-in-the-blank`, `tableau-mathlive`, `mathalea-textfield`). Les helpers ci-dessus restent les API à utiliser dans les exercices : ils préservent les identifiants internes historiques tout en permettant au pipeline de correction de passer par `verifQuestion()` du custom element.
 
 ## Cas courant : champ MathLive simple
 
@@ -103,6 +105,8 @@ texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
 ```
 
 Ne pas entourer tout le champ avec un `$...$` sans vérifier le rendu : le helper génère un élément HTML, pas seulement du LaTeX.
+
+Le helper retourne un wrapper `mathalea-mathfield`. L'id du wrapper suit la convention custom element (`mathalea-mathfieldEx0Q0` par exemple), tandis que le `math-field` interne conserve l'id legacy `champTexteEx0Q0`. Les anciens sélecteurs d'exercices qui ciblent ce champ continuent donc de fonctionner.
 
 ### 3. Enregistrer la réponse
 
@@ -162,12 +166,12 @@ handleAnswers(this, i, {
 
 Les noms dans le modèle (`%{champ1}`, `%{champ2}`, ...) doivent être exactement les mêmes que les clés passées à `handleAnswers()`. La présence de `champ1` fait déduire le format `fillInTheBlank`.
 
-Le barème par défaut de `verifQuestionMathLive()` est `toutPourUnPoint` : la question vaut 1 point seulement si tous les champs sont justes. C'est le bon choix quand les champs forment une seule réponse, par exemple une égalité complète ou une fraction.
+Le barème par défaut du wrapper `fill-in-the-blank` est `toutPourUnPoint` : la question vaut 1 point seulement si tous les champs sont justes. C'est le bon choix quand les champs forment une seule réponse, par exemple une égalité complète ou une fraction.
 
-Si chaque champ doit rapporter son propre point, importer `toutAUnPoint` depuis `src/lib/interactif/mathLive.ts` et le passer en `bareme` :
+Si chaque champ doit rapporter son propre point, importer `toutAUnPoint` depuis `src/lib/interactif/fonctionsBaremes.ts` et le passer en `bareme` :
 
 ```ts
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 
 handleAnswers(this, i, {
   champ1: { value: a },
@@ -185,7 +189,10 @@ Utiliser les helpers de `src/lib/interactif/tableaux/AjouteTableauMathlive.ts`.
 
 ```ts
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
+import {
+  AddTabDbleEntryMathlive,
+  creeTableauMathliveElement,
+} from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 
 const tableau = AddTabDbleEntryMathlive.convertTclToTableauMathlive(
   ['', 'Prix'],
@@ -193,16 +200,12 @@ const tableau = AddTabDbleEntryMathlive.convertTclToTableauMathlive(
   [''],
 )
 
-const tableauInteractif = AddTabDbleEntryMathlive.create(
-  this.numeroExercice,
-  i,
+texte += creeTableauMathliveElement({
+  numeroExercice: this.numeroExercice,
+  question: i,
   tableau,
-  '',
-  this.interactif,
-  {},
-)
-
-texte += tableauInteractif.output
+  typeTableau: 'doubleEntree',
+})
 
 handleAnswers(
   this,
@@ -215,6 +218,8 @@ handleAnswers(
 ```
 
 Les cellules interactives sont nommées `L1C1`, `L1C2`, `L2C1`, etc. Les clés dans `handleAnswers()` doivent correspondre aux cellules réellement éditables du tableau.
+
+`AddTabPropMathlive.create()` et `AddTabDbleEntryMathlive.create()` restent compatibles et retournent toujours un objet dont `output` contient le tableau. Pour un nouveau code, préférer `creeTableauMathliveElement()` quand l'exercice veut seulement injecter le composant ; `ajouteQuestionMathlive()` reste disponible quand on veut créer le tableau et enregistrer les bonnes réponses en une seule fois.
 
 ## Champ texte HTML
 

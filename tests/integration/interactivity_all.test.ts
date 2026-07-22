@@ -320,7 +320,7 @@ for (const [dir, entries] of grouped) {
               }
             }
 
-            // Stratégie 2 : On crée les éléments attendus par la fonction de vérification (comme verifQuestionMathlive) et on vérifie que la correction accepte ces éléments.
+            // Stratégie 2 : On crée les éléments DOM attendus par la vérification interactive et on vérifie que la correction accepte ces éléments.
             const domResults = verifyDom(exercice)
             for (const result of domResults) {
               if (result.skipped) {

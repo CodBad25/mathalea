@@ -3,7 +3,7 @@ import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { Tableau } from '../../lib/2d/tableau'
 import figureApigeom from '../../lib/figureApigeom'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import {
   AddTabPropMathlive,
   type Icell,

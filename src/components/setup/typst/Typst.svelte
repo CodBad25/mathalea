@@ -85,27 +85,21 @@
     { label: 'Violet', value: 'rgb("#7c3aed")', css: '#7c3aed' },
   ]
 
-  /** Couleur des badges au format `#rrggbb` pour le sélecteur natif */
-  $: badgeColorHex = (() => {
-    const value = documentOptions.badgeColor
-    const hex = value.match(/#([0-9a-fA-F]{6})/)
-    if (hex != null) return `#${hex[1]}`
-    if (value === 'black') return '#000000'
-    return '#000000'
-  })()
-  /** La couleur active ne fait pas partie des pastilles prédéfinies */
-  $: isCustomBadgeColor = !BADGE_COLORS.some(
-    (color) => color.value === documentOptions.badgeColor,
-  )
-
   type DisplayMode = 'code' | 'split' | 'preview'
   const STORAGE_KEY = 'mathaleaTypstView'
 
-  let displayMode: DisplayMode = 'preview'
-  let documentOptions: TypstDocumentOptions = { ...defaultTypstDocumentOptions }
-  let isSettingsOpen = true
+  let displayMode: DisplayMode = $state('preview')
+  let isSettingsOpen = $state(true)
   /** Affiche la palette de mise en page sur l'aperçu */
-  let showOverlay = true
+  let showOverlay = $state(true)
+  /**
+   * Valeur initiale de `documentOptions` (calculée ici, hors réactivité, pour
+   * n'assigner l'état qu'une seule fois — lire un `$state` en dehors d'un
+   * `$derived`/`$effect` ne fait que capturer l'instantané courant).
+   */
+  let restoredDocumentOptions: TypstDocumentOptions = {
+    ...defaultTypstDocumentOptions,
+  }
   if (isLocalStorageAvailable()) {
     try {
       const saved = window.localStorage.getItem(STORAGE_KEY)
@@ -118,7 +112,7 @@
           showOverlay = parsed.showOverlay
         }
         if (parsed.documentOptions != null) {
-          documentOptions = {
+          restoredDocumentOptions = {
             ...defaultTypstDocumentOptions,
             ...parsed.documentOptions,
           }
@@ -127,24 +121,24 @@
           // la valeur par défaut
           const has = (list: readonly string[], value: string) =>
             list.includes(value)
-          if (!has(BADGE_STYLES, documentOptions.badgeStyle)) {
-            documentOptions.badgeStyle = defaultTypstDocumentOptions.badgeStyle
+          if (!has(BADGE_STYLES, restoredDocumentOptions.badgeStyle)) {
+            restoredDocumentOptions.badgeStyle = defaultTypstDocumentOptions.badgeStyle
           }
-          if (!has(HEADER_STYLES, documentOptions.headerStyle)) {
-            documentOptions.headerStyle = defaultTypstDocumentOptions.headerStyle
+          if (!has(HEADER_STYLES, restoredDocumentOptions.headerStyle)) {
+            restoredDocumentOptions.headerStyle = defaultTypstDocumentOptions.headerStyle
           }
-          if (!has(TEXT_FONTS, documentOptions.font)) {
-            documentOptions.font = defaultTypstDocumentOptions.font
+          if (!has(TEXT_FONTS, restoredDocumentOptions.font)) {
+            restoredDocumentOptions.font = defaultTypstDocumentOptions.font
           }
-          if (!has(MATH_FONTS, documentOptions.mathFont)) {
-            documentOptions.mathFont = defaultTypstDocumentOptions.mathFont
+          if (!has(MATH_FONTS, restoredDocumentOptions.mathFont)) {
+            restoredDocumentOptions.mathFont = defaultTypstDocumentOptions.mathFont
           }
           if (
-            !Number.isInteger(documentOptions.nbVersions) ||
-            documentOptions.nbVersions < 1 ||
-            documentOptions.nbVersions > 4
+            !Number.isInteger(restoredDocumentOptions.nbVersions) ||
+            restoredDocumentOptions.nbVersions < 1 ||
+            restoredDocumentOptions.nbVersions > 4
           ) {
-            documentOptions.nbVersions = defaultTypstDocumentOptions.nbVersions
+            restoredDocumentOptions.nbVersions = defaultTypstDocumentOptions.nbVersions
           }
         }
       }
@@ -172,15 +166,31 @@
     typstParamStore.set(typstUrlParam)
     const parsed = decodeBase64(typstUrlParam)
     if (parsed.options != null) {
-      documentOptions = { ...documentOptions, ...parsed.options }
+      restoredDocumentOptions = { ...restoredDocumentOptions, ...parsed.options }
     }
     if (parsed.carryOver != null) {
       urlCarryOver = parsed.carryOver
     }
   }
+  let documentOptions: TypstDocumentOptions = $state(restoredDocumentOptions)
 
-  let exercises: (IExercice | null)[] = []
-  let isLoading = true
+  /** Couleur des badges au format `#rrggbb` pour le sélecteur natif */
+  const badgeColorHex = $derived(
+    (() => {
+      const value = documentOptions.badgeColor
+      const hex = value.match(/#([0-9a-fA-F]{6})/)
+      if (hex != null) return `#${hex[1]}`
+      if (value === 'black') return '#000000'
+      return '#000000'
+    })(),
+  )
+  /** La couleur active ne fait pas partie des pastilles prédéfinies */
+  const isCustomBadgeColor = $derived(
+    !BADGE_COLORS.some((color) => color.value === documentOptions.badgeColor),
+  )
+
+  let exercises: (IExercice | null)[] = $state([])
+  let isLoading = $state(true)
   /**
    * Le code a été modifié à la main depuis sa génération. Les éditions
    * faites par la palette de mise en page ne comptent pas : elles sont
@@ -205,20 +215,20 @@
       isPaletteEdit = false
     }
   }
-  let isCompiling = false
-  let isCompilerLoading = false
+  let isCompiling = $state(false)
+  let isCompilerLoading = $state(false)
   /**
    * Vrai seulement une fois confirmé que le compilateur n'est PAS en cache
    * (téléchargement à prévoir). Par défaut faux : on affiche un message
    * neutre tant qu'on ne sait pas, pour éviter un clignotement « première
    * visite » sur les rechargements où le compilateur est déjà en cache.
    */
-  let compilerFirstVisit = false
-  let isGeneratingPdf = false
-  let diagnostics: string[] = []
-  let svgContent = ''
+  let compilerFirstVisit = $state(false)
+  let isGeneratingPdf = $state(false)
+  let diagnostics: string[] = $state([])
+  let svgContent = $state('')
 
-  let editorEl: HTMLDivElement
+  let editorEl: HTMLDivElement = $state()!
   let editorView: EditorView | null = null
 
   /** Géométrie d'une page dans le SVG de l'aperçu (unités pt du viewBox) */
@@ -228,49 +238,50 @@
     width: number
     height: number
   }
-  let previewPages: PreviewPageGeometry[] = []
-  let previewViewBox = { width: 0, height: 0 }
+  let previewPages: PreviewPageGeometry[] = $state([])
+  let previewViewBox = $state({ width: 0, height: 0 })
   /** Repères publiés par le document compilé (palette de mise en page) */
-  let anchors: TypstAnchor[] = []
+  let anchors: TypstAnchor[] = $state([])
   /**
    * Mise en page des questions, lue dans le code courant, par préfixe de
    * variables (`ex1` pour l'énoncé, `ex1-corr` pour la correction)
    */
-  let tasksLayoutValues: Record<string, TasksLayoutValue> = {}
+  let tasksLayoutValues: Record<string, TasksLayoutValue> = $state({})
   /** Insertions (texte/section) présentes dans le code, par repère de gap */
-  let insertionValues: Record<number, string[]> = {}
+  let insertionValues: Record<number, string[]> = $state({})
   /**
    * Numéros (1-based) des exercices fusionnés avec le précédent, lus dans
    * le code courant (bouton de la palette de mise en page).
    */
-  let mergedExercises: number[] = []
+  let mergedExercises: number[] = $state([])
   /** Variables d'en-tête de la fiche, lues dans le code courant */
-  let headerValues = { titre: '', 'sous-titre': '', entete: '' }
+  let headerValues = $state({ titre: '', 'sous-titre': '', entete: '' })
   /** Nombre de colonnes du document (`#let colonnes`), lu dans le code */
-  let documentColumns = 1
+  let documentColumns = $state(1)
   /** Zoom de chaque figure (`#let fig-N-zoom`), lu dans le code courant */
-  let figureZoomValues: Record<number, number> = {}
+  let figureZoomValues: Record<number, number> = $state({})
   /** Alignement de chaque figure (`#let fig-N-align`), lu dans le code courant */
-  let figureAlignValues: Record<number, 'left' | 'center' | 'right'> = {}
+  let figureAlignValues: Record<number, 'left' | 'center' | 'right'> = $state({})
   /** Exercice dont la modale de réglages (panneau Settings) est ouverte */
-  let settingsExerciseIndex: number | null = null
-  $: settingsExercise =
+  let settingsExerciseIndex: number | null = $state(null)
+  const settingsExercise = $derived(
     settingsExerciseIndex !== null
       ? (exercises[settingsExerciseIndex] ?? null)
-      : null
+      : null,
+  )
   /** Surcharges de code Typst par exercice (modale d'édition), lues dans le code */
-  let codeOverrideValues: Record<number, string> = {}
+  let codeOverrideValues: Record<number, string> = $state({})
   /** Lignes en pointillés réglées par exercice (palette), lues dans le code */
   let writingLinesValues: Record<
     number,
     { position: WritingLinesPosition; count: number; spacing: number }
-  > = {}
+  > = $state({})
   /** Numéro de l'exercice dont la modale d'édition du code Typst est ouverte */
-  let codeEditNum: number | null = null
+  let codeEditNum: number | null = $state(null)
   /** Brouillon de la modale d'édition du code Typst */
-  let codeEditDraft = ''
+  let codeEditDraft = $state('')
   /** Message de confirmation affiché après un clic sur un bouton « Copier » de la modale */
-  let codeCopyStatus = ''
+  let codeCopyStatus = $state('')
   let codeCopyStatusTimer: ReturnType<typeof setTimeout>
 
   /** Copie `text` dans le presse-papier et affiche une confirmation temporaire */
@@ -344,7 +355,9 @@
     }
     return widgets
   }
-  $: overlayWidgets = computeOverlayWidgets(anchors, previewPages, previewViewBox)
+  const overlayWidgets = $derived(
+    computeOverlayWidgets(anchors, previewPages, previewViewBox),
+  )
 
   /**
    * Relit dans le code les données de la palette : valeurs
@@ -488,21 +501,41 @@
    * Exercices statiques (annale scannée, éventuellement convertie en `.typ`),
    * par numéro : contenu figé, aucune régénération possible (voir `regenerate`).
    */
-  $: staticExercises = Object.fromEntries(
-    exercises.map((exercise, k) => [k + 1, exercise?.typeExercice === 'statique']),
-  ) as Record<number, boolean>
+  const staticExercises = $derived(
+    Object.fromEntries(
+      exercises.map((exercise, k) => [k + 1, exercise?.typeExercice === 'statique']),
+    ) as Record<number, boolean>,
+  )
+
+  /**
+   * Exercices dont le code Typst n'est pas éditable : exercices statiques
+   * sans fichier source `.typ` (`typ: true` absent du référentiel), qui ne
+   * sont donc qu'une image scannée (voir `applyTypSourcesForStaticExercises`)
+   * — leur icône crayon (« Éditer le code Typst ») est masquée.
+   */
+  const nonEditableStaticExercises = $derived(
+    Object.fromEntries(
+      exercises.map((exercise, k) => [
+        k + 1,
+        exercise?.typeExercice === 'statique' &&
+          (exercise.uuid == null || getStaticExerciceTypUrl(exercise.uuid) == null),
+      ]),
+    ) as Record<number, boolean>,
+  )
 
   /**
    * Nombre de questions par exercice (null : non réglable), pour la palette.
    * Toujours `null` pour un exercice statique : son nombre de questions est
    * figé par son contenu (image ou `.typ`), pas de génération possible.
    */
-  $: questionCounts = Object.fromEntries(
-    exercises.map((exercise, k) => [
-      k + 1,
-      exercise?.typeExercice === 'statique' ? null : (exercise?.nbQuestions ?? null),
-    ]),
-  ) as Record<number, number | null>
+  const questionCounts = $derived(
+    Object.fromEntries(
+      exercises.map((exercise, k) => [
+        k + 1,
+        exercise?.typeExercice === 'statique' ? null : (exercise?.nbQuestions ?? null),
+      ]),
+    ) as Record<number, number | null>,
+  )
 
   /** Change le nombre de questions de l'exercice num et régénère le code */
   function changeQuestionCount(num: number, delta: number) {
@@ -1790,7 +1823,7 @@
               ? 'bg-coopmaths-action text-coopmaths-canvas dark:bg-coopmathsdark-action dark:text-coopmathsdark-canvas'
               : 'text-coopmaths-action dark:text-coopmathsdark-action hover:bg-coopmaths-canvas-dark dark:hover:bg-coopmathsdark-canvas-dark'}"
             aria-pressed={displayMode === choice.mode}
-            on:click={() => setDisplayMode(choice.mode as DisplayMode)}
+            onclick={() => setDisplayMode(choice.mode as DisplayMode)}
           >
             <i class="bx {choice.icon} text-lg"></i>
             {choice.label}
@@ -1805,7 +1838,7 @@
         class="flex items-center gap-1 text-sm {isSettingsOpen
           ? 'text-coopmaths-action font-semibold dark:text-coopmathsdark-action'
           : 'text-coopmaths-action/60 hover:text-coopmaths-action dark:text-coopmathsdark-action/60 dark:hover:text-coopmathsdark-action'}"
-        on:click={() => (isSettingsOpen = !isSettingsOpen)}
+        onclick={() => (isSettingsOpen = !isSettingsOpen)}
       >
         <i class="bx bx-cog text-xl"></i>
         Réglages
@@ -1815,7 +1848,7 @@
         type="button"
         title="Nouvelles données aléatoires pour tous les exercices"
         class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
-        on:click={newDataForAll}
+        onclick={newDataForAll}
       >
         <i class="bx bx-refresh text-xl"></i>
         Nouvelles données
@@ -1828,7 +1861,7 @@
         class="flex items-center gap-1 text-sm {showOverlay
           ? 'text-coopmaths-action font-semibold dark:text-coopmathsdark-action'
           : 'text-coopmaths-action/60 hover:text-coopmaths-action dark:text-coopmathsdark-action/60 dark:hover:text-coopmathsdark-action'}"
-        on:click={() => {
+        onclick={() => {
           showOverlay = !showOverlay
           persistPreferences()
         }}
@@ -1843,7 +1876,7 @@
         <select
           class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
           bind:value={documentOptions.nbVersions}
-          on:change={applyDocumentOptions}
+          onchange={applyDocumentOptions}
         >
           <option value={1}>1</option>
           <option value={2}>2</option>
@@ -1905,7 +1938,7 @@
             <button
               type="button"
               aria-label="Fermer les réglages"
-              on:click={() => (isSettingsOpen = false)}
+              onclick={() => (isSettingsOpen = false)}
             >
               <i
                 class="bx bx-x text-2xl text-coopmaths-action dark:text-coopmathsdark-action"
@@ -1918,7 +1951,7 @@
             <select
               class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
               bind:value={documentOptions.pageFormat}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             >
               <option value="a4">A4</option>
               <option value="a5">A5</option>
@@ -1930,7 +1963,7 @@
             <select
               class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
               bind:value={documentOptions.orientation}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             >
               <option value="portrait">Portrait</option>
               <option value="landscape">Paysage</option>
@@ -1947,7 +1980,7 @@
               step="1"
               class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
               bind:value={documentOptions.columns}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             />
           </div>
 
@@ -1955,7 +1988,7 @@
             <input
               type="checkbox"
               bind:checked={documentOptions.mergeExercises}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             />
             Fusionner tous les exercices (questions numérotées à la suite)
           </label>
@@ -1965,7 +1998,7 @@
               type="checkbox"
               bind:checked={documentOptions.showExerciseRefs}
               disabled={documentOptions.mergeExercises}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             />
             <span class:opacity-50={documentOptions.mergeExercises}>
               Afficher la référence des exercices
@@ -1977,7 +2010,7 @@
               type="checkbox"
               bind:checked={documentOptions.showQrCode}
               disabled={documentOptions.mergeExercises}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             />
             <span class:opacity-50={documentOptions.mergeExercises}>
               QR-code vers chaque exercice
@@ -1989,7 +2022,7 @@
             <select
               class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
               bind:value={documentOptions.headerStyle}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             >
               {#each HEADER_STYLES as style}
                 <option value={style}>{HEADER_STYLE_LABELS[style]}</option>
@@ -2008,7 +2041,7 @@
             <select
               class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
               bind:value={documentOptions.font}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             >
               {#each TEXT_FONTS as font}
                 <option value={font}>{font}</option>
@@ -2021,7 +2054,7 @@
             <select
               class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
               bind:value={documentOptions.mathFont}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             >
               {#each MATH_FONTS as font}
                 <option value={font}>{font}</option>
@@ -2039,7 +2072,7 @@
               step="0.5"
               class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
               bind:value={documentOptions.fontSize}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             />
           </div>
 
@@ -2053,7 +2086,7 @@
               step="0.05"
               class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
               bind:value={documentOptions.lineSpacing}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             />
           </div>
 
@@ -2069,7 +2102,7 @@
               step="5"
               class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
               bind:value={documentOptions.wordSpacing}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             />
           </div>
 
@@ -2085,7 +2118,7 @@
               step="0.1"
               class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
               bind:value={documentOptions.exerciseSpacing}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             />
           </div>
 
@@ -2093,7 +2126,7 @@
             <input
               type="checkbox"
               bind:checked={documentOptions.autoVerticalSpacing}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             />
             Gestion automatique des espaces verticaux
           </label>
@@ -2102,7 +2135,7 @@
             <input
               type="checkbox"
               bind:checked={documentOptions.boldQuestionNumbers}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             />
             Numéros des questions en gras
           </label>
@@ -2116,7 +2149,7 @@
               class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
               bind:value={documentOptions.badgeStyle}
               disabled={documentOptions.mergeExercises}
-              on:change={applyDocumentOptions}
+              onchange={applyDocumentOptions}
             >
               {#each BADGE_STYLES as style}
                 <option value={style}>{BADGE_STYLE_LABELS[style]}</option>
@@ -2142,7 +2175,7 @@
                     ? 'border-coopmaths-action dark:border-coopmathsdark-action scale-110'
                     : 'border-transparent'}"
                   style="background-color: {color.css};"
-                  on:click={() => {
+                  onclick={() => {
                     documentOptions.badgeColor = color.value
                     applyDocumentOptions()
                   }}
@@ -2157,7 +2190,7 @@
                   ? 'border-coopmaths-action dark:border-coopmathsdark-action scale-110'
                   : 'border-transparent'} bg-transparent p-0"
                 value={badgeColorHex}
-                on:input={(e) => {
+                oninput={(e) => {
                   documentOptions.badgeColor = `rgb("${e.currentTarget.value}")`
                   applyDocumentOptions()
                 }}
@@ -2173,7 +2206,7 @@
           <button
             type="button"
             class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
-            on:click={resetDocumentOptions}
+            onclick={resetDocumentOptions}
           >
             <i class="bx bx-reset"></i>
             Réinitialiser les réglages du document
@@ -2232,6 +2265,7 @@
                   {documentColumns}
                   {questionCounts}
                   {staticExercises}
+                  {nonEditableStaticExercises}
                   {figureZoomValues}
                   {figureAlignValues}
                   codeOverrides={codeOverrideValues}
@@ -2275,10 +2309,12 @@
   {/if}
 
   {#if settingsExerciseIndex !== null && settingsExercise != null}
-    <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
     <div
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-      on:click|self={() => (settingsExerciseIndex = null)}
+      onclick={(e) => {
+        if (e.target === e.currentTarget) settingsExerciseIndex = null
+      }}
     >
       <div
         class="relative w-full max-w-xl max-h-[85vh] overflow-y-auto rounded-lg shadow-xl bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark"
@@ -2302,10 +2338,12 @@
 
   {#if codeEditNum !== null}
     {@const num = codeEditNum}
-    <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
     <div
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-      on:click|self={() => (codeEditNum = null)}
+      onclick={(e) => {
+        if (e.target === e.currentTarget) codeEditNum = null
+      }}
     >
       <div
         class="relative flex w-full max-w-2xl flex-col gap-3 rounded-lg bg-coopmaths-canvas-dark p-4 shadow-xl dark:bg-coopmathsdark-canvas-dark"
@@ -2322,7 +2360,7 @@
         <textarea
           class="h-64 w-full rounded border border-gray-300 bg-coopmaths-canvas p-2 font-mono text-xs text-coopmaths-corpus dark:border-coopmathsdark-corpus-lightest dark:bg-coopmathsdark-canvas dark:text-coopmathsdark-corpus"
           bind:value={codeEditDraft}
-          on:keydown={(e) => {
+          onkeydown={(e) => {
             if (e.key === 'Escape') codeEditNum = null
           }}
         ></textarea>
@@ -2330,14 +2368,14 @@
           <button
             type="button"
             class="rounded border border-coopmaths-action px-3 py-1 text-coopmaths-action hover:bg-coopmaths-action hover:text-white"
-            on:click={copyExerciseCode}
+            onclick={copyExerciseCode}
           >
             Copier le code
           </button>
           <button
             type="button"
             class="rounded border border-coopmaths-action px-3 py-1 text-coopmaths-action hover:bg-coopmaths-action hover:text-white"
-            on:click={() => copyExerciseCodeWithPreamble(num)}
+            onclick={() => copyExerciseCodeWithPreamble(num)}
           >
             Copier avec le préambule
           </button>
@@ -2351,7 +2389,7 @@
           <button
             type="button"
             class="px-3 py-1 hover:text-coopmaths-action"
-            on:click={() => restoreGeneratedCode(num)}
+            onclick={() => restoreGeneratedCode(num)}
           >
             Restaurer le code d'origine
           </button>
@@ -2359,14 +2397,14 @@
             <button
               type="button"
               class="px-3 py-1 hover:text-coopmaths-action"
-              on:click={() => (codeEditNum = null)}
+              onclick={() => (codeEditNum = null)}
             >
               Annuler
             </button>
             <button
               type="button"
               class="rounded bg-coopmaths-action px-3 py-1 text-white"
-              on:click={() => updateExerciseCode(num, codeEditDraft)}
+              onclick={() => updateExerciseCode(num, codeEditDraft)}
             >
               Enregistrer
             </button>
