@@ -1,3 +1,4 @@
+import MathaleaCustomElement, { registerMathaleaCustomElement } from '../lib/customElements/MathaleaCustomElement'
 import { pointAbstrait, type PointAbstrait } from '../lib/2d/PointAbstrait'
 import { pointAdistance } from '../lib/2d/utilitairesPoint'
 import Alea2iep from './Alea2iep'
@@ -503,7 +504,9 @@ const classesChamp = [
   'text-sm',
 ]
 
-export class ElementIepEditeur extends HTMLElement {
+export class ElementIepEditeur extends MathaleaCustomElement {
+  static readonly elementTag = 'alea-iep-editeur'
+
   private programme: InstructionIep[] = []
   private prochaineLettre = 0
   private divParametres!: HTMLDivElement
@@ -513,6 +516,7 @@ export class ElementIepEditeur extends HTMLElement {
   private animationVisible = false
 
   connectedCallback() {
+    super.connectedCallback()
     if (this.dataset.initialise === '1') return
     this.dataset.initialise = '1'
     const id = this.getAttribute('id') ?? 'editeur-iep'
@@ -837,7 +841,5 @@ export class ElementIepEditeur extends HTMLElement {
  * Enregistre le custom element <alea-iep-editeur> si nécessaire
  */
 export function ensureElementIepEditeurRegistered() {
-  if (customElements.get('alea-iep-editeur') === undefined) {
-    customElements.define('alea-iep-editeur', ElementIepEditeur)
-  }
+  registerMathaleaCustomElement(ElementIepEditeur)
 }

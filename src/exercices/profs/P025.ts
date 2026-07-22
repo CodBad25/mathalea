@@ -1,4 +1,4 @@
-import { ensureElementIepEditeurRegistered } from '../../modules/ElementIepEditeur'
+import { ElementIepEditeur, ensureElementIepEditeurRegistered } from '../../modules/ElementIepEditeur'
 import { context } from '../../modules/context'
 import Exercice from '../Exercice'
 
@@ -26,13 +26,10 @@ export default class CreateurAnimationInstruments extends Exercice {
   }
 
   nouvelleVersion() {
-    let contenuGenere: string
-    if (context.isHtml) {
-      ensureElementIepEditeurRegistered()
-      contenuGenere = `<alea-iep-editeur id="editeur-iep-${this.numeroExercice ?? 0}"></alea-iep-editeur>`
-    } else {
-      contenuGenere = ''
-    }
+    ensureElementIepEditeurRegistered()
+    const contenuGenere = ElementIepEditeur.create({
+      id: `editeur-iep-${this.numeroExercice ?? 0}`,
+    })
     this.contenu = contenuGenere
     this.listeQuestions[0] = contenuGenere
   }
