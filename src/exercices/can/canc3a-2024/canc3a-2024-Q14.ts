@@ -1,17 +1,17 @@
-import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Multiplier par 10, ...'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'f195a'
-/**
- * Modèle d'exercice très simple pour la course aux nombres
- * @author Gilles Mora (reprise du fichier de Jean-claude Lhote 6ième)
 
-*/
+/**
+ * @author Gilles Mora (reprise du fichier de Jean-claude Lhote 6ième)
+ */
+
 export default class MultiplieDixiemeCM2 extends ExerciceSimple {
   constructor() {
     super()
@@ -20,7 +20,7 @@ export default class MultiplieDixiemeCM2 extends ExerciceSimple {
     this.nbQuestions = 1
     this.formatInteractif = 'fillInTheBlank'
     this.canOfficielle = false
-    this.consigne = 'Complete :'
+    this.consigne = 'Complète :'
   }
 
   nouvelleVersion() {

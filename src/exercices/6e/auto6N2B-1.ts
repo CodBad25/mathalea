@@ -9,11 +9,10 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Donner différentes écritures de nombres décimaux'
 export const amcReady = true
@@ -40,7 +39,6 @@ function texFraction(
  * * 6) n/10 = ... + .../10 + .../100
  * * 7) .../100 = u + d/10
  * @author Rémi Angot
- * 6N23-1
  */
 export const uuid = '1acf7'
 
