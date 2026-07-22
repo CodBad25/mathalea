@@ -16,6 +16,7 @@ export const listOfCustomElements = [
   'fill-in-the-blank',
   'mathalea-textfield',
   'tableau-mathlive',
+  'mathalea-qcm',
 ]
 
 /**

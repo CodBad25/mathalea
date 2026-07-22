@@ -15,7 +15,6 @@
     uniformiseResults,
     verifQuestionMetaInteractif2d,
   } from '../../../lib/interactif/gestionInteractif'
-  import { verifQuestionQcm } from '../../../lib/interactif/qcm'
   import {
     mathaleaFormatExercice,
     mathaleaGenerateSeed,
@@ -34,7 +33,7 @@
   import {
     isInteractivityType,
     isOldFormatInteractifType,
-    mathliveCompatibleToCustomElementFormat,
+    interactivityTypeToCustomElementFormat,
     type IExercice,
     type InteractivityType,
     type OldFormatInteractifType,
@@ -135,15 +134,8 @@
       return
     }
     const customElementType =
-      mathliveCompatibleToCustomElementFormat(type) ?? type
-    if (type === 'qcm') {
-      resultsByQuestion[i] = uniformiseResults(
-        verifQuestionQcm(
-          exercices[indiceExercice[i]],
-          indiceQuestionInExercice[i],
-        ),
-      )
-    } else if (type === 'cliqueFigure') {
+      interactivityTypeToCustomElementFormat(type) ?? type
+    if (type === 'cliqueFigure') {
       resultsByQuestion[i] = uniformiseResults(
         verifQuestionCliqueFigure(
           exercices[indiceExercice[i]],

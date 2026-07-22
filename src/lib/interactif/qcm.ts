@@ -13,9 +13,8 @@ import ExerciceQcm from '../../exercices/ExerciceQcm'
 import ExerciceSimple from '../../exercices/ExerciceSimple'
 import type { IExercice, UneProposition } from '../../lib/types'
 import { context } from '../../modules/context'
-import { addFeedback } from '../../modules/messages'
 import type { AutoCorrectionAMC } from '../amc/amcTypes'
-import { get } from '../html/dom'
+import { MathaleaQcmElement } from '../customElements/MathaleaQcm'
 import {
   barreTexte,
   miseEnEvidence,
@@ -24,176 +23,57 @@ import {
 } from '../outils/embellissements'
 import { lettreDepuisChiffre } from '../outils/outilString'
 import { shuffleJusquaWithIndexes } from '../qcmCam'
-import type { ButtonWithMathaleaListener } from '../types/can'
-import { afficheScore } from './afficheScore'
 
-export function verifQuestionQcm(exercice: IExercice, i: number) {
-  let resultat
-  const feedbackItems: { texte: string; feedback: string }[] = []
-  // i est l'indice de la question
-  let nbBonnesReponses = 0
-  let nbMauvaisesReponses = 0
-  let nbBonnesReponsesAttendues = 0
-  if (exercice.answers == null) {
-    exercice.answers = {}
-  }
-  // Compte le nombre de réponses justes attendues
-  const nbReps = exercice.autoCorrection[i].propositions?.length ?? 0
-  for (let k = 0; k < nbReps; k++) {
-    if (exercice.autoCorrection[i]!.propositions![k].statut) {
-      nbBonnesReponsesAttendues++
-    }
-  }
-  const divReponseLigne = document.querySelector(
-    `#resultatCheckEx${exercice.numeroExercice}Q${i}`,
-  ) as HTMLDivElement
-  exercice.autoCorrection[i]!.propositions!.forEach((proposition, indice) => {
-    // La liste de question peut être plus courte que autoCorrection si on n'a pas réussi à générer suffisamment de questions différentes
-    // if (exercice.listeQuestions[i] !== undefined) {
-    // On a des exercices comme 6S10-1 où il y a 2 questions... mais 6 qcm !
-    const label = document.querySelector(
-      `#labelEx${exercice.numeroExercice}Q${i}R${indice}`,
-    ) as HTMLLabelElement
-    const check = document.querySelector(
-      `#checkEx${exercice.numeroExercice}Q${i}R${indice}`,
-    ) as HTMLInputElement
-    if (check != null) {
-      if (check.checked) {
-        // Sauvegarde pour les exports Moodle, Capytale...
-        exercice.answers![`Ex${exercice.numeroExercice}Q${i}R${indice}`] = '1'
-        // Gestion du feedback de toutes les cases cochées
-        if (exercice.autoCorrection[i].propositions![indice].feedback) {
-          // Modification le 5 avril 2026 (JCL) : Les feedbacks décalent les case à cocher,
-          //  on les regroupent dans verifQuestionQcm avec le feedback global de la question pour éviter ce problème d'affichage.
-          //  On garde cependant la possibilité d'avoir un feedback spécifique à chaque proposition qui s'affiche dans le feedback global de la question.
-          /* messageFeedback({
-            id: `feedbackEx${exercice.numeroExercice}Q${i}R${indice}`,
-            message: exercice.autoCorrection[i].propositions![indice].feedback,
-            type: proposition.statut ? 'positive' : 'error',
-          }) */
-          const propositionFeedback =
-            exercice.autoCorrection[i].propositions![indice].feedback
-          if (propositionFeedback && propositionFeedback !== '') {
-            feedbackItems.push({
-              texte: proposition.texte,
-              feedback: propositionFeedback,
-            })
-          }
-        }
-      } else {
-        exercice.answers![`Ex${exercice.numeroExercice}Q${i}R${indice}`] = '0'
-      }
-      if (proposition.statut) {
-        if (check.checked === true) {
-          nbBonnesReponses++
-          label.classList.add('bg-coopmaths-warn-100', 'rounded-lg', 'p-1')
-        } else {
-          // Bonnes réponses non cochées
-          label.classList.add('bg-coopmaths-warn-100', 'rounded-lg', 'p-1')
-        }
-      } else if (check.checked === true) {
-        label.classList.add('bg-coopmaths-action-200', 'rounded-lg', 'p-1')
-        nbMauvaisesReponses++
-      }
-      // On évite check.disabled = true : certains navigateurs perdent alors le
-      // rendu "coché" des boutons radio (appearance personnalisée), ce qui masque
-      // la réponse choisie par l'élève au moment de la correction.
-      check.style.pointerEvents = 'none'
-      check.tabIndex = -1
-      check.setAttribute('aria-disabled', 'true')
-      // Sur certains navigateurs (Safari notamment), un input radio coché perd
-      // quand même son rendu "coché" une fois verrouillé : on force donc l'affichage
-      // via une classe qui ne dépend pas de :checked ni d'un état natif désactivé.
-      if (check.type === 'radio' && check.checked) {
-        check.classList.add('qcm-locked-checked')
-      }
-    }
-  })
-  let typeFeedback = 'positive'
-  if (
-    nbMauvaisesReponses === 0 &&
-    nbBonnesReponses === nbBonnesReponsesAttendues
-  ) {
-    if (divReponseLigne)
-      divReponseLigne.innerHTML = '<span class="qcm-feedback-face">😎</span>'
-    resultat = 'OK'
-  } else {
-    if (divReponseLigne)
-      divReponseLigne.innerHTML = '<span class="qcm-feedback-face">☹️</span>'
-    typeFeedback = 'error'
-    resultat = 'KO'
-  }
-  // Gestion du feedback global de la question
-  if (divReponseLigne) divReponseLigne.style.fontSize = 'large'
-  const eltFeedback = get(`feedbackEx${exercice.numeroExercice}Q${i}`, false)
-  if (eltFeedback) {
-    eltFeedback.innerHTML = ''
-  }
-  if (resultat === 'KO') {
-    const isRadio = exercice.autoCorrection[i].options?.radio === true
-    const detailHtml = feedbackItems
-      .map((item) => `${item.texte} : ${item.feedback}`)
-      .join('<br>')
+export { verifQuestionQcm } from '../customElements/MathaleaQcm'
 
-    const chips: { label: string; tone: 'error' | 'positive' }[] = []
-    // Juste mais incomplet
-    if (
-      nbBonnesReponses > 0 &&
-      nbMauvaisesReponses === 0 &&
-      nbBonnesReponses < nbBonnesReponsesAttendues
-    ) {
-      chips.push({
-        label: `${nbBonnesReponses} trouvée${nbBonnesReponses > 1 ? 's' : ''}`,
-        tone: 'positive',
-      })
-    } else if (nbMauvaisesReponses > 0 && !isRadio) {
-      // Du juste et du faux, ou que du faux (inutile de compter les erreurs
-      // sur un QCM à choix unique : une seule case peut être cochée)
-      chips.push({
-        label: `${nbMauvaisesReponses} erreur${nbMauvaisesReponses > 1 ? 's' : ''}`,
-        tone: 'error',
-      })
-    }
-    if (!isRadio && nbBonnesReponsesAttendues > nbBonnesReponses) {
-      const nbManquantes = nbBonnesReponsesAttendues - nbBonnesReponses
-      chips.push({
-        label: `${nbManquantes} réponse${nbManquantes > 1 ? 's' : ''} manquante${nbManquantes > 1 ? 's' : ''}`,
-        tone: 'positive',
-      })
-    }
-    const chipSpans = chips
-      .map(
-        (chip) =>
-          `<span class="qcm-feedback-chip qcm-feedback-chip--${chip.tone}">${chip.label}</span>`,
-      )
-      .join('')
+type PreparedQcmPropositions = {
+  indexes: number[]
+  vertical: boolean
+  nbCols: number
+}
 
-    if (divReponseLigne) {
-      if (detailHtml !== '') {
-        // Le trait à gauche ne sert qu'à signaler un texte de correction :
-        // inutile quand il n'y a que le décompte des erreurs/réponses manquantes.
-        const chipsHtml =
-          chips.length > 0
-            ? `<div class="qcm-feedback-chips">${chipSpans}</div>`
-            : ''
-        const message = `<div class="qcm-feedback-detail">${detailHtml}</div>${chipsHtml}`
-        const div = addFeedback(divReponseLigne, {
-          message,
-          type: typeFeedback,
-        })
-        div.classList.add(
-          'qcm-feedback-msg',
-          `qcm-feedback-msg--${typeFeedback}`,
-        )
-      } else if (chips.length > 0) {
-        addFeedback(divReponseLigne, {
-          message: `<div class="qcm-feedback-chips-standalone">${chipSpans}</div>`,
-          type: typeFeedback,
-        })
-      }
+/**
+ * Prépare les propositions d'un QCM avant rendu.
+ *
+ * La mutation de `autoCorrection[questionIndex].propositions` est conservée :
+ * les rendus HTML, LaTeX, AMC et QcmCam relisent ensuite cet ordre.
+ */
+export function prepareQcmPropositions(
+  exercice: IExercice,
+  questionIndex: number,
+): PreparedQcmPropositions {
+  const autoCorrection = exercice.autoCorrection[questionIndex]
+  const propositions = autoCorrection.propositions ?? []
+  const indexes: number[] = []
+
+  elimineDoublons(propositions)
+
+  const lastChoice = Math.min(
+    autoCorrection.options?.lastChoice ?? propositions.length,
+    propositions.length - 1,
+  )
+  const vertical = autoCorrection.options?.vertical ?? false
+  const nbCols = Math.min(autoCorrection.options?.nbCols ?? 1, 1)
+  const isTrueFalse =
+    propositions.some((prop) => prop.texte === 'Vrai') &&
+    propositions.some((prop) => prop.texte === 'Faux')
+
+  if (isTrueFalse) {
+    const vraiProp = propositions.find((prop) => prop.texte === 'Vrai')
+    const fauxProp = propositions.find((prop) => prop.texte === 'Faux')
+    const autresProps = propositions.filter(
+      (prop) => prop.texte !== 'Vrai' && prop.texte !== 'Faux',
+    )
+    if (vraiProp != null && fauxProp != null) {
+      autoCorrection.propositions = [vraiProp, fauxProp, ...autresProps]
     }
+  } else if (!autoCorrection.options?.ordered) {
+    const melange = shuffleJusquaWithIndexes(propositions, lastChoice)
+    autoCorrection.propositions = melange.shuffledArray as UneProposition[]
+    indexes.push(...melange.indexes)
   }
-  return resultat
+
+  return { indexes, vertical, nbCols }
 }
 
 /**
@@ -207,40 +87,6 @@ export function propositionsQcm(
   i: number,
   options: { style: string; format: string } = { style: '', format: 'case' },
 ) {
-  const syncQcmAutoCorrectionToAmc = () => {
-    const source = exercice.autoCorrection[i]
-    const options = source.options
-    const texteCorr =
-      options?.correction != null && options?.correction !== ''
-        ? options.correction
-        : exercice.typeExercice === 'simple' ||
-            exercice instanceof ExerciceSimple
-          ? exercice.correction
-          : exercice.listeCorrections[i] != null
-            ? exercice.listeCorrections[i]
-            : ''
-    if (source == null) return
-
-    const exerciseAny = exercice as IExercice & {
-      autoCorrectionAMC?: AutoCorrectionAMC[]
-    }
-    if (!Array.isArray(exerciseAny.autoCorrectionAMC)) {
-      exerciseAny.autoCorrectionAMC = []
-    }
-
-    exerciseAny.autoCorrectionAMC[i] = {
-      ...exerciseAny.autoCorrectionAMC[i],
-      enonce: source.enonce,
-      options:
-        source.options != null
-          ? { ...source.options, correction: texteCorr }
-          : undefined,
-      propositions: (source.propositions ?? []).map((proposition) => ({
-        ...proposition,
-      })),
-    }
-  }
-
   /**
    * Mélange les éléments d'un tableau jusqu'à un certain index et laisse les suivants inchangés.
    * @param {Array} array - Le tableau à mélanger.
@@ -287,55 +133,16 @@ export function propositionsQcm(
     return { texte: '', texteCorr: '' }
   }
 
-  // On regarde si il n'y a pas de doublons dans les propositions de réponse. Si c'est le cas, on enlève les mauvaises réponses en double.
-  elimineDoublons(exercice.autoCorrection[i].propositions)
   if (context.isHtml) {
     espace = '&emsp;'
     exercice.autoCorrection[i].formatInteractif = 'qcm'
   } else {
     espace = '\\qquad '
   }
-  // Mélange les propositions du QCM sauf celles à partir de lastchoice (inclus)
-  const lastChoice = Math.min(
-    exercice.autoCorrection[i].options?.lastChoice ??
-      exercice.autoCorrection[i].propositions.length,
-    exercice.autoCorrection[i].propositions.length - 1,
-  )
-  vertical = exercice.autoCorrection[i].options?.vertical ?? false // est-ce qu'on veut une présentation en colonnes ?
-  nbCols = Math.min(exercice.autoCorrection[i].options?.nbCols ?? 1, 1)
-  const isTrueFalse =
-    exercice.autoCorrection[i].propositions.some(
-      (prop) => prop.texte === 'Vrai',
-    ) &&
-    exercice.autoCorrection[i].propositions.some(
-      (prop) => prop.texte === 'Faux',
-    )
-  if (isTrueFalse) {
-    // Si on a les réponses Vrai et Faux, on les met en premier
-    const vrai = exercice.autoCorrection[i].propositions.findIndex(
-      (prop) => prop.texte === 'Vrai',
-    )
-    const faux = exercice.autoCorrection[i].propositions.findIndex(
-      (prop) => prop.texte === 'Faux',
-    )
-    if (vrai !== -1 && faux !== -1) {
-      // On les met en premier
-      const vraiProp = exercice.autoCorrection[i].propositions[vrai]
-      const fauxProp = exercice.autoCorrection[i].propositions[faux]
-      exercice.autoCorrection[i].propositions.splice(vrai, 1)
-      exercice.autoCorrection[i].propositions.splice(faux - 1, 1)
-      exercice.autoCorrection[i].propositions.unshift(fauxProp)
-      exercice.autoCorrection[i].propositions.unshift(vraiProp)
-    }
-  }
-  if (!exercice.autoCorrection[i].options?.ordered && !isTrueFalse) {
-    const melange = shuffleJusquaWithIndexes(
-      exercice.autoCorrection[i].propositions,
-      lastChoice,
-    )
-    exercice.autoCorrection[i].propositions = melange.shuffledArray
-    indexes.push(...melange.indexes)
-  }
+  const qcmPreparation = prepareQcmPropositions(exercice, i)
+  indexes.push(...qcmPreparation.indexes)
+  vertical = qcmPreparation.vertical
+  nbCols = qcmPreparation.nbCols
   if (!context.isHtml) {
     const propositions = exercice.autoCorrection[i].propositions
 
@@ -372,15 +179,6 @@ export function propositionsQcm(
   }
   if (context.isHtml) {
     const isRadio = exercice.autoCorrection[i].options?.radio ?? false
-    const formateQ = (format: string, rep: number) => {
-      if (format == null || format === 'case') {
-        return `<input type="${isRadio ? 'radio' : 'checkbox'}" name="checkEx${exercice.numeroExercice}Q${i}" ${exercice.interactif ? '' : 'disabled'} tabindex="0" style="height: 1rem; width: 1rem;" class="disabled:cursor-default" id="checkEx${exercice.numeroExercice}Q${i}R${rep}">`
-      }
-      if (format === 'lettre') {
-        return `<label ${classCss} >${texteGras(lettreDepuisChiffre(rep + 1))}.</label>`
-      }
-      return `<input type="${isRadio ? 'radio' : 'checkbox'}" name="checkEx${exercice.numeroExercice}Q${i}" ${exercice.interactif ? '' : 'disabled'} tabindex="0" style="height: 1rem; width: 1rem;" class="disabled:cursor-default" id="checkEx${exercice.numeroExercice}Q${i}R${rep}"><label ${classCss} >${lettreDepuisChiffre(rep + 1)}.</label>`
-    }
     const formateRV = (format: string, rep: number) => {
       if (format == null || format === 'case') {
         return `<input type="${isRadio ? 'radio' : 'checkbox'}" name="checkEx${exercice.numeroExercice}Q${i}" tabindex="0" style="height: 1rem; width: 1rem;" class="disabled:cursor-default" checked>`
@@ -400,18 +198,22 @@ export function propositionsQcm(
       return `<input type="${isRadio ? 'radio' : 'checkbox'}" name="checkEx${exercice.numeroExercice}Q${i}" ${exercice.interactif ? '' : 'disabled'} tabindex="0" style="height: 1rem; width: 1rem;" class="disabled:cursor-default"><label ${classCss} >$${miseEnEvidence(`\\cancel{${lettreDepuisChiffre(rep + 1)}}`, 'black')}$.</label>`
     }
 
-    texte = '<div class="my-3">'
+    texte = MathaleaQcmElement.create({
+      numeroExercice: exercice.numeroExercice ?? 0,
+      questionIndex: i,
+      propositions: exercice.autoCorrection[i].propositions ?? [],
+      radio: isRadio,
+      vertical,
+      format: options?.format ?? 'case',
+      style: options?.style ?? '',
+      interactivityOn: exercice.interactif,
+    })
     texteCorr = '<div class="my-3">'
     for (
       let rep = 0;
       rep < exercice.autoCorrection[i].propositions.length;
       rep++
     ) {
-      if (nbCols > 1 && rep % nbCols === 0) texte += '<br>'
-      texte += `<div class="ex${exercice.numeroExercice} ${vertical ? '' : 'inline-block'} my-2 align-center">
-      ${formateQ(options?.format, rep)}
-      <label id="labelEx${exercice.numeroExercice}Q${i}R${rep}" ${classCss} >${exercice.autoCorrection[i].propositions[rep].texte}</label>${espace}
-      </div>`
       texteCorr += `<div class="${vertical ? '' : 'inline-block'}">
     ${
       exercice.autoCorrection[i].propositions[rep].statut
@@ -428,57 +230,48 @@ export function propositionsQcm(
     ) {
       texte += `<div class="m-2" id="feedbackEx${exercice.numeroExercice}Q${i}R${rep}"></div>`
     } */
-    texte += `</div><div class="m-2" id="resultatCheckEx${exercice.numeroExercice}Q${i}"></div>`
     texteCorr += '</div><div class="m-2"></div>'
   }
   if (!context.isHtml) {
     texte = '\n' + texte
     texteCorr = '\n' + texteCorr
   }
-  syncQcmAutoCorrectionToAmc()
+  syncQcmAutoCorrectionToAmc(exercice, i)
   return { texte, texteCorr, indexes }
 }
 
-/**
- * Lorsque l'évènement 'exercicesAffiches' est lancé par mathalea.js
- * on vérifie la présence du bouton de validation d'id btnValidationEx{i} créé par listeQuestionsToContenu
- * et on y ajoute un listenner pour vérifier les réponses cochées
- * @param {object} exercice
- */
-export function exerciceQcm(exercice: IExercice) {
-  document.addEventListener('exercicesAffiches', () => {
-    // On vérifie le type si jamais il a été changé après la création du listenner (voir 5R20)
-    if (exercice.interactifType === 'qcm') {
-      const button = document.querySelector(
-        `#btnValidationEx${exercice.numeroExercice}-${exercice.id}`,
-      ) as ButtonWithMathaleaListener
-      if (button) {
-        if (!button.hasMathaleaListener) {
-          button.addEventListener('click', () => {
-            let nbQuestionsValidees = 0
-            let nbQuestionsNonValidees = 0
-            for (let i = 0; i < exercice.autoCorrection.length; i++) {
-              const resultat = verifQuestionQcm(exercice, i)
-              if (resultat === 'OK') {
-                nbQuestionsValidees++
-              } else {
-                nbQuestionsNonValidees++
-              }
-            }
-            const uichecks = document.querySelectorAll(
-              `.ui.checkbox.ex${exercice.numeroExercice}`,
-            )
-            for (const uicheck of uichecks) {
-              uicheck.classList.add('read-only')
-            }
-            button.classList.add('disabled')
-            afficheScore(exercice, nbQuestionsValidees, nbQuestionsNonValidees)
-          })
-          button.hasMathaleaListener = true
-        }
-      }
-    }
-  })
+export function syncQcmAutoCorrectionToAmc(
+  exercice: IExercice,
+  questionIndex: number,
+  correction?: string,
+): void {
+  const source = exercice.autoCorrection[questionIndex]
+  if (source == null) return
+  const texteCorr =
+    correction ??
+    (source.options?.correction != null && source.options.correction !== ''
+      ? source.options.correction
+      : exercice.typeExercice === 'simple' || exercice instanceof ExerciceSimple
+        ? exercice.correction
+        : (exercice.listeCorrections[questionIndex] ?? ''))
+
+  const exerciseAny = exercice as IExercice & {
+    autoCorrectionAMC?: AutoCorrectionAMC[]
+  }
+  exerciseAny.autoCorrectionAMC ??= []
+  exerciseAny.autoCorrectionAMC[questionIndex] = {
+    ...exerciseAny.autoCorrectionAMC[questionIndex],
+    enonce: source.enonce,
+    options:
+      source.options != null
+        ? { ...source.options, correction: texteCorr }
+        : correction != null
+          ? { correction: texteCorr }
+          : undefined,
+    propositions: (source.propositions ?? []).map((proposition) => ({
+      ...proposition,
+    })),
+  }
 }
 
 /**

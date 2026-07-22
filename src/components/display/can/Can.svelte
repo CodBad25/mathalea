@@ -22,7 +22,6 @@
   } from '../../../lib/interactif/cliqueFigure'
   import { verifDragAndDrop } from '../../../lib/interactif/DragAndDrop'
   import { verifQuestionMetaInteractif2d } from '../../../lib/interactif/gestionInteractif'
-  import { verifQuestionQcm } from '../../../lib/interactif/qcm'
   import { mathaleaUpdateUrlFromExercicesParams } from '../../../lib/mathalea'
   import { canOptions } from '../../../lib/stores/canStore'
   import {
@@ -33,7 +32,7 @@
   import { globalOptions } from '../../../lib/stores/globalOptions'
   import {
     isMathliveCompatible,
-    mathliveCompatibleToCustomElementFormat,
+    interactivityTypeToCustomElementFormat,
     type IExercice,
     type InteractivityType,
     type InterfaceResultExercice,
@@ -210,7 +209,7 @@
         exercice.interactifType ??
         'mathlive'
       const customElementType =
-        mathliveCompatibleToCustomElementFormat(type) ?? type
+        interactivityTypeToCustomElementFormat(type) ?? type
 
       if (listOfCustomElements.includes(customElementType)) {
         const liste = Array.from(mathaleaCustomElementsRegistry)
@@ -238,6 +237,32 @@
         resultsByQuestion[i] = result.isOk
         if (!isMathliveCompatible(type)) {
           const listeKey = `${tag}Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+          if (type === 'qcm') {
+            const questionIndex = indiceQuestionInExercice[i]
+            const answerKey = `Ex${indiceExercice[i]}Q${questionIndex}`
+            const qcmAnswers =
+              exercice.autoCorrection[questionIndex].propositions
+                ?.filter(
+                  (_proposition, index) =>
+                    exercice.answers?.[`${answerKey}R${index}`] === '1',
+                )
+                .map((proposition) => proposition.texte) ?? []
+            answers[i] = qcmAnswers.join(' ; ')
+            exercice.answers ??= {}
+            exercice.answers[answerKey] = answers[i]
+            answersType[i] = {
+              type,
+              index: i,
+              answers: Object.keys(exercice.answers)
+                .filter((key) => key.startsWith(answerKey))
+                .reduce((result: { [key: string]: string }, key) => {
+                  result[key] = exercice.answers![key]
+                  return result
+                }, {}),
+              answerTxt: answers[i],
+            }
+            continue
+          }
           answers[i] = exercice.answers?.[listeKey] ?? ''
           answersType[i] = {
             type: type as InteractivityType,
@@ -314,44 +339,6 @@
         answersType[i].answers![
           `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
         ] = answersType[i].answerTxt
-      } else if (type === 'qcm') {
-        resultsByQuestion[i] = oneResultToBoolean(
-          verifQuestionQcm(exercice, indiceQuestionInExercice[i]) === 'OK',
-        )
-        // récupération de la réponse
-        const propositions =
-          exercice.autoCorrection[indiceQuestionInExercice[i]].propositions
-        const qcmAnswers: string[] = []
-        propositions!.forEach((proposition, indice: number) => {
-          if (
-            exercice.answers![
-              `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}R${indice}`
-            ] === '1'
-          ) {
-            if (proposition.texte !== undefined) {
-              qcmAnswers.push(proposition.texte)
-            }
-          }
-        })
-        answers[i] = qcmAnswers.join(' ; ')
-        exercice.answers![
-          `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-        ] = answers[i]
-        answersType[i] = {
-          type,
-          index: i,
-          answers: Object.keys(exercice.answers ?? {})
-            .filter((key: string) =>
-              key.startsWith(
-                `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-              ),
-            )
-            .reduce((result: { [key: string]: any }, k) => {
-              result[k] = exercice.answers![k]
-              return result
-            }, {}),
-          answerTxt: answers[i],
-        }
       } else if (type === 'cliqueFigure') {
         resultsByQuestion[i] = oneResultToBoolean(
           verifQuestionCliqueFigure(exercice, indiceQuestionInExercice[i]) ===

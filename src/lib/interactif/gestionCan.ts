@@ -1,6 +1,6 @@
 import { orangeMathalea } from '../../lib/colors'
 import {
-  mathliveCompatibleToCustomElementFormat,
+  interactivityTypeToCustomElementFormat,
   type IExercice,
 } from '../../lib/types'
 import { context } from '../../modules/context'
@@ -12,7 +12,6 @@ import { addElement, get } from '../html/dom'
 import type { ButtonWithMathaleaListener } from '../types/can'
 import { verifQuestionCliqueFigure } from './cliqueFigure'
 import { verifQuestionMetaInteractif2d } from './gestionInteractif'
-import { verifQuestionQcm } from './qcm'
 
 export function gestionCan(exercice: IExercice) {
   context.nbBonnesReponses = 0
@@ -37,10 +36,7 @@ export function gestionCan(exercice: IExercice) {
             | string
             | string[] = 'KO'
           const customElementType =
-            mathliveCompatibleToCustomElementFormat(type) ?? type
-          if (type === 'qcm') {
-            resultat = verifQuestionQcm(exercice, i)
-          }
+            interactivityTypeToCustomElementFormat(type) ?? type
           if (type === 'cliqueFigure') {
             resultat = verifQuestionCliqueFigure(exercice, i)
           }
