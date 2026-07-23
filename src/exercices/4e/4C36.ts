@@ -48,114 +48,135 @@ export default class nomExercice extends Exercice {
         intitule: "la hauteur d'un immeuble",
         puissanceDe10: 2,
         unite: '\\text{ m}',
+        avecCeOuCette: 'cette hauteur',
       },
       {
         intitule: "la longueur d'un smartphone",
         puissanceDe10: -1,
         unite: '\\text{ m}',
+        avecCeOuCette: 'cette longueur',
       },
       {
         intitule: "la longueur d'une fourmi",
         puissanceDe10: -3,
         unite: '\\text{ m}',
+        avecCeOuCette: 'cette longueur',
       },
       {
         intitule: "la masse d'un camion",
         puissanceDe10: 4,
         unite: '\\text{ kg}',
+        avecCeOuCette: 'cette masse',
       },
       {
         intitule: "la masse d'une voiture",
         puissanceDe10: 3,
         unite: '\\text{ kg}',
+        avecCeOuCette: 'cette masse',
       },
       {
         intitule: "la masse d'une pomme",
         puissanceDe10: -1,
         unite: '\\text{ kg}',
+        avecCeOuCette: 'cette masse',
       },
       {
         intitule: "le volume d'une bouteille d'eau",
         puissanceDe10: 0,
         unite: '\\text{ L}',
+        avecCeOuCette: 'ce volume',
       },
       {
         intitule: "le volume d'une bouteille d'eau",
         puissanceDe10: 0,
         unite: '\\text{ dm}^3',
+        avecCeOuCette: 'ce volume',
       },
       {
         intitule: "le volume d'une bouteille d'eau",
         puissanceDe10: -3,
         unite: '\\text{ m}^3',
+        avecCeOuCette: 'ce volume',
       },
       {
         intitule: "le volume d'une bouteille d'eau",
         puissanceDe10: 6,
         unite: '\\text{ mm}^3',
+        avecCeOuCette: 'ce volume',
       },
       {
         intitule: "la surface d'une table",
         puissanceDe10: 0,
         unite: '\\text{ m}^2',
+        avecCeOuCette: 'cette surface',
       },
     ]
-
     const problemesDePuissances = [
       {
         intitule: "la taille d'un tardigrade",
         puissanceDe10: -4,
         unite: '\\text{ m}',
+        avecCeOuCette: 'cette taille',
       },
       {
         intitule: 'la vitesse de la lumière',
         puissanceDe10: 8,
         unite: '\\text{ m/s}',
+        avecCeOuCette: 'cette vitesse',
       },
       {
         intitule: 'la distance entre la Terre et le Soleil',
         puissanceDe10: 8,
         unite: '\\text{ km}',
+        avecCeOuCette: 'cette distance',
       },
       {
         intitule: 'la vitesse de la station spatiale internationale',
         puissanceDe10: 4,
         unite: '\\text{ km/h}',
+        avecCeOuCette: 'cette vitesse',
       },
       {
         intitule: 'la masse de la station spatiale internationale',
         puissanceDe10: 5,
         unite: '\\text{ kg}',
+        avecCeOuCette: 'cette masse',
       },
       {
         intitule: "l'épaisseur d'un fil de soie",
         puissanceDe10: -4,
         unite: '\\text{ m}',
+        avecCeOuCette: 'cette épaisseur',
       },
       {
         intitule: "la taille d'une bactérie",
         puissanceDe10: -6,
         unite: '\\text{ m}',
+        avecCeOuCette: 'cette taille',
       },
       {
         intitule: "la taille d'un pixel de téléviseur à haute résolution",
         puissanceDe10: -4,
         unite: '\\text{ m}',
+        avecCeOuCette: 'cette taille',
       },
       {
         intitule: 'la masse du Titanic',
         puissanceDe10: 7,
         unite: '\\text{ kg}',
+        avecCeOuCette: 'cette masse',
       },
       {
         intitule: 'la masse de la grande pyramide de Gizeh',
         puissanceDe10: 9,
         unite: '\\text{ kg}',
+        avecCeOuCette: 'cette masse',
       },
       {
         intitule: 'la production de pétrole mondiale en 2020',
         puissanceDe10: 9,
         unite: '\\text{ kg}',
+        avecCeOuCette: 'cette production',
       },
     ]
     const justesseResultats = combinaisonListes([-1, 0, 1], this.nbQuestions)
@@ -180,7 +201,6 @@ export default class nomExercice extends Exercice {
         remarque,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const prenom = prenomPronom()
       switch (listeDesProblemes[i]) {
@@ -226,9 +246,9 @@ export default class nomExercice extends Exercice {
           break
         case 2:
         default:
-          texte = ` Comme résultat d'un exercice, ${prenom.prenom} a obtenu $${texNombre(resultatObtenu)} ${probleme.unite}$.<br>
-          ${premiereLettreEnMajuscule(prenom.pronom)} sait que ${probleme.intitule} est de l'ordre de $10^{${probleme.puissanceDe10}} ${probleme.unite}$.<br>
-         Ce résultat est-il plausible ?`
+          texte = `${prenom.prenom} sait que ${probleme.intitule} est de l'ordre de $10^{${probleme.puissanceDe10}} ${probleme.unite}$.<br>`
+          texte += `Comme résultat d'un exercice, ${prenom.prenom} a obtenu, pour ${probleme.avecCeOuCette}, $${texNombre(resultatObtenu)} ${probleme.unite}$.<br>`
+          texte += `Ce résultat est-il plausible ?`
           break
       }
 
