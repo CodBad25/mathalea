@@ -47,8 +47,8 @@ export default class Auto1C19b extends ExerciceQcmA {
     )
 
     this.enonce = `Une personne doit rembourser un crédit de $${texNombre(credit, 0)}$ en trois mois.<br>
-        En janvier, elle rembourse $${frac1.texFraction}$ du crédit et en février elle rembourse $${frac2.texFraction}$ de ce qu'elle a remboursé en janvier.<br>
-        En mars elle doit rembourser :`
+        En janvier, elle rembourse $${frac1.texFraction}$ du crédit et en février, elle rembourse $${frac2.texFraction}$ de ce qu'elle a remboursé en janvier.<br>
+        En mars, elle doit rembourser :`
 
     this.correction = `
        
