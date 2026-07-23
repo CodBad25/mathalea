@@ -82,7 +82,7 @@ export default class ModeliserEquations extends Exercice {
             texte = `  Le salaire mensuel d'un commercial est composé d'un salaire fixe auquel
                   s'ajoute une prime suivant ses objectifs.<br>
                    Au mois de janvier, son salaire fixe est $x$ € et sa prime a été de $${j}$ €.  <br>
-                  Au mois de février son salaire fixe a augmenté de $${t}~\\%$ et il reçoit une prime de $${f}$ €. <br>
+                  Au mois de février, son salaire fixe a augmenté de $${t}~\\%$ et il reçoit une prime de $${f}$ €. <br>
                   Globalement, son salaire au mois
                   de février a augmenté de $${a}$ € par rapport à celui du mois de janvier. <br>
                   ${numAlpha(0)} Exprimer en fonction de $x$ son salaire au mois de janvier, puis celui du mois de février.<br>
@@ -132,7 +132,7 @@ export default class ModeliserEquations extends Exercice {
             c = c / 100
             texte = `  Une société de location de véhicules propose deux tarifs :<br>
                 $\\bullet$ Tarif A : un forfait de $${a}$ € et $${texNombre(c)}$ € par $\\text{km}$ parcouru ;<br>
-                $\\bullet$  Tarif B : un forfait de $${b}$ € et $${texNombre(d)}$ € par $\\text{km}$ parcouru ;<br>
+                $\\bullet$  Tarif B : un forfait de $${b}$ € et $${texNombre(d)}$ € par $\\text{km}$ parcouru.<br>
           
                        Pour quelle distance (arrondie au $\\text{km}$ près), les deux tarifs sont-ils égaux ?<br>
                                       `

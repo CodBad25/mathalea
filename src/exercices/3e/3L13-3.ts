@@ -128,8 +128,8 @@ function ageDuPereEtDuFils() {
     x = xn - n // variables.x // âge du fils aujourd'hui
     a = an - n // variables.a // âge du père aujourd'hui
   } while (a < 20 || x < 0)
-  const enonce = `Un père a ${a - x} ans de plus que son fils. Dans ${n} ans, l'age du père sera le double de l'âge du fils.<br>
-  Quels sont les âges du fils et du père aujourd'hui ?<br>`
+  const enonce = `Un père a ${a - x} ans de plus que son fils. Dans ${n} ans, l'âge du père sera le double de l'âge du fils.<br>
+  Quels sont les âges respectifs du fils et du père aujourd'hui ?<br>`
   const intro = `Posons $x$ l'âge du fils aujourd'hui.<br>
   L'âge du père aujourd'hui est donc $${a - x}+x$.<br>
   Dans ${n} ans, l'âge du fils sera $x+${n}$ et l'âge du père sera $2\\times(x+${n})$.<br>
@@ -1050,7 +1050,7 @@ export default class ProblemesEnEquation extends Exercice {
                       listeDeProblemes[i] === 12
                         ? 'On donnera le terme du mileu : '
                         : listeDeProblemes[i] === 13
-                          ? "On donnera l'age du père : "
+                          ? "On donnera l'âge du père : "
                           : 'Réponse au problème : ',
                     valeur: [
                       typeof x === 'number'
