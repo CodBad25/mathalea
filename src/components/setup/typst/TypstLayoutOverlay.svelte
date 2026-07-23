@@ -3,10 +3,11 @@
   export interface OverlayWidget {
     /**
      * `tasks` : liste de questions réglable ; `exo` : début d'un exercice ;
+     * `corr` : début de la correction d'un exercice ;
      * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche ;
      * `figure` : figure mathalea2d embarquée (zoom)
      */
-    kind: 'tasks' | 'exo' | 'gap' | 'header' | 'figure'
+    kind: 'tasks' | 'exo' | 'corr' | 'gap' | 'header' | 'figure'
     /** Numéro de l'exercice concerné (0 = avant le premier exercice), ou de la figure */
     num: number
     /** Préfixe des variables visées par un contrôle `tasks` (`ex1`, `ex1-corr`) */
@@ -47,6 +48,8 @@
     layoutValues?: Record<string, TasksLayoutValue>
     /** Insertions présentes dans le code, par repère de gap (code Typst brut) */
     insertions?: Record<number, string[]>
+    /** Insertions présentes juste avant chaque correction, par numéro d'exercice */
+    insertionsCorrection?: Record<number, string[]>
     /** Variables d'en-tête de la fiche (valeurs lues dans le code) */
     header?: { titre: string; 'sous-titre': string; entete: string }
     onAdjustColumns: (target: string, delta: number) => void
@@ -55,6 +58,14 @@
     onInsert: (num: number, snippet: string) => void
     onUpdateInsertion: (num: number, index: number, snippet: string) => void
     onDeleteInsertion: (num: number, index: number) => void
+    /** Insère un fragment de code Typst juste avant la correction de l'exercice `num` */
+    onInsertCorrection: (num: number, snippet: string) => void
+    onUpdateInsertionCorrection: (
+      num: number,
+      index: number,
+      snippet: string,
+    ) => void
+    onDeleteInsertionCorrection: (num: number, index: number) => void
     onUpdateHeader: (
       name: 'titre' | 'sous-titre' | 'entete',
       value: string,
@@ -74,6 +85,12 @@
      * — masque le bouton « Éditer le code Typst de cet exercice ».
      */
     nonEditableStaticExercises?: Record<number, boolean>
+    /**
+     * Exercices statiques dont la correction n'a pas de fichier source
+     * `_cor.typ` : leur correction n'est qu'une image scannée, rien à
+     * éditer — masque le bouton d'édition sur le repère `tasks-corr`.
+     */
+    nonEditableCorrections?: Record<number, boolean>
     /** Nombre de colonnes du document (le saut de colonne n'a de sens qu'à > 1) */
     documentColumns?: number
     /** Zoom de chaque figure, par numéro de figure (`fig-N`) */
@@ -101,6 +118,9 @@
     /** Surcharges de code Typst existantes, par numéro d'exercice (voir onEditCode) */
     codeOverrides?: Record<number, string>
     onEditCode: (num: number) => void
+    /** Surcharges de code Typst de la correction, par numéro d'exercice (voir onEditCorrectionCode) */
+    codeOverridesCorrection?: Record<number, string>
+    onEditCorrectionCode: (num: number) => void
     /** Lignes en pointillés réglées par exercice (valeurs lues dans le code) */
     writingLinesValues?: Record<
       number,
@@ -121,16 +141,21 @@
     widgets = [],
     layoutValues = {},
     insertions = {},
+    insertionsCorrection = {},
     header = { titre: '', 'sous-titre': '', entete: '' },
     onAdjustColumns,
     onAdjustGutter,
     onInsert,
     onUpdateInsertion,
     onDeleteInsertion,
+    onInsertCorrection,
+    onUpdateInsertionCorrection,
+    onDeleteInsertionCorrection,
     onUpdateHeader,
     questionCounts = {},
     staticExercises = {},
     nonEditableStaticExercises = {},
+    nonEditableCorrections = {},
     documentColumns = 1,
     figureZoomValues = {},
     figureAlignValues = {},
@@ -147,14 +172,25 @@
     onOpenSettings,
     codeOverrides = {},
     onEditCode,
+    codeOverridesCorrection = {},
+    onEditCorrectionCode,
     writingLinesValues = {},
     onSetWritingLines,
   }: Props = $props()
 
-  /** Numéro du repère de gap dont le panneau d'insertion est ouvert */
-  let openInsertion: number | null = $state(null)
+  /** Espace des insertions : `exo` (entre les exercices) ou `corr` (avant une correction) */
+  type InsertionSpace = 'exo' | 'corr'
+
+  /** Repère (espace + numéro) dont le panneau d'insertion est ouvert */
+  let openInsertion: { space: InsertionSpace; num: number } | null =
+    $state(null)
   let insertionKind: 'section' | 'texte' = $state('section')
   let insertionText = $state('')
+
+  /** Liste des insertions existantes au repère `num` de l'espace `space` */
+  function insertionsAt(space: InsertionSpace, num: number): string[] {
+    return (space === 'corr' ? insertionsCorrection : insertions)[num] ?? []
+  }
 
   /** Panneau d'édition du titre/en-tête ouvert */
   let headerOpen = $state(false)
@@ -203,10 +239,11 @@
 
   // resynchronise les brouillons quand le code change (après enregistrement
   // ou suppression) ; la frappe dans un brouillon ne repasse pas ici.
-  // Les sauts de page/colonne sont pilotés par leurs boutons dédiés.
+  // Les sauts de page/colonne sont pilotés par leurs boutons dédiés (espace
+  // `exo` uniquement, une correction n'en a pas).
   $effect(() => {
     if (openInsertion != null) {
-      drafts = (insertions[openInsertion] ?? [])
+      drafts = insertionsAt(openInsertion.space, openInsertion.num)
         .map(parseSnippet)
         .filter(
           (draft) =>
@@ -216,15 +253,18 @@
     }
   })
 
-  /** Ajoute ou retire un saut de page/colonne au repère de gap `num` */
+  /** Ajoute ou retire un saut de page/colonne au repère de gap `num` (espace `exo` uniquement) */
   function toggleBreak(num: number, snippet: string) {
     const index = (insertions[num] ?? []).indexOf(snippet)
     if (index >= 0) onDeleteInsertion(num, index)
     else onInsert(num, snippet)
   }
 
-  function toggleInsertion(num: number) {
-    openInsertion = openInsertion === num ? null : num
+  function toggleInsertion(space: InsertionSpace, num: number) {
+    openInsertion =
+      openInsertion?.space === space && openInsertion.num === num
+        ? null
+        : { space, num }
     insertionText = ''
     openWritingLines = null
   }
@@ -233,10 +273,12 @@
     if (openInsertion == null) return
     const text = insertionText.trim()
     if (text.length === 0) return
-    onInsert(
-      openInsertion,
-      insertionKind === 'section' ? `#section[${text}]` : text,
-    )
+    const snippet = insertionKind === 'section' ? `#section[${text}]` : text
+    if (openInsertion.space === 'corr') {
+      onInsertCorrection(openInsertion.num, snippet)
+    } else {
+      onInsert(openInsertion.num, snippet)
+    }
     insertionText = ''
   }
 
@@ -297,11 +339,16 @@
   }
 </script>
 
-{#snippet insertionPanel(gapNum: number, positionClass: string)}
+{#snippet insertionPanel(
+  space: InsertionSpace,
+  gapNum: number,
+  positionClass: string,
+)}
   <!-- panneau d'insertion/modification d'un texte ou d'un titre de section
-       pour le repère de gap `gapNum` ; partagé entre le bouton du repère
-       (barre d'exercice qui suit, ou barre du dernier repère) -->
-  {#if openInsertion === gapNum}
+       pour le repère `gapNum` de l'espace `space` (`exo` : entre les
+       exercices ; `corr` : avant une correction) ; partagé entre le bouton
+       du repère (barre d'exercice qui suit, ou barre du dernier repère) -->
+  {#if openInsertion?.space === space && openInsertion.num === gapNum}
     <div
       class="absolute top-6 z-20 w-72 space-y-2 typst-panel p-2 {positionClass}"
     >
@@ -322,7 +369,15 @@
               bind:value={draft.text}
               onkeydown={(e) => {
                 if (e.key === 'Enter' && draft.text.trim().length > 0) {
-                  onUpdateInsertion(gapNum, draft.index, composeSnippet(draft))
+                  if (space === 'corr') {
+                    onUpdateInsertionCorrection(
+                      gapNum,
+                      draft.index,
+                      composeSnippet(draft),
+                    )
+                  } else {
+                    onUpdateInsertion(gapNum, draft.index, composeSnippet(draft))
+                  }
                 }
                 if (e.key === 'Escape') openInsertion = null
               }}
@@ -334,7 +389,13 @@
               class="hover:text-coopmaths-action disabled:opacity-40"
               disabled={draft.text.trim().length === 0}
               onclick={() =>
-                onUpdateInsertion(gapNum, draft.index, composeSnippet(draft))}
+                space === 'corr'
+                  ? onUpdateInsertionCorrection(
+                      gapNum,
+                      draft.index,
+                      composeSnippet(draft),
+                    )
+                  : onUpdateInsertion(gapNum, draft.index, composeSnippet(draft))}
             >
               <i class="bx bx-check text-base"></i>
             </button>
@@ -343,7 +404,10 @@
               title="Supprimer cette insertion"
               aria-label="Supprimer cette insertion"
               class="hover:text-red-600"
-              onclick={() => onDeleteInsertion(gapNum, draft.index)}
+              onclick={() =>
+                space === 'corr'
+                  ? onDeleteInsertionCorrection(gapNum, draft.index)
+                  : onDeleteInsertion(gapNum, draft.index)}
             >
               <i class="bx bx-trash text-base"></i>
             </button>
@@ -616,9 +680,11 @@
            réglages, nouvelles données, nombre de questions, suppression -->
       <div
         class="pointer-events-auto absolute flex -translate-x-full -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
-        class:typst-pill-force-visible={openInsertion === insertGapNum ||
+        class:typst-pill-force-visible={(openInsertion?.space === 'exo' &&
+          openInsertion.num === insertGapNum) ||
           openWritingLines === widget.num}
-        class:z-20={openInsertion === insertGapNum ||
+        class:z-20={(openInsertion?.space === 'exo' &&
+          openInsertion.num === insertGapNum) ||
           openWritingLines === widget.num}
         style="top: {widget.top}%; left: {columnRight - 0.3}%;"
         data-testid="typst-overlay-exo"
@@ -646,9 +712,10 @@
             type="button"
             title="Insérer ou modifier un texte ou un titre de section avant l'exercice"
             aria-label="Insérer ou modifier un texte ou un titre de section avant l'exercice {widget.num}"
-            aria-expanded={openInsertion === insertGapNum}
+            aria-expanded={openInsertion?.space === 'exo' &&
+              openInsertion.num === insertGapNum}
             data-testid="typst-overlay-insert"
-            onclick={() => toggleInsertion(insertGapNum)}
+            onclick={() => toggleInsertion('exo', insertGapNum)}
           >
             <i class="bx bx-plus-circle"></i>
           </button>
@@ -734,7 +801,53 @@
         >
           <i class="bx bx-trash"></i>
         </button>
-        {@render insertionPanel(insertGapNum, 'right-0')}
+        {@render insertionPanel('exo', insertGapNum, 'right-0')}
+      </div>
+    {:else if widget.kind === 'corr'}
+      <!-- barre de la correction (pendant de la barre 'exo' de l'énoncé) :
+           insertion d'un texte ou d'un titre de section avant elle, et
+           édition de son code Typst. Même position (bord droit de la colonne
+           qui la contient) que la barre 'exo'. -->
+      {@const columnWidth = 100 / Math.max(documentColumns, 1)}
+      {@const columnRight =
+        (Math.floor(widget.left / columnWidth) + 1) * columnWidth}
+      <div
+        class="pointer-events-auto absolute flex -translate-x-full -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class:typst-pill-force-visible={openInsertion?.space === 'corr' &&
+          openInsertion.num === widget.num}
+        class:z-20={openInsertion?.space === 'corr' &&
+          openInsertion.num === widget.num}
+        style="top: {widget.top}%; left: {columnRight - 0.3}%;"
+        data-testid="typst-overlay-corr"
+      >
+        <button
+          type="button"
+          title="Insérer ou modifier un texte ou un titre de section avant cette correction"
+          aria-label="Insérer ou modifier un texte ou un titre de section avant la correction de l'exercice {widget.num}"
+          aria-expanded={openInsertion?.space === 'corr' &&
+            openInsertion.num === widget.num}
+          data-testid="typst-overlay-insert-corr"
+          onclick={() => toggleInsertion('corr', widget.num)}
+        >
+          <i class="bx bx-plus-circle"></i>
+        </button>
+        {#if !nonEditableCorrections[widget.num]}
+          <span class="typst-pill-sep"></span>
+          <button
+            type="button"
+            title={codeOverridesCorrection[widget.num] != null
+              ? 'Modifier le code Typst de cette correction'
+              : 'Éditer le code Typst de cette correction'}
+            aria-label="Éditer le code Typst de la correction de l'exercice {widget.num}"
+            class:typst-pill-active={codeOverridesCorrection[widget.num] !=
+              null}
+            data-testid="typst-overlay-edit-correction-code"
+            onclick={() => onEditCorrectionCode(widget.num)}
+          >
+            <i class="bx bx-pencil"></i>
+          </button>
+        {/if}
+        {@render insertionPanel('corr', widget.num, 'right-0')}
       </div>
     {:else if widget.kind === 'figure'}
       <!-- zoom et alignement d'une figure mathalea2d embarquée : le repère
@@ -823,8 +936,10 @@
         class="pointer-events-auto absolute flex -translate-x-2 {hasBreak
           ? 'translate-y-2'
           : '-translate-y-[135%]'} items-center gap-0.5 typst-pill typst-pill-round px-1"
-        class:typst-pill-force-visible={openInsertion === widget.num}
-        class:z-20={openInsertion === widget.num}
+        class:typst-pill-force-visible={openInsertion?.space === 'exo' &&
+          openInsertion.num === widget.num}
+        class:z-20={openInsertion?.space === 'exo' &&
+          openInsertion.num === widget.num}
         style="left: {widget.left}%; top: {widget.top}%;"
       >
         {#if !isMergeGap}
@@ -833,9 +948,10 @@
               type="button"
               title="Insérer ou modifier un texte ou un titre de section ici"
               aria-label="Insérer ou modifier un texte ou un titre de section ici"
-              aria-expanded={openInsertion === widget.num}
+              aria-expanded={openInsertion?.space === 'exo' &&
+                openInsertion.num === widget.num}
               data-testid="typst-overlay-insert"
-              onclick={() => toggleInsertion(widget.num)}
+              onclick={() => toggleInsertion('exo', widget.num)}
             >
               <i class="bx bx-plus-circle"></i>
             </button>
@@ -905,7 +1021,11 @@
           </button>
         {/if}
         {#if !hasFollowingExo}
-          {@render insertionPanel(widget.num, 'left-1/2 -translate-x-1/2')}
+          {@render insertionPanel(
+            'exo',
+            widget.num,
+            'left-1/2 -translate-x-1/2',
+          )}
         {/if}
       </div>
     {/if}

@@ -155,9 +155,9 @@ export default class PoucentageP2 extends ExerciceSimple {
           ['une voiture électrique', 'elle'],
           ['un manège', 'il'],
         ])
-        this.question = `En ${a * b} minutes, ${d[0]} fait ${a * c} tours.<br>        
-        En ${b} minutes ${d[1]} fait ${this.interactif ? '' : '$\\ldots \\ldots$ tours.'}`
-        this.correction = `En ${a} fois moins de temps, ${d[1]} fait ${a} fois moins de tours, soit : $${a * c} \\div ${a}=${c}$ tours.`
+        this.question = `En $${a * b}$ minutes, ${d[0]} fait $${a * c}$ tours.<br>        
+        En $${b}$ minutes, ${d[1]} fait ${this.interactif ? '' : '$\\ldots\\ldots$ tours.'}`
+        this.correction = `En $${a}$ fois moins de temps, ${d[1]} fait $${a}$ fois moins de tours, soit : $${a * c} \\div ${a}=${c}$ tours.`
         this.optionsChampTexte = { texteApres: ' tours.' }
         this.reponse = c
         this.canEnonce = 'Compléter.'

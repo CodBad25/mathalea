@@ -19,9 +19,9 @@
   import {
     indexQuestionCliqueFigure,
     verifQuestionCliqueFigure,
-  } from '../../../lib/interactif/cliqueFigure'
-  import { verifDragAndDrop } from '../../../lib/interactif/DragAndDrop'
-  import { verifQuestionMetaInteractif2d } from '../../../lib/interactif/gestionInteractif'
+  } from '../../../lib/customElements/CliqueFigureElement'
+  import { DragAndDropElement } from '../../../lib/customElements/DragAndDropElement'
+  import { MetaInteractif2dElement } from '../../../lib/customElements/MetaInteractif2dElement'
   import { mathaleaUpdateUrlFromExercicesParams } from '../../../lib/mathalea'
   import { canOptions } from '../../../lib/stores/canStore'
   import {
@@ -86,6 +86,27 @@
   let answers: string[] = []
   let recordedTimeFromCapytale: number
   let unavailableMessage = ''
+
+  function getQuestionAnswerValue(
+    exercice: IExercice,
+    exerciceIndex: number,
+    questionIndex: number,
+    customElementType?: string,
+  ) {
+    const questionKey = `Ex${exerciceIndex}Q${questionIndex}`
+    const customElementKey =
+      customElementType == null
+        ? undefined
+        : `${customElementType}Ex${exerciceIndex}Q${questionIndex}`
+    return (
+      exercice.answers?.[questionKey] ??
+      (customElementKey == null
+        ? undefined
+        : exercice.answers?.[customElementKey]) ??
+      ''
+    )
+  }
+
   onMount(async () => {
     document.addEventListener('updateAsyncEx', forceUpdate)
     // handleCapytale peut changer la valeur du store pour que le
@@ -263,7 +284,73 @@
             }
             continue
           }
-          answers[i] = exercice.answers?.[listeKey] ?? ''
+          if (customElementType === 'clique-figure') {
+            answers[i] = indexQuestionCliqueFigure(
+              exercice,
+              indiceQuestionInExercice[i],
+            )
+            answersType[i] = {
+              type: customElementType as InteractivityType,
+              index: i,
+              answers: Object.keys(exercice.answers ?? {})
+                .filter(
+                  (key: string) =>
+                    key.startsWith('cliquefigure') &&
+                    key.endsWith(
+                      `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
+                    ),
+                )
+                .reduce((result: { [key: string]: any }, k) => {
+                  result[k] = exercice.answers![k]
+                  return result
+                }, {}),
+              answerTxt: answers[i],
+            }
+            continue
+          }
+          if (customElementType === 'drag-and-drop') {
+            answersType[i] = {
+              type: customElementType as InteractivityType,
+              index: i,
+              answers: Object.keys(exercice.answers ?? {})
+                .filter(
+                  (key: string) =>
+                    key.startsWith(
+                      `rectangleDNDEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
+                    ) ||
+                    key.startsWith(
+                      `texteDNDEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
+                    ),
+                )
+                .reduce((result: { [key: string]: any }, k) => {
+                  result[k] = exercice.answers![k]
+                  return result
+                }, {}),
+              answerTxt: Object.keys(exercice.answers ?? {})
+                .filter((key: string) =>
+                  key.startsWith(
+                    `texteDNDEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
+                  ),
+                )
+                .reduce((result: string, k) => {
+                  result = exercice.answers![k]
+                  return result
+                }, ''),
+            }
+            answers[i] = answersType[i].answerTxt
+            answersType[i].answers![
+              `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+            ] = answersType[i].answerTxt
+            continue
+          }
+          answers[i] =
+            exercice.answers?.[listeKey] ??
+            getQuestionAnswerValue(
+              exercice,
+              indiceExercice[i],
+              indiceQuestionInExercice[i],
+              customElementType,
+            )
           answersType[i] = {
             type: type as InteractivityType,
             index: i,
@@ -292,19 +379,27 @@
           index: i,
           answers: {
             [`Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
-              exercice.answers![
-                `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-              ],
+              getQuestionAnswerValue(
+                exercice,
+                indiceExercice[i],
+                indiceQuestionInExercice[i],
+                customElementType,
+              ),
           },
-          answerTxt:
-            exercice.answers![
-              `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-            ],
+          answerTxt: getQuestionAnswerValue(
+            exercice,
+            indiceExercice[i],
+            indiceQuestionInExercice[i],
+            customElementType,
+          ),
         }
         answers[i] = answersType[i].answerTxt
       } else if (type === 'dnd') {
         resultsByQuestion[i] = oneResultToBoolean(
-          verifDragAndDrop(exercice, indiceQuestionInExercice[i]),
+          DragAndDropElement.verifQuestion(
+            exercice,
+            indiceQuestionInExercice[i],
+          ),
         )
         // récupération de la réponse
         answersType[i] = {
@@ -422,7 +517,10 @@
           : answersType[i].answerTxt
       } else if (type === 'MetaInteractif2d') {
         resultsByQuestion[i] = oneResultToBoolean(
-          verifQuestionMetaInteractif2d(exercice, indiceQuestionInExercice[i]),
+          MetaInteractif2dElement.verifQuestion(
+            exercice,
+            indiceQuestionInExercice[i],
+          ),
         )
         // récupération de la réponse
         answersType[i] = {

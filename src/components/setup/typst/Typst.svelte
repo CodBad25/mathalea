@@ -4,12 +4,14 @@
   import { EditorState } from '@codemirror/state'
   import { oneDark } from '@codemirror/theme-one-dark'
   import { EditorView, keymap } from '@codemirror/view'
+  import JSZip from 'jszip'
   import seedrandom from 'seedrandom'
   import { onDestroy, onMount } from 'svelte'
   import { get } from 'svelte/store'
   import ExerciceSimple from '../../../exercices/ExerciceSimple'
   import {
     buildExercisesList,
+    getStaticExerciceCorTypUrl,
     getStaticExerciceTypUrl,
   } from '../../../lib/components/exercisesUtils'
   import {
@@ -35,12 +37,14 @@
   import {
     BADGE_STYLES,
     HEADER_STYLES,
+    INSERTION_CORRECTION_TAG,
     INSERTION_TAG,
     MATH_FONTS,
     TEXT_FONTS,
     buildStandaloneExerciseCode,
     buildTypstDocument,
     defaultTypstDocumentOptions,
+    getGeneratedCorrectionCode,
     getGeneratedExerciseCode,
     harvestCarryOver,
     type TypstCarryOver,
@@ -249,6 +253,8 @@
   let tasksLayoutValues: Record<string, TasksLayoutValue> = $state({})
   /** Insertions (texte/section) présentes dans le code, par repère de gap */
   let insertionValues: Record<number, string[]> = $state({})
+  /** Insertions (texte/section) présentes juste avant chaque correction, par numéro d'exercice */
+  let insertionCorrectionValues: Record<number, string[]> = $state({})
   /**
    * Numéros (1-based) des exercices fusionnés avec le précédent, lus dans
    * le code courant (bouton de la palette de mise en page).
@@ -271,6 +277,8 @@
   )
   /** Surcharges de code Typst par exercice (modale d'édition), lues dans le code */
   let codeOverrideValues: Record<number, string> = $state({})
+  /** Surcharges de code Typst de la correction par exercice, lues dans le code */
+  let codeOverrideCorrectionValues: Record<number, string> = $state({})
   /** Lignes en pointillés réglées par exercice (palette), lues dans le code */
   let writingLinesValues: Record<
     number,
@@ -278,6 +286,8 @@
   > = $state({})
   /** Numéro de l'exercice dont la modale d'édition du code Typst est ouverte */
   let codeEditNum: number | null = $state(null)
+  /** Partie éditée par la modale : énoncé ou correction de `codeEditNum` */
+  let codeEditPart: 'enonce' | 'correction' = $state('enonce')
   /** Brouillon de la modale d'édition du code Typst */
   let codeEditDraft = $state('')
   /** Message de confirmation affiché après un clic sur un bouton « Copier » de la modale */
@@ -319,6 +329,7 @@
       documentOptions,
       carryOver,
       codeEditDraft,
+      codeEditPart,
     )
     void copyToClipboard(standalone, 'Le code avec préambule')
   }
@@ -338,7 +349,7 @@
       widgets.push({
         kind: isTasks
           ? 'tasks'
-          : (anchor.kind as 'exo' | 'gap' | 'header' | 'figure'),
+          : (anchor.kind as 'exo' | 'corr' | 'gap' | 'header' | 'figure'),
         num: anchor.num,
         // les variables de la correction sont indépendantes de l'énoncé
         target: isTasks
@@ -386,8 +397,10 @@
     tasksLayoutValues = values
     const harvested = harvestCarryOver(code)
     insertionValues = harvested.insertions ?? {}
+    insertionCorrectionValues = harvested.insertionsCorrection ?? {}
     mergedExercises = harvested.merges ?? []
     codeOverrideValues = harvested.codeOverrides ?? {}
+    codeOverrideCorrectionValues = harvested.codeOverridesCorrection ?? {}
     writingLinesValues = harvested.writingLines ?? {}
     const columns = code.match(/^#let colonnes = (\d+)/m)
     documentColumns = columns != null ? Number(columns[1]) : 1
@@ -524,6 +537,24 @@
   )
 
   /**
+   * Exercices dont la correction n'est pas éditable : exercices statiques
+   * sans fichier source `_cor.typ` (`typ: true` sans correction rédigée en
+   * Typst), qui n'ont donc qu'une correction scannée (image) — leur icône
+   * crayon sur la correction est masquée. Un exercice non statique sans
+   * correction n'a de toute façon pas de repère `tasks-corr` où l'afficher.
+   */
+  const nonEditableCorrections = $derived(
+    Object.fromEntries(
+      exercises.map((exercise, k) => [
+        k + 1,
+        exercise?.typeExercice === 'statique' &&
+          (exercise.uuid == null ||
+            getStaticExerciceCorTypUrl(exercise.uuid) == null),
+      ]),
+    ) as Record<number, boolean>,
+  )
+
+  /**
    * Nombre de questions par exercice (null : non réglable), pour la palette.
    * Toujours `null` pour un exercice statique : son nombre de questions est
    * figé par son contenu (image ou `.typ`), pas de génération possible.
@@ -599,13 +630,41 @@
       if (n === removed) continue
       codeOverrides[n > removed ? n - 1 : n] = value
     }
+    const codeOverridesCorrection: NonNullable<
+      typeof carryOver.codeOverridesCorrection
+    > = {}
+    for (const [key, value] of Object.entries(
+      carryOver.codeOverridesCorrection ?? {},
+    )) {
+      const n = Number(key)
+      if (n === removed) continue
+      codeOverridesCorrection[n > removed ? n - 1 : n] = value
+    }
+    const insertionsCorrection: NonNullable<
+      typeof carryOver.insertionsCorrection
+    > = {}
+    for (const [key, value] of Object.entries(
+      carryOver.insertionsCorrection ?? {},
+    )) {
+      const n = Number(key)
+      if (n === removed) continue
+      insertionsCorrection[n > removed ? n - 1 : n] = value
+    }
     const writingLines: NonNullable<typeof carryOver.writingLines> = {}
     for (const [key, value] of Object.entries(carryOver.writingLines ?? {})) {
       const n = Number(key)
       if (n === removed) continue
       writingLines[n > removed ? n - 1 : n] = value
     }
-    return { tasksLayout, insertions, merges, codeOverrides, writingLines }
+    return {
+      tasksLayout,
+      insertions,
+      insertionsCorrection,
+      merges,
+      codeOverrides,
+      codeOverridesCorrection,
+      writingLines,
+    }
   }
 
   /** Retire l'exercice num de la fiche et régénère le code */
@@ -657,11 +716,35 @@
     for (const [key, value] of Object.entries(carryOver.codeOverrides ?? {})) {
       codeOverrides[swapNum(Number(key))] = value
     }
+    const codeOverridesCorrection: NonNullable<
+      typeof carryOver.codeOverridesCorrection
+    > = {}
+    for (const [key, value] of Object.entries(
+      carryOver.codeOverridesCorrection ?? {},
+    )) {
+      codeOverridesCorrection[swapNum(Number(key))] = value
+    }
+    const insertionsCorrection: NonNullable<
+      typeof carryOver.insertionsCorrection
+    > = {}
+    for (const [key, value] of Object.entries(
+      carryOver.insertionsCorrection ?? {},
+    )) {
+      insertionsCorrection[swapNum(Number(key))] = value
+    }
     const writingLines: NonNullable<typeof carryOver.writingLines> = {}
     for (const [key, value] of Object.entries(carryOver.writingLines ?? {})) {
       writingLines[swapNum(Number(key))] = value
     }
-    return { tasksLayout, insertions, merges, codeOverrides, writingLines }
+    return {
+      tasksLayout,
+      insertions,
+      insertionsCorrection,
+      merges,
+      codeOverrides,
+      codeOverridesCorrection,
+      writingLines,
+    }
   }
 
   /** Échange l'exercice num avec son voisin (delta : -1 monter, 1 descendre) */
@@ -735,37 +818,69 @@
     codeEditDraft =
       carryOver.codeOverrides?.[num] ??
       getGeneratedExerciseCode(buildInputs(), num, documentOptions, carryOver)
+    codeEditPart = 'enonce'
     codeEditNum = num
   }
 
   /**
-   * Retire la surcharge de l'exercice num : son énoncé redevient celui
-   * généré automatiquement (icône crayon désactivée, « Nouvelles données »
-   * de nouveau opérant sur son contenu). Contrairement au brouillon de la
-   * modale, une surcharge n'est un texte figé que tant qu'elle existe : la
-   * restaurer doit donc réellement la supprimer, pas seulement préremplir le
-   * brouillon avec un instantané du texte généré.
+   * Ouvre la modale d'édition du code Typst de la correction de l'exercice
+   * num, préremplie avec sa surcharge existante ou, à défaut, le code
+   * actuellement généré pour cette correction (voir `getGeneratedCorrectionCode`).
+   * Pendant de `openCodeEdit` pour la correction plutôt que l'énoncé.
    */
-  function restoreGeneratedCode(num: number) {
-    updateExerciseCode(num, '')
+  function openCorrectionCodeEdit(num: number) {
+    const carryOver =
+      editorView != null ? harvestCarryOver(currentCode()) : {}
+    codeEditDraft =
+      carryOver.codeOverridesCorrection?.[num] ??
+      getGeneratedCorrectionCode(buildInputs(), num, documentOptions, carryOver)
+    codeEditPart = 'correction'
+    codeEditNum = num
   }
 
   /**
-   * Applique (ou retire, si `code` est vide) la surcharge de code Typst de
-   * l'exercice num, saisie dans la modale d'édition. Régénère le document
-   * (comme suppression/déplacement/fusion) : la surcharge change la
-   * structure du code (elle remplace l'énoncé généré), un simple patch de
-   * texte comme pour les insertions ne suffit pas.
+   * Retire la surcharge de l'exercice num (énoncé ou correction, selon
+   * `codeEditPart`) : son contenu redevient celui généré automatiquement
+   * (icône crayon désactivée, « Nouvelles données » de nouveau opérant sur
+   * son contenu). Contrairement au brouillon de la modale, une surcharge
+   * n'est un texte figé que tant qu'elle existe : la restaurer doit donc
+   * réellement la supprimer, pas seulement préremplir le brouillon avec un
+   * instantané du texte généré.
    */
-  function updateExerciseCode(num: number, code: string) {
+  function restoreGeneratedCode(num: number) {
+    updateExerciseCode(num, '', codeEditPart)
+  }
+
+  /**
+   * Applique (ou retire, si `code` est vide) la surcharge de code Typst
+   * (énoncé ou correction, selon `part`) de l'exercice num, saisie dans la
+   * modale d'édition. Régénère le document (comme suppression/déplacement/
+   * fusion) : la surcharge change la structure du code (elle remplace le
+   * contenu généré), un simple patch de texte comme pour les insertions ne
+   * suffit pas.
+   */
+  function updateExerciseCode(
+    num: number,
+    code: string,
+    part: 'enonce' | 'correction' = 'enonce',
+  ) {
     if (!confirmOverwrite()) return
     const carryOver =
       editorView != null ? harvestCarryOver(currentCode()) : {}
-    const codeOverrides = { ...(carryOver.codeOverrides ?? {}) }
     const trimmed = code.trim()
-    if (trimmed.length === 0) delete codeOverrides[num]
-    else codeOverrides[num] = code
-    carryOver.codeOverrides = codeOverrides
+    if (part === 'correction') {
+      const codeOverridesCorrection = {
+        ...(carryOver.codeOverridesCorrection ?? {}),
+      }
+      if (trimmed.length === 0) delete codeOverridesCorrection[num]
+      else codeOverridesCorrection[num] = code
+      carryOver.codeOverridesCorrection = codeOverridesCorrection
+    } else {
+      const codeOverrides = { ...(carryOver.codeOverrides ?? {}) }
+      if (trimmed.length === 0) delete codeOverrides[num]
+      else codeOverrides[num] = code
+      carryOver.codeOverrides = codeOverrides
+    }
     const [primary, ...extraVersions] = buildAllVersionInputs()
     const newCode = buildTypstDocument(
       primary,
@@ -994,6 +1109,101 @@
     const line = findInsertionLine(doc, num, index)
     if (line == null) return
     // la ligne entière disparaît, saut de ligne précédent compris
+    dispatchPaletteEdit({ from: line.from - 1, to: line.to, insert: '' })
+  }
+
+  /** Repère `corr` de l'exercice num dans le code (indentation et fin de sa ligne) */
+  function findCorrAnchor(
+    doc: string,
+    num: number,
+  ): { indent: string; lineEnd: number } | null {
+    const match = new RegExp(
+      `^([ \\t]*)#mathalea-anchor\\("corr", ${num}\\).*$`,
+      'm',
+    ).exec(doc)
+    if (match == null) return null
+    return { indent: match[1], lineEnd: match.index + match[0].length }
+  }
+
+  /**
+   * Bornes de la ligne de la `index`-ième insertion qui précède la
+   * correction de l'exercice num (sans son saut de ligne initial). Pendant
+   * de `findInsertionLine` pour le repère `corr`.
+   */
+  function findInsertionCorrectionLine(
+    doc: string,
+    num: number,
+    index: number,
+  ): { from: number; to: number } | null {
+    const anchor = findCorrAnchor(doc, num)
+    if (anchor == null) return null
+    let offset = anchor.lineEnd
+    let count = 0
+    while (offset < doc.length) {
+      const from = offset + 1
+      let to = doc.indexOf('\n', from)
+      if (to === -1) to = doc.length
+      const line = doc.slice(from, to)
+      if (line.includes('#mathalea-anchor(')) return null
+      if (/\/\/ mathalea:insertion-corr\s*$/.test(line)) {
+        if (count === index) return { from, to }
+        count++
+      }
+      offset = to
+    }
+    return null
+  }
+
+  /** Insère un fragment (texte, #section[...]) juste avant la correction de l'exercice num */
+  function insertBeforeCorrection(num: number, snippet: string) {
+    if (editorView == null) return
+    const doc = editorView.state.doc.toString()
+    const anchor = findCorrAnchor(doc, num)
+    if (anchor == null) return
+    // la nouvelle ligne s'ajoute après les insertions déjà présentes
+    // (leur ordre d'affichage est conservé)
+    let insertAt = anchor.lineEnd
+    let offset = anchor.lineEnd
+    while (offset < doc.length) {
+      const from = offset + 1
+      let to = doc.indexOf('\n', from)
+      if (to === -1) to = doc.length
+      const line = doc.slice(from, to)
+      if (line.includes('#mathalea-anchor(')) break
+      if (/\/\/ mathalea:insertion-corr\s*$/.test(line)) insertAt = to
+      else if (line.trim().length > 0) break
+      offset = to
+    }
+    dispatchPaletteEdit({
+      from: insertAt,
+      insert: `\n${anchor.indent}${snippet} ${INSERTION_CORRECTION_TAG}`,
+    })
+  }
+
+  /** Remplace la `index`-ième insertion qui précède la correction de l'exercice num */
+  function updateInsertionCorrection(
+    num: number,
+    index: number,
+    snippet: string,
+  ) {
+    if (editorView == null) return
+    const doc = editorView.state.doc.toString()
+    const line = findInsertionCorrectionLine(doc, num, index)
+    if (line == null) return
+    const indent = doc.slice(line.from, line.to).match(/^[ \t]*/)?.[0] ?? ''
+    dispatchPaletteEdit({
+      from: line.from,
+      to: line.to,
+      insert: `${indent}${snippet} ${INSERTION_CORRECTION_TAG}`,
+    })
+  }
+
+  /** Supprime la `index`-ième insertion qui précède la correction de l'exercice num */
+  function deleteInsertionCorrection(num: number, index: number) {
+    if (editorView == null) return
+    const doc = editorView.state.doc.toString()
+    const line = findInsertionCorrectionLine(doc, num, index)
+    if (line == null) return
     dispatchPaletteEdit({ from: line.from - 1, to: line.to, insert: '' })
   }
 
@@ -1510,39 +1720,88 @@
    * séparées de `listeQuestions` : la numérotation passe alors par le même
    * environnement `#tasks(...)` que les autres exercices et respecte le
    * réglage « Numéros des questions en gras ».
+   *
+   * La correction suit le même principe à partir du fichier `<uuid>_cor.typ`
+   * (à côté du `.typ` de l'énoncé), indépendamment de celui-ci : ce fichier
+   * est optionnel (pas toujours encore rédigé), son absence laisse la
+   * correction (png scanné) inchangée même si l'énoncé a bien son `.typ`.
    */
   async function applyTypSourcesForStaticExercises() {
     for (const exercise of exercises) {
       if (exercise == null || exercise.typeExercice !== 'statique') continue
       const uuid = exercise.uuid
       if (uuid == null) continue
+      if (getStaticExerciceTypUrl(uuid) == null) continue
+
       const typUrl = getStaticExerciceTypUrl(uuid)
-      if (typUrl == null) continue
       try {
+        if (typUrl == null) throw new Error('no typ url')
         const response = await window.fetch(typUrl)
-        if (!response.ok) continue
+        if (!response.ok) throw new Error('fetch failed')
         const code = await response.text()
-        if (code.trim().length === 0) continue
+        if (code.trim().length === 0) throw new Error('empty file')
         const { intro, questions } = splitTypQuestions(code)
         if (questions.length === 0) {
           exercise.listeQuestions[0] = `<mathalea-typst>${code}</mathalea-typst>`
-          continue
+        } else {
+          if (intro.trim().length > 0) {
+            exercise.consigne = `<mathalea-typst>${intro}</mathalea-typst>`
+          }
+          exercise.listeQuestions = questions.map(
+            (question) => `<mathalea-typst>${question}</mathalea-typst>`,
+          )
+          exercise.nbQuestions = questions.length
         }
-        if (intro.trim().length > 0) {
-          exercise.consigne = `<mathalea-typst>${intro}</mathalea-typst>`
-        }
-        exercise.listeQuestions = questions.map(
-          (question) => `<mathalea-typst>${question}</mathalea-typst>`,
-        )
-        exercise.nbQuestions = questions.length
       } catch {
         // fichier .typ absent ou inaccessible : l'énoncé (png) reste inchangé
+      }
+
+      try {
+        const corTypUrl = getStaticExerciceCorTypUrl(uuid)
+        if (corTypUrl == null) throw new Error('no cor typ url')
+        const response = await window.fetch(corTypUrl)
+        if (!response.ok) throw new Error('fetch failed')
+        const code = await response.text()
+        if (code.trim().length === 0) throw new Error('empty file')
+        const { intro, questions } = splitTypQuestions(code)
+        if (questions.length === 0) {
+          exercise.listeCorrections[0] = `<mathalea-typst>${code}</mathalea-typst>`
+        } else {
+          if (intro.trim().length > 0) {
+            exercise.consigneCorrection = `<mathalea-typst>${intro}</mathalea-typst>`
+          }
+          exercise.listeCorrections = questions.map(
+            (question) => `<mathalea-typst>${question}</mathalea-typst>`,
+          )
+        }
+      } catch {
+        // fichier _cor.typ absent ou inaccessible (pas encore rédigé) :
+        // la correction (png scanné) reste inchangée
       }
     }
   }
 
   /** Extensions d'image reconnues par Typst pour le chemin virtuel du fichier */
   const KNOWN_IMAGE_EXTENSIONS = new Set(['png', 'jpg', 'jpeg', 'gif', 'webp'])
+
+  /**
+   * Appel `#image("chemin relatif")` dans le code Typst brut d'un exercice
+   * statique (`typ: true`), tel qu'écrit par l'auteur du `.typ` (voir
+   * `applyTypSourcesForStaticExercises`). Ne capture que les chemins
+   * relatifs : une URL absolue (`https://...`) n'est pas prise en charge par
+   * `#image`, elle échouerait de toute façon à la compilation d'origine.
+   */
+  const TYP_IMAGE_CALL = /#image\(\s*"([^"]+)"/g
+
+  /**
+   * Octets des images nécessaires à la compilation du code courant, indexés
+   * par le chemin virtuel exact référencé par les `image(...)` du document
+   * généré (mêmes clés que `setStaticImageBytes`, voir `prefetchStaticImages`).
+   * Réutilisés par `downloadTyp` pour empaqueter le `.typ` téléchargé avec
+   * ses images : sans elles, le fichier téléchargé seul ne compile pas
+   * (chemins relatifs ou virtuels introuvables hors de l'appli).
+   */
+  let requiredImageAssets: Map<string, Uint8Array> = $state(new Map())
 
   async function prefetchStaticImages() {
     // régénère chaque exercice (avec context.isTypst, comme le fera buildCode()
@@ -1556,6 +1815,10 @@
 
     const urls = new Set<string>()
     const imgSrc = /<img[^>]*\ssrc=["']([^"']+)["']/gi
+    // chemin virtuel (identique au chemin relatif du `#image(...)`, pour que
+    // le `.typ` reste utilisable tel quel) -> URL réelle, résolue par rapport
+    // au dossier du `.typ` source de l'exercice
+    const typImageUrls = new Map<string, string>()
     for (const exercise of exercises) {
       if (exercise == null) continue
       const html = [
@@ -1564,8 +1827,26 @@
         ...(exercise.listeCorrections ?? []),
       ].join('')
       for (const match of html.matchAll(imgSrc)) urls.add(match[1])
+
+      if (exercise.typeExercice === 'statique' && exercise.uuid != null) {
+        const typUrl = getStaticExerciceTypUrl(exercise.uuid)
+        if (typUrl != null) {
+          const typBase = new URL(typUrl, window.location.href)
+          for (const match of html.matchAll(TYP_IMAGE_CALL)) {
+            const relativePath = match[1]
+            if (/^[a-z][a-z0-9+.-]*:/i.test(relativePath)) continue // URL absolue : non gérée par #image
+            typImageUrls.set(
+              `/${relativePath}`,
+              new URL(relativePath, typBase).href,
+            )
+          }
+        }
+      }
     }
-    if (urls.size === 0) return
+    if (urls.size === 0 && typImageUrls.size === 0) {
+      requiredImageAssets = new Map()
+      return
+    }
     const { cachedBytes, setStaticImageBytes } = await import('./typstCompiler')
     const paths = new Map<string, string>()
     const bytes = new Map<string, Uint8Array>()
@@ -1586,8 +1867,18 @@
         }
       }),
     )
+    await Promise.all(
+      [...typImageUrls].map(async ([virtualPath, url]) => {
+        try {
+          bytes.set(virtualPath, await cachedBytes(toSameOriginUrl(url)))
+        } catch {
+          // image indisponible : #image() échouera pour cet exercice (diagnostic Typst)
+        }
+      }),
+    )
     setStaticImagePaths(paths)
     setStaticImageBytes(bytes)
+    requiredImageAssets = bytes
   }
 
   async function loadExercises() {
@@ -1783,11 +2074,27 @@
     })
   }
 
-  function downloadTyp() {
-    downloadBlob(
-      new Blob([buildExportCode()], { type: 'text/plain;charset=utf-8' }),
-      `${exportFilename()}.typ`,
-    )
+  /**
+   * Télécharge le `.typ` : seul s'il ne référence aucune image, sinon dans
+   * une archive ZIP avec les images nécessaires (mêmes chemins que ceux
+   * référencés par le code, voir `requiredImageAssets`) — sans elles, le
+   * `.typ` téléchargé seul ne compile pas hors de l'appli.
+   */
+  async function downloadTyp() {
+    const filename = exportFilename()
+    if (requiredImageAssets.size === 0) {
+      downloadBlob(
+        new Blob([buildExportCode()], { type: 'text/plain;charset=utf-8' }),
+        `${filename}.typ`,
+      )
+      return
+    }
+    const zip = new JSZip()
+    zip.file(`${filename}.typ`, buildExportCode())
+    for (const [virtualPath, bytes] of requiredImageAssets) {
+      zip.file(virtualPath.replace(/^\//, ''), bytes)
+    }
+    downloadBlob(await zip.generateAsync({ type: 'blob' }), `${filename}.zip`)
   }
 </script>
 
@@ -1887,15 +2194,21 @@
 
       <div class="grow"></div>
 
-      {#if displayMode === 'code'}
+      {#if displayMode === 'code' || displayMode === 'split'}
         <ButtonTextAction
-          text="Télécharger le .typ"
+          text={requiredImageAssets.size > 0
+            ? 'Télécharger le .typ (.zip)'
+            : 'Télécharger le .typ'}
           icon="bx-file-blank"
           inverted={true}
           class="rounded-lg py-1 px-2"
+          title={requiredImageAssets.size > 0
+            ? 'Archive ZIP contenant le .typ et les images dont il a besoin'
+            : ''}
           on:click={downloadTyp}
         />
-      {:else}
+      {/if}
+      {#if displayMode === 'preview' || displayMode === 'split'}
         <ButtonTextAction
           text={isGeneratingPdf ? 'PDF en cours...' : 'Télécharger le PDF'}
           icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-download'}
@@ -2261,14 +2574,17 @@
                   widgets={overlayWidgets}
                   layoutValues={tasksLayoutValues}
                   insertions={insertionValues}
+                  insertionsCorrection={insertionCorrectionValues}
                   header={headerValues}
                   {documentColumns}
                   {questionCounts}
                   {staticExercises}
                   {nonEditableStaticExercises}
+                  {nonEditableCorrections}
                   {figureZoomValues}
                   {figureAlignValues}
                   codeOverrides={codeOverrideValues}
+                  codeOverridesCorrection={codeOverrideCorrectionValues}
                   exerciseCount={exercises.length}
                   {mergedExercises}
                   mergeExercisesEnabled={!documentOptions.mergeExercises}
@@ -2279,6 +2595,9 @@
                   onInsert={insertAfterExercise}
                   onUpdateInsertion={updateInsertion}
                   onDeleteInsertion={deleteInsertion}
+                  onInsertCorrection={insertBeforeCorrection}
+                  onUpdateInsertionCorrection={updateInsertionCorrection}
+                  onDeleteInsertionCorrection={deleteInsertionCorrection}
                   onUpdateHeader={updateHeaderValue}
                   onChangeQuestionCount={changeQuestionCount}
                   onDeleteExercise={deleteExercise}
@@ -2286,6 +2605,7 @@
                   onNewData={newDataForExercise}
                   onOpenSettings={openSettings}
                   onEditCode={openCodeEdit}
+                  onEditCorrectionCode={openCorrectionCodeEdit}
                   onToggleMergeBefore={toggleMergeBefore}
                   {writingLinesValues}
                   onSetWritingLines={setWritingLines}
@@ -2349,13 +2669,21 @@
         class="relative flex w-full max-w-2xl flex-col gap-3 rounded-lg bg-coopmaths-canvas-dark p-4 shadow-xl dark:bg-coopmathsdark-canvas-dark"
       >
         <h2 class="text-base font-semibold">
-          Code Typst de l'exercice {num}
+          {codeEditPart === 'correction'
+            ? `Code Typst de la correction de l'exercice ${num}`
+            : `Code Typst de l'exercice ${num}`}
         </h2>
         <p class="text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus">
-          Modifiez le code ci-dessous : il remplacera l'énoncé généré de cet
-          exercice (QR-code et numérotation continue des questions désactivés
-          pour lui). Videz le champ pour revenir à l'énoncé généré
-          automatiquement.
+          {#if codeEditPart === 'correction'}
+            Modifiez le code ci-dessous : il remplacera la correction générée
+            de cet exercice. Videz le champ pour revenir à la correction
+            générée automatiquement.
+          {:else}
+            Modifiez le code ci-dessous : il remplacera l'énoncé généré de cet
+            exercice (QR-code et numérotation continue des questions désactivés
+            pour lui). Videz le champ pour revenir à l'énoncé généré
+            automatiquement.
+          {/if}
         </p>
         <textarea
           class="h-64 w-full rounded border border-gray-300 bg-coopmaths-canvas p-2 font-mono text-xs text-coopmaths-corpus dark:border-coopmathsdark-corpus-lightest dark:bg-coopmathsdark-canvas dark:text-coopmathsdark-corpus"
@@ -2404,7 +2732,7 @@
             <button
               type="button"
               class="rounded bg-coopmaths-action px-3 py-1 text-white"
-              onclick={() => updateExerciseCode(num, codeEditDraft)}
+              onclick={() => updateExerciseCode(num, codeEditDraft, codeEditPart)}
             >
               Enregistrer
             </button>

@@ -112,9 +112,9 @@ export default class ProportionPartieRestante extends ExerciceQcmA {
         introduction: (total) =>
           `Un club de padel compte $${total}$ joueurs, répartis en trois groupes selon leur niveau.`,
         categories: [
-          'joueurs de niveau 3 ou moins',
-          'joueurs de niveau 4 ou 5',
-          'joueurs de niveau 6 ou plus',
+          'joueurs de niveau $3$ ou moins',
+          'joueurs de niveau $4$ ou $5$',
+          'joueurs de niveau $6$ ou plus',
         ],
         ensemble: 'le club',
       },
@@ -122,9 +122,9 @@ export default class ProportionPartieRestante extends ExerciceQcmA {
         introduction: (total) =>
           `Lors d'un examen noté sur 20, les $${total}$ candidats sont répartis en trois groupes selon leur note.`,
         categories: [
-          'candidats ayant obtenu une note strictement inférieure à 8',
-          'candidats ayant obtenu une note comprise entre 8 et 12',
-          'candidats ayant obtenu une note strictement supérieure à 12',
+          'candidats ayant obtenu une note strictement inférieure à $8$',
+          'candidats ayant obtenu une note comprise entre $8$ et $12$',
+          'candidats ayant obtenu une note strictement supérieure à $12$',
         ],
         ensemble: "l'ensemble des candidats",
       },

@@ -11,11 +11,11 @@ import {
   ajouteChampTexteMathLive,
   remplisLesBlancs,
 } from '../lib/interactif/questionMathLive'
-import { creeTableauMathliveElement } from '../lib/interactif/tableaux/AjouteTableauMathlive'
 import type {
   ItabDbleEntry,
   Itableau,
 } from '../lib/interactif/tableaux/AjouteTableauMathlive'
+import { creeTableauMathliveElement } from '../lib/interactif/tableaux/AjouteTableauMathlive'
 import { getDistracteurs } from '../lib/mathalea'
 import { Complexe } from '../lib/mathFonctions/Complexe'
 import { combinaisonListes, shuffle } from '../lib/outils/arrayOutils'
@@ -23,6 +23,7 @@ import { range1 } from '../lib/outils/nombres'
 import type { AnswerValueType, AutoCorrection, Valeur } from '../lib/types'
 import {
   isValeur,
+  interactivityTypeToCustomElementFormat,
   mathliveCompatibleToCustomElementFormat,
   type InteractivityType,
   type OptionsComparaisonType,
@@ -60,6 +61,190 @@ function cloneQcmAutoCorrection(source: AutoCorrection): AutoCorrection {
     propositions: source.propositions?.map((proposition) => ({
       ...proposition,
     })),
+  }
+}
+
+function getRegisteredCustomElementTag(format: string | undefined) {
+  if (format == null || !listOfCustomElements.includes(format)) return null
+  const elementClass = mathaleaCustomElementsRegistry.get(format)
+  if (elementClass == null) {
+    throw Error(
+      "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
+    )
+  }
+  return format as InteractivityType
+}
+
+function getSimpleQuestionCustomElementFormat(question: Exercice) {
+  const formatInteractif = question.formatInteractif ?? 'mathlive'
+  const format =
+    formatInteractif === 'mathlive' &&
+    typeof question.reponse === 'object' &&
+    question.reponse != null &&
+    'champ1' in question.reponse
+      ? 'fill-in-the-blank'
+      : (interactivityTypeToCustomElementFormat(formatInteractif) ??
+        mathliveCompatibleToCustomElementFormat(formatInteractif) ??
+        formatInteractif)
+  return getRegisteredCustomElementTag(format)
+}
+
+function getClassicQuestionCustomElementFormat(question: Exercice) {
+  const format =
+    mathliveCompatibleToCustomElementFormat(
+      question.autoCorrection[0]?.formatInteractif,
+    ) ?? question.autoCorrection[0]?.formatInteractif
+  return getRegisteredCustomElementTag(format)
+}
+
+function remapCustomElementQuestionIds(
+  questionHtml: string,
+  tag: InteractivityType,
+  numeroExercice: number | undefined,
+  destinationIndex: number,
+) {
+  const n = numeroExercice ?? 0
+  let html = questionHtml
+    .replaceAll(`${tag}Ex${n}Q0`, `${tag}Ex${n}Q${destinationIndex}`)
+    .replaceAll(
+      `resultatCheckEx${n}Q0`,
+      `resultatCheckEx${n}Q${destinationIndex}`,
+    )
+    .replaceAll(`feedbackEx${n}Q0`, `feedbackEx${n}Q${destinationIndex}`)
+    .replaceAll('resultatCheckEx0Q0', `resultatCheckEx0Q${destinationIndex}`)
+    .replaceAll('feedbackEx0Q0', `feedbackEx0Q${destinationIndex}`)
+
+  if (tag === 'meta-interactif-2d') {
+    html = html.replace(
+      /id="MetaInteractif2dEx\d+Q\d+field(\d+)"/g,
+      `id="MetaInteractif2dEx${n}Q${destinationIndex}field$1"`,
+    )
+  }
+  return html
+}
+
+function injectSimpleQuestionCustomElement({
+  meta,
+  question,
+  questionIndex,
+  tag,
+  formatChampTexte,
+  optionsChampTexte,
+}: {
+  meta: MetaExercice
+  question: Exercice
+  questionIndex: number
+  tag: InteractivityType
+  formatChampTexte: string
+  optionsChampTexte: Parameters<typeof ajouteChampTexte>[3]
+}) {
+  const questionHtml = String(question.question ?? '')
+  if (questionHtml.includes(`<${tag}`)) {
+    return remapCustomElementQuestionIds(
+      questionHtml,
+      tag,
+      question.numeroExercice,
+      questionIndex,
+    )
+  }
+
+  if (tag === 'mathalea-mathfield') {
+    return (
+      questionHtml +
+      ajouteChampTexteMathLive(
+        meta,
+        questionIndex,
+        formatChampTexte,
+        optionsChampTexte,
+      )
+    )
+  }
+  if (tag === 'mathalea-textfield') {
+    return (
+      questionHtml +
+      ajouteChampTexte(meta, questionIndex, formatChampTexte, optionsChampTexte)
+    )
+  }
+  if (tag === 'fill-in-the-blank') {
+    return remplisLesBlancs(
+      meta,
+      questionIndex,
+      questionHtml,
+      formatChampTexte,
+      '\\ldots',
+    )
+  }
+  if (tag === 'tableau-mathlive') {
+    const questionWithTableau = question as QuestionWithOptionalTableau
+    if (questionWithTableau.tableau == null) {
+      window.notify(
+        `Tableau non défini pour l'interactivité tableau-mathlive. Exercice ${meta.id} ${meta.uuid}`,
+        { question },
+      )
+      return questionHtml
+    }
+    return (
+      questionHtml +
+      creeTableauMathliveElement({
+        numeroExercice: meta.numeroExercice ?? 0,
+        question: questionIndex,
+        tableau: questionWithTableau.tableau,
+        typeTableau: questionWithTableau.typeTableau ?? 'doubleEntree',
+        classes: formatChampTexte,
+      })
+    )
+  }
+
+  return remapCustomElementQuestionIds(
+    questionHtml,
+    tag,
+    question.numeroExercice,
+    questionIndex,
+  )
+}
+
+function normalizeSimpleAnswerValue(answer: unknown): AnswerValueType {
+  if (typeof answer === 'string' || typeof answer === 'number') {
+    return String(answer)
+  }
+  if (answer instanceof FractionEtendue) return answer.texFraction
+  if (answer instanceof Decimal) return answer.toString()
+  if (answer instanceof Complexe) return answer.tex()
+  return answer as AnswerValueType
+}
+
+function buildSimpleQuestionAnswerValue(
+  question: Exercice,
+  tag: InteractivityType | undefined,
+): Valeur {
+  const options =
+    question.optionsDeComparaison == null
+      ? ({} as OptionsComparaisonType)
+      : (question.optionsDeComparaison as OptionsComparaisonType)
+  const compare = question.compare
+  const answer = question.reponse
+
+  if (tag === 'fill-in-the-blank') {
+    if (typeof answer === 'string') {
+      return {
+        champ1: {
+          value: answer,
+          compare,
+          options,
+        },
+      }
+    }
+    return answer as Valeur
+  }
+
+  if (isValeur(answer)) return answer
+
+  return {
+    reponse: {
+      value: normalizeSimpleAnswerValue(answer),
+      compare,
+      options,
+    },
   }
 }
 
@@ -204,14 +389,7 @@ export default class MetaExercice extends Exercice {
               break
             }
             const customElementFormat =
-              Question.formatInteractif === 'mathlive' &&
-              typeof Question.reponse === 'object' &&
-              Question.reponse != null &&
-              'champ1' in Question.reponse
-                ? 'fill-in-the-blank'
-                : (mathliveCompatibleToCustomElementFormat(
-                    Question.formatInteractif,
-                  ) ?? Question.formatInteractif)
+              getSimpleQuestionCustomElementFormat(Question)
             const qcmAutoCorrection = getQcmAutoCorrection(
               Question,
               indexQuestion,
@@ -221,228 +399,39 @@ export default class MetaExercice extends Exercice {
                 cloneQcmAutoCorrection(qcmAutoCorrection)
               this.listeQuestions[indexQuestion] =
                 consigne + String(Question.question ?? '')
-            } else if (
-              listOfCustomElements.includes(customElementFormat ?? '')
-            ) {
-              const liste = Array.from(mathaleaCustomElementsRegistry)
-              const [tag, elementClasse] =
-                liste.find((custom) => custom[0] === customElementFormat) ?? []
-              if (tag == null || elementClasse == null) {
-                throw Error(
-                  "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
-                )
-              }
-              const n = Question.numeroExercice
-              let questionHtml = String(Question.question)
-              if (!questionHtml.includes(`<${tag}`)) {
-                if (tag === 'mathalea-mathfield') {
-                  questionHtml += ajouteChampTexteMathLive(
-                    this,
-                    indexQuestion,
-                    formatChampTexte,
-                    optionsChampTexte,
-                  )
-                } else if (tag === 'mathalea-textfield') {
-                  questionHtml += ajouteChampTexte(
-                    this,
-                    indexQuestion,
-                    formatChampTexte,
-                    optionsChampTexte,
-                  )
-                } else if (tag === 'fill-in-the-blank') {
-                  questionHtml = remplisLesBlancs(
-                    this,
-                    indexQuestion,
-                    questionHtml,
-                    formatChampTexte,
-                    '\\ldots',
-                  )
-                } else if (tag === 'tableau-mathlive') {
-                  const questionWithTableau =
-                    Question as QuestionWithOptionalTableau
-                  if (questionWithTableau.tableau == null) {
-                    window.notify(
-                      `Tableau non défini pour l'interactivité tableau-mathlive. Exercice ${this.id} ${this.uuid}`,
-                      { question: Question },
-                    )
-                  } else {
-                    questionHtml += creeTableauMathliveElement({
-                      numeroExercice: this.numeroExercice ?? 0,
-                      question: indexQuestion,
-                      tableau: questionWithTableau.tableau,
-                      typeTableau:
-                        questionWithTableau.typeTableau ?? 'doubleEntree',
-                      classes: formatChampTexte,
-                    })
-                  }
-                }
-              } else {
-                questionHtml = questionHtml
-                  .replaceAll(`${tag}Ex${n}Q0`, `${tag}Ex${n}Q${indexQuestion}`)
-                  .replaceAll(
-                    `resultatCheckEx${n}Q0`,
-                    `resultatCheckEx${n}Q${indexQuestion}`,
-                  )
-                  .replaceAll(
-                    `feedbackEx${n}Q0`,
-                    `feedbackEx${n}Q${indexQuestion}`,
-                  )
-              }
-              this.listeQuestions[indexQuestion] = consigne + questionHtml
-              if (tag === 'fill-in-the-blank') {
-                if (typeof Question.reponse === 'string') {
-                  handleAnswers(
-                    this,
-                    indexQuestion,
-                    {
-                      champ1: {
-                        value: Question.reponse,
-                        compare: Question.compare,
-                        options:
-                          Question.optionsDeComparaison ??
-                          ({} as OptionsComparaisonType),
-                      },
-                    },
-                    { ...optionsChampTexte, formatInteractif: tag },
-                  )
-                } else {
-                  handleAnswers(
-                    this,
-                    indexQuestion,
-                    Question.reponse as Valeur,
-                    { ...optionsChampTexte, formatInteractif: tag },
-                  )
-                }
-              } else if (
-                typeof Question.reponse === 'string' ||
-                typeof Question.reponse === 'number'
-              ) {
-                handleAnswers(
-                  this,
-                  indexQuestion,
-                  {
-                    reponse: {
-                      value: String(Question.reponse),
-                      compare: Question.compare,
-                      options:
-                        Question.optionsDeComparaison ??
-                        ({} as OptionsComparaisonType),
-                    },
-                  },
-                  { formatInteractif: tag as InteractivityType },
-                )
-              } else if (Question.reponse instanceof FractionEtendue) {
-                handleAnswers(
-                  this,
-                  indexQuestion,
-                  {
-                    reponse: {
-                      value: Question.reponse.texFraction,
-                      compare: Question.compare,
-                      options:
-                        Question.optionsDeComparaison ??
-                        ({} as OptionsComparaisonType),
-                    },
-                  },
-                  { formatInteractif: tag as InteractivityType },
-                )
-              } else if (Question.reponse instanceof Decimal) {
-                handleAnswers(
-                  this,
-                  indexQuestion,
-                  {
-                    reponse: {
-                      value: Question.reponse.toString(),
-                      compare: Question.compare,
-                      options:
-                        Question.optionsDeComparaison ??
-                        ({} as OptionsComparaisonType),
-                    },
-                  },
-                  { formatInteractif: tag as InteractivityType },
-                )
-              } else if (
-                Question.reponse instanceof Grandeur ||
-                Question.reponse instanceof Hms
-              ) {
-                handleAnswers(
-                  this,
-                  indexQuestion,
-                  {
-                    reponse: {
-                      value: Question.reponse,
-                      compare: Question.compare,
-                      options:
-                        Question.optionsDeComparaison ??
-                        ({} as OptionsComparaisonType),
-                    },
-                  },
-                  { formatInteractif: tag as InteractivityType },
-                )
-              } else if (Question.reponse instanceof Complexe) {
-                handleAnswers(
-                  this,
-                  indexQuestion,
-                  {
-                    reponse: {
-                      value: Question.reponse.tex(),
-                      compare: Question.compare,
-                      options:
-                        Question.optionsDeComparaison ??
-                        ({} as OptionsComparaisonType),
-                    },
-                  },
-                  { formatInteractif: tag as InteractivityType },
-                )
-              } else if (Array.isArray(Question.reponse)) {
-                handleAnswers(
-                  this,
-                  indexQuestion,
-                  {
-                    reponse: {
-                      value: Question.reponse,
-                      compare: Question.compare,
-                      options:
-                        Question.optionsDeComparaison ??
-                        ({} as OptionsComparaisonType),
-                    },
-                  },
-                  { formatInteractif: tag as InteractivityType },
-                )
-              } else if (isValeur(Question.reponse)) {
-                handleAnswers(this, indexQuestion, Question.reponse as Valeur, {
-                  formatInteractif: tag as InteractivityType,
-                })
-              } else {
-                handleAnswers(this, indexQuestion, Question.reponse as Valeur, {
-                  formatInteractif: tag as InteractivityType,
-                })
-              }
-            } else if (Question.formatInteractif === 'MetaInteractif2d') {
-              const n = Question.numeroExercice
-              if (Question.question != null) {
-                const inputsIds = Question.question.matchAll(
-                  /id="MetaInteractif2dEx\d+Q\d+field(\d+)"/g,
-                )
-                for (const match of inputsIds) {
-                  Question.question = Question.question.replace(
-                    `id="MetaInteractif2dEx${n}Q0field${match[1]}"`,
-                    `id="MetaInteractif2dEx${n}Q${indexQuestion}field${match[1]}"`,
-                  )
-                }
-                Question.question = Question.question.replace(
-                  `id="resultatCheckEx${n}Q0"`,
-                  `id="resultatCheckEx${n}Q${indexQuestion}"`,
-                )
-                Question.question = Question.question.replace(
-                  `id="feedbackEx${n}Q0"`,
-                  `id="feedbackEx${n}Q${indexQuestion}"`,
-                )
-              }
-              handleAnswers(this, indexQuestion, Question.reponse as Valeur, {
-                formatInteractif: 'MetaInteractif2d',
+            } else if (customElementFormat != null && !Question.interactif) {
+              const tag = customElementFormat
+              this.listeQuestions[indexQuestion] =
+                consigne + String(Question.question ?? '')
+              handleAnswers(
+                this,
+                indexQuestion,
+                buildSimpleQuestionAnswerValue(Question, tag),
+                {
+                  ...(tag === 'fill-in-the-blank' ? optionsChampTexte : {}),
+                  formatInteractif: tag,
+                },
+              )
+            } else if (customElementFormat != null) {
+              const tag = customElementFormat
+              const questionHtml = injectSimpleQuestionCustomElement({
+                meta: this,
+                question: Question,
+                questionIndex: indexQuestion,
+                tag,
+                formatChampTexte,
+                optionsChampTexte,
               })
-              this.listeQuestions[indexQuestion] = consigne + Question.question
+              this.listeQuestions[indexQuestion] = consigne + questionHtml
+              handleAnswers(
+                this,
+                indexQuestion,
+                buildSimpleQuestionAnswerValue(Question, tag),
+                {
+                  ...(tag === 'fill-in-the-blank' ? optionsChampTexte : {}),
+                  formatInteractif: tag,
+                },
+              )
             } else {
               if (Question.formatInteractif === 'custom') {
                 this.correctionInteractives[indexQuestion] =
@@ -653,21 +642,9 @@ export default class MetaExercice extends Exercice {
                 ? Question.autoCorrection[0]
                 : cloneQcmAutoCorrection(qcmAutoCorrection)
             const customElementFormat =
-              mathliveCompatibleToCustomElementFormat(
-                Question.autoCorrection[0]?.formatInteractif,
-              ) ?? Question.autoCorrection[0]?.formatInteractif
-            if (
-              qcmAutoCorrection == null &&
-              listOfCustomElements.includes(customElementFormat ?? '')
-            ) {
-              const liste = Array.from(mathaleaCustomElementsRegistry)
-              const [tag, elementClasse] =
-                liste.find((custom) => custom[0] === customElementFormat) ?? []
-              if (tag == null || elementClasse == null) {
-                throw Error(
-                  "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
-                )
-              }
+              getClassicQuestionCustomElementFormat(Question)
+            if (qcmAutoCorrection == null && customElementFormat != null) {
+              const tag = customElementFormat
               const n = Question.numeroExercice
               const questionHtml = String(Question.listeQuestions[0])
                 .replaceAll(`${tag}Ex${n}Q0`, `${tag}Ex${n}Q${indexQuestion}`)

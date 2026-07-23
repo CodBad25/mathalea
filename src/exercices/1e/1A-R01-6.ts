@@ -29,7 +29,7 @@ export default class EffectifProportion extends ExerciceQcmA {
     const bonneReponse = total * proportion
 
     this.enonce =
-      `Une boîte contient $${total}$ billes. <br>Dans cette boîte la proportion de billes vertes est égale à $${proportion}$.<br> ` +
+      `Une boîte contient $${total}$ billes. <br>Dans cette boîte, la proportion de billes vertes est égale à $${proportion}$.<br> ` +
       `Le nombre de billes vertes dans la boîte est égal à :`
 
     this.correction =
@@ -138,7 +138,7 @@ export default class EffectifProportion extends ExerciceQcmA {
     }
 
     this.enonce =
-      `${conteneur} contient $${total}$ ${contexte.pluriel}. <br>${contexte.dans.charAt(0).toUpperCase() + contexte.dans.slice(1)} ` +
+      `${conteneur} contient $${total}$ ${contexte.pluriel}. <br>${contexte.dans.charAt(0).toUpperCase() + contexte.dans.slice(1)}, ` +
       `la proportion de ${contexte.pluriel} ${contexte.attribut} est égale à $${texNombre(proportion, 1)}$.<br> ` +
       `Le nombre de ${contexte.pluriel} ${contexte.attribut} ${contexte.dans} est égal à :`
 

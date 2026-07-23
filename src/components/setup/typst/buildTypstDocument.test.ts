@@ -44,9 +44,12 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('#let ex1 = exo.with(')
     expect(code).toContain('id: "6e23-1",')
     expect(code).toContain('exercise: [')
-    expect(code).toContain('solution: [')
     expect(code).toContain('#ex1()')
-    expect(code).toContain('#exo-print-solutions(title: none)')
+    // la correction est imprimée directement (exo-solution-box), pas via
+    // exo-print-solutions : elle garde ainsi un point d'insertion (palette)
+    // juste avant son badge, voir buildVersionContent
+    expect(code).toContain('#exo-solution-box(')
+    expect(code).toContain('exercise-id: "6e23-1",')
     expect(code).toContain(
       '#import "@preview/taskize:0.2.7": tasks, tasks-setup',
     )

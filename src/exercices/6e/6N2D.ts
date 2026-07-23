@@ -177,7 +177,7 @@ export default class ProduitDeDecimauxAPartirProduitConnu extends Exercice {
 
       if (this.sup3) {
         texte = addMultiMathfield(this, i, {
-          dataTemplate: `Sachant que $${nb1}\\times ${nb2} = ${texNombre(nb1 * nb2)}$, calculer : $${texNombre(multipleNb1)}$ $\\times$ $${texNombre(multipleNb2)} = $%{champ1}`,
+          dataTemplate: `Sachant que $${nb1}\\times ${nb2} = ${texNombre(nb1 * nb2)}$, calculer : $${texNombre(multipleNb1)}$ $\\times$ $${texNombre(multipleNb2)}${this.interactif ? '=' : ''}$%{champ1}`,
           dataOptions: {
             champ1: {
               keyboard: KeyboardType.clavierNumbers,
@@ -201,7 +201,7 @@ export default class ProduitDeDecimauxAPartirProduitConnu extends Exercice {
         reponse[0] = 0
       } else {
         texte = addMultiMathfield(this, i, {
-          dataTemplate: `Calculer ${this.sup2 === 1 ? 'en ligne' : "en posant l'opération"} $${nb1}\\times ${nb2}=$%{champ1} puis en déduire le résultat de $${texNombre(multipleNb1)}\\times ${texNombre(multipleNb2)}$ : %{champ2}`,
+          dataTemplate: `Calculer ${this.sup2 === 1 ? 'en ligne' : "en posant l'opération"} $${nb1}\\times ${nb2}${this.interactif ? '=' : ''}$%{champ1} puis en déduire le résultat de $${texNombre(multipleNb1)}\\times ${texNombre(multipleNb2)}$ : %{champ2}`,
           dataOptions: {
             champ1: {
               keyboard: KeyboardType.clavierNumbers,

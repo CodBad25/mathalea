@@ -150,6 +150,7 @@ export interface TypstAnchor {
   /**
    * `tasks`/`tasks-corr` : liste de questions réglable (énoncé/correction) ;
    * `exo` : début d'un exercice (nombre de questions, suppression) ;
+   * `corr` : début de la correction d'un exercice (édition du code, insertion) ;
    * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche ;
    * `figure` : figure mathalea2d embarquée (zoom) ;
    * `carte-recto`/`carte-verso` : carte de la vue Flash-cards (taille du texte)
@@ -158,6 +159,7 @@ export interface TypstAnchor {
     | 'tasks'
     | 'tasks-corr'
     | 'exo'
+    | 'corr'
     | 'gap'
     | 'header'
     | 'figure'
@@ -174,6 +176,7 @@ const ANCHOR_KINDS = new Set([
   'tasks',
   'tasks-corr',
   'exo',
+  'corr',
   'gap',
   'header',
   'figure',
@@ -249,5 +252,16 @@ export async function compileTypstToPdf(
 ): Promise<Uint8Array | undefined> {
   await ensureInitialized()
   await mapStaticImages()
-  return await $typst.pdf({ mainContent: source })
+  const compiler = await $typst.getCompiler()
+  await compiler.addSource(MAIN_FILE, source)
+  // même « monde » de compilation que l'aperçu SVG (`compileTypstToSvg`) :
+  // `$typst.pdf()` compile dans un monde séparé qui ne voit pas les fichiers
+  // virtuels enregistrés par `mapShadow` (images d'exercices statiques).
+  return await compiler.runWithWorld(
+    { mainFilePath: MAIN_FILE },
+    async (world) => {
+      const compiled = await world.pdf({ diagnostics: 'unix' })
+      return compiled?.result
+    },
+  )
 }

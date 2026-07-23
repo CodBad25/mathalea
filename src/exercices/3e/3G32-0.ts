@@ -33,6 +33,7 @@ import {
   vecteur3d,
 } from '../../lib/3d/3dProjectionMathalea2d/elementsEtTransformations3d'
 import { sphere3d } from '../../lib/3d/3dProjectionMathalea2d/Sphere3dPerspectiveCavaliere'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
@@ -63,8 +64,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   "Problèmes nécessitant un calcul de longueur à l'aide de la trigonométrie"
@@ -166,7 +165,6 @@ export default class ProblemesTrigoLongueur extends Exercice {
     ]
     const listeTypeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup2,
-      min: 1,
       max: 6,
       melange: 7,
       defaut: 7,

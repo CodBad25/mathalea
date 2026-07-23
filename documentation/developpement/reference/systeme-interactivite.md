@@ -12,31 +12,34 @@ Les formats sont définis par `InteractivityType` dans `src/lib/types.ts`. Les f
 
 Les custom elements maison sont centralisés dans `src/lib/customElements/`. Dans un exercice, utiliser le helper métier indiqué ci-dessous : il prépare le HTML périphérique et délègue à la méthode `create()` du custom element. Les méthodes `create()` sont des primitives destinées à l'implémentation des helpers et aux infrastructures qui doivent reconstruire un composant, comme `MetaExerciceCan`.
 
-| Format                      | Statut     | Usage                                                            | Helper d'injection recommandé      | Fichiers principaux                                                                                                                    |
-| --------------------------- | ---------- | ---------------------------------------------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `mathlive`                  | Obsolète   | Alias historique de `mathalea-mathfield`                         | `ajouteChampTexteMathLive()`       | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaMathfield.ts`, `src/lib/interactif/mathLiveVerifications.ts` |
-| `fillInTheBlank`            | Obsolète   | Alias historique de `fill-in-the-blank`                          | `remplisLesBlancs()`               | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/FillInTheBlank.ts`                                                   |
-| `tableauMathlive`           | Obsolète   | Alias historique de `tableau-mathlive`                           | `creeTableauMathliveElement()`     | `src/lib/interactif/tableaux/AjouteTableauMathlive.ts`, `src/lib/customElements/TableauMathlive.ts`                                    |
-| `texte`                     | Obsolète   | Alias historique de `mathalea-textfield`                         | `ajouteChampTexte()`               | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaTextfield.ts`                                                |
-| `qcm`                       | Obsolète   | API historique des QCM, rendue en HTML par `mathalea-qcm`        | `propositionsQcm()`                | `src/lib/interactif/qcm.ts`, `src/lib/customElements/MathaleaQcm.ts`                                                                   |
-| `mathalea-qcm`              | Moderne    | QCM déclaré par `handleAnswers()`                                | `addMathaleaQcm()`                 | `src/lib/customElements/MathaleaQcm.ts`                                                                                                |
-| `liste-deroulante`          | Moderne    | Liste déroulante HTML custom                                     | `choixDeroulant()`                 | `src/lib/customElements/ListeDeroulanteElement.ts`                                                                                     |
-| `dnd`                       | Historique | Glisser-déposer                                                  | helpers de `DragAndDrop.ts`        | `src/lib/interactif/DragAndDrop.ts`                                                                                                    |
-| `cliqueFigure`              | Historique | Clics sur objets de figure                                       | objets SVG et `cliqueFiguresArray` | `src/lib/interactif/cliqueFigure.ts`, `src/lib/interactif/gestionInteractif.ts`                                                        |
-| `svg-selection`             | Moderne    | Sélection de SVG avec somme de valeurs                           | `addSvgSelection()`                | `src/lib/customElements/SvgSelectionElement.ts`                                                                                        |
-| `custom`                    | Historique | Vérification fournie par l'exercice ou un méta-exercice          | fourni par l'exercice              | `src/lib/interactif/gestionInteractif.ts`                                                                                              |
-| `my-spreadsheet`            | Moderne    | Réponse de type feuille de calcul                                | `addSheet()`                       | `src/lib/customElements/MySpreadSheet.ts`                                                                                              |
-| `MetaInteractif2d`          | Historique | Champs dans une figure MathALÉA 2D                               | helpers de `interactif2d.ts`       | `src/lib/2d/interactif2d.ts`, `src/lib/interactif/gestionInteractif.ts`                                                                |
-| `multi-mathfield`           | Moderne    | Plusieurs champs MathLive coordonnés                             | `addMultiMathfield()`              | `src/lib/customElements/MultiMathfield.ts`                                                                                             |
-| `mathalea-mathfield`        | Moderne    | Champ MathLive simple                                            | `ajouteChampTexteMathLive()`       | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaMathfield.ts`                                                |
-| `fill-in-the-blank`         | Moderne    | Texte à trous MathLive                                           | `remplisLesBlancs()`               | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/FillInTheBlank.ts`                                                   |
-| `mathalea-textfield`        | Moderne    | Champ texte HTML                                                 | `ajouteChampTexte()`               | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaTextfield.ts`                                                |
-| `tableau-mathlive`          | Moderne    | Tableau de cellules MathLive                                     | `creeTableauMathliveElement()`     | `src/lib/interactif/tableaux/AjouteTableauMathlive.ts`, `src/lib/customElements/TableauMathlive.ts`                                    |
-| `guide-ane`                 | Moderne    | Un guide-âne interactif                                          | `addGuideAne()`                    | `src/lib/customElements/GuideAne.ts`                                                                                                   |
-| `demi-droite-interactive`   | Moderne    | Pour placer des points d'abscisses fractionnaires                | `demiDroiteInteractive()`          | `src/lib/customElements/demi_droite_interactive.ts`                                                                                    |
-| `interactive-clock`         | Moderne    | Une horloge interactive                                          | `handleInteractiveClock()`         | `src/lib/customElements/InteractiveClock.ts`                                                                                           |
-| `trigo-circle-selection`    | Moderne    | Un cercle trigo interactif                                       | `selectionCercleTrigo()`           | `src/lib/customElements/TrigoCircleSelectionElement.ts`                                                                                |
-| `tableau-signes-variations` | Moderne    | Tableau de signes/variations interactif, export tkz-tab en LaTeX | `addTableauSignesVariations()`     | `src/lib/customElements/TableauSignesVariationsElement.ts`                                                                             |
+| Format                      | Statut     | Usage                                                             | Helper d'injection recommandé         | Fichiers principaux                                                                                                                    |
+| --------------------------- | ---------- | ----------------------------------------------------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `mathlive`                  | Obsolète   | Alias historique de `mathalea-mathfield`                          | `ajouteChampTexteMathLive()`          | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaMathfield.ts`, `src/lib/interactif/mathLiveVerifications.ts` |
+| `fillInTheBlank`            | Obsolète   | Alias historique de `fill-in-the-blank`                           | `remplisLesBlancs()`                  | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/FillInTheBlank.ts`                                                   |
+| `tableauMathlive`           | Obsolète   | Alias historique de `tableau-mathlive`                            | `creeTableauMathliveElement()`        | `src/lib/interactif/tableaux/AjouteTableauMathlive.ts`, `src/lib/customElements/TableauMathlive.ts`                                    |
+| `texte`                     | Obsolète   | Alias historique de `mathalea-textfield`                          | `ajouteChampTexte()`                  | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaTextfield.ts`                                                |
+| `qcm`                       | Obsolète   | API historique des QCM, rendue en HTML par `mathalea-qcm`         | `propositionsQcm()`                   | `src/lib/interactif/qcm.ts`, `src/lib/customElements/MathaleaQcm.ts`                                                                   |
+| `mathalea-qcm`              | Moderne    | QCM déclaré par `handleAnswers()`                                 | `addMathaleaQcm()`                    | `src/lib/customElements/MathaleaQcm.ts`                                                                                                |
+| `liste-deroulante`          | Moderne    | Liste déroulante HTML custom                                      | `choixDeroulant()`                    | `src/lib/customElements/ListeDeroulanteElement.ts`                                                                                     |
+| `dnd`                       | Historique | Alias historique de `drag-and-drop`                               | helpers de `DragAndDrop.ts`           | `src/lib/interactif/DragAndDrop.ts`, `src/lib/customElements/DragAndDropElement.ts`                                                    |
+| `drag-and-drop`             | Moderne    | Glisser-déposer                                                   | `DragAndDrop.ajouteDragAndDrop()`     | `src/lib/interactif/DragAndDrop.ts`, `src/lib/customElements/DragAndDropElement.ts`                                                    |
+| `cliqueFigure`              | Historique | Clics sur objets de figure                                        | objets SVG et `cliqueFiguresArray`    | `src/lib/customElements/CliqueFigureElement.ts`, `src/lib/interactif/gestionInteractif.ts`                                             |
+| `svg-selection`             | Moderne    | Sélection de SVG avec somme de valeurs                            | `addSvgSelection()`                   | `src/lib/customElements/SvgSelectionElement.ts`                                                                                        |
+| `custom`                    | Historique | Vérification fournie par l'exercice ou un méta-exercice           | fourni par l'exercice                 | `src/lib/interactif/gestionInteractif.ts`                                                                                              |
+| `my-spreadsheet`            | Moderne    | Réponse de type feuille de calcul                                 | `addSheet()`                          | `src/lib/customElements/MySpreadSheet.ts`                                                                                              |
+| `MetaInteractif2d`          | Historique | Alias historique de `meta-interactif-2d`                          | helpers de `interactif2d.ts`          | `src/lib/2d/interactif2d.ts`, `src/lib/customElements/MetaInteractif2dElement.ts`                                                      |
+| `meta-interactif-2d`        | Moderne    | Champs MathLive placés dans une figure MathALÉA 2D                | `mathalea2d()` via `MetaInteractif2d` | `src/lib/2d/interactif2d.ts`, `src/modules/mathalea2d.ts`, `src/lib/customElements/MetaInteractif2dElement.ts`                         |
+| `multi-mathfield`           | Moderne    | Plusieurs champs MathLive coordonnés                              | `addMultiMathfield()`                 | `src/lib/customElements/MultiMathfield.ts`                                                                                             |
+| `mathalea-mathfield`        | Moderne    | Champ MathLive simple                                             | `ajouteChampTexteMathLive()`          | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaMathfield.ts`                                                |
+| `fill-in-the-blank`         | Moderne    | Texte à trous MathLive                                            | `remplisLesBlancs()`                  | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/FillInTheBlank.ts`                                                   |
+| `mathalea-textfield`        | Moderne    | Champ texte HTML                                                  | `ajouteChampTexte()`                  | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaTextfield.ts`                                                |
+| `tableau-mathlive`          | Moderne    | Tableau de cellules MathLive                                      | `creeTableauMathliveElement()`        | `src/lib/interactif/tableaux/AjouteTableauMathlive.ts`, `src/lib/customElements/TableauMathlive.ts`                                    |
+| `guide-ane`                 | Moderne    | Un guide-âne interactif                                           | `addGuideAne()`                       | `src/lib/customElements/GuideAne.ts`                                                                                                   |
+| `clique-figure`             | Moderne    | Sélection d'une ou plusieurs figures déjà présentes dans l'énoncé | `addCliqueFigure()`                   | `src/lib/customElements/CliqueFigureElement.ts`                                                                                        |
+| `demi-droite-interactive`   | Moderne    | Pour placer des points d'abscisses fractionnaires                 | `demiDroiteInteractive()`             | `src/lib/customElements/demi_droite_interactive.ts`                                                                                    |
+| `interactive-clock`         | Moderne    | Une horloge interactive                                           | `handleInteractiveClock()`            | `src/lib/customElements/InteractiveClock.ts`                                                                                           |
+| `trigo-circle-selection`    | Moderne    | Un cercle trigo interactif                                        | `selectionCercleTrigo()`              | `src/lib/customElements/TrigoCircleSelectionElement.ts`                                                                                |
+| `tableau-signes-variations` | Moderne    | Tableau de signes/variations interactif, export tkz-tab en LaTeX  | `addTableauSignesVariations()`        | `src/lib/customElements/TableauSignesVariationsElement.ts`                                                                             |
 
 Pour un nouvel exercice, choisir le format moderne dans `handleAnswers()` tout en continuant d'utiliser le helper métier correspondant pour injecter le composant. Les formats obsolètes restent acceptés afin de ne pas migrer en bloc les exercices existants.
 
@@ -76,13 +79,16 @@ Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métie
 
 Avant le dispatch, les formats historiques compatibles sont normalisés vers leur custom element :
 
-| Format historique | Custom element terminal |
-| ----------------- | ----------------------- |
-| `mathlive`        | `mathalea-mathfield`    |
-| `fillInTheBlank`  | `fill-in-the-blank`     |
-| `tableauMathlive` | `tableau-mathlive`      |
-| `texte`           | `mathalea-textfield`    |
-| `qcm`             | `mathalea-qcm`          |
+| Format historique  | Custom element terminal |
+| ------------------ | ----------------------- |
+| `mathlive`         | `mathalea-mathfield`    |
+| `fillInTheBlank`   | `fill-in-the-blank`     |
+| `tableauMathlive`  | `tableau-mathlive`      |
+| `texte`            | `mathalea-textfield`    |
+| `qcm`              | `mathalea-qcm`          |
+| `cliqueFigure`     | `clique-figure`         |
+| `dnd`              | `drag-and-drop`         |
+| `MetaInteractif2d` | `meta-interactif-2d`    |
 
 Le dispatch utilise `interactivityTypeToCustomElementFormat()` dans `src/lib/types.ts`. La fonction ajoute la compatibilité QCM à la normalisation MathLive sans affecter les branches de construction de `MetaExerciceCan`. Elle est utilisée dans le flux classique (`exerciceInteractif()`), les flux CAN (`gestionCan.ts`, `Can.svelte`) et `QuestionParPage.svelte`. Les wrappers appellent ensuite leur propre `verifQuestion()` terminale. Les helpers historiques restent donc utilisables dans les exercices, mais la correction passe par le registre des `MathaleaCustomElement`.
 
@@ -99,19 +105,22 @@ Les QCM n'installent plus de listener de validation depuis `propositionsQcm()` :
 | `mathalea-textfield`        | `MathaleaTextfieldElement.verifQuestion()` dans `src/lib/customElements/MathaleaTextfield.ts`, vérification terminale d'un champ texte                          |
 | `tableau-mathlive`          | `TableauMathliveElement.verifQuestion()` dans `src/lib/customElements/TableauMathlive.ts`, vérification terminale des cellules `LxCy`                           |
 | `multi-mathfield`           | `MultiMathfieldElement.verifQuestion()` dans `src/lib/customElements/MultiMathfield.ts`                                                                         |
-| `MetaInteractif2d`          | `verifQuestionMetaInteractif2d()`                                                                                                                               |
+| `MetaInteractif2d`          | Routé vers `MetaInteractif2dElement.verifQuestion()` dans `src/lib/customElements/MetaInteractif2dElement.ts`                                                   |
+| `meta-interactif-2d`        | `MetaInteractif2dElement.verifQuestion()` dans `src/lib/customElements/MetaInteractif2dElement.ts`                                                              |
 | `qcm`                       | Routé vers `MathaleaQcmElement.verifQuestion()` dans `src/lib/customElements/MathaleaQcm.ts`                                                                    |
 | `mathalea-qcm`              | `MathaleaQcmElement.verifQuestion()` dans `src/lib/customElements/MathaleaQcm.ts`                                                                               |
 | `liste-deroulante`          | `ListeDeroulanteElement.verifQuestion()`                                                                                                                        |
 | `svg-selection`             | `SvgSelectionElement.verifQuestion()` dans `src/lib/customElements/SvgSelectionElement.ts`                                                                      |
-| `dnd`                       | `verifDragAndDrop()`                                                                                                                                            |
+| `dnd`                       | Routé vers `DragAndDropElement.verifQuestion()` dans `src/lib/customElements/DragAndDropElement.ts`                                                             |
+| `drag-and-drop`             | `DragAndDropElement.verifQuestion()` dans `src/lib/customElements/DragAndDropElement.ts`                                                                        |
 | `my-spreadsheet`            | `MySpreadsheetElement.verifQuestion()` dans `src/lib/customElements/MySpreadSheet.ts`                                                                           |
 | `guide-ane`                 | `GuideAne.verifQuestion()` dans `src/lib/customElements/GuideAne.ts`                                                                                            |
 | `trigo-circle-selection`    | `TrigCircleSelectionElement.verifQuestion()` dans `src/lib/customElements/TrigoCircleSelectionElement.ts`                                                       |
 | `demi-droite-interactive`   | `DemiDroiteInteractiveElement.verifQuestion()` dans `src/lib/customElements/demi_droite_interactive.ts`                                                         |
 | `interactive-clock`         | `InteractiveClock.verifQuestion()` dans `src/lib/customElements/InteractiveClock.ts`                                                                            |
 | `tableau-signes-variations` | `TableauSignesVariationsElement.verifQuestion()` dans `src/lib/customElements/TableauSignesVariationsElement.ts`                                                |
-| `cliqueFigure`              | `verifQuestionCliqueFigure()` dans `src/lib/interactif/cliqueFigure.ts`                                                                                         |
+| `cliqueFigure`              | Routé vers `CliqueFigureElement.verifQuestion()` dans `src/lib/customElements/CliqueFigureElement.ts`                                                           |
+| `clique-figure`             | `CliqueFigureElement.verifQuestion()` dans `src/lib/customElements/CliqueFigureElement.ts`                                                                      |
 | `custom`                    | correction globale de l'exercice quand `exercice.interactifType === 'custom'`, ou fonction `correctionInteractives` à l'index de question pour un méta-exercice |
 
 Les fonctions de vérification retournent un résultat exploitable par le score et affichent le retour visuel associé à la question.
@@ -132,7 +141,7 @@ La vue des corrections d'une Course aux nombres (`src/components/display/can/pre
 - `formatStudentAnswer(questionHtml, rawAnswer)` : formate la réponse brute stockée dans `exercice.answers` pour la ligne « Réponse donnée : ... » ;
 - `stripInteractiveWidgets(questionHtml)` : retire ou remplace les éléments interactifs de l'énoncé (mathfields remplacés par des pointillés, etc.).
 
-Les customElements y sont traités de façon générique via le registre `mathaleaCustomElementsRegistry` et les hooks statiques `formatStudentAnswer` / `stripFromQuestionHtml` de `MathaleaCustomElement` (voir [créer un custom element](../guides/creer-un-custom-element.md)). Les autres formats (QCM, champ texte, `MetaInteractif2d`, mathfield par défaut) sont détectés par des marqueurs dans le HTML de la question. Tests : `tests/unit/canSolutions.test.ts`.
+Les customElements y sont traités de façon générique via le registre `mathaleaCustomElementsRegistry` et les hooks statiques `formatStudentAnswer` / `stripFromQuestionHtml` de `MathaleaCustomElement` (voir [créer un custom element](../guides/creer-un-custom-element.md)). Les autres formats (QCM, champ texte, mathfield par défaut) sont détectés par des marqueurs dans le HTML de la question. Tests : `tests/unit/canSolutions.test.ts`.
 
 ## Wrappers MathLive historiques
 
@@ -174,5 +183,7 @@ Pour les exercices qui ont besoin de critères multiples ou d'un score partiel, 
 - `src/lib/interactif/fonctionsBaremes.ts` : barèmes partagés comme `toutPourUnPoint` et `toutAUnPoint`.
 - `src/lib/interactif/qcm.ts` : QCM.
 - `src/lib/customElements/MathaleaQcm.ts` : custom element `mathalea-qcm`, helper `addMathaleaQcm()` et vérification QCM partagée. En contexte HTML, `propositionsQcm()` injecte ce composant tout en conservant les identifiants internes historiques.
-- `src/lib/interactif/DragAndDrop.ts` : glisser-déposer.
+- `src/lib/customElements/CliqueFigureElement.ts` : custom element `clique-figure`, helper `addCliqueFigure()` et vérification des questions `cliqueFigure`. Les exercices historiques qui renseignent `cliqueFiguresArray` et appellent `setCliqueFigure()` sont normalisés vers ce tag sans devoir réécrire leurs énoncés.
+- `src/lib/interactif/DragAndDrop.ts` : builder historique du glisser-déposer.
+- `src/lib/customElements/DragAndDropElement.ts` : custom element `drag-and-drop`, wrapper de rendu et vérification des questions `dnd`.
 - `src/lib/interactif/setMathfield.ts` : configuration partagée des `math-field` interactifs.

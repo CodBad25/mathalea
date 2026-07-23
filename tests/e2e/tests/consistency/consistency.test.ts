@@ -137,7 +137,14 @@ function getLatexNumbers(
         ? /\\CompteurTC\s+&[^\r\n]*/g
         : /\\item[^\r\n]*/g
       : /\$ [^\r\n]*/g
-  const rawLines: string[] = latex.match(lineRegex) || []
+  let rawLines: string[] = latex.match(lineRegex) || []
+  if (
+    view === 'LaTeX' &&
+    (model === 'ProfMaquette' || model === 'ProfMaquetteQrcode') &&
+    exerciseType === 'simple'
+  ) {
+    rawLines = rawLines.filter((line) => !/^\\item\s*\$/.test(line))
+  }
   if (model === 'Can') {
     const rawNumbers = rawLines.map((line) => line.replace(/\D/g, ''))
     // const cleanNumbers = rawNumbers.map(number => number.slice(1))
@@ -159,6 +166,7 @@ function removeAnswers(
 ): string[] {
   if (view === 'LaTeX') {
     if (model === 'ProfMaquette' || model === 'ProfMaquetteQrcode') {
+      if (exerciseType === 'simple') return calculationsQuestionsAnswers
       const firstExercise = calculationsQuestionsAnswers.slice(
         0,
         questionsNb / 2,
@@ -185,25 +193,6 @@ async function defaultViewStatePush(
   await page.waitForSelector('.katex')
   const locators = await page.locator('.katex').all()
   const numbers = await getNumbers(locators)
-  if (
-    view === 'eleve' &&
-    (variation === 'Une page par exercice' ||
-      variation === 'Course aux nombres' ||
-      variation === 'Une page par question')
-  ) {
-    // Bizarrement, les nombres se répètent 3 fois à partir du deuxième exercice dans ces vues au lieu de 2 partout ailleurs
-    // À modifier lorsque ce problème de duplication sera réglé
-    const duplicationBeginningIndex =
-      variation === 'Une page par exercice' ? numbers.length / 2 : 1
-    for (let i = 0; i < numbers.length; i++) {
-      if (i >= duplicationBeginningIndex) {
-        numbers[i] = numbers[i].slice(
-          0,
-          Math.round((numbers[i].length * 2) / 3),
-        )
-      }
-    }
-  }
   states.push({
     url,
     view,
@@ -217,9 +206,17 @@ async function getNumbers(locators: Locator[]) {
   for (const locator of locators) {
     const innerText = await locator.innerText()
     const number = clean(innerText, ['cr']).replace(/\D/g, '')
-    numbers.push(number)
+    numbers.push(normalizeRepeatedNumber(number))
   }
   return numbers.filter((n) => n !== '')
+}
+
+function normalizeRepeatedNumber(number: string): string {
+  if (number.length % 3 !== 0) return number
+  const chunkLength = number.length / 3
+  const chunk = number.slice(0, chunkLength)
+  if (chunk !== '' && number === chunk.repeat(3)) return chunk.repeat(2)
+  return number
 }
 
 function isConsistent() {
