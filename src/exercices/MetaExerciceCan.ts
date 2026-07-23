@@ -22,8 +22,8 @@ import { combinaisonListes, shuffle } from '../lib/outils/arrayOutils'
 import { range1 } from '../lib/outils/nombres'
 import type { AnswerValueType, AutoCorrection, Valeur } from '../lib/types'
 import {
-  isValeur,
   interactivityTypeToCustomElementFormat,
+  isValeur,
   mathliveCompatibleToCustomElementFormat,
   type InteractivityType,
   type OptionsComparaisonType,
@@ -399,19 +399,6 @@ export default class MetaExercice extends Exercice {
                 cloneQcmAutoCorrection(qcmAutoCorrection)
               this.listeQuestions[indexQuestion] =
                 consigne + String(Question.question ?? '')
-            } else if (customElementFormat != null && !Question.interactif) {
-              const tag = customElementFormat
-              this.listeQuestions[indexQuestion] =
-                consigne + String(Question.question ?? '')
-              handleAnswers(
-                this,
-                indexQuestion,
-                buildSimpleQuestionAnswerValue(Question, tag),
-                {
-                  ...(tag === 'fill-in-the-blank' ? optionsChampTexte : {}),
-                  formatInteractif: tag,
-                },
-              )
             } else if (customElementFormat != null) {
               const tag = customElementFormat
               const questionHtml = injectSimpleQuestionCustomElement({
