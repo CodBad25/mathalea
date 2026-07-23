@@ -1,19 +1,5 @@
-import { infoMessage, lampeMessage } from '../../lib/format/message'
-import { combinaisonListesSansChangerOrdre } from '../../lib/outils/arrayOutils'
-import { numAlpha } from '../../lib/outils/outilString'
-import { listeDesDiviseurs } from '../../lib/outils/primalite'
-import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
-import {
-  machineMathsVideo,
-  tikzMachineDiag,
-  tikzMachineMaths,
-} from '../../modules/machines'
-import {
-  SvgMachineDiag3F12,
-  SvgMachineDiag3F1ActMono,
-} from '../../modules/macroSvgJs'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = 'Découvrir la notion et le vocabulaire des fonctions'
@@ -40,7 +26,7 @@ export const refs = {
  * @param {string} titrePopup
  * @param {string} textePopup
  */
-export function katexPopup(
+/*export function katexPopup(
   texte: string,
   titrePopup: string,
   textePopup: string,
@@ -61,7 +47,7 @@ export function katexPopup(
     return `\\textbf{${texte}} \\footnote{\\textbf{${titrePopup}} ${textePopup}}`
   }
 }
-
+*/
 export default class FonctionNotionVocabulaire extends Exercice {
   constructor() {
     super()
@@ -85,7 +71,10 @@ export default class FonctionNotionVocabulaire extends Exercice {
   }
 
   nouvelleVersion(numeroExercice: number) {
-    const numEx = '3F1-act' // pour rendre unique les id des SVG, en cas d'utilisation dans plusieurs exercices y faisant appel
+    this.listeQuestions[0] =
+      "Cet exercice n'a pas pu être conservé pour des raisons techniques. Vous trouverez dans la section 3F1 ne nombreux exercices de calcul d'image"
+
+    /*     const numEx = '3F1-act' // pour rendre unique les id des SVG, en cas d'utilisation dans plusieurs exercices y faisant appel
 
     let typesDeQuestions
     let j, idDuDivDiag, idDuDivCorr
@@ -1099,6 +1088,7 @@ Ces machines sont appelées $\\textit{fonctions}$, on a l'habitude de leur donne
       }
       cpt++
     }
+      */
     listeQuestionsToContenu(this)
   }
 }
