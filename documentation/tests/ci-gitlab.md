@@ -40,8 +40,11 @@ La plupart des jobs Node utilisent `.pnpm_setup` :
 ```bash
 corepack enable
 corepack prepare pnpm@11.8.0 --activate
-pnpm config set store-dir .pnpm-store
 ```
+
+Le store est défini une seule fois par `storeDir: .pnpm-store` dans
+[`pnpm-workspace.yaml`](../../pnpm-workspace.yaml). Les jobs conservent le
+dossier `.pnpm-store/` dans leurs caches sans reconfigurer pnpm.
 
 Les jobs Playwright démarrent ensuite l'application avec `pnpm start` et attendent `http://localhost:80/alea/`.
 

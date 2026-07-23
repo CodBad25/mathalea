@@ -27,7 +27,7 @@ Le composant supporte plusieurs types de cellules éditables :
 
 ## Architecture du code
 
-Le composant suit la [convention MathALÉA de custom element](../../../../documentation/developpement/guides/creer-un-custom-element.md) : la classe (`extends MathaleaCustomElement`), `create()`, `verifQuestion()` et les helpers d'injection (`creerTableauSignesVariations`, `addTableauSignesVariations`) vivent dans `src/lib/customElements/TableauSignesVariationsElement.ts`. Ce dossier ne contient que les modules de support (types, rendu, toolbar, export LaTeX) et les builders de données purs.
+Le composant suit la [convention MathALÉA de custom element](../../../../documentation/developpement/maintenance-moteur/interactivite/custom-elements.md) : la classe (`extends MathaleaCustomElement`), `create()`, `verifQuestion()` et les helpers d'injection (`creerTableauSignesVariations`, `addTableauSignesVariations`) vivent dans `src/lib/customElements/TableauSignesVariationsElement.ts`. Ce dossier ne contient que les modules de support (types, rendu, toolbar, export LaTeX) et les builders de données purs.
 
 ```
 src/lib/customElements/
@@ -746,7 +746,7 @@ fleches: [
 ### Export Typst
 
 `TableauSignesVariationsElement.create()` détecte `context.isTypst` (vrai
-pendant la régénération d'un exercice pour la [vue Typst](../../../../documentation/developpement/reference/vue-typst.md), alors même que
+pendant la régénération d'un exercice pour la [vue Typst](../../../../documentation/developpement/maintenance-moteur/exports/typst.md), alors même que
 `context.isHtml` reste vrai) et retourne, au lieu du custom element, du code
 Typst natif (package [`vartable`](https://typst.app/universe/package/vartable),
 fonction `tabvar`) inséré tel quel via le marqueur `<mathalea-typst>` reconnu

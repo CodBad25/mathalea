@@ -15,13 +15,13 @@ Documentation destinée aux utilisatrices et utilisateurs de MathALÉA.
 
 ## Développement
 
-La documentation de développement est séparée en deux familles.
+La documentation de développement est organisée par niveau de responsabilité.
 
 | Titre | Rôle | Lien |
 | --- | --- | --- |
-| Référence développeur | Architecture, APIs, classes, formats et comportements durables | [developpement/reference/README.md](developpement/reference/README.md) |
-| Guides développeur | Procédures concrètes pour coder, exporter, tester ou maintenir | [developpement/guides/README.md](developpement/guides/README.md) |
-| Workflow agent-documentation | Règles de réponse et de maintenance documentaire par les agents | [developpement/agent-documentation.md](developpement/agent-documentation.md) |
+| Niveau 1 — Coder des exercices | Parcours essentiel et compléments pour les auteurs d'exercices | [developpement/auteurs-exercices/README.md](developpement/auteurs-exercices/README.md) |
+| Niveau 2 — Maintenir le moteur | Architecture, contrats techniques, exports et composants partagés | [developpement/maintenance-moteur/README.md](developpement/maintenance-moteur/README.md) |
+| Maintenance documentaire | Règles de réponse et de mise à jour de la documentation | [developpement/maintenance-moteur/contribution/documentation.md](developpement/maintenance-moteur/contribution/documentation.md) |
 
 ## Tests
 
@@ -32,6 +32,6 @@ La documentation de développement est séparée en deux familles.
 ## Convention
 
 - `documentation/utilisation/` contient les usages actuels côté enseignant, élève ou plateforme.
-- `documentation/developpement/reference/` décrit les systèmes et modules stables : interactivité, exercices, classes mathématiques, APIs internes.
-- `documentation/developpement/guides/` explique comment réaliser une tâche : coder un exercice, rendre un exercice interactif, exporter AMC, utiliser les helpers mathématiques.
+- `documentation/developpement/auteurs-exercices/` guide la création et la validation des exercices.
+- `documentation/developpement/maintenance-moteur/` décrit les systèmes, contrats et modules partagés.
 - `documentation/tests/` décrit les tests locaux, la CI et les rapports générés.
