@@ -14,7 +14,7 @@
  * `registerMathaleaCustomElement` peut surcharger les hooks statiques
  * `formatStudentAnswer` et `stripFromQuestionHtml`. Pour brancher un nouveau
  * customElement ici, il n'y a donc rien à modifier dans ce fichier :
- * voir `documentation/developpement/guides/creer-un-custom-element.md`.
+ * voir `documentation/developpement/maintenance-moteur/interactivite/custom-elements.md`.
  *
  * Les autres types d'interactivité (QCM, champ texte, mathfield...) n'ont pas
  * de classe dédiée : ils sont détectés par des marqueurs dans le HTML de la
