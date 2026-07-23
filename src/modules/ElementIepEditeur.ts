@@ -1,6 +1,14 @@
 import MathaleaCustomElement, { registerMathaleaCustomElement } from '../lib/customElements/MathaleaCustomElement'
+import { cercle } from '../lib/2d/cercle'
+import { droite } from '../lib/2d/droites'
 import { pointAbstrait, type PointAbstrait } from '../lib/2d/PointAbstrait'
-import { pointAdistance } from '../lib/2d/utilitairesPoint'
+import { longueur } from '../lib/2d/utilitairesGeometriques'
+import {
+  pointAdistance,
+  pointIntersectionCC,
+  pointIntersectionDD,
+  pointIntersectionLC,
+} from '../lib/2d/utilitairesPoint'
 import Alea2iep from './Alea2iep'
 
 /**
@@ -32,6 +40,41 @@ const nomsOutils: Record<OutilIep, string> = {
   rapporteur: 'le rapporteur',
 }
 
+// Types d'instructions dont le tracé peut servir de support à une intersection
+type TypeElementIntersectable =
+  | 'droite'
+  | 'segment'
+  | 'demiDroite'
+  | 'cercle'
+  | 'arc'
+
+const typesElementsIntersectables: TypeElementIntersectable[] = [
+  'droite',
+  'segment',
+  'demiDroite',
+  'cercle',
+  'arc',
+]
+
+// Préposition + nom pour décrire l'élément référencé par une intersection
+const prepositionElementIntersectable: Record<TypeElementIntersectable, string> = {
+  droite: 'de la droite',
+  segment: 'du segment',
+  demiDroite: 'de la demi-droite',
+  cercle: 'du cercle',
+  arc: 'de l’arc',
+}
+
+// Nom seul (sans article) pour les options du menu de sélection d'une étape
+const nomsTypesElementsIntersectables: Record<TypeElementIntersectable, string> =
+  {
+    droite: 'droite',
+    segment: 'segment',
+    demiDroite: 'demi-droite',
+    cercle: 'cercle',
+    arc: 'arc',
+  }
+
 export type InstructionIep =
   | { type: 'point'; nom: string; x: number; y: number }
   | {
@@ -46,6 +89,13 @@ export type InstructionIep =
   | { type: 'demiDroite'; p1: string; p2: string }
   | { type: 'cercle'; p1: string; p2: string }
   | { type: 'arc'; p1: string; p2: string }
+  | {
+      type: 'intersection'
+      nom: string
+      etape1: number
+      etape2: number
+      choix: number
+    }
   | { type: 'mediatrice'; p1: string; p2: string }
   | { type: 'perpendiculaire'; p1: string; p2: string; p3: string }
   | { type: 'parallele'; p1: string; p2: string; p3: string }
@@ -61,7 +111,15 @@ type TypeInstruction = InstructionIep['type']
 
 type ChampSpec = {
   cle: string
-  genre: 'nom' | 'point' | 'pointOptionnel' | 'outil' | 'nombre' | 'texte'
+  genre:
+    | 'nom'
+    | 'point'
+    | 'pointOptionnel'
+    | 'outil'
+    | 'nombre'
+    | 'texte'
+    | 'etape'
+    | 'choix'
   label: string
   defaut?: number | string
 }
@@ -120,6 +178,15 @@ const catalogue: Record<
     champs: [
       { cle: 'p1', genre: 'point', label: 'Centre' },
       { cle: 'p2', genre: 'point', label: 'Point visé' },
+    ],
+  },
+  intersection: {
+    label: 'Placer un point d’intersection',
+    champs: [
+      { cle: 'nom', genre: 'nom', label: 'Nom' },
+      { cle: 'etape1', genre: 'etape', label: '1er élément' },
+      { cle: 'etape2', genre: 'etape', label: '2e élément' },
+      { cle: 'choix', genre: 'choix', label: 'Si 2 points possibles' },
     ],
   },
   mediatrice: {
@@ -203,6 +270,7 @@ const ordreCatalogue: TypeInstruction[] = [
   'demiDroite',
   'cercle',
   'arc',
+  'intersection',
   'mediatrice',
   'perpendiculaire',
   'parallele',
@@ -220,9 +288,27 @@ function formateNombre(n: number) {
 }
 
 /**
- * Description en français d'une instruction pour l'affichage du programme
+ * Décrit l'élément référencé par une intersection (ex. « de la droite de l'étape 1 »)
  */
-export function decrireInstruction(instr: InstructionIep): string {
+function decrireElementPourIntersection(
+  programme: InstructionIep[],
+  etape: number,
+): string {
+  const instr = programme[etape]
+  if (instr === undefined || !estElementIntersectable(instr)) {
+    return `de l’étape ${etape + 1}`
+  }
+  return `${prepositionElementIntersectable[instr.type]} de l’étape ${etape + 1}`
+}
+
+/**
+ * Description en français d'une instruction pour l'affichage du programme
+ * @param {InstructionIep[]} [programme] Programme complet, nécessaire pour décrire les étapes référencées par une intersection
+ */
+export function decrireInstruction(
+  instr: InstructionIep,
+  programme: InstructionIep[] = [],
+): string {
   switch (instr.type) {
     case 'point':
       return `Placer le point ${instr.nom} (${formateNombre(instr.x)} ; ${formateNombre(instr.y)}).`
@@ -238,6 +324,8 @@ export function decrireInstruction(instr: InstructionIep): string {
       return `Tracer le cercle de centre ${instr.p1} passant par ${instr.p2} au compas.`
     case 'arc':
       return `Tracer un arc de cercle de centre ${instr.p1} passant par ${instr.p2} au compas.`
+    case 'intersection':
+      return `Placer le point ${instr.nom}, intersection ${decrireElementPourIntersection(programme, instr.etape1)} et ${decrireElementPourIntersection(programme, instr.etape2)}.`
     case 'mediatrice':
       return `Tracer la médiatrice du segment [${instr.p1}${instr.p2}] au compas.`
     case 'perpendiculaire':
@@ -268,7 +356,9 @@ export function pointsDefinis(programme: InstructionIep[]): string[] {
   const noms: string[] = []
   for (const instr of programme) {
     if (
-      (instr.type === 'point' || instr.type === 'pointADistance') &&
+      (instr.type === 'point' ||
+        instr.type === 'pointADistance' ||
+        instr.type === 'intersection') &&
       instr.nom !== '' &&
       !noms.includes(instr.nom)
     ) {
@@ -276,6 +366,127 @@ export function pointsDefinis(programme: InstructionIep[]): string[] {
     }
   }
   return noms
+}
+
+/**
+ * Indique si l'instruction trace un élément (droite, segment, demi-droite, cercle ou arc)
+ * pouvant servir de support à une intersection
+ */
+function estElementIntersectable(
+  instr: InstructionIep | undefined,
+): instr is Extract<InstructionIep, { type: TypeElementIntersectable }> {
+  return (
+    instr !== undefined &&
+    (typesElementsIntersectables as string[]).includes(instr.type)
+  )
+}
+
+/**
+ * Renvoie la liste des étapes du programme utilisables comme support d'intersection
+ */
+function elementsIntersectablesDefinis(
+  programme: InstructionIep[],
+): { index: number; type: TypeElementIntersectable }[] {
+  const elements: { index: number; type: TypeElementIntersectable }[] = []
+  programme.forEach((instr, index) => {
+    if (estElementIntersectable(instr)) {
+      elements.push({ index, type: instr.type })
+    }
+  })
+  return elements
+}
+
+/**
+ * Indique si l'instruction à l'index donné a toutes ses dépendances
+ * (points ou étapes référencés) satisfaites par des étapes qui la précèdent
+ */
+function instructionEstValide(
+  programme: InstructionIep[],
+  index: number,
+): boolean {
+  const instr = programme[index]
+  if (instr.type === 'intersection') {
+    return (
+      instr.etape1 < index &&
+      instr.etape2 < index &&
+      estElementIntersectable(programme[instr.etape1]) &&
+      estElementIntersectable(programme[instr.etape2])
+    )
+  }
+  const nomsConnus = new Set<string>()
+  for (let i = 0; i < index; i++) {
+    const precedente = programme[i]
+    if (
+      precedente.type === 'point' ||
+      precedente.type === 'pointADistance' ||
+      precedente.type === 'intersection'
+    ) {
+      nomsConnus.add(precedente.nom)
+    }
+  }
+  const references: string[] = []
+  for (const cle of ['p1', 'p2', 'p3'] as const) {
+    if (cle in instr) {
+      references.push((instr as unknown as Record<string, string>)[cle])
+    }
+  }
+  return references.every((nom) => nomsConnus.has(nom))
+}
+
+/**
+ * Indique si on peut échanger les étapes i et j du programme sans casser
+ * une référence : ni leur propre validité, ni une intersection ailleurs dans
+ * le programme qui viserait l'une de ces deux étapes par son numéro.
+ */
+function peutEchangerEtapes(
+  programme: InstructionIep[],
+  i: number,
+  j: number,
+): boolean {
+  if (j < 0 || j >= programme.length) return false
+  const viseUneEtapeEchangee = programme.some(
+    (instr) =>
+      instr.type === 'intersection' &&
+      (instr.etape1 === i ||
+        instr.etape1 === j ||
+        instr.etape2 === i ||
+        instr.etape2 === j),
+  )
+  if (viseUneEtapeEchangee) return false
+  const copie = [...programme]
+  ;[copie[i], copie[j]] = [copie[j], copie[i]]
+  return instructionEstValide(copie, i) && instructionEstValide(copie, j)
+}
+
+type ElementGeometrique =
+  | { nature: 'droite'; objet: ReturnType<typeof droite> }
+  | { nature: 'cercle'; objet: ReturnType<typeof cercle> }
+
+/**
+ * Reconstruit la droite ou le cercle abstrait tracé par une étape du programme,
+ * à partir des points déjà placés. Renvoie undefined si l'étape n'est pas
+ * intersectable ou si l'un de ses points n'est pas encore défini.
+ */
+function elementGeometrique(
+  instr: InstructionIep | undefined,
+  points: Map<string, PointAbstrait>,
+): ElementGeometrique | undefined {
+  if (!estElementIntersectable(instr)) return undefined
+  const A = points.get(instr.p1)
+  const B = points.get(instr.p2)
+  if (A === undefined || B === undefined) return undefined
+  if (
+    instr.type === 'droite' ||
+    instr.type === 'segment' ||
+    instr.type === 'demiDroite'
+  ) {
+    const d = droite(A, B)
+    d.isVisible = false
+    return { nature: 'droite', objet: d }
+  }
+  const c = cercle(A, longueur(A, B))
+  c.isVisible = false
+  return { nature: 'cercle', objet: c }
 }
 
 /**
@@ -365,6 +576,54 @@ function jouerProgramme(
           break
         }
         anim.compasTracerArcCentrePoint(pts[0], pts[1])
+        break
+      }
+      case 'intersection': {
+        const element1 = elementGeometrique(programme[instr.etape1], points)
+        const element2 = elementGeometrique(programme[instr.etape2], points)
+        if (element1 === undefined || element2 === undefined) {
+          etapesIgnorees.push(index)
+          break
+        }
+        let A: PointAbstrait
+        if (element1.nature === 'droite' && element2.nature === 'droite') {
+          A = pointIntersectionDD(element1.objet, element2.objet, instr.nom)
+        } else if (
+          element1.nature === 'cercle' &&
+          element2.nature === 'cercle'
+        ) {
+          A = pointIntersectionCC(
+            element1.objet,
+            element2.objet,
+            instr.nom,
+            instr.choix,
+          )
+        } else if (
+          element1.nature === 'droite' &&
+          element2.nature === 'cercle'
+        ) {
+          A = pointIntersectionLC(
+            element1.objet,
+            element2.objet,
+            instr.nom,
+            instr.choix,
+          )
+        } else if (
+          element1.nature === 'cercle' &&
+          element2.nature === 'droite'
+        ) {
+          A = pointIntersectionLC(
+            element2.objet,
+            element1.objet,
+            instr.nom,
+            instr.choix,
+          )
+        } else {
+          etapesIgnorees.push(index)
+          break
+        }
+        anim.pointCreer(A, { label: instr.nom })
+        points.set(instr.nom, A)
         break
       }
       case 'mediatrice': {
@@ -675,6 +934,38 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           select.appendChild(option)
         }
         etiquette.appendChild(select)
+      } else if (champ.genre === 'etape') {
+        const select = document.createElement('select')
+        select.classList.add(...classesChamp, 'min-w-32')
+        select.dataset.cle = champ.cle
+        const elements = elementsIntersectablesDefinis(this.programme)
+        for (const { index: etape, type: typeElement } of elements) {
+          const option = document.createElement('option')
+          option.value = String(etape)
+          option.innerText = `${nomsTypesElementsIntersectables[typeElement]} de l’étape ${etape + 1}`
+          select.appendChild(option)
+        }
+        // Par défaut, on propose des étapes différentes pour chaque champ
+        const indice = catalogue[type].champs
+          .filter((c) => c.genre === 'etape')
+          .findIndex((c) => c.cle === champ.cle)
+        if (elements.length > indice) select.value = String(elements[indice].index)
+        etiquette.appendChild(select)
+      } else if (champ.genre === 'choix') {
+        const select = document.createElement('select')
+        select.classList.add(...classesChamp)
+        select.dataset.cle = champ.cle
+        const optionsChoix: [string, string][] = [
+          ['1', '1er point'],
+          ['2', '2e point'],
+        ]
+        for (const [valeur, texte] of optionsChoix) {
+          const option = document.createElement('option')
+          option.value = valeur
+          option.innerText = texte
+          select.appendChild(option)
+        }
+        etiquette.appendChild(select)
       } else {
         const champTexte = document.createElement('input')
         champTexte.classList.add(...classesChamp)
@@ -724,12 +1015,21 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         instruction[champ.cle] = valeur
       } else if (champ.genre === 'pointOptionnel') {
         if (element.value !== '') instruction[champ.cle] = element.value
+      } else if (champ.genre === 'etape' || champ.genre === 'choix') {
+        if (element.value === '') return
+        const valeur = Number(element.value)
+        if (Number.isNaN(valeur)) return
+        instruction[champ.cle] = valeur
       } else {
         if (element.value === '') return
         instruction[champ.cle] = element.value
       }
     }
-    if (type === 'point' || type === 'pointADistance') {
+    if (
+      type === 'point' ||
+      type === 'pointADistance' ||
+      type === 'intersection'
+    ) {
       const nom = String(instruction.nom)
       if (pointsDefinis(this.programme).includes(nom)) {
         window.alert(`Le point ${nom} existe déjà.`)
@@ -744,7 +1044,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
   private deplacerInstruction(index: number, decalage: number) {
     const cible = index + decalage
-    if (cible < 0 || cible >= this.programme.length) return
+    if (!peutEchangerEtapes(this.programme, index, cible)) return
     const [instruction] = this.programme.splice(index, 1)
     this.programme.splice(cible, 0, instruction)
     this.rafraichirProgramme()
@@ -765,8 +1065,6 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         'Le programme est vide : ajoutez une première instruction (par exemple, placer deux points).'
       this.listeProgramme.appendChild(vide)
     }
-    // Détermine les étapes invalides (point utilisé avant d'être placé)
-    const nomsConnus = new Set<string>()
     this.programme.forEach((instruction, index) => {
       const ligne = document.createElement('li')
       ligne.classList.add('flex', 'items-center', 'gap-1')
@@ -777,33 +1075,38 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
       const texte = document.createElement('span')
       texte.classList.add('grow')
-      texte.innerText = decrireInstruction(instruction)
-      const references: string[] = []
-      for (const cle of ['p1', 'p2', 'p3'] as const) {
-        if (cle in instruction) {
-          references.push(
-            (instruction as unknown as Record<string, string>)[cle],
-          )
-        }
-      }
-      const invalide = references.some((nom) => !nomsConnus.has(nom))
-      if (invalide) {
+      texte.innerText = decrireInstruction(instruction, this.programme)
+      if (!instructionEstValide(this.programme, index)) {
         texte.classList.add('text-red-600', 'line-through')
-        texte.title = 'Étape ignorée : un des points n’est pas encore placé.'
+        texte.title =
+          instruction.type === 'intersection'
+            ? 'Étape ignorée : un des éléments choisis n’est pas valide.'
+            : 'Étape ignorée : un des points n’est pas encore placé.'
       }
-      if (instruction.type === 'point' || instruction.type === 'pointADistance')
-        nomsConnus.add(instruction.nom)
       ligne.appendChild(texte)
 
-      const boutons: [string, () => void, string][] = [
-        ['▲', () => this.deplacerInstruction(index, -1), 'Monter'],
-        ['▼', () => this.deplacerInstruction(index, 1), 'Descendre'],
-        ['✕', () => this.supprimerInstruction(index), 'Supprimer'],
+      const boutons: [string, () => void, string, boolean][] = [
+        [
+          '▲',
+          () => this.deplacerInstruction(index, -1),
+          'Monter',
+          !peutEchangerEtapes(this.programme, index, index - 1),
+        ],
+        [
+          '▼',
+          () => this.deplacerInstruction(index, 1),
+          'Descendre',
+          !peutEchangerEtapes(this.programme, index, index + 1),
+        ],
+        ['✕', () => this.supprimerInstruction(index), 'Supprimer', false],
       ]
-      for (const [symbole, action, titre] of boutons) {
+      for (const [symbole, action, titre, desactive] of boutons) {
         const bouton = document.createElement('button')
         bouton.innerText = symbole
-        bouton.title = titre
+        bouton.title = desactive
+          ? 'Déplacement impossible : une autre étape en dépend.'
+          : titre
+        bouton.disabled = desactive
         bouton.classList.add(
           'px-1.5',
           'py-0.5',
@@ -811,10 +1114,14 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           'rounded',
           'border',
           'border-gray-300',
-          'hover:bg-gray-200',
           'shrink-0',
         )
-        bouton.onclick = action
+        if (desactive) {
+          bouton.classList.add('opacity-40', 'cursor-not-allowed')
+        } else {
+          bouton.classList.add('hover:bg-gray-200')
+          bouton.onclick = action
+        }
         ligne.appendChild(bouton)
       }
       this.listeProgramme.appendChild(ligne)
