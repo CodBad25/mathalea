@@ -1,23 +1,35 @@
 # Coder un QCM
 
-Ce guide explique le cas le plus courant : ajouter un QCM à un exercice classique qui hérite de `Exercice`. Les helpers et contrats cités ont été vérifiés dans `src/lib/interactif/qcm.ts`, `src/lib/types.ts`, `src/lib/interactif/qcmBuilder.ts`, `src/lib/customElements/ListeDeroulanteElement.ts`, ainsi que dans des exercices réels comme `src/exercices/can/6e/can6M01.ts`, `src/exercices/can/6e/can6M02.ts` et `src/exercices/6e/6G0-2.ts`.
+Ce guide explique comment ajouter un QCM moderne à un exercice classique qui
+hérite de `Exercice`. La réponse attendue se déclare avec `handleAnswers()` et
+le composant HTML s'ajoute avec `addMathaleaQcm()`. Le code de l'exercice ne
+manipule donc pas directement `this.autoCorrection[i]`.
+
+Les contrats décrits ici ont été vérifiés dans
+`src/lib/customElements/MathaleaQcm.ts`,
+`src/lib/interactif/gestionInteractif.ts`, `src/lib/interactif/qcm.ts` et
+`src/lib/types.ts`, ainsi que dans `tests/unit/mathaleaQcm.test.ts`.
 
 Pour le cycle général d'un exercice, lire aussi
-[créer un exercice](../creer-un-exercice.md). Pour le pipeline de vérification,
-voir [système d'interactivité](../../maintenance-moteur/interactivite/systeme-interactivite.md).
+[créer un exercice](../creer-un-exercice.md). Les autres formats sont présentés
+dans [formats interactifs spécialisés](formats-interactifs.md). Pour le
+pipeline de vérification, voir
+[système d'interactivité](../../maintenance-moteur/interactivite/systeme-interactivite.md).
 
 ## Pré-requis
 
-Un exercice QCM doit avoir :
+Un exercice QCM moderne doit avoir :
 
 - un fichier dans `src/exercices/`, au bon niveau de dossier ;
 - `export const interactifReady = true` ;
-- `export const interactifType = 'qcm'` ;
-- une entrée `this.autoCorrection[i]` pour chaque question ;
-- un appel unique à `propositionsQcm(this, i)` après avoir rempli `autoCorrection[i]` ;
-- `listeQuestionsToContenu(this)` à la fin de `nouvelleVersion()` pour un exercice classique.
+- `export const interactifType = 'mathalea-qcm'` ;
+- un appel à `handleAnswers()` pour chaque question acceptée ;
+- un appel à `addMathaleaQcm()` après `handleAnswers()` ;
+- `listeQuestionsToContenu(this)` à la fin de `nouvelleVersion()` pour un
+  exercice classique.
 
-Pour AMC, ajouter seulement si l'exercice est réellement vérifié en export papier :
+Pour AMC, ajouter ces métadonnées seulement si l'exercice a réellement été
+vérifié en export papier :
 
 ```ts
 export const amcReady = true
@@ -28,9 +40,12 @@ export const amcType = 'qcmMult' // plusieurs bonnes réponses possibles
 
 ## Squelette minimal
 
-Exemple pour un fichier situé dans `src/exercices/6e/`. Adapter les chemins d'import si le fichier est dans un autre dossier.
+Cet exemple convient à un fichier placé dans `src/exercices/6e/`. Adapter les
+chemins d'import pour un autre dossier.
 
 ```ts
+import { addMathaleaQcm } from '../../lib/customElements/MathaleaQcm'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -38,7 +53,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Choisir la bonne réponse'
 export const interactifReady = true
-export const interactifType = 'qcm'
+export const interactifType = 'mathalea-qcm'
 export const uuid = 'a-remplacer'
 export const refs = {
   'fr-fr': ['6X00-0'],
@@ -56,26 +71,40 @@ export default class ChoisirLaBonneReponse extends Exercice {
       const a = randint(2, 9)
       const b = randint(2, 9)
       let texte = `Calculer $${a}+${b}$.`
-      const bonneReponse = a + b
-
-      this.autoCorrection[i] = {
-        enonce: texte,
-        propositions: [
-          { texte: `$${bonneReponse}$`, statut: true },
-          { texte: `$${bonneReponse + 1}$`, statut: false },
-          { texte: `$${bonneReponse - 1}$`, statut: false },
-        ],
-        options: { radio: true },
-      }
-
-      const qcm = propositionsQcm(this, i)
-      if (!context.isAmc) {
-        texte += qcm.texte
-      }
-
-      const texteCorr = `$${a}+${b}=${bonneReponse}$.`
+      let texteCorr = `$${a}+${b}=${a + b}$.`
+      const propositions = [
+        { texte: `$${a + b}$`, statut: true },
+        { texte: `$${a + b + 1}$`, statut: false },
+        { texte: `$${a + b - 1}$`, statut: false },
+      ]
+      const qcmOptions = { radio: true, vertical: true }
 
       if (this.questionJamaisPosee(i, a, b)) {
+        handleAnswers(
+          this,
+          i,
+          {
+            qcm: {
+              enonce: texte,
+              propositions,
+              correction: texteCorr,
+              options: qcmOptions,
+            },
+          },
+          { formatInteractif: 'mathalea-qcm' },
+        )
+
+        if (context.isHtml) {
+          texte += addMathaleaQcm(this, i, {
+            ...qcmOptions,
+            interactivityOn: this.interactif,
+          })
+        } else if (!context.isAmc) {
+          const qcmLatex = propositionsQcm(this, i)
+          texte += qcmLatex.texte
+          texteCorr += qcmLatex.texteCorr
+        }
+
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
@@ -96,13 +125,35 @@ Points importants :
 pnpm getNewUuid
 ```
 
-- `refs['fr-fr']` contient l'identifiant de l'exercice côté interface. C'est cette valeur qui sert dans l'URL de prévisualisation `?id=...` ;
-- `enonce` sert notamment aux exports et à la synchronisation de correction.
-- `propositionsQcm(this, i)` fabrique le rendu HTML ou LaTeX à partir de `autoCorrection[i]`.
-- `context.isAmc` évite d'ajouter le rendu HTML/LaTeX classique dans la sortie AMC.
-- `questionJamaisPosee()` doit recevoir les valeurs qui caractérisent vraiment la question.
+- `refs['fr-fr']` contient l'identifiant utilisé dans l'URL de prévisualisation
+  `?id=...` ;
+- `handleAnswers()` doit être appelé avant `addMathaleaQcm()`, car il déclare les
+  propositions que le composant doit afficher ;
+- l'énoncé fourni à `handleAnswers()` doit être autonome pour les exports ;
+- la correction fournie dans `qcm.correction` est synchronisée vers AMC ;
+- `questionJamaisPosee()` doit recevoir les valeurs qui caractérisent vraiment
+  la question.
 
 ## Déclarer les propositions
+
+`handleAnswers()` attend une valeur de la forme suivante pour le format
+`mathalea-qcm` :
+
+```ts
+handleAnswers(
+  this,
+  i,
+  {
+    qcm: {
+      enonce: texte,
+      propositions,
+      correction: texteCorr,
+      options: qcmOptions,
+    },
+  },
+  { formatInteractif: 'mathalea-qcm' },
+)
+```
 
 Chaque proposition est un objet de type :
 
@@ -114,165 +165,196 @@ Chaque proposition est un objet de type :
 }
 ```
 
-`texte` est le contenu affiché à côté de la case ou du bouton radio. Il peut contenir du HTML ou du LaTeX entre `$...$`.
+- `texte` est le contenu affiché à côté de la case ou du bouton radio. Il peut
+  contenir du HTML ou du LaTeX entre `$...$`.
+- `statut` indique si la proposition est correcte.
+- `feedback` est facultatif. Les messages des propositions cochées sont
+  regroupés dans le retour global de la question.
 
-`statut` indique si la proposition est correcte. Utiliser `true` pour une bonne réponse et `false` pour un distracteur.
+Le format moderne conserve les propositions dans l'ordre fourni. Il ne supprime
+pas automatiquement les doublons. Si les distracteurs sont calculés, vérifier
+qu'ils sont distincts avant d'accepter la question et mélanger explicitement le
+tableau si l'ordre doit varier.
 
-`feedback` est facultatif. Dans la vérification interactive actuelle, le feedback des propositions cochées est regroupé dans le message global de la question.
+## Options d'affichage
 
-Pour une réponse unique :
+Les options communes à la déclaration et au composant sont :
 
-```ts
-options: {
-  radio: true
-}
-```
+| Option           | Effet                                                            |
+| ---------------- | ---------------------------------------------------------------- |
+| `radio: true`    | Utilise des boutons radio. À réserver à une seule bonne réponse. |
+| `vertical: true` | Affiche une proposition par ligne en HTML.                       |
 
-Pour plusieurs bonnes réponses :
-
-```ts
-options: { radio: false, vertical: true }
-```
-
-Dans ce cas, toutes les propositions dont `statut` vaut `true` doivent être cochées, et aucune proposition fausse ne doit l'être.
-
-## Options utiles
-
-Les options de `autoCorrection[i].options` sont définies par `ParamForQcmInteractif` dans `src/lib/types.ts`.
-
-| Option              | Effet                                                                                                  |
-| ------------------- | ------------------------------------------------------------------------------------------------------ |
-| `radio: true`       | Utilise des boutons radio. À réserver aux QCM avec une seule bonne réponse.                            |
-| `ordered: true`     | Conserve l'ordre déclaré des propositions. Sans cette option, les propositions peuvent être mélangées. |
-| `vertical: true`    | Affiche une proposition par ligne en HTML.                                                             |
-| `lastChoice: n`     | Mélange seulement les propositions avant cet index ; utile pour garder une proposition finale fixe.    |
-| `correction: '...'` | Texte de correction utilisé lors de la synchronisation vers AMC.                                       |
-
-Exemples :
+Déclarer une seule variable et la réutiliser évite de produire, par exemple, un
+composant à cases à cocher alors que la réponse a été déclarée en boutons radio :
 
 ```ts
-options: { radio: true, ordered: true }
+const qcmOptions = { radio: true, vertical: true }
+
+handleAnswers(
+  this,
+  i,
+  {
+    qcm: {
+      enonce: texte,
+      propositions,
+      correction: texteCorr,
+      options: qcmOptions,
+    },
+  },
+  { formatInteractif: 'mathalea-qcm' },
+)
+
+texte += addMathaleaQcm(this, i, {
+  ...qcmOptions,
+  interactivityOn: this.interactif,
+})
 ```
+
+`addMathaleaQcm()` accepte aussi `format: 'lettre'` et `style` pour adapter le
+rendu HTML. Les options historiques `ordered` et `lastChoice` restent utilisées
+par `propositionsQcm()`, notamment pour le fallback LaTeX, mais ne mélangent pas
+le composant HTML moderne.
+
+Pour plusieurs bonnes réponses, utiliser des cases à cocher :
 
 ```ts
-options: { vertical: true, lastChoice: 3 }
+const qcmOptions = { radio: false, vertical: true }
 ```
 
-Le helper élimine aussi les propositions de même `texte` quand il détecte des doublons. Il vaut mieux éviter les doublons dès la génération, surtout si les distracteurs sont calculés.
+La réponse est validée seulement si toutes les propositions vraies sont cochées
+et qu'aucune proposition fausse ne l'est.
 
 ## Ajouter le QCM à la question
 
-Toujours stocker le résultat de `propositionsQcm()` dans une variable et le réutiliser.
+Après `handleAnswers()`, ajouter le composant HTML :
 
 ```ts
-const qcm = propositionsQcm(this, i)
-texte += qcm.texte
-texteCorr += qcm.texteCorr
+texte += addMathaleaQcm(this, i, {
+  ...qcmOptions,
+  interactivityOn: this.interactif,
+})
 ```
 
-Pour obtenir un rendu par lettres au lieu des cases dans certains contextes, passer une option au helper :
+`addMathaleaQcm()` retourne une chaîne vide hors du contexte HTML. Il n'est donc
+pas nécessaire de l'entourer d'un test pour un exercice qui n'a pas besoin d'un
+rendu LaTeX des propositions.
+
+Lorsque le rendu LaTeX doit afficher les choix, utiliser le helper historique
+après `handleAnswers()` :
 
 ```ts
-const qcm = propositionsQcm(this, i, { style: '', format: 'lettre' })
+if (context.isHtml) {
+  texte += addMathaleaQcm(this, i, {
+    ...qcmOptions,
+    interactivityOn: this.interactif,
+  })
+} else if (!context.isAmc) {
+  const qcmLatex = propositionsQcm(this, i)
+  texte += qcmLatex.texte
+  texteCorr += qcmLatex.texteCorr
+}
 ```
 
-Ne pas faire ceci :
-
-```ts
-texte += propositionsQcm(this, i).texte
-texteCorr += propositionsQcm(this, i).texteCorr
-```
-
-Chaque appel peut mélanger les propositions. Deux appels pour la même question peuvent donc créer un ordre différent entre l'énoncé, la correction et les identifiants interactifs.
+`handleAnswers()` a déjà préparé les données internes dont
+`propositionsQcm()` a besoin : aucune écriture directe dans `autoCorrection`
+n'est nécessaire.
 
 ## Correction
 
-La correction peut être une correction rédigée classique :
+La correction affichée par l'exercice reste une correction rédigée classique :
 
 ```ts
 const texteCorr = `$${a}+${b}=${bonneReponse}$.`
 ```
 
-Elle peut aussi inclure le QCM corrigé :
+Fournir la même correction à `handleAnswers()` :
 
 ```ts
-const qcm = propositionsQcm(this, i)
-texte += qcm.texte
-const texteCorr = `$${a}+${b}=${bonneReponse}$.<br>${qcm.texteCorr}`
-```
-
-Dans beaucoup d'exercices, la correction rédigée suffit. Utiliser `qcm.texteCorr` quand le corrigé doit montrer explicitement quelles cases étaient vraies ou fausses.
-
-## Rendu non interactif
-
-Un QCM ne doit pas dépendre uniquement du navigateur interactif.
-
-Deux approches sont courantes :
-
-1. Réutiliser `propositionsQcm(this, i)` : en LaTeX non HTML, le helper produit un environnement `qcmprop` avec les bonnes réponses dans `texteCorr`.
-2. Fournir une consigne non interactive plus naturelle : par exemple `Entourer le plus grand nombre : ...`, comme dans certains exercices CAN.
-
-Exemple avec alternative non interactive :
-
-```ts
-const qcm = propositionsQcm(this, i)
-if (this.interactif) {
-  texte = 'Cocher la bonne réponse : ' + qcm.texte
-} else {
-  texte = `Entourer la bonne réponse : $${bonneReponse}$ \\qquad $${bonneReponse + 1}$ \\qquad $${bonneReponse - 1}$`
+qcm: {
+  enonce: texte,
+  propositions,
+  correction: texteCorr,
+  options: qcmOptions,
 }
 ```
 
-Si l'exercice doit aussi sortir en AMC, garder `if (!context.isAmc)` autour de l'ajout de `qcm.texte`.
+Cette propriété `correction` est notamment copiée vers les données AMC. Elle ne
+remplace pas `this.listeCorrections[i]`, qui alimente la correction des sorties
+classiques.
+
+Dans le fallback LaTeX, `qcmLatex.texteCorr` montre explicitement les bonnes
+propositions. Il peut être ajouté à la correction rédigée comme dans le
+squelette minimal.
 
 ## Gestion interactive
 
-Pour un QCM manuel, ne pas utiliser `handleAnswers()`. Le contrat interactif est `this.autoCorrection[i].propositions`.
+Le format moderne est déclaré par :
 
-La vérification est assurée par `verifQuestionQcm()` dans `src/lib/interactif/qcm.ts`. Elle :
+```ts
+export const interactifReady = true
+export const interactifType = 'mathalea-qcm'
+```
+
+`handleAnswers()` enregistre le format et les réponses attendues. Le bouton de
+validation route ensuite la question vers `MathaleaQcmElement.verifQuestion()`,
+qui :
 
 - lit les cases ou boutons associés à la question ;
 - sauvegarde les choix dans `exercice.answers` ;
-- marque la question `OK` si toutes les bonnes réponses sont cochées et aucune mauvaise ne l'est ;
-- affiche le score via le bouton de validation de l'exercice QCM.
+- valide seulement l'ensemble exact des bonnes réponses ;
+- verrouille le composant après validation.
 
-Les métadonnées `interactifReady` et `interactifType = 'qcm'` sont donc indispensables pour que l'exercice soit reconnu comme QCM interactif.
+Ne pas utiliser `setReponse()` ni un comparateur champ par champ pour un QCM.
 
-## Variante avec `buildQcmForExercise()`
+## Rendu non interactif
 
-Pour un exercice classique, `buildQcmForExercise()` évite une partie du câblage manuel. Il remplit `autoCorrection`, appelle `propositionsQcm()` et retourne la question et la correction.
+Deux approches sont possibles :
+
+1. appeler `propositionsQcm()` uniquement hors HTML et hors AMC pour obtenir
+   l'environnement LaTeX `qcmprop` ;
+2. construire une consigne non interactive plus naturelle, par exemple
+   `Entourer la bonne réponse : ...`.
+
+Dans les deux cas, `handleAnswers()` reste l'unique point de déclaration de la
+réponse attendue.
+
+## AMC
+
+Pour un QCM simple :
 
 ```ts
-import { buildQcmForExercise } from '../../lib/interactif/qcmBuilder'
-
-const qcmData = buildQcmForExercise(this, i, {
-  question: texte,
-  correction: texteCorr,
-  propositions: [
-    { texte: '$2x$', statut: true, correction: 'Correct.' },
-    {
-      texte: '$x^2$',
-      statut: false,
-      correction: 'On confond ici fonction et dérivée.',
-    },
-    {
-      texte: '$2$',
-      statut: false,
-      correction: 'Ce serait la dérivée de $2x$.',
-    },
-  ],
-  options: { radio: true },
-})
-
-this.listeQuestions[i] = qcmData.question
-this.listeCorrections[i] = qcmData.correction
+export const amcReady = true
+export const amcType = 'qcmMono'
 ```
 
-Cette variante est utile quand chaque proposition a sa correction détaillée, ou quand il faut ajouter automatiquement un message du type "La bonne réponse est...".
+Pour plusieurs bonnes réponses :
+
+```ts
+export const amcReady = true
+export const amcType = 'qcmMult'
+```
+
+`handleAnswers()` copie automatiquement l'énoncé, les propositions, les options
+et `qcm.correction` vers la structure dédiée à AMC. Le code de l'exercice ne
+doit donc remplir directement ni `autoCorrection` ni `autoCorrectionAMC` pour
+ce cas.
+
+Points de vigilance :
+
+- `qcmMono` doit avoir exactement une proposition vraie ;
+- `qcmMult` accepte plusieurs propositions vraies, mais l'élève doit cocher
+  exactement l'ensemble attendu ;
+- l'énoncé fourni dans `qcm.enonce` doit être autonome et imprimable ;
+- les propositions ne doivent pas dépendre d'un composant navigateur ;
+- garder une déclaration explicite de `amcType` et tester l'export.
+
+Pour plus de détails, voir [export AMC](export-amc.md).
 
 ## Variante `ExerciceSimple`
 
-Pour un exercice simple qui possède déjà une réponse libre, une version QCM optionnelle peut être générée avec :
+Pour un exercice simple qui possède déjà une réponse libre, une version QCM
+optionnelle peut être générée avec :
 
 ```ts
 this.versionQcmDisponible = true
@@ -281,71 +363,42 @@ this.distracteurs = [mauvaise1, mauvaise2, mauvaise3]
 this.versionQcmOptions = { radio: true }
 ```
 
-Le moteur construit alors le QCM quand `versionQcm` est activé. Cette voie est adaptée aux exercices CAN ou aux exercices très courts qui peuvent exister à la fois en saisie libre et en QCM.
+Le moteur construit le QCM lorsque `versionQcm` est activé. Cette voie convient
+aux exercices CAN ou aux exercices courts disponibles à la fois en saisie libre
+et en QCM.
 
-Attention : ces quatre propriétés ne suffisent pas à elles seules à afficher le QCM. Le runtime doit activer `versionQcm`. Le comportement actuel est dans `src/lib/mathalea.ts` : le paramètre URL `qcm=1` met `exercice.versionQcm = true` pour les `ExerciceSimple`. `src/exercices/MetaExerciceCan.ts` construit ensuite le QCM seulement si `versionQcm`, `versionQcmDisponible` et les distracteurs sont présents.
-
-Pour tester une version QCM optionnelle :
+Pour tester cette version :
 
 ```txt
 http://localhost:5173/alea/?id=REF_EXERCICE&i=1&qcm=1
 ```
 
-Sans `qcm=1`, l'exercice peut rester en version saisie libre même si `versionQcmDisponible` vaut `true`.
+Sans `qcm=1`, l'exercice peut rester en saisie libre même si
+`versionQcmDisponible` vaut `true`.
 
-## Liste déroulante vers QCM
+## Maintenir un QCM historique
 
-Quand un exercice utilise une liste déroulante mais qu'un rendu QCM est nécessaire, notamment pour un rendu non interactif ou une réflexion AMC, utiliser `listeDeroulanteToQcm()` depuis `src/lib/customElements/ListeDeroulanteElement.ts`.
+Les exercices existants qui utilisent `interactifType = 'qcm'`, remplissent
+directement `autoCorrection[i]` et appellent `propositionsQcm()` restent pris en
+charge. Il n'est pas nécessaire de les migrer pour une modification sans
+rapport avec leur interactivité.
 
-```ts
-listeDeroulanteToQcm(this, i, choix, bonneReponse, {
-  ordered: true,
-  vertical: true,
-  radio: true,
-})
-const qcm = propositionsQcm(this, i)
-```
+Pour un nouveau QCM, préférer systématiquement :
 
-La fonction remplit `this.autoCorrection[i].propositions` à partir des choix. La bonne réponse doit faire partie des valeurs de la liste.
+1. `handleAnswers(..., { formatInteractif: 'mathalea-qcm' })` ;
+2. `addMathaleaQcm()` pour le rendu HTML ;
+3. éventuellement `propositionsQcm()` uniquement pour le fallback LaTeX.
 
-## AMC
-
-Pour un QCM simple, déclarer :
-
-```ts
-export const amcReady = true
-export const amcType = 'qcmMono'
-```
-
-Pour un QCM avec plusieurs bonnes réponses possibles :
-
-```ts
-export const amcReady = true
-export const amcType = 'qcmMult'
-```
-
-Points de vigilance :
-
-- `qcmMono` doit avoir une seule bonne réponse par question.
-- `qcmMult` accepte plusieurs bonnes réponses, mais l'élève doit cocher exactement l'ensemble attendu.
-- L'énoncé dans `autoCorrection[i].enonce` doit être autonome et imprimable.
-- Éviter les propositions qui dépendent d'un composant navigateur.
-- Ne pas ajouter `qcm.texte` dans `context.isAmc`, car l'export AMC produit son propre rendu.
-- Si le QCM vient d'une liste déroulante, vérifier l'export : l'inférence AMC des listes déroulantes reste plus fragile qu'un QCM déclaré directement.
-
-Le système sait aussi inférer `qcmMono` ou `qcmMult` à partir d'un exercice interactif QCM dans certains chemins d'export, mais pour un exercice officiellement prêt AMC, garder une déclaration explicite et tester le rendu.
+`buildQcmForExercise()` et `listeDeroulanteToQcm()` appartiennent également au
+parcours historique : les conserver pour maintenir les exercices qui les
+utilisent déjà.
 
 ## Prévisualiser et tester
 
 Pendant le développement :
 
-1. Lancer le serveur local :
-
-```sh
-pnpm dev
-```
-
-1. Ouvrir l'exercice avec son identifiant `refs['fr-fr']` :
+1. lancer le serveur local avec `pnpm dev` ;
+2. ouvrir l'exercice avec son identifiant :
 
 ```txt
 http://localhost:5173/alea/?id=REF_EXERCICE&i=1
@@ -357,17 +410,18 @@ ou avec son UUID :
 http://localhost:5173/alea/?uuid=UUID_GENERE&i=1
 ```
 
-1. Tester au moins une bonne réponse et une mauvaise réponse.
-2. Vérifier le rendu non interactif ou LaTeX si l'exercice doit être imprimé.
-3. Vérifier AMC si `amcReady` est déclaré.
+3. tester au moins une bonne et une mauvaise réponse ;
+4. vérifier le rendu non interactif ou LaTeX si l'exercice doit être imprimé ;
+5. vérifier AMC si `amcReady` est déclaré.
 
-Pour une validation ciblée du rapport interactif sur un exercice modifié :
+Pour une validation ciblée du rapport interactif :
 
 ```sh
 INTERACTIF_REPORT=1 CHANGED_FILES='src/exercices/6e/mon-qcm.ts' pnpm vitest src/lib/amc/report-interactif.test.ts --run
 ```
 
-Remplacer `src/exercices/6e/mon-qcm.ts` par le chemin réel du fichier d'exercice. Le rapport généré est documenté dans [rapports d'exercices](../../../tests/rapports-exercices.md).
+Remplacer le chemin par celui du fichier modifié. Le rapport est décrit dans
+[rapports d'exercices](../../../tests/rapports-exercices.md).
 
 Avant commit :
 
@@ -381,24 +435,31 @@ Si des fichiers TypeScript ou Svelte sont modifiés :
 pnpm check
 ```
 
-Pour les rapports d'exercices interactifs et AMC, voir [rapports d'exercices](../../../tests/rapports-exercices.md).
-
 ## Dépannage
 
-`propositionsQcm a reçu une liste de propositions undefined` : `this.autoCorrection[i]` n'a pas été rempli avant l'appel à `propositionsQcm(this, i)`.
+`handleAnswers() attend une valeur QCM pour le format 'mathalea-qcm'` : vérifier
+la présence du niveau `{ qcm: { ... } }` autour des propositions.
 
-`propositionsQcm a reçu une liste de propositions vide` : le tableau `propositions` est vide. Vérifier la génération des distracteurs.
+Le QCM est vide : vérifier que `handleAnswers()` est appelé avant
+`addMathaleaQcm()` et que le tableau `propositions` contient au moins deux
+éléments.
 
-`propositionsQcm a reçu une liste de propositions de taille 1` : un QCM doit avoir au moins deux propositions.
+Le QCM s'affiche mais ne se valide pas : vérifier
+`interactifType = 'mathalea-qcm'` et
+`{ formatInteractif: 'mathalea-qcm' }`.
 
-La bonne réponse affichée ne correspond pas à la correction : vérifier que `propositionsQcm(this, i)` n'est appelé qu'une seule fois pour cette question.
+Des cases à cocher s'affichent au lieu de boutons radio : passer le même
+`qcmOptions` à `handleAnswers()` et à `addMathaleaQcm()`.
 
-Les propositions changent d'ordre alors qu'elles doivent rester fixes : ajouter `options: { ordered: true }`.
+Les boutons radio correspondent à plusieurs réponses attendues : ne pas utiliser
+`radio: true` si plusieurs propositions ont `statut: true`.
 
-Une proposition comme "Aucune de ces réponses" ou "Je ne sais pas" ne reste pas en dernier : utiliser `lastChoice` ou `buildQcmForExercise()` avec l'option `dontKnow`.
+Les propositions ne changent jamais d'ordre : le composant moderne respecte
+l'ordre fourni ; mélanger explicitement le tableau avant `handleAnswers()`.
 
-Les boutons radio permettent plusieurs réponses attendues : ne pas utiliser `radio: true` si plusieurs propositions ont `statut: true`.
+Le QCM apparaît en HTML mais pas en LaTeX : `addMathaleaQcm()` est HTML
+uniquement ; utiliser le fallback `propositionsQcm()` montré plus haut.
 
-Le QCM fonctionne en HTML mais pas en validation interactive : vérifier `export const interactifType = 'qcm'` et que chaque question a bien une entrée `autoCorrection[i]`.
-
-L'export AMC est incohérent : vérifier `amcType`, `autoCorrection[i].enonce`, le nombre de bonnes réponses et l'absence de rendu navigateur dans les propositions.
+L'export AMC est incohérent : vérifier `amcType`, `qcm.enonce`,
+`qcm.correction`, le nombre de bonnes réponses et l'absence de contenu
+strictement navigateur dans les propositions.

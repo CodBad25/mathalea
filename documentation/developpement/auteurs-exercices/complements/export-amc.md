@@ -224,50 +224,70 @@ Voir aussi `src/exercices/can/3e/can3C01.ts` pour un exercice existant qui garde
 
 ## Cas QCM
 
-Un QCM AMC utilise `autoCorrection[i].propositions`, comme le QCM interactif.
+Un QCM moderne se déclare avec `handleAnswers()`. Cette fonction synchronise
+automatiquement les données interactives vers la structure dédiée à AMC :
+l'exercice ne remplit directement ni `autoCorrection[i]` ni
+`autoCorrectionAMC[i]`.
 
 Extrait partiel à adapter dans `nouvelleVersion()` ; les imports nécessaires sont inclus pour éviter un copier-coller incomplet :
 
 ```ts
-import { propositionsQcm } from '../../lib/interactif/qcm'
-import { context } from '../../modules/context'
+import { addMathaleaQcm } from '../../lib/customElements/MathaleaQcm'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 
 export const interactifReady = true
-export const interactifType = 'qcm'
+export const interactifType = 'mathalea-qcm'
 export const amcReady = true
 export const amcType = 'qcmMono'
 
 const correction = estVrai
   ? 'La phrase est vraie car ...'
   : 'La phrase est fausse car ...'
+const qcmDisplayOptions = { radio: true, vertical: true }
 
-this.autoCorrection[i] = {
-  enonce: texte,
-  propositions: [
-    { texte: 'Vrai', statut: estVrai },
-    { texte: 'Faux', statut: !estVrai },
-  ],
-  options: { ordered: true, radio: true, correction },
-}
+handleAnswers(
+  this,
+  i,
+  {
+    qcm: {
+      enonce: texte,
+      propositions: [
+        { texte: 'Vrai', statut: estVrai },
+        { texte: 'Faux', statut: !estVrai },
+      ],
+      correction,
+      options: { ...qcmDisplayOptions, ordered: true },
+    },
+  },
+  { formatInteractif: 'mathalea-qcm' },
+)
 
-const monQcm = propositionsQcm(this, i)
-if (!context.isAmc) {
-  texte += monQcm.texte
-}
+texte += addMathaleaQcm(this, i, {
+  ...qcmDisplayOptions,
+  interactivityOn: this.interactif,
+})
 ```
 
 Règles à respecter :
 
 - `qcmMono` : exactement une proposition doit avoir `statut: true` ;
 - `qcmMult` : une ou plusieurs propositions peuvent avoir `statut: true` ;
-- `options.ordered: true` conserve l'ordre des propositions ;
-- `options.vertical: true` force une présentation verticale ;
-- `options.lastChoice` garde les dernières propositions à la fin, utile pour "Aucune réponse" ou "Je ne sais pas" ;
-- `options.correction` doit porter la correction détaillée à afficher dans `\explain{...}`.
+- `qcm.enonce` doit être autonome et imprimable ;
+- `qcm.correction` porte la correction détaillée à afficher dans
+  `\explain{...}` ;
+- `qcm.options.ordered: true` conserve l'ordre dans les rendus qui utilisent
+  cette option ;
+- les options d'affichage `radio` et `vertical` doivent rester cohérentes entre
+  `handleAnswers()` et `addMathaleaQcm()`.
 
-Pour un QCM, ne vous reposez pas sur `listeCorrections[i]` pour la correction AMC détaillée : le template QCM lit `options.correction`. `listeCorrections[i]` reste utile pour les autres sorties, mais la sortie AMC est fiable seulement si `options.correction` est renseigné, directement ou via un helper qui le copie explicitement.
+Pour un QCM, ne vous reposez pas sur `listeCorrections[i]` pour la correction
+AMC détaillée : transmettez-la dans `qcm.correction`. `listeCorrections[i]`
+reste utile pour les autres sorties.
 
-En contexte AMC, `propositionsQcm()` ne doit pas ajouter de HTML à l'énoncé. Gardez donc le test `if (!context.isAmc)` autour du texte interactif.
+`addMathaleaQcm()` retourne une chaîne vide hors HTML et ne pollue donc pas
+l'export AMC. Si les propositions doivent aussi apparaître dans un export
+LaTeX classique, utiliser le fallback `propositionsQcm()` décrit dans
+[coder un QCM](coder-un-qcm.md#ajouter-le-qcm-à-la-question).
 
 ## Cas AMCOpen
 
