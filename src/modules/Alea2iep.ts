@@ -1576,9 +1576,16 @@ export default class Alea2iep {
 
   /**
    * Met l'animation en pause forçant l'utilisateur à appuyer sur lecture pour voir la suite
+   * @param {objet} [options] tempo : délai (dixièmes de seconde) avant que le bouton "continuer" n'apparaisse
    */
-  pause() {
-    this.liste_script.push('<action mouvement="pause" />')
+  pause(options: OptionsIep = {}) {
+    if (options.tempo !== undefined) {
+      this.liste_script.push(
+        `<action mouvement="pause" tempo="${options.tempo}" />`,
+      )
+    } else {
+      this.liste_script.push('<action mouvement="pause" />')
+    }
   }
 
   /**
