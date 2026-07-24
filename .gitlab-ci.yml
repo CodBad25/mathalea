@@ -67,7 +67,6 @@ default:
   before_script:
     - corepack enable
     - corepack prepare pnpm@11.8.0 --activate
-    - pnpm config set store-dir .pnpm-store
 
 setup:
   stage: setup
@@ -128,7 +127,6 @@ build_ci_pdf:
   timeout: 5h
   script:
     - npm install -g pnpm@11.8.0
-    - pnpm config set store-dir .pnpm-store
   rules:
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
       when: always
@@ -244,7 +242,6 @@ playwright-console-consolidated:
   script:
     - corepack enable
     - corepack prepare pnpm@11.8.0 --activate
-    - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 50
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
@@ -312,7 +309,6 @@ playwright-pdf-consolidated:
   script:
     - corepack enable
     - corepack prepare pnpm@11.8.0 --activate
-    - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 30
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
@@ -371,7 +367,6 @@ playwright-pdf-dnb-consolidated:
   script:
     - corepack enable
     - corepack prepare pnpm@11.8.0 --activate
-    - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 50
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
@@ -417,7 +412,6 @@ playwright-pdf-bac-consolidated:
   script:
     - corepack enable
     - corepack prepare pnpm@11.8.0 --activate
-    - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 50
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
@@ -475,7 +469,6 @@ jsdom-all-exercises:
     - corepack enable
     - corepack prepare pnpm@11.8.0 --activate
     - NODE_OPTIONS=--max-old-space-size=4096
-    - pnpm config set store-dir .pnpm-store
     - pnpm run makeJson >/dev/null
     - sleep 50
     - |
@@ -549,7 +542,6 @@ playwright-caneleve:
     - corepack enable
     - corepack prepare pnpm@11.8.0 --activate
     - NODE_OPTIONS=--max-old-space-size=4096
-    - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 50
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
@@ -603,7 +595,6 @@ playwright-consistency:
     - corepack enable
     - corepack prepare pnpm@11.8.0 --activate
     - NODE_OPTIONS=--max-old-space-size=4096
-    - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 50
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
@@ -656,7 +647,6 @@ playwright-interactivity:
     - corepack enable
     - corepack prepare pnpm@11.8.0 --activate
     - NODE_OPTIONS=--max-old-space-size=4096
-    - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 50
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
@@ -785,7 +775,6 @@ testExosModifiedConsolidated:
     - corepack enable
     - corepack prepare pnpm@11.8.0 --activate
     - NODE_OPTIONS=--max-old-space-size=4096
-    - pnpm config set store-dir .pnpm-store
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 50
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
@@ -933,7 +922,6 @@ testExosModifiedLatex:
       fi
 
     - npm install -g pnpm@11.8.0
-    - pnpm config set store-dir .pnpm-store
     - pnpm run makeJson >/dev/null
     - sleep 50
     - echo "$CHANGED_FILES"

@@ -1,16 +1,5 @@
-import { combinaisonListesSansChangerOrdre } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { numAlpha } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
-import { texCadreParOrange, tikzMachineDiag } from '../../modules/machines'
-import { SvgMachineDiag3F12 } from '../../modules/macroSvgJs'
-import {
-  gestionnaireFormulaireTexte,
-  itemize,
-  listeQuestionsToContenu,
-  randint,
-  texEnumerate,
-} from '../../modules/outils'
+import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre =
@@ -46,6 +35,9 @@ export default class FonctionsCalculsDImages extends Exercice {
   }
 
   nouvelleVersion(numeroExercice: number) {
+    this.listeQuestions[0] =
+      "Cet exercice n'a pas pu être conservé pour des raisons techniques. Vous trouverez dans la section 3F1 ne nombreux exercices de calcul d'image"
+    /*
     let pourcentage, j
     let idDuDiv = ''
     let idDuDivCorr = ''
@@ -351,7 +343,7 @@ export default class FonctionsCalculsDImages extends Exercice {
       }
       cpt++
     }
-
+*/
     listeQuestionsToContenu(this)
   }
 }

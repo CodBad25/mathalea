@@ -104,8 +104,14 @@ export type InstructionIep =
   | { type: 'demiDroiteAngle'; p1: string; p2: string; angle: number }
   | { type: 'montrerOutil'; outil: OutilIep; p1?: string }
   | { type: 'masquerOutil'; outil: OutilIep }
+  | { type: 'segmentCodage'; p1: string; p2: string; codage: string }
+  | { type: 'angleCodage'; p1: string; p2: string; p3: string; codage: string }
+  | { type: 'regleMontrerGraduations' }
+  | { type: 'regleMasquerGraduations' }
+  | { type: 'regleModifierLongueur'; longueur: number }
   | { type: 'texte'; texte: string; x: number; y: number }
-  | { type: 'pause' }
+  | { type: 'pause'; secondes: number }
+  | { type: 'attente'; secondes: number }
 
 type TypeInstruction = InstructionIep['type']
 
@@ -120,9 +126,38 @@ type ChampSpec = {
     | 'texte'
     | 'etape'
     | 'choix'
+    | 'codageSegment'
+    | 'codageAngle'
   label: string
   defaut?: number | string
 }
+
+// Symboles de codage disponibles pour un segment (marque de longueur égale)
+const optionsCodageSegment: string[] = ['/', '//', '///', 'X', 'O']
+
+// Symboles de codage disponibles pour un angle (voir Alea2iep.angleCodage)
+const optionsCodageAngle: string[] = [
+  'simple',
+  '/',
+  '//',
+  '///',
+  'O',
+  'double',
+  'double/',
+  'double//',
+  'double///',
+  'doubleO',
+  'triple',
+  'triple/',
+  'triple//',
+  'triple///',
+  'tripleO',
+  'plein',
+  'plein/',
+  'plein//',
+  'plein///',
+  'pleinO',
+]
 
 const catalogue: Record<
   TypeInstruction,
@@ -247,6 +282,37 @@ const catalogue: Record<
     label: 'Cacher un instrument',
     champs: [{ cle: 'outil', genre: 'outil', label: 'Instrument' }],
   },
+  segmentCodage: {
+    label: 'Coder un segment (marque de longueur)',
+    champs: [
+      { cle: 'p1', genre: 'point', label: 'Extrémité 1' },
+      { cle: 'p2', genre: 'point', label: 'Extrémité 2' },
+      { cle: 'codage', genre: 'codageSegment', label: 'Codage' },
+    ],
+  },
+  angleCodage: {
+    label: 'Coder un angle',
+    champs: [
+      { cle: 'p1', genre: 'point', label: 'Point sur un côté' },
+      { cle: 'p2', genre: 'point', label: 'Sommet de l’angle' },
+      { cle: 'p3', genre: 'point', label: 'Point sur l’autre côté' },
+      { cle: 'codage', genre: 'codageAngle', label: 'Codage' },
+    ],
+  },
+  regleMontrerGraduations: {
+    label: 'Montrer les graduations de la règle',
+    champs: [],
+  },
+  regleMasquerGraduations: {
+    label: 'Masquer les graduations de la règle',
+    champs: [],
+  },
+  regleModifierLongueur: {
+    label: 'Modifier la longueur de la règle',
+    champs: [
+      { cle: 'longueur', genre: 'nombre', label: 'Longueur (cm)', defaut: 20 },
+    ],
+  },
   texte: {
     label: 'Écrire un texte',
     champs: [
@@ -256,8 +322,16 @@ const catalogue: Record<
     ],
   },
   pause: {
-    label: 'Marquer une pause',
-    champs: [],
+    label: 'Marquer une pause (clic requis pour continuer)',
+    champs: [
+      { cle: 'secondes', genre: 'nombre', label: 'Secondes', defaut: 2 },
+    ],
+  },
+  attente: {
+    label: 'Attendre quelques secondes (sans clic)',
+    champs: [
+      { cle: 'secondes', genre: 'nombre', label: 'Secondes', defaut: 2 },
+    ],
   },
 }
 
@@ -277,10 +351,16 @@ const ordreCatalogue: TypeInstruction[] = [
   'bissectrice',
   'demiDroiteAngle',
   'codageAngleDroit',
+  'segmentCodage',
+  'angleCodage',
+  'regleMontrerGraduations',
+  'regleMasquerGraduations',
+  'regleModifierLongueur',
   'montrerOutil',
   'masquerOutil',
   'texte',
   'pause',
+  'attente',
 ]
 
 function formateNombre(n: number) {
@@ -342,10 +422,22 @@ export function decrireInstruction(
       return `Montrer ${nomsOutils[instr.outil]}${instr.p1 ? ` en ${instr.p1}` : ''}.`
     case 'masquerOutil':
       return `Cacher ${nomsOutils[instr.outil]}.`
+    case 'segmentCodage':
+      return `Coder le segment [${instr.p1}${instr.p2}] (${instr.codage}).`
+    case 'angleCodage':
+      return `Coder l’angle ${instr.p1}${instr.p2}${instr.p3} (${instr.codage}).`
+    case 'regleMontrerGraduations':
+      return 'Montrer les graduations de la règle.'
+    case 'regleMasquerGraduations':
+      return 'Masquer les graduations de la règle.'
+    case 'regleModifierLongueur':
+      return `Modifier la longueur de la règle (${formateNombre(instr.longueur)} cm).`
     case 'texte':
       return `Écrire « ${instr.texte} » en (${formateNombre(instr.x)} ; ${formateNombre(instr.y)}).`
     case 'pause':
-      return 'Marquer une pause dans l’animation.'
+      return `Marquer une pause de ${formateNombre(instr.secondes)} s (clic requis pour continuer).`
+    case 'attente':
+      return `Attendre ${formateNombre(instr.secondes)} s (reprise automatique, sans clic).`
   }
 }
 
@@ -697,12 +789,49 @@ function jouerProgramme(
         anim.masquer(instr.outil)
         break
       }
+      case 'segmentCodage': {
+        const pts = recupere(instr.p1, instr.p2)
+        if (pts === undefined) {
+          etapesIgnorees.push(index)
+          break
+        }
+        anim.segmentCodage(pts[0], pts[1], { codage: instr.codage })
+        break
+      }
+      case 'angleCodage': {
+        const pts = recupere(instr.p1, instr.p2, instr.p3)
+        if (pts === undefined) {
+          etapesIgnorees.push(index)
+          break
+        }
+        anim.angleCodage(pts[0], pts[1], pts[2], { codage: instr.codage })
+        break
+      }
+      case 'regleMontrerGraduations': {
+        anim.regleMontrerGraduations()
+        break
+      }
+      case 'regleMasquerGraduations': {
+        anim.regleMasquerGraduations()
+        break
+      }
+      case 'regleModifierLongueur': {
+        anim.regleModifierLongueur(instr.longueur)
+        break
+      }
       case 'texte': {
         anim.textePosition(instr.texte, instr.x, instr.y)
         break
       }
       case 'pause': {
-        anim.pause()
+        anim.pause({ tempo: instr.secondes * 10 })
+        break
+      }
+      case 'attente': {
+        // Instrumenpoche n'a pas d'action d'attente pure : on rejoue un zoom
+        // à 100% (valeur déjà en place, donc sans effet visuel) pour ne
+        // profiter que de son tempo, qui retarde l'étape suivante sans clic.
+        anim.compasZoom(100, { tempo: instr.secondes * 10 })
         break
       }
     }
@@ -773,6 +902,10 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   private listeProgramme!: HTMLOListElement
   private divAnimation!: HTMLDivElement
   private animationVisible = false
+  private boutonValider!: HTMLButtonElement
+  private boutonAnnulerEdition!: HTMLButtonElement
+  // Index de l'étape en cours de modification, null si on est en mode ajout
+  private editingIndex: number | null = null
 
   connectedCallback() {
     super.connectedCallback()
@@ -792,7 +925,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
   private construireInterface() {
     const conteneur = document.createElement('div')
-    conteneur.classList.add('flex', 'flex-col', 'gap-4', 'my-4', 'max-w-3xl')
+    conteneur.classList.add('flex', 'flex-col', 'gap-4', 'my-4', 'max-w-5xl')
 
     // --- Zone d'ajout d'une instruction ---
     const zoneAjout = document.createElement('div')
@@ -832,11 +965,29 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     )
     ligneAjout.appendChild(this.divParametres)
 
-    const boutonAjouter = document.createElement('button')
-    boutonAjouter.innerText = 'Ajouter'
-    boutonAjouter.classList.add(...classesBouton)
-    boutonAjouter.onclick = () => this.ajouterInstruction()
-    ligneAjout.appendChild(boutonAjouter)
+    this.boutonValider = document.createElement('button')
+    this.boutonValider.innerText = 'Ajouter'
+    this.boutonValider.classList.add(...classesBouton)
+    this.boutonValider.onclick = () => this.validerInstruction()
+    ligneAjout.appendChild(this.boutonValider)
+
+    this.boutonAnnulerEdition = document.createElement('button')
+    this.boutonAnnulerEdition.innerText = 'Annuler'
+    this.boutonAnnulerEdition.type = 'button'
+    this.boutonAnnulerEdition.classList.add(
+      'px-3',
+      'py-1.5',
+      'text-xs',
+      'font-medium',
+      'uppercase',
+      'rounded',
+      'border',
+      'border-gray-300',
+      'hover:bg-gray-200',
+      'hidden',
+    )
+    this.boutonAnnulerEdition.onclick = () => this.annulerEdition()
+    ligneAjout.appendChild(this.boutonAnnulerEdition)
     zoneAjout.appendChild(ligneAjout)
     conteneur.appendChild(zoneAjout)
 
@@ -878,7 +1029,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     }
     zoneAnimation.appendChild(boutonTester)
     this.divAnimation = document.createElement('div')
-    this.divAnimation.classList.add('max-w-3xl')
+    this.divAnimation.classList.add('max-w-5xl')
     zoneAnimation.appendChild(this.divAnimation)
     conteneur.appendChild(zoneAnimation)
 
@@ -951,6 +1102,27 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           .findIndex((c) => c.cle === champ.cle)
         if (elements.length > indice) select.value = String(elements[indice].index)
         etiquette.appendChild(select)
+      } else if (
+        champ.genre === 'codageSegment' ||
+        champ.genre === 'codageAngle'
+      ) {
+        const select = document.createElement('select')
+        select.classList.add(
+          ...classesChamp,
+          champ.genre === 'codageSegment' ? 'min-w-16' : 'min-w-28',
+        )
+        select.dataset.cle = champ.cle
+        const optionsCodage =
+          champ.genre === 'codageSegment'
+            ? optionsCodageSegment
+            : optionsCodageAngle
+        for (const valeur of optionsCodage) {
+          const option = document.createElement('option')
+          option.value = valeur
+          option.innerText = valeur
+          select.appendChild(option)
+        }
+        etiquette.appendChild(select)
       } else if (champ.genre === 'choix') {
         const select = document.createElement('select')
         select.classList.add(...classesChamp)
@@ -1001,7 +1173,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     return `P${noms.length + 1}`
   }
 
-  private ajouterInstruction() {
+  private validerInstruction() {
     const type = this.selectType.value as TypeInstruction
     const instruction: Record<string, string | number> = { type }
     for (const champ of catalogue[type].champs) {
@@ -1025,20 +1197,68 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         instruction[champ.cle] = element.value
       }
     }
+    const enEdition = this.editingIndex !== null
+    const programmeSansEdition = enEdition
+      ? this.programme.filter((_, i) => i !== this.editingIndex)
+      : this.programme
     if (
       type === 'point' ||
       type === 'pointADistance' ||
       type === 'intersection'
     ) {
       const nom = String(instruction.nom)
-      if (pointsDefinis(this.programme).includes(nom)) {
+      if (pointsDefinis(programmeSansEdition).includes(nom)) {
         window.alert(`Le point ${nom} existe déjà.`)
         return
       }
-      this.prochaineLettre++
+      if (!enEdition) this.prochaineLettre++
     }
-    this.programme.push(instruction as unknown as InstructionIep)
+    if (enEdition) {
+      this.programme[this.editingIndex as number] =
+        instruction as unknown as InstructionIep
+      this.terminerEdition()
+    } else {
+      this.programme.push(instruction as unknown as InstructionIep)
+    }
     this.rafraichirProgramme()
+    this.rafraichirParametres()
+  }
+
+  /**
+   * Charge une étape existante dans le formulaire d'ajout pour la modifier
+   */
+  private demarrerEdition(index: number) {
+    this.editingIndex = index
+    const instruction = this.programme[index]
+    this.selectType.value = instruction.type
+    this.rafraichirParametres()
+    const valeurs = instruction as unknown as Record<
+      string,
+      string | number | undefined
+    >
+    for (const champ of catalogue[instruction.type].champs) {
+      const element = this.divParametres.querySelector<
+        HTMLInputElement | HTMLSelectElement
+      >(`[data-cle="${champ.cle}"]`)
+      if (element === null) continue
+      const valeur = valeurs[champ.cle]
+      element.value = valeur === undefined ? '' : String(valeur)
+    }
+    this.boutonValider.innerText = 'Enregistrer'
+    this.boutonAnnulerEdition.classList.remove('hidden')
+  }
+
+  /**
+   * Sort du mode édition sans changer les champs affichés
+   */
+  private terminerEdition() {
+    this.editingIndex = null
+    this.boutonValider.innerText = 'Ajouter'
+    this.boutonAnnulerEdition.classList.add('hidden')
+  }
+
+  private annulerEdition() {
+    this.terminerEdition()
     this.rafraichirParametres()
   }
 
@@ -1047,11 +1267,21 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     if (!peutEchangerEtapes(this.programme, index, cible)) return
     const [instruction] = this.programme.splice(index, 1)
     this.programme.splice(cible, 0, instruction)
+    if (this.editingIndex === index) {
+      this.editingIndex = cible
+    } else if (this.editingIndex === cible) {
+      this.editingIndex = index
+    }
     this.rafraichirProgramme()
   }
 
   private supprimerInstruction(index: number) {
     this.programme.splice(index, 1)
+    if (this.editingIndex === index) {
+      this.terminerEdition()
+    } else if (this.editingIndex !== null && this.editingIndex > index) {
+      this.editingIndex--
+    }
     this.rafraichirProgramme()
     this.rafraichirParametres()
   }
@@ -1068,6 +1298,14 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     this.programme.forEach((instruction, index) => {
       const ligne = document.createElement('li')
       ligne.classList.add('flex', 'items-center', 'gap-1')
+      if (index === this.editingIndex) {
+        ligne.classList.add(
+          'bg-amber-100',
+          'dark:bg-amber-900/40',
+          'rounded',
+          'px-1',
+        )
+      }
       const numero = document.createElement('span')
       numero.classList.add('text-gray-500', 'w-6', 'text-right', 'shrink-0')
       numero.innerText = `${index + 1}.`
@@ -1086,6 +1324,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       ligne.appendChild(texte)
 
       const boutons: [string, () => void, string, boolean][] = [
+        ['✎', () => this.demarrerEdition(index), 'Modifier', false],
         [
           '▲',
           () => this.deplacerInstruction(index, -1),

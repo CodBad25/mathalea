@@ -348,7 +348,8 @@ export class TableauSignesVariationsElement extends MathaleaCustomElement {
       // L'export Typst réutilise le rendu HTML (context.isHtml reste vrai),
       // mais ce web component ne peut pas être « rejoué » par htmlToTypst
       // (JS exécuté après montage dans le DOM, cf. documentation/developpement/
-      // guides/coder-un-exercice-classique.md#contextistypst). On insère donc
+      // auteurs-exercices/complements/variantes-exercices.md#branches-de-rendu).
+      // On insère donc
       // directement le code Typst (package vartable) via le marqueur
       // <mathalea-typst>, reconnu tel quel par htmlToTypst (latexToTypst.ts).
       return `<mathalea-typst>${toTypst(config, {})}</mathalea-typst>`

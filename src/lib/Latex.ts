@@ -234,8 +234,13 @@ class Latex {
               } // Cette étoile permet de gérer les sauts de page malencontreux
               content += '\n'
             }
-            for (const correction of exercice.listeCorrections) {
-              contentCorr += `\n\\item ${format(correction)}`
+            // On itère sur le nombre de questions (et non listeCorrections) pour garder
+            // une correspondance 1-1 avec les lignes ajoutées à content ci-dessus : un
+            // exercice qui ne remplit pas listeCorrections (ex. outil interactif pur)
+            // ne doit pas laisser l'environnement enumerate sans aucun \item, ce qui
+            // provoque une erreur LaTeX "Something's wrong--perhaps a missing \item."
+            for (let i = 0; i < exercice.listeQuestions.length; i++) {
+              contentCorr += `\n\\item ${format(exercice.listeCorrections[i] ?? '')}`
             }
           }
         }

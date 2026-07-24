@@ -289,7 +289,7 @@ export default class FormeLitteraleIntroduireUneLettre extends Exercice {
         ? choice(['x', 'y', 'a', 'z', 'b', 'c', 'h', 'k', 'n'], lettre1)
         : situation.elt2.lettre
       enonces.push({
-        enonce: `${situation.prenom} veut acheter ${n} ${pluriel(n, situation.elt1)} et ${p} ${pluriel(p, situation.elt2)}.
+        enonce: `${situation.prenom} veut acheter $${n}$ ${pluriel(n, situation.elt1)} et $${p}$ ${pluriel(p, situation.elt2)}.
 <br>On note $${lettre1}$ le prix d'${situation.elt1.article} ${situation.elt1.sing} et $${lettre2}$ le prix d'${situation.elt2.article} ${situation.elt2.sing}.`,
         question: '',
         correction: `
