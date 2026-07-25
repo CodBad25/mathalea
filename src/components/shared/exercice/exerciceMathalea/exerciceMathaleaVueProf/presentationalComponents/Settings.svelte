@@ -217,22 +217,24 @@
         {/if}
       </div>
 
-      <form
-        id="settings-form-formAlea-{exerciceIndex}"
-        name="settings-form-formAlea"
-        autocomplete="off"
-        class="w-1/2"
-        on:submit|preventDefault={dispatchNewSettings}
-      >
-        <InputText
-          inputID="settings-formAlea-{exerciceIndex}"
-          title="Série :"
-          bind:value={alea}
-          darkBackground={true}
-          classAddenda="w-full"
-          on:input={dispatchNewSettings}
-        />
-      </form>
+      {#if !exercice.pasDeVersionAleatoire}
+        <form
+          id="settings-form-formAlea-{exerciceIndex}"
+          name="settings-form-formAlea"
+          autocomplete="off"
+          class="w-1/2"
+          on:submit|preventDefault={dispatchNewSettings}
+        >
+          <InputText
+            inputID="settings-formAlea-{exerciceIndex}"
+            title="Série :"
+            bind:value={alea}
+            darkBackground={true}
+            classAddenda="w-full"
+            on:input={dispatchNewSettings}
+          />
+        </form>
+      {/if}
     </div>
     <SupParameterGroup
       supIndex={1}

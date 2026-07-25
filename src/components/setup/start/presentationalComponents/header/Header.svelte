@@ -13,7 +13,6 @@
   export let setAllInteractive: (isAllInteractive: boolean) => void
   export let newDataForAll: () => void
   export let trash: () => void
-  export let setFullScreen: (isFullScreen: boolean) => void
   export let handleExport: (vue: VueType) => void
   export let handleRecorder: () => void
   export let locale: Language
@@ -85,7 +84,6 @@
         {setAllInteractive}
         {newDataForAll}
         {trash}
-        {setFullScreen}
         {handleExport}
         {exportQcmCam}
       />

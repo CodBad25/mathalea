@@ -106,7 +106,7 @@ export default class MedianeMoyenneQCM extends ExerciceQcmA {
     this.enonce = `Voici deux séries de valeurs :<br>
 ${texteGras('série A :')} $~~${A[0]}~~; ~~${A[1]}~~; ~~${A[2]}$<br>
 ${texteGras('série B :')} $~~${texNombre(B[0])}~~; ~~${texNombre(B[1])}~~; ~~${texNombre(B[2])}$<br>
-Laquelle des ces 4 propositions est vraie ?`
+Laquelle de ces 4 propositions est vraie ?`
     const moyA = new FractionEtendue(a1 + a2 + a3, 3)
     const moyB = new FractionEtendue(b1 + b2 + b3, 3)
     this.correction = `On calcule la moyenne de la série A :

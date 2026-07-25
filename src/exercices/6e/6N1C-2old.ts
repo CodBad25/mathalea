@@ -4,10 +4,14 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint, latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
+import {
+  addPointsCliquables,
+  type PointCliquableData,
+} from '../../lib/customElements/PointsCliquablesElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import { lettreIndiceeDepuisChiffre } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
-import { PointCliquable, pointCliquable } from '../../modules/2dinteractif'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { egal, listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -19,7 +23,7 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 export const dateDeModifImportante = '16/09/2024'
 export const titre = "Placer un point d'abscisse entière (grands nombres)"
 export const interactifReady = true
-export const interactifType = 'custom'
+export const interactifType = 'points-cliquables'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 /**
@@ -37,8 +41,6 @@ export const refs = {
 }
 
 export default class PlacerUnPointAbscisseEntiere2d extends Exercice {
-  pointsNonSolutions: PointCliquable[][]
-  pointsSolutions: PointCliquable[][]
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
@@ -50,8 +52,6 @@ export default class PlacerUnPointAbscisseEntiere2d extends Exercice {
     this.nbQuestions = 5
 
     this.sup = 1
-    this.pointsNonSolutions = []
-    this.pointsSolutions = []
   }
 
   nouvelleVersion() {
@@ -62,9 +62,6 @@ export default class PlacerUnPointAbscisseEntiere2d extends Exercice {
     }
     // numeroExercice est 0 pour l'exercice 1
     let typesDeQuestions
-
-    this.pointsNonSolutions = []
-    this.pointsSolutions = []
 
     if (this.sup === 4) {
       typesDeQuestions = combinaisonListes([1, 2, 3], this.nbQuestions)
@@ -186,24 +183,24 @@ export default class PlacerUnPointAbscisseEntiere2d extends Exercice {
       } else {
         texte = `Placer les points $${l1}\\left(${texNombre(abscisse[0][1])}\\right)$, $~${l2}\\left(${texNombre(abscisse[1][1])}\\right)$ et $~${l3}\\left(${texNombre(abscisse[2][1])}\\right)$.`
       }
-      this.pointsNonSolutions[i] = []
-      this.pointsSolutions[i] = []
+      const pointsCliquables: PointCliquableData[] = []
+      const pointsAttendus: PointCliquableData[] = []
       if (this.interactif) {
-        for (let indicePoint = 0, monPoint; indicePoint < 70; indicePoint++) {
-          monPoint = pointCliquable((indicePoint / 10) * tailleUnite, 0, {
-            size: 5,
-            width: 3,
-            color: bleuMathalea,
-            radius: tailleUnite / 25,
-          })
-          mesObjets.push(monPoint)
-          if (egal((indicePoint * pas1) / 10 + abs0, abscisse[0][1])) {
-            this.pointsSolutions[i][0] = monPoint
-          } else {
-            this.pointsNonSolutions[i].push(monPoint)
+        for (let indicePoint = 0; indicePoint < 70; indicePoint++) {
+          const point = {
+            x: (indicePoint / 10) * tailleUnite,
+            y: 0,
+            id: `P${indicePoint}`,
+            etat: false,
           }
+          pointsCliquables.push(point)
+          pointsAttendus.push({
+            ...point,
+            etat: egal((indicePoint * pas1) / 10 + abs0, abscisse[0][1]),
+          })
         }
       }
+      const figureId = `figEx${this.numeroExercice}Q${i}`
       texte +=
         (context.isHtml ? '' : '\\\\') +
         mathalea2d(
@@ -214,11 +211,28 @@ export default class PlacerUnPointAbscisseEntiere2d extends Exercice {
             ymax: 1,
             pixelsParCm: 20,
             scale: 0.5,
+            id: figureId,
           },
           ...mesObjets,
         )
       if (this.interactif) {
-        texte += `<span id="resultatCheckEx${this.numeroExercice}Q${i}"></span>`
+        texte += addPointsCliquables({
+          numeroExercice: this.numeroExercice ?? 0,
+          questionIndex: i,
+          figureId,
+          points: pointsCliquables,
+          pixelsParCm: 20,
+          radius: tailleUnite / 25,
+          width: 3,
+          size: 5,
+          color: bleuMathalea,
+        })
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: JSON.stringify(pointsAttendus) } },
+          { formatInteractif: 'points-cliquables' },
+        )
       }
 
       A = pointAbstrait(abscisse[0][0] * tailleUnite, 0, l1)
@@ -288,33 +302,6 @@ export default class PlacerUnPointAbscisseEntiere2d extends Exercice {
       this.listeQuestions.push(texte)
       this.listeCorrections.push(texteCorr)
     }
-    // Pour distinguer les deux types de codage de recuperation des résultats
-    this.exoCustomResultat = true
-
     listeQuestionsToContenu(this)
-  }
-
-  // Gestion de la correction
-  correctionInteractive = (i: number) => {
-    let resultat = ''
-    let aucunMauvaisPointsCliques = true
-    const spanResultat = document.querySelector(
-      `#resultatCheckEx${this.numeroExercice}Q${i}`,
-    )
-    this.pointsSolutions[i][0].stopCliquable()
-    for (const monPoint of this.pointsNonSolutions[i]) {
-      if (monPoint.etat) aucunMauvaisPointsCliques = false
-      monPoint.stopCliquable()
-      if (spanResultat) {
-        if (aucunMauvaisPointsCliques && this.pointsSolutions[i][0].etat) {
-          spanResultat.innerHTML = '😎'
-          resultat = 'OK'
-        } else {
-          spanResultat.innerHTML = '☹️'
-          resultat = 'KO'
-        }
-      }
-    }
-    return resultat
   }
 }

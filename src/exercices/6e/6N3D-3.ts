@@ -3,9 +3,13 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { bleuMathalea } from '../../lib/colors'
+import {
+  addPointsCliquables,
+  type PointCliquableData,
+} from '../../lib/customElements/PointsCliquablesElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { lettreIndiceeDepuisChiffre } from '../../lib/outils/outilString'
-import { PointCliquable, pointCliquable } from '../../modules/2dinteractif'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -15,8 +19,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Placer un point sur une droite graduée (abscisses fractionnaires niv 2)'
 export const interactifReady = true
-// remettre interactif_Ready à true qd point_Cliquable sera de nouveau opérationnel
-export const interactifType = 'custom'
+export const interactifType = 'points-cliquables'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDePublication = '11/05/2023'
@@ -39,8 +42,6 @@ export const refs = {
   'fr-ch': [],
 }
 export default class PlacerPointsAbscissesFractionnairesComplexes extends Exercice {
-  pointsSolution: PointCliquable[] = []
-  pointsNonSolution: PointCliquable[][] = [] // Pour chaque question, la liste des points qui ne doivent pas être cliqués
   niveau: number = 6
   constructor() {
     super()
@@ -211,34 +212,30 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
         thickEpaisseur: 3,
       })
       const mesObjets: NestedObjetMathalea2dArray = [d]
-      this.pointsNonSolution[i] = []
+      const pointsCliquables: PointCliquableData[] = []
+      const pointsAttendus: PointCliquableData[] = []
       if (this.interactif) {
         for (
-          let indicePoint = 0, monPoint;
+          let indicePoint = 0;
           indicePoint < 1 + data[tab].id * (data[tab].max - data[tab].min);
           indicePoint++
         ) {
-          monPoint = pointCliquable(
-            (indicePoint / data[tab].id) * tailleUnite,
-            0,
-            {
-              size: 8,
-              width: 5,
-              color: bleuMathalea,
-              radius: tailleUnite / data[tab].id / 2,
-            },
-          )
-          mesObjets.push(monPoint)
-          if (
-            Math.abs(indicePoint / data[tab].id + origine - num1 / den1) <
-            0.5 / data[tab].id
-          ) {
-            this.pointsSolution[i] = monPoint
-          } else {
-            this.pointsNonSolution[i].push(monPoint)
+          const point = {
+            x: (indicePoint / data[tab].id) * tailleUnite,
+            y: 0,
+            id: `P${indicePoint}`,
+            etat: false,
           }
+          pointsCliquables.push(point)
+          pointsAttendus.push({
+            ...point,
+            etat:
+              Math.abs(indicePoint / data[tab].id + origine - num1 / den1) <
+              0.5 / data[tab].id,
+          })
         }
       }
+      const figureId = `figEx${this.numeroExercice}Q${i}`
       texte +=
         '<br>' +
         mathalea2d(
@@ -248,12 +245,28 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
             ymin: -1,
             ymax: 2.5,
             scale: 0.6,
-            id: `figEx${this.numeroExercice}Q${i}`,
+            id: figureId,
           },
           mesObjets,
         )
       if (this.interactif && context.isHtml) {
-        texte += `<div id="resultatCheckEx${this.numeroExercice}Q${i}"></div>`
+        texte += addPointsCliquables({
+          numeroExercice: this.numeroExercice ?? 0,
+          questionIndex: i,
+          figureId,
+          points: pointsCliquables,
+          pixelsParCm: 20,
+          radius: tailleUnite / data[tab].id / 2,
+          width: 5,
+          size: 8,
+          color: bleuMathalea,
+        })
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: JSON.stringify(pointsAttendus) } },
+          { formatInteractif: 'points-cliquables' },
+        )
       }
 
       let A, B, C, traceB, traceC, labels
@@ -376,52 +389,7 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
       }
     }
 
-    // Pour distinguer les deux types de codage de recuperation des résultats
-    // Gestion de la correction
-
     listeQuestionsToContenu(this)
-  }
-  correctionInteractive = (i: number) => {
-    let resultat: string = 'KO'
-    let aucunMauvaisPointsCliques = true
-    this.pointsSolution[i].stopCliquable()
-    const figure = document.querySelector(`#figEx${this.numeroExercice}Q${i}`)
-    if (figure === null) return 'KO'
-    if (this.answers === undefined) this.answers = {}
-    for (const monPoint of [
-      ...this.pointsNonSolution[i],
-      this.pointsSolution[i],
-    ]) {
-      if (monPoint.etat && monPoint.groupe) {
-        const groups = Array.from(
-          figure.querySelectorAll(':scope > g'),
-        ) as SVGGElement[]
-        if (monPoint.groupe instanceof SVGGElement) {
-          const pos = groups.indexOf(monPoint.groupe)
-          if (pos === -1) continue
-          this.answers[`cliquePointfigEx${this.numeroExercice}Q${i}P${pos}`] =
-            `svg[id$='Ex${this.numeroExercice}Q${i}'] g:nth-of-type(${pos + 1})`
-        }
-      }
-    }
-    for (const monPoint of this.pointsNonSolution[i]) {
-      if (monPoint.etat) aucunMauvaisPointsCliques = false
-      monPoint.stopCliquable()
-    }
-    const divFeedback = document.querySelector(
-      `#resultatCheckEx${this.numeroExercice}Q${i}`,
-    )
-    if (divFeedback != null) {
-      if (aucunMauvaisPointsCliques && this.pointsSolution[i].etat) {
-        divFeedback.innerHTML = '😎'
-        resultat = 'OK'
-      } else {
-        divFeedback.innerHTML = '☹️'
-        resultat = 'KO'
-      }
-    }
-
-    return resultat
   }
 }
 

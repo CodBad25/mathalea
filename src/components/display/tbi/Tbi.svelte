@@ -1,0 +1,180 @@
+<script lang="ts">
+  import { onDestroy, onMount } from 'svelte'
+  import { get, type Unsubscriber } from 'svelte/store'
+  import {
+    isStatic,
+    isSvelte,
+  } from '../../../lib/components/componentsUtils'
+  import {
+    mathaleaHandleParamOfOneExercice,
+    mathaleaLoadExerciceFromUuid,
+    mathaleaUpdateUrlFromExercicesParams,
+  } from '../../../lib/mathalea'
+  import {
+    exercicesParams,
+    tbiParamStore,
+  } from '../../../lib/stores/generalStore'
+  import {
+    applyTbiSharedState,
+    deleteTbiCard,
+    getTbiSharedState,
+    loadTbiLocalLayout,
+    reconcileTbiCards,
+    reorderTbiCard,
+    saveTbiLocalLayout,
+    tbiState,
+  } from '../../../lib/stores/tbiStore'
+  import {
+    decodeBase64,
+    encodeBase64,
+  } from '../../setup/latex/LatexConfig'
+  import TbiClockWidget from './TbiClockWidget.svelte'
+  import TbiToolbar from './TbiToolbar.svelte'
+  import type { TbiItem } from './tbiTypes'
+  import TbiColumnsLayout from './layouts/TbiColumnsLayout.svelte'
+  import TbiFreeLayout from './layouts/TbiFreeLayout.svelte'
+  import TbiListLayout from './layouts/TbiListLayout.svelte'
+  import TbiTabsLayout from './layouts/TbiTabsLayout.svelte'
+
+  let items: TbiItem[] = $state([])
+  let isReady = $state(false)
+  let uuids: string[] = []
+  let tbiStateUnsubscriber: Unsubscriber | undefined
+  let lastEncodedSharedState = ''
+  let syncUrlTimer: ReturnType<typeof setTimeout> | undefined
+
+  let nextItemKey = 0
+
+  async function loadItems() {
+    const params = get(exercicesParams)
+    const result: TbiItem[] = []
+    for (let i = 0; i < params.length; i++) {
+      const param = params[i]
+      const base = {
+        paramsIndex: i,
+        uuid: param.uuid,
+        id: param.id ?? param.uuid,
+        key: nextItemKey++,
+      }
+      if (isStatic(param.uuid) || isSvelte(param.uuid)) {
+        result.push({ ...base, exercise: null })
+        continue
+      }
+      const exercise = await mathaleaLoadExerciceFromUuid(param.uuid)
+      if (!exercise) {
+        result.push({ ...base, exercise: null })
+        continue
+      }
+      mathaleaHandleParamOfOneExercice(exercise, param)
+      exercise.numeroExercice = i
+      exercise.interactif = false
+      result.push({ ...base, exercise })
+    }
+    items = result
+    uuids = items.map((item) => item.uuid)
+  }
+
+  function persistLayout() {
+    saveTbiLocalLayout(uuids)
+  }
+
+  /** Déplace un exercice (sémantique splice) et réaligne items sur le nouvel ordre */
+  function applyReorder(from: number, to: number) {
+    if (!reorderTbiCard(from, to)) return
+    items.splice(to, 0, items.splice(from, 1)[0])
+    items = items.map((item, i) => {
+      item.paramsIndex = i
+      if (item.exercise) item.exercise.numeroExercice = i
+      return item
+    })
+    uuids = items.map((item) => item.uuid)
+    persistLayout()
+  }
+
+  /** Supprime un exercice et réaligne items sur les indices restants */
+  function applyDelete(paramsIndex: number) {
+    deleteTbiCard(paramsIndex)
+    items.splice(paramsIndex, 1)
+    items = items.map((item, i) => {
+      item.paramsIndex = i
+      if (item.exercise) item.exercise.numeroExercice = i
+      return item
+    })
+    uuids = items.map((item) => item.uuid)
+    persistLayout()
+  }
+
+  onMount(async () => {
+    await loadItems()
+    reconcileTbiCards(uuids)
+    // l'URL (tbiParam) décrit la disposition partagée, le localStorage
+    // les positions dépendantes de l'écran
+    const urlParam = new URL(window.location.href).searchParams.get('tbiParam')
+    if (urlParam != null) {
+      tbiParamStore.set(urlParam)
+      applyTbiSharedState(decodeBase64(urlParam))
+    }
+    loadTbiLocalLayout(uuids)
+    isReady = true
+    // Maintient l'URL à jour avec la partie partageable de l'état. tbiState
+    // notifie sur CHAQUE mutation, y compris les positions/tailles du mode
+    // libre (pas concernées par l'URL) mises à jour à chaque pointermove
+    // d'un glisser-déposer : sans ce débounce, un encodage JSON+base64 de
+    // tout l'état tournerait à chaque déplacement de souris et rendrait
+    // l'interface perceptiblement lente pendant le geste.
+    tbiStateUnsubscriber = tbiState.subscribe(() => {
+      if (!isReady) return
+      if (syncUrlTimer !== undefined) clearTimeout(syncUrlTimer)
+      syncUrlTimer = setTimeout(() => {
+        syncUrlTimer = undefined
+        const encoded = encodeBase64(getTbiSharedState(get(tbiState)))
+        if (encoded === lastEncodedSharedState) return
+        lastEncodedSharedState = encoded
+        tbiParamStore.set(encoded)
+        mathaleaUpdateUrlFromExercicesParams()
+      }, 200)
+    })
+  })
+
+  onDestroy(() => {
+    if (syncUrlTimer !== undefined) clearTimeout(syncUrlTimer)
+    tbiStateUnsubscriber?.()
+  })
+</script>
+
+<main
+  class="min-h-screen w-full bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
+>
+  <TbiToolbar />
+  {#if isReady}
+    {#if items.length === 0}
+      <div
+        class="flex flex-col items-center justify-center min-h-screen gap-4 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+      >
+        <i class="bx bx-chalkboard text-6xl"></i>
+        <p>Aucun exercice à afficher. Retournez à l'éditeur pour en ajouter.</p>
+      </div>
+    {:else if $tbiState.mode === 'list'}
+      <TbiListLayout {items} onMove={applyReorder} onDelete={applyDelete} />
+    {:else if $tbiState.mode === 'columns'}
+      <TbiColumnsLayout
+        {items}
+        nbColumns={$tbiState.nbColumns}
+        onMove={applyReorder}
+        onDelete={applyDelete}
+      />
+    {:else if $tbiState.mode === 'free'}
+      <TbiFreeLayout {items} {persistLayout} />
+    {:else if $tbiState.mode === 'tabs'}
+      <TbiTabsLayout
+        {items}
+        onMove={applyReorder}
+        {persistLayout}
+        onDelete={applyDelete}
+      />
+    {/if}
+  {/if}
+  {#if $tbiState.widget.visible}
+    <TbiClockWidget {persistLayout} />
+  {/if}
+</main>

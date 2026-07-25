@@ -1,5 +1,4 @@
 import { ElementIepEditeur, ensureElementIepEditeurRegistered } from '../../modules/ElementIepEditeur'
-import { context } from '../../modules/context'
 import Exercice from '../Exercice'
 
 export const titre =
@@ -23,6 +22,7 @@ export default class CreateurAnimationInstruments extends Exercice {
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
     this.pasDeVersionLatex = true
+    this.pasDeVersionAleatoire = true
   }
 
   nouvelleVersion() {

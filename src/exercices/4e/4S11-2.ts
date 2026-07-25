@@ -1,7 +1,7 @@
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
@@ -49,13 +49,13 @@ export default class MoyenneEtMediane extends Exercice {
       let mediane = 0
       const nbTemperatures = 2 * randint(3, 5) + this.sup
       const temperatures = generateTemperatures(nbTemperatures)
-      let texte = `Voici les températures, en degré Celsius, relevées sur une période de ${nbTemperatures} jours : ${stringList(temperatures)}.<br>`
+      let texte = `Voici les températures, en degré Celsius, relevées sur une période de $${nbTemperatures}$ jours : ${stringList(temperatures)}.<br>`
       const moyenne = getMoyenne(temperatures)
       let isExact = false
       if ((moyenne * 10) % 1 === 0) {
         isExact = true
       }
-      const question1 = `Calculer la température moyenne ${isExact ? '' : ', au dixième près, '} de cette série. `
+      const question1 = `Calculer la température moyenne${isExact ? '' : ', au dixième près, '} de cette série. `
       let correction1 = stringCalculMoyenne(temperatures)
       correction1 += `<br><br> La température moyenne est de $${miseEnEvidence(texNombre(getMoyenne(temperatures), 1))}$°C.`
 

@@ -136,6 +136,11 @@
   on:click={() => handleExport('diaporama')}
 />
 <ButtonIconTooltip
+  icon="bx-chalkboard text-3xl"
+  tooltip="Vidéoprojection"
+  on:click={() => handleExport('tbi')}
+/>
+<ButtonIconTooltip
   icon={'bx-link text-3xl'}
   cornerIcon="bxs-graduation"
   cornerIconClass="text-coopmaths-action dark:text-coopmathsdark-action"

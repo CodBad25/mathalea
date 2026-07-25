@@ -31,6 +31,7 @@ Pour créer un exercice sans modifier ces contrats, commencez par
 | [Moteur AMC](exports/amc.md) | Structures, inférence, normalisation et rendu |
 | [Vue Typst](exports/typst.md) | Conversion et compilation dans le navigateur |
 | [Vue Flash-cards](exports/flashcards.md) | Cartes question/réponse en Typst |
+| [Vue TBI](exports/tbi.md) | Vidéoprojection : dispositions, actions au survol, horloge |
 
 ## Mathématiques
 

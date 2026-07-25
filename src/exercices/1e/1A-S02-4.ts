@@ -128,10 +128,10 @@ export default class MoyennePondereeQCM extends ExerciceQcmA {
         distracteurErreur = `$x=${texNombre(xErreur)}$`
       }
     }
-    this.enonce = `Voici les $${effectif + 1}$ notes sur vingt obtenues par un élève en mathématiques :<br><br>
+    this.enonce = `Voici les $${effectif + 1}$ notes sur 20 obtenues par un élève en mathématiques :<br><br>
 ${tableau}
 <br><br>
-On cherche ce que doit valoir $x$ pour que la moyenne de l'élève soit égale $${moyenne}$.`
+On cherche ce que doit valoir $x$ pour que la moyenne de l'élève soit égale à $${moyenne}$.`
     if (estPossible) {
       const inclureImpossibleCommePiege = x >= 18
       const distracteurs = genererDistracteurs(x, inclureImpossibleCommePiege)

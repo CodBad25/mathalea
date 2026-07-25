@@ -97,7 +97,7 @@
   const exerciceHasNoSettings =
     !exercise.nbQuestionsModifiable &&
     !exercise.correctionDetailleeDisponible &&
-    !exercise.seed &&
+    !!exercise.pasDeVersionAleatoire &&
     !exercise.besoinFormulaireCaseACocher &&
     !exercise.besoinFormulaireNumerique &&
     !exercise.besoinFormulaireTexte &&

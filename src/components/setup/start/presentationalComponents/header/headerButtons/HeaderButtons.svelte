@@ -9,7 +9,6 @@
   export let setAllInteractive: (isAllInteractive: boolean) => void
   export let newDataForAll: () => void
   export let trash: () => void
-  export let setFullScreen: (isFullScreen: boolean) => void
   export let handleExport: (vue: VueType) => void
   export let exportQcmCam: () => Promise<void>
 </script>
@@ -25,7 +24,6 @@
       {setAllInteractive}
       {newDataForAll}
       {trash}
-      {setFullScreen}
     />
   </div>
   <div

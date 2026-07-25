@@ -83,7 +83,7 @@ export default class PlusOuMoins2 extends ExerciceSimple {
             prenom2 = prenomF()
           }
           if (choice([true, false])) {
-            this.question = ` ${prenom2} dit à ${prenom1}  : « J'ai $${texPrix(r)}$ € soit $${texPrix(e)}$ € de plus que toi ».<br>
+            this.question = ` ${prenom2} dit à ${prenom1}  : « J'ai $${texPrix(r)}$, € soit $${texPrix(e)}$ € de plus que toi. ».<br>
             
             `
             this.question +=

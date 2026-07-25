@@ -15,7 +15,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Lire la médiane d'une série sur une boite à moustaches"
+export const titre = "Lire la médiane d'une série sur une boîte à moustaches"
 export const dateDePublication = '01/01/2026'
 /**
  * @author Jean-claude Lhote
@@ -41,12 +41,12 @@ export default class LireMedianeBoiteMoustachesQCM extends ExerciceQcmA {
       texNombre(maSerie.q1, 0),
       texNombre(maSerie.q3, 0),
     ].map((r) => `$${r}$`)
-    this.enonce = `Une série statistique est résumée par le diagramme en boite ci-dessous, utilisez-le pour donner la valeur de la médiane de cette série.<br>
+    this.enonce = `Une série statistique est résumée par le diagramme en boîte ci-dessous, l'utilise pour donner la valeur de la médiane de cette série.<br>
       ${moustache}`
 
     // Correction : explication simple, claire
     this.correction = `La médiane est la valeur qui partage la série statistique en deux parties égales.<br>
-      D'après le diagramme en boite, on a $Q_1=${texNombre(maSerie.q1, 1)}$ et $Q_3=${texNombre(maSerie.q3, 1)}$. La médiane se trouve au niveau du trait intermédiaire.<br>
+      D'après le diagramme en boîte, on a $Q_1=${texNombre(maSerie.q1, 1)}$ et $Q_3=${texNombre(maSerie.q3, 1)}$. La médiane se trouve au niveau du trait intermédiaire.<br>
       La médiane de la série est donc : $${miseEnEvidence(
         texNombre(maSerie.mediane(), 1),
       )}$.`

@@ -194,6 +194,89 @@ texte += addMathaleaQcm(this, i, { radio: true })
 
 `addMathaleaQcm()` injecte un custom element `mathalea-qcm`. Pour un nouvel exercice, préférer ce format moderne à l'ancien helper `propositionsQcm()`, qui reste utile pour maintenir les exercices existants.
 
+## Points cliquables dans une figure MathALEA2D
+
+À utiliser quand l'élève doit sélectionner des points dans une figure produite par `mathalea2d()`.
+
+```ts
+import {
+  addPointsCliquables,
+  type PointCliquableData,
+} from '../../lib/customElements/PointsCliquablesElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+
+const figureId = `figEx${this.numeroExercice}Q${i}`
+const points: PointCliquableData[] = [
+  { x: 0, y: 0, id: 'P0', etat: false },
+  { x: 1, y: 0, id: 'P1', etat: false },
+]
+const pointsAttendus: PointCliquableData[] = [
+  { x: 0, y: 0, id: 'P0', etat: false },
+  { x: 1, y: 0, id: 'P1', etat: true },
+]
+
+texte += mathalea2d({ id: figureId, xmin: -1, ymin: -1, xmax: 2, ymax: 1 }, objets)
+texte += addPointsCliquables({
+  numeroExercice: this.numeroExercice ?? 0,
+  questionIndex: i,
+  figureId,
+  points,
+})
+
+handleAnswers(
+  this,
+  i,
+  { reponse: { value: JSON.stringify(pointsAttendus) } },
+  { formatInteractif: 'points-cliquables' },
+)
+```
+
+Le custom element `points-cliquables` injecte les groupes SVG dans la figure repérée par `figureId`, gère les clics, ajoute le `span#resultatCheck...` et le `div#feedback...`, puis expose dans `value` la liste JSON des points avec leur état courant. La réponse attendue passée à `handleAnswers()` utilise le même format, avec `etat: true` pour les points qui doivent être cliqués.
+
+## Objets cliquables dans une figure MathALEA2D
+
+À utiliser quand l'élève doit sélectionner plusieurs types d'objets dans une figure `mathalea2d()` : point, segment, droite, cercle, polygone ou polyline.
+
+```ts
+import {
+  addObjetsCliquables,
+  type ObjetCliquableData,
+} from '../../lib/customElements/ObjetsCliquablesElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+
+const figureId = `figEx${this.numeroExercice}Q${i}`
+const objets: ObjetCliquableData[] = [
+  { type: 'segment', id: 'AB', x1: 0, y1: 0, x2: 3, y2: 1, etat: false },
+  { type: 'cercle', id: 'c', x: 2, y: 2, r: 1, etat: false },
+  {
+    type: 'polyline',
+    id: 'ligne-brisee',
+    points: [
+      { x: 0, y: 0 },
+      { x: 1, y: 1 },
+      { x: 2, y: 0 },
+    ],
+    etat: false,
+  },
+]
+const objetsAttendus = objets.map((objet) => ({
+  ...objet,
+  etat: objet.id === 'AB',
+}))
+
+texte += mathalea2d({ id: figureId, xmin: -1, ymin: -1, xmax: 5, ymax: 4 }, objets2d)
+texte += addObjetsCliquables(this, i, { figureId, objets })
+
+handleAnswers(
+  this,
+  i,
+  { reponse: { value: JSON.stringify(objetsAttendus) } },
+  { formatInteractif: 'objets-cliquables' },
+)
+```
+
+Le custom element `objets-cliquables` injecte une couche SVG superposée à la figure. Les zones de clic sont transparentes et élargies avec `hitWidth`, tandis que les objets sélectionnés sont rendus visibles avec `selectedColor`. Le setter `value` restaure l'état depuis le JSON stocké dans `exercice.answers`, notamment pour Capytale. Le helper ajoute aussi le `span#resultatCheck...` et le `div#feedback...`.
+
 ## Liste déroulante
 
 À utiliser pour choisir une réponse dans un menu.

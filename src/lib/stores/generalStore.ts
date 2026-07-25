@@ -29,6 +29,12 @@ export const a4ParamStore = writable<string>('')
 export const typstParamStore = writable<string>('')
 
 /**
+ * Réglages encodés (base64) de la vue TBI, maintenus dans l'URL
+ * par updateGlobalOptionsInURL. Alimenté par la vue TBI elle-même.
+ */
+export const tbiParamStore = writable<string>('')
+
+/**
  * Pour signaler que MathALÉA est dans une iframe
  */
 export const isInIframe = writable<boolean>(false)
@@ -228,6 +234,11 @@ export function updateGlobalOptionsInURL(url: URL) {
   const typstParam = get(typstParamStore)
   if (options.v === 'typst' && typstParam.length > 0) {
     url.searchParams.append('typstParam', typstParam)
+  }
+  // Même principe pour la vue TBI.
+  const tbiParam = get(tbiParamStore)
+  if (options.v === 'tbi' && tbiParam.length > 0) {
+    url.searchParams.append('tbiParam', tbiParam)
   }
   urlToWrite = url
   // On ne met à jour l'url qu'une fois toutes les 0,5 s

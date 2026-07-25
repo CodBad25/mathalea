@@ -36,6 +36,7 @@
   import Tools from './setup/tools/Tools.svelte'
   import Typst from './setup/typst/Typst.svelte'
   import Flashcards from './setup/flashcards/Flashcards.svelte'
+  import Tbi from './display/tbi/Tbi.svelte'
   import CheckTest from './devtools/CheckTest.svelte'
   import Popup from './shared/modal/Popup.svelte'
 
@@ -233,6 +234,8 @@
     <Typst />
   {:else if $globalOptions.v === 'flashcards'}
     <Flashcards />
+  {:else if $globalOptions.v === 'tbi'}
+    <Tbi />
   {:else if $globalOptions.v === 'check-test'}
     <CheckTest />
   {:else if $globalOptions.v !== undefined}

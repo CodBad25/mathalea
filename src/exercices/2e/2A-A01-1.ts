@@ -8,7 +8,7 @@ import Question6 from '../EAMPremiere/EAM-CETechno-2026-Q4'
 import Question7 from '../EAMPremiere/EAM-ANSpe-2026-Q7'
 import Question8 from '../EAMPremiere/EAM-ANSpe-2026-Q8'
 import Question9 from '../EAMPremiere/EAM-ANSpe-2026-Q9'
-import Question10 from '../EAMPremiere/EAM-FMTechno-2026-Q7'
+import Question10 from '../EAMPremiere/EAM-AGSpe-2026-Q4'
 export const titre = 'Sujet n°1'
 export const interactifReady = true
 export const interactifType = 'mathLive'

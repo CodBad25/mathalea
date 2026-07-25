@@ -1,0 +1,117 @@
+/**
+ * Actions Svelte de glisser-déposer et de redimensionnement à la souris,
+ * au stylet ou au doigt (pointer events).
+ * Utilisées par la vue TBI (mode libre et widget horloge).
+ *
+ * Les écouteurs move/up sont posés sur `window` : le geste continue même
+ * quand le pointeur quitte la poignée (poignées petites, mouvements
+ * rapides), et un pointerup n'est jamais manqué. `setPointerCapture`
+ * est demandé en complément pour suivre le pointeur jusqu'en dehors de
+ * la fenêtre, mais le geste n'en dépend pas.
+ */
+
+export interface PointerGestureOptions {
+  /** Appelé au début du geste, avec la poignée (pour capturer l'état initial) */
+  onStart?: (node: HTMLElement) => void
+  /** Appelé à chaque déplacement avec le décalage depuis le dernier événement */
+  onMove: (dx: number, dy: number) => void
+  /** Appelé au relâchement du pointeur */
+  onEnd?: () => void
+}
+
+function startGesture(
+  node: HTMLElement,
+  getOptions: () => PointerGestureOptions,
+) {
+  let lastX = 0
+  let lastY = 0
+  let activePointerId: number | null = null
+
+  function onPointerDown(event: PointerEvent) {
+    // ne pas capturer les clics sur les éléments interactifs de la poignée
+    if (
+      event.target instanceof Element &&
+      event.target.closest('button, input, select, a, textarea')
+    ) {
+      return
+    }
+    // un geste précédent n'a pas été nettoyé correctement (pointerup
+    // manqué...) : on le termine avant d'en démarrer un nouveau
+    if (activePointerId !== null) {
+      stopTracking()
+    }
+    event.preventDefault()
+    activePointerId = event.pointerId
+    lastX = event.clientX
+    lastY = event.clientY
+    try {
+      node.setPointerCapture(event.pointerId)
+    } catch {
+      // pointeur déjà inactif (événement synthétique) : sans conséquence
+    }
+    window.addEventListener('pointermove', onPointerMove)
+    window.addEventListener('pointerup', onPointerUp)
+    window.addEventListener('pointercancel', onPointerUp)
+    getOptions().onStart?.(node)
+  }
+
+  function onPointerMove(event: PointerEvent) {
+    if (event.pointerId !== activePointerId) return
+    getOptions().onMove(event.clientX - lastX, event.clientY - lastY)
+    lastX = event.clientX
+    lastY = event.clientY
+  }
+
+  function onPointerUp(event: PointerEvent) {
+    if (event.pointerId !== activePointerId) return
+    stopTracking()
+    getOptions().onEnd?.()
+  }
+
+  function stopTracking() {
+    if (activePointerId !== null) {
+      try {
+        node.releasePointerCapture(activePointerId)
+      } catch {
+        // capture jamais obtenue ou déjà relâchée : sans conséquence
+      }
+    }
+    activePointerId = null
+    window.removeEventListener('pointermove', onPointerMove)
+    window.removeEventListener('pointerup', onPointerUp)
+    window.removeEventListener('pointercancel', onPointerUp)
+  }
+
+  node.style.touchAction = 'none'
+  node.addEventListener('pointerdown', onPointerDown)
+  return () => {
+    node.removeEventListener('pointerdown', onPointerDown)
+    stopTracking()
+  }
+}
+
+/** Poignée de déplacement : onMove reçoit les décalages (dx, dy) en px */
+export function draggable(node: HTMLElement, options: PointerGestureOptions) {
+  let current = options
+  const destroy = startGesture(node, () => current)
+  node.style.cursor = 'move'
+  return {
+    update(next: PointerGestureOptions) {
+      current = next
+    },
+    destroy,
+  }
+}
+
+/** Poignée de redimensionnement : onMove reçoit les décalages (dw, dh) en px */
+export function resizable(node: HTMLElement, options: PointerGestureOptions) {
+  let current = options
+  const destroy = startGesture(node, () => current)
+  node.style.cursor = 'nwse-resize'
+  return {
+    update(next: PointerGestureOptions) {
+      current = next
+    },
+    destroy,
+  }
+}

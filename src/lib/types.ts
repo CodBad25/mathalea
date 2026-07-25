@@ -334,6 +334,8 @@ export type InteractivityType =
   | 'texte' // à priori non compatible AMC
   | 'cliqueFigure' // Non compatible AMC
   | 'clique-figure' // Non compatible AMC
+  | 'points-cliquables' // Non compatible AMC
+  | 'objets-cliquables' // Non compatible AMC
   | 'dnd' // Non compatible AMC
   | 'drag-and-drop' // Non compatible AMC
   | 'custom' // Non compatible AMC
@@ -367,6 +369,8 @@ export function isInteractivityType(
     value === 'texte' ||
     value === 'cliqueFigure' ||
     value === 'clique-figure' ||
+    value === 'points-cliquables' ||
+    value === 'objets-cliquables' ||
     value === 'dnd' ||
     value === 'drag-and-drop' ||
     value === 'custom' ||
@@ -390,6 +394,8 @@ export function isInteractivityType(
     value === 'tableau-mathlive' ||
     value === 'mathalea-qcm' ||
     value === 'clique-figure' ||
+    value === 'points-cliquables' ||
+    value === 'objets-cliquables' ||
     value === 'drag-and-drop' ||
     value === 'meta-interactif-2d'
   )
@@ -421,6 +427,8 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'tableau-mathlive' ||
     value === 'mathalea-qcm' ||
     value === 'clique-figure' ||
+    value === 'points-cliquables' ||
+    value === 'objets-cliquables' ||
     value === 'drag-and-drop' ||
     value === 'meta-interactif-2d'
   )

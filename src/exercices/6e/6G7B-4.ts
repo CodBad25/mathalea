@@ -7,8 +7,12 @@ import { symetrieAxiale } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
+import {
+  addPointsCliquables,
+  type PointCliquableData,
+} from '../../lib/customElements/PointsCliquablesElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
-import { PointCliquable, pointCliquable } from '../../modules/2dinteractif'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -18,7 +22,7 @@ export const titre = 'Compléter un nuage de points symétriques'
 export const dateDePublication = '18/12/2021'
 export const interactifReady = true
 // remettre interactif_Ready à true qd l'exo sera refait avec apiGEom
-export const interactifType = 'custom'
+export const interactifType = 'points-cliquables'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -36,9 +40,7 @@ export const refs = {
   'fr-ch': ['9ES6-15'],
 }
 export default class CompleterParSymetrie6e extends Exercice {
-  pointsNonSolution: PointCliquable[][]
-  pointsSolution: PointCliquable[][]
-  pointsCliquables: PointCliquable[][]
+  pointsCliquables: PointCliquableData[][]
   pointsCliques: TracePoint[][] | undefined
   constructor() {
     super()
@@ -57,8 +59,6 @@ export default class CompleterParSymetrie6e extends Exercice {
     this.sup = 1
     this.sup2 = 1
     this.sup3 = true
-    this.pointsNonSolution = []
-    this.pointsSolution = []
     this.pointsCliquables = []
     this.pointsCliques = []
   }
@@ -71,8 +71,6 @@ export default class CompleterParSymetrie6e extends Exercice {
     const pointsChoisis = []
     const pointsAffiches = []
     const pointsEnPlusCorr = []
-    this.pointsNonSolution = []
-    this.pointsSolution = []
     this.pointsCliquables = []
     this.pointsCliques = []
     const changeAxe = []
@@ -97,9 +95,8 @@ export default class CompleterParSymetrie6e extends Exercice {
       pointsChoisis.length = 0
       pointsAffiches.length = 0
       pointsEnPlusCorr.length = 0
-      this.pointsNonSolution[i] = []
-      this.pointsSolution[i] = []
       this.pointsCliquables[i] = []
+      const pointsAttendus: PointCliquableData[] = []
       this.pointsCliques[i] = []
       couples.length = 0
       changeAxe[i] = this.sup3 ? 0 : randint(-2, 2, 0)
@@ -179,12 +176,12 @@ export default class CompleterParSymetrie6e extends Exercice {
       if (this.interactif && context.isHtml) {
         for (let p = 0; p < papier.listeCoords.length; p++) {
           this.pointsCliquables[i].push(
-            pointCliquable(papier.listeCoords[p][0], papier.listeCoords[p][1], {
-              radius: 0.2,
-              color: 'red',
-              width: 2,
-              opacite: 0.7,
-            }),
+            {
+              x: papier.listeCoords[p][0],
+              y: papier.listeCoords[p][1],
+              id: `P${p}`,
+              etat: false,
+            },
           )
         }
       }
@@ -257,17 +254,22 @@ export default class CompleterParSymetrie6e extends Exercice {
         let q = 0
         while (q < pointsEnPlusCorr.length && !trouve) {
           if (
-            longueur(pointsEnPlusCorr[q], this.pointsCliquables[i][p].point) <
-            0.1
+            longueur(
+              pointsEnPlusCorr[q],
+              pointAbstrait(
+                this.pointsCliquables[i][p].x,
+                this.pointsCliquables[i][p].y,
+              ),
+            ) < 0.1
           ) {
             trouve = true
-            this.pointsSolution[i].push(this.pointsCliquables[i][p])
+            pointsAttendus.push({ ...this.pointsCliquables[i][p], etat: true })
           } else {
             q++
           }
         }
         if (!trouve) {
-          this.pointsNonSolution[i].push(this.pointsCliquables[i][p])
+          pointsAttendus.push({ ...this.pointsCliquables[i][p], etat: false })
         }
       }
       texte = context.isAmc
@@ -284,10 +286,25 @@ export default class CompleterParSymetrie6e extends Exercice {
           id: `figEx${this.numeroExercice}Q${i}`,
         },
         ...objetsEnonce[i],
-        ...this.pointsCliquables[i],
       )
       if (this.interactif && context.isHtml) {
-        texte += `<div id="resultatCheckEx${this.numeroExercice}Q${i}"></div>`
+        texte += addPointsCliquables({
+          numeroExercice: this.numeroExercice ?? 0,
+          questionIndex: i,
+          figureId: `figEx${this.numeroExercice}Q${i}`,
+          points: this.pointsCliquables[i],
+          pixelsParCm: 20,
+          radius: 0.2,
+          width: 2,
+          size: 3,
+          color: 'red',
+        })
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: JSON.stringify(pointsAttendus) } },
+          { formatInteractif: 'points-cliquables' },
+        )
       }
       texteCorr = `Il faut ajouter au minimum ${pointsEnPlusCorr.length} points (en rouge sur la figure) afin que la figure soit symétrique par rapport à l'axe.
       ${mathalea2d({ xmin: -1, ymin: -1, xmax: 11, ymax: 11, scale: 0.5, display: 'inline' }, ...objetsEnonce[i], ...objetsCorrection[i])}`
@@ -347,68 +364,5 @@ export default class CompleterParSymetrie6e extends Exercice {
       cpt++
     }
     listeQuestionsToContenu(this)
-  }
-
-  correctionInteractive = (i: number) => {
-    let resultat = 'Ok'
-    let aucunMauvaisPointsCliques = true
-    const figure = document.querySelector(`#figEx${this.numeroExercice}Q${i}`)
-    if (figure === null) return 'KO'
-    if (this.pointsCliques == null) this.pointsCliques = []
-    if (this.pointsCliques[i] == null) this.pointsCliques[i] = []
-    if (this.answers === undefined) this.answers = {}
-    // Sauvegarde de la réponse pour Capytale
-    for (const monPoint of [
-      ...this.pointsNonSolution[i],
-      ...this.pointsSolution[i],
-    ]) {
-      if (monPoint.etat && monPoint.groupe) {
-        const groups = Array.from(
-          figure.querySelectorAll(':scope > g'),
-        ) as SVGGElement[]
-        if (monPoint.groupe instanceof SVGGElement) {
-          const pos = groups.indexOf(monPoint.groupe)
-          if (pos === -1) continue
-          this.answers[`cliquePointfigEx${this.numeroExercice}Q${i}P${pos}`] =
-            `svg[id$='Ex${this.numeroExercice}Q${i}'] g:nth-of-type(${pos + 1})`
-        }
-      }
-    }
-    for (const monPoint of this.pointsNonSolution[i]) {
-      if (monPoint.etat) {
-        aucunMauvaisPointsCliques = false
-        this.pointsCliques[i].push(new TracePoint(monPoint.point, 'red')) // ça c'est pour éventuellement modifier la correction avec les points cliqués par l'utilisateur.
-      }
-      monPoint.stopCliquable()
-    }
-    for (const monPoint of this.pointsSolution[i]) {
-      if (!monPoint.etat) aucunMauvaisPointsCliques = false
-      else this.pointsCliques[i].push(new TracePoint(monPoint.point, 'red')) // ça c'est pour éventuellement modifier la correction avec les points cliqués par l'utilisateur.
-      monPoint.stopCliquable()
-    }
-    const spanResultat = document.querySelector(
-      `#resultatCheckEx${this.numeroExercice}Q${i}`,
-    )
-    for (let j = 0; j < this.pointsSolution[i].length; j++) {
-      this.pointsSolution[i][j].stopCliquable()
-    }
-    let etat = true
-    for (let k = 0; k < this.pointsSolution[i].length; k++) {
-      etat = etat && this.pointsSolution[i][k].etat
-    }
-    if (aucunMauvaisPointsCliques && etat) {
-      if (spanResultat != null) {
-        spanResultat.innerHTML = '😎'
-        resultat = 'OK'
-      }
-    } else {
-      if (spanResultat != null) {
-        spanResultat.innerHTML = '☹️'
-        resultat = 'KO'
-      }
-    }
-    // this.listeCorrections[i] = mathalea2d({ xmin: -1, ymin: -1, xmax: 11, ymax: 11, scale: 0.7, style: 'inline' }, ...objetsEnonce[i], ...pointsCliques[i]) + mathalea2d({ xmin: -1, ymin: -1, xmax: 11, ymax: 11, scale: 0.5, style: 'inline' }, ...objetsEnonce, ...objetsCorrection[i])
-    // le contenu est déjà prêt. Il faudra modifier les <svg> à postéreiori...
-    return resultat
   }
 }

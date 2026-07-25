@@ -37,6 +37,8 @@ import { fonctionComparaison } from './comparisonFunctions'
 import { syncQcmAutoCorrectionToAmc } from './qcm'
 import '../customElements/DragAndDropElement'
 import '../customElements/MetaInteractif2dElement'
+import '../customElements/PointsCliquablesElement'
+import '../customElements/ObjetsCliquablesElement'
 
 export function isClickFiguresArray(
   figures: Figure[] | ClickFigures[],
@@ -849,7 +851,8 @@ export function handleAnswers(
       : typeof reponses === 'object' &&
           Object.keys(reponses).some((key) => key.match(/^L\d+C\d+$/))
         ? 'tableauMathlive'
-        : (exercice.autoCorrection[question]?.formatInteractif ?? 'mathlive'))
+        : (exercice.autoCorrection[question]?.formatInteractif ??
+          'mathalea-mathfield'))
   if (context.isAmc) {
     if (exercice.autoCorrectionAMC == null) exercice.autoCorrectionAMC = []
     if (exercice.autoCorrectionAMC[question] === undefined) {
@@ -873,7 +876,10 @@ export function handleAnswers(
       }
       return val
     }
-    if (formatInteractif === 'mathlive') {
+    if (
+      formatInteractif === 'mathlive' ||
+      formatInteractif === 'mathalea-mathfield'
+    ) {
       const reponseValue =
         'reponse' in reponses
           ? reponses.reponse!.value
@@ -919,7 +925,7 @@ export function handleAnswers(
     exercice.autoCorrection[question] = {}
   }
 
-  if (formatInteractif === undefined) formatInteractif = 'mathlive'
+  if (formatInteractif === undefined) formatInteractif = 'mathalea-mathfield'
 
   const questionAutoCorrection = exercice.autoCorrection[question]
   const param = { ...(params ?? {}) }

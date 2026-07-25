@@ -15,6 +15,11 @@ const LAYOUT_CLASSES: Record<number, string> = {
  * le nom, la photo et les quatre champs de texte propres à la personne
  * présentée.
  */
+const LIVRET_URL =
+  'https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true'
+const LIVRET_TITRE =
+  "« Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles"
+
 export default class PortraitExercice extends Exercice {
   nom = ''
   photoSrc = ''
@@ -24,6 +29,9 @@ export default class PortraitExercice extends Exercice {
   ceQuElleFait = ''
   leTrucStyle = ''
   parcours = ''
+  // Portraits issus du livret Versailles (par opposition aux fiches "super-pouvoirs"
+  // Femmes et numérique) : affiche la mention "D'après « lien »" comme dans les exercices.
+  mentionLivret = false
 
   constructor() {
     super()
@@ -71,6 +79,11 @@ export default class PortraitExercice extends Exercice {
 \\textbf{Parcours~:} ${sanitizeLatexInput(this.parcours)}`
   }
 
+  private mentionLivretLatex(): string {
+    if (!this.mentionLivret) return ''
+    return `{\\footnotesize\\itshape D'après \\href{${LIVRET_URL}}{${sanitizeLatexInput(LIVRET_TITRE)}}}\\\\[0.3em]\n`
+  }
+
   private consigneLatex(position: number): string {
     const photo = this.blocPhotoLatex()
     const texte = this.blocTexteLatex()
@@ -82,7 +95,7 @@ export default class PortraitExercice extends Exercice {
     } else {
       corps = `\\begin{center}\n${photo}\n\\end{center}\n${texte}`
     }
-    return `\\begin{center}\\textbf{\\large ${sanitizeLatexInput(this.nom)}}\\end{center}\n${corps}`
+    return `${this.mentionLivretLatex()}\\begin{center}\\textbf{\\large ${sanitizeLatexInput(this.nom)}}\\end{center}\n${corps}`
   }
 
   nouvelleVersion() {
@@ -128,7 +141,9 @@ export default class PortraitExercice extends Exercice {
     #${id} .portrait-source { text-align: center; font-size: 0.7rem; font-style: italic; opacity: 0.7; margin-top: 0.35rem; }
     #${id} .portrait-champ { margin: 0.35rem 0; }
     #${id} .portrait-champ strong { color: #f15929; }
+    #${id} .portrait-mention { text-align: center; font-size: 0.75rem; font-style: italic; opacity: 0.75; margin-bottom: 0.5rem; }
   </style>
+  ${this.mentionLivret ? `<p class="portrait-mention">D'après <a href="${LIVRET_URL}" target="_blank" rel="noopener noreferrer">${LIVRET_TITRE}</a></p>` : ''}
   <h3 class="text-center text-lg font-bold mb-2">${this.nom}</h3>
   ${corps}
 </div>

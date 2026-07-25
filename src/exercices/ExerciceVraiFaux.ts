@@ -36,9 +36,11 @@ export default class VraiFaux extends Exercice {
 
   nouvelleVersion() {
     this.consigne =
-      this.nbQuestions === 1
-        ? 'Dire si cette affirmation est vraie ou fausse.'
-        : 'Pour chaque affirmation, dire si elle est vraie ou fausse.'
+      this.consigne === ''
+        ? this.nbQuestions === 1
+          ? 'Dire si cette affirmation est vraie ou fausse.'
+          : 'Pour chaque affirmation, dire si elle est vraie ou fausse.'
+        : this.consigne
     this.affirmations = shuffle(this.affirmations)
     this.nbQuestions = Math.min(this.affirmations.length, this.nbQuestions)
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {

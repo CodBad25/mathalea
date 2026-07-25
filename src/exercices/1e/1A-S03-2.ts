@@ -15,7 +15,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Comprendre une boite à moustaches'
+export const titre = 'Comprendre une boîte à moustaches'
 export const dateDePublication = '31/12/2025'
 /**
  * @author Jean-claude Lhote
@@ -62,7 +62,7 @@ export default class ComprendreBoiteMoustachesQCM extends ExerciceQcmA {
       `${texNombre(distracteur2, 0)}\\%`,
       `${texNombre(distracteur3, 0)}\\%`,
     ].map((r) => `$${r}$`)
-    this.enonce = `Une série statistique est résumée par le diagramme en boite ci-dessous. Quel pourcentage de valeurs sont comprises entre $${a}$ et $${b}$ ?<br>
+    this.enonce = `Une série statistique est résumée par le diagramme en boîte ci-dessous. Quel pourcentage de valeurs sont comprises entre $${a}$ et $${b}$ ?<br>
       ${moustache}`
 
     // Correction : explication simple, claire

@@ -295,13 +295,6 @@
     toggleSidenav(true)
   }
 
-  function setFullScreen(isFullScreen: boolean) {
-    globalOptions.update((params) => {
-      isFullScreen ? (params.v = 'l') : (params.v = '')
-      return params
-    })
-  }
-
   function handleExport(vue: VueType) {
     $previousView = ''
     globalOptions.update((params) => {
@@ -430,7 +423,6 @@
         {setAllInteractive}
         {newDataForAll}
         {trash}
-        {setFullScreen}
         {handleExport}
         handleRecorder={sendActivityParams}
         locale={localeValue}

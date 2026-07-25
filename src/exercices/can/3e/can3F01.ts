@@ -1,12 +1,12 @@
 import { repere } from '../../../lib/2d/reperes'
 import { latex2d } from '../../../lib/2d/textes'
+import { bleuMathalea } from '../../../lib/colors'
 import { Spline, spline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const dateDeModifImportante = '26/10/2023'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -114,18 +114,25 @@ export default class ImageSpline extends ExerciceSimple {
     const courbe1 = theSpline.courbe({
       epaisseur: 1.5,
       ajouteNoeuds: true,
-      optionsNoeuds: { color: bleuMathalea, taille: 2, style: 'x', epaisseur: 2 },
+      optionsNoeuds: {
+        color: bleuMathalea,
+        taille: 2,
+        style: 'x',
+        epaisseur: 2,
+      },
       color: bleuMathalea,
     })
     const objetsEnonce = [repere1, courbe1]
 
-    this.reponse = theSpline.y[antecedent]
+    this.reponse = this.versionQcm
+      ? `est $${theSpline.y[antecedent]}$`
+      : theSpline.y[antecedent]
     this.distracteurs = [
-      `$${theSpline.x[antecedent]}$`,
-      `L'image de $${theSpline.x[antecedent]}$ n'existe pas`,
-      `$${theSpline.y[0]}$`,
-      `$${antecedent}$`,
-      `$${theSpline.x[antecedent]}$`,
+      `est $${theSpline.x[antecedent]}$`,
+      `n'existe pas`,
+      `est $${theSpline.y[0]}$`,
+      `est $${antecedent}$`,
+      `est $${theSpline.x[antecedent]}$`,
     ]
     if (this.versionQcm) {
       this.question =
@@ -143,9 +150,8 @@ export default class ImageSpline extends ExerciceSimple {
           o,
         ) +
         '<br>' +
-        `L'image de $${theSpline.x[antecedent]}$ est : `
-    } // fixeBordures(objetsEnonce))
-    else {
+        `L'image de $${theSpline.x[antecedent]}$ : `
+    } else {
       this.question =
         `Quelle est l'image de $${theSpline.x[antecedent]}$ ?
     ` +
@@ -164,6 +170,6 @@ export default class ImageSpline extends ExerciceSimple {
         )
     }
     this.correction = `Pour lire l'image de $${theSpline.x[antecedent]}$, on place la valeur de $${theSpline.x[antecedent]}$ sur l'axe des abscisses (axe de lecture  des antécédents) et on lit
-    son image  sur l'axe des ordonnées (axe de lecture des images). On obtient :  $f(${theSpline.x[antecedent]})=${miseEnEvidence(theSpline.y[antecedent])}$`
+    son image  sur l'axe des ordonnées (axe de lecture des images). On obtient :  $f(${theSpline.x[antecedent]})=${miseEnEvidence(theSpline.y[antecedent])}$.`
   }
 }
