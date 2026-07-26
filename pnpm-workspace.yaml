@@ -9,7 +9,7 @@ onlyBuiltDependencies:
 allowBuilds:
   '@parcel/watcher': true
   apigeom: true
-  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git#06f76b7e7d677859618279caced33fe1dccc2542: true
+  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git: true
   core-js: false
   esbuild: true
 blockExoticSubdeps: false
@@ -19,3 +19,9 @@ overrides:
   svelte@<3.49.0: '>=3.49.0'
   react: ^18.3.1
   react-dom: ^18.3.1
+  # scratchFr.json (dans @scratch2latex/scratch-core) référence encore des
+  # IDs de blocs renommés dans scratchblocks 3.7.1 (ex: SENSING_OF_DIRECTION
+  # -> MOTION_DIRECTION), ce qui casse le rendu de TOUS les exercices (pas
+  # seulement Scratch, car renderScratchDiv est appelé sans condition).
+  # À retirer quand scratch-core aura été mis à jour en amont.
+  scratchblocks: 3.6.4

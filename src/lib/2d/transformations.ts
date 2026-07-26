@@ -11,6 +11,7 @@ import type {
 import type { ObjetMathalea2D } from './ObjetMathalea2D'
 import { PointAbstrait, pointAbstrait } from './PointAbstrait'
 import { Polygone, polygone } from './polygones'
+import { Polyline, polyline } from './Polyline'
 import { Segment, segment } from './segmentsVecteurs'
 import { Vecteur, vecteur } from './Vecteur'
 
@@ -41,6 +42,13 @@ export function translation(
   positionLabel?: string,
   color?: string,
 ): Vecteur
+export function translation(
+  O: Polyline,
+  v: IVecteur | Vecteur | PointAbstrait,
+  nom?: string,
+  positionLabel?: string,
+  color?: string,
+): Polyline
 export function translation(
   O: IPolygone,
   v: IVecteur | Vecteur | PointAbstrait,
@@ -100,6 +108,7 @@ export function translation(
     | IDroite
     | ISegment
     | IPolygone
+    | Polyline
     | IVecteur
     | ObjetMathalea2D,
   vecteurTranslation: IVecteur | Vecteur | PointAbstrait, // ← Renommer le paramètre
@@ -123,6 +132,20 @@ export function translation(
     } else {
       return pointAbstrait(x, y, nom, positionLabel)
     }
+  }
+
+  // Polyline
+  if (O instanceof Polyline) {
+    const p2: PointAbstrait[] = []
+    for (let i = 0; i < O.listePoints.length; i++) {
+      const pi = translation(
+        O.listePoints[i] as PointAbstrait,
+        vecteurTranslation,
+      ) as PointAbstrait
+      pi.nom = O.listePoints[i].nom + "'"
+      p2[i] = pi
+    }
+    return polyline(p2, color)
   }
 
   // Polygone
@@ -216,6 +239,14 @@ export function translation2Points(
   color?: string,
 ): Segment
 export function translation2Points(
+  O: Polyline,
+  A: IPointAbstrait,
+  B: IPointAbstrait,
+  nom?: string,
+  positionLabel?: string,
+  color?: string,
+): Polyline
+export function translation2Points(
   O: IPolygone,
   A: IPointAbstrait,
   B: IPointAbstrait,
@@ -234,13 +265,20 @@ export function translation2Points(
 
 // Implémentation
 export function translation2Points(
-  O: IPointAbstrait | IPoint | IDroite | ISegment | IPolygone | IVecteur,
+  O:
+    | IPointAbstrait
+    | IPoint
+    | IDroite
+    | ISegment
+    | IPolygone
+    | Polyline
+    | IVecteur,
   A: IPointAbstrait,
   B: IPointAbstrait,
   nom = '',
   positionLabel = 'above',
   color = 'black',
-): PointAbstrait | PointAbstrait | Droite | Segment | Polygone | Vecteur {
+): PointAbstrait | PointAbstrait | Droite | Segment | Polygone | Polyline | Vecteur {
   // Points (PointAbstrait ou PointAbstrait)
   if (O instanceof PointAbstrait || O instanceof PointAbstrait) {
     const x = O.x + B.x - A.x
@@ -250,6 +288,17 @@ export function translation2Points(
     } else {
       return pointAbstrait(x, y, nom, positionLabel)
     }
+  }
+
+  // Polyline
+  if (O instanceof Polyline) {
+    const p2: PointAbstrait[] = []
+    for (let i = 0; i < O.listePoints.length; i++) {
+      const pi = translation2Points(O.listePoints[i], A, B) as PointAbstrait
+      pi.nom = O.listePoints[i].nom + "'"
+      p2[i] = pi
+    }
+    return polyline(p2, color)
   }
 
   // Polygone
@@ -324,6 +373,14 @@ export function rotation(
   color?: string,
 ): Segment
 export function rotation(
+  A: Polyline,
+  O: PointAbstrait | IPointAbstrait,
+  angle: number,
+  nom?: string,
+  positionLabel?: string,
+  color?: string,
+): Polyline
+export function rotation(
   A: Polygone,
   O: PointAbstrait | IPointAbstrait,
   angle: number,
@@ -351,13 +408,20 @@ export function rotation(
 
 // Implémentation (avec classes concrètes pour instanceof)
 export function rotation(
-  A: IPointAbstrait | IPoint | IDroite | ISegment | IPolygone | IVecteur,
+  A:
+    | IPointAbstrait
+    | IPoint
+    | IDroite
+    | ISegment
+    | IPolygone
+    | Polyline
+    | IVecteur,
   O: PointAbstrait | IPointAbstrait,
   angle: number,
   nom = '',
   positionLabel = 'above',
   color = 'black',
-): PointAbstrait | Droite | Segment | IPolygone | Vecteur {
+): PointAbstrait | Droite | Segment | IPolygone | Polyline | Vecteur {
   if (A instanceof PointAbstrait || A instanceof PointAbstrait) {
     const x =
       O.x +
@@ -380,6 +444,14 @@ export function rotation(
       p2[i].nom = A.listePoints[i].nom + "'"
     }
     return polygone(p2, color)
+  }
+  if (A instanceof Polyline) {
+    const p2: PointAbstrait[] = []
+    for (let i = 0; i < A.listePoints.length; i++) {
+      p2[i] = rotation(A.listePoints[i], O, angle) as PointAbstrait
+      p2[i].nom = A.listePoints[i].nom + "'"
+    }
+    return polyline(p2, color)
   }
   if ('pente' in A) {
     const M = rotation(
@@ -467,6 +539,14 @@ export function homothetie(
   color?: string,
 ): Segment
 export function homothetie(
+  Objet: Polyline,
+  O: IPointAbstrait,
+  k: number,
+  nom?: string,
+  positionLabel?: string,
+  color?: string,
+): Polyline
+export function homothetie(
   Objet: IPolygone,
   O: IPointAbstrait,
   k: number,
@@ -485,13 +565,20 @@ export function homothetie(
 
 // Implémentation
 export function homothetie(
-  objet: IPointAbstrait | IPoint | IDroite | ISegment | IPolygone | IVecteur,
+  objet:
+    | IPointAbstrait
+    | IPoint
+    | IDroite
+    | ISegment
+    | IPolygone
+    | Polyline
+    | IVecteur,
   O: IPointAbstrait,
   k: number,
   nom = '',
   positionLabel = 'above',
   color = 'black',
-): PointAbstrait | PointAbstrait | Droite | Segment | Polygone | Vecteur {
+): PointAbstrait | PointAbstrait | Droite | Segment | Polygone | Polyline | Vecteur {
   // Points (PointAbstrait ou PointAbstrait)
   if (objet instanceof PointAbstrait || objet instanceof PointAbstrait) {
     const x = O.x + k * (objet.x - O.x)
@@ -501,6 +588,16 @@ export function homothetie(
     } else {
       return pointAbstrait(x, y, nom, positionLabel)
     }
+  }
+
+  // Polyline
+  if (objet instanceof Polyline) {
+    const p2: PointAbstrait[] = []
+    for (let i = 0; i < objet.listePoints.length; i++) {
+      p2[i] = homothetie(objet.listePoints[i], O, k) as PointAbstrait
+      p2[i].nom = objet.listePoints[i].nom + "'"
+    }
+    return polyline(p2, color)
   }
 
   // Polygone
@@ -550,6 +647,13 @@ export function homothetie(
 
 // Surcharges
 export function symetrieAxiale(
+  A: Polyline,
+  d: IDroite,
+  nom?: string,
+  positionLabel?: string,
+  color?: string,
+): Polyline
+export function symetrieAxiale(
   A: IPolygone,
   d: IDroite,
   nom?: string,
@@ -594,12 +698,19 @@ export function symetrieAxiale(
 
 // Implémentation
 export function symetrieAxiale(
-  A: IPointAbstrait | IPoint | IDroite | ISegment | IPolygone | IVecteur,
+  A:
+    | IPointAbstrait
+    | IPoint
+    | IDroite
+    | ISegment
+    | IPolygone
+    | Polyline
+    | IVecteur,
   d: IDroite,
   nom = '',
   positionLabel = 'above',
   color = 'black',
-): PointAbstrait | PointAbstrait | Droite | Segment | Polygone | Vecteur {
+): PointAbstrait | PointAbstrait | Droite | Segment | Polygone | Polyline | Vecteur {
   let x: number, y: number
   const a = d.a
   const b = d.b
@@ -626,6 +737,16 @@ export function symetrieAxiale(
     } else {
       return pointAbstrait(x, y, nom, positionLabel)
     }
+  }
+
+  // Polyline
+  if (A instanceof Polyline) {
+    const p2: PointAbstrait[] = []
+    for (let i = 0; i < A.listePoints.length; i++) {
+      p2[i] = symetrieAxiale(A.listePoints[i], d) as unknown as PointAbstrait
+      p2[i].nom = A.listePoints[i].nom + "'"
+    }
+    return polyline(p2, color)
   }
 
   // Polygone
@@ -779,6 +900,14 @@ export function affiniteOrtho(
   color?: string,
 ): Segment
 export function affiniteOrtho(
+  A: Polyline,
+  d: IDroite,
+  k: number,
+  nom?: string,
+  positionLabel?: string,
+  color?: string,
+): Polyline
+export function affiniteOrtho(
   A: IPolygone,
   d: IDroite,
   k: number,
@@ -805,13 +934,20 @@ export function affiniteOrtho(
 
 // Implémentation
 export function affiniteOrtho(
-  A: IPointAbstrait | IPoint | IDroite | ISegment | IPolygone | IVecteur,
+  A:
+    | IPointAbstrait
+    | IPoint
+    | IDroite
+    | ISegment
+    | IPolygone
+    | Polyline
+    | IVecteur,
   d: IDroite,
   k: number,
   nom = '',
   positionLabel = 'above',
   color = 'black',
-): PointAbstrait | PointAbstrait | Droite | Segment | Polygone | Vecteur {
+): PointAbstrait | PointAbstrait | Droite | Segment | Polygone | Polyline | Vecteur {
   const a = d.a
   const b = d.b
   const c = d.c
@@ -839,6 +975,16 @@ export function affiniteOrtho(
     } else {
       return pointAbstrait(x, y, nom, positionLabel)
     }
+  }
+
+  // Polyline
+  if (A instanceof Polyline) {
+    const p2: PointAbstrait[] = []
+    for (let i = 0; i < A.listePoints.length; i++) {
+      p2[i] = affiniteOrtho(A.listePoints[i], d, k) as PointAbstrait
+      p2[i].nom = A.listePoints[i].nom + "'"
+    }
+    return polyline(p2, color)
   }
 
   // Polygone
@@ -929,6 +1075,15 @@ export function similitude(
   color?: string,
 ): Segment
 export function similitude(
+  A: Polyline,
+  O: IPointAbstrait,
+  a: number,
+  k: number,
+  nom?: string,
+  positionLabel?: string,
+  color?: string,
+): Polyline
+export function similitude(
   A: IPolygone,
   O: IPointAbstrait,
   a: number,
@@ -949,14 +1104,21 @@ export function similitude(
 
 // Implémentation
 export function similitude(
-  A: IPointAbstrait | IPoint | IDroite | ISegment | IPolygone | IVecteur,
+  A:
+    | IPointAbstrait
+    | IPoint
+    | IDroite
+    | ISegment
+    | IPolygone
+    | Polyline
+    | IVecteur,
   O: IPointAbstrait,
   a: number,
   k: number,
   nom = '',
   positionLabel = 'above',
   color = 'black',
-): PointAbstrait | PointAbstrait | Droite | Segment | Polygone | Vecteur {
+): PointAbstrait | PointAbstrait | Droite | Segment | Polygone | Polyline | Vecteur {
   // Points (PointAbstrait ou PointAbstrait)
   if (A instanceof PointAbstrait || A instanceof PointAbstrait) {
     const ra = degToRad(a)
@@ -969,6 +1131,16 @@ export function similitude(
     } else {
       return pointAbstrait(x, y, nom, positionLabel)
     }
+  }
+
+  // Polyline
+  if (A instanceof Polyline) {
+    const p2: PointAbstrait[] = []
+    for (let i = 0; i < A.listePoints.length; i++) {
+      p2[i] = similitude(A.listePoints[i], O, a, k) as PointAbstrait
+      p2[i].nom = A.listePoints[i].nom + "'"
+    }
+    return polyline(p2, color)
   }
 
   // Polygone

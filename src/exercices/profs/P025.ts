@@ -1,4 +1,8 @@
-import { ElementIepEditeur, ensureElementIepEditeurRegistered } from '../../modules/ElementIepEditeur'
+import {
+  ElementIepEditeur,
+  ensureElementIepEditeurRegistered,
+} from '../../lib/customElements/ElementIepEditeur'
+import { all } from '../../lib/interactif/checks'
 import Exercice from '../Exercice'
 
 export const titre =

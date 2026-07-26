@@ -358,6 +358,7 @@ export type InteractivityType =
   | 'mathalea-textfield'
   | 'tableau-mathlive'
   | 'mathalea-qcm'
+  | 'alea-iep-editeur'
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -393,6 +394,7 @@ export function isInteractivityType(
     value === 'mathalea-textfield' ||
     value === 'tableau-mathlive' ||
     value === 'mathalea-qcm' ||
+    value === 'alea-iep-editeur' ||
     value === 'clique-figure' ||
     value === 'points-cliquables' ||
     value === 'objets-cliquables' ||
@@ -426,6 +428,7 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'mathalea-textfield' ||
     value === 'tableau-mathlive' ||
     value === 'mathalea-qcm' ||
+    value === 'alea-iep-editeur' ||
     value === 'clique-figure' ||
     value === 'points-cliquables' ||
     value === 'objets-cliquables' ||

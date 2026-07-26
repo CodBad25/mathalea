@@ -160,7 +160,7 @@ build_ci_pdf:
     policy: pull
 
 .testCI:
-  image: mcr.microsoft.com/playwright:v1.60.0-noble
+  image: mcr.microsoft.com/playwright:v1.61.1-noble
   stage: playwright-test
   allow_failure: true
   timeout: 5h
@@ -208,7 +208,7 @@ build_ci_pdf:
     - pnpm run makeJson
 
 .testExosModifiedConsolidated:
-  image: mcr.microsoft.com/playwright:v1.60.0-noble
+  image: mcr.microsoft.com/playwright:v1.61.1-noble
   stage: build-projet
   allow_failure: false
   timeout: 5h
@@ -526,7 +526,7 @@ jsdom-all-exercises:
     - when: never
 
 playwright-caneleve:
-  image: mcr.microsoft.com/playwright:v1.60.0-noble
+  image: mcr.microsoft.com/playwright:v1.61.1-noble
   cache:
     key:
       files:
@@ -579,7 +579,7 @@ playwright-caneleve:
     - when: never
 
 playwright-consistency:
-  image: mcr.microsoft.com/playwright:v1.60.0-noble
+  image: mcr.microsoft.com/playwright:v1.61.1-noble
   cache:
     key:
       files:
@@ -631,7 +631,7 @@ playwright-consistency:
     - when: never
 
 playwright-interactivity:
-  image: mcr.microsoft.com/playwright:v1.60.0-noble
+  image: mcr.microsoft.com/playwright:v1.61.1-noble
   stage: playwright
   cache:
     key:

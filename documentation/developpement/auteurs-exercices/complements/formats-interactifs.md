@@ -159,6 +159,12 @@ handleAnswers(
 
 Le helper injecte un custom element `tableau-mathlive`.
 
+## Éditeur Instrumenpoche
+
+À utiliser pour faire compléter un programme de construction aux instruments.
+Voir la page dédiée :
+[éditeur Instrumenpoche](editeur-iep.md).
+
 ## QCM
 
 À utiliser pour cocher une ou plusieurs propositions.

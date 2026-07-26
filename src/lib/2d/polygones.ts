@@ -11,6 +11,7 @@ import {
   pointAbstrait,
   PointAbstrait,
 } from './PointAbstrait'
+import type { Polyline } from './Polyline'
 import { segment } from './segmentsVecteurs'
 import { texteParPoint } from './textes'
 import { longueur } from './utilitairesGeometriques'
@@ -18,6 +19,7 @@ import { pointSurSegment } from './utilitairesPoint'
 
 type BinomeXY = { x: number; y: number }
 export type BinomesXY = BinomeXY[]
+type NommablePolygone = Polygone | Polyline
 
 // Fonction locale pour calculer l'aire d'un triangle (remplace l'import)
 function aireTriangle(p: {
@@ -657,9 +659,15 @@ export function polygoneATrous({
  * @author Jean-claude Lhote
  */
 export class NommePolygone extends ObjetMathalea2D {
-  poly: Polygone
+  poly: NommablePolygone
   dist: number
-  constructor(p: Polygone, nom = '', k = 0.5, color = 'black', size = 1) {
+  constructor(
+    p: NommablePolygone,
+    nom = '',
+    k = 0.5,
+    color = 'black',
+    size = 1,
+  ) {
     super()
     this.poly = p
     this.dist = k
@@ -669,7 +677,7 @@ export class NommePolygone extends ObjetMathalea2D {
       if (noms.length > 0) p.listePoints[i].nom = noms[i]
     }
     p.nom = p.listePoints.map((el) => el.nom).join('')
-    const G = barycentre(p)
+    const G = barycentre(p as IPolygone)
     let xMin = 1000
     let xMax = -1000
     let yMin = 1000
@@ -711,7 +719,7 @@ export class NommePolygone extends ObjetMathalea2D {
 }
 
 export function nommePolygone(
-  p: Polygone,
+  p: NommablePolygone,
   nom = '',
   k = 0.5,
   color = 'black',

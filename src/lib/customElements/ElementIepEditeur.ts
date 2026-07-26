@@ -1,15 +1,20 @@
-import MathaleaCustomElement, { registerMathaleaCustomElement } from '../lib/customElements/MathaleaCustomElement'
-import { cercle } from '../lib/2d/cercle'
-import { droite } from '../lib/2d/droites'
-import { pointAbstrait, type PointAbstrait } from '../lib/2d/PointAbstrait'
-import { longueur } from '../lib/2d/utilitairesGeometriques'
+import Alea2iep from '../../modules/Alea2iep'
+import { context } from '../../modules/context'
+import { cercle } from '../2d/cercle'
+import { droite } from '../2d/droites'
+import { pointAbstrait, type PointAbstrait } from '../2d/PointAbstrait'
+import { longueur } from '../2d/utilitairesGeometriques'
 import {
   pointAdistance,
   pointIntersectionCC,
   pointIntersectionDD,
   pointIntersectionLC,
-} from '../lib/2d/utilitairesPoint'
-import Alea2iep from './Alea2iep'
+} from '../2d/utilitairesPoint'
+import { stringNombre } from '../outils/texNombre'
+import type { IExercice } from '../types'
+import MathaleaCustomElement, {
+  registerMathaleaCustomElement,
+} from './MathaleaCustomElement'
 
 /**
  * Éditeur d'animations de constructions aux instruments (Instrumenpoche)
@@ -23,12 +28,7 @@ import Alea2iep from './Alea2iep'
  */
 
 export type OutilIep =
-  | 'regle'
-  | 'crayon'
-  | 'equerre'
-  | 'requerre'
-  | 'compas'
-  | 'rapporteur'
+  'regle' | 'crayon' | 'equerre' | 'requerre' | 'compas' | 'rapporteur'
 
 // Nom de l'instrument avec son article pour les descriptions en français
 const nomsOutils: Record<OutilIep, string> = {
@@ -47,6 +47,7 @@ type TypeElementIntersectable =
   | 'demiDroite'
   | 'cercle'
   | 'arc'
+  | 'parallele'
 
 const typesElementsIntersectables: TypeElementIntersectable[] = [
   'droite',
@@ -54,28 +55,40 @@ const typesElementsIntersectables: TypeElementIntersectable[] = [
   'demiDroite',
   'cercle',
   'arc',
+  'parallele',
 ]
 
 // Préposition + nom pour décrire l'élément référencé par une intersection
-const prepositionElementIntersectable: Record<TypeElementIntersectable, string> = {
+const prepositionElementIntersectable: Record<
+  TypeElementIntersectable,
+  string
+> = {
   droite: 'de la droite',
   segment: 'du segment',
   demiDroite: 'de la demi-droite',
   cercle: 'du cercle',
   arc: 'de l’arc',
+  parallele: 'de la parallèle',
 }
 
 // Nom seul (sans article) pour les options du menu de sélection d'une étape
-const nomsTypesElementsIntersectables: Record<TypeElementIntersectable, string> =
-  {
-    droite: 'droite',
-    segment: 'segment',
-    demiDroite: 'demi-droite',
-    cercle: 'cercle',
-    arc: 'arc',
-  }
+const nomsTypesElementsIntersectables: Record<
+  TypeElementIntersectable,
+  string
+> = {
+  droite: 'droite',
+  segment: 'segment',
+  demiDroite: 'demi-droite',
+  cercle: 'cercle',
+  arc: 'arc',
+  parallele: 'parallèle',
+}
 
-export type InstructionIep =
+type InstructionIepBase = {
+  protege?: boolean
+}
+
+type InstructionIepSansOptions =
   | { type: 'point'; nom: string; x: number; y: number }
   | {
       type: 'pointADistance'
@@ -113,7 +126,22 @@ export type InstructionIep =
   | { type: 'pause'; secondes: number }
   | { type: 'attente'; secondes: number }
 
-type TypeInstruction = InstructionIep['type']
+export type InstructionIep = InstructionIepSansOptions & InstructionIepBase
+
+export type EditeurIepOptions = {
+  id?: string
+  numeroExercice?: number
+  questionIndex?: number
+  programmeInitial?: InstructionIep[]
+  instructionsDisponibles?: TypeInstructionIep[]
+  instructionsInitialesProtegees?: number[]
+  programmeInitialProtege?: boolean
+  loadSaveButtons?: boolean
+  allowFullscreen?: boolean
+  interactivityOn?: boolean
+}
+
+export type TypeInstructionIep = InstructionIep['type']
 
 type ChampSpec = {
   cle: string
@@ -160,7 +188,7 @@ const optionsCodageAngle: string[] = [
 ]
 
 const catalogue: Record<
-  TypeInstruction,
+  TypeInstructionIep,
   { label: string; champs: ChampSpec[] }
 > = {
   point: {
@@ -336,7 +364,7 @@ const catalogue: Record<
 }
 
 // Ordre d'affichage dans le menu déroulant
-const ordreCatalogue: TypeInstruction[] = [
+const ordreCatalogue: TypeInstructionIep[] = [
   'point',
   'pointADistance',
   'segment',
@@ -364,7 +392,7 @@ const ordreCatalogue: TypeInstruction[] = [
 ]
 
 function formateNombre(n: number) {
-  return String(n).replace('.', ',')
+  return stringNombre(n, 2)
 }
 
 /**
@@ -564,6 +592,16 @@ function elementGeometrique(
   points: Map<string, PointAbstrait>,
 ): ElementGeometrique | undefined {
   if (!estElementIntersectable(instr)) return undefined
+  if (instr.type === 'parallele') {
+    const A = points.get(instr.p1)
+    const B = points.get(instr.p2)
+    const C = points.get(instr.p3)
+    if (A === undefined || B === undefined || C === undefined) return undefined
+    const pointDirection = pointAbstrait(C.x + B.x - A.x, C.y + B.y - A.y)
+    const d = droite(C, pointDirection)
+    d.isVisible = false
+    return { nature: 'droite', objet: d }
+  }
   const A = points.get(instr.p1)
   const B = points.get(instr.p2)
   if (A === undefined || B === undefined) return undefined
@@ -585,10 +623,7 @@ function elementGeometrique(
  * Joue le programme sur une instance d'Alea2iep.
  * Renvoie la liste des indices des étapes ignorées (points non définis).
  */
-function jouerProgramme(
-  anim: Alea2iep,
-  programme: InstructionIep[],
-): number[] {
+function jouerProgramme(anim: Alea2iep, programme: InstructionIep[]): number[] {
   const points = new Map<string, PointAbstrait>()
   const etapesIgnorees: number[] = []
   programme.forEach((instr, index) => {
@@ -864,6 +899,52 @@ export function construireAnimation(programme: InstructionIep[]): Alea2iep {
 // Les programmes sont conservés ici pour survivre aux re-rendus de l'exercice
 const programmesParId = new Map<string, InstructionIep[]>()
 
+function clonerProgramme(programme: InstructionIep[]): InstructionIep[] {
+  return structuredClone(programme)
+}
+
+function lireProgrammeDepuisAttribut(valeur: string | null): InstructionIep[] {
+  if (valeur === null || valeur === '') return []
+  try {
+    const programme = JSON.parse(valeur)
+    return Array.isArray(programme) ? (programme as InstructionIep[]) : []
+  } catch {
+    return []
+  }
+}
+
+function lireIndicesDepuisAttribut(valeur: string | null): number[] {
+  if (valeur === null || valeur === '') return []
+  try {
+    const indices = JSON.parse(valeur)
+    return Array.isArray(indices)
+      ? indices.filter(
+          (index): index is number =>
+            Number.isInteger(index) && index >= 0,
+        )
+      : []
+  } catch {
+    return []
+  }
+}
+
+function lireTypesInstructionsDepuisAttribut(
+  valeur: string | null,
+): TypeInstructionIep[] {
+  if (valeur === null || valeur === '') return ordreCatalogue
+  try {
+    const types = JSON.parse(valeur)
+    if (!Array.isArray(types)) return ordreCatalogue
+    const typesDisponibles = types.filter(
+      (type): type is TypeInstructionIep =>
+        typeof type === 'string' && type in catalogue,
+    )
+    return typesDisponibles.length > 0 ? typesDisponibles : ordreCatalogue
+  } catch {
+    return ordreCatalogue
+  }
+}
+
 const classesBouton = [
   'px-3',
   'py-1.5',
@@ -896,6 +977,8 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   static readonly elementTag = 'alea-iep-editeur'
 
   private programme: InstructionIep[] = []
+  private indicesInstructionsProtegees = new Set<number>()
+  private instructionsProtegeesInitiales = new Map<number, InstructionIep>()
   private prochaineLettre = 0
   private divParametres!: HTMLDivElement
   private selectType!: HTMLSelectElement
@@ -904,23 +987,139 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   private animationVisible = false
   private boutonValider!: HTMLButtonElement
   private boutonAnnulerEdition!: HTMLButtonElement
+  private inputChargerJSON!: HTMLInputElement
+  // undefined si allowfullscreen n'est pas activé
+  private boutonPleinEcran?: HTMLButtonElement
   // Index de l'étape en cours de modification, null si on est en mode ajout
   private editingIndex: number | null = null
+
+  static create({
+    id,
+    numeroExercice = 0,
+    questionIndex = 0,
+    programmeInitial = [],
+    instructionsDisponibles,
+    instructionsInitialesProtegees = [],
+    programmeInitialProtege = false,
+    loadSaveButtons = false,
+    allowFullscreen = false,
+    interactivityOn = true,
+  }: EditeurIepOptions = {}): string {
+    return super.create({
+      id:
+        id ??
+        `${ElementIepEditeur.elementTag}Ex${numeroExercice}Q${questionIndex}`,
+      numeroExercice,
+      questionIndex,
+      programmeInitial,
+      instructionsDisponibles,
+      instructionsInitialesProtegees,
+      programmeInitialProtege,
+      loadSaveButtons,
+      allowFullscreen,
+      interactivityOn,
+    })
+  }
+
+  /**
+   * Ajoute des boutons Sauvegarder/Charger pour le JSON du programme
+   * @attr {boolean} [loadSaveButtons=false]
+   */
+  private get loadSaveButtonsActif(): boolean {
+    return this.getAttribute('load-save-buttons') === 'true'
+  }
+
+  /**
+   * Ajoute un bouton pour ne voir que l'animation en plein écran
+   * @attr {boolean} [allowfullscreen=false]
+   */
+  private get allowFullscreenActif(): boolean {
+    return this.getAttribute('allowfullscreen') === 'true'
+  }
 
   connectedCallback() {
     super.connectedCallback()
     if (this.dataset.initialise === '1') return
     this.dataset.initialise = '1'
     const id = this.getAttribute('id') ?? 'editeur-iep'
+    const programmeInitial = lireProgrammeDepuisAttribut(
+      this.getAttribute('programme-initial'),
+    )
+    this.initialiserInstructionsProtegees(programmeInitial)
     const programmeSauvegarde = programmesParId.get(id)
     if (programmeSauvegarde !== undefined) {
       this.programme = programmeSauvegarde
+    } else if (programmeInitial.length > 0) {
+      this.programme = clonerProgramme(programmeInitial)
+      programmesParId.set(id, this.programme)
     } else {
       programmesParId.set(id, this.programme)
     }
     this.prochaineLettre = pointsDefinis(this.programme).length
     this.construireInterface()
     this.rafraichirProgramme()
+  }
+
+  /**
+   * Valeur JSON du programme de construction, utilisée par
+   * `mathaleaWriteStudentPreviousAnswer()` pour réinjecter une réponse
+   * sauvegardée (en association avec `interactivityOn = false`).
+   */
+  get value(): string {
+    return JSON.stringify(this.programme)
+  }
+
+  set value(nextValue: string) {
+    if (typeof nextValue !== 'string' || nextValue === '') return
+    this.importerProgramme(nextValue)
+  }
+
+  protected onInteractivityChanged(_isOn: boolean): void {
+    this.appliquerInteractivite()
+  }
+
+  /**
+   * Active/désactive tous les boutons, listes et champs de l'éditeur
+   * en fonction de `interactivityOn`.
+   * Les boutons ▲/▼ déjà désactivés par la logique du programme (déplacement
+   * impossible, cf. `data-desactive-logique`) ne sont pas réactivés.
+   */
+  private appliquerInteractivite() {
+    const actif = this.interactivityOn
+    this.querySelectorAll<
+      HTMLButtonElement | HTMLSelectElement | HTMLInputElement
+    >('button, select, input').forEach((element) => {
+      if (!actif) {
+        element.disabled = true
+      } else if (element.dataset.desactiveLogique !== 'true') {
+        element.disabled = false
+      }
+    })
+  }
+
+  /**
+   * Remplace le programme courant par celui décrit par le JSON fourni
+   * (utilisé par le setter `value` et par le bouton Charger)
+   * @returns true si l'import a réussi
+   */
+  private importerProgramme(json: string): boolean {
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(json)
+    } catch {
+      return false
+    }
+    if (!Array.isArray(parsed)) return false
+    const programmeImporte = parsed as InstructionIep[]
+    this.programme = programmeImporte
+    this.restaurerInstructionsProtegees()
+    this.prochaineLettre = pointsDefinis(this.programme).length
+    const id = this.getAttribute('id') ?? 'editeur-iep'
+    programmesParId.set(id, this.programme)
+    this.terminerEdition()
+    this.rafraichirProgramme()
+    this.rafraichirParametres()
+    return true
   }
 
   private construireInterface() {
@@ -947,7 +1146,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     ligneAjout.classList.add('flex', 'flex-wrap', 'items-center', 'gap-2')
     this.selectType = document.createElement('select')
     this.selectType.classList.add(...classesChamp)
-    for (const type of ordreCatalogue) {
+    for (const type of this.instructionsDisponibles) {
       const option = document.createElement('option')
       option.value = type
       option.innerText = catalogue[type].label
@@ -1015,31 +1214,156 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       'gap-1',
     )
     zoneProgramme.appendChild(this.listeProgramme)
+    if (this.loadSaveButtonsActif) {
+      zoneProgramme.appendChild(this.construireLigneChargerSauvegarder())
+    }
     conteneur.appendChild(zoneProgramme)
 
     // --- Animation ---
     const zoneAnimation = document.createElement('div')
-    zoneAnimation.classList.add('flex', 'flex-col', 'gap-2')
+    zoneAnimation.classList.add('flex', 'flex-wrap', 'gap-2')
     const boutonTester = document.createElement('button')
     boutonTester.innerText = 'Tester l’animation'
+    boutonTester.type = 'button'
     boutonTester.classList.add(...classesBouton, 'self-start')
     boutonTester.onclick = () => {
       this.animationVisible = true
       this.chargerAnimation()
     }
     zoneAnimation.appendChild(boutonTester)
+    if (this.allowFullscreenActif) {
+      this.boutonPleinEcran = document.createElement('button')
+      this.boutonPleinEcran.innerText = 'Voir en plein écran'
+      this.boutonPleinEcran.type = 'button'
+      this.boutonPleinEcran.classList.add(...classesBouton, 'self-start')
+      this.boutonPleinEcran.onclick = () => this.basculerPleinEcran()
+      zoneAnimation.appendChild(this.boutonPleinEcran)
+    }
     this.divAnimation = document.createElement('div')
-    this.divAnimation.classList.add('max-w-5xl')
+    this.divAnimation.classList.add(
+      'max-w-5xl',
+      'basis-full',
+      'bg-white',
+      'flex',
+      'items-center',
+      'justify-center',
+    )
     zoneAnimation.appendChild(this.divAnimation)
     conteneur.appendChild(zoneAnimation)
 
     this.appendChild(conteneur)
     this.rafraichirParametres()
+    this.appliquerInteractivite()
+  }
+
+  private get instructionsDisponibles(): TypeInstructionIep[] {
+    return lireTypesInstructionsDepuisAttribut(
+      this.getAttribute('instructions-disponibles'),
+    )
+  }
+
+  private ajouterTypeInstructionAuSelectSiBesoin(type: TypeInstructionIep) {
+    if (this.selectType.querySelector(`option[value="${type}"]`) !== null) {
+      return
+    }
+    const option = document.createElement('option')
+    option.value = type
+    option.innerText = catalogue[type].label
+    this.selectType.appendChild(option)
+  }
+
+  /**
+   * Construit la ligne de boutons Sauvegarder/Charger le JSON du programme
+   * (visible uniquement si `loadSaveButtons` vaut `true`)
+   */
+  private construireLigneChargerSauvegarder(): HTMLDivElement {
+    const ligne = document.createElement('div')
+    ligne.classList.add('flex', 'items-center', 'gap-2')
+
+    const boutonSauvegarder = document.createElement('button')
+    boutonSauvegarder.innerHTML = '<i class="bx bx-save text-lg"></i>'
+    boutonSauvegarder.type = 'button'
+    boutonSauvegarder.title = 'Sauvegarder le programme (JSON)'
+    boutonSauvegarder.setAttribute(
+      'aria-label',
+      'Sauvegarder le programme (JSON)',
+    )
+    boutonSauvegarder.classList.add(...classesBouton)
+    boutonSauvegarder.onclick = () => this.sauvegarderJSON()
+    ligne.appendChild(boutonSauvegarder)
+
+    const boutonCharger = document.createElement('button')
+    boutonCharger.innerHTML = '<i class="bx bx-upload text-lg"></i>'
+    boutonCharger.type = 'button'
+    boutonCharger.title = 'Charger un programme (JSON)'
+    boutonCharger.setAttribute('aria-label', 'Charger un programme (JSON)')
+    boutonCharger.classList.add(...classesBouton)
+    boutonCharger.onclick = () => this.inputChargerJSON.click()
+    ligne.appendChild(boutonCharger)
+
+    this.inputChargerJSON = document.createElement('input')
+    this.inputChargerJSON.type = 'file'
+    this.inputChargerJSON.accept = '.json,application/json'
+    this.inputChargerJSON.classList.add('hidden')
+    this.inputChargerJSON.onchange = () => this.chargerJSON()
+    ligne.appendChild(this.inputChargerJSON)
+
+    return ligne
+  }
+
+  /**
+   * Télécharge le programme de construction courant au format JSON
+   */
+  private sauvegarderJSON() {
+    const blob = new Blob([JSON.stringify(this.programme, null, 2)], {
+      type: 'application/json',
+    })
+    const url = URL.createObjectURL(blob)
+    const lien = document.createElement('a')
+    lien.href = url
+    lien.download = 'programme-construction.json'
+    lien.click()
+    URL.revokeObjectURL(url)
+  }
+
+  /**
+   * Lit le fichier JSON sélectionné par l'utilisateur et remplace le
+   * programme courant par son contenu
+   */
+  private chargerJSON() {
+    const fichier = this.inputChargerJSON.files?.[0]
+    this.inputChargerJSON.value = ''
+    if (fichier == null) return
+    const lecteur = new FileReader()
+    lecteur.onload = () => {
+      const reussi = this.importerProgramme(String(lecteur.result))
+      if (!reussi) {
+        window.alert(
+          'Le fichier sélectionné n’est pas un programme de construction valide.',
+        )
+      }
+    }
+    lecteur.readAsText(fichier)
+  }
+
+  /**
+   * Affiche l'animation seule en plein écran (API Fullscreen du navigateur)
+   */
+  private async basculerPleinEcran() {
+    if (!this.animationVisible) {
+      this.animationVisible = true
+      await this.chargerAnimation()
+    }
+    if (document.fullscreenElement === this.divAnimation) {
+      await document.exitFullscreen()
+    } else {
+      await this.divAnimation.requestFullscreen()
+    }
   }
 
   private rafraichirParametres() {
     this.divParametres.innerHTML = ''
-    const type = this.selectType.value as TypeInstruction
+    const type = this.selectType.value as TypeInstructionIep
     const noms = pointsDefinis(this.programme)
     for (const champ of catalogue[type].champs) {
       const etiquette = document.createElement('label')
@@ -1100,7 +1424,8 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         const indice = catalogue[type].champs
           .filter((c) => c.genre === 'etape')
           .findIndex((c) => c.cle === champ.cle)
-        if (elements.length > indice) select.value = String(elements[indice].index)
+        if (elements.length > indice)
+          select.value = String(elements[indice].index)
         etiquette.appendChild(select)
       } else if (
         champ.genre === 'codageSegment' ||
@@ -1159,6 +1484,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       }
       this.divParametres.appendChild(etiquette)
     }
+    this.appliquerInteractivite()
   }
 
   private nomSuivant() {
@@ -1174,7 +1500,13 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   }
 
   private validerInstruction() {
-    const type = this.selectType.value as TypeInstruction
+    if (
+      this.editingIndex !== null &&
+      this.indexInstructionEstProtege(this.editingIndex)
+    ) {
+      return
+    }
+    const type = this.selectType.value as TypeInstructionIep
     const instruction: Record<string, string | number> = { type }
     for (const champ of catalogue[type].champs) {
       const element = this.divParametres.querySelector<
@@ -1228,8 +1560,10 @@ export class ElementIepEditeur extends MathaleaCustomElement {
    * Charge une étape existante dans le formulaire d'ajout pour la modifier
    */
   private demarrerEdition(index: number) {
+    if (this.indexInstructionEstProtege(index)) return
     this.editingIndex = index
     const instruction = this.programme[index]
+    this.ajouterTypeInstructionAuSelectSiBesoin(instruction.type)
     this.selectType.value = instruction.type
     this.rafraichirParametres()
     const valeurs = instruction as unknown as Record<
@@ -1264,6 +1598,12 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
   private deplacerInstruction(index: number, decalage: number) {
     const cible = index + decalage
+    if (
+      this.indexInstructionEstProtege(index) ||
+      this.indexInstructionEstProtege(cible)
+    ) {
+      return
+    }
     if (!peutEchangerEtapes(this.programme, index, cible)) return
     const [instruction] = this.programme.splice(index, 1)
     this.programme.splice(cible, 0, instruction)
@@ -1276,6 +1616,12 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   }
 
   private supprimerInstruction(index: number) {
+    if (
+      this.indexInstructionEstProtege(index) ||
+      this.suppressionDeplaceraitInstructionProtegee(index)
+    ) {
+      return
+    }
     this.programme.splice(index, 1)
     if (this.editingIndex === index) {
       this.terminerEdition()
@@ -1296,6 +1642,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       this.listeProgramme.appendChild(vide)
     }
     this.programme.forEach((instruction, index) => {
+      const protege = this.indexInstructionEstProtege(index)
       const ligne = document.createElement('li')
       ligne.classList.add('flex', 'items-center', 'gap-1')
       if (index === this.editingIndex) {
@@ -1324,27 +1671,38 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       ligne.appendChild(texte)
 
       const boutons: [string, () => void, string, boolean][] = [
-        ['✎', () => this.demarrerEdition(index), 'Modifier', false],
+        ['✎', () => this.demarrerEdition(index), 'Modifier', protege],
         [
           '▲',
           () => this.deplacerInstruction(index, -1),
           'Monter',
-          !peutEchangerEtapes(this.programme, index, index - 1),
+          protege ||
+            this.indexInstructionEstProtege(index - 1) ||
+            !peutEchangerEtapes(this.programme, index, index - 1),
         ],
         [
           '▼',
           () => this.deplacerInstruction(index, 1),
           'Descendre',
-          !peutEchangerEtapes(this.programme, index, index + 1),
+          protege ||
+            this.indexInstructionEstProtege(index + 1) ||
+            !peutEchangerEtapes(this.programme, index, index + 1),
         ],
-        ['✕', () => this.supprimerInstruction(index), 'Supprimer', false],
+        [
+          '✕',
+          () => this.supprimerInstruction(index),
+          'Supprimer',
+          protege || this.suppressionDeplaceraitInstructionProtegee(index),
+        ],
       ]
       for (const [symbole, action, titre, desactive] of boutons) {
         const bouton = document.createElement('button')
         bouton.innerText = symbole
-        bouton.title = desactive
-          ? 'Déplacement impossible : une autre étape en dépend.'
-          : titre
+        bouton.title = protege
+          ? 'Instruction initiale protégée.'
+          : desactive
+            ? 'Déplacement impossible : une autre étape en dépend.'
+            : titre
         bouton.disabled = desactive
         bouton.classList.add(
           'px-1.5',
@@ -1356,6 +1714,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           'shrink-0',
         )
         if (desactive) {
+          bouton.dataset.desactiveLogique = 'true'
           bouton.classList.add('opacity-40', 'cursor-not-allowed')
         } else {
           bouton.classList.add('hover:bg-gray-200')
@@ -1365,7 +1724,52 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       }
       this.listeProgramme.appendChild(ligne)
     })
+    this.appliquerInteractivite()
+    if (this.boutonPleinEcran !== undefined) {
+      this.boutonPleinEcran.classList.toggle(
+        'hidden',
+        this.programme.length === 0,
+      )
+    }
     if (this.animationVisible) this.chargerAnimation()
+  }
+
+  private indexInstructionEstProtege(index: number): boolean {
+    return this.indicesInstructionsProtegees.has(index)
+  }
+
+  private suppressionDeplaceraitInstructionProtegee(index: number): boolean {
+    return [...this.indicesInstructionsProtegees].some(
+      (indexProtege) => index < indexProtege,
+    )
+  }
+
+  private initialiserInstructionsProtegees(programmeInitial: InstructionIep[]) {
+    const indicesProtegesDepuisOptions =
+      this.getAttribute('programme-initial-protege') === 'true'
+        ? programmeInitial.map((_, index) => index)
+        : lireIndicesDepuisAttribut(
+            this.getAttribute('instructions-initiales-protegees'),
+          )
+    const indicesProtegesDepuisInstructions = programmeInitial.flatMap(
+      (instruction, index) => (instruction.protege === true ? [index] : []),
+    )
+    this.indicesInstructionsProtegees = new Set(
+      [...indicesProtegesDepuisOptions, ...indicesProtegesDepuisInstructions]
+        .filter((index) => index < programmeInitial.length),
+    )
+    this.instructionsProtegeesInitiales = new Map(
+      [...this.indicesInstructionsProtegees].map((index) => [
+        index,
+        clonerProgramme([programmeInitial[index]])[0],
+      ]),
+    )
+  }
+
+  private restaurerInstructionsProtegees() {
+    for (const [index, instruction] of this.instructionsProtegeesInitiales) {
+      this.programme[index] = clonerProgramme([instruction])[0]
+    }
   }
 
   private async chargerAnimation() {
@@ -1389,3 +1793,24 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 export function ensureElementIepEditeurRegistered() {
   registerMathaleaCustomElement(ElementIepEditeur)
 }
+
+export function addEditeurIep(
+  exercice: IExercice,
+  questionIndex: number,
+  options: EditeurIepOptions = {},
+): string {
+  if (!context.isHtml) return ''
+  if (exercice.autoCorrection == null) exercice.autoCorrection = []
+  if (exercice.autoCorrection[questionIndex] == null) {
+    exercice.autoCorrection[questionIndex] = {}
+  }
+  exercice.autoCorrection[questionIndex].formatInteractif =
+    ElementIepEditeur.elementTag
+  return ElementIepEditeur.create({
+    ...options,
+    numeroExercice: exercice.numeroExercice,
+    questionIndex,
+  })
+}
+
+registerMathaleaCustomElement(ElementIepEditeur)

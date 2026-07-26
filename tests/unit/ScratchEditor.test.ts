@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { areArithmeticAstsEquivalent } from '../mathFonctions/expression'
 import {
   blocklyWorkspaceJsonToScratchXml,
   normalizedScratchWorkspaceXml,
   ScratchEditorElement,
+  scratchWorkspaceXmlToArithmeticAst,
   scratchWorkspaceXmlToScratchblockCode,
   scratchWorkspaceXmlToVariableValues,
-  scratchWorkspaceXmlToArithmeticAst,
-} from './ScratchEditor'
+} from '../../src/lib/customElements/ScratchEditor'
+import { areArithmeticAstsEquivalent } from '../../src/lib/mathFonctions/expression'
 
 describe('ScratchEditor conversions', () => {
   it('convertit la solution Blockly de 5I1C en XML Scratch puis en AST', () => {

@@ -22,6 +22,7 @@ export const listOfCustomElements = [
   'objets-cliquables',
   'drag-and-drop',
   'meta-interactif-2d',
+  'alea-iep-editeur',
 ]
 
 /**

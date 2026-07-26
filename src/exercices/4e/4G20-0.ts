@@ -1,19 +1,21 @@
-import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
-import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { nommePolygone, polygone } from '../../lib/2d/polygones'
-import { rotation } from '../../lib/2d/transformations'
+import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit';
+import { droite } from '../../lib/2d/droites';
+import { fixeBordures } from '../../lib/2d/fixeBordures';
+import { pointAbstrait } from '../../lib/2d/PointAbstrait';
+import { nommePolygone, polygone } from '../../lib/2d/polygones';
+import { polyline } from '../../lib/2d/Polyline';
+import { projectionOrtho, rotation } from '../../lib/2d/transformations';
 import {
-  addObjetsCliquables,
-  type ObjetCliquableData,
-} from '../../lib/customElements/ObjetsCliquablesElement'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choice } from '../../lib/outils/arrayOutils'
-import { creerNomDePolygone } from '../../lib/outils/outilString'
-import { context } from '../../modules/context'
-import { mathalea2d } from '../../modules/mathalea2d'
-import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
-import Exercice from '../Exercice'
+    addObjetsCliquables,
+    type ObjetCliquableData,
+} from '../../lib/customElements/ObjetsCliquablesElement';
+import { handleAnswers } from '../../lib/interactif/gestionInteractif';
+import { choice } from '../../lib/outils/arrayOutils';
+import { creerNomDePolygone } from '../../lib/outils/outilString';
+import { context } from '../../modules/context';
+import { mathalea2d } from '../../modules/mathalea2d';
+import { gestionnaireFormulaireTexte, randint } from '../../modules/outils';
+import Exercice from '../Exercice';
 
 export const titre = 'Indentifier les côtés d’un triangle rectangle'
 export const interactifReady = true
@@ -59,18 +61,19 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
       ])
       const indexSommet = choice([0, 2])
       let question = ''
+      const nom = creerNomDePolygone(6)
+
+      const A = pointAbstrait(0, 0, nom[0])
+      const B = pointAbstrait(6, 0, nom[1])
+      const angle = randint(30, 60)
+      const C = pointAbstrait(
+        B.x,
+        (B.y + 6 * Math.sin((angle * Math.PI) / 180)) * randint(-1, 1, 0),
+        nom[2],
+      )
       switch (listeTypeDeQuestions[i]) {
         case 1: // Un seul triangle
           {
-            const nom = creerNomDePolygone(3)
-            const A = pointAbstrait(0, 0, nom[0])
-            const B = pointAbstrait(6, 0, nom[1])
-            const angle = randint(30, 60)
-            const C = pointAbstrait(
-              B.x,
-              (B.y + 6 * Math.sin((angle * Math.PI) / 180)) * randint(-1, 1, 0),
-              nom[2],
-            )
             const AB = nom[0] + nom[1]
             const AC = nom[0] + nom[2]
             const BC = nom[1] + nom[2]
@@ -87,7 +90,7 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
                 triangle.listePoints[1],
                 triangle.listePoints[2],
               ),
-              nommePolygone(triangle, nom),
+              nommePolygone(triangle, nom.slice(0, 3)),
             ]
             const figureId = `figEx${this.numeroExercice}Q${i}`
             question += mathalea2d(
@@ -128,8 +131,8 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
               etat:
                 terme === 'hypoténuse'
                   ? objet.id === AC
-                  : (terme === 'côté adjacent' && indexSommet === 0) ||
-                      (terme === 'côté opposé' && indexSommet === 2)
+                : (terme === 'adjacent' && indexSommet === 0) ||
+                    (terme === 'opposé' && indexSommet === 2)
                     ? objet.id === AB
                     : objet.id === BC,
             }))
@@ -145,6 +148,146 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
           }
           break
         case 2:
+          {
+            const H = projectionOrtho(B, droite(A, C), nom[3])
+            const AB = nom[0] + nom[1]
+            const AC = nom[0] + nom[2]
+            const BC = nom[1] + nom[2]
+            const BH = nom[1] + nom[3]
+            const CH = nom[2] + nom[3]
+            const AH = nom[0] + nom[3]
+            const turnTriangles = randint(0, 360)
+            const triangles = rotation(polyline(A,B,C,H,A,B,H), A, turnTriangles)
+            const Hrotated = rotation(H, A, turnTriangles)
+            const listeTriangles = [
+              nom.slice(0, 3), // ABC
+              nom[0] + nom[3] + nom[1], // AHC
+              nom[1] + nom[3] + nom[2], // BHC
+            ]
+            const indexTriangle = randint(0, 2)
+            const choixTriangle = listeTriangles[indexTriangle]
+            question =
+              context.isHtml && this.interactif
+                ? `Dans le triangle rectangle $${choixTriangle}$, sélectionner ${terme === 'hypoténuse' ? "l'hypoténuse" : `le côté ${terme} à l'angle $\\widehat{${choixTriangle[2 - indexSommet]}${choixTriangle[indexSommet]}${choixTriangle[1]}}$`}.`
+                : `Dans le triangle rectangle $${choixTriangle}$, ${terme === 'hypoténuse' ? "l'hypoténuse" : `le côté ${terme} à l'angle $\\widehat{${choixTriangle[2 - indexSommet]}${choixTriangle[indexSommet]}${choixTriangle[1]}}$`} est :`
+            const objetsFigure = [
+              triangles,
+              codageAngleDroit(
+                triangles.listePoints[0],
+                triangles.listePoints[1],
+                triangles.listePoints[2],
+              ),
+              codageAngleDroit(
+                triangles.listePoints[0],
+                Hrotated,
+                triangles.listePoints[1],
+              ),
+              nommePolygone(polygone(triangles.listePoints.slice(0, 4)), nom.slice(0, 4)),
+            ]
+            const figureId = `figEx${this.numeroExercice}Q${i}`
+            question += mathalea2d(
+              Object.assign({ id: figureId }, fixeBordures(objetsFigure)),
+              objetsFigure,
+            )
+            const coteAttendu =
+              terme === 'hypoténuse'
+                ? choixTriangle === listeTriangles[0]
+                  ? AC
+                  : choixTriangle === listeTriangles[1]
+                    ? AB
+                    : BC
+                : choixTriangle === listeTriangles[0]
+                ? (terme === 'adjacent' && indexSommet === 0) ||
+                    (terme === 'opposé' && indexSommet === 2)
+                    ? AB
+                    : BC
+                : choixTriangle === listeTriangles[1]
+                  ? (terme === 'adjacent' && indexSommet === 0) ||
+                      (terme === 'opposé' && indexSommet === 2)
+                    ? AH
+                    : BH
+                  : (terme === 'adjacent' && indexSommet === 0) ||
+                      (terme === 'opposé' && indexSommet === 2)
+                    ? BH
+                    : CH
+            const objets: ObjetCliquableData[] = [
+              {
+                type: 'segment',
+                id: AB,
+                x1: triangles.listePoints[0].x,
+                y1: triangles.listePoints[0].y,
+                x2: triangles.listePoints[1].x,
+                y2: triangles.listePoints[1].y,
+                etat: false,
+              },
+              {
+                type: 'segment',
+                id: AC,
+                x1: triangles.listePoints[0].x,
+                y1: triangles.listePoints[0].y,
+                x2: triangles.listePoints[2].x,
+                y2: triangles.listePoints[2].y,
+                etat: false,
+              },
+              {
+                type: 'segment',
+                id: BC,
+                x1: triangles.listePoints[1].x,
+                y1: triangles.listePoints[1].y,
+                x2: triangles.listePoints[2].x,
+                y2: triangles.listePoints[2].y,
+                etat: false,
+              },
+              {
+                type: 'segment',
+                id: BH,
+                x1: triangles.listePoints[1].x,
+                y1: triangles.listePoints[1].y,
+                x2: Hrotated.x,
+                y2: Hrotated.y,
+                etat: false,
+              },
+              {
+                type: 'segment',
+                id: CH,
+                x1: triangles.listePoints[2].x,
+                y1: triangles.listePoints[2].y,
+                x2: Hrotated.x,
+                y2: Hrotated.y,
+                etat: false,
+              },
+              {
+                type: 'segment',
+                id: AH,
+                x1: triangles.listePoints[0].x,
+                y1: triangles.listePoints[0].y,
+                x2: Hrotated.x,
+                y2: Hrotated.y,
+                etat: false,
+              },
+            ]
+            const objetsCliquables =
+              choixTriangle === listeTriangles[0]
+                ? objets.filter((objet) => objet.id !== AH && objet.id !== CH)
+                : objets
+            const objetAttendu = objetsCliquables.map((objet) => ({
+              ...objet,
+              etat: objet.id === coteAttendu,
+            }))
+            if (this.interactif) {
+              question += addObjetsCliquables(this, i, {
+                figureId,
+                objets: objetsCliquables,
+              })
+            }
+            handleAnswers(
+              this,
+              i,
+              { reponse: { value: JSON.stringify(objetAttendu) } },
+              { formatInteractif: 'objets-cliquables' },
+            )
+          }
+
           break
       }
       this.listeQuestions.push(question)

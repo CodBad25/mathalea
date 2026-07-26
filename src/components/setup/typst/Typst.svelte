@@ -111,6 +111,9 @@
         const parsed = JSON.parse(saved)
         if (['code', 'split', 'preview'].includes(parsed.displayMode)) {
           displayMode = parsed.displayMode
+          // le bouton Réglages n'existe qu'en Aperçu : hors de ce mode, le
+          // volet doit rester fermé (isSettingsOpen n'est pas persisté)
+          if (displayMode !== 'preview') isSettingsOpen = false
         }
         if (typeof parsed.showOverlay === 'boolean') {
           showOverlay = parsed.showOverlay
@@ -1256,7 +1259,9 @@
 
   function setDisplayMode(mode: DisplayMode) {
     displayMode = mode
-    isSettingsOpen = false
+    // le bouton Réglages n'existe qu'en Aperçu : on y revient toujours avec
+    // le volet ouvert, et il reste fermé (masqué) dans les deux autres modes
+    isSettingsOpen = mode === 'preview'
     persistPreferences()
   }
 
@@ -2099,7 +2104,7 @@
 </script>
 
 <svelte:head>
-  <title>MathALÉA - Typst</title>
+  <title>MathALÉA - Impression</title>
 </svelte:head>
 
 <main
@@ -2138,18 +2143,20 @@
         {/each}
       </div>
 
-      <button
-        type="button"
-        title="Réglages du document"
-        aria-pressed={isSettingsOpen}
-        class="flex items-center gap-1 text-sm {isSettingsOpen
-          ? 'text-coopmaths-action font-semibold dark:text-coopmathsdark-action'
-          : 'text-coopmaths-action/60 hover:text-coopmaths-action dark:text-coopmathsdark-action/60 dark:hover:text-coopmathsdark-action'}"
-        onclick={() => (isSettingsOpen = !isSettingsOpen)}
-      >
-        <i class="bx bx-cog text-xl"></i>
-        Réglages
-      </button>
+      {#if displayMode === 'preview'}
+        <button
+          type="button"
+          title="Réglages du document"
+          aria-pressed={isSettingsOpen}
+          class="flex items-center gap-1 text-sm {isSettingsOpen
+            ? 'text-coopmaths-action font-semibold dark:text-coopmathsdark-action'
+            : 'text-coopmaths-action/60 hover:text-coopmaths-action dark:text-coopmathsdark-action/60 dark:hover:text-coopmathsdark-action'}"
+          onclick={() => (isSettingsOpen = !isSettingsOpen)}
+        >
+          <i class="bx bx-cog text-xl"></i>
+          Réglages
+        </button>
+      {/if}
 
       <button
         type="button"

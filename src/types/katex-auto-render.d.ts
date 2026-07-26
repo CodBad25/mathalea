@@ -1,4 +1,4 @@
-declare module 'katex/dist/contrib/auto-render.js' {
+declare module 'katex/contrib/auto-render' {
   type RenderMathInElement = (
     element: Element,
     options?: Record<string, unknown>,

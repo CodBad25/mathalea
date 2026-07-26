@@ -304,7 +304,11 @@ async function fillMathField(
 
   if (promptCount > 1 && Array.isArray(answer)) {
     for (let i = 0; i < answer.length && i < promptCount; i++) {
-      await prompts[i].click()
+      // force: true car MathLive 0.110 imbrique un span partageant le même
+      // data-atom-id sous .ML__prompt (fix du hit-testing des prompts), ce
+      // qui fait échouer la vérification stricte d'actionabilité de
+      // Playwright alors que le clic réel fonctionne bien pour l'utilisateur.
+      await prompts[i].click({ force: true })
       await page.waitForTimeout(100) // Ajout d'un délai pour s'assurer que le champ est prêt à recevoir la saisie
       await champTexteMathlive.pressSequentially(answer[i].toString())
     }
