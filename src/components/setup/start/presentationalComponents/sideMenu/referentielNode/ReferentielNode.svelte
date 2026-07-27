@@ -100,106 +100,219 @@
     )
   }
 
+  // ===========================================================================
+  //  Aides au rangement des entrées du menu (annales)
+  // ===========================================================================
+
+  /** Reconnaît une année (chaîne de 4 chiffres). */
+  const YEAR_REGEX = /^\d{4}$/
+
+  /** Une entrée `[clé, valeur]` du référentiel. */
+  type SubsetEntry = [string, unknown]
+
+  /** Toutes les valeurs sont des terminaisons (niveau feuille). */
+  function allValuesAreEndings(entries: SubsetEntry[]): boolean {
+    return (
+      entries.length > 0 &&
+      entries.every(([, v]) => isJSONReferentielEnding(v))
+    )
+  }
+
+  /** Toutes les clés sont des années (niveau « liste d'années »). */
+  function allKeysAreYears(entries: SubsetEntry[]): boolean {
+    return entries.length > 0 && entries.every(([k]) => YEAR_REGEX.test(k))
+  }
+
+  /** Chaque valeur est un sous-objet dont les enfants sont des terminaisons
+   *  (niveau « liste de thèmes »). */
+  function allValuesAreEndingContainers(entries: SubsetEntry[]): boolean {
+    return (
+      entries.length > 0 &&
+      entries.every(([, v]) => {
+        if (v === null || typeof v !== 'object' || Array.isArray(v)) return false
+        const children = Object.values(v as Record<string, unknown>)
+        return (
+          children.length > 0 && children.every((c) => isJSONReferentielEnding(c))
+        )
+      })
+    )
+  }
+
+  /** Préfixe numérique d'une clé de filière (ex. `00_Général` -> 0). */
+  function numericPrefix(key: string): number | undefined {
+    const m = key.match(/^(\d+)/)
+    return m ? parseInt(m[1], 10) : undefined
+  }
+
+  /** Valeur numérique d'une année ; `+Infinity` si absente (repoussée en fin). */
+  function anneeValue(v: string | undefined): number {
+    if (!v) return Number.POSITIVE_INFINITY
+    const n = parseInt(v, 10)
+    return Number.isNaN(n) ? Number.POSITIVE_INFINITY : n
+  }
+
+  /** Index du mois (0..11) ; `+Infinity` si absent/inconnu (repoussé en fin). */
+  function monthIndex(mois: string | undefined): number {
+    if (!mois) return Number.POSITIVE_INFINITY
+    const i = monthes.indexOf(mois)
+    return i === -1 ? Number.POSITIVE_INFINITY : i
+  }
+
+  /** Valeur numérique d'un jour (`J1` -> 1) ; `+Infinity` si absent. */
+  function jourValue(jour: string | undefined): number {
+    if (!jour) return Number.POSITIVE_INFINITY
+    const n = parseInt(jour.replace('J', ''), 10)
+    return Number.isNaN(n) ? Number.POSITIVE_INFINITY : n
+  }
+
+  /** Valeur numérique du `numeroInitial` ; `+Infinity` si absent. */
+  function numeroInitialValue(v: string | undefined): number {
+    if (!v) return Number.POSITIVE_INFINITY
+    const n = parseInt(v, 10)
+    return Number.isNaN(n) ? Number.POSITIVE_INFINITY : n
+  }
+
+  /** Ordre de regroupement par `typeExercice` (ex. `dnb` avant `dnbpro`).
+   *  Les types non listés sont regroupés ensemble en fin, dans un ordre stable. */
+  const TYPE_EXERCICE_RANK: Record<string, number> = {
+    dnb: 0,
+    dnbpro: 1,
+  }
+
+  /** Rang de regroupement d'une terminaison selon son `typeExercice` ;
+   *  `+Infinity` si absent ou non référencé (repoussé en fin du regroupement). */
+  function typeExerciceRank(v: unknown): number {
+    if (v && typeof v === 'object' && 'typeExercice' in v) {
+      const t = (v as { typeExercice?: string }).typeExercice
+      if (t && t in TYPE_EXERCICE_RANK) return TYPE_EXERCICE_RANK[t]
+    }
+    return Number.POSITIVE_INFINITY
+  }
+
+  /** Compare le `lieu` (ascendant, insensible à la casse/accents) ;
+   *  les entrées incomplètes sont repoussées en fin. */
+  function compareLieu(a: string | undefined, b: string | undefined): number {
+    if (!a && b) return 1
+    if (a && !b) return -1
+    if (!a && !b) return 0
+    return a!.localeCompare(b!, 'fr')
+  }
+
+  /** Extrait les champs d'une terminaison d'examen ; renvoie `null` sinon. */
+  function examFields(v: unknown) {
+    return isExamItemInReferentiel(v)
+      ? {
+          annee: anneeValue((v as { annee?: string }).annee),
+          mois: monthIndex((v as { mois?: string }).mois),
+          lieu: (v as { lieu?: string }).lieu,
+          typeRank: typeExerciceRank(v),
+          jour: jourValue((v as { jour?: string }).jour),
+          numeroInitial: numeroInitialValue(
+            (v as { numeroInitial?: string }).numeroInitial,
+          ),
+        }
+      : null
+  }
+
   /**
-   * Ordonne les entrées d'un sous-menu à l'envers lorsque son titre contient le mot `année`
-   * afin de commencer par l'année la plus récente
+   * Comparateur des terminaisons sous un nœud ANNÉE :
+   * (A) mois descendant · (B) lieu ascendant · (C) typeExercice regroupé (`dnb` avant `dnbpro`)
+   * · (D) jour ascendant · (E) numeroInitial ascendant.
+   * Les entrées incomplètes sur un critère sont repoussées en fin de ce critère.
+   */
+  function compareEndingsByYear(a: SubsetEntry, b: SubsetEntry): number {
+    const fa = examFields(a[1])
+    const fb = examFields(b[1])
+    // une entrée non-examen est repoussée en fin
+    if (!fa && fb) return 1
+    if (fa && !fb) return -1
+    if (!fa && !fb) return 0
+    return (
+      fb!.mois - fa!.mois ||
+      compareLieu(fa!.lieu, fb!.lieu) ||
+      fa!.typeRank - fb!.typeRank ||
+      fa!.jour - fb!.jour ||
+      fa!.numeroInitial - fb!.numeroInitial
+    )
+  }
+
+  /**
+   * Comparateur des terminaisons sous un nœud THÈME :
+   * (A) année descendante · (B) mois descendant · (C) lieu ascendant · (D) typeExercice regroupé
+   * (`dnb` avant `dnbpro`) · (E) jour ascendant · (F) numeroInitial ascendant.
+   * Les entrées incomplètes sur un critère sont repoussées en fin de ce critère.
+   */
+  function compareEndingsByTheme(a: SubsetEntry, b: SubsetEntry): number {
+    const fa = examFields(a[1])
+    const fb = examFields(b[1])
+    if (!fa && fb) return 1
+    if (fa && !fb) return -1
+    if (!fa && !fb) return 0
+    return (
+      fb!.annee - fa!.annee ||
+      fb!.mois - fa!.mois ||
+      compareLieu(fa!.lieu, fb!.lieu) ||
+      fa!.typeRank - fb!.typeRank ||
+      fa!.jour - fb!.jour ||
+      fa!.numeroInitial - fb!.numeroInitial
+    )
+  }
+
+  /**
+   * Prépare la liste ordonnée des enfants d'un nœud du menu avant déploiement.
+   *
+   * Le rangement est déterminé par la **nature des enfants** (et non par le libellé
+   * du chemin), afin d'être robuste quelle que soit la section (Brevet, Bac,
+   * Épreuves de Première…, structurées « Par année » ou « Par thème ») :
+   *  - niveau feuille (terminaisons d'examens) :
+   *      · sous une année  -> mois desc, lieu asc, typeExercice regroupé, jour asc, numeroInitial asc ;
+   *      · sous un thème    -> année desc, mois desc, lieu asc, typeExercice regroupé, jour asc, numeroInitial asc ;
+   *  - liste d'années (clés 4 chiffres)        -> années décroissantes ;
+   *  - liste de thèmes (sous-objets de terminaisons) -> ordre alphabétique ascendant ;
+   *  - filières / sections                     -> préfixe numérique ascendant (ordre préservé sinon).
    */
   function prepareSubset(s: JSONReferentielObject) {
-    // console.log('======= referentiel before preparation ====')
-    // console.log(pathToThisNode.join('/'))
-    // console.log(Object.entries(s))
+    const entries = Object.entries(s)
     if (pathToThisNode.length !== 0) {
-      // console.log('object in prepareSubset (pathToThisNode): ')
-      // console.log(pathToThisNode)
-      // console.log(s)
-      // classement entrées CAN
-      if (pathToThisNode[pathToThisNode.length - 1].includes('CAN')) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        return Object.entries(s).sort(([keyA, valueA], [keyB, valueB]) => {
+      const current = pathToThisNode[pathToThisNode.length - 1]
+      // classement entrées CAN (ordre des niveaux)
+      if (current.includes('CAN')) {
+        return entries.sort(([keyA], [keyB]) => {
           return levels.indexOf(keyA) - levels.indexOf(keyB)
         })
       }
-      // classement des entrées par années décroissantes
-      const key = pathToThisNode[
-        pathToThisNode.length - 1
-      ] as keyof typeof codeToLevelList
-      if (codeToLevelList[key]?.includes('année')) {
-        return Object.entries(s).reverse()
+      // niveau feuille : terminaisons d'examens
+      if (allValuesAreEndings(entries)) {
+        return YEAR_REGEX.test(current)
+          ? entries.sort(compareEndingsByYear)
+          : entries.sort(compareEndingsByTheme)
       }
-      // classement des entrées par années décroissantes
-      if (pathToThisNode[pathToThisNode.length - 1].includes('année')) {
-        return Object.entries(s).reverse()
-      }
-
-      // classement des thèmes dans l'ordre alphabétique
-      const key2 = pathToThisNode[
-        pathToThisNode.length - 1
-      ] as keyof typeof codeToLevelList
-      if (codeToLevelList[key2]?.includes('thème')) {
-        return Object.entries(s).sort(([keyA, valueA], [keyB, valueB]) => {
-          return keyA.localeCompare(keyB, 'fr')
-        })
-      }
-
-      // classement des thèmes dans l'ordre alphabétique
-      if (pathToThisNode[pathToThisNode.length - 1].includes('Tags')) {
-        return Object.entries(s).sort(([keyA, valueA], [keyB, valueB]) => {
-          return keyA.localeCompare(keyB, 'fr')
-        })
-      }
-
-      // classement des thèmes dans l'ordre alphabétique
-      if (pathToThisNode[pathToThisNode.length - 1].includes('Tags')) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const e = Object.entries(s).sort(([keyA, valueA], [keyB, valueB]) => {
-          return keyA.localeCompare(keyB, 'fr')
-        })
-
-        // console.log('======= referentiel after (theme) ====')
-        // console.log(e)
-        return e
-      }
-      // classement des entrées par années : sujets 1 et 2
-      const regExpForExactlyFourDigits = /^\d{4}$/gm
-      if (
-        regExpForExactlyFourDigits.test(
-          pathToThisNode[pathToThisNode.length - 1],
+      // liste d'années -> ordre descendant
+      if (allKeysAreYears(entries)) {
+        return entries.sort(
+          ([keyA], [keyB]) => parseInt(keyB, 10) - parseInt(keyA, 10),
         )
-      ) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        return Object.entries(s).sort(([keyA, valueA], [keyB, valueB]) => {
-          if (
-            isExamItemInReferentiel(valueA) &&
-            isExamItemInReferentiel(valueB) &&
-            valueA.jour &&
-            valueB.jour
-          ) {
-            const jourA = parseInt(valueA.jour.replace('J', ''))
-            const jourB = parseInt(valueB.jour.replace('J', ''))
-            const moisA = monthes.indexOf(valueA.mois ?? '')
-            const moisB = monthes.indexOf(valueB.mois ?? '')
-            return (
-              moisB - moisA ||
-              valueA.lieu.localeCompare(valueB.lieu) ||
-              jourA - jourB
-            )
-          } else {
-            return 0
-          }
-        })
       }
-      return Object.entries(s)
+      // liste de thèmes -> ordre alphabétique ascendant
+      if (allValuesAreEndingContainers(entries)) {
+        return entries.sort(([keyA], [keyB]) => keyA.localeCompare(keyB, 'fr'))
+      }
+      // filières / sections : préfixe numérique ascendant (ordre préservé sinon)
+      return entries.sort(([keyA], [keyB]) => {
+        const na = numericPrefix(keyA)
+        const nb = numericPrefix(keyB)
+        if (na === undefined && nb === undefined) return 0
+        return (na ?? Number.POSITIVE_INFINITY) - (nb ?? Number.POSITIVE_INFINITY)
+      })
     } else {
-      // classement dans l'ordre alphabétique
+      // niveau racine : ordre alphabétique pour ces référentiels
       if (
         'Géométrie dynamique' === levelTitle ||
         'Vos ressources' === levelTitle
       ) {
-        return Object.entries(s).sort(([keyA, valueA], [keyB, valueB]) => {
-          return keyA.localeCompare(keyB, 'fr')
-        })
+        return entries.sort(([keyA], [keyB]) => keyA.localeCompare(keyB, 'fr'))
       }
-      return Object.entries(s)
+      return entries
     }
   }
 
@@ -249,6 +362,36 @@
   Le composant s'appelle lui-même afin d'assurer récursivement le parcours entier du référentiel.
   On détecte si l'objet passé en paramètre est du type `JSONReferentielEnding` pour s'arrèter.
   Dans ce cas, le composant `ReferentielEnding.svelte` est appelé.
+
+  #### Organisation
+  Le rangement des entrées est réalisé **à la volée**, au moment d'afficher un nœud : la
+  fonction `prepareSubset` est réexécutée à chaque déploiement (via `$: items = prepareSubset(subset)`)
+  et produit la liste ordonnée des enfants directs du nœud courant. L'ordre dans lequel les entrées
+  apparaissent dans le référentiel passé en paramètre (`subset`) **n'est pas utilisé** : il est
+  intégralement recalculé à l'affichage, aussi bien pour les nœuds intermédiaires que pour les
+  terminaisons.
+
+  Le rangement est déterminé par la **nature des enfants** du nœud courant (et non par le libellé
+  du chemin), afin de rester valable quelle que soit la section (Brevet, Baccalauréat, Épreuves de
+  Première…) et sa structure (« Par année » ou « Par thème ») :
+
+  - **niveau feuille** (les valeurs sont des terminaisons d'examens) :
+      - sous un nœud **année** (clé `YYYY`) : mois descendant, puis lieu ascendant, puis
+        `typeExercice` regroupé (`dnb` avant `dnbpro`), puis jour ascendant (`J1` avant `J2`),
+        puis `numeroInitial` ascendant ;
+      - sous un nœud **thème** : année descendante, puis mois descendant, puis lieu ascendant,
+        puis `typeExercice` regroupé (`dnb` avant `dnbpro`), puis jour ascendant,
+        puis `numeroInitial` ascendant ;
+  - **liste d'années** (clés `YYYY`) : ordre descendant ;
+  - **liste de thèmes** (sous-objets dont les enfants sont des terminaisons) : ordre alphabétique
+    ascendant ;
+  - **filières / sections** (p. ex. `00_Général`, `10_STI2D`) : ordre du préfixe numérique ascendant,
+    ordre d'insertion préservé en l'absence de préfixe.
+
+  Sur chaque critère, une entrée incomplète (champ absent ou non numérique) est **repoussée en fin**
+  de ce critère ; les critères suivants continuent de s'appliquer dans l'ordre hiérarchique. Les
+  entrées CAN ainsi que le niveau racine (`pathToThisNode` vide) suivent un rangement spécifique
+  conservé tel quel.
 
   #### Paramètres
   - **subset** (_JSONReferentielObject_) : la branche du référentiel à afficher.

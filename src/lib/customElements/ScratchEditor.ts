@@ -1,5 +1,5 @@
 import * as ScratchBlocksModule from 'scratch-blocks/dist/vertical'
-import scratchFr from '../../json/scratchFr.json'
+import scratchFr from '@scratch2latex/scratch-core/json/scratchFr.json'
 import {
   areArithmeticAstsEquivalent,
   blocklyWorkspaceToArithmeticAst,

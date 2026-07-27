@@ -24,6 +24,12 @@ Pour créer un exercice sans modifier ces contrats, commencez par
 | [Scratch et Blockly](interactivite/scratch-blockly.md) | Architecture des éditeurs visuels |
 | [Tableur](interactivite/tableur.md) | Rendu HTML, sérialisation et sortie imprimable |
 
+## Scratch
+
+| Sujet | Rôle |
+| --- | --- |
+| [`@scratch2latex/scratch-core`](scratch/scratch-core.md) | Mise à jour de `scratchblocks`, dictionnaire français et exports du paquet |
+
 ## Exports
 
 | Sujet | Rôle |

@@ -1,7 +1,8 @@
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteGras, texteItalique } from '../../lib/outils/embellissements'
+import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -27,23 +28,51 @@ export default class EgaliteFG4 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après « Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
     )
     this.consigne +=
-      "<br><br>Le DNB est organisé en France métropolitaine, Outre-Mer et centres étrangers. En 2016, l'inventaire des prénoms dans les sujets du DNB a permis d'établir un tableau recensant, zone par zone, le nombre de personnages féminins et masculins apparaissant dans quatre types d'activités : activité purement mathématique, métier, activité sportive et activité courante.<br><br>"
-    this.consigne += "Voici un extrait de ce tableau :<br>"
+      "<br><br>Le DNB est organisé en France métropolitaine, Outre-Mer et centres étrangers. En 2016, l'inventaire des prénoms dans les sujets du DNB a permis d'établir le tableau suivant :<br>"
+    const th = 'style="border: 1px solid #888; padding: 3px 6px; font-size:0.85rem;"'
+    const td = 'style="border: 1px solid #888; padding: 3px 6px; font-size:0.85rem; text-align:center;"'
     const tableauHtml = `<table style="border-collapse: collapse; margin: 10px 0;">
-      <tr><th style="border: 1px solid #888; padding: 4px 10px;"></th><th style="border: 1px solid #888; padding: 4px 10px;">Activité purement mathématique<br>Fille/femme</th><th style="border: 1px solid #888; padding: 4px 10px;">Activité purement mathématique<br>Garçon/homme</th><th style="border: 1px solid #888; padding: 4px 10px;">Activité sportive<br>Fille/femme</th><th style="border: 1px solid #888; padding: 4px 10px;">Activité courante<br>Fille/femme</th></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">Nouvelle-Calédonie</td><td style="border: 1px solid #888; padding: 4px 10px;">1</td><td style="border: 1px solid #888; padding: 4px 10px;">2</td><td style="border: 1px solid #888; padding: 4px 10px;">-</td><td style="border: 1px solid #888; padding: 4px 10px;">8</td></tr>
-      <tr><td style="border: 1px solid #888; padding: 4px 10px;">TOTAL (toutes zones)</td><td style="border: 1px solid #888; padding: 4px 10px;">4</td><td style="border: 1px solid #888; padding: 4px 10px;">4</td><td style="border: 1px solid #888; padding: 4px 10px;">4</td><td style="border: 1px solid #888; padding: 4px 10px;">10</td></tr>
-      </table>
-      <p>Par ailleurs, la ligne TOTAL indique aussi : Métier, Fille/femme : <b>0</b> ; Garçon/homme : <b>6</b>. Activité sportive, Garçon/homme : <b>7</b>. Activité courante, Garçon/homme : <b>19</b>.</p>`
+      <tr><th ${th}></th><th ${th} colspan="2">Activité purement mathématique</th><th ${th} colspan="2">Métier</th><th ${th} colspan="2">Activité sportive</th><th ${th} colspan="2">Activité courante</th></tr>
+      <tr><th ${th}>Personnage</th><th ${th}>Fille/femme</th><th ${th}>Garçon/homme</th><th ${th}>Fille/femme</th><th ${th}>Garçon/homme</th><th ${th}>Fille/femme</th><th ${th}>Garçon/homme</th><th ${th}>Fille/femme</th><th ${th}>Garçon/homme</th></tr>
+      <tr><td ${td}>Pondichéry</td><td ${td}></td><td ${td}></td><td ${td}></td><td ${td}>3</td><td ${td}></td><td ${td}>1</td><td ${td}>2</td><td ${td}>4</td></tr>
+      <tr><td ${td}>Amérique du Nord</td><td ${td}>1</td><td ${td}></td><td ${td}></td><td ${td}></td><td ${td}></td><td ${td}>2</td><td ${td}></td><td ${td}></td></tr>
+      <tr><td ${td}>Centres étrangers</td><td ${td}></td><td ${td}></td><td ${td}></td><td ${td}></td><td ${td}></td><td ${td}></td><td ${td}>4</td><td ${td}>3</td></tr>
+      <tr><td ${td}>Polynésie</td><td ${td}></td><td ${td}>1</td><td ${td}></td><td ${td}></td><td ${td}>3</td><td ${td}>3</td><td ${td}></td><td ${td}>1</td></tr>
+      <tr><td ${td}>Métropole</td><td ${td}></td><td ${td}></td><td ${td}></td><td ${td}>1</td><td ${td}></td><td ${td}></td><td ${td}></td><td ${td}>1</td></tr>
+      <tr><td ${td}>Asie</td><td ${td}>1</td><td ${td}></td><td ${td}></td><td ${td}></td><td ${td}>1</td><td ${td}>1</td><td ${td}>1</td><td ${td}></td></tr>
+      <tr><td ${td}>Métropole (sept)</td><td ${td}>1</td><td ${td}>1</td><td ${td}></td><td ${td}>1</td><td ${td}></td><td ${td}></td><td ${td}>1</td><td ${td}>1</td></tr>
+      <tr><td ${td}>Amérique du Sud</td><td ${td}></td><td ${td}></td><td ${td}></td><td ${td}>1</td><td ${td}></td><td ${td}></td><td ${td}>2</td><td ${td}>1</td></tr>
+      <tr><td ${td}>Nouvelle-Calédonie</td><td ${td}>1</td><td ${td}>2</td><td ${td}></td><td ${td}></td><td ${td}></td><td ${td}></td><td ${td}></td><td ${td}>8</td></tr>
+      <tr><td ${td}><b>TOTAL</b></td><td ${td}><b>4</b></td><td ${td}><b>4</b></td><td ${td}><b>0</b></td><td ${td}><b>6</b></td><td ${td}><b>4</b></td><td ${td}><b>7</b></td><td ${td}><b>10</b></td><td ${td}><b>19</b></td></tr>
+      </table>`
     const tableauLatex =
-      'Extrait du tableau : Nouvelle-Calédonie, activité purement mathématique : 1 fille, 2 garçons ; activité courante : 8 filles.<br>' +
-      'Ligne TOTAL (toutes zones) : activité purement mathématique 4 filles/4 garçons ; métier 0 fille/6 garçons ; activité sportive 4 filles/7 garçons ; activité courante 10 filles/19 garçons.<br>'
+      '{\\small\\begin{center}\\begin{tabular}{|l|c|c|c|c|c|c|c|c|}\n\\hline\n' +
+      ' & \\multicolumn{2}{c|}{Math.} & \\multicolumn{2}{c|}{Métier} & \\multicolumn{2}{c|}{Sportive} & \\multicolumn{2}{c|}{Courante} \\\\\n' +
+      'Personnage & F & G & F & G & F & G & F & G \\\\\n\\hline\n' +
+      'Pondichéry & & & & 3 & & 1 & 2 & 4 \\\\\n\\hline\n' +
+      'Amérique du Nord & 1 & & & & & 2 & & \\\\\n\\hline\n' +
+      'Centres étrangers & & & & & & & 4 & 3 \\\\\n\\hline\n' +
+      'Polynésie & & 1 & & & 3 & 3 & & 1 \\\\\n\\hline\n' +
+      'Métropole & & & & 1 & & & & 1 \\\\\n\\hline\n' +
+      'Asie & 1 & & & & 1 & 1 & 1 & \\\\\n\\hline\n' +
+      'Métropole (sept) & 1 & 1 & & 1 & & & 1 & 1 \\\\\n\\hline\n' +
+      'Amérique du Sud & & & & 1 & & & 2 & 1 \\\\\n\\hline\n' +
+      'Nouvelle-Calédonie & 1 & 2 & & & & & & 8 \\\\\n\\hline\n' +
+      '\\textbf{TOTAL} & \\textbf{4} & \\textbf{4} & \\textbf{0} & \\textbf{6} & \\textbf{4} & \\textbf{7} & \\textbf{10} & \\textbf{19} \\\\\n\\hline\n' +
+      '\\end{tabular}\\end{center}}\n' +
+      '(F = Fille/femme, G = Garçon/homme)<br>'
     this.consigne += context.isHtml ? tableauHtml : tableauLatex
+    this.consigne +=
+      "<br>" + texteGras('Pour lire le tableau') + ".<br>Il y a $4$ personnages féminins intervenant lors d'activités courantes dans le sujet de mathématiques du DNB « Centres étrangers » en 2016.<br>" +
+      "Il y a $4$ personnages masculins intervenant lors d'activités purement mathématiques et relevés dans les sujets de mathématiques des zones géographiques citées dans ce tableau."
     this.nbQuestions = 4
     this.nbQuestionsModifiable = false
+    this.comment =
+      'Source : femmes et maths - ' +
+      ajouterLien('https://femmes-et-maths.fr/wp-content/uploads/2023/06/inegalites-hommes-femmes.pdf', 'lien')
   }
 
   nouvelleVersion() {
@@ -78,14 +107,14 @@ export default class EgaliteFG4 extends Exercice {
       'Combien de fois apparaît un personnage masculin dans le sujet de mathématiques du DNB en Nouvelle-Calédonie ?'
     if (this.interactif) texte1 += ajouteChampTexteMathLive(this, 1) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 2 } })
-    const correction1 = "D'après le tableau, un personnage masculin apparaît $2$ fois."
+    const correction1 = `D'après le tableau, un personnage masculin apparaît $${miseEnEvidence('2')}$ fois.`
 
     // Q2 : fille Nouvelle-Calédonie maths
     let texte2 =
       'Même question avec un personnage féminin.'
     if (this.interactif) texte2 += ajouteChampTexteMathLive(this, 2) + '<br>'
     handleAnswers(this, 2, { reponse: { value: 1 } })
-    const correction2 = "D'après le tableau, un personnage féminin apparaît $1$ fois."
+    const correction2 = `D'après le tableau, un personnage féminin apparaît $${miseEnEvidence('1')}$ fois.`
 
     // Q3 : sportives vs courantes (QCM)
     const texteQ3 =

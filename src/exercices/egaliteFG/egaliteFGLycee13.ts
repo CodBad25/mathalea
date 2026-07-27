@@ -1,7 +1,8 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteGras, texteItalique } from '../../lib/outils/embellissements'
+import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -23,19 +24,23 @@ export const egaliteFillesGarcons = true
  * Transcription par Lydie El-Halougi
  */
 export default class EgaliteFGLycee13 extends Exercice {
+  commentaireDebat = ''
+
   constructor() {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après « Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
     )
     this.consigne +=
       "<br><br>En 2024, une femme consacre en moyenne $12$ heures par semaine aux tâches domestiques, contre $5$ heures pour un homme. On suppose que chaque année, les hommes augmentent leur participation de $0{,}5$ heure par semaine, tandis que les femmes diminuent leur temps de $0{,}3$ heure par semaine.<br>" +
       "On note $F_n$ le temps hebdomadaire des femmes et $H_n$ celui des hommes, $n$ années après 2024, avec $F_0=12$ et $H_0=5$."
     this.nbQuestions = 4
     this.nbQuestionsModifiable = false
-    this.comment =
-      'Pour débattre.<br>Discutez de la pertinence de cette modélisation et de la façon dont cette évolution pourrait être influencée par d\'autres facteurs sociaux.'
+    this.commentaireDebat =
+      texteGras('Pour débattre') + '.<br>Discutez de la pertinence de cette modélisation et de la façon dont cette évolution pourrait être influencée par d\'autres facteurs sociaux.'
+    this.besoinFormulaireCaseACocher = ['Afficher « Pour débattre »', true]
+    this.sup = true
   }
 
   nouvelleVersion() {
@@ -56,24 +61,24 @@ export default class EgaliteFGLycee13 extends Exercice {
     let texte0 = texteQ0
     if (!context.isAmc) texte0 += monQcm0.texte
     const correction0 =
-      "$(F_n)$ est arithmétique de raison $-0{,}3$ et de premier terme $12$ (donc $F_n=12-0{,}3n$). $(H_n)$ est arithmétique de raison $0{,}5$ et de premier terme $5$ (donc $H_n=5+0{,}5n$)."
+      `Les deux suites sont $${miseEnEvidence('\\text{arithmétiques}')}$ : $(F_n)$ de raison $-0{,}3$ et de premier terme $12$ (donc $F_n=12-0{,}3n$) ; $(H_n)$ de raison $0{,}5$ et de premier terme $5$ (donc $H_n=5+0{,}5n$).`
 
     let texte1 = 'Combien d\'heures les femmes consacreront-elles aux tâches domestiques en 2030 ($n=6$) ?'
     if (this.interactif) texte1 += ajouteChampTexteMathLive(this, 1, '', { texteApres: 'h' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 10.2 } })
-    const correction1 = '$F_6=12-0{,}3\\times 6=12-1{,}8=10{,}2$ h.'
+    const correction1 = `$F_6=12-0{,}3\\times 6=12-1{,}8=${miseEnEvidence('10{,}2')}$ h.`
 
     let texte2 = 'Combien d\'heures les hommes consacreront-ils aux tâches domestiques en 2030 ($n=6$) ?'
     if (this.interactif) texte2 += ajouteChampTexteMathLive(this, 2, '', { texteApres: 'h' }) + '<br>'
     handleAnswers(this, 2, { reponse: { value: 8 } })
-    const correction2 = '$H_6=5+0{,}5\\times 6=5+3=8$ h.'
+    const correction2 = `$H_6=5+0{,}5\\times 6=5+3=${miseEnEvidence('8')}$ h.`
 
     let texte3 =
       'En résolvant $F_n=H_n$, au bout de combien d\'années (valeur exacte) les hommes et les femmes consacreront-ils le même temps aux tâches domestiques ?'
     if (this.interactif) texte3 += ajouteChampTexteMathLive(this, 3, '', { texteApres: 'ans' }) + '<br>'
     handleAnswers(this, 3, { reponse: { value: 8.75 } })
     const correction3 =
-      "$12-0{,}3n=5+0{,}5n \\iff 7=0{,}8n \\iff n=8{,}75$ : le temps consacré serait théoriquement égal au bout de $8{,}75$ ans, soit vers la fin de l'année 2032. Entre la 8e année (où les femmes font encore un peu plus que les hommes) et la 9e (où elles en font déjà un peu moins), l'égalité exacte n'est donc atteinte qu'à une date non entière."
+      `$12-0{,}3n=5+0{,}5n \\iff 7=0{,}8n \\iff n=${miseEnEvidence('8{,}75')}$ : le temps consacré serait théoriquement égal au bout de $8{,}75$ ans, soit vers la fin de l'année 2032. Entre la 8e année (où les femmes font encore un peu plus que les hommes) et la 9e (où elles en font déjà un peu moins), l'égalité exacte n'est donc atteinte qu'à une date non entière.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0
@@ -83,6 +88,8 @@ export default class EgaliteFGLycee13 extends Exercice {
     this.listeCorrections[2] = correction2
     this.listeQuestions[3] = texte3
     this.listeCorrections[3] = correction3
+    if (this.sup) this.listeQuestions[this.listeQuestions.length - 1] += '<br><br>' + this.commentaireDebat
+
 
     listeQuestionsToContenu(this)
   }

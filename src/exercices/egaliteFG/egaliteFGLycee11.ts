@@ -1,6 +1,7 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
+import { ajouterLien } from '../../lib/outils/enrichissements'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -25,7 +26,7 @@ export default class EgaliteFGLycee11 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après « Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
     )
     this.consigne +=
       "<br><br>En 2020, le salaire moyen des femmes dans une entreprise était de $2\\,000$ € par mois, celui des hommes de $2\\,300$ €. Pour réduire l'écart, les ressources humaines décident d'une augmentation salariale moyenne de $2\\,\\%$ par an pour les femmes et de $1{,}5\\,\\%$ par an pour les hommes.<br>" +
@@ -41,17 +42,17 @@ export default class EgaliteFGLycee11 extends Exercice {
     let texte0 = 'Calculer $F_1$ et interpréter ce résultat.'
     if (this.interactif) texte0 += ajouteChampTexteMathLive(this, 0, '', { texteApres: '€' }) + '<br>'
     handleAnswers(this, 0, { reponse: { value: 2040 } })
-    const correction0 = '$F_1=2\\,000\\times 1{,}02=2\\,040$ € : le salaire moyen des femmes en 2021.'
+    const correction0 = `$F_1=2\\,000\\times 1{,}02=${miseEnEvidence('2\\,040')}$ € : le salaire moyen des femmes en 2021.`
 
     let texte1 = 'Calculer $H_1$ et interpréter ce résultat.'
     if (this.interactif) texte1 += ajouteChampTexteMathLive(this, 1, '', { texteApres: '€' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 2334.5 } })
-    const correction1 = '$H_1=2\\,300\\times 1{,}015=2\\,334{,}5$ € : le salaire moyen des hommes en 2021.'
+    const correction1 = `$H_1=2\\,300\\times 1{,}015=${miseEnEvidence('2\\,334{,}5')}$ € : le salaire moyen des hommes en 2021.`
 
     const texte2 =
       'Quelle est la nature des suites $(F_n)$ et $(H_n)$ ? Justifier en donnant leurs éléments caractéristiques.'
     const correction2 =
-      "$(F_n)$ est géométrique de raison $1{,}02$ et de premier terme $2\\,000$ (donc $F_n=2\\,000\\times 1{,}02^n$). $(H_n)$ est géométrique de raison $1{,}015$ et de premier terme $2\\,300$ (donc $H_n=2\\,300\\times 1{,}015^n$)."
+      `Les deux suites sont $${miseEnEvidence('\\text{géométriques}')}$ : $(F_n)$ de raison $1{,}02$ et de premier terme $2\\,000$ (donc $F_n=2\\,000\\times 1{,}02^n$) ; $(H_n)$ de raison $1{,}015$ et de premier terme $2\\,300$ (donc $H_n=2\\,300\\times 1{,}015^n$).`
 
     let texte3 = 'Au bout de combien d\'années le salaire moyen des femmes dépassera-t-il celui des hommes ?'
     if (this.interactif) texte3 += ajouteChampTexteMathLive(this, 3, '', { texteApres: 'ans' }) + '<br>'

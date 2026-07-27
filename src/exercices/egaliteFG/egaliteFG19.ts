@@ -1,5 +1,6 @@
 import { propositionsQcm } from '../../lib/interactif/qcm'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
+import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -25,10 +26,11 @@ export default class EgaliteFG19 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après « Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
     )
     this.consigne +=
-      "<br><br>Sophie Germain (1776-1831), mathématicienne autodidacte, a dû apprendre les mathématiques seule et se faire passer pour un homme pour avoir accès aux travaux scientifiques de son époque. Ses travaux sur l'élasticité et la résistance des surfaces ont contribué, bien des années après sa mort, aux théories mathématiques utilisées pour construire un monument célèbre.<br>" +
+      (context.isHtml ? '<div class="not-prose" style="text-align:center; margin: 0.75rem 0;"><img src="/alea/images/egalite/germain-historique.jpg" alt="Portrait de Sophie Germain" style="width:130px; height:auto; border-radius:9999px; border:3px solid #f15929;"><p style="font-size:0.7rem; font-style:italic; opacity:0.7;">Sophie Germain (1776-1831) — Source : gravure, Œuvres philosophiques, 1896, domaine public</p></div>' : '') +
+      "<br>Sophie Germain (1776-1831), mathématicienne autodidacte, a dû apprendre les mathématiques seule et se faire passer pour un homme pour avoir accès aux travaux scientifiques de son époque. Ses travaux sur l'élasticité et la résistance des surfaces ont contribué, bien des années après sa mort, aux théories mathématiques utilisées pour construire un monument célèbre.<br>" +
       'Pour chaque question du QCM suivant, une seule réponse est exacte.'
     this.nbQuestions = 5
     this.nbQuestionsModifiable = false
@@ -51,7 +53,7 @@ export default class EgaliteFG19 extends Exercice {
     const monQcm0 = propositionsQcm(this, 0)
     let texte0 = texteQ0
     if (!context.isAmc) texte0 += monQcm0.texte
-    const correction0 = "$2+\\dfrac{4}{3}=\\dfrac{6}{3}+\\dfrac{4}{3}=\\dfrac{10}{3}$ : la réponse exacte est $\\dfrac{10}{3}$ (réponse A)."
+    const correction0 = `$2+\\dfrac{4}{3}=\\dfrac{6}{3}+\\dfrac{4}{3}=${miseEnEvidence('\\dfrac{10}{3}')}$ (réponse A).`
 
     const texteQ1 = "L'expression factorisée de $(2x-1)(3x-4)-(3x-4)^2$ est :"
     this.autoCorrection[1] = {
@@ -67,9 +69,12 @@ export default class EgaliteFG19 extends Exercice {
     let texte1 = texteQ1
     if (!context.isAmc) texte1 += monQcm1.texte
     const correction1 =
-      "$(2x-1)(3x-4)-(3x-4)^2=(3x-4)\\big[(2x-1)-(3x-4)\\big]=(3x-4)(-x+3)$ (réponse A)."
+      `$(2x-1)(3x-4)-(3x-4)^2=(3x-4)\\big[(2x-1)-(3x-4)\\big]=${miseEnEvidence('(3x-4)(-x+3)')}$ (réponse A).`
 
+    const schemaDesserte =
+      (context.isHtml ? '<div class="not-prose" style="text-align:center; margin: 0.75rem 0;"><img src="/alea/images/egalite/desserte.jpg" alt="Desserte pliante en bois avec AB=76 cm, OB=45 cm, OC=50 cm, CD=100 cm" style="max-width:230px; width:100%; height:auto;"></div>' : '')
     const texteQ2 =
+      schemaDesserte +
       'Pour cette desserte en bois, les points $B$, $O$, $C$, ainsi que les points $A$, $O$, $D$, sont alignés, avec $AB=76$ cm, $OB=45$ cm, $OC=50$ cm et $CD=100$ cm. Alors, on peut dire que :'
     this.autoCorrection[2] = {
       enonce: texteQ2,
@@ -86,7 +91,10 @@ export default class EgaliteFG19 extends Exercice {
     const correction2 =
       "Pour appliquer la réciproque du théorème de Thalès dans la configuration où $(BOC)$ et $(AOD)$ sont deux droites sécantes en $O$, il faudrait connaître les longueurs $OA$ et $OD$ (et non les longueurs externes $AB$ et $CD$). Faute de connaître $OA$ et $OD$, on ne peut donc rien conclure sur le parallélisme de $(AB)$ et $(CD)$ avec les seules informations données (réponse C)."
 
+    const schemaRST =
+      (context.isHtml ? '<div class="not-prose" style="text-align:center; margin: 0.75rem 0;"><img src="/alea/images/egalite/triangle-rst.jpg" alt="Triangle RST avec RS=8 cm, RT=4,5 cm, ST=9,2 cm" style="max-width:200px; width:100%; height:auto;"></div>' : '')
     const texteQ3 =
+      schemaRST +
       'Dans un triangle $RST$ tel que $RS=8$ cm, $RT=4{,}5$ cm et $ST=9{,}2$ cm, on peut dire que :'
     this.autoCorrection[3] = {
       enonce: texteQ3,
@@ -101,7 +109,7 @@ export default class EgaliteFG19 extends Exercice {
     let texte3 = texteQ3
     if (!context.isAmc) texte3 += monQcm3.texte
     const correction3 =
-      "Le plus grand côté est $[ST]$ : $ST^2=9{,}2^2=84{,}64$. Or $RS^2+RT^2=8^2+4{,}5^2=64+20{,}25=84{,}25$. Comme $84{,}64\\neq 84{,}25$, le triangle $RST$ n'est pas rectangle (réponse C)."
+      `Le plus grand côté est $[ST]$ : $ST^2=9{,}2^2=84{,}64$. Or $RS^2+RT^2=8^2+4{,}5^2=64+20{,}25=84{,}25$. Comme $84{,}64\\neq 84{,}25$, $${miseEnEvidence("\\text{le triangle }RST\\text{ n'est pas rectangle}")}$ (réponse C).`
 
     const texteQ4 =
       'En comptant le nombre de réponses A obtenues aux quatre questions précédentes, quelle construction célèbre a été rendue possible grâce aux travaux de Sophie Germain ?'
@@ -119,7 +127,7 @@ export default class EgaliteFG19 extends Exercice {
     let texte4 = texteQ4
     if (!context.isAmc) texte4 += monQcm4.texte
     const correction4 =
-      "Les réponses A sont obtenues aux questions $1$ et $2$ (soit $2$ réponses A) : c'est donc la tour Eiffel, comme l'indique le texte introductif sur les travaux de Sophie Germain sur l'élasticité et la résistance des surfaces."
+      `Les réponses A sont obtenues aux questions $1$ et $2$ (soit $2$ réponses A) : c'est donc $${miseEnEvidence('\\text{la tour Eiffel}')}$, comme l'indique le texte introductif sur les travaux de Sophie Germain sur l'élasticité et la résistance des surfaces.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

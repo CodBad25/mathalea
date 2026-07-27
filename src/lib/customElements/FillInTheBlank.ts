@@ -30,6 +30,12 @@ export type FillInTheBlankVerificationCallback = (
 
 export type FillInTheBlankOptions = {
   id?: string
+  /**
+   * Identifiant de l'élément `<fill-in-the-blank>` lui-même.
+   * À préciser quand une même question contient plusieurs champs (par exemple
+   * un champ par cellule d'un tableau) afin de garder des identifiants uniques.
+   */
+  elementId?: string
   className?: string
   dataKeyboard?: string
   content?: string
@@ -56,6 +62,7 @@ export class FillInTheBlankElement extends MathaleaCustomElement {
 
   static create({
     id,
+    elementId,
     numeroExercice,
     questionIndex,
     className = 'fillInTheBlanks',
@@ -67,7 +74,9 @@ export class FillInTheBlankElement extends MathaleaCustomElement {
   }: FillInTheBlankCreateOptions): string {
     const legacyMathfieldId =
       id ?? `champTexteEx${numeroExercice}Q${questionIndex}`
-    const computedId = `${FillInTheBlankElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
+    const computedId =
+      elementId ??
+      `${FillInTheBlankElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
     const computedCallbackName =
       verifyCallbackName ??
       (verifyCallback == null ? undefined : `${legacyMathfieldId}-verification`)

@@ -110,10 +110,11 @@
       if (saved != null) {
         const parsed = JSON.parse(saved)
         if (['code', 'split', 'preview'].includes(parsed.displayMode)) {
-          displayMode = parsed.displayMode
+          const restoredDisplayMode = parsed.displayMode as DisplayMode
+          displayMode = restoredDisplayMode
           // le bouton Réglages n'existe qu'en Aperçu : hors de ce mode, le
           // volet doit rester fermé (isSettingsOpen n'est pas persisté)
-          if (displayMode !== 'preview') isSettingsOpen = false
+          if (restoredDisplayMode !== 'preview') isSettingsOpen = false
         }
         if (typeof parsed.showOverlay === 'boolean') {
           showOverlay = parsed.showOverlay

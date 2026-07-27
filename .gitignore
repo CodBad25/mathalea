@@ -51,3 +51,5 @@ v8-compile-cache-0/x64/10.2.154.26-node.28/zSusrzSlocalzSlibzSnode_moduleszSpnpm
 .gitignore
 src/exercices/can/TSpe/canTSpeS10.ts
 variants-report.txt
+.claude/settings.json
+.github/

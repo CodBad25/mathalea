@@ -159,6 +159,32 @@ handleAnswers(
 
 Le helper injecte un custom element `tableau-mathlive`.
 
+### Plusieurs champs dans une même cellule
+
+Une cellule vide de `AddTabDbleEntryMathlive` ne contient qu'un seul champ. Quand une cellule doit contenir plusieurs trous (par exemple `\ldots + \dfrac{\ldots}{10} + \dfrac{\ldots}{100}`), on y place un `fill-in-the-blank` : la cellule est alors une cellule HTML (`latex: false`) dont le texte est le custom element.
+
+```ts
+import { FillInTheBlankElement } from '../../lib/customElements/FillInTheBlank'
+
+const cellule: Icell = {
+  texte: FillInTheBlankElement.create({
+    id: `champTexteEx${numeroExercice}Q0L${ligne}C${colonne}`, // id du math-field
+    elementId: `fill-in-the-blankEx${numeroExercice}Q0L${ligne}C${colonne}`, // id de l'élément
+    numeroExercice,
+    questionIndex: 0,
+    dataKeyboard,
+    content: '\\placeholder[a]{}+\\dfrac{\\placeholder[b]{}}{10}',
+  }),
+  latex: false,
+  gras: false,
+  color: 'black',
+}
+```
+
+`elementId` est indispensable dès qu'une question contient plusieurs `fill-in-the-blank` : sans lui, tous les éléments partagent l'identifiant `fill-in-the-blankEx<n>Q<i>`.
+
+La vérification par cellule de `verifyTableauMathLive()` ne sait pas lire les trous d'un champ : il faut fournir un `callback` à `handleAnswers()`, qui lit chaque trou avec `getPromptValue(nom)`, le compare avec `fonctionComparaison()`, colore le trou avec `setPromptState(nom, 'correct' | 'incorrect', true)` et renvoie `{ isOk, feedback, score }`. Exemple complet : [`src/exercices/6e/auto6N2B-1.ts`](../../../../src/exercices/6e/auto6N2B-1.ts).
+
 ## Éditeur Instrumenpoche
 
 À utiliser pour faire compléter un programme de construction aux instruments.

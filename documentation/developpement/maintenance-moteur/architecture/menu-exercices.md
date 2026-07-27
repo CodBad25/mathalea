@@ -66,4 +66,4 @@ L'apparence d'un noeud du menu dépend à la fois de sa profondeur dans `emptyRe
 
 ## Fichiers non consommés dans `src/` (à supprimer)
 
-Ces fichiers existent dans `src/json/` mais n'ont pas de consommateur identifié dans `src/` au moment de la rédaction de cette page : `exercicesList.json`, `allExercice.json`, `scratchFr.json`, `referentiel2nd.json`, `2ndeAvecSousThemes.json`, `2ndeListeIndividuelle.json`, `3eAvecSousThemes.json`, `3eListeIndividuelle.json`, `4eAvecSousThemes.json`, `4eListeIndividuelle.json`, `5eAvecSousThemes.json`, `5eListeIndividuelle.json`, `6emeAvecSousTheme.json`, `6emeListeIndividuelle.json`.
+Ces fichiers existent dans `src/json/` mais n'ont pas de consommateur identifié dans `src/` au moment de la rédaction de cette page : `exercicesList.json`, `allExercice.json`, `referentiel2nd.json`, `2ndeAvecSousThemes.json`, `2ndeListeIndividuelle.json`, `3eAvecSousThemes.json`, `3eListeIndividuelle.json`, `4eAvecSousThemes.json`, `4eListeIndividuelle.json`, `5eAvecSousThemes.json`, `5eListeIndividuelle.json`, `6emeAvecSousTheme.json`, `6emeListeIndividuelle.json`.

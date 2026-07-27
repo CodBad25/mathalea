@@ -1,7 +1,8 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
+import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -27,12 +28,15 @@ export default class EgaliteFG18 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après « Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
     )
     this.consigne +=
-      "<br><br>Maryam Mirzakhani (1977-2017), mathématicienne iranienne, est la première femme à avoir reçu la médaille Fields, en 2014.<br>" +
+      (context.isHtml ? '<div class="not-prose" style="text-align:center; margin: 0.75rem 0;"><img src="/alea/images/egalite/mirzakhani-portrait.jpg" alt="Portrait de Maryam Mirzakhani" style="width:130px; height:auto; border-radius:9999px; border:3px solid #f15929;"><p style="font-size:0.7rem; font-style:italic; opacity:0.7;">Maryam Mirzakhani (1977-2017) — Source : Florian Caullery — Wikimedia Commons — CC BY-SA 3.0</p></div>' : '') +
+      "<br>Maryam Mirzakhani (1977-2017), mathématicienne iranienne, est la première femme à avoir reçu la médaille Fields, en 2014.<br>" +
       'De 1901 à 2024, $65$ femmes et $915$ hommes ont reçu un prix Nobel. De 1936 à 2024, $2$ femmes et $62$ hommes ont reçu la médaille Fields.<br>' +
-      'On note $A$ le pourcentage de femmes parmi les médailles Fields et $B$ le pourcentage de femmes parmi les prix Nobel (arrondis au centième).'
+      "On considère :<br>" +
+      '$\\bullet$ $A$ : le pourcentage total de femmes ayant obtenu la médaille Fields depuis sa création jusqu\'en 2024 ;<br>' +
+      "$\\bullet$ $B$ : le pourcentage total de femmes ayant obtenu un prix Nobel depuis sa création jusqu'en 2024 (arrondis au centième)."
     this.nbQuestions = 6
     this.nbQuestionsModifiable = false
   }
@@ -44,12 +48,12 @@ export default class EgaliteFG18 extends Exercice {
     let texte0 = 'Calculer $A$, le pourcentage de femmes parmi les médailles Fields.'
     if (this.interactif) texte0 += ajouteChampTexteMathLive(this, 0, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 0, { reponse: { value: 3.13 } })
-    const correction0 = '$A=\\dfrac{2}{2+62}=\\dfrac{2}{64}\\approx 3{,}13\\,\\%$.'
+    const correction0 = `$A=\\dfrac{2}{2+62}=\\dfrac{2}{64}\\approx ${miseEnEvidence('3{,}13\\,\\%')}$.`
 
     let texte1 = 'Calculer $B$, le pourcentage de femmes parmi les prix Nobel.'
     if (this.interactif) texte1 += ajouteChampTexteMathLive(this, 1, '', { texteApres: '%' }) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 6.63 } })
-    const correction1 = '$B=\\dfrac{65}{65+915}=\\dfrac{65}{980}\\approx 6{,}63\\,\\%$.'
+    const correction1 = `$B=\\dfrac{65}{65+915}=\\dfrac{65}{980}\\approx ${miseEnEvidence('6{,}63\\,\\%')}$.`
 
     const texteQ2 = 'Comparer $A$ et $B$. Que peut-on en déduire ?'
     this.autoCorrection[2] = {
@@ -85,7 +89,7 @@ export default class EgaliteFG18 extends Exercice {
     const monQcm3 = propositionsQcm(this, 3)
     let texte3 = texteQ3
     if (!context.isAmc) texte3 += monQcm3.texte
-    const correction3 = '$630=2\\times 3^2\\times 5\\times 7$.'
+    const correction3 = `$630=${miseEnEvidence('2\\times 3^2\\times 5\\times 7')}$.`
 
     const texteQ4 = 'Quelle est la décomposition en produit de facteurs premiers de $456$ ?'
     this.autoCorrection[4] = {
@@ -100,7 +104,7 @@ export default class EgaliteFG18 extends Exercice {
     const monQcm4 = propositionsQcm(this, 4)
     let texte4 = texteQ4
     if (!context.isAmc) texte4 += monQcm4.texte
-    const correction4 = '$456=2^3\\times 3\\times 19$.'
+    const correction4 = `$456=${miseEnEvidence('2^3\\times 3\\times 19')}$.`
 
     const texteQ5 =
       'Le collège a acheté $630$ chocolats et $456$ caramels, pour constituer des lots identiques utilisant tous les bonbons. Les professeurs ont-ils pu constituer $18$ lots ?'
@@ -116,7 +120,7 @@ export default class EgaliteFG18 extends Exercice {
     let texte5 = texteQ5
     if (!context.isAmc) texte5 += monQcm5.texte
     const correction5 =
-      "Le nombre de lots doit diviser à la fois $630$ et $456$, donc diviser leur PGCD. D'après les décompositions précédentes, les seuls facteurs premiers communs à $630=2\\times 3^2\\times 5\\times 7$ et $456=2^3\\times 3\\times 19$ sont $2$ et $3$, donc $\\text{PGCD}(630\\,;\\,456)=2\\times 3=6$. Comme $18$ ne divise pas $6$ (et ne divise d'ailleurs pas $456$ : $456\\div 18\\approx 25{,}3$), on ne peut pas constituer $18$ lots.<br>Le nombre maximum de lots que l'on peut constituer est donc $6$, avec $630\\div 6=105$ chocolats et $456\\div 6=76$ caramels par lot."
+      `Le nombre de lots doit diviser à la fois $630$ et $456$, donc diviser leur PGCD. D'après les décompositions précédentes, les seuls facteurs premiers communs à $630=2\\times 3^2\\times 5\\times 7$ et $456=2^3\\times 3\\times 19$ sont $2$ et $3$, donc $\\text{PGCD}(630\\,;\\,456)=2\\times 3=6$. Comme $18$ ne divise pas $6$ (et ne divise d'ailleurs pas $456$ : $456\\div 18\\approx 25{,}3$), $${miseEnEvidence('\\text{on ne peut pas constituer }18\\text{ lots}')}$.<br>Le nombre maximum de lots que l'on peut constituer est donc $${miseEnEvidence('6')}$, avec $630\\div 6=105$ chocolats et $456\\div 6=76$ caramels par lot.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0

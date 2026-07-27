@@ -146,6 +146,21 @@ async function testV(page: Page) {
     value7,
     'Écrire un nombre entier en chiffres ou en lettres en DRAP AND DROP',
   ).toEqual('1 / 1')
+  await page
+    .locator('#iframe')
+    .contentFrame()
+    .getByRole('button', { name: 'Exercice 8' })
+    .click()
+  const value8 = await page
+    .locator('#iframe')
+    .contentFrame()
+    .locator('#exercice7')
+    .getByText('/ 2')
+    .innerText()
+  expect(
+    value8,
+    'Donner différentes écritures de nombres décimaux en TABLEAU MATHLIVE',
+  ).toEqual('2 / 2')
   return true
 }
 

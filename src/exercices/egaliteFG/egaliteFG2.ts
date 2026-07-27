@@ -1,7 +1,8 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { texteGras, texteItalique } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteGras, texteItalique } from '../../lib/outils/embellissements'
+import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -27,7 +28,7 @@ export default class EgaliteFG2 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après « Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
     )
     this.consigne +=
       '<br><br>Voici la répartition de devoirs facultatifs rendus aux élèves d\'une classe :<br>'
@@ -39,8 +40,13 @@ export default class EgaliteFG2 extends Exercice {
       <tr><td style="border: 1px solid #888; padding: 4px 10px;">${texteGras('Total')}</td><td style="border: 1px solid #888; padding: 4px 10px;">23</td><td style="border: 1px solid #888; padding: 4px 10px;">29</td><td style="border: 1px solid #888; padding: 4px 10px;">52</td></tr>
       </table>`
     const tableauLatex =
-      'Matière : Mathématiques, Sciences, Histoire-Géographie.<br>' +
-      'Filles : 8, 6, 9 (total 23). Garçons : 12, 10, 7 (total 29). Totaux par matière : 20, 16, 16 (total 52).<br>'
+      '\\begin{center}\\begin{tabular}{|l|c|c|c|}\n\\hline\n' +
+      'Matière & Filles & Garçons & Total \\\\\n\\hline\n' +
+      'Mathématiques & 8 & 12 & 20 \\\\\n\\hline\n' +
+      'Sciences & 6 & 10 & 16 \\\\\n\\hline\n' +
+      'Histoire-Géographie & 9 & 7 & 16 \\\\\n\\hline\n' +
+      '\\textbf{Total} & 23 & 29 & 52 \\\\\n\\hline\n' +
+      '\\end{tabular}\\end{center}\n'
     this.consigne += context.isHtml ? tableauHtml : tableauLatex
     this.nbQuestions = 4
     this.nbQuestionsModifiable = false
@@ -57,7 +63,7 @@ export default class EgaliteFG2 extends Exercice {
       texte0 += ajouteChampTexteMathLive(this, 0) + '<br>'
     }
     handleAnswers(this, 0, { reponse: { value: 4 } })
-    const correction0 = "$12-8=4$. Il y a $4$ garçons de plus que de filles ayant rendu ce devoir."
+    const correction0 = `$12-8=${miseEnEvidence('4')}$. Il y a $4$ garçons de plus que de filles ayant rendu ce devoir.`
 
     // Q1 : nombre de filles en Histoire-Géographie
     let texte1 = 'Combien de filles ont rendu des devoirs en Histoire-Géographie ?'
@@ -65,17 +71,17 @@ export default class EgaliteFG2 extends Exercice {
       texte1 += ajouteChampTexteMathLive(this, 1) + '<br>'
     }
     handleAnswers(this, 1, { reponse: { value: 9 } })
-    const correction1 = "D'après le tableau, $9$ filles ont rendu ce devoir."
+    const correction1 = `D'après le tableau, $${miseEnEvidence('9')}$ filles ont rendu ce devoir.`
 
     // Q2 : proportion de filles en Histoire-Géographie (en %)
     let texte2 =
-      "Quelle est la proportion de filles par rapport au total d'élèves en Histoire-Géographie ? (en \\%, arrondi au centième)"
+      "Quelle est la proportion de filles par rapport au total d'élèves en Histoire-Géographie ? (en $\\%$, arrondi au centième)"
     if (this.interactif) {
       texte2 += ajouteChampTexteMathLive(this, 2, '', { texteApres: '%' }) + '<br>'
     }
     handleAnswers(this, 2, { reponse: { value: 56.25 } })
     const correction2 =
-      '$\\dfrac{9}{16}=0{,}5625=56{,}25\\,\\%$ des élèves ayant rendu ce devoir en Histoire-Géographie sont des filles.'
+      `$\\dfrac{9}{16}=0{,}5625=${miseEnEvidence('56{,}25\\,\\%')}$ des élèves ayant rendu ce devoir en Histoire-Géographie sont des filles.`
 
     // Q3 : matière où la proportion de garçons est la plus élevée (QCM)
     const texteQ3 =

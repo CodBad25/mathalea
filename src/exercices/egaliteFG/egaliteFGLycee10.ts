@@ -1,7 +1,8 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { texteItalique } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteGras, texteItalique } from '../../lib/outils/embellissements'
+import { ajouterLien } from '../../lib/outils/enrichissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -23,19 +24,23 @@ export const egaliteFillesGarcons = true
  * Transcription par Lydie El-Halougi
  */
 export default class EgaliteFGLycee10 extends Exercice {
+  commentaireDebat = ''
+
   constructor() {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après « Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
     )
     this.consigne +=
-      "<br><br>Dans un secteur professionnel, en 2020, $500$ femmes occupaient un poste de direction contre $1\\,500$ hommes. Chaque année, des lois favorisant la parité augmentent le nombre de femmes dirigeantes de $8\\,\\%$ et le nombre d'hommes de $3\\,\\%$.<br>" +
+      "<br><br>Dans un secteur professionnel, en 2020, $500$ femmes occupaient un poste de direction contre $1\\,500$ hommes. Chaque année, la mise en place de lois favorisant la parité au sein des comités décisionnels augmente le nombre de femmes dirigeantes de $8\\,\\%$ et le nombre d'hommes de $3\\,\\%$.<br>" +
       "On note $F_n$ le nombre de femmes et $H_n$ le nombre d'hommes dirigeants en $2020+n$, avec $F_0=500$ et $H_0=1\\,500$."
     this.nbQuestions = 4
     this.nbQuestionsModifiable = false
-    this.comment =
-      'Pour débattre.<br>Cette politique est-elle suffisante pour atteindre la parité rapidement ? Pourquoi les femmes sont-elles encore minoritaires dans les postes à responsabilités, malgré les lois ?'
+    this.commentaireDebat =
+      texteGras('Pour débattre') + '.<br>Cette politique est-elle suffisante pour atteindre la parité ?<br>Pourquoi les femmes sont-elles encore minoritaires dans les postes à responsabilités, malgré les lois ?'
+    this.besoinFormulaireCaseACocher = ['Afficher « Pour débattre »', true]
+    this.sup = true
   }
 
   nouvelleVersion() {
@@ -56,25 +61,25 @@ export default class EgaliteFGLycee10 extends Exercice {
     let texte0 = texteQ0
     if (!context.isAmc) texte0 += monQcm0.texte
     const correction0 =
-      "$(F_n)$ est géométrique de raison $1{,}08$ (donc $F_n=500\\times 1{,}08^n$) et $(H_n)$ est géométrique de raison $1{,}03$ (donc $H_n=1\\,500\\times 1{,}03^n$)."
+      `$(F_n)$ et $(H_n)$ sont $${miseEnEvidence('\\text{géométriques}')}$ : $(F_n)$ de raison $1{,}08$ (donc $F_n=500\\times 1{,}08^n$) et $(H_n)$ de raison $1{,}03$ (donc $H_n=1\\,500\\times 1{,}03^n$).`
 
     let texte1 =
       'Combien de femmes occuperont un poste de direction en 2030 (arrondi à l\'unité) ?'
     if (this.interactif) texte1 += ajouteChampTexteMathLive(this, 1) + '<br>'
     handleAnswers(this, 1, { reponse: { value: 1079 } })
-    const correction1 = '$F_{10}=500\\times 1{,}08^{10}\\approx 1\\,079$.'
+    const correction1 = `$F_{10}=500\\times 1{,}08^{10}\\approx ${miseEnEvidence('1\\,079')}$.`
 
     let texte2 = 'Combien d\'hommes occuperont un poste de direction en 2030 (arrondi à l\'unité) ?'
     if (this.interactif) texte2 += ajouteChampTexteMathLive(this, 2) + '<br>'
     handleAnswers(this, 2, { reponse: { value: 2016 } })
-    const correction2 = '$H_{10}=1\\,500\\times 1{,}03^{10}\\approx 2\\,016$.'
+    const correction2 = `$H_{10}=1\\,500\\times 1{,}03^{10}\\approx ${miseEnEvidence('2\\,016')}$.`
 
     let texte3 =
       "En combien d'années (à partir de 2020) l'effectif de femmes dirigeantes dépassera-t-il l'effectif d'hommes dirigeants ?"
     if (this.interactif) texte3 += ajouteChampTexteMathLive(this, 3, '', { texteApres: 'ans' }) + '<br>'
     handleAnswers(this, 3, { reponse: { value: 24 } })
     const correction3 =
-      "On cherche le plus petit $n$ tel que $500\\times 1{,}08^n>1\\,500\\times 1{,}03^n$, soit $\\left(\\dfrac{1{,}08}{1{,}03}\\right)^n>3$. À la calculatrice ou au tableur, on trouve qu'à $n=23$ le rapport vaut environ $2{,}98<3$, et qu'à $n=24$ il vaut environ $3{,}12>3$ : c'est donc au bout de $24$ ans, soit en $2044$, que les femmes dirigeantes deviendront plus nombreuses que les hommes dirigeants."
+      `On cherche le plus petit $n$ tel que $500\\times 1{,}08^n>1\\,500\\times 1{,}03^n$, soit $\\left(\\dfrac{1{,}08}{1{,}03}\\right)^n>3$. À la calculatrice ou au tableur, on trouve qu'à $n=23$ le rapport vaut environ $2{,}98<3$, et qu'à $n=24$ il vaut environ $3{,}12>3$ : c'est donc au bout de $${miseEnEvidence('24')}$ ans, soit en $2044$, que les femmes dirigeantes deviendront plus nombreuses que les hommes dirigeants.`
 
     this.listeQuestions[0] = texte0
     this.listeCorrections[0] = correction0
@@ -84,6 +89,8 @@ export default class EgaliteFGLycee10 extends Exercice {
     this.listeCorrections[2] = correction2
     this.listeQuestions[3] = texte3
     this.listeCorrections[3] = correction3
+    if (this.sup) this.listeQuestions[this.listeQuestions.length - 1] += '<br><br>' + this.commentaireDebat
+
 
     listeQuestionsToContenu(this)
   }

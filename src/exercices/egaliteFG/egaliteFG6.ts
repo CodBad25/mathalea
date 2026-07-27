@@ -1,4 +1,6 @@
 import { texteItalique } from '../../lib/outils/embellissements'
+import { ajouterLien } from '../../lib/outils/enrichissements'
+import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -21,7 +23,7 @@ export default class EgaliteFG6 extends Exercice {
     super()
     this.pasDeVersionAleatoire = true
     this.consigne = texteItalique(
-      "D'après « Sur le chemin de l'égalité en mathématiques pour tous les élèves » - Académie de Versailles",
+      "D'après " + ajouterLien('https://nuage03.apps.education.fr/index.php/s/NZgmoFpcSCW8Cag?dir=/&editing=false&openfile=true', '« Sur le chemin de l\'égalité en mathématiques pour tous les élèves » - Académie de Versailles'),
     )
     this.consigne +=
       "<br><br>L'égalité entre les femmes et les hommes est un principe fondamental de notre société. Pourtant, ce droit n'a pas toujours été inscrit dans la loi. Ce n'est qu'en $1946$, après la Seconde Guerre mondiale, que l'égalité entre les sexes a été affirmée pour la première fois dans la Constitution française, à travers le préambule de la Constitution de la IV<sup>e</sup> République. Cette reconnaissance a été réaffirmée dans la Constitution actuelle de $1958$, qui sert encore de base à notre République."
@@ -38,8 +40,54 @@ export default class EgaliteFG6 extends Exercice {
     this.listeCorrections[0] =
       "Réponse personnelle, qui dépend de la composition réelle de ta classe.<br>Méthode : si $f$ est le nombre d'enseignantes et $h$ le nombre d'enseignants, le total est $f+h$ ; la part des femmes est la fraction $\\dfrac{f}{f+h}$ (à simplifier), soit en pourcentage $\\dfrac{f}{f+h}\\times 100$, arrondi à l'unité (et de même pour les hommes)."
 
+    const barres: [string, number][] = [
+      ['École\nmaternelle', 97],
+      ['École\nélémentaire', 83],
+      ['Collège', 58],
+      ['Lycée général\net technologique', 54],
+      ['Lycée\nprofessionnel', 45],
+    ]
+    const largeurBarre = 70
+    const espaceBarre = 30
+    const hauteurGraphique = 220
+    const largeurGraphique = barres.length * (largeurBarre + espaceBarre) + espaceBarre + 40
+    const echelle = 180 / 100
+    let barresSvg = ''
+    barres.forEach(([label, valeur], i) => {
+      const x = 40 + espaceBarre + i * (largeurBarre + espaceBarre)
+      const hauteurBarre = valeur * echelle
+      const y = hauteurGraphique - 30 - hauteurBarre
+      barresSvg += `
+      <rect x="${x}" y="${y}" width="${largeurBarre}" height="${hauteurBarre}" fill="#f5a623" stroke="#c9781a" />
+      <text x="${x + largeurBarre / 2}" y="${y - 6}" text-anchor="middle" font-size="13" fill="#333">${valeur}</text>
+      ${label
+        .split('\n')
+        .map(
+          (ligne, j) =>
+            `<text x="${x + largeurBarre / 2}" y="${hauteurGraphique - 12 + j * 12}" text-anchor="middle" font-size="10" fill="#333">${ligne}</text>`,
+        )
+        .join('')}`
+    })
+    const grapheHtml = !context.isHtml ? '' : `
+<div class="not-prose" style="text-align:center; margin: 0.75rem 0;">
+  <p style="font-weight:600; margin-bottom:0.25rem;">Proportion de femmes parmi les enseignants selon le niveau d'enseignement en France</p>
+  <svg viewBox="0 0 ${largeurGraphique} ${hauteurGraphique + 20}" style="max-width:520px; width:100%; height:auto;">
+    <line x1="35" y1="10" x2="35" y2="${hauteurGraphique - 30}" stroke="#333" />
+    <line x1="35" y1="${hauteurGraphique - 30}" x2="${largeurGraphique - 5}" y2="${hauteurGraphique - 30}" stroke="#333" />
+    ${[0, 20, 40, 60, 80, 100]
+      .map((v) => {
+        const y = hauteurGraphique - 30 - v * echelle
+        return `<text x="28" y="${y + 4}" text-anchor="end" font-size="11" fill="#333">${v}</text><line x1="33" y1="${y}" x2="35" y2="${y}" stroke="#333" />`
+      })
+      .join('')}
+    <text x="12" y="${(hauteurGraphique - 30) / 2}" text-anchor="middle" font-size="11" fill="#333" transform="rotate(-90 12 ${(hauteurGraphique - 30) / 2})">Proportion de femmes (%)</text>
+    ${barresSvg}
+  </svg>
+</div>`
+
     this.listeQuestions[1] =
-      "Partie 2 - D'après le graphique « Proportion de femmes parmi les enseignants selon le niveau d'enseignement en France », donne une estimation du pourcentage de femmes pour chaque niveau : école maternelle, école élémentaire, collège, lycée général et technologique, lycée professionnel."
+      grapheHtml +
+      "Partie 2 - D'après le graphique ci-dessus « Proportion de femmes parmi les enseignants selon le niveau d'enseignement en France », donne une estimation du pourcentage de femmes pour chaque niveau : école maternelle, école élémentaire, collège, lycée général et technologique, lycée professionnel."
     this.listeCorrections[1] =
       "Estimations à partir du graphique (les valeurs peuvent varier légèrement selon la lecture) : école maternelle $\\approx 97\\,\\%$, école élémentaire $\\approx 83\\,\\%$, collège $\\approx 58\\,\\%$, lycée général et technologique $\\approx 54\\,\\%$, lycée professionnel $\\approx 45\\,\\%$."
 
@@ -51,7 +99,7 @@ export default class EgaliteFG6 extends Exercice {
     this.listeQuestions[3] =
       'Selon le graphique, quel niveau est le plus paritaire (le plus égalitaire) en termes de nombre d\'enseignantes et d\'enseignants ? Justifie ta réponse.'
     this.listeCorrections[3] =
-      "C'est le lycée professionnel qui semble le plus paritaire : la proportion de femmes y est la plus proche de $50\\,\\%$."
+      "C'est le lycée général et technologique qui semble le plus paritaire : sa proportion de femmes ($54\\,\\%$) est à $4$ points de $50\\,\\%$, alors que le lycée professionnel ($45\\,\\%$) en est à $5$ points."
 
     this.listeQuestions[4] =
       'Entre quelles catégories consécutives l\'écart est-il le plus élevé ? Pourquoi, à ton avis ?'

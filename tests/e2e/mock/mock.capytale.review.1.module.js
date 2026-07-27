@@ -83,6 +83,16 @@ const activityParams = {
         cd: '1',
         alea: 'gFXm',
       },
+      {
+        uuid: '1acf7',
+        id: 'auto6N2B-1',
+        interactif: '1',
+        nbQuestions: 2,
+        duration: 10,
+        sup: '4-1',
+        cd: '1',
+        alea: 'cAp1',
+      },
     ],
     globalOptions: {
       v: '',
@@ -327,6 +337,22 @@ const activityParams = {
       numberOfPoints: 1,
       numberOfQuestions: 1,
       bestScore: 1,
+    },
+    {
+      uuid: '1acf7',
+      title: 'Donner différentes écritures de nombres décimaux',
+      indice: 7,
+      state: 'done',
+      alea: 'cAp1',
+      answers: {
+        Ex7Q0L1C1: '\\dfrac{\\placeholder[a][correct][locked]{70}}{10}',
+        Ex7Q0L2C2:
+          '\\placeholder[a][correct][locked]{7}+\\dfrac{\\placeholder[b][correct][locked]{6}}{10}+\\dfrac{\\placeholder[c][correct][locked]{9}}{100}',
+        Ex7Q0L2C3: '\\placeholder[a][correct][locked]{7,69}',
+      },
+      numberOfPoints: 2,
+      numberOfQuestions: 2,
+      bestScore: 2,
     },
   ],
 }

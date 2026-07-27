@@ -133,7 +133,12 @@ async function testV(page: Page) {
     .contentFrame()
     .getByRole('button', { name: 'Exercice 3' })
     .click()
-  await page.locator('#iframe').contentFrame().locator('.ML__content').click()
+  await page
+    .locator('#iframe')
+    .contentFrame()
+    .locator('#champTexteEx2Q0')
+    .locator('.ML__content')
+    .click()
   await clickRobust(
     page
       .locator('#iframe')
@@ -240,6 +245,57 @@ async function testV(page: Page) {
     .contentFrame()
     .getByRole('button', { name: 'Vérifier la réponse' })
     .click()
+  await page
+    .locator('#iframe')
+    .contentFrame()
+    .getByRole('button', { name: 'Exercice 8' })
+    .click()
+  await page.waitForTimeout(2_000) // le tableau MathLive doit être rendu
+  // Tableau avec plusieurs zones de saisie par cellule (fill-in-the-blank)
+  // Les trous sont dans le shadow DOM de MathLive : un clic à la souris sur leur
+  // rectangle est le seul moyen fiable d'y placer le curseur. Le champ se
+  // redessine à chaque saisie, d'où les essais successifs.
+  const remplisLeTrou = async (
+    idDuChamp: string,
+    indexDuTrou: number,
+    saisie: string,
+  ) => {
+    let boite = null
+    for (let essai = 0; essai < 5 && boite === null; essai++) {
+      const trou = page
+        .locator('#iframe')
+        .contentFrame()
+        .locator(`#${idDuChamp}`)
+        .locator('.ML__editablePromptBox')
+        .nth(indexDuTrou)
+      try {
+        await trou.waitFor({ state: 'attached', timeout: 10_000 })
+        await trou.scrollIntoViewIfNeeded({ timeout: 10_000 })
+        boite = await trou.boundingBox({ timeout: 10_000 })
+      } catch {
+        await page.waitForTimeout(300)
+      }
+    }
+    if (boite === null)
+      throw Error(`Trou ${indexDuTrou} introuvable dans ${idDuChamp}`)
+    await page.mouse.click(
+      boite.x + boite.width / 2,
+      boite.y + boite.height / 2,
+    )
+    await page.waitForTimeout(300)
+    await page.keyboard.type(saisie)
+    await page.waitForTimeout(300)
+  }
+  await remplisLeTrou('champTexteEx7Q0L1C1', 0, '70')
+  await remplisLeTrou('champTexteEx7Q0L2C2', 0, '7')
+  await remplisLeTrou('champTexteEx7Q0L2C2', 1, '6')
+  await remplisLeTrou('champTexteEx7Q0L2C2', 2, '9')
+  await remplisLeTrou('champTexteEx7Q0L2C3', 0, '7,69')
+  await page
+    .locator('#iframe')
+    .contentFrame()
+    .getByRole('button', { name: 'Vérifier la réponse' })
+    .click()
 
   await page.waitForTimeout(2000) // attendre 2000 ms de plus pour assurer la sauvegarde
 
@@ -249,7 +305,7 @@ async function testV(page: Page) {
 
   const value = JSON.parse(valueString ?? '')
   expect(value).not.toBe(null)
-  expect(value.studentAssignment.length).toEqual(7)
+  expect(value.studentAssignment.length).toEqual(8)
   const responses = [
     { 'interactive-clockEx0Q0': '{"hour":12,"minute":15,"second":0}' },
     { Ex1Q0R0: '1', Ex1Q0R1: '0', Ex1Q0R2: '0', Ex1Q0R3: '0', Ex1Q0R4: '0' },
@@ -268,6 +324,12 @@ async function testV(page: Page) {
     {
       rectangleDNDEx6Q0R1: 'etiquetteEx6Q0I20-clone-1740844199069',
       texteDNDEx6Q0R1: 'deux',
+    },
+    {
+      Ex7Q0L1C1: '\\dfrac{\\placeholder[a][correct][locked]{70}}{10}',
+      Ex7Q0L2C2:
+        '\\placeholder[a][correct][locked]{7}+\\dfrac{\\placeholder[b][correct][locked]{6}}{10}+\\dfrac{\\placeholder[c][correct][locked]{9}}{100}',
+      Ex7Q0L2C3: '\\placeholder[a][correct][locked]{7,69}',
     },
   ]
   const apigeomCaptures: Record<string, string> = {}

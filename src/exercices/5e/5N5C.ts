@@ -299,6 +299,7 @@ export default class TesterUneEgalite extends Exercice {
                 rep1 === rep2
                   ? ['O', 'Oui', 'oui', 'OUI']
                   : ['N', 'Non', 'non', 'NON'],
+              options: { texteSansCasse: true },
             },
             champ4: { value: rep3 },
             champ5: { value: rep4 },
@@ -307,6 +308,7 @@ export default class TesterUneEgalite extends Exercice {
                 rep3 === rep4
                   ? ['O', 'Oui', 'oui', 'OUI']
                   : ['N', 'Non', 'non', 'NON'],
+              options: { texteSansCasse: true },
             },
           },
           { formatInteractif: 'multi-mathfield' },
