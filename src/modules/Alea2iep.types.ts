@@ -24,10 +24,13 @@ export type OptionsOutilMesure = OptionsCrayon & {
   codage?: string
   couleurCodage?: string
   sens?: number
+  zeroSurPremierPoint?: boolean
 }
 
 export type OptionsRegle = OptionsOutilMesure & {}
 export type OptionsEquerre = OptionsRegle & {}
+export type OptionsRequerre = OptionsEquerre & {}
+
 export type OptionsRapporteur = OptionsOutilMesure & {
   rayon?: number
 }
@@ -60,16 +63,7 @@ export type OptionsLabel = OptionsIep & {
   angle?: number
   // positionnement "cardinal" (libre si autre convention)
   position?:
-    | 'N'
-    | 'NE'
-    | 'E'
-    | 'SE'
-    | 'S'
-    | 'SO'
-    | 'O'
-    | 'NO'
-    | 'center'
-    | string
+    'N' | 'NE' | 'E' | 'SE' | 'S' | 'SO' | 'O' | 'NO' | 'center' | string
   // options de style éventuelles
   police?: string
   taille?: number
@@ -88,6 +82,15 @@ export type RegleState = {
 export type EquerreState = {
   visibilite: boolean
   zoom: number
+  // autres propriétés selon ton implémentation
+}
+
+export type RequerreState = {
+  visibilite: boolean
+  zoom: number
+  position: PointAbstrait
+  angle: number
+  abscisse: number
   // autres propriétés selon ton implémentation
 }
 
@@ -112,6 +115,7 @@ export interface IAlea2iep {
   // États des outils
   regle: RegleState
   equerre: EquerreState
+  requerre: RequerreState
   compas: CompasState
 
   // Coordonnées
@@ -123,6 +127,11 @@ export interface IAlea2iep {
   regleMasquer(options?: OptionsRegle): void
   regleDeplacer(A: PointAbstrait, options?: OptionsRegle): void
   regleRotation(angle: number | PointAbstrait, options?: OptionsRegle): void
+  regleRotationTranslation(
+    angle: number | PointAbstrait,
+    A: PointAbstrait,
+    options?: OptionsRegle,
+  ): void
   regleDroite(A: PointAbstrait, B: PointAbstrait, options?: OptionsRegle): void
   regleSegment(
     A: PointAbstrait,
@@ -150,6 +159,65 @@ export interface IAlea2iep {
   equerreDeplacer(A: PointAbstrait, options?: OptionsEquerre): void
   equerreRotation(angle: number | PointAbstrait, options?: OptionsEquerre): void
   equerreZoom(echelle: number, options?: OptionsIep): void
+
+  // Requerre (outil combiné)
+  requerreMontrer(A?: PointAbstrait, options?: OptionsEquerre): void
+  requerreMasquer(options?: OptionsEquerre): void
+  requerreDeplacer(A: PointAbstrait, options?: OptionsEquerre): void
+  requerreRotation(
+    angle: number | PointAbstrait,
+    options?: OptionsEquerre,
+  ): void
+  requerreZoom(echelle: number, options?: OptionsIep): void
+  requerreRotationTranslation(
+    angle: number | PointAbstrait,
+    A: PointAbstrait,
+    options?: OptionsRequerre,
+  ): void
+  requerreGlisserEquerre(deplacement: number, options: OptionsRequerre): void
+
+  // Compas
+  compasMontrer(A?: PointAbstrait, options?: OptionsCompas): void
+  compasMasquer(options?: OptionsCompas): void
+  compasDeplacer(A: PointAbstrait, options?: OptionsCompas): void
+  compasRotation(angle: number | PointAbstrait, options?: OptionsCompas): void
+  compasEcarter(l: number, options?: OptionsCompas): void
+  compasEcarterAvecRegle(longueur: number, options?: OptionsCompas): void
+  compasEcarter2Points(
+    A: PointAbstrait,
+    B: PointAbstrait,
+    options?: OptionsCompas,
+  ): void
+  compasTracerArcCentrePoint(
+    centre: PointAbstrait,
+    point: PointAbstrait,
+    options?: OptionsCompas,
+  ): number
+  compasCercleCentrePoint(
+    centre: PointAbstrait,
+    point: PointAbstrait,
+    options?: OptionsCompas,
+  ): void
+
+  // Points et polygones
+  pointCreer(A: PointAbstrait, options?: OptionsOutil): void
+  pointMasquer(...points: (PointAbstrait | OptionsOutil)[]): void
+  polygoneRapide(...args: (PointAbstrait | OptionsCrayon)[]): void
+
+  // Textes
+  textePoint(
+    texte: string,
+    position: PointAbstrait,
+    options?: OptionsTexte,
+  ): number
+  textePosition(
+    texte: string,
+    x: number,
+    y: number,
+    options?: OptionsTexte,
+  ): number
+  texteMasquer(id: number, options: OptionsIep): void
+  texteChangeCouleur(texte: string, id: number, couleur: string): void
 
   // Rapporteur
   rapporteurMontrer(A?: PointAbstrait, options?: OptionsRapporteur): void

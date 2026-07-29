@@ -100,8 +100,8 @@ importers:
         specifier: git+https://forge.apps.education.fr/coopmaths/apps/glisse-nombre.git
         version: git+https://forge.apps.education.fr/coopmaths/apps/glisse-nombre.git#d6e6408c2beb38d0050492e7cd8ef56304282443(vite@7.3.6(@types/node@25.9.5)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.101.6)(yaml@2.9.0))
       instrumenpoche:
-        specifier: git+https://git.sesamath.net/sesamath/instrumenpoche.git
-        version: git+https://git.sesamath.net/sesamath/instrumenpoche.git#04ba37b51f90cbc475afbf1e21e41c04d336cb96
+        specifier: git+https://forge.apps.education.fr/jeanclaudelhote/instrumenpoche.git
+        version: git+https://forge.apps.education.fr/jeanclaudelhote/instrumenpoche.git#81981a7df3d616391fc53f7bcbffd6437a0b278b
       jspdf:
         specifier: ^4.2.1
         version: 4.2.1
@@ -1972,6 +1972,9 @@ packages:
   dijkstrajs@1.0.3:
     resolution: {integrity: sha512-qiSlmBq9+BCdCA/L46dw8Uy93mloxsPSbwnm5yrKn2vMPiy8KyAskTF6zuV/j5BMsmOGZDPs7KjU+mjb670kfA==}
 
+  docdash@1.2.0:
+    resolution: {integrity: sha512-IYZbgYthPTspgqYeciRJNPhSwL51yer7HAwDXhF5p+H7mTDbPvY3PCk/QDjNxdPCpWkaJVFC4t7iCNB/t9E5Kw==}
+
   dom-accessibility-api@0.5.16:
     resolution: {integrity: sha512-X7BJ2yElsnOJ30pZF4uIIDfBEVgF4XEBxL9Bxhy6dnrm5hkzqmsWHGTiHqRiITNhMyFLyAiWndIJP7Z1NTteDg==}
 
@@ -2543,9 +2546,9 @@ packages:
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
-  instrumenpoche@git+https://git.sesamath.net/sesamath/instrumenpoche.git#04ba37b51f90cbc475afbf1e21e41c04d336cb96:
-    resolution: {commit: 04ba37b51f90cbc475afbf1e21e41c04d336cb96, repo: https://git.sesamath.net/sesamath/instrumenpoche.git, type: git}
-    version: 2.5.1
+  instrumenpoche@git+https://forge.apps.education.fr/jeanclaudelhote/instrumenpoche.git#81981a7df3d616391fc53f7bcbffd6437a0b278b:
+    resolution: {commit: 81981a7df3d616391fc53f7bcbffd6437a0b278b, repo: https://forge.apps.education.fr/jeanclaudelhote/instrumenpoche.git, type: git}
+    version: 2.4.5
     engines: {node: '>8.0.0'}
 
   into-stream@3.1.0:
@@ -4143,6 +4146,9 @@ packages:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
     deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+
+  whatwg-fetch@3.6.20:
+    resolution: {integrity: sha512-EqhiFU6daOA8kpjOWTL0olhVOF3i7OrFzSYiGsEMB8GcXS+RrzauAERX65xMeNWVqxA6HXH2m69Z9LaKKdisfg==}
 
   whatwg-mimetype@4.0.0:
     resolution: {integrity: sha512-QaKxh0eNIi2mE9p2vEdzfagOKHCcj1pJ56EEHGQOVxp8r9/iszLUUV7v89x9O1p/T+NlTM5W7jW6+cz4Fq1YVg==}
@@ -5786,6 +5792,8 @@ snapshots:
 
   dijkstrajs@1.0.3: {}
 
+  docdash@1.2.0: {}
+
   dom-accessibility-api@0.5.16: {}
 
   dompurify@3.4.12:
@@ -6400,9 +6408,12 @@ snapshots:
 
   inherits@2.0.4: {}
 
-  instrumenpoche@git+https://git.sesamath.net/sesamath/instrumenpoche.git#04ba37b51f90cbc475afbf1e21e41c04d336cb96:
+  instrumenpoche@git+https://forge.apps.education.fr/jeanclaudelhote/instrumenpoche.git#81981a7df3d616391fc53f7bcbffd6437a0b278b:
     dependencies:
+      core-js: 3.49.0
+      docdash: 1.2.0
       sesajstools: git+https://git.sesamath.net/sesamath/sesajstools.git#47c73bf8dc4892229cff930111fc66a1b9abd333
+      whatwg-fetch: 3.6.20
 
   into-stream@3.1.0:
     dependencies:
@@ -8032,6 +8043,8 @@ snapshots:
   whatwg-encoding@3.1.1:
     dependencies:
       iconv-lite: 0.6.3
+
+  whatwg-fetch@3.6.20: {}
 
   whatwg-mimetype@4.0.0: {}
 

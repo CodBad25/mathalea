@@ -19,6 +19,15 @@ export interface PointerGestureOptions {
   onEnd?: () => void
 }
 
+export interface ResizableOptions extends PointerGestureOptions {
+  /**
+   * Curseur affiché sur la poignée (par défaut 'nwse-resize'). À préciser
+   * pour les poignées en diagonale opposée (coins nord-est/sud-ouest), sans
+   * quoi le curseur par défaut serait incorrect pour ces coins.
+   */
+  cursor?: string
+}
+
 function startGesture(
   node: HTMLElement,
   getOptions: () => PointerGestureOptions,
@@ -104,13 +113,14 @@ export function draggable(node: HTMLElement, options: PointerGestureOptions) {
 }
 
 /** Poignée de redimensionnement : onMove reçoit les décalages (dw, dh) en px */
-export function resizable(node: HTMLElement, options: PointerGestureOptions) {
+export function resizable(node: HTMLElement, options: ResizableOptions) {
   let current = options
   const destroy = startGesture(node, () => current)
-  node.style.cursor = 'nwse-resize'
+  node.style.cursor = options.cursor ?? 'nwse-resize'
   return {
-    update(next: PointerGestureOptions) {
+    update(next: ResizableOptions) {
       current = next
+      node.style.cursor = next.cursor ?? 'nwse-resize'
     },
     destroy,
   }

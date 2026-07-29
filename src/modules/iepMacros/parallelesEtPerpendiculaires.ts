@@ -2,7 +2,6 @@ import { cercle } from '../../lib/2d/cercle'
 import {
   Droite,
   droite,
-  droiteParPointEtParallele,
   droiteParPointEtPerpendiculaire,
 } from '../../lib/2d/droites'
 import type { PointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -23,9 +22,8 @@ import {
 import {
   pointIntersectionLC,
   pointSurDroite,
-  pointSurSegment,
 } from '../../lib/2d/utilitairesPoint'
-import { vecteur } from '../../lib/2d/Vecteur'
+import { cross, dot, vecteur } from '../../lib/2d/Vecteur'
 import type {
   IAlea2iep,
   OptionsCompas,
@@ -46,84 +44,34 @@ export const paralleleRegleEquerre2points3epoint = function (
   C: PointAbstrait,
   options?: OptionsEquerre,
 ) {
-  let G, D, H1
+  let H1
   // G est le point le plus à gauche, D le plus à droite et H le projeté de C sur (AB)
   // H1 est un point de (AB) à gauche de H, c'est là où seront la règle et l'équerre avant de glisser
-  if (A.x < B.x) {
-    G = A
-    D = B
-  } else {
-    G = B
-    D = A
-  }
+
   const d = droite(A, B)
   const H = projectionOrtho(C, d)
-  if (H.x < D.x) {
-    H1 = pointSurSegment(H, D, -2) // H1 sera plus à gauche que H
-  } else if (H.x > D.x) {
-    H1 = pointSurSegment(H, D, 2)
+  const AB = [B.x - A.x, B.y - A.y, 0]
+  const AC = [C.x - A.x, C.y - A.y, 0]
+  const prodScal = dot(AB, AC)
+  const prodVect = cross(AB, AC)
+  if (prodScal < 0) {
+    H1 = B
   } else {
-    H1 = pointSurSegment(H, G, 2)
+    H1 = A
   }
-  const C1 = projectionOrtho(H1, droiteParPointEtParallele(C, d))
-  // C1 est le point d'arrivée de l'équerre après avoir glissé
-  const M = pointSurSegment(C1, C, 6)
-  // Le tracé de la parallèle ne fera que 6 cm pour ne pas dépassr de l'équerre. M est la fin de ce tracé
-
-  if (H.x < G.x && longueur(H, G) > 3) {
-    // Si le pied de la hauteur est trop à gauche
-    this.regleProlongerSegment(D, G, options)
-    this.regleMasquer(options)
-  }
-  if (H.x > D.x && longueur(H, D) > 3) {
-    // Si le pied de la hauteur est trop à gauche
-    this.regleProlongerSegment(G, D, options)
-  }
-
-  this.equerreMontrer(H1, options)
-  if (M.x > C1.x) {
-    this.equerreRotation(d.angleAvecHorizontale - 90, options)
-  } else {
-    this.equerreRotation(d.angleAvecHorizontale + 90, options)
-  }
-  if (H1.y > C1.y) {
-    if (this.regle.visibilite) {
-      this.regleDeplacer(H1, Object.assign({}, options, { tempo: 0 }))
-      this.regleRotation(C1, Object.assign({}, options, { tempo: 0 }))
-    } else {
-      this.regleDeplacer(
-        H1,
-        Object.assign({}, options, { vitesse: 1000, tempo: 0 }),
-      )
-      this.regleRotation(
-        C1,
-        Object.assign({}, options, { sens: 1000, tempo: 0 }),
-      )
-    }
-  } else {
-    const C12 = pointSurSegment(C1, H1, -2) // On monte un peu plus la règle pour que ça soit plus crédible
-    if (this.regle.visibilite) {
-      this.regleDeplacer(C12, Object.assign({}, options, { tempo: 0 }))
-      this.regleRotation(H1, Object.assign({}, options, { tempo: 0 }))
-    } else {
-      this.regleDeplacer(
-        C12,
-        Object.assign({}, options, { vitesse: 1000, tempo: 0 }),
-      )
-      this.regleRotation(
-        H1,
-        Object.assign({}, options, { sens: 1000, tempo: 0 }),
-      )
-      this.regleMontrer()
-    }
-  }
-  this.equerreDeplacer(C1, options)
-  this.crayonMontrer()
-  this.crayonDeplacer(C1, options)
-  this.tracer(M, options)
-  this.regleMasquer(options)
-  this.equerreMasquer(options)
-  this.crayonMasquer(options)
+  const H2 = translation(H1, vecteur(H, C))
+  this.requerreZoom(120)
+  this.requerreGlisserEquerre(0, { tempo: 0 })
+  this.requerreMontrer()
+  this.requerreRotationTranslation(d.angleAvecHorizontale + 90, H1, options)
+  this.requerreGlisserEquerre(
+    prodVect[2] < 0 ? -longueur(H, C) / 1.2 : longueur(H, C) / 1.2,
+    options ?? {},
+  )
+  this.crayonMontrer(H2)
+  this.tracer(C)
+  this.requerreMasquer()
+  this.crayonMasquer()
 }
 /**
  * Trace la perpendiculaire à (AB) passant par C avec la règle et l'équerre. Peut prolonger le segment [AB] si le pied de la hauteur est trop éloigné des extrémités du segment

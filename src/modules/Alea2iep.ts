@@ -19,7 +19,7 @@ import {
   pointSurSegment,
 } from '../lib/2d/utilitairesPoint'
 import { vecteur } from '../lib/2d/Vecteur'
-import { orangeMathalea, bleuMathalea } from '../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../lib/colors'
 import { context } from './context'
 import {
   bissectriceAuCompas,
@@ -104,12 +104,9 @@ type Compas = ObjetIep & {
 }
 
 type StringOutil =
-  | 'regle'
-  | 'equerre'
-  | 'requerre'
-  | 'rapporteur'
-  | 'compas'
-  | 'crayon'
+  'regle' | 'equerre' | 'requerre' | 'rapporteur' | 'compas' | 'crayon'
+
+const EPSILON_SEGMENT_IEP = 1e-9
 
 export type OptionsIep = {
   id?: string // Identifiant de l'objet
@@ -134,6 +131,7 @@ export type OptionsOutilMesure = OptionsCrayon & {
   codage?: string // Code pour le codage
   couleurCodage?: string // Couleur du codage
   sens?: number // Sens de la rotation
+  zeroSurPremierPoint?: boolean // Place le zéro de la règle sur le premier point du segment
 }
 
 export type OptionsRegle = OptionsOutilMesure & {}
@@ -199,7 +197,7 @@ export default class Alea2iep {
   regle: Regle
   crayon: ObjetIep
   equerre: ObjetIep
-  requerre: ObjetIep
+  requerre: ObjetIep & { abscisse: number }
   rapporteur: Rapporteur
   compas: Compas
   xml: string // Code XML de l'animation
@@ -305,6 +303,7 @@ export default class Alea2iep {
       position: pointAbstrait(0, 0),
       angle: 0,
       zoom: 100,
+      abscisse: 0, // abscisse de l'équerre sur la règle
     }
 
     this.rapporteur = {
@@ -491,6 +490,14 @@ export default class Alea2iep {
     this.montrer('requerre', A ?? this.requerre.position, options)
   }
 
+  requerreRotationTranslation(
+    angle: number | PointAbstrait,
+    A: PointAbstrait,
+    options: OptionsRequerre = {},
+  ) {
+    this.rotationTranslation('requerre', angle, A, options)
+  }
+
   compasMontrer(A?: PointAbstrait, options: OptionsCompas = {}) {
     this.montrer('compas', A ?? this.compas.position, options)
   }
@@ -604,6 +611,47 @@ export default class Alea2iep {
 
   regleRotation(angle: number | PointAbstrait, options: OptionsRegle = {}) {
     this.rotation('regle', angle, options)
+  }
+
+  rotationTranslation(
+    outil: StringOutil,
+    angle: number | PointAbstrait,
+    A: PointAbstrait,
+    options: OptionsOutilMesure = {},
+  ) {
+    const tempo = options.tempo ?? this.tempo
+    const vitesse = options.vitesse ?? this.vitesse
+    const sens = options.sens ?? Math.round(this.vitesse / 2)
+    let angleDeRotation: number
+    if (typeof angle === 'number') {
+      angleDeRotation = angle
+    } else {
+      const d = droite(this[outil].position, angle)
+      angleDeRotation = d.angleAvecHorizontale
+    }
+    if (
+      !this[outil].visibilite ||
+      this[outil].angle !== angleDeRotation ||
+      this[outil].position !== A
+    ) {
+      const codeXML = `<action objet="${outil}" mouvement="rotation_translation" angle="${-1 * angleDeRotation}" abscisse="${this.x(A)}" ordonnee="${this.y(A)}" tempo="${tempo}" sens="${sens}" vitesse="${vitesse}" />`
+      this[outil].angle = angleDeRotation
+      this[outil].position = A
+      this[outil].visibilite = true
+      if (typeof angleDeRotation === 'number' && isFinite(angleDeRotation)) {
+        this.liste_script.push(codeXML)
+      } else {
+        console.error("Angle de rotation non défini pour l'objet .", outil)
+      }
+    }
+  }
+
+  regleRotationTranslation(
+    angle: number | PointAbstrait,
+    A: PointAbstrait,
+    options: OptionsRegle = {},
+  ) {
+    this.rotationTranslation('regle', angle, A, options)
   }
 
   crayonRotation(angle: number | PointAbstrait, options: OptionsCrayon = {}) {
@@ -1380,13 +1428,24 @@ export default class Alea2iep {
         options = arg3
       }
     }
-    if (A.x <= B.x) {
-      // Toujours avoir la règle de gauche à droite
-      this.regleMontrer(A, options)
-      this.regleRotation(B, options)
-    } else {
-      this.regleMontrer(B, options)
-      this.regleRotation(A, options)
+    const longueurRegle = options.longueur ?? this.regle.longueur
+    const longueurSegment = longueur(A, B)
+    if (longueurSegment > EPSILON_SEGMENT_IEP) {
+      const premierPoint = options.zeroSurPremierPoint
+        ? A
+        : this.premierPointReglePourSegment(A, B)
+      const secondPoint = premierPoint === A ? B : A
+      const pointDepartRegle = options.zeroSurPremierPoint
+        ? A
+        : this.pointDepartReglePourSegmentCentre(
+            A,
+            B,
+            longueurRegle,
+            premierPoint,
+          )
+      const angleRegle = droite(premierPoint, secondPoint).angleAvecHorizontale
+      this.regleMontrer()
+      this.regleRotationTranslation(angleRegle, pointDepartRegle, options)
     }
     if (this.crayon != null) {
       if (
@@ -1400,7 +1459,27 @@ export default class Alea2iep {
         id = this.tracer(A, options)
       }
     }
+    this.regleMasquer()
     return id
+  }
+
+  private pointDepartReglePourSegmentCentre(
+    A: PointAbstrait,
+    B: PointAbstrait,
+    longueurRegle: number,
+    premierPoint = this.premierPointReglePourSegment(A, B),
+  ) {
+    const longueurSegment = longueur(A, B)
+    const marge = Math.max((longueurRegle - longueurSegment) / 2, 0)
+    const secondPoint = premierPoint === A ? B : A
+    return pointSurSegment(premierPoint, secondPoint, -marge)
+  }
+
+  private premierPointReglePourSegment(A: PointAbstrait, B: PointAbstrait) {
+    if (Math.abs(A.x - B.x) < EPSILON_SEGMENT_IEP) {
+      return A.y <= B.y ? A : B
+    }
+    return A.x <= B.x ? A : B
   }
 
   /**

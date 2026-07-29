@@ -1,10 +1,10 @@
 <script lang="ts">
   import {
+    balanceColumnBreaks,
     defaultTbiTabConfig,
     tbiState,
     type TbiTabLayout,
   } from '../../../../lib/stores/tbiStore'
-  import TbiCardHost from '../TbiCardHost.svelte'
   import type { TbiItem } from '../tbiTypes'
   import TbiColumnsLayout from './TbiColumnsLayout.svelte'
   import TbiFreeLayout from './TbiFreeLayout.svelte'
@@ -61,7 +61,6 @@
   )
 
   const tabLayouts: { value: TbiTabLayout; label: string; icon: string }[] = [
-    { value: 'list', label: 'Liste', icon: 'bx-list-ul' },
     { value: 'columns', label: 'Colonnes', icon: 'bx-columns' },
     { value: 'free', label: 'Placement libre', icon: 'bx-move' },
   ]
@@ -77,7 +76,7 @@
   }
 
   function setTabNbColumns(nbColumns: number) {
-    nbColumns = Math.min(4, Math.max(2, nbColumns))
+    nbColumns = Math.min(4, Math.max(1, nbColumns))
     tbiState.update((state) => {
       while (state.tabConfigs.length <= activeTab) {
         state.tabConfigs.push(defaultTbiTabConfig())
@@ -85,6 +84,10 @@
       state.tabConfigs[activeTab].nbColumns = nbColumns
       return state
     })
+    balanceColumnBreaks(
+      activeItems.map((item) => item.paramsIndex),
+      nbColumns,
+    )
   }
 </script>
 
@@ -158,7 +161,7 @@
         {tabsCount}
         currentTab={activeTab}
       />
-    {:else if activeLayout === 'columns'}
+    {:else}
       <TbiColumnsLayout
         items={activeItems}
         nbColumns={activeNbColumns}
@@ -169,25 +172,6 @@
         currentTab={activeTab}
         {onDelete}
       />
-    {:else}
-      <div class="flex flex-col gap-4 w-full max-w-5xl mx-auto">
-        {#each activeItems as item, position (item.key)}
-          <TbiCardHost
-            {item}
-            showMoveToTab={true}
-            {tabsCount}
-            currentTab={activeTab}
-            showReorder={true}
-            canMoveUp={position > 0}
-            canMoveDown={position < activeItems.length - 1}
-            onReorder={(paramsIndex, delta) => {
-              const neighbor = activeItems[position + delta]
-              if (neighbor) onMove(paramsIndex, neighbor.paramsIndex)
-            }}
-            {onDelete}
-          />
-        {/each}
-      </div>
     {/if}
   </div>
 </div>

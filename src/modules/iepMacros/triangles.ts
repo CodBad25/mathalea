@@ -56,7 +56,11 @@ export const triangle3longueurs = function (
   this.pointCreer(A, options)
   // this.regleRotation(droite(A,B).angleAvecHorizontale, options)
   // this.regleMontrer(A, options)
-  this.regleSegment(A, B, options)
+  this.regleSegment(
+    A,
+    B,
+    Object.assign({}, options, { zeroSurPremierPoint: true }),
+  )
   this.pointCreer(B, options)
   this.crayonMasquer(options)
   if (description)

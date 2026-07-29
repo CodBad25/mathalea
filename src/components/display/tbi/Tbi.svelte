@@ -16,7 +16,9 @@
   } from '../../../lib/stores/generalStore'
   import {
     applyTbiSharedState,
+    decodeTbiParam,
     deleteTbiCard,
+    encodeTbiParam,
     getTbiSharedState,
     loadTbiLocalLayout,
     reconcileTbiCards,
@@ -24,16 +26,12 @@
     saveTbiLocalLayout,
     tbiState,
   } from '../../../lib/stores/tbiStore'
-  import {
-    decodeBase64,
-    encodeBase64,
-  } from '../../setup/latex/LatexConfig'
   import TbiClockWidget from './TbiClockWidget.svelte'
   import TbiToolbar from './TbiToolbar.svelte'
+  import TbiTrafficLightWidget from './TbiTrafficLightWidget.svelte'
   import type { TbiItem } from './tbiTypes'
   import TbiColumnsLayout from './layouts/TbiColumnsLayout.svelte'
   import TbiFreeLayout from './layouts/TbiFreeLayout.svelte'
-  import TbiListLayout from './layouts/TbiListLayout.svelte'
   import TbiTabsLayout from './layouts/TbiTabsLayout.svelte'
 
   let items: TbiItem[] = $state([])
@@ -108,13 +106,15 @@
     await loadItems()
     reconcileTbiCards(uuids)
     // l'URL (tbiParam) décrit la disposition partagée, le localStorage
-    // les positions dépendantes de l'écran
+    // les positions/tailles dépendantes de l'écran : le localStorage est
+    // appliqué en premier, puis l'URL (si présente) par-dessus, pour que
+    // la position partagée d'un widget prenne le pas sur la sauvegarde locale
+    loadTbiLocalLayout(uuids)
     const urlParam = new URL(window.location.href).searchParams.get('tbiParam')
     if (urlParam != null) {
       tbiParamStore.set(urlParam)
-      applyTbiSharedState(decodeBase64(urlParam))
+      applyTbiSharedState(decodeTbiParam(urlParam))
     }
-    loadTbiLocalLayout(uuids)
     isReady = true
     // Maintient l'URL à jour avec la partie partageable de l'état. tbiState
     // notifie sur CHAQUE mutation, y compris les positions/tailles du mode
@@ -127,7 +127,7 @@
       if (syncUrlTimer !== undefined) clearTimeout(syncUrlTimer)
       syncUrlTimer = setTimeout(() => {
         syncUrlTimer = undefined
-        const encoded = encodeBase64(getTbiSharedState(get(tbiState)))
+        const encoded = encodeTbiParam(getTbiSharedState(get(tbiState)))
         if (encoded === lastEncodedSharedState) return
         lastEncodedSharedState = encoded
         tbiParamStore.set(encoded)
@@ -154,8 +154,6 @@
         <i class="bx bx-chalkboard text-6xl"></i>
         <p>Aucun exercice à afficher. Retournez à l'éditeur pour en ajouter.</p>
       </div>
-    {:else if $tbiState.mode === 'list'}
-      <TbiListLayout {items} onMove={applyReorder} onDelete={applyDelete} />
     {:else if $tbiState.mode === 'columns'}
       <TbiColumnsLayout
         {items}
@@ -176,5 +174,8 @@
   {/if}
   {#if $tbiState.widget.visible}
     <TbiClockWidget {persistLayout} />
+  {/if}
+  {#if $tbiState.trafficLight.visible}
+    <TbiTrafficLightWidget {persistLayout} />
   {/if}
 </main>

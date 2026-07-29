@@ -6,16 +6,19 @@ import { isLocalStorageAvailable } from './storage'
  * État de la vue TBI (vidéoprojection).
  *
  * - Le mode d'affichage, le nombre de colonnes, les sauts de colonne,
- *   la répartition des onglets et la disposition de chaque onglet sont
- *   partageables : ils sont sérialisés dans l'URL (paramètre tbiParam)
- *   par la vue TBI elle-même via tbiParamStore.
- * - Les positions/tailles du mode libre et la position du widget horloge
- *   dépendent de l'écran : elles sont sauvegardées en localStorage.
+ *   la répartition des onglets, la disposition de chaque onglet, la
+ *   visibilité et la position des widgets (horloge, feu tricolore) et le
+ *   zoom de chaque exercice sont partageables : ils sont sérialisés dans
+ *   l'URL (paramètre tbiParam) par la vue TBI elle-même via tbiParamStore.
+ * - Les positions/tailles du mode libre et la taille des widgets dépendent
+ *   de l'écran : elles sont sauvegardées en localStorage. Au chargement,
+ *   l'URL (si présente) est appliquée après le localStorage pour que la
+ *   position partagée d'un widget prenne le pas sur la sauvegarde locale.
  */
 
-export type TbiMode = 'list' | 'columns' | 'free' | 'tabs'
+export type TbiMode = 'columns' | 'free' | 'tabs'
 /** Disposition interne d'un onglet */
-export type TbiTabLayout = 'list' | 'columns' | 'free'
+export type TbiTabLayout = 'columns' | 'free'
 
 export const TBI_BASE_WIDTH = 600
 export const TBI_MIN_ZOOM = 0.4
@@ -23,6 +26,11 @@ export const TBI_MAX_ZOOM = 3
 
 export const TBI_WIDGET_MIN_ZOOM = 0.5
 export const TBI_WIDGET_MAX_ZOOM = 2.5
+
+export const TBI_TRAFFIC_LIGHT_MIN_W = 90
+export const TBI_TRAFFIC_LIGHT_MAX_W = 500
+export const TBI_TRAFFIC_LIGHT_MIN_H = 220
+export const TBI_TRAFFIC_LIGHT_MAX_H = 1200
 
 /** Bornes de largeur de carte en mode libre, indépendantes du zoom */
 export const TBI_MIN_CARD_WIDTH = 240
@@ -56,6 +64,17 @@ export interface TbiWidgetState {
   zoom: number
 }
 
+export type TbiTrafficLightColor = 'red' | 'orange' | 'green'
+
+export interface TbiTrafficLightState {
+  visible: boolean
+  active: TbiTrafficLightColor
+  x: number
+  y: number
+  w: number
+  h: number
+}
+
 export interface TbiState {
   mode: TbiMode
   nbColumns: number
@@ -64,6 +83,7 @@ export interface TbiState {
   /** Disposition de chaque onglet, indexée par indice compact d'onglet */
   tabConfigs: TbiTabConfig[]
   widget: TbiWidgetState
+  trafficLight: TbiTrafficLightState
 }
 
 export function defaultTbiCardState(index: number): TbiCardState {
@@ -79,16 +99,24 @@ export function defaultTbiCardState(index: number): TbiCardState {
 }
 
 export function defaultTbiTabConfig(): TbiTabConfig {
-  return { layout: 'list', nbColumns: 2 }
+  return { layout: 'columns', nbColumns: 1 }
 }
 
 export function defaultTbiState(): TbiState {
   return {
-    mode: 'list',
-    nbColumns: 2,
+    mode: 'columns',
+    nbColumns: 1,
     cards: [],
     tabConfigs: [],
     widget: { visible: false, mode: 'clock', x: 0, y: 0, zoom: 1 },
+    trafficLight: {
+      visible: false,
+      active: 'red',
+      x: 0,
+      y: 0,
+      w: 130,
+      h: 340,
+    },
   }
 }
 
@@ -106,10 +134,36 @@ function clampWidgetZoom(zoom: number): number {
   return clamp(zoom, TBI_WIDGET_MIN_ZOOM, TBI_WIDGET_MAX_ZOOM)
 }
 
+function clampTrafficLightWidth(w: number): number {
+  return clamp(w, TBI_TRAFFIC_LIGHT_MIN_W, TBI_TRAFFIC_LIGHT_MAX_W)
+}
+
+function clampTrafficLightHeight(h: number): number {
+  return clamp(h, TBI_TRAFFIC_LIGHT_MIN_H, TBI_TRAFFIC_LIGHT_MAX_H)
+}
+
 /** Fait varier le zoom du widget horloge/minuteur/chronomètre de `delta` */
 export function zoomWidgetBy(delta: number) {
   tbiState.update((state) => {
     state.widget.zoom = clampWidgetZoom(state.widget.zoom + delta)
+    return state
+  })
+}
+
+/** Fait varier le zoom de tous les exercices de `delta` en même temps */
+export function zoomAllCardsBy(delta: number) {
+  tbiState.update((state) => {
+    for (const card of state.cards) {
+      card.zoom = clampZoom(card.zoom + delta)
+    }
+    return state
+  })
+}
+
+/** Change la couleur éclairée du widget feu tricolore */
+export function setTrafficLightActive(color: TbiTrafficLightColor) {
+  tbiState.update((state) => {
+    state.trafficLight.active = color
     return state
   })
 }
@@ -191,6 +245,29 @@ export function moveCardToTab(paramsIndex: number, targetCompactTab: number) {
 }
 
 /**
+ * Répartit équitablement (par nombre d'exercices) les sauts de colonne sur
+ * `paramsIndices` (ordre d'affichage) pour `nbColumns` colonnes : écrase les
+ * sauts existants sur ces indices par la répartition par défaut. Le
+ * professeur peut ensuite désactiver individuellement un saut (bouton sur la
+ * carte).
+ */
+export function balanceColumnBreaks(paramsIndices: number[], nbColumns: number) {
+  const n = paramsIndices.length
+  const breakPositions = new Set<number>()
+  for (let k = 1; k < nbColumns; k++) {
+    const position = Math.round((k * n) / nbColumns)
+    if (position > 0 && position < n) breakPositions.add(position)
+  }
+  tbiState.update((state) => {
+    paramsIndices.forEach((paramsIndex, position) => {
+      const card = state.cards[paramsIndex]
+      if (card) card.colBreak = breakPositions.has(position)
+    })
+    return state
+  })
+}
+
+/**
  * Déplace un exercice de la position from à la position to (sémantique
  * splice : l'ordre relatif des autres exercices est préservé). Réordonne
  * exercicesParams (l'ordre canonique, persisté dans l'URL) et les états
@@ -245,6 +322,14 @@ export interface TbiSharedState {
   tabs: number[]
   breaks: number[]
   tabConfigs: TbiTabConfig[]
+  widgetVisible: boolean
+  trafficLightVisible: boolean
+  /** Zoom de chaque exercice, aligné par indice sur exercicesParams */
+  zooms: number[]
+  widgetX: number
+  widgetY: number
+  trafficLightX: number
+  trafficLightY: number
 }
 
 export function getTbiSharedState(state: TbiState): TbiSharedState {
@@ -254,11 +339,159 @@ export function getTbiSharedState(state: TbiState): TbiSharedState {
     tabs: state.cards.map((card) => card.tab),
     breaks: state.cards.flatMap((card, i) => (card.colBreak ? [i] : [])),
     tabConfigs: state.tabConfigs.map((config) => ({ ...config })),
+    widgetVisible: state.widget.visible,
+    trafficLightVisible: state.trafficLight.visible,
+    zooms: state.cards.map((card) => card.zoom),
+    widgetX: state.widget.x,
+    widgetY: state.widget.y,
+    trafficLightX: state.trafficLight.x,
+    trafficLightY: state.trafficLight.y,
   }
 }
 
-const TBI_MODES: TbiMode[] = ['list', 'columns', 'free', 'tabs']
-const TBI_TAB_LAYOUTS: TbiTabLayout[] = ['list', 'columns', 'free']
+const TBI_MODES: TbiMode[] = ['columns', 'free', 'tabs']
+const TBI_TAB_LAYOUTS: TbiTabLayout[] = ['columns', 'free']
+
+/**
+ * Encodage lisible du tbiParam (paramètre d'URL partageable), pensé pour
+ * être modifié à la main : `clé-valeur`, champs séparés par `_`, listes
+ * séparées par `.`. Seuls les champs qui s'écartent de leur valeur par
+ * défaut sont inclus, pour rester court (ex. "c-2" pour 2 colonnes).
+ * Limité à [a-z0-9-_.] : les autres caractères sont échappés par
+ * URLSearchParams, ce qui rendrait le paramètre illisible dans l'URL.
+ */
+const TBI_PARAM_FIELD_SEP = '_'
+const TBI_PARAM_LIST_SEP = '.'
+
+function isDefaultTabs(tabs: number[]): boolean {
+  return tabs.every((tab, i) => tab === i)
+}
+
+function isDefaultTabConfigs(tabConfigs: TbiTabConfig[]): boolean {
+  return tabConfigs.every((c) => c.layout === 'columns' && c.nbColumns === 1)
+}
+
+function isDefaultZooms(zooms: number[]): boolean {
+  return zooms.every((zoom) => zoom === 1)
+}
+
+function encodePosition(x: number, y: number): string {
+  return `${Math.round(x)}${TBI_PARAM_LIST_SEP}${Math.round(y)}`
+}
+
+function decodePosition(value: string): { x: number; y: number } | undefined {
+  const [x, y] = value.split(TBI_PARAM_LIST_SEP).map(Number)
+  if (Number.isNaN(x) || Number.isNaN(y)) return undefined
+  return { x, y }
+}
+
+export function encodeTbiParam(shared: TbiSharedState): string {
+  const fields: string[] = []
+  if (shared.mode !== 'columns') fields.push(`m-${shared.mode}`)
+  if (shared.nbColumns !== 1) fields.push(`c-${shared.nbColumns}`)
+  if (!isDefaultTabs(shared.tabs)) {
+    fields.push(`t-${shared.tabs.join(TBI_PARAM_LIST_SEP)}`)
+  }
+  if (shared.breaks.length > 0) {
+    fields.push(`b-${shared.breaks.join(TBI_PARAM_LIST_SEP)}`)
+  }
+  if (!isDefaultTabConfigs(shared.tabConfigs)) {
+    fields.push(
+      `g-${shared.tabConfigs
+        .map((c) => `${c.layout}-${c.nbColumns}`)
+        .join(TBI_PARAM_LIST_SEP)}`,
+    )
+  }
+  if (shared.widgetVisible) fields.push('w-1')
+  if (shared.trafficLightVisible) fields.push('f-1')
+  if (!isDefaultZooms(shared.zooms)) {
+    fields.push(
+      `z-${shared.zooms
+        .map((zoom) => Math.round(zoom * 10))
+        .join(TBI_PARAM_LIST_SEP)}`,
+    )
+  }
+  if (shared.widgetX !== 0 || shared.widgetY !== 0) {
+    fields.push(`wp-${encodePosition(shared.widgetX, shared.widgetY)}`)
+  }
+  if (shared.trafficLightX !== 0 || shared.trafficLightY !== 0) {
+    fields.push(`fp-${encodePosition(shared.trafficLightX, shared.trafficLightY)}`)
+  }
+  return fields.join(TBI_PARAM_FIELD_SEP)
+}
+
+export function decodeTbiParam(param: string): Partial<TbiSharedState> {
+  const shared: Partial<TbiSharedState> = {}
+  if (param.length === 0) return shared
+  for (const field of param.split(TBI_PARAM_FIELD_SEP)) {
+    const separatorIndex = field.indexOf('-')
+    if (separatorIndex === -1) continue
+    const key = field.slice(0, separatorIndex)
+    const value = field.slice(separatorIndex + 1)
+    switch (key) {
+      case 'm':
+        shared.mode = value as TbiMode
+        break
+      case 'c': {
+        const n = Number(value)
+        if (!Number.isNaN(n)) shared.nbColumns = n
+        break
+      }
+      case 't':
+        shared.tabs = value
+          .split(TBI_PARAM_LIST_SEP)
+          .map(Number)
+          .filter((n) => !Number.isNaN(n))
+        break
+      case 'b':
+        shared.breaks = value
+          .split(TBI_PARAM_LIST_SEP)
+          .map(Number)
+          .filter((n) => !Number.isNaN(n))
+        break
+      case 'g':
+        shared.tabConfigs = value.split(TBI_PARAM_LIST_SEP).map((entry) => {
+          const i = entry.indexOf('-')
+          const layout = i === -1 ? entry : entry.slice(0, i)
+          const nbColumns = i === -1 ? NaN : Number(entry.slice(i + 1))
+          return {
+            layout: layout as TbiTabLayout,
+            nbColumns: Number.isNaN(nbColumns) ? 1 : nbColumns,
+          }
+        })
+        break
+      case 'w':
+        shared.widgetVisible = value === '1'
+        break
+      case 'f':
+        shared.trafficLightVisible = value === '1'
+        break
+      case 'z':
+        shared.zooms = value
+          .split(TBI_PARAM_LIST_SEP)
+          .map((n) => Number(n) / 10)
+          .filter((n) => !Number.isNaN(n))
+        break
+      case 'wp': {
+        const position = decodePosition(value)
+        if (position) {
+          shared.widgetX = position.x
+          shared.widgetY = position.y
+        }
+        break
+      }
+      case 'fp': {
+        const position = decodePosition(value)
+        if (position) {
+          shared.trafficLightX = position.x
+          shared.trafficLightY = position.y
+        }
+        break
+      }
+    }
+  }
+  return shared
+}
 
 export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
   tbiState.update((state) => {
@@ -267,7 +500,7 @@ export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
     }
     if (
       typeof shared.nbColumns === 'number' &&
-      shared.nbColumns >= 2 &&
+      shared.nbColumns >= 1 &&
       shared.nbColumns <= 4
     ) {
       state.nbColumns = Math.round(shared.nbColumns)
@@ -288,14 +521,41 @@ export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
       state.tabConfigs = shared.tabConfigs.map((config) => ({
         layout: TBI_TAB_LAYOUTS.includes(config?.layout)
           ? config.layout
-          : 'list',
+          : 'columns',
         nbColumns:
           typeof config?.nbColumns === 'number' &&
-          config.nbColumns >= 2 &&
+          config.nbColumns >= 1 &&
           config.nbColumns <= 4
             ? Math.round(config.nbColumns)
-            : 2,
+            : 1,
       }))
+    }
+    if (typeof shared.widgetVisible === 'boolean') {
+      state.widget.visible = shared.widgetVisible
+    }
+    if (typeof shared.trafficLightVisible === 'boolean') {
+      state.trafficLight.visible = shared.trafficLightVisible
+    }
+    if (Array.isArray(shared.zooms)) {
+      shared.zooms.forEach((zoom, i) => {
+        if (state.cards[i] && typeof zoom === 'number') {
+          state.cards[i].zoom = clampZoom(zoom)
+        }
+      })
+    }
+    if (
+      typeof shared.widgetX === 'number' &&
+      typeof shared.widgetY === 'number'
+    ) {
+      state.widget.x = shared.widgetX
+      state.widget.y = shared.widgetY
+    }
+    if (
+      typeof shared.trafficLightX === 'number' &&
+      typeof shared.trafficLightY === 'number'
+    ) {
+      state.trafficLight.x = shared.trafficLightX
+      state.trafficLight.y = shared.trafficLightY
     }
     ensureTabConfigs(state)
     return state
@@ -306,6 +566,13 @@ export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
 interface TbiLocalLayout {
   cards: { x: number; y: number; w: number; zoom: number }[]
   widget: { x: number; y: number; zoom: number }
+  trafficLight?: {
+    x: number
+    y: number
+    w: number
+    h: number
+    active: TbiTrafficLightColor
+  }
 }
 
 function tbiStorageKey(uuids: string[]): string {
@@ -318,6 +585,13 @@ export function saveTbiLocalLayout(uuids: string[]) {
   const layout: TbiLocalLayout = {
     cards: state.cards.map(({ x, y, w, zoom }) => ({ x, y, w, zoom })),
     widget: { x: state.widget.x, y: state.widget.y, zoom: state.widget.zoom },
+    trafficLight: {
+      x: state.trafficLight.x,
+      y: state.trafficLight.y,
+      w: state.trafficLight.w,
+      h: state.trafficLight.h,
+      active: state.trafficLight.active,
+    },
   }
   try {
     window.localStorage.setItem(tbiStorageKey(uuids), JSON.stringify(layout))
@@ -366,6 +640,26 @@ export function loadTbiLocalLayout(uuids: string[]) {
     }
     if (typeof layout.widget?.zoom === 'number') {
       state.widget.zoom = clampWidgetZoom(layout.widget.zoom)
+    }
+    if (
+      typeof layout.trafficLight?.x === 'number' &&
+      typeof layout.trafficLight?.y === 'number'
+    ) {
+      state.trafficLight.x = layout.trafficLight.x
+      state.trafficLight.y = layout.trafficLight.y
+    }
+    if (typeof layout.trafficLight?.w === 'number') {
+      state.trafficLight.w = clampTrafficLightWidth(layout.trafficLight.w)
+    }
+    if (typeof layout.trafficLight?.h === 'number') {
+      state.trafficLight.h = clampTrafficLightHeight(layout.trafficLight.h)
+    }
+    if (
+      layout.trafficLight?.active === 'red' ||
+      layout.trafficLight?.active === 'orange' ||
+      layout.trafficLight?.active === 'green'
+    ) {
+      state.trafficLight.active = layout.trafficLight.active
     }
     return state
   })
