@@ -56,6 +56,7 @@ L'apparence d'un noeud du menu dépend à la fois de sa profondeur dans `emptyRe
 | `src/json/quickLinks.json`                 | Contenu des liens rapides affichés sur la page d'accueil.                                                                                                                                     | `QuickLinks.svelte`                                                                       |
 | `src/json/carouselContent.json`            | Contenu du carrousel de la page d'accueil.                                                                                                                                                    | `Carousel.svelte`, `MobileCarouselCards.svelte`                                           |
 | `src/json/carouselContentForCapytale.json` | Variante du carrousel pour Capytale.                                                                                                                                                          | Non utilisée actuellement (import commenté dans `Carousel.svelte`).                       |
+| `src/json/mobileMenu.json`                 | Rubriques (Collège / Lycée) et niveaux proposés par la vue mobile, avec le référentiel et le chemin visés. Voir [Vue mobile](vue-mobile.md).                                                   | `MobileBrowser.svelte` via `lib/components/mobileMenu.ts`                                  |
 
 ## Dictionnaires de libellés
 

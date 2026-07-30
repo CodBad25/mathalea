@@ -1,5 +1,5 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte'
-import { defineConfig } from 'vitest/config'
+import { configDefaults, defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [svelte({ hot: !process.env.VITEST })],
@@ -13,6 +13,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['tests/unit/setup-vitest.ts'],
+    exclude: [...configDefaults.exclude, '.pnpm-store/**'],
     testTimeout: 18_000_000, // prévoir 5h pour les test effectués la nuit
     /*coverage: {
       provider: 'v8',

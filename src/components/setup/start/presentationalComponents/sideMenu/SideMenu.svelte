@@ -21,6 +21,7 @@
   import { get } from 'svelte/store'
   import { sortArrayOfResourcesBasedOnYearAndMonth } from '../../../../../lib/components/sorting'
   import {
+    buildResourcesSet,
     deepReferentielInMenuCopy,
     getReferentiels,
   } from '../../../../../lib/stores/referentielsStore'
@@ -110,51 +111,6 @@
       }
     }
     return filteredRepository
-  }
-
-  const buildResourcesSet = (
-    refList: ReferentielInMenu[],
-  ): ResourceAndItsPath[] => {
-    let result: ResourceAndItsPath[] = []
-    const refList2 = deepReferentielInMenuCopy(refList)
-    for (const item of refList2) {
-      if (item.searchable) {
-        if (item.referentiel.BrevetTags) {
-          delete item.referentiel.BrevetTags
-        }
-        if (item.referentiel.E3CTags) {
-          delete item.referentiel.E3CTags
-        }
-        if (item.referentiel.crpeTags) {
-          delete item.referentiel.crpeTags
-        }
-        result.push(...getAllEndings(item.referentiel))
-      }
-    }
-    const clavier: ResourceAndItsPath = {
-      resource: {
-        uuid: 'clavier',
-        url: 'clavier',
-        id: 'clavier',
-        titre: 'clavier',
-        typeExercice: 'outil',
-        tags: [],
-      },
-      pathToResource: ['ClavierTest'],
-    }
-    const version: ResourceAndItsPath = {
-      resource: {
-        uuid: 'version',
-        url: 'version',
-        id: 'version',
-        titre: 'version',
-        typeExercice: 'outil',
-        tags: [],
-      },
-      pathToResource: ['Version'],
-    }
-    result.push(clavier, version)
-    return result
   }
 </script>
 

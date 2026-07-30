@@ -132,12 +132,21 @@ export interface IAlea2iep {
     A: PointAbstrait,
     options?: OptionsRegle,
   ): void
-  regleDroite(A: PointAbstrait, B: PointAbstrait, options?: OptionsRegle): void
+  regleDroite(
+    A: PointAbstrait,
+    direction: number | PointAbstrait,
+    options?: OptionsRegle,
+  ): void
   regleSegment(
     A: PointAbstrait,
     B: PointAbstrait,
     options?: OptionsRegle,
   ): number
+  regleDemiDroite(
+    O: PointAbstrait,
+    direction: number | PointAbstrait,
+    options?: OptionsRegle,
+  ): void
   regleDemiDroiteOriginePoint(
     O: PointAbstrait,
     A: PointAbstrait,
@@ -158,6 +167,11 @@ export interface IAlea2iep {
   equerreMasquer(options?: OptionsEquerre): void
   equerreDeplacer(A: PointAbstrait, options?: OptionsEquerre): void
   equerreRotation(angle: number | PointAbstrait, options?: OptionsEquerre): void
+  equerreRotationTranslation(
+    angle: number | PointAbstrait,
+    A: PointAbstrait,
+    options?: OptionsEquerre,
+  ): void
   equerreZoom(echelle: number, options?: OptionsIep): void
 
   // Requerre (outil combiné)
@@ -201,6 +215,7 @@ export interface IAlea2iep {
 
   // Points et polygones
   pointCreer(A: PointAbstrait, options?: OptionsOutil): void
+  milieuALaRegle(A: PointAbstrait, B: PointAbstrait, nom?: string): void
   pointMasquer(...points: (PointAbstrait | OptionsOutil)[]): void
   polygoneRapide(...args: (PointAbstrait | OptionsCrayon)[]): void
 
@@ -225,6 +240,11 @@ export interface IAlea2iep {
   rapporteurDeplacer(A: PointAbstrait, options?: OptionsRapporteur): void
   rapporteurRotation(
     angle: number | PointAbstrait,
+    options?: OptionsRapporteur,
+  ): void
+  rapporteurRotationTranslation(
+    angle: number | PointAbstrait,
+    A: PointAbstrait,
     options?: OptionsRapporteur,
   ): void
   rapporteurTracerDemiDroiteAngle(

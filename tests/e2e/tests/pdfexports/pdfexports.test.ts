@@ -6,7 +6,7 @@ import Latex, { makeImageFilesUrls } from '../../../../src/lib/Latex'
 import type { LatexFileInfos } from '../../../../src/lib/LatexTypes'
 import type { IExercice, IExerciceStatique } from '../../../../src/lib/types'
 import { context } from '../../../../src/modules/context'
-import { findStatic, findUuid } from '../../helpers/filter'
+import { findStatic, findUuid, loadStaticRef } from '../../helpers/filter'
 import { createIssue } from '../../helpers/issue'
 import { getFileLogger, log as lg, logError as lgE } from '../../helpers/log'
 
@@ -207,7 +207,9 @@ function shortErrorLabel(detail: string) {
 }
 
 function needsStaticLookup(filter: string) {
-  return /(dnb|crpe|sti2d|bac|e3c)/.test(filter)
+  return /(dnb|dnbpro|crpe|sti2d|stl|bac|e3c|eam|evacom|2nd)/.test(
+    filter,
+  )
 }
 
 function toFilterFromExercisePath(file: string) {
@@ -237,7 +239,157 @@ function buildExerciseUrl(uuid: string, exercicePath: string) {
   return `http://localhost:${port}/alea/?uuid=${uuid}&id=${idPath}&alea=${DEFAULT_ALEA}&v=latex&testCI`
 }
 
+function getStaticExerciceByUuid(
+  root: Record<string, unknown>,
+  targetUuid: string,
+): Record<string, unknown> | null {
+  if (root.uuid === targetUuid) return root
+
+  for (const value of Object.values(root)) {
+    if (value && typeof value === 'object') {
+      const found = getStaticExerciceByUuid(
+        value as Record<string, unknown>,
+        targetUuid,
+      )
+      if (found) return found
+    }
+  }
+
+  return null
+}
+
+async function readFirstExistingText(paths: string[]) {
+  for (const path of paths) {
+    try {
+      return {
+        content: await fs.readFile(path, 'utf8'),
+        path,
+      }
+    } catch {
+      // On essaie le chemin suivant: les statiques peuvent venir du dépôt
+      // local ou du clone CI public/static.
+    }
+  }
+  return {
+    content: '',
+    path: undefined,
+  }
+}
+
+function getStaticSerie(uuid: string) {
+  return uuid.split('_')[0]
+}
+
+function getStaticExam(uuid: string) {
+  if (uuid.startsWith('crpe')) return 'CRPE'
+  if (uuid.startsWith('dnb_')) return 'DNB'
+  if (uuid.startsWith('dnbpro_')) return 'DNBPRO'
+  if (uuid.startsWith('e3c_')) return 'E3C'
+  if (uuid.startsWith('eam_')) return 'EAM'
+  if (uuid.startsWith('bac_')) return 'BAC'
+  if (uuid.startsWith('sti2d_')) return 'STI2D'
+  if (uuid.startsWith('stl_')) return 'STL'
+  if (uuid.startsWith('evacom_')) return 'EVACOM'
+  if (uuid.startsWith('2nd_')) return '2ND'
+  return ''
+}
+
+async function loadStaticExercise(uuid: string) {
+  const allStaticReferentiels = loadStaticRef()
+  const infos = allStaticReferentiels
+    ? getStaticExerciceByUuid(
+        allStaticReferentiels as Record<string, unknown>,
+        uuid,
+      )
+    : null
+
+  if (!infos) {
+    return {
+      status: 'NON_TESTE' as const,
+      detail: 'Informations statiques introuvables.',
+    }
+  }
+
+  const annee = infos.annee
+  const serie = getStaticSerie(uuid)
+  const texCandidates =
+    typeof annee === 'string'
+      ? [
+          resolve(
+            process.cwd(),
+            'public',
+            'static',
+            serie,
+            annee,
+            'tex',
+            `${uuid}.tex`,
+          ),
+          resolve(
+            process.cwd(),
+            'src',
+            'exercicesStatiques',
+            serie,
+            annee,
+            'tex',
+            `${uuid}.tex`,
+          ),
+        ]
+      : []
+  const texCorrectionCandidates =
+    typeof annee === 'string'
+      ? [
+          resolve(
+            process.cwd(),
+            'public',
+            'static',
+            serie,
+            annee,
+            'tex',
+            `${uuid}_cor.tex`,
+          ),
+          resolve(
+            process.cwd(),
+            'src',
+            'exercicesStatiques',
+            serie,
+            annee,
+            'tex',
+            `${uuid}_cor.tex`,
+          ),
+        ]
+      : []
+
+  const enonce = await readFirstExistingText(texCandidates)
+  if (!enonce.path) {
+    return {
+      status: 'NON_TESTE' as const,
+      detail: `Fichier LaTeX statique introuvable: ${texCandidates.join(' ou ')}`,
+    }
+  }
+
+  const correction = await readFirstExistingText(texCorrectionCandidates)
+
+  return {
+    status: 'OK' as const,
+    exercice: {
+      typeExercice: 'statique',
+      uuid,
+      content: enonce.content,
+      contentCorr: correction.content,
+      annee,
+      lieu: infos.lieu,
+      mois: infos.mois,
+      numeroInitial: infos.numeroInitial,
+      examen: getStaticExam(uuid),
+    } as IExerciceStatique,
+  }
+}
+
 async function loadExercise(uuid: string) {
+  if (isStaticUuid(uuid)) {
+    return await loadStaticExercise(uuid)
+  }
+
   const exercice = await mathaleaLoadExerciceFromUuid(uuid)
 
   if (!exercice) {

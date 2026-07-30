@@ -61,17 +61,22 @@
   import ModalThirdApps from './presentationalComponents/ModalThirdApps.svelte'
   import Placeholder from './presentationalComponents/Placeholder.svelte'
   import MobileCarouselCards from './presentationalComponents/carousel/MobileCarouselCards.svelte'
+  import MobileView from '../mobile/MobileView.svelte'
   import { getLang } from '../../../lib/stores/languagesStore'
   import SideMenu from './presentationalComponents/sideMenu/SideMenu.svelte'
 
   const lang = getLang()
   let isNavBarVisible: boolean = true
-  let innerWidth = 0
+  let innerWidth = window.innerWidth
   let isBackToTopButtonVisible = false
   let selectedThirdApps: string[]
   let thirdAppsChoiceModal: BasicClassicModal | undefined
   let showThirdAppsChoiceDialog = false
   let isMd: boolean
+  let isMobileViewUsed: boolean = false
+  // Bascule manuelle depuis le menu général de la vue mobile (« Afficher comme
+  // sur un ordinateur ») : force la vue bureau tant que la page n'est pas rechargée.
+  let forceDesktopView: boolean = false
   let localeValue: Language = get(referentielLocale)
   let isSidenavOpened: boolean = true
 
@@ -223,6 +228,10 @@
     isNavBarVisible = $globalOptions.v !== 'l'
     updateSelectedThirdApps()
     isMd = innerWidth >= SM_BREAKPOINT
+    // La vue mobile dédiée remplace la vue par défaut sur téléphone, sauf dans
+    // les intégrations (Capytale, Moodle…) qui ont leur propre barre d'outils,
+    // ou si l'utilisateur a demandé la vue bureau depuis le menu général.
+    isMobileViewUsed = !isMd && !$globalOptions.recorder && !forceDesktopView
   }
 
   function addScrollListener() {
@@ -412,10 +421,24 @@
   <div
     class="{$darkMode.isActive
       ? 'dark'
-      : ''} relative flex w-screen h-screen bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
+      : ''} relative flex w-screen {isMobileViewUsed
+      ? 'min-h-screen'
+      : 'h-screen'} bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
     id="startComponent"
   >
     <div class="flex-1 flex flex-col w-full md:overflow-hidden">
+      {#if isMobileViewUsed}
+        <!-- ====================================================================================
+                  VUE MOBILE (téléphone)
+========================================================================================= -->
+        <MobileView
+          {newDataForAll}
+          {setAllInteractive}
+          {trash}
+          {handleExport}
+          useDesktopView={() => (forceDesktopView = true)}
+        />
+      {:else}
       <Header
         {isNavBarVisible}
         isExerciseDisplayed={$exercicesParams.length !== 0}
@@ -540,6 +563,7 @@
           </div>
           <Footer />
         </div>
+      {/if}
       {/if}
     </div>
     <Keyboard />

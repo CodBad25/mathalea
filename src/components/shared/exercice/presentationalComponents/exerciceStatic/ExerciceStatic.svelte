@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getContext } from 'svelte'
   import HeaderExerciceVueProf from '../../shared/headerExerciceVueProf/HeaderExerciceVueProf.svelte'
   import HeaderExerciceVueEleve from '../shared/HeaderExerciceVueEleve.svelte'
   import ButtonTextAction from '../../../forms/ButtonTextAction.svelte'
@@ -88,6 +89,16 @@
   function handleNoCorrectionAvailable() {
     noCorrectionAvailable = true
   }
+
+  const isMobileView = getContext('mobileView') === true
+
+  /**
+   * Ouvre une image d'énoncé ou de correction dans un nouvel onglet : sur un
+   * écran de téléphone, c'est le seul moyen de la zoomer et de s'y déplacer.
+   */
+  function openImageInNewTab(url: string) {
+    window.open(url, '_blank', 'noopener')
+  }
 </script>
 
 {#if isVueEleve}
@@ -130,13 +141,27 @@
 <div class="p-4">
   {#if isContentVisible}
     {#if exercice}
-      {#each exercice.png as url}
+      {#each exercice.png as url, i}
         <img
           src={url}
           class="mb-6"
           style="width: calc(100% * {zoomFactor})"
           alt="énoncé"
         />
+        {#if isMobileView}
+          <div class="print-hidden flex flex-row mb-6">
+            <ButtonTextAction
+              text={exercice.png.length > 1
+                ? `Ouvrir l'énoncé (partie ${i + 1}) en plein écran`
+                : "Ouvrir l'énoncé en plein écran"}
+              icon="bx-zoom-in"
+              inverted={true}
+              class="rounded-lg py-1 px-3"
+              title="Ouvre l'image dans un nouvel onglet pour pouvoir zoomer"
+              on:click={() => openImageInNewTab(url)}
+            />
+          </div>
+        {/if}
       {/each}
     {/if}
   {/if}
@@ -148,7 +173,7 @@
     >
       <div class="container">
         {#if exercice}
-          {#each exercice.pngCor as url}
+          {#each exercice.pngCor as url, i}
             {#if noCorrectionAvailable}
               <p class="text-red-500">Aucune correction disponible</p>
             {:else}
@@ -159,6 +184,20 @@
                 alt="correction"
                 on:error={handleNoCorrectionAvailable}
               />
+              {#if isMobileView}
+                <div class="print-hidden flex flex-row mb-4 pl-2">
+                  <ButtonTextAction
+                    text={exercice.pngCor.length > 1
+                      ? `Ouvrir la correction ${i + 1} en grand`
+                      : 'Ouvrir la correction en grand'}
+                    icon="bx-zoom-in"
+                    inverted={true}
+                    class="rounded-lg py-1 px-3"
+                    title="Ouvre l'image dans un nouvel onglet pour pouvoir zoomer"
+                    on:click={() => openImageInNewTab(url)}
+                  />
+                </div>
+              {/if}
             {/if}
           {/each}
         {/if}
@@ -172,6 +211,20 @@
       <div
         class="absolute border-coopmaths-struct dark:border-coopmathsdark-struct bottom-0 left-0 border-b-[3px] w-4"
       ></div>
+    </div>
+  {/if}
+
+  {#if isMobileView && !isVueEleve && isSolutionAccessible}
+    <div class="print-hidden flex flex-row flex-wrap gap-2 mt-2 mb-8">
+      <ButtonTextAction
+        text={isCorrectionVisible
+          ? 'Masquer la correction'
+          : 'Afficher la correction'}
+        icon={isCorrectionVisible ? 'bx-hide' : 'bx-check-circle'}
+        inverted={true}
+        class="rounded-lg py-1 px-3"
+        on:click={() => (isCorrectionVisible = !isCorrectionVisible)}
+      />
     </div>
   {/if}
 </div>

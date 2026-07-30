@@ -9,6 +9,7 @@ import {
   translation2Points,
 } from '../lib/2d/transformations'
 import {
+  angleModulo,
   angleOriente,
   longueur,
   norme,
@@ -29,6 +30,7 @@ import {
   mediatriceAuCompas,
   mediatriceRegleEquerre,
 } from './iepMacros/droitesRemarquables'
+import { milieuALaRegle } from './iepMacros/milieu'
 import {
   paralleleAuCompas,
   paralleleAuCompasAvecDescription,
@@ -228,6 +230,7 @@ export default class Alea2iep {
   mediane = mediane
   bissectriceAuCompas = bissectriceAuCompas
   cercleCirconscrit = cercleCirconscrit
+  milieuALaRegle = milieuALaRegle
   triangle3longueurs = triangle3longueurs
   triangleRectangleCoteHypotenuse = triangleRectangleCoteHypotenuse
   triangleRectangle2Cotes = triangleRectangle2Cotes
@@ -662,6 +665,14 @@ export default class Alea2iep {
     this.rotation('equerre', angle, options)
   }
 
+  equerreRotationTranslation(
+    angle: number | PointAbstrait,
+    A: PointAbstrait,
+    options: OptionsEquerre = {},
+  ) {
+    this.rotationTranslation('equerre', angle, A, options)
+  }
+
   requerreRotation(
     angle: number | PointAbstrait,
     options: OptionsRequerre = {},
@@ -678,6 +689,14 @@ export default class Alea2iep {
     options: OptionsRapporteur = {},
   ) {
     this.rotation('rapporteur', angle, options)
+  }
+
+  rapporteurRotationTranslation(
+    angle: number | PointAbstrait,
+    A: PointAbstrait,
+    options: OptionsRapporteur = {},
+  ) {
+    this.rotationTranslation('rapporteur', angle, A, options)
   }
 
   /**
@@ -1262,19 +1281,52 @@ export default class Alea2iep {
     A: PointAbstrait,
     options: OptionsRegle = {},
   ) {
-    const longueur = options.longueur ?? this.regle.longueur
-    const M = pointSurSegment(O, A, longueur)
+    this.regleDemiDroite(O, A, options)
+  }
+
+  /**
+   * Trace une demi-droite d'origine O passant par A, ou de direction donnée par un angle avec l'horizontale
+   * @param {PointAbstrait} O Origine
+   * @param {number|PointAbstrait} direction Point de direction ou angle en degrés
+   * @param {objet} [options] Défaut {longueur: this.regle.longueur, tempo : this.tempo, vitesse: this.vitesse, sens: this.vitesse / 2}
+   */
+  regleDemiDroite(
+    O: PointAbstrait,
+    direction: number | PointAbstrait,
+    options: OptionsRegle = {},
+  ) {
+    const longueurRegle = options.longueur ?? this.regle.longueur
+    const M =
+      typeof direction === 'number'
+        ? pointAdistance(O, longueurRegle, angleModulo(direction))
+        : pointSurSegment(O, direction, longueurRegle)
     this.regleSegment(O, M, options)
   }
 
   /**
-   * Trace une droite passanrt par les points A et B
+   * Trace une droite passant par les points A et B, ou passant par A avec la pente indiquée
    * @param {PointAbstrait} A
-   * @param {PointAbstrait} B
+   * @param {number|PointAbstrait} direction Point de direction ou coefficient directeur de la droite
    * @param {objet} [options] Défaut {longueur: this.regle.longueur, tempo : this.tempo, vitesse: this.vitesse, sens: this.vitesse / 2}
    */
-  regleDroite(A: PointAbstrait, B: PointAbstrait, options: OptionsRegle = {}) {
+  regleDroite(
+    A: PointAbstrait,
+    direction: number | PointAbstrait,
+    options: OptionsRegle = {},
+  ) {
     const longueurRegle = options.longueur ?? this.regle.longueur
+    const B =
+      typeof direction === 'number'
+        ? pointAdistance(
+            A,
+            1,
+            Number.isFinite(direction)
+              ? (Math.atan(direction) * 180) / Math.PI
+              : direction > 0
+                ? 90
+                : -90,
+          )
+        : direction
     const M = homothetie(
       B,
       A,
@@ -1286,12 +1338,8 @@ export default class Alea2iep {
       (-longueurRegle * 0.5 + longueur(A, B) * 0.5) / longueur(A, B),
     )
     if (this.x(A) <= this.x(B)) {
-      this.regleMontrer(M)
-      this.regleRotation(N, options)
       this.regleSegment(M, N, options)
     } else {
-      this.regleMontrer(N)
-      this.regleRotation(M, options)
       this.regleSegment(N, M, options)
     }
   }
@@ -1430,6 +1478,7 @@ export default class Alea2iep {
     }
     const longueurRegle = options.longueur ?? this.regle.longueur
     const longueurSegment = longueur(A, B)
+    const regleVisibleInitialement = this.regle.visibilite
     if (longueurSegment > EPSILON_SEGMENT_IEP) {
       const premierPoint = options.zeroSurPremierPoint
         ? A
@@ -1444,7 +1493,7 @@ export default class Alea2iep {
             premierPoint,
           )
       const angleRegle = droite(premierPoint, secondPoint).angleAvecHorizontale
-      this.regleMontrer()
+      if (!regleVisibleInitialement) this.regleMontrer()
       this.regleRotationTranslation(angleRegle, pointDepartRegle, options)
     }
     if (this.crayon != null) {
@@ -1459,7 +1508,7 @@ export default class Alea2iep {
         id = this.tracer(A, options)
       }
     }
-    this.regleMasquer()
+    if (!regleVisibleInitialement) this.regleMasquer()
     return id
   }
 
@@ -1487,10 +1536,13 @@ export default class Alea2iep {
    * @param  {...points} sommets du polygonne séparés par des virgules
    */
   polygoneTracer(...sommets: PointAbstrait[]) {
+    const regleVisibleInitialement = this.regle.visibilite
+    if (!regleVisibleInitialement) this.regleMontrer()
     for (let i = 0; i < sommets.length - 1; i++) {
       this.regleSegment(sommets[i], sommets[i + 1])
     }
     this.regleSegment(sommets[sommets.length - 1], sommets[0])
+    if (!regleVisibleInitialement) this.regleMasquer()
   }
 
   /**

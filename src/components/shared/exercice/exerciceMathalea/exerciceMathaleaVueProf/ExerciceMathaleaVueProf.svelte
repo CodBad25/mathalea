@@ -1,6 +1,13 @@
 <script lang="ts">
   import seedrandom from 'seedrandom'
-  import { afterUpdate, beforeUpdate, onDestroy, onMount, tick } from 'svelte'
+  import {
+    afterUpdate,
+    beforeUpdate,
+    getContext,
+    onDestroy,
+    onMount,
+    tick,
+  } from 'svelte'
   import { get } from 'svelte/store'
   import ExerciceSimple from '../../../../../exercices/ExerciceSimple'
   import {
@@ -91,7 +98,10 @@
   let columnsCount = interfaceParams.cols || 1
   let isVisible = true
   let isContentVisible = true
-  let isSettingsVisible = true
+  // Dans la vue mobile, les paramètres sont masqués tant qu'ils n'ont pas été
+  // demandés depuis le menu de l'exercice : ils occuperaient tout l'écran.
+  const isMobileView = getContext('mobileView') === true
+  let isSettingsVisible = !isMobileView
   let isInteractif = exercise.interactif || exercise.interactifObligatoire
   const interactifReady = exercise.interactifReady
   const exerciceHasNoSettings =
@@ -613,6 +623,32 @@
     }
     await updateDisplay()
   }
+
+  /**
+   * Applique l'affichage ou le masquage de la correction.
+   * Utilisée par la barre de titre (vue bureau) et par les boutons placés
+   * sous l'exercice (vue mobile).
+   */
+  async function applyCorrectionVisibility(
+    nextIsCorrectionVisible: boolean,
+    nextIsContentVisible: boolean = true,
+  ) {
+    isContentVisible = nextIsContentVisible
+    isCorrectionVisible = nextIsCorrectionVisible
+    if (
+      isLocalStorageAvailable() &&
+      exercise.id !== undefined &&
+      isCorrectionVisible
+    ) {
+      window.localStorage.setItem(`${exercise.id}|${exercise.seed}`, 'true')
+    }
+    if (isInteractif && !exercise.interactifObligatoire) {
+      isInteractif = !isInteractif
+      exercise.interactif = isInteractif
+      await updateDisplay()
+    }
+    await adjustMathalea2dFiguresWidth()
+  }
 </script>
 
 <div class="z-0 flex-1" bind:this={divExercice}>
@@ -623,24 +659,11 @@
     }}
     on:clickSettings={(event) =>
       (isSettingsVisible = event.detail.isSettingsVisible)}
-    on:clickCorrection={async (event) => {
-      isContentVisible = event.detail.isContentVisible
-      isCorrectionVisible = event.detail.isCorrectionVisible
-
-      if (
-        isLocalStorageAvailable() &&
-        exercise.id !== undefined &&
-        isCorrectionVisible
-      ) {
-        window.localStorage.setItem(`${exercise.id}|${exercise.seed}`, 'true')
-      }
-      if (isInteractif && !exercise.interactifObligatoire) {
-        isInteractif = !isInteractif
-        exercise.interactif = isInteractif
-        await updateDisplay()
-      }
-      await adjustMathalea2dFiguresWidth()
-    }}
+    on:clickCorrection={async (event) =>
+      await applyCorrectionVisibility(
+        event.detail.isCorrectionVisible,
+        event.detail.isContentVisible,
+      )}
     on:clickInteractif={async (event) => {
       isInteractif = exercise.interactifObligatoire
         ? true
@@ -849,6 +872,32 @@
           >
         {/if}
         <div bind:this={divScore}></div>
+        {#if isMobileView}
+          <!-- Actions les plus courantes, répétées sous l'exercice pour rester
+               à portée de pouce sans remonter jusqu'à la barre de titre -->
+          <div class="print-hidden flex flex-row flex-wrap gap-2 mt-4 mb-8">
+            {#if exercise.listeCorrections.length > 0}
+              <ButtonTextAction
+                text={isCorrectionVisible
+                  ? 'Masquer la correction'
+                  : 'Afficher la correction'}
+                icon={isCorrectionVisible ? 'bx-hide' : 'bx-check-circle'}
+                inverted={true}
+                class="rounded-lg py-1 px-3"
+                on:click={() => applyCorrectionVisibility(!isCorrectionVisible)}
+              />
+            {/if}
+            {#if !exercise.pasDeVersionAleatoire}
+              <ButtonTextAction
+                text="Nouvelles données"
+                icon="bx-refresh"
+                inverted={true}
+                class="rounded-lg py-1 px-3"
+                on:click={newData}
+              />
+            {/if}
+          </div>
+        {/if}
       </div>
       <Settings
         exercice={exercise}

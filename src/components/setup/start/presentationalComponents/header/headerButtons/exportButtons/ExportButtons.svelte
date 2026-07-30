@@ -56,13 +56,13 @@
       icon: 'bx bx-code-alt',
       action: () => exportAndClose('latex'),
     },
-    {
-      id: 'typst',
-      label: 'PDF via HTML',
-      description: 'Pour générer un PDF à partir de la mise en page HTML',
-      icon: 'bx bx-code-alt',
-      action: () => exportAndClose('a4'),
-    },
+    // {
+    //   id: 'typst',
+    //   label: 'PDF via HTML',
+    //   description: 'Pour générer un PDF à partir de la mise en page HTML',
+    //   icon: 'bx bx-code-alt',
+    //   action: () => exportAndClose('a4'),
+    // },
     {
       id: 'moodle',
       label: 'Moodle',

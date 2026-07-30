@@ -22,6 +22,7 @@ import {
 import {
   pointIntersectionLC,
   pointSurDroite,
+  pointSurSegment,
 } from '../../lib/2d/utilitairesPoint'
 import { cross, dot, vecteur } from '../../lib/2d/Vecteur'
 import type {
@@ -54,8 +55,12 @@ export const paralleleRegleEquerre2points3epoint = function (
   const AC = [C.x - A.x, C.y - A.y, 0]
   const prodScal = dot(AB, AC)
   const prodVect = cross(AB, AC)
+  let angleRequerre: number = -90
+  let sensGlisser = -1
   if (prodScal < 0) {
     H1 = B
+    angleRequerre = 90
+    sensGlisser = 1
   } else {
     H1 = A
   }
@@ -63,9 +68,14 @@ export const paralleleRegleEquerre2points3epoint = function (
   this.requerreZoom(120)
   this.requerreGlisserEquerre(0, { tempo: 0 })
   this.requerreMontrer()
-  this.requerreRotationTranslation(d.angleAvecHorizontale + 90, H1, options)
+  this.requerreRotationTranslation(
+    d.angleAvecHorizontale + angleRequerre,
+    H1,
+    options,
+  )
   this.requerreGlisserEquerre(
-    prodVect[2] < 0 ? -longueur(H, C) / 1.2 : longueur(H, C) / 1.2,
+    sensGlisser *
+      (prodVect[2] < 0 ? -longueur(H, C) / 1.2 : longueur(H, C) / 1.2),
     options ?? {},
   )
   this.crayonMontrer(H2)
@@ -132,6 +142,15 @@ export const perpendiculaireRegleEquerreDroitePoint = function (
     const A = rotation(P, H, 90)
     const B = rotation(A, H, 180)
     const P3 = homothetie(P, H, 1.2)
+    const P3B = pointSurSegment(P3, H, 0.4)
+    const HB = pointSurSegment(H, P3, 0.4)
+
+    const P4 = rotation(P3, H, 180)
+    const P4B = pointSurSegment(
+      P3,
+      P4,
+      Math.min(this.regle.longueur, longueur(P3, H) + 1),
+    )
     const alpha = angleOriente(pointAbstrait(10000, H.y), H, B)
     if (options.description)
       this.textePosition(
@@ -140,34 +159,36 @@ export const perpendiculaireRegleEquerreDroitePoint = function (
         10,
         { couleur: 'lightblue' },
       )
-    this.equerreRotation(alpha, options)
-    this.equerreMontrer(H, options)
+    const equerreVisibility = this.equerre.visibilite
+    if (!equerreVisibility) this.equerreMontrer()
+    this.equerreRotationTranslation(alpha, H, options)
+    if (options.description)
+      this.textePosition(`2. Faire deux traits le long de l'équerre.`, 0, 9.3, {
+        couleur: 'lightblue',
+      })
+    this.trait(P3, P3B, Object.assign({}, options, { tempo: 5, epaisseur: 1 }))
+    this.trait(H, HB, Object.assign({}, options, { tempo: 5, epaisseur: 1 }))
+    if (!equerreVisibility) {
+      this.equerreMasquer(options)
+    }
+    this.regleMontrer()
+    this.regleRotationTranslation(alpha - 90, P3, options)
+
     if (options.description)
       this.textePosition(
-        `2. Tracer le segment de droite passant par le point ${P.nom}`,
-        0,
-        9.3,
-        { couleur: 'lightblue' },
-      )
-    this.crayonMontrer(P, options)
-    this.tracer(H, options)
-    this.equerreMasquer(options)
-    if (options.description)
-      this.textePosition(
-        `3. Prolonger la perpendiculaire à ${d.nom} à la règle.`,
+        `3. Tracer la perpendiculaire à ${d.nom} à la règle.`,
         0,
         8.6,
         { couleur: 'lightblue' },
       )
-    this.regleMontrer(P3, options)
-    this.regleRotation(alpha - 90, options)
-    this.crayonDeplacer(P3, options)
-    this.tracer(rotation(P3, H, 180), options)
+
+    this.trait(P3, P4B, options)
+    this.regleMasquer(options)
     if (options.description)
       this.textePosition("4. Coder l'angle droit.", 0, 7.9, {
         couleur: 'lightblue',
       })
-    this.regleMasquer(options)
+
     this.codageAngleDroit(
       A,
       H,
@@ -181,7 +202,10 @@ export const perpendiculaireRegleEquerreDroitePoint = function (
     const B = pointSurDroite(d, 10000)
     const pointIntersectionDC = pointIntersectionLC(d, C)
     let P3 = rotation(pointIntersectionDC, P, 90)
+
     if (P3.y < P.y) P3 = rotation(P3, P, 180)
+    const P3B = pointSurSegment(P3, H, 0.4)
+    const HB = pointSurSegment(H, P3, 0.4)
     const alpha = angleOriente(pointAbstrait(10000, H.y), H, B)
     if (options.description)
       this.textePosition(
@@ -190,34 +214,40 @@ export const perpendiculaireRegleEquerreDroitePoint = function (
         10,
         { couleur: 'lightblue' },
       )
-    this.equerreRotation(alpha, options)
-    this.equerreMontrer(H, options)
+    const equerreVisibility = this.equerre.visibilite
+    if (!equerreVisibility) this.equerreMontrer()
+    this.equerreRotationTranslation(alpha, H, options)
+    if (options.description)
+      this.textePosition(`2. Faire deux traits le long de l'équerre.`, 0, 9.3, {
+        couleur: 'lightblue',
+      })
+    this.trait(P3, P3B, Object.assign({}, options, { tempo: 5, epaisseur: 1 }))
+    this.trait(H, HB, Object.assign({}, options, { tempo: 5, epaisseur: 1 }))
+    if (!equerreVisibility) this.equerreMasquer(options)
+
     if (options.description)
       this.textePosition(
-        "2. Tracer le long de l'autre côté de l'angle droit de l'équerre",
-        0,
-        9.3,
-        { couleur: 'lightblue' },
-      )
-    this.crayonMontrer(P3, options)
-    this.tracer(H, options)
-    this.equerreMasquer(options)
-    if (options.description)
-      this.textePosition(
-        `3. Prolonger la perpendiculaire à ${d.nom} à la règle.`,
+        `3. Tracer la perpendiculaire à ${d.nom} à la règle.`,
         0,
         8.6,
         { couleur: 'lightblue' },
       )
-    this.regleMontrer(P3, options)
-    this.regleRotation(alpha - 90, options)
-    this.crayonDeplacer(P3, options)
-    this.tracer(rotation(P3, H, 180), options)
+    this.regleMontrer()
+    this.regleRotationTranslation(alpha - 90, P3, options)
+    this.trait(
+      P3,
+      pointSurSegment(
+        P3,
+        H,
+        Math.min(this.regle.longueur, longueur(P3, H) + 1),
+      ),
+      options,
+    )
+    this.regleMasquer()
     if (options.description)
       this.textePosition("4. Coder l'angle droit.", 0, 7.9, {
         couleur: 'lightblue',
       })
-    this.regleMasquer(options)
     this.codageAngleDroit(A, H, P3, options)
   }
 }

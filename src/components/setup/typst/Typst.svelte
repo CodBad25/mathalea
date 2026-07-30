@@ -34,6 +34,7 @@
   import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
+  import { SM_BREAKPOINT } from '../../keyboard/lib/sizes'
   import {
     BADGE_STYLES,
     HEADER_STYLES,
@@ -92,10 +93,14 @@
   type DisplayMode = 'code' | 'split' | 'preview'
   const STORAGE_KEY = 'mathaleaTypstView'
 
+  // Sur téléphone, l'éditeur de code et l'affichage côte à côte n'ont pas de
+  // place : seul l'aperçu est proposé et le volet de réglages reste replié.
+  const isMobile = window.innerWidth < SM_BREAKPOINT
+
   let displayMode: DisplayMode = $state('preview')
-  let isSettingsOpen = $state(true)
+  let isSettingsOpen = $state(!isMobile)
   /** Affiche la palette de mise en page sur l'aperçu */
-  let showOverlay = $state(true)
+  let showOverlay = $state(!isMobile)
   /**
    * Valeur initiale de `documentOptions` (calculée ici, hors réactivité, pour
    * n'assigner l'état qu'une seule fois — lire un `$state` en dehors d'un
@@ -109,14 +114,15 @@
       const saved = window.localStorage.getItem(STORAGE_KEY)
       if (saved != null) {
         const parsed = JSON.parse(saved)
-        if (['code', 'split', 'preview'].includes(parsed.displayMode)) {
+        // sur téléphone on reste sur l'aperçu quel que soit le mode mémorisé
+        if (!isMobile && ['code', 'split', 'preview'].includes(parsed.displayMode)) {
           const restoredDisplayMode = parsed.displayMode as DisplayMode
           displayMode = restoredDisplayMode
           // le bouton Réglages n'existe qu'en Aperçu : hors de ce mode, le
           // volet doit rester fermé (isSettingsOpen n'est pas persisté)
           if (restoredDisplayMode !== 'preview') isSettingsOpen = false
         }
-        if (typeof parsed.showOverlay === 'boolean') {
+        if (!isMobile && typeof parsed.showOverlay === 'boolean') {
           showOverlay = parsed.showOverlay
         }
         if (parsed.documentOptions != null) {
@@ -2119,12 +2125,16 @@
       subtitleType="export"
       handleLanguage={() => {}}
       locale={$referentielLocale}
+      showLanguage={!isMobile}
     />
     <div
       class="flex flex-row flex-wrap items-center gap-x-6 gap-y-3 px-4 md:px-8 py-3 border-b border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest text-coopmaths-corpus dark:text-coopmathsdark-corpus"
     >
+      <!-- Sur téléphone, seul l'aperçu est disponible : le sélecteur est masqué -->
       <div
-        class="flex flex-row rounded-lg overflow-hidden border border-coopmaths-action dark:border-coopmathsdark-action"
+        class="{isMobile
+          ? 'hidden'
+          : 'flex'} flex-row rounded-lg overflow-hidden border border-coopmaths-action dark:border-coopmathsdark-action"
         role="group"
         aria-label="Mode d'affichage"
       >

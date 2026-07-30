@@ -1,0 +1,94 @@
+{
+  "sections": [
+    {
+      "id": "college",
+      "title": "Collège",
+      "subtitle": "6e · 5e · 4e · 3e · Brevet",
+      "icon": "bx-backpack",
+      "entries": [
+        {
+          "id": "6e",
+          "title": "6e",
+          "referentiel": "aleatoires",
+          "path": ["6e"]
+        },
+        {
+          "id": "5e",
+          "title": "5e",
+          "referentiel": "aleatoires",
+          "path": ["5e"]
+        },
+        {
+          "id": "4e",
+          "title": "4e",
+          "referentiel": "aleatoires",
+          "path": ["4e"]
+        },
+        {
+          "id": "3e",
+          "title": "3e",
+          "referentiel": "aleatoires",
+          "path": ["3e"]
+        },
+        {
+          "id": "dnb-themes",
+          "title": "Annales de DNB par thèmes",
+          "referentiel": "examens",
+          "path": ["BrevetTags"]
+        }
+      ]
+    },
+    {
+      "id": "lycee",
+      "title": "Lycée Général",
+      "subtitle": "2de · 1re · Tle · Bac",
+      "icon": "bx-graduation",
+      "entries": [
+        {
+          "id": "2e",
+          "title": "Seconde",
+          "referentiel": "aleatoires",
+          "path": ["2e"]
+        },
+        {
+          "id": "1e",
+          "title": "Première",
+          "referentiel": "aleatoires",
+          "path": ["1e"]
+        },
+        {
+          "id": "terminale",
+          "title": "Terminale",
+          "referentiel": "aleatoires",
+          "path": ["Terminale"]
+        },
+        {
+          "id": "premiere-annales-themes",
+          "title": "Annales épreuves de première par thème",
+          "referentiel": "examens",
+          "path": ["40_Épreuves de Première - Par thème"]
+        },
+        {
+          "id": "bac-themes",
+          "title": "Baccalauréat par thème",
+          "referentiel": "examens",
+          "path": ["60_Baccalauréat - Par thème"]
+        }
+      ]
+    },
+    {
+      "id": "lyceePro",
+      "title": "Lycée Professionnel",
+      "subtitle": "2de",
+      "icon": "bx-graduation",
+      "entries": [
+        {
+          "id": "bp2",
+          "title": "Bac Pro seconde",
+          "referentiel": "aleatoires",
+          "path": ["BP2"]
+        }
+      ]
+    }
+  ]
+}

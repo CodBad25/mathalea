@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
+  import { createEventDispatcher, getContext } from 'svelte'
   import refProfs from '../../../../../json/referentielProfs.json'
   import uuidsRessources from '../../../../../json/uuidsRessources.json'
   import { toMap } from '../../../../../lib/components/toMap'
@@ -7,9 +7,16 @@
   import { exercicesParams } from '../../../../../lib/stores/generalStore'
   import { globalOptions } from '../../../../../lib/stores/globalOptions'
   import PdfDialog from '../../../../setup/latex/PdfDialog.svelte'
+  import MobileMenuAction from '../../../../setup/mobile/MobileMenuAction.svelte'
+  import MobileOverlay from '../../../../setup/mobile/MobileOverlay.svelte'
   import InteractivityIcon from '../../../icons/TwoStatesIcon.svelte'
   import BoutonDescendre from './BoutonDescendre.svelte'
   import BoutonMonter from './BoutonMonter.svelte'
+
+  // Dans la vue mobile, la barre d'actions est remplacée par une icône unique
+  // qui ouvre un menu plein écran (voir `MobileView.svelte`).
+  const isMobileView = getContext('mobileView') === true
+  let isMobileMenuOpen = false
 
   // paramètres obligatoires
   export let title: string | undefined
@@ -111,9 +118,129 @@
   }
   <HeaderExerciceVueProf {...headerExerciceProps}/>
   ```
+
+  Dans la vue mobile (contexte `mobileView`), la barre d'actions est remplacée
+  par une icône unique ouvrant un menu plein écran qui recouvre les exercices.
  -->
 
-<div class="z-0 flex-1">
+{#if isMobileView}
+  <div class="z-0 flex-1">
+    <div
+      class="flex flex-row items-center justify-between gap-2 mt-4 pb-1
+      border-b border-coopmaths-struct dark:border-coopmathsdark-struct"
+    >
+      <h1
+        id="exercice{indiceExercice}"
+        class="min-w-0 flex flex-row items-center gap-2 text-coopmaths-struct dark:text-coopmathsdark-struct"
+      >
+        <span
+          class="{$exercicesParams.length <= 1
+            ? 'hidden'
+            : 'flex'} shrink-0 items-center justify-center h-5 w-5 text-xs font-light
+          bg-coopmaths-struct dark:bg-coopmathsdark-struct
+          text-coopmaths-canvas dark:text-coopmathsdark-canvas"
+        >
+          {indiceExercice + 1}
+        </span>
+        <span
+          id="exotitle-{indiceExercice}"
+          class="min-w-0 truncate font-bold text-base">{titleBase}</span
+        >
+        {#if titleAddendum}
+          <span
+            class="flex shrink-0 justify-center items-center rounded-full h-5 w-5 bg-coopmaths-warn-900 text-coopmaths-canvas font-bold text-sm"
+          >
+            {titleAddendum}
+          </span>
+        {/if}
+      </h1>
+      <button
+        type="button"
+        aria-label="Régler l'exercice"
+        class="print-hidden shrink-0 p-1 text-coopmaths-action dark:text-coopmathsdark-action"
+        on:click={() => (isMobileMenuOpen = true)}
+      >
+        <i class="bx bx-slider-alt text-2xl"></i>
+      </button>
+    </div>
+  </div>
+
+  {#if isMobileMenuOpen}
+    <div
+      class="fixed inset-0 z-[1100] flex flex-col overflow-y-auto
+      bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
+    >
+      <div
+        class="sticky top-0 flex flex-row items-center justify-between gap-2 px-4 py-3
+        border-b border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest
+        bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
+      >
+        <h2
+          class="min-w-0 truncate text-lg font-bold text-coopmaths-struct dark:text-coopmathsdark-struct"
+        >
+          {titleBase}
+        </h2>
+        <button
+          type="button"
+          aria-label="Fermer le menu de l'exercice"
+          class="shrink-0 p-1 text-coopmaths-action dark:text-coopmathsdark-action"
+          on:click={() => (isMobileMenuOpen = false)}
+        >
+          <i class="bx bx-x text-3xl"></i>
+        </button>
+      </div>
+      <div class="flex flex-col gap-2 p-4">
+        {#if randomReady}
+          <MobileMenuAction
+            icon="bx-refresh"
+            label="Nouvelles données"
+            description="Régénère l'énoncé de cet exercice"
+            onclick={() => {
+              isMobileMenuOpen = false
+              newData()
+            }}
+          />
+        {/if}
+        {#if settingsReady}
+          <MobileMenuAction
+            icon="bx-slider"
+            label={isSettingsVisible
+              ? 'Masquer les paramètres'
+              : "Paramétrer l'exercice"}
+            onclick={() => {
+              isMobileMenuOpen = false
+              isSettingsVisible = !isSettingsVisible
+              dispatch('clickSettings', { isSettingsVisible })
+            }}
+          />
+        {/if}
+        {#if interactifReady && !interactifObligatoire}
+          <MobileMenuAction
+            icon={isInteractif ? 'bx-toggle-right' : 'bx-toggle-left'}
+            label={isInteractif
+              ? "Désactiver l'interactivité"
+              : "Activer l'interactivité"}
+            onclick={() => {
+              isMobileMenuOpen = false
+              switchInteractif()
+            }}
+          />
+        {/if}
+        {#if isDeletable}
+          <MobileMenuAction
+            icon="bx-trash"
+            label="Supprimer l'exercice"
+            onclick={() => {
+              isMobileMenuOpen = false
+              remove()
+            }}
+          />
+        {/if}
+      </div>
+    </div>
+  {/if}
+{:else}
+  <div class="z-0 flex-1">
   <h1
     class="border-b border-coopmaths-struct dark:border-coopmathsdark-struct text-coopmaths-struct dark:text-coopmathsdark-struct pl-0 mt-4 flex flex-col lg:flex-row justify-start lg:justify-between items-start xl:items-baseline"
   >
@@ -302,4 +429,5 @@
       </div>
     </div>
   </h1>
-</div>
+  </div>
+{/if}

@@ -10,6 +10,7 @@ import {
 } from 'vitest'
 import { createURL } from '../../src/lib/createURL'
 import { aLeBonNombreDePropsDifferentes } from '../../src/lib/interactif/qcm'
+import { createSolidesThreeJsMock } from '../e2e/mocks/solidesThreeJs.mock'
 import { clearDOM } from './helpers/domSimulator'
 import { discoverExercises, loadExercise } from './helpers/exerciseLoader'
 import {
@@ -30,6 +31,22 @@ vi.mock('../../src/lib/renderScratch', () => ({
 
 vi.mock('../../src/lib/components/version', () => ({
   checkForServerUpdate: vi.fn(() => 'mocked value'),
+}))
+
+vi.mock('../../src/lib/3d/3d_dynamique/Canvas3DElement', () => ({
+  ajouteCanvas3d: vi.fn((args) => `canvas3DElement-mock:${args.length}`),
+}))
+
+vi.mock('../../src/lib/3d/3d_dynamique/solidesThreeJs', () =>
+  createSolidesThreeJsMock(),
+)
+
+vi.mock('../../src/lib/3d/3d_dynamique/patrons3d', () => ({
+  generateContent3D: vi.fn((matrice, id) => ({
+    type: 'group',
+    object: { id, faces: Array.isArray(matrice) ? matrice.length : 0 },
+  })),
+  onCorrectionsAffichees: vi.fn(),
 }))
 
 beforeAll(() => {

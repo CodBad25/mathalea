@@ -18,6 +18,8 @@
   export let subtitleType: 'export' | 'design' = 'export'
   export let locale: Language
   export let handleLanguage: (lang: string) => void
+  /** Permet de masquer le choix de la langue du référentiel (vue mobile). */
+  export let showLanguage: boolean = true
 
   let showLanguageChoiceModal: boolean = false
 </script>
@@ -100,7 +102,9 @@
       class="flex flex-row space-x-4 pt-2
       pr-0 md:pr-4"
     >
-      {#if $globalOptions.v && VUES_WITH_LANG_STATUS_ONLY.includes($globalOptions.v)}
+      {#if !showLanguage}
+        <!-- rien : le choix de la langue est masqué -->
+      {:else if $globalOptions.v && VUES_WITH_LANG_STATUS_ONLY.includes($globalOptions.v)}
         <LanguageStatus {locale} />
       {:else}
         <!-- Menu déroulant en mode desktop -->

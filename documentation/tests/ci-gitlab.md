@@ -38,8 +38,7 @@ Les stages déclarés sont :
 La plupart des jobs Node utilisent `.pnpm_setup` :
 
 ```bash
-corepack enable
-corepack prepare pnpm@11.8.0 --activate
+npm install -g pnpm@11.16.0
 ```
 
 Le store est défini une seule fois par `storeDir: .pnpm-store` dans
