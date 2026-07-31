@@ -31,11 +31,12 @@ export default class TrouverOppose extends Exercice {
     this.besoinFormulaireCaseACocher = [
       'Afficher quelques fois le signe des nombres positifs',
     ]
-    this.besoinFormulaire2CaseACocher = ['Avec distance à zéro']
-    this.besoinFormulaire3CaseACocher = ['Avec valeur absolue']
+    this.besoinFormulaire2Numerique = [
+      'Vocabulaire', 2,
+      '1 : Valeur absolue\n2 : Distance à zéro',
+    ]
     this.sup = true
-    this.sup2 = false
-    this.sup3 = true
+    this.sup2 = 1
     this.nbQuestions = 1
     this.consigne = 'Compléter le tableau suivant.'
   }
@@ -82,10 +83,7 @@ export default class TrouverOppose extends Exercice {
       const nbLigneNombresDistZeroCorrNu = []
       for (let k = 0; k < 6; k++) {
         const nb = nbRelatifEtSonOppose(this.sup)
-        const lig =
-          (this.sup2 || this.sup3) && !this.interactif
-            ? randint(0, 2)
-            : randint(0, 1)
+        const lig = !this.interactif ? randint(0, 2) : randint(0, 1)
         if (lig === 0) {
           nbLigneNombres.push(this.interactif ? '' : '\\phantom{rrrrr}')
           nbLigneNombresCorr.push(miseEnEvidence(nb.nb))
@@ -129,59 +127,48 @@ export default class TrouverOppose extends Exercice {
       }
 
       const enonces = []
-      if (this.sup2 || this.sup3) {
-        enonces.push({
-          tabEntetesColonnes: [],
-          tabEntetesLignes: [
+      enonces.push({
+        tabEntetesColonnes: [],
+        tabEntetesLignes: [
+          '\\text{Nombre}',
+          `\\text{${this.sup2 === 1 ? 'Valeur absolue' : 'Distance à zéro'} du nombre}`,
+          '\\text{Opposé du nombre}',
+        ],
+        tabLines: nbLigneNombres
+          .concat(nbLigneNombresDistZero)
+          .concat(nbLigneNombresOpp),
+        tabLinesCorr: nbLigneNombresCorrNu
+          .concat(nbLigneNombresDistZeroCorrNu)
+          .concat(nbLigneNombresOppCorrNu),
+        enonce: `${tableauColonneLigne(
+          [],
+          [
             '\\text{Nombre}',
-            '\\text{Distance à zéro du nombre}',
+            this.sup2 === 1
+              ? '\\text{Valeur absolue du nombre}'
+              : '\\text{Distance à zéro du nombre}',
             '\\text{Opposé du nombre}',
           ],
-          tabLines: nbLigneNombres
+          nbLigneNombres
             .concat(nbLigneNombresDistZero)
             .concat(nbLigneNombresOpp),
-          tabLinesCorr: nbLigneNombresCorrNu
-            .concat(nbLigneNombresDistZeroCorrNu)
-            .concat(nbLigneNombresOppCorrNu),
-          enonce: `${tableauColonneLigne(
-            [],
-            [
-              '\\text{Nombre}',
-              this.sup3
-                ? '\\text{Valeur absolue du nombre}'
-                : '\\text{Distance à zéro du nombre}',
-              '\\text{Opposé du nombre}',
-            ],
-            nbLigneNombres
-              .concat(nbLigneNombresDistZero)
-              .concat(nbLigneNombresOpp),
-          )}`,
-          question: '',
-          correction: `${tableauColonneLigne(
-            [],
-            [
-              '\\text{Nombre}',
-              this.sup3
-                ? '\\text{Valeur absolue du nombre}'
-                : '\\text{Distance à zéro du nombre}',
-              '\\text{Opposé du nombre}',
-            ],
-            nbLigneNombresCorr
-              .concat(nbLigneNombresDistZeroCorr)
-              .concat(nbLigneNombresOppCorr),
-          )}`,
-        })
-      } else {
-        enonces.push({
-          tabEntetesColonnes: [],
-          tabEntetesLignes: ['\\text{Nombre}', '\\text{Opposé du nombre}'],
-          tabLines: nbLigneNombres.concat(nbLigneNombresOpp),
-          tabLinesCorr: nbLigneNombresCorrNu.concat(nbLigneNombresOppCorrNu),
-          enonce: `${tableauColonneLigne([], ['\\text{Nombre}', '\\text{Opposé du nombre}'], nbLigneNombres.concat(nbLigneNombresOpp))}`,
-          question: '',
-          correction: `${tableauColonneLigne([], ['\\text{Nombre}', '\\text{Opposé du nombre}'], nbLigneNombresCorr.concat(nbLigneNombresOppCorr))}`,
-        })
-      }
+        )}`,
+        question: '',
+        correction: `${tableauColonneLigne(
+          [],
+          [
+            '\\text{Nombre}',
+            this.sup2 === 1
+              ? '\\text{Valeur absolue du nombre}'
+              : '\\text{Distance à zéro du nombre}',
+            '\\text{Opposé du nombre}',
+          ],
+          nbLigneNombresCorr
+            .concat(nbLigneNombresDistZeroCorr)
+            .concat(nbLigneNombresOppCorr),
+        )}`,
+      })
+
       let objetReponse = {}
       for (let i = 0; i < enonces[0].tabLines.length; i++) {
         if (enonces[0].tabLines[i] === '') {
@@ -224,7 +211,7 @@ export default class TrouverOppose extends Exercice {
         texte = leTableau.output
       } else {
         texte = `
-        
+
 ${enonces[0].enonce}`
       }
       texteCorr = `${enonces[0].correction}`

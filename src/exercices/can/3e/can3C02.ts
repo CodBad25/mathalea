@@ -19,7 +19,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'debe7'
 
 export const refs = {
-  'fr-fr': ['can3C02'],
+  'fr-fr': ['can3C02', 'BP1AUTO047'],
   'fr-ch': [],
 }
 export default class MoyenneEntiereDeDecimaux extends ExerciceSimple {

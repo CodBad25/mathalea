@@ -24,7 +24,7 @@ export const dateDePublication = '28/05/2023'
 export const uuid = '14a2c'
 
 export const refs = {
-  'fr-fr': ['2G24-3'],
+  'fr-fr': ['2G24-3', 'BP1GV05'],
   'fr-ch': ['3G92-5'],
 }
 export default class Calculercoordonneesdifferencevecteurs extends Exercice {

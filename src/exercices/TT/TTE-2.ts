@@ -24,7 +24,7 @@ export const dateDePublication = '18/10/2025'
 export const uuid = 'ef3d7' // Cet élement doit être différent d un exercice à l autre. Lancer pnpm start pour copier l uuid
 // aléatoire proposé par le moteur
 export const refs = {
-  'fr-fr': ['TTE-2'], // Cet élément doit être choisi en lien avec le référentiel
+  'fr-fr': ['TTE-2', 'BP1CF12'], // Cet élément doit être choisi en lien avec le référentiel
   'fr-ch': [], // Cet élément peut rester vide et sera géré ultérieurement par Nathan, qui gère le référentiel suisse.
 }
 

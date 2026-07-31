@@ -11,6 +11,10 @@ export type Vue = {
   questionText: string
   correctionText: string
   key: string
+  /** Lettres des bonnes réponses si la question est un QCM. */
+  lettresQcm: string[]
+  /** Réponses mises en évidence en orange dans la correction. */
+  reponsesCourtes: string[]
 }
 
 export type Slide = {

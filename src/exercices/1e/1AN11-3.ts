@@ -38,7 +38,7 @@ export const dateDeModifImportante = '09/12/2025'
 export const uuid = '4c8c7'
 
 export const refs = {
-  'fr-fr': ['1AN11-3'],
+  'fr-fr': ['1AN11-3', 'BP1FDEV01'],
   'fr-ch': [],
 }
 export default class Equationdetangente extends Exercice {

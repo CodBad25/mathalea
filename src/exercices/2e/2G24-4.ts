@@ -35,7 +35,7 @@ export const dateDeModifImportante = '14/06/2023'
 export const uuid = '68693'
 
 export const refs = {
-  'fr-fr': ['2G24-4'],
+  'fr-fr': ['2G24-4', 'BP1GV06'],
   'fr-ch': ['3G92-6'],
 }
 export default class Calculercoordonneesproduitvecteurs extends Exercice {

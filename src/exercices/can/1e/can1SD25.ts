@@ -19,7 +19,7 @@ export const dateDePublication = '11/06/2022'
 export const uuid = 'cbbbb'
 
 export const refs = {
-  'fr-fr': ['can1SD25'],
+  'fr-fr': ['can1SD25', 'BP1AUTO069'],
   'fr-ch': [],
 }
 export default class DeveloppementCoeff2 extends ExerciceSimple {

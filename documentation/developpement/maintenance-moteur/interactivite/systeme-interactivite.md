@@ -12,6 +12,18 @@ La création d'un composant suit la
 
 Un exercice peut définir `interactifObligatoire = true` lorsqu'il ne possède pas de version HTML non interactive. Dans les vues HTML, ce drapeau impose `interactif = true`, remplace un éventuel paramètre URL `i=0` par `i=1` et masque le bouton de bascule. Les exports papier restent libres de désactiver l'interactivité pour leur rendu.
 
+## Interactivité dans la vue Course aux nombres
+
+La vue Course aux nombres (`src/components/display/can/Can.svelte`) impose son propre réglage d'interactivité à tous les exercices de la liste, sans tenir compte des réglages individuels (`i` dans l'URL) : le paramètre d'URL `canI` (`canOptions.isInteractive`) fixe `globalOptions.setInteractive` puis `exercice.interactif` pour chaque exercice, avant le découpage en questions.
+
+Avec `canI=0`, les énoncés ne doivent donc contenir aucun champ de saisie ni case à cocher active : les réponses ne sont jamais vérifiées (`Race.svelte` n'appelle `checkAnswers()` qu'en mode interactif) et le score comme la ligne « Réponse donnée » sont masqués. Seuls les exercices `interactifObligatoire` conservent leur interactivité, faute de rendu HTML alternatif.
+
+`canOptions.isInteractive` est un réglage indépendant de `globalOptions.setInteractive`, qui ne concerne que la page Élève classique :
+
+- il se règle dans l'onglet « Course aux nombres » de la page de configuration élève (`src/components/setup/configEleve/ConfigEleve.svelte`), pas dans l'onglet « Présentation classique » ;
+- sa valeur par défaut dans `src/lib/stores/canStore.ts` est `true`, pour que les liens antérieurs au paramètre `canI` restent interactifs ;
+- le flux Capytale reste l'exception : `handleCapytale()` dérive `isInteractive` de `setInteractive` parce que l'activité Capytale ne transporte qu'un seul réglage d'interactivité.
+
 ## Formats interactifs
 
 Les formats sont définis par `InteractivityType` dans `src/lib/types.ts`. Les formats courants sont :

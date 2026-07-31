@@ -22,18 +22,27 @@ import {
 import { monthes } from './handleDate'
 import { codeToLevelTitle } from './refUtils'
 
+/** Lien externe affiché en tête d'écran d'un niveau de la vue mobile. */
+export type MobileMenuExternalLink = {
+  title: string
+  url: string
+  icon?: string
+}
+
 /**
  * Entrée de niveau d'une rubrique de la vue mobile.
  * @property {string} id identifiant unique de l'entrée dans sa rubrique (utilisé dans le chemin de navigation)
  * @property {string} title libellé affiché sur la tuile
  * @property {string} referentiel nom du référentiel du menu contenant le nœud (`aleatoires`, `examens`, …)
  * @property {string[]} path chemin des clés menant au nœud dans ce référentiel
+ * @property {MobileMenuExternalLink[]} externalLinks liens externes affichés au-dessus des thèmes de ce niveau (optionnel)
  */
 export type MobileMenuEntry = {
   id: string
   title: string
   referentiel: string
   path: string[]
+  externalLinks?: MobileMenuExternalLink[]
 }
 
 /**

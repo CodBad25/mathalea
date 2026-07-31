@@ -21,7 +21,7 @@ export const dateDeModificationImportante = '06/04/2026'
 export const uuid = 'd6c25' // @todo à changer dans un nouvel exo (utiliser pnpm getNewUuid)
 
 export const refs = {
-  'fr-fr': ['2F32-2'],
+  'fr-fr': ['2F32-2', 'BP1AUTO059'],
   'fr-ch': [],
 }
 // une liste de nœuds pour définir une fonction Spline

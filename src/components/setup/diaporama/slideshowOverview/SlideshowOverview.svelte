@@ -15,6 +15,7 @@
   import ZoomButtons from '../../start/presentationalComponents/header/headerButtons/setupButtons/ZoomButtons.svelte'
   import type { Serie, Slideshow } from '../types'
   import SlideshowOverviewLeftPanel from './presentationalComponent/SlideshowOverviewLeftPanel.svelte'
+  import SlideshowOverviewAnswersTable from './presentationalComponent/mainPanel/SlideshowOverviewAnswersTable.svelte'
   import SlideshowOverviewMainPanel from './presentationalComponent/mainPanel/SlideshowOverviewMainPanel.svelte'
 
   export let exercises: IExercice[] = []
@@ -28,8 +29,13 @@
   let currentSeriesIndex: 0 | 1 | 2 | 3 | 4 = 0
   let isCorrectionVisible = false
   let isQuestionsVisible = true
-  let divExercice: HTMLElement
+  let isAnswersTableVisible = false
+  let mainPanelDiv: HTMLElement
   let correctionsSteps: number[] = []
+  // Nombre de questions dont la réponse est révélée dans le tableau des
+  // réponses, dans l'ordre de `order` (indépendant de `correctionsSteps`,
+  // qui ne concerne que le panneau Questions/Réponses).
+  let revealedAnswersCount = 0
 
   let nbVues: 0 | 1 | 2 | 3 | 4
   $: {
@@ -69,13 +75,24 @@
     }
   }
 
+  // Le MainPanel reste monté (masqué en CSS) même quand le tableau des
+  // réponses est affiché, pour éviter un bug Svelte qui vide le <main> lors
+  // d'un {#if}/{:else} direct sur un noeud avec bind:this. Mais il ne faut
+  // pas lui infliger un redimensionnement coûteux (SVGs, cases à cocher…)
+  // tant qu'il est caché, sous peine de ralentir le zoom. Le tableau des
+  // réponses gère lui-même son rendu KaTeX (voir SlideshowOverviewAnswersTable).
   $: if (
+    !isAnswersTableVisible &&
     (isQuestionsVisible ||
       isCorrectionVisible ||
       correctionsSteps.length > 0) &&
     currentSeriesIndex !== undefined
   ) {
-    tick().then(() => mathaleaRenderDiv(divExercice))
+    tick().then(() => mathaleaRenderDiv(mainPanelDiv))
+  }
+
+  function setAnswersTableVisible(answersTableVisibility: boolean) {
+    isAnswersTableVisible = answersTableVisibility
   }
 
   function setCorrectionVisible(correctionVisibility: boolean) {
@@ -116,6 +133,7 @@
     isQuestionsVisible = true
     isCorrectionVisible = false
     correctionsSteps = []
+    revealedAnswersCount = 0
   }
 
   /**
@@ -137,32 +155,49 @@
     }
   }
 
+  /**
+   * Pas à pas du tableau des réponses : révèle/masque les réponses une à une,
+   * dans l'ordre de `order`.
+   */
+  function handleAnswersTableStepsClick(button: 'backward' | 'forward') {
+    if (button === 'backward') {
+      revealedAnswersCount = Math.max(0, revealedAnswersCount - 1)
+    } else {
+      revealedAnswersCount = Math.min(order.length, revealedAnswersCount + 1)
+    }
+  }
+
+  function showAllAnswers() {
+    revealedAnswersCount = order.length
+  }
+
   function zoomUpdate(plusMinus: '+' | '-') {
     const oldZoom = Number($globalOptions.z || 1)
     const newZoom = Number(
       (plusMinus === '+' ? oldZoom + 0.1 : oldZoom - 0.1).toFixed(1),
     )
     $globalOptions.z = newZoom.toString()
-    const main = document.querySelector('main')
-    tick().then(() => mathaleaRenderDiv(main))
+    tick().then(() => mathaleaRenderDiv(mainPanelDiv))
     mathaleaUpdateUrlFromExercicesParams()
   }
 </script>
 
 <div class={$darkMode.isActive ? 'dark' : ''}>
-  <div
-    class="fixed z-20 rounded-b-full rounded-t-full
-    bottom-2 lg:bottom-6
-    right-2 lg:right-6
-    bg-coopmaths-canvas/80 dark:bg-coopmathsdark-canvas/80"
-  >
+  {#if !isAnswersTableVisible}
     <div
-      class="flex flex-col space-y-2
-      scale-75 lg:scale-100"
+      class="fixed z-20 rounded-b-full rounded-t-full
+      bottom-2 lg:bottom-6
+      right-2 lg:right-6
+      bg-coopmaths-canvas/80 dark:bg-coopmathsdark-canvas/80"
     >
-      <ZoomButtons {zoomUpdate} />
+      <div
+        class="flex flex-col space-y-2
+        scale-75 lg:scale-100"
+      >
+        <ZoomButtons {zoomUpdate} />
+      </div>
     </div>
-  </div>
+  {/if}
   <div
     class="flex
     bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
@@ -171,31 +206,47 @@
       <SlideshowOverviewLeftPanel
         {isQuestionsVisible}
         {isCorrectionVisible}
+        {isAnswersTableVisible}
         currentVue={currentSeriesIndex}
         nbOfVues={nbVues}
         {setCurrentVue}
         {setQuestionsVisible}
         {setCorrectionVisible}
+        {setAnswersTableVisible}
         {handleCorrectionsStepsClick}
+        {handleAnswersTableStepsClick}
+        {showAllAnswers}
         {newDataForAll}
         {backToSettings}
       />
     </aside>
     <main
-      class="flex flex-row p-2
+      class="flex flex-col grow min-w-0 p-2
       bg-coopmaths-canvas dark:bg-coopmathsdark-canvas
       text-coopmaths-corpus dark:text-coopmathsdark-corpus"
-      bind:this={divExercice}
     >
-      <SlideshowOverviewMainPanel
-        {isQuestionsVisible}
-        {isCorrectionVisible}
-        {currentSeriesIndex}
-        {order}
-        {series}
-        {correctionsSteps}
-        zoom={$globalOptions.z || '1'}
-      />
+      <div class={isAnswersTableVisible ? 'flex w-full min-w-0' : 'hidden'}>
+        <SlideshowOverviewAnswersTable
+          slides={slideshow.slides}
+          {order}
+          {nbVues}
+          {revealedAnswersCount}
+        />
+      </div>
+      <div
+        class={isAnswersTableVisible ? 'hidden' : 'flex flex-row'}
+        bind:this={mainPanelDiv}
+      >
+        <SlideshowOverviewMainPanel
+          {isQuestionsVisible}
+          {isCorrectionVisible}
+          {currentSeriesIndex}
+          {order}
+          {series}
+          {correctionsSteps}
+          zoom={$globalOptions.z || '1'}
+        />
+      </div>
     </main>
   </div>
 </div>

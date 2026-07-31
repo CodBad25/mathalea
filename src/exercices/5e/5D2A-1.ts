@@ -20,7 +20,7 @@ export const interactifType = 'multi-mathfield'
 export const uuid = 'a813f'
 
 export const refs = {
-  'fr-fr': ['5D2A-1', 'BP2FLUC14'],
+  'fr-fr': ['5D2A-1', 'BP2FLUC14', 'BP1AUTO012'],
   'fr-2016': ['5S21-1', 'BP2FLUC14'],
   'fr-ch': ['11NO2-7'],
 }

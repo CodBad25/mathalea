@@ -30,7 +30,7 @@ export const titre =
 export const uuid = '515b0'
 
 export const refs = {
-  'fr-fr': ['4L20-0', 'BP2RES9'],
+  'fr-fr': ['4L20-0', 'BP2RES9', 'BP1AUTO020'],
   'fr-ch': ['10FA3-6'],
 }
 export default class ExerciceEquationASolutionEntiere extends Exercice {

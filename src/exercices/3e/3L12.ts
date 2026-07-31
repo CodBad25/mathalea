@@ -29,7 +29,7 @@ export const dateDeModifImportante = '26/02/2023'
 export const uuid = '81fd2'
 
 export const refs = {
-  'fr-fr': ['3L12', 'BP2AutoI23'],
+  'fr-fr': ['3L12', 'BP2AutoI23', 'BP1AUTO090'],
   'fr-ch': ['11FA3-4'],
 }
 export default class FactoriserIdentitesRemarquables3 extends Exercice {

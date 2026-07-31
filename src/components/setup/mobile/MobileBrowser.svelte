@@ -98,6 +98,11 @@
 {:else}
   <!-- Thèmes, sous-thèmes puis exercices -->
   <div class="flex flex-col gap-3 p-4">
+    {#if path.length === 2}
+      {#each entry?.externalLinks ?? [] as link (link.url)}
+        <MobileTile title={link.title} icon={link.icon} href={link.url} />
+      {/each}
+    {/if}
     {#each children.categories as key (key)}
       <MobileTile
         title={nodeLabel(key)}

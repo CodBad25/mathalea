@@ -4,13 +4,17 @@
    *
    * `size` vaut `large` pour les rubriques de premier niveau (Collège / Lycée)
    * et `normal` pour les niveaux, thèmes et sous-thèmes.
+   *
+   * Si `href` est fourni, la tuile s'affiche comme un lien externe (nouvel
+   * onglet) plutôt que comme un bouton de navigation interne.
    */
   type Props = {
     title: string
     subtitle?: string
     icon?: string
     size?: 'large' | 'normal'
-    onclick: () => void
+    href?: string
+    onclick?: () => void
   }
 
   const {
@@ -18,20 +22,19 @@
     subtitle = '',
     icon = '',
     size = 'normal',
+    href,
     onclick,
   }: Props = $props()
-</script>
 
-<button
-  type="button"
-  {onclick}
-  class="w-full flex flex-row items-center justify-between gap-3 text-left rounded-xl
+  const sharedClasses = $derived(`w-full flex flex-row items-center justify-between gap-3 text-left rounded-xl
   border border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest
   bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark
   active:bg-coopmaths-canvas-darkest dark:active:bg-coopmathsdark-canvas-darkest
   transition-colors duration-150
-  {size === 'large' ? 'p-5' : 'px-4 py-3'}"
->
+  ${size === 'large' ? 'p-5' : 'px-4 py-3'}`)
+</script>
+
+{#snippet content()}
   <div class="flex flex-row items-center gap-3 min-w-0">
     {#if icon}
       <i
@@ -58,6 +61,16 @@
     </div>
   </div>
   <i
-    class="bx bx-chevron-right shrink-0 text-2xl text-coopmaths-action dark:text-coopmathsdark-action"
+    class="bx {href ? 'bx-link-external' : 'bx-chevron-right'} shrink-0 text-2xl text-coopmaths-action dark:text-coopmathsdark-action"
   ></i>
-</button>
+{/snippet}
+
+{#if href}
+  <a {href} target="_blank" rel="noopener noreferrer" class={sharedClasses}>
+    {@render content()}
+  </a>
+{:else}
+  <button type="button" {onclick} class={sharedClasses}>
+    {@render content()}
+  </button>
+{/if}

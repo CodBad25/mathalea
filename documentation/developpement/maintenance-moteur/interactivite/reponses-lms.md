@@ -4,13 +4,27 @@ Cette page décrit le format des réponses d'élève échangées avec un LMS (Mo
 
 ## Chaîne de transmission (Moodle/SCORM)
 
-1. À la vérification, `ExerciceMathaleaVueEleve.svelte` poste au parent un message `mathalea:score` contenant `resultsByExercice` (dont `answers`), lorsque `recorder=moodle`.
+1. À la vérification, `ExerciceMathaleaVueEleve.svelte` (vue élève) ou `Can.svelte` (vue CAN) poste au parent un message `mathalea:score` contenant `resultsByExercice` (dont `answers`), lorsque `recorder=moodle`. La vue CAN y ajoute `duration`, le temps mis par l'élève en secondes.
 2. Le SCO Moodle exécute [`public/assets/externalJs/moodle.scorm.js`](../../../../public/assets/externalJs/moodle.scorm.js), qui écrit dans le suivi SCORM :
-   - `cmi.suspend_data` = `seed|réponses encodées` ;
-   - `cmi.interactions_0.student_response` = URL de la copie élève (avec `&done=1&answers=…`).
-3. À la réouverture, le script relit `cmi.suspend_data` et recharge l'iframe avec `&done=1&answers=…` ; MathALÉA décode alors le paramètre et rejoue la copie.
+   - `cmi.suspend_data` = `graine[;d=durée]|réponses encodées` ;
+   - `cmi.interactions_0.student_response` = URL de la copie élève (avec `&done=1&answers=…[&duration=…]`).
+3. À la réouverture, le script relit `cmi.suspend_data` et recharge l'iframe avec `&done=1&answers=…[&duration=…]` ; MathALÉA décode alors le paramètre et rejoue la copie.
+
+En vue CAN, `resultsByExercice` contient une entrée par question : `moodle.scorm.js` fusionne les `answers` de toutes les entrées (les clés `ExiQj` sont uniques) pour que la copie enregistrée soit complète.
+
+La durée est placée avant le premier `|` de `cmi.suspend_data` car les réponses, lorsque le repli JSON brut est utilisé, peuvent elles-mêmes contenir ce caractère (`\left|`). Les copies enregistrées sans durée (`graine|réponses`) restent lisibles.
 
 SCORM 1.2 plafonne `cmi.suspend_data` à 4 096 caractères et `student_response` à 255. Deux mesures maintiennent les réponses sous ces ordres de grandeur.
+
+## Relecture de la copie
+
+En vue élève, `ExerciceMathaleaVueEleve.svelte` réinjecte les réponses dans les champs puis clique sur le bouton de vérification.
+
+En vue CAN, `Can.svelte` fait de même : quand `done=1` et que `answers` est présent (et que le recorder n'est pas Capytale, qui transmet la copie par postMessage), les questions sont montées hors de l'écran le temps d'y écrire les réponses avec `mathaleaWriteStudentPreviousAnswers()`, puis `checkAnswers({ record: false })` les corrige et la vue bascule sur les corrections. `record: false` évite de comptabiliser la relecture dans les statistiques et de renvoyer au LMS un score assorti d'une durée erronée.
+
+Les résultats ne sont donc pas transmis par l'URL : ils sont recalculés, ce que la graine (`alea`) rend déterministe. Seul le temps mis ne peut pas l'être, d'où le paramètre `duration` (en secondes) affiché par la vue des corrections.
+
+Le test e2e correspondant est `tests/e2e/tests/view/view.moodle.review.can.test.ts` (`pnpm vitest --config tests/e2e/vitest.config.view.moodle.review.js --run`).
 
 ## Encodage des réponses : `z:<base64url>`
 

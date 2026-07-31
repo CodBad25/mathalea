@@ -6,7 +6,7 @@ import ExerciceQcmA from '../../ExerciceQcmA'
 import FractionEtendue from '../../../modules/FractionEtendue'
 export const uuid = '6a9da'
 export const refs = {
-  'fr-fr': ['3S2QCM-4', 'BP2FLUC5'],
+  'fr-fr': ['3S2QCM-4', 'BP2FLUC5', 'BP1AUTO005'],
   'fr-ch': [],
 }
 export const interactifReady = true

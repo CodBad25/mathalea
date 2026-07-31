@@ -38,7 +38,7 @@ export const dateDeModifImportante = '28/04/2023' // ajout du cas entreprise
 export const uuid = '612a5'
 
 export const refs = {
-  'fr-fr': ['2S10-2', 'BP2SP8'],
+  'fr-fr': ['2S10-2', 'BP2SP8', 'BP1SP04'],
   'fr-ch': ['9NO14-8'],
 }
 export default class Proportions extends Exercice {

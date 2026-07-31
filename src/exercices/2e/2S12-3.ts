@@ -30,7 +30,7 @@ export const dateDePublication = '16/01/2022'
 export const uuid = '509db'
 
 export const refs = {
-  'fr-fr': ['2S12-3'],
+  'fr-fr': ['2S12-3', 'BP1CF08'],
   'fr-ch': [],
 }
 export default class EvolutionsSuccesives extends Exercice {

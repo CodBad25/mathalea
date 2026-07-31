@@ -7,7 +7,7 @@ export const titre =
   'Résoudre une équation du premier degré à solutions entières'
 export const uuid = '5a02b'
 export const refs = {
-  'fr-fr': ['3L13-0', 'BP2RES11'],
+  'fr-fr': ['3L13-0', 'BP2RES11', 'BP1AUTO022'],
   'fr-ch': [],
 }
 export default class EquationPremierDegreSolutionsEntieres extends ExerciceEquationASolutionEntiere {

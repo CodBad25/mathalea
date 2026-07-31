@@ -3146,6 +3146,36 @@
   "BP2SP": {
     "titre": "Statistiques à une variable"
   },
+  "BP1AA": {
+    "titre": "Algèbre – Analyse"
+  },
+  "BP1AUTO": {
+    "titre": "Automatismes"
+  },
+  "BP1CF": {
+    "titre": "Calculs commerciaux et financiers"
+  },
+  "BP1FDEV": {
+    "titre": "Fonction dérivée et étude des variations d’une fonction"
+  },
+  "BP1F2D": {
+    "titre": "Fonction du second degré"
+  },
+  "BP1GEO": {
+    "titre": "Géométrie"
+  },
+  "BP1GV": {
+    "titre": "Géométrie (vecteurs)"
+  },
+  "BP1INE": {
+    "titre": "Inéquations"
+  },
+  "BP1RGEI": {
+    "titre": "Résolution graphique d'équations et d'inéquations"
+  },
+  "BP1SP": {
+    "titre": "Statistique et probabilités"
+  },
   "auto5N1A": {
     "titre": "Mobiliser les critères de divisibilité par 2, 5 et 10 vus en CM1 et CM2"
   },

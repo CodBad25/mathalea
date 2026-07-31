@@ -33,6 +33,33 @@ function answersForUrl(encodedAnswers) {
     : encodeURIComponent(encodedAnswers)
 }
 
+/*
+  Format de cmi.suspend_data : `graine[;d=durée]|réponses`.
+
+  - L'élève n'a jamais accédé à l'exercice : ''
+  - Il y a accédé sans répondre : `graine`
+  - Il a répondu : `graine|réponses`
+  - Il a répondu à une Course aux nombres (chronométrée) : `graine;d=durée|réponses`
+
+  La durée (en secondes) est placée avant le premier `|` car les réponses, quand
+  le repli JSON brut est utilisé, peuvent elles-mêmes contenir ce caractère
+  (`\left|` par exemple). Les graines, elles, ne contiennent jamais de `;`.
+*/
+function parseSuspendData(suspendData) {
+  if (!suspendData) return { seed: undefined, answers: '', duration: '' }
+  const separatorIndex = suspendData.indexOf('|')
+  const seedPart = separatorIndex === -1 ? suspendData : suspendData.slice(0, separatorIndex)
+  const answers = separatorIndex === -1 ? '' : suspendData.slice(separatorIndex + 1)
+  const [seed, ...seedExtras] = seedPart.split(';')
+  const durationExtra = seedExtras.find((extra) => extra.startsWith('d=')) || ''
+  return { seed, answers, duration: durationExtra.slice(2) }
+}
+
+function buildSuspendData(seed, encodedAnswers, duration) {
+  const seedPart = Number.isFinite(duration) ? seed + ';d=' + duration : seed
+  return seedPart + '|' + encodedAnswers
+}
+
 window.onload = function () {
   const style = document.createElement('style')
   style.innerHTML = 'body, html { margin: 0px; padding: 0px; height: 100%; overflow: auto; }'
@@ -44,28 +71,8 @@ window.onload = function () {
   let exo = location.hash.slice(1)
   const iframe = document.createElement('iframe')
   const suspendData = scorm.get('cmi.suspend_data')
-  /*
-    Trois cas possibles :
-    - L'élève n'a jamais accédé à l'exercice : suspendData = ''
-    - L'élève a déjà accédé à l'exercice mais n'a pas encore répondu : suspendData = seed
-    - L'élève a déjà répondu à l'exercice : suspendData = seed|answers
-  */
-  let seed, answers
-  if (suspendData) {
-    // L'élève a déjà accédé à l'exercice
-    if (suspendData.includes('|')) {
-      // L'élève a déjà répondu à l'exercice
-      seed = suspendData.slice(0, suspendData.indexOf('|'))
-      answers = suspendData.slice(suspendData.indexOf('|') + 1)
-    } else {
-      // L'élève a déjà accédé à l'exercice mais n'a pas encore répondu
-      seed = suspendData
-      answers = ''
-    }
-  } else {
-    // L'élève n'a pas encore accédé à l'exercice
-    answers = ''
-  }
+  const { seed: storedSeed, answers, duration } = parseSuspendData(suspendData)
+  let seed = storedSeed
   const randomSeed = exo.includes('&alea=-1') || !exo.includes('&alea')
   // Il faut générer une graine si alea n'est pas fourni ou est égal à -1
   if (randomSeed) {
@@ -90,6 +97,11 @@ window.onload = function () {
   src += '&recorder=moodle'
   if (answers !== '') {
     src += '&done=1&answers=' + answers
+    // La CAN affiche aussi le temps mis par l'élève, que le chronomètre ne peut
+    // plus fournir puisque la course n'est pas rejouée.
+    if (duration !== '') {
+      src += '&duration=' + duration
+    }
   }
   iframe.src = src
   iframe.setAttribute('frameborder', '0')
@@ -133,12 +145,21 @@ window.addEventListener('message', async (event) => {
       scorm.set('cmi.core.score.raw', score)
       scorm.set('cmi.core.score.min', '0')
       scorm.set('cmi.core.score.max', scoreMax.toString())
-      // todo : gérer les can où il y a plusieurs exos
-      const encodedAnswers = await encodeAnswers(event.data.resultsByExercice[0].answers)
-      scorm.set('cmi.suspend_data', seed + '|' + encodedAnswers)
+      /*
+        En vue élève resultsByExercice contient un exercice, en vue CAN une entrée
+        par question : on fusionne les réponses de toutes les entrées pour que la
+        copie rechargée soit complète (les clés `ExiQj` sont uniques).
+      */
+      const allAnswers = Object.assign({}, ...event.data.resultsByExercice.map((result) => result.answers || {}))
+      const encodedAnswers = await encodeAnswers(allAnswers)
+      const duration = event.data.duration
+      scorm.set('cmi.suspend_data', buildSuspendData(seed, encodedAnswers, duration))
       let copieEleveUrl = document.getElementsByTagName('iframe')[0].src
       copieEleveUrl = copieEleveUrl.replace(/&alea=[^&]+/, '&alea=' + seed) // On remplace la seed au cas où qu'elle ait changé
       copieEleveUrl += '&done=1&answers=' + answersForUrl(encodedAnswers)
+      if (Number.isFinite(duration)) {
+        copieEleveUrl += '&duration=' + duration
+      }
       scorm.set('cmi.interactions_0.student_response', copieEleveUrl)
       // scorm.set("cmi.success_status", "passed");
       scorm.save()

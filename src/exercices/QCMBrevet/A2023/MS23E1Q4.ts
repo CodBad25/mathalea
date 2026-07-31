@@ -5,7 +5,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 
 export const uuid = '80f6g'
 export const refs = {
-  'fr-fr': ['3S2QCM-7', 'BP2FLUC8'],
+  'fr-fr': ['3S2QCM-7', 'BP2FLUC8', 'BP1AUTO008'],
   'fr-ch': [],
 }
 export const interactifReady = true

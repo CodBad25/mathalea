@@ -22,7 +22,7 @@ export const dateDeModifImportante = '16/07/2025'
 export const uuid = '9d51d'
 
 export const refs = {
-  'fr-fr': ['can2C12'],
+  'fr-fr': ['can2C12', 'BP1CF11'],
   'fr-ch': [],
 }
 export default class TauxGlobal extends ExerciceSimple {

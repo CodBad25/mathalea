@@ -42,7 +42,7 @@ export const dateDeModifImportante = '14/04/2026' // Passage en MultiMathfield J
 export const uuid = 'd1514'
 
 export const refs = {
-  'fr-fr': ['5M11-1', 'BP2AutoV4'],
+  'fr-fr': ['5M11-1', 'BP2AutoV4', 'BP1AUTO101'],
   'fr-2016': ['6M11-1', 'BP2AutoV4'],
   'fr-ch': ['9GM1-4'],
 }

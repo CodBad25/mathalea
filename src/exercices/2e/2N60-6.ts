@@ -31,7 +31,7 @@ export const titre = 'Étudier la position relative de deux courbes'
 export const uuid = '53e8f'
 
 export const refs = {
-  'fr-fr': ['2N60-6'],
+  'fr-fr': ['2N60-6', 'BP1INE02'],
   'fr-ch': [],
 }
 export default class PositionRelative extends Exercice {

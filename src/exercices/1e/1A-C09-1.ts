@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'c4664'
 
 export const refs = {
-  'fr-fr': ['1A-C09-1'],
+  'fr-fr': ['1A-C09-1', 'BP1AUTO085'],
   'fr-ch': [],
 }
 export default class Auto1AC9 extends FatorisationEgR {

@@ -16,7 +16,7 @@ export const dateDeModifImportante = '12/07/2025'
  */
 export const uuid = '4c675'
 export const refs = {
-  'fr-fr': ['can2L06'],
+  'fr-fr': ['can2L06', 'BP1AUTO082'],
   'fr-ch': [],
 }
 export default class DevelopperEgalitesRemarquables extends ExerciceSimple {

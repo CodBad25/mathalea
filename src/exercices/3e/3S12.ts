@@ -36,7 +36,7 @@ export const dateDeModifImportante = '18/04/2026' // passage en MultiMathfield
 export const uuid = 'f4b96'
 
 export const refs = {
-  'fr-fr': ['3S12', 'BP2AutoA5', 'BP2SP2'],
+  'fr-fr': ['3S12', 'BP2AutoA5', 'BP2SP2', 'BP1AUTO015'],
   'fr-ch': [],
 }
 export default class CalculEffectifFrequence extends Exercice {

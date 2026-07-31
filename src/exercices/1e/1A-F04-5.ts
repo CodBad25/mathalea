@@ -15,7 +15,7 @@ export const uuid = '6d6ea'
  * @author Gilles Mora factorisation du code par Claude
  */
 export const refs = {
-  'fr-fr': ['1A-F04-5'],
+  'fr-fr': ['1A-F04-5', 'BP1RGEI01'],
   'fr-ch': [],
 }
 export const interactifReady = true

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte'
+  import { onDestroy, onMount, tick } from 'svelte'
   import { get } from 'svelte/store'
   import MetaExercice from '../../../exercices/MetaExerciceCan'
   import {
@@ -22,7 +22,9 @@
   } from '../../../lib/customElements/CliqueFigureElement'
   import { DragAndDropElement } from '../../../lib/customElements/DragAndDropElement'
   import { MetaInteractif2dElement } from '../../../lib/customElements/MetaInteractif2dElement'
+  import { decodeAnswers } from '../../../lib/lms/answersCodec'
   import { mathaleaUpdateUrlFromExercicesParams } from '../../../lib/mathalea'
+  import { mathaleaWriteStudentPreviousAnswers } from '../../../lib/mathaleaUtils'
   import { canOptions } from '../../../lib/stores/canStore'
   import {
     darkMode,
@@ -47,6 +49,7 @@
   import CountDown from './presentationalComponents/CountDown.svelte'
   import End from './presentationalComponents/End.svelte'
   import KickOff from './presentationalComponents/KickOff.svelte'
+  import Question from './presentationalComponents/Question.svelte'
   import Race from './presentationalComponents/Race.svelte'
   import Solutions from './presentationalComponents/Solutions.svelte'
 
@@ -84,8 +87,29 @@
   let indiceQuestionInExercice: number[] = []
   let resultsByQuestion: QuestionResult[] = []
   let answers: string[] = []
-  let recordedTimeFromCapytale: number
+  let recordedTimeInSeconds: number
   let unavailableMessage = ''
+
+  /*
+    Relecture d'une copie d'élève transmise dans l'URL par un LMS.
+
+    Capytale envoie la copie par postMessage (voir `handleCapytale.ts`), mais
+    Moodle recharge simplement l'iframe avec `done=1&answers=…&duration=…`
+    (voir `public/assets/externalJs/moodle.scorm.js`). Dans ce cas la CAN ne
+    connaît que les réponses : les résultats sont recalculés en rejouant la
+    copie, exactement comme le fait la vue élève dans
+    `ExerciceMathaleaVueEleve.svelte`.
+  */
+  const urlSearchParams = new URL(window.location.href).searchParams
+  const savedAnswersParam = urlSearchParams.get('answers')
+  const savedDurationParam = urlSearchParams.get('duration')
+  // Vrai tant que la copie est en cours de relecture : les questions sont alors
+  // rendues hors écran pour que les champs interactifs puissent être remplis.
+  let isReplayingSavedCopy =
+    $globalOptions.done === '1' &&
+    $globalOptions.recorder !== 'capytale' &&
+    savedAnswersParam != null &&
+    savedAnswersParam.length > 0
 
   function getQuestionAnswerValue(
     exercice: IExercice,
@@ -151,12 +175,16 @@
           assignmentDataFromCapytale.resultsByQuestion,
         )
       if (assignmentDataFromCapytale?.duration !== undefined)
-        recordedTimeFromCapytale = assignmentDataFromCapytale.duration
+        recordedTimeInSeconds = assignmentDataFromCapytale.duration
     })
     context.isDiaporama = true
-    // force le mode interactif
+    // La vue Course aux nombres impose son propre réglage d'interactivité
+    // (paramètre d'URL `canI`) à tous les exercices, sans tenir compte des
+    // réglages individuels : afficher des champs de saisie ou des cases à
+    // cocher alors que les réponses ne seront jamais vérifiées serait
+    // trompeur pour l'élève.
     globalOptions.update((gOpt) => {
-      gOpt.setInteractive = '1'
+      gOpt.setInteractive = $canOptions.isInteractive ? '1' : '0'
       return gOpt
     })
     // reconstitution des exercices
@@ -177,15 +205,55 @@
     // met à jour la url avec la graine...
     mathaleaUpdateUrlFromExercicesParams(get(exercicesParams))
     // interactivité
-    if ($canOptions.isInteractive) {
-      $keyboardState.isVisible = true
-      for (const param of exercises) {
-        param.interactif = true
-      }
+    $keyboardState.isVisible = $canOptions.isInteractive
+    for (const exercise of exercises) {
+      // `interactifObligatoire` signale un exercice sans version HTML non
+      // interactive : on ne peut pas lui retirer son interactivité.
+      exercise.interactif =
+        $canOptions.isInteractive || exercise.interactifObligatoire
     }
     // découpage des exerices en questions
     buildQuestions()
+    if (isReplayingSavedCopy) {
+      await replaySavedCopy()
+    }
   })
+
+  /**
+   * Rejoue la copie transmise par le LMS dans l'URL : les réponses sont
+   * réinjectées dans les champs interactifs (rendus hors écran), puis
+   * `checkAnswers()` les corrige comme à la fin d'une course, ce qui alimente
+   * `answers` et `resultsByQuestion` pour la vue des corrections.
+   */
+  async function replaySavedCopy() {
+    try {
+      const savedAnswers = await decodeAnswers(savedAnswersParam ?? '')
+      if (savedAnswers == null) return
+      // Les questions doivent être dans le DOM pour que les réponses puissent y
+      // être écrites puis relues par les fonctions de vérification.
+      await tick()
+      await Promise.all(mathaleaWriteStudentPreviousAnswers(savedAnswers))
+      checkAnswers({ record: false })
+    } catch (error) {
+      console.error('Impossible de relire la copie transmise dans l’URL', error)
+      window.notify('Copie transmise dans l’URL illisible', {
+        error: error instanceof Error ? error.message : String(error),
+        answers: savedAnswersParam,
+      })
+      return
+    } finally {
+      isReplayingSavedCopy = false
+    }
+    const duration = Number.parseInt(savedDurationParam ?? '', 10)
+    if (Number.isFinite(duration)) {
+      recordedTimeInSeconds = duration
+    }
+    $keyboardState.isVisible = false
+    canOptions.update((options) => {
+      options.state = 'solutions'
+      return options
+    })
+  }
 
   // Certains exercices (ex. « Sélection d'automatismes ») chargent leurs
   // questions de façon asynchrone et signalent leur disponibilité via
@@ -219,8 +287,17 @@
     answerTxt: string
   }
 
-  function checkAnswers() {
-    statsCanTracker($globalOptions.recorder ?? '', $globalOptions.v ?? '')
+  /**
+   * Corrige les réponses présentes dans le DOM et alimente `answers` et
+   * `resultsByQuestion`.
+   * @param record `false` lors de la relecture d'une copie déjà enregistrée :
+   * il ne faut alors ni comptabiliser la course dans les statistiques, ni
+   * renvoyer un score au LMS (le temps mis serait faux, la copie écrasée).
+   */
+  function checkAnswers({ record = true }: { record?: boolean } = {}) {
+    if (record) {
+      statsCanTracker($globalOptions.recorder ?? '', $globalOptions.v ?? '')
+    }
     const answersType: AnswerType[] = []
     for (let i = 0; i < questions.length; i++) {
       const exercice = exercises[indiceExercice[i]]
@@ -594,6 +671,7 @@
       l = resultsByExerciceArray
       return l
     })
+    if (!record) return
     if ($globalOptions.recorder === 'moodle') {
       const url = new URL(window.location.href)
       const iframe = url.searchParams.get('iframe')
@@ -673,7 +751,7 @@
    */
   function buildTime(): string {
     const nbOfSeconds =
-      recordedTimeFromCapytale ||
+      recordedTimeInSeconds ||
       $canOptions.durationInMinutes * 60 - $canOptions.remainingTimeInSeconds
     const time = millisecondToMinSec(nbOfSeconds * 1000)
     return [
@@ -695,7 +773,36 @@
     ? 'dark'
     : ''} relative w-full h-screen bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
 >
-  {#if state === 'start' || state === 'canHomeScreen'}
+  {#if isReplayingSavedCopy}
+    <!--
+      Les questions sont montées hors de l'écran, le temps d'y réinjecter les
+      réponses de l'élève et de les corriger. Elles sont ensuite démontées : la
+      vue des corrections réaffiche les énoncés débarrassés de leurs widgets.
+    -->
+    <div
+      class="w-full h-full flex justify-center items-center text-2xl font-light text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+    >
+      Chargement de la copie…
+    </div>
+    <div
+      aria-hidden="true"
+      class="fixed top-0 w-[1000px]"
+      style="left: -10000px;"
+    >
+      {#each [...Array(questions.length).keys()] as i}
+        <Question
+          consigne={consignes[i]}
+          question={questions[i]}
+          consigneCorrection={''}
+          correction={''}
+          mode={'display'}
+          visible={false}
+          index={i}
+          nextQuestion={() => {}}
+        />
+      {/each}
+    </div>
+  {:else if state === 'start' || state === 'canHomeScreen'}
     <KickOff
       title={$canOptions.title}
       subTitle={$canOptions.subTitle}

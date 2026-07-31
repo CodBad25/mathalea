@@ -25,7 +25,7 @@ export const dateDeModifImportante = '15/03/2026'
 export const uuid = 'a720c'
 
 export const refs = {
-  'fr-fr': ['1AN41'],
+  'fr-fr': ['1AN41', 'BP1GEO02'],
   'fr-ch': [],
 }
 export default class MesurePrincipale extends Exercice {

@@ -33,7 +33,7 @@ export const dateDeModifImportante = '28/02/2025'
 export const uuid = '05b53'
 
 export const refs = {
-  'fr-fr': ['2F30-1'],
+  'fr-fr': ['2F30-1', 'BP1AUTO057'],
   'fr-ch': ['2mFctPoly-4'],
 }
 export default class VariationsCourbe extends Exercice {

@@ -47,7 +47,14 @@ sont décrites dans
           "id": "6e",               // identifiant unique dans la rubrique
           "title": "6e",            // libellé de la tuile
           "referentiel": "aleatoires", // nom du référentiel du menu
-          "path": ["6e"]            // chemin des clés menant au nœud
+          "path": ["6e"],           // chemin des clés menant au nœud
+          "externalLinks": [        // optionnel : liens externes du niveau
+            {
+              "title": "Cahier d'automatismes",
+              "url": "https://coopmaths.fr/www/automatismes/2nde/",
+              "icon": "bx-book"     // optionnel, classe boxicons
+            }
+          ]
         }
       ]
     }
@@ -63,6 +70,14 @@ sont décrites dans
 - `path` est le chemin des clés brutes du référentiel (`["BrevetTags"]`,
   `["40_Épreuves de Première - Par thème"]`, …). Une entrée dont le chemin ne se
   résout pas (par exemple en locale `fr-CH`) n'affiche simplement aucun contenu.
+- `externalLinks` (optionnel) liste des liens ouverts dans un nouvel onglet,
+  affichés en tuiles au-dessus des thèmes lorsqu'on est directement sur l'écran
+  du niveau (`path` de longueur 2, ex. `["lycee", "2e"]`). Utilisé par exemple
+  pour pointer vers le Cahier d'automatismes de 2nde et de 1re. Rendu par
+  [`MobileBrowser.svelte`](../../../../src/components/setup/mobile/MobileBrowser.svelte)
+  via [`MobileTile.svelte`](../../../../src/components/setup/mobile/MobileTile.svelte)
+  (prop `href`, qui bascule la tuile d'un `<button>` de navigation vers un
+  `<a target="_blank">`).
 
 Ajouter un niveau au menu mobile ne demande donc **que** l'ajout d'une entrée
 dans ce fichier.

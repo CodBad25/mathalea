@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'f0230'
 
 export const refs = {
-  'fr-fr': ['1A-C10-13'],
+  'fr-fr': ['1A-C10-13', 'BP1AUTO050'],
   'fr-ch': [],
 }
 export default class Auto1AC12 extends SolutionInequation {

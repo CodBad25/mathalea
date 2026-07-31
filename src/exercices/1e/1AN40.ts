@@ -33,6 +33,12 @@ export const refs = {
 }
 export default class CosEtsin extends Exercice {
   can: boolean
+  /**
+   * Si vrai, l'angle $\pi$ est ajouté aux angles du premier quadrant (type de questions 1).
+   * Utilisé par le clone BP1G01 (Bac Pro Première) dont le programme se limite
+   * aux valeurs particulières 0, π/6, π/4, π/3, π/2 et π.
+   */
+  avecPi = false
   constructor() {
     super()
     this.can = false
@@ -96,7 +102,12 @@ export default class CosEtsin extends Exercice {
       else listeK.push(randint(-30, -2))
     }
     const mesAngles = valeursTrigo({ modulos: listeK })
-    mesAnglesAleatoiresBis.push(shuffle(mesAngles.liste1))
+    const anglesDuPremierQuadrant = mesAngles.liste1.slice()
+    if (this.avecPi) {
+      const anglePi = mesAngles.liste2.find((angle) => angle.degres === '180')
+      if (anglePi !== undefined) anglesDuPremierQuadrant.push(anglePi)
+    }
+    mesAnglesAleatoiresBis.push(shuffle(anglesDuPremierQuadrant))
     mesAnglesAleatoiresBis.push(shuffle(mesAngles.liste2))
 
     for (let k = 0; k < listeK.length; k++) {

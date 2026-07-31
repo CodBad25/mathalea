@@ -130,3 +130,39 @@ describe('Alea2iep.regleProlongerSegment', () => {
     )
   })
 })
+
+describe('Alea2iep.perpendiculaireRegleEquerre2points3epoint', () => {
+  it('codes the right angle at the orthogonal projection of the external point', () => {
+    const iep = new Alea2iep()
+    const A = pointAbstrait(0, 0, 'A')
+    const B = pointAbstrait(4, 0, 'B')
+    const C = pointAbstrait(2, 3, 'C')
+
+    iep.perpendiculaireRegleEquerre2points3epoint(A, B, C, { tempo: 0 })
+
+    const xml = iep.script()
+    expect(xml).toContain(
+      '<action objet="equerre" mouvement="rotation_translation" angle="0" abscisse="60" ordonnee="300" tempo="0" sens="5" vitesse="10" />',
+    )
+    expect(xml).not.toContain(
+      '<action objet="equerre" mouvement="rotation_translation" angle="0" abscisse="120" ordonnee="300" tempo="0" sens="5" vitesse="10" />',
+    )
+  })
+
+  it('uses the orthogonal projection instead of the second reference point on an oblique line', () => {
+    const iep = new Alea2iep()
+    const A = pointAbstrait(0, 0, 'A')
+    const B = pointAbstrait(4, 2, 'B')
+    const C = pointAbstrait(2, 4, 'C')
+
+    iep.perpendiculaireRegleEquerre2points3epoint(A, B, C, { tempo: 0 })
+
+    const xml = iep.script()
+    expect(xml).toContain(
+      '<action objet="equerre" mouvement="rotation_translation" angle="-26.57" abscisse="96" ordonnee="252" tempo="0" sens="5" vitesse="10" />',
+    )
+    expect(xml).not.toContain(
+      '<action objet="equerre" mouvement="rotation_translation" angle="-26.57" abscisse="120" ordonnee="240" tempo="0" sens="5" vitesse="10" />',
+    )
+  })
+})

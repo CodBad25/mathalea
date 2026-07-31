@@ -26,7 +26,7 @@ export const dateDeModifImportante = '26/04/2023' // Correction par Rémi Angot 
 export const uuid = '04b0a'
 
 export const refs = {
-  'fr-fr': ['2N41-6', 'BP2AutoI1'],
+  'fr-fr': ['2N41-6', 'BP2AutoI1', 'BP1AUTO077'],
   'fr-ch': ['11FA2-13'],
 }
 export default class DevelopperIdentitesRemarquables2 extends Exercice {

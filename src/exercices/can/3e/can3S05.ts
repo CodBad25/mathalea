@@ -18,7 +18,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'c9d15'
 
 export const refs = {
-  'fr-fr': ['can3S05'],
+  'fr-fr': ['can3S05', 'BP1AUTO048'],
   'fr-ch': [],
 }
 export default class MoyenneStat extends ExerciceSimple {

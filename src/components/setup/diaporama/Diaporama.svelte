@@ -26,6 +26,7 @@
   import CountDown from '../../display/can/presentationalComponents/CountDown.svelte'
   import KickOff from '../../display/can/presentationalComponents/KickOff.svelte'
   import ButtonText from '../../shared/forms/ButtonText.svelte'
+  import { extraitLettresQcm, extraitReponsesCourtes } from './answersTable'
   import SlideshowOverview from './slideshowOverview/SlideshowOverview.svelte'
   import SlideshowPlay from './slideshowPlay/SlideshowPlay.svelte'
   import SlideshowSettings from './slideshowSettings/SlideshowSettings.svelte'
@@ -135,6 +136,8 @@
                 correctionSvgs,
                 correctionText,
                 key: exercise.key,
+                lettresQcm: extraitLettresQcm(exercise, i),
+                reponsesCourtes: extraitReponsesCourtes(correction),
               }
             } while (
               attempt < 10 &&

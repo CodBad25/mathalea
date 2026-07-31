@@ -23,7 +23,7 @@ export const titre = 'Développer $(a+b)^2$'
 export const uuid = '877a9'
 
 export const refs = {
-  'fr-fr': ['2N41-4'],
+  'fr-fr': ['2N41-4', 'BP1AUTO075'],
   'fr-ch': ['11FA2-10'],
 }
 export default class DevelopperIdentitesRemarquables3 extends Exercice {

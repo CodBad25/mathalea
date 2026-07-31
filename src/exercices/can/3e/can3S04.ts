@@ -16,7 +16,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'f0983'
 
 export const refs = {
-  'fr-fr': ['can3S04'],
+  'fr-fr': ['can3S04', 'BP1AUTO036'],
   'fr-ch': [],
 }
 export default class Etendue extends ExerciceSimple {

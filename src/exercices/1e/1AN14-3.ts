@@ -31,7 +31,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'ec088'
 
 export const refs = {
-  'fr-fr': ['1AN14-3'],
+  'fr-fr': ['1AN14-3', 'BP1FDEV03'],
   'fr-ch': ['3mA2-2'],
 }
 const termNames = ['u', 'v', 'w', 'z']

@@ -48,13 +48,27 @@
           "id": "2e",
           "title": "Seconde",
           "referentiel": "aleatoires",
-          "path": ["2e"]
+          "path": ["2e"],
+          "externalLinks": [
+            {
+              "title": "Cahier d'automatismes",
+              "url": "https://coopmaths.fr/www/automatismes/2nde/",
+              "icon": "bx-book"
+            }
+          ]
         },
         {
           "id": "1e",
           "title": "Première",
           "referentiel": "aleatoires",
-          "path": ["1e"]
+          "path": ["1e"],
+          "externalLinks": [
+            {
+              "title": "Cahier d'automatismes",
+              "url": "https://coopmaths.fr/www/automatismes/1re/",
+              "icon": "bx-book"
+            }
+          ]
         },
         {
           "id": "terminale",
@@ -79,7 +93,7 @@
     {
       "id": "lyceePro",
       "title": "Lycée Professionnel",
-      "subtitle": "2de",
+      "subtitle": "2de · 1re",
       "icon": "bx-graduation",
       "entries": [
         {
@@ -87,6 +101,12 @@
           "title": "Bac Pro seconde",
           "referentiel": "aleatoires",
           "path": ["BP2"]
+        },
+        {
+          "id": "bp1",
+          "title": "Bac Pro première",
+          "referentiel": "aleatoires",
+          "path": ["BP1"]
         }
       ]
     }

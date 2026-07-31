@@ -28,7 +28,7 @@ export const dateDePublication = '31/10/2022'
 export const uuid = 'aa661'
 
 export const refs = {
-  'fr-fr': ['can1G09'],
+  'fr-fr': ['can1G09', 'BP1GEO05'],
   'fr-ch': [],
 }
 export default class AngleSurCercleTrigo extends ExerciceSimple {

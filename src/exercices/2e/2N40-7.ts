@@ -15,7 +15,7 @@ export const dateDePublication = '20/02/2025'
 export const uuid = '80c0e'
 
 export const refs = {
-  'fr-fr': ['2N40-7'],
+  'fr-fr': ['2N40-7', 'BP1AUTO073'],
   'fr-ch': ['1mCL1-3', '11FA2-18'],
 }
 export default class MultipleDistributiviteSeconde extends MultipleDistributivite {

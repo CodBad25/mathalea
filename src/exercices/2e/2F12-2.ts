@@ -31,7 +31,7 @@ export const dateDePublication = '14/02/2023'
 export const uuid = '277d3'
 
 export const refs = {
-  'fr-fr': ['2F12-2'],
+  'fr-fr': ['2F12-2', 'BP1RGEI05'],
   'fr-ch': ['2mIneq-6'],
 }
 export default class ResoudreGraphFonctionRef extends Exercice {

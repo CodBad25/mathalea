@@ -7,7 +7,7 @@ export const interactifType = 'mathLive'
 export const uuid = '9fbff'
 
 export const refs = {
-  'fr-fr': ['BP2FONC32'],
+  'fr-fr': ['BP2FONC32', 'BP1RGEI07'],
   'fr-ch': [],
 }
 export default class ExerciceBPFONC31 extends Exercice2F122 {

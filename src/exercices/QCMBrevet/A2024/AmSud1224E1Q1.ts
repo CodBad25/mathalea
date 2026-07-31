@@ -7,7 +7,7 @@ import ExerciceQcmA from '../../ExerciceQcmA'
 
 export const uuid = 'be990'
 export const refs = {
-  'fr-fr': ['3S2QCM-6', 'BP2FLUC7'],
+  'fr-fr': ['3S2QCM-6', 'BP2FLUC7', 'BP1AUTO007'],
   'fr-ch': [],
 }
 export const interactifReady = true

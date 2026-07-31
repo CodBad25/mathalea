@@ -33,7 +33,7 @@ export const amcReady = true
 export const uuid = 'd28ff'
 
 export const refs = {
-  'fr-fr': ['3L11-3b', 'BP2AutoI6'],
+  'fr-fr': ['3L11-3b', 'BP2AutoI6', 'BP1AUTO080'],
   'fr-ch': [''], // déjà référencé dans un autre exercice
 }
 

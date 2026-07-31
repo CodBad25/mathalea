@@ -32,7 +32,7 @@ export const dateDeModifImportante = '26/02/2023' // Une date de modification im
 export const uuid = 'be157'
 
 export const refs = {
-  'fr-fr': ['3L12-1', 'BP2AutoI9'],
+  'fr-fr': ['3L12-1', 'BP2AutoI9', 'BP1AUTO081'],
   'fr-ch': ['11FA2-12'],
 }
 export default class DevelopperIdentitesRemarquables3 extends Exercice {

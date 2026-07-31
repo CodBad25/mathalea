@@ -23,7 +23,7 @@ export const dateDeModifImportante = '06/04/2026'
 export const uuid = 'a15fb'
 
 export const refs = {
-  'fr-fr': ['1P10-4', '1Tec-P21'],
+  'fr-fr': ['1P10-4', '1Tec-P21', 'BP1SP13'],
   'fr-ch': [],
 }
 export default class CalculerProbaTableau extends Exercice {

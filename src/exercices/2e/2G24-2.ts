@@ -21,7 +21,7 @@ export const dateDePublication = '21/05/2023'
 export const uuid = '49570'
 
 export const refs = {
-  'fr-fr': ['2G24-2'],
+  'fr-fr': ['2G24-2', 'BP1GV04'],
   'fr-ch': ['3G92-4'],
 }
 export default class Calculercoordonneessommevecteurs extends Exercice {

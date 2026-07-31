@@ -7,7 +7,7 @@ import { createList } from '../../../lib/format/lists'
 import FractionEtendue from '../../../modules/FractionEtendue'
 export const uuid = '530db'
 export const refs = {
-  'fr-fr': ['3S2QCM-5', 'BP2FLUC6'],
+  'fr-fr': ['3S2QCM-5', 'BP2FLUC6', 'BP1AUTO006'],
   'fr-ch': [],
 }
 export const interactifReady = true

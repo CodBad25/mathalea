@@ -500,7 +500,14 @@
             : ''}"
         >
           {#each $exercicesParams as paramsExercice, i (paramsExercice)}
-            <div class="break-inside-avoid-column">
+            <!-- `inline-block` rend l'exercice monolithique : sans lui,
+                 Firefox le fragmente entre les colonnes malgré
+                 `break-inside`, ce qui décale l'énoncé et fait déborder la
+                 figure sur l'exercice suivant (au chargement comme après un
+                 redimensionnement de la fenêtre). -->
+            <div
+              class="inline-block w-full align-top break-inside-avoid-column"
+            >
               <Exercice
                 {paramsExercice}
                 indiceExercice={i}
@@ -519,7 +526,14 @@
             : ''}"
         >
           {#each $exercicesParams as paramsExercice, i (paramsExercice)}
-            <div class="break-inside-avoid-column">
+            <!-- `inline-block` rend l'exercice monolithique : sans lui,
+                 Firefox le fragmente entre les colonnes malgré
+                 `break-inside`, ce qui décale l'énoncé et fait déborder la
+                 figure sur l'exercice suivant (au chargement comme après un
+                 redimensionnement de la fenêtre). -->
+            <div
+              class="inline-block w-full align-top break-inside-avoid-column"
+            >
               <Exercice
                 {paramsExercice}
                 indiceExercice={i}

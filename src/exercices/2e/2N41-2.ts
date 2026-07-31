@@ -25,7 +25,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDeModifImportante = '17/02/2026'
 export const refs = {
-  'fr-fr': ['2N41-2'],
+  'fr-fr': ['2N41-2', 'BP1AUTO086'],
   'fr-ch': [],
 }
 /**

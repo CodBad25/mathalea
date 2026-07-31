@@ -4,7 +4,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '55d00'
 export const refs = {
-  'fr-fr': ['2S20-4', 'BP2SP6'],
+  'fr-fr': ['2S20-4', 'BP2SP6', 'BP1AUTO017', 'BP1AUTO034'],
   'fr-ch': [],
 }
 export default class CalculerEtendues2nde extends CalculerEtendues {}

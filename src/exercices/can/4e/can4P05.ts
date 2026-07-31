@@ -20,7 +20,7 @@ export const dateDeModifImportante = '02/11/2024' // Une date de modification im
 export const uuid = '8171f'
 
 export const refs = {
-  'fr-fr': ['can4P05'],
+  'fr-fr': ['can4P05', 'BP1AUTO053'],
   'fr-ch': [],
 }
 export default class ImageSpline extends ExerciceSimple {

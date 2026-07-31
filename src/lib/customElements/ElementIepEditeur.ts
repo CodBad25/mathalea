@@ -57,6 +57,7 @@ type TypeElementIntersectable =
   | 'paralleleAObjet'
   | 'paralleleObjet'
   | 'perpendiculaireAObjet'
+  | 'perpendiculaire'
 
 type TypeElementDirection =
   | 'droite'
@@ -81,6 +82,7 @@ const typesElementsIntersectables: TypeElementIntersectable[] = [
   'paralleleAObjet',
   'paralleleObjet',
   'perpendiculaireAObjet',
+  'perpendiculaire',
 ]
 
 const typesElementsDirection: TypeElementDirection[] = [
@@ -111,6 +113,7 @@ const prepositionElementIntersectable: Record<
   paralleleAObjet: 'de la parallèle',
   paralleleObjet: 'de la parallèle',
   perpendiculaireAObjet: 'de la perpendiculaire',
+  perpendiculaire: 'de la perpendiculaire',
 }
 
 // Nom seul (sans article) pour les options du menu de sélection d'une étape
@@ -129,6 +132,7 @@ const nomsTypesElementsIntersectables: Record<
   paralleleAObjet: 'parallèle',
   paralleleObjet: 'parallèle',
   perpendiculaireAObjet: 'perpendiculaire',
+  perpendiculaire: 'perpendiculaire',
 }
 
 type InstructionIepBase = {
@@ -267,8 +271,8 @@ const optionsCodageAngle: string[] = [
   'pleinO',
 ]
 
-const longueurObjetDirectionEditeurIep = 8
-const longueurProlongementObjetEditeurIep = 8
+const longueurObjetDirectionEditeurIep = 12
+const longueurProlongementObjetEditeurIep = 12
 
 const catalogue: Record<
   TypeInstructionIep,
@@ -957,10 +961,7 @@ function instructionEstValide(
     }
   }
   if (instr.type === 'perpendiculaireAObjet') {
-    if (
-      instr.etape >= index ||
-      !estElementDirection(programme[instr.etape])
-    ) {
+    if (instr.etape >= index || !estElementDirection(programme[instr.etape])) {
       return false
     }
   }
@@ -1065,6 +1066,18 @@ function elementGeometrique(
       A.y + base.objet.directeur.x,
     )
     const d = droite(A, pointDirection)
+    d.isVisible = false
+    return { nature: 'droite', objet: d }
+  }
+  if (instr.type === 'perpendiculaire') {
+    const A = points.get(instr.p1)
+    const B = points.get(instr.p2)
+    const C = points.get(instr.p3)
+    if (A === undefined || B === undefined || C === undefined) {
+      return undefined
+    }
+    const pointDirection = pointAbstrait(C.x - (B.y - A.y), C.y + B.x - A.x)
+    const d = droite(C, pointDirection)
     d.isVisible = false
     return { nature: 'droite', objet: d }
   }

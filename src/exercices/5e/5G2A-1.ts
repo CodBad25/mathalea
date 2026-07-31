@@ -34,6 +34,12 @@ export const refs = {
   'fr-ch': ['11ES1-3'],
 }
 export default class DecrireAssemblageDeSolides extends Exercice {
+  /**
+   * Si vrai, les assemblages à base de prisme droit ne sont pas proposés.
+   * Utilisé par le clone BP1G06 (Bac Pro Première) : les prismes droits
+   * (hors cube et pavé droit) ne sont pas au programme.
+   */
+  sansPrisme = false
   constructor() {
     super()
     this.consigne =
@@ -75,7 +81,9 @@ export default class DecrireAssemblageDeSolides extends Exercice {
   }
 
   nouvelleVersion() {
-    const troncs = ['prisme', 'cylindre', 'prisme sans', 'cylindre sans']
+    const troncs = this.sansPrisme
+      ? ['cylindre', 'cylindre sans']
+      : ['prisme', 'cylindre', 'prisme sans', 'cylindre sans']
     const chapeaux = ['haut', 'bas', 'les deux']
     const combinaisons = []
     for (const tronc of troncs) {

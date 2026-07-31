@@ -12,7 +12,7 @@ export const dateDeModifImportante = '05/11/2025'
 export const uuid = 'be864'
 
 export const refs = {
-  'fr-fr': ['2N41-6b', 'BP2AutoI8'],
+  'fr-fr': ['2N41-6b', 'BP2AutoI8', 'BP1AUTO078'],
   'fr-ch': [],
 }
 export default class developperIdentiteRemarquableFrance extends developperIdentiteRemarquable {

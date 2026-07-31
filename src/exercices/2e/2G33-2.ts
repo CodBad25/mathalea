@@ -17,7 +17,7 @@ export const titre =
 export const uuid = 'e715d'
 
 export const refs = {
-  'fr-fr': ['2G33-2'],
+  'fr-fr': ['2G33-2', 'BP1AUTO062'],
   'fr-ch': [],
 }
 export default class PositionsDeDroites extends Exercice {

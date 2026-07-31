@@ -26,6 +26,11 @@ export const refs = {
 }
 
 export default class FactoriserIdentitesRemarquables2 extends Exercice {
+  /**
+   * Si vrai, seule la factorisation de x² - a² (a entier naturel) est proposée.
+   * Utilisé par le clone BP1AUTO087 (Bac Pro Première).
+   */
+  seulementDifferenceDeCarres = false
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
@@ -85,6 +90,9 @@ export default class FactoriserIdentitesRemarquables2 extends Exercice {
       typesDeQuestionsDisponibles = [7, 8, 9] // coef de x rationnel
     } else {
       typesDeQuestionsDisponibles = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    }
+    if (this.seulementDifferenceDeCarres) {
+      typesDeQuestionsDisponibles = [3] // x² - a²
     }
 
     const listeTypeDeQuestions = combinaisonListes(

@@ -32,12 +32,7 @@
   ]
 
   function handleTabChange(e: CustomEvent<string>) {
-    if (e.detail === 'classic') {
-      $canOptions.isChoosen = false
-    } else {
-      $canOptions.isChoosen = true
-      toggleCan()
-    }
+    $canOptions.isChoosen = e.detail !== 'classic'
   }
 
   onMount(() => {
@@ -64,7 +59,10 @@
       isEncrypted: true,
     },
   }
-  $: $canOptions.isInteractive = $globalOptions.setInteractive === '1'
+  // L'interactivité de la Course aux nombres (`canOptions.isInteractive`) est
+  // réglée dans son propre onglet : elle ne doit pas être liée au réglage
+  // « Interactivité » de la présentation classique
+  // (`globalOptions.setInteractive`), qui ne concerne que la page Élève.
   type LinkFormat = keyof typeof availableLinkFormats
   let currentLinkFormat: LinkFormat = 'clear'
   let setInteractive: string = $globalOptions.setInteractive ?? '2'
@@ -99,12 +97,6 @@
       }
     }
     mathaleaUpdateUrlFromExercicesParams($exercicesParams)
-  }
-
-  function toggleCan() {
-    if ($canOptions.isChoosen) {
-      $globalOptions.setInteractive = '1'
-    }
   }
 </script>
 
@@ -279,6 +271,46 @@
               </div>
             </div>
           </div>
+          <div class="pt-2 px-4 grid grid-flow-row md:grid-cols-2 gap-4">
+            <div class="pb-2">
+              <div
+                class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
+              >
+                Affichage du titre de l'exercice
+              </div>
+              <div class="flex flex-row justify-start items-center px-4">
+                <ButtonToggleAlt
+                  title={"Titre de l'exercice"}
+                  bind:value={$globalOptions.isTitleDisplayed}
+                  id={'config-eleve-title-displayed-toggle'}
+                  explanations={[
+                    'Les titres sont affichés',
+                    'Les titres sont masqués.',
+                  ]}
+                  on:toggle={handleSeed}
+                />
+              </div>
+            </div>
+            <div class="pb-2">
+              <div
+                class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
+              >
+                Affichage de la référence de l'exercice
+              </div>
+              <div class="flex flex-row justify-start items-center px-4">
+                <ButtonToggleAlt
+                  title={"Référence de l'exercice"}
+                  bind:value={$globalOptions.isReferenceDisplayed}
+                  id={'config-eleve-reference-displayed-toggle'}
+                  explanations={[
+                    'Les références sont affichées',
+                    'Les références sont masquées.',
+                  ]}
+                  on:toggle={handleSeed}
+                />
+              </div>
+            </div>
+          </div>
         </div>
         <div
           class="transition-opacity duration-150 ease-linear
@@ -295,7 +327,9 @@
             limité.
           </div>
           <div class="pt-2 px-4 grid grid-flow-row md:grid-cols-2 gap-4">
-            <div class="pb-2 w-full flex flex-col">
+            <div
+              class="pb-2 w-full flex flex-col md:col-start-1 md:row-start-1"
+            >
               <div
                 class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
               >
@@ -364,7 +398,28 @@
                 </div>
               </div>
             </div>
-            <div class="pb-2">
+            <div class="pb-2 md:col-start-1 md:row-start-2">
+              <div
+                class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
+              >
+                Interactivité
+              </div>
+              <div
+                class="flex flex-col items-start justify-start space-y-2 px-4"
+              >
+                <ButtonToggleAlt
+                  title={'Questions interactives'}
+                  id={'config-eleve-can-interactif-toggle'}
+                  bind:value={$canOptions.isInteractive}
+                  isDisabled={!$canOptions.isChoosen}
+                  explanations={[
+                    'Les élèves saisissent leurs réponses et obtiennent un score à la fin de la course.',
+                    'Les questions sont affichées sans champ de saisie : les élèves répondent sur une autre feuille.',
+                  ]}
+                />
+              </div>
+            </div>
+            <div class="pb-2 md:col-start-2 md:row-start-2">
               <div
                 class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
               >
@@ -408,44 +463,6 @@
       <div
         class="pt-2 pl-2 grid grid-flow-row md:grid-cols-2 gap-4 bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
       >
-        <div class="pb-2">
-          <div
-            class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-          >
-            Affichage du titre de l'exercice
-          </div>
-          <div class="flex flex-row justify-start items-center px-4">
-            <ButtonToggleAlt
-              title={"Titre de l'exercice"}
-              bind:value={$globalOptions.isTitleDisplayed}
-              id={'config-eleve-title-displayed-toggle'}
-              explanations={[
-                'Les titres sont affichés',
-                'Les titres sont masqués.',
-              ]}
-              on:toggle={handleSeed}
-            />
-          </div>
-        </div>
-        <div class="pb-2">
-          <div
-            class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-          >
-            Affichage de la référence de l'exercice
-          </div>
-          <div class="flex flex-row justify-start items-center px-4">
-            <ButtonToggleAlt
-              title={"Référence de l'exercice"}
-              bind:value={$globalOptions.isReferenceDisplayed}
-              id={'config-eleve-reference-displayed-toggle'}
-              explanations={[
-                'Les références sont affichées',
-                'Les références sont masquées.',
-              ]}
-              on:toggle={handleSeed}
-            />
-          </div>
-        </div>
         <div class="pb-2">
           <div
             class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"

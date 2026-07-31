@@ -24,7 +24,7 @@ export const dateDePublication = '29/04/2025'
 export const uuid = 'baee1'
 
 export const refs = {
-  'fr-fr': ['1P10-2'],
+  'fr-fr': ['1P10-2', 'BP1SP12'],
   'fr-ch': [],
 }
 export default class CalculerProbaCond extends Exercice {

@@ -22,7 +22,7 @@ export const dateDePublication = '27/09/2022' // La date de publication initiale
 export const uuid = '1d7cc'
 
 export const refs = {
-  'fr-fr': ['can2F14'],
+  'fr-fr': ['can2F14', 'BP1AUTO060'],
   'fr-ch': ['NR'],
 }
 export default class CalculOrdonneePoint extends ExerciceSimple {

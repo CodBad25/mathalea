@@ -22,7 +22,7 @@ export const titre = 'Résoudre une inéquation graphiquement'
 export const uuid = '61271'
 
 export const refs = {
-  'fr-fr': ['can2F22'],
+  'fr-fr': ['can2F22', 'BP1RGEI09'],
   'fr-ch': ['2mIneq-2'],
 }
 

@@ -31,7 +31,7 @@ export const dateDeModifImportante = '08/09/2024'
 export const uuid = 'a2ac3'
 
 export const refs = {
-  'fr-fr': ['2F22-1', 'BP2AutoP2'],
+  'fr-fr': ['2F22-1', 'BP2AutoP2', 'BP1AUTO063', 'BP1RGEI04'],
   'fr-ch': ['10FA5-17'],
 }
 // une liste de nœuds pour définir une fonction Spline

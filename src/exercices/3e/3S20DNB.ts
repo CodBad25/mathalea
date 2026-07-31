@@ -14,7 +14,7 @@ import ExerciceBrevetA from '../ExerciceBrevetA'
 
 export const uuid = 'd11ae'
 export const refs = {
-  'fr-fr': ['3S20DNB', '3Z1DNB-15', 'BP2FLUC9'],
+  'fr-fr': ['3S20DNB', '3Z1DNB-15', 'BP2FLUC9', 'BP1AUTO009'],
   'fr-ch': [],
 }
 export const titre = 'Calculer des probabilités (exercice de brevet)'
@@ -182,7 +182,7 @@ export default class Exercice3S2DNB0 extends ExerciceBrevetA {
 
     this.versionAleatoire(0)
     this.introduction = texteItalique(
-      "D'après l'exercice 1 du brevet Métropole 2024.<br>",
+      "D'après l'exercice 1 du brevet Métropole 2024.",
     )
   }
 

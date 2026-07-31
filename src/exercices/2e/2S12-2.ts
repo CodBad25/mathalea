@@ -28,7 +28,7 @@ export const dateDeModifImportante = '04/05/2023'
 export const uuid = '018f3'
 
 export const refs = {
-  'fr-fr': ['2S12-2'],
+  'fr-fr': ['2S12-2', 'BP1CF07'],
   'fr-ch': ['10FA4-8'],
 }
 export default class EvolutionsSuccesives extends Exercice {
