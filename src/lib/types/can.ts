@@ -14,6 +14,8 @@ export type CanOptions = {
   solutionsAccess: boolean
   solutionsMode: CanSolutionsMode
   isInteractive: boolean
+  /** Course sans limite de temps : le chronomètre n'est ni affiché ni décompté. */
+  isTimerDisabled: boolean
   remainingTimeInSeconds: number
   questionGetAnswer: boolean[]
   state: CanState

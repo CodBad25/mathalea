@@ -24,8 +24,6 @@ export const refs = {
 }
 
 export default class ExerciceTableurCalculs6e extends Exercice {
-  destroyers: (() => void)[] = []
-
   private renderSheetMarkup(
     q: number,
     options: {
@@ -66,12 +64,6 @@ export default class ExerciceTableurCalculs6e extends Exercice {
       `Nombres séparés par des tirets\n${ExerciceTableurCalculs6e.listeTypeDeQuestions.map((type, index) => `${index + 1} : ${type}`).join('\n')}\n0: Mélange`,
     ]
     this.sup = '1-2' // `${ExerciceTableurCalculs6e.listeTypeDeQuestions.length + 1}`
-  }
-
-  destroy() {
-    // MGu quan l'exercice est supprimé par svelte : bouton supprimé
-    this.destroyers.forEach((destroy) => destroy())
-    this.destroyers.length = 0
   }
 
   static readonly colors = {
@@ -415,9 +407,6 @@ export default class ExerciceTableurCalculs6e extends Exercice {
   }
 
   nouvelleVersion(): void {
-    // MGu quand l'exercice est modifié, on détruit les anciens listeners
-    this.destroyers.forEach((destroy) => destroy())
-    this.destroyers.length = 0
     const typesDeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup,
       nbQuestions: this.nbQuestions,

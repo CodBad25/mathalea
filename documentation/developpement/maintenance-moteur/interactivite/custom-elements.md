@@ -127,9 +127,9 @@ Afin que le custom element soit correctement pris en charge par le système d'in
 - Enregistrer la classe avec `registerMathaleaCustomElement(MaClasse)`.
 - La méthode statique `verifQuestion(exercice,questionIndex)` doit être implémentée dans l'élément. Elle correspond à la méthode correctionInteractive(i) de la classe Exercice lorsque celui-ci a un interactifType = 'custom'. Il suffit donc d'en transposer la logique : vérification, hydratation de exercice.answers, du span#resultatCheckEx et du div#feedbackEx...
 - Le retour de la fonction doit être : `{
-  isOk: boolean
-  feedback: string
-  score: { nbBonnesReponses: number; nbReponses: number }
+isOk: boolean
+feedback: string
+score: { nbBonnesReponses: number; nbReponses: number }
 }`. comme pour les callbacks de corrections.
 - Le dispatch par le registre est générique : `exerciceInteractif()`, `gestionCan.ts`, `Can.svelte` et `QuestionParPage.svelte` consultent `listOfCustomElements` puis `mathaleaCustomElementsRegistry` pour appeler `verifQuestion()`. Il n'y a donc plus de branche spécifique à ajouter dans ces fichiers pour un custom element correctement enregistré.
 - Les formats historiques MathLive `mathlive`, `fillInTheBlank`, `tableauMathlive` et `texte` sont normalisés vers leurs tags (`mathalea-mathfield`, `fill-in-the-blank`, `tableau-mathlive`, `mathalea-textfield`) par `mathliveCompatibleToCustomElementFormat()` dans `src/lib/types.ts`. Ne pas ajouter de nouveau cas historique sans raison de compatibilité forte : préférer le tag du custom element comme `formatInteractif`.
@@ -161,10 +161,24 @@ Ce nommage évite de mélanger :
 
 Exemple d'usage : `MySpreadsheetElement` instancie des feuilles de calcul techniques dans le DOM (invisibilisées) pour des vérifications hors affichage.
 
+Un custom element peut aussi être purement technique et ne porter aucune
+réponse élève. Dans ce cas, il ne doit pas être ajouté à `InteractivityType` ni
+à `listOfCustomElements` : il utilise seulement le cycle de vie DOM pour
+installer et nettoyer des listeners liés à un rendu. Exemple :
+`cube-iso-interaction`, injecté par `mathalea2d()` quand `updateCubeIso()`
+enregistre une projection 3D manipulable.
+
+Pour remplacer un écouteur global `exercicesAffiches` qui ne sert qu'à attendre
+que le HTML d'un exercice soit dans le DOM, utiliser `mathalea-dom-ready`. Le
+composant reçoit un nom d'action et un payload sérialisable, puis exécute le
+callback enregistré à son `connectedCallback()`. Si le callback retourne une
+fonction, elle est appelée au `disconnectedCallback()`.
+
 ## Cas avancés
 
 - MySpreadsheetElement (tableur) : [architecture du tableur](tableur.md)
 - BlocklyEditor : [architecture de Scratch et Blockly](scratch-blockly.md)
+- RelierEtiquettesElement (composant à trois rendus : HTML interactif, LaTeX et Typst) : [relier les étiquettes](relier-etiquettes.md)
 
 ## Checklist avant merge
 

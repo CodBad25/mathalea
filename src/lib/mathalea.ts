@@ -33,6 +33,7 @@ import {
   inferNumericValueForAMC,
 } from './amc/amcInferenceHelpers'
 import { isStatic, isSvelte } from './components/componentsUtils'
+import { listOfCustomElements } from './customElements/MathaleaCustomElement'
 import { referentielMathadata } from './components/mathadataReferentiel'
 import {
   showDialogForLimitedTime,
@@ -682,6 +683,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   let canSolAccess = true
   let canSolMode = 'gathered'
   let canIsInteractive = true
+  let canIsTimerDisabled = false
   try {
     url = new URL(urlString)
   } catch (error) {
@@ -804,6 +806,8 @@ export function mathaleaUpdateExercicesParamsFromUrl(
         canSolMode = entry[1]
       } else if (entry[0] === 'canI') {
         canIsInteractive = entry[1] === '1'
+      } else if (entry[0] === 'canNC') {
+        canIsTimerDisabled = entry[1] === '1'
       }
 
       if (entry[0] === 'uuid') previousEntryWasUuid = true
@@ -855,6 +859,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
       e.durationInMinutes = canDuration
       e.title = canMainTitle
       e.isInteractive = canIsInteractive
+      e.isTimerDisabled = canIsTimerDisabled
       e.solutionsAccess = canSolAccess
       if (canSolMode === 'gathered') e.solutionsMode = 'gathered'
       else e.solutionsMode = 'split'
@@ -1174,6 +1179,18 @@ export function mathaleaHandleExerciceSimple(
             `checkSvgSelectionEx${n}Q${i}"`,
           )
           exercice.listeQuestions.push(exercice.question ?? '')
+        } else if (
+          listOfCustomElements.includes(String(exercice.formatInteractif))
+        ) {
+          // Un custom element porte sa propre correction : aucun champ MathLive
+          // à ajouter. Dans un exercice simple, nouvelleVersion() ne connait pas
+          // l'indice de la question et produit des identifiants en Q0 : ils sont
+          // renumérotés ici (même principe que les branches spécifiques
+          // ci-dessus, mais valable pour tout customElement enregistré).
+          const n = exercice.numeroExercice
+          exercice.listeQuestions.push(
+            (exercice.question ?? '').replaceAll(`Ex${n}Q0`, `Ex${n}Q${i}`),
+          )
         } else {
           exercice.listeQuestions.push(
             exercice.question +

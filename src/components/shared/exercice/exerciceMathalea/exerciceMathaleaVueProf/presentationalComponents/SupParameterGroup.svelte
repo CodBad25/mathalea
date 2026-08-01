@@ -1,10 +1,12 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
+  import type { FormulaireComplexe as FormulaireComplexeType } from '../../../../../../lib/formulaireComplexe'
   import type { IExercice } from '../../../../../../lib/types'
   import CheckboxWithLabel from '../../../../forms/CheckboxWithLabel.svelte'
   import InputNumber from '../../../../forms/InputNumber.svelte'
   import InputText from '../../../../forms/InputText.svelte'
   import SelectUnique from '../../../../forms/SelectUnique.svelte'
+  import FormulaireComplexe from './FormulaireComplexe.svelte'
 
   export let supIndex: 1 | 2 | 3 | 4 | 5
   export let exercice: IExercice
@@ -19,6 +21,7 @@
         defaut: number[]
       }
     | undefined = undefined
+  export let formulaireComplexe: FormulaireComplexeType | undefined = undefined
 
   const dispatch = createEventDispatcher()
 
@@ -137,6 +140,15 @@
       </div>
     {/each}
   </div>
+{/if}
+
+{#if formulaireComplexe}
+  <FormulaireComplexe
+    formulaire={formulaireComplexe}
+    {exerciceIndex}
+    bind:supValue
+    on:change={handleChange}
+  />
 {/if}
 
 {#if texte}

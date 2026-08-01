@@ -49,6 +49,7 @@ type TypeElementIntersectable =
   | 'droite'
   | 'droitePointPente'
   | 'segment'
+  | 'trait'
   | 'demiDroite'
   | 'demiDroitePointDirection'
   | 'cercle'
@@ -63,6 +64,7 @@ type TypeElementDirection =
   | 'droite'
   | 'droitePointPente'
   | 'segment'
+  | 'trait'
   | 'demiDroite'
   | 'demiDroitePointDirection'
   | 'parallele'
@@ -74,6 +76,7 @@ const typesElementsIntersectables: TypeElementIntersectable[] = [
   'droite',
   'droitePointPente',
   'segment',
+  'trait',
   'demiDroite',
   'demiDroitePointDirection',
   'cercle',
@@ -89,6 +92,7 @@ const typesElementsDirection: TypeElementDirection[] = [
   'droite',
   'droitePointPente',
   'segment',
+  'trait',
   'demiDroite',
   'demiDroitePointDirection',
   'parallele',
@@ -105,6 +109,7 @@ const prepositionElementIntersectable: Record<
   droite: 'de la droite',
   droitePointPente: 'de la droite',
   segment: 'du segment',
+  trait: 'du trait',
   demiDroite: 'de la demi-droite',
   demiDroitePointDirection: 'de la demi-droite',
   cercle: 'du cercle',
@@ -124,6 +129,7 @@ const nomsTypesElementsIntersectables: Record<
   droite: 'droite',
   droitePointPente: 'droite',
   segment: 'segment',
+  trait: 'trait',
   demiDroite: 'demi-droite',
   demiDroitePointDirection: 'demi-droite',
   cercle: 'cercle',
@@ -149,6 +155,7 @@ type InstructionIepSansOptions =
       angle: number
     }
   | { type: 'segment'; p1: string; p2: string }
+  | { type: 'trait'; p1: string; p2: string }
   | { type: 'polygone'; sommets: string }
   | { type: 'polygoneRapide'; sommets: string }
   | { type: 'droite'; p1: string; p2: string }
@@ -192,6 +199,7 @@ export type EditeurIepOptions = {
   id?: string
   numeroExercice?: number
   questionIndex?: number
+  conditionsInitiales?: InstructionIep[]
   programmeInitial?: InstructionIep[]
   instructionsDisponibles?: InstructionsDisponiblesIep
   instructionsInitialesProtegees?: number[]
@@ -297,6 +305,13 @@ const catalogue: Record<
   },
   segment: {
     label: 'Tracer un segment à la règle',
+    champs: [
+      { cle: 'p1', genre: 'point', label: 'Extrémité 1' },
+      { cle: 'p2', genre: 'point', label: 'Extrémité 2' },
+    ],
+  },
+  trait: {
+    label: 'Tracer un trait',
     champs: [
       { cle: 'p1', genre: 'point', label: 'Extrémité 1' },
       { cle: 'p2', genre: 'point', label: 'Extrémité 2' },
@@ -532,6 +547,7 @@ const ordreCatalogue: TypeInstructionIep[] = [
   'point',
   'pointADistance',
   'segment',
+  'trait',
   'polygone',
   'polygoneRapide',
   'droite',
@@ -663,6 +679,8 @@ export function decrireInstruction(
       return `Placer le point ${instr.nom} à ${formateNombre(instr.distance)} cm de ${instr.p1} (direction ${formateNombre(instr.angle)}°).`
     case 'segment':
       return `Tracer le segment [${instr.p1}${instr.p2}] à la règle.`
+    case 'trait':
+      return `Tracer le trait [${instr.p1}${instr.p2}].`
     case 'polygone':
       return `Tracer le polygone ${lireSommetsPolygone(instr.sommets).join('')} à la règle.`
     case 'polygoneRapide':
@@ -869,7 +887,7 @@ function segmentVisibleObjetDirection(
   programme: InstructionIep[],
 ): readonly [PointAbstrait, PointAbstrait] | undefined {
   if (instr === undefined || !estElementDirection(instr)) return undefined
-  if (instr.type === 'segment') {
+  if (instr.type === 'segment' || instr.type === 'trait') {
     const A = points.get(instr.p1)
     const B = points.get(instr.p2)
     if (A === undefined || B === undefined) return undefined
@@ -1102,6 +1120,7 @@ function elementGeometrique(
   if (
     instr.type === 'droite' ||
     instr.type === 'segment' ||
+    instr.type === 'trait' ||
     instr.type === 'demiDroite'
   ) {
     const d = droite(A, B)
@@ -1113,31 +1132,129 @@ function elementGeometrique(
   return { nature: 'cercle', objet: c }
 }
 
+type OptionsLectureProgrammeIep = {
+  nombreInstructionsImmediates?: number
+  rangerInstruments?: boolean
+  instrumentsRequis?: OutilIep[]
+  positionsRangement?: Partial<Record<OutilIep, PointAbstrait>>
+}
+
+const outilsIep: OutilIep[] = [
+  'regle',
+  'crayon',
+  'equerre',
+  'requerre',
+  'compas',
+  'rapporteur',
+]
+
+function outilsRequisParInstruction(instr: InstructionIep): OutilIep[] {
+  switch (instr.type) {
+    case 'point':
+    case 'pointADistance':
+    case 'intersection':
+    case 'texte':
+    case 'segmentCodage':
+    case 'angleCodage':
+    case 'codageAngleDroit':
+    case 'trait':
+      return ['crayon']
+    case 'segment':
+    case 'droite':
+    case 'droitePointPente':
+    case 'demiDroite':
+    case 'demiDroitePointDirection':
+    case 'polygone':
+    case 'polygoneRapide':
+    case 'prolongerObjet':
+    case 'milieu':
+      return ['regle', 'crayon']
+    case 'cercle':
+    case 'arc':
+    case 'mediatrice':
+    case 'bissectrice':
+      return ['compas', 'regle', 'crayon']
+    case 'perpendiculaire':
+    case 'perpendiculaireAObjet':
+    case 'parallele':
+    case 'paralleleAObjet':
+    case 'paralleleObjet':
+      return ['regle', 'equerre', 'crayon']
+    case 'demiDroiteAngle':
+      return ['rapporteur', 'regle', 'crayon']
+    case 'montrerOutil':
+    case 'masquerOutil':
+      return [instr.outil]
+    case 'regleMontrerGraduations':
+    case 'regleMasquerGraduations':
+    case 'regleModifierLongueur':
+      return ['regle']
+    case 'pause':
+    case 'attente':
+      return []
+  }
+  return []
+}
+
+function outilsRequisParProgramme(programme: InstructionIep[]): OutilIep[] {
+  return outilsIep.filter((outil) =>
+    programme.some((instruction) =>
+      outilsRequisParInstruction(instruction).includes(outil),
+    ),
+  )
+}
+
+function positionsRangementInstruments(
+  anim: Alea2iep,
+  largeur: number,
+): Partial<Record<OutilIep, PointAbstrait>> {
+  const xDroite = largeur / 30 - anim.translationX
+  const yHaut = anim.translationY
+  return {
+    regle: pointAbstrait(xDroite - 7.8, yHaut - 0.8),
+    equerre: pointAbstrait(xDroite - 4.2, yHaut - 1.1),
+    requerre: pointAbstrait(xDroite - 4.2, yHaut - 1.1),
+    rapporteur: pointAbstrait(xDroite - 1.7, yHaut - 1.15),
+    compas: pointAbstrait(xDroite - 2.6, yHaut - 2.65),
+    crayon: pointAbstrait(xDroite - 6.9, yHaut - 2.25),
+  }
+}
+
 /**
  * Joue le programme sur une instance d'Alea2iep.
  * Renvoie la liste des indices des étapes ignorées (points non définis).
  */
-function jouerProgramme(anim: Alea2iep, programme: InstructionIep[]): number[] {
+function jouerProgramme(
+  anim: Alea2iep,
+  programme: InstructionIep[],
+  optionsLecture: OptionsLectureProgrammeIep = {},
+): number[] {
+  const {
+    nombreInstructionsImmediates = 0,
+    rangerInstruments = false,
+    instrumentsRequis = [],
+    positionsRangement = {},
+  } = optionsLecture
   const points = new Map<string, PointAbstrait>()
   const etapesIgnorees: number[] = []
-  if (
-    programme.some((instr) =>
-      [
-        'segment',
-        'droite',
-        'droitePointPente',
-        'demiDroite',
-        'demiDroitePointDirection',
-        'polygone',
-        'paralleleAObjet',
-        'paralleleObjet',
-        'perpendiculaireAObjet',
-      ].includes(instr.type),
-    )
-  ) {
-    anim.regleMontrer()
+  if (rangerInstruments) {
+    for (const outil of instrumentsRequis) {
+      const position = positionsRangement[outil]
+      if (position === undefined) continue
+      anim.montrer(outil, position, { tempo: 0 })
+    }
+  } else if (outilsRequisParProgramme(programme).includes('regle')) {
+    anim.regleMontrer(undefined, {
+      tempo: outilsRequisParProgramme(
+        programme.slice(0, nombreInstructionsImmediates),
+      ).includes('regle')
+        ? 0
+        : undefined,
+    })
   }
   programme.forEach((instr, index) => {
+    const tempoAvantInstruction = anim.tempo
+    if (index < nombreInstructionsImmediates) anim.tempo = 0
     // Récupère les points référencés par l'instruction, undefined si l'un manque
     const recupere = (...noms: string[]): PointAbstrait[] | undefined => {
       const resultat: PointAbstrait[] = []
@@ -1148,370 +1265,405 @@ function jouerProgramme(anim: Alea2iep, programme: InstructionIep[]): number[] {
       }
       return resultat
     }
-    switch (instr.type) {
-      case 'point': {
-        const A = pointAbstrait(instr.x, instr.y, instr.nom)
-        anim.pointCreer(A, { label: instr.nom })
-        points.set(instr.nom, A)
-        break
-      }
-      case 'pointADistance': {
-        const origine = recupere(instr.p1)
-        if (origine === undefined) {
-          etapesIgnorees.push(index)
+    const jouerInstruction = () => {
+      const optionsInstrument = rangerInstruments
+        ? { positionsRangementInstruments: positionsRangement }
+        : {}
+      switch (instr.type) {
+        case 'point': {
+          const A = pointAbstrait(instr.x, instr.y, instr.nom)
+          anim.pointCreer(A, { label: instr.nom })
+          points.set(instr.nom, A)
           break
         }
-        const A = pointAdistance(
-          origine[0],
-          instr.distance,
-          instr.angle,
-          instr.nom,
-        )
-        anim.pointCreer(A, { label: instr.nom })
-        points.set(instr.nom, A)
-        break
-      }
-      case 'segment': {
-        const pts = recupere(instr.p1, instr.p2)
-        if (pts === undefined) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.regleSegment(pts[0], pts[1])
-        break
-      }
-      case 'polygone': {
-        const pts = recupere(...lireSommetsPolygone(instr.sommets))
-        if (pts === undefined || pts.length < 3) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.polygoneTracer(...pts)
-        break
-      }
-      case 'polygoneRapide': {
-        const pts = recupere(...lireSommetsPolygone(instr.sommets))
-        if (pts === undefined || pts.length < 3) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.polygoneRapide(...pts)
-        break
-      }
-      case 'droite': {
-        const pts = recupere(instr.p1, instr.p2)
-        if (pts === undefined) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.regleDroite(pts[0], pts[1], {
-          longueur: longueurObjetDirectionEditeurIep,
-        })
-        break
-      }
-      case 'droitePointPente': {
-        const pts = recupere(instr.p1)
-        const pente =
-          lireNombreOptionnelFiniOuInfini(instr.pente) ?? penteAleatoire()
-        if (pts === undefined || Number.isNaN(pente)) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.regleDroite(pts[0], pente, {
-          longueur: longueurObjetDirectionEditeurIep,
-        })
-        break
-      }
-      case 'demiDroite': {
-        const pts = recupere(instr.p1, instr.p2)
-        if (pts === undefined) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.regleDemiDroite(pts[0], pts[1], {
-          longueur: longueurObjetDirectionEditeurIep,
-        })
-        break
-      }
-      case 'demiDroitePointDirection': {
-        const pts = recupere(instr.p1)
-        const angle =
-          lireNombreOptionnelFiniOuInfini(instr.angle) ?? angleAleatoire()
-        if (pts === undefined || Number.isNaN(angle)) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.regleDemiDroite(pts[0], angle, {
-          longueur: longueurObjetDirectionEditeurIep,
-        })
-        break
-      }
-      case 'cercle': {
-        const pts = recupere(instr.p1, instr.p2)
-        if (pts === undefined) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.compasCercleCentrePoint(pts[0], pts[1])
-        break
-      }
-      case 'arc': {
-        const pts = recupere(instr.p1, instr.p2)
-        if (pts === undefined) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.compasTracerArcCentrePoint(pts[0], pts[1])
-        break
-      }
-      case 'milieu': {
-        const pts = recupere(instr.p1, instr.p2)
-        if (pts === undefined) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.milieuALaRegle(pts[0], pts[1], instr.nom)
-        const M = milieu(pts[0], pts[1], instr.nom)
-        points.set(instr.nom, M)
-        break
-      }
-      case 'intersection': {
-        const element1 = elementGeometrique(
-          programme[instr.etape1],
-          points,
-          programme,
-        )
-        const element2 = elementGeometrique(
-          programme[instr.etape2],
-          points,
-          programme,
-        )
-        if (element1 === undefined || element2 === undefined) {
-          etapesIgnorees.push(index)
-          break
-        }
-        let A: PointAbstrait
-        if (element1.nature === 'droite' && element2.nature === 'droite') {
-          A = pointIntersectionDD(element1.objet, element2.objet, instr.nom)
-        } else if (
-          element1.nature === 'cercle' &&
-          element2.nature === 'cercle'
-        ) {
-          A = pointIntersectionCC(
-            element1.objet,
-            element2.objet,
+        case 'pointADistance': {
+          const origine = recupere(instr.p1)
+          if (origine === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          const A = pointAdistance(
+            origine[0],
+            instr.distance,
+            instr.angle,
             instr.nom,
-            instr.choix,
           )
-        } else if (
-          element1.nature === 'droite' &&
-          element2.nature === 'cercle'
-        ) {
-          A = pointIntersectionLC(
-            element1.objet,
-            element2.objet,
-            instr.nom,
-            instr.choix,
-          )
-        } else if (
-          element1.nature === 'cercle' &&
-          element2.nature === 'droite'
-        ) {
-          A = pointIntersectionLC(
-            element2.objet,
-            element1.objet,
-            instr.nom,
-            instr.choix,
-          )
-        } else {
-          etapesIgnorees.push(index)
+          anim.pointCreer(A, { label: instr.nom })
+          points.set(instr.nom, A)
           break
         }
-        anim.pointCreer(A, { label: instr.nom })
-        points.set(instr.nom, A)
-        break
-      }
-      case 'mediatrice': {
-        const pts = recupere(instr.p1, instr.p2)
-        if (pts === undefined) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.mediatriceAuCompas(pts[0], pts[1])
-        break
-      }
-      case 'perpendiculaire': {
-        const pts = recupere(instr.p1, instr.p2, instr.p3)
-        if (pts === undefined) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.perpendiculaireRegleEquerre2points3epoint(pts[0], pts[1], pts[2])
-        break
-      }
-      case 'perpendiculaireAObjet': {
-        const pts = recupere(instr.p1)
-        const element = elementGeometrique(
-          programme[instr.etape],
-          points,
-          programme,
-        )
-        if (pts === undefined || element?.nature !== 'droite') {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.perpendiculaireRegleEquerreDroitePoint(element.objet, pts[0])
-        break
-      }
-      case 'parallele': {
-        const pts = recupere(instr.p1, instr.p2, instr.p3)
-        if (pts === undefined) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.paralleleRegleEquerre2points3epoint(pts[0], pts[1], pts[2])
-        break
-      }
-      case 'paralleleAObjet': {
-        const pts = recupere(instr.p1)
-        const element = elementGeometrique(
-          programme[instr.etape],
-          points,
-          programme,
-        )
-        if (pts === undefined || element?.nature !== 'droite') {
-          etapesIgnorees.push(index)
-          break
-        }
-        const [A, B] = deuxPointsSurDroitePourAnimation(element.objet)
-        anim.paralleleRegleEquerre2points3epoint(A, B, pts[0])
-        break
-      }
-      case 'paralleleObjet': {
-        const pts = recupere(instr.p1)
-        const element = elementGeometrique(
-          programme[instr.element],
-          points,
-          programme,
-        )
-        if (pts === undefined || element?.nature !== 'droite') {
-          etapesIgnorees.push(index)
-          break
-        }
-        const [A, B] = deuxPointsSurDroitePourAnimation(element.objet)
-        anim.paralleleRegleEquerre2points3epoint(A, B, pts[0])
-        break
-      }
-      case 'prolongerObjet': {
-        const longueurTrace =
-          instr.longueur ?? longueurProlongementObjetEditeurIep
-        const ok = tracerProlongementObjet(
-          anim,
-          programme[instr.etape],
-          points,
-          programme,
-          longueurTrace,
-        )
-        if (!ok) etapesIgnorees.push(index)
-        break
-      }
-      case 'bissectrice': {
-        const pts = recupere(instr.p1, instr.p2, instr.p3)
-        if (pts === undefined) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.bissectriceAuCompas(pts[0], pts[1], pts[2])
-        break
-      }
-      case 'codageAngleDroit': {
-        const pts = recupere(instr.p1, instr.p2, instr.p3)
-        if (pts === undefined) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.codageAngleDroit(pts[0], pts[1], pts[2])
-        break
-      }
-      case 'demiDroiteAngle': {
-        const pts = recupere(instr.p1, instr.p2)
-        if (pts === undefined) {
-          etapesIgnorees.push(index)
-          break
-        }
-        anim.rapporteurTracerDemiDroiteAngle(pts[0], pts[1], instr.angle)
-        break
-      }
-      case 'montrerOutil': {
-        if (instr.p1 !== undefined) {
-          const pts = recupere(instr.p1)
+        case 'segment': {
+          const pts = recupere(instr.p1, instr.p2)
           if (pts === undefined) {
             etapesIgnorees.push(index)
             break
           }
-          anim.montrer(instr.outil, pts[0])
-        } else {
-          anim.montrer(instr.outil, anim[instr.outil].position)
-        }
-        break
-      }
-      case 'masquerOutil': {
-        anim.masquer(instr.outil)
-        break
-      }
-      case 'segmentCodage': {
-        const pts = recupere(instr.p1, instr.p2)
-        if (pts === undefined) {
-          etapesIgnorees.push(index)
+          anim.regleSegment(pts[0], pts[1])
           break
         }
-        anim.segmentCodage(pts[0], pts[1], { codage: instr.codage })
-        break
-      }
-      case 'angleCodage': {
-        const pts = recupere(instr.p1, instr.p2, instr.p3)
-        if (pts === undefined) {
-          etapesIgnorees.push(index)
+        case 'trait': {
+          const pts = recupere(instr.p1, instr.p2)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.traitRapide(pts[0], pts[1])
           break
         }
-        anim.angleCodage(pts[0], pts[1], pts[2], { codage: instr.codage })
-        break
-      }
-      case 'regleMontrerGraduations': {
-        anim.regleMontrerGraduations()
-        break
-      }
-      case 'regleMasquerGraduations': {
-        anim.regleMasquerGraduations()
-        break
-      }
-      case 'regleModifierLongueur': {
-        anim.regleModifierLongueur(instr.longueur)
-        break
-      }
-      case 'texte': {
-        anim.textePosition(instr.texte, instr.x, instr.y)
-        break
-      }
-      case 'pause': {
-        anim.pause({ tempo: instr.secondes * 10 })
-        break
-      }
-      case 'attente': {
-        // Instrumenpoche n'a pas d'action d'attente pure : on rejoue un zoom
-        // à 100% (valeur déjà en place, donc sans effet visuel) pour ne
-        // profiter que de son tempo, qui retarde l'étape suivante sans clic.
-        anim.compasZoom(100, { tempo: instr.secondes * 10 })
-        break
+        case 'polygone': {
+          const pts = recupere(...lireSommetsPolygone(instr.sommets))
+          if (pts === undefined || pts.length < 3) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.polygoneTracer(...pts)
+          break
+        }
+        case 'polygoneRapide': {
+          const pts = recupere(...lireSommetsPolygone(instr.sommets))
+          if (pts === undefined || pts.length < 3) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.polygoneRapide(...pts)
+          break
+        }
+        case 'droite': {
+          const pts = recupere(instr.p1, instr.p2)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.regleDroite(pts[0], pts[1], {
+            longueur: longueurObjetDirectionEditeurIep,
+          })
+          break
+        }
+        case 'droitePointPente': {
+          const pts = recupere(instr.p1)
+          const pente =
+            lireNombreOptionnelFiniOuInfini(instr.pente) ?? penteAleatoire()
+          if (pts === undefined || Number.isNaN(pente)) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.regleDroite(pts[0], pente, {
+            longueur: longueurObjetDirectionEditeurIep,
+          })
+          break
+        }
+        case 'demiDroite': {
+          const pts = recupere(instr.p1, instr.p2)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.regleDemiDroite(pts[0], pts[1], {
+            longueur: longueurObjetDirectionEditeurIep,
+          })
+          break
+        }
+        case 'demiDroitePointDirection': {
+          const pts = recupere(instr.p1)
+          const angle =
+            lireNombreOptionnelFiniOuInfini(instr.angle) ?? angleAleatoire()
+          if (pts === undefined || Number.isNaN(angle)) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.regleDemiDroite(pts[0], angle, {
+            longueur: longueurObjetDirectionEditeurIep,
+          })
+          break
+        }
+        case 'cercle': {
+          const pts = recupere(instr.p1, instr.p2)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.compasCercleCentrePoint(pts[0], pts[1])
+          break
+        }
+        case 'arc': {
+          const pts = recupere(instr.p1, instr.p2)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.compasTracerArcCentrePoint(pts[0], pts[1])
+          break
+        }
+        case 'milieu': {
+          const pts = recupere(instr.p1, instr.p2)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.milieuALaRegle(pts[0], pts[1], instr.nom)
+          const M = milieu(pts[0], pts[1], instr.nom)
+          points.set(instr.nom, M)
+          break
+        }
+        case 'intersection': {
+          const element1 = elementGeometrique(
+            programme[instr.etape1],
+            points,
+            programme,
+          )
+          const element2 = elementGeometrique(
+            programme[instr.etape2],
+            points,
+            programme,
+          )
+          if (element1 === undefined || element2 === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          let A: PointAbstrait
+          if (element1.nature === 'droite' && element2.nature === 'droite') {
+            A = pointIntersectionDD(element1.objet, element2.objet, instr.nom)
+          } else if (
+            element1.nature === 'cercle' &&
+            element2.nature === 'cercle'
+          ) {
+            A = pointIntersectionCC(
+              element1.objet,
+              element2.objet,
+              instr.nom,
+              instr.choix,
+            )
+          } else if (
+            element1.nature === 'droite' &&
+            element2.nature === 'cercle'
+          ) {
+            A = pointIntersectionLC(
+              element1.objet,
+              element2.objet,
+              instr.nom,
+              instr.choix,
+            )
+          } else if (
+            element1.nature === 'cercle' &&
+            element2.nature === 'droite'
+          ) {
+            A = pointIntersectionLC(
+              element2.objet,
+              element1.objet,
+              instr.nom,
+              instr.choix,
+            )
+          } else {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.pointCreer(A, { label: instr.nom })
+          points.set(instr.nom, A)
+          break
+        }
+        case 'mediatrice': {
+          const pts = recupere(instr.p1, instr.p2)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.mediatriceAuCompas(pts[0], pts[1])
+          break
+        }
+        case 'perpendiculaire': {
+          const pts = recupere(instr.p1, instr.p2, instr.p3)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.perpendiculaireRegleEquerre2points3epoint(
+            pts[0],
+            pts[1],
+            pts[2],
+            optionsInstrument,
+          )
+          break
+        }
+        case 'perpendiculaireAObjet': {
+          const pts = recupere(instr.p1)
+          const element = elementGeometrique(
+            programme[instr.etape],
+            points,
+            programme,
+          )
+          if (pts === undefined || element?.nature !== 'droite') {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.perpendiculaireRegleEquerreDroitePoint(
+            element.objet,
+            pts[0],
+            optionsInstrument,
+          )
+          break
+        }
+        case 'parallele': {
+          const pts = recupere(instr.p1, instr.p2, instr.p3)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.paralleleRegleEquerre2points3epoint(pts[0], pts[1], pts[2])
+          break
+        }
+        case 'paralleleAObjet': {
+          const pts = recupere(instr.p1)
+          const element = elementGeometrique(
+            programme[instr.etape],
+            points,
+            programme,
+          )
+          if (pts === undefined || element?.nature !== 'droite') {
+            etapesIgnorees.push(index)
+            break
+          }
+          const [A, B] = deuxPointsSurDroitePourAnimation(element.objet)
+          anim.paralleleRegleEquerre2points3epoint(A, B, pts[0])
+          break
+        }
+        case 'paralleleObjet': {
+          const pts = recupere(instr.p1)
+          const element = elementGeometrique(
+            programme[instr.element],
+            points,
+            programme,
+          )
+          if (pts === undefined || element?.nature !== 'droite') {
+            etapesIgnorees.push(index)
+            break
+          }
+          const [A, B] = deuxPointsSurDroitePourAnimation(element.objet)
+          anim.paralleleRegleEquerre2points3epoint(A, B, pts[0])
+          break
+        }
+        case 'prolongerObjet': {
+          const longueurTrace =
+            instr.longueur ?? longueurProlongementObjetEditeurIep
+          const ok = tracerProlongementObjet(
+            anim,
+            programme[instr.etape],
+            points,
+            programme,
+            longueurTrace,
+          )
+          if (!ok) etapesIgnorees.push(index)
+          break
+        }
+        case 'bissectrice': {
+          const pts = recupere(instr.p1, instr.p2, instr.p3)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.bissectriceAuCompas(pts[0], pts[1], pts[2])
+          break
+        }
+        case 'codageAngleDroit': {
+          const pts = recupere(instr.p1, instr.p2, instr.p3)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.codageAngleDroit(pts[0], pts[1], pts[2])
+          break
+        }
+        case 'demiDroiteAngle': {
+          const pts = recupere(instr.p1, instr.p2)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.rapporteurTracerDemiDroiteAngle(pts[0], pts[1], instr.angle)
+          break
+        }
+        case 'montrerOutil': {
+          if (instr.p1 !== undefined) {
+            const pts = recupere(instr.p1)
+            if (pts === undefined) {
+              etapesIgnorees.push(index)
+              break
+            }
+            anim.montrer(instr.outil, pts[0])
+          } else {
+            anim.montrer(instr.outil, anim[instr.outil].position)
+          }
+          break
+        }
+        case 'masquerOutil': {
+          anim.masquer(instr.outil)
+          break
+        }
+        case 'segmentCodage': {
+          const pts = recupere(instr.p1, instr.p2)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.segmentCodage(pts[0], pts[1], { codage: instr.codage })
+          break
+        }
+        case 'angleCodage': {
+          const pts = recupere(instr.p1, instr.p2, instr.p3)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.angleCodage(pts[0], pts[1], pts[2], { codage: instr.codage })
+          break
+        }
+        case 'regleMontrerGraduations': {
+          anim.regleMontrerGraduations()
+          break
+        }
+        case 'regleMasquerGraduations': {
+          anim.regleMasquerGraduations()
+          break
+        }
+        case 'regleModifierLongueur': {
+          anim.regleModifierLongueur(instr.longueur)
+          break
+        }
+        case 'texte': {
+          anim.textePosition(instr.texte, instr.x, instr.y)
+          break
+        }
+        case 'pause': {
+          anim.pause({ tempo: instr.secondes * 10 })
+          break
+        }
+        case 'attente': {
+          // Instrumenpoche n'a pas d'action d'attente pure : on rejoue un zoom
+          // à 100% (valeur déjà en place, donc sans effet visuel) pour ne
+          // profiter que de son tempo, qui retarde l'étape suivante sans clic.
+          anim.compasZoom(100, { tempo: instr.secondes * 10 })
+          break
+        }
       }
     }
+    if (rangerInstruments) {
+      anim.preserverVisibiliteInstruments(jouerInstruction, { tempo: 0 })
+      anim.rangerInstruments(positionsRangement, instrumentsRequis, {
+        tempo: 0,
+        vitesse: 20,
+      })
+    } else {
+      jouerInstruction()
+    }
+    anim.tempo = tempoAvantInstruction
   })
-  anim.regleMasquer()
-  anim.equerreMasquer()
-  anim.requerreMasquer()
-  anim.rapporteurMasquer()
-  anim.compasMasquer()
-  anim.crayonMasquer()
+  if (!rangerInstruments) {
+    anim.regleMasquer()
+    anim.equerreMasquer()
+    anim.requerreMasquer()
+    anim.rapporteurMasquer()
+    anim.compasMasquer()
+    anim.crayonMasquer()
+  }
   return etapesIgnorees
 }
 
@@ -1519,16 +1671,30 @@ function jouerProgramme(anim: Alea2iep, programme: InstructionIep[]): number[] {
  * Construit l'animation complète : une première passe sert à calculer
  * les bornes de la figure pour cadrer la seconde (viewBox + recadrage).
  */
-export function construireAnimation(programme: InstructionIep[]): Alea2iep {
+export function construireAnimation(
+  programme: InstructionIep[],
+  nombreInstructionsImmediates = 0,
+  options: { rangerInstruments?: boolean } = {},
+): Alea2iep {
   const programmeResolue = resoudreDirectionsAleatoires(programme)
   const brouillon = new Alea2iep()
-  jouerProgramme(brouillon, programmeResolue)
+  jouerProgramme(brouillon, programmeResolue, {
+    nombreInstructionsImmediates,
+  })
   const anim = new Alea2iep()
   const largeur = Math.max(600, (brouillon.xMax - brouillon.xMin + 6) * 30)
   const hauteur = Math.max(400, (brouillon.yMax - brouillon.yMin + 6) * 30)
   anim.taille(largeur, hauteur)
   anim.recadre(brouillon.xMin - 3, brouillon.yMax)
-  jouerProgramme(anim, programmeResolue)
+  const instrumentsRequis = options.rangerInstruments
+    ? outilsRequisParProgramme(programmeResolue)
+    : []
+  jouerProgramme(anim, programmeResolue, {
+    nombreInstructionsImmediates,
+    rangerInstruments: options.rangerInstruments,
+    instrumentsRequis,
+    positionsRangement: positionsRangementInstruments(anim, largeur),
+  })
   return anim
 }
 
@@ -1638,6 +1804,7 @@ export function pointsConstruitsDepuisProgramme(
 
 type ProgrammeSauvegardeIep = {
   programme: InstructionIep[]
+  conditionsInitialesAttribut: string
   programmeInitialAttribut: string
 }
 
@@ -1745,7 +1912,11 @@ const classesSelect = [...classesChamp, 'pr-8']
 export class ElementIepEditeur extends MathaleaCustomElement {
   static readonly elementTag = 'alea-iep-editeur'
   static get observedAttributes(): string[] {
-    return ['programme-initial', 'instructions-disponibles']
+    return [
+      'conditions-initiales',
+      'programme-initial',
+      'instructions-disponibles',
+    ]
   }
 
   private static readonly verificationCallbacks = new Map<
@@ -1753,6 +1924,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     ElementIepVerificationCallback
   >()
 
+  private conditionsInitiales: InstructionIep[] = []
   private programme: InstructionIep[] = []
   private indicesInstructionsProtegees = new Set<number>()
   private instructionsProtegeesInitiales = new Map<number, InstructionIep>()
@@ -1776,6 +1948,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     id,
     numeroExercice = 0,
     questionIndex = 0,
+    conditionsInitiales = [],
     programmeInitial = [],
     instructionsDisponibles,
     instructionsInitialesProtegees = [],
@@ -1802,6 +1975,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       id: computedId,
       numeroExercice,
       questionIndex,
+      conditionsInitiales,
       programmeInitial,
       instructionsDisponibles,
       instructionsInitialesProtegees,
@@ -1926,7 +2100,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     if (this.dataset.initialise === '1') return
     this.dataset.initialise = '1'
     this.reinitialiserProgrammeDepuisAttributs()
-    this.prochaineLettre = pointsDefinis(this.programme).length
+    this.prochaineLettre = pointsDefinis(this.programmeComplet()).length
     this.construireInterface()
     this.rafraichirProgramme()
   }
@@ -1939,7 +2113,11 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     if (
       this.dataset.initialise !== '1' ||
       oldValue === newValue ||
-      !['programme-initial', 'instructions-disponibles'].includes(name)
+      ![
+        'conditions-initiales',
+        'programme-initial',
+        'instructions-disponibles',
+      ].includes(name)
     ) {
       return
     }
@@ -1951,6 +2129,11 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
   private reinitialiserProgrammeDepuisAttributs() {
     const id = this.getAttribute('id') ?? 'editeur-iep'
+    const conditionsInitialesAttribut =
+      this.getAttribute('conditions-initiales') ?? ''
+    this.conditionsInitiales = lireProgrammeDepuisAttribut(
+      conditionsInitialesAttribut,
+    )
     const programmeInitialAttribut =
       this.getAttribute('programme-initial') ?? ''
     const programmeInitial = lireProgrammeDepuisAttribut(
@@ -1960,6 +2143,8 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     const programmeSauvegarde = programmesParId.get(id)
     if (
       programmeSauvegarde !== undefined &&
+      programmeSauvegarde.conditionsInitialesAttribut ===
+        conditionsInitialesAttribut &&
       programmeSauvegarde.programmeInitialAttribut === programmeInitialAttribut
     ) {
       this.programme = programmeSauvegarde.programme
@@ -1968,10 +2153,11 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         programmeInitial.length > 0 ? clonerProgramme(programmeInitial) : []
       programmesParId.set(id, {
         programme: this.programme,
+        conditionsInitialesAttribut,
         programmeInitialAttribut,
       })
     }
-    this.prochaineLettre = pointsDefinis(this.programme).length
+    this.prochaineLettre = pointsDefinis(this.programmeComplet()).length
     this.terminerEditionSiInterfacePrete()
   }
 
@@ -1981,7 +2167,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
    * sauvegardée (en association avec `interactivityOn = false`).
    */
   get value(): string {
-    return JSON.stringify(this.programme)
+    return JSON.stringify(this.programmeComplet())
   }
 
   set value(nextValue: string) {
@@ -1990,7 +2176,11 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   }
 
   getProgramme(): InstructionIep[] {
-    return clonerProgramme(this.programme)
+    return this.programmeComplet()
+  }
+
+  private programmeComplet(): InstructionIep[] {
+    return clonerProgramme([...this.conditionsInitiales, ...this.programme])
   }
 
   protected onInteractivityChanged(_isOn: boolean): void {
@@ -2040,18 +2230,32 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     }
     if (!Array.isArray(parsed)) return false
     const programmeImporte = parsed as InstructionIep[]
-    this.programme = programmeImporte
+    this.programme = this.extraireProgrammeVisible(programmeImporte)
     this.restaurerInstructionsProtegees()
-    this.prochaineLettre = pointsDefinis(this.programme).length
+    this.prochaineLettre = pointsDefinis(this.programmeComplet()).length
     const id = this.getAttribute('id') ?? 'editeur-iep'
     programmesParId.set(id, {
       programme: this.programme,
+      conditionsInitialesAttribut:
+        this.getAttribute('conditions-initiales') ?? '',
       programmeInitialAttribut: this.getAttribute('programme-initial') ?? '',
     })
     this.terminerEdition()
     this.rafraichirProgramme()
     this.rafraichirParametres()
     return true
+  }
+
+  private extraireProgrammeVisible(programmeImporte: InstructionIep[]) {
+    const nombreConditionsInitiales = this.conditionsInitiales.length
+    const prefixe = programmeImporte.slice(0, nombreConditionsInitiales)
+    if (
+      normaliserProgramme(prefixe) ===
+      normaliserProgramme(this.conditionsInitiales)
+    ) {
+      return programmeImporte.slice(nombreConditionsInitiales)
+    }
+    return programmeImporte
   }
 
   private construireInterface() {
@@ -2247,7 +2451,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
    * Télécharge le programme de construction courant au format JSON
    */
   private sauvegarderJSON() {
-    const blob = new Blob([JSON.stringify(this.programme, null, 2)], {
+    const blob = new Blob([JSON.stringify(this.programmeComplet(), null, 2)], {
       type: 'application/json',
     })
     const url = URL.createObjectURL(blob)
@@ -2296,7 +2500,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   private rafraichirParametres() {
     this.divParametres.innerHTML = ''
     const type = this.selectType.value as TypeInstructionIep
-    const noms = pointsDefinis(this.programme)
+    const noms = pointsDefinis(this.programmeComplet())
     for (const champ of catalogue[type].champs) {
       const etiquette = document.createElement('label')
       etiquette.classList.add(
@@ -2347,8 +2551,8 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         select.dataset.cle = champ.cle
         const elements =
           champ.genre === 'etape'
-            ? elementsIntersectablesDefinis(this.programme)
-            : elementsDirectionDefinis(this.programme)
+            ? elementsIntersectablesDefinis(this.programmeComplet())
+            : elementsDirectionDefinis(this.programmeComplet())
         for (const { index: etape, type: typeElement } of elements) {
           const option = document.createElement('option')
           option.value = String(etape)
@@ -2423,7 +2627,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   }
 
   private nomSuivant() {
-    const noms = pointsDefinis(this.programme)
+    const noms = pointsDefinis(this.programmeComplet())
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     for (let i = this.prochaineLettre; i < alphabet.length; i++) {
       if (!noms.includes(alphabet[i])) return alphabet[i]
@@ -2482,7 +2686,12 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       type === 'intersection'
     ) {
       const nom = String(instruction.nom)
-      if (pointsDefinis(programmeSansEdition).includes(nom)) {
+      if (
+        pointsDefinis([
+          ...this.conditionsInitiales,
+          ...programmeSansEdition,
+        ]).includes(nom)
+      ) {
         window.alert(`Le point ${nom} existe déjà.`)
         return
       }
@@ -2559,7 +2768,16 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     ) {
       return
     }
-    if (!peutEchangerEtapes(this.programme, index, cible)) return
+    const offset = this.conditionsInitiales.length
+    if (
+      !peutEchangerEtapes(
+        this.programmeComplet(),
+        index + offset,
+        cible + offset,
+      )
+    ) {
+      return
+    }
     const [instruction] = this.programme.splice(index, 1)
     this.programme.splice(cible, 0, instruction)
     if (this.editingIndex === index) {
@@ -2596,7 +2814,10 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         'Le programme est vide : ajoutez une première instruction (par exemple, placer deux points).'
       this.listeProgramme.appendChild(vide)
     }
+    const programmeComplet = this.programmeComplet()
+    const offset = this.conditionsInitiales.length
     this.programme.forEach((instruction, index) => {
+      const indexComplet = index + offset
       const protege = this.indexInstructionEstProtege(index)
       const ligne = document.createElement('li')
       ligne.classList.add('flex', 'items-center', 'gap-1')
@@ -2615,8 +2836,8 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
       const texte = document.createElement('span')
       texte.classList.add('grow')
-      texte.innerText = decrireInstruction(instruction, this.programme)
-      if (!instructionEstValide(this.programme, index)) {
+      texte.innerText = decrireInstruction(instruction, programmeComplet)
+      if (!instructionEstValide(programmeComplet, indexComplet)) {
         texte.classList.add('text-red-600', 'line-through')
         texte.title =
           instruction.type === 'intersection'
@@ -2633,7 +2854,11 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           'Monter',
           protege ||
             this.indexInstructionEstProtege(index - 1) ||
-            !peutEchangerEtapes(this.programme, index, index - 1),
+            !peutEchangerEtapes(
+              programmeComplet,
+              indexComplet,
+              indexComplet - 1,
+            ),
         ],
         [
           '▼',
@@ -2641,7 +2866,11 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           'Descendre',
           protege ||
             this.indexInstructionEstProtege(index + 1) ||
-            !peutEchangerEtapes(this.programme, index, index + 1),
+            !peutEchangerEtapes(
+              programmeComplet,
+              indexComplet,
+              indexComplet + 1,
+            ),
         ],
         [
           '✕',
@@ -2732,8 +2961,13 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
   private async chargerAnimation() {
     this.divAnimation.innerHTML = ''
-    if (this.programme.length === 0) return
-    const anim = construireAnimation(this.programme)
+    const programmeComplet = this.programmeComplet()
+    if (programmeComplet.length === 0) return
+    const anim = construireAnimation(
+      programmeComplet,
+      this.conditionsInitiales.length,
+      { rangerInstruments: true },
+    )
     try {
       const { default: iepLoadPromise } = await import('instrumenpoche')
       await iepLoadPromise(this.divAnimation, anim.script(), {})

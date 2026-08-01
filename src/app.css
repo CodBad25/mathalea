@@ -1343,3 +1343,239 @@ div.etiquettes {
     opacity: 0;
   }
 }
+
+/* Custom element « Relier les étiquettes » (relier-etiquettes) */
+relier-etiquettes {
+  display: block;
+  margin: 0.75rem 0 0.25rem;
+}
+
+.relier-etiquettes {
+  --relier-fond: var(--color-coopmaths-canvas);
+  --relier-bordure: var(--color-coopmaths-canvas-moredark);
+  --relier-texte: var(--color-coopmaths-corpus);
+  --relier-accent: var(--color-coopmaths-struct);
+  /* Étiquettes carrées : un seul réglage pour la largeur et la hauteur. */
+  --relier-taille: clamp(4.5rem, 24vw, 7.5rem);
+  /* Couloir vide entre les deux colonnes, où se tracent les traits. */
+  --relier-couloir: clamp(2.75rem, 16vw, 6.5rem);
+  max-width: 100%;
+}
+
+.dark .relier-etiquettes {
+  --relier-fond: var(--color-coopmathsdark-canvas);
+  --relier-bordure: var(--color-coopmathsdark-canvas-moredark);
+  --relier-texte: var(--color-coopmathsdark-corpus);
+  --relier-accent: var(--color-coopmathsdark-struct);
+}
+
+.relier-etiquettes__board {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--relier-taille) var(--relier-taille);
+  column-gap: var(--relier-couloir);
+  justify-content: center;
+}
+
+.relier-etiquettes__colonne {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.relier-etiquettes__etiquette {
+  position: relative;
+  width: var(--relier-taille);
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  border: 2px solid var(--relier-bordure);
+  border-radius: 0.75rem;
+  background-color: var(--relier-fond);
+  color: var(--relier-texte);
+  font-size: clamp(0.7rem, 2.6vw, 0.95rem);
+  line-height: 1.25;
+  text-align: center;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  /* Le glisser horizontal sert à relier, le défilement vertical reste possible. */
+  touch-action: pan-y;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    transform 150ms ease;
+}
+
+.relier-etiquettes__etiquette:disabled {
+  color: var(--relier-texte);
+  cursor: default;
+}
+
+.relier-etiquettes__etiquette:not(:disabled):hover {
+  border-color: var(--relier-accent);
+  transform: translateY(-1px);
+}
+
+.relier-etiquettes__etiquette:focus-visible {
+  outline: 2px solid var(--relier-accent);
+  outline-offset: 3px;
+}
+
+.relier-etiquettes__etiquette.is-selected {
+  border-color: var(--relier-accent);
+  background-color: color-mix(in srgb, var(--relier-accent) 14%, var(--relier-fond));
+}
+
+.relier-etiquettes__etiquette.is-cible:not(:disabled):not(.is-selected) {
+  border-style: dashed;
+  border-color: var(--relier-accent);
+  animation: relier-pulse 1.6s ease-in-out infinite;
+}
+
+.relier-etiquettes__etiquette.is-survolee {
+  border-style: solid;
+  transform: scale(1.04);
+  background-color: color-mix(in srgb, var(--relier-accent) 18%, var(--relier-fond));
+}
+
+.relier-etiquettes__etiquette.is-flash {
+  animation: relier-flash 600ms ease-out;
+}
+
+.relier-etiquettes__contenu {
+  display: block;
+}
+
+.relier-etiquettes__prise {
+  position: absolute;
+  top: 50%;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 9999px;
+  background-color: var(--relier-bordure);
+  transform: translateY(-50%);
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease;
+}
+
+.relier-etiquettes__colonne--gauche .relier-etiquettes__prise {
+  right: -0.3125rem;
+}
+
+.relier-etiquettes__colonne--droite .relier-etiquettes__prise {
+  left: -0.3125rem;
+}
+
+.relier-etiquettes__etiquette.is-selected .relier-etiquettes__prise,
+.relier-etiquettes__etiquette.is-reliee .relier-etiquettes__prise {
+  background-color: var(--relier-accent);
+  transform: translateY(-50%) scale(1.3);
+}
+
+.relier-etiquettes__traits {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.relier-etiquettes__trait {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.relier-etiquettes__trait--provisoire {
+  stroke: var(--relier-accent);
+  stroke-dasharray: 6 7;
+  opacity: 0.85;
+}
+
+.relier-etiquettes__trait.is-nouveau {
+  stroke-dasharray: var(--relier-longueur);
+  stroke-dashoffset: var(--relier-longueur);
+  animation: relier-trace 320ms ease-out forwards;
+}
+
+.relier-etiquettes__trait.is-manquant {
+  stroke-dasharray: 7 6;
+  opacity: 0.8;
+}
+
+.relier-etiquettes__zone-trait {
+  stroke: transparent;
+  stroke-width: 18;
+  stroke-linecap: round;
+  pointer-events: stroke;
+  cursor: pointer;
+}
+
+.relier-etiquettes__actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.relier-etiquettes__effacer {
+  padding: 0.15rem 0.75rem;
+  border: 1px solid currentColor;
+  border-radius: 9999px;
+  background-color: transparent;
+  color: var(--color-coopmaths-struct);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.dark .relier-etiquettes__effacer {
+  color: var(--color-coopmathsdark-struct);
+}
+
+.relier-etiquettes__effacer[hidden] {
+  display: none;
+}
+
+@keyframes relier-trace {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes relier-pulse {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--relier-accent) 40%, var(--relier-bordure));
+  }
+  50% {
+    border-color: var(--relier-accent);
+  }
+}
+
+@keyframes relier-flash {
+  from {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--relier-accent) 55%, transparent);
+  }
+  to {
+    box-shadow: 0 0 0 16px color-mix(in srgb, var(--relier-accent) 0%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .relier-etiquettes__etiquette,
+  .relier-etiquettes__prise {
+    transition: none;
+  }
+  .relier-etiquettes__trait.is-nouveau,
+  .relier-etiquettes__etiquette.is-flash,
+  .relier-etiquettes__etiquette.is-cible {
+    animation: none;
+  }
+}

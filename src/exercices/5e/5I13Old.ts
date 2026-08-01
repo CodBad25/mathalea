@@ -58,8 +58,6 @@ export const refs = {
 }
 
 export default class PatternIteratifOld extends Exercice {
-  destroyers: (() => void)[] = []
-
   constructor() {
     super()
     this.nbQuestions = 3
@@ -107,16 +105,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
     this.listePackages = ['twemojis'] // this.listePackages est inutile mais la présence du mot "twemojis" est indispensable pour la sortie LaTeX.
   }
 
-  destroy() {
-    // MGu quan l'exercice est supprimé par svelte : bouton supprimé
-    this.destroyers.forEach((destroy) => destroy())
-    this.destroyers.length = 0
-  }
-
   nouvelleVersion(): void {
-    // MGu quand l'exercice est modifié, on détruit les anciens listeners
-    this.destroyers.forEach((destroy) => destroy())
-    this.destroyers.length = 0
     // on ne conserve que les linéaires et les affines sans ratio, ni fraction, ni multiple shape
     const nbFigures = contraindreValeur(2, 4, this.sup + 1, 4)
 
@@ -239,8 +228,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
             })
           }
           if (context.isHtml) {
-            const listeners = updateCubeIso({ pattern, i, j, angle })
-            if (listeners) this.destroyers.push(listeners)
+            updateCubeIso({ pattern, i, j, angle })
             pattern.shape.codeSvg = `<use href="#cubeIsoQ${i}F${j}"></use>`
             const cells = (pattern as VisualPattern3D).update3DCells(j + 1)
             // Ajouter les SVG générés par svg() de chaque objet

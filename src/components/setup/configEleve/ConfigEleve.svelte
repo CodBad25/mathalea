@@ -350,10 +350,12 @@
                       min={1}
                       max={60}
                       bind:value={$canOptions.durationInMinutes}
-                      isDisabled={!$canOptions.isChoosen}
+                      isDisabled={!$canOptions.isChoosen ||
+                        $canOptions.isTimerDisabled}
                     />
                     <div
-                      class="text-sm font-light {$canOptions.isChoosen
+                      class="text-sm font-light {$canOptions.isChoosen &&
+                      !$canOptions.isTimerDisabled
                         ? 'text-coopmaths-corpus-light dark:text-coopmathsdark-corpus'
                         : 'text-coopmaths-corpus-light/10 dark:text-coopmathsdark-corpus/10'}"
                     >
@@ -364,6 +366,16 @@
                     </div>
                   </div>
                 </div>
+                <ButtonToggleAlt
+                  title={'Désactiver le chronomètre'}
+                  id={'config-eleve-can-no-timer-toggle'}
+                  bind:value={$canOptions.isTimerDisabled}
+                  isDisabled={!$canOptions.isChoosen}
+                  explanations={[
+                    'La course se déroule sans limite de temps : les élèves la terminent en rendant leur copie.',
+                    'La course est chronométrée et se termine automatiquement au bout de la durée indiquée.',
+                  ]}
+                />
                 <div class="flex flex-row items-center">
                   <div
                     class="w-24 shrink-0 whitespace-nowrap text-sm font-light {$canOptions.isChoosen

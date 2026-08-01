@@ -28,8 +28,13 @@
   function endTimer(e: CustomEvent) {
     const du = parseInt(e.detail.duration)
     const el = parseInt(e.detail.elapsed)
+    // Sans chronomètre, le temps passé peut dépasser la durée prévue : le
+    // « temps restant » devient négatif pour que le temps mis (durée prévue
+    // moins temps restant) reste exact.
     $canOptions.remainingTimeInSeconds =
-      el >= du ? 0 : Math.floor((du - el) / 1000)
+      el >= du && !$canOptions.isTimerDisabled
+        ? 0
+        : Math.floor((du - el) / 1000)
     handleEndOfRace()
   }
   /**
@@ -58,6 +63,7 @@
     <Timer
       bind:this={timerComponent}
       durationInMilliSeconds={numberOfSeconds * 1000}
+      isDisabled={$canOptions.isTimerDisabled}
       on:message={endTimer}
     />
     <Pagination

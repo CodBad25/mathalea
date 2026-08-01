@@ -66,8 +66,6 @@ export const uuid = '4c9ca'
  * Remplacé par listePatterns.ts
  */
 export default class ListePatternsPreDef extends Exercice {
-  destroyers: (() => void)[] = []
-
   constructor() {
     super()
     this.nbQuestions = 1
@@ -89,20 +87,10 @@ Le nombre donné entre parenthèses est le nombre d'éléments au rang 43 de cha
 L'expression donnée entre crochets est la formule qui permet de calculer le nombre d'éléments au rang n de chaque pattern.<br>`
   }
 
-  destroy() {
-    // MGu quan l'exercice est supprimé par svelte : bouton supprimé
-    this.destroyers.forEach((destroy) => destroy())
-    this.destroyers.length = 0
-  }
-
   nouvelleVersion(): void {
-    // MGu quand l'exercice est modifié, on détruit les anciens listeners
-    this.destroyers.forEach((destroy) => destroy())
     this.sup3 = Math.max(2, this.sup3) // On ne peut pas afficher moins de 2 motifs
     let listePatterns: (
-      | PatternRiche
-      | PatternRicheRepetition
-      | PatternRiche3D
+      PatternRiche | PatternRicheRepetition | PatternRiche3D
     )[] = []
     switch (this.sup) {
       case 1:
@@ -267,14 +255,13 @@ L'expression donnée entre crochets est la formule qui permet de calculer le nom
               })
             }
             if (context.isHtml) {
-              const listeners = updateCubeIso({
+              updateCubeIso({
                 pattern,
                 i,
                 j,
                 angle,
                 inCorrectionMode: false,
               })
-              if (listeners) this.destroyers.push(listeners)
               pattern.shape.codeSvg = `<use href="#cubeIsoQ${i}F${j}"></use>`
               const cells = (pattern as VisualPattern3D).update3DCells(j + 1)
               // Ajouter les SVG générés par svg() de chaque objet

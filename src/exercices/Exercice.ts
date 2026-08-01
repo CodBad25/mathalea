@@ -1,6 +1,7 @@
 import type Figure from 'apigeom/src/Figure'
 import type Decimal from 'decimal.js'
 import type { AutoCorrectionAMC, QuestionAMC } from '../lib/amc/amcTypes'
+import type { FormulaireComplexe } from '../lib/formulaireComplexe'
 import {
   KeyboardType,
   type PartialKbType,
@@ -160,6 +161,8 @@ export default class Exercice implements IExercice {
         defaut: number[]
       }
 
+  besoinFormulaireComplexe: false | FormulaireComplexe
+
   questionRefs?: string[] // Affiche la référence de l'exercice en en-tête de la question (utile pour MetaExerciceCan)
   listeArguments: string[] // Variable servant à comparer les exercices pour ne pas avoir deux exercices identiques
   lastCallback: string // La dernière signature de listeArguments afin de comparaison : permet d'éviter un nouvelleVersionWrapper inutile
@@ -260,6 +263,8 @@ export default class Exercice implements IExercice {
     this.besoinFormulaire5Texte = false // Sinon this.besoinFormulaire5Texte = [texte, tooltip]
     this.besoinFormulaire5CaseACocher = false // Sinon this.besoinFormulaire5CaseACocher = [texte]
     this.besoinFormulaireNombresCategories = false // Sinon { titre, categories: [{label, max}], defaut: [] }
+    // Formulaire multi-champs stocké dans le seul `this.sup` (voir src/lib/formulaireComplexe.ts)
+    this.besoinFormulaireComplexe = false // Sinon { titre, champs: [{ type: 'case' | 'selection' | 'listePonderee', ... }] }
 
     // ///////////////////////////////////////////////
     // Exercice avec des dépendances particulières

@@ -38,6 +38,7 @@
   import Flashcards from './setup/flashcards/Flashcards.svelte'
   import Tbi from './display/tbi/Tbi.svelte'
   import CheckTest from './devtools/CheckTest.svelte'
+  import CapytaleConnectionLostModal from './shared/modal/CapytaleConnectionLostModal.svelte'
   import Popup from './shared/modal/Popup.svelte'
 
   let showPopup = false
@@ -240,6 +241,10 @@
     <CheckTest />
   {:else if $globalOptions.v !== undefined}
     <Start />
+  {/if}
+  {#if $globalOptions.recorder === 'capytale'}
+    <!-- Bloque la copie tant que la sauvegarde vers Capytale n'est pas possible -->
+    <CapytaleConnectionLostModal />
   {/if}
 </div>
 

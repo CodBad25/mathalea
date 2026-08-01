@@ -4,6 +4,12 @@
   import ElapsedTime from './ElapsedTime.svelte'
 
   export let durationInMilliSeconds
+  /**
+   * Course sans limite de temps : le temps continue d'être mesuré (pour le
+   * score final et les LMS) mais il n'est ni affiché ni utilisé pour arrêter
+   * la course.
+   */
+  export let isDisabled: boolean = false
   const dispatch = createEventDispatcher()
 
   let elapsed = 0
@@ -25,18 +31,20 @@
     const time = window.performance.now()
     elapsed += time - lastTime
 
-    if (elapsed > duration) {
+    if (elapsed > duration && !isDisabled) {
       terminateTimer()
     } else {
       frame = requestAnimationFrame(update)
-      const timeD = millisecondToMinSec(duration - elapsed)
-      const formattedtime = [
-        timeD.minutes.toString().padStart(2, '0'),
-        timeD.seconds.toString().padStart(2, '0'),
-      ].join(':')
+      if (!isDisabled) {
+        const timeD = millisecondToMinSec(duration - elapsed)
+        const formattedtime = [
+          timeD.minutes.toString().padStart(2, '0'),
+          timeD.seconds.toString().padStart(2, '0'),
+        ].join(':')
 
-      displayedTime = formattedtime
-      widthFactor = (duration - elapsed) / duration
+        displayedTime = formattedtime
+        widthFactor = (duration - elapsed) / duration
+      }
       lastTime = time
     }
   })()
@@ -47,4 +55,6 @@
   })
 </script>
 
-<ElapsedTime {widthFactor} {displayedTime} />
+{#if !isDisabled}
+  <ElapsedTime {widthFactor} {displayedTime} />
+{/if}

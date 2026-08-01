@@ -108,18 +108,32 @@ type Compas = ObjetIep & {
 type StringOutil =
   'regle' | 'equerre' | 'requerre' | 'rapporteur' | 'compas' | 'crayon'
 
+type VisibiliteInstrumentsIep = Record<StringOutil, boolean>
+type PositionsInstrumentsIep = Partial<Record<StringOutil, PointAbstrait>>
+
+const outilsIep: StringOutil[] = [
+  'regle',
+  'equerre',
+  'requerre',
+  'rapporteur',
+  'compas',
+  'crayon',
+]
+
 const EPSILON_SEGMENT_IEP = 1e-9
 
 export type OptionsIep = {
   id?: string // Identifiant de l'objet
   tempo?: number // Temps d'attente après l'instruction
   vitesse?: number // Vitesse de déplacement des instruments
+  sens?: number // Vitesse de rotation des instruments
   couleur?: string // Couleur des traits
   epaisseur?: number // Epaisseur des traits
   pointilles?: boolean // Pointillés ou traits pleins
   couleurLabel?: string // Couleur du label des points
   couleurPoint?: string // Couleur du nom des points
   description?: boolean // Pour ajouter un texte qui décrit les étapes de construction
+  positionsRangementInstruments?: PositionsInstrumentsIep
 }
 
 export type OptionsOutil = OptionsIep & {}
@@ -203,6 +217,7 @@ export default class Alea2iep {
   rapporteur: Rapporteur
   compas: Compas
   xml: string // Code XML de l'animation
+  private visibilitesPreservees: VisibiliteInstrumentsIep[] = []
   symetrieAxialePoint = symetrieAxialePoint
   parallelogramme3sommetsConsecutifs = parallelogramme3sommetsConsecutifs
   parallelogrammeAngleCentre = parallelogrammeAngleCentre
@@ -510,6 +525,8 @@ export default class Alea2iep {
   }
 
   masquer(outil: StringOutil, options: OptionsOutil = {}) {
+    const visibilitePreservee = this.visibilitesPreservees.at(-1)
+    if (visibilitePreservee?.[outil] === true) return
     const tempo = options.tempo ?? this.tempo
     if (this[outil].visibilite) {
       // On ajoute une ligne xml que si l'objet est visible
@@ -541,6 +558,58 @@ export default class Alea2iep {
 
   rapporteurMasquer(options: OptionsRapporteur = {}) {
     this.masquer('rapporteur', options)
+  }
+
+  sauvegarderVisibiliteInstruments(): VisibiliteInstrumentsIep {
+    return Object.fromEntries(
+      outilsIep.map((outil) => [outil, this[outil].visibilite]),
+    ) as VisibiliteInstrumentsIep
+  }
+
+  restaurerVisibiliteInstruments(
+    etat: VisibiliteInstrumentsIep,
+    options: OptionsIep = {},
+  ) {
+    for (const outil of outilsIep) {
+      if (etat[outil]) {
+        this.montrer(outil, this[outil].position, options)
+      } else {
+        this.masquer(outil, options)
+      }
+    }
+  }
+
+  preserverVisibiliteInstruments<T>(
+    callback: () => T,
+    options: OptionsIep = {},
+  ): T {
+    const etat = this.sauvegarderVisibiliteInstruments()
+    this.visibilitesPreservees.push(etat)
+    try {
+      return callback()
+    } finally {
+      this.visibilitesPreservees.pop()
+      this.restaurerVisibiliteInstruments(etat, options)
+    }
+  }
+
+  rangerInstruments(
+    positions: PositionsInstrumentsIep,
+    outils: StringOutil[] = outilsIep,
+    options: OptionsIep = {},
+  ) {
+    const optionsRangement = {
+      tempo: 0,
+      vitesse: 20,
+      sens: 100000,
+      ...options,
+    }
+    for (const outil of outils) {
+      const position = positions[outil]
+      if (position !== undefined && this[outil].visibilite) {
+        this.rotationTranslation(outil, 0, position, optionsRangement)
+      }
+    }
   }
 
   deplacer(outil: StringOutil, A: PointAbstrait, options: OptionsOutil = {}) {

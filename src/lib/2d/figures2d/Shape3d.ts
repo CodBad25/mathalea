@@ -263,9 +263,151 @@ export function shapeCubeIso(
     scale: options?.scale ?? 1,
   })
 }
-/*
-  MGu refactoring pour gérer les eventsListeners
-*/
+type CubeIsoInteractionConfig = {
+  pattern: IVisualPattern3D
+  i: number
+  j: number
+  angle: number
+  newScale?: number
+  inCorrectionMode?: boolean
+}
+
+const cubeIsoInteractionConfigs = new Map<string, CubeIsoInteractionConfig>()
+const cubeIsoInteractionElementTag = 'cube-iso-interaction'
+
+if (
+  typeof HTMLElement !== 'undefined' &&
+  typeof customElements !== 'undefined' &&
+  customElements.get(cubeIsoInteractionElementTag) === undefined
+) {
+  class CubeIsoInteractionElement extends HTMLElement {
+    private motifId = ''
+    private config: CubeIsoInteractionConfig | undefined
+    private dragging = false
+    private lastX = 0
+    private svg: (SVGSVGElement & { _eventsBound?: boolean }) | null = null
+    private readonly pointerMoveAction = (e: PointerEvent) => {
+      if (!this.dragging || !this.config) return
+      const dx = e.clientX - this.lastX
+      this.lastX = e.clientX
+      this.config.angle += dx * 0.02
+      this.config.angle = Math.max(0.1, Math.min(1.4, this.config.angle))
+      this.renderScene()
+    }
+
+    private readonly pointerUpAction = () => {
+      this.dragging = false
+    }
+
+    private readonly pointerDownAction = (e: PointerEvent) => {
+      this.dragging = true
+      this.lastX = e.clientX
+      this.svg?.setPointerCapture?.(e.pointerId)
+    }
+
+    private readonly mouseOverAction = () => {
+      if (this.svg) this.svg.style.cursor = 'grab'
+    }
+
+    private readonly setupAction = () => {
+      this.setup()
+    }
+
+    connectedCallback() {
+      this.motifId = this.getAttribute('motif-id') ?? ''
+      this.config = cubeIsoInteractionConfigs.get(this.motifId)
+      if (!this.config) return
+
+      window.addEventListener('pointermove', this.pointerMoveAction)
+      window.addEventListener('pointerup', this.pointerUpAction)
+      window.addEventListener('pointercancel', this.pointerUpAction)
+      document.addEventListener('correctionsAffichees', this.setupAction)
+      document.addEventListener('exercicesAffiches', this.setupAction)
+      this.setup()
+    }
+
+    disconnectedCallback() {
+      this.teardownSvg()
+      window.removeEventListener('pointermove', this.pointerMoveAction)
+      window.removeEventListener('pointerup', this.pointerUpAction)
+      window.removeEventListener('pointercancel', this.pointerUpAction)
+      document.removeEventListener('correctionsAffichees', this.setupAction)
+      document.removeEventListener('exercicesAffiches', this.setupAction)
+      cubeIsoInteractionConfigs.delete(this.motifId)
+    }
+
+    private setup() {
+      const svg = document.querySelector(`svg#${this.motifId}`) as
+        (SVGSVGElement & { _eventsBound?: boolean }) | null
+      if (!svg) return
+      if (this.svg !== svg) {
+        this.teardownSvg()
+        this.svg = svg
+      }
+      if (!svg._eventsBound) {
+        svg._eventsBound = true
+        svg.addEventListener('mouseover', this.mouseOverAction)
+        svg.addEventListener('pointerdown', this.pointerDownAction)
+      }
+      this.renderScene()
+    }
+
+    private teardownSvg() {
+      if (!this.svg) return
+      this.svg.removeEventListener('mouseover', this.mouseOverAction)
+      this.svg.removeEventListener('pointerdown', this.pointerDownAction)
+      this.svg._eventsBound = false
+      this.svg = null
+    }
+
+    private renderScene() {
+      if (!this.config) return
+      const { pattern, i, j, angle } = this.config
+      const svg = document.querySelector(
+        `svg#${this.motifId}`,
+      ) as SVGSVGElement | null
+      if (!svg) return
+      const defs = Array.from(svg.querySelectorAll('defs')).find((defsEl) =>
+        defsEl.querySelector('g[id^="cubeIso"]'),
+      ) as SVGDefsElement | undefined
+      if (!defs) return
+
+      const g = defs.querySelector(`#cubeIsoQ${i}F${j}`)
+      if (g) {
+        g.innerHTML = `${faceTop(angle)}\n${faceLeft(angle)}\n${faceRight(angle)}\n`
+      }
+
+      const svgGroups = Array.from(svg.children).filter(
+        (el) => el.tagName === 'g',
+      ) as SVGGElement[]
+      svgGroups.forEach((group) => group.remove())
+
+      const cells = pattern.update3DCells(j + 1)
+      cells.forEach((cell) => {
+        const [px, py] = project3dIso(cell[0], cell[1], cell[2], angle)
+        const obj = shapeCubeIso(`cubeIsoQ${i}F${j}`, px, py, {
+          scale: this.config?.newScale ?? 1,
+        })
+        if (typeof obj.svg === 'function') {
+          const temp = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'g',
+          )
+          temp.innerHTML = obj.svg(20)
+          svg.appendChild(temp)
+        }
+      })
+    }
+  }
+
+  customElements.define(cubeIsoInteractionElementTag, CubeIsoInteractionElement)
+}
+
+export function cubeIsoInteractionMarkup(motifId: string): string {
+  if (!context.isHtml || !cubeIsoInteractionConfigs.has(motifId)) return ''
+  return `<${cubeIsoInteractionElementTag} motif-id="${motifId}"></${cubeIsoInteractionElementTag}>`
+}
+
 export function updateCubeIso({
   pattern,
   i,
@@ -280,107 +422,15 @@ export function updateCubeIso({
   angle: number
   newScale?: number
   inCorrectionMode?: boolean
-}): void | (() => void) {
+}): void {
   if (pattern instanceof VisualPattern) return
-  let dragging = false
-  let lastX = 0
   const motifId = `Motif${i}F${j}`
-
-  function mouseMoveAction(e: MouseEvent) {
-    if (!dragging) return
-    const dx = e.clientX - lastX
-    lastX = e.clientX
-    angle += dx * 0.02
-    angle = Math.max(0.1, Math.min(1.4, angle))
-    renderScene()
-  }
-
-  function mouseupAction() {
-    dragging = false
-  }
-
-  function destroyListeners() {
-    window.removeEventListener('mousemove', mouseMoveAction)
-    window.removeEventListener('mouseup', mouseupAction)
-    document.removeEventListener('correctionsAffichees', setup)
-    document.removeEventListener('exercicesAffiches', setup)
-  }
-
-  window.addEventListener('mousemove', mouseMoveAction)
-  window.addEventListener('mouseup', mouseupAction)
-
-  function renderScene() {
-    const svg = document.querySelector(`svg#${motifId}`) as
-      | (SVGSVGElement & { _eventsBound?: boolean })
-      | null
-    if (!svg) return
-    // Sélectionne la balise <defs> qui contient un <g> dont l'id commence par "cubeIso"
-    const defs = Array.from(svg.querySelectorAll('defs')).find((defsEl) =>
-      defsEl.querySelector('g[id^="cubeIso"]'),
-    ) as SVGDefsElement | undefined
-    if (!defs) return
-
-    // Recalculate face coordinates based on angle
-    // Example: update faceTop, faceLeft, faceRight
-    // (Assume faceTop, faceLeft, faceRight are functions that accept angle)
-    const top = faceTop(angle)
-    const left = faceLeft(angle)
-    const right = faceRight(angle)
-
-    // Update the <g> content in <defs>
-    const g = defs.querySelector(`#cubeIsoQ${i}F${j}`)
-    if (g) {
-      g.innerHTML = `${top}\n${left}\n${right}\n`
-    }
-    // Sélectionne tous les <g> qui suivent <defs> et qui sont enfants directs de <svg>
-    const svgGroups = Array.from(svg.children).filter(
-      (el) => el.tagName === 'g',
-    ) as SVGGElement[]
-    // Supprimer tous les groupes enfants directs de <svg>
-    svgGroups.forEach((group) => group.remove())
-
-    // Recalculer chaque polygone avec pattern.render(j, angle)
-    const cells = (pattern as IVisualPattern3D).update3DCells(j + 1)
-    // Ajouter les SVG générés par svg() de chaque objet
-    cells.forEach((cell) => {
-      const [px, py] = project3dIso(cell[0], cell[1], cell[2], angle)
-      const obj = shapeCubeIso(`cubeIsoQ${i}F${j}`, px, py, {
-        scale: 1,
-      })
-      if (typeof obj.svg === 'function') {
-        const temp = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-        // temp.setAttribute('transform', `translate(${px}, ${py})`)
-        temp.innerHTML = obj.svg(20)
-        svg.appendChild(temp)
-      }
-    })
-  }
-
-  function setup() {
-    const svg = document.querySelector(`svg#${motifId}`) as
-      | (SVGSVGElement & { _eventsBound?: boolean })
-      | null
-    if (svg && !svg._eventsBound) {
-      // console.log(motifId)
-      svg._eventsBound = true
-
-      svg.addEventListener('mouseover', () => {
-        svg.style.cursor = 'grab'
-      })
-
-      svg.addEventListener('mousedown', (e) => {
-        dragging = true
-        lastX = e.clientX
-      })
-      renderScene()
-    }
-  }
-  if (inCorrectionMode) {
-    // MGu Jean-Claude a raison, il faut cette évent pour savoir quand la correction est affichée
-    document.addEventListener('correctionsAffichees', setup)
-  } else {
-    // Listen for the 'exercicesAffiches' event to re-render the scene
-    document.addEventListener('exercicesAffiches', setup)
-  }
-  return destroyListeners
+  cubeIsoInteractionConfigs.set(motifId, {
+    pattern,
+    i,
+    j,
+    angle,
+    newScale,
+    inCorrectionMode,
+  })
 }

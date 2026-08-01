@@ -56,12 +56,10 @@ function getQuestionData(exercice: IExercice, i: number) {
   }
 }
 
-function writeFeedback(
-  exercice: IExercice,
-  i: number,
-  feedback: string,
-): void {
-  const divFeedback = document.querySelector(`#feedbackEx${exercice.numeroExercice}Q${i}`)
+function writeFeedback(exercice: IExercice, i: number, feedback: string): void {
+  const divFeedback = document.querySelector(
+    `#feedbackEx${exercice.numeroExercice}Q${i}`,
+  )
   if (feedback.length === 0 || divFeedback == null) return
   divFeedback.innerHTML = `💡 ${feedback}`
   divFeedback.classList.add(
@@ -92,7 +90,11 @@ export function verifySingleMathLiveField(
       const variables = data.variables
       const mfe = champTexte as MathfieldElement | null
       if (mfe != null) {
-        if ('getValue' in mfe && mfe.getValue().length > 0 && typeof exercice.answers === 'object') {
+        if (
+          'getValue' in mfe &&
+          mfe.getValue().length > 0 &&
+          typeof exercice.answers === 'object'
+        ) {
           exercice.answers[`Ex${exercice.numeroExercice}Q${i}`] = mfe.getValue()
         }
         if (mfe.value.length > 0 && typeof exercice.answers === 'object') {
@@ -216,9 +218,11 @@ export function verifyFillInTheBlankMathLive(
       ) as MathfieldElement | null)
     if (mfe == null) {
       throw Error(
-        `Vérification fill-in-the-blank: mathfield introuvable ${JSON.stringify({
-          selecteur: `math-field#champTexteEx${exercice.numeroExercice}Q${i}`,
-        })}`,
+        `Vérification fill-in-the-blank: mathfield introuvable ${JSON.stringify(
+          {
+            selecteur: `math-field#champTexteEx${exercice.numeroExercice}Q${i}`,
+          },
+        )}`,
       )
     }
 
@@ -263,7 +267,9 @@ export function verifyFillInTheBlankMathLive(
         if (result.feedback === 'saisieVide') result.feedback = null
         else {
           const fieldNumber =
-            variables.length > 1 ? ` Champ ${key.charAt(key.length - 1)} : ` : ''
+            variables.length > 1
+              ? ` Champ ${key.charAt(key.length - 1)} : `
+              : ''
           result.feedback = feedback
           feedback = ''
           if (!result.feedback) {
@@ -286,7 +292,11 @@ export function verifyFillInTheBlankMathLive(
 
     if (compteurBonnesReponses === variables.length) {
       if (!feedback || feedback.trim() === '') feedback = ''
-    } else if (compteurBonnesReponses === 0 && compteurSaisiesVides === 0 && !feedback) {
+    } else if (
+      compteurBonnesReponses === 0 &&
+      compteurSaisiesVides === 0 &&
+      !feedback
+    ) {
       feedback =
         variables.length === 1
           ? " Le résultat n'est pas correct."
@@ -360,7 +370,9 @@ export function verifyTableauMathLive(
       const options = reponse.options
       const noFeedback = Boolean(options?.noFeedback)
       const compareFunction = reponse.compare ?? fonctionComparaison
-      const input = Array.from(tableElement.querySelectorAll('math-field')).find(
+      const input = Array.from(
+        tableElement.querySelectorAll('math-field'),
+      ).find(
         (el) => el.id === `champTexteEx${exercice.numeroExercice}Q${i}${key}`,
       ) as MathfieldElement | undefined
       if (input == null) {
@@ -370,15 +382,14 @@ export function verifyTableauMathLive(
           })}`,
         )
       }
-      const shadow =
-        input instanceof HTMLDivElement ? input : input.shadowRoot
-      const spanFeedback = document.createElement('span')
-      spanFeedback.id = `resultatCheckEx${exercice.numeroExercice}Q${i}${key}`
+      const shadow = input instanceof HTMLDivElement ? input : input.shadowRoot
+      const resultatCheckCell = document.createElement('span')
+      resultatCheckCell.id = `resultatCheckEx${exercice.numeroExercice}Q${i}${key}`
       const content =
         shadow instanceof HTMLDivElement
           ? input
           : shadow?.querySelector('span.ML__content')
-      content?.appendChild(spanFeedback)
+      content?.appendChild(resultatCheckCell)
 
       let result
       if (input.value === '') {
@@ -399,13 +410,14 @@ export function verifyTableauMathLive(
       }
       points.push(scoreFromResult(result))
       if (result.isOk) {
-        spanFeedback.innerHTML = '😎'
+        resultatCheckCell.innerHTML = '😎'
       } else {
         resultat = 'KO'
-        spanFeedback.innerHTML = '☹️'
+        resultatCheckCell.innerHTML = '☹️'
       }
       if (input.value.length > 0 && typeof exercice.answers === 'object') {
-        exercice.answers[`Ex${exercice.numeroExercice}Q${i}${key}`] = input.value
+        exercice.answers[`Ex${exercice.numeroExercice}Q${i}${key}`] =
+          input.value
       }
       input.readOnly = true
     }

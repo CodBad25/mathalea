@@ -7,12 +7,14 @@ export type OptionsIep = {
   dy?: number
   tempo?: number
   vitesse?: number
+  sens?: number
   couleur?: string
   epaisseur?: number
   pointilles?: boolean
   couleurLabel?: string
   couleurPoint?: string
   description?: boolean
+  positionsRangementInstruments?: PositionsInstrumentsIep
 }
 
 export type OptionsOutil = OptionsIep & {}
@@ -99,6 +101,17 @@ export type CompasState = {
   // autres propriétés selon ton implémentation
 }
 
+export type OutilIep =
+  | 'regle'
+  | 'equerre'
+  | 'requerre'
+  | 'rapporteur'
+  | 'compas'
+  | 'crayon'
+
+export type VisibiliteInstrumentsIep = Record<OutilIep, boolean>
+export type PositionsInstrumentsIep = Partial<Record<OutilIep, PointAbstrait>>
+
 export interface IAlea2iep {
   // Styles/état
   couleur: string
@@ -117,10 +130,24 @@ export interface IAlea2iep {
   equerre: EquerreState
   requerre: RequerreState
   compas: CompasState
+  crayon: EquerreState
+  rapporteur: EquerreState
 
   // Coordonnées
   x(A: PointAbstrait): number
   y(A: PointAbstrait): number
+
+  sauvegarderVisibiliteInstruments(): VisibiliteInstrumentsIep
+  restaurerVisibiliteInstruments(
+    etat: VisibiliteInstrumentsIep,
+    options?: OptionsIep,
+  ): void
+  preserverVisibiliteInstruments<T>(callback: () => T, options?: OptionsIep): T
+  rangerInstruments(
+    positions: PositionsInstrumentsIep,
+    outils?: OutilIep[],
+    options?: OptionsIep,
+  ): void
 
   // Règle
   regleMontrer(A?: PointAbstrait, options?: OptionsRegle): void

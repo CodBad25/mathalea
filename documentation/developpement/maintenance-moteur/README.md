@@ -14,6 +14,7 @@ Pour créer un exercice sans modifier ces contrats, commencez par
 | [Architecture des exercices](architecture/exercices.md) | Cycle de génération, classes et sorties |
 | [JSON du menu des exercices](architecture/menu-exercices.md) | Fichiers générés et consommés par le menu |
 | [Vue mobile](architecture/vue-mobile.md) | Vue par défaut sur téléphone : tuiles, menus plein écran |
+| [Apps externes](architecture/apps-externes.md) | Iframes tierces, protocole `postMessage` et remontée des scores |
 
 ## Interactivité
 
@@ -24,6 +25,7 @@ Pour créer un exercice sans modifier ces contrats, commencez par
 | [Réponses LMS](interactivite/reponses-lms.md) | Encodage et transmission Moodle/SCORM |
 | [Scratch et Blockly](interactivite/scratch-blockly.md) | Architecture des éditeurs visuels |
 | [Tableur](interactivite/tableur.md) | Rendu HTML, sérialisation et sortie imprimable |
+| [Relier les étiquettes](interactivite/relier-etiquettes.md) | Appariement interactif et ses sorties LaTeX et Typst |
 
 ## Scratch
 
@@ -39,6 +41,7 @@ Pour créer un exercice sans modifier ces contrats, commencez par
 | [Vue Typst](exports/typst.md) | Conversion et compilation dans le navigateur |
 | [Vue Flash-cards](exports/flashcards.md) | Cartes question/réponse en Typst |
 | [Vue TBI](exports/tbi.md) | Vidéoprojection : dispositions, actions au survol, horloge |
+| [Vue Diaporama](exports/diaporama.md) | Diapositives, décompte, alternance question/correction |
 
 ## Mathématiques
 

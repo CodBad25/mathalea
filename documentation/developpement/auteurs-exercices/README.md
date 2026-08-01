@@ -27,6 +27,7 @@ mathématique simple.
 
 | Besoin | Guide |
 | --- | --- |
+| Proposer des réglages à l'enseignant | [Formulaires de paramétrage](complements/formulaires-parametres.md) |
 | Utiliser un format interactif spécialisé | [Formats interactifs spécialisés](complements/formats-interactifs.md) |
 | Créer un QCM | [Coder un QCM](complements/coder-un-qcm.md) |
 | Préparer un export AMC | [Export AMC](complements/export-amc.md) |

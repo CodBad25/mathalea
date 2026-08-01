@@ -10,6 +10,7 @@ export const canOptions = writable<CanOptions>({
   // La Course aux nombres est interactive par défaut : les liens antérieurs au
   // paramètre d'URL `canI` doivent rester interactifs.
   isInteractive: true,
+  isTimerDisabled: false,
   remainingTimeInSeconds: 0,
   questionGetAnswer: [],
   state: 'start',

@@ -62,6 +62,12 @@
     context.vue = 'diap'
     document.addEventListener('updateAsyncEx', forceUpdate)
     exercises = await getExercisesFromExercicesParams()
+    // Certains exercices (les « Sélection d'automatismes ») ne connaissent leur
+    // nombre de questions qu'après une première génération : sans cela l'écran
+    // de réglages afficherait 0 question.
+    for (const exercise of exercises) {
+      if (!exercise.nbQuestions) reroll(exercise)
+    }
     updateExercises(false, true)
   })
 
@@ -151,10 +157,15 @@
         slides.push(slide)
       }
     }
+    const questionsNumber = selectedQuestionsNumber || slides.length
     slideshow = {
       slides,
-      currentQuestion: -1,
-      selectedQuestionsNumber: selectedQuestionsNumber || slides.length,
+      // On conserve la question courante : `setSlidesContent()` est aussi
+      // appelé par `forceUpdate()` quand un exercice vient de finir son
+      // chargement asynchrone (« Sélection d'automatismes »). Remettre -1
+      // renvoyait alors l'utilisateur aux réglages en plein diaporama.
+      currentQuestion: Math.min(slideshow.currentQuestion, questionsNumber),
+      selectedQuestionsNumber: questionsNumber,
     }
   }
 

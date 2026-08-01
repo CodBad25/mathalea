@@ -5,6 +5,12 @@ MathALÉA expose deux éditeurs visuels sous forme de custom elements :
 - `BlocklyEditor` dans `src/lib/customElements/BlocklyEditor.ts` ;
 - `ScratchEditorElement` dans `src/lib/customElements/ScratchEditor.ts`.
 
+L'exercice `6I1D` utilise un composant métier dédié,
+`LabyrintheBlocklyElement` dans `src/lib/customElements/LabyrintheBlockly.ts`.
+Il encapsule l'éditeur Blockly, le graphe SVG du bus, la simulation et les
+listeners associés. L'exercice fournit seulement les données du labyrinthe et
+garde sa correction interactive historique.
+
 Les recettes côté exercice sont dans les guides
 [Blockly](../../auteurs-exercices/complements/blockly-editor.md) et
 [Scratch](../../auteurs-exercices/complements/scratch-editor.md).

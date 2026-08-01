@@ -82,18 +82,43 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
     }
   }
 
+  // Une catégorie ne peut pas fournir plus de questions qu'elle n'a
+  // d'exercices : on borne le formulaire et les valeurs par défaut sur ce qui
+  // existe réellement, sinon l'utilisateur demande 2 questions et n'en obtient
+  // qu'une, sans comprendre pourquoi.
+  const availableByCategory = categories.map(
+    (cat) => categoryEntries[cat].length,
+  )
+  const defaultParts = categories.map((_, i) => {
+    const fromSup = parseInt(String(defaultSup).split('-')[i])
+    const wanted = isNaN(fromSup) ? (categoriesForm.defaut[i] ?? 0) : fromSup
+    return Math.max(0, Math.min(wanted, availableByCategory[i]))
+  })
+  const clampedDefaultSup = defaultParts.join('-')
+  const clampedCategoriesForm: CategoriesForm = {
+    ...categoriesForm,
+    categories: categoriesForm.categories.map((categorie, i) => ({
+      ...categorie,
+      max: Math.min(categorie.max, availableByCategory[i]),
+    })),
+    defaut: defaultParts,
+  }
+
   return class AutomatismesCan extends MetaExercice {
     constructor() {
       super([])
       if (interactifType) this.interactifType = interactifType
-      this.sup = defaultSup
+      this.sup = clampedDefaultSup
       this.sup3 = false
       this.sup4 = false // graine figée de la sélection quand sup3 est coché
+      // Le nombre de questions découle des catégories : il ne se règle pas
+      // depuis les vues qui proposent un champ « nombre de questions ».
+      this.nbQuestionsModifiable = false
       this.besoinFormulaire2CaseACocher = [
         'Afficher la référence de chaque question',
       ]
       this.besoinFormulaire3CaseACocher = ['Garder la sélection d\'exercices']
-      this.besoinFormulaireNombresCategories = categoriesForm
+      this.besoinFormulaireNombresCategories = clampedCategoriesForm
       this.comment = ''
     }
 
@@ -104,12 +129,12 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
       const savedSup2 = this.sup2
       const savedSup3 = this.sup3
 
-      const parts = String(this.sup || defaultSup)
-        .split('-')
-        .map((s) => {
-          const n = parseInt(s)
-          return isNaN(n) ? 2 : Math.max(0, n)
-        })
+      const supParts = String(this.sup || clampedDefaultSup).split('-')
+      const parts = categories.map((_, i) => {
+        const n = parseInt(supParts[i])
+        const wanted = isNaN(n) ? defaultParts[i] : Math.max(0, n)
+        return Math.min(wanted, availableByCategory[i])
+      })
 
       // « Garder la sélection d'exercices » : on fige dans sup4 (paramètre
       // persisté et inutilisé par MetaExerciceCan) la graine de la sélection.
@@ -137,7 +162,7 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
       const selected: CategoryEntry[] = []
       for (let i = 0; i < categories.length; i++) {
         const cat = categories[i]
-        const picked = pickRandom(categoryEntries[cat], parts[i] ?? 2, rng)
+        const picked = pickRandom(categoryEntries[cat], parts[i], rng)
         selected.push(...picked)
       }
 
@@ -156,7 +181,8 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
       ]
       this.besoinFormulaire2Texte = false
       this.besoinFormulaire3CaseACocher = ['Garder la sélection d\'exercices']
-      this.besoinFormulaireNombresCategories = categoriesForm
+      this.besoinFormulaireNombresCategories = clampedCategoriesForm
+      this.nbQuestionsModifiable = false
 
       // Construit les questions à partir des classes chargées puis restaure nos
       // paramètres de formulaire (MetaExerciceCan les écrase pendant le rendu).
@@ -183,7 +209,8 @@ export function createAutomatismesCanExercice(config: AutomatismesCanConfig) {
         ]
         this.besoinFormulaire2Texte = false
         this.besoinFormulaire3CaseACocher = ['Garder la sélection d\'exercices']
-        this.besoinFormulaireNombresCategories = categoriesForm
+        this.besoinFormulaireNombresCategories = clampedCategoriesForm
+        this.nbQuestionsModifiable = false
       }
 
       // Si tous les modules sélectionnés sont déjà en cache, on reconstruit de

@@ -65,7 +65,6 @@ export const refs = {
 }
 
 export default class PaternNum04emeOld extends Exercice {
-  destroyers: (() => void)[] = []
   niveau: string
   constructor() {
     super()
@@ -108,16 +107,7 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
     this.niveau = '4e'
   }
 
-  destroy() {
-    // MGu quan l'exercice est supprimé par svelte : bouton supprimé
-    this.destroyers.forEach((destroy) => destroy())
-    this.destroyers.length = 0
-  }
-
   nouvelleVersion(): void {
-    // MGu quand l'exercice est modifié, on détruit les anciens listeners
-    this.destroyers.forEach((destroy) => destroy())
-    this.destroyers.length = 0
     const resolutionIntuitive = this.niveau === '4e' && !this.sup5
     const nbDePattern = listePatternsSansRatioNiFraction.length
     const ordreAleatoireDesQuestions =
@@ -207,14 +197,13 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
 
         const angle = Math.PI / 6
         if (context.isHtml) {
-          const listeners = updateCubeIso({
+          updateCubeIso({
             pattern,
             i,
             j: nbFigures,
             angle,
             inCorrectionMode: true,
           })
-          if (listeners) this.destroyers.push(listeners)
           pattern.shape.codeSvg = `<use href="#cubeIsoQ${i}F${nbFigures}"></use>`
           // Ajouter les SVG générés par svg() de chaque objet
           const cells = (pattern as VisualPattern3D).update3DCells(nbFigures)
@@ -291,14 +280,13 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
         let ymax = -Infinity
         if (pattern instanceof VisualPattern3D) {
           if (context.isHtml) {
-            const listeners = updateCubeIso({
+            updateCubeIso({
               pattern,
               i,
               j,
               angle,
               inCorrectionMode: false,
             })
-            if (listeners) this.destroyers.push(listeners)
             if (pattern.shape)
               pattern.shape.codeSvg = `<use href="#cubeIsoQ${i}F${j}"></use>`
             const cells = (pattern as VisualPattern3D).update3DCells(j + 1)

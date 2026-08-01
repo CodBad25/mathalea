@@ -366,21 +366,27 @@ export function onCorrectionsAffichees() {
   canvasList.forEach((canvas3d) => {
     // Récupère l'id unique (doit être défini lors de la création)
     const idCanvas = canvas3d.getAttribute('id') || ''
-    const match = idCanvas.match(/Ex\d+Q\d+/)
-    const idEvent = match ? match[0] : ''
-
-    // Récupère le groupe Three.js via le getter objects
-    const objects = (canvas3d as any).objects
-    const group = Array.isArray(objects)
-      ? objects.find((obj) => obj instanceof THREE.Group)
-      : undefined
-
-    if (group && idEvent) {
-      ajouteListenersThreeJS(canvas3d as HTMLElement, group, idEvent)
-    }
+    initialisePatron3DCanvas(idCanvas)
   })
   // Supprime l'écouteur pour éviter les doublons
   document.removeEventListener('correctionsAffichees', onCorrectionsAffichees)
+}
+
+export function initialisePatron3DCanvas(canvasId: string): void {
+  const canvas3d = document.getElementById(canvasId)
+  if (!canvas3d || canvas3d.dataset.patrons3dListeners === 'ready') return
+
+  const match = canvasId.match(/Ex\d+Q\d+/)
+  const idEvent = match ? match[0] : ''
+  const objects = (canvas3d as any).objects
+  const group = Array.isArray(objects)
+    ? objects.find((obj) => obj instanceof THREE.Group)
+    : undefined
+
+  if (group && idEvent) {
+    ajouteListenersThreeJS(canvas3d, group, idEvent)
+    canvas3d.dataset.patrons3dListeners = 'ready'
+  }
 }
 
 function animateRotation(

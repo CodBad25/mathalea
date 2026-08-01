@@ -85,7 +85,9 @@
       Boolean(exercise.besoinFormulaire4Texte) ||
       Boolean(exercise.besoinFormulaire5CaseACocher) ||
       Boolean(exercise.besoinFormulaire5Numerique) ||
-      Boolean(exercise.besoinFormulaire5Texte),
+      Boolean(exercise.besoinFormulaire5Texte) ||
+      Boolean(exercise.besoinFormulaireNombresCategories) ||
+      Boolean(exercise.besoinFormulaireComplexe),
   )
 
   /**

@@ -1,10 +1,10 @@
 import Figure from 'apigeom'
 import remove from 'apigeom/src/assets/svg/restart.svg'
-import type { Coords } from 'apigeom/src/elements/calculus/Coords'
 import {
   orangeMathalea,
   orangeMathaleaLight,
 } from 'apigeom/src/elements/defaultValues'
+import type Polygon from 'apigeom/src/elements/lines/Polygon'
 import figureApigeom from '../../lib/figureApigeom'
 import { choice } from '../../lib/outils/arrayOutils'
 import { range1 } from '../../lib/outils/nombres'
@@ -41,17 +41,26 @@ type Rectangle = {
   bottomRight: [number, number]
 }
 
+/** Rectangle tracé par l'élève, exprimé en coordonnées de la figure */
+type RectangleTrace = {
+  xMin: number
+  xMax: number
+  yMin: number
+  yMax: number
+}
+
 export default class shikaku extends Exercice {
   // On déclare des propriétés supplémentaires pour cet exercice afin de pouvoir les réutiliser dans la correction
   figure!: Figure
   figureCorrection!: Figure
-  goodAnswers: Array<Coords[]>
   longueur: number
   largeur: number
+  /** Nombre affiché dans chaque case qui en contient un, indexé par `'x;y'` (coin inférieur gauche de la case) */
+  nombresDesCases: Map<string, number>
 
   constructor() {
     super()
-    this.goodAnswers = []
+    this.nombresDesCases = new Map()
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
 
@@ -182,7 +191,6 @@ export default class shikaku extends Exercice {
       i: 0,
       figure: this.figure,
     })
-    this.goodAnswers = []
     const rows = this.largeur
     const cols = this.longueur
     let regionIdCounter = 1
@@ -405,12 +413,21 @@ export default class shikaku extends Exercice {
     displayRectanglesBeforeAndAfterRotation(grid, rectangles)
     */
     // Positionnement des chiffres dans une grille
+    this.nombresDesCases = new Map()
     for (let j = 0; j < this.largeur; j++) {
       for (let i = 0; i < this.longueur; i++) {
+        const valeurDeLaCase = newGrid[this.largeur - j - 1][i].value
+        if (typeof valeurDeLaCase === 'number') {
+          // On mémorise le nombre et la case qui le contient pour pouvoir vérifier n'importe quelle solution
+          this.nombresDesCases.set(
+            `${(this.largeur - j - 1).toString()};${i.toString()}`,
+            valeurDeLaCase,
+          )
+        }
         this.figure.create('TextByPosition', {
           isDeletable: false,
           anchor: 'middleCenter',
-          text: newGrid[this.largeur - j - 1][i].value.toString(),
+          text: valeurDeLaCase.toString(),
           //  x: i + 0.5,
           //  y: this.largeur - j - 0.5
           y: i + 0.5,
@@ -418,7 +435,7 @@ export default class shikaku extends Exercice {
         })
         this.figureCorrection.create('TextByPosition', {
           anchor: 'middleCenter',
-          text: newGrid[this.largeur - j - 1][i].value.toString(),
+          text: valeurDeLaCase.toString(),
           // x: i + 0.5,
           // y: this.largeur - j - 0.5
           y: i + 0.5,
@@ -447,12 +464,6 @@ export default class shikaku extends Exercice {
         y: newRectangles[k].bottomRight[1] + 1,
         isVisible: false,
       })
-      this.goodAnswers.push([
-        { x: A.x, y: A.y },
-        { x: B.x, y: B.y },
-        { x: C.x, y: C.y },
-        { x: D.x, y: D.y },
-      ])
       this.figureCorrection.create('Polygon', {
         points: [A, B, C, D],
         thickness: 3,
@@ -502,6 +513,131 @@ export default class shikaku extends Exercice {
     this.listeCorrections.push(texteCorr)
   }
 
+  /**
+   * Convertit un polygone tracé par l'élève en rectangle de la grille.
+   * Retourne `undefined` si le polygone n'est pas un rectangle dont les sommets
+   * sont des nœuds de la grille (côtés horizontaux et verticaux, coordonnées entières).
+   */
+  rectangleDuPolygone(polygone: Polygon): RectangleTrace | undefined {
+    const sommets = polygone.points
+    if (sommets.length !== 4) return undefined
+    const abscisses: number[] = []
+    const ordonnees: number[] = []
+    for (const sommet of sommets) {
+      const x = Math.round(sommet.x)
+      const y = Math.round(sommet.y)
+      if (Math.abs(sommet.x - x) > 0.001 || Math.abs(sommet.y - y) > 0.001) {
+        return undefined
+      }
+      abscisses.push(x)
+      ordonnees.push(y)
+    }
+    const xMin = Math.min(...abscisses)
+    const xMax = Math.max(...abscisses)
+    const yMin = Math.min(...ordonnees)
+    const yMax = Math.max(...ordonnees)
+    // Un rectangle a au moins une case de côté et reste dans la grille
+    if (xMax - xMin < 1 || yMax - yMin < 1) return undefined
+    if (xMin < 0 || yMin < 0 || xMax > this.largeur || yMax > this.longueur) {
+      return undefined
+    }
+    // Les 4 sommets doivent être exactement les 4 coins du rectangle
+    for (const [x, y] of [
+      [xMin, yMin],
+      [xMin, yMax],
+      [xMax, yMin],
+      [xMax, yMax],
+    ]) {
+      if (!abscisses.some((abs, k) => abs === x && ordonnees[k] === y)) {
+        return undefined
+      }
+    }
+    return { xMin, xMax, yMin, yMax }
+  }
+
+  /**
+   * Vérifie que les polygones tracés forment une solution valide de la grille :
+   * ce sont tous des rectangles de la grille, ils la pavent sans chevauchement
+   * et chacun contient un unique nombre égal à son aire.
+   * Toute solution correcte est acceptée, pas seulement celle de la correction.
+   */
+  verifieSolution(polygones: Polygon[]): { isValid: boolean; message: string } {
+    if (polygones.length === 0) {
+      return { isValid: false, message: "Aucun polygone n'a été tracé." }
+    }
+    const rectangles: RectangleTrace[] = []
+    for (const polygone of polygones) {
+      const rectangle = this.rectangleDuPolygone(polygone)
+      if (rectangle == null) {
+        return {
+          isValid: false,
+          message:
+            "Au moins un polygone tracé n'est pas un rectangle dont les sommets sont des nœuds de la grille.",
+        }
+      }
+      rectangles.push(rectangle)
+    }
+
+    // Chaque case doit être recouverte une fois et une seule
+    const nombreDeRecouvrements = new Map<string, number>()
+    for (const rectangle of rectangles) {
+      for (let x = rectangle.xMin; x < rectangle.xMax; x++) {
+        for (let y = rectangle.yMin; y < rectangle.yMax; y++) {
+          const cle = `${x.toString()};${y.toString()}`
+          const recouvrements = (nombreDeRecouvrements.get(cle) ?? 0) + 1
+          if (recouvrements > 1) {
+            return {
+              isValid: false,
+              message: 'Au moins deux rectangles se chevauchent.',
+            }
+          }
+          nombreDeRecouvrements.set(cle, recouvrements)
+        }
+      }
+    }
+    if (nombreDeRecouvrements.size !== this.largeur * this.longueur) {
+      return {
+        isValid: false,
+        message: "La grille n'est pas entièrement recouverte.",
+      }
+    }
+
+    // Chaque rectangle doit contenir un seul nombre, égal à son aire
+    for (const rectangle of rectangles) {
+      const nombresContenus: number[] = []
+      for (let x = rectangle.xMin; x < rectangle.xMax; x++) {
+        for (let y = rectangle.yMin; y < rectangle.yMax; y++) {
+          const nombre = this.nombresDesCases.get(
+            `${x.toString()};${y.toString()}`,
+          )
+          if (nombre !== undefined) nombresContenus.push(nombre)
+        }
+      }
+      if (nombresContenus.length === 0) {
+        return {
+          isValid: false,
+          message: 'Au moins un rectangle ne contient aucun nombre.',
+        }
+      }
+      if (nombresContenus.length > 1) {
+        return {
+          isValid: false,
+          message: 'Au moins un rectangle contient plusieurs nombres.',
+        }
+      }
+      const aire =
+        (rectangle.xMax - rectangle.xMin) * (rectangle.yMax - rectangle.yMin)
+      if (nombresContenus[0] !== aire) {
+        return {
+          isValid: false,
+          message:
+            "Au moins un rectangle n'a pas l'aire indiquée par le nombre qu'il contient.",
+        }
+      }
+    }
+    return { isValid: true, message: 'Bravo !' }
+  }
+
   correctionInteractive = () => {
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
@@ -509,39 +645,17 @@ export default class shikaku extends Exercice {
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${0}`,
     ) as HTMLDivElement
-    let validUnPolygone = true
-    const nbPolygon = [...this.figure.elements.values()].filter(
+    const polygones = [...this.figure.elements.values()].filter(
       (e) => e.type === 'Polygon',
-    ).length
+    ) as Polygon[]
 
-    let isValid = nbPolygon === this.goodAnswers.length
-    let message: string
-
-    if (!isValid) {
-      if (nbPolygon > this.goodAnswers.length)
-        message = 'Trop de polygones ont été tracés.'
-      else if (nbPolygon > 0) message = 'Trop peu de polygones ont été tracés.'
-      else message = "Aucun polygone n'a été tracé."
-      divFeedback.innerHTML = message
-      return ['KO']
-    }
-
-    for (let i = 0; i < this.goodAnswers.length; i++) {
-      validUnPolygone = this.figure.checkPolygon({
-        points: this.goodAnswers[i],
-      }).isValid
-      isValid &&= validUnPolygone
-    }
+    const { isValid, message } = this.verifieSolution(polygones)
 
     this.figure.isDynamic = false
     this.figure.divButtons.style.display = 'none'
     this.figure.divUserMessage.style.display = 'none'
     this.figure.buttons.get('SHAKE')?.click()
-    if (isValid) {
-      divFeedback.innerHTML = 'Bravo !'
-      return ['OK']
-    }
-    divFeedback.innerHTML = "Au moins un polygone n'a pas la bonne aire."
-    return ['KO']
+    divFeedback.innerHTML = message
+    return isValid ? ['OK'] : ['KO']
   }
 }

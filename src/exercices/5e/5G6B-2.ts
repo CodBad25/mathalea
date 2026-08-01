@@ -222,8 +222,8 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
       const segBD = segment(B, D)
       const nomPolygone = nommePolygone(parallelogramme)
       const objetsFigure: NestedObjetMathalea2dArray = []
-      const programmeInitial: InstructionIep[] = []
-      const programmeAttendu: InstructionIep[] = []
+      const conditionsInitiales: InstructionIep[] = []
+      let programmeAttendu: InstructionIep[] = []
       const instructionsDisponibles: InstructionsDisponiblesIep = []
       switch (listeTypeQuestions[i]) {
         case 1: // deux côtés consécutifs
@@ -236,19 +236,15 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
             tracePoint(B, D),
             C,
           )
-          programmeInitial.push(
+          conditionsInitiales.push(
             { type: 'point', nom: noms[0], x: A.x, y: A.y, protege: true },
             { type: 'point', nom: noms[1], x: B.x, y: B.y, protege: true },
             { type: 'point', nom: noms[3], x: D.x, y: D.y, protege: true },
-            { type: 'segment', p1: noms[0], p2: noms[1], protege: false },
-            { type: 'segment', p1: noms[3], p2: noms[0], protege: false },
+            { type: 'trait', p1: noms[0], p2: noms[1], protege: true },
+            { type: 'trait', p1: noms[3], p2: noms[0], protege: true },
           )
+          programmeAttendu = conditionsInitiales.slice()
           programmeAttendu.push(
-            { type: 'point', nom: noms[0], x: A.x, y: A.y, protege: true },
-            { type: 'point', nom: noms[1], x: B.x, y: B.y, protege: true },
-            { type: 'point', nom: noms[3], x: D.x, y: D.y, protege: true },
-            { type: 'segment', p1: noms[0], p2: noms[1], protege: true },
-            { type: 'segment', p1: noms[3], p2: noms[0], protege: true },
             { type: 'parallele', p1: noms[0], p2: noms[1], p3: noms[3] },
             { type: 'parallele', p1: noms[3], p2: noms[0], p3: noms[1] },
             {
@@ -280,15 +276,13 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
             nomPolygone.objets![2],
             C,
           )
-          programmeInitial.push(
+          conditionsInitiales.push(
             { type: 'point', nom: noms[0], x: A.x, y: A.y, protege: true },
             { type: 'point', nom: noms[1], x: B.x, y: B.y, protege: true },
             { type: 'point', nom: noms[2], x: C.x, y: C.y, protege: true },
           )
+          programmeAttendu = conditionsInitiales.slice()
           programmeAttendu.push(
-            { type: 'point', nom: noms[0], x: A.x, y: A.y, protege: true },
-            { type: 'point', nom: noms[1], x: B.x, y: B.y, protege: true },
-            { type: 'point', nom: noms[2], x: C.x, y: C.y, protege: true },
             { type: 'segment', p1: noms[0], p2: noms[2], protege: true },
             {
               type: 'milieu',
@@ -331,15 +325,13 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
             C,
             D,
           )
-          programmeInitial.push(
+          conditionsInitiales.push(
             { type: 'point', nom: noms[0], x: A.x, y: A.y, protege: true },
             { type: 'point', nom: noms[1], x: B.x, y: B.y, protege: true },
             { type: 'point', nom: noms[4], x: O.x, y: O.y, protege: true },
           )
+          programmeAttendu = conditionsInitiales.slice()
           programmeAttendu.push(
-            { type: 'point', nom: noms[0], x: A.x, y: A.y, protege: true },
-            { type: 'point', nom: noms[1], x: B.x, y: B.y, protege: true },
-            { type: 'point', nom: noms[4], x: O.x, y: O.y, protege: true },
             { type: 'demiDroite', p1: noms[0], p2: noms[4], protege: true },
             { type: 'demiDroite', p1: noms[1], p2: noms[4], protege: true },
             { type: 'cercle', p1: noms[4], p2: noms[0], protege: true },
@@ -387,7 +379,7 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
             D,
             B,
           )
-          programmeInitial.push(
+          conditionsInitiales.push(
             { type: 'point', nom: noms[0], x: A.x, y: A.y, protege: true },
             { type: 'point', nom: noms[2], x: C.x, y: C.y, protege: true },
             {
@@ -403,21 +395,8 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
               protege: true,
             },
           )
+          programmeAttendu = conditionsInitiales.slice()
           programmeAttendu.push(
-            { type: 'point', nom: noms[0], x: A.x, y: A.y, protege: true },
-            { type: 'point', nom: noms[2], x: C.x, y: C.y, protege: true },
-            {
-              type: 'demiDroitePointDirection',
-              p1: noms[0],
-              angle: angleAB,
-              protege: true,
-            },
-            {
-              type: 'demiDroitePointDirection',
-              p1: noms[0],
-              angle: angleAD,
-              protege: true,
-            },
             { type: 'paralleleAObjet', etape: 2, p1: noms[2] },
             { type: 'paralleleAObjet', etape: 3, p1: noms[2] },
             {
@@ -454,7 +433,7 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
         objetsFigure,
       )
       texte += addEditeurIep(this, i, {
-        programmeInitial,
+        conditionsInitiales,
         instructionsDisponibles,
         verifyCallbackName: VERIFICATION_PARALLELOGRAMME_CALLBACK_NAME,
       })

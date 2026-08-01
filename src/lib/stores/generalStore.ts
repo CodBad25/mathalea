@@ -60,6 +60,11 @@ export const capytaleMode = writable<
 
 export const capytaleStudentAssignment = writable<InterfaceResultExercice[]>()
 
+// vrai lorsqu'une sauvegarde vers Capytale a échoué et n'a pas encore pu être rejouée
+// (session expirée, coupure réseau, page parente qui ne répond plus)
+// tant que c'est vrai, l'élève ne doit plus pouvoir modifier sa copie
+export const capytaleConnectionLost = writable<boolean>(false)
+
 // sauvegarde des résultats des exercices
 export const resultsByExercice = writable<InterfaceResultExercice[]>([])
 

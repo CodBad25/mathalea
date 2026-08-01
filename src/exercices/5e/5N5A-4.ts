@@ -54,8 +54,6 @@ export const refs = {
 }
 
 export default class PaternNum1 extends Exercice {
-  destroyers: (() => void)[] = []
-
   constructor() {
     super()
     this.nbQuestions = 3
@@ -89,17 +87,7 @@ Grâce au troisième paramètre, on peut imposer l'ordre des motifs choisis au d
     this.sup5 = true
   }
 
-  destroy() {
-    // MGu quan l'exercice est supprimé par svelte : bouton supprimé
-    this.destroyers.forEach((destroy) => destroy())
-    this.destroyers.length = 0
-  }
-
   nouvelleVersion(): void {
-    // MGu quand l'exercice est modifié, on détruit les anciens listeners
-    this.destroyers.forEach((destroy) => destroy())
-    this.destroyers.length = 0
-
     const ordreAleatoireDesQuestions = this.sup5
     const nbDePattern = listePatternsSansRatioNiFraction.length
 
@@ -122,7 +110,7 @@ Grâce au troisième paramètre, on peut imposer l'ordre des motifs choisis au d
     )
 
     const nbFigures = contraindreValeur(2, 4, this.sup + 1, 4)
-    for (let i = 0; i < this.nbQuestions; ) {
+    for (let i = 0; i < this.nbQuestions;) {
       const objetsCorr: NestedObjetMathalea2dArray = []
       /* const popped = listePreDef.pop()
       if (!popped) {
@@ -199,14 +187,13 @@ Grâce au troisième paramètre, on peut imposer l'ordre des motifs choisis au d
         let ymax = -Infinity
         if ('iterate3d' in pattern) {
           if (context.isHtml) {
-            const listeners = updateCubeIso({
+            updateCubeIso({
               pattern,
               i,
               j,
               angle,
               inCorrectionMode: false,
             })
-            if (listeners) this.destroyers.push(listeners)
             if (pattern.shape == null) {
               pattern.shape = shapeCubeIso(`cubeIsoQ${i}F${j}`, 0, 0, {
                 fillStyle: '#ffffff',

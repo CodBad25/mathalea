@@ -1,5 +1,5 @@
 import { Labyrinthe } from 'labyrinthe'
-import type LabyrintheElement from 'labyrinthe/src/LabyrintheElement'
+import MathaleaLabyrintheElement from '../lib/customElements/MathaleaLabyrintheElement'
 import { context } from '../modules/context'
 import { listeQuestionsToContenu } from '../modules/outils'
 import Exercice from './Exercice'
@@ -11,7 +11,7 @@ export default class ExerciceLabyrinthe extends Exercice {
   consigneDeplacement =
     '<br>Dans ce labyrinthe, on peut se déplacer horizontalement, verticalement et en diagonale.'
   labyrinthe!: Labyrinthe
-  labyrintheElement!: LabyrintheElement
+  labyrintheElement!: MathaleaLabyrintheElement
   cols = 6
   rows = 6
   orientation?: 'horizontal' | 'vertical'
@@ -32,188 +32,56 @@ export default class ExerciceLabyrinthe extends Exercice {
     this.goodAnswers = []
     this.badAnswers = []
 
-    if (this.labyrintheElement) {
-      this.labyrintheElement.remove()
+    this.labyrinthe = new Labyrinthe({
+      seed: this.seed,
+      rows: this.rows,
+      cols: this.cols,
+      orientation: this.orientation,
+    })
+    this.init()
+    this.labyrinthe.regenerate()
+
+    const actualGoodCount = this.labyrinthe.numberOfGoodAnswers()
+    const actualBadCount = this.labyrinthe.numberOfIncorrectAnswers()
+
+    for (let i = 0; i < actualGoodCount; i++) {
+      this.goodAnswers.push(String(this.generateGoodAnswers()))
+    }
+    for (let i = 0; i < actualBadCount; i++) {
+      this.badAnswers.push(String(this.generateBadAnswers()))
     }
 
     let texte = ''
     let texteCorr = ''
     if (context.isHtml && !context.isTypst) {
-      texte = `<div
-        id="containerLabyrintheEx${this.numeroExercice}Q${0}">
-      </div>
+      texte = `${MathaleaLabyrintheElement.create({
+        id: `labyrintheEx${this.numeroExercice}`,
+        seed: this.seed ?? '',
+        rows: this.rows,
+        cols: this.cols,
+        orientation: this.orientation,
+        goodAnswers: this.goodAnswers,
+        badAnswers: this.badAnswers,
+        disabled: !this.interactif,
+        numeroExercice: this.numeroExercice,
+      })}
       <div id=${`feedbackEx${this.numeroExercice}Q${0}`}
         class="ml-2 py-2 text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest"
         >
       </div>`
 
-      texteCorr = `<div
-        id="containerLabyrintheCorrectionEx${this.numeroExercice}Q${0}">
-      </div>`
-      document.addEventListener('exercicesAffiches', async () => {
-        const container = document.querySelector(
-          `#containerLabyrintheEx${this.numeroExercice}Q${0}`,
-        )
-        const containerCorrection = document.querySelector(
-          `#containerLabyrintheCorrectionEx${this.numeroExercice}Q${0}`,
-        )
-        if (container) {
-          if (!this.labyrintheElement?.isConnected) {
-            container.innerHTML = ''
-            // Modèle temporaire
-            this.labyrinthe = new Labyrinthe({
-              seed: this.seed,
-              rows: this.rows,
-              cols: this.cols,
-              orientation: this.orientation,
-            })
-            this.init()
-            if (!customElements.get('labyrinthe-grid')) {
-              const { default: LabyrintheElement } =
-                await import('labyrinthe/src/LabyrintheElement')
-              try {
-                customElements.define(
-                  'labyrinthe-grid',
-                  LabyrintheElement as any,
-                )
-              } catch {}
-            }
-            const el = document.createElement(
-              'labyrinthe-grid',
-            ) as LabyrintheElement
-            el.seed = this.seed ?? ''
-            el.rows = this.rows
-            el.cols = this.cols
-            if (this.orientation) {
-              el.orientation = this.orientation
-            }
-            container.innerHTML = ''
-            // Cela lance connectedCallback qui regénère le chemin
-            container.appendChild(el)
-            await new Promise<void>((resolve) => {
-              const checkReady = () => {
-                if (el.ready) {
-                  resolve()
-                } else {
-                  setTimeout(checkReady, 30)
-                }
-              }
-              checkReady()
-            })
-
-            this.labyrintheElement = el
-            const actualGoodCount =
-              this.labyrintheElement.numberOfGoodAnswers ?? 0
-            const actualBadCount =
-              this.labyrintheElement.numberOfIncorrectAnswers ?? 0
-
-            // Nouveau labyrinthe avec le même seed
-            this.labyrinthe = new Labyrinthe({
-              seed: this.seed,
-              rows: this.rows,
-              cols: this.cols,
-              orientation: this.orientation,
-            })
-            this.labyrinthe.regenerate()
-
-            // Generate values using our labyrinthe's RNG
-            this.goodAnswers = []
-            this.badAnswers = []
-            for (let i = 0; i < actualGoodCount; i++) {
-              this.goodAnswers.push(String(this.generateGoodAnswers()))
-            }
-            for (let i = 0; i < actualBadCount; i++) {
-              this.badAnswers.push(String(this.generateBadAnswers()))
-            }
-            this.labyrintheElement.setValues(this.goodAnswers, this.badAnswers)
-            this.labyrintheElement.addEventListener(
-              'labyrinthe:gameend',
-              (e: Event) => {
-                const btnScore = document.querySelector(
-                  `#buttonScoreEx${this.numeroExercice}`,
-                )
-                ;(btnScore as HTMLButtonElement)?.click()
-              },
-            )
-          }
-          this.labyrintheElement.id = `labyrintheEx${this.numeroExercice}`
-          if (!this.interactif) {
-            this.labyrintheElement.disabled = true
-          }
-        }
-        if (containerCorrection) {
-          containerCorrection.innerHTML = ''
-          const elCorrection = document.createElement(
-            'labyrinthe-grid',
-          ) as LabyrintheElement
-          elCorrection.seed = this.seed ?? ''
-          elCorrection.rows = this.rows
-          elCorrection.cols = this.cols
-          if (this.orientation) {
-            elCorrection.orientation = this.orientation
-          }
-
-          containerCorrection.appendChild(elCorrection)
-
-          await new Promise<void>((resolve) => {
-            const checkReady = () => {
-              if (elCorrection.ready) {
-                resolve()
-              } else {
-                setTimeout(checkReady, 30)
-              }
-            }
-            checkReady()
-          })
-
-          elCorrection.setValues(this.goodAnswers, this.badAnswers)
-          elCorrection.showCorrection()
-        }
-      })
-
-      setTimeout(() => {
-        // Gestion particulière du bouton score
-        const btnScore = document.querySelector(
-          `#buttonScoreEx${this.numeroExercice}`,
-        )
-        if (btnScore) {
-          ;(btnScore as HTMLButtonElement).style.display = 'none'
-        }
-      }, 500)
-    } else {
-      this.labyrinthe = new Labyrinthe({
-        seed: this.seed,
+      texteCorr = MathaleaLabyrintheElement.create({
+        id: `labyrintheCorrectionEx${this.numeroExercice}Q${0}`,
+        seed: this.seed ?? '',
         rows: this.rows,
         cols: this.cols,
         orientation: this.orientation,
+        goodAnswers: this.goodAnswers,
+        badAnswers: this.badAnswers,
+        correction: true,
+        disabled: true,
       })
-      this.init()
-      this.labyrinthe.regenerate()
-      let actualGoodCount = 0
-      let actualBadCount = 0
-      const grid = (this.labyrinthe as any).grid
-      if (grid && Array.isArray(grid)) {
-        for (let r = 0; r < this.rows; r++) {
-          for (let c = 0; c < this.cols; c++) {
-            const cell = grid[r]?.[c]
-            if (cell?.isGood === true) {
-              actualGoodCount++
-            } else if (cell?.isGood === false) {
-              actualBadCount++
-            }
-          }
-        }
-      }
-
-      this.goodAnswers = []
-      this.badAnswers = []
-      for (let i = 0; i < actualGoodCount; i++) {
-        this.goodAnswers.push(String(this.generateGoodAnswers()))
-      }
-      for (let i = 0; i < actualBadCount; i++) {
-        this.badAnswers.push(String(this.generateBadAnswers()))
-      }
-
+    } else {
       if (context.isTypst) {
         // La conversion HTML→Typst ne traite le LaTeX que dans du texte
         // délimité par des `$...$` : le tableau du labyrinthe doit donc y
@@ -258,6 +126,13 @@ export default class ExerciceLabyrinthe extends Exercice {
 
   correctionInteractive = (i: number) => {
     if (this.answers == null) this.answers = {}
+    const labyrintheElement = document.querySelector<MathaleaLabyrintheElement>(
+      `#labyrintheEx${this.numeroExercice}`,
+    )
+    if (labyrintheElement == null) {
+      throw new Error('Labyrinthe not found')
+    }
+    this.labyrintheElement = labyrintheElement
     this.answers[`labyrintheEx${this.numeroExercice}`] =
       this.labyrintheElement.state
     const divFeedback = document.querySelector(

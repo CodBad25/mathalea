@@ -10,6 +10,7 @@ import type Decimal from 'decimal.js'
 import Hms from '../modules/Hms'
 import type { VueType } from './VueType'
 import type { AutoCorrectionAMC, QuestionAMC } from './amc/amcTypes'
+import type { FormulaireComplexe } from './formulaireComplexe'
 import { Complexe } from './mathFonctions/Complexe'
 
 /**
@@ -59,6 +60,8 @@ export interface InterfaceGlobalOptions {
   canSA?: boolean
   canSM?: CanSolutionsMode
   canI?: boolean
+  /** no chrono : course aux nombres sans chronomètre */
+  canNC?: boolean
   lang?: Language
 }
 
@@ -134,12 +137,7 @@ export interface StudentAssignment {
 // * `type` : type du référentiel pour gérer l'affichage (exploration récursive ou pas par exemple)
 // * `activated`: flag pour afficher ou pas le référentiel
 export type ReferentielTypes =
-  | 'outils'
-  | 'exercices'
-  | 'ressources'
-  | 'bibliotheque'
-  | 'apps'
-  | 'examens'
+  'outils' | 'exercices' | 'ressources' | 'bibliotheque' | 'apps' | 'examens'
 export type ReferentielNames =
   | 'outils'
   | 'aleatoires'
@@ -336,6 +334,8 @@ export type InteractivityType =
   | 'clique-figure' // Non compatible AMC
   | 'points-cliquables' // Non compatible AMC
   | 'objets-cliquables' // Non compatible AMC
+  | 'fraction-cliquable' // Non compatible AMC
+  | 'mathalea-labyrinthe' // Non compatible AMC
   | 'dnd' // Non compatible AMC
   | 'drag-and-drop' // Non compatible AMC
   | 'custom' // Non compatible AMC
@@ -359,6 +359,7 @@ export type InteractivityType =
   | 'tableau-mathlive'
   | 'mathalea-qcm'
   | 'alea-iep-editeur'
+  | 'relier-etiquettes' // Non compatible AMC
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -372,6 +373,8 @@ export function isInteractivityType(
     value === 'clique-figure' ||
     value === 'points-cliquables' ||
     value === 'objets-cliquables' ||
+    value === 'fraction-cliquable' ||
+    value === 'mathalea-labyrinthe' ||
     value === 'dnd' ||
     value === 'drag-and-drop' ||
     value === 'custom' ||
@@ -398,8 +401,11 @@ export function isInteractivityType(
     value === 'clique-figure' ||
     value === 'points-cliquables' ||
     value === 'objets-cliquables' ||
+    value === 'fraction-cliquable' ||
+    value === 'mathalea-labyrinthe' ||
     value === 'drag-and-drop' ||
-    value === 'meta-interactif-2d'
+    value === 'meta-interactif-2d' ||
+    value === 'relier-etiquettes'
   )
 }
 
@@ -432,8 +438,10 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'clique-figure' ||
     value === 'points-cliquables' ||
     value === 'objets-cliquables' ||
+    value === 'fraction-cliquable' ||
     value === 'drag-and-drop' ||
-    value === 'meta-interactif-2d'
+    value === 'meta-interactif-2d' ||
+    value === 'relier-etiquettes'
   )
 }
 
@@ -910,11 +918,7 @@ export type AutoCorrection = {
 }
 
 export type LegacyReponse =
-  | string
-  | IFractionEtendue
-  | Decimal
-  | number
-  | IGrandeur
+  string | IFractionEtendue | Decimal | number | IGrandeur
 export type LegacyReponses = LegacyReponse[] | LegacyReponse
 
 export interface MathaleaSVG extends SVGSVGElement {
@@ -1082,6 +1086,13 @@ export interface IExercice {
         categories: { label: string; max: number }[]
         defaut: number[]
       }
+
+  /**
+   * Formulaire regroupant plusieurs champs (cases à cocher, sélections, listes
+   * ordonnables et pondérées) dans le seul emplacement `sup`.
+   * Voir `src/lib/formulaireComplexe.ts`.
+   */
+  besoinFormulaireComplexe: false | FormulaireComplexe
   questionRefs?: string[]
   listeArguments: string[]
   lastCallback: string

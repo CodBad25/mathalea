@@ -38,6 +38,7 @@ export default createAutomatismesCanExercice({
     ],
     defaut: [2, 2, 2, 2, 2, 1, 1],
   },
-  defaultSup: '2-2-2-2-2-2',
+  // Une valeur par catégorie, alignée sur `categoriesForm.defaut`
+  defaultSup: '2-2-2-2-2-1-1',
   interactifType: 'qcm',
 })

@@ -44,6 +44,39 @@ Le helper :
 
 ## Programme initial
 
+L'option `conditionsInitiales` reçoit aussi un tableau d'`InstructionIep`,
+mais ces instructions ne sont pas affichées dans le programme éditable. Elles
+sont jouées immédiatement au début de l'animation, avant les instructions
+visibles. Elles servent à installer une figure de départ que l'élève doit
+compléter, par exemple un triangle sur lequel construire une hauteur ou un
+cercle circonscrit.
+
+Les conditions initiales sont incluses dans la valeur sauvegardée, dans la
+réponse élève enregistrée et dans le programme à comparer à la réponse
+attendue. Les instructions visibles peuvent référencer les étapes des
+conditions initiales avec les indices du programme complet.
+
+Dans l'animation de l'éditeur, les instruments nécessaires au programme sont
+affichés dès le départ dans une zone de rangement en haut à droite du SVG. Après
+chaque instruction, l'éditeur les remet silencieusement dans cette zone avec une
+rotation-translation d'angle `0`. Les macros IEP jouées par l'éditeur
+préservent la visibilité des instruments déjà visibles, ce qui évite les effets
+de masquage/réapparition pendant la construction.
+
+```ts
+const conditionsInitiales: InstructionIep[] = [
+  { type: 'point', nom: 'A', x: 0, y: 0 },
+  { type: 'point', nom: 'B', x: 5, y: 0 },
+  { type: 'point', nom: 'C', x: 2, y: 3 },
+  { type: 'polygoneRapide', sommets: 'A,B,C' },
+]
+
+texte += addEditeurIep(this, i, {
+  conditionsInitiales,
+  instructionsDisponibles: ['perpendiculaire', 'intersection'],
+})
+```
+
 L'option `programmeInitial` reçoit un tableau d'`InstructionIep`. Ces
 instructions sont chargées au premier affichage de l'éditeur et sont incluses
 dans l'animation comme dans la valeur sauvegardée.
@@ -181,6 +214,7 @@ La valeur `longueur` désigne la longueur totale du nouveau tracé.
 
 | Option | Rôle |
 | --- | --- |
+| `conditionsInitiales` | Instructions jouées immédiatement avant le programme visible, sans être affichées dans l'éditeur. |
 | `programmeInitial` | Instructions déjà présentes dans l'éditeur. |
 | `instructionsDisponibles` | Types d'instructions proposés dans le menu d'ajout. |
 | `protege` | Propriété d'une instruction initiale qui la protège contre l'édition, la suppression et le déplacement. |

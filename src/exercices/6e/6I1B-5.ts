@@ -33,7 +33,6 @@ export const refs = {
 }
 
 export default class ExerciceTableurVocabulaire extends Exercice {
-  destroyers: (() => void)[] = []
   niveau: number
   constructor() {
     super()
@@ -82,12 +81,8 @@ export default class ExerciceTableurVocabulaire extends Exercice {
     this.sup = 0
     this.sup2 = 3
     this.niveau = 6
-  }
-
-  destroy() {
-    // MGu quand l'exercice est supprimé par svelte : bouton supprimé
-    this.destroyers.forEach((destroy) => destroy())
-    this.destroyers.length = 0
+    this.comment =
+      'Le paramètre "Nombre de lignes" n\'est satisfait que si le nombre de formules choisies est suffisant.'
   }
 
   static readonly colors = {
@@ -127,13 +122,6 @@ export default class ExerciceTableurVocabulaire extends Exercice {
   }
 
   nouvelleVersion(): void {
-    // MGu quand l'exercice est modifié, on détruit les anciens listeners
-    this.destroyers.forEach((destroy) => destroy())
-    this.destroyers.length = 0
-
-    const nbLignes = this.sup2
-    const nbElements = this.nbQuestions * this.sup2
-
     let choixThisSup = this.sup
     if (this.niveau === 6) {
       const map: Record<string, string> = {
@@ -170,6 +158,7 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         choixThisSup = '1-2-3-4-5-6-7-8-9-10-11-12-13'
       }
     }
+
     const listeTypeQuestionsBase = gestionnaireFormulaireTexte({
       saisie: choixThisSup,
       min: 1,
@@ -177,8 +166,13 @@ export default class ExerciceTableurVocabulaire extends Exercice {
       defaut: 1,
       melange: 0,
       // shuffle: false, //true bien pour les tests
-      nbQuestions: Math.min(nbElements, 50),
+      //nbQuestions: Math.min(nbElements, 50),
+      nbQuestions: String(choixThisSup).includes('-')
+        ? choixThisSup.split('-').length
+        : 1,
     })
+    const nbLignes = Math.min(this.sup2, listeTypeQuestionsBase.length)
+    const nbElements = this.nbQuestions * this.sup2
 
     const listeTypeQuestions = combinaisonListes(
       listeTypeQuestionsBase,
@@ -303,7 +297,6 @@ export default class ExerciceTableurVocabulaire extends Exercice {
     for (let q = 0, cpt = 0; q < this.nbQuestions && cpt < 50; cpt++) {
       // const q = 0
       let texte = ''
-      let texteCorr = ''
       const listeMotsCellule: string[] = []
       const listeMotsEnonce: string[] = []
       const nbColTableur = 2
@@ -317,8 +310,10 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         formule?: string
       }
       const cellDatas: CellData[][] = [[]]
-      const cellDatasCorr: CellData[][] = [[]]
+      const cellDatasCorr1: CellData[][] = [[]]
+      const cellDatasCorr2: CellData[][] = [[]]
       const lesBonnesFormules: GoodAnswersFormulas = []
+      const lesBonnesFormulesInitiales: GoodAnswersFormulas = []
       cellDatas[0][0] = {
         v: 'Nombre de départ',
         s: '', // 'style_id_orange', // couleur uniquement apriori ?
@@ -329,16 +324,9 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         s: '', // 'style_id_orange', // couleur uniquement apriori ?
         t: 2, //  1:text, 2:number, 3:boolean
       }
-      cellDatasCorr[0][0] = {
-        v: 'Nombre de départ',
-        s: '', // 'style_id_orange', // couleur uniquement apriori ?
-        t: 1, //  1:text, 2:number, 3:boolean
-      }
-      cellDatasCorr[0][1] = {
-        v: `${nbDepart}`,
-        s: '', // 'style_id_orange', // couleur uniquement apriori ?
-        t: 2, //  1:text, 2:number, 3:boolean
-      }
+      cellDatasCorr1[0] = cellDatas[0]
+      cellDatasCorr2[0] = cellDatas[0]
+
       let motCellule: string = ''
       let motEnonce: string = ''
       let formule: string = ''
@@ -410,6 +398,10 @@ export default class ExerciceTableurVocabulaire extends Exercice {
           ref: `B${i - q * nbLignes + 2}`,
           formula: plainFormule,
         })
+        lesBonnesFormulesInitiales.push({
+          ref: `B${i - q * nbLignes + 2}`,
+          formula: formule,
+        })
       }
 
       // GoodAnswersFormulas
@@ -417,18 +409,31 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         cellDatas.push([]) // creer une ligne par question
         cellDatas[i + 1][0] = {
           v: `${listeMotsCellule[i]}`,
-          formule: `${lesBonnesFormules[i].formula}`,
+          formule: `${lesBonnesFormulesInitiales[i].formula}`,
           s: '',
           t: 1,
         }
-        cellDatasCorr.push([]) // creer une ligne par question
-        cellDatasCorr[i + 1][0] = {
+        cellDatasCorr1.push([]) // creer une ligne par question
+        cellDatasCorr1[i + 1][0] = {
+          v: `${listeMotsCellule[i]}`,
+          formule: `${lesBonnesFormulesInitiales[i].formula}`,
+          s: '',
+          t: 1,
+        }
+        cellDatasCorr1[i + 1][1] = {
+          v: `${lesBonnesFormulesInitiales[i].formula}`,
+          formule: `${lesBonnesFormulesInitiales[i].formula}`,
+          s: '',
+          t: 1,
+        }
+        cellDatasCorr2.push([]) // creer une ligne par question
+        cellDatasCorr2[i + 1][0] = {
           v: `${listeMotsCellule[i]}`,
           formule: `${lesBonnesFormules[i].formula}`,
           s: '',
           t: 1,
         }
-        cellDatasCorr[i + 1][1] = {
+        cellDatasCorr2[i + 1][1] = {
           v: `${lesBonnesFormules[i].formula}`,
           formule: `${lesBonnesFormules[i].formula}`,
           s: '',
@@ -441,20 +446,27 @@ export default class ExerciceTableurVocabulaire extends Exercice {
       data[0][0] = cellDatas[0][0].v
       data[0][1] = cellDatas[0][1].v
 
-      const dataCorr: (number | string)[][] = [[]]
-      dataCorr[0][0] = cellDatas[0][0].v
-      dataCorr[0][1] = cellDatas[0][1].v
+      const dataCorr1: (number | string)[][] = [[]]
+      dataCorr1[0][0] = cellDatas[0][0].v
+      dataCorr1[0][1] = cellDatas[0][1].v
+
+      const dataCorr2: (number | string)[][] = [[]]
+      dataCorr2[0][0] = cellDatas[0][0].v
+      dataCorr2[0][1] = cellDatas[0][1].v
 
       for (let i = 0; i < nbLignes; i++) {
         data.push([]) // creer une ligne par question
         data[i + 1][0] = cellDatas[i + 1][0].v
-        dataCorr.push([]) // creer une ligne par question
-        dataCorr[i + 1][0] = cellDatasCorr[i + 1][0].v
-        dataCorr[i + 1][1] = cellDatasCorr[i + 1][1].v
+        dataCorr1.push([]) // creer une ligne par question
+        dataCorr1[i + 1][0] = cellDatasCorr1[i + 1][0].v
+        dataCorr1[i + 1][1] = cellDatasCorr1[i + 1][1].v
+        dataCorr2.push([]) // creer une ligne par question
+        dataCorr2[i + 1][0] = cellDatasCorr2[i + 1][0].v
+        dataCorr2[i + 1][1] = cellDatasCorr2[i + 1][1].v
       }
-
       data.push([]) // ligne vide en plus
-      dataCorr.push([]) // ligne vide en plus
+      dataCorr1.push([]) // ligne vide en plus
+      dataCorr2.push([]) // ligne vide en plus
       const style: Record<string, string> = {}
       for (let i = 0; i < nbLignes + 2; i++) {
         const key = `A${i}`
@@ -504,22 +516,34 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         latexOptions,
         appendFeedbackBlocks: this.interactif,
       })
-      const correctionMarkup = renderSheetMarkup({
-        data: dataCorr,
+      const correctionMarkup1 = renderSheetMarkup({
+        data: dataCorr1,
         minDimensions: [nbColTableur, 2],
         style,
         columns: [{ width: 320 }, { width: 90 }, { width: 90 }, { width: 90 }],
         interactif: false,
         showVerifyButton: false,
         readOnlyCells: [`A1:D${nbLignes + 1}`],
-        latexData: cellDatasCorr,
+        latexData: cellDatasCorr1,
+        latexStyles: ExerciceTableurVocabulaire.styles,
+        latexOptions,
+        appendFeedbackBlocks: false,
+      })
+      const correctionMarkup2 = renderSheetMarkup({
+        data: dataCorr2,
+        minDimensions: [nbColTableur, 2],
+        style,
+        columns: [{ width: 320 }, { width: 90 }, { width: 90 }, { width: 90 }],
+        interactif: false,
+        showVerifyButton: false,
+        readOnlyCells: [`A1:D${nbLignes + 1}`],
+        latexData: cellDatasCorr2,
         latexStyles: ExerciceTableurVocabulaire.styles,
         latexOptions,
         appendFeedbackBlocks: false,
       })
 
       texte += questionMarkup
-      texteCorr += correctionMarkup
 
       if (this.interactif) {
         handleAnswers(
@@ -540,6 +564,8 @@ export default class ExerciceTableurVocabulaire extends Exercice {
         )
       }
 
+      let texteCorr = 'Le tableur doit contenir les formules suivantes :<br>'
+      texteCorr += correctionMarkup1
       /*
       texteCorr += 'Voici les formules à saisir dans le tableur :<br>'
       for (let i = 0; i < nbLignes; i++) {
@@ -552,7 +578,10 @@ export default class ExerciceTableurVocabulaire extends Exercice {
           }
         texteCorr += `Pour calculer ${listeMots[lOperation - 1].txtCorrection}${nbDepart}, la formule  à saisir dans la cellule ${lesBonnesFormules[i].ref} est : ${formule}.<br>`
       }
-      */
+        */
+      texteCorr +=
+        '<br>Et les valeurs calculées automatiquement par le tableur sont :<br>'
+      texteCorr += correctionMarkup2
 
       if (this.questionJamaisPosee(q, nbDepart, listeMotsEnonce[0])) {
         this.listeQuestions[q] = texte

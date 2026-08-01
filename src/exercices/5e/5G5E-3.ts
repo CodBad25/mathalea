@@ -495,7 +495,7 @@ export default class nomExercice extends Exercice {
       const SBis = [S[0], S[1], S[2]]
       const nomSommetsBis = [nomSommets[0], nomSommets[1], nomSommets[2]]
       shuffle2tableaux(SBis, nomSommetsBis)
-      const programmeInitial: InstructionIep[] = [
+      const conditionsInitiales: InstructionIep[] = [
         {
           type: 'point',
           nom: nomSommetsBis[0],
@@ -528,7 +528,7 @@ export default class nomExercice extends Exercice {
         'prolongerObjet',
         'intersection',
       ]
-      const programmeAttendu: InstructionIep[] = programmeInitial.slice()
+      const programmeAttendu: InstructionIep[] = conditionsInitiales.slice()
       programmeAttendu.push(
         {
           type: 'droite',
@@ -541,7 +541,7 @@ export default class nomExercice extends Exercice {
         reponse: { value: JSON.stringify(programmeAttendu) },
       })
       texte += addEditeurIep(this, i, {
-        programmeInitial,
+        conditionsInitiales,
         instructionsDisponibles /*: */,
         verifyCallbackName: VERIFICATION_HAUTEUR_CALLBACK_NAME,
       })

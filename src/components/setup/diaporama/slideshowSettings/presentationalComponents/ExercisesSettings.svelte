@@ -174,6 +174,7 @@
             <NumberInput
               id="diaporama-exo-nb-questions-{i}"
               value={exercise.nbQuestions}
+              isDisabled={exercise.nbQuestionsModifiable === false}
               on:change={(e) => {
                 const nbQuestions = e.detail
                 updateQuestionsNb(i, nbQuestions)

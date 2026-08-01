@@ -17,8 +17,9 @@ import {
 } from '../../lib/3d/3d_dynamique/Canvas3DElement'
 import {
   generateContent3D,
-  onCorrectionsAffichees,
+  initialisePatron3DCanvas,
 } from '../../lib/3d/3d_dynamique/patrons3d'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import type { objetFace } from '../../lib/3d/utilsPatrons'
 import { cubesObj, fauxCubesObj } from '../../lib/3d/utilsPatrons'
 import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
@@ -40,6 +41,9 @@ export const refs = {
   'fr-2016': ['6G45'],
   'fr-ch': [],
 }
+
+const patron3dReadyAction = 'CM2G5C-1:patron-3d-ready'
+let patron3dReadyRegistered = false
 
 function retrouveMatrices(liste: objetFace[][][]): {
   indexVraiPatron: number
@@ -81,7 +85,6 @@ function retrouveMatrices(liste: objetFace[][][]): {
  */
 export default class choixPatron extends Exercice {
   listeMatrices: objetFace[][][][]
-  listeners: (() => void)[]
 
   constructor() {
     super()
@@ -92,7 +95,6 @@ export default class choixPatron extends Exercice {
     this.besoinFormulaire2CaseACocher = ['3d dynamique', true]
     this.sup2 = true
     this.listeMatrices = []
-    this.listeners = []
   }
 
   nouvelleVersion() {
@@ -120,7 +122,7 @@ export default class choixPatron extends Exercice {
     )
     const listeVraisPatrons: UnPatron[] = initListePatrons(cubesObj)
     const listeFauxPatrons: UnPatron[] = initListePatrons(fauxCubesObj)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
 
@@ -386,11 +388,17 @@ export default class choixPatron extends Exercice {
             },
           ]
           const content3d = { objects, autoCenterZoomMargin: 1 }
+          const canvasId = `canvas3dEx${this.numeroExercice}Q${i}`
           texteCorr += ajouteCanvas3d({
-            id: `canvas3dEx${this.numeroExercice}Q${i}`,
+            id: canvasId,
             content: content3d,
             width: 200,
             height: 200,
+          })
+          registerPatron3dReady()
+          texteCorr += DomReadyActionElement.create({
+            action: patron3dReadyAction,
+            payload: { canvasId },
           })
         }
         this.listeQuestions[i] = texte
@@ -400,11 +408,6 @@ export default class choixPatron extends Exercice {
       cpt++
     }
     listeQuestionsToContenu(this)
-    // Ce onCorrectionAffichees est dédié à la gestion du pliage/dépliage de patrons3d : il n'est pas à utiliser dans un autre contexte.
-    // On pourra éventuellement remplacer 'correctionsAffichees' par 'exercicesAffiches' si les patrons sont dans l'énoncé et pas dans la correction.
-    document.addEventListener('correctionsAffichees', onCorrectionsAffichees, {
-      once: true,
-    }) // listener auto-détruit à la première utilisation
   }
 
   callback(exercice: Exercice, i: number): void {
@@ -466,19 +469,36 @@ export default class choixPatron extends Exercice {
         },
       ]
       const content3d = { objects, autoCenterZoomMargin: 1.2 }
+      const canvasId = `canvas3dEx${exercice.numeroExercice}Q${i}`
 
       const nouveauCanvas = ajouteCanvas3d({
-        id: `canvas3dEx${exercice.numeroExercice}Q${i}`,
+        id: canvasId,
         content: content3d, // généré avec la matrice du patron cliqué
         width: 200,
         height: 200,
       })
+      registerPatron3dReady()
       exercice.listeCorrections[i] = exercice.listeCorrections[i].replace(
-        /<canvas-3d[^>]*>.*?<\/canvas-3d>/s,
-        nouveauCanvas,
+        /<canvas-3d[^>]*>.*?<\/canvas-3d>(?:<mathalea-dom-ready[^>]*><\/mathalea-dom-ready>)?/s,
+        nouveauCanvas +
+          DomReadyActionElement.create({
+            action: patron3dReadyAction,
+            payload: { canvasId },
+          }),
       )
     }
   }
+}
+
+function registerPatron3dReady() {
+  if (patron3dReadyRegistered) return
+  patron3dReadyRegistered = true
+  DomReadyActionElement.registerCallback<{ canvasId: string }>(
+    patron3dReadyAction,
+    ({ payload }) => {
+      initialisePatron3DCanvas(payload.canvasId)
+    },
+  )
 }
 
 const tailleCarre = 1

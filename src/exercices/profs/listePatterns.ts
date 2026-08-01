@@ -55,8 +55,6 @@ export const uuid = '71ff5'
  *  (sur la base de listePatterns de Jean-claude Lhote)
  */
 export default class ListePatternsTousLesExos extends Exercice {
-  destroyers: (() => void)[] = []
-
   constructor() {
     super()
     this.nbQuestions = 1
@@ -75,16 +73,7 @@ export default class ListePatternsTousLesExos extends Exercice {
     pour le motif 43 ainsi que le nombre d'éléments au rang n de chaque pattern.<br>`
   }
 
-  destroy() {
-    // MGu quan l'exercice est supprimé par svelte : bouton supprimé
-    this.destroyers.forEach((destroy) => destroy())
-    this.destroyers.length = 0
-  }
-
   nouvelleVersion(): void {
-    // MGu quand l'exercice est modifié, on détruit les anciens listeners
-    this.destroyers.forEach((destroy) => destroy())
-    this.destroyers.length = 0
     this.sup3 = Math.max(2, this.sup3) // On ne peut pas afficher moins de 2 motifs
     let texte = ''
 
@@ -235,8 +224,7 @@ export default class ListePatternsTousLesExos extends Exercice {
               })
             }
             if (context.isHtml) {
-              const listeners = updateCubeIso({ pattern, i, j, angle })
-              if (listeners) this.destroyers.push(listeners)
+              updateCubeIso({ pattern, i, j, angle })
               pattern.shape.codeSvg = `<use href="#cubeIsoQ${i}F${j}"></use>`
               const cells = (pattern as VisualPattern3D).update3DCells(j + 1)
               // Ajouter les SVG générés par svg() de chaque objet

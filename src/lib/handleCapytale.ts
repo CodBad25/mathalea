@@ -25,6 +25,7 @@ import {
 import { showDialogStringMessageForLimitedTime } from './components/dialogs'
 import { canOptions as canOptionsStore } from './stores/canStore'
 import {
+  capytaleConnectionLost,
   capytaleMode,
   capytaleStudentAssignment,
   exercicesParams,
@@ -46,7 +47,32 @@ interface ActivityParams {
   assignmentData: AssignmentData
 }
 
+// Les erreurs remontées par Capytale ne suivent pas toutes la même forme
+type CapytaleError = Error & {
+  code?: string | number
+  status?: number
+  response?: unknown
+  data?: { message?: string }
+  error?: { message?: string }
+}
+
+interface StudentAssignmentPayload {
+  studentAssignment: InterfaceResultExercice[]
+  evaluation: string
+  exerciceGraded: number | 'all'
+  assignmentData?: AssignmentData
+  final?: boolean
+}
+
 const serviceId = 'capytale-player'
+
+// La librairie RPC ne gère aucun timeout : si la page parente ne répond plus
+// (session Capytale expirée, onglet rechargé, réseau coupé), la promesse reste
+// indéfiniment en attente. On considère donc qu'au-delà de ce délai la connexion est perdue.
+const CAPYTALE_CALL_TIMEOUT_IN_MS = 15000
+
+// Délais successifs entre deux tentatives de sauvegarde, le dernier est répété indéfiniment
+const RETRY_DELAYS_IN_MS = [3000, 5000, 10000, 20000, 30000]
 
 // Gestion des postMessage avec Capytale
 export const rpc = new RPC({
@@ -63,7 +89,10 @@ export let assignmentDataFromCapytale: AssignmentData = {}
 let timerId: ReturnType<typeof setTimeout> | undefined
 let firstTime = true
 
-let currentMode: 'create' | 'assignment' | 'review' | 'view'
+// Sauvegarde qui n'a pas pu aboutir et qu'il faut rejouer dès le retour de la connexion
+let pendingSaveData: StudentAssignmentPayload | undefined
+let retryTimerId: ReturnType<typeof setTimeout> | undefined
+let retryCount = 0
 
 /**
  * Fonction pour recevoir les paramètres des exercices depuis Capytale
@@ -81,7 +110,6 @@ async function toolSetActivityParams({
   // mode : create (le prof créé sa séance), assignment (l'élève voit sa copie), review (le prof voit la copie d'un élève), view (le prof voit la séance d'un collègue dans la bibliothèque et pourra la cloner)
   // workflow : current (la copie n'a pas encore été rendue), finished (la copie a été rendue), corrected (la copie a été anotée par l'enseignant)
   // On récupère les paramètres de l'activité
-  currentMode = mode
   capytaleMode.set(mode)
   const canOptions = get(canOptionsStore)
   if (activity === null || activity === undefined) return
@@ -334,7 +362,7 @@ export function sendToCapytaleSaveStudentAssignment({
       evaluation += resultExercice.numberOfPoints
     }
   }
-  if (currentMode === 'assignment') {
+  if (get(capytaleMode) === 'assignment') {
     // exerciceGraded est l'indice du dernier exercice évalué
     // L'information est envoyée à Capytale pour qu'ils sachent quel exercice ajouter en base de données
     // Dans le cas d'une vue Course aux Nombre on envoie all pour forcer de mettre à jour en base de données tous les scores
@@ -356,7 +384,7 @@ export function sendToCapytaleSaveStudentAssignment({
       newStudentAssignement = results
       capytaleStudentAssignment.set(newStudentAssignement)
     }
-    const data = {
+    const data: StudentAssignmentPayload = {
       // Les réponses de l'élève
       // Le tableau fourni remplace complètement les réponses précédemment sauvegardées.
       studentAssignment: newStudentAssignement,
@@ -371,83 +399,188 @@ export function sendToCapytaleSaveStudentAssignment({
       // Indique que l'activité est terminée et doit être verrouillée pour l'élève : workflow = 'finished'
       final: get(canOptionsStore).isChoosen && get(globalOptions).oneShot,
     }
-    console.info('Message envoyé à Capytale', data)
-    const promiseSaveStudentAssignment = rpc.call('saveStudentAssignment', data)
-    promiseSaveStudentAssignment
-      .then(() => {
-        console.info('Sauvegarde effectuée')
-        // Afficher sauvegarde réussie
-      })
-      .catch((err) => {
-        if (
-          err instanceof Error &&
-          err.message &&
-          err.message.includes('votre copie est rendue')
-        ) {
-          // L'enregistrement de vos réponses n'est pas possible car votre copie est rendue.
-          showDialogStringMessageForLimitedTime(
-            'Impossible de sauvegarder vos réponses car votre copie est déjà rendue.',
-            5000,
-          )
-          return
-        }
-        if (
-          err instanceof Error &&
-          err.message &&
-          err.message.includes('Copie verrouillée')
-        ) {
-          showDialogStringMessageForLimitedTime(
-            'Impossible de sauvegarder vos réponses car votre copie est verrouillée.',
-            5000,
-          )
-          return
-        }
-
-        console.error('Problème avec la sauvegarde', err)
-        // Indiquer à l'élève qu'il y a un soucis réseau
-
-        console.error('typeof err =', typeof err)
-
-        if (err instanceof Error) {
-          console.error('message =', err.message)
-          console.error('stack =', err.stack)
-        }
-
-        if (err?.response) {
-          console.error('response =', err.response)
-        }
-
-        if (err?.data) {
-          console.error('data =', err.data)
-        }
-
-        const message = [
-          err.code && `code: ${err.code}`,
-          err.status && `status: ${err.status}`,
-          err.message && `message: ${err.message}`,
-          err.stack && `stack: ${err.stack}`,
-          err?.data?.message && `data.message: ${err?.data?.message}`,
-          err?.error?.message && `error.message: ${err?.error?.message}`,
-        ]
-          .filter(Boolean)
-          .join('\n')
-
-        window.notify(
-          `Problème avec la sauvegarde Capytale: ${err.message ?? 'Erreur inconnue'}`,
-          {
-            error: err,
-            message,
-            mode: currentMode,
-            indiceExercice,
-            data,
-            globalOptions: get(globalOptions),
-            exercicesParams: get(exercicesParams),
-            resultsByExercice: get(resultsByExercice),
-            canOptions: get(canOptionsStore),
-          },
-        )
-      })
+    saveStudentAssignmentToCapytale(data)
   }
+}
+
+/**
+ * Appelle une méthode de Capytale en échouant explicitement si la réponse n'arrive pas à temps.
+ * Sans ce timeout, une page parente qui ne répond plus laisserait la promesse
+ * indéfiniment en attente et la perte de connexion passerait inaperçue.
+ */
+function callCapytale<T>(
+  method: string,
+  params: object,
+  timeoutInMs = CAPYTALE_CALL_TIMEOUT_IN_MS,
+): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timeoutOfCallId = setTimeout(() => {
+      reject(
+        new Error(
+          `Capytale n'a pas répondu à ${method} en moins de ${timeoutInMs / 1000} s`,
+        ),
+      )
+    }, timeoutInMs)
+    rpc.call<T>(method, params).then(
+      (result: T) => {
+        clearTimeout(timeoutOfCallId)
+        resolve(result)
+      },
+      (error: unknown) => {
+        clearTimeout(timeoutOfCallId)
+        reject(error)
+      },
+    )
+  })
+}
+
+/**
+ * Renvoie le message à afficher si l'erreur est une erreur métier de Capytale
+ * (copie rendue ou verrouillée), undefined sinon.
+ * Dans ce cas la communication fonctionne : inutile de bloquer la copie.
+ */
+function getLockedCopyMessage(err: unknown): string | undefined {
+  if (!(err instanceof Error) || !err.message) return undefined
+  if (err.message.includes('votre copie est rendue')) {
+    return 'Impossible de sauvegarder vos réponses car votre copie est déjà rendue.'
+  }
+  if (err.message.includes('Copie verrouillée')) {
+    return 'Impossible de sauvegarder vos réponses car votre copie est verrouillée.'
+  }
+  return undefined
+}
+
+/**
+ * Envoie la copie à Capytale et gère la perte de connexion :
+ * en cas d'échec, la copie est verrouillée et la sauvegarde est rejouée automatiquement.
+ */
+function saveStudentAssignmentToCapytale(data: StudentAssignmentPayload) {
+  console.info('Message envoyé à Capytale', data)
+  callCapytale('saveStudentAssignment', data)
+    .then(() => {
+      console.info('Sauvegarde effectuée')
+      handleCapytaleConnectionRestored()
+    })
+    .catch((err) => {
+      const lockedCopyMessage = getLockedCopyMessage(err)
+      if (lockedCopyMessage !== undefined) {
+        pendingSaveData = undefined
+        showDialogStringMessageForLimitedTime(lockedCopyMessage, 5000)
+        return
+      }
+      handleCapytaleConnectionLost(err as CapytaleError, data)
+    })
+}
+
+/**
+ * La sauvegarde a échoué : on signale la coupure à l'élève (le store bloque la copie)
+ * et on programme une nouvelle tentative.
+ */
+function handleCapytaleConnectionLost(
+  err: CapytaleError,
+  data: StudentAssignmentPayload,
+) {
+  pendingSaveData = data
+  const wasAlreadyLost = get(capytaleConnectionLost)
+  capytaleConnectionLost.set(true)
+  console.error('Problème avec la sauvegarde', err)
+  // On ne notifie qu'une fois par coupure pour ne pas inonder Bugsnag avec les tentatives
+  if (!wasAlreadyLost) notifySaveError(err, data)
+  scheduleSaveRetry()
+}
+
+/**
+ * La sauvegarde a abouti : la connexion est (re)venue, on déverrouille la copie.
+ */
+function handleCapytaleConnectionRestored() {
+  const wasLost = get(capytaleConnectionLost)
+  pendingSaveData = undefined
+  retryCount = 0
+  if (retryTimerId !== undefined) {
+    clearTimeout(retryTimerId)
+    retryTimerId = undefined
+  }
+  capytaleConnectionLost.set(false)
+  if (wasLost) {
+    showDialogStringMessageForLimitedTime(
+      'Connexion à Capytale rétablie, vos réponses ont bien été enregistrées.',
+      3000,
+    )
+  }
+}
+
+/**
+ * Programme une nouvelle tentative de sauvegarde, avec un délai croissant.
+ */
+function scheduleSaveRetry() {
+  if (retryTimerId !== undefined) return
+  const delay =
+    RETRY_DELAYS_IN_MS[Math.min(retryCount, RETRY_DELAYS_IN_MS.length - 1)]
+  retryCount++
+  retryTimerId = setTimeout(() => {
+    retryTimerId = undefined
+    if (pendingSaveData === undefined) return
+    saveStudentAssignmentToCapytale(pendingSaveData)
+  }, delay)
+}
+
+/**
+ * Relance immédiatement la sauvegarde en attente (bouton « Réessayer » de l'élève).
+ */
+export function retryCapytaleSaveNow() {
+  if (retryTimerId !== undefined) {
+    clearTimeout(retryTimerId)
+    retryTimerId = undefined
+  }
+  if (pendingSaveData === undefined) {
+    // Rien à sauvegarder : il n'y a plus de raison de bloquer la copie
+    capytaleConnectionLost.set(false)
+    return
+  }
+  saveStudentAssignmentToCapytale(pendingSaveData)
+}
+
+function notifySaveError(err: CapytaleError, data: StudentAssignmentPayload) {
+  console.error('typeof err =', typeof err)
+
+  if (err instanceof Error) {
+    console.error('message =', err.message)
+    console.error('stack =', err.stack)
+  }
+
+  if (err?.response) {
+    console.error('response =', err.response)
+  }
+
+  if (err?.data) {
+    console.error('data =', err.data)
+  }
+
+  const message = [
+    err.code && `code: ${err.code}`,
+    err.status && `status: ${err.status}`,
+    err.message && `message: ${err.message}`,
+    err.stack && `stack: ${err.stack}`,
+    err?.data?.message && `data.message: ${err?.data?.message}`,
+    err?.error?.message && `error.message: ${err?.error?.message}`,
+  ]
+    .filter(Boolean)
+    .join('\n')
+
+  window.notify(
+    `Problème avec la sauvegarde Capytale: ${err.message ?? 'Erreur inconnue'}`,
+    {
+      error: err,
+      message,
+      mode: get(capytaleMode),
+      indiceExercice: data.exerciceGraded,
+      data,
+      globalOptions: get(globalOptions),
+      exercicesParams: get(exercicesParams),
+      resultsByExercice: get(resultsByExercice),
+      canOptions: get(canOptionsStore),
+    },
+  )
 }
 
 function sendToCapytaleActivityParams() {

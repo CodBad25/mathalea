@@ -389,14 +389,14 @@ export class AddTabPropMathlive {
       })
     }
     table.appendChild(secondLine)
-    const spanCheckOuterHTML = `<span id="resultatCheckEx${numeroExercice}Q${question}"></span>`
+    const divFeedbackOuterHTML = `<div id="feedbackEx${numeroExercice}Q${question}"></div>`
     // pour l'instant je retourne l'objet complet avec le HTML de la table dans sa propriété output,
     // mais il sera peut-être possible de ne retourner que le HTML comme pour ajouteChampTexteMathlive...
     tableauMathlive.output = TableauMathliveElement.create({
       numeroExercice: NoEx,
       questionIndex: question,
       tableHtml: table.outerHTML,
-      feedbackHtml: spanCheckOuterHTML,
+      feedbackHtml: divFeedbackOuterHTML,
     })
     return tableauMathlive
   }
@@ -482,9 +482,9 @@ export class AddTabDbleEntryMathlive {
     isInteractif: boolean,
   ) {
     if (numeroExercice == null) {
-      // @ts-expect-error
       window.notify(
         "AddTabDbleEntryMathlive a besoin absolument d'un numero d'exercice",
+        {},
       )
     }
     this.headingCols = tableau.headingCols
@@ -600,14 +600,14 @@ export class AddTabDbleEntryMathlive {
         }
       }
     }
-    const spanCheckOuterHTML = `<span id="feedbackEx${numeroExercice}Q${question}"></span>`
+    const divFeedbackOuterHTML = `<div id="feedbackEx${numeroExercice}Q${question}"></div>`
     // pour l'instant je retourne l'objet complet avec le HTML de la table dans sa propriété output,
     // mais il sera peut-être possible de ne retourner que le HTML comme pour ajouteChampTexteMathlive...
     tableauMathlive.output = TableauMathliveElement.create({
       numeroExercice: NoEx,
       questionIndex: question,
       tableHtml: table.outerHTML,
-      feedbackHtml: spanCheckOuterHTML,
+      feedbackHtml: divFeedbackOuterHTML,
     })
     return tableauMathlive
   }

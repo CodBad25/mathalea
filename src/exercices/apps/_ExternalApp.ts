@@ -16,6 +16,9 @@ class ExternalApp extends Exercice {
   url: URL
   state: 'done' | ''
   type = 'app'
+  // Le getter html est appelé à chaque rendu : sans ce drapeau on empilerait
+  // un écouteur de message supplémentaire (et donc autant de sauvegardes) par rendu
+  isScoreHandled = false
   constructor(url: string) {
     super()
     this.url = new URL(url)
@@ -105,22 +108,41 @@ class ExternalApp extends Exercice {
   }
 
   handleScore() {
+    if (this.isScoreHandled) return
+    this.isScoreHandled = true
     window.addEventListener('message', (event) => {
       if (event.data?.numeroExercice !== this.numeroExercice) return
       if (event.data?.type === 'mathaleaSendScore') {
         this.state = 'done'
-        const numberOfPoints = parseInt(event.data.score)
         const indice = parseInt(event.data.numeroExercice)
         const numberOfQuestions = parseInt(event.data.numberOfQuestions)
+        const scoreSentByApp = parseInt(event.data.score)
+        // Certaines apps cumulent le score restauré par mathaleaHasScore avec celui
+        // de la nouvelle tentative et peuvent donc annoncer plus de points que de questions
+        if (scoreSentByApp > numberOfQuestions) {
+          window.notify(
+            `L'app de l'exercice ${indice} a envoyé un score de ${scoreSentByApp} pour ${numberOfQuestions} questions`,
+            { url: this.url.toString(), data: event.data },
+          )
+        }
+        const numberOfPoints = Math.min(scoreSentByApp, numberOfQuestions)
         const answers = Array.isArray(event.data.finalState)
           ? event.data.finalState
           : [event.data.finalState]
         const type = 'app'
-        const results = get(resultsByExercice)
-        let bestScore = results[indice]?.numberOfPoints || 0
-        if (numberOfPoints > bestScore) {
-          bestScore = numberOfPoints
-        }
+        // Le meilleur score peut venir d'une copie précédente restaurée par Capytale
+        // (exercicesParams) ou d'une tentative de la session en cours (resultsByExercice)
+        const previousBestScore = Math.max(
+          get(exercicesParams)[indice]?.bestScore ?? 0,
+          get(resultsByExercice)[indice]?.bestScore ?? 0,
+        )
+        // On ne remplace jamais la meilleure copie de l'élève par une tentative moins bonne
+        if (numberOfPoints < previousBestScore) return
+        const bestScore = numberOfPoints
+        exercicesParams.update((l) => {
+          if (l[indice] !== undefined) l[indice].bestScore = bestScore
+          return l
+        })
         resultsByExercice.update((l) => {
           l[indice] = {
             numberOfPoints,
@@ -144,8 +166,20 @@ class ExternalApp extends Exercice {
         const answers = Array.isArray(event.data.finalState)
           ? event.data.finalState
           : [event.data.finalState]
+        // Restauration d'une copie précédente : le score restauré est le meilleur score
+        const bestScore = Math.max(
+          numberOfPoints,
+          get(exercicesParams)[indice]?.bestScore ?? 0,
+        )
         resultsByExercice.update((l) => {
-          l[indice] = { numberOfPoints, numberOfQuestions, indice, answers }
+          l[indice] = {
+            numberOfPoints,
+            bestScore,
+            numberOfQuestions,
+            indice,
+            answers,
+            type: 'app',
+          }
           return l
         })
         const message = {

@@ -16,6 +16,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
@@ -35,6 +36,9 @@ export const refs = {
   'fr-fr': [],
   'fr-ch': [],
 }
+
+const replayAnimationAction = '3A12-0-old:replay-animation'
+let replayAnimationRegistered = false
 
 export default class EngrenagesAnimes extends Exercice {
   constructor() {
@@ -498,35 +502,16 @@ export default class EngrenagesAnimes extends Exercice {
         )
         button.setAttribute('id', `b_AnimRoue${numeroExercice}_${i}`)
         texteCorr += '<br>' + button.outerHTML
-
-        const questNbr = i
-        const listener = function () {
-          const btn = document.getElementById(
-            `b_AnimRoue${numeroExercice}_${questNbr}`,
-          )
-          if (btn) {
-            const intervallesId = {}
-            btn.onclick = function () {
-              remiseAZeroT(
-                `${numeroExercice}_${questNbr}`,
-                nbToursA,
-                oneCycle,
-                intervallesId,
-              )
-            }
-
-            // on arrete toutes les roues et on remet en position initiale
-            setTimeout(function () {
-              document
-                .querySelector(
-                  `#containerAnimRoues${numeroExercice}_${questNbr}`,
-                )
-                ?.querySelectorAll('[id^=animRoue]')
-                .forEach((e) => e.endElement())
-            })
-          }
-        }
-        document.addEventListener('exercicesAffiches', listener)
+        registerReplayAnimation(remiseAZeroT)
+        texteCorr += DomReadyActionElement.create({
+          action: replayAnimationAction,
+          payload: {
+            numeroExercice,
+            question: i,
+            nbToursPremiereRoue: nbToursA,
+            oneCycle,
+          },
+        })
       }
 
       if (
@@ -549,4 +534,38 @@ export default class EngrenagesAnimes extends Exercice {
     }
     listeQuestionsToContenu(this)
   }
+}
+
+function registerReplayAnimation(remiseAZeroT) {
+  if (replayAnimationRegistered) return
+  replayAnimationRegistered = true
+  DomReadyActionElement.registerCallback(
+    replayAnimationAction,
+    ({ payload }) => {
+      const { numeroExercice, question, nbToursPremiereRoue, oneCycle } =
+        payload
+      const idSuffix = `${numeroExercice}_${question}`
+      const btn = document.getElementById(`b_AnimRoue${idSuffix}`)
+      if (!btn) return
+
+      const intervallesId = {}
+      const handleClick = function () {
+        remiseAZeroT(idSuffix, nbToursPremiereRoue, oneCycle, intervallesId)
+      }
+      btn.addEventListener('click', handleClick)
+
+      setTimeout(function () {
+        document
+          .querySelector(`#containerAnimRoues${idSuffix}`)
+          ?.querySelectorAll('[id^=animRoue]')
+          .forEach((e) => e.endElement())
+      })
+
+      return () => {
+        btn.removeEventListener('click', handleClick)
+        intervallesId[idSuffix]?.forEach((e) => clearInterval(e))
+        intervallesId[idSuffix] = []
+      }
+    },
+  )
 }

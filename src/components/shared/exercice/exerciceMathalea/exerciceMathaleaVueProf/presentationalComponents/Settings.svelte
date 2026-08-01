@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte'
   import ExerciceSimple from '../../../../../../exercices/ExerciceSimple'
+  import type { FormulaireComplexe } from '../../../../../../lib/formulaireComplexe'
   import type { IExercice } from '../../../../../../lib/types'
   import CheckboxWithLabel from '../../../../forms/CheckboxWithLabel.svelte'
   import InputNumber from '../../../../forms/InputNumber.svelte'
@@ -45,6 +46,7 @@
     defaut: number[]
   }
   let categoriesForm: CategoriesForm | undefined = undefined
+  let formulaireComplexe: FormulaireComplexe | undefined = undefined
 
   let previousSeed: string | undefined
   $: {
@@ -102,6 +104,9 @@
     if (exercice.besoinFormulaireNombresCategories) {
       categoriesForm =
         exercice.besoinFormulaireNombresCategories as CategoriesForm
+    }
+    if (exercice.besoinFormulaireComplexe) {
+      formulaireComplexe = exercice.besoinFormulaireComplexe
     }
   })
 
@@ -243,6 +248,7 @@
       bind:supValue={sup}
       formNum={formNum1}
       {categoriesForm}
+      {formulaireComplexe}
       on:change={dispatchNewSettings}
     />
 
