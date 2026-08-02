@@ -113,8 +113,7 @@
   /** Toutes les valeurs sont des terminaisons (niveau feuille). */
   function allValuesAreEndings(entries: SubsetEntry[]): boolean {
     return (
-      entries.length > 0 &&
-      entries.every(([, v]) => isJSONReferentielEnding(v))
+      entries.length > 0 && entries.every(([, v]) => isJSONReferentielEnding(v))
     )
   }
 
@@ -129,10 +128,12 @@
     return (
       entries.length > 0 &&
       entries.every(([, v]) => {
-        if (v === null || typeof v !== 'object' || Array.isArray(v)) return false
+        if (v === null || typeof v !== 'object' || Array.isArray(v))
+          return false
         const children = Object.values(v as Record<string, unknown>)
         return (
-          children.length > 0 && children.every((c) => isJSONReferentielEnding(c))
+          children.length > 0 &&
+          children.every((c) => isJSONReferentielEnding(c))
         )
       })
     )
@@ -302,7 +303,9 @@
         const na = numericPrefix(keyA)
         const nb = numericPrefix(keyB)
         if (na === undefined && nb === undefined) return 0
-        return (na ?? Number.POSITIVE_INFINITY) - (nb ?? Number.POSITIVE_INFINITY)
+        return (
+          (na ?? Number.POSITIVE_INFINITY) - (nb ?? Number.POSITIVE_INFINITY)
+        )
       })
     } else {
       // niveau racine : ordre alphabétique pour ces référentiels
@@ -492,6 +495,12 @@
             {/if}
           </li>
         {/each}
+        <!-- Entrée libre ajoutée en fin de nœud par l'appelant, qui fournit son
+             propre `<li>` (utilisée par « Ressources partenaires » pour le
+             bouton d'ajout de banque). Le slot n'est pas transmis à
+             `svelte:self` : il n'apparaît qu'au niveau où il est fourni, jamais
+             dans les sous-nœuds. -->
+        <slot name="trailing" />
       </ul>
     {/if}
   </div>

@@ -24,6 +24,7 @@ import { globalOptions } from '../stores/globalOptions'
 import type { IExercice } from '../types'
 import { isStatic } from './componentsUtils'
 import { referentielMathadata } from './mathadataReferentiel'
+import { referentielBanquesExternes } from '../stores/banquesExternesStore'
 
 const allStaticReferentiels: JSONReferentielObject = {
   ...referentielStaticFR,
@@ -36,6 +37,16 @@ delete allStaticReferentiels['BrevetTags']
 delete allStaticReferentiels['EVACOMTags']
 delete allStaticReferentiels['E3CTags']
 delete allStaticReferentiels['crpeTags']
+
+/**
+ * Référentiels statiques augmentés des banques externes chargées. Ces dernières
+ * changeant en cours de session (ajout, suppression, lien partagé), la fusion
+ * est refaite à chaque appel plutôt que figée au chargement du module.
+ * @returns {JSONReferentielObject} référentiel dans lequel chercher un uuid statique
+ */
+function referentielsStatiques(): JSONReferentielObject {
+  return { ...allStaticReferentiels, ...referentielBanquesExternes() }
+}
 
 /**
  * Construit la liste des exercices basée sur le contenu du store exercicesParams
@@ -61,11 +72,20 @@ export const buildExercisesList = (
         exo.listeCorrections[0] = ''
         exo.nbQuestions = 1
         const foundResource = retrieveResourceFromUuid(
-          allStaticReferentiels,
+          referentielsStatiques(),
           paramsExercice.uuid,
         )
         if (resourceHasPlace(foundResource)) {
           exo.titre = `${foundResource.typeExercice.toUpperCase()} ${foundResource.mois || ''} ${foundResource.annee} ${foundResource.lieu} ${foundResource.jour || ''} Ex ${foundResource.numeroInitial}`
+        } else if (
+          foundResource !== null &&
+          'titre' in foundResource &&
+          typeof foundResource.titre === 'string' &&
+          foundResource.titre.length > 0
+        ) {
+          // ressources titrées (banques externes, MathAdata) : sans cela le
+          // titre affiché resterait l'uuid brut dans les vues A4 et Typst
+          exo.titre = foundResource.titre
         }
         const pngUrls = computeStaticExercicePngUrls(foundResource)
         if (pngUrls != null) {
@@ -127,7 +147,7 @@ export const buildExercisesList = (
  * @returns l'URL relative du fichier `.typ`, ou `null` si non déclarée
  */
 export const getStaticExerciceTypUrl = (uuid: string): string | null => {
-  const foundResource = retrieveResourceFromUuid(allStaticReferentiels, uuid)
+  const foundResource = retrieveResourceFromUuid(referentielsStatiques(), uuid)
   return computeStaticExerciceTypUrl(foundResource)
 }
 
@@ -139,7 +159,7 @@ export const getStaticExerciceTypUrl = (uuid: string): string | null => {
  * @returns l'URL relative du fichier `_cor.typ`, ou `null` si non déclarée
  */
 export const getStaticExerciceCorTypUrl = (uuid: string): string | null => {
-  const foundResource = retrieveResourceFromUuid(allStaticReferentiels, uuid)
+  const foundResource = retrieveResourceFromUuid(referentielsStatiques(), uuid)
   return computeStaticExerciceCorTypUrl(foundResource)
 }
 

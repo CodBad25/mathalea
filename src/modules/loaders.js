@@ -60,7 +60,8 @@ function ensureGlobalTabTracker() {
 }
 
 function selectFillInTheBlanksPrompt(mf, direction) {
-  const prompts = mf.getPrompts?.()
+  if (mf.classList.contains('corrected')) return false
+  const prompts = mf.getPrompts?.({ locked: false })
   if (!Array.isArray(prompts) || prompts.length === 0) return false
 
   const promptId =
@@ -93,7 +94,10 @@ function insertInFillInTheBlanksPrompt(mf, text) {
 
 function handleFillInTheBlanksBeforeInput(event) {
   const mf = event.currentTarget
-  if (mf.classList.contains('corrected')) return
+  if (mf.classList.contains('corrected')) {
+    event.preventDefault()
+    return
+  }
 
   if (!isSafariLikeBrowser()) {
     if (mf.isSelectionEditable) return
@@ -123,7 +127,10 @@ function handleFillInTheBlanksKeydown(event) {
     return
   }
   const mf = event.currentTarget
-  if (mf.classList.contains('corrected')) return
+  if (mf.classList.contains('corrected')) {
+    event.preventDefault()
+    return
+  }
 
   if (isSafariLikeBrowser()) {
     if (mf.isSelectionEditable) return
@@ -135,6 +142,13 @@ function handleFillInTheBlanksKeydown(event) {
   if (mf.isSelectionEditable) return
   event.preventDefault()
   selectFillInTheBlanksPrompt(mf, 'forward')
+}
+
+function handleCorrectedFillInTheBlanksPointer(event) {
+  const mf = event.currentTarget
+  if (!mf.classList.contains('corrected')) return
+  event.preventDefault()
+  mf.blur?.()
 }
 
 async function load(name) {
@@ -288,6 +302,16 @@ export async function loadMathLive(divExercice) {
         mf.addEventListener('focusout', handleFocusOutMathField)
         if (mf.classList.contains('fillInTheBlanks')) {
           mf.addEventListener(
+            'pointerdown',
+            handleCorrectedFillInTheBlanksPointer,
+            true,
+          )
+          mf.addEventListener(
+            'mousedown',
+            handleCorrectedFillInTheBlanksPointer,
+            true,
+          )
+          mf.addEventListener(
             'beforeinput',
             handleFillInTheBlanksBeforeInput,
             true,
@@ -339,6 +363,13 @@ export async function loadMathLive(divExercice) {
 
 function handleFocusMathField(event) {
   const mf = event.target
+  if (
+    mf.classList.contains('fillInTheBlanks') &&
+    mf.classList.contains('corrected')
+  ) {
+    mf.blur?.()
+    return
+  }
   const isFillInTheBlanks =
     mf.classList.contains('fillInTheBlanks') ||
     mf.classList.contains('metaInteractif2d')

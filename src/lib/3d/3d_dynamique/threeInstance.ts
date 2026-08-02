@@ -2,13 +2,11 @@ import type * as THREEType from 'three'
 import type { Object3D } from 'three'
 import * as THREE from 'three'
 
-import {
-  BufferGeometryUtils,
-  LineMaterial,
-  LineSegmentsGeometry,
-  OrbitControls,
-  Wireframe,
-} from 'three/examples/jsm/Addons.js'
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js'
+import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry.js'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { Wireframe } from 'three/examples/jsm/lines/Wireframe.js'
 export { Text } from 'troika-three-text'
 
 const BoxGeometry = THREE.BoxGeometry

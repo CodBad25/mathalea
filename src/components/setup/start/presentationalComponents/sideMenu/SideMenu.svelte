@@ -20,18 +20,22 @@
 
   import { get } from 'svelte/store'
   import { sortArrayOfResourcesBasedOnYearAndMonth } from '../../../../../lib/components/sorting'
+  import { banquesExternes } from '../../../../../lib/stores/banquesExternesStore'
   import {
     buildResourcesSet,
     deepReferentielInMenuCopy,
     getReferentiels,
   } from '../../../../../lib/stores/referentielsStore'
   import type { Language } from '../../../../../lib/types/languages'
+  import BanquesExternesDialog from './BanquesExternesDialog.svelte'
 
   export let excludedReferentiels: ActivationName[] = []
   export let hideThirdAppsButton = false
   export let addExercise: (uuid: string, id: string) => void
 
   let searchBlock: { triggerUpdateFromSearchBlock: () => void } | undefined
+
+  let isBanquesDialogDisplayed = false
 
   let referentielsForMenu: ReferentielInMenu[] = []
 
@@ -58,11 +62,29 @@
     },
   )
 
+  /**
+   * Les banques externes sont chargées de façon asynchrone au démarrage, et
+   * peuvent être ajoutées ou retirées en cours de session : à chaque
+   * changement, « Ressources partenaires » doit être reconstruit.
+   */
+  let premierAppelBanques = true
+  const unsubscribeToBanquesExternes = banquesExternes.subscribe(() => {
+    // `subscribe` déclenche immédiatement : le premier appel n'apporte rien de
+    // neuf, les référentiels viennent tout juste d'être construits
+    if (premierAppelBanques) {
+      premierAppelBanques = false
+      return
+    }
+    referentiels = getReferentiels(localeValue)
+    updateRepositories()
+  })
+
   onMount(() => {
     updateRepositories()
   })
   onDestroy(() => {
     unsubscribeToReferentielLocale()
+    unsubscribeToBanquesExternes()
   })
 
   function updateRepositories() {
@@ -137,11 +159,29 @@
         nestedLevelCount={1}
         class="w-full px-4 text-[10px]"
         pathToThisNode={[]}
-      />
+      >
+        <!-- En fin de « Ressources partenaires » : ajout d'une banque perso -->
+        <svelte:fragment slot="trailing">
+          {#if item.name === 'partenaires'}
+            <li>
+              <button
+                type="button"
+                class="w-full flex flex-row items-center gap-1 text-start font-bold text-base py-2 text-coopmaths-action dark:text-coopmathsdark-action hover:bg-coopmaths-canvas-darkest dark:hover:bg-coopmathsdark-canvas-darkest"
+                style="padding-left: 0.8rem"
+                on:click={() => (isBanquesDialogDisplayed = true)}
+              >
+                <i class="bx bx-plus-circle text-lg"></i>
+                Ajouter une banque d'exercices
+              </button>
+            </li>
+          {/if}
+        </svelte:fragment>
+      </ReferentielNode>
     {/each}
     <!-- Bouton spécial pour les applications tierces -->
     {#if !hideThirdAppsButton}
       <SideMenuApps class="text-start p-6 w-full" />
     {/if}
+    <BanquesExternesDialog bind:isDisplayed={isBanquesDialogDisplayed} />
   </div>
 </aside>

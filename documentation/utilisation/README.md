@@ -2,9 +2,11 @@
 
 Cette section regroupe la documentation actuelle destinée aux utilisateurs et utilisatrices de MathALÉA.
 
-| Sujet | Rôle | Lien |
-| --- | --- | --- |
-| Intégrations | Moodle/ELEA, Anki, Capytale et site personnel | [integrations/README.md](integrations/README.md) |
+| Sujet                            | Rôle                                                          | Lien                                                   |
+| -------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------ |
+| Intégrations                     | Moodle/ELEA, Anki, Capytale et site personnel                 | [integrations/README.md](integrations/README.md)       |
+| Banques externes — prise en main | Guide pas à pas pour utiliser ou créer une banque d'exercices | [aide-banques-exercices.md](aide-banques-exercices.md) |
+| Banques externes — référence     | Format complet du manifest et détails techniques              | [banques-externes.md](banques-externes.md)             |
 
 ## Partager une sélection
 

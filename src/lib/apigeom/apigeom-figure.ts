@@ -147,7 +147,6 @@ export class ApigeomFigureElement extends HTMLElement {
   private onReloadBound = this.onReload.bind(this)
 
   private onZoom = (event: Event) => {
-    console.log('zoomChanged event received')
     if (!this.figure?.options) return
     const zoom = Number((event as CustomEvent).detail.zoom)
     if (zoom !== this.oldZoom) {
@@ -176,12 +175,9 @@ export class ApigeomFigureElement extends HTMLElement {
     }
   }
 
-  private boundApplyZoom = this.applyZoom.bind(this)
-
   private bindEvents() {
     document.addEventListener(this.idApigeom, this.onReloadBound)
     document.addEventListener('zoomChanged', this.onZoomBound)
-    document.addEventListener('exercicesAffiches', this.boundApplyZoom)
   }
 
   /* ==============================
@@ -194,7 +190,6 @@ export class ApigeomFigureElement extends HTMLElement {
 
     document.removeEventListener(this.idApigeom, this.onReloadBound)
     document.removeEventListener('zoomChanged', this.onZoomBound)
-    document.removeEventListener('exercicesAffiches', this.boundApplyZoom)
 
     this.figure?.destroy?.()
     this.figure = undefined

@@ -136,6 +136,32 @@ export interface StaticItemInreferentiel extends BaseItemInReferentiel {
 }
 
 /**
+ * Description d'une ressource provenant d'une banque externe ajoutée par
+ * l'utilisateur (voir `lib/types/banquesExternes.ts`). Contrairement aux autres
+ * ressources statiques, ses fichiers ne sont pas à un emplacement déductible de
+ * l'uuid : les URLs déjà résolues (`blob:` pour une banque zip, API GitLab pour
+ * un dépôt de forge) sont portées par l'entrée elle-même.
+ * @interface BanqueExterneItemInReferentiel
+ * @extends StaticItemInreferentiel
+ * @property {string} banque : id de la banque d'origine
+ * @property {string} banqueTitre : titre de la banque d'origine, pour l'attribution affichée
+ * @property {string} banqueAuteur : auteur déclaré par le manifest de la banque (optionnel)
+ * @property {number} etoiles : niveau de difficulté de 0 à 5 (optionnel)
+ * @property {string} typUrl : URL de la source Typst de l'énoncé (optionnel)
+ * @property {string} typCorUrl : URL de la source Typst de la correction (optionnel)
+ */
+export interface BanqueExterneItemInReferentiel extends StaticItemInreferentiel {
+  banque: string
+  banqueTitre: string
+  banqueAuteur?: string
+  titre: string
+  etoiles?: number
+  typUrl?: string
+  typCorUrl?: string
+  typeExercice: 'static'
+}
+
+/**
  * Description d'une ressource venant un examen dans un référentiel
  * @interface ExamItemInReferentiel
  * @extends StaticItemInreferentiel
@@ -196,20 +222,20 @@ export interface ToolItemInReferentiel extends BaseItemInReferentiel {
 export type JSONReferentielEnding =
   // | BaseItemInReferentiel  <-- pas de terminaison aussi basique
   | StaticItemInreferentiel
+  | BanqueExterneItemInReferentiel
   | ExamItemInReferentiel
   | ExerciceItemInReferentiel
   | ToolItemInReferentiel
 // Type pour un référentiel complet
-export interface JSONReferentielObject
-  extends Record<
-    string,
-    | JSONReferentielEnding
-    | JSONReferentielObject
-    | string
-    | string[]
-    | boolean
-    | Features
-  > {}
+export interface JSONReferentielObject extends Record<
+  string,
+  | JSONReferentielEnding
+  | JSONReferentielObject
+  | string
+  | string[]
+  | boolean
+  | Features
+> {}
 // Type correspondant à une branche déstructurée : chemin + terminaison (données de la ressource)
 export type ResourceAndItsPath = {
   resource: JSONReferentielEnding
@@ -323,6 +349,20 @@ export const isStaticType = (obj: any): obj is StaticItemInreferentiel =>
   obj.png !== undefined &&
   !isNonEmptyArrayOfStrings(obj.png)
 
+/**
+ * Détecte une terminaison provenant d'une banque externe ajoutée par
+ * l'utilisateur : elle porte la clé `banque` (id de sa banque d'origine).
+ * @param obj terminaison à tester
+ * @returns `true` si la ressource vient d'une banque externe
+ */
+export const isBanqueExterneType = (
+  obj: any,
+): obj is BanqueExterneItemInReferentiel =>
+  obj !== null &&
+  typeof obj !== 'undefined' &&
+  Object.keys(obj).includes('banque') &&
+  typeof obj.banque === 'string'
+
 export const isCrpeType = (obj: any): obj is crpeItemInreferentiel =>
   obj !== null &&
   typeof obj !== 'undefined' &&
@@ -349,14 +389,16 @@ export const isStaticWithoutPngUrl = (obj: any): obj is ExamItemInReferentiel =>
 /**
  * Détecte si une terminaison de référentiel déclare la présence d'un fichier
  * source Typst (`typ/<uuid>.typ`) à utiliser à la place du png pour la vue Typst.
+ * Une ressource de banque externe porte à la place l'URL déjà résolue de sa
+ * source Typst (`typUrl`), les fichiers n'étant pas rangés selon l'uuid.
  * @param obj {JSONReferentielEnding} terminaison à tester
- * @returns `true` si la clé `typ` est présente et vaut `true`
+ * @returns `true` si la clé `typ` vaut `true` ou si `typUrl` est renseignée
  */
 export const hasTypSource = (obj: any): boolean =>
   obj !== null &&
   typeof obj !== 'undefined' &&
-  Object.keys(obj).includes('typ') &&
-  obj.typ === true
+  ((Object.keys(obj).includes('typ') && obj.typ === true) ||
+    (Object.keys(obj).includes('typUrl') && typeof obj.typUrl === 'string'))
 
 /**
  * Détecte si la terminaison d'un référentiel est un exercice de géométrie dynamique ou pas.

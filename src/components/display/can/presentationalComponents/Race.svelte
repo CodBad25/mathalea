@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { afterUpdate } from 'svelte'
   import { canOptions } from '../../../../lib/stores/canStore'
   import type { CanState } from '../../../../lib/types/can'
   import Keyboard from '../../../keyboard/Keyboard.svelte'
@@ -17,13 +16,6 @@
   export let consignes: string[]
   const numberOfQuestions: number = questions.length
   let timerComponent: Timer
-
-  afterUpdate(() => {
-    const exercicesAffiches = new window.Event('exercicesAffiches', {
-      bubbles: true,
-    })
-    document.dispatchEvent(exercicesAffiches)
-  })
 
   function endTimer(e: CustomEvent) {
     const du = parseInt(e.detail.duration)

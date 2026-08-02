@@ -15,6 +15,7 @@ import {
   getRecentExercices,
 } from '../components/refUtils'
 import { referentielMathadata } from '../components/mathadataReferentiel'
+import { referentielBanquesExternes } from './banquesExternesStore'
 import {
   sortArrayOfResourcesBasedOnProp,
   triAnnales,
@@ -132,6 +133,9 @@ function createOriginalReferentiels(lang: Language): ReferentielInMenu[] {
               ...(Object.keys(egaliteFGReferentiel).length > 0
                 ? { 'Égalité filles-garçons': egaliteFGReferentiel }
                 : {}),
+              // banques ajoutées par l'utilisateur : chaque banque forme un
+              // nœud de premier niveau portant le titre de son manifest
+              ...referentielBanquesExternes(),
             },
           },
         ]

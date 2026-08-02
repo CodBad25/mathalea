@@ -56,37 +56,25 @@ function addUniqueMessage(messages: string[], message: string | undefined) {
   if (!messages.includes(message)) messages.push(message)
 }
 
-async function waitForExercicesAffiches(page: Page, buttonZoom: Locator) {
-  const waitForEvent = page.evaluate(() => {
-    return new Promise<void>((resolve) => {
-      const listener = () => {
-        document.removeEventListener('exercicesAffiches', listener)
-        resolve()
-      }
-      document.addEventListener('exercicesAffiches', listener)
-    })
-  })
+async function clickZoomAndWaitForExercise(page: Page, buttonZoom: Locator) {
+  const previousZoom = new URL(page.url()).searchParams.get('z') ?? ''
   await buttonZoom.click()
-  // Attendre que l'événement exercicesAffiches soit déclenché
-  const eventDetected = await Promise.race([
-    waitForEvent,
-    new Promise((resolve, reject) =>
-      setTimeout(
-        () =>
-          reject(
-            new Error(
-              "Timeout: L'événement exercicesAffiches n'a pas été détecté",
-            ),
-          ),
-        5000,
-      ),
-    ),
-  ])
-  if (eventDetected instanceof Error) {
-    logError(eventDetected.message)
-  } else {
-    logIfDebug('Événement exercicesAffiches détecté')
-  }
+  await page.waitForFunction(
+    (zoom) => new URL(window.location.href).searchParams.get('z') !== zoom,
+    previousZoom,
+    { timeout: 30_000 },
+  )
+  await page.locator('div.mb-5>ul>div#consigne0-0').waitFor({
+    state: 'visible',
+    timeout: 60_000,
+  })
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+      }),
+  )
+  logIfDebug('Exercice affiché après zoom')
 }
 
 async function action(page: Page, description: string) {
@@ -107,10 +95,10 @@ async function action(page: Page, description: string) {
   logIfVerbose('Zoom')
   if (z < 1.4) {
     // await buttonZoom.highlight()
-    await waitForExercicesAffiches(page, buttonZoom)
+    await clickZoomAndWaitForExercise(page, buttonZoom)
   } else {
     // await buttonZoomMoins.highlight()
-    await waitForExercicesAffiches(page, buttonZoomMoins)
+    await clickZoomAndWaitForExercise(page, buttonZoomMoins)
   }
   logIfVerbose('Fin zoom')
   // Active le mode interactif

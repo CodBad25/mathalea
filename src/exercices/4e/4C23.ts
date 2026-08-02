@@ -1,4 +1,4 @@
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -31,7 +31,7 @@ export const dateDePublication = '15/09/2021'
 export const dateDeModifImportante = '06/10/2024'
 
 /**
- * Effectuer somme, différence ou produit de fractions
+ * Effectuer somme, différence, produit, ou quotient de fractions
  * @author Mireille Gain
  */
 

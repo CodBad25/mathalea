@@ -1179,7 +1179,7 @@ function outilsRequisParInstruction(instr: InstructionIep): OutilIep[] {
     case 'parallele':
     case 'paralleleAObjet':
     case 'paralleleObjet':
-      return ['regle', 'equerre', 'crayon']
+      return ['regle', 'equerre', 'crayon', 'requerre']
     case 'demiDroiteAngle':
       return ['rapporteur', 'regle', 'crayon']
     case 'montrerOutil':

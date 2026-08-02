@@ -1,6 +1,7 @@
 import Figure from 'apigeom'
 import { get } from 'svelte/store'
 import { canOptions } from '../../src/lib/stores/canStore'
+import { DomReadyActionElement } from './customElements/DomReadyAction'
 import type { IExercice } from '../lib/types'
 import { context } from '../modules/context'
 import { exercicesParams } from './stores/generalStore'
@@ -71,6 +72,7 @@ export default function figureApigeom({
   if (!exercice.figuresApiGeom.includes(figure)) {
     exercice.figuresApiGeom.push(figure)
   }
+  const setupAction = `figureApigeom:setup:${idApigeom}`
 
   // Pour revoir la copie de l'élève dans Capytale
   // Attention, la clé de answers[] doit contenir apigeom, c'est pourquoi l'id est généré par cette fonction
@@ -199,7 +201,16 @@ export default function figureApigeom({
       })
     }
   }
-  document.addEventListener('exercicesAffiches', updateAffichage)
+  DomReadyActionElement.registerCallback(setupAction, () => {
+    updateAffichage()
+    return () => {
+      if (retryTimeout !== null) {
+        window.clearTimeout(retryTimeout)
+        retryTimeout = null
+      }
+      DomReadyActionElement.unregisterCallback(setupAction)
+    }
+  })
 
   // --------------------------
   // CLEANUP
@@ -209,9 +220,13 @@ export default function figureApigeom({
   const destroy = () => {
     if (destroyed) return
     destroyed = true
+    if (retryTimeout !== null) {
+      window.clearTimeout(retryTimeout)
+      retryTimeout = null
+    }
+    DomReadyActionElement.unregisterCallback(setupAction)
     document.removeEventListener(idApigeom, idApigeomFunct)
     document.removeEventListener('zoomChanged', updateZoom)
-    document.removeEventListener('exercicesAffiches', updateAffichage)
   }
 
   // On surcharge la méthode clearHtml de la figure pour faire le cleanup des listeners
@@ -226,7 +241,17 @@ export default function figureApigeom({
   }
 
   if (hasFeedback) {
-    return `<div class="m-6 leading-none" id="${idApigeom}"></div><span id="resultatCheckEx${exercice.numeroExercice}Q${i}"></span><div class="ml-2 py-2 text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${exercice.numeroExercice}Q${i}"></div>`
+    return `<div class="m-6 leading-none" id="${idApigeom}"></div>${DomReadyActionElement.create(
+      {
+        id: `${idApigeom}-setup`,
+        action: setupAction,
+      },
+    )}<span id="resultatCheckEx${exercice.numeroExercice}Q${i}"></span><div class="ml-2 py-2 text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${exercice.numeroExercice}Q${i}"></div>`
   }
-  return `<div class="m-6 leading-none" id="${idApigeom}"></div>`
+  return `<div class="m-6 leading-none" id="${idApigeom}"></div>${DomReadyActionElement.create(
+    {
+      id: `${idApigeom}-setup`,
+      action: setupAction,
+    },
+  )}`
 }

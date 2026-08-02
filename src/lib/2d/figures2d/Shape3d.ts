@@ -309,10 +309,6 @@ if (
       if (this.svg) this.svg.style.cursor = 'grab'
     }
 
-    private readonly setupAction = () => {
-      this.setup()
-    }
-
     connectedCallback() {
       this.motifId = this.getAttribute('motif-id') ?? ''
       this.config = cubeIsoInteractionConfigs.get(this.motifId)
@@ -321,8 +317,6 @@ if (
       window.addEventListener('pointermove', this.pointerMoveAction)
       window.addEventListener('pointerup', this.pointerUpAction)
       window.addEventListener('pointercancel', this.pointerUpAction)
-      document.addEventListener('correctionsAffichees', this.setupAction)
-      document.addEventListener('exercicesAffiches', this.setupAction)
       this.setup()
     }
 
@@ -331,8 +325,6 @@ if (
       window.removeEventListener('pointermove', this.pointerMoveAction)
       window.removeEventListener('pointerup', this.pointerUpAction)
       window.removeEventListener('pointercancel', this.pointerUpAction)
-      document.removeEventListener('correctionsAffichees', this.setupAction)
-      document.removeEventListener('exercicesAffiches', this.setupAction)
       cubeIsoInteractionConfigs.delete(this.motifId)
     }
 

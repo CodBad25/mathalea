@@ -8,6 +8,7 @@ import { rotation, similitude } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import blocklypyt from '../../lib/blockly/blocklypyt.json'
 import { ensureBlocklyBlocksInitialized } from '../../lib/blockly/blocks'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { combinaisonListesSansChangerOrdre } from '../../lib/outils/arrayOutils'
 import { stringNombre } from '../../lib/outils/texNombre'
@@ -214,10 +215,17 @@ export default class Pythagore2DBlockly extends Exercice {
       }
       cpt++
     }
+    const blocklyReadyAction = `4G20-7:create-blockly:Ex${numeroExercice}`
+    if (context.isHtml && this.listeQuestions.length > 0) {
+      this.listeQuestions[0] += DomReadyActionElement.create({
+        id: `4G20-7-create-blockly-Ex${numeroExercice}`,
+        action: blocklyReadyAction,
+      })
+    }
     listeQuestionsToContenu(this)
 
     ensureBlocklyBlocksInitialized() // blockly initialisation
-    const createAllBlockly = function (this: Pythagore2DBlockly) {
+    const createAllBlockly = () => {
       const nbQ = this.nbQuestions
       const numExercice = numeroExercice
       // console log('nbQ:' + nbQ)
@@ -655,7 +663,10 @@ export default class Pythagore2DBlockly extends Exercice {
         onresize()
       }
     }
-    document.addEventListener('exercicesAffiches', createAllBlockly)
+    DomReadyActionElement.registerCallback(blocklyReadyAction, () => {
+      createAllBlockly()
+      return () => DomReadyActionElement.unregisterCallback(blocklyReadyAction)
+    })
   }
 
   correctionInteractive = (i: number) => {

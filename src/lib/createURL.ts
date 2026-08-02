@@ -1,3 +1,5 @@
+import { clesBanquesPartageables } from './stores/banquesExternesStore'
+import { estUuidBanqueExterne } from './types/banquesExternes'
 import type { InterfaceParams } from './types'
 
 export function createURL(params: InterfaceParams[]) {
@@ -7,6 +9,18 @@ export function createURL(params: InterfaceParams[]) {
       window.location.host +
       window.location.pathname,
   )
+  // Banques externes distantes : le lien doit dire d'où viennent les uuid `bq-`,
+  // sans quoi le destinataire ne pourrait pas afficher ces exercices. Seules
+  // les banques hébergées sur une forge sont référençables (une banque zip
+  // n'existe que sur la machine où elle a été déposée).
+  const uuidsDeBanque = params
+    .map((ex) => ex.uuid)
+    .filter((uuid) => estUuidBanqueExterne(uuid))
+  if (uuidsDeBanque.length > 0) {
+    for (const cle of clesBanquesPartageables(uuidsDeBanque)) {
+      url.searchParams.append('bq', cle)
+    }
+  }
   for (const ex of params) {
     url.searchParams.append('uuid', ex.uuid)
     if (ex.id != null) url.searchParams.append('id', ex.id)

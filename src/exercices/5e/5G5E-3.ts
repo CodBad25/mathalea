@@ -380,11 +380,9 @@ export default class nomExercice extends Exercice {
         '2 : Relative à la base',
       ].join('\n'),
     ]
-    this.besoinFormulaire3CaseACocher = ['Point de concours', false]
 
     this.sup = '0'
     this.sup2 = '0'
-    this.sup3 = false
     this.nbQuestions = 1
   }
 

@@ -20,13 +20,14 @@ function genere(sup: string, nbQuestions = 12) {
 }
 
 // Les valeurs de `sup` suivent l'ordre de déclaration des champs dans
-// `formulaireConversions` : operations * unites (ordre_poids) * decimaux * fractions.
-// Un changement de cet ordre change le format de `sup` — voir la régression testée
-// dans `formulaireComplexe.test.ts` (ne jamais indexer `champs` par position).
+// `formulaireConversions` : operations * unites (ordre_poids) * decimaux *
+// correctionDivision. Un changement de cet ordre change le format de `sup` — voir la
+// régression testée dans `formulaireComplexe.test.ts` (ne jamais indexer `champs` par
+// position).
 
 describe('exercice de conversions paramétrable', () => {
   it('utilise par défaut les longueurs, contenances et masses en multipliant', () => {
-    expect(supParDefaut).toBe('mult*0_0.1-1.1-2.1-3.0-4.0*0*0')
+    expect(supParDefaut).toBe('mult*0_0.1-1.1-2.1-3.0-4.0*0*div')
     const exo = genere(supParDefaut)
     expect(exo.listeQuestions).toHaveLength(12)
     const enonces = exo.listeQuestions.join(' ')
@@ -37,7 +38,7 @@ describe('exercice de conversions paramétrable', () => {
 
   it('ne propose que l’unité cochée', () => {
     // Seules les masses sont actives, avec des divisions.
-    const exo = genere('div*0_0.0-1.0-2.1-3.0-4.0*0*0')
+    const exo = genere('div*0_0.0-1.0-2.1-3.0-4.0*0*div', 12)
     for (const question of exo.listeQuestions) {
       expect(question).toMatch(/\\text\{[dcm]g\}/)
     }
@@ -47,7 +48,7 @@ describe('exercice de conversions paramétrable', () => {
 
   it('regroupe les unités par blocs quand la case d’ordre est cochée', () => {
     // Masses puis longueurs, la masse comptant double : 4 masses puis 2 longueurs.
-    const exo = genere('mult*1_2.2-0.1-1.0-3.0-4.0*0*0', 6)
+    const exo = genere('mult*1_2.2-0.1-1.0-3.0-4.0*0*div', 6)
     const unites = exo.listeQuestions.map(
       (question) => /\\text\{[a-zA-Z]*(g|m)\}/.exec(question)?.[1],
     )
@@ -56,7 +57,7 @@ describe('exercice de conversions paramétrable', () => {
 
   it('répartit équitablement des unités de même poids, dans l’ordre choisi', () => {
     // Cas signalé : 5 questions pour 3 unités de poids 1 → 2 + 2 + 1.
-    const exo = genere('mult*1_0.1-1.1-2.1-3.0-4.0*0*0', 5)
+    const exo = genere('mult*1_0.1-1.1-2.1-3.0-4.0*0*div', 5)
     const unites = exo.listeQuestions.map(
       (question) => /\\text\{[a-zA-Z]*(m|L|g)\}/.exec(question)?.[1],
     )
@@ -65,7 +66,7 @@ describe('exercice de conversions paramétrable', () => {
 
   it('mélange les unités quand la case d’ordre est décochée', () => {
     // Mêmes poids, mais sans ordre imposé : les proportions tiennent, pas la séquence.
-    const exo = genere('mult*0_2.2-0.1-1.0-3.0-4.0*0*0', 6)
+    const exo = genere('mult*0_2.2-0.1-1.0-3.0-4.0*0*div', 6)
     const unites = exo.listeQuestions.map(
       (question) => /\\text\{[a-zA-Z]*(g|m)\}/.exec(question)?.[1],
     )
@@ -74,19 +75,25 @@ describe('exercice de conversions paramétrable', () => {
   })
 
   it('produit des nombres décimaux quand l’option est cochée', () => {
-    const exo = genere('mult*0_0.1-1.0-2.0-3.0-4.0*1*0', 20)
+    const exo = genere('mult*0_0.1-1.0-2.0-3.0-4.0*1*div', 20)
     expect(exo.listeQuestions.join(' ')).toMatch(/\d,\d/)
   })
 
-  it('n’utilise les fractions dans la correction que si l’option est cochée', () => {
-    const sansFractions = genere('div*0_0.1-1.0-2.0-3.0-4.0*0*0', 12)
-    expect(sansFractions.listeCorrections.join(' ')).not.toMatch(/\\dfrac/)
-    const avecFractions = genere('div*0_0.1-1.0-2.0-3.0-4.0*0*1', 12)
+  it('ne propose des fractions dans la correction que si ce mode est choisi', () => {
+    const avecDivisions = genere('div*0_0.1-1.0-2.0-3.0-4.0*0*div', 12)
+    expect(avecDivisions.listeCorrections.join(' ')).not.toMatch(/\\dfrac/)
+    const avecFractions = genere('div*0_0.1-1.0-2.0-3.0-4.0*0*frac', 12)
     expect(avecFractions.listeCorrections.join(' ')).toMatch(/\\dfrac/)
   })
 
+  it('corrige les divisions par une multiplication (0,1 ; 0,01…) quand ce mode est choisi', () => {
+    const exo = genere('div*0_0.1-1.0-2.0-3.0-4.0*0*mult', 12)
+    expect(exo.listeCorrections.join(' ')).toMatch(/\\times0,(1|01|001)/)
+    expect(exo.listeCorrections.join(' ')).not.toMatch(/\\div|\\dfrac/)
+  })
+
   it('gère les unités de stockage informatique', () => {
-    const exo = genere('both*0_0.0-1.0-2.0-3.0-4.1*0*0', 12)
+    const exo = genere('tous*0_0.0-1.0-2.0-3.0-4.1*0*div', 12)
     for (const question of exo.listeQuestions) {
       expect(question).toMatch(/\\text\{(o|ko|Mo|Go|To)\}/)
     }
@@ -94,9 +101,26 @@ describe('exercice de conversions paramétrable', () => {
 
   it('écarte l’euro quand seules les divisions sont demandées', () => {
     // L'euro est la seule unité cochée mais n'a pas de sous-multiple usuel.
-    const exo = genere('div*0_0.0-1.0-2.0-3.1-4.0*0*0', 8)
+    const exo = genere('div*0_0.0-1.0-2.0-3.1-4.0*0*div', 8)
     expect(exo.listeQuestions).toHaveLength(8)
     expect(exo.listeQuestions.join(' ')).not.toMatch(/€/)
+  })
+
+  it('alterne les 4 types de conversions en mode « tous types »', () => {
+    // Beaucoup de questions, uniquement des longueurs, pour observer les 4 types :
+    // vers l'unité de référence (mult/div) et sans l'unité de référence (mult/div).
+    const exo = genere('tous*0_0.1-1.0-2.0-3.0-4.0*0*div', 40)
+    const corrections = exo.listeCorrections.join(' ')
+    expect(corrections).toMatch(/\\times/)
+    expect(corrections).toMatch(/\\div/)
+    // Une conversion « sans l'unité de référence » n'a ni départ ni arrivée en m seul.
+    const sansReference = exo.listeQuestions.some((question) => {
+      const unites = [...question.matchAll(/\\text\{([a-zA-Z]*m)\}/g)].map(
+        (m) => m[1],
+      )
+      return unites.length === 2 && unites[0] !== 'm' && unites[1] !== 'm'
+    })
+    expect(sansReference).toBe(true)
   })
 
   it('reste valide avec un sup vide ou hérité d’une ancienne URL', () => {

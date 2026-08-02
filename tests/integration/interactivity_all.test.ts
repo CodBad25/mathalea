@@ -46,7 +46,6 @@ vi.mock('../../src/lib/3d/3d_dynamique/patrons3d', () => ({
     type: 'group',
     object: { id, faces: Array.isArray(matrice) ? matrice.length : 0 },
   })),
-  onCorrectionsAffichees: vi.fn(),
 }))
 
 beforeAll(() => {

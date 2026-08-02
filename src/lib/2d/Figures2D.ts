@@ -35,6 +35,296 @@ function computeSymmetryMatrix(
 
   return { a, b, c, d, tx, ty }
 }
+
+type ReflectionLoopAnimationConfig = {
+  type: 'loop'
+  id: string
+  axe: Droite
+  pixelsParCm: number
+  onDirectionChange?: (direction: number) => void
+}
+
+type AutoReflectionAnimationConfig = {
+  type: 'auto'
+  id: string
+  cx: number
+  cy: number
+  pixelsParCm: number
+  symmetryAngles: number[]
+}
+
+type ReflectionAnimationConfig =
+  ReflectionLoopAnimationConfig | AutoReflectionAnimationConfig
+
+const reflectionAnimationElementTag = 'reflection-animation'
+const reflectionAnimationConfigs = new Map<string, ReflectionAnimationConfig>()
+
+function registerReflectionAnimation(config: ReflectionAnimationConfig): void {
+  reflectionAnimationConfigs.set(config.id, config)
+}
+
+if (
+  typeof customElements !== 'undefined' &&
+  customElements.get(reflectionAnimationElementTag) === undefined
+) {
+  class ReflectionAnimationElement extends HTMLElement {
+    private animationId = ''
+    private config: ReflectionAnimationConfig | undefined
+    private frameId: number | null = null
+    private timeoutId: number | null = null
+    private clipPath: SVGClipPathElement | null = null
+
+    connectedCallback() {
+      this.animationId = this.getAttribute('animation-id') ?? ''
+      this.config = reflectionAnimationConfigs.get(this.animationId)
+      if (!this.config) return
+      this.setup()
+    }
+
+    disconnectedCallback() {
+      this.cancelLoop()
+      this.clipPath?.remove()
+      this.clipPath = null
+      reflectionAnimationConfigs.delete(this.animationId)
+    }
+
+    private setup(): void {
+      if (!this.config) return
+      const figure = document.getElementById(
+        this.config.id,
+      ) as SVGElement | null
+      if (!figure) return
+      if (this.config.type === 'loop') {
+        this.setupLoopReflection(figure, this.config)
+      } else {
+        this.setupAutoReflection(figure, this.config)
+      }
+    }
+
+    private setupLoopReflection(
+      figure: SVGElement,
+      config: ReflectionLoopAnimationConfig,
+    ): void {
+      const cx = (config.axe.x1 + config.axe.x2) / 2
+      const cy = (config.axe.y1 + config.axe.y2) / 2
+      this.createClipPath({
+        figure,
+        id: config.id,
+        x: cx * config.pixelsParCm - 250,
+        y: cy * config.pixelsParCm - 250,
+        width: 500,
+        height: 500,
+      })
+
+      let progress = 0
+      let direction = 1
+      const angleAxe =
+        (Math.atan2(
+          config.axe.y1 - config.axe.y2,
+          config.axe.x2 - config.axe.x1,
+        ) *
+          180) /
+        Math.PI
+
+      const animateLoop = () => {
+        progress += 0.004 * direction
+        if (progress > 1) {
+          progress = 1
+          direction = -1
+          config.onDirectionChange?.(direction)
+          this.timeoutId = window.setTimeout(() => {
+            this.frameId = window.requestAnimationFrame(animateLoop)
+          }, 2000)
+          return
+        }
+        if (progress < 0) {
+          progress = 0
+          direction = 1
+          config.onDirectionChange?.(direction)
+          this.timeoutId = window.setTimeout(() => {
+            this.frameId = window.requestAnimationFrame(animateLoop)
+          }, 200)
+          return
+        }
+        this.applyReflectionFrame(
+          figure,
+          progress,
+          angleAxe,
+          cx * config.pixelsParCm,
+          cy * config.pixelsParCm,
+          5,
+        )
+        this.frameId = window.requestAnimationFrame(animateLoop)
+      }
+
+      animateLoop()
+    }
+
+    private setupAutoReflection(
+      figure: SVGElement,
+      config: AutoReflectionAnimationConfig,
+    ): void {
+      this.createClipPath({
+        figure,
+        id: config.id,
+        x: config.cx * config.pixelsParCm,
+        y: config.cy * config.pixelsParCm - 250,
+        width: 500,
+        height: 500,
+      })
+
+      if (config.symmetryAngles.length === 0) {
+        figure.setAttribute('transform', 'scale(1,1)')
+        return
+      }
+
+      let currentSymmetry = 0
+
+      const animateSymmetry = (angleDeg: number, onComplete: () => void) => {
+        const rect = document.getElementById(`clipingRect_${config.id}`)
+        if (!rect) return
+        rect.setAttribute('x', String(config.cx * config.pixelsParCm))
+        rect.setAttribute('y', String(config.cy * config.pixelsParCm - 250))
+        rect.setAttribute('width', '500')
+        rect.setAttribute('height', '500')
+        rect.setAttribute(
+          'transform',
+          `rotate(${angleDeg + 90}, ${config.cx * config.pixelsParCm}, ${
+            config.cy * config.pixelsParCm
+          })`,
+        )
+
+        let progress = 0
+        const step = () => {
+          progress += 0.004
+          if (progress > 1) progress = 1
+          this.applyReflectionFrame(
+            figure,
+            progress,
+            angleDeg,
+            config.cx * config.pixelsParCm,
+            config.cy * config.pixelsParCm,
+            2,
+          )
+
+          if (progress < 1) {
+            this.frameId = window.requestAnimationFrame(step)
+          } else {
+            onComplete()
+          }
+        }
+
+        this.frameId = window.requestAnimationFrame(step)
+      }
+
+      const next = () => {
+        const angle = config.symmetryAngles[currentSymmetry]
+        animateSymmetry(angle, () => {
+          currentSymmetry = (currentSymmetry + 1) % config.symmetryAngles.length
+          this.timeoutId = window.setTimeout(next, 500)
+        })
+      }
+
+      next()
+    }
+
+    private createClipPath({
+      figure,
+      id,
+      x,
+      y,
+      width,
+      height,
+    }: {
+      figure: SVGElement
+      id: string
+      x: number
+      y: number
+      width: number
+      height: number
+    }): void {
+      this.clipPath?.remove()
+      document.getElementById(`clip-${id}`)?.remove()
+      const clipPath = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'clipPath',
+      )
+      const clipId = `clip-${id}`
+      clipPath.setAttribute('id', clipId)
+      const rect = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'rect',
+      )
+      rect.setAttribute('id', `clipingRect_${id}`)
+      rect.setAttribute('x', String(x))
+      rect.setAttribute('y', String(y))
+      rect.setAttribute('width', String(width))
+      rect.setAttribute('height', String(height))
+      clipPath.appendChild(rect)
+      figure.appendChild(clipPath)
+      figure.setAttribute('clip-path', `url(#${clipId})`)
+      this.clipPath = clipPath
+    }
+
+    private applyReflectionFrame(
+      figure: SVGElement,
+      progress: number,
+      angleDeg: number,
+      cx: number,
+      cy: number,
+      shadowBlur: number,
+    ): void {
+      const shadowOffsetX =
+        (1 - Math.abs(Math.cos(progress * Math.PI))) *
+        5 *
+        Math.cos((angleDeg * Math.PI) / 180)
+      const shadowOffsetY =
+        (1 - Math.abs(Math.cos(progress * Math.PI))) *
+        5 *
+        Math.sin((angleDeg * Math.PI) / 180)
+      const shadowStyle = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px ${shadowBlur}px rgb(80, 80, 80))`
+      figure.setAttribute('style', `filter: ${shadowStyle}`)
+
+      const { a, b, c, d, tx, ty } = computeSymmetryMatrix(
+        progress,
+        angleDeg,
+        cx,
+        cy,
+      )
+      figure.setAttribute(
+        'transform',
+        `matrix(${a} ${b} ${c} ${d} ${tx} ${ty})`,
+      )
+    }
+
+    private cancelLoop(): void {
+      if (this.frameId != null) {
+        window.cancelAnimationFrame(this.frameId)
+        this.frameId = null
+      }
+      if (this.timeoutId != null) {
+        window.clearTimeout(this.timeoutId)
+        this.timeoutId = null
+      }
+    }
+  }
+
+  customElements.define(
+    reflectionAnimationElementTag,
+    ReflectionAnimationElement,
+  )
+}
+
+export function reflectionAnimationMarkup(animationIds: string[]): string {
+  if (!context.isHtml || animationIds.length === 0) return ''
+  return [...new Set(animationIds)]
+    .filter((id) => reflectionAnimationConfigs.has(id))
+    .map(
+      (id) =>
+        `<${reflectionAnimationElementTag} animation-id="${id}"></${reflectionAnimationElementTag}>`,
+    )
+    .join('\n')
+}
 function rotatedBoundingBoxWithCenter(
   xmin: number,
   ymin: number,
@@ -759,86 +1049,13 @@ export class Figure2D extends Shape2D {
     const ppcm = this.pixelsParCm
 
     copieAnimee.name = id
-    document.addEventListener('exercicesAffiches', () => {
-      const figure = document.getElementById(id)
-      if (!figure) return
-
-      const cx = (axe.x1 + axe.x2) / 2
-      const cy = (axe.y1 + axe.y2) / 2
-
-      const clipPath = document.createElementNS(
-        'http://www.w3.org/2000/svg',
-        'clipPath',
-      )
-      const clipId = 'clip-' + id
-      clipPath.setAttribute('id', clipId)
-      const rect = document.createElementNS(
-        'http://www.w3.org/2000/svg',
-        'rect',
-      )
-      rect.setAttribute('id', `clipingRect_${id}`)
-      const largeur = 500
-      const hauteur = 500
-      rect.setAttribute('x', String(cx * ppcm - largeur / 2))
-      rect.setAttribute('y', String(cy * ppcm - hauteur / 2))
-      rect.setAttribute('width', String(largeur))
-      rect.setAttribute('height', String(hauteur))
-      clipPath.appendChild(rect)
-      figure.appendChild(clipPath)
-      figure.setAttribute('clip-path', `url(#${clipId})`)
-
-      let progress = 0
-      let direction = 1
-
-      const angleAxe =
-        (Math.atan2(axe.y1 - axe.y2, axe.x2 - axe.x1) * 180) / Math.PI
-
-      function animateLoop() {
-        if (figure == null) return
-        progress += 0.004 * direction
-        if (progress > 1) {
-          progress = 1
-          direction = -1
-          if (onDirectionChange) onDirectionChange(direction)
-          setTimeout(() => {
-            requestAnimationFrame(animateLoop)
-          }, 2000)
-          return
-        } else if (progress < 0) {
-          progress = 0
-          direction = 1
-          if (onDirectionChange) onDirectionChange(direction)
-          setTimeout(() => {
-            requestAnimationFrame(animateLoop)
-          }, 200)
-          return
-        }
-        const shadowOffsetX =
-          (1 - Math.abs(Math.cos(progress * Math.PI))) *
-          5 *
-          Math.cos((angleAxe * Math.PI) / 180)
-        const shadowOffsetY =
-          (1 - Math.abs(Math.cos(progress * Math.PI))) *
-          5 *
-          Math.sin((angleAxe * Math.PI) / 180)
-        const shadowStyle = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 5px rgb(80, 80, 80))`
-        figure.setAttribute('style', `filter: ${shadowStyle}`)
-
-        const { a, b, c, d, tx, ty } = computeSymmetryMatrix(
-          progress,
-          angleAxe,
-          cx * ppcm,
-          cy * ppcm,
-        )
-        figure.setAttribute(
-          'transform',
-          `matrix(${a} ${b} ${c} ${d} ${tx} ${ty})`,
-        )
-
-        requestAnimationFrame(animateLoop)
-      }
-
-      animateLoop()
+    copieAnimee.reflectionAnimationId = id
+    registerReflectionAnimation({
+      type: 'loop',
+      id,
+      axe,
+      pixelsParCm: ppcm,
+      onDirectionChange,
     })
     return copieAnimee
   }
@@ -867,113 +1084,14 @@ export class Figure2D extends Shape2D {
     const ppcm = this.pixelsParCm
 
     copieAnimee.name = id
-    document.addEventListener('exercicesAffiches', () => {
-      // Création du clipPath
-
-      const figure = document.getElementById(id)
-      const clipPath = document.createElementNS(
-        'http://www.w3.org/2000/svg',
-        'clipPath',
-      )
-      const clipId = 'clip-' + id
-      clipPath.setAttribute('id', clipId)
-      const rect = document.createElementNS(
-        'http://www.w3.org/2000/svg',
-        'rect',
-      )
-      rect.setAttribute('id', `clipingRect_${id}`)
-      const largeur = 500 // Suffisamment grand pour couvrir la figure
-      const hauteur = 500
-      rect.setAttribute('x', String(cx * ppcm)) // String(cx - largeur / 2))
-      rect.setAttribute('y', String(cy * ppcm - hauteur / 2))
-      rect.setAttribute('width', String(largeur))
-      rect.setAttribute('height', String(hauteur))
-      clipPath.appendChild(rect)
-      figure?.appendChild(clipPath)
-      figure?.setAttribute('clip-path', `url(#${clipId})`)
-
-      // Clone the figure content and append it to the shadow group
-
-      let progress = 0
-      let currentSymmetry = 0
-      let animating = false
-
-      function animateSymmetry(angleDeg: number, onComplete: () => void) {
-        // Création du rectangle bord gauche centré en (cx, cy) avec largeur et hauteur suffisantes
-        const rect = document.getElementById(`clipingRect_${id}`)
-        if (!rect) return
-        const largeur = 500 // Suffisamment grand pour couvrir la figure
-        const hauteur = 500
-        rect.setAttribute('x', String(cx * ppcm))
-        rect.setAttribute('y', String(cy * ppcm - hauteur / 2))
-        rect.setAttribute('width', String(largeur))
-        rect.setAttribute('height', String(hauteur))
-
-        // Rotation du rectangle autour de (cx, cy) pour orienter la coupe
-        rect.setAttribute(
-          'transform',
-          `rotate(${angleDeg + 90}, ${cx * ppcm}, ${cy * ppcm})`,
-        )
-
-        // Application du clipPath à la copie
-        progress = 0
-
-        function step() {
-          progress += 0.004
-          if (progress > 1) progress = 1
-          const shadowOffsetX =
-            (1 - Math.abs(Math.cos(progress * Math.PI))) *
-            5 *
-            Math.cos((angleDeg * Math.PI) / 180)
-          const shadowOffsetY =
-            (1 - Math.abs(Math.cos(progress * Math.PI))) *
-            5 *
-            Math.sin((angleDeg * Math.PI) / 180)
-          const shadowStyle = `drop-shadow(${shadowOffsetX}px ${shadowOffsetY}px 2px rgb(80, 80, 80))`
-          const rect = document.getElementById(`${id}`)
-          rect?.setAttribute('style', `filter: ${shadowStyle}`)
-
-          const { a, b, c, d, tx, ty } = computeSymmetryMatrix(
-            progress,
-            angleDeg,
-            cx * ppcm,
-            cy * ppcm,
-          )
-          figure?.setAttribute(
-            'transform',
-            `matrix(${a} ${b} ${c} ${d} ${tx} ${ty})`,
-          )
-
-          if (progress < 1) {
-            requestAnimationFrame(step)
-          } else {
-            onComplete()
-          }
-        }
-
-        requestAnimationFrame(step)
-      }
-
-      function loopSymetries(symetries: number[]) {
-        if (animating) return
-        animating = true
-
-        function next() {
-          const angle = symetries[currentSymmetry]
-          animateSymmetry(angle, () => {
-            currentSymmetry = (currentSymmetry + 1) % symetries.length
-            setTimeout(next, 500) // petite pause entre chaque symétrie
-          })
-        }
-        next()
-      }
-
-      const symetries = copieAnimee.axesAngles
-      if (symetries.length === 0) {
-        figure?.setAttribute('transform', 'scale(1,1)')
-      } else {
-        loopSymetries(symetries)
-      }
+    copieAnimee.reflectionAnimationId = id
+    registerReflectionAnimation({
+      type: 'auto',
+      id,
+      cx,
+      cy,
+      pixelsParCm: ppcm,
+      symmetryAngles: copieAnimee.axesAngles,
     })
     return copieAnimee
   }

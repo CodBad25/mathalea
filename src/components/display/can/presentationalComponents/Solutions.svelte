@@ -59,10 +59,6 @@
       const content = answersContents[i] as HTMLDivElement
       mathaleaRenderDiv(content)
     }
-    const exercicesAffiches = new window.Event('exercicesAffiches', {
-      bubbles: true,
-    })
-    document.dispatchEvent(exercicesAffiches)
   })
 
   // La correction de la question i est masquée si elle est juste et que le
@@ -73,7 +69,9 @@
   let correctionHidden: boolean[] = []
   $: correctionHidden = questions.map(
     (_question, i) =>
-      !solutionDisplayed[i] && Boolean(resultsByQuestion[i]) && displayCorrection,
+      !solutionDisplayed[i] &&
+      Boolean(resultsByQuestion[i]) &&
+      displayCorrection,
   )
 </script>
 

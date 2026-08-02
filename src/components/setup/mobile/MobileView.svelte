@@ -4,6 +4,7 @@
   import { mobileMenuSections, nodeLabel } from '../../../lib/components/mobileMenu'
   import { mathaleaGenerateSeed } from '../../../lib/mathalea'
   import { scrollToLastExercise } from '../../../lib/scrollToLastExercise'
+  import { banquesExternes } from '../../../lib/stores/banquesExternesStore'
   import { changes, exercicesParams } from '../../../lib/stores/generalStore'
   import { globalOptions } from '../../../lib/stores/globalOptions'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
@@ -48,9 +49,12 @@
   // Les composants d'exercice adaptent leur barre de titre grâce à ce contexte.
   setContext('mobileView', true)
 
-  const referentiels: ReferentielInMenu[] = getReferentiels(
-    get(referentielLocale),
-  )
+  const referentiels: ReferentielInMenu[] = $derived.by(() => {
+    // dépendance explicite : les banques externes sont chargées de façon
+    // asynchrone au démarrage, le menu doit se reconstruire à leur arrivée
+    void $banquesExternes
+    return getReferentiels(get(referentielLocale))
+  })
 
   /** Chemin courant : [rubrique, niveau, ...clés du référentiel]. */
   let path = $state<string[]>([])

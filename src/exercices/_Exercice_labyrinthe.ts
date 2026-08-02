@@ -106,8 +106,8 @@ export default class ExerciceLabyrinthe extends Exercice {
         texteCorr = `$${this.labyrinthe.generateLatexCorrection()}$`
       } else {
         this.labyrinthe.setValues(this.goodAnswers, this.badAnswers)
-        texte = `\n\n\\bigskip\n${this.labyrinthe.generateLatex()}`
-        texteCorr = this.labyrinthe.generateLatexCorrection()
+        texte = `\n\n\\bigskip\n{\\renewcommand{\\arraystretch}{2}${this.labyrinthe.generateLatex()}}`
+        texteCorr = `{\\renewcommand{\\arraystretch}{2}${this.labyrinthe.generateLatexCorrection()}}`
       }
     }
 

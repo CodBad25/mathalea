@@ -86,25 +86,25 @@ Trois écouteurs Playwright sont attachés.
 
 Les messages sont **exclus** s'ils contiennent l'une des chaînes suivantes :
 
-| Chaîne exclue | Raison |
-| --- | --- |
-| `[vite]` | Messages du serveur de développement Vite |
-| `[bugsnag] Loaded!` | Rapporteur d'erreurs Bugsnag |
-| `No character metrics for` | Avertissements KaTeX |
-| `LaTeX-incompatible input` | Avertissements KaTeX |
-| `mtgLoad` / `MG32div0` | MathGraph (3G22) |
-| `Figure destroyed successfully` | Nettoyage apigeom |
-| `UserFriendlyError: Le chargement de mathgraph` | Erreur MathGraph |
-| `Invalid 'X-Frame-Options' header` | Problème d'en-tête HTTP |
-| `Blockly.Workspace.getAllVariables was deprecated in v12` | Dépréciation Blockly |
-| `A-Frame Version:` / `THREE Version` | Informations des bibliothèques 3D |
-| `WARNING: Too many active WebGL contexts` | Avertissement de ressources WebGL |
-| `GPU stall due to ReadPixels` | Performance GPU |
-| `: le motif contient plus` | Débordement de motif |
-| `The column width is less than 0` | Avertissement de mise en page |
-| `placeholderMetrics 0.7 0.2` | Métriques MathLive |
-| `<HeaderExercice>` | Message de composant Svelte |
-| `location().url` contient `mathgraph32` | Tous les messages MathGraph |
+| Chaîne exclue                                             | Raison                                    |
+| --------------------------------------------------------- | ----------------------------------------- |
+| `[vite]`                                                  | Messages du serveur de développement Vite |
+| `[bugsnag] Loaded!`                                       | Rapporteur d'erreurs Bugsnag              |
+| `No character metrics for`                                | Avertissements KaTeX                      |
+| `LaTeX-incompatible input`                                | Avertissements KaTeX                      |
+| `mtgLoad` / `MG32div0`                                    | MathGraph (3G22)                          |
+| `Figure destroyed successfully`                           | Nettoyage apigeom                         |
+| `UserFriendlyError: Le chargement de mathgraph`           | Erreur MathGraph                          |
+| `Invalid 'X-Frame-Options' header`                        | Problème d'en-tête HTTP                   |
+| `Blockly.Workspace.getAllVariables was deprecated in v12` | Dépréciation Blockly                      |
+| `A-Frame Version:` / `THREE Version`                      | Informations des bibliothèques 3D         |
+| `WARNING: Too many active WebGL contexts`                 | Avertissement de ressources WebGL         |
+| `GPU stall due to ReadPixels`                             | Performance GPU                           |
+| `: le motif contient plus`                                | Débordement de motif                      |
+| `The column width is less than 0`                         | Avertissement de mise en page             |
+| `placeholderMetrics 0.7 0.2`                              | Métriques MathLive                        |
+| `<HeaderExercice>`                                        | Message de composant Svelte               |
+| `location().url` contient `mathgraph32`                   | Tous les messages MathGraph               |
 
 Tous les messages non exclus sont ajoutés à un tableau `messages[]` avec un préfixe de type (`'console:'`, `'pageerror:'`, `'crash:'` ou `'exception:'`).
 
@@ -120,13 +120,13 @@ Cette fonction découvre tous les éléments de formulaire configurables dans le
 
 Recherche jusqu'à 5 instances de chaque type de formulaire dans le conteneur `#settings0` :
 
-| Type de formulaire | Sélecteur | Valeurs testées |
-| --- | --- | --- |
-| `formText` | `#settings-formText{1-5}-0` | Nombres extraits du libellé |
-| `check` (cases à cocher) | `#settings-check{1-5}-0` | `[false, true]` |
-| `num` (champs numériques) | `#settings-formNum{1-5}-0` (input) | `[min, min+1, max]` |
+| Type de formulaire            | Sélecteur                           | Valeurs testées             |
+| ----------------------------- | ----------------------------------- | --------------------------- |
+| `formText`                    | `#settings-formText{1-5}-0`         | Nombres extraits du libellé |
+| `check` (cases à cocher)      | `#settings-check{1-5}-0`            | `[false, true]`             |
+| `num` (champs numériques)     | `#settings-formNum{1-5}-0` (input)  | `[min, min+1, max]`         |
 | `select` (listes déroulantes) | `#settings-formNum{1-5}-0` (select) | Toutes les valeurs d'option |
-| Correction détaillée | `#settings-correction-detaillee-0` | `[false, true]` |
+| Correction détaillée          | `#settings-correction-detaillee-0`  | `[false, true]`             |
 
 ### Stratégie de test
 
@@ -141,10 +141,10 @@ Pour chaque combinaison de paramètres, le rappel `action` effectue les étapes 
 
 1. **Clic sur "Nouvel énoncé"** : régénère l'exercice avec une nouvelle graine aléatoire.
 
-2. **Test du zoom** : lit le zoom courant `z` dans l'URL. Si `z < 1.4`, clique sur le zoom avant ; sinon clique sur le zoom arrière. Utilise `waitForExercicesAffiches`, qui :
-   - enregistre un écouteur sur l'événement DOM personnalisé `exercicesAffiches` ;
+2. **Test du zoom** : lit le zoom courant `z` dans l'URL. Si `z < 1.4`, clique sur le zoom avant ; sinon clique sur le zoom arrière. Utilise `clickZoomAndWaitForExercise`, qui :
    - clique sur le bouton de zoom ;
-   - attend soit l'événement, soit un délai maximal de 5 secondes.
+   - attend que le paramètre `z` change dans l'URL ;
+   - attend que la consigne soit visible, puis laisse passer deux frames navigateur pour stabiliser le rendu.
 
 3. **Test de l'interactivité** : si le bouton "Rendre interactif" est visible :
    - clique dessus pour activer le mode interactif ;

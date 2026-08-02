@@ -35,6 +35,9 @@ import {
 import { isStatic, isSvelte } from './components/componentsUtils'
 import { listOfCustomElements } from './customElements/MathaleaCustomElement'
 import { referentielMathadata } from './components/mathadataReferentiel'
+import { retrieveResourceFromUuid } from './components/refUtils'
+import { referentielBanquesExternes } from './stores/banquesExternesStore'
+import { estUuidBanqueExterne } from './types/banquesExternes'
 import {
   showDialogForLimitedTime,
   showPopupAndWait,
@@ -356,6 +359,28 @@ export async function mathaleaLoadExerciceFromUuid(uuid: string) {
 }
 
 /**
+ * Télécharge la source LaTeX d'un exercice de banque externe, si la banque en
+ * fournit une. L'URL est déjà résolue par le store (`blob:` pour une banque
+ * zip, API de la forge pour un dépôt).
+ * @param {string} url URL du fichier `.tex`, vide si la banque n'en déclare pas
+ * @returns {Promise<string|null>} le code LaTeX, ou `null` s'il est indisponible
+ */
+async function recupererSourceLatexDeBanque(
+  url: string,
+): Promise<string | null> {
+  if (typeof url !== 'string' || url.length === 0) return null
+  try {
+    const response = await window.fetch(url)
+    if (!response.ok) return null
+    const text = await response.text()
+    if (isHtmlDocumentText(text) || text.trim().length === 0) return null
+    return text
+  } catch {
+    return null
+  }
+}
+
+/**
  * Charge tous les exercices et les paramètres
  * en fonction du store exercicesParams.
  */
@@ -364,6 +389,36 @@ export async function mathaleaGetExercicesFromParams(
 ): Promise<(IExercice | IExerciceStatique)[]> {
   const exercices = []
   for (const param of params) {
+    if (estUuidBanqueExterne(param.uuid)) {
+      // Banque externe : la source LaTeX est facultative (une banque peut n'être
+      // qu'en png et/ou Typst). Quand elle manque, on produit tout de même une
+      // entrée commentée pour que l'exercice ne disparaisse pas silencieusement
+      // de l'export LaTeX/PDF.
+      const ressource = retrieveResourceFromUuid(
+        referentielBanquesExternes(),
+        param.uuid,
+      )
+      const titre =
+        ressource !== null && 'titre' in ressource && ressource.titre
+          ? ressource.titre
+          : param.uuid
+      const texUrl =
+        ressource !== null && 'tex' in ressource ? ressource.tex : ''
+      const texCorUrl =
+        ressource !== null && 'texCor' in ressource ? ressource.texCor : ''
+      exercices.push({
+        typeExercice: 'statique',
+        uuid: param.uuid,
+        content:
+          (await recupererSourceLatexDeBanque(texUrl)) ??
+          `\n\n\t%« ${titre} » : pas de source LaTeX dans cette banque.\n\n`,
+        contentCorr:
+          (await recupererSourceLatexDeBanque(texCorUrl)) ??
+          '\n\n\t%Pas de correction LaTeX disponible\n\n',
+        examen: '',
+      } as IExerciceStatique)
+      continue
+    }
     if (
       param.uuid.substring(0, 4) === 'crpe' ||
       param.uuid.substring(0, 4) === 'dnb_' ||

@@ -2,7 +2,9 @@ import Figure from 'apigeom'
 import remove from 'apigeom/src/assets/svg/restart.svg'
 import Element2D from 'apigeom/src/elements/Element2D'
 import Circle from 'apigeom/src/elements/lines/Circle'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import { orangeMathalea } from '../../lib/colors'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import figureApigeom from '../../lib/figureApigeom'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
@@ -11,7 +13,6 @@ import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 import bluePoint from './svg/blueCirclePoint.svg'
 import redPoint from './svg/redPoint.svg'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const dateDePublication = '15/07/2024'
 export const titre = 'Résoudre une grille de SquarO'
@@ -284,6 +285,7 @@ class squaro extends Exercice {
       )
     }
 
+    let domReadyMarkup = ''
     // Besoin de l'aide sur l'affichage du nombre de points
     if (this.interactif) {
       this.figure.divUserMessage.style.textAlign = 'left'
@@ -314,14 +316,15 @@ class squaro extends Exercice {
         ).length
         divNbPoints.innerHTML = `Cette grille contient actuellement ${nbBluePoints} point${nbBluePoints === 1 ? '' : 's'} bleu${nbBluePoints === 1 ? '' : 's'}.`
       })
-      const handleExercicesAffiches = () => {
+      const domReadyAction = `EN-squaro:draw-blue-point:Ex${this.numeroExercice}`
+      DomReadyActionElement.registerCallback(domReadyAction, () => {
         this.blueButton.click()
-        document.removeEventListener(
-          'exercicesAffiches',
-          handleExercicesAffiches,
-        )
-      }
-      document.addEventListener('exercicesAffiches', handleExercicesAffiches)
+        return () => DomReadyActionElement.unregisterCallback(domReadyAction)
+      })
+      domReadyMarkup = DomReadyActionElement.create({
+        id: `EN-squaro-draw-blue-point-Ex${this.numeroExercice}`,
+        action: domReadyAction,
+      })
     } else {
       this.figure.isDynamic = false
       this.figure.divButtons.style.display = 'none'
@@ -331,7 +334,8 @@ class squaro extends Exercice {
     let texteCorr =
       'Voici une solution possible :<br>' +
       this.figureCorrection.getStaticHtml()
-    let texte = (this.sup3 ? enonce : '') + emplacementPourFigure
+    let texte =
+      (this.sup3 ? enonce : '') + emplacementPourFigure + domReadyMarkup
 
     if (!context.isHtml) {
       let persoSquaro = ''

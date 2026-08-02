@@ -399,6 +399,13 @@ async function loadExercise(uuid: string) {
     }
   }
 
+  if ('pasDeVersionLatex' in exercice && exercice.pasDeVersionLatex) {
+    return {
+      status: 'NON_TESTE' as const,
+      detail: 'Exercice marque pasDeVersionLatex: export LaTeX non pertinent.',
+    }
+  }
+
   ;(exercice as IExercice | IExerciceStatique).uuid = uuid
 
   if ('seed' in exercice) {

@@ -60,6 +60,7 @@ export default class ListePatternsTousLesExos extends Exercice {
     this.nbQuestions = 1
     this.listePackages = ['twemojis'] // this.listePackages est inutile mais la présence du mot "twemojis" est indispensable pour la sortie LaTeX.
     this.nbQuestionsModifiable = false
+    this.pasDeVersionLatex = true // page de référence : contenu trop volumineux pour un export LaTeX
     this.besoinFormulaireNumerique = [
       'Liste restreinte pour la référence',
       6,

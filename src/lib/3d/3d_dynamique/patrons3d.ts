@@ -360,18 +360,6 @@ export function animeDepliageThreeJS(
   })
 }
 
-export function onCorrectionsAffichees() {
-  // Sélectionne tous les canvas-3d présents dans le DOM
-  const canvasList = document.querySelectorAll('canvas-3d')
-  canvasList.forEach((canvas3d) => {
-    // Récupère l'id unique (doit être défini lors de la création)
-    const idCanvas = canvas3d.getAttribute('id') || ''
-    initialisePatron3DCanvas(idCanvas)
-  })
-  // Supprime l'écouteur pour éviter les doublons
-  document.removeEventListener('correctionsAffichees', onCorrectionsAffichees)
-}
-
 export function initialisePatron3DCanvas(canvasId: string): void {
   const canvas3d = document.getElementById(canvasId)
   if (!canvas3d || canvas3d.dataset.patrons3dListeners === 'ready') return

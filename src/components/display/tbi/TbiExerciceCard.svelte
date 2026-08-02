@@ -17,8 +17,8 @@
     tbiState,
   } from '../../../lib/stores/tbiStore'
   import type { IExercice } from '../../../lib/types'
-  import BasicClassicModal from '../../shared/modal/BasicClassicModal.svelte'
   import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
+  import BasicClassicModal from '../../shared/modal/BasicClassicModal.svelte'
   import TbiCardActions from './TbiCardActions.svelte'
   import type { TbiCorrectionMode } from './tbiTypes'
 
@@ -134,8 +134,6 @@
     mathaleaUpdateUrlFromExercicesParams()
     version += 1
     await tick()
-    // Evènement utilisé par certains exercices (pointCliquable...)
-    document.dispatchEvent(new window.Event('exercicesAffiches', { bubbles: true }))
   }
 
   async function newData() {
@@ -164,7 +162,10 @@
           interfaceParams[supName] = mathaleaHandleSup(exercise[supName])
         }
       }
-      if (detail.versionQcm !== undefined && exercise instanceof ExerciceSimple) {
+      if (
+        detail.versionQcm !== undefined &&
+        exercise instanceof ExerciceSimple
+      ) {
         exercise.versionQcm = detail.versionQcm
         interfaceParams.versionQcm = exercise.versionQcm ? '1' : '0'
       }
@@ -221,7 +222,9 @@
   <header
     class="flex flex-row items-baseline gap-2 px-3 pt-2 text-coopmaths-struct dark:text-coopmathsdark-struct"
   >
-    <span class="font-bold text-sm">{exercise.id?.replace('.js', '').replace('.ts', '') ?? ''}</span>
+    <span class="font-bold text-sm"
+      >{exercise.id?.replace('.js', '').replace('.ts', '') ?? ''}</span
+    >
     <span class="text-xs font-light truncate">{exercise.titre}</span>
   </header>
   {#key version}
@@ -261,7 +264,9 @@
       />
     </div>
 
-    <article class="px-3 pb-3 text-coopmaths-corpus dark:text-coopmathsdark-corpus">
+    <article
+      class="px-3 pb-3 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+    >
       {#if correctionMode !== 'replace'}
         <div use:renderMath={zoom}>
           {#if exercise.consigne && exercise.consigne.length > 0}
@@ -355,7 +360,8 @@
         <h2
           class="mb-4 text-xl font-bold text-coopmaths-struct dark:text-coopmathsdark-struct"
         >
-          Correction — {exercise.id?.replace('.js', '').replace('.ts', '') ?? ''}
+          Correction — {exercise.id?.replace('.js', '').replace('.ts', '') ??
+            ''}
         </h2>
         <div use:renderMath={Math.max(zoom, 1.2)}>
           {#if exercise.consigneCorrection && exercise.consigneCorrection.length > 0}

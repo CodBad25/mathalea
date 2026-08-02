@@ -16,9 +16,7 @@
   export let goToOverview: () => void
 
   const divQuestion: HTMLDivElement[] = []
-  const exercicesAffiches = new window.Event('exercicesAffiches', {
-    bubbles: true,
-  })
+
   let isCorrectionVisible = false
   let isPause = false
   let isManualPause = false
@@ -162,7 +160,6 @@
         optimalZoom * userZoom[slideshow.currentQuestion],
       )
     }
-    document.dispatchEvent(exercicesAffiches)
   }
 
   async function findOptimalZoom() {

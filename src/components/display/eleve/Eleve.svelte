@@ -175,11 +175,6 @@
   afterUpdate(() => {
     log('Eleve.svelte afterUpdate')
     const starttime = window.performance.now()
-    // Evènement indispensable pour pointCliquable par exemple
-    const exercicesAffiches = new window.Event('exercicesAffiches', {
-      bubbles: true,
-    })
-    document.dispatchEvent(exercicesAffiches)
     if (eleveSection) {
       const params = $globalOptions
       const zoom = Number(params.z) ?? 1
@@ -327,7 +322,9 @@
   >
     <div
       class="flex flex-col-reverse lg:flex-row space-y-reverse space-y-4 lg:space-y-0 lg:space-x-4 scale-75 lg:scale-100 pointer-events-auto
-      {$globalOptions.v === 'myriade' || $globalOptions.v === 'indices' || $globalOptions.v === 'indice'
+      {$globalOptions.v === 'myriade' ||
+      $globalOptions.v === 'indices' ||
+      $globalOptions.v === 'indice'
         ? 'translate-y-16'
         : ''}"
     >

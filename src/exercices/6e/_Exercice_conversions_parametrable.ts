@@ -11,7 +11,11 @@ import {
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { choice } from '../../lib/outils/arrayOutils'
+import {
+  choice,
+  combinaisonListes,
+  getRandomSubarray,
+} from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
@@ -28,9 +32,11 @@ import Exercice from '../Exercice'
  * indépendamment :
  *
  * * les unités travaillées, leur ordre et leur poids d'apparition ;
- * * le type d'opérations (multiplications, divisions ou les deux) ;
+ * * le type d'opérations (multiplications, divisions ou tous types de conversions,
+ *   y compris celles ne passant pas par l'unité de référence, ex. de déca à milli) ;
  * * la présence de nombres décimaux ;
- * * l'utilisation de fractions dans la correction.
+ * * la façon de corriger les divisions (divisions, fractions ou multiplications par
+ *   0,1 ; 0,01…).
  *
  * @author Rémi Angot
  */
@@ -106,6 +112,57 @@ const definitionsUnites: Record<string, DefinitionUnite> = {
   },
 }
 
+/** Type de conversion tiré pour une question, utilisé par le mode « Tous types de conversions ». */
+type TypeConversion = 'multRef' | 'divRef' | 'multSansRef' | 'divSansRef'
+
+/**
+ * Préfixe disponible pour une unité, avec son exposant par rapport à l'unité de
+ * référence (`+1` pour « da », `-3` pour « milli »…). Un exposant entier, plutôt qu'un
+ * facteur ou une échelle décimale, évite toute imprécision en virgule flottante quand on
+ * compare ou combine deux préfixes.
+ */
+type EchellePrefixe = { symbole: string; exposant: number }
+
+/**
+ * Préfixes utilisables pour une unité (multiplicateurs et diviseurs confondus). Sert aux
+ * conversions « sans l'unité de référence » (ex. de déca à milli).
+ */
+function echellesDisponibles(definition: DefinitionUnite): EchellePrefixe[] {
+  return [
+    ...definition.multiplicateurs.map((symbole) => ({
+      symbole,
+      exposant: Math.round(
+        Math.log10(prefixesMultiplicateurs[symbole].facteur),
+      ),
+    })),
+    ...definition.diviseurs.map((symbole) => ({
+      symbole,
+      exposant: -Math.round(Math.log10(prefixesDiviseurs[symbole].facteur)),
+    })),
+  ]
+}
+
+/**
+ * Étape intermédiaire de la correction d'une division, selon le mode choisi par
+ * l'enseignant : `6,74 dm = 6,74\div10 m`, `6,74 dm = \dfrac{6,74}{10} m` (uniquement pour
+ * un numérateur entier) ou `6,74 dm = 6,74\times0,1 m`.
+ */
+function etapeDivision(
+  valeur: Decimal,
+  decimalesValeur: number,
+  facteur: number,
+  mode: string,
+): string {
+  if (mode === 'frac' && valeur.isInteger()) {
+    return fraction(valeur.toNumber(), facteur).texFraction
+  }
+  if (mode === 'mult') {
+    const decimalesInverse = String(facteur).length - 1
+    return `${texNombre(valeur, decimalesValeur)}\\times${texNombre(new Decimal(1).div(facteur), decimalesInverse)}`
+  }
+  return `${texNombre(valeur, decimalesValeur)}\\div${texNombre(facteur, 0)}`
+}
+
 /**
  * Phrase d'explication du préfixe : « Un kilogramme est un millier de grammes ».
  */
@@ -134,9 +191,9 @@ export const formulaireConversions: FormulaireComplexe = {
       nom: 'operations',
       label: 'Type d’opérations',
       options: [
-        { valeur: 'mult', label: 'Multiplications (da, h, k)' },
-        { valeur: 'div', label: 'Divisions (d, c, m)' },
-        { valeur: 'both', label: 'Multiplications et divisions' },
+        { valeur: 'mult', label: "Multiplications (da, h, k) vers l'unité de référence" },
+        { valeur: 'div', label: "Divisions (d, c, m) vers l'unité de référence" },
+        { valeur: 'tous', label: 'Tous types de conversions' },
       ],
       defaut: 'mult',
     },
@@ -162,10 +219,15 @@ export const formulaireConversions: FormulaireComplexe = {
       defaut: false,
     },
     {
-      type: 'case',
-      nom: 'fractions',
-      label: 'Avec des fractions dans la correction',
-      defaut: false,
+      type: 'selection',
+      nom: 'correctionDivision',
+      label: 'Type de correction pour les divisions',
+      options: [
+        { valeur: 'div', label: 'Divisions' },
+        { valeur: 'frac', label: 'Fractions' },
+        { valeur: 'mult', label: 'Multiplications (par 0,1 ; 0,01…)' },
+      ],
+      defaut: 'div',
     },
   ],
 }
@@ -240,7 +302,7 @@ export default class ExerciceConversionsParametrable extends Exercice {
   nouvelleVersion() {
     const params = lireFormulaireComplexe(formulaireConversions, this.sup)
     const avecDecimaux = params.case('decimaux')
-    const avecFractions = params.case('fractions')
+    const modeDivision = params.selection('correctionDivision')
     const operations = params.selection('operations')
 
     // Une unité n'est retenue que si elle possède des préfixes compatibles avec le
@@ -273,11 +335,25 @@ export default class ExerciceConversionsParametrable extends Exercice {
       unitesDeReference,
     )
 
+    // En mode « Tous types de conversions », les 4 types alternent de manière équitable
+    // (répartition proche de l'équirépartition sur l'ensemble des questions).
+    const typesTousParQuestion: TypeConversion[] =
+      operations === 'tous'
+        ? combinaisonListes(
+            ['multRef', 'divRef', 'multSansRef', 'divSansRef'] as TypeConversion[],
+            this.nbQuestions,
+          )
+        : []
+
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
       const nomUnite = unitesParQuestion[i]
       if (nomUnite === undefined) break
-      const division =
-        operations === 'div' || (operations === 'both' && choice([true, false]))
+      const typeConversion: TypeConversion =
+        operations === 'mult'
+          ? 'multRef'
+          : operations === 'div'
+            ? 'divRef'
+            : typesTousParQuestion[i]
 
       let texte: string
       let texteCorr: string
@@ -285,6 +361,8 @@ export default class ExerciceConversionsParametrable extends Exercice {
       let valeur: Decimal
 
       if (nomUnite === 'octet') {
+        const division =
+          typeConversion === 'divRef' || typeConversion === 'divSansRef'
         // Nombre de multiplications par 1 000 : on s'en tient à un seul palier pour
         // les divisions, sinon les nombres de départ deviennent illisibles.
         const ecart = division ? 1 : randint(1, 2)
@@ -324,41 +402,81 @@ export default class ExerciceConversionsParametrable extends Exercice {
         }
       } else {
         const definition = definitionsUnites[nomUnite]
-        const symbolesPossibles = division
-          ? definition.diviseurs
-          : definition.multiplicateurs
-        // Le type d'opérations « les deux » peut tomber sur un sens impossible
-        // pour l'unité tirée (l'euro n'a pas de sous-multiple) : on tente à nouveau.
-        if (symbolesPossibles.length === 0) continue
-        const prefixe = division
-          ? prefixesDiviseurs[choice(symbolesPossibles)]
-          : prefixesMultiplicateurs[choice(symbolesPossibles)]
+
+        // « Sans l'unité de référence » : conversion directe entre deux préfixes non
+        // triviaux (ex. de déca à milli), sans passer par l'unité de base. Repli vers
+        // une conversion classique si l'unité n'a pas au moins deux préfixes utilisables
+        // (l'euro, qui n'a que « k », ne peut par exemple pas en bénéficier).
+        const echelles =
+          typeConversion === 'multSansRef' || typeConversion === 'divSansRef'
+            ? echellesDisponibles(definition)
+            : []
+        const sansReference = echelles.length >= 2
+
+        let division: boolean
+        let uniteDepart: string
+        let uniteArrivee: string
+        let facteurMultiplication: number | undefined
+        let facteurDivision: number | undefined
+        let prefixeVersReference: Prefixe | undefined
+
+        if (sansReference) {
+          const veutMultiplication = typeConversion === 'multSansRef'
+          const [a, b] = getRandomSubarray(echelles, 2)
+          const [depart, arrivee] =
+            a.exposant > b.exposant === veutMultiplication ? [a, b] : [b, a]
+          division = !veutMultiplication
+          uniteDepart = depart.symbole + definition.symbole
+          uniteArrivee = arrivee.symbole + definition.symbole
+          const facteur = Math.pow(10, Math.abs(depart.exposant - arrivee.exposant))
+          if (veutMultiplication) {
+            facteurMultiplication = facteur
+          } else {
+            facteurDivision = facteur
+          }
+        } else {
+          division =
+            typeConversion === 'divRef' || typeConversion === 'divSansRef'
+          // Le sens tiré peut être impossible pour l'unité (l'euro n'a pas de
+          // sous-multiple usuel) : on se rabat sur l'autre sens plutôt que de tenter
+          // en vain une combinaison qui restera toujours indisponible.
+          if ((division ? definition.diviseurs : definition.multiplicateurs).length === 0) {
+            division = !division
+          }
+          const symbolesPossibles = division
+            ? definition.diviseurs
+            : definition.multiplicateurs
+          if (symbolesPossibles.length === 0) continue
+          prefixeVersReference = division
+            ? prefixesDiviseurs[choice(symbolesPossibles)]
+            : prefixesMultiplicateurs[choice(symbolesPossibles)]
+          uniteDepart = prefixeVersReference.symbole + definition.symbole
+          uniteArrivee = definition.symbole
+          if (division) facteurDivision = prefixeVersReference.facteur
+          else facteurMultiplication = prefixeVersReference.facteur
+        }
+
         valeur = valeurADistribuer(avecDecimaux)
         const decimalesValeur = valeur.decimalPlaces()
-        const uniteDepart = prefixe.symbole + definition.symbole
         resultat = division
-          ? valeur.div(prefixe.facteur)
-          : valeur.mul(prefixe.facteur)
+          ? valeur.div(facteurDivision as number)
+          : valeur.mul(facteurMultiplication as number)
         const decimalesResultat = resultat.decimalPlaces()
-        texte = this.enonce(
-          i,
-          valeur,
-          decimalesValeur,
-          uniteDepart,
-          definition.symbole,
-        )
-        // Les fractions ne sont proposées que pour un numérateur entier : une
-        // écriture comme 2,5/100 n'apporterait rien à la correction.
-        const etapeIntermediaire =
-          division && avecFractions && valeur.isInteger()
-            ? fraction(valeur.toNumber(), prefixe.facteur).texFraction
-            : `${texNombre(valeur, decimalesValeur)}${division ? '\\div' : '\\times'}${texNombre(prefixe.facteur, 0)}`
+        texte = this.enonce(i, valeur, decimalesValeur, uniteDepart, uniteArrivee)
+        const etapeIntermediaire = division
+          ? etapeDivision(
+              valeur,
+              decimalesValeur,
+              facteurDivision as number,
+              modeDivision,
+            )
+          : `${texNombre(valeur, decimalesValeur)}\\times${texNombre(facteurMultiplication as number, 0)}`
         texteCorr =
           `$ ${texNombre(valeur, decimalesValeur)}${texTexte(uniteDepart)} = ` +
-          `${etapeIntermediaire}${texTexte(definition.symbole)} = ` +
-          `${miseEnEvidence(texNombre(resultat, decimalesResultat))}${texTexte(definition.symbole)}$`
-        if (this.correctionDetaillee) {
-          texteCorr = `${phraseExplication(definition, prefixe, division)} donc :<br>${texteCorr}`
+          `${etapeIntermediaire}${texTexte(uniteArrivee)} = ` +
+          `${miseEnEvidence(texNombre(resultat, decimalesResultat))}${texTexte(uniteArrivee)}$`
+        if (this.correctionDetaillee && prefixeVersReference !== undefined) {
+          texteCorr = `${phraseExplication(definition, prefixeVersReference, division)} donc :<br>${texteCorr}`
         }
       }
 

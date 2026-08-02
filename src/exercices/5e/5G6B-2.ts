@@ -175,12 +175,8 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
     ]
 
     this.nbQuestions = 1
-    this.sup = '1'
-    this.sup2 = 2
-    this.sup3 = true
+    this.sup = '0'
     this.spacingCorr = 2
-    this.correctionDetaillee = false
-    this.correctionDetailleeDisponible = true
   }
 
   nouvelleVersion(numeroExercice: number) {

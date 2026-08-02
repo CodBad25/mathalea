@@ -7,6 +7,7 @@ import {
     type JSONReferentielObject,
     type ResourceAndItsPath,
     hasTypSource,
+    isBanqueExterneType,
     isCrpeType,
     isExerciceItemInReferentiel,
     isJSONReferentielEnding,
@@ -196,6 +197,11 @@ export function computeStaticExerciceTypUrl(
   if (!hasTypSource(foundResource) || foundResource === null) {
     return null
   }
+  // banque externe : les fichiers ne sont pas rangés selon l'uuid, l'URL déjà
+  // résolue (`blob:` ou API de la forge) est portée par la ressource elle-même
+  if (isBanqueExterneType(foundResource)) {
+    return foundResource.typUrl ?? null
+  }
   const resource = foundResource as JSONReferentielEnding & {
     uuid: string
     annee: string
@@ -218,6 +224,9 @@ export function computeStaticExerciceCorTypUrl(
 ): string | null {
   if (!hasTypSource(foundResource) || foundResource === null) {
     return null
+  }
+  if (isBanqueExterneType(foundResource)) {
+    return foundResource.typCorUrl ?? null
   }
   const resource = foundResource as JSONReferentielEnding & {
     uuid: string

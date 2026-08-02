@@ -2,6 +2,7 @@
   import katex from 'katex'
   import { onDestroy, tick } from 'svelte'
   import {
+    isBanqueExterneType,
     isExerciceItemInReferentiel,
     isGeoDynamic,
     isTool,
@@ -9,6 +10,7 @@
     resourceHasPlace,
     type JSONReferentielEnding,
   } from '../../../../../../lib/types/referentiels'
+  import { MAX_ETOILES } from '../../../../../../lib/types/banquesExternes'
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   import { mathaleaGenerateSeed } from '../../../../../../lib/mathalea'
   import { scrollToLastExercise } from '../../../../../../lib/scrollToLastExercise'
@@ -268,6 +270,37 @@
             class="text-start text-coopmaths-corpus dark:text-coopmathsdark-corpus bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark hover:bg-coopmaths-canvas dark:hover:bg-coopmathsdark-canvas-darkest"
           >
             <span class="font-bold">{ending.id} - </span>{ending.titre}
+          </div>
+        {:else if isBanqueExterneType(ending)}
+          <!-- Exercice d'une banque externe ajoutée par l'utilisateur :
+               titre, étoiles de difficulté puis étiquettes -->
+          <div
+            class="text-start text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+          >
+            <div class="flex flex-row items-center gap-2">
+              <span>{ending.titre}</span>
+              {#if ending.etoiles !== undefined && ending.etoiles > 0}
+                <span
+                  class="shrink-0 text-coopmaths-warn-dark dark:text-coopmathsdark-warn-dark leading-none"
+                  title="Difficulté : {ending.etoiles} sur {MAX_ETOILES}"
+                >
+                  {#each { length: ending.etoiles } as _}
+                    <i class="bx bxs-star text-[0.65rem]"></i>
+                  {/each}
+                </span>
+              {/if}
+            </div>
+            {#if ending.tags.length > 0}
+              <div class="pl-2 pt-px">
+                {#each ending.tags as tag}
+                  <span
+                    class="inline-flex flex-wrap items-center justify-center rounded-full bg-coopmaths-struct-light dark:bg-coopmathsdark-struct-light text-coopmaths-canvas dark:text-coopmathsdark-canvas text-[0.6rem] px-2 py-px leading-snug font-semibold mr-1"
+                  >
+                    {tag}
+                  </span>
+                {/each}
+              </div>
+            {/if}
           </div>
         {:else if 'titre' in ending && ending.titre}
           <!-- Exercice statique avec titre (ex. ressources partenaires MathAdata) -->

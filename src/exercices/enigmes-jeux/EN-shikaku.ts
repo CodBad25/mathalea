@@ -5,6 +5,8 @@ import {
   orangeMathaleaLight,
 } from 'apigeom/src/elements/defaultValues'
 import type Polygon from 'apigeom/src/elements/lines/Polygon'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import figureApigeom from '../../lib/figureApigeom'
 import { choice } from '../../lib/outils/arrayOutils'
 import { range1 } from '../../lib/outils/nombres'
@@ -12,7 +14,6 @@ import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 import bluePolygon from './svg/bluePolygon.svg'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const dateDePublication = '31/07/2024'
 export const dateDeModifImportante = '03/09/2024'
@@ -471,16 +472,21 @@ export default class shikaku extends Exercice {
         fillColor: orangeMathaleaLight,
       })
     }
-    function handleExercicesAffiches() {
+    const domReadyAction = `EN-shikaku:draw-blue-polygon:Ex${this.numeroExercice}`
+    DomReadyActionElement.registerCallback(domReadyAction, () => {
       drawBluePolygon()
-      document.removeEventListener('exercicesAffiches', handleExercicesAffiches)
-    }
-    document.addEventListener('exercicesAffiches', handleExercicesAffiches)
+      return () => DomReadyActionElement.unregisterCallback(domReadyAction)
+    })
 
     let texteCorr =
       'Voici une solution possible :<br>' +
       this.figureCorrection.getStaticHtml()
-    let texte = emplacementPourFigure
+    let texte =
+      emplacementPourFigure +
+      DomReadyActionElement.create({
+        id: `EN-shikaku-draw-blue-polygon-Ex${this.numeroExercice}`,
+        action: domReadyAction,
+      })
 
     // Construction de la grille au format voulu par ProfCollege... Inutile finalement car on se passe de ProfCollege pour la correction.
     const tabProfCollege: string[] = []

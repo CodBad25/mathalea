@@ -43,7 +43,6 @@
   import ButtonTextAction from '../../../forms/ButtonTextAction.svelte'
   import BasicClassicModal from '../../../modal/BasicClassicModal.svelte'
   import { countMathField } from '../../countMathField'
-  import { handleCorrectionAffichee } from '../../handleCorrection'
   import HeaderExerciceVueProf from '../../shared/headerExerciceVueProf/HeaderExerciceVueProf.svelte'
   import Settings from './presentationalComponents/Settings.svelte'
 
@@ -279,14 +278,6 @@
       if (exerciceHasNoSettings) {
         isSettingsVisible = false
       }
-    }
-    // Evènement indispensable pour pointCliquable par exemple
-    const exercicesAffiches = new window.Event('exercicesAffiches', {
-      bubbles: true,
-    })
-    document.dispatchEvent(exercicesAffiches)
-    if (isCorrectionVisible) {
-      handleCorrectionAffichee()
     }
   })
 
@@ -883,7 +874,7 @@
                   : 'Afficher la correction'}
                 icon={isCorrectionVisible ? 'bx-hide' : 'bx-check-circle'}
                 inverted={true}
-                class="rounded-lg py-1 px-3"
+                class="py-0.5 px-2 text-[0.7rem]"
                 on:click={() => applyCorrectionVisibility(!isCorrectionVisible)}
               />
             {/if}
@@ -892,7 +883,7 @@
                 text="Nouvelles données"
                 icon="bx-refresh"
                 inverted={true}
-                class="rounded-lg py-1 px-3"
+                class="py-0.5 px-2 text-[0.7rem]"
                 on:click={newData}
               />
             {/if}

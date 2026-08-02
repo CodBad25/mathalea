@@ -118,7 +118,9 @@ export class FillInTheBlankElement extends MathaleaCustomElement {
         ? null
         : FillInTheBlankElement.verificationCallbacks.get(callbackName)
     if (fillInTheBlank != null && callback != null) {
-      return callback(exercice, i, fillInTheBlank)
+      const result = callback(exercice, i, fillInTheBlank)
+      fillInTheBlank.lockPrompts()
+      return result
     }
     return verifyFillInTheBlankMathLive(
       exercice,
@@ -204,11 +206,25 @@ export class FillInTheBlankElement extends MathaleaCustomElement {
   }
 
   protected onInteractivityChanged(isOn: boolean): void {
-    this.readOnly = !isOn
+    void isOn
+    this.readOnly = true
+    if (!isOn) this.lockPrompts()
+  }
+
+  lockPrompts(): void {
+    if (this.mathfield == null) return
+    this.mathfield.classList.add('corrected')
+    this.classList.add('corrected')
+    for (const promptId of this.mathfield.getPrompts()) {
+      const [state] = this.mathfield.getPromptState?.(promptId) ?? [undefined]
+      this.mathfield.setPromptState(promptId, state, true)
+    }
+    this.readOnly = true
   }
 
   private syncMathfieldAttributes(): void {
     if (this.mathfield == null) return
+    const wasCorrected = this.mathfield.classList.contains('corrected')
     this.mathfield.id = this.getAttribute('mathfield-id') ?? this.id
     this.mathfield.setAttribute(
       'data-keyboard',
@@ -218,6 +234,7 @@ export class FillInTheBlankElement extends MathaleaCustomElement {
     this.mathfield.className = [
       this.getAttribute('class-name') ?? 'fillInTheBlanks',
       this.getAttribute('class') ?? '',
+      wasCorrected ? 'corrected' : '',
     ]
       .join(' ')
       .trim()
