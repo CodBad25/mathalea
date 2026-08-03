@@ -1,3 +1,4 @@
+import { spawnSync } from 'node:child_process'
 import { describe, expect, it } from 'vitest'
 import {
   buildStandaloneExerciseCode,
@@ -19,6 +20,15 @@ const exercise = (
   numbered: false,
   ...overrides,
 })
+
+const hasTypstCli = () => {
+  const result = spawnSync('typst', ['--version'], { stdio: 'ignore' })
+  return result.status === 0
+}
+
+const shouldRunTypstCliTests = () =>
+  process.env.TYPST_CLI_TESTS === '1' ||
+  (process.env.CI == null && hasTypstCli())
 
 describe('buildTypstDocument', () => {
   it('génère un document avec en-tête, exercice et correction', () => {
@@ -73,7 +83,7 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('$3 times 4 = 12$')
   })
 
-  it("ne déclare pas de réglages de questions pour un exercice à question unique", () => {
+  it('ne déclare pas de réglages de questions pour un exercice à question unique', () => {
     const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
     expect(code).not.toContain('#tasks(')
     expect(code).not.toContain('ex1-colonnes')
@@ -248,7 +258,9 @@ describe('buildTypstDocument', () => {
       ...defaultTypstDocumentOptions,
       columns: 2,
     })
-    expect(code).toContain('#let colonnes = 2 // nombre de colonnes (1, 2 ou 3)')
+    expect(code).toContain(
+      '#let colonnes = 2 // nombre de colonnes (1, 2 ou 3)',
+    )
   })
 
   it('règle le format et l’orientation de la page', () => {
@@ -318,7 +330,9 @@ describe('buildTypstDocument', () => {
       ...defaultTypstDocumentOptions,
       headerStyle: 'cadre',
     })
-    expect(cadre).toContain('stroke: (top: 1pt + couleur, bottom: 1pt + couleur)')
+    expect(cadre).toContain(
+      'stroke: (top: 1pt + couleur, bottom: 1pt + couleur)',
+    )
     expect(cadre).toContain('CC BY-SA · MathALÉA')
   })
 
@@ -470,11 +484,14 @@ describe('buildTypstDocument', () => {
     expect(withoutQr).not.toContain('qr-size')
 
     // en mode fusionné, il n'y a pas de bloc par exercice : pas de QR-code
-    const merged = buildTypstDocument([exercise({ url, questions: ['$1+1$'] })], {
-      ...defaultTypstDocumentOptions,
-      showQrCode: true,
-      mergeExercises: true,
-    })
+    const merged = buildTypstDocument(
+      [exercise({ url, questions: ['$1+1$'] })],
+      {
+        ...defaultTypstDocumentOptions,
+        showQrCode: true,
+        mergeExercises: true,
+      },
+    )
     expect(merged).not.toContain('qr:')
   })
 
@@ -574,7 +591,11 @@ describe('buildTypstDocument', () => {
           }),
         ],
         defaultTypstDocumentOptions,
-        { writingLines: { 1: { position: 'endOfExercise', count: 3, spacing: 1 } } },
+        {
+          writingLines: {
+            1: { position: 'endOfExercise', count: 3, spacing: 1 },
+          },
+        },
       )
       const correctionSection = code.slice(code.indexOf('solution: ['))
       expect(correctionSection).not.toContain('mathalea-lignes(')
@@ -584,7 +605,11 @@ describe('buildTypstDocument', () => {
       const code = buildTypstDocument(
         [exercise({ questions: ['$1+1$'] })],
         defaultTypstDocumentOptions,
-        { writingLines: { 1: { position: 'afterEachQuestion', count: 3, spacing: 1 } } },
+        {
+          writingLines: {
+            1: { position: 'afterEachQuestion', count: 3, spacing: 1 },
+          },
+        },
       )
       expect(code).not.toContain('mathalea-lignes')
     })
@@ -603,7 +628,9 @@ describe('buildTypstDocument', () => {
         },
       )
       expect(
-        code.match(/#mathalea-lignes\(5, gutter: 2em\) \/\/ mathalea:lignes-fin\(2\)/g),
+        code.match(
+          /#mathalea-lignes\(5, gutter: 2em\) \/\/ mathalea:lignes-fin\(2\)/g,
+        ),
       ).toHaveLength(1)
       expect(code).not.toContain('mathalea:lignes-fin(1)')
     })
@@ -651,7 +678,9 @@ describe('buildTypstDocument', () => {
       expect(code).not.toContain('#ex2()')
       // marqueurs de section pour les deux exercices dans le même groupe
       expect(code).toContain('// ----- Exercice 1 -----')
-      expect(code).toContain('// ----- Exercice 2 (fusionné avec le précédent) -----')
+      expect(code).toContain(
+        '// ----- Exercice 2 (fusionné avec le précédent) -----',
+      )
       // numérotation continue : questions 1-2 puis 3-4
       expect(code).toContain('start: 1)')
       expect(code).toContain('start: 3)')
@@ -680,7 +709,7 @@ describe('buildTypstDocument', () => {
       expect(code).toContain('start: 2)')
     })
 
-    it("ne numérote pas une question unique restée seule dans son exercice", () => {
+    it('ne numérote pas une question unique restée seule dans son exercice', () => {
       const code = buildTypstDocument([
         exercise({ questions: ['$1+1$'], numbered: true }),
         exercise({ questions: ['$2+2$', '$3+3$'], numbered: true }),
@@ -758,36 +787,39 @@ describe('buildTypstDocument', () => {
       expect(code).not.toContain('solution: [')
     })
 
-    it('compile avec typst : groupe fusionné valide', async () => {
-      const code = buildTypstDocument(
-        [
-          exercise({
-            questions: ['$1+1$', '$2+2$'],
-            corrections: ['$2$', '$4$'],
-            numbered: true,
+    it.skipIf(!shouldRunTypstCliTests())(
+      'compile avec typst : groupe fusionné valide',
+      async () => {
+        const code = buildTypstDocument(
+          [
+            exercise({
+              questions: ['$1+1$', '$2+2$'],
+              corrections: ['$2$', '$4$'],
+              numbered: true,
+            }),
+            exercise({
+              questions: ['$3+3$', '$4+4$'],
+              corrections: ['$6$', '$8$'],
+              numbered: true,
+            }),
+          ],
+          defaultTypstDocumentOptions,
+          { merges: [2] },
+        )
+        const { execFileSync } = await import('node:child_process')
+        const { writeFileSync, mkdtempSync } = await import('node:fs')
+        const { tmpdir } = await import('node:os')
+        const { join } = await import('node:path')
+        const dir = mkdtempSync(join(tmpdir(), 'typst-merge-'))
+        const file = join(dir, 'doc.typ')
+        writeFileSync(file, code, 'utf-8')
+        expect(() =>
+          execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+            stdio: 'pipe',
           }),
-          exercise({
-            questions: ['$3+3$', '$4+4$'],
-            corrections: ['$6$', '$8$'],
-            numbered: true,
-          }),
-        ],
-        defaultTypstDocumentOptions,
-        { merges: [2] },
-      )
-      const { execFileSync } = await import('node:child_process')
-      const { writeFileSync, mkdtempSync } = await import('node:fs')
-      const { tmpdir } = await import('node:os')
-      const { join } = await import('node:path')
-      const dir = mkdtempSync(join(tmpdir(), 'typst-merge-'))
-      const file = join(dir, 'doc.typ')
-      writeFileSync(file, code, 'utf-8')
-      expect(() =>
-        execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
-          stdio: 'pipe',
-        }),
-      ).not.toThrow()
-    })
+        ).not.toThrow()
+      },
+    )
   })
 })
 
@@ -839,7 +871,7 @@ describe('exportMode (fichier .typ téléchargé, bouton copier)', () => {
     expect(code).toContain('row-gutter: 1.2em,')
   })
 
-  it("ne contient ni repère mathalea-anchor ni marqueur interne (insertion/surcharge)", () => {
+  it('ne contient ni repère mathalea-anchor ni marqueur interne (insertion/surcharge)', () => {
     const code = buildTypstDocument(
       [
         exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
@@ -861,35 +893,38 @@ describe('exportMode (fichier .typ téléchargé, bouton copier)', () => {
     expect(code).toContain('#text[Contenu personnalisé]')
   })
 
-  it('compile avec typst : document export (tasks + figure avec labels + insertion)', async () => {
-    const code = buildTypstDocument(
-      [
-        exercise({
-          questions: [
-            '<div class="svgContainer"><div><svg class="mathalea2d" width="96" height="48"></svg><div class="divLatex" style="top: 10px; left: 20px; transform: rotate(0deg);" data-top=10 data-left=20><span class="katex"><span class="katex-mathml"><math><semantics><annotation encoding="application/x-tex">1</annotation></semantics></math></span></span></div></div></div>',
-            '$2+2$',
-          ],
-          numbered: true,
+  it.skipIf(!shouldRunTypstCliTests())(
+    'compile avec typst : document export (tasks + figure avec labels + insertion)',
+    async () => {
+      const code = buildTypstDocument(
+        [
+          exercise({
+            questions: [
+              '<div class="svgContainer"><div><svg class="mathalea2d" width="96" height="48"></svg><div class="divLatex" style="top: 10px; left: 20px; transform: rotate(0deg);" data-top=10 data-left=20><span class="katex"><span class="katex-mathml"><math><semantics><annotation encoding="application/x-tex">1</annotation></semantics></math></span></span></div></div></div>',
+              '$2+2$',
+            ],
+            numbered: true,
+          }),
+        ],
+        defaultTypstDocumentOptions,
+        { insertions: { 0: ['#section[Fractions]'] } },
+        [],
+        { exportMode: true },
+      )
+      const { execFileSync } = await import('node:child_process')
+      const { writeFileSync, mkdtempSync } = await import('node:fs')
+      const { tmpdir } = await import('node:os')
+      const { join } = await import('node:path')
+      const dir = mkdtempSync(join(tmpdir(), 'typst-export-'))
+      const file = join(dir, 'doc.typ')
+      writeFileSync(file, code, 'utf-8')
+      expect(() =>
+        execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+          stdio: 'pipe',
         }),
-      ],
-      defaultTypstDocumentOptions,
-      { insertions: { 0: ['#section[Fractions]'] } },
-      [],
-      { exportMode: true },
-    )
-    const { execFileSync } = await import('node:child_process')
-    const { writeFileSync, mkdtempSync } = await import('node:fs')
-    const { tmpdir } = await import('node:os')
-    const { join } = await import('node:path')
-    const dir = mkdtempSync(join(tmpdir(), 'typst-export-'))
-    const file = join(dir, 'doc.typ')
-    writeFileSync(file, code, 'utf-8')
-    expect(() =>
-      execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
-        stdio: 'pipe',
-      }),
-    ).not.toThrow()
-  })
+      ).not.toThrow()
+    },
+  )
 })
 
 describe('getGeneratedExerciseCode', () => {
@@ -907,9 +942,7 @@ describe('getGeneratedExerciseCode', () => {
 
 describe('buildStandaloneExerciseCode', () => {
   it("n'inclut que les aides utilisées et aucun repère/variable interne", () => {
-    const inputs = [
-      exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
-    ]
+    const inputs = [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })]
     const code = buildStandaloneExerciseCode(inputs, 1)
     expect(code).toContain('#import "@preview/taskize:0.2.7"')
     expect(code).toContain('#let couleur =')
@@ -918,26 +951,29 @@ describe('buildStandaloneExerciseCode', () => {
     expect(code).not.toContain('ex1-colonnes')
   })
 
-  it('compile seul avec typst (exercice avec figure mathalea2d à labels)', async () => {
-    const inputs = [
-      exercise({
-        questions: [
-          '<div class="svgContainer"><div><svg class="mathalea2d" width="96" height="48"></svg><div class="divLatex" style="top: 10px; left: 20px; transform: rotate(0deg);" data-top=10 data-left=20><span class="katex"><span class="katex-mathml"><math><semantics><annotation encoding="application/x-tex">1</annotation></semantics></math></span></span></div></div></div>',
-        ],
-      }),
-    ]
-    const code = buildStandaloneExerciseCode(inputs, 1)
-    const { execFileSync } = await import('node:child_process')
-    const { writeFileSync, mkdtempSync } = await import('node:fs')
-    const { tmpdir } = await import('node:os')
-    const { join } = await import('node:path')
-    const dir = mkdtempSync(join(tmpdir(), 'typst-standalone-'))
-    const file = join(dir, 'doc.typ')
-    writeFileSync(file, code, 'utf-8')
-    expect(() =>
-      execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
-        stdio: 'pipe',
-      }),
-    ).not.toThrow()
-  })
+  it.skipIf(!shouldRunTypstCliTests())(
+    'compile seul avec typst (exercice avec figure mathalea2d à labels)',
+    async () => {
+      const inputs = [
+        exercise({
+          questions: [
+            '<div class="svgContainer"><div><svg class="mathalea2d" width="96" height="48"></svg><div class="divLatex" style="top: 10px; left: 20px; transform: rotate(0deg);" data-top=10 data-left=20><span class="katex"><span class="katex-mathml"><math><semantics><annotation encoding="application/x-tex">1</annotation></semantics></math></span></span></div></div></div>',
+          ],
+        }),
+      ]
+      const code = buildStandaloneExerciseCode(inputs, 1)
+      const { execFileSync } = await import('node:child_process')
+      const { writeFileSync, mkdtempSync } = await import('node:fs')
+      const { tmpdir } = await import('node:os')
+      const { join } = await import('node:path')
+      const dir = mkdtempSync(join(tmpdir(), 'typst-standalone-'))
+      const file = join(dir, 'doc.typ')
+      writeFileSync(file, code, 'utf-8')
+      expect(() =>
+        execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+          stdio: 'pipe',
+        }),
+      ).not.toThrow()
+    },
+  )
 })

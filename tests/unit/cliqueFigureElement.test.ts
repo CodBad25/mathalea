@@ -101,7 +101,11 @@ describe('CliqueFigureElement', () => {
       document.createElement('button'),
     )
 
-    expect(result).toEqual({ numberOfPoints: 1, numberOfQuestions: 1 })
+    expect(result).toEqual({
+      numberOfPoints: 1,
+      numberOfQuestions: 1,
+      perQuestionIsOk: [true],
+    })
     expect(exercice.answers?.figureA).toBe('1')
   })
 })

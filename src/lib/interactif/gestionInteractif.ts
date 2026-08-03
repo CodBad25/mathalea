@@ -4,6 +4,7 @@ import {
   isInteractivityType,
   isQcmValeur,
   interactivityTypeToCustomElementFormat,
+  VALEUR_NAMES,
   type AnswerValueType,
   type AutoCorrection,
   type ClickFigures,
@@ -33,7 +34,7 @@ import { prepareCliqueFigure } from '../customElements/CliqueFigureElement'
 import { addElement, get, setStyles } from '../html/dom'
 import { Complexe } from '../mathFonctions/Complexe'
 import { afficheScore } from './afficheScore'
-import { fonctionComparaison } from './comparisonFunctions'
+import { estUniteManquante, fonctionComparaison } from './comparisonFunctions'
 import { syncQcmAutoCorrectionToAmc } from './qcm'
 import '../customElements/DragAndDropElement'
 import '../customElements/MetaInteractif2dElement'
@@ -90,6 +91,64 @@ const isMetaExercice = (
       .correctionInteractives,
   )
 /**
+ * Lit la saisie brute (LaTeX) d'un champ de réponse mathlive avant toute vérification,
+ * sans déclencher les effets de bord de verifQuestion (verrouillage du champ, écriture du score...).
+ */
+function getSaisieBruteChampAvecUnite(
+  numeroExercice: number,
+  i: number,
+  key: string,
+): string | null {
+  const baseId = `champTexteEx${numeroExercice}Q${i}`
+  const mathaleaMathfield = document.querySelector(
+    `mathalea-mathfield[mathfield-id="${baseId}"]`,
+  ) as
+    | (Element & {
+        value?: string
+        getPromptValue?: (id: string) => string
+      })
+    | null
+  if (key === 'reponse') {
+    if (mathaleaMathfield != null) return mathaleaMathfield.value ?? ''
+    const champTexte = document.getElementById(baseId) as
+      | (HTMLElement & { value?: string })
+      | null
+    return champTexte?.value ?? null
+  }
+  if (/^champ\d+$/.test(key)) {
+    return mathaleaMathfield?.getPromptValue?.(key) ?? null
+  }
+  return null
+}
+
+/**
+ * Indique si l'exercice contient une réponse attendant une unité (options.unite === true)
+ * dont la saisie actuelle en oublie une. Sert à bloquer la toute première vérification
+ * pour inviter l'élève à compléter l'unité avant de corriger.
+ */
+export function exerciceAUneUniteManquante(exercice: IExercice): boolean {
+  if (exercice.numeroExercice == null) return false
+  for (let i = 0; i < exercice.autoCorrection.length; i++) {
+    const valeur = exercice.autoCorrection[i]?.valeur
+    if (valeur == null) continue
+    for (const key of VALEUR_NAMES) {
+      if (key === 'bareme' || key === 'feedback' || key === 'callback') continue
+      const champ = valeur[key]
+      if (champ == null || typeof champ !== 'object' || !('options' in champ))
+        continue
+      if (champ.options?.unite !== true) continue
+      const saisie = getSaisieBruteChampAvecUnite(
+        exercice.numeroExercice,
+        i,
+        key,
+      )
+      if (saisie != null && estUniteManquante(saisie)) return true
+    }
+  }
+  return false
+}
+
+/**
  * Cette fonction vérifie les réponses de chaque question en appelant la fonction associée à son formatInteractif ('mathlive', 'listeDeroulante', 'cliqueFigure', 'qcm')
  * @param {Exercice} exercice
  * @param {HTMLDivElement} divScore
@@ -103,6 +162,7 @@ export function exerciceInteractif(
 ): ResultOfExerciceInteractif {
   let nbQuestionsValidees = 0
   let nbQuestionsNonValidees = 0
+  const perQuestionIsOk: boolean[] = []
   exercice.answers = {}
 
   if (exercice.interactifType === 'custom') {
@@ -146,6 +206,7 @@ export function exerciceInteractif(
       nbQuestionsValidees += result.score.nbBonnesReponses
       nbQuestionsNonValidees +=
         result.score.nbReponses - result.score.nbBonnesReponses
+      perQuestionIsOk[i] = result.isOk
       if (result.feedback && result.feedback !== '') {
         const divFeedback = document.querySelector(
           `#feedbackEx${exercice.numeroExercice}Q${i}`,
@@ -170,6 +231,7 @@ export function exerciceInteractif(
           {
             if (isMetaExercice(exercice)) {
               const result = exercice.correctionInteractives[i](i)
+              perQuestionIsOk[i] = result === 'OK'
               if (result === 'OK') nbQuestionsValidees++
               else nbQuestionsNonValidees++
             }
@@ -184,6 +246,7 @@ export function exerciceInteractif(
     nbQuestionsNonValidees,
     divScore,
     buttonScore,
+    perQuestionIsOk,
   )
 }
 
@@ -201,6 +264,7 @@ function verifExerciceCustom(
 ) {
   let nbBonnesReponses = 0
   let nbMauvaisesReponses = 0
+  const perQuestionIsOk: boolean[] = []
   // Le get est non strict car on sait que l'élément n'existe pas à la première itération de l'exercice
   let eltFeedback = get(`feedbackEx${exercice.numeroExercice}`, false)
   // On ajoute le div pour le feedback
@@ -225,11 +289,13 @@ function verifExerciceCustom(
       if (exercice.correctionInteractive != null) {
         const correction = exercice.correctionInteractive(i)
         if (Array.isArray(correction)) {
+          perQuestionIsOk[i] = correction.every((result) => result === 'OK')
           for (const result of correction) {
             if (result === 'OK') nbBonnesReponses++
             else nbMauvaisesReponses++
           }
         } else {
+          perQuestionIsOk[i] = correction === 'OK'
           if (correction === 'OK') nbBonnesReponses++
           else nbMauvaisesReponses++
         }
@@ -238,7 +304,9 @@ function verifExerciceCustom(
   } else {
     for (let i = 0; i < exercice.nbQuestions; i++) {
       if (exercice.correctionInteractive != null) {
-        if (exercice.correctionInteractive(i) === 'OK') nbBonnesReponses++
+        const correction = exercice.correctionInteractive(i)
+        perQuestionIsOk[i] = correction === 'OK'
+        if (correction === 'OK') nbBonnesReponses++
         else nbMauvaisesReponses++
       }
     }
@@ -249,6 +317,7 @@ function verifExerciceCustom(
     nbMauvaisesReponses,
     divScore,
     buttonScore,
+    perQuestionIsOk,
   )
 }
 

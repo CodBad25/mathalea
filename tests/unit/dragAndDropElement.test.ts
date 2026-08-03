@@ -78,7 +78,11 @@ describe('DragAndDropElement', () => {
       document.createElement('button'),
     )
 
-    expect(result).toEqual({ numberOfPoints: 1, numberOfQuestions: 1 })
+    expect(result).toEqual({
+      numberOfPoints: 1,
+      numberOfQuestions: 1,
+      perQuestionIsOk: [true],
+    })
     expect(document.getElementById('resultatCheckEx4Q0')?.innerHTML).toBe('😎')
     expect(exercice.answers?.rectangleDNDEx4Q0R1).toBe('etiquetteEx4Q0I1')
   })

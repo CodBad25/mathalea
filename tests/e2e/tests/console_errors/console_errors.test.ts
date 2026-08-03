@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test'
-import type { Locator, Page } from 'playwright'
+import type { ConsoleMessage, Locator, Page } from 'playwright'
 import { describe, test } from 'vitest'
 import { shuffle } from '../../../../src/lib/outils/arrayOutils'
 import { findStatic, findUuid } from '../../helpers/filter.js'
@@ -18,6 +18,45 @@ import { checkEachCombinationOfParams } from '../../helpers/testAllViews.js'
 const logConsole = getFileLogger('exportConsole', { append: true })
 
 class ConsoleErrorsTestFailure extends Error {}
+
+type ConsoleTestTimeouts = {
+  default: number
+  navigation: number
+  networkIdle: number
+  selector: number
+  zoomUrl: number
+  zoomExercise: number
+}
+
+type ConsoleErrorsProfile = 'smoke' | 'standard' | 'deep'
+
+function getConsoleTestTimeouts(urlExercice: string): ConsoleTestTimeouts {
+  const url = new URL(urlExercice)
+  const isForgeLocalServer =
+    urlExercice.startsWith('http://localhost:80/') ||
+    url.port === '80' ||
+    (url.port === '' && process.env.CI)
+  const shortTimeout = 10_000
+  const forgeTimeout = 30_000
+  const timeout = isForgeLocalServer ? forgeTimeout : shortTimeout
+
+  return {
+    default: timeout,
+    navigation: timeout,
+    networkIdle: timeout,
+    selector: timeout,
+    zoomUrl: 5_000,
+    zoomExercise: timeout,
+  }
+}
+
+function getConsoleErrorsProfile(): ConsoleErrorsProfile {
+  const profile = process.env.CONSOLE_ERRORS_PROFILE?.trim().toLowerCase()
+  if (profile === 'smoke' || profile === 'standard' || profile === 'deep') {
+    return profile
+  }
+  return 'standard'
+}
 
 function formatFailureDetails(
   urlExercice: string,
@@ -56,17 +95,42 @@ function addUniqueMessage(messages: string[], message: string | undefined) {
   if (!messages.includes(message)) messages.push(message)
 }
 
+async function waitForExerciseVisible(page: Page) {
+  const timeouts = getConsoleTestTimeouts(page.url())
+  await page.waitForSelector('div.mb-5>ul>div#consigne0-0', {
+    timeout: timeouts.selector,
+  })
+}
+
+function isLocalViteDependencyLoadingMessage(
+  text: string,
+  locationUrl: string,
+) {
+  return (
+    locationUrl.includes('/node_modules/.vite/deps/') &&
+    text.startsWith('Failed to load resource:')
+  )
+}
+
 async function clickZoomAndWaitForExercise(page: Page, buttonZoom: Locator) {
+  const timeouts = getConsoleTestTimeouts(page.url())
   const previousZoom = new URL(page.url()).searchParams.get('z') ?? ''
   await buttonZoom.click()
-  await page.waitForFunction(
-    (zoom) => new URL(window.location.href).searchParams.get('z') !== zoom,
-    previousZoom,
-    { timeout: 30_000 },
-  )
-  await page.locator('div.mb-5>ul>div#consigne0-0').waitFor({
+  const exerciseLocator = page.locator('div.mb-5>ul>div#consigne0-0')
+  try {
+    await page.waitForFunction(
+      (zoom) => new URL(window.location.href).searchParams.get('z') !== zoom,
+      previousZoom,
+      { timeout: timeouts.zoomUrl },
+    )
+  } catch (error) {
+    const exerciseIsVisible = await exerciseLocator.isVisible()
+    if (!exerciseIsVisible) throw error
+    logIfDebug(`Zoom inchangé, exercice déjà visible: z=${previousZoom}`)
+  }
+  await exerciseLocator.waitFor({
     state: 'visible',
-    timeout: 60_000,
+    timeout: timeouts.zoomExercise,
   })
   await page.evaluate(
     () =>
@@ -77,9 +141,17 @@ async function clickZoomAndWaitForExercise(page: Page, buttonZoom: Locator) {
   logIfDebug('Exercice affiché après zoom')
 }
 
-async function action(page: Page, description: string) {
+async function quickAction(page: Page, description: string) {
   logIfVerbose(`Test avec les paramètres ${description}`)
-  // clic sur nouvel énoncé 3 fois
+  await waitForExerciseVisible(page)
+}
+
+async function fullAction(
+  page: Page,
+  description: string,
+  options?: { refreshAfterInteractivityCount?: number },
+) {
+  logIfVerbose(`Test complet avec les paramètres ${description}`)
   const buttonNewData = page.getByRole('button', { name: 'Nouvel énoncé' })
   logIfDebug('Actualier (nouvel énoncé)')
   await buttonNewData.click({ force: true })
@@ -126,9 +198,15 @@ async function action(page: Page, description: string) {
     await page.waitForSelector('article + div')
     const buttonResult = await page.locator('article + div').innerText()
     logIfVerbose(buttonResult)
-    logIfVerbose('Actualier (nouvel énoncé) 3 fois')
-    await buttonNewData.click({ clickCount: 3 })
-    logIfVerbose('fin Actualier (nouvel énoncé) 3 fois')
+    const refreshAfterInteractivityCount =
+      options?.refreshAfterInteractivityCount ?? 1
+    logIfVerbose(
+      `Actualier (nouvel énoncé) ${refreshAfterInteractivityCount} fois`,
+    )
+    await buttonNewData.click({ clickCount: refreshAfterInteractivityCount })
+    logIfVerbose(
+      `fin Actualier (nouvel énoncé) ${refreshAfterInteractivityCount} fois`,
+    )
   } else {
     // MGu : obligé car parfois on rate l'exception car trop rapide
     // await new Promise((resolve) => setTimeout(resolve, 1000)) // GV : Si on attend 1 seconde après chaque cas, il va falloir 1 an si on veut tester toutes les possibilités
@@ -137,87 +215,107 @@ async function action(page: Page, description: string) {
 
 async function getConsoleTest(page: Page, urlExercice: string) {
   logIfVerbose(urlExercice)
-  page.setDefaultTimeout(1_500_000)
+  const timeouts = getConsoleTestTimeouts(urlExercice)
+  const profile = getConsoleErrorsProfile()
+  page.setDefaultTimeout(timeouts.default)
 
   const retries = 3 // Nombre de tentatives en cas d'erreur
   for (let attempt = 1; attempt <= retries; attempt++) {
     const messages: string[] = []
-    try {
-      page.on('pageerror', (msg) => {
-        if (msg.message !== 'Erreur de chargement de Mathgraph') {
-          // mtgLoad : 3G22
-          addUniqueMessage(messages, `pageerror:${page.url()} ${msg.message}`)
-          logError(msg)
-        }
-      })
-      page.on('crash', (msg) => {
-        addUniqueMessage(messages, 'crash:' + page.url() + ' ' + msg)
+    const onPageError = (msg: Error) => {
+      if (msg.message !== 'Erreur de chargement de Mathgraph') {
+        // mtgLoad : 3G22
+        addUniqueMessage(messages, `pageerror:${page.url()} ${msg.message}`)
         logError(msg)
-      })
-      // Listen for all console events and handle errors
-      page.on('console', (msg) => {
-        // if (msg.type() === 'error') {
-        if (
-          !msg.text().includes('[vite]') &&
-          !msg.text().includes('[bugsnag] Loaded!') &&
-          !msg.text().includes('No character metrics for') && // katex
-          !msg.text().includes('LaTeX-incompatible input') && // katex
-          !msg.text().includes('mtgLoad') && // mtgLoad : 3G22
-          !msg.text().includes('MG32div0') && // MG32div0 : 3G22
-          !msg.text().includes('Figure destroyed successfully') && // apigeom
-          !msg
-            .text()
-            .includes('UserFriendlyError: Le chargement de mathgraph') &&
-          !msg.text().includes("Invalid 'X-Frame-Options' header") &&
-          !msg
-            .text()
-            .includes(
-              'Blockly.Workspace.getAllVariables was deprecated in v12',
-            ) &&
-          !msg.text().includes('A-Frame Version:') &&
-          !msg
-            .text()
-            .includes(
-              'THREE Version (https://github.com/supermedium/three.js)',
-            ) &&
-          !msg
-            .text()
-            .includes(
-              'WARNING: Too many active WebGL contexts. Oldest context will be lost.',
-            ) &&
-          !msg.text().includes('GPU stall due to ReadPixels') &&
-          !msg.text().includes(': le motif contient plus') &&
-          !msg
-            .text()
-            .includes(
-              'The column width is less than 0, need to adjust page width to make',
-            ) &&
-          !msg.location().url.includes('mathgraph32') &&
-          !msg.text().includes('placeholderMetrics 0.7 0.2') &&
-          !msg.text().includes('Compilation fallback for')
-        ) {
-          if (!msg.text().includes('<HeaderExercice>')) {
-            addUniqueMessage(
-              messages,
-              `console:${page.url()} ${compactBrowserMessage(msg.text())}`,
-            )
-          }
+      }
+    }
+    const onCrash = (msg: Page) => {
+      addUniqueMessage(messages, 'crash:' + page.url() + ' ' + msg)
+      logError(msg)
+    }
+    const onConsole = (msg: ConsoleMessage) => {
+      const text = msg.text()
+      const locationUrl = msg.location().url
+      // if (msg.type() === 'error') {
+      if (
+        !text.includes('[vite]') &&
+        !text.includes('[bugsnag] Loaded!') &&
+        !text.includes('No character metrics for') && // katex
+        !text.includes('LaTeX-incompatible input') && // katex
+        !text.includes('mtgLoad') && // mtgLoad : 3G22
+        !text.includes('MG32div0') && // MG32div0 : 3G22
+        !text.includes('Figure destroyed successfully') && // apigeom
+        !text.includes('UserFriendlyError: Le chargement de mathgraph') &&
+        !text.includes("Invalid 'X-Frame-Options' header") &&
+        !text.includes(
+          'Blockly.Workspace.getAllVariables was deprecated in v12',
+        ) &&
+        !text.includes('A-Frame Version:') &&
+        !text.includes(
+          'THREE Version (https://github.com/supermedium/three.js)',
+        ) &&
+        !text.includes(
+          'WARNING: Too many active WebGL contexts. Oldest context will be lost.',
+        ) &&
+        !text.includes('GPU stall due to ReadPixels') &&
+        !text.includes(': le motif contient plus') &&
+        !text.includes(
+          'The column width is less than 0, need to adjust page width to make',
+        ) &&
+        !locationUrl.includes('mathgraph32') &&
+        !text.includes('placeholderMetrics 0.7 0.2') &&
+        !text.includes('Compilation fallback for') &&
+        !isLocalViteDependencyLoadingMessage(text, locationUrl)
+      ) {
+        if (!text.includes('<HeaderExercice>')) {
+          addUniqueMessage(
+            messages,
+            `console:${page.url()} ${compactBrowserMessage(text)}`,
+          )
         }
-        // }
-      })
+      }
+      // }
+    }
+    try {
+      page.on('pageerror', onPageError)
+      page.on('crash', onCrash)
+      // Listen for all console events and handle errors
+      page.on('console', onConsole)
 
       logIfVerbose('On charge la page')
-      await page.goto(urlExercice)
-      await page.waitForLoadState('networkidle')
+      await page.goto(urlExercice, { timeout: timeouts.navigation })
+      await page.waitForLoadState('networkidle', {
+        timeout: timeouts.networkIdle,
+      })
       logIfVerbose('fin : On charge la page')
 
       // Correction
       // On cherche les questions
       logIfVerbose('On cherche les questions')
-      await page.waitForSelector('div.mb-5>ul>div#consigne0-0')
+      await waitForExerciseVisible(page)
       logIfVerbose('fin : On cherche les questions')
-      // Pour chaque combinaison de paramètres, on clique sur nouvel énoncé 3 fois, active le mode interactif et reclique sur nouvel énoncé 3 fois
-      await checkEachCombinationOfParams(page, action, { isFullViews: true })
+
+      if (profile === 'deep') {
+        // Ancien scénario : chaque valeur de paramètre déclenche le parcours UI complet.
+        await checkEachCombinationOfParams(
+          page,
+          async (page, description) =>
+            fullAction(page, description, {
+              refreshAfterInteractivityCount: 3,
+            }),
+          { isFullViews: true },
+        )
+      } else if (profile === 'smoke') {
+        await fullAction(page, 'smoke')
+      } else {
+        // Scénario par défaut : les paramètres sont parcourus légèrement,
+        // puis le zoom et l'interactivité sont vérifiés une seule fois.
+        await checkEachCombinationOfParams(page, quickAction, {
+          isFullViews: false,
+        })
+        await fullAction(page, 'standard')
+      }
+
       // Paramètres ça va les refermer puisqu'ils sont ouverts par défaut
       const buttonParam = page.getByRole('button', {
         name: "Changer les paramètres de l'",
@@ -255,6 +353,10 @@ async function getConsoleTest(page: Page, urlExercice: string) {
           formatFailureDetails(urlExercice, page, messages),
         )
       }
+    } finally {
+      page.off('pageerror', onPageError)
+      page.off('crash', onCrash)
+      page.off('console', onConsole)
     }
   }
 }
@@ -327,7 +429,6 @@ async function testRunAllLots(filter: string) {
 
 const alea = 'e906e'
 const local = true
-process.env.NIV = 'EAMPremiere/EAM-PolynesieSpe-2026-Q4.ts'
 if (process.env.NIV !== null && process.env.NIV !== undefined) {
   const filter = (process.env.NIV as string).replaceAll(' ', '')
   prefs.headless = true

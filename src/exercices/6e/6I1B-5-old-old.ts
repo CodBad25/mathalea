@@ -3,6 +3,7 @@ import {
   renderSheetMarkup,
 } from '../../lib/customElements/MySpreadSheet'
 import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
+import { vertMathalea } from '../../lib/colors'
 import { context } from '../../modules/context'
 
 import {
@@ -248,7 +249,7 @@ export default class ExerciceTableur extends Exercice {
         '#message-faux',
       ) as HTMLDivElement
       if (messages && messagesDiv) {
-        messagesDiv.style.color = 'green'
+        messagesDiv.style.color = vertMathalea
         messagesDiv.innerHTML = messages
       }
     }

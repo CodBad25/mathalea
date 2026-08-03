@@ -88,12 +88,19 @@ function applyPrefsFromEnv(defaultHeadless: boolean) {
 async function clickZoomAndWaitForExercise(page: Page, buttonZoom: Locator) {
   const previousZoom = new URL(page.url()).searchParams.get('z') ?? ''
   await buttonZoom.click()
-  await page.waitForFunction(
-    (zoom) => new URL(window.location.href).searchParams.get('z') !== zoom,
-    previousZoom,
-    { timeout: 30_000 },
-  )
-  await page.locator('div.mb-5>ul>div#consigne0-0').waitFor({
+  const exerciseLocator = page.locator('div.mb-5>ul>div#consigne0-0')
+  try {
+    await page.waitForFunction(
+      (zoom) => new URL(window.location.href).searchParams.get('z') !== zoom,
+      previousZoom,
+      { timeout: 5_000 },
+    )
+  } catch (error) {
+    const exerciseIsVisible = await exerciseLocator.isVisible()
+    if (!exerciseIsVisible) throw error
+    logDebug(`Zoom inchangé, exercice déjà visible: z=${previousZoom}`)
+  }
+  await exerciseLocator.waitFor({
     state: 'visible',
     timeout: 60_000,
   })

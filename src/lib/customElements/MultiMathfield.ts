@@ -10,8 +10,11 @@ import {
 } from '../interactif/claviers/keyboard'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
 import { toutAUnPoint } from '../interactif/fonctionsBaremes'
+import type { AllChoicesType } from '../interactif/listeDeroulante/ListeDeroulante'
 import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
 import type { IExercice, ValeurNames } from '../types'
+import type ListeDeroulanteElement from './ListeDeroulanteElement'
+import './ListeDeroulanteElement'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
@@ -68,6 +71,13 @@ export type DataOptionsMultiMathfield = Partial<
       minWidth?: number
       texteApres?: string
       ldots?: boolean
+      /**
+       * Si ce tableau est fourni, le champ n'est pas un MathLive mais une liste
+       * déroulante proposant ces choix.
+       */
+      choices?: AllChoicesType
+      /** Le premier choix de la liste est-il sélectionnable ? */
+      choix0?: boolean
     }
   >
 >
@@ -90,6 +100,8 @@ type MultiMathfieldOption = {
   minWidth?: number
   texteApres?: string
   ldots?: boolean
+  choices?: AllChoicesType
+  choix0?: boolean
 }
 
 const buildDataKeyboardString = (style = '') => {
@@ -241,7 +253,35 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
   }
 
   connectedCallback() {
+    this.hydrateCommonAttributes()
     this.render()
+  }
+
+  /**
+   * Construit une liste déroulante imbriquée pour un champ défini avec `choices`.
+   * L'id est préfixé par le tag pour que le span de résultat créé par
+   * `ListeDeroulanteElement` ne rentre pas en collision avec l'élément lui-même.
+   */
+  private createListeDeroulante(
+    name: string,
+    fieldOptions: MultiMathfieldOption,
+  ): ListeDeroulanteElement {
+    const liste = document.createElement(
+      'liste-deroulante',
+    ) as ListeDeroulanteElement
+    liste.id = `liste-deroulante-${this.id || 'multi-mathfield'}-${name}`
+    liste.setAttribute('data-name', name)
+    liste.setAttribute('class', 'mx-2 listeDeroulante')
+    liste.setAttribute(
+      'choices',
+      encodeURIComponent(JSON.stringify(fieldOptions.choices ?? [])),
+    )
+    liste.setAttribute('choix0', fieldOptions.choix0 ? 'true' : 'false')
+    liste.setAttribute(
+      'interactivity-on',
+      this.interactivityOn ? 'true' : 'false',
+    )
+    return liste
   }
 
   render() {
@@ -304,6 +344,27 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
       } else if (token.startsWith('%{')) {
         // Champ éditable
         const name = token.slice(2, -1)
+        const fieldOptions: MultiMathfieldOption = options[name] ?? {}
+        if (
+          Array.isArray(fieldOptions.choices) &&
+          fieldOptions.choices.length > 0
+        ) {
+          // Le champ est une liste déroulante et non un MathLive.
+          const liste = this.createListeDeroulante(name, fieldOptions)
+          const checkSpanListe = document.createElement('span')
+          checkSpanListe.id =
+            'check-' + (this.id ? this.id : 'multi-mathfield') + '-' + name
+          currentSpan.appendChild(liste)
+          if (fieldOptions.texteApres) {
+            const texteApresListe = document.createElement('span')
+            texteApresListe.style.marginLeft = '0'
+            texteApresListe.innerHTML = fieldOptions.texteApres
+            currentSpan.appendChild(texteApresListe)
+          }
+          currentSpan.appendChild(checkSpanListe)
+          lastIndex = regex.lastIndex
+          continue
+        }
         const div = document.createElement('DIV')
         div.style.display = 'inline-block'
         div.classList.add('ml-1')
@@ -447,6 +508,13 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
           result[name] = mf.value
         }
       })
+      this.shadowRoot.querySelectorAll('liste-deroulante').forEach((el) => {
+        const liste = el as ListeDeroulanteElement
+        const name = liste.getAttribute('data-name')
+        if (name) {
+          result[name] = liste.value ?? ''
+        }
+      })
     }
     return result
   }
@@ -498,6 +566,13 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         const name = mf.getAttribute('data-name')
         if (name && answers[name] !== undefined) {
           mf.value = answers[name]
+        }
+      })
+      this.shadowRoot.querySelectorAll('liste-deroulante').forEach((el) => {
+        const liste = el as ListeDeroulanteElement
+        const name = liste.getAttribute('data-name')
+        if (name && answers[name] !== undefined) {
+          liste.value = answers[name]
         }
       })
     }
@@ -570,6 +645,36 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
       const options = reponse.options
       noFeedback = noFeedback || Boolean(options?.noFeedback)
       const compareFunction = reponse.compare ?? fonctionComparaison
+
+      const liste = multi?.shadowRoot?.querySelector(
+        `liste-deroulante[data-name="${field}"]`,
+      ) as ListeDeroulanteElement | null
+      if (liste != null) {
+        // Champ « liste déroulante » : la comparaison est une simple égalité
+        // avec la (ou l'une des) valeur(s) attendue(s).
+        liste.interactivityOn = false
+        const saisie = liste.value ?? ''
+        const eltFeedbackListe = multi?.shadowRoot?.querySelector(
+          `#check-${multiId}-${field}`,
+        ) as HTMLSpanElement | null
+        if (saisie === '') {
+          compteurSaisiesVides++
+          points.push(0)
+          continue
+        }
+        saisies[field] = saisie
+        const attendues: unknown[] = Array.isArray(reponse.value)
+          ? reponse.value
+          : [reponse.value]
+        const isOk = attendues.some((valeur) => String(valeur) === saisie)
+        points.push(isOk ? 1 : 0)
+        if (isOk) compteurBonnesReponses++
+        if (eltFeedbackListe) {
+          setStyles(eltFeedbackListe, 'marginBottom: 20px')
+          eltFeedbackListe.innerHTML = isOk ? '😎' : '☹️'
+        }
+        continue
+      }
 
       const mf = multi?.shadowRoot?.querySelector(
         `#${multiId}-${field}`,

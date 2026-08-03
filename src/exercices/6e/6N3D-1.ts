@@ -60,14 +60,14 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
     this.consigne = context.isHtml
       ? 'Utiliser les boutons pour modifier la demi-droite graduée et créer les graduations nécessaires pour placer le point $A$.'
       : "L'unité est le cm. Un segment [OT] est à construire sur la demi-droite graduée, puis à partager en parties égales pour placer le point $A$."
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const abscisseT = randint(4, 9)
       const den = context.isHtml
         ? randint(2, 10, abscisseT)
         : this.sup2
           ? choice([2, 4, 5, 10], abscisseT)
           : choice([2, 4], abscisseT)
-      const num = this.sup ? randint(2, den - 1) * abscisseT : abscisseT
+      const num = this.sup ? randint(2, den) * abscisseT : abscisseT
 
       let texte = `Placer le point $A$ d'abscisse $\\dfrac{${num}}{${den}}$ sur la demi-droite graduée ci-dessous.<br><br>`
       let texteCorr = `On construit le segment [OT] de longueur ${abscisseT} cm, puis on le partage en ${den} parties égales.<br>

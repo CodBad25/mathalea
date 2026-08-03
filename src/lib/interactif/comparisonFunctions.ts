@@ -14,7 +14,7 @@ import {
 import Grandeur from '../../modules/Grandeur'
 import Hms from '../../modules/Hms'
 import { pgcd } from '../outils/primalite'
-import type { OptionsComparaisonType } from '../types'
+import type { CleaningOperation, OptionsComparaisonType } from '../types'
 import { generateCleaner } from './cleaners'
 
 const ce = new ComputeEngine()
@@ -1041,6 +1041,26 @@ function handleEcritureScientifique(
  * @param {string} input la chaine qui contient le nombre avec son unité
  * @return {Grandeur|false} l'objet de type Grandeur qui contient la valeur et l'unité... ou false si c'est pas une grandeur.
  */
+const CLEANER_STEPS_UNITE: CleaningOperation[] = [
+  'virgules',
+  'espaces',
+  'fractions',
+  'parentheses',
+  'mathrm',
+  'operatorName',
+]
+
+/**
+ * Indique si une saisie non vide ne contient pas d'unité reconnaissable.
+ * Utilisée pour bloquer une première vérification tant que l'unité n'a pas été saisie.
+ */
+export function estUniteManquante(saisie: string): boolean {
+  if (saisie == null || saisie.trim() === '') return false
+  const localInput = saisie.replace('^\\circ', '°').replace('\\degree', '°')
+  const cleaner = generateCleaner(CLEANER_STEPS_UNITE)
+  return inputToGrandeur(cleaner(localInput)) === false
+}
+
 function inputToGrandeur(input: string): Grandeur | false {
   if (input.indexOf('°C') > 0) {
     const split = input.split('°C')
@@ -1087,14 +1107,7 @@ function handleUnite(
   */
   // Version Jean-claude Lhote
   const localInput = saisie.replace('^\\circ', '°').replace('\\degree', '°')
-  const cleaner = generateCleaner([
-    'virgules',
-    'espaces',
-    'fractions',
-    'parentheses',
-    'mathrm',
-    'operatorName',
-  ])
+  const cleaner = generateCleaner(CLEANER_STEPS_UNITE)
   const inputGrandeur = inputToGrandeur(cleaner(localInput))
 
   const goodAnswerGrandeur = Grandeur.fromString(

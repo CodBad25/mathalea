@@ -102,6 +102,10 @@ const callback = async (
     if (view === 'LaTeX' || view === 'AMC') {
       let latex = ''
       if (view === 'LaTeX') {
+        await page.context().grantPermissions(
+          ['clipboard-read', 'clipboard-write'],
+          { origin: new URL(page.url()).origin },
+        )
         await page.locator('text=Code + préambule').click()
         latex = await page.evaluate(async () => {
           return await navigator.clipboard.readText()
@@ -157,7 +161,7 @@ async function prepareCompilation(view: View, AmcFiles: string[]) {
 }
 
 async function compileLatex(texDir: string, fileName: string) {
-  const compilationCommand = `lualatex ${texDir}/${fileName}.tex`
+  const compilationCommand = `lualatex -interaction=nonstopmode -halt-on-error -file-line-error ${texDir}/${fileName}.tex`
   console.log(`First compilation of ${texDir}/${fileName}.tex`)
   await runShellCommand(compilationCommand)
   console.log(`Second compilation of ${texDir}/${fileName}.tex`)
@@ -237,7 +241,9 @@ async function getScenario(
     }
   } else if (view === 'apercu') {
     return {
-      displayCorrectionSelectors: ['.mb-8.bx-toggle-left'],
+      displayCorrectionSelectors: [
+        'button[aria-label="Afficher les réponses"]',
+      ],
     }
   } else if (view === 'eleve') {
     if (variation === 'Une page par question') {

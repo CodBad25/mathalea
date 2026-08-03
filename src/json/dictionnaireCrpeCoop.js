@@ -2881,8 +2881,8 @@ export const dictionnaireCrpeCoop = {
   },
   crpe_m2_2026_g1_ex1: {
     annee: '2026',
-    lieu: 'g1',
-    numeroInitial: 'ex1',
+    lieu: 'Groupement 1',
+    numeroInitial: '1',
     png: 'static/crpe/2026/tex/png/crpe_m2_2026_g1_ex1.png',
     pngCor: 'static/crpe/2026/tex/png/crpe_m2_2026_g1_ex1_cor.png',
     typeExercice: 'crpe',

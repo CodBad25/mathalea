@@ -85,6 +85,13 @@ export const rpc = new RPC({
 export let answersFromCapytale: InterfaceResultExercice[] = []
 export let assignmentDataFromCapytale: AssignmentData = {}
 
+// Les paramètres de l'activité tels que Capytale les a fournis.
+// Hors mode création, MathALÉA force des réglages d'affichage dans les stores
+// (vue élève, accès aux corrections, graines effacées…) : ils ne doivent pas
+// être renvoyés à Capytale, sinon un clonage enregistrerait ces réglages
+// d'affichage à la place de ceux de l'enseignant.
+let activityFromCapytale: Activity | undefined
+
 // timer pour ne pas lancer hasChanged trop souvent
 let timerId: ReturnType<typeof setTimeout> | undefined
 let firstTime = true
@@ -113,6 +120,7 @@ async function toolSetActivityParams({
   capytaleMode.set(mode)
   const canOptions = get(canOptionsStore)
   if (activity === null || activity === undefined) return
+  activityFromCapytale = structuredClone(activity)
   const [newExercicesParams, newGlobalOptions, newCanOptions] = [
     activity.exercicesParams,
     activity.globalOptions,
@@ -124,6 +132,10 @@ async function toolSetActivityParams({
     newGlobalOptions.v = 'can'
   } else if (mode !== 'create') {
     newGlobalOptions.v = 'eleve'
+  } else if (newGlobalOptions.v === 'eleve' || newGlobalOptions.v === 'can') {
+    // Séance enregistrée avec une vue élève (clonage d'une version antérieure) :
+    // l'enseignant doit retrouver la page de configuration, pas la vue de ses élèves
+    newGlobalOptions.v = ''
   }
 
   // On met à jour les paramètres globaux
@@ -147,9 +159,13 @@ async function toolSetActivityParams({
     if (l.v === 'eleve') {
       l.isInteractiveFree = false
     }
-    // Le prof a toujours accès à la correction
+    // Le prof a toujours accès à la correction quand il consulte une séance ou une copie
     // L'élève n'y a accès que si la séance est corrigée
-    if (mode !== 'assignment' || workflow === 'corrected') {
+    // En mode création, on ne force rien pour ne pas écraser le choix de l'enseignant
+    if (
+      mode !== 'create' &&
+      (mode !== 'assignment' || workflow === 'corrected')
+    ) {
       l.isSolutionAccessible = true
     }
     return l
@@ -584,6 +600,12 @@ function notifySaveError(err: CapytaleError, data: StudentAssignmentPayload) {
 }
 
 function sendToCapytaleActivityParams() {
+  // Hors mode création (consultation d'une séance avant clonage, copie d'élève,
+  // relecture), les stores contiennent des réglages d'affichage imposés par
+  // MathALÉA : on renvoie l'activité telle qu'elle a été reçue.
+  if (get(capytaleMode) !== 'create' && activityFromCapytale !== undefined) {
+    return activityFromCapytale
+  }
   const params = get(exercicesParams)
   const options = get(globalOptions)
   const canOptions = get(canOptionsStore)

@@ -4,7 +4,9 @@
   import { get } from 'svelte/store'
   import type TypeExercice from '../../../../../exercices/Exercice'
   import { sendToCapytaleSaveStudentAssignment } from '../../../../../lib/handleCapytale'
+  import { afficheAlerteUniteManquante } from '../../../../../lib/interactif/afficheScore'
   import {
+    exerciceAUneUniteManquante,
     exerciceInteractif,
     prepareExerciceCliqueFigure,
   } from '../../../../../lib/interactif/gestionInteractif'
@@ -85,6 +87,8 @@
 
   // une variable locale car si on modifie isCorrectionVisible, parfois elle devient undefined
   let isCorrectVisible = isCorrectionVisible
+  // résultat (correct/incorrect) de chaque question, utilisé pour n'afficher la correction que sous les questions fausses
+  let questionsIsOk: boolean[] = []
 
   // URL-driven display toggles (only used for FlowMath recorder)
   let boutonValidationUrlFlag = true
@@ -274,6 +278,7 @@
     log('newData:' + exercise.id + ', v:' + $globalOptions.v)
     exercise.isDone = false
     if (isCorrectVisible) switchCorrectionVisible(false)
+    questionsIsOk = []
     exercise.seed = generateFreshSeed()
     if (buttonScore?.dataset?.capytaleLoadAnswers === '1') {
       // si les données ont été chargées par Capytale, on remet à 0
@@ -419,6 +424,14 @@
 
   async function verifExerciceVueEleve() {
     log('verifExerciceVueEleve')
+    exercise.nbTentativesVerification = (exercise.nbTentativesVerification ?? 0) + 1
+    if (
+      exercise.nbTentativesVerification === 1 &&
+      exerciceAUneUniteManquante(exercise)
+    ) {
+      afficheAlerteUniteManquante(divScore)
+      return
+    }
     if (exercise.numeroExercice != null && !(exercise.isDone === true))
       statsTracker(
         exercise,
@@ -430,11 +443,9 @@
 
     if (exercise.numeroExercice != null) {
       const previousBestScore = interfaceParams?.bestScore ?? 0
-      const { numberOfPoints, numberOfQuestions } = exerciceInteractif(
-        exercise,
-        divScore,
-        buttonScore,
-      )
+      const { numberOfPoints, numberOfQuestions, perQuestionIsOk } =
+        exerciceInteractif(exercise, divScore, buttonScore)
+      questionsIsOk = perQuestionIsOk
       const isThisTryBetter = numberOfPoints >= previousBestScore
       if (
         buttonScore.dataset.capytaleLoadAnswers === '1' &&
@@ -751,6 +762,8 @@
                 {questionIndex}
                 {exerciseIndex}
                 isCorrectionVisible={isCorrectVisible}
+                isQuestionCorrect={questionsIsOk[questionIndex]}
+                hideCorrectionOnSuccess={$globalOptions.isCorrectionOnlyOnError}
               />
             {/each}
             <div bind:this={divScore} id="divScoreEx{exerciseIndex}"></div>

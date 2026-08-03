@@ -23,12 +23,13 @@
   let questionContainer: HTMLDivElement
 
   onDestroy(() => {
-    const mf = questionContainer?.querySelector(
+    const mathfields = questionContainer?.querySelectorAll(
       'math-field',
-    ) as MathfieldElement
-    if (mf) {
+    ) as NodeListOf<MathfieldElement>
+    for (const mf of mathfields ?? []) {
       mf.removeEventListener('keyup', handleKeyUp)
       mf.removeEventListener('input', handleMathfieldElement)
+      mf.removeEventListener('focusin', handleMathfieldFocus)
     }
     const listesDeroulantes = questionContainer?.querySelectorAll(
       '[id^="liste-deroulanteEx"]',
@@ -73,7 +74,14 @@
 
   function handleMathfieldElement(this: HTMLElement, ev: Event) {
     /* ca peut venir du clavier vituel ou du clavier physique */
-    if ((this as MathfieldElement).value !== '') {
+    const mathfields = Array.from(
+      questionContainer?.querySelectorAll('math-field') ?? [],
+    ) as MathfieldElement[]
+    const hasAnswer =
+      mathfields.length > 1
+        ? mathfields.some((mf) => mf.value !== '')
+        : (this as MathfieldElement).value !== ''
+    if (hasAnswer) {
       if ($canOptions.questionGetAnswer[index] !== true) {
         $canOptions.questionGetAnswer[index] = true
       }
@@ -82,6 +90,10 @@
         $canOptions.questionGetAnswer[index] = false
       }
     }
+  }
+
+  function handleMathfieldFocus(this: MathfieldElement) {
+    ensureKeyboardVisibleForMathfield(this)
   }
 
   function handleMultiMathfieldElement(ev: Event) {
@@ -193,19 +205,32 @@
         return
       }
 
+      const mathfields = Array.from(
+        questionContainer?.querySelectorAll('math-field') ?? [],
+      ) as MathfieldElement[]
       const mf = questionContainer?.querySelector(
         'math-field',
       ) as MathfieldElement
       if (mf) {
-        if (!mf.dataset.canListenerAdded) {
-          mf.dataset.canListenerAdded = 'true' // Marquer comme ajouté
-          mf.addEventListener('keyup', handleKeyUp)
-          mf.addEventListener('input', handleMathfieldElement)
+        for (const mathfield of mathfields) {
+          if (!mathfield.dataset.canListenerAdded) {
+            mathfield.dataset.canListenerAdded = 'true' // Marquer comme ajouté
+            mathfield.addEventListener('keyup', handleKeyUp)
+            mathfield.addEventListener('input', handleMathfieldElement)
+            mathfield.addEventListener('focusin', handleMathfieldFocus)
+          }
         }
         $keyboardState.idMathField = mf.id
         window.setTimeout(() => {
-          mf.focus()
-          ensureKeyboardVisibleForMathfield(mf)
+          const activeMathfield = mathfields.find(
+            (mathfield) => document.activeElement === mathfield,
+          )
+          if (activeMathfield) {
+            ensureKeyboardVisibleForMathfield(activeMathfield)
+          } else {
+            mf.focus()
+            ensureKeyboardVisibleForMathfield(mf)
+          }
         }, 0)
         return
       }

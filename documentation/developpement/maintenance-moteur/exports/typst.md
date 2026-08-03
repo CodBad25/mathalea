@@ -103,4 +103,5 @@ Les tableaux HTML (par opposition aux tableaux LaTeX visuels, voir ci-dessus) ne
 ## Tests
 
 - `src/components/setup/typst/latexToTypst.test.ts` : conversion des formules et du HTML ;
-- `src/components/setup/typst/buildTypstDocument.test.ts` : structure du document généré.
+- `src/components/setup/typst/buildTypstDocument.test.ts` : structure du document généré. Les cas qui lancent le binaire externe `typst compile` sont exécutés en local quand le CLI `typst` est installé, ignorés en CI par défaut, et réactivables avec `TYPST_CLI_TESTS=1` pour un job dédié ;
+- `pnpm typst:check:compile` : vérification explicite par compilation CLI Typst pour les environnements qui installent le binaire `typst`.

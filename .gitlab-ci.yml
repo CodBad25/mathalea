@@ -97,7 +97,6 @@ setup:
   artifacts:
     untracked: false
     when: on_success
-    access: all
     expire_in: 1 day
 
 build_ci_pdf:
@@ -302,50 +301,24 @@ playwright-console-consolidated:
 playwright-pdf-consolidated:
   extends: .testCIPDF
   stage: compile-pdf
-  timeout: 5h
+  timeout: 2h
   allow_failure: false
+  parallel:
+    matrix:
+      - NIV_LABEL: 'can/2e^can/1e'
+      - NIV_LABEL: 'can/6e^can/5e'
+      - NIV_LABEL: 'can/4e^can/3e'
+      - NIV_LABEL: '6e/6'
+      - NIV_LABEL: '5e/5'
+      - NIV_LABEL: '4e/4'
+      - NIV_LABEL: '3e/3'
   script:
     - npm install -g pnpm@11.16.0
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 30
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
-    - |
-      FAIL=0
-
-      run_pdf () {
-        NIV_LABEL="$1"
-        STATUS_VAR="$2"
-        echo "🧪 pdfexports NIV=$NIV_LABEL"
-        if NIV="$NIV_LABEL" pnpm test:e2e:pdfexports; then
-          eval "$STATUS_VAR=ok"
-        else
-          eval "$STATUS_VAR=ko"
-          FAIL=1
-        fi
-      }
-
-      run_pdf "can/2e^can/1e" STATUS_CAN_2E_1E
-      run_pdf "can/6e^can/5e" STATUS_CAN_6E_5E
-      run_pdf "can/4e^can/3e" STATUS_CAN_4E_3E
-      run_pdf "6e/6" STATUS_6E
-      run_pdf "5e/5" STATUS_5E
-      run_pdf "4e/4" STATUS_4E
-      run_pdf "3e/3" STATUS_3E
-
-      echo ""
-      echo "═══════════════════════════════════════════"
-      echo "📊 Résumé pdf consolidated"
-      echo "═══════════════════════════════════════════"
-      [ "$STATUS_CAN_2E_1E" = "ok" ] && echo "✅ can/2e^can/1e" || echo "❌ can/2e^can/1e"
-      [ "$STATUS_CAN_6E_5E" = "ok" ] && echo "✅ can/6e^can/5e" || echo "❌ can/6e^can/5e"
-      [ "$STATUS_CAN_4E_3E" = "ok" ] && echo "✅ can/4e^can/3e" || echo "❌ can/4e^can/3e"
-      [ "$STATUS_6E" = "ok" ] && echo "✅ 6e/6" || echo "❌ 6e/6"
-      [ "$STATUS_5E" = "ok" ] && echo "✅ 5e/5" || echo "❌ 5e/5"
-      [ "$STATUS_4E" = "ok" ] && echo "✅ 4e/4" || echo "❌ 4e/4"
-      [ "$STATUS_3E" = "ok" ] && echo "✅ 3e/3" || echo "❌ 3e/3"
-      echo "═══════════════════════════════════════════"
-
-      exit "$FAIL"
+    - echo "🧪 pdfexports NIV=$NIV_LABEL"
+    - NIV="$NIV_LABEL" pnpm test:e2e:pdfexports
   artifacts:
     when: on_failure
     paths:

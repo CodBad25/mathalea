@@ -250,7 +250,7 @@ Les jobs PDF utilisent l'image `$DOCKER_IMAGE` (`ci/tex-node:node22-texlive-2026
 
 ### `playwright-pdf-consolidated`
 
-Lance `pnpm test:e2e:pdfexports` sur :
+Lance `pnpm test:e2e:pdfexports` en matrice parallèle sur :
 
 - `can/2e^can/1e`
 - `can/6e^can/5e`
@@ -259,6 +259,19 @@ Lance `pnpm test:e2e:pdfexports` sur :
 - `5e/5`
 - `4e/4`
 - `3e/3`
+
+Chaque entrée de matrice définit `NIV_LABEL`, puis le job lance :
+
+```bash
+NIV="$NIV_LABEL" pnpm test:e2e:pdfexports
+```
+
+Le test `pdfexports` compile les exports LaTeX avec `lualatex`. Les seuils
+suivants permettent de diagnostiquer ou limiter les compilations trop longues :
+
+- `PDF_COMPILE_TIMEOUT_MS` : timeout par compilation, défaut `90000`.
+- `PDF_SLOW_COMPILE_MS` : seuil de log pour les compilations lentes, défaut
+  `10000`.
 
 ### `playwright-pdf-dnb-consolidated`
 

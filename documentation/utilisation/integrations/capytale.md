@@ -4,15 +4,42 @@ Dans Capytale, une activité MathALÉA charge MathALÉA dans une iframe avec un 
 
 ## Modes d'affichage
 
-- `conception` : création ou édition d'une séance côté professeur.
+- `create` : création ou édition d'une séance côté professeur.
 - `assignment` : activité côté élève.
 - `review` : relecture des réponses, notes et commentaires.
+- `view` : consultation de la séance d'un collègue dans la bibliothèque, avant clonage.
 
 ## Données échangées
 
 Capytale sauvegarde les paramètres de séance et les réponses d'élèves. MathALÉA récupère les paramètres d'activité, signale les modifications et envoie les résultats lorsque l'élève valide.
 
 Le code d'intégration côté MathALÉA est dans `src/lib/handleCapytale.ts`.
+
+## Réglages de séance : aller-retour avec Capytale
+
+`toolGetActivityParams` (Capytale → MathALÉA) fournit l'activité enregistrée,
+`platformGetActivityParams` (MathALÉA → Capytale) renvoie ce qui doit être
+enregistré, aussi bien lors d'une sauvegarde que lors d'un clonage.
+
+Deux règles évitent que les réglages de l'enseignant (accès aux corrections,
+affichage des titres, pages identiques ou différentes…) soient perdus :
+
+- **En mode `create`, MathALÉA n'impose aucun réglage** issu de l'activité
+  chargée : le choix de l'enseignant est restauré tel quel. En particulier
+  `isSolutionAccessible` n'est forcé à `true` que hors mode création, là où le
+  professeur consulte une séance ou une copie.
+- **Hors mode `create`, `platformGetActivityParams` renvoie l'activité telle
+  qu'elle a été reçue** (`activityFromCapytale`). Les stores contiennent alors
+  des réglages d'affichage imposés par MathALÉA (`v: 'eleve'`,
+  `isInteractiveFree: false`, graines effacées, `done`…) qui, sans cela,
+  seraient enregistrés à la place des réglages de l'enseignant lors d'un
+  clonage.
+
+Par sécurité, une séance enregistrée avec `v: 'eleve'` ou `v: 'can'` (séance
+clonée par une version antérieure) est ramenée à la page de configuration en
+mode `create`.
+
+Les tests unitaires correspondants sont dans `tests/unit/capytaleActivityParams.test.ts`.
 
 Pour un exercice de type « app » (iframe tierce), la remontée du score suit le
 protocole décrit dans

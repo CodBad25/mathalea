@@ -4,9 +4,10 @@ import { runTest } from '../../helpers/run'
 
 async function test(page: Page) {
   const url = 'http://localhost:5173/alea/?uuid=424b2&i=0'
+  const labyrintheSelector = 'mathalea-labyrinthe#labyrintheEx0 labyrinthe-grid'
 
   await page.goto(url)
-  await page.locator('#containerLabyrintheEx0Q0').waitFor()
+  await page.locator(labyrintheSelector).waitFor()
   expect(
     await page
       .locator(
@@ -25,7 +26,7 @@ async function test(page: Page) {
   expect(new URL(page.url()).searchParams.get('alea')).toBe(seed)
 
   await page.goto(`${url}&v=eleve&es=021100`)
-  await page.locator('#containerLabyrintheEx0Q0').waitFor()
+  await page.locator(labyrintheSelector).waitFor()
   expect(
     await page
       .locator(

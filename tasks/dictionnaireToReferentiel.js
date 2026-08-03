@@ -5,6 +5,7 @@
  */
 
 import fs from 'fs'
+import { deriveInfosExerciceStatique } from '../src/json/referentielStaticFRCodec.js'
 import { dictionnaireBAC } from '../src/json/dictionnaireBAC.js'
 import { dictionnaireCrpeCoop } from '../src/json/dictionnaireCrpeCoop.js'
 import { dictionnaireDNB } from '../src/json/dictionnaireDNB.js'
@@ -434,6 +435,63 @@ for (const tag of tagsEVACOM) {
       }
     }
   }
+}
+
+// Vérifie que annee/lieu/mois/numeroInitial/typeExercice/jour/filiere sont
+// bien reconstructibles à partir de l'uuid (cf. referentielStaticFRCodec.js
+// et referentielStaticFRSessions.json), puis les retire de chaque entrée
+// pour alléger referentielStaticFR.json : ils seront ré-hydratés à
+// l'exécution par referentielStaticFRHydrated.ts.
+const fieldsToStrip = ['annee', 'lieu', 'mois', 'numeroInitial', 'typeExercice']
+const mismatches = []
+
+function checkAndTrim(node) {
+  if (node && typeof node === 'object') {
+    if (typeof node.uuid === 'string') {
+      const uuid = node.uuid
+      let derived
+      try {
+        derived = deriveInfosExerciceStatique(uuid)
+      } catch (e) {
+        mismatches.push(`${uuid} : ${e.message}`)
+        return
+      }
+      const expected = {
+        typeExercice: node.typeExercice,
+        annee: node.annee,
+        lieu: node.lieu,
+        numeroInitial: node.numeroInitial,
+      }
+      if (node.mois !== undefined) expected.mois = node.mois
+      if (node.jour !== undefined) expected.jour = node.jour
+      if (node.filiere !== undefined) expected.filiere = node.filiere
+      const derivedKeys = Object.keys(derived).sort()
+      const expectedKeys = Object.keys(expected).sort()
+      const same =
+        JSON.stringify(derived, derivedKeys) === JSON.stringify(expected, expectedKeys)
+      if (!same) {
+        mismatches.push(
+          `${uuid} : attendu ${JSON.stringify(expected)}, déduit de l'uuid ${JSON.stringify(derived)}`,
+        )
+        return
+      }
+      for (const field of fieldsToStrip) delete node[field]
+      return
+    }
+    for (const key in node) checkAndTrim(node[key])
+  }
+}
+checkAndTrim(referentielFR)
+
+if (mismatches.length > 0) {
+  console.error(
+    `\n❌ ${mismatches.length} exercice(s) statique(s) FR ont des champs annee/lieu/mois/numeroInitial/typeExercice non reconstructibles depuis leur uuid :\n`,
+  )
+  for (const m of mismatches) console.error(`  - ${m}`)
+  console.error(
+    '\nCorrigez le dictionnaire concerné, ou ajoutez/mettez à jour une entrée dans src/json/referentielStaticFRSessions.json.\n',
+  )
+  process.exit(1)
 }
 
 const dataFR = JSON.stringify(referentielFR, null, 2)

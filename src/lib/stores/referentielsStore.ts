@@ -8,7 +8,7 @@ import referentielProfs from '../../json/referentielProfs.json'
 import referentielRessources from '../../json/referentielRessources.json'
 import referentielsActivation from '../../json/referentielsActivation.json'
 import referentielExamsCH from '../../json/referentielStaticCH.json'
-import referentielExams from '../../json/referentielStaticFR.json'
+import referentielExams from '../../json/referentielStaticFRHydrated'
 import {
   buildReferentiel,
   getAllEndings,

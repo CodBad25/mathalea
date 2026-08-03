@@ -9,6 +9,7 @@ import {
   longueur,
 } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance, pointSurSegment } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -338,7 +339,7 @@ export default class RelationDeThales extends Exercice {
       const boutonAideMathalea2d = ajouterBoutonMathalea2d(
         `${numeroExercice}_${i}`,
         `if (!document.getElementById('M2D_${numeroExercice}_${i}_1').dataset.colorie == true || (document.getElementById('M2D_${numeroExercice}_${i}_1').dataset.colorie == 'false')){
-          document.getElementById('M2D_${numeroExercice}_${i}_1').style.stroke = 'blue';
+          document.getElementById('M2D_${numeroExercice}_${i}_1').style.stroke = '${bleuMathalea}';
           document.getElementById('M2D_${numeroExercice}_${i}_2').style.stroke = 'red';
           document.getElementById('M2D_${numeroExercice}_${i}_1').style.opacity = .5;
           document.getElementById('M2D_${numeroExercice}_${i}_1').style.strokeWidth = ${epaisseurTriangle};

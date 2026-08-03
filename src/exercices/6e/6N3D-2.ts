@@ -91,7 +91,7 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
                 .map((p) => `$${p}$`)
                 .join(', ')}` + `et $${['A', 'B', 'C'][this.sup - 1]}$`
         }.`
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const x0 = this.sup2 ? 0 : randint(1, 3)
       let den: number
       const abscisseT = x0 + nbUnits
@@ -101,7 +101,7 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
 
       const nums: number[] = []
       for (let j = 0; j < this.sup; j++) {
-        nums.push(randint(den * x0 + 1, den * abscisseT - 1, [...nums, den]))
+        nums.push(randint(den * x0 + 1, den * abscisseT, [...nums]))
       }
       let texte =
         this.sup === 1
@@ -194,7 +194,7 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
                   pointValue: num / den,
                   label: ['A', 'B', 'C'][i],
                 })),
-                x0: 0,
+                x0,
               }),
             },
           },

@@ -23,6 +23,18 @@ type DemiDroiteInteractiveIncomingValue = DemiDroiteInteractiveValue & {
   showNegative?: boolean
 }
 
+function formatPointValue(pointValue: number, partsCount: number): string {
+  const numerator = pointValue * partsCount
+  if (
+    !Number.isFinite(numerator) ||
+    !Number.isFinite(partsCount) ||
+    partsCount <= 0
+  ) {
+    return String(pointValue)
+  }
+  return fraction(numerator, partsCount).texFraction
+}
+
 class DemiDroiteInteractiveElement extends MathaleaCustomElement {
   static readonly elementTag = 'demi-droite-interactive'
 
@@ -113,7 +125,15 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       const ok = saisi !== undefined && Math.abs(saisi - attendu) < 1e-9
       results.push(ok ? 'OK' : 'KO')
       if (!ok) {
-        feedback += `Le point ${parsed.points[j].label} est attendu à l'abscisse $${fraction(parsed.points[j].pointValue * parsed.partsCount, parsed.partsCount).texFraction}$, mais il est placé à l'abscisse $${fraction(saisi * den, den).texFraction}$.<br>`
+        const attenduTex = formatPointValue(
+          parsed.points[j].pointValue,
+          parsed.partsCount,
+        )
+        const saisiTex =
+          saisi === undefined
+            ? "il n'est pas placé"
+            : `il est placé à l'abscisse $${formatPointValue(saisi, den)}$`
+        feedback += `Le point ${parsed.points[j].label} est attendu à l'abscisse $${attenduTex}$, mais ${saisiTex}.<br>`
       }
     }
     const spanResultat = host.querySelector(

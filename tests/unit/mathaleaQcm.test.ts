@@ -190,7 +190,11 @@ describe('MathaleaQcmElement', () => {
 
     const result = exerciceInteractif(exercice, score, button)
 
-    expect(result).toEqual({ numberOfPoints: 1, numberOfQuestions: 1 })
+    expect(result).toEqual({
+      numberOfPoints: 1,
+      numberOfQuestions: 1,
+      perQuestionIsOk: [true],
+    })
     expect(score.textContent).toBe('1 / 1')
     expect(qcm.interactivityOn).toBe(false)
     expect(exercice.answers?.Ex2Q0R0).toBe('1')

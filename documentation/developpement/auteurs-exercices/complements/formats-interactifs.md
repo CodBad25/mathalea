@@ -397,6 +397,81 @@ handleAnswers(
 
 Le helper injecte un custom element `multi-mathfield`.
 
+### Une liste déroulante parmi les champs
+
+Un champ dont les options contiennent `choices` n'est pas un MathLive mais une
+liste déroulante (le custom element `liste-deroulante` est imbriqué dans le
+`multi-mathfield`). C'est le seul moyen de mélanger un menu et des champs
+MathLive dans une même question, puisqu'une question n'a qu'un seul
+`formatInteractif`.
+
+```ts
+texte += addMultiMathfield(this, i, {
+  dataTemplate: `a) Quelle inconnue choisir ? %{field0}
+b) Écrire l'équation : %{field1}`,
+  dataOptions: {
+    field0: { choices, ldots: true },
+    field1: { keyboard: KeyboardType.clavierDeBaseAvecEgal, ldots: true },
+  },
+})
+
+handleAnswers(
+  this,
+  i,
+  {
+    field0: { value: ['d0', 'd1'] },
+    field1: { value: equation, options: { egaliteExpression: true } },
+  },
+  { formatInteractif: 'multi-mathfield' },
+)
+```
+
+Points à connaître :
+
+- `choices` a le même format que pour `choixDeroulant()` ; ajouter en tête un
+  choix neutre `{ label: 'Choisir…', value: '' }` car le premier choix sert
+  d'invite et n'est pas sélectionnable (`choix0: false` par défaut) ;
+- la comparaison est une égalité stricte avec `value` ; un tableau de valeurs
+  permet d'accepter plusieurs choix ;
+- les libellés sont du **texte** : éviter le LaTeX, qui n'est pas rendu dans le
+  shadow DOM de la liste.
+
+### Barème personnalisé
+
+La clé `bareme` de `handleAnswers()` reçoit la liste des points des champs
+(dans l'ordre de déclaration) et renvoie `[pointsObtenus, pointsPossibles]`.
+Elle sert notamment à obtenir un total constant quand le nombre de champs
+dépend de la question tirée :
+
+```ts
+// Cinq étapes valant chacun un point, même si l'étape b) a plusieurs champs.
+const bareme = (points: number[]): [number, number] => [
+  points[0] + Math.min(...points.slice(1, 1 + nbChampsEtapeB)) + /* … */ 0,
+  5,
+]
+```
+
+Un exemple complet (liste déroulante, barème constant et corrections dépendant
+du choix fait dans la liste) : [`src/exercices/4e/4L13-2.ts`](../../../../src/exercices/4e/4L13-2.ts).
+
+### Corriger selon la réponse donnée dans un autre champ
+
+`compare` peut être une fermeture qui lit l'état courant du composant au moment
+de la vérification. C'est ainsi que 4L13-2 corrige les étapes b) à d) en
+fonction de l'inconnue choisie à l'étape a) :
+
+```ts
+const varianteChoisie = () => {
+  const multi = document.getElementById(
+    `multi-mathfieldEx${this.numeroExercice}Q${i}`,
+  )
+  const liste = multi?.shadowRoot?.querySelector(
+    'liste-deroulante[data-name="field0"]',
+  ) as { value?: string } | null
+  return variantes.find((variante) => variante.cle === liste?.value)
+}
+```
+
 ## Sélection de SVG
 
 À utiliser quand l'élève doit sélectionner un ou plusieurs dessins. La réponse est la somme des valeurs des SVG sélectionnés.

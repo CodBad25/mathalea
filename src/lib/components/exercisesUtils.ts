@@ -2,7 +2,7 @@ import seedrandom from 'seedrandom'
 import { get } from 'svelte/store'
 import Exercice from '../../exercices/Exercice'
 import referentielStaticCH from '../../json/referentielStaticCH.json'
-import referentielStaticFR from '../../json/referentielStaticFR.json'
+import referentielStaticFR from '../../json/referentielStaticFRHydrated'
 import {
   computeStaticExerciceCorTypUrl,
   computeStaticExerciceTypUrl,

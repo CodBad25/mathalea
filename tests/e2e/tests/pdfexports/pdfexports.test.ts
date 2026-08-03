@@ -27,10 +27,22 @@ type ExportRow = {
   status: ExportStatus
   detail: string
   debugDetail?: string
+  durationMs?: number
 }
 
 const logPDF = getFileLogger('exportPDF', { append: true })
 const DEFAULT_ALEA = 'e906e'
+const configuredPdfCompileTimeoutMs = Number(process.env.PDF_COMPILE_TIMEOUT_MS)
+const PDF_COMPILE_TIMEOUT_MS =
+  Number.isFinite(configuredPdfCompileTimeoutMs) &&
+  configuredPdfCompileTimeoutMs > 0
+    ? configuredPdfCompileTimeoutMs
+    : 90_000
+const configuredPdfSlowCompileMs = Number(process.env.PDF_SLOW_COMPILE_MS)
+const PDF_SLOW_COMPILE_MS =
+  Number.isFinite(configuredPdfSlowCompileMs) && configuredPdfSlowCompileMs > 0
+    ? configuredPdfSlowCompileMs
+    : 10_000
 const STATIC_UUID_PREFIXES = [
   'crpe',
   'dnb_',
@@ -204,6 +216,11 @@ function shortErrorLabel(detail: string) {
     if (match && match[0]) return match[0]
   }
   return detail.slice(0, 180)
+}
+
+function formatDuration(durationMs: number | undefined) {
+  if (durationMs == null) return '-'
+  return `${(durationMs / 1000).toFixed(1)}s`
 }
 
 function needsStaticLookup(filter: string) {
@@ -478,20 +495,33 @@ async function compileTexToPdf(
 ) {
   const texFile = resolve(workDir, 'main.tex')
   await fs.writeFile(texFile, texContent, 'utf8')
+  const startedAt = Date.now()
 
   return await new Promise<{
     ok: boolean
     detail: string
     debugDetail: string
+    durationMs: number
   }>((resolveResult) => {
     let stdout = ''
     let stderr = ''
+    let timedOut = false
+    let settled = false
+    let killTimeout: ReturnType<typeof setTimeout> | undefined
 
     const proc = spawn(
       'lualatex',
       ['--halt-on-error', '-interaction=nonstopmode', 'main.tex'],
       { cwd: workDir },
     )
+
+    const timeout = setTimeout(() => {
+      timedOut = true
+      proc.kill('SIGTERM')
+      killTimeout = setTimeout(() => {
+        if (!settled) proc.kill('SIGKILL')
+      }, 5_000)
+    }, PDF_COMPILE_TIMEOUT_MS)
 
     proc.stdout.on('data', (chunk) => {
       stdout += String(chunk)
@@ -502,22 +532,44 @@ async function compileTexToPdf(
     })
 
     proc.on('error', (error) => {
+      if (settled) return
+      settled = true
+      clearTimeout(timeout)
+      if (killTimeout) clearTimeout(killTimeout)
       resolveResult({
         ok: false,
         detail: `Execution lualatex impossible: ${String(error)}`,
         debugDetail: `Execution lualatex impossible: ${String(error)}`,
+        durationMs: Date.now() - startedAt,
       })
     })
 
     proc.on('close', async (code) => {
+      if (settled) return
+      settled = true
+      clearTimeout(timeout)
+      if (killTimeout) clearTimeout(killTimeout)
+      const durationMs = Date.now() - startedAt
+      if (timedOut) {
+        const detail = `Timeout lualatex apres ${formatDuration(durationMs)} (limite ${formatDuration(PDF_COMPILE_TIMEOUT_MS)})`
+        resolveResult({
+          ok: false,
+          detail,
+          debugDetail: detail,
+          durationMs,
+        })
+        return
+      }
+
       if (code === 0) {
         const pdfSource = resolve(workDir, 'main.pdf')
         const pdfTarget = resolve(workDir, `${outputBaseName}.pdf`)
         await fs.copyFile(pdfSource, pdfTarget)
         resolveResult({
           ok: true,
-          detail: `Compilation OK (${pdfTarget})`,
-          debugDetail: `Compilation OK (${pdfTarget})`,
+          detail: `Compilation OK en ${formatDuration(durationMs)} (${pdfTarget})`,
+          debugDetail: `Compilation OK en ${formatDuration(durationMs)} (${pdfTarget})`,
+          durationMs,
         })
         return
       }
@@ -536,8 +588,9 @@ async function compileTexToPdf(
         latexDiagnostic || excerpt || 'Aucune trace exploitable.'
       resolveResult({
         ok: false,
-        detail: `lualatex exit ${code}. ${shortErrorLabel(debugDetail)}`,
+        detail: `lualatex exit ${code} en ${formatDuration(durationMs)}. ${shortErrorLabel(debugDetail)}`,
         debugDetail,
+        durationMs,
       })
     })
   })
@@ -545,6 +598,10 @@ async function compileTexToPdf(
 
 function printSummary(rows: ExportRow[]) {
   const failingRows = rows.filter((row) => row.status === 'KO')
+  const slowRows = rows
+    .filter((row) => row.durationMs != null)
+    .sort((a, b) => (b.durationMs ?? 0) - (a.durationMs ?? 0))
+    .slice(0, 20)
   const totalRows = rows.length
 
   console.log('')
@@ -569,6 +626,21 @@ function printSummary(rows: ExportRow[]) {
 
   console.log('-------------------------------------------------------------')
   console.log(`ECHECS=${failingRows.length} TOTAL=${totalRows}`)
+  console.log('=============================================================')
+
+  console.log('')
+  console.log('=============================================================')
+  console.log('[SUMMARY] PDF exports les plus lents')
+  console.log('=============================================================')
+  console.log('| Duree | Exercice | UUID | Style | Statut |')
+  console.log('| --- | --- | --- | --- | --- |')
+
+  for (const row of slowRows) {
+    console.log(
+      `| ${formatDuration(row.durationMs)} | ${row.exercicePath} | ${row.uuid} | ${row.style} | ${row.status} |`,
+    )
+  }
+
   console.log('=============================================================')
 }
 
@@ -701,6 +773,10 @@ describe('pdfexports sans playwright', () => {
               ['pdfexport'],
               logError,
             )
+          } else if (compileResult.durationMs >= PDF_SLOW_COMPILE_MS) {
+            log(
+              `Compilation lente pour ${exercicePath} (style ${style}): ${formatDuration(compileResult.durationMs)}`,
+            )
           }
 
           rows.push({
@@ -710,6 +786,7 @@ describe('pdfexports sans playwright', () => {
             status: compileResult.ok ? 'OK' : 'KO',
             detail: compileResult.detail,
             debugDetail: compileResult.debugDetail,
+            durationMs: compileResult.durationMs,
           })
         } catch (error) {
           const detail = `Generation ou compilation impossible: ${String(error)}`

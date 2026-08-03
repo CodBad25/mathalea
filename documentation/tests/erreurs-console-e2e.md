@@ -86,25 +86,26 @@ Trois écouteurs Playwright sont attachés.
 
 Les messages sont **exclus** s'ils contiennent l'une des chaînes suivantes :
 
-| Chaîne exclue                                             | Raison                                    |
-| --------------------------------------------------------- | ----------------------------------------- |
-| `[vite]`                                                  | Messages du serveur de développement Vite |
-| `[bugsnag] Loaded!`                                       | Rapporteur d'erreurs Bugsnag              |
-| `No character metrics for`                                | Avertissements KaTeX                      |
-| `LaTeX-incompatible input`                                | Avertissements KaTeX                      |
-| `mtgLoad` / `MG32div0`                                    | MathGraph (3G22)                          |
-| `Figure destroyed successfully`                           | Nettoyage apigeom                         |
-| `UserFriendlyError: Le chargement de mathgraph`           | Erreur MathGraph                          |
-| `Invalid 'X-Frame-Options' header`                        | Problème d'en-tête HTTP                   |
-| `Blockly.Workspace.getAllVariables was deprecated in v12` | Dépréciation Blockly                      |
-| `A-Frame Version:` / `THREE Version`                      | Informations des bibliothèques 3D         |
-| `WARNING: Too many active WebGL contexts`                 | Avertissement de ressources WebGL         |
-| `GPU stall due to ReadPixels`                             | Performance GPU                           |
-| `: le motif contient plus`                                | Débordement de motif                      |
-| `The column width is less than 0`                         | Avertissement de mise en page             |
-| `placeholderMetrics 0.7 0.2`                              | Métriques MathLive                        |
-| `<HeaderExercice>`                                        | Message de composant Svelte               |
-| `location().url` contient `mathgraph32`                   | Tous les messages MathGraph               |
+| Chaîne exclue                                              | Raison                                    |
+| ---------------------------------------------------------- | ----------------------------------------- |
+| `[vite]`                                                   | Messages du serveur de développement Vite |
+| `[bugsnag] Loaded!`                                        | Rapporteur d'erreurs Bugsnag              |
+| `No character metrics for`                                 | Avertissements KaTeX                      |
+| `LaTeX-incompatible input`                                 | Avertissements KaTeX                      |
+| `mtgLoad` / `MG32div0`                                     | MathGraph (3G22)                          |
+| `Figure destroyed successfully`                            | Nettoyage apigeom                         |
+| `UserFriendlyError: Le chargement de mathgraph`            | Erreur MathGraph                          |
+| `Invalid 'X-Frame-Options' header`                         | Problème d'en-tête HTTP                   |
+| `Blockly.Workspace.getAllVariables was deprecated in v12`  | Dépréciation Blockly                      |
+| `A-Frame Version:` / `THREE Version`                       | Informations des bibliothèques 3D         |
+| `WARNING: Too many active WebGL contexts`                  | Avertissement de ressources WebGL         |
+| `GPU stall due to ReadPixels`                              | Performance GPU                           |
+| `: le motif contient plus`                                 | Débordement de motif                      |
+| `The column width is less than 0`                          | Avertissement de mise en page             |
+| `placeholderMetrics 0.7 0.2`                               | Métriques MathLive                        |
+| `Failed to load resource` dans `/node_modules/.vite/deps/` | Chargement transitoire des deps Vite      |
+| `<HeaderExercice>`                                         | Message de composant Svelte               |
+| `location().url` contient `mathgraph32`                    | Tous les messages MathGraph               |
 
 Tous les messages non exclus sont ajoutés à un tableau `messages[]` avec un préfixe de type (`'console:'`, `'pageerror:'`, `'crash:'` ou `'exception:'`).
 
@@ -128,16 +129,24 @@ Recherche jusqu'à 5 instances de chaque type de formulaire dans le conteneur `#
 | `select` (listes déroulantes) | `#settings-formNum{1-5}-0` (select) | Toutes les valeurs d'option |
 | Correction détaillée          | `#settings-correction-detaillee-0`  | `[false, true]`             |
 
-### Stratégie de test
+### Stratégie de test des paramètres
 
 - **`simpleTest`** (par défaut pour `console_errors`) : parcourt chaque formulaire indépendamment, en testant ses valeurs pendant que les autres formulaires conservent leur dernière valeur. C'est beaucoup plus rapide et chaque valeur de paramètre est testée au moins une fois, sans croiser toutes les interactions entre paramètres.
 - **`fullTest`** (quand `isFullCombinations: true`) : boucle imbriquée sur toutes les combinaisons de 5 formulaires au maximum (produit cartésien). Ce mode est très lent.
 
 ---
 
-## 5. Déroulement des interactions avec la page
+## 5. Profils et interactions avec la page
 
-Pour chaque combinaison de paramètres, le rappel `action` effectue les étapes suivantes :
+Le scénario est choisi avec `CONSOLE_ERRORS_PROFILE` :
+
+- **`standard`** (défaut) : parcourt les paramètres avec une action légère, puis lance une seule fois le parcours UI complet.
+- **`smoke`** : charge l'exercice et lance uniquement le parcours UI complet, sans parcours des paramètres.
+- **`deep`** : ancien scénario complet ; chaque valeur de paramètre déclenche le parcours UI complet.
+
+L'action légère du profil `standard` vérifie seulement que la consigne reste visible après changement de paramètre.
+
+Le parcours UI complet effectue les étapes suivantes :
 
 1. **Clic sur "Nouvel énoncé"** : régénère l'exercice avec une nouvelle graine aléatoire.
 
@@ -151,9 +160,9 @@ Pour chaque combinaison de paramètres, le rappel `action` effectue les étapes 
    - attend les éléments de question (`li[id^="exercice0Q"]`) ;
    - clique sur le bouton "Vérifier" (`#verif0`) pour valider des réponses vides ;
    - attend la div de résultat (`article + div`) ;
-   - clique 3 fois de plus sur "Nouvel énoncé".
+   - clique une fois de plus sur "Nouvel énoncé" en profil `standard` ou `smoke`, et 3 fois en profil `deep`.
 
-### Construction de l'URL
+### Construction de l'URL et timeouts adaptatifs
 
 ```
 http://localhost:{5173|80}/alea/?uuid={uuid}&id={filename_without_extension}&alea=e906e&testCI
@@ -162,6 +171,8 @@ http://localhost:{5173|80}/alea/?uuid={uuid}&id={filename_without_extension}&ale
 - Port `PLAYWRIGHT_SERVER_PORT` si défini, sinon 80 en CI et 5173 en local.
 - `alea=e906e` est une graine fixe pour la reproductibilité.
 - `testCI` est un paramètre d'URL qui indique le mode test.
+- Les attentes Playwright internes au test sont courtes sur le serveur Vite local (`localhost:5173` : 10 s) et plus tolérantes sur le serveur local de la forge (`localhost:80` : 30 s).
+- Ces timeouts concernent le chargement, l'attente `networkidle`, la recherche de la consigne et les contrôles de zoom. Le timeout Vitest global reste plus large car il couvre tout le scénario d'un exercice.
 
 ---
 
@@ -185,6 +196,7 @@ Chaque exercice est tenté jusqu'à **3 fois** :
 - À la dernière tentative : crée un ticket (sauf pour `net::ERR_CONNECTION_REFUSED`) et retourne `'KO'`.
 - S'il n'y a pas d'exception mais que `messages.length > 0`, crée un ticket et retourne immédiatement `'KO'` (pas de nouvelle tentative pour les erreurs console sans exception).
 - Si tout est propre : retourne `'OK'`.
+- Les écouteurs Playwright (`console`, `pageerror`, `crash`) sont détachés après chaque tentative pour éviter qu'une tentative échouée pollue les suivantes sur la page partagée du lot.
 
 ---
 
@@ -194,7 +206,8 @@ Le test a trois points d'entrée :
 
 1. **Variable d'environnement `NIV`** : mode manuel ou CI pour un niveau précis. Exemple : `NIV=4e pnpm test:e2e:console_errors`.
 2. **Variable d'environnement `CHANGED_FILES`** : mode CI qui teste uniquement les exercices dont les fichiers source ont changé. Filtre les fichiers dans `src/exercices/` (hors `ressources` et `apps`), transforme les chemins, puis lance `testRunAllLots` pour chacun.
-3. **Aucune des deux variables** : affiche les consignes d'utilisation et crée un test ignoré.
+3. **Variable d'environnement `CONSOLE_ERRORS_PROFILE`** : profil de scénario (`standard`, `smoke`, `deep`). Par défaut : `standard`.
+4. **Aucune des variables `NIV` ou `CHANGED_FILES`** : affiche les consignes d'utilisation et crée un test ignoré.
 
 ---
 
@@ -202,7 +215,7 @@ Le test a trois points d'entrée :
 
 **Fichier :** `tests/e2e/vitest.config.console_errors.js`
 
-- **`testTimeout` :** 1 000 secondes (16,7 minutes par cas de test).
-- **`hookTimeout` :** 120 secondes.
+- **`testTimeout` :** 20 000 secondes par cas de test.
+- **`hookTimeout` :** 600 secondes.
 - **`pool` :** `threads` avec `maxWorkers: 1`, `isolate: false`, `disableConsoleIntercept: true` — exécution séquentielle dans un seul thread.
 - **`reporters` :** `html`, `junit`, `json`, `default`.

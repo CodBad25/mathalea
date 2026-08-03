@@ -413,7 +413,7 @@
                   {@html question}
                 </div>
               </div>
-              {#if isCorrectionVisible[k]}
+              {#if isCorrectionVisible[k] && !($globalOptions.isCorrectionOnlyOnError && resultsByQuestion[k]?.isOk === true)}
                 <div
                   class="relative border-l-coopmaths-struct dark:border-l-coopmathsdark-struct border-l-[3px] text-coopmaths-corpus dark:text-coopmathsdark-corpus mt-2 lg:{$isMenuNeededForQuestions
                     ? 'mt-6'

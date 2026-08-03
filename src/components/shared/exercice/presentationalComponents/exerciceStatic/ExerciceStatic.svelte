@@ -17,7 +17,7 @@
   /**
    * Gestion du référentiel pour la recherche de l'uuid
    */
-  import referentielStaticFR from '../../../../../json/referentielStaticFR.json'
+  import referentielStaticFR from '../../../../../json/referentielStaticFRHydrated'
   import referentielStaticCH from '../../../../../json/referentielStaticCH.json'
 
   import referentielBibliotheque from '../../../../../json/referentielBibliotheque.json'

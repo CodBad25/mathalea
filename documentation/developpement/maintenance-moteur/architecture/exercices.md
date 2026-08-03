@@ -42,6 +42,21 @@ décrits dans [système d'interactivité](../interactivite/systeme-interactivite
 
 Les composants qui modifient le store `exercicesParams` doivent appeler `exercicesParams.update()`, sans réécrire eux-mêmes l'URL. `App.svelte` centralise cette synchronisation via son abonnement au store. Les appels explicites à `mathaleaUpdateUrlFromExercicesParams()` restent réservés aux tableaux de paramètres qui ne sont pas le store global.
 
+### Le paramètre `es` (réglages de la vue élève)
+
+Le store `globalOptions` (`src/lib/stores/globalOptions.ts`) contient les réglages de la vue élève classique (présentation, interactivité, corrections). Plutôt qu'un paramètre d'URL par réglage, ces booléens/énumérations sont compressés dans une seule chaîne `es` : un caractère par réglage, dans un ordre fixe.
+
+- Construction : `buildEsParams()` dans `src/lib/components/urls.ts`. Chaque réglage est ajouté à la chaîne dans l'ordre `presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError`.
+- Décodage : la fonction `mathaleaUpdateExercicesParamsFromUrl()` dans `src/lib/mathalea.ts` lit `es` et affecte chaque caractère (`es.charAt(i)`) au réglage correspondant.
+- Rétrocompatibilité : le décodage teste `es.length` (6, 7, 8, 9 caractères actuellement) et choisit la branche qui correspond, pour que les anciennes URLs partagées (avec moins de réglages) restent valides. Chaque nouvelle branche reprend le décodage complet des caractères précédents avant d'ajouter le nouveau.
+
+Pour ajouter un nouveau réglage `es` :
+
+1. Ajouter le champ à `InterfaceGlobalOptions` dans `src/lib/types.ts` et sa valeur par défaut dans `src/lib/stores/globalOptions.ts`.
+2. Ajouter un caractère à la fin de la chaîne dans `buildEsParams()`.
+3. Ajouter une nouvelle branche `es.length === N` (N = longueur actuelle + 1) dans `mathaleaUpdateExercicesParamsFromUrl()`, sans modifier les branches existantes, et inclure le nouveau champ dans l'objet retourné par la fonction.
+4. Ajouter le toggle correspondant dans `ConfigEleve.svelte` (`src/components/setup/configEleve/ConfigEleve.svelte`), en suivant le pattern `ButtonToggleAlt` existant dans la section concernée.
+
 ## Tests
 
 Les tests et rapports sont décrits dans

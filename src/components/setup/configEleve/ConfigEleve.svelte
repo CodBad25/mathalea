@@ -269,6 +269,18 @@
                   ]}
                 />
               </div>
+              <div class="flex flex-row justify-start items-center px-4 pt-2">
+                <ButtonToggleAlt
+                  title={"N'afficher la correction que si la réponse est fausse"}
+                  isDisabled={!$globalOptions.isSolutionAccessible}
+                  bind:value={$globalOptions.isCorrectionOnlyOnError}
+                  id={'config-eleve-correction-si-erreur-toggle'}
+                  explanations={[
+                    'Sous une bonne réponse, seul le smiley sera affiché ; la correction ne sera affichée que sous les mauvaises réponses.',
+                    'La correction sera affichée sous toutes les questions, bonnes ou mauvaises.',
+                  ]}
+                />
+              </div>
             </div>
           </div>
           <div class="pt-2 px-4 grid grid-flow-row md:grid-cols-2 gap-4">

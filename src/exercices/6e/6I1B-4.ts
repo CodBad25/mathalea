@@ -11,7 +11,7 @@ import { listeDesDiviseurs } from '../../lib/outils/primalite'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, vertMathalea } from '../../lib/colors'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -197,7 +197,7 @@ export default class ExerciceTableur extends Exercice {
         '#message-faux',
       ) as HTMLDivElement
       if (messages && messagesDiv) {
-        messagesDiv.style.color = 'green'
+        messagesDiv.style.color = vertMathalea
         messagesDiv.innerHTML = messages
       }
     }

@@ -121,7 +121,11 @@ describe('ObjetsCliquablesElement', () => {
       document.createElement('button'),
     )
 
-    expect(result).toEqual({ numberOfPoints: 1, numberOfQuestions: 1 })
+    expect(result).toEqual({
+      numberOfPoints: 1,
+      numberOfQuestions: 1,
+      perQuestionIsOk: [true],
+    })
     expect(document.querySelector('#resultatCheckEx3Q0')?.innerHTML).toBe('😎')
     expect(exercice.answers?.['objets-cliquablesEx3Q0']).toContain(
       '"etat":true',
@@ -179,7 +183,11 @@ describe('ObjetsCliquablesElement', () => {
     )
 
     expect(callback).toHaveBeenCalled()
-    expect(result).toEqual({ numberOfPoints: 0, numberOfQuestions: 1 })
+    expect(result).toEqual({
+      numberOfPoints: 0,
+      numberOfQuestions: 1,
+      perQuestionIsOk: [false],
+    })
     expect(document.querySelector('#feedbackEx3Q0')?.innerHTML).toBe(
       '💡 Retour personnalise.',
     )

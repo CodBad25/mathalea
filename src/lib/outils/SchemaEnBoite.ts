@@ -1,9 +1,14 @@
 import { context } from '../../modules/context'
 import type { ColourNames } from '../2d/colorToLatexOrHtml'
-import { colours } from '../2d/colorToLatexOrHtml'
+import { colours, mathaleaColorAliases } from '../2d/colorToLatexOrHtml'
 import { range } from './nombres'
 import './ShemasEnBoite.css'
 import { texNombre } from './texNombre'
+
+// Ramène 'blue'/'green'/'orange' vers les couleurs officielles CoopMaths.
+function normalizeMathaleaColor(color: string): string {
+  return mathaleaColorAliases[color] ?? color
+}
 
 const standardLatexColors = new Set([
   'black',
@@ -164,7 +169,7 @@ export default class SchemaEnBoite {
           const type = brace.type ?? 'accolade'
           const options = brace.options ?? {}
           const justify = options.justify ?? 'center'
-          const color = options.color ?? 'black'
+          const color = normalizeMathaleaColor(options.color ?? 'black')
           const fontSize = options.fontSize ?? '1em'
           const fontWeight = options.fontWeight ?? 'normal'
           const lineHeight = options.lineHeight ?? '1.2em'
@@ -204,7 +209,9 @@ export default class SchemaEnBoite {
       for (let i = 0; i < this.lignes.length; i++) {
         const ligne = this.lignes[i]
         const entete = ligne.entete?.content ?? ''
-        const couleurEntete = ligne.entete?.couleur ?? 'black'
+        const couleurEntete = normalizeMathaleaColor(
+          ligne.entete?.couleur ?? 'black',
+        )
         const fontSizeEntete = ligne.entete?.fontSize ?? '1em'
         const fontWeightEntete = ligne.entete?.fontWeight ?? 'normal'
         const spacing = ligne.spacing ?? 0
@@ -217,11 +224,11 @@ export default class SchemaEnBoite {
           const barre = barres[k]
           if (barre.length <= 0) continue
           if (barre.content == null) barre.content = ''
-          if (barre.color == null) barre.color = 'lightgray'
+          barre.color = normalizeMathaleaColor(barre.color ?? 'lightgray')
           if (barre.options == null) barre.options = {}
           const options = barre.options ?? {}
           const justify = options.justify ?? 'center'
-          const color = options.color ?? 'black'
+          const color = normalizeMathaleaColor(options.color ?? 'black')
           const fontSize = options.fontSize ?? '1em'
           const fontWeight = options.fontWeight ?? 'normal'
           const style = options.style ?? ''
@@ -305,7 +312,7 @@ export default class SchemaEnBoite {
           const type = brace.type ?? 'accolade'
           const options = brace.options ?? {}
           const justify = options.justify ?? 'center'
-          const color = options.color ?? 'black'
+          const color = normalizeMathaleaColor(options.color ?? 'black')
           const fontSize = options.fontSize ?? '1em'
           const fontWeight = options.fontWeight ?? 'normal'
           const lineHeight = options.lineHeight ?? '1.2em'
@@ -361,7 +368,7 @@ export default class SchemaEnBoite {
           // const type = brace.type ?? 'accolade'
           const options = brace.options ?? {}
           const justify = options.justify ?? 'center'
-          const color = options.color ?? 'black'
+          const color = normalizeMathaleaColor(options.color ?? 'black')
           const fontSize = options.fontSize ?? '1em'
           const fontWeight = options.fontWeight ?? 'normal'
           if (start != null && end != null && texte != null) {
@@ -412,7 +419,7 @@ export default class SchemaEnBoite {
           const texte = brace.text
           const type = brace.type ?? 'accolade'
           const options = brace.options ?? {}
-          const color = options.color ?? 'black'
+          const color = normalizeMathaleaColor(options.color ?? 'black')
           const fontSize = options.fontSize ?? '1em'
           const fontWeight = options.fontWeight ?? 'normal'
           if (start != null && end != null && texte != null) {
@@ -442,7 +449,9 @@ export default class SchemaEnBoite {
       for (let i = 0; i < this.lignes.length; i++) {
         const ligne = this.lignes[i]
         const entete = ligne.entete?.content ?? ''
-        const couleurEntete = ligne.entete?.couleur ?? 'black'
+        const couleurEntete = normalizeMathaleaColor(
+          ligne.entete?.couleur ?? 'black',
+        )
         const fontSizeEntete = ligne.entete?.fontSize ?? '1em'
         const fontWeightEntete = ligne.entete?.fontWeight ?? 'normal'
 
@@ -487,11 +496,11 @@ export default class SchemaEnBoite {
           const barre = barres[k]
           if (barre.length <= 0) continue
           if (barre.content == null) barre.content = ''
-          if (barre.color == null) barre.color = 'lightgray'
+          barre.color = normalizeMathaleaColor(barre.color ?? 'lightgray')
           if (barre.options == null) barre.options = {}
           const options = barre.options ?? {}
           const justify = options.justify ?? 'center'
-          const color = options.color ?? 'black'
+          const color = normalizeMathaleaColor(options.color ?? 'black')
           const fontSize = options.fontSize ?? '1em'
           const fontWeight = options.fontWeight ?? 'normal'
 
@@ -553,7 +562,7 @@ export default class SchemaEnBoite {
           const texte = brace.text
           const type = brace.type ?? 'accolade'
           const options = brace.options ?? {}
-          const color = options.color ?? 'black'
+          const color = normalizeMathaleaColor(options.color ?? 'black')
           const fontSize = options.fontSize ?? '1em'
           const fontWeight = options.fontWeight ?? 'normal'
           if (start != null && end != null && texte != null) {
@@ -601,7 +610,7 @@ export default class SchemaEnBoite {
           const texte = brace.text
           // const type = brace.type ?? 'accolade'
           const options = brace.options ?? {}
-          const color = options.color ?? 'black'
+          const color = normalizeMathaleaColor(options.color ?? 'black')
           const fontSize = options.fontSize ?? '1em'
           const fontWeight = options.fontWeight ?? 'normal'
           if (start != null && end != null && texte != null) {

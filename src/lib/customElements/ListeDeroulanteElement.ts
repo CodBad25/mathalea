@@ -226,6 +226,7 @@ class ListeDeroulanteElement extends MathaleaCustomElement {
   }
 
   private _listeDeroulante?: ListeDeroulante
+  private _container?: HTMLSpanElement
   private _lastValue = ''
 
   constructor() {
@@ -469,11 +470,8 @@ span.listeDeroulante ul li svg.svgChoice {
     // Création de la liste déroulante
     this._listeDeroulante = new ListeDeroulante(choices, { choix0 })
     this._listeDeroulante._init({ conteneur: container })
-    if (!this.interactivityOn) {
-      this._listeDeroulante.disabled = true
-      container.classList.add('disabled')
-      container.setAttribute('aria-disabled', 'true')
-    }
+    this._container = container
+    this.applyInteractivity(this.interactivityOn)
     const originalSelect = this._listeDeroulante.select.bind(
       this._listeDeroulante,
     )
@@ -486,6 +484,22 @@ span.listeDeroulante ul li svg.svgChoice {
       return result
     }
     this._lastValue = this.value
+  }
+
+  /**
+   * Grise la liste et bloque la sélection quand l'interactivité est coupée
+   * (par exemple au moment de la correction).
+   */
+  private applyInteractivity(isOn: boolean) {
+    if (this._listeDeroulante == null || this._container == null) return
+    this._listeDeroulante.disabled = !isOn
+    this._container.classList.toggle('disabled', !isOn)
+    if (isOn) this._container.removeAttribute('aria-disabled')
+    else this._container.setAttribute('aria-disabled', 'true')
+  }
+
+  protected onInteractivityChanged(isOn: boolean): void {
+    this.applyInteractivity(isOn)
   }
 
   // API JS pour récupérer la valeur sélectionnée

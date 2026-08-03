@@ -66,7 +66,7 @@ export default class QuestionBissectrice extends Exercice {
       melange: 4,
       defaut: 4,
     }).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100;) {
       const minuscule = choice(['x', 'y', 'z'])
       const lettres = choisitLettresDifferentes(4, 'XYZ')
       const A = lettres[0]
@@ -241,7 +241,9 @@ export default class QuestionBissectrice extends Exercice {
               ],
         ),
       )
-      handleAnswers(this, i, objetReponse, { formatInteractif: 'mathlive' })
+      handleAnswers(this, i, objetReponse, {
+        formatInteractif: 'tableau-mathlive',
+      })
       const texte =
         'Compléter le tableau.<br>' +
         `$${I}$ est un point de la demi-droite $\\left[${B}${minuscule}\\right)$, bissectrice de l'angle $\\widehat{${A}${B}${C}}$.<br>` +

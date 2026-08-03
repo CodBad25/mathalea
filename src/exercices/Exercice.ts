@@ -177,6 +177,7 @@ export default class Exercice implements IExercice {
   answers?: { [key: string]: string } // Réponses de l'élève
   dragAndDrops?: IDragAndDrop[]
   isDone?: boolean
+  nbTentativesVerification?: number
   private _html: HTMLElement = document.createElement('div')
   score?: number
   vspace?: number // Ajoute un \vspace{[number]cm} avant l'énoncé ce qui peut être pratique pour des exercices avec des figures.

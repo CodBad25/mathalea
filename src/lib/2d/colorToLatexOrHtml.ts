@@ -6,6 +6,16 @@
  * @return {number[]}
  */
 
+import { bleuMathalea, orangeMathalea, vertMathalea } from '../colors'
+
+// Couleurs nommées historiquement utilisées dans les exercices, ramenées vers
+// les couleurs officielles CoopMaths pour uniformiser bleu/vert/orange partout.
+export const mathaleaColorAliases: Record<string, string> = {
+  blue: bleuMathalea,
+  green: vertMathalea,
+  orange: orangeMathalea,
+}
+
 export const colours = {
   aliceblue: '#f0f8ff',
   antiquewhite: '#faebd7',
@@ -213,6 +223,7 @@ export function colorToLatexOrHTML(couleur: string): [string, string] {
   } else if (couleur === 'none') {
     return ['none', ''] // 'none' n'est pas une couleur valide en latex ! Modifié par Jean-claude Lhote le 19:&é:éàé"
   } else {
+    couleur = mathaleaColorAliases[couleur] ?? couleur
     const tabCouleur: string[] = []
     tabCouleur[0] = couleur
     if (couleur[0] === '#') {

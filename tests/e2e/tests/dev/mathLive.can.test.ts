@@ -1,5 +1,5 @@
 import { getDefaultPage } from '../../helpers/browser'
-import { runTest, waitForKatex } from '../../helpers/run'
+import { inputAnswerById, runTest, waitForKatex } from '../../helpers/run'
 
 async function testCan2nde2024VueEleve() {
   const page = await getDefaultPage()
@@ -42,17 +42,56 @@ async function testCan2nde2024VueEleve() {
   for (let i = 0; i < answers.length; i++) {
     if (i === 13 || i === 18) continue
     const champTexteSelector = `#champTexteEx${i}Q0`
-    await page.waitForSelector(champTexteSelector)
-    const champTexteMathlive = page.locator(champTexteSelector)
-    await champTexteMathlive.pressSequentially(answers[i])
-    champTexteMathlive.blur()
+    await inputAnswerById(page, `${i}Q0`, answers[i])
+    await page.locator(champTexteSelector).blur()
     // const buttonCheckQuestion = page.locator(`#verif${i}`) // Vue Prof
     const buttonCheckQuestion = page.locator(`#buttonScoreEx${i}`)
     await buttonCheckQuestion.click()
     const feedbackSelector = `#resultatCheckEx${i}Q0`
-    await page.waitForSelector(feedbackSelector)
+    await page.waitForSelector(feedbackSelector, { state: 'attached' })
+    try {
+      await page.waitForFunction(
+        (selector) => document.querySelector(selector)?.textContent?.trim(),
+        feedbackSelector,
+        { timeout: 5000 },
+      )
+    } catch (error) {
+      const diagnostic = await page.evaluate(
+        ({ champTexteSelector, feedbackSelector, i }) => {
+          const champ = document.querySelector(champTexteSelector)
+          const feedback = document.querySelector(feedbackSelector)
+          const feedbackDetail = document.querySelector(`#feedbackEx${i}Q0`)
+          const button = document.querySelector(`#buttonScoreEx${i}`)
+          const wrapper = document.querySelector(
+            `mathalea-mathfield[mathfield-id="champTexteEx${i}Q0"]`,
+          )
+          return {
+            question: i,
+            champTexteSelector,
+            champValue:
+              champ == null
+                ? null
+                : ((champ as HTMLInputElement).value ??
+                  champ.textContent ??
+                  ''),
+            feedbackSelector,
+            feedbackText: feedback?.textContent?.trim() ?? null,
+            feedbackHtml: feedback?.outerHTML ?? null,
+            feedbackDetailText: feedbackDetail?.textContent?.trim() ?? null,
+            feedbackDetailHtml: feedbackDetail?.outerHTML ?? null,
+            buttonHtml: button?.outerHTML ?? null,
+            wrapperHtml: wrapper?.outerHTML ?? null,
+          }
+        },
+        { champTexteSelector, feedbackSelector, i },
+      )
+      throw new Error(
+        `Aucun smiley écrit pour la question ${i}: ${JSON.stringify(diagnostic, null, 2)}`,
+        { cause: error },
+      )
+    }
     const spanFeedback = page.locator(feedbackSelector)
-    const feedback = await spanFeedback.innerText()
+    const feedback = await spanFeedback.textContent()
     if (!feedback?.includes('😎')) {
       throw Error(`Problème à la question ${i}, 😎 n'a pas été trouvé`)
     }

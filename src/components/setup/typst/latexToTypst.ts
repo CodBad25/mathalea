@@ -1,5 +1,5 @@
 import { tex2typst } from 'tex2typst'
-import { colours } from '../../../lib/2d/colorToLatexOrHtml'
+import { colours, mathaleaColorAliases } from '../../../lib/2d/colorToLatexOrHtml'
 import { renderScratchDiv } from '../../../lib/renderScratch'
 
 /**
@@ -475,6 +475,8 @@ function preprocessTex(tex: string): string {
     /\\textcolor\s*\{([a-zA-Z][a-zA-Z_\d]*)\}/g,
     (match, name: string) => {
       const lower = name.toLowerCase()
+      const mathaleaAlias = mathaleaColorAliases[lower]
+      if (mathaleaAlias) return `\\textcolor{${mathaleaAlias}}`
       if (TYPST_NATIVE_COLORS.has(lower)) return match
       const hex =
         TYPST_COLOR_OVERRIDES[lower] ??

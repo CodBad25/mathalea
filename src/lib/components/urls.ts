@@ -191,7 +191,7 @@ export function buildEsParams(
     ['verso', 5],
   ])
   let es = ''
-  // Paramètre 'es' : presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed
+  // Paramètre 'es' : presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed|isCorrectionOnlyOnError
   es += presentationMode.get(
     mode !== undefined ? mode : (options.presMode ?? 'liste_exos'),
   )
@@ -202,6 +202,7 @@ export function buildEsParams(
   es += options.twoColumns ? '1' : '0'
   es += options.isTitleDisplayed ? '1' : '0'
   es += options.isReferenceDisplayed !== false ? '1' : '0'
+  es += options.isCorrectionOnlyOnError ? '1' : '0'
   return es
 }
 

@@ -6999,7 +6999,7 @@ export const dictionnaireDNB = {
   dnb_2026_01_sujet0va_automatismes: {
     annee: '2026',
     typ: true,
-    lieu: 'Sujet 0 Version B',
+    lieu: 'Sujet 0 Version A',
     mois: 'Janvier',
     numeroInitial: 'automatismes',
     typeExercice: 'dnb',
@@ -7008,7 +7008,7 @@ export const dictionnaireDNB = {
   dnb_2026_01_sujet0vb_automatismes: {
     annee: '2026',
     typ: true,
-    lieu: 'Sujet 0 Version A',
+    lieu: 'Sujet 0 Version B',
     mois: 'Janvier',
     numeroInitial: 'automatismes',
     typeExercice: 'dnb',

@@ -81,7 +81,11 @@ describe('MetaInteractif2dElement', () => {
       document.createElement('button'),
     )
 
-    expect(result).toEqual({ numberOfPoints: 1, numberOfQuestions: 1 })
+    expect(result).toEqual({
+      numberOfPoints: 1,
+      numberOfQuestions: 1,
+      perQuestionIsOk: [true],
+    })
     expect(document.getElementById('resultatCheckEx5Q0')?.innerHTML).toBe('😎')
     expect(field.setPromptState).toHaveBeenCalledWith('champ1', 'correct', true)
     expect(exercice.answers?.MetaInteractif2dEx5Q0).toBe(

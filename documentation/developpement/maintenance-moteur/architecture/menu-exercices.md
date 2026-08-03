@@ -7,7 +7,7 @@ Cette page décrit le rôle de chaque fichier JSON impliqué dans la génératio
 Deux familles de fichiers coexistent :
 
 - **Fichiers générés** par [tasks/updateMenuInternational.js](../../../../tasks/updateMenuInternational.js) (référentiel des exercices aléatoires) et par `tasks/dictionnaireToReferentiel.js` (référentiel des annales statiques). Ils ne doivent pas être édités à la main.
-- **Fichiers maintenus manuellement** : squelettes de référentiel, libellés affichés, contenus de menu annexes (outils, ressources, bibliothèque, applications tierces, liens rapides, carrousel).
+- **Fichiers maintenus manuellement** : squelettes de référentiel, libellés affichés, contenus de menu annexes (outils, ressources, bibliothèque, applications tierces, liens rapides, carrousel). `src/json/referentielStaticFRSessions.json` en fait aussi partie : bien que consommé par le script `tasks/dictionnaireToReferentiel.js`, il n'est pas régénéré automatiquement (voir plus bas la section « Allègement de `referentielStaticFR.json` »).
 
 Tous ces fichiers sont importés statiquement (ES modules JSON) par le code sous [src/lib](../../../../src/lib) et [src/components](../../../../src/components) ; il n'y a pas de fetch runtime.
 
@@ -40,6 +40,26 @@ L'apparence d'un noeud du menu dépend à la fois de sa profondeur dans `emptyRe
 
 - `src/json/dictionnaireBAC.js`, `dictionnaireDNB.js`, `dictionnaireDNBPRO.js`, `dictionnaireC3.js`, `dictionnaireCrpeCoop.js`, `dictionnaireCrpeDida.js`, `dictionnaireE3C.js`, `dictionnaireEAM.js`, `dictionnaireEVACOM.js`, `dictionnaireFlashBac.js`, `dictionnaireSTI2D.js`, `dictionnaireSTL.js` : sources maintenues à la main listant chaque annale statique (tags, chemins d'images/LaTeX). Ce sont les entrées du script.
 - `src/json/referentielStaticFR.json`, `src/json/referentielStaticCH.json` : référentiel des annales d'examens statiques généré à partir des dictionnaires ci-dessus. Consommé par `refUtils.ts` (fusionné dans `baseReferentiel.static`) et par `referentielsStore.ts` (section « Annales examens »).
+
+### Allègement de `referentielStaticFR.json` : champs déduits de l'uuid
+
+`referentielStaticFR.json` répète chaque exercice une fois par regroupement (par année, par thème, par tag) : un même exercice statique FR (DNB, DNBPRO, BAC, STI2D, STL, E3C, EAM, CRPE — pas EVACOM, qui reste dans `referentielStaticCH.json`) apparaît donc plusieurs fois dans l'arbre. Pour limiter le poids du fichier, les entrées de `referentielStaticFR.json` ne stockent **plus** `annee`, `lieu`, `mois`, `numeroInitial`, `typeExercice` : ces champs sont déductibles de l'`uuid` (par exemple `dnb_2013_04_pondichery_5`) et reconstruits au chargement.
+
+- `src/json/referentielStaticFRSessions.json` : table de correspondance `sessionKey -> {annee, mois?, lieu, jour?, typeExercice, filiere?}`, où `sessionKey` est l'uuid **sans son dernier segment** (le numéro d'exercice). Une « session » correspond à une même épreuve (ex. `dnb_2013_04_pondichery` regroupe les 6 exercices de ce sujet). Contient aussi `numeroOverrides` (uuid complet -> `numeroInitial`, pour les rares numéros qui ne sont pas un décodage mécanique du dernier segment de l'uuid, ex. `bac_2024_06_sujet1_metropole_devoile_1` dont le `numeroInitial` réel est `"devoile"`) et `entryOverrides` (uuid complet -> infos complètes, pour les uuid dont la clé de session ne suffit pas à isoler un lieu unique, ex. `crpe_blanc_2017_algo`/`clermont`/`vraifaux`). Cette table est générée puis maintenue à la main : voir la procédure ci-dessous en cas d'erreur au build.
+- `src/json/referentielStaticFRCodec.js` : module JS simple (ESM, sans dépendance à un outillage de compilation) exportant `deriveInfosExerciceStatique(uuid)` et `hydrateReferentielTree(tree)`. Importable tel quel par `tasks/dictionnaireToReferentiel.js` (Node) et par le code TS/Svelte (`allowJs: true` dans `tsconfig.json`) : c'est la seule implémentation de la logique de dérivation, partagée entre le build et le runtime.
+- `src/json/referentielStaticFRHydrated.ts` : point d'entrée runtime. Importe `referentielStaticFR.json` (allégé) et applique `hydrateReferentielTree` une seule fois au chargement du module pour ré-attacher `annee`/`lieu`/`mois`/`numeroInitial`/`typeExercice` (et `jour`/`filiere` s'ils étaient présents) à chaque feuille de l'arbre. Le résultat a exactement la même forme que l'ancien import direct de `referentielStaticFR.json`.
+  - **Tout code qui a besoin des exercices statiques FR avec leurs métadonnées (annee/lieu/mois/…) doit importer `referentielStaticFRHydrated.ts`, jamais `referentielStaticFR.json` directement.** Points d'import actuels : `mathalea.ts`, `exercisesUtils.ts`, `referentielsUtils.ts`, `referentielsStore.ts`, `ExerciceStatic.svelte`. Les autres consommateurs (`refUtils.ts`, `sorting.ts`, `mobileMenu.ts`, `filters.ts`, `Latex.ts`, `ReferentielNode.svelte`, `ReferentielEnding.svelte`, `MobileSearch.svelte`, `SearchInput.svelte`, …) reçoivent l'arbre déjà fusionné par ces 5 fichiers et n'ont rien à connaître de l'hydratation.
+  - `referentielStaticCH.json` (EVACOM) n'est pas concerné : il garde tous ses champs et s'importe directement.
+- Avant d'écrire `referentielStaticFR.json`, le script vérifie pour **chaque** exercice que `deriveInfosExerciceStatique(uuid)` reproduit exactement les champs saisis à la main dans le dictionnaire source ; en cas d'écart il liste les uuid fautifs et échoue (`process.exit(1)`) au lieu d'écrire un référentiel incohérent.
+
+**Que faire si `pnpm makeJson` / `pnpm build` échoue avec « Session inconnue pour l'uuid statique » ou un écart de champs :**
+
+1. Un nouvel exercice a été ajouté dans un dictionnaire (`dictionnaireDNB.js`, etc.) avec une nouvelle épreuve (nouveau lieu/année/mois) qui n'a pas encore de ligne dans `referentielStaticFRSessions.json` : ajouter la clé `sessionKey` correspondante (uuid sans son dernier segment) avec les bons `annee`/`mois`/`lieu`/`jour`/`typeExercice`.
+2. Le `numeroInitial` réel ne correspond pas au décodage mécanique du dernier segment de l'uuid (identité pour toutes les familles sauf le CRPE, où `exN`/`ex0N` → `N` et `pb` → `Problème`) : ajouter une entrée dans `numeroOverrides`.
+3. Le lieu/mois/jour diffère entre exercices qui partagent pourtant la même `sessionKey` (cas rare, ex. CRPE « blanc ») : ajouter une entrée complète par uuid dans `entryOverrides` plutôt que dans `sessions`.
+4. Sinon, c'est probablement une faute de frappe dans le dictionnaire source (champ mal traduit, mauvais numéro) : corriger le dictionnaire.
+
+Relancer `node tasks/dictionnaireToReferentiel.js` après toute modification pour vérifier que le message d'erreur a disparu.
 
 ## Ressources partenaires (MathAdata)
 

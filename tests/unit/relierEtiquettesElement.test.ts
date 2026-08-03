@@ -174,7 +174,11 @@ describe('RelierEtiquettesElement', () => {
       document.createElement('button'),
     )
 
-    expect(resultat).toEqual({ numberOfPoints: 2, numberOfQuestions: 2 })
+    expect(resultat).toEqual({
+      numberOfPoints: 2,
+      numberOfQuestions: 2,
+      perQuestionIsOk: [true],
+    })
     expect(document.querySelector('#resultatCheckEx3Q0')?.innerHTML).toBe('😎')
     expect(exercice.answers?.['relier-etiquettesEx3Q0']).toBe(
       JSON.stringify(liensAttendus),
@@ -203,7 +207,11 @@ describe('RelierEtiquettesElement', () => {
       document.createElement('button'),
     )
 
-    expect(resultat).toEqual({ numberOfPoints: 1, numberOfQuestions: 2 })
+    expect(resultat).toEqual({
+      numberOfPoints: 1,
+      numberOfQuestions: 2,
+      perQuestionIsOk: [false],
+    })
     expect(document.querySelector('#resultatCheckEx3Q0')?.innerHTML).toBe('☹️')
   })
 

@@ -6,6 +6,11 @@
   export let exerciseIndex: number
   export let questionIndex: number
   export let isCorrectionVisible: boolean
+  export let isQuestionCorrect: boolean | undefined = undefined
+  export let hideCorrectionOnSuccess: boolean = false
+
+  $: isCorrectionDisplayed =
+    isCorrectionVisible && !(hideCorrectionOnSuccess && isQuestionCorrect === true)
 </script>
 
 <div
@@ -26,7 +31,7 @@
     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
     {@html mathaleaFormatExercice(exercise.listeQuestions[questionIndex])}
   </li>
-  {#if isCorrectionVisible}
+  {#if isCorrectionDisplayed}
     <div
       class="relative self-start border-l-coopmaths-struct dark:border-l-coopmathsdark-struct border-l-[3px] text-coopmaths-corpus dark:text-coopmathsdark-corpus mt-6 mb-4 lg:mb-0 ml-0 lg:ml-0 py-2 pl-4 lg:pl-6"
       id="correction-exo{exerciseIndex}Q{questionIndex}"
