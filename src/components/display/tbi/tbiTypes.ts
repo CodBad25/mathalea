@@ -1,7 +1,12 @@
 import type { IExercice } from '../../../lib/types'
 
 /** Mode d'affichage de la correction d'une carte TBI */
-export type TbiCorrectionMode = 'hidden' | 'below' | 'replace' | 'modal'
+export type TbiCorrectionMode =
+  | 'hidden'
+  | 'below'
+  | 'perQuestion'
+  | 'replace'
+  | 'modal'
 
 /**
  * Un exercice affiché dans la vue TBI.

@@ -52,21 +52,27 @@ const ASSET_CACHE = 'typst-assets-v2'
  * naturellement l'entrée de cache.
  */
 export async function cachedBytes(url: string): Promise<Uint8Array> {
+  let cache: Cache | null = null
   try {
-    if (typeof caches !== 'undefined') {
-      const cache = await caches.open(ASSET_CACHE)
-      let response = await cache.match(url)
-      if (response == null) {
-        const network = await fetch(url)
-        if (network.ok) await cache.put(url, network.clone())
-        response = network
-      }
-      return new Uint8Array(await response.arrayBuffer())
-    }
+    if (typeof caches !== 'undefined') cache = await caches.open(ASSET_CACHE)
   } catch {
     // Cache API indisponible/pleine : on retombe sur un fetch normal
   }
-  return new Uint8Array(await (await fetch(url)).arrayBuffer())
+  if (cache != null) {
+    const hit = await cache.match(url)
+    if (hit != null) return new Uint8Array(await hit.arrayBuffer())
+  }
+  // un statut d'erreur (404, 429 de limitation de débit, etc.) n'est jamais
+  // mis en cache ni renvoyé comme si c'était le fichier : le corps de la
+  // réponse d'erreur (souvent du texte/JSON) serait sinon pris pour les
+  // octets de l'image ou de la police, échouant plus loin de façon opaque
+  // (ex. « Invalid PNG signature » au décodage Typst)
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error(`Échec du téléchargement de ${url} (HTTP ${response.status})`)
+  }
+  if (cache != null) await cache.put(url, response.clone())
+  return new Uint8Array(await response.arrayBuffer())
 }
 
 /**

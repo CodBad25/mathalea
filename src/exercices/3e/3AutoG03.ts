@@ -7,7 +7,7 @@ import { labelPoint } from '../../lib/2d/textes'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
-import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
+import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 
 export const titre =
@@ -35,27 +35,25 @@ export default class AngleComplémentaireTriangleRectangle extends ExerciceSimpl
       'Sujet original (2e paramètre inutile si coché)',
       false,
     ]
-    this.besoinFormulaire2Texte = [
-      'modulo 10 pour angle en A',
-      'Nombre entre 0 et 9 (10 pour aléatoire)',
+    this.besoinFormulaire2Numerique = [
+      'Modulo 10 pour angle en A',
+      10,
+      '0 à 9 : modulo choisi\n10 : aléatoire',
     ]
     this.sup = false
-    this.sup2 = '10'
+    this.sup2 = 10
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.optionsChampTexte = { texteAvant : '<br>$\\widehat{C} =$', texteApres: '$^\\circ$' }
-     this.can = false
+    this.nbQuestionsModifiable = false
+    this.optionsChampTexte = {
+      texteAvant: '<br>$\\widehat{C} =$',
+      texteApres: '$^\\circ$',
+    }
+    this.can = false
   }
 
   nouvelleVersion() {
-    const modulo = gestionnaireFormulaireTexte({
-      saisie: this.sup2,
-      min: 0,
-      max: 9,
-      defaut: 10,
-      melange: 10,
-      nbQuestions: 1,
-    }).map(Number)[0]
+    const modulo = this.sup2 >= 0 && this.sup2 <= 9 ? this.sup2 : randint(0, 9)
     const positionAngleDroit = this.sup
       ? 'droite'
       : choice(['gauche', 'droite'])
@@ -112,8 +110,7 @@ export default class AngleComplémentaireTriangleRectangle extends ExerciceSimpl
       `${90 - alpha}`,
     )}^\\circ$.`
 
-     this.canEnonce =  figure +'Calculer $\\widehat{C}$'
-      this.canReponseACompleter = '$\\widehat{C} =\\ldots ^\\circ$ '
-
+    this.canEnonce = figure + 'Calculer $\\widehat{C}$'
+    this.canReponseACompleter = '$\\widehat{C} =\\ldots ^\\circ$ '
   }
 }

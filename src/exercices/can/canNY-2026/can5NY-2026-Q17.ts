@@ -32,7 +32,7 @@ export default class CalculDivers2026 extends ExerciceSimple {
     switch (this.canOfficielle ? 1 : this.quotaRandint('cas', 1, 5)) {
       case 1:
         this.reponse = texNombre(10, 0)
-        this.question = `$${texNombre(annee / 10, 1)}=202+\\dfrac{${annee % 10}}{%{champ1}}$`
+        this.question = `${texNombre(annee / 10, 1)}=202+\\dfrac{${annee % 10}}{%{champ1}}`
         this.correction = `$${texNombre(annee / 10, 1)}=202+${texNombre((annee % 10) / 10, 1)}=202+\\dfrac{${annee % 10}}{${miseEnEvidence(this.reponse)}}$`
         handleAnswers(this, 0, { champ1: { value: this.reponse } })
         this.canReponseACompleter = `$${texNombre(annee / 10, 1)}=202+\\dfrac{${annee % 10}}{\\ldots}$`
@@ -53,7 +53,7 @@ export default class CalculDivers2026 extends ExerciceSimple {
         break
       case 4:
         this.reponse = texNombre(annee % 1000, 0)
-        this.question = `$${texNombre(annee / 1000, 3)}=2+\\dfrac{%{champ1}}{${texNombre(1000)}}$`
+        this.question = `${texNombre(annee / 1000, 3)}=2+\\dfrac{%{champ1}}{${texNombre(1000)}}`
         this.correction = `$${texNombre(annee / 1000, 3)}=2+${texNombre((annee % 1000) / 1000, 3)}=2+\\dfrac{${miseEnEvidence(this.reponse)}}{${texNombre(1000)}}$`
         handleAnswers(this, 0, { champ1: { value: this.reponse } })
         this.canReponseACompleter = `$${texNombre(annee / 1000, 2)}=2+\\dfrac{\\ldots}{${texNombre(1000)}}$`

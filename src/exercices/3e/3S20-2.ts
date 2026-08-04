@@ -53,7 +53,7 @@ export default class CalculProbaTab2Entrées extends Exercice {
       ],
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const { texte, texteCorr, alea } = typeDeQuestion[i](this, i)
 
       if (this.questionJamaisPosee(i, ...alea)) {
@@ -387,7 +387,7 @@ function moule(
   )
   question1 += exercice.interactif ? tableauInteractif.output : tableau
   handleAnswers(exercice, question * 4, objetReponse1, {
-    formatInteractif: 'mathlive',
+    formatInteractif: 'tableau-mathlive',
   })
   const tableauCorr = tableauColonneLigne(colonneEnt, ligneEnt, contenuCorr)
   const correction1 = `${exercice.correctionDetaillee ? correctionDetaillee1 : ''}Voici le tableau des effectifs :<br>${tableauCorr}`
@@ -397,6 +397,7 @@ function moule(
     ajouteQuestionMathlive({
       exercice,
       question: question * 4 + 1,
+      reponseParams: { formatInteractif: 'mathalea-mathfield' },
       objetReponse: {
         reponse: {
           value: proba2.texFraction,
@@ -412,6 +413,7 @@ function moule(
     ajouteQuestionMathlive({
       exercice,
       question: question * 4 + 2,
+      reponseParams: { formatInteractif: 'mathalea-mathfield' },
       objetReponse: {
         reponse: {
           value: proba3.texFraction,
@@ -427,6 +429,7 @@ function moule(
     ajouteQuestionMathlive({
       exercice,
       question: question * 4 + 3,
+      reponseParams: { formatInteractif: 'mathalea-mathfield' },
       objetReponse: {
         reponse: {
           value: proba4.texFraction,

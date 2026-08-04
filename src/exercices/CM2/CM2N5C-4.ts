@@ -92,7 +92,7 @@ export default class ExerciceProbleme002 extends Exercice {
 
   nouvelleVersion() {
     const prenomsMelanges = shuffle(prenoms)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const listeFruit1 = [
         {
           nomSingulier: 'une fraise',
@@ -271,6 +271,7 @@ Le contenu de son panier pèse $${texNombre(masseTotale, 3, true)}$ kg.`
             ajouteQuestionMathlive({
               exercice: this,
               question: 4 * i,
+              reponseParams: { formatInteractif: 'mathalea-mathfield' },
               objetReponse: {
                 reponse: { value: texNombre(masseTotale * 1000, 0) },
               },
@@ -281,6 +282,7 @@ Le contenu de son panier pèse $${texNombre(masseTotale, 3, true)}$ kg.`
             ajouteQuestionMathlive({
               exercice: this,
               question: 4 * i + 1,
+              reponseParams: { formatInteractif: 'mathalea-mathfield' },
               objetReponse: { reponse: { value: texNombre(masseFruit2, 0) } },
               typeInteractivite: 'mathlive',
               texteApres: 'g',
@@ -289,6 +291,7 @@ Le contenu de son panier pèse $${texNombre(masseTotale, 3, true)}$ kg.`
             ajouteQuestionMathlive({
               exercice: this,
               question: 4 * i + 2,
+              reponseParams: { formatInteractif: 'mathalea-mathfield' },
               objetReponse: {
                 reponse: { value: texNombre(masseFruit1 + masseFruit2, 0) },
               },
@@ -299,6 +302,7 @@ Le contenu de son panier pèse $${texNombre(masseTotale, 3, true)}$ kg.`
             ajouteQuestionMathlive({
               exercice: this,
               question: 4 * i + 3,
+              reponseParams: { formatInteractif: 'mathalea-mathfield' },
               objetReponse: { reponse: { value: texNombre(masseFruit3, 0) } },
               typeInteractivite: 'mathlive',
               texteApres: 'g',
@@ -419,6 +423,7 @@ Le contenu de son panier pèse $${texNombre(masseTotale, 3, true)}$ kg.`
             ajouteQuestionMathlive({
               exercice: this,
               question: 3 * i,
+              reponseParams: { formatInteractif: 'mathalea-mathfield' },
               objetReponse: {
                 reponse: { value: texNombre(masseTotale * 1000, 0) },
               },
@@ -429,6 +434,7 @@ Le contenu de son panier pèse $${texNombre(masseTotale, 3, true)}$ kg.`
             ajouteQuestionMathlive({
               exercice: this,
               question: 3 * i + 1,
+              reponseParams: { formatInteractif: 'mathalea-mathfield' },
               objetReponse: { reponse: { value: texNombre(masseFruit2, 0) } },
               typeInteractivite: 'mathlive',
               texteApres: 'g',
@@ -437,6 +443,7 @@ Le contenu de son panier pèse $${texNombre(masseTotale, 3, true)}$ kg.`
             ajouteQuestionMathlive({
               exercice: this,
               question: 3 * i + 2,
+              reponseParams: { formatInteractif: 'mathalea-mathfield' },
               objetReponse: { reponse: { value: texNombre(masseFruit3, 0) } },
               typeInteractivite: 'mathlive',
               texteApres: 'g',
@@ -466,6 +473,7 @@ Le contenu de son panier pèse $${texNombre(masseTotale, 3, true)}$ kg.`
             ajouteQuestionMathlive({
               exercice: this,
               question: i,
+              reponseParams: { formatInteractif: 'mathalea-mathfield' },
               objetReponse: { reponse: { value: texNombre(masseFruit3, 0) } },
               typeInteractivite: 'mathlive',
               texteApres: 'g',

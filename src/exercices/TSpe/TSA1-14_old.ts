@@ -1,5 +1,5 @@
-import N2PlusRacineDeN from '../can/TSpe/canTSpeS06'
-export const titre = 'Calculer la limite de $\\dfrac{u_n}{v_n}$'
+import N2PlusRacineDeN from '../can/TSpe/canTSpeS04'
+export const titre = 'Calculer la limite de $\\dfrac{a\\pm kn}{n}$'
 export const dateDePublication = '04/08/2025'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -9,10 +9,10 @@ export const interactifType = 'mathLive'
  * @author Stéphane Guyon
  */
 
-export const uuid = '1b8d3'
+export const uuid = '1b8d1'
 
 export const refs = {
-  'fr-fr': ['TSA1-16'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 export default class N2PlusRacineDeNUn extends N2PlusRacineDeN {

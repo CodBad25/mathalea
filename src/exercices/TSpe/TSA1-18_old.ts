@@ -1,5 +1,5 @@
-import N2PlusRacineDeN from '../can/TSpe/canTSpeS01'
-export const titre = "Calculer la limite d'un polynôme"
+import N2PlusRacineDeN from '../can/TSpe/canTSpeS08'
+export const titre = 'Calculer la limite de $\\sqrt{n}-n^p$'
 export const dateDePublication = '04/08/2025'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -9,10 +9,10 @@ export const interactifType = 'mathLive'
  * @author Stéphane Guyon
  */
 
-export const uuid = 'fe9d9'
+export const uuid = '1b8d5'
 
 export const refs = {
-  'fr-fr': ['TSA1-11'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 export default class N2PlusRacineDeNUn extends N2PlusRacineDeN {

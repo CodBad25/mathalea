@@ -525,7 +525,7 @@ export default class ProportionnaliteParLinearite2 extends Exercice {
       }
       answers.push(['bareme', toutAUnPoint])
       handleAnswers(this, i, Object.fromEntries(answers), {
-        formatInteractif: 'mathlive',
+        formatInteractif: 'tableauMathlive',
       })
       const cells = AddTabPropMathlive.convertTableauToTableauMathlive(
         ligne1,

@@ -2,10 +2,12 @@
 // cf https://vitest.dev/config/
 
 import { dirname, resolve } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { mergeConfig } from 'vite'
 import { defineConfig } from 'vitest/config'
 import viteConfig from './vite.config'
+import { ConsoleErrorsReporter } from './helpers/consoleErrorsReporter.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -37,7 +39,12 @@ export default mergeConfig(
       // et si un test s'arrête dans l'une les autres continuent de tourner rendant impossible
       // l'inspection du pb)
       // on le laisse et tant pis pour le wrap des tests dans webstorm
-      reporters: ['default', 'html', 'junit', 'json'],
+      reporters: [
+        process.env.DEBUG === '1' ? 'default' : new ConsoleErrorsReporter(),
+        'html',
+        'junit',
+        'json',
+      ],
       printConsoleTrace: false,
       outputFile: {
         junit: './logs/junit-report.xml',

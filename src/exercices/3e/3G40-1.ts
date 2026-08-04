@@ -443,6 +443,7 @@ export default class ReperageSurLaTerre extends Exercice {
             exercice: this,
             question: i,
             typeInteractivite: 'fillInTheBlank',
+            reponseParams: { formatInteractif: 'fill-in-the-blank' },
             content: '%{champ1}°%{champ2}',
             classe: KeyboardType.geolocalisation,
             objetReponse: {

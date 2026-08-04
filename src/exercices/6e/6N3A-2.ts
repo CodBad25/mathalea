@@ -106,6 +106,7 @@ export default class PasserEcritureFractionnaireFraction extends Exercice {
           question: i,
           texteAvant: '$=$',
           typeInteractivite: 'mathlive',
+          reponseParams: { formatInteractif: 'mathalea-mathfield' },
           objetReponse: {
             reponse: {
               value,

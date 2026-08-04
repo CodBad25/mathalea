@@ -170,6 +170,9 @@ export function exerciceInteractif(
   }
 
   for (let i = 0; i < exercice.autoCorrection.length; i++) {
+    // Une question sans réponse attendue (question de démonstration, de rédaction...)
+    // au milieu de questions interactives ne doit pas être vérifiée ni comptée.
+    if (exercice.autoCorrection[i] == null) continue
     const format = exercice.autoCorrection[i]?.formatInteractif ?? 'mathlive'
     const customElementFormat =
       interactivityTypeToCustomElementFormat(format) ?? format

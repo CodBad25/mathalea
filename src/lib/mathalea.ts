@@ -1162,7 +1162,11 @@ export function mathaleaHandleExerciceSimple(
             { exercice: JSON.stringify(exercice) },
           )
       }
-      if (exercice.formatInteractif !== 'fillInTheBlank') {
+      const isFillInTheBlank =
+        exercice.formatInteractif === 'fillInTheBlank' ||
+        (exercice.formatInteractif === 'custom' &&
+          String(exercice.question).includes('%{'))
+      if (!isFillInTheBlank) {
         if (
           exercice.formatInteractif === 'qcm' ||
           (exercice instanceof ExerciceSimple &&
@@ -1282,12 +1286,14 @@ export function mathaleaHandleExerciceSimple(
           ),
         )
         if (
+          exercice.formatInteractif !== 'custom' &&
           typeof exercice.reponse === 'object' &&
           'callback' in exercice.reponse
         ) {
           // Cas d'un callback dans un exercice simple
           handleAnswers(exercice, i, exercice.reponse)
         } else if (
+          exercice.formatInteractif !== 'custom' &&
           typeof exercice.reponse === 'object' &&
           'champ1' in exercice.reponse
         ) {

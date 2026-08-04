@@ -112,6 +112,33 @@ Calculer et donner le résultat sous forme de fraction irréductible.
 Une correction est facultative : ajoutez-la dans un fichier `_cor` à côté
 (`somme-de-fractions_cor.typ`).
 
+### Personnaliser le document généré (optionnel)
+
+Si vos exercices ont besoin de leurs propres commandes — un paquet LaTeX
+particulier, une fonction Typst maison — ajoutez un fichier `preambule.tex`
+et/ou `preambule.typ` à la racine de votre dossier, puis déclarez-les dans
+`manifest.json` (généré par `build.sh`, voir étape suivante) :
+
+```json
+{
+  "preambule": {
+    "tex": "preambule.tex",
+    "typ": "preambule.typ"
+  }
+}
+```
+
+- `preambule.tex` est inséré dans le préambule du document LaTeX (avant
+  `\begin{document}`) ;
+- `preambule.typ` est inséré en tête du document Typst généré.
+
+Le modèle de banque ne génère pas encore ce champ automatiquement à partir de
+`banque.json` : ajoutez-le à la main dans `manifest.json` après avoir lancé
+`build.sh` (étape suivante), ou adaptez le script si vous voulez que la
+génération le fasse pour vous. Détails et exemple complet dans la
+documentation de référence :
+[banques-externes.md](https://forge.apps.education.fr/coopmaths/mathalea/-/blob/main/documentation/utilisation/banques-externes.md).
+
 ### 4. Générer et tester la banque
 
 ```bash

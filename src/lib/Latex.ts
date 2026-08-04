@@ -13,10 +13,14 @@ import {
   type IExercice,
   type IExerciceStatique,
 } from '../lib/types'
+import { retrieveResourceFromUuid } from './components/refUtils'
 import { isMathadataUuid } from './components/mathadataReferentiel'
 import genericPreamble from './latex/preambule.tex?raw'
 import mathadataCompatTex from './latex/mathadata-compat.tex?raw'
 import { decodeExosGrouping, findExoPosition } from './LatexGroup'
+import { preambuleBanque, referentielBanquesExternes } from './stores/banquesExternesStore'
+import { estUuidBanqueExterne } from './types/banquesExternes'
+import { isBanqueExterneType } from './types/referentiels'
 import type {
   ExoContent,
   LatexFileInfos,
@@ -98,6 +102,28 @@ class Latex {
 
   isMathadataExerciceInTheList() {
     return this.exercices.some((e) => isMathadataUuid(String(e.uuid)))
+  }
+
+  /**
+   * Code LaTeX du préambule déclaré par les banques externes dont un exercice
+   * figure dans la liste (voir `manifest.preambule.tex`), une seule fois par
+   * banque même si elle fournit plusieurs exercices de la fiche.
+   */
+  preambulesBanquesExternes(): string {
+    const referentiel = referentielBanquesExternes()
+    const idsBanques = new Set<string>()
+    for (const e of this.exercices) {
+      const uuid = String(e.uuid)
+      if (!estUuidBanqueExterne(uuid)) continue
+      const ressource = retrieveResourceFromUuid(referentiel, uuid)
+      if (ressource !== null && isBanqueExterneType(ressource)) {
+        idsBanques.add(ressource.banque)
+      }
+    }
+    return [...idsBanques]
+      .map((id) => preambuleBanque(id)?.tex)
+      .filter((tex): tex is string => tex !== undefined)
+      .join('\n')
   }
 
   getExercices() {
@@ -742,6 +768,10 @@ class Latex {
     }
     if (this.isMathadataExerciceInTheList()) {
       contents.preamble += '\n' + mathadataCompatTex
+    }
+    const preambulesBanquesExternes = this.preambulesBanquesExternes()
+    if (preambulesBanquesExternes.length > 0) {
+      contents.preamble += '\n' + preambulesBanquesExternes
     }
     contents.content = contents.content
       .replaceAll('\\\\\\\\', '\n\\medskip\n\n')

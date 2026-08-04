@@ -1179,9 +1179,7 @@ math-field.metaInteractif2d.corrected::part(prompt) {
 math-field.fillInTheBlanks::part(prompt) {
   font-size: 1em;
   line-height: 1;
-  min-height: 1em;
   min-width: 0px;
-  height: auto;
   border: none;
   outline: solid;
   outline-width: thin;
@@ -1192,19 +1190,13 @@ math-field.fillInTheBlanks::part(container) {
   border: none;
   border-radius: 4px;
 }
-math-field.ml-1:focus-within::part(container) {
+math-field.ml-1:not(.fillInTheBlanks):focus-within::part(container) {
   outline: solid;
   outline-width: 2px;
   outline-color: var(--color-coopmaths-struct);
 }
 math-field.fillInTheBlanks:not(:focus-within)::part(container) {
   border: none;
-}
-
-.dark math-field.fillInTheBlanks:focus-within::part(container) {
-  outline: solid;
-  outline-width: 2px;
-  outline-color: var(--color-coopmathsdark-corpus-light);
 }
 
 math-field.schemaEnBoite {

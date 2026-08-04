@@ -405,6 +405,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
               {
                 exercice: this,
                 question: indexInteractif++,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: { reponse: { value: nbTex } },
                 typeInteractivite: 'mathlive',
               },

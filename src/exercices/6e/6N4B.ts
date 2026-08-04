@@ -416,6 +416,7 @@ Grâce au cinquième paramètre, on peut imposer l'ordre des motifs choisis au q
               {
                 exercice: this,
                 question: indexInteractif++,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: { reponse: { value: nbTex } },
                 typeInteractivite: 'mathlive',
               },

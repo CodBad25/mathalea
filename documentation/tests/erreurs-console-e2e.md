@@ -121,18 +121,20 @@ Cette fonction découvre tous les éléments de formulaire configurables dans le
 
 Recherche jusqu'à 5 instances de chaque type de formulaire dans le conteneur `#settings0` :
 
-| Type de formulaire            | Sélecteur                           | Valeurs testées             |
-| ----------------------------- | ----------------------------------- | --------------------------- |
-| `formText`                    | `#settings-formText{1-5}-0`         | Nombres extraits du libellé |
-| `check` (cases à cocher)      | `#settings-check{1-5}-0`            | `[false, true]`             |
-| `num` (champs numériques)     | `#settings-formNum{1-5}-0` (input)  | `[min, min+1, max]`         |
-| `select` (listes déroulantes) | `#settings-formNum{1-5}-0` (select) | Toutes les valeurs d'option |
-| Correction détaillée          | `#settings-correction-detaillee-0`  | `[false, true]`             |
+| Type de formulaire            | Sélecteur                           | Valeurs testées                                         |
+| ----------------------------- | ----------------------------------- | ------------------------------------------------------- |
+| `formText`                    | `#settings-formText{1-5}-0`         | Cas extraits des lignes `1 : ...`, `2 : ...` uniquement |
+| `check` (cases à cocher)      | `#settings-check{1-5}-0`            | `[false, true]`                                         |
+| `num` (champs numériques)     | `#settings-formNum{1-5}-0` (input)  | `[min, min+1, max]`                                     |
+| `select` (listes déroulantes) | `#settings-formNum{1-5}-0` (select) | Toutes les valeurs d'option                             |
+| Correction détaillée          | `#settings-correction-detaillee-0`  | `[false, true]`                                         |
 
 ### Stratégie de test des paramètres
 
 - **`simpleTest`** (par défaut pour `console_errors`) : parcourt chaque formulaire indépendamment, en testant ses valeurs pendant que les autres formulaires conservent leur dernière valeur. C'est beaucoup plus rapide et chaque valeur de paramètre est testée au moins une fois, sans croiser toutes les interactions entre paramètres.
 - **`fullTest`** (quand `isFullCombinations: true`) : boucle imbriquée sur toutes les combinaisons de 5 formulaires au maximum (produit cartésien). Ce mode est très lent.
+
+Les formulaires texte dont l'aide ne suit pas le format énuméré `1 : ...`, `2 : ...` sont ignorés par ce parcours automatique. Cela évite de transformer des indications libres comme `Nombre entre 0 et 9` en valeurs de test invalides.
 
 ---
 
@@ -148,7 +150,7 @@ L'action légère du profil `standard` vérifie seulement que la consigne reste 
 
 Le parcours UI complet effectue les étapes suivantes :
 
-1. **Clic sur "Nouvel énoncé"** : régénère l'exercice avec une nouvelle graine aléatoire.
+1. **Clic sur "Nouvel énoncé"** : régénère l'exercice avec une nouvelle graine aléatoire. Le bouton est absent pour les exercices déclarant `pasDeVersionAleatoire = true` ; l'étape est alors ignorée (sinon le locator ne résout jamais et le test attend jusqu'au timeout).
 
 2. **Test du zoom** : lit le zoom courant `z` dans l'URL. Si `z < 1.4`, clique sur le zoom avant ; sinon clique sur le zoom arrière. Utilise `clickZoomAndWaitForExercise`, qui :
    - clique sur le bouton de zoom ;
@@ -160,7 +162,7 @@ Le parcours UI complet effectue les étapes suivantes :
    - attend les éléments de question (`li[id^="exercice0Q"]`) ;
    - clique sur le bouton "Vérifier" (`#verif0`) pour valider des réponses vides ;
    - attend la div de résultat (`article + div`) ;
-   - clique une fois de plus sur "Nouvel énoncé" en profil `standard` ou `smoke`, et 3 fois en profil `deep`.
+   - clique 3 fois de plus sur "Nouvel énoncé" (sauf si le bouton est absent, cf. étape 1).
 
 ### Construction de l'URL et timeouts adaptatifs
 
@@ -198,6 +200,15 @@ Chaque exercice est tenté jusqu'à **3 fois** :
 - Si tout est propre : retourne `'OK'`.
 - Les écouteurs Playwright (`console`, `pageerror`, `crash`) sont détachés après chaque tentative pour éviter qu'une tentative échouée pollue les suivantes sur la page partagée du lot.
 
+Quand un ou plusieurs exercices échouent, le test imprime aussi en fin d'exécution un récapitulatif `console_errors` :
+
+| Colonne                      | Contenu                                                        |
+| ---------------------------- | -------------------------------------------------------------- |
+| `Fichier`                    | Nom du fichier d'exercice en échec                             |
+| `Extrait du message console` | Première erreur significative, sans URL, compactée et tronquée |
+
+Ce tableau évite de devoir parcourir tout le log Vitest pour retrouver les exercices concernés. Par défaut, et avec `DEBUG=0`, les échecs sont bien remontés à Vitest, mais avec une erreur volontairement courte qui renvoie vers le tableau et vers `tests/e2e/logs/exportConsole.log`. Le reporter `console_errors` masque alors la section finale `Failed Tests`, devenue redondante, tout en gardant le bilan rouge `Test Files` / `Tests`. Avec `DEBUG=1`, l'erreur complète est relancée et le reporter standard affiche aussi les détails de diagnostic Vitest.
+
 ---
 
 ## 8. Modes d'entrée
@@ -218,4 +229,4 @@ Le test a trois points d'entrée :
 - **`testTimeout` :** 20 000 secondes par cas de test.
 - **`hookTimeout` :** 600 secondes.
 - **`pool` :** `threads` avec `maxWorkers: 1`, `isolate: false`, `disableConsoleIntercept: true` — exécution séquentielle dans un seul thread.
-- **`reporters` :** `html`, `junit`, `json`, `default`.
+- **`reporters` :** `html`, `junit`, `json`, reporter console court par défaut (`default` avec `DEBUG=1`).

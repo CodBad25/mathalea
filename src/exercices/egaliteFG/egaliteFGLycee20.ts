@@ -13,7 +13,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '7a886'
 export const refs = {
-  'fr-fr': ['TermComplem-2', 'EgaliteFG7-Tle-20'],
+  'fr-fr': ['EgaliteFG7-Tle-20'],
   'fr-ch': [],
 }
 

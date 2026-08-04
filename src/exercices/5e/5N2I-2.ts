@@ -42,7 +42,7 @@ export default class ExerciceSoustractionsRelatifsATrou extends Exercice {
 
   nouvelleVersion(numeroExercice: number) {
     const nombresDecimaux = this.sup3
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = nombresDecimaux
         ? (randint(10, this.sup * 10) * choice([1, -1])) / 10
         : randint(1, this.sup) * choice([1, -1])
@@ -60,6 +60,7 @@ export default class ExerciceSoustractionsRelatifsATrou extends Exercice {
               ? `${ajouteQuestionMathlive({
                   exercice: this,
                   question: i,
+                  reponseParams: { formatInteractif: 'mathalea-mathfield' },
                   objetReponse: { reponse: { value: texNombre(c, 1) } },
                   typeInteractivite: 'mathlive',
                 })}$`
@@ -75,6 +76,7 @@ export default class ExerciceSoustractionsRelatifsATrou extends Exercice {
               ? `$${ajouteQuestionMathlive({
                   exercice: this,
                   question: i,
+                  reponseParams: { formatInteractif: 'mathalea-mathfield' },
                   objetReponse: { reponse: { value: texNombre(a, 1) } },
                   typeInteractivite: 'mathlive',
                 })}$`

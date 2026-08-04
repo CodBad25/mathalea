@@ -3001,6 +3001,58 @@
     "titre": "Nombres premiers",
     "sousThemes": {}
   },
+  "TCA1": {
+    "titre": "Suites numériques",
+    "sousThemes": {}
+  },
+  "TCA1-1": {
+    "titre": "Limites de suites",
+    "sousThemes": {}
+  },
+  "TCA1-2": {
+    "titre": "Suites arithmético-géométriques",
+    "sousThemes": {}
+  },
+  "TCA1-3": {
+    "titre": "Synthèse",
+    "sousThemes": {}
+  },
+  "TCA2": {
+    "titre": "Limites de fonctions",
+    "sousThemes": {}
+  },
+  "TCA3": {
+    "titre": "Continuité et TVI",
+    "sousThemes": {}
+  },
+   "TCA4": {
+    "titre": "Fonction logarithme népérien",
+    "sousThemes": {}
+  },
+ "TCA5": {
+    "titre": "Primitives et équations différentielles",
+    "sousThemes": {}
+  },
+    "TCA6": {
+    "titre": "Intégration",
+    "sousThemes": {}
+  },
+   "TCA7": {
+    "titre": "Convexité",
+    "sousThemes": {}
+  },
+   "TCP1": {
+    "titre": "Lois de probabilités discrètes",
+    "sousThemes": {}
+  },
+    "TCP2": {
+    "titre": "Lois de probabilités à densité",
+    "sousThemes": {}
+  },
+    "TCP3": {
+    "titre": "Séries statistiques à deux variables",
+    "sousThemes": {}
+  },
   "TTA": {
     "titre": "Vocabulaire ensembliste et logique",
     "sousThemes": {}

@@ -217,6 +217,7 @@ Grâce au quatrième paramètre, on peut imposer l'ordre des motifs choisis au q
                   {
                     exercice: this,
                     question: indexInteractif++,
+                    reponseParams: { formatInteractif: 'mathalea-mathfield' },
                     objetReponse: { reponse: { value: nbTex } },
                     typeInteractivite: 'mathlive',
                   },
@@ -235,6 +236,7 @@ Grâce au quatrième paramètre, on peut imposer l'ordre des motifs choisis au q
                 {
                   exercice: this,
                   question: indexInteractif++,
+                  reponseParams: { formatInteractif: 'mathalea-mathfield' },
                   objetReponse: { reponse: { value: nbTex } },
                   typeInteractivite: 'mathlive',
                 },
@@ -254,6 +256,7 @@ Grâce au quatrième paramètre, on peut imposer l'ordre des motifs choisis au q
                 {
                   exercice: this,
                   question: indexInteractif++,
+                  reponseParams: { formatInteractif: 'mathalea-mathfield' },
                   objetReponse: { reponse: { value: etape.toString() } },
                   typeInteractivite: 'mathlive',
                 },
@@ -279,6 +282,7 @@ Grâce au quatrième paramètre, on peut imposer l'ordre des motifs choisis au q
                 {
                   exercice: this,
                   question: indexInteractif++,
+                  reponseParams: { formatInteractif: 'mathalea-mathfield' },
                   objetReponse: { reponse: { value: nbTex } },
                   typeInteractivite: 'mathlive',
                 },

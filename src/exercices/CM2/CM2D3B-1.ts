@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -49,7 +49,7 @@ export default class ExerciceProbleme001 extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let nbCoquillages: number
       let nouveauNombre: number | undefined
       const coquillages = [
@@ -128,6 +128,7 @@ export default class ExerciceProbleme001 extends Exercice {
           listePrincipale += ajouteQuestionMathlive({
             exercice: this,
             question: i,
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: {
                 value: texNombre(masseCoquillages.div(nbCoquillages), 2),
@@ -144,6 +145,7 @@ export default class ExerciceProbleme001 extends Exercice {
           listePrincipale += ajouteQuestionMathlive({
             exercice: this,
             question: i,
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: {
                 value: texNombre(masseCoquillages.div(nbCoquillages), 0),
@@ -163,10 +165,35 @@ export default class ExerciceProbleme001 extends Exercice {
           items: [
             `Aujourd'hui, j'ai trouvé $${nbCoquillages}$ ${coquillage.nomPluriel}. ${premiereLettreEnMajuscule(pronom)} pèsent ensemble $${texNombre(masseCoquillages, 2)}$ g.<br>En supposant qu'${pronom} aient ${tout} la même masse, trouve combien pèse ${coquillage.nomSingulier}.
           ${this.sup2 ? `${SchemaEnBoite.division(masseCoquillages.toNumber(), undefined, nbCoquillages, 0).display()}<br>` : ''}
-          ${ajouteQuestionMathlive({ exercice: this, question: 2 * i, objetReponse: { reponse: { value: texNombre(masseCoquillages.div(nbCoquillages), 2) } }, typeInteractivite: 'mathlive', texteApres: 'g' })}`,
+          ${ajouteQuestionMathlive({
+            exercice: this,
+            question: 2 * i,
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
+            objetReponse: {
+              reponse: {
+                value: texNombre(masseCoquillages.div(nbCoquillages), 2),
+              },
+            },
+            typeInteractivite: 'mathlive',
+            texteApres: 'g',
+          })}`,
             `Combien pèsent $${nouveauNombre}$ ${coquillage.nomPluriel} (on suppose toujours qu'${pronom} ont ${tout} la même masse) ?
      ${this.sup2 ? `${SchemaEnBoite.division(undefined, undefined, Number(nouveauNombre), 0).display()}` : ''}
-      ${ajouteQuestionMathlive({ exercice: this, question: 2 * i + 1, objetReponse: { reponse: { value: texNombre(masseCoquillages.mul(Number(nouveauNombre)).div(nbCoquillages), 2) } }, typeInteractivite: 'mathlive', texteApres: 'g' })}`,
+      ${ajouteQuestionMathlive({
+        exercice: this,
+        question: 2 * i + 1,
+        reponseParams: { formatInteractif: 'mathalea-mathfield' },
+        objetReponse: {
+          reponse: {
+            value: texNombre(
+              masseCoquillages.mul(Number(nouveauNombre)).div(nbCoquillages),
+              2,
+            ),
+          },
+        },
+        typeInteractivite: 'mathlive',
+        texteApres: 'g',
+      })}`,
           ],
           style: 'alpha',
           classOptions: 'display: inline-block;',

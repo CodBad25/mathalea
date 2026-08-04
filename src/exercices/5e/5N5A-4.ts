@@ -295,6 +295,7 @@ Grâce au troisième paramètre, on peut imposer l'ordre des motifs choisis au d
         {
           exercice: this,
           question: i,
+          reponseParams: { formatInteractif: 'mathalea-mathfield' },
           objetReponse: { reponse: { value: pat.formule } },
           typeInteractivite: 'mathlive',
         },

@@ -3,6 +3,7 @@ import {
   construireAnimation,
   ElementIepEditeur,
 } from '../../src/lib/customElements/ElementIepEditeur'
+import CreateurAnimationInstruments from '../../src/exercices/profs/P025'
 import { context } from '../../src/modules/context'
 
 describe('ElementIepEditeur intersections', () => {
@@ -22,6 +23,119 @@ describe('ElementIepEditeur intersections', () => {
     )
     expect(xml).not.toMatch(
       /texte="\$H\$"[\s\S]*<action abscisse="360" ordonnee="198" couleur="black" id="\d+" mouvement="creer" objet="point" tempo="5"\/>/,
+    )
+  })
+
+  it('intersects a line with a perpendicular bisector', () => {
+    const animation = construireAnimation([
+      { type: 'point', nom: 'A', x: 0, y: 0 },
+      { type: 'point', nom: 'B', x: 4, y: 0 },
+      { type: 'droite', p1: 'A', p2: 'B' },
+      { type: 'mediatrice', p1: 'A', p2: 'B' },
+      { type: 'intersection', nom: 'M', etape1: 2, etape2: 3, choix: 1 },
+    ])
+
+    const xml = animation.script()
+    expect(xml).toMatch(
+      /texte="\$M\$"[\s\S]*<action abscisse="300" ordonnee="315" couleur="black" id="\d+" mouvement="creer" objet="point" tempo="5"\/>/,
+    )
+  })
+
+  it('intersects a line with an angle bisector', () => {
+    const animation = construireAnimation([
+      { type: 'point', nom: 'A', x: 4, y: 0 },
+      { type: 'point', nom: 'B', x: 0, y: 0 },
+      { type: 'point', nom: 'C', x: 0, y: 4 },
+      { type: 'point', nom: 'D', x: 2, y: -1 },
+      { type: 'point', nom: 'E', x: 2, y: 3 },
+      { type: 'droite', p1: 'D', p2: 'E' },
+      { type: 'bissectrice', p1: 'A', p2: 'B', p3: 'C' },
+      { type: 'intersection', nom: 'I', etape1: 5, etape2: 6, choix: 1 },
+    ])
+
+    const xml = animation.script()
+    expect(xml).toMatch(
+      /texte="\$I\$"[\s\S]*<action abscisse="180" ordonnee="240" couleur="black" id="\d+" mouvement="creer" objet="point" tempo="5"\/>/,
+    )
+  })
+
+  it('intersects a line with a protractor ray', () => {
+    const animation = construireAnimation([
+      { type: 'point', nom: 'A', x: 0, y: 0 },
+      { type: 'point', nom: 'B', x: 4, y: 0 },
+      { type: 'point', nom: 'C', x: 2, y: -1 },
+      { type: 'point', nom: 'D', x: 2, y: 3 },
+      { type: 'droite', p1: 'C', p2: 'D' },
+      { type: 'demiDroiteAngle', p1: 'A', p2: 'B', angle: 45 },
+      { type: 'intersection', nom: 'J', etape1: 4, etape2: 5, choix: 1 },
+    ])
+
+    const xml = animation.script()
+    expect(xml).toMatch(
+      /texte="\$J\$"[\s\S]*<action abscisse="180" ordonnee="348" couleur="black" id="\d+" mouvement="creer" objet="point" tempo="5"\/>/,
+    )
+  })
+})
+
+describe('ElementIepEditeur direction objects', () => {
+  it('draws a parallel to a perpendicular bisector', () => {
+    const animation = construireAnimation([
+      { type: 'point', nom: 'A', x: 0, y: 0 },
+      { type: 'point', nom: 'B', x: 4, y: 0 },
+      { type: 'point', nom: 'C', x: 3, y: 0 },
+      { type: 'mediatrice', p1: 'A', p2: 'B' },
+      { type: 'paralleleAObjet', etape: 3, p1: 'C' },
+    ])
+
+    const xml = animation.script()
+    expect(xml).toMatch(
+      /abscisse="210" ordonnee="315" epaisseur="2" couleur="#216D9A" mouvement="tracer" objet="crayon"/,
+    )
+  })
+
+  it('draws a perpendicular to an angle bisector', () => {
+    const animation = construireAnimation([
+      { type: 'point', nom: 'A', x: 4, y: 0 },
+      { type: 'point', nom: 'B', x: 0, y: 0 },
+      { type: 'point', nom: 'C', x: 0, y: 4 },
+      { type: 'point', nom: 'D', x: 2, y: 2 },
+      { type: 'bissectrice', p1: 'A', p2: 'B', p3: 'C' },
+      { type: 'perpendiculaireAObjet', etape: 4, p1: 'D' },
+    ])
+
+    const xml = animation.script()
+    expect(xml).toMatch(
+      /abscisse="268" ordonnee="238" epaisseur="2" couleur="#216D9A" mouvement="tracer" objet="crayon"/,
+    )
+  })
+
+  it('draws a parallel to a protractor ray', () => {
+    const animation = construireAnimation([
+      { type: 'point', nom: 'A', x: 0, y: 0 },
+      { type: 'point', nom: 'B', x: 4, y: 0 },
+      { type: 'point', nom: 'C', x: 0, y: 2 },
+      { type: 'demiDroiteAngle', p1: 'A', p2: 'B', angle: 0 },
+      { type: 'paralleleAObjet', etape: 3, p1: 'C' },
+    ])
+
+    const xml = animation.script()
+    expect(xml).toMatch(
+      /abscisse="300" ordonnee="90" epaisseur="2" couleur="#216D9A" mouvement="tracer" objet="crayon"/,
+    )
+  })
+
+  it('draws a perpendicular to a protractor ray', () => {
+    const animation = construireAnimation([
+      { type: 'point', nom: 'A', x: 0, y: 0 },
+      { type: 'point', nom: 'B', x: 4, y: 0 },
+      { type: 'point', nom: 'C', x: 2, y: 0 },
+      { type: 'demiDroiteAngle', p1: 'A', p2: 'B', angle: 0 },
+      { type: 'perpendiculaireAObjet', etape: 3, p1: 'C' },
+    ])
+
+    const xml = animation.script()
+    expect(xml).toMatch(
+      /abscisse="180" ordonnee="300" epaisseur="2" couleur="#216D9A" mouvement="tracer" objet="crayon"/,
     )
   })
 })
@@ -107,6 +221,26 @@ describe('ElementIepEditeur conditions initiales', () => {
 
     expect(html).toContain('conditions-initiales=')
     expect(html).toContain('programme-initial=')
+    context.isHtml = htmlContextAvantTest
+  })
+})
+
+describe('P025 editor identity', () => {
+  it('keeps the same editor id when the exercise number changes', () => {
+    const htmlContextAvantTest = context.isHtml
+    context.isHtml = true
+    const exercice = new CreateurAnimationInstruments()
+
+    exercice.numeroExercice = 0
+    exercice.nouvelleVersion()
+    const premierId = exercice.listeQuestions[0].match(/id="([^"]+)"/)?.[1]
+
+    exercice.numeroExercice = 3
+    exercice.nouvelleVersion()
+    const secondId = exercice.listeQuestions[0].match(/id="([^"]+)"/)?.[1]
+
+    expect(secondId).toBe(premierId)
+    expect(secondId).toMatch(/^editeur-iep-p025-\d+$/)
     context.isHtml = htmlContextAvantTest
   })
 })

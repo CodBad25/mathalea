@@ -75,7 +75,7 @@ export default class Reperage2e extends Exercice {
     const Y: number[][] = []
     const noms: string[][] = []
     const points: PointAbstrait[][] = []
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       x[i] = []
       y[i] = []
       X[i] = []
@@ -297,6 +297,7 @@ export default class Reperage2e extends Exercice {
                     1,
                   ],
                 },
+                reponseParams: { formatInteractif: 'fill-in-the-blank' },
                 content: '(%{champ1}~~;~~%{champ2})',
               })}`,
           )

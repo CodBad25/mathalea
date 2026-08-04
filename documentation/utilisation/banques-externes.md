@@ -54,6 +54,8 @@ racine, et les fichiers qu'il référence :
 
 ```
 manifest.json
+preambule.tex
+preambule.typ
 png/somme-de-fractions.png
 png/somme-de-fractions_cor.png
 typ/somme-de-fractions.typ
@@ -71,6 +73,10 @@ tex/somme-de-fractions.tex
   "licence": "CC BY-SA 4.0",
   "version": "1.0.0",
   "description": "Quelques mots sur la banque.",
+  "preambule": {
+    "tex": "preambule.tex",
+    "typ": "preambule.typ"
+  },
   "exercices": [
     {
       "id": "somme-de-fractions",
@@ -98,6 +104,7 @@ Champs de la banque :
 | `id`                                          | oui         | identifiant court (lettres, chiffres, `.`, `_`, `-`) ; il entre dans les uuid des exercices, donc dans les liens partagés                                            |
 | `titre`                                       | oui         | nom du nœud affiché dans « Ressources partenaires »                                                                                                                  |
 | `auteur`, `licence`, `version`, `description` | non         | `auteur` figure aussi en attribution discrète sous chaque exercice de la banque (vues prof et élève) ; les quatre sont affichés dans la liste des banques installées |
+| `preambule`                                   | non         | personnalisation du document généré, voir ci-dessous                                                                                                                 |
 | `exercices`                                   | oui         | liste des exercices, non vide                                                                                                                                        |
 
 Champs d'un exercice :
@@ -119,6 +126,26 @@ dans les vues Typst ou LaTeX correspondantes.
 
 Tous les chemins sont **relatifs à la racine de la banque**. Les chemins
 absolus, les URLs et les remontées `..` sont refusés.
+
+### Personnaliser le document généré (`preambule`)
+
+Le champ optionnel `preambule` déclare, pour chaque format, un fichier inséré
+dans le document généré quand un exercice de la banque en fait partie —
+l'équivalent d'un `preambule.tex` que l'on joindrait à un envoi LaTeX :
+
+- `preambule.tex` : code LaTeX inséré dans le préambule du document (avant
+  `\begin{document}`) — pour déclarer des `\usepackage`, des macros, etc. dont
+  les sources `tex`/`texCor` de la banque ont besoin ;
+- `preambule.typ` : code Typst inséré en tête du document généré (après les
+  paquets fixes de MathALÉA) — pour ses propres fonctions ou imports Typst.
+
+Chaque fichier n'est ajouté qu'une seule fois, même si plusieurs exercices de
+la banque figurent dans la fiche.
+
+Ce code est inséré tel quel dans le document compilé : comme pour les sources
+`tex`/`typ` des exercices eux-mêmes, MathALÉA fait confiance au contenu d'une
+banque que vous avez choisi d'installer. N'installez que des banques dont vous
+connaissez la provenance.
 
 ## Fabriquer une banque
 

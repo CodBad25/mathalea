@@ -16,6 +16,7 @@ import Exercice from '../Exercice'
 // Ici ce sont les fonctions de la librairie maison 2d.js qui gèrent tout ce qui est graphique (SVG/tikz) et en particulier ce qui est lié à l'objet lutin
 import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
 import { bleuMathalea } from '../../lib/colors'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import {
   allerA,
@@ -46,11 +47,15 @@ export const refs = {
   'fr-fr': ['4I1-2'],
   'fr-ch': [],
 }
+
+const scratchSimulatorButtonAction = '4I1-2:scratch-simulator-button'
+
 export default class AlgoTortue extends Exercice {
   // ça c'est la classe qui permet de créer cet exercice
   indiceBonneFigure: number
   constructor() {
     super() // la classe parente qui définit les attributs commun à tous les exercices
+    registerScratchSimulatorButton()
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
     this.besoinFormulaireNumerique = [
@@ -652,7 +657,14 @@ export default class AlgoTortue extends Exercice {
     texteCorr += `La bonne figure est la figure ${this.indiceBonneFigure + 1}<br>
     ${
       context.isHtml
-        ? createScratchSimulatorElement(lutins[0].codeScratch, delay, false)
+        ? DomReadyActionElement.create({
+            action: scratchSimulatorButtonAction,
+            payload: {
+              codeScratch: lutins[0].codeScratch,
+              delai: delay,
+              insertProgramme: false,
+            },
+          })
         : ''
     }`
     if (this.interactif && context.isHtml) {
@@ -681,4 +693,41 @@ export default class AlgoTortue extends Exercice {
     this.listeCorrections.push(texteCorr) // et la liste des corrections
     listeQuestionsToContenuSansNumero(this) // on envoie tout à la fonction qui va mettre en forme.
   }
+}
+
+let scratchSimulatorButtonRegistered = false
+
+function registerScratchSimulatorButton() {
+  if (scratchSimulatorButtonRegistered) return
+  scratchSimulatorButtonRegistered = true
+  DomReadyActionElement.registerCallback<{
+    codeScratch: string
+    delai: number
+    insertProgramme: boolean
+  }>(scratchSimulatorButtonAction, ({ element, payload }) => {
+    element.innerHTML = ''
+    element.classList.add('my-4', 'block')
+    const button = document.createElement('button')
+    const simulatorContainer = document.createElement('div')
+    button.type = 'button'
+    button.textContent = 'Lancer le simulateur'
+    button.className =
+      'inline-flex items-center px-4 py-2 bg-coopmaths-action dark:bg-coopmathsdark-action text-coopmaths-canvas dark:text-coopmathsdark-canvas font-medium text-sm rounded shadow-md hover:bg-coopmaths-action-lightest dark:hover:bg-coopmathsdark-action-lightest focus:bg-coopmaths-action-lightest dark:focus:bg-coopmathsdark-action-lightest focus:outline-none transition duration-150 ease-in-out'
+
+    const onClick = () => {
+      simulatorContainer.innerHTML = createScratchSimulatorElement(
+        payload.codeScratch,
+        payload.delai,
+        payload.insertProgramme,
+      )
+    }
+
+    button.addEventListener('click', onClick)
+    element.append(button, simulatorContainer)
+
+    return () => {
+      button.removeEventListener('click', onClick)
+      element.innerHTML = ''
+    }
+  })
 }

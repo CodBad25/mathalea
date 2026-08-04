@@ -77,7 +77,7 @@ export default class Reperage2e extends Exercice {
     const Y: number[][] = []
     const noms: string[][] = []
     const points: PointAbstrait[][] = []
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       x[i] = []
       y[i] = []
       X[i] = []
@@ -88,7 +88,7 @@ export default class Reperage2e extends Exercice {
       let coordsK: [number, number]
       let matrice: Matrice
       let matriceInverse: Matrice | undefined
-      
+
       let listeNoms: string[]
       let labelI: string, labelK: string, labelO: string
 
@@ -99,15 +99,20 @@ export default class Reperage2e extends Exercice {
         labelK = 'J'
         // On génère plusieurs lettres et on filtre pour exclure O, I et J
         const toutesLesLettres = choisitLettresDifferentes(15)
-        const lettresPourPoints = toutesLesLettres.filter((l) => l !== 'O' && l !== 'I' && l !== 'J')
-        listeNoms = [labelI, labelK, labelO, ...lettresPourPoints].slice(0, 3 + this.sup3)
+        const lettresPourPoints = toutesLesLettres.filter(
+          (l) => l !== 'O' && l !== 'I' && l !== 'J',
+        )
+        listeNoms = [labelI, labelK, labelO, ...lettresPourPoints].slice(
+          0,
+          3 + this.sup3,
+        )
       } else {
         listeNoms = choisitLettresDifferentes(3 + this.sup3)
         labelI = listeNoms[0]
         labelK = listeNoms[1]
         labelO = listeNoms[2]
       }
-      
+
       noms[i] = listeNoms.slice(3)
       const pointO = pointAbstrait(0, 0, labelO, 'below left')
       let compteur = 0
@@ -317,6 +322,7 @@ export default class Reperage2e extends Exercice {
                     1,
                   ],
                 },
+                reponseParams: { formatInteractif: 'fill-in-the-blank' },
                 content: '(%{champ1}~~;~~%{champ2})',
               })}`,
           )

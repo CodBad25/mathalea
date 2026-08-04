@@ -118,10 +118,16 @@ async function action(page: Page, description: string) {
   logDebug(`Test avec les paramètres ${description}`)
   // clic sur nouvel énoncé 3 fois
   const buttonNewData = page.getByRole('button', { name: 'Nouvel énoncé' })
-  logDebug('Actualier (nouvel énoncé)')
-  setLastAction('click Nouvel énoncé')
-  await buttonNewData.click({ force: true })
-  logDebug('fin Actualier (nouvel énoncé)')
+  // Le bouton est masqué pour les exercices avec pasDeVersionAleatoire = true
+  const hasButtonNewData = await buttonNewData.isVisible()
+  if (hasButtonNewData) {
+    logDebug('Actualier (nouvel énoncé)')
+    setLastAction('click Nouvel énoncé')
+    await buttonNewData.click({ force: true })
+    logDebug('fin Actualier (nouvel énoncé)')
+  } else {
+    logDebug('Pas de bouton « Nouvel énoncé » (exercice non aléatoire)')
+  }
   const buttonZoom = page.locator(
     '#setupButtonsBar > div > div:nth-child(2) > button',
   )
@@ -170,6 +176,12 @@ async function action(page: Page, description: string) {
     await page.waitForSelector('article + div')
     const buttonResult = await page.locator('article + div').innerText()
     log(buttonResult)
+    const scratchModal = page.locator('dialog[data-scratch-sim="true"]')
+    if (await scratchModal.isVisible()) {
+      setLastAction('fermer la modale scratch-simulator')
+      await scratchModal.getByRole('button', { name: '✕' }).click()
+      await scratchModal.waitFor({ state: 'hidden' })
+    }
     logDebug('Actualier (nouvel énoncé) 3 fois')
     setLastAction('click Nouvel énoncé x3')
     await buttonNewData.click({ clickCount: 3 })

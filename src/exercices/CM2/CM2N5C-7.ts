@@ -1,4 +1,4 @@
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -71,7 +71,7 @@ export default class ExerciceProbleme006 extends Exercice {
       defaut: 1,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 5; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 5;) {
       const prenom1 = choice(prenoms)
       const prenom2 = choice(prenoms, [prenom1])
       const typeDeProbleme = listeTypesDeProblemes[i]
@@ -93,6 +93,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       question: i,
                       typeInteractivite: 'mathlive',
                       texteApres: ' billes',
+                      reponseParams: { formatInteractif: 'mathalea-mathfield' },
                       objetReponse: {
                         reponse: {
                           value: texNombre(nb1 + nb2),
@@ -116,6 +117,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       question: i,
                       typeInteractivite: 'mathlive',
                       texteApres: ' billes',
+                      reponseParams: { formatInteractif: 'mathalea-mathfield' },
                       objetReponse: {
                         reponse: {
                           value: texNombre(nb1 - nb2),
@@ -139,6 +141,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       question: i,
                       typeInteractivite: 'mathlive',
                       texteApres: ' billes',
+                      reponseParams: { formatInteractif: 'mathalea-mathfield' },
                       objetReponse: {
                         reponse: {
                           value: texNombre(nb1),
@@ -168,6 +171,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       question: i,
                       typeInteractivite: 'mathlive',
                       texteApres: ' billes',
+                      reponseParams: { formatInteractif: 'mathalea-mathfield' },
                       objetReponse: {
                         reponse: {
                           value: texNombre(nb1 + nb2),
@@ -191,6 +195,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       question: i,
                       typeInteractivite: 'mathlive',
                       texteApres: ' billes',
+                      reponseParams: { formatInteractif: 'mathalea-mathfield' },
                       objetReponse: {
                         reponse: {
                           value: texNombre(nb1 - nb2),
@@ -214,6 +219,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       question: i,
                       typeInteractivite: 'mathlive',
                       texteApres: ' billes',
+                      reponseParams: { formatInteractif: 'mathalea-mathfield' },
                       objetReponse: {
                         reponse: {
                           value: texNombre(nb1 + nb2),
@@ -276,6 +282,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       question: i,
                       typeInteractivite: 'mathlive',
                       texteApres: ' billes',
+                      reponseParams: { formatInteractif: 'mathalea-mathfield' },
                       objetReponse: {
                         reponse: {
                           value: texNombre(nb2),
@@ -299,6 +306,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       question: i,
                       typeInteractivite: 'mathlive',
                       texteApres: ' billes',
+                      reponseParams: { formatInteractif: 'mathalea-mathfield' },
                       objetReponse: {
                         reponse: {
                           value: texNombre(nb1),
@@ -323,6 +331,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       question: i,
                       typeInteractivite: 'mathlive',
                       texteApres: ' billes',
+                      reponseParams: { formatInteractif: 'mathalea-mathfield' },
                       objetReponse: {
                         reponse: {
                           value: texNombre(nb1 + nb2),
@@ -389,6 +398,9 @@ export default class ExerciceProbleme006 extends Exercice {
                         question: i,
                         typeInteractivite: 'mathlive',
                         texteApres: ' billes',
+                        reponseParams: {
+                          formatInteractif: 'mathalea-mathfield',
+                        },
                         objetReponse: {
                           reponse: {
                             value: texNombre(nb1 * nbFois),
@@ -412,6 +424,9 @@ export default class ExerciceProbleme006 extends Exercice {
                         question: i,
                         typeInteractivite: 'mathlive',
                         texteApres: ' billes',
+                        reponseParams: {
+                          formatInteractif: 'mathalea-mathfield',
+                        },
                         objetReponse: {
                           reponse: {
                             value: texNombre(nb1),
@@ -436,6 +451,9 @@ export default class ExerciceProbleme006 extends Exercice {
                         question: i,
                         typeInteractivite: 'mathlive',
                         texteApres: ' billes',
+                        reponseParams: {
+                          formatInteractif: 'mathalea-mathfield',
+                        },
                         objetReponse: {
                           reponse: {
                             value: texNombre(nb2),

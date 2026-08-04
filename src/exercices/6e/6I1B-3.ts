@@ -19,6 +19,7 @@ import {
 import Exercice from '../Exercice'
 // Ici ce sont les fonctions de la librairie maison 2d.js qui gèrent tout ce qui est graphique (SVG/tikz) et en particulier ce qui est lié à l'objet lutin
 import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { grille } from '../../lib/2d/Grille'
 import { bleuMathalea } from '../../lib/colors'
 import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
@@ -50,6 +51,9 @@ export const refs = {
   'fr-2016': ['6I12'],
   'fr-ch': [],
 }
+
+const scratchSimulatorButtonAction = '6I1B-3:scratch-simulator-button'
+
 /**
  * @author Jean-claude Lhote
  */
@@ -71,6 +75,7 @@ export default class AlgoTortue extends Exercice {
   }
 
   nouvelleVersion(numeroExercice: number) {
+    registerScratchSimulatorButton()
     // la méthode qui crée une nouvelle version de l'exercice
     this.cliqueFiguresArray = []
     this.autoCorrection[0] = {}
@@ -481,9 +486,14 @@ export default class AlgoTortue extends Exercice {
       },
     ]
 
-    // Ici, la figure contient la grille, le point de départ et le lutin qui s'anime sur sa trace...
+    // Ici, la figure contient la grille, le point de départ et la trace finale.
+    // Le simulateur Scratch s'ouvre automatiquement en modale quand il est inséré :
+    // on ne le crée donc qu'au clic sur le bouton ci-dessous.
     texteCorr += `La bonne figure est la figure ${texteEnCouleurEtGras(this.indiceBonneFigure + 1)}.<br>
-    ${context.isHtml ? createScratchSimulatorElement(lutins[0].codeScratch, 1000, false) : ''}`
+    ${DomReadyActionElement.create({
+      action: scratchSimulatorButtonAction,
+      payload: { codeScratch: lutins[0].codeScratch },
+    })}`
 
     texteCorr += mathalea2d(paramsCorrection, objetsCorrection)
     this.listeQuestions.push(texte) // on met à jour la liste des questions
@@ -491,4 +501,39 @@ export default class AlgoTortue extends Exercice {
 
     listeQuestionsToContenuSansNumero(this) // on envoie tout à la fonction qui va mettre en forme.
   }
+}
+
+let scratchSimulatorButtonRegistered = false
+
+function registerScratchSimulatorButton() {
+  if (scratchSimulatorButtonRegistered) return
+  scratchSimulatorButtonRegistered = true
+  DomReadyActionElement.registerCallback<{
+    codeScratch: string
+  }>(scratchSimulatorButtonAction, ({ element, payload }) => {
+    element.innerHTML = ''
+    element.classList.add('my-4', 'block')
+    const button = document.createElement('button')
+    const simulatorContainer = document.createElement('div')
+    button.type = 'button'
+    button.textContent = 'Lancer le simulateur'
+    button.className =
+      'inline-flex items-center px-4 py-2 bg-coopmaths-action dark:bg-coopmathsdark-action text-coopmaths-canvas dark:text-coopmathsdark-canvas font-medium text-sm rounded shadow-md hover:bg-coopmaths-action-lightest dark:hover:bg-coopmathsdark-action-lightest focus:bg-coopmaths-action-lightest dark:focus:bg-coopmathsdark-action-lightest focus:outline-none transition duration-150 ease-in-out'
+
+    const onClick = () => {
+      simulatorContainer.innerHTML = createScratchSimulatorElement(
+        payload.codeScratch,
+        1000,
+        false,
+      )
+    }
+
+    button.addEventListener('click', onClick)
+    element.append(button, simulatorContainer)
+
+    return () => {
+      button.removeEventListener('click', onClick)
+      element.innerHTML = ''
+    }
+  })
 }

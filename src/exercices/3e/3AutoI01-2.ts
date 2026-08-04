@@ -1,4 +1,5 @@
 import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -22,9 +23,13 @@ export const refs = {
   'fr-fr': ['3AutoI01-2'],
   'fr-ch': [],
 }
+
+const scratchSimulatorButtonAction = '3AutoI01-2:scratch-simulator-button'
+
 export default class BlocPersonnaliseScratch2 extends Exercice {
   constructor() {
     super()
+    registerScratchSimulatorButton()
     this.typeExercice = 'Scratch'
     this.besoinFormulaireCaseACocher = ['Sujet original', false]
     this.sup = false
@@ -54,6 +59,12 @@ export default class BlocPersonnaliseScratch2 extends Exercice {
 \\end{scratch}`
     }
     const codeScratch = blocACompléter(a, b, c)
+    const correctionCodeScratch = codeScratch
+      .replace(
+        '\\blocksensing{demander \\ovalnum{ Choisir un nombre } et attendre}\n',
+        '',
+      )
+      .replace('\\ovalsensing{réponse}', `\\ovalnum{${x}}`)
     const codeScratch3 = String(scratchblock(codeScratch))
 
     const codeVariable = scratchblock(
@@ -80,6 +91,7 @@ ${codeScratch3}<br>
       ajouteQuestionMathlive({
         exercice: this,
         question: 0,
+        reponseParams: { formatInteractif: 'mathalea-mathfield' },
         objetReponse: {
           reponse: { value: (x * a + b) / c },
         },
@@ -93,18 +105,53 @@ ${codeScratch3}<br>
     ${
       context.isHtml
         ? '<br>' +
-          createScratchSimulatorElement(
-            codeScratch
-              .replace(
-                '\\blocksensing{demander \\ovalnum{ Choisir un nombre } et attendre}\n',
-                '',
-              )
-              .replace('\\ovalsensing{réponse}', `\\ovalnum{${x}}`),
-            500,
-            false,
-          )
+          DomReadyActionElement.create({
+            action: scratchSimulatorButtonAction,
+            payload: {
+              codeScratch: correctionCodeScratch,
+              delai: 500,
+              insertProgramme: false,
+            },
+          })
         : ''
     }
      `
   }
+}
+
+let scratchSimulatorButtonRegistered = false
+
+function registerScratchSimulatorButton() {
+  if (scratchSimulatorButtonRegistered) return
+  scratchSimulatorButtonRegistered = true
+  DomReadyActionElement.registerCallback<{
+    codeScratch: string
+    delai: number
+    insertProgramme: boolean
+  }>(scratchSimulatorButtonAction, ({ element, payload }) => {
+    element.innerHTML = ''
+    element.classList.add('my-4', 'block')
+    const button = document.createElement('button')
+    const simulatorContainer = document.createElement('div')
+    button.type = 'button'
+    button.textContent = 'Lancer le simulateur'
+    button.className =
+      'inline-flex items-center px-4 py-2 bg-coopmaths-action dark:bg-coopmathsdark-action text-coopmaths-canvas dark:text-coopmathsdark-canvas font-medium text-sm rounded shadow-md hover:bg-coopmaths-action-lightest dark:hover:bg-coopmathsdark-action-lightest focus:bg-coopmaths-action-lightest dark:focus:bg-coopmathsdark-action-lightest focus:outline-none transition duration-150 ease-in-out'
+
+    const onClick = () => {
+      simulatorContainer.innerHTML = createScratchSimulatorElement(
+        payload.codeScratch,
+        payload.delai,
+        payload.insertProgramme,
+      )
+    }
+
+    button.addEventListener('click', onClick)
+    element.append(button, simulatorContainer)
+
+    return () => {
+      button.removeEventListener('click', onClick)
+      element.innerHTML = ''
+    }
+  })
 }

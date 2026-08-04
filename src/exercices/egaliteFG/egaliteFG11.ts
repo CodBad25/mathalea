@@ -17,7 +17,7 @@ export const interactifReady = true
 export const interactifType = 'custom'
 export const uuid = '1ed48'
 export const refs = {
-  'fr-fr': ['3G20-4', 'EgaliteFG3-4e-11', 'EgaliteFG4-3e-11'],
+  'fr-fr': [ 'EgaliteFG3-4e-11', 'EgaliteFG4-3e-11'],
   'fr-ch': [],
 }
 

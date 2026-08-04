@@ -59,10 +59,25 @@ export interface BanqueExterneExercice {
 }
 
 /**
+ * Personnalisation du document généré (LaTeX et/ou Typst) pour les exercices
+ * de la banque : l'équivalent d'un `preambule.tex` que l'auteur de la banque
+ * fournirait pour déclarer ses propres commandes/paquets (LaTeX) ou ses
+ * propres fonctions/imports (Typst). Chemins relatifs à la racine de la
+ * banque, comme les autres fichiers du manifest.
+ * @property {string} tex chemin d'un fichier de code LaTeX inséré dans le préambule
+ * @property {string} typ chemin d'un fichier de code Typst inséré en tête de document
+ */
+export interface BanqueExternePreambule {
+  tex?: string
+  typ?: string
+}
+
+/**
  * Contenu du fichier `manifest.json` à la racine d'une banque externe.
  * @property {string} schema doit valoir `mathalea-banque-v1`
  * @property {string} id identifiant court de la banque (slug), utilisé dans les uuid
  * @property {string} titre intitulé du nœud dans « Ressources partenaires »
+ * @property {BanqueExternePreambule} preambule personnalisation optionnelle du document généré
  * @property {BanqueExterneExercice[]} exercices liste à plat des exercices
  */
 export interface BanqueExterneManifest {
@@ -73,6 +88,7 @@ export interface BanqueExterneManifest {
   licence?: string
   version?: string
   description?: string
+  preambule?: BanqueExternePreambule
   exercices: BanqueExterneExercice[]
 }
 
@@ -101,11 +117,15 @@ export interface BanqueExterneSource {
  * @property {BanqueExterneManifest} manifest manifest validé
  * @property {Map<string,string>} assets chemin relatif -> URL utilisable dans le
  * navigateur (`blob:` pour un zip, URL d'API GitLab pour un dépôt de forge)
+ * @property {BanqueExternePreambule} preambuleTexte code LaTeX/Typst du
+ * préambule (`manifest.preambule`), déjà lu une fois pour toutes au
+ * chargement de la banque plutôt que retéléchargé à chaque export
  */
 export interface BanqueExterneChargee {
   source: BanqueExterneSource
   manifest: BanqueExterneManifest
   assets: Map<string, string>
+  preambuleTexte?: BanqueExternePreambule
 }
 
 /**

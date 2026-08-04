@@ -138,7 +138,7 @@ export default class ConstructionsParallelogrammesParticuliersV3 extends Exercic
       nbQuestions: this.nbQuestions,
     }).map(Number)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
 
@@ -379,6 +379,7 @@ export default class ConstructionsParallelogrammesParticuliersV3 extends Exercic
             exercice: this,
             question: i,
             typeInteractivite: 'fillInTheBlank',
+            reponseParams: { formatInteractif: 'fill-in-the-blank' },
             content: `${pointsInvisibles.map((el, index) => `${el.nom} : (~%{champ${index * 2 + 1}}~;~%{champ${index * 2 + 2}}~)`).join('~~et~~')}`,
             objetReponse: {
               champ1: { value: pointsInvisibles[0].x },
@@ -399,6 +400,7 @@ export default class ConstructionsParallelogrammesParticuliersV3 extends Exercic
             exercice: this,
             question: i,
             typeInteractivite: 'fillInTheBlank',
+            reponseParams: { formatInteractif: 'fill-in-the-blank' },
             content: `\\text{Coordonnées du centre } ${noms[4]}:~(~%{champ1}~;~%{champ2}~)`,
             objetReponse: {
               champ1: { value: centre.x },

@@ -74,7 +74,7 @@ export default class TrouverLeSym extends Exercice {
       defaut: 1,
     }).map(Number)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // on remet à vide tous les tableaux utilisés pour la question suivante
       let indexNumerosChoisis: number[] = []
       const numerosAEviter =
@@ -149,7 +149,13 @@ export default class TrouverLeSym extends Exercice {
       let questionInteractive = ''
       for (let j = 0; j < this.sup2; j++) {
         questionInteractive += `Quel est le numéro du symétrique du point ${numerosChoisis[j]} par rapport à $(d)$ ?
-         ${ajouteQuestionMathlive({ exercice: this, question: this.sup * i + j, typeInteractivite: 'mathlive', objetReponse: { reponse: { value: numerosSymChoisis[j] } } })}<br>`
+         ${ajouteQuestionMathlive({
+           exercice: this,
+           question: this.sup * i + j,
+           typeInteractivite: 'mathlive',
+           reponseParams: { formatInteractif: 'mathalea-mathfield' },
+           objetReponse: { reponse: { value: numerosSymChoisis[j] } },
+         })}<br>`
       }
       let texte = this.interactif
         ? questionInteractive

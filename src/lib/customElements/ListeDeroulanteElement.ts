@@ -204,7 +204,14 @@ class ListeDeroulanteElement extends MathaleaCustomElement {
     const liste = document.querySelector(
       `#liste-deroulanteEx${exercice.numeroExercice}Q${questionIndex}`,
     ) as ListeDeroulanteElement | null
-    liste!.interactivityOn = false
+    if (liste == null) {
+      window.notify(
+        `Liste déroulante introuvable pour la question ${questionIndex} de l'exercice ${exercice.id}`,
+        { exercice: exercice.id, questionIndex },
+      )
+      return uniformiseResults('KO')
+    }
+    liste.interactivityOn = false
     const value = liste?.value
     const reponse =
       exercice.autoCorrection[questionIndex]?.valeur?.reponse?.value

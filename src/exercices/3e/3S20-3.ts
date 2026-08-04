@@ -1,13 +1,13 @@
-import { choice, shuffle } from '../../lib/outils/arrayOutils'
-import { fraction } from '../../modules/fractions'
-import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
-import Exercice from '../Exercice'
+import { choice, shuffle } from '../../lib/outils/arrayOutils';
+import { fraction } from '../../modules/fractions';
+import { gestionnaireFormulaireTexte, randint } from '../../modules/outils';
+import Exercice from '../Exercice';
 
-import { tableauColonneLigne } from '../../lib/2d/tableau'
-import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { premiereLettreEnMajuscule } from '../../lib/outils/outilString'
-import { context } from '../../modules/context'
+import { tableauColonneLigne } from '../../lib/2d/tableau';
+import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive';
+import { miseEnEvidence } from '../../lib/outils/embellissements';
+import { premiereLettreEnMajuscule } from '../../lib/outils/outilString';
+import { context } from '../../modules/context';
 
 export const titre =
   'Calculer des probabilités dans une expérience aléatoire à deux épreuves'
@@ -559,7 +559,8 @@ export default class CalculProbaExperience2Epreuves extends Exercice {
           ajouteQuestionMathlive({
             exercice: this,
             question: i,
-            objetReponse: { reponse: { value: question.reponse } },
+          reponseParams: { formatInteractif: 'mathalea-mathfield' },
+                 objetReponse: { reponse: { value: question.reponse } },
             typeInteractivite: 'mathlive',
           })
         this.listeCorrections[i] = question.correction

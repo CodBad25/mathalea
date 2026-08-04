@@ -10,6 +10,7 @@ import {
   retrieveResourceFromUuid,
 } from '../../lib/components/refUtils'
 import {
+  isBanqueExterneType,
   resourceHasPlace,
   type JSONReferentielObject,
 } from '../../lib/types/referentiels'
@@ -22,9 +23,13 @@ import {
 import { exercicesParams } from '../stores/generalStore'
 import { globalOptions } from '../stores/globalOptions'
 import type { IExercice } from '../types'
+import { estUuidBanqueExterne } from '../types/banquesExternes'
 import { isStatic } from './componentsUtils'
 import { referentielMathadata } from './mathadataReferentiel'
-import { referentielBanquesExternes } from '../stores/banquesExternesStore'
+import {
+  preambuleBanque,
+  referentielBanquesExternes,
+} from '../stores/banquesExternesStore'
 
 const allStaticReferentiels: JSONReferentielObject = {
   ...referentielStaticFR,
@@ -161,6 +166,31 @@ export const getStaticExerciceTypUrl = (uuid: string): string | null => {
 export const getStaticExerciceCorTypUrl = (uuid: string): string | null => {
   const foundResource = retrieveResourceFromUuid(referentielsStatiques(), uuid)
   return computeStaticExerciceCorTypUrl(foundResource)
+}
+
+/**
+ * Code Typst déclaré par le préambule des banques externes (`manifest.
+ * preambule.typ`) dont un exercice figure dans la liste donnée, une seule
+ * fois par banque même si elle fournit plusieurs exercices de la fiche.
+ * Utilisé par la vue Typst pour personnaliser le document généré (voir
+ * `Typst.svelte`), l'équivalent du `preambule.tex` côté LaTeX (`Latex.ts`).
+ * @param uuids uuid des exercices de la fiche
+ * @returns le code Typst à insérer, vide si aucune banque n'en déclare
+ */
+export const getBanquesExternesPreambuleTyp = (uuids: string[]): string => {
+  const referentiel = referentielsStatiques()
+  const idsBanques = new Set<string>()
+  for (const uuid of uuids) {
+    if (!estUuidBanqueExterne(uuid)) continue
+    const ressource = retrieveResourceFromUuid(referentiel, uuid)
+    if (ressource !== null && isBanqueExterneType(ressource)) {
+      idsBanques.add(ressource.banque)
+    }
+  }
+  return [...idsBanques]
+    .map((id) => preambuleBanque(id)?.typ)
+    .filter((typ): typ is string => typ !== undefined)
+    .join('\n')
 }
 
 export const splitExercisesIntoQuestions = (

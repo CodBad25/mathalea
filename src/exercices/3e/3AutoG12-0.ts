@@ -41,6 +41,7 @@ export default class AutoTheoremeThales extends ExerciceSimple {
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
     this.formatChampTexte = KeyboardType.alphanumeric
+    this.formatInteractif = 'custom'
   }
 
   nouvelleVersion() {
@@ -125,7 +126,6 @@ export default class AutoTheoremeThales extends ExerciceSimple {
       champ4: { value: [D.nom + E.nom, String(longueurDE)] },
     }
     if (context.isHtml) {
-      this.formatInteractif = 'fillInTheBlank'
       this.consigne = // this.consigne n'admet pas de figure en LaTeX
         figure +
         `Sur la figure ci-dessus, les droites $(${nomPara1})$ et $(${nomPara2})$ sont parallèles.<br><br>

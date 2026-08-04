@@ -653,23 +653,31 @@ async function getForms(page: Page) {
         'xpath=../preceding-sibling::div/div[1]',
       )
       const labelText = await titleDiv.innerText()
-      const allNumbers = getAllNumbersFromString(labelText || '')
-      const uniqueNumbers = Array.from(new Set(allNumbers))
+      const values = getEnumeratedTextFormValues(labelText || '')
+      if (values.length === 0) {
+        logIfVerbose(
+          `Formulaire texte ignoré car son aide n'est pas une énumération de cas: ${labelText}`,
+        )
+        continue
+      }
       formTexts.push({
         description: sanitizeFilename(labelText),
         locator: formText,
         type: 'text',
-        values: [uniqueNumbers.map((num) => num.toString()).join('-')],
+        values: [values.map((num) => num.toString()).join('-')],
       })
     }
   }
   return { formTexts, formChecks, formNums, formNumSelects }
 }
 
-function getAllNumbersFromString(inputString: string) {
-  const regex = /\d+/g // Regex pattern to match one or more digits
-  const matches = inputString.match(regex)
-  return matches ? matches.map(Number) : []
+function getEnumeratedTextFormValues(inputString: string) {
+  const values: number[] = []
+  for (const line of inputString.split('\n')) {
+    const match = line.trim().match(/^(\d+)\s*:/)
+    if (match) values.push(Number(match[1]))
+  }
+  return Array.from(new Set(values))
 }
 
 function sanitizeFilename(filename: string): string {

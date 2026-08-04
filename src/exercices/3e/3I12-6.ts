@@ -1,4 +1,5 @@
 import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -23,6 +24,9 @@ export const refs = {
   'fr-2016': [],
   'fr-ch': [],
 }
+
+const scratchSimulatorButtonAction = '3I12-6:scratch-simulator-button'
+
 /**
  * @author Jean-claude Lhote
  * Cet exercice utilise le simulateur Scratch (ScratchSimulator) couplé à l'interpréteur Scratch (ScratchInterpreter) de la librairie maison.
@@ -62,6 +66,7 @@ for (let i = 0; i < syracuseNumbers.length; i++) {
 export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
   constructor() {
     super()
+    registerScratchSimulatorButton()
     this.spacingCorr = 2.5
     this.nbQuestions = 1
     this.besoinFormulaireTexte = [
@@ -81,7 +86,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
       nbQuestions: this.nbQuestions,
     }).map(Number)
 
-    for (let q = 0, cpt = 0; q < this.nbQuestions && cpt < 50; ) {
+    for (let q = 0, cpt = 0; q < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let reponse = ''
       switch (listeTypeDeQuestions[q]) {
@@ -106,6 +111,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
               ajouteQuestionMathlive({
                 exercice: this,
                 question: q,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: { reponse: { value: triplet[0] } },
                 typeInteractivite: 'mathlive',
               }) +
@@ -126,11 +132,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
 
             this.listeCorrections[q] = `${
               context.isHtml
-                ? createScratchSimulatorElement(
-                    codeScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
-                    500,
-                    false,
-                  ) + '<br>'
+                ? createScratchSimulatorButton(codeScratch, 500) + '<br>'
                 : ''
             }
               Pour que le programme dise que le triangle est rectangle en $B$, il faut saisir la valeur $${miseEnEvidence(triplet[0])}$ pour la longueur $AB$.<br>
@@ -150,6 +152,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
               ajouteQuestionMathlive({
                 exercice: this,
                 question: q,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: { reponse: { value: nbBoucles } },
                 typeInteractivite: 'mathlive',
               }) +
@@ -164,11 +167,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
             const suiteSyracuse = nombreDeDepart.listeNombres
             this.listeCorrections[q] = `${
               context.isHtml
-                ? createScratchSimulatorElement(
-                    codeScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
-                    1000,
-                    false,
-                  ) + '<br>'
+                ? createScratchSimulatorButton(codeScratch, 1000) + '<br>'
                 : ''
             }
               La variable compteur finira avec la valeur $${miseEnEvidence(nbBoucles)}$, car le programme va afficher successivement les nombres :<br>
@@ -200,6 +199,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
               ajouteQuestionMathlive({
                 exercice: this,
                 question: q,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: { reponse: { value: nbRepetitions } },
                 typeInteractivite: 'mathlive',
               }) +
@@ -214,11 +214,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
 
             this.listeCorrections[q] = `${
               context.isHtml
-                ? createScratchSimulatorElement(
-                    codeScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
-                    500,
-                    false,
-                  ) + '<br>'
+                ? createScratchSimulatorButton(codeScratch, 500) + '<br>'
                 : ''
             }
               Pour que le programme s'arrête lorsque $c-b < ${texNombre(precision, 3)}$, il faut que le programme exécute ${miseEnEvidence(nbRepetitions)} répétitions. En effet, à chaque répétition, l'intervalle $[b,c]$ est divisé par 2, donc après $${nbRepetitions}$ répétitions, on a $c-b = \\dfrac{10}{2^{${nbRepetitions}}}=${texNombre(10 / 2 ** nbRepetitions, 5)}$.`
@@ -233,6 +229,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
               ajouteQuestionMathlive({
                 exercice: this,
                 question: q,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: { reponse: { value: d } },
                 typeInteractivite: 'mathlive',
               }) +
@@ -247,11 +244,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
 
             this.listeCorrections[q] = `${
               context.isHtml
-                ? createScratchSimulatorElement(
-                    codeScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
-                    500,
-                    false,
-                  ) + '<br>'
+                ? createScratchSimulatorButton(codeScratch, 500) + '<br>'
                 : ''
             }
               Pour que le programme dise que les nombres sont proportionnels, il faut saisir la valeur $${miseEnEvidence(d)}$ pour $x$.<br>
@@ -275,6 +268,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
               ajouteQuestionMathlive({
                 exercice: this,
                 question: q,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: { reponse: { value: AE } },
                 typeInteractivite: 'mathlive',
               }) +
@@ -292,11 +286,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
             }
             this.listeCorrections[q] = `${
               context.isHtml
-                ? createScratchSimulatorElement(
-                    codeScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
-                    500,
-                    false,
-                  ) + '<br>'
+                ? createScratchSimulatorButton(codeScratch, 500) + '<br>'
                 : ''
             }
             Pour que le programme dise que les droites $(BC)$ et $(DE)$ sont parallèles, il faut saisir la valeur $${miseEnEvidence(AE)}$ pour la longueur $AE$.<br>
@@ -319,6 +309,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
               ajouteQuestionMathlive({
                 exercice: this,
                 question: q,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: {
                   reponse: { value: String((d - b) / (a - c)) },
                 },
@@ -333,11 +324,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
             }
             this.listeCorrections[q] = `${
               context.isHtml
-                ? createScratchSimulatorElement(
-                    codeScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
-                    500,
-                    false,
-                  ) + '<br>'
+                ? createScratchSimulatorButton(codeScratch, 500) + '<br>'
                 : ''
             }
                 Pour que le programme dise que l'équation est vérifiée, il faut saisir la valeur $${miseEnEvidence((d - b) / (a - c))}$ pour $x$.<br>
@@ -357,6 +344,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
               ajouteQuestionMathlive({
                 exercice: this,
                 question: q,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: {
                   reponse: { value: [String(a), String(-b)] },
                 },
@@ -371,11 +359,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
             }
             this.listeCorrections[q] = `${
               context.isHtml
-                ? createScratchSimulatorElement(
-                    codeScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
-                    500,
-                    false,
-                  ) + '<br>'
+                ? createScratchSimulatorButton(codeScratch, 500) + '<br>'
                 : ''
             }
               Pour que le programme dise que le produit est nul, il faut saisir la valeur $${miseEnEvidence(a)}$ ou $${miseEnEvidence(-b)}$.<br>
@@ -392,6 +376,54 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
       cpt++
     }
   }
+}
+
+function createScratchSimulatorButton(codeScratch: string, delai: number) {
+  return DomReadyActionElement.create({
+    action: scratchSimulatorButtonAction,
+    payload: {
+      codeScratch,
+      delai,
+      insertProgramme: false,
+    },
+  })
+}
+
+let scratchSimulatorButtonRegistered = false
+
+function registerScratchSimulatorButton() {
+  if (scratchSimulatorButtonRegistered) return
+  scratchSimulatorButtonRegistered = true
+  DomReadyActionElement.registerCallback<{
+    codeScratch: string
+    delai: number
+    insertProgramme: boolean
+  }>(scratchSimulatorButtonAction, ({ element, payload }) => {
+    element.innerHTML = ''
+    element.classList.add('my-4', 'block')
+    const button = document.createElement('button')
+    const simulatorContainer = document.createElement('div')
+    button.type = 'button'
+    button.textContent = 'Lancer le simulateur'
+    button.className =
+      'inline-flex items-center px-4 py-2 bg-coopmaths-action dark:bg-coopmathsdark-action text-coopmaths-canvas dark:text-coopmathsdark-canvas font-medium text-sm rounded shadow-md hover:bg-coopmaths-action-lightest dark:hover:bg-coopmathsdark-action-lightest focus:bg-coopmaths-action-lightest dark:focus:bg-coopmathsdark-action-lightest focus:outline-none transition duration-150 ease-in-out'
+
+    const onClick = () => {
+      simulatorContainer.innerHTML = createScratchSimulatorElement(
+        payload.codeScratch,
+        payload.delai,
+        payload.insertProgramme,
+      )
+    }
+
+    button.addEventListener('click', onClick)
+    element.append(button, simulatorContainer)
+
+    return () => {
+      button.removeEventListener('click', onClick)
+      element.innerHTML = ''
+    }
+  })
 }
 
 function programmeReciproquePythagore(triplet: number[]): string {

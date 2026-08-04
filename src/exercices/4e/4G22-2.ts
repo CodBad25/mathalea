@@ -223,7 +223,7 @@ export default class CalculeDansCone extends Exercice {
       defaut: 3,
       nbQuestions: this.nbQuestions,
     }).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typeDeReponse =
         this.sup2 === 1
           ? 'Donner la valeur exacte'
@@ -261,6 +261,7 @@ export default class CalculeDansCone extends Exercice {
                 exercice: this,
                 question: i,
                 texteApres: '$\\text{ cm}$',
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: {
                   reponse: {
                     value: typeDeReponse.includes('exacte')
@@ -300,6 +301,7 @@ export default class CalculeDansCone extends Exercice {
                 exercice: this,
                 question: i,
                 texteApres: '$\\text{ cm}$',
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: {
                   reponse: {
                     value: typeDeReponse.includes('exacte')

@@ -24,6 +24,13 @@ export const TBI_BASE_WIDTH = 600
 export const TBI_MIN_ZOOM = 0.4
 export const TBI_MAX_ZOOM = 3
 
+/**
+ * Délai d'inactivité (ms) avant de masquer les barres d'outils de la vue TBI
+ * (barre globale et barres par exercice), comme les commandes d'un lecteur
+ * vidéo : elles ne doivent pas encombrer la vidéoprojection en continu.
+ */
+export const TBI_CONTROLS_HIDE_DELAY = 2000
+
 export const TBI_WIDGET_MIN_ZOOM = 0.5
 export const TBI_WIDGET_MAX_ZOOM = 2.5
 
@@ -121,6 +128,14 @@ export function defaultTbiState(): TbiState {
 }
 
 export const tbiState = writable<TbiState>(defaultTbiState())
+
+/**
+ * paramsIndex de la carte dont la correction est actuellement affichée en
+ * plein écran, ou null si aucune. Permet de n'avoir qu'une seule boîte de
+ * dialogue plein écran ouverte à la fois, même si le mode de correction est
+ * un état propre à chaque carte.
+ */
+export const activeTbiModalCard = writable<number | null>(null)
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value))

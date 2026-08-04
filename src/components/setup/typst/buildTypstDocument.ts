@@ -1345,6 +1345,13 @@ export interface TypstBuildOptions {
    * fournie (contexte sans URL, comme les tests).
    */
   sourceUrl?: string
+  /**
+   * Code Typst déclaré par le préambule d'une banque externe (`manifest.
+   * preambule.typ`) dont un exercice figure dans la fiche : l'équivalent
+   * d'un `preambule.tex`, pour ses propres fonctions/imports. Inséré juste
+   * après les paquets fixes de MathALÉA, avant les réglages de la fiche.
+   */
+  extraPreamble?: string
 }
 
 export function buildTypstDocument(
@@ -1352,7 +1359,7 @@ export function buildTypstDocument(
   options: TypstDocumentOptions = defaultTypstDocumentOptions,
   carryOver: TypstCarryOver = {},
   extraVersions: TypstExerciseInput[][] = [],
-  { exportMode = false, sourceUrl }: TypstBuildOptions = {},
+  { exportMode = false, sourceUrl, extraPreamble }: TypstBuildOptions = {},
 ): string {
   // Les corps sont convertis d'abord : les figures SVG rencontrées sont
   // collectées pour être déclarées (`#let fig-N = image(...)`) en tête
@@ -1432,6 +1439,11 @@ export function buildTypstDocument(
     if (usesTasks) lines.push(TASKIZE_IMPORT)
     if (options.autoVerticalSpacing) lines.push(BREATHER_IMPORT)
     if (usesVarTable) lines.push(VARTABLE_IMPORT)
+    lines.push('')
+  }
+  if (extraPreamble != null && extraPreamble.length > 0) {
+    lines.push('// ----- Préambule d’une banque externe -----')
+    lines.push(extraPreamble)
     lines.push('')
   }
   if (usesAnchors) {

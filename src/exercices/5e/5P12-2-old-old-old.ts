@@ -84,10 +84,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
 
     const listePreDef = typesPattern.map((i) => listePatternRatio[i - 1])
 
-    for (
-      let i = 0;
-      i < Math.min(this.nbQuestions, listePatternRatio.length);
-    ) {
+    for (let i = 0; i < Math.min(this.nbQuestions, listePatternRatio.length);) {
       const objetsCorr: NestedObjetMathalea2dArray = []
       const popped = listePreDef.pop()
       if (!popped) {
@@ -180,6 +177,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
         {
           exercice: this,
           question: i,
+          reponseParams: { formatInteractif: 'mathalea-mathfield' },
           objetReponse: { reponse: { value: pat.formule } },
           typeInteractivite: 'mathlive',
         },

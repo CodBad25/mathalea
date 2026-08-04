@@ -74,7 +74,7 @@ export function ajouteQuestionMathlive({
   exercice: IExercice
   question: number
   objetReponse: Valeur
-  reponseParams?: ReponseParams
+  reponseParams: ReponseParams
   typeInteractivite: InteractivityType
   content?: string
   classe?: string
@@ -85,14 +85,12 @@ export function ajouteQuestionMathlive({
   blocCenter?: boolean
   espace?: boolean
 }) {
-  if (
-    !(
-      typeInteractivite === 'mathlive' ||
-      typeInteractivite === 'fillInTheBlank' ||
-      typeInteractivite === 'tableauMathlive' ||
-      typeInteractivite === 'texte'
-    )
-  ) {
+  if (!(
+    typeInteractivite === 'mathlive' ||
+    typeInteractivite === 'fillInTheBlank' ||
+    typeInteractivite === 'tableauMathlive' ||
+    typeInteractivite === 'texte'
+  )) {
     window.notify(
       `Type d'interactivité ${typeInteractivite} non reconnu. Exercice ${exercice.id} ${exercice.uuid}`,
       { typeInteractivite },
@@ -100,7 +98,14 @@ export function ajouteQuestionMathlive({
     return ''
   }
   if (reponseParams === undefined) {
-    reponseParams = { formatInteractif: 'mathlive' }
+    reponseParams = { formatInteractif: 'mathalea-mathfield' }
+  } else {
+    if (typeInteractivite === 'fillInTheBlank')
+      reponseParams = { formatInteractif: 'fill-in-the-blank' }
+    if (typeInteractivite === 'tableauMathlive')
+      reponseParams = { formatInteractif: 'tableau-mathlive' }
+    if (typeInteractivite === 'mathlive')
+      reponseParams = { formatInteractif: 'mathalea-mathfield' }
   }
   handleAnswers(exercice, question, objetReponse, reponseParams)
   switch (typeInteractivite) {

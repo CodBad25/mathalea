@@ -1,4 +1,5 @@
 import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import { choice, shuffle, shuffle4tableaux } from '../../lib/outils/arrayOutils'
 import { enumeration } from '../../lib/outils/ecritures'
@@ -21,6 +22,9 @@ export const refs = {
   'fr-2016': [],
   'fr-ch': [],
 }
+
+const scratchSimulatorButtonAction = '6I1B-6:scratch-simulator-button'
+
 /**
  * @author Jean-claude Lhote
  * Cet exercice utilise le simulateur Scratch (ScratchSimulator) couplé à l'interpréteur Scratch (ScratchInterpreter) de la librairie maison.
@@ -57,6 +61,7 @@ export default class TrouverLeBonProgramme extends Exercice {
   }
 
   nouvelleVersion(): void {
+    registerScratchSimulatorButton()
     let max: number = 4
     if (this.niveau === '6') {
       max = 4
@@ -197,13 +202,6 @@ export default class TrouverLeBonProgramme extends Exercice {
 
       const ligne2Brut =
         programmes.programmesCodeBrut || programmes.programmesListe
-      const simulateurs = ligne2Brut.map((code) =>
-        createScratchSimulatorElement(
-          code.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
-          delai,
-          context.isTypst,
-        ),
-      )
       if (context.isHtml) {
         texte +=
           '<div style="margin: 20px 0; display: flex; flex-wrap: wrap; gap: 12px; width: 100%; align-items: flex-start;">'
@@ -285,7 +283,21 @@ export default class TrouverLeBonProgramme extends Exercice {
             ${
               context.isHtml
                 ? `<div style="margin: 20px 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); width: 100%; align-self: stretch;">
-     ${simulateurs.map((s, i) => `<div style="border: 1px solid #ddd; padding: 10px;"><div style="font-weight: 600; margin-bottom: 8px;">Programme ${i + 1}</div>${s}</div>`).join('')}</div>`
+     ${ligne2Brut
+       .map(
+         (codeScratch, i) =>
+           `<div style="border: 1px solid #ddd; padding: 10px;"><div style="font-weight: 600; margin-bottom: 8px;">Programme ${i + 1}</div>${DomReadyActionElement.create(
+             {
+               action: scratchSimulatorButtonAction,
+               payload: {
+                 codeScratch,
+                 delai,
+                 insertProgramme: context.isTypst,
+               },
+             },
+           )}</div>`,
+       )
+       .join('')}</div>`
                 : ''
             }`,
         )
@@ -294,6 +306,43 @@ export default class TrouverLeBonProgramme extends Exercice {
       cpt++
     }
   }
+}
+
+let scratchSimulatorButtonRegistered = false
+
+function registerScratchSimulatorButton() {
+  if (scratchSimulatorButtonRegistered) return
+  scratchSimulatorButtonRegistered = true
+  DomReadyActionElement.registerCallback<{
+    codeScratch: string
+    delai: number
+    insertProgramme: boolean
+  }>(scratchSimulatorButtonAction, ({ element, payload }) => {
+    element.innerHTML = ''
+    element.classList.add('mt-3', 'block')
+    const button = document.createElement('button')
+    const simulatorContainer = document.createElement('div')
+    button.type = 'button'
+    button.textContent = 'Lancer le simulateur'
+    button.className =
+      'inline-flex items-center px-3 py-2 bg-coopmaths-action dark:bg-coopmathsdark-action text-coopmaths-canvas dark:text-coopmathsdark-canvas font-medium text-xs rounded shadow-md hover:bg-coopmaths-action-lightest dark:hover:bg-coopmathsdark-action-lightest focus:bg-coopmaths-action-lightest dark:focus:bg-coopmathsdark-action-lightest focus:outline-none transition duration-150 ease-in-out'
+
+    const onClick = () => {
+      simulatorContainer.innerHTML = createScratchSimulatorElement(
+        payload.codeScratch,
+        payload.delai,
+        payload.insertProgramme,
+      )
+    }
+
+    button.addEventListener('click', onClick)
+    element.append(button, simulatorContainer)
+
+    return () => {
+      button.removeEventListener('click', onClick)
+      element.innerHTML = ''
+    }
+  })
 }
 function programmeAvancerType1(nbPas: number, vraiOuFaux: boolean) {
   let codeScratch = `\\begin{scratch}[blocks, scale=0.6]

@@ -1,4 +1,3 @@
-import { SVG, registerWindow } from '@svgdotjs/svg.js'
 import { createList } from '../../lib/format/lists'
 import { choice } from '../../lib/outils/arrayOutils'
 import { egalOuApprox } from '../../lib/outils/ecritures'
@@ -73,38 +72,87 @@ function latexRoulette(listeNumeros: number[]) {
   \\end{tikzpicture}`
 }
 function rouletteSVG(numeros: number[]): string {
-  const document = window.document
-  registerWindow(window, document)
+  const svgNamespace = 'http://www.w3.org/2000/svg'
+  const svg = window.document.createElementNS(svgNamespace, 'svg')
+  svg.setAttribute('xmlns', svgNamespace)
+  svg.setAttribute('width', '480')
+  svg.setAttribute('height', '480')
+  svg.setAttribute('viewBox', '0 0 480 480')
 
-  const draw = SVG().addTo(document.documentElement).size(480, 480)
+  const addCircle = ({
+    radius,
+    fill,
+    stroke = 'black',
+    strokeWidth = 1,
+  }: {
+    radius: number
+    fill: string
+    stroke?: string
+    strokeWidth?: number
+  }) => {
+    const circle = window.document.createElementNS(svgNamespace, 'circle')
+    circle.setAttribute('cx', '240')
+    circle.setAttribute('cy', '240')
+    circle.setAttribute('r', String(radius))
+    circle.setAttribute('fill', fill)
+    circle.setAttribute('stroke', stroke)
+    circle.setAttribute('stroke-width', String(strokeWidth))
+    svg.append(circle)
+  }
+
+  const addPath = (pathData: string, fill: string) => {
+    const path = window.document.createElementNS(svgNamespace, 'path')
+    path.setAttribute('d', pathData)
+    path.setAttribute('fill', fill)
+    svg.append(path)
+  }
+
+  const addLine = (x1: number, y1: number, x2: number, y2: number) => {
+    const line = window.document.createElementNS(svgNamespace, 'line')
+    line.setAttribute('x1', String(x1))
+    line.setAttribute('y1', String(y1))
+    line.setAttribute('x2', String(x2))
+    line.setAttribute('y2', String(y2))
+    line.setAttribute('stroke', 'black')
+    line.setAttribute('stroke-width', '1')
+    svg.append(line)
+  }
+
+  const addText = ({
+    text,
+    x,
+    y,
+    fill,
+    rotation,
+  }: {
+    text: string
+    x: number
+    y: number
+    fill: string
+    rotation: number
+  }) => {
+    const textElement = window.document.createElementNS(svgNamespace, 'text')
+    textElement.textContent = text
+    textElement.setAttribute('x', String(x))
+    textElement.setAttribute('y', String(y))
+    textElement.setAttribute('fill', fill)
+    textElement.setAttribute('font-size', '20')
+    textElement.setAttribute('text-anchor', 'middle')
+    textElement.setAttribute('dominant-baseline', 'middle')
+    textElement.setAttribute('transform', `rotate(${rotation} ${x} ${y})`)
+    svg.append(textElement)
+  }
+
   const outerRadius = 240
   const innerRadius = outerRadius / 2
   const secondRadius = (17 / 24) * outerRadius
   const thirdRadius = (22 / 24) * outerRadius
   const fourthRadius = (23 / 24) * outerRadius
 
-  // Créer les cercles
-  draw
-    .circle(outerRadius * 2)
-    .center(240, 240)
-    .stroke({ width: 2 })
-    .fill('black')
-    .stroke({ width: 1, color: 'black' })
-  draw
-    .circle(fourthRadius * 2)
-    .center(240, 240)
-    .fill('white')
-    .stroke({ width: 1, color: 'black' })
-  draw
-    .circle(thirdRadius * 2)
-    .center(240, 240)
-    .fill('white')
-    .stroke({ width: 1, color: 'black' })
-  draw
-    .circle(innerRadius * 2)
-    .center(240, 240)
-    .fill('white')
-    .stroke({ width: 1, color: 'black' })
+  addCircle({ radius: outerRadius, fill: 'black' })
+  addCircle({ radius: fourthRadius, fill: 'white' })
+  addCircle({ radius: thirdRadius, fill: 'white' })
+  addCircle({ radius: innerRadius, fill: 'white' })
 
   // Créer les secteurs
   const numSectors = 37
@@ -134,10 +182,9 @@ function rouletteSVG(numeros: number[]): string {
       'Z',
     ].join(' ')
 
-    draw.path(pathData).fill(i % 2 === 1 ? 'black' : 'white')
-    // Ajouter les segments pour délimiter chaque secteur
-    draw.line(x1, y1, x3, y3).stroke({ width: 1, color: 'black' })
-    // Ajouter les numéros
+    addPath(pathData, i % 2 === 1 ? 'black' : 'white')
+    addLine(x1, y1, x3, y3)
+
     const angle = i * angleStep + angleStep / 2
     const rotation = angle
     const x =
@@ -148,22 +195,17 @@ function rouletteSVG(numeros: number[]): string {
       240 +
       (secondRadius + (thirdRadius - secondRadius) / 2) *
         Math.sin((angle - 90) * (Math.PI / 180))
-    draw
-      .text(`${numeros[i]}`)
-      .font({ size: 20 })
-      .center(x, y)
-      .fill(i % 2 === 1 ? 'white' : 'black')
-      .rotate(rotation, x, y)
+    addText({
+      text: `${numeros[i]}`,
+      x,
+      y,
+      fill: i % 2 === 1 ? 'white' : 'black',
+      rotation,
+    })
   }
 
-  draw
-    .circle(secondRadius * 2)
-    .center(240, 240)
-    .fill('none')
-    .stroke({ width: 1, color: 'black' })
-  const svg = draw.svg()
-  draw.remove()
-  return svg
+  addCircle({ radius: secondRadius, fill: 'none' })
+  return svg.outerHTML
 }
 
 /**
@@ -265,7 +307,7 @@ ${createList({
   versionAleatoire: (i: number) => void = () => {
     const listeNum = listeNumeros.slice()
     let k = 0
-    for (; k < 34; ) {
+    for (; k < 34;) {
       if (k % 2 === 0) {
         const zap = listeNum[k]
         const k2 = randint(k / 2, 18) * 2

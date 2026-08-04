@@ -12,6 +12,7 @@ import {
   MAX_ETOILES,
   type BanqueExterneExercice,
   type BanqueExterneManifest,
+  type BanqueExternePreambule,
   type BanqueExterneSource,
 } from '../types/banquesExternes'
 import type {
@@ -94,8 +95,38 @@ export function validerManifest(brut: unknown): BanqueExterneManifest {
       typeof manifest.description === 'string'
         ? manifest.description
         : undefined,
+    preambule: validerPreambule(manifest.preambule),
     exercices,
   }
+}
+
+/**
+ * Valide le champ optionnel `preambule` du manifest (personnalisation du
+ * document généré : équivalent d'un `preambule.tex` pour la banque).
+ * @param {unknown} brut valeur de `preambule` dans le manifest
+ * @returns {BanqueExternePreambule|undefined} préambule validé, `undefined` si absent
+ * @throws {ManifestInvalideError} si le champ est mal formé
+ */
+function validerPreambule(brut: unknown): BanqueExternePreambule | undefined {
+  if (brut === undefined) return undefined
+  if (brut === null || typeof brut !== 'object' || Array.isArray(brut)) {
+    throw new ManifestInvalideError(
+      'Le champ `preambule` du manifest doit être un objet JSON.',
+    )
+  }
+  const preambule = brut as Partial<BanqueExternePreambule>
+  for (const chemin of [preambule.tex, preambule.typ]) {
+    if (chemin === undefined) continue
+    if (typeof chemin !== 'string' || !estCheminInterne(chemin)) {
+      throw new ManifestInvalideError(
+        `Le champ \`preambule\` référence un chemin de fichier invalide : « ${String(chemin)} ».`,
+      )
+    }
+  }
+  if (preambule.tex === undefined && preambule.typ === undefined) {
+    return undefined
+  }
+  return { tex: preambule.tex, typ: preambule.typ }
 }
 
 /**

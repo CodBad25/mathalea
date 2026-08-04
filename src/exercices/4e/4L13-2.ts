@@ -77,6 +77,8 @@ type Variante = {
 
 type Probleme = {
   enonce: string
+  /** Phrase annonçant ce que l'on cherche, affichée avant la question a). */
+  objectif: string
   figure: string
   /** Grandeurs à exprimer en fonction de l'inconnue (au plus 5). */
   donnees: string[]
@@ -253,6 +255,8 @@ function basket(): Probleme {
   return {
     enonce: `Une équipe de basket a marqué $${d}$ points lors d'un match. Au cours de ce match, elle a marqué $${b}$ points sur lancers francs.<br>
     L'équipe a marqué $${a}$ paniers à deux points de plus que de paniers à trois points.`,
+    objectif:
+      "On cherche à déterminer le nombre de paniers à trois points marqués par l'équipe.",
     figure: '',
     donnees: [
       'le nombre de paniers à trois points',
@@ -291,6 +295,8 @@ function basket2(): Probleme {
   return {
     enonce: `Une équipe de basket a marqué $${d}$ points lors d'un match. Au cours de ce match, elle a marqué $${b}$ points sur lancers francs.<br>
     L'équipe a marqué $${a}$ paniers à trois points de moins que de paniers à deux points.`,
+    objectif:
+      "On cherche à déterminer le nombre de paniers à deux points marqués par l'équipe.",
     figure: '',
     donnees: [
       'le nombre de paniers à trois points',
@@ -325,7 +331,7 @@ function achats(valeurEntiere: boolean): Probleme {
   let x: number // prix d'un kilogramme
   let a: number // nombre de kilogrammes achetés
   let b: number // prix payé
-  const quidam = prenom(1)[0]
+  const quidam = prenom(1)
   const produit = choice([
     'fraises',
     'pêches',
@@ -344,6 +350,7 @@ function achats(valeurEntiere: boolean): Probleme {
   const rendu = arrondi(d - b, 2)
   return {
     enonce: `${quidam} a acheté $${texNombre(a, 2)}$ kg de ${produit} avec un billet de $${d}$ €. Le marchand lui a rendu $${texPrix(rendu)}$ €.`,
+    objectif: `On cherche à déterminer le prix d'un kilogramme de ${produit}.`,
     figure: '',
     donnees: [
       `le prix d'un kilogramme de ${produit}`,
@@ -383,6 +390,7 @@ function polyg(valeurEntiere: boolean): Probleme {
   return {
     enonce: `Un ${polygones[b - 2]} possède un côté de longueur $${texNombre(a, 2)}\\text{ cm}$ et $${b}$ autres côtés de même longueur.<br>
     Son périmètre est $${texNombre(d, 2)}\\text{ cm}$.`,
+    objectif: 'On cherche à déterminer la longueur des côtés de même longueur.',
     figure: '',
     donnees: [
       'la longueur d’un des côtés de même longueur',
@@ -435,6 +443,7 @@ function programme1(solutionPositive: boolean): Probleme {
     enonce: `${quidam[0]} et ${quidam[1]} choisissent un même nombre.<br>
     ${quidam[0]} lui ajoute $${b}$ puis multiplie le résultat par $${a}$, alors que ${quidam[1]} lui ajoute $${d}$ puis multiplie le résultat par $${c}$.<br>
     ${quidam[0]} et ${quidam[1]} obtiennent le même résultat.`,
+    objectif: `On cherche à déterminer le nombre choisi au départ par ${quidam[0]} et ${quidam[1]}.`,
     figure: '',
     donnees: [
       'le nombre choisi au départ',
@@ -480,6 +489,7 @@ function programme2(): Probleme {
     enonce: `${quidam[0]} et ${quidam[1]} choisissent un même nombre.<br>
     ${quidam[0]} lui ajoute $${b}$ puis multiplie le résultat par $${a}$, alors que ${quidam[1]} le multiplie par $${c}$ puis ajoute $${d}$ au résultat.<br>
     ${quidam[0]} et ${quidam[1]} obtiennent le même résultat.`,
+    objectif: `On cherche à déterminer le nombre choisi au départ par ${quidam[0]} et ${quidam[1]}.`,
     figure: '',
     donnees: [
       'le nombre choisi au départ',
@@ -526,6 +536,8 @@ function tarifs(valeurEntiere: boolean): Probleme {
     enonce: `Le ${clubs[club]} d'un village propose deux tarifs à ses pratiquants.<br>
     Le tarif A propose de payer $${texPrix(b)}$ € à chaque séance.<br>
     Le tarif B propose de payer un abonnement annuel de $${texPrix(c)}$ € puis $${texPrix(d)}$ € par séance.`,
+    objectif:
+      'On cherche à déterminer le nombre de séances pour lequel les deux tarifs sont égaux.',
     figure: '',
     donnees: [
       'le nombre de séances',
@@ -567,6 +579,7 @@ function spectacle(valeurEntiere: boolean): Probleme {
   return {
     enonce: `Dans une salle de spectacle de $${texNombre(a, 0)}$ places, le prix d'entrée est $${texPrix(b)}$ € pour un adulte et $${texPrix(c)}$ € pour un enfant.<br>
     Le spectacle de ce soir s'est déroulé devant une salle pleine et la recette est de $${texPrix(d)}$ €.`,
+    objectif: "On cherche à déterminer le nombre d'adultes présents dans la salle.",
     figure: '',
     donnees: [
       'le nombre de places adultes vendues',
@@ -613,6 +626,9 @@ function isocele(): Probleme {
     enonce: `Un triangle isocèle a pour périmètre $${perimetre}\\text{ mm}$.<br>
     Sa base est plus ${ecart > 0 ? 'longue' : 'courte'} de $${Math.abs(ecart)}\\text{ mm}$ que chacun des côtés égaux.<br>
     (La figure n'est pas en vraie grandeur.)`,
+    objectif: chercheLaBase
+      ? 'On cherche à déterminer la longueur de la base du triangle.'
+      : 'On cherche à déterminer la longueur des côtés égaux du triangle.',
     figure: ecart > 0 ? triangleIsocele2() : triangleIsocele1(),
     donnees: ['la longueur de la base', 'la longueur d’un des côtés égaux'],
     distracteurs: [
@@ -658,6 +674,7 @@ function thales(): Probleme {
     enonce: `Sur la figure ci-dessous, qui n'est pas en vraie grandeur, $[CD]$ et $[AB]$ sont parallèles.<br>
     $AB=${c}\\text{ mm}$, $AC=${b}\\text{ mm}$ et $CD=${a}\\text{ mm}$.<br>
     Dans cette configuration de Thalès, $\\dfrac{OC}{OA}=\\dfrac{CD}{AB}$, ce qui donne l'égalité des produits en croix $CD\\times OA=OC\\times AB$.`,
+    objectif: 'On cherche à déterminer la longueur $OC$.',
     figure: figureThales(a, b, c, ''),
     donnees: ['la longueur OC', 'la longueur OA'],
     distracteurs: ['la longueur AB', 'la longueur CD'],
@@ -698,6 +715,7 @@ function thales2(): Probleme {
     enonce: `Sur la figure ci-dessous, qui n'est pas en vraie grandeur, $[CD]$ et $[AB]$ sont parallèles.<br>
     $AB=${c}\\text{ mm}$, $OC=${b}\\text{ mm}$ et $CD=${a}\\text{ mm}$.<br>
     Dans cette configuration de Thalès, $\\dfrac{OC}{OA}=\\dfrac{CD}{AB}$, ce qui donne l'égalité des produits en croix $CD\\times OA=OC\\times AB$.`,
+    objectif: 'On cherche à déterminer la longueur $AC$.',
     figure: figureThales(a, '', c, b),
     donnees: ['la longueur AC', 'la longueur OA'],
     distracteurs: ['la longueur AB', 'la longueur OC'],
@@ -736,6 +754,7 @@ function sommeDeNombresConsecutifs(): Probleme {
   return {
     enonce: `On considère une suite de $3$ nombres entiers consécutifs.<br>
     La somme de ces $3$ nombres est $${somme}$.`,
+    objectif: 'On cherche à déterminer ces trois nombres entiers consécutifs.',
     figure: '',
     donnees: [
       'le plus petit des trois nombres',
@@ -788,6 +807,8 @@ function ageDuPereEtDuFils(): Probleme {
   return {
     enonce: `Un père a $${ecart}$ ans de plus que son fils.<br>
     Dans $${n}$ ans, l'âge du père sera le double de l'âge du fils.`,
+    objectif:
+      "On cherche à déterminer les âges du fils et du père aujourd'hui.",
     figure: '',
     donnees: ["l'âge du fils aujourd'hui", "l'âge du père aujourd'hui"],
     distracteurs: [
@@ -992,7 +1013,7 @@ e) ${probleme.question} %{field${CHAMP_REPONSE}}`
     const texte =
       probleme.enonce +
       probleme.figure +
-      '<br>' +
+      `<br>${probleme.objectif}<br><br>` +
       addMultiMathfield(this, i, { dataTemplate, dataOptions })
 
     /**

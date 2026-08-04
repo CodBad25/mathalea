@@ -1,5 +1,5 @@
-import N2PlusRacineDeN from '../can/TSpe/canTSpeS05'
-export const titre = 'Calculer la limite de $u_n\\times v_n$'
+import N2PlusRacineDeN from '../can/TSpe/canTSpeS07'
+export const titre = 'Calculer la limite de $n^m-n^p$'
 export const dateDePublication = '04/08/2025'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -9,10 +9,10 @@ export const interactifType = 'mathLive'
  * @author Stéphane Guyon
  */
 
-export const uuid = '1b8d2'
+export const uuid = '1b8d4'
 
 export const refs = {
-  'fr-fr': ['TSA1-15'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 export default class N2PlusRacineDeNUn extends N2PlusRacineDeN {

@@ -217,7 +217,7 @@ export default class nomExercice extends Exercice {
           y !== 0 ? (Math.floor(x / y) + 1) * y : NaN,
       },
     ]
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const lOperation = Number(listeTypeQuestions[i])
@@ -311,6 +311,7 @@ export default class nomExercice extends Exercice {
             question: i,
             typeInteractivite: 'mathlive',
 
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: {
                 value: laReponseEnTexte,

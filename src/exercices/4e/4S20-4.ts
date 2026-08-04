@@ -75,7 +75,7 @@ export default class ProbabilitesEnJeuxDe32Cartes extends Exercice {
     const m = fraction(5, 8)
     const n = fraction(30, 32)
     const o = fraction(15, 16)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const famille = choice(['Carreau', 'Coeur', 'Pique', 'Trèfle'])
       const couleur = choice(['Rouge', 'Noire'])
       const valeur = choice([
@@ -184,6 +184,7 @@ export default class ProbabilitesEnJeuxDe32Cartes extends Exercice {
       texte += ajouteQuestionMathlive({
         exercice: this,
         question: i,
+        reponseParams: { formatInteractif: 'mathalea-mathfield' },
         objetReponse: {
           reponse: { value: reponse },
         },

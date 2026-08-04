@@ -1,4 +1,5 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -7,14 +8,12 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   'Additionner deux entiers relatifs dans un tableau à double entrée'
 export const dateDeModifImportante = '07/04/2026'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+export const interactifType = 'tableau-mathlive'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 
@@ -111,7 +110,9 @@ export default class ExerciceTableauAdditionsRelatifs extends Exercice {
     )
 
     const texte = this.interactif ? tableauInteractif.output : tableau
-    handleAnswers(this, 0, objetReponse1, { formatInteractif: 'mathlive' })
+    handleAnswers(this, 0, objetReponse1, {
+      formatInteractif: 'tableau-mathlive',
+    })
 
     const tableauCorr = tableauColonneLigne(colonneEnt, ligneEnt, contenuCorr)
     const texteCorr = `${tableauCorr}`

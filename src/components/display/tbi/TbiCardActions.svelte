@@ -1,9 +1,5 @@
 <script lang="ts">
-  import type { TbiCorrectionMode } from './tbiTypes'
-
   interface Props {
-    correctionMode?: TbiCorrectionMode
-    correctionExists?: boolean
     settingsExist?: boolean
     newDataExists?: boolean
     showMoveToTab?: boolean
@@ -18,7 +14,6 @@
     colBreakActive?: boolean
     /** Nombre maximal de sauts de colonne atteint : désactive l'ajout (pas le retrait) */
     columnBreakDisabled?: boolean
-    onCorrection?: (mode: TbiCorrectionMode) => void
     onNewData?: () => void
     onSettings?: () => void
     onZoomIn?: () => void
@@ -31,8 +26,6 @@
   }
 
   let {
-    correctionMode = 'hidden',
-    correctionExists = false,
     settingsExist = false,
     newDataExists = true,
     showMoveToTab = false,
@@ -44,7 +37,6 @@
     showColumnBreak = false,
     colBreakActive = false,
     columnBreakDisabled = false,
-    onCorrection = () => {},
     onNewData = () => {},
     onSettings = () => {},
     onZoomIn = () => {},
@@ -55,10 +47,6 @@
     onToggleColBreak = () => {},
     onDelete = () => {},
   }: Props = $props()
-
-  function toggleCorrection(mode: TbiCorrectionMode) {
-    onCorrection(correctionMode === mode ? 'hidden' : mode)
-  }
 
   const buttonClass =
     'flex items-center justify-center w-8 h-8 rounded-full ' +
@@ -75,38 +63,6 @@
 <div
   class="flex flex-row flex-wrap items-center gap-1 rounded-full px-2 py-1 bg-coopmaths-canvas/90 dark:bg-coopmathsdark-canvas/90 shadow-md"
 >
-  {#if correctionExists}
-    <button
-      type="button"
-      class={correctionMode === 'below' ? activeButtonClass : buttonClass}
-      title="Correction sous l'énoncé"
-      aria-label="Correction sous l'énoncé"
-      onclick={() => toggleCorrection('below')}
-    >
-      <i class="bx bx-check-circle"></i>
-    </button>
-    <button
-      type="button"
-      class={correctionMode === 'replace' ? activeButtonClass : buttonClass}
-      title="Correction à la place de l'énoncé"
-      aria-label="Correction à la place de l'énoncé"
-      onclick={() => toggleCorrection('replace')}
-    >
-      <i class="bx bx-transfer-alt"></i>
-    </button>
-    <button
-      type="button"
-      class={correctionMode === 'modal' ? activeButtonClass : buttonClass}
-      title="Correction en plein écran"
-      aria-label="Correction en plein écran"
-      onclick={() => toggleCorrection('modal')}
-    >
-      <i class="bx bx-fullscreen"></i>
-    </button>
-    <div
-      class="w-px h-5 mx-1 bg-coopmaths-struct-light dark:bg-coopmathsdark-struct-light"
-    ></div>
-  {/if}
   {#if newDataExists}
     <button
       type="button"

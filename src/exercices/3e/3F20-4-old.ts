@@ -75,7 +75,7 @@ export default class CoefficientDirecteur extends Exercice {
       nbQuestions: this.nbQuestions,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const nomFonction = this.sup2 ? 'f' : choice(['f', 'g', 'h', 'k'])
       const nomVariable = this.sup3 ? 'x' : choice(['x', 'a', 'b', 'c', 't'])
       let a = randint(-9, 9, [-1, 0, 1])
@@ -310,6 +310,7 @@ export default class CoefficientDirecteur extends Exercice {
           typesDeQuestionsDisponibles[i] === 6
             ? KeyboardType.clavierFullOperations
             : KeyboardType.clavierDeBaseAvecFraction,
+        reponseParams: { formatInteractif: 'fill-in-the-blank' },
         objetReponse: {
           champ1: { value: reponse1 },
           champ2: { value: reponse2 },

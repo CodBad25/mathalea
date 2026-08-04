@@ -311,6 +311,7 @@ export default class FormeLitteraleIntroduireUneLettre extends Exercice {
             question: i, // ça, c'est pour qu'il numérote correctement l'input
             typeInteractivite: 'mathlive', // ça, c'est l'input le plus souvent utilisé
             classe: 'clavierMinuscules',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               // ça c'est ce qui définit la réponse attendue et la façon dont elle doit être vérifiée
               reponse: {

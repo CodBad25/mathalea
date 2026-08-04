@@ -43,4 +43,34 @@ describe('FillInTheBlankElement', () => {
     expect(promptStates.get('champ1')?.locked).toBe(true)
     expect(promptStates.get('champ2')?.locked).toBe(true)
   })
+
+  it("annonce chaque champ faux par son rang plutot que par le nom technique du champ, sans imbrication d'un champ dans l'autre", () => {
+    const exercice = new Exercice()
+    exercice.numeroExercice = 4
+    handleAnswers(
+      exercice,
+      0,
+      { champ1: { value: '2' }, champ2: { value: '3' } },
+      { formatInteractif: 'fill-in-the-blank' },
+    )
+    document.body.innerHTML = '<span id="resultatCheckEx4Q0"></span>'
+
+    const mathfield = document.createElement(
+      'div',
+    ) as unknown as MathfieldElement
+    mathfield.id = 'champTexteEx4Q0'
+    mathfield.getPrompts = () => ['champ1', 'champ2']
+    mathfield.getPromptValue = (id: string) => (id === 'champ1' ? '5' : '9')
+    mathfield.getValue = () => '\\placeholder[champ1]{5}\\placeholder[champ2]{9}'
+    mathfield.setPromptState = () => {}
+    mathfield.readOnly = false
+
+    const result = verifyFillInTheBlankMathLive(exercice, 0, mathfield)
+
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toContain('1ère réponse')
+    expect(result.feedback).toContain('2e réponse')
+    expect(result.feedback).not.toContain('Champ')
+    expect(result.feedback.match(/réponse\s*:/g)).toHaveLength(2)
+  })
 })

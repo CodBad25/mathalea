@@ -1,6 +1,7 @@
 import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
@@ -35,9 +36,13 @@ export const refs = {
   'fr-fr': ['4I1', '3AutoI01-1'],
   'fr-ch': ['autres-16'],
 }
+
+const scratchSimulatorButtonAction = '4I1:scratch-simulator-button'
+
 export default class TracerAvecScratch extends Exercice {
   constructor() {
     super()
+    registerScratchSimulatorButton()
     this.consigne =
       'Laquelle des 4 figures ci-dessous va être tracée avec le script fourni ?'
 
@@ -237,16 +242,59 @@ export default class TracerAvecScratch extends Exercice {
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] =
-          texteCorr + context.isHtml
-            ? createScratchSimulatorElement(
-                enonces[listeTypeDeQuestions[i] - 1].scratchCorrection,
-                500,
-              )
-            : ''
+          texteCorr +
+          (context.isHtml
+            ? DomReadyActionElement.create({
+                action: scratchSimulatorButtonAction,
+                payload: {
+                  codeScratch:
+                    enonces[listeTypeDeQuestions[i] - 1].scratchCorrection,
+                  delai: 500,
+                  insertProgramme: true,
+                },
+              })
+            : '')
         i++
       }
       cpt++
     }
     listeQuestionsToContenu(this)
   }
+}
+
+let scratchSimulatorButtonRegistered = false
+
+function registerScratchSimulatorButton() {
+  if (scratchSimulatorButtonRegistered) return
+  scratchSimulatorButtonRegistered = true
+  DomReadyActionElement.registerCallback<{
+    codeScratch: string
+    delai: number
+    insertProgramme: boolean
+  }>(scratchSimulatorButtonAction, ({ element, payload }) => {
+    element.innerHTML = ''
+    element.classList.add('my-4', 'block')
+    const button = document.createElement('button')
+    const simulatorContainer = document.createElement('div')
+    button.type = 'button'
+    button.textContent = 'Lancer le simulateur'
+    button.className =
+      'inline-flex items-center px-4 py-2 bg-coopmaths-action dark:bg-coopmathsdark-action text-coopmaths-canvas dark:text-coopmathsdark-canvas font-medium text-sm rounded shadow-md hover:bg-coopmaths-action-lightest dark:hover:bg-coopmathsdark-action-lightest focus:bg-coopmaths-action-lightest dark:focus:bg-coopmathsdark-action-lightest focus:outline-none transition duration-150 ease-in-out'
+
+    const onClick = () => {
+      simulatorContainer.innerHTML = createScratchSimulatorElement(
+        payload.codeScratch,
+        payload.delai,
+        payload.insertProgramme,
+      )
+    }
+
+    button.addEventListener('click', onClick)
+    element.append(button, simulatorContainer)
+
+    return () => {
+      button.removeEventListener('click', onClick)
+      element.innerHTML = ''
+    }
+  })
 }

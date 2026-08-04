@@ -4,6 +4,7 @@
   import { mathaleaGoToView } from '../../../lib/mathaleaUtils'
   import {
     balanceColumnBreaks,
+    TBI_CONTROLS_HIDE_DELAY,
     tbiState,
     zoomAllCardsBy,
     type TbiMode,
@@ -52,7 +53,6 @@
    * visibles pendant et juste après un mouvement de souris, invisibles
    * ensuite, pour ne pas encombrer la vidéoprojection en continu.
    */
-  const HIDE_DELAY = 2000
   let controlsVisible = $state(true)
   let hideTimer: ReturnType<typeof setTimeout> | undefined
 
@@ -61,7 +61,7 @@
     if (hideTimer !== undefined) clearTimeout(hideTimer)
     hideTimer = setTimeout(() => {
       controlsVisible = false
-    }, HIDE_DELAY)
+    }, TBI_CONTROLS_HIDE_DELAY)
   }
 
   onMount(() => {

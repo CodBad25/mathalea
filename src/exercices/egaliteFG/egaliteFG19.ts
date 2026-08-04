@@ -11,7 +11,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const uuid = '26077'
 export const refs = {
-  'fr-fr': ['3L1-4', '3G22-2', 'EgaliteFG4-3e-19'],
+  'fr-fr': [ 'EgaliteFG4-3e-19'],
   'fr-ch': [],
 }
 

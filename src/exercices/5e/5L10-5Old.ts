@@ -274,6 +274,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
         {
           exercice: this,
           question: i,
+          reponseParams: { formatInteractif: 'mathalea-mathfield' },
           objetReponse: { reponse: { value: pat.formule } },
           typeInteractivite: 'mathlive',
         },

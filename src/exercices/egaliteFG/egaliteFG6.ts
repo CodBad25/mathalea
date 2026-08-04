@@ -8,7 +8,7 @@ export const titre = 'La place des femmes parmi les enseignants'
 export const dateDePublication = '15/07/2026'
 export const uuid = 'e5d3e'
 export const refs = {
-  'fr-fr': ['5P1A-3', 'EgaliteFG2-5e-6'],
+  'fr-fr': [ 'EgaliteFG2-5e-6'],
   'fr-ch': [],
 }
 

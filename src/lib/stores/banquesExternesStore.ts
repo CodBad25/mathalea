@@ -23,6 +23,8 @@ import {
   cleSource,
   sourceDepuisCle,
   type BanqueExterneChargee,
+  type BanqueExternePreambule,
+  type BanqueExterneManifest,
   type BanqueExterneSource,
 } from '../types/banquesExternes'
 import type { JSONReferentielObject } from '../types/referentiels'
@@ -77,6 +79,36 @@ const TYPES_MIME: Record<string, string> = {
 function typeMime(chemin: string): string {
   const extension = chemin.split('.').pop()?.toLowerCase() ?? ''
   return TYPES_MIME[extension] ?? 'application/octet-stream'
+}
+
+/**
+ * Lit le contenu texte du préambule déclaré par un manifest (`preambule.tex`
+ * et/ou `preambule.typ`), lu une bonne fois pour toutes au chargement de la
+ * banque plutôt que retéléchargé à chaque export LaTeX/Typst.
+ * @param {BanqueExterneManifest} manifest manifest de la banque
+ * @param {(chemin: string) => Promise<string|null>} lireFichier lit le texte
+ * d'un chemin relatif à la racine de la banque (`null` si absent/illisible)
+ * @returns {Promise<BanqueExternePreambule|undefined>} préambule chargé, ou
+ * `undefined` si le manifest n'en déclare pas
+ */
+async function chargerPreambule(
+  manifest: BanqueExterneManifest,
+  lireFichier: (chemin: string) => Promise<string | null>,
+): Promise<BanqueExternePreambule | undefined> {
+  if (manifest.preambule === undefined) return undefined
+  const tex =
+    manifest.preambule.tex !== undefined
+      ? await lireFichier(manifest.preambule.tex)
+      : null
+  const typ =
+    manifest.preambule.typ !== undefined
+      ? await lireFichier(manifest.preambule.typ)
+      : null
+  if (tex === null && typ === null) return undefined
+  return {
+    tex: tex ?? undefined,
+    typ: typ ?? undefined,
+  }
 }
 
 // ===========================================================================
@@ -198,12 +230,17 @@ async function chargerDepuisZip(
       URL.createObjectURL(new Blob([contenu], { type: typeMime(chemin) })),
     )
   }
+  const preambuleTexte = await chargerPreambule(manifest, async (chemin) => {
+    const entree = archive.files[`${racine}${chemin}`]
+    if (entree === undefined || entree.dir) return null
+    return await entree.async('string')
+  })
   const source: BanqueExterneSource = {
     type: 'zip',
     cle: `zip:${manifest.id}`,
     nomFichier,
   }
-  return { source, manifest, assets }
+  return { source, manifest, assets, preambuleTexte }
 }
 
 /**
@@ -309,7 +346,18 @@ async function chargerDepuisForge(
       }
     }
   }
-  return { source, manifest, assets }
+  const preambuleTexte = await chargerPreambule(manifest, async (chemin) => {
+    try {
+      const reponse = await window.fetch(
+        urlFichierForge(sourceEffective, chemin),
+      )
+      if (!reponse.ok) return null
+      return await reponse.text()
+    } catch {
+      return null
+    }
+  })
+  return { source, manifest, assets, preambuleTexte }
 }
 
 /**
@@ -512,6 +560,21 @@ export function referentielBanquesExternes(): JSONReferentielObject {
     )
   }
   return referentiel
+}
+
+/**
+ * Donne le préambule (code LaTeX/Typst) déclaré par une banque externe
+ * chargée, pour l'insérer dans le document généré quand un de ses exercices
+ * est utilisé.
+ * @param {string} idBanque id de la banque (`manifest.id`)
+ * @returns {BanqueExternePreambule|undefined} préambule chargé, ou `undefined`
+ * si la banque n'est pas chargée ou n'en déclare pas
+ */
+export function preambuleBanque(
+  idBanque: string,
+): BanqueExternePreambule | undefined {
+  return get(banquesExternes).find((banque) => banque.manifest.id === idBanque)
+    ?.preambuleTexte
 }
 
 /**

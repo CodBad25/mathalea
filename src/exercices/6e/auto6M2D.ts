@@ -225,30 +225,28 @@ export default class EgalitesUnitesAires extends Exercice {
 
   correctionInteractive = (i: number) => {
     const select = []
-    select.push(
-      document.querySelector(
-        `#ex${this.numeroExercice}Q${4 * i}`,
-      ) as HTMLSelectElement,
-    )
-    select.push(
-      document.querySelector(
-        `#ex${this.numeroExercice}Q${4 * i + 1}`,
-      ) as HTMLSelectElement,
-    )
-    select.push(
-      document.querySelector(
-        `#ex${this.numeroExercice}Q${4 * i + 2}`,
-      ) as HTMLSelectElement,
-    )
-    select.push(
-      document.querySelector(
-        `#ex${this.numeroExercice}Q${4 * i + 3}`,
-      ) as HTMLSelectElement,
-    )
+    for (let j = 0; j < 4; j++) {
+      const questionIndex = 4 * i + j
+      const liste = document.querySelector(
+        `#liste-deroulanteEx${this.numeroExercice}Q${questionIndex}`,
+      ) as (HTMLElement & { value?: string }) | null
+      const legacySelect = document.querySelector(
+        `#ex${this.numeroExercice}Q${questionIndex}`,
+      ) as HTMLSelectElement | null
+      const value = liste?.value ?? legacySelect?.value
+      if (value == null) {
+        window.notify(
+          `Liste déroulante introuvable pour la question ${questionIndex} de l'exercice ${this.id}`,
+          { exercice: this.id, questionIndex },
+        )
+        return 'KO'
+      }
+      select.push(value)
+    }
 
     let isOk = true
     for (let j = 0; j < 4; j++) {
-      isOk &&= select[j].value === this.listeReponses[i][j]
+      isOk &&= select[j] === this.listeReponses[i][j]
     }
 
     // const spanReponseLigne = document.querySelector(`#resultatCheckEx${this.numeroExercice}Q${4 * i + 3}`)

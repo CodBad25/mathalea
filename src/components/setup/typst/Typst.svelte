@@ -1,9 +1,6 @@
 <script lang="ts">
-  import { defaultKeymap, history, historyKeymap } from '@codemirror/commands'
-  import { search, searchKeymap } from '@codemirror/search'
   import { EditorState } from '@codemirror/state'
-  import { oneDark } from '@codemirror/theme-one-dark'
-  import { EditorView, keymap } from '@codemirror/view'
+  import { EditorView } from '@codemirror/view'
   import JSZip from 'jszip'
   import seedrandom from 'seedrandom'
   import { onDestroy, onMount } from 'svelte'
@@ -11,6 +8,7 @@
   import ExerciceSimple from '../../../exercices/ExerciceSimple'
   import {
     buildExercisesList,
+    getBanquesExternesPreambuleTyp,
     getStaticExerciceCorTypUrl,
     getStaticExerciceTypUrl,
   } from '../../../lib/components/exercisesUtils'
@@ -59,6 +57,19 @@
   } from './TypstLayoutOverlay.svelte'
   import type { TypstAnchor } from './typstCompiler'
   import { setStaticImagePaths } from './latexToTypst'
+  import {
+    countErrors,
+    parseTypstDiagnostics,
+    summarizeDiagnostics,
+    type TypstDiagnostic,
+  } from './typstDiagnostics'
+  import {
+    revealPosition,
+    setEditorMarkers,
+    setEditorTheme,
+    typstEditorExtensions,
+    type EditorMarker,
+  } from './editor/typstEditorSetup'
 
   /** Libellés des habillages d'en-tête/pied de page */
   const HEADER_STYLE_LABELS: Record<(typeof HEADER_STYLES)[number], string> = {
@@ -115,7 +126,10 @@
       if (saved != null) {
         const parsed = JSON.parse(saved)
         // sur téléphone on reste sur l'aperçu quel que soit le mode mémorisé
-        if (!isMobile && ['code', 'split', 'preview'].includes(parsed.displayMode)) {
+        if (
+          !isMobile &&
+          ['code', 'split', 'preview'].includes(parsed.displayMode)
+        ) {
           const restoredDisplayMode = parsed.displayMode as DisplayMode
           displayMode = restoredDisplayMode
           // le bouton Réglages n'existe qu'en Aperçu : hors de ce mode, le
@@ -136,23 +150,27 @@
           const has = (list: readonly string[], value: string) =>
             list.includes(value)
           if (!has(BADGE_STYLES, restoredDocumentOptions.badgeStyle)) {
-            restoredDocumentOptions.badgeStyle = defaultTypstDocumentOptions.badgeStyle
+            restoredDocumentOptions.badgeStyle =
+              defaultTypstDocumentOptions.badgeStyle
           }
           if (!has(HEADER_STYLES, restoredDocumentOptions.headerStyle)) {
-            restoredDocumentOptions.headerStyle = defaultTypstDocumentOptions.headerStyle
+            restoredDocumentOptions.headerStyle =
+              defaultTypstDocumentOptions.headerStyle
           }
           if (!has(TEXT_FONTS, restoredDocumentOptions.font)) {
             restoredDocumentOptions.font = defaultTypstDocumentOptions.font
           }
           if (!has(MATH_FONTS, restoredDocumentOptions.mathFont)) {
-            restoredDocumentOptions.mathFont = defaultTypstDocumentOptions.mathFont
+            restoredDocumentOptions.mathFont =
+              defaultTypstDocumentOptions.mathFont
           }
           if (
             !Number.isInteger(restoredDocumentOptions.nbVersions) ||
             restoredDocumentOptions.nbVersions < 1 ||
             restoredDocumentOptions.nbVersions > 4
           ) {
-            restoredDocumentOptions.nbVersions = defaultTypstDocumentOptions.nbVersions
+            restoredDocumentOptions.nbVersions =
+              defaultTypstDocumentOptions.nbVersions
           }
         }
       }
@@ -180,7 +198,10 @@
     typstParamStore.set(typstUrlParam)
     const parsed = decodeBase64(typstUrlParam)
     if (parsed.options != null) {
-      restoredDocumentOptions = { ...restoredDocumentOptions, ...parsed.options }
+      restoredDocumentOptions = {
+        ...restoredDocumentOptions,
+        ...parsed.options,
+      }
     }
     if (parsed.carryOver != null) {
       urlCarryOver = parsed.carryOver
@@ -239,8 +260,91 @@
    */
   let compilerFirstVisit = $state(false)
   let isGeneratingPdf = $state(false)
-  let diagnostics: string[] = $state([])
+  /** Fenêtre d'aide listant les raccourcis clavier de l'éditeur */
+  let isShortcutsOpen = $state(false)
+  /** Touche de modification affichée dans l'aide, selon la plateforme */
+  const MOD_KEY =
+    typeof navigator !== 'undefined' &&
+    /Mac|iPhone|iPad/.test(navigator.userAgent)
+      ? '⌘'
+      : 'Ctrl'
+  /**
+   * Raccourcis de l'éditeur, par famille. Ils viennent de CodeMirror
+   * (`defaultKeymap`, `searchKeymap`) et de `typstEditorExtensions`.
+   */
+  const EDITOR_SHORTCUTS: { title: string; keys: [string, string][] }[] = [
+    {
+      title: 'Rechercher et sélectionner',
+      keys: [
+        [`${MOD_KEY} + F`, 'Rechercher / remplacer'],
+        [`${MOD_KEY} + G`, 'Occurrence suivante'],
+        [`${MOD_KEY} + D`, 'Ajouter l’occurrence suivante à la sélection'],
+        [`${MOD_KEY} + Maj + L`, 'Sélectionner toutes les occurrences'],
+        [`${MOD_KEY} + L`, 'Sélectionner la ligne'],
+        ['Alt + G', 'Aller à la ligne…'],
+        ['Échap', 'Revenir à un seul curseur'],
+      ],
+    },
+    {
+      title: 'Modifier',
+      keys: [
+        [`${MOD_KEY} + /`, 'Commenter / décommenter'],
+        ['Alt + ↑ / ↓', 'Déplacer la ligne'],
+        ['Maj + Alt + ↑ / ↓', 'Dupliquer la ligne'],
+        [`${MOD_KEY} + Maj + D`, 'Dupliquer la ligne vers le bas'],
+        [`${MOD_KEY} + Maj + K`, 'Supprimer la ligne'],
+        ['Tab / Maj + Tab', 'Indenter / désindenter'],
+        [`${MOD_KEY} + Z`, 'Annuler'],
+        [`${MOD_KEY} + Maj + Z`, 'Rétablir'],
+      ],
+    },
+    {
+      title: 'Curseurs multiples',
+      keys: [
+        [
+          `${MOD_KEY} + Alt + ↑ / ↓`,
+          'Ajouter un curseur au-dessus / en dessous',
+        ],
+        ['Alt + glisser', 'Sélection rectangulaire'],
+      ],
+    },
+    {
+      title: 'Compiler et replier',
+      keys: [
+        [`${MOD_KEY} + S`, 'Compiler tout de suite'],
+        [`${MOD_KEY} + Entrée`, 'Compiler tout de suite'],
+        [`${MOD_KEY} + Maj + [ / ]`, 'Replier / déplier le bloc'],
+      ],
+    },
+  ]
+
+  /** Diagnostics de la dernière compilation, traduits en français */
+  let diagnostics: TypstDiagnostic[] = $state([])
+  /** Le panneau d'erreurs est replié (l'utilisateur l'a fermé) */
+  let isDiagnosticsCollapsed = $state(false)
   let svgContent = $state('')
+
+  const errorCount = $derived(countErrors(diagnostics))
+  const diagnosticsSummary = $derived(summarizeDiagnostics(diagnostics))
+  /**
+   * L'aperçu affiché ne correspond plus au code : la compilation a échoué et
+   * c'est le rendu précédent qui reste à l'écran. Sans rien de visible en
+   * mode « Code », la remarque n'a pas lieu d'être.
+   */
+  const isPreviewStale = $derived(
+    errorCount > 0 && svgContent !== '' && displayMode !== 'code',
+  )
+
+  /**
+   * Dernier code Typst qui a compilé, et son horodatage. Sert au bouton de
+   * retour arrière proposé quand la compilation échoue : le professeur
+   * récupère une fiche qui s'affiche, sans avoir à retrouver lui-même
+   * la modification fautive.
+   */
+  let lastGoodCode: string | null = null
+  let lastGoodAt: Date | null = $state(null)
+  /** Vrai quand le code courant diffère de la dernière version qui compilait */
+  let canRestoreLastGood = $state(false)
 
   let editorEl: HTMLDivElement = $state()!
   let editorView: EditorView | null = null
@@ -277,7 +381,9 @@
   /** Zoom de chaque figure (`#let fig-N-zoom`), lu dans le code courant */
   let figureZoomValues: Record<number, number> = $state({})
   /** Alignement de chaque figure (`#let fig-N-align`), lu dans le code courant */
-  let figureAlignValues: Record<number, 'left' | 'center' | 'right'> = $state({})
+  let figureAlignValues: Record<number, 'left' | 'center' | 'right'> = $state(
+    {},
+  )
   /** Exercice dont la modale de réglages (panneau Settings) est ouverte */
   let settingsExerciseIndex: number | null = $state(null)
   const settingsExercise = $derived(
@@ -331,8 +437,7 @@
    * l'exercice dans un autre fichier Typst.
    */
   function copyExerciseCodeWithPreamble(num: number) {
-    const carryOver =
-      editorView != null ? harvestCarryOver(currentCode()) : {}
+    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
     const standalone = buildStandaloneExerciseCode(
       buildInputs(),
       num,
@@ -428,9 +533,10 @@
     figureAlignValues = figureAlign
     const header = { titre: '', 'sous-titre': '', entete: '' }
     for (const name of ['titre', 'sous-titre', 'entete'] as const) {
-      const match = new RegExp(`^#let ${name} = "((?:[^"\\\\]|\\\\.)*)"`, 'm').exec(
-        code,
-      )
+      const match = new RegExp(
+        `^#let ${name} = "((?:[^"\\\\]|\\\\.)*)"`,
+        'm',
+      ).exec(code)
       if (match != null) {
         header[name] = match[1].replace(/\\(.)/g, '$1')
       }
@@ -468,7 +574,8 @@
       return
     }
     const clamped = Math.min(4, next)
-    if (clamped !== current) setTasksVariable(target, 'colonnes', String(clamped))
+    if (clamped !== current)
+      setTasksVariable(target, 'colonnes', String(clamped))
   }
 
   /** Pas d'ajustement de l'espacement vertical des questions, en em */
@@ -495,7 +602,10 @@
     const current = figureZoomValues[figNum] ?? 1
     const next = Math.min(
       3,
-      Math.max(0.2, Math.round((current + delta * FIGURE_ZOOM_STEP) * 100) / 100),
+      Math.max(
+        0.2,
+        Math.round((current + delta * FIGURE_ZOOM_STEP) * 100) / 100,
+      ),
     )
     dispatchPaletteEdit({
       from: match.index,
@@ -505,10 +615,7 @@
   }
 
   /** Alignement d'une figure : gauche, centré ou à droite */
-  function setFigureAlign(
-    figNum: number,
-    align: 'left' | 'center' | 'right',
-  ) {
+  function setFigureAlign(figNum: number, align: 'left' | 'center' | 'right') {
     if (editorView == null) return
     const doc = editorView.state.doc.toString()
     const match = new RegExp(`^#let fig-${figNum}-align = .*$`, 'm').exec(doc)
@@ -526,7 +633,10 @@
    */
   const staticExercises = $derived(
     Object.fromEntries(
-      exercises.map((exercise, k) => [k + 1, exercise?.typeExercice === 'statique']),
+      exercises.map((exercise, k) => [
+        k + 1,
+        exercise?.typeExercice === 'statique',
+      ]),
     ) as Record<number, boolean>,
   )
 
@@ -541,7 +651,8 @@
       exercises.map((exercise, k) => [
         k + 1,
         exercise?.typeExercice === 'statique' &&
-          (exercise.uuid == null || getStaticExerciceTypUrl(exercise.uuid) == null),
+          (exercise.uuid == null ||
+            getStaticExerciceTypUrl(exercise.uuid) == null),
       ]),
     ) as Record<number, boolean>,
   )
@@ -573,7 +684,9 @@
     Object.fromEntries(
       exercises.map((exercise, k) => [
         k + 1,
-        exercise?.typeExercice === 'statique' ? null : (exercise?.nbQuestions ?? null),
+        exercise?.typeExercice === 'statique'
+          ? null
+          : (exercise?.nbQuestions ?? null),
       ]),
     ) as Record<number, number | null>,
   )
@@ -689,9 +802,16 @@
     exercise?.destroy?.()
     exercises = exercises.filter((_, k) => k !== num - 1)
     exercicesParams.update((list) => list.filter((_, k) => k !== num - 1))
-    const code = buildTypstDocument(buildInputs(), documentOptions, carryOver, [], {
-      sourceUrl: currentUrl(),
-    })
+    const code = buildTypstDocument(
+      buildInputs(),
+      documentOptions,
+      carryOver,
+      [],
+      {
+        sourceUrl: currentUrl(),
+        extraPreamble: extraPreamble(),
+      },
+    )
     setEditorContent(code)
     scheduleCompile(code, 0)
   }
@@ -778,9 +898,16 @@
       ;[copy[k], copy[target]] = [copy[target], copy[k]]
       return copy
     })
-    const code = buildTypstDocument(buildInputs(), documentOptions, carryOver, [], {
-      sourceUrl: currentUrl(),
-    })
+    const code = buildTypstDocument(
+      buildInputs(),
+      documentOptions,
+      carryOver,
+      [],
+      {
+        sourceUrl: currentUrl(),
+        extraPreamble: extraPreamble(),
+      },
+    )
     setEditorContent(code)
     scheduleCompile(code, 0)
   }
@@ -823,8 +950,7 @@
    * pour cet exercice (voir `getGeneratedExerciseCode`).
    */
   function openCodeEdit(num: number) {
-    const carryOver =
-      editorView != null ? harvestCarryOver(currentCode()) : {}
+    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
     codeEditDraft =
       carryOver.codeOverrides?.[num] ??
       getGeneratedExerciseCode(buildInputs(), num, documentOptions, carryOver)
@@ -839,8 +965,7 @@
    * Pendant de `openCodeEdit` pour la correction plutôt que l'énoncé.
    */
   function openCorrectionCodeEdit(num: number) {
-    const carryOver =
-      editorView != null ? harvestCarryOver(currentCode()) : {}
+    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
     codeEditDraft =
       carryOver.codeOverridesCorrection?.[num] ??
       getGeneratedCorrectionCode(buildInputs(), num, documentOptions, carryOver)
@@ -875,8 +1000,7 @@
     part: 'enonce' | 'correction' = 'enonce',
   ) {
     if (!confirmOverwrite()) return
-    const carryOver =
-      editorView != null ? harvestCarryOver(currentCode()) : {}
+    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
     const trimmed = code.trim()
     if (part === 'correction') {
       const codeOverridesCorrection = {
@@ -897,7 +1021,7 @@
       documentOptions,
       carryOver,
       extraVersions,
-      { sourceUrl: currentUrl() },
+      { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
     )
     setEditorContent(newCode)
     scheduleCompile(newCode, 0)
@@ -925,7 +1049,7 @@
       documentOptions,
       carryOver,
       extraVersions,
-      { sourceUrl: currentUrl() },
+      { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
     )
     setEditorContent(code)
     scheduleCompile(code, 0)
@@ -957,7 +1081,7 @@
       documentOptions,
       carryOver,
       extraVersions,
-      { sourceUrl: currentUrl() },
+      { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
     )
     setEditorContent(code)
     scheduleCompile(code, 0)
@@ -1287,6 +1411,7 @@
     // (colonnes/espacement par exercice, insertions) ne sont pas repris
     const code = buildTypstDocument(buildInputs(), documentOptions, {}, [], {
       sourceUrl: currentUrl(),
+      extraPreamble: extraPreamble(),
     })
     setEditorContent(code)
     scheduleCompile(code, 0)
@@ -1351,12 +1476,18 @@
     if (exercise.duration !== undefined) {
       url.searchParams.append('d', exercise.duration.toString())
     }
-    if (exercise.sup !== undefined) url.searchParams.append('s', String(exercise.sup))
-    if (exercise.sup2 !== undefined) url.searchParams.append('s2', String(exercise.sup2))
-    if (exercise.sup3 !== undefined) url.searchParams.append('s3', String(exercise.sup3))
-    if (exercise.sup4 !== undefined) url.searchParams.append('s4', String(exercise.sup4))
-    if (exercise.sup5 !== undefined) url.searchParams.append('s5', String(exercise.sup5))
-    if (exercise.seed !== undefined) url.searchParams.append('alea', exercise.seed)
+    if (exercise.sup !== undefined)
+      url.searchParams.append('s', String(exercise.sup))
+    if (exercise.sup2 !== undefined)
+      url.searchParams.append('s2', String(exercise.sup2))
+    if (exercise.sup3 !== undefined)
+      url.searchParams.append('s3', String(exercise.sup3))
+    if (exercise.sup4 !== undefined)
+      url.searchParams.append('s4', String(exercise.sup4))
+    if (exercise.sup5 !== undefined)
+      url.searchParams.append('s5', String(exercise.sup5))
+    if (exercise.seed !== undefined)
+      url.searchParams.append('alea', exercise.seed)
     if (exercise.correctionDetaillee !== undefined) {
       url.searchParams.append('cd', exercise.correctionDetaillee ? '1' : '0')
     }
@@ -1472,9 +1603,16 @@
         ? harvestCarryOver(currentCode())
         : (urlCarryOver ?? {})
     const [primary, ...extraVersions] = buildAllVersionInputs()
-    return buildTypstDocument(primary, documentOptions, carryOver, extraVersions, {
-      sourceUrl: currentUrl(),
-    })
+    return buildTypstDocument(
+      primary,
+      documentOptions,
+      carryOver,
+      extraVersions,
+      {
+        sourceUrl: currentUrl(),
+        extraPreamble: extraPreamble(),
+      },
+    )
   }
 
   function initEditor(content: string) {
@@ -1483,10 +1621,13 @@
       state: EditorState.create({
         doc: content,
         extensions: [
-          history(),
-          oneDark,
-          search({ top: true }),
-          keymap.of([...defaultKeymap, ...historyKeymap, ...searchKeymap]),
+          ...typstEditorExtensions({
+            dark: $darkMode.isActive,
+            // Ctrl/Cmd + S et Ctrl/Cmd + Entrée : compiler sans attendre
+            // le débounce (réflexe d'éditeur, et pas d'enregistrement du
+            // navigateur déclenché par mégarde)
+            onCompileNow: () => scheduleCompile(currentCode(), 0),
+          }),
           EditorView.updateListener.of((update) => {
             if (update.docChanged) {
               // les éditions de la palette survivent à la régénération :
@@ -1494,6 +1635,7 @@
               if (!isPaletteEdit) isEdited = true
               const code = update.state.doc.toString()
               refreshTasksLayout(code)
+              canRestoreLastGood = lastGoodCode != null && lastGoodCode !== code
               // toute modification structurée (palette, régénération) est
               // reportée dans l'URL ; le garde-fou sur la valeur encodée
               // évite d'écrire à chaque frappe qui ne change pas les réglages
@@ -1501,16 +1643,156 @@
               scheduleCompile(code)
             }
           }),
-          EditorView.theme({
-            '&': { height: '100%' },
-            '.cm-scroller': { overflow: 'auto' },
-          }),
-          EditorView.lineWrapping,
         ],
       }),
       parent: editorEl,
     })
     refreshTasksLayout(content)
+  }
+
+  // l'éditeur suit le thème clair/sombre de l'application
+  $effect(() => {
+    const dark = $darkMode.isActive
+    if (editorView != null) setEditorTheme(editorView, dark)
+  })
+
+  /**
+   * Rétablit le dernier code qui a compilé. L'opération passe par
+   * l'historique de CodeMirror : elle est annulable par Ctrl/Cmd + Z si le
+   * professeur veut finalement récupérer sa version en cours.
+   */
+  function restoreLastGoodCode() {
+    if (editorView == null || lastGoodCode == null) return
+    const restored = lastGoodCode
+    editorView.dispatch({
+      changes: { from: 0, to: editorView.state.doc.length, insert: restored },
+      selection: { anchor: 0 },
+    })
+    editorView.focus()
+    scheduleCompile(restored, 0)
+  }
+
+  /** Place le curseur sur la ligne d'un diagnostic (clic dans le panneau) */
+  function goToDiagnostic(diagnostic: TypstDiagnostic) {
+    if (editorView == null || diagnostic.line == null) return
+    if (displayMode === 'preview') setDisplayMode('split')
+    revealPosition(
+      editorView,
+      diagnostic.line,
+      diagnostic.column,
+      diagnostic.endLine,
+      diagnostic.endColumn,
+    )
+  }
+
+  /**
+   * Repère (1-based) de la ligne de code portant le marqueur invisible d'un
+   * exercice ou de sa correction (`#mathalea-anchor("exo"|"corr", N)`, voir
+   * `buildTypstDocument`) : c'est la ligne la plus proche du contenu affiché,
+   * quel que soit le mode de document (fusionné ou non). À défaut, on
+   * retombe sur le titre de section lisible du mode « banque »
+   * (`// ----- Exercice N -----`), pour un code retouché à la main qui
+   * aurait perdu son repère.
+   */
+  function findExerciseSourceLine(
+    code: string,
+    kind: 'exo' | 'corr',
+    num: number,
+  ): number | null {
+    const anchorPattern = new RegExp(
+      `#mathalea-anchor\\(\\s*"${kind}"\\s*,\\s*${num}\\s*\\)`,
+    )
+    const lines = code.split('\n')
+    const anchorLine = lines.findIndex((line) => anchorPattern.test(line))
+    if (anchorLine !== -1) return anchorLine + 1
+    if (kind !== 'exo') return null
+    const titleLine = lines.findIndex((line) =>
+      new RegExp(`^//\\s*-+\\s*Exercice ${num}\\b`).test(line),
+    )
+    return titleLine === -1 ? null : titleLine + 1
+  }
+
+  /**
+   * Double-clic sur l'aperçu : amène le curseur, dans l'éditeur, sur
+   * l'exercice (ou sa correction) affiché au point cliqué. Convertit le
+   * clic en coordonnées SVG (mêmes unités que les repères de la palette de
+   * mise en page, voir `computeOverlayWidgets`), repère la page puis le
+   * dernier repère « exo »/« corr » rencontré au-dessus du point cliqué.
+   */
+  function jumpToSourceFromClick(event: MouseEvent) {
+    if (editorView == null) return
+    // ignore un double-clic sur un contrôle de la palette de mise en page
+    // (bouton, champ…), qui a déjà son propre comportement
+    const target = event.target as HTMLElement
+    if (
+      target !== event.currentTarget &&
+      target.closest('button, input, select')
+    )
+      return
+    if (previewViewBox.width <= 0 || previewViewBox.height <= 0) return
+    const container = event.currentTarget as HTMLElement
+    const rect = container.getBoundingClientRect()
+    if (rect.width <= 0 || rect.height <= 0) return
+    const clickX =
+      ((event.clientX - rect.left) / rect.width) * previewViewBox.width
+    const clickY =
+      ((event.clientY - rect.top) / rect.height) * previewViewBox.height
+
+    let pageIndex = previewPages.findIndex(
+      (page) => clickY >= page.y && clickY <= page.y + page.height,
+    )
+    if (pageIndex === -1) {
+      // clic dans l'espacement entre deux pages : la page la plus proche
+      let bestDistance = Infinity
+      previewPages.forEach((page, index) => {
+        const distance = Math.min(
+          Math.abs(clickY - page.y),
+          Math.abs(clickY - (page.y + page.height)),
+        )
+        if (distance < bestDistance) {
+          bestDistance = distance
+          pageIndex = index
+        }
+      })
+    }
+    if (pageIndex === -1) return
+    const pageNum = pageIndex + 1
+    const localY = clickY - previewPages[pageIndex].y
+
+    const sectionAnchors = anchors.filter(
+      (anchor) => anchor.kind === 'exo' || anchor.kind === 'corr',
+    )
+    let candidate: TypstAnchor | null = null
+    for (const anchor of sectionAnchors) {
+      const isBeforeClick =
+        anchor.page < pageNum || (anchor.page === pageNum && anchor.y <= localY)
+      if (!isBeforeClick) continue
+      if (
+        candidate == null ||
+        anchor.page > candidate.page ||
+        (anchor.page === candidate.page && anchor.y > candidate.y)
+      ) {
+        candidate = anchor
+      }
+    }
+    // clic au-dessus du premier repère de la page (ex. dans l'en-tête) :
+    // on vise plutôt le premier exercice qui suit
+    if (candidate == null) {
+      candidate =
+        sectionAnchors.find((anchor) => anchor.page >= pageNum) ??
+        sectionAnchors[0] ??
+        null
+    }
+    if (candidate == null) return
+
+    const line = findExerciseSourceLine(
+      currentCode(),
+      candidate.kind === 'corr' ? 'corr' : 'exo',
+      candidate.num,
+    )
+    if (line == null) return
+    if (displayMode === 'preview') setDisplayMode('split')
+    revealPosition(editorView, line)
   }
 
   function setEditorContent(content: string) {
@@ -1537,6 +1819,19 @@
    */
   function currentUrl(): string {
     return window.location.href
+  }
+
+  /**
+   * Code Typst du préambule des banques externes dont un exercice figure
+   * dans la fiche (voir `manifest.preambule.typ`), à insérer dans le document
+   * généré.
+   */
+  function extraPreamble(): string {
+    return getBanquesExternesPreambuleTyp(
+      exercises
+        .filter((e): e is IExercice => e != null)
+        .map((e) => String(e.uuid)),
+    )
   }
 
   /**
@@ -1598,15 +1893,9 @@
         const pageY = translate != null ? parseFloat(translate[1]) : cumulatedY
         cumulatedY += height
         geometry.push({ y: pageY + i * PAGE_GAP, width, height })
-        const wrapper = doc.createElementNS(
-          'http://www.w3.org/2000/svg',
-          'g',
-        )
+        const wrapper = doc.createElementNS('http://www.w3.org/2000/svg', 'g')
         wrapper.setAttribute('transform', `translate(0, ${i * PAGE_GAP})`)
-        const sheet = doc.createElementNS(
-          'http://www.w3.org/2000/svg',
-          'rect',
-        )
+        const sheet = doc.createElementNS('http://www.w3.org/2000/svg', 'rect')
         sheet.setAttribute('x', '0')
         sheet.setAttribute('y', String(pageY))
         sheet.setAttribute('width', String(width))
@@ -1636,34 +1925,65 @@
     }
   }
 
+  /**
+   * Traduit les diagnostics bruts du compilateur et les reporte dans
+   * l'éditeur (surlignage des lignes fautives et pastilles dans la marge).
+   * Le panneau se rouvre dès qu'une nouvelle erreur apparaît, même si le
+   * professeur l'avait replié.
+   */
+  function applyDiagnostics(raw: string[]) {
+    const previousErrors = countErrors(diagnostics)
+    diagnostics = parseTypstDiagnostics(raw)
+    if (countErrors(diagnostics) > previousErrors)
+      isDiagnosticsCollapsed = false
+    if (editorView != null) {
+      const markers: EditorMarker[] = diagnostics
+        .filter((diagnostic) => diagnostic.line != null)
+        .map((diagnostic) => ({
+          line: diagnostic.line as number,
+          column: diagnostic.column,
+          endLine: diagnostic.endLine,
+          endColumn: diagnostic.endColumn,
+          severity: diagnostic.severity,
+          message: diagnostic.message,
+        }))
+      setEditorMarkers(editorView, markers)
+    }
+  }
+
   async function compile(code: string) {
     const token = ++compileToken
     isCompiling = true
     if (svgContent === '') isCompilerLoading = true
     try {
-      const { compileTypstToSvg, isCompilerCached } = await import(
-        './typstCompiler'
-      )
+      const { compileTypstToSvg, isCompilerCached } =
+        await import('./typstCompiler')
       // adapte le message d'attente : « première visite » seulement si le
       // compilateur n'est pas déjà en cache (téléchargement à prévoir)
       if (isCompilerLoading) compilerFirstVisit = !(await isCompilerCached())
       const result = await compileTypstToSvg(code)
       if (token !== compileToken) return
-      diagnostics = result.diagnostics
+      applyDiagnostics(result.diagnostics)
       if (result.svg != null) {
         const separated = separatePages(result.svg)
         svgContent = separated.svg
         previewPages = separated.pages
         previewViewBox = separated.viewBox
         anchors = result.anchors ?? []
+        // point de retour : ce code produit bien un document
+        lastGoodCode = code
+        lastGoodAt = new Date()
+        canRestoreLastGood = false
+      } else {
+        canRestoreLastGood = lastGoodCode != null && lastGoodCode !== code
       }
     } catch (error) {
       if (token !== compileToken) return
       console.error('Erreur lors de la compilation Typst', error)
-      diagnostics = [
-        'La compilation a échoué : ' +
-          (error instanceof Error ? error.message : String(error)),
-      ]
+      applyDiagnostics([
+        'error: ' + (error instanceof Error ? error.message : String(error)),
+      ])
+      canRestoreLastGood = lastGoodCode != null && lastGoodCode !== code
     } finally {
       if (token === compileToken) {
         isCompiling = false
@@ -1869,8 +2189,13 @@
           // le format d'une image d'après l'extension de son chemin (`format:
           // auto`), une image JPEG enregistrée sous un chemin `.png` échoue au
           // décodage
-          const rawExt = /\.([a-z0-9]+)(?:[?#]|$)/i.exec(url)?.[1]?.toLowerCase()
-          const ext = rawExt != null && KNOWN_IMAGE_EXTENSIONS.has(rawExt) ? rawExt : 'png'
+          const rawExt = /\.([a-z0-9]+)(?:[?#]|$)/i
+            .exec(url)?.[1]
+            ?.toLowerCase()
+          const ext =
+            rawExt != null && KNOWN_IMAGE_EXTENSIONS.has(rawExt)
+              ? rawExt
+              : 'png'
           const path = `/static-img-${i}.${ext}`
           bytes.set(path, await cachedBytes(toSameOriginUrl(url)))
           paths.set(url, path)
@@ -2077,13 +2402,19 @@
    * de l'éditeur intégré et sans effet une fois le code sorti de l'appli.
    */
   function buildExportCode(): string {
-    const carryOver =
-      editorView != null ? harvestCarryOver(currentCode()) : {}
+    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
     const [primary, ...extraVersions] = buildAllVersionInputs()
-    return buildTypstDocument(primary, documentOptions, carryOver, extraVersions, {
-      exportMode: true,
-      sourceUrl: currentUrl(),
-    })
+    return buildTypstDocument(
+      primary,
+      documentOptions,
+      carryOver,
+      extraVersions,
+      {
+        exportMode: true,
+        sourceUrl: currentUrl(),
+        extraPreamble: extraPreamble(),
+      },
+    )
   }
 
   /**
@@ -2213,6 +2544,17 @@
       <div class="grow"></div>
 
       {#if displayMode === 'code' || displayMode === 'split'}
+        <button
+          type="button"
+          title="Raccourcis clavier de l’éditeur de code"
+          class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+          onclick={() => (isShortcutsOpen = true)}
+        >
+          <i class="bx bx-keyboard text-xl"></i>
+          Raccourcis
+        </button>
+      {/if}
+      {#if displayMode === 'code' || displayMode === 'split'}
         <ButtonTextAction
           text={requiredImageAssets.size > 0
             ? 'Télécharger le .typ (.zip)'
@@ -2255,393 +2597,551 @@
       <i class="bx bx-loader-alt bx-spin text-4xl"></i>
     </div>
   {:else}
-    <div class="flex flex-row grow min-h-0">
-      {#if isSettingsOpen}
-        <div
-          class="typst-settings-pane w-80 shrink-0 overflow-y-auto border-r border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus p-5 space-y-4"
-        >
-          <div class="flex items-center justify-between">
-            <h3
-              class="font-bold text-coopmaths-struct dark:text-coopmathsdark-struct"
-            >
-              Réglages du document
-            </h3>
-            <button
-              type="button"
-              aria-label="Fermer les réglages"
-              onclick={() => (isSettingsOpen = false)}
-            >
-              <i
-                class="bx bx-x text-2xl text-coopmaths-action dark:text-coopmathsdark-action"
-              ></i>
-            </button>
-          </div>
-
-          <label class="flex items-center justify-between gap-4 text-sm">
-            Format
-            <select
-              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-              bind:value={documentOptions.pageFormat}
-              onchange={applyDocumentOptions}
-            >
-              <option value="a4">A4</option>
-              <option value="a5">A5</option>
-            </select>
-          </label>
-
-          <label class="flex items-center justify-between gap-4 text-sm">
-            Orientation
-            <select
-              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-              bind:value={documentOptions.orientation}
-              onchange={applyDocumentOptions}
-            >
-              <option value="portrait">Portrait</option>
-              <option value="landscape">Paysage</option>
-            </select>
-          </label>
-
-          <div class="flex items-center justify-between gap-4 text-sm">
-            <label for="typst-columns-input">Nombre de colonnes</label>
-            <input
-              id="typst-columns-input"
-              type="number"
-              min="1"
-              max="3"
-              step="1"
-              class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-              bind:value={documentOptions.columns}
-              onchange={applyDocumentOptions}
-            />
-          </div>
-
-          <label class="flex items-center gap-2 text-sm cursor-pointer">
-            <input
-              type="checkbox"
-              bind:checked={documentOptions.mergeExercises}
-              onchange={applyDocumentOptions}
-            />
-            Fusionner tous les exercices (questions numérotées à la suite)
-          </label>
-
-          <label class="flex items-center gap-2 text-sm cursor-pointer">
-            <input
-              type="checkbox"
-              bind:checked={documentOptions.showExerciseRefs}
-              disabled={documentOptions.mergeExercises}
-              onchange={applyDocumentOptions}
-            />
-            <span class:opacity-50={documentOptions.mergeExercises}>
-              Afficher la référence des exercices
-            </span>
-          </label>
-
-          <label class="flex items-center gap-2 text-sm cursor-pointer">
-            <input
-              type="checkbox"
-              bind:checked={documentOptions.showQrCode}
-              disabled={documentOptions.mergeExercises}
-              onchange={applyDocumentOptions}
-            />
-            <span class:opacity-50={documentOptions.mergeExercises}>
-              QR-code vers chaque exercice
-            </span>
-          </label>
-
-          <label class="flex items-center justify-between gap-4 text-sm">
-            Habillage en-tête
-            <select
-              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-              bind:value={documentOptions.headerStyle}
-              onchange={applyDocumentOptions}
-            >
-              {#each HEADER_STYLES as style}
-                <option value={style}>{HEADER_STYLE_LABELS[style]}</option>
-              {/each}
-            </select>
-          </label>
-
-          <p class="text-xs opacity-75">
-            Le titre, le sous-titre et la ligne d'en-tête se modifient
-            directement sur l'aperçu (bouton
-            <i class="bx bx-edit"></i> à gauche du titre).
-          </p>
-
-          <label class="flex items-center justify-between gap-4 text-sm">
-            Police du texte
-            <select
-              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-              bind:value={documentOptions.font}
-              onchange={applyDocumentOptions}
-            >
-              {#each TEXT_FONTS as font}
-                <option value={font}>{font}</option>
-              {/each}
-            </select>
-          </label>
-
-          <label class="flex items-center justify-between gap-4 text-sm">
-            Police des maths
-            <select
-              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-              bind:value={documentOptions.mathFont}
-              onchange={applyDocumentOptions}
-            >
-              {#each MATH_FONTS as font}
-                <option value={font}>{font}</option>
-              {/each}
-            </select>
-          </label>
-
-          <div class="flex items-center justify-between gap-4 text-sm">
-            <label for="typst-font-size-input">Taille du texte (pt)</label>
-            <input
-              id="typst-font-size-input"
-              type="number"
-              min="7"
-              max="16"
-              step="0.5"
-              class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-              bind:value={documentOptions.fontSize}
-              onchange={applyDocumentOptions}
-            />
-          </div>
-
-          <div class="flex items-center justify-between gap-4 text-sm">
-            <label for="typst-line-spacing-input">Interligne</label>
-            <input
-              id="typst-line-spacing-input"
-              type="number"
-              min="0.3"
-              max="2"
-              step="0.05"
-              class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-              bind:value={documentOptions.lineSpacing}
-              onchange={applyDocumentOptions}
-            />
-          </div>
-
-          <div class="flex items-center justify-between gap-4 text-sm">
-            <label for="typst-word-spacing-input"
-              >Espacement entre les mots (%)</label
-            >
-            <input
-              id="typst-word-spacing-input"
-              type="number"
-              min="50"
-              max="300"
-              step="5"
-              class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-              bind:value={documentOptions.wordSpacing}
-              onchange={applyDocumentOptions}
-            />
-          </div>
-
-          <div class="flex items-center justify-between gap-4 text-sm">
-            <label for="typst-exercise-spacing-input"
-              >Espacement entre les exercices</label
-            >
-            <input
-              id="typst-exercise-spacing-input"
-              type="number"
-              min="0"
-              max="6"
-              step="0.1"
-              class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-              bind:value={documentOptions.exerciseSpacing}
-              onchange={applyDocumentOptions}
-            />
-          </div>
-
-          <label class="flex items-center gap-2 text-sm cursor-pointer">
-            <input
-              type="checkbox"
-              bind:checked={documentOptions.autoVerticalSpacing}
-              onchange={applyDocumentOptions}
-            />
-            Gestion automatique des espaces verticaux
-          </label>
-
-          <label class="flex items-center gap-2 text-sm cursor-pointer">
-            <input
-              type="checkbox"
-              bind:checked={documentOptions.boldQuestionNumbers}
-              onchange={applyDocumentOptions}
-            />
-            Numéros des questions en gras
-          </label>
-
-          <label
-            class="flex items-center justify-between gap-4 text-sm"
-            class:opacity-50={documentOptions.mergeExercises}
-          >
-            Style des exercices
-            <select
-              class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
-              bind:value={documentOptions.badgeStyle}
-              disabled={documentOptions.mergeExercises}
-              onchange={applyDocumentOptions}
-            >
-              {#each BADGE_STYLES as style}
-                <option value={style}>{BADGE_STYLE_LABELS[style]}</option>
-              {/each}
-            </select>
-          </label>
-
+    <!-- colonne : volets (réglages, éditeur, aperçu) puis panneau d'erreurs -->
+    <div class="flex flex-col grow min-h-0">
+      <div class="flex flex-row grow min-h-0">
+        {#if isSettingsOpen}
           <div
-            class="flex items-center justify-between gap-4 text-sm"
-            class:opacity-50={documentOptions.mergeExercises}
+            class="typst-settings-pane w-80 shrink-0 overflow-y-auto border-r border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus p-5 space-y-4"
           >
-            <span>Couleur des titres</span>
-            <div class="flex items-center gap-1.5">
-              {#each BADGE_COLORS as color}
-                <button
-                  type="button"
-                  title={color.label}
-                  aria-label={color.label}
-                  aria-pressed={documentOptions.badgeColor === color.value}
-                  disabled={documentOptions.mergeExercises}
-                  class="h-6 w-6 rounded-full border-2 transition {documentOptions.badgeColor ===
-                  color.value
-                    ? 'border-coopmaths-action dark:border-coopmathsdark-action scale-110'
-                    : 'border-transparent'}"
-                  style="background-color: {color.css};"
-                  onclick={() => {
-                    documentOptions.badgeColor = color.value
-                    applyDocumentOptions()
-                  }}
-                ></button>
-              {/each}
+            <div class="flex items-center justify-between">
+              <h3
+                class="font-bold text-coopmaths-struct dark:text-coopmathsdark-struct"
+              >
+                Réglages du document
+              </h3>
+              <button
+                type="button"
+                aria-label="Fermer les réglages"
+                onclick={() => (isSettingsOpen = false)}
+              >
+                <i
+                  class="bx bx-x text-2xl text-coopmaths-action dark:text-coopmathsdark-action"
+                ></i>
+              </button>
+            </div>
+
+            <label class="flex items-center justify-between gap-4 text-sm">
+              Format
+              <select
+                class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.pageFormat}
+                onchange={applyDocumentOptions}
+              >
+                <option value="a4">A4</option>
+                <option value="a5">A5</option>
+              </select>
+            </label>
+
+            <label class="flex items-center justify-between gap-4 text-sm">
+              Orientation
+              <select
+                class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.orientation}
+                onchange={applyDocumentOptions}
+              >
+                <option value="portrait">Portrait</option>
+                <option value="landscape">Paysage</option>
+              </select>
+            </label>
+
+            <div class="flex items-center justify-between gap-4 text-sm">
+              <label for="typst-columns-input">Nombre de colonnes</label>
               <input
-                type="color"
-                title="Couleur personnalisée"
-                aria-label="Couleur personnalisée"
-                disabled={documentOptions.mergeExercises}
-                class="h-6 w-6 cursor-pointer rounded-full border-2 {isCustomBadgeColor
-                  ? 'border-coopmaths-action dark:border-coopmathsdark-action scale-110'
-                  : 'border-transparent'} bg-transparent p-0"
-                value={badgeColorHex}
-                oninput={(e) => {
-                  documentOptions.badgeColor = `rgb("${e.currentTarget.value}")`
-                  applyDocumentOptions()
-                }}
+                id="typst-columns-input"
+                type="number"
+                min="1"
+                max="3"
+                step="1"
+                class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.columns}
+                onchange={applyDocumentOptions}
               />
             </div>
-          </div>
 
-          <p class="text-xs opacity-75">
-            Ces réglages régénèrent le code Typst à partir des exercices : vos
-            modifications manuelles du code seront perdues.
-          </p>
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                bind:checked={documentOptions.mergeExercises}
+                onchange={applyDocumentOptions}
+              />
+              Fusionner tous les exercices (questions numérotées à la suite)
+            </label>
 
-          <button
-            type="button"
-            class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
-            onclick={resetDocumentOptions}
-          >
-            <i class="bx bx-reset"></i>
-            Réinitialiser les réglages du document
-          </button>
-        </div>
-      {/if}
-      <div
-        class="typst-editor-pane {isSettingsOpen
-          ? 'hidden'
-          : displayMode === 'code'
-            ? 'w-full'
-            : displayMode === 'split'
-              ? 'w-1/2'
-              : 'hidden'} min-h-0"
-        bind:this={editorEl}
-      ></div>
-      <div
-        class="typst-preview-pane {isSettingsOpen
-          ? 'grow'
-          : displayMode === 'preview'
-            ? 'w-full'
-            : displayMode === 'split'
-              ? 'w-1/2'
-              : 'hidden'} min-h-0 flex flex-col"
-      >
-        <div class="relative grow overflow-auto p-4">
-          {#if isCompilerLoading}
-            <div
-              class="flex flex-col items-center gap-2 py-24 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
-            >
-              <i class="bx bx-loader-alt bx-spin text-4xl"></i>
-              <span class="text-sm">
-                {compilerFirstVisit
-                  ? 'Chargement du compilateur Typst (première visite, ~30 Mo)…'
-                  : 'Chargement du compilateur Typst…'}
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                bind:checked={documentOptions.showExerciseRefs}
+                disabled={documentOptions.mergeExercises}
+                onchange={applyDocumentOptions}
+              />
+              <span class:opacity-50={documentOptions.mergeExercises}>
+                Afficher la référence des exercices
               </span>
-            </div>
-          {:else if svgContent !== ''}
-            {#if isCompiling}
-              <div
-                class="absolute top-2 right-4 z-10 text-coopmaths-action dark:text-coopmathsdark-action"
+            </label>
+
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                bind:checked={documentOptions.showQrCode}
+                disabled={documentOptions.mergeExercises}
+                onchange={applyDocumentOptions}
+              />
+              <span class:opacity-50={documentOptions.mergeExercises}>
+                QR-code vers chaque exercice
+              </span>
+            </label>
+
+            <label class="flex items-center justify-between gap-4 text-sm">
+              Habillage en-tête
+              <select
+                class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.headerStyle}
+                onchange={applyDocumentOptions}
               >
-                <i class="bx bx-loader-alt bx-spin text-2xl"></i>
-              </div>
-            {/if}
-            <!-- le fond blanc des pages est dessiné dans le SVG (separatePages) -->
-            <div class="typst-svg-container relative mx-auto">
-              <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-              {@html svgContent}
-              {#if showOverlay && overlayWidgets.length > 0}
-                <TypstLayoutOverlay
-                  widgets={overlayWidgets}
-                  layoutValues={tasksLayoutValues}
-                  insertions={insertionValues}
-                  insertionsCorrection={insertionCorrectionValues}
-                  header={headerValues}
-                  {documentColumns}
-                  {questionCounts}
-                  {staticExercises}
-                  {nonEditableStaticExercises}
-                  {nonEditableCorrections}
-                  {figureZoomValues}
-                  {figureAlignValues}
-                  codeOverrides={codeOverrideValues}
-                  codeOverridesCorrection={codeOverrideCorrectionValues}
-                  exerciseCount={exercises.length}
-                  {mergedExercises}
-                  mergeExercisesEnabled={!documentOptions.mergeExercises}
-                  onAdjustColumns={adjustColumns}
-                  onAdjustGutter={adjustGutter}
-                  onAdjustFigureZoom={adjustFigureZoom}
-                  onSetFigureAlign={setFigureAlign}
-                  onInsert={insertAfterExercise}
-                  onUpdateInsertion={updateInsertion}
-                  onDeleteInsertion={deleteInsertion}
-                  onInsertCorrection={insertBeforeCorrection}
-                  onUpdateInsertionCorrection={updateInsertionCorrection}
-                  onDeleteInsertionCorrection={deleteInsertionCorrection}
-                  onUpdateHeader={updateHeaderValue}
-                  onChangeQuestionCount={changeQuestionCount}
-                  onDeleteExercise={deleteExercise}
-                  onMoveExercise={moveExercise}
-                  onNewData={newDataForExercise}
-                  onOpenSettings={openSettings}
-                  onEditCode={openCodeEdit}
-                  onEditCorrectionCode={openCorrectionCodeEdit}
-                  onToggleMergeBefore={toggleMergeBefore}
-                  {writingLinesValues}
-                  onSetWritingLines={setWritingLines}
-                />
-              {/if}
+                {#each HEADER_STYLES as style}
+                  <option value={style}>{HEADER_STYLE_LABELS[style]}</option>
+                {/each}
+              </select>
+            </label>
+
+            <p class="text-xs opacity-75">
+              Le titre, le sous-titre et la ligne d'en-tête se modifient
+              directement sur l'aperçu (bouton
+              <i class="bx bx-edit"></i> à gauche du titre).
+            </p>
+
+            <label class="flex items-center justify-between gap-4 text-sm">
+              Police du texte
+              <select
+                class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.font}
+                onchange={applyDocumentOptions}
+              >
+                {#each TEXT_FONTS as font}
+                  <option value={font}>{font}</option>
+                {/each}
+              </select>
+            </label>
+
+            <label class="flex items-center justify-between gap-4 text-sm">
+              Police des maths
+              <select
+                class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.mathFont}
+                onchange={applyDocumentOptions}
+              >
+                {#each MATH_FONTS as font}
+                  <option value={font}>{font}</option>
+                {/each}
+              </select>
+            </label>
+
+            <div class="flex items-center justify-between gap-4 text-sm">
+              <label for="typst-font-size-input">Taille du texte (pt)</label>
+              <input
+                id="typst-font-size-input"
+                type="number"
+                min="7"
+                max="16"
+                step="0.5"
+                class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.fontSize}
+                onchange={applyDocumentOptions}
+              />
             </div>
-          {/if}
-        </div>
-        {#if diagnostics.length > 0}
-          <div
-            data-testid="typst-diagnostics"
-            class="max-h-40 overflow-auto shrink-0 px-4 py-2 text-sm font-mono bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-200 border-t border-red-300 dark:border-red-800"
-          >
-            {#each diagnostics as diagnostic}
-              <div>{diagnostic}</div>
-            {/each}
+
+            <div class="flex items-center justify-between gap-4 text-sm">
+              <label for="typst-line-spacing-input">Interligne</label>
+              <input
+                id="typst-line-spacing-input"
+                type="number"
+                min="0.3"
+                max="2"
+                step="0.05"
+                class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.lineSpacing}
+                onchange={applyDocumentOptions}
+              />
+            </div>
+
+            <div class="flex items-center justify-between gap-4 text-sm">
+              <label for="typst-word-spacing-input"
+                >Espacement entre les mots (%)</label
+              >
+              <input
+                id="typst-word-spacing-input"
+                type="number"
+                min="50"
+                max="300"
+                step="5"
+                class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.wordSpacing}
+                onchange={applyDocumentOptions}
+              />
+            </div>
+
+            <div class="flex items-center justify-between gap-4 text-sm">
+              <label for="typst-exercise-spacing-input"
+                >Espacement entre les exercices</label
+              >
+              <input
+                id="typst-exercise-spacing-input"
+                type="number"
+                min="0"
+                max="6"
+                step="0.1"
+                class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.exerciseSpacing}
+                onchange={applyDocumentOptions}
+              />
+            </div>
+
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                bind:checked={documentOptions.autoVerticalSpacing}
+                onchange={applyDocumentOptions}
+              />
+              Gestion automatique des espaces verticaux
+            </label>
+
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                bind:checked={documentOptions.boldQuestionNumbers}
+                onchange={applyDocumentOptions}
+              />
+              Numéros des questions en gras
+            </label>
+
+            <label
+              class="flex items-center justify-between gap-4 text-sm"
+              class:opacity-50={documentOptions.mergeExercises}
+            >
+              Style des exercices
+              <select
+                class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.badgeStyle}
+                disabled={documentOptions.mergeExercises}
+                onchange={applyDocumentOptions}
+              >
+                {#each BADGE_STYLES as style}
+                  <option value={style}>{BADGE_STYLE_LABELS[style]}</option>
+                {/each}
+              </select>
+            </label>
+
+            <div
+              class="flex items-center justify-between gap-4 text-sm"
+              class:opacity-50={documentOptions.mergeExercises}
+            >
+              <span>Couleur des titres</span>
+              <div class="flex items-center gap-1.5">
+                {#each BADGE_COLORS as color}
+                  <button
+                    type="button"
+                    title={color.label}
+                    aria-label={color.label}
+                    aria-pressed={documentOptions.badgeColor === color.value}
+                    disabled={documentOptions.mergeExercises}
+                    class="h-6 w-6 rounded-full border-2 transition {documentOptions.badgeColor ===
+                    color.value
+                      ? 'border-coopmaths-action dark:border-coopmathsdark-action scale-110'
+                      : 'border-transparent'}"
+                    style="background-color: {color.css};"
+                    onclick={() => {
+                      documentOptions.badgeColor = color.value
+                      applyDocumentOptions()
+                    }}
+                  ></button>
+                {/each}
+                <input
+                  type="color"
+                  title="Couleur personnalisée"
+                  aria-label="Couleur personnalisée"
+                  disabled={documentOptions.mergeExercises}
+                  class="h-6 w-6 cursor-pointer rounded-full border-2 {isCustomBadgeColor
+                    ? 'border-coopmaths-action dark:border-coopmathsdark-action scale-110'
+                    : 'border-transparent'} bg-transparent p-0"
+                  value={badgeColorHex}
+                  oninput={(e) => {
+                    documentOptions.badgeColor = `rgb("${e.currentTarget.value}")`
+                    applyDocumentOptions()
+                  }}
+                />
+              </div>
+            </div>
+
+            <p class="text-xs opacity-75">
+              Ces réglages régénèrent le code Typst à partir des exercices : vos
+              modifications manuelles du code seront perdues.
+            </p>
+
+            <button
+              type="button"
+              class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+              onclick={resetDocumentOptions}
+            >
+              <i class="bx bx-reset"></i>
+              Réinitialiser les réglages du document
+            </button>
           </div>
         {/if}
+        <div
+          class="typst-editor-pane {isSettingsOpen
+            ? 'hidden'
+            : displayMode === 'code'
+              ? 'w-full'
+              : displayMode === 'split'
+                ? 'w-1/2'
+                : 'hidden'} min-h-0"
+          bind:this={editorEl}
+        ></div>
+        <div
+          class="typst-preview-pane {isSettingsOpen
+            ? 'grow'
+            : displayMode === 'preview'
+              ? 'w-full'
+              : displayMode === 'split'
+                ? 'w-1/2'
+                : 'hidden'} min-h-0 flex flex-col"
+        >
+          <div class="relative grow overflow-auto p-4">
+            {#if isCompilerLoading}
+              <div
+                class="flex flex-col items-center gap-2 py-24 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+              >
+                <i class="bx bx-loader-alt bx-spin text-4xl"></i>
+                <span class="text-sm">
+                  {compilerFirstVisit
+                    ? 'Chargement du compilateur Typst (première visite, ~30 Mo)…'
+                    : 'Chargement du compilateur Typst…'}
+                </span>
+              </div>
+            {:else if svgContent !== ''}
+              {#if isCompiling}
+                <div
+                  class="absolute top-2 right-4 z-10 text-coopmaths-action dark:text-coopmathsdark-action"
+                >
+                  <i class="bx bx-loader-alt bx-spin text-2xl"></i>
+                </div>
+              {/if}
+              <!-- le fond blanc des pages est dessiné dans le SVG (separatePages) -->
+              <!-- svelte-ignore a11y_no_static_element_interactions -->
+              <div
+                class="typst-svg-container relative mx-auto"
+                title="Double-cliquez sur un exercice pour éditer son code"
+                ondblclick={jumpToSourceFromClick}
+              >
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                {@html svgContent}
+                {#if showOverlay && overlayWidgets.length > 0}
+                  <TypstLayoutOverlay
+                    widgets={overlayWidgets}
+                    layoutValues={tasksLayoutValues}
+                    insertions={insertionValues}
+                    insertionsCorrection={insertionCorrectionValues}
+                    header={headerValues}
+                    {documentColumns}
+                    {questionCounts}
+                    {staticExercises}
+                    {nonEditableStaticExercises}
+                    {nonEditableCorrections}
+                    {figureZoomValues}
+                    {figureAlignValues}
+                    codeOverrides={codeOverrideValues}
+                    codeOverridesCorrection={codeOverrideCorrectionValues}
+                    exerciseCount={exercises.length}
+                    {mergedExercises}
+                    mergeExercisesEnabled={!documentOptions.mergeExercises}
+                    onAdjustColumns={adjustColumns}
+                    onAdjustGutter={adjustGutter}
+                    onAdjustFigureZoom={adjustFigureZoom}
+                    onSetFigureAlign={setFigureAlign}
+                    onInsert={insertAfterExercise}
+                    onUpdateInsertion={updateInsertion}
+                    onDeleteInsertion={deleteInsertion}
+                    onInsertCorrection={insertBeforeCorrection}
+                    onUpdateInsertionCorrection={updateInsertionCorrection}
+                    onDeleteInsertionCorrection={deleteInsertionCorrection}
+                    onUpdateHeader={updateHeaderValue}
+                    onChangeQuestionCount={changeQuestionCount}
+                    onDeleteExercise={deleteExercise}
+                    onMoveExercise={moveExercise}
+                    onNewData={newDataForExercise}
+                    onOpenSettings={openSettings}
+                    onEditCode={openCodeEdit}
+                    onEditCorrectionCode={openCorrectionCodeEdit}
+                    onToggleMergeBefore={toggleMergeBefore}
+                    {writingLinesValues}
+                    onSetWritingLines={setWritingLines}
+                  />
+                {/if}
+              </div>
+            {/if}
+          </div>
+        </div>
+      </div>
+
+      {#if diagnostics.length > 0}
+        {@const isError = errorCount > 0}
+        <div
+          data-testid="typst-diagnostics"
+          class="shrink-0 border-t {isError
+            ? 'border-red-300 bg-red-50 text-red-900 dark:border-red-800 dark:bg-red-950/60 dark:text-red-100'
+            : 'border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-700 dark:bg-amber-950/60 dark:text-amber-100'}"
+        >
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2">
+            <button
+              type="button"
+              class="flex items-center gap-2 text-sm font-semibold"
+              aria-expanded={!isDiagnosticsCollapsed}
+              onclick={() => (isDiagnosticsCollapsed = !isDiagnosticsCollapsed)}
+            >
+              <i class="bx {isError ? 'bx-error-circle' : 'bx-error'} text-xl"
+              ></i>
+              {isError
+                ? 'La fiche ne compile pas'
+                : 'La fiche compile avec des remarques'}
+              <span class="font-normal opacity-80">({diagnosticsSummary})</span>
+              <i
+                class="bx {isDiagnosticsCollapsed
+                  ? 'bx-chevron-up'
+                  : 'bx-chevron-down'} text-xl"
+              ></i>
+            </button>
+
+            <div class="grow"></div>
+
+            {#if isPreviewStale}
+              <span class="text-xs opacity-80">
+                <i class="bx bx-time-five"></i>
+                L’aperçu ci-dessus est celui de la dernière compilation réussie{lastGoodAt !=
+                null
+                  ? ` (${lastGoodAt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })})`
+                  : ''}.
+              </span>
+            {/if}
+
+            {#if isError && canRestoreLastGood}
+              <button
+                type="button"
+                data-testid="typst-restore-last-good"
+                class="flex items-center gap-1 rounded-lg border border-current px-2 py-1 text-sm font-semibold hover:bg-red-100 dark:hover:bg-red-900/60"
+                title="Remplace le code par la dernière version qui compilait. Annulable avec Ctrl/Cmd + Z."
+                onclick={restoreLastGoodCode}
+              >
+                <i class="bx bx-undo text-lg"></i>
+                Revenir à la dernière version qui compilait
+              </button>
+            {/if}
+          </div>
+
+          {#if !isDiagnosticsCollapsed}
+            <ul class="max-h-52 overflow-auto px-4 pb-3 space-y-1.5">
+              {#each diagnostics as diagnostic}
+                <li
+                  class="rounded border-l-4 {diagnostic.severity === 'error'
+                    ? 'border-red-500'
+                    : 'border-amber-500'} bg-white/60 px-3 py-2 dark:bg-black/25"
+                >
+                  <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                    {#if diagnostic.line != null}
+                      <button
+                        type="button"
+                        class="shrink-0 rounded bg-black/10 px-1.5 py-0.5 font-mono text-xs hover:bg-black/20 dark:bg-white/15 dark:hover:bg-white/25"
+                        title="Aller à cette ligne dans l’éditeur"
+                        onclick={() => goToDiagnostic(diagnostic)}
+                      >
+                        ligne {diagnostic.line}
+                      </button>
+                    {:else if diagnostic.packageName != null}
+                      <span
+                        class="shrink-0 rounded bg-black/10 px-1.5 py-0.5 font-mono text-xs dark:bg-white/15"
+                      >
+                        paquet {diagnostic.packageName}
+                      </span>
+                    {/if}
+                    <span class="text-sm">{diagnostic.message}</span>
+                  </div>
+                  {#if diagnostic.hint != null}
+                    <p class="mt-1 text-xs opacity-90">
+                      <i class="bx bx-bulb"></i>
+                      {diagnostic.hint}
+                    </p>
+                  {/if}
+                  {#if diagnostic.message !== diagnostic.original}
+                    <details class="mt-1 text-xs opacity-70">
+                      <summary class="cursor-pointer">Message d’origine</summary
+                      >
+                      <code class="font-mono break-all">{diagnostic.raw}</code>
+                    </details>
+                  {/if}
+                </li>
+              {/each}
+            </ul>
+          {/if}
+        </div>
+      {/if}
+    </div>
+  {/if}
+
+  {#if isShortcutsOpen}
+    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      onclick={(e) => {
+        if (e.target === e.currentTarget) isShortcutsOpen = false
+      }}
+    >
+      <div
+        class="relative max-h-[85vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-coopmaths-canvas-dark p-5 shadow-xl dark:bg-coopmathsdark-canvas-dark text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+      >
+        <div class="mb-4 flex items-center justify-between">
+          <h2
+            class="font-bold text-coopmaths-struct dark:text-coopmathsdark-struct"
+          >
+            Raccourcis clavier de l’éditeur
+          </h2>
+          <button
+            type="button"
+            aria-label="Fermer"
+            onclick={() => (isShortcutsOpen = false)}
+          >
+            <i
+              class="bx bx-x text-2xl text-coopmaths-action dark:text-coopmathsdark-action"
+            ></i>
+          </button>
+        </div>
+        <div class="grid gap-5 sm:grid-cols-2">
+          {#each EDITOR_SHORTCUTS as group}
+            <div>
+              <h3
+                class="mb-1.5 text-sm font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
+              >
+                {group.title}
+              </h3>
+              <dl class="space-y-1 text-sm">
+                {#each group.keys as [keys, label]}
+                  <div class="flex items-baseline justify-between gap-3">
+                    <dd class="opacity-90">{label}</dd>
+                    <dt
+                      class="shrink-0 rounded border border-current/30 bg-black/5 px-1.5 py-0.5 font-mono text-xs dark:bg-white/10"
+                    >
+                      {keys}
+                    </dt>
+                  </div>
+                {/each}
+              </dl>
+            </div>
+          {/each}
+        </div>
+        <p class="mt-4 text-xs opacity-75">
+          L’éditeur reconnaît aussi les raccourcis habituels de déplacement et
+          de sélection. Cliquez sur « ligne N » dans le panneau d’erreurs pour
+          sauter directement à la ligne concernée.
+        </p>
       </div>
     </div>
   {/if}
@@ -2693,9 +3193,9 @@
         </h2>
         <p class="text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus">
           {#if codeEditPart === 'correction'}
-            Modifiez le code ci-dessous : il remplacera la correction générée
-            de cet exercice. Videz le champ pour revenir à la correction
-            générée automatiquement.
+            Modifiez le code ci-dessous : il remplacera la correction générée de
+            cet exercice. Videz le champ pour revenir à la correction générée
+            automatiquement.
           {:else}
             Modifiez le code ci-dessous : il remplacera l'énoncé généré de cet
             exercice (QR-code et numérotation continue des questions désactivés
@@ -2726,7 +3226,8 @@
             Copier avec le préambule
           </button>
           {#if codeCopyStatus !== ''}
-            <span class="text-xs text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+            <span
+              class="text-xs text-coopmaths-corpus dark:text-coopmathsdark-corpus"
               >{codeCopyStatus}</span
             >
           {/if}
@@ -2750,7 +3251,8 @@
             <button
               type="button"
               class="rounded bg-coopmaths-action px-3 py-1 text-white"
-              onclick={() => updateExerciseCode(num, codeEditDraft, codeEditPart)}
+              onclick={() =>
+                updateExerciseCode(num, codeEditDraft, codeEditPart)}
             >
               Enregistrer
             </button>

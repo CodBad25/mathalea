@@ -31,7 +31,7 @@ export default class AjouterPresqueDoubles extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = randint(this.sup, this.sup2)
       const delta = a === 1 ? 1 : choice([-1, 1])
       const b = a + delta
@@ -41,6 +41,7 @@ export default class AjouterPresqueDoubles extends Exercice {
         ajouteQuestionMathlive({
           exercice: this,
           question: i,
+          reponseParams: { formatInteractif: 'mathalea-mathfield' },
           objetReponse: { reponse: { value: reponse } },
           texteAvant: '$=$',
           typeInteractivite: 'mathlive',

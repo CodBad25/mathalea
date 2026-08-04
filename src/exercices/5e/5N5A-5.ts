@@ -139,7 +139,7 @@ export default class perimetreVersFormule extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const nombreFigures: number = +listeNombreFigures[i]
       const nombreInconnues: number = +listeNombreInconnues[i]
       const difficulte: number = +listeDifficulte[i]
@@ -1120,6 +1120,7 @@ Pour calculer le périmètre d'une figure, on additionne les longueurs de tous l
             question: i, // ça, c'est pour qu'il numérote correctement l'input
             typeInteractivite: 'mathlive', // ça, c'est l'input le plus souvent utilisé
             classe: 'clavierMinuscules',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               // ça c'est ce qui définit la réponse attendue et la façon dont elle doit être vérifiée
               reponse: {

@@ -99,6 +99,8 @@ Chaque réponse peut fournir `value`, `compare` et `options`. Les valeurs métie
 
 `exerciceInteractif()` dans `src/lib/interactif/gestionInteractif.ts` parcourt les questions et délègue selon `formatInteractif`.
 
+Les index sans entrée dans `autoCorrection` sont ignorés : un exercice peut donc mélanger des questions interactives et des questions sans réponse attendue (démonstration, rédaction, justification), y compris au milieu de la liste. Ces questions ne sont ni vérifiées ni comptées dans le score. Sans ce filtrage, l'index sans réponse tomberait sur le format `mathlive` par défaut et déclencherait l'erreur « Vérification MathLive appelée sur une question sans réponse » de `getQuestionData()` dans `src/lib/interactif/mathLiveVerifications.ts`.
+
 Avant le dispatch, les formats historiques compatibles sont normalisés vers leur custom element :
 
 | Format historique  | Custom element terminal |
@@ -221,6 +223,10 @@ Pour préserver les anciens exercices et callbacks, l'identifiant legacy reste p
 - tableaux : `table#tabMathliveEx${numeroExercice}Q${questionIndex}` et cellules `champTexteEx...LxCy`.
 
 Le wrapper suit la convention des custom elements : son id est préfixé par le tag, par exemple `mathalea-mathfieldEx0Q0`, `fill-in-the-blankEx0Q0`, `mathalea-textfieldEx0Q0` ou `tableau-mathliveEx0Q0`. Les sélecteurs legacy qui ciblent le champ interne continuent donc de fonctionner, tandis que les traitements génériques ciblent le wrapper.
+
+Un champ porte donc **deux** identifiants indexés par la question : l'id du wrapper (`<tag>Ex{n}Q{i}`) et l'id legacy (`champTexteEx{n}Q{i}`, exposé par l'attribut `mathfield-id` du wrapper). C'est ce second identifiant qu'utilisent les `verifQuestion()` des wrappers MathLive pour retrouver le champ. Une infrastructure qui réhéberge la question d'un sous-exercice à un autre index — `MetaExerciceCan` pour les CAN et les « Sélections d'automatismes » — doit réindexer **les deux**, sans quoi plusieurs questions partagent le même `mathfield-id` et la vérification échoue sur « champ introuvable ». Le nom du callback de vérification (`champTexteEx{n}Q0-verification`) est en revanche une clé du registre statique du custom element : il ne doit pas être réindexé.
+
+`ajouteQuestionMathlive()` déduit le `formatInteractif` par défaut de son `typeInteractivite` : un `fillInTheBlank` déclare bien `fill-in-the-blank` et est vérifié par `verifyFillInTheBlankMathLive()` (réponses `champ1`, `champ2`, ...) et non par `verifySingleMathLiveField()`, qui n'attend qu'une réponse unique.
 
 Deux niveaux de personnalisation existent :
 

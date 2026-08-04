@@ -100,15 +100,6 @@ export default class PlacerUnPointAbscisseEntiere2d extends Exercice {
       l1 = lettreIndiceeDepuisChiffre(i * 3 + 1)
       l2 = lettreIndiceeDepuisChiffre(i * 3 + 2)
       l3 = lettreIndiceeDepuisChiffre(i * 3 + 3)
-      this.autoCorrection[3 * i] = {
-        propositions: [{ texte: '', statut: 4, feedback: '' }],
-      }
-      this.autoCorrection[3 * i + 1] = {
-        propositions: [{ texte: '', statut: 4, feedback: '' }],
-      }
-      this.autoCorrection[3 * i + 2] = {
-        propositions: [{ texte: '', statut: 4, feedback: '' }],
-      }
       switch (typesDeQuestions[i]) {
         case 1: // Niveau 0 : Centaines (ajout Mireille, septembre 2025)
           abs0 = randint(1, 9) * 100 // Ex: 200, 500, etc.

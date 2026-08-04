@@ -13,7 +13,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '86049'
 export const refs = {
-  'fr-fr': ['TSA1-2-1', 'TermComplem-1', 'EgaliteFG7-Tle-19'],
+  'fr-fr': ['EgaliteFG7-Tle-19'],
   'fr-ch': [],
 }
 
@@ -34,7 +34,7 @@ export default class EgaliteFGLycee19 extends Exercice {
     )
     this.consigne +=
       "<br><br>En 2015, une école d'ingénieures et d'ingénieurs en informatique compte $650$ étudiants et $150$ étudiantes. La direction observe chaque année une diminution de $16\\,\\%$ du nombre d'étudiantes ; des mesures d'inclusivité permettent l'inscription de $20$ nouvelles étudiantes supplémentaires chaque année.<br>" +
-      "Pour tout entier $n$, on note $U_n$ le nombre d'étudiantes en $2015+n$, avec $U_0=150$."
+      "Pour tout entier $n$, on note $u_n$ le nombre d'étudiantes en $2015+n$, avec $u_0=150$."
     this.nbQuestions = 7
     this.nbQuestionsModifiable = false
     this.comment = 'Piste 8 du livret : comment animer un débat à partir de cet exercice ?'
@@ -52,18 +52,18 @@ export default class EgaliteFGLycee19 extends Exercice {
     this.listeQuestions = []
     this.listeCorrections = []
 
-    let texte0 = 'Calculer $U_1$ et interpréter le résultat.'
+    let texte0 = 'Calculer $u_1$ et interpréter le résultat.'
     if (this.interactif) texte0 += ajouteChampTexteMathLive(this, 0) + '<br>'
     handleAnswers(this, 0, { reponse: { value: 146 } })
     const correction0 =
-      `$U_1=0{,}84\\times 150+20=126+20=146$ : en 2016, l'école compte $${miseEnEvidence('146')}$ étudiantes (une diminution malgré les mesures d'inclusivité).`
+      `$u_1=0{,}84\\times 150+20=126+20=146$ : en 2016, l'école compte $${miseEnEvidence('146')}$ étudiantes (une diminution malgré les mesures d'inclusivité).`
 
     const texte1 =
-      "Justifier que, pour tout entier $n$ : $U_{n+1}=0{,}84\\,U_n+20$, puis démontrer par récurrence que la suite $(U_n)$ est décroissante."
+      "Justifier que, pour tout entier $n$ : $u_{n+1}=0{,}84\\,u_n+20$, puis démontrer par récurrence que la suite $(u_n)$ est décroissante."
     const correction1 =
-      `Une diminution de $16\\,\\%$ correspond à un coefficient multiplicateur de $1-0{,}16=0{,}84$ ; en ajoutant les $20$ nouvelles inscriptions, on obtient $U_{n+1}=0{,}84\\,U_n+20$.<br>Pour la récurrence : au rang $0$, $U_1=146\\leqslant 150=U_0$. En supposant $U_{n+1}\\leqslant U_n$ à un rang $n$, on a $0{,}84\\,U_{n+1}\\leqslant 0{,}84\\,U_n$ (car $0{,}84>0$), donc $U_{n+2}=0{,}84\\,U_{n+1}+20\\leqslant 0{,}84\\,U_n+20=U_{n+1}$ : la propriété est donc vraie à tous les rangs, la suite $(U_n)$ est $${miseEnEvidence('\\text{décroissante}')}$.`
+      `Une diminution de $16\\,\\%$ correspond à un coefficient multiplicateur de $1-0{,}16=0{,}84$ ; en ajoutant les $20$ nouvelles inscriptions, on obtient $u_{n+1}=0{,}84\\,u_n+20$.<br>Pour la récurrence : au rang $0$, $u_1=146\\leqslant 150=u_0$. En supposant $u_{n+1}\\leqslant u_n$ à un rang $n$, on a $0{,}84\\,u_{n+1}\\leqslant 0{,}84\\,u_n$ (car $0{,}84>0$), donc $u_{n+2}=0{,}84\\,u_{n+1}+20\\leqslant 0{,}84\\,u_n+20=u_{n+1}$ : la propriété est donc vraie à tous les rangs, la suite $(u_n)$ est $${miseEnEvidence('\\text{décroissante}')}$.`
 
-    const texteQ2 = 'La suite $(U_n)$ est-elle convergente ?'
+    const texteQ2 = 'La suite $(u_n)$ est-elle convergente ?'
     this.autoCorrection[2] = {
       enonce: texteQ2,
       options: { ordered: true, radio: true },
@@ -76,26 +76,26 @@ export default class EgaliteFGLycee19 extends Exercice {
     let texte2 = texteQ2
     if (!context.isAmc) texte2 += monQcm2.texte
     const correction2 =
-      `La suite $(U_n)$ est décroissante (question précédente) et minorée par $0$ (un effectif ne peut pas être négatif) : elle est donc $${miseEnEvidence('\\text{convergente}')}$, d'après le théorème de la limite monotone.`
+      `La suite $(u_n)$ est décroissante (question précédente) et minorée par $0$ (un effectif ne peut pas être négatif) : elle est donc $${miseEnEvidence('\\text{convergente}')}$, d'après le théorème de la limite monotone.`
 
     let texte3 =
-      "On pose $V_n=U_n-125$ pour tout entier $n$. Montrer que $(V_n)$ est géométrique et donner sa raison."
+      "On pose $V_n=u_n-125$ pour tout entier $n$. Montrer que $(V_n)$ est géométrique et donner sa raison."
     if (this.interactif) texte3 += ajouteChampTexteMathLive(this, 3) + '<br>'
     handleAnswers(this, 3, { reponse: { value: 0.84 } })
     const correction3 =
-      `$V_{n+1}=U_{n+1}-125=0{,}84\\,U_n+20-125=0{,}84\\,U_n-105=0{,}84\\,(U_n-125)+0{,}84\\times 125-105=0{,}84\\,V_n+105-105=0{,}84\\,V_n$ (car $0{,}84\\times 125=105$) : $(V_n)$ est donc $${miseEnEvidence('\\text{géométrique de raison }0{,}84')}$.`
+      `$V_{n+1}=u_{n+1}-125=0{,}84\\,u_n+20-125=0{,}84\\,u_n-105=0{,}84\\,(u_n-125)+0{,}84\\times 125-105=0{,}84\\,V_n+105-105=0{,}84\\,V_n$ (car $0{,}84\\times 125=105$) : $(V_n)$ est donc $${miseEnEvidence('\\text{géométrique de raison }0{,}84')}$.`
 
-    let texte4 = "En déduire que, pour tout entier $n$, $U_n=25\\times 0{,}84^n+125$. Quel est le premier terme $V_0$ de la suite $(V_n)$ ?"
+    let texte4 = "En déduire que, pour tout entier $n$, $u_n=25\\times 0{,}84^n+125$. Quel est le premier terme $V_0$ de la suite $(V_n)$ ?"
     if (this.interactif) texte4 += ajouteChampTexteMathLive(this, 4) + '<br>'
     handleAnswers(this, 4, { reponse: { value: 25 } })
     const correction4 =
-      `$V_0=U_0-125=150-125=25$, donc $V_n=25\\times 0{,}84^n$ (suite géométrique), d'où $${miseEnEvidence('U_n=25\\times 0{,}84^n+125')}$.`
+      `$V_0=u_0-125=150-125=25$, donc $V_n=25\\times 0{,}84^n$ (suite géométrique), d'où $${miseEnEvidence('u_n=25\\times 0{,}84^n+125')}$.`
 
-    let texte5 = 'Déterminer la limite de $(U_n)$ quand $n$ tend vers $+\\infty$.'
+    let texte5 = 'Déterminer la limite de $(u_n)$ quand $n$ tend vers $+\\infty$.'
     if (this.interactif) texte5 += ajouteChampTexteMathLive(this, 5) + '<br>'
     handleAnswers(this, 5, { reponse: { value: 125 } })
     const correction5 =
-      `Comme $0<0{,}84<1$, on a $0{,}84^n\\to 0$ quand $n\\to +\\infty$, donc $U_n=25\\times 0{,}84^n+125\\to ${miseEnEvidence('125')}$.`
+      `Comme $0<0{,}84<1$, on a $0{,}84^n\\to 0$ quand $n\\to +\\infty$, donc $u_n=25\\times 0{,}84^n+125\\to ${miseEnEvidence('125')}$.`
 
     const texteQ6 = "Les mesures d'inclusivité de l'école d'ingénieurs ont-elles été efficaces ?"
     this.autoCorrection[6] = {

@@ -378,6 +378,7 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
                   {
                     exercice: this,
                     question: indexInteractif++,
+                    reponseParams: { formatInteractif: 'mathalea-mathfield' },
                     objetReponse: { reponse: { value: nbTex } },
                     typeInteractivite: 'mathlive',
                     classe: KeyboardType.clavierNumbers,
@@ -396,6 +397,7 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
                 {
                   exercice: this,
                   question: indexInteractif++,
+                  reponseParams: { formatInteractif: 'mathalea-mathfield' },
                   objetReponse: { reponse: { value: nbTex } },
                   typeInteractivite: 'mathlive',
                   classe: KeyboardType.clavierNumbers,
@@ -422,6 +424,7 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
               {
                 exercice: this,
                 question: indexInteractif++,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: {
                   reponse: {
                     value: reponseQ5,
@@ -498,6 +501,7 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
                   `${ajouteQuestionMathlive({
                     exercice: this,
                     question: indexInteractif++,
+                    reponseParams: { formatInteractif: 'mathalea-mathfield' },
                     objetReponse: { reponse: { value: etape.toString() } },
                     classe: KeyboardType.clavierNumbers,
                     typeInteractivite: 'mathlive',
@@ -514,6 +518,7 @@ La correction détaillée (ou pas) n'est utile que si on choisit une résolution
                 {
                   exercice: this,
                   question: indexInteractif++,
+                  reponseParams: { formatInteractif: 'mathalea-mathfield' },
                   objetReponse: { reponse: { value: nbTex } },
                   classe: KeyboardType.clavierNumbers,
                   typeInteractivite: 'mathlive',

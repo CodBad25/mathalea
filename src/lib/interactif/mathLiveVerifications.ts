@@ -77,6 +77,10 @@ function writeFeedback(exercice: IExercice, i: number, feedback: string): void {
   ;(divFeedback as HTMLDivElement).style.display = 'block'
 }
 
+function ordinalFr(n: number): string {
+  return n === 1 ? '1ère' : `${n}e`
+}
+
 function lockFillInTheBlankPrompts(mfe: MathfieldElement): void {
   const promptMathfield = mfe as LockablePromptMathfield
   mfe.classList.add('corrected')
@@ -262,6 +266,7 @@ export function verifyFillInTheBlankMathLive(
       const options = reponse.options
       noFeedback = noFeedback || Boolean(options?.noFeedback)
       let result
+      let compareFeedback = ''
       if (saisie == null || saisie === '') {
         compteurSaisiesVides++
         result = { isOk: false, feedback: 'saisieVide' }
@@ -271,7 +276,7 @@ export function verifyFillInTheBlankMathLive(
           : [reponse.value]
         for (const expected of expectedValues) {
           result = compareFunction(saisie, expected, options)
-          if (result.feedback) feedback = result.feedback
+          if (result.feedback) compareFeedback = result.feedback
           if (result.isOk) break
         }
       }
@@ -286,21 +291,19 @@ export function verifyFillInTheBlankMathLive(
         else {
           const fieldNumber =
             variables.length > 1
-              ? ` Champ ${key.charAt(key.length - 1)} : `
+              ? `${ordinalFr(Number(key.charAt(key.length - 1)))} réponse : `
               : ''
-          result.feedback = feedback
-          feedback = ''
-          if (!result.feedback) {
+          if (!compareFeedback) {
             result = {
               isOk: false,
               feedback: `${fieldNumber}Le résultat est incorrect.<br>`,
             }
           } else {
-            const firstChar = result.feedback.charAt(0)
+            const firstChar = compareFeedback.charAt(0)
             const lowerFirst = /[a-zA-Z]/.test(firstChar)
               ? firstChar.toLowerCase()
               : firstChar
-            result.feedback = `${fieldNumber}${lowerFirst + result.feedback.slice(1)}<br>`
+            result.feedback = `${fieldNumber}${lowerFirst + compareFeedback.slice(1)}<br>`
           }
         }
       }

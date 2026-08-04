@@ -14,6 +14,8 @@ export const refs = {
 }
 export const uuid = 'a9f31'
 
+let prochainIdEditeurP025 = 0
+
 /**
  * Outil du professeur pour créer pas à pas, avec des boutons,
  * un programme de construction aux instruments (règle, compas, équerre,
@@ -21,6 +23,8 @@ export const uuid = 'a9f31'
  * @author Rémi Angot
  */
 export default class CreateurAnimationInstruments extends Exercice {
+  private readonly editorId = `editeur-iep-p025-${prochainIdEditeurP025++}`
+
   constructor() {
     super()
     this.nbQuestions = 1
@@ -32,7 +36,7 @@ export default class CreateurAnimationInstruments extends Exercice {
   nouvelleVersion() {
     ensureElementIepEditeurRegistered()
     const contenuGenere = ElementIepEditeur.create({
-      id: `editeur-iep-${this.numeroExercice ?? 0}`,
+      id: this.editorId,
     })
     this.contenu = contenuGenere
     this.listeQuestions[0] = contenuGenere

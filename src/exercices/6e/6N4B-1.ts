@@ -80,7 +80,7 @@ export default class PaternRepetitif extends Exercice {
       ),
     )
     let indexInteractif = 0
-    for (let i = 0; i < this.nbQuestions; ) {
+    for (let i = 0; i < this.nbQuestions;) {
       let nbElements: number
       let shapes: string[]
       let longueurSerie: number
@@ -279,6 +279,7 @@ export default class PaternRepetitif extends Exercice {
                 {
                   exercice: this,
                   question: indexInteractif++,
+                  reponseParams: { formatInteractif: 'mathalea-mathfield' },
                   objetReponse: {
                     reponse: {
                       value:

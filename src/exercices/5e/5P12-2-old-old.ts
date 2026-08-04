@@ -91,10 +91,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
 
     const listePreDef = typesPattern.map((i) => listePatternRatio[i - 1])
 
-    for (
-      let i = 0;
-      i < Math.min(this.nbQuestions, listePatternRatio.length);
-    ) {
+    for (let i = 0; i < Math.min(this.nbQuestions, listePatternRatio.length);) {
       const objetsCorr: NestedObjetMathalea2dArray = []
       const popped = listePreDef.pop()
       if (!popped) {
@@ -261,6 +258,7 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
           .map((_, index) => `%{champ${index + 1}}`)
           .join('~:~')}`,
         objetReponse,
+        reponseParams: { formatInteractif: 'fill-in-the-blank' },
         typeInteractivite: 'fillInTheBlank',
       })
       texteCorr += `Au rang $${nbFigures + 1}$, le ratio "${(pat as PatternRiche).texRatio}" sera $${miseEnEvidence(ratio.toLatex())}$.<br>`
@@ -280,7 +278,8 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
           id: `Motif${i}Correction`,
           pixelsParCm: 20,
           scale: 0.6,
-          display: 'block' as const, center: true,
+          display: 'block' as const,
+          center: true,
           optionsTikz: 'transform shape',
         }),
         figureCorr,

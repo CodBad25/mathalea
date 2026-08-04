@@ -10,7 +10,39 @@ Trois modes d'affichage, mémorisés dans `localStorage` (`mathaleaTypstView`) :
 - **Côte à côte** : le code à gauche, l'aperçu à droite ;
 - **Aperçu** : le document compilé seul.
 
-Le code est éditable : chaque modification recompile le document (débounce de 500 ms) et met à jour l'aperçu. Les erreurs de compilation s'affichent sous l'aperçu au format `fichier:ligne:colonne: message`, en conservant le dernier rendu valide.
+Le code est éditable : chaque modification recompile le document (débounce de 500 ms) et met à jour l'aperçu, en conservant le dernier rendu valide en cas d'échec.
+
+## Éditeur de code
+
+L'éditeur est CodeMirror 6, configuré par `editor/typstEditorSetup.ts` (`typstEditorExtensions()`) : numéros de lignes, coloration syntaxique Typst, repliage, curseurs multiples, recherche, et thème clair ou sombre suivant celui de l'application (compartiment reconfiguré par `setEditorTheme`, appelé depuis un `$effect` sur le store `darkMode`).
+
+- **Coloration syntaxique** : `editor/typstLanguage.ts` définit un `StreamLanguage` Typst (tokeniseur ligne à ligne, pas un analyseur complet) couvrant commentaires, balisage (titres, listes, gras, italique, littéral), mode code après `#` et formules `$…$`. Les noms de jetons émis sont des noms de tags standard, colorés tels quels par `oneDark` (sombre) et `defaultHighlightStyle` (clair). Le `languageData` fournit les jetons de commentaire, ce qui active « commenter / décommenter » (Ctrl/Cmd + /).
+- **Raccourcis** : ceux de `defaultKeymap`, `searchKeymap`, `historyKeymap` et `foldKeymap`, plus quelques ajouts (Ctrl/Cmd + S et Ctrl/Cmd + Entrée pour compiler sans attendre le débounce, Ctrl/Cmd + Maj + D pour dupliquer une ligne, Ctrl/Cmd + L pour sélectionner la ligne, Ctrl/Cmd + Alt + ↑/↓ pour ajouter un curseur). Le bouton « Raccourcis » de la barre d'outils (modes Code et Côte à côte) en affiche la liste, avec la touche de modification adaptée à la plateforme.
+- **Interface en français** : `editor/editorPhrases.ts` traduit les chaînes de CodeMirror via `EditorState.phrases` (panneau de recherche de Ctrl/Cmd + F, boîte « Aller à la ligne » de Alt + G, annonces pour lecteurs d'écran).
+- **Sélection** : `app.css` redéfinit globalement `::selection` avec une couleur de texte noire, illisible sur le fond sombre de l'éditeur. `drawSelection()` dessine le fond de sélection et un correctif de thème (`Prec.highest`) rétablit `color: inherit` sur le texte sélectionné.
+- **Repliage** : il n'y a pas d'arbre syntaxique exploitable, le `foldService` se fonde donc sur l'indentation — ce qui correspond à la structure du code généré (exercices, corrections et listes de questions sont des blocs indentés).
+
+## Erreurs de compilation
+
+`typstDiagnostics.ts` transforme les lignes brutes renvoyées par le compilateur (format « unix » : `main.typ:ligne:colonne[-ligne:colonne]: sévérité: message`, positions comptées à partir de 1) en `TypstDiagnostic` : position, sévérité, message traduit en français et piste de résolution. La table de règles (`RULES`) va du plus spécifique au plus général ; un message non couvert reste affiché en anglais, jugé plus utile qu'une approximation, et le message d'origine reste consultable dans le panneau. Un même message répété sur une même ligne n'est affiché qu'une fois, et un diagnostic venant d'un paquet importé est signalé comme tel (sa ligne ne correspond à rien dans l'éditeur).
+
+Côté interface (`Typst.svelte`) :
+
+- le panneau de diagnostics est sous les deux volets, donc visible aussi en mode « Code » ; il se replie, et se rouvre dès qu'une nouvelle erreur apparaît ;
+- chaque diagnostic est cliquable (« ligne N ») et amène le curseur sur la position concernée (`revealPosition`), en basculant en « Côte à côte » si on était en « Aperçu » ;
+- les lignes fautives sont surlignées dans l'éditeur et marquées d'une pastille dans une marge dédiée (`setEditorMarkers`) ; pendant la frappe, les marqueurs suivent les décalages de lignes jusqu'à la compilation suivante ;
+- quand la compilation échoue, un bouton **« Revenir à la dernière version qui compilait »** rétablit le dernier code ayant produit un document (`lastGoodCode`, mémorisé à chaque compilation réussie). L'opération passe par l'historique de CodeMirror : elle est annulable par Ctrl/Cmd + Z.
+
+## Double-clic sur l'aperçu : aller au code
+
+Un double-clic sur l'aperçu (`jumpToSourceFromClick` dans `Typst.svelte`) bascule en « Côte à côte » (si on était en « Aperçu ») et amène le curseur sur l'exercice ou la correction affiché au point cliqué :
+
+1. le clic est converti en coordonnées SVG (mêmes unités que les repères de la palette de mise en page, voir `computeOverlayWidgets`) ;
+2. la page cliquée est retrouvée dans `previewPages`, puis le dernier repère `exo`/`corr` (parmi ceux publiés par `buildTypstDocument`, voir la section « Palette de mise en page ») rencontré au-dessus du point cliqué détermine l'exercice ;
+3. `findExerciseSourceLine` cherche dans le code la ligne portant `#mathalea-anchor("exo"|"corr", N)` (présente dans tous les modes de document, y compris fusionné) — ou, à défaut, le titre `// ----- Exercice N -----` du mode banque, pour un code retouché à la main qui aurait perdu son repère ;
+4. `revealPosition` (dans `editor/typstEditorSetup.ts`) y place le curseur, en dépliant d'abord tout bloc replié qui la contiendrait (`foldedRanges`/`unfoldEffect`).
+
+Un double-clic sur un contrôle de la palette de mise en page (bouton, champ) est ignoré : elle a déjà son propre comportement.
 
 ## Palette de mise en page
 
@@ -57,6 +89,10 @@ La liste des exercices, leurs graines et leurs réglages restent portés par les
 | `src/components/setup/typst/buildTypstDocument.ts` | Génère le code Typst complet (en-tête, exercices, corrections) |
 | `src/components/setup/typst/latexToTypst.ts` | Convertit le HTML des exercices et les formules LaTeX en Typst |
 | `src/components/setup/typst/typstCompiler.ts` | Compilation dans le navigateur via typst.ts (WASM) |
+| `src/components/setup/typst/typstDiagnostics.ts` | Lecture et traduction en français des diagnostics du compilateur |
+| `src/components/setup/typst/editor/typstEditorSetup.ts` | Extensions CodeMirror de l'éditeur (thèmes, raccourcis, marqueurs d'erreur) |
+| `src/components/setup/typst/editor/typstLanguage.ts` | Coloration syntaxique Typst (`StreamLanguage`) |
+| `src/components/setup/typst/editor/editorPhrases.ts` | Traduction française de l'interface de CodeMirror |
 
 ## Pipeline de génération
 
@@ -103,5 +139,6 @@ Les tableaux HTML (par opposition aux tableaux LaTeX visuels, voir ci-dessus) ne
 ## Tests
 
 - `src/components/setup/typst/latexToTypst.test.ts` : conversion des formules et du HTML ;
+- `src/components/setup/typst/typstDiagnostics.test.ts` : lecture du format « unix » et traduction des messages ;
 - `src/components/setup/typst/buildTypstDocument.test.ts` : structure du document généré. Les cas qui lancent le binaire externe `typst compile` sont exécutés en local quand le CLI `typst` est installé, ignorés en CI par défaut, et réactivables avec `TYPST_CLI_TESTS=1` pour un job dédié ;
 - `pnpm typst:check:compile` : vérification explicite par compilation CLI Typst pour les environnements qui installent le binaire `typst`.

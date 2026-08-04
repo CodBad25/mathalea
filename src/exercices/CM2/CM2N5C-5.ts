@@ -51,7 +51,7 @@ export default class ExerciceProbleme004 extends Exercice {
     let payeArtiste = 50
     let fraisDeplacement = 200
     let nbEleves = 50
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const show = choice([
         'musical.artistes',
         'théatral.acteurs',
@@ -134,6 +134,7 @@ Le montant restant à payer par les familles est de $${this.sup !== 3 ? miseEnEv
               ajouteQuestionMathlive({
                 exercice: this,
                 question: 3 * i,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: { reponse: { value: String(sommeTotale) } },
                 typeInteractivite: 'mathlive',
                 texteApres: ' euros.',
@@ -142,6 +143,7 @@ Le montant restant à payer par les familles est de $${this.sup !== 3 ? miseEnEv
               ajouteQuestionMathlive({
                 exercice: this,
                 question: 3 * i + 1,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: { reponse: { value: String(resteAPayer) } },
                 typeInteractivite: 'mathlive',
                 texteApres: ' euros.',
@@ -150,6 +152,7 @@ Le montant restant à payer par les familles est de $${this.sup !== 3 ? miseEnEv
               ajouteQuestionMathlive({
                 exercice: this,
                 question: 3 * i + 2,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: { reponse: { value: String(participation) } },
                 typeInteractivite: 'mathlive',
                 texteApres: ' euros.',
@@ -180,6 +183,7 @@ La somme totale restant à payer par les familles est de $${this.sup !== 3 ? mis
               ajouteQuestionMathlive({
                 exercice: this,
                 question: 3 * i,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: { reponse: { value: String(sommeTotale) } },
                 typeInteractivite: 'mathlive',
                 texteApres: ' euros.',
@@ -188,6 +192,7 @@ La somme totale restant à payer par les familles est de $${this.sup !== 3 ? mis
               ajouteQuestionMathlive({
                 exercice: this,
                 question: 3 * i + 1,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: { reponse: { value: String(aides) } },
                 typeInteractivite: 'mathlive',
                 texteApres: ' euros.',
@@ -196,6 +201,7 @@ La somme totale restant à payer par les familles est de $${this.sup !== 3 ? mis
               ajouteQuestionMathlive({
                 exercice: this,
                 question: 3 * i + 2,
+                reponseParams: { formatInteractif: 'mathalea-mathfield' },
                 objetReponse: { reponse: { value: String(participation) } },
                 typeInteractivite: 'mathlive',
                 texteApres: ' euros.',
@@ -226,6 +232,7 @@ La somme totale restant à payer par les familles est de $${this.sup !== 3 ? mis
           ajouteQuestionMathlive({
             exercice: this,
             question: i,
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: { reponse: { value: String(participation) } },
             typeInteractivite: 'mathlive',
             texteApres: ' euros.',

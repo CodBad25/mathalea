@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test'
 import type { ConsoleMessage, Locator, Page } from 'playwright'
-import { describe, test } from 'vitest'
+import { afterAll, describe, test } from 'vitest'
 import { shuffle } from '../../../../src/lib/outils/arrayOutils'
 import { findStatic, findUuid } from '../../helpers/filter.js'
 import { createIssue } from '../../helpers/issue.js'
@@ -16,8 +16,19 @@ import { runSeveralTests } from '../../helpers/run.js'
 import { checkEachCombinationOfParams } from '../../helpers/testAllViews.js'
 
 const logConsole = getFileLogger('exportConsole', { append: true })
+const consoleErrorsFailures = new Map<string, string>()
 
 class ConsoleErrorsTestFailure extends Error {}
+
+class ConsoleErrorsSummaryFailure extends Error {
+  constructor(fileName: string, message: string) {
+    super(
+      `console_errors a détecté une erreur dans ${fileName}: ${message}\nVoir le récapitulatif console_errors ci-dessus et tests/e2e/logs/exportConsole.log pour le détail.`,
+    )
+    this.name = 'ConsoleErrorsSummaryFailure'
+    this.stack = this.message
+  }
+}
 
 type ConsoleTestTimeouts = {
   default: number
@@ -58,24 +69,20 @@ function getConsoleErrorsProfile(): ConsoleErrorsProfile {
   return 'standard'
 }
 
-function formatFailureDetails(
-  urlExercice: string,
-  page: Page,
-  messages: string[],
-) {
-  const details = messages.slice(0, 5).join('\n')
-  const suffix =
-    messages.length > 5
-      ? `\n... ${messages.length - 5} autre(s) erreur(s) dans tests/e2e/logs/exportConsole.log`
-      : ''
+function shouldReportFailuresThroughVitest() {
+  return process.env.DEBUG === '1'
+}
+
+function throwConsoleErrorsFailure(fileName: string, error: unknown): never {
+  recordConsoleErrorsFailure(fileName, error)
+  if (shouldReportFailuresThroughVitest()) throw error
+  throw new ConsoleErrorsSummaryFailure(fileName, summarizeError(error))
+}
+
+function formatFailureDetails(messages: string[]) {
   return [
-    `Console errors test failed.`,
-    messages[0] == null ? '' : `First error: ${messages[0]}`,
-    `Initial URL: ${urlExercice}`,
-    `Current URL: ${page.url()}`,
-    `Unique errors (${messages.length}):`,
-    details,
-    suffix,
+    `Console errors test failed: ${summarizeConsoleErrorMessage(messages[0] ?? 'Unknown error')}`,
+    `Unique errors: ${messages.length}`,
     `Full logs: tests/e2e/logs/exportConsole.log`,
   ]
     .filter((line) => line !== '')
@@ -94,6 +101,81 @@ function addUniqueMessage(messages: string[], message: string | undefined) {
   if (message == null || message === '') return
   if (!messages.includes(message)) messages.push(message)
 }
+
+function stripAnsiControlSequences(message: string) {
+  let cleanMessage = ''
+  for (let i = 0; i < message.length; i++) {
+    if (
+      message.charCodeAt(i) === 27 &&
+      message[i + 1] === '['
+    ) {
+      i += 2
+      while (i < message.length) {
+        const code = message.charCodeAt(i)
+        if (code >= 0x40 && code <= 0x7e) break
+        i++
+      }
+      continue
+    }
+    cleanMessage += message[i]
+  }
+  return cleanMessage
+}
+
+function summarizeConsoleErrorMessage(message: string) {
+  return stripAnsiControlSequences(message)
+    .replace(/\s*Call log:.*$/su, '')
+    .replace(
+      /^(console|pageerror|crash|exception):(?:https?:\/\/\S+|chrome-error:\/\/\S+):?\s*/u,
+      '',
+    )
+    .replace(/\s+at\s+https?:\/\/\S+/gu, '')
+    .replace(/\s+at\s+chrome-error:\/\/\S+/gu, '')
+    .replace(/https?:\/\/\S+/gu, '')
+    .replace(/chrome-error:\/\/\S+/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+function summarizeError(error: unknown) {
+  const rawMessage = error instanceof Error ? error.message : String(error)
+  const firstErrorMatch = rawMessage.match(
+    /Console errors test failed:\s*([^\n]+)/,
+  )
+  const message = firstErrorMatch?.[1] ?? rawMessage
+  return summarizeConsoleErrorMessage(message).slice(0, 240)
+}
+
+function escapeMarkdownTableCell(value: string) {
+  return value.replaceAll('|', '\\|').replace(/\s+/g, ' ').trim()
+}
+
+function recordConsoleErrorsFailure(fileName: string, error: unknown) {
+  if (!consoleErrorsFailures.has(fileName)) {
+    consoleErrorsFailures.set(fileName, summarizeError(error))
+  }
+}
+
+afterAll(() => {
+  if (consoleErrorsFailures.size === 0) return
+
+  const rows = Array.from(consoleErrorsFailures.entries()).map(
+    ([fileName, message]) => ({
+      fichier: fileName,
+      erreur: message,
+    }),
+  )
+
+  console.error('\nRécapitulatif console_errors')
+  console.table(rows)
+  console.error('| Fichier | Extrait du message console |')
+  console.error('| --- | --- |')
+  for (const { fichier, erreur } of rows) {
+    console.error(
+      `| ${escapeMarkdownTableCell(fichier)} | ${escapeMarkdownTableCell(erreur)} |`,
+    )
+  }
+})
 
 async function waitForExerciseVisible(page: Page) {
   const timeouts = getConsoleTestTimeouts(page.url())
@@ -146,6 +228,20 @@ async function quickAction(page: Page, description: string) {
   await waitForExerciseVisible(page)
 }
 
+/**
+ * Le web component <scratch-simulator> (utilisé dans certaines corrections) ouvre
+ * automatiquement une modale plein écran dès qu'il est inséré dans le DOM.
+ * Cette modale intercepte les clics suivants (ex: "Nouvel énoncé") tant qu'elle
+ * n'est pas fermée explicitement.
+ */
+async function closeScratchSimulatorModalIfOpen(page: Page) {
+  const scratchModal = page.locator('dialog[data-scratch-sim="true"]')
+  if (await scratchModal.isVisible()) {
+    await scratchModal.getByRole('button', { name: '✕' }).click()
+    await scratchModal.waitFor({ state: 'hidden' })
+  }
+}
+
 async function fullAction(
   page: Page,
   description: string,
@@ -153,9 +249,15 @@ async function fullAction(
 ) {
   logIfVerbose(`Test complet avec les paramètres ${description}`)
   const buttonNewData = page.getByRole('button', { name: 'Nouvel énoncé' })
-  logIfDebug('Actualier (nouvel énoncé)')
-  await buttonNewData.click({ force: true })
-  logIfDebug('fin Actualier (nouvel énoncé)')
+  // Le bouton est masqué pour les exercices avec pasDeVersionAleatoire = true
+  const hasButtonNewData = await buttonNewData.isVisible()
+  if (hasButtonNewData) {
+    logIfDebug('Actualier (nouvel énoncé)')
+    await buttonNewData.click({ force: true })
+    logIfDebug('fin Actualier (nouvel énoncé)')
+  } else {
+    logIfDebug('Pas de bouton « Nouvel énoncé » (exercice non aléatoire)')
+  }
   const buttonZoom = page.locator(
     '#setupButtonsBar > div > div:nth-child(2) > button',
   )
@@ -198,6 +300,7 @@ async function fullAction(
     await page.waitForSelector('article + div')
     const buttonResult = await page.locator('article + div').innerText()
     logIfVerbose(buttonResult)
+    await closeScratchSimulatorModalIfOpen(page)
     const refreshAfterInteractivityCount =
       options?.refreshAfterInteractivityCount ?? 1
     logIfVerbose(
@@ -329,9 +432,7 @@ async function getConsoleTest(page: Page, urlExercice: string) {
         logError(`Il y a ${messages.length} erreurs : ${messages.join('\n')}`)
         log('url:' + page.url())
         await createIssue(urlExercice, messages, ['console'], log)
-        throw new ConsoleErrorsTestFailure(
-          formatFailureDetails(urlExercice, page, messages),
-        )
+        throw new ConsoleErrorsTestFailure(formatFailureDetails(messages))
       } else {
         return 'OK'
       }
@@ -349,9 +450,7 @@ async function getConsoleTest(page: Page, urlExercice: string) {
           // le serveur ne répond pas... si net::ERR_CONNECTION_REFUSED
           await createIssue(urlExercice, messages, ['console'], log)
         }
-        throw new ConsoleErrorsTestFailure(
-          formatFailureDetails(urlExercice, page, messages),
-        )
+        throw new ConsoleErrorsTestFailure(formatFailureDetails(messages))
       }
     } finally {
       page.off('pageerror', onPageError)
@@ -369,7 +468,7 @@ async function testRunAllLots(filter: string) {
 
   // Exclure les exercices contenant "test" ou "beta" dans leur nom
   const filteredUuids = shuffle(
-    uuids.filter(([uuid, name]) => {
+    uuids.filter(([_uuid, name]) => {
       const nameLower = name.toLowerCase()
       return !nameLower.includes('test') && !nameLower.includes('beta')
     }),
@@ -400,20 +499,29 @@ async function testRunAllLots(filter: string) {
         logIfVerbose(
           `uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]} i=${k} / ${filteredUuids.length}`,
         )
-        const resultReq = await getConsoleTest(
-          page,
-          `${hostname}?uuid=${filteredUuids[k][0]}&id=${filteredUuids[k][1].substring(0, filteredUuids[k][1].lastIndexOf('.')) || filteredUuids[k][1]}&alea=${alea}&testCI`,
-        )
+        let resultReq: string | undefined
+        try {
+          resultReq = await getConsoleTest(
+            page,
+            `${hostname}?uuid=${filteredUuids[k][0]}&id=${filteredUuids[k][1].substring(0, filteredUuids[k][1].lastIndexOf('.')) || filteredUuids[k][1]}&alea=${alea}&testCI`,
+          )
+        } catch (error) {
+          throwConsoleErrorsFailure(filteredUuids[k][1], error)
+        }
         if (resultReq !== 'OK') {
           logError(
             `Erreur pour uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]} i=${k} / ${filteredUuids.length}`,
+          )
+          throwConsoleErrorsFailure(
+            filteredUuids[k][1],
+            `Résultat inattendu: ${resultReq}`,
           )
         } else {
           logIfVerbose(
             `Succès pour uuid=${filteredUuids[k][0]} exo=${filteredUuids[k][1]} i=${k} / ${filteredUuids.length}`,
           )
         }
-        return resultReq === 'OK'
+        return true
       }
       Object.defineProperty(f, 'name', { value: myName, writable: false })
       ff.push(f)

@@ -194,6 +194,12 @@ La perpendiculaire ainsi construite devient elle-même un objet directionnel et
 peut servir à une intersection, une parallèle, une autre perpendiculaire ou un
 prolongement.
 
+Les tracés rectilignes qui représentent un support unique sont proposés comme
+supports pour les points d'intersection, les parallèles à un objet, les
+perpendiculaires à un objet et les prolongements. Cela inclut les droites,
+segments, traits, demi-droites, parallèles, perpendiculaires, médiatrices,
+bissectrices et demi-droites tracées au rapporteur.
+
 L'instruction `prolongerObjet` ajoute un tracé plus long, centré sur le tracé
 visible courant, pour un objet directionnel déjà construit, sans créer de
 nouvel objet géométrique. Les intersections doivent donc continuer de

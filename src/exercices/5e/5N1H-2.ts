@@ -74,7 +74,7 @@ export default class MultiplierEnDistribuant extends Exercice {
       melange: 3,
       defaut: 3,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = randint(3, 9) * 10
       let b: number
       let texte: string
@@ -133,6 +133,7 @@ export default class MultiplierEnDistribuant extends Exercice {
       texte += ajouteQuestionMathlive({
         exercice: this,
         question: i,
+        reponseParams: { formatInteractif: 'mathalea-mathfield' },
         objetReponse: {
           reponse: {
             value: reponse,

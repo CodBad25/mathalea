@@ -25,7 +25,7 @@ export default class AjouterDizainesAUnPres extends Exercice {
     this.nbQuestions = 1
     this.spacing = 1.5
     this.formatChampTexte = KeyboardType.clavierDeBase
-     this.optionsChampTexte = { texteAvant: '<br>' }
+    this.optionsChampTexte = { texteAvant: '<br>' }
     this.besoinFormulaireTexte = [
       'Types de questions',
       'Nombres séparés par des tirets  :\n1: Ajouter 9 ou 99\n2: Soustraire 9 ou 99\n3: Ajouter x9\n4: Soustraire x9\n5: Ajouter xx9\n6: Soustraire xx9\n7: Mélange',
@@ -41,7 +41,7 @@ export default class AjouterDizainesAUnPres extends Exercice {
       defaut: 7,
       nbQuestions: this.nbQuestions,
     }).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let nb1: number
       let nb2: number
       let enonce: string
@@ -104,6 +104,7 @@ export default class AjouterDizainesAUnPres extends Exercice {
         exercice: this,
         question: i,
         typeInteractivite: 'mathlive',
+        reponseParams: { formatInteractif: 'mathalea-mathfield' },
         objetReponse: { reponse: { value: reponse } },
       })
       if (this.questionJamaisPosee(i, nb1, nb2, typeDeQuestion[i])) {

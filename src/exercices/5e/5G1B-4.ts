@@ -138,7 +138,7 @@ export default class ConstructionsParallelogrammesParticuliersV2 extends Exercic
       nbQuestions: this.nbQuestions,
     }).map(Number)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
 
@@ -346,6 +346,7 @@ export default class ConstructionsParallelogrammesParticuliersV2 extends Exercic
           exercice: this,
           question: i,
           typeInteractivite: 'fillInTheBlank',
+          reponseParams: { formatInteractif: 'fill-in-the-blank' },
           content: `${pointInvisible.nom}(%{champ1}~;~%{champ2})`,
           objetReponse: {
             champ1: { value: pointInvisible.x },

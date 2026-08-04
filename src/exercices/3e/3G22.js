@@ -109,6 +109,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 0,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: { reponse: { value: texNombre(c * c, 2) } },
             classe: KeyboardType.clavierDeBaseAvecFraction,
             texteApres: ' $\\text{cm}^2$',
@@ -127,6 +128,7 @@ export default class AgrandissementReduction extends Exercice {
               exercice: this,
               question: 1,
               typeInteractivite: 'mathlive',
+              reponseParams: { formatInteractif: 'mathalea-mathfield' },
               objetReponse: {
                 reponse: { value: texNombre((c * c * h1) / 3, 3) },
               },
@@ -149,6 +151,7 @@ export default class AgrandissementReduction extends Exercice {
               exercice: this,
               question: 2,
               typeInteractivite: 'mathlive',
+              reponseParams: { formatInteractif: 'mathalea-mathfield' },
               objetReponse: {
                 reponse: { value: texNombre(((c * h2) / h1) ** 2, 2) },
               },
@@ -163,6 +166,7 @@ export default class AgrandissementReduction extends Exercice {
               exercice: this,
               question: 3,
               typeInteractivite: 'mathlive',
+              reponseParams: { formatInteractif: 'mathalea-mathfield' },
               objetReponse: {
                 reponse: {
                   value: texNombre((h2 / h1) ** 3 * ((h1 * c ** 2) / 3), 3),
@@ -184,6 +188,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 4,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: {
                 value: texNombre(
@@ -339,6 +344,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 0,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: { value: texNombre(Math.PI * r ** 2, 2) },
             },
@@ -361,6 +367,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 1,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: { value: texNombre((h1 * Math.PI * r ** 2) / 3, 3) },
             },
@@ -383,6 +390,7 @@ export default class AgrandissementReduction extends Exercice {
               exercice: this,
               question: 2,
               typeInteractivite: 'mathlive',
+              reponseParams: { formatInteractif: 'mathalea-mathfield' },
               objetReponse: {
                 reponse: {
                   value: texNombre((Math.PI * r ** 2 * h2 * h2) / h1 / h1, 2),
@@ -399,6 +407,7 @@ export default class AgrandissementReduction extends Exercice {
               exercice: this,
               question: 3,
               typeInteractivite: 'mathlive',
+              reponseParams: { formatInteractif: 'mathalea-mathfield' },
               objetReponse: {
                 reponse: {
                   value: texNombre(
@@ -426,6 +435,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 4,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: {
                 value: texNombre(
@@ -615,6 +625,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 0,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: { value: texNombre((c * c2) / 2, 2) },
             },
@@ -634,6 +645,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 1,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: {
                 value: texNombre((c * c * h1) / 6, 3),
@@ -658,6 +670,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 2,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: {
                 value: texNombre((((c * c2) / 2) * h2 ** 2) / h1 ** 2, 2),
@@ -673,6 +686,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 3,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: {
                 value: texNombre((((c * c * h1) / 6) * h2 ** 3) / h1 ** 3, 3),
@@ -694,6 +708,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 4,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: {
                 value: texNombre(
@@ -985,6 +1000,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 0,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: {
                 value: texNombre(r.mul(r).mul(h1).mul(pi).div(3), 3),
@@ -1001,6 +1017,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 1,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: {
                 value: texNombre(r2.mul(r2).mul(h2).mul(pi).div(3), 3),
@@ -1017,6 +1034,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 2,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: {
                 value: texNombre(
@@ -1042,6 +1060,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 3,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: {
                 value: texNombre(kprime.mul(h1), 4),
@@ -1057,6 +1076,7 @@ export default class AgrandissementReduction extends Exercice {
             exercice: this,
             question: 4,
             typeInteractivite: 'mathlive',
+            reponseParams: { formatInteractif: 'mathalea-mathfield' },
             objetReponse: {
               reponse: {
                 value: texNombre(h1.sub(kprime.mul(h1)).mul(10), 2),

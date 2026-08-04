@@ -45,7 +45,7 @@ export default class AjouterOuSoustraire1ou2 extends Exercice {
       defaut: 3,
       nbQuestions: this.nbQuestions,
     }).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = randint(this.sup, this.sup2)
       const delta = choice([-1, 1]) * deltas[i]
       const reponse = a + delta
@@ -54,6 +54,7 @@ export default class AjouterOuSoustraire1ou2 extends Exercice {
         ajouteQuestionMathlive({
           exercice: this,
           question: i,
+          reponseParams: { formatInteractif: 'mathalea-mathfield' },
           objetReponse: { reponse: { value: reponse } },
           texteAvant: '$=$',
           typeInteractivite: 'mathlive',

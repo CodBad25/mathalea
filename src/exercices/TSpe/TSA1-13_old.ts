@@ -12,7 +12,7 @@ export const interactifType = 'mathLive'
 export const uuid = '1b8d0'
 
 export const refs = {
-  'fr-fr': ['TSA1-13'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 export default class N2PlusRacineDeNUn extends N2PlusRacineDeN {

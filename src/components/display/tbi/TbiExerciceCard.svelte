@@ -11,6 +11,8 @@
   } from '../../../lib/mathalea'
   import { exercicesParams } from '../../../lib/stores/generalStore'
   import {
+    activeTbiModalCard,
+    TBI_CONTROLS_HIDE_DELAY,
     TBI_MAX_ZOOM,
     TBI_MIN_ZOOM,
     moveCardToTab,
@@ -20,6 +22,7 @@
   import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
   import BasicClassicModal from '../../shared/modal/BasicClassicModal.svelte'
   import TbiCardActions from './TbiCardActions.svelte'
+  import TbiCorrectionToolbar from './TbiCorrectionToolbar.svelte'
   import type { TbiCorrectionMode } from './tbiTypes'
 
   interface Props {
@@ -61,6 +64,26 @@
 
   let correctionMode: TbiCorrectionMode = $state('hidden')
   let isSettingsModalDisplayed = $state(false)
+  /** Zoom propre à la correction en plein écran, indépendant du zoom de la carte */
+  let modalZoom = $state(1.2)
+
+  function setCorrectionMode(mode: TbiCorrectionMode) {
+    correctionMode = mode
+    // une seule correction en plein écran à la fois, même si le mode est
+    // propre à chaque carte : ouvrir celle-ci ferme celle d'une autre carte
+    activeTbiModalCard.set(mode === 'modal' ? paramsIndex : null)
+    if (mode === 'modal') modalZoom = Math.max(zoom, 1.2)
+  }
+
+  function zoomModalBy(delta: number) {
+    modalZoom = Math.min(TBI_MAX_ZOOM, Math.max(TBI_MIN_ZOOM, modalZoom + delta))
+  }
+
+  $effect(() => {
+    if (correctionMode === 'modal' && $activeTbiModalCard !== paramsIndex) {
+      correctionMode = 'hidden'
+    }
+  })
   /** Incrémenté à chaque régénération pour ré-injecter le HTML */
   let version = $state(0)
 
@@ -206,18 +229,45 @@
     })
   }
 
+  /**
+   * Barres d'outils de la carte masquées au repos, comme la barre d'outils
+   * globale de la vue TBI : visibles pendant et juste après un mouvement de
+   * souris sur l'exercice, invisibles ensuite.
+   */
+  let controlsVisible = $state(true)
+  let hideControlsTimer: ReturnType<typeof setTimeout> | undefined
+
+  function showControls() {
+    controlsVisible = true
+    if (hideControlsTimer !== undefined) clearTimeout(hideControlsTimer)
+    hideControlsTimer = setTimeout(() => {
+      controlsVisible = false
+    }, TBI_CONTROLS_HIDE_DELAY)
+  }
+
+  /** La souris quitte l'exercice : pas besoin d'attendre le délai d'inactivité */
+  function hideControls() {
+    if (hideControlsTimer !== undefined) clearTimeout(hideControlsTimer)
+    controlsVisible = false
+  }
+
   onMount(() => {
     document.addEventListener('newDataForAll', newData)
     updateDisplay()
+    showControls()
   })
 
   onDestroy(() => {
     document.removeEventListener('newDataForAll', newData)
+    if (hideControlsTimer !== undefined) clearTimeout(hideControlsTimer)
   })
 </script>
 
 <section
-  class="group relative w-full rounded-lg border border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest bg-coopmaths-canvas dark:bg-coopmathsdark-canvas shadow-sm"
+  class="relative w-full rounded-lg border border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest bg-coopmaths-canvas dark:bg-coopmathsdark-canvas shadow-sm"
+  onpointermove={showControls}
+  onpointerdown={showControls}
+  onpointerleave={hideControls}
 >
   <header
     class="flex flex-row items-baseline gap-2 px-3 pt-2 text-coopmaths-struct dark:text-coopmathsdark-struct"
@@ -235,11 +285,11 @@
       forcé sur `version`.
     -->
     <div
-      class="absolute top-1 right-1 z-20 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200"
+      class="absolute top-1 right-1 z-20 flex flex-col items-end gap-1 transition-opacity duration-300 {controlsVisible
+        ? 'opacity-100'
+        : 'opacity-0 pointer-events-none'}"
     >
       <TbiCardActions
-        {correctionMode}
-        correctionExists={exercise.listeCorrections.length > 0}
         {settingsExist}
         newDataExists={!exercise.pasDeVersionAleatoire}
         {showMoveToTab}
@@ -251,7 +301,6 @@
         {showColumnBreak}
         {columnBreakDisabled}
         {colBreakActive}
-        onCorrection={(mode) => (correctionMode = mode)}
         onNewData={newData}
         onSettings={() => (isSettingsModalDisplayed = true)}
         onZoomIn={() => zoomBy(0.1)}
@@ -262,6 +311,9 @@
         onToggleColBreak={toggleColBreak}
         onDelete={() => onDelete(paramsIndex)}
       />
+      {#if exercise.listeCorrections.length > 0}
+        <TbiCorrectionToolbar {correctionMode} onCorrection={setCorrectionMode} />
+      {/if}
     </div>
 
     <article
@@ -288,14 +340,35 @@
               : 'numbered-list'} w-full list-inside marker:text-coopmaths-struct dark:marker:text-coopmathsdark-struct marker:font-bold"
           >
             {#each exercise.listeQuestions as question, i (i)}
-              <li
-                id="exercice{paramsIndex}Q{i}"
-                class="py-1 overflow-x-auto"
-                style="line-height: {exercise.spacing || 1}"
-              >
-                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                {@html mathaleaFormatExercice(question)}
-              </li>
+              <div>
+                <li
+                  id="exercice{paramsIndex}Q{i}"
+                  class="py-1 overflow-x-auto"
+                  style="line-height: {exercise.spacing || 1}"
+                >
+                  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                  {@html mathaleaFormatExercice(question)}
+                </li>
+                {#if correctionMode === 'perQuestion' && exercise.listeCorrections[i]}
+                  <div
+                    class="relative border-l-coopmaths-struct dark:border-l-coopmathsdark-struct border-l-[3px] mt-6 mb-4 py-2 pl-4"
+                    use:renderMath={zoom}
+                  >
+                    <div
+                      class="absolute flex flex-row py-[1.5px] px-3 rounded-t-md justify-center items-center -left-0.75 -top-3.75 bg-coopmaths-struct dark:bg-coopmathsdark-struct font-semibold text-xs text-coopmaths-canvas dark:text-coopmathsdark-canvas"
+                    >
+                      Correction
+                    </div>
+                    <div
+                      class="overflow-x-auto"
+                      style="line-height: {exercise.spacingCorr || 1}"
+                    >
+                      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                      {@html mathaleaFormatExercice(exercise.listeCorrections[i])}
+                    </div>
+                  </div>
+                {/if}
+              </div>
             {/each}
           </ul>
         </div>
@@ -323,13 +396,15 @@
               : 'numbered-list'} w-full list-inside marker:text-coopmaths-struct dark:marker:text-coopmathsdark-struct marker:font-bold"
           >
             {#each exercise.listeCorrections as correction, i (i)}
-              <li
-                class="py-1 overflow-x-auto"
-                style="line-height: {exercise.spacingCorr || 1}"
-              >
-                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                {@html mathaleaFormatExercice(correction)}
-              </li>
+              <div>
+                <li
+                  class="py-1 overflow-x-auto"
+                  style="line-height: {exercise.spacingCorr || 1}"
+                >
+                  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                  {@html mathaleaFormatExercice(correction)}
+                </li>
+              </div>
             {/each}
           </ul>
         </div>
@@ -345,25 +420,45 @@
           bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
         use:openDialog
         onclick={(event) => {
-          if (event.target === event.currentTarget) correctionMode = 'hidden'
+          if (event.target === event.currentTarget) setCorrectionMode('hidden')
         }}
-        onclose={() => (correctionMode = 'hidden')}
+        onclose={() => setCorrectionMode('hidden')}
       >
-        <button
-          type="button"
-          class="absolute top-3 right-3 text-coopmaths-action hover:text-coopmaths-action-darkest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-darkest"
-          aria-label="Fermer la correction"
-          onclick={() => (correctionMode = 'hidden')}
-        >
-          <i class="bx bx-x text-3xl"></i>
-        </button>
+        <div class="absolute top-3 right-3 flex flex-row items-center gap-2">
+          <button
+            type="button"
+            class="flex items-center justify-center w-9 h-9 rounded-full text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-action hover:bg-coopmaths-action-darkest dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-darkest"
+            title="Réduire"
+            aria-label="Réduire la correction"
+            onclick={() => zoomModalBy(-0.1)}
+          >
+            <i class="bx bx-zoom-out"></i>
+          </button>
+          <button
+            type="button"
+            class="flex items-center justify-center w-9 h-9 rounded-full text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-action hover:bg-coopmaths-action-darkest dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-darkest"
+            title="Agrandir"
+            aria-label="Agrandir la correction"
+            onclick={() => zoomModalBy(0.1)}
+          >
+            <i class="bx bx-zoom-in"></i>
+          </button>
+          <button
+            type="button"
+            class="text-coopmaths-action hover:text-coopmaths-action-darkest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-darkest"
+            aria-label="Fermer la correction"
+            onclick={() => setCorrectionMode('hidden')}
+          >
+            <i class="bx bx-x text-3xl"></i>
+          </button>
+        </div>
         <h2
           class="mb-4 text-xl font-bold text-coopmaths-struct dark:text-coopmathsdark-struct"
         >
           Correction — {exercise.id?.replace('.js', '').replace('.ts', '') ??
             ''}
         </h2>
-        <div use:renderMath={Math.max(zoom, 1.2)}>
+        <div use:renderMath={modalZoom}>
           {#if exercise.consigneCorrection && exercise.consigneCorrection.length > 0}
             <p class="mb-2 font-light">
               <!-- eslint-disable-next-line svelte/no-at-html-tags -->
@@ -377,10 +472,15 @@
               : 'numbered-list'} w-full list-inside marker:text-coopmaths-struct dark:marker:text-coopmathsdark-struct marker:font-bold"
           >
             {#each exercise.listeCorrections as correction, i (i)}
-              <li class="py-1" style="line-height: {exercise.spacingCorr || 1}">
-                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                {@html mathaleaFormatExercice(correction)}
-              </li>
+              <div>
+                <li
+                  class="py-1"
+                  style="line-height: {exercise.spacingCorr || 1}"
+                >
+                  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                  {@html mathaleaFormatExercice(correction)}
+                </li>
+              </div>
             {/each}
           </ul>
         </div>

@@ -1,4 +1,5 @@
 import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
@@ -26,9 +27,13 @@ export const refs = {
   'fr-fr': ['3I1'],
   'fr-ch': [],
 }
+
+const scratchSimulatorButtonAction = '3I1:scratch-simulator-button'
+
 export default class InstructionConditionnelle extends Exercice {
   constructor() {
     super()
+    registerScratchSimulatorButton()
     this.besoinFormulaireNumerique = [
       'Variante',
       3,
@@ -113,7 +118,15 @@ export default class InstructionConditionnelle extends Exercice {
     }
     texteCorr += ` La position finale est donc : (${texteEnCouleurEtGras(xLutin)} ; ${texteEnCouleurEtGras(yLutin)}).`
     texteCorr += context.isHtml
-      ? '<br>' + createScratchSimulatorElement(codeTikz, 2000, false)
+      ? '<br>' +
+        DomReadyActionElement.create({
+          action: scratchSimulatorButtonAction,
+          payload: {
+            codeScratch: codeTikz,
+            delai: 2000,
+            insertProgramme: false,
+          },
+        })
       : ''
     if (this.interactif) {
       texte +=
@@ -140,4 +153,41 @@ export default class InstructionConditionnelle extends Exercice {
     this.listeCorrections.push(texteCorr)
     listeQuestionsToContenu(this)
   }
+}
+
+let scratchSimulatorButtonRegistered = false
+
+function registerScratchSimulatorButton() {
+  if (scratchSimulatorButtonRegistered) return
+  scratchSimulatorButtonRegistered = true
+  DomReadyActionElement.registerCallback<{
+    codeScratch: string
+    delai: number
+    insertProgramme: boolean
+  }>(scratchSimulatorButtonAction, ({ element, payload }) => {
+    element.innerHTML = ''
+    element.classList.add('my-4', 'block')
+    const button = document.createElement('button')
+    const simulatorContainer = document.createElement('div')
+    button.type = 'button'
+    button.textContent = 'Lancer le simulateur'
+    button.className =
+      'inline-flex items-center px-4 py-2 bg-coopmaths-action dark:bg-coopmathsdark-action text-coopmaths-canvas dark:text-coopmathsdark-canvas font-medium text-sm rounded shadow-md hover:bg-coopmaths-action-lightest dark:hover:bg-coopmathsdark-action-lightest focus:bg-coopmaths-action-lightest dark:focus:bg-coopmathsdark-action-lightest focus:outline-none transition duration-150 ease-in-out'
+
+    const onClick = () => {
+      simulatorContainer.innerHTML = createScratchSimulatorElement(
+        payload.codeScratch,
+        payload.delai,
+        payload.insertProgramme,
+      )
+    }
+
+    button.addEventListener('click', onClick)
+    element.append(button, simulatorContainer)
+
+    return () => {
+      button.removeEventListener('click', onClick)
+      element.innerHTML = ''
+    }
+  })
 }

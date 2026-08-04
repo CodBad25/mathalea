@@ -3,7 +3,7 @@ import { context } from '../../modules/context'
 import { cercle } from '../2d/cercle'
 import { droite } from '../2d/droites'
 import { pointAbstrait, type PointAbstrait } from '../2d/PointAbstrait'
-import { projectionOrtho } from '../2d/transformations'
+import { projectionOrtho, rotation } from '../2d/transformations'
 import { longueur } from '../2d/utilitairesGeometriques'
 import {
   milieu,
@@ -52,6 +52,7 @@ type TypeElementIntersectable =
   | 'trait'
   | 'demiDroite'
   | 'demiDroitePointDirection'
+  | 'demiDroiteAngle'
   | 'cercle'
   | 'arc'
   | 'parallele'
@@ -59,6 +60,8 @@ type TypeElementIntersectable =
   | 'paralleleObjet'
   | 'perpendiculaireAObjet'
   | 'perpendiculaire'
+  | 'mediatrice'
+  | 'bissectrice'
 
 type TypeElementDirection =
   | 'droite'
@@ -67,10 +70,14 @@ type TypeElementDirection =
   | 'trait'
   | 'demiDroite'
   | 'demiDroitePointDirection'
+  | 'demiDroiteAngle'
   | 'parallele'
   | 'paralleleAObjet'
   | 'paralleleObjet'
   | 'perpendiculaireAObjet'
+  | 'perpendiculaire'
+  | 'mediatrice'
+  | 'bissectrice'
 
 const typesElementsIntersectables: TypeElementIntersectable[] = [
   'droite',
@@ -79,6 +86,7 @@ const typesElementsIntersectables: TypeElementIntersectable[] = [
   'trait',
   'demiDroite',
   'demiDroitePointDirection',
+  'demiDroiteAngle',
   'cercle',
   'arc',
   'parallele',
@@ -86,6 +94,8 @@ const typesElementsIntersectables: TypeElementIntersectable[] = [
   'paralleleObjet',
   'perpendiculaireAObjet',
   'perpendiculaire',
+  'mediatrice',
+  'bissectrice',
 ]
 
 const typesElementsDirection: TypeElementDirection[] = [
@@ -95,10 +105,14 @@ const typesElementsDirection: TypeElementDirection[] = [
   'trait',
   'demiDroite',
   'demiDroitePointDirection',
+  'demiDroiteAngle',
   'parallele',
   'paralleleAObjet',
   'paralleleObjet',
   'perpendiculaireAObjet',
+  'perpendiculaire',
+  'mediatrice',
+  'bissectrice',
 ]
 
 // Préposition + nom pour décrire l'élément référencé par une intersection
@@ -112,6 +126,7 @@ const prepositionElementIntersectable: Record<
   trait: 'du trait',
   demiDroite: 'de la demi-droite',
   demiDroitePointDirection: 'de la demi-droite',
+  demiDroiteAngle: 'de la demi-droite',
   cercle: 'du cercle',
   arc: 'de l’arc',
   parallele: 'de la parallèle',
@@ -119,6 +134,8 @@ const prepositionElementIntersectable: Record<
   paralleleObjet: 'de la parallèle',
   perpendiculaireAObjet: 'de la perpendiculaire',
   perpendiculaire: 'de la perpendiculaire',
+  mediatrice: 'de la médiatrice',
+  bissectrice: 'de la bissectrice',
 }
 
 // Nom seul (sans article) pour les options du menu de sélection d'une étape
@@ -132,6 +149,7 @@ const nomsTypesElementsIntersectables: Record<
   trait: 'trait',
   demiDroite: 'demi-droite',
   demiDroitePointDirection: 'demi-droite',
+  demiDroiteAngle: 'demi-droite',
   cercle: 'cercle',
   arc: 'arc',
   parallele: 'parallèle',
@@ -139,6 +157,8 @@ const nomsTypesElementsIntersectables: Record<
   paralleleObjet: 'parallèle',
   perpendiculaireAObjet: 'perpendiculaire',
   perpendiculaire: 'perpendiculaire',
+  mediatrice: 'médiatrice',
+  bissectrice: 'bissectrice',
 }
 
 type InstructionIepBase = {
@@ -1099,6 +1119,37 @@ function elementGeometrique(
     d.isVisible = false
     return { nature: 'droite', objet: d }
   }
+  if (instr.type === 'mediatrice') {
+    const A = points.get(instr.p1)
+    const B = points.get(instr.p2)
+    if (A === undefined || B === undefined) return undefined
+    const M = milieu(A, B)
+    const pointDirection = pointAbstrait(M.x - (B.y - A.y), M.y + B.x - A.x)
+    const d = droite(M, pointDirection)
+    d.isVisible = false
+    return { nature: 'droite', objet: d }
+  }
+  if (instr.type === 'bissectrice') {
+    const A = points.get(instr.p1)
+    const B = points.get(instr.p2)
+    const C = points.get(instr.p3)
+    if (A === undefined || B === undefined || C === undefined) {
+      return undefined
+    }
+    const longueurBA = longueur(B, A)
+    const longueurBC = longueur(B, C)
+    if (longueurBA === 0 || longueurBC === 0) return undefined
+    const pointDirection = pointAbstrait(
+      B.x + (A.x - B.x) / longueurBA + (C.x - B.x) / longueurBC,
+      B.y + (A.y - B.y) / longueurBA + (C.y - B.y) / longueurBC,
+    )
+    if (pointDirection.x === B.x && pointDirection.y === B.y) {
+      return undefined
+    }
+    const d = droite(B, pointDirection)
+    d.isVisible = false
+    return { nature: 'droite', objet: d }
+  }
   const A = points.get(instr.p1)
   if (A === undefined) return undefined
   if (instr.type === 'droitePointPente') {
@@ -1112,6 +1163,14 @@ function elementGeometrique(
     const B = pointDepuisAngle(A, instr.angle)
     if (B === undefined) return undefined
     const d = droite(A, B)
+    d.isVisible = false
+    return { nature: 'droite', objet: d }
+  }
+  if (instr.type === 'demiDroiteAngle') {
+    const B = points.get(instr.p2)
+    if (B === undefined) return undefined
+    const pointDirection = rotation(B, A, instr.angle)
+    const d = droite(A, pointDirection)
     d.isVisible = false
     return { nature: 'droite', objet: d }
   }
