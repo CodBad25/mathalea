@@ -251,6 +251,7 @@ export default class ReciproquePythagore extends Exercice {
       } else {
         this.autoCorrection[i].enonce = texte
         this.autoCorrection[i].propositions![0].feedback = texteCorr
+        this.autoCorrection[i].propositions![1].feedback = texteCorr
       }
       const props = propositionsQcm(this, i)
       if (this.interactif) {

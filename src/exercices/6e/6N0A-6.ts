@@ -425,7 +425,7 @@ export default class EcrirePetitsNombresEntiers extends Exercice {
               etiquettes: etiquettesNumeration,
               enonceATrous,
             })
-            this.dragAndDrops.push(leDragAndDrop)
+            this.dragAndDrops[i] = leDragAndDrop
             handleAnswers(
               this,
               i,

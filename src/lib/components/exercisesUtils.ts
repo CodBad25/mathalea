@@ -22,7 +22,7 @@ import {
 } from '../mathalea'
 import { exercicesParams } from '../stores/generalStore'
 import { globalOptions } from '../stores/globalOptions'
-import type { IExercice } from '../types'
+import type { IExercice, InterfaceParams } from '../types'
 import { estUuidBanqueExterne } from '../types/banquesExternes'
 import { isStatic } from './componentsUtils'
 import { referentielMathadata } from './mathadataReferentiel'
@@ -54,93 +54,99 @@ function referentielsStatiques(): JSONReferentielObject {
 }
 
 /**
+ * Construit un exercice à partir de ses paramètres (uuid, id, graine,
+ * réglages), qu'il soit statique (annale scannée, banque externe) ou
+ * aléatoire. Utilisé pour la liste complète d'une fiche
+ * (`buildExercisesList`) comme pour un exercice isolé (aperçu de la modale
+ * « Ajouter un exercice » de la vue Typst).
+ * @param {InterfaceParams} paramsExercice paramètres de l'exercice
+ * @returns {Promise<IExercice>} l'exercice chargé et paramétré
+ */
+export const buildExercise = (
+  paramsExercice: InterfaceParams,
+): Promise<IExercice> => {
+  const options = get(globalOptions)
+  if (isStatic(paramsExercice.uuid)) {
+    return new Promise<IExercice>((resolve) => {
+      const exo = new Exercice()
+      exo.typeExercice = 'statique'
+      exo.titre = `Uuid ${paramsExercice.uuid}`
+      exo.listeQuestions[0] = ''
+      exo.listeCorrections[0] = ''
+      exo.nbQuestions = 1
+      const foundResource = retrieveResourceFromUuid(
+        referentielsStatiques(),
+        paramsExercice.uuid,
+      )
+      if (resourceHasPlace(foundResource)) {
+        exo.titre = `${foundResource.typeExercice.toUpperCase()} ${foundResource.mois || ''} ${foundResource.annee} ${foundResource.lieu} ${foundResource.jour || ''} Ex ${foundResource.numeroInitial}`
+      } else if (
+        foundResource !== null &&
+        'titre' in foundResource &&
+        typeof foundResource.titre === 'string' &&
+        foundResource.titre.length > 0
+      ) {
+        // ressources titrées (banques externes, MathAdata) : sans cela le
+        // titre affiché resterait l'uuid brut dans les vues A4 et Typst
+        exo.titre = foundResource.titre
+      }
+      const pngUrls = computeStaticExercicePngUrls(foundResource)
+      if (pngUrls != null) {
+        exo.listeQuestions[0] = pngUrls.png
+          .map(
+            (url) =>
+              `<img src="${url}" style="width: calc(100% * {zoomFactor})" alt="énoncé" />`,
+          )
+          .join('<br>')
+        exo.listeCorrections[0] = pngUrls.pngCor
+          .map(
+            (url) =>
+              `<img src="${url}" style="width: calc(100% * {zoomFactor})" alt="correction" />`,
+          )
+          .join('<br>')
+      } else {
+        exo.listeQuestions[0] = `Uuid ${paramsExercice.uuid}<br>`
+        exo.listeCorrections[0] = `Uuid ${paramsExercice.uuid}<br>`
+      }
+      mathaleaHandleParamOfOneExercice(exo, paramsExercice)
+      if (options.setInteractive === '1' && exo?.interactifReady) {
+        exo.interactif = true
+      }
+      resolve(exo)
+    })
+  }
+  return new Promise<IExercice>((resolve) => {
+    mathaleaLoadExerciceFromUuid(paramsExercice.uuid).then((exo) => {
+      if (typeof exo === 'undefined') {
+        throw new Error(
+          "L'exercice correspondant à l'uuid " +
+            paramsExercice.uuid +
+            " n'est pas défini...",
+        )
+      }
+      mathaleaHandleParamOfOneExercice(exo, paramsExercice)
+      if (options.setInteractive === '1' && exo?.interactifReady) {
+        exo.interactif = true
+      }
+      resolve(exo)
+    })
+  })
+}
+
+/**
  * Construit la liste des exercices basée sur le contenu du store exercicesParams
  * @returns liste des exercices EN PROMESSE
  */
 export const buildExercisesList = (
   filter: string[] = [],
 ): Promise<IExercice>[] => {
-  const promiseExos: Promise<IExercice>[] = []
-  const options = get(globalOptions)
   const exosParams = get(exercicesParams)
-  for (const paramsExercice of exosParams) {
-    if (filter.length > 0 && !filter.includes(paramsExercice.uuid)) {
-      continue
-    }
-    if (isStatic(paramsExercice.uuid)) {
-      const p = new Promise<IExercice>((resolve) => {
-        // console.log('id' + paramsExercice.id)
-        const exo = new Exercice()
-        exo.typeExercice = 'statique'
-        exo.titre = `Uuid ${paramsExercice.uuid}`
-        exo.listeQuestions[0] = ''
-        exo.listeCorrections[0] = ''
-        exo.nbQuestions = 1
-        const foundResource = retrieveResourceFromUuid(
-          referentielsStatiques(),
-          paramsExercice.uuid,
-        )
-        if (resourceHasPlace(foundResource)) {
-          exo.titre = `${foundResource.typeExercice.toUpperCase()} ${foundResource.mois || ''} ${foundResource.annee} ${foundResource.lieu} ${foundResource.jour || ''} Ex ${foundResource.numeroInitial}`
-        } else if (
-          foundResource !== null &&
-          'titre' in foundResource &&
-          typeof foundResource.titre === 'string' &&
-          foundResource.titre.length > 0
-        ) {
-          // ressources titrées (banques externes, MathAdata) : sans cela le
-          // titre affiché resterait l'uuid brut dans les vues A4 et Typst
-          exo.titre = foundResource.titre
-        }
-        const pngUrls = computeStaticExercicePngUrls(foundResource)
-        if (pngUrls != null) {
-          exo.listeQuestions[0] = pngUrls.png
-            .map(
-              (url) =>
-                `<img src="${url}" style="width: calc(100% * {zoomFactor})" alt="énoncé" />`,
-            )
-            .join('<br>')
-          exo.listeCorrections[0] = pngUrls.pngCor
-            .map(
-              (url) =>
-                `<img src="${url}" style="width: calc(100% * {zoomFactor})" alt="correction" />`,
-            )
-            .join('<br>')
-        } else {
-          exo.listeQuestions[0] = `Uuid ${paramsExercice.uuid}<br>`
-          exo.listeCorrections[0] = `Uuid ${paramsExercice.uuid}<br>`
-        }
-        mathaleaHandleParamOfOneExercice(exo, paramsExercice)
-        if (options.setInteractive === '1' && exo?.interactifReady) {
-          exo.interactif = true
-        }
-        resolve(exo)
-        // console.log('id resolu' + paramsExercice.id)
-      })
-      promiseExos.push(p)
-    } else {
-      const p = new Promise<IExercice>((resolve) => {
-        // console.log('id' + paramsExercice.id)
-        mathaleaLoadExerciceFromUuid(paramsExercice.uuid).then((exo) => {
-          if (typeof exo === 'undefined') {
-            throw new Error(
-              "L'exercice correspondant à l'uuid " +
-                paramsExercice.uuid +
-                " n'est pas défini...",
-            )
-          }
-          mathaleaHandleParamOfOneExercice(exo, paramsExercice)
-          if (options.setInteractive === '1' && exo?.interactifReady) {
-            exo.interactif = true
-          }
-          resolve(exo)
-        })
-        // console.log('id resolu' + paramsExercice.id)
-      })
-      promiseExos.push(p)
-    }
-  }
-  return promiseExos
+  return exosParams
+    .filter(
+      (paramsExercice) =>
+        filter.length === 0 || filter.includes(paramsExercice.uuid),
+    )
+    .map(buildExercise)
 }
 
 /**

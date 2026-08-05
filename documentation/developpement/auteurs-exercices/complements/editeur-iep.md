@@ -54,7 +54,9 @@ cercle circonscrit.
 Les conditions initiales sont incluses dans la valeur sauvegardée, dans la
 réponse élève enregistrée et dans le programme à comparer à la réponse
 attendue. Les instructions visibles peuvent référencer les étapes des
-conditions initiales avec les indices du programme complet.
+conditions initiales avec les indices du programme complet. Pour éviter les
+ambiguïtés, la numérotation affichée des instructions visibles commence après
+les étapes consommées par les conditions initiales.
 
 Dans l'animation de l'éditeur, les instruments nécessaires au programme sont
 affichés dès le départ dans une zone de rangement en haut à droite du SVG. Après
@@ -102,6 +104,11 @@ L'option `instructionsDisponibles` limite les types proposés dans le menu
 `TypeInstructionIep`, ou directement une liste typée
 `InstructionsDisponiblesIep`.
 
+Dans l'éditeur, les instructions sont présentées par catégories : points,
+tracés de base, constructions, codages, instruments et animation. Quand
+`instructionsDisponibles` est fourni, seules les catégories contenant au moins
+une instruction autorisée sont affichées.
+
 Cette configuration convient par exemple pour faire construire un
 parallélogramme avec les côtés opposés parallèles :
 
@@ -142,6 +149,16 @@ const programmeInitial: InstructionIep[] = [
 
 L'instruction `milieu` place un point nommé au milieu de deux points déjà
 construits, avec la macro `Alea2iep.milieuALaRegle()`.
+
+L'instruction `codageMilieu` code les deux demi-segments de part et d'autre
+d'un milieu déjà construit. Elle reçoit `p1` et `p3` comme extrémités du
+segment, `p2` comme milieu, puis `codage` avec les mêmes symboles que
+`segmentCodage`. Si les deux extrémités sont confondues, l'étape est ignorée.
+
+L'instruction `demiTourPoint` construit l'image d'un point par la symétrie
+centrale de centre un point déjà construit. Elle reçoit `nom` pour l'image,
+`p1` pour le point antécédent et `p2` pour le centre de symétrie. L'animation
+code automatiquement les deux demi-segments de part et d'autre du centre.
 
 Les instructions `demiDroitePointDirection` et `droitePointPente` évitent de
 créer un second point uniquement pour donner une direction :
@@ -218,18 +235,18 @@ La valeur `longueur` désigne la longueur totale du nouveau tracé.
 
 ## Options utiles
 
-| Option | Rôle |
-| --- | --- |
-| `conditionsInitiales` | Instructions jouées immédiatement avant le programme visible, sans être affichées dans l'éditeur. |
-| `programmeInitial` | Instructions déjà présentes dans l'éditeur. |
-| `instructionsDisponibles` | Types d'instructions proposés dans le menu d'ajout. |
-| `protege` | Propriété d'une instruction initiale qui la protège contre l'édition, la suppression et le déplacement. |
-| `instructionsInitialesProtegees` | Indices des instructions initiales à protéger. |
-| `programmeInitialProtege` | Raccourci pour protéger tout le programme initial. |
-| `loadSaveButtons` | Affiche les boutons de sauvegarde et chargement JSON. |
-| `allowFullscreen` | Ajoute le bouton de test de l'animation en plein écran. |
-| `interactivityOn` | Désactive l'édition quand la valeur vaut `false` : la zone d'ajout et les boutons de modification des lignes sont masqués, mais le bouton « Tester l'animation » reste disponible. |
-| `verifyCallbackName` | Nom d'une callback de vérification enregistrée avec `ElementIepEditeur.registerVerificationCallback()`. |
+| Option                           | Rôle                                                                                                                                                                               |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `conditionsInitiales`            | Instructions jouées immédiatement avant le programme visible, sans être affichées dans l'éditeur.                                                                                  |
+| `programmeInitial`               | Instructions déjà présentes dans l'éditeur.                                                                                                                                        |
+| `instructionsDisponibles`        | Types d'instructions proposés dans le menu d'ajout.                                                                                                                                |
+| `protege`                        | Propriété d'une instruction initiale qui la protège contre l'édition, la suppression et le déplacement.                                                                            |
+| `instructionsInitialesProtegees` | Indices des instructions initiales à protéger.                                                                                                                                     |
+| `programmeInitialProtege`        | Raccourci pour protéger tout le programme initial.                                                                                                                                 |
+| `loadSaveButtons`                | Affiche les boutons de sauvegarde et chargement JSON.                                                                                                                              |
+| `allowFullscreen`                | Ajoute le bouton de test de l'animation en plein écran.                                                                                                                            |
+| `interactivityOn`                | Désactive l'édition quand la valeur vaut `false` : la zone d'ajout et les boutons de modification des lignes sont masqués, mais le bouton « Tester l'animation » reste disponible. |
+| `verifyCallbackName`             | Nom d'une callback de vérification enregistrée avec `ElementIepEditeur.registerVerificationCallback()`.                                                                            |
 
 ## Vérification interactive
 
@@ -244,13 +261,13 @@ Pour les constructions qui acceptent plusieurs procédures équivalentes, utilis
 un callback nommé :
 
 ```ts
-ElementIepEditeur.registerVerificationCallback('mon-verificateur', ({
-  studentProgram,
-  expectedRaw,
-}) => {
-  // Rejouer ou analyser studentProgram, puis comparer les objets finaux utiles.
-  return { isOk: true, feedback: 'Bravo !' }
-})
+ElementIepEditeur.registerVerificationCallback(
+  'mon-verificateur',
+  ({ studentProgram, expectedRaw }) => {
+    // Rejouer ou analyser studentProgram, puis comparer les objets finaux utiles.
+    return { isOk: true, feedback: 'Bravo !' }
+  },
+)
 
 texte += addEditeurIep(this, i, {
   programmeInitial,

@@ -701,7 +701,7 @@ La réponse attendue est une configuration sérialisée, pas seulement l'absciss
 
 ```ts
 import {
-  selectionCercleTrigo,
+  addTrigoCircleSelection,
   trigoCircleSelectionValue,
 } from '../../lib/customElements/TrigoCircleSelectionElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -721,7 +721,7 @@ handleAnswers(
   { formatInteractif: 'trigo-circle-selection' },
 )
 
-texte += selectionCercleTrigo(this, i, {
+texte += addTrigoCircleSelection(this, i, {
   showAngleLabels: true,
   showCoordinateLabels: Boolean(this.sup2),
   style: 'display:block; max-width: 46rem;',

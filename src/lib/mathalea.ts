@@ -1412,7 +1412,7 @@ export function mathaleaGenerateSeed({
  * @returns string
  */
 // Define the function with the condition check
-export function mathaleaFormatExercice(texte = ' ') {
+function applyFormatExerciceReplacements(texte: string): string {
   const lang = getLang()
   // Replace symbols based on general rules
   let formattedText = texte
@@ -1463,6 +1463,17 @@ export function mathaleaFormatExercice(texte = ' ') {
   }
 
   return formattedText
+}
+
+export function mathaleaFormatExercice(texte = ' ') {
+  // Les remplacements ne doivent porter que sur le texte affiché, pas sur le
+  // contenu des balises (ex: le JSON sérialisé dans l'attribut `propositions`
+  // de <mathalea-qcm>, que ces remplacements pourraient corrompre en cassant
+  // l'échappement des `\`, rendant le JSON illisible par JSON.parse).
+  return texte
+    .split(/(<[^>]*>)/g)
+    .map((part) => (part.startsWith('<') ? part : applyFormatExerciceReplacements(part)))
+    .join('')
 }
 
 export async function getExercisesFromExercicesParams() {

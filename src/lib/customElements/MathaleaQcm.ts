@@ -69,13 +69,8 @@ export class MathaleaQcmElement extends MathaleaCustomElement {
     ) as MathaleaQcmElement | null
 
     if (qcm != null) {
-      if (
-        exercice.autoCorrection[questionIndex]?.formatInteractif ===
-        MathaleaQcmElement.elementTag
-      ) {
-        exercice.answers ??= {}
-        exercice.answers[qcm.id] = qcm.value
-      }
+      exercice.answers ??= {}
+      exercice.answers[qcm.id] = qcm.value
       qcm.interactivityOn = false
     }
 

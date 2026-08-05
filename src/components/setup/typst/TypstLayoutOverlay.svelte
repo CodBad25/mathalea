@@ -109,6 +109,8 @@
     mergeExercisesEnabled?: boolean
     onChangeQuestionCount: (num: number, delta: number) => void
     onDeleteExercise: (num: number) => void
+    /** Ouvre la modale d'ajout d'un exercice à la fin de la fiche */
+    onAddExercise: () => void
     onToggleMergeBefore: (num: number) => void
     onAdjustFigureZoom: (num: number, delta: number) => void
     onSetFigureAlign: (num: number, align: 'left' | 'center' | 'right') => void
@@ -164,6 +166,7 @@
     mergeExercisesEnabled = true,
     onChangeQuestionCount,
     onDeleteExercise,
+    onAddExercise,
     onToggleMergeBefore,
     onAdjustFigureZoom,
     onSetFigureAlign,
@@ -931,9 +934,11 @@
            repère est au bord gauche de la page (déjà proche du bord) : on ne
            le décale que légèrement vers la gauche, et nettement vers le haut,
            pour ne pas recouvrir le titre de l'exercice qui suit — sauf
-           lorsqu'un saut est actif, où le repère reste sous l'exercice. -->
+           lorsqu'un saut est actif ou après le dernier exercice (rien ne suit
+           qu'on pourrait recouvrir), où la barre reste sous l'exercice. -->
       <div
-        class="pointer-events-auto absolute flex -translate-x-2 {hasBreak
+        class="pointer-events-auto absolute flex -translate-x-2 {hasBreak ||
+        !hasFollowingExo
           ? 'translate-y-2'
           : '-translate-y-[135%]'} items-center gap-0.5 typst-pill typst-pill-round px-1"
         class:typst-pill-force-visible={openInsertion?.space === 'exo' &&
@@ -942,6 +947,22 @@
           openInsertion.num === widget.num}
         style="left: {widget.left}%; top: {widget.top}%;"
       >
+        {#if !hasFollowingExo}
+          <!-- fin de la fiche : ajout d'un exercice choisi dans les
+               référentiels (modale de la vue Typst) -->
+          <button
+            type="button"
+            class="typst-pill-wide"
+            title="Ajouter un exercice à la fin de la fiche"
+            aria-label="Ajouter un exercice à la fin de la fiche"
+            data-testid="typst-overlay-add-exercise"
+            onclick={onAddExercise}
+          >
+            <i class="bx bx-plus"></i>
+            Ajouter un exercice
+          </button>
+          <span class="typst-pill-sep"></span>
+        {/if}
         {#if !isMergeGap}
           {#if !hasFollowingExo}
             <button
@@ -1077,6 +1098,18 @@
   }
   .typst-pill > :global(button:disabled:hover) {
     background: transparent;
+  }
+  /* Bouton à libellé (« Ajouter un exercice ») : les autres boutons de la
+     palette sont des icônes carrées de 22 px */
+  .typst-pill > :global(button.typst-pill-wide) {
+    gap: 2px;
+    padding: 0 6px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .typst-pill > :global(button.typst-pill-wide) > :global(i) {
+    font-size: 14px;
   }
   .typst-pill-sep {
     width: 1px;

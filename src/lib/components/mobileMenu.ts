@@ -46,11 +46,21 @@ export type MobileMenuEntry = {
 }
 
 /**
+ * Vues qui utilisent ces rubriques : la vue mobile et la modale « Ajouter un
+ * exercice » de la vue Typst (qui propose des rubriques supplémentaires).
+ */
+export type MobileMenuView = 'mobile' | 'typst'
+
+/** Vues d'une rubrique qui n'en déclare pas (`views` absent du JSON). */
+const ALL_MENU_VIEWS: MobileMenuView[] = ['mobile', 'typst']
+
+/**
  * Rubrique de premier niveau de la vue mobile (Collège, Lycée, …).
  * @property {string} id identifiant unique de la rubrique
  * @property {string} title libellé affiché sur la grosse tuile
  * @property {string} subtitle texte secondaire de la tuile (optionnel)
  * @property {string} icon classe d'icône boxicons de la tuile (optionnel)
+ * @property {MobileMenuView[]} views vues qui affichent la rubrique (optionnel, toutes par défaut)
  * @property {MobileMenuEntry[]} entries niveaux proposés dans la rubrique
  */
 export type MobileMenuSection = {
@@ -58,13 +68,33 @@ export type MobileMenuSection = {
   title: string
   subtitle?: string
   icon?: string
+  views?: MobileMenuView[]
   entries: MobileMenuEntry[]
 }
 
-/** Rubriques de la vue mobile, telles que décrites dans `mobileMenu.json`. */
-export const mobileMenuSections: MobileMenuSection[] = (
+const allMenuSections: MobileMenuSection[] = (
   mobileMenuContent as { sections: MobileMenuSection[] }
 ).sections
+
+/**
+ * Rubriques proposées dans une vue donnée.
+ * @param {MobileMenuView} view vue concernée
+ * @returns {MobileMenuSection[]} les rubriques que cette vue affiche
+ */
+function sectionsForView(view: MobileMenuView): MobileMenuSection[] {
+  return allMenuSections.filter((section) =>
+    (section.views ?? ALL_MENU_VIEWS).includes(view),
+  )
+}
+
+/** Rubriques de la vue mobile, telles que décrites dans `mobileMenu.json`. */
+export const mobileMenuSections: MobileMenuSection[] = sectionsForView('mobile')
+
+/**
+ * Rubriques de la modale « Ajouter un exercice » de la vue Typst : celles de
+ * la vue mobile, plus la Course aux nombres et les ressources complémentaires.
+ */
+export const typstMenuSections: MobileMenuSection[] = sectionsForView('typst')
 
 const themesTitles = levelsThemesList as Record<string, { titre?: string }>
 

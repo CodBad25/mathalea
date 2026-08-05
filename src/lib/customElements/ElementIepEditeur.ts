@@ -185,6 +185,7 @@ type InstructionIepSansOptions =
   | { type: 'cercle'; p1: string; p2: string }
   | { type: 'arc'; p1: string; p2: string }
   | { type: 'milieu'; nom: string; p1: string; p2: string }
+  | { type: 'demiTourPoint'; nom: string; p1: string; p2: string }
   | {
       type: 'intersection'
       nom: string
@@ -212,6 +213,7 @@ type InstructionIepSansOptions =
   | { type: 'texte'; texte: string; x: number; y: number }
   | { type: 'pause'; secondes: number }
   | { type: 'attente'; secondes: number }
+  | { type: 'codageMilieu'; p1: string; p2: string; p3: string; codage: string }
 
 export type InstructionIep = InstructionIepSansOptions & InstructionIepBase
 
@@ -409,6 +411,14 @@ const catalogue: Record<
       { cle: 'p2', genre: 'point', label: 'Extrémité 2' },
     ],
   },
+  demiTourPoint: {
+    label: 'Construire le symétrique d’un point',
+    champs: [
+      { cle: 'nom', genre: 'nom', label: 'Nom' },
+      { cle: 'p1', genre: 'point', label: 'Point' },
+      { cle: 'p2', genre: 'point', label: 'Centre' },
+    ],
+  },
   intersection: {
     label: 'Placer un point d’intersection',
     champs: [
@@ -517,6 +527,15 @@ const catalogue: Record<
       { cle: 'codage', genre: 'codageSegment', label: 'Codage' },
     ],
   },
+  codageMilieu: {
+    label: 'Coder le milieu d’un segment',
+    champs: [
+      { cle: 'p1', genre: 'point', label: 'Extrémité 1' },
+      { cle: 'p2', genre: 'point', label: 'Milieu' },
+      { cle: 'p3', genre: 'point', label: 'Extrémité 2' },
+      { cle: 'codage', genre: 'codageSegment', label: 'Codage' },
+    ],
+  },
   angleCodage: {
     label: 'Coder un angle',
     champs: [
@@ -577,6 +596,7 @@ const ordreCatalogue: TypeInstructionIep[] = [
   'cercle',
   'arc',
   'milieu',
+  'demiTourPoint',
   'intersection',
   'mediatrice',
   'perpendiculaire',
@@ -588,6 +608,7 @@ const ordreCatalogue: TypeInstructionIep[] = [
   'demiDroiteAngle',
   'codageAngleDroit',
   'segmentCodage',
+  'codageMilieu',
   'angleCodage',
   'regleMontrerGraduations',
   'regleMasquerGraduations',
@@ -597,6 +618,72 @@ const ordreCatalogue: TypeInstructionIep[] = [
   'texte',
   'pause',
   'attente',
+]
+
+type CategorieInstructionIep = {
+  id: string
+  label: string
+  types: TypeInstructionIep[]
+}
+
+const categoriesCatalogue: CategorieInstructionIep[] = [
+  {
+    id: 'points',
+    label: 'Points',
+    types: ['point', 'pointADistance', 'milieu', 'intersection'],
+  },
+  {
+    id: 'traces-base',
+    label: 'Tracés de base',
+    types: [
+      'segment',
+      'trait',
+      'polygone',
+      'polygoneRapide',
+      'droite',
+      'droitePointPente',
+      'demiDroite',
+      'demiDroitePointDirection',
+      'cercle',
+      'arc',
+      'prolongerObjet',
+    ],
+  },
+  {
+    id: 'constructions',
+    label: 'Constructions',
+    types: [
+      'mediatrice',
+      'perpendiculaire',
+      'perpendiculaireAObjet',
+      'parallele',
+      'paralleleAObjet',
+      'demiTourPoint',
+      'bissectrice',
+      'demiDroiteAngle',
+    ],
+  },
+  {
+    id: 'codages',
+    label: 'Codages',
+    types: ['codageAngleDroit', 'segmentCodage', 'codageMilieu', 'angleCodage'],
+  },
+  {
+    id: 'outils',
+    label: 'Instruments',
+    types: [
+      'regleMontrerGraduations',
+      'regleMasquerGraduations',
+      'regleModifierLongueur',
+      'montrerOutil',
+      'masquerOutil',
+    ],
+  },
+  {
+    id: 'animation',
+    label: 'Animation',
+    types: ['texte', 'pause', 'attente'],
+  },
 ]
 
 function formateNombre(n: number) {
@@ -719,6 +806,8 @@ export function decrireInstruction(
       return `Tracer un arc de cercle de centre ${instr.p1} passant par ${instr.p2} au compas.`
     case 'milieu':
       return `Placer le milieu ${instr.nom} du segment [${instr.p1}${instr.p2}] à la règle graduée.`
+    case 'demiTourPoint':
+      return `Construire le symétrique ${instr.nom} du point ${instr.p1} par rapport au point ${instr.p2} et coder le milieu.`
     case 'intersection':
       return `Placer le point ${instr.nom}, intersection ${decrireElementPourIntersection(programme, instr.etape1)} et ${decrireElementPourIntersection(programme, instr.etape2)}.`
     case 'mediatrice':
@@ -747,6 +836,8 @@ export function decrireInstruction(
       return `Cacher ${nomsOutils[instr.outil]}.`
     case 'segmentCodage':
       return `Coder le segment [${instr.p1}${instr.p2}] (${instr.codage}).`
+    case 'codageMilieu':
+      return `Coder que ${instr.p2} est le milieu du segment [${instr.p1}${instr.p3}] (${instr.codage}).`
     case 'angleCodage':
       return `Coder l’angle ${instr.p1}${instr.p2}${instr.p3} (${instr.codage}).`
     case 'regleMontrerGraduations':
@@ -831,6 +922,23 @@ function elementsDirectionDefinis(
     }
   })
   return elements
+}
+
+function intersectionPeutAvoirDeuxPoints(
+  programme: InstructionIep[],
+  etape1: number,
+  etape2: number,
+) {
+  const element1 = programme[etape1]
+  const element2 = programme[etape2]
+  return (
+    estElementIntersectable(element1) &&
+    estElementIntersectable(element2) &&
+    (element1.type === 'cercle' ||
+      element1.type === 'arc' ||
+      element2.type === 'cercle' ||
+      element2.type === 'arc')
+  )
 }
 
 function pointDepuisPente(
@@ -1010,6 +1118,7 @@ function instructionEstValide(
       precedente.type === 'point' ||
       precedente.type === 'pointADistance' ||
       precedente.type === 'milieu' ||
+      precedente.type === 'demiTourPoint' ||
       precedente.type === 'intersection'
     ) {
       nomsConnus.add(precedente.nom)
@@ -1214,6 +1323,7 @@ function outilsRequisParInstruction(instr: InstructionIep): OutilIep[] {
     case 'intersection':
     case 'texte':
     case 'segmentCodage':
+    case 'codageMilieu':
     case 'angleCodage':
     case 'codageAngleDroit':
     case 'trait':
@@ -1228,6 +1338,8 @@ function outilsRequisParInstruction(instr: InstructionIep): OutilIep[] {
     case 'prolongerObjet':
     case 'milieu':
       return ['regle', 'crayon']
+    case 'demiTourPoint':
+      return ['compas', 'regle', 'crayon']
     case 'cercle':
     case 'arc':
     case 'mediatrice':
@@ -1464,6 +1576,16 @@ function jouerProgramme(
           points.set(instr.nom, M)
           break
         }
+        case 'demiTourPoint': {
+          const pts = recupere(instr.p1, instr.p2)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.demiTourPoint(pts[0], pts[1], instr.nom)
+          points.set(instr.nom, rotation(pts[0], pts[1], 180, instr.nom))
+          break
+        }
         case 'intersection': {
           const element1 = elementGeometrique(
             programme[instr.etape1],
@@ -1666,6 +1788,16 @@ function jouerProgramme(
           anim.segmentCodage(pts[0], pts[1], { codage: instr.codage })
           break
         }
+        case 'codageMilieu': {
+          const pts = recupere(instr.p1, instr.p2, instr.p3)
+          if (pts === undefined || longueur(pts[0], pts[2]) === 0) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.segmentCodage(pts[0], pts[1], { codage: instr.codage })
+          anim.segmentCodage(pts[1], pts[2], { codage: instr.codage })
+          break
+        }
         case 'angleCodage': {
           const pts = recupere(instr.p1, instr.p2, instr.p3)
           if (pts === undefined) {
@@ -1805,6 +1937,12 @@ export function pointsConstruitsDepuisProgramme(
         const pts = recupere(instr.p1, instr.p2)
         if (pts === undefined) break
         points.set(instr.nom, milieu(pts[0], pts[1], instr.nom))
+        break
+      }
+      case 'demiTourPoint': {
+        const pts = recupere(instr.p1, instr.p2)
+        if (pts === undefined) break
+        points.set(instr.nom, rotation(pts[0], pts[1], 180, instr.nom))
         break
       }
       case 'intersection': {
@@ -1990,6 +2128,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   private prochaineLettre = 0
   private divParametres!: HTMLDivElement
   private zoneAjout!: HTMLDivElement
+  private selectCategorie!: HTMLSelectElement
   private selectType!: HTMLSelectElement
   private listeProgramme!: HTMLOListElement
   private divAnimation!: HTMLDivElement
@@ -2339,14 +2478,22 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
     const ligneAjout = document.createElement('div')
     ligneAjout.classList.add('flex', 'flex-wrap', 'items-center', 'gap-2')
+    this.selectCategorie = document.createElement('select')
+    this.selectCategorie.classList.add(...classesSelect)
+    for (const categorie of this.categoriesDisponibles()) {
+      const option = document.createElement('option')
+      option.value = categorie.id
+      option.innerText = categorie.label
+      this.selectCategorie.appendChild(option)
+    }
+    this.selectCategorie.onchange = () => {
+      this.rafraichirSelectType()
+      this.rafraichirParametres()
+    }
+    ligneAjout.appendChild(this.selectCategorie)
+
     this.selectType = document.createElement('select')
     this.selectType.classList.add(...classesSelect)
-    for (const type of this.instructionsDisponibles) {
-      const option = document.createElement('option')
-      option.value = type
-      option.innerText = catalogue[type].label
-      this.selectType.appendChild(option)
-    }
     this.selectType.onchange = () => this.rafraichirParametres()
     ligneAjout.appendChild(this.selectType)
 
@@ -2447,6 +2594,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     conteneur.appendChild(zoneAnimation)
 
     this.appendChild(conteneur)
+    this.rafraichirSelectType()
     this.rafraichirParametres()
     this.appliquerInteractivite()
   }
@@ -2457,7 +2605,63 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     )
   }
 
+  private categoriesDisponibles() {
+    const typesDisponibles = new Set(this.instructionsDisponibles)
+    return categoriesCatalogue.filter((categorie) =>
+      categorie.types.some((type) => typesDisponibles.has(type)),
+    )
+  }
+
+  private typesDisponiblesDansCategorie(categorieId: string) {
+    const typesDisponibles = new Set(this.instructionsDisponibles)
+    const categorie =
+      categoriesCatalogue.find((categorie) => categorie.id === categorieId) ??
+      this.categoriesDisponibles()[0]
+    return (
+      categorie?.types.filter((type) => typesDisponibles.has(type)) ??
+      this.instructionsDisponibles
+    )
+  }
+
+  private categorieDuType(type: TypeInstructionIep) {
+    return categoriesCatalogue.find((categorie) =>
+      categorie.types.includes(type),
+    )
+  }
+
+  private rafraichirSelectType(typeAConserver?: TypeInstructionIep) {
+    const typeCourant =
+      typeAConserver ?? (this.selectType.value as TypeInstructionIep | '')
+    const types = this.typesDisponiblesDansCategorie(this.selectCategorie.value)
+    const typeSelectionne = types.includes(typeCourant as TypeInstructionIep)
+      ? (typeCourant as TypeInstructionIep)
+      : types[0]
+    this.selectType.innerHTML = ''
+    for (const type of types) {
+      const option = document.createElement('option')
+      option.value = type
+      option.innerText = catalogue[type].label
+      this.selectType.appendChild(option)
+    }
+    if (typeSelectionne !== undefined) this.selectType.value = typeSelectionne
+  }
+
   private ajouterTypeInstructionAuSelectSiBesoin(type: TypeInstructionIep) {
+    const categorie = this.categorieDuType(type)
+    if (categorie !== undefined) {
+      if (
+        this.selectCategorie.querySelector(
+          `option[value="${categorie.id}"]`,
+        ) === null
+      ) {
+        const optionCategorie = document.createElement('option')
+        optionCategorie.value = categorie.id
+        optionCategorie.innerText = categorie.label
+        this.selectCategorie.appendChild(optionCategorie)
+      }
+      this.selectCategorie.value = categorie.id
+      this.rafraichirSelectType(type)
+    }
     if (this.selectType.querySelector(`option[value="${type}"]`) !== null) {
       return
     }
@@ -2556,11 +2760,20 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     }
   }
 
-  private rafraichirParametres() {
+  private rafraichirParametres(valeursInitiales?: Record<string, string>) {
+    const valeursCourantes =
+      valeursInitiales ?? this.valeursParametresCourants()
     this.divParametres.innerHTML = ''
     const type = this.selectType.value as TypeInstructionIep
     const noms = pointsDefinis(this.programmeComplet())
     for (const champ of catalogue[type].champs) {
+      if (
+        type === 'intersection' &&
+        champ.genre === 'choix' &&
+        !this.intersectionSelectionneePeutAvoirDeuxPoints(valeursCourantes)
+      ) {
+        continue
+      }
       const etiquette = document.createElement('label')
       etiquette.classList.add(
         'flex',
@@ -2592,6 +2805,9 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           .findIndex((c) => c.cle === champ.cle)
         if (champ.genre === 'point' && noms.length > indice)
           select.value = noms[indice]
+        if (valeursCourantes[champ.cle] !== undefined) {
+          select.value = valeursCourantes[champ.cle]
+        }
         etiquette.appendChild(select)
       } else if (champ.genre === 'outil') {
         const select = document.createElement('select')
@@ -2603,11 +2819,15 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           option.innerText = nom
           select.appendChild(option)
         }
+        if (valeursCourantes[champ.cle] !== undefined) {
+          select.value = valeursCourantes[champ.cle]
+        }
         etiquette.appendChild(select)
       } else if (champ.genre === 'etape' || champ.genre === 'objetDirection') {
         const select = document.createElement('select')
         select.classList.add(...classesSelect, 'min-w-48')
         select.dataset.cle = champ.cle
+        select.onchange = () => this.rafraichirParametres()
         const elements =
           champ.genre === 'etape'
             ? elementsIntersectablesDefinis(this.programmeComplet())
@@ -2624,6 +2844,9 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           .findIndex((c) => c.cle === champ.cle)
         if (elements.length > indice)
           select.value = String(elements[indice].index)
+        if (valeursCourantes[champ.cle] !== undefined) {
+          select.value = valeursCourantes[champ.cle]
+        }
         etiquette.appendChild(select)
       } else if (
         champ.genre === 'codageSegment' ||
@@ -2645,6 +2868,9 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           option.innerText = valeur
           select.appendChild(option)
         }
+        if (valeursCourantes[champ.cle] !== undefined) {
+          select.value = valeursCourantes[champ.cle]
+        }
         etiquette.appendChild(select)
       } else if (champ.genre === 'choix') {
         const select = document.createElement('select')
@@ -2659,6 +2885,9 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           option.value = valeur
           option.innerText = texte
           select.appendChild(option)
+        }
+        if (valeursCourantes[champ.cle] !== undefined) {
+          select.value = valeursCourantes[champ.cle]
         }
         etiquette.appendChild(select)
       } else {
@@ -2678,11 +2907,41 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           champTexte.classList.add('w-48')
           champTexte.value = String(champ.defaut ?? '')
         }
+        if (valeursCourantes[champ.cle] !== undefined) {
+          champTexte.value = valeursCourantes[champ.cle]
+        }
         etiquette.appendChild(champTexte)
       }
       this.divParametres.appendChild(etiquette)
     }
     this.appliquerInteractivite()
+  }
+
+  private valeursParametresCourants() {
+    const valeurs: Record<string, string> = {}
+    if (this.divParametres === undefined) return valeurs
+    this.divParametres
+      .querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-cle]')
+      .forEach((element) => {
+        const cle = element.dataset.cle
+        if (cle !== undefined) valeurs[cle] = element.value
+      })
+    return valeurs
+  }
+
+  private intersectionSelectionneePeutAvoirDeuxPoints(
+    valeursCourantes: Record<string, string>,
+  ) {
+    const programme = this.programmeComplet()
+    const elements = elementsIntersectablesDefinis(programme)
+    const etape1 = Number(
+      valeursCourantes.etape1 ?? String(elements[0]?.index ?? ''),
+    )
+    const etape2 = Number(
+      valeursCourantes.etape2 ?? String(elements[1]?.index ?? ''),
+    )
+    if (Number.isNaN(etape1) || Number.isNaN(etape2)) return false
+    return intersectionPeutAvoirDeuxPoints(programme, etape1, etape2)
   }
 
   private nomSuivant() {
@@ -2710,7 +2969,13 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       const element = this.divParametres.querySelector<
         HTMLInputElement | HTMLSelectElement
       >(`[data-cle="${champ.cle}"]`)
-      if (element === null) return
+      if (element === null) {
+        if (type === 'intersection' && champ.genre === 'choix') {
+          instruction[champ.cle] = 1
+          continue
+        }
+        return
+      }
       if (champ.genre === 'nombre') {
         const valeur = Number(element.value.replace(',', '.'))
         if (Number.isNaN(valeur)) return
@@ -2742,6 +3007,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       type === 'point' ||
       type === 'pointADistance' ||
       type === 'milieu' ||
+      type === 'demiTourPoint' ||
       type === 'intersection'
     ) {
       const nom = String(instruction.nom)
@@ -2776,11 +3042,17 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     const instruction = this.programme[index]
     this.ajouterTypeInstructionAuSelectSiBesoin(instruction.type)
     this.selectType.value = instruction.type
-    this.rafraichirParametres()
     const valeurs = instruction as unknown as Record<
       string,
       string | number | undefined
     >
+    this.rafraichirParametres(
+      Object.fromEntries(
+        Object.entries(valeurs)
+          .filter(([, valeur]) => valeur !== undefined)
+          .map(([cle, valeur]) => [cle, String(valeur)]),
+      ),
+    )
     for (const champ of catalogue[instruction.type].champs) {
       const element = this.divParametres.querySelector<
         HTMLInputElement | HTMLSelectElement
@@ -2890,7 +3162,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       }
       const numero = document.createElement('span')
       numero.classList.add('text-gray-500', 'w-6', 'text-right', 'shrink-0')
-      numero.innerText = `${index + 1}.`
+      numero.innerText = `${indexComplet + 1}.`
       ligne.appendChild(numero)
 
       const texte = document.createElement('span')

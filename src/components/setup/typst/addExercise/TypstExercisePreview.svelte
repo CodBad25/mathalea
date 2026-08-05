@@ -1,0 +1,311 @@
+<script lang="ts">
+  import seedrandom from 'seedrandom'
+  import { onDestroy, tick } from 'svelte'
+  import { buildExercise } from '../../../../lib/components/exercisesUtils'
+  import { applyExerciceSettings } from '../../../../lib/components/exerciceSettings'
+  import {
+    endingLabel,
+    endingReference,
+  } from '../../../../lib/components/mobileMenu'
+  import {
+    mathaleaFormatExercice,
+    mathaleaGenerateSeed,
+    mathaleaHandleExerciceSimple,
+    mathaleaRenderDiv,
+  } from '../../../../lib/mathalea'
+  import type { IExercice, InterfaceParams } from '../../../../lib/types'
+  import {
+    isExerciceItemInReferentiel,
+    isGeoDynamic,
+    isTool,
+    type JSONReferentielEnding,
+  } from '../../../../lib/types/referentiels'
+  import Settings from '../../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
+
+  /**
+   * Aperçu d'un exercice dans la modale « Ajouter un exercice » de la vue
+   * Typst : énoncé généré (comme il le sera dans la fiche), roue dentée pour
+   * le paramétrer avant de l'ajouter, et bouton d'ajout.
+   *
+   * L'exercice vit ici : il n'est pas dans `exercicesParams` tant qu'il n'a
+   * pas été ajouté. « Ajouter » transmet une copie de ses paramètres (graine
+   * et réglages compris), la vue Typst se charge du reste.
+   */
+  type Props = {
+    ending: JSONReferentielEnding
+    /** Nombre de fois où cette ressource est déjà dans la fiche */
+    count: number
+    onAdd: (params: InterfaceParams) => void
+  }
+
+  const { ending, count, onAdd }: Props = $props()
+
+  /** Paramètres de l'exercice prévisualisé, transmis tels quels à l'ajout */
+  const params: InterfaceParams = $state(initialParams())
+  let exercise: IExercice | null = $state(null)
+  let isLoading = $state(false)
+  let errorMessage = $state('')
+  let isSettingsOpen = $state(false)
+  /** Incrémenté à chaque régénération pour ré-injecter le HTML de l'énoncé */
+  let version = $state(0)
+
+  /** Paramètres de départ : graine tirée au sort, comme un ajout par le menu */
+  function initialParams(): InterfaceParams {
+    // Math.random peut être verrouillé sur la graine du dernier exercice
+    // généré (seedrandom global) : sans ce réamorçage, toutes les cartes
+    // partageraient la même graine « aléatoire »
+    seedrandom(undefined, { global: true })
+    const newParams: InterfaceParams = {
+      uuid: ending.uuid,
+      alea: mathaleaGenerateSeed(),
+    }
+    if (isExerciceItemInReferentiel(ending) || isTool(ending)) {
+      newParams.id = ending.id
+    }
+    return newParams
+  }
+
+  /** Génère (ou régénère) le contenu de l'exercice pour l'aperçu HTML */
+  async function updateDisplay() {
+    if (exercise == null) return
+    if (exercise.seed === undefined) exercise.applyNewSeed?.()
+    seedrandom(exercise.seed, { global: true })
+    exercise.numeroExercice = 0
+    exercise.interactif = false
+    if (exercise.typeExercice === 'statique') {
+      // contenu figé (annale scannée, banque externe) : le régénérer
+      // viderait `listeQuestions` sans rien produire à la place
+      version += 1
+      await tick()
+      return
+    }
+    if (exercise.typeExercice === 'simple') {
+      mathaleaHandleExerciceSimple(exercise, false, 0)
+    } else if (typeof exercise.nouvelleVersionWrapper === 'function') {
+      exercise.nouvelleVersionWrapper(0)
+    }
+    version += 1
+    await tick()
+  }
+
+  /** Charge l'exercice à la première apparition à l'écran */
+  async function load() {
+    if (exercise != null || isLoading) return
+    isLoading = true
+    try {
+      exercise = await buildExercise($state.snapshot(params))
+      await updateDisplay()
+    } catch {
+      errorMessage = "Cet exercice n'a pas pu être chargé."
+    } finally {
+      isLoading = false
+    }
+  }
+
+  /**
+   * Action de chargement paresseux : un thème peut contenir des dizaines
+   * d'exercices, chacun étant un module chargé à la demande — on ne les
+   * génère qu'au moment où leur carte approche de l'écran.
+   */
+  let observer: IntersectionObserver | null = null
+  function lazyLoad(node: HTMLElement) {
+    if (typeof IntersectionObserver === 'undefined') {
+      void load()
+      return
+    }
+    observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer?.disconnect()
+          observer = null
+          void load()
+        }
+      },
+      { rootMargin: '200px' },
+    )
+    observer.observe(node)
+    return {
+      destroy() {
+        observer?.disconnect()
+        observer = null
+      },
+    }
+  }
+
+  onDestroy(() => {
+    exercise?.reinit?.()
+    exercise?.destroy?.()
+  })
+
+  /** Typeset KaTeX et redimensionnement des figures du contenu injecté */
+  function renderMath(node: HTMLElement) {
+    mathaleaRenderDiv(node, 1)
+  }
+
+  /**
+   * Met un contenu d'exercice au format HTML affichable : mêmes réécritures
+   * que les autres vues, et facteur de zoom des images statiques figé à 1.
+   * @param {string} text contenu brut (énoncé, consigne, question)
+   * @returns {string} le HTML à injecter
+   */
+  function format(text: string): string {
+    return mathaleaFormatExercice(text).replaceAll('{zoomFactor}', '1')
+  }
+
+  function handleNewSettings(event: CustomEvent) {
+    if (exercise == null) return
+    applyExerciceSettings(exercise, params, event.detail)
+    void updateDisplay()
+  }
+
+  function add() {
+    onAdd({ ...$state.snapshot(params) })
+    // la carte reste disponible : une nouvelle graine évite d'ajouter deux
+    // fois le même énoncé si l'on reclique
+    seedrandom(undefined, { global: true })
+    params.alea = mathaleaGenerateSeed()
+    if (exercise != null) {
+      exercise.seed = params.alea
+      void updateDisplay()
+    }
+  }
+
+  const label = $derived(endingLabel(ending))
+  const reference = $derived(endingReference(ending))
+  /** Ressource interactive sans énoncé imprimable (géométrie dynamique, outils) */
+  const isNotPrintable = $derived(isGeoDynamic(ending) || isTool(ending))
+  /**
+   * Exercice statique (annale scannée, banque externe) : contenu figé, ni
+   * nombre de questions ni graine à régler — comme dans la palette de mise en
+   * page, la roue dentée n'a rien à proposer.
+   */
+  const isConfigurable = $derived.by(
+    () => exercise != null && exercise.typeExercice !== 'statique',
+  )
+</script>
+
+<li
+  use:lazyLoad
+  class="flex flex-col gap-2 rounded-xl border border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest
+  bg-coopmaths-canvas dark:bg-coopmathsdark-canvas p-3"
+>
+  <div class="flex flex-row items-start justify-between gap-3">
+    <div class="min-w-0 text-coopmaths-corpus dark:text-coopmathsdark-corpus">
+      {#if reference}
+        <span
+          class="font-bold text-coopmaths-struct dark:text-coopmathsdark-struct"
+          >{reference}</span
+        >
+        &nbsp;
+      {/if}
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+      {@html label}
+    </div>
+    <div class="flex shrink-0 flex-row items-center gap-1">
+      {#if count > 0}
+        <span
+          title="Déjà présent {count} fois dans la fiche"
+          class="inline-flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-xs font-bold
+          bg-coopmaths-warn dark:bg-coopmathsdark-warn
+          text-coopmaths-canvas dark:text-coopmathsdark-canvas"
+        >
+          {count}
+        </span>
+      {/if}
+      {#if isConfigurable}
+        <button
+          type="button"
+          title="Paramétrer l'exercice avant de l'ajouter"
+          aria-label="Paramétrer l'exercice"
+          aria-expanded={isSettingsOpen}
+          class="rounded p-1 text-xl text-coopmaths-action hover:bg-coopmaths-canvas-dark
+          dark:text-coopmathsdark-action dark:hover:bg-coopmathsdark-canvas-dark"
+          onclick={() => (isSettingsOpen = !isSettingsOpen)}
+        >
+          <i class="bx bx-cog"></i>
+        </button>
+      {/if}
+      <button
+        type="button"
+        title="Ajouter cet exercice à la fiche"
+        class="flex flex-row items-center gap-1 rounded-lg px-3 py-1 text-sm font-bold
+        bg-coopmaths-action text-coopmaths-canvas hover:bg-coopmaths-action-lightest
+        dark:bg-coopmathsdark-action dark:text-coopmathsdark-canvas dark:hover:bg-coopmathsdark-action-lightest"
+        onclick={add}
+      >
+        <i class="bx bx-plus text-lg"></i>
+        Ajouter
+      </button>
+    </div>
+  </div>
+
+  {#if isSettingsOpen && exercise != null}
+    <div
+      class="rounded-lg bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark"
+    >
+      <Settings
+        exercice={exercise}
+        exerciceIndex={0}
+        inModal={true}
+        on:settings={handleNewSettings}
+        on:clickSettings={() => (isSettingsOpen = false)}
+      />
+    </div>
+  {/if}
+
+  {#if isNotPrintable}
+    <p class="text-xs italic text-coopmaths-warn dark:text-coopmathsdark-warn">
+      Cette ressource est interactive : elle n'a pas d'énoncé imprimable.
+    </p>
+  {/if}
+
+  {#if errorMessage !== ''}
+    <p class="text-sm text-coopmaths-warn dark:text-coopmathsdark-warn">
+      {errorMessage}
+    </p>
+  {:else if exercise == null}
+    <p
+      class="text-sm font-light text-coopmaths-corpus-lightest dark:text-coopmathsdark-corpus-lightest"
+    >
+      <i class="bx bx-loader-alt bx-spin"></i>
+      Chargement de l'aperçu…
+    </p>
+  {:else}
+    {#key version}
+      <div
+        use:renderMath
+        class="max-h-72 overflow-y-auto text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+      >
+        {#if exercise.consigne}
+          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+          <p class="mb-1">{@html format(exercise.consigne)}</p>
+        {/if}
+        {#if exercise.introduction}
+          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+          <p class="mb-1">{@html format(exercise.introduction)}</p>
+        {/if}
+        <!-- `list-inside` : le conteneur n'a que overflow-y réglé, ce qui
+             force overflow-x à se comporter en `auto` (règle CSS Overflow) et
+             rogne tout ce qui déborderait à gauche — dont les numéros en
+             `list-style-position: outside` (défaut), qui débordent dans la
+             marge sans réserver de place. `list-inside` les remet dans le
+             flux normal du contenu, sans dépassement possible. -->
+        <ul
+          class="{exercise.listeQuestions.length === 1 ||
+          exercise.listeAvecNumerotation === false
+            ? 'list-none'
+            : 'list-decimal list-inside'} space-y-1"
+        >
+          {#each exercise.listeQuestions as question}
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+            <li
+              class="marker:font-bold marker:text-coopmaths-struct dark:marker:text-coopmathsdark-struct"
+            >
+              {@html format(question)}
+            </li>
+          {/each}
+        </ul>
+      </div>
+    {/key}
+  {/if}
+</li>

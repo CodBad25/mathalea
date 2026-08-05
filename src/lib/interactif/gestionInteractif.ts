@@ -176,7 +176,14 @@ export function exerciceInteractif(
     const format = exercice.autoCorrection[i]?.formatInteractif ?? 'mathlive'
     const customElementFormat =
       interactivityTypeToCustomElementFormat(format) ?? format
-    if (listOfCustomElements.includes(customElementFormat)) {
+    if (format === 'custom') {
+      if (isMetaExercice(exercice)) {
+        const result = exercice.correctionInteractives[i](i)
+        perQuestionIsOk[i] = result === 'OK'
+        if (result === 'OK') nbQuestionsValidees++
+        else nbQuestionsNonValidees++
+      }
+    } else if (listOfCustomElements.includes(customElementFormat)) {
       // On traite le cas de tous les MathaleaCustomElement ici
       const liste = Array.from(mathaleaCustomElementsRegistry)
       const [tag, elementClasse] =
@@ -224,22 +231,6 @@ export function exerciceInteractif(
           )
           ;(divFeedback as HTMLDivElement).style.display = 'block'
         }
-      }
-    }
-    // Ensuite on traite tout ce qui va dans verifQuestionMathlive soit l'essentiel de tous les exos
-    else {
-      // On traite les autres cas ici
-      switch (format) {
-        case 'custom': // cas particulier d'un MetaExercice : il n'as pa d'interactifType mais il peut avoir des "questions" venant d'exercices 'custom'
-          {
-            if (isMetaExercice(exercice)) {
-              const result = exercice.correctionInteractives[i](i)
-              perQuestionIsOk[i] = result === 'OK'
-              if (result === 'OK') nbQuestionsValidees++
-              else nbQuestionsNonValidees++
-            }
-          }
-          break
       }
     }
   }

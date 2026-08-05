@@ -1,7 +1,7 @@
 import { cercleTrigo } from '../../lib/2d/cercleTrigo'
 import { orangeMathalea } from '../../lib/colors'
 import {
-  selectionCercleTrigo,
+  addTrigoCircleSelection,
   trigoCircleSelectionValue,
 } from '../../lib/customElements/TrigoCircleSelectionElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -104,7 +104,7 @@ function buildQuestion(type: number): PlacementQuestion {
 
 function renderCircleQuestion(exercice: Exercice, questionIndex: number) {
   if (context.isHtml && exercice.interactif) {
-    return selectionCercleTrigo(exercice, questionIndex, {
+    return addTrigoCircleSelection(exercice, questionIndex, {
       showAngleLabels: true,
       showCoordinateLabels: Boolean(exercice.sup2),
       style: 'display:block; max-width: 46rem;',
@@ -154,7 +154,7 @@ function renderFinalAnswerCircle(
   questionIndex: number,*/
 ) {
   /*  if (context.isHtml) {
-    const cercleCorr = selectionCercleTrigo(exercice, questionIndex, {
+    const cercleCorr = addTrigoCircleSelection(exercice, questionIndex, {
       showAngleLabels: true,
       showCoordinateLabels: true,
       style: 'display:block; max-width: 40rem;',

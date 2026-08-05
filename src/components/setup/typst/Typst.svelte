@@ -5,17 +5,17 @@
   import seedrandom from 'seedrandom'
   import { onDestroy, onMount } from 'svelte'
   import { get } from 'svelte/store'
-  import ExerciceSimple from '../../../exercices/ExerciceSimple'
   import {
+    buildExercise,
     buildExercisesList,
     getBanquesExternesPreambuleTyp,
     getStaticExerciceCorTypUrl,
     getStaticExerciceTypUrl,
   } from '../../../lib/components/exercisesUtils'
+  import { applyExerciceSettings } from '../../../lib/components/exerciceSettings'
   import {
     mathaleaFormatExercice,
     mathaleaHandleExerciceSimple,
-    mathaleaHandleSup,
     mathaleaUpdateUrlFromExercicesParams,
   } from '../../../lib/mathalea'
   import {
@@ -26,7 +26,7 @@
   } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
   import { isLocalStorageAvailable } from '../../../lib/stores/storage'
-  import type { IExercice } from '../../../lib/types'
+  import type { IExercice, InterfaceParams } from '../../../lib/types'
   import { decodeBase64, encodeBase64 } from '../latex/LatexConfig'
   import { context } from '../../../modules/context'
   import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
@@ -51,6 +51,7 @@
     type TypstExerciseInput,
     type WritingLinesPosition,
   } from './buildTypstDocument'
+  import TypstAddExerciseModal from './addExercise/TypstAddExerciseModal.svelte'
   import TypstLayoutOverlay, {
     type OverlayWidget,
     type TasksLayoutValue,
@@ -816,6 +817,48 @@
     scheduleCompile(code, 0)
   }
 
+  /** Modale « Ajouter un exercice » (navigation dans les référentiels) */
+  let isAddExerciseOpen = $state(false)
+
+  /**
+   * Ouvre la modale d'ajout. Pas de confirmation ici (contrairement aux
+   * autres actions qui régénèrent le code) : comme `deleteExercise`, ajouter
+   * un exercice est un geste déjà délibéré (plusieurs clics dans la modale),
+   * et le bloquer derrière l'avertissement générique « le code Typst a été
+   * modifié » forcerait à choisir entre perdre ses modifications et ne
+   * jamais pouvoir ajouter d'exercice tant que le code a été retouché à la
+   * main.
+   */
+  function openAddExercise() {
+    isAddExerciseOpen = true
+  }
+
+  /**
+   * Ajoute une ressource à la fin de la fiche : ses paramètres rejoignent
+   * `exercicesParams` (donc l'URL) et son contenu est généré comme les autres.
+   * Les réglages de la palette ne bougent pas — le nouvel exercice s'ajoute
+   * après le dernier, aucun numéro existant n'est décalé.
+   * @param {InterfaceParams} params paramètres de l'exercice choisi
+   */
+  async function addExerciseToSheet(params: InterfaceParams) {
+    exercicesParams.update((list) => [...list, params])
+    let exercise: IExercice | null = null
+    try {
+      exercise = await buildExercise(params)
+      // la vue Typst n'affiche jamais les exercices en mode interactif
+      exercise.interactif = false
+    } catch {
+      // exercice non chargeable : buildInputs signalera l'avertissement
+      exercise = null
+    }
+    exercises = [...exercises, exercise]
+    await applyTypSourcesForStaticExercises()
+    await prefetchStaticImages()
+    const code = buildCode()
+    setEditorContent(code)
+    scheduleCompile(code, 0)
+  }
+
   /**
    * Échange les réglages de la palette (colonnes/espacement des questions,
    * insertions) entre les exercices `numA` et `numB` : ce que le professeur
@@ -1093,35 +1136,7 @@
     const params = get(exercicesParams)[k]
     if (exercise == null || params == null) return
     if (!confirmOverwrite()) return
-    if (detail.nbQuestions != null) {
-      exercise.nbQuestions = detail.nbQuestions as number
-      params.nbQuestions = exercise.nbQuestions
-    }
-    if (detail.duration != null) {
-      exercise.duration = detail.duration as number
-      params.duration = exercise.duration
-    }
-    const supKeys = ['sup', 'sup2', 'sup3', 'sup4', 'sup5'] as const
-    for (const key of supKeys) {
-      if (detail[key] !== undefined) {
-        exercise[key] = detail[key] as boolean | number | string
-        params[key] = mathaleaHandleSup(
-          exercise[key] as boolean | number | string,
-        )
-      }
-    }
-    if (detail.versionQcm !== undefined && exercise instanceof ExerciceSimple) {
-      exercise.versionQcm = detail.versionQcm as boolean
-      params.versionQcm = exercise.versionQcm ? '1' : '0'
-    }
-    if (detail.alea !== undefined) {
-      exercise.seed = detail.alea as string
-      params.alea = exercise.seed
-    }
-    if (detail.correctionDetaillee !== undefined) {
-      exercise.correctionDetaillee = detail.correctionDetaillee as boolean
-      params.cd = exercise.correctionDetaillee ? '1' : '0'
-    }
+    applyExerciceSettings(exercise, params, detail)
     exercicesParams.update((list) => list)
     frozenInputs.delete(exercise)
     const code = buildCode()
@@ -1686,30 +1701,37 @@
   }
 
   /**
-   * Repère (1-based) de la ligne de code portant le marqueur invisible d'un
-   * exercice ou de sa correction (`#mathalea-anchor("exo"|"corr", N)`, voir
-   * `buildTypstDocument`) : c'est la ligne la plus proche du contenu affiché,
-   * quel que soit le mode de document (fusionné ou non). À défaut, on
-   * retombe sur le titre de section lisible du mode « banque »
-   * (`// ----- Exercice N -----`), pour un code retouché à la main qui
-   * aurait perdu son repère.
+   * Repère (1-based) de la ligne de code où éditer un exercice ou sa
+   * correction.
+   *
+   * En mode « banque » (le mode courant), le contenu d'un énoncé est dans sa
+   * définition (`// ----- Exercice N -----` puis `#let exN = exo.with(...)`) :
+   * le repère `#mathalea-anchor("exo", N)`, lui, ne précède que l'appel
+   * `#exN()` de la section « Énoncés », où il n'y a rien à modifier. On vise
+   * donc d'abord le titre de la définition, et on ne retombe sur le repère
+   * que s'il n'y en a pas — c'est le cas du mode fusionné, où le contenu suit
+   * directement le repère.
+   *
+   * Une correction n'a pas de définition séparée : son contenu suit son
+   * repère `#mathalea-anchor("corr", N)`, qui reste donc la bonne cible.
    */
   function findExerciseSourceLine(
     code: string,
     kind: 'exo' | 'corr',
     num: number,
   ): number | null {
+    const lines = code.split('\n')
+    if (kind === 'exo') {
+      const titleLine = lines.findIndex((line) =>
+        new RegExp(`^//\\s*-+\\s*Exercice ${num}\\b`).test(line),
+      )
+      if (titleLine !== -1) return titleLine + 1
+    }
     const anchorPattern = new RegExp(
       `#mathalea-anchor\\(\\s*"${kind}"\\s*,\\s*${num}\\s*\\)`,
     )
-    const lines = code.split('\n')
     const anchorLine = lines.findIndex((line) => anchorPattern.test(line))
-    if (anchorLine !== -1) return anchorLine + 1
-    if (kind !== 'exo') return null
-    const titleLine = lines.findIndex((line) =>
-      new RegExp(`^//\\s*-+\\s*Exercice ${num}\\b`).test(line),
-    )
-    return titleLine === -1 ? null : titleLine + 1
+    return anchorLine === -1 ? null : anchorLine + 1
   }
 
   /**
@@ -2450,7 +2472,10 @@
     ? 'dark'
     : ''} flex flex-col h-screen bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas-darkest"
 >
-  <div class="bg-coopmaths-canvas dark:bg-coopmathsdark-canvas">
+  <!-- `relative z-10` : la barre d'outils précède l'aperçu dans le DOM, elle
+       doit rester au-dessus de ses pastilles de mise en page (voir `isolate`
+       sur le conteneur de l'aperçu) -->
+  <div class="relative z-10 bg-coopmaths-canvas dark:bg-coopmathsdark-canvas">
     <NavBar
       subtitle="Impression"
       subtitleType="export"
@@ -2602,7 +2627,7 @@
       <div class="flex flex-row grow min-h-0">
         {#if isSettingsOpen}
           <div
-            class="typst-settings-pane w-80 shrink-0 overflow-y-auto border-r border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus p-5 space-y-4"
+            class="typst-settings-pane relative z-10 w-80 shrink-0 overflow-y-auto border-r border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus p-5 space-y-4"
           >
             <div class="flex items-center justify-between">
               <h3
@@ -2907,7 +2932,15 @@
                 ? 'w-1/2'
                 : 'hidden'} min-h-0 flex flex-col"
         >
-          <div class="relative grow overflow-auto p-4">
+          <!-- `isolate` : les pastilles de la palette de mise en page portent
+               des z-index (jusqu'à z-30) qui, sans contexte d'empilement ici,
+               les placeraient au-dessus des voisins de l'aperçu (panneau de
+               diagnostics, volet Réglages). Chrome les rend inoffensives en
+               les rognant (overflow), mais Safari leur laisse capter le survol
+               et les clics hors du cadre : le bouton « Revenir à la dernière
+               version qui compilait » se retrouvait sous une pastille
+               invisible. -->
+          <div class="relative isolate grow overflow-auto p-4">
             {#if isCompilerLoading}
               <div
                 class="flex flex-col items-center gap-2 py-24 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
@@ -2968,6 +3001,7 @@
                     onUpdateHeader={updateHeaderValue}
                     onChangeQuestionCount={changeQuestionCount}
                     onDeleteExercise={deleteExercise}
+                    onAddExercise={openAddExercise}
                     onMoveExercise={moveExercise}
                     onNewData={newDataForExercise}
                     onOpenSettings={openSettings}
@@ -3033,7 +3067,10 @@
                 onclick={restoreLastGoodCode}
               >
                 <i class="bx bx-undo text-lg"></i>
-                Revenir à la dernière version qui compilait
+                <!-- libellé dans un <span> : un nœud de texte nu dans un
+                     conteneur flex forme une boîte anonyme, dont le survol et
+                     le clic ne sont pas toujours rattachés au bouton -->
+                <span>Revenir à la dernière version qui compilait</span>
               </button>
             {/if}
           </div>
@@ -3144,6 +3181,13 @@
         </p>
       </div>
     </div>
+  {/if}
+
+  {#if isAddExerciseOpen}
+    <TypstAddExerciseModal
+      onAdd={addExerciseToSheet}
+      onClose={() => (isAddExerciseOpen = false)}
+    />
   {/if}
 
   {#if settingsExerciseIndex !== null && settingsExercise != null}

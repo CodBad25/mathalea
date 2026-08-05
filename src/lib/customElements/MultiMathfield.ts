@@ -121,6 +121,35 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
    */
   static formatStudentAnswer(rawAnswer: string): string {
     if (typeof rawAnswer !== 'string') return ''
+    const fromJson = (() => {
+      try {
+        const parsed = JSON.parse(rawAnswer) as unknown
+        if (
+          parsed == null ||
+          typeof parsed !== 'object' ||
+          Array.isArray(parsed)
+        ) {
+          return null
+        }
+        const values = Object.values(parsed as Record<string, unknown>)
+          .map((value) => String(value).trim())
+          .filter((value) => value.length > 0)
+        return values.length === 0
+          ? ''
+          : values
+              .map((value) => {
+                let v = value
+                if (!v.startsWith('$')) v = '$' + v
+                if (!v.endsWith('$')) v += '$'
+                return v
+              })
+              .join(' ; ')
+      } catch {
+        return null
+      }
+    })()
+    if (fromJson != null) return fromJson
+
     const cleaned = rawAnswer.replace(
       /%\{([a-zA-Z0-9_]+):"([^"]*)"\}/g,
       (_match, _champ, valeur: string) => {
@@ -519,8 +548,8 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
     return result
   }
 
-  get value() {
-    return this.getValue()
+  get value(): string {
+    return JSON.stringify(this.getValue())
   }
 
   update(answers: MultiMathfieldAnswers | string) {
@@ -599,8 +628,10 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
     }
 
     const multiId = `${this.elementTag}Ex${exercice.numeroExercice}Q${i}`
-    const multi = document.getElementById(multiId) as HTMLElement | null
-    const template = multi?.getAttribute('data-template')
+    const legacyMultiId = `multiMathfieldEx${exercice.numeroExercice}Q${i}`
+    const multi = (document.getElementById(multiId) ??
+      document.getElementById(legacyMultiId)) as HTMLElement | null
+    const fieldIdPrefix = multi?.id ?? multiId
     const reponses = exercice.autoCorrection[i].valeur
 
     if (reponses == null) {
@@ -654,8 +685,8 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         // avec la (ou l'une des) valeur(s) attendue(s).
         liste.interactivityOn = false
         const saisie = liste.value ?? ''
-        const eltFeedbackListe = multi?.shadowRoot?.querySelector(
-          `#check-${multiId}-${field}`,
+        const eltFeedbackListe = multi?.shadowRoot?.getElementById(
+          `check-${fieldIdPrefix}-${field}`,
         ) as HTMLSpanElement | null
         if (saisie === '') {
           compteurSaisiesVides++
@@ -676,8 +707,8 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         continue
       }
 
-      const mf = multi?.shadowRoot?.querySelector(
-        `#${multiId}-${field}`,
+      const mf = multi?.shadowRoot?.getElementById(
+        `${fieldIdPrefix}-${field}`,
       ) as MathfieldElement | null
       if (mf == null) {
         points.push(0)
@@ -693,8 +724,8 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         continue
       }
 
-      const eltFeedback = multi?.shadowRoot?.querySelector(
-        `#check-${multiId}-${field}`,
+      const eltFeedback = multi?.shadowRoot?.getElementById(
+        `check-${fieldIdPrefix}-${field}`,
       ) as HTMLSpanElement | null
       if (eltFeedback) {
         setStyles(eltFeedback, 'marginBottom: 20px')
@@ -769,14 +800,11 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         compteurBonnesReponses === variables.length ? '😎' : '☹️'
     }
 
-    if (typeof exercice.answers === 'object' && exercice.answers !== null) {
-      let filledTemplate = template ?? ''
-      Object.entries(saisies).forEach(([champ, valeur]) => {
-        const regex = new RegExp(`%\\{${champ}\\}`, 'g')
-        filledTemplate = filledTemplate.replace(regex, `${valeur}`)
-      })
-      exercice.answers[multiId] = filledTemplate
-    }
+    exercice.answers ??= {}
+    exercice.answers[multiId] =
+      multi instanceof MultiMathfieldElement
+        ? JSON.stringify(multi.getValue())
+        : JSON.stringify(saisies)
 
     return {
       isOk: compteurBonnesReponses === variables.length,

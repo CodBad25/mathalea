@@ -42,6 +42,7 @@ sont décrites dans
       "title": "Collège",           // libellé de la grosse tuile
       "subtitle": "6e · 5e · …",    // optionnel
       "icon": "bx-backpack",        // classe boxicons, optionnelle
+      "views": ["mobile", "typst"], // optionnel : vues affichant la rubrique (toutes par défaut)
       "entries": [
         {
           "id": "6e",               // identifiant unique dans la rubrique
@@ -78,6 +79,15 @@ sont décrites dans
   via [`MobileTile.svelte`](../../../../src/components/setup/mobile/MobileTile.svelte)
   (prop `href`, qui bascule la tuile d'un `<button>` de navigation vers un
   `<a target="_blank">`).
+
+- `views` (optionnel) restreint la rubrique à certaines vues. Ce fichier sert
+  aussi à la modale « Ajouter un exercice » de la
+  [vue Typst](../exports/typst.md#ajouter-un-exercice-depuis-laperçu) : les
+  rubriques sans `views` sont proposées partout, `"views": ["typst"]` réserve
+  une rubrique à cette modale (c'est le cas de « Course aux nombres » et de
+  « Ressources complémentaires », absentes du téléphone).
+  [`lib/components/mobileMenu.ts`](../../../../src/lib/components/mobileMenu.ts)
+  en tire `mobileMenuSections` et `typstMenuSections`.
 
 Ajouter un niveau au menu mobile ne demande donc **que** l'ajout d'une entrée
 dans ce fichier.

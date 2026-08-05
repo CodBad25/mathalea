@@ -16,12 +16,6 @@
     assignmentDataFromCapytale,
     sendToCapytaleSaveStudentAssignment,
   } from '../../../lib/handleCapytale'
-  import {
-    indexQuestionCliqueFigure,
-    verifQuestionCliqueFigure,
-  } from '../../../lib/customElements/CliqueFigureElement'
-  import { DragAndDropElement } from '../../../lib/customElements/DragAndDropElement'
-  import { MetaInteractif2dElement } from '../../../lib/customElements/MetaInteractif2dElement'
   import { decodeAnswers } from '../../../lib/lms/answersCodec'
   import { mathaleaUpdateUrlFromExercicesParams } from '../../../lib/mathalea'
   import { mathaleaWriteStudentPreviousAnswers } from '../../../lib/mathaleaUtils'
@@ -33,7 +27,6 @@
   } from '../../../lib/stores/generalStore'
   import { globalOptions } from '../../../lib/stores/globalOptions'
   import {
-    isMathliveCompatible,
     interactivityTypeToCustomElementFormat,
     type IExercice,
     type InteractivityType,
@@ -123,12 +116,82 @@
         ? undefined
         : `${customElementType}Ex${exerciceIndex}Q${questionIndex}`
     return (
-      exercice.answers?.[questionKey] ??
       (customElementKey == null
         ? undefined
         : exercice.answers?.[customElementKey]) ??
+      exercice.answers?.[questionKey] ??
       ''
     )
+  }
+
+  function collectAnswers(
+    exercice: IExercice,
+    predicate: (key: string) => boolean,
+  ): { [key: string]: string } {
+    return Object.keys(exercice.answers ?? {})
+      .filter(predicate)
+      .reduce((result: { [key: string]: string }, key) => {
+        result[key] = exercice.answers![key]
+        return result
+      }, {})
+  }
+
+  function getCustomElementAnswers(
+    exercice: IExercice,
+    exerciceIndex: number,
+    questionIndex: number,
+    customElementType: string,
+  ): { [key: string]: string } {
+    const questionKey = `Ex${exerciceIndex}Q${questionIndex}`
+    const lowerQuestionKey = `ex${exerciceIndex}Q${questionIndex}`
+    const customElementKey = `${customElementType}Ex${exerciceIndex}Q${questionIndex}`
+    if (exercice.answers?.[customElementKey] != null) {
+      return { [customElementKey]: exercice.answers[customElementKey] }
+    }
+    return collectAnswers(
+      exercice,
+      (key) =>
+        key.startsWith(customElementKey) ||
+        key.startsWith(questionKey) ||
+        key.startsWith(lowerQuestionKey) ||
+        key.endsWith(questionKey) ||
+        key.startsWith(`apigeomEx${exerciceIndex}F${questionIndex}`),
+    )
+  }
+
+  function getCanAnswerTypeForCustomElement({
+    exercice,
+    type,
+    customElementType,
+    displayQuestionIndex,
+    exerciceIndex,
+    questionIndex,
+  }: {
+    exercice: IExercice
+    type: InteractivityType
+    customElementType: string
+    displayQuestionIndex: number
+    exerciceIndex: number
+    questionIndex: number
+  }): AnswerType {
+    const answers = getCustomElementAnswers(
+      exercice,
+      exerciceIndex,
+      questionIndex,
+      customElementType,
+    )
+    const answerTxt = getQuestionAnswerValue(
+      exercice,
+      exerciceIndex,
+      questionIndex,
+      customElementType,
+    )
+    return {
+      type,
+      index: displayQuestionIndex,
+      answers,
+      answerTxt: answerTxt.includes('apiGeomVersion') ? 'Voir figure' : answerTxt,
+    }
   }
 
   onMount(async () => {
@@ -309,233 +372,7 @@
       const customElementType =
         interactivityTypeToCustomElementFormat(type) ?? type
 
-      if (listOfCustomElements.includes(customElementType)) {
-        const liste = Array.from(mathaleaCustomElementsRegistry)
-        const [tag, elementClasse] =
-          liste.find((custom) => custom[0] === customElementType) ?? []
-        if (tag == null || elementClasse == null) {
-          throw Error(
-            "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
-          )
-        }
-        const result = elementClasse.verifQuestion(
-          exercice,
-          indiceQuestionInExercice[i],
-        )
-        if (
-          result == null ||
-          typeof result !== 'object' ||
-          !('isOk' in result) ||
-          !('score' in result)
-        ) {
-          throw Error(
-            `L'élément '${tag}' n'a pas de méthode verifQuestion ou celle-ci n'a pas retourné une valeur conforme)`,
-          )
-        }
-        resultsByQuestion[i] = result.isOk
-        if (!isMathliveCompatible(type)) {
-          const listeKey = `${tag}Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-          if (type === 'qcm') {
-            const questionIndex = indiceQuestionInExercice[i]
-            const answerKey = `Ex${indiceExercice[i]}Q${questionIndex}`
-            const qcmAnswers =
-              exercice.autoCorrection[questionIndex].propositions
-                ?.filter(
-                  (_proposition, index) =>
-                    exercice.answers?.[`${answerKey}R${index}`] === '1',
-                )
-                .map((proposition) => proposition.texte) ?? []
-            answers[i] = qcmAnswers.join(' ; ')
-            exercice.answers ??= {}
-            exercice.answers[answerKey] = answers[i]
-            answersType[i] = {
-              type,
-              index: i,
-              answers: Object.keys(exercice.answers)
-                .filter((key) => key.startsWith(answerKey))
-                .reduce((result: { [key: string]: string }, key) => {
-                  result[key] = exercice.answers![key]
-                  return result
-                }, {}),
-              answerTxt: answers[i],
-            }
-            continue
-          }
-          if (customElementType === 'clique-figure') {
-            answers[i] = indexQuestionCliqueFigure(
-              exercice,
-              indiceQuestionInExercice[i],
-            )
-            answersType[i] = {
-              type: customElementType as InteractivityType,
-              index: i,
-              answers: Object.keys(exercice.answers ?? {})
-                .filter(
-                  (key: string) =>
-                    key.startsWith('cliquefigure') &&
-                    key.endsWith(
-                      `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                    ),
-                )
-                .reduce((result: { [key: string]: any }, k) => {
-                  result[k] = exercice.answers![k]
-                  return result
-                }, {}),
-              answerTxt: answers[i],
-            }
-            continue
-          }
-          if (customElementType === 'drag-and-drop') {
-            answersType[i] = {
-              type: customElementType as InteractivityType,
-              index: i,
-              answers: Object.keys(exercice.answers ?? {})
-                .filter(
-                  (key: string) =>
-                    key.startsWith(
-                      `rectangleDNDEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                    ) ||
-                    key.startsWith(
-                      `texteDNDEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                    ),
-                )
-                .reduce((result: { [key: string]: any }, k) => {
-                  result[k] = exercice.answers![k]
-                  return result
-                }, {}),
-              answerTxt: Object.keys(exercice.answers ?? {})
-                .filter((key: string) =>
-                  key.startsWith(
-                    `texteDNDEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                  ),
-                )
-                .reduce((result: string, k) => {
-                  result = exercice.answers![k]
-                  return result
-                }, ''),
-            }
-            answers[i] = answersType[i].answerTxt
-            answersType[i].answers![
-              `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-            ] = answersType[i].answerTxt
-            continue
-          }
-          answers[i] =
-            exercice.answers?.[listeKey] ??
-            getQuestionAnswerValue(
-              exercice,
-              indiceExercice[i],
-              indiceQuestionInExercice[i],
-              customElementType,
-            )
-          answersType[i] = {
-            type: type as InteractivityType,
-            index: i,
-            answers: Object.keys(exercice.answers ?? {})
-              .filter(
-                (key: string) =>
-                  key.startsWith(listeKey) ||
-                  key.startsWith(
-                    `ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                  ) ||
-                  key.startsWith(
-                    `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                  ),
-              )
-              .reduce((result: { [key: string]: any }, k) => {
-                result[k] = exercice.answers![k]
-                return result
-              }, {}),
-            answerTxt: answers[i],
-          }
-          continue
-        }
-        // récupération de la réponse
-        answersType[i] = {
-          type: type as InteractivityType,
-          index: i,
-          answers: {
-            [`Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
-              getQuestionAnswerValue(
-                exercice,
-                indiceExercice[i],
-                indiceQuestionInExercice[i],
-                customElementType,
-              ),
-          },
-          answerTxt: getQuestionAnswerValue(
-            exercice,
-            indiceExercice[i],
-            indiceQuestionInExercice[i],
-            customElementType,
-          ),
-        }
-        answers[i] = answersType[i].answerTxt
-      } else if (type === 'dnd') {
-        resultsByQuestion[i] = oneResultToBoolean(
-          DragAndDropElement.verifQuestion(
-            exercice,
-            indiceQuestionInExercice[i],
-          ),
-        )
-        // récupération de la réponse
-        answersType[i] = {
-          type,
-          index: i,
-          answers: Object.keys(exercice.answers ?? {})
-            .filter(
-              (key: string) =>
-                key.startsWith(
-                  `rectangleDNDEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                ) ||
-                key.startsWith(
-                  `texteDNDEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                ),
-            )
-            .reduce((result: { [key: string]: any }, k) => {
-              result[k] = exercice.answers![k]
-              return result
-            }, {}),
-          answerTxt: Object.keys(exercice.answers ?? {})
-            .filter((key: string) =>
-              key.startsWith(
-                `texteDNDEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-              ),
-            )
-            .reduce((result: string, k) => {
-              result = exercice.answers![k]
-              return result
-            }, ''),
-        }
-        answers[i] = answersType[i].answerTxt
-        answersType[i].answers![
-          `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-        ] = answersType[i].answerTxt
-      } else if (type === 'cliqueFigure') {
-        resultsByQuestion[i] = oneResultToBoolean(
-          verifQuestionCliqueFigure(exercice, indiceQuestionInExercice[i]) ===
-            'OK',
-        )
-        answers[i] = indexQuestionCliqueFigure(
-          exercice,
-          indiceQuestionInExercice[i],
-        )
-        answersType[i] = {
-          type,
-          index: i,
-          answers: Object.keys(exercice.answers ?? {})
-            .filter((key: string) =>
-              key.endsWith(
-                `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-              ),
-            )
-            .reduce((result: { [key: string]: any }, k) => {
-              result[k] = exercice.answers![k]
-              return result
-            }, {}),
-          answerTxt: answers[i],
-        }
-      } else if (type === 'custom') {
+      if (type === 'custom') {
         // si le type est `custom` on est sûr que `correctionInteractive` existe
         // d'où le ! après `correctionInteractive`
         if (exercice instanceof MetaExercice) {
@@ -567,20 +404,16 @@
         answersType[i] = {
           type,
           index: i,
-          answers: Object.keys(exercice.answers ?? {})
-            .filter(
-              (key: string) =>
-                key.endsWith(
-                  `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-                ) ||
-                key.startsWith(
-                  `apigeomEx${indiceExercice[i]}F${indiceQuestionInExercice[i]}`,
-                ),
-            )
-            .reduce((result: { [key: string]: any }, k) => {
-              result[k] = exercice.answers![k]
-              return result
-            }, {}),
+          answers: collectAnswers(
+            exercice,
+            (key) =>
+              key.endsWith(
+                `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
+              ) ||
+              key.startsWith(
+                `apigeomEx${indiceExercice[i]}F${indiceQuestionInExercice[i]}`,
+              ),
+          ),
           answerTxt: '',
         }
         answersType[i].answerTxt = Object.keys(answersType[i].answers ?? {})
@@ -592,43 +425,46 @@
         answers[i] = answersType[i].answerTxt.includes('apiGeomVersion')
           ? 'Voir figure'
           : answersType[i].answerTxt
-      } else if (type === 'MetaInteractif2d') {
-        resultsByQuestion[i] = oneResultToBoolean(
-          MetaInteractif2dElement.verifQuestion(
-            exercice,
-            indiceQuestionInExercice[i],
-          ),
-        )
-        // récupération de la réponse
-        answersType[i] = {
-          type,
-          index: i,
-          answers: {
-            [`Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
-              exercice.answers![
-                `MetaInteractif2dEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-              ],
-          },
-          answerTxt:
-            exercice.answers![
-              `MetaInteractif2dEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
-            ],
+      } else if (listOfCustomElements.includes(customElementType)) {
+        const liste = Array.from(mathaleaCustomElementsRegistry)
+        const [tag, elementClasse] =
+          liste.find((custom) => custom[0] === customElementType) ?? []
+        if (tag == null || elementClasse == null) {
+          throw Error(
+            "Une classe de listOfCustomElements n'est pas enregistrée dans le registre mathaleaCustomElementsRegistry",
+          )
         }
+        const result = elementClasse.verifQuestion(
+          exercice,
+          indiceQuestionInExercice[i],
+        )
+        if (
+          result == null ||
+          typeof result !== 'object' ||
+          !('isOk' in result) ||
+          !('score' in result)
+        ) {
+          throw Error(
+            `L'élément '${tag}' n'a pas de méthode verifQuestion ou celle-ci n'a pas retourné une valeur conforme)`,
+          )
+        }
+        resultsByQuestion[i] = result.isOk
+        answersType[i] = getCanAnswerTypeForCustomElement({
+          exercice,
+          type: type as InteractivityType,
+          customElementType: tag,
+          displayQuestionIndex: i,
+          exerciceIndex: indiceExercice[i],
+          questionIndex: indiceQuestionInExercice[i],
+        })
         answers[i] = answersType[i].answerTxt
       } else {
         answersType[i] = {
           type: 'mathlive',
           index: i,
-          answers: Object.keys(exercice.answers ?? {})
-            .filter((key: string) =>
-              key.endsWith(
-                `Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-              ),
-            )
-            .reduce((result: { [key: string]: any }, k) => {
-              result[k] = exercice.answers![k]
-              return result
-            }, {}),
+          answers: collectAnswers(exercice, (key) =>
+            key.endsWith(`Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`),
+          ),
           answerTxt: '',
         }
       }

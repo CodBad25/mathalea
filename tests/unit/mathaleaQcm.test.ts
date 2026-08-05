@@ -170,7 +170,7 @@ describe('MathaleaQcmElement', () => {
     expect(qcm.interactivityOn).toBe(false)
   })
 
-  it('ne duplique pas la reponse pour un dispatch qcm historique', () => {
+  it('hydrate la valeur restaurable pour un dispatch qcm historique', () => {
     exercice.autoCorrection[0].formatInteractif = 'qcm'
     const qcm = appendQcm(exercice)
     qcm.value = '[0]'
@@ -178,7 +178,7 @@ describe('MathaleaQcmElement', () => {
     MathaleaQcmElement.verifQuestion(exercice, 0)
 
     expect(exercice.answers?.Ex2Q0R0).toBe('1')
-    expect(exercice.answers?.['mathalea-qcmEx2Q0']).toBeUndefined()
+    expect(exercice.answers?.['mathalea-qcmEx2Q0']).toBe('[0]')
   })
 
   it('corrige le format qcm historique par le dispatch central', () => {
@@ -198,7 +198,7 @@ describe('MathaleaQcmElement', () => {
     expect(score.textContent).toBe('1 / 1')
     expect(qcm.interactivityOn).toBe(false)
     expect(exercice.answers?.Ex2Q0R0).toBe('1')
-    expect(exercice.answers?.['mathalea-qcmEx2Q0']).toBeUndefined()
+    expect(exercice.answers?.['mathalea-qcmEx2Q0']).toBe('[0]')
   })
 
   it('expose un helper qui renseigne le format interactif', () => {

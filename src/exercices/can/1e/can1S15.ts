@@ -1,84 +1,94 @@
+import Decimal from 'decimal.js'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  ecritureAlgebriqueSauf1,
+  ecritureParentheseSiNegatif,
+  reduireAxPlusB,
+} from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Calculer la raison d’une suite arithmétique/géométrique'
+
+export const titre =
+  "Exprimer le terme général d'une suite définie par récurrence"
+export const dateDePublication = '04/08/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
-// Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
-export const dateDePublication = '18/02/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-// export const dateDeModifImportante = '14/02/2022' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-
-/**
- * Modèle d'exercice très simple pour la course aux nombres
- * @author Gilles Mora
-
-*/
-export const uuid = 'cd45d'
-
+export const uuid = 'cf810'
 export const refs = {
   'fr-fr': ['can1S15'],
   'fr-ch': [],
 }
-export default class CalculRaison extends ExerciceSimple {
+
+/**
+ * Déterminer la forme explicite d'une suite arithmétique ou géométrique
+ * définie par récurrence à partir de $u_0$ ou $u_1$.
+ * @author Stéphane Guyon
+ */
+export default class TermeGeneralSuiteParRecurrence extends ExerciceSimple {
   constructor() {
     super()
-
     this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
   }
 
   nouvelleVersion() {
-    let u, i, v, r, q
-    const nomSuite = ['u', 'v', 'w']
-    const s = choice(nomSuite)
-    switch (
-      this.quotaChoice('cas', ['a', 'b']) // 'b', 'c', 'd'
-    ) {
-      case 'a': // suite arithmétique
-        u = randint(-15, 15, 0)
-        r = randint(-15, 15, 0)
-        v = u + r
-        i = randint(0, 10)
-        this.question = `Soit $(${s}_n)$ une suite arithmétique telle que :<br>
-$${s}_{${i}}=${u}$ et  $${s}_{${i + 1}}=${v}$.<br>
+    const indicePremierTerme = choice([0, 1])
+    const premierTerme = randint(-12, 12, 0)
 
-Donner la raison $r$ de cette suite.`
-        if (!this.interactif) {
-          this.question += ''
-        } else {
-          this.question += '<br> $r=$'
-        }
-        this.correction = `La raison est donnée par la différence de deux termes consécutifs :<br>
-        $r=${s}_{${i + 1}}-${s}_{${i}}=${v}-${ecritureParentheseSiNegatif(u)}=${miseEnEvidence(v - u)}$.`
+    switch (this.quotaChoice('typeSuite', ['arithmetique', 'geometrique'])) {
+      case 'arithmetique': {
+        const raison = randint(-9, 9, 0)
+        const termeConstant = premierTerme - indicePremierTerme * raison
+        const decalage = indicePremierTerme === 0 ? 'n' : '\\left(n-1\\right)'
+        const formeDeveloppee = `${premierTerme}${ecritureAlgebriqueSauf1(raison)}n${indicePremierTerme === 0 ? '' : ecritureAlgebrique(-raison)}`
+        const reponse = reduireAxPlusB(raison, termeConstant, 'n')
+        const relation = `u_{n+1}=u_n${ecritureAlgebrique(raison)}`
 
-        this.reponse = r
+        this.question = `La suite $(u_n)$ est définie par $u_{${indicePremierTerme}}=${premierTerme}$ et par la relation $${relation}$, pour tout entier naturel $n$.<br>Exprimer $u_n$ en fonction de $n$.`
+        if (this.interactif) this.question += '<br>$u_n=$'
 
-        this.canReponseACompleter = '$r=\\ldots$'
+        this.correction = `$${relation}$ est la relation de récurrence d’une suite arithmétique de raison $r=${raison}$.<br>`
+        this.correction +=
+          indicePremierTerme === 0
+            ? 'Pour tout entier naturel $n$, on a $u_n=u_0+nr$.<br>'
+            : 'Pour tout entier naturel $n$, on a $u_n=u_1+(n-1)r$.<br>'
+        this.correction += `$\\begin{aligned}u_n&=${premierTerme}+${decalage}\\times ${ecritureParentheseSiNegatif(raison)}\\\\&=${formeDeveloppee}\\\\&=${miseEnEvidence(reponse)}.\\end{aligned}$`
+
+        this.reponse = reponse
+        this.canReponseACompleter = '$u_n=\\ldots$'
         break
-      case 'b': // suite géométrique
-        u = randint(-12, 12, 0)
-        q = randint(-10, 10, [-1, 1, 0])
-        v = u * q
-        i = randint(0, 10)
-        this.question = `Soit $(${s}_n)$ une suite géométrique  telle que :<br>
-$${s}_{${i}}=${u}$ et  $${s}_{${i + 1}}=${v}$.<br>
+      }
+      case 'geometrique': {
+        const raison = choice([
+          new Decimal(randint(2, 9)).div(10),
+          new Decimal(randint(2, 5)),
+        ])
+        const raisonTex = texNombre(raison, 1)
+        const puissance = indicePremierTerme === 0 ? 'n' : 'n-1'
+        const reponse = `${premierTerme}*(${raison.toString()})^(${puissance})`
+        const relation = `u_{n+1}=${raisonTex}u_n`
+        const formeExplicite = `${premierTerme}\\times ${raisonTex}^{${puissance}}`
 
-Donner la raison $q$ de cette suite.`
-        if (!this.interactif) {
-          this.question += ''
-        } else {
-          this.question += '<br> $q=$'
-        }
-        this.correction = `La raison est donnée par le quotient de deux termes consécutifs :<br>
-        $q=\\dfrac{${s}_{${i + 1}}}{${s}_{${i}}}=\\dfrac{${v}}{${u}}=${miseEnEvidence(v / u)}$.`
+        this.question = `La suite $(u_n)$ est définie par $u_{${indicePremierTerme}}=${premierTerme}$ et par la relation $${relation}$, pour tout entier naturel $n$.<br>Exprimer $u_n$ en fonction de $n$.`
+        if (this.interactif) this.question += '<br>$u_n=$'
 
-        this.reponse = q
+        this.correction = `$${relation}$ est la relation de récurrence d’une suite géométrique de raison $q=${raisonTex}$.<br>`
+        this.correction +=
+          indicePremierTerme === 0
+            ? 'Pour tout entier naturel $n$, on a $u_n=u_0\\times q^n$.<br>'
+            : 'Pour tout entier naturel $n$, on a $u_n=u_1\\times q^{n-1}$.<br>'
+        this.correction += `$u_n=${miseEnEvidence(formeExplicite)}$.`
 
-        this.canReponseACompleter = '$q=\\ldots$'
+        this.reponse = reponse
+        this.canReponseACompleter = '$u_n=\\ldots$'
         break
+      }
     }
   }
 }

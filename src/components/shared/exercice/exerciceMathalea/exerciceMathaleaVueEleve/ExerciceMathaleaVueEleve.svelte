@@ -409,12 +409,39 @@
   ) {
     if (sourceAnswers == null) return sourceAnswers
     const serializableAnswers = { ...sourceAnswers }
-    const hasLegacyCliqueFigureAnswer = Object.keys(sourceAnswers).some((key) =>
-      key.startsWith('cliquefigure'),
+    const qcmCustomKeys = Object.keys(sourceAnswers).filter((key) =>
+      key.startsWith('mathalea-qcmEx'),
     )
-    if (hasLegacyCliqueFigureAnswer) {
+    for (const customKey of qcmCustomKeys) {
+      const legacyPrefix = customKey.replace('mathalea-qcm', '')
       for (const key of Object.keys(serializableAnswers)) {
-        if (key.startsWith('clique-figureEx')) {
+        if (key === legacyPrefix || key.startsWith(`${legacyPrefix}R`)) {
+          delete serializableAnswers[key]
+        }
+      }
+    }
+    const dragAndDropCustomKeys = Object.keys(sourceAnswers).filter((key) =>
+      key.startsWith('drag-and-dropEx'),
+    )
+    for (const customKey of dragAndDropCustomKeys) {
+      const legacyPrefix = customKey.replace('drag-and-drop', '')
+      for (const key of Object.keys(serializableAnswers)) {
+        if (
+          key === legacyPrefix ||
+          key.startsWith(`rectangleDND${legacyPrefix}`) ||
+          key.startsWith(`texteDND${legacyPrefix}`)
+        ) {
+          delete serializableAnswers[key]
+        }
+      }
+    }
+    const cliqueFigureCustomKeys = Object.keys(sourceAnswers).filter((key) =>
+      key.startsWith('clique-figureEx'),
+    )
+    for (const customKey of cliqueFigureCustomKeys) {
+      const legacySuffix = customKey.replace('clique-figure', '')
+      for (const key of Object.keys(serializableAnswers)) {
+        if (key.startsWith('cliquefigure') && key.endsWith(legacySuffix)) {
           delete serializableAnswers[key]
         }
       }
@@ -424,7 +451,8 @@
 
   async function verifExerciceVueEleve() {
     log('verifExerciceVueEleve')
-    exercise.nbTentativesVerification = (exercise.nbTentativesVerification ?? 0) + 1
+    exercise.nbTentativesVerification =
+      (exercise.nbTentativesVerification ?? 0) + 1
     if (
       exercise.nbTentativesVerification === 1 &&
       exerciceAUneUniteManquante(exercise)
@@ -445,6 +473,7 @@
       const previousBestScore = interfaceParams?.bestScore ?? 0
       const { numberOfPoints, numberOfQuestions, perQuestionIsOk } =
         exerciceInteractif(exercise, divScore, buttonScore)
+      console.log(`Answers: ${JSON.stringify(exercise.answers)}`)
       questionsIsOk = perQuestionIsOk
       const isThisTryBetter = numberOfPoints >= previousBestScore
       if (

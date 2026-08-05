@@ -23,7 +23,7 @@ export type TrigoCircleSelectionOptions = {
   showCoordinateLabels?: boolean
   style?: string
   interactivityOn?: boolean
-  value?: number
+  value?: number | string
 }
 
 const svgNamespace = 'http://www.w3.org/2000/svg'
@@ -63,11 +63,12 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
       `trigo-circle-selectionEx${exercice.numeroExercice}Q${questionIndex}`,
     ) as TrigoCircleSelectionElement | null
     cercleSelectionElement!.interactivityOn = false
-    const resultatMesure = cercleSelectionElement?.value ?? 0 // 0 signifie pas de réponse.
+    const resultatMesure = Number(cercleSelectionElement?.value ?? 0) // 0 signifie pas de réponse.
     const isCorrect = resultatMesure === Number(goodAnswer)
-    exercice.answers[
-      `trigo-circle-selectionEx${exercice.numeroExercice}Q${questionIndex}`
-    ] = resultatMesure.toString()
+    if (cercleSelectionElement != null) {
+      exercice.answers[cercleSelectionElement.id] =
+        cercleSelectionElement.value
+    }
     const spanResultat = document.querySelector(
       `#resultatCheckEx${exercice.numeroExercice}Q${questionIndex}`,
     ) as HTMLDivElement | null
@@ -95,7 +96,7 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
     style?: string
     showAngleLabels?: boolean
     showCoordinateLabels?: boolean
-    value?: number
+    value?: number | string
     interactivityOn: boolean
   }): string {
     const attrs: string[] = []
@@ -106,7 +107,7 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
     if (style) attrs.push(`style="${style}"`)
     if (showAngleLabels === false) attrs.push('show-angle-labels="false"')
     if (showCoordinateLabels) attrs.push('show-coordinate-labels')
-    if (value !== undefined) attrs.push(`value="${value}"`)
+    if (value !== undefined) attrs.push(`value="${String(value)}"`)
     attrs.push(`interactivity-on="${Boolean(interactivityOn)}"`)
     attrs.push(`points="${encodeURIComponent(JSON.stringify(points))}"`)
     return `<trigo-circle-selection ${attrs.join(' ')}></trigo-circle-selection>`
@@ -151,15 +152,19 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
     }
   }
 
-  get value(): number {
+  get value(): string {
+    return String(this.selectedValue)
+  }
+
+  get selectedValue(): number {
     return Array.from(this._selectedValues).reduce(
       (sum, value) => sum + value,
       0,
     )
   }
 
-  set value(val: number) {
-    this._selectedValues = this.decodeValue(val)
+  set value(val: number | string) {
+    this._selectedValues = this.decodeValue(Number(val))
     this.syncValueAttribute()
     this.updateSelectionState()
   }
@@ -585,7 +590,7 @@ export function trigoCircleSelectionValue(
   }, 0)
 }
 
-export function selectionCercleTrigo(
+export function addTrigoCircleSelection(
   exercice: IExercice,
   questionIndex: number,
   options: TrigoCircleSelectionOptions = {},
@@ -611,6 +616,8 @@ export function selectionCercleTrigo(
 
   return `${html}<span id="resultatCheckEx${exercice.numeroExercice}Q${questionIndex}"></span>`
 }
+
+export const selectionCercleTrigo = addTrigoCircleSelection
 
 registerMathaleaCustomElement(TrigoCircleSelectionElement)
 

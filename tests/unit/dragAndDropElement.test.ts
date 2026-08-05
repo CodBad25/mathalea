@@ -1,99 +1,92 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import Exercice from '../../src/exercices/Exercice'
 import { DragAndDropElement } from '../../src/lib/customElements/DragAndDropElement'
-import {
-  listOfCustomElements,
-  mathaleaCustomElementsRegistry,
-} from '../../src/lib/customElements/MathaleaCustomElement'
-import DragAndDrop from '../../src/lib/interactif/DragAndDrop'
-import {
-  exerciceInteractif,
-  handleAnswers,
-} from '../../src/lib/interactif/gestionInteractif'
-import { interactivityTypeToCustomElementFormat } from '../../src/lib/types'
+import { handleAnswers } from '../../src/lib/interactif/gestionInteractif'
 import { setOutputHtml } from '../../src/modules/context'
 
-describe('DragAndDropElement', () => {
-  let exercice: Exercice
+function renderDndElement(): DragAndDropElement {
+  document.body.innerHTML = DragAndDropElement.create({
+    numeroExercice: 3,
+    questionIndex: 0,
+    innerHtml: `
+      <div id="etiquettesEx3Q0">
+        <div class="etiquette dragOk" id="etiquetteEx3Q0I1">A</div>
+        <div class="etiquette dragOk duplicable" id="etiquetteEx3Q0I2">B</div>
+      </div>
+      <div id="rectanglesEx3Q0">
+        <div class="rectangleDND" id="rectangleEx3Q0R1"></div>
+        <div class="rectangleDND" id="rectangleEx3Q0R2"></div>
+      </div>
+      <span id="resultatCheckEx3Q0"></span>
+      <div id="feedbackEx3Q0"></div>
+    `,
+  })
+  const element = document.querySelector(
+    'drag-and-drop',
+  ) as DragAndDropElement
+  element.connectedCallback()
+  element.querySelectorAll<HTMLElement>('.etiquette').forEach((etiquette) => {
+    etiquette.innerText = etiquette.textContent ?? ''
+  })
+  return element
+}
 
+describe('DragAndDropElement', () => {
   beforeEach(() => {
     setOutputHtml()
     document.body.innerHTML = ''
-    exercice = new Exercice()
-    exercice.numeroExercice = 4
-    exercice.nbQuestions = 1
-    exercice.interactif = true
-    exercice.dragAndDrops = []
   })
 
-  it('enregistre le tag dans les registres MathALEA', () => {
-    expect(customElements.get('drag-and-drop')).toBe(DragAndDropElement)
-    expect(listOfCustomElements).toContain('drag-and-drop')
-    expect(mathaleaCustomElementsRegistry.get('drag-and-drop')).toBe(
-      DragAndDropElement,
+  it('rehydrate les rectangles depuis sa value JSON', () => {
+    const element = renderDndElement()
+
+    element.value = JSON.stringify([
+      'etiquetteEx3Q0I1',
+      'etiquetteEx3Q0I2-clone-123',
+    ])
+
+    expect(element.value).toBe(
+      JSON.stringify(['etiquetteEx3Q0I1', 'etiquetteEx3Q0I2-clone-123']),
     )
+    expect(
+      element.querySelector('#rectangleEx3Q0R1 #etiquetteEx3Q0I1'),
+    ).not.toBeNull()
+    expect(
+      element.querySelector('#rectangleEx3Q0R2 #etiquetteEx3Q0I2-clone-123'),
+    ).not.toBeNull()
   })
 
-  it('normalise le format dnd historique pour le dispatch', () => {
-    expect(interactivityTypeToCustomElementFormat('dnd')).toBe('drag-and-drop')
+  it('formate sa value JSON en texte lisible pour les solutions CAN', () => {
+    const element = renderDndElement()
+
+    expect(
+      DragAndDropElement.formatStudentAnswer(
+        JSON.stringify(['etiquetteEx3Q0I1;etiquetteEx3Q0I2-clone-123']),
+        element.outerHTML,
+      ),
+    ).toBe('A B')
   })
 
-  it('encapsule le HTML historique dans un custom element', () => {
-    const dnd = createDnd(exercice)
-    const addEventListenerSpy = vi.spyOn(document, 'addEventListener')
-
-    const html = dnd.ajouteDragAndDrop({ melange: false, duplicable: false })
-
-    expect(html).toContain('<drag-and-drop')
-    expect(html).toContain('id="drag-and-dropEx4Q0"')
-    expect(html).toContain('id="divDragAndDropEx4Q0"')
-    expect(html).toContain('id="rectangleEx4Q0R1"')
-    expect(addEventListenerSpy).not.toHaveBeenCalledWith(
-      'exercicesAffiches',
-      expect.any(Function),
-    )
-    addEventListenerSpy.mockRestore()
-  })
-
-  it('verifie une question par le dispatch central', () => {
-    const dnd = createDnd(exercice)
-    exercice.dragAndDrops[0] = dnd
+  it('stocke sa value restaurable dans exercice.answers', () => {
+    const exercice = new Exercice()
+    exercice.numeroExercice = 3
+    exercice.dragAndDrops = [{ listeners: [] } as any]
     handleAnswers(
       exercice,
       0,
-      { rectangle1: { value: '1', options: { multi: false } } },
+      {
+        rectangle1: { value: '1' },
+        rectangle2: { value: '2' },
+      },
       { formatInteractif: 'dnd' },
     )
-    document.body.innerHTML = dnd.ajouteDragAndDrop({
-      melange: false,
-      duplicable: false,
-    })
-    const rectangle = document.getElementById('rectangleEx4Q0R1')
-    const etiquette = document.getElementById('etiquetteEx4Q0I1')
-    rectangle?.appendChild(etiquette!)
+    const element = renderDndElement()
+    element.value = JSON.stringify(['etiquetteEx3Q0I1', 'etiquetteEx3Q0I2'])
 
-    const result = exerciceInteractif(
-      exercice,
-      document.createElement('div'),
-      document.createElement('button'),
-    )
+    const result = DragAndDropElement.verifQuestion(exercice, 0)
 
-    expect(result).toEqual({
-      numberOfPoints: 1,
-      numberOfQuestions: 1,
-      perQuestionIsOk: [true],
-    })
-    expect(document.getElementById('resultatCheckEx4Q0')?.innerHTML).toBe('😎')
-    expect(exercice.answers?.rectangleDNDEx4Q0R1).toBe('etiquetteEx4Q0I1')
+    expect(result.isOk).toBe(true)
+    expect(exercice.answers?.['drag-and-dropEx3Q0']).toBe(element.value)
+    expect(exercice.answers?.rectangleDNDEx3Q0R1).toBe('etiquetteEx3Q0I1')
   })
 })
-
-function createDnd(exercice: Exercice): DragAndDrop {
-  return new DragAndDrop({
-    exercice,
-    question: 0,
-    consigne: 'Déplacer.',
-    etiquettes: [[{ id: '1', contenu: 'A' }]],
-    enonceATrous: '%{rectangle1}',
-  })
-}

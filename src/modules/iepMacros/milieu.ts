@@ -19,9 +19,9 @@ export const milieuALaRegle = function (
   if (this.x(A) === this.x(B) && this.y(A) === this.y(B)) {
     return
   }
-  const d = droite(A, B)
   const depart = A.x < B.x ? A : A.x > B.x ? B : A.y < B.y ? A : B
   const arrivee = depart === A ? B : A
+  const d = droite(depart, arrivee)
   const O = milieu(A, B, nom)
   const isRegleVisible = this.regle.visibilite
   this.regleMontrerGraduations()

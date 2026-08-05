@@ -39,7 +39,7 @@ Un double-clic sur l'aperçu (`jumpToSourceFromClick` dans `Typst.svelte`) bascu
 
 1. le clic est converti en coordonnées SVG (mêmes unités que les repères de la palette de mise en page, voir `computeOverlayWidgets`) ;
 2. la page cliquée est retrouvée dans `previewPages`, puis le dernier repère `exo`/`corr` (parmi ceux publiés par `buildTypstDocument`, voir la section « Palette de mise en page ») rencontré au-dessus du point cliqué détermine l'exercice ;
-3. `findExerciseSourceLine` cherche dans le code la ligne portant `#mathalea-anchor("exo"|"corr", N)` (présente dans tous les modes de document, y compris fusionné) — ou, à défaut, le titre `// ----- Exercice N -----` du mode banque, pour un code retouché à la main qui aurait perdu son repère ;
+3. `findExerciseSourceLine` cherche la ligne où le contenu est réellement éditable. Pour un énoncé, c'est le titre `// ----- Exercice N -----` de sa définition (`#let exN = exo.with(...)`) : le repère `#mathalea-anchor("exo", N)` ne précède que l'appel `#exN()` de la section « Énoncés », où il n'y a rien à modifier. À défaut de définition (mode fusionné, où le contenu suit le repère) — et toujours pour une correction, qui n'a pas de définition séparée — la ligne visée est celle du repère `#mathalea-anchor("exo"|"corr", N)` ;
 4. `revealPosition` (dans `editor/typstEditorSetup.ts`) y place le curseur, en dépliant d'abord tout bloc replié qui la contiendrait (`foldedRanges`/`unfoldEffect`).
 
 Un double-clic sur un contrôle de la palette de mise en page (bouton, champ) est ignoré : elle a déjà son propre comportement.
@@ -62,6 +62,52 @@ Fonctionnement :
 Les contrôles font des **éditions ciblées du code** dans CodeMirror (pas de régénération) : les boutons modifient les lignes `#let exN-colonnes`/`#let exN-gutter`, les insertions ajoutent une ligne marquée `// mathalea:insertion` après le repère de gap. Elles sont donc annulables (Ctrl+Z) et présentes dans le `.typ` exporté. Ces éditions ne marquent **pas** le code comme « modifié à la main » (`isEdited`) : puisqu'elles survivent à la régénération via le carry-over, elles ne déclenchent pas l'avertissement d'écrasement — seule la frappe directe dans l'éditeur le fait.
 
 À la régénération (réglages, « Nouvelles données »), `harvestCarryOver` relit ces ajustements dans le code courant et les réémet (paramètre `carryOver` de `buildTypstDocument`) : ils survivent à la régénération, contrairement aux autres modifications manuelles. « Réinitialiser les réglages du document » les efface.
+
+## Ajouter un exercice depuis l'aperçu
+
+Le dernier repère de la palette (après le dernier exercice, ou seul repère
+d'une fiche vide) porte un bouton **« Ajouter un exercice »** qui ouvre une
+modale de navigation dans les référentiels
+([`addExercise/TypstAddExerciseModal.svelte`](../../../../src/components/setup/typst/addExercise/TypstAddExerciseModal.svelte)) :
+
+- même parcours que la vue mobile (rubrique > niveau > thèmes > sous-thèmes),
+  à partir des rubriques déclarées pour la vue `typst` dans
+  [`src/json/mobileMenu.json`](../../../../src/json/mobileMenu.json) (voir
+  [Vue mobile — rubriques](../architecture/vue-mobile.md#rubriques-affichées--srcjsonmobilemenujson)) :
+  Collège, Lycée général, Lycée professionnel, **Course aux nombres** et
+  **Ressources complémentaires** (annales d'examens et ressources partenaires,
+  banques d'exercices ajoutées comprises) — ces deux dernières ne sont pas
+  proposées sur téléphone ;
+- au bout d'un thème, chaque exercice est affiché **en aperçu HTML**
+  ([`addExercise/TypstExercisePreview.svelte`](../../../../src/components/setup/typst/addExercise/TypstExercisePreview.svelte)),
+  avec une roue dentée qui ouvre le panneau `Settings` de la vue prof et un
+  bouton « Ajouter ». Les aperçus sont chargés paresseusement
+  (`IntersectionObserver`) : un thème de cinquante exercices ne charge que les
+  modules visibles ;
+- l'exercice prévisualisé vit dans la carte, hors de `exercicesParams` : les
+  réglages faits à la roue dentée sont portés par les paramètres transmis à
+  l'ajout. Après un ajout, la carte tire une nouvelle graine (recliquer
+  n'ajoute donc pas deux fois le même énoncé) et un badge rappelle combien de
+  fois la ressource est déjà dans la fiche ;
+- un exercice statique (annale, banque externe) n'a rien à régler : sa roue
+  dentée est masquée, comme dans la barre d'exercice de la palette.
+
+On peut naviguer, ajouter plusieurs exercices, puis fermer la modale
+(« Valider », croix, Échap ou clic sur le fond).
+
+Côté `Typst.svelte`, `addExerciseToSheet` ajoute les paramètres à
+`exercicesParams` (donc à l'URL), charge l'exercice avec le même
+`buildExercise` que le chargement de la fiche
+([`lib/components/exercisesUtils.ts`](../../../../src/lib/components/exercisesUtils.ts)),
+relit les sources `.typ`/images statiques puis régénère le code. Les réglages
+de la palette ne sont pas décalés : l'ajout se fait après le dernier exercice,
+aucun numéro existant ne change (une insertion de texte présente au dernier
+repère se retrouve donc avant le nouvel exercice). Contrairement aux autres
+actions qui régénèrent le code, ouvrir la modale ne demande pas confirmation
+même si le code a été modifié à la main (`isEdited`) : comme `deleteExercise`,
+ajouter un exercice est déjà un geste délibéré, et bloquer la modale derrière
+l'avertissement générique interdirait tout ajout tant que le code a été
+retouché à la main.
 
 ## Lignes en pointillés (« Lignes pour écrire »)
 
@@ -86,6 +132,8 @@ La liste des exercices, leurs graines et leurs réglages restent portés par les
 | --- | --- |
 | `src/components/setup/typst/Typst.svelte` | La vue : barre d'outils, éditeur, aperçu, exports |
 | `src/components/setup/typst/TypstLayoutOverlay.svelte` | Palette de mise en page dessinée par-dessus l'aperçu |
+| `src/components/setup/typst/addExercise/TypstAddExerciseModal.svelte` | Modale « Ajouter un exercice » (navigation dans les référentiels) |
+| `src/components/setup/typst/addExercise/TypstExercisePreview.svelte` | Aperçu d'un exercice dans cette modale (réglages et ajout) |
 | `src/components/setup/typst/buildTypstDocument.ts` | Génère le code Typst complet (en-tête, exercices, corrections) |
 | `src/components/setup/typst/latexToTypst.ts` | Convertit le HTML des exercices et les formules LaTeX en Typst |
 | `src/components/setup/typst/typstCompiler.ts` | Compilation dans le navigateur via typst.ts (WASM) |

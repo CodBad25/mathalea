@@ -109,6 +109,90 @@
           "path": ["BP1"]
         }
       ]
+    },
+    {
+      "id": "can",
+      "title": "Course aux nombres",
+      "subtitle": "CE · CM · 6e … Terminale",
+      "icon": "bx-timer",
+      "views": ["typst", "mobile"],
+      "entries": [
+        {
+          "id": "can-ce",
+          "title": "CE1 · CE2",
+          "referentiel": "aleatoires",
+          "path": ["CAN", "canCE"]
+        },
+        {
+          "id": "can-cm",
+          "title": "CM1 · CM2",
+          "referentiel": "aleatoires",
+          "path": ["CAN", "CM1/CM2"]
+        },
+        {
+          "id": "can-6e",
+          "title": "6e",
+          "referentiel": "aleatoires",
+          "path": ["CAN", "6e"]
+        },
+        {
+          "id": "can-5e",
+          "title": "5e",
+          "referentiel": "aleatoires",
+          "path": ["CAN", "5e"]
+        },
+        {
+          "id": "can-4e",
+          "title": "4e",
+          "referentiel": "aleatoires",
+          "path": ["CAN", "4e"]
+        },
+        {
+          "id": "can-3e",
+          "title": "3e",
+          "referentiel": "aleatoires",
+          "path": ["CAN", "3e"]
+        },
+        {
+          "id": "can-2e",
+          "title": "Seconde",
+          "referentiel": "aleatoires",
+          "path": ["CAN", "2e"]
+        },
+        {
+          "id": "can-1e",
+          "title": "Première",
+          "referentiel": "aleatoires",
+          "path": ["CAN", "1e"]
+        },
+        {
+          "id": "can-terminale",
+          "title": "Terminale",
+          "referentiel": "aleatoires",
+          "path": ["CAN", "Terminale"]
+        }
+      ]
+    },
+    {
+      "id": "complements",
+      "title": "Ressources complémentaires",
+      "subtitle": "Annales d'examens · Ressources partenaires",
+      "icon": "bx-library",
+      "views": ["typst"],
+      "entries": [
+        {
+          "id": "annales",
+          "title": "Annales d'examens",
+          "referentiel": "examens",
+          "path": []
+        },
+        {
+          "id": "partenaires",
+          "title": "Ressources partenaires",
+          "referentiel": "partenaires",
+          "path": []
+        }
+      ]
     }
   ]
 }

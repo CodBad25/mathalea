@@ -263,6 +263,7 @@
   })
 </script>
 
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <section
   class="relative w-full rounded-lg border border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest bg-coopmaths-canvas dark:bg-coopmathsdark-canvas shadow-sm"
   onpointermove={showControls}

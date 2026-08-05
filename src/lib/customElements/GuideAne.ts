@@ -98,6 +98,18 @@ type GuideAneValue = GuideAneState & {
 
 type GuideAnePoint = { x: number; y: number }
 
+function parseGuideAneValue(
+  value: GuideAneState | GuideAneValue | string,
+): GuideAneState | GuideAneValue | null {
+  if (typeof value !== 'string') return value
+  if (value.trim() === '') return null
+  try {
+    return JSON.parse(value) as GuideAneState | GuideAneValue
+  } catch {
+    return null
+  }
+}
+
 export type GuideAneOptions = {
   id?: string
   className?: string
@@ -243,17 +255,16 @@ export class GuideAne extends MathaleaCustomElement {
       `#feedbackEx${exercice.numeroExercice}Q${questionIndex}`,
     ) as HTMLDivElement
     let isOk = false
-    const answer = guideAne.value
+    const answer = guideAne.getState()
     if (exercice.answers == null) exercice.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    exercice.answers[`guide-aneEx${exercice.numeroExercice}Q${questionIndex}`] =
-      JSON.stringify(answer)
+    exercice.answers[guideAne.id] = guideAne.value
 
     isOk = guideAne.isTargetReached()
     guideAne.interactivityOn = false
     let feedback = ''
     if (!isOk) {
-      const saisie = guideAne.value
+      const saisie = answer
       const AD = saisie.lengthAD
       feedback = `Votre segment $[AD]$ mesure $${texNombre(AD, 2)}$ cm.<br>
       Le segment $[AD]$ doit mesurer $\\dfrac{${p}}{${n}}\\times ${targetAB}${egalOuApprox((p * targetAB) / n, 2)}${texNombre((p * targetAB) / n, 2)}$ cm pour que le rapport $\\dfrac{AD}{AB}$ soit égal à $\\dfrac{${p}}{${n}}$.<br>`
@@ -270,10 +281,10 @@ export class GuideAne extends MathaleaCustomElement {
         spanReponseLigne.innerHTML = '☹️'
       }
     }
-    if (divFeedback && feedback !== '') {
-      divFeedback.innerHTML = feedback
+    if (divFeedback) {
+      if (feedback !== '') divFeedback.innerHTML = feedback
+      divFeedback.style.display = feedback !== '' ? 'block' : 'none'
     }
-    divFeedback.style.display = feedback !== '' ? 'block' : 'none'
 
     return {
       isOk,
@@ -413,7 +424,7 @@ export class GuideAne extends MathaleaCustomElement {
   }
 
   public getValue() {
-    return this.value
+    return this.getState()
   }
 
   public getLengthABValue(): number {
@@ -449,7 +460,7 @@ export class GuideAne extends MathaleaCustomElement {
   }
 
   // Méthode pour obtenir un rapport détaillé de l'état du guide-âne
-  public get value(): GuideAneValue {
+  public getState(): GuideAneValue {
     return {
       n: this.n,
       p: this.p,
@@ -468,18 +479,24 @@ export class GuideAne extends MathaleaCustomElement {
     }
   }
 
-  public update(val: GuideAneState | GuideAneValue) {
-    this.n = val.n
-    this.p = val.p
-    this.alpha = val.alpha
-    this.lengthAB = val.lengthAB
-    this.target = val.target
-    this.targetFraction = val.targetFraction
-    this.targetColor = val.targetColor
-    this.printAD = val.printAD
-    this.printRatio = val.printRatio
-    this.fractionToDecimalAD = val.fractionToDecimalAD
-    this.displayTargetOn = val.displayTargetOn
+  public get value(): string {
+    return JSON.stringify(this.getState())
+  }
+
+  public update(val: GuideAneState | GuideAneValue | string) {
+    const parsedValue = parseGuideAneValue(val)
+    if (parsedValue == null) return
+    this.n = parsedValue.n
+    this.p = parsedValue.p
+    this.alpha = parsedValue.alpha
+    this.lengthAB = parsedValue.lengthAB
+    this.target = parsedValue.target
+    this.targetFraction = parsedValue.targetFraction
+    this.targetColor = parsedValue.targetColor
+    this.printAD = parsedValue.printAD
+    this.printRatio = parsedValue.printRatio
+    this.fractionToDecimalAD = parsedValue.fractionToDecimalAD
+    this.displayTargetOn = parsedValue.displayTargetOn
     this.B = {
       x: this.A.x + this.lengthAB * this.pixelsParCm,
       y: this.A.y,
@@ -488,10 +505,10 @@ export class GuideAne extends MathaleaCustomElement {
 
     // targetReached est dérivé : il sera recalculé dans redraw().
     this.targetReached = false
-    this.redraw()
+    if (this.svg != null) this.redraw()
   }
 
-  public set value(val: GuideAneState | GuideAneValue) {
+  public set value(val: GuideAneState | GuideAneValue | string) {
     this.update(val)
   }
 
@@ -501,7 +518,7 @@ export class GuideAne extends MathaleaCustomElement {
     const originalRedraw = this.redraw.bind(this)
     this.redraw = () => {
       originalRedraw()
-      callback(this.value)
+      callback(this.getState())
     }
   }
 
@@ -1384,7 +1401,7 @@ export class GuideAne extends MathaleaCustomElement {
   private checkTargetReached() {
     if (this.target === null) return
 
-    const currentValue = this.value
+    const currentValue = this.getState()
     const threshold = 0.02 // Seuil de tolérance en cm
 
     const wasReached = this.targetReached
@@ -1468,7 +1485,7 @@ export class GuideAne extends MathaleaCustomElement {
   }
 
   updateLengthDisplay() {
-    const lengthCm = this.value.lengthAD
+    const lengthCm = this.getState().lengthAD
     const lengthAB = this.getLengthAB()
 
     let targetDisplay = ''

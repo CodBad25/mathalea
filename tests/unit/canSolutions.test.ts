@@ -83,6 +83,14 @@ describe('formatStudentAnswer', () => {
     ).toBe('a) $3$ b) $x+1$')
   })
 
+  it("formate la value JSON d'un multi-mathfield", () => {
+    const question =
+      '<multi-mathfield id="multi-mathfieldEx0Q0"></multi-mathfield>'
+    expect(
+      formatStudentAnswer(question, '{"rep1":"3","rep2":"x+1"}'),
+    ).toBe('$3$ ; $x+1$')
+  })
+
   it("affiche la réponse brute d'un champ texte", () => {
     const question = '<input id="champTexteEx0Q0">'
     expect(formatStudentAnswer(question, 'douze')).toBe('douze')

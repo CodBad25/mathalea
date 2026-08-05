@@ -308,23 +308,23 @@ async function testV(page: Page) {
   expect(value.studentAssignment.length).toEqual(8)
   const responses = [
     { 'interactive-clockEx0Q0': '{"hour":12,"minute":15,"second":0}' },
-    { Ex1Q0R0: '1', Ex1Q0R1: '0', Ex1Q0R2: '0', Ex1Q0R3: '0', Ex1Q0R4: '0' },
+    { 'mathalea-qcmEx1Q0': '[0]' },
     { Ex2Q0: '6000' },
     {
       apigeomEx3F06GXX0:
         '{"apiGeomVersion":"3.0.20230508","xMin":-5.5,"yMin":-5.5,"scale":1,"pixelsPerUnit":30,"xScale":1,"yScale":1,"zoomLevel":1,"snapGrid":false,"point1":{"id":"point1","isDeletable":false,"thickness":2,"type":"Point","label":"B","labelDxInPixels":10,"labelDyInPixels":20,"shape":"x","x":1,"y":2},"point2":{"id":"point2","isDeletable":false,"thickness":2,"type":"Point","label":"S","labelDxInPixels":10,"labelDyInPixels":20,"shape":"x","x":-3,"y":2},"element0":{"id":"element0","type":"Circle","fillColor":"currentColor","idCenter":"point1","radius":5}}',
     },
-    { cliquefigure1Ex4Q0: '1', cliquefigure0Ex4Q1: '1' },
+    {
+      'clique-figureEx4Q0': '["cliquefigure1Ex4Q0"]',
+      'clique-figureEx4Q1': '["cliquefigure0Ex4Q1"]',
+    },
     {
       'liste-deroulanteEx5Q0': 'somme',
       'liste-deroulanteEx5Q1': '',
       'liste-deroulanteEx5Q2': 'différence',
       'liste-deroulanteEx5Q3': '',
     },
-    {
-      rectangleDNDEx6Q0R1: 'etiquetteEx6Q0I20-clone-1740844199069',
-      texteDNDEx6Q0R1: 'deux',
-    },
+    { 'drag-and-dropEx6Q0': '["etiquetteEx6Q0I20-clone-1740844199069"]' },
     {
       Ex7Q0L1C1: '\\dfrac{\\placeholder[a][correct][locked]{70}}{10}',
       Ex7Q0L2C2:
@@ -346,6 +346,10 @@ async function testV(page: Page) {
         expect(assignment.answers[key].split('-')[0]).toEqual(
           (responses[i] as any)[key].split('-')[0],
         )
+      } else if (key.startsWith('drag-and-drop')) {
+        const actual = JSON.parse(assignment.answers[key])[0]
+        const expected = JSON.parse((responses[i] as any)[key])[0]
+        expect(actual.split('-')[0]).toEqual(expected.split('-')[0])
       } else if (
         key.includes('apigeom') &&
         process.env.UPDATE_APIGEOM_SNAPSHOTS

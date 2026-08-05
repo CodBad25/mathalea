@@ -353,7 +353,7 @@ ElementIepEditeur.registerVerificationCallback(
  * deux cas intérieure, exterieure, deux vocabulaire  isssue du sommet, relative à la base
  * @author Jean-Claude Lhote
  */
-export default class nomExercice extends Exercice {
+export default class TracerHauteurAuxInstruments extends Exercice {
   pA: Point[] = []
   pB: Point[] = []
   pC: Point[] = []

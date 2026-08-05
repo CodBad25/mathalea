@@ -74,8 +74,9 @@ describe('Alea2iep.regleSegment', () => {
     const xml = iep.script()
     expect(xml.match(/objet="regle" mouvement="montrer"/g)).toHaveLength(1)
     expect(xml.match(/objet="regle" mouvement="masquer"/g)).toHaveLength(1)
-    expect(xml.match(/objet="regle" mouvement="rotation_translation"/g))
-      .toHaveLength(4)
+    expect(
+      xml.match(/objet="regle" mouvement="rotation_translation"/g),
+    ).toHaveLength(4)
   })
 })
 
@@ -127,6 +128,25 @@ describe('Alea2iep.regleProlongerSegment', () => {
     )
     expect(xml).not.toMatch(
       /mouvement="translation"[\s\S]*mouvement="rotation"/,
+    )
+  })
+})
+
+describe('Alea2iep.milieuALaRegle', () => {
+  it('orients the ruler from its zero point toward the other endpoint', () => {
+    const iep = new Alea2iep()
+
+    iep.milieuALaRegle(pointAbstrait(4, 0), pointAbstrait(0, 0), 'I')
+
+    const xml = iep.script()
+    expect(xml).toContain(
+      '<action objet="regle" mouvement="rotation_translation" angle="0" abscisse="0" ordonnee="300" tempo="5" sens="5" vitesse="10" />',
+    )
+    expect(xml).not.toContain(
+      '<action objet="regle" mouvement="rotation_translation" angle="-180" abscisse="0" ordonnee="300" tempo="5" sens="5" vitesse="10" />',
+    )
+    expect(xml).toContain(
+      '<action abscisse="60" ordonnee="300" couleur="black" id="1" mouvement="creer" objet="point" tempo="5"/>',
     )
   })
 })

@@ -403,7 +403,7 @@ export class TableauSignesVariationsElement extends MathaleaCustomElement {
     const actual: Record<string, string> = el?.effectiveValue ?? {}
 
     if (exercice.answers === undefined) exercice.answers = {}
-    if (el) exercice.answers[id] = JSON.stringify(actual)
+    if (el) exercice.answers[id] = el.value
 
     const feedback: Record<string, 'ok' | 'ko'> = {}
     let correctCount = 0
@@ -506,17 +506,27 @@ export class TableauSignesVariationsElement extends MathaleaCustomElement {
     return this._config
   }
 
-  set value(val: TableauSVValue) {
+  set value(val: TableauSVValue | string) {
     this.update(val)
   }
 
-  get value(): TableauSVValue {
+  get value(): string {
+    return JSON.stringify(this.effectiveValue)
+  }
+
+  get state(): TableauSVValue {
     return { ...this._state }
   }
 
+  getState(): TableauSVValue {
+    return this.state
+  }
+
   /** Applique un état restaurable (valeurs saisies) et redessine le tableau. */
-  update(state: TableauSVValue): void {
-    this._state = { ...state }
+  update(state: TableauSVValue | string): void {
+    const parsedState =
+      typeof state === 'string' ? parseValueAttribute(state) : state
+    this._state = { ...parsedState }
     this.syncValueAttribute()
     this.render()
   }

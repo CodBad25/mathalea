@@ -74,6 +74,7 @@ export function exportedReinit(this: IExerciceSimple) {
   this.cliqueFiguresArray = []
   if (this.dragAndDrops && this.dragAndDrops.length > 0) {
     for (const leDragAndDrop of this.dragAndDrops) {
+      if (leDragAndDrop == null) continue
       for (const [element, type, listener] of leDragAndDrop.listeners) {
         element.removeEventListener(type, listener as EventListener)
       }
