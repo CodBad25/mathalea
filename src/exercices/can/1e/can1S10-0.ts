@@ -1,9 +1,12 @@
 import { choice } from '../../../lib/outils/arrayOutils'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  ecritureParentheseSiNegatif,
+} from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Appliquer la définition d’une suite géométrique'
+export const titre = 'Appliquer la définition d’une suite arithmétique'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
@@ -16,10 +19,10 @@ export const dateDePublication = '18/02/2026' // La date de publication initiale
  * @author Stéphane Guyon (Découpage de cans1S10 par Jean-claude Lhote)
 
 */
-export const uuid = 'cd45f'
+export const uuid = 'cd45e'
 
 export const refs = {
-  'fr-fr': ['can1S10'],
+  'fr-fr': ['can1S10-0'],
   'fr-ch': [],
 }
 export default class CalculTerme extends ExerciceSimple {
@@ -34,11 +37,12 @@ export default class CalculTerme extends ExerciceSimple {
     const nomSuite = ['u', 'v', 'w']
     const s = choice(nomSuite)
 
-    const u = randint(-3, 3, 0)
-    const q = randint(2, 3)
+    const u = randint(-10, 10, 0)
+    const r = randint(-5, 5, 0)
 
     const i = randint(2, 3)
-    this.question = `Soit $(${s}_n)$ une suite géométrique de premier terme $${s}_0=${u}$ et de raison $q=${q}$.<br>
+
+    this.question = `Soit $(${s}_n)$ une suite arithmétique de premier terme $${s}_0=${u}$ et de raison $r=${r}$.<br>
 
 Calculer le terme $${s}_{${i}}$.`
     if (!this.interactif) {
@@ -46,17 +50,16 @@ Calculer le terme $${s}_{${i}}$.`
     } else {
       this.question += `<br> $${s}_{${i}}=.....$`
     }
-    this.correction = `Comme la suite $(${s}_n)$ est géométrique  de premier terme $${s}_0=${u}$ et de raison $q=${q}$,<br>
-       pour tout entier $n$, $${s}_{n+1} =  ${q}${s}_n$.<br>
+    this.correction = `Comme la suite $(${s}_n)$ est arithmétique  de premier terme $${s}_0=${u}$ et de raison $r=${r}$, <br>pour tout entier $n$, $${s}_{n+1} = ${s}_n  ${ecritureAlgebrique(r)}$.<br>
        Donc `
     let current = u
     for (let k = 0; k < i; k++) {
-      this.correction += `$${s}_{${k + 1}} =  ${q} \\times ${ecritureParentheseSiNegatif(current)} = ${current * q}$ <br>`
-      current *= q
+      this.correction += `$${s}_{${k + 1}} = ${s}_${k} ${ecritureAlgebrique(r)} = ${current + r}$ <br>`
+      current += r
     }
-    this.correction += ` La réponse est donc $${s}_{${i}} = ${miseEnEvidence(u * Math.pow(q, i))}$.<br>On aurait pu aussi directement utiliser la forme explicite d'une suite géométrique : $${s}_n = ${s}_0 \\times q^n$.<br>`
-    this.correction += `Ce qui donne le même résultat :  $${s}_{${i}} = ${u} \\times ${q}^{${i}} = ${miseEnEvidence(u * Math.pow(q, i))}$.<br>`
-    this.reponse = u * Math.pow(q, i)
+    this.correction += `  La réponse est donc $${s}_{${i}} = ${miseEnEvidence(u + i * r)}$.<br> On aurait pu aussi directement utiliser la forme explicite d'une suite arithmétique : $${s}_n = ${s}_0 + n \\times r$.<br>`
+    this.correction += ` Ce qui donne le même résultat :  $${s}_{${i}} = ${u} + ${i} \\times ${ecritureParentheseSiNegatif(r)} = ${miseEnEvidence(u + i * r)}$.<br>`
+    this.reponse = u + i * r
 
     this.canReponseACompleter = `$${s}_{${i}}=\\ldots$`
   }

@@ -37,7 +37,7 @@ export default class ComplementADixCentMille extends ExerciceSimple {
 
   nouvelleVersion() {
     switch (
-      this.quotaChoice('cas', [1, 1, 1, 2, 3, 3, 3, 3]) //
+      this.quotaChoice('typeDeQuestions', [1, 1, 1, 2, 3, 3, 3, 3]) //
     ) {
       case 1: // complément à 100
         {

@@ -19,6 +19,9 @@ export default mergeConfig(
       },
     },
     test: {
+      workerThreads: {
+        memoryLimit: '4096',
+      },
       include: ['./tests/pdfexports/*.test.{js,ts}'],
       exclude: ['./tests/pdfexports/pdfexport.moule.test.ts'],
       environment: 'jsdom',

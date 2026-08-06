@@ -455,6 +455,17 @@ export function verifDragAndDrop(
     }
   }
   const leDragAndDrop = exoDragAndDrops[question]
+  if (leDragAndDrop == null) {
+    window.notify(
+      `Problème survenu dans verifDragAndDrop : il n'y a pas de drag and drop pour la question ${question}`,
+      {},
+    )
+    return {
+      isOk: false,
+      feedback: 'Un problème est survenu',
+      score: { nbBonnesReponses: 0, nbReponses: 0 },
+    }
+  }
   for (const [element, type, listener] of leDragAndDrop.listeners) {
     element.removeEventListener(type, listener as EventListener)
   }

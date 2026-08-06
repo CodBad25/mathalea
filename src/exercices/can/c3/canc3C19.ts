@@ -31,7 +31,7 @@ export default class problemeMultiplication extends ExerciceSimple {
 
   nouvelleVersion() {
     switch (
-      this.quotaRandint('cas', 1, 6) // 1,2, 3
+      this.quotaRandint('typeDeQuestions', 1, 6) // 1,2, 3
     ) {
       case 1:
         {

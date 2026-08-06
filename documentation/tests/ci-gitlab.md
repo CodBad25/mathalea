@@ -236,7 +236,9 @@ Job planifié qui lance `pnpm test:e2e:all_exercises` avec `NB_EXOS_PAR_LOT=1000
 - `can/4e^can/3e`
 - `6e/6`
 - `5e/5`
-- `4e/4`
+- `4e/4A^4e/4F^4e/4I^4e/4P^4e/4S`
+- `4e/4C`
+- `4e/4G^4e/4L`
 - `3e/3`
 
 Déclenchement :

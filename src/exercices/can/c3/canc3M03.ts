@@ -34,10 +34,10 @@ export default class CalculAvecUnite extends ExerciceSimple {
   nouvelleVersion() {
     const prefixes = ['k', 'h', 'da', '', 'd', 'c', 'm']
 
-    const unite = choice(['g', 'm', 'L'])
+    const unite = this.quotaChoice('unite', ['g', 'm', 'L'])
     let k
-    const a = randint(1, 9)
-    const b = randint(1, 19)
+    const a = this.quotaRandint('a', 1, 9)
+    const b = this.quotaRandint('b', 1, 19)
     switch (this.quotaChoice('cas', [1, 2, 3])) {
       case 1:
         k = randint(0, 5)

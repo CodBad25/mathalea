@@ -57,11 +57,9 @@ export default class LireHeure extends ExerciceSimple {
       horloge.push(rotation(t, O, 30 + i * 90), rotation(t, O, 60 + i * 90))
     }
 
-    const isAfternoon = this.sup
-      ? this.quotaRandint('isAfternoon', 0, 1) === 1
-      : false
+    const isAfternoon = this.sup ? this.quotaRandint('isAfternoon', 0, 1) === 1 : false
     const h = isAfternoon ? randint(1, 11) + 12 : randint(0, 11)
-    const m = randint(0, 11) * 5
+    const m = this.quotaRandint('m', 0, 11) * 5
 
     const alpha = 90 - (h % 12) * 30 - m / 2
     const beta = 90 - m * 6

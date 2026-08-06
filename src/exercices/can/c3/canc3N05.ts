@@ -35,7 +35,7 @@ export default class CompositionDeNombreDecimalC3 extends ExerciceSimple {
     const a = this.quotaRandint('a', 1, 9)
     const b = randint(1, 9, a)
     const c = randint(1, 9, [a, b])
-    switch (this.quotaChoice('cas', [1, 2, 3])) {
+    switch (this.quotaChoice('typeDeQuestions', [1, 2, 3])) {
       case 1:
         this.reponse = arrondi(a + b / 10 + c / 100, 2)
         this.question = `Calculer $${a} + ${texNombre(b / 10 + c / 100, 2)}$.`

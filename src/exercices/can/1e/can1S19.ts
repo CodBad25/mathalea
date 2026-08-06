@@ -1,9 +1,8 @@
 import { choice } from '../../../lib/outils/arrayOutils'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Calculer la raison d’une suite arithmétique'
+export const titre = 'Calculer la raison d’une suite géométrique'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
@@ -13,13 +12,13 @@ export const dateDePublication = '18/02/2022' // La date de publication initiale
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Gilles Mora (découpage de can1S16 => can1S19 par Jean-Claude Lhote)
+ * @author Gilles Mora (découpage de can1S16 par Jean-Claude Lhote)
 
 */
-export const uuid = 'cd45d'
+export const uuid = 'cd54d'
 
 export const refs = {
-  'fr-fr': ['can1S16'],
+  'fr-fr': ['can1S19'],
   'fr-ch': [],
 }
 export default class CalculRaison extends ExerciceSimple {
@@ -34,24 +33,24 @@ export default class CalculRaison extends ExerciceSimple {
     const nomSuite = ['u', 'v', 'w']
     const s = choice(nomSuite)
 
-    const u = randint(-15, 15, 0)
-    const r = randint(-15, 15, 0)
-    const v = u + r
+    const u = randint(-12, 12, 0)
+    const q = randint(-10, 10, [-1, 1, 0])
+    const v = u * q
     const i = randint(0, 10)
-    this.question = `Soit $(${s}_n)$ une suite arithmétique telle que :<br>
+    this.question = `Soit $(${s}_n)$ une suite géométrique  telle que :<br>
 $${s}_{${i}}=${u}$ et  $${s}_{${i + 1}}=${v}$.<br>
 
-Donner la raison $r$ de cette suite.`
+Donner la raison $q$ de cette suite.`
     if (!this.interactif) {
       this.question += ''
     } else {
-      this.question += '<br> $r=$'
+      this.question += '<br> $q=$'
     }
-    this.correction = `La raison est donnée par la différence de deux termes consécutifs :<br>
-        $r=${s}_{${i + 1}}-${s}_{${i}}=${v}-${ecritureParentheseSiNegatif(u)}=${miseEnEvidence(v - u)}$.`
+    this.correction = `La raison est donnée par le quotient de deux termes consécutifs :<br>
+        $q=\\dfrac{${s}_{${i + 1}}}{${s}_{${i}}}=\\dfrac{${v}}{${u}}=${miseEnEvidence(v / u)}$.`
 
-    this.reponse = r
+    this.reponse = q
 
-    this.canReponseACompleter = '$r=\\ldots$'
+    this.canReponseACompleter = '$q=\\ldots$'
   }
 }

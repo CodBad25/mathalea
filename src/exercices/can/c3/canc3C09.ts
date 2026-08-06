@@ -104,12 +104,12 @@ export default class FoisPlusFoisMoins extends ExerciceSimple {
     const club = choice(listeClubs)
     const prenom1 = prenomM() as string
     const prenom2 = prenomF() as string
-    const quantité1 = this.quotaRandint('quantite1', 3, 12)
+    const quantité1 = this.quotaRandint('quantité1', 3, 12)
     const facteur = this.quotaChoice('facteur', [3, 4, 5, 6])
     const quantité2 = quantité1 * facteur
     this.optionsChampTexte = { texteAvant: `<br>`, texteApres: ` ${objet}` }
     switch (
-      this.quotaChoice('cas', [1, 2, 3]) // 1, 2
+      this.quotaChoice('typeProbleme', [1, 2, 3]) // 1, 2
     ) {
       case 1:
         this.reponse = plusOuMoins === 'plus' ? quantité2 : quantité1

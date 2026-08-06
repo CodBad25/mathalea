@@ -89,4 +89,39 @@ describe('DragAndDropElement', () => {
     expect(exercice.answers?.['drag-and-dropEx3Q0']).toBe(element.value)
     expect(exercice.answers?.rectangleDNDEx3Q0R1).toBe('etiquetteEx3Q0I1')
   })
+
+  it('verifie une question drag and drop apres une question non drag and drop', () => {
+    exercice.nbQuestions = 2
+    const dnd = createDnd(exercice, 1)
+    exercice.dragAndDrops[1] = dnd
+    handleAnswers(
+      exercice,
+      1,
+      { rectangle1: { value: '1', options: { multi: false } } },
+      { formatInteractif: 'dnd' },
+    )
+    document.body.innerHTML = dnd.ajouteDragAndDrop({
+      melange: false,
+      duplicable: false,
+    })
+    const rectangle = document.getElementById('rectangleEx4Q1R1')
+    const etiquette = document.getElementById('etiquetteEx4Q1I1')
+    rectangle?.appendChild(etiquette!)
+
+    const result = DragAndDropElement.verifQuestion(exercice, 1)
+
+    expect(result.isOk).toBe(true)
+    expect(result.score).toEqual({ nbBonnesReponses: 1, nbReponses: 1 })
+    expect(exercice.answers?.rectangleDNDEx4Q1R1).toBe('etiquetteEx4Q1I1')
+  })
 })
+
+function createDnd(exercice: Exercice, question = 0): DragAndDrop {
+  return new DragAndDrop({
+    exercice,
+    question,
+    consigne: 'Déplacer.',
+    etiquettes: [[{ id: '1', contenu: 'A' }]],
+    enonceATrous: '%{rectangle1}',
+  })
+}

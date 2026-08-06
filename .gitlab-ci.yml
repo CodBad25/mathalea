@@ -305,12 +305,17 @@ playwright-pdf-consolidated:
   allow_failure: false
   parallel:
     matrix:
-      - NIV_LABEL: 'can/2e^can/1e'
-      - NIV_LABEL: 'can/6e^can/5e'
-      - NIV_LABEL: 'can/4e^can/3e'
+      - NIV_LABEL: 'can/2e'
+      - NIV_LABLE: 'can/1e'
+      - NIV_LABEL: 'can/6e'
+      - NIV_LABEL: 'can/5e'
+      - NIV_LABEL: 'can/4e'
+      - NIV_LABEL: 'can/3e'
       - NIV_LABEL: '6e/6'
       - NIV_LABEL: '5e/5'
-      - NIV_LABEL: '4e/4'
+      - NIV_LABEL: '4e/4A^4e/4F^4e/4I^4e/4P^4e/4S'
+      - NIV_LABEL: '4e/4C'
+      - NIV_LABEL: '4e/4G^4e/4L'
       - NIV_LABEL: '3e/3'
   script:
     - npm install -g pnpm@11.16.0

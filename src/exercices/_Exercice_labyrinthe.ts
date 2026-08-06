@@ -55,7 +55,7 @@ export default class ExerciceLabyrinthe extends Exercice {
     let texteCorr = ''
     if (context.isHtml && !context.isTypst) {
       texte = `${MathaleaLabyrintheElement.create({
-        id: `labyrintheEx${this.numeroExercice}`,
+        id: `labyrintheEx${this.numeroExercice}Q0`,
         seed: this.seed ?? '',
         rows: this.rows,
         cols: this.cols,
@@ -71,7 +71,7 @@ export default class ExerciceLabyrinthe extends Exercice {
       </div>`
 
       texteCorr = MathaleaLabyrintheElement.create({
-        id: `labyrintheCorrectionEx${this.numeroExercice}Q${0}`,
+        id: `labyrintheCorrectionExo${this.numeroExercice}Question0`,
         seed: this.seed ?? '',
         rows: this.rows,
         cols: this.cols,
@@ -127,13 +127,13 @@ export default class ExerciceLabyrinthe extends Exercice {
   correctionInteractive = (i: number) => {
     if (this.answers == null) this.answers = {}
     const labyrintheElement = document.querySelector<MathaleaLabyrintheElement>(
-      `#labyrintheEx${this.numeroExercice}`,
+      `#labyrintheEx${this.numeroExercice}Q0`,
     )
     if (labyrintheElement == null) {
       throw new Error('Labyrinthe not found')
     }
     this.labyrintheElement = labyrintheElement
-    this.answers[`labyrintheEx${this.numeroExercice}`] =
+    this.answers[`labyrintheEx${this.numeroExercice}Q0`] =
       this.labyrintheElement.state
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,

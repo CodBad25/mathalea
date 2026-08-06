@@ -25,10 +25,9 @@ import {
   randint,
 } from '../../modules/outils'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import DragAndDrop from '../../lib/interactif/DragAndDrop'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Écrire un nombre entier en chiffres ou en lettres'
 export const amcReady = true
@@ -493,6 +492,9 @@ export default class EcrirePetitsNombresEntiers extends Exercice {
         this.listeCanEnonces.push(this.canEnonce ?? '')
         this.listeCanReponsesACompleter.push(this.canReponseACompleter ?? '')
         i++
+      } else {
+        if (context.isAmc) this.autoCorrectionAMC.pop()
+        else this.autoCorrection.pop()
       }
       cpt++
     }

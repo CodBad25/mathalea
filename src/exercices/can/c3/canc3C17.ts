@@ -30,7 +30,7 @@ export default class problemeAddition extends ExerciceSimple {
 
   nouvelleVersion() {
     switch (
-      this.quotaRandint('cas', 1, 7) // 1,2, 3
+      this.quotaRandint('typeProbleme', 1, 7) // 1,2, 3
     ) {
       case 1:
         {

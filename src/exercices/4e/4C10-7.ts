@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -22,8 +23,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Opérations avec deux entiers relatifs'
 export const interactifReady = true
@@ -192,7 +191,9 @@ export default class ExerciceOperationsRelatifs extends Exercice {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
-
+        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
+          texteAvant: sp() + '$=$',
+        })
         if (context.isAmc) {
           this.autoCorrectionAMC[i].propositions = [
             { statut: 0, sanscadre: false, texte: texteCorr },

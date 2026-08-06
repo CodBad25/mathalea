@@ -473,7 +473,6 @@
       const previousBestScore = interfaceParams?.bestScore ?? 0
       const { numberOfPoints, numberOfQuestions, perQuestionIsOk } =
         exerciceInteractif(exercise, divScore, buttonScore)
-      console.log(`Answers: ${JSON.stringify(exercise.answers)}`)
       questionsIsOk = perQuestionIsOk
       const isThisTryBetter = numberOfPoints >= previousBestScore
       if (

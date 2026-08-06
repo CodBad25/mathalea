@@ -34,7 +34,7 @@ export default class TableDivisions extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    switch (this.quotaChoice('cas', [1, 1, 2])) {
+    switch (this.quotaChoice('typeCalcul', [1, 1, 2])) {
       case 1:
         {
           const a = randint(2, 9)

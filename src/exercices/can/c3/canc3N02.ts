@@ -3,7 +3,6 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Trouver un nombre sur une droite graduée'
@@ -35,7 +34,7 @@ export default class SuiteSurDroiteGraduee extends ExerciceSimple {
 
   nouvelleVersion() {
     const a = this.quotaRandint('a', 1, 6) // choix de la table = écart entre deux graduations
-    const c = Math.floor(randint(10, 40) / a) * a // premier nombre.
+    const c = Math.floor(this.quotaRandint('c', 10, 40) / a) * a // premier nombre.
     const maListe: [number, string][] = []
     for (let i = 0; i < 3; i++) {
       maListe.push([c + a * i, texNombre(c + a * i)])
