@@ -7,6 +7,7 @@ import Exercice from '../Exercice'
 import Figure from 'apigeom'
 import type CircleFractionDiagram from 'apigeom/src/elements/diagrams/CircleFractionDiagram'
 import { amcConvert } from '../../lib/amc/amcBuilders'
+import { apigeomFigureToSvg } from '../../lib/apigeom/apigeom-figure'
 import { bleuMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { fraction } from '../../modules/fractions'
@@ -146,7 +147,9 @@ export default class RepresenterUneFraction extends Exercice {
           radius: 1,
         })
         diagrammeCorr.numerator = num
-        texteCorr += figureCorr.getStaticHtml()
+        texteCorr += context.isTypst
+          ? apigeomFigureToSvg(figureCorr)
+          : figureCorr.getStaticHtml()
         this.figuresApiGeomCorr[i] = figureCorr
       } else {
         texteCorr += mathalea2d(

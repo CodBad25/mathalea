@@ -22,13 +22,13 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 
 export const dateDePublication = '02/05/2025'
-export const dateDeModifImportante = '02/05/2025'
+export const dateDeModifImportante = '06/08/2026'
 
 /**
  *
- * @author Mickael Guironnet
+ * @author Mickael Guironnet Ajout d'un cas additif par Jean-Claude Lhote
  */
-export const uuid = '51d14'
+export const uuid = '51d25'
 
 export const refs = {
   'fr-fr': ['6P3D-1'],
@@ -42,7 +42,7 @@ export default class ProblemesDeProportionnalité extends Exercice {
     this.consigne =
       'On considère que les situations suivantes sont des situations de proportionnalités. Compléter.'
     this.sup = 1
-    this.sup2 = 4
+    this.sup2 = 0
     this.besoinFormulaireNumerique = [
       'Niveau de difficulté',
       3,
@@ -51,18 +51,20 @@ export default class ProblemesDeProportionnalité extends Exercice {
     this.besoinFormulaire2Texte = [
       'Type de questions',
       `Nombres séparés par des tirets :
+  0 : Mélange
   1 : Passage à l'unité
   2 : Recherche d'une quantité
   3 : Recherche du nombre de cartons
-  4 : Mélange`,
+  4 : Recherche d'une quantité (procedéure additive)
+  5 : Recherche du nombre de cartons (procédure additive)`,
     ]
   }
 
   nouvelleVersion() {
     const typesDeQuestions = gestionnaireFormulaireTexte({
-      max: 3,
+      max: 5,
       defaut: 1,
-      melange: 4,
+      melange: 0,
       nbQuestions: this.nbQuestions,
       saisie: this.sup2,
     })
@@ -73,6 +75,11 @@ export default class ProblemesDeProportionnalité extends Exercice {
       } else if (value === 3) {
         arr[index] = randint(0, 1) < 1 ? 31 : 32
         // 31 pour la multiplciation et 32 pour la division
+      } else if (value === 4) {
+        arr[index] = randint(0, 1) < 1 ? 41 : 42
+        // 41 pour ajouter et 42 pour soustraire
+      } else if (value === 5) {
+        arr[index] = randint(0, 1) < 1 ? 51 : 52
       }
     })
     const n = this.sup - 1
@@ -207,6 +214,123 @@ export default class ProblemesDeProportionnalité extends Exercice {
           else handleAnswers(this, i, { reponse: { value: cartons } })
           break
         }
+        case 41: {
+          const unité = choice(unites)
+          texte = this.createArray(
+            `$${cartons}$ cartons`,
+            '$\\rightarrow$',
+            `$${texNombre(quantite)}~\\text{${unité}}$`,
+            `$${f * cartons}$ cartons`,
+            '$\\rightarrow$',
+            `$${texNombre(quantite * f)}~\\text{${unité}}$`,
+            `$${cartons + f * cartons}$ cartons`,
+            '$\\rightarrow$',
+            this.interactif && !context.isAmc
+              ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
+                  texteApres: `~$\\text{${unité}}$`,
+                })
+              : '....',
+          )
+          texteCorr = `$${f * cartons}\\text{ cartons } + ${cartons}\\text{ cartons } = ${f * cartons + cartons}\\text{ cartons }$<br>`
+          texteCorr += `$${texNombre(quantite * f)}~\\text{${unité}} + ${quantite}~\\text{${unité}} = ${texNombre(quantite * f + quantite)}~\\text{${unité}}$<br>`
+          texteCorr +=
+            'Donc le résultat est ' +
+            `$${miseEnEvidence(texNombre(quantite * f + quantite))}$ ${unité}.`
+          if (context.isAmc) setReponse(this, i, quantite * f + quantite)
+          else
+            handleAnswers(this, i, {
+              reponse: { value: quantite * f + quantite },
+            })
+          break
+        }
+        case 42: {
+          const unité = choice(unites)
+          texte = this.createArray(
+            `$${f * cartons}$ cartons`,
+            '$\\rightarrow$',
+            `$${texNombre(quantite * f)}~\\text{${unité}}$`,
+            `$${cartons}$ cartons`,
+            '$\\rightarrow$',
+            `$${texNombre(quantite)}~\\text{${unité}}$`,
+            `$${f * cartons - cartons}$ cartons`,
+            '$\\rightarrow$',
+            this.interactif && !context.isAmc
+              ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
+                  texteApres: `~$\\text{${unité}}$`,
+                })
+              : '....',
+          )
+          texteCorr = `$${f * cartons}\\text{ cartons } - ${cartons}\\text{ cartons } = ${f * cartons - cartons}\\text{ cartons }$<br>`
+          texteCorr += `$${texNombre(quantite * f)}~\\text{${unité}} - ${quantite}~\\text{${unité}} = ${texNombre(quantite * f - quantite)}~\\text{${unité}}$<br>`
+          texteCorr +=
+            'Donc le résultat est ' +
+            `$${miseEnEvidence(texNombre(quantite * f - quantite))}$ ${unité}.`
+          if (context.isAmc) setReponse(this, i, quantite * f - quantite)
+          else
+            handleAnswers(this, i, {
+              reponse: { value: quantite * f - quantite },
+            })
+          break
+        }
+        case 51: {
+          const unité = choice(unites)
+          texte = this.createArray(
+            `$${cartons}$ cartons`,
+            '$\\rightarrow$',
+            `$${texNombre(quantite)}~\\text{${unité}}$`,
+            `$${f * cartons}$ cartons`,
+            '$\\rightarrow$',
+            `$${texNombre(quantite * f)}~\\text{${unité}}$`,
+            this.interactif && !context.isAmc
+              ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
+                  texteApres: ' cartons',
+                })
+              : '....',
+            '$\\rightarrow$',
+            `$${texNombre(quantite * (1 + f))} \\text{ ${unité}}$`,
+          )
+          texteCorr = `$${texNombre(quantite * f)}~\\text{${unité}} + ${quantite}~\\text{${unité}} = ${texNombre(quantite * f + quantite)}~\\text{${unité}}$<br>`
+          texteCorr += `$${f * cartons}\\text{ cartons } + ${cartons}\\text{ cartons } = ${f * cartons + cartons}\\text{ cartons }$<br>`
+          texteCorr +=
+            'Donc le résultat est ' +
+            `$${miseEnEvidence(cartons * f + cartons)}$ cartons.`
+          if (context.isAmc) setReponse(this, i, f * cartons + cartons)
+          else
+            handleAnswers(this, i, {
+              reponse: { value: f * cartons + cartons },
+            })
+          break
+        }
+        case 52: {
+          const unité = choice(unites)
+          texte = this.createArray(
+            `$${f * cartons}$ cartons`,
+            '$\\rightarrow$',
+            `$${texNombre(quantite * f)}~\\text{${unité}}$`,
+            `$${cartons}$ cartons`,
+            '$\\rightarrow$',
+            `$${texNombre(quantite)}~\\text{${unité}}$`,
+            this.interactif && !context.isAmc
+              ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
+                  texteApres: ' cartons',
+                })
+              : '....',
+            '$\\rightarrow$',
+            `$${texNombre(quantite * (f - 1))} \\text{ ${unité}}$`,
+          )
+          texteCorr = `$${texNombre(quantite * f)}~\\text{${unité}} - ${quantite}~\\text{${unité}} = ${texNombre(quantite * f - quantite)}~\\text{${unité}}$<br>`
+          texteCorr += `$${f * cartons}\\text{ cartons } - ${cartons}\\text{ cartons } = ${f * cartons - cartons}\\text{ cartons }$<br>`
+          texteCorr +=
+            'Donc le résultat est ' +
+            `$${miseEnEvidence(cartons * f - cartons)}$ cartons.`
+          if (context.isAmc) setReponse(this, i, f * cartons - cartons)
+          else
+            handleAnswers(this, i, {
+              reponse: { value: f * cartons - cartons },
+            })
+
+          break
+        }
       }
       if (this.questionJamaisPosee(i, cartons, f)) {
         // Si la question n'a jamais été posée, on en crée une autre
@@ -228,17 +352,29 @@ export default class ProblemesDeProportionnalité extends Exercice {
     cel21: string,
     cel22: string,
     cel23: string,
+    cel31?: string,
+    cel32?: string,
+    cel33?: string,
   ): string {
     if (context.isHtml) {
       const texte = `<span style="display: inline-grid; grid-template-columns: auto auto auto; gap: 0.5em;">
                <span class='mt-auto mb-auto'> ${cel11} </span><span class='mt-auto mb-auto'> ${cel12}</span><span class='mt-auto mb-auto'>  ${cel13}</span>
                <span class='mt-auto mb-auto'> ${cel21} </span><span class='mt-auto mb-auto'> ${cel22}</span><span class='mt-auto mb-auto'>  ${cel23}</span>
+               ${
+                 cel31 == null
+                   ? ''
+                   : `<span class='mt-auto mb-auto'> ${cel31} </span><span class='mt-auto mb-auto'> ${cel32}</span><span class='mt-auto mb-auto'>  ${cel33}</span>`
+               }
                 </span>`
       return texte
     } else {
       const texte = `\\begin{tabular}[t]{ccc}
                        ${cel11} & ${cel12} & ${cel13} \\\\
-                       ${cel21} & ${cel22} & ${cel23} \\\\
+                       ${cel21} & ${cel22} & ${cel23} \\\\${
+                         cel31 == null
+                           ? ''
+                           : `${cel31} & ${cel32} & ${cel33} \\\\`
+                       }
                        \\end{tabular}`
       return texte
     }

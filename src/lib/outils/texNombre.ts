@@ -444,7 +444,7 @@ function afficherNombre(
       )}i`
     } else if (typeof nb !== 'number') {
       window.notify(
-        `afficherNombre a reçu un argument de type inconnu come nombre : ${nb}`,
+        `afficherNombre a reçu un argument de type inconnu comme nombre : ${nb}`,
         { nombreEntrant: nb },
       )
       nb = Number(nb)

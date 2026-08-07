@@ -1,5 +1,5 @@
 import Figure from 'apigeom/src/Figure'
-import handleApigeomFigureElement from '../../lib/apigeom/apigeom-figure'
+import { createApigeomFigureHtml } from '../../lib/apigeom/apigeom-figure'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
@@ -70,8 +70,9 @@ export default class EcrireEntierSousFormeDeFraction extends Exercice {
         denominator: 2,
         numberOfRectangles: 5,
       })
-      handleApigeomFigureElement()
-      this.introduction = `<apigeom-figure interactive default-action='FILL' x-min=${figure.xMin} y-min=${figure.yMin} width=${figure.width} height=${figure.height} numero-exercice=${this.numeroExercice} index=0 auto-index><script type="application/json">${figure.json}</script></apigeom-figure>`
+      this.introduction = createApigeomFigureHtml(figure, {
+        numeroExercice: this.numeroExercice,
+      })
     } else {
       this.introduction = ''
     }

@@ -78,6 +78,10 @@ export default class MathaleaLabyrintheElement extends MathaleaCustomElement {
     return this.value
   }
 
+  set state(nextState: string) {
+    this.value = nextState
+  }
+
   get win(): boolean {
     return this.labyrintheElement?.win ?? false
   }
@@ -138,7 +142,7 @@ export default class MathaleaLabyrintheElement extends MathaleaCustomElement {
           ?.click()
       }
       element.addEventListener('labyrinthe:gameend', this.gameEndListener)
-      this.scheduleHideScoreButton()
+      // this.scheduleHideScoreButton() Pourquoi masquer le bouton vérifier les réponses ? même si ça clique automatiquement, c'est un marqueur de l'interactivité !
     }
   }
 

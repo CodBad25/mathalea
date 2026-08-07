@@ -707,6 +707,8 @@
         introCorrection: current.introCorrection,
         questions: current.questions,
         corrections: current.corrections,
+        canQuestions: current.canQuestions ?? [],
+        canAnswers: current.canAnswers ?? [],
       })
     }
     exercise.nbQuestions = next
@@ -1474,6 +1476,9 @@
       introCorrection: string
       questions: string[]
       corrections: string[]
+      /** Énoncés et réponses du tableau « Course aux nombres » */
+      canQuestions: string[]
+      canAnswers: string[]
     }
   >()
 
@@ -1564,6 +1569,18 @@
       // environnement `tasks` (donc jamais numéroté), sauf s'il rejoint un
       // groupe fusionné (voir `forceList` dans buildTypstDocument)
       input.numbered = exercise.listeAvecNumerotation !== false
+      // mode « Course aux nombres » : énoncés propres au tableau (à défaut,
+      // les questions ordinaires) et réponses à compléter, comme le style
+      // « Can » de la sortie LaTeX (voir `lib/Latex.ts`)
+      input.canQuestions = input.questions.map((question, i) => {
+        const canEnonce = exercise.listeCanEnonces?.[i]
+        return canEnonce != null && canEnonce.length > 0
+          ? format(canEnonce)
+          : question
+      })
+      input.canAnswers = input.questions.map((_, i) =>
+        format(exercise.listeCanReponsesACompleter?.[i] ?? ''),
+      )
       // questions figées par la palette (nombre de questions modifié) : les
       // questions déjà affichées gardent leur contenu, seules les questions
       // ajoutées prennent le contenu fraîchement généré
@@ -1576,6 +1593,12 @@
         )
         input.corrections = input.corrections.map(
           (correction, i) => frozen.corrections[i] ?? correction,
+        )
+        input.canQuestions = input.canQuestions?.map(
+          (question, i) => frozen.canQuestions[i] ?? question,
+        )
+        input.canAnswers = input.canAnswers?.map(
+          (answer, i) => frozen.canAnswers[i] ?? answer,
         )
       }
       return input
@@ -2687,20 +2710,60 @@
             <label class="flex items-center gap-2 text-sm cursor-pointer">
               <input
                 type="checkbox"
-                bind:checked={documentOptions.mergeExercises}
+                bind:checked={documentOptions.showCorrections}
                 onchange={applyDocumentOptions}
               />
-              Fusionner tous les exercices (questions numérotées à la suite)
+              Afficher la correction
+            </label>
+
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                bind:checked={documentOptions.minimalCorrections}
+                disabled={!documentOptions.showCorrections}
+                onchange={applyDocumentOptions}
+              />
+              <span
+                class:opacity-50={!documentOptions.showCorrections}
+                title="Quand une correction met sa réponse en évidence (en orange), n'imprimer que cette réponse"
+              >
+                Correction minimale
+              </span>
+            </label>
+
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                bind:checked={documentOptions.canMode}
+                onchange={applyDocumentOptions}
+              />
+              Présentation « Course aux nombres »
+            </label>
+
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                bind:checked={documentOptions.mergeExercises}
+                disabled={documentOptions.canMode}
+                onchange={applyDocumentOptions}
+              />
+              <span class:opacity-50={documentOptions.canMode}>
+                Fusionner tous les exercices (questions numérotées à la suite)
+              </span>
             </label>
 
             <label class="flex items-center gap-2 text-sm cursor-pointer">
               <input
                 type="checkbox"
                 bind:checked={documentOptions.showExerciseRefs}
-                disabled={documentOptions.mergeExercises}
+                disabled={documentOptions.mergeExercises ||
+                  documentOptions.canMode}
                 onchange={applyDocumentOptions}
               />
-              <span class:opacity-50={documentOptions.mergeExercises}>
+              <span
+                class:opacity-50={documentOptions.mergeExercises ||
+                  documentOptions.canMode}
+              >
                 Afficher la référence des exercices
               </span>
             </label>
@@ -2709,10 +2772,14 @@
               <input
                 type="checkbox"
                 bind:checked={documentOptions.showQrCode}
-                disabled={documentOptions.mergeExercises}
+                disabled={documentOptions.mergeExercises ||
+                  documentOptions.canMode}
                 onchange={applyDocumentOptions}
               />
-              <span class:opacity-50={documentOptions.mergeExercises}>
+              <span
+                class:opacity-50={documentOptions.mergeExercises ||
+                  documentOptions.canMode}
+              >
                 QR-code vers chaque exercice
               </span>
             </label>
@@ -2842,13 +2909,15 @@
 
             <label
               class="flex items-center justify-between gap-4 text-sm"
-              class:opacity-50={documentOptions.mergeExercises}
+              class:opacity-50={documentOptions.mergeExercises ||
+                documentOptions.canMode}
             >
               Style des exercices
               <select
                 class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
                 bind:value={documentOptions.badgeStyle}
-                disabled={documentOptions.mergeExercises}
+                disabled={documentOptions.mergeExercises ||
+                  documentOptions.canMode}
                 onchange={applyDocumentOptions}
               >
                 {#each BADGE_STYLES as style}
@@ -2987,7 +3056,9 @@
                     codeOverridesCorrection={codeOverrideCorrectionValues}
                     exerciseCount={exercises.length}
                     {mergedExercises}
-                    mergeExercisesEnabled={!documentOptions.mergeExercises}
+                    mergeExercisesEnabled={!documentOptions.mergeExercises &&
+                      !documentOptions.canMode}
+                    canMode={documentOptions.canMode}
                     onAdjustColumns={adjustColumns}
                     onAdjustGutter={adjustGutter}
                     onAdjustFigureZoom={adjustFigureZoom}

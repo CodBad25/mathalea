@@ -1,3 +1,4 @@
+import { minimalCorrection } from './minimalCorrection'
 import {
   MATHALEA_FIGURE_BLOCK_HELPER,
   MATHALEA_FIGURE_HELPERS,
@@ -62,6 +63,43 @@ export const MATHALEA_WRITING_LINES_HELPER = `#let mathalea-lignes(n, gutter: 2e
 ) }`
 
 /**
+ * Tableau « Course aux nombres » : équivalent Typst de l'environnement
+ * `TableauCan` de la sortie LaTeX (voir `lib/latex/preambuleTex.ts`). Une
+ * ligne par question, avec son numéro, son énoncé, la réponse à compléter
+ * (`canReponseACompleter` de l'exercice) et une colonne réservée au jury.
+ *
+ * `enonces` et `reponses` sont deux listes de contenus de même longueur (une
+ * réponse manquante laisse la cellule vide) ; les proportions des colonnes
+ * reprennent celles du `colspec` de la version LaTeX. L'en-tête se répète en
+ * haut de chaque page, comme le `longtblr` de LaTeX.
+ */
+export const MATHALEA_CAN_TABLE_HELPER = `#let can-tableau(
+  enonces,
+  reponses,
+  jury: true,
+  entetes: ([\\#], [Énoncé], [Réponse], [Jury]),
+  fond: luma(230),
+  hauteur-ligne: 11pt,
+) = {
+  let largeurs = if jury { (0.075fr, 0.545fr, 0.28fr, 0.1fr) } else { (0.08fr, 0.6fr, 0.32fr) }
+  let cellules = ()
+  for (i, enonce) in enonces.enumerate() {
+    cellules.push(table.cell(fill: fond)[*#(i + 1)*])
+    cellules.push(enonce)
+    cellules.push(reponses.at(i, default: []))
+    if jury { cellules.push([]) }
+  }
+  table(
+    columns: largeurs,
+    align: center + horizon,
+    inset: (x: 6pt, y: hauteur-ligne),
+    stroke: 0.6pt + luma(60),
+    table.header(..entetes.slice(0, largeurs.len()).map(entete => table.cell(fill: fond)[*#entete*])),
+    ..cellules,
+  )
+}`
+
+/**
  * Saut de page insérable entre deux exercices : `#pagebreak` est interdit
  * dans un conteneur (`columns`), la ligne ferme donc le bloc `en-colonnes`
  * courant, saute la page au niveau du document, puis rouvre le bloc.
@@ -80,6 +118,15 @@ const DEFAULT_TASKS_COLUMNS = '"auto-fit"'
  * directement dans chaque `#tasks(...)` plutôt que déclarée en variable.
  */
 const DEFAULT_GUTTER_LITERAL = '1.2em'
+
+/**
+ * Préfixe des variables de mise en page de la liste des corrections du mode
+ * « Course aux nombres ». Elle est unique pour toute la fiche (un seul tableau,
+ * une seule liste de réponses) : le numéro 0, qu'aucun exercice ne porte, la
+ * distingue des listes de questions (`ex1`, `ex1-corr`…) tout en restant
+ * reconnue par la palette de l'aperçu et par `harvestCarryOver`.
+ */
+const CAN_CORRECTIONS_PREFIX = 'ex0-corr'
 
 /**
  * Réglages repris du code courant lors d'une régénération : les ajustements
@@ -348,6 +395,19 @@ export interface TypstExerciseInput {
   numbered: boolean
   /** Message affiché à la place du contenu (exercice non imprimable) */
   warning?: string
+  /**
+   * Mode « Course aux nombres » : énoncés à mettre dans le tableau
+   * (`listeCanEnonces` de l'exercice, avec repli sur `listeQuestions` déjà
+   * appliqué par l'appelant). Absent pour un exercice qui n'en déclare pas :
+   * `questions` sert alors d'énoncés.
+   */
+  canQuestions?: string[]
+  /**
+   * Mode « Course aux nombres » : réponses à compléter par l'élève
+   * (`listeCanReponsesACompleter`), une par question — colonne « Réponse »
+   * du tableau. Une entrée vide laisse la cellule vide.
+   */
+  canAnswers?: string[]
 }
 
 export interface TypstDocumentOptions {
@@ -385,6 +445,11 @@ export interface TypstDocumentOptions {
    * seul sur MathALÉA (comme la sortie LaTeX). Sans effet en mode fusionné.
    */
   showQrCode: boolean
+  /**
+   * Affiche la correction dans le document généré (`#let corrige`). Décochée,
+   * seuls les énoncés sont rendus, sans bloc « Corrections » ni titre associé.
+   */
+  showCorrections: boolean
   /** Nombre de colonnes du document (1, 2 ou 3) */
   columns: number
   /** Format de page */
@@ -397,6 +462,21 @@ export interface TypstDocumentOptions {
    * titres « Exercice N » disparaissent.
    */
   mergeExercises: boolean
+  /**
+   * Mode « Course aux nombres » : toutes les questions de tous les exercices
+   * sont rassemblées dans un seul tableau (numéro, énoncé, réponse à
+   * compléter, jury), comme le style « Can » de la sortie LaTeX. Les
+   * corrections sont numérotées à la suite. Prend le pas sur `mergeExercises`
+   * et sur les réglages de badges (il n'y a plus de titre d'exercice).
+   */
+  canMode: boolean
+  /**
+   * Correction minimale : quand une correction met une réponse en évidence
+   * (`miseEnEvidence`, orange), seule cette réponse est imprimée — le
+   * raisonnement détaillé disparaît. Une correction sans mise en évidence
+   * reste affichée telle quelle.
+   */
+  minimalCorrections: boolean
   /** Style des badges du paquet exercise-bank */
   badgeStyle: BadgeStyle
   /**
@@ -513,14 +593,29 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   autoVerticalSpacing: true,
   boldQuestionNumbers: true,
   showExerciseRefs: false,
+  showCorrections: true,
   columns: 1,
   pageFormat: 'a4',
   orientation: 'portrait',
   mergeExercises: false,
+  canMode: false,
+  minimalCorrections: false,
   showQrCode: false,
   badgeStyle: 'underline',
   badgeColor: 'black',
   nbVersions: 1,
+}
+
+/** Applique le réglage « Correction minimale » aux corrections des exercices */
+function withMinimalCorrections(
+  exercises: TypstExerciseInput[],
+  options: TypstDocumentOptions,
+): TypstExerciseInput[] {
+  if (!options.minimalCorrections) return exercises
+  return exercises.map((exercise) => ({
+    ...exercise,
+    corrections: exercise.corrections.map(minimalCorrection),
+  }))
 }
 
 /**
@@ -759,7 +854,7 @@ interface GeneratedExercise {
  * code actuellement généré d'un seul exercice, avant toute surcharge).
  */
 function computeGeneratedExercises(
-  exercises: TypstExerciseInput[],
+  allExercises: TypstExerciseInput[],
   options: TypstDocumentOptions,
   carryOver: TypstCarryOver,
   figures: string[],
@@ -767,6 +862,9 @@ function computeGeneratedExercises(
   /** Voir `exerciseBody` : colonnes/espacement des `#tasks(...)` en valeurs littérales */
   exportMode = false,
 ): GeneratedExercise[] {
+  // seul point de passage des corrections vers le code généré (avec le mode
+  // « Course aux nombres ») : le réglage « Correction minimale » s'y applique
+  const exercises = withMinimalCorrections(allExercises, options)
   // exercice fusionné avec le précédent (bouton de la palette) : rejoint le
   // groupe `exo.with(...)` de son prédécesseur (un seul titre pour le
   // groupe). Sans effet quand tous les exercices sont déjà fusionnés
@@ -1011,6 +1109,133 @@ export function buildStandaloneExerciseCode(
 }
 
 /**
+ * Argument tableau de contenus Typst, une entrée par ligne :
+ * `(\n  [...],\n),`. Les contenus multilignes sont réindentés pour rester
+ * lisibles dans le code généré.
+ */
+function typstContentArrayArgument(items: string[], indent: string): string[] {
+  if (items.length === 0) return [`${indent}(),`]
+  return [
+    `${indent}(`,
+    ...items.map(
+      (item) => `${indent}  [${item.split('\n').join(`\n${indent}  `)}],`,
+    ),
+    `${indent}),`,
+  ]
+}
+
+/**
+ * Contenu d'une version en mode « Course aux nombres » : toutes les questions
+ * de tous les exercices dans un seul tableau (`#can-tableau`), puis les
+ * corrections numérotées à la suite — équivalent du style « Can » de la
+ * sortie LaTeX (`lib/Latex.ts`). La consigne et l'introduction des exercices
+ * ne sont pas reprises, comme en LaTeX : le tableau ne montre que les énoncés.
+ *
+ * La palette de mise en page n'y garde que les repères qui ont un sens : la
+ * barre de chaque exercice (repère `exo` placé dans sa première cellule, une
+ * métadonnée n'occupant aucune place) et les deux points d'insertion qui
+ * encadrent le tableau (`gap` 0 et `gap` du dernier exercice) — entre deux
+ * lignes d'un même tableau, une insertion ou un saut de page n'en aurait pas.
+ * Les insertions portées par les gaps intermédiaires (héritées d'un passage
+ * par le mode fiche) sont donc réémises après le tableau, avec les siennes.
+ */
+function buildCanVersionContent(
+  allExercises: TypstExerciseInput[],
+  options: TypstDocumentOptions,
+  carryOver: TypstCarryOver,
+  figures: string[],
+  emitAnchors: boolean,
+  exportMode: boolean,
+): VersionContent {
+  const exercises = withMinimalCorrections(allExercises, options)
+  const enonces: string[] = []
+  const reponses: string[] = []
+  const corrections: string[] = []
+  for (const [k, exercise] of exercises.entries()) {
+    const anchor = emitAnchors ? `#mathalea-anchor("exo", ${k + 1})\n` : ''
+    if (exercise.warning != null) {
+      enonces.push(`${anchor}${escapeTypstText(exercise.warning)}`)
+      reponses.push('')
+      corrections.push('')
+      continue
+    }
+    const questions = exercise.canQuestions ?? exercise.questions
+    for (const [i, question] of questions.entries()) {
+      enonces.push(
+        `${i === 0 ? anchor : ''}${htmlToTypst(question, figures)}`,
+      )
+      reponses.push(htmlToTypst(exercise.canAnswers?.[i] ?? '', figures))
+      corrections.push(htmlToTypst(exercise.corrections[i] ?? '', figures))
+    }
+  }
+
+  const insertionLine = (line: string, indent: string): string =>
+    exportMode ? `${indent}${line}` : `${indent}${line} ${INSERTION_TAG}`
+  const lastGap = exercises.length
+  const renderLines: string[] = ['// ----- Course aux nombres -----']
+  renderLines.push('#en-colonnes[')
+  if (emitAnchors) renderLines.push('  #mathalea-anchor("gap", 0)')
+  renderLines.push(
+    ...(carryOver.insertions?.[0] ?? []).map((line) =>
+      insertionLine(line, '  '),
+    ),
+  )
+  renderLines.push('  #can-tableau(')
+  renderLines.push(...typstContentArrayArgument(enonces, '    '))
+  renderLines.push(...typstContentArrayArgument(reponses, '    '))
+  renderLines.push('  )')
+  if (emitAnchors) renderLines.push(`  #mathalea-anchor("gap", ${lastGap})`)
+  for (const [num, lines] of Object.entries(carryOver.insertions ?? {})) {
+    if (Number(num) === 0) continue
+    renderLines.push(...lines.map((line) => insertionLine(line, '  ')))
+  }
+  renderLines.push(']')
+  renderLines.push('')
+
+  const hasCorrections = corrections.some(
+    (correction) => correction.trim().length > 0,
+  )
+  if (hasCorrections) {
+    renderLines.push('// ----- Corrections -----')
+    renderLines.push('#if corrige [')
+    renderLines.push('  // les corrections commencent sur une nouvelle page')
+    renderLines.push('  #pagebreak(weak: true)')
+    renderLines.push(
+      '  #align(center, text(size: 1.3em, weight: "bold", fill: couleur)[Corrections])',
+    )
+    renderLines.push('  #en-colonnes[')
+    // Une seule liste numérotée pour toutes les questions : ses numéros
+    // suivent ceux des lignes du tableau (les items doivent donc se suivre
+    // sans ligne vide, sinon la numérotation repart à 1). L'environnement
+    // `tasks` répartit les réponses sur plusieurs colonnes — indispensable
+    // avec le réglage « Correction minimale », où chaque item tient en
+    // quelques caractères — et le nombre de colonnes se règle depuis la
+    // palette de l'aperçu, comme les listes de questions des exercices.
+    const layout = carryOver.tasksLayout?.[CAN_CORRECTIONS_PREFIX]
+    const columnsExpr = exportMode
+      ? (layout?.columns ?? DEFAULT_TASKS_COLUMNS)
+      : `${CAN_CORRECTIONS_PREFIX}-colonnes`
+    const gutterExpr = exportMode
+      ? (layout?.gutter ?? DEFAULT_GUTTER_LITERAL)
+      : `${CAN_CORRECTIONS_PREFIX}-gutter`
+    if (emitAnchors) {
+      renderLines.push('    #mathalea-anchor("tasks-corr", 0)')
+    }
+    renderLines.push(
+      `    #tasks(columns: ${columnsExpr}, label: ${boldableLabel('"1."', options.boldQuestionNumbers)}, row-gutter: ${gutterExpr}, above: 1.2em, below: 0.8em, start: 1)[`,
+    )
+    for (const correction of corrections) {
+      renderLines.push(`      + ${correction.split('\n').join('\n        ')}`)
+    }
+    renderLines.push('    ]')
+    renderLines.push('  ]')
+    renderLines.push(']')
+    renderLines.push('')
+  }
+  return { bankLines: [], renderLines, hasCorrections }
+}
+
+/**
  * Construit les définitions et le rendu (Énoncés + Corrections) d'une seule
  * version du sujet. `varPrefix` distingue les variables de banque
  * (`#let <prefix>exN = ...`) d'une version à l'autre ; les variables de mise
@@ -1034,6 +1259,18 @@ function buildVersionContent(
    */
   exportMode = false,
 ): VersionContent {
+  // le mode « Course aux nombres » n'a ni banque d'exercices ni titres : tout
+  // le contenu tient dans un seul tableau, construit à part
+  if (options.canMode) {
+    return buildCanVersionContent(
+      exercises,
+      options,
+      carryOver,
+      figures,
+      emitAnchors,
+      exportMode,
+    )
+  }
   /** Insertions de la palette à réémettre après l'exercice `num` */
   const insertionLines = (num: number, indent: string): string[] =>
     (carryOver.insertions?.[num] ?? []).map((line) =>
@@ -1410,6 +1647,7 @@ export function buildTypstDocument(
   const usesWritingLines = allLines.some((line) =>
     line.includes('#mathalea-lignes('),
   )
+  const usesCanTable = allLines.some((line) => line.includes('#can-tableau('))
   // variables de mise en page des questions référencées par les corps
   // (`ex1`, et `ex1-corr` pour les corrections, réglables indépendamment)
   const tasksPrefixes = [
@@ -1432,7 +1670,9 @@ export function buildTypstDocument(
     lines.push(`// Pour régénérer cette fiche : ${sourceUrl}`)
   }
   lines.push('')
-  const usesExerciseBank = !options.mergeExercises
+  // en mode « Course aux nombres » il n'y a pas de titre d'exercice à
+  // habiller : le paquet exercise-bank n'a rien à faire dans le document
+  const usesExerciseBank = !options.mergeExercises && !options.canMode
   if (usesTasks || usesExerciseBank || options.autoVerticalSpacing || usesVarTable) {
     lines.push('// ----- Paquets -----')
     if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
@@ -1463,6 +1703,11 @@ export function buildTypstDocument(
     lines.push(MATHALEA_WRITING_LINES_HELPER)
     lines.push('')
   }
+  if (usesCanTable) {
+    lines.push('// ----- Tableau « Course aux nombres » -----')
+    lines.push(MATHALEA_CAN_TABLE_HELPER)
+    lines.push('')
+  }
   // mathalea-fit (adaptation de la largeur des figures) est requis dès
   // qu'une figure est présente ; mathalea-figure l'utilise pour ses figures
   // à labels, il doit donc être défini avant.
@@ -1488,7 +1733,9 @@ export function buildTypstDocument(
   lines.push(
     `#let colonnes = ${options.columns} // nombre de colonnes (1, 2 ou 3)`,
   )
-  lines.push('#let corrige = true // afficher les corrections')
+  lines.push(
+    `#let corrige = ${options.showCorrections} // afficher les corrections`,
+  )
   lines.push(
     `#let couleur = ${options.badgeColor} // couleur des badges d'exercice et des titres`,
   )
@@ -1650,7 +1897,7 @@ export function buildTypstDocument(
     // chaque sujet recommence sa propre pagination et sa numérotation
     // d'exercices (compteur global du paquet exercise-bank)
     lines.push('#counter(page).update(1)')
-    if (!options.mergeExercises) lines.push('#exo-counter.update(0)')
+    if (usesExerciseBank) lines.push('#exo-counter.update(0)')
     lines.push('')
     lines.push(
       ...headerBlock(options.headerStyle, `Sujet ${versionLetter(i + 1)}`),

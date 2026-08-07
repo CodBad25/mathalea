@@ -5,8 +5,9 @@ import {
   orangeMathaleaLight,
 } from 'apigeom/src/elements/defaultValues'
 import type Polygon from 'apigeom/src/elements/lines/Polygon'
-import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
+import { apigeomFigureToSvg } from '../../lib/apigeom/apigeom-figure'
 import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import figureApigeom from '../../lib/figureApigeom'
 import { choice } from '../../lib/outils/arrayOutils'
 import { range1 } from '../../lib/outils/nombres'
@@ -480,7 +481,9 @@ export default class shikaku extends Exercice {
 
     let texteCorr =
       'Voici une solution possible :<br>' +
-      this.figureCorrection.getStaticHtml()
+      (context.isTypst
+        ? apigeomFigureToSvg(this.figureCorrection)
+        : this.figureCorrection.getStaticHtml())
     let texte =
       emplacementPourFigure +
       DomReadyActionElement.create({

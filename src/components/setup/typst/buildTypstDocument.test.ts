@@ -823,6 +823,280 @@ describe('buildTypstDocument', () => {
   })
 })
 
+describe('mode « Course aux nombres » (canMode)', () => {
+  const canOptions = { ...defaultTypstDocumentOptions, canMode: true }
+
+  it('rassemble toutes les questions dans un seul tableau', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: ['$7\\times 5$', '$37+29$'],
+          canAnswers: ['', '$\\ldots$ €'],
+          corrections: ['$35$', '$66$'],
+        }),
+        exercise({
+          questions: ['Combien de boules ?'],
+          canAnswers: ['$\\ldots$ boules'],
+          corrections: ['$12$ boules'],
+        }),
+      ],
+      canOptions,
+      {},
+      [],
+      { exportMode: true },
+    )
+    // l'aide n'est déclarée que si elle sert, comme les autres
+    expect(code).toContain('#let can-tableau(')
+    expect(code).toContain('#can-tableau(')
+    // les questions des deux exercices se suivent dans le même tableau
+    expect(code).toContain('[$7 times 5$],')
+    expect(code).toContain('[Combien de boules ?],')
+    expect(code).toContain('[$...$ boules],')
+    // corrections numérotées à la suite, dans l'ordre des lignes, et
+    // réparties en colonnes (les réponses tiennent en quelques caractères)
+    expect(code).toContain('#if corrige [')
+    expect(code).toContain(
+      '#tasks(columns: "auto-fit", label: (..n) => strong(numbering("1.", ..n))',
+    )
+    expect(code).toContain('      + $35$\n      + $66$\n      + $12$ boules')
+    // ni banque d'exercices ni badges : il n'y a plus de titre d'exercice
+    expect(code).not.toContain('exercise-bank')
+    expect(code).not.toContain('#let ex1 = exo.with(')
+  })
+
+  it('préfère les énoncés CAN (canQuestions) aux questions ordinaires', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: ['Calculer $7\\times 5$.'],
+          canQuestions: ['$7\\times 5$'],
+          canAnswers: [''],
+        }),
+      ],
+      canOptions,
+      {},
+      [],
+      { exportMode: true },
+    )
+    expect(code).toContain('[$7 times 5$],')
+    expect(code).not.toContain('Calculer')
+  })
+
+  it('laisse la cellule réponse vide quand il n’y a pas de canAnswers', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$', '$2+2$'] })],
+      canOptions,
+      {},
+      [],
+      { exportMode: true },
+    )
+    expect(code).toContain('#can-tableau(\n    (\n      [$1 + 1$],\n      [$2 + 2$],\n    ),\n    (\n      [],\n      [],\n    ),\n  )')
+  })
+
+  it('ne produit pas de section Corrections sans correction', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      canOptions,
+    )
+    expect(code).not.toContain('Corrections')
+  })
+
+  it('garde les repères de la palette qui ont un sens dans un tableau', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({ questions: ['$1+1$', '$2+2$'], corrections: ['$2$', '$4$'] }),
+        exercise({ questions: ['$3+3$'], corrections: ['$6$'] }),
+      ],
+      canOptions,
+      { insertions: { 0: ['#section[Calcul mental]'], 1: ['#colbreak()'] } },
+    )
+    // la liste des corrections est commune à la fiche : ses colonnes se
+    // règlent depuis la palette, via un repère et des variables au numéro 0
+    expect(code).toContain('#mathalea-anchor("tasks-corr", 0)')
+    expect(code).toContain('#tasks(columns: ex0-corr-colonnes')
+    expect(code).toContain('#let ex0-corr-colonnes = "auto-fit"')
+    expect(code).toContain('#let ex0-corr-gutter = interligne-questions')
+    // un repère « exo » par exercice, dans sa première cellule
+    expect(code).toContain('[#mathalea-anchor("exo", 1)\n      $1 + 1$],')
+    expect(code).toContain('[#mathalea-anchor("exo", 2)\n      $3 + 3$],')
+    // seuls les deux gaps qui encadrent le tableau existent
+    expect(code).toContain('#mathalea-anchor("gap", 0)')
+    expect(code).toContain('#mathalea-anchor("gap", 2)')
+    expect(code).not.toContain('#mathalea-anchor("gap", 1)')
+    // les insertions des gaps intermédiaires sont réémises après le tableau
+    // plutôt que perdues
+    expect(code).toContain('#section[Calcul mental] // mathalea:insertion')
+    expect(code).toContain('#colbreak() // mathalea:insertion')
+  })
+
+  it('n’émet pas de repère hors de la première version', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      { ...canOptions, nbVersions: 2 },
+      {},
+      [[exercise({ questions: ['$5+5$'] })]],
+    )
+    expect(code).toContain('Sujet A')
+    expect(code).toContain('[$5 + 5$],')
+    // le compteur du paquet exercise-bank n'existe pas dans ce mode
+    expect(code).not.toContain('#exo-counter.update(0)')
+  })
+
+  it.skipIf(!shouldRunTypstCliTests())(
+    'compile avec typst : tableau, figure et corrections',
+    async () => {
+      const code = buildTypstDocument(
+        [
+          exercise({
+            questions: [
+              '$7\\times 5$',
+              'Combien y a-t-il de boules noires ?<br><svg width="96" height="48"><circle cx="24" cy="24" r="8"/></svg>',
+            ],
+            canAnswers: ['', '$\\ldots$ boules'],
+            corrections: ['$35$', '$12$ boules'],
+          }),
+        ],
+        canOptions,
+      )
+      const { execFileSync } = await import('node:child_process')
+      const { writeFileSync, mkdtempSync } = await import('node:fs')
+      const { tmpdir } = await import('node:os')
+      const { join } = await import('node:path')
+      const dir = mkdtempSync(join(tmpdir(), 'typst-can-'))
+      const file = join(dir, 'doc.typ')
+      writeFileSync(file, code, 'utf-8')
+      expect(() =>
+        execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+          stdio: 'pipe',
+        }),
+      ).not.toThrow()
+    },
+  )
+})
+
+describe('correction minimale (minimalCorrections)', () => {
+  const highlight = (contenu: string) =>
+    `{\\color{#F15929}\\boldsymbol{${contenu}}}`
+  const minimalOptions = {
+    ...defaultTypstDocumentOptions,
+    minimalCorrections: true,
+  }
+
+  it('ne garde que la réponse mise en évidence', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: ['Calculer $3\\times 5$.'],
+          corrections: [`On sait que $3\\times 5 = ${highlight('15')}$.`],
+        }),
+      ],
+      minimalOptions,
+    )
+    expect(code).toContain('15')
+    expect(code).not.toContain('On sait que')
+  })
+
+  it('sépare plusieurs réponses d’une même correction', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: ['PGCD et PPCM de $12$ et $30$ ?'],
+          corrections: [
+            `Le PGCD est $${highlight('6')}$ et le PPCM est $${highlight('60')}$.`,
+          ],
+        }),
+      ],
+      minimalOptions,
+    )
+    expect(code).not.toContain('Le PGCD est')
+    // les deux réponses se suivent, séparées par un cadratin
+    expect(code).toContain(
+      '$text(fill: #rgb("#F15929"), upright(bold(6)))$\u2003$text(fill: #rgb("#F15929"), upright(bold(60)))$',
+    )
+  })
+
+  it('laisse intacte une correction sans mise en évidence orange', () => {
+    const detaillee = 'On applique la formule, donc $A = 12$.'
+    const code = buildTypstDocument(
+      [exercise({ questions: ['Calculer $A$.'], corrections: [detaillee] })],
+      minimalOptions,
+    )
+    expect(code).toContain('On applique la formule')
+  })
+
+  it('ignore une mise en évidence d’une autre couleur', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: ['Calculer.'],
+          corrections: [
+            'Le signe est $ {\\color{#1d4ed8}\\boldsymbol{+}} $ donc $A = 12$.',
+          ],
+        }),
+      ],
+      minimalOptions,
+    )
+    expect(code).toContain('Le signe est')
+  })
+
+  it('s’applique aussi au tableau « Course aux nombres »', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: ['$3\\times 5$'],
+          corrections: [`On a $3\\times 5 = ${highlight('15')}$.`],
+        }),
+      ],
+      { ...minimalOptions, canMode: true },
+    )
+    expect(code).toContain('#can-tableau(')
+    expect(code).not.toContain('On a')
+  })
+
+  it('garde la réponse d’un texteEnCouleurEtGras (QCM)', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: ['Coche la bonne réponse.'],
+          corrections: [
+            'A) six B) sept<br>$68=6\\times 10+8$, donc $68$ c’est ' +
+              '<span style="color:#F15929;font-weight: bold;">$6$ fois $10$ et j’ajoute $8$</span>.',
+          ],
+        }),
+      ],
+      minimalOptions,
+    )
+    expect(code).not.toContain('A) six')
+    expect(code).not.toContain('donc')
+    expect(code).toContain('fois')
+  })
+
+  it('ignore les repères de sous-question (numAlpha), orange et gras eux aussi', () => {
+    const marker = (letter: string) =>
+      `<span style="color:#f15929; font-weight:bold">${letter})&nbsp;</span>`
+    const detaillee = `${marker('a')}On développe.<br>${marker('b')}On factorise.`
+    const code = buildTypstDocument(
+      [exercise({ questions: ['Calculer.'], corrections: [detaillee] })],
+      minimalOptions,
+    )
+    expect(code).toContain('On développe')
+    expect(code).toContain('On factorise')
+  })
+
+  it('reste sans effet quand le réglage est désactivé', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: ['Calculer $3\\times 5$.'],
+          corrections: [`On sait que $3\\times 5 = ${highlight('15')}$.`],
+        }),
+      ],
+      defaultTypstDocumentOptions,
+    )
+    expect(code).toContain('On sait que')
+  })
+})
+
 describe('sourceUrl (URL de régénération en commentaire)', () => {
   it("n'ajoute pas de ligne quand aucune URL n'est fournie", () => {
     const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])

@@ -1279,6 +1279,8 @@ export default class Alea2iep {
     angle: number,
     options: OptionsCrayon = {},
   ) {
+    const rapporteurVisibilite = this.rapporteur.visibilite
+    if (!rapporteurVisibilite) this.rapporteurMontrer()
     if (angle > 0) {
       this.rapporteurDeplacerRotation2Points(A, B, options)
       this.rapporteurCrayonMarqueAngle(angle, options)
@@ -1294,7 +1296,17 @@ export default class Alea2iep {
       (this.rapporteur.rayon * this.rapporteur.zoom) / 100,
       d.angleAvecHorizontale + angle,
     )
-    this.rapporteurMasquer(options)
+    if (options?.positionsRangementInstruments !== undefined) {
+      this.rangerInstruments(
+        options.positionsRangementInstruments,
+        ['rapporteur'],
+        {
+          tempo: 0,
+          vitesse: 20,
+        },
+      )
+    }
+    if (!rapporteurVisibilite) this.rapporteurMasquer(options)
     this.regleDemiDroiteOriginePoint(A, M, options)
   }
 

@@ -1,10 +1,18 @@
+import { bleuMathalea } from '../../lib/colors'
+import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { polygone } from '../../lib/2d/polygones'
+import { repere } from '../../lib/2d/reperes'
+import { segment } from '../../lib/2d/segmentsVecteurs'
+import { texteParPosition } from '../../lib/2d/textes'
 import Stat from '../../lib/mathFonctions/Stat'
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { mathalea2d } from '../../modules/mathalea2d'
+import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import { creerSerieDeQuartiles } from '../../modules/outilsStat'
-import { nombreElementsDifferents } from '../ExerciceQcm'
+import type { ObjetMathalea2D } from '../../lib/2d/ObjetMathalea2D'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '0cd7a'
@@ -16,114 +24,223 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre =
-  'Interpréter des effectifs à partir d’une boite à moustaches'
-export const dateDePublication = '04/07/2026'
+export const titre = 'Comparer deux séries à partir de diagrammes en boîte'
+export const dateDePublication = '06/08/2026'
 
-type TypeQuestion = 'inferieurQ3' | 'superieurQ1'
+type Resume = {
+  min: number
+  q1: number
+  mediane: number
+  q3: number
+  max: number
+}
+
+type Cas = {
+  serie1: Resume
+  serie2: Resume
+  bonneAffirmation: number
+}
 
 /**
  * @author Stéphane Guyon
  */
-export default class LireEffectifBoiteMoustachesQCM extends ExerciceQcmA {
-  private appliquerLesValeurs(
-    effectifTotal: number,
-    min: number,
-    q1: number,
-    mediane: number,
-    q3: number,
-    max: number,
-    typeQuestion: TypeQuestion,
-  ): void {
-    const serie = creerSerieDeQuartiles({
-      q1,
-      mediane,
-      q3,
-      min,
-      max,
-      n: effectifTotal,
-      isInteger: true,
-    })
-    const maSerie = new Stat(serie)
-    const moustache = maSerie.traceBoiteAMoustache({
-      size: 10,
-      height: 4,
-      legendeOn: false,
-      valeursOn: true,
-      echelle: 1,
-    })
-    const reponse = (3 * effectifTotal) / 4
-    const valeurRepere = typeQuestion === 'inferieurQ3' ? q3 : q1
-    const question =
-      typeQuestion === 'inferieurQ3'
-        ? `Le nombre d'élèves ayant une note inférieure ou égale à $${valeurRepere}$ est au moins égal à :`
-        : `Le nombre d'élèves ayant une note supérieure ou égale à $${valeurRepere}$ est au plus moins à :`
-    const interpretation =
-      typeQuestion === 'inferieurQ3'
-        ? `On lit sur le diagramme en boîtes que $Q_3=${q3}$.<br>
-      On cherche donc le nombre d'élèves ayant une note au plus égale à $${q3}$.<br>
-      Par définition, $75\\,\\%$ des notes sont inférieures ou égales au troisième quartile $Q_3$.`
-        : `On lit que $Q_1=${q1}$.<br>
-      On cherche donc le nombre d'élèves ayant une note au moins égale à $${q1}$.<br>
-      Par définition, $75\\,\\%$ des notes sont supérieures ou égales au premier quartile $Q_1$.`
+export default class ComparerDeuxBoitesMoustaches extends ExerciceQcmA {
+  private construireBoite(
+    resume: Resume,
+    ordonnee: number,
+    axeMin: number,
+    pas: number,
+  ): ObjetMathalea2D[] {
+    const x = (valeur: number) => (valeur - axeMin) / pas
+    const demiHauteur = 0.35
+    const minBas = pointAbstrait(x(resume.min), ordonnee - demiHauteur)
+    const minHaut = pointAbstrait(x(resume.min), ordonnee + demiHauteur)
+    const maxBas = pointAbstrait(x(resume.max), ordonnee - demiHauteur)
+    const maxHaut = pointAbstrait(x(resume.max), ordonnee + demiHauteur)
+    const q1Bas = pointAbstrait(x(resume.q1), ordonnee - demiHauteur)
+    const q1Haut = pointAbstrait(x(resume.q1), ordonnee + demiHauteur)
+    const q3Bas = pointAbstrait(x(resume.q3), ordonnee - demiHauteur)
+    const q3Haut = pointAbstrait(x(resume.q3), ordonnee + demiHauteur)
+    const medianeBas = pointAbstrait(
+      x(resume.mediane),
+      ordonnee - demiHauteur,
+    )
+    const medianeHaut = pointAbstrait(
+      x(resume.mediane),
+      ordonnee + demiHauteur,
+    )
 
-    const distracteurs = [
-      effectifTotal / 4,
-      effectifTotal / 2,
-      valeurRepere,
-      effectifTotal,
-      reponse - 1,
-      reponse + 1,
-    ].filter((valeur) => valeur > 0 && valeur !== reponse)
-    const reponses = [reponse]
-    for (const distracteur of distracteurs) {
-      if (!reponses.includes(distracteur)) reponses.push(distracteur)
-      if (reponses.length === 4) break
-    }
+    const boite = polygone([q1Bas, q1Haut, q3Haut, q3Bas], bleuMathalea)
+    boite.epaisseur = 2
+    boite.couleurDeRemplissage = colorToLatexOrHTML(bleuMathalea)
+    boite.opaciteDeRemplissage = 0.2
 
-    this.reponses = reponses.map((r) => `$${texNombre(r, 0)}$`)
-
-    this.enonce = `Les notes d'une classe de $${effectifTotal}$ élèves sont résumées par le diagramme en boite ci-dessous.<br>
-      ${moustache}<br>
-      ${question}`
-
-    this.correction = `${interpretation}<br>
-      Cela correspond donc à $\\dfrac{3}{4}$ de l'effectif total.<br>
-      $\\dfrac{3}{4}\\times ${effectifTotal}=${miseEnEvidence(texNombre(reponse, 0))}$.`
+    const objets: ObjetMathalea2D[] = [
+      boite,
+      segment(minBas, minHaut, bleuMathalea),
+      segment(maxBas, maxHaut, bleuMathalea),
+      segment(
+        pointAbstrait(x(resume.min), ordonnee),
+        pointAbstrait(x(resume.q1), ordonnee),
+        bleuMathalea,
+      ),
+      segment(
+        pointAbstrait(x(resume.q3), ordonnee),
+        pointAbstrait(x(resume.max), ordonnee),
+        bleuMathalea,
+      ),
+      segment(medianeBas, medianeHaut, 'red'),
+    ]
+    for (const objet of objets.slice(1)) objet.epaisseur = 2
+    return objets
   }
 
-  versionOriginale: () => void = () => {
-    this.appliquerLesValeurs(24, 2, 5, 9, 13, 18, 'inferieurQ3')
+  private appliquerTransformation(resume: Resume, a: number, b: number): Resume {
+    return {
+      min: a * resume.min + b,
+      q1: a * resume.q1 + b,
+      mediane: a * resume.mediane + b,
+      q3: a * resume.q3 + b,
+      max: a * resume.max + b,
+    }
+  }
+
+  private appliquerLesValeurs(cas: Cas): void {
+    const coefficient = choice([1, 2])
+    const translation = randint(-3, 6)
+    const donnees1 = this.appliquerTransformation(
+      cas.serie1,
+      coefficient,
+      translation,
+    )
+    const donnees2 = this.appliquerTransformation(
+      cas.serie2,
+      coefficient,
+      translation,
+    )
+
+    const serie1 = creerSerieDeQuartiles({ ...donnees1, n: 40 })
+    const serie2 = creerSerieDeQuartiles({ ...donnees2, n: 40 })
+    const boite1 = new Stat(serie1).boiteAMoustache()
+    const boite2 = new Stat(serie2).boiteAMoustache()
+    const resume1: Resume = {
+      min: boite1.min,
+      q1: boite1.q1,
+      mediane: boite1.q2,
+      q3: boite1.q3,
+      max: boite1.max,
+    }
+    const resume2: Resume = {
+      min: boite2.min,
+      q1: boite2.q1,
+      mediane: boite2.q2,
+      q3: boite2.q3,
+      max: boite2.max,
+    }
+
+    const pas = 2 * coefficient
+    const minimum = Math.min(resume1.min, resume2.min)
+    const maximum = Math.max(resume1.max, resume2.max)
+    const axeMin = pas * Math.floor(minimum / pas) - pas
+    const axeMax = pas * Math.ceil(maximum / pas) + pas
+    const largeur = (axeMax - axeMin) / pas
+    const axe = repere({
+      xMin: 0,
+      xMax: largeur,
+      yMin: 0,
+      yMax: 4,
+      xThickDistance: 1,
+      xLabelListe: Array.from({ length: largeur + 1 }, (_, index) => ({
+        valeur: index,
+        texte: `${axeMin + pas * index}`,
+      })),
+      labelsYareVisible: false,
+      grilleX: false,
+      grilleY: false,
+    })
+    const objets = [
+      axe,
+      ...this.construireBoite(resume1, 3, axeMin, pas),
+      ...this.construireBoite(resume2, 1.5, axeMin, pas),
+      texteParPosition('Série 1', -1.2, 3, 0, 'black', 1),
+      texteParPosition('Série 2', -1.2, 1.5, 0, 'black', 1),
+    ]
+    const figure = mathalea2d(
+      {
+        xmin: -2.2,
+        xmax: largeur + 1,
+        ymin: -1,
+        ymax: 4.2,
+        pixelsParCm: 30,
+        scale: 0.75,
+        center: true,
+      },
+      objets,
+    )
+
+    const affirmations = [
+      `Environ $75\\,\\%$ des valeurs de la série 2 sont inférieures ou égales à la médiane de la série 1.`,
+      `Environ $75\\,\\%$ des valeurs de la série 1 sont supérieures ou égales à la médiane de la série 2.`,
+      `Au moins une valeur de la série 2 est strictement inférieure à toutes les valeurs de la série 1.`,
+      `Au moins une valeur de la série 1 est strictement supérieure à toutes les valeurs de la série 2.`,
+    ]
+    this.reponses = affirmations
+    this.bonnesReponses = affirmations.map(
+      (_, index) => index === cas.bonneAffirmation,
+    )
+
+    const estVraie = (index: number) =>
+      index === cas.bonneAffirmation
+        ? texteEnCouleurEtGras('Vraie')
+        : texteEnCouleurEtGras('Fausse')
+    this.enonce = `On donne les diagrammes en boîte de deux séries statistiques.<br>
+      ${figure}<br>
+      On peut affirmer que :${
+        context.isTypst
+          ? `<br><br>${affirmations
+              .map(
+                (affirmation, index) =>
+                  `${String.fromCharCode(65 + index)}. ${affirmation}`,
+              )
+              .join('<br><br>')}`
+          : ''
+      }`
+    this.correction = `$\\bullet$ « ${affirmations[0]} » ${estVraie(0)} : le troisième quartile de la série 2 vaut $${resume2.q3}$ et la médiane de la série 1 vaut $${resume1.mediane}$.<br><br>
+      $\\bullet$ « ${affirmations[1]} » ${estVraie(1)} : le premier quartile de la série 1 vaut $${resume1.q1}$ et la médiane de la série 2 vaut $${resume2.mediane}$.<br><br>
+      $\\bullet$ « ${affirmations[2]} » ${estVraie(2)} : le minimum de la série 2 vaut $${resume2.min}$ et celui de la série 1 vaut $${resume1.min}$.<br><br>
+      $\\bullet$ « ${affirmations[3]} » ${estVraie(3)} : le maximum de la série 1 vaut $${resume1.max}$ et celui de la série 2 vaut $${resume2.max}$.`
   }
 
   versionAleatoire: () => void = () => {
-    const n = 4
-    do {
-      const effectifTotal = choice([24, 28, 32, 36])
-      const min = randint(2, 5)
-      const q1 = randint(min + 1, min + 4)
-      const mediane = randint(q1 + 2, q1 + 5)
-      const q3 = randint(mediane + 2, mediane + 4)
-      const max = randint(q3 + 1, 20)
-      const typeQuestion = choice([
-        'inferieurQ3',
-        'superieurQ1',
-      ]) as TypeQuestion
-      this.appliquerLesValeurs(
-        effectifTotal,
-        min,
-        q1,
-        mediane,
-        q3,
-        max,
-        typeQuestion,
-      )
-    } while (nombreElementsDifferents(this.reponses) < n)
+    const cas: Cas[] = [
+      {
+        serie1: { min: 4, q1: 8, mediane: 12, q3: 15, max: 18 },
+        serie2: { min: 5, q1: 7, mediane: 10, q3: 12, max: 20 },
+        bonneAffirmation: 0,
+      },
+      {
+        serie1: { min: 4, q1: 10, mediane: 13, q3: 16, max: 18 },
+        serie2: { min: 5, q1: 7, mediane: 10, q3: 14, max: 20 },
+        bonneAffirmation: 1,
+      },
+      {
+        serie1: { min: 5, q1: 9, mediane: 12, q3: 15, max: 18 },
+        serie2: { min: 3, q1: 7, mediane: 10, q3: 14, max: 20 },
+        bonneAffirmation: 2,
+      },
+      {
+        serie1: { min: 3, q1: 8, mediane: 12, q3: 16, max: 20 },
+        serie2: { min: 5, q1: 7, mediane: 10, q3: 14, max: 18 },
+        bonneAffirmation: 3,
+      },
+    ]
+    this.appliquerLesValeurs(choice(cas))
   }
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+    this.besoinFormulaireCaseACocher = false
+    this.options = { vertical: true, ordered: context.isTypst }
     this.versionAleatoire()
   }
 }

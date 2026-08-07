@@ -1,6 +1,6 @@
 import Figure from 'apigeom'
 import type { MathfieldElement } from 'mathlive'
-import handleApigeomFigureElement from '../../lib/apigeom/apigeom-figure'
+import { createApigeomFigureHtml } from '../../lib/apigeom/apigeom-figure'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { generateCleaner } from '../../lib/interactif/cleaners'
 import ce from '../../lib/interactif/comparisonFunctions'
@@ -93,8 +93,9 @@ export default class ExerciceFractionsDifferentesEcritures extends Exercice {
         denominator: 2,
         numberOfRectangles: 5,
       })
-      handleApigeomFigureElement()
-      this.introduction = `<apigeom-figure interactive default-action='FILL' x-min=${figure.xMin} y-min=${figure.yMin} width=${figure.width} height=${figure.height} numero-exercice=${this.numeroExercice} index=0 auto-index><script type="application/json">${figure.json}</script></apigeom-figure>`
+      this.introduction = createApigeomFigureHtml(figure, {
+        numeroExercice: this.numeroExercice,
+      })
     } else {
       this.introduction = ''
     }

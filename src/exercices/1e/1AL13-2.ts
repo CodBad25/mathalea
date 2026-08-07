@@ -27,7 +27,7 @@ export const dateDeModificationImportante = '18/04/2026' // Passage en MultiMath
 export const uuid = '12afd'
 
 export const refs = {
-  'fr-fr': ['1AL13-2'],
+  'fr-fr': ['1AL13-2','TSA1-31'],
   'fr-ch': ['autres-10'],
 }
 export default class SuitesArithmeticoG extends Exercice {

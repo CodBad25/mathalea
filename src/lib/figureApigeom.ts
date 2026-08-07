@@ -1,5 +1,6 @@
 import Figure from 'apigeom'
 import { get } from 'svelte/store'
+import { apigeomFigureToSvg } from './apigeom/apigeom-figure'
 import { canOptions } from '../../src/lib/stores/canStore'
 import { DomReadyActionElement } from './customElements/DomReadyAction'
 import type { IExercice } from '../lib/types'
@@ -48,6 +49,11 @@ export default function figureApigeom({
   hasFeedback?: boolean
 }): string {
   if (!context.isHtml) return ''
+  // Export Typst : le montage DOM différé (DomReadyActionElement) ci-dessous
+  // ne s'exécute jamais dans le pipeline Typst (chaîne de caractères, sans
+  // DOM), donc la figure resterait un simple <div> vide. `apigeomFigureToSvg`
+  // fournit directement le SVG (texte intégré) à embarquer comme image.
+  if (context.isTypst) return apigeomFigureToSvg(figure)
   // Styles par défaut
   figure.isDynamic = isDynamic !== undefined ? isDynamic : !!exercice.interactif
   figure.divButtons.style.display = figure.isDynamic ? 'grid' : 'none'

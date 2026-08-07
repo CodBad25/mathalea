@@ -1,3 +1,4 @@
+import { apigeomFigureToSvg } from '../../lib/apigeom/apigeom-figure'
 import { isEqual, seq } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -283,7 +284,11 @@ export default class DroiteEuler extends Exercice {
           `Dans un repère orthonormé $(O\\,;\\,\\vec{\\imath}\\,;\\,\\vec{\\jmath})$, on considère les points ` +
           `$A(${xA}\\,;\\,${yA})$, $B(${xB}\\,;\\,${yB})$, $C(${xC}\\,;\\,${yC})$, ` +
           `$H(${xH}\\,;\\,${yH})$ et $K(${kx}\\,;\\,${ky})$.<br>` +
-          (context.isHtml ? figure.getStaticHtml() : figure.tikz())
+          (context.isTypst
+            ? apigeomFigureToSvg(figure)
+            : context.isHtml
+              ? figure.getStaticHtml()
+              : figure.tikz())
 
         handleAnswers(this, 0, {
           champ1: { value: `${gx}`, compare: seq([isEqual()]) },

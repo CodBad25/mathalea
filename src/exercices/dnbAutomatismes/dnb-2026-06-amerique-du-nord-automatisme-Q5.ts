@@ -1,5 +1,6 @@
 import Figure from 'apigeom'
 import type Point from 'apigeom/src/elements/points/Point'
+import { apigeomFigureToSvg } from '../../lib/apigeom/apigeom-figure'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -63,6 +64,7 @@ export default class AutoQ5ANbrevet2026 extends ExerciceCan {
       color: 'black',
     }) as Point
     figure.optimizeLabels()
+    if (context.isTypst) return apigeomFigureToSvg(figure)
     return context.isHtml
       ? figure.getStaticHtml({ center: true })
       : figure.tikz()

@@ -1,4 +1,5 @@
 import Figure from 'apigeom'
+import { apigeomFigureToSvg } from '../../lib/apigeom/apigeom-figure'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -502,6 +503,7 @@ function drawParallelogramm(
   figureCorr.create('Segment', { point1: A, point2: C, isDashed: true })
   figureCorr.create('Segment', { point1: B, point2: D, isDashed: true })
 
+  if (context.isTypst) return apigeomFigureToSvg(figureCorr)
   if (context.isHtml) {
     return `<div>${figureCorr.getStaticHtml()}</div>`
   }

@@ -389,3 +389,21 @@ export class Triangle {
     }
   }
 }
+
+export function troisLongueursPourTriangle(longueurMax = 10, decimal = false) {
+  let l1 = 0
+  let l2 = 0
+  let l3 = 0
+  do {
+    if (decimal) {
+      l1 = Math.random() * longueurMax
+      l2 = Math.random() * longueurMax
+      l3 = Math.random() * longueurMax
+    } else {
+      l1 = Math.floor(Math.random() * longueurMax) + 1
+      l2 = Math.floor(Math.random() * longueurMax) + 1
+      l3 = Math.floor(Math.random() * longueurMax) + 1
+    }
+  } while (!(l1 + l2 > l3 && l1 + l3 > l2 && l2 + l3 > l1))
+  return [l1, l2, l3]
+}

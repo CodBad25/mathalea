@@ -18,7 +18,7 @@ export const amcType = 'qcmMono'
 
 export const uuid = 'a61e7'
 export const refs = {
-  'fr-fr': ['TSA1-106'],
+  'fr-fr': ['TSA1-27', 'TCA1-17'],
   'fr-ch': [],
 }
 

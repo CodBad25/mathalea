@@ -1,4 +1,5 @@
 import Figure from 'apigeom'
+import { apigeomFigureToSvg } from '../../lib/apigeom/apigeom-figure'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { pgcd } from '../../lib/outils/primalite'
@@ -180,7 +181,11 @@ export default class AireAssemblageCarreRectangleTriangle extends ExerciceSimple
       figure.create('MarkBetweenPoints', { point1: E, point2: D })
       figure.create('MarkBetweenPoints', { point1: D, point2: A })
 
-      const figureHtml = context.isHtml ? figure.getStaticHtml() : figure.tikz()
+      const figureHtml = context.isTypst
+        ? apigeomFigureToSvg(figure)
+        : context.isHtml
+          ? figure.getStaticHtml()
+          : figure.tikz()
 
       this.reponse = texNombre(aireTriangle)
       this.question = `Calculer l'aire du triangle représenté ci-dessous.<br>${figureHtml}`
@@ -213,9 +218,11 @@ export default class AireAssemblageCarreRectangleTriangle extends ExerciceSimple
         fenceDash: 'dotted',
       })
 
-      const figureCorrectionHtml = context.isHtml
-        ? figureCorrection.getStaticHtml()
-        : figureCorrection.tikz()
+      const figureCorrectionHtml = context.isTypst
+        ? apigeomFigureToSvg(figureCorrection)
+        : context.isHtml
+          ? figureCorrection.getStaticHtml()
+          : figureCorrection.tikz()
 
       this.correction += '<br>'
       this.correction += figureCorrectionHtml
@@ -287,7 +294,11 @@ export default class AireAssemblageCarreRectangleTriangle extends ExerciceSimple
       figure.create('MarkBetweenPoints', { point1: B, point2: A, text: 'o' })
       figure.create('MarkBetweenPoints', { point1: A, point2: D, text: 'o' })
 
-      const figureHtml = context.isHtml ? figure.getStaticHtml() : figure.tikz()
+      const figureHtml = context.isTypst
+        ? apigeomFigureToSvg(figure)
+        : context.isHtml
+          ? figure.getStaticHtml()
+          : figure.tikz()
 
       this.reponse = texNombre(aireGrandCarre)
       this.question = `Calculer l'aire du grand carré représenté ci-dessous.<br>${figureHtml}`
@@ -330,9 +341,11 @@ export default class AireAssemblageCarreRectangleTriangle extends ExerciceSimple
         fenceDash: 'dotted',
       })
 
-      const figureCorrectionHtml = context.isHtml
-        ? figureCorrection.getStaticHtml()
-        : figureCorrection.tikz()
+      const figureCorrectionHtml = context.isTypst
+        ? apigeomFigureToSvg(figureCorrection)
+        : context.isHtml
+          ? figureCorrection.getStaticHtml()
+          : figureCorrection.tikz()
 
       this.correction += '<br>'
       this.correction += figureCorrectionHtml
@@ -504,7 +517,11 @@ export default class AireAssemblageCarreRectangleTriangle extends ExerciceSimple
         })
       }
 
-      const figureHtml = context.isHtml ? figure.getStaticHtml() : figure.tikz()
+      const figureHtml = context.isTypst
+        ? apigeomFigureToSvg(figure)
+        : context.isHtml
+          ? figure.getStaticHtml()
+          : figure.tikz()
 
       this.reponse = texNombre(aireCherchee)
       this.question = `La figure ci-dessous est un assemblage de quatre carrés identiques, de deux rectangles et de deux triangles rectangles.<br>Calculer l'aire du triangle marqué d'un point d'interrogation.<br>${figureHtml}`
@@ -573,9 +590,11 @@ export default class AireAssemblageCarreRectangleTriangle extends ExerciceSimple
         fenceDash: 'dotted',
       })
 
-      const figureCorrectionHtml = context.isHtml
-        ? figureCorrection.getStaticHtml()
-        : figureCorrection.tikz()
+      const figureCorrectionHtml = context.isTypst
+        ? apigeomFigureToSvg(figureCorrection)
+        : context.isHtml
+          ? figureCorrection.getStaticHtml()
+          : figureCorrection.tikz()
 
       this.correction += '<br>'
       this.correction += figureCorrectionHtml

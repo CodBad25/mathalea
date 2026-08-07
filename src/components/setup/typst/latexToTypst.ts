@@ -1860,6 +1860,38 @@ function protectMathalea2dContainers(
 }
 
 /**
+ * Convertit le SVG autonome d'une figure apigeom (voir `apigeomFigureToSvg`,
+ * `src/lib/apigeom/apigeom-figure.ts` — texte déjà intégré en noeuds `<text>`,
+ * contrairement à mathalea2d qui pose ses labels en `<div>` séparés) en
+ * `#mathalea-figure-block(...)`, comme `mathalea2dContainerToTypst` : réduit
+ * la figure si elle dépasse la largeur disponible, applique le zoom choisi
+ * par le professeur et l'alignement, et place le repère invisible de la
+ * palette de mise en page (mêmes contrôles que pour les figures mathalea2d).
+ */
+function apigeomSvgToTypst(svgHtml: string, figures?: string[]): string | null {
+  if (figures == null) return missingBox('figure non convertie')
+  figures.push(svgToTypstImage(svgHtml))
+  const figureIndex = figures.length
+  const figureName = `fig-${figureIndex}`
+  return [
+    `#mathalea-figure-block(${figureIndex}, ${figureName}-align, ${figureName}-zoom,`,
+    figureName,
+    ')',
+  ].join('\n')
+}
+
+function protectApigeomSvgContainers(
+  html: string,
+  protect: (typst: string) => string,
+  figures?: string[],
+): string {
+  return html.replace(
+    /<svg\b[^>]*\bclass="[^"]*\bapigeom-svg\b[^"]*"[^>]*>[\s\S]*?<\/svg>/gi,
+    (svg) => protect((apigeomSvgToTypst(svg, figures) ?? svg) + '\n\n'),
+  )
+}
+
+/**
  * Convertit un groupe de propositions de QCM en un bloc `#tasks(...)`
  * (paquet taskize) présenté sur `qcm-colonnes` colonnes, avec des étiquettes
  * A) B) C)... Dans le corrigé, la bonne réponse est mise en évidence.
@@ -2297,6 +2329,7 @@ export function htmlToTypst(html: string, figures?: string[]): string {
   text = protectSchemaContainers(text, protect)
   text = protectHtmlTables(text, protect, figures)
   text = protectMathalea2dContainers(text, protect, figures)
+  text = protectApigeomSvgContainers(text, protect, figures)
   text = protectKatexSpans(text, protect)
   // `~$€$` (pattern produit par `texPrix(val)~$€$`) : le `$€$` est un bloc math
   // imbriqué dans un autre `$...$`. En mode texte brut (pas de KaTeX rendu),

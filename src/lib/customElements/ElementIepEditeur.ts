@@ -54,6 +54,7 @@ type TypeElementIntersectable =
   | 'demiDroitePointDirection'
   | 'demiDroiteAngle'
   | 'cercle'
+  | 'cercleRayon'
   | 'arc'
   | 'parallele'
   | 'paralleleAObjet'
@@ -88,6 +89,7 @@ const typesElementsIntersectables: TypeElementIntersectable[] = [
   'demiDroitePointDirection',
   'demiDroiteAngle',
   'cercle',
+  'cercleRayon',
   'arc',
   'parallele',
   'paralleleAObjet',
@@ -128,6 +130,7 @@ const prepositionElementIntersectable: Record<
   demiDroitePointDirection: 'de la demi-droite',
   demiDroiteAngle: 'de la demi-droite',
   cercle: 'du cercle',
+  cercleRayon: 'du cercle',
   arc: 'de l’arc',
   parallele: 'de la parallèle',
   paralleleAObjet: 'de la parallèle',
@@ -151,6 +154,7 @@ const nomsTypesElementsIntersectables: Record<
   demiDroitePointDirection: 'demi-droite',
   demiDroiteAngle: 'demi-droite',
   cercle: 'cercle',
+  cercleRayon: 'cercle',
   arc: 'arc',
   parallele: 'parallèle',
   paralleleAObjet: 'parallèle',
@@ -183,6 +187,7 @@ type InstructionIepSansOptions =
   | { type: 'demiDroite'; p1: string; p2: string }
   | { type: 'demiDroitePointDirection'; p1: string; angle?: number | string }
   | { type: 'cercle'; p1: string; p2: string }
+  | { type: 'cercleRayon'; p1: string; r: number }
   | { type: 'arc'; p1: string; p2: string }
   | { type: 'milieu'; nom: string; p1: string; p2: string }
   | { type: 'demiTourPoint'; nom: string; p1: string; p2: string }
@@ -396,6 +401,13 @@ const catalogue: Record<
       { cle: 'p2', genre: 'point', label: 'Point du cercle' },
     ],
   },
+  cercleRayon: {
+    label: 'Tracer un cercle au compas (centre + rayon)',
+    champs: [
+      { cle: 'p1', genre: 'point', label: 'Centre' },
+      { cle: 'r', genre: 'nombre', label: 'Rayon du cercle' },
+    ],
+  },
   arc: {
     label: 'Tracer un arc de cercle au compas',
     champs: [
@@ -594,6 +606,7 @@ const ordreCatalogue: TypeInstructionIep[] = [
   'demiDroite',
   'demiDroitePointDirection',
   'cercle',
+  'cercleRayon',
   'arc',
   'milieu',
   'demiTourPoint',
@@ -645,6 +658,7 @@ const categoriesCatalogue: CategorieInstructionIep[] = [
       'demiDroite',
       'demiDroitePointDirection',
       'cercle',
+      'cercleRayon',
       'arc',
       'prolongerObjet',
     ],
@@ -687,7 +701,7 @@ const categoriesCatalogue: CategorieInstructionIep[] = [
 ]
 
 function formateNombre(n: number) {
-  return stringNombre(n, 2)
+  if (n != null && !isNaN(n)) return stringNombre(n, 2)
 }
 
 function lireNombreFiniOuInfini(valeur: number | string): number {
@@ -802,6 +816,8 @@ export function decrireInstruction(
       return `Tracer la demi-droite d’origine ${instr.p1} formant un angle ${formateAngleOptionnel(instr.angle)} avec l’horizontale.`
     case 'cercle':
       return `Tracer le cercle de centre ${instr.p1} passant par ${instr.p2} au compas.`
+    case 'cercleRayon':
+      return `Tracer le cercle de centre ${instr.p1} et de rayon ${formateNombre(instr.r)} au compas.`
     case 'arc':
       return `Tracer un arc de cercle de centre ${instr.p1} passant par ${instr.p2} au compas.`
     case 'milieu':
@@ -936,8 +952,10 @@ function intersectionPeutAvoirDeuxPoints(
     estElementIntersectable(element2) &&
     (element1.type === 'cercle' ||
       element1.type === 'arc' ||
+      element1.type === 'cercleRayon' ||
       element2.type === 'cercle' ||
-      element2.type === 'arc')
+      element2.type === 'arc' ||
+      element2.type === 'cercleRayon')
   )
 }
 
@@ -1283,6 +1301,11 @@ function elementGeometrique(
     d.isVisible = false
     return { nature: 'droite', objet: d }
   }
+  if (instr.type === 'cercleRayon') {
+    const c = cercle(A, instr.r)
+    c.isVisible = false
+    return { nature: 'cercle', objet: c }
+  }
   const B = points.get(instr.p2)
   if (B === undefined) return undefined
   if (
@@ -1360,6 +1383,8 @@ function outilsRequisParInstruction(instr: InstructionIep): OutilIep[] {
     case 'regleMasquerGraduations':
     case 'regleModifierLongueur':
       return ['regle']
+    case 'cercleRayon':
+      return ['compas']
     case 'pause':
     case 'attente':
       return []
@@ -1456,7 +1481,7 @@ function jouerProgramme(
           const A = pointAdistance(
             origine[0],
             instr.distance,
-            instr.angle,
+            instr.angle ?? 0,
             instr.nom,
           )
           anim.pointCreer(A, { label: instr.nom })
@@ -1554,6 +1579,16 @@ function jouerProgramme(
             break
           }
           anim.compasCercleCentrePoint(pts[0], pts[1])
+          break
+        }
+        case 'cercleRayon': {
+          const A = recupere(instr.p1)
+          const r = Number(instr.r)
+          if (A === undefined || A.length < 1 || isNaN(r))
+            etapesIgnorees.push(index)
+
+          const B = pointAdistance(A![0], r)
+          anim.compasCercleCentrePoint(A![0], B)
           break
         }
         case 'arc': {
@@ -1759,7 +1794,9 @@ function jouerProgramme(
             etapesIgnorees.push(index)
             break
           }
-          anim.rapporteurTracerDemiDroiteAngle(pts[0], pts[1], instr.angle)
+          anim.rapporteurTracerDemiDroiteAngle(pts[0], pts[1], instr.angle, {
+            positionsRangementInstruments: positionsRangement,
+          })
           break
         }
         case 'montrerOutil': {
@@ -1929,7 +1966,12 @@ export function pointsConstruitsDepuisProgramme(
         if (origine === undefined) break
         points.set(
           instr.nom,
-          pointAdistance(origine[0], instr.distance, instr.angle, instr.nom),
+          pointAdistance(
+            origine[0],
+            instr.distance,
+            instr.angle ?? 0,
+            instr.nom,
+          ),
         )
         break
       }

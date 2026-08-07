@@ -197,18 +197,45 @@ export function propositionsQcm(
       }
       return `<input type="${isRadio ? 'radio' : 'checkbox'}" name="checkEx${exercice.numeroExercice}Q${i}" ${exercice.interactif ? '' : 'disabled'} tabindex="0" style="height: 1rem; width: 1rem;" class="disabled:cursor-default"><label ${classCss} >$${miseEnEvidence(`\\cancel{${lettreDepuisChiffre(rep + 1)}}`, 'black')}$.</label>`
     }
-
-    texte = MathaleaQcmElement.create({
-      numeroExercice: exercice.numeroExercice ?? 0,
-      questionIndex: i,
-      propositions: exercice.autoCorrection[i].propositions ?? [],
-      radio: isRadio,
-      vertical,
-      format: options?.format ?? 'case',
-      style: options?.style ?? '',
-      interactivityOn: exercice.interactif,
-    })
     texteCorr = '<div class="my-3">'
+
+    if (!context.isTypst) {
+      texte = MathaleaQcmElement.create({
+        numeroExercice: exercice.numeroExercice ?? 0,
+        questionIndex: i,
+        propositions: exercice.autoCorrection[i].propositions ?? [],
+        radio: isRadio,
+        vertical,
+        format: options?.format ?? 'case',
+        style: options?.style ?? '',
+        interactivityOn: exercice.interactif,
+      })
+    } else {
+      const formateQ = (format: string, rep: number) => {
+        if (format == null || format === 'case') {
+          return `<input type="${isRadio ? 'radio' : 'checkbox'}" name="checkEx${exercice.numeroExercice}Q${i}" ${exercice.interactif ? '' : 'disabled'} tabindex="0" style="height: 1rem; width: 1rem;" class="disabled:cursor-default" id="checkEx${exercice.numeroExercice}Q${i}R${rep}">`
+        }
+        if (format === 'lettre') {
+          return `<label ${classCss} >${texteGras(lettreDepuisChiffre(rep + 1))}.</label>`
+        }
+        return `<input type="${isRadio ? 'radio' : 'checkbox'}" name="checkEx${exercice.numeroExercice}Q${i}" ${exercice.interactif ? '' : 'disabled'} tabindex="0" style="height: 1rem; width: 1rem;" class="disabled:cursor-default" id="checkEx${exercice.numeroExercice}Q${i}R${rep}"><label ${classCss} >${lettreDepuisChiffre(rep + 1)}.</label>`
+      }
+
+      texte = '<div class="my-3">'
+      for (
+        let rep = 0;
+        rep < exercice.autoCorrection[i].propositions.length;
+        rep++
+      ) {
+        if (nbCols > 1 && rep % nbCols === 0) texte += '<br>'
+        texte += `<div class="ex${exercice.numeroExercice} ${vertical ? '' : 'inline-block'} my-2 align-center">
+      ${formateQ(options?.format, rep)}
+      <label id="labelEx${exercice.numeroExercice}Q${i}R${rep}" ${classCss} >${exercice.autoCorrection[i].propositions[rep].texte + espace}</label>
+      </div>`
+      }
+
+      texte += `</div><div class="m-2" id="resultatCheckEx${exercice.numeroExercice}Q${i}"></div>`
+    }
     for (
       let rep = 0;
       rep < exercice.autoCorrection[i].propositions.length;
@@ -283,7 +310,7 @@ export function elimineDoublons(propositions: UneProposition[]) {
   // fonction qui va éliminer les doublons si il y en a
   let doublonsTrouves = false
   for (let i = 0; i < propositions.length - 1; i++) {
-    for (let j = i + 1; j < propositions.length; ) {
+    for (let j = i + 1; j < propositions.length;) {
       if (propositions[i].texte === propositions[j].texte) {
         // les réponses i et j sont les mêmes
         doublonsTrouves = true
@@ -358,7 +385,7 @@ export function aLeBonNombreDePropsDifferentes(
   let doublonsTrouvés = false
   let nbReponsesDifferentes = reponses.length
   for (let i = 0; i < reponses.length - 1; i++) {
-    for (let j = i + 1; j < reponses.length; ) {
+    for (let j = i + 1; j < reponses.length;) {
       if (reponses[i].trim() === reponses[j].trim()) {
         if (i === 0) {
           exercice.reponses[j] = 'doublon de la bonne réponse'

@@ -1,4 +1,6 @@
 import Figure from 'apigeom'
+import type BaseFigure from 'apigeom/src/Figure'
+import { addTextElementsToSvg } from 'apigeom/src/lib/addTextElementsToSvg'
 import { get } from 'svelte/store'
 import { canOptions } from '../../../src/lib/stores/canStore'
 import { globalOptions } from '../../../src/lib/stores/globalOptions'
@@ -200,4 +202,80 @@ export default function handleApigeomFigureElement() {
   if (!customElements.get('apigeom-figure')) {
     customElements.define('apigeom-figure', ApigeomFigureElement)
   }
+}
+
+/**
+ * Marge (px) ajoutée sur chaque bord du viewBox exporté : les labels sont
+ * positionnés en `<div>` HTML, qui débordent librement du cadre géométrique
+ * de la figure (ex. `labelDxInPixels` décalant un nom de point vers
+ * l'extérieur du quadrillage). Le SVG, lui, rogne tout ce qui dépasse son
+ * viewBox — sans cette marge, ces labels seraient coupés une fois intégrés
+ * en `<text>`. Valeur heuristique (~2 lignes de texte), pas un calcul exact
+ * de la boîte englobante réelle du texte (non mesurable sans le rendre).
+ */
+const TEXT_OVERFLOW_MARGIN_PX = 30
+
+/**
+ * SVG autonome d'une figure apigeom déjà construite (`figure.create(...)`),
+ * texte compris (labels de points, etc.) : contrairement à `getStaticHtml()`,
+ * qui pose ce texte dans des `<div>` positionnés en CSS à côté du `<svg>`
+ * (correct à l'écran, mais invisible/détaché une fois converti en image pour
+ * Typst — voir `svgToTypstImage`/`htmlToTypst` dans `latexToTypst.ts`), les
+ * éléments de texte sont ici ajoutés en tant que vrais noeuds SVG `<text>`,
+ * via `addTextElementsToSvg` (package apigeom).
+ *
+ * La classe `apigeom-svg` posée sur la racine permet à `latexToTypst.ts`
+ * (`protectApigeomSvgContainers`) de repérer ce SVG et de l'insérer avec les
+ * mêmes contrôles de zoom/alignement de la palette de mise en page qu'une
+ * figure mathalea2d (`#mathalea-figure-block`), plutôt que le simple
+ * `#mathalea-fit` appliqué aux SVG génériques.
+ *
+ * Limite connue : `addTextElementsToSvg` ne couvre que les éléments de type
+ * `TextByPosition`/`TextByPoint`/`TextDynamicByPosition`/`TextDynamicByPoint`
+ * (donc les labels de points, qui sont des `TextByPoint`) — le texte porté
+ * par des marques (`MarkRightAngle`, `MarkBetweenPoints`) ou des mesures
+ * (`MeasureSegment`) n'est pour l'instant pas repris par cette fonction.
+ */
+export function apigeomFigureToSvg(figure: BaseFigure): string {
+  // Assure que la figure est attachée à un conteneur et dimensionnée
+  // (viewBox, width, height posés par adjustSize()) : nécessaire avant de
+  // cloner figure.svg pour obtenir un SVG autonome valide.
+  figure.getStaticHtml()
+  const svg = figure.svg.cloneNode(true) as SVGElement
+  svg.classList.add('apigeom-svg')
+  const xMin = figure.xToSx(figure.xMin) - TEXT_OVERFLOW_MARGIN_PX
+  const yMax = figure.yToSy(figure.yMax) - TEXT_OVERFLOW_MARGIN_PX
+  const width = figure.width + TEXT_OVERFLOW_MARGIN_PX * 2
+  const height = figure.height + TEXT_OVERFLOW_MARGIN_PX * 2
+  svg.setAttribute('viewBox', `${xMin} ${yMax} ${width} ${height}`)
+  svg.setAttribute('width', width.toString())
+  svg.setAttribute('height', height.toString())
+  addTextElementsToSvg(svg, figure, { xMin, yMax, width, height })
+  return svg.outerHTML
+}
+
+/**
+ * HTML d'une figure apigeom déjà construite (`figure.create(...)`) : balise
+ * interactive `<apigeom-figure>` pour l'affichage HTML, ou SVG autonome
+ * (`apigeomFigureToSvg`) quand `context.isTypst` est actif.
+ *
+ * En Typst, le web component ne peut pas être « rejoué » par `htmlToTypst`
+ * (JS exécuté après montage dans le DOM, cf. documentation/developpement/
+ * auteurs-exercices/complements/variantes-exercices.md#branches-de-rendu).
+ */
+export function createApigeomFigureHtml(
+  figure: BaseFigure,
+  {
+    numeroExercice,
+    index = 0,
+  }: {
+    numeroExercice: number | undefined
+    index?: number
+  },
+): string {
+  if (context.isTypst) {
+    return apigeomFigureToSvg(figure)
+  }
+  handleApigeomFigureElement()
+  return `<apigeom-figure interactive default-action='FILL' x-min=${figure.xMin} y-min=${figure.yMin} width=${figure.width} height=${figure.height} numero-exercice=${numeroExercice ?? 0} index=${index} auto-index><script type="application/json">${figure.json}</script></apigeom-figure>`
 }

@@ -3,6 +3,8 @@ import MathaleaLabyrintheElement from '../lib/customElements/MathaleaLabyrintheE
 import { context } from '../modules/context'
 import { listeQuestionsToContenu } from '../modules/outils'
 import Exercice from './Exercice'
+export const interactifReady = true
+export const interactifType = 'custom'
 
 /**
  * @author Rémi Angot

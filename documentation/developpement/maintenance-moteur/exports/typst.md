@@ -115,6 +115,28 @@ Bouton (icône liste, `bx-detail`) de la barre d'outils de chaque exercice (à c
 
 Comme la fusion d'exercices (`onToggleMergeBefore`), le réglage change la structure du document (les appels s'intercalent après chaque question en mode « Après chaque question ») : il régénère donc tout le code plutôt que de l'éditer ponctuellement. Porté par `TypstCarryOver.writingLines` (`Record<number, { position, count, spacing }>`, clé = numéro d'exercice 1-based), il survit à la régénération comme les autres réglages de la palette. Chaque appel généré `#mathalea-lignes(n, gutter: ...em)` est tagué d'un marqueur `// mathalea:lignes-fin(N)` ou `// mathalea:lignes-apres(N)`, relu par `harvestCarryOver` (comme `// mathalea:insertion` pour les insertions de texte) ; `shiftCarryOver`/`swapCarryOver` décalent ces réglages à la suppression/au déplacement d'un exercice, comme `tasksLayout`/`codeOverrides`. Le helper Typst réutilisable `#mathalea-lignes(n, gutter: ...)` (`MATHALEA_WRITING_LINES_HELPER` dans `buildTypstDocument.ts`) n'est déclaré dans le préambule que s'il est effectivement utilisé, et ne produit aucun rendu (ni espace) tant que `n` vaut 0.
 
+## Mode « Course aux nombres » (tableau)
+
+Case à cocher des Réglages du document (`TypstDocumentOptions.canMode`) : pendant Typst du style `Can` de la sortie LaTeX (`lib/Latex.ts`). Toutes les questions de tous les exercices sont rassemblées dans **un seul tableau** (numéro, énoncé, réponse à compléter, colonne « Jury »), et les corrections sont numérotées à la suite, dans le même ordre que les lignes du tableau.
+
+- Le tableau est produit par le helper Typst `#can-tableau(enonces, reponses, jury: true, entetes: ..., fond: ..., hauteur-ligne: ...)` (`MATHALEA_CAN_TABLE_HELPER` dans `buildTypstDocument.ts`), déclaré dans le préambule seulement quand il sert, comme les autres aides. `enonces` et `reponses` sont deux listes de contenus de même longueur ; les proportions des colonnes et l'en-tête répété en haut de chaque page reprennent le `longtblr` de l'environnement `TableauCan` (`lib/latex/preambuleTex.ts`). Les arguments nommés restent modifiables dans l'éditeur (retirer la colonne « Jury » avec `jury: false`, par exemple).
+- Les réponses à compléter viennent de `listeCanReponsesACompleter` (exposée par `TypstExerciseInput.canAnswers`), les énoncés de `listeCanEnonces` à défaut de `listeQuestions` (`canQuestions`) — même repli qu'en LaTeX. `buildInputs` (`Typst.svelte`) les renseigne comme les autres contenus, et `frozenInputs` les fige avec les questions quand le nombre de questions change.
+- La consigne et l'introduction des exercices ne sont pas reprises (comme en LaTeX) : le tableau ne montre que les énoncés.
+- Le paquet `exercise-bank` n'est pas importé (il n'y a plus de titre d'exercice à habiller) : les réglages « Fusionner les exercices », « Style des exercices », « Afficher la référence » et « QR-code » sont désactivés dans ce mode.
+- Les corrections sont dans un environnement `tasks` unique pour toute la fiche (une seule liste, numérotée comme les lignes du tableau) : elles se répartissent donc sur plusieurs colonnes, indispensable avec la [correction minimale](#correction-minimale) où chaque réponse tient en quelques caractères. Ses variables de mise en page portent le préfixe `ex0-corr` — le numéro 0, qu'aucun exercice ne porte, la distingue des listes de questions tout en restant reconnu par la palette, par `harvestCarryOver` et par `shiftCarryOver`/`swapCarryOver` (qui ne renumérotent que les exercices, à partir de 1).
+- Palette de mise en page : le repère `exo` de chaque exercice est émis **dans sa première cellule** (une métadonnée n'occupe aucune place, le contenu n'est pas décalé), la barre de l'exercice reste donc disponible ; seuls les repères `gap` qui encadrent le tableau existent (0 et le dernier), car entre deux lignes d'un même tableau une insertion ou un saut de page n'aurait pas de sens. `TypstLayoutOverlay` reçoit `canMode` et masque en conséquence les boutons sans effet (insertion avant l'exercice, édition du code de l'exercice, lignes pour écrire). Les insertions héritées de gaps intermédiaires (passage par le mode fiche) sont réémises après le tableau plutôt que perdues.
+
+## Correction minimale
+
+Case à cocher des Réglages du document (`TypstDocumentOptions.minimalCorrections`, désactivée quand la correction n'est pas affichée) : quand une correction met sa réponse en évidence en orange, seule cette réponse est imprimée — le raisonnement disparaît. Une correction sans mise en évidence, ou dont la mise en évidence utilise une autre couleur (choisie justement pour ne pas désigner la réponse, voir `lib/outils/ecritures.ts`), est conservée telle quelle.
+
+`minimalCorrection` (`components/setup/typst/minimalCorrection.ts`) reconnaît les **deux** façons de mettre une réponse en évidence :
+
+- `miseEnEvidence()` — dans une formule, produit `{\color{#F15929}\boldsymbol{…}}`. Repérée par `occurrencesMiseEnEvidence` (`components/setup/diaporama/answersTable.ts`, partagée avec le tableau des réponses du diaporama), qui tient compte des accolades imbriquées ;
+- `texteEnCouleurEtGras()` — hors formule, produit en HTML un `<span>` orange et gras ; c'est ce qu'emploient les exercices à QCM pour désigner la bonne réponse. Repérée par un balayage des spans qui compte les imbrications. Les repères de sous-question de `numAlpha` (`a)`, `b)`…), orange et gras eux aussi, sont exclus : ils ne désignent aucune réponse.
+
+Les réponses trouvées sont remises dans leur ordre d'apparition, dédoublonnées, puis réémises telles quelles (donc toujours en orange) séparées par un cadratin `&emsp;`. Le réglage s'applique au seul endroit où les corrections passent dans le code généré : `computeGeneratedExercises` (fiche normale, fusionnée, code autonome de la modale d'édition) et `buildCanVersionContent` (tableau « Course aux nombres »). Dans les deux cas les corrections sont dans un environnement `tasks` en `auto-fit` : une fois réduites à leur réponse, elles se répartissent d'elles-mêmes sur plusieurs colonnes, réglables depuis la palette de l'aperçu.
+
 ## Persistance dans l'URL
 
 Toutes les modifications de la fiche sont sauvegardées dans l'URL (paramètre `typstParam`, JSON encodé en base64) pour pouvoir la recharger à l'identique ou la partager :
@@ -136,6 +158,7 @@ La liste des exercices, leurs graines et leurs réglages restent portés par les
 | `src/components/setup/typst/addExercise/TypstExercisePreview.svelte` | Aperçu d'un exercice dans cette modale (réglages et ajout) |
 | `src/components/setup/typst/buildTypstDocument.ts` | Génère le code Typst complet (en-tête, exercices, corrections) |
 | `src/components/setup/typst/latexToTypst.ts` | Convertit le HTML des exercices et les formules LaTeX en Typst |
+| `src/components/setup/typst/minimalCorrection.ts` | Réduit une correction à ses réponses mises en évidence en orange |
 | `src/components/setup/typst/typstCompiler.ts` | Compilation dans le navigateur via typst.ts (WASM) |
 | `src/components/setup/typst/typstDiagnostics.ts` | Lecture et traduction en français des diagnostics du compilateur |
 | `src/components/setup/typst/editor/typstEditorSetup.ts` | Extensions CodeMirror de l'éditeur (thèmes, raccourcis, marqueurs d'erreur) |

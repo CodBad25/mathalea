@@ -1,5 +1,6 @@
 import Figure from 'apigeom'
 import type Point from 'apigeom/src/elements/points/Point'
+import { apigeomFigureToSvg } from '../../lib/apigeom/apigeom-figure'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -88,6 +89,7 @@ export default class AutoQ7ANbrevet2026 extends ExerciceQcmA {
     }
 
     figure.optimizeLabels()
+    if (context.isTypst) return apigeomFigureToSvg(figure)
     if (!context.isHtml) return figure.tikz()
     return figure.getStaticHtml({ center: true })
   }

@@ -2,6 +2,7 @@ import Figure from 'apigeom'
 import remove from 'apigeom/src/assets/svg/restart.svg'
 import Element2D from 'apigeom/src/elements/Element2D'
 import Circle from 'apigeom/src/elements/lines/Circle'
+import { apigeomFigureToSvg } from '../../lib/apigeom/apigeom-figure'
 import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import { orangeMathalea } from '../../lib/colors'
 import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
@@ -333,7 +334,9 @@ class squaro extends Exercice {
 
     let texteCorr =
       'Voici une solution possible :<br>' +
-      this.figureCorrection.getStaticHtml()
+      (context.isTypst
+        ? apigeomFigureToSvg(this.figureCorrection)
+        : this.figureCorrection.getStaticHtml())
     let texte =
       (this.sup3 ? enonce : '') + emplacementPourFigure + domReadyMarkup
 

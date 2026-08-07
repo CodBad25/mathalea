@@ -4,7 +4,7 @@ import Exercice from '../Exercice'
 
 export const uuid = 'c0f91'
 export const refs = {
-  'fr-fr': ['TSA1-31'],
+  'fr-fr': ['TSA1-41'],
   'fr-ch': [],
 }
 export const interactifReady = true

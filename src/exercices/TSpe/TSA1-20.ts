@@ -1,194 +1,182 @@
-import { choice } from '../../lib/outils/arrayOutils'
-import {
-  texteEnCouleur,
-  texteEnCouleurEtGras,
-} from '../../lib/outils/embellissements'
-import { sp } from '../../lib/outils/outilString'
-import { texNombre } from '../../lib/outils/texNombre'
-import { context } from '../../modules/context'
-import FractionEtendue from '../../modules/FractionEtendue'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { ecritureAlgebriqueSauf1, rienSi1 } from '../../lib/outils/ecritures'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Étudier une suite par récurrence'
-export const dateDePublication = '25/10/2024'
+export const titre = 'Déterminer des limites de suites de référence'
+export const dateDePublication = '04/08/2026'
+export const interactifReady = true
+export const interactifType = 'mathLive'
 
-/**
- * @author Rémi Angot
- * Étude d\'une suite par récurrence
- */
-
-export const uuid = '7f24e'
+export const uuid = '958a4'
 export const refs = {
-  'fr-fr': ['TSA1-20'],
+  'fr-fr': ['TSA1-20', 'TCA1-10'],
   'fr-ch': [],
 }
 
-const bleuMathalea = context.isHtml ? '#216D9A' : 'black'
+type TypeQuestion =
+  | 'lineaire'
+  | 'quadratique'
+  | 'inverse'
+  | 'inverseCarre'
+  | 'exponentielleDecroissante'
+  | 'exponentielleCroissante'
+  | 'alternee'
+  | 'cosinus'
+  | 'sinus'
 
-export default class EtudeSuiteRecurrence extends Exercice {
+type DonneesQuestion = {
+  expression: string
+  reponse: string
+  correction: string
+}
+
+function termePolynomial(coefficient: number, puissance: 1 | 2) {
+  const coefficientTexte =
+    coefficient === 1
+      ? ''
+      : coefficient === -1
+        ? '-'
+        : ecritureAlgebriqueSauf1(coefficient).replace('+', '')
+  return `${coefficientTexte}n${puissance === 1 ? '' : '^2'}`
+}
+
+/**
+ * Limites de suites de référence, sans opération sur les limites.
+ * @author Stéphane Guyon
+ */
+export default class LimitesSuitesDeReference extends Exercice {
   constructor() {
     super()
-
-    this.nbQuestions = 1
-    this.nbQuestionsModifiable = false
-    this.sup = 5
-    this.besoinFormulaireNumerique = [
-      'Type de question',
-      5,
-      '1 : a + 1/un\n2 : aun + b croissante\n3 : aun + b décroissante\n4 : racine(aun + b) décroissante\n5: Aléatoire',
-    ]
+    this.nbQuestions = 5
   }
 
   nouvelleVersion() {
-    let texte = ''
-    let texteCorr = ''
-    const typesDeQuestionsDisponibles = [
-      'a + 1/un',
-      'aun + b croissante',
-      'aun + b décroissante',
-      'sqrt(aun + b) décroissante',
-    ]
-    const typeDeQuestion =
-      this.sup <= typesDeQuestionsDisponibles.length
-        ? typesDeQuestionsDisponibles[this.sup - 1]
-        : choice(typesDeQuestionsDisponibles)
-    switch (typeDeQuestion) {
-      case 'a + 1/un':
-        {
-          const u0 = randint(2, 10)
-          texte = `Soit $(u_n)$ la suite définie par $u_0 = ${u0}$ et pour tout $n\\in\\N$,${sp()}$u_{n+1} = ${u0 - 1} + \\dfrac{1}{u_n}$. `
-          texte += `<br>Démontrer par récurrence que, pour tout entier naturel $n$,${sp()}$${u0 - 1} \\leqslant u_n \\leqslant ${u0}$.`
+    this.consigne =
+      this.nbQuestions === 1
+        ? 'Déterminer, si elle existe, la limite de la suite lorsque $n$ tend vers $+\\infty$.'
+        : 'Déterminer, si elle existe, la limite de chacune des suites lorsque $n$ tend vers $+\\infty$.'
 
-          texteCorr = `${texteEnCouleurEtGras('Initialisation :', bleuMathalea)}`
-          texteCorr += `<br><br>$u_0 = ${u0}$, on a bien $${u0 - 1} \\leqslant u_0 \\leqslant ${u0}$.`
-          texteCorr += '<br><br>La propriété est donc vraie pour $n=0$.'
-          texteCorr += `<br><br>${texteEnCouleurEtGras('Hérédité :', bleuMathalea)}`
-          texteCorr += `<br><br>Soit $n$ un entier naturel. Supposons que : $${u0 - 1} \\leqslant u_n \\leqslant ${u0}$.`
-          texteCorr += `<br><br> Montrons alors que : $${u0 - 1} \\leqslant u_{n+1} \\leqslant ${u0}$.`
-          texteCorr += `<br><br>$${u0 - 1} \\leqslant u_n \\leqslant ${u0}\\qquad$ ${texteEnCouleur('Par hypothèse de récurrence.', 'forestgreen')}`
-          texteCorr += `<br><br>$\\dfrac{1}{${u0 - 1}} \\geqslant \\dfrac{1}{u_n} \\geqslant \\dfrac{1}{${u0}}\\qquad$ ${texteEnCouleur('La fonction inverse est strictement décroissante sur $]0 ; +\\infty[$.', 'forestgreen')}`
-          texteCorr += `<br><br>$ ${u0 - 1} + \\dfrac{1}{${u0 - 1}} \\geqslant  ${u0 - 1} + \\dfrac{1}{u_n} \\geqslant  ${u0 - 1} + \\dfrac{1}{${u0}} \\qquad$ ${texteEnCouleur(`On ajoute ${u0 - 1}.`, 'forestgreen')}`
-          texteCorr += `<br><br>$\\dfrac{${u0 ** 2 - 2 * u0 + 2}}{${u0 - 1}} \\geqslant u_{n+1} \\geqslant \\dfrac{${u0 ** 2 - u0 + 1}}{${u0}}$`
-          texteCorr += `<br><br>Comme $\\dfrac{${u0 ** 2 - 2 * u0 + 2}}{${u0 - 1}} \\leqslant ${u0}$ et $\\dfrac{${u0 ** 2 - u0 + 1}}{${u0}} \\geqslant ${u0 - 1}$, on a bien :`
-          texteCorr += `<br><br>$${u0 - 1} \\leqslant u_{n+1} \\leqslant ${u0}$.`
-          texteCorr += `<br><br>${texteEnCouleurEtGras('Conclusion :', bleuMathalea)}`
-          texteCorr +=
-            '<br><br>La propriété est vraie pour $n=0$ et héréditaire à partir de ce rang, donc par récurrence, elle est vraie pour tout entier naturel.'
+    const typesDeQuestions = combinaisonListes<TypeQuestion>(
+      [
+        'lineaire',
+        'quadratique',
+        'inverse',
+        'inverseCarre',
+        'exponentielleDecroissante',
+        'exponentielleCroissante',
+        'alternee',
+        'cosinus',
+        'sinus',
+      ],
+      this.nbQuestions,
+    )
+
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
+      const type = typesDeQuestions[i]
+      const coefficient = choice([-1, 1]) * randint(2, 6)
+      const valeurAbsolue = Math.abs(coefficient)
+      const coefficientArgument = randint(2, 6)
+      let donnees: DonneesQuestion
+
+      switch (type) {
+        case 'lineaire': {
+          const expression = termePolynomial(coefficient, 1)
+          const reponse = coefficient > 0 ? '+\\infty' : '-\\infty'
+          donnees = {
+            expression,
+            reponse,
+            correction: `On sait que $\\displaystyle \\lim_{n\\to+\\infty}n=+\\infty$. Comme le coefficient de $n$ est ${coefficient > 0 ? 'positif' : 'négatif'}, $\\displaystyle \\lim_{n\\to+\\infty}u_n=${miseEnEvidence(reponse)}$.`,
+          }
+          break
         }
-        break
-      case 'aun + b croissante':
-        {
-          const denA = randint(2, 7)
-          const numA = randint(1, denA - 1)
-          const a = new FractionEtendue(numA, denA)
-          const b = randint(1, 9)
-          const l = a
-            .multiplieEntier(-1)
-            .ajouteEntier(1)
-            .inverse()
-            .multiplieEntier(b)
-          const u0 = randint(1, Math.ceil(l.toNumber()) - 1)
-
-          texte = `Soit $(u_n)$ la suite définie par $u_0 = ${u0}$ et pour tout $n\\in\\N$,${sp()}$u_{n+1} = ${a.texFraction}u_n + ${b}$. `
-          texte += `<br>Démontrer par récurrence que, pour tout entier naturel $n$,${sp()}$${u0} \\leqslant u_n \\leqslant u_{n+1} \\leqslant ${l.texFractionSimplifiee}$.`
-
-          texteCorr = `${texteEnCouleurEtGras('Initialisation :', bleuMathalea)}`
-          texteCorr += `<br><br>$u_0 = ${u0}$ et $u_1 = ${a.texFraction} \\times u_0 + ${b} = ${a.multiplieEntier(u0).ajouteEntier(b).texFractionSimplifiee}$.`
-          texteCorr += `<br><br>On a bien $${u0} \\leqslant u_0 \\leqslant u_1 \\leqslant ${l.texFractionSimplifiee}$.`
-          texteCorr += '<br><br>La propriété est donc vraie pour $n=0$.'
-          texteCorr += `<br><br>${texteEnCouleurEtGras('Hérédité :', bleuMathalea)}`
-          texteCorr += `<br><br>Soit $n$ un entier naturel. Supposons que : $${u0} \\leqslant u_n \\leqslant u_{n+1} \\leqslant ${l.texFractionSimplifiee}$.`
-          texteCorr += `<br><br> Montrons alors que : $${u0} \\leqslant u_{n+1} \\leqslant u_{n+2} \\leqslant ${l.texFractionSimplifiee}$.`
-          texteCorr += `<br><br>$${u0} \\leqslant u_n \\leqslant u_{n+1} \\leqslant ${l.texFractionSimplifiee}\\qquad$ ${texteEnCouleur('Par hypothèse de récurrence.', 'forestgreen')}`
-          texteCorr += `<br><br>$${a.texFraction} \\times ${u0} \\leqslant ${a.texFraction} \\times u_n \\leqslant ${a.texFraction} \\times u_{n+1} \\leqslant ${a.texFraction} \\times ${l.texFractionSimplifiee}\\qquad$ ${texteEnCouleur('Multiplication par un nombre strictement positif.', 'forestgreen')}`
-          texteCorr += `<br><br>$${a.multiplieEntier(u0).texFractionSimplifiee} \\leqslant ${a.texFraction} u_n \\leqslant ${a.texFraction} u_{n+1} \\leqslant ${a.produitFraction(l).texFractionSimplifiee}$`
-          texteCorr += `<br><br>$${a.multiplieEntier(u0).texFractionSimplifiee} + ${b} \\leqslant ${a.texFraction} u_n + ${b} \\leqslant ${a.texFraction} u_{n+1} + ${b} \\leqslant ${a.produitFraction(l).texFractionSimplifiee} + ${b} \\qquad$ ${texteEnCouleur(`On ajoute ${b}.`, 'forestgreen')}`
-          texteCorr += `<br><br>$${a.multiplieEntier(u0).ajouteEntier(b).texFractionSimplifiee} \\leqslant u_{n+1} \\leqslant u_{n+2} \\leqslant ${a.produitFraction(l).ajouteEntier(b).texFractionSimplifiee}$`
-          texteCorr += `<br><br>Comme $ ${u0} \\leqslant ${a.multiplieEntier(u0).ajouteEntier(b).texFractionSimplifiee}$, on a bien :`
-          texteCorr += `<br<br> $${u0} \\leqslant u_{n+1} \\leqslant u_{n+2} \\leqslant ${l.texFractionSimplifiee}$.`
-          texteCorr += `<br><br>${texteEnCouleurEtGras('Conclusion :', bleuMathalea)}`
-          texteCorr +=
-            '<br><br>La propriété est vraie pour $n=0$ et héréditaire à partir de ce rang, donc par récurrence, elle est vraie pour tout entier naturel.'
+        case 'quadratique': {
+          const expression = termePolynomial(coefficient, 2)
+          const reponse = coefficient > 0 ? '+\\infty' : '-\\infty'
+          donnees = {
+            expression,
+            reponse,
+            correction: `On sait que $\\displaystyle \\lim_{n\\to+\\infty}n^2=+\\infty$. Comme le coefficient de $n^2$ est ${coefficient > 0 ? 'positif' : 'négatif'}, $\\displaystyle \\lim_{n\\to+\\infty}u_n=${miseEnEvidence(reponse)}$.`,
+          }
+          break
         }
-        break
-      case 'aun + b décroissante':
-        {
-          const denA = randint(2, 7)
-          const numA = randint(1, denA - 1)
-          const a = new FractionEtendue(numA, denA)
-          const b = randint(1, 9)
-          const l = a
-            .multiplieEntier(-1)
-            .ajouteEntier(1)
-            .inverse()
-            .multiplieEntier(b)
-          const u0 = randint(
-            Math.floor(l.toNumber()) + 1,
-            Math.floor(l.toNumber()) + 10,
-          )
-
-          texte = `Soit $(u_n)$ la suite définie par $u_0 = ${u0}$ et pour tout $n\\in\\N$,${sp()}$u_{n+1} = ${a.texFraction}u_n + ${b}$. `
-          texte += `<br>Démontrer par récurrence que, pour tout entier naturel $n$,${sp()}$${u0} \\geqslant u_n \\geqslant u_{n+1} \\geqslant ${l.texFractionSimplifiee}$.`
-
-          texteCorr = `${texteEnCouleurEtGras('Initialisation :', bleuMathalea)}`
-          texteCorr += `<br><br>$u_0 = ${u0}$ et $u_1 = ${a.texFraction} \\times u_0 + ${b} = ${a.multiplieEntier(u0).ajouteEntier(b).texFractionSimplifiee}$.`
-          texteCorr += `<br><br>On a bien $${u0} \\geqslant u_0 \\geqslant u_1 \\geqslant ${l.texFractionSimplifiee}$.`
-          texteCorr += '<br><br>La propriété est donc vraie pour $n=0$.'
-          texteCorr += `<br><br>${texteEnCouleurEtGras('Hérédité :', bleuMathalea)}`
-          texteCorr += `<br><br>Soit $n$ un entier naturel. Supposons que : $${u0} \\geqslant u_n \\geqslant u_{n+1} \\geqslant ${l.texFractionSimplifiee}$.`
-          texteCorr += `<br><br> Montrons alors que : $${u0} \\geqslant u_{n+1} \\geqslant u_{n+2} \\geqslant ${l.texFractionSimplifiee}$.`
-          texteCorr += `<br><br>$${u0} \\geqslant u_n \\geqslant u_{n+1} \\geqslant ${l.texFractionSimplifiee}\\qquad$ ${texteEnCouleur('Par hypothèse de récurrence.', 'forestgreen')}`
-          texteCorr += `<br><br>$${a.texFraction} \\times ${u0} \\geqslant ${a.texFraction} \\times u_n \\geqslant ${a.texFraction} \\times u_{n+1} \\geqslant ${a.texFraction} \\times ${l.texFractionSimplifiee}\\qquad$ ${texteEnCouleur('Multiplication par un nombre strictement positif.', 'forestgreen')}`
-          texteCorr += `<br><br>$${a.multiplieEntier(u0).texFractionSimplifiee} \\geqslant ${a.texFraction} u_n \\geqslant ${a.texFraction} u_{n+1} \\geqslant ${a.produitFraction(l).texFractionSimplifiee}$`
-          texteCorr += `<br><br>$${a.multiplieEntier(u0).texFractionSimplifiee} + ${b} \\geqslant ${a.texFraction} u_n + ${b} \\geqslant ${a.texFraction} u_{n+1} + ${b} \\geqslant ${a.produitFraction(l).texFractionSimplifiee} + ${b} \\qquad$ ${texteEnCouleur(`On ajoute ${b}.`, 'forestgreen')}`
-          texteCorr += `<br><br>$${a.multiplieEntier(u0).ajouteEntier(b).texFractionSimplifiee} \\geqslant u_{n+1} \\geqslant u_{n+2} \\geqslant ${a.produitFraction(l).ajouteEntier(b).texFractionSimplifiee}$`
-          texteCorr += `<br><br>Comme $ ${u0} \\geqslant ${a.multiplieEntier(u0).ajouteEntier(b).texFractionSimplifiee}$, on a bien :`
-          texteCorr += `<br<br> $${u0} \\geqslant u_{n+1} \\geqslant u_{n+2} \\geqslant ${l.texFractionSimplifiee}$.`
-          texteCorr += `<br><br>${texteEnCouleurEtGras('Conclusion :', bleuMathalea)}`
-          texteCorr +=
-            '<br><br>La propriété est vraie pour $n=0$ et héréditaire à partir de ce rang, donc par récurrence, elle est vraie pour tout entier naturel.'
+        case 'inverse': {
+          const expression = `\\dfrac{${coefficient}}{n}`
+          donnees = {
+            expression,
+            reponse: '0',
+            correction: `On sait que $\\displaystyle \\lim_{n\\to+\\infty}\\dfrac{1}{n}=0$. Le numérateur est ici égal à $${coefficient}$, donc $\\displaystyle \\lim_{n\\to+\\infty}u_n=${miseEnEvidence('0')}$.`,
+          }
+          break
         }
-        break
-      case 'sqrt(aun + b) décroissante':
-        {
-          const b = randint(1, 4)
-          const a = randint(2 * b, 12)
-          const racine = (a + Math.sqrt(a ** 2 + 4 * b)) / 2
-          const u0 = randint(Math.floor(racine) + 1, Math.floor(racine) + 10)
-
-          texte = `Soit $(u_n)$ la suite définie par $u_0 = ${u0}$ et pour tout $n\\in\\N$,${sp()}$u_{n+1} = \\sqrt{${a}u_n + ${b}}$. `
-          texte += `<br>Démontrer par récurrence que, pour tout entier naturel $n$,${sp()}$0 \\leqslant u_{n+1} \\leqslant u_{n}$.`
-
-          texteCorr = `${texteEnCouleurEtGras('Initialisation :', bleuMathalea)}`
-          texteCorr += `<br><br>$u_0 = ${u0}$ et $u_1 =\\sqrt{${a}u_0 + ${b}} \\approx ${texNombre(Math.sqrt(a * u0 + b), 2)}$.`
-          texteCorr += '<br><br>On a bien $0 \\leqslant u_1 \\leqslant u_0$.'
-          texteCorr += '<br><br>La propriété est donc vraie pour $n=0$.'
-          texteCorr += `<br><br>${texteEnCouleurEtGras('Hérédité :', bleuMathalea)}`
-          texteCorr +=
-            '<br><br>Soit $n$ un entier naturel. Supposons que : $0 \\leqslant u_{n+1} \\leqslant u_{n}$.'
-          texteCorr +=
-            '<br><br> Montrons alors que : $0 \\leqslant u_{n+2} \\leqslant u_{n+1}$.'
-          texteCorr += `<br><br>$0 \\leqslant u_{n+1} \\leqslant u_{n} \\qquad$ ${texteEnCouleur('Par hypothèse de récurrence.', 'forestgreen')}`
-          texteCorr += `<br><br>$${a}\\times0 \\leqslant ${a}u_{n+1} \\leqslant ${a}u_{n} \\qquad$ ${texteEnCouleur('Multiplication par un nombre strictement positif.', 'forestgreen')}`
-          texteCorr += `<br><br>$0 + ${b} \\leqslant ${a}u_{n+1} + ${b} \\leqslant ${a}u_{n} + ${b} \\qquad$ ${texteEnCouleur(`On ajoute ${b}.`, 'forestgreen')}`
-          texteCorr += `<br><br>$ \\sqrt{${b}} \\leqslant \\sqrt{${a}u_{n+1} + ${b}} \\leqslant \\sqrt{${a}u_{n} + ${b}} \\qquad$ ${texteEnCouleur('La fonction racine est strictement croissante sur $]0 ; +\\infty[$.', 'forestgreen')}`
-          texteCorr += `<br><br>$\\sqrt{${b}} \\leqslant u_{n+2} \\leqslant u_{n+1}$`
-          texteCorr += `<br><br>Comme $0 \\leqslant \\sqrt{${b}}$, on a bien :`
-          texteCorr += '<br><br>$0 \\leqslant u_{n+2} \\leqslant u_{n+1}$.'
-          texteCorr += `<br><br>${texteEnCouleurEtGras('Conclusion :', bleuMathalea)}`
-          texteCorr +=
-            '<br><br>La propriété est vraie pour $n=0$ et héréditaire à partir de ce rang, donc par récurrence, elle est vraie pour tout entier naturel.'
+        case 'inverseCarre': {
+          const expression = `\\dfrac{${coefficient}}{n^2}`
+          donnees = {
+            expression,
+            reponse: '0',
+            correction: `On sait que $\\displaystyle \\lim_{n\\to+\\infty}\\dfrac{1}{n^2}=0$. Le numérateur est ici égal à $${coefficient}$, donc $\\displaystyle \\lim_{n\\to+\\infty}u_n=${miseEnEvidence('0')}$.`,
+          }
+          break
         }
-        break
+        case 'exponentielleDecroissante': {
+          const expression = `\\mathrm{e}^{-${rienSi1(valeurAbsolue)}n}`
+          donnees = {
+            expression,
+            reponse: '0',
+            correction: `On sait que $\\displaystyle \\lim_{n\\to+\\infty}\\mathrm{e}^{-n}=0$. Plus généralement, pour tout réel $a>0$, $\\displaystyle \\lim_{n\\to+\\infty}\\mathrm{e}^{-an}=0$.<br>Ici, $a=${valeurAbsolue}$, donc $\\displaystyle \\lim_{n\\to+\\infty}u_n=${miseEnEvidence('0')}$.`,
+          }
+          break
+        }
+        case 'exponentielleCroissante': {
+          const expression = `\\mathrm{e}^{${rienSi1(valeurAbsolue)}n}`
+          donnees = {
+            expression,
+            reponse: '+\\infty',
+            correction: `On sait que $\\displaystyle \\lim_{n\\to+\\infty}\\mathrm{e}^{n}=+\\infty$. Plus généralement, pour tout réel $a>0$, $\\displaystyle \\lim_{n\\to+\\infty}\\mathrm{e}^{an}=+\\infty$.<br>Ici, $a=${valeurAbsolue}$, donc $\\displaystyle \\lim_{n\\to+\\infty}u_n=${miseEnEvidence('+\\infty')}$.`,
+          }
+          break
+        }
+        case 'alternee':
+          donnees = {
+            expression: `${coefficient}\\times(-1)^n`,
+            reponse: '\\not\\exists',
+            correction: `Pour tout entier naturel $n$, $${coefficient}\\times(-1)^{2n}=${coefficient}$ et $${coefficient}\\times(-1)^{2n+1}=${-coefficient}$.<br>Donc la suite $(u_n)$ n'a pas de limite.`,
+          }
+          break
+        case 'cosinus':
+          donnees = {
+            expression: `${rienSi1(coefficient)}\\cos(n)`,
+            reponse: '\\not\\exists',
+            correction:
+              "La fonction cosinus est périodique. La suite $(u_n)$ n'admet donc pas de limite.",
+          }
+          break
+        case 'sinus':
+          donnees = {
+            expression: `${rienSi1(coefficient)}\\sin(${coefficientArgument}n)`,
+            reponse: '\\not\\exists',
+            correction:
+              "La fonction sinus est périodique. La suite $(u_n)$ n'admet donc pas de limite.",
+          }
+          break
+      }
+
+      let texte = `La suite $(u_n)$ est définie, pour tout entier naturel $n$ non nul, par :<br>$u_n=${donnees.expression}$.`
+      if (this.interactif) {
+        texte += `<br>$\\displaystyle \\lim_{n\\to+\\infty}u_n=$${ajouteChampTexteMathLive(this, i, KeyboardType.clavierLectureLimites)}`
+      }
+
+      if (this.questionJamaisPosee(i, donnees.expression)) {
+        handleAnswers(this, i, { reponse: { value: donnees.reponse } })
+        this.listeQuestions[i] = texte
+        this.listeCorrections[i] = donnees.correction
+        i++
+      }
     }
-
-    if (!context.isHtml) {
-      texteCorr = texteCorr.replaceAll('forestgreen', 'black')
-    }
-    this.listeQuestions.push(texte)
-    this.listeCorrections.push(texteCorr)
-
     listeQuestionsToContenu(this)
   }
 }

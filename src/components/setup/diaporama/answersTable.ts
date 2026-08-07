@@ -41,12 +41,15 @@ function contenuAccolade(
 }
 
 /**
- * Extrait d'une correction les réponses courtes mises en évidence en orange,
- * c'est-à-dire les contenus passés à `miseEnEvidence()` avec la couleur par
- * défaut. Les doublons sont supprimés, l'ordre d'apparition est conservé.
+ * Occurrences de `miseEnEvidence()` en orange dans une correction, avec leur
+ * position de départ dans le texte (pour pouvoir les remettre dans l'ordre
+ * avec d'autres mises en évidence, voir `minimalCorrection` côté Typst).
+ * Le contenu est renvoyé brut, sans dédoublonnage.
  */
-export function extraitReponsesCourtes(correction: string): string[] {
-  const reponses: string[] = []
+export function occurrencesMiseEnEvidence(
+  correction: string,
+): { index: number; contenu: string }[] {
+  const occurrences: { index: number; contenu: string }[] = []
   regexpMiseEnEvidence.lastIndex = 0
   let correspondance: RegExpExecArray | null
   while ((correspondance = regexpMiseEnEvidence.exec(correction)) !== null) {
@@ -54,9 +57,24 @@ export function extraitReponsesCourtes(correction: string): string[] {
       correspondance.index + correspondance[0].length - 1 /* l'accolade */
     const accolade = contenuAccolade(correction, indexOuvrante)
     if (accolade === undefined) break
-    const contenu = accolade.contenu.trim()
-    if (contenu !== '' && !reponses.includes(contenu)) reponses.push(contenu)
+    occurrences.push({
+      index: correspondance.index,
+      contenu: accolade.contenu.trim(),
+    })
     regexpMiseEnEvidence.lastIndex = accolade.indexFermante + 1
+  }
+  return occurrences
+}
+
+/**
+ * Extrait d'une correction les réponses courtes mises en évidence en orange,
+ * c'est-à-dire les contenus passés à `miseEnEvidence()` avec la couleur par
+ * défaut. Les doublons sont supprimés, l'ordre d'apparition est conservé.
+ */
+export function extraitReponsesCourtes(correction: string): string[] {
+  const reponses: string[] = []
+  for (const { contenu } of occurrencesMiseEnEvidence(correction)) {
+    if (contenu !== '' && !reponses.includes(contenu)) reponses.push(contenu)
   }
   return reponses
 }

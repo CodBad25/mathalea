@@ -1,4 +1,3 @@
-import type Point from 'apigeom/src/elements/points/Point'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -514,11 +513,6 @@ ElementIepEditeur.registerVerificationCallback(
  * @author Jean-Claude Lhote
  */
 export default class TracerMedianeAuxInstruments extends Exercice {
-  pA: Point[] = []
-  pB: Point[] = []
-  pC: Point[] = []
-  relative: boolean[] = []
-
   constructor() {
     super()
     this.consigne = ''
@@ -580,7 +574,6 @@ export default class TracerMedianeAuxInstruments extends Exercice {
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
-      this.relative[i] = listeTypeVocabulaire[i] === 'base'
       const S: PointAbstrait[] = []
       let angA = 0
       let angB = 0

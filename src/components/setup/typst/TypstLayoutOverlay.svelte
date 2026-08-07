@@ -107,6 +107,13 @@
     mergedExercises?: number[]
     /** Fusion locale désactivée quand tous les exercices sont déjà fusionnés */
     mergeExercisesEnabled?: boolean
+    /**
+     * Mode « Course aux nombres » : le document est un seul tableau, sans
+     * titres d'exercice ni listes de questions. Masque les contrôles qui n'y
+     * ont pas de prise (insertion entre deux lignes du tableau, édition du
+     * code d'un exercice, lignes pour écrire).
+     */
+    canMode?: boolean
     onChangeQuestionCount: (num: number, delta: number) => void
     onDeleteExercise: (num: number) => void
     /** Ouvre la modale d'ajout d'un exercice à la fin de la fiche */
@@ -164,6 +171,7 @@
     exerciseCount = 0,
     mergedExercises = [],
     mergeExercisesEnabled = true,
+    canMode = false,
     onChangeQuestionCount,
     onDeleteExercise,
     onAddExercise,
@@ -539,9 +547,13 @@
   {#each widgets as widget, i (i)}
     {#if widget.kind === 'tasks' && widget.target != null}
       {@const target = widget.target}
+      <!-- num 0 : la liste des corrections du mode « Course aux nombres »,
+           commune à toute la fiche (elle n'appartient à aucun exercice) -->
       {@const label =
-        `l'exercice ${widget.num}` +
-        (target.endsWith('-corr') ? ' (correction)' : '')}
+        widget.num === 0
+          ? 'des corrections de la fiche'
+          : `des questions de l'exercice ${widget.num}` +
+            (target.endsWith('-corr') ? ' (correction)' : '')}
       <!-- lecture directe de layoutValues dans le gabarit : une lecture via
            une fonction ne serait pas re-rendue quand la prop change -->
       {@const gutter = layoutValues[target]?.gutter}
@@ -557,7 +569,7 @@
       >
         <div
           class="flex items-center justify-between"
-          title="Colonnes des questions de {label}"
+          title="Colonnes {label}"
         >
           <button
             type="button"
@@ -583,7 +595,7 @@
         </div>
         <div
           class="flex items-center justify-between typst-pill-divider-top"
-          title="Espacement vertical des questions de {label}"
+          title="Espacement vertical {label}"
         >
           <button
             type="button"
@@ -670,8 +682,10 @@
           snippet !== PAGE_BREAK_SNIPPET && snippet !== COLUMN_BREAK_SNIPPET,
       )}
       <!-- exercice fusionné avec le précédent : le repère de gap qui le
-           précède est interne au groupe, l'insertion n'y a pas de sens -->
-      {@const showInsert = !mergedExercises.includes(widget.num)}
+           précède est interne au groupe, l'insertion n'y a pas de sens ;
+           en mode « Course aux nombres » non plus, entre deux lignes du
+           tableau (seuls les gaps qui l'encadrent existent) -->
+      {@const showInsert = !mergedExercises.includes(widget.num) && !canMode}
       <!-- bord droit de la colonne qui contient l'exercice (et non celui de
            la page) : en document multicolonne, la barre doit rester dans la
            même colonne que le titre qu'elle contrôle, sous peine de se
@@ -734,7 +748,7 @@
             <i class="bx bx-cog"></i>
           </button>
         {/if}
-        {#if !nonEditableStaticExercises[widget.num]}
+        {#if !nonEditableStaticExercises[widget.num] && !canMode}
           <button
             type="button"
             title={codeOverrides[widget.num] != null
@@ -748,20 +762,22 @@
             <i class="bx bx-pencil"></i>
           </button>
         {/if}
-        <button
-          type="button"
-          title={writingLinesValues[widget.num] != null
-            ? 'Modifier les lignes pour écrire de cet exercice'
-            : 'Ajouter des lignes pour écrire à cet exercice'}
-          aria-label="Lignes pour écrire, exercice {widget.num}"
-          aria-expanded={openWritingLines === widget.num}
-          class:typst-pill-active={writingLinesValues[widget.num] != null}
-          data-testid="typst-overlay-writing-lines"
-          onclick={() => toggleWritingLines(widget.num)}
-        >
-          <i class="bx bx-detail"></i>
-        </button>
-        {@render writingLinesPanel(widget.num)}
+        {#if !canMode}
+          <button
+            type="button"
+            title={writingLinesValues[widget.num] != null
+              ? 'Modifier les lignes pour écrire de cet exercice'
+              : 'Ajouter des lignes pour écrire à cet exercice'}
+            aria-label="Lignes pour écrire, exercice {widget.num}"
+            aria-expanded={openWritingLines === widget.num}
+            class:typst-pill-active={writingLinesValues[widget.num] != null}
+            data-testid="typst-overlay-writing-lines"
+            onclick={() => toggleWritingLines(widget.num)}
+          >
+            <i class="bx bx-detail"></i>
+          </button>
+          {@render writingLinesPanel(widget.num)}
+        {/if}
         {#if !staticExercises[widget.num]}
           <button
             type="button"

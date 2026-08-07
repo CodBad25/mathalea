@@ -1,134 +1,357 @@
-import { bleuMathalea, vertMathalea } from '../../lib/colors'
-import { tableauVariationsFonction } from '../../lib/mathFonctions/etudeFonction'
-import { choice } from '../../lib/outils/arrayOutils'
+import { addMathaleaQcm } from '../../lib/customElements/MathaleaQcm'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import {
-  texteEnCouleur,
-  texteEnCouleurEtGras,
-} from '../../lib/outils/embellissements'
-import { sp } from '../../lib/outils/outilString'
+  choice,
+  combinaisonListes,
+  shuffle,
+} from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
-import FractionEtendue from '../../modules/FractionEtendue'
-import { listeQuestionsToContenu } from '../../modules/outils'
-import Trinome from '../../modules/Trinome'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Étudier une suite $u_{n+1}=f(u_n)$ par récurrence'
-export const dateDePublication = '25/10/2024'
-
-/**
- * @author Rémi Angot
- * Étude d'une suite par récurrence définie par une fonction polynôme du second degré.
- */
-
-export const uuid = '787b5'
+export const titre = 'Reconnaître les opérations sur les limites de suites'
+export const dateDePublication = '04/08/2026'
+export const interactifReady = true
+export const interactifType = 'mathalea-qcm'
+export const amcReady = true
+export const amcType = 'qcmMono'
+export const uuid = '1d15b'
 export const refs = {
-  'fr-fr': ['TSA1-21'],
+  'fr-fr': ['TSA1-21', 'TCA1-11'],
   'fr-ch': [],
 }
 
-const bleu = context.isHtml ? bleuMathalea : 'black'
+type TypeQuestion =
+  | 'reelFoisInfini'
+  | 'reelSurInfini'
+  | 'zeroFoisReel'
+  | 'zeroFoisZero'
+  | 'zeroSurZero'
+  | 'infiniSurInfini'
+  | 'infiniSurZero'
+  | 'infinisOpposes'
+  | 'zeroPlusInfini'
+  | 'zeroSurInfini'
+  | 'reelSurZero'
+  | 'zeroSurReel'
+  | 'infiniSurReel'
+  | 'infiniFoisInfini'
 
-export default class EtudeSuiteFonctionRecurrence extends Exercice {
+type Conclusion = 'zero' | 'plusInfini' | 'moinsInfini' | 'indeterminee'
+
+type DonneesQuestion = {
+  limiteU: string
+  limiteV: string
+  expression: string
+  conclusion: Conclusion
+  justification: string
+}
+
+const textesConclusions: Record<Conclusion, string> = {
+  zero: '$0$',
+  plusInfini: '$+\\infty$',
+  moinsInfini: '$-\\infty$',
+  indeterminee: 'Forme indéterminée',
+}
+
+function conclusionSignee(signe: number): Conclusion {
+  return signe > 0 ? 'plusInfini' : 'moinsInfini'
+}
+
+function conclusionEnEvidence(conclusion: Conclusion) {
+  const texte =
+    conclusion === 'zero'
+      ? '0'
+      : conclusion === 'plusInfini'
+        ? '+\\infty'
+        : conclusion === 'moinsInfini'
+          ? '-\\infty'
+          : '\\text{forme indéterminée}'
+  return miseEnEvidence(texte)
+}
+
+/**
+ * Reconnaître les formes déterminées et indéterminées dans les opérations sur
+ * les limites de deux suites.
+ * @author Stéphane Guyon
+ */
+export default class OperationsSurLesLimites extends Exercice {
   constructor() {
     super()
-
-    this.nbQuestions = 1
-    this.nbQuestionsModifiable = false
+    this.nbQuestions = 5
   }
 
   nouvelleVersion() {
-    const i1 = 1
-    const i2 = 3
+    const typesDeQuestions = combinaisonListes<TypeQuestion>(
+      [
+        'reelFoisInfini',
+        'reelSurInfini',
+        'zeroFoisReel',
+        'zeroFoisZero',
+        'zeroSurZero',
+        'infiniSurInfini',
+        'infiniSurZero',
+        'infinisOpposes',
+        'zeroPlusInfini',
+        'zeroSurInfini',
+        'reelSurZero',
+        'zeroSurReel',
+        'infiniSurReel',
+        'infiniFoisInfini',
+      ],
+      this.nbQuestions,
+    )
+    const qcmOptions = { radio: true, vertical: false, ordered: true }
 
-    const [a, b, c] = choice([
-      [frac(1, 3), frac(-1, 3), frac(1, 1)],
-      [frac(1, 3), frac(-2, 3), frac(4, 3)],
-      [frac(1, 4), frac(-1, 2), frac(5, 4)],
-      [frac(1, 4), frac(-1, 4), frac(1, 1)],
-      [frac(1, 5), frac(-1, 5), frac(1, 1)],
-      [frac(1, 5), frac(1, 5), frac(3, 5)],
-    ])
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
+      const type = typesDeQuestions[i]
+      const ell = choice([-1, 1]) * randint(2, 7)
+      const signeU = choice([-1, 1])
+      const signeV = choice([-1, 1])
+      const infiniU = signeU > 0 ? '+\\infty' : '-\\infty'
+      const infiniV = signeV > 0 ? '+\\infty' : '-\\infty'
+      const signeZero = choice([-1, 1])
+      const zeroLateral = signeZero > 0 ? '0^+' : '0^-'
+      let donnees: DonneesQuestion
 
-    const f = new Trinome(a, b, c)
-    const alpha = f.alpha.texFractionSimplifiee
-    this.introduction = `On considère la fonction définie sur $\\R$ par $f(x)=${f.tex}$ et la suite $(u_n)$ définie par $u_0 = ${i2}$ et pour tout $n\\in\\N$,${sp()}$u_{n+1} = f(u_n)$. `
-    const questions = [
-      `Étudier le sens de variation de $f$ sur $[${i1}\\;;\\;${i2}]$.`,
-      `Démontrer par récurrence que, pour tout entier naturel $n$, $${i1} \\leqslant u_n \\leqslant ${i2}$`,
-      'Démontrer que la suite $(u_n)$ est décroissante.',
-    ]
-    let correction1 =
-      'La fonction $f$ est une fonction polynôme du second degré. Elle est donc dérivable sur $\\R$ et pour tout $x$ de $\\R$ :'
-    correction1 += `<br><br> $f'(x)=${f.derivee.tex}$`
-    correction1 += `<br><br> $f'(x) \\geqslant 0 \\Leftrightarrow x \\geqslant ${alpha}$`
-    correction1 += `<br><br>donc $f$ est croissante sur $[${i1}\\;;\\;${i2}]$.`
+      switch (type) {
+        case 'reelFoisInfini':
+          donnees = {
+            limiteU: String(ell),
+            limiteV: infiniV,
+            expression: 'u_n\\times v_n',
+            conclusion: conclusionSignee(ell * signeV),
+            justification:
+              'Le produit d’un réel non nul par un infini est infini. Son signe est donné par la règle des signes.',
+          }
+          break
+        case 'reelSurInfini':
+          donnees = {
+            limiteU: String(ell),
+            limiteV: infiniV,
+            expression: '\\dfrac{u_n}{v_n}',
+            conclusion: 'zero',
+            justification: 'Le quotient d’un réel par un infini tend vers $0$.',
+          }
+          break
+        case 'zeroFoisReel':
+          donnees = {
+            limiteU: '0',
+            limiteV: String(ell),
+            expression: 'u_n\\times v_n',
+            conclusion: 'zero',
+            justification: 'Le produit de $0$ par un réel est égal à $0$.',
+          }
+          break
+        case 'zeroFoisZero':
+          donnees = {
+            limiteU: '0',
+            limiteV: '0',
+            expression: 'u_n\\times v_n',
+            conclusion: 'zero',
+            justification:
+              'Le produit de deux suites qui tendent vers $0$ tend vers $0$.',
+          }
+          break
+        case 'zeroSurZero':
+          donnees = {
+            limiteU: '0',
+            limiteV: '0',
+            expression: '\\dfrac{u_n}{v_n}',
+            conclusion: 'indeterminee',
+            justification:
+              'La forme « $\\dfrac{0}{0}$ » est une forme indéterminée.',
+          }
+          break
+        case 'infiniSurInfini':
+          donnees = {
+            limiteU: infiniU,
+            limiteV: infiniV,
+            expression: '\\dfrac{u_n}{v_n}',
+            conclusion: 'indeterminee',
+            justification:
+              'La forme $\\dfrac{\\infty}{\\infty}$ est une forme indéterminée.',
+          }
+          break
+        case 'infiniSurZero':
+          donnees = {
+            limiteU: infiniU,
+            limiteV: zeroLateral,
+            expression: '\\dfrac{u_n}{v_n}',
+            conclusion: conclusionSignee(signeU * signeZero),
+            justification:
+              'Le numérateur tend vers un infini et le dénominateur vers $' +
+              zeroLateral +
+              '$. Le signe du quotient est donné par la règle des signes.',
+          }
+          break
+        case 'infinisOpposes':
+          donnees = {
+            limiteU: '+\\infty',
+            limiteV: '-\\infty',
+            expression: 'u_n+v_n',
+            conclusion: 'indeterminee',
+            justification:
+              'La forme $+\\infty-\\infty$ est une forme indéterminée.',
+          }
+          break
+        case 'zeroPlusInfini':
+          donnees = {
+            limiteU: '0',
+            limiteV: infiniV,
+            expression: 'u_n+v_n',
+            conclusion: conclusionSignee(signeV),
+            justification:
+              'Ajouter une suite qui tend vers $0$ ne change pas la limite infinie.',
+          }
+          break
+        case 'zeroSurInfini':
+          donnees = {
+            limiteU: '0',
+            limiteV: infiniV,
+            expression: '\\dfrac{u_n}{v_n}',
+            conclusion: 'zero',
+            justification:
+              'Le quotient de $0$ par un infini a pour limite $0$.',
+          }
+          break
+        case 'reelSurZero':
+          donnees = {
+            limiteU: String(ell),
+            limiteV: zeroLateral,
+            expression: '\\dfrac{u_n}{v_n}',
+            conclusion: conclusionSignee(ell * signeZero),
+            justification:
+              'Le numérateur tend vers le réel non nul $' +
+              ell +
+              '$ et le dénominateur vers $' +
+              zeroLateral +
+              '$. Le signe du quotient est donné par la règle des signes.',
+          }
+          break
+        case 'zeroSurReel':
+          donnees = {
+            limiteU: '0',
+            limiteV: String(ell),
+            expression: '\\dfrac{u_n}{v_n}',
+            conclusion: 'zero',
+            justification:
+              'Le quotient de $0$ par un réel non nul a pour limite $0$.',
+          }
+          break
+        case 'infiniSurReel':
+          donnees = {
+            limiteU: infiniU,
+            limiteV: String(ell),
+            expression: '\\dfrac{u_n}{v_n}',
+            conclusion: conclusionSignee(signeU * ell),
+            justification:
+              'Le quotient d’un infini par un réel non nul est infini. Son signe est donné par la règle des signes.',
+          }
+          break
+        case 'infiniFoisInfini':
+          donnees = {
+            limiteU: infiniU,
+            limiteV: infiniV,
+            expression: 'u_n\\times v_n',
+            conclusion: conclusionSignee(signeU * signeV),
+            justification:
+              'Le produit de deux infinis est infini. Son signe est donné par la règle des signes.',
+          }
+          break
+      }
 
-    const fonction = (x: FractionEtendue | number) => f.image(x).toNumber()
-    const derivee = (x: FractionEtendue | number) =>
-      f.derivee.image(x).toNumber()
-    correction1 +=
-      '<br><br>' +
-      tableauVariationsFonction(fonction, derivee, i1, i2, {
-        ligneDerivee: true,
-        substituts: [
-          { antVal: 3, antTex: '3', imgTex: '$ $' },
-          { antVal: 1, antTex: '1', imgTex: '$ $' },
-        ],
-        step: new FractionEtendue(1, 100),
-        tolerance: 0.001,
-      })
+      let texte =
+        'On considère deux suites $(u_n)$ et $(v_n)$ telles que :<br>' +
+        '$\\displaystyle\\lim_{n\\to+\\infty}u_n=' +
+        donnees.limiteU +
+        '$ et $\\displaystyle\\lim_{n\\to+\\infty}v_n=' +
+        donnees.limiteV +
+        '$.<br>À l’aide des opérations sur les limites, à quoi est égale ' +
+        '$\\displaystyle\\lim_{n\\to+\\infty}\\left(' +
+        donnees.expression +
+        '\\right)$ ?'
+      let texteCorr = donnees.justification
+      if (donnees.conclusion === 'indeterminee') {
+        texteCorr +=
+          '<br>Les limites de $(u_n)$ et $(v_n)$ ne suffisent pas pour déterminer celle de l’expression.'
+      } else {
+        texteCorr +=
+          '<br>Donc $\\displaystyle\\lim_{n\\to+\\infty}\\left(' +
+          donnees.expression +
+          '\\right)=' +
+          conclusionEnEvidence(donnees.conclusion) +
+          '$.'
+      }
 
-    let correction2 = `Démontrons par récurrence que, pour tout entier naturel $n$, $${i1} \\leqslant u_n \\leqslant ${i2}$`
-    correction2 += `<br><br>${texteEnCouleurEtGras('Initialisation :', bleu)}`
-    correction2 += `<br><br>$u_0 = ${i2}$, on a bien $${i1} \\leqslant u_0 \\leqslant ${i2}$.`
-    correction2 += '<br><br>La propriété est donc vraie au rang 0.'
+      const bonneReponse = textesConclusions[donnees.conclusion]
+      const utiliseEll = [
+        'reelFoisInfini',
+        'reelSurInfini',
+        'zeroFoisReel',
+        'reelSurZero',
+        'zeroSurReel',
+        'infiniSurReel',
+      ].includes(type)
+      const utiliseInfini = type.toLowerCase().includes('infini')
+      const distracteursPrioritaires = [
+        ...(utiliseEll ? [`$${ell}$`] : []),
+        ...(utiliseEll ? [ell < 0 ? '$-\\infty$' : '$+\\infty$'] : []),
+        ...(utiliseInfini ? ['$0$'] : []),
+      ]
+      const distracteursGeneriques = [
+        '$0$',
+        '$+\\infty$',
+        '$-\\infty$',
+        'Forme indéterminée',
+        '$1$',
+      ]
+      const distracteurs = [
+        ...new Set([
+          ...distracteursPrioritaires,
+          ...shuffle(distracteursGeneriques),
+        ]),
+      ].filter((proposition) => proposition !== bonneReponse)
+      const propositions = shuffle([
+        { texte: bonneReponse, statut: true },
+        ...distracteurs
+          .slice(0, 3)
+          .map((proposition) => ({ texte: proposition, statut: false })),
+      ])
 
-    correction2 += `<br><br>${texteEnCouleurEtGras('Hérédité :', bleu)}`
-    correction2 += `<br><br>Soit $n$ un entier naturel. Supposons que $${i1} \\leqslant u_n \\leqslant ${i2}$.`
-    correction2 += `<br><br>Montrons alors que $${i1} \\leqslant u_{n+1} \\leqslant ${i2}$.`
-    correction2 += '<br><br>On a : '
-    correction2 += `<br><br>$${i1} \\leqslant u_n \\leqslant ${i2}\\qquad$ ${texteEnCouleur('Hypothèse de récurrence', vertMathalea)}`
-    correction2 += `<br><br>$f(${i1}) \\leqslant f(u_n) \\leqslant f(${i2})\\qquad$ ${texteEnCouleur(`Car $f$ est croissante sur $[${i1}\\;;\\;${i2}]$`, vertMathalea)}`
-    correction2 += `<br><br>$${f.image(i1).texFractionSimplifiee} \\leqslant f(u_n) \\leqslant ${f.image(i2).texFractionSimplifiee}$`
-    correction2 += `<br><br>Or $${f.image(i2).texFractionSimplifiee} \\leqslant ${i2}$.`
-    correction2 += '<br><br>Donc la propriété est vraie au rang $n+1$.'
-
-    correction2 += `<br><br>${texteEnCouleurEtGras('Conclusion :', bleu)}`
-    correction2 +=
-      '<br><br>La propriété est vraie pour $n=0$ et héréditaire à partir de ce rang, donc par récurrence, elle est vraie pour tout entier naturel.'
-
-    let correction3 =
-      'Démontrons par récurrence que pour tout $n$ entier naturel : $u_{n+1} \\leqslant u_n$.'
-    correction3 += `<br><br>${texteEnCouleurEtGras('Initialisation :', bleu)}`
-    correction3 += `<br><br>$u_1 = f(u_0) = f(${i2}) = ${f.image(i2).texFractionSimplifiee} \\leqslant u_0$`
-    correction3 += '<br><br>La propriété est donc vraie au rang 0.'
-
-    correction3 += `<br><br>${texteEnCouleurEtGras('Hérédité :', bleu)}`
-    correction3 +=
-      '<br><br>Soit $n$ un entier naturel. Supposons que $u_{n+1} \\leqslant u_n$.'
-    correction3 += '<br><br>Montrons alors que $u_{n+2} \\leqslant u_{n+1}$.'
-    correction3 += '<br><br>On a : '
-    correction3 += `<br><br>$u_{n+1} \\leqslant u_n \\qquad$ ${texteEnCouleur('Hypothèse de récurrence', vertMathalea)}`
-    correction3 += `<br><br>$f(u_{n+1}) \\leqslant f(u_n)\\qquad$ ${texteEnCouleur(`Car $f$ est croissante sur $[${i1}\\;;\\;${i2}]$`, vertMathalea)}`
-    correction3 += '<br><br>$u_{n+2} \\leqslant u_{n+1}$'
-
-    correction3 += `<br><br>${texteEnCouleurEtGras('Conclusion :', bleu)}`
-    correction3 +=
-      '<br><br>La propriété est vraie pour $n=0$ et héréditaire à partir de ce rang, donc par récurrence, elle est vraie pour tout entier naturel.'
-
-    if (!context.isHtml) {
-      correction1 = correction1.replaceAll(vertMathalea, 'black')
-      correction2 = correction2.replaceAll(vertMathalea, 'black')
-      correction3 = correction3.replaceAll(vertMathalea, 'black')
+      if (
+        this.questionJamaisPosee(i, type, ell, donnees.limiteU, donnees.limiteV)
+      ) {
+        handleAnswers(
+          this,
+          i,
+          {
+            qcm: {
+              enonce: texte,
+              propositions,
+              correction: texteCorr,
+              options: qcmOptions,
+            },
+          },
+          { formatInteractif: 'mathalea-qcm' },
+        )
+        if (context.isHtml) {
+          texte += addMathaleaQcm(this, i, {
+            ...qcmOptions,
+            interactivityOn: this.interactif,
+          })
+        } else if (!context.isAmc) {
+          const qcmLatex = propositionsQcm(this, i)
+          texte += qcmLatex.texte
+          texteCorr += qcmLatex.texteCorr
+        }
+        this.listeQuestions[i] = texte
+        this.listeCorrections[i] = texteCorr
+        i++
+      }
     }
-
-    this.listeQuestions.push(...questions)
-    this.listeCorrections.push(correction1, correction2, correction3)
-
     listeQuestionsToContenu(this)
   }
-}
-
-function frac(a: number, b: number) {
-  return new FractionEtendue(a, b)
 }

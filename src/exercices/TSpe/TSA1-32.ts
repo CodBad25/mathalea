@@ -11,7 +11,7 @@ export const dateDePublication = '05/08/2026'
 
 export const uuid = '00f79'
 export const refs = {
-  'fr-fr': ['TSA1-303'],
+  'fr-fr': ['TSA1-32', 'TCA1-22'],
   'fr-ch': [],
 }
 
@@ -68,18 +68,18 @@ export default class EvolutionPopulation extends Exercice {
     texte += `${texteEnCouleurEtGras('Partie 1', 'black')}<br>`
     texte += `On note $u_n$ le nombre d’habitants, exprimé en milliers, l’année $${anneeInitiale}+n$.<br><br>`
     texte += `1. Expliquer pourquoi $u_0=${u0}$.<br><br>`
-    texte += `2. Montrer, en justifiant, que, pour tout entier naturel $n$, $u_{n+1}=${qTex}u_n+${apportTex}$.<br><br>`
+    texte += `2. Montrer que, pour tout entier naturel $n$, $u_{n+1}=${qTex}u_n+${apportTex}$.<br><br>`
     texte += `3. Calculer le nombre d’habitants de la ville en ${anneeProche}.<br><br>`
     texte += `${texteEnCouleurEtGras('Partie 2', 'black')}<br>`
     texte += `On pose, pour tout entier naturel $n$, $v_n=u_n-${equilibre}$.<br><br>`
     texte += `1. Démontrer que $(v_n)$ est une suite géométrique dont on précisera le premier terme et la raison.<br><br>`
     texte += `2. Exprimer $v_n$, puis $u_n$, en fonction de $n$.<br><br>`
     texte += `3. Combien y aura-t-il d’habitants dans la ville en ${anneeLointaine} ? Arrondir au nombre entier d’habitants.<br><br>`
-    texte += `4. Déterminer, en admettant que ce modèle soit réaliste sur une longue période, la limite du nombre d’habitants dans la ville lorsque $n$ tend vers $+\\infty$.`
+    texte += `4. Déterminer la limite de la suite $(u_n)$ lorsque $n$ tend vers $+\\infty$, puis interpréter le résultat dans le contexte de l’exercice, en admettant que ce modèle soit réaliste sur une longue période.`
 
     let correction = `${texteEnCouleurEtGras('Partie 1', 'black')}<br><br>`
     correction += `1. La population est exprimée en milliers. En ${anneeInitiale}, la ville compte $${texNombre(1000 * u0, 0)}$ habitants, soit $${u0}$ milliers d’habitants. Ainsi, $u_0=${u0}$.<br><br>`
-    correction += `2. Chaque année, la ville conserve $${100 - tauxDepart}\\,\\%$ de sa population, ce qui revient à multiplier $u_n$ par $${qTex}$. De plus, elle gagne $${texNombre(apportHabitants, 0)}$ habitants, soit $${apportTex}$ millier d’habitants.<br>`
+    correction += `2. Chaque année, la ville conserve $${100 - tauxDepart}\\,\\%$ de sa population, ce qui revient à multiplier $u_n$ par $${qTex}$. De plus, elle gagne $${texNombre(apportHabitants, 0)}$ habitants, soit $${apportTex}$ ${apport > 1 ? 'milliers' : 'millier'} d’habitants.<br>`
     correction += `Ainsi, pour tout entier naturel $n$, $u_{n+1}=${qTex}u_n+${apportTex}$.<br><br>`
     correction += `3. L’année ${anneeProche} correspond au rang $n=2$.<br>`
     correction += `$\\begin{aligned}
@@ -99,7 +99,10 @@ v_{n+1}&=u_{n+1}-${equilibre}\\\\
 \\end{aligned}$<br>`
     correction += `La suite $(v_n)$ est donc géométrique de raison $${qTex}$ et de premier terme $v_0=u_0-${equilibre}=${v0}$.<br><br>`
     correction += `2. Pour tout entier naturel $n$ :<br>`
-    correction += `$v_n=${v0}\\times ${qTex}^n$.<br>`
+    correction += `On sait qu’une suite géométrique de premier terme $v_0$ et de raison $q$ vérifie, pour tout entier naturel $n$ :<br>
+$v_n=v_0\\times q^n$.<br>
+Ici, $v_0=${v0}$ et $q=${qTex}$. On obtient donc :<br>
+$v_n=${v0}\\times ${qTex}^n$.<br>`
     correction += `Comme $u_n=v_n+${equilibre}$, on obtient :<br>`
     correction += `$u_n=${equilibre}${ecritureAlgebrique(v0)}\\times ${qTex}^n$.<br><br>`
     correction += `3. L’année ${anneeLointaine} correspond au rang $n=${rangLointain}$.<br>`
@@ -109,7 +112,10 @@ u_{${rangLointain}}&=${equilibre}${ecritureAlgebrique(v0)}\\times ${qTex}^{${ran
 \\end{aligned}$<br>`
     correction += `Cela représente environ $${texNombre(habitantsLointains, 0)}$ habitants.<br><br>`
     correction += `4. Comme $${qTex}\\in]0\\,;\\,1[$, on sait que $\\displaystyle \\lim_{n\\to+\\infty}${qTex}^n=0$.<br>`
-    correction += `Donc $\\displaystyle \\lim_{n\\to+\\infty}u_n=${equilibre}$. La population de la ville tend ainsi vers $${texNombre(1000 * equilibre, 0)}$ habitants.`
+    correction += `Par produit, $\\displaystyle \\lim_{n\\to+\\infty}${v0}\\times ${qTex}^n=0$.<br>`
+    correction += `Or, $u_n=${equilibre}${ecritureAlgebrique(v0)}\\times ${qTex}^n$. Par somme :<br>
+$\\displaystyle \\lim_{n\\to+\\infty}u_n=${equilibre}$.<br>
+La population de la ville tend ainsi vers $${texNombre(1000 * equilibre, 0)}$ habitants.`
 
     this.listeQuestions[0] = texte
     this.listeCorrections[0] = correction

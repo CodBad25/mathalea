@@ -12,7 +12,7 @@ import Exercice from '../Exercice'
 
 import Figure from 'apigeom/src/Figure'
 import { amcConvert } from '../../lib/amc/amcBuilders'
-import handleApigeomFigureElement from '../../lib/apigeom/apigeom-figure'
+import { createApigeomFigureHtml } from '../../lib/apigeom/apigeom-figure'
 import { bleuMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -97,8 +97,9 @@ export default class EncadrerFractionEntre2Entiers extends Exercice {
         denominator: 2,
         numberOfRectangles: 5,
       })
-      handleApigeomFigureElement()
-      this.introduction = `<apigeom-figure interactive default-action='FILL' x-min=${figure.xMin} y-min=${figure.yMin} width=${figure.width} height=${figure.height} numero-exercice=${this.numeroExercice} index=0 auto-index><script type="application/json">${figure.json}</script></apigeom-figure>`
+      this.introduction = createApigeomFigureHtml(figure, {
+        numeroExercice: this.numeroExercice,
+      })
     } else {
       this.introduction = ''
     }

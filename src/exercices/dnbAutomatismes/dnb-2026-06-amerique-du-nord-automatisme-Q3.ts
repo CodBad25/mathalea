@@ -1,6 +1,7 @@
 import Figure from 'apigeom'
 import type Point from 'apigeom/src/elements/points/Point'
 import { context } from '../../modules/context'
+import { apigeomFigureToSvg } from '../../lib/apigeom/apigeom-figure'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -62,6 +63,7 @@ export default class AutoQ3ANbrevet2026 extends ExerciceQcmA {
       figure.create('MarkRightAngle', { point: O, directionPoint: C, size: 0.3 })
     }
 
+    if (context.isTypst) return apigeomFigureToSvg(figure)
     if (!context.isHtml) return figure.tikz()
     // addHandDrawnFilter() est appelé inconditionnellement dans clearHtml() :
     // les <defs> avec le filtre feTurbulence sont toujours présents dans le SVG.
