@@ -28,6 +28,7 @@ export const listOfCustomElements = [
   'meta-interactif-2d',
   'alea-iep-editeur',
   'relier-etiquettes',
+  'diagram-builder',
 ]
 
 /**

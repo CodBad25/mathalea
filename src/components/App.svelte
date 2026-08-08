@@ -33,6 +33,7 @@
   import RawLatex from './setup/latex/RawLatex.svelte'
   import Moodle from './setup/moodle/Moodle.svelte'
   import Start from './setup/start/Start.svelte'
+  import Tex from './setup/tex/Tex.svelte'
   import Tools from './setup/tools/Tools.svelte'
   import Typst from './setup/typst/Typst.svelte'
   import Flashcards from './setup/flashcards/Flashcards.svelte'
@@ -139,6 +140,7 @@
     if (
       $globalOptions.v === 'latex' ||
       $globalOptions.v === 'pdf' ||
+      $globalOptions.v === 'tex' ||
       $globalOptions.v === 'raw'
     ) {
       context.isHtml = false
@@ -159,7 +161,11 @@
     }
     context.vue = ''
     if ($globalOptions.v === 'diaporama') context.vue = 'diap' // for compatibility
-    if ($globalOptions.v === 'latex' || $globalOptions.v === 'raw')
+    if (
+      $globalOptions.v === 'latex' ||
+      $globalOptions.v === 'raw' ||
+      $globalOptions.v === 'tex'
+    )
       context.vue = 'latex' // for compatibility
     if ($globalOptions.v === 'can') context.vue = 'can' // for compatibility
     // lorsque l'éditeur sera intégré à la v3, il faudra mettre à true cette propriété pour l'editeur
@@ -233,6 +239,8 @@
     <Tools />
   {:else if $globalOptions.v === 'typst'}
     <Typst />
+  {:else if $globalOptions.v === 'tex'}
+    <Tex />
   {:else if $globalOptions.v === 'flashcards'}
     <Flashcards />
   {:else if $globalOptions.v === 'tbi'}

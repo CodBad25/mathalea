@@ -56,6 +56,13 @@
       icon: 'bx bx-code-alt',
       action: () => exportAndClose('latex'),
     },
+    {
+      id: 'latex2',
+      label: 'PDF via LaTeX (beta)',
+      description: 'Nouvel éditeur pour générer un PDF à partir du moteur de composition LaTeX',
+      icon: 'bx bx-code-alt',
+      action: () => exportAndClose('tex'),
+    },
     // {
     //   id: 'typst',
     //   label: 'PDF via HTML',

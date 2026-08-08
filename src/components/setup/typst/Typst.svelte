@@ -65,12 +65,13 @@
     type TypstDiagnostic,
   } from './typstDiagnostics'
   import {
+    codeEditorExtensions,
     revealPosition,
     setEditorMarkers,
     setEditorTheme,
-    typstEditorExtensions,
     type EditorMarker,
-  } from './editor/typstEditorSetup'
+  } from '../shared/editor/editorSetup'
+  import { typstLanguage } from './editor/typstLanguage'
 
   /** Libellés des habillages d'en-tête/pied de page */
   const HEADER_STYLE_LABELS: Record<(typeof HEADER_STYLES)[number], string> = {
@@ -195,6 +196,11 @@
   const typstUrlParam = new URL(window.location.href).searchParams.get(
     'typstParam',
   )
+  /**
+   * Un lien partagé fixe déjà `canMode` : la détection automatique (voir
+   * `loadExercises`) ne doit pas le remplacer.
+   */
+  let canModeSetFromUrl = false
   if (typstUrlParam != null) {
     typstParamStore.set(typstUrlParam)
     const parsed = decodeBase64(typstUrlParam)
@@ -203,6 +209,7 @@
         ...restoredDocumentOptions,
         ...parsed.options,
       }
+      canModeSetFromUrl = parsed.options.canMode !== undefined
     }
     if (parsed.carryOver != null) {
       urlCarryOver = parsed.carryOver
@@ -271,7 +278,7 @@
       : 'Ctrl'
   /**
    * Raccourcis de l'éditeur, par famille. Ils viennent de CodeMirror
-   * (`defaultKeymap`, `searchKeymap`) et de `typstEditorExtensions`.
+   * (`defaultKeymap`, `searchKeymap`) et de `codeEditorExtensions`.
    */
   const EDITOR_SHORTCUTS: { title: string; keys: [string, string][] }[] = [
     {
@@ -312,7 +319,6 @@
     {
       title: 'Compiler et replier',
       keys: [
-        [`${MOD_KEY} + S`, 'Compiler tout de suite'],
         [`${MOD_KEY} + Entrée`, 'Compiler tout de suite'],
         [`${MOD_KEY} + Maj + [ / ]`, 'Replier / déplier le bloc'],
       ],
@@ -1659,11 +1665,10 @@
       state: EditorState.create({
         doc: content,
         extensions: [
-          ...typstEditorExtensions({
+          ...codeEditorExtensions({
             dark: $darkMode.isActive,
-            // Ctrl/Cmd + S et Ctrl/Cmd + Entrée : compiler sans attendre
-            // le débounce (réflexe d'éditeur, et pas d'enregistrement du
-            // navigateur déclenché par mégarde)
+            language: typstLanguage,
+            // Ctrl/Cmd + Entrée : compiler sans attendre le débounce
             onCompileNow: () => scheduleCompile(currentCode(), 0),
           }),
           EditorView.updateListener.of((update) => {
@@ -2279,6 +2284,20 @@
 
   onMount(async () => {
     await loadExercises()
+    // Course aux nombres par défaut si la fiche ne contient que des
+    // exercices « can » (identifiant commençant par « can », comme
+    // `can6M20`), sauf si un lien partagé fixe déjà `canMode`.
+    if (!canModeSetFromUrl) {
+      const loaded = exercises.filter(
+        (exercise): exercise is IExercice => exercise != null,
+      )
+      const allCan =
+        loaded.length > 0 &&
+        loaded.every((exercise) =>
+          (exercise.id ?? '').toLowerCase().includes('can'),
+        )
+      if (allCan) documentOptions.canMode = true
+    }
     const code = buildCode()
     initEditor(code)
     // normalise l'URL : elle porte désormais l'ensemble des réglages
@@ -2595,11 +2614,11 @@
         <button
           type="button"
           title="Raccourcis clavier de l’éditeur de code"
-          class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+          aria-label="Raccourcis clavier de l’éditeur de code"
+          class="flex items-center justify-center rounded-lg border border-coopmaths-action py-1 px-2 text-coopmaths-action hover:bg-coopmaths-action hover:text-coopmaths-canvas dark:border-coopmathsdark-action dark:text-coopmathsdark-action dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
           onclick={() => (isShortcutsOpen = true)}
         >
-          <i class="bx bx-keyboard text-xl"></i>
-          Raccourcis
+          <i class="bx bx-help-circle text-xl"></i>
         </button>
       {/if}
       {#if displayMode === 'code' || displayMode === 'split'}

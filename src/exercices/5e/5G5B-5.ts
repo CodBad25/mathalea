@@ -299,7 +299,8 @@ export default class TracerTriangleAngle2cotes extends Exercice {
           const l0 = randint(4, 8)
           const A = pointAbstrait(0, 0, nom[0])
           const B = pointAdistance(A, l0, 0)
-          texte = `Construire le triangle $${nom}$ tel que $\\widehat{${nom[1]}${nom[0]}${nom[2]}} = ${BAC}^\\circ$, $\\widehat{${nom[0]}${nom[1]}${nom[2]}} = ${ABC}^\\circ$ et $${nom[0]}${nom[1]}=${l0}\\text{ cm}$.<br>`
+          texte = `Construire le triangle $${nom}$ tel que $\\widehat{${nom[1]}${nom[0]}${nom[2]}} = ${BAC}^\\circ$, $\\widehat{${nom[0]}${nom[1]}${nom[2]}} = ${ABC}^\\circ$ et $${nom[0]}${nom[1]}=${l0}\\text{ cm}$.<br>
+          (Pour construire un angle dans le sens indirect, mettre un signe - devant)<br>`
           donnees = [l0, BAC, ABC]
           instructionsDisponibles = [
             'cercleRayon',

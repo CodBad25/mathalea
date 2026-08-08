@@ -10,6 +10,12 @@
 \arrayrulecolor{couleur_theme} % Couleur des filets des tableaux
 
 \usepackage[most]{tcolorbox} % Supprimé à cause de conflits avec ProfCollege
+% Découpe des cadres d'exercice. Le style est redéfini par la sortie LaTeX
+% juste avant un exercice à garder d'un seul tenant, puis rétabli :
+%   \tcbset{mathaleaexo/.style={unbreakable}}
+% Passer par un style plutôt que par la clé « breakable » directement évite
+% de changer la découpe des autres cadres du document (ProfCollege...).
+\tcbset{mathaleaexo/.style={breakable}}
 \tcbuselibrary{documentation}
 
 %%%%%%%% Modification paramétrage pour footnotes
@@ -107,7 +113,7 @@
 \NewDocumentEnvironment{EXOcoop}{m m}{%
   \begin{tcolorbox}[%
     enhanced,
-    breakable,
+    mathaleaexo,
     colback=white,
     colframe=white,
     coltitle=black,
@@ -134,7 +140,7 @@
 \NewDocumentEnvironment{EXOlibre}{m m}{%
   \begin{tcolorbox}[%
     enhanced,
-    breakable,
+    mathaleaexo,
     colback=white,
     colframe=white,
     coltitle=black,

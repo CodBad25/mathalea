@@ -161,7 +161,6 @@ export default class LectureDiagrammeBaton extends Exercice {
       'Blueross',
       'Vlane',
     ]
-    //this.introduction =
     this.consigne =
       'Dans le parc naturel de ' +
       choice(lstNomParc) +
@@ -230,7 +229,7 @@ export default class LectureDiagrammeBaton extends Exercice {
       }
     }
 
-    this.introduction += mathalea2d(
+    this.introduction = mathalea2d(
       Object.assign(
         { zoom: 1, scale: 0.5 },
         fixeBordures([r, ...lstElementGraph]),

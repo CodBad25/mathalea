@@ -361,6 +361,7 @@ export type InteractivityType =
   | 'mathalea-qcm'
   | 'alea-iep-editeur'
   | 'relier-etiquettes' // Non compatible AMC
+  | 'diagram-builder' // Non compatible AMC
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -406,7 +407,8 @@ export function isInteractivityType(
     value === 'mathalea-labyrinthe' ||
     value === 'drag-and-drop' ||
     value === 'meta-interactif-2d' ||
-    value === 'relier-etiquettes'
+    value === 'relier-etiquettes' ||
+    value === 'diagram-builder'
   )
 }
 
@@ -442,7 +444,8 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'fraction-cliquable' ||
     value === 'drag-and-drop' ||
     value === 'meta-interactif-2d' ||
-    value === 'relier-etiquettes'
+    value === 'relier-etiquettes' ||
+    value === 'diagram-builder'
   )
 }
 

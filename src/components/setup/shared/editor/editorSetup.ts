@@ -53,15 +53,16 @@ import {
   tooltips,
 } from '@codemirror/view'
 import { frenchPhrases } from './editorPhrases'
-import { typstLanguage } from './typstLanguage'
 
 /**
- * Configuration de l'éditeur de code Typst : coloration syntaxique,
- * numéros de lignes, raccourcis usuels, thèmes clair et sombre, et
- * signalement des erreurs de compilation dans la marge et sous le code.
+ * Configuration de l'éditeur de code des vues qui exposent le source d'une
+ * fiche (Typst, LaTeX) : numéros de lignes, raccourcis usuels, thèmes clair
+ * et sombre, et signalement des erreurs de compilation dans la marge et sous
+ * le code.
  *
- * Le tout est regroupé ici pour que `Typst.svelte` n'ait à connaître que
- * `typstEditorExtensions()` et `setEditorMarkers()`.
+ * Le langage (coloration syntaxique) est le seul élément propre à chaque vue :
+ * il est passé en option. Le reste est commun, pour que chaque vue n'ait à
+ * connaître que `codeEditorExtensions()` et `setEditorMarkers()`.
  */
 
 /** Erreur ou avertissement à signaler dans l'éditeur (lignes 1-based) */
@@ -85,8 +86,8 @@ function offsetAt(state: EditorState, line: number, column = 1): number {
   return Math.min(target.from + Math.max(column - 1, 0), target.to)
 }
 
-const errorLine = Decoration.line({ class: 'cm-typst-errorLine' })
-const warningLine = Decoration.line({ class: 'cm-typst-warningLine' })
+const errorLine = Decoration.line({ class: 'cm-mathalea-errorLine' })
+const warningLine = Decoration.line({ class: 'cm-mathalea-warningLine' })
 
 function buildDecorations(
   state: EditorState,
@@ -163,7 +164,7 @@ class DiagnosticGutterMarker extends GutterMarker {
 
   override toDOM(): Node {
     const element = document.createElement('span')
-    element.className = `cm-typst-gutterMarker cm-typst-gutterMarker-${this.severity}`
+    element.className = `cm-mathalea-gutterMarker cm-mathalea-gutterMarker-${this.severity}`
     element.textContent = this.severity === 'error' ? '●' : '▲'
     element.title = this.message
     return element
@@ -172,7 +173,7 @@ class DiagnosticGutterMarker extends GutterMarker {
 
 /** Marge affichant une pastille en face des lignes en erreur */
 const diagnosticGutter = gutter({
-  class: 'cm-typst-diagnosticGutter',
+  class: 'cm-mathalea-diagnosticGutter',
   lineMarker(view, block) {
     const markers = view.state.field(markersField, false)
     if (markers == null || markers.length === 0) return null
@@ -268,15 +269,15 @@ const baseTheme = EditorView.theme({
   },
   '.cm-content': { paddingBottom: '40vh' },
   '.cm-gutters': { border: 'none' },
-  '.cm-typst-diagnosticGutter': {
+  '.cm-mathalea-diagnosticGutter': {
     width: '1.1em',
     textAlign: 'center',
     fontSize: '0.7em',
     lineHeight: '1.5rem',
   },
-  '.cm-typst-gutterMarker': { cursor: 'help' },
-  '.cm-typst-gutterMarker-error': { color: '#e06c75' },
-  '.cm-typst-gutterMarker-warning': { color: '#d19a66' },
+  '.cm-mathalea-gutterMarker': { cursor: 'help' },
+  '.cm-mathalea-gutterMarker-error': { color: '#e06c75' },
+  '.cm-mathalea-gutterMarker-warning': { color: '#d19a66' },
   '.cm-panels': { fontFamily: 'inherit', fontSize: '0.85rem' },
   '.cm-panel.cm-search label': { textTransform: 'none' },
   '.cm-panel.cm-search input[type=checkbox]': { verticalAlign: 'middle' },
@@ -332,8 +333,8 @@ const lightTheme: Extension = [
         backgroundColor: '#c7d2fe',
         outline: 'none',
       },
-      '.cm-typst-errorLine': { backgroundColor: 'rgba(220, 38, 38, 0.13)' },
-      '.cm-typst-warningLine': { backgroundColor: 'rgba(217, 119, 6, 0.15)' },
+      '.cm-mathalea-errorLine': { backgroundColor: 'rgba(220, 38, 38, 0.13)' },
+      '.cm-mathalea-warningLine': { backgroundColor: 'rgba(217, 119, 6, 0.15)' },
       '.cm-panels': { backgroundColor: '#f0f3f6', color: '#1f2933' },
       '.cm-panels.cm-panels-top': { borderBottom: '1px solid #cbd5e1' },
       '.cm-panel input, .cm-panel button': {
@@ -355,8 +356,8 @@ const darkTheme: Extension = [
   oneDark,
   EditorView.theme(
     {
-      '.cm-typst-errorLine': { backgroundColor: 'rgba(224, 108, 117, 0.18)' },
-      '.cm-typst-warningLine': { backgroundColor: 'rgba(229, 192, 123, 0.15)' },
+      '.cm-mathalea-errorLine': { backgroundColor: 'rgba(224, 108, 117, 0.18)' },
+      '.cm-mathalea-warningLine': { backgroundColor: 'rgba(229, 192, 123, 0.15)' },
       [SELECTION_FOCUSED]: { backgroundColor: '#2f5480' },
       [SELECTION_BLURRED]: { backgroundColor: '#333a45' },
       '.cm-selectionMatch': { backgroundColor: 'rgba(229, 192, 123, 0.22)' },
@@ -375,11 +376,13 @@ export function setEditorTheme(view: EditorView, dark: boolean): void {
   })
 }
 
-export interface TypstEditorOptions {
+export interface CodeEditorOptions {
   /** Mode sombre de l'application au moment de la création */
   dark: boolean
-  /** Ctrl/Cmd + S ou Ctrl/Cmd + Entrée : compiler tout de suite */
+  /** Ctrl/Cmd + Entrée : compiler tout de suite */
   onCompileNow: () => void
+  /** Coloration syntaxique du langage édité (Typst, LaTeX…) */
+  language: Extension
 }
 
 /**
@@ -388,14 +391,14 @@ export interface TypstEditorOptions {
  * rechercher, Alt + ↑/↓ pour déplacer une ligne, Maj + Alt + ↑/↓ pour la
  * dupliquer, Ctrl/Cmd + Maj + K pour la supprimer, Ctrl/Cmd + / pour
  * commenter) viennent de `defaultKeymap` et `searchKeymap`.
+ *
+ * Pas de raccourci Ctrl/Cmd + S : Safari ouvre sa boîte de dialogue
+ * d'enregistrement de page avant même que la page reçoive l'événement
+ * clavier, `preventDefault()` ne peut donc rien y changer. Ctrl/Cmd + Entrée
+ * reste le seul raccourci de compilation, sans ce conflit.
  */
-function extraKeymap(options: TypstEditorOptions) {
+function extraKeymap(options: CodeEditorOptions) {
   return [
-    {
-      key: 'Mod-s',
-      preventDefault: true,
-      run: () => (options.onCompileNow(), true),
-    },
     {
       key: 'Mod-Enter',
       preventDefault: true,
@@ -408,10 +411,8 @@ function extraKeymap(options: TypstEditorOptions) {
   ]
 }
 
-/** Extensions CodeMirror de l'éditeur de code Typst */
-export function typstEditorExtensions(
-  options: TypstEditorOptions,
-): Extension[] {
+/** Extensions CodeMirror de l'éditeur de code */
+export function codeEditorExtensions(options: CodeEditorOptions): Extension[] {
   return [
     lineNumbers(),
     highlightActiveLineGutter(),
@@ -431,7 +432,7 @@ export function typstEditorExtensions(
     highlightActiveLine(),
     highlightSelectionMatches(),
     tooltips({ parent: document.body }),
-    typstLanguage,
+    options.language,
     search({ top: true }),
     frenchPhrases,
     markersField,

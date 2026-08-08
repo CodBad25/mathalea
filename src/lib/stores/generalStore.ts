@@ -29,6 +29,12 @@ export const a4ParamStore = writable<string>('')
 export const typstParamStore = writable<string>('')
 
 /**
+ * Réglages encodés (base64) de la vue LaTeX (`v=tex`), maintenus dans l'URL
+ * par updateGlobalOptionsInURL. Alimenté par la vue elle-même.
+ */
+export const texParamStore = writable<string>('')
+
+/**
  * Réglages encodés (base64) de la vue TBI, maintenus dans l'URL
  * par updateGlobalOptionsInURL. Alimenté par la vue TBI elle-même.
  */
@@ -239,6 +245,11 @@ export function updateGlobalOptionsInURL(url: URL) {
   const typstParam = get(typstParamStore)
   if (options.v === 'typst' && typstParam.length > 0) {
     url.searchParams.append('typstParam', typstParam)
+  }
+  // Même principe pour la vue LaTeX (v=tex).
+  const texParam = get(texParamStore)
+  if (options.v === 'tex' && texParam.length > 0) {
+    url.searchParams.append('texParam', texParam)
   }
   // Même principe pour la vue TBI.
   const tbiParam = get(tbiParamStore)

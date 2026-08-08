@@ -13,6 +13,13 @@
   export let disabled: boolean
   export let exercices: (IExercice | IExerciceStatique)[]
   export let latexFile: latexFileType
+  /** Libellé du bouton */
+  export let text: string = 'Aller sur Overleaf'
+  /** Icône (boxicons) affichée avant le libellé, ex. `bx-link-external` */
+  export let icon: string = ''
+  /** Classes du bouton lui-même (le style par défaut est conservé si omis) */
+  export let buttonClass: string =
+    'px-2 py-1 rounded-md text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-action hover:bg-coopmaths-action-lightest dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest'
 
   let textForOverleafInput: HTMLInputElement
   let textForProfMaquette: string = ''
@@ -112,10 +119,13 @@
     type="submit"
     {disabled}
     on:click={copyDocumentToOverleaf}
-    class={disabled
-      ? 'px-2 py-1 rounded-md text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-action-lightest  dark:bg-coopmathsdark-action-lightest '
-      : 'px-2 py-1 rounded-md text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-action hover:bg-coopmaths-action-lightest dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest'}
+    class="{buttonClass} inline-flex items-center justify-center gap-2 {disabled
+      ? 'cursor-not-allowed opacity-60'
+      : ''}"
   >
-    Aller sur Overleaf
+    {#if icon !== ''}
+      <i class="bx {icon} shrink-0"></i>
+    {/if}
+    {text}
   </button>
 </form>
