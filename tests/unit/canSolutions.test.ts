@@ -2,22 +2,34 @@ import { beforeAll, describe, expect, it } from 'vitest'
 
 // L'import des customElements les enregistre dans mathaleaCustomElementsRegistry
 // (comme le fait le chargement d'un exercice qui les utilise).
-import handleInteractiveClock from '../../src/lib/customElements/InteractiveClock'
 import '../../src/lib/customElements/BlocklyEditor'
 import '../../src/lib/customElements/CliqueFigureElement'
 import '../../src/lib/customElements/demi_droite_interactive'
-import '../../src/lib/customElements/DragAndDropElement'
+import '../../src/lib/customElements/DiagramBarAssessmentElement'
+import '../../src/lib/customElements/DiagramBuilderElement'
+import '../../src/lib/customElements/DiagramCartesianAssessmentElement'
+import '../../src/lib/customElements/DiagramHistogramAssessmentElement'
+import '../../src/lib/customElements/DiagramPieAssessmentElement'
 import '../../src/lib/customElements/DomReadyAction'
+import '../../src/lib/customElements/DragAndDropElement'
 import '../../src/lib/customElements/ElementIepEditeur'
+import '../../src/lib/customElements/FillInTheBlank'
 import '../../src/lib/customElements/GuideAne'
+import handleInteractiveClock from '../../src/lib/customElements/InteractiveClock'
 import '../../src/lib/customElements/LabyrintheBlockly'
-import '../../src/lib/customElements/MetaInteractif2dElement'
 import '../../src/lib/customElements/ListeDeroulanteElement'
+import '../../src/lib/customElements/MathaleaMathfield'
+import '../../src/lib/customElements/MathaleaQcm'
+import '../../src/lib/customElements/MathaleaTextfield'
+import '../../src/lib/customElements/MetaInteractif2dElement'
 import '../../src/lib/customElements/MultiMathfield'
 import '../../src/lib/customElements/MySpreadSheet'
+import '../../src/lib/customElements/ObjetsCliquablesElement'
+import '../../src/lib/customElements/PointsCliquablesElement'
 import '../../src/lib/customElements/RelierEtiquettesElement'
 import '../../src/lib/customElements/ScratchEditor'
 import '../../src/lib/customElements/SvgSelectionElement'
+import '../../src/lib/customElements/TableauMathlive'
 import '../../src/lib/customElements/TableauSignesVariationsElement'
 import '../../src/lib/customElements/TrigoCircleSelectionElement'
 
@@ -86,9 +98,9 @@ describe('formatStudentAnswer', () => {
   it("formate la value JSON d'un multi-mathfield", () => {
     const question =
       '<multi-mathfield id="multi-mathfieldEx0Q0"></multi-mathfield>'
-    expect(
-      formatStudentAnswer(question, '{"rep1":"3","rep2":"x+1"}'),
-    ).toBe('$3$ ; $x+1$')
+    expect(formatStudentAnswer(question, '{"rep1":"3","rep2":"x+1"}')).toBe(
+      '$3$ ; $x+1$',
+    )
   })
 
   it("affiche la réponse brute d'un champ texte", () => {

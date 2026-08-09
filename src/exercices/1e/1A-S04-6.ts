@@ -5,7 +5,7 @@ import { creerSerieDeQuartiles } from '../../modules/outilsStat'
 import { nombreElementsDifferents } from '../ExerciceQcm'
 import ExerciceQcmA from '../ExerciceQcmA'
 
-export const uuid = '5bb2b'
+export const uuid = 'bdd60'
 export const refs = {
   'fr-fr': ['1A-S04-6', '2A-S4-6'],
   'fr-ch': [],
@@ -14,7 +14,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Lire une fréquence à partir d'un histogramme"
+export const titre = "Lire une fréquence à partir d'un diagramme des fréquences cumulées croissantes"
 export const dateDePublication = '01/01/2026'
 /**
  * @author Jean-claude Lhote

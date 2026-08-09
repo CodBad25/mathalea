@@ -29,6 +29,10 @@ export const listOfCustomElements = [
   'alea-iep-editeur',
   'relier-etiquettes',
   'diagram-builder',
+  'diagram-pie-assessment',
+  'diagram-bar-assessment',
+  'diagram-histogram-assessment',
+  'diagram-cartesian-assessment',
 ]
 
 /**

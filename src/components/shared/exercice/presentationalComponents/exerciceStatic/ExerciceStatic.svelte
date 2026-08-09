@@ -176,7 +176,7 @@
         <img
           src={url}
           class="mb-6"
-          style="width: calc(100% * {zoomFactor})"
+          style="width: min(100%, calc(850px * {zoomFactor}))"
           alt="énoncé"
         />
         {#if isMobileView}
@@ -211,7 +211,7 @@
               <img
                 src={url}
                 class="p-2"
-                style="width: calc(100% * {zoomFactor})"
+                style="width: min(100%, calc(850px * {zoomFactor}))"
                 alt="correction"
                 on:error={handleNoCorrectionAvailable}
               />

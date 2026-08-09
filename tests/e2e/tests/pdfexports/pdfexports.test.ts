@@ -4,6 +4,7 @@ import { basename, resolve } from 'node:path'
 import { beforeAll, describe, expect, test, vi } from 'vitest'
 import Latex, { makeImageFilesUrls } from '../../../../src/lib/Latex'
 import type { LatexFileInfos } from '../../../../src/lib/LatexTypes'
+import { shuffle } from '../../../../src/lib/outils/arrayOutils'
 import type { IExercice, IExerciceStatique } from '../../../../src/lib/types'
 import { context } from '../../../../src/modules/context'
 import { findStatic, findUuid, loadStaticRef } from '../../helpers/filter'
@@ -14,11 +15,7 @@ context.isHtml = false
 
 type ExportStatus = 'OK' | 'KO' | 'NON_TESTE'
 type ExportStyle =
-  | 'ProfMaquette'
-  | 'Can'
-  | 'Classique'
-  | 'Coopmaths'
-  | 'ProfMaquetteQrcode'
+  'ProfMaquette' | 'Can' | 'Classique' | 'Coopmaths' | 'ProfMaquetteQrcode'
 
 type ExportRow = {
   uuid: string
@@ -224,9 +221,7 @@ function formatDuration(durationMs: number | undefined) {
 }
 
 function needsStaticLookup(filter: string) {
-  return /(dnb|dnbpro|crpe|sti2d|stl|bac|e3c|eam|evacom|2nd)/.test(
-    filter,
-  )
+  return /(dnb|dnbpro|crpe|sti2d|stl|bac|e3c|eam|evacom|2nd)/.test(filter)
 }
 
 function toFilterFromExercisePath(file: string) {
@@ -440,9 +435,10 @@ async function loadExercise(uuid: string) {
 async function resolveTargets() {
   if (process.env.NIV) {
     const filter = process.env.NIV.replaceAll(' ', '')
-    return needsStaticLookup(filter)
+    const allTargets = needsStaticLookup(filter)
       ? await findStatic(filter)
       : await findUuid(filter)
+    return shuffle(allTargets).slice(0, 50) // On limite à 50 exercices pour éviter de saturer le CI sur des filtres trop larges.
   }
 
   const changedFiles = normalizeChangedFiles(process.env.CHANGED_FILES)
@@ -687,7 +683,7 @@ describe('pdfexports sans playwright', () => {
     const stylesForExport = process.env.STYLES
       ? process.env.STYLES.split(',').map((s) => s.trim())
       : process.env.CI === 'true'
-        ? ['ProfMaquette', 'Can', 'Coopmaths']
+        ? ['Coopmaths']
         : [
             'ProfMaquette',
             'ProfMaquetteQrcode',

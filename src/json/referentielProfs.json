@@ -90,6 +90,14 @@
       "titre": "Encodeur de texte",
       "typeExercice": "outil",
       "tags": {}
+    },
+    "P026": {
+      "id": "P026",
+      "uuid": "a9f71",
+      "url": "profs/P026.js",
+      "titre": "Créateur de diagramme",
+      "typeExercice": "outil",
+      "tags": {}
     }
   },
   "Géométrie animée": {

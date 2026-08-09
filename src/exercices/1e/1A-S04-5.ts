@@ -15,7 +15,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Calculer une moyenne à partir d'un histogramme"
+export const titre = "Calculer une moyenne à partir d'un diagramme en barres"
 export const dateDePublication = '01/01/2026'
 /**
  * @author Jean-claude Lhote

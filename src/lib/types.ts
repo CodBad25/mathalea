@@ -362,6 +362,10 @@ export type InteractivityType =
   | 'alea-iep-editeur'
   | 'relier-etiquettes' // Non compatible AMC
   | 'diagram-builder' // Non compatible AMC
+  | 'diagram-pie-assessment' // Non compatible AMC
+  | 'diagram-bar-assessment' // Non compatible AMC
+  | 'diagram-histogram-assessment' // Non compatible AMC
+  | 'diagram-cartesian-assessment' // Non compatible AMC
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -408,7 +412,11 @@ export function isInteractivityType(
     value === 'drag-and-drop' ||
     value === 'meta-interactif-2d' ||
     value === 'relier-etiquettes' ||
-    value === 'diagram-builder'
+    value === 'diagram-builder' ||
+    value === 'diagram-pie-assessment' ||
+    value === 'diagram-bar-assessment' ||
+    value === 'diagram-histogram-assessment' ||
+    value === 'diagram-cartesian-assessment'
   )
 }
 
@@ -445,7 +453,11 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'drag-and-drop' ||
     value === 'meta-interactif-2d' ||
     value === 'relier-etiquettes' ||
-    value === 'diagram-builder'
+    value === 'diagram-builder' ||
+    value === 'diagram-pie-assessment' ||
+    value === 'diagram-bar-assessment' ||
+    value === 'diagram-histogram-assessment' ||
+    value === 'diagram-cartesian-assessment'
   )
 }
 

@@ -197,6 +197,40 @@ const lectureLimitesCaps: CompleteKeysList = {
     'COMMA',
   ],
 }
+const limitesSimpleCaps: CompleteKeysList = {
+  inline: [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    0,
+    'COMMA',
+    'SUB',
+    'PLUS_INFTY',
+    'MINUS_INFTY',
+  ],
+  block: [
+    7,
+    8,
+    9,
+    'PLUS_INFTY',
+    4,
+    5,
+    6,
+    'MINUS_INFTY',
+    1,
+    2,
+    3,
+    'SUB',
+    0,
+    'COMMA',
+  ],
+}
 const numbersOperationsXCaps: CompleteKeysList = {
   inline: [
     1,
@@ -1047,6 +1081,13 @@ export const lectureLimites: KeyboardBlock = {
   isUnits: false,
 }
 
+export const limitesSimple: KeyboardBlock = {
+  keycaps: limitesSimpleCaps,
+  cols: 4,
+  title: 'Lecture de limites',
+  isUnits: false,
+}
+
 export const numbersSpace: KeyboardBlock = {
   keycaps: numbersSpaceCaps,
   cols: 4,
@@ -1329,6 +1370,7 @@ export const keyboardBlocks: {
   hms,
   lengths,
   lectureLimites,
+  limitesSimple,
   clavierFonctionsTerminales,
   majuscules,
   minuscules,

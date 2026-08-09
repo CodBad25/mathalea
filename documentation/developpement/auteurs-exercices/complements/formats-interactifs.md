@@ -33,6 +33,8 @@ handleAnswers(
 
 Depuis `src/exercices/6e/`, les imports commencent souvent par `../../lib/...`. Depuis `src/exercices/can/6e/`, ils commencent plutôt par `../../../lib/...`.
 
+# liste des éléments interactifs
+
 ## Champ MathLive simple
 
 À utiliser pour saisir un nombre, une fraction, un calcul, une expression ou une grandeur.
@@ -159,7 +161,7 @@ handleAnswers(
 
 Le helper injecte un custom element `tableau-mathlive`.
 
-### Plusieurs champs dans une même cellule
+### Des champs dans les cellules d'un tableau
 
 Une cellule vide de `AddTabDbleEntryMathlive` ne contient qu'un seul champ. Quand une cellule doit contenir plusieurs trous (par exemple `\ldots + \dfrac{\ldots}{10} + \dfrac{\ldots}{100}`), on y place un `fill-in-the-blank` : la cellule est alors une cellule HTML (`latex: false`) dont le texte est le custom element.
 
@@ -614,7 +616,7 @@ Points à connaître :
 
 Le composant produit aussi les sorties imprimées : une figure TikZ en LaTeX et une figure Typst native (sans paquet externe), avec les mêmes couleurs de traits. Voir [le custom element](../../maintenance-moteur/interactivite/relier-etiquettes.md).
 
-## Champs dans une figure 2D
+## Multiples champs dans une figure 2D
 
 À utiliser quand un champ doit être posé dans une figure produite par `mathalea2d()`.
 
@@ -659,7 +661,7 @@ handleAnswers(
 
 ## Demi-droite interactive
 
-À utiliser pour placer un ou plusieurs points sur une demi-droite graduée.
+À utiliser pour placer un ou plusieurs points sur une demi-droite graduée (qui peut se transformer en droite avec l'option showNegative)
 
 ```ts
 import { demiDroiteInteractive } from '../../lib/customElements/demi_droite_interactive'
@@ -906,7 +908,64 @@ texte += addBloklyEditor(this, i, {
 
 Lire [ScratchEditor](scratch-editor.md) ou [BlocklyEditor](blockly-editor.md) avant de créer un exercice avec ces composants. Les exemples à copier sont `src/exercices/5e/5I1C.ts` pour une traduction de calcul en blocs et `src/exercices/5e/5I1D.ts` pour un programme avec variables et callback de vérification.
 
-## Correction non interactive
+## DiagramPieAssessmentElement
+
+Ce composant permet de créer un diagramme circulaire interactif.
+
+```ts
+import { DiagramPieAssessmentElement } from '../../lib/customElements/DiagramPieAssessmentElement'
+
+texte += addDiagramPieAssessment(this, i, {
+            items: [
+              {label: 'A', effectif:12},{label: 'B', effectif:8},{label: 'C': effectif: 16}
+            ],
+            mode: 'angle' as PieAssessmentMode,
+            shape: 'pie' as PieAssessmentShape,
+            infosStatus: false,
+          })
+```
+
+Il peut être utilisé selon 3 modes :
+
+- 'angle' demande l'angle associé à chaque label (cas d'usage dans 5D1D-1)
+- 'effectif' demande l'effectif associé à chaque label
+- 'label' demande le label associé à au choix : l'effectif ou l'angle fourni.
+
+Pour un exemple d'utilisation, un exemple à étudier est `src/exercices/5e/5D1D-1.ts`.
+Il contient les versions 'pie' et 'semi-pie' (shape), mais aussi d'autre diagrammes comme le DiagramBarAssessmentElement décrit ci-après.
+
+## DiagramBarAssessmentElement
+
+Ce composant permet de créer un diagramme en barres interactif.
+
+```ts
+import { DiagramBarAssessmentElement } from '../../lib/customElements/DiagramBarAssessmentElement'
+
+texte += addDiagramBarAssessment(this, i,{
+            unitValue: 200,
+            unitLabel: `individus`,
+            yMax: 1000,
+            mode: 'hauteur' as BarAssessmentMode,
+            infosStatus: false,
+            interactivityOn: true,
+            items:[
+              {label: 'A', effectif:12},{label: 'B', effectif:8},{label: 'C': effectif: 16}
+            ]})
+```
+
+Il peut être utilisé selon 3 modes :
+
+- 'hauteur' demande la hauteur de la barre associée à chaque label (cas d'usage dans 5D1D-1)
+- 'effectif' demande l'effectif associé à chaque label (on fournira les hauteurs par exemple)
+- 'label' demande le label associé à chaque barre donnée par au choix : sa hauteur ou son effectif.
+
+Pour un exemple d'utilisation, un exemple à étudier est `src/exercices/5e/5D1D-1.ts`.
+
+## fin de la liste des éléments
+
+# Bonnes pratiques
+
+## Affichage de la correction
 
 Quel que soit le custom element, `texteCorr` ne doit pas dépendre du widget interactif. Écrire une correction lisible en texte, LaTeX ou figure statique :
 

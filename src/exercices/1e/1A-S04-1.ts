@@ -16,7 +16,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Calculer un effectif total à partir d'un diagramme"
+export const titre = "Calculer un effectif total à partir d'un diagramme en barres"
 export const dateDePublication = '31/12/2025'
 /**
  * @author Jean-claude Lhote

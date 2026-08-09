@@ -3022,7 +3022,27 @@
   },
   "TCA2": {
     "titre": "Limites de fonctions",
-    "sousThemes": {}
+    "sousThemes": {   }
+  },
+   "TCA2-1": {
+    "titre": "Limites finies, infinies, asymptotes",
+    "sousThemes": {   }
+  },
+   "TCA2-2": {
+    "titre": "Limites de fonctions de référence",
+    "sousThemes": {   }
+  },
+   "TCA2-3": {
+    "titre": "Limites de fonctions de référence",
+    "sousThemes": {   }
+  },
+   "TCA2-4": {
+    "titre": "Opérations sur les limites",
+    "sousThemes": {   }
+  },
+   "TCA2-5": {
+    "titre": "Limites et comparaisons",
+    "sousThemes": {   }
   },
   "TCA3": {
     "titre": "Continuité et TVI",

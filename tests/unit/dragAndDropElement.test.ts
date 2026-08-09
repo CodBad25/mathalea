@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import Exercice from '../../src/exercices/Exercice'
 import { DragAndDropElement } from '../../src/lib/customElements/DragAndDropElement'
+import DragAndDrop from '../../src/lib/interactif/DragAndDrop'
 import { handleAnswers } from '../../src/lib/interactif/gestionInteractif'
 import { setOutputHtml } from '../../src/modules/context'
 
@@ -21,9 +22,7 @@ function renderDndElement(): DragAndDropElement {
       <div id="feedbackEx3Q0"></div>
     `,
   })
-  const element = document.querySelector(
-    'drag-and-drop',
-  ) as DragAndDropElement
+  const element = document.querySelector('drag-and-drop') as DragAndDropElement
   element.connectedCallback()
   element.querySelectorAll<HTMLElement>('.etiquette').forEach((etiquette) => {
     etiquette.innerText = etiquette.textContent ?? ''
@@ -91,37 +90,47 @@ describe('DragAndDropElement', () => {
   })
 
   it('verifie une question drag and drop apres une question non drag and drop', () => {
-    exercice.nbQuestions = 2
-    const dnd = createDnd(exercice, 1)
-    exercice.dragAndDrops[1] = dnd
+    const exercice = new Exercice()
+    exercice.dragAndDrops = [{ listeners: [] } as any]
+    exercice.numeroExercice = 4
+    exercice.nbQuestions = 1
+    exercice.interactif = true
+    const dnd = createDnd(exercice, 0)
+    exercice.dragAndDrops[0] = dnd
     handleAnswers(
       exercice,
-      1,
-      { rectangle1: { value: '1', options: { multi: false } } },
+      0,
+      { rectangle1: { value: 'sept', options: { multi: false } } },
       { formatInteractif: 'dnd' },
     )
     document.body.innerHTML = dnd.ajouteDragAndDrop({
       melange: false,
       duplicable: false,
     })
-    const rectangle = document.getElementById('rectangleEx4Q1R1')
-    const etiquette = document.getElementById('etiquetteEx4Q1I1')
+    const rectangle = document.getElementById('rectangleEx4Q0R1')
+    const etiquette = document.getElementById('etiquetteEx4Q0Isept')
     rectangle?.appendChild(etiquette!)
 
-    const result = DragAndDropElement.verifQuestion(exercice, 1)
+    const result = DragAndDropElement.verifQuestion(exercice, 0)
 
     expect(result.isOk).toBe(true)
     expect(result.score).toEqual({ nbBonnesReponses: 1, nbReponses: 1 })
-    expect(exercice.answers?.rectangleDNDEx4Q1R1).toBe('etiquetteEx4Q1I1')
+    expect(exercice.answers?.rectangleDNDEx4Q0R1).toBe('etiquetteEx4Q0Isept')
   })
 })
 
 function createDnd(exercice: Exercice, question = 0): DragAndDrop {
-  return new DragAndDrop({
-    exercice,
-    question,
-    consigne: 'Déplacer.',
-    etiquettes: [[{ id: '1', contenu: 'A' }]],
-    enonceATrous: '%{rectangle1}',
+  const leDragAndDrop = new DragAndDrop({
+    exercice: exercice,
+    question: question,
+    consigne: 'Compléter avec les étiquettes disponibles.',
+    enonceATrous: '$3+4$ donne %{rectangle1}.',
+    etiquettes: [
+      [
+        { id: 'sept', contenu: '$7$' },
+        { id: 'huit', contenu: '$8$' },
+      ],
+    ],
   })
+  return leDragAndDrop
 }

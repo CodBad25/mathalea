@@ -14,7 +14,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Calculer le pourcentage d'élèves obtenant la moyenne"
+export const titre = "Calculer le pourcentage d'élèves à partir d'un diagramme en barres"
 export const dateDePublication = '31/12/2025'
 /**
  * @author Jean-claude Lhote

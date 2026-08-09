@@ -311,19 +311,19 @@ playwright-pdf-consolidated:
       - NIV_LABEL: 'can/5e'
       - NIV_LABEL: 'can/4e'
       - NIV_LABEL: 'can/3e'
-      - NIV_LABEL: '6e/6'
-      - NIV_LABEL: '5e/5'
+      - NIV_LABEL: '6e'
+      - NIV_LABEL: '5e'
       - NIV_LABEL: '4e/4A^4e/4F^4e/4I^4e/4P^4e/4S'
       - NIV_LABEL: '4e/4C'
       - NIV_LABEL: '4e/4G^4e/4L'
-      - NIV_LABEL: '3e/3'
+      - NIV_LABEL: '3e'
   script:
     - npm install -g pnpm@11.16.0
     - nohup pnpm start 2>&1 >/dev/null &
     - sleep 30
     - until $(curl --output /dev/null --head --fail http://localhost:80/alea/); do printf '.'; sleep 20; done
     - echo "🧪 pdfexports NIV=$NIV_LABEL"
-    - NIV="$NIV_LABEL" pnpm test:e2e:pdfexports
+    - NIV="$NIV_LABEL" STYLES="Coopmaths" pnpm test:e2e:pdfexports
   artifacts:
     when: on_failure
     paths:

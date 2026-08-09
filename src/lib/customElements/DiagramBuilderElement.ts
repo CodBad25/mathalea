@@ -457,14 +457,16 @@ export class DiagramBuilderElement extends MathaleaCustomElement {
         }
         .diagram-builder-grid {
           display: grid;
-          grid-template-columns: 1fr;
+          grid-template-columns: 1fr 1fr;
           gap: 8px;
+          align-items: start;
         }
         .row {
           display: flex;
           gap: 8px;
           align-items: center;
           flex-wrap: wrap;
+          grid-column: 1 / -1;
         }
         .row label {
           font-size: 0.9rem;
@@ -476,8 +478,11 @@ export class DiagramBuilderElement extends MathaleaCustomElement {
           padding: 4px 6px;
         }
         table {
-          width: 100%;
           border-collapse: collapse;
+          table-layout: auto;
+        }
+        #table-container {
+          min-width: 0;
         }
         th,
         td {
@@ -491,6 +496,11 @@ export class DiagramBuilderElement extends MathaleaCustomElement {
           padding: 6px;
           background: #f8fafc;
           min-height: 160px;
+          cursor: zoom-in;
+        }
+        .preview:focus-visible {
+          outline: 2px solid #2563eb;
+          outline-offset: 2px;
         }
         .legend {
           display: grid;
@@ -520,6 +530,60 @@ export class DiagramBuilderElement extends MathaleaCustomElement {
         .bar-chart-svg {
           height: 220px;
         }
+        dialog {
+          width: 100vw;
+          height: 100vh;
+          max-width: none;
+          max-height: none;
+          margin: 0;
+          padding: 0;
+          border: 0;
+          background: rgba(15, 23, 42, 0.74);
+        }
+        dialog::backdrop {
+          background: rgba(15, 23, 42, 0.55);
+        }
+        .modal-panel {
+          min-height: 100vh;
+          box-sizing: border-box;
+          display: grid;
+          grid-template-rows: auto 1fr;
+          gap: 12px;
+          padding: 16px;
+          background: #ffffff;
+        }
+        .modal-header {
+          display: flex;
+          justify-content: flex-end;
+        }
+        .modal-close {
+          font-size: 0.95rem;
+          padding: 6px 10px;
+        }
+        .modal-diagram {
+          min-height: 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 12px;
+        }
+        .modal-title {
+          text-align: center;
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: #0f172a;
+        }
+        .modal-diagram svg {
+          height: min(70vh, 720px);
+        }
+        .modal-diagram .bar-chart-svg {
+          height: min(70vh, 720px);
+        }
+        @media (max-width: 768px) {
+          .diagram-builder-grid {
+            grid-template-columns: 1fr;
+          }
+        }
       </style>
       <div class="diagram-builder-grid">
         <div class="row">
@@ -538,8 +602,16 @@ export class DiagramBuilderElement extends MathaleaCustomElement {
           <button id="add-row" type="button" ${disableAttr}>Ajouter une ligne</button>
         </div>
         <div id="table-container"></div>
-        <div class="preview" id="preview-container"></div>
+        <div class="preview" id="preview-container" role="button" tabindex="0" aria-label="Agrandir le diagramme"></div>
       </div>
+      <dialog id="diagram-modal" aria-label="Diagramme agrandi">
+        <div class="modal-panel">
+          <div class="modal-header">
+            <button class="modal-close" id="close-diagram-modal" type="button">Fermer</button>
+          </div>
+          <div class="modal-diagram" id="modal-diagram-container"></div>
+        </div>
+      </dialog>
     `
 
     this.renderTable()
@@ -579,6 +651,7 @@ export class DiagramBuilderElement extends MathaleaCustomElement {
     if (titleInput != null) {
       titleInput.addEventListener('input', () => {
         this.state.title = titleInput.value
+        this.renderPreview()
       })
       titleInput.addEventListener('change', () => {
         this.emitStateChanged()
@@ -607,6 +680,33 @@ export class DiagramBuilderElement extends MathaleaCustomElement {
         this.emitStateChanged()
       })
     }
+
+    const preview = this.shadowRoot.querySelector(
+      '#preview-container',
+    ) as HTMLDivElement | null
+    if (preview != null) {
+      preview.addEventListener('click', () => {
+        this.openDiagramModal()
+      })
+      preview.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return
+        event.preventDefault()
+        this.openDiagramModal()
+      })
+    }
+
+    const modal = this.shadowRoot.querySelector(
+      '#diagram-modal',
+    ) as HTMLDialogElement | null
+    const closeButton = this.shadowRoot.querySelector(
+      '#close-diagram-modal',
+    ) as HTMLButtonElement | null
+    closeButton?.addEventListener('click', () => {
+      modal?.close()
+    })
+    modal?.addEventListener('click', (event) => {
+      if (event.target === modal) modal.close()
+    })
   }
 
   private renderTable(): void {
@@ -759,6 +859,38 @@ export class DiagramBuilderElement extends MathaleaCustomElement {
     ) as HTMLDivElement | null
     if (preview == null) return
 
+    preview.innerHTML = this.renderDiagramContent({ centerTitle: false })
+
+    const modal = this.shadowRoot.querySelector(
+      '#diagram-modal',
+    ) as HTMLDialogElement | null
+    const modalContent = this.shadowRoot.querySelector(
+      '#modal-diagram-container',
+    ) as HTMLDivElement | null
+    if (modal?.open === true && modalContent != null) {
+      modalContent.innerHTML = this.renderDiagramContent({ centerTitle: true })
+    }
+  }
+
+  private openDiagramModal(): void {
+    if (this.shadowRoot == null) return
+    const modal = this.shadowRoot.querySelector(
+      '#diagram-modal',
+    ) as HTMLDialogElement | null
+    const modalContent = this.shadowRoot.querySelector(
+      '#modal-diagram-container',
+    ) as HTMLDivElement | null
+    if (modal == null || modalContent == null) return
+
+    modalContent.innerHTML = this.renderDiagramContent({ centerTitle: true })
+    if (!modal.open) modal.showModal()
+  }
+
+  private renderDiagramContent({
+    centerTitle,
+  }: {
+    centerTitle: boolean
+  }): string {
     let svg = ''
     let legend = ''
     if (this.state.type === 'pie' || this.state.type === 'semi-pie') {
@@ -768,11 +900,13 @@ export class DiagramBuilderElement extends MathaleaCustomElement {
       svg = this.renderBarSvg()
     } else if (this.state.type === 'histogram') {
       svg = this.renderHistogramSvg()
+      legend = this.renderHistogramLegend()
     } else {
       svg = this.renderCartesianSvg()
     }
     const title = this.state.title.trim()
-    preview.innerHTML = `${title === '' ? '' : `<div>${this.escapeText(title)}</div>`}${svg}${legend}`
+    const titleClass = centerTitle ? ' class="modal-title"' : ''
+    return `${title === '' ? '' : `<div${titleClass}>${this.escapeText(title)}</div>`}${svg}${legend}`
   }
 
   private renderPieSvg(isSemiPie: boolean): string {
@@ -865,7 +999,13 @@ export class DiagramBuilderElement extends MathaleaCustomElement {
 
   private renderHistogramSvg(): string {
     const width = 300
-    const height = 160
+    const height = 190
+    const axisLeft = 36
+    const axisRight = 288
+    const axisTop = 18
+    const axisBottom = 148
+    const axisWidth = axisRight - axisLeft
+    const axisHeight = axisBottom - axisTop
     const bins = this.state.bins
     const maxValue = Math.max(1, ...bins.map((bin) => bin.value))
     const first = bins[0]
@@ -873,18 +1013,58 @@ export class DiagramBuilderElement extends MathaleaCustomElement {
     const minX = first?.from ?? 0
     const maxX = last?.to ?? minX + 1
     const rangeX = maxX - minX === 0 ? 1 : maxX - minX
+    const projectX = (value: number) =>
+      axisLeft + ((value - minX) / rangeX) * axisWidth
+    const projectY = (value: number) =>
+      axisBottom - (Math.max(0, value) / maxValue) * axisHeight
 
-    const bars = bins
-      .map((bin) => {
-        const x = 20 + ((bin.from - minX) / rangeX) * 260
-        const w = Math.max(2, ((bin.to - bin.from) / rangeX) * 260)
-        const h = Math.max(0, (bin.value / maxValue) * 120)
-        const y = 140 - h
-        return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#16a34a" opacity="0.85" />`
+    const yTickCount = 4
+    const yTicks = Array.from({ length: yTickCount + 1 }, (_, index) => {
+      const value = (maxValue / yTickCount) * index
+      const y = projectY(value)
+      const label = Number.isInteger(value) ? String(value) : value.toFixed(1)
+      return `<line x1="${axisLeft - 4}" y1="${y}" x2="${axisRight}" y2="${y}" stroke="#e2e8f0"/><text x="${axisLeft - 7}" y="${y + 4}" text-anchor="end" font-size="10" fill="#475569">${label}</text>`
+    }).join('')
+
+    const xTickValues = Array.from(
+      new Set(bins.flatMap((bin) => [bin.from, bin.to])),
+    ).sort((a, b) => a - b)
+    const xTicks = xTickValues
+      .map((value) => {
+        const x = projectX(value)
+        const label = Number.isInteger(value) ? String(value) : value.toFixed(1)
+        return `<line x1="${x}" y1="${axisBottom}" x2="${x}" y2="${axisBottom + 4}" stroke="#475569"/><text x="${x}" y="${axisBottom + 18}" text-anchor="middle" font-size="10" fill="#475569">${label}</text>`
       })
       .join('')
 
-    return `<svg viewBox="0 0 ${width} ${height}"><line x1="20" y1="140" x2="290" y2="140" stroke="#475569"/><line x1="20" y1="20" x2="20" y2="140" stroke="#475569"/>${bars}</svg>`
+    const bars = bins
+      .map((bin, index) => {
+        const x = projectX(bin.from)
+        const w = Math.max(2, projectX(bin.to) - x)
+        const y = projectY(bin.value)
+        const h = axisBottom - y
+        const tooltip = `[${bin.from}; ${bin.to}[ : ${bin.value}`
+        return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${this.colorForIndex(index)}" opacity="0.85"><title>${this.escapeText(tooltip)}</title></rect>`
+      })
+      .join('')
+
+    return `<svg viewBox="0 0 ${width} ${height}">${yTicks}<line x1="${axisLeft}" y1="${axisBottom}" x2="${axisRight}" y2="${axisBottom}" stroke="#475569"/><line x1="${axisLeft}" y1="${axisTop}" x2="${axisLeft}" y2="${axisBottom}" stroke="#475569"/>${xTicks}${bars}</svg>`
+  }
+
+  private renderHistogramLegend(): string {
+    const entries = this.state.bins.map((bin, index) => ({
+      color: this.colorForIndex(index),
+      label: `[${bin.from}; ${bin.to}[`,
+    }))
+
+    if (entries.length === 0) return ''
+
+    return `<div class="legend">${entries
+      .map(
+        (entry) =>
+          `<div class="legend-item"><span class="legend-color" style="background:${entry.color};"></span><span>${this.escapeText(entry.label)}</span></div>`,
+      )
+      .join('')}</div>`
   }
 
   private renderCartesianSvg(): string {

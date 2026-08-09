@@ -30,7 +30,7 @@ export class MonElement extends MathaleaCustomElement {
 
 2. Méthode statique create
 
-- `create(...)` retourne la chaîne HTML à injecter dans l'énoncé (ou le latex selon le contexte)
+- `create(...)` retourne la chaîne à injecter dans l'énoncé : HTML en contexte HTML, ou LaTeX/chaîne vide en contexte non HTML selon les capacités du composant.
 - `create(...)` prend un seul argument objet.
 - Cet objet contient au minimum :
   - `id?: string`
@@ -40,6 +40,32 @@ export class MonElement extends MathaleaCustomElement {
 - Si `id` est fourni, il est utilisé tel quel.
 - Sinon, l'id est construit avec la convention : `${elementTag}Ex${numeroExercice}Q${questionIndex}`.
 - Les attributs doivent être passés en camelCase ; la base les convertit en kebab-case.
+- Si le composant possède une sortie imprimable (`renderLatex()`), sa méthode `create(...)` doit gérer explicitement le contexte non HTML : instancier l'élément en mémoire, initialiser son état métier depuis les options, puis retourner `renderLatex()`.
+- Si le composant possède une sortie Typst native (`renderTypst()`), `create(...)` doit traiter `context.isTypst` avant le cas LaTeX et retourner `<mathalea-typst>${codeTypst}</mathalea-typst>`. Ce marqueur est inséré tel quel par `htmlToTypst()`.
+- Si le composant n'a pas de sortie non HTML exploitable, le comportement par défaut de `MathaleaCustomElement.create(...)` suffit : il retourne une chaîne vide hors HTML.
+
+### Cahier des charges des sorties
+
+Un custom element pédagogique doit choisir sa sortie selon le contexte global :
+
+- `context.isHtml === true` et `context.isTypst === false` : `create(...)`
+  retourne un élément HTML. Celui-ci peut être interactif ou figé selon
+  `interactivityOn`.
+- `context.isTypst === true` : `create(...)` retourne un marqueur
+  `<mathalea-typst>...</mathalea-typst>` contenant le Typst pur produit par
+  `renderTypst()`. La vue Typst régénère les exercices avec `context.isHtml`
+  encore vrai, donc ce cas doit être testé avant la branche HTML standard.
+- `context.isHtml === false` : `create(...)` retourne le code LaTeX équivalent,
+  produit par `renderLatex()`, ou une chaîne vide si le composant n'a pas de
+  rendu imprimable.
+
+Pour les composants d'évaluation, `interactivityOn` pilote aussi la sortie
+imprimable :
+
+- `interactivityOn === true` : version énoncé/évaluation, avec les zones à
+  compléter ou le support graphique vide attendu.
+- `interactivityOn === false` : version correction complète, avec données,
+  figure et éléments d'identification nécessaires.
 
 3. Helper d'instanciation côté exercice
 
@@ -73,10 +99,34 @@ export function demiDroiteInteractive(
   questionIndex: number,
   options?: DemiDroiteInteractiveOptions,
 ): string {
+  // Ce composant ne fournit pas de rendu LaTeX statique.
   if (!context.isHtml) return ''
   return DemiDroiteInteractiveElement.create({
     ...options,
     numeroExercice: exercice.numeroExercice,
+    questionIndex,
+  })
+}
+```
+
+Quand un composant sait produire une sortie LaTeX statique, ne pas court-circuiter
+le helper avec `if (!context.isHtml) return ''`. Le helper doit appeler
+`create(...)` dans tous les contextes et laisser la classe décider de la sortie.
+
+Exemple de helper pour un composant avec `renderLatex()` :
+
+```ts
+export function addDiagramXxxAssessment(
+  exercice: IExercice,
+  questionIndex: number,
+  options: DiagramXxxAssessmentOptions,
+): string {
+  exercice.autoCorrection[questionIndex] ??= {}
+  exercice.autoCorrection[questionIndex].formatInteractif =
+    DiagramXxxAssessmentElement.elementTag
+  return DiagramXxxAssessmentElement.create({
+    ...options,
+    numeroExercice: exercice.numeroExercice ?? 0,
     questionIndex,
   })
 }
@@ -87,6 +137,20 @@ export function demiDroiteInteractive(
 - En HTML : `render()` met à jour le DOM du composant.
 - En LaTeX : `render()` retourne la variante LaTeX si elle existe, sinon une chaîne vide.
 - Pour la partie LaTeX, implémenter `renderLatex()` quand nécessaire.
+- En Typst : si le composant ne peut pas être rejoué par `htmlToTypst()`, implémenter
+  `renderTypst()` et faire retourner à `create(...)` un marqueur
+  `<mathalea-typst>...</mathalea-typst>` quand `context.isTypst` est vrai.
+- En contexte non HTML, aucun `connectedCallback()` n'est exécuté : `create(...)`
+  doit donc préparer directement l'état nécessaire à `renderLatex()`.
+- Ne pas faire dépendre `renderLatex()` du shadow DOM, d'attributs hydratés par le
+  navigateur, ni d'éléments HTML internes. Il doit fonctionner à partir de l'état
+  métier du composant.
+- Même règle pour `renderTypst()` : produire du Typst pur à partir de l'état métier,
+  sans dépendre du shadow DOM.
+- Si `interactivityOn === true`, la sortie LaTeX doit représenter la version
+  imprimable de l'évaluation, avec les zones à compléter pertinentes. Si
+  `interactivityOn === false`, elle doit représenter la version statique/correction
+  complète.
 
 5. Propriété value
 
@@ -176,6 +240,21 @@ fonction, elle est appelée au `disconnectedCallback()`.
 
 ## Cas avancés
 
+## Cas spécifique : diagrammes (outil prof vs évaluation)
+
+Pour les diagrammes, distinguer explicitement deux usages.
+
+- Outil auteur/prof (construction libre) : `diagram-builder`.
+  - Usage recommandé : préparation d'énoncés, de corrections, d'exemples visuels.
+  - Non recommandé pour évaluer directement un élève sur une compétence de construction.
+- Outils d'évaluation (contraints) : un composant par scénario métier.
+  - Exemple : `diagram-pie-assessment` pour un exercice d'angles de secteurs.
+  - Exemple : `diagram-bar-assessment` pour un exercice de hauteurs de bâtons avec unité.
+
+Principe pédagogique : en mode évaluation, l'élève ne doit pas pouvoir "obtenir"
+le graphique complet par simple saisie des données de l'énoncé. Le composant doit
+imposer la variable didactique attendue (angles, hauteurs, échelles, etc.).
+
 - MySpreadsheetElement (tableur) : [architecture du tableur](tableur.md)
 - BlocklyEditor : [architecture de Scratch et Blockly](scratch-blockly.md)
 - RelierEtiquettesElement (composant à trois rendus : HTML interactif, LaTeX et Typst) : [relier les étiquettes](relier-etiquettes.md)
@@ -192,6 +271,9 @@ fonction, elle est appelée au `disconnectedCallback()`.
 - `interactivityOn` est respectée.
 - `connectedCallback()` et `disconnectedCallback()` sont propres.
 - Le rendu non HTML est défini (`renderLatex()` ou chaîne vide assumée).
+- Le rendu Typst est défini quand le composant HTML ne peut pas être converti
+  automatiquement (`renderTypst()` + marqueur `<mathalea-typst>` dans
+  `create(...)`).
 - L'affichage dans les corrections CAN est correct (`formatStudentAnswer` et `stripFromQuestionHtml` surchargées si les valeurs par défaut ne conviennent pas).
 
 ## Migration d'un composant existant

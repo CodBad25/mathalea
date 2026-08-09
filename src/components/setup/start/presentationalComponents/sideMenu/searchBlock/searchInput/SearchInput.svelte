@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher, onDestroy, onMount, tick } from 'svelte'
+  import { createEventDispatcher, onDestroy, onMount } from 'svelte'
   import { stringToCriterion } from '../../../../../../../lib/components/filters'
   import {
     isExerciceItemInReferentiel,
@@ -40,8 +40,6 @@
   let selectedFilters: FilterObject<string | Level>[] = []
   let lastInput: string = ''
   let isInputFocused = false
-  let isCtrlDown: boolean = false
-  let isKDown: boolean = false
   let isEnterDown: boolean = false
   let unsubscribeToFiltersStore: Unsubscriber
 
@@ -218,23 +216,12 @@
   function onKeyDown(event: KeyboardEvent) {
     if (event.repeat) return
     switch (event.key) {
-      case 'Control':
-        isCtrlDown = true
-        event.preventDefault()
-        break
-      case 'k':
-        isKDown = true
-        break
       case 'Enter':
         if (isInputFocused) {
           isEnterDown = true
         }
         event.preventDefault()
         break
-    }
-    if (isCtrlDown && isKDown) {
-      // https://svelte.dev/repl/48bd3726b74c4329a186838ce645099b?version=3.46.4
-      getFocusOnSearchInput()
     }
     if (isEnterDown) {
       onEnterDown()
@@ -243,22 +230,10 @@
 
   function onKeyUp(event: KeyboardEvent) {
     switch (event.key) {
-      case 'Control':
-        isCtrlDown = false
-        event.preventDefault()
-        break
-      case 'k':
-        isKDown = false
-        event.preventDefault()
-        break
       case 'Enter':
         isEnterDown = false
         break
     }
-  }
-  const getFocusOnSearchInput = async () => {
-    await tick()
-    searchField.focus()
   }
   /**
    * Permet d'afficher séquentiellement une liste de chaînes de caractères

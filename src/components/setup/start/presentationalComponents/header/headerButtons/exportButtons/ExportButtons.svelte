@@ -15,11 +15,6 @@
   export let handleExport: (vue: VueType) => void
   export let exportQcmCam: () => Promise<void>
 
-  // Bouton Kutsum masqué en production — activer avec ?kutsum=1 dans l'URL
-  const showKutsum =
-    new URLSearchParams(window.location.search).get('kutsum') === '1' ||
-    window.location.hostname === 'localhost'
-
   let showMoreModal = false
   let moreDialog: HTMLDialogElement
   let downloadContentDisplayed: 'success' | 'error' | 'none' = 'none'
@@ -52,14 +47,16 @@
     {
       id: 'latex',
       label: 'PDF via LaTeX',
-      description: 'Pour générer un PDF à partir du moteur de composition LaTeX',
+      description:
+        'Pour générer un PDF à partir du moteur de composition LaTeX',
       icon: 'bx bx-code-alt',
       action: () => exportAndClose('latex'),
     },
     {
       id: 'latex2',
       label: 'PDF via LaTeX (beta)',
-      description: 'Nouvel éditeur pour générer un PDF à partir du moteur de composition LaTeX',
+      description:
+        'Nouvel éditeur pour générer un PDF à partir du moteur de composition LaTeX',
       icon: 'bx bx-code-alt',
       action: () => exportAndClose('tex'),
     },
@@ -89,7 +86,7 @@
       id: 'flashcards',
       label: 'Flash-cards',
       description:
-        "Pour imprimer des cartes recto (question) / verso (réponse) à découper, idéal avec les exercices de course aux nombres",
+        'Pour imprimer des cartes recto (question) / verso (réponse) à découper, idéal avec les exercices de course aux nombres',
       icon: 'bx bx-credit-card-front',
       action: () => exportAndClose('flashcards'),
     },
@@ -119,21 +116,16 @@
       component: AnkiIcon,
       action: () => exportAndClose('anki'),
     },
-    // Kutsum masqué en production — visible uniquement avec ?kutsum=1 dans l'URL
-    ...(showKutsum
-      ? [
-          {
-            id: 'kutsum',
-            label: 'Kutsum',
-            description: 'Pour créer des quiz interactifs sur Kutsum',
-            icon: 'bx bx-game',
-            action: () => {
-              showMoreModal = false
-              exportKutsum()
-            },
-          } satisfies ExportOption,
-        ]
-      : []),
+    {
+      id: 'kutsum',
+      label: 'Kutsum',
+      description: 'Pour créer des quiz interactifs sur Kutsum',
+      icon: 'bx bx-game',
+      action: () => {
+        showMoreModal = false
+        exportKutsum()
+      },
+    },
   ]
 </script>
 

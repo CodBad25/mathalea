@@ -3,6 +3,7 @@
   import { onDestroy, tick } from 'svelte'
   import { buildExercise } from '../../../../lib/components/exercisesUtils'
   import { applyExerciceSettings } from '../../../../lib/components/exerciceSettings'
+  import { acquireLoadSlot } from '../../../../lib/components/loadQueue'
   import {
     endingLabel,
     endingReference,
@@ -88,10 +89,22 @@
     await tick()
   }
 
-  /** Charge l'exercice à la première apparition à l'écran */
+  /** Annule la demande de créneau de chargement si non encore accordée */
+  let cancelLoadSlot: (() => void) | null = null
+
+  /**
+   * Charge l'exercice à la première apparition à l'écran. Passe par la file
+   * d'attente `loadQueue` : au plus 5 exercices se génèrent en même temps,
+   * pour ne pas saturer le thread principal quand plusieurs cartes entrent
+   * dans la marge de préchargement d'un coup (liste de résultats).
+   */
   async function load() {
     if (exercise != null || isLoading) return
     isLoading = true
+    const { slot, cancel } = acquireLoadSlot()
+    cancelLoadSlot = cancel
+    const release = await slot
+    cancelLoadSlot = null
     try {
       exercise = await buildExercise($state.snapshot(params))
       await updateDisplay()
@@ -99,13 +112,18 @@
       errorMessage = "Cet exercice n'a pas pu être chargé."
     } finally {
       isLoading = false
+      release()
     }
   }
 
   /**
-   * Action de chargement paresseux : un thème peut contenir des dizaines
-   * d'exercices, chacun étant un module chargé à la demande — on ne les
-   * génère qu'au moment où leur carte approche de l'écran.
+   * Action de chargement paresseux : un thème (ou une recherche) peut
+   * afficher des dizaines d'exercices, chacun étant un module chargé à la
+   * demande — on ne les génère qu'au moment où leur carte est réellement
+   * visible. Pas de marge de préchargement (`rootMargin: '0px'`) : une
+   * liste de résultats peut compter plusieurs centaines d'entrées, et
+   * précharger au-delà de l'écran viderait la file d'attente `loadQueue`
+   * sur des cartes que l'utilisateur n'a pas encore fait défiler.
    */
   let observer: IntersectionObserver | null = null
   function lazyLoad(node: HTMLElement) {
@@ -121,7 +139,7 @@
           void load()
         }
       },
-      { rootMargin: '200px' },
+      { rootMargin: '0px' },
     )
     observer.observe(node)
     return {
@@ -133,6 +151,7 @@
   }
 
   onDestroy(() => {
+    cancelLoadSlot?.()
     exercise?.reinit?.()
     exercise?.destroy?.()
   })

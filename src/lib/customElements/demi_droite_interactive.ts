@@ -14,7 +14,7 @@ type ValeurPoint = {
 type DemiDroiteInteractiveValue = {
   partsCount: number
   maxT: number
-  showwNegative: boolean
+  showNegative: boolean
   points: ValeurPoint[]
   x0: number
 }
@@ -244,7 +244,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     return {
       partsCount: this.partsCount,
       maxT: this.tMax,
-      showwNegative: this.showNegative,
+      showNegative: this.showNegative,
       points: this.points.map((point) => ({ ...point })),
       x0: this.x0,
     }
@@ -269,7 +269,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     }
 
     const incomingShowNegative =
-      nextValue.showwNegative ?? nextValue.showNegative
+      nextValue.showNegative ?? nextValue.showNegative
     this.showNegative = incomingShowNegative === true
 
     const availableValues = this.getAvailableValues()

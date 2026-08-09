@@ -13,7 +13,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const uuid = '339f9'
 export const refs = {
-  'fr-fr': ['1A-P03-8', '2A-P3-8'],
+  'fr-fr': ['1A-P01-1', '2A-P1-1'],
   'fr-ch': [],
 }
 
@@ -166,14 +166,10 @@ export default class ReconnaitreUneProbabilite extends ExerciceQcmA {
     this.reponses = propositionsDansOrdre.map(
       (proposition) => `$${proposition.latex}$`,
     )
-    this.corrections = propositionsDansOrdre.map(
-      (proposition) =>
-        `$${proposition.latex}$ ${proposition.justification} : ce réel ${proposition.estUneProbabilite ? 'peut' : 'ne peut pas'} être une probabilité.`,
-    )
 
     this.enonce = demandeValeurPossible
-      ? 'Quel réel peut être une probabilité ?'
-      : 'Quel réel ne peut pas être une probabilité ?'
+      ? 'Parmi les réels suivants, lequel peut être une probabilité ?'
+      : 'Parmi les réels suivants, lequel ne peut pas être une probabilité ?'
 
     if (context.isTypst) {
       this.enonce += `<br>${this.reponses

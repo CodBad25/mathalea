@@ -64,6 +64,7 @@
   import MobileView from '../mobile/MobileView.svelte'
   import { getLang } from '../../../lib/stores/languagesStore'
   import SideMenu from './presentationalComponents/sideMenu/SideMenu.svelte'
+  import TypstAddExerciseModal from '../typst/addExercise/TypstAddExerciseModal.svelte'
 
   const lang = getLang()
   let isNavBarVisible: boolean = true
@@ -323,6 +324,25 @@
     exercicesParams.update((list) => [...list, newExercise])
   }
 
+  /** Modale « Ajouter un exercice » (Ctrl/Cmd+K), même modale que la vue Typst */
+  let isAddExerciseModalOpen = false
+
+  function addExerciseFromModal(params: InterfaceParams) {
+    exercicesParams.update((list) => [...list, params])
+  }
+
+  function handleGlobalKeydown(event: KeyboardEvent) {
+    if (
+      (event.ctrlKey || event.metaKey) &&
+      !event.shiftKey &&
+      !event.altKey &&
+      event.key.toLowerCase() === 'k'
+    ) {
+      event.preventDefault()
+      isAddExerciseModalOpen = true
+    }
+  }
+
   function backToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -416,7 +436,7 @@
   }
 </script>
 
-<svelte:window bind:innerWidth />
+<svelte:window bind:innerWidth onkeydown={handleGlobalKeydown} />
 {#if $globalOptions.v === '' || $globalOptions.v === undefined || $globalOptions.v === 'l'}
   <div
     class="{$darkMode.isActive
@@ -582,6 +602,12 @@
     {buildUrlAndOpenItInNewTab}
     {updateParams}
   />
+  {#if isAddExerciseModalOpen}
+    <TypstAddExerciseModal
+      onAdd={addExerciseFromModal}
+      onClose={() => (isAddExerciseModalOpen = false)}
+    />
+  {/if}
 {/if}
 
 <style>
