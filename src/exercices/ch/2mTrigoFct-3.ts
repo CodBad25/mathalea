@@ -1,4 +1,3 @@
-import { cercleTrigo } from '../../lib/2d/cercleTrigo'
 import { orangeMathalea } from '../../lib/colors'
 import {
   addTrigoCircleSelection,
@@ -17,8 +16,6 @@ import {
 } from '../../lib/mathFonctions/trigo'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnCouleur, miseEnEvidence } from '../../lib/outils/embellissements'
-import { context } from '../../modules/context'
-import { mathalea2d } from '../../modules/mathalea2d'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -103,88 +100,50 @@ function buildQuestion(type: number): PlacementQuestion {
 }
 
 function renderCircleQuestion(exercice: Exercice, questionIndex: number) {
-  if (context.isHtml && exercice.interactif) {
-    return addTrigoCircleSelection(exercice, questionIndex, {
-      showAngleLabels: true,
-      showCoordinateLabels: Boolean(exercice.sup2),
-      style: 'display:block; max-width: 46rem;',
-    })
-  }
-  return mathalea2d(
-    {
-      xmin: -3.6,
-      ymin: -3.7,
-      xmax: 3.6,
-      ymax: 3.7,
-      pixelsParCm: 90,
-      scale: 1,
-      display: 'block',
-    },
-    cercleTrigo({ radius: 2, showCoordinates: Boolean(exercice.sup2) }),
-  )
+  return addTrigoCircleSelection(exercice, questionIndex, {
+    showAngleLabels: true,
+    showCoordinateLabels: Boolean(exercice.sup2),
+    style: 'display:block; max-width: 46rem;',
+    interactivityOn: exercice.interactif,
+  })
 }
 
-function renderCorrectionCircle(branches: CorrectionBranch[]) {
-  return mathalea2d(
-    {
-      xmin: -3.6,
-      ymin: -3.7,
-      xmax: 3.6,
-      ymax: 3.7,
-      pixelsParCm: 90,
-      scale: 1,
-      display: 'block',
-    },
-    cercleTrigo({
-      radius: 2,
-      showCoordinates: true,
-      markedPoints: branches.flatMap((branch) =>
-        branch.solutions.map((solution) => ({
-          angle: solution.angle.angleRad,
-          color: solution.color,
-        })),
-      ),
-    }),
-  )
+function renderCorrectionCircle(
+  exercice: Exercice,
+  questionIndex: number,
+  branches: CorrectionBranch[],
+) {
+  return addTrigoCircleSelection(exercice, questionIndex, {
+    id: `trigo-circle-selection-correctionEx${exercice.numeroExercice}Q${questionIndex}`,
+    showAngleLabels: true,
+    showCoordinateLabels: true,
+    style: 'display:block; max-width: 46rem;',
+    interactivityOn: false,
+    markedPoints: branches.flatMap((branch) =>
+      branch.solutions.map((solution) => ({
+        angle: solution.angle.angleRad,
+        color: solution.color,
+      })),
+    ),
+  })
 }
 
 function renderFinalAnswerCircle(
   solutions: TrigoCircleAngle[],
-  /* exercice: IExercice,
-  questionIndex: number,*/
+  exercice: Exercice,
+  questionIndex: number,
 ) {
-  /*  if (context.isHtml) {
-    const cercleCorr = addTrigoCircleSelection(exercice, questionIndex, {
-      showAngleLabels: true,
-      showCoordinateLabels: true,
-      style: 'display:block; max-width: 40rem;',
-      value: trigoCircleSelectionValue(
-        solutions.map((solution) => solution.angleRad),
-      ),
-      interactivityOn: false,
-    })
-    return cercleCorr
-  }
-*/
-  return mathalea2d(
-    {
-      xmin: -3.6,
-      ymin: -3.7,
-      xmax: 3.6,
-      ymax: 3.7,
-      pixelsParCm: 90,
-      scale: 1,
-      display: 'block',
-    },
-    cercleTrigo({
-      radius: 2,
-      showCoordinates: true,
-      markedPoints: solutions.map((solution) => ({
-        angle: solution.angleRad,
-        color: orangeMathalea,
-      })),
-    }),
-  )
+  return addTrigoCircleSelection(exercice, questionIndex, {
+    id: `trigo-circle-selection-finalEx${exercice.numeroExercice}Q${questionIndex}`,
+    showAngleLabels: true,
+    showCoordinateLabels: true,
+    style: 'display:block; max-width: 46rem;',
+    interactivityOn: false,
+    markedPoints: solutions.map((solution) => ({
+      angle: solution.angleRad,
+      color: orangeMathalea,
+    })),
+  })
 }
 
 function texEquation(fn: SinCosTrigoFunctionName, valueTex: string) {
@@ -332,9 +291,9 @@ export default class PlacerSolutionsEquationTrigoCercle extends Exercice {
             : `${texColoredBranches(branches)}.<br>`
       }
       texteCorr += `${renderBranchDetails(branches)}<br>`
-      texteCorr += renderCorrectionCircle(branches)
+      texteCorr += renderCorrectionCircle(this, i, branches)
       texteCorr += `Sur $[0;2\\pi[$, on obtient donc $S=${miseEnEvidence(texSolutionList(question.solutions))}$.<br>`
-      texteCorr += renderFinalAnswerCircle(question.solutions /* this, i*/)
+      texteCorr += renderFinalAnswerCircle(question.solutions, this, i)
 
       if (this.questionJamaisPosee(i, equation)) {
         this.listeQuestions[i] = texte

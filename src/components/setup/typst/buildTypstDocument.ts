@@ -1,4 +1,3 @@
-import { minimalCorrection } from './minimalCorrection'
 import {
   MATHALEA_FIGURE_BLOCK_HELPER,
   MATHALEA_FIGURE_HELPERS,
@@ -10,6 +9,7 @@ import {
   escapeTypstText,
   htmlToTypst,
 } from './latexToTypst'
+import { minimalCorrection } from './minimalCorrection'
 
 /**
  * Import du paquet exercise-bank (badges Exercice/Correction, banque).
@@ -23,18 +23,18 @@ import {
  * point d'insertion individuel entre eux (voir `buildVersionContent`).
  */
 export const EXERCISE_BANK_IMPORT =
-  '#import "@preview/exercise-bank:0.6.0": exo, exo-setup, exo-solution-box, exo-counter'
+  '#import "@preview/exercise-bank:0.6.1": exo, exo-setup, exo-solution-box, exo-counter'
 
 /** Hauteur (et largeur) des QR-codes placés au coin des exercices (`qr-size`) */
 const QRCODE_SIZE = '1.8cm'
+const QRCODE_POSITION = '"tasks"'
 
 /**
  * Import du paquet breather (gestion automatique des espaces verticaux) :
  * `#show: breathe` écarte les lignes contenant des maths hautes (fractions
  * « display », matrices…) juste ce qu'il faut, sans toucher aux autres.
  */
-export const BREATHER_IMPORT =
-  '#import "@preview/breather:0.1.0": breathe'
+export const BREATHER_IMPORT = '#import "@preview/breather:0.1.0": breathe'
 
 /**
  * Repère invisible pour la palette de mise en page de l'aperçu : publie la
@@ -329,7 +329,8 @@ export function harvestCarryOver(code: string): TypstCarryOver {
     const matched = (start ?? startCorrection) as RegExpMatchArray
     const indent = matched[1]
     const num = Number(matched[2])
-    const endRegex = start != null ? CODE_OVERRIDE_END : CODE_OVERRIDE_CORRECTION_END
+    const endRegex =
+      start != null ? CODE_OVERRIDE_END : CODE_OVERRIDE_CORRECTION_END
     const content: string[] = []
     i++
     while (i < codeLines.length && !endRegex.test(codeLines[i])) {
@@ -1040,7 +1041,9 @@ export function buildStandaloneExerciseCode(
     true,
   )
   const generatedPart =
-    part === 'correction' ? generated[num - 1]?.correction : generated[num - 1]?.enonce
+    part === 'correction'
+      ? generated[num - 1]?.correction
+      : generated[num - 1]?.enonce
   const code = codeOverride ?? generatedPart ?? ''
   const codeLines = code.split('\n')
   const {
@@ -1161,9 +1164,7 @@ function buildCanVersionContent(
     }
     const questions = exercise.canQuestions ?? exercise.questions
     for (const [i, question] of questions.entries()) {
-      enonces.push(
-        `${i === 0 ? anchor : ''}${htmlToTypst(question, figures)}`,
-      )
+      enonces.push(`${i === 0 ? anchor : ''}${htmlToTypst(question, figures)}`)
       reponses.push(htmlToTypst(exercise.canAnswers?.[i] ?? '', figures))
       corrections.push(htmlToTypst(exercise.corrections[i] ?? '', figures))
     }
@@ -1279,7 +1280,9 @@ function buildVersionContent(
   /** Insertions de la palette à réémettre juste avant la correction de l'exercice `num` */
   const insertionCorrectionLines = (num: number, indent: string): string[] =>
     (carryOver.insertionsCorrection?.[num] ?? []).map((line) =>
-      exportMode ? `${indent}${line}` : `${indent}${line} ${INSERTION_CORRECTION_TAG}`,
+      exportMode
+        ? `${indent}${line}`
+        : `${indent}${line} ${INSERTION_CORRECTION_TAG}`,
     )
   // Banque d'exercices (paquet exercise-bank) : chaque exercice regroupe
   // son énoncé et sa correction dans un `#let exN = exo.with(...)`, puis
@@ -1361,7 +1364,8 @@ function buildVersionContent(
         // le repère et l'insertion précèdent directement le contenu, déjà
         // « avant la correction »
         const num = k + 1
-        if (emitAnchors) renderLines.push(`    #mathalea-anchor("corr", ${num})`)
+        if (emitAnchors)
+          renderLines.push(`    #mathalea-anchor("corr", ${num})`)
         renderLines.push(...insertionCorrectionLines(num, '    '))
         renderLines.push(indentContentBlock(indentContentBlock(correction)))
         renderLines.push('')
@@ -1420,8 +1424,7 @@ function buildVersionContent(
 
     for (const group of groups) {
       for (const k of group.members) {
-        const suffix =
-          k === group.head ? '' : ' (fusionné avec le précédent)'
+        const suffix = k === group.head ? '' : ' (fusionné avec le précédent)'
         bankLines.push(`// ----- Exercice ${k + 1}${suffix} -----`)
       }
       bankLines.push(`#let ${varPrefix}ex${group.head + 1} = exo.with(`)
@@ -1494,7 +1497,8 @@ function buildVersionContent(
       renderLines.push(`  #${varPrefix}ex${group.head + 1}()`)
       // repère "gap" du dernier membre du groupe : seule limite, entre deux
       // groupes, où un saut de page/colonne ou une insertion a un sens
-      if (emitAnchors) renderLines.push(`  #mathalea-anchor("gap", ${last + 1})`)
+      if (emitAnchors)
+        renderLines.push(`  #mathalea-anchor("gap", ${last + 1})`)
       renderLines.push(...insertionLines(last + 1, '  '))
     }
     renderLines.push(']')
@@ -1528,16 +1532,15 @@ function buildVersionContent(
         if (emitAnchors) {
           renderLines.push(`    #mathalea-anchor("corr", ${group.head + 1})`)
         }
-        renderLines.push(
-          ...insertionCorrectionLines(group.head + 1, '    '),
-        )
+        renderLines.push(...insertionCorrectionLines(group.head + 1, '    '))
         const correctionBody = correctionMembers
           .map((k) => built[k].correction as string)
           .join('\n\n')
         // même identifiant que le badge de l'énoncé (voir la construction de
         // `exo.with(...)` ci-dessus) : explicite (`ref`) pour un groupe d'un
         // seul exercice, sinon celui qu'exo() aurait généré lui-même
-        const ref = group.members.length === 1 ? exercises[group.head].ref.trim() : ''
+        const ref =
+          group.members.length === 1 ? exercises[group.head].ref.trim() : ''
         const exerciseId = ref.length > 0 ? ref : `exo-${num}`
         renderLines.push('    #exo-solution-box(')
         renderLines.push(`      number: ${num},`)
@@ -1673,7 +1676,12 @@ export function buildTypstDocument(
   // en mode « Course aux nombres » il n'y a pas de titre d'exercice à
   // habiller : le paquet exercise-bank n'a rien à faire dans le document
   const usesExerciseBank = !options.mergeExercises && !options.canMode
-  if (usesTasks || usesExerciseBank || options.autoVerticalSpacing || usesVarTable) {
+  if (
+    usesTasks ||
+    usesExerciseBank ||
+    options.autoVerticalSpacing ||
+    usesVarTable
+  ) {
     lines.push('// ----- Paquets -----')
     if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
     if (usesTasks) lines.push(TASKIZE_IMPORT)
@@ -1852,6 +1860,8 @@ export function buildTypstDocument(
     lines.push(`  show-id: ${options.showExerciseRefs},`)
     lines.push(`  exercise-above: ${options.exerciseSpacing}em,`)
     if (usesQrCode) lines.push(`  qr-size: ${QRCODE_SIZE},`)
+    if (usesQrCode) lines.push(`  qr-position: ${QRCODE_POSITION},`)
+
     // styles « en marge » : colonne compacte pour ne pas étrangler le
     // contenu (le paquet dimensionne sinon la colonne sur « Correction 100 »).
     // On règle ici la largeur des énoncés ; celle des corrections est
@@ -1873,8 +1883,12 @@ export function buildTypstDocument(
     for (const [index, figure] of figures.entries()) {
       const figNum = index + 1
       lines.push(`#let fig-${figNum} = ${figure}`)
-      lines.push(`#let fig-${figNum}-zoom = ${carryOver.figureZoom?.[figNum] ?? 1}`)
-      lines.push(`#let fig-${figNum}-align = ${carryOver.figureAlign?.[figNum] ?? 'left'}`)
+      lines.push(
+        `#let fig-${figNum}-zoom = ${carryOver.figureZoom?.[figNum] ?? 1}`,
+      )
+      lines.push(
+        `#let fig-${figNum}-align = ${carryOver.figureAlign?.[figNum] ?? 'left'}`,
+      )
     }
     lines.push('')
   }

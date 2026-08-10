@@ -58,6 +58,12 @@ conditions initiales avec les indices du programme complet. Pour éviter les
 ambiguïtés, la numérotation affichée des instructions visibles commence après
 les étapes consommées par les conditions initiales.
 
+Quand l'éditeur HTML est interactif, il affiche automatiquement au-dessus de la
+zone « Ajouter une instruction » une figure statique correspondant aux
+conditions initiales. Les exercices n'ont donc pas besoin d'ajouter une figure
+`mathalea2d` séparée uniquement pour ce contexte. Si aucune condition initiale
+n'est fournie, aucun aperçu SVG n'est affiché.
+
 Dans l'animation de l'éditeur, les instruments nécessaires au programme sont
 affichés dès le départ dans une zone de rangement en haut à droite du SVG. Après
 chaque instruction, l'éditeur les remet silencieusement dans cette zone avec une
@@ -243,10 +249,29 @@ La valeur `longueur` désigne la longueur totale du nouveau tracé.
 | `protege`                        | Propriété d'une instruction initiale qui la protège contre l'édition, la suppression et le déplacement.                                                                            |
 | `instructionsInitialesProtegees` | Indices des instructions initiales à protéger.                                                                                                                                     |
 | `programmeInitialProtege`        | Raccourci pour protéger tout le programme initial.                                                                                                                                 |
+| `programmeAttendu`               | Programme complet attendu, utilisé seulement pour cadrer la figure imprimable de l'énoncé quand `interactivityOn` vaut `true`.                                                    |
 | `loadSaveButtons`                | Affiche les boutons de sauvegarde et chargement JSON.                                                                                                                              |
 | `allowFullscreen`                | Ajoute le bouton de test de l'animation en plein écran.                                                                                                                            |
 | `interactivityOn`                | Désactive l'édition quand la valeur vaut `false` : la zone d'ajout et les boutons de modification des lignes sont masqués, mais le bouton « Tester l'animation » reste disponible. |
 | `verifyCallbackName`             | Nom d'une callback de vérification enregistrée avec `ElementIepEditeur.registerVerificationCallback()`.                                                                            |
+
+## Rendu imprimable
+
+Hors HTML, `addEditeurIep()` retourne une figure statique sans instruments :
+
+- en LaTeX : un `tikzpicture` ;
+- en Typst : une image SVG embarquée dans un marqueur `<mathalea-typst>`.
+
+Quand `interactivityOn` vaut `true`, la figure affichée à l'élève ne contient
+que les conditions initiales. Le cadre est toutefois calculé pour contenir toute
+la construction attendue si elle est disponible. Le helper essaie alors de lire
+un programme IEP JSON depuis `autoCorrection[questionIndex].valeur.reponse.value`
+(renseigné par `handleAnswers()`), ou utilise l'option `programmeAttendu` si
+elle est fournie explicitement.
+
+Quand `interactivityOn` vaut `false`, la figure imprimable contient les
+conditions initiales et tout le `programmeInitial`, ce qui convient à une
+correction statique.
 
 ## Vérification interactive
 

@@ -18,7 +18,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const egaliteFillesGarcons = true
+export const tags = ['égalité filles-garçons']
 
 /**
  * @author Sur le chemin de l'égalité en mathématiques pour tous les élèves - Académie de Versailles

@@ -8,7 +8,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const egaliteFillesGarcons = true
+export const tags = ['égalité filles-garçons']
 
 /**
  * @author Femmes et numérique / mathématiques - fiches "super-pouvoirs"

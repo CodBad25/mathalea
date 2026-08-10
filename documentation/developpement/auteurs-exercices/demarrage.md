@@ -124,5 +124,34 @@ exemple complet.
 3. Relancez `pnpm install` si un module manque.
 4. Consultez `git status` avant toute réinstallation ou suppression.
 
+Si la page reste bloquée sur l'animation du dé MathALÉA après un redémarrage de
+Vite, ouvrez la console ou l'onglet Réseau du navigateur. Une erreur du type
+`504 (Outdated Optimize Dep)` ou `Outdated Optimize Dep` indique souvent que le
+navigateur demande une dépendance pré-bundlée que le serveur Vite considère
+périmée. Les dépendances servies depuis `node_modules/.vite/deps` sont mises en
+cache très longtemps côté navigateur ; le problème peut donc ne toucher qu'un
+poste ou qu'un profil navigateur.
+
+Dans ce cas, commencez par ouvrir la page dans une fenêtre de navigation privée.
+Si elle démarre correctement, supprimez les données du site `localhost:5173`
+dans le navigateur habituel, ou gardez les DevTools ouverts avec l'option réseau
+`Disable cache` pendant le développement. Il n'est alors pas nécessaire de
+supprimer `node_modules/.vite` à chaque relance.
+
+Pour diagnostiquer :
+
+```sh
+node --version
+pnpm --version
+node ./node_modules/vite/bin/vite.js --version
+```
+
+Après un changement de version Node ou pnpm, relancez `pnpm install`, puis
+démarrez Vite avec une réoptimisation explicite :
+
+```sh
+pnpm dev -- --force
+```
+
 Les workflows Git, build et CI plus avancés sont décrits dans
 [Contribuer au moteur](../maintenance-moteur/contribution/workflows.md).

@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
  */
 export const uuid = 'b7e92'
 export const refs = {
-  'fr-fr': ['TSA3-24'],
+  'fr-fr': ['TSA3-40'],
   'fr-ch': [],
 }
 

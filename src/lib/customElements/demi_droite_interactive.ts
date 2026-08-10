@@ -1,6 +1,6 @@
 import { context } from '../../modules/context'
 import { fraction } from '../../modules/fractions'
-import { bleuMathalea } from '../colors'
+import { bleuMathalea, parseHexColor } from '../colors'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
@@ -33,6 +33,41 @@ function formatPointValue(pointValue: number, partsCount: number): string {
     return String(pointValue)
   }
   return fraction(numerator, partsCount).texFraction
+}
+
+function formatDecimal(value: number): string {
+  return Number.isFinite(value) ? String(Number(value.toFixed(4))) : '0'
+}
+
+function escapeLatexText(value: string): string {
+  return value.replace(/[\\{}_$#%&]/g, (character) => `\\${character}`)
+}
+
+function escapeTypstText(value: string): string {
+  return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+}
+
+function escapeXmlText(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
+function tikzColorDefinition(color: string) {
+  const parsedColor = parseHexColor(color)
+  if (parsedColor == null) {
+    return { definition: '', colorName: 'black' }
+  }
+  return {
+    definition: `\\definecolor{demiDroiteInteractivePointColor}{HTML}{${parsedColor.withoutHash}}\n`,
+    colorName: 'demiDroiteInteractivePointColor',
+  }
+}
+
+function typstStringLiteral(value: string) {
+  return `"${escapeTypstText(value)}"`
 }
 
 class DemiDroiteInteractiveElement extends MathaleaCustomElement {
@@ -172,6 +207,15 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       questionIndex?: number
     },
   ): string {
+    if (context.isTypst || !context.isHtml) {
+      const element = new DemiDroiteInteractiveElement()
+      element.applyOptions(options)
+      if (context.isTypst) {
+        return `<mathalea-typst>${element.renderTypst()}</mathalea-typst>`
+      }
+      return element.renderLatex()
+    }
+
     const idAttribute = options.id
       ? ` id="${options.id}"`
       : `id="demi-droite-interactiveEx${options.numeroExercice ?? 0}Q${options.questionIndex ?? 0}"`
@@ -189,6 +233,30 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     )
 
     return `<demi-droite-interactive ${idAttribute} x0="${x0}" initial-t="${initialT}" min-t="${minT}" max-t="${maxT}" show-negative="${showNegative}" multiple-points="${multiplePoints}" interactivity-on="${interactivityOn}" parts-count="${partsCount}" points="${pointsAttribute}" points-color="${pointsColor}"></demi-droite-interactive>`
+  }
+
+  private applyOptions(options: DemiDroiteInteractiveOptions = {}): void {
+    this.pointsColor = options.pointsColor ?? bleuMathalea
+    this.minT = options.minT ?? 2
+    this.maxT = options.maxT ?? 10
+    this.initialTMax = options.initialT ?? this.minT
+    this.tMax = Math.max(this.minT, Math.min(this.maxT, this.initialTMax))
+    this.initialX0 = options.x0 ?? 0
+    this.x0 = this.initialX0
+    this.initialPartsCount = Math.max(1, options.partsCount ?? 1)
+    this.partsCount = this.initialPartsCount
+    this.showNegative = options.showNegative ?? false
+    this.initialShowNegative = this.showNegative
+    this.allowMultiplePoints = options.multiplePoints ?? false
+    this.interactivityOn = options.interactivityOn ?? true
+    this.initialPoints = (options.points ?? []).map((point, index) => ({
+      pointValue: Number(point.pointValue),
+      label:
+        typeof point.label === 'string' && point.label.length > 0
+          ? point.label
+          : String.fromCharCode(65 + index),
+    }))
+    this.points = this.initialPoints.map((point) => ({ ...point }))
   }
 
   connectedCallback() {
@@ -335,6 +403,142 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     }
 
     return Array.from(values).sort((a, b) => a - b)
+  }
+
+  private getStaticGeometry() {
+    const width = 12
+    const axisStart = 0
+    const axisEnd = width
+    const valuesEnd = width - 0.6
+    const valuesLength = valuesEnd - axisStart
+    const minValue = this.getAxisStartValue()
+    const maxValue = this.tMax
+    const totalAxis = maxValue - minValue
+    const xForValue = (value: number) => {
+      const ratio = totalAxis === 0 ? 0 : (value - minValue) / totalAxis
+      return axisStart + ratio * valuesLength
+    }
+    return {
+      axisStart,
+      axisEnd,
+      minValue,
+      maxValue,
+      xForValue,
+    }
+  }
+
+  protected renderLatex(): string {
+    const geometry = this.getStaticGeometry()
+    const availableValues = this.getAvailableValues()
+    const visiblePoints = this.interactivityOn ? [] : this.points
+    const pointColor = tikzColorDefinition(this.pointsColor)
+    const lines = [
+      `${pointColor.definition}\\begin{tikzpicture}[baseline]`,
+      `\\draw[->, line width=0.8pt] (${formatDecimal(geometry.axisStart)},0) -- (${formatDecimal(geometry.axisEnd)},0);`,
+    ]
+    const parts = this.getParts()
+    if (parts >= 2) {
+      for (let partIndex = 0; partIndex < parts; partIndex++) {
+        const segmentStartValue =
+          geometry.minValue +
+          (partIndex * (geometry.maxValue - geometry.minValue)) / parts
+        const segmentEndValue =
+          geometry.minValue +
+          ((partIndex + 1) * (geometry.maxValue - geometry.minValue)) / parts
+        const markerX = geometry.xForValue(
+          (segmentStartValue + segmentEndValue) / 2,
+        )
+        lines.push(
+          `\\draw[magenta, line width=0.35pt] (${formatDecimal(markerX - 0.08)},0.12) -- (${formatDecimal(markerX)},-0.12) -- (${formatDecimal(markerX + 0.08)},0.12);`,
+        )
+      }
+    }
+    for (const value of availableValues) {
+      const x = geometry.xForValue(value)
+      const isIntegerValue = Number.isInteger(value)
+      const tickHeight = isIntegerValue ? 0.34 : 0.24
+      lines.push(
+        `\\draw[line width=${isIntegerValue ? '0.8pt' : '0.55pt'}] (${formatDecimal(x)},${formatDecimal(-tickHeight / 2)}) -- (${formatDecimal(x)},${formatDecimal(tickHeight / 2)});`,
+      )
+      if (isIntegerValue) {
+        lines.push(
+          `\\node[below] at (${formatDecimal(x)},-0.2) {${formatDecimal(value)}};`,
+        )
+      }
+    }
+    for (const point of visiblePoints) {
+      const x = geometry.xForValue(point.pointValue)
+      lines.push(
+        `\\draw[${pointColor.colorName}, line width=0.9pt] (${formatDecimal(x - 0.12)},${formatDecimal(-0.12)}) -- (${formatDecimal(x + 0.12)},${formatDecimal(0.12)}) (${formatDecimal(x - 0.12)},${formatDecimal(0.12)}) -- (${formatDecimal(x + 0.12)},${formatDecimal(-0.12)});`,
+      )
+      lines.push(
+        `\\node[above, ${pointColor.colorName}] at (${formatDecimal(x)},0.55) {\\bfseries ${escapeLatexText(point.label)}};`,
+      )
+    }
+    lines.push('\\end{tikzpicture}')
+    return lines.join('\n')
+  }
+
+  protected renderTypst(): string {
+    const svg = this.renderStaticSvg()
+    return `#image(bytes(${typstStringLiteral(svg)}), format: "svg", width: 340pt)`
+  }
+
+  private renderStaticSvg(): string {
+    const geometry = this.getStaticGeometry()
+    const availableValues = this.getAvailableValues()
+    const visiblePoints = this.interactivityOn ? [] : this.points
+    const parts = this.getParts()
+    const pixelsPerUnit = 40
+    const marginX = 18
+    const axisY = 38
+    const width = geometry.axisEnd * pixelsPerUnit + marginX * 2
+    const height = visiblePoints.length > 0 ? 92 : 76
+    const xSvg = (x: number) => marginX + x * pixelsPerUnit
+    const lines = [
+      `<svg width="${formatDecimal(width)}" height="${height}" viewBox="0 0 ${formatDecimal(width)} ${height}" xmlns="http://www.w3.org/2000/svg">`,
+      '<g fill="none" stroke-linecap="round" stroke-linejoin="round">',
+      `<line x1="${xSvg(geometry.axisStart)}" y1="${axisY}" x2="${xSvg(geometry.axisEnd)}" y2="${axisY}" stroke="#111" stroke-width="1.6" />`,
+      `<path d="M ${xSvg(geometry.axisEnd - 0.24)} ${axisY - 5} L ${xSvg(geometry.axisEnd)} ${axisY} L ${xSvg(geometry.axisEnd - 0.24)} ${axisY + 5}" stroke="#111" stroke-width="1.6" />`,
+    ]
+    if (parts >= 2) {
+      for (let partIndex = 0; partIndex < parts; partIndex++) {
+        const segmentStartValue =
+          geometry.minValue +
+          (partIndex * (geometry.maxValue - geometry.minValue)) / parts
+        const segmentEndValue =
+          geometry.minValue +
+          ((partIndex + 1) * (geometry.maxValue - geometry.minValue)) / parts
+        const markerX = geometry.xForValue(
+          (segmentStartValue + segmentEndValue) / 2,
+        )
+        lines.push(
+          `<path d="M ${formatDecimal(xSvg(markerX - 0.08))} ${axisY - 5} L ${formatDecimal(xSvg(markerX))} ${axisY + 5} L ${formatDecimal(xSvg(markerX + 0.08))} ${axisY - 5}" stroke="#f050d0" stroke-width="1" />`,
+        )
+      }
+    }
+    for (const value of availableValues) {
+      const x = geometry.xForValue(value)
+      const isIntegerValue = Number.isInteger(value)
+      const tickHeight = isIntegerValue ? 0.34 : 0.24
+      lines.push(
+        `<line x1="${formatDecimal(xSvg(x))}" y1="${formatDecimal(axisY - (tickHeight * pixelsPerUnit) / 2)}" x2="${formatDecimal(xSvg(x))}" y2="${formatDecimal(axisY + (tickHeight * pixelsPerUnit) / 2)}" stroke="#111" stroke-width="${isIntegerValue ? '2' : '1.3'}" />`,
+      )
+      if (isIntegerValue) {
+        lines.push(
+          `<text x="${formatDecimal(xSvg(x))}" y="${axisY + 28}" text-anchor="middle" font-family="serif" font-size="13" fill="#222">${formatDecimal(value)}</text>`,
+        )
+      }
+    }
+    for (const point of visiblePoints) {
+      const x = geometry.xForValue(point.pointValue)
+      lines.push(
+        `<path d="M ${formatDecimal(xSvg(x) - 5)} ${axisY - 5} L ${formatDecimal(xSvg(x) + 5)} ${axisY + 5} M ${formatDecimal(xSvg(x) - 5)} ${axisY + 5} L ${formatDecimal(xSvg(x) + 5)} ${axisY - 5}" stroke="${escapeXmlText(this.pointsColor)}" stroke-width="2" />`,
+        `<text x="${formatDecimal(xSvg(x))}" y="${axisY - 24}" text-anchor="middle" font-family="serif" font-size="14" font-weight="700" fill="${escapeXmlText(this.pointsColor)}">${escapeXmlText(point.label)}</text>`,
+      )
+    }
+    lines.push('</g>', '</svg>')
+    return lines.join('')
   }
 
   private valueExistsOnAxis(testValue: number): boolean {
@@ -832,7 +1036,6 @@ export function demiDroiteInteractive(
   questionIndex: number,
   options?: DemiDroiteInteractiveOptions,
 ): string {
-  if (!context.isHtml) return ''
   return DemiDroiteInteractiveElement.create({
     ...options,
     numeroExercice: exercice.numeroExercice,

@@ -1,6 +1,4 @@
-import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { nommePolygone, polygone } from '../../lib/2d/polygones'
 import { rotation } from '../../lib/2d/transformations'
 import { angle } from '../../lib/2d/utilitairesGeometriques'
 import {
@@ -18,13 +16,11 @@ import {
   shuffle2tableaux,
 } from '../../lib/outils/arrayOutils'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
-import { mathalea2d } from '../../modules/mathalea2d'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 export const titre = 'Construire deux triangles de même aire'
@@ -179,22 +175,12 @@ export default class ConstruireDeuxTrianglesMemeAire extends Exercice {
       for (let j = 0; j < 3; j++) {
         S[j].nom = nomSommets[j]
       }
-      const leTriangle = polygone([S[0], S[1], S[2]])
-      const nom = nommePolygone(
-        leTriangle,
-        `${nomSommets[0]}${nomSommets[1]}${nomSommets[2]}`,
-      )
-      const objetsDessin: NestedObjetMathalea2dArray = [leTriangle, nom]
-      const typeConstruction = listeTypeConstruction[i]
 
+      const typeConstruction = listeTypeConstruction[i]
       texte +=
         typeConstruction === 'milieu'
-          ? `Dans le triangle $${nomDuTriangleEnonce}$, construire deux triangles de même aire en utilisant le milieu d’un côté.<br>`
-          : `Dans le triangle $${nomDuTriangleEnonce}$, construire le symétrique de $${S[1].nom}$ par rapport à $${S[0].nom}$, puis tracer deux triangles de même aire.<br>`
-      texte += mathalea2d(
-        Object.assign({}, fixeBordures(objetsDessin)),
-        objetsDessin,
-      )
+          ? `Dans le triangle $${nomDuTriangleEnonce}$, construire deux triangles de même aire.<br>`
+          : `Tracer le triangle $${nomDuTriangleEnonce}$ et construire un deuxième triangle de même aire.<br>`
 
       const SBis = [S[0], S[1], S[2]]
       const nomSommetsBis = [nomSommets[0], nomSommets[1], nomSommets[2]]
@@ -221,8 +207,13 @@ export default class ConstruireDeuxTrianglesMemeAire extends Exercice {
           y: SBis[2].y,
           protege: true,
         },
-        { type: 'polygoneRapide', sommets: nomSommets.slice(0, 3).join(',') },
       ]
+      if (typeConstruction === 'milieu') {
+        conditionsInitiales.push({
+          type: 'polygoneRapide',
+          sommets: `${S[0].nom},${S[1].nom},${S[2].nom}`,
+        })
+      }
       const instructionsDisponibles: TypeInstructionIep[] =
         typeConstruction === 'milieu'
           ? [

@@ -1,6 +1,5 @@
 import { Labyrinthe } from 'labyrinthe'
 import MathaleaLabyrintheElement from '../lib/customElements/MathaleaLabyrintheElement'
-import { context } from '../modules/context'
 import { listeQuestionsToContenu } from '../modules/outils'
 import Exercice from './Exercice'
 export const interactifReady = true
@@ -55,63 +54,31 @@ export default class ExerciceLabyrinthe extends Exercice {
 
     let texte = ''
     let texteCorr = ''
-    if (context.isHtml && !context.isTypst) {
-      texte = `${MathaleaLabyrintheElement.create({
-        id: `labyrintheEx${this.numeroExercice}Q0`,
-        seed: this.seed ?? '',
-        rows: this.rows,
-        cols: this.cols,
-        orientation: this.orientation,
-        goodAnswers: this.goodAnswers,
-        badAnswers: this.badAnswers,
-        disabled: !this.interactif,
-        numeroExercice: this.numeroExercice,
-      })}
-      <div id=${`feedbackEx${this.numeroExercice}Q${0}`}
-        class="ml-2 py-2 text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest"
-        >
-      </div>`
+    texte = MathaleaLabyrintheElement.create({
+      id: `labyrintheEx${this.numeroExercice}Q0`,
+      seed: this.seed ?? '',
+      rows: this.rows,
+      cols: this.cols,
+      orientation: this.orientation,
+      goodAnswers: this.goodAnswers,
+      badAnswers: this.badAnswers,
+      disabled: !this.interactif,
+      numeroExercice: this.numeroExercice,
+      feedback: true,
+      questionIndex: 0,
+    })
 
-      texteCorr = MathaleaLabyrintheElement.create({
-        id: `labyrintheCorrectionExo${this.numeroExercice}Question0`,
-        seed: this.seed ?? '',
-        rows: this.rows,
-        cols: this.cols,
-        orientation: this.orientation,
-        goodAnswers: this.goodAnswers,
-        badAnswers: this.badAnswers,
-        correction: true,
-        disabled: true,
-      })
-    } else {
-      if (context.isTypst) {
-        // La conversion HTML→Typst ne traite le LaTeX que dans du texte
-        // délimité par des `$...$` : le tableau du labyrinthe doit donc y
-        // être enveloppé pour être reconnu et transformé en `#table(...)`.
-        // Chaque cellule est remise en mode maths par ce convertisseur : les
-        // réponses des sous-classes qui portent déjà leurs propres `$...$`
-        // (ex. fractions) doivent en être retirées pour éviter un `$...$`
-        // imbriqué.
-        const stripMathDelimiters = (s: string): string => {
-          const trimmed = s.trim()
-          return trimmed.startsWith('$') &&
-            trimmed.endsWith('$') &&
-            trimmed.length > 1
-            ? trimmed.slice(1, -1)
-            : trimmed
-        }
-        this.labyrinthe.setValues(
-          this.goodAnswers.map(stripMathDelimiters),
-          this.badAnswers.map(stripMathDelimiters),
-        )
-        texte = `$${this.labyrinthe.generateLatex()}$`
-        texteCorr = `$${this.labyrinthe.generateLatexCorrection()}$`
-      } else {
-        this.labyrinthe.setValues(this.goodAnswers, this.badAnswers)
-        texte = `\n\n\\bigskip\n{\\renewcommand{\\arraystretch}{2}${this.labyrinthe.generateLatex()}}`
-        texteCorr = `{\\renewcommand{\\arraystretch}{2}${this.labyrinthe.generateLatexCorrection()}}`
-      }
-    }
+    texteCorr = MathaleaLabyrintheElement.create({
+      id: `labyrintheCorrectionExo${this.numeroExercice}Question0`,
+      seed: this.seed ?? '',
+      rows: this.rows,
+      cols: this.cols,
+      orientation: this.orientation,
+      goodAnswers: this.goodAnswers,
+      badAnswers: this.badAnswers,
+      correction: true,
+      disabled: true,
+    })
 
     this.listeQuestions[0] = texte
     this.listeCorrections[0] = texteCorr

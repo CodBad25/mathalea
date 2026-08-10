@@ -194,19 +194,6 @@
                 </span>
               </span>
             {/if}
-            {#if ending.egaliteFillesGarcons}
-              &nbsp;
-              <span
-                class="tooltip tooltip-bottom tooltip-neutral"
-                data-tip="Égalité filles-garçons : exercice sensibilisant aux stéréotypes de genre"
-              >
-                <span
-                  class="inline-flex flex-wrap items-center justify-center rounded-full bg-coopmaths dark:bg-coopmathsdark text-coopmaths-canvas dark:text-coopmathsdark-canvas text-[0.6rem] px-2 ml-2 font-semibold leading-normal whitespace-nowrap"
-                >
-                  ÉGALITÉ FG
-                </span>
-              </span>
-            {/if}
             {#if ending.features.qcmcam}
               &nbsp;
               <span
@@ -237,6 +224,17 @@
                   class="inline-flex h-3 w-3 text-coopmaths-warn-dark dark:text-coopmathsdark-warn-dark fill-coopmaths-warn-dark dark:fill-coopmathsdark-warn-dark stroke-coopmaths-warn-dark dark:stroke-coopmathsdark-warn-dark"
                 />
               </span>
+            {/if}
+            {#if ending.tags.length > 0}
+              <div class="pl-2">
+                {#each ending.tags as tag}
+                  <span
+                    class="inline-flex flex-wrap items-center justify-center rounded-full bg-coopmaths-struct-light dark:bg-coopmathsdark-struct-light text-coopmaths-canvas dark:text-coopmathsdark-canvas text-[0.6rem] px-2 py-px leading-snug font-semibold mr-1"
+                  >
+                    {tag}
+                  </span>
+                {/each}
+              </div>
             {/if}
           </div>
         {:else if resourceHasPlace(ending)}

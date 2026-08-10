@@ -1,4 +1,5 @@
 import Hms from '../../modules/Hms'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import Horloge from '../2d/horloge'
 import { orangeMathalea } from '../colors'
@@ -30,6 +31,14 @@ type ClockValueInput =
       minute?: number
       second?: number
     }
+
+function formatNumber(value: number): string {
+  return Number.isFinite(value) ? String(Number(value.toFixed(4))) : '0'
+}
+
+function typstStringLiteral(value: string): string {
+  return `"${value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
+}
 /**
  * Horloge interactive
  * @author Rémi Angot
@@ -196,15 +205,55 @@ export class InteractiveClock extends MathaleaCustomElement {
     const computedId =
       id ??
       `${InteractiveClock.elementTag}Ex${numeroExercice ?? 0}Q${questionIndex ?? 0}`
+    const createElementForStaticRender = () => {
+      const clock = new InteractiveClock()
+      clock.applyOptions({
+        id: computedId,
+        hour,
+        minute,
+        second,
+        interactivityOn,
+        showHands,
+        showSecond,
+      })
+      return clock
+    }
+
+    if (context.isTypst) {
+      return `<mathalea-typst>${createElementForStaticRender().renderTypst()}</mathalea-typst>`
+    }
+
+    if (!context.isHtml) return createElementForStaticRender().renderLatex()
+
     return `<interactive-clock id="${computedId}" hour="${hour}" minute="${minute}" second="${second}" interactivity-on="${interactivityOn}" showHands="${showHands}" showSecond="${showSecond}"></interactive-clock>`
   }
 
-  renderLatex() {
+  private applyOptions({
+    id,
+    hour = 0,
+    minute = 0,
+    second = 0,
+    interactivityOn = true,
+    showHands = true,
+    showSecond = false,
+  }: ClockDataOptions): void {
+    if (id != null) this.id = id
+    this.hour = hour
+    this.minute = minute
+    this.second = second
+    this.interactivityOn = interactivityOn
+    this.showHands = showHands
+    this.showSecond = showSecond
+  }
+
+  protected renderLatex(): string {
     const horloge = new Horloge(
       0,
       0,
       2,
-      new Hms({ hour: this.hour, minute: this.minute }),
+      this.showHands
+        ? new Hms({ hour: this.hour, minute: this.minute, second: this.second })
+        : undefined,
     )
     return mathalea2d(
       {
@@ -217,6 +266,65 @@ export class InteractiveClock extends MathaleaCustomElement {
       },
       horloge,
     )
+  }
+
+  protected renderTypst(): string {
+    return `#image(bytes(${typstStringLiteral(this.renderStaticSvg())}), format: "svg", width: 115pt)`
+  }
+
+  private renderStaticSvg(): string {
+    const size = 420
+    const center = size / 2
+    const radius = 190
+    const lines = [
+      `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">`,
+      `<circle cx="${center}" cy="${center}" r="${radius}" stroke="black" stroke-opacity="0.8" fill="none" stroke-width="2"/>`,
+      `<circle cx="${center}" cy="${center}" r="10" stroke="black" fill="black"/>`,
+    ]
+
+    for (let i = 1; i <= 12; i++) {
+      const angle = (i / 12) * 2 * Math.PI
+      const x = center + Math.sin(angle) * 152
+      const y = center - Math.cos(angle) * 152
+      lines.push(
+        `<text x="${formatNumber(x)}" y="${formatNumber(y + 7)}" text-anchor="middle" font-family="serif" font-size="22">${i}</text>`,
+      )
+    }
+
+    for (let i = 0; i < 60; i++) {
+      const angle = (i / 60) * 2 * Math.PI
+      const isHourTick = i % 5 === 0
+      const innerRadius = isHourTick ? 170 : 180
+      const outerRadius = 190
+      const x1 = center + Math.sin(angle) * innerRadius
+      const y1 = center - Math.cos(angle) * innerRadius
+      const x2 = center + Math.sin(angle) * outerRadius
+      const y2 = center - Math.cos(angle) * outerRadius
+      lines.push(
+        `<line x1="${formatNumber(x1)}" y1="${formatNumber(y1)}" x2="${formatNumber(x2)}" y2="${formatNumber(y2)}" stroke="black" stroke-width="${isHourTick ? 5 : 1.5}" stroke-linecap="round"/>`,
+      )
+    }
+
+    if (this.showHands) {
+      const hand = (
+        value: number,
+        total: number,
+        length: number,
+        width: number,
+        color = 'black',
+      ) => {
+        const angle = (value / total) * 2 * Math.PI
+        const x = center + Math.sin(angle) * length
+        const y = center - Math.cos(angle) * length
+        return `<line x1="${center}" y1="${center}" x2="${formatNumber(x)}" y2="${formatNumber(y)}" stroke="${color}" stroke-width="${width}" stroke-linecap="round"/>`
+      }
+      lines.push(hand((this.hour % 12) + this.minute / 60, 12, 95, 12))
+      lines.push(hand(this.minute + this.second / 60, 60, 145, 8))
+      if (this.showSecond) lines.push(hand(this.second, 60, 165, 3, 'red'))
+    }
+
+    lines.push('</svg>')
+    return lines.join('')
   }
 
   render() {

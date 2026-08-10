@@ -1,4 +1,4 @@
-import Exercice2F121 from '../2e/2F12-1'
+import Exercice2F121 from '../2e/2F23-1'
 export const titre =
   'Résoudre algébriquement une équation $f(x)=k$ avec la fonction carrée'
 export const interactifReady = true

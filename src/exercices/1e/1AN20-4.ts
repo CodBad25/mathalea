@@ -22,7 +22,7 @@ export const dateDeModifImportante = '26/09/2024'
 export const interactifReady = false
 export const uuid = 'e1890'
 export const refs = {
-  'fr-fr': ['1AN20-4'],
+  'fr-fr': ['1AN20-4','TSA3-14', 'TCA7-14'],
   'fr-ch': ['3mA3-1'],
 }
 

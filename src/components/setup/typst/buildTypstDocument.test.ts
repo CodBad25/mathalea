@@ -50,7 +50,7 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('#set page(paper: "a4"')
     expect(code).toContain("Fiche d'exercices")
     // banque exercise-bank : énoncé et correction regroupés
-    expect(code).toContain('#import "@preview/exercise-bank:0.6.0"')
+    expect(code).toContain('#import "@preview/exercise-bank:0.6.1"')
     expect(code).toContain('#let ex1 = exo.with(')
     expect(code).toContain('id: "6e23-1",')
     expect(code).toContain('exercise: [')
@@ -61,7 +61,7 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('#exo-solution-box(')
     expect(code).toContain('exercise-id: "6e23-1",')
     expect(code).toContain(
-      '#import "@preview/taskize:0.2.7": tasks, tasks-setup',
+      '#import "@preview/taskize:0.2.8": tasks, tasks-setup',
     )
     expect(code).toContain(
       '#tasks-setup(columns: "auto-fit", auto-fit-mode: "uniform", max-columns: 4)',
@@ -219,7 +219,7 @@ describe('buildTypstDocument', () => {
       }),
     ])
     expect(code).toContain(
-      '#import "@preview/taskize:0.2.7": tasks, tasks-setup',
+      '#import "@preview/taskize:0.2.8": tasks, tasks-setup',
     )
     expect(code).toContain('#let qcm-colonnes = 2')
     expect(code).toContain('#let qcm-bonne(')
@@ -890,7 +890,9 @@ describe('mode « Course aux nombres » (canMode)', () => {
       [],
       { exportMode: true },
     )
-    expect(code).toContain('#can-tableau(\n    (\n      [$1 + 1$],\n      [$2 + 2$],\n    ),\n    (\n      [],\n      [],\n    ),\n  )')
+    expect(code).toContain(
+      '#can-tableau(\n    (\n      [$1 + 1$],\n      [$2 + 2$],\n    ),\n    (\n      [],\n      [],\n    ),\n  )',
+    )
   })
 
   it('ne produit pas de section Corrections sans correction', () => {
@@ -904,7 +906,10 @@ describe('mode « Course aux nombres » (canMode)', () => {
   it('garde les repères de la palette qui ont un sens dans un tableau', () => {
     const code = buildTypstDocument(
       [
-        exercise({ questions: ['$1+1$', '$2+2$'], corrections: ['$2$', '$4$'] }),
+        exercise({
+          questions: ['$1+1$', '$2+2$'],
+          corrections: ['$2$', '$4$'],
+        }),
         exercise({ questions: ['$3+3$'], corrections: ['$6$'] }),
       ],
       canOptions,

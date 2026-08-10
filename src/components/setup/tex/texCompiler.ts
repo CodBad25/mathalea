@@ -30,6 +30,13 @@ export interface TexCompileResult {
   log: string
   /** Message court à afficher, `null` si la compilation a réussi */
   error: string | null
+  /**
+   * Vrai si `error` vient d'un échec réseau (service injoignable), et non
+   * d'un délai dépassé ou d'une erreur de compilation LaTeX. Permet à
+   * l'appelant de basculer automatiquement sur l'autre moteur sans avoir à
+   * analyser le texte du message.
+   */
+  unreachable: boolean
 }
 
 /** Vrai si l'erreur vient d'une annulation (nouvelle compilation, démontage) */
@@ -116,6 +123,7 @@ export async function compileTexToPdf(
         pdf: null,
         log: '',
         error: `La compilation a dépassé ${COMPILE_TIMEOUT_MS / 1000} secondes.`,
+        unreachable: false,
       }
     }
     return {
@@ -124,6 +132,7 @@ export async function compileTexToPdf(
       error: `Le service de compilation est injoignable (${
         error instanceof Error ? error.message : String(error)
       }).`,
+      unreachable: true,
     }
   }
 
@@ -133,8 +142,9 @@ export async function compileTexToPdf(
       pdf: null,
       log,
       error: `La compilation a échoué (erreur ${response.status}).`,
+      unreachable: false,
     }
   }
 
-  return { pdf: await response.blob(), log: '', error: null }
+  return { pdf: await response.blob(), log: '', error: null, unreachable: false }
 }

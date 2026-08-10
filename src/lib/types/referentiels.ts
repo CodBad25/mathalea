@@ -188,7 +188,6 @@ export interface ExamItemInReferentiel extends StaticItemInreferentiel {
  * @property {Feature[]} features : liste des fonctionnalités supplémentaires de l'exercice (`interactif` et/ou `amc`)
  * @property {string} datePublication : date de la publication de l'exercice (optionnel)
  * @property {string} dateModification : date de la *dernière* modification de l'exercice (optionnel)
- * @property {boolean} egaliteFillesGarcons : marque l'exercice comme issu du livret « Sur le chemin de l'égalité en mathématiques pour tous les élèves » (optionnel)
  */
 export interface ExerciceItemInReferentiel extends BaseItemInReferentiel {
   url: string
@@ -197,7 +196,6 @@ export interface ExerciceItemInReferentiel extends BaseItemInReferentiel {
   features: Features
   datePublication?: FrenchDateString
   dateModification?: FrenchDateString
-  egaliteFillesGarcons?: boolean
   typeExercice: 'alea'
 }
 

@@ -1,4 +1,4 @@
-import Exercice2F204 from '../2e/2F20-4'
+import Exercice2F204 from '../2e/2F30-4'
 
 export const titre = 'Résoudre graphiquement une équation'
 export const interactifReady = true

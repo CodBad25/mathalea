@@ -8,14 +8,12 @@ import {
 } from '../../src/lib/customElements/MathaleaCustomElement'
 import {
   addRelierEtiquettes,
-  RelierEtiquettesElement,
-} from '../../src/lib/customElements/RelierEtiquettesElement'
-import { toLatex } from '../../src/lib/interactif/relierEtiquettes/latexExport'
-import { toTypst } from '../../src/lib/interactif/relierEtiquettes/typstExport'
-import {
   parseLiens,
+  RelierEtiquettesElement,
+  toLatex,
+  toTypst,
   type RelierEtiquettesConfig,
-} from '../../src/lib/interactif/relierEtiquettes/types'
+} from '../../src/lib/customElements/RelierEtiquettesElement'
 import {
   exerciceInteractif,
   handleAnswers,

@@ -36,7 +36,7 @@ export const amcType = 'AMCHybride'
 export const uuid = 'f2352'
 
 export const refs = {
-  'fr-fr': ['3F12-4'],
+  'fr-fr': ['3F12-4', '2F11-4'],
   'fr-ch': ['11FA7-3', '1mF1-3'],
 }
 export default class ImageGraphique extends Exercice {

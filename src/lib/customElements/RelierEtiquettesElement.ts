@@ -1,25 +1,32 @@
 import { context } from '../../modules/context'
-import { toLatex } from '../interactif/relierEtiquettes/latexExport'
-import { toTypst } from '../interactif/relierEtiquettes/typstExport'
-import {
-  cleLien,
-  couleurLien,
-  type EtiquetteRelier,
-  type LienRelier,
-  normaliseEtiquettes,
-  parseEtiquettes,
-  parseLiens,
-  type RelierEtiquettesConfig,
-} from '../interactif/relierEtiquettes/types'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
 
-export type {
-  EtiquetteRelier,
-  LienRelier,
-} from '../interactif/relierEtiquettes/types'
+/** Une étiquette d'une des deux colonnes à relier. */
+export type EtiquetteRelier = {
+  /** Identifiant stable, utilisé dans les liens et dans la réponse de l'élève. */
+  id: string
+  /** Contenu affiché, éventuellement du LaTeX entre `$`. */
+  texte: string
+}
+
+/** Un lien tracé entre une étiquette de gauche et une étiquette de droite. */
+export type LienRelier = {
+  gauche: string
+  droite: string
+}
+
+/** État complet d'un composant « Relier les étiquettes ». */
+export type RelierEtiquettesConfig = {
+  gauche: EtiquetteRelier[]
+  droite: EtiquetteRelier[]
+  /** Liens déjà tracés (correction, restauration d'une copie). */
+  liens: LienRelier[]
+  /** Autorise plusieurs liens par étiquette (sinon un lien remplace le précédent). */
+  multiple: boolean
+}
 
 export type RelierEtiquettesOptions = {
   id?: string
@@ -55,6 +62,321 @@ const SEUIL_GLISSER = 8
 const SVG_NS = 'http://www.w3.org/2000/svg'
 const COULEUR_JUSTE = '#16a34a'
 const COULEUR_FAUX = '#dc2626'
+
+/**
+ * Palette des traits, partagée par les trois rendus (HTML, LaTeX, Typst) pour
+ * qu'un même lien garde sa couleur d'un format à l'autre. L'indice utilisé est
+ * celui de l'étiquette de gauche du lien.
+ */
+export const COULEURS_LIENS = [
+  '#2563eb',
+  '#ea580c',
+  '#059669',
+  '#7c3aed',
+  '#db2777',
+  '#ca8a04',
+  '#0891b2',
+  '#4d7c0f',
+] as const
+
+/** Couleur du trait d'un lien partant de l'étiquette de gauche d'indice `index`. */
+export function couleurLien(index: number): string {
+  const taille = COULEURS_LIENS.length
+  return COULEURS_LIENS[((index % taille) + taille) % taille]
+}
+
+/**
+ * Clé de comparaison d'un lien, indépendante de l'ordre de création.
+ * JSON plutôt qu'une concaténation : les identifiants étant libres, deux
+ * couples différents ne doivent pas pouvoir produire la même clé.
+ */
+export function cleLien(lien: LienRelier): string {
+  return JSON.stringify([lien.gauche, lien.droite])
+}
+
+/** Normalise une étiquette donnée sous forme de chaîne ou d'objet. */
+export function normaliseEtiquettes(
+  etiquettes: (string | EtiquetteRelier)[],
+  prefixe: string,
+): EtiquetteRelier[] {
+  return etiquettes.map((etiquette, index) =>
+    typeof etiquette === 'string'
+      ? { id: `${prefixe}${index}`, texte: etiquette }
+      : { id: etiquette.id ?? `${prefixe}${index}`, texte: etiquette.texte },
+  )
+}
+
+/** Relit une liste de liens sérialisée (chaîne JSON, tableau ou `undefined`). */
+export function parseLiens(value: unknown): LienRelier[] {
+  if (typeof value === 'string') {
+    if (value.trim() === '') return []
+    try {
+      return parseLiens(JSON.parse(value))
+    } catch {
+      return []
+    }
+  }
+  if (!Array.isArray(value)) return []
+  return value.filter(
+    (lien): lien is LienRelier =>
+      typeof lien === 'object' &&
+      lien !== null &&
+      typeof lien.gauche === 'string' &&
+      typeof lien.droite === 'string',
+  )
+}
+
+/** Relit une liste d'étiquettes sérialisée (attribut HTML ou tableau). */
+export function parseEtiquettes(value: unknown): EtiquetteRelier[] {
+  if (typeof value === 'string') {
+    if (value.trim() === '') return []
+    try {
+      return parseEtiquettes(JSON.parse(value))
+    } catch {
+      return []
+    }
+  }
+  if (!Array.isArray(value)) return []
+  return value.filter(
+    (etiquette): etiquette is EtiquetteRelier =>
+      typeof etiquette === 'object' &&
+      etiquette !== null &&
+      typeof etiquette.id === 'string' &&
+      typeof etiquette.texte === 'string',
+  )
+}
+
+/** Largeur d'une étiquette 16/9, en cm pour le rendu LaTeX. */
+const LARGEUR_ETIQUETTE_LATEX = 3.2
+/** Hauteur d'une étiquette 16/9, en cm pour le rendu LaTeX. */
+const HAUTEUR_ETIQUETTE_LATEX = 1.8
+/** Largeur du couloir entre les deux colonnes, en cm pour le rendu LaTeX. */
+const ECART_COLONNES_LATEX = 4
+/** Espace vertical entre deux étiquettes d'une même colonne, en cm. */
+const ECART_LIGNES_LATEX = 0.5
+/** Rayon des points de raccordement, en pt. */
+const RAYON_POINT_LATEX = 1.6
+
+/** Couleur TikZ inline à partir d'une couleur hexadécimale `#rrggbb`. */
+function couleurTikz(hex: string): string {
+  const rouge = Number.parseInt(hex.slice(1, 3), 16)
+  const vert = Number.parseInt(hex.slice(3, 5), 16)
+  const bleu = Number.parseInt(hex.slice(5, 7), 16)
+  return `{rgb,255:red,${rouge};green,${vert};blue,${bleu}}`
+}
+
+/** Ordonnée du centre de l'étiquette d'indice `index` dans une colonne de `nb` étiquettes. */
+function ordonneeLatex(index: number, nb: number, nbMax: number): number {
+  const pas = HAUTEUR_ETIQUETTE_LATEX + ECART_LIGNES_LATEX
+  const decalage = ((nbMax - nb) * pas) / 2
+  return -(index * pas + decalage)
+}
+
+/** Arrondi court, pour ne pas polluer le code LaTeX de décimales inutiles. */
+function cm(valeur: number): string {
+  return Number(valeur.toFixed(3)).toString()
+}
+
+export function toLatex(config: RelierEtiquettesConfig): string {
+  const { gauche, droite, liens } = config
+  const nbMax = Math.max(gauche.length, droite.length)
+  if (nbMax === 0) return ''
+
+  const xDroite = LARGEUR_ETIQUETTE_LATEX + ECART_COLONNES_LATEX
+  const lignes: string[] = []
+  lignes.push('\\begin{center}')
+  lignes.push('\\begin{tikzpicture}[')
+  lignes.push('  etiquetteRelier/.style={')
+  lignes.push('    draw=black!45,')
+  lignes.push('    line width=0.6pt,')
+  lignes.push('    rounded corners=3pt,')
+  lignes.push(`    minimum width=${cm(LARGEUR_ETIQUETTE_LATEX)}cm,`)
+  lignes.push(`    minimum height=${cm(HAUTEUR_ETIQUETTE_LATEX)}cm,`)
+  lignes.push(`    text width=${cm(LARGEUR_ETIQUETTE_LATEX - 0.4)}cm,`)
+  lignes.push('    align=center,')
+  lignes.push('    inner sep=2pt')
+  lignes.push('  }')
+  lignes.push(']')
+
+  gauche.forEach((etiquette, index) => {
+    const y = ordonneeLatex(index, gauche.length, nbMax)
+    lignes.push(
+      `\\node[etiquetteRelier] (relierG${index}) at (0,${cm(y)}) {${etiquette.texte}};`,
+    )
+  })
+  droite.forEach((etiquette, index) => {
+    const y = ordonneeLatex(index, droite.length, nbMax)
+    lignes.push(
+      `\\node[etiquetteRelier] (relierD${index}) at (${cm(xDroite)},${cm(y)}) {${etiquette.texte}};`,
+    )
+  })
+
+  gauche.forEach((_, index) => {
+    lignes.push(
+      `\\fill[black!45] (relierG${index}.east) circle (${RAYON_POINT_LATEX}pt);`,
+    )
+  })
+  droite.forEach((_, index) => {
+    lignes.push(
+      `\\fill[black!45] (relierD${index}.west) circle (${RAYON_POINT_LATEX}pt);`,
+    )
+  })
+
+  const indexGauche = new Map(gauche.map((etiquette, i) => [etiquette.id, i]))
+  const indexDroite = new Map(droite.map((etiquette, i) => [etiquette.id, i]))
+  for (const lien of liens) {
+    const i = indexGauche.get(lien.gauche)
+    const j = indexDroite.get(lien.droite)
+    if (i === undefined || j === undefined) continue
+    lignes.push(
+      `\\draw[line width=1pt, draw=${couleurTikz(couleurLien(i))}] (relierG${i}.east) -- (relierD${j}.west);`,
+    )
+  }
+
+  lignes.push('\\end{tikzpicture}')
+  lignes.push('\\end{center}')
+  return lignes.join('\n')
+}
+
+/** Largeur d'une étiquette 16/9, en pt, pour le rendu Typst. */
+const LARGEUR_ETIQUETTE_TYPST = 91
+/** Hauteur d'une étiquette 16/9, en pt, pour le rendu Typst. */
+const HAUTEUR_ETIQUETTE_TYPST = 51
+/** Largeur du couloir entre les deux colonnes, en pt (4 cm). */
+const ECART_COLONNES_TYPST = 113
+/** Espace vertical entre deux étiquettes d'une même colonne, en pt. */
+const ECART_LIGNES_TYPST = 14
+/** Rayon des points de raccordement, en pt. */
+const RAYON_POINT_TYPST = 2
+
+function latexFragmentToTypstMath(latex: string): string {
+  let s = latex
+  s = s.replace(/\\d?frac\{([^{}]*)\}\{([^{}]*)\}/g, '($1)/($2)')
+  s = s.replace(/\\sqrt\{([^{}]*)\}/g, 'sqrt($1)')
+  s = s.replace(/\\text(?:rm|bf|it)?\{([^{}]*)\}/g, '"$1"')
+  s = s.replace(/\\(?:geqslant|geqq|geq|ge)\b/g, '>=')
+  s = s.replace(/\\(?:leqslant|leqq|leq|le)\b/g, '<=')
+  s = s.replace(/\\(?:neq|ne)\b/g, '!=')
+  s = s.replace(/\\infty\b/g, 'infinity')
+  s = s.replace(/\\pm\b/g, 'plus.minus')
+  s = s.replace(/\\times\b/g, 'times')
+  s = s.replace(/\\div\b/g, 'div')
+  s = s.replace(/\\cdot\b/g, 'dot.op')
+  s = s.replace(/\\,/g, 'thin')
+  s = s.replace(/\\%/g, '%')
+  return s
+}
+
+/** Échappe le texte destiné au balisage Typst. */
+function echappeTexteTypst(texte: string): string {
+  return texte.replace(/[\\#$[\]*_`<>@~]/g, (caractere) => `\\${caractere}`)
+}
+
+export function contenuEtiquetteTypst(texte: string): string {
+  return texte
+    .split('$')
+    .map((fragment, index) =>
+      index % 2 === 1
+        ? `$${latexFragmentToTypstMath(fragment)}$`
+        : echappeTexteTypst(fragment),
+    )
+    .join('')
+}
+
+function ordonneeTypst(index: number, nb: number, nbMax: number): number {
+  const pas = HAUTEUR_ETIQUETTE_TYPST + ECART_LIGNES_TYPST
+  const decalage = ((nbMax - nb) * pas) / 2
+  return index * pas + decalage
+}
+
+function pt(valeur: number): string {
+  return `${Number(valeur.toFixed(2))}pt`
+}
+
+export function toTypst(config: RelierEtiquettesConfig): string {
+  const { gauche, droite, liens } = config
+  const nbMax = Math.max(gauche.length, droite.length)
+  if (nbMax === 0) return ''
+
+  const pas = HAUTEUR_ETIQUETTE_TYPST + ECART_LIGNES_TYPST
+  const largeur = 2 * LARGEUR_ETIQUETTE_TYPST + ECART_COLONNES_TYPST
+  const hauteur = nbMax * pas - ECART_LIGNES_TYPST
+  const xDroite = LARGEUR_ETIQUETTE_TYPST + ECART_COLONNES_TYPST
+
+  const lignes: string[] = []
+  lignes.push(
+    `#align(center)[#block(width: ${pt(largeur)}, height: ${pt(hauteur)})[`,
+  )
+
+  const etiquette = (x: number, y: number, contenu: string) =>
+    `  #place(top + left, dx: ${pt(x)}, dy: ${pt(y)}, box(` +
+    `width: ${pt(LARGEUR_ETIQUETTE_TYPST)}, height: ${pt(HAUTEUR_ETIQUETTE_TYPST)}, ` +
+    'radius: 4pt, stroke: 0.6pt + luma(55%), inset: 5pt, ' +
+    `align(center + horizon)[${contenu}]))`
+
+  gauche.forEach((item, index) => {
+    lignes.push(
+      etiquette(
+        0,
+        ordonneeTypst(index, gauche.length, nbMax),
+        contenuEtiquetteTypst(item.texte),
+      ),
+    )
+  })
+  droite.forEach((item, index) => {
+    lignes.push(
+      etiquette(
+        xDroite,
+        ordonneeTypst(index, droite.length, nbMax),
+        contenuEtiquetteTypst(item.texte),
+      ),
+    )
+  })
+
+  const ancreGauche = (index: number) => ({
+    x: LARGEUR_ETIQUETTE_TYPST,
+    y:
+      ordonneeTypst(index, gauche.length, nbMax) +
+      HAUTEUR_ETIQUETTE_TYPST / 2,
+  })
+  const ancreDroite = (index: number) => ({
+    x: xDroite,
+    y:
+      ordonneeTypst(index, droite.length, nbMax) +
+      HAUTEUR_ETIQUETTE_TYPST / 2,
+  })
+
+  const indexGauche = new Map(gauche.map((item, i) => [item.id, i]))
+  const indexDroite = new Map(droite.map((item, i) => [item.id, i]))
+  for (const lien of liens) {
+    const i = indexGauche.get(lien.gauche)
+    const j = indexDroite.get(lien.droite)
+    if (i === undefined || j === undefined) continue
+    const depart = ancreGauche(i)
+    const arrivee = ancreDroite(j)
+    lignes.push(
+      `  #place(top + left, line(start: (${pt(depart.x)}, ${pt(depart.y)}), ` +
+        `end: (${pt(arrivee.x)}, ${pt(arrivee.y)}), ` +
+        `stroke: 1pt + rgb("${couleurLien(i)}")))`,
+    )
+  }
+
+  const point = (x: number, y: number) =>
+    `  #place(top + left, dx: ${pt(x - RAYON_POINT_TYPST)}, dy: ${pt(y - RAYON_POINT_TYPST)}, ` +
+    `circle(radius: ${pt(RAYON_POINT_TYPST)}, fill: luma(55%), stroke: none))`
+
+  gauche.forEach((_, index) => {
+    const ancre = ancreGauche(index)
+    lignes.push(point(ancre.x, ancre.y))
+  })
+  droite.forEach((_, index) => {
+    const ancre = ancreDroite(index)
+    lignes.push(point(ancre.x, ancre.y))
+  })
+
+  lignes.push(']]')
+  return lignes.join('\n')
+}
 
 export class RelierEtiquettesElement extends MathaleaCustomElement {
   static readonly elementTag = 'relier-etiquettes'
@@ -94,15 +416,16 @@ export class RelierEtiquettesElement extends MathaleaCustomElement {
       liens,
       multiple,
     }
-    if (!context.isHtml) return toLatex(config)
-    if (context.isTypst) {
-      // L'export Typst réutilise le rendu HTML (context.isHtml reste vrai),
-      // mais ce web component ne peut pas être « rejoué » par htmlToTypst
-      // (JS exécuté après montage dans le DOM). On insère donc directement le
-      // code Typst via le marqueur <mathalea-typst>, reconnu tel quel par
-      // htmlToTypst (latexToTypst.ts).
-      return `<mathalea-typst>${toTypst(config)}</mathalea-typst>`
+    const createElementForStaticRender = () => {
+      const element = new RelierEtiquettesElement()
+      element.applyConfig(config)
+      element.interactivityOn = interactivityOn
+      return element
     }
+    if (context.isTypst) {
+      return `<mathalea-typst>${createElementForStaticRender().renderTypst()}</mathalea-typst>`
+    }
+    if (!context.isHtml) return createElementForStaticRender().renderLatex()
     const elementId =
       id ??
       `${RelierEtiquettesElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
@@ -203,15 +526,28 @@ export class RelierEtiquettesElement extends MathaleaCustomElement {
   }
 
   render(): string | void {
-    if (!context.isHtml || context.isTypst) return this.renderLatex()
+    if (context.isTypst) return this.renderTypst()
+    if (!context.isHtml) return this.renderLatex()
     this.hydrateAttributes()
     this.construitDom()
     this.rafraichit()
   }
 
   protected renderLatex(): string {
-    this.hydrateAttributes()
+    this.hydrateAttributesIfNeeded()
     return toLatex(this.config)
+  }
+
+  protected renderTypst(): string {
+    this.hydrateAttributesIfNeeded()
+    return toTypst(this.config)
+  }
+
+  private applyConfig(config: RelierEtiquettesConfig): void {
+    this.gauche = config.gauche.map((etiquette) => ({ ...etiquette }))
+    this.droite = config.droite.map((etiquette) => ({ ...etiquette }))
+    this.liens = config.liens.map((lien) => ({ ...lien }))
+    this.multiple = config.multiple
   }
 
   /** Configuration courante, utilisable par les exports LaTeX et Typst. */
@@ -277,6 +613,12 @@ export class RelierEtiquettesElement extends MathaleaCustomElement {
       (lien) => idsGauche.has(lien.gauche) && idsDroite.has(lien.droite),
     )
     this.multiple = this.getAttribute('multiple') === 'true'
+  }
+
+  private hydrateAttributesIfNeeded(): void {
+    if (this.hasAttribute('gauche') || this.hasAttribute('droite')) {
+      this.hydrateAttributes()
+    }
   }
 
   private construitDom(): void {

@@ -1,5 +1,8 @@
 import { tex2typst } from 'tex2typst'
-import { colours, mathaleaColorAliases } from '../../../lib/2d/colorToLatexOrHtml'
+import {
+  colours,
+  mathaleaColorAliases,
+} from '../../../lib/2d/colorToLatexOrHtml'
 import { renderScratchDiv } from '../../../lib/renderScratch'
 
 /**
@@ -121,7 +124,7 @@ export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0
 
 /** Import du paquet taskize (mise en colonnes des propositions de QCM) */
 export const TASKIZE_IMPORT =
-  '#import "@preview/taskize:0.2.7": tasks, tasks-setup'
+  '#import "@preview/taskize:0.2.8": tasks, tasks-setup'
 
 /**
  * Import du paquet vartable (tableaux de signes/variations, `#tabvar(...)`),
@@ -1015,10 +1018,7 @@ function parseLatexTableBody(body: string): ParsedTableItem[] {
 
 function stripCellLatex(cell: string): string {
   return cell
-    .replace(
-      /\\multicolumn\s*\{[^{}]*\}\s*\{[^{}]*\}\s*\{([^{}]*)\}/g,
-      '$1',
-    )
+    .replace(/\\multicolumn\s*\{[^{}]*\}\s*\{[^{}]*\}\s*\{([^{}]*)\}/g, '$1')
     .replace(/\\rowcolor(?:\[[^\]]+\])?\s*\{[^{}]*\}/g, '')
     .replace(/\\cellcolor(?:\[[^\]]+\])?\s*\{[^{}]*\}/g, '')
     .replace(
@@ -1206,7 +1206,11 @@ function findLatexTableEnvironment(tex: string): LatexTableEnvironment | null {
 }
 
 function shouldConvertAsVisualTable(table: LatexTableEnvironment): boolean {
-  if (table.env === 'tabular' || table.env === 'tabularx' || table.env === 'tblr')
+  if (
+    table.env === 'tabular' ||
+    table.env === 'tabularx' ||
+    table.env === 'tblr'
+  )
     return true
   return (
     table.colspec.includes('|') ||
@@ -1925,7 +1929,14 @@ function canvas3dToSvg(tag: string): string | null {
       : []
     cubes = objects
       .filter(
-        (object): object is { type: string; pos: number[]; size?: unknown; color?: unknown } =>
+        (
+          object,
+        ): object is {
+          type: string
+          pos: number[]
+          size?: unknown
+          color?: unknown
+        } =>
           object != null &&
           typeof object === 'object' &&
           (object as { type?: unknown }).type === 'cube' &&
@@ -1970,8 +1981,9 @@ function canvas3dToSvg(tag: string): string | null {
     for (const dx of [-s, s]) {
       for (const dy of [-s, s]) {
         for (const dz of [-s, s]) {
-          corners[`${dx > 0 ? '+' : '-'}${dy > 0 ? '+' : '-'}${dz > 0 ? '+' : '-'}`] =
-            [x + dx, y + dy, z + dz]
+          corners[
+            `${dx > 0 ? '+' : '-'}${dy > 0 ? '+' : '-'}${dz > 0 ? '+' : '-'}`
+          ] = [x + dx, y + dy, z + dz]
         }
       }
     }
@@ -2001,7 +2013,9 @@ function canvas3dToSvg(tag: string): string | null {
         .map(
           ([px, py]) => `${(px - minX).toFixed(1)},${(py - minY).toFixed(1)}`,
         )
-        .join(' ')}" fill="${face.fill}" stroke="black" stroke-width="1" stroke-linejoin="round"/>`,
+        .join(
+          ' ',
+        )}" fill="${face.fill}" stroke="black" stroke-width="1" stroke-linejoin="round"/>`,
   )
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width.toFixed(1)}" height="${height.toFixed(1)}" viewBox="0 0 ${width.toFixed(1)} ${height.toFixed(1)}">${polygons.join('')}</svg>`
 }
@@ -2014,7 +2028,9 @@ function inlineStyleProp(style: string, name: string): string | null {
 
 /** Contenu d'une cellule de schéma : HTML converti, replié sur une ligne */
 function schemaCellContent(html: string): string {
-  return htmlToTypst(html).replace(/\s*\n+\s*/g, ' ').trim()
+  return htmlToTypst(html)
+    .replace(/\s*\n+\s*/g, ' ')
+    .trim()
 }
 
 /**
@@ -2069,10 +2085,8 @@ function schemaEnBoiteToTypst(container: HTMLElement): string {
       )
       const label = schemaCellContent(labelElement?.innerHTML ?? '')
       const color = colorToTypst(
-        inlineStyleProp(
-          labelElement?.getAttribute('style') ?? '',
-          'color',
-        ) ?? '',
+        inlineStyleProp(labelElement?.getAttribute('style') ?? '', 'color') ??
+          '',
       )
       const options = [
         arrow ? 'kind: "arrow"' : null,
@@ -2096,9 +2110,7 @@ function schemaEnBoiteToTypst(container: HTMLElement): string {
     if (content.length === 0 && height != null) {
       content = `#v(${height})`
     }
-    const fill = colorToTypst(
-      inlineStyleProp(style, 'background-color') ?? '',
-    )
+    const fill = colorToTypst(inlineStyleProp(style, 'background-color') ?? '')
     const stroke = schemaCellStroke(style)
     const bold = inlineStyleProp(style, 'font-weight') === 'bold'
     const textColor = colorToTypst(inlineStyleProp(style, 'color') ?? '')

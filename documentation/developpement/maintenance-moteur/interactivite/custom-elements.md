@@ -99,8 +99,6 @@ export function demiDroiteInteractive(
   questionIndex: number,
   options?: DemiDroiteInteractiveOptions,
 ): string {
-  // Ce composant ne fournit pas de rendu LaTeX statique.
-  if (!context.isHtml) return ''
   return DemiDroiteInteractiveElement.create({
     ...options,
     numeroExercice: exercice.numeroExercice,

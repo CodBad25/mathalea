@@ -1,4 +1,4 @@
-import Exercice2F122 from '../2e/2F12-2'
+import Exercice2F122 from '../2e/2F23-2'
 export const titre =
   'Résoudre graphiquement une inéquation avec la fonction carrée'
 export const interactifReady = true

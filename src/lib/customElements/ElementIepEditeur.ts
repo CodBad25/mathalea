@@ -231,6 +231,7 @@ export type EditeurIepOptions = {
   instructionsDisponibles?: InstructionsDisponiblesIep
   instructionsInitialesProtegees?: number[]
   programmeInitialProtege?: boolean
+  programmeAttendu?: InstructionIep[]
   loadSaveButtons?: boolean
   allowFullscreen?: boolean
   interactivityOn?: boolean
@@ -308,6 +309,7 @@ const optionsCodageAngle: string[] = [
 
 const longueurObjetDirectionEditeurIep = 12
 const longueurProlongementObjetEditeurIep = 12
+const margeFigureStatiqueIep = 1
 
 const catalogue: Record<
   TypeInstructionIep,
@@ -1185,6 +1187,20 @@ type ElementGeometrique =
   | { nature: 'droite'; objet: ReturnType<typeof droite> }
   | { nature: 'cercle'; objet: ReturnType<typeof cercle> }
 
+type CommandeFigureStatiqueIep =
+  | { type: 'point'; point: PointAbstrait; label?: string }
+  | { type: 'segment'; p1: PointAbstrait; p2: PointAbstrait }
+  | { type: 'cercle'; centre: PointAbstrait; rayon: number }
+  | { type: 'texte'; texte: string; x: number; y: number }
+
+type FigureStatiqueIep = {
+  commandes: CommandeFigureStatiqueIep[]
+  xmin: number
+  ymin: number
+  xmax: number
+  ymax: number
+}
+
 /**
  * Reconstruit la droite ou le cercle abstrait tracé par une étape du programme,
  * à partir des points déjà placés. Renvoie undefined si l'étape n'est pas
@@ -2041,6 +2057,415 @@ export function pointsConstruitsDepuisProgramme(
   return points
 }
 
+function ajouterPointFigureStatique(
+  commandes: CommandeFigureStatiqueIep[],
+  point: PointAbstrait,
+  label?: string,
+) {
+  commandes.push(
+    label == null ? { type: 'point', point } : { type: 'point', point, label },
+  )
+}
+
+function ajouterSegmentFigureStatique(
+  commandes: CommandeFigureStatiqueIep[],
+  p1: PointAbstrait,
+  p2: PointAbstrait,
+) {
+  commandes.push({ type: 'segment', p1, p2 })
+}
+
+function ajouterCercleFigureStatique(
+  commandes: CommandeFigureStatiqueIep[],
+  centre: PointAbstrait,
+  rayon: number,
+) {
+  if (!Number.isFinite(rayon) || rayon < 0) return
+  commandes.push({ type: 'cercle', centre, rayon })
+}
+
+function construireCommandesFigureStatique(
+  programme: InstructionIep[],
+): CommandeFigureStatiqueIep[] {
+  programme = resoudreDirectionsAleatoires(programme)
+  const points = new Map<string, PointAbstrait>()
+  const commandes: CommandeFigureStatiqueIep[] = []
+  const recupere = (...noms: string[]): PointAbstrait[] | undefined => {
+    const resultat: PointAbstrait[] = []
+    for (const nom of noms) {
+      const point = points.get(nom)
+      if (point === undefined) return undefined
+      resultat.push(point)
+    }
+    return resultat
+  }
+  programme.forEach((instr) => {
+    switch (instr.type) {
+      case 'point': {
+        const A = pointAbstrait(instr.x, instr.y, instr.nom)
+        points.set(instr.nom, A)
+        ajouterPointFigureStatique(commandes, A, instr.nom)
+        break
+      }
+      case 'pointADistance': {
+        const origine = recupere(instr.p1)
+        if (origine === undefined) break
+        const A = pointAdistance(
+          origine[0],
+          instr.distance,
+          instr.angle ?? 0,
+          instr.nom,
+        )
+        points.set(instr.nom, A)
+        ajouterPointFigureStatique(commandes, A, instr.nom)
+        break
+      }
+      case 'milieu': {
+        const pts = recupere(instr.p1, instr.p2)
+        if (pts === undefined) break
+        const M = milieu(pts[0], pts[1], instr.nom)
+        points.set(instr.nom, M)
+        ajouterPointFigureStatique(commandes, M, instr.nom)
+        break
+      }
+      case 'demiTourPoint': {
+        const pts = recupere(instr.p1, instr.p2)
+        if (pts === undefined) break
+        const A = rotation(pts[0], pts[1], 180, instr.nom)
+        points.set(instr.nom, A)
+        ajouterPointFigureStatique(commandes, A, instr.nom)
+        ajouterSegmentFigureStatique(commandes, pts[0], A)
+        break
+      }
+      case 'intersection': {
+        const element1 = elementGeometrique(
+          programme[instr.etape1],
+          points,
+          programme,
+        )
+        const element2 = elementGeometrique(
+          programme[instr.etape2],
+          points,
+          programme,
+        )
+        if (element1 === undefined || element2 === undefined) break
+        let A: PointAbstrait | undefined
+        if (element1.nature === 'droite' && element2.nature === 'droite') {
+          A = pointIntersectionDD(element1.objet, element2.objet, instr.nom)
+        } else if (
+          element1.nature === 'cercle' &&
+          element2.nature === 'cercle'
+        ) {
+          A = pointIntersectionCC(
+            element1.objet,
+            element2.objet,
+            instr.nom,
+            instr.choix,
+          )
+        } else if (
+          element1.nature === 'droite' &&
+          element2.nature === 'cercle'
+        ) {
+          A = pointIntersectionLC(
+            element1.objet,
+            element2.objet,
+            instr.nom,
+            instr.choix,
+          )
+        } else if (
+          element1.nature === 'cercle' &&
+          element2.nature === 'droite'
+        ) {
+          A = pointIntersectionLC(
+            element2.objet,
+            element1.objet,
+            instr.nom,
+            instr.choix,
+          )
+        }
+        if (A !== undefined) {
+          points.set(instr.nom, A)
+          ajouterPointFigureStatique(commandes, A, instr.nom)
+        }
+        break
+      }
+      case 'segment':
+      case 'trait': {
+        const pts = recupere(instr.p1, instr.p2)
+        if (pts !== undefined) {
+          ajouterSegmentFigureStatique(commandes, pts[0], pts[1])
+        }
+        break
+      }
+      case 'polygone':
+      case 'polygoneRapide': {
+        const pts = recupere(...lireSommetsPolygone(instr.sommets))
+        if (pts === undefined || pts.length < 3) break
+        pts.forEach((point, index) => {
+          ajouterSegmentFigureStatique(
+            commandes,
+            point,
+            pts[(index + 1) % pts.length],
+          )
+        })
+        break
+      }
+      case 'droite':
+      case 'droitePointPente':
+      case 'demiDroite':
+      case 'demiDroitePointDirection':
+      case 'demiDroiteAngle':
+      case 'mediatrice':
+      case 'perpendiculaire':
+      case 'perpendiculaireAObjet':
+      case 'parallele':
+      case 'paralleleAObjet':
+      case 'paralleleObjet':
+      case 'bissectrice': {
+        const segmentVisible = segmentVisibleObjetDirection(
+          instr,
+          points,
+          programme,
+        )
+        if (segmentVisible !== undefined) {
+          ajouterSegmentFigureStatique(
+            commandes,
+            segmentVisible[0],
+            segmentVisible[1],
+          )
+        }
+        break
+      }
+      case 'prolongerObjet': {
+        const segmentVisible = segmentVisibleObjetDirection(
+          programme[instr.etape],
+          points,
+          programme,
+        )
+        if (segmentVisible === undefined) break
+        const [A, B] = deuxPointsProlongementCentre(
+          segmentVisible[0],
+          segmentVisible[1],
+          instr.longueur ?? longueurProlongementObjetEditeurIep,
+        )
+        ajouterSegmentFigureStatique(commandes, A, B)
+        break
+      }
+      case 'cercle': {
+        const pts = recupere(instr.p1, instr.p2)
+        if (pts !== undefined) {
+          ajouterCercleFigureStatique(
+            commandes,
+            pts[0],
+            longueur(pts[0], pts[1]),
+          )
+        }
+        break
+      }
+      case 'cercleRayon': {
+        const pts = recupere(instr.p1)
+        if (pts !== undefined) {
+          ajouterCercleFigureStatique(commandes, pts[0], instr.r)
+        }
+        break
+      }
+      case 'arc': {
+        const pts = recupere(instr.p1, instr.p2)
+        if (pts !== undefined) {
+          ajouterCercleFigureStatique(
+            commandes,
+            pts[0],
+            longueur(pts[0], pts[1]),
+          )
+        }
+        break
+      }
+      case 'codageMilieu': {
+        const pts = recupere(instr.p1, instr.p2, instr.p3)
+        if (pts === undefined) break
+        ajouterSegmentFigureStatique(commandes, pts[0], pts[1])
+        ajouterSegmentFigureStatique(commandes, pts[1], pts[2])
+        break
+      }
+      case 'segmentCodage': {
+        const pts = recupere(instr.p1, instr.p2)
+        if (pts !== undefined) {
+          ajouterSegmentFigureStatique(commandes, pts[0], pts[1])
+        }
+        break
+      }
+      case 'texte': {
+        commandes.push({
+          type: 'texte',
+          texte: instr.texte,
+          x: instr.x,
+          y: instr.y,
+        })
+        break
+      }
+    }
+  })
+  return commandes
+}
+
+function bornesFigureStatique(commandes: CommandeFigureStatiqueIep[]) {
+  const bornes = { xmin: 0, ymin: 0, xmax: 10, ymax: 10 }
+  let initialise = false
+  const ajoute = (x: number, y: number) => {
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return
+    if (!initialise) {
+      bornes.xmin = x
+      bornes.xmax = x
+      bornes.ymin = y
+      bornes.ymax = y
+      initialise = true
+      return
+    }
+    bornes.xmin = Math.min(bornes.xmin, x)
+    bornes.xmax = Math.max(bornes.xmax, x)
+    bornes.ymin = Math.min(bornes.ymin, y)
+    bornes.ymax = Math.max(bornes.ymax, y)
+  }
+  for (const commande of commandes) {
+    if (commande.type === 'point') ajoute(commande.point.x, commande.point.y)
+    if (commande.type === 'segment') {
+      ajoute(commande.p1.x, commande.p1.y)
+      ajoute(commande.p2.x, commande.p2.y)
+    }
+    if (commande.type === 'cercle') {
+      ajoute(
+        commande.centre.x - commande.rayon,
+        commande.centre.y - commande.rayon,
+      )
+      ajoute(
+        commande.centre.x + commande.rayon,
+        commande.centre.y + commande.rayon,
+      )
+    }
+    if (commande.type === 'texte') ajoute(commande.x, commande.y)
+  }
+  bornes.xmin -= margeFigureStatiqueIep
+  bornes.ymin -= margeFigureStatiqueIep
+  bornes.xmax += margeFigureStatiqueIep
+  bornes.ymax += margeFigureStatiqueIep
+  return bornes
+}
+
+function construireFigureStatiqueIep(
+  programmeVisible: InstructionIep[],
+  programmePourCadre = programmeVisible,
+): FigureStatiqueIep {
+  const commandes = construireCommandesFigureStatique(programmeVisible)
+  const commandesCadre = construireCommandesFigureStatique(programmePourCadre)
+  return { commandes, ...bornesFigureStatique(commandesCadre) }
+}
+
+function nombreFigureStatique(n: number) {
+  return Number.isFinite(n) ? Number(n.toFixed(3)) : 0
+}
+
+function echapperLatexTexte(texte: string) {
+  return texte.replace(/[\\{}_$#%&]/g, (caractere) => `\\${caractere}`)
+}
+
+function echapperXmlTexte(texte: string) {
+  return texte
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
+function rendreFigureStatiqueLatex(figure: FigureStatiqueIep) {
+  const lignes = [
+    '\\begin{tikzpicture}[baseline]',
+    `\\clip (${nombreFigureStatique(figure.xmin)},${nombreFigureStatique(figure.ymin)}) rectangle (${nombreFigureStatique(figure.xmax)},${nombreFigureStatique(figure.ymax)});`,
+  ]
+  for (const commande of figure.commandes) {
+    if (commande.type === 'segment') {
+      lignes.push(
+        `\\draw (${nombreFigureStatique(commande.p1.x)},${nombreFigureStatique(commande.p1.y)}) -- (${nombreFigureStatique(commande.p2.x)},${nombreFigureStatique(commande.p2.y)});`,
+      )
+    } else if (commande.type === 'cercle') {
+      lignes.push(
+        `\\draw (${nombreFigureStatique(commande.centre.x)},${nombreFigureStatique(commande.centre.y)}) circle (${nombreFigureStatique(commande.rayon)});`,
+      )
+    } else if (commande.type === 'point') {
+      lignes.push(
+        `\\node[thick,draw,cross out,inner sep=0pt,minimum width=5pt,minimum height=5pt] at (${nombreFigureStatique(commande.point.x)},${nombreFigureStatique(commande.point.y)}) {};`,
+      )
+      if (commande.label != null && commande.label !== '') {
+        lignes.push(
+          `\\node[above right] at (${nombreFigureStatique(commande.point.x)},${nombreFigureStatique(commande.point.y)}) {${echapperLatexTexte(commande.label)}};`,
+        )
+      }
+    } else if (commande.type === 'texte') {
+      lignes.push(
+        `\\node at (${nombreFigureStatique(commande.x)},${nombreFigureStatique(commande.y)}) {${echapperLatexTexte(commande.texte)}};`,
+      )
+    }
+  }
+  lignes.push('\\end{tikzpicture}')
+  return lignes.join('\n')
+}
+
+function rendreFigureStatiqueSvg(figure: FigureStatiqueIep) {
+  const pixelsParCm = 30
+  const largeur = Math.max(1, (figure.xmax - figure.xmin) * pixelsParCm)
+  const hauteur = Math.max(1, (figure.ymax - figure.ymin) * pixelsParCm)
+  const sx = (x: number) => (x - figure.xmin) * pixelsParCm
+  const sy = (y: number) => (figure.ymax - y) * pixelsParCm
+  const lignes = [
+    `<svg width="${nombreFigureStatique(largeur)}" height="${nombreFigureStatique(hauteur)}" viewBox="0 0 ${nombreFigureStatique(largeur)} ${nombreFigureStatique(hauteur)}" xmlns="http://www.w3.org/2000/svg">`,
+    '<g fill="none" stroke="black" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">',
+  ]
+  for (const commande of figure.commandes) {
+    if (commande.type === 'segment') {
+      lignes.push(
+        `<line x1="${nombreFigureStatique(sx(commande.p1.x))}" y1="${nombreFigureStatique(sy(commande.p1.y))}" x2="${nombreFigureStatique(sx(commande.p2.x))}" y2="${nombreFigureStatique(sy(commande.p2.y))}" />`,
+      )
+    } else if (commande.type === 'cercle') {
+      lignes.push(
+        `<circle cx="${nombreFigureStatique(sx(commande.centre.x))}" cy="${nombreFigureStatique(sy(commande.centre.y))}" r="${nombreFigureStatique(commande.rayon * pixelsParCm)}" />`,
+      )
+    }
+  }
+  lignes.push('</g>', '<g fill="black" font-family="serif" font-size="13">')
+  for (const commande of figure.commandes) {
+    if (commande.type === 'point') {
+      const x = sx(commande.point.x)
+      const y = sy(commande.point.y)
+      lignes.push(
+        `<path d="M ${nombreFigureStatique(x - 3)} ${nombreFigureStatique(y - 3)} L ${nombreFigureStatique(x + 3)} ${nombreFigureStatique(y + 3)} M ${nombreFigureStatique(x - 3)} ${nombreFigureStatique(y + 3)} L ${nombreFigureStatique(x + 3)} ${nombreFigureStatique(y - 3)}" stroke="black" stroke-width="1.3" />`,
+      )
+      if (commande.label != null && commande.label !== '') {
+        lignes.push(
+          `<text x="${nombreFigureStatique(sx(commande.point.x) + 5)}" y="${nombreFigureStatique(sy(commande.point.y) - 5)}">${echapperXmlTexte(commande.label)}</text>`,
+        )
+      }
+    } else if (commande.type === 'texte') {
+      lignes.push(
+        `<text x="${nombreFigureStatique(sx(commande.x))}" y="${nombreFigureStatique(sy(commande.y))}">${echapperXmlTexte(commande.texte)}</text>`,
+      )
+    }
+  }
+  lignes.push('</g>', '</svg>')
+  return lignes.join('')
+}
+
+function typstStringLiteral(texte: string) {
+  return `"${texte.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
+}
+
+function rendreFigureStatiqueTypst(figure: FigureStatiqueIep) {
+  const svg = rendreFigureStatiqueSvg(figure)
+  const largeurPt = Math.min(
+    420,
+    Math.max(120, (figure.xmax - figure.xmin) * 28),
+  )
+  return `#image(bytes(${typstStringLiteral(svg)}), format: "svg", width: ${nombreFigureStatique(largeurPt)}pt)`
+}
+
 type ProgrammeSauvegardeIep = {
   programme: InstructionIep[]
   conditionsInitialesAttribut: string
@@ -2118,6 +2543,21 @@ function lireTypesInstructionsDepuisAttribut(
   }
 }
 
+function lireProgrammeAttenduDepuisAutoCorrection(
+  exercice: IExercice,
+  questionIndex: number,
+): InstructionIep[] | undefined {
+  const value = exercice.autoCorrection?.[questionIndex]?.valeur?.reponse?.value
+  if (typeof value !== 'string') return undefined
+  try {
+    const parsed = JSON.parse(value)
+    if (!Array.isArray(parsed)) return undefined
+    return parsed as InstructionIep[]
+  } catch {
+    return undefined
+  }
+}
+
 const classesBouton = [
   'px-3',
   'py-1.5',
@@ -2165,6 +2605,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
   private conditionsInitiales: InstructionIep[] = []
   private programme: InstructionIep[] = []
+  private programmeAttenduPourCadre: InstructionIep[] | undefined
   private indicesInstructionsProtegees = new Set<number>()
   private instructionsProtegeesInitiales = new Map<number, InstructionIep>()
   private prochaineLettre = 0
@@ -2193,6 +2634,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     instructionsDisponibles,
     instructionsInitialesProtegees = [],
     programmeInitialProtege = false,
+    programmeAttendu,
     loadSaveButtons = false,
     allowFullscreen = false,
     interactivityOn = true,
@@ -2211,6 +2653,26 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         verifyCallback,
       )
     }
+    if (context.isTypst) {
+      const editor = new ElementIepEditeur()
+      editor.initialiserEtatPourRenduStatique({
+        conditionsInitiales,
+        programmeInitial,
+        programmeAttendu,
+        interactivityOn,
+      })
+      return `<mathalea-typst>${editor.renderTypst()}</mathalea-typst>`
+    }
+    if (!context.isHtml) {
+      const editor = new ElementIepEditeur()
+      editor.initialiserEtatPourRenduStatique({
+        conditionsInitiales,
+        programmeInitial,
+        programmeAttendu,
+        interactivityOn,
+      })
+      return editor.renderLatex()
+    }
     return super.create({
       id: computedId,
       numeroExercice,
@@ -2220,6 +2682,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       instructionsDisponibles,
       instructionsInitialesProtegees,
       programmeInitialProtege,
+      programmeAttendu,
       loadSaveButtons,
       allowFullscreen,
       interactivityOn,
@@ -2419,8 +2882,65 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     return this.programmeComplet()
   }
 
+  private initialiserEtatPourRenduStatique({
+    conditionsInitiales = [],
+    programmeInitial = [],
+    programmeAttendu,
+    interactivityOn = true,
+  }: Pick<
+    EditeurIepOptions,
+    | 'conditionsInitiales'
+    | 'programmeInitial'
+    | 'programmeAttendu'
+    | 'interactivityOn'
+  >) {
+    this.conditionsInitiales = clonerProgramme(conditionsInitiales)
+    this.programme = clonerProgramme(programmeInitial)
+    this.programmeAttenduPourCadre =
+      programmeAttendu == null ? undefined : clonerProgramme(programmeAttendu)
+    this.interactivityOn = interactivityOn
+  }
+
   private programmeComplet(): InstructionIep[] {
     return clonerProgramme([...this.conditionsInitiales, ...this.programme])
+  }
+
+  protected renderLatex(): string {
+    const figure = this.figureStatiquePourRendu()
+    if (figure.commandes.length === 0) return ''
+    return rendreFigureStatiqueLatex(figure)
+  }
+
+  protected renderTypst(): string {
+    const figure = this.figureStatiquePourRendu()
+    if (figure.commandes.length === 0) return ''
+    return rendreFigureStatiqueTypst(figure)
+  }
+
+  private figureStatiquePourRendu(): FigureStatiqueIep {
+    this.initialiserEtatStatiqueDepuisAttributsSiNecessaire()
+    const programmeComplet = this.programmeComplet()
+    const programmeVisible = this.interactivityOn
+      ? clonerProgramme(this.conditionsInitiales)
+      : programmeComplet
+    const programmeCadre =
+      this.interactivityOn && this.programmeAttenduPourCadre != null
+        ? clonerProgramme([
+            ...this.conditionsInitiales,
+            ...this.programmeAttenduPourCadre,
+          ])
+        : programmeComplet
+    return construireFigureStatiqueIep(programmeVisible, programmeCadre)
+  }
+
+  private initialiserEtatStatiqueDepuisAttributsSiNecessaire() {
+    if (this.conditionsInitiales.length > 0 || this.programme.length > 0) return
+    this.conditionsInitiales = lireProgrammeDepuisAttribut(
+      this.getAttribute('conditions-initiales'),
+    )
+    this.programme = lireProgrammeDepuisAttribut(
+      this.getAttribute('programme-initial'),
+    )
   }
 
   protected onInteractivityChanged(_isOn: boolean): void {
@@ -2501,6 +3021,9 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   private construireInterface() {
     const conteneur = document.createElement('div')
     conteneur.classList.add('flex', 'flex-col', 'gap-4', 'my-4', 'max-w-5xl')
+
+    const figureInitiale = this.construireFigureConditionsInitiales()
+    if (figureInitiale != null) conteneur.appendChild(figureInitiale)
 
     // --- Zone d'ajout d'une instruction ---
     this.zoneAjout = document.createElement('div')
@@ -2639,6 +3162,27 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     this.rafraichirSelectType()
     this.rafraichirParametres()
     this.appliquerInteractivite()
+  }
+
+  private construireFigureConditionsInitiales(): HTMLDivElement | undefined {
+    if (!this.interactivityOn || this.conditionsInitiales.length === 0) {
+      return undefined
+    }
+    const figure = construireFigureStatiqueIep(this.conditionsInitiales)
+    if (figure.commandes.length === 0) return undefined
+    const conteneur = document.createElement('div')
+    conteneur.classList.add(
+      'flex',
+      'justify-center',
+      'items-center',
+      'overflow-auto',
+      'max-w-full',
+      'bg-white',
+    )
+    conteneur.innerHTML = rendreFigureStatiqueSvg(figure)
+    const svg = conteneur.querySelector('svg')
+    svg?.classList.add('max-w-full', 'h-auto')
+    return conteneur
   }
 
   private get instructionsDisponibles(): TypeInstructionIep[] {
@@ -3364,19 +3908,23 @@ export function addEditeurIep(
   questionIndex: number,
   options: EditeurIepOptions = {},
 ): string {
-  if (!context.isHtml) return ''
   if (exercice.autoCorrection == null) exercice.autoCorrection = []
   if (exercice.autoCorrection[questionIndex] == null) {
     exercice.autoCorrection[questionIndex] = {}
   }
   exercice.autoCorrection[questionIndex].formatInteractif =
     ElementIepEditeur.elementTag
+  const programmeAttendu =
+    options.programmeAttendu ??
+    lireProgrammeAttenduDepuisAutoCorrection(exercice, questionIndex)
   const elementHtml = ElementIepEditeur.create({
     ...options,
+    programmeAttendu,
     numeroExercice: exercice.numeroExercice,
     questionIndex,
   })
   if (elementHtml === '') return ''
+  if (!context.isHtml) return elementHtml
   return `${elementHtml}<span id="resultatCheckEx${exercice.numeroExercice}Q${questionIndex}"></span><div id="feedbackEx${exercice.numeroExercice}Q${questionIndex}"></div>`
 }
 

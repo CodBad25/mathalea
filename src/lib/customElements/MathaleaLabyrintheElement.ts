@@ -1,4 +1,7 @@
+import { context } from '../../modules/context'
+import { Labyrinthe } from 'labyrinthe/src/labyrinthe/model'
 import type LabyrintheElement from 'labyrinthe/src/LabyrintheElement'
+import { tex2typst } from 'tex2typst'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
@@ -16,6 +19,24 @@ export type MathaleaLabyrintheOptions = {
   correction?: boolean
   disabled?: boolean
   numeroExercice?: number
+  feedback?: boolean
+  questionIndex?: number
+}
+
+function stripMathDelimiters(value: string): string {
+  const trimmed = value.trim()
+  return trimmed.startsWith('$') && trimmed.endsWith('$') && trimmed.length > 1
+    ? trimmed.slice(1, -1)
+    : trimmed
+}
+
+function typstCellContent(value: string): string {
+  const trimmed = value.trim()
+  if (trimmed === '') return '[]'
+  const wasMath =
+    trimmed.startsWith('$') && trimmed.endsWith('$') && trimmed.length > 1
+  if (!wasMath) return `[${trimmed.replace(/]/g, '\\]')}]`
+  return `[$${tex2typst(stripMathDelimiters(trimmed))}$]`
 }
 
 export default class MathaleaLabyrintheElement extends MathaleaCustomElement {
@@ -25,9 +46,21 @@ export default class MathaleaLabyrintheElement extends MathaleaCustomElement {
   private gameEndListener: ((event: Event) => void) | null = null
   private hideScoreButtonFrame: number | null = null
   private hideScoreButtonTries = 0
+  private staticOptions: MathaleaLabyrintheOptions | null = null
 
   static create(options: MathaleaLabyrintheOptions): string {
-    return super.create({
+    const createElementForStaticRender = () => {
+      const element = new MathaleaLabyrintheElement()
+      element.staticOptions = options
+      return element
+    }
+
+    if (context.isTypst) {
+      return `<mathalea-typst>${createElementForStaticRender().renderTypst()}</mathalea-typst>`
+    }
+    if (!context.isHtml) return createElementForStaticRender().renderLatex()
+
+    const html = super.create({
       id: options.id,
       seed: options.seed,
       rows: options.rows,
@@ -40,6 +73,12 @@ export default class MathaleaLabyrintheElement extends MathaleaCustomElement {
       numeroExercice: options.numeroExercice,
       interactivityOn: options.disabled ? false : true,
     })
+    if (!options.feedback) return html
+    return `${html}
+      <div id=${`feedbackEx${options.numeroExercice}Q${options.questionIndex ?? 0}`}
+        class="ml-2 py-2 text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest"
+        >
+      </div>`
   }
 
   connectedCallback() {
@@ -201,6 +240,79 @@ export default class MathaleaLabyrintheElement extends MathaleaCustomElement {
 
   private shouldDisable(): boolean {
     return !this.interactivityOn || this.getAttribute('disabled') === 'true'
+  }
+
+  protected renderLatex(): string {
+    const options = this.getStaticOptions()
+    const labyrinthe = this.createStaticLabyrinthe(options)
+    const latex = options.correction
+      ? labyrinthe.generateLatexCorrection()
+      : labyrinthe.generateLatex()
+    return options.correction
+      ? `{\\renewcommand{\\arraystretch}{2}${latex}}`
+      : `\n\n\\bigskip\n{\\renewcommand{\\arraystretch}{2}${latex}}`
+  }
+
+  protected renderTypst(): string {
+    const options = this.getStaticOptions()
+    const labyrinthe = this.createStaticLabyrinthe(options)
+    const snapshot = labyrinthe.snapshot()
+    const cells: string[] = []
+    for (let row = 0; row < snapshot.rows; row++) {
+      for (let col = 0; col < snapshot.cols; col++) {
+        const cell = snapshot.grid?.[row]?.[col]
+        const isGood = Boolean(cell?.isGood)
+        const isStart =
+          snapshot.start.row === row && snapshot.start.col === col
+        const isEnd = snapshot.end.row === row && snapshot.end.col === col
+        const shouldShade = isStart || isEnd || (options.correction && isGood)
+        const body = typstCellContent(String(cell?.text ?? ''))
+        const content =
+          options.correction && isGood ? `[#strong(${body})]` : body
+        cells.push(
+          `table.cell(fill: ${shouldShade ? 'luma(90%)' : 'none'}, ${content})`,
+        )
+      }
+    }
+    return [
+      '#block[',
+      '#set text(size: 10pt)',
+      '#table(',
+      `  columns: ${snapshot.cols},`,
+      '  stroke: 0.6pt + black,',
+      '  inset: (x: 5pt, y: 8pt),',
+      `  ${cells.join(',\n  ')}`,
+      ')',
+      ']',
+    ].join('\n')
+  }
+
+  private getStaticOptions(): MathaleaLabyrintheOptions {
+    if (this.staticOptions != null) return this.staticOptions
+    return {
+      id: this.id,
+      seed: this.getAttribute('seed') ?? '',
+      rows: this.readPositiveIntegerAttribute('rows', 6),
+      cols: this.readPositiveIntegerAttribute('cols', 6),
+      orientation: this.readOrientation() ?? undefined,
+      goodAnswers: this.readStringArrayAttribute('good-answers'),
+      badAnswers: this.readStringArrayAttribute('bad-answers'),
+      correction: this.isCorrection(),
+      disabled: this.shouldDisable(),
+      numeroExercice: Number(this.getAttribute('numero-exercice')),
+    }
+  }
+
+  private createStaticLabyrinthe(options: MathaleaLabyrintheOptions) {
+    const labyrinthe = new Labyrinthe({
+      seed: options.seed,
+      rows: options.rows,
+      cols: options.cols,
+      orientation: options.orientation,
+    })
+    labyrinthe.regenerate()
+    labyrinthe.setValues(options.goodAnswers, options.badAnswers)
+    return labyrinthe
   }
 
   private scheduleHideScoreButton(): void {

@@ -254,13 +254,18 @@ Les jobs PDF utilisent l'image `$DOCKER_IMAGE` (`ci/tex-node:node22-texlive-2026
 
 Lance `pnpm test:e2e:pdfexports` en matrice parallèle sur :
 
-- `can/2e^can/1e`
-- `can/6e^can/5e`
-- `can/4e^can/3e`
-- `6e/6`
-- `5e/5`
-- `4e/4`
-- `3e/3`
+- `can/2e`
+- `can/1e`
+- `can/6e`
+- `can/5e`
+- `can/4e`
+- `can/3e`
+- `6e`
+- `5e`
+- `4e/4A^4e/4F^4e/4I^4e/4P^4e/4S`
+- `4e/4C`
+- `4e/4G^4e/4L`
+- `3e`
 
 Chaque entrée de matrice définit `NIV_LABEL`, puis le job lance :
 
@@ -274,6 +279,13 @@ suivants permettent de diagnostiquer ou limiter les compilations trop longues :
 - `PDF_COMPILE_TIMEOUT_MS` : timeout par compilation, défaut `90000`.
 - `PDF_SLOW_COMPILE_MS` : seuil de log pour les compilations lentes, défaut
   `10000`.
+
+Si Vitest échoue avec `[vitest-pool]: Failed to start threads worker` puis
+`Timeout waiting for worker to respond`, l'échec survient avant la découverte
+des tests. Il faut d'abord suspecter le démarrage du worker `threads` et
+l'import initial du fichier `pdfexports.test.ts` (notamment l'import de
+`src/lib/mathalea`) sous contrainte CPU ou mémoire, plutôt qu'une compilation
+LaTeX individuelle.
 
 ### `playwright-pdf-dnb-consolidated`
 

@@ -1,244 +1,348 @@
+import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
-import { texteParPosition } from '../../lib/2d/textes'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { tableauSignesFonction } from '../../lib/mathFonctions/etudeFonction'
-import { Spline, spline } from '../../lib/mathFonctions/Spline'
-import { choice } from '../../lib/outils/arrayOutils'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import { mathalea2d } from '../../modules/mathalea2d'
-import {
-  gestionnaireFormulaireTexte,
-  listeQuestionsToContenu,
-  randint,
-} from '../../modules/outils'
-import Exercice from '../Exercice'
-
-import { ajouteChampTexte } from '../../lib/interactif/questionMathLive'
-import type FractionEtendue from '../../modules/FractionEtendue'
-import type { NestedObjetMathalea2dArray } from '../../types/2d'
+import { segment } from '../../lib/2d/segmentsVecteurs'
+import { latex2d } from '../../lib/2d/textes'
 import { bleuMathalea } from '../../lib/colors'
-export const titre =
-  "Déterminer le tableau de signes d'une fonction graphiquement"
-export const interactifReady = true
-export const interactifType = 'mathLive'
-export const dateDePublication = '06/07/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModifImportante = '07/12/2023' // interactivité
-export const uuid = 'a7860' // @todo à changer dans un nouvel exo (utiliser pnpm getNewUuid)
+import { shuffle } from '../../lib/outils/arrayOutils'
+import { context } from '../../modules/context'
+import { mathalea2d } from '../../modules/mathalea2d'
+import ExerciceQcmA from '../ExerciceQcmA'
+import { nombreElementsDifferents } from '../ExerciceQcm'
 
+export const titre = 'Reconnaître la courbe d’une fonction de référence'
+export const dateDePublication = '09/08/2026'
+export const interactifReady = true
+export const interactifType = 'qcm'
+export const amcReady = 'true'
+export const amcType = 'qcmMono'
+
+export const uuid = '4f213'
 export const refs = {
   'fr-fr': ['2F22-3'],
   'fr-ch': [],
 }
-// une liste de nœuds pour définir une fonction Spline
-const noeuds1 = [
-  { x: -4, y: -1, deriveeGauche: 0.5, deriveeDroit: 0.5, isVisible: true },
-  { x: -3, y: 0, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
-  { x: -2, y: 4, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-  { x: -1, y: 2, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
-  { x: 0, y: 1, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
-  { x: 1, y: 2, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-  { x: 2, y: 0, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
-  { x: 3, y: -2, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-  { x: 4, y: 0, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
-  { x: 5, y: 1, deriveeGauche: 0.5, deriveeDroit: 0.5, isVisible: true },
-]
-// une autre liste de nœuds...
-const noeuds2 = [
-  { x: -6, y: -2, deriveeGauche: 2, deriveeDroit: 2, isVisible: true },
-  { x: -5, y: 0, deriveeGauche: 2, deriveeDroit: 3, isVisible: true },
-  { x: -4, y: 3, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-  { x: -3, y: 2, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
-  { x: -2, y: 0, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
-  { x: -1, y: -1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-  { x: 0, y: 0, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
-  { x: 1, y: 3, deriveeGauche: 3, deriveeDroit: 3, isVisible: true },
-  { x: 2, y: 5, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-  { x: 3, y: 4, deriveeGauche: -2, deriveeDroit: -2, isVisible: true },
-  { x: 4, y: 3, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-  { x: 5, y: 4, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
-  { x: 6, y: 5, deriveeGauche: 0.2, deriveeDroit: 0.2, isVisible: true },
-]
 
-const noeuds3 = [
-  { x: -6, y: -4, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
-  { x: -2, y: 0, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
-  { x: 2, y: 2, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-  { x: 4, y: 0, deriveeGauche: -2, deriveeDroit: -2, isVisible: true },
-  { x: 6, y: -3, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
-]
+export type TypeCourbe =
+  | 'valeurAbsolue'
+  | 'opposeValeurAbsolue'
+  | 'carre'
+  | 'opposeCarre'
+  | 'inverse'
+  | 'opposeInverse'
+  | 'identite'
+  | 'opposeIdentite'
+  | 'racineCarree'
+  | 'cube'
 
-const noeuds4 = [
-  { x: -6, y: 3, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
-  { x: -5, y: 4, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-  { x: -4, y: 2, deriveeGauche: -1.5, deriveeDroit: -1.5, isVisible: true },
-  { x: -2, y: 0, deriveeGauche: -1, deriveeDroit: -1.5, isVisible: true },
-  { x: 0, y: -3, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-  { x: 1, y: -1, deriveeGauche: 1.5, deriveeDroit: 1.5, isVisible: true },
-  { x: 2, y: 0, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-  { x: 3, y: -3, deriveeGauche: -2, deriveeDroit: -2, isVisible: true },
-]
-// une liste des listes
-const mesFonctions = [noeuds1, noeuds2, noeuds3, noeuds4] //,, noeuds2noeuds1, noeuds2,
+export const expressions: Record<TypeCourbe, string> = {
+  valeurAbsolue: '|x|',
+  opposeValeurAbsolue: '-|x|',
+  carre: 'x^2',
+  opposeCarre: '-x^2',
+  inverse: '\\dfrac{1}{x}',
+  opposeInverse: '-\\dfrac{1}{x}',
+  identite: 'x',
+  opposeIdentite: '-x',
+  racineCarree: '\\sqrt{x}',
+  cube: 'x^3',
+}
 
-let coeffX
-let coeffY
-let deltaX
-let deltaY
+export function construireGraphique(type: TypeCourbe): string {
+  const xmin = -4.5
+  const xmax = 4.5
+  const ymin = -4.5
+  const ymax = 4.5
+  const r = repere({
+    xMin: xmin,
+    xMax: xmax,
+    yMin: ymin,
+    yMax: ymax,
+    grilleX: false,
+    grilleY: false,
+    grilleSecondaire: true,
+    grilleSecondaireXDistance: 1,
+    grilleSecondaireYDistance: 1,
+  })
+  const optionsCourbe = {
+    repere: r,
+    color: bleuMathalea,
+    epaisseur: 2,
+    step: 0.05,
+    yMin: ymin,
+    yMax: ymax,
+  }
+  const courbes = []
 
-/**
- * choisit les caractèristique de la transformation de la courbe
- * @returns {{coeffX: -1|1, deltaX: int, deltaY: int, coeffY: -1|1}}
- */
-
-function aleatoiriseCourbe(choix: number) {
-  coeffX = choice([-1, 1]) // symétries ou pas
-  coeffY = choice([-1, 1])
-  deltaX = randint(-2, +2) // translations
-  switch (choix) {
-    case 1:
-      deltaY = 0 // randint(-2, +2)
+  switch (type) {
+    case 'valeurAbsolue':
+      courbes.push(
+        courbe((x) => Math.abs(x), {
+          ...optionsCourbe,
+          xMin: -4.2,
+          xMax: 4.2,
+        }),
+      )
       break
-    case 2:
-      deltaY = randint(-2, +2)
+    case 'opposeValeurAbsolue':
+      courbes.push(
+        courbe((x) => -Math.abs(x), {
+          ...optionsCourbe,
+          xMin: -4.2,
+          xMax: 4.2,
+        }),
+      )
       break
-    default:
-      deltaY = choice([randint(-4, +4), 0]) / 2
+    case 'carre':
+      courbes.push(
+        courbe((x) => x ** 2, {
+          ...optionsCourbe,
+          xMin: -2.15,
+          xMax: 2.15,
+        }),
+      )
+      break
+    case 'opposeCarre':
+      courbes.push(
+        courbe((x) => -(x ** 2), {
+          ...optionsCourbe,
+          xMin: -2.15,
+          xMax: 2.15,
+        }),
+      )
+      break
+    case 'inverse':
+    case 'opposeInverse': {
+      const signe = type === 'inverse' ? 1 : -1
+      courbes.push(
+        courbe((x) => signe / x, {
+          ...optionsCourbe,
+          xMin: xmin,
+          xMax: -0.22,
+          step: 0.02,
+        }),
+        courbe((x) => signe / x, {
+          ...optionsCourbe,
+          xMin: 0.22,
+          xMax: xmax,
+          step: 0.02,
+        }),
+      )
+      break
+    }
+    case 'identite':
+      courbes.push(
+        courbe((x) => x, {
+          ...optionsCourbe,
+          xMin: -4.2,
+          xMax: 4.2,
+        }),
+      )
+      break
+    case 'opposeIdentite':
+      courbes.push(
+        courbe((x) => -x, {
+          ...optionsCourbe,
+          xMin: -4.2,
+          xMax: 4.2,
+        }),
+      )
+      break
+    case 'racineCarree':
+      courbes.push(
+        courbe((x) => Math.sqrt(x), {
+          ...optionsCourbe,
+          xMin: 0,
+          xMax: 4.2,
+        }),
+      )
+      break
+    case 'cube':
+      courbes.push(
+        courbe((x) => x ** 3, {
+          ...optionsCourbe,
+          xMin: -1.65,
+          xMax: 1.65,
+        }),
+      )
       break
   }
-  return { coeffX, coeffY, deltaX, deltaY }
+
+  const axeX = segment(xmin, 0, xmax, 0, 'black', '->')
+  const axeY = segment(0, ymin, 0, ymax, 'black', '->')
+  const origine = latex2d('O', -0.3, -0.3, {
+    letterSize: 'scriptsize',
+  })
+
+  return mathalea2d(
+    {
+      xmin: xmin - 0.2,
+      xmax: xmax + 0.2,
+      ymin: ymin - 0.2,
+      ymax: ymax + 0.2,
+      pixelsParCm: 18,
+      scale: 0.42,
+      center: true,
+    },
+    r,
+    ...courbes,
+    axeX,
+    axeY,
+    origine,
+  )
 }
 
 /**
- * Aléatoirise une courbe et demande les antécédents d'une valeur entière (eux aussi entiers)
- * @author Gilles Mora (Jean-claude Lhote pour la programmation)
-
+ * @author Stéphane Guyon
  */
-export default class BetaModeleSpline extends Exercice {
-  spline?: Spline
-  constructor() {
-    super()
-    this.nbQuestions = 1 // Nombre de questions par défaut
-    this.correctionDetailleeDisponible = true // booléen qui indique si une correction détaillée est disponible.
-    this.correctionDetaillee = false
+export default class ReconnaitreFonctionReference extends ExerciceQcmA {
+  private ordreDesCas = shuffle([1, 2, 3])
+  private indiceDuCas = 0
+
+  private casDisponibles(): number[] {
+    switch (this.sup3) {
+      case 1:
+        return [1, 2, 3]
+      case 2:
+        return [2, 3, 4, 5]
+      case 3:
+      default:
+        return [1, 2, 3, 4, 5]
+    }
   }
 
-  nouvelleVersion() {
-    const typeDeQuestions = gestionnaireFormulaireTexte({
-      saisie: '1', // @fixme à modifier dés qu'on aura une recherche fiable des zéros.
-      min: 1,
-      max: 3,
-      melange: 3,
-      defaut: 1,
-      nbQuestions: this.nbQuestions,
-    })
-    // boucle de création des différentes questions
-    for (let i = 0; i < this.nbQuestions; i++) {
-      const { coeffX, coeffY, deltaX, deltaY } = aleatoiriseCourbe(
-        Number(typeDeQuestions[i]),
-      )
-      // la liste des noeuds de notre fonction
+  private appliquerLesValeurs(cas: number): void {
+    let fonctionDemandee: TypeCourbe
+    switch (cas) {
+      case 1:
+        fonctionDemandee = 'valeurAbsolue'
+        break
+      case 2:
+        fonctionDemandee = 'carre'
+        break
+      case 3:
+        fonctionDemandee = 'inverse'
+        break
+      case 4:
+        fonctionDemandee = 'cube'
+        break
+      case 5:
+        fonctionDemandee = 'racineCarree'
+        break
+      default:
+        fonctionDemandee = 'valeurAbsolue'
+    }
+    let distracteursPossibles: TypeCourbe[]
+    let commentaire: string
 
-      const nuage = choice(mesFonctions).map((noeud) =>
-        Object({
-          x: (noeud.x + deltaX) * coeffX,
-          y: (noeud.y + deltaY) * coeffY,
-          deriveeGauche: noeud.deriveeGauche * coeffX * coeffY,
-          deriveeDroit: noeud.deriveeDroit * coeffX * coeffY,
-          isVisible: noeud.isVisible,
-        }),
-      )
-      const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-      const maSpline = spline(nuage)
-      const fonctionD = (x: number) => maSpline.derivee(x)
-      const choixInteractif = randint(0, 1)
-      const { xMin, xMax, yMin, yMax } = maSpline.trouveMaxes()
-      this.spline = maSpline
-      const bornes = maSpline.trouveMaxes()
-      const repere1 = repere({
-        xMin: bornes.xMin - 1,
-        xMax: bornes.xMax + 1,
-        yMin: bornes.yMin - 1,
-        yMax: bornes.yMax + 1,
-        grilleX: false,
-        grilleY: false,
-        grilleSecondaire: true,
-        grilleSecondaireYDistance: 1,
-        grilleSecondaireXDistance: 1,
-      })
-      const courbe1 = maSpline.courbe({
-        epaisseur: 1.5,
-        ajouteNoeuds: true,
-        optionsNoeuds: { color: bleuMathalea, taille: 2, style: '.', epaisseur: 2 },
-        color: bleuMathalea,
-      })
-
-      const objetsEnonce = [
-        ...(repere1.objets as NestedObjetMathalea2dArray),
-        /* courbe2, */ courbe1,
+    if (fonctionDemandee === 'valeurAbsolue') {
+      distracteursPossibles = [
+        'identite',
+        'opposeIdentite',
+        'opposeValeurAbsolue',
+        'inverse',
+        'cube',
       ]
-      let texteEnonce
-
-      const tableau = maSpline.tableauSignes()
-      const tableauB = tableauSignesFonction(
-        fonctionD as (x: number | FractionEtendue) => number,
-        xMin,
-        xMax,
-        { step: 1, tolerance: 0.1 },
-      )
-
-      const tableauChoisi = [tableau, tableauB][choixInteractif]
-      handleAnswers(this, i, {
-        reponse: {
-          value: choixInteractif === 0 ? ['oui'] : ['non'],
-          options: { texteSansCasse: true },
-        },
-      })
-
-      const figure = mathalea2d(
-        Object.assign(
-          { pixelsParCm: 30, scale: 0.6, center: true },
-          { xmin: xMin - 1, ymin: yMin - 1, xmax: xMax + 1, ymax: yMax + 1 },
-        ),
-        objetsEnonce,
-        o,
-      )
-
-      texteEnonce =
-        'Dresser le tableau de signes de la fonction $f$ représentée ci-dessous.<br>' +
-        figure
-      if (this.interactif) {
-        // || this.can
-        texteEnonce =
-          "Voici la représentation graphique d'une fonction $f$ :<br>"
-        texteEnonce += figure
-        texteEnonce += '<br>Le tableau de signes de la fonction $f$ est : <br>'
-        texteEnonce += tableauChoisi
-        texteEnonce += '<br>Répondre par Oui ou Non. '
-        texteEnonce += ajouteChampTexte(this, i)
-      }
-      let texteCorrection
-      texteCorrection = `L'ensemble de définition de $f$ est $[${maSpline.x[0]}\\,;\\,${maSpline.x[maSpline.n - 1]}]$.<br>`
-      if (this.correctionDetaillee) {
-        texteCorrection += `Les images $f(x)$ sont positives lorsque la courbe est au-dessus de l'axe des abscisses et elles sont négatives lorque la courbe est en dessous de l'axe des abscisses.<br><br>
-          `
-      }
-      texteCorrection += `Tableau de signes de $f(x)$ sur $[${maSpline.x[0]}\\,;\\,${maSpline.x[maSpline.n - 1]}]$ :<br>
-          `
-      texteCorrection += tableau
-
-      if (this.interactif) {
-        if (choixInteractif === 0) {
-          texteCorrection += `<br>Le tableau de signes correspond, il fallait donc répondre ${texteEnCouleurEtGras('Oui')}.`
-        } else {
-          texteCorrection += `<br>Le tableau de signes ne correspond pas, il fallait donc répondre ${texteEnCouleurEtGras('Non')}.`
-        }
-      }
-
-      this.listeQuestions.push(texteEnonce)
-      this.listeCorrections.push(texteCorrection)
-      this.canEnonce = texteEnonce // 'Compléter'
+      commentaire =
+        'La courbe de la fonction valeur absolue est formée de deux demi-droites, de sommet $O$, et elle est située au-dessus de l’axe des abscisses.'
+    } else if (fonctionDemandee === 'carre') {
+      distracteursPossibles = [
+        'opposeCarre',
+        'valeurAbsolue',
+        'inverse',
+        'identite',
+        'cube',
+      ]
+      commentaire =
+        'La courbe de la fonction carré est une parabole de sommet $O$, symétrique par rapport à l’axe des ordonnées et située au-dessus de l’axe des abscisses.'
+    } else if (fonctionDemandee === 'inverse') {
+      distracteursPossibles = [
+        'opposeInverse',
+        'carre',
+        'valeurAbsolue',
+        'identite',
+        'opposeIdentite',
+        'cube',
+      ]
+      commentaire =
+        'La courbe de la fonction inverse possède deux branches situées dans les premier et troisième quadrants. Les deux axes sont des asymptotes à la courbe.'
+    } else if (fonctionDemandee === 'cube') {
+      distracteursPossibles = [
+        'identite',
+        'opposeIdentite',
+        'carre',
+        'valeurAbsolue',
+        'inverse',
+        'opposeInverse',
+      ]
+      commentaire =
+        'La courbe de la fonction cube passe par l’origine. Elle est strictement croissante et possède un point d’inflexion en $O$.'
+    } else {
+      distracteursPossibles = [
+        'valeurAbsolue',
+        'carre',
+        'inverse',
+        'identite',
+        'cube',
+      ]
+      commentaire =
+        'La fonction racine carrée est définie sur $[0;+\\infty[$. Sa courbe part de l’origine et est strictement croissante.'
     }
 
-    listeQuestionsToContenu(this) // On envoie l'exercice à la fonction de mise en page
+    const distracteurs = shuffle(distracteursPossibles).slice(0, 3)
+    const graphiqueCorrect = construireGraphique(fonctionDemandee)
+    this.enonce = `Soit $f$ la fonction définie par $f(x)=${expressions[fonctionDemandee]}$.<br>
+    Quelle courbe représente la fonction $f$ ?`
+    this.reponses = [
+      graphiqueCorrect,
+      ...distracteurs.map((type) => construireGraphique(type)),
+    ].map((graphique) =>
+      context.isHtml
+        ? `<div style="margin: 0.75rem 1rem;">${graphique}</div>`
+        : graphique,
+    )
+    this.correction = `${commentaire}<br>
+    La bonne représentation graphique est donc :<br>${graphiqueCorrect}`
+  }
+
+  versionAleatoire: () => void = () => {
+    const cas = this.ordreDesCas[this.indiceDuCas % this.ordreDesCas.length]
+    this.indiceDuCas++
+    do {
+      this.appliquerLesValeurs(cas)
+    } while (nombreElementsDifferents(this.reponses) < 4)
+  }
+
+  nouvelleVersion(): void {
+    this.ordreDesCas = shuffle(this.casDisponibles())
+    this.indiceDuCas = 0
+    super.nouvelleVersion()
+    if (!context.isHtml) {
+      this.listeQuestions = this.listeQuestions.map((question) =>
+        question.replaceAll(
+          '\\begin{qcmprop}[cols=4]',
+          '\\begin{qcmprop}[cols=2]',
+        ),
+      )
+      this.listeCorrections = this.listeCorrections.map((correction) =>
+        correction.replaceAll(
+          '\\begin{qcmprop}[cols=4',
+          '\\begin{qcmprop}[cols=2',
+        ),
+      )
+    }
+  }
+
+  constructor() {
+    super()
+    this.sup3 = 3
+    this.besoinFormulaire3Numerique = [
+      'Fonctions proposées',
+      3,
+      '1 : Nouveau programme 2026\n2 : Années de transition\n3 : Toutes les fonctions de référence',
+    ]
+    this.besoinFormulaireCaseACocher = false
+    this.options = { vertical: false, ordered: false }
+    this.ordreDesCas = shuffle(this.casDisponibles())
+    this.versionAleatoire()
   }
 }

@@ -1,6 +1,6 @@
 # Custom element « Relier les étiquettes »
 
-Tag : `relier-etiquettes`. Composant d'appariement : deux colonnes d'étiquettes carrées que l'élève relie deux à deux, avec un rendu HTML interactif et deux rendus imprimés (LaTeX/TikZ et Typst).
+Tag : `relier-etiquettes`. Composant d'appariement : deux colonnes d'étiquettes rectangulaires 16/9 que l'élève relie deux à deux, avec un rendu HTML interactif et deux rendus imprimés (LaTeX/TikZ et Typst).
 
 La recette côté exercice est décrite dans [Formats interactifs spécialisés](../../auteurs-exercices/complements/formats-interactifs.md#relier-les-étiquettes). Cette page documente l'implémentation.
 
@@ -8,10 +8,7 @@ La recette côté exercice est décrite dans [Formats interactifs spécialisés]
 
 | Fichier | Rôle |
 | --- | --- |
-| `src/lib/customElements/RelierEtiquettesElement.ts` | Le custom element, sa correction (`verifQuestion`) et le helper `addRelierEtiquettes()` |
-| `src/lib/interactif/relierEtiquettes/types.ts` | Types partagés, palette des traits, parsing des attributs |
-| `src/lib/interactif/relierEtiquettes/latexExport.ts` | `toLatex()` : figure TikZ |
-| `src/lib/interactif/relierEtiquettes/typstExport.ts` | `toTypst()` : figure Typst |
+| `src/lib/customElements/RelierEtiquettesElement.ts` | Le custom element, ses types, sa correction (`verifQuestion`), le helper `addRelierEtiquettes()` et les rendus `renderLatex()` / `renderTypst()` |
 | `src/app.css` | Styles (classes préfixées `relier-etiquettes__`) |
 | `tests/unit/relierEtiquettesElement.test.ts` | Tests unitaires |
 
@@ -19,15 +16,23 @@ Le composant vit dans le DOM clair (pas de shadow DOM) : les formules LaTeX des 
 
 ## Trois rendus, un seul appel
 
-`create()` choisit la sortie selon le contexte, dans cet ordre (identique à `tableau-signes-variations`, car `context.isHtml` reste vrai pendant un export Typst) :
+`create()` choisit la sortie selon le contexte, dans cet ordre (car
+`context.isHtml` reste vrai pendant un export Typst) :
 
-1. `!context.isHtml` → `toLatex(config)` ;
-2. `context.isTypst` → `<mathalea-typst>${toTypst(config)}</mathalea-typst>`, marqueur inséré tel quel par `htmlToTypst()` (`latexToTypst.ts`) ;
+1. `context.isTypst` → `<mathalea-typst>${renderTypst()}</mathalea-typst>`, marqueur inséré tel quel par `htmlToTypst()` (`latexToTypst.ts`) ;
+2. `!context.isHtml` → `renderLatex()` ;
 3. sinon → la balise `<relier-etiquettes>` et ses attributs, suivie du `span#resultatCheck…` et du `div#feedback…` **si l'interactivité est active** (sans quoi ces identifiants seraient dupliqués entre l'énoncé et la correction).
 
-Les trois rendus partagent la même géométrie (étiquettes carrées, couloir vide entre les colonnes, point de raccordement sur le bord intérieur) et la même palette `COULEURS_LIENS`, indexée par le rang de l'étiquette de gauche : un lien garde donc sa couleur d'un format à l'autre.
+Les trois rendus partagent la même géométrie (étiquettes rectangulaires 16/9,
+couloir vide entre les colonnes, point de raccordement sur le bord intérieur)
+et la même palette `COULEURS_LIENS`, indexée par le rang de l'étiquette de
+gauche : un lien garde donc sa couleur d'un format à l'autre.
 
-Le rendu Typst n'utilise aucun paquet externe : le dessin est un `#block` de taille fixe où étiquettes, traits (`line`) et points (`circle`) sont posés en coordonnées absolues avec `#place`. Le LaTeX de chaque étiquette est converti par un mini-convertisseur local (`latexFragmentToTypstMath`), pour la même raison que dans `tableauSignesVariations/typstExport.ts` : `src/lib/interactif` ne doit pas dépendre de `src/components`.
+Le rendu Typst n'utilise aucun paquet externe : le dessin est un `#block` de
+taille fixe où étiquettes, traits (`line`) et points (`circle`) sont posés en
+coordonnées absolues avec `#place`. Le LaTeX de chaque étiquette est converti
+par un mini-convertisseur local (`latexFragmentToTypstMath`) contenu dans le
+fichier du custom element.
 
 ## Interactions
 

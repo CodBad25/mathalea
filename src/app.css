@@ -1347,10 +1347,10 @@ relier-etiquettes {
   --relier-bordure: var(--color-coopmaths-canvas-moredark);
   --relier-texte: var(--color-coopmaths-corpus);
   --relier-accent: var(--color-coopmaths-struct);
-  /* Étiquettes carrées : un seul réglage pour la largeur et la hauteur. */
-  --relier-taille: clamp(4.5rem, 24vw, 7.5rem);
+  /* Étiquettes 16/9 : plus lisibles pour les textes longs. */
+  --relier-largeur: clamp(7rem, 32vw, 11rem);
   /* Couloir vide entre les deux colonnes, où se tracent les traits. */
-  --relier-couloir: clamp(2.75rem, 16vw, 6.5rem);
+  --relier-couloir: clamp(2.25rem, 12vw, 5rem);
   max-width: 100%;
 }
 
@@ -1364,7 +1364,7 @@ relier-etiquettes {
 .relier-etiquettes__board {
   position: relative;
   display: grid;
-  grid-template-columns: var(--relier-taille) var(--relier-taille);
+  grid-template-columns: var(--relier-largeur) var(--relier-largeur);
   column-gap: var(--relier-couloir);
   justify-content: center;
 }
@@ -1379,8 +1379,8 @@ relier-etiquettes {
 
 .relier-etiquettes__etiquette {
   position: relative;
-  width: var(--relier-taille);
-  aspect-ratio: 1 / 1;
+  width: var(--relier-largeur);
+  aspect-ratio: 16 / 9;
   display: flex;
   align-items: center;
   justify-content: center;

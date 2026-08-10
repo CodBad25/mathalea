@@ -1,4 +1,4 @@
-import TracerDroite2nde from '../2e/2F10-3'
+import TracerDroite2nde from '../2e/2F21-3'
 
 export const titre = 'Représenter graphiquement une fonction affine'
 export const dateDePublication = '06/04/2024'

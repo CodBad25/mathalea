@@ -127,7 +127,7 @@ function createOriginalReferentiels(lang: Language): ReferentielInMenu[] {
           {
             title: 'Ressources partenaires',
             name: 'partenaires' as ActivationName,
-            searchable: false,
+            searchable: true,
             referentiel: {
               ...referentielMathadata,
               ...(Object.keys(egaliteFGReferentiel).length > 0

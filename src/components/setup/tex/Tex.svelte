@@ -168,6 +168,8 @@
   let pdfBlob: Blob | null = null
   /** Message court quand la compilation n'a pas abouti (réseau, délai…) */
   let compileError: string | null = $state(null)
+  /** Bascule automatique de moteur signalée à l'utilisateur (service injoignable) */
+  let engineSwitchNotice: string | null = $state(null)
   /** Diagnostics de la dernière compilation, traduits en français */
   let diagnostics: TexDiagnostic[] = $state([])
   /** Le panneau d'erreurs est replié (l'utilisateur l'a fermé) */
@@ -419,30 +421,46 @@
     editorView.focus()
   }
 
-  /** Compile le code affiché avec le moteur choisi */
+  /**
+   * Compile le code affiché avec le moteur choisi. Si le moteur coopmaths
+   * signale un service injoignable (panne réseau, pas une erreur LaTeX), on
+   * bascule automatiquement sur texlive.net et on relance la compilation.
+   */
   async function compile() {
     if (compileEngine === 'texlive') {
       await compileViaTexlive()
       return
     }
-    await compileViaCoopmaths()
+    const unreachable = await compileViaCoopmaths()
+    if (unreachable) {
+      compileEngine = 'texlive'
+      persistPreferences()
+      engineSwitchNotice =
+        'Le service de compilation Coopmaths est injoignable : bascule automatique sur texlive.net.'
+      await compileViaTexlive()
+    }
   }
 
-  /** Compile via le service distant de la vue PDF (fetch, PDF en Blob) */
-  async function compileViaCoopmaths() {
+  /**
+   * Compile via le service distant de la vue PDF (fetch, PDF en Blob).
+   * Renvoie `true` si l'échec est dû à un service injoignable (réseau), pour
+   * que `compile` puisse basculer sur l'autre moteur.
+   */
+  async function compileViaCoopmaths(): Promise<boolean> {
     const source = currentCode()
-    if (source.trim() === '') return
+    if (source.trim() === '') return false
     compileController?.abort()
     const controller = new AbortController()
     compileController = controller
 
     isCompiling = true
     compileError = null
+    engineSwitchNotice = null
     startElapsed()
     try {
       const files = await auxiliaryFiles(controller.signal)
       const result = await compileTexToPdf(source, files, controller.signal)
-      if (controller.signal.aborted) return
+      if (controller.signal.aborted) return false
       compileError = result.error
       applyDiagnostics(result.log)
       if (result.pdf != null) {
@@ -453,10 +471,12 @@
         lastGoodCode = source
         lastGoodAt = new Date()
       }
+      return result.unreachable
     } catch (error) {
       if (!isAbortError(error)) {
         compileError = error instanceof Error ? error.message : String(error)
       }
+      return false
     } finally {
       if (compileController === controller) {
         compileController = null
@@ -945,7 +965,10 @@
             onChange={() => void applyDocumentOptions()}
             onClose={() => (isSettingsOpen = false)}
             onReset={() => void resetDocumentOptions()}
-            onEngineChange={() => persistPreferences()}
+            onEngineChange={() => {
+              engineSwitchNotice = null
+              persistPreferences()
+            }}
           />
         {/if}
         <div
@@ -1009,6 +1032,15 @@
           <form bind:this={hiddenFormEl} class="hidden"></form>
         </div>
       </div>
+
+      {#if engineSwitchNotice != null}
+        <div
+          class="shrink-0 flex items-center gap-2 border-t border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-950/60 dark:text-amber-100"
+        >
+          <i class="bx bx-transfer-alt text-lg"></i>
+          {engineSwitchNotice}
+        </div>
+      {/if}
 
       {#if diagnostics.length > 0 || compileError != null}
         {@const isError = errorCount > 0 || compileError != null}

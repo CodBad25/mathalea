@@ -194,7 +194,9 @@ Le composant expose `value` comme une liste JSON stringifiée de parts `{ id, et
 
 `mathalea-labyrinthe` est le wrapper MathALÉA du composant externe `labyrinthe-grid`. Il reçoit la graine, les dimensions, l'orientation et les valeurs de cases depuis l'exercice, instancie `labyrinthe-grid` à son `connectedCallback()`, puis retire le listener `labyrinthe:gameend` et le composant interne à son `disconnectedCallback()`.
 
-Les exercices qui héritent de `src/exercices/_Exercice_labyrinthe.ts` restent en `interactifType = 'custom'` : leur logique de score spécifique demeure dans `correctionInteractive()`. Le wrapper évite seulement l'ancien listener global `exercicesAffiches` utilisé pour attendre l'insertion de l'énoncé et de la correction dans le DOM.
+Son `create()` est contextuel : en HTML, il produit le custom element ; en LaTeX, `renderLatex()` génère le tableau LaTeX du modèle pur `labyrinthe` ; en Typst, `renderTypst()` produit une table Typst native afin d'éviter d'injecter du `tabular` LaTeX dans un marqueur `<mathalea-typst>`.
+
+Les exercices qui héritent de `src/exercices/_Exercice_labyrinthe.ts` restent en `interactifType = 'custom'` : leur logique de score spécifique demeure dans `correctionInteractive()`. La classe mère appelle `MathaleaLabyrintheElement.create()` pour l'énoncé comme pour la correction, sans branchement local selon `context`.
 
 ### Objets cliquables dans une figure MathALÉA 2D
 

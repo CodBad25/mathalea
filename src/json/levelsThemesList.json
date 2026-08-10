@@ -2454,48 +2454,72 @@
     "titre": "Résoudre un système de deux équations linéaires à deux inconnues, déterminer le point d'intersection de deux droites sécantes"
   },
   "2F1": {
-    "titre": "Se constituer un répertoire de fonctions de référence"
+    "titre": "Généralités sur les fonctions"
   },
   "2F10": {
-    "titre": "Connaître les fonctions affines"
+    "titre": "Utiliser les notations et le vocabulaire fonctionnels"
   },
   "2F11": {
-    "titre": "Comparer et calculer des images en utilisant les fonctions de référence"
+    "titre": "Passer d'un mode de représentation d'une fonction à un autre"
   },
   "2F12": {
-    "titre": "Résoudre algébriquement ou graphiquement  f(x)=k ou f(x)<k avec f fonction de référence"
+    "titre": "Déterminer, à partir de tous les modes de représentation, l'image d'un nombre"
+  },
+  "2F13": {
+    "titre": "Déterminer un antécédent à partir d'une représentation graphique ou d'un tableau de valeurs d'une fonction"
+  },
+  "2F14": {
+    "titre": "Modéliser un phénomène continu par une fonction"
+  },
+  "2F15": {
+    "titre": "Résoudre des problèmes modélisés par des fonctions en utilisant un ou plusieurs modes de représentation"
+  },
+  "2F1Q": {
+    "titre": "QCM"
   },
   "2F2": {
-    "titre": "Représenter algébriquement et graphiquement les fonctions"
-  },
-  "2F20": {
-    "titre": "Exploiter l'équation y=f(x) d'une courbe : appartenance, calcul de coordonnées"
+    "titre": "Se constituer un répertoire de fonctions de référence"
   },
   "2F21": {
-    "titre": "Modéliser par des fonctions des situations issues des mathématiques, des autres disciplines"
+    "titre": "Connaître les fonctions affines"
   },
   "2F22": {
-    "titre": "Résoudre f(x)=k ou f(x)<k en choisissant une méthode adaptée"
+    "titre": "Comparer et calculer des images en utilisant les fonctions de référence"
   },
   "2F23": {
-    "titre": "Résoudre une équation, une inéquation produit ou quotient, à l'aide d'un tableau de signes"
-  },
-  "2F24": {
-    "titre": "Résoudre graphiquement ou avec un outil numérique, f(x)=g(x) ou f(x)<g(x)"
-  },
-  "2F25": {
-    "titre": "Etudier la parité d'une fonction"
+    "titre": "Résoudre algébriquement ou graphiquement  f(x)=k ou f(x)<k avec f fonction de référence"
   },
   "2F3": {
-    "titre": "Étudier les variations et les extremums d'une fonction"
+    "titre": "Représenter algébriquement et graphiquement les fonctions"
   },
   "2F30": {
-    "titre": "Relier représentation graphique et tableau de variations"
+    "titre": "Exploiter l'équation y=f(x) d'une courbe : appartenance, calcul de coordonnées"
   },
   "2F31": {
-    "titre": "Utiliser les variations d'une fonction"
+    "titre": "Modéliser par des fonctions des situations issues des mathématiques, des autres disciplines"
   },
   "2F32": {
+    "titre": "Résoudre f(x)=k ou f(x)<k en choisissant une méthode adaptée"
+  },
+  "2F33": {
+    "titre": "Résoudre une équation, une inéquation produit ou quotient, à l'aide d'un tableau de signes"
+  },
+  "2F34": {
+    "titre": "Résoudre graphiquement ou avec un outil numérique, f(x)=g(x) ou f(x)<g(x)"
+  },
+  "2F35": {
+    "titre": "Etudier la parité d'une fonction"
+  },
+  "2F4": {
+    "titre": "Étudier les variations et les extremums d'une fonction"
+  },
+  "2F40": {
+    "titre": "Relier représentation graphique et tableau de variations"
+  },
+  "2F41": {
+    "titre": "Utiliser les variations d'une fonction"
+  },
+  "2F42": {
     "titre": "Déterminer les extremums d'une fonction"
   },
   "2S1": {
@@ -2839,11 +2863,20 @@
   "TSA3": {
     "titre": "Complément sur la dérivation"
   },
-  "TSA3-1": {
-    "titre": "Composée de deux fonctions, dérivée d'une composée"
+   "TSA3-1": {
+    "titre": "Dérivation"
   },
   "TSA3-2": {
+    "titre": "Exponentielle"
+  },
+  "TSA3-3": {
+    "titre": "Composée de deux fonctions, dérivée d'une composée"
+  },
+  "TSA3-4": {
     "titre": "Convexité"
+  },
+  "TSA3-5": {
+    "titre": "Synthèse"
   },
   "TSA4": {
     "titre": "Continuité des fonctions"
@@ -3061,8 +3094,23 @@
     "sousThemes": {}
   },
    "TCA7": {
-    "titre": "Convexité",
+    "titre": "Compléments sur la dérivation",
     "sousThemes": {}
+  },
+  "TCA7-1": {
+    "titre": "Dérivation"
+  },
+  "TCA7-2": {
+    "titre": "Exponentielle"
+  },
+  "TCA7-3": {
+    "titre": "Composée de deux fonctions, dérivée d'une composée"
+  },
+  "TCA7-4": {
+    "titre": "Convexité"
+  },
+  "TCA7-5": {
+    "titre": "Synthèse"
   },
    "TCP1": {
     "titre": "Lois de probabilités discrètes",

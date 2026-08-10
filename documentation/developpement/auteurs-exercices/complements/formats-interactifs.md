@@ -697,6 +697,15 @@ handleAnswers(
 
 La réponse attendue est une configuration sérialisée, pas seulement l'abscisse du point. L'objet `points` contient les points que l'élève doit placer, avec leur `pointValue` et leur `label`. La clé `showwNegative` correspond au nom historique attendu par la vérification. Vérifier un exercice existant proche, par exemple `6N3D-2.ts`, si plusieurs points ou des fractions sont attendus.
 
+Hors HTML, `demiDroiteInteractive()` produit une figure statique :
+
+- en LaTeX : un `tikzpicture` ;
+- en Typst : une image SVG embarquée dans un marqueur `<mathalea-typst>`.
+
+Quand `interactivityOn` vaut `true`, la demi-droite graduée est affichée sans
+les points à placer. Quand `interactivityOn` vaut `false`, les points fournis
+dans l'option `points` sont dessinés, ce qui convient au rendu de correction.
+
 ## Cercle trigonométrique
 
 À utiliser pour sélectionner une position sur le cercle trigonométrique.
@@ -727,12 +736,23 @@ texte += addTrigoCircleSelection(this, i, {
   showAngleLabels: true,
   showCoordinateLabels: Boolean(this.sup2),
   style: 'display:block; max-width: 46rem;',
+  interactivityOn: this.interactif,
 })
 
 texteCorr += 'Il fallait sélectionner les points correspondant aux solutions.'
+texteCorr += addTrigoCircleSelection(this, i, {
+  id: `trigo-circle-selection-correctionEx${this.numeroExercice}Q${i}`,
+  showAngleLabels: true,
+  showCoordinateLabels: true,
+  interactivityOn: false,
+  markedPoints: solutions.map((solution) => ({
+    angle: solution.angleRad,
+    color: '#f15929',
+  })),
+})
 ```
 
-`trigoCircleSelectionValue()` transforme la liste des angles attendus en valeur numérique vérifiable par le custom element. Chaque angle vient de `solution.angleRad`, comme dans l'exercice `2mTrigoFct-3.ts`. Les options exactes dépendent du type de sélection voulu ; partir de cet exercice si le cercle doit gérer plusieurs réponses.
+`trigoCircleSelectionValue()` transforme la liste des angles attendus en valeur numérique vérifiable par le custom element. Chaque angle vient de `solution.angleRad`, comme dans l'exercice `2mTrigoFct-3.ts`. L'appel à `addTrigoCircleSelection()` est contextuel : en HTML interactif, il produit le custom element ; en LaTeX, il produit un cercle trigonométrique via `mathalea2d` ; en Typst, il embarque un SVG statique. Quand `interactivityOn` vaut `true`, aucun point attendu n'est marqué sur le rendu statique. Quand `interactivityOn` vaut `false`, les points fournis par `markedPoints` sont dessinés, ou à défaut les points déduits de `value`.
 
 ## Horloge interactive
 
@@ -769,6 +789,17 @@ handleAnswers(
 ```
 
 La réponse attendue est la chaîne produite par `Hms.toString()`. Le custom element sauvegarde la réponse élève comme objet sérialisé, puis la vérification reconstruit l'heure attendue avec `Hms.fromString()`, comme dans l'exercice `canc3D04.ts`.
+
+`addInteractiveClock()` gère directement les contextes de sortie :
+
+- en HTML standard, il injecte le custom element interactif ou figé ;
+- en LaTeX, il retourne une horloge `mathalea2d` statique ;
+- en Typst, il retourne une image SVG embarquée dans un marqueur
+  `<mathalea-typst>`.
+
+Quand `showHands` vaut `false`, l'horloge est rendue sans aiguilles, ce qui
+convient à l'énoncé interactif. Quand `interactivityOn` vaut `false` avec
+`showHands: true`, l'heure fournie est dessinée pour la correction.
 
 ## Guide-âne
 

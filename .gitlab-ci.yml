@@ -306,7 +306,7 @@ playwright-pdf-consolidated:
   parallel:
     matrix:
       - NIV_LABEL: 'can/2e'
-      - NIV_LABLE: 'can/1e'
+      - NIV_LABEL: 'can/1e'
       - NIV_LABEL: 'can/6e'
       - NIV_LABEL: 'can/5e'
       - NIV_LABEL: 'can/4e'

@@ -1,4 +1,4 @@
-import CalculerCoordonneesPointsCourbe from '../2e/2F20-2'
+import CalculerCoordonneesPointsCourbe from '../2e/2F30-2'
 export const titre =
   "Calculer l'ordonnée d'un point d'une courbe connaissant son abscisse"
 export const interactifReady = true

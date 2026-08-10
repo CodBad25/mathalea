@@ -1,18 +1,8 @@
-import { droite } from '../../lib/2d/droites'
-import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { segment } from '../../lib/2d/segmentsVecteurs'
-import { Latex2d, latex2d } from '../../lib/2d/textes'
-import {
-  TracePointSurDroite,
-  tracePointSurDroite,
-} from '../../lib/2d/TracePointSurDroite'
 import { orangeMathalea } from '../../lib/colors'
 import { demiDroiteInteractive } from '../../lib/customElements/demi_droite_interactive'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
-import { mathalea2d } from '../../modules/mathalea2d'
 import { adverbeNumeral } from '../../modules/nombreEnLettres'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -74,23 +64,24 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
   nouvelleVersion() {
     const nbClicsMax = (1 + this.sup3) * 5
     const nbUnits = 1 + (context.isHtml ? this.sup4 : Math.min(this.sup4, 2))
-    this.consigne = context.isHtml
-      ? `Utiliser les boutons pour modifier la demi-droite graduée et créer les graduations nécessaires pour placer ${
-          this.sup === 1
-            ? 'le point $A$'
-            : `les points ${['A', 'B', 'C']
-                .slice(0, this.sup - 1)
-                .map((p) => `$${p}$`)
-                .join(', ')}` + `et $${['A', 'B', 'C'][this.sup - 1]}$`
-        }.`
-      : `L'unité fait 4 cm. Graduer régulièrement l'axe et placer  ${
-          this.sup === 1
-            ? 'le point $A$'
-            : `les points ${['A', 'B', 'C']
-                .slice(0, this.sup - 1)
-                .map((p) => `$${p}$`)
-                .join(', ')}` + `et $${['A', 'B', 'C'][this.sup - 1]}$`
-        }.`
+    this.consigne =
+      context.isHtml && !context.isTypst
+        ? `Utiliser les boutons pour modifier la demi-droite graduée et créer les graduations nécessaires pour placer ${
+            this.sup === 1
+              ? 'le point $A$'
+              : `les points ${['A', 'B', 'C']
+                  .slice(0, this.sup - 1)
+                  .map((p) => `$${p}$`)
+                  .join(', ')}` + `et $${['A', 'B', 'C'][this.sup - 1]}$`
+          }.`
+        : `L'unité fait 4 cm. Graduer régulièrement l'axe et placer  ${
+            this.sup === 1
+              ? 'le point $A$'
+              : `les points ${['A', 'B', 'C']
+                  .slice(0, this.sup - 1)
+                  .map((p) => `$${p}$`)
+                  .join(', ')}` + `et $${['A', 'B', 'C'][this.sup - 1]}$`
+          }.`
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const x0 = this.sup2 ? 0 : randint(1, 3)
       let den: number
@@ -133,52 +124,29 @@ export default class DonnerSensDefinitionQuotient2 extends Exercice {
               .join(
                 ', ',
               )} sont placés sur la demi-droite graduée ci-dessous.<br><br>`
-      if (context.isHtml) {
-        texte += demiDroiteInteractive(this, i, {
-          initialT: abscisseT,
-          minT: abscisseT,
-          maxT: abscisseT,
-          multiplePoints: this.sup > 1,
-          x0,
-        })
-        texteCorr += demiDroiteInteractive(this, i, {
-          initialT: abscisseT,
-          x0,
-          minT: abscisseT,
-          maxT: abscisseT,
-          interactivityOn: false,
-          partsCount: den * (abscisseT - x0),
-          points: nums.map((num, i) => ({
-            pointValue: num / den,
-            label: ['A', 'B', 'C'][i],
-          })),
-          id: `demi-droite-gradueeEx${this.numeroExercice}Q${i}Corr`,
-          pointsColor: orangeMathalea,
-          multiplePoints: this.sup > 1,
-        })
-      } else {
-        const O = pointAbstrait(0, 0)
-        const I = pointAbstrait(2, 0)
 
-        const F = pointAbstrait((abscisseT - x0) * 4 + 0.5, 0)
-        const axe = segment(O, F)
-        const d = droite(O, F)
-        axe.epaisseur = 2
-        axe.styleExtremites = '->'
-        const ticks: TracePointSurDroite[] = []
-        const labels: Latex2d[] = []
-        for (let j = 0; j <= abscisseT - x0; j++) {
-          const tick = tracePointSurDroite(pointAbstrait(j * 4, 0), d, 'black')
-          ticks.push(tick)
-          labels.push(latex2d(`$${j + x0}$`, j * 4, -0.7, {}))
-        }
-
-        const objets = [axe, ...ticks, ...labels]
-        texte += mathalea2d(
-          Object.assign({ scale: 1 }, fixeBordures(objets, { rxmin: 0 })),
-          objets,
-        )
-      }
+      texte += demiDroiteInteractive(this, i, {
+        initialT: abscisseT,
+        minT: abscisseT,
+        maxT: abscisseT,
+        multiplePoints: this.sup > 1,
+        x0,
+      })
+      texteCorr += demiDroiteInteractive(this, i, {
+        initialT: abscisseT,
+        x0,
+        minT: abscisseT,
+        maxT: abscisseT,
+        interactivityOn: false,
+        partsCount: den * (abscisseT - x0),
+        points: nums.map((num, i) => ({
+          pointValue: num / den,
+          label: ['A', 'B', 'C'][i],
+        })),
+        id: `demi-droite-gradueeEx${this.numeroExercice}Q${i}Corr`,
+        pointsColor: orangeMathalea,
+        multiplePoints: this.sup > 1,
+      })
 
       if (this.questionJamaisPosee(i, nums.join(''), den)) {
         handleAnswers(

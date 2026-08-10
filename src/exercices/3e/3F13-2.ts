@@ -29,7 +29,7 @@ export const dateDePublication = '31/01/2026'
 export const uuid = '8117e'
 
 export const refs = {
-  'fr-fr': ['3F13-2', '1Tec-F13'],
+  'fr-fr': ['3F13-2', '2F12-3', '1Tec-F13'],
   'fr-ch': [],
 }
 export default class AntecedentGraphique extends Exercice {

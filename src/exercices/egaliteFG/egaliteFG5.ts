@@ -17,7 +17,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export const egaliteFillesGarcons = true
+export const tags = ['égalité filles-garçons']
 
 const annees = [1986, 1988, 1993, 1997, 2002, 2007, 2012, 2017, 2022]
 const nombres = [34, 33, 35, 63, 71, 107, 155, 224, 215]

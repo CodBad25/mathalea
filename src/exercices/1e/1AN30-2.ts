@@ -29,7 +29,7 @@ export const interactifReady = true
 export const interactifType = ['qcm', 'mathLive']
 export const uuid = 'cb7d9'
 export const refs = {
-  'fr-fr': ['1AN30-2'],
+  'fr-fr': ['1AN30-2','TSA3-20', 'TCA7-20'],
   'fr-ch': [],
 }
 

@@ -1,6 +1,12 @@
 import { context } from '../../modules/context'
 import type FractionEtendue from '../../modules/FractionEtendue'
-import { compactTexForSvg } from '../2d/cercleTrigo'
+import { mathalea2d } from '../../modules/mathalea2d'
+import {
+  cercleTrigo,
+  compactTexForSvg,
+  type TrigoCircleMarkedPoint,
+} from '../2d/cercleTrigo'
+import { orangeMathalea } from '../colors'
 import { uniformiseResults } from '../interactif/gestionInteractif'
 import {
   normalizeAnglePiFraction,
@@ -19,11 +25,18 @@ type TrigoCircleSelectionPoint = {
 }
 
 export type TrigoCircleSelectionOptions = {
+  id?: string
   showAngleLabels?: boolean
   showCoordinateLabels?: boolean
   style?: string
   interactivityOn?: boolean
   value?: number | string
+  markedPoints?: TrigoCircleMarkedPoint[]
+  withResultSpan?: boolean
+}
+
+function typstStringLiteral(value: string): string {
+  return JSON.stringify(value)
 }
 
 const svgNamespace = 'http://www.w3.org/2000/svg'
@@ -41,6 +54,7 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
   private _updatingValueAttr = false
   private _showAngleLabels = true
   private _showCoordinateLabels = false
+  private _markedPoints: TrigoCircleMarkedPoint[] = []
 
   constructor() {
     super()
@@ -88,6 +102,7 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
     showCoordinateLabels,
     value,
     interactivityOn,
+    markedPoints,
   }: {
     id?: string
     numeroExercice: number
@@ -98,7 +113,25 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
     showCoordinateLabels?: boolean
     value?: number | string
     interactivityOn: boolean
+    markedPoints?: TrigoCircleMarkedPoint[]
   }): string {
+    const createElementForStaticRender = () => {
+      const element = new TrigoCircleSelectionElement()
+      element.applyStaticOptions({
+        showAngleLabels,
+        showCoordinateLabels,
+        value,
+        interactivityOn,
+        markedPoints,
+      })
+      return element
+    }
+
+    if (context.isTypst) {
+      return `<mathalea-typst>${createElementForStaticRender().renderTypst()}</mathalea-typst>`
+    }
+    if (!context.isHtml) return createElementForStaticRender().renderLatex()
+
     const attrs: string[] = []
 
     id = id ?? `trigo-circle-selectionEx${numeroExercice}Q${questionIndex}`
@@ -108,9 +141,41 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
     if (showAngleLabels === false) attrs.push('show-angle-labels="false"')
     if (showCoordinateLabels) attrs.push('show-coordinate-labels')
     if (value !== undefined) attrs.push(`value="${String(value)}"`)
+    if (markedPoints && markedPoints.length > 0) {
+      attrs.push(
+        `marked-points="${encodeURIComponent(
+          JSON.stringify(
+            markedPoints.map((point) => ({
+              angle: normalizeAnglePiFraction(point.angle),
+              color: point.color,
+              radius: point.radius,
+              label: point.label,
+            })),
+          ),
+        )}"`,
+      )
+    }
     attrs.push(`interactivity-on="${Boolean(interactivityOn)}"`)
     attrs.push(`points="${encodeURIComponent(JSON.stringify(points))}"`)
     return `<trigo-circle-selection ${attrs.join(' ')}></trigo-circle-selection>`
+  }
+
+  private applyStaticOptions({
+    showAngleLabels,
+    showCoordinateLabels,
+    value,
+    interactivityOn,
+    markedPoints,
+  }: TrigoCircleSelectionOptions) {
+    this._points = points
+    this._showAngleLabels = showAngleLabels !== false
+    this._showCoordinateLabels = Boolean(showCoordinateLabels)
+    this.interactivityOn = interactivityOn ?? true
+    this._markedPoints = markedPoints ?? []
+    const numericValue = Number(value)
+    if (Number.isFinite(numericValue)) {
+      this._selectedValues = this.decodeValue(numericValue)
+    }
   }
 
   static get observedAttributes() {
@@ -121,6 +186,7 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
       'show-angle-labels',
       'show-coordinate-labels',
       'interactivity-on',
+      'marked-points',
     ]
   }
 
@@ -150,6 +216,10 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
       this._showCoordinateLabels = this.hasAttribute('show-coordinate-labels')
       this.render()
     }
+    if (name === 'marked-points') {
+      this._markedPoints = this.parseMarkedPointsAttribute(newValue)
+      this.render()
+    }
   }
 
   get value(): string {
@@ -173,6 +243,9 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
     this._points = this.parsePointsAttribute(this.getAttribute('points'))
     this._showAngleLabels = this.getAttribute('show-angle-labels') !== 'false'
     this._showCoordinateLabels = this.hasAttribute('show-coordinate-labels')
+    this._markedPoints = this.parseMarkedPointsAttribute(
+      this.getAttribute('marked-points'),
+    )
     const value = Number(this.getAttribute('value'))
     this.interactivityOn = this.getAttribute('interactivity-on') !== 'false'
     if (Number.isFinite(value)) this._selectedValues = this.decodeValue(value)
@@ -201,6 +274,46 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
             Number.isFinite(point.value) &&
             point.value > 0,
         )
+    } catch {
+      return []
+    }
+  }
+
+  private parseMarkedPointsAttribute(
+    value: string | null,
+  ): TrigoCircleMarkedPoint[] {
+    if (!value) return []
+    try {
+      const parsed = JSON.parse(decodeURIComponent(value))
+      if (!Array.isArray(parsed)) return []
+      return parsed
+        .map((point) => {
+          const angle = point.angle
+          return {
+            angle:
+              angle != null &&
+              Number.isFinite(Number(angle.num)) &&
+              Number.isFinite(Number(angle.den))
+                ? {
+                    num: Number(angle.num),
+                    den: Number(angle.den),
+                  }
+                : Number(point.angle),
+            color: point.color == null ? undefined : String(point.color),
+            radius: Number.isFinite(Number(point.radius))
+              ? Number(point.radius)
+              : undefined,
+            label: point.label == null ? undefined : String(point.label),
+          }
+        })
+        .filter((point) => {
+          const angle = point.angle
+          return typeof angle === 'number'
+            ? Number.isFinite(angle)
+            : Number.isFinite(Number(angle.num)) &&
+                Number.isFinite(Number(angle.den)) &&
+                Number(angle.den) !== 0
+        }) as TrigoCircleMarkedPoint[]
     } catch {
       return []
     }
@@ -398,6 +511,9 @@ class TrigoCircleSelectionElement extends MathaleaCustomElement {
   }
 
   render() {
+    if (context.isTypst) return this.renderTypst()
+    if (!context.isHtml) return this.renderLatex()
+
     if (!this.shadowRoot) return
     this.shadowRoot.innerHTML = ''
     const style = document.createElement('style')
@@ -567,12 +683,80 @@ svg {
       svg.appendChild(button)
     }
 
+    if (!this.interactivityOn && this._markedPoints.length > 0) {
+      for (const point of this._markedPoints) {
+        const normalized = normalizeAnglePiFraction(point.angle)
+        const angle = (normalized.num / normalized.den) * Math.PI
+        const marker = this.createSvgElement('circle')
+        marker.setAttribute('cx', (Math.cos(angle) * 100).toFixed(2))
+        marker.setAttribute('cy', (-Math.sin(angle) * 100).toFixed(2))
+        marker.setAttribute('r', `${(point.radius ?? 0.055) * 100}`)
+        marker.setAttribute('fill', point.color ?? orangeMathalea)
+        marker.setAttribute('stroke', '#1f2429')
+        marker.setAttribute('stroke-width', '0.8')
+        svg.appendChild(marker)
+      }
+    }
+
     this.shadowRoot.appendChild(svg)
     this.updateSelectionState()
     if (!this.interactivityOn) {
       this.setAttribute('disabled', '')
     }
     this.updateDisabledState()
+  }
+
+  private getStaticMarkedPoints(): TrigoCircleMarkedPoint[] {
+    if (this.interactivityOn) return []
+    if (this._markedPoints.length > 0) return this._markedPoints
+    return this._points
+      .filter((point) => this._selectedValues.has(point.value))
+      .map((point) => ({
+        angle:
+          trigoCircleAngles.find((angle) => angle.angleDeg === point.angleDeg)
+            ?.angleRad ?? 0,
+        color: orangeMathalea,
+      }))
+  }
+
+  protected renderLatex(): string {
+    const verticalBound = this._showCoordinateLabels ? 4.625 : 3.9
+    return mathalea2d(
+      {
+        xmin: -4.5,
+        ymin: -verticalBound,
+        xmax: 4.5,
+        ymax: verticalBound,
+        pixelsParCm: 90,
+        scale: 1,
+        display: 'block',
+      },
+      cercleTrigo({
+        radius: 2.5,
+        showRadians: this._showAngleLabels,
+        showCoordinates: this._showCoordinateLabels,
+        markedPoints: this.getStaticMarkedPoints(),
+      }),
+    )
+  }
+
+  protected renderTypst(): string {
+    const cercle = cercleTrigo({
+      radius: 2.5,
+      showRadians: this._showAngleLabels,
+      showCoordinates: this._showCoordinateLabels,
+      markedPoints: this.getStaticMarkedPoints(),
+    })
+    const coeff = 80
+    const width = 820
+    const halfHeight = this._showCoordinateLabels ? 300 : 280
+    const height = halfHeight * 2
+    const svg = [
+      `<svg width="${width}" height="${height}" viewBox="-410 -${halfHeight} 820 ${height}" xmlns="http://www.w3.org/2000/svg">`,
+      cercle.svg(coeff),
+      '</svg>',
+    ].join('')
+    return `#image(bytes(${typstStringLiteral(svg)}), format: "svg", width: 325pt)`
   }
 }
 
@@ -595,8 +779,6 @@ export function addTrigoCircleSelection(
   questionIndex: number,
   options: TrigoCircleSelectionOptions = {},
 ): string {
-  if (!context.isHtml) return ''
-
   if (exercice.autoCorrection == null) exercice.autoCorrection = []
   if (exercice.autoCorrection[questionIndex] == null)
     exercice.autoCorrection[questionIndex] = {}
@@ -604,6 +786,7 @@ export function addTrigoCircleSelection(
     'trigo-circle-selection'
 
   const html = TrigoCircleSelectionElement.create({
+    id: options.id,
     className: 'mx-2 trigoCircleSelection',
     numeroExercice: exercice.numeroExercice ?? 0,
     questionIndex: questionIndex ?? 0,
@@ -612,8 +795,12 @@ export function addTrigoCircleSelection(
     showCoordinateLabels: options.showCoordinateLabels,
     value: options.value,
     interactivityOn: options.interactivityOn ?? true,
+    markedPoints: options.markedPoints,
   })
 
+  const withResultSpan =
+    options.withResultSpan ?? (options.interactivityOn ?? true)
+  if (!withResultSpan) return html
   return `${html}<span id="resultatCheckEx${exercice.numeroExercice}Q${questionIndex}"></span>`
 }
 

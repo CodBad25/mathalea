@@ -145,15 +145,19 @@ export default class LimitesParComparaison extends Exercice {
         )
         const borneUtile =
           signeLimite > 0 ? borneInferieure : borneSuperieure
+        const comparaisonUtile =
+          signeLimite > 0
+            ? `f(x)\\geqslant ${borneInferieure}`
+            : `f(x)\\leqslant ${borneSuperieure}`
 
         correction = `Soit $x\\in\\mathbb R$. On a :<br>
         $\\begin{aligned}
-          \\phantom{\\iff}&-1\\leqslant ${fonctionTrigo}(x)\\leqslant 1\\\\
-          \\iff&-${valeurAbsolueCoefficientTrigo}\\leqslant ${termeTrigonometrie}\\leqslant ${valeurAbsolueCoefficientTrigo}\\\\
-          \\iff&${borneInferieure}\\leqslant f(x)\\leqslant ${borneSuperieure}.
+          &-1\\leqslant ${fonctionTrigo}(x)\\leqslant 1\\\\
+          &-${valeurAbsolueCoefficientTrigo}\\leqslant ${termeTrigonometrie}\\leqslant ${valeurAbsolueCoefficientTrigo}\\\\
+          &${borneInferieure}\\leqslant ${expression}\\leqslant ${borneSuperieure}.
         \\end{aligned}$<br>
-        On a $\\displaystyle \\lim_{${indice}}(${borneUtile})=${reponse}$.<br>
-        D’après le théorème de comparaison, $\\displaystyle \\lim_{${indice}}f(x)=${miseEnEvidence(reponse)}$.`
+        On a donc $${comparaisonUtile}$.<br>
+        Comme $\\displaystyle \\lim_{${indice}}(${borneUtile})=${reponse}$, alors, d’après le théorème de comparaison, $\\displaystyle \\lim_{${indice}}f(x)=${miseEnEvidence(reponse)}$.`
       } else if (type === 'gendarmesQuotient') {
         const coefficient = randint(1, 5)
         const constante = randint(1, 8)
@@ -165,11 +169,11 @@ export default class LimitesParComparaison extends Exercice {
 
         correction = `Soit $x\\in\\mathbb R$. On a :<br>
         $\\begin{aligned}
-          \\phantom{\\iff}&-1\\leqslant ${fonctionTrigo}(x)\\leqslant 1\\\\
-          \\iff&-${valeurAbsolueCoefficientTrigo}\\leqslant ${termeTrigonometrie}\\leqslant ${valeurAbsolueCoefficientTrigo}\\\\
-          \\iff&-\\dfrac{${valeurAbsolueCoefficientTrigo}}{${polynome}}\\leqslant f(x)\\leqslant\\dfrac{${valeurAbsolueCoefficientTrigo}}{${polynome}}.
+          &-1\\leqslant ${fonctionTrigo}(x)\\leqslant 1\\\\
+          &-${valeurAbsolueCoefficientTrigo}\\leqslant ${termeTrigonometrie}\\leqslant ${valeurAbsolueCoefficientTrigo}\\\\
+          &-\\dfrac{${valeurAbsolueCoefficientTrigo}}{${polynome}}\\leqslant \\dfrac{${termeTrigonometrie}}{${polynome}}\\leqslant\\dfrac{${valeurAbsolueCoefficientTrigo}}{${polynome}}.
         \\end{aligned}$<br>
-        La dernière équivalence est obtenue car $${polynome}>0$ : on peut diviser chaque membre par $${polynome}$ sans changer le sens des inégalités.<br>
+        La dernière inégalité est obtenue car $${polynome}>0$ : on peut diviser chaque membre par $${polynome}$ sans changer le sens des inégalités.<br>
         On a $\\displaystyle \\lim_{${indice}}\\left(-\\dfrac{${valeurAbsolueCoefficientTrigo}}{${polynome}}\\right)=0$ et $\\displaystyle \\lim_{${indice}}\\dfrac{${valeurAbsolueCoefficientTrigo}}{${polynome}}=0$.<br>
         D’après le théorème des gendarmes, $\\displaystyle \\lim_{${indice}}f(x)=${miseEnEvidence('0')}$.`
       } else {
@@ -185,11 +189,11 @@ export default class LimitesParComparaison extends Exercice {
         domaine = '\\mathbb R'
         reponse = '0'
 
-        correction = `Soit $x\\in\\mathbb R$. Comme $\\mathrm{e}^{${exposant}}>0$, on a :<br>
+        correction = `Soit $x\\in\\mathbb R$. On a :<br>
         $\\begin{aligned}
-          \\phantom{\\iff}&-1\\leqslant ${fonctionTrigo}(x)\\leqslant 1\\\\
-          \\iff&-${valeurAbsolueCoefficientTrigo}\\leqslant ${termeTrigonometrie}\\leqslant ${valeurAbsolueCoefficientTrigo}\\\\
-          \\iff&-${coefficientBorne}\\mathrm{e}^{${exposant}}\\leqslant f(x)\\leqslant ${coefficientBorne}\\mathrm{e}^{${exposant}}.
+          &-1\\leqslant ${fonctionTrigo}(x)\\leqslant 1\\\\
+          &-${valeurAbsolueCoefficientTrigo}\\leqslant ${termeTrigonometrie}\\leqslant ${valeurAbsolueCoefficientTrigo}\\\\
+          &-${coefficientBorne}\\mathrm{e}^{${exposant}}\\leqslant ${expression}\\leqslant ${coefficientBorne}\\mathrm{e}^{${exposant}} &&\\text{car } \\mathrm{e}^{${exposant}}>0.
         \\end{aligned}$<br>
         On a $\\displaystyle \\lim_{${indice}}(${exposant})=-\\infty$ et $\\displaystyle \\lim_{X\\to-\\infty}\\mathrm{e}^{X}=0$.<br>
         Par composition :<br>

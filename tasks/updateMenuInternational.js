@@ -73,6 +73,13 @@ async function readInfos(
           const matchUuid = data.match(/export const uuid\s*=\s*'([^']*)'/)
           infos.url = filePath.replace('src/exercices/', '')
           infos.tags = []
+          const matchTags = data.match(/export const tags\s*=\s*\[([^\]]*)\]/)
+          if (matchTags) {
+            infos.tags = matchTags[1]
+              .split(',')
+              .map((tag) => tag.trim().replace(/^['"]|['"]$/g, ''))
+              .filter((tag) => tag !== '')
+          }
           if (matchUuid) {
             if (uuidMap.has(matchUuid[1])) {
               console.error(
@@ -159,15 +166,6 @@ async function readInfos(
                 )
                 if (matchDateModif) {
                   infos.dateModification = matchDateModif[1]
-                }
-                const matchEgaliteFillesGarcons = data.match(
-                  /export const egaliteFillesGarcons = (.*)/,
-                )
-                if (
-                  matchEgaliteFillesGarcons &&
-                  matchEgaliteFillesGarcons[1].trim() === 'true'
-                ) {
-                  infos.egaliteFillesGarcons = true
                 }
                 infos.features = {}
                 const matchInteractif = data.match(
@@ -263,15 +261,6 @@ async function readInfos(
                 )
                 if (matchDateModif) {
                   infos.dateModification = matchDateModif[1]
-                }
-                const matchEgaliteFillesGarcons = data.match(
-                  /export const egaliteFillesGarcons = (.*)/,
-                )
-                if (
-                  matchEgaliteFillesGarcons &&
-                  matchEgaliteFillesGarcons[1].trim() === 'true'
-                ) {
-                  infos.egaliteFillesGarcons = true
                 }
                 infos.features = {}
                 const matchInteractif = data.match(

@@ -25,7 +25,7 @@ export const titre = 'Dériver une fonction du type $u(ax + b)$'
 
 export const uuid = '3391d'
 export const refs = {
-  'fr-fr': ['1AN14-7'],
+  'fr-fr': ['1AN14-7','TSA3-30', 'TCA7-30'],
   'fr-ch': ['3mA2-9', '4mAna-3'],
 }
 

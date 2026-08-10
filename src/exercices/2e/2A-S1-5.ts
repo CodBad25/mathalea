@@ -13,7 +13,7 @@ export const titre = 'Interpréter une courbe des effectifs cumulés croissants'
 export const dateDePublication = '06/08/2026'
 export const uuid = '76b4a'
 export const refs = {
-  'fr-fr': ['2A-S1-5'],
+  'fr-fr': ['2A-S1-5','1A-S01-7'],
   'fr-ch': [],
 }
 export const interactifReady = true

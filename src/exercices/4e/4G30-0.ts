@@ -1,11 +1,3 @@
-import { demiDroite } from '../../lib/2d/DemiDroite'
-import { droite } from '../../lib/2d/droites'
-import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
-import { labelPoint } from '../../lib/2d/textes'
-import { tracePointSurDroite } from '../../lib/2d/TracePointSurDroite'
-import { homothetie, similitude } from '../../lib/2d/transformations'
 import { addGuideAne, GuideAne } from '../../lib/customElements/GuideAne'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
@@ -13,9 +5,7 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { egalOuApprox } from '../../lib/outils/ecritures'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
-import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
-import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 export const titre =
@@ -40,7 +30,7 @@ export default class MonExoGuideAne extends Exercice {
   }
 
   nouvelleVersion(): void {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const alpha = choice([30, 45, 60])
       const targetAB = randint(5, 16, 10)
 
@@ -51,7 +41,7 @@ export default class MonExoGuideAne extends Exercice {
       const targetValue = (targetAB * targetP) / targetN
       let texte = `Représenter en rouge un segment de longueur $${targetFraction}\\times AB$ lorsque $AB$ mesure $${targetAB}\\text{ cm}$`
       let texteCorr = ''
-      if (context.isHtml) {
+      if (context.isHtml && !context.isTypst) {
         const guideAneData = {
           alpha,
           targetAB,
@@ -78,30 +68,39 @@ export default class MonExoGuideAne extends Exercice {
            A: { x: 100, y: 300 },
            n: targetN,
            p: targetP,
-           alpha: 60,
+           alpha,
            targetAB,
            disableADrag: true,
            displayTargetOn: true,
+           interactivityOn: false,
          })}`
       } else {
         // contexte latex
         texte += ' sans utiliser les graduations de la règle.<br>'
-
-        const objets: NestedObjetMathalea2dArray = []
-        const A = pointAbstrait(0, 0, 'A', 'below left')
-        const B = pointAbstrait(targetAB, 0, 'B', 'below right')
-        const C = similitude(B, A, 30, 1)
-        const d = droite(A, C)
-        for (let k = 1; k < 11; k++) {
-          const Ck = homothetie(C, A, k / 10, `C_${k}`, 'above')
-          const traceCk = tracePointSurDroite(Ck, d, 'gray')
-          objets.push(traceCk)
-        }
-        objets.push(labelPoint(A, B))
-        const AB = segmentAvecExtremites(A, B, 'black')
-        const AC = demiDroite(A, C, 'gray')
-        objets.push(AB, AC)
-        texte += mathalea2d(Object.assign({}, fixeBordures(objets)), objets)
+        texte += GuideAne.create({
+          numeroExercice: this.numeroExercice,
+          questionIndex: i,
+          n: targetN,
+          p: targetP,
+          alpha,
+          targetAB,
+          interactivityOn: true,
+        })
+        texteCorr = `Le segment $[AB]$ mesurant $${targetAB}$ cm, on place un point $C$ sur une demi-droite issue de $A$ tel que $AC=${targetN}$ unités.<br>
+        Ensuite, on trace $${targetN - 1}$ parallèles passant par les points sur cette demi-droite.<br>
+        Ces parallèles coupent le segment $[AB]$ en $${targetN}$ segments de même longueur.<br>
+         Le point $D$ est placé sur la $${targetP}^\\text{ème}$ parallèle, ce qui donne $AD=\\dfrac{${targetP}}{${targetN}}AB${egalOuApprox(targetValue, 2)}${texNombre(targetValue, 2)}$ cm.<br>
+         ${GuideAne.create({
+           numeroExercice: this.numeroExercice,
+           questionIndex: i,
+           n: targetN,
+           p: targetP,
+           alpha,
+           targetAB,
+           disableADrag: true,
+           displayTargetOn: true,
+           interactivityOn: false,
+         })}`
       }
       if (this.questionJamaisPosee(i, targetAB, targetN, targetP)) {
         // GuideAne.verifQuestion() n'utilise pas exercice.autoCorrection[i], mais on remplit quand-même pour harmoniser les usages
