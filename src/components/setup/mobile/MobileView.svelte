@@ -117,9 +117,11 @@
     if (isExerciceItemInReferentiel(ending) || isTool(ending)) {
       newExercise.id = ending.id
     }
+    // Sur la vue mobile, les exercices sont interactifs par défaut,
+    // sauf si l'utilisateur a explicitement désactivé l'interactivité.
     if (
       $globalOptions.recorder === 'capytale' ||
-      $globalOptions.setInteractive === '1'
+      $globalOptions.setInteractive !== '0'
     ) {
       newExercise.interactif = '1'
     }

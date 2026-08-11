@@ -1,9 +1,4 @@
-import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { labelPoint } from '../../lib/2d/textes'
-import { tracePoint } from '../../lib/2d/TracePoint'
-import { similitude } from '../../lib/2d/transformations'
-import { pointAdistance } from '../../lib/2d/utilitairesPoint'
+import { PointAbstrait } from '../../lib/2d/PointAbstrait'
 import {
   addEditeurIep,
   ElementIepEditeur,
@@ -14,7 +9,6 @@ import {
 } from '../../lib/customElements/ElementIepEditeur'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
-import { mathalea2d } from '../../modules/mathalea2d'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -108,7 +102,13 @@ export const verifierTriangle: ElementIepVerificationCallback = ({
   studentProgram,
   expectedRaw,
 }) => {
-  const programmeAttendu: InstructionIep[] = JSON.parse(String(expectedRaw))
+  const parsedExpected = JSON.parse(String(expectedRaw))
+  const programmeAttendu: InstructionIep[] = Array.isArray(parsedExpected)
+    ? parsedExpected
+    : [
+        ...(parsedExpected.conditionsInitiales as InstructionIep[]),
+        ...(parsedExpected.programmeAttendu as InstructionIep[]),
+      ]
   const resultatAttendu = produiScalaireDeuxPremiersCotes(programmeAttendu)
   const resultatEleve = produiScalaireDeuxPremiersCotes(studentProgram)
   if (resultatEleve.message !== '') {
@@ -207,16 +207,8 @@ export default class TracerTriangleAngle2cotes extends Exercice {
           const BC = randint(3, 7, AB)
           const ABC = randint(20, 70)
           donnees = [AB, BC, ABC]
-          const B = pointAbstrait(0, 0, nom[1])
-          const A = pointAdistance(B, AB, 0)
-          const C = similitude(A, B, ABC, BC / AB)
-          const objets = [A, B, C, tracePoint(B), labelPoint(B)]
-          const figure = mathalea2d(
-            Object.assign({}, fixeBordures(objets)),
-            objets,
-          )
-          texte = `Construire le triangle $${nom}$ tel que $\\widehat{${nom[0]}${nom[1]}${nom[2]}} = ${ABC}^\\circ$ et $${nom[0]}${nom[1]}=${AB}\\text{ cm}$ et $${nom[1]}${nom[2]}=${BC}\\text{ cm}$.<br>
-      ${figure}`
+
+          texte = `Construire le triangle $${nom}$ tel que $\\widehat{${nom[0]}${nom[1]}${nom[2]}} = ${ABC}^\\circ$ et $${nom[0]}${nom[1]}=${AB}\\text{ cm}$ et $${nom[1]}${nom[2]}=${BC}\\text{ cm}$.<br>`
           instructionsDisponibles = [
             'cercleRayon',
             'droite',
@@ -297,8 +289,6 @@ export default class TracerTriangleAngle2cotes extends Exercice {
           const BAC = randint(20, 70)
           const ABC = randint(20, 70, BAC)
           const l0 = randint(4, 8)
-          const A = pointAbstrait(0, 0, nom[0])
-          const B = pointAdistance(A, l0, 0)
           texte = `Construire le triangle $${nom}$ tel que $\\widehat{${nom[1]}${nom[0]}${nom[2]}} = ${BAC}^\\circ$, $\\widehat{${nom[0]}${nom[1]}${nom[2]}} = ${ABC}^\\circ$ et $${nom[0]}${nom[1]}=${l0}\\text{ cm}$.<br>
           (Pour construire un angle dans le sens indirect, mettre un signe - devant)<br>`
           donnees = [l0, BAC, ABC]
@@ -346,8 +336,16 @@ export default class TracerTriangleAngle2cotes extends Exercice {
       }
 
       if (this.questionJamaisPosee(i, ...donnees)) {
+        const programmeAjoute = programmeAttendu.slice(
+          conditionsInitiales.length,
+        )
         handleAnswers(this, i, {
-          reponse: { value: JSON.stringify(programmeAttendu) },
+          reponse: {
+            value: JSON.stringify({
+              conditionsInitiales,
+              programmeAttendu: programmeAjoute,
+            }),
+          },
         })
         texte += addEditeurIep(this, i, {
           conditionsInitiales,
@@ -357,8 +355,9 @@ export default class TracerTriangleAngle2cotes extends Exercice {
         const texteCorr = `Voici un programme de construction possible :<br>
       ${addEditeurIep(this, i, {
         id: `IepEditeur-corr-Ex${this.numeroExercice}Q${i}`,
+        conditionsInitiales,
         interactivityOn: false,
-        programmeInitial: programmeAttendu as InstructionIep[],
+        programmeInitial: programmeAjoute as InstructionIep[],
       })}`
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

@@ -1,11 +1,5 @@
-import { demiDroite } from '../../lib/2d/DemiDroite'
 import { droite } from '../../lib/2d/droites'
-import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { nommePolygone, polygone } from '../../lib/2d/polygones'
-import { segment } from '../../lib/2d/segmentsVecteurs'
-import { labelPoint } from '../../lib/2d/textes'
-import { tracePoint } from '../../lib/2d/TracePoint'
 import { rotation, similitude, translation } from '../../lib/2d/transformations'
 import { milieu, pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
@@ -19,13 +13,11 @@ import {
 } from '../../lib/customElements/ElementIepEditeur'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
-import { mathalea2d } from '../../modules/mathalea2d'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 export const titre = 'Construire des parallélogrammes'
@@ -85,13 +77,10 @@ const programmeContientCote = (
     })
   })
 
-const cotesTraceesParProgramme = (
+const cotesDesPolygonesDuProgramme = (
   programme: InstructionIep[],
 ): [string, string][] =>
   programme.flatMap((instruction) => {
-    if (instruction.type === 'segment') {
-      return [[instruction.p1, instruction.p2] satisfies [string, string]]
-    }
     if (
       instruction.type !== 'polygone' &&
       instruction.type !== 'polygoneRapide'
@@ -129,13 +118,23 @@ const verifierParallelogramme: ElementIepVerificationCallback = ({
   let expectedProgram: InstructionIep[]
   try {
     const parsed = JSON.parse(expectedRaw)
-    if (!Array.isArray(parsed)) {
+    if (Array.isArray(parsed)) {
+      expectedProgram = parsed as InstructionIep[]
+    } else if (parsed != null && typeof parsed === 'object') {
+      const expectedData = parsed as {
+        conditionsInitiales?: InstructionIep[]
+        programmeAttendu?: InstructionIep[]
+      }
+      expectedProgram = [
+        ...(expectedData.conditionsInitiales ?? []),
+        ...(expectedData.programmeAttendu ?? []),
+      ]
+    } else {
       return {
         isOk: false,
         feedback: 'Réponse attendue invalide.',
       }
     }
-    expectedProgram = parsed as InstructionIep[]
   } catch {
     return {
       isOk: false,
@@ -148,7 +147,9 @@ const verifierParallelogramme: ElementIepVerificationCallback = ({
     const construit = studentPoints.get(nom)
     return construit !== undefined && memePosition(construit, point)
   })
-  const expectedCotes = cotesUniques(cotesTraceesParProgramme(expectedProgram))
+  const expectedCotes = cotesUniques(
+    cotesDesPolygonesDuProgramme(expectedProgram),
+  )
   const cotesOk = expectedCotes.every((cote) =>
     programmeContientCote(studentProgram, cote),
   )
@@ -179,7 +180,7 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
     this.spacingCorr = 2
   }
 
-  nouvelleVersion(numeroExercice: number) {
+  nouvelleVersion() {
     const listeTypeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
@@ -209,29 +210,11 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
       const C = similitude(B, A, angleBAC, randint(7, 9) / 10, noms[2])
       const D = translation(C, vecteur(B, A), noms[3])
       const O = milieu(A, C, noms[4], 'above right')
-      const parallelogramme = polygone(A, B, C, D)
-      const segAB = segment(A, B)
-      const segBC = segment(B, C)
-      const segCD = segment(C, D)
-      const segDA = segment(D, A)
-      const segAC = segment(A, C)
-      const segBD = segment(B, D)
-      const nomPolygone = nommePolygone(parallelogramme)
-      const objetsFigure: NestedObjetMathalea2dArray = []
       const conditionsInitiales: InstructionIep[] = []
       let programmeAttendu: InstructionIep[] = []
       const instructionsDisponibles: InstructionsDisponiblesIep = []
       switch (listeTypeQuestions[i]) {
         case 1: // deux côtés consécutifs
-          objetsFigure.push(
-            segAB,
-            segDA,
-            nomPolygone.objets![0],
-            nomPolygone.objets![1],
-            nomPolygone.objets![3],
-            tracePoint(B, D),
-            C,
-          )
           conditionsInitiales.push(
             { type: 'point', nom: noms[0], x: A.x, y: A.y, protege: true },
             { type: 'point', nom: noms[1], x: B.x, y: B.y, protege: true },
@@ -265,13 +248,6 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
 
           break
         case 2: // trois sommets consécutifs
-          objetsFigure.push(
-            tracePoint(A, B, C),
-            nomPolygone.objets![0],
-            nomPolygone.objets![1],
-            nomPolygone.objets![2],
-            C,
-          )
           conditionsInitiales.push(
             { type: 'point', nom: noms[0], x: A.x, y: A.y, protege: true },
             { type: 'point', nom: noms[1], x: B.x, y: B.y, protege: true },
@@ -279,7 +255,6 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
           )
           programmeAttendu = conditionsInitiales.slice()
           programmeAttendu.push(
-            { type: 'segment', p1: noms[0], p2: noms[2], protege: true },
             {
               type: 'milieu',
               p1: noms[0],
@@ -291,9 +266,9 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
             { type: 'cercle', p1: noms[4], p2: noms[1], protege: true },
             {
               type: 'intersection',
-              etape1: 5,
-              etape2: 6,
-              choix: 2,
+              etape1: 4,
+              etape2: 5,
+              choix: D.y > B.y ? 1 : 2,
               nom: noms[3],
             },
             {
@@ -313,14 +288,6 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
           break
         case 3: // deux sommets consécutifs et le centre
         default:
-          objetsFigure.push(
-            tracePoint(A, B, O),
-            nomPolygone.objets![0],
-            nomPolygone.objets![1],
-            labelPoint(O),
-            C,
-            D,
-          )
           conditionsInitiales.push(
             { type: 'point', nom: noms[0], x: A.x, y: A.y, protege: true },
             { type: 'point', nom: noms[1], x: B.x, y: B.y, protege: true },
@@ -366,15 +333,7 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
           // un angle et le sommet opposé
           const angleAB = droite(A, B).angleAvecHorizontale
           const angleAD = droite(A, D).angleAvecHorizontale
-          objetsFigure.push(
-            tracePoint(A, C),
-            nomPolygone.objets![0],
-            nomPolygone.objets![2],
-            demiDroite(A, D),
-            demiDroite(A, B),
-            D,
-            B,
-          )
+
           conditionsInitiales.push(
             { type: 'point', nom: noms[0], x: A.x, y: A.y, protege: true },
             { type: 'point', nom: noms[2], x: C.x, y: C.y, protege: true },
@@ -424,26 +383,28 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
           texte = `Compléter le programme de construction du  parallélogramme $${nom}$ (sens des aiguilles d'une montre), afin de terminer la figure ci-dessous.<br>`
         }
       }
-      texte += mathalea2d(
-        Object.assign({}, fixeBordures(objetsFigure)),
-        objetsFigure,
-      )
+
       texte += addEditeurIep(this, i, {
         conditionsInitiales,
         instructionsDisponibles,
         verifyCallbackName: VERIFICATION_PARALLELOGRAMME_CALLBACK_NAME,
       })
+      const programmeAjoute = programmeAttendu.slice(conditionsInitiales.length)
       handleAnswers(this, i, {
         reponse: {
-          value: JSON.stringify(programmeAttendu),
+          value: JSON.stringify({
+            conditionsInitiales,
+            programmeAttendu: programmeAjoute,
+          }),
         },
       })
 
       texteCorr = `Voici un programme de construction du parallélogramme $${nom}$ :<br>
         ${addEditeurIep(this, i, {
           id: `IepEditeur-corr-Ex${this.numeroExercice}Q${i}`,
+          conditionsInitiales,
           interactivityOn: false,
-          programmeInitial: programmeAttendu,
+          programmeInitial: programmeAjoute,
           instructionsDisponibles: [],
           verifyCallbackName: VERIFICATION_PARALLELOGRAMME_CALLBACK_NAME,
         })}`

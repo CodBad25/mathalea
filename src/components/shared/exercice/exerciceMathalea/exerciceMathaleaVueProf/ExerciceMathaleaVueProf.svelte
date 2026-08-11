@@ -14,7 +14,9 @@
     exercisesUuidRanking,
     uuidCount,
   } from '../../../../../lib/components/counts'
+  import { afficheAlerteUniteManquante } from '../../../../../lib/interactif/afficheScore'
   import {
+    exerciceAUneUniteManquante,
     exerciceInteractif,
     prepareExerciceCliqueFigure,
   } from '../../../../../lib/interactif/gestionInteractif'
@@ -285,6 +287,7 @@
     log('newData' + exercise.id)
     if (Object.prototype.hasOwnProperty.call(exercise, 'listeQuestions')) {
       if (isCorrectionVisible && isInteractif) isCorrectionVisible = false
+      isExerciceChecked = false
       if (
         exercise !== undefined &&
         typeof exercise?.applyNewSeed === 'function'
@@ -455,6 +458,15 @@
   }
 
   function verifExercice() {
+    exercise.nbTentativesVerification =
+      (exercise.nbTentativesVerification ?? 0) + 1
+    if (
+      exercise.nbTentativesVerification === 1 &&
+      exerciceAUneUniteManquante(exercise)
+    ) {
+      afficheAlerteUniteManquante(divScore)
+      return
+    }
     isCorrectionVisible = true
     isExerciceChecked = true
     resultsByExercice.update((l) => {
@@ -633,8 +645,17 @@
     ) {
       window.localStorage.setItem(`${exercise.id}|${exercise.seed}`, 'true')
     }
-    if (isInteractif && !exercise.interactifObligatoire) {
-      isInteractif = !isInteractif
+    if (
+      nextIsCorrectionVisible &&
+      !isExerciceChecked &&
+      isInteractif &&
+      !exercise.interactifObligatoire
+    ) {
+      // On ne désactive l'interactivité que si on affiche la correction
+      // d'un exercice interactif pas encore vérifié (contournement de la
+      // vérification) : la masquer, ou la (re)montrer après vérification,
+      // ne doit pas changer l'état d'interactivité.
+      isInteractif = false
       exercise.interactif = isInteractif
       await updateDisplay()
     }
@@ -866,24 +887,31 @@
         {#if isMobileView}
           <!-- Actions les plus courantes, répétées sous l'exercice pour rester
                à portée de pouce sans remonter jusqu'à la barre de titre -->
-          <div class="print-hidden flex flex-row flex-wrap gap-2 mt-4 mb-8">
-            {#if exercise.listeCorrections.length > 0}
+          <div class="print-hidden flex flex-row flex-wrap items-center gap-2 mt-4 mb-8 ml-6">
+            <div
+              class={exercise.listeCorrections.length > 0 &&
+              (!isInteractif || isExerciceChecked)
+                ? 'flex'
+                : 'hidden'}
+            >
               <ButtonTextAction
                 text={isCorrectionVisible
                   ? 'Masquer la correction'
                   : 'Afficher la correction'}
                 icon={isCorrectionVisible ? 'bx-hide' : 'bx-check-circle'}
                 inverted={true}
-                class="py-0.5 px-2 text-[0.7rem]"
+                class="py-2 px-3 text-xs rounded"
                 on:click={() => applyCorrectionVisibility(!isCorrectionVisible)}
               />
-            {/if}
+            </div>
             {#if !exercise.pasDeVersionAleatoire}
               <ButtonTextAction
                 text="Nouvelles données"
                 icon="bx-refresh"
-                inverted={true}
-                class="py-0.5 px-2 text-[0.7rem]"
+                inverted={!(isInteractif && isExerciceChecked)}
+                class={isInteractif && isExerciceChecked
+                  ? 'py-2 px-3 text-xs font-medium shadow-md rounded'
+                  : 'py-2 px-3 text-xs rounded'}
                 on:click={newData}
               />
             {/if}

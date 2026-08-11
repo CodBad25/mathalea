@@ -1,6 +1,6 @@
 import { context } from '../../modules/context'
-import { Labyrinthe } from 'labyrinthe/src/labyrinthe/model'
-import type LabyrintheElement from 'labyrinthe/src/LabyrintheElement'
+import { Labyrinthe } from './labyrinthe/model'
+import type LabyrintheElement from './labyrinthe/LabyrintheElement'
 import { tex2typst } from 'tex2typst'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
@@ -188,7 +188,7 @@ export default class MathaleaLabyrintheElement extends MathaleaCustomElement {
   private async ensureLabyrintheGridIsDefined(): Promise<void> {
     if (customElements.get('labyrinthe-grid') !== undefined) return
     const { default: LabyrintheElement } =
-      await import('labyrinthe/src/LabyrintheElement')
+      await import('./labyrinthe/LabyrintheElement')
     if (customElements.get('labyrinthe-grid') === undefined) {
       customElements.define(
         'labyrinthe-grid',

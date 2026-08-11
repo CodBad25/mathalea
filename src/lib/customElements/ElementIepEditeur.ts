@@ -1,24 +1,24 @@
-import Alea2iep from '../../modules/Alea2iep'
-import { context } from '../../modules/context'
-import { cercle } from '../2d/cercle'
-import { droite } from '../2d/droites'
-import { pointAbstrait, type PointAbstrait } from '../2d/PointAbstrait'
-import { projectionOrtho, rotation } from '../2d/transformations'
-import { longueur } from '../2d/utilitairesGeometriques'
+import Alea2iep from '../../modules/Alea2iep';
+import { context } from '../../modules/context';
+import { cercle } from '../2d/cercle';
+import { droite } from '../2d/droites';
+import { pointAbstrait, type PointAbstrait } from '../2d/PointAbstrait';
+import { projectionOrtho, rotation } from '../2d/transformations';
+import { longueur } from '../2d/utilitairesGeometriques';
 import {
-  milieu,
-  pointAdistance,
-  pointIntersectionCC,
-  pointIntersectionDD,
-  pointIntersectionLC,
-  pointSurDroite,
-  pointSurSegment,
-} from '../2d/utilitairesPoint'
-import { stringNombre } from '../outils/texNombre'
-import type { IExercice } from '../types'
+    milieu,
+    pointAdistance,
+    pointIntersectionCC,
+    pointIntersectionDD,
+    pointIntersectionLC,
+    pointSurDroite,
+    pointSurSegment,
+} from '../2d/utilitairesPoint';
+import { stringNombre } from '../outils/texNombre';
+import type { IExercice } from '../types';
 import MathaleaCustomElement, {
-  registerMathaleaCustomElement,
-} from './MathaleaCustomElement'
+    registerMathaleaCustomElement,
+} from './MathaleaCustomElement';
 
 /**
  * Éditeur d'animations de constructions aux instruments (Instrumenpoche)
@@ -56,6 +56,7 @@ type TypeElementIntersectable =
   | 'cercle'
   | 'cercleRayon'
   | 'arc'
+  | 'arcPointPointCentre'
   | 'parallele'
   | 'paralleleAObjet'
   | 'paralleleObjet'
@@ -91,6 +92,7 @@ const typesElementsIntersectables: TypeElementIntersectable[] = [
   'cercle',
   'cercleRayon',
   'arc',
+  'arcPointPointCentre',
   'parallele',
   'paralleleAObjet',
   'paralleleObjet',
@@ -132,6 +134,7 @@ const prepositionElementIntersectable: Record<
   cercle: 'du cercle',
   cercleRayon: 'du cercle',
   arc: 'de l’arc',
+  arcPointPointCentre: 'de l’arc',
   parallele: 'de la parallèle',
   paralleleAObjet: 'de la parallèle',
   paralleleObjet: 'de la parallèle',
@@ -156,6 +159,7 @@ const nomsTypesElementsIntersectables: Record<
   cercle: 'cercle',
   cercleRayon: 'cercle',
   arc: 'arc',
+  arcPointPointCentre: 'arc',
   parallele: 'parallèle',
   paralleleAObjet: 'parallèle',
   paralleleObjet: 'parallèle',
@@ -189,6 +193,7 @@ type InstructionIepSansOptions =
   | { type: 'cercle'; p1: string; p2: string }
   | { type: 'cercleRayon'; p1: string; r: number }
   | { type: 'arc'; p1: string; p2: string }
+  | { type: 'arcPointPointCentre'; p1: string; p2: string; p3: string }
   | { type: 'milieu'; nom: string; p1: string; p2: string }
   | { type: 'demiTourPoint'; nom: string; p1: string; p2: string }
   | {
@@ -417,6 +422,14 @@ const catalogue: Record<
       { cle: 'p2', genre: 'point', label: 'Point visé' },
     ],
   },
+  arcPointPointCentre: {
+    label: 'Tracer un arc au compas (centre + extrémités)',
+    champs: [
+      { cle: 'p1', genre: 'point', label: 'Centre' },
+      { cle: 'p2', genre: 'point', label: 'Extrémité 1' },
+      { cle: 'p3', genre: 'point', label: 'Extrémité 2' },
+    ],
+  },
   milieu: {
     label: 'Placer le milieu d’un segment',
     champs: [
@@ -610,6 +623,7 @@ const ordreCatalogue: TypeInstructionIep[] = [
   'cercle',
   'cercleRayon',
   'arc',
+  'arcPointPointCentre',
   'milieu',
   'demiTourPoint',
   'intersection',
@@ -662,6 +676,7 @@ const categoriesCatalogue: CategorieInstructionIep[] = [
       'cercle',
       'cercleRayon',
       'arc',
+      'arcPointPointCentre',
       'prolongerObjet',
     ],
   },
@@ -822,6 +837,8 @@ export function decrireInstruction(
       return `Tracer le cercle de centre ${instr.p1} et de rayon ${formateNombre(instr.r)} au compas.`
     case 'arc':
       return `Tracer un arc de cercle de centre ${instr.p1} passant par ${instr.p2} au compas.`
+    case 'arcPointPointCentre':
+      return `Tracer un arc de cercle de centre ${instr.p1} allant de ${instr.p2} à ${instr.p3} au compas.`
     case 'milieu':
       return `Placer le milieu ${instr.nom} du segment [${instr.p1}${instr.p2}] à la règle graduée.`
     case 'demiTourPoint':
@@ -1381,6 +1398,7 @@ function outilsRequisParInstruction(instr: InstructionIep): OutilIep[] {
       return ['compas', 'regle', 'crayon']
     case 'cercle':
     case 'arc':
+    case 'arcPointPointCentre':
     case 'mediatrice':
     case 'bissectrice':
       return ['compas', 'regle', 'crayon']
@@ -1614,6 +1632,15 @@ function jouerProgramme(
             break
           }
           anim.compasTracerArcCentrePoint(pts[0], pts[1])
+          break
+        }
+        case 'arcPointPointCentre': {
+          const pts = recupere(instr.p1, instr.p2, instr.p3)
+          if (pts === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          anim.compasTracerArcCentre2extremites(pts[0], pts[1], pts[2])
           break
         }
         case 'milieu': {
@@ -2271,6 +2298,17 @@ function construireCommandesFigureStatique(
       }
       case 'arc': {
         const pts = recupere(instr.p1, instr.p2)
+        if (pts !== undefined) {
+          ajouterCercleFigureStatique(
+            commandes,
+            pts[0],
+            longueur(pts[0], pts[1]),
+          )
+        }
+        break
+      }
+      case 'arcPointPointCentre': {
+        const pts = recupere(instr.p1, instr.p2, instr.p3)
         if (pts !== undefined) {
           ajouterCercleFigureStatique(
             commandes,

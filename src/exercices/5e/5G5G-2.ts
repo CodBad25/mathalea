@@ -1,7 +1,5 @@
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
-import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { nommePolygone, polygone } from '../../lib/2d/polygones'
 import { rotation } from '../../lib/2d/transformations'
 import { angle } from '../../lib/2d/utilitairesGeometriques'
 import { centreGraviteTriangle } from '../../lib/2d/utilitairesTriangle'
@@ -20,13 +18,11 @@ import {
   shuffle2tableaux,
 } from '../../lib/outils/arrayOutils'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
-import { mathalea2d } from '../../modules/mathalea2d'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 export const titre = 'Tracer une médiane dans un triangle aux instruments'
@@ -206,7 +202,7 @@ function traceDepuisInstruction(
 
 function pointsDuProgramme(programme: InstructionIep[]) {
   const points = new Map<string, PointAbstrait>()
-  programme.forEach((instruction, index) => {
+  programme.forEach((instruction) => {
     if (instruction.type === 'point') {
       points.set(
         instruction.nom,
@@ -605,22 +601,13 @@ export default class TracerMedianeAuxInstruments extends Exercice {
       for (let j = 0; j < 3; j++) {
         S[j].nom = nomSommets[j]
       }
-      const leTriangle = polygone([S[0], S[1], S[2]])
-      const nom = nommePolygone(
-        leTriangle,
-        `${nomSommets[0]}${nomSommets[1]}${nomSommets[2]}`,
-      )
-      const objetsDessin: NestedObjetMathalea2dArray = [leTriangle, nom]
 
       const typeQuestion = listeTypeQuestion[i]
       texte +=
         typeQuestion === 'centreGravite'
           ? `Dans le triangle $${nomDuTriangleEnonce}$, construire le centre de gravité.<br>`
           : `Dans le triangle $${nomDuTriangleEnonce}$, tracer la médiane ${listeTypeVocabulaire[i] === 'sommet' ? `issue de $${S[2].nom}$` : `relative au côté $[${S[0].nom}${S[1].nom}]$`}.<br>`
-      texte += mathalea2d(
-        Object.assign({}, fixeBordures(objetsDessin)),
-        objetsDessin,
-      )
+
       const SBis = [S[0], S[1], S[2]]
       const nomSommetsBis = [nomSommets[0], nomSommets[1], nomSommets[2]]
       shuffle2tableaux(SBis, nomSommetsBis)
@@ -703,6 +690,7 @@ export default class TracerMedianeAuxInstruments extends Exercice {
               },
               { type: 'droite', p1: S[2].nom, p2: 'I' },
             ]
+      const programmeAjoute = programmeAttendu.slice(conditionsInitiales.length)
       const reponseAttendue = {
         typeQuestion,
         sommets: S.map((sommet) => ({
@@ -722,8 +710,9 @@ export default class TracerMedianeAuxInstruments extends Exercice {
       const texteCorr = `Voici un programme de construction possible :<br>
       ${addEditeurIep(this, i, {
         id: `IepEditeur-corr-Ex${this.numeroExercice}Q${i}`,
+        conditionsInitiales,
         interactivityOn: false,
-        programmeInitial: programmeAttendu as InstructionIep[],
+        programmeInitial: programmeAjoute as InstructionIep[],
       })}`
       if (this.questionJamaisPosee(i, typeQuestion, angA, angB, angC)) {
         this.listeQuestions[i] = texte

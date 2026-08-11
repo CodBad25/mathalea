@@ -752,6 +752,13 @@ export default class Alea2iep {
   compasRotation(angle: number | PointAbstrait, options: OptionsCompas = {}) {
     this.rotation('compas', angle, options)
   }
+  compasRotationTranslation(
+    angle: number | PointAbstrait,
+    A: PointAbstrait,
+    options: OptionsRegle = {},
+  ) {
+    this.rotationTranslation('compas', angle, A, options)
+  }
 
   rapporteurRotation(
     angle: number | PointAbstrait,
@@ -1057,6 +1064,49 @@ export default class Alea2iep {
     }
   }
 
+  /**
+   *
+   * @param centre Trace un arc de centre centre allant de A à B
+   * @param A
+   * @param B
+   * @param options
+   */
+  compasTracerArcCentre2extremites(
+    centre: PointAbstrait,
+    A: PointAbstrait,
+    B: PointAbstrait,
+    options: OptionsCompas = {},
+  ) {
+    const compasVisibility = this.compas.visibilite
+    if (!compasVisibility) {
+      this.compasMontrer()
+    }
+    /*  this.compasRotationTranslation(
+      angleOriente(pointAbstrait(centre.x + 5, centre.y), centre, A),
+      centre,
+      options,
+    )*/
+    this.compasEcarter2Points(centre, A, options)
+    this.compasTracerArc2Angles(
+      angleOriente(pointAbstrait(centre.x + 5, centre.y), centre, A),
+      angleOriente(pointAbstrait(centre.x + 5, centre.y), centre, B),
+      options,
+    )
+
+    if (options?.positionsRangementInstruments !== undefined) {
+      this.rangerInstruments(
+        options.positionsRangementInstruments,
+        ['rapporteur'],
+        {
+          tempo: 0,
+          vitesse: 20,
+        },
+      )
+    }
+    if (!compasVisibility) {
+      this.compasMasquer()
+    }
+  }
   /**
    * Trace un arc de cercle en gardant l'écartement et le centre actuel. L'angle de départ sera choisi pour être le plus proche de l'angle actuel
    * @param {number} angle1

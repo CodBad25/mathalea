@@ -1,4 +1,4 @@
-import type LabyrintheElement from 'labyrinthe/src/LabyrintheElement'
+import type LabyrintheElement from './customElements/labyrinthe/LabyrintheElement'
 import type { MathfieldElement } from 'mathlive'
 import { get } from 'svelte/store'
 import { type MathaleaSVG } from '../lib/types'

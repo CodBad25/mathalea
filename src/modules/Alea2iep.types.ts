@@ -234,6 +234,12 @@ export interface IAlea2iep {
     point: PointAbstrait,
     options?: OptionsCompas,
   ): number
+  compasTracerArcCentre2extremites(
+    centre: PointAbstrait,
+    A: PointAbstrait,
+    B: PointAbstrait,
+    options?: OptionsCompas,
+  ): void
   compasCercleCentrePoint(
     centre: PointAbstrait,
     point: PointAbstrait,
@@ -338,6 +344,12 @@ export interface IAlea2iep {
     point: PointAbstrait,
     options?: OptionsCompas,
   ): number
+  compasTracerArcCentre2extremites(
+    centre: PointAbstrait,
+    A: PointAbstrait,
+    B: PointAbstrait,
+    options?: OptionsCompas,
+  ): void
   compasCercleCentrePoint(
     centre: PointAbstrait,
     point: PointAbstrait,

@@ -155,6 +155,22 @@ describe('ElementIepEditeur trait instruction', () => {
   })
 })
 
+describe('ElementIepEditeur compass arc instructions', () => {
+  it('draws an arc from two extremities and a center', () => {
+    const animation = construireAnimation([
+      { type: 'point', nom: 'O', x: 0, y: 0 },
+      { type: 'point', nom: 'A', x: 4, y: 0 },
+      { type: 'point', nom: 'B', x: 0, y: 4 },
+      { type: 'arcPointPointCentre', p1: 'O', p2: 'A', p3: 'B' },
+    ])
+
+    const xml = animation.script()
+    expect(xml).toMatch(
+      /debut="0" fin="-90" mouvement="tracer" objet="compas"/,
+    )
+  })
+})
+
 describe('ElementIepEditeur unknown instructions', () => {
   it('does not crash while collecting required instruments', () => {
     expect(() =>

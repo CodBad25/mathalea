@@ -258,6 +258,7 @@ export default class ConstruireDeuxTrianglesMemeAire extends Exercice {
                 sommets: `${S[2].nom},${S[0].nom},${S[1].nom}'`,
               },
             ]
+      const programmeAjoute = programmeAttendu.slice(conditionsInitiales.length)
       handleAnswers(this, i, {
         reponse: { value: JSON.stringify({ typeConstruction }) },
       })
@@ -274,8 +275,9 @@ export default class ConstruireDeuxTrianglesMemeAire extends Exercice {
       }<br>
       ${addEditeurIep(this, i, {
         id: `IepEditeur-corr-Ex${this.numeroExercice}Q${i}`,
+        conditionsInitiales,
         interactivityOn: false,
-        programmeInitial: programmeAttendu,
+        programmeInitial: programmeAjoute,
       })}`
       if (this.questionJamaisPosee(i, typeConstruction, angA, angB, angC)) {
         this.listeQuestions[i] = texte

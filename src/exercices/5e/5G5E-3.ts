@@ -1,15 +1,10 @@
 import type Point from 'apigeom/src/elements/points/Point'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { droite } from '../../lib/2d/droites'
-import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { nommePolygone, polygone } from '../../lib/2d/polygones'
 import { projectionOrtho, rotation } from '../../lib/2d/transformations'
 import { angle } from '../../lib/2d/utilitairesGeometriques'
-import {
-  centreGraviteTriangle,
-  orthoCentre,
-} from '../../lib/2d/utilitairesTriangle'
+import { orthoCentre } from '../../lib/2d/utilitairesTriangle'
 import { bleuMathalea } from '../../lib/colors'
 import {
   addEditeurIep,
@@ -25,13 +20,11 @@ import {
   shuffle2tableaux,
 } from '../../lib/outils/arrayOutils'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
-import { mathalea2d } from '../../modules/mathalea2d'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 export const titre = 'Tracer une hauteur dans un triangle aux instruments'
@@ -212,7 +205,7 @@ function tracesDuProgramme(
   points: Map<string, PointAbstrait>,
 ) {
   const traces: TraceDroit[] = []
-  programme.forEach((instruction, index) => {
+  programme.forEach((instruction) => {
     if (
       instruction.type === 'polygone' ||
       instruction.type === 'polygoneRapide'
@@ -303,13 +296,23 @@ export const verifierHauteur: ElementIepVerificationCallback = ({
   let expectedProgram: InstructionIep[]
   try {
     const parsed = JSON.parse(expectedRaw)
-    if (!Array.isArray(parsed)) {
+    if (Array.isArray(parsed)) {
+      expectedProgram = parsed as InstructionIep[]
+    } else if (parsed != null && typeof parsed === 'object') {
+      const expectedData = parsed as {
+        conditionsInitiales?: InstructionIep[]
+        programmeAttendu?: InstructionIep[]
+      }
+      expectedProgram = [
+        ...(expectedData.conditionsInitiales ?? []),
+        ...(expectedData.programmeAttendu ?? []),
+      ]
+    } else {
       return {
         isOk: false,
         feedback: 'Réponse attendue invalide.',
       }
     }
-    expectedProgram = parsed as InstructionIep[]
   } catch {
     return {
       isOk: false,
@@ -467,7 +470,6 @@ export default class TracerHauteurAuxInstruments extends Exercice {
         k < 10
       )
       P = orthoCentre(S[0], S[1], S[2])
-      const G = centreGraviteTriangle(S[0], S[1], S[2])
       P.color = colorToLatexOrHTML(bleuMathalea)
       const nomDuTriangleEnonce = creerNomDePolygone(3, 'Q')
       P.nom = choice(
@@ -478,18 +480,9 @@ export default class TracerHauteurAuxInstruments extends Exercice {
       for (let j = 0; j < 3; j++) {
         S[j].nom = nomSommets[j]
       }
-      const leTriangle = polygone([S[0], S[1], S[2]])
-      const nom = nommePolygone(
-        leTriangle,
-        `${nomSommets[0]}${nomSommets[1]}${nomSommets[2]}`,
-      )
-      const objetsDessin: NestedObjetMathalea2dArray = [leTriangle, nom]
 
       texte += `Dans le triangle $${nomDuTriangleEnonce}$, tracer la hauteur ${listeTypeVocabulaire[i] === 'sommet' ? `issue de $${S[2].nom}$` : `relative au côté $[${S[0].nom}${S[1].nom}]$`}.<br>`
-      texte += mathalea2d(
-        Object.assign({}, fixeBordures(objetsDessin)),
-        objetsDessin,
-      )
+
       const SBis = [S[0], S[1], S[2]]
       const nomSommetsBis = [nomSommets[0], nomSommets[1], nomSommets[2]]
       shuffle2tableaux(SBis, nomSommetsBis)
@@ -535,8 +528,14 @@ export default class TracerHauteurAuxInstruments extends Exercice {
         },
         { type: 'perpendiculaireAObjet', etape: 4, p1: S[2].nom },
       )
+      const programmeAjoute = programmeAttendu.slice(conditionsInitiales.length)
       handleAnswers(this, i, {
-        reponse: { value: JSON.stringify(programmeAttendu) },
+        reponse: {
+          value: JSON.stringify({
+            conditionsInitiales,
+            programmeAttendu: programmeAjoute,
+          }),
+        },
       })
       texte += addEditeurIep(this, i, {
         conditionsInitiales,
@@ -546,8 +545,9 @@ export default class TracerHauteurAuxInstruments extends Exercice {
       const texteCorr = `Voici un programme le programme de construction attendu :<br>
       ${addEditeurIep(this, i, {
         id: `IepEditeur-corr-Ex${this.numeroExercice}Q${i}`,
+        conditionsInitiales,
         interactivityOn: false,
-        programmeInitial: programmeAttendu,
+        programmeInitial: programmeAjoute,
       })}`
       if (this.questionJamaisPosee(i, angA, angB, angC)) {
         this.listeQuestions[i] = texte

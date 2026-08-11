@@ -135,6 +135,13 @@ texte += addEditeurIep(this, i, {
 })
 ```
 
+L'instruction `arc` trace au compas une petite marque de centre `p1` autour du
+point visé `p2`. L'instruction `arcPointPointCentre` trace un arc de cercle
+dont on donne le centre et les deux extrémités : `p1` est le centre, `p2` la
+première extrémité et `p3` la seconde extrémité. L'animation utilise
+`Alea2iep.compasTracerArcCentre2extremites()` et trace l'arc dans le sens
+indirect.
+
 Les instructions `polygone` et `polygoneRapide` tracent un polygone fermé avec
 les méthodes Alea2iep correspondantes :
 

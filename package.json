@@ -132,7 +132,6 @@
     "jszip": "^3.10.1",
     "jszip-utils": "^0.1.0",
     "katex": "^0.18.1",
-    "labyrinthe": "git+https://forge.apps.education.fr/coopmaths/apps/labyrinthe.git",
     "mathlive": "^0.110.0",
     "modern-screenshot": "^4.7.0",
     "nunjucks": "^3.2.4",

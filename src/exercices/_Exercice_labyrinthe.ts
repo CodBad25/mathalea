@@ -1,4 +1,4 @@
-import { Labyrinthe } from 'labyrinthe'
+import { Labyrinthe } from '../lib/customElements/labyrinthe/model'
 import MathaleaLabyrintheElement from '../lib/customElements/MathaleaLabyrintheElement'
 import { listeQuestionsToContenu } from '../modules/outils'
 import Exercice from './Exercice'
