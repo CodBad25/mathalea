@@ -27,7 +27,7 @@ export const uuid = '9552d'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ExerciceLabyrinthePremiers3eOld extends Exercice {
   constructor() {
@@ -90,7 +90,7 @@ export default class ExerciceLabyrinthePremiers3eOld extends Exercice {
     let laby: Labyrinthe
     let monChemin
 
-    for (let q = 0; q < this.nbQuestions; ) {
+    for (let q = 0; q < this.nbQuestions;) {
       let nbL = this.sup3 === 1 ? randint(2, 7) : Math.max(2, this.sup3)
       let nbC = this.sup4 === 1 ? randint(3, 7) : Math.max(3, this.sup4)
       let indiceDiminution = 0

@@ -22,7 +22,7 @@ export const uuid = 'dd7d1'
 
 export const refs = {
   'fr-fr': ['can6C60', '6N3K-flash5'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class SommeDiffEntierFraction extends ExerciceSimple {
   constructor() {

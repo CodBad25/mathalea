@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { sp } from '../../lib/outils/outilString'
@@ -5,7 +6,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = 'Comparer des nombres décimaux'
 export const amcReady = true
@@ -38,7 +38,7 @@ export const uuid = 'be1e4'
 export const refs = {
   'fr-fr': ['6N1I', 'BP2AutoG4'],
   'fr-2016': ['6N31', 'BP2AutoG4'],
-  'fr-ch': ['9NO7-4'],
+  'fr-ch': ['PR-38'],
 }
 export default class ComparerDecimaux extends Exercice {
   constructor() {

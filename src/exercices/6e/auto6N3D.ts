@@ -28,7 +28,7 @@ export const uuid = 'af4b1'
 export const refs = {
   'fr-fr': ['auto6N3D'],
   'fr-2016': ['6N43-3'],
-  'fr-ch': ['9NO4-2'],
+  'fr-ch': ['9NO1A-2'],
 }
 
 function justification(N: number, a: number, critereOK: boolean) {

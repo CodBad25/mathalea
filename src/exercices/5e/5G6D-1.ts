@@ -35,7 +35,7 @@ export const uuid = '588fe'
 export const refs = {
   'fr-fr': ['5G6D-1', '3AutoG02-2'],
   'fr-2016': ['5G40-2', '3AutoG02-2'],
-  'fr-ch': ['9ES2-2'],
+  'fr-ch': ['9ES1E-4'],
 }
 export default class ParallelogrammeAPartirDUneFigure extends Exercice {
   constructor() {

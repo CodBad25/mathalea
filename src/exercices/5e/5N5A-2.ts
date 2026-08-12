@@ -25,7 +25,7 @@ export const uuid = '12bb6'
 export const refs = {
   'fr-fr': ['5N5A-2'],
   'fr-2016': ['5L10-2'],
-  'fr-ch': ['9FA2-5', '10FA1-8'],
+  'fr-ch': ['10FA4A-3'],
 }
 export default class TraduireUnProgrammeDeCalcul extends Exercice {
   constructor() {
@@ -42,7 +42,7 @@ export default class TraduireUnProgrammeDeCalcul extends Exercice {
       this.nbQuestions,
     ) // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const a = randint(4, 11)

@@ -65,7 +65,7 @@ export const uuid = 'dc8c9'
 export const refs = {
   'fr-fr': [],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 const troisiemeAngle = function (a1: number, a2: number) {
   if (a1 + a2 <= 180) {

@@ -1,6 +1,7 @@
 import Figure from 'apigeom'
 import Element2D from 'apigeom/src/elements/Element2D'
 import type Point from 'apigeom/src/elements/points/Point'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import figureApigeom from '../../lib/figureApigeom'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
@@ -13,7 +14,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = 'Construire des médiatrices'
 
@@ -25,7 +25,7 @@ export const uuid = '0dbe7'
 export const refs = {
   'fr-fr': ['6G3B'],
   'fr-2016': ['6G25-0'],
-  'fr-ch': ['9ES3-11'],
+  'fr-ch': ['9ES1D-3'],
 }
 /**
  * Construire des médiatrices
@@ -112,7 +112,7 @@ export default class nomExercice extends Exercice {
     this.lesPointsCorr = []
     this.ensembleDesQuestions = []
     this.mediatrices = []
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       this.mediatrices[i] = []
       this.lesPoints[i] = []
       this.lesPointsCorr[i] = []
@@ -491,7 +491,9 @@ export default class nomExercice extends Exercice {
   correctionInteractive = (i: number) => {
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(this.figuresApiGeom[i])
+    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(
+      this.figuresApiGeom[i],
+    )
     const resultat: ('OK' | 'KO')[] = []
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,

@@ -1,7 +1,7 @@
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../lib/outils/ecritures'
-import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const titre =
   'Multiplications de deux entiers relatifs dans un tableau à double entrée'
 
@@ -15,7 +15,7 @@ export const uuid = 'c8f4b'
 
 export const refs = {
   'fr-fr': ['4C10-5'],
-  'fr-ch': ['10NO4-7'],
+  'fr-ch': ['9NO2C-7'],
 }
 export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
   constructor() {

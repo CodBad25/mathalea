@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -8,8 +9,6 @@ import { context } from '../../modules/context'
 import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -43,7 +42,7 @@ export const uuid = 'd0cd7'
 export const refs = {
   'fr-fr': ['6N2K-4'],
   'fr-2016': ['6C11-3'],
-  'fr-ch': ['9NO3-7'],
+  'fr-ch': [''], // Primaire anciennement :['9NO3-7'],
 }
 export default class APartirDeDivisionsEuclidiennes extends Exercice {
   classe: number

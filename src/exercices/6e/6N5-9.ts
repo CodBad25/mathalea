@@ -34,7 +34,7 @@ export const uuid = '96b94'
 export const refs = {
   'fr-fr': ['6N5-9', '5N1D-7'],
   'fr-2016': ['6C32'],
-  'fr-ch': ['9FA3-7'],
+  'fr-ch': ['9FA2B-21'],
 }
 
 function probleme4(calculFacile: boolean): {
@@ -384,7 +384,7 @@ export default class ProblemeCourse extends Exercice {
       nbQuestions: this.nbQuestions,
     }).map(Number)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse = ''

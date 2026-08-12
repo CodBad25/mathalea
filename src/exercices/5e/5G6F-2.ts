@@ -17,7 +17,7 @@ export const uuid = '3d1bd'
 export const refs = {
   'fr-fr': ['5G6F-2'],
   'fr-2016': ['5G41-5'],
-  'fr-ch': [],
+  'fr-ch': ['9ES1E-14'],
 }
 export default class ConstruireParallélogrammesCaracteristiques extends ConstructionsParallelogrammesParticuliers {
   constructor() {

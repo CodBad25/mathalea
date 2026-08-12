@@ -10,7 +10,7 @@ import ExerciceQcmA from '../ExerciceQcmA'
 export const uuid = '6b959'
 export const refs = {
   'fr-fr': ['1A-C03-10', '2A-N3-10'],
-  'fr-ch': [],
+  'fr-ch': ['10NO3F-4'],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'

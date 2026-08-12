@@ -29,7 +29,7 @@ export const uuid = 'c1889'
 export const refs = {
   'fr-fr': ['6N1H'],
   'fr-2016': ['6N30'],
-  'fr-ch': ['9NO7-1'],
+  'fr-ch': ['PR-35'],
 }
 export default class LireAbscisseDecimale extends Exercice {
   constructor() {

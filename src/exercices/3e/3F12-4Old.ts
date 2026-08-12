@@ -36,7 +36,7 @@ export const uuid = 'b8946'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ImageGraphiqueOld extends Exercice {
   constructor() {

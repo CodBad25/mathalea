@@ -1,10 +1,10 @@
-import Exercice from '../../Exercice'
-import { randint, listeQuestionsToContenu } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import Exercice from '../../Exercice'
 
 import Decimal from 'decimal.js'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -19,7 +19,7 @@ export const uuid = 'bd96a'
 
 export const refs = {
   'fr-fr': ['can2C21'],
-  'fr-ch': ['10NO3-6b'],
+  'fr-ch': ['10NO3E-7'],
 }
 export default class calculsRacinesCarresPafaitsDecimaux extends Exercice {
   constructor() {
@@ -29,7 +29,7 @@ export default class calculsRacinesCarresPafaitsDecimaux extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a, b

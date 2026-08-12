@@ -24,7 +24,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'a33b9'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 
 export default class resoudreProblemeRelatifs extends Exercice {
@@ -55,7 +55,7 @@ export default class resoudreProblemeRelatifs extends Exercice {
       }
       return solutions
     }
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let Solutions: Array<Array<number>>
       let longueurSolutions: number
       const nombreQuestions = choice([10, 20, 30])

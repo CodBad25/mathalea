@@ -17,7 +17,7 @@ export const uuid = 'f2a18'
 export const refs = {
   'fr-fr': ['6M1C'],
   'fr-2016': ['6M22-1a'],
-  'fr-ch': [],
+  'fr-ch': ['10GM1B-4'],
 }
 export default class PerimetreDisques extends PerimetreAireDisques {
   constructor() {

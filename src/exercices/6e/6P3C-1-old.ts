@@ -48,7 +48,7 @@ export const uuid = 'c511f'
 export const refs = {
   'fr-fr': [],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 
 type Situation = {

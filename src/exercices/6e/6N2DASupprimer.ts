@@ -37,7 +37,7 @@ export const uuid = '625c0'
 export const refs = {
   'fr-fr': [],
   'fr-2016': ['6C30-2'],
-  'fr-ch': ['9NO8-10'],
+  'fr-ch': ['PR-26'],
 }
 export default class ProduitDeDecimauxAPartirProduitConnuASupprimer extends Exercice {
   constructor() {

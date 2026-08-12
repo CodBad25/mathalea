@@ -19,7 +19,7 @@ export const uuid = '60b02'
 export const refs = {
   'fr-fr': ['CM2G3C-1'],
   'fr-2016': ['6G20-4'],
-  'fr-ch': ['9ES2-11'],
+  'fr-ch': ['9ES1E-9'],
 }
 export default class VocabulaireDeBaseDesPolygones extends Exercice {
   constructor() {
@@ -79,7 +79,6 @@ export default class VocabulaireDeBaseDesPolygones extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const item = items[randint(0, items.length - 1)]
       if (typeQuestions[i] === 1) {

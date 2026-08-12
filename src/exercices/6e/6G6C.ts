@@ -13,7 +13,7 @@ export const uuid = '04439'
 
 export const refs = {
   'fr-fr': ['6G6C'],
-  'fr-ch': [],
+  'fr-ch': ['9ES1C-2'],
 }
 export default class DefinitionProprietesTrianglesSommesDesAngles extends DefinitionProprietesTriangles {
   constructor() {

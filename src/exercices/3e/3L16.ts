@@ -13,7 +13,7 @@ export const uuid = '7a6d5'
 
 export const refs = {
   'fr-fr': ['3L16'],
-  'fr-ch': [],
+  'fr-ch': ['10FA1A-4'],
 }
 export default class PaternRatio3eme extends PaternRatio {
   constructor() {

@@ -46,7 +46,7 @@ export const uuid = '8c803'
 
 export const refs = {
   'fr-fr': ['3G42', 'BP2G19'],
-  'fr-ch': ['11GM2-3'],
+  'fr-ch': ['11GM2C-1'],
 }
 export default class VolumeBoule extends Exercice {
   constructor() {

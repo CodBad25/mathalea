@@ -34,7 +34,7 @@ export const uuid = 'db71b'
 export const refs = {
   'fr-fr': ['6N2B-3'],
   'fr-2016': ['6C30-6b'],
-  'fr-ch': ['9NO8-21'],
+  'fr-ch': ['9NO1G-7'],
 }
 export default class MultiplierUnDecimalParPuissanceDeDix extends Exercice {
   constructor() {

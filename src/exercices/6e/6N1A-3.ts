@@ -19,9 +19,8 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 
 import type { MathfieldElement } from 'mathlive'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { amcConvert } from '../../lib/amc/amcBuilders'
-
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
 export const titre = 'Recomposer un décimal ou un entier'
 export const interactifReady = true
@@ -47,7 +46,7 @@ export const uuid = 'f899b'
 export const refs = {
   'fr-fr': ['6N1A-3'],
   'fr-2016': ['6N10-7'],
-  'fr-ch': ['9NO1-9'],
+  'fr-ch': [''],
 }
 export default class RecomposerEntierC3 extends Exercice {
   nombreDeChamps?: number[]

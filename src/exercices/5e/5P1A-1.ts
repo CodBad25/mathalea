@@ -13,7 +13,7 @@ export const uuid = '5a44b'
 export const refs = {
   'fr-fr': ['5P1A-1', 'BP2AutoB4', 'BP2CCF2'],
   'fr-2016': ['5N11-2', 'BP2AutoB4', 'BP2CCF2'],
-  'fr-ch': ['9NO14-5'],
+  'fr-ch': ['NR'],
 }
 export default class TableauxEtPourcentagesPourcentConstant extends TableauxEtPourcentages {
   constructor() {

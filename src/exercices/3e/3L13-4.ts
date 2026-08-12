@@ -26,7 +26,7 @@ export const dateDeModifImportante = '11/06/2025'
 export const uuid = 'cd2f2'
 export const refs = {
   'fr-fr': ['3L13-4', 'BP2RES15'],
-  'fr-ch': ['11FA6-9'],
+  'fr-ch': ['10FA5D-3'],
 }
 /**
  * @author Guillaume Valmont

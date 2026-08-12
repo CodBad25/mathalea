@@ -24,7 +24,7 @@ export const interactifType = 'qcm'
 export const uuid = '08f6e'
 export const refs = {
   'fr-fr': ['4G40-0'],
-  'fr-ch': ['11GM1-10', '1mG2-1'],
+  'fr-ch': ['1mG2-1'],
 }
 export const dateDePublication = '23/08/2024'
 

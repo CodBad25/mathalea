@@ -26,7 +26,7 @@ export const uuid = 'ed2ee'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
   constructor() {
@@ -58,7 +58,7 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
       typeDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a: number = 0

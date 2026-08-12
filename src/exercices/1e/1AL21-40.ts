@@ -29,7 +29,7 @@ export const uuid = '334ca'
 
 export const refs = {
   'fr-fr': ['1AL21-40'],
-  'fr-ch': ['11FA10-12'], // OK?
+  'fr-ch': [''], // OK?
 }
 export default class Resolutionavecformecanonique extends Exercice {
   constructor() {

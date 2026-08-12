@@ -53,7 +53,7 @@ export const uuid = '75a84'
 
 export const refs = {
   'fr-fr': ['4L13-2', 'BP2RES3'],
-  'fr-ch': ['10FA3-11'],
+  'fr-ch': ['10FA5D-1'],
 }
 
 /* -------------------------------------------------------------------------- */
@@ -579,7 +579,8 @@ function spectacle(valeurEntiere: boolean): Probleme {
   return {
     enonce: `Dans une salle de spectacle de $${texNombre(a, 0)}$ places, le prix d'entrée est $${texPrix(b)}$ € pour un adulte et $${texPrix(c)}$ € pour un enfant.<br>
     Le spectacle de ce soir s'est déroulé devant une salle pleine et la recette est de $${texPrix(d)}$ €.`,
-    objectif: "On cherche à déterminer le nombre d'adultes présents dans la salle.",
+    objectif:
+      "On cherche à déterminer le nombre d'adultes présents dans la salle.",
     figure: '',
     donnees: [
       'le nombre de places adultes vendues',
@@ -889,7 +890,7 @@ export default class ProblemesEnEquationParEtapes extends Exercice {
         'Somme de trois nombres consécutifs',
         'Âges du père et du fils',
         'Programmes de calcul (un produit et une somme)',
-        'Hasard'
+        'Hasard',
       ].join('\n'),
     ]
     this.sup = 15
@@ -1062,7 +1063,9 @@ e) ${probleme.question} %{field${CHAMP_REPONSE}}`
     }
     reponses[`field${CHAMP_REPONSE}` as 'field8'] = {
       value: probleme.reponseFinale,
-      options: probleme.optionsReponseFinale ?? { nombreDecimalSeulement: true },
+      options: probleme.optionsReponseFinale ?? {
+        nombreDecimalSeulement: true,
+      },
     }
 
     handleAnswers(this, i, reponses, { formatInteractif: 'multi-mathfield' })

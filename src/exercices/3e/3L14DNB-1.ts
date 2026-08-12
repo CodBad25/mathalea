@@ -23,7 +23,7 @@ import { bleuMathalea } from '../../lib/colors'
 export const uuid = '972f5'
 export const refs = {
   'fr-fr': ['3L14DNB-1', '3Z1DNB-13'],
-  'fr-ch': ['11FA4-4'],
+  'fr-ch': ['11FA4D-6'],
 }
 export const titre = 'Se préparer au DNB : programme de calcul, scratch et calcul littéral'
 export const dateDePublication = '25/11/2024'

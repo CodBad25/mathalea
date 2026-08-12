@@ -16,7 +16,7 @@ export const uuid = '5199b'
 export const refs = {
   'fr-fr': ['5P1B-3'],
   'fr-2016': ['5P14-2'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class AppliquerPourcentage1 extends AppliquerPourcentage {
   constructor() {

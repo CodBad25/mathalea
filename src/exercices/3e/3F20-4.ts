@@ -34,7 +34,7 @@ export const uuid = '63ce9'
 
 export const refs = {
   'fr-fr': ['3F20-4'],
-  'fr-ch': ['1mF2-16', '11FA8-19'],
+  'fr-ch': ['1mF2-16'],
 }
 export default class CoefficientDirecteur extends Exercice {
   constructor() {
@@ -79,7 +79,7 @@ export default class CoefficientDirecteur extends Exercice {
       nbQuestions: this.nbQuestions,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const nomFonction = this.sup2 ? 'f' : choice(['f', 'g', 'h', 'k'])
       const nomVariable = this.sup3 ? 'x' : choice(['x', 'a', 'b', 'c', 't'])
       let a = randint(-9, 9, [-1, 0, 1])

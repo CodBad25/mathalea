@@ -15,7 +15,7 @@ export const uuid = '4f9a6'
 export const refs = {
   'fr-fr': ['CM2G3D-2'],
   'fr-2016': ['6G13-1'],
-  'fr-ch': ['9ES4-2'],
+  'fr-ch': ['9ES1E-17'],
 }
 export default class ConstruireCarréOuRectangles extends TracerQuadrilatèresParticuliers {
   constructor() {

@@ -9,6 +9,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebrique,
@@ -17,8 +18,6 @@ import {
   rienSi1,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   'Additionner ou soustraire une expression entre parenthèses'
@@ -39,7 +38,7 @@ export const uuid = '815eb'
 
 export const refs = {
   'fr-fr': ['3L10-1'],
-  'fr-ch': ['11FA1-2'],
+  'fr-ch': ['10FA4E-2'],
 }
 export default class ParenthesesPrecedesDeMoinsOuPlus extends Exercice {
   constructor() {

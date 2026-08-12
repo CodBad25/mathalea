@@ -42,7 +42,7 @@ export const uuid = '12774'
 export const refs = {
   'fr-fr': ['6N1H-2'],
   'fr-2016': ['6N23-2'],
-  'fr-ch': ['9NO11-7a'],
+  'fr-ch': [''],
 }
 export default class LireAbscisseDecimaleTroisFormes extends Exercice {
   niveau: string

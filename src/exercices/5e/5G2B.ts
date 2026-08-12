@@ -21,8 +21,8 @@ import { similitude, translation } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { arrondi } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -41,7 +41,7 @@ export const uuid = 'bc788'
 export const refs = {
   'fr-fr': ['5G2B'],
   'fr-2016': ['5G52'],
-  'fr-ch': ['11ES1-2', '10ES1-2'],
+  'fr-ch': ['10ES2A-4'],
 }
 /**
  * calculer des longueurs avec un patron de cylindre
@@ -122,7 +122,7 @@ export default class longueursPatronsCylindre extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = '' // listeTypeQuestions[i] + '<br>' //
       let texteCorr = ''
       const tailleMinFigure = 7

@@ -14,7 +14,7 @@ export const dateDeModificationImportante = '29/12/2025' // Mise en place de l'i
 export const uuid = '24db8'
 export const refs = {
   'fr-fr': ['4S20-4', 'BP2FLUC12', 'BP1AUTO010'],
-  'fr-ch': ['4mProbStat-15'],
+  'fr-ch': ['10NO3G-1', '4mProbStat-15'],
 }
 
 /**

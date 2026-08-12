@@ -2,8 +2,8 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { Tableau } from '../../lib/2d/tableau'
 import figureApigeom from '../../lib/figureApigeom'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   AddTabPropMathlive,
   type Icell,
@@ -34,7 +34,7 @@ export const uuid = '6c6b3'
 
 export const refs = {
   'fr-fr': ['3F10-4', '2F10-4', 'BP2AutoO5'],
-  'fr-ch': ['10FA5-8', '11FA7-2', '1mF1-2'],
+  'fr-ch': ['10FA1B-6', '1mF1-2'],
 }
 
 class LireImageParApiGeom extends Exercice {

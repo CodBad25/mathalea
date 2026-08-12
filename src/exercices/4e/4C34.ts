@@ -22,7 +22,6 @@ import {
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
@@ -86,7 +85,7 @@ export const uuid = '2d79c'
 
 export const refs = {
   'fr-fr': ['4C34'],
-  'fr-ch': ['10NO6-1'],
+  'fr-ch': ['10NO1-1'],
 }
 export default class PrioritesEtRelatifsEtPuissances extends Exercice {
   constructor() {

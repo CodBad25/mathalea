@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -13,8 +14,6 @@ import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Réduire une expression de la forme $ax+bx$ '
 export const interactifReady = true
@@ -32,7 +31,7 @@ export const uuid = '1bce3'
 export const refs = {
   'fr-fr': ['5N5F-3', 'BP2AutoI15'],
   'fr-2016': ['5L13', 'BP2AutoI15'],
-  'fr-ch': ['10FA1-11'],
+  'fr-ch': ['10FA4C-4'],
 }
 export default class Reductionaxbx extends Exercice {
   constructor() {

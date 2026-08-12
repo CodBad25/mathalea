@@ -45,7 +45,7 @@ export const uuid = 'cbc26'
 export const refs = {
   'fr-fr': ['5N2G'],
   'fr-2016': ['5R20'],
-  'fr-ch': ['9NO9-6'],
+  'fr-ch': ['9NO2B-3', '10NO2A-1'],
 }
 export default class ExerciceAdditionsRelatifs extends Exercice {
   modeQcm: boolean
@@ -89,7 +89,7 @@ export default class ExerciceAdditionsRelatifs extends Exercice {
       [true, true, false],
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let a: number
       let b: number
       let texte = ''

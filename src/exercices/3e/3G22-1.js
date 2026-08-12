@@ -29,7 +29,7 @@ export const uuid = 'a0ad1'
 
 export const refs = {
   'fr-fr': ['3G22-1', 'BP2G17'],
-  'fr-ch': [],
+  'fr-ch': ['11GM1C-2'],
 }
 export default class Agrandissement extends Exercice {
   constructor() {

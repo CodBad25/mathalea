@@ -19,7 +19,7 @@ export const dateDeModifImportante = '12/01/2026'
 export const uuid = '67519'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 
 /**

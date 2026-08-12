@@ -540,7 +540,7 @@ export const uuid = 'b0f4e'
 export const refs = {
   'fr-fr': ['6P3C-2', 'BP2AutoL8', '3AutoP07-1'],
   'fr-2016': ['6P12', 'BP2AutoL8'],
-  'fr-ch': ['9FA3-12'],
+  'fr-ch': ['9FA2B-6'],
 }
 export default class ProportionnaliteParCoefDeProportionnalite extends Exercice {
   constructor() {
@@ -576,7 +576,7 @@ export default class ProportionnaliteParCoefDeProportionnalite extends Exercice 
       saisie: this.sup2,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       indexN = randint(0, couplePremiersEntreEux.length - 1)
       if (this.sup) {
         versionSimplifiee = true

@@ -29,7 +29,7 @@ export const uuid = 'bb6d5'
 
 export const refs = {
   'fr-fr': ['2N52-2'],
-  'fr-ch': ['11FA10-6'],
+  'fr-ch': ['11FA5B-6'],
 }
 export default class FactoriserIdentitesRemarquables2 extends Exercice {
   can: boolean

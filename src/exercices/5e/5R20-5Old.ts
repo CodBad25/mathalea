@@ -26,7 +26,7 @@ export const uuid = '41254'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ExerciceTableauAdditionsRelatifs extends Exercice {
   constructor() {

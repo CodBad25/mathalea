@@ -33,7 +33,7 @@ export const uuid = '2z3e5'
 export const refs = {
   'fr-fr': ['5N1E'],
   'fr-2016': ['6C33-2', '5C12-2'],
-  'fr-ch': ['9NO6-8', '10NO6-6'],
+  'fr-ch': ['9NO1F-4'],
 }
 
 export function rediger(

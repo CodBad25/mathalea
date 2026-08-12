@@ -36,7 +36,7 @@ export const uuid = '9af23'
 export const refs = {
   'fr-fr': ['6G0-5'],
   'fr-2016': ['6G10-6'],
-  'fr-ch': ['9ES1-5'],
+  'fr-ch': ['9ES1A-5'],
 }
 
 const responsiveColumnsAction = '6G0-5:responsive-columns'

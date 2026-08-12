@@ -27,7 +27,7 @@ export const uuid = '66c48'
 export const refs = {
   'fr-fr': ['6N3O-1'],
   'fr-2016': ['6N23-12'],
-  'fr-ch': [''],
+  'fr-ch': ['10FA2B-2'],
 }
 export default class DecimalFractionPourcentage extends Exercice {
   constructor() {
@@ -103,7 +103,7 @@ export default class DecimalFractionPourcentage extends Exercice {
       (val): val is number => typeof val === 'number',
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse = 0

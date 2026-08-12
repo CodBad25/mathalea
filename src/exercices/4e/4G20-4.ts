@@ -1,8 +1,8 @@
 import Decimal from 'decimal.js'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -32,7 +32,7 @@ export const uuid = '41188'
 
 export const refs = {
   'fr-fr': ['4G20-4', 'BP2AutoS2', 'BP2G8'],
-  'fr-ch': ['10NO3-2'],
+  'fr-ch': ['10NO3E-2'],
 }
 export default class ArrondirUneValeur4e extends Exercice {
   version: number

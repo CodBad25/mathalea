@@ -38,7 +38,7 @@ export const uuid = 'e0bca'
 export const refs = {
   'fr-fr': ['6G6F'],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['9ES1F-3'],
 }
 export default class ConstruireUnTriangleEtSonCercleCirconscrit extends Exercice {
   constructor() {
@@ -50,7 +50,7 @@ export default class ConstruireUnTriangleEtSonCercleCirconscrit extends Exercice
 
   nouvelleVersion() {
     let listeDeNomsDePolygones: string[] = []
-    for (let i = 0, verif, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, verif, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       if (i % 5 === 0) listeDeNomsDePolygones = ['PQD']

@@ -28,7 +28,7 @@ export const amcType = 'AMCHybride'
 export const refs = {
   'fr-fr': ['6N1M'],
   'fr-2016': ['6N31-5'],
-  'fr-ch': ['9NO7-8'],
+  'fr-ch': ['PR-42'],
 }
 export const uuid = 'a8c22'
 export default class EncadrerUnDecimal extends Exercice {

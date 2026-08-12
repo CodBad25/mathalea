@@ -8,8 +8,8 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 
-import { fractionCliquable } from '../../../modules/2dinteractif'
 import { orangeMathalea } from '../../../lib/colors'
+import { fractionCliquable } from '../../../modules/2dinteractif'
 export const titre = 'Résoudre un problème de reste en fraction'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -26,7 +26,7 @@ export const uuid = '1cee6'
 
 export const refs = {
   'fr-fr': ['can6C46', '6N3K-flash1'],
-  'fr-ch': ['NR'],
+  'fr-ch': ['9NO3F-8'],
 }
 export default class ProblemeResteFraction extends ExerciceSimple {
   constructor() {

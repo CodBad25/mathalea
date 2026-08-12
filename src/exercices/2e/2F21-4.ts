@@ -27,7 +27,7 @@ export const uuid = 'ef898'
 
 export const refs = {
   'fr-fr': ['2F21-4'],
-  'fr-ch': ['11FA8-11'],
+  'fr-ch': ['11FA1B-11'],
 }
 export default class Determinerfonctionaffine extends Exercice {
   constructor() {

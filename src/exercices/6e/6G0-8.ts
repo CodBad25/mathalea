@@ -27,7 +27,7 @@ export const uuid = 'a8f1f'
 export const refs = {
   'fr-fr': ['6G0-8'],
   'fr-2016': ['6G51-2'],
-  'fr-ch': ['9ES1-6'],
+  'fr-ch': ['9ES1A-6'],
 }
 export default class UtilerAppartientA extends Exercice {
   constructor() {

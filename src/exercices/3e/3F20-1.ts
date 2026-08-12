@@ -31,7 +31,6 @@ import {
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const titre = 'Étudier des fonctions affines'
 export const interactifType = 'mathLive'
 export const interactifReady = true
@@ -42,7 +41,7 @@ export const dateDeModifImportante = '01/06/2024'
 
 export const refs = {
   'fr-fr': ['3F20-1'],
-  'fr-ch': ['10FA5-13', '11FA8-7'],
+  'fr-ch': ['11FA1B-2'],
 }
 export const uuid = '20d20'
 /**

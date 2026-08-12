@@ -38,7 +38,7 @@ export const uuid = 'am8cs'
 export const refs = {
   'fr-fr': ['5G4A-4'],
   'fr-2016': ['5G33-2a'],
-  'fr-ch': ['9ES3-7a'],
+  'fr-ch': ['9ES1A-14', '11ES1A-7'],
 }
 export default class ProprietesParallelesPerpendiculaires extends Exercice {
   constructor() {

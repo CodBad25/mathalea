@@ -41,7 +41,7 @@ export const uuid = '339c9'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 
 export default class PaternRatioOld extends Exercice {
@@ -345,7 +345,8 @@ Si aucun motif prédéfini n'est choisi et si le nombre de questions est supéri
                 id: `Motif${i}Correction`,
                 pixelsParCm: 20,
                 scale: 0.6,
-                display: 'block' as const, center: true,
+                display: 'block' as const,
+                center: true,
                 optionsTikz: 'transform shape',
               }),
               figureCorr,
@@ -416,7 +417,8 @@ Si aucun motif prédéfini n'est choisi et si le nombre de questions est supéri
                   id: `Motif${i}Correction`,
                   pixelsParCm: 20,
                   scale: 0.6,
-                  display: 'block' as const, center: true,
+                  display: 'block' as const,
+                  center: true,
                   optionsTikz: 'transform shape',
                 }),
                 figureCorr,

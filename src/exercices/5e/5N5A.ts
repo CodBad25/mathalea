@@ -33,7 +33,7 @@ export const uuid = '3c1f7'
 export const refs = {
   'fr-fr': ['5N5A'],
   'fr-2016': ['5L10'],
-  'fr-ch': ['9FA2-3', '10FA1-4'],
+  'fr-ch': ['10FA4A-1', '10FA5A-1', '11FA4D-2'],
 }
 export default class ÉcrireUneExpressionLitterale extends Exercice {
   constructor() {
@@ -547,47 +547,47 @@ export default class ÉcrireUneExpressionLitterale extends Exercice {
           ]
           break
 
-
         case 12: // x-k
-        if (this.sup3) {
-          texte = `Exprimer la différence entre $${x}$ et ${k}.`
-        } else {
-          texte = `Exprimer la différence entre $${x}$ et ${k} en fonction de $${x}$.`
-        }
-        texteCorr = `La différence entre $${x}$ et ${k} peut se noter : $${miseEnEvidence(`${x}-${k}`)}$.`
-        this.autoCorrection[i].propositions = [
-          {
-            texte: `$${k}-${x}$`,
-            statut: false,
-            feedback: "L'ordre des termes a de l'importance dans une différence.",
-          },
-          {
-            texte: `$${x}-${k}$`,
-            statut: true,
-            feedback: 'Correct !',
-          },
-          {
-            texte: `$${k}${x}$`,
-            statut: false,
-            feedback: 'Confusion entre différence et multiplication.',
-          },
-          {
-            texte: `$${x}${k}$`,
-            statut: false,
-            feedback: 'Cette écriture est incorrecte.',
-          },
-          {
-            texte: `$${x}+${k}$`,
-            statut: false,
-            feedback: 'Confusion entre somme et différence.',
-          },
-          {
-            texte: `$${k}\\times ${x}$`,
-            statut: false,
-            feedback: 'Confusion entre différence et produit.',
-          },
-        ]
-        break
+          if (this.sup3) {
+            texte = `Exprimer la différence entre $${x}$ et ${k}.`
+          } else {
+            texte = `Exprimer la différence entre $${x}$ et ${k} en fonction de $${x}$.`
+          }
+          texteCorr = `La différence entre $${x}$ et ${k} peut se noter : $${miseEnEvidence(`${x}-${k}`)}$.`
+          this.autoCorrection[i].propositions = [
+            {
+              texte: `$${k}-${x}$`,
+              statut: false,
+              feedback:
+                "L'ordre des termes a de l'importance dans une différence.",
+            },
+            {
+              texte: `$${x}-${k}$`,
+              statut: true,
+              feedback: 'Correct !',
+            },
+            {
+              texte: `$${k}${x}$`,
+              statut: false,
+              feedback: 'Confusion entre différence et multiplication.',
+            },
+            {
+              texte: `$${x}${k}$`,
+              statut: false,
+              feedback: 'Cette écriture est incorrecte.',
+            },
+            {
+              texte: `$${x}+${k}$`,
+              statut: false,
+              feedback: 'Confusion entre somme et différence.',
+            },
+            {
+              texte: `$${k}\\times ${x}$`,
+              statut: false,
+              feedback: 'Confusion entre différence et produit.',
+            },
+          ]
+          break
         case 13: // kx
           if (this.sup3) {
             texte = `Exprimer le produit de $${x}$ par ${k}.`
@@ -630,41 +630,41 @@ export default class ÉcrireUneExpressionLitterale extends Exercice {
           break
 
         case 14: // xy
-        texte = `Exprimer le produit de $${x}$ par $${y}$ ?`
-        texteCorr = `Le produit de $${x}$ par $${y}$ peut se noter : $${miseEnEvidence(`${x}${y}`)}$, $${miseEnEvidence(`${y}${x}`)}$, ou $${miseEnEvidence(`${x}\\times ${y}`)}$.`
-        this.autoCorrection[i].propositions = [
-          {
-            texte: `$${y}${x}$`,
-            statut: true,
-            feedback: 'Correct !',
-          },
-          {
-            texte: `$${x}${y}$`,
-            statut: true,
-            feedback: 'Correct !',
-          },
-          {
-            texte: `$${y}\\times ${x}$`,
-            statut: true,
-            feedback: 'Correct, mais non simplifié.',
-          },
-          {
-            texte: `$${x}+${y}$`,
-            statut: false,
-            feedback: 'Confusion entre somme et produit.',
-          },
-          {
-            texte: `$${y}+${x}$`,
-            statut: false,
-            feedback: 'Confusion entre somme et produit.',
-          },
-          {
-            texte: `$${x}-${y}$`,
-            statut: false,
-            feedback: 'Confusion entre différence et produit.',
-          },
-        ]
-        break
+          texte = `Exprimer le produit de $${x}$ par $${y}$ ?`
+          texteCorr = `Le produit de $${x}$ par $${y}$ peut se noter : $${miseEnEvidence(`${x}${y}`)}$, $${miseEnEvidence(`${y}${x}`)}$, ou $${miseEnEvidence(`${x}\\times ${y}`)}$.`
+          this.autoCorrection[i].propositions = [
+            {
+              texte: `$${y}${x}$`,
+              statut: true,
+              feedback: 'Correct !',
+            },
+            {
+              texte: `$${x}${y}$`,
+              statut: true,
+              feedback: 'Correct !',
+            },
+            {
+              texte: `$${y}\\times ${x}$`,
+              statut: true,
+              feedback: 'Correct, mais non simplifié.',
+            },
+            {
+              texte: `$${x}+${y}$`,
+              statut: false,
+              feedback: 'Confusion entre somme et produit.',
+            },
+            {
+              texte: `$${y}+${x}$`,
+              statut: false,
+              feedback: 'Confusion entre somme et produit.',
+            },
+            {
+              texte: `$${x}-${y}$`,
+              statut: false,
+              feedback: 'Confusion entre différence et produit.',
+            },
+          ]
+          break
         case 15: // k/x
           if (this.sup3) {
             texte = `Exprimer le quotient de ${k} par $${x}$.`
@@ -705,46 +705,46 @@ export default class ÉcrireUneExpressionLitterale extends Exercice {
             },
           ]
           break
-          case 16: // x/k
-            if (this.sup3) {
-              texte = `Exprimer le quotient de $${x}$ par ${k}.`
-            } else {
-              texte = `Exprimer le quotient de $${x}$ par ${k} en fonction de $${x}$.`
-            }
-            texteCorr = `Le quotient de $${x}$ par ${k} peut se noter : $${miseEnEvidence(`${texFractionFromString(x, k)}`)}$ ou $${miseEnEvidence(`${x}\\div ${k}`)}$.`
-            this.autoCorrection[i].propositions = [
-              {
-                texte: `$${x}\\div ${k}$`,
-                statut: true,
-                feedback: 'Correct !',
-              },
-              {
-                texte: `$\\dfrac{${x}}{${k}}$`,
-                statut: true,
-                feedback: 'Correct !',
-              },
-              {
-                texte: `$${k}\\div ${x}$`,
-                statut: false,
-                feedback: "C'est l'inverse.",
-              },
-              {
-                texte: `$${x}\\times ${k}$`,
-                statut: false,
-                feedback: 'Cette écriture est incorrecte.',
-              },
-              {
-                texte: `$${x}+${k}$`,
-                statut: false,
-                feedback: 'Confusion entre somme et quotient.',
-              },
-              {
-                texte: `$${x}-${k}$`,
-                statut: false,
-                feedback: 'Confusion entre différence et quotient.',
-              },
-            ]
-            break
+        case 16: // x/k
+          if (this.sup3) {
+            texte = `Exprimer le quotient de $${x}$ par ${k}.`
+          } else {
+            texte = `Exprimer le quotient de $${x}$ par ${k} en fonction de $${x}$.`
+          }
+          texteCorr = `Le quotient de $${x}$ par ${k} peut se noter : $${miseEnEvidence(`${texFractionFromString(x, k)}`)}$ ou $${miseEnEvidence(`${x}\\div ${k}`)}$.`
+          this.autoCorrection[i].propositions = [
+            {
+              texte: `$${x}\\div ${k}$`,
+              statut: true,
+              feedback: 'Correct !',
+            },
+            {
+              texte: `$\\dfrac{${x}}{${k}}$`,
+              statut: true,
+              feedback: 'Correct !',
+            },
+            {
+              texte: `$${k}\\div ${x}$`,
+              statut: false,
+              feedback: "C'est l'inverse.",
+            },
+            {
+              texte: `$${x}\\times ${k}$`,
+              statut: false,
+              feedback: 'Cette écriture est incorrecte.',
+            },
+            {
+              texte: `$${x}+${k}$`,
+              statut: false,
+              feedback: 'Confusion entre somme et quotient.',
+            },
+            {
+              texte: `$${x}-${k}$`,
+              statut: false,
+              feedback: 'Confusion entre différence et quotient.',
+            },
+          ]
+          break
         case 17: // pair
           texte =
             'Écrire une expression littérale qui permet de représenter un nombre pair.'

@@ -13,7 +13,7 @@ export const interactifReady = false
 export const uuid = '1be55'
 export const refs = {
   'fr-fr': ['1AL23-22'],
-  'fr-ch': ['11FA10-15'],
+  'fr-ch': ['11FA5B-14'],
 }
 
 // export const dateDeModifImportante = '24/10/2021'

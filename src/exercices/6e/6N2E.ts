@@ -34,7 +34,7 @@ export const uuid = 'f9113'
 export const refs = {
   'fr-fr': ['6N2E'],
   'fr-2016': ['6C30-0'],
-  'fr-ch': ['9NO8-9'],
+  'fr-ch': ['9NO1G-15'],
 }
 export default class MultiplierDecimauxParametres extends Exercice {
   version: string

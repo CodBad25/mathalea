@@ -25,7 +25,7 @@ export const uuid = '0cee9'
 
 export const refs = {
   'fr-fr': ['2G31-2'],
-  'fr-ch': ['11FA9-5', '1mF2-2'],
+  'fr-ch': ['11FA1B-17', '1mF2-2'],
 }
 export default class EquationReduiteDeDroites extends Exercice {
   constructor() {

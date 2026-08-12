@@ -22,7 +22,7 @@ export const uuid = 'bc570'
 export const refs = {
   'fr-fr': ['5N1J-4'],
   'fr-2016': ['5A11-5'],
-  'fr-ch': [],
+  'fr-ch': ['9NO1A-6'],
 }
 
 /**
@@ -110,7 +110,7 @@ export default class TrouverNombre extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse: number[] | string[] = []

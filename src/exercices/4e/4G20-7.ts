@@ -33,7 +33,7 @@ export const uuid = 'c0f90'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 
 Blockly.setLocale(En as unknown as { [key: string]: string })

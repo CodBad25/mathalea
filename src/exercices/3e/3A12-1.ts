@@ -1,11 +1,11 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import {
   handleAnswers,
   setReponse,
 } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha, sp } from '../../lib/outils/outilString'
 import { listeDesDiviseurs } from '../../lib/outils/primalite'
@@ -35,7 +35,7 @@ export const uuid = '8e05e'
 
 export const refs = {
   'fr-fr': ['3A12-1'],
-  'fr-ch': ['9NO4-24'],
+  'fr-ch': ['9NO1A-18'],
 }
 export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
   constructor() {

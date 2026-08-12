@@ -37,7 +37,7 @@ export const uuid = '397d2'
 
 export const refs = {
   'fr-fr': ['2F30-5', '1Tec-F12'],
-  'fr-ch': [''],
+  'fr-ch': ['11FA1A-13'],
 }
 
 // ============ FONCTIONS HELPERS POUR PHRASES RÉPÉTÉES ============

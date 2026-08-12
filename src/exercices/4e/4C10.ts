@@ -31,7 +31,7 @@ export const uuid = '745ba'
 
 export const refs = {
   'fr-fr': ['4C10'],
-  'fr-ch': ['10NO4-1'],
+  'fr-ch': ['9NO2C-1', '11NO1-2'],
 }
 /**
  * @author ???

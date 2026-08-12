@@ -15,7 +15,7 @@ export const uuid = '2d81e'
 
 export const refs = {
   'fr-fr': ['can2C27'],
-  'fr-ch': [],
+  'fr-ch': ['9NO1B-12'],
 }
 export default class DecomposerUnNombre extends ExerciceSimple {
   constructor() {

@@ -44,7 +44,7 @@ export const uuid = 'b428f'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['10FA1B-1'],
 }
 export default class ExploiterRepresentationGraphique extends Exercice {
   constructor() {

@@ -4,6 +4,6 @@ export const interactifReady = false
 export const uuid = '71e5c'
 export const refs = {
   'fr-fr': ['2N51-1', 'BP2RES25'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class TesterSiUnNombreEstSolutionDUneEquation2nde extends TesterSiUnNombreEstSolutionDUneEquation {}

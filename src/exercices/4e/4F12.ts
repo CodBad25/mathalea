@@ -40,7 +40,7 @@ export const uuid = 'b429f'
 
 export const refs = {
   'fr-fr': ['4F12', '3AutoP09-1'],
-  'fr-ch': ['10FA5-2'],
+  'fr-ch': ['10FA1B-18'],
 }
 export default class ExploiterRepresentationGraphique extends Exercice {
   constructor() {
@@ -79,7 +79,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
       nbQuestions: this.nbQuestions,
       defaut: 4,
     }).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       if (typesDeProblemes[i] === 1) {

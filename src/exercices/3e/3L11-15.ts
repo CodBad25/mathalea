@@ -27,7 +27,7 @@ export const uuid = '6e472'
 export const refs = {
   // Exo pour la Suisse à cause de la 4ème identité remarquable.
   'fr-fr': [],
-  'fr-ch': ['11FA1-11', '1mCL1-7'],
+  'fr-ch': ['11FA4A-5', '1mCL1-7'],
 }
 
 export default class developperIdentiteRemarquable extends Exercice {

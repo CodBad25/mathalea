@@ -18,7 +18,7 @@ export const uuid = '5e598'
 export const refs = {
   'fr-fr': ['6M2C-1', 'BP1AUTO104'],
   'fr-2016': ['6M11-1a'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class PerimetreOuAireDeCarresRectangles extends PerimetreOuAireDeCarresRectanglesTriangles {
   constructor() {

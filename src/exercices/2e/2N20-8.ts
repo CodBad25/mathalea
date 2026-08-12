@@ -13,7 +13,7 @@ export const uuid = '3ec5c'
 
 export const refs = {
   'fr-fr': ['2N20-8'],
-  'fr-ch': ['11FA4-2'],
+  'fr-ch': ['11FA4D-3'],
 }
 export default class Parite extends Exercice {
   constructor() {

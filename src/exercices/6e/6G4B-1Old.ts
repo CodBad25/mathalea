@@ -26,7 +26,6 @@ import {
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const titre = 'Mesurer un angle avec rapporteur intégré'
 export const interactifType = 'mathLive'
 export const interactifReady = true
@@ -42,7 +41,7 @@ export const uuid = 'ff2cc'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class MesurerUnAngleAvecRapporteurOld extends Exercice {
   constructor() {

@@ -31,7 +31,7 @@ export const uuid = '41187'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ArrondirUneValeur4e extends Exercice {
   version: number

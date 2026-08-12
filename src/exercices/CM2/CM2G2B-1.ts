@@ -13,7 +13,7 @@ export const uuid = '46429'
 export const refs = {
   'fr-fr': ['CM2G2B-1'],
   'fr-2016': ['6G12'],
-  'fr-ch': ['9ES3-3'],
+  'fr-ch': ['9ES1A-10'],
 }
 export default class TracerDesParalleles extends ParalleleEtPerpendiculaires {
   constructor() {

@@ -32,7 +32,7 @@ export const uuid = 'db772'
 export const refs = {
   'fr-fr': ['6N3P'],
   'fr-2016': ['6N33-2'],
-  'fr-ch': ['9NO15-1'],
+  'fr-ch': ['10FA2B-3'],
 }
 export default class CalculerUnPourcentage extends Exercice {
   can: boolean

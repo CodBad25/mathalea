@@ -42,7 +42,7 @@ export const uuid = '5563e'
 export const refs = {
   'fr-fr': ['auto6M1E-1'],
   'fr-2016': ['6M11-3'],
-  'fr-ch': ['9GM1-1'],
+  'fr-ch': ['9GM1B-1'],
 }
 export default class AireCarresRectanglesTrianglesSL extends Exercice {
   constructor() {

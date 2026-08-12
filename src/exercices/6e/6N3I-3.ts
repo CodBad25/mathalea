@@ -32,7 +32,7 @@ export const uuid = '234ae'
 export const refs = {
   'fr-fr': ['6N3I-3', 'BP2AutoG6'],
   'fr-2016': ['5N14', 'BP2AutoG6'],
-  'fr-ch': ['9NO12-5'],
+  'fr-ch': ['NR'],
 }
 export default class ExerciceComparerDeuxFractions extends Exercice {
   constructor(max = 11) {

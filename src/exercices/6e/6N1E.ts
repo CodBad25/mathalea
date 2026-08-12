@@ -29,7 +29,7 @@ export const uuid = '2359a'
 export const refs = {
   'fr-fr': ['6N1E', '3AutoN06-1'],
   'fr-2016': ['6N23-10'],
-  'fr-ch': [''],
+  'fr-ch': ['9NO3C-9'],
 }
 export default class DecimalFractionPourcentage extends Exercice {
   constructor() {

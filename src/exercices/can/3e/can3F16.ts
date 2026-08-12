@@ -1,3 +1,4 @@
+import { amcConvert } from '../../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
@@ -7,8 +8,6 @@ import { getLang } from '../../../lib/stores/languagesStore'
 import { context } from '../../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import { amcConvert } from '../../../lib/amc/amcBuilders'
-
 
 export const titre = 'Lire images et antécédents depuis un tableau de valeurs'
 export const interactifReady = true
@@ -24,7 +23,7 @@ export const uuid = 'b92dc'
 
 export const refs = {
   'fr-fr': ['3F10Can', '2F12-4'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ImageAntecedentDepuisTableau extends Exercice {
   constructor() {

@@ -14,7 +14,7 @@ export const titre = 'Exercice de synthèse sur les équations'
 export const uuid = '74438'
 export const refs = {
   'fr-fr': ['3L15-3'],
-  'fr-ch': [],
+  'fr-ch': ['11FA5B-8'],
 }
 
 /**

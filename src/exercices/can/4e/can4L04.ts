@@ -16,7 +16,7 @@ export const uuid = '12514'
 
 export const refs = {
   'fr-fr': ['can4L04'],
-  'fr-ch': ['10FA1-1b', '11FA1-4b'],
+  'fr-ch': ['9FA4A-6'],
 }
 
 export default class SubstitutionRelatif extends ExerciceSimple {

@@ -20,7 +20,7 @@ export const uuid = 'c7c3d'
 export const refs = {
   'fr-fr': ['5N2F-1'],
   'fr-2016': ['5R13-1'],
-  'fr-ch': ['9NO9-18'],
+  'fr-ch': ['9NO2A-4'],
 }
 /**
  * Ranger des nombres relatifs
@@ -44,7 +44,7 @@ export default class RelatifsOrdre extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const a = new Decimal(randint(10, 99)).div(-10)
       const b = a.add(new Decimal(randint(1, 9)).div(100))
       const c = a.add(new Decimal(randint(-9, -1)).div(100))

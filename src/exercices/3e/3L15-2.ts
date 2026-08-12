@@ -19,7 +19,7 @@ export const inteeractifReady = 'mathLive'
 export const uuid = '0f844'
 export const refs = {
   'fr-fr': ['3L15-2'],
-  'fr-ch': ['11FA10-14', '1mCL4-0'],
+  'fr-ch': ['11FA5B-7', '1mCL4-0'],
 }
 
 // export const dateDeModifImportante = '24/10/2021'

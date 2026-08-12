@@ -29,7 +29,7 @@ export const uuid = 'cf5b7'
 
 export const refs = {
   'fr-fr': ['2N50-4', 'BP2RES24'],
-  'fr-ch': ['11FA6-13'],
+  'fr-ch': ['11FA5C-2'],
 }
 export default class ModeliserEquationsGeometrie extends Exercice {
   constructor() {

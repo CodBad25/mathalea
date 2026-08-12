@@ -19,7 +19,7 @@ export const uuid = 'd2d85'
 export const refs = {
   'fr-fr': ['5N1I-3'],
   'fr-2016': ['5A10-2'],
-  'fr-ch': [''],
+  'fr-ch': ['9NO1A-8'],
 }
 /**
  * @author Éric Elter
@@ -47,7 +47,7 @@ export default class ListeMultiples extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let n = 0
       switch (listeTypeQuestions[i]) {
         case 'multipleDe10':

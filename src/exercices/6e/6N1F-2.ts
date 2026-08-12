@@ -33,7 +33,7 @@ export const uuid = '5eb83'
 export const refs = {
   'fr-fr': ['6N1F-2'],
   'fr-2016': ['6N23-0'],
-  'fr-ch': ['9NO7-10'],
+  'fr-ch': ['9NO3C-12'],
 }
 export default class ÉcrireNombresDecimal extends Exercice {
   constructor() {

@@ -31,7 +31,7 @@ export const uuid = 'ce849'
 export const refs = {
   'fr-fr': ['5N2G-3'],
   'fr-2016': ['5R20-2'],
-  'fr-ch': ['9NO9-7'],
+  'fr-ch': ['9NO2B-6'],
 }
 export default class ExerciceAdditionsRelatifsATrou extends Exercice {
   constructor(max = 10) {

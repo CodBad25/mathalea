@@ -32,7 +32,7 @@ export const uuid = '2b06d'
 export const refs = {
   'fr-fr': [''],
   'fr-2016': ['6C33-1'],
-  'fr-ch': ['9NO6-7', '10NO6-5'],
+  'fr-ch': ['NR'],
 }
 export default class OrganiserDesCalculsEnUneSeuleLigne extends Exercice {
   constructor() {

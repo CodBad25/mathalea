@@ -26,7 +26,7 @@ export const uuid = '6c8a1'
 export const refs = {
   'fr-fr': ['auto6N2B-6'],
   'fr-2016': ['6N20'],
-  'fr-ch': ['9NO10-9'],
+  'fr-ch': ['NR'],
 }
 export default class ExerciceFractionsDecomposer extends Exercice {
   constructor() {
@@ -90,7 +90,7 @@ export default class ExerciceFractionsDecomposer extends Exercice {
       shuffle: true,
       nbQuestions: this.nbQuestions,
     }).map((element) => Number(element))
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const denominateur =
         listeDenominateurs[cpt % this.nbQuestions] === 1000
           ? randint(2, 11)

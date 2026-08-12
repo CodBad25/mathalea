@@ -24,6 +24,7 @@ import {
 } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import {
   rotationAnimee,
   symetrieAnimee,
@@ -34,7 +35,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Effectuer des transformations de triangles'
 /**
@@ -44,7 +44,7 @@ export const uuid = '0da6a'
 
 export const refs = {
   'fr-fr': ['4G15'],
-  'fr-ch': ['10ES2-7'],
+  'fr-ch': ['9ES3-6'],
 }
 export default class TransformationsDeTriangle extends Exercice {
   constructor() {

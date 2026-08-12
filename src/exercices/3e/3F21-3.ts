@@ -10,8 +10,8 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -39,7 +39,7 @@ export const uuid = '156fa'
 
 export const refs = {
   'fr-fr': ['3F21-3'],
-  'fr-ch': ['11FA8-12'],
+  'fr-ch': ['11FA1B-7'],
 }
 export default class PenteEtOrdonneeOrigineDroite extends Exercice {
   constructor() {

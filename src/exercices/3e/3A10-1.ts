@@ -28,7 +28,7 @@ export const uuid = 'bba55'
 
 export const refs = {
   'fr-fr': ['3A10-1'],
-  'fr-ch': ['9NO4-9'],
+  'fr-ch': ['9NO1B-7'],
 }
 const prems = cribleEratostheneN(529) // constante contenant tous les nombres premiers jusqu'à 529...
 
@@ -98,7 +98,7 @@ export default class PremierOuPas extends Exercice {
     }
     stringRappel += '.'
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       typesDeQuestions = listeTypeDeQuestions[i]
       let texte = ''
       let texteCorr = ''

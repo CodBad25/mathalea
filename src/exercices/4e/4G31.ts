@@ -8,7 +8,7 @@ export const dateDeModifImportante = '11/06/2024'
 export const uuid = '4dce8'
 export const refs = {
   'fr-fr': ['4G31'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ReciproqueThales4eme extends ReciproqueThales {
   constructor() {

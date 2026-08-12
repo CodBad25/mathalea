@@ -19,7 +19,7 @@ export const uuid = '57f44'
 
 export const refs = {
   'fr-fr': ['3L15-1'],
-  'fr-ch': ['11FA10-5'],
+  'fr-ch': ['11FA5B-5'],
 }
 export default class ResoudreEquatioeX2EgalA extends Exercice {
   constructor() {

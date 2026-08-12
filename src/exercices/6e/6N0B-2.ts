@@ -1,5 +1,8 @@
 import { propositionsQcm } from '../../lib/interactif/qcm'
-import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import {
@@ -21,7 +24,7 @@ export const uuid = '32e02'
 export const refs = {
   'fr-fr': ['6N0B-2'],
   'fr-2016': ['6C13-1'],
-  'fr-ch': ['9NO1-7'],
+  'fr-ch': ['9NO1E-1'],
 }
 export default class VocabulaireSur4Operations extends Exercice {
   constructor() {
@@ -77,7 +80,6 @@ export default class VocabulaireSur4Operations extends Exercice {
     for (
       let i = 0, texte, a, b, reste, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const reponse: { textes: string[]; statuts: boolean[] } = {
         textes: [],

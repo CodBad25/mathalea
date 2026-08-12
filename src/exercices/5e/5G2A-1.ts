@@ -31,7 +31,7 @@ export const uuid = '083b9'
 export const refs = {
   'fr-fr': ['5G2A-1'],
   'fr-2016': ['6G44-2', '5G53-1'],
-  'fr-ch': ['11ES1-3'],
+  'fr-ch': ['10ES2A-2', '10GM2C-1'],
 }
 export default class DecrireAssemblageDeSolides extends Exercice {
   /**
@@ -97,7 +97,7 @@ export default class DecrireAssemblageDeSolides extends Exercice {
       }
     }
     const typesDeQuestions = combinaisonListes(combinaisons, this.nbQuestions)
-    for (let j = 0, cpt = 0; j < this.nbQuestions && cpt < 50; ) {
+    for (let j = 0, cpt = 0; j < this.nbQuestions && cpt < 50;) {
       const tronc = typesDeQuestions[j].tronc
       const chapeau = typesDeQuestions[j].chapeau
       context.anglePerspective = 20

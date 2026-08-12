@@ -24,7 +24,7 @@ export const uuid = '7b350'
 
 export const refs = {
   'fr-fr': ['can5P09', '5P1C-flash3'],
-  'fr-ch': [],
+  'fr-ch': ['9FA2B-12'],
 }
 export default class CalculPrix extends ExerciceSimple {
   constructor() {

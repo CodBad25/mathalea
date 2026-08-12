@@ -46,7 +46,7 @@ export const dateDePublication = '30/12/2024' // La date de publication initiale
 export const uuid = '58a64'
 export const refs = {
   'fr-fr': [''],
-  'fr-ch': [''],
+  'fr-ch': ['NR'],
 }
 /**
  * calcul de longueurs avec des triangles semblables

@@ -8,7 +8,7 @@ export const amcType = 'AMCOpen'
 export const uuid = 'dd1c9'
 export const refs = {
   'fr-fr': ['4L11', 'BP2AutoI26'],
-  'fr-ch': [],
+  'fr-ch': ['10FA4G-2'],
 }
 export default class Factoriser4e extends FactoriserParNombreOux {
   constructor() {

@@ -20,7 +20,7 @@ export const interactifType = 'svg-selection'
 export const uuid = '1574f'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['PR-20'],
 }
 
 const fractionsPourCase1 = [
@@ -170,7 +170,7 @@ Dans ${this.nbQuestions > 1 ? 'les questions suivantes' : 'la question suivante'
 
       return result
     }
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let frac: FractionEtendue
       let figureLatex = ''

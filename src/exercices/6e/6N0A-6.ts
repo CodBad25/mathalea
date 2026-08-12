@@ -119,7 +119,7 @@ export const uuid = '0688e'
 export const refs = {
   'fr-fr': ['6N0A-6'],
   'fr-2016': ['6N10'],
-  'fr-ch': ['9NO1-1'],
+  'fr-ch': [''], // Primaire anciennement :['9NO1-1'],
 }
 export default class EcrirePetitsNombresEntiers extends Exercice {
   constructor() {

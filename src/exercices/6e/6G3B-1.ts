@@ -24,6 +24,7 @@ import {
   pointAdistance,
   pointIntersectionLC,
 } from '../../lib/2d/utilitairesPoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { arrondi } from '../../lib/outils/nombres'
@@ -31,8 +32,6 @@ import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const dateDePublication = '30/11/2020'
 export const dateDeModifImportante = '06/09/2024'
@@ -48,7 +47,7 @@ export const uuid = 'd7052'
 export const refs = {
   'fr-fr': ['6G3B-1'],
   'fr-2016': ['6G25'],
-  'fr-ch': ['9ES3-5'],
+  'fr-ch': ['9ES1D-4'],
 }
 
 const celluleAlea = function (rang: number) {
@@ -64,7 +63,7 @@ export default class ConstruireMediatrices6e extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let ee = 0, cpt = 0; ee < this.nbQuestions && cpt < 50; ) {
+    for (let ee = 0, cpt = 0; ee < this.nbQuestions && cpt < 50;) {
       let result = [0, 0]
       let texteCorr = ''
       let texte = ''

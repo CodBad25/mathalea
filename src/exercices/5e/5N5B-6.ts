@@ -20,7 +20,7 @@ export const uuid = '01387'
 export const refs = {
   'fr-fr': ['5N5B-6'],
   'fr-2016': ['5L17'],
-  'fr-ch': ['1mF1-1', '11FA7-6', '10FA5-20'],
+  'fr-ch': ['10FA4A-7', '1mF1-1'],
 }
 export default class TraduireDependanceGrandeursTableau extends Exercice {
   constructor() {
@@ -48,7 +48,7 @@ export default class TraduireDependanceGrandeursTableau extends Exercice {
     )
     let ligne1: StyledText[] = []
     let ligne2: StyledText[] = []
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       switch (listeTypeQuestions[i]) {

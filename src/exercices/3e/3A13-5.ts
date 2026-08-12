@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -14,8 +15,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Jouer avec la compréhension des multiples d'un nombre"
 
@@ -34,7 +33,7 @@ export const uuid = '2ae9b'
 
 export const refs = {
   'fr-fr': ['3A13-5'],
-  'fr-ch': ['9NO4-25'],
+  'fr-ch': [''],
 }
 export default class DivisionEuclidienneEtAjout extends Exercice {
   constructor() {

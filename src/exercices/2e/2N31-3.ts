@@ -31,7 +31,7 @@ export const uuid = 'c71da'
 
 export const refs = {
   'fr-fr': ['2N31-3'],
-  'fr-ch': ['10NO2-14', '11NO1-10'],
+  'fr-ch': ['10NO3D-22', '10NO3D-27'],
 }
 export default class PuissancesDUnRelatif2 extends Exercice {
   constructor() {
@@ -50,7 +50,7 @@ export default class PuissancesDUnRelatif2 extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typesDeQuestions = listeTypeDeQuestions[i]
       let base = 0
       let exp: number[] = []

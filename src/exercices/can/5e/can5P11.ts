@@ -19,7 +19,7 @@ export const uuid = '6a3da'
 
 export const refs = {
   'fr-fr': ['can5P11', '5P1C-flash4'],
-  'fr-ch': [],
+  'fr-ch': ['9FA2B-13'],
 }
 export default class CalculPartieAvecTout extends ExerciceSimple {
   constructor() {

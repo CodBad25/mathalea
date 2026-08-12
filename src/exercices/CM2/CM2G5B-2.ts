@@ -22,7 +22,6 @@ import {
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const titre = 'Nommer des faces dans un pavé droit'
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -41,7 +40,7 @@ export const uuid = '6809f'
 export const refs = {
   'fr-fr': ['CM2G5B-2', 'BP2G1'],
   'fr-2016': ['6G42-1', 'BP2G1'],
-  'fr-ch': ['9ES7-5'],
+  'fr-ch': ['9ES2A-3'],
 }
 
 /**

@@ -6,6 +6,6 @@ export const uuid = '6a1a2'
 export const refs = {
   'fr-fr': ['5G5B-1'],
   'fr-2016': ['5G20-2'],
-  'fr-ch': [],
+  'fr-ch': ['9ES1C-13'],
 }
 export default class TracerTriangle2Angles5e extends TracerTriangle2Angles {}

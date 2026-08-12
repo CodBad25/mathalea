@@ -13,7 +13,7 @@ export const uuid = '598c3'
 export const refs = {
   'fr-fr': ['5N2G-5'],
   'fr-2016': ['5R20-6'],
-  'fr-ch': ['9NO9-11'],
+  'fr-ch': ['9NO2B-8'],
 }
 /**
  * @author Jean-claude Lhote

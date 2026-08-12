@@ -4,7 +4,7 @@ export const uuid = '14b84'
 export const refs = {
   'fr-fr': ['CM2N2U-3'],
   'fr-2016': ['c3N11-1'],
-  'fr-ch': ['9NO2-7'],
+  'fr-ch': [''], // Primaire anciennement :['9NO2-7'],
 }
 export const interactifReady = true
 export const interactifType = 'mathLive'

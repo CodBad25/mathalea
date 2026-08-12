@@ -20,7 +20,7 @@ export const uuid = 'f8019'
 
 export const refs = {
   'fr-fr': ['can6M10', 'BP1AUTO098'],
-  'fr-ch': [],
+  'fr-ch': ['9GM2A-4'],
 }
 export default class VolumePaveSimple extends ExerciceSimple {
   constructor() {

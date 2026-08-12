@@ -45,7 +45,7 @@ export const uuid = '76ea9'
 export const refs = {
   'fr-fr': ['5G3A-9'],
   'fr-2016': ['5G12'],
-  'fr-ch': ['9ES6-21'],
+  'fr-ch': ['9ES3C-10'],
 }
 export default class PavageEtDemiTour2D extends Exercice {
   constructor() {

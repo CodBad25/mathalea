@@ -45,7 +45,7 @@ export const uuid = 'ec059'
 
 export const refs = {
   'fr-fr': ['2F30-2'],
-  'fr-ch': ['11FA9-2'],
+  'fr-ch': ['11FA1A-12'],
 }
 export default class CalculPointSurCourbe extends Exercice {
   constructor() {

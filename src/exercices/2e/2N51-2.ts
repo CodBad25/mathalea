@@ -5,6 +5,6 @@ export const interactifReady = false
 export const uuid = 'ad208'
 export const refs = {
   'fr-fr': ['2N51-2', 'BP2RES26'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class TrouverErreurResolEqDeg12nde extends TrouverErreurResolEqDeg1 {}

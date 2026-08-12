@@ -18,7 +18,6 @@ import {
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
@@ -39,7 +38,7 @@ export const uuid = 'b16c6'
 
 export const refs = {
   'fr-fr': ['4A12'],
-  'fr-ch': ['9NO4-22'],
+  'fr-ch': ['10NO1A-10'],
 }
 export default class ProblemesEvenementsRecurrents extends Exercice {
   constructor() {

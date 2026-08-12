@@ -58,7 +58,7 @@ export const uuid = '8e5d3'
 export const refs = {
   'fr-fr': ['6N4B'],
   'fr-2016': ['6I13-1'],
-  'fr-ch': [],
+  'fr-ch': ['10FA1A-6'],
 }
 
 export default class PatternIteratif6e extends Exercice {

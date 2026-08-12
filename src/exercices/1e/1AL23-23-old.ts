@@ -10,6 +10,6 @@ export const titre =
   "Nombre de solutions d'une équation du second degré à paramètre"
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class EquationDuSecondDegreAvecUnParametreOld extends EquationDuSecondDegreAvecUnParametre {}

@@ -23,7 +23,7 @@ export const uuid = '4117b'
 
 export const refs = {
   'fr-fr': ['3A10-4'],
-  'fr-ch': ['9NO4-8'],
+  'fr-ch': ['10NO1A-9'],
 }
 export default class ListerDiviseursParDecompositionFacteursPremiers extends Exercice {
   constructor() {

@@ -15,7 +15,7 @@ export const uuid = '918c2'
 export const refs = {
   'fr-fr': ['5N1I-1'],
   'fr-2016': ['5A10-3'],
-  'fr-ch': [],
+  'fr-ch': ['9NO1A-3'],
 }
 /**
  * @author Éric Elter
@@ -44,7 +44,7 @@ export default class MultiplesOuDiviseurs extends Exercice {
     )
     let texteCorr = ''
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = 'Cocher la seule réponse exacte.<br>'
       let bonneReponse
       const nb1 = randint(2, 10)

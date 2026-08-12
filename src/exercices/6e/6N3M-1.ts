@@ -19,8 +19,8 @@ import {
   type DataOptionsMultiMathfield,
 } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { fraction } from '../../modules/fractions'
 import {
@@ -43,7 +43,7 @@ export const uuid = 'a6deb'
 export const refs = {
   'fr-fr': ['6N3M-1'],
   'fr-2016': ['6N33-0'],
-  'fr-ch': ['9NO14-2'],
+  'fr-ch': ['9NO3E-2'],
 }
 export default class FractionDuneQuantite extends Exercice {
   constructor() {

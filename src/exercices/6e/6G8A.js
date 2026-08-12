@@ -40,7 +40,7 @@ export const uuid = '136dd'
 export const refs = {
   'fr-fr': ['6G8A'],
   'fr-2016': ['3G41'],
-  'fr-ch': [],
+  'fr-ch': ['9ES2C-2'],
 }
 export default class VuesEmpilementCubes extends Exercice {
   constructor() {

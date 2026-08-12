@@ -15,7 +15,7 @@ export const uuid = '91a00'
 export const refs = {
   'fr-fr': ['6G7B-1'],
   'fr-2016': ['6G24-1'],
-  'fr-ch': ['9ES6-12'],
+  'fr-ch': ['9ES3B-4'],
 }
 export default class SymetrieAxialePoint6e extends ConstruireParSymetrie {
   constructor() {

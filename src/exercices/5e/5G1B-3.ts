@@ -1,12 +1,12 @@
 import Figure from 'apigeom'
 import type TextByPosition from 'apigeom/src/elements/text/TextByPosition'
 import { amcConvert } from '../../lib/amc/amcBuilders'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import figureApigeom from '../../lib/figureApigeom'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = 'Placer des points dans un repère'
 export const dateDePublication = '27/10/2023'
@@ -24,7 +24,7 @@ export const uuid = '4dadb'
 export const refs = {
   'fr-fr': ['5G1B-3', '3AutoG01-1'],
   'fr-2016': ['5R12-1', '3AutoG01-1'],
-  'fr-ch': ['9FA1-6'],
+  'fr-ch': ['9FA1A-3'],
 }
 
 // Type simplifié pour la sauvegarde de la réponse

@@ -25,7 +25,7 @@ export const uuid = '550cf'
 
 export const refs = {
   'fr-fr': ['2N51-6'],
-  'fr-ch': [],
+  'fr-ch': ['10FA5C-5'],
 }
 export default class ResoudreEquationAvecQuotient extends ExerciceSimple {
   constructor() {

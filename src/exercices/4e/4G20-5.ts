@@ -8,7 +8,7 @@ export const interactifType = 'qcm'
 export const uuid = '9c484'
 export const refs = {
   'fr-fr': ['4G20-5', 'BP2AutoS3'],
-  'fr-ch': ['10NO3-3'],
+  'fr-ch': ['10NO3E-3'],
 }
 export default class ArrondirUneValeur4eRac extends ArrondirUneValeur6e {
   constructor() {

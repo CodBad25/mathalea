@@ -22,7 +22,7 @@ export const uuid = '846b8'
 
 export const refs = {
   'fr-fr': ['2N50-3', 'BP2RES23'],
-  'fr-ch': ['10FA3-12', '11FA6-8'],
+  'fr-ch': ['10FA5D-6', '11FA5C-1'],
 }
 export default class ModeliserEquations extends Exercice {
   constructor() {
@@ -63,7 +63,7 @@ export default class ModeliserEquations extends Exercice {
       typeDeQuestionsDisponibles,
       this.nbQuestions,
     ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // Boucle principale où i+1 correspond au numéro de la question
       let texte = ''
       let texteCorr = ''

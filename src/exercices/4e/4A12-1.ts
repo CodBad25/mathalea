@@ -1,20 +1,20 @@
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import {
-  obtenirListeFacteursPremiers,
-  texFactorisation,
-  ppcm,
-} from '../../lib/outils/primalite'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  obtenirListeFacteursPremiers,
+  ppcm,
+  texFactorisation,
+} from '../../lib/outils/primalite'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const uuid = 'ff20c'
 export const refs = {
   'fr-fr': ['4A12-1'],
-  'fr-ch': [],
+  'fr-ch': ['9NO1C-2', '10NO1A-7'],
 }
 export const titre =
   'Déterminer le PPCM à partir des décompositions en produits de facteurs premiers'
@@ -35,7 +35,8 @@ export default class PPCMDecompositionFacteursPremiers extends Exercice {
       'Afficher les décompositions avec des puissances',
       true,
     ]
-    this.comment = 'Pour permettre de faire cet exercice sans calculatrice, en mode interactif, les réponses sous forme de produit sont acceptées.'
+    this.comment =
+      'Pour permettre de faire cet exercice sans calculatrice, en mode interactif, les réponses sous forme de produit sont acceptées.'
   }
 
   nouvelleVersion() {
@@ -58,7 +59,8 @@ export default class PPCMDecompositionFacteursPremiers extends Exercice {
         const p = primesImpairsA[randint(0, primesImpairsA.length - 1)]
         const primesImpairsBSansP = primesImpairsB.filter((x) => x !== p)
         if (primesImpairsBSansP.length === 0) continue
-        const q = primesImpairsBSansP[randint(0, primesImpairsBSansP.length - 1)]
+        const q =
+          primesImpairsBSansP[randint(0, primesImpairsBSansP.length - 1)]
         A = 4 * p
         B = 8 * q
       } else {
@@ -109,9 +111,7 @@ export default class PPCMDecompositionFacteursPremiers extends Exercice {
       }
 
       // Construction de la correction (liste plate)
-      const factATexte = factA
-        .map((f) => String(f))
-        .join(' \\times ')
+      const factATexte = factA.map((f) => String(f)).join(' \\times ')
       const factManquantsTexte = facteursManquants
         .map((f) => miseEnEvidence(String(f), 'green'))
         .join(' \\times ')
@@ -130,11 +130,9 @@ export default class PPCMDecompositionFacteursPremiers extends Exercice {
           ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
           : '')
 
-      let texteCorr =
-        `On recopie la décomposition de $${A}$ : $${factATexte}.$<br>`
+      let texteCorr = `On recopie la décomposition de $${A}$ : $${factATexte}.$<br>`
       if (facteursManquants.length > 0) {
-        texteCorr +=
-          `On ajoute les facteurs manquants de $${B}$ (en vert) : ${texteDecompPPCM.replace(/\$$/, '.$')}<br>`
+        texteCorr += `On ajoute les facteurs manquants de $${B}$ (en vert) : ${texteDecompPPCM.replace(/\$$/, '.$')}<br>`
       }
       texteCorr += `Donc $\\text{PPCM}(${A}, ${B}) = ${texteDecompPPCM.replace(/^\$/, '').replace(/\$$/, '')} = ${miseEnEvidence(lePPCM)}.$`
 

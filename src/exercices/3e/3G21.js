@@ -42,7 +42,7 @@ export const uuid = '3451c'
 
 export const refs = {
   'fr-fr': ['3G21'],
-  'fr-ch': ['11GM3-5'],
+  'fr-ch': ['11GM1B-6'],
 }
 export default class ReciproqueThales extends Exercice {
   constructor() {

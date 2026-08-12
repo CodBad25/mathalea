@@ -3,8 +3,8 @@ import { repere } from '../../lib/2d/reperes'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { chercheMinMaxFonction } from '../../lib/mathFonctions/etudeFonction'
 import {
   resolutionSystemeLineaire2x2,
@@ -37,7 +37,7 @@ export const uuid = 'f2352'
 
 export const refs = {
   'fr-fr': ['3F12-4', '2F11-4'],
-  'fr-ch': ['11FA7-3', '1mF1-3'],
+  'fr-ch': ['10FA1B-11', '11FA1A-3', '1mF1-3'],
 }
 export default class ImageGraphique extends Exercice {
   constructor() {
@@ -122,7 +122,7 @@ export default class ImageGraphique extends Exercice {
       }
 
       if (this.sup === 3) {
-        let a1: Number, b1: Number, c1: Number
+        let a1: number, b1: number, c1: number
         ;[a1, b1, c1] = resolutionSystemeLineaire3x3(
           x1,
           x2,

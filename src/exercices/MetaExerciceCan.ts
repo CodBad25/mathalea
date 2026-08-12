@@ -121,15 +121,68 @@ function remapLegacyFieldIds(
 ) {
   const pattern = (exerciceNumber: number) =>
     new RegExp(`champTexteEx${exerciceNumber}Q0(?!-verification)`, 'g')
-  return questionHtml
+  return remapDomReadyPayloadQuestionIds(
+    questionHtml
+      .replace(
+        pattern(sourceNumeroExercice),
+        `champTexteEx${destinationNumeroExercice}Q${destinationIndex}`,
+      )
+      .replace(
+        pattern(0),
+        `champTexteEx${destinationNumeroExercice}Q${destinationIndex}`,
+      ),
+    destinationNumeroExercice,
+    destinationIndex,
+  )
+}
+
+function decodeHtmlAttribute(value: string) {
+  return value
     .replace(
-      pattern(sourceNumeroExercice),
-      `champTexteEx${destinationNumeroExercice}Q${destinationIndex}`,
+      /&(quot|amp|lt|gt);/g,
+      (_match, entity: string) =>
+        ({ quot: '"', amp: '&', lt: '<', gt: '>' })[
+          entity as 'quot' | 'amp' | 'lt' | 'gt'
+        ],
     )
-    .replace(
-      pattern(0),
-      `champTexteEx${destinationNumeroExercice}Q${destinationIndex}`,
-    )
+}
+
+function encodeHtmlAttribute(value: string) {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('"', '&quot;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+}
+
+function remapDomReadyPayloadQuestionIds(
+  questionHtml: string,
+  destinationNumeroExercice: number,
+  destinationIndex: number,
+) {
+  return questionHtml.replace(
+    /(<mathalea-dom-ready\b[^>]*\spayload=")([^"]*)(")/g,
+    (_match, before: string, rawPayload: string, after: string) => {
+      try {
+        const payload = JSON.parse(decodeHtmlAttribute(rawPayload)) as Record<
+          string,
+          unknown
+        >
+        if ('numeroExercice' in payload) {
+          payload.numeroExercice = destinationNumeroExercice
+        }
+        if ('indiceQuestion' in payload) {
+          payload.indiceQuestion = destinationIndex
+        }
+        if ('questionIndex' in payload) {
+          payload.questionIndex = destinationIndex
+        }
+        return `${before}${encodeHtmlAttribute(JSON.stringify(payload))}${after}`
+      } catch {
+        return `${before}${rawPayload}${after}`
+      }
+    },
+  )
 }
 
 function remapCustomElementQuestionIds(
@@ -192,7 +245,11 @@ function injectSimpleQuestionCustomElement({
   formatChampTexte: string
   optionsChampTexte: Parameters<typeof ajouteChampTexte>[3]
 }) {
-  const questionHtml = String(question.question ?? '')
+  const questionHtml = remapDomReadyPayloadQuestionIds(
+    String(question.question ?? ''),
+    meta.numeroExercice ?? 0,
+    questionIndex,
+  )
   if (questionHtml.includes(`<${tag}`)) {
     return remapCustomElementQuestionIds(
       questionHtml,
@@ -501,7 +558,11 @@ export default class MetaExercice extends Exercice {
 
                 this.listeQuestions[indexQuestion] =
                   consigne +
-                  Question.question +
+                  remapDomReadyPayloadQuestionIds(
+                    String(Question.question ?? ''),
+                    this.numeroExercice ?? 0,
+                    indexQuestion,
+                  ) +
                   ajouteChampTexteMathLive(
                     this,
                     indexQuestion,

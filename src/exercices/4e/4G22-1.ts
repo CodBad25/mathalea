@@ -28,7 +28,7 @@ export const uuid = 'c18ea'
 
 export const refs = {
   'fr-fr': ['4G22-1'],
-  'fr-ch': [],
+  'fr-ch': ['10GM1D-7', '11GM2A-1'],
 }
 
 function figurePyramideCarree(

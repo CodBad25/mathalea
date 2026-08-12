@@ -6,6 +6,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { sensDeRotation } from '../../lib/2d/SensDeRotation'
 import { texteParPoint } from '../../lib/2d/textes'
 import { homothetie, rotation, similitude } from '../../lib/2d/transformations'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -13,8 +14,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Construire un angle de mesure donnée'
 export const amcReady = true
@@ -29,7 +28,7 @@ export const uuid = '34e3c'
 export const refs = {
   'fr-fr': ['6G4C'],
   'fr-2016': ['6G23'],
-  'fr-ch': ['9ES5-3'],
+  'fr-ch': ['9ES1B-3'],
 }
 export default class ConstruireUnAngle extends Exercice {
   constructor() {
@@ -73,7 +72,7 @@ export default class ConstruireUnAngle extends Exercice {
     for (let i = 1; i < this.nbQuestions; i++) {
       signe.push(-1 * signe[i - 1])
     }
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (listeTypeDeQuestion[i]) {
         case 1:
           angle = randint(1, 17, 9) * 10

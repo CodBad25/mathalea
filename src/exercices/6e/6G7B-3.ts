@@ -12,6 +12,7 @@ import {
   translation,
 } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
+import { orangeMathalea } from '../../lib/colors'
 import { arcenciel } from '../../lib/format/style'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { arrondi } from '../../lib/outils/nombres'
@@ -20,7 +21,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
 export const titre =
   "Construire le symétrique d'un point avec cible auto-corrective"
 
@@ -35,7 +35,7 @@ export const uuid = '60e16'
 export const refs = {
   'fr-fr': ['6G7B-3'],
   'fr-2016': ['6G24-3'],
-  'fr-ch': ['9ES6-14'],
+  'fr-ch': ['9ES3B-5'],
 }
 export default class ConstruireSymetriquePoint6e extends Exercice {
   constructor() {

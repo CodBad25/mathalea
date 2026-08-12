@@ -15,7 +15,7 @@ export const uuid = 'ec32b'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['9ES6-7'],
+  'fr-ch': ['NR'],
 }
 export default class Transformations5e extends Transformations {
   constructor() {

@@ -27,7 +27,7 @@ export const uuid = 'cf78f'
 
 export const refs = {
   'fr-fr': ['1AL23-21'],
-  'fr-ch': ['11FA10-10'],
+  'fr-ch': ['11FA5B-13'],
 }
 export default class ResoudreEquationDegre2Entiers extends Exercice {
   constructor() {

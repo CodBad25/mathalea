@@ -29,7 +29,7 @@ export const uuid = 'af8bb'
 
 export const refs = {
   'fr-fr': ['4L10-2'],
-  'fr-ch': ['10FA2-3'],
+  'fr-ch': ['10FA4A-6'],
 }
 export default class AirePerimetrePolygone extends Exercice {
   constructor() {

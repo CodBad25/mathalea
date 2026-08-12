@@ -25,7 +25,7 @@ export const uuid = 'eea67'
 
 export const refs = {
   'fr-fr': ['3G20-1', 'BP2AutoR7', 'BP2G14'],
-  'fr-ch': ['11GM3-8'],
+  'fr-ch': ['11GM1B-7'],
 }
 export default class ProblemesThales extends Exercice {
   constructor() {

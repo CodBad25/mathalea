@@ -15,6 +15,7 @@ import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../lib/2d/textes'
 import { TracePoint } from '../../lib/2d/TracePoint'
 import { rotation } from '../../lib/2d/transformations'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import { bleuMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
@@ -24,7 +25,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { contraindreValeur, egal, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre =
   'Construire des symétriques de points par rapport à un point'
@@ -36,7 +36,7 @@ export const uuid = '67c96'
 export const refs = {
   'fr-fr': ['5G3A-2'],
   'fr-2016': ['5G11-10'],
-  'fr-ch': ['9ES6-27', '10ES2-14'],
+  'fr-ch': ['9ES3C-3'],
 }
 
 /**
@@ -110,7 +110,7 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
     this.centres2d = []
     this.centresApiGeom = []
     this.antecedentsApiGeom = []
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 20; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 20;) {
       let enonce = ''
       // Ici on fait une figure Mathalea2d, pas apiGeom. On est en mode non interactif pour l'instant
       let antecedents2d: Array<PointAbstrait> = []
@@ -356,7 +356,9 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
   correctionInteractive = (i: number) => {
     if (this.answers === undefined) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figuresApiGeom![i].id] = figureAnswerJson(this.figuresApiGeom![i])
+    this.answers[this.figuresApiGeom![i].id] = figureAnswerJson(
+      this.figuresApiGeom![i],
+    )
     const resultat = []
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,

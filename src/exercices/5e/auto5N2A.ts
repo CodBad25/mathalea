@@ -27,7 +27,7 @@ export const uuid = '9af48'
 
 export const refs = {
   'fr-fr': ['auto5N2A'],
-  'fr-ch': [],
+  'fr-ch': ['9NO1G-17'],
 }
 export default class OperationsSurDecimaux extends Exercice {
   version: string

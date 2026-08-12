@@ -16,7 +16,7 @@ export const uuid = 'ae35d'
 export const refs = {
   'fr-fr': ['5G2D-3'],
   'fr-2016': ['6N24', '5N15-1'],
-  'fr-ch': ['10GM3-8'],
+  'fr-ch': ['NR'],
 }
 export default class Exercice6N24 extends ExerciceConversions {
   constructor() {

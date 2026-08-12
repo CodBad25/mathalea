@@ -37,7 +37,7 @@ export const uuid = '4d9ca'
 
 export const refs = {
   'fr-fr': ['6G2A-1'],
-  'fr-ch': [],
+  'fr-ch': ['10GM1B-2'],
 }
 export default class RayonDiametreMilieu extends Exercice {
   constructor() {
@@ -67,7 +67,7 @@ export default class RayonDiametreMilieu extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let reponse: number
       let texte = ''
       let texteCorr = ''

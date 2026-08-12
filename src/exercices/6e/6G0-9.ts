@@ -39,7 +39,7 @@ export const uuid = 'da6a4'
 export const refs = {
   'fr-fr': ['6G0-9', 'BP2G2'],
   'fr-2016': ['6G44', 'BP2G2'],
-  'fr-ch': ['9ES7-7'],
+  'fr-ch': ['9ES2A-1'],
 }
 export default class NombreDeFacesEtDAretes extends Exercice {
   version: number
@@ -76,7 +76,7 @@ export default class NombreDeFacesEtDAretes extends Exercice {
       this.nbQuestions,
     ) as Array<[number, number]>
 
-    for (let j = 0, choix; j < this.nbQuestions; ) {
+    for (let j = 0, choix; j < this.nbQuestions;) {
       let correction = ''
       let reponse = 0
       let question = 'Voici un solide :<br>'

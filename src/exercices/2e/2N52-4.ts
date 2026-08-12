@@ -29,7 +29,7 @@ export const uuid = '93432'
 
 export const refs = {
   'fr-fr': ['2N52-4'],
-  'fr-ch': ['11FA10-3'],
+  'fr-ch': ['11FA5B-9'],
 }
 export default class Equationspresqueproduitnulle extends Exercice {
   constructor() {

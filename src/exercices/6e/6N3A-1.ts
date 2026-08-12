@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -18,8 +19,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const interactifReady = true
@@ -48,7 +47,7 @@ export const uuid = 'd5e44'
 export const refs = {
   'fr-fr': ['6N3A-1', 'BP2AutoC3'],
   'fr-2016': ['6N23-6', 'BP2AutoC3'],
-  'fr-ch': ['9NO10-7'],
+  'fr-ch': ['9NO3C-18'],
 }
 export default class DivisionFraction extends Exercice {
   constructor() {

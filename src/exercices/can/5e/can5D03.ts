@@ -25,7 +25,7 @@ export const uuid = '5430f'
 
 export const refs = {
   'fr-fr': ['can5D03', '6M4C-flash10'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class HeuresFractionHeuresMinutes2 extends Exercice {
   constructor() {
@@ -54,7 +54,7 @@ export default class HeuresFractionHeuresMinutes2 extends Exercice {
       [5, 12],
       [11, 12],
     ]
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (
         choice([1, 2]) //, 'b'
       ) {

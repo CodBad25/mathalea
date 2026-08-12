@@ -33,7 +33,7 @@ export const uuid = '6ea89'
 export const refs = {
   'fr-fr': ['6N1A'],
   'fr-2016': ['6N10-2'],
-  'fr-ch': ['9NO1-3'],
+  'fr-ch': [''], // Primaire anciennement :['9NO1-3'],
 }
 export default class DecompositionNombreDecimal extends Exercice {
   constructor() {

@@ -30,7 +30,7 @@ export const uuid = 'bb9d8'
 export const refs = {
   'fr-fr': ['6N2C-1', 'auto5N1E'],
   'fr-2016': ['6N12'],
-  'fr-ch': ['9NO3-2'],
+  'fr-ch': [''], // Primaire anciennement :['9NO3-2'],
 }
 export default class MultiplierEntierPar101001000 extends Exercice {
   constructor() {

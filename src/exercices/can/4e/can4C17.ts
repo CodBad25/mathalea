@@ -18,7 +18,7 @@ export const uuid = '471bf'
 
 export const refs = {
   'fr-fr': ['can4C17'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class SimplifierFractionSimple extends ExerciceSimple {
   constructor() {

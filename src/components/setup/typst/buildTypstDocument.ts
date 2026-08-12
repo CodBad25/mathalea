@@ -9,7 +9,20 @@ import {
   escapeTypstText,
   htmlToTypst,
 } from './latexToTypst'
+import { LOGO_CAN_VIRTUAL_PATH } from './mathaleaLogo'
 import { minimalCorrection } from './minimalCorrection'
+
+/**
+ * Logo de la page de garde « Course aux nombres », référencé par chemin
+ * virtuel (voir `mathaleaLogo.ts`) plutôt qu'embarqué : `prefetchStaticImages`
+ * (`Typst.svelte`) le charge dans le compilateur pour l'aperçu, et l'ajoute
+ * au `.zip` téléchargé aux côtés du `.typ`.
+ *
+ * Largeur en pourcentage (relative au conteneur, pas à la page) : elle suit
+ * ainsi la largeur de la page de garde sans dépasser en A5, plus étroite
+ * qu'en A4, sans code dédié par format.
+ */
+const MATHALEA_LOGO_IMAGE = `image("${LOGO_CAN_VIRTUAL_PATH}", width: 45%)`
 
 /**
  * Import du paquet exercise-bank (badges Exercice/Correction, banque).
@@ -100,6 +113,128 @@ export const MATHALEA_CAN_TABLE_HELPER = `#let can-tableau(
 }`
 
 /**
+ * Champ à compléter par l'élève (« Nom : ...... »), commun aux deux pages de
+ * garde. Les pointillés occupent toute la largeur restante (`repeat`).
+ */
+export const MATHALEA_COVER_FIELD_HELPER = `#let mathalea-champ(intitule, largeur: 1fr) = box(width: largeur,
+  grid(columns: (auto, 1fr), column-gutter: 4pt,
+    [#intitule :], box(width: 1fr, repeat(gap: 2pt)[.])))`
+
+/**
+ * Page de garde des modèles « Évaluation », « Brevet des collèges » et
+ * « BAC » : intitulé encadré, session, matière, durée, consignes, puis le
+ * barème exercice par exercice et son total. Reprend la présentation de la
+ * page de garde de la vue PDF (`ExamTemplateEngine`, `latex/LatexConfig.ts`).
+ *
+ * Tous les textes sont passés en arguments nommés : ils restent modifiables
+ * dans l'éditeur, comme les autres réglages en tête de document.
+ * - `identite` ajoute en haut les champs Nom/Prénom/Classe/Date (évaluation) ;
+ * - `colonne-note` ajoute au barème une colonne vide où porter la note ;
+ * - `note-fin` inscrit une mention en bas de page (« Tournez la page S.V.P. »).
+ */
+export const MATHALEA_COVER_HELPER = `#let mathalea-points(n) = {
+  let texte = if n == calc.round(n) { str(calc.round(n)) } else { str(n).replace(".", ",") }
+  texte + if calc.abs(n) >= 2 { " points" } else { " point" }
+}
+#let mathalea-couverture(
+  titre: "",
+  session: "",
+  matiere: "",
+  duree: "",
+  consignes: (),
+  bareme: (),
+  identite: false,
+  colonne-note: false,
+  note-fin: none,
+) = {
+  if identite {
+    block(width: 100%, below: 2em,
+      grid(columns: (1fr, 1fr), column-gutter: 10mm, row-gutter: 1.4em,
+        mathalea-champ("Nom"), mathalea-champ("Prénom"),
+        mathalea-champ("Classe"), mathalea-champ("Date")))
+  }
+  set align(center)
+  v(1.5cm)
+  if titre != "" {
+    block(stroke: 0.8pt + couleur, inset: (x: 10pt, y: 8pt),
+      text(size: 2em, weight: "bold", fill: couleur, titre))
+    v(6mm)
+  }
+  if session != "" { text(size: 0.95em, session); v(1.2cm) }
+  if matiere != "" {
+    text(size: 1.6em, weight: "bold", matiere)
+    v(3mm)
+    line(length: 7cm, stroke: 1pt + couleur)
+    v(1cm)
+  }
+  if duree != "" { text(size: 1.15em, weight: "bold")[Durée de l’épreuve : #duree]; v(8mm) }
+  for consigne in consignes { text(size: 1.05em, style: "italic", consigne); v(4mm) }
+  if bareme.len() > 0 {
+    v(1.2cm)
+    let entetes = ("Exercice", "Barème") + if colonne-note { ("Note",) } else { () }
+    let colonnes = (5cm, 3cm) + if colonne-note { (3cm,) } else { () }
+    table(columns: colonnes, align: center + horizon, inset: 7pt,
+      stroke: 0.7pt + couleur,
+      ..entetes.map(entete => text(weight: "bold", entete)),
+      ..bareme.enumerate().map(((i, points)) => {
+        let cellules = (align(left)[Exercice #(i + 1)], mathalea-points(points))
+        if colonne-note { cellules + ([],) } else { cellules }
+      }).flatten())
+    v(6mm)
+    text(size: 1.2em, weight: "bold")[Total : #mathalea-points(bareme.fold(0, (s, p) => s + p))]
+  }
+  if note-fin != none and note-fin != "" { v(1fr); align(right, text(weight: "bold", note-fin)) }
+  pagebreak()
+}`
+
+/**
+ * Page de garde « Course aux nombres » : en-tête d'identité avec la case du
+ * score sur le total des questions, consignes de passation et logo (le logo
+ * porte déjà le nom du sujet, pas de second titre texte). Reprend
+ * `\\pageDeGardeCan` de la sortie LaTeX (`lib/latex/preambuleTex.ts`) sans
+ * les logos des académies ni de l'APMEP.
+ *
+ * La durée et le nombre de questions produisent leurs propres consignes (le
+ * décompte suit la fiche) ; `consignes` porte les suivantes, libres.
+ */
+export const MATHALEA_COVER_CAN_HELPER = `#let mathalea-couverture-can(
+  duree: "",
+  nb-questions: 0,
+  consignes: (),
+) = {
+  let coche(corps) = {
+    grid(columns: (auto, 1fr), column-gutter: 6pt,
+      text(weight: "bold")[✓], text(style: "italic", corps))
+    v(2.5mm)
+  }
+  line(length: 100%, stroke: 0.7pt)
+  v(5mm)
+  grid(columns: (1fr, 1fr), column-gutter: 10mm,
+    mathalea-champ("Nom"), mathalea-champ("Prénom"))
+  v(7mm)
+  grid(columns: (1fr, auto), column-gutter: 10mm, align: horizon,
+    mathalea-champ("Classe"),
+    block(stroke: 0.7pt, inset: 10pt,
+      text(size: 1.15em)[Score : #box(width: 1.6cm, repeat(gap: 2pt)[.]) / #nb-questions]))
+  v(5mm)
+  line(length: 100%, stroke: 0.7pt)
+  v(4mm)
+  if duree != "" { coche[Durée : #duree] }
+  if nb-questions > 0 { coche[L’épreuve comporte #nb-questions questions.] }
+  for consigne in consignes { coche(consigne) }
+  v(1.5mm)
+  line(length: 100%, stroke: 0.7pt)
+  // espacement élastique (plutôt qu'une longueur fixe) : le contenu
+  // au-dessus varie déjà (0 à plusieurs consignes) et le format de page
+  // aussi (A4/A5) — un espacement fixe y débordait sur une 2e page en A5,
+  // trop court pour la somme de tout le contenu fixe.
+  v(1fr)
+  align(center, mathalea-logo)
+  v(1fr)
+  pagebreak()
+}`
+
+/**
  * Saut de page insérable entre deux exercices : `#pagebreak` est interdit
  * dans un conteneur (`columns`), la ligne ferme donc le bloc `en-colonnes`
  * courant, saute la page au niveau du document, puis rouvre le bloc.
@@ -173,6 +308,20 @@ export interface TypstCarryOver {
    */
   codeOverridesCorrection?: Record<number, string>
   /**
+   * Code Typst saisi à la main qui remplace l'énoncé généré d'une ligne du
+   * tableau « Course aux nombres », par numéro de ligne (1-based, celui de
+   * la colonne « # » du tableau — toutes les questions de tous les exercices
+   * mises bout à bout, pas un numéro d'exercice). Pendant, à l'échelle d'une
+   * ligne, de `codeOverrides`.
+   */
+  codeOverridesCan?: Record<number, string>
+  /**
+   * Code Typst saisi à la main qui remplace la réponse à compléter générée
+   * d'une ligne du tableau « Course aux nombres », par numéro de ligne.
+   * Pendant de `codeOverridesCan` pour la colonne « Réponse ».
+   */
+  codeOverridesCanReponse?: Record<number, string>
+  /**
    * Lignes de code Typst insérées juste avant la correction d'un exercice
    * (sans le marqueur `// mathalea:insertion-corr`), par numéro d'exercice.
    * Pendant de `insertions` pour la correction.
@@ -200,6 +349,32 @@ const CODE_OVERRIDE_CORRECTION_START =
 /** Repère de fin d'une surcharge de code de correction */
 const CODE_OVERRIDE_CORRECTION_END =
   /^[ \t]*\/\/ mathalea:override-corr-end\s*$/
+/** Repère de début d'une surcharge d'énoncé de ligne « Course aux nombres » (voir `codeOverridesCan`) */
+const CODE_OVERRIDE_CAN_START = /^([ \t]*)\/\/ mathalea:override-can\((\d+)\)\s*$/
+/**
+ * Repère de fin d'une surcharge d'énoncé de ligne « Course aux nombres ».
+ * Contrairement à `CODE_OVERRIDE_END` (toujours seul sur sa ligne), cette
+ * ligne peut être suivie de `],` : elle termine un élément du tableau passé
+ * à `#can-tableau(...)` (voir `typstContentArrayArgument`), qui colle la
+ * fermeture du littéral de contenu directement après la dernière ligne
+ * plutôt que de l'émettre sur sa propre ligne — le repère n'ancre donc que
+ * le début de la ligne, pas sa fin.
+ */
+const CODE_OVERRIDE_CAN_END = /^[ \t]*\/\/ mathalea:override-can-end/
+/**
+ * Repère de début d'une surcharge de réponse de ligne « Course aux nombres »
+ * (voir `codeOverridesCanReponse`). Contrairement aux autres repères de
+ * début, celui-ci peut être précédé d'un `[` collé : la cellule « Réponse »
+ * n'a pas de repère `mathalea-anchor` avant elle (seule la cellule « Énoncé »
+ * en porte), donc quand elle est surchargée, ce repère se retrouve en toute
+ * première ligne de l'élément du tableau — juste après le `[` que
+ * `typstContentArrayArgument` colle au début de chaque élément.
+ */
+const CODE_OVERRIDE_CAN_REPONSE_START =
+  /^([ \t]*)\[?\/\/ mathalea:override-can-rep\((\d+)\)\s*$/
+/** Repère de fin d'une surcharge de réponse de ligne « Course aux nombres » (voir `CODE_OVERRIDE_CAN_END`) */
+const CODE_OVERRIDE_CAN_REPONSE_END =
+  /^[ \t]*\/\/ mathalea:override-can-rep-end/
 
 /** Enveloppe le code saisi par le professeur entre ses repères, pour l'exercice `num` */
 function wrapCodeOverride(num: number, code: string): string {
@@ -209,6 +384,24 @@ function wrapCodeOverride(num: number, code: string): string {
 /** Enveloppe le code de correction saisi par le professeur entre ses repères */
 function wrapCodeOverrideCorrection(num: number, code: string): string {
   return `// mathalea:override-corr(${num})\n${code}\n// mathalea:override-corr-end`
+}
+
+/**
+ * Enveloppe l'énoncé saisi par le professeur pour la ligne `num` du tableau
+ * « Course aux nombres ». Contrairement à `wrapCodeOverride`, se termine par
+ * un saut de ligne après le repère de fin : cette valeur est un élément du
+ * tableau passé à `#can-tableau(...)`, dont `typstContentArrayArgument`
+ * colle `],` directement après la dernière ligne (voir `CODE_OVERRIDE_CAN_END`)
+ * — sans ce saut de ligne, `],` se retrouverait sur la ligne du repère,
+ * commentée avec lui (`//`), et l'élément ne se refermerait jamais.
+ */
+function wrapCodeOverrideCan(num: number, code: string): string {
+  return `// mathalea:override-can(${num})\n${code}\n// mathalea:override-can-end\n`
+}
+
+/** Enveloppe la réponse saisie par le professeur pour la ligne `num` du tableau « Course aux nombres » (voir `wrapCodeOverrideCan`) */
+function wrapCodeOverrideCanReponse(num: number, code: string): string {
+  return `// mathalea:override-can-rep(${num})\n${code}\n// mathalea:override-can-rep-end\n`
 }
 
 /**
@@ -316,21 +509,32 @@ export function harvestCarryOver(code: string): TypstCarryOver {
   // une surcharge peut s'étendre sur plusieurs lignes : on ne peut pas la
   // lire avec un simple matchAll, il faut avancer ligne à ligne et retirer
   // l'indentation ajoutée par les blocs englobants (mêmes marges pour le
-  // repère et son contenu, voir `wrapCodeOverride`). Les surcharges d'énoncé
-  // et de correction partagent la même boucle : leurs repères sont distincts
-  // (`override`/`override-corr`) donc jamais confondus.
+  // repère et son contenu, voir `wrapCodeOverride`). Les quatre types de
+  // surcharge (énoncé/correction d'exercice, énoncé/réponse de ligne
+  // « Course aux nombres ») partagent la même boucle : leurs repères sont
+  // distincts donc jamais confondus.
   const codeOverrides: Record<number, string> = {}
   const codeOverridesCorrection: Record<number, string> = {}
+  const codeOverridesCan: Record<number, string> = {}
+  const codeOverridesCanReponse: Record<number, string> = {}
   const codeLines = code.split('\n')
   for (let i = 0; i < codeLines.length; i++) {
     const start = codeLines[i].match(CODE_OVERRIDE_START)
     const startCorrection = codeLines[i].match(CODE_OVERRIDE_CORRECTION_START)
-    if (start == null && startCorrection == null) continue
-    const matched = (start ?? startCorrection) as RegExpMatchArray
+    const startCan = codeLines[i].match(CODE_OVERRIDE_CAN_START)
+    const startCanReponse = codeLines[i].match(CODE_OVERRIDE_CAN_REPONSE_START)
+    const matched = start ?? startCorrection ?? startCan ?? startCanReponse
+    if (matched == null) continue
     const indent = matched[1]
     const num = Number(matched[2])
     const endRegex =
-      start != null ? CODE_OVERRIDE_END : CODE_OVERRIDE_CORRECTION_END
+      start != null
+        ? CODE_OVERRIDE_END
+        : startCorrection != null
+          ? CODE_OVERRIDE_CORRECTION_END
+          : startCan != null
+            ? CODE_OVERRIDE_CAN_END
+            : CODE_OVERRIDE_CAN_REPONSE_END
     const content: string[] = []
     i++
     while (i < codeLines.length && !endRegex.test(codeLines[i])) {
@@ -339,7 +543,10 @@ export function harvestCarryOver(code: string): TypstCarryOver {
       i++
     }
     if (start != null) codeOverrides[num] = content.join('\n')
-    else codeOverridesCorrection[num] = content.join('\n')
+    else if (startCorrection != null)
+      codeOverridesCorrection[num] = content.join('\n')
+    else if (startCan != null) codeOverridesCan[num] = content.join('\n')
+    else codeOverridesCanReponse[num] = content.join('\n')
   }
   // lignes en pointillés (palette, par exercice) : chaque appel émis par
   // `writingLinesCall` porte un marqueur identifiant l'exercice et
@@ -367,6 +574,8 @@ export function harvestCarryOver(code: string): TypstCarryOver {
     merges,
     codeOverrides,
     codeOverridesCorrection,
+    codeOverridesCan,
+    codeOverridesCanReponse,
     writingLines,
   }
 }
@@ -416,8 +625,12 @@ export interface TypstDocumentOptions {
   /** Sous-titre affiché à côté du titre (niveau, classe…) */
   subtitle: string
   headerLine: string
-  /** Style de l'en-tête et du pied de page */
+  /** Style de l'en-tête ; `aucun` n'affiche ni titre, ni sous-titre, ni ligne d'en-tête */
   headerStyle: HeaderStyle
+  /** Affiche le pied de page (crédit MathALÉA, pagination, titre) */
+  showFooter: boolean
+  /** Texte affiché à gauche du pied de page (« MathALÉA — coopmaths.fr » par défaut) */
+  footerText: string
   /** Police du texte (nom d'une police libre embarquée dans le compilateur) */
   font: string
   /** Police des formules mathématiques */
@@ -487,6 +700,120 @@ export interface TypstDocumentOptions {
   badgeColor: string
   /** Nombre de versions du sujet (Sujet A, B...) générées à la suite */
   nbVersions: number
+  /** Page de garde placée en tête de chaque sujet (`aucune` par défaut) */
+  coverPage: TypstCoverOptions
+}
+
+/**
+ * Modèles de page de garde proposés (comme la vue PDF, voir
+ * `latex/LatexConfig.ts`). `aucune` : la fiche commence directement par son
+ * en-tête, comportement d'origine.
+ */
+export const COVER_TEMPLATES = [
+  'aucune',
+  'evaluation',
+  'brevet',
+  'bac',
+  'can',
+] as const
+export type CoverTemplate = (typeof COVER_TEMPLATES)[number]
+
+/** Modèle de page de garde effectivement rendu (hors « aucune ») */
+export type ActiveCoverTemplate = Exclude<CoverTemplate, 'aucune'>
+
+/**
+ * Textes de la page de garde. Tous sont modifiables dans les réglages, et
+ * réémis tels quels dans le code Typst (arguments nommés de
+ * `#mathalea-couverture`), donc encore modifiables dans l'éditeur.
+ */
+export interface TypstCoverOptions {
+  template: CoverTemplate
+  /** Intitulé principal (« Brevet des collèges », « Évaluation »…) */
+  titre: string
+  /** Session ou date de l'épreuve (« Juin 2026 »). Inutilisé par « can ». */
+  session: string
+  /** Matière (« MATHÉMATIQUES »). Inutilisée par « can ». */
+  matiere: string
+  /** Durée de l'épreuve (« 2 heures ») */
+  duree: string
+  /** Consignes affichées sous la durée, une par ligne */
+  consignes: string[]
+  /**
+   * Mention en bas de page (« Tournez la page S.V.P. »). Affichée seulement
+   * si le modèle en prévoit une (`COVER_TEMPLATE_LAYOUT.hasNoteFin`) et si le
+   * texte n'est pas vide.
+   */
+  noteFin: string
+  /**
+   * Barème : points de chaque exercice, dans l'ordre de la fiche. Ajusté au
+   * nombre d'exercices par les réglages ; ignoré par le modèle « can », dont
+   * le score porte sur le nombre de questions.
+   */
+  bareme: number[]
+  /** Affiche le tableau du barème et son total */
+  showBareme: boolean
+}
+
+/**
+ * Présentation propre à chaque modèle : ces différences ne sont pas réglables
+ * (elles font le modèle), seul le texte de `noteFin` l'est (voir
+ * `TypstCoverOptions.noteFin`) — `hasNoteFin` ne dit que si le modèle en
+ * affiche une.
+ */
+const COVER_TEMPLATE_LAYOUT: Record<
+  Exclude<ActiveCoverTemplate, 'can'>,
+  { identite: boolean; colonneNote: boolean; hasNoteFin: boolean }
+> = {
+  // évaluation : la copie est la feuille elle-même, d'où les champs
+  // d'identité en tête et la colonne où porter la note de chaque exercice
+  evaluation: { identite: true, colonneNote: true, hasNoteFin: false },
+  brevet: { identite: false, colonneNote: false, hasNoteFin: true },
+  bac: { identite: false, colonneNote: false, hasNoteFin: true },
+}
+
+/**
+ * Textes proposés à la sélection d'un modèle, tous modifiables ensuite. La
+ * session est datée du jour par les réglages (`currentSession`), et le modèle
+ * « can » tire ses deux premières consignes de la durée et du nombre de
+ * questions (voir `MATHALEA_COVER_CAN_HELPER`).
+ */
+export const COVER_TEMPLATE_DEFAULTS: Record<
+  ActiveCoverTemplate,
+  Pick<
+    TypstCoverOptions,
+    'titre' | 'matiere' | 'duree' | 'consignes' | 'noteFin'
+  >
+> = {
+  evaluation: {
+    titre: 'Évaluation',
+    matiere: 'Mathématiques',
+    duree: '55 minutes',
+    consignes: ['La calculatrice est autorisée.'],
+    noteFin: '',
+  },
+  brevet: {
+    titre: 'Brevet des collèges',
+    matiere: 'MATHÉMATIQUES',
+    duree: '2 heures',
+    consignes: ['L’usage de la calculatrice est autorisé.'],
+    noteFin: 'Tournez la page S.V.P.',
+  },
+  bac: {
+    titre: 'Baccalauréat',
+    matiere: 'MATHÉMATIQUES',
+    duree: '4 heures',
+    consignes: ['L’usage de la calculatrice est autorisé.'],
+    noteFin: 'Tournez la page S.V.P.',
+  },
+  can: {
+    titre: 'La course aux nombres',
+    matiere: '',
+    duree: '9 minutes',
+    consignes: [
+      'L’usage de la calculatrice et du brouillon sont interdits. Il n’est pas permis d’écrire des calculs intermédiaires.',
+    ],
+    noteFin: '',
+  },
 }
 
 /**
@@ -499,8 +826,11 @@ export const WRITING_LINES_POSITIONS = [
 ] as const
 export type WritingLinesPosition = (typeof WRITING_LINES_POSITIONS)[number]
 
-/** Habillage de l'en-tête et du pied de page */
-export const HEADER_STYLES = ['epure', 'cartouche', 'cadre'] as const
+/**
+ * `aucun` masque le bloc de titre (titre, sous-titre, ligne d'en-tête) sans
+ * effet sur le pied de page (réglage indépendant, voir `showFooter`).
+ */
+export const HEADER_STYLES = ['epure', 'cartouche', 'cadre', 'aucun'] as const
 export type HeaderStyle = (typeof HEADER_STYLES)[number]
 
 /**
@@ -583,6 +913,8 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   title: "Fiche d'exercices",
   subtitle: '',
   headerStyle: 'epure',
+  showFooter: true,
+  footerText: 'MathALÉA — coopmaths.fr',
   font: 'Libertinus Serif',
   mathFont: 'Libertinus Math',
   fontSize: 11,
@@ -605,6 +937,17 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   badgeStyle: 'underline',
   badgeColor: 'black',
   nbVersions: 1,
+  coverPage: {
+    template: 'aucune',
+    titre: '',
+    session: '',
+    matiere: '',
+    duree: '',
+    consignes: [],
+    noteFin: '',
+    bareme: [],
+    showBareme: true,
+  },
 }
 
 /** Applique le réglage « Correction minimale » aux corrections des exercices */
@@ -1127,6 +1470,75 @@ function typstContentArrayArgument(items: string[], indent: string): string[] {
   ]
 }
 
+/** Une ligne (générée, sans surcharge) du tableau « Course aux nombres » */
+interface GeneratedCanRow {
+  enonce: string
+  reponse: string
+  correction: string
+  /** Numéro (1-based) de l'exercice dont vient la ligne */
+  exerciseNum: number
+  /** Vrai pour la première ligne de son exercice (repère `exo`) */
+  isFirstOfExercise: boolean
+}
+
+/**
+ * Calcule les lignes générées du tableau « Course aux nombres » (une par
+ * question de chaque exercice), sans appliquer les surcharges manuelles
+ * (`carryOver.codeOverridesCan`/`codeOverridesCanReponse`) : partagé par
+ * `buildCanVersionContent` (assemblage du tableau, qui applique les
+ * surcharges après coup) et par `getGeneratedCanRowCode` (préremplissage de
+ * la modale d'édition d'une ligne avec son contenu actuellement généré,
+ * avant toute surcharge) — pendant, à l'échelle d'une ligne, de
+ * `computeGeneratedExercises`.
+ */
+function computeGeneratedCanRows(
+  allExercises: TypstExerciseInput[],
+  options: TypstDocumentOptions,
+  figures: string[],
+): GeneratedCanRow[] {
+  const exercises = withMinimalCorrections(allExercises, options)
+  const rows: GeneratedCanRow[] = []
+  for (const [k, exercise] of exercises.entries()) {
+    if (exercise.warning != null) {
+      rows.push({
+        enonce: escapeTypstText(exercise.warning),
+        reponse: '',
+        correction: '',
+        exerciseNum: k + 1,
+        isFirstOfExercise: true,
+      })
+      continue
+    }
+    const questions = exercise.canQuestions ?? exercise.questions
+    for (const [i, question] of questions.entries()) {
+      rows.push({
+        enonce: htmlToTypst(question, figures),
+        reponse: htmlToTypst(exercise.canAnswers?.[i] ?? '', figures),
+        correction: htmlToTypst(exercise.corrections[i] ?? '', figures),
+        exerciseNum: k + 1,
+        isFirstOfExercise: i === 0,
+      })
+    }
+  }
+  return rows
+}
+
+/**
+ * Code Typst actuellement généré pour l'énoncé et la réponse d'une ligne du
+ * tableau « Course aux nombres » (préremplissage de la modale d'édition),
+ * sans appliquer sa surcharge existante — voir `getGeneratedExerciseCode`,
+ * pendant à l'échelle d'un exercice.
+ */
+export function getGeneratedCanRowCode(
+  exercises: TypstExerciseInput[],
+  row: number,
+  options: TypstDocumentOptions = defaultTypstDocumentOptions,
+): { enonce: string; reponse: string } {
+  const rows = computeGeneratedCanRows(exercises, options, [])
+  const found = rows[row - 1]
+  return { enonce: found?.enonce ?? '', reponse: found?.reponse ?? '' }
+}
+
 /**
  * Contenu d'une version en mode « Course aux nombres » : toutes les questions
  * de tous les exercices dans un seul tableau (`#can-tableau`), puis les
@@ -1136,7 +1548,8 @@ function typstContentArrayArgument(items: string[], indent: string): string[] {
  *
  * La palette de mise en page n'y garde que les repères qui ont un sens : la
  * barre de chaque exercice (repère `exo` placé dans sa première cellule, une
- * métadonnée n'occupant aucune place) et les deux points d'insertion qui
+ * métadonnée n'occupant aucune place), le repère de chaque ligne (`can-row`,
+ * édition de son énoncé/réponse) et les deux points d'insertion qui
  * encadrent le tableau (`gap` 0 et `gap` du dernier exercice) — entre deux
  * lignes d'un même tableau, une insertion ou un saut de page n'en aurait pas.
  * Les insertions portées par les gaps intermédiaires (héritées d'un passage
@@ -1151,24 +1564,39 @@ function buildCanVersionContent(
   exportMode: boolean,
 ): VersionContent {
   const exercises = withMinimalCorrections(allExercises, options)
+  const generatedRows = computeGeneratedCanRows(allExercises, options, figures)
   const enonces: string[] = []
   const reponses: string[] = []
   const corrections: string[] = []
-  for (const [k, exercise] of exercises.entries()) {
-    const anchor = emitAnchors ? `#mathalea-anchor("exo", ${k + 1})\n` : ''
-    if (exercise.warning != null) {
-      enonces.push(`${anchor}${escapeTypstText(exercise.warning)}`)
-      reponses.push('')
-      corrections.push('')
-      continue
-    }
-    const questions = exercise.canQuestions ?? exercise.questions
-    for (const [i, question] of questions.entries()) {
-      enonces.push(`${i === 0 ? anchor : ''}${htmlToTypst(question, figures)}`)
-      reponses.push(htmlToTypst(exercise.canAnswers?.[i] ?? '', figures))
-      corrections.push(htmlToTypst(exercise.corrections[i] ?? '', figures))
-    }
-  }
+  generatedRows.forEach((row, index) => {
+    const rowNum = index + 1
+    const exoAnchor =
+      emitAnchors && row.isFirstOfExercise
+        ? `#mathalea-anchor("exo", ${row.exerciseNum})\n`
+        : ''
+    const rowAnchor = emitAnchors
+      ? `#mathalea-anchor("can-row", ${rowNum})\n`
+      : ''
+    const enonceOverride = carryOver.codeOverridesCan?.[rowNum]
+    const reponseOverride = carryOver.codeOverridesCanReponse?.[rowNum]
+    enonces.push(
+      `${exoAnchor}${rowAnchor}${
+        enonceOverride == null
+          ? row.enonce
+          : exportMode
+            ? enonceOverride
+            : wrapCodeOverrideCan(rowNum, enonceOverride)
+      }`,
+    )
+    reponses.push(
+      reponseOverride == null
+        ? row.reponse
+        : exportMode
+          ? reponseOverride
+          : wrapCodeOverrideCanReponse(rowNum, reponseOverride),
+    )
+    corrections.push(row.correction)
+  })
 
   const insertionLine = (line: string, indent: string): string =>
     exportMode ? `${indent}${line}` : `${indent}${line} ${INSERTION_TAG}`
@@ -1667,6 +2095,16 @@ export function buildTypstDocument(
       a.length - b.length,
   )
 
+  // page de garde : le même appel ouvre chaque sujet (le barème et le nombre
+  // de questions sont ceux de la fiche, identiques d'une version à l'autre)
+  const coverTemplate = options.coverPage?.template ?? 'aucune'
+  const coverDeclarations =
+    options.coverPage != null ? coverDeclarationLines(options.coverPage) : []
+  const coverLines =
+    options.coverPage != null
+      ? coverPageLines(options.coverPage, countQuestions(exercises))
+      : []
+
   const lines: string[] = []
   lines.push('// Fiche générée par MathALÉA — https://coopmaths.fr/alea')
   if (sourceUrl != null && sourceUrl !== '') {
@@ -1750,6 +2188,8 @@ export function buildTypstDocument(
   lines.push(`#let titre = ${typstString(options.title)}`)
   lines.push(`#let sous-titre = ${typstString(options.subtitle)}`)
   lines.push(`#let entete = ${typstString(options.headerLine)}`)
+  lines.push(`#let pied-page = ${typstString(options.footerText)}`)
+  lines.push(...coverDeclarations)
   lines.push(`#let police-texte = ${typstString(options.font)}`)
   lines.push(`#let police-maths = ${typstString(options.mathFont)}`)
   lines.push(`#let taille-texte = ${options.fontSize}pt`)
@@ -1796,7 +2236,11 @@ export function buildTypstDocument(
   lines.push(
     `#set page(paper: "${options.pageFormat}", flipped: ${options.orientation === 'landscape'}, margin: (x: 15mm, y: 15mm),`,
   )
-  lines.push(...pageFooter(options.headerStyle).map((line) => `  ${line}`))
+  lines.push(
+    ...pageFooter(options.headerStyle, options.showFooter, exportMode).map(
+      (line) => `  ${line}`,
+    ),
+  )
   lines.push(')')
   lines.push(
     `#set text(font: police-texte, size: taille-texte, lang: "fr", spacing: ${options.wordSpacing}%)`,
@@ -1877,6 +2321,18 @@ export function buildTypstDocument(
     lines.push('// ----- QCM (case à cocher) -----')
     lines.push(MATHALEA_QCM_HELPERS)
   }
+  // la page de garde suit les réglages (`couleur`) et précède l'en-tête :
+  // ses aides sont déclarées ici, seulement quand un modèle est choisi
+  if (coverTemplate !== 'aucune') {
+    lines.push('// ----- Page de garde -----')
+    lines.push(MATHALEA_COVER_FIELD_HELPER)
+    if (coverTemplate === 'can') {
+      lines.push(`#let mathalea-logo = ${MATHALEA_LOGO_IMAGE}`)
+      lines.push(MATHALEA_COVER_CAN_HELPER)
+    } else {
+      lines.push(MATHALEA_COVER_HELPER)
+    }
+  }
   lines.push('')
   if (figures.length > 0) {
     lines.push('// ----- Figures (SVG embarqués) -----')
@@ -1894,10 +2350,22 @@ export function buildTypstDocument(
   }
   lines.push(...bankLines)
   lines.push('')
+  if (coverLines.length > 0) {
+    // repère du bloc de couverture : la palette de l'aperçu propose d'y
+    // modifier titre, session, matière, durée et consignes (sans objet en
+    // mode export) ; un seul repère suffit, les sujets suivants affichent la
+    // même page de garde (voir la boucle des versions plus bas)
+    if (!exportMode) lines.push('#mathalea-anchor("cover", 0)')
+    lines.push(...coverLines)
+    lines.push('')
+  }
   lines.push('// ----- En-tête -----')
   // repère du bloc de titre : la palette de l'aperçu propose d'y modifier
-  // les variables titre, sous-titre et entete (sans objet en mode export)
-  if (!exportMode) lines.push('#mathalea-anchor("header", 0)')
+  // les variables titre, sous-titre et entete (sans objet en mode export, ni
+  // quand l'habillage « aucun » n'affiche justement aucun bloc à ce repère)
+  if (!exportMode && options.headerStyle !== 'aucun') {
+    lines.push('#mathalea-anchor("header", 0)')
+  }
   lines.push(
     ...headerBlock(
       options.headerStyle,
@@ -1913,6 +2381,10 @@ export function buildTypstDocument(
     lines.push('#counter(page).update(1)')
     if (usesExerciseBank) lines.push('#exo-counter.update(0)')
     lines.push('')
+    if (coverLines.length > 0) {
+      lines.push(...coverLines)
+      lines.push('')
+    }
     lines.push(
       ...headerBlock(options.headerStyle, `Sujet ${versionLetter(i + 1)}`),
     )
@@ -1926,6 +2398,97 @@ export function buildTypstDocument(
 /** Chaîne littérale Typst (échappe backslash et guillemets) */
 function typstString(text: string): string {
   return `"${text.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
+}
+
+/**
+ * Littéral tableau Typst. Un tableau d'un seul élément exige une virgule
+ * finale (`("a",)`), sans quoi Typst n'y voit qu'une expression parenthésée.
+ */
+function typstArray(items: string[]): string {
+  if (items.length === 0) return '()'
+  if (items.length === 1) return `(${items[0]},)`
+  return `(${items.join(', ')})`
+}
+
+/**
+ * Nombre de questions de la fiche, pour la case « Score : ... / n » de la
+ * page de garde « Course aux nombres » (mêmes énoncés que ceux du tableau).
+ */
+function countQuestions(exercises: TypstExerciseInput[]): number {
+  return exercises.reduce(
+    (total, exercise) =>
+      total + (exercise.canQuestions ?? exercise.questions).length,
+    0,
+  )
+}
+
+/**
+ * Déclare les textes de la page de garde en variables (`#let couverture-titre
+ * = ...`), comme `titre`/`sous-titre`/`entete` pour l'en-tête de la fiche :
+ * `coverPageLines` y renvoie plutôt que d'inscrire les valeurs en dur, ce qui
+ * permet à la palette de l'aperçu de les modifier par des éditions ciblées
+ * (voir `#mathalea-anchor("cover", 0)` dans `buildTypstDocument`), sans
+ * régénérer tout le document. Toujours émises quand un modèle est choisi,
+ * même les variables inutilisées par ce modèle (`couverture-session` et
+ * `couverture-matiere` pour « can », `couverture-note-fin` pour
+ * « évaluation ») : une variable Typst non lue ne produit ni erreur ni
+ * avertissement, et les garder simplifie la palette (mêmes variables quel
+ * que soit le modèle).
+ */
+function coverDeclarationLines(cover: TypstCoverOptions): string[] {
+  if (cover.template === 'aucune') return []
+  const consignes = typstArray(
+    cover.consignes
+      .filter((consigne) => consigne.trim() !== '')
+      .map(typstString),
+  )
+  return [
+    `#let couverture-titre = ${typstString(cover.titre)}`,
+    `#let couverture-session = ${typstString(cover.session)}`,
+    `#let couverture-matiere = ${typstString(cover.matiere)}`,
+    `#let couverture-duree = ${typstString(cover.duree)}`,
+    `#let couverture-consignes = ${consignes}`,
+    `#let couverture-note-fin = ${typstString(cover.noteFin)}`,
+  ]
+}
+
+/**
+ * Appel de la page de garde : les textes (`couverture-titre`...) réfèrent aux
+ * variables déclarées par `coverDeclarationLines`, éditables sur l'aperçu.
+ * Seul le barème reste inscrit en dur (réglé dans le volet, pas sur l'aperçu).
+ */
+function coverPageLines(
+  cover: TypstCoverOptions,
+  nbQuestions: number,
+): string[] {
+  if (cover.template === 'aucune') return []
+  if (cover.template === 'can') {
+    return [
+      '#mathalea-couverture-can(',
+      '  duree: couverture-duree,',
+      `  nb-questions: ${nbQuestions},`,
+      '  consignes: couverture-consignes,',
+      ')',
+    ]
+  }
+  const layout = COVER_TEMPLATE_LAYOUT[cover.template]
+  const bareme = cover.showBareme
+    ? typstArray(cover.bareme.map((points) => String(points)))
+    : '()'
+  const lines = [
+    '#mathalea-couverture(',
+    '  titre: couverture-titre,',
+    '  session: couverture-session,',
+    '  matiere: couverture-matiere,',
+    '  duree: couverture-duree,',
+    '  consignes: couverture-consignes,',
+    `  bareme: ${bareme},`,
+  ]
+  if (layout.identite) lines.push('  identite: true,')
+  if (layout.colonneNote) lines.push('  colonne-note: true,')
+  if (layout.hasNoteFin) lines.push('  note-fin: couverture-note-fin,')
+  lines.push(')')
+  return lines
 }
 
 /**
@@ -1955,6 +2518,10 @@ function headerBlock(style: HeaderStyle, versionLabel?: string): string[] {
     return centered ? `align(center, ${plain})` : plain
   }
   const enteteCondition = label != null ? 'true' : 'entete != ""'
+  // aucun bloc de titre : la fiche commence directement par les exercices.
+  // Avec plusieurs versions, l'étiquette « Sujet A/B... » n'a alors nulle
+  // part où s'afficher — c'est un compromis accepté du réglage.
+  if (style === 'aucun') return []
   if (style === 'cadre') {
     return [
       '#block(width: 100%, stroke: (top: 1pt + couleur, bottom: 1pt + couleur), inset: (y: 8pt))[',
@@ -2003,19 +2570,35 @@ function headerBlock(style: HeaderStyle, versionLabel?: string): string[] {
 }
 
 /**
- * Pied de page (crédit MathALÉA, pagination, titre) selon l'habillage.
- * Renvoie l'argument `footer: ...` du `#set page(...)`.
+ * Pied de page (texte éditable `pied-page`, pagination, titre) selon
+ * l'habillage. Renvoie l'argument `footer: ...` du `#set page(...)` —
+ * `footer: none,` quand `showFooter` est décoché, quel que soit l'habillage.
+ *
+ * Repère d'édition : `here().page()` (numéro de page **physique**, à la
+ * différence de `counter(page)` que les sujets suivants remettent à 1) limite
+ * l'icône à la toute première page du document, comme le titre et la page de
+ * garde (un seul point d'édition, même si le pied de page, lui, se répète
+ * sur chaque page).
  */
-function pageFooter(style: HeaderStyle): string[] {
+function pageFooter(
+  style: HeaderStyle,
+  showFooter: boolean,
+  exportMode: boolean,
+): string[] {
+  if (!showFooter) return ['footer: none,']
   const pagination = '#counter(page).display("1 / 1", both: true)'
+  const anchorLines = exportMode
+    ? []
+    : ['  #if here().page() == 1 [#mathalea-anchor("footer", 0)]']
   if (style === 'cadre') {
     return [
       'footer: context [',
+      ...anchorLines,
       '  #set text(size: 8pt, style: "italic")',
       '  #line(length: 100%, stroke: 0.4pt)',
       '  #v(-2pt)',
       '  #grid(columns: (1fr, auto, 1fr),',
-      '    align(left)[CC BY-SA · MathALÉA],',
+      '    align(left)[#pied-page],',
       `    align(center)[${pagination}],`,
       '    align(right)[#if sous-titre != "" { sous-titre } else { titre }],',
       '  )',
@@ -2025,11 +2608,12 @@ function pageFooter(style: HeaderStyle): string[] {
   if (style === 'cartouche') {
     return [
       'footer: context [',
+      ...anchorLines,
       '  #set text(size: 8pt, fill: couleur)',
       '  #line(length: 100%, stroke: 0.6pt + couleur.lighten(30%))',
       '  #v(-2pt)',
       '  #grid(columns: (1fr, auto, 1fr),',
-      '    align(left)[MathALÉA · coopmaths.fr],',
+      '    align(left)[#pied-page],',
       `    align(center)[${pagination}],`,
       '    align(right)[#emph(titre)],',
       '  )',
@@ -2038,11 +2622,12 @@ function pageFooter(style: HeaderStyle): string[] {
   }
   return [
     'footer: context [',
+    ...anchorLines,
     '  #set text(size: 8pt, fill: gray)',
     '  #line(length: 100%, stroke: 0.4pt + gray.lighten(30%))',
     '  #v(-2pt)',
     '  #grid(columns: (1fr, auto, 1fr),',
-    '    align(left)[MathALÉA — coopmaths.fr],',
+    '    align(left)[#pied-page],',
     `    align(center)[${pagination}],`,
     '    align(right)[#emph(titre)],',
     '  )',

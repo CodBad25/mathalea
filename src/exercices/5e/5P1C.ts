@@ -50,7 +50,7 @@ export const uuid = 'e4d13'
 export const refs = {
   'fr-fr': ['5P1C'],
   'fr-2016': ['6P14', '5P10-1'],
-  'fr-ch': ['9FA3-17'],
+  'fr-ch': ['9ES3E-1', '10FA2A-1'],
 }
 class AgrandirReduireFigure extends Exercice {
   constructor() {
@@ -95,7 +95,7 @@ class AgrandirReduireFigure extends Exercice {
       ["l'agrandissement demandé", 'la réduction demandée'],
     ] // Ne pas supprimer le 'e'
     let iiAMC // Cet indice permet de gérer les numéros de champs AMC car ces champs ne sont pas de nombre égal selon les listeTypeQuestions[i].
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 200; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 200;) {
       let texte, texteCorr, absBFinal, coeffFinal, longueurMax
       do {
         texte = ''

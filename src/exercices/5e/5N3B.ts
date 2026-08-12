@@ -36,7 +36,7 @@ export const uuid = 'd5ee3'
 export const refs = {
   'fr-fr': ['5N3B', 'BP2AutoH22'],
   'fr-2016': ['5N20', 'BP2AutoH22'],
-  'fr-ch': ['9NO13-6'],
+  'fr-ch': ['9NO3F-12'],
 }
 
 function formatFractionForQcm(

@@ -20,7 +20,6 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const titre = 'Calculer le coefficient de proportionnalité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -33,7 +32,7 @@ export const uuid = '2d5eb'
 export const refs = {
   'fr-fr': [],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 /**
  * @author jean-claude Lhote

@@ -50,7 +50,7 @@ export const uuid = 'b3643'
 export const refs = {
   'fr-fr': ['5N5A-5'],
   'fr-2016': ['5L10-6'],
-  'fr-ch': [],
+  'fr-ch': ['10FA4A-5'],
 }
 
 export default class perimetreVersFormule extends Exercice {

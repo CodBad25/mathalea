@@ -28,7 +28,7 @@ export const dateDeModifImportante = '19/06/2026'
 
 /**
  * Calculs avec des fractions que l'on peut faire à partir de schémas
- * @author Rémi Angot 
+ * @author Rémi Angot
  * Modifié par Éric Elter : rajout d'un paramètre
  * Modifié par Mireille : rajout du case soustraction
  */
@@ -37,7 +37,7 @@ export const uuid = '7367d'
 export const refs = {
   'fr-fr': ['6N3K-1', 'BP2AutoH25'],
   'fr-2016': ['6N22', 'BP2AutoH25'],
-  'fr-ch': ['9NO13-2'],
+  'fr-ch': ['9NO3F-2'],
 }
 export default class FractionsCalculsSimples extends Exercice {
   constructor() {
@@ -83,9 +83,7 @@ export default class FractionsCalculsSimples extends Exercice {
       const a = randint(1, b - 1)
       const xmax = 19.2
       const scale = context.isHtml ? 0.5 : 0.4
-      switch (
-        listeTypeQuestions[i]
-      ) {
+      switch (listeTypeQuestions[i]) {
         case 1: // 'a/b+c/b':
           c = randint(1, b + 4, [b, 2 * b, 3 * b, 4 * b])
           f1 = new FractionEtendue(a, b)

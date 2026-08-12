@@ -22,7 +22,7 @@ export const uuid = '1957a'
 
 export const refs = {
   'fr-fr': ['can6S01', 'auto6P1A-flash1', 'BP1AUTO029'],
-  'fr-ch': ['9FA1-9'],
+  'fr-ch': ['9FA4A-5'],
 }
 export default class LectureDiagrammeBarre extends ExerciceSimple {
   constructor() {

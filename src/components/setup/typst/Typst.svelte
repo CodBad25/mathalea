@@ -35,6 +35,8 @@
   import { SM_BREAKPOINT } from '../../keyboard/lib/sizes'
   import {
     BADGE_STYLES,
+    COVER_TEMPLATES,
+    COVER_TEMPLATE_DEFAULTS,
     HEADER_STYLES,
     INSERTION_CORRECTION_TAG,
     INSERTION_TAG,
@@ -43,9 +45,12 @@
     buildStandaloneExerciseCode,
     buildTypstDocument,
     defaultTypstDocumentOptions,
+    getGeneratedCanRowCode,
     getGeneratedCorrectionCode,
     getGeneratedExerciseCode,
     harvestCarryOver,
+    type ActiveCoverTemplate,
+    type CoverTemplate,
     type TypstCarryOver,
     type TypstDocumentOptions,
     type TypstExerciseInput,
@@ -58,6 +63,7 @@
   } from './TypstLayoutOverlay.svelte'
   import type { TypstAnchor } from './typstCompiler'
   import { setStaticImagePaths } from './latexToTypst'
+  import { LOGO_CAN_URL, LOGO_CAN_VIRTUAL_PATH } from './mathaleaLogo'
   import {
     countErrors,
     parseTypstDiagnostics,
@@ -73,11 +79,12 @@
   } from '../shared/editor/editorSetup'
   import { typstLanguage } from './editor/typstLanguage'
 
-  /** Libellés des habillages d'en-tête/pied de page */
+  /** Libellés des habillages d'en-tête */
   const HEADER_STYLE_LABELS: Record<(typeof HEADER_STYLES)[number], string> = {
     epure: 'Épuré',
     cartouche: 'Cartouche',
     cadre: 'Cadre',
+    aucun: 'Aucun',
   }
 
   /** Libellés des styles de badge du paquet exercise-bank */
@@ -91,6 +98,15 @@
     tag: 'Étiquette (marge)',
     circled: 'Numéro cerclé (marge)',
     'filled-circle': 'Numéro plein (marge)',
+  }
+
+  /** Libellés des modèles de page de garde */
+  const COVER_TEMPLATE_LABELS: Record<CoverTemplate, string> = {
+    aucune: 'Aucune',
+    evaluation: 'Évaluation',
+    brevet: 'Brevet des collèges',
+    bac: 'BAC',
+    can: 'Course aux nombres',
   }
 
   /** Palette de couleurs proposées pour les badges (expression Typst) */
@@ -174,6 +190,9 @@
             restoredDocumentOptions.nbVersions =
               defaultTypstDocumentOptions.nbVersions
           }
+          restoredDocumentOptions.coverPage = sanitizeCoverPage(
+            restoredDocumentOptions.coverPage,
+          )
         }
       }
     } catch {
@@ -197,10 +216,15 @@
     'typstParam',
   )
   /**
-   * Un lien partagé fixe déjà `canMode` : la détection automatique (voir
-   * `loadExercises`) ne doit pas le remplacer.
+   * Un lien partagé fixe déjà ces réglages : la détection automatique de la
+   * présentation « Course aux nombres » (voir `loadExercises`) ne doit
+   * remplacer que ceux qu'il n'a pas fixés.
    */
   let canModeSetFromUrl = false
+  let pageFormatSetFromUrl = false
+  let coverTemplateSetFromUrl = false
+  let headerStyleSetFromUrl = false
+  let titleSetFromUrl = false
   if (typstUrlParam != null) {
     typstParamStore.set(typstUrlParam)
     const parsed = decodeBase64(typstUrlParam)
@@ -210,12 +234,221 @@
         ...parsed.options,
       }
       canModeSetFromUrl = parsed.options.canMode !== undefined
+      pageFormatSetFromUrl = parsed.options.pageFormat !== undefined
+      coverTemplateSetFromUrl = parsed.options.coverPage?.template !== undefined
+      headerStyleSetFromUrl = parsed.options.headerStyle !== undefined
+      titleSetFromUrl = parsed.options.title !== undefined
+      restoredDocumentOptions.coverPage = sanitizeCoverPage(
+        restoredDocumentOptions.coverPage,
+      )
     }
     if (parsed.carryOver != null) {
       urlCarryOver = parsed.carryOver
     }
   }
   let documentOptions: TypstDocumentOptions = $state(restoredDocumentOptions)
+
+  /**
+   * Page de garde restaurée d'un lien partagé ou des préférences : un réglage
+   * absent (fiche d'avant la fonctionnalité) ou d'un modèle qui n'existe plus
+   * retombe sur les valeurs par défaut.
+   */
+  function sanitizeCoverPage(
+    cover: TypstDocumentOptions['coverPage'] | undefined,
+  ): TypstDocumentOptions['coverPage'] {
+    const fallback = defaultTypstDocumentOptions.coverPage
+    if (cover == null || typeof cover !== 'object') {
+      return { ...fallback, consignes: [], bareme: [] }
+    }
+    const texte = (value: unknown, defaut = ''): string =>
+      typeof value === 'string' ? value : defaut
+    return {
+      template: COVER_TEMPLATES.includes(cover.template)
+        ? cover.template
+        : fallback.template,
+      titre: texte(cover.titre),
+      session: texte(cover.session),
+      matiere: texte(cover.matiere),
+      duree: texte(cover.duree),
+      consignes: Array.isArray(cover.consignes)
+        ? cover.consignes.filter((ligne) => typeof ligne === 'string')
+        : [],
+      noteFin: texte(cover.noteFin),
+      bareme: Array.isArray(cover.bareme)
+        ? cover.bareme.map(Number).filter((points) => Number.isFinite(points))
+        : [],
+      showBareme:
+        typeof cover.showBareme === 'boolean'
+          ? cover.showBareme
+          : fallback.showBareme,
+    }
+  }
+
+  /** Page de garde en cours de réglage (raccourci d'écriture) */
+  const coverPage = $derived(documentOptions.coverPage)
+
+  /** Total du barème affiché à côté du tableau des points */
+  const coverTotalPoints = $derived(
+    coverPage.bareme.reduce((total, points) => total + Number(points || 0), 0),
+  )
+
+  /** Session courante, au format « Juin 2026 » (comme la vue LaTeX) */
+  function currentSession(): string {
+    const date = new Date()
+    const mois = date.toLocaleDateString('fr-FR', { month: 'long' })
+    return `${mois.charAt(0).toUpperCase() + mois.slice(1)} ${date.getFullYear()}`
+  }
+
+  /**
+   * Un texte est « d'origine » tant qu'il est vide ou qu'il reprend mot pour
+   * mot celui d'un modèle : changer de modèle le remplace alors par le texte
+   * du nouveau. Un texte réécrit par le professeur, lui, est conservé —
+   * sans quoi passer du Brevet à la Course aux nombres garderait « Durée :
+   * 2 heures » et « calculatrice autorisée », qui la contredisent.
+   */
+  function isDefaultCoverText(
+    valeur: string,
+    champ: 'titre' | 'matiere' | 'duree' | 'noteFin',
+  ): boolean {
+    return (
+      valeur === '' ||
+      Object.values(COVER_TEMPLATE_DEFAULTS).some(
+        (defauts) => defauts[champ] === valeur,
+      )
+    )
+  }
+
+  /** Pendant de `isDefaultCoverText` pour la liste des consignes */
+  function isDefaultCoverConsignes(consignes: string[]): boolean {
+    return (
+      consignes.length === 0 ||
+      Object.values(COVER_TEMPLATE_DEFAULTS).some(
+        (defauts) =>
+          defauts.consignes.length === consignes.length &&
+          defauts.consignes.every((ligne, i) => ligne === consignes[i]),
+      )
+    )
+  }
+
+  /**
+   * Prépare (ou efface) la page de garde au changement de modèle : les textes
+   * du nouveau modèle remplacent ceux qui n'ont pas été personnalisés, et le
+   * barème est initialisé à partir des exercices de la fiche. Choisir un
+   * modèle bascule aussi l'habillage en-tête sur « Aucun » : la page de garde
+   * porte déjà le titre de la fiche, un second bloc de titre en page 2 ferait
+   * doublon (l'utilisateur peut toujours le rétablir ensuite à la main).
+   */
+  async function applyCoverTemplate() {
+    const template = coverPage.template
+    if (template === 'aucune') {
+      applyDocumentOptions()
+      return
+    }
+    const defauts = COVER_TEMPLATE_DEFAULTS[template as ActiveCoverTemplate]
+    documentOptions.coverPage = {
+      ...coverPage,
+      titre: isDefaultCoverText(coverPage.titre, 'titre')
+        ? defauts.titre
+        : coverPage.titre,
+      matiere: isDefaultCoverText(coverPage.matiere, 'matiere')
+        ? defauts.matiere
+        : coverPage.matiere,
+      session: coverPage.session === '' ? currentSession() : coverPage.session,
+      duree: isDefaultCoverText(coverPage.duree, 'duree')
+        ? defauts.duree
+        : coverPage.duree,
+      consignes: isDefaultCoverConsignes(coverPage.consignes)
+        ? defauts.consignes
+        : coverPage.consignes,
+      noteFin: isDefaultCoverText(coverPage.noteFin, 'noteFin')
+        ? defauts.noteFin
+        : coverPage.noteFin,
+      bareme:
+        coverPage.bareme.length > 0 ? coverPage.bareme : defaultCoverBareme(),
+    }
+    documentOptions.headerStyle = 'aucun'
+    // le modèle « can » a son propre logo (asset fixe, pas embarqué dans le
+    // code) : sans ce prefetch, il resterait absent du registre tant qu'une
+    // autre action (ex. « Nouvelles données ») ne le redéclencherait pas.
+    if (template === 'can') await prefetchStaticImages()
+    applyDocumentOptions()
+  }
+
+  /** Titre affiché en page de garde et repris dans le pied de page (`titre`
+   * Typst) en présentation « Course aux nombres » — au lieu du titre par
+   * défaut d'une fiche classique, sans objet ici (il n'y a pas de « fiche
+   * d'exercices », juste l'épreuve du jour).
+   */
+  const CAN_TITLE = 'La course aux nombres'
+
+  /**
+   * (Dé)cocher « Présentation Course aux nombres » : la coche vient souvent
+   * du réglage automatique de `loadExercises` (fiche 100% « can » → format
+   * A5 + page de garde « can » + en-tête « Aucun » (pas de second titre en
+   * page 2, la page de garde en porte déjà un) + titre « La course aux
+   * nombres », repris dans le pied de page), donc la (dé)cocher doit
+   * (dé)faire ces quatre réglages plutôt que de laisser une fiche normale en
+   * A5, sans page de garde ni en-tête, ou une fiche « Course aux nombres »
+   * dont le pied de page dit encore « Fiche d'exercices ». Sans effet si
+   * l'utilisateur a lui-même choisi un autre format/une autre page de
+   * garde/un autre en-tête/un autre titre entre-temps.
+   */
+  function toggleCanMode() {
+    if (documentOptions.canMode) {
+      if (documentOptions.title === defaultTypstDocumentOptions.title) {
+        documentOptions.title = CAN_TITLE
+      }
+    } else {
+      if (documentOptions.pageFormat === 'a5') {
+        documentOptions.pageFormat = 'a4'
+      }
+      if (documentOptions.coverPage.template === 'can') {
+        documentOptions.coverPage = {
+          ...documentOptions.coverPage,
+          template: 'aucune',
+        }
+      }
+      if (documentOptions.headerStyle === 'aucun') {
+        documentOptions.headerStyle = defaultTypstDocumentOptions.headerStyle
+      }
+      if (documentOptions.title === CAN_TITLE) {
+        documentOptions.title = defaultTypstDocumentOptions.title
+      }
+    }
+    applyDocumentOptions()
+  }
+
+  /**
+   * Barème proposé : un point par question, comme la page de garde de la vue
+   * PDF (`buildExamExercices` de `lib/LatexGroup.ts`).
+   */
+  function defaultCoverBareme(): number[] {
+    return exercises.map((exercise) => exercise?.listeQuestions?.length || 1)
+  }
+
+  /**
+   * Réaligne le barème sur les exercices de la fiche : les points déjà saisis
+   * sont gardés, les exercices ajoutés depuis prennent le barème par défaut.
+   */
+  function resizeCoverBareme() {
+    const defauts = defaultCoverBareme()
+    documentOptions.coverPage.bareme = defauts.map(
+      (points, index) => coverPage.bareme[index] ?? points,
+    )
+    applyDocumentOptions()
+  }
+
+  /**
+   * Retire une ligne du barème (comme `TexSettingsPane.removeExamExercice`) :
+   * la page de garde peut compter moins de lignes que d'exercices (groupés,
+   * ou dont le barème ne suit pas un-à-un la fiche).
+   */
+  function removeCoverBaremeRow(index: number) {
+    documentOptions.coverPage.bareme = coverPage.bareme.filter(
+      (_points, i) => i !== index,
+    )
+    applyDocumentOptions()
+  }
 
   /** Couleur des badges au format `#rrggbb` pour le sélecteur natif */
   const badgeColorHex = $derived(
@@ -383,6 +616,18 @@
   let mergedExercises: number[] = $state([])
   /** Variables d'en-tête de la fiche, lues dans le code courant */
   let headerValues = $state({ titre: '', 'sous-titre': '', entete: '' })
+  /** Variables texte de la page de garde (`couverture-*`), lues dans le code courant */
+  let coverValues = $state({
+    titre: '',
+    session: '',
+    matiere: '',
+    duree: '',
+    noteFin: '',
+  })
+  /** Consignes de la page de garde (`couverture-consignes`), lues dans le code courant */
+  let coverConsignesValue: string[] = $state([])
+  /** Texte du pied de page (`#let pied-page = "..."`), lu dans le code courant */
+  let footerValue = $state('')
   /** Nombre de colonnes du document (`#let colonnes`), lu dans le code */
   let documentColumns = $state(1)
   /** Zoom de chaque figure (`#let fig-N-zoom`), lu dans le code courant */
@@ -413,6 +658,15 @@
   let codeEditPart: 'enonce' | 'correction' = $state('enonce')
   /** Brouillon de la modale d'édition du code Typst */
   let codeEditDraft = $state('')
+  /** Surcharges d'énoncé par ligne du tableau « Course aux nombres », lues dans le code */
+  let codeOverrideCanValues: Record<number, string> = $state({})
+  /** Surcharges de réponse par ligne du tableau « Course aux nombres », lues dans le code */
+  let codeOverrideCanReponseValues: Record<number, string> = $state({})
+  /** Numéro de ligne (1-based) du tableau « Course aux nombres » dont la modale d'édition est ouverte */
+  let canRowEditNum: number | null = $state(null)
+  /** Brouillons de la modale d'édition d'une ligne « Course aux nombres » */
+  let canRowEditEnonceDraft = $state('')
+  let canRowEditReponseDraft = $state('')
   /** Message de confirmation affiché après un clic sur un bouton « Copier » de la modale */
   let codeCopyStatus = $state('')
   let codeCopyStatusTimer: ReturnType<typeof setTimeout>
@@ -471,7 +725,15 @@
       widgets.push({
         kind: isTasks
           ? 'tasks'
-          : (anchor.kind as 'exo' | 'corr' | 'gap' | 'header' | 'figure'),
+          : (anchor.kind as
+              | 'exo'
+              | 'corr'
+              | 'gap'
+              | 'header'
+              | 'cover'
+              | 'footer'
+              | 'figure'
+              | 'can-row'),
         num: anchor.num,
         // les variables de la correction sont indépendantes de l'énoncé
         target: isTasks
@@ -523,6 +785,8 @@
     mergedExercises = harvested.merges ?? []
     codeOverrideValues = harvested.codeOverrides ?? {}
     codeOverrideCorrectionValues = harvested.codeOverridesCorrection ?? {}
+    codeOverrideCanValues = harvested.codeOverridesCan ?? {}
+    codeOverrideCanReponseValues = harvested.codeOverridesCanReponse ?? {}
     writingLinesValues = harvested.writingLines ?? {}
     const columns = code.match(/^#let colonnes = (\d+)/m)
     documentColumns = columns != null ? Number(columns[1]) : 1
@@ -549,6 +813,43 @@
       }
     }
     headerValues = header
+    const cover = {
+      titre: '',
+      session: '',
+      matiere: '',
+      duree: '',
+      noteFin: '',
+    }
+    // `noteFin` (JS) ↔ `note-fin` (variable Typst, voir `coverDeclarationLines`)
+    const coverFieldNames: [keyof typeof cover, string][] = [
+      ['titre', 'titre'],
+      ['session', 'session'],
+      ['matiere', 'matiere'],
+      ['duree', 'duree'],
+      ['noteFin', 'note-fin'],
+    ]
+    for (const [jsName, typstName] of coverFieldNames) {
+      const match = new RegExp(
+        `^#let couverture-${typstName} = "((?:[^"\\\\]|\\\\.)*)"`,
+        'm',
+      ).exec(code)
+      if (match != null) {
+        cover[jsName] = match[1].replace(/\\(.)/g, '$1')
+      }
+    }
+    coverValues = cover
+    // le tableau tient sur une seule ligne (voir `coverDeclarationLines`) :
+    // chaque littéral entre guillemets y est extrait puis déséchappé
+    const consignesMatch = /^#let couverture-consignes = \((.*)\)$/m.exec(code)
+    coverConsignesValue =
+      consignesMatch != null
+        ? [...consignesMatch[1].matchAll(/"((?:[^"\\]|\\.)*)"/g)].map((m) =>
+            m[1].replace(/\\(.)/g, '$1'),
+          )
+        : []
+    const footerMatch = /^#let pied-page = "((?:[^"\\]|\\.)*)"/m.exec(code)
+    footerValue =
+      footerMatch != null ? footerMatch[1].replace(/\\(.)/g, '$1') : ''
   }
 
   /** Modifie la ligne `#let <prefix>-<clef> = ...` (édition ciblée, annulable) */
@@ -795,6 +1096,13 @@
       merges,
       codeOverrides,
       codeOverridesCorrection,
+      // surcharges de ligne « Course aux nombres » (par numéro de ligne, pas
+      // d'exercice) : pas renumérotées ici, faute de connaître le nombre de
+      // questions retirées avec l'exercice — conservées telles quelles pour
+      // ne pas perdre le travail du professeur, au prix d'un décalage
+      // possible si l'exercice supprimé contribuait plusieurs lignes.
+      codeOverridesCan: carryOver.codeOverridesCan ?? {},
+      codeOverridesCanReponse: carryOver.codeOverridesCanReponse ?? {},
       writingLines,
     }
   }
@@ -924,6 +1232,11 @@
       merges,
       codeOverrides,
       codeOverridesCorrection,
+      // surcharges de ligne « Course aux nombres » : voir le même
+      // commentaire dans `shiftCarryOver` (pas renumérotées, conservées
+      // telles quelles).
+      codeOverridesCan: carryOver.codeOverridesCan ?? {},
+      codeOverridesCanReponse: carryOver.codeOverridesCanReponse ?? {},
       writingLines,
     }
   }
@@ -1080,6 +1393,68 @@
   }
 
   /**
+   * Ouvre la modale d'édition d'une ligne du tableau « Course aux nombres »
+   * (énoncé et réponse), préremplie avec ses surcharges existantes ou, à
+   * défaut, le contenu actuellement généré pour cette ligne (voir
+   * `getGeneratedCanRowCode`). Pendant de `openCodeEdit`, à l'échelle d'une
+   * ligne plutôt que d'un exercice entier.
+   */
+  function openCanRowCodeEdit(row: number) {
+    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
+    const generated =
+      carryOver.codeOverridesCan?.[row] == null ||
+      carryOver.codeOverridesCanReponse?.[row] == null
+        ? getGeneratedCanRowCode(buildInputs(), row, documentOptions)
+        : null
+    canRowEditEnonceDraft =
+      carryOver.codeOverridesCan?.[row] ?? generated?.enonce ?? ''
+    canRowEditReponseDraft =
+      carryOver.codeOverridesCanReponse?.[row] ?? generated?.reponse ?? ''
+    canRowEditNum = row
+  }
+
+  /**
+   * Retire les surcharges (énoncé et réponse) de la ligne `row` : son contenu
+   * redevient celui généré automatiquement. Pendant de `restoreGeneratedCode`.
+   */
+  function restoreCanRowCode(row: number) {
+    updateCanRowCode(row, '', '')
+  }
+
+  /**
+   * Applique (ou retire, si vide) les surcharges d'énoncé et de réponse de
+   * la ligne `row` du tableau « Course aux nombres », saisies dans la
+   * modale d'édition. Pendant de `updateExerciseCode`, à l'échelle d'une
+   * ligne : les deux moitiés (énoncé/réponse) sont réglées ensemble, chacune
+   * indépendamment retirée si son champ a été vidé.
+   */
+  function updateCanRowCode(row: number, enonce: string, reponse: string) {
+    if (!confirmOverwrite()) return
+    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
+    const codeOverridesCan = { ...(carryOver.codeOverridesCan ?? {}) }
+    if (enonce.trim().length === 0) delete codeOverridesCan[row]
+    else codeOverridesCan[row] = enonce
+    carryOver.codeOverridesCan = codeOverridesCan
+    const codeOverridesCanReponse = {
+      ...(carryOver.codeOverridesCanReponse ?? {}),
+    }
+    if (reponse.trim().length === 0) delete codeOverridesCanReponse[row]
+    else codeOverridesCanReponse[row] = reponse
+    carryOver.codeOverridesCanReponse = codeOverridesCanReponse
+    const [primary, ...extraVersions] = buildAllVersionInputs()
+    const newCode = buildTypstDocument(
+      primary,
+      documentOptions,
+      carryOver,
+      extraVersions,
+      { sourceUrl: currentUrl(), extraPreamble: extraPreamble() },
+    )
+    setEditorContent(newCode)
+    scheduleCompile(newCode, 0)
+    canRowEditNum = null
+  }
+
+  /**
    * Fusionne/sépare l'exercice num avec celui qui le précède : ils partagent
    * alors un seul titre (banque exercise-bank) et la numérotation de ses
    * questions continue celle de son prédécesseur. Régénère le code (comme
@@ -1174,6 +1549,88 @@
     if (name === 'titre') documentOptions.title = value
     else if (name === 'sous-titre') documentOptions.subtitle = value
     else documentOptions.headerLine = value
+    persistPreferences()
+  }
+
+  /** Échappe une chaîne pour l'inscrire dans un littéral Typst `"..."` */
+  function escapeTypstStringLiteral(value: string): string {
+    return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+  }
+
+  /**
+   * Modifie une variable texte de la page de garde (`#let couverture-titre =
+   * "..."`…) dans le code et reporte la valeur dans les réglages persistés —
+   * même mécanisme que `updateHeaderValue`, édition ciblée sans régénération.
+   */
+  function updateCoverValue(
+    name: 'titre' | 'session' | 'matiere' | 'duree' | 'noteFin',
+    value: string,
+  ) {
+    if (editorView == null) return
+    // `noteFin` (JS) ↔ `note-fin` (variable Typst, voir `coverDeclarationLines`)
+    const typstName = name === 'noteFin' ? 'note-fin' : name
+    const doc = editorView.state.doc.toString()
+    const match = new RegExp(`^#let couverture-${typstName} = ".*"`, 'm').exec(
+      doc,
+    )
+    if (match == null) return
+    dispatchPaletteEdit({
+      from: match.index,
+      to: match.index + match[0].length,
+      insert: `#let couverture-${typstName} = "${escapeTypstStringLiteral(value)}"`,
+    })
+    documentOptions.coverPage[name] = value
+    persistPreferences()
+  }
+
+  /**
+   * Pendant de `updateCoverValue` pour les consignes (`#let
+   * couverture-consignes = (...)`) : la liste est réémise sur une seule
+   * ligne, comme `coverDeclarationLines` (`buildTypstDocument.ts`) le fait à
+   * la génération — un tableau d'un seul élément exige la virgule finale.
+   */
+  function updateCoverConsignes(consignes: string[]) {
+    if (editorView == null) return
+    const doc = editorView.state.doc.toString()
+    const match = /^#let couverture-consignes = \(.*\)$/m.exec(doc)
+    if (match == null) return
+    const items = consignes.map(
+      (ligne) => `"${escapeTypstStringLiteral(ligne)}"`,
+    )
+    const literal =
+      items.length === 0
+        ? '()'
+        : items.length === 1
+          ? `(${items[0]},)`
+          : `(${items.join(', ')})`
+    dispatchPaletteEdit({
+      from: match.index,
+      to: match.index + match[0].length,
+      insert: `#let couverture-consignes = ${literal}`,
+    })
+    documentOptions.coverPage.consignes = consignes
+    persistPreferences()
+  }
+
+  /**
+   * Modifie le texte du pied de page (`#let pied-page = "..."`) — même
+   * mécanisme que `updateHeaderValue`/`updateCoverValue`, édition ciblée
+   * sans régénération. Réglé sur l'aperçu (icône sur le pied de page de la
+   * première page) plutôt que dans le volet : contrairement au titre et à la
+   * page de garde, le pied de page se répète sur chaque page, sans second
+   * réglage à synchroniser.
+   */
+  function updateFooterText(value: string) {
+    if (editorView == null) return
+    const doc = editorView.state.doc.toString()
+    const match = /^#let pied-page = ".*"/m.exec(doc)
+    if (match == null) return
+    dispatchPaletteEdit({
+      from: match.index,
+      to: match.index + match[0].length,
+      insert: `#let pied-page = "${escapeTypstStringLiteral(value)}"`,
+    })
+    documentOptions.footerText = value
     persistPreferences()
   }
 
@@ -2225,7 +2682,11 @@
         }
       }
     }
-    if (urls.size === 0 && typImageUrls.size === 0) {
+    // logo de la page de garde « Course aux nombres » (voir `mathaleaLogo.ts`) :
+    // un asset fixe de l'appli, pas une image d'exercice, mais chargé et
+    // empaqueté (aperçu + .zip téléchargé) par le même mécanisme
+    const needsLogoCan = documentOptions.coverPage.template === 'can'
+    if (urls.size === 0 && typImageUrls.size === 0 && !needsLogoCan) {
       requiredImageAssets = new Map()
       return
     }
@@ -2263,6 +2724,16 @@
         }
       }),
     )
+    if (needsLogoCan) {
+      try {
+        bytes.set(
+          LOGO_CAN_VIRTUAL_PATH,
+          await cachedBytes(`${import.meta.env.BASE_URL}${LOGO_CAN_URL}`),
+        )
+      } catch {
+        // logo indisponible : encart « image non convertie » à sa place
+      }
+    }
     setStaticImagePaths(paths)
     setStaticImageBytes(bytes)
     requiredImageAssets = bytes
@@ -2286,17 +2757,41 @@
     await loadExercises()
     // Course aux nombres par défaut si la fiche ne contient que des
     // exercices « can » (identifiant commençant par « can », comme
-    // `can6M20`), sauf si un lien partagé fixe déjà `canMode`.
-    if (!canModeSetFromUrl) {
-      const loaded = exercises.filter(
-        (exercise): exercise is IExercice => exercise != null,
+    // `can6M20`) : présentation en tableau, format A5 (feuille de passation
+    // plus petite) et page de garde assortie — sauf si un lien partagé fixe
+    // déjà l'un de ces réglages.
+    const loaded = exercises.filter(
+      (exercise): exercise is IExercice => exercise != null,
+    )
+    const allCan =
+      loaded.length > 0 &&
+      loaded.every((exercise) =>
+        (exercise.id ?? '').toLowerCase().includes('can'),
       )
-      const allCan =
-        loaded.length > 0 &&
-        loaded.every((exercise) =>
-          (exercise.id ?? '').toLowerCase().includes('can'),
-        )
-      if (allCan) documentOptions.canMode = true
+    if (allCan) {
+      if (!canModeSetFromUrl) documentOptions.canMode = true
+      if (!pageFormatSetFromUrl) documentOptions.pageFormat = 'a5'
+      if (
+        !titleSetFromUrl &&
+        documentOptions.title === defaultTypstDocumentOptions.title
+      ) {
+        documentOptions.title = CAN_TITLE
+      }
+      if (!coverTemplateSetFromUrl) {
+        documentOptions.coverPage = {
+          ...documentOptions.coverPage,
+          template: 'can',
+          ...COVER_TEMPLATE_DEFAULTS.can,
+          bareme: defaultCoverBareme(),
+        }
+        // la page de garde porte déjà le titre du sujet : pas de second
+        // bloc de titre en page 2 (même raison que `applyCoverTemplate`)
+        if (!headerStyleSetFromUrl) documentOptions.headerStyle = 'aucun'
+      }
+      // le passage en page de garde « can » ci-dessus arrive après le
+      // premier prefetch (loadExercises) : celui-ci n'a donc pas pu charger
+      // le logo, absent du registre à ce moment-là — on le relance.
+      await prefetchStaticImages()
     }
     const code = buildCode()
     initEditor(code)
@@ -2754,7 +3249,7 @@
               <input
                 type="checkbox"
                 bind:checked={documentOptions.canMode}
-                onchange={applyDocumentOptions}
+                onchange={toggleCanMode}
               />
               Présentation « Course aux nombres »
             </label>
@@ -2821,6 +3316,22 @@
               directement sur l'aperçu (bouton
               <i class="bx bx-edit"></i> à gauche du titre).
             </p>
+
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                bind:checked={documentOptions.showFooter}
+                onchange={applyDocumentOptions}
+              />
+              Afficher le pied de page
+            </label>
+
+            {#if documentOptions.showFooter}
+              <p class="text-xs opacity-75">
+                Le texte du pied de page se modifie directement sur l'aperçu
+                (bouton <i class="bx bx-edit"></i> sur le pied de la première page).
+              </p>
+            {/if}
 
             <label class="flex items-center justify-between gap-4 text-sm">
               Police du texte
@@ -2986,6 +3497,95 @@
               </div>
             </div>
 
+            <!-- ------------------------------------------ page de garde -->
+            <h4
+              class="pt-2 text-xs font-semibold uppercase tracking-wide opacity-70 border-t border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark"
+            >
+              Page de garde
+            </h4>
+
+            <label class="flex items-center justify-between gap-4 text-sm">
+              Modèle
+              <select
+                class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.coverPage.template}
+                onchange={applyCoverTemplate}
+              >
+                {#each COVER_TEMPLATES as template}
+                  <option value={template}>
+                    {COVER_TEMPLATE_LABELS[template]}
+                  </option>
+                {/each}
+              </select>
+            </label>
+
+            {#if coverPage.template !== 'aucune'}
+              <p class="text-xs opacity-75">
+                L'intitulé, la session, la matière, la durée et les consignes se
+                modifient directement sur l'aperçu (bouton
+                <i class="bx bx-edit"></i> en haut de la page de garde).
+              </p>
+
+              {#if coverPage.template === 'can'}
+                <p class="text-xs opacity-75">
+                  La durée, le nombre de questions et le score sur le total des
+                  questions sont ajoutés automatiquement.
+                </p>
+              {:else}
+                <label class="flex items-center gap-2 text-sm cursor-pointer">
+                  <input
+                    type="checkbox"
+                    bind:checked={documentOptions.coverPage.showBareme}
+                    onchange={applyDocumentOptions}
+                  />
+                  Afficher le barème
+                </label>
+
+                {#if coverPage.showBareme}
+                  <div class="space-y-1.5">
+                    <div class="flex items-center justify-between text-sm">
+                      <span>Barème</span>
+                      <span class="text-xs opacity-70">
+                        Total : {coverTotalPoints} pts
+                      </span>
+                    </div>
+                    {#each coverPage.bareme as _points, index (index)}
+                      <div class="flex items-center gap-2 text-sm">
+                        <label class="grow" for="typst-points-{index}">
+                          Exercice {index + 1}
+                        </label>
+                        <input
+                          id="typst-points-{index}"
+                          type="number"
+                          step="0.5"
+                          min="0"
+                          class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                          bind:value={documentOptions.coverPage.bareme[index]}
+                          onchange={applyDocumentOptions}
+                        />
+                        <button
+                          type="button"
+                          aria-label="Retirer l'exercice {index + 1} du barème"
+                          class="text-coopmaths-action dark:text-coopmathsdark-action"
+                          onclick={() => removeCoverBaremeRow(index)}
+                        >
+                          <i class="bx bx-x text-lg"></i>
+                        </button>
+                      </div>
+                    {/each}
+                    <button
+                      type="button"
+                      class="text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action"
+                      onclick={resizeCoverBareme}
+                    >
+                      <i class="bx bx-sync"></i>
+                      Reprendre les exercices de la fiche
+                    </button>
+                  </div>
+                {/if}
+              {/if}
+            {/if}
+
             <p class="text-xs opacity-75">
               Ces réglages régénèrent le code Typst à partir des exercices : vos
               modifications manuelles du code seront perdues.
@@ -3064,6 +3664,10 @@
                     insertions={insertionValues}
                     insertionsCorrection={insertionCorrectionValues}
                     header={headerValues}
+                    cover={coverValues}
+                    coverConsignes={coverConsignesValue}
+                    coverTemplate={documentOptions.coverPage.template}
+                    footerText={footerValue}
                     {documentColumns}
                     {questionCounts}
                     {staticExercises}
@@ -3073,6 +3677,8 @@
                     {figureAlignValues}
                     codeOverrides={codeOverrideValues}
                     codeOverridesCorrection={codeOverrideCorrectionValues}
+                    codeOverridesCan={codeOverrideCanValues}
+                    codeOverridesCanReponse={codeOverrideCanReponseValues}
                     exerciseCount={exercises.length}
                     {mergedExercises}
                     mergeExercisesEnabled={!documentOptions.mergeExercises &&
@@ -3089,6 +3695,9 @@
                     onUpdateInsertionCorrection={updateInsertionCorrection}
                     onDeleteInsertionCorrection={deleteInsertionCorrection}
                     onUpdateHeader={updateHeaderValue}
+                    onUpdateCover={updateCoverValue}
+                    onUpdateCoverConsignes={updateCoverConsignes}
+                    onUpdateFooterText={updateFooterText}
                     onChangeQuestionCount={changeQuestionCount}
                     onDeleteExercise={deleteExercise}
                     onAddExercise={openAddExercise}
@@ -3097,6 +3706,7 @@
                     onOpenSettings={openSettings}
                     onEditCode={openCodeEdit}
                     onEditCorrectionCode={openCorrectionCodeEdit}
+                    onEditCanRow={openCanRowCodeEdit}
                     onToggleMergeBefore={toggleMergeBefore}
                     {writingLinesValues}
                     onSetWritingLines={setWritingLines}
@@ -3387,6 +3997,80 @@
               class="rounded bg-coopmaths-action px-3 py-1 text-white"
               onclick={() =>
                 updateExerciseCode(num, codeEditDraft, codeEditPart)}
+            >
+              Enregistrer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {/if}
+
+  {#if canRowEditNum !== null}
+    {@const row = canRowEditNum}
+    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      onclick={(e) => {
+        if (e.target === e.currentTarget) canRowEditNum = null
+      }}
+    >
+      <div
+        class="relative flex w-full max-w-2xl flex-col gap-3 rounded-lg bg-coopmaths-canvas-dark p-4 shadow-xl dark:bg-coopmathsdark-canvas-dark"
+      >
+        <h2 class="text-base font-semibold">
+          Code Typst de la ligne {row} du tableau
+        </h2>
+        <p class="text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus">
+          Modifiez le code ci-dessous : il remplacera l'énoncé et la réponse
+          générés de cette ligne. Videz un champ pour revenir à son contenu
+          généré automatiquement.
+        </p>
+        <label class="flex flex-col gap-1 text-sm">
+          Énoncé
+          <textarea
+            class="h-32 w-full rounded border border-gray-300 bg-coopmaths-canvas p-2 font-mono text-xs text-coopmaths-corpus dark:border-coopmathsdark-corpus-lightest dark:bg-coopmathsdark-canvas dark:text-coopmathsdark-corpus"
+            bind:value={canRowEditEnonceDraft}
+            onkeydown={(e) => {
+              if (e.key === 'Escape') canRowEditNum = null
+            }}
+          ></textarea>
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          Réponse
+          <textarea
+            class="h-24 w-full rounded border border-gray-300 bg-coopmaths-canvas p-2 font-mono text-xs text-coopmaths-corpus dark:border-coopmathsdark-corpus-lightest dark:bg-coopmathsdark-canvas dark:text-coopmathsdark-corpus"
+            bind:value={canRowEditReponseDraft}
+            onkeydown={(e) => {
+              if (e.key === 'Escape') canRowEditNum = null
+            }}
+          ></textarea>
+        </label>
+        <div class="flex justify-between gap-2">
+          <button
+            type="button"
+            class="px-3 py-1 hover:text-coopmaths-action"
+            onclick={() => restoreCanRowCode(row)}
+          >
+            Restaurer le contenu d'origine
+          </button>
+          <div class="flex gap-2">
+            <button
+              type="button"
+              class="px-3 py-1 hover:text-coopmaths-action"
+              onclick={() => (canRowEditNum = null)}
+            >
+              Annuler
+            </button>
+            <button
+              type="button"
+              class="rounded bg-coopmaths-action px-3 py-1 text-white"
+              onclick={() =>
+                updateCanRowCode(
+                  row,
+                  canRowEditEnonceDraft,
+                  canRowEditReponseDraft,
+                )}
             >
               Enregistrer
             </button>

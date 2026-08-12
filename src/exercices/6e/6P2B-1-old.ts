@@ -35,7 +35,7 @@ export const uuid = '69e1f'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [''],
+  'fr-ch': ['NR'],
 }
 
 export default class FonctionsProbabilite6e extends Exercice {
@@ -95,7 +95,7 @@ export default class FonctionsProbabilite6e extends Exercice {
       'la couleur',
       'la couleur',
     ]
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const index1 = listeIndex[i]

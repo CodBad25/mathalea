@@ -15,11 +15,10 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreIndiceeDepuisChiffre } from '../../lib/outils/outilString'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Multiplier ou/et diviser des fractions'
 export const amcReady = true
@@ -38,7 +37,7 @@ export const uuid = '3ee4e'
 
 export const refs = {
   'fr-fr': ['4C22', 'BP2AutoH13'],
-  'fr-ch': ['10NO5-6'],
+  'fr-ch': ['10NO3A-3'],
 }
 
 const space = '\\phantom{\\dfrac{(_(^(}{(_(^(}}' // Utilisé pour mettre de l'espace dans une fraction de fraction

@@ -37,7 +37,7 @@ export const uuid = '33ac2'
 export const refs = {
   'fr-fr': ['5G2D', '3AutoG06-4'],
   'fr-2016': ['6M31', '5M22', '3AutoG06-4'],
-  'fr-ch': ['9GM2-3'],
+  'fr-ch': ['10GM3A-1'],
 }
 
 function nombreAleatoire(nbChiffres: number) {

@@ -29,7 +29,7 @@ export const uuid = '8b0f9'
 export const refs = {
   'fr-fr': ['6M4C', '3AutoG06-5'],
   'fr-2016': ['6D10'],
-  'fr-ch': ['10GM3-1'],
+  'fr-ch': ['9GM3A-3', '10GM3B-1'],
 }
 export default class ConversionsDeDurees extends Exercice {
   expectedAnswers: Hms[] = []
@@ -68,7 +68,7 @@ export default class ConversionsDeDurees extends Exercice {
     let s = 0
     let j = 0
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const consigne = 'Convertir '
       if (typesDeQuestions[i] === 1) {
         const sousTypeDeQuestion = listeSousTypeDeQuestionV1[i]

@@ -22,7 +22,7 @@ export const uuid = 'a813f'
 export const refs = {
   'fr-fr': ['5D2A-1', 'BP2FLUC14', 'BP1AUTO012'],
   'fr-2016': ['5S21-1', 'BP2FLUC14'],
-  'fr-ch': ['11NO2-7'],
+  'fr-ch': ['11NO4A-12'],
 }
 export default class ProbabilitesSimples extends Exercice {
   constructor() {
@@ -35,7 +35,7 @@ export default class ProbabilitesSimples extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0; i < this.nbQuestions; ) {
+    for (let i = 0; i < this.nbQuestions;) {
       let texte
 
       const pG = randint(20, 60) // pG est un pourcentage

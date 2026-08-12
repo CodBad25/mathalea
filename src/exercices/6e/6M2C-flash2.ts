@@ -14,7 +14,7 @@ export const dateDePublication = '21/04/2023'
 export const uuid = '90e79'
 export const refs = {
   'fr-fr': ['6M2C-flash2'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 /**
  *
@@ -33,7 +33,7 @@ export default class RelationAireCoteTriangle extends Exercice {
       [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       switch (listeTypeQuestions[i]) {

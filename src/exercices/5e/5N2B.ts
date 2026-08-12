@@ -23,7 +23,7 @@ export const uuid = 'cab80'
 export const refs = {
   'fr-fr': ['5N2B'],
   'fr-2016': ['5R10'],
-  'fr-ch': ['9NO9-3'],
+  'fr-ch': ['9NO2B-1'],
 }
 export default class TrouverOppose extends Exercice {
   constructor() {
@@ -32,7 +32,8 @@ export default class TrouverOppose extends Exercice {
       'Afficher quelques fois le signe des nombres positifs',
     ]
     this.besoinFormulaire2Numerique = [
-      'Vocabulaire', 2,
+      'Vocabulaire',
+      2,
       '1 : Valeur absolue\n2 : Distance à zéro',
     ]
     this.sup = true

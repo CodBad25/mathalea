@@ -8,7 +8,7 @@ export const interactifType = 'mathLive'
 export const uuid = '80d4e'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CoefficientDirecteur2nde extends CoefficientDirecteur {
   constructor() {

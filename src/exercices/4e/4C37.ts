@@ -19,7 +19,7 @@ export const uuid = '67432'
 
 export const refs = {
   'fr-fr': ['4C37'],
-  'fr-ch': ['10NO2-10'],
+  'fr-ch': ['10NO3D-6'],
 }
 export default class SignePuissance extends Exercice {
   constructor() {
@@ -46,7 +46,6 @@ export default class SignePuissance extends Exercice {
     for (
       let i = 0, texte, texteCorr, monQcm, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (listeTypeDeQuestions[i]) {
         case 'a^n':

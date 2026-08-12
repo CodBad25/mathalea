@@ -49,7 +49,7 @@ export const uuid = '07d1a'
 export const refs = {
   'fr-fr': ['5G3B-1'],
   'fr-2016': ['5G13'],
-  'fr-ch': ['9ES6-24'],
+  'fr-ch': ['10ES3A-3'],
 }
 export default class ConservationTransformation extends Exercice {
   constructor() {

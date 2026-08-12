@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -13,8 +14,6 @@ import {
 } from '../../modules/outils'
 import { OutilsStats } from '../../modules/outilsStat'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -36,7 +35,7 @@ export const uuid = 'ab91d'
 export const refs = {
   'fr-fr': ['5D1F', 'BP2AutoD1', 'BP1AUTO044'],
   'fr-2016': ['5S14', 'BP2AutoD1'],
-  'fr-ch': ['11NO2-4'],
+  'fr-ch': ['11NO4A-9'],
 }
 export default class CalculerDesMoyennes extends Exercice {
   constructor() {

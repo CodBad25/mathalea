@@ -24,7 +24,7 @@ export const uuid = 'fa3ec'
 export const refs = {
   'fr-fr': ['5N1J-3', '3AutoN09-1'],
   'fr-2016': ['6N43-2', '5A11-4', '3AutoN09-1'],
-  'fr-ch': ['9NO4-5'],
+  'fr-ch': ['9NO1A-5'],
 }
 export default class TableauCriteresDeDivisibilite extends Exercice {
   constructor() {

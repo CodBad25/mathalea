@@ -14,7 +14,7 @@ export const uuid = '4f77c'
 export const refs = {
   'fr-fr': ['CM2N5C-5'],
   'fr-2016': ['c3C32-04'],
-  'fr-ch': ['9NO16-7'],
+  'fr-ch': ['9FA2B-18'],
 }
 export const titre = 'Résoudre le problème complexe du spectacle'
 export const dateDePublication = '21/11/2024'

@@ -30,7 +30,7 @@ export const uuid = 'fe4dg'
 
 export const refs = {
   'fr-fr': ['1AL23-23'],
-  'fr-ch': [],
+  'fr-ch': ['11FA5B-12'],
 }
 
 interface CoefficientsEquation {

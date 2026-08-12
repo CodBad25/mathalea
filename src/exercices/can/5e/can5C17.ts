@@ -16,7 +16,7 @@ export const uuid = 'b1881'
 
 export const refs = {
   'fr-fr': ['can5C17', 'auto6N2B-flash5', 'auto5N3B-flash1'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class EntierPlusFractionVersDecimal extends ExerciceSimple {
   constructor() {

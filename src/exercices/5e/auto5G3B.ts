@@ -13,7 +13,7 @@ export const uuid = 'ce9ef'
 export const refs = {
   'fr-fr': ['auto5G3B'],
   'fr-2016': ['5G10-1'],
-  'fr-ch': ['9ES6-3'],
+  'fr-ch': ['9ES3B-13'],
 }
 export default class SymetrieAxialePoint5e extends ConstruireParSymetrie {
   constructor() {

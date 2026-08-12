@@ -2,8 +2,8 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -28,7 +28,7 @@ export const uuid = '37268'
 export const refs = {
   'fr-fr': ['6N2K-3'],
   'fr-2016': ['6C11-1'],
-  'fr-ch': ['9NO3-5'],
+  'fr-ch': [''], // Primaire anciennement :['9NO3-5'],
 }
 export default class DivisionsEuclidiennesEgalite2 extends Exercice {
   constructor() {

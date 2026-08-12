@@ -17,7 +17,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '412a7'
 export const refs = {
-  'fr-ch': ['10FA4-13'],
+  'fr-ch': ['10FA2C-3'],
   'fr-fr': [],
 }
 // export const dateDeModifImportante = '24/10/2021'
@@ -56,7 +56,7 @@ export default class EchellesCartes extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const dCarte = randint(2, 30)
       const echelle = new Decimal(randint(1, 50, dCarte))
         .mul(choice([1, 10, 100, 1000]))

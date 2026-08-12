@@ -29,7 +29,7 @@ export const uuid = '64ef9'
 
 export const refs = {
   'fr-fr': ['6G4C-1'],
-  'fr-ch': [''],
+  'fr-ch': ['9ES1B-11'],
 }
 export default class ConstruireUnAngle extends Exercice {
   constructor() {

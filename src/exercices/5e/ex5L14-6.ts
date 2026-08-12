@@ -16,7 +16,7 @@ export const uuid = 'd1a2c'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['11FA5-1'],
+  'fr-ch': ['11GM3-1'],
 }
 export default class DeterminerDerniereOperationExpNum extends Exercice {
   constructor() {

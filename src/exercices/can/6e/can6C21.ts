@@ -22,7 +22,7 @@ export const uuid = '89135'
 
 export const refs = {
   'fr-fr': ['can6C21', '6N2A-flash3', 'auto5N2A-flash6'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ComplementAUn extends ExerciceSimple {
   constructor() {

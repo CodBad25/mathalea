@@ -13,7 +13,7 @@ export const uuid = '9d5ef'
 export const refs = {
   'fr-fr': ['CM2N5C-4'],
   'fr-2016': ['c3C32-02'],
-  'fr-ch': ['9FA3-20'],
+  'fr-ch': ['9FA2B-17'],
 }
 export const titre =
   'Au marché (addition et soustraction de masses, conversions)'

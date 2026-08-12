@@ -30,7 +30,7 @@ export const uuid = 'e564b'
 
 export const refs = {
   'fr-fr': ['4G20-3', '3AutoN08-2'],
-  'fr-ch': ['10NO2-2'],
+  'fr-ch': ['9NO1D-4'],
 }
 export default class calculsDeCarre extends Exercice {
   constructor() {

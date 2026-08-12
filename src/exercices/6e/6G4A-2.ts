@@ -47,7 +47,7 @@ export const uuid = 'fe08e'
 export const refs = {
   'fr-fr': ['6G4A-2', '3AutoG03-1'],
   'fr-2016': ['6G22-2'],
-  'fr-ch': ['9ES5-2'],
+  'fr-ch': ['9ES1B-2'],
 }
 export default class ReconnaitreUnAngleParticulier extends Exercice {
   constructor() {
@@ -71,7 +71,6 @@ export default class ReconnaitreUnAngleParticulier extends Exercice {
     for (
       let i = 0, texte, texteCorr, triangle, explications, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const objets2d = []
       const indiceNomA = randint(1, 26)

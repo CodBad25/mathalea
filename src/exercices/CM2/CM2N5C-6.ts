@@ -18,7 +18,7 @@ export const uuid = 'ab18c'
 export const refs = {
   'fr-fr': ['CM2N5C-6'],
   'fr-2016': ['c3C32-05'],
-  'fr-ch': ['9NO15-7'],
+  'fr-ch': ['9NO3C-16'],
 }
 export const titre =
   'La bouteille (problème de conversion avec fraction simple)'

@@ -90,7 +90,7 @@ export const uuid = '7781a'
 export const refs = {
   'fr-fr': ['6N3M-2'],
   'fr-2016': ['6N22-1'],
-  'fr-ch': ['9NO10-6'],
+  'fr-ch': ['9NO3A-9'],
 }
 export default class RapportsSurUnSegment extends Exercice {
   constructor() {

@@ -40,7 +40,7 @@ export const uuid = '17e39'
 export const refs = {
   'fr-fr': ['5N5B-1'],
   'fr-2016': ['5L14-1'],
-  'fr-ch': ['10FA1-2', '11FA1-6'],
+  'fr-ch': ['10FA4B-2'],
 }
 export default class CalculerLaValeurDUneExpressionLitterale extends Exercice {
   version: string

@@ -46,7 +46,7 @@ export const uuid = '01873'
 export const refs = {
   'fr-fr': ['6N2A,CM1C2C'],
   'fr-2016': ['6C20'],
-  'fr-ch': ['9NO8-1'],
+  'fr-ch': ['9NO1G-11'],
 }
 export default class AdditionnerSoustrairesDecimaux extends Exercice {
   constructor() {

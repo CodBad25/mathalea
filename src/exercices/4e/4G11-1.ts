@@ -16,7 +16,7 @@ export const uuid = '48253'
 
 export const refs = {
   'fr-fr': ['4G11-1'],
-  'fr-ch': ['10ES2-10'],
+  'fr-ch': ['9ES3A-5'],
 }
 export default class PavagesEtTranslation extends PavagesEtTransformations {
   constructor() {

@@ -6,7 +6,6 @@ import {
 } from '../../../lib/outils/embellissements'
 import { prenoms } from '../../../lib/outils/Personne'
 import { formatMinute } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une durée en minutes'
 export const interactifReady = true
@@ -22,7 +21,7 @@ export const uuid = '05b2e'
 
 export const refs = {
   'fr-fr': ['can6D03', '6M4B-flash2'],
-  'fr-ch': ['10GM3-12'],
+  'fr-ch': ['9GM3A-8'],
 }
 export default class CalculDureeMinutes extends ExerciceSimple {
   constructor() {

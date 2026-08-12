@@ -55,7 +55,7 @@ export const uuid = '37e3e'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['9ES4-5'],
+  'fr-ch': ['9ES1E-19'],
 }
 export default class ConstructionsParallelogrammesParticuliers extends Exercice {
   exo: string
@@ -146,7 +146,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
     }
     const typeDeQuestion = combinaisonListes(typesDeFigures, this.nbQuestions)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const celluleAlea = function (rang: number) {

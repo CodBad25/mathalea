@@ -12,8 +12,8 @@ import type { AMCUneProposition } from '../../lib/amc/amcTypes'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { egalOuApprox } from '../../lib/outils/ecritures'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -43,7 +43,7 @@ export const uuid = '064cf'
 export const refs = {
   'fr-fr': ['6N3Q-2', 'BP2CCF6'],
   'fr-2016': ['6P13', 'BP2CCF6'],
-  'fr-ch': ['9FA3-13'],
+  'fr-ch': ['10FA2B-11'],
 }
 
 function nombreDecimales(prMin: number, prMax: number, n: number) {
@@ -178,7 +178,7 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
       this.nbQuestions,
     ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // Boucle principale où i+1 correspond au numéro de la question
       const prenom1 = prenomM()
       const prenom2 = prenomF()

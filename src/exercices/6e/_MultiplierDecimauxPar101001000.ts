@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -23,8 +24,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const amcType = 'AMCNum'
@@ -52,7 +51,7 @@ export const uuid = '2471d'
 export const refs = {
   'fr-fr': [],
   'fr-2016': ['6C30-1'],
-  'fr-ch': ['9NO1-10', '10NO5-1'],
+  'fr-ch': [''], // Primaire anciennement :['9NO1-10', '10NO5-1'],
 }
 export default class MultiplierDecimauxPar101001000 extends Exercice {
   constructor() {

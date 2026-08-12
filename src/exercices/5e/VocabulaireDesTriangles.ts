@@ -40,7 +40,7 @@ export const uuid = 'c3781'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['9ES2-7'],
+  'fr-ch': ['9ES1C-1'],
 }
 export default class VocabulaireDesTriangles extends Exercice {
   classe: number
@@ -653,7 +653,7 @@ export default class VocabulaireDesTriangles extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const longueurMin = 6
       const longueurMax = 15
       const angleMin = 30

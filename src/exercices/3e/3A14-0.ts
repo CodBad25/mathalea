@@ -34,7 +34,7 @@ export const uuid = '2e22a'
 
 export const refs = {
   'fr-fr': ['3A14-0'],
-  'fr-ch': ['11GM2-2'],
+  'fr-ch': ['10NO1A-15', '11GM3-7'],
 }
 export default class DesChocolatsDansDesBoites extends Exercice {
   constructor() {

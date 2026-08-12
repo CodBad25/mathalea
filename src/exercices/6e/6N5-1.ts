@@ -50,7 +50,7 @@ export const uuid = '28d56'
 export const refs = {
   'fr-fr': ['6N5-1', 'BP2CCF3', '5N1D-4'],
   'fr-2016': ['6C12', 'BP2CCF3'],
-  'fr-ch': ['9FA3-5'],
+  'fr-ch': ['9FA2B-19'],
 }
 export default class QuestionsPrix extends Exercice {
   constructor() {

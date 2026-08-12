@@ -12,6 +12,7 @@ import {
   pointAdistance,
   pointIntersectionLC,
 } from '../../lib/2d/utilitairesPoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import type { AMCUneProposition } from '../../lib/amc/amcTypes'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -34,7 +35,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const interactifReady = true
 export const interactifType = ['qcm', 'mathLive']
@@ -57,7 +57,7 @@ export const uuid = '03b49'
 export const refs = {
   'fr-fr': ['6G2A'],
   'fr-2016': ['6G10-4'],
-  'fr-ch': ['9ES1-9'],
+  'fr-ch': ['9ES1F-1', '10GM1B-1'],
 }
 
 type Proposition = UneProposition & { feedbackAlt?: string }

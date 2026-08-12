@@ -23,7 +23,7 @@ export const uuid = 'c3e17'
 
 export const refs = {
   'fr-fr': ['can6C13', '6N2A-flash1', 'auto5N1F-flash2', 'auto5N2A-flash1'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class FSomme2Decimaux extends ExerciceSimple {
   constructor() {

@@ -39,7 +39,7 @@ export const uuid = '612a5'
 
 export const refs = {
   'fr-fr': ['2S10-2', 'BP2SP8', 'BP1SP04'],
-  'fr-ch': ['9NO14-8'],
+  'fr-ch': ['10FA2B-19'],
 }
 export default class Proportions extends Exercice {
   constructor() {
@@ -59,9 +59,7 @@ export default class Proportions extends Exercice {
 
   nouvelleVersion() {
     let typesDeQuestionsDisponibles: (
-      | 'sous-population'
-      | 'proportion'
-      | 'population-totale'
+      'sous-population' | 'proportion' | 'population-totale'
     )[] = []
     if (this.sup === 1) {
       typesDeQuestionsDisponibles = ['sous-population']
@@ -102,7 +100,7 @@ export default class Proportions extends Exercice {
       this.nbQuestions,
     ) // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
     let prénom, espèces
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let totale: number
       let taux: number
       let p: number

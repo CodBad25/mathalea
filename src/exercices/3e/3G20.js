@@ -7,7 +7,7 @@ export const titre = 'Calculer des longueurs avec le théorème de Thalès'
 export const uuid = '74eac'
 export const refs = {
   'fr-fr': ['3G20', 'BP2AutoR6', 'BP2G13'],
-  'fr-ch': ['11GM3-4'],
+  'fr-ch': ['11GM1B-3'],
 }
 export default class Thales2D3e extends Thales2D {
   constructor() {

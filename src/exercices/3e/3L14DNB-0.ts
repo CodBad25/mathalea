@@ -14,7 +14,7 @@ import ExerciceBrevetA from '../ExerciceBrevetA'
 export const uuid = '6c592'
 export const refs = {
   'fr-fr': ['3L14DNB-0', '3Z1DNB-01'],
-  'fr-ch': ['11FA4-3'],
+  'fr-ch': ['11FA4D-5'],
 }
 export const titre =
   'Préparation DNB : Calcul littéral, scratch et équation produit nul'

@@ -16,6 +16,7 @@ import {
   pointIntersectionLC,
 } from '../../lib/2d/utilitairesPoint'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
 import { texteEnCouleur } from '../../lib/outils/embellissements'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
 import { stringNombre, texNombre } from '../../lib/outils/texNombre'
@@ -27,7 +28,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Tracer des carrés et des rectangles de longueurs données'
 
 export const dateDePublication = '10/09/2022'
@@ -41,7 +41,7 @@ export const uuid = '2203a'
 export const refs = {
   'fr-fr': ['CM2G3D-1'],
   'fr-2016': ['6G13'],
-  'fr-ch': ['9ES4-1'],
+  'fr-ch': ['9ES1E-16'],
 }
 export default class TracerQuadrilatèresParticuliers extends Exercice {
   constructor() {
@@ -77,7 +77,6 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const typeDeQuestion = typesDeQuestionsDisponibles[listeQuestions[i]]
       const objetsCorrection = []
@@ -108,7 +107,12 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
               }
             }
           }
-          B = pointAbstrait(disSave[1] / 10, 0, nomPoly.charAt(1), 'below right')
+          B = pointAbstrait(
+            disSave[1] / 10,
+            0,
+            nomPoly.charAt(1),
+            'below right',
+          )
           figure = polygoneRegulier(A, B, 4)
           C = pointAbstrait(
             figure.listePoints[2].x,
@@ -147,7 +151,12 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
               }
             }
           }
-          B = pointAbstrait(disSave[1] / 10, 0, nomPoly.charAt(1), 'below right')
+          B = pointAbstrait(
+            disSave[1] / 10,
+            0,
+            nomPoly.charAt(1),
+            'below right',
+          )
           figure = polygoneRegulier(A, B, 4)
           C = pointAbstrait(
             figure.listePoints[2].x,
@@ -193,7 +202,12 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
               }
             }
           }
-          B = pointAbstrait(disSave[0] / 10, 0, nomPoly.charAt(1), 'below right')
+          B = pointAbstrait(
+            disSave[0] / 10,
+            0,
+            nomPoly.charAt(1),
+            'below right',
+          )
           C = pointAdistance(B, disSave[1] / 10, 90, nomPoly.charAt(2))
           D = pointAdistance(C, disSave[0] / 10, 180, nomPoly.charAt(3))
           figure = polygone(A, B, C, D)
@@ -231,7 +245,12 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
           }
 
           const diagonale = disSave[1] / 10
-          B = pointAbstrait(disSave[0] / 10, 0, nomPoly.charAt(1), 'below right')
+          B = pointAbstrait(
+            disSave[0] / 10,
+            0,
+            nomPoly.charAt(1),
+            'below right',
+          )
 
           C = pointIntersectionLC(
             droiteParPointEtPerpendiculaire(B, droite(A, B)),

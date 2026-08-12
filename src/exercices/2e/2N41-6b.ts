@@ -13,7 +13,7 @@ export const uuid = 'be864'
 
 export const refs = {
   'fr-fr': ['2N41-6b', 'BP2AutoI8', 'BP1AUTO078'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class developperIdentiteRemarquableFrance extends developperIdentiteRemarquable {
   constructor() {

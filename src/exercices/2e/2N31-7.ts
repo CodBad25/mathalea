@@ -23,7 +23,7 @@ export const uuid = 'f49ff'
 
 export const refs = {
   'fr-fr': ['2N31-7', 'BP2AutoE3'],
-  'fr-ch': ['10NO2-15'],
+  'fr-ch': ['10NO3F-7'],
 }
 export default class CalculsAvecPuissancesDeDixBis extends Exercice {
   constructor() {
@@ -51,7 +51,7 @@ export default class CalculsAvecPuissancesDeDixBis extends Exercice {
           : "Trouver l'exposant manquant dans les égalités suivantes."
     }
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let decalage = 0
       let mantisse = 0
       let exp = 0

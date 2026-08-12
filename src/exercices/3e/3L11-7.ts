@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -11,8 +12,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Développer des carrés avec la double distributivité'
 export const interactifReady = true
@@ -31,7 +30,7 @@ export const uuid = '7cf81'
 
 export const refs = {
   'fr-fr': ['3L11-7', 'BP2AutoI7'],
-  'fr-ch': ['11FA2-8'],
+  'fr-ch': ['10FA4F-4'],
 }
 export default class CarreDoubleDistributivite extends Exercice {
   constructor() {

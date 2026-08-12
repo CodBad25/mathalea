@@ -24,7 +24,6 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const titre = 'Utiliser des symétries axiales en pavage triangulaire'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -40,7 +39,7 @@ export const uuid = '49cb2'
 export const refs = {
   'fr-fr': ['6G7B-5'],
   'fr-2016': ['6G25-1'],
-  'fr-ch': ['9ES6-18'],
+  'fr-ch': ['9ES3B-14'],
 }
 
 // on Choisit trois axes parmi les possibilités prédéfinies... 6 types d'axes laissant le pavage invariant

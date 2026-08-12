@@ -38,7 +38,7 @@ export const uuid = '34579'
 export const refs = {
   'fr-fr': ['6N1A-2'],
   'fr-2016': ['6N10-3'],
-  'fr-ch': ['9NO1-4'],
+  'fr-ch': [''], // Primaire anciennement :['9NO1-4'],
 }
 
 /**

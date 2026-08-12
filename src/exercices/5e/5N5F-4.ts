@@ -24,7 +24,7 @@ export const uuid = 'e2e64'
 export const refs = {
   'fr-fr': ['5N5F-4'],
   'fr-2016': ['5L16'],
-  'fr-ch': ['9FA2-8'],
+  'fr-ch': ['10FA4C-5'],
 }
 export default class SimplifierEcritureLitterale extends Exercice {
   constructor() {

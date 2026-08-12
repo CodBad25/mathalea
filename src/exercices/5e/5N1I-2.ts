@@ -19,7 +19,7 @@ export const uuid = '108ab'
 export const refs = {
   'fr-fr': ['5N1I-2'],
   'fr-2016': ['5A10-1'],
-  'fr-ch': ['9NO4-31'],
+  'fr-ch': ['9NO1A-11'],
 }
 /**
  * Donner la liste de tous les diviseurs de tête pour des nombres simples
@@ -45,7 +45,7 @@ export default class ListeDiviseurs extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let n = 0
       switch (listeTypeQuestions[i]) {
         case 'multipleDe10':

@@ -34,7 +34,7 @@ export const uuid = '6b370'
 
 export const refs = {
   'fr-fr': ['3A12-0'],
-  'fr-ch': [],
+  'fr-ch': ['10NO1A-13'],
 }
 
 const replayAnimationAction = '3A12-0:replay-animation'

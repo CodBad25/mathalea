@@ -14,7 +14,7 @@ export const uuid = 'd309b'
 
 export const refs = {
   'fr-fr': ['2N12-1'],
-  'fr-ch': ['9NO11-9'],
+  'fr-ch': ['9NO3C-3'],
 }
 export default class EncadrerFractionEntre2Entiers2nde extends EncadrerFractionEntre2Entiers {
   constructor() {

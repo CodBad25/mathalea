@@ -31,7 +31,7 @@ export const uuid = '51360'
 
 export const refs = {
   'fr-fr': ['3L11-6', 'BP2AutoI22'],
-  'fr-ch': ['11FA3-3'],
+  'fr-ch': ['11FA4B-3'],
 }
 export default class FactoriserUneExpression3e extends Exercice {
   constructor() {

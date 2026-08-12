@@ -25,7 +25,7 @@ export const uuid = '29b40'
 export const refs = {
   'fr-fr': ['6N0A-9'],
   'fr-2016': ['6N11-3'],
-  'fr-ch': ['9NO2-3'],
+  'fr-ch': [''], // Primaire anciennement :['9NO2-3'],
 }
 
 // selon la precision on veut certains chiffres plus souvant que d'autres ...
@@ -189,7 +189,7 @@ export default class EncadrerUnEntierParDeuxEntiersConsecutifs extends Exercice 
       this.nbQuestions,
     ) // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let pDix = 1

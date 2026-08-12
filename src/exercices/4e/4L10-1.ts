@@ -13,8 +13,7 @@ import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre =
-  'Réduire, si possible, une expression littérale simple'
+export const titre = 'Réduire, si possible, une expression littérale simple'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
@@ -42,7 +41,7 @@ export const uuid = 'cc129'
 
 export const refs = {
   'fr-fr': ['4L10-1', 'BP2AutoI12'],
-  'fr-ch': ['10FA1-15'],
+  'fr-ch': ['10FA4C-6'],
 }
 export default class ReductionsPiegesClassiques extends Exercice {
   constructor() {

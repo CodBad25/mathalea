@@ -21,7 +21,7 @@ export const uuid = '87514'
 export const refs = {
   'fr-fr': ['6N3I'],
   'fr-2016': ['6N20-4'],
-  'fr-ch': [],
+  'fr-ch': ['9NO3D-1'],
 }
 export default class ComparerFraction extends Exercice {
   constructor() {
@@ -96,7 +96,7 @@ export default class ComparerFraction extends Exercice {
         : this.sup === 2
           ? combinaisonListes([2], this.nbQuestions)
           : combinaisonListes([1, 2], this.nbQuestions)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       switch (typeDeQuestionsDisponibles[i]) {
         case 1: // même dénominateur

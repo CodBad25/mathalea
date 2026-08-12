@@ -36,7 +36,7 @@ export const uuid = 'ce9ca'
 export const refs = {
   'fr-fr': ['5N3A', 'BP2AutoG7'],
   'fr-2016': ['5N14-2', 'BP2AutoG7'],
-  'fr-ch': ['9NO12-6'],
+  'fr-ch': ['9NO3D-4'],
 }
 export default class ExerciceComparerQuatreFractions extends Exercice {
   constructor() {

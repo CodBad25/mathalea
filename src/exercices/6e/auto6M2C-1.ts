@@ -28,7 +28,7 @@ export const uuid = '83be9'
 export const refs = {
   'fr-fr': ['auto6M2C-1'],
   'fr-2016': ['6M10-2'],
-  'fr-ch': ['9GM1-17'],
+  'fr-ch': ['9GM1B-6'],
 }
 export default class AireParComptage extends Exercice {
   constructor() {

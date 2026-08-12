@@ -21,7 +21,7 @@ export const uuid = '0e6bd'
 export const refs = {
   'fr-fr': ['auto6N3D-1'],
   'fr-2016': ['6C10-1'],
-  'fr-ch': ['9NO3-8'],
+  'fr-ch': [''], // Primaire anciennement :['9NO3-8'],
 }
 export default class TablesParametres extends TablesDeMultiplications {
   constructor() {

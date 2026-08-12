@@ -12,7 +12,7 @@ export const uuid = '78f28'
 export const refs = {
   'fr-fr': ['5G6F-1'],
   'fr-2016': ['5G42-1'],
-  'fr-ch': ['9ES2-4'],
+  'fr-ch': ['9ES1E-7'],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -97,7 +97,7 @@ export default class QcmProprietesParallelogrammesParticuliers extends Exercice 
         }
       }
     }
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       this.autoCorrection[i] = {}
       switch (listeTypeQuestions[i]) {
         case 'par1':

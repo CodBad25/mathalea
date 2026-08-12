@@ -57,7 +57,7 @@ export const uuid = 'd4088'
 
 export const refs = {
   'fr-fr': ['3G10-1'],
-  'fr-ch': ['11ES3-1'],
+  'fr-ch': ['9ES3-8', '11ES3A-4'],
 }
 export default class TransformationsDuPlanEtCoordonnees extends Exercice {
   constructor() {

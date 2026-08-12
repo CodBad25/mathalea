@@ -15,7 +15,7 @@ import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
-import { creerNomDePolygone, sp } from '../../lib/outils/outilString'
+import { creerNomDePolygone } from '../../lib/outils/outilString'
 import Grandeur from '../../modules/Grandeur'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -41,7 +41,7 @@ export const uuid = 'd6cd1'
 export const refs = {
   'fr-fr': ['5G6G', 'BP2AutoV1'],
   'fr-2016': ['5M10', 'BP2AutoV1'],
-  'fr-ch': ['9GM1-5'],
+  'fr-ch': ['9GM1B-19'],
 }
 
 const longueur = (A: PointAbstrait, B: PointAbstrait) =>

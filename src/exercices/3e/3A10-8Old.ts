@@ -25,7 +25,7 @@ export const dateDePublication = '13/11/2024'
 export const uuid = 'cb844'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 /**
  * @Author Jean-Claude LHOTE
@@ -204,7 +204,7 @@ export default class LireUnePuissance extends Exercice {
   ]
 
   nouvelleVersion(): void {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const listeQuestParChoix = [
         [1],
         [1, 2],

@@ -51,11 +51,13 @@ Le bouton « Mise en page » de la barre d'outils affiche des contrôles par-des
 - dans la marge de page (la plus proche de la colonne concernée), à hauteur de chaque liste de questions (environnement `tasks`) : nombre de colonnes (1 à 4) et espacement vertical (pas de 0,25 em) — l'énoncé (`exN`) et sa correction (`exN-corr`) se règlent indépendamment ;
 - dans la marge droite, au début de chaque exercice : insertion/modification d'un texte ou d'un titre de section (`#section[...]`, helper émis dans le préambule) **avant** cet exercice, nombre de questions (`nbQuestions`) et suppression de l'exercice (retire aussi son entrée de `exercicesParams`). Quand le nombre de questions change, les questions déjà affichées sont figées (`frozenInputs`, vidé par « Nouvelles données ») : la régénération ne rebrasse pas leurs valeurs, seules les questions ajoutées sont nouvelles ;
 - entre les exercices : deux boutons de saut de page et de saut de colonne (ce dernier seulement en document multicolonne) — une fois insérés, ils deviennent des badges bien visibles, retirables d'un clic (le saut de page ferme et rouvre le bloc `en-colonnes`, `#pagebreak` étant interdit dans un conteneur) ;
-- à gauche du titre de la fiche : édition du titre, du sous-titre et de la ligne d'en-tête (ces champs ne sont plus dans la fenêtre Réglages ; la valeur est reportée dans les réglages persistés).
+- à gauche du titre de la fiche : édition du titre, du sous-titre et de la ligne d'en-tête (ces champs ne sont plus dans la fenêtre Réglages ; la valeur est reportée dans les réglages persistés) — absente si l'habillage en-tête est `Aucun`, faute de bloc à éditer ;
+- en haut de la page de garde (quand un modèle est choisi) : édition de l'intitulé, de la session, de la matière, de la durée, de la mention de bas de page et des consignes — même mécanisme que le titre de la fiche, voir [Page de garde](#page-de-garde) ;
+- sur le pied de la première page (si affiché) : édition de son texte — voir [En-tête et pied de page](#en-tête-et-pied-de-page).
 
 Fonctionnement :
 
-1. `buildTypstDocument` émet des repères invisibles `#mathalea-anchor(kind, num)` (métadonnées Typst portant la position `here().position()` en pt) devant chaque `#tasks` (`kind: "tasks"`, ou `"tasks-corr"` dans une correction), devant chaque exercice (`kind: "exo"`), aux points d'insertion (`kind: "gap"`, `num: 0` avant le premier exercice) et devant le bloc de titre (`kind: "header"`). Ils n'ont aucun impact sur la mise en page (vérifié au pixel près).
+1. `buildTypstDocument` émet des repères invisibles `#mathalea-anchor(kind, num)` (métadonnées Typst portant la position `here().position()` en pt) devant chaque `#tasks` (`kind: "tasks"`, ou `"tasks-corr"` dans une correction), devant chaque exercice (`kind: "exo"`), aux points d'insertion (`kind: "gap"`, `num: 0` avant le premier exercice), devant le bloc de titre (`kind: "header"`, absent si l'habillage est `Aucun`), devant la page de garde (`kind: "cover"`, absente sans modèle choisi) et dans le pied de page (`kind: "footer"`, seulement sur la première page physique — voir « En-tête et pied de page »). Ils n'ont aucun impact sur la mise en page (vérifié au pixel près).
 2. Après chaque compilation, `typstCompiler.ts` interroge le document (`world.query({ selector: '<mathalea-anchor>' })`, même monde de compilation que le rendu SVG) et renvoie les repères (`TypstAnchor`).
 3. `Typst.svelte` convertit ces positions en pourcentages du conteneur de l'aperçu (via la géométrie des pages renvoyée par `separatePages`) et place les contrôles.
 
@@ -115,10 +117,152 @@ Bouton (icône liste, `bx-detail`) de la barre d'outils de chaque exercice (à c
 
 Comme la fusion d'exercices (`onToggleMergeBefore`), le réglage change la structure du document (les appels s'intercalent après chaque question en mode « Après chaque question ») : il régénère donc tout le code plutôt que de l'éditer ponctuellement. Porté par `TypstCarryOver.writingLines` (`Record<number, { position, count, spacing }>`, clé = numéro d'exercice 1-based), il survit à la régénération comme les autres réglages de la palette. Chaque appel généré `#mathalea-lignes(n, gutter: ...em)` est tagué d'un marqueur `// mathalea:lignes-fin(N)` ou `// mathalea:lignes-apres(N)`, relu par `harvestCarryOver` (comme `// mathalea:insertion` pour les insertions de texte) ; `shiftCarryOver`/`swapCarryOver` décalent ces réglages à la suppression/au déplacement d'un exercice, comme `tasksLayout`/`codeOverrides`. Le helper Typst réutilisable `#mathalea-lignes(n, gutter: ...)` (`MATHALEA_WRITING_LINES_HELPER` dans `buildTypstDocument.ts`) n'est déclaré dans le préambule que s'il est effectivement utilisé, et ne produit aucun rendu (ni espace) tant que `n` vaut 0.
 
+## En-tête et pied de page
+
+Réglages des Réglages du document, indépendants l'un de l'autre :
+
+- **Habillage en-tête** (`TypstDocumentOptions.headerStyle`) : `Épuré`,
+  `Cartouche`, `Cadre` ou **`Aucun`** — ce dernier n'émet aucun bloc de titre
+  (`headerBlock` renvoie `[]`), la fiche commence alors directement par le
+  premier exercice. Les variables `titre`/`sous-titre`/`entete` restent
+  déclarées (le pied de page peut toujours y renvoyer), mais le repère
+  `#mathalea-anchor("header", 0)`, lui, n'est **pas** émis dans ce cas : sans
+  bloc de titre affiché, il n'y a rien à éditer à cet endroit sur l'aperçu.
+  Choisir un modèle de [page de garde](#page-de-garde) bascule automatiquement
+  cet habillage sur `Aucun` (la page de garde porte déjà le titre ; un second
+  bloc en page 2 ferait doublon) — un choix explicite plus tard dans le
+  sélecteur reste possible et n'est pas écrasé ensuite.
+- **Pied de page** (`TypstDocumentOptions.showFooter`/`footerText`) : une
+  case à cocher dans le volet (`footer: none,` côté Typst quand décochée) ;
+  le texte, lui, se modifie **directement sur l'aperçu** (icône sur le pied
+  de la première page), comme le titre et la page de garde. Le texte est
+  déclaré en variable (`#let pied-page = "..."`) et référencé par les trois
+  habillages, qui n'en diffèrent donc plus que par la mise en forme (ligne,
+  couleur) — avant ce réglage, chaque habillage imprimait un texte différent
+  en dur (« MathALÉA — coopmaths.fr », « MathALÉA · coopmaths.fr », « CC
+  BY-SA · MathALÉA »).
+  - Le pied de page se répète sur **chaque** page (`#set page(footer:
+    context [...])`), à la différence du titre ou de la page de garde qui
+    n'apparaissent qu'une fois : un seul point d'édition suffit, donc le
+    repère `#mathalea-anchor("footer", 0)` n'est émis que sur la première
+    page **physique**, via `#if here().page() == 1 [...]`. `here().page()`
+    (numéro de page physique) est utilisé plutôt que `counter(page).get()` :
+    ce dernier est remis à 1 par `#counter(page).update(1)` au début de
+    chaque sujet suivant (plusieurs versions, voir « Page de garde » plus
+    bas) — l'icône réapparaîtrait alors en tête de chaque sujet plutôt
+    qu'une seule fois sur toute la fiche.
+
+## Page de garde
+
+Réglage `TypstDocumentOptions.coverPage` (section « Page de garde » des
+Réglages du document), sur le modèle des modèles d'épreuve de la vue PDF
+(`ExamTemplateEngine`, [`latex/LatexConfig.ts`](../../../../src/components/setup/latex/LatexConfig.ts)).
+Cinq modèles : **Aucune** (défaut), **Évaluation**, **Brevet des collèges**,
+**BAC** et **Course aux nombres**.
+
+L'intitulé, la session, la matière, la durée, la mention en bas de page
+(« Tournez la page S.V.P. ») et les consignes se modifient **directement sur
+l'aperçu** (bouton `bx-edit` en haut de la page de garde), sur le modèle du
+titre/sous-titre/en-tête de la fiche (voir « Palette de mise en page »
+ci-dessous) ; le barème, lui, reste dans les Réglages du document (exercice
+par exercice, avec son total).
+
+Comme `titre`/`sous-titre`/`entete`, les textes sont déclarés en variables en
+tête de document puis référencés par l'appel — une édition depuis l'aperçu
+modifie ainsi la ligne `#let couverture-titre = "..."` (édition ciblée du
+code, sans régénération) plutôt que l'argument nommé :
+
+```typst
+#let couverture-titre = "Brevet des collèges"
+#let couverture-session = "Juin 2026"
+#let couverture-matiere = "MATHÉMATIQUES"
+#let couverture-duree = "2 heures"
+#let couverture-consignes = ("L’usage de la calculatrice est autorisé.",)
+#let couverture-note-fin = "Tournez la page S.V.P."
+…
+#mathalea-couverture(
+  titre: couverture-titre,
+  session: couverture-session,
+  matiere: couverture-matiere,
+  duree: couverture-duree,
+  consignes: couverture-consignes,
+  bareme: (6, 4, 4, 2.5, 3.5),
+  note-fin: couverture-note-fin,
+)
+```
+
+- Deux aides seulement, déclarées uniquement quand un modèle est choisi :
+  `#mathalea-couverture` (Évaluation, Brevet, BAC) et
+  `#mathalea-couverture-can`, plus `#mathalea-champ` (« Nom : ...... »)
+  commune aux deux. Ce qui distingue les trois premiers modèles n'est pas
+  réglable — c'est ce qui *fait* le modèle — et tient en trois arguments
+  (`COVER_TEMPLATE_LAYOUT`) : `identite` (champs Nom/Prénom/Classe/Date) et
+  `colonne-note` (colonne vide où porter la note) pour l'évaluation,
+  `hasNoteFin` (affiche la mention de bas de page — son texte, lui, reste
+  réglable, voir plus haut) pour le Brevet et le BAC.
+  `couverture-session`/`couverture-matiere`/`couverture-note-fin` sont
+  toujours déclarées, y compris quand le modèle actif ne les référence pas
+  (une variable Typst non lue ne produit ni erreur ni avertissement) : la
+  palette garde ainsi les mêmes variables quel que soit le modèle, et
+  masque simplement les champs sans objet (Session/Matière/mention pour
+  « can », mention pour « Évaluation »).
+- Le barème est proposé à un point par question, comme la vue PDF
+  (`buildExamExercices` de [`lib/LatexGroup.ts`](../../../../src/lib/LatexGroup.ts)) ;
+  chaque ligne a sa croix de suppression (comme `TexSettingsPane`) et
+  « Reprendre les exercices de la fiche » le réaligne après un ajout ou une
+  suppression, en gardant les points déjà saisis.
+- Changer de modèle **remplace les textes qui n'ont pas été personnalisés**
+  (`isDefaultCoverText`, étendu à `noteFin`) et conserve les autres : passer
+  du Brevet à la Course aux nombres ne garde pas « Durée : 2 heures » ni
+  « calculatrice autorisée », qui la contrediraient, mais un intitulé réécrit
+  à la main survit. Choisir un modèle bascule aussi l'**habillage en-tête sur
+  `Aucun`** (voir « En-tête et pied de page » plus haut) : la page de garde
+  porte déjà le titre, un second bloc en page 2 ferait doublon.
+- Avec plusieurs versions (Sujet A, B…), la page de garde ouvre **chaque**
+  sujet (mêmes variables partagées) ; l'aide et le repère d'édition
+  (`#mathalea-anchor("cover", 0)`), eux, ne sont émis qu'une fois — seul le
+  premier sujet est éditable depuis l'aperçu, comme l'en-tête et le pied de
+  page.
+- Fiche entièrement composée d'exercices « can » (identifiant contenant
+  `can`) : la détection automatique de `canMode` (voir « Mode « Course aux
+  nombres » (tableau) » ci-dessous) sélectionne aussi le format **A5**, la
+  page de garde **Course aux nombres** et l'habillage en-tête **Aucun**, sauf
+  si un lien partagé fixe déjà l'un de ces réglages individuellement.
+
+La page de garde « Course aux nombres » reprend `\pageDeGardeCan` de la sortie
+LaTeX ([`lib/latex/preambuleTex.ts`](../../../../src/lib/latex/preambuleTex.ts))
+— identité, case « Score : ... / n », consignes cochées, titre du sujet — sans
+les logos des académies ni de l'APMEP, remplacés par le **dé de MathALÉA**. La
+durée et le nombre de questions produisent leurs deux premières consignes (le
+décompte suit la fiche, énoncés du tableau compris) ; les suivantes sont
+libres.
+
+Le dé est embarqué dans le document comme les figures mathalea2d
+(`#let mathalea-logo = image(bytes("<svg…>"), format: "svg", width: 3.4cm)`),
+qui reste donc autonome. `mathaleaLogo.ts` en porte une version allégée de
+`public/assets/svg/logo_mathalea.svg` : métadonnées d'Inkscape et décimales
+superflues retirées (14,7 ko → 8,1 ko, rendu identique), attributs entre
+apostrophes pour s'inscrire tel quel dans le littéral Typst sans échappement.
+
+Les petites capitales ne sont pas employées ici : la police Libertinus Serif
+embarquée dans le compilateur WASM n'a pas de table `smcp`, `#smallcaps` y est
+sans effet (vérifié).
+
 ## Mode « Course aux nombres » (tableau)
 
 Case à cocher des Réglages du document (`TypstDocumentOptions.canMode`) : pendant Typst du style `Can` de la sortie LaTeX (`lib/Latex.ts`). Toutes les questions de tous les exercices sont rassemblées dans **un seul tableau** (numéro, énoncé, réponse à compléter, colonne « Jury »), et les corrections sont numérotées à la suite, dans le même ordre que les lignes du tableau.
 
+- **Détection automatique** (`Typst.svelte`, au chargement) : si la fiche ne
+  contient que des exercices « can » (identifiant contenant `can`, ex.
+  `can6M20`), `canMode` est coché par défaut, le format passe en **A5**
+  (feuille de passation plus petite), la [page de garde](#page-de-garde)
+  bascule sur le modèle **Course aux nombres** et l'habillage en-tête sur
+  **Aucun** (même raison que le choix manuel d'un modèle de page de garde :
+  elle porte déjà le titre du sujet). Chacun de ces quatre réglages n'est
+  appliqué que s'il n'a pas déjà été fixé par un lien partagé
+  (`canModeSetFromUrl`/`pageFormatSetFromUrl`/`coverTemplateSetFromUrl`/
+  `headerStyleSetFromUrl`) : rouvrir une fiche déjà réglée autrement ne
+  l'écrase pas.
 - Le tableau est produit par le helper Typst `#can-tableau(enonces, reponses, jury: true, entetes: ..., fond: ..., hauteur-ligne: ...)` (`MATHALEA_CAN_TABLE_HELPER` dans `buildTypstDocument.ts`), déclaré dans le préambule seulement quand il sert, comme les autres aides. `enonces` et `reponses` sont deux listes de contenus de même longueur ; les proportions des colonnes et l'en-tête répété en haut de chaque page reprennent le `longtblr` de l'environnement `TableauCan` (`lib/latex/preambuleTex.ts`). Les arguments nommés restent modifiables dans l'éditeur (retirer la colonne « Jury » avec `jury: false`, par exemple).
 - Les réponses à compléter viennent de `listeCanReponsesACompleter` (exposée par `TypstExerciseInput.canAnswers`), les énoncés de `listeCanEnonces` à défaut de `listeQuestions` (`canQuestions`) — même repli qu'en LaTeX. `buildInputs` (`Typst.svelte`) les renseigne comme les autres contenus, et `frozenInputs` les fige avec les questions quand le nombre de questions change.
 - La consigne et l'introduction des exercices ne sont pas reprises (comme en LaTeX) : le tableau ne montre que les énoncés.
@@ -141,7 +285,7 @@ Les réponses trouvées sont remises dans leur ordre d'apparition, dédoublonné
 
 Toutes les modifications de la fiche sont sauvegardées dans l'URL (paramètre `typstParam`, JSON encodé en base64) pour pouvoir la recharger à l'identique ou la partager :
 
-- `options` : les réglages du document (`TypstDocumentOptions` — format, orientation, polices, titre/sous-titre/en-tête, nombre de versions…) ;
+- `options` : les réglages du document (`TypstDocumentOptions` — format, orientation, polices, titre/sous-titre/en-tête, nombre de versions, page de garde…). Une fiche partagée avant l'arrivée d'un réglage, ou pointant un modèle de page de garde qui n'existe plus, retombe sur les valeurs par défaut (`sanitizeCoverPage`) ;
 - `carryOver` : les réglages de la palette de mise en page (`harvestCarryOver` — colonnes/espacement des questions par exercice, textes et sections insérés, sauts de page et de colonne, fusions, zoom/alignement des figures).
 
 La liste des exercices, leurs graines et leurs réglages restent portés par les paramètres habituels de l'URL (`exercicesParams`), mis à jour par le store du même nom : suppression, déplacement, changement de graine ou de nombre de questions y sont déjà reflétés.
@@ -159,6 +303,7 @@ La liste des exercices, leurs graines et leurs réglages restent portés par les
 | `src/components/setup/typst/buildTypstDocument.ts` | Génère le code Typst complet (en-tête, exercices, corrections) |
 | `src/components/setup/typst/latexToTypst.ts` | Convertit le HTML des exercices et les formules LaTeX en Typst |
 | `src/components/setup/typst/minimalCorrection.ts` | Réduit une correction à ses réponses mises en évidence en orange |
+| `src/components/setup/typst/mathaleaLogo.ts` | Dé de MathALÉA (SVG allégé) embarqué par la page de garde « Course aux nombres » |
 | `src/components/setup/typst/typstCompiler.ts` | Compilation dans le navigateur via typst.ts (WASM) |
 | `src/components/setup/typst/typstDiagnostics.ts` | Lecture et traduction en français des diagnostics du compilateur |
 | `src/components/setup/typst/editor/typstEditorSetup.ts` | Extensions CodeMirror de l'éditeur (thèmes, raccourcis, marqueurs d'erreur) |

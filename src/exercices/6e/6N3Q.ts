@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -13,8 +14,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const amcType = 'AMCNum'
@@ -33,7 +32,7 @@ export const uuid = '66756'
 export const refs = {
   'fr-fr': ['6N3Q'],
   'fr-2016': ['6N33-1'],
-  'fr-ch': ['9NO14-3'],
+  'fr-ch': ['9NO3E-3', '10FA2B-5'],
 }
 export default class PourcentageDunNombre extends Exercice {
   constructor() {

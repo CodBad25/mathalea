@@ -14,7 +14,7 @@ export const uuid = 'f4fdd'
 export const refs = {
   'fr-fr': ['6G6A-3'],
   'fr-2016': ['6G21-2'],
-  'fr-ch': ['9ES4-9'],
+  'fr-ch': ['9ES1C-9'],
 }
 export default class ConstruireUnTriangleQuelconque extends ConstruireUnTriangle {
   constructor() {

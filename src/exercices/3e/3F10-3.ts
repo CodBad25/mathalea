@@ -42,7 +42,7 @@ export const uuid = '4daef'
 
 export const refs = {
   'fr-fr': ['3F10-3', '2F10-3', 'BP2AutoO4'],
-  'fr-ch': ['10FA5-7', '11FA7-1', '1mF1-5'],
+  'fr-ch': ['10FA1B-5', '1mF1-5'],
 }
 export default class VocabulaireNotationsFonctions2 extends Exercice {
   constructor() {

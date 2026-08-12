@@ -32,7 +32,7 @@ export const uuid = '5f117'
 export const refs = {
   'fr-fr': ['6M3B'],
   'fr-2016': ['6G43-1'],
-  'fr-ch': [],
+  'fr-ch': ['9GM2A-6'],
 }
 
 function trouvePave(volume: number): [number, number, number] {

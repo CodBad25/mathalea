@@ -25,7 +25,7 @@ export const dateDePublication = '01/09/2025'
 export const refs = {
   'fr-fr': ['6G5B'],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['9ES1D-9'],
 }
 
 /**
@@ -55,7 +55,7 @@ export default class QuestionBissectrice extends Exercice {
       defaut: 4,
     }).map(Number)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100;) {
       let texte = ''
       let texteCorr = ''
       let alpha: number

@@ -38,7 +38,7 @@ export const uuid = 'a168c'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class FractionDuneQuantiteOldOld extends Exercice {
   constructor() {

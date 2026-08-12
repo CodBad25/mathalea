@@ -5,9 +5,9 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = 'Écrire correctement les grands nombres entiers'
 
@@ -27,7 +27,7 @@ export const uuid = 'dc348'
 export const refs = {
   'fr-fr': ['6N1C'],
   'fr-2016': ['6N10-4'],
-  'fr-ch': ['9NO1-5'],
+  'fr-ch': [''], // Primaire anciennement :['9NO1-5'],
 }
 export default class ÉcrireNombresEntiersFormates extends Exercice {
   constructor() {

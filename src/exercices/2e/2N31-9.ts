@@ -9,7 +9,7 @@ export const uuid = 'fb1a4'
 
 export const refs = {
   'fr-fr': ['2N31-9'],
-  'fr-ch': ['11NO1-3'],
+  'fr-ch': ['10NO3D-26'],
 }
 export default class NotationPuissanceEn2nde extends NotationPuissance {
   constructor() {

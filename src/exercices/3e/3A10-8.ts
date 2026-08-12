@@ -2,8 +2,8 @@ import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   choice,
   combinaisonListes,
@@ -30,7 +30,7 @@ export const dateDeModifImportante = '12/04/2026'
 export const uuid = 'eb844'
 export const refs = {
   'fr-fr': ['3A10-8'],
-  'fr-ch': ['9NO4-29'],
+  'fr-ch': ['10NO1A-8'],
 }
 /**
  * @author Jean-Claude LHOTE
@@ -297,7 +297,7 @@ export default class LireUnePuissance extends Exercice {
 
     const listeTypeDeQuestions = enleveDoublonNum(typesDeQuestionsDisponibles)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const situation = choice(this.situations)
       const [unPremier, unSecond] = shuffle(choice(situation.premiers))
       const facteurs1 = combinaisonListes([2, 3, 2, 3, 5, 2], 5).slice(0, 3)

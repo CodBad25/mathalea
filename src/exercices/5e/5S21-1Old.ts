@@ -20,7 +20,7 @@ export const uuid = '850b0'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ProbabilitesSimples extends Exercice {
   constructor() {
@@ -33,7 +33,7 @@ export default class ProbabilitesSimples extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0; i < this.nbQuestions; ) {
+    for (let i = 0; i < this.nbQuestions;) {
       let texte
 
       const pG = randint(20, 60) // pG est un pourcentage

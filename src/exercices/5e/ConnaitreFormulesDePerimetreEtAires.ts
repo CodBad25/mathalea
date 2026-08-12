@@ -16,7 +16,7 @@ export const uuid = 'dc7ba'
 export const refs = {
   'fr-fr': [],
   'fr-2016': ['6M25'],
-  'fr-ch': ['10GM1-4'],
+  'fr-ch': ['10GM1B-9'],
 }
 export default class ConnaitreFormulesDePerimetreEtAires extends Exercice {
   version: string

@@ -11,6 +11,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   ecritureParentheseSiMoins,
@@ -20,8 +21,6 @@ import {
   simpleDeveloppement,
   simpleDeveloppementAvecDoubleX,
 } from '../../lib/outils/ecritures'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Effectuer la simple distributivité'
 export const dateDePublication = '03/02/2025'
@@ -38,7 +37,7 @@ export const uuid = 'f61d9'
 
 export const refs = {
   'fr-fr': ['3L11-0'],
-  'fr-ch': ['10FA2-4', '11FA2-16', '1mCL1-1'],
+  'fr-ch': ['10FA4D-4', '1mCL1-1'],
 }
 
 export default class SimpleDistributivite extends Exercice {

@@ -21,7 +21,7 @@ export const uuid = 'f0128'
 
 export const refs = {
   'fr-fr': ['can3M02'],
-  'fr-ch': [],
+  'fr-ch': ['11GM2A-2'],
 }
 export default class CalculVolumePyramide extends ExerciceSimple {
   constructor() {

@@ -29,7 +29,7 @@ export const uuid = '018f3'
 
 export const refs = {
   'fr-fr': ['2S12-2', 'BP1CF07'],
-  'fr-ch': ['10FA4-8'],
+  'fr-ch': ['10FA2B-15'],
 }
 export default class EvolutionsSuccesives extends Exercice {
   constructor() {

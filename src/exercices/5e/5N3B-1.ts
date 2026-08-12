@@ -10,7 +10,7 @@ export const uuid = '6074b'
 export const refs = {
   'fr-fr': ['5N3B-1'],
   'fr-2016': ['5N20-1'],
-  'fr-ch': ['10NO5-14', '9NO13-10'],
+  'fr-ch': ['10NO3B-7'],
 }
 export default class ExerciceAdditionnerSoustraireFractions5eter extends ExerciceAdditionnerSoustraireFractions5ebis {
   constructor() {

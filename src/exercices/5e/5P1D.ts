@@ -26,7 +26,7 @@ export const uuid = 'a29bd'
 export const refs = {
   'fr-fr': ['5P1D'],
   'fr-2016': ['5P11-1'],
-  'fr-ch': ['11FA11-1'],
+  'fr-ch': ['11FA2A-2'],
 }
 export default class VitesseDistanceTemps extends Exercice {
   constructor() {

@@ -29,7 +29,7 @@ export const uuid = '857c1'
 
 export const refs = {
   'fr-fr': ['4C10-10'],
-  'fr-ch': ['10NO4-6'],
+  'fr-ch': ['9NO2C-12'],
 }
 export default class ExerciceMultiplicationsRelatifsATrou extends Exercice {
   constructor(max = 10) {

@@ -1,10 +1,10 @@
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import Exercice from '../Exercice'
 import { texteGras } from '../../lib/format/style'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const titre = "Justifier l'existence d'une racine carrée"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -17,7 +17,7 @@ export const uuid = '55cc0'
 
 export const refs = {
   'fr-fr': ['2N32-1'],
-  'fr-ch': ['11NO1-4', '1mCN-6'],
+  'fr-ch': ['11NO3A-1', '1mCN-6'],
 }
 export default class ExistenceDUneRacineCarree extends Exercice {
   constructor() {
@@ -48,7 +48,6 @@ export default class ExistenceDUneRacineCarree extends Exercice {
     for (
       let i = 0, texte, texteCorr, reponse, corr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typesDeQuestions = listeTypeDeQuestions[i]
       const corrDetail = `${texteGras('Définition')} : $\\sqrt{a}$ est le nombre positif dont le carré est $a$.<br>

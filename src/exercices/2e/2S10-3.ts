@@ -16,6 +16,6 @@ export const uuid = '0f1d1'
 
 export const refs = {
   'fr-fr': ['2S10-3', 'BP2AutoB1'],
-  'fr-ch': ['10FA4-11'],
+  'fr-ch': ['NR'],
 }
 export default class ProportiondeProportionS extends ProportiondeProportion {}

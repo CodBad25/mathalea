@@ -26,7 +26,7 @@ export const uuid = '96bac'
 
 export const refs = {
   'fr-fr': ['2N42-2', 'BP2AutoJ1'],
-  'fr-ch': ['11FA5-4'],
+  'fr-ch': ['11GM3-4'],
 }
 export default class ExprimerEnFonctionDesAutresFormules extends Exercice {
   constructor() {

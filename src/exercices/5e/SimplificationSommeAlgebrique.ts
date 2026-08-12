@@ -27,7 +27,7 @@ export const uuid = '070b5'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['9NO9-16'],
+  'fr-ch': ['NR'],
 }
 export default class ExerciceSimplificationSommeAlgebrique extends Exercice {
   constructor(max = 20) {

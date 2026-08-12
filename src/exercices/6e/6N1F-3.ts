@@ -31,7 +31,7 @@ export const uuid = '0e58f'
 
 export const refs = {
   'fr-fr': ['6N1F-3'],
-  'fr-ch': ['9NO14-6'],
+  'fr-ch': ['9NO3C-13'],
 }
 export default class FractionVersPourcentage extends Exercice {
   constructor() {

@@ -50,7 +50,7 @@ export const uuid = '26ea4'
 export const refs = {
   'fr-fr': ['6G7A'],
   'fr-2016': ['6G24-0'],
-  'fr-ch': ['9ES6-11'],
+  'fr-ch': ['9ES3B-1'],
 }
 
 /**
@@ -497,7 +497,9 @@ class ConstrctionsSymetriquesPoints extends Exercice {
     if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     if (this.answers === undefined) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(this.figuresApiGeom[i])
+    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(
+      this.figuresApiGeom[i],
+    )
     const resultat = []
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,

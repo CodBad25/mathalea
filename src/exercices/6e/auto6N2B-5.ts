@@ -25,7 +25,7 @@ export const uuid = 'bcef9'
 export const refs = {
   'fr-fr': ['auto6N2B-5'],
   'fr-2016': ['6C30-13'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 
 export default class TrouverFractionDecimaleEgale extends Exercice {
@@ -98,7 +98,7 @@ export default class TrouverFractionDecimaleEgale extends Exercice {
       defaut: 1,
       nbQuestions: 50,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const numerateur = choixNumerateur[cpt] === 1 ? 1 : randint(1, 9)
       if (
         this.questionJamaisPosee(

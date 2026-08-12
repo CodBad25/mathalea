@@ -30,7 +30,7 @@ export const uuid = '17bce'
 export const refs = {
   'fr-fr': ['auto6P1A', 'BP1AUTO027'],
   'fr-2016': ['6S10'],
-  'fr-ch': ['9FA1-1'],
+  'fr-ch': ['9FA3A-3'],
 }
 export default class LectureDiagrammeBaton extends Exercice {
   constructor() {

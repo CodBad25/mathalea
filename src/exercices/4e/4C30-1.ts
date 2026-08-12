@@ -1,8 +1,8 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
@@ -30,7 +30,7 @@ export const uuid = '760d8'
 
 export const refs = {
   'fr-fr': ['4C30-1', 'BP2AutoE6'],
-  'fr-ch': ['9NO5-1'],
+  'fr-ch': ['10NO3D-18'],
 }
 export default class PuissancesEncadrement extends Exercice {
   classe = 4

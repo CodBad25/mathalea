@@ -42,7 +42,7 @@ export const uuid = 'ff387'
 export const refs = {
   'fr-fr': ['5G2E-2', 'BP1AUTO110'],
   'fr-2016': ['6M22-2', '5M11-4'],
-  'fr-ch': ['10GM1-3'],
+  'fr-ch': ['10GM1C-2'],
 }
 export default class PerimetreAireEtPortionsDeDisques extends Exercice {
   constructor() {
@@ -84,7 +84,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
         ? ' la figure suivante.'
         : ' chacune des figures suivantes.'
 
-    for (let i = 0, cpt = 0, texteCorr; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0, texteCorr; i < this.nbQuestions && cpt < 50;) {
       texteCorr = ''
       const objetsEnonce = []
       const C = pointAbstrait(0, 0)

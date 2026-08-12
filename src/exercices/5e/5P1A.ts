@@ -14,7 +14,7 @@ export const uuid = 'f00fb'
 export const refs = {
   'fr-fr': ['5P1A', 'BP2AutoB3', 'BP2CCF1'],
   'fr-2016': ['5N11-1', 'BP2AutoB3', 'BP2CCF1'],
-  'fr-ch': ['9NO14-4'],
+  'fr-ch': ['10FA2B-9'],
 }
 
 export default class TableauxEtPourcentagesPrixConstant extends TableauxEtPourcentages {

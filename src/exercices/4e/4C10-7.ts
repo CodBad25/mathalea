@@ -40,7 +40,7 @@ export const uuid = '0b020'
 
 export const refs = {
   'fr-fr': ['4C10-7', '3AutoN02-2'],
-  'fr-ch': ['10NO4-9'],
+  'fr-ch': ['9NO2C-9'],
 }
 export default class ExerciceOperationsRelatifs extends Exercice {
   constructor() {

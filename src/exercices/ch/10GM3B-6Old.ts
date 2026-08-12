@@ -22,7 +22,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '31e61'
 export const refs = {
-  'fr-ch': [],
+  'fr-ch': ['NR'],
   'fr-fr': [''],
 }
 
@@ -50,7 +50,7 @@ export default class ConvertirDuree extends Exercice {
     this.besoinFormulaire3CaseACocher = ["Dixièmes d'heure seulement", true]
     this.correctionDetailleeDisponible = true
     this.correctionDetaillee = true
-    this.version = '10GM3-10'
+    this.version = '10GM3B-6'
   }
 
   nouvelleVersion(): void {

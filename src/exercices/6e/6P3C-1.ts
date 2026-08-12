@@ -7,8 +7,8 @@ import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { createList } from '../../lib/format/lists'
 import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   choice,
   combinaisonListes,
@@ -50,7 +50,7 @@ export const uuid = 'd511f'
 export const refs = {
   'fr-fr': ['6P3C-1', 'BP2AutoL6'],
   'fr-2016': ['6P11-1', 'BP2AutoL6'],
-  'fr-ch': ['9FA3-10'],
+  'fr-ch': ['9FA2B-5'],
 }
 
 type Situation = {

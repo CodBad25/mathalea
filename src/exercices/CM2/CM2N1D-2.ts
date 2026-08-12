@@ -9,12 +9,11 @@ import Exercice from '../Exercice'
 
 import Decimal from 'decimal.js'
 import type { MathfieldElement } from 'mathlive'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { context } from '../../modules/context'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Recomposer un entier'
 export const interactifReady = true
@@ -47,7 +46,7 @@ export const uuid = 'c96de'
 export const refs = {
   'fr-fr': ['CM2N1D-2'],
   'fr-2016': ['c3N10-1'],
-  'fr-ch': ['9NO1-8'],
+  'fr-ch': [''],
 }
 export default class RecomposerEntierC3 extends Exercice {
   nombreDeChiffresMin: number

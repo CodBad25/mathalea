@@ -230,7 +230,7 @@ export const uuid = '1acf7'
 export const refs = {
   'fr-fr': ['auto6N2B-1'],
   'fr-2016': ['6N23-1'],
-  'fr-ch': ['9NO10-11'],
+  'fr-ch': [''], // Primaire anciennement : ['9NO10-11'],
 }
 export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercice {
   constructor() {

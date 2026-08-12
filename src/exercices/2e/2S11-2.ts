@@ -31,7 +31,7 @@ export const uuid = '12444'
 
 export const refs = {
   'fr-fr': ['2S11-2', 'BP2AutoB2'],
-  'fr-ch': ['10FA4-7'],
+  'fr-ch': ['10FA2B-13'],
 }
 export default class EvolutionsEnPourcentage extends Exercice {
   onlyMoney = false
@@ -84,7 +84,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
       this.nbQuestions,
     ) // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
     let date, cetteAnnee, anneeDerniere, etablissement, facture, nb
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let depart: number
       let taux: number
       let tauxDec: number

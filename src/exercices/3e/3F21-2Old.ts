@@ -40,7 +40,7 @@ export const uuid = 'b8b33'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class DeterminerFonctionAffine3eOld extends Exercice {
   constructor() {

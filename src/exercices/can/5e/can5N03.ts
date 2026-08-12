@@ -14,7 +14,7 @@ export const uuid = 'ed8da'
 
 export const refs = {
   'fr-fr': ['can5N03', '5N1I-flash1'],
-  'fr-ch': [],
+  'fr-ch': ['9NO1A-9'],
 }
 export default class PlusGrandMultiple extends ExerciceSimple {
   constructor() {

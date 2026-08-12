@@ -31,7 +31,7 @@ export const uuid = '23bc8'
 export const refs = {
   'fr-fr': ['6N0A-4'],
   'fr-2016': ['6C10-2'],
-  'fr-ch': ['9NO3-15'],
+  'fr-ch': [''], // Primaire anciennement :['9NO3-15'],
 }
 export default class ExerciceTablesMultiplicationsEtMultiplesDe10 extends Exercice {
   constructor(tablesParDefaut = '2-3-4-5-6-7-8-9') {
@@ -97,7 +97,6 @@ export default class ExerciceTablesMultiplicationsEtMultiplesDe10 extends Exerci
     for (
       let i = 0, cpt = 0, a, b, texte, texteCorr, melange;
       i < this.nbQuestions && cpt < 100;
-
     ) {
       this.autoCorrection[i] = {}
       const [k1, k2] = shuffle(

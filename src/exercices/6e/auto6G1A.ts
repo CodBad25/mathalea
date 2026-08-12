@@ -15,6 +15,7 @@ import {
 } from '../../lib/2d/utilitairesPoint'
 import { vide2d } from '../../lib/2d/Vide2d'
 import { amcConvert } from '../../lib/amc/amcBuilders'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import figureApigeom from '../../lib/figureApigeom'
 import { lettreDepuisChiffre, numAlpha } from '../../lib/outils/outilString'
 import Alea2iep from '../../modules/Alea2iep'
@@ -22,7 +23,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -42,7 +42,7 @@ export const uuid = '3dbda'
 export const refs = {
   'fr-fr': ['auto6G1A'],
   'fr-2016': ['6G10-5'],
-  'fr-ch': ['9ES1-7'],
+  'fr-ch': ['9ES1A-7'],
 }
 export default class constructionElementaire extends Exercice {
   Anom?: string
@@ -67,7 +67,7 @@ export default class constructionElementaire extends Exercice {
   nouvelleVersion() {
     this.figuresApiGeom = []
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const anim = new Alea2iep()
       anim.equerreZoom(150)
       const objetsEnonce = []

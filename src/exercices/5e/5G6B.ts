@@ -14,6 +14,7 @@ import {
   pointAdistance,
   pointIntersectionCC,
 } from '../../lib/2d/utilitairesPoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -28,8 +29,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Construire des parallélogrammes'
 export const dateDeModifImportante = '18/04/2024'
@@ -47,7 +46,7 @@ export const uuid = 'b611a'
 export const refs = {
   'fr-fr': ['5G6B'],
   'fr-2016': ['5G40'],
-  'fr-ch': ['9ES4-4'],
+  'fr-ch': ['9ES1E-10'],
 }
 export default class ConstructionsParallelogrammes extends Exercice {
   /** Type de question */

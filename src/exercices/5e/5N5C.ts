@@ -1,8 +1,8 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import {
@@ -36,7 +36,7 @@ export const uuid = 'd8841'
 export const refs = {
   'fr-fr': ['5N5C'],
   'fr-2016': ['5L15'],
-  'fr-ch': ['10FA3-1'],
+  'fr-ch': ['10FA5B-3'],
 }
 export default class TesterUneEgalite extends Exercice {
   constructor() {

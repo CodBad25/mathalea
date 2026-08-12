@@ -2,6 +2,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -18,8 +19,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Utiliser la distributivité (simple ou double) et réduire'
 export const interactifReady = true
@@ -36,7 +35,7 @@ export const uuid = '82313'
 
 export const refs = {
   'fr-fr': ['3L11-3', 'BP2AutoI11'],
-  'fr-ch': ['11FA2-4', '1mCL1-9'],
+  'fr-ch': ['10FA4F-5', '1mCL1-9'],
 }
 export default class DistributiviteSimpleDoubleReduction extends Exercice {
   constructor() {

@@ -19,7 +19,7 @@ export const amcType = 'qcmMono'
 export const uuid = '4f213'
 export const refs = {
   'fr-fr': ['2F22-3'],
-  'fr-ch': [],
+  'fr-ch': ['11FA1A-9'],
 }
 
 export type TypeCourbe =

@@ -26,7 +26,7 @@ export const uuid = 'd67e9'
 export const refs = {
   'fr-fr': ['6N3Q-1', 'BP2AutoB6'],
   'fr-2016': ['6N33-3', 'BP2AutoB6'],
-  'fr-ch': ['9NO15-2'],
+  'fr-ch': ['10FA2B-6'],
 }
 export default class AppliquerUnPourcentage6N3Q extends Exercice {
   onlyMoney = false

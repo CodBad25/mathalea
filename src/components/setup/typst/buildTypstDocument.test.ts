@@ -4,8 +4,10 @@ import {
   buildStandaloneExerciseCode,
   buildTypstDocument,
   defaultTypstDocumentOptions,
+  getGeneratedCanRowCode,
   getGeneratedExerciseCode,
   harvestCarryOver,
+  type TypstDocumentOptions,
   type TypstExerciseInput,
 } from './buildTypstDocument'
 
@@ -318,7 +320,10 @@ describe('buildTypstDocument', () => {
     expect(epure).toContain('#let sous-titre = "Sixième"')
     // épuré : filet sous le titre + pied avec crédit
     expect(epure).toContain('#line(length: 100%, stroke: 1.2pt + couleur)')
-    expect(epure).toContain('MathALÉA — coopmaths.fr')
+    // texte du pied de page : variable éditable, partagée entre les trois
+    // habillages (voir le groupe de tests « en-tête et pied de page »)
+    expect(epure).toContain('#let pied-page = "MathALÉA — coopmaths.fr"')
+    expect(epure).toContain('align(left)[#pied-page]')
 
     const cartouche = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
       ...defaultTypstDocumentOptions,
@@ -333,7 +338,7 @@ describe('buildTypstDocument', () => {
     expect(cadre).toContain(
       'stroke: (top: 1pt + couleur, bottom: 1pt + couleur)',
     )
-    expect(cadre).toContain('CC BY-SA · MathALÉA')
+    expect(cadre).toContain('align(left)[#pied-page]')
   })
 
   it('règle la police, la police des maths et la taille du texte', () => {
@@ -823,6 +828,156 @@ describe('buildTypstDocument', () => {
   })
 })
 
+describe('en-tête et pied de page', () => {
+  it('« aucun » n’émet aucun bloc de titre mais garde le pied de page', () => {
+    const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      headerStyle: 'aucun',
+    })
+    // `titre` reste déclarée : le pied de page la référence toujours
+    expect(code).toContain(`#let titre = "Fiche d'exercices"`)
+    // mais aucun des trois blocs de titre (épuré/cartouche/cadre) n'est émis
+    expect(code).not.toContain('#block(width: 100%, inset: (y: 4pt))[')
+    expect(code).not.toContain('#block(width: 100%, fill: couleur')
+    expect(code).not.toContain(
+      'stroke: (top: 1pt + couleur, bottom: 1pt + couleur)',
+    )
+    expect(code).toContain('footer: context [')
+    // sans bloc de titre affiché, rien à éditer depuis l'aperçu à cet endroit
+    expect(code).not.toContain('#mathalea-anchor("header"')
+  })
+
+  it('émet le repère d’édition du titre seulement si un bloc de titre est affiché', () => {
+    const shown = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      headerStyle: 'epure',
+    })
+    expect(shown).toContain('#mathalea-anchor("header", 0)')
+    const hidden = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      headerStyle: 'aucun',
+    })
+    expect(hidden).not.toContain('#mathalea-anchor("header"')
+  })
+
+  it('n’émet pas le repère d’édition du pied de page en mode export', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      defaultTypstDocumentOptions,
+      {},
+      [],
+      { exportMode: true },
+    )
+    expect(code).toContain('footer: context [')
+    expect(code).not.toContain('#mathalea-anchor("footer"')
+  })
+
+  it('limite le repère d’édition du pied de page à la première page physique', () => {
+    const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      showFooter: true,
+    })
+    expect(code).toContain(
+      '#if here().page() == 1 [#mathalea-anchor("footer", 0)]',
+    )
+    // pas `counter(page)`, qui repart de 1 à chaque nouveau sujet
+    expect(code).not.toContain('counter(page).get()')
+  })
+
+  it('masque le pied de page quand il est décoché', () => {
+    const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      showFooter: false,
+    })
+    expect(code).toContain('footer: none,')
+    expect(code).not.toContain('footer: context [')
+  })
+
+  it('reprend le texte personnalisé du pied de page', () => {
+    const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
+      ...defaultTypstDocumentOptions,
+      footerText: 'Lycée Test — 2026',
+    })
+    expect(code).toContain('#let pied-page = "Lycée Test — 2026"')
+    expect(code).toContain('align(left)[#pied-page]')
+  })
+
+  it.runIf(shouldRunTypstCliTests())(
+    'compile avec typst (en-tête « aucun », pied de page masqué)',
+    async () => {
+      const code = buildTypstDocument(
+        [
+          exercise({
+            questions: ['$1+1$'],
+            corrections: ['$2$'],
+            numbered: true,
+          }),
+        ],
+        {
+          ...defaultTypstDocumentOptions,
+          headerStyle: 'aucun',
+          showFooter: false,
+        },
+      )
+      const { execFileSync } = await import('node:child_process')
+      const { writeFileSync, mkdtempSync } = await import('node:fs')
+      const { tmpdir } = await import('node:os')
+      const { join } = await import('node:path')
+      const dir = mkdtempSync(join(tmpdir(), 'typst-no-header-footer-'))
+      const file = join(dir, 'doc.typ')
+      writeFileSync(file, code, 'utf-8')
+      expect(() =>
+        execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+          stdio: 'pipe',
+        }),
+      ).not.toThrow()
+    },
+  )
+
+  it.runIf(shouldRunTypstCliTests())(
+    'compile avec typst (page de garde, pied de page visible avec son repère)',
+    async () => {
+      const code = buildTypstDocument(
+        [
+          exercise({
+            questions: ['$1+1$'],
+            corrections: ['$2$'],
+            numbered: true,
+          }),
+        ],
+        {
+          ...defaultTypstDocumentOptions,
+          headerStyle: 'aucun',
+          showFooter: true,
+          coverPage: {
+            ...defaultTypstDocumentOptions.coverPage,
+            template: 'brevet',
+            titre: 'Brevet des collèges',
+            session: 'Juin 2026',
+            matiere: 'MATHÉMATIQUES',
+            duree: '2 heures',
+            consignes: ['L’usage de la calculatrice est autorisé.'],
+            noteFin: 'Tournez la page S.V.P.',
+            bareme: [20],
+          },
+        },
+      )
+      const { execFileSync } = await import('node:child_process')
+      const { writeFileSync, mkdtempSync } = await import('node:fs')
+      const { tmpdir } = await import('node:os')
+      const { join } = await import('node:path')
+      const dir = mkdtempSync(join(tmpdir(), 'typst-cover-footer-anchor-'))
+      const file = join(dir, 'doc.typ')
+      writeFileSync(file, code, 'utf-8')
+      expect(() =>
+        execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+          stdio: 'pipe',
+        }),
+      ).not.toThrow()
+    },
+  )
+})
+
 describe('mode « Course aux nombres » (canMode)', () => {
   const canOptions = { ...defaultTypstDocumentOptions, canMode: true }
 
@@ -921,9 +1076,15 @@ describe('mode « Course aux nombres » (canMode)', () => {
     expect(code).toContain('#tasks(columns: ex0-corr-colonnes')
     expect(code).toContain('#let ex0-corr-colonnes = "auto-fit"')
     expect(code).toContain('#let ex0-corr-gutter = interligne-questions')
-    // un repère « exo » par exercice, dans sa première cellule
-    expect(code).toContain('[#mathalea-anchor("exo", 1)\n      $1 + 1$],')
-    expect(code).toContain('[#mathalea-anchor("exo", 2)\n      $3 + 3$],')
+    // un repère « exo » par exercice, dans sa première cellule, et un repère
+    // « can-row » dans chaque cellule (édition d'une ligne du tableau)
+    expect(code).toContain(
+      '[#mathalea-anchor("exo", 1)\n      #mathalea-anchor("can-row", 1)\n      $1 + 1$],',
+    )
+    expect(code).toContain('[#mathalea-anchor("can-row", 2)\n      $2 + 2$],')
+    expect(code).toContain(
+      '[#mathalea-anchor("exo", 2)\n      #mathalea-anchor("can-row", 3)\n      $3 + 3$],',
+    )
     // seuls les deux gaps qui encadrent le tableau existent
     expect(code).toContain('#mathalea-anchor("gap", 0)')
     expect(code).toContain('#mathalea-anchor("gap", 2)')
@@ -977,6 +1138,88 @@ describe('mode « Course aux nombres » (canMode)', () => {
       ).not.toThrow()
     },
   )
+
+  describe('surcharge d’une ligne (modale d’édition)', () => {
+    const inputs = [
+      exercise({ questions: ['$1+1$', '$2+2$'], canAnswers: ['$2$', '$4$'] }),
+      exercise({ questions: ['$3+3$'], canAnswers: ['$6$'] }),
+    ]
+
+    it('getGeneratedCanRowCode renvoie l’énoncé et la réponse générés de la ligne', () => {
+      expect(getGeneratedCanRowCode(inputs, 1, canOptions)).toEqual({
+        enonce: '$1 + 1$',
+        reponse: '$2$',
+      })
+      expect(getGeneratedCanRowCode(inputs, 3, canOptions)).toEqual({
+        enonce: '$3 + 3$',
+        reponse: '$6$',
+      })
+    })
+
+    it('remplace l’énoncé et/ou la réponse générés de la ligne surchargée, sans toucher aux autres', () => {
+      const code = buildTypstDocument(inputs, canOptions, {
+        codeOverridesCan: { 2: '#strong[Deux plus deux ?]' },
+        codeOverridesCanReponse: { 2: '#strong[4]' },
+      })
+      expect(code).toContain('#strong[Deux plus deux ?]')
+      expect(code).toContain('#strong[4]')
+      // les lignes non surchargées gardent leur contenu généré
+      expect(code).toContain('$1 + 1$')
+      expect(code).toContain('$3 + 3$')
+      expect(code).not.toContain('$2 + 2$')
+    })
+
+    it('harvestCarryOver relit les surcharges depuis le code généré (aller-retour)', () => {
+      const code = buildTypstDocument(inputs, canOptions, {
+        codeOverridesCan: { 2: '#strong[Deux plus deux ?]' },
+        codeOverridesCanReponse: { 2: '#strong[4]' },
+      })
+      const harvested = harvestCarryOver(code)
+      expect(harvested.codeOverridesCan).toEqual({
+        2: '#strong[Deux plus deux ?]',
+      })
+      expect(harvested.codeOverridesCanReponse).toEqual({ 2: '#strong[4]' })
+    })
+
+    it('exportMode : la surcharge sort telle quelle, sans repère ni marqueur de relecture', () => {
+      const code = buildTypstDocument(
+        inputs,
+        canOptions,
+        { codeOverridesCan: { 1: '#strong[Un plus un ?]' } },
+        [],
+        { exportMode: true },
+      )
+      expect(code).toContain('#strong[Un plus un ?]')
+      expect(code).not.toContain('mathalea:override-can')
+      expect(code).not.toContain('mathalea-anchor')
+    })
+
+    it.skipIf(!shouldRunTypstCliTests())(
+      'compile avec typst : le repère de fin de surcharge ne masque pas le `],` qui le suit',
+      async () => {
+        // régression : `// mathalea:override-can(-rep)-end` est un
+        // commentaire Typst ; s'il n'est pas suivi d'un saut de ligne avant
+        // le `],` collé par `typstContentArrayArgument`, ce `],` est avalé
+        // par le commentaire et l'élément du tableau ne se referme jamais.
+        const code = buildTypstDocument(inputs, canOptions, {
+          codeOverridesCan: { 1: 'Un plus un ?' },
+          codeOverridesCanReponse: { 2: '$4$' },
+        })
+        const { execFileSync } = await import('node:child_process')
+        const { writeFileSync, mkdtempSync } = await import('node:fs')
+        const { tmpdir } = await import('node:os')
+        const { join } = await import('node:path')
+        const dir = mkdtempSync(join(tmpdir(), 'typst-can-row-'))
+        const file = join(dir, 'doc.typ')
+        writeFileSync(file, code, 'utf-8')
+        expect(() =>
+          execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+            stdio: 'pipe',
+          }),
+        ).not.toThrow()
+      },
+    )
+  })
 })
 
 describe('correction minimale (minimalCorrections)', () => {
@@ -1253,6 +1496,250 @@ describe('buildStandaloneExerciseCode', () => {
           stdio: 'pipe',
         }),
       ).not.toThrow()
+    },
+  )
+})
+
+describe('page de garde', () => {
+  const cover = (
+    overrides: Partial<TypstDocumentOptions['coverPage']> = {},
+  ): TypstDocumentOptions => ({
+    ...defaultTypstDocumentOptions,
+    coverPage: {
+      ...defaultTypstDocumentOptions.coverPage,
+      titre: 'Brevet des collèges',
+      session: 'Juin 2026',
+      matiere: 'MATHÉMATIQUES',
+      duree: '2 heures',
+      consignes: ['L’usage de la calculatrice est autorisé.'],
+      noteFin: 'Tournez la page S.V.P.',
+      bareme: [6, 14],
+      ...overrides,
+    },
+  })
+
+  it('n’émet rien tant qu’aucun modèle n’est choisi', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      defaultTypstDocumentOptions,
+    )
+    expect(code).not.toContain('mathalea-couverture')
+    expect(code).not.toContain('Page de garde')
+  })
+
+  it('place l’appel avant l’en-tête de la fiche', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      cover({ template: 'brevet' }),
+    )
+    expect(code).toContain('#let mathalea-couverture(')
+    expect(code.indexOf('#mathalea-couverture(')).toBeLessThan(
+      code.indexOf('// ----- En-tête -----'),
+    )
+  })
+
+  it('déclare les textes en variables et l’appel les référence (édition sur l’aperçu)', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      cover({ template: 'brevet' }),
+    )
+    // déclarées près de `titre`/`sous-titre`/`entete`, comme eux modifiables
+    // par une édition ciblée depuis l'icône de l'aperçu (pas de régénération)
+    expect(code).toContain('#let couverture-titre = "Brevet des collèges"')
+    expect(code).toContain('#let couverture-session = "Juin 2026"')
+    expect(code).toContain('#let couverture-matiere = "MATHÉMATIQUES"')
+    expect(code).toContain('#let couverture-duree = "2 heures"')
+    // une consigne unique : le tableau Typst exige la virgule finale
+    expect(code).toContain(
+      '#let couverture-consignes = ("L’usage de la calculatrice est autorisé.",)',
+    )
+    expect(code).toContain(
+      '#let couverture-note-fin = "Tournez la page S.V.P."',
+    )
+    // l'appel référence les variables, pas les valeurs en dur
+    expect(code).toContain('  titre: couverture-titre,')
+    expect(code).toContain('  session: couverture-session,')
+    expect(code).toContain('  matiere: couverture-matiere,')
+    expect(code).toContain('  duree: couverture-duree,')
+    expect(code).toContain('  consignes: couverture-consignes,')
+    expect(code).toContain('  note-fin: couverture-note-fin,')
+    // le barème, lui, reste en dur (réglé dans le volet, pas sur l'aperçu)
+    expect(code).toContain('  bareme: (6, 14),')
+    expect(code).not.toContain('identite: true')
+  })
+
+  it('n’affiche pas la mention de bas de page pour une évaluation (mais la déclare)', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      cover({ template: 'evaluation' }),
+    )
+    // toujours déclarée (même variables quel que soit le modèle), mais
+    // l'argument n'est pas passé : l'aide garde sa valeur par défaut `none`
+    expect(code).toContain(
+      '#let couverture-note-fin = "Tournez la page S.V.P."',
+    )
+    expect(code).not.toContain('note-fin: couverture-note-fin')
+  })
+
+  it('place un repère unique avant le premier appel, absent en mode export', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      cover({ template: 'brevet' }),
+    )
+    expect(code.match(/#mathalea-anchor\("cover", 0\)/g)).toHaveLength(1)
+    expect(code.indexOf('#mathalea-anchor("cover", 0)')).toBeLessThan(
+      code.indexOf('#mathalea-couverture('),
+    )
+    const exportCode = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      cover({ template: 'brevet' }),
+      {},
+      [],
+      { exportMode: true },
+    )
+    expect(exportCode).not.toContain('#mathalea-anchor("cover"')
+    // les variables restent déclarées et l'appel les référence toujours :
+    // le code exporté reste autonome et éditable comme celui de l'aperçu
+    expect(exportCode).toContain(
+      '#let couverture-titre = "Brevet des collèges"',
+    )
+    expect(exportCode).toContain('  titre: couverture-titre,')
+  })
+
+  it('ajoute l’identité et la colonne de note pour une évaluation', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      cover({ template: 'evaluation' }),
+    )
+    expect(code).toContain('  identite: true,')
+    expect(code).toContain('  colonne-note: true,')
+    // « Tournez la page » n'a pas de sens sur une évaluation d'une page :
+    // l'argument n'est pas passé (l'aide garde sa valeur par défaut `none`)
+    expect(code).not.toContain('note-fin: "')
+  })
+
+  it('masque le barème quand il est désactivé', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      cover({ template: 'brevet', showBareme: false }),
+    )
+    expect(code).toContain('  bareme: (),')
+  })
+
+  it('compte les questions et embarque le logo en « Course aux nombres »', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({ questions: ['$1+1$', '$2+2$'] }),
+        exercise({ questions: ['$3+3$'] }),
+      ],
+      cover({ template: 'can', titre: 'Course aux nombres' }),
+    )
+    expect(code).toContain('#mathalea-couverture-can(')
+    // pas de titre texte dans la page de garde « can » : le logo porte déjà
+    // le nom du sujet (voir MATHALEA_COVER_CAN_HELPER)
+    expect(code).not.toContain('  titre: couverture-titre,')
+    expect(code).toContain('  nb-questions: 3,')
+    // référencé par chemin virtuel (chargé par `Typst.svelte`), pas embarqué
+    expect(code).toContain(
+      '#let mathalea-logo = image("/images/logoCan.png", width: 45%)',
+    )
+    // la page de garde des examens n'a rien à faire dans ce document
+    expect(code).not.toContain('#let mathalea-couverture(')
+  })
+
+  it('compte les énoncés du tableau plutôt que les questions, le cas échéant', () => {
+    const code = buildTypstDocument(
+      [
+        exercise({
+          questions: ['$1+1$'],
+          canQuestions: ['$1+1$', '$2+2$', '$3+3$'],
+        }),
+      ],
+      { ...cover({ template: 'can' }), canMode: true },
+    )
+    expect(code).toContain('  nb-questions: 3,')
+  })
+
+  it('n’impose pas de largeur fixe au champ « Classe » (chevauchement en A5)', () => {
+    // `largeur: 7cm` ignorait la colonne `1fr` du grid et débordait sur la
+    // case du score en A5 (page plus étroite) : le champ doit occuper toute
+    // la colonne qui lui est réservée, comme Nom/Prénom.
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      cover({ template: 'can' }),
+    )
+    expect(code).not.toContain('mathalea-champ("Classe", largeur:')
+    expect(code).toContain('mathalea-champ("Classe")')
+  })
+
+  it('espace les pointillés des champs à compléter', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      cover({ template: 'evaluation' }),
+    )
+    expect(code).toContain('repeat(gap: 2pt)[.]')
+    expect(code).not.toContain('repeat[.]')
+  })
+
+  it('ouvre chaque sujet quand plusieurs versions sont générées', () => {
+    const code = buildTypstDocument(
+      [exercise({ questions: ['$1+1$'] })],
+      cover({ template: 'brevet' }),
+      {},
+      [[exercise({ questions: ['$2+2$'] })]],
+    )
+    const appels = code.match(/#mathalea-couverture\(/g) ?? []
+    expect(appels).toHaveLength(2)
+    // ... mais l'aide n'est déclarée qu'une fois
+    expect(code.match(/#let mathalea-couverture\(/g) ?? []).toHaveLength(1)
+    // le repère d'édition aussi (seul le premier sujet est éditable sur
+    // l'aperçu, comme l'en-tête — les variables sont de toute façon partagées)
+    expect(code.match(/#mathalea-anchor\("cover", 0\)/g) ?? []).toHaveLength(1)
+  })
+
+  it.runIf(shouldRunTypstCliTests())(
+    'compile avec typst (chaque modèle de page de garde)',
+    async () => {
+      const { execFileSync } = await import('node:child_process')
+      const { writeFileSync, mkdtempSync, mkdirSync, copyFileSync } =
+        await import('node:fs')
+      const { tmpdir } = await import('node:os')
+      const { join, dirname } = await import('node:path')
+      const { fileURLToPath } = await import('node:url')
+      const testDir = dirname(fileURLToPath(import.meta.url))
+      for (const template of ['evaluation', 'brevet', 'bac', 'can'] as const) {
+        const code = buildTypstDocument(
+          [
+            exercise({
+              questions: ['$1+1$', '$2+2$'],
+              corrections: ['$2$', '$4$'],
+              numbered: true,
+            }),
+          ],
+          {
+            ...cover({ template }),
+            canMode: template === 'can',
+          },
+        )
+        const dir = mkdtempSync(join(tmpdir(), `typst-cover-${template}-`))
+        const file = join(dir, 'doc.typ')
+        writeFileSync(file, code, 'utf-8')
+        if (template === 'can') {
+          // le logo « can » est référencé par chemin (voir mathaleaLogo.ts),
+          // pas embarqué : il faut le fournir à côté du .typ pour compiler,
+          // comme le fera le .zip téléchargé (voir downloadTyp)
+          mkdirSync(join(dir, 'images'), { recursive: true })
+          copyFileSync(
+            join(testDir, '../../../../public/images/logoCan.png'),
+            join(dir, 'images', 'logoCan.png'),
+          )
+        }
+        expect(() =>
+          execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+            stdio: 'pipe',
+          }),
+        ).not.toThrow()
+      }
     },
   )
 })

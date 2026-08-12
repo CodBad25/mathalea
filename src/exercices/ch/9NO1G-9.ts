@@ -27,7 +27,7 @@ export const titre = 'Diviser par 0,1 ; 0,01 ; 0,001 (Calculs à trous)'
 export const uuid = '6d205'
 export const refs = {
   'fr-fr': [''],
-  'fr-ch': ['9NO8-23'],
+  'fr-ch': ['9NO1G-9'],
 }
 export default class DiviserPar001 extends Exercice {
   constructor() {

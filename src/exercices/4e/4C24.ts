@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -10,8 +11,6 @@ import {
   listeQuestionsToContenu,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Simplifier des fractions à l'aide des nombres premiers"
 export const interactifReady = true
@@ -30,7 +29,7 @@ export const uuid = '612b9'
 
 export const refs = {
   'fr-fr': ['4C24', '3AutoN03-1'],
-  'fr-ch': ['9NO12-9'],
+  'fr-ch': ['9NO3B-4'],
 }
 export default class SimplifierFractions extends Exercice {
   constructor() {

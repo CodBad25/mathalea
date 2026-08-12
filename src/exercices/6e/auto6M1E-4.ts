@@ -12,7 +12,7 @@ export const uuid = 'fcbd9'
 
 export const refs = {
   'fr-fr': ['auto6M1E-4'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ConnaitreFormulesDePerimetreEtAiresV2 extends ConnaitreFormulesDePerimetreEtAires {
   constructor() {

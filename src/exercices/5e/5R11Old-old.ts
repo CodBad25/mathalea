@@ -38,7 +38,7 @@ export const uuid = '4ca10'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 
 const changeCoord = function (x: number, abs0: number, pas1: number) {

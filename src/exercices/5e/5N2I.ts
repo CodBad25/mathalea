@@ -47,7 +47,7 @@ export const uuid = 'b6982'
 export const refs = {
   'fr-fr': ['5N2I'],
   'fr-2016': ['5R21'],
-  'fr-ch': ['9NO9-13'],
+  'fr-ch': ['9NO2B-13', '10NO2A-2'],
 }
 export default class ExerciceSoustractionsRelatifs extends Exercice {
   constructor() {
@@ -81,7 +81,7 @@ export default class ExerciceSoustractionsRelatifs extends Exercice {
       [true, true, false],
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let a: number
       let b: number
       let texte = ''

@@ -33,7 +33,7 @@ export const uuid = 'ddb83'
 export const refs = {
   'fr-fr': ['6N3L'],
   'fr-2016': ['6N33'],
-  'fr-ch': ['9NO14-1'],
+  'fr-ch': ['9NO3E-1', '10NO3A-2'],
 }
 export default class FractionDUnNombre extends Exercice {
   constructor() {

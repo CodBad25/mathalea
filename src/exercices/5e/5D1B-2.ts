@@ -20,8 +20,8 @@ import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = 'Calculer des fréquences statistiques'
@@ -291,7 +291,7 @@ export const uuid = 'e9c50'
 export const refs = {
   'fr-fr': ['5D1B-2', 'BP2AutoA3', 'BP2SP4', '3AutoP02-2'],
   'fr-2016': ['5S13-2', 'BP2AutoA3', 'BP2SP4', '3AutoP02-2'],
-  'fr-ch': ['11NO2-2'],
+  'fr-ch': ['11NO4A-8'],
 }
 /**
  * version 0 :
@@ -630,7 +630,7 @@ export default class CalculerDesFrequences extends Exercice {
       melange: 3,
       nbQuestions: this.nbQuestions,
     }).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       theme = listeDesThemes[typeDeTheme[i]]
       switch (typeDeQuestions[i]) {
         case 1: // tableau

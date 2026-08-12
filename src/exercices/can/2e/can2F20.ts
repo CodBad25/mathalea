@@ -17,7 +17,7 @@ export const dateDeModifImportante = '06/08/2025'
 export const uuid = 'b9c80'
 export const refs = {
   'fr-fr': ['can2F20'],
-  'fr-ch': ['11FA8-24'],
+  'fr-ch': ['11FA1B-24'],
 }
 /**
  * Modèle d'exercice très simple pour la course aux nombres

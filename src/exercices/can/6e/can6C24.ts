@@ -26,7 +26,7 @@ export const uuid = '53034'
 
 export const refs = {
   'fr-fr': ['can6C24', '6N2B-flash1'],
-  'fr-ch': ['NR'],
+  'fr-ch': ['9NO1G-6'],
 }
 export default class MultiplierParPuissanceDixNeg extends ExerciceSimple {
   constructor() {
@@ -53,7 +53,10 @@ export default class MultiplierParPuissanceDixNeg extends ExerciceSimple {
     let typeQuestionsDisponibles = ['multiplier', 'diviser']
     if (this.sup === 1) typeQuestionsDisponibles = ['multiplier']
     else if (this.sup === 2) typeQuestionsDisponibles = ['diviser']
-    const typeQuestion = this.quotaChoice('typeQuestion', typeQuestionsDisponibles)
+    const typeQuestion = this.quotaChoice(
+      'typeQuestion',
+      typeQuestionsDisponibles,
+    )
     const d = this.quotaChoice('d', [0.1, 0.01, 0.001])
     this.reponse = arrondi(facteur * d)
     this.distracteurs = [

@@ -27,7 +27,7 @@ export const uuid = 'd37ea'
 export const refs = {
   'fr-fr': ['5G3A-4'],
   'fr-2016': ['5G11-20'],
-  'fr-ch': ['9ES6-28', '10ES2-15'],
+  'fr-ch': ['9ES3C-5'],
 }
 
 /**
@@ -63,11 +63,7 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
   labels!: string[][]
   centresApiGeom!: PointApigeom[]
   typesDeQuestions!: (
-    | 'segment'
-    | 'droite'
-    | 'demidroite'
-    | 'cercle'
-    | 'triangle'
+    'segment' | 'droite' | 'demidroite' | 'cercle' | 'triangle'
   )[]
 
   nbPoints!: number[]
@@ -116,7 +112,7 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
       defaut: 6,
       listeOfCase: ['segment', 'droite', 'demidroite', 'cercle', 'triangle'],
     }) as typeof this.typesDeQuestions
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 20; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 20;) {
       let nuage: { x: number; y: number }[] = []
       // On construit les points
       do {
@@ -513,7 +509,9 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
   correctionInteractive = (i: number) => {
     if (this.answers === undefined) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figuresApiGeom![i].id] = figureAnswerJson(this.figuresApiGeom![i])
+    this.answers[this.figuresApiGeom![i].id] = figureAnswerJson(
+      this.figuresApiGeom![i],
+    )
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,
     ) as HTMLDivElement

@@ -10,14 +10,13 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   doubleDeveloppement,
   reduirePolynomeDegre3,
 } from '../../lib/outils/ecritures'
 import { abs } from '../../lib/outils/nombres'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Effectuer la double distributivité'
 export const dateDePublication = '03/02/2025'
@@ -34,7 +33,7 @@ export const uuid = '67396'
 
 export const refs = {
   'fr-fr': ['3L11-1b'],
-  'fr-ch': ['11FA2-17', '1mCL1-2'],
+  'fr-ch': ['10FA4F-3', '1mCL1-2'],
 }
 
 export default class MultipleDistributivite extends Exercice {

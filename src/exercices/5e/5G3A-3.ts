@@ -14,7 +14,7 @@ export const uuid = '49786'
 export const refs = {
   'fr-fr': ['5G3A-3'],
   'fr-2016': ['5G11-2'],
-  'fr-ch': ['9ES6-6'],
+  'fr-ch': ['9ES3C-4'],
 }
 export default class ConstruireParSymetrieCentraleFigure extends ConstruireParSymetrie {
   constructor() {

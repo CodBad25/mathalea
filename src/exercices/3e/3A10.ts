@@ -33,7 +33,7 @@ export const uuid = '42d20'
 
 export const refs = {
   'fr-fr': ['3A10'],
-  'fr-ch': ['9NO4-1'],
+  'fr-ch': ['9NO1A-14'],
 }
 export default class DivisionEuclidienneMultiplesDiviseursCriteres extends Exercice {
   constructor() {

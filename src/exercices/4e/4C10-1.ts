@@ -16,7 +16,7 @@ export const uuid = '4fd42'
 
 export const refs = {
   'fr-fr': ['4C10-1'],
-  'fr-ch': ['10NO4-3'],
+  'fr-ch': ['9NO2C-3'],
 }
 export default class SigneProduitRelatifs extends SigneProduitQuotientRelatifs {
   constructor() {

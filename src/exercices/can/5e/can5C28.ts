@@ -1,11 +1,11 @@
-import ExerciceSimple from '../../ExerciceSimple'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
 } from '../../../lib/outils/ecritures'
-import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const interactifType = 'mathLive'
 export const interactifReady = true
 export const titre =
@@ -20,7 +20,7 @@ export const uuid = 'f9b48'
 
 export const refs = {
   'fr-fr': ['can5C28', '5N2I-flash3'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class AdditionRelatifATrou2 extends ExerciceSimple {
   constructor() {

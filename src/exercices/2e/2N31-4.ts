@@ -8,6 +8,6 @@ export const amcType = 'AMCHybrides'
 export const uuid = '6fda8'
 export const refs = {
   'fr-fr': ['2N31-4'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class PrioritesEtRelatifsEtPuissances2e extends PrioritesEtRelatifsEtPuissances {}

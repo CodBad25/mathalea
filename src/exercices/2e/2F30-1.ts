@@ -29,7 +29,7 @@ export const uuid = '36795'
 
 export const refs = {
   'fr-fr': ['2F30-1'],
-  'fr-ch': ['11FA9-1'],
+  'fr-ch': ['11FA1A-11'],
 }
 export default class PointSurCourbe extends Exercice {
   constructor() {

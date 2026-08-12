@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -33,8 +34,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   "Effectuer un enchaînement d'additions et de soustractions de nombres relatifs"
@@ -55,7 +54,7 @@ export const uuid = 'f6ea7'
 export const refs = {
   'fr-fr': ['5N2L'],
   'fr-2016': ['5R22'],
-  'fr-ch': ['9NO9-15'],
+  'fr-ch': ['9NO2B-18', '11NO1-1'],
 }
 export default class ExerciceAdditionsSoustractionRelatifsV2 extends Exercice {
   constructor() {

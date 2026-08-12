@@ -8,7 +8,7 @@ export const uuid = '2d343'
 export const refs = {
   'fr-fr': ['5G3A-12'],
   'fr-2016': ['5G12-3'],
-  'fr-ch': ['10GM2-4'],
+  'fr-ch': ['9ES3-7'],
 }
 export default class TrouverLaTransformation5e extends TrouverLaTransformation {
   constructor() {

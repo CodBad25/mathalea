@@ -34,7 +34,7 @@ export const uuid = '75a8c'
 export const refs = {
   'fr-fr': ['5G2B-2'],
   'fr-2016': ['5G52-2'],
-  'fr-ch': [],
+  'fr-ch': ['10ES2A-6'],
 }
 /**
  * report de longueur sur un patron de pavé droit
@@ -126,7 +126,7 @@ export default class longueurPatronPaveDroit extends Exercice {
       nbdeLongueursDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const numerotationFaces: 'sans' | 'standard' | 'hasard' = 'standard' //'hasard'

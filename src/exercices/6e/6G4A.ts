@@ -10,6 +10,7 @@ import {
   pointIntersectionDD,
   pointSurSegment,
 } from '../../lib/2d/utilitairesPoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { couleurTab } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -27,8 +28,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Nommer un angle'
 export const interactifType = ['qcm', 'mathLive']
@@ -48,7 +47,7 @@ export const uuid = 'e10d1'
 export const refs = {
   'fr-fr': ['6G4A'],
   'fr-2016': ['6G22'],
-  'fr-ch': ['9ES5-1'],
+  'fr-ch': ['9ES1B-1'],
 }
 export default class NommerUnAngle extends Exercice {
   constructor() {

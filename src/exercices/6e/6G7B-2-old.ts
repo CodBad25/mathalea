@@ -15,7 +15,7 @@ export const uuid = 'adfb5'
 export const refs = {
   'fr-fr': [],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class SymetrieAxialeFigure6e extends ConstruireParSymetrie {
   constructor() {

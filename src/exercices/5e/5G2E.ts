@@ -12,7 +12,7 @@ export const uuid = '7cc93'
 export const refs = {
   'fr-fr': ['5G2E'],
   'fr-2016': ['5M10-2b'],
-  'fr-ch': [],
+  'fr-ch': ['10GM1B-5'],
 }
 export default class ConnaitreFormulesDePerimetreEtAiresV4 extends ConnaitreFormulesDePerimetreEtAires {
   constructor() {

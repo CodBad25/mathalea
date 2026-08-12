@@ -15,7 +15,7 @@ export const uuid = '606fd'
 
 export const refs = {
   'fr-fr': ['can5C11', '5N2I-flash1'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class DifferenceNegative extends ExerciceSimple {
   constructor() {

@@ -6,6 +6,6 @@ export const uuid = '98658'
 
 export const refs = {
   'fr-fr': ['2N40-2'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CalculerLaValeurDUneExpressionLitterale2e extends CalculerLaValeurDUneExpressionLitterale {}

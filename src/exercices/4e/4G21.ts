@@ -26,7 +26,7 @@ export const uuid = 'ab5d4'
 
 export const refs = {
   'fr-fr': ['4G21', 'BP2G9'],
-  'fr-ch': ['11GM1-3'],
+  'fr-ch': ['11GM1A-1'],
 }
 export default class ReciproquePythagore extends Exercice {
   constructor() {

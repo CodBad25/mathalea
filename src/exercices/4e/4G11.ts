@@ -35,7 +35,7 @@ export const uuid = '3bfb6'
 
 export const refs = {
   'fr-fr': ['4G11'],
-  'fr-ch': ['10ES2-9'],
+  'fr-ch': ['9ES3A-4'],
 }
 export default class PavageEtTranslation2d extends Exercice {
   constructor() {
@@ -293,7 +293,7 @@ export default class PavageEtTranslation2d extends Exercice {
       console.error('index1 ou index2 est null')
       return
     }
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       texte = `Quelle est l'image de la figure $${couples[i][0]}$ dans la translation transformant la figure $${index1 + 1}$ en la figure $${index2 + 1}$ ?<br>`
       texteCorr = `L'image de la figure $${couples[i][0]}$ dans la translation transformant la figure $${index1 + 1}$ en la figure $${index2 + 1}$ est la figure ${couples[i][1]}.<br>`
       //      symetriques=associesommets(monpavage.polygones[couples[i][0]-1],monpavage.polygones[couples[i][1]-1],d)

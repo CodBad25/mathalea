@@ -35,7 +35,7 @@ export const uuid = 'ec005'
 export const refs = {
   'fr-fr': ['6N0A-13'],
   'fr-2016': ['6N24-1'],
-  'fr-ch': ['9NO10-5'],
+  'fr-ch': [''], // Primaire anciennement : ['9NO10-5'],
 }
 export default class ExerciceMultiplierOuDiviserUnNombreEntierPar101001000 extends Exercice {
   constructor() {

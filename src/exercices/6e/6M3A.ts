@@ -14,7 +14,7 @@ export const uuid = '9bcab'
 export const refs = {
   'fr-fr': ['6M3A'],
   'fr-2016': ['6M32'],
-  'fr-ch': [],
+  'fr-ch': ['9GM2A-1'],
 }
 export default class DefinitionUnitesCm3 extends DefinitionUnitesVolumes {
   constructor() {

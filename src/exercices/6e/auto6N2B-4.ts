@@ -29,7 +29,7 @@ export const uuid = '4b9d5'
 export const refs = {
   'fr-fr': ['auto6N2B-4', 'BP2AutoC2'],
   'fr-2016': ['6N23', 'BP2AutoC2'],
-  'fr-ch': [],
+  'fr-ch': ['9NO3C-15'],
 }
 export default class ExerciceEcritureDecimaleApartirDeFractionDecimale extends Exercice {
   constructor() {

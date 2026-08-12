@@ -14,7 +14,7 @@ export const uuid = '45885'
 
 export const refs = {
   'fr-fr': ['can6D10', '6M4C-flash6'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class can6D10 extends ConversionHeuresMinutesOuMinutesEtSecondes {
   constructor() {

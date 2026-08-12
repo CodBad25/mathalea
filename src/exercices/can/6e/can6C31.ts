@@ -23,7 +23,7 @@ export const uuid = '5b443'
 
 export const refs = {
   'fr-fr': ['can6C31', '6N2A-flash5', 'auto5N2A-flash7'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class SoustraireEntierDecimal extends ExerciceSimple {
   constructor() {

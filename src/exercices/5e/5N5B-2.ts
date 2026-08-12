@@ -42,7 +42,7 @@ export const uuid = '8865d'
 export const refs = {
   'fr-fr': ['5N5B-2'],
   'fr-2016': ['5L14-2'],
-  'fr-ch': ['10FA1-1a', '11FA1-4a'],
+  'fr-ch': ['10FA4B-3'],
 }
 export default class ExerciceSubstituer extends Exercice {
   constructor(difficulte = 1) {

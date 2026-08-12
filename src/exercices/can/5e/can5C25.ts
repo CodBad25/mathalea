@@ -16,7 +16,7 @@ export const uuid = 'a7061'
 
 export const refs = {
   'fr-fr': ['can5C25', '5N2G-flash1'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class AdditionRelatifCAN extends ExerciceSimple {
   constructor() {

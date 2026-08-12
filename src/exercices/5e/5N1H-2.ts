@@ -9,7 +9,7 @@ export const titre = 'Multiplier en utilisant la distributivité'
 export const refs = {
   'fr-fr': ['5N1H-2'],
   'fr-2016': ['5C12-6'],
-  'fr-ch': ['1mCL1-14', '10FA2-5', '11FA2-21'],
+  'fr-ch': ['1mCL1-14', '9NO1G-18'],
 }
 export const interactifReady = true
 export const interactifType = 'mathLive'

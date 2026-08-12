@@ -34,7 +34,7 @@ export const uuid = '29c3b'
 export const refs = {
   'fr-fr': ['5G33-3'],
   'fr-2016': ['6G53'],
-  'fr-ch': ['9ES3-8'],
+  'fr-ch': ['9ES1A-15'],
 }
 export default class MesurerDistancePointDroite extends Exercice {
   constructor() {

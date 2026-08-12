@@ -2,6 +2,7 @@ import Figure from 'apigeom'
 import GraduatedLine from 'apigeom/src/elements/grid/GraduatedLine'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import { orangeMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -11,7 +12,6 @@ import { context } from '../../modules/context'
 import { fraction } from '../../modules/fractions'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const dateDePublication = '29/06/2021'
 export const dateDeModifImportante = '03/05/2024'
@@ -29,7 +29,7 @@ export const uuid = '2ba53'
 export const refs = {
   'fr-fr': ['CM2N2E-2'],
   'fr-2016': ['6N21'],
-  'fr-ch': ['9NO11-4'],
+  'fr-ch': ['9NO3A-4'],
 }
 
 type goodAnswer = { label: string; x: number }[]
@@ -66,7 +66,7 @@ class PlacerPointsAbscissesFractionnaires extends Exercice {
     }
     const fractionsUtilisees: Array<[number, number]> = [] // Pour s'assurer de ne pas poser 2 fois la même question
     const tableUtilisées: [number[], number[], number[]] = [[], [], []]
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let origine, num1, den1: number
@@ -240,7 +240,9 @@ class PlacerPointsAbscissesFractionnaires extends Exercice {
     // Sauvegarde de la réponse pour Capytale
     if (this.answers == null) this.answers = {}
     if (this == null) return ['KO']
-    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(this.figuresApiGeom[i])
+    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(
+      this.figuresApiGeom[i],
+    )
     const result: ('OK' | 'KO')[] = []
     const figure = this.figuresApiGeom[i]
     figure.isDynamic = false

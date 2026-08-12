@@ -8,6 +8,6 @@ export const uuid = '4718e'
 export const refs = {
   'fr-fr': ['auto5N3E'],
   'fr-2016': ['5N13-2'],
-  'fr-ch': ['9NO12-4'],
+  'fr-ch': ['9NO3B-8'],
 }
 export default class EgalitesEntreFractions5e extends EgalitesEntreFractions {}

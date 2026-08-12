@@ -21,7 +21,7 @@ export const interactifType = 'fillInTheBlank'
 export const refs = {
   'fr-fr': ['5N2F', 'BP2AutoG3', '3AutoN02-1'],
   'fr-2016': ['5R13', 'BP2AutoG3', '3AutoN02-1'],
-  'fr-ch': ['9NO7-13'],
+  'fr-ch': ['9NO2A-3'],
 }
 
 /**

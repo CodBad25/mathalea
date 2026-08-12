@@ -216,6 +216,21 @@ export default function handleApigeomFigureElement() {
 const TEXT_OVERFLOW_MARGIN_PX = 30
 
 /**
+ * Nettoyage minimal des macros LaTeX pouvant apparaître dans le texte des
+ * labels apigeom (ex. `1~\text{u.l}`, `$\dfrac{3}{4}~\text{u.l}$`) :
+ * `addTextElementsToSvg` (paquet apigeom) retire seulement les `$` de
+ * bordure, il ne connaît pas KaTeX et poserait sinon le code LaTeX brut tel
+ * quel comme texte SVG. Rendu approximatif (pas un vrai typeset), suffisant
+ * pour les libellés courts utilisés ici (unités, fractions simples).
+ */
+function cleanLatexLabel(text: string): string {
+  return text
+    .replace(/\\[dt]?frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g, '$1/$2')
+    .replace(/\\text\s*\{([^{}]*)\}/g, '$1')
+    .replace(/~/g, ' ')
+}
+
+/**
  * SVG autonome d'une figure apigeom déjà construite (`figure.create(...)`),
  * texte compris (labels de points, etc.) : contrairement à `getStaticHtml()`,
  * qui pose ce texte dans des `<div>` positionnés en CSS à côté du `<svg>`
@@ -251,6 +266,9 @@ export function apigeomFigureToSvg(figure: BaseFigure): string {
   svg.setAttribute('width', width.toString())
   svg.setAttribute('height', height.toString())
   addTextElementsToSvg(svg, figure, { xMin, yMax, width, height })
+  for (const textNode of svg.querySelectorAll('text')) {
+    textNode.textContent = cleanLatexLabel(textNode.textContent ?? '')
+  }
   return svg.outerHTML
 }
 

@@ -26,6 +26,7 @@ import {
   orthoCentre,
 } from '../../lib/2d/utilitairesTriangle'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import { bleuMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import {
@@ -44,7 +45,6 @@ import {
 import { Triangle } from '../../modules/Triangle'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = 'Tracer une hauteur dans un triangle'
 
@@ -55,7 +55,7 @@ export const interactifType = 'custom'
 export const uuid = 'c7c78'
 export const refs = {
   'fr-fr': ['5G5E-2'],
-  'fr-ch': [],
+  'fr-ch': ['9ES1D-10'],
 }
 /**
  * Tracer une hauteur
@@ -137,7 +137,7 @@ export default class nomExercice extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let enonce = ''
@@ -440,7 +440,9 @@ export default class nomExercice extends Exercice {
     if (this.answers == null) this.answers = {}
     if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figuresApiGeom![i].id] = figureAnswerJson(this.figuresApiGeom![i])
+    this.answers[this.figuresApiGeom![i].id] = figureAnswerJson(
+      this.figuresApiGeom![i],
+    )
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,
     )

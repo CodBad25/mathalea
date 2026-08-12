@@ -21,7 +21,7 @@ export const uuid = '57777'
 
 export const refs = {
   'fr-fr': ['can5P03', 'auto5P1B-flash1'],
-  'fr-ch': ['11FA11-5'],
+  'fr-ch': ['9FA2B-25'],
 }
 export default class PoucentageP2 extends ExerciceSimple {
   constructor() {

@@ -20,7 +20,7 @@ export const uuid = 'b0f1a'
 
 export const refs = {
   'fr-fr': ['can6P03', '6P3C-flash2'],
-  'fr-ch': [],
+  'fr-ch': ['11FA2A-1'],
 }
 export default class QuestionDeVitesse extends ExerciceSimple {
   constructor() {

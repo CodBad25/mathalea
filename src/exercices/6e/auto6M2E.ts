@@ -33,7 +33,7 @@ export const uuid = 'a6e80'
 export const refs = {
   'fr-fr': ['auto6M2E'],
   'fr-2016': ['6M23-2'],
-  'fr-ch': [],
+  'fr-ch': ['9GM1A-8'],
 }
 
 export default class ConvertirM2EnDm2 extends Exercice {
@@ -118,7 +118,7 @@ export default class ConvertirM2EnDm2 extends Exercice {
       texNombre(0.01),
     ]
     let compteurAleatoire = 0
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const element = [listeConversions[cpt], listeQuestionsDisponibles[cpt]]
       const index = tableauDesPossibilites.findIndex(
         ([coords, _]) => coords[0] === element[0] && coords[1] === element[1],

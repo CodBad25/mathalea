@@ -9,7 +9,7 @@ export const amcType = 'AMCOpen'
 export const uuid = '1eaf7'
 export const refs = {
   'fr-fr': ['4A11-0'],
-  'fr-ch': ['9NO4-16'],
+  'fr-ch': ['9NO1B-11', '10NO1A-1'],
 }
 export default class ExerciceDecomposerEnFacteursPremiers4e extends ExerciceDecomposerEnFacteursPremiers {
   constructor() {

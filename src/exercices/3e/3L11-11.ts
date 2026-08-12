@@ -1,10 +1,10 @@
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   all,
   isEqual,
-  onlyIrreducibleFractions,
   isReduced,
+  onlyIrreducibleFractions,
 } from '../../lib/interactif/checks'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import MonomePlusieursVariables from '../../lib/mathFonctions/MonomePlusieursVariables'
@@ -33,7 +33,7 @@ export const interactifType = 'mathLive'
 export const uuid = '2f983'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['11FA1-7', '1mCL1-10'],
+  'fr-ch': ['10FA4C-8', '1mCL1-10'],
 }
 
 export default class NomExercice extends Exercice {
@@ -76,7 +76,7 @@ export default class NomExercice extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte, texteCorr: string
       const degMin = this.sup2 - 1
       const degMax = Math.max(this.sup3, this.sup2 - 1)

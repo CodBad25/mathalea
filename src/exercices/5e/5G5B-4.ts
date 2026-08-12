@@ -14,7 +14,7 @@ export const uuid = '3cbb1'
 export const refs = {
   'fr-fr': ['5G5B-4'],
   'fr-2016': ['5G25b'],
-  'fr-ch': [],
+  'fr-ch': ['9ES1C-16'],
 }
 export default class DefinitionProprietesTrianglesInegaliteTriangulaire extends DefinitionProprietesTriangles {
   constructor() {

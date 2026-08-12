@@ -18,21 +18,20 @@ export const uuid = '20fcc'
 
 export const refs = {
   'fr-fr': ['can3C23'],
-  'fr-ch': [],
+  'fr-ch': ['9NO1D-3'],
 }
 export default class EcrireAvecPuissances extends ExerciceSimple {
   constructor() {
     super()
     this.nbQuestions = 1
     this.optionsChampTexte = { texteAvant: '<br>' }
-      this.optionsDeComparaison = { seulementCertainesPuissances: true }
+    this.optionsDeComparaison = { seulementCertainesPuissances: true }
     this.typeExercice = 'simple'
-  
   }
 
   nouvelleVersion() {
     const cas = this.quotaRandint('cas', 1, 2)
-    
+
     if (cas === 1) {
       // Cas avec des entiers
       const choixEntiers = [
@@ -52,25 +51,26 @@ export default class EcrireAvecPuissances extends ExerciceSimple {
         { nombre: 1000, reponses: ['10^3'] },
         { nombre: 10000, reponses: ['10^4', '100^2'] },
       ]
-      
+
       const valeur = choice(choixEntiers)
-      
+
       this.question = `Écrire le nombre $${texNombre(valeur.nombre)}$ sous la forme $a^n$ avec $n\\neq 1$.`
-      
+
       // Afficher toutes les solutions dans la correction
-      const solutionsTexte = valeur.reponses.map(rep => {
-        const [base, exp] = rep.split('^')
-        return `${base}^{${exp}}`
-      }).join(' \\text{ ou } ')
-      
+      const solutionsTexte = valeur.reponses
+        .map((rep) => {
+          const [base, exp] = rep.split('^')
+          return `${base}^{${exp}}`
+        })
+        .join(' \\text{ ou } ')
+
       this.correction = `$${texNombre(valeur.nombre)}=${miseEnEvidence(solutionsTexte)}$`
-      
+
       // Passer toutes les réponses possibles
       this.reponse = valeur.reponses
-      
+
       this.canEnonce = 'Compléter.'
       this.canReponseACompleter = `$${valeur.nombre}=\\ldots$`
-      
     } else {
       // Cas avec des décimaux
       const choixDecimaux = [
@@ -87,28 +87,31 @@ export default class EcrireAvecPuissances extends ExerciceSimple {
         { nombre: 0.64, reponses: ['0.8^2'] },
         { nombre: 0.81, reponses: ['0.9^2'] },
       ]
-      
+
       const valeur = choice(choixDecimaux)
-      
+
       this.question = `Écrire le nombre $${texNombre(valeur.nombre)}$ sous la forme $a^n$ avec $n\\neq 1$.`
-      
+
       // Afficher toutes les solutions dans la correction
-      const solutionsTexte = valeur.reponses.map(rep => {
-        if (rep.includes('{')) {
-          // Cas avec exposant négatif déjà formaté
-          return rep
-        } else {
-          const [base, exp] = rep.split('^')
-          return `${texNombre(parseFloat(base))}^{${exp}}`
-        }
-      }).join(' \\text{ ou } ')
-      
+      const solutionsTexte = valeur.reponses
+        .map((rep) => {
+          if (rep.includes('{')) {
+            // Cas avec exposant négatif déjà formaté
+            return rep
+          } else {
+            const [base, exp] = rep.split('^')
+            return `${texNombre(parseFloat(base))}^{${exp}}`
+          }
+        })
+        .join(' \\text{ ou } ')
+
       this.correction = `$${texNombre(valeur.nombre)}=${miseEnEvidence(solutionsTexte)}$`
-      
+
       // Passer toutes les réponses possibles
       this.reponse = valeur.reponses
-      
-      this.canEnonce = 'Compléter avec un nombre sous la forme $a^n$ avec $n\\neq 1$.'
+
+      this.canEnonce =
+        'Compléter avec un nombre sous la forme $a^n$ avec $n\\neq 1$.'
       this.canReponseACompleter = `$${texNombre(valeur.nombre)}=\\ldots$`
     }
   }

@@ -13,7 +13,7 @@ export const uuid = '6314c'
 
 export const refs = {
   'fr-fr': ['can5G01', 'auto5G3A-flash1'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class SymetriqueD1Point5eme extends Transformations {
   constructor() {

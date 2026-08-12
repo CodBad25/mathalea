@@ -283,6 +283,17 @@ describe('htmlToTypst', () => {
     )
   })
 
+  it('convertit \\medskip en texte brut (exercices CAN écrits en LaTeX texte)', () => {
+    expect(htmlToTypst('Viens-tu à vélo ?\\medskip')).toBe(
+      'Viens-tu à vélo ?#v(0.5em)',
+    )
+    // can6a-2026 : le \\ de saut de ligne LaTeX précédant \medskip ne doit
+    // pas fuir en texte littéral (backslashes échappés affichés tels quels)
+    expect(htmlToTypst('Viens-tu à vélo ? \\\\\\medskip Suite')).toBe(
+      'Viens-tu à vélo ? #v(0.5em)\nSuite',
+    )
+  })
+
   it('convertit les array LaTeX bordés en tableaux natifs', () => {
     const result = htmlToTypst(
       '$\\def\\arraystretch{1.5}\\begin{array}{|l|c|c|}\\hline x & 1 & 2 \\\\ \\hline f(x) & 3 & 4 \\\\ \\hline\\end{array}$',

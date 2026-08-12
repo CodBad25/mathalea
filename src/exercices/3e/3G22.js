@@ -25,7 +25,7 @@ export const uuid = '960f9'
 
 export const refs = {
   'fr-fr': ['3G22', 'BP2G16'],
-  'fr-ch': [],
+  'fr-ch': ['11GM1C-1'],
 }
 export default class AgrandissementReduction extends Exercice {
   constructor() {

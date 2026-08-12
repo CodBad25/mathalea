@@ -1,4 +1,5 @@
 import type { MathfieldElement } from 'mathlive'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleLeCompteEstBon } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -10,7 +11,6 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 import TrouverSolutionMathador from './_TrouverSolutionMathador'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -29,7 +29,7 @@ export const uuid = '3406a'
 export const refs = {
   'fr-fr': ['5N1E-1'],
   'fr-2016': ['5C11-2'],
-  'fr-ch': ['9NO6-3'],
+  'fr-ch': ['9NO1F-5'],
 }
 export default class ÉcrireUneExpressionMathador extends Exercice {
   tirage: number[][]

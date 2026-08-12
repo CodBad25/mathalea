@@ -11,7 +11,7 @@ export const uuid = 'da157'
 export const refs = {
   'fr-fr': ['auto5G3A'],
   'fr-2016': ['5G10'],
-  'fr-ch': ['9ES6-2'],
+  'fr-ch': ['9ES3B-11'],
 }
 export default class SymetrieAxiale5e extends Transformations {
   constructor() {

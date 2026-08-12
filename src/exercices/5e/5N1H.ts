@@ -34,7 +34,7 @@ export const uuid = '86fa8'
 export const refs = {
   'fr-fr': ['5N1H'],
   'fr-2016': ['5C12-3'],
-  'fr-ch': ['11FA2-1'],
+  'fr-ch': ['9NO1G-1'],
 }
 
 class DistributiviteNumerique extends Exercice {
@@ -192,7 +192,7 @@ class DistributiviteNumerique extends Exercice {
       return sortie
     }
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = '' // Nous utilisons souvent cette variable pour construire le texte de la question.
       let texteCorr = '' // Idem pour le texte de la correction.
       // Choix des paramètres aléatoires

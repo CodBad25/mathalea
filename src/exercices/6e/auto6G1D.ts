@@ -19,6 +19,7 @@ import {
 } from '../../lib/2d/transformations'
 import { vecteur, type Vecteur } from '../../lib/2d/Vecteur'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -29,7 +30,6 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Nommer et coder des polygones'
 export const dateDeModifImportante = '10/01/2024'
 
@@ -42,7 +42,7 @@ export const uuid = '90e1a'
 export const refs = {
   'fr-fr': ['auto6G1D'],
   'fr-2016': ['6G20'],
-  'fr-ch': ['9ES2-5'],
+  'fr-ch': ['9ES1E-2'],
 }
 const choisirPolygone: (
   n: number,
@@ -281,7 +281,6 @@ export default class NommerEtCoderDesPolygones extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       if (i % 4 === 0) listeDeNomsDePolygones = ['PQD']
       // context.pixelsParCm = 40

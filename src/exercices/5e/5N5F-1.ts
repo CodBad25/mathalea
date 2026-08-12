@@ -32,7 +32,7 @@ export const uuid = '4623e'
 export const refs = {
   'fr-fr': ['5N5F-1'],
   'fr-2016': ['5L12-1'],
-  'fr-ch': ['10FA1-14'],
+  'fr-ch': ['10FA4C-2'],
 }
 export default class ReduireDinstinctionSommeProduit extends Exercice {
   constructor() {

@@ -35,7 +35,7 @@ export const uuid = 'b6cc0'
 
 export const refs = {
   'fr-fr': ['2F22-1'],
-  'fr-ch': [],
+  'fr-ch': ['11FA1A-7'],
 }
 export default class ImageFonctionsRefs extends Exercice {
   can: boolean

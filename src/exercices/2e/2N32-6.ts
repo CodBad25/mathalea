@@ -25,7 +25,7 @@ export const uuid = '91dc4'
 
 export const refs = {
   'fr-fr': ['2N32-6'],
-  'fr-ch': ['11NO1-9', '1mCN-11'],
+  'fr-ch': ['11NO3A-6', '1mCN-11'],
 }
 export default class IdentitesRemarquablesEtRacineCarree extends Exercice {
   constructor() {
@@ -48,7 +48,7 @@ export default class IdentitesRemarquablesEtRacineCarree extends Exercice {
       this.nbQuestions === 1
         ? 'Effectuer le calcul suivant.'
         : 'Effectuer les calculs suivants.'
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let a = 0
       let b = 0
       let c = 0

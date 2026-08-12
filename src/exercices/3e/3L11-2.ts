@@ -2,6 +2,7 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/view.capytale.save3L11-2.test.ts ⚠️
  */
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -20,8 +21,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Réduire une expression'
 export const interactifReady = true
@@ -39,7 +38,7 @@ export const uuid = 'f6853'
 
 export const refs = {
   'fr-fr': ['3L11-2', 'BP2AutoI10', '3AutoN11-1'],
-  'fr-ch': ['10FA1-13'],
+  'fr-ch': ['10FA4C-7'],
 }
 export default class ReductionSiPossible extends Exercice {
   constructor() {

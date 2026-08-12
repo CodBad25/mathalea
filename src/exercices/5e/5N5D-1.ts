@@ -35,7 +35,7 @@ export const uuid = '97f1a'
 export const refs = {
   'fr-fr': ['5N5D-1'],
   'fr-2016': ['5L14-4'],
-  'fr-ch': ['11FA5-2'],
+  'fr-ch': ['11GM3-2'],
 }
 export default class DeterminerDerniereOperationExpressionLitterale extends Exercice {
   constructor() {

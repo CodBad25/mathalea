@@ -33,7 +33,7 @@ export const uuid = '4ce2d'
 
 export const refs = {
   'fr-fr': ['3P10-1', 'BP2CCF12'],
-  'fr-ch': ['10FA4-6'],
+  'fr-ch': ['10FA2B-14'],
 }
 export default class CoefficientEvolution extends Exercice {
   version = 1

@@ -50,7 +50,7 @@ export const amcType = 'qcmMono'
 export const refs = {
   'fr-fr': ['auto6G8A', '3AutoG07-1'],
   'fr-2016': ['6G44-1'],
-  'fr-ch': ['9ES7-8', '10ES1-1', '11ES1-1'],
+  'fr-ch': ['9ES2A-6', '10ES2A-1', '11ES2A-1'],
 }
 export const uuid = '051aa'
 export default class ReconnaitreDesSolides extends Exercice {
@@ -215,7 +215,7 @@ export default class ReconnaitreDesSolides extends Exercice {
               texteCorrection = this.sup3
                 ? `Pyramide avec une base ayant $${pyra.base.listePoints.length}$ sommets` // et selon l'axe=$${axe}$`
                 : `Pyramide`
-              if ((pyra.base.listePoints.length === 3) && this.sup3) {
+              if (pyra.base.listePoints.length === 3 && this.sup3) {
                 texteCorrection += ` (plus précisément, c'est un tétraèdre)`
               }
             }

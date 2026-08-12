@@ -33,7 +33,7 @@ export const uuid = '5c5a2'
 export const refs = {
   'fr-fr': [],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 
 const items = [
@@ -112,7 +112,7 @@ export default class ResoudreDesProblemes extends Exercice {
       melange: 5,
       defaut: 5,
     }).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = 'On a effectué deux pesées :<br>'
       let texteCorr = ''
       const [fruit1, fruit2] = combinaisonListes(items, 2)

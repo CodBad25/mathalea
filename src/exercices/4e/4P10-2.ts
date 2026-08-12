@@ -7,7 +7,7 @@ export const dateDeModifImportante = '15/06/2024'
 export const uuid = 'a6b5b'
 export const refs = {
   'fr-fr': ['4P10-2', 'BP2AutoL1'],
-  'fr-ch': ['9FA3-4'],
+  'fr-ch': ['10FA2-4'],
 }
 export default class TableauxEtQuatriemeProportionnelle extends EqResolvantesThales {
   constructor() {

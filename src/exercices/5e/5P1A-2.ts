@@ -49,7 +49,7 @@ export const uuid = 'edb61'
 export const refs = {
   'fr-fr': ['5P1A-2', 'BP2AutoM1'],
   'fr-2016': ['5P13', 'BP2AutoM1'],
-  'fr-ch': ['10FA4-1'],
+  'fr-ch': ['10FA2C-1'],
 }
 export default class EchellesProblemes extends Exercice {
   constructor() {

@@ -32,7 +32,7 @@ export const interactifType = 'editeur-iep'
 export const uuid = 'e5g3a'
 export const refs = {
   'fr-fr': ['5G5G-3'],
-  'fr-ch': [],
+  'fr-ch': ['9ES1D-14'],
 }
 
 const VERIFICATION_MEME_AIRE_CALLBACK_NAME = '5G5G-3-verification-meme-aire'

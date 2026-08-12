@@ -20,6 +20,7 @@ import { triangle2points2longueurs } from '../../lib/2d/triangles'
 import { angle, longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
@@ -34,7 +35,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
 export const titre =
   'Utiliser les propriétés de conservation des longueurs et des angles'
 export const interactifReady = true
@@ -51,7 +51,7 @@ export const uuid = '07d1b'
 export const refs = {
   'fr-fr': ['5G3B'],
   'fr-2016': ['5G13-1'],
-  'fr-ch': [],
+  'fr-ch': ['10ES3A-2'],
 }
 export default class ConservationTransformation extends Exercice {
   constructor() {
@@ -97,7 +97,7 @@ export default class ConservationTransformation extends Exercice {
     })
 
     let objetsEnonceEtCorr, objetsEnonceOnly, objetsCorrectionOnly
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typeDeTransfo = listeTypeDeQuestions[i]
       objetsEnonceOnly = []
       objetsCorrectionOnly = []

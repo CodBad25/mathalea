@@ -26,7 +26,7 @@ export const uuid = 'e332d'
 
 export const refs = {
   'fr-fr': ['can6M11', '6M3C-flash1'],
-  'fr-ch': [],
+  'fr-ch': ['9GM2A-2'],
 }
 export default class VolumePaveCubes extends ExerciceSimple {
   constructor() {

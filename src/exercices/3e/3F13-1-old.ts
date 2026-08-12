@@ -13,7 +13,6 @@ import { randint, texConsigne } from '../../modules/outils'
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const titre = 'Lire graphiquement images et antécédents'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -28,7 +27,7 @@ export const uuid = '4b121'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class AntecedentEtImageGraphique extends Exercice {
   constructor() {

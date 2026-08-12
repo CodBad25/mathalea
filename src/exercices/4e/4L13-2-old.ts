@@ -18,7 +18,7 @@ export const uuid = '5ca1e'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ProblemesEnEquation4e extends ProblemesEnEquation {
   constructor() {

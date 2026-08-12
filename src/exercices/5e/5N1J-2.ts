@@ -25,7 +25,7 @@ export const uuid = '4a128'
 export const refs = {
   'fr-fr': ['5N1J-2'],
   'fr-2016': ['6N43', '5A11-3'],
-  'fr-ch': ['9NO4-4'],
+  'fr-ch': ['9NO1A-4'],
 }
 export default class CriteresDeDivisibilite extends Exercice {
   constructor() {

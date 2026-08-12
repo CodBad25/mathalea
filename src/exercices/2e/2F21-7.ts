@@ -20,7 +20,7 @@ export const uuid = '46bec'
 
 export const refs = {
   'fr-fr': ['2F21-7'],
-  'fr-ch': [],
+  'fr-ch': [''],
 }
 export default class SignefonctionaffineVariation extends Exercice {
   constructor() {

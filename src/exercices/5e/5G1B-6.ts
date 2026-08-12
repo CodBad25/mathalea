@@ -11,7 +11,7 @@ export const uuid = '2d2bb'
 export const refs = {
   'fr-fr': ['5G1B-6'],
   'fr-2016': ['5G11-5'],
-  'fr-ch': ['9ES6-10'],
+  'fr-ch': ['9ES3C-14'],
 }
 export default class SymetriesEtCoordonnees5e extends TransformationsDuPlanEtCoordonnees {
   constructor() {

@@ -12,8 +12,8 @@ import Exercice from '../Exercice'
 
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   miseEnEvidence,
   texteEnCouleurEtGras,
@@ -37,7 +37,7 @@ export const uuid = 'e90ee'
 export const refs = {
   'fr-fr': ['6N5-11', '5N1D-1'],
   'fr-2016': ['6C32-1'],
-  'fr-ch': ['9FA3-8'],
+  'fr-ch': ['10FA5D-5'],
 }
 export default class ExerciceProblemesComplexes extends Exercice {
   constructor() {

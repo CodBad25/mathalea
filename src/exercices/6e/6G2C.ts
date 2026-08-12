@@ -43,7 +43,7 @@ export const uuid = '29c3c'
 export const refs = {
   'fr-fr': ['6G2C'],
   'fr-2016': ['6G54'],
-  'fr-ch': ['9ES4-15'],
+  'fr-ch': ['9ES1F-5'],
 }
 export default class ProblemeDeLaChevreDansSonEnclos extends Exercice {
   constructor() {
@@ -67,7 +67,7 @@ export default class ProblemeDeLaChevreDansSonEnclos extends Exercice {
       defaut: 1,
       melange: 4,
     }).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const longueurEnclos = randint(12, 16)
       const largeurEnclos = randint(10, longueurEnclos - 1)
       const longueurCabane = randint(4, Math.ceil(longueurEnclos / 3))

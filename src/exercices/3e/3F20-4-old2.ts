@@ -32,7 +32,7 @@ export const uuid = 'a2b1b'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CoefficientDirecteur extends Exercice {
   constructor() {
@@ -77,7 +77,7 @@ export default class CoefficientDirecteur extends Exercice {
       nbQuestions: this.nbQuestions,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const nomFonction = this.sup2 ? 'f' : choice(['f', 'g', 'h', 'k'])
       const nomVariable = this.sup3 ? 'x' : choice(['x', 'a', 'b', 'c', 't'])
       let a = randint(-9, 9, [-1, 0, 1])

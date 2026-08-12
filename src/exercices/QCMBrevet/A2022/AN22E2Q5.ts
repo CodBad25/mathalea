@@ -19,7 +19,7 @@ export const uuid = '279da'
 export const refs = {
   'fr-fr': ['5G2C-1'],
   'fr-2016': ['5M2QCM-1'],
-  'fr-ch': ['10GM2-3'],
+  'fr-ch': ['10GM2A-1'],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'

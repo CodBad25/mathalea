@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -12,8 +13,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   'Réduire et simplifier une expression littérale (somme et produit)'
@@ -45,7 +44,7 @@ export const uuid = 'a8ad0'
 export const refs = {
   'fr-fr': ['5N5F-2', 'BP2AutoI14'],
   'fr-2016': ['5L12-2', 'BP2AutoI14'],
-  'fr-ch': ['10FA1-10'],
+  'fr-ch': ['10FA4C-3'],
 }
 export default class ReduireUneExpressionLitterale extends Exercice {
   constructor() {

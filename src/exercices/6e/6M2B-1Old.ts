@@ -41,7 +41,7 @@ export const uuid = 'f36f5'
 export const refs = {
   'fr-fr': [],
   'fr-2016': [],
-  'fr-ch': [''],
+  'fr-ch': ['NR'],
 }
 const figureCarre = (cote: number, exercice: IExercice, question: number) => {
   const c = Math.max(5, cote)
@@ -350,7 +350,7 @@ export default class AireCarreRectangle extends Exercice {
       melange: 5,
       defaut: 5,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typeDeQuestion = listeTypeDeQuestions[i]
       let texte = ''
       let texteCorr = ''

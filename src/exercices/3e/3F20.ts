@@ -4,6 +4,7 @@ import { polyline } from '../../lib/2d/Polyline'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import type { AutoCorrectionAMC } from '../../lib/amc/amcTypes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
@@ -27,8 +28,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Étudier des fonctions linéaires'
 export const interactifType = 'mathLive'
@@ -40,7 +39,7 @@ export const dateDeModifImportante = '16/05/2024'
 
 export const refs = {
   'fr-fr': ['3F20'],
-  'fr-ch': ['10FA5-12', '11FA8-6'],
+  'fr-ch': ['11FA1B-1'],
 }
 export const uuid = 'aeb5a'
 /**

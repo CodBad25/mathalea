@@ -9,7 +9,7 @@ export const uuid = 'baa4b'
 export const refs = {
   'fr-fr': ['5N1F-1'],
   'fr-2016': ['5C11-1'],
-  'fr-ch': ['9NO4-21'],
+  'fr-ch': ['9NO1E-5'],
 }
 export default class TraduireUneExpressionParUnePhrase extends EcrireUneExpressionNumerique {
   constructor() {

@@ -32,7 +32,7 @@ export const uuid = '53762'
 
 export const refs = {
   'fr-fr': ['2N52-1', 'BP2RES31'],
-  'fr-ch': ['11FA10-2'],
+  'fr-ch': ['11FA5B-3'],
 }
 export default class EquationsProduitsNuls2 extends Exercice {
   constructor() {

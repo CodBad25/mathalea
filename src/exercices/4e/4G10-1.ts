@@ -10,7 +10,7 @@ export const dateDeModifImportante = '28/12/2022'
 export const uuid = '7b40c'
 export const refs = {
   'fr-fr': ['4G10-1'],
-  'fr-ch': ['10ES2-2'],
+  'fr-ch': ['9ES3-2'],
 }
 export default class TransformationsDuPlanEtCoordonnees4e extends TransformationsDuPlanEtCoordonnees {
   constructor() {

@@ -15,7 +15,7 @@ export const uuid = '1d202'
 export const refs = {
   'fr-fr': ['5G5E-1'],
   'fr-2016': ['5G25a'],
-  'fr-ch': [],
+  'fr-ch': ['9ES1D-2'],
 }
 export default class DefinitionProprietesTrianglesHauteurs extends DefinitionProprietesTriangles {
   constructor() {

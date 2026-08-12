@@ -1,10 +1,10 @@
-import Exercice from '../../Exercice'
-import { choice, combinaisonListes } from '../../../lib/outils/arrayOutils'
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
+import { choice, combinaisonListes } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import Exercice from '../../Exercice'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const titre = 'Calculer un PGCD de tête'
@@ -14,7 +14,7 @@ export const dateDePublication = '17/02/2025' // La date de publication initiale
 export const uuid = 'b6918'
 export const refs = {
   'fr-fr': ['canTEA3-01'],
-  'fr-ch': [],
+  'fr-ch': ['9NO1C-1'],
 }
 
 /**
@@ -38,7 +38,7 @@ export default class NomExercice extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       switch (listeTypeQuestions[i]) {

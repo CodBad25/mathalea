@@ -25,7 +25,7 @@ export const uuid = 'b18e9'
 
 export const refs = {
   'fr-fr': ['4G22-0'],
-  'fr-ch': [],
+  'fr-ch': ['10GM1D-6'],
 }
 
 function figureTriangleEquilateral(

@@ -41,7 +41,7 @@ export const uuid = '082d7'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ImageFonctionAlgebrique extends Exercice {
   constructor() {

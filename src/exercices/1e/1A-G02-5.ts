@@ -17,7 +17,7 @@ export const uuid = 'f19d3'
 
 export const refs = {
   'fr-fr': ['1A-G02-5', '2A-G3-5'],
-  'fr-ch': [],
+  'fr-ch': ['10GM1B-8'],
 }
 
 export const interactifReady = true

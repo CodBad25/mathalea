@@ -60,7 +60,7 @@ export const uuid = '62f66'
 
 export const refs = {
   'fr-fr': ['4C11'],
-  'fr-ch': ['10NO6-2'],
+  'fr-ch': ['9NO2C-13', '10NO2A-5', '11NO1-3'],
 }
 export default class PrioritesEtRelatifs extends Exercice {
   constructor() {
@@ -98,7 +98,7 @@ export default class PrioritesEtRelatifs extends Exercice {
       listeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a: number

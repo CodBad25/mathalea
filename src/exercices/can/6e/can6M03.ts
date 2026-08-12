@@ -17,7 +17,7 @@ export const uuid = 'd52aa'
 
 export const refs = {
   'fr-fr': ['can6M03', 'auto6M1C-flash2'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ConvertirEnM extends ExerciceSimple {
   constructor() {

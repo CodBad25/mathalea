@@ -7,7 +7,7 @@ export const amcType = 'AMCHybride'
 export const uuid = '7d429'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CalculEffectifFrequence5e extends calculEffectifFrequence {
   constructor() {

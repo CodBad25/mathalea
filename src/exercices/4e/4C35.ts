@@ -25,7 +25,7 @@ export const uuid = '125bd'
 
 export const refs = {
   'fr-fr': ['4C35'],
-  'fr-ch': ['10NO2-12'],
+  'fr-ch': ['10NO3D-5'],
 }
 export default class PuissanceDecimaleOuFractionnaire extends Exercice {
   classe: 5 | 4 = 4
@@ -88,7 +88,7 @@ export default class PuissanceDecimaleOuFractionnaire extends Exercice {
     /** string */
     let a /** number */, n /** number */, reponse /** any */
     const alternance2Et3 = combinaisonListes([2, 3], this.nbQuestions)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (listeTypeQuestions[i]) {
         case 'puissancePos':
           a = choice([2, 3, randint(4, 9)])

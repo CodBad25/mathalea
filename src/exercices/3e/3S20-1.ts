@@ -36,7 +36,7 @@ export const uuid = '77231'
 
 export const refs = {
   'fr-fr': ['3S20-1'],
-  'fr-ch': ['11NO2-14'],
+  'fr-ch': ['11NO4A-14'],
 }
 export default class CalculProbaExperience2Epreuves3e extends Exercice {
   niveau = '3eme'
@@ -69,7 +69,7 @@ export default class CalculProbaExperience2Epreuves3e extends Exercice {
       shuffle: false,
     })
 
-    for (let i = 0, cpt = 0, question; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0, question; i < this.nbQuestions && cpt < 50;) {
       switch (QuestionsDisponibles[i]) {
         case 1:
           question = unePieceDeuxUrnes(

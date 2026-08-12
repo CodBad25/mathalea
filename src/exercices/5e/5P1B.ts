@@ -25,7 +25,7 @@ export const uuid = 'b2c55'
 export const refs = {
   'fr-fr': ['5P1B', 'BP2AutoB5', 'BP2CCF13'],
   'fr-2016': ['5N110', 'BP2AutoB5', 'BP2CCF13'],
-  'fr-ch': ['9NO14-11'],
+  'fr-ch': ['10FA2B-10'],
 }
 export default class VariationEnPourcentages extends Exercice {
   constructor() {

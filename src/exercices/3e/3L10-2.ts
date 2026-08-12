@@ -19,7 +19,7 @@ export const uuid = 'c88ba'
 
 export const refs = {
   'fr-fr': ['3L10-2'],
-  'fr-ch': ['11FA1-3'],
+  'fr-ch': ['10FA4E-3'],
 }
 export default class ReduireExpressionComplexe extends OpposeExpression {
   constructor() {

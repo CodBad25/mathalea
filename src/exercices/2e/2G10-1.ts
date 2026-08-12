@@ -6,6 +6,6 @@ export const amcType = 'AMCHybride'
 export const uuid = '430b9'
 export const refs = {
   'fr-fr': ['2G10-1'],
-  'fr-ch': [],
+  'fr-ch': ['11ES1A-10'],
 }
 export default class EgaliteDAngles2nde extends EgaliteDAngles {}

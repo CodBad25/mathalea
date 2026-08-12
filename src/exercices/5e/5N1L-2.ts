@@ -10,7 +10,7 @@ export const uuid = '0507e'
 export const refs = {
   'fr-fr': ['5N1L-2'],
   'fr-2016': ['5A12-3'],
-  'fr-ch': ['NR'],
+  'fr-ch': ['9NO1B-4'],
 }
 
 /** Explorer un labyrinthe de nombres premiers

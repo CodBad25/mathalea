@@ -26,7 +26,7 @@ export const uuid = 'cded3'
 
 export const refs = {
   'fr-fr': ['6G4B-2', '3AutoG04-1'],
-  'fr-ch': [],
+  'fr-ch': ['9ES1B-9'],
 }
 export default class MesureAnglesParticuliers extends Exercice {
   constructor() {

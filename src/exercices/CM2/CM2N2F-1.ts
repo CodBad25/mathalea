@@ -10,14 +10,13 @@ import { context } from '../../modules/context'
 import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   quotientier,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Lire des abscisses fractionnaires'
 export const interactifReady = true
@@ -36,7 +35,7 @@ export const uuid = '0e527'
 export const refs = {
   'fr-fr': ['CM2N2F-1'],
   'fr-2016': ['6N21-3'],
-  'fr-ch': ['9NO11-10'],
+  'fr-ch': ['9NO3A-7'],
 }
 export default class LireAbscissesFractionnairesComplexes extends Exercice {
   constructor() {

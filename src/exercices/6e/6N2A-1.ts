@@ -47,7 +47,7 @@ export const uuid = 'cfa6a'
 export const refs = {
   'fr-fr': ['6N2A-1'],
   'fr-2016': ['6C10'],
-  'fr-ch': ['9NO3-1'],
+  'fr-ch': [''], // Primaire anciennement : ['9NO3-1'],
 }
 export default class AdditionsSoustractionsMultiplicationsPosees extends Exercice {
   version: string

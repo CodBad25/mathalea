@@ -17,7 +17,7 @@ export const uuid = 'd5f34'
 
 export const refs = {
   'fr-fr': ['3G10-2'],
-  'fr-ch': ['11ES3-2'],
+  'fr-ch': ['11ES3A-5'],
 }
 export default class Transformations3e extends Transformations {
   constructor() {

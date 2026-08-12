@@ -9,7 +9,7 @@ export const uuid = '65bed'
 
 export const refs = {
   'fr-fr': ['2G11-5', 'BP2G23'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CalculDeVolumes2nde extends CalculDeVolumes {
   constructor() {

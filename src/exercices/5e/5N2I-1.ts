@@ -2,6 +2,7 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.fillInTheBlanks.test.ts ⚠️
  */
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
@@ -16,8 +17,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Transformer une soustraction en addition puis calculer'
 export const dateDePublication = '13/11/2023'
@@ -36,7 +35,7 @@ export const uuid = 'f2db1'
 export const refs = {
   'fr-fr': ['5N2I-1'],
   'fr-2016': ['5R21-1'],
-  'fr-ch': ['9NO9-14'],
+  'fr-ch': ['9NO2B-14'],
 }
 
 type TypeQuestionsDisponibles = '+-' | '--' | '-+'
@@ -68,7 +67,7 @@ export default class SoustractionRelatifs extends Exercice {
         ? 'Transformer chaque soustraction en une addition puis calculer.'
         : 'Transformer la soustraction en une addition puis calculer.'
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const CoefDecimales = this.sup3 ? 10 : 1

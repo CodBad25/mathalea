@@ -55,7 +55,7 @@ export const uuid = '22412'
 
 export const refs = {
   'fr-fr': ['3L13-3', 'BP2RES14'],
-  'fr-ch': ['11FA6-6'],
+  'fr-ch': ['10FA5D-2'],
 }
 
 // fonctions problèmes
@@ -982,7 +982,7 @@ export default class ProblemesEnEquation extends Exercice {
       shuffle: true,
       nbQuestions: this.nbQuestions,
     }).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // const n = 0 // un paramètre entier qui peut servir dans certains cas.
       let fonctionProbleme = listeDeFonction[listeDeProblemes[i] - 1]
       if (Array.isArray(fonctionProbleme))

@@ -11,7 +11,7 @@ export const uuid = '08f60'
 export const refs = {
   'fr-fr': ['5G3A-7'],
   'fr-2016': ['5G11-4'],
-  'fr-ch': ['9ES6-9'],
+  'fr-ch': ['9ES3C-8'],
 }
 export default class TransformationsDuPlanEtCoordonnees5e extends TransformationsDuPlanEtCoordonnees {
   constructor() {

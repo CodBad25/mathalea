@@ -12,7 +12,7 @@ export const uuid = '8d4bf'
 export const refs = {
   'fr-fr': ['5G3A-1'],
   'fr-2016': ['5G11-1'],
-  'fr-ch': ['9ES6-5'],
+  'fr-ch': ['9ES3C-2'],
 }
 export default class SymetrieCentralePoint extends ConstruireParSymetrie {
   constructor() {

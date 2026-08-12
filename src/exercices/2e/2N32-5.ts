@@ -27,7 +27,7 @@ export const uuid = '660de'
 
 export const refs = {
   'fr-fr': ['2N32-5'],
-  'fr-ch': ['11NO1-8', '1mCN-10'],
+  'fr-ch': ['11NO3A-5', '1mCN-10'],
 }
 export default class DoubleDistributiviteAvecRacineCarree extends Exercice {
   constructor() {
@@ -64,7 +64,7 @@ export default class DoubleDistributiviteAvecRacineCarree extends Exercice {
       this.nbQuestions === 1
         ? 'Développer le produit  suivant.'
         : 'Développer les produits  suivants.'
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typesDeQuestions = listeTypeDeQuestions[i]
 
       let a1 = 0

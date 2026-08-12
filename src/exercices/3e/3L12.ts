@@ -30,7 +30,7 @@ export const uuid = '81fd2'
 
 export const refs = {
   'fr-fr': ['3L12', 'BP2AutoI23', 'BP1AUTO090'],
-  'fr-ch': ['11FA3-4'],
+  'fr-ch': ['11FA4C-3'],
 }
 export default class FactoriserIdentitesRemarquables3 extends Exercice {
   constructor() {

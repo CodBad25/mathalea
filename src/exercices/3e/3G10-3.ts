@@ -5,6 +5,7 @@ import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { rotation } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
+import { orangeMathalea } from '../../lib/colors'
 import { arcenciel } from '../../lib/format/style'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
@@ -12,7 +13,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
 export const titre =
   "Construire l'image d'un point par une rotation avec cible auto-corrective"
 
@@ -26,7 +26,7 @@ export const uuid = '19ce6'
 
 export const refs = {
   'fr-fr': ['3G10-3'],
-  'fr-ch': ['10ES2-8'],
+  'fr-ch': ['9ES3D-1'],
 }
 export default class ConstruireRotationPoint3e extends Exercice {
   constructor() {

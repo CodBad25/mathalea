@@ -33,7 +33,7 @@ export const uuid = 'c71fb'
 export const refs = {
   'fr-fr': ['auto6P3B'],
   'fr-2016': ['6P11-3'],
-  'fr-ch': ['9NO16-6'],
+  'fr-ch': [''], // Primaire anciennement :['9NO16-6'],
 }
 export default class ProblemesDeFoisPlusEtDeFoisMoins extends Exercice {
   constructor() {

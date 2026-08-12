@@ -31,7 +31,7 @@ export const uuid = '515b0'
 
 export const refs = {
   'fr-fr': ['4L20-0', 'BP2RES9', 'BP1AUTO020'],
-  'fr-ch': ['10FA3-6'],
+  'fr-ch': ['10FA5C-1'],
 }
 export default class ExerciceEquationASolutionEntiere extends Exercice {
   constructor() {
@@ -56,11 +56,7 @@ export default class ExerciceEquationASolutionEntiere extends Exercice {
     this.consigne =
       this.nbQuestions > 1 ? 'Résoudre les équations suivantes.' : ''
     let listeTypeDeQuestions: (
-      | 'ax+b=0'
-      | 'ax+b=d'
-      | 'ax=d'
-      | 'x+b=d'
-      | 'ax+b=cx+d'
+      'ax+b=0' | 'ax+b=d' | 'ax=d' | 'x+b=d' | 'ax+b=cx+d'
     )[] = []
     switch (this.sup2.toString()) {
       case '1':
@@ -86,7 +82,7 @@ export default class ExerciceEquationASolutionEntiere extends Exercice {
       listeTypeDeQuestions,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const equation = equation1erDegre1Inconnue({
         valeursRelatives: this.sup,
         type: listeTypeDeQuestions[i],

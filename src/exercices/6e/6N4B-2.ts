@@ -39,7 +39,7 @@ export const uuid = '66095'
 
 export const refs = {
   'fr-fr': ['6N4B-2'],
-  'fr-ch': ['autres-15'],
+  'fr-ch': ['10FA1A-8'],
 }
 
 export default class PaternNum06eme extends Exercice {

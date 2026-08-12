@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -11,8 +12,6 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 import choisirExpressionNumerique from './_choisirExpressionNumerique'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -28,7 +27,7 @@ export const uuid = 'e61fc'
 export const refs = {
   'fr-fr': ['5N1G'],
   'fr-2016': ['5C12'],
-  'fr-ch': ['9NO6-2'],
+  'fr-ch': ['9NO1F-1'],
 }
 export default class CalculerUneExpressionNumerique extends Exercice {
   version: number

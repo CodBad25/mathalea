@@ -49,7 +49,7 @@ export const dateDeModifImportante = '16/11/2025'
 export const uuid = '58a6f'
 export const refs = {
   'fr-fr': ['3G24-2'],
-  'fr-ch': ['11GM3-9', '1mG3-2'],
+  'fr-ch': ['11ES1C-3', '11GM1B-4', '1mG3-2'],
 }
 /**
  * calcul de longueurs avec des triangles semblables

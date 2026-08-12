@@ -35,7 +35,7 @@ export const uuid = '75f80'
 export const refs = {
   'fr-fr': ['5N3B-2', 'BP2AutoH23'],
   'fr-2016': ['5N20-2', 'BP2AutoH23'],
-  'fr-ch': ['10NO5-3'],
+  'fr-ch': ['10NO3B-6'],
 }
 export default class ExerciceAdditionnerSoustraireFractions5e extends Exercice {
   constructor(max = 5) {

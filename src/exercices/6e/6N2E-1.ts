@@ -43,7 +43,7 @@ export const uuid = '52939'
 export const refs = {
   'fr-fr': ['6N2E-1'],
   'fr-2016': ['6C30'],
-  'fr-ch': ['9NO8-8'],
+  'fr-ch': ['9NO1G-14'],
 }
 export default class MultiplierDecimaux extends Exercice {
   constructor() {

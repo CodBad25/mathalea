@@ -18,7 +18,7 @@ export const uuid = 'f92e1'
 export const refs = {
   'fr-fr': ['CM2N3G-1'],
   'fr-2016': ['c3C10-3'],
-  'fr-ch': ['9NO8-2'],
+  'fr-ch': ['PR-34'],
 }
 export default class MultiplierDecimauxPar101001000CM extends MultiplierDecimauxPar101001000 {
   constructor() {

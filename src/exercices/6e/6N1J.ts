@@ -14,7 +14,7 @@ export const uuid = '15ece'
 export const refs = {
   'fr-fr': ['6N1J'],
   'fr-2016': ['6N31-7'],
-  'fr-ch': ['9NO7-12'],
+  'fr-ch': ['PR-45'],
 }
 
 export default class RangerOrdreCroissantDecroissantDecimaux extends RangerOrdreCroissantDecroissant {

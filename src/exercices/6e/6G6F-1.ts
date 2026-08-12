@@ -42,7 +42,7 @@ export const uuid = 'e0bcb'
 export const refs = {
   'fr-fr': ['6G6F-1'],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['9ES1F-4', '11ES1A-2'],
 }
 export default class ConstruireUnTriangleParticulierEtSonCercleCirconscrit extends Exercice {
   constructor() {
@@ -72,7 +72,7 @@ export default class ConstruireUnTriangleParticulierEtSonCercleCirconscrit exten
       defaut: 4,
       shuffle: false,
     }).map(Number)
-    for (let i = 0, verif, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, verif, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       if (i % 5 === 0) listeDeNomsDePolygones = ['PQD']

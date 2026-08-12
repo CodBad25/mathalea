@@ -37,7 +37,7 @@ export const uuid = 'ad8c9'
 export const refs = {
   'fr-fr': ['6N1C-1'],
   'fr-2016': ['6N11'],
-  'fr-ch': ['9NO2-1'],
+  'fr-ch': [''], // Primaire anciennement :['9NO2-1'],
 }
 export default class LireAbscisseEntiere2d extends Exercice {
   constructor() {

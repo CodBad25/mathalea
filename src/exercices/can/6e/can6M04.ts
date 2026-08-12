@@ -1,5 +1,8 @@
 import { choice } from '../../../lib/outils/arrayOutils'
-import { miseEnEvidence, texteEnCouleur } from '../../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -19,7 +22,7 @@ export const uuid = 'c0bf1'
 
 export const refs = {
   'fr-fr': ['can6M04', 'auto6M1C-flash3'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ConversionEnTousSens extends ExerciceSimple {
   constructor() {
@@ -59,7 +62,8 @@ export default class ConversionEnTousSens extends ExerciceSimple {
           }
 
           this.optionsChampTexte = {
-            texteApres: '$\\text{ g }$' }
+            texteApres: '$\\text{ g }$',
+          }
           this.canEnonce = 'Compléter.'
           this.canReponseACompleter = `$${texNombre(a)}\\text{ kg}$ $= \\dots\\text{ g}$`
           this.correction = `$${texNombre(a)}\\text{ kg}$ $=${miseEnEvidence(texNombre(a * 1000))}\\text{ g}$`

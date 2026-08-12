@@ -12,7 +12,7 @@ export const dateDePublication = '12/11/2024'
 export const uuid = 'a9001'
 export const refs = {
   'fr-fr': ['3C10-4'],
-  'fr-ch': ['9NO5-0'],
+  'fr-ch': ['NR'],
 }
 /**
  * @Author Jean-Claude LHOTE
@@ -51,7 +51,7 @@ export default class LireUnePuissance extends Exercice {
         { id: '15', contenu: 'puissance' },
       ],
     ]
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const mantisse = randint(2, 9) * (this.sup ? choice([1, -1]) : 1)
       const mantisseEnLettres = `${mantisse < 0 ? 'moins ' : ''}${nombreEnLettres(Math.abs(mantisse))}`
       const mantisseEtiquette = etiquettes[0].find(

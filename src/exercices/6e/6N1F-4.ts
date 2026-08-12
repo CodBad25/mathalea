@@ -24,7 +24,7 @@ export const uuid = '6b534'
 
 export const refs = {
   'fr-fr': ['6N1F-4'],
-  'fr-ch': ['9NO14-7'],
+  'fr-ch': ['10FA2B-8'],
 }
 export default class ValeurApprocheeDePourcentages extends Exercice {
   constructor() {

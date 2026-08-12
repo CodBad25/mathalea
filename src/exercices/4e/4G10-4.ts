@@ -37,7 +37,7 @@ export const uuid = '6a2de'
 
 export const refs = {
   'fr-fr': ['4G10-4'],
-  'fr-ch': [],
+  'fr-ch': ['9ES3A-3'],
 }
 
 function deuxCiblesSeChevauchent(cibles: ReturnType<typeof cibleCarree>[]) {

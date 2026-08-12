@@ -10,14 +10,13 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { fractionCliquable } from '../../modules/2dinteractif'
 import { context } from '../../modules/context'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Effectuer des calculs simples avec des fractions'
 export const dateDePublication = '20/11/2021'
@@ -35,7 +34,7 @@ export const uuid = 'c75b6'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class FractionsCalculsSimples extends Exercice {
   constructor() {

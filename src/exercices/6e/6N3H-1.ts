@@ -37,7 +37,7 @@ export const uuid = 'f8a4e'
 export const refs = {
   'fr-fr': ['6N3H-1', 'BP2AutoG5'],
   'fr-2016': ['6N41-1', 'BP2AutoG5'],
-  'fr-ch': ['9NO12-2'],
+  'fr-ch': ['9NO3B-7'],
 }
 export default class ExerciceLabyrintheFractionsEgales extends Exercice {
   niveau: string

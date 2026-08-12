@@ -13,7 +13,7 @@ export const uuid = '04ea4'
 export const refs = {
   'fr-fr': ['6G4A-3'],
   'fr-2016': ['6G22-3'],
-  'fr-ch': [''],
+  'fr-ch': ['9ES1B-8'],
 }
 export default class VocabulaireAngles6e extends VocabulaireAngles {
   constructor() {

@@ -55,7 +55,7 @@ export const interactifType = 'mathLive'
 export const uuid = '1bf3b'
 export const refs = {
   'fr-fr': ['4C11-0'],
-  'fr-ch': ['1mCN-14', '9NO6-5', '10N06-4'],
+  'fr-ch': ['1mCN-14', '9NO2C-14', '10N02A-6', '11NO2-4'],
 }
 
 export default class PrioritesEtRelatifsComplex extends Exercice {
@@ -104,7 +104,7 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
       nbQuestions: this.nbQuestions,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a = 0

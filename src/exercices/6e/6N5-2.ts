@@ -51,7 +51,7 @@ export const uuid = '4e2b2'
 export const refs = {
   'fr-fr': ['6N5-2', 'BP2CCF4', '5N1D-5'],
   'fr-2016': ['6C12-1', 'BP2CCF4'],
-  'fr-ch': ['9FA3-6'],
+  'fr-ch': ['9FA2B-20'],
 }
 export default class QuestionsMasses extends Exercice {
   constructor() {

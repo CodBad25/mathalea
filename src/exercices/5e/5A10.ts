@@ -34,7 +34,7 @@ export const uuid = '4828d'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['9NO4-6'],
+  'fr-ch': ['9NO1A-16'],
 }
 export default class ListeDesDiviseurs5e extends Exercice {
   constructor() {

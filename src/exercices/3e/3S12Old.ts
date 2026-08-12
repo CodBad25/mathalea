@@ -1,5 +1,6 @@
 import { traceBarre } from '../../lib/2d/diagrammes'
 import { repere } from '../../lib/2d/reperes'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -17,8 +18,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Calculer des effectifs et des fréquences'
 export const interactifReady = true
@@ -37,7 +36,7 @@ export const uuid = 'f4b95'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CalculEffectifFrequence extends Exercice {
   constructor() {
@@ -80,7 +79,7 @@ export default class CalculEffectifFrequence extends Exercice {
       'vautours',
     ]
     const symbolePourCent = context.isHtml ? '%' : '$\\%$'
-    for (let ee = 0, cpt = 0; ee < this.nbQuestions && cpt < 50; ) {
+    for (let ee = 0, cpt = 0; ee < this.nbQuestions && cpt < 50;) {
       // Boucle principale où i+1 correspond au numéro de la question
       const nbAnimaux = 4 + parseInt(this.sup) // nombre d'animaux différents dans l'énoncé (entre 5 et 7)
       const nbQuadri = 3

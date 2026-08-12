@@ -10,9 +10,8 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { amcConvert } from '../../lib/amc/amcBuilders'
-
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -30,7 +29,7 @@ export const uuid = '7f50c'
 export const refs = {
   'fr-fr': ['5N1L-4'],
   'fr-2016': ['5A13'],
-  'fr-ch': ['9NO4-10'],
+  'fr-ch': ['9NO1B-3'],
 }
 export default class ExerciceDecomposerEnFacteursPremiers extends Exercice {
   constructor() {

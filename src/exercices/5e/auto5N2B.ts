@@ -27,7 +27,7 @@ export const uuid = '503dd'
 
 export const refs = {
   'fr-fr': ['auto5N2B'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CompleterUneAdditionATrou extends Exercice {
   constructor() {

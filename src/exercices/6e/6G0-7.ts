@@ -22,7 +22,7 @@ export const uuid = '02320'
 export const refs = {
   'fr-fr': ['6G0-7'],
   'fr-2016': ['6G51-1'],
-  'fr-ch': ['9ES1-4'],
+  'fr-ch': ['9ES1A-4'],
 }
 export default class ReconnaitreDesPointsAlignes extends Exercice {
   constructor() {
@@ -42,7 +42,6 @@ export default class ReconnaitreDesPointsAlignes extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       objetsEnonce = []
       objetsCorrection = []

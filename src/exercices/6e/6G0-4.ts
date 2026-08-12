@@ -35,7 +35,7 @@ export const uuid = '83763'
 export const refs = {
   'fr-fr': ['6G0-4'],
   'fr-2016': ['6G10-3'],
-  'fr-ch': ['9ES1-8'],
+  'fr-ch': ['9ES1A-16'],
 }
 export default class CliqueFigure extends Exercice {
   constructor() {

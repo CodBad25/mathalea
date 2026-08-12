@@ -39,7 +39,7 @@ export const uuid = 'a2582'
 export const refs = {
   'fr-fr': ['CM2N2E-3'],
   'fr-2016': ['6G24-4'],
-  'fr-ch': [],
+  'fr-ch': ['9NO3A-6'],
 }
 export default class PlacerPointsAbscissesFractionnairesComplexes extends Exercice {
   niveau: number = 6

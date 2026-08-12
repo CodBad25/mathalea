@@ -34,7 +34,7 @@ export const uuid = '5f115'
 export const refs = {
   'fr-fr': ['6G8A-1'],
   'fr-2016': ['6G43'],
-  'fr-ch': ['9ES7-6'],
+  'fr-ch': ['9ES2C-1'],
 }
 export default class DenombrerCubes extends Exercice {
   constructor() {
@@ -296,8 +296,8 @@ export default class DenombrerCubes extends Exercice {
         this.listeCanEnonces[q] =
           (listeTypeDeQuestions[q] === 1
             ? unitesCubes
-              ? 'Compter les cubes de l\'empilement (voir figure).'
-              : 'Calculer le volume en $\\text{cm}^3$ de l\'empilement (voir figure).'
+              ? "Compter les cubes de l'empilement (voir figure)."
+              : "Calculer le volume en $\\text{cm}^3$ de l'empilement (voir figure)."
             : unitesCubes
               ? `Compter les cubes manquants pour compléter un grand cube de $${longueur}$ petits cubes d'arête (voir figure).`
               : `Calculer le volume en $\\text{cm}^3$ manquant pour reconstruire un cube de $${longueur}\\text{ cm}$ d'arête (voir figure).`) +

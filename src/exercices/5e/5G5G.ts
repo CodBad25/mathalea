@@ -12,7 +12,7 @@ export const uuid = 'da670'
 export const refs = {
   'fr-fr': ['5G5G'],
   'fr-2016': ['5G22b'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class DroiteRemarquableDuTriangleMedianes extends DroiteRemarquableDuTriangle {
   constructor() {

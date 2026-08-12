@@ -1,3 +1,4 @@
+import { orangeMathalea } from '../../../lib/colors'
 import { texPrix } from '../../../lib/format/style'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -5,7 +6,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { orangeMathalea } from '../../../lib/colors'
 export const titre = 'Résoudre un problème de proportionnalité**'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -23,7 +23,7 @@ export const uuid = 'c3a01'
 
 export const refs = {
   'fr-fr': ['can5P08', '5P1C-flash2'],
-  'fr-ch': [],
+  'fr-ch': ['9FA2B-11'],
 }
 export default class Proportionnalite3 extends ExerciceSimple {
   constructor() {

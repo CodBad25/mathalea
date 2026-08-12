@@ -15,7 +15,7 @@ export const interactifReady = true
 export const interactifType = 'guide-ane'
 export const refs = {
   'fr-fr': ['4G30-0'],
-  'fr-ch': [],
+  'fr-ch': ['11ES1C-4'],
 }
 export const dateDePublication = '30/12/2025'
 /**

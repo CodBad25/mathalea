@@ -1,21 +1,21 @@
-import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit';
-import { droite } from '../../lib/2d/droites';
-import { fixeBordures } from '../../lib/2d/fixeBordures';
-import { pointAbstrait } from '../../lib/2d/PointAbstrait';
-import { nommePolygone, polygone } from '../../lib/2d/polygones';
-import { polyline } from '../../lib/2d/Polyline';
-import { projectionOrtho, rotation } from '../../lib/2d/transformations';
+import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
+import { droite } from '../../lib/2d/droites'
+import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { nommePolygone, polygone } from '../../lib/2d/polygones'
+import { polyline } from '../../lib/2d/Polyline'
+import { projectionOrtho, rotation } from '../../lib/2d/transformations'
 import {
-    addObjetsCliquables,
-    type ObjetCliquableData,
-} from '../../lib/customElements/ObjetsCliquablesElement';
-import { handleAnswers } from '../../lib/interactif/gestionInteractif';
-import { choice } from '../../lib/outils/arrayOutils';
-import { creerNomDePolygone } from '../../lib/outils/outilString';
-import { context } from '../../modules/context';
-import { mathalea2d } from '../../modules/mathalea2d';
-import { gestionnaireFormulaireTexte, randint } from '../../modules/outils';
-import Exercice from '../Exercice';
+  addObjetsCliquables,
+  type ObjetCliquableData,
+} from '../../lib/customElements/ObjetsCliquablesElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { choice } from '../../lib/outils/arrayOutils'
+import { creerNomDePolygone } from '../../lib/outils/outilString'
+import { context } from '../../modules/context'
+import { mathalea2d } from '../../modules/mathalea2d'
+import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = 'Indentifier les côtés d’un triangle rectangle'
 export const interactifReady = true
@@ -26,7 +26,7 @@ export const uuid = '40d57'
 
 export const refs = {
   'fr-fr': ['4G20-0'],
-  'fr-ch': [],
+  'fr-ch': ['10GM1D-1'],
 }
 
 /**
@@ -51,7 +51,7 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
       nbQuestions: this.nbQuestions,
     }).map(Number)
 
-    for (let i = 0; i < this.nbQuestions; ) {
+    for (let i = 0; i < this.nbQuestions;) {
       const terme = choice([
         'opposé',
         'adjacent',
@@ -131,8 +131,8 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
               etat:
                 terme === 'hypoténuse'
                   ? objet.id === AC
-                : (terme === 'adjacent' && indexSommet === 0) ||
-                    (terme === 'opposé' && indexSommet === 2)
+                  : (terme === 'adjacent' && indexSommet === 0) ||
+                      (terme === 'opposé' && indexSommet === 2)
                     ? objet.id === AB
                     : objet.id === BC,
             }))
@@ -157,7 +157,11 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
             const CH = nom[2] + nom[3]
             const AH = nom[0] + nom[3]
             const turnTriangles = randint(0, 360)
-            const triangles = rotation(polyline(A,B,C,H,A,B,H), A, turnTriangles)
+            const triangles = rotation(
+              polyline(A, B, C, H, A, B, H),
+              A,
+              turnTriangles,
+            )
             const Hrotated = rotation(H, A, turnTriangles)
             const listeTriangles = [
               nom.slice(0, 3), // ABC
@@ -182,7 +186,10 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
                 Hrotated,
                 triangles.listePoints[1],
               ),
-              nommePolygone(polygone(triangles.listePoints.slice(0, 4)), nom.slice(0, 4)),
+              nommePolygone(
+                polygone(triangles.listePoints.slice(0, 4)),
+                nom.slice(0, 4),
+              ),
             ]
             const figureId = `figEx${this.numeroExercice}Q${i}`
             question += mathalea2d(
@@ -197,19 +204,19 @@ export default class IdentifierCoteTriangleRectangle extends Exercice {
                     ? AB
                     : BC
                 : choixTriangle === listeTriangles[0]
-                ? (terme === 'adjacent' && indexSommet === 0) ||
+                  ? (terme === 'adjacent' && indexSommet === 0) ||
                     (terme === 'opposé' && indexSommet === 2)
                     ? AB
                     : BC
-                : choixTriangle === listeTriangles[1]
-                  ? (terme === 'adjacent' && indexSommet === 0) ||
+                  : choixTriangle === listeTriangles[1]
+                    ? (terme === 'adjacent' && indexSommet === 0) ||
                       (terme === 'opposé' && indexSommet === 2)
-                    ? AH
-                    : BH
-                  : (terme === 'adjacent' && indexSommet === 0) ||
-                      (terme === 'opposé' && indexSommet === 2)
-                    ? BH
-                    : CH
+                      ? AH
+                      : BH
+                    : (terme === 'adjacent' && indexSommet === 0) ||
+                        (terme === 'opposé' && indexSommet === 2)
+                      ? BH
+                      : CH
             const objets: ObjetCliquableData[] = [
               {
                 type: 'segment',

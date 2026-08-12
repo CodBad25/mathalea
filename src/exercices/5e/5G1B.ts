@@ -9,7 +9,7 @@ export const uuid = 'cf83c'
 export const refs = {
   'fr-fr': ['5G1B'],
   'fr-2016': ['5R12'],
-  'fr-ch': ['9FA1-5'],
+  'fr-ch': ['9FA1A-1'],
 }
 export default class ReperagePointDuQuartDePlan extends ReperagePointDuPlan {
   constructor() {

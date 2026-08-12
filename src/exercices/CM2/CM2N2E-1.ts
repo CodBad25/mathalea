@@ -1,6 +1,7 @@
 import Figure from 'apigeom'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import { orangeMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -14,7 +15,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const dateDePublication = '28/01/2023'
 export const dateDeModifImportante = '08/06/2024'
@@ -32,7 +32,7 @@ export const uuid = '778c0'
 export const refs = {
   'fr-fr': ['CM2N2E-1'],
   'fr-2016': ['6N21-1'],
-  'fr-ch': ['9NO11-5'],
+  'fr-ch': ['9NO3A-5'],
 }
 
 type goodAnswer = { label: string; x: number }[]
@@ -82,7 +82,7 @@ class PlacerPointsAbscissesFractionnairesBis extends Exercice {
       [],
       [],
     ]
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let origine, num, den, coef: number
@@ -299,7 +299,9 @@ class PlacerPointsAbscissesFractionnairesBis extends Exercice {
     if (this.figuresApiGeom == null) return ['KO']
     if (this.figuresApiGeom[i] == null) return ['KO']
     if (!(this.figuresApiGeom[i] instanceof Figure)) return ['KO']
-    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(this.figuresApiGeom[i])
+    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(
+      this.figuresApiGeom[i],
+    )
     const result: ('OK' | 'KO')[] = []
     const figure = this.figuresApiGeom[i]
     figure.isDynamic = false

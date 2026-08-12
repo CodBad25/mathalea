@@ -37,7 +37,7 @@ export const uuid = '37e38'
 export const refs = {
   'fr-fr': ['5G1B-4'],
   'fr-2016': ['5G42-2'],
-  'fr-ch': [],
+  'fr-ch': ['9FA1A-4'],
 }
 const couplesVecteursEntiers = [
   [

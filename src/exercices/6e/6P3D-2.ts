@@ -30,7 +30,7 @@ export const uuid = 'f7a15'
 export const refs = {
   'fr-fr': ['6P3D-2'],
   'fr-2016': ['6P11-5'],
-  'fr-ch': ['9FA3-19'],
+  'fr-ch': ['9FA2A-1'],
 }
 /**
  * @author Jean-claude Lhote
@@ -401,7 +401,7 @@ export default class ProportionnaliteParLinearite2 extends Exercice {
         ? 'Compléter le tableau de proportionnalité ci dessous.'
         : 'Compléter les tableaux de proportionnalité ci-dessous.'
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const fonctionChoisie = choice([achat, achat, dillution, carrelage])
       const nbo: number[] = []
       const prix: number[] = []
@@ -421,7 +421,7 @@ export default class ProportionnaliteParLinearite2 extends Exercice {
       const B: number[] = []
       const X: number[] = []
       const Y: number[] = []
-      for (let j = 2, index = 0; j < 5; ) {
+      for (let j = 2, index = 0; j < 5;) {
         // On va chercher les 3 autres nombres
         if (index >= coefficients.length) {
           index = 0

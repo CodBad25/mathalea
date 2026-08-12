@@ -37,7 +37,7 @@ export const uuid = '65288'
 export const refs = {
   'fr-fr': ['6P3D', 'BP2AutoL7'],
   'fr-2016': ['6P11-2', 'BP2AutoL7'],
-  'fr-ch': ['9FA3-11'],
+  'fr-ch': ['9FA2B-7'],
 }
 
 type Item = [string, Decimal]

@@ -35,7 +35,7 @@ export const uuid = '5f315'
 export const refs = {
   'fr-fr': ['6M4A'],
   'fr-2016': ['6D11'],
-  'fr-ch': ['10GM3-3'],
+  'fr-ch': ['9GM3A-1'],
 }
 export default class SommeDeDurees extends Exercice {
   constructor() {

@@ -16,7 +16,7 @@ export const uuid = '7d21c'
 
 export const refs = {
   'fr-fr': ['can5C16', '5N1H-flash3'],
-  'fr-ch': [],
+  'fr-ch': ['9NO1G-3'],
 }
 export default class CalculAstucieuxAvecFactorisation extends ExerciceSimple {
   constructor() {

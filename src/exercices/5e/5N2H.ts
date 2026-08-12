@@ -49,7 +49,7 @@ export const uuid = '36e2a'
 export const refs = {
   'fr-fr': ['5N2H'],
   'fr-2016': ['5R20-3'],
-  'fr-ch': ['9NO9-8'],
+  'fr-ch': ['9NO2B-11'],
 }
 export default class ExerciceAdditionsDe5Relatifs extends Exercice {
   constructor() {
@@ -91,7 +91,7 @@ export default class ExerciceAdditionsDe5Relatifs extends Exercice {
       [true, true, false],
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let c, relatifs
       let texte = ''
       let texteCorr = ''

@@ -12,7 +12,7 @@ export const uuid = 'ec781'
 export const refs = {
   'fr-fr': ['6P3A-1'],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['9FA2B-1'],
 }
 /**
  *
@@ -36,7 +36,7 @@ export default class IdentifierGrandeurs extends Exercice {
         ? 'Identifier les grandeurs dans chaque situation.'
         : 'Dans chaque situation, préciser si les grandeurs présentées sont dans une relation de proportionnalité.'
     const listeSituations = combinaisonListes(situations, this.nbQuestions)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const situation = listeSituations[i]
       const variante = situation[Math.floor(situation.length * Math.random())]
       const unite1 = variante.unites[0]

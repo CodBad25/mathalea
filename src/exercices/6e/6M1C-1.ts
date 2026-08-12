@@ -17,7 +17,7 @@ export const uuid = '5db4b'
 export const refs = {
   'fr-fr': ['6M1C-1'],
   'fr-2016': ['6M22-2a'],
-  'fr-ch': [],
+  'fr-ch': ['10GM1C-1'],
 }
 export default class PerimetrePortionsDeDisques extends PerimetreAireEtPortionsDeDisques {
   constructor() {

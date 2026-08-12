@@ -7,6 +7,6 @@ export const amcReady = true
 export const uuid = '3b7ee'
 export const refs = {
   'fr-fr': ['2N41-3', 'BP1AUTO074'],
-  'fr-ch': ['11FA2-9'],
+  'fr-ch': ['NR'],
 }
 export default class DevelopperIdentitesRemarquables32nde extends DevelopperIdentitesRemarquables3 {}

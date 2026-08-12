@@ -27,7 +27,7 @@ export const uuid = 'ed0ea'
 export const refs = {
   'fr-fr': ['6N0B-1'],
   'fr-2016': ['6C13'],
-  'fr-ch': ['9FA2-1'],
+  'fr-ch': ['9NO1E-2'],
 }
 export default class VocabulaireEtOperations extends Exercice {
   constructor() {
@@ -72,7 +72,7 @@ export default class VocabulaireEtOperations extends Exercice {
     if (this.sup2) decimal = 10 ** randint(1, 2)
     else decimal = 1
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte: string = ''
       let texteCorr: string = ''
       resultats = choisirExpressionNumerique(1, decimal, true, true, sousCas[i])

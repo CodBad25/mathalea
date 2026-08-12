@@ -31,7 +31,7 @@ export const uuid = '234a7'
 export const refs = {
   'fr-fr': [],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ExerciceComparerDeuxFractionsOld extends Exercice {
   constructor(max = 11) {

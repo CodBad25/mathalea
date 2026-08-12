@@ -8,7 +8,7 @@ export const dateDeModifImportante = '10/06/2024'
 export const uuid = 'e26ca'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['10GM2-1'],
+  'fr-ch': ['NR'],
 }
 export default class CalculDeVolumes5e extends CalculDeVolumes {
   constructor() {

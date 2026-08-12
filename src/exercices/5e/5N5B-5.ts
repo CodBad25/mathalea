@@ -23,7 +23,7 @@ export const uuid = '79a6e'
 export const refs = {
   'fr-fr': ['5N5B-5'],
   'fr-2016': ['5L14-6'],
-  'fr-ch': [],
+  'fr-ch': ['9FA4A-2'],
 }
 /**
  * Calculer une expression littérale simple pour de "petites" valeurs,
@@ -80,7 +80,7 @@ export default class CalculerUneExpressionSimpleFractions extends Exercice {
       ? `Pour $${inconnue}=${fraction(x, b * k).texFraction}$, calculer :`
       : `Pour $${inconnue}=${x}$, calculer :`
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let expression = ''

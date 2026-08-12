@@ -35,7 +35,7 @@ export const uuid = 'd4089'
 export const refs = {
   'fr-fr': ['5G3A-6'],
   'fr-2016': ['5G11-41'],
-  'fr-ch': [],
+  'fr-ch': ['9ES3C-7'],
 }
 export default class DemiTourEtCoordonnees extends Exercice {
   constructor() {

@@ -20,7 +20,7 @@ export const uuid = '3e083'
 export const refs = {
   'fr-fr': ['CM2N2W-1'],
   'fr-2016': ['6N31-1'],
-  'fr-ch': ['9NO7-5'],
+  'fr-ch': ['PR-39'],
 }
 export default class EncadrerUnDecimalParDeuxEntiersConsecutifs extends Exercice {
   constructor() {
@@ -43,7 +43,6 @@ export default class EncadrerUnDecimalParDeuxEntiersConsecutifs extends Exercice
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const m = randint(1, 9)
       const c = randint(1, 9)

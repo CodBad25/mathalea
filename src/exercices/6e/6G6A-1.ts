@@ -42,7 +42,7 @@ export const uuid = 'e0bc9'
 export const refs = {
   'fr-fr': ['6G6A-1'],
   'fr-2016': ['6G21'],
-  'fr-ch': ['9ES4-7'],
+  'fr-ch': ['9ES1C-7'],
 }
 export default class ConstruireUnTriangle extends Exercice {
   classe: number
@@ -128,7 +128,7 @@ export default class ConstruireUnTriangle extends Exercice {
       this.nbQuestions,
     )
     let listeDeNomsDePolygones: string[] = []
-    for (let i = 0, verif, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, verif, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       if (i % 5 === 0) listeDeNomsDePolygones = ['PQD']

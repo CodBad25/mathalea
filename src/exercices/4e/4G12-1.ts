@@ -58,7 +58,7 @@ export const uuid = '8ac93'
 
 export const refs = {
   'fr-fr': ['4G12-1'],
-  'fr-ch': ['9ES6-17', '10ES2-6'],
+  'fr-ch': ['9ES3-5'],
 }
 
 const motifs = [
@@ -704,10 +704,7 @@ export default class TrouverLaTransformation extends Exercice {
             texteCorr: string
             texteInteractif: string
             animation?:
-              | TranslationAnimee
-              | RotationAnimee
-              | SymetrieAnimee
-              | Vide2d
+              TranslationAnimee | RotationAnimee | SymetrieAnimee | Vide2d
             vecteur?: Vecteur
             depart: number
             arrivee: number
@@ -843,8 +840,7 @@ export default class TrouverLaTransformation extends Exercice {
       const texteCorrPossible = []
       const reponsePossible = []
       const propositions: (
-        | { latex: string; value: string }
-        | { label: string; value: string }
+        { latex: string; value: string } | { label: string; value: string }
       )[][] = []
       const objetEnonce = []
       for (let k = 0; k < 4; k++) {

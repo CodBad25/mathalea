@@ -19,7 +19,7 @@ import ExerciceBrevetA from '../ExerciceBrevetA'
 export const uuid = 'fb6ad'
 export const refs = {
   'fr-fr': ['3Z1DNB-12'],
-  'fr-ch': ['11FA8-22', '1mF1-15'],
+  'fr-ch': ['11FA1C-5', '1mF1-15'],
 }
 export const titre =
   'Se préparer au DNB  : fonctions affines et lecture graphique'

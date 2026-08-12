@@ -13,7 +13,7 @@ export const uuid = '64d46'
 export const refs = {
   'fr-fr': ['CM2D3B-2', 'BP2AutoL11'],
   'fr-2016': ['c3C32-03', 'BP2AutoL11'],
-  'fr-ch': ['9FA3-21'],
+  'fr-ch': ['9FA2B-22'],
 }
 export const titre =
   'Savoir résoudre un problème de proportionnalité : Le sportif'

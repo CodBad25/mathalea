@@ -30,7 +30,7 @@ export const uuid = '7bd4f'
 
 export const refs = {
   'fr-fr': ['2N41-6c', 'BP1AUTO079'],
-  'fr-ch': [],
+  'fr-ch': ['11FA4A-6'],
 }
 
 export default class DevelopperIdentitesRemarquables5 extends Exercice {

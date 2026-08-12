@@ -32,7 +32,7 @@ export const uuid = '87479'
 export const refs = {
   'fr-fr': ['CM2N2A-2'],
   'fr-2016': ['6N14'],
-  'fr-ch': ['9NO10-1'],
+  'fr-ch': ['9NO3A-2'],
 }
 export default class RepresenterUneFraction extends Exercice {
   figures: Figure[] = []
@@ -202,7 +202,9 @@ export default class RepresenterUneFraction extends Exercice {
 
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(this.figuresApiGeom[i])
+    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(
+      this.figuresApiGeom[i],
+    )
     let result = 'KO'
     const divCheck = document.querySelector(
       `#resultatCheckEx${this.numeroExercice}Q${i}`,

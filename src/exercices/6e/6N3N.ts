@@ -21,7 +21,7 @@ export const uuid = '67f73'
 export const refs = {
   'fr-fr': ['6N3N'],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['9NO3F-9'],
 }
 
 /**
@@ -120,7 +120,7 @@ export default class ProblemesFractions extends Exercice {
       melange: 3,
       defaut: 3,
     }).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       cpt++
       let texte = ''
       let texteCorr = ''

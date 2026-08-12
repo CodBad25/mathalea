@@ -18,7 +18,7 @@ export const uuid = '4d164'
 
 export const refs = {
   'fr-fr': ['can5C24', 'auto5N3B-flash2'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class FractionVersDecimal extends ExerciceSimple {
   constructor() {

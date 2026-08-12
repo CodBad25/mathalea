@@ -1,10 +1,10 @@
-import Exercice from '../../Exercice'
-import { randint, listeQuestionsToContenu } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import Exercice from '../../Exercice'
 
 export const titre = 'Déterminer des racines carrées ou des carrés parfaits'
 export const interactifReady = true
@@ -17,7 +17,7 @@ export const uuid = '59365'
 
 export const refs = {
   'fr-fr': ['can3C11'],
-  'fr-ch': ['10NO3-6a'],
+  'fr-ch': ['10NO3E-6'],
 }
 export default class calculsRacinesCarresPafaits extends Exercice {
   constructor() {
@@ -27,7 +27,7 @@ export default class calculsRacinesCarresPafaits extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a, b

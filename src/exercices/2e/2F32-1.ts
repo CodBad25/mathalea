@@ -32,7 +32,7 @@ export const uuid = 'a2ac3'
 
 export const refs = {
   'fr-fr': ['2F32-1', 'BP2AutoP2', 'BP1AUTO063', 'BP1RGEI04'],
-  'fr-ch': ['10FA5-17'],
+  'fr-ch': ['10FA1B-17'],
 }
 // une liste de nœuds pour définir une fonction Spline
 const noeuds1 = [

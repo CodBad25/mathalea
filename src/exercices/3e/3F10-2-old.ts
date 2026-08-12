@@ -39,7 +39,7 @@ export const uuid = 'ba520'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CalculsImagesFonctions extends Exercice {
   fonctions: string

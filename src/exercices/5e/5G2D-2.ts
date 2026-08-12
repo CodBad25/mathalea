@@ -40,7 +40,7 @@ export const uuid = 'f4d29'
 export const refs = {
   'fr-fr': ['5G2D-2', '3AutoG06-2'],
   'fr-2016': ['6M31-2', '5M22-1', '3AutoG06-2'],
-  'fr-ch': ['10GM3-6'],
+  'fr-ch': ['10GM3A-2'],
 }
 export default class UnitesDeVolumesEtDeCapacite extends Exercice {
   constructor() {

@@ -30,7 +30,7 @@ export const uuid = 'b0b3c'
 
 export const refs = {
   'fr-fr': ['4C30-4'],
-  'fr-ch': [],
+  'fr-ch': ['10NO3D-4'],
 }
 export default class PuissancesEtPrefixe extends Exercice {
   constructor() {

@@ -11,7 +11,7 @@ export const uuid = '2664c'
 
 export const refs = {
   'fr-fr': ['6M1B'],
-  'fr-ch': [],
+  'fr-ch': ['10GM1B-3'],
 }
 export default class ConnaitreFormulesDePerimetreEtAiresV1 extends ConnaitreFormulesDePerimetreEtAires {
   constructor() {

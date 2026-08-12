@@ -30,7 +30,7 @@ export const uuid = 'a2b1c'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CoefficientDirecteur extends Exercice {
   constructor() {

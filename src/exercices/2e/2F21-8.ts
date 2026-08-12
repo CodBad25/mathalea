@@ -7,7 +7,7 @@ export const dateDeModifImportante = '21/05/2023'
 export const uuid = 'c1961'
 export const refs = {
   'fr-fr': ['2F21-8'],
-  'fr-ch': [],
+  'fr-ch': ['11FA1B-14'],
 }
 export default class FonctionsAffinesS extends FonctionsAffinesOuLineaires {
   constructor() {

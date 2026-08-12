@@ -10,12 +10,11 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { egalOuApprox } from '../../lib/outils/ecritures'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Augmenter ou diminuer d'un pourcentage"
 export const interactifReady = true
@@ -42,7 +41,7 @@ export const uuid = '064ce'
 export const refs = {
   'fr-fr': [],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 
 function nombreDecimales(prMin: number, prMax: number, n: number) {
@@ -179,7 +178,7 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
       this.nbQuestions,
     ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // Boucle principale où i+1 correspond au numéro de la question
       const prenom1 = prenomM()
       const prenom2 = prenomF()

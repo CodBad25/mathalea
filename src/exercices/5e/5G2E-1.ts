@@ -9,8 +9,8 @@ import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
@@ -39,7 +39,7 @@ export const uuid = 'f9a03'
 export const refs = {
   'fr-fr': ['5G2E-1', 'BP2AutoV7', 'BP1AUTO109'],
   'fr-2016': ['6M22-1', '5M11-3', 'BP2AutoV7'],
-  'fr-ch': ['10GM1-2'],
+  'fr-ch': ['10GM1B-6'],
 }
 
 /**

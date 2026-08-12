@@ -16,7 +16,7 @@ export const uuid = '15d3c'
 export const refs = {
   'fr-fr': ['auto6N2B-3'],
   'fr-2016': ['6N10-6a'],
-  'fr-ch': [''],
+  'fr-ch': ['NR'],
 }
 export default class SommeFractionsDecimales2 extends SommeFractionsDecimales {
   constructor() {

@@ -8,7 +8,7 @@ export const dateDeModifImportante = '02/03/2024'
 export const uuid = '7e31e'
 export const refs = {
   'fr-fr': ['4C20-1', 'BP2AutoG2'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ExerciceComparerQuatreFractions4e extends ExerciceComparerQuatreFractions {
   constructor() {

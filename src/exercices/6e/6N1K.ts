@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import {
   choice,
@@ -12,8 +13,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 /**
  * Calcule le cosinus d'un angle en degrés
@@ -40,7 +39,7 @@ export const uuid = 'ab793'
 export const refs = {
   'fr-fr': ['6N1K', 'BP2AutoS7'],
   'fr-2016': ['6N31-3', 'BP2AutoS7'],
-  'fr-ch': ['9NO7-6'],
+  'fr-ch': ['PR-40'],
 }
 export default class ArrondirUneValeur6e extends Exercice {
   version: number

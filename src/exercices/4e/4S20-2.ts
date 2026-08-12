@@ -13,7 +13,7 @@ export const dateDePublication = '30/7/2024'
 export const uuid = '48b39'
 export const refs = {
   'fr-fr': ['4S20-2'],
-  'fr-ch': [],
+  'fr-ch': ['11NO4A-4'],
 }
 /**
  *  Différencier événéments impossibles, certains, ou possibles
@@ -46,7 +46,7 @@ export default class ExerciceProbaLancerDeDes extends Exercice {
     const m = randint(10, 17) // m est le nombre le plus grand du dé
     this.consigne = `Classer chaque événement suivant qu'il est impossible, certain, ou possible.<br>On lance un dé équilibré à $ ${texNombre(m - n + 1)}$ faces numérotées de $ ${texNombre(n)}$ à $ ${texNombre(m)}$. On regarde la face du dessus.<br>`
 
-    for (let i = 0, k, p, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, k, p, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let bonneReponse
       k = choice([1, 2, 3, 4])

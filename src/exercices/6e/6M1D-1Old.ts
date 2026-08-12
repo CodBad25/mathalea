@@ -14,7 +14,7 @@ export const uuid = 'fbafe'
 export const refs = {
   'fr-fr': [],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class DecomposerFigureComplexe extends PerimetreOuAireDeFiguresComposees {
   constructor() {

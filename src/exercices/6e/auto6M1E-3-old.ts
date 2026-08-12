@@ -15,7 +15,7 @@ export const uuid = '2a997'
 export const refs = {
   'fr-fr': [],
   'fr-2016': [],
-  'fr-ch': [''],
+  'fr-ch': ['NR'],
 }
 
 export default class Reglagesauto6M1E3Old extends ExercicePerimetresEtAiresOld {

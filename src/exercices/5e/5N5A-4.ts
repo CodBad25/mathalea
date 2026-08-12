@@ -50,7 +50,7 @@ export const uuid = 'a35d5'
 export const refs = {
   'fr-fr': ['5N5A-4'],
   'fr-2016': ['5L10-5'],
-  'fr-ch': ['10FA1-18', '11FA1-14'],
+  'fr-ch': ['10FA1A-1'],
 }
 
 export default class PaternNum1 extends Exercice {

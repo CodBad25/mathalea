@@ -34,7 +34,7 @@ export const uuid = 'd633a'
 
 export const refs = {
   'fr-fr': ['2G12-4'],
-  'fr-ch': ['11GM1-7', '3G90-6'],
+  'fr-ch': ['3G90-6'],
 }
 export default class NaturePolygone extends Exercice {
   constructor() {

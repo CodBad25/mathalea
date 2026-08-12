@@ -20,7 +20,7 @@ export const uuid = '2be1d'
 export const refs = {
   'fr-fr': ['6N0B-4'],
   'fr-2016': ['6C13-3'],
-  'fr-ch': ['9FA2-2'],
+  'fr-ch': ['10FA5D-9'],
 }
 
 class OperationsReciproques extends Exercice {
@@ -32,14 +32,7 @@ class OperationsReciproques extends Exercice {
 
   nouvelleVersion(): void {
     type TypeQuestionsDisponibles =
-      | 'x+'
-      | '+x'
-      | 'x-'
-      | '-x'
-      | '/+'
-      | '+/'
-      | '/-'
-      | '-/'
+      'x+' | '+x' | 'x-' | '-x' | '/+' | '+/' | '/-' | '-/'
     const typeQuestionsDisponibles = [
       'x+',
       '+x',
@@ -55,7 +48,7 @@ class OperationsReciproques extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     ) as TypeQuestionsDisponibles[]
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let depart = randint(1, 10)

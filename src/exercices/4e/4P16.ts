@@ -28,7 +28,7 @@ export const uuid = '63cdb'
 
 export const refs = {
   'fr-fr': ['4P16'],
-  'fr-ch': ['10FA4-4'],
+  'fr-ch': ['11GM3A-1'],
 }
 export default class NomExercice extends Exercice {
   constructor() {

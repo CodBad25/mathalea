@@ -29,7 +29,7 @@ export const uuid = '44e23'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 
 export default class ComprendreSensPourcentage extends Exercice {
@@ -125,7 +125,7 @@ export default class ComprendreSensPourcentage extends Exercice {
     }).map(Number)
 
     let pourcentage = 0
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texteCorr = ''
       const texteAvant = []
       let texteApres = ''

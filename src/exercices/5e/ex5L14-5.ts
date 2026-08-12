@@ -6,7 +6,7 @@ export const interactifType = 'mathLive'
 export const uuid = '72764'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['9FA2-7'],
+  'fr-ch': ['9FA4A-3'],
 }
 export default class CalculerLaValeurDUneExpressionLitteraleDeg1Inc1 extends CalculerLaValeurDUneExpressionLitterale {
   constructor() {

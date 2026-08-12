@@ -6,6 +6,6 @@ export const interactifType = 'mathLive'
 export const uuid = '3b3d9'
 export const refs = {
   'fr-fr': ['2N51-5', 'BP2RES30'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ExerciceEquation1Tiret22nde extends ExerciceEquation1Tiret2 {}

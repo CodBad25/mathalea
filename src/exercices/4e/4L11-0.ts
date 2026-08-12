@@ -35,7 +35,7 @@ export const amcType = 'AMCOpen'
 export const uuid = '0ee90'
 export const refs = {
   'fr-fr': ['4L11-0'],
-  'fr-ch': ['11FA3-6', '1mCL2-0'],
+  'fr-ch': ['10FA4G-3', '11FA4B-2', '1mCL2-0'],
 }
 
 export default class FactoriserExpressionsNiv1 extends Exercice {
@@ -102,7 +102,7 @@ export default class FactoriserExpressionsNiv1 extends Exercice {
       defaut: 4,
     }).map(String)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse = ''

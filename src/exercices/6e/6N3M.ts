@@ -35,7 +35,7 @@ export const uuid = '8e07a'
 export const refs = {
   'fr-fr': ['6N3M'],
   'fr-2016': ['6N33-4'],
-  'fr-ch': ['9NO15-5', '10NO5-11'],
+  'fr-ch': ['9NO3E-6', '10NO3C-4'],
 }
 
 function capitalizeFirstLetter(word: string): string {
@@ -176,7 +176,7 @@ export default class ProblemesFractions6e extends Exercice {
     let nbIndirect = ''
     let nbUnites = 0
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       den = listeDen[i]

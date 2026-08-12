@@ -28,7 +28,7 @@ export const uuid = 'feb39'
 
 export const refs = {
   'fr-fr': ['1AL20-11'],
-  'fr-ch': ['11FA10-7'],
+  'fr-ch': ['11FA5B-11'],
 }
 export default class CalculDiscriminant extends Exercice {
   constructor() {

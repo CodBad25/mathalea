@@ -31,7 +31,7 @@ export const uuid = 'c72da'
 
 export const refs = {
   'fr-fr': ['4C30-5'],
-  'fr-ch': [],
+  'fr-ch': ['10NO3D-10'],
 }
 export default class PuissancesDUnEntier extends Exercice {
   niveau: number
@@ -63,7 +63,7 @@ export default class PuissancesDUnEntier extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typesDeQuestions = listeTypeDeQuestions[i]
       let base = 0
       const signeBase = this.niveau === 4 ? 1 : randint(-1, 1, 0)

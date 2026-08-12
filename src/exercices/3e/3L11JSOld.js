@@ -47,7 +47,7 @@ export const amcReady = true
 export const uuid = '77a62'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ExerciceDevelopperEnJS extends Exercice {
   constructor() {

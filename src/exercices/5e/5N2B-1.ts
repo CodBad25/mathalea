@@ -32,7 +32,7 @@ export const uuid = '76343'
 export const refs = {
   'fr-fr': ['5N2B-1'],
   'fr-2016': ['5R10-1'],
-  'fr-ch': ['9NO9-5'],
+  'fr-ch': ['9NO2B-2'],
 }
 export default class DevinerNombreRelatif extends Exercice {
   constructor() {

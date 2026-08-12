@@ -23,7 +23,7 @@ export const uuid = '9315e'
 
 export const refs = {
   'fr-fr': ['2F22-2'],
-  'fr-ch': [],
+  'fr-ch': ['11FA1A-8'],
 }
 export default class ComparerAvecFonctionRef extends Exercice {
   constructor() {

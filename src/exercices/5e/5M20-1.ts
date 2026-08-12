@@ -38,7 +38,7 @@ export const uuid = '04b0d'
 export const refs = {
   'fr-fr': ['BP1AUTO097'],
   'fr-2016': ['6M30'],
-  'fr-ch': ['9GM3-2'],
+  'fr-ch': ['9GM2A-5'],
 }
 export default class CalculDeVolumes extends Exercice {
   classe: number

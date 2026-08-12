@@ -32,7 +32,7 @@ export const uuid = 'f5dcf'
 
 export const refs = {
   'fr-fr': ['4C30', 'BP2AutoE5'],
-  'fr-ch': ['10NO2-3'],
+  'fr-ch': ['10NO3D-2'],
 }
 export default class PuissancesDeDix extends Exercice {
   constructor() {

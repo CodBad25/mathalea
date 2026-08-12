@@ -1,17 +1,17 @@
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
-import { texNombre2 } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
-import {
-  listeQuestionsToContenu,
-  randint,
-  gestionnaireFormulaireTexte,
-} from '../../modules/outils'
-import { fraction } from '../../modules/fractions'
-import { propositionsQcm } from '../../lib/interactif/qcm'
-import FractionEtendue from '../../modules/FractionEtendue'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
+import { texNombre2 } from '../../lib/outils/texNombre'
+import FractionEtendue from '../../modules/FractionEtendue'
+import { fraction } from '../../modules/fractions'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const dateDePublication = '10/03/2021'
 export const amcReady = true
@@ -30,7 +30,7 @@ export const uuid = '4d0dd'
 export const refs = {
   'fr-fr': ['6N3B-1'],
   'fr-2016': ['6N23-5'],
-  'fr-ch': ['9NO10-4'],
+  'fr-ch': [''], // Primaire anciennement : ['9NO10-4'],
 }
 export default class SensDeLaFraction extends Exercice {
   constructor() {
@@ -57,7 +57,6 @@ export default class SensDeLaFraction extends Exercice {
     for (
       let i = 0, texte, texteCorr, a, b, f, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = ''
       texteCorr = ''

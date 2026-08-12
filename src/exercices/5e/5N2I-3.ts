@@ -13,7 +13,7 @@ export const uuid = '47868'
 export const refs = {
   'fr-fr': ['5N2I-3'],
   'fr-2016': ['5R22-2b'],
-  'fr-ch': [],
+  'fr-ch': ['9NO2B-16', '10NO2A-3'],
 }
 /**
  * @author Éric Elter

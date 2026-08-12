@@ -19,7 +19,7 @@ export const uuid = '7374f'
 
 export const refs = {
   'fr-fr': ['can4P02'],
-  'fr-ch': [],
+  'fr-ch': ['11FA2A-3'],
 }
 export default class ProblemesDeVitesse extends ExerciceSimple {
   constructor() {

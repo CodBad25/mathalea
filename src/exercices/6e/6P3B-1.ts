@@ -34,7 +34,7 @@ export const uuid = '850d5'
 export const refs = {
   'fr-fr': ['6P3B-1', 'BP2AutoL4', '3AutoP06-1'],
   'fr-2016': ['6P10', 'BP2AutoL4'],
-  'fr-ch': ['9FA3-1'],
+  'fr-ch': ['9FA2B-3'],
 }
 export default class ProportionnalitePasProportionnalite extends Exercice {
   constructor() {

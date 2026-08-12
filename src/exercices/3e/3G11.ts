@@ -35,7 +35,7 @@ export const uuid = '18e25'
 
 export const refs = {
   'fr-fr': ['3G11'],
-  'fr-ch': ['11ES3-3'],
+  'fr-ch': ['11ES3A-1'],
 }
 export default class ConstruireHomothetiePoint3e extends Exercice {
   constructor() {

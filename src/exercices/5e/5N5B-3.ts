@@ -10,7 +10,7 @@ export const uuid = '1abc6'
 export const refs = {
   'fr-fr': ['5N5B-3'],
   'fr-2016': ['5L14-3'],
-  'fr-ch': ['10FA1-3', '11FA1-5'],
+  'fr-ch': ['10FA4B-4'],
 }
 export default class CalculerUneExpressionLitterale extends EcrireUneExpressionNumerique {
   constructor() {

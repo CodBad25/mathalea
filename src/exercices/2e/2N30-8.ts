@@ -2,7 +2,10 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -40,10 +43,7 @@ function normaliseComparateur(saisie: string): '<' | '>' | '' {
 }
 
 function melangeCouple(couple: CoupleFractions): CoupleFractions {
-  return choice([
-    couple,
-    [couple[1], couple[0]],
-  ])
+  return choice([couple, [couple[1], couple[0]]])
 }
 
 /**
@@ -150,7 +150,7 @@ export default class ComparerDeuxFractions extends Exercice {
       ],
     ]
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const situation = situations[i]
       const couple = melangeCouple(
         choice(
@@ -191,10 +191,8 @@ export default class ComparerDeuxFractions extends Exercice {
       if (situation === 'dePartEtDAutreDeUn') {
         const fractionSuperieureAUn = A.valeurDecimale > 1 ? 'A' : 'B'
         const fractionInferieureAUn = A.valeurDecimale < 1 ? 'A' : 'B'
-        const fractionSuperieure =
-          fractionSuperieureAUn === 'A' ? A : B
-        const fractionInferieure =
-          fractionInferieureAUn === 'A' ? A : B
+        const fractionSuperieure = fractionSuperieureAUn === 'A' ? A : B
+        const fractionInferieure = fractionInferieureAUn === 'A' ? A : B
 
         texteCorr = `
         Dans la fraction $${fractionSuperieure.texFraction}$, on observe que le numérateur est supérieur au dénominateur, donc $${fractionSuperieureAUn} > 1$.<br><br>
@@ -204,7 +202,7 @@ export default class ComparerDeuxFractions extends Exercice {
         )}$.`
       } else {
         texteCorr = `On peut procéder de deux manières différentes.<br>
-        ${texteEnCouleurEtGras('Première méthode :','black')} on calcule la différence $A-B$.<br>
+        ${texteEnCouleurEtGras('Première méthode :', 'black')} on calcule la différence $A-B$.<br>
         $\\begin{aligned}
         A-B
         &=${A.texFraction}-${B.texFraction}\\\\
@@ -218,14 +216,18 @@ export default class ComparerDeuxFractions extends Exercice {
         Cette différence est ${difference.num < 0 ? 'négative' : 'positive'}, donc $${miseEnEvidence(
           reponse === '<' ? 'A < B' : 'A > B',
         )}$.<br><br>
-        ${texteEnCouleurEtGras('Deuxième méthode :','black')} on calcule le quotient de fractions $\\dfrac{A}{B}$.<br>
+        ${texteEnCouleurEtGras('Deuxième méthode :', 'black')} on calcule le quotient de fractions $\\dfrac{A}{B}$.<br>
         Comme les nombres $A$ et $B$ sont positifs, on peut comparer ce quotient à $1$ :<br>
         $\\begin{aligned}
         \\dfrac{A}{B}
         &=${A.texFraction}\\div${B.texFraction}\\\\
         &=${A.texFraction}\\times\\dfrac{${B.den}}{${B.num}}\\\\
-        &=\\dfrac{${A.num * B.den}}{${A.den * B.num}}${quotient.estIrreductible ? '.' : `\\\\
-        &=${quotient.texFractionSimplifiee}.`}
+        &=\\dfrac{${A.num * B.den}}{${A.den * B.num}}${
+          quotient.estIrreductible
+            ? '.'
+            : `\\\\
+        &=${quotient.texFractionSimplifiee}.`
+        }
         \\end{aligned}$<br>
         Comme $${quotient.texFractionSimplifiee}$ est ${quotient.valeurDecimale < 1 ? 'inférieur' : 'supérieur'} à $1$, on obtient $${miseEnEvidence(
           reponse === '<' ? 'A < B' : 'A > B',
@@ -233,16 +235,7 @@ export default class ComparerDeuxFractions extends Exercice {
         `
       }
 
-      if (
-        this.questionJamaisPosee(
-          i,
-          A.num,
-          A.den,
-          B.num,
-          B.den,
-          situation,
-        )
-      ) {
+      if (this.questionJamaisPosee(i, A.num, A.den, B.num, B.den, situation)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

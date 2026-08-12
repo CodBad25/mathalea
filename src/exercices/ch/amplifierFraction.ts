@@ -16,7 +16,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '0e77e'
 export const refs = {
-  'fr-ch': ['9NO12-10'],
+  'fr-ch': ['9NO3B-1'],
   'fr-fr': [],
 }
 
@@ -67,7 +67,7 @@ export default class AmplifierOuReduireFraction extends Exercice {
       [multipleDe10, a, b, c],
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const num = randint(1, 12)

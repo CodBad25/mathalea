@@ -30,7 +30,7 @@ export const uuid = 'c28e5'
 export const refs = {
   'fr-fr': ['CM2N2A-1'],
   'fr-2016': ['6N32'],
-  'fr-ch': ['9NO10-12'],
+  'fr-ch': ['9NO3A-3'],
 }
 export default class FractionsDunite extends Exercice {
   goodAnswers: number[] = []
@@ -61,7 +61,7 @@ export default class FractionsDunite extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let den = 1
       let num = 1
       let texte = ''

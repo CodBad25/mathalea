@@ -19,7 +19,7 @@ export const uuid = 'fb422'
 
 export const refs = {
   'fr-fr': ['can6P06', '6N3O-flash1'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CalculerUnPourcentageCAN extends CalculerUnPourcentage {
   constructor() {

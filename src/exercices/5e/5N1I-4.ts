@@ -35,7 +35,7 @@ export const uuid = 'e3870'
 export const refs = {
   'fr-fr': ['5N1I-4'],
   'fr-2016': ['5A11-1'],
-  'fr-ch': ['9NO4-11'],
+  'fr-ch': ['9NO1A-7'],
 }
 export default class ExerciceLabyrintheDivisibilite extends Exercice {
   version: string
@@ -101,7 +101,7 @@ export default class ExerciceLabyrintheDivisibilite extends Exercice {
 
     const tables = combinaisonListes(tablesPossibles, this.nbQuestions)
 
-    for (let i = 0; i < this.nbQuestions; ) {
+    for (let i = 0; i < this.nbQuestions;) {
       const nbL = this.sup3 === 1 ? randint(2, 8) : Math.max(2, this.sup3)
       const nbC =
         this.sup4 === 1 ? randint(3, 11 - nbL) : Math.max(3, this.sup4)

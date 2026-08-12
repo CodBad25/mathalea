@@ -35,7 +35,7 @@ export const uuid = '7c068'
 
 export const refs = {
   'fr-fr': ['4S11-1'],
-  'fr-ch': ['11NO2-9'],
+  'fr-ch': ['NR'],
 }
 export default class DeterminerDesMedianes extends Exercice {
   constructor() {

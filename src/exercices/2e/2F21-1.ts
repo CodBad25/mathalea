@@ -24,7 +24,7 @@ export const uuid = '90998'
 
 export const refs = {
   'fr-fr': ['2F21-1'],
-  'fr-ch': ['11FA8-1'],
+  'fr-ch': ['11FA1B-9'],
 }
 export default class Reconnaitrefonctionaffine extends Exercice {
   constructor() {

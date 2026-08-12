@@ -26,7 +26,7 @@ export const uuid = '73187'
 
 export const refs = {
   'fr-fr': ['4C10-6'],
-  'fr-ch': ['10NO4-8'],
+  'fr-ch': ['9NO2C-8', '10NO2A-7'],
 }
 export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
   constructor() {

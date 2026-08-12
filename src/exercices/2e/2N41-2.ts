@@ -26,7 +26,7 @@ export const interactifType = 'mathLive'
 export const dateDeModifImportante = '17/02/2026'
 export const refs = {
   'fr-fr': ['2N41-2', 'BP1AUTO086'],
-  'fr-ch': [],
+  'fr-ch': ['11FA4C-4'],
 }
 /**
  * @author Gilles Mora

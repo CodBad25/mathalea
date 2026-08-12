@@ -38,7 +38,7 @@ export const uuid = '796f3'
 export const refs = {
   'fr-fr': ['5G5E'],
   'fr-2016': ['5G22'],
-  'fr-ch': ['9ES3-9'],
+  'fr-ch': ['9ES1D-1'],
 }
 export default class DroiteRemarquableDuTriangle extends Exercice {
   constructor() {

@@ -2,6 +2,7 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.intervalleStrict.test.ts ⚠️
  */
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { infoMessage } from '../../lib/format/message'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -15,8 +16,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Intercaler un nombre décimal entre deux nombres décimaux'
 export const amcReady = true
@@ -36,7 +35,7 @@ export const uuid = 'b86b9'
 export const refs = {
   'fr-fr': ['6N1M-1'],
   'fr-2016': ['6N31-4'],
-  'fr-ch': ['9NO7-7'],
+  'fr-ch': ['PR-41'],
 }
 export default class IntercalerDecimalEntre2Decimaux extends Exercice {
   constructor() {

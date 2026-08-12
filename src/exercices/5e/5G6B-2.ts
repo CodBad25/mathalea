@@ -35,7 +35,7 @@ export const uuid = 'b612b'
 export const refs = {
   'fr-fr': ['5G6B-2'],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['9ES1E-12'],
 }
 
 const VERIFICATION_PARALLELOGRAMME_CALLBACK_NAME =

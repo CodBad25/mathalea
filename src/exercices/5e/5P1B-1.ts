@@ -10,7 +10,7 @@ export const dateDePublication = '04/04/2022'
 export const refs = {
   'fr-fr': ['5P1B-1'],
   'fr-2016': ['5P14'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export const uuid = '4db23'
 export default class ExercicePourcentage5e extends Proportions {

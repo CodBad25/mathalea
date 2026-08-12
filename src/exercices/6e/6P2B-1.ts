@@ -1,8 +1,8 @@
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { Personne } from '../../lib/outils/Personne'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -36,7 +36,7 @@ export const uuid = '69e1a'
 
 export const refs = {
   'fr-fr': ['6P2B-1'],
-  'fr-ch': [''],
+  'fr-ch': ['11NO4A-1'],
 }
 
 export default class FonctionsProbabilite6e extends Exercice {
@@ -96,7 +96,7 @@ export default class FonctionsProbabilite6e extends Exercice {
       'la couleur',
       'la couleur',
     ]
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const index1 = listeIndex[i]

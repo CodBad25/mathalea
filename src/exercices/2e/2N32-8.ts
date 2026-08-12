@@ -9,6 +9,6 @@ export const uuid = '99c85'
 
 export const refs = {
   'fr-fr': ['2N32-8'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CalculValeurApprocheeRacineCarreeS extends CalculValeurApprocheeRacineCarree {}

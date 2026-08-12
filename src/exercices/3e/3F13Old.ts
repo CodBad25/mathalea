@@ -33,7 +33,7 @@ export const uuid = '8117d'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class AntecedentGraphique extends Exercice {
   constructor() {
@@ -67,7 +67,7 @@ export default class AntecedentGraphique extends Exercice {
     let indexInteractif = 0
     let incrementInteractif = 0
     this.sup = Number(this.sup)
-    for (let i = 0; i < this.nbQuestions; ) {
+    for (let i = 0; i < this.nbQuestions;) {
       const initialiseVariables = function () {
         if (context.isHtml) {
           // repère -10 || 10

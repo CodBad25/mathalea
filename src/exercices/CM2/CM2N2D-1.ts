@@ -16,7 +16,7 @@ export const uuid = '3bdcd'
 export const refs = {
   'fr-fr': ['CM2N2D-1'],
   'fr-2016': ['6N20-3'],
-  'fr-ch': ['9NO11-3'],
+  'fr-ch': ['9NO3C-19'],
 }
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -41,7 +41,7 @@ export default class nomExercice extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     ) as TypeQuestionsDisponibles[]
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let den = 1
       let num = 1
       let texteEgaliteUnite: string

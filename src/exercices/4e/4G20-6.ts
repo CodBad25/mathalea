@@ -1,8 +1,8 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { nombreDeChiffresDansLaPartieEntiere } from '../../lib/outils/nombres'
@@ -27,7 +27,7 @@ export const uuid = '516d2'
 
 export const refs = {
   'fr-fr': ['4G20-6', 'BP2AutoS4'],
-  'fr-ch': ['10NO3-4'],
+  'fr-ch': ['10NO3E-4'],
 }
 export default class CalculValeurApprocheeRacineCarree extends Exercice {
   constructor() {

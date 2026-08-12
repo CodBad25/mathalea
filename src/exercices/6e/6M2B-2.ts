@@ -24,7 +24,7 @@ export const uuid = '6ca92'
 
 export const refs = {
   'fr-fr': ['6M2B-2'],
-  'fr-ch': [],
+  'fr-ch': ['9GM1C-1'],
 }
 
 /**

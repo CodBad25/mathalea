@@ -11,7 +11,7 @@ export const uuid = '2dd47'
 export const refs = {
   'fr-fr': ['5D2C', 'BP2FLUC13', 'BP1AUTO011'],
   'fr-2016': ['5S21', '5S21-2', 'BP2FLUC13'],
-  'fr-ch': ['11NO2-6'],
+  'fr-ch': ['NR'],
 }
 
 export default class FonctionsVocabulaireProbabilite5e extends FonctionsProbabilite6e {

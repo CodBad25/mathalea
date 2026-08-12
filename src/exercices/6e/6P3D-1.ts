@@ -33,7 +33,7 @@ export const uuid = '51d25'
 export const refs = {
   'fr-fr': ['6P3D-1'],
   'fr-2016': ['6P11-4'],
-  'fr-ch': ['9FA3-18'],
+  'fr-ch': ['9FA2B-8'],
 }
 export default class ProblemesDeProportionnalité extends Exercice {
   constructor() {

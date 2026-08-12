@@ -27,7 +27,7 @@ export const uuid = 'b5828'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ResoudreEquationsQuotient extends Exercice {
   constructor() {

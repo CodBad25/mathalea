@@ -43,7 +43,7 @@ export const uuid = '294bb'
 export const refs = {
   'fr-fr': ['6N2H'],
   'fr-2016': ['6C31'],
-  'fr-ch': ['9NO8-14'],
+  'fr-ch': ['PR-29'],
 }
 export default class DivisionDecimale extends Exercice {
   constructor() {

@@ -7,7 +7,7 @@ export const interactifType = 'custom'
 export const uuid = '20c65'
 export const refs = {
   'fr-fr': ['3F20-3'],
-  'fr-ch': ['1mF2-15', '11FA8-18'],
+  'fr-ch': ['10FA1C-1', '11FA1B-3', '1mF2-15'],
 }
 
 export default class TracerDroite extends TracerDroite2nde {

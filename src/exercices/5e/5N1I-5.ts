@@ -27,7 +27,7 @@ export const uuid = '2173b'
 export const refs = {
   'fr-fr': ['5N1I-5'],
   'fr-2016': ['5A10-4'],
-  'fr-ch': [],
+  'fr-ch': ['9NO1A-12'],
 }
 /**
  * @author Éric Elter
@@ -196,7 +196,7 @@ export default class MultiplesOuDiviseurs extends Exercice {
       ? combinaisonListes([false, true], this.nbQuestions)
       : combinaisonListes([false], this.nbQuestions)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = numAlpha(0)
       let bonneReponse

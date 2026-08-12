@@ -5,13 +5,12 @@ import { context } from '../../modules/context'
 import Hms from '../../modules/Hms'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { minToHoraire } from '../../lib/outils/dateEtHoraires'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Utiliser les heures décimales'
 export const interactifReady = true
@@ -30,7 +29,7 @@ export const uuid = '6b3e4'
 export const refs = {
   'fr-fr': ['6M4C-2'],
   'fr-2016': ['6D101'],
-  'fr-ch': ['10GM3-2'],
+  'fr-ch': ['9GM3A-5', '10GM3B-3'],
 }
 export default class HeuresDecimales extends Exercice {
   constructor() {

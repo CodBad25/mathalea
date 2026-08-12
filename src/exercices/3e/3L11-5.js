@@ -30,7 +30,7 @@ export const uuid = 'edbd5'
 
 export const refs = {
   'fr-fr': ['3L11-5'],
-  'fr-ch': ['11FA2-5'],
+  'fr-ch': ['11FA4A-31'],
 }
 export default class IdentitesCalculs extends Exercice {
   constructor() {

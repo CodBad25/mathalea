@@ -16,7 +16,7 @@ export const uuid = 'e99f1'
 export const refs = {
   'fr-fr': ['auto5N5A'],
   'fr-2016': ['5I13-1'],
-  'fr-ch': [],
+  'fr-ch': ['10FA1A-9'],
 }
 export default class PatternIteratifPoursuite extends PatternIteratif {
   constructor() {

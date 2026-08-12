@@ -31,7 +31,7 @@ export const uuid = '6667e'
 export const refs = {
   'fr-fr': ['5N2H-1'],
   'fr-2016': ['5R20-4'],
-  'fr-ch': ['9NO9-9'],
+  'fr-ch': ['9NO2B-12'],
 }
 export default class ProblemesAdditifsRelatifs5e extends Exercice {
   constructor() {

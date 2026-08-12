@@ -19,7 +19,6 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const titre = 'Additionner ou soustraire deux fractions'
@@ -40,7 +39,7 @@ export const uuid = '5f429'
 
 export const refs = {
   'fr-fr': ['4C21', 'BP2AutoH9'],
-  'fr-ch': ['9NO13-5'],
+  'fr-ch': ['9NO3F-4'],
 }
 export default class ExerciceAdditionnerOuSoustraireDesFractions extends Exercice {
   constructor() {

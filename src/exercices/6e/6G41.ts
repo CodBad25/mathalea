@@ -16,7 +16,6 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const amcReady = true
 export const amcType = 'AMCOpen'
 
@@ -32,7 +31,7 @@ export const uuid = 'a8e0f'
 export const refs = {
   'fr-fr': [],
   'fr-2016': ['6G41'],
-  'fr-ch': ['9ES7-1'],
+  'fr-ch': ['9ES2B-3'],
 }
 export default class RepresenterUnSolide extends Exercice {
   classe: number
@@ -128,7 +127,7 @@ export default class RepresenterUnSolide extends Exercice {
     let objetsEnonce = []
     let objetsCorrection = []
     let listeDeNomsDePolygones: string[] = []
-    for (let i = 0, enonce, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, enonce, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       if (i % 2 === 0) listeDeNomsDePolygones = ['QD']
       const nom = creerNomDePolygone(8, listeDeNomsDePolygones)
       listeDeNomsDePolygones.push(nom)

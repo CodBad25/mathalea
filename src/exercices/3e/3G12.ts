@@ -46,7 +46,7 @@ export const uuid = '442e0'
 
 export const refs = {
   'fr-fr': ['3G12'],
-  'fr-ch': ['10ES2-11'],
+  'fr-ch': ['9ES3D-2'],
 }
 export default class PavageEtRotation2D extends Exercice {
   constructor() {
@@ -175,13 +175,7 @@ export default class PavageEtRotation2D extends Exercice {
     let texte = ''
     let texteCorr = ''
     let typeDePavage = contraindreValeur(1, 7, this.sup, 1) as
-      | 1
-      | 2
-      | 3
-      | 4
-      | 5
-      | 6
-      | 7
+      1 | 2 | 3 | 4 | 5 | 6 | 7
     let nombreTentatives
     let nombrePavageTestes = 1
     const propositionsAMC = []
@@ -209,13 +203,7 @@ export default class PavageEtRotation2D extends Exercice {
       typeDePavage = randint(1, 7) as 1 | 2 | 3 | 4 | 5 | 6 | 7
     } else {
       typeDePavage = Math.max(Math.min(7, this.sup3), 1) as
-        | 1
-        | 2
-        | 3
-        | 4
-        | 5
-        | 6
-        | 7
+        1 | 2 | 3 | 4 | 5 | 6 | 7
     }
     while (couples.length < this.nbQuestions && nombrePavageTestes < 6) {
       nombreTentatives = 0

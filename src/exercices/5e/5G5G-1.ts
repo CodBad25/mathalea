@@ -48,7 +48,7 @@ export const interactifType = 'custom'
 export const uuid = '63d3a'
 export const refs = {
   'fr-fr': ['5G5G-1'],
-  'fr-ch': [],
+  'fr-ch': ['9ES1D-12'],
 }
 /**
  * Tracer une médiane
@@ -106,7 +106,7 @@ export default class nomExercice extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let enonce = ''
@@ -374,7 +374,9 @@ export default class nomExercice extends Exercice {
     if (this.answers == null) this.answers = {}
     if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figuresApiGeom![i].id] = figureAnswerJson(this.figuresApiGeom![i])
+    this.answers[this.figuresApiGeom![i].id] = figureAnswerJson(
+      this.figuresApiGeom![i],
+    )
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,
     )

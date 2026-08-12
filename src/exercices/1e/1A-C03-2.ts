@@ -15,7 +15,7 @@ export const uuid = '71eba'
 
 export const refs = {
   'fr-fr': ['1A-C03-2', '2A-N3-2'],
-  'fr-ch': [],
+  'fr-ch': ['10NO3D-12'],
 }
 export default class Auto1AC3b extends CalculPuissancesOperation {
   constructor() {

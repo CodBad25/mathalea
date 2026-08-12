@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -17,8 +18,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = "Supprimer les parenthèses puis réduire l'expression"
 export const interactifReady = true
@@ -36,7 +35,7 @@ export const uuid = '603a8'
 
 export const refs = {
   'fr-fr': ['3L10'],
-  'fr-ch': ['11FA1-1'],
+  'fr-ch': ['10FA4E-1'],
 }
 export default class OpposeExpression extends Exercice {
   constructor() {

@@ -2,7 +2,7 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.fractionPlusSimple.test.ts ⚠️
  */
 
-/* eslint-disable camelcase */
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
@@ -15,8 +15,6 @@ import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const amcType = ['AMCOpen', 'AMCNum', 'qcmMult', 'qcmMono']
@@ -35,7 +33,7 @@ export const uuid = 'f8f4e'
 export const refs = {
   'fr-fr': ['auto5N3E-1'],
   'fr-2016': ['5N13'],
-  'fr-ch': ['9NO12-3'],
+  'fr-ch': ['9NO3B-2'],
 }
 export default class Exercice_fractions_simplifier extends Exercice {
   constructor(max = 11) {

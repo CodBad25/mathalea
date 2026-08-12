@@ -1,13 +1,13 @@
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import Exercice from '../Exercice'
 import { abs } from '../../lib/outils/nombres'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { propositionsQcm } from '../../lib/interactif/qcm'
+import Exercice from '../Exercice'
 export const titre =
   'Connaitre les propriétés calculatoires des racines carrées'
 export const interactifReady = true
@@ -21,7 +21,7 @@ export const uuid = '99b29'
 
 export const refs = {
   'fr-fr': ['2N32-2'],
-  'fr-ch': ['11NO1-5', '1mCN-7'],
+  'fr-ch': ['11NO3A-2', '1mCN-7'],
 }
 export default class Proprietesracinecarree extends Exercice {
   constructor() {
@@ -43,7 +43,7 @@ export default class Proprietesracinecarree extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       typesDeQuestions = listeTypeDeQuestions[i]
       let a = 0
       let b = 0

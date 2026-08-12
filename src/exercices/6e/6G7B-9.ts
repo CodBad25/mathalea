@@ -13,7 +13,7 @@ export const uuid = 'f0a09'
 
 export const refs = {
   'fr-fr': ['6G7B-9'],
-  'fr-ch': [],
+  'fr-ch': ['10ES3A-1'],
 }
 export default class SymetrieAxialeProprietes extends SymetrieProprietes {
   constructor() {

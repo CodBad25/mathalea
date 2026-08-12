@@ -44,7 +44,7 @@ export const uuid = 'f5cbd'
 
 export const refs = {
   'fr-fr': ['4G20-2'],
-  'fr-ch': ['10NO3-1'],
+  'fr-ch': ['10NO3E-1'],
 }
 const figureCarre = (aire: number, exercice: IExercice, question: number) => {
   const c = Math.sqrt(aire) / 4

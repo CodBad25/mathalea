@@ -22,7 +22,7 @@ import ExerciceBrevetA from '../ExerciceBrevetA'
 export const uuid = '4beb8'
 export const refs = {
   'fr-fr': ['3G20DNB0', '3Z1DNB-02'],
-  'fr-ch': ['1mG4-1'],
+  'fr-ch': ['11GM1-1', '1mG4-1'],
 }
 export const titre = 'Se préparer au DNB  : Thalès, Pythagore, aire'
 export const dateDePublication = '26/11/2024'

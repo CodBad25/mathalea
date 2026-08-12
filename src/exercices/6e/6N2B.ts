@@ -29,7 +29,7 @@ export const uuid = '5df6e'
 export const refs = {
   'fr-fr': ['6N2B'],
   'fr-2016': ['6C30-5b'],
-  'fr-ch': ['9NO8-20'],
+  'fr-ch': ['9NO1G-8'],
 }
 export default class MultiplierPar001Bis extends Exercice {
   constructor() {
@@ -75,7 +75,6 @@ export default class MultiplierPar001Bis extends Exercice {
         exposant,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = '' // Nous utilisons souvent cette variable pour construire le texte de la question.
       texteCorr = '' // Idem pour le texte de la correction.

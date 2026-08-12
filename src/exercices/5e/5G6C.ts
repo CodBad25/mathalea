@@ -26,7 +26,7 @@ export const uuid = 'af2c2'
 export const refs = {
   'fr-fr': ['5G6C'],
   'fr-2016': ['5G40-1'],
-  'fr-ch': ['9ES2-1'],
+  'fr-ch': ['9ES1E-3'],
 }
 export default class ProprietesDesParallelogrammes extends Exercice {
   constructor() {

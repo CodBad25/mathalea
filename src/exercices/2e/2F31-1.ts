@@ -33,7 +33,7 @@ export const uuid = '5621b'
 
 export const refs = {
   'fr-fr': ['2F31-1'],
-  'fr-ch': ['10FA5-16', '11FA9-10'],
+  'fr-ch': ['11FA1C-2'],
 }
 export default class EtudeFctPoly3 extends Exercice {
   constructor() {

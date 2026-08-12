@@ -1,5 +1,6 @@
 import { apigeomGraduatedLine } from '../../lib/apigeom/apigeomGraduatedLine'
 import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import { orangeMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -9,7 +10,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = "Placer un point d'abscisse décimale"
 export const dateDeModifImportante = '03/05/2024'
@@ -28,7 +28,7 @@ export const uuid = 'e528e'
 export const refs = {
   'fr-fr': ['6N1G'],
   'fr-2016': ['6N30-2'],
-  'fr-ch': ['9NO7-3'],
+  'fr-ch': ['PR-37'],
 }
 
 type goodAnswer = { label: string; x: number }[]

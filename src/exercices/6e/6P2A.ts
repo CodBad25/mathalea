@@ -27,7 +27,7 @@ export const uuid = '2b600'
 export const refs = {
   'fr-fr': ['6P2A'],
   'fr-2016': ['5S20a'],
-  'fr-ch': ['11NO2-5a'],
+  'fr-ch': ['11NO4A-11'],
 }
 export default class PlacerProbabilitesV2 extends Exercice {
   constructor() {

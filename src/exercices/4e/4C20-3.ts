@@ -11,5 +11,4 @@ export const refs = {
   'fr-fr': ['4C20-3'],
   'fr-ch': [],
 }
-export default class EqResolvantesThales4e extends EqResolvantesThales {
-}
+export default class EqResolvantesThales4e extends EqResolvantesThales {}

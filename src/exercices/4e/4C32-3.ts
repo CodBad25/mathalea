@@ -31,7 +31,7 @@ export const uuid = '5c9c2'
 
 export const refs = {
   'fr-fr': ['4C32-3', 'BP2AutoE9'],
-  'fr-ch': ['10NO2-6'],
+  'fr-ch': ['10NO3F-5'],
 }
 
 function decompositionScientifique(n: number) {

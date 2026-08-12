@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -10,8 +11,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Réduire une expression littérale'
 export const interactifReady = true
@@ -36,7 +35,7 @@ export const uuid = '85d2d'
 export const refs = {
   'fr-fr': ['5N5F', 'BP2AutoI13'],
   'fr-2016': ['5L12', 'BP2AutoI13'],
-  'fr-ch': ['10FA1-12'],
+  'fr-ch': ['10FA4C-1'],
 }
 export default class ReduireUneExpressionLitterale extends Exercice {
   constructor() {

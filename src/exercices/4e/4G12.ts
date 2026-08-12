@@ -42,7 +42,6 @@ import { transfoPoly } from './4G12-1'
 import { CHEMINS_PREDEFINIS } from './_4G12-paths'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const titre = 'Trouver une série de transformations'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -61,7 +60,7 @@ export const uuid = '4ffdb'
 
 export const refs = {
   'fr-fr': ['4G12'],
-  'fr-ch': ['9ES6-23', '10ES2-5'],
+  'fr-ch': ['9ES3-3'],
 }
 
 const motifs = [
@@ -889,7 +888,9 @@ export default class SerieDeTransformations extends Exercice {
             ],
           },
         ]
-        this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) => amcConvert(questionAMC))
+        this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) =>
+          amcConvert(questionAMC),
+        )
       } else {
         handleAnswers(this, i, {
           reponse: {

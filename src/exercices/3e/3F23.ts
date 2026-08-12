@@ -36,7 +36,7 @@ export const uuid = '13cfb'
 
 export const refs = {
   'fr-fr': ['3F23'],
-  'fr-ch': [],
+  'fr-ch': ['11FA1B-8'],
 }
 export default class IntersectionDroites extends Exercice {
   constructor() {
@@ -61,7 +61,7 @@ export default class IntersectionDroites extends Exercice {
       defaut: 3,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const a = randint(-9, 9, 0)

@@ -42,7 +42,7 @@ export const uuid = '6516e'
 
 export const refs = {
   'fr-fr': ['3L13-2', '3G20-3', 'BP2RES13'],
-  'fr-ch': ['11GM3-7', '11FA5-5'],
+  'fr-ch': ['11GM1B-5'],
 }
 export default class EqResolvantesThales extends Exercice {
   consignePluriel: string

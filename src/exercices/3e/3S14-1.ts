@@ -5,8 +5,8 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   listeDeNotes,
   tirerLesDes,
@@ -45,7 +45,7 @@ export const uuid = 'b9afd'
 
 export const refs = {
   'fr-fr': ['3S14-1'],
-  'fr-ch': ['11NO2-11'],
+  'fr-ch': ['NR'],
 }
 
 const numAlpha = (num: number) => `${String.fromCharCode(97 + num)}) `

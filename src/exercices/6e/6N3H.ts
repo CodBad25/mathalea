@@ -24,7 +24,7 @@ export const uuid = '06633'
 export const refs = {
   'fr-fr': ['6N3H'],
   'fr-2016': ['6N41'],
-  'fr-ch': ['9NO12-1'],
+  'fr-ch': ['9NO3B-6'],
 }
 export default class EgalitesEntreFractions extends Exercice {
   constructor() {

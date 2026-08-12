@@ -9,7 +9,7 @@ import ExerciceQcmA from '../ExerciceQcmA'
 export const uuid = '81c7b'
 export const refs = {
   'fr-fr': ['1A-S01-3', '2A-S1-3'],
-  'fr-ch': [],
+  'fr-ch': ['9FA3A-2'],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -89,8 +89,6 @@ export default class LireEffectifCumuleHistogramme extends ExerciceQcmA {
     const sommeTex = valeursConcernees
       .map(([, effectif]) => texNombre(effectif, 0))
       .join('+')
-   
-      
 
     const distracteurs = [
       effectifExact,

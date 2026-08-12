@@ -10,7 +10,7 @@ export const uuid = '4c6a1'
 export const refs = {
   'fr-fr': ['5G5B'],
   'fr-2016': ['5G20'],
-  'fr-ch': [],
+  'fr-ch': ['9ES1C-11'],
 }
 export default class ConstruireUnTriangleAvecCible5e extends ConstruireUnTriangleAvecCible {
   constructor() {

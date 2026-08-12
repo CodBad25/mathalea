@@ -17,7 +17,7 @@ export const uuid = '7433c'
 export const refs = {
   'fr-fr': ['6M1D'],
   'fr-2016': ['6M11-2a'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class PerimetreDeFiguresComposees extends PerimetreOuAireDeFiguresComposees {
   constructor() {

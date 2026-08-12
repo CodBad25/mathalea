@@ -1,9 +1,9 @@
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { arrondi } from '../../lib/outils/nombres'
 import { texNombre2 } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { propositionsQcm } from '../../lib/interactif/qcm'
 import Exercice from '../Exercice'
-import { arrondi } from '../../lib/outils/nombres'
 
 export const amcReady = true
 export const amcType = 'qcmMono'
@@ -28,7 +28,7 @@ export const uuid = '36573'
 export const refs = {
   'fr-fr': ['6N2E-2'],
   'fr-2016': ['6C30-3'],
-  'fr-ch': ['9NO8-11'],
+  'fr-ch': ['PR-27'],
 }
 export default class MultiplicationMentalDecimaux extends Exercice {
   constructor() {
@@ -49,7 +49,6 @@ export default class MultiplicationMentalDecimaux extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = '' // Nous utilisons souvent cette variable pour construire le texte de la question.
       texteCorr = '' // Idem pour le texte de la correction.

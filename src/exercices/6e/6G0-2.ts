@@ -29,7 +29,7 @@ export const uuid = 'd81c6'
 export const refs = {
   'fr-fr': ['6G0-2'],
   'fr-2016': ['6G10-1'],
-  'fr-ch': ['9ES1-2'],
+  'fr-ch': ['9ES1A-2'],
 }
 export default class DescriptionSegmentDroiteDemiDroite extends Exercice {
   constructor() {
@@ -51,7 +51,6 @@ export default class DescriptionSegmentDroiteDemiDroite extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       if (i % 5 === 0) listeDeNomsDePolygones = ['QD']
       const p = creerNomDePolygone(2, listeDeNomsDePolygones)

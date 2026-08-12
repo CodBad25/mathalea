@@ -56,7 +56,7 @@ export const uuid = '328b1'
 export const refs = {
   'fr-fr': ['6G7B-7'],
   'fr-2016': ['6G25-3'],
-  'fr-ch': ['9ES6-20'],
+  'fr-ch': ['9ES3B-8'],
 }
 
 const longueur = (A: PointAbstrait, B: PointAbstrait) =>
@@ -213,13 +213,7 @@ export default class PavageEtReflexion2d extends Exercice {
     let texte = ''
     let texteCorr = ''
     let typeDePavage = Math.max(1, parseInt(this.sup3)) as
-      | 1
-      | 2
-      | 3
-      | 4
-      | 5
-      | 6
-      | 7
+      1 | 2 | 3 | 4 | 5 | 6 | 7
     let nombreTentatives
     let nombrePavageTestes = 1
     if (this.sup3 === 8) {

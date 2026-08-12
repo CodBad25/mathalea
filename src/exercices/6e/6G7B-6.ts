@@ -18,7 +18,7 @@ export const uuid = 'f5569'
 export const refs = {
   'fr-fr': ['6G7B-6'],
   'fr-2016': ['6G25-2'],
-  'fr-ch': ['9ES6-19'],
+  'fr-ch': ['9ES3B-7'],
 }
 export default class PavagesEtSymetries extends PavagesEtTransformations {
   constructor() {

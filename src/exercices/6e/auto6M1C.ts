@@ -18,7 +18,7 @@ export const uuid = 'c57cf'
 export const refs = {
   'fr-fr': ['auto6M1C'],
   'fr-2016': ['6N34'],
-  'fr-ch': ['10GM3-9'],
+  'fr-ch': ['9GM1A-3'],
 }
 export default class Reglages6N34 extends ExerciceConversions {
   constructor() {

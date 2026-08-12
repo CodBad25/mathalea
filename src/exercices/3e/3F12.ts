@@ -14,7 +14,7 @@ export const uuid = '02116'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class FonctionsCalculsDImages extends Exercice {
   constructor() {

@@ -25,7 +25,7 @@ export const uuid = 'b72b0'
 
 export const refs = {
   'fr-fr': ['2F21-6'],
-  'fr-ch': [],
+  'fr-ch': ['11FA1B-13'],
 }
 export default class Variationsfonctionaffine extends Exercice {
   constructor() {

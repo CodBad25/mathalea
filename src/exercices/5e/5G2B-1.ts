@@ -25,7 +25,7 @@ export const uuid = '2d961'
 export const refs = {
   'fr-fr': ['5G2B-1'],
   'fr-2016': ['5G52-1'],
-  'fr-ch': [],
+  'fr-ch': ['10ES2A-5'],
 }
 /**
  * Identifier les bases d'un prisme à partir de son patron.
@@ -67,7 +67,7 @@ export default class nomExercice extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = '<br><br>'
       let texteCorr = ''
       let reponse1: number = -1

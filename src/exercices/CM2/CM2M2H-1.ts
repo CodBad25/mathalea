@@ -21,7 +21,7 @@ export const uuid = '3a087'
 export const refs = {
   'fr-fr': ['CM2M2H-1', 'BP2AutoH26'],
   'fr-2016': ['c3C23', 'BP2AutoH26'],
-  'fr-ch': ['9NO13-1'],
+  'fr-ch': ['NR'],
 }
 class CalculsFractionsSimples extends Exercice {
   version: string
@@ -47,7 +47,7 @@ class CalculsFractionsSimples extends Exercice {
       defaut: 4,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const den = choice([2, 3, 4, 5, 10])
       let a = randint(1, 10, [den, 2 * den, 3 * den, 4 * den])
       let b = randint(1, 10, [den, 2 * den, 3 * den, 4 * den])

@@ -31,7 +31,7 @@ export const dateDeModifImportante = '30/09/2024'
 
 export const refs = {
   'fr-fr': ['3A10-6'],
-  'fr-ch': ['9NO4-7'],
+  'fr-ch': ['9NO1A-15'],
 }
 export const uuid = '5636e'
 export default class TrouverChiffre extends Exercice {
@@ -99,7 +99,7 @@ export default class TrouverChiffre extends Exercice {
       shuffle: true,
     }).map(Number)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte =
         'Dans le nombre suivant à ' + nombreDeChiffres[i] + ' chiffres '
       const positionX =

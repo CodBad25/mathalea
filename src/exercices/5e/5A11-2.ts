@@ -15,8 +15,8 @@ import Exercice from '../Exercice'
 
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 export const dateDePublication = '16/11/2021'
 export const dateDeModifImportante = '29/10/2024'
 export const interactifReady = true
@@ -32,7 +32,7 @@ export const uuid = 'ef7b6'
 
 export const refs = {
   'fr-fr': [''],
-  'fr-ch': ['9NO4-12'],
+  'fr-ch': ['9NO1A-17'],
 }
 export default class ExerciceLabyrintheDivisibilite2 extends Exercice {
   niveau: string
@@ -81,7 +81,7 @@ export default class ExerciceLabyrintheDivisibilite2 extends Exercice {
       tables.push(couple[0], couple[1])
     }
     tables = combinaisonListesSansChangerOrdre(tables, this.nbQuestions)
-    for (let q = 0; q < this.nbQuestions; ) {
+    for (let q = 0; q < this.nbQuestions;) {
       const nbL = this.sup3 === 1 ? randint(2, 8) : Math.max(2, this.sup3)
       const nbC =
         this.sup4 === 1 ? randint(3, 11 - nbL) : Math.max(3, this.sup4)

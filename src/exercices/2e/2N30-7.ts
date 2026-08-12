@@ -13,7 +13,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'd0fdc'
 export const refs = {
   'fr-fr': ['2N30-7', 'BP2AutoH5'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ProblemesAdditifsFractionsBis2nde extends ProblemesAdditifsFractionsBis {
   constructor() {

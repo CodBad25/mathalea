@@ -40,7 +40,7 @@ export const uuid = '4ca19'
 export const refs = {
   'fr-fr': ['5G1A', '3AutoN15-1', '5N2E'],
   'fr-2016': ['5R11', '3AutoN15-1'],
-  'fr-ch': ['9NO9-1'],
+  'fr-ch': ['9NO2A-1'],
 }
 
 const changeCoord = function (x: number, abs0: number, pas1: number) {

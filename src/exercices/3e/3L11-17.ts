@@ -1,7 +1,7 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -32,7 +32,7 @@ export const uuid = 'de188'
 
 export const refs = {
   'fr-fr': ['3L11-17'],
-  'fr-ch': [''],
+  'fr-ch': ['10FA4D-5'],
 }
 export default class TableSimpleDistributivite extends Exercice {
   constructor() {

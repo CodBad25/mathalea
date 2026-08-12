@@ -21,7 +21,7 @@ export const interactifType = 'mathLive'
 export const refs = {
   'fr-fr': ['5N1E-2'],
   'fr-2016': ['5C11-4'],
-  'fr-ch': [],
+  'fr-ch': ['9NO1E-6'],
 }
 
 /**
@@ -78,7 +78,7 @@ export default class EcrireNombreDifferentesFormes extends Exercice {
       typeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       if (i % nbChoix === 0) {
         a = randint(2, 9)
         b = randint(2, 9)

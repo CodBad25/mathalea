@@ -26,7 +26,7 @@ export const uuid = '843e5'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['9NO8-12b'],
+  'fr-ch': ['PR-32'],
 }
 // une fonction pour ordre de grandeur en fonction de ... opération 1
 function myOrdreOpe1(c, d) {

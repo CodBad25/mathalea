@@ -40,7 +40,7 @@ export const uuid = '93f13'
 
 export const refs = {
   'fr-fr': ['2F21-2'],
-  'fr-ch': ['11FA8-13'],
+  'fr-ch': ['11FA1B-10'],
 }
 /**
  * @author = ???

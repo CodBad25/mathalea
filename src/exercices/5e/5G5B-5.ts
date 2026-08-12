@@ -27,7 +27,7 @@ export const interactifType = 'editeur-iep'
 export const uuid = 'd8d99'
 export const refs = {
   'fr-fr': ['5G5B-5'],
-  'fr-ch': [],
+  'fr-ch': ['9ES1C-17'],
 }
 
 const VERIFICATION_TRIANGLE_CALLBACK_NAME = '5G5B-5-verification-triangle'

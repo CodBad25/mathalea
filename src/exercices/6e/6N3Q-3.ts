@@ -16,7 +16,7 @@ export const uuid = '837cd'
 export const refs = {
   'fr-fr': ['6N3Q-3', 'BP2CCF7'],
   'fr-2016': ['6P13-1', 'BP2CCF7'],
-  'fr-ch': ['9FA3-14'],
+  'fr-ch': ['10FA2B-7'],
 }
 export default class CompleterUneFacture extends Exercice {
   constructor() {
@@ -52,7 +52,6 @@ export default class CompleterUneFacture extends Exercice {
         texteCorr,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const listeArticles: [string, number][] = [
         ['Feuilletés au fromage', randint(50, 80) / 10],

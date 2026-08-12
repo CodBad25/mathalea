@@ -41,7 +41,7 @@ export const uuid = '6f383'
 
 export const refs = {
   'fr-fr': ['3G13'],
-  'fr-ch': ['11ES3-5'],
+  'fr-ch': ['11ES3A-3'],
 }
 
 function texteSurSegmentDessus(

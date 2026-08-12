@@ -45,7 +45,7 @@ export const uuid = '2621f'
 
 export const refs = {
   'fr-fr': ['4P12-2'],
-  'fr-ch': ['NR'],
+  'fr-ch': ['10FA1A-2'],
 }
 
 export default class PaternRatio extends Exercice {

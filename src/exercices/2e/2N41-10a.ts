@@ -46,7 +46,7 @@ export const amcReady = true
 export const uuid = '889ef'
 export const refs = {
   'fr-fr': ['2N41-10a'],
-  'fr-ch': ['1mCL1-4', '11FA2-19'],
+  'fr-ch': ['1mCL1-4', '11FA4A-8'],
 }
 
 export default class DevelopperReduireExprComplexe extends Exercice {

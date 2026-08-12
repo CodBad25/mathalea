@@ -31,7 +31,7 @@ export const uuid = '42ade'
 export const refs = {
   'fr-fr': ['6N3F-1'],
   'fr-2016': ['6N20-0'],
-  'fr-ch': ['9NO12-11'],
+  'fr-ch': ['9NO3C-4'],
 }
 export default class EcrireEntierSousFormeDeFraction extends Exercice {
   constructor() {
@@ -97,7 +97,7 @@ export default class EcrireEntierSousFormeDeFraction extends Exercice {
     }).map((element) => Number(element))
     let scale
     context.isHtml ? (scale = 0.5) : (scale = 0.4)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const denominateur =
         listeDenominateurs[cpt % this.nbQuestions] === 1000
           ? randint(2, 11)

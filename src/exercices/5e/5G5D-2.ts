@@ -22,7 +22,7 @@ export const uuid = '9e8f9'
 export const refs = {
   'fr-fr': ['5G5D-2', 'BP2AutoV8', '3AutoG09-1', 'BP1AUTO102'],
   'fr-2016': ['6M25-2', '5M11-6', 'BP2AutoV8', '3AutoG09-1'],
-  'fr-ch': ['9GM1-19'],
+  'fr-ch': ['10GM1A-1'],
 }
 /**
  * Les longueurs sont choisies de telle sorte que le calcul mental soit possible.
@@ -72,7 +72,7 @@ export default class AiresCalculMental extends Exercice {
       defaut: 6,
     }).map(String)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let texteInteractif = ''

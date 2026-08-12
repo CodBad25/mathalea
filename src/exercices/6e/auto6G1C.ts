@@ -36,7 +36,7 @@ export const uuid = '328b2'
 export const refs = {
   'fr-fr': ['auto6G1C'],
   'fr-2016': ['6G25-4'],
-  'fr-ch': ['9ES6-30', '10ES2-17'],
+  'fr-ch': ['9ES1E-21'],
 }
 
 export default class NbAxesDeSymetrie extends Exercice {
@@ -68,7 +68,7 @@ export default class NbAxesDeSymetrie extends Exercice {
       nbQuestions: this.nbQuestions,
     }).map(Number)
     const numerosChoisis: number[] = []
-    for (let i = 0; i < this.nbQuestions; ) {
+    for (let i = 0; i < this.nbQuestions;) {
       let texte = ''
       let texteCorr = ''
       const objets: NestedObjetMathalea2dArray = []

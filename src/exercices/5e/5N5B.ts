@@ -21,7 +21,7 @@ export const uuid = 'd05d3'
 export const refs = {
   'fr-fr': ['5N5B'],
   'fr-2016': ['5L14'],
-  'fr-ch': [],
+  'fr-ch': ['9FA4A-1', '10FA4B-1'],
 }
 /**
  *
@@ -75,7 +75,7 @@ export default class CalculerUneExpressionSimple extends Exercice {
     )
     const signeDisponible = this.sup2 ? [1, -1] : [1]
     const signes = combinaisonListes(signeDisponible, this.nbQuestions)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const inconnue = this.sup4
         ? 'x'
         : choice(['x', 'y', 'z', 'm', 't', 'a', 'b', 'c'])

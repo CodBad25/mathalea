@@ -37,7 +37,7 @@ export const uuid = '41e6f'
 
 export const refs = {
   'fr-fr': ['2G31-3'],
-  'fr-ch': ['11FA9-7', '1mF2-6'],
+  'fr-ch': ['11FA1B-18', '1mF2-6'],
 }
 export default class Lecturegraphiquedeaetb extends Exercice {
   constructor() {

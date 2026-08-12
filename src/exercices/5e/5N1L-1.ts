@@ -32,7 +32,7 @@ export const uuid = '03d65'
 export const refs = {
   'fr-fr': ['5N1L-1'],
   'fr-2016': ['5A12-2'],
-  'fr-ch': ['9NO4-14'],
+  'fr-ch': ['9NO1B-2'],
 }
 export default class ReconnaitreNombrePremier extends Exercice {
   constructor() {
@@ -64,7 +64,7 @@ export default class ReconnaitreNombrePremier extends Exercice {
     const listePremiersDansLordre = listeNombresPremiersStrictJusqua(max + 1)
     const listePremiers = shuffle(listePremiersDansLordre)
     let indexPremiers = 0
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texteCorr = ''
       let texte = ''
       let a = 0

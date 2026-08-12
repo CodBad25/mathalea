@@ -69,7 +69,9 @@ export async function cachedBytes(url: string): Promise<Uint8Array> {
   // (ex. « Invalid PNG signature » au décodage Typst)
   const response = await fetch(url)
   if (!response.ok) {
-    throw new Error(`Échec du téléchargement de ${url} (HTTP ${response.status})`)
+    throw new Error(
+      `Échec du téléchargement de ${url} (HTTP ${response.status})`,
+    )
   }
   if (cache != null) await cache.put(url, response.clone())
   return new Uint8Array(await response.arrayBuffer())
@@ -158,8 +160,12 @@ export interface TypstAnchor {
    * `exo` : début d'un exercice (nombre de questions, suppression) ;
    * `corr` : début de la correction d'un exercice (édition du code, insertion) ;
    * `gap` : espace après un exercice ; `header` : bloc de titre de la fiche ;
+   * `cover` : textes de la page de garde ; `footer` : texte du pied de page
+   * (émis sur la première page physique seulement, voir `pageFooter`) ;
    * `figure` : figure mathalea2d embarquée (zoom) ;
-   * `carte-recto`/`carte-verso` : carte de la vue Flash-cards (taille du texte)
+   * `carte-recto`/`carte-verso` : carte de la vue Flash-cards (taille du texte) ;
+   * `can-row` : ligne du tableau « Course aux nombres » (édition de son
+   * énoncé/réponse), num = numéro de ligne (1-based, colonne « # »)
    */
   kind:
     | 'tasks'
@@ -168,9 +174,12 @@ export interface TypstAnchor {
     | 'corr'
     | 'gap'
     | 'header'
+    | 'cover'
+    | 'footer'
     | 'figure'
     | 'carte-recto'
     | 'carte-verso'
+    | 'can-row'
   /** Numéro de l'exercice concerné (0 = avant le premier exercice), ou de la figure */
   num: number
   page: number
@@ -185,9 +194,12 @@ const ANCHOR_KINDS = new Set([
   'corr',
   'gap',
   'header',
+  'cover',
+  'footer',
   'figure',
   'carte-recto',
   'carte-verso',
+  'can-row',
 ])
 
 /** Valide et filtre les métadonnées renvoyées par `query(<mathalea-anchor>)` */

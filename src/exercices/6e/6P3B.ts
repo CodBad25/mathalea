@@ -26,7 +26,7 @@ export const uuid = '05763'
 export const refs = {
   'fr-fr': ['6P3B'],
   'fr-2016': ['6P16'],
-  'fr-ch': [],
+  'fr-ch': ['9FA2B-2'],
 }
 export default class VraiFauxProportionnalite extends Exercice {
   affirmations: Affirmation[]
@@ -323,7 +323,7 @@ export default class VraiFauxProportionnalite extends Exercice {
     ]
     this.affirmations = shuffle(this.affirmations)
     this.nbQuestions = Math.min(this.affirmations.length, this.nbQuestions)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = this.affirmations[i].texte
       const propositions = [
         {

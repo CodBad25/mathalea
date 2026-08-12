@@ -62,7 +62,7 @@ export const uuid = '6999f'
 export const refs = {
   'fr-fr': ['5G2E-5', 'BP2AutoV5'],
   'fr-2016': ['6M11-2', '5M11-5', 'BP2AutoV5'],
-  'fr-ch': ['9GM1-8', '10GM1-6'],
+  'fr-ch': ['9GM1C-3', '10GM1A-4'],
 }
 
 function valeursApprochees(inputValue: number, sup3: number): [number, number] {

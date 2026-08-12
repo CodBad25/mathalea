@@ -8,7 +8,7 @@ export const dateDeModifImportante = '02/04/2024'
 export const uuid = 'd02da'
 export const refs = {
   'fr-fr': ['2N51-4', 'BP2RES29'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ExerciceEquation12nde extends ExerciceEquation1 {
   constructor() {

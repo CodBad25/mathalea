@@ -33,7 +33,7 @@ export const uuid = '85989'
 export const refs = {
   'fr-fr': ['6N2C-2'],
   'fr-2016': ['6C30-7'],
-  'fr-ch': ['9NO8-13'],
+  'fr-ch': ['PR-23'],
 }
 export default class DiviserUnNombreParPuissanceDeDix extends Exercice {
   constructor() {

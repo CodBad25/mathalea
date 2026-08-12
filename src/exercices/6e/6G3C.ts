@@ -35,7 +35,7 @@ export const uuid = '3acc1'
 export const refs = {
   'fr-fr': ['6G3C'],
   'fr-2016': ['5G22-1'],
-  'fr-ch': ['9ES3-10'],
+  'fr-ch': ['9ES1D-6'],
 }
 export default class ProprietesMediatrice extends Exercice {
   constructor() {
@@ -87,7 +87,6 @@ export default class ProprietesMediatrice extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Construction des objets
       objetsEnonce = []

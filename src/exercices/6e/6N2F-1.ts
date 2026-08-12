@@ -28,7 +28,7 @@ export const uuid = '6e828'
 export const refs = {
   'fr-fr': ['6N2F-1', 'BP2AutoU6'],
   'fr-2016': ['6N31-2'],
-  'fr-ch': ['9NO8-12a'],
+  'fr-ch': ['9NO1G-16'],
 }
 
 export default class OrdreDeGrandeurMultiplication extends Exercice {
@@ -74,7 +74,7 @@ export default class OrdreDeGrandeurMultiplication extends Exercice {
       melange: 5,
       defaut: 5,
     }).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte: string = ''
       let texteCorr: string = ''
       let nb1: number = 0

@@ -14,13 +14,12 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebriqueSauf1,
   reduirePolynomeDegre3,
 } from '../../lib/outils/ecritures'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Utiliser la double distributivité'
 export const interactifReady = true
@@ -37,7 +36,7 @@ export const uuid = '4197c'
 
 export const refs = {
   'fr-fr': ['3L11-1'],
-  'fr-ch': ['11FA2-3'],
+  'fr-ch': ['10FA4F-1'],
 }
 export default class DoubleDistributivite extends Exercice {
   constructor() {

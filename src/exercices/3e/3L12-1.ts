@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -14,8 +15,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Développer (a-b)(a+b)'
 export const interactifReady = true
@@ -33,7 +32,7 @@ export const uuid = 'be157'
 
 export const refs = {
   'fr-fr': ['3L12-1', 'BP2AutoI9', 'BP1AUTO081'],
-  'fr-ch': ['11FA2-12'],
+  'fr-ch': ['10FA4F-2', '11FA4A-3'],
 }
 export default class DevelopperIdentitesRemarquables3 extends Exercice {
   constructor() {

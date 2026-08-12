@@ -2,17 +2,18 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeDesDiviseurs, texFactorisation } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
+
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { bleuMathalea } from '../../lib/colors'
-
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifType = 'qcm'
 export const interactifReady = true
 
-export const titre = 'Effectuer des calculs avec  des multiplications et des puissances de 10'
+export const titre =
+  'Effectuer des calculs avec  des multiplications et des puissances de 10'
 export const dateDePublication = '20/08/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
 /**
@@ -25,7 +26,7 @@ export const uuid = '8b399'
 
 export const refs = {
   'fr-fr': ['4C32-4', 'BP2AutoE10'],
-  'fr-ch': ['10NO2-7', '11NO1-1'],
+  'fr-ch': ['10NO3D-23'],
 }
 export default class CalculsPuissancesDe10 extends Exercice {
   constructor() {
@@ -70,7 +71,6 @@ export default class CalculsPuissancesDe10 extends Exercice {
         scientifiquestring,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       mantisse = randint(2, 9)
 

@@ -2,8 +2,8 @@ import Decimal from 'decimal.js'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha, sp } from '../../lib/outils/outilString'
@@ -30,7 +30,7 @@ export const uuid = '71be7'
 export const refs = {
   'fr-fr': ['6N2E-3'],
   'fr-2016': ['6C30-9'],
-  'fr-ch': ['9NO8-17'],
+  'fr-ch': ['PR-28'],
 }
 export default class ProduitEtSommeOuDifferenceDeDecimaux extends Exercice {
   constructor() {

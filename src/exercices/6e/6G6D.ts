@@ -13,8 +13,8 @@ import {
   type DataOptionsMultiMathfield,
 } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
@@ -71,7 +71,7 @@ export const uuid = 'dc8ce'
 export const refs = {
   'fr-fr': ['6G6D', '3AutoG05-1'],
   'fr-2016': ['5G31'],
-  'fr-ch': ['9ES2-9', '1mG1-2'],
+  'fr-ch': ['9ES1C-4', '11ES1A-1', '1mG1-2'],
 }
 const troisiemeAngle = function (a1: number, a2: number) {
   if (a1 + a2 <= 180) {

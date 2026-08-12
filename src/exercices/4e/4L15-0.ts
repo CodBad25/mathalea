@@ -26,7 +26,7 @@ export const uuid = 'df5a3'
 
 export const refs = {
   'fr-fr': ['4L15-0', 'BP2RES6', 'BP1AUTO018'],
-  'fr-ch': ['10FA3-8'],
+  'fr-ch': ['10FA5C-3'],
 }
 
 // une fonction pour gérer le signe

@@ -18,7 +18,7 @@ export const uuid = '6225c'
 export const refs = {
   'fr-fr': ['6M2A-1', '3AutoG06-3'],
   'fr-2016': ['6M23'],
-  'fr-ch': ['9GM2-2'],
+  'fr-ch': ['9GM1A-6'],
 }
 export default class Reglages6M2A1 extends ExerciceConversionsAires {
   constructor() {

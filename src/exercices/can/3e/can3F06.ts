@@ -22,7 +22,7 @@ export const uuid = '17987'
 
 export const refs = {
   'fr-fr': ['can3F06'],
-  'fr-ch': ['11FA8-27', '1mF2-1b'],
+  'fr-ch': ['11FA1B-27', '1mF2-1b'],
 }
 export default class CoefficientFonctionAffine extends ExerciceSimple {
   constructor() {

@@ -1,14 +1,14 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureNombreRelatif,
   ecritureNombreRelatifc,
   ecritureParentheseSiNegatif,
 } from '../../lib/outils/ecritures'
-import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import Exercice from '../Exercice'
 
 export const titre = 'Multiplier deux entiers relatifs'
 export const interactifReady = true
@@ -26,7 +26,7 @@ export const uuid = '153b9'
 
 export const refs = {
   'fr-fr': ['4C10-3'],
-  'fr-ch': ['10NO4-5'],
+  'fr-ch': ['9NO2C-5'],
 }
 export default class ExerciceMultiplicationsRelatifs extends Exercice {
   constructor(max = 10) {
@@ -44,7 +44,6 @@ export default class ExerciceMultiplicationsRelatifs extends Exercice {
     for (
       let i = 0, a, b, k, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // On limite le nombre d'essais pour chercher des valeurs nouvelles
       a = randint(1, this.sup)

@@ -20,7 +20,7 @@ export const amcType = 'qcmMono'
 export const uuid = 'd7e12'
 export const refs = {
   'fr-fr': ['4C20-4'],
-  'fr-ch': [],
+  'fr-ch': ['9NO3D-6'],
 }
 /**
  * @author Jean-Claude Lhote
@@ -48,7 +48,7 @@ export default class ExerciceComparerDeuxFractionsDenominateursNonMultiples exte
       melange: 0,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let d1 = 1
       let d2 = 1
 

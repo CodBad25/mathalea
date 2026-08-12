@@ -31,7 +31,7 @@ export const uuid = '63f03'
 export const refs = {
   'fr-fr': ['auto6N2B-2'],
   'fr-2016': ['6N23-7'],
-  'fr-ch': ['9NO10-8'],
+  'fr-ch': ['9NO3A-10'],
 }
 /**
  * Exercice de recomposition décimale avec des solides 3D

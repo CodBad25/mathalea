@@ -12,7 +12,7 @@ export const dateDeModifImportante = '20/06/2024'
 export const uuid = '04f53'
 export const refs = {
   'fr-fr': [], // Déréférencé car hors programme. Voir 3Z1DNB-19 pour un exercice sur ce thème.
-  'fr-ch': ['11NO2-13'],
+  'fr-ch': ['NR'],
 }
 
 export default class FonctionsProbabilite extends FonctionsProbabilite2 {

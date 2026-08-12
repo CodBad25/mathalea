@@ -15,7 +15,7 @@ export const uuid = '57f65'
 export const refs = {
   'fr-fr': ['5G2E-4', 'BP2AutoV6b'],
   'fr-2016': ['5M11-2b', 'BP2AutoV6b'],
-  'fr-ch': ['10GM1-1b'],
+  'fr-ch': ['NR'],
 }
 export default class Reglages5M112b extends ExercicePerimetresEtAires {
   constructor() {

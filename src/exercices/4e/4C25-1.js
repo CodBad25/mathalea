@@ -24,7 +24,7 @@ export const uuid = '7ba8b'
 
 export const refs = {
   'fr-fr': ['4C25-1', 'BP2AutoH20'],
-  'fr-ch': ['10NO5-10'],
+  'fr-ch': ['10NO3C-2'],
 }
 export default class ProblemesMultiplicatifsFractions extends Exercice {
   constructor() {

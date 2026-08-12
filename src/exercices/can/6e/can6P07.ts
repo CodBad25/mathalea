@@ -29,7 +29,7 @@ export const uuid = '1a706'
 
 export const refs = {
   'fr-fr': ['can6P07', '6N3P-flash1'],
-  'fr-ch': ['9NO14-15'],
+  'fr-ch': ['10FA2B-4'],
 }
 export default class PoucentageProportion extends ExerciceSimple {
   constructor() {

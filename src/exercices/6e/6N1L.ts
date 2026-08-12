@@ -31,7 +31,7 @@ export const uuid = '013ef'
 export const refs = {
   'fr-fr': ['6N1L'],
   'fr-2016': ['6C31-2'],
-  'fr-ch': ['9NO8-15'],
+  'fr-ch': ['PR-21'],
 }
 export default class ValeurApprocheeDivisionDecimale extends Exercice {
   constructor() {
@@ -75,7 +75,7 @@ export default class ValeurApprocheeDivisionDecimale extends Exercice {
       nbQuestions: 0,
       saisie: this.sup2,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // Une fraction irréductible avec un dénominateur qui comporte un facteur différent de 2 ou de 5
       // aura une écriture décimale périodique infinie
       const k1 = choice([3, 7, 11, 13])

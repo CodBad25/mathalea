@@ -30,7 +30,7 @@ export const uuid = '8117e'
 
 export const refs = {
   'fr-fr': ['3F13-2', '2F12-3', '1Tec-F13'],
-  'fr-ch': [],
+  'fr-ch': ['10FA1B-14', '11FA1A-6'],
 }
 export default class AntecedentGraphique extends Exercice {
   constructor() {
@@ -65,7 +65,7 @@ export default class AntecedentGraphique extends Exercice {
     let yMin: number = -10
     let yMax: number = 10
     let yUnite = 1
-    for (let i = 0; i < this.nbQuestions; ) {
+    for (let i = 0; i < this.nbQuestions;) {
       const nbAnt = nbAntecedents[i] || 1
       if (nbAnt === 1) {
         let a: number = 0

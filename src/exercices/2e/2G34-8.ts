@@ -19,7 +19,7 @@ export const interactifType = 'liste-deroulante'
 export const dateDePublication = '28/03/2024'
 export const uuid = 'fade2'
 export const refs = {
-  'fr-ch': ['11FA12-7'],
+  'fr-ch': ['11FA5A-6'],
   'fr-fr': ['2G34-8'],
 }
 // export const dateDeModifImportante = '24/10/2021'

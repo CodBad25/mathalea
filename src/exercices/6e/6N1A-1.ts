@@ -46,7 +46,7 @@ export const uuid = 'e8e24'
 export const refs = {
   'fr-fr': ['6N1A-1'],
   'fr-2016': ['6N23-4'],
-  'fr-ch': ['9NO10-3'],
+  'fr-ch': [''], // Primaire anciennement : ['9NO10-3'],
 }
 export default class NombreDecimalOraliseDeDifferentesManieres extends Exercice {
   constructor() {
@@ -77,7 +77,6 @@ export default class NombreDecimalOraliseDeDifferentesManieres extends Exercice 
     for (
       let i = 0, texte, texteCorr, cpt = 0, a, b, c, reponseAMC, n, choix;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       a = randint(2, 9)
       b = randint(2, 9, a)

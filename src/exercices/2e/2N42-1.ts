@@ -24,7 +24,7 @@ export const uuid = 'ef686'
 
 export const refs = {
   'fr-fr': ['2N42-1'],
-  'fr-ch': ['11FA5-3'],
+  'fr-ch': ['11GM3-3'],
 }
 export default class ExprimerEnFonctionDesAutres extends Exercice {
   constructor() {

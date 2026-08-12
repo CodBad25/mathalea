@@ -37,7 +37,7 @@ export const uuid = 'ab969'
 export const refs = {
   'fr-fr': ['5G1B-2', '3AutoG01-2'],
   'fr-2016': ['5R12-2', '3AutoG01-2'],
-  'fr-ch': ['9FA1-7'],
+  'fr-ch': ['9FA1A-2'],
 }
 function bareme(listePoints: number[]): [number, number] {
   let points = 0

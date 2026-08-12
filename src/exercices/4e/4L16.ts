@@ -19,7 +19,7 @@ export const dateDePublication = '14/08/2021'
 export const uuid = '68cda'
 export const refs = {
   'fr-fr': ['4L16'],
-  'fr-ch': ['11FA3-1'],
+  'fr-ch': ['10FA4G-1'],
 }
 export default class DeterminerStructureExpressionLitterale extends DeterminerDerniereOperationExpressionLitterale {
   constructor() {

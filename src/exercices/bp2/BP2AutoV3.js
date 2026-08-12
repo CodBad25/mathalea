@@ -45,7 +45,7 @@ export const uuid = 'eb45a'
 export const refs = {
   'fr-fr': ['BP2AutoV3', 'BP1AUTO100'],
   'fr-2016': ['6M11', 'BP2AutoV3'],
-  'fr-ch': ['9GM1-2'],
+  'fr-ch': ['9GM1B-10'],
 }
 export default class AireCarresRectanglesTriangles extends Exercice {
   constructor() {

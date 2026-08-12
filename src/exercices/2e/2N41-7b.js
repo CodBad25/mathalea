@@ -21,7 +21,7 @@ export const interactifType = 'mathLive'
 export const uuid = '874e8'
 export const refs = {
   'fr-fr': [''],
-  'fr-ch': ['11FA3-4b'],
+  'fr-ch': ['10FA4G-5'],
 }
 export default class FactoriserIdentitesremarquables2 extends Exercice {
   constructor() {

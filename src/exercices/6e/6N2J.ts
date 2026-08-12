@@ -1,8 +1,8 @@
 import { orangeMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { rangeMinMax } from '../../lib/outils/nombres'
@@ -40,7 +40,7 @@ export const uuid = '2se82'
 
 export const refs = {
   'fr-fr': ['6N2J'],
-  'fr-ch': ['9NO3-3'],
+  'fr-ch': [''], // Primaire anciennement :['9NO3-3'],
 }
 export default class DivisionsEuclidiennes extends Exercice {
   constructor() {

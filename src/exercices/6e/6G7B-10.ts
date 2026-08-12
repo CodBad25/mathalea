@@ -50,7 +50,7 @@ export const uuid = 'cd69a'
 export const refs = {
   'fr-fr': ['6G7B-10'],
   'fr-2016': ['6G32-1'],
-  'fr-ch': ['9ES6-26'],
+  'fr-ch': ['9ES3B-10'],
 }
 export default class SymetrieAxialeConservation1 extends Exercice {
   constructor() {
@@ -232,7 +232,7 @@ export default class SymetrieAxialeConservation1 extends Exercice {
 
       texte =
         "Dans la symétrie d'axe (d), répondre aux questions suivantes.<br>"
-      for (let ii = 0, s1, s2, texteAMC, choix; ii < this.sup3; ) {
+      for (let ii = 0, s1, s2, texteAMC, choix; ii < this.sup3;) {
         let reponse: string
         switch (listeTypeDeQuestions[ii]) {
           case 'Segment':

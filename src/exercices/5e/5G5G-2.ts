@@ -34,7 +34,7 @@ export const interactifType = 'editeur-iep'
 export const uuid = 'd8d88'
 export const refs = {
   'fr-fr': ['5G5G-2'],
-  'fr-ch': [],
+  'fr-ch': ['9ES1D-13'],
 }
 
 const VERIFICATION_MEDIANE_CALLBACK_NAME = '5G5G-2-verification-mediane'

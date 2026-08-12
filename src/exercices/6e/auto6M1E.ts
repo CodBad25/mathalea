@@ -14,7 +14,7 @@ export const uuid = '316d2'
 export const refs = {
   'fr-fr': ['auto6M1E'],
   'fr-2016': ['6M21-1'],
-  'fr-ch': [''],
+  'fr-ch': ['9GM1B-4'],
 }
 export default class ComparePerimetreAvecRectangle extends CompareAireEtPerimetreAvecRectangle {
   constructor() {

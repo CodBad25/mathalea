@@ -27,7 +27,7 @@ export const uuid = 'c668a'
 
 export const refs = {
   'fr-fr': ['4P10-1', 'BP2AutoL2'],
-  'fr-ch': ['9FA3-15', '10FA4-3'],
+  'fr-ch': ['9FA2B-23'],
 }
 export default class GraphiquesEtProportionnalite2 extends Exercice {
   constructor() {

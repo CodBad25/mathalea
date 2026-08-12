@@ -1,4 +1,4 @@
-import ConvertirDuree from '../ch/10GM3-10Old'
+import ConvertirDuree from '../ch/10GM3B-6Old'
 export const titre = 'Convertir des durées en heures décimales ou en minutes'
 export const dateDePublication = '24/09/2025'
 export const dateDeModifImportante = '19/03/2026'
@@ -7,7 +7,7 @@ export const interactifType = 'mathLive'
 export const uuid = '8013d'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 /**
  * Exercice de conversion de durées

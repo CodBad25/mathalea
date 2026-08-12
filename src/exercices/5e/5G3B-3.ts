@@ -64,7 +64,7 @@ export const uuid = '65bd8'
 export const refs = {
   'fr-fr': ['5G3B-3'],
   'fr-2016': ['6G32', '5G10-3'],
-  'fr-ch': ['9ES6-25'],
+  'fr-ch': ['10ES3A-4'],
 }
 export const interactifReady = true
 export const interactifType = 'mathLive'

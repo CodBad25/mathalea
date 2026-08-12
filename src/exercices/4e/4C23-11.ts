@@ -23,7 +23,7 @@ export const uuid = 'f7f49'
 
 export const refs = {
   'fr-fr': ['4C23-11', 'BP2AutoH19'],
-  'fr-ch': ['10NO5-12', '1mCN-15'],
+  'fr-ch': ['10NO3B-5', '11NO2-3', '1mCN-15'],
 }
 export default class FractionEtPriorites extends Exercice {
   constructor() {
@@ -54,7 +54,7 @@ export default class FractionEtPriorites extends Exercice {
       max: 6,
       melange: 7,
     })
-    for (let i = 0, cpt = 0; i < listeTypeDeQuestion.length && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < listeTypeDeQuestion.length && cpt < 50;) {
       let texte: string = ''
       let texteCorr: string = ''
       let operation = choice(['+', '-'])

@@ -31,7 +31,7 @@ export const uuid = 'd3ba7'
 export const refs = {
   'fr-fr': ['5D1D-1'],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['10FA3A-5'],
 }
 export default class ConstruireUnDiagramme2 extends Exercice {
   constructor() {

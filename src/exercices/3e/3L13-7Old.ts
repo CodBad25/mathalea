@@ -12,7 +12,7 @@ export const uuid = '679f2'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class PaternNum03emeOld extends PaternNum04emeOld {
   constructor() {

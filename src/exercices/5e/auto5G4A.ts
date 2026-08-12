@@ -44,7 +44,7 @@ export const uuid = '1f334'
 export const refs = {
   'fr-fr': ['auto5G4A'],
   'fr-2016': ['5G30-3'],
-  'fr-ch': ['1mG1-3', '11ES2-4'],
+  'fr-ch': ['11ES1A-8', '1mG1-3'],
 }
 
 // Fonction pour vérifier si tous les points sont dans l'intervalle

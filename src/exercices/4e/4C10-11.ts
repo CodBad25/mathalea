@@ -70,7 +70,7 @@ export default class ValeurApprocheeQuotientRelatif extends Exercice {
       nbQuestions: 0,
       saisie: this.sup2,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // Une fraction irréductible avec un dénominateur qui comporte un facteur différent de 2 ou de 5
       // aura une écriture décimale périodique infinie
       const k1 = choice([3, 7, 11, 13])

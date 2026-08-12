@@ -15,7 +15,7 @@ export const uuid = '9f711'
 export const refs = {
   'fr-fr': ['5G3A'],
   'fr-2016': ['5G11b'],
-  'fr-ch': [''],
+  'fr-ch': ['9ES3C-1'],
 }
 export default class Transformations5eSymCentrale extends Transformations {
   constructor() {

@@ -1,11 +1,11 @@
 import Exercice from '../../Exercice'
 
-import { randint, listeQuestionsToContenu } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 export const titre = 'Trouver deux entiers consécutifs'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -13,7 +13,7 @@ export const dateDePublication = '12/09/2024'
 export const uuid = '58784'
 export const refs = {
   'fr-fr': ['can2C18'],
-  'fr-ch': ['10FA3-13'],
+  'fr-ch': ['10FA5D-7'],
 }
 /**
  * Modèle d'exercice très simple pour la course aux nombres
@@ -29,7 +29,7 @@ export default class entiersConsecutifs extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       const n1 = randint(-20, 20, [0, 1, 2, 3, 4, 5, 6, 7])
       const n2 = n1 + 1

@@ -26,7 +26,7 @@ export const uuid = 'a013f'
 export const refs = {
   'fr-fr': ['5G2A'],
   'fr-2016': ['5G51'],
-  'fr-ch': ['9ES7-2'],
+  'fr-ch': ['9ES2B-2', '10ES2A-3'],
 }
 export default class RepresenterUnSolide5e extends Exercice {
   classe: number
@@ -123,7 +123,7 @@ export default class RepresenterUnSolide5e extends Exercice {
     let objetsEnonce = []
     let objetsCorrection = []
     let listeDeNomsDePolygones: string[] = []
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const texte = ''
       if (i % 2 === 0) listeDeNomsDePolygones = ['QD']
       const nom = creerNomDePolygone(8, listeDeNomsDePolygones)

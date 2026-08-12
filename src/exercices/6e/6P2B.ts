@@ -1,7 +1,7 @@
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { personne } from '../../lib/outils/Personne'
@@ -24,7 +24,7 @@ export const uuid = 'b8297'
 export const refs = {
   'fr-fr': ['6P2B'],
   'fr-2016': ['6S12'],
-  'fr-ch': [''],
+  'fr-ch': ['11NO4A-3'],
 }
 export default class Probabilites6e extends Exercice {
   constructor() {
@@ -49,7 +49,7 @@ export default class Probabilites6e extends Exercice {
       [9, 10, 90],
     ]
     const couleur = ['noire', 'blanche', 'rouge', 'bleue', 'verte', 'jaune']
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const frac: [number, number, number] = choice(fracPossible)
       const choix = choice([true, false])
       const choixCouleur = [choice(couleur)]

@@ -1,12 +1,12 @@
-import Exercice from '../Exercice'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Decimal from 'decimal.js'
-import { texNombre } from '../../lib/outils/texNombre'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const titre = 'Encadrer un nombre relatif'
 
 export const dateDePublication = '25/9/2024'
@@ -16,7 +16,7 @@ export const interactifType = 'mathLive'
 export const refs = {
   'fr-fr': ['5N2F-2'],
   'fr-2016': ['5R13-2'],
-  'fr-ch': [''],
+  'fr-ch': ['9NO2A-5'],
 }
 
 /**
@@ -43,7 +43,7 @@ export default class EncadrerRelatif extends Exercice {
       this.nbQuestions,
     )
     const signe = combinaisonListes([1, -1, -1, -1], this.nbQuestions)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let a = new Decimal(
         choice([true, false]) ? randint(1, 100) : randint(1, 10),
       )

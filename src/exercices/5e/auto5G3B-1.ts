@@ -14,7 +14,7 @@ export const uuid = '8ea24'
 export const refs = {
   'fr-fr': ['auto5G3B-1'],
   'fr-2016': ['5G10-2'],
-  'fr-ch': ['9ES6-4'],
+  'fr-ch': ['9ES3B-12'],
 }
 export default class SymetrieAxialeFigure5e extends ConstruireParSymetrie {
   constructor() {

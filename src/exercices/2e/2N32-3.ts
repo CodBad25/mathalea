@@ -17,7 +17,7 @@ export const uuid = 'd9495'
 
 export const refs = {
   'fr-fr': ['2N32-3'],
-  'fr-ch': ['11NO1-6', '1mCN-8'],
+  'fr-ch': ['11NO3A-3', '1mCN-8'],
 }
 export default class ExtraireUnCarreParfaitDUneRacineCarree extends Exercice {
   constructor() {
@@ -42,7 +42,7 @@ export default class ExtraireUnCarreParfaitDUneRacineCarree extends Exercice {
         : ''
 
     let a, b, c, d, texte, texteCorr, reponse
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let enonce = ''
       a = randint(2, 11)
       b = a * a

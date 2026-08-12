@@ -8,6 +8,6 @@ export const amcType = 'AMCNum'
 export const uuid = '78f02'
 export const refs = {
   'fr-fr': ['2N51-3b', 'BP2RES28'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class EqResolvantesThales2nde extends EqResolvantesThales {}

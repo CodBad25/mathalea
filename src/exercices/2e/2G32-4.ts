@@ -38,7 +38,7 @@ export const uuid = '580a6'
 
 export const refs = {
   'fr-fr': ['2G32-4'],
-  'fr-ch': ['10FA5-19', '11FA8-16', '1mF2-14'],
+  'fr-ch': ['11FA1B-22', '1mF2-14'],
 }
 export default class RepresenterfDroite extends Exercice {
   figuresApiGeom: Figure[] = []
@@ -78,7 +78,7 @@ export default class RepresenterfDroite extends Exercice {
     this.figuresApiGeomCorr = []
 
     const textO = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const xA = randint(-3, 3)
       const yA = randint(-2, 2)
       const A = pointAbstrait(xA, yA, 'A')

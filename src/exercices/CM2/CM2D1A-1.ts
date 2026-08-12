@@ -41,7 +41,7 @@ export const uuid = '99d95'
 export const refs = {
   'fr-fr': ['CM2D1A-1'],
   'fr-2016': ['6S11'],
-  'fr-ch': ['9FA1-3'],
+  'fr-ch': [''], // Primaire anciennement : ['9FA1-3'],
 }
 export default class OrganiserDonneesDepuisTexte extends Exercice {
   constructor() {

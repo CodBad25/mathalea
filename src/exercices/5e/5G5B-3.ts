@@ -18,7 +18,7 @@ export const uuid = 'f789c'
 export const refs = {
   'fr-fr': ['5G5B-3'],
   'fr-2016': ['5G21-1'],
-  'fr-ch': ['9ES4-12'],
+  'fr-ch': ['9ES1C-15'],
 }
 export default class ConstructibiliteDesTrianglesLongueurs extends ConstructibiliteDesTriangles {
   exo: string

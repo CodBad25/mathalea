@@ -16,7 +16,7 @@ export const uuid = '9d3f3'
 
 export const refs = {
   'fr-fr': ['can6M19', 'auto6M1A-flash1'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CombienDeFoisMetres extends ExerciceSimple {
   constructor() {

@@ -31,7 +31,7 @@ export const uuid = '72c5a'
 
 export const refs = {
   'fr-fr': ['4P10', 'BP2AutoU4'],
-  'fr-ch': ['10FA4-2'],
+  'fr-ch': ['11GM3-6'],
 }
 const solutes: [string, string, number][] = [
   ['sel', "d'eau", 300],

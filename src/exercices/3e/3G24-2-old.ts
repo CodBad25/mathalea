@@ -48,7 +48,7 @@ export const dateDeModifImportante = '16/11/2025'
 export const uuid = '58a6e'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 /**
  * calcul de longueurs avec des triangles semblables

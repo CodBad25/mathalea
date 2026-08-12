@@ -19,7 +19,6 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const titre = 'Compléter une représentation en perspective cavalière'
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -36,7 +35,7 @@ export const uuid = '0e754'
 
 export const refs = {
   'fr-fr': ['4G51'],
-  'fr-ch': ['9ES7-3'],
+  'fr-ch': ['9ES2B-4'],
 }
 export default class RepresenterUnSolide4e extends Exercice {
   classe: number
@@ -133,7 +132,7 @@ export default class RepresenterUnSolide4e extends Exercice {
     let objetsEnonce = []
     let objetsCorrection = []
     let listeDeNomsDePolygones: string[] = []
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       if (i % 2 === 0) listeDeNomsDePolygones = ['QD'] // lettres à éviter
       const nom = creerNomDePolygone(8, listeDeNomsDePolygones)
       listeDeNomsDePolygones.push(nom)

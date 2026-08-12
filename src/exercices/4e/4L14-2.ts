@@ -5,7 +5,7 @@ export const interactifReady = false
 export const uuid = '1188b'
 export const refs = {
   'fr-fr': ['4L14-2'],
-  'fr-ch': ['10FA3-4', '11FA10-0'],
+  'fr-ch': ['10FA5B-4', '11FA5B-1'],
 }
 export default class TesterSiUnNombreEstSolutionDUneEquationDeg2 extends TesterSiUnNombreEstSolutionDUneEquation {
   constructor() {

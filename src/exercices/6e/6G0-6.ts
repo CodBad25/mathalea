@@ -2,6 +2,7 @@ import { cercle } from '../../lib/2d/cercle'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { pointSurCercle } from '../../lib/2d/utilitairesPoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
@@ -9,7 +10,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -28,7 +28,7 @@ export const uuid = '18672'
 export const refs = {
   'fr-fr': ['6G0-6'],
   'fr-2016': ['6G20-3'],
-  'fr-ch': ['9ES2-12'],
+  'fr-ch': ['9ES1E-1'],
 }
 export default class VocabulaireDeBaseDesPolygones extends Exercice {
   constructor() {

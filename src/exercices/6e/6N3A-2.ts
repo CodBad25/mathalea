@@ -22,7 +22,7 @@ export const uuid = '9cb7e'
 
 export const refs = {
   'fr-fr': ['6N3A-2'],
-  'fr-ch': ['9NO12-12', '10NO5-13'],
+  'fr-ch': ['9NO3C-5'],
 }
 
 export default class PasserEcritureFractionnaireFraction extends Exercice {

@@ -29,7 +29,7 @@ export const uuid = '6babf'
 export const refs = {
   'fr-fr': ['6N0A-7'],
   'fr-2016': ['6N10-0'],
-  'fr-ch': ['9NO1-2'],
+  'fr-ch': [''], // Primaire anciennement :['9NO1-2'],
 }
 export default class ÉcrireNombresEntiers extends Exercice {
   constructor() {

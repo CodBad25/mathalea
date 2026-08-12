@@ -16,7 +16,7 @@ export const uuid = 'c7954'
 export const refs = {
   'fr-fr': ['CM2N5C-7'],
   'fr-2016': ['c3C32-06'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export const titre = 'Résoudre des problèmes de billes'
 export const dateDePublication = '30/11/2024'

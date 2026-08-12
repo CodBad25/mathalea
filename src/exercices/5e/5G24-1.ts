@@ -39,7 +39,7 @@ export const uuid = '10148'
 
 export const refs = {
   'fr-fr': ['5G24-1'],
-  'fr-ch': ['9ES2-8'],
+  'fr-ch': ['11GM1B-0'],
 }
 export default class TrianglesEgaux extends Exercice {
   constructor() {

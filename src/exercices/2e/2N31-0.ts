@@ -7,7 +7,7 @@ export const interactifType = 'mathLive'
 export const uuid = '53fbb'
 export const refs = {
   'fr-fr': ['2N31-0'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class PuissanceDunNombre2e extends PuissanceDunNombre {
   constructor() {

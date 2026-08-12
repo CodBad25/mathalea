@@ -12,6 +12,7 @@ import { texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { rotation, translation } from '../../lib/2d/transformations'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { texcolors } from '../../lib/format/style'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -20,8 +21,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Lire des données représentées dans un diagramme'
 export const interactifReady = true
@@ -38,7 +37,7 @@ export const uuid = 'adac4'
 export const refs = {
   'fr-fr': ['auto6P1A-1', '3AutoP05-1', 'BP1AUTO028'],
   'fr-2016': ['6S10-1'],
-  'fr-ch': ['9FA1-2'],
+  'fr-ch': ['9FA3A-4'],
 }
 export default class LireUnDiagramme extends Exercice {
   constructor() {
@@ -123,7 +122,7 @@ export default class LireUnDiagramme extends Exercice {
       'Vlane',
     ]
     let A, B, T, angle, a, legende, textelegende, hachures, a0, t, alpha
-    for (let q = 0, texte, texteCorr, texteAMC; q < this.nbQuestions; ) {
+    for (let q = 0, texte, texteCorr, texteAMC; q < this.nbQuestions;) {
       objets = []
       lstVal = []
       lstAnimauxExo = []

@@ -32,7 +32,7 @@ export const uuid = '6a2dd'
 
 export const refs = {
   'fr-fr': ['4G10-2'],
-  'fr-ch': ['10ES2-3'],
+  'fr-ch': ['9ES3A-1'],
 }
 
 function segmente(point: PointAbstrait, image: PointAbstrait) {
@@ -89,8 +89,16 @@ export default class nomExercice extends Exercice {
       )
 
       // Vecteur et image par translation
-      const D = pointAbstrait(B.x - 1, B.y + 7 + randint(-10, 10) / 10, lettres[3])
-      const E = pointAbstrait(B.x - 10, B.y + 7 + randint(-20, 20) / 10, lettres[4])
+      const D = pointAbstrait(
+        B.x - 1,
+        B.y + 7 + randint(-10, 10) / 10,
+        lettres[3],
+      )
+      const E = pointAbstrait(
+        B.x - 10,
+        B.y + 7 + randint(-20, 20) / 10,
+        lettres[4],
+      )
       const imageA = translation2Points(A, D, E, `${lettres[0]}'`)
       const imageB = translation2Points(B, D, E, `${lettres[1]}'`)
       const imageC = translation2Points(C, D, E, `${lettres[2]}'`)

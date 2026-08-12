@@ -16,7 +16,7 @@ export const uuid = '3fc85'
 export const refs = {
   'fr-fr': [],
   'fr-2016': ['6G21-4'],
-  'fr-ch': ['9ES4-3'],
+  'fr-ch': ['9ES1E-18'],
 }
 export default class ConstruireLosangesOuParallélogrammes extends TracerQuadrilatèresParticuliers {
   constructor() {

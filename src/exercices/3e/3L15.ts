@@ -36,7 +36,7 @@ export const uuid = '231d3'
 
 export const refs = {
   'fr-fr': ['3L15'],
-  'fr-ch': ['11FA10-4'],
+  'fr-ch': ['10FA5C-6', '11FA5B-4'],
 }
 export default class ExerciceEquations extends Exercice {
   constructor() {

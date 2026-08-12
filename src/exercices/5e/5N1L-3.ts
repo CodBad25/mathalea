@@ -11,7 +11,7 @@ export const uuid = 'b7aee'
 export const refs = {
   'fr-fr': ['5N1L-3'],
   'fr-2016': ['5A12-3v2'],
-  'fr-ch': [],
+  'fr-ch': ['9NO1B-5'],
 }
 /**
  * @author Rémi Angot

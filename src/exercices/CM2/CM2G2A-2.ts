@@ -39,7 +39,7 @@ export const uuid = 'df825'
 export const refs = {
   'fr-fr': ['CM2G2A-2'],
   'fr-2016': ['6G11-1'],
-  'fr-ch': ['9ES3-2'],
+  'fr-ch': ['9ES1A-9'],
 }
 export default class constructionPerpendiculaires extends Exercice {
   //
@@ -95,7 +95,12 @@ export default class constructionPerpendiculaires extends Exercice {
       const objetsEnonce = []
       const objetsCorrection = []
       const indLettre = randint(1, 15)
-      const A = pointAbstrait(0, 0, lettreDepuisChiffre(indLettre), 'above left')
+      const A = pointAbstrait(
+        0,
+        0,
+        lettreDepuisChiffre(indLettre),
+        'above left',
+      )
       let B = pointAbstrait(
         20,
         randint(-4, 0, [-1, 0, 1]),

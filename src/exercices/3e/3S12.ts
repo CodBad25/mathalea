@@ -3,8 +3,8 @@ import { repere } from '../../lib/2d/reperes'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionSigne } from '../../lib/outils/deprecatedFractions'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
@@ -37,7 +37,7 @@ export const uuid = 'f4b96'
 
 export const refs = {
   'fr-fr': ['3S12', 'BP2AutoA5', 'BP2SP2', 'BP1AUTO015'],
-  'fr-ch': [],
+  'fr-ch': ['11NO4A-7'],
 }
 export default class CalculEffectifFrequence extends Exercice {
   constructor() {
@@ -80,7 +80,7 @@ export default class CalculEffectifFrequence extends Exercice {
       'vautours',
     ]
     const symbolePourCent = context.isHtml ? '%' : '$\\%$'
-    for (let ee = 0, cpt = 0; ee < this.nbQuestions && cpt < 50; ) {
+    for (let ee = 0, cpt = 0; ee < this.nbQuestions && cpt < 50;) {
       // Boucle principale où i+1 correspond au numéro de la question
       const nbAnimaux = 4 + parseInt(this.sup) // nombre d'animaux différents dans l'énoncé (entre 5 et 7)
       const nbQuadri = 3

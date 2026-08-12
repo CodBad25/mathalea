@@ -21,7 +21,7 @@ export const uuid = '5a4ad'
 
 export const refs = {
   'fr-fr': ['2N41-5', 'BP1AUTO076'],
-  'fr-ch': ['11FA2-11'],
+  'fr-ch': ['11FA4A-2'],
 }
 
 export default class DevelopperIdentitesRemarquables4 extends Exercice {

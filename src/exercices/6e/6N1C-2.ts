@@ -3,6 +3,7 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint, latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import {
   addPointsCliquables,
@@ -17,8 +18,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { egal, listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const dateDeModifImportante = '16/09/2024'
 export const titre = "Placer un point d'abscisse entière (grands nombres)"
@@ -37,7 +36,7 @@ export const uuid = '4000d'
 export const refs = {
   'fr-fr': ['6N1C-2'],
   'fr-2016': ['6N11-2'],
-  'fr-ch': ['9NO2-2'],
+  'fr-ch': [''], // Primaire anciennement :['9NO2-2'],
 }
 export default class PlacerUnPointAbscisseEntiere2d extends Exercice {
   constructor() {

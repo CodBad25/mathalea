@@ -34,7 +34,7 @@ export const uuid = '2a611'
 export const refs = {
   'fr-fr': ['5G3A-8'],
   'fr-2016': ['5G11-6'],
-  'fr-ch': ['9ES6-16'],
+  'fr-ch': ['9ES3C-9'],
 }
 export default class CompleterParSymetrie5e extends Exercice {
   constructor() {
@@ -111,14 +111,12 @@ export default class CompleterParSymetrie5e extends Exercice {
       // on prépare les points cliquables pour la version interactive
       if (this.interactif && context.isHtml) {
         for (let p = 0; p < papier.listeCoords.length; p++) {
-          pointsCliquables[i].push(
-            {
-              x: papier.listeCoords[p][0],
-              y: papier.listeCoords[p][1],
-              id: `P${p}`,
-              etat: false,
-            },
-          )
+          pointsCliquables[i].push({
+            x: papier.listeCoords[p][0],
+            y: papier.listeCoords[p][1],
+            id: `P${p}`,
+            etat: false,
+          })
         }
       }
       while (pointsPossibles.length > 1) {

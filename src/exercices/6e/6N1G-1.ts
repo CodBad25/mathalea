@@ -24,7 +24,7 @@ export const uuid = '50614'
 export const refs = {
   'fr-fr': ['6N1G-1', 'BP2AutoN2'],
   'fr-2016': ['6N30-0', 'BP2AutoN2'],
-  'fr-ch': ['9NO7-11'],
+  'fr-ch': ['PR-44'],
 }
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -178,7 +178,7 @@ class ReperageEntiersOuDecimaux extends Exercice {
     )
     const distanceGrossesGraduations = 2.5
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const [pasPrincipal, subdivision] = listeValeurs[i]
       const premiereGrosseGraduation = this.sup2
         ? 0
@@ -272,7 +272,10 @@ class ReperageEntiersOuDecimaux extends Exercice {
             distanceGrossesGraduations
           if (xGraduation < B.x) {
             graduationsSecondaires.push(
-              segment(pointAbstrait(xGraduation, -0.1), pointAbstrait(xGraduation, 0.1)),
+              segment(
+                pointAbstrait(xGraduation, -0.1),
+                pointAbstrait(xGraduation, 0.1),
+              ),
             )
           }
         }
@@ -299,7 +302,10 @@ class ReperageEntiersOuDecimaux extends Exercice {
         -1.2,
         { color: orangeMathalea },
       )
-      const guide = segment(pointAbstrait(xPoint, -0.3), pointAbstrait(xPoint, -0.9))
+      const guide = segment(
+        pointAbstrait(xPoint, -0.3),
+        pointAbstrait(xPoint, -0.9),
+      )
       guide.styleExtremites = '->'
       guide.color = colorToLatexOrHTML(orangeMathalea)
       guide.epaisseur = 2

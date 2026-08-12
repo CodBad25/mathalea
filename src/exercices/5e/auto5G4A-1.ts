@@ -17,7 +17,7 @@ export const uuid = 'ed9f4'
 export const refs = {
   'fr-fr': ['auto5G4A-1', '3AutoG03-2'],
   'fr-2016': ['5G30-0', '3AutoG03-2'],
-  'fr-ch': ['11ES2-3', '1mG1-6'],
+  'fr-ch': ['11ES1A-9', '1mG1-6'],
 }
 /**
  * Utiliser le vocabulaire complémentaires et supplémentaires pour qualifier des paires d'angles ou calculer des mesures d'angles

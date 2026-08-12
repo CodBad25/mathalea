@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { deparenthise } from '../../lib/mathFonctions/EnleverParenthesesInutiles'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -6,8 +7,6 @@ import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { Relatif } from '../../modules/Relatif'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const dateDeModifImportante = '02/11/2025'
 export const interactifReady = true
@@ -29,7 +28,7 @@ export const uuid = '450ae'
 
 export const refs = {
   'fr-fr': ['4C10-0'],
-  'fr-ch': ['10NO4-2'],
+  'fr-ch': ['9NO2C-2', '10NO2A-6'],
 }
 export default class SigneProduitQuotientRelatifs extends Exercice {
   exo: string

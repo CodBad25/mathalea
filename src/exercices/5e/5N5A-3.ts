@@ -45,7 +45,7 @@ export const uuid = '0024b'
 export const refs = {
   'fr-fr': ['5N5A-3', 'BP2AutoJ2'],
   'fr-2016': ['5L10-4', 'BP2AutoJ2'],
-  'fr-ch': ['10FA1-9'],
+  'fr-ch': ['10FA4A-4', '10FA5A-4'],
 }
 
 type Longueur = {
@@ -126,7 +126,7 @@ export default class TableauxEtFonction extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let memesUnites = listeTypeDUnites[i] === 'Meme'
       let texte = ''
       let texteCorr = ''

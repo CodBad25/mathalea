@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -17,8 +18,6 @@ import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Calculer des fréquences'
 
@@ -38,7 +37,7 @@ export const uuid = '8cdd5'
 export const refs = {
   'fr-fr': ['5D1B', 'BP2AutoA2', 'BP2SP3', '3AutoP02-1'],
   'fr-2016': ['5S13', 'BP2AutoA2', 'BP2SP3', '3AutoP02-1'],
-  'fr-ch': ['11NO2-1'],
+  'fr-ch': ['11NO4A-6'],
 }
 export default class CalculerDesFrequences extends Exercice {
   constructor() {

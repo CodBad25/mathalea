@@ -28,7 +28,7 @@ export const uuid = '12c6f'
 
 export const refs = {
   'fr-fr': ['6G4B-3'],
-  'fr-ch': [''],
+  'fr-ch': ['9ES1B-10'],
 }
 export default class MesurerUnAngle extends Exercice {
   constructor() {

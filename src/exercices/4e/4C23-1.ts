@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -18,8 +19,6 @@ import type FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre =
   'Effectuer des calculs avec des fractions et les priorités  opératoires'
@@ -38,7 +37,7 @@ export const uuid = '18ddd'
 
 export const refs = {
   'fr-fr': ['4C23-1', 'BP2AutoH18'],
-  'fr-ch': ['10NO6-3'],
+  'fr-ch': ['10NO3B-3', '11NO2-1'],
 }
 export default class ExerciceAdditionnerFractionProduit extends Exercice {
   constructor() {
@@ -111,7 +110,7 @@ export default class ExerciceAdditionnerFractionProduit extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const typesDeQuestions = listeTypeDeQuestions[i]

@@ -17,7 +17,6 @@ import { arrondi } from '../../lib/outils/nombres'
 import Exercice from '../Exercice'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 
-
 export const titre = 'Convertir en min vers h et min ou en s vers min et s'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -35,7 +34,7 @@ export const uuid = '4f8f4'
 export const refs = {
   'fr-fr': ['6M4C-1'],
   'fr-2016': ['6D13'],
-  'fr-ch': ['10GM3-5'],
+  'fr-ch': ['9GM3A-4', '10GM3B-2'],
 }
 export default class ConversionHeuresMinutesOuMinutesEtSecondes extends Exercice {
   can: boolean

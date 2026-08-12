@@ -29,7 +29,7 @@ export const dateDeModifImportante = '13/02/2026'
 export const uuid = 'a1b2c'
 export const refs = {
   'fr-fr': ['2G34-11'],
-  'fr-ch': ['11FA12-11', '1mF2-10', '1mSE-2'],
+  'fr-ch': ['11FA5A-10', '1mF2-10', '1mSE-2'],
 }
 
 export default class IntersectionDeuxDroites extends Exercice {

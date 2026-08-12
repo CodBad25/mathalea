@@ -1,10 +1,10 @@
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
+import { arrondi } from '../../lib/outils/nombres'
 import { texNombre, texNombre2 } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { propositionsQcm } from '../../lib/interactif/qcm'
 import Exercice from '../Exercice'
-import { arrondi } from '../../lib/outils/nombres'
 
 export const amcReady = true
 export const amcType = 'qcmMono'
@@ -24,7 +24,7 @@ export const uuid = '47a54'
 export const refs = {
   'fr-fr': ['6N2B-1'],
   'fr-2016': ['6C30-4'],
-  'fr-ch': ['9NO8-3'],
+  'fr-ch': ['9NO1G-10'],
 }
 export default class PlacerLaVirgule extends Exercice {
   constructor() {
@@ -68,7 +68,6 @@ export default class PlacerLaVirgule extends Exercice {
         exposant,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = '' // Nous utilisons souvent cette variable pour construire le texte de la question.
       texteCorr = '' // Idem pour le texte de la correction.

@@ -9,7 +9,7 @@ export const dateDePublication = '08/09/2023'
 export const uuid = '816c8'
 export const refs = {
   'fr-fr': ['2N31-6', 'BP2AutoF2'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class CalculsAvecPuissancesDeDixEn2nde extends CalculsAvecPuissancesDeDix {
   constructor() {

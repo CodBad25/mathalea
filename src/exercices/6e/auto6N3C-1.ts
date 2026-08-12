@@ -4,7 +4,11 @@ import {
   ajouteChampTexteMathLive,
   remplisLesBlancs,
 } from '../../lib/interactif/questionMathLive'
-import { choice, combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
+import {
+  choice,
+  combinaisonListes,
+  shuffle,
+} from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { range1, rangeMinMax } from '../../lib/outils/nombres'
@@ -23,7 +27,7 @@ export const uuid = 'adfb1'
 export const refs = {
   'fr-fr': ['auto6N3C-1'],
   'fr-2016': [''],
-  'fr-ch': [''],
+  'fr-ch': ['9NO3C-7'],
 }
 
 /** Relier valeurs décimales et fractions dans ces cas simples (demis, quarts, cinquièmes, dixièmes, et "petits" numérateurs)
@@ -63,10 +67,14 @@ export default class DecimaleAFractionnaireBasique extends Exercice {
           ? 'Compléter.'
           : ''
 
-    let typeQuestions = this.sup === 1 ? shuffle(range1(6)) : shuffle(rangeMinMax(7, 18))
+    let typeQuestions =
+      this.sup === 1 ? shuffle(range1(6)) : shuffle(rangeMinMax(7, 18))
     if (this.sup === 3) {
       // Je veux qu'il y ait autant de questions 1 à 6 que 7 à 18
-      const sousTypeQuestions = combinaisonListes([true, false], this.nbQuestions)
+      const sousTypeQuestions = combinaisonListes(
+        [true, false],
+        this.nbQuestions,
+      )
       const nbTrue = sousTypeQuestions.filter((v) => v).length
       const nbFalse = this.nbQuestions - nbTrue
       const liste1to6 = combinaisonListes(range1(6), nbTrue)
@@ -84,8 +92,8 @@ export default class DecimaleAFractionnaireBasique extends Exercice {
         }
       }
     }
-    
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse = ''

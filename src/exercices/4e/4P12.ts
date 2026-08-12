@@ -1,11 +1,11 @@
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { prenom, prenomF, prenomM } from '../../lib/outils/Personne'
-import { objet } from '../6e/6N4A-1'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive' // fonctions de mise en place des éléments interactifs
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { prenom, prenomF, prenomM } from '../../lib/outils/Personne'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import { objet } from '../6e/6N4A-1'
+import Exercice from '../Exercice'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -23,7 +23,7 @@ export const uuid = '60910'
 
 export const refs = {
   'fr-fr': ['5P12'],
-  'fr-ch': ['9NO14-9'],
+  'fr-ch': ['10FA2-2'],
 }
 export default class PartagerSelonUnRatio extends Exercice {
   constructor() {
@@ -56,7 +56,6 @@ export default class PartagerSelonUnRatio extends Exercice {
         total,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       objet1 = objet()
       prenom1 = prenomF()

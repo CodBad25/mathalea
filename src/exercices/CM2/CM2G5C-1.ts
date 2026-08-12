@@ -19,9 +19,9 @@ import {
   generateContent3D,
   initialisePatron3DCanvas,
 } from '../../lib/3d/3d_dynamique/patrons3d'
-import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import type { objetFace } from '../../lib/3d/utilsPatrons'
 import { cubesObj, fauxCubesObj } from '../../lib/3d/utilsPatrons'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import type { MathaleaSVG } from '../../lib/types'
 import { context } from '../../modules/context'
@@ -39,7 +39,7 @@ export const uuid = 'f57fe'
 export const refs = {
   'fr-fr': ['CM2G5C-1'],
   'fr-2016': ['6G45'],
-  'fr-ch': [],
+  'fr-ch': ['9ES2B-1'],
 }
 
 const patron3dReadyAction = 'CM2G5C-1:patron-3d-ready'

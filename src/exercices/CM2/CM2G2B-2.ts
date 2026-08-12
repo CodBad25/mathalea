@@ -17,6 +17,7 @@ import {
   pointSurDroite,
 } from '../../lib/2d/utilitairesPoint'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../lib/outils/embellissements'
@@ -28,8 +29,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const dateDeModifImportante = '17/02/2025'
 export const amcReady = true
@@ -47,7 +46,7 @@ export const uuid = 'd14bc'
 export const refs = {
   'fr-fr': ['CM2G2B-2'],
   'fr-2016': ['6G12-1'],
-  'fr-ch': ['9ES3-4'],
+  'fr-ch': ['9ES1A-11'],
 }
 export default class ParalleleEtPerpendiculaires extends Exercice {
   type: number
@@ -121,7 +120,7 @@ export default class ParalleleEtPerpendiculaires extends Exercice {
 
     let p
     let longueurAEE = 0
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       anim = new Alea2iep()
       anim.equerreZoom(150)
       objetsEnonce.length = 0

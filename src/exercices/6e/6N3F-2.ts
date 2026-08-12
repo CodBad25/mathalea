@@ -33,7 +33,7 @@ export const uuid = 'ab44e'
 export const refs = {
   'fr-fr': ['6N3F-2', '3AutoN06-2'],
   'fr-2016': ['6N20-2'],
-  'fr-ch': ['9NO11-2'],
+  'fr-ch': ['9NO3C-2'],
 }
 
 export default class ExerciceFractionsDifferentesEcritures extends Exercice {

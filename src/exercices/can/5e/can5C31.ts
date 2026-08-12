@@ -18,7 +18,7 @@ export const uuid = 'c70e1'
 
 export const refs = {
   'fr-fr': ['can5C31, 3autoP07-2', '6N3M-flash1'],
-  'fr-ch': [],
+  'fr-ch': ['9NO3E-5'],
 }
 export default class ProblemeFraction extends ExerciceSimple {
   constructor() {

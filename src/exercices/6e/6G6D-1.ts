@@ -27,7 +27,7 @@ export const uuid = 'c2f77'
 export const refs = {
   'fr-fr': ['6G6D-1'],
   'fr-2016': ['5G31-2'],
-  'fr-ch': ['9ES2-10', '1mG1-1'],
+  'fr-ch': ['9ES1C-5', '1mG1-1'],
 }
 
 interface SortieAffichageFactorise {

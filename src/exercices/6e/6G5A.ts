@@ -26,7 +26,7 @@ export const dateDeModifImportante = '05/12/2025'
 export const refs = {
   'fr-fr': ['6G5A'],
   'fr-2016': [],
-  'fr-ch': ['9ES3-12'],
+  'fr-ch': ['9ES1D-7'],
 }
 
 /**
@@ -70,7 +70,7 @@ export default class QuestionBissectrice extends Exercice {
       defaut: 4,
     }).map(Number)
     const avecFigure = this.sup4
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100;) {
       let texte = ''
       let texteCorr = ''
       let alpha = 0

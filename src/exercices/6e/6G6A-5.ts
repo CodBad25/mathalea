@@ -25,7 +25,7 @@ export const uuid = '1ad45'
 export const refs = {
   'fr-fr': ['6G6A-5'],
   'fr-2016': ['6G23-2'],
-  'fr-ch': ['9ES4-11', '9ES5-5'],
+  'fr-ch': ['NR'],
 }
 export default class TracerTriangle2Angles extends Exercice {
   constructor() {
@@ -42,7 +42,6 @@ export default class TracerTriangle2Angles extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       if (i % 5 === 0) listeDeNomsDePolygones = ['PQD']
       const c = randint(30, 70) / 10

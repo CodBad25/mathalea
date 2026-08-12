@@ -68,7 +68,7 @@ export const uuid = '57c70'
 
 export const refs = {
   'fr-fr': ['3G44'],
-  'fr-ch': ['11GM2-5'],
+  'fr-ch': ['10GM1D-9', '11GM2-1'],
 }
 export default class CalculPythagoreEspace extends Exercice {
   constructor() {

@@ -1,3 +1,4 @@
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -11,8 +12,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -34,7 +33,7 @@ export const uuid = '25fb4'
 
 export const refs = {
   'fr-fr': ['2N14-1'],
-  'fr-ch': ['10NO1-1'],
+  'fr-ch': ['11NO5-1'],
 }
 export default class EnsembleDeNombres extends Exercice {
   constructor() {
@@ -77,7 +76,7 @@ export default class EnsembleDeNombres extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let a = 0
       let b = 0
       let c = 0

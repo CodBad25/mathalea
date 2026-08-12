@@ -30,7 +30,7 @@ export const uuid = 'b92db'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
   constructor() {

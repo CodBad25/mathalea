@@ -1,8 +1,8 @@
-import ExerciceSimple from '../ExerciceSimple'
 import Figure from 'apigeom'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import figureApigeom from '../../lib/figureApigeom'
 import { randint } from '../../modules/outils'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
+import ExerciceSimple from '../ExerciceSimple'
 
 export const titre = 'Tracer un rectangle de dimensions données'
 export const dateDePublication = '4/11/2023'
@@ -17,7 +17,7 @@ export const interactifType = 'custom'
 
 export const refs = {
   'fr-fr': ['rectangle2'],
-  'fr-ch': ['9ES4-14'],
+  'fr-ch': ['9ES1E-20'],
 }
 export const uuid = '1d6ca'
 

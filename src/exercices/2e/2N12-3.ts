@@ -1,8 +1,8 @@
 import Decimal from 'decimal.js'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -28,7 +28,7 @@ export const uuid = 'ed2ed'
 
 export const refs = {
   'fr-fr': ['2N12-3'],
-  'fr-ch': ['10NO3-5'],
+  'fr-ch': ['10NO3E-5'],
 }
 export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
   constructor() {
@@ -60,7 +60,7 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
       typeDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let a: number = 0

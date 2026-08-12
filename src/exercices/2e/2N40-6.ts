@@ -7,7 +7,7 @@ export const amcReady = true
 export const uuid = '60cc5'
 export const refs = {
   'fr-fr': ['2N40-6'],
-  'fr-ch': ['11FA2-7'],
+  'fr-ch': ['NR'],
 }
 export default class DistributiviteSimpleDoubleReduction2e extends DistributiviteSimpleDoubleReduction {
   constructor() {

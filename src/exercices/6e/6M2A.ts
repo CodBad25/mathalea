@@ -33,7 +33,7 @@ export const uuid = '026d9'
 export const refs = {
   'fr-fr': ['6M2A'],
   'fr-2016': ['6M23-1'],
-  'fr-ch': ['NR'],
+  'fr-ch': ['9GM1A-5'],
 }
 export default class convertirAiresVersion2025 extends Exercice {
   constructor() {

@@ -20,7 +20,7 @@ export const uuid = 'c4c53'
 export const refs = {
   'fr-fr': ['6N3I-2'],
   'fr-2016': ['6N20-5'],
-  'fr-ch': [],
+  'fr-ch': ['9NO3D-3'],
 }
 export default class ComparerFractionAUnEtAUnDemi extends Exercice {
   constructor() {
@@ -43,7 +43,7 @@ export default class ComparerFractionAUnEtAUnDemi extends Exercice {
           ? combinaisonListes([2], this.nbQuestions)
           : combinaisonListes([1, 2], this.nbQuestions)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let reponse = ''

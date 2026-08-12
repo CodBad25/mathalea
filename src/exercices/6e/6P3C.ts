@@ -883,7 +883,7 @@ export const uuid = 'f7a14'
 export const refs = {
   'fr-fr': ['6P3C', 'BP2AutoL5'],
   'fr-2016': ['6P11', 'BP2AutoL5'],
-  'fr-ch': ['9FA3-9'],
+  'fr-ch': ['9FA2B-4'],
 }
 export default class ProportionnaliteParLinearite extends Exercice {
   constructor() {
@@ -927,7 +927,7 @@ export default class ProportionnaliteParLinearite extends Exercice {
       saisie: this.sup2,
     }).map(Number)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       indexN = randint(0, couplePremiersEntreEux.length - 1)
       if (this.sup) {
         versionSimplifiee = true

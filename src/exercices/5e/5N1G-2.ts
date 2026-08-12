@@ -21,7 +21,7 @@ export const titre =
 export const refs = {
   'fr-fr': ['5N1G-2'],
   'fr-2016': ['5C12-4'],
-  'fr-ch': ['9NO6-6', '10NO6-4'],
+  'fr-ch': ['9NO1F-3'],
 }
 /**
  * @author Jean-claude Lhote
@@ -264,7 +264,7 @@ class MettreDesParentheses extends Exercice {
       defaut: 3,
     })
     let findExp = false
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const choix: Materiel[] = []
       if (listeTypeDeQuestion[i] === 1) {
         if (this.sup2) {

@@ -10,7 +10,7 @@ export const uuid = '7ba64'
 
 export const refs = {
   'fr-fr': ['4S20', 'BP2FLUC10'],
-  'fr-ch': ['11NO2-10'],
+  'fr-ch': ['NR'],
 }
 export default class FonctionsVocabulaireProbabilite4e extends FonctionsProbabilite6e {
   constructor() {

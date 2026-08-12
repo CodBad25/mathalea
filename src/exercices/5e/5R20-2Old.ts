@@ -29,7 +29,7 @@ export const uuid = 'ce842'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ExerciceAdditionsRelatifsATrouOld extends Exercice {
   constructor(max = 10) {

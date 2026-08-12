@@ -24,7 +24,7 @@ export const uuid = '36e68'
 
 export const refs = {
   'fr-fr': ['3S14-0', 'BP1AUTO035'],
-  'fr-ch': ['11NO2-12'],
+  'fr-ch': ['NR'],
 }
 export default class CalculerEtendues extends Exercice {
   constructor() {

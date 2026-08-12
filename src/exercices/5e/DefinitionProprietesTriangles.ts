@@ -19,7 +19,7 @@ export const dateDeModifImportante = '25/04/2026' // Rémi Angot ajout interacti
 export const uuid = '043ca'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['9ES2-14'],
+  'fr-ch': ['9ES1D-15'],
 }
 /**
  * @author Rémi Angot

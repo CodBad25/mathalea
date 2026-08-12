@@ -44,7 +44,7 @@ export const uuid = 'bae57'
 
 export const refs = {
   'fr-fr': ['4C33-1'],
-  'fr-ch': ['10NO2-11'],
+  'fr-ch': ['10NO3D-9'],
 }
 // une fonction pour des infos supp sur les exposants
 function remarquesPuissances(

@@ -7,7 +7,7 @@ export const uuid = '6575c'
 
 export const refs = {
   'fr-fr': ['2N30-5', 'BP2AutoH4'],
-  'fr-ch': ['1mCN-5'],
+  'fr-ch': ['11-NO2-1', '1mCN-5'],
 }
 export default class SommeOuProduitFractions2nde extends SommeOuProduitFractions {
   constructor() {

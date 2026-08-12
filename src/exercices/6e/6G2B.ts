@@ -6,6 +6,7 @@ import Figure from 'apigeom'
 import checkCircle from 'apigeom/src/check/checkCircleRadius'
 import type Point from 'apigeom/src/elements/points/Point'
 import Decimal from 'decimal.js'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import figureApigeom from '../../lib/figureApigeom'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -15,7 +16,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = 'Utiliser la définition du cercle et du disque'
 
@@ -27,7 +27,7 @@ export const uuid = 'f8dee'
 export const refs = {
   'fr-fr': ['6G2B'],
   'fr-2016': ['6G10-8'],
-  'fr-ch': ['9ES1-10'],
+  'fr-ch': ['9ES1F-2'],
 }
 /**
  * Utiliser la définition du cercle et du disque
@@ -82,7 +82,7 @@ export default class defCercleDisque extends Exercice {
         typeDeQuestions = [true, false]
         break
     }
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       this.lesPoints[i] = []
       this.lesPointsCorr[i] = []
       this.choixRayon[i] = []
@@ -228,7 +228,9 @@ export default class defCercleDisque extends Exercice {
     if (i === undefined || this.figuresApiGeom === undefined) return ['KO']
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
-    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(this.figuresApiGeom[i])
+    this.answers[this.figuresApiGeom[i].id] = figureAnswerJson(
+      this.figuresApiGeom[i],
+    )
     const resultat = []
     const divFeedback = document.querySelector(
       `#feedbackEx${this.numeroExercice}Q${i}`,

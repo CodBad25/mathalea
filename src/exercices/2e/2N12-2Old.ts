@@ -6,7 +6,7 @@ export const interactifType = 'mathLive'
 export const uuid = '8f56e'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class PuissancesEncadrement2nde extends PuissancesEncadrement {
   constructor() {

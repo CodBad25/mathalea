@@ -31,7 +31,7 @@ export const uuid = '021f3'
 export const refs = {
   'fr-fr': ['6N2B-2'],
   'fr-2016': ['6C30-5'],
-  'fr-ch': ['9NO8-4'],
+  'fr-ch': ['PR-22'],
 }
 export default class MultiplierPar001 extends Exercice {
   constructor() {

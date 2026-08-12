@@ -15,7 +15,7 @@ export const uuid = '261bf'
 export const refs = {
   'fr-fr': ['5G3A-10'],
   'fr-2016': ['5G12-1'],
-  'fr-ch': ['9ES6-22'],
+  'fr-ch': ['9ES3C-11'],
 }
 export default class PavagesEtDemiTour extends PavagesEtTransformations {
   constructor() {

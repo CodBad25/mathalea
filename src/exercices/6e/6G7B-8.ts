@@ -16,7 +16,7 @@ export const uuid = 'd7da5'
 export const refs = {
   'fr-fr': ['6G7B-8'],
   'fr-2016': ['6G26'],
-  'fr-ch': [],
+  'fr-ch': ['9ES3B-9'],
 }
 export default class SerieDeTransformations6e extends SerieDeTransformations {
   version: number

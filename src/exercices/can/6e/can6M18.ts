@@ -22,7 +22,7 @@ export const uuid = '616e6'
 
 export const refs = {
   'fr-fr': ['can6M18', 'auto6M1C-flash1'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ConversionEnTousSensLongueur extends ExerciceSimple {
   constructor() {

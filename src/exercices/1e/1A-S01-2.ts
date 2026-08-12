@@ -2,7 +2,7 @@ import AutoQ11AGt2026 from '../EAMPremiere/EAM-AGTechno-2026-Q11'
 export const uuid = 'aebb5'
 export const refs = {
   'fr-fr': ['1A-S01-2', '2A-S1-2'],
-  'fr-ch': [],
+  'fr-ch': ['10FA3A-3'],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'

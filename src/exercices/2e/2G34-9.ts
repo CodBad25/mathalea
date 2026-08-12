@@ -25,7 +25,7 @@ export const interactifType = 'mathLive'
 export const dateDePublication = '21/03/2024'
 export const uuid = '6fbf9'
 export const refs = {
-  'fr-ch': ['11FA12-8'],
+  'fr-ch': ['11FA5A-7'],
   'fr-fr': ['2G34-9'],
 }
 // export const dateDeModifImportante = '24/10/2021'

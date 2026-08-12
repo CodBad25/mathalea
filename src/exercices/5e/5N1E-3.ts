@@ -1,7 +1,7 @@
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { prenomF, prenomM } from '../../lib/outils/Personne'
@@ -28,7 +28,7 @@ export const uuid = '34cce'
 export const refs = {
   'fr-fr': ['5N1E-3'],
   'fr-2016': ['5C11-5'],
-  'fr-ch': ['9NO16-8'],
+  'fr-ch': ['9NO1F-6'],
 }
 export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
   constructor() {

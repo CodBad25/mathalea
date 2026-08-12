@@ -28,7 +28,7 @@ export const uuid = '4125e'
 export const refs = {
   'fr-fr': ['5N2G-4'],
   'fr-2016': ['5R20-5'],
-  'fr-ch': ['9NO9-10'],
+  'fr-ch': ['9NO2B-7'],
 }
 
 type Cellule = {

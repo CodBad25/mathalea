@@ -12,7 +12,7 @@ export const uuid = '3174f'
 
 export const refs = {
   'fr-fr': ['4G12-2', '3AutoG14-1'],
-  'fr-ch': ['10ES2-13'],
+  'fr-ch': ['NR'],
 }
 export default class ConservationTransformation4e extends ConservationTransformation {
   constructor() {

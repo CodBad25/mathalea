@@ -9,7 +9,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'eb865'
 export const refs = {
   'fr-fr': ['3C10-1'],
-  'fr-ch': ['11NO1-2'],
+  'fr-ch': ['10NO3D-25'],
 }
 export default class EcritureDecimalePuissance3e extends EcritureDecimalePuissance {
   constructor() {

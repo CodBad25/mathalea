@@ -28,7 +28,7 @@ export const uuid = '526f8'
 
 export const refs = {
   'fr-fr': ['3A10-2'],
-  'fr-ch': ['9NO4-27'],
+  'fr-ch': ['9NO1B-8'],
 }
 const prems = cribleEratostheneN(529) // constante contenant tous les nombres premiers jusqu'à 529...
 export default class PremierOuPasCriterePar7Par11 extends Exercice {

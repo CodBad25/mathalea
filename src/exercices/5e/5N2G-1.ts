@@ -37,7 +37,7 @@ export const uuid = '61b4a'
 export const refs = {
   'fr-fr': ['5N2G-1'],
   'fr-2016': ['5R20-1'],
-  'fr-ch': ['9NO9-4'],
+  'fr-ch': ['9NO2B-4'],
 }
 export default class TermeInconnuDeSomme extends Exercice {
   constructor() {

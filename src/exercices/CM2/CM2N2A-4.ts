@@ -23,7 +23,7 @@ export const dateDePublication = '10/02/2026'
 export const uuid = '1574a'
 export const refs = {
   'fr-fr': ['CM2N2A-4'],
-  'fr-ch': [],
+  'fr-ch': ['9NO3A-1'],
 }
 /**
  *
@@ -318,7 +318,7 @@ export default class RepresenterUneFractionAvecUnePlaqueDeChocolat extends Exerc
       .map(Number)
       .map((n: number) => total(n))
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let frac: FractionEtendue
       let factor: number

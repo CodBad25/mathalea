@@ -30,7 +30,7 @@ export const uuid = '91d72'
 export const refs = {
   'fr-fr': ['auto5N3B', 'BP2AutoC1'],
   'fr-2016': ['5N10', 'BP2AutoC1'],
-  'fr-ch': ['9NO10-2', '1mCN-3'],
+  'fr-ch': ['9NO3C-17', '1mCN-3'],
 }
 export default class PasserEcritureDecimaleEcritureFractionnaireInversement extends Exercice {
   constructor() {

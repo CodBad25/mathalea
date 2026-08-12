@@ -1,8 +1,8 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, shuffle2tableaux } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { range } from '../../lib/outils/nombres'
@@ -25,7 +25,7 @@ export const uuid = 'b92de'
 
 export const refs = {
   'fr-fr': ['3F10', '2F12-5', 'BP2AutoO1'],
-  'fr-ch': ['10FA5-4', '1mF1-6'],
+  'fr-ch': ['10FA1B-2', '1mF1-6'],
 }
 export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
   constructor() {

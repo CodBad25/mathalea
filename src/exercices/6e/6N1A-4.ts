@@ -27,7 +27,7 @@ export const uuid = '8064e'
 export const refs = {
   'fr-fr': ['6N1A-4'],
   'fr-2016': ['6N10-5'],
-  'fr-ch': ['9NO1-6'],
+  'fr-ch': [''], // Primaire anciennement :['9NO1-6'],
 }
 export default class ExerciceLabyrintheNumeration extends Exercice {
   constructor() {

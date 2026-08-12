@@ -23,7 +23,7 @@ export const uuid = '762fe'
 
 export const refs = {
   'fr-fr': ['4C32-1', 'BP2AutoF7'],
-  'fr-ch': ['10NO2-17'],
+  'fr-ch': ['10NO3F-2'],
 }
 export default class CalculsAvecPuissancesDeDix extends Exercice {
   classe: number
@@ -78,7 +78,6 @@ export default class CalculsAvecPuissancesDeDix extends Exercice {
         scientifiquestring,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (this.sup - 1) {
         case 0:

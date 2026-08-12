@@ -20,7 +20,7 @@ export const uuid = '89c0c'
 export const refs = {
   'fr-fr': [],
   'fr-2016': ['6N12-1'],
-  'fr-ch': ['9nO8-6'],
+  'fr-ch': ['PR-31'],
 }
 export default class Exercice6N121 extends MultiplierUnNombreParPuissanceDeDix {
   constructor() {

@@ -36,7 +36,7 @@ export const uuid = '9a5fe'
 export const refs = {
   'fr-fr': ['6M2C-3', 'BP1AUTO107'],
   'fr-2016': ['6M10-1'],
-  'fr-ch': ['9GM1-9'],
+  'fr-ch': ['9GM1B-21'],
 }
 /**
  * @author Jean-claude Lhote
@@ -212,7 +212,7 @@ function dessineCheminAires(
   let y = 0
   let index = 0
   const listeCellules = []
-  for (let etape = 0; etape <= nombreTotalEtapes; ) {
+  for (let etape = 0; etape <= nombreTotalEtapes;) {
     switch (alternance) {
       case 'colonne':
         do {
@@ -702,7 +702,6 @@ export default class ProblemesAiresRectangles extends Exercice {
     for (
       let q = 0, cpt = 0, texte, texteCorr, reponse;
       q < this.nbQuestions && cpt < 50;
-
     ) {
       const typeDeGrille = choisitFormatGrille(nombreTotalEtapes[q])
       // On détermine les 8 longueurs nécessaires et on prépare la grille de rectangles

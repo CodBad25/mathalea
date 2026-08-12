@@ -28,7 +28,7 @@ export const uuid = 'c7f7a'
 export const refs = {
   'fr-fr': ['6G4B'],
   'fr-2016': ['6G23-1'],
-  'fr-ch': ['9ES5-4'],
+  'fr-ch': ['9ES1B-4'],
 }
 export default class MesurerUnAngle extends Exercice {
   constructor() {
@@ -72,7 +72,7 @@ export default class MesurerUnAngle extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // on évite d'avoir deux propositions différentes de 2° (comme 69° et 71°)
       do {
         signes.push(choice([-1, 1]))

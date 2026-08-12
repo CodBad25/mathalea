@@ -5,13 +5,13 @@ import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
 
 export const titre = 'Utiliser la notation de droites, segments et demi-droites'
 export const amcReady = true
@@ -26,7 +26,7 @@ export const uuid = '8f5d3'
 export const refs = {
   'fr-fr': ['6G0-1'],
   'fr-2016': ['6G10'],
-  'fr-ch': ['9ES1-1'],
+  'fr-ch': ['9ES1A-1'],
 }
 export default class NotationSegmentDroiteDemiDroite extends Exercice {
   constructor() {

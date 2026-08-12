@@ -39,7 +39,7 @@ export const uuid = '374b6'
 
 export const refs = {
   'fr-fr': ['4C23', 'BP2AutoH17', '3AutoN03-2'],
-  'fr-ch': ['10NO5-4'],
+  'fr-ch': ['10NO3A-1'],
 }
 export default class SommeOuProduitFractions extends Exercice {
   constructor() {

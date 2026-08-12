@@ -39,7 +39,7 @@ export const uuid = 'b18e8'
 
 export const refs = {
   'fr-fr': ['4G22', 'BP2AutoR4'],
-  'fr-ch': ['10GM4-3', '11GM1-4'],
+  'fr-ch': ['10GM1D-5'],
 }
 export default class ProblemesPythagore extends Exercice {
   constructor() {

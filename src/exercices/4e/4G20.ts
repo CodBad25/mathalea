@@ -22,14 +22,14 @@ import { RedactionPythagore } from './_pythagore'
 
 import { isFunction } from '@cortex-js/compute-engine'
 import type { MathfieldElement } from 'mathlive'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import ce from '../../lib/interactif/comparisonFunctions'
 import { ordreAlphabetique } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
 
 export const titre = 'Calculer une longueur avec le théorème de Pythagore'
 export const amcType = 'AMCHybride'
@@ -234,7 +234,7 @@ export const uuid = 'bd660'
 
 export const refs = {
   'fr-fr': ['4G20', 'BP2AutoR1', 'BP2G6'],
-  'fr-ch': ['10GM4-1', '11GM1-1'],
+  'fr-ch': ['10GM1D-3'],
 }
 
 export default class Pythagore2D extends Exercice {

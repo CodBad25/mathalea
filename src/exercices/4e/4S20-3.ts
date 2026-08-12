@@ -14,7 +14,7 @@ export const dateDeModificationImportante = '27/10/2025'
 export const uuid = '00bb0'
 export const refs = {
   'fr-fr': ['4S20-3'],
-  'fr-ch': [],
+  'fr-ch': ['11NO4A-5'],
 }
 
 /**
@@ -63,7 +63,6 @@ export default class ExerciceProba extends Exercice {
     for (
       let i = 0, texte, texteCorr, k, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let bonneReponse
       const figure = choice(['un Valet', 'une Dame', 'un Roi'])

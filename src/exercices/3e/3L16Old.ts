@@ -12,7 +12,7 @@ export const uuid = 'fe750'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class PaternRatio3emeOld extends PaternRatioOld {
   constructor() {

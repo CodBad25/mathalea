@@ -36,7 +36,7 @@ export const interactifType = 'editeur-iep'
 export const uuid = 'd7d78'
 export const refs = {
   'fr-fr': ['5G5E-3'],
-  'fr-ch': [],
+  'fr-ch': ['9ES1D-11'],
 }
 
 const VERIFICATION_HAUTEUR_CALLBACK_NAME = '5G5E-3-verification-hauteur'

@@ -32,7 +32,7 @@ export const uuid = '43cea'
 
 export const refs = {
   'fr-fr': ['4C22-1'],
-  'fr-ch': ['10NO5-5'],
+  'fr-ch': ['10NO3A-4'],
 }
 export default class ExerciceTrouverInverse extends Exercice {
   constructor() {

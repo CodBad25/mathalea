@@ -29,7 +29,7 @@ export const uuid = '6a17f'
 export const refs = {
   'fr-fr': ['6N3K-2'],
   'fr-2016': ['6N22-2'],
-  'fr-ch': ['9NO10-13'],
+  'fr-ch': ['9NO3F-3'],
 }
 export default class AjouterDesFractionsDunite extends Exercice {
   constructor() {

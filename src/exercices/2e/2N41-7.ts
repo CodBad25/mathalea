@@ -22,7 +22,7 @@ export const uuid = '0bd00'
 
 export const refs = {
   'fr-fr': ['2N41-7', 'BP2AutoI18'],
-  'fr-ch': ['11FA3-5'],
+  'fr-ch': ['11FA4C-2'],
 }
 
 export default class FactoriserIdentitesRemarquables2 extends Exercice {

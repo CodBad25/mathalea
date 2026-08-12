@@ -5,6 +5,6 @@ export const interactifReady = false
 export const uuid = '27741'
 export const refs = {
   'fr-fr': ['2N50-2', 'BP2RES22'],
-  'fr-ch': ['9FA2-10', '10FA1-4b'],
+  'fr-ch': ['NR'],
 }
 export default class FormeLitteraleIntroduireUneLettre2nde extends FormeLitteraleIntroduireUneLettre {}

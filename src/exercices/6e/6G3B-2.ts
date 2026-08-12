@@ -14,7 +14,7 @@ export const uuid = '29407'
 
 export const refs = {
   'fr-fr': ['6G3B-2'],
-  'fr-ch': [],
+  'fr-ch': ['9ES1D-5'],
 }
 export default class DefinitionProprietesTrianglesMediatrices extends DefinitionProprietesTriangles {
   constructor() {

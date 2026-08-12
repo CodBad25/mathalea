@@ -34,7 +34,7 @@ export const refs = {
   // exercice conservé pour retrocompatibilité
   'fr-fr': [],
   'fr-2016': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 
 const items = [
@@ -113,7 +113,7 @@ export default class ResoudreDesProblemes extends Exercice {
       melange: 5,
       defaut: 5,
     }).map(Number)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = 'On a effectué deux pesées :<br>'
       let texteCorr = ''
       const [fruit1, fruit2] = combinaisonListes(items, 2)
@@ -252,7 +252,9 @@ export default class ResoudreDesProblemes extends Exercice {
       }
       et celle d'${shape2.articleSingulier} ${shape2.nomSingulier} ${
         this.interactif
-          ? ajouteChampTexteMathLive(this, 2 * i + 1, KeyboardType.masse, { texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' })
+          ? ajouteChampTexteMathLive(this, 2 * i + 1, KeyboardType.masse, {
+              texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+            })
           : ''
       }?`
       handleAnswers(this, 2 * i, {

@@ -40,7 +40,7 @@ export const uuid = 'c360e'
 
 export const refs = {
   'fr-fr': ['2F21-3'],
-  'fr-ch': ['10FA5-15'],
+  'fr-ch': ['NR'],
 }
 export default class Representerfonctionaffine extends Exercice {
   coefficients!: [number, number][]

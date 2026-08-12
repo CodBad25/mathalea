@@ -17,7 +17,7 @@ export const uuid = '3e4d9'
 export const refs = {
   'fr-fr': ['5N2G-6'],
   'fr-2016': ['5R20-7'],
-  'fr-ch': ['9NO9-12'],
+  'fr-ch': ['9NO2B-9', '10NO2A-4'],
 }
 export default class RoseAdditive5R extends ExoRose {
   // c'est l'ExoRose zéro contenu dans _Roses.js

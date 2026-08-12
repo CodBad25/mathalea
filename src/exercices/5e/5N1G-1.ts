@@ -67,7 +67,7 @@ export const uuid = '4c10a'
 export const refs = {
   'fr-fr': ['5N1G-1'],
   'fr-2016': ['6C33', '5C12-0'],
-  'fr-ch': [],
+  'fr-ch': ['9NO1F-2'],
 }
 export default class Priorites extends Exercice {
   constructor() {

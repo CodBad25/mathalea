@@ -20,7 +20,7 @@ export const uuid = 'afbda'
 
 export const refs = {
   'fr-fr': ['can5P07', '5P1C-flash1'],
-  'fr-ch': [],
+  'fr-ch': ['9FA2B-10'],
 }
 export default class Proportionnalite2 extends ExerciceSimple {
   constructor() {

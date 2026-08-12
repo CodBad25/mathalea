@@ -2371,6 +2371,25 @@ export function htmlToTypst(html: string, figures?: string[]): string {
   // Supprime les $ orphelins restants (ne contenant que des espaces)
   text = text.replace(/\$\s*\$/g, '')
 
+  // `\underline{X}`, `\quad`/`\qquad` et `\medskip` en texte brut hors de
+  // tout `$...$` (ex. `canEnonce`/`canReponseACompleter` des exercices
+  // « Course aux nombres », écrits en LaTeX texte plutôt qu'en HTML, cf.
+  // `context.isHtml` qui reste `true` pendant la génération Typst) : à ce
+  // stade, tout ce qui était dans un `$...$` a déjà été protégé, donc ces
+  // commandes restantes sont forcément du texte mode LaTeX, pas des maths.
+  // `\underline` est réécrit en balise <u> pour rejoindre le traitement des
+  // balises HTML ci-dessous ; `\quad`/`\qquad`/`\medskip` en espacement
+  // Typst direct. `\medskip` peut être précédé d'un `\\` de saut de ligne
+  // LaTeX explicite (ex. can6a-2026 : `Viens-tu à vélo ? \\\medskip …`) :
+  // ce `\\` est absorbé avec la commande pour ne pas fuir en texte littéral.
+  text = text.replace(/\\underline\s*\{([^{}]*)\}/g, '<u>$1</u>')
+  text = text.replace(/\\qquad\b\s*/g, () => protect('#h(2em)'))
+  text = text.replace(/\\quad\b\s*/g, () => protect('#h(1em)'))
+  text = text.replace(
+    /(?:\\\\\s*)?\\medskip\b\s*/g,
+    () => protect('#v(0.5em)\n'),
+  )
+
   // 2. Figures SVG (embarquées dans le document), puis éléments non
   //    convertis : images et tableaux
   text = text.replace(/<svg[\s\S]*?<\/svg>/gi, (svg) => {

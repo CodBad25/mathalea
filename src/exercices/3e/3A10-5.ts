@@ -37,7 +37,7 @@ export const uuid = 'eee79'
 
 export const refs = {
   'fr-fr': ['3A10-5'],
-  'fr-ch': ['9NO4-28'],
+  'fr-ch': ['9NO1B-9'],
 }
 
 export function extraitLaDecomposition(expression: string) {

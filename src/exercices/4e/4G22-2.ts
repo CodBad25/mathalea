@@ -27,7 +27,7 @@ export const uuid = '9aeec'
 
 export const refs = {
   'fr-fr': ['4G22-2'],
-  'fr-ch': [],
+  'fr-ch': ['10GM1D-8', '11GM2B-1'],
 }
 
 function figureCone(

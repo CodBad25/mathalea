@@ -19,7 +19,7 @@ export const uuid = '41f23'
 export const refs = {
   'fr-fr': ['5N1H-1'],
   'fr-2016': ['5C12-2b'],
-  'fr-ch': ['10FA2-1'],
+  'fr-ch': ['9NO1G-2'],
 }
 export default class DistributiviteNumerique extends Exercice {
   constructor() {
@@ -83,7 +83,6 @@ export default class DistributiviteNumerique extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = '' // Nous utilisons souvent cette variable pour construire le texte de la question.
       texteCorr = '' // Idem pour le texte de la correction.

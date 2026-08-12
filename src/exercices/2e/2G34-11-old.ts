@@ -26,7 +26,7 @@ export const dateDePublication = '20/04/2024'
 export const uuid = '8ff15'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class IntersectionDroites extends Exercice {
   constructor() {

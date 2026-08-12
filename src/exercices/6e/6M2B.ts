@@ -1,5 +1,5 @@
-import type { AllChoicesType } from '../../lib/interactif/listeDeroulante/ListeDeroulante'
 import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import type { AllChoicesType } from '../../lib/interactif/listeDeroulante/ListeDeroulante'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -27,7 +27,7 @@ export const uuid = 'f36f3'
 export const refs = {
   'fr-fr': ['6M2B'],
   'fr-2016': ['6M25-3'],
-  'fr-ch': [''],
+  'fr-ch': ['9GM1B-8'],
 }
 
 export default class FormulesAireCarreRectangle extends Exercice {
@@ -98,7 +98,7 @@ export default class FormulesAireCarreRectangle extends Exercice {
       ],
     ]
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       if (this.questionJamaisPosee(i, listeTypeDeQuestions[i])) {
         // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
         let texte = ''
@@ -232,16 +232,21 @@ export default class FormulesAireCarreRectangle extends Exercice {
 
         texte = texteFixe[0]
         texte += this.interactif
-          ? choixDeroulant(this, 3 * i, { choices: choixListeDeroulantePourCeCas[0] })
+          ? choixDeroulant(this, 3 * i, {
+              choices: choixListeDeroulantePourCeCas[0],
+            })
           : '$\\ldots\\ldots\\ldots$'
         texte += texteFixe[1]
         texte += this.interactif
-          ? choixDeroulant(this, 3 * i + 1, { choices: choixListeDeroulantePourCeCas[1] })
+          ? choixDeroulant(this, 3 * i + 1, {
+              choices: choixListeDeroulantePourCeCas[1],
+            })
           : '$\\ldots\\ldots\\ldots$'
         texte += texteFixe[2]
         texte += this.interactif
-          ? choixDeroulant(this, 3 * i + 2, { choices: choixListeDeroulantePourCeCas[2] }) +
-            '.'
+          ? choixDeroulant(this, 3 * i + 2, {
+              choices: choixListeDeroulantePourCeCas[2],
+            }) + '.'
           : '$\\ldots\\ldots\\ldots$'
         this.listeQuestions.push(texte)
         this.listeCorrections.push(texteCorr)

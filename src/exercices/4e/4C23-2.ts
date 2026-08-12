@@ -31,7 +31,7 @@ export const uuid = '18dde'
 
 export const refs = {
   'fr-fr': ['4C23-2'],
-  'fr-ch': [],
+  'fr-ch': ['10NO3C-3', '11NO2-2'],
 }
 
 function supprimeDoublons(correction: string) {
@@ -100,7 +100,7 @@ export default class ExerciceCalculFractionnairesAvecParenthèses extends Exerci
       nbQuestions: this.nbQuestions,
     }).map(Number)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let fractions = ''
 
       let compteur = 0

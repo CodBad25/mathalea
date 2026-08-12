@@ -6,7 +6,7 @@ export const interactifType = 'multi-mathfield'
 export const uuid = '8f56f'
 export const refs = {
   'fr-fr': ['2N12-2', 'BP2AutoE1'],
-  'fr-ch': ['10NO2-8'],
+  'fr-ch': ['10NO3D-20'],
 }
 export default class PuissancesEncadrement2nde extends PuissancesEncadrement {
   constructor() {

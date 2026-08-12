@@ -25,7 +25,7 @@ export const uuid = 'd8797'
 
 export const refs = {
   'fr-fr': ['can5D01', '6M4C-flash8'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ConversionHeuresDecimalesMinutes extends Exercice {
   constructor() {
@@ -35,7 +35,7 @@ export default class ConversionHeuresDecimalesMinutes extends Exercice {
 
   nouvelleVersion() {
     let a, b, d, texte, texteCorr
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (
         choice([1, 2]) //, 'b'
       ) {

@@ -38,7 +38,7 @@ export const uuid = '056fa'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class PenteEtOrdonneeOrigineDroite extends Exercice {
   constructor() {

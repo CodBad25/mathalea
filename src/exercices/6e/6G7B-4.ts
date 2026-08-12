@@ -37,7 +37,7 @@ export const uuid = '07f8a'
 export const refs = {
   'fr-fr': ['6G7B-4'],
   'fr-2016': ['6G24-4'],
-  'fr-ch': ['9ES6-15'],
+  'fr-ch': ['9ES3B-6'],
 }
 export default class CompleterParSymetrie6e extends Exercice {
   pointsCliquables: PointCliquableData[][]
@@ -175,14 +175,12 @@ export default class CompleterParSymetrie6e extends Exercice {
       // over, out et click sont des ojets pour le style css des évènements de la souris, radius, width, color, size, style sont les paramètres possibles pour la trace du point
       if (this.interactif && context.isHtml) {
         for (let p = 0; p < papier.listeCoords.length; p++) {
-          this.pointsCliquables[i].push(
-            {
-              x: papier.listeCoords[p][0],
-              y: papier.listeCoords[p][1],
-              id: `P${p}`,
-              etat: false,
-            },
-          )
+          this.pointsCliquables[i].push({
+            x: papier.listeCoords[p][0],
+            y: papier.listeCoords[p][1],
+            id: `P${p}`,
+            etat: false,
+          })
         }
       }
       while (pointsPossibles.length > 1) {

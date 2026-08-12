@@ -48,7 +48,7 @@ export const uuid = '329fe'
 export const refs = {
   'fr-fr': ['6G4A-4'],
   'fr-2016': ['6G23-5'],
-  'fr-ch': ['9ES5-8'],
+  'fr-ch': ['9ES1B-6', '11ES1A-0'],
 }
 export default class CalculerUnAngle extends Exercice {
   constructor() {

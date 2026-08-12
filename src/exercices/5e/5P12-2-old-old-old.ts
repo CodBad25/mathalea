@@ -35,7 +35,7 @@ export const uuid = '328b8'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 
 export default class PaternRatioOldOldOld extends Exercice {

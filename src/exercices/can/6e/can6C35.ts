@@ -22,7 +22,7 @@ export const uuid = '95dd2'
 
 export const refs = {
   'fr-fr': ['can6C35', '6N2A-flash6', 'auto5N2A-flash8'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class PlusOuMoins6ieme extends ExerciceSimple {
   constructor() {

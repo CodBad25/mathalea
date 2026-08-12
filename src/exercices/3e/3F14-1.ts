@@ -29,7 +29,7 @@ export const uuid = '5622b'
 
 export const refs = {
   'fr-fr': ['3F14-1', '2F13-1'],
-  'fr-ch': [],
+  'fr-ch': ['10FA1B-15', '11FA1C-1'],
 }
 export default class ModeliserSituations extends Exercice {
   constructor() {

@@ -1,4 +1,5 @@
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
+import { amcConvert } from '../../lib/amc/amcBuilders'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -8,8 +9,6 @@ import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { amcConvert } from '../../lib/amc/amcBuilders'
-
 
 export const titre = 'Lire des abscisses fractionnaires de points (niv 2)'
 export const interactifReady = true
@@ -28,7 +27,7 @@ export const uuid = '442f4'
 export const refs = {
   'fr-fr': ['CM2N2F-2'],
   'fr-2016': ['6N21-2'],
-  'fr-ch': ['9NO11-6'],
+  'fr-ch': ['9NO3A-8'],
 }
 export default class LireAbscissesFractionnairesComplexes extends Exercice {
   constructor() {

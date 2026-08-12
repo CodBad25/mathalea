@@ -9,7 +9,7 @@ export const uuid = 'dbc1d'
 export const refs = {
   'fr-fr': ['5G3A-11'],
   'fr-2016': ['5G12-2'],
-  'fr-ch': [],
+  'fr-ch': ['9ES3C-12'],
 }
 export default class SerieDeTransformations5e extends SerieDeTransformations {
   constructor() {

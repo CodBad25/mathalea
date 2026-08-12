@@ -8,7 +8,7 @@ export const uuid = 'fe6e0'
 export const refs = {
   'fr-fr': ['auto6N3D-5'],
   'fr-2016': ['6C10-8'],
-  'fr-ch': ['9NO3-14'],
+  'fr-ch': [''], // Primaire anciennement :['9NO3-14'],
 }
 export default class MessageCodeAvecTables extends EncodeurTexte {
   constructor() {

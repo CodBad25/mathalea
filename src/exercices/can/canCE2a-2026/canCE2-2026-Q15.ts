@@ -1,4 +1,3 @@
-
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
@@ -12,7 +11,7 @@ export const interactifType = 'mathLive'
 export const uuid = '569e1'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['9QCM-10'],
 }
 
 /**
@@ -20,10 +19,20 @@ export const refs = {
 
 */
 export default class Can2026CE2Q15 extends ExerciceCan {
-    enonce(nombre?: number, chiffreDizaines?: number, ajoutOuRetrait?: number, type?: string) {
-    if (nombre == null || chiffreDizaines == null || ajoutOuRetrait == null || type == null) {
+  enonce(
+    nombre?: number,
+    chiffreDizaines?: number,
+    ajoutOuRetrait?: number,
+    type?: string,
+  ) {
+    if (
+      nombre == null ||
+      chiffreDizaines == null ||
+      ajoutOuRetrait == null ||
+      type == null
+    ) {
       type = choice(['soustraction', 'addition'])
-      
+
       if (type === 'soustraction') {
         // Nombre = (chiffreDizaines) × 10 - différence
         // Exemple: 78 = 8 × 10 - 2
@@ -51,19 +60,19 @@ export default class Can2026CE2Q15 extends ExerciceCan {
     if (type === 'soustraction') {
       // Bonne réponse
       prop1Text = `$${chiffreDizaines}$ fois $10$ et j'enlève $${ajoutOuRetrait}$`
-      
+
       // Distracteur 1 : erreur en mettant le nombre complet de dizaines avec addition
       prop2Text = `$${dizainesCompletes * 10}$ fois $10$ et j'ajoute $${chiffreUnites}$`
-      
+
       // Distracteur 2 : formule inversée
       prop3Text = `$${dizainesCompletes}$ et $${chiffreUnites}\\times 10$`
     } else {
       // Bonne réponse
       prop1Text = `$${chiffreDizaines}$ fois $10$ et j'ajoute $${ajoutOuRetrait}$`
-      
+
       // Distracteur 1 : inversion dizaines/unités
       prop2Text = `$${ajoutOuRetrait}$ fois $10$ et j'ajoute $${chiffreDizaines}$`
-      
+
       // Distracteur 2 : formule inversée
       prop3Text = `$${chiffreDizaines}$ et $${ajoutOuRetrait}\\times 10$`
     }
@@ -86,7 +95,7 @@ export default class Can2026CE2Q15 extends ExerciceCan {
           statut: false,
         },
       ],
-      options: { vertical: !context.isHtml }
+      options: { vertical: !context.isHtml },
     }
 
     this.formatInteractif = 'qcm'
@@ -96,9 +105,13 @@ export default class Can2026CE2Q15 extends ExerciceCan {
     this.canEnonce = `Coche la bonne réponse.<br>$${nombre}$ c'est :`
 
     if (type === 'soustraction') {
-      this.correction = monQcm.texteCorr + `$${nombre}=${chiffreDizaines}\\times 10-${ajoutOuRetrait}$, donc $${nombre}$ c'est ${texteEnCouleurEtGras(`$${chiffreDizaines}$ fois $10$ et j'enlève $${ajoutOuRetrait}$`)}.`
+      this.correction =
+        monQcm.texteCorr +
+        `$${nombre}=${chiffreDizaines}\\times 10-${ajoutOuRetrait}$, donc $${nombre}$ c'est ${texteEnCouleurEtGras(`$${chiffreDizaines}$ fois $10$ et j'enlève $${ajoutOuRetrait}$`)}.`
     } else {
-      this.correction = monQcm.texteCorr + `$${nombre}=${chiffreDizaines}\\times 10+${ajoutOuRetrait}$, donc $${nombre}$ c'est ${texteEnCouleurEtGras(`$${chiffreDizaines}$ fois $10$ et j'ajoute $${ajoutOuRetrait}$`)}.`
+      this.correction =
+        monQcm.texteCorr +
+        `$${nombre}=${chiffreDizaines}\\times 10+${ajoutOuRetrait}$, donc $${nombre}$ c'est ${texteEnCouleurEtGras(`$${chiffreDizaines}$ fois $10$ et j'ajoute $${ajoutOuRetrait}$`)}.`
     }
 
     this.canReponseACompleter = monQcm.texte

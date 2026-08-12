@@ -18,7 +18,7 @@ export const uuid = '6ec4a'
 
 export const refs = {
   'fr-fr': ['1A-G02-13', '2A-G3-13'],
-  'fr-ch': [],
+  'fr-ch': ['10GM2A-3'],
 }
 
 export const interactifReady = true
@@ -69,7 +69,10 @@ export default class VolumePrismeDroitBasePentagonaleQcm extends ExerciceQcmA {
     for (const arete of aretesBaseInferieure) {
       arete.epaisseur = 2
     }
-    for (const areteCachee of [aretesBaseInferieure[2], aretesBaseInferieure[3]]) {
+    for (const areteCachee of [
+      aretesBaseInferieure[2],
+      aretesBaseInferieure[3],
+    ]) {
       areteCachee.pointilles = 5
     }
 

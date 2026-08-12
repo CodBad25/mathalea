@@ -9,7 +9,7 @@ export const uuid = '98a08'
 export const refs = {
   'fr-fr': ['5G2C'],
   'fr-2016': ['5M20-2'],
-  'fr-ch': [],
+  'fr-ch': ['10GM2A-4'],
 }
 export default class CalculDeVolumes5ePolyedres extends CalculDeVolumes {
   constructor() {

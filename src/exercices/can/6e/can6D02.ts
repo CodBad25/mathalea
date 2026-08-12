@@ -16,7 +16,7 @@ export const uuid = '46e66'
 
 export const refs = {
   'fr-fr': ['can6D02', '6M4C-flash2'],
-  'fr-ch': [],
+  'fr-ch': ['NR'],
 }
 export default class ResteEnMinutes extends ExerciceSimple {
   constructor() {

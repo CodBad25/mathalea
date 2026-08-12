@@ -1,7 +1,7 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -30,7 +30,7 @@ export const uuid = 'c8403'
 
 export const refs = {
   'fr-fr': ['3L11-10'],
-  'fr-ch': ['11FA2-6'],
+  'fr-ch': ['10FA4F-9'],
 }
 export default class TableDoubleDistributivite extends Exercice {
   constructor() {

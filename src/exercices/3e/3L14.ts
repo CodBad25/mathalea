@@ -39,7 +39,7 @@ export const uuid = 'ecf62'
 
 export const refs = {
   'fr-fr': ['3L14', 'BP2RES16'],
-  'fr-ch': ['11FA10-1'],
+  'fr-ch': ['11FA5B-2'],
 }
 export default class ResoudreUneEquationProduitNul extends Exercice {
   constructor() {
