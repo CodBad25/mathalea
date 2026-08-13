@@ -40,8 +40,8 @@ export default class ExercicePolynesie392024 extends ExerciceBrevetA {
     this.besoinFormulaireCaseACocher = ['Sujet original', false]
     this.sup = false
     this.introduction = texteItalique(
-      "D'après l'exercice 5 du brevet Polynésie 2024.<br>",
-    )
+      "D'après l'exercice 5 du brevet Polynésie 2024.",
+    ) + '<br>'
 
     this.versionAleatoire()
   }

@@ -16,6 +16,7 @@
   } from '../../../../lib/mathalea'
   import type { IExercice, InterfaceParams } from '../../../../lib/types'
   import {
+    isExamItemInReferentiel,
     isExerciceItemInReferentiel,
     isGeoDynamic,
     isTool,
@@ -205,6 +206,10 @@
 
 <li
   use:lazyLoad
+  data-tour="exercise-preview"
+  data-tour-exam={isExamItemInReferentiel(ending)
+    ? ending.typeExercice
+    : undefined}
   class="flex flex-col gap-2 rounded-xl border border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest
   bg-coopmaths-canvas dark:bg-coopmathsdark-canvas p-3"
 >

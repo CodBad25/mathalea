@@ -29,8 +29,8 @@ export default class Exercice3F14DNB2 extends ExerciceBrevetA {
     this.besoinFormulaireCaseACocher = ['Sujet original', false]
     this.sup = false
     this.introduction = texteItalique(
-      "D'après l'exercice 3 du brevet Métropole Septembre 2023.<br>",
-    )
+      "D'après l'exercice 3 du brevet Métropole Septembre 2023.",
+    ) + '<br>'
 
     this.versionAleatoire()
   }

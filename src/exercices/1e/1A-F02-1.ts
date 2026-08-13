@@ -1,4 +1,4 @@
-import CalculImageSecondDegre from '../can/2e/can2F01'
+import CalculImageSecondDegre from '../can/2e/can2F3-01'
 export const titre = 'Calculer une image avec une fonction'
 export const dateDePublication = '23/07/2025'
 export const amcReady = true
@@ -7,7 +7,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
- * Clone de can2F01 pour les auto 1er
+ * Clone de can2F3-01 pour les auto 1er
  * @author Gilles Mora
  */
 

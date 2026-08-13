@@ -43,8 +43,8 @@ export default class ExercicePythThalTrigo extends ExerciceBrevetA {
     this.besoinFormulaireCaseACocher = ['Sujet original', false]
     this.sup = false
     this.introduction = texteItalique(
-      "D'après l'exercice 3 du brevet Antilles 2024.<br>",
-    )
+      "D'après l'exercice 3 du brevet Antilles 2024.",
+    ) + '<br>'
 
     this.versionAleatoire()
   }

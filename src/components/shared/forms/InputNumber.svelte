@@ -7,6 +7,8 @@
   export let isDisabled: boolean = false
   export let darkBackground: boolean = false
   export let step: number = 1
+  /** Libellé pour les lecteurs d'écran, quand le champ n'a pas de `<label>`. */
+  export let ariaLabel: string = ''
 
   const dispatch = createEventDispatcher()
 
@@ -58,6 +60,7 @@
     {min}
     {max}
     {step}
+    aria-label={ariaLabel === '' ? undefined : ariaLabel}
     value={displayValue}
     on:input={handleInput}
     class="{$$props.class} w-full h-10 pr-0

@@ -150,6 +150,9 @@
   style="padding-left: {(nestedLevelCount * 2) / 6}rem"
 >
   <div
+    data-tour-id={isExerciceItemInReferentiel(ending) || isTool(ending)
+      ? ending.id
+      : undefined}
     class={`w-full relative inline-flex text-start justify-start items-start hover:bg-coopmaths-action-light dark:hover:bg-coopmathsdark-action-light dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest ${selectedCount >= 1 ? 'bg-coopmaths-warn dark:bg-coopmathsdark-warn' : 'bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas-darkest'} cursor-pointer`}
   >
     <button

@@ -7,7 +7,6 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
- * Clone de can2F24 pour les auto 1er
  * @author Gilles Mora
  */
 

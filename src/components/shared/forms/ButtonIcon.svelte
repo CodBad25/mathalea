@@ -5,13 +5,14 @@
   export let floatUnderText: string = ''
   export let cornerIcon: string = ''
   export let cornerIconClass: string = ''
+  export let dataTour: string | undefined = undefined
 </script>
 
 <button
   type="button"
   {title}
-  class="{$$props.class ||
-    ''} {disabled
+  data-tour={dataTour}
+  class="{$$props.class || ''} {disabled
     ? 'text-coopmaths-action/10 dark:text-coopmathsdark-action/10'
     : 'text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest'}"
   {disabled}

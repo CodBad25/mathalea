@@ -137,6 +137,18 @@
   "can2F": {
     "titre": "Fonctions"
   },
+  "can2F1": {
+    "titre": "Généralités avec les fonctions"
+  },
+  "can2F2": {
+    "titre": "Fonctions affines"
+  },
+  "can2F3": {
+    "titre": "Fonctions de références"
+  },
+  "can2F4": {
+    "titre": "Variations et signes d'une fonction"
+  },
   "can2G": {
     "titre": "Géométrie"
   },
@@ -1850,6 +1862,75 @@
   "3Auto": {
     "titre": "Automatismes"
   },
+  "3AutoF": {
+    "titre": "Fonctions"
+  },
+  "3AutoF01": {
+    "titre": "Calculer des images et des antécédents"
+  },
+  "3AutoF02": {
+    "titre": "Trouver graphiquement des images et des antécédents"
+  },
+  "3AutoG": {
+    "titre": "Espace et géométrie"
+  },
+  "3AutoG01": {
+    "titre": "Dans le plan muni d'un repère orthogonal, lire les coordonnées d'un point, placer un point de coordonnées données"
+  },
+  "3AutoG02": {
+    "titre": "Exploiter le codage d'une figure pour identifier des triangles, des quadrilatères particuliers, une médiatrice"
+  },
+  "3AutoG03": {
+    "titre": "Reconnaître et citer des angles sur une configuration géométrique"
+  },
+  "3AutoG04": {
+    "titre": "Savoir qu’un angle droit mesure 90° et un angle plat 180°"
+  },
+  "3AutoG05": {
+    "titre": "Connaître la somme des mesures des angles d'un triangle, calculer la mesure du troisième angle"
+  },
+  "3AutoG06": {
+    "titre": "Connaître les procédures de conversion d'unités"
+  },
+  "3AutoG07": {
+    "titre": "Reconnaître des solides (cube, pavé droit, prisme droit, cylindre, pyramide, cône)"
+  },
+  "3AutoG08": {
+    "titre": "Déterminer le périmètre d'un polygone, d'un disque"
+  },
+  "3AutoG09": {
+    "titre": "Connaître et utiliser les formules d'aire d'un triangle, d'un rectangle, d'un disque"
+  },
+  "3AutoG10": {
+    "titre": "Connaître et utiliser les formules du volume d'un cube, d'un pavé droit, d'un prisme droit, d'un cylindre"
+  },
+  "3AutoG11": {
+    "titre": "Reconnaître une situation d'application du théorème de Pythagore"
+  },
+  "3AutoG12": {
+    "titre": "Reconnaître une situation d'application du théorème de Thalès"
+  },
+  "3AutoG13": {
+    "titre": "Reconnaître une situation d'application de la ligne trigonométrique cosinus"
+  },
+  "3AutoG14": {
+    "titre": "Mobiliser les propriétés de la symétrie axiale, de la symétrie centrale, de la translation"
+  },
+  "3AutoM": {
+    "titre": "Mesures"
+  },
+  "3AutoM01": {
+    "titre": "Conversions d'unités de durées"
+  },
+  "3AutoM02": {
+    "titre": "Conversions d'unités de longueurs"
+  },
+  "3AutoM03": {
+    "titre": "Conversions d'unités d'aires"
+  },
+  "3AutoM04": {
+    "titre": "Conversions d'unités de volumes"
+  },
   "3AutoN": {
     "titre": "Nombres et calcul"
   },
@@ -1898,51 +1979,6 @@
   "3AutoN15": {
     "titre": "Sur une droite graduée, lire l'abscisse d'un point et placer un point d'abscisse donnée"
   },
-  "3AutoG": {
-    "titre": "Espace et géométrie"
-  },
-  "3AutoG01": {
-    "titre": "Dans le plan muni d'un repère orthogonal, lire les coordonnées d'un point, placer un point de coordonnées données"
-  },
-  "3AutoG02": {
-    "titre": "Exploiter le codage d'une figure pour identifier des triangles, des quadrilatères particuliers, une médiatrice"
-  },
-  "3AutoG03": {
-    "titre": "Reconnaître et citer des angles sur une configuration géométrique"
-  },
-  "3AutoG04": {
-    "titre": "Savoir qu’un angle droit mesure 90° et un angle plat 180°"
-  },
-  "3AutoG05": {
-    "titre": "Connaître la somme des mesures des angles d'un triangle, calculer la mesure du troisième angle"
-  },
-  "3AutoG06": {
-    "titre": "Connaître les procédures de conversion d'unités"
-  },
-  "3AutoG07": {
-    "titre": "Reconnaître des solides (cube, pavé droit, prisme droit, cylindre, pyramide, cône)"
-  },
-  "3AutoG08": {
-    "titre": "Déterminer le périmètre d'un polygone, d'un disque"
-  },
-  "3AutoG09": {
-    "titre": "Connaître et utiliser les formules d'aire d'un triangle, d'un rectangle, d'un disque"
-  },
-  "3AutoG10": {
-    "titre": "Connaître et utiliser les formules du volume d'un cube, d'un pavé droit, d'un prisme droit, d'un cylindre"
-  },
-  "3AutoG11": {
-    "titre": "Reconnaître une situation d'application du théorème de Pythagore"
-  },
-  "3AutoG12": {
-    "titre": "Reconnaître une situation d'application du théorème de Thalès"
-  },
-  "3AutoG13": {
-    "titre": "Reconnaître une situation d'application de la ligne trigonométrique cosinus"
-  },
-  "3AutoG14": {
-    "titre": "Mobiliser les propriétés de la symétrie axiale, de la symétrie centrale, de la translation"
-  },
   "3AutoP": {
     "titre": "Organisation et gestion de données et probabilités"
   },
@@ -1978,9 +2014,6 @@
   },
   "3AutoI01": {
     "titre": "Interpréter une suite d'instructions : programme de calcul, déplacement, construction géométrique"
-  },
-  "3AutoM": {
-    "titre": "Mesures"
   },
   "3A1": {
     "titre": "Arithmétique"
@@ -2468,10 +2501,13 @@
   "2F13": {
     "titre": "Déterminer un antécédent à partir d'une représentation graphique ou d'un tableau de valeurs d'une fonction"
   },
-  "2F14": {
-    "titre": "Modéliser un phénomène continu par une fonction"
+   "2F14": {
+    "titre": "Recherche du domaine de définition"
   },
   "2F15": {
+    "titre": "Modéliser un phénomène continu par une fonction"
+  },
+  "2F16": {
     "titre": "Résoudre des problèmes modélisés par des fonctions en utilisant un ou plusieurs modes de représentation"
   },
   "2F1Q": {
@@ -2863,7 +2899,7 @@
   "TSA3": {
     "titre": "Complément sur la dérivation"
   },
-   "TSA3-1": {
+  "TSA3-1": {
     "titre": "Dérivation"
   },
   "TSA3-2": {
@@ -3055,45 +3091,45 @@
   },
   "TCA2": {
     "titre": "Limites de fonctions",
-    "sousThemes": {   }
+    "sousThemes": {}
   },
-   "TCA2-1": {
+  "TCA2-1": {
     "titre": "Limites finies, infinies, asymptotes",
-    "sousThemes": {   }
+    "sousThemes": {}
   },
-   "TCA2-2": {
+  "TCA2-2": {
     "titre": "Limites de fonctions de référence",
-    "sousThemes": {   }
+    "sousThemes": {}
   },
-   "TCA2-3": {
+  "TCA2-3": {
     "titre": "Limites de fonctions de référence",
-    "sousThemes": {   }
+    "sousThemes": {}
   },
-   "TCA2-4": {
+  "TCA2-4": {
     "titre": "Opérations sur les limites",
-    "sousThemes": {   }
+    "sousThemes": {}
   },
-   "TCA2-5": {
+  "TCA2-5": {
     "titre": "Limites et comparaisons",
-    "sousThemes": {   }
+    "sousThemes": {}
   },
   "TCA3": {
     "titre": "Continuité et TVI",
     "sousThemes": {}
   },
-   "TCA4": {
+  "TCA4": {
     "titre": "Fonction logarithme népérien",
     "sousThemes": {}
   },
- "TCA5": {
+  "TCA5": {
     "titre": "Primitives et équations différentielles",
     "sousThemes": {}
   },
-    "TCA6": {
+  "TCA6": {
     "titre": "Intégration",
     "sousThemes": {}
   },
-   "TCA7": {
+  "TCA7": {
     "titre": "Compléments sur la dérivation",
     "sousThemes": {}
   },
@@ -3112,15 +3148,15 @@
   "TCA7-5": {
     "titre": "Synthèse"
   },
-   "TCP1": {
+  "TCP1": {
     "titre": "Lois de probabilités discrètes",
     "sousThemes": {}
   },
-    "TCP2": {
+  "TCP2": {
     "titre": "Lois de probabilités à densité",
     "sousThemes": {}
   },
-    "TCP3": {
+  "TCP3": {
     "titre": "Séries statistiques à deux variables",
     "sousThemes": {}
   },

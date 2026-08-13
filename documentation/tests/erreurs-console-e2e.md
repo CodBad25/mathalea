@@ -124,6 +124,7 @@ Recherche jusqu'à 5 instances de chaque type de formulaire dans le conteneur `#
 | Type de formulaire            | Sélecteur                           | Valeurs testées                                         |
 | ----------------------------- | ----------------------------------- | ------------------------------------------------------- |
 | `formText`                    | `#settings-formText{1-5}-0`         | Cas extraits des lignes `1 : ...`, `2 : ...` uniquement |
+| `formTextListe` (cas à cocher) | `#settings-formTextListe{1-5}-0`   | Tous les cas cochés (raccourci « Tout cocher »)         |
 | `check` (cases à cocher)      | `#settings-check{1-5}-0`            | `[false, true]`                                         |
 | `num` (champs numériques)     | `#settings-formNum{1-5}-0` (input)  | `[min, min+1, max]`                                     |
 | `select` (listes déroulantes) | `#settings-formNum{1-5}-0` (select) | Toutes les valeurs d'option                             |
@@ -135,6 +136,8 @@ Recherche jusqu'à 5 instances de chaque type de formulaire dans le conteneur `#
 - **`fullTest`** (quand `isFullCombinations: true`) : boucle imbriquée sur toutes les combinaisons de 5 formulaires au maximum (produit cartésien). Ce mode est très lent.
 
 Les formulaires texte dont l'aide ne suit pas le format énuméré `1 : ...`, `2 : ...` sont ignorés par ce parcours automatique. Cela évite de transformer des indications libres comme `Nombre entre 0 et 9` en valeurs de test invalides.
+
+Une aide qui se résume à cette énumération n'est d'ailleurs plus rendue par un champ texte mais par une liste de cases à cocher (`formTextListe`, cf. [formulaires de paramétrage](../developpement/auteurs-exercices/complements/formulaires-parametres.md)) : le parcours coche alors tous les cas, ce qui produit la même valeur de `sup` qu'auparavant. Le champ texte ne subsiste que pour les aides qui mêlent énumération et indications libres.
 
 ---
 

@@ -122,6 +122,7 @@
     "boxicons": "^2.1.4",
     "daisyui": "^5.7.0",
     "decimal.js": "^10.6.0",
+    "driver.js": "^1.8.0",
     "earcut": "^3.2.3",
     "fraction-visualizer": "git+https://forge.apps.education.fr/coopmaths/apps/fraction-visualizer.git",
     "git-precommit-checks": "^3.1.0",

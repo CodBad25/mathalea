@@ -39,8 +39,8 @@ export default class Exercice3F14DNB1 extends ExerciceBrevetA {
     this.correctionDetailleeDisponible = true
     this.correctionDetaillee = true
     this.introduction = texteItalique(
-      "D'après l'exercice 2 du brevet Amérique du Sud 2024.<br>",
-    )
+      "D'après l'exercice 2 du brevet Amérique du Sud 2024.",
+    ) + '<br>'
 
     this.versionAleatoire()
   }

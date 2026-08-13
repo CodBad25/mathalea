@@ -44,8 +44,8 @@ export default class ExerciceMetropole392024 extends ExerciceBrevetA {
     this.besoinFormulaireCaseACocher = ['Sujet original', false]
     this.sup = false
     this.introduction = texteItalique(
-      "D'après l'exercice 3 du brevet Métropole septembre 2024.<br>",
-    )
+      "D'après l'exercice 3 du brevet Métropole septembre 2024.",
+    ) + '<br>'
 
     this.versionAleatoire()
   }

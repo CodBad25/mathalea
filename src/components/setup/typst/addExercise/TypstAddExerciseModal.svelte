@@ -225,6 +225,7 @@
       <input
         bind:this={searchField}
         type="search"
+        data-tour="add-exercise-search-input"
         placeholder="🔍 Thème, identifiant..."
         bind:value={searchInput}
         oninput={onSearchInput}
@@ -241,7 +242,11 @@
       />
     </div>
 
-    <div bind:this={scrollableBody} class="min-h-0 grow overflow-y-auto p-4">
+    <div
+      bind:this={scrollableBody}
+      data-tour="add-exercise-results"
+      class="min-h-0 grow overflow-y-auto p-4"
+    >
       <!-- Contenu plus étroit que la modale : les marges de part et
            d'autre restent du fond défilable, pas un aperçu, pour qu'on
            puisse y poser la molette sans qu'un exercice ne capte le scroll. -->

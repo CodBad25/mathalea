@@ -44,8 +44,8 @@ export default class ExerciceCentresEtrangers262024 extends ExerciceBrevetA {
     this.besoinFormulaireCaseACocher = ['Sujet original', false]
     this.sup = false
     this.introduction = texteItalique(
-      "D'après l'exercice 2 du brevet Centres étrangers Juin 2024.<br>",
-    )
+      "D'après l'exercice 2 du brevet Centres étrangers Juin 2024.",
+    ) + '<br>'
 
     this.versionAleatoire()
   }

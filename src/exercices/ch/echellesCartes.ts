@@ -148,7 +148,7 @@ export default class EchellesCartes extends Exercice {
           } else {
             texteCorr +=
               '\n\n\\Propor[Math,Stretch=2,largeur=15, GrandeurA=Dist. carte ($\\text{cm}$),GrandeurB=Dist. réelle ($\\text{km}$)]{'
-            texteCorr += `${premiereLigneCarte[0]}/${deuxiemeLigneCarte[0]},${premiereLigneCarte[0]}/${deuxiemeLigneCarte[1]}}<br>`
+            texteCorr += `{${premiereLigneCarte[0]}}/{${deuxiemeLigneCarte[0]}},{${premiereLigneCarte[1]}}/{${deuxiemeLigneCarte[1]}}}<br>`
           }
           texteCorr += `<br> et en utilisant le produit en croix, on obtient que $d=${texNombre(echelleKm, 3)} \\times ${texNombre(dCarte, 3)} \\div 1  = ${miseEnEvidence(`${texNombre(dReelleKm, 3)}\\,\\text{km}`)}$.`
           if (this.interactif && context.isHtml) {
@@ -181,7 +181,7 @@ export default class EchellesCartes extends Exercice {
           } else {
             texteCorr +=
               '\n\n\\Propor[Math,Stretch=2,largeur=15, GrandeurA=Dist. carte ($\\text{cm}$),GrandeurB=Dist. réelle ($\\text{km}$)]{'
-            texteCorr += `${premiereLigneReelle[0]}/${deuxiemeLigneReelle[0]},${premiereLigneReelle[1]}/${deuxiemeLigneReelle[1]}}<br>`
+            texteCorr += `{${premiereLigneReelle[0]}}/{${deuxiemeLigneReelle[0]}},{${premiereLigneReelle[1]}}/{${deuxiemeLigneReelle[1]}}}<br>`
           }
           texteCorr += `<br> et en utilisant le produit en croix, on obtient que $d=1 \\times   ${texNombre(dReelleKm, 3)} \\div ${texNombre(echelleKm, 3)} = ${miseEnEvidence(`${texNombre(dCarte, 3)}\\,\\text{cm}`)}$.`
           if (this.interactif && context.isHtml) {
@@ -214,7 +214,7 @@ export default class EchellesCartes extends Exercice {
           } else {
             texteCorr +=
               '\n\n\\Propor[Math,Stretch=2,largeur=15, GrandeurA=Dist. carte ($\\text{cm}$),GrandeurB=Dist. réelle ($\\text{km}$)]{'
-            texteCorr += `${premiereLigneEchelle[0]}/${deuxiemeLigneEchelle[0]},${premiereLigneEchelle[1]}/${deuxiemeLigneEchelle[1]}}<br>`
+            texteCorr += `{${premiereLigneEchelle[0]}}/{${deuxiemeLigneEchelle[0]}},{${premiereLigneEchelle[1]}}/{${deuxiemeLigneEchelle[1]}}}<br>`
           }
           texteCorr += `<br> donc $d=${texNombre(dReelleKm, 3)} \\div  ${texNombre(dCarte, 3)}=${texNombre(echelleKm, 3)}\\,\\text{km}$. Ce qui signifie que $1\\,\\text{cm}$ sur la carte correspond à $${texNombre(echelleKm, 3)}\\,\\text{km}=${texNombre(echelle, 3)}\\,\\text{cm}$ en réalité. L'échelle de la carte est $${miseEnEvidence(`1:${texNombre(echelle, 3)}`)}$.`
           if (this.interactif && context.isHtml) {

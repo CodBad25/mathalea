@@ -63,8 +63,9 @@ const longueursTriangle = (nom: string): [string, string, string] => [
 export default class AutoQ4CentresEtrangersBrevet2026 extends ExerciceCan {
   constructor() {
     super()
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = { texteSansCasse: true }
+    this.optionsChampTexte = { texteApres: '$\\text{ cm}^2$', texteAvant: ' ' }
   }
 
   enonce(

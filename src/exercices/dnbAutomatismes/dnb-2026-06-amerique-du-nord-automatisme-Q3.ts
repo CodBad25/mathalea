@@ -1,9 +1,9 @@
 import Figure from 'apigeom'
 import type Point from 'apigeom/src/elements/points/Point'
-import { context } from '../../modules/context'
 import { apigeomFigureToSvg } from '../../lib/apigeom/apigeom-figure'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = 'd3b6c'
@@ -15,7 +15,8 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Reconnaître la nature d\'un quadrilatère à partir de ses diagonales'
+export const titre =
+  "Reconnaître la nature d'un quadrilatère à partir de ses diagonales"
 export const dateDePublication = '06/06/2026'
 
 /**
@@ -25,7 +26,10 @@ export const dateDePublication = '06/06/2026'
  * @author Rémi Angot
  */
 export default class AutoQ3ANbrevet2026 extends ExerciceQcmA {
-  private construireFigure(diagonalesEgales: boolean, perpendiculaires: boolean): string {
+  private construireFigure(
+    diagonalesEgales: boolean,
+    perpendiculaires: boolean,
+  ): string {
     const figure = new Figure({
       xMin: -1.5,
       yMin: -1.5,
@@ -37,10 +41,30 @@ export default class AutoQ3ANbrevet2026 extends ExerciceQcmA {
 
     // ABCD : diagonales AC et BD toujours perpendiculaires (AC↗(4,2), BD↘(2,-4))
     // Les trois cas (rectangle, losange, parallélogramme) ne se distinguent que par le codage.
-    const A = figure.create('Point', { x: 0, y: 1, label: 'A', shape: '' }) as Point
-    const B = figure.create('Point', { x: 1, y: 4, label: 'B', shape: '' }) as Point
-    const C = figure.create('Point', { x: 4, y: 3, label: 'C', shape: '' }) as Point
-    const D = figure.create('Point', { x: 3, y: 0, label: 'D', shape: '' }) as Point
+    const A = figure.create('Point', {
+      x: 0,
+      y: 1,
+      label: 'A',
+      shape: '',
+    }) as Point
+    const B = figure.create('Point', {
+      x: 1,
+      y: 4,
+      label: 'B',
+      shape: '',
+    }) as Point
+    const C = figure.create('Point', {
+      x: 4,
+      y: 3,
+      label: 'C',
+      shape: '',
+    }) as Point
+    const D = figure.create('Point', {
+      x: 3,
+      y: 0,
+      label: 'D',
+      shape: '',
+    }) as Point
     const O = figure.create('Point', { x: 2, y: 2, isVisible: false }) as Point
 
     figure.create('Segment', { point1: A, point2: B })
@@ -60,7 +84,11 @@ export default class AutoQ3ANbrevet2026 extends ExerciceQcmA {
     figure.create('MarkBetweenPoints', { point1: O, point2: D, text: marqueBD })
 
     if (perpendiculaires) {
-      figure.create('MarkRightAngle', { point: O, directionPoint: C, size: 0.3 })
+      figure.create('MarkRightAngle', {
+        point: O,
+        directionPoint: C,
+        size: 0.3,
+      })
     }
 
     if (context.isTypst) return apigeomFigureToSvg(figure)
@@ -69,16 +97,21 @@ export default class AutoQ3ANbrevet2026 extends ExerciceQcmA {
     // les <defs> avec le filtre feTurbulence sont toujours présents dans le SVG.
     // On injecte l'attribut SVG filter="url(#handDrawn)" directement dans la balise,
     // plus robuste que svg.style.filter qui peut être perdu lors des re-rendus Svelte.
-    return figure.getStaticHtml({ center: true }).replace(/<svg\b/, '<svg filter="url(#handDrawn)"')
+    return figure
+      .getStaticHtml({ center: true })
+      .replace(/<svg\b/, '<svg filter="url(#handDrawn)"')
   }
 
-  private appliquerLesValeurs(diagonalesEgales: boolean, perpendiculaires: boolean): void {
+  private appliquerLesValeurs(
+    diagonalesEgales: boolean,
+    perpendiculaires: boolean,
+  ): void {
     // On évite volontairement le cas du carré : un carré étant à la fois un losange
     // et un rectangle, plusieurs réponses seraient correctes (incompatible avec un QCU).
-    const optionCarre = 'C\'est un carré.'
-    const optionRectangle = 'C\'est un rectangle.'
-    const optionLosange = 'C\'est un losange.'
-    const optionNi = 'Ce n\'est ni un losange, ni un rectangle.'
+    const optionCarre = "C'est un carré."
+    const optionRectangle = "C'est un rectangle."
+    const optionLosange = "C'est un losange."
+    const optionNi = "Ce n'est ni un losange, ni un rectangle."
 
     let bonneReponse: string
     let natureCorr: string
@@ -106,9 +139,12 @@ ${figure}`
     this.correction = `${justifs.join(' et ')}, donc c'est ${texteEnCouleurEtGras(natureCorr)}.`
 
     // reponses[0] est la bonne réponse, les autres options du QCM suivent
-    const autres = [optionLosange, optionRectangle, optionCarre, optionNi].filter(
-      (opt) => opt !== bonneReponse,
-    )
+    const autres = [
+      optionLosange,
+      optionRectangle,
+      optionCarre,
+      optionNi,
+    ].filter((opt) => opt !== bonneReponse)
     this.reponses = [bonneReponse, ...autres]
   }
 
@@ -133,6 +169,6 @@ ${figure}`
   constructor() {
     super()
     this.versionAleatoire()
-    this.options = { vertical: true, radio: true, ordered: true }
+    this.options = { vertical: true, radio: true }
   }
 }

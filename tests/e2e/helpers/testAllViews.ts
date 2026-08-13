@@ -68,7 +68,7 @@ export type CallbackType = (
 type Form = {
   description: string
   locator: Locator
-  type: 'check' | 'num' | 'text' | 'select'
+  type: 'check' | 'num' | 'text' | 'select' | 'textListe'
   values: string[] | number[] | boolean[]
 }
 
@@ -537,6 +537,18 @@ async function setParam(
   if (form.type === 'select') {
     await form.locator.selectOption({ value: value.toString() })
   }
+  if (form.type === 'textListe') {
+    // Le formulaire est une liste de cas à cocher : on les coche tous, avec un
+    // poids de 1, et on demande autant de questions que de cas.
+    const nombreDeCas = await form.locator
+      .locator('input[type="checkbox"]')
+      .count()
+    const locator = page.locator('#settings-nb-questions-0')
+    if ((await locator.count()) > 0) {
+      await locator.fill(nombreDeCas.toString())
+    }
+    await form.locator.locator('button').first().click() // « Tout cocher »
+  }
   if (form.type === 'text') {
     const locator = page.locator('#settings-nb-questions-0')
     if ((await locator.count()) > 0) {
@@ -665,6 +677,25 @@ async function getForms(page: Page) {
         locator: formText,
         type: 'text',
         values: [values.map((num) => num.toString()).join('-')],
+      })
+    }
+  }
+  // Les aides qui se résument à une énumération de cas ne sont pas rendues par un
+  // champ texte mais par une liste de cases à cocher (cf. formulaireTexteListe.ts).
+  for (let i = 0; i < 5; i++) {
+    const formTextListe = settingsLocator.locator(
+      `#settings-formTextListe${i + 1}-0`,
+    )
+    if (await formTextListe.isVisible()) {
+      const titleDiv = settingsLocator.locator(
+        `#settings-formTextTitre${i + 1}-0`,
+      )
+      const labelText = await titleDiv.innerText()
+      formTexts.push({
+        description: sanitizeFilename(labelText),
+        locator: formTextListe,
+        type: 'textListe',
+        values: ['tous les cas'],
       })
     }
   }

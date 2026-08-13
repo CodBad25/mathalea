@@ -7,6 +7,7 @@
   } from '../../../lib/types/languages'
   import ButtonIcon from '../forms/ButtonIcon.svelte'
   import ButtonToggleDarkMode from '../forms/ButtonToggleDarkMode.svelte'
+  import HelpPopup from '../modal/HelpPopup.svelte'
   import ModalLanguageChoice from '../modal/ModalLanguageChoice.svelte'
   import LanguageDropdown from '../ui/LanguageDropdown.svelte'
   import LanguageIcon from '../ui/LanguageIcon.svelte'
@@ -22,6 +23,7 @@
   export let showLanguage: boolean = true
 
   let showLanguageChoiceModal: boolean = false
+  let showHelpPopup: boolean = false
 </script>
 
 <!--
@@ -124,6 +126,12 @@
         </div>
       {/if}
       <ButtonToggleDarkMode />
+      <ButtonIcon
+        icon="bx-help-circle text-2xl"
+        title="Aide"
+        dataTour="help-button"
+        on:click={() => (showHelpPopup = true)}
+      />
       {#if $globalOptions.v !== '' && subtitleType !== 'design'}
         <ButtonIcon
           icon="bx-x"
@@ -137,3 +145,4 @@
   </div>
 </nav>
 <ModalLanguageChoice bind:showLanguageChoiceModal {locale} {handleLanguage} />
+<HelpPopup bind:isDisplayed={showHelpPopup} />

@@ -300,7 +300,7 @@ export default class DecimaleAFractionnaireBasique extends Exercice {
           break
 
         case 14:
-          if (k === 3) {
+          if (k === 2) {
             texteCorr = `$${texNombre(0.1)}=`
             texte =
               texteCorr +

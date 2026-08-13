@@ -28,6 +28,7 @@
   </div>
   <div
     slot="export-buttons"
+    data-tour="export-buttons"
     class="flex flex-row justify-end items-center space-x-3 md:space-x-4"
   >
     <ExportButtons {handleExport} {exportQcmCam} />

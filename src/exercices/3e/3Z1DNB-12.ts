@@ -39,8 +39,8 @@ export default class ExerciceAmeriqueNord392024 extends ExerciceBrevetA {
     this.besoinFormulaireCaseACocher = ['Sujet original', false]
     this.sup = false
     this.introduction = texteItalique(
-      "D'après l'exercice 3 du brevet Amérique du Nord 2024.<br>",
-    )
+      "D'après l'exercice 3 du brevet Amérique du Nord 2024.",
+    ) + '<br>'
 
     this.versionAleatoire()
   }

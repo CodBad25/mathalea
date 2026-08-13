@@ -1,4 +1,4 @@
-import EquationsGSplineNombre from '../can/2e/can2F24'
+import EquationsGSplineNombre from '../can/2e/can2F1-05'
 export const titre =
   "Déterminer le nombre de solutions d'une équation (graphique)"
 export const dateDePublication = '29/07/2025'
@@ -8,7 +8,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
- * Clone de can2F24 pour les auto 1er
+ * Clone de can2F1-05 pour les auto 1er
  * @author Gilles Mora
  */
 

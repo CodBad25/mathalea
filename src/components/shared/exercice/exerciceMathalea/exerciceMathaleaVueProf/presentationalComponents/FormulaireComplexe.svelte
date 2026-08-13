@@ -13,6 +13,7 @@
     type ItemPondere,
     type ValeursFormulaireComplexe,
   } from '../../../../../../lib/formulaireComplexe'
+  import ListePondereeItems from './ListePondereeItems.svelte'
 
   export let formulaire: FormulaireComplexe
   export let exerciceIndex: number
@@ -174,71 +175,16 @@
         >
           {champ.label} :
         </div>
-        {#each listes[champ.nom] as item, index (item.nom)}
-          <div class="flex flex-row items-center gap-x-1">
-            <input
-              id="settings-complexe-{champ.nom}-{item.nom}-{exerciceIndex}"
-              type="checkbox"
-              class="w-4 h-4 rounded shrink-0 bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark
-                border-coopmaths-action dark:border-coopmathsdark-action cursor-pointer
-                checked:bg-coopmaths-action dark:checked:bg-coopmathsdark-action
-                focus:ring-3 focus:ring-coopmaths-action dark:focus:ring-coopmathsdark-action"
-              checked={item.poids > 0}
-              on:change={(e) =>
-                basculeItem(champ, index, e.currentTarget.checked)}
-            />
-            <label
-              for="settings-complexe-{champ.nom}-{item.nom}-{exerciceIndex}"
-              class="grow min-w-0 text-sm font-light leading-tight cursor-pointer
-                {item.poids > 0 ? '' : 'opacity-50'}">{item.label}</label
-            >
-            {#if champ.type !== 'liste'}
-              <input
-                type="number"
-                min="0"
-                max={poidsMaximal(champ)}
-                aria-label="Poids d'apparition de {item.label}"
-                class="w-12 h-8 px-1 shrink-0 bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark
-                  text-coopmaths-corpus-lightest dark:text-coopmathsdark-corpus-dark
-                  border border-coopmaths-action dark:border-coopmathsdark-action
-                  focus:outline-0 focus:ring-0 disabled:opacity-30"
-                disabled={item.poids === 0}
-                value={item.poids}
-                on:change={(e) =>
-                  changePoids(
-                    champ,
-                    index,
-                    Math.min(
-                      poidsMaximal(champ),
-                      Number(e.currentTarget.value),
-                    ),
-                  )}
-              />
-            {/if}
-            {#if champ.type === 'listePondereeOrdonnee'}
-              <span class="inline-flex flex-col shrink-0">
-                <button
-                  type="button"
-                  aria-label="Déplacer {item.label} vers le haut"
-                  class="w-5 h-4 flex items-center justify-center text-coopmaths-action dark:text-coopmathsdark-action disabled:opacity-20"
-                  disabled={index === 0}
-                  on:click={() => deplace(champ, index, -1)}
-                >
-                  <i class="bx bx-chevron-up"></i>
-                </button>
-                <button
-                  type="button"
-                  aria-label="Déplacer {item.label} vers le bas"
-                  class="w-5 h-4 flex items-center justify-center text-coopmaths-action dark:text-coopmathsdark-action disabled:opacity-20"
-                  disabled={index === listes[champ.nom].length - 1}
-                  on:click={() => deplace(champ, index, 1)}
-                >
-                  <i class="bx bx-chevron-down"></i>
-                </button>
-              </span>
-            {/if}
-          </div>
-        {/each}
+        <ListePondereeItems
+          items={listes[champ.nom]}
+          idItem={(item) =>
+            `settings-complexe-${champ.nom}-${item.nom}-${exerciceIndex}`}
+          poidsMax={champ.type === 'liste' ? 0 : poidsMaximal(champ)}
+          avecFleches={champ.type === 'listePondereeOrdonnee'}
+          on:bascule={(e) => basculeItem(champ, e.detail.index, e.detail.actif)}
+          on:poids={(e) => changePoids(champ, e.detail.index, e.detail.poids)}
+          on:deplace={(e) => deplace(champ, e.detail.index, e.detail.sens)}
+        />
         {#if champ.type === 'listePondereeOrdonnee'}
           <div class="flex flex-row justify-start items-center pl-1 pt-1">
             <input
@@ -262,16 +208,3 @@
     {/if}
   {/each}
 </div>
-
-<style>
-  /* Cacher les flèches natives des champs de poids */
-  input[type='number']::-webkit-inner-spin-button,
-  input[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    display: none;
-  }
-  input[type='number'] {
-    appearance: textfield;
-    -moz-appearance: textfield;
-  }
-</style>

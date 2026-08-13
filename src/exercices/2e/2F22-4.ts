@@ -1,16 +1,16 @@
+import { courbe } from '../../lib/2d/Courbe'
+import { repere } from '../../lib/2d/reperes'
+import { segment } from '../../lib/2d/segmentsVecteurs'
+import { latex2d } from '../../lib/2d/textes'
 import { bleuMathalea } from '../../lib/colors'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { mathalea2d } from '../../modules/mathalea2d'
 import ExerciceQcmA from '../ExerciceQcmA'
-import {
-  construireGraphique,
-  expressions,
-  type TypeCourbe,
-} from './2F22-3'
 
 export const titre =
   'Reconnaître une fonction de référence à partir de sa courbe'
-export const dateDePublication = '09/08/2026'
+export const dateDePublication = '10/08/2026'
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
@@ -20,6 +20,175 @@ export const uuid = 'f214a'
 export const refs = {
   'fr-fr': ['2F22-4'],
   'fr-ch': ['11FA1A-10'],
+}
+
+type TypeCourbe =
+  | 'valeurAbsolue'
+  | 'opposeValeurAbsolue'
+  | 'carre'
+  | 'opposeCarre'
+  | 'inverse'
+  | 'opposeInverse'
+  | 'identite'
+  | 'opposeIdentite'
+  | 'racineCarree'
+  | 'cube'
+
+const expressions: Record<TypeCourbe, string> = {
+  valeurAbsolue: '|x|',
+  opposeValeurAbsolue: '-|x|',
+  carre: 'x^2',
+  opposeCarre: '-x^2',
+  inverse: '\\dfrac{1}{x}',
+  opposeInverse: '-\\dfrac{1}{x}',
+  identite: 'x',
+  opposeIdentite: '-x',
+  racineCarree: '\\sqrt{x}',
+  cube: 'x^3',
+}
+
+function construireGraphique(type: TypeCourbe): string {
+  const xmin = -4.5
+  const xmax = 4.5
+  const ymin = -4.5
+  const ymax = 4.5
+  const r = repere({
+    xMin: xmin,
+    xMax: xmax,
+    yMin: ymin,
+    yMax: ymax,
+    grilleX: false,
+    grilleY: false,
+    grilleSecondaire: true,
+    grilleSecondaireXDistance: 1,
+    grilleSecondaireYDistance: 1,
+  })
+  const optionsCourbe = {
+    repere: r,
+    color: bleuMathalea,
+    epaisseur: 2,
+    step: 0.05,
+    yMin: ymin,
+    yMax: ymax,
+  }
+  const courbes = []
+
+  switch (type) {
+    case 'valeurAbsolue':
+      courbes.push(
+        courbe((x) => Math.abs(x), {
+          ...optionsCourbe,
+          xMin: -4.2,
+          xMax: 4.2,
+        }),
+      )
+      break
+    case 'opposeValeurAbsolue':
+      courbes.push(
+        courbe((x) => -Math.abs(x), {
+          ...optionsCourbe,
+          xMin: -4.2,
+          xMax: 4.2,
+        }),
+      )
+      break
+    case 'carre':
+      courbes.push(
+        courbe((x) => x ** 2, {
+          ...optionsCourbe,
+          xMin: -2.15,
+          xMax: 2.15,
+        }),
+      )
+      break
+    case 'opposeCarre':
+      courbes.push(
+        courbe((x) => -(x ** 2), {
+          ...optionsCourbe,
+          xMin: -2.15,
+          xMax: 2.15,
+        }),
+      )
+      break
+    case 'inverse':
+    case 'opposeInverse': {
+      const signe = type === 'inverse' ? 1 : -1
+      courbes.push(
+        courbe((x) => signe / x, {
+          ...optionsCourbe,
+          xMin: xmin,
+          xMax: -0.22,
+          step: 0.02,
+        }),
+        courbe((x) => signe / x, {
+          ...optionsCourbe,
+          xMin: 0.22,
+          xMax: xmax,
+          step: 0.02,
+        }),
+      )
+      break
+    }
+    case 'identite':
+      courbes.push(
+        courbe((x) => x, {
+          ...optionsCourbe,
+          xMin: -4.2,
+          xMax: 4.2,
+        }),
+      )
+      break
+    case 'opposeIdentite':
+      courbes.push(
+        courbe((x) => -x, {
+          ...optionsCourbe,
+          xMin: -4.2,
+          xMax: 4.2,
+        }),
+      )
+      break
+    case 'racineCarree':
+      courbes.push(
+        courbe((x) => Math.sqrt(x), {
+          ...optionsCourbe,
+          xMin: 0,
+          xMax: 4.2,
+        }),
+      )
+      break
+    case 'cube':
+      courbes.push(
+        courbe((x) => x ** 3, {
+          ...optionsCourbe,
+          xMin: -1.65,
+          xMax: 1.65,
+        }),
+      )
+      break
+  }
+
+  const axeX = segment(xmin, 0, xmax, 0, 'black', '->')
+  const axeY = segment(0, ymin, 0, ymax, 'black', '->')
+  const origine = latex2d('O', -0.3, -0.3, {
+    letterSize: 'scriptsize',
+  })
+
+  return mathalea2d(
+    {
+      xmin: xmin - 0.2,
+      xmax: xmax + 0.2,
+      ymin: ymin - 0.2,
+      ymax: ymax + 0.2,
+      pixelsParCm: 18,
+      scale: 0.42,
+      center: true,
+    },
+    r,
+    ...courbes,
+    axeX,
+    axeY,
+    origine,
+  )
 }
 
 /**

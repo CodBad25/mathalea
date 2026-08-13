@@ -18,6 +18,58 @@ Chaque emplacement `supN` accueille **un seul** réglage, choisi parmi trois typ
 Les emplacements suivants utilisent les mêmes noms préfixés du numéro :
 `besoinFormulaire2Numerique`, `besoinFormulaire3CaseACocher`, etc.
 
+### Formulaire texte énumérant des cas
+
+Un `besoinFormulaireTexte` dont l'aide énumère des cas (`1 : …`, `2 : …`) attend des
+numéros séparés par des tirets, chaque numéro répété autant de fois qu'on veut de
+questions de ce type : `1-1-1-2` demande trois questions du cas 1 pour une du cas 2.
+C'est ce que lit `gestionnaireFormulaireTexte()`.
+
+Cette saisie n'est plus présentée comme un champ texte : l'interface affiche une case
+à cocher et un poids d'apparition par cas, comme une `listePonderee` (voir plus bas).
+Cocher le cas 1 avec un poids de 3 et le cas 2 produit exactement `1-1-1-2` : **rien ne
+change ni pour `this.sup` ni pour les URL déjà partagées**, seule la présentation
+change. Les exercices n'ont donc rien à modifier.
+
+L'extraction des cas est faite par
+[src/lib/formulaireTexteListe.ts](../../../../src/lib/formulaireTexteListe.ts), à partir
+de l'aide seule (les exercices ne déclarent pas leurs cas ailleurs) :
+
+- une ligne `<numéro><séparateur><libellé>` décrit un cas, le séparateur pouvant être
+  `:`, `-`, `.` ou `)` ;
+- la consigne de saisie (« Nombres séparés par des tirets ») est ignorée ;
+- **toute autre ligne annule la conversion** et l'aide garde son champ texte : elle
+  décrit en général des valeurs qui ne sont pas énumérées, donc impossibles à cocher
+  (« Entre 1 et 12 : pour choisir un motif particulier ») ;
+- il faut au moins deux cas, de numéros distincts, qui n'ont besoin ni de se suivre ni
+  de commencer à 1.
+
+### Le cas « Mélange »
+
+Le numéro passé à `gestionnaireFormulaireTexte()` par le paramètre `melange` remplace
+la saisie par **tous** les cas. Il n'est déclaré nulle part ailleurs que dans l'aide,
+et sa valeur change d'un exercice à l'autre (`7` pour 3L11, `0` pour 2F40-1, `6` pour
+5M11-2b…). Il n'est donc pas affiché comme un cas à cocher, mais rendu par :
+
+- un raccourci **Tout cocher**, qui remet tous les cas au même poids ;
+- une lecture qui coche tous les cas dès que `sup` contient ce numéro ;
+- une écriture qui utilise ce numéro dès que tous les cas sont cochés au même poids —
+  la valeur historique, et la seule qui reste juste quand l'exercice écarte certains
+  cas selon ses autres réglages (`exclus`).
+
+Le numéro est repéré au libellé (« Mélange », « Mélange des cas précédents »…), avec
+deux garde-fous contre un vrai type de question qui porterait ce nom : un seul libellé
+de l'aide peut commencer par « Mélange », et son numéro doit être en bordure de
+l'énumération. `4C23`, qui propose `5 : Mélange` **et** `7 : Mélange avec quotient`
+alors que sa sentinelle vaut `0`, garde ainsi ses deux cas cochables.
+
+Une aide dont le libellé « tous les cas » s'écrit autrement (« Toutes les questions »,
+« Ensemble de ces 6 propositions »…) n'est pas reconnue : le cas reste une case à
+cocher ordinaire, ce qui produit la même génération, sans le raccourci.
+
+Pour un nouvel exercice, préférez cependant `besoinFormulaireComplexe` : les cas y sont
+déclarés explicitement, avec leurs libellés, au lieu d'être devinés depuis une aide.
+
 Ces formulaires conviennent tant que l'exercice reste à cinq réglages indépendants.
 Au-delà, on finit par encoder plusieurs dimensions dans un seul menu déroulant
 (« 1 : multiplications / 2 : divisions / 3 : les deux / 4 : octets / 5 : mélange »),
@@ -28,7 +80,9 @@ ce qui devient vite illisible pour l'enseignant comme pour l'auteur.
 `besoinFormulaireComplexe` regroupe plusieurs champs de natures différentes dans le
 seul emplacement `this.sup`. Il est décrit dans
 [src/lib/formulaireComplexe.ts](../../../../src/lib/formulaireComplexe.ts) et rendu par
-`FormulaireComplexe.svelte`.
+`FormulaireComplexe.svelte`, qui délègue l'affichage des listes au composant partagé
+`ListePondereeItems.svelte` (également utilisé par les formulaires texte énumérant des
+cas).
 
 ### Déclarer le formulaire
 
@@ -188,4 +242,5 @@ et deux `case` (décimaux, fractions dans la correction). Il est instancié par
 [src/exercices/5e/5G2D-4.ts](../../../../src/exercices/5e/5G2D-4.ts).
 
 Les tests correspondants sont dans `tests/unit/formulaireComplexe.test.ts` et
-`tests/unit/conversionsParametrable.test.ts`.
+`tests/unit/conversionsParametrable.test.ts`. La conversion des formulaires texte en
+liste pondérée est testée dans `tests/unit/formulaireTexteListe.test.ts`.
