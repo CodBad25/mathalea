@@ -1,4 +1,6 @@
 import {
+  CETZ_IMPORT,
+  CETZ_PLOT_CHART_IMPORT,
   MATHALEA_FIGURE_BLOCK_HELPER,
   MATHALEA_FIGURE_HELPERS,
   MATHALEA_FIT_HELPER,
@@ -425,6 +427,8 @@ function detectUsedFeatures(lines: string[]): {
   usesQcm: boolean
   usesSchema: boolean
   usesWritingLines: boolean
+  usesCetz: boolean
+  usesCetzPlotChart: boolean
 } {
   return {
     usesMathaleaFigure: lines.some((line) => line.includes('mathalea-figure(')),
@@ -432,6 +436,8 @@ function detectUsedFeatures(lines: string[]): {
     usesQcm: lines.some((line) => line.includes('qcm-')),
     usesSchema: lines.some((line) => line.includes('mathalea-schema-span')),
     usesWritingLines: lines.some((line) => line.includes('#mathalea-lignes(')),
+    usesCetz: lines.some((line) => line.includes('cetz.')),
+    usesCetzPlotChart: lines.some((line) => line.includes('chart.')),
   }
 }
 
@@ -1395,6 +1401,8 @@ export function buildStandaloneExerciseCode(
     usesQcm,
     usesSchema,
     usesWritingLines,
+    usesCetz,
+    usesCetzPlotChart,
   } = detectUsedFeatures(codeLines)
   const usesFigures = figures.length > 0
 
@@ -1402,6 +1410,8 @@ export function buildStandaloneExerciseCode(
   const importLines: string[] = []
   if (usesTasks) importLines.push(TASKIZE_IMPORT)
   if (options.autoVerticalSpacing) importLines.push(BREATHER_IMPORT)
+  if (usesCetz) importLines.push(CETZ_IMPORT)
+  if (usesCetzPlotChart) importLines.push(CETZ_PLOT_CHART_IMPORT)
   if (importLines.length > 0) lines.push(...importLines, '')
   if (usesSchema) lines.push(MATHALEA_SCHEMA_HELPER, '')
   if (usesFigures) {
@@ -2079,6 +2089,8 @@ export function buildTypstDocument(
     line.includes('#mathalea-lignes('),
   )
   const usesCanTable = allLines.some((line) => line.includes('#can-tableau('))
+  const usesCetz = allLines.some((line) => line.includes('cetz.'))
+  const usesCetzPlotChart = allLines.some((line) => line.includes('chart.'))
   // variables de mise en page des questions référencées par les corps
   // (`ex1`, et `ex1-corr` pour les corrections, réglables indépendamment)
   const tasksPrefixes = [
@@ -2118,13 +2130,17 @@ export function buildTypstDocument(
     usesTasks ||
     usesExerciseBank ||
     options.autoVerticalSpacing ||
-    usesVarTable
+    usesVarTable ||
+    usesCetz ||
+    usesCetzPlotChart
   ) {
     lines.push('// ----- Paquets -----')
     if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
     if (usesTasks) lines.push(TASKIZE_IMPORT)
     if (options.autoVerticalSpacing) lines.push(BREATHER_IMPORT)
     if (usesVarTable) lines.push(VARTABLE_IMPORT)
+    if (usesCetz) lines.push(CETZ_IMPORT)
+    if (usesCetzPlotChart) lines.push(CETZ_PLOT_CHART_IMPORT)
     lines.push('')
   }
   if (extraPreamble != null && extraPreamble.length > 0) {

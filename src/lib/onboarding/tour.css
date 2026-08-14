@@ -89,3 +89,15 @@
   border-left-color: transparent;
   border-right-color: transparent;
 }
+
+/* Pastilles de la palette de mise en page Typst (vue Typst)&nbsp;: à demi
+   transparentes par défaut (`.typst-pill`, voir TypstLayoutOverlay.svelte),
+   elles ne redeviennent pleinement visibles qu'au survol/focus — que
+   driver.js ne déclenche pas. Sans cette règle, la pastille ciblée par une
+   étape de la visite reste délavée à l'intérieur du halo qui la met en
+   avant. `:has()` couvre le cas où c'est un bouton de la pastille (pas la
+   pastille elle-même) qui est la cible de l'étape. */
+.typst-pill.driver-active-element,
+.typst-pill:has(.driver-active-element) {
+  opacity: 1 !important;
+}

@@ -24,6 +24,38 @@ if (typeof window.iMathAlea === 'undefined') {
     }
   }
 
+  /*
+    Repli du plein écran demandé par MathALÉA (message `mathalea:fullscreen`,
+    voir src/lib/fullscreen.ts) : l'API Fullscreen native est normalement
+    autorisée ici (l'iframe est créée avec allow="fullscreen"), mais si le
+    navigateur ou la politique de la page la refuse, l'élément <mathalea-moodle>
+    est agrandi aux dimensions de la fenêtre de Moodle.
+  */
+  const setPseudoFullscreen = (element, isFullscreen) => {
+    if (isFullscreen) {
+      /*
+        Pendant le plein écran, les messages de redimensionnement continuent de
+        poser sur l'élément la hauteur de la fenêtre : on mémorise la hauteur de
+        l'exercice pour la lui rendre à la sortie.
+      */
+      element.hauteurAvantPleinEcran = element.getAttribute('height')
+      element.setAttribute(
+        'style',
+        'display:block;box-sizing:border-box;position:fixed;top:0;left:0;width:100%;height:100%;z-index:2147483647;background:#fff;',
+      )
+      // Le style est prioritaire sur l'attribut height
+      element.iframe.style.height = '100%'
+      document.body.style.overflow = 'hidden'
+    } else {
+      element.removeAttribute('style')
+      element.iframe.style.height = ''
+      document.body.style.overflow = ''
+      if (element.hauteurAvantPleinEcran) {
+        element.setAttribute('height', element.hauteurAvantPleinEcran)
+      }
+    }
+  }
+
   window.addEventListener('message', (event) => {
     // V3 ou V4
     if (
@@ -44,6 +76,9 @@ if (typeof window.iMathAlea === 'undefined') {
           const hauteur = event.data.hauteurExercice
           // hauteur += 50
           iframe.setAttribute('height', hauteur.toString())
+        }
+        if (event.data.action === 'mathalea:fullscreen') {
+          setPseudoFullscreen(iframe, event.data.value === true)
         }
         if (event.data.action === 'mathalea:score') {
           const score =

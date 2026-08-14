@@ -323,6 +323,15 @@ describe('htmlToTypst', () => {
     expect(result).not.toContain('*')
   })
 
+  it('convertit \\text{\\textbf{X}} en en-tête de tableau au lieu de le laisser fuir (5D1B-2)', () => {
+    const result = htmlToTypst(
+      '$\\begin{array}{|c|c|}\\hline \\text{\\textbf{Sports}} & \\text{\\textbf{TOTAL}} \\\\ \\hline 12 & 100 \\\\ \\hline\\end{array}$',
+    )
+    expect(result).toContain('#strong[Sports]')
+    expect(result).toContain('#strong[TOTAL]')
+    expect(result).not.toContain('textbf')
+  })
+
   it('ne fragmente pas un array imbriqué dans une cellule', () => {
     const result = htmlToTypst(
       '$\\begin{array}{|c|c|}\\hline a & \\begin{array}{c|c} x & y\\end{array} \\\\ \\hline b & c \\\\ \\hline\\end{array}$',

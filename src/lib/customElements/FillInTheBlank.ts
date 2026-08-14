@@ -1,4 +1,8 @@
 import { MathfieldElement } from 'mathlive'
+import {
+  compteChampsDeReponse,
+  pointsMaxDuBareme,
+} from '../interactif/baremeExercice'
 import { verifyFillInTheBlankMathLive } from '../interactif/mathLiveVerifications'
 import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
 import type { IExercice } from '../types'
@@ -126,6 +130,15 @@ export class FillInTheBlankElement extends MathaleaCustomElement {
       exercice,
       i,
       fillInTheBlank?.mathfield ?? null,
+    )
+  }
+
+  static pointsMaxQuestion(exercice: IExercice, i: number): number {
+    // `verifyFillInTheBlankMathLive()` applique le barème à un point par champ.
+    const valeur = exercice.autoCorrection?.[i]?.valeur
+    return pointsMaxDuBareme(
+      valeur?.bareme,
+      compteChampsDeReponse(valeur, (cle) => /^champ\d+$/.test(cle)),
     )
   }
 

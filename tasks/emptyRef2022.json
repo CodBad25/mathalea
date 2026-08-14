@@ -82,6 +82,11 @@
       "can1S": {
         "can1S0": {},
         "can1S1": {}
+      },
+      "can1F": {
+        "can1F0": {},
+        "can1F1": {},
+        "can1F2": {}
       }
     },
     "Terminale": {

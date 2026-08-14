@@ -7,6 +7,7 @@
     remToPixels,
   } from '../../../lib/components/measures'
   import { resizeContent } from '../../../lib/components/sizeTools'
+  import { handleFullscreenEscape } from '../../../lib/fullscreen'
   import { handleFlowmath } from '../../../lib/handleFlowmath'
   import {
     mathaleaFormatExercice,
@@ -26,6 +27,7 @@
   import Keyboard from '../../keyboard/Keyboard.svelte'
   import { keyboardState } from '../../keyboard/stores/keyboardStore'
   import Exercice from '../../shared/exercice/Exercice.svelte'
+  import BtnFullscreen from '../../shared/ui/BtnFullscreen.svelte'
   import BtnZoom from '../../shared/ui/btnZoom.svelte'
   import Banner from '../../shared/vendors/Banner.svelte'
   import FlipCard from './FlipCard.svelte'
@@ -301,7 +303,10 @@
   }
 </script>
 
-<svelte:window bind:innerWidth={currentWindowWidth} />
+<svelte:window
+  bind:innerWidth={currentWindowWidth}
+  on:keydown={handleFullscreenEscape}
+/>
 <section
   bind:this={eleveSection}
   class="relative flex flex-col min-h-screen min-w-screen bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus {$darkMode.isActive
@@ -333,6 +338,14 @@
         isBorderTransparent={typeof $globalOptions.title === 'string' &&
           $globalOptions.title.length > 0}
       />
+      <!-- Dans Moodle, l'iframe est à l'étroit dans la page du cours -->
+      {#if $globalOptions.recorder === 'moodle'}
+        <BtnFullscreen
+          size="bx-sm md:bx-md"
+          isBorderTransparent={typeof $globalOptions.title === 'string' &&
+            $globalOptions.title.length > 0}
+        />
+      {/if}
     </div>
   </div>
   <div class="mb-auto">

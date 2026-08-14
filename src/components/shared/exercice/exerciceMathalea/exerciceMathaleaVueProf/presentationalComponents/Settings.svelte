@@ -2,6 +2,11 @@
   import { createEventDispatcher, onMount } from 'svelte'
   import ExerciceSimple from '../../../../../../exercices/ExerciceSimple'
   import type { FormulaireComplexe } from '../../../../../../lib/formulaireComplexe'
+  import {
+    COEFF_BAREME_MAX,
+    COEFF_BAREME_MIN,
+    normaliseCoeffBareme,
+  } from '../../../../../../lib/interactif/baremeExercice'
   import type { IExercice } from '../../../../../../lib/types'
   import CheckboxWithLabel from '../../../../forms/CheckboxWithLabel.svelte'
   import InputNumber from '../../../../forms/InputNumber.svelte'
@@ -12,6 +17,10 @@
   export let exerciceIndex: number
   export let isVisible: boolean = true
   export let inModal: boolean = false
+  /** Le barème n'est réglable que sur un exercice affiché en interactif. */
+  export let isInteractif: boolean = false
+  /** Nombre de points maximum de l'exercice, avant coefficient. */
+  export let pointsMax: number = 0
 
   const dispatch = createEventDispatcher()
 
@@ -31,6 +40,9 @@
   let alea: string
   let correctionDetaillee: boolean
   let tipAvailable: boolean
+  let coeffBareme: number = normaliseCoeffBareme(exercice.coeffBareme)
+
+  $: isBaremeDisplayed = isInteractif && pointsMax > 0
 
   let isCommentDisplayed: boolean = false
 
@@ -60,6 +72,7 @@
 
   onMount(() => {
     nbQuestions = exercice.nbQuestions
+    coeffBareme = normaliseCoeffBareme(exercice.coeffBareme)
     duration = exercice.duration || 10
     sup = exercice.sup === 'false' ? false : exercice.sup
     sup2 = exercice.sup2 === 'false' ? false : exercice.sup2
@@ -171,7 +184,19 @@
       alea,
       correctionDetaillee,
       tipAvailable,
+      coeffBareme,
     })
+  }
+
+  /**
+   * Modifie le coefficient multiplicateur du barème.
+   * @param pas +1 ou -1
+   */
+  function changeCoeffBareme(pas: number) {
+    const nouveauCoeff = normaliseCoeffBareme(coeffBareme + pas)
+    if (nouveauCoeff === coeffBareme) return
+    coeffBareme = nouveauCoeff
+    dispatchNewSettings()
   }
 </script>
 
@@ -313,6 +338,73 @@
         label="Version QCM"
         on:change={dispatchNewSettings}
       />
+    {/if}
+
+    {#if isBaremeDisplayed}
+      <div class="flex flex-col gap-y-1">
+        <span
+          class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
+        >
+          Barème&nbsp;:
+        </span>
+        <div class="flex flex-row items-center gap-x-3">
+          <span class="inline-flex items-center">
+            <button
+              type="button"
+              id="settings-bareme-moins-{exerciceIndex}"
+              class="w-7 h-7 flex items-center justify-center
+                border border-coopmaths-action dark:border-coopmathsdark-action
+                text-coopmaths-action dark:text-coopmathsdark-action
+                hover:bg-coopmaths-action hover:text-coopmaths-canvas
+                dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas
+                disabled:opacity-30"
+              disabled={coeffBareme <= COEFF_BAREME_MIN}
+              aria-label="Diminuer le coefficient du barème"
+              on:click={() => changeCoeffBareme(-1)}
+            >
+              <i class="bx bx-minus"></i>
+            </button>
+            <span
+              class="w-10 h-7 flex items-center justify-center border-y
+                border-coopmaths-action dark:border-coopmathsdark-action
+                text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+              aria-live="polite"
+            >
+              &times;{coeffBareme}
+            </span>
+            <button
+              type="button"
+              id="settings-bareme-plus-{exerciceIndex}"
+              class="w-7 h-7 flex items-center justify-center
+                border border-coopmaths-action dark:border-coopmathsdark-action
+                text-coopmaths-action dark:text-coopmathsdark-action
+                hover:bg-coopmaths-action hover:text-coopmaths-canvas
+                dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas
+                disabled:opacity-30"
+              disabled={coeffBareme >= COEFF_BAREME_MAX}
+              aria-label="Augmenter le coefficient du barème"
+              on:click={() => changeCoeffBareme(1)}
+            >
+              <i class="bx bx-plus"></i>
+            </button>
+          </span>
+          <span
+            id="settings-bareme-points-{exerciceIndex}"
+            class="text-coopmaths-struct dark:text-coopmathsdark-struct font-bold"
+          >
+            {pointsMax * coeffBareme}
+            {pointsMax * coeffBareme > 1 ? 'points' : 'point'}
+          </span>
+        </div>
+        {#if coeffBareme > 1}
+          <span
+            class="text-xs font-light text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light"
+          >
+            {pointsMax}
+            {pointsMax > 1 ? 'points' : 'point'} &times; {coeffBareme}
+          </span>
+        {/if}
+      </div>
     {/if}
 
     {#if exercice.comment !== undefined && exercice.comment !== ''}

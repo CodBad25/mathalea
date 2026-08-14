@@ -8,6 +8,10 @@ import {
   buildDataKeyboardFromStyle,
   KeyboardType,
 } from '../interactif/claviers/keyboard'
+import {
+  compteChampsDeReponse,
+  pointsMaxDuBareme,
+} from '../interactif/baremeExercice'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
 import { toutAUnPoint } from '../interactif/fonctionsBaremes'
 import type { AllChoicesType } from '../interactif/listeDeroulante/ListeDeroulante'
@@ -814,6 +818,17 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         nbReponses,
       },
     }
+  }
+
+  static pointsMaxQuestion(exercice: IExercice, i: number): number {
+    // `verifQuestion()` applique le barème à un point par champ, avec
+    // `toutAUnPoint` par défaut.
+    const valeur = exercice.autoCorrection?.[i]?.valeur
+    return pointsMaxDuBareme(
+      valeur?.bareme,
+      compteChampsDeReponse(valeur),
+      toutAUnPoint,
+    )
   }
 }
 

@@ -49,6 +49,7 @@ import { checkForServerUpdate } from './components/version'
 import { createURL } from './createURL'
 import { sendToCapytaleMathaleaHasChanged } from './handleCapytale'
 import { isHtmlDocumentText } from './httpResponses'
+import { normaliseCoeffBareme } from './interactif/baremeExercice'
 import { fonctionComparaison } from './interactif/comparisonFunctions'
 import { handleAnswers, setReponse } from './interactif/gestionInteractif'
 import { buildSimpleVersionQcm } from './interactif/qcmBuilder'
@@ -568,6 +569,7 @@ export function mathaleaHandleParamOfOneExercice(
   if (param.sup5) exercice.sup5 = mathaleaHandleStringFromUrl(param.sup5)
   if (param.versionQcm !== undefined && exercice instanceof ExerciceSimple)
     exercice.versionQcm = param.versionQcm === '1'
+  exercice.coeffBareme = normaliseCoeffBareme(param.coeffBareme)
   if (param.interactif) exercice.interactif = param.interactif === '1'
   // Un exercice interactif obligatoire ne possède pas de version HTML non
   // interactive. Ce réglage est donc prioritaire sur celui de l'URL.
@@ -804,6 +806,10 @@ export function mathaleaUpdateExercicesParamsFromUrl(
         newExercisesParams[indiceExercice].sup5 = entry[1]
       } else if (entry[0] === 'qcm' && (entry[1] === '0' || entry[1] === '1')) {
         newExercisesParams[indiceExercice].versionQcm = entry[1]
+      } else if (entry[0] === 'coef') {
+        newExercisesParams[indiceExercice].coeffBareme = normaliseCoeffBareme(
+          entry[1],
+        )
       } else if (entry[0] === 'alea') {
         newExercisesParams[indiceExercice].alea = entry[1]
       } else if (entry[0] === 'cols') {

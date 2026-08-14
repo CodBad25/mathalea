@@ -81,6 +81,7 @@ export interface InterfaceParams extends Partial<
   sup4?: string
   sup5?: string
   versionQcm?: '0' | '1' // pour la version QCM des exercices de type simple
+  coeffBareme?: number // coefficient multiplicateur du barème d'un exercice interactif
   nbQuestions?: number
   duration?: number
   cols?: number
@@ -1058,6 +1059,11 @@ export interface IExercice {
   beamer: boolean
   nbQuestions: number
   pointsParQuestions: number
+  /**
+   * Coefficient multiplicateur du barème choisi par l'enseignant dans les
+   * paramètres de l'exercice interactif (voir `src/lib/interactif/baremeExercice.ts`).
+   */
+  coeffBareme: number
   correctionDetailleeDisponible: boolean
   correctionDetaillee: boolean
   correctionIsCachee: boolean

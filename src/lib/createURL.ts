@@ -34,6 +34,9 @@ export function createURL(params: InterfaceParams[]) {
     if (ex.sup4 != null) url.searchParams.append('s4', ex.sup4)
     if (ex.sup5 != null) url.searchParams.append('s5', ex.sup5)
     if (ex.versionQcm != null) url.searchParams.append('qcm', ex.versionQcm)
+    // Le coefficient par défaut n'alourdit pas l'URL
+    if (ex.coeffBareme != null && ex.coeffBareme !== 1)
+      url.searchParams.append('coef', ex.coeffBareme.toString())
     if (ex.interactif === '1') url.searchParams.append('i', '1')
     if (ex.cd != null) url.searchParams.append('cd', ex.cd)
     if (ex.tip != null) url.searchParams.append('tip', String(ex.tip))

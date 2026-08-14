@@ -1,5 +1,6 @@
 import type { IExercice, ResultOfExerciceInteractif } from '../../lib/types'
 import { orangeMathalea } from '../../lib/colors'
+import { coeffBaremeExercice } from './baremeExercice'
 
 const CLASSES_ALERTE_UNITE_MANQUANTE = [
   'italic',
@@ -22,17 +23,22 @@ export function afficheScore(
       'pointer-events-none',
     )
   }
+  // Le coefficient de barème choisi dans les paramètres de l'exercice
+  // multiplie la note obtenue comme la note maximale.
+  const coeff = coeffBaremeExercice(exercice)
+  const numberOfPoints = nbBonnesReponses * coeff
+  const numberOfQuestions = (nbBonnesReponses + nbMauvaisesReponses) * coeff
   if (divScore != null) {
     divScore.classList.remove(...CLASSES_ALERTE_UNITE_MANQUANTE)
-    divScore.innerHTML = `${nbBonnesReponses} / ${nbBonnesReponses + nbMauvaisesReponses}`
+    divScore.innerHTML = `${numberOfPoints} / ${numberOfQuestions}`
     divScore.style.color = orangeMathalea
     divScore.style.fontWeight = 'bold'
     divScore.style.fontSize = 'x-large'
     divScore.style.display = 'inline'
   }
   return {
-    numberOfPoints: nbBonnesReponses,
-    numberOfQuestions: nbBonnesReponses + nbMauvaisesReponses,
+    numberOfPoints,
+    numberOfQuestions,
     perQuestionIsOk,
   }
 }

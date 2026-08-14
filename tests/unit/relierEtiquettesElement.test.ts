@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import Exercice from '../../src/exercices/Exercice'
 import ExempleRelierEtiquettes from '../../src/exercices/modèlesExos/ExempleRelierEtiquettes'
-import { mathaleaHandleExerciceSimple } from '../../src/lib/mathalea'
 import {
   listOfCustomElements,
   mathaleaCustomElementsRegistry,
@@ -18,6 +17,7 @@ import {
   exerciceInteractif,
   handleAnswers,
 } from '../../src/lib/interactif/gestionInteractif'
+import { mathaleaHandleExerciceSimple } from '../../src/lib/mathalea'
 import {
   context,
   setOutputHtml,
@@ -262,7 +262,7 @@ describe('Exports imprimés de relier-etiquettes', () => {
 
     expect(latex).toContain('\\begin{tikzpicture}')
     expect(latex).toContain('(relierG0) at (0,0) {positif}')
-    expect(latex).toContain('(relierD1) at (6.4,-2.9) {$n \\leqslant 0$}')
+    expect(latex).toContain('(relierD1) at (7.2,-2.3) {$n \\leqslant 0$}')
     expect(latex.match(/\\draw\[line width=1pt/g)).toHaveLength(2)
     expect(latex).toContain('(relierG0.east) -- (relierD0.west)')
   })
@@ -270,7 +270,7 @@ describe('Exports imprimés de relier-etiquettes', () => {
   it('produit un dessin Typst autonome avec les mêmes couleurs', () => {
     const typst = toTypst(config)
 
-    expect(typst).toContain('#block(width: 249pt')
+    expect(typst).toContain('#block(width: 295pt')
     expect(typst.match(/#place\(top \+ left, dx: /g)).toHaveLength(8)
     expect(typst).toContain('$n >= 0$')
     expect(typst).toContain('rgb("#2563eb")')

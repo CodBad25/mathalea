@@ -447,13 +447,12 @@ async function resolveTargets() {
   ]
 
   if (relevantFiles.length > 0) {
-    const entries = await Promise.all(
-      relevantFiles.map(async (sourceFile) => {
-        const exercicePath = sourceFile.replace(/^src\/exercices\//, '')
-        const filter = toFilterFromExercisePath(exercicePath)
-        return await findUuid(filter)
-      }),
-    )
+    const entries: Awaited<ReturnType<typeof findUuid>>[] = []
+    for (const sourceFile of relevantFiles) {
+      const exercicePath = sourceFile.replace(/^src\/exercices\//, '')
+      const filter = toFilterFromExercisePath(exercicePath)
+      entries.push(await findUuid(filter))
+    }
     return entries.flat()
   }
   if (process.env.CI === 'true') {
@@ -461,7 +460,10 @@ async function resolveTargets() {
   }
   // En local, si pas de fichier modifié identifié, on teste une sélection de cibles par défaut pour assurer une couverture régulière sur les exercices populaires et les différents types d'exercices.
   const defaults = ['can', '3e', '4e', '5e', '6e', '2e', '1e']
-  const results = await Promise.all(defaults.map((filter) => findUuid(filter)))
+  const results: Awaited<ReturnType<typeof findUuid>>[] = []
+  for (const filter of defaults) {
+    results.push(await findUuid(filter))
+  }
   return results.flat() // Si on lance le test en local sans cible spécifique, on teste tous les exercices (ça dure 5h sur une machine puissante). Plus de
 }
 

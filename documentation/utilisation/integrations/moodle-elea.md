@@ -20,6 +20,12 @@ Procédure générale :
 
 Point de réglage important : dans l'activité Scorm, vérifier la méthode d'évaluation dans la section des notes. Pour plusieurs exercices, la note moyenne ou totale doit correspondre à l'usage attendu.
 
+## Plein écran
+
+Dans les deux formats, l'exercice s'affiche dans un cadre inséré dans la page de Moodle, souvent étroit sur téléphone. Un bouton plein écran est proposé à l'élève à côté des boutons de zoom (vue élève) ou du bouton de mode sombre (vue Course aux nombres). Un nouvel appui sur ce bouton, ou la touche <kbd>Échap</kbd>, revient à l'affichage normal.
+
+Selon la configuration de Moodle et du navigateur, le plein écran est soit celui du navigateur, soit un agrandissement à la taille de la fenêtre. Les réponses déjà saisies sont conservées dans les deux cas.
+
 ## Choisir le format
 
 - Gift : intégration dans un test Moodle, logique de question Moodle.

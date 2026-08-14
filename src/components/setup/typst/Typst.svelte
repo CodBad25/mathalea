@@ -23,6 +23,7 @@
     exercicesParams,
     freezeUrl,
     typstParamStore,
+    typstShortcutsOpen,
   } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
   import { isLocalStorageAvailable } from '../../../lib/stores/storage'
@@ -78,6 +79,7 @@
     type EditorMarker,
   } from '../shared/editor/editorSetup'
   import { typstLanguage } from './editor/typstLanguage'
+  import { hasSeenTypstTour, startTypstTour } from '../../../lib/onboarding/typstTour'
 
   /** Libellés des habillages d'en-tête */
   const HEADER_STYLE_LABELS: Record<(typeof HEADER_STYLES)[number], string> = {
@@ -501,8 +503,6 @@
    */
   let compilerFirstVisit = $state(false)
   let isGeneratingPdf = $state(false)
-  /** Fenêtre d'aide listant les raccourcis clavier de l'éditeur */
-  let isShortcutsOpen = $state(false)
   /** Touche de modification affichée dans l'aide, selon la plateforme */
   const MOD_KEY =
     typeof navigator !== 'undefined' &&
@@ -2799,7 +2799,39 @@
     // (document + mise en page) tels qu'appliqués au premier rendu
     persistToUrl()
     compile(code)
+    maybeStartTypstTour()
   })
+
+  /**
+   * Ne se déclenche qu'une fois par poste (localStorage), et seulement sur
+   * un vrai premier passage en mode bureau&nbsp;: pas de préférence
+   * `mathaleaTypstView` déjà enregistrée (qui changerait le mode
+   * d'affichage/l'état des réglages par défaut ciblés par la visite) ni de
+   * lien partagé (`typstParam`, même raison). Pas non plus en localhost,
+   * pour ne pas se redéclencher à chaque rechargement pendant le
+   * développement (voir le même choix dans `Start.svelte`).
+   */
+  let typstTourTriggered = false
+  function maybeStartTypstTour() {
+    if (
+      typstTourTriggered ||
+      hasSeenTypstTour() ||
+      isMobile ||
+      typstUrlParam != null ||
+      window.location.hostname === 'localhost'
+    ) {
+      return
+    }
+    if (isLocalStorageAvailable()) {
+      try {
+        if (window.localStorage.getItem(STORAGE_KEY) != null) return
+      } catch {
+        return
+      }
+    }
+    typstTourTriggered = true
+    setTimeout(startTypstTour, 400)
+  }
 
   onDestroy(() => {
     clearTimeout(compileTimer)
@@ -3030,6 +3062,7 @@
           : 'flex'} flex-row rounded-lg overflow-hidden border border-coopmaths-action dark:border-coopmathsdark-action"
         role="group"
         aria-label="Mode d'affichage"
+        data-tour="typst-mode-switch"
       >
         {#each [{ mode: 'code', icon: 'bx-code-alt', label: 'Code' }, { mode: 'split', icon: 'bx-columns', label: 'Côte à côte' }, { mode: 'preview', icon: 'bx-file-pdf', label: 'Aperçu' }] as choice}
           <button
@@ -3051,6 +3084,7 @@
         <button
           type="button"
           title="Réglages du document"
+          data-tour="typst-settings-toggle"
           aria-pressed={isSettingsOpen}
           class="flex items-center gap-1 text-sm {isSettingsOpen
             ? 'text-coopmaths-action font-semibold dark:text-coopmathsdark-action'
@@ -3065,6 +3099,7 @@
       <button
         type="button"
         title="Nouvelles données aléatoires pour tous les exercices"
+        data-tour="typst-new-data"
         class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
         onclick={newDataForAll}
       >
@@ -3075,6 +3110,7 @@
       <button
         type="button"
         title="Afficher sur l'aperçu les contrôles de mise en page (colonnes et espacement des questions, insertions entre les exercices)"
+        data-tour="typst-layout-toggle"
         aria-pressed={showOverlay}
         class="flex items-center gap-1 text-sm {showOverlay
           ? 'text-coopmaths-action font-semibold dark:text-coopmathsdark-action'
@@ -3088,7 +3124,10 @@
         Mise en page
       </button>
 
-      <label class="flex items-center gap-2 text-sm">
+      <label
+        class="flex items-center gap-2 text-sm"
+        data-tour="typst-versions"
+      >
         <i class="bx bx-copy text-xl"></i>
         Versions
         <select
@@ -3111,7 +3150,7 @@
           title="Raccourcis clavier de l’éditeur de code"
           aria-label="Raccourcis clavier de l’éditeur de code"
           class="flex items-center justify-center rounded-lg border border-coopmaths-action py-1 px-2 text-coopmaths-action hover:bg-coopmaths-action hover:text-coopmaths-canvas dark:border-coopmathsdark-action dark:text-coopmathsdark-action dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
-          onclick={() => (isShortcutsOpen = true)}
+          onclick={() => ($typstShortcutsOpen = true)}
         >
           <i class="bx bx-help-circle text-xl"></i>
         </button>
@@ -3132,6 +3171,7 @@
       {/if}
       {#if displayMode === 'preview' || displayMode === 'split'}
         <ButtonTextAction
+          id="typst-download-pdf-button"
           text={isGeneratingPdf ? 'PDF en cours...' : 'Télécharger le PDF'}
           icon={isGeneratingPdf ? 'bx-loader-alt bx-spin' : 'bx-download'}
           inverted={true}
@@ -3183,7 +3223,10 @@
               </button>
             </div>
 
-            <label class="flex items-center justify-between gap-4 text-sm">
+            <label
+              class="flex items-center justify-between gap-4 text-sm"
+              data-tour="typst-settings-layout"
+            >
               Format
               <select
                 class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
@@ -3298,7 +3341,10 @@
               </span>
             </label>
 
-            <label class="flex items-center justify-between gap-4 text-sm">
+            <label
+              class="flex items-center justify-between gap-4 text-sm"
+              data-tour="typst-settings-typography"
+            >
               Habillage en-tête
               <select
                 class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
@@ -3500,6 +3546,7 @@
             <!-- ------------------------------------------ page de garde -->
             <h4
               class="pt-2 text-xs font-semibold uppercase tracking-wide opacity-70 border-t border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark"
+              data-tour="typst-settings-cover"
             >
               Page de garde
             </h4>
@@ -3824,12 +3871,12 @@
     </div>
   {/if}
 
-  {#if isShortcutsOpen}
+  {#if $typstShortcutsOpen}
     <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
     <div
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
       onclick={(e) => {
-        if (e.target === e.currentTarget) isShortcutsOpen = false
+        if (e.target === e.currentTarget) $typstShortcutsOpen = false
       }}
     >
       <div
@@ -3844,7 +3891,7 @@
           <button
             type="button"
             aria-label="Fermer"
-            onclick={() => (isShortcutsOpen = false)}
+            onclick={() => ($typstShortcutsOpen = false)}
           >
             <i
               class="bx bx-x text-2xl text-coopmaths-action dark:text-coopmathsdark-action"

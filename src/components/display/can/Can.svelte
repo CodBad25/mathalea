@@ -16,6 +16,7 @@
     assignmentDataFromCapytale,
     sendToCapytaleSaveStudentAssignment,
   } from '../../../lib/handleCapytale'
+  import { handleFullscreenEscape } from '../../../lib/fullscreen'
   import { decodeAnswers } from '../../../lib/lms/answersCodec'
   import { mathaleaUpdateUrlFromExercicesParams } from '../../../lib/mathalea'
   import { mathaleaWriteStudentPreviousAnswers } from '../../../lib/mathaleaUtils'
@@ -39,6 +40,7 @@
   import { keyboardState } from '../../keyboard/stores/keyboardStore'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
   import ButtonToggleDarkMode from '../../shared/forms/ButtonToggleDarkMode.svelte'
+  import BtnFullscreen from '../../shared/ui/BtnFullscreen.svelte'
   import CountDown from './presentationalComponents/CountDown.svelte'
   import End from './presentationalComponents/End.svelte'
   import KickOff from './presentationalComponents/KickOff.svelte'
@@ -604,6 +606,7 @@
   }
 </script>
 
+<svelte:window on:keydown={handleFullscreenEscape} />
 <div
   class="{$darkMode.isActive
     ? 'dark'
@@ -689,7 +692,11 @@
       time={buildTime()}
     />
   {/if}
-  <div class="fixed flex bottom-2 right-2">
+  <div class="fixed flex flex-row items-center space-x-2 bottom-2 right-2">
+    <!-- Dans Moodle, l'iframe est à l'étroit dans la page du cours -->
+    {#if $globalOptions.recorder === 'moodle'}
+      <BtnFullscreen size="sm" isPlain={true} />
+    {/if}
     <ButtonToggleDarkMode />
   </div>
 </div>

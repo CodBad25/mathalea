@@ -130,7 +130,7 @@
       border-b border-coopmaths-struct dark:border-coopmathsdark-struct"
     >
       <h1
-        id="exercice{indiceExercice}"
+        id="exerciceHeader{indiceExercice}"
         class="min-w-0 flex flex-row items-center gap-2 text-coopmaths-struct dark:text-coopmathsdark-struct"
       >
         <span
@@ -246,7 +246,7 @@
   >
     <div
       class="flex flex-col xl:flex-row xl:justify-start xl:items-center"
-      id="exercice{indiceExercice}"
+      id="exerciceHeader{indiceExercice}"
     >
       <div
         class="flex flex-row items-center whitespace-pre font-bold text-sm md:text-base lg:text-xl pb-1 lg:pb-0"

@@ -170,6 +170,21 @@ export default class MathaleaCustomElement extends HTMLElement {
   }
 
   /**
+   * Nombre de points maximum que la question peut rapporter, c'est-à-dire le
+   * `score.nbReponses` que `verifQuestion()` retournera si l'élève répond
+   * juste partout. Il est calculé avant toute saisie pour afficher le barème
+   * de l'exercice dans ses paramètres (voir `src/lib/interactif/baremeExercice.ts`).
+   *
+   * Une question vaut 1 point par défaut : c'est le cas de tous les composants
+   * qui corrigent une réponse unique. À surcharger par les composants dont une
+   * question peut rapporter plusieurs points (plusieurs champs de saisie,
+   * barème spécifique...).
+   */
+  static pointsMaxQuestion(_exercice: IExercice, _i: number): number {
+    return 1
+  }
+
+  /**
    * Transforme le HTML de la question pour l'affichage dans la liste
    * des corrections (CAN)
    * Par défaut l'attribut `interactivity-on` est forcé à false pour avoir la version non interactive du composant et éviter que l'élève puisse interagir avec

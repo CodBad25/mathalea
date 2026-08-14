@@ -252,7 +252,7 @@ Les jobs PDF utilisent l'image `$DOCKER_IMAGE` (`ci/tex-node:node22-texlive-2026
 
 ### `playwright-pdf-consolidated`
 
-Lance `pnpm test:e2e:pdfexports` en matrice parallèle sur :
+Lance `pnpm test:e2e:pdfexports` dans un seul job CI, en série, sur :
 
 - `can/2e`
 - `can/1e`
@@ -267,10 +267,10 @@ Lance `pnpm test:e2e:pdfexports` en matrice parallèle sur :
 - `4e/4G^4e/4L`
 - `3e`
 
-Chaque entrée de matrice définit `NIV_LABEL`, puis le job lance :
+Chaque entrée est lancée l'une après l'autre avec :
 
 ```bash
-NIV="$NIV_LABEL" pnpm test:e2e:pdfexports
+NIV="$NIV_LABEL" STYLES="Coopmaths" pnpm test:e2e:pdfexports
 ```
 
 Le test `pdfexports` compile les exports LaTeX avec `lualatex`. Les seuils
@@ -280,12 +280,9 @@ suivants permettent de diagnostiquer ou limiter les compilations trop longues :
 - `PDF_SLOW_COMPILE_MS` : seuil de log pour les compilations lentes, défaut
   `10000`.
 
-Si Vitest échoue avec `[vitest-pool]: Failed to start threads worker` puis
-`Timeout waiting for worker to respond`, l'échec survient avant la découverte
-des tests. Il faut d'abord suspecter le démarrage du worker `threads` et
-l'import initial du fichier `pdfexports.test.ts` (notamment l'import de
-`src/lib/mathalea`) sous contrainte CPU ou mémoire, plutôt qu'une compilation
-LaTeX individuelle.
+Le job reste volontairement linéaire pour éviter plusieurs compilations
+LaTeX simultanées en CI. La configuration Vitest dédiée utilise aussi un seul
+worker.
 
 ### `playwright-pdf-dnb-consolidated`
 

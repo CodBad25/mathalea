@@ -193,6 +193,7 @@ isOk: boolean
 feedback: string
 score: { nbBonnesReponses: number; nbReponses: number }
 }`. comme pour les callbacks de corrections.
+- La méthode statique `pointsMaxQuestion(exercice, questionIndex)` retourne le `score.nbReponses` que `verifQuestion()` produira si l'élève répond juste partout. Elle vaut 1 par défaut : ne la surcharger que si une question du composant peut rapporter plusieurs points (plusieurs champs, barème spécifique). Elle est appelée avant toute saisie pour afficher le barème dans les paramètres de l'exercice, voir [le barème d'un exercice interactif](systeme-interactivite.md#barème-dun-exercice-interactif).
 - Le dispatch par le registre est générique : `exerciceInteractif()`, `gestionCan.ts`, `Can.svelte` et `QuestionParPage.svelte` consultent `listOfCustomElements` puis `mathaleaCustomElementsRegistry` pour appeler `verifQuestion()`. Il n'y a donc plus de branche spécifique à ajouter dans ces fichiers pour un custom element correctement enregistré.
 - Les formats historiques MathLive `mathlive`, `fillInTheBlank`, `tableauMathlive` et `texte` sont normalisés vers leurs tags (`mathalea-mathfield`, `fill-in-the-blank`, `tableau-mathlive`, `mathalea-textfield`) par `mathliveCompatibleToCustomElementFormat()` dans `src/lib/types.ts`. Ne pas ajouter de nouveau cas historique sans raison de compatibilité forte : préférer le tag du custom element comme `formatInteractif`.
 - Dans les exercices utilisant ces éléments, `handleAnswers()` doit être utilisé pour renseigner `exercice.autoCorrection[questionIndex].valeur`, qui sera lu par `verifQuestion()` afin d'obtenir la réponse attendue de l'élément pour cette question. Si la réponse attendue doit être un objet, la stocker dans un format que `verifQuestion()` sait relire explicitement. De même, la `value` correspondant à la réponse de l'élève doit rester compatible avec la restauration via `mathaleaWriteStudentPreviousAnswers()`.
@@ -273,6 +274,7 @@ imposer la variable didactique attendue (angles, hauteurs, échelles, etc.).
   automatiquement (`renderTypst()` + marqueur `<mathalea-typst>` dans
   `create(...)`).
 - L'affichage dans les corrections CAN est correct (`formatStudentAnswer` et `stripFromQuestionHtml` surchargées si les valeurs par défaut ne conviennent pas).
+- `pointsMaxQuestion` est surchargée si une question du composant peut rapporter plus d'un point.
 
 ## Migration d'un composant existant
 

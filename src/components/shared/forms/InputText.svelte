@@ -30,6 +30,10 @@
   function handleChange(event: Event) {
     dispatch('change', event)
   }
+
+  function handlePaste(event: ClipboardEvent) {
+    dispatch('paste', event)
+  }
 </script>
 
 <!--
@@ -83,6 +87,7 @@
     spellcheck={spellcheck ? 'true' : 'false'}
     on:input={handleInput}
     on:change={handleChange}
+    on:paste={handlePaste}
     class="block w-full text-sm border h-10 pr-0
       border-coopmaths-action dark:border-coopmathsdark-action
       focus:border-coopmaths-action-lightest dark:focus:border-coopmathsdark-action-lightest

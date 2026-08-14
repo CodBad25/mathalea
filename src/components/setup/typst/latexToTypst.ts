@@ -134,6 +134,22 @@ export const TASKIZE_IMPORT =
 export const VARTABLE_IMPORT = '#import "@preview/vartable:0.2.4": tabvar'
 
 /**
+ * Import du paquet cetz (dessins vectoriels), utilisé tel quel (`cetz.canvas`,
+ * `cetz.draw`…) par le code Typst brut des exercices statiques (annales),
+ * inséré via le marqueur `<mathalea-typst>` sans passer par la conversion
+ * LaTeX -> Typst.
+ */
+export const CETZ_IMPORT = '#import "@preview/cetz:0.3.4"'
+
+/**
+ * Import du module `chart` de cetz-plot (diagrammes en barres/bâtons),
+ * référencé (`chart.columnchart`…) par le même code Typst brut que
+ * `CETZ_IMPORT`, dont il dépend.
+ */
+export const CETZ_PLOT_CHART_IMPORT =
+  '#import "@preview/cetz-plot:0.1.1": chart'
+
+/**
  * Aides Typst pour les QCM : une case à cocher (vide dans l'énoncé, remplie
  * pour la bonne réponse dans le corrigé) et le nombre de colonnes réglable.
  */
@@ -1125,13 +1141,44 @@ interface TypstTableCell {
   fill: string | null
 }
 
+/**
+ * Convertit `\textbf{...}`/`\textit{...}` (imbriqués ou non) en formatage
+ * Typst (`#strong[...]`/`#emph[...]`) et échappe le texte brut restant.
+ * Utilisé pour le contenu d'une cellule wrappé dans `\text{...}` (ex.
+ * `\text{\textbf{Sports}}`, produit par les en-têtes de `tableauColonneLigne`) :
+ * sans ce traitement, la commande `\textbf` fuyait telle quelle dans le texte
+ * affiché (elle n'est interprétée qu'en mode mathématique par `preprocessTex`).
+ */
+function convertCellTextFormatting(text: string): string {
+  let output = ''
+  let cursor = 0
+  const commandRe = /\\text(bf|it)\s*\{/g
+  let match: RegExpExecArray | null
+  while ((match = commandRe.exec(text)) != null) {
+    output += escapeTypstText(text.slice(cursor, match.index))
+    const openIndex = match.index + match[0].length - 1
+    const arg = readBraced(text, openIndex)
+    if (arg == null) {
+      output += escapeTypstText(text.slice(match.index))
+      cursor = text.length
+      break
+    }
+    const wrapper = match[1] === 'bf' ? '#strong' : '#emph'
+    output += `${wrapper}[${convertCellTextFormatting(arg.value)}]`
+    cursor = arg.end
+    commandRe.lastIndex = cursor
+  }
+  output += escapeTypstText(text.slice(cursor))
+  return output
+}
+
 function latexTableCell(cell: string): TypstTableCell {
   const { color, rest } = extractCellColor(cell)
   const stripped = stripCellLatex(rest)
   if (stripped.length === 0) return { body: '', fill: color }
   const textContent = unwrapWholeTextCommand(stripped)
   if (textContent != null) {
-    return { body: escapeTypstText(textContent), fill: color }
+    return { body: convertCellTextFormatting(textContent), fill: color }
   }
   return { body: `$${latexMathToTypst(stripped)}$`, fill: color }
 }

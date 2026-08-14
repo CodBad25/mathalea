@@ -1,11 +1,14 @@
 <script lang="ts">
+  import { tick } from 'svelte'
   import ButtonIconTooltip from '../../../shared/forms/ButtonIconTooltip.svelte'
   import ButtonTextAction from '../../../shared/forms/ButtonTextAction.svelte'
   import InputText from '../../../shared/forms/InputText.svelte'
+  import BasicClassicModal from '../../../shared/modal/BasicClassicModal.svelte'
   import ModalLanguageChoice from '../../../shared/modal/ModalLanguageChoice.svelte'
   import LanguageDropdown from '../../../shared/ui/LanguageDropdown.svelte'
   import LanguageIcon from '../../../shared/ui/LanguageIcon.svelte'
   import ButtonsDeck from '../../../shared/ui/ButtonsDeck.svelte'
+  import { pointsMaxTotal } from '../../../../lib/stores/generalStore'
   import type { Language } from '../../../../lib/types/languages'
   import type { VueType } from '../../../../lib/VueType'
 
@@ -25,6 +28,30 @@
 
   let urlFeuilleEleve: string = ''
   let showLanguageChoiceModal: boolean = false
+  let showImportModal: boolean = false
+  const importInputId = 'importUrlFeuilleEleveInput'
+
+  function openImportModal() {
+    urlFeuilleEleve = ''
+    showImportModal = true
+    tick().then(() => document.getElementById(importInputId)?.focus())
+  }
+
+  function validateImport() {
+    if (urlFeuilleEleve === '') return
+    importExercises(urlFeuilleEleve)
+    showImportModal = false
+  }
+
+  // Un texte collé est importé immédiatement : seule une saisie manuelle,
+  // lettre par lettre, attend la validation par bouton.
+  function handleImportPaste(event: ClipboardEvent) {
+    const pastedText = event.clipboardData?.getData('text').trim()
+    if (!pastedText) return
+    urlFeuilleEleve = pastedText
+    importExercises(pastedText)
+    showImportModal = false
+  }
 </script>
 
 <nav
@@ -107,60 +134,64 @@
         />
       </div>
       <div slot="input" class="flex flex-row items-center space-x-4">
-        <InputText
-          title="Importer les exercices d'une feuille élève"
-          placeholder="Lien"
-          bind:value={urlFeuilleEleve}
-          classAddenda="w-50"
-        />
-        <ButtonTextAction
-          class="text-sm py-1 px-2 rounded-md h-7"
-          text="Ajouter"
-          disabled={urlFeuilleEleve === ''}
-          on:click={() => importExercises(urlFeuilleEleve)}
+        <ButtonIconTooltip
+          icon="bx-import text-3xl"
+          tooltip="Importer les exercices d'une feuille élève"
+          on:click={openImportModal}
         />
       </div>
-      <div
-        slot="export-buttons"
-        class="flex flex-row justify-center items-center space-x-4"
-      >
-        {#if !isCapytale}
-          <ButtonTextAction
-            class="text-sm py-1 px-2 rounded-md h-7"
-            text="Valider"
-            disabled={isExercisesListEmpty}
-            on:click={handleRecorder}
-          />
-        {/if}
-        {#if isCapytale}
-          <ButtonIconTooltip
-            icon="bx-cog text-3xl"
-            tooltip="Régler l'affichage du mode élève"
-            disabled={isExercisesListEmpty}
-            on:click={showSettingsDialog}
-          />
-        {/if}
-        {#if isCapytale}
+      <div slot="export-buttons" class="relative">
+        <div class="flex flex-row justify-center items-center space-x-4">
+          {#if !isCapytale}
+            <ButtonTextAction
+              class="text-sm py-1 px-2 rounded-md h-7"
+              text="Valider"
+              disabled={isExercisesListEmpty}
+              on:click={handleRecorder}
+            />
+          {/if}
+          {#if isCapytale}
+            <ButtonIconTooltip
+              icon="bx-cog text-3xl"
+              tooltip="Régler l'affichage du mode élève"
+              disabled={isExercisesListEmpty}
+              on:click={showSettingsDialog}
+            />
+          {/if}
+          {#if isCapytale}
+            <div>
+              <ButtonIconTooltip
+                icon="bx-printer text-3xl"
+                tooltip="Imprimer"
+                disabled={isExercisesListEmpty}
+                on:click={() => handleExport('a4')}
+              />
+            </div>
+          {/if}
           <div>
             <ButtonIconTooltip
-              icon="bx-printer text-3xl"
-              tooltip="Imprimer"
+              icon="bx-log-out bx-rotate-180"
+              tooltip="Rejoindre MathALÉA"
+              class="text-3xl"
               disabled={isExercisesListEmpty}
-              on:click={() => handleExport('a4')}
+              on:click={() => {
+                buildUrlAndOpenItInNewTab('usual')
+              }}
             />
           </div>
-        {/if}
-        <div>
-          <ButtonIconTooltip
-            icon="bx-log-out bx-rotate-180"
-            tooltip="Rejoindre MathALÉA"
-            class="text-3xl"
-            disabled={isExercisesListEmpty}
-            on:click={() => {
-              buildUrlAndOpenItInNewTab('usual')
-            }}
-          />
         </div>
+        {#if isCapytale && !isExercisesListEmpty && $pointsMaxTotal > 0}
+          <div
+            id="pointsMaxTotal"
+            class="absolute top-full right-0 mt-1 text-sm font-semibold whitespace-nowrap
+              text-coopmaths-struct dark:text-coopmathsdark-struct"
+          >
+            <span class="font-black text-coopmaths-action dark:text-coopmathsdark-action"
+              >Total</span
+            >
+            : {$pointsMaxTotal} {$pointsMaxTotal > 1 ? 'points' : 'point'}
+          </div>
+        {/if}
       </div>
     </ButtonsDeck>
   </div>
@@ -168,3 +199,25 @@
 {#if isFlowmath}
   <ModalLanguageChoice bind:showLanguageChoiceModal {locale} {handleLanguage} />
 {/if}
+<BasicClassicModal bind:isDisplayed={showImportModal}>
+  <svelte:fragment slot="header">
+    Importer les exercices d'une feuille élève de coopmaths.fr/alea
+  </svelte:fragment>
+  <svelte:fragment slot="content">
+    <InputText
+      inputID={importInputId}
+      title="Lien de la feuille élève"
+      placeholder="Lien"
+      bind:value={urlFeuilleEleve}
+      on:paste={(event) => handleImportPaste(event.detail)}
+    />
+  </svelte:fragment>
+  <svelte:fragment slot="footer">
+    <ButtonTextAction
+      class="text-sm py-1 px-2 rounded-md h-7"
+      text="Importer"
+      disabled={urlFeuilleEleve === ''}
+      on:click={validateImport}
+    />
+  </svelte:fragment>
+</BasicClassicModal>

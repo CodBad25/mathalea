@@ -1,3 +1,7 @@
+import {
+  compteChampsDeReponse,
+  pointsMaxDuBareme,
+} from '../interactif/baremeExercice'
 import { verifyTableauMathLive } from '../interactif/mathLiveVerifications'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
@@ -92,6 +96,15 @@ export class TableauMathliveElement extends MathaleaCustomElement {
       exercice,
       i,
       tableau?.querySelector('table') ?? null,
+    )
+  }
+
+  static pointsMaxQuestion(exercice: IExercice, i: number): number {
+    // `verifyTableauMathLive()` applique le barème à un point par cellule.
+    const valeur = exercice.autoCorrection?.[i]?.valeur
+    return pointsMaxDuBareme(
+      valeur?.bareme,
+      compteChampsDeReponse(valeur, (cle) => /^L\d+C\d+$/.test(cle)),
     )
   }
 

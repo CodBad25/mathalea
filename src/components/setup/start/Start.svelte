@@ -117,9 +117,10 @@
   // Ne se déclenche qu'une fois par poste (localStorage), et uniquement sur
   // la page d'accueil « vierge » en mode bureau (pas dans Capytale/Moodle,
   // pas si des exercices sont déjà chargés depuis une URL partagée).
-  // Pas non plus en localhost : la visite guidée s'y déclencherait à chaque
-  // rechargement pendant le développement, tant que le localStorage n'a pas
-  // encore mémorisé qu'elle a été vue.
+  // Pas non plus en localhost (hors navigateur piloté par un test e2e) : la
+  // visite guidée s'y déclencherait à chaque rechargement pendant le
+  // développement, tant que le localStorage n'a pas encore mémorisé qu'elle a
+  // été vue.
   let onboardingTourTriggered = false
   function maybeStartOnboardingTour() {
     if (
@@ -128,7 +129,7 @@
       $globalOptions.recorder ||
       !isMd ||
       $exercicesParams.length !== 0 ||
-      window.location.hostname === 'localhost'
+      (window.location.hostname === 'localhost' && !navigator.webdriver)
     ) {
       return
     }

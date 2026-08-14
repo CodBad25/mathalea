@@ -1466,7 +1466,7 @@ describe('buildStandaloneExerciseCode', () => {
   it("n'inclut que les aides utilisées et aucun repère/variable interne", () => {
     const inputs = [exercise({ questions: ['$1+1$', '$2+2$'], numbered: true })]
     const code = buildStandaloneExerciseCode(inputs, 1)
-    expect(code).toContain('#import "@preview/taskize:0.2.7"')
+    expect(code).toContain('#import "@preview/taskize:0.2.8"')
     expect(code).toContain('#let couleur =')
     expect(code).not.toContain('mathalea-anchor')
     expect(code).not.toContain('exercise-bank')

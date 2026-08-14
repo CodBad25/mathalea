@@ -489,6 +489,14 @@ export class RelierEtiquettesElement extends MathaleaCustomElement {
     }
   }
 
+  static pointsMaxQuestion(exercice: IExercice, i: number): number {
+    // Un point par lien attendu, comme dans `verifQuestion()`.
+    const attendus = parseLiens(
+      exercice.autoCorrection?.[i]?.valeur?.reponse?.value,
+    )
+    return Math.max(attendus.length, 1)
+  }
+
   static formatStudentAnswer(rawAnswer: string, questionHtml?: string): string {
     const liens = parseLiens(rawAnswer)
     if (liens.length === 0) return 'aucun lien'

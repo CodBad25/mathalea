@@ -208,6 +208,33 @@ La valeur attendue et la valeur élève sont des listes JSON stringifiées d'obj
 
 Par défaut, `verifQuestion()` compare l'état de tous les objets à la liste attendue. Pour une correction plus spécifique, le helper accepte `verifyCallback` ou `verifyCallbackName`; la callback reçoit l'exercice, l'index de question, l'élément, les objets attendus et les objets élèves, puis retourne `{ isOk, feedback?, score? }`.
 
+## Barème d'un exercice interactif
+
+`src/lib/interactif/baremeExercice.ts` porte le barème au niveau de l'exercice, à ne pas confondre avec les fonctions de barème question par question de `fonctionsBaremes.ts`.
+
+### Nombre de points maximum
+
+`pointsMaxExercice(exercice)` donne le nombre de points que l'exercice peut rapporter, **avant** toute saisie de l'élève. Il somme les `pointsMaxQuestion()` de chaque entrée non nulle de `autoCorrection`, en déléguant au custom element qui corrige la question (hook statique `pointsMaxQuestion()` de `MathaleaCustomElement`, résolu via `mathaleaCustomElementsRegistry` comme dans `exerciceInteractif()`).
+
+Le calcul est possible sans réponse parce que les fonctions de barème ne dépendent que du nombre de champs : `pointsMaxDuBareme(bareme, nbChamps)` les appelle avec une liste de champs tous justes et lit le second terme du couple `[points, maximum]` retourné.
+
+- une question vaut **1 point** par défaut, ce qui couvre tous les composants à réponse unique ;
+- `fill-in-the-blank`, `tableau-mathlive` et `multi-mathfield` comptent leurs champs (`champN`, `LxCy`, noms de champs) et leur appliquent le barème de la question — un texte à trous corrigé en `toutPourUnPoint` vaut donc 1 point, le même corrigé en `toutAUnPoint` vaut un point par trou ;
+- `relier-etiquettes` compte un point par lien attendu ;
+- un exercice `interactifType = 'custom'` vaut `nbQuestions` points, comme les compte `verifExerciceCustom()`.
+
+Un composant dont une question peut rapporter plusieurs points doit donc surcharger `pointsMaxQuestion()` pour rester cohérent avec le `score.nbReponses` que retourne son `verifQuestion()`.
+
+### Coefficient multiplicateur
+
+Les paramètres d'un exercice affiché en interactif proposent un réglage « Barème » : le nombre de points maximum y est affiché, assorti de boutons `−` et `+` qui règlent un coefficient multiplicateur entier (`COEFF_BAREME_MIN` à `COEFF_BAREME_MAX`).
+
+- le coefficient est porté par `exercice.coeffBareme`, sauvegardé dans `exercicesParams` et dans l'URL sous le paramètre `coef` (absent quand il vaut 1) ;
+- il est appliqué au moment de l'affichage du score par `afficheScore()`, qui multiplie la note obtenue **et** la note maximale : un 3/5 avec un coefficient 2 devient 6/10, dans la vue prof comme dans la vue élève et dans ce qui est transmis au LMS (`numberOfPoints` / `numberOfQuestions`) ;
+- la vue Course aux nombres a son propre calcul de score (`gestionCan.ts`) et n'est pas concernée.
+
+Tests : `tests/unit/baremeExercice.test.ts`.
+
 ## Affichage des réponses élèves dans les corrections CAN
 
 La vue des corrections d'une Course aux nombres (`src/components/display/can/presentationalComponents/Solutions.svelte`) rappelle la réponse donnée par l'élève sous chaque correction et nettoie le HTML des questions pour l'affichage groupé. Cette logique est isolée dans `src/lib/components/canSolutions.ts` :
@@ -259,6 +286,7 @@ Pour les exercices qui ont besoin de critères multiples ou d'un score partiel, 
 - `src/lib/interactif/questionMathLive.ts` : helpers historiques d'insertion des champs MathLive, textes à trous, champs texte et tableaux.
 - `src/lib/interactif/mathLiveVerifications.ts` : primitives terminales utilisées par les wrappers MathLive.
 - `src/lib/interactif/fonctionsBaremes.ts` : barèmes partagés comme `toutPourUnPoint` et `toutAUnPoint`.
+- `src/lib/interactif/baremeExercice.ts` : points maximum d'un exercice et coefficient multiplicateur du barème.
 - `src/lib/interactif/qcm.ts` : QCM.
 - `src/lib/customElements/MathaleaQcm.ts` : custom element `mathalea-qcm`, helper `addMathaleaQcm()` et vérification QCM partagée. En contexte HTML, `propositionsQcm()` injecte ce composant tout en conservant les identifiants internes historiques.
 - `src/lib/customElements/CliqueFigureElement.ts` : custom element `clique-figure`, helper `addCliqueFigure()` et vérification des questions `cliqueFigure`. Les exercices historiques qui renseignent `cliqueFiguresArray` et appellent `setCliqueFigure()` sont normalisés vers ce tag sans devoir réécrire leurs énoncés.

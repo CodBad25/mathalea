@@ -609,7 +609,7 @@ class Latex {
           latexFileInfos.titleOption === 'AvecTitre'
             ? `Titre=${latexFileInfos.titleOption}, `
             : ''
-        }Ajout={\\node[anchor=north east, inner sep=2pt]
+        }Ajout={\\node[anchor=north east, inner sep=2pt, fill=white]
         at (frame.north east) {\\hypersetup{urlcolor=black, pdfnewwindow=true}\\qrcode[height=2cm]{${getUrlFromExercice(exercice, indiceVersion)}&v=eleve&es=0211}};
 }]%[Lignes=5,Interieur]`
       } else {
@@ -652,7 +652,7 @@ class Latex {
         latexFileInfos.titleOption === 'AvecTitre'
           ? `Titre=${exercice.titre}, `
           : ''
-      }Ajout={\\node[anchor=north east, inner sep=2pt]
+      }Ajout={\\node[anchor=north east, inner sep=2pt, fill=white]
         at (frame.north east) {\\hypersetup{urlcolor=black}\\qrcode[height=2cm]{${getUrlFromExercice(exercice, indiceVersion)}&v=eleve&es=0211}};
 }]%[Lignes=5,Interieur]`
     } else {

@@ -16,6 +16,10 @@
   } from '../../../../../lib/components/counts'
   import { afficheAlerteUniteManquante } from '../../../../../lib/interactif/afficheScore'
   import {
+    normaliseCoeffBareme,
+    pointsMaxExercice,
+  } from '../../../../../lib/interactif/baremeExercice'
+  import {
     exerciceAUneUniteManquante,
     exerciceInteractif,
     prepareExerciceCliqueFigure,
@@ -31,6 +35,7 @@
   import {
     changes,
     exercicesParams,
+    pointsMaxParExercice,
     resultsByExercice,
   } from '../../../../../lib/stores/generalStore'
   import { globalOptions } from '../../../../../lib/stores/globalOptions'
@@ -105,7 +110,7 @@
   let isSettingsVisible = !isMobileView
   let isInteractif = exercise.interactif || exercise.interactifObligatoire
   const interactifReady = exercise.interactifReady
-  const exerciceHasNoSettings =
+  const exerciceHasNoSettingsExceptBareme =
     !exercise.nbQuestionsModifiable &&
     !exercise.correctionDetailleeDisponible &&
     !!exercise.pasDeVersionAleatoire &&
@@ -125,6 +130,12 @@
     !exercise.besoinFormulaire5Numerique &&
     !exercise.besoinFormulaire5Texte &&
     !(exercise.tip && exercise.tip.length > 0)
+  /** Nombre de points maximum de l'exercice, hors coefficient de barème. */
+  let pointsMax = 0
+  // Un exercice interactif garde le réglage de son barème, même s'il n'a
+  // aucun autre paramètre.
+  $: exerciceHasNoSettings =
+    exerciceHasNoSettingsExceptBareme && !(isInteractif && pointsMax > 0)
   isTipAvailable = exercise.tipAvailable !== false
   let isExerciceChecked = false
   const generateTitleAddendum = (): string => {
@@ -191,11 +202,28 @@
     }
   }
 
+  /**
+   * Met à jour le nombre de points maximum affiché dans les paramètres.
+   * À appeler après chaque (re)génération des questions, qui remplit
+   * `autoCorrection`.
+   */
+  function refreshPointsMax() {
+    const nouveauPointsMax = isInteractif ? pointsMaxExercice(exercise) : 0
+    if (pointsMax !== nouveauPointsMax) pointsMax = nouveauPointsMax
+    pointsMaxParExercice.update((liste) => {
+      if (liste[exerciseIndex] === nouveauPointsMax) return liste
+      const nouvelleListe = [...liste]
+      nouvelleListe[exerciseIndex] = nouveauPointsMax
+      return nouvelleListe
+    })
+  }
+
   beforeUpdate(async () => {
     log('beforeUpdate:' + exercise.id)
     if (numberOfAnswerFields !== countMathField(exercise)) {
       numberOfAnswerFields = countMathField(exercise)
     }
+    refreshPointsMax()
     if (get(exercicesParams)[exerciseIndex] !== interfaceParams) {
       // interface à changer car un exercice a été supprimé au dessus...
       interfaceParams = get(exercicesParams)[exerciseIndex]
@@ -370,6 +398,10 @@
       isTipAvailable = event.detail.tipAvailable
       interfaceParams.tip = exercise.tipAvailable ? '1' : '0'
     }
+    if (event.detail.coeffBareme !== undefined) {
+      exercise.coeffBareme = normaliseCoeffBareme(event.detail.coeffBareme)
+      interfaceParams.coeffBareme = exercise.coeffBareme
+    }
     exercicesParams.update((list) => {
       // interfaceParams a été mis à jour donc le store est à jour
       return list
@@ -453,6 +485,7 @@
     ) {
       exercise.nouvelleVersionWrapper(exerciseIndex)
     }
+    refreshPointsMax()
     mathaleaUpdateUrlFromExercicesParams()
     await adjustMathalea2dFiguresWidth()
   }
@@ -922,6 +955,8 @@
         exercice={exercise}
         bind:isVisible={isSettingsVisible}
         exerciceIndex={exerciseIndex}
+        isInteractif={Boolean(isInteractif)}
+        {pointsMax}
         on:settings={handleNewSettings}
       />
     </div>

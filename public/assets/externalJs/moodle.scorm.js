@@ -107,6 +107,8 @@ window.onload = function () {
   iframe.setAttribute('frameborder', '0')
   iframe.setAttribute('width', '100%')
   iframe.setAttribute('height', '100%')
+  // Autorise le plein écran natif quand Moodle l'autorise lui-même pour l'iframe du SCO
+  iframe.setAttribute('allow', 'fullscreen')
   iframe.style.display = 'none'
   iframe.onload = function () {
     chargement.style.display = 'none'
@@ -129,8 +131,45 @@ window.onunload = function () {
   scorm.quit()
 }
 
+/*
+  Repli du plein écran demandé par MathALÉA (message `mathalea:fullscreen`, voir
+  src/lib/fullscreen.ts). Moodle pose l'iframe du SCO sans `allowfullscreen` :
+  l'API Fullscreen native est donc refusée à MathALÉA, qui est imbriquée dedans.
+
+  Le SCO étant servi depuis le domaine de Moodle, il peut en revanche agrandir
+  sa propre iframe pour couvrir la page du cours. Le style d'origine est
+  mémorisé car Moodle y écrit la hauteur du lecteur SCORM.
+*/
+let scoFrameStyle = null
+
+function setPseudoFullscreen(isFullscreen) {
+  let frame
+  try {
+    frame = window.frameElement // null si le SCO est ouvert dans sa propre fenêtre
+  } catch {
+    frame = null
+  }
+  if (!frame) return
+  if (isFullscreen) {
+    if (scoFrameStyle === null) scoFrameStyle = frame.getAttribute('style') || ''
+    frame.setAttribute(
+      'style',
+      scoFrameStyle +
+        ';box-sizing:border-box;position:fixed;top:0;left:0;width:100%;height:100%;z-index:2147483647;background:#fff;'
+    )
+    frame.ownerDocument.body.style.overflow = 'hidden'
+  } else {
+    frame.setAttribute('style', scoFrameStyle || '')
+    scoFrameStyle = null
+    frame.ownerDocument.body.style.overflow = ''
+  }
+}
+
 window.addEventListener('message', async (event) => {
   if (typeof event.data.action !== 'undefined' && event.data.action.startsWith('mathalea:')) {
+    if (event.data.action === 'mathalea:fullscreen') {
+      setPseudoFullscreen(event.data.value === true)
+    }
     if (event.data.action === 'mathalea:score') {
       const seed = event.data.resultsByExercice[0].alea
       let points = 0
