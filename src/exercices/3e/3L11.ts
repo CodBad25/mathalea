@@ -56,7 +56,7 @@ export const dateDeModifImportante = '10/06/2024'
 export const uuid = 'db2e0'
 
 export const refs = {
-  'fr-fr': ['3L11', '3AutoN13-1'],
+  'fr-fr': ['3L11', '3AutoL03-1'],
   'fr-ch': ['10FA4D-3'],
 }
 export default class ExerciceDevelopper extends Exercice {

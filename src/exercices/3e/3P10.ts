@@ -27,7 +27,7 @@ export const interactifType = 'mathLive'
 export const uuid = '0bcef'
 
 export const refs = {
-  'fr-fr': ['3P10', '3AutoP08-1'],
+  'fr-fr': ['3P10', '3AutoP03-3'],
   'fr-ch': ['10FA2B-12'],
 }
 export default class EvolutionsEnPourcentage extends Exercice {

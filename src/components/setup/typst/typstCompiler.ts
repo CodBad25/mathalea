@@ -164,6 +164,9 @@ export interface TypstAnchor {
    * (émis sur la première page physique seulement, voir `pageFooter`) ;
    * `figure` : figure mathalea2d embarquée (zoom) ;
    * `carte-recto`/`carte-verso` : carte de la vue Flash-cards (taille du texte) ;
+   * `diapo-question`/`diapo-correction` : diapositive de la vue Diaporama PDF
+   * (taille du texte, alignement, masquage, ordre) ;
+   * `diapo-garde` : page de garde de cette même vue (édition de son contenu) ;
    * `can-row` : ligne du tableau « Course aux nombres » (édition de son
    * énoncé/réponse), num = numéro de ligne (1-based, colonne « # »)
    */
@@ -179,6 +182,9 @@ export interface TypstAnchor {
     | 'figure'
     | 'carte-recto'
     | 'carte-verso'
+    | 'diapo-question'
+    | 'diapo-correction'
+    | 'diapo-garde'
     | 'can-row'
   /** Numéro de l'exercice concerné (0 = avant le premier exercice), ou de la figure */
   num: number
@@ -199,6 +205,9 @@ const ANCHOR_KINDS = new Set([
   'figure',
   'carte-recto',
   'carte-verso',
+  'diapo-question',
+  'diapo-correction',
+  'diapo-garde',
   'can-row',
 ])
 

@@ -1,18 +1,21 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { lettreDepuisChiffre } from '../../lib/outils/outilString'
+import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import FractionEtendue from '../../modules/FractionEtendue'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
-import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 
 export const titre =
-  'Déterminer une équation réduite d\'une droite passant par un point et parallèle ou perpendiculaire à une droite donnée'
+  "Déterminer une équation réduite d'une droite passant par un point et parallèle ou perpendiculaire à une droite donnée"
 export const dateDePublication = '25/11/2024'
-export const interactifReady = false
+export const interactifReady = true
 export const uuid = '2db22'
 export const refs = {
   'fr-fr': ['2G31-4'],
@@ -85,7 +88,7 @@ export default class ExerciceEquationSecondDegre extends Exercice {
       this.consigne = "Déterminer l'équation réduite des droites ci-dessous."
     }
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let point = [
@@ -150,7 +153,23 @@ export default class ExerciceEquationSecondDegre extends Exercice {
           droite[1].texFractionSimplifiee,
         )
       ) {
-        this.listeQuestions[i] = texte
+        this.listeQuestions[i] =
+          texte +
+          (this.interactif
+            ? '<br>' +
+              ajouteChampTexteMathLive(
+                this,
+                i,
+                KeyboardType.clavierDeBaseAvecVariable,
+                { texteAvant: ' $y=$' },
+              )
+            : '')
+        handleAnswers(this, i, {
+          reponse: {
+            value: `${rienSi1(nPente.simplifie())}x${nOdonnee.num === 0 ? '' : ecritureAlgebrique(nOdonnee.simplifie())}`,
+            options: { egaliteExpression: true },
+          },
+        })
         this.listeCorrections[i] = texteCorr
         i++
       }

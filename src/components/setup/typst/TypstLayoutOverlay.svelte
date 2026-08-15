@@ -134,6 +134,16 @@
     figureZoomValues?: Record<number, number>
     /** Alignement de chaque figure, par numéro de figure (`fig-N`) */
     figureAlignValues?: Record<number, 'left' | 'center' | 'right'>
+    /**
+     * Zoom de chaque exercice statique sans source .typ (image scannée
+     * seule), par numéro d'exercice (`exo-N`)
+     */
+    exerciseZoomValues?: Record<number, number>
+    /**
+     * Zoom de chaque correction statique sans source _cor.typ (image
+     * scannée seule), par numéro d'exercice (`exo-N-corr`)
+     */
+    exerciseCorrectionZoomValues?: Record<number, number>
     /** Nombre total d'exercices (borne les boutons monter/descendre) */
     exerciseCount?: number
     /**
@@ -157,6 +167,8 @@
     onAddExercise: () => void
     onToggleMergeBefore: (num: number) => void
     onAdjustFigureZoom: (num: number, delta: number) => void
+    onAdjustExerciseZoom: (num: number, delta: number) => void
+    onAdjustExerciseCorrectionZoom: (num: number, delta: number) => void
     onSetFigureAlign: (num: number, align: 'left' | 'center' | 'right') => void
     onMoveExercise: (num: number, delta: -1 | 1) => void
     onNewData: (num: number) => void
@@ -220,6 +232,8 @@
     documentColumns = 1,
     figureZoomValues = {},
     figureAlignValues = {},
+    exerciseZoomValues = {},
+    exerciseCorrectionZoomValues = {},
     exerciseCount = 0,
     mergedExercises = [],
     mergeExercisesEnabled = true,
@@ -229,6 +243,8 @@
     onAddExercise,
     onToggleMergeBefore,
     onAdjustFigureZoom,
+    onAdjustExerciseZoom,
+    onAdjustExerciseCorrectionZoom,
     onSetFigureAlign,
     onMoveExercise,
     onNewData,
@@ -1032,6 +1048,29 @@
           </button>
           <span class="typst-pill-sep"></span>
         {/if}
+        {#if nonEditableStaticExercises[widget.num] && !canMode}
+          {@const exoZoom = exerciseZoomValues[widget.num] ?? 1}
+          <button
+            type="button"
+            title="Réduire l'exercice"
+            aria-label="Réduire l'exercice {widget.num}"
+            onclick={() => onAdjustExerciseZoom(widget.num, -1)}
+          >
+            <i class="bx bx-zoom-out"></i>
+          </button>
+          <span class="tabular-nums px-0.5 text-[0.6rem]">
+            {Math.round(exoZoom * 100)}%
+          </span>
+          <button
+            type="button"
+            title="Agrandir l'exercice"
+            aria-label="Agrandir l'exercice {widget.num}"
+            onclick={() => onAdjustExerciseZoom(widget.num, 1)}
+          >
+            <i class="bx bx-zoom-in"></i>
+          </button>
+          <span class="typst-pill-sep"></span>
+        {/if}
         {#if !staticExercises[widget.num]}
           <button
             type="button"
@@ -1144,6 +1183,29 @@
         >
           <i class="bx bx-plus-circle"></i>
         </button>
+        {#if nonEditableCorrections[widget.num] && !canMode}
+          {@const corrZoom = exerciseCorrectionZoomValues[widget.num] ?? 1}
+          <span class="typst-pill-sep"></span>
+          <button
+            type="button"
+            title="Réduire la correction"
+            aria-label="Réduire la correction de l'exercice {widget.num}"
+            onclick={() => onAdjustExerciseCorrectionZoom(widget.num, -1)}
+          >
+            <i class="bx bx-zoom-out"></i>
+          </button>
+          <span class="tabular-nums px-0.5 text-[0.6rem]">
+            {Math.round(corrZoom * 100)}%
+          </span>
+          <button
+            type="button"
+            title="Agrandir la correction"
+            aria-label="Agrandir la correction de l'exercice {widget.num}"
+            onclick={() => onAdjustExerciseCorrectionZoom(widget.num, 1)}
+          >
+            <i class="bx bx-zoom-in"></i>
+          </button>
+        {/if}
         {#if !nonEditableCorrections[widget.num]}
           <span class="typst-pill-sep"></span>
           <button
@@ -1168,7 +1230,7 @@
            alignement compris, voir mathalea-figure-block) ; on ne décale la
            pastille que vers le haut pour qu'elle ne recouvre pas l'image -->
       {@const zoom = figureZoomValues[widget.num] ?? 1}
-      {@const figAlign = figureAlignValues[widget.num] ?? 'left'}
+      {@const figAlign = figureAlignValues[widget.num] ?? 'center'}
       <div
         class="pointer-events-auto absolute flex -translate-x-full -translate-y-full items-center gap-0.5 typst-pill typst-pill-round px-1"
         style="left: {widget.left}%; top: {widget.top}%;"

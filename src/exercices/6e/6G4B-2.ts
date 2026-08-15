@@ -25,7 +25,7 @@ export const dateDeModifImportante = '14/12/2025'
 export const uuid = 'cded3'
 
 export const refs = {
-  'fr-fr': ['6G4B-2', '3AutoG04-1'],
+  'fr-fr': ['6G4B-2', '3AutoG04'],
   'fr-ch': ['9ES1B-9'],
 }
 export default class MesureAnglesParticuliers extends Exercice {

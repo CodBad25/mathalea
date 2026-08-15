@@ -18,7 +18,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'd86bf'
 
 export const refs = {
-  'fr-fr': ['can3S08', '3AutoP01-1'],
+  'fr-fr': ['can3S08', '3AutoS01-1'],
   'fr-ch': [],
 }
 export default class CalculsProbabilite3 extends ExerciceSimple {

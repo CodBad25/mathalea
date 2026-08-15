@@ -5,7 +5,7 @@ export const titre = 'Écrire une expression littérale'
 export const dateDePublication = '29/11/2025'
 export const uuid = '95789'
 export const refs = {
-  'fr-fr': ['3AutoN10-1'],
+  'fr-fr': ['3AutoN10'],
   'fr-ch': [],
 }
 export default class ÉcrireUneExpressionLitteraleAuto3eme extends ÉcrireUneExpressionLitterale {

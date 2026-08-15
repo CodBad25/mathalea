@@ -4,7 +4,7 @@ export const interactifType = 'mathLive'
 export const interactifReady = true
 export const uuid = '60eb8'
 export const refs = {
-  'fr-fr': ['5D1A', '3AutoP05-2'],
+  'fr-fr': ['5D1A', '3AutoS03-2'],
   'fr-2016': ['5S10', '3AutoP05-2'],
   'fr-ch': [],
 }

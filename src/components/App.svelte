@@ -37,6 +37,7 @@
   import Tools from './setup/tools/Tools.svelte'
   import Typst from './setup/typst/Typst.svelte'
   import Flashcards from './setup/flashcards/Flashcards.svelte'
+  import Slides from './setup/slides/Slides.svelte'
   import Tbi from './display/tbi/Tbi.svelte'
   import CheckTest from './devtools/CheckTest.svelte'
   import CapytaleConnectionLostModal from './shared/modal/CapytaleConnectionLostModal.svelte'
@@ -243,6 +244,8 @@
     <Tex />
   {:else if $globalOptions.v === 'flashcards'}
     <Flashcards />
+  {:else if $globalOptions.v === 'slides'}
+    <Slides />
   {:else if $globalOptions.v === 'tbi'}
     <Tbi />
   {:else if $globalOptions.v === 'check-test'}

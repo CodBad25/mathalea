@@ -12,6 +12,8 @@ Trois modes d'affichage, mémorisés dans `localStorage` (`mathaleaTypstView`) :
 
 Le code est éditable : chaque modification recompile le document (débounce de 500 ms) et met à jour l'aperçu, en conservant le dernier rendu valide en cas d'échec.
 
+En tête du panneau « Réglages du document », `shared/ExportViewLinks.svelte` affiche des liens vers les deux autres exports Typst — [Flash-cards](flashcards.md) et [Diaporama PDF](diaporama-pdf.md) — qui reprennent les exercices en place (`$globalOptions.v`), sans repasser par la page d'accueil. Le même composant équipe les trois vues, chacune montrant les deux autres.
+
 ## Éditeur de code
 
 L'éditeur est CodeMirror 6, configuré par `editor/typstEditorSetup.ts` (`typstEditorExtensions()`) : numéros de lignes, coloration syntaxique Typst, repliage, curseurs multiples, recherche, et thème clair ou sombre suivant celui de l'application (compartiment reconfiguré par `setEditorTheme`, appelé depuis un `$effect` sur le store `darkMode`).
@@ -292,11 +294,21 @@ La liste des exercices, leurs graines et leurs réglages restent portés par les
 
 `persistToUrl` (dans `Typst.svelte`) est appelée après chaque modification (réglage du document ou édition de la palette, via le `updateListener` de CodeMirror). Comme la vue A4 avec `a4Param`, elle écrit dans `typstParamStore` (source de vérité), redéclenche l'écrivain d'URL de l'app (`mathaleaUpdateUrlFromExercicesParams`, sinon sa prochaine écriture débouncée réécrirait l'URL sans `typstParam`) puis pose immédiatement le paramètre avec `history.replaceState`. Au chargement, `parsed.carryOver` est réinjecté dans la première génération du code (`buildCode` part de `urlCarryOver` tant que l'éditeur n'existe pas). `typstParam` est aussi le canal par lequel le diaporama transmet son nombre de vues (`goToTypstWithSeries`).
 
+## Visite guidée
+
+`src/lib/onboarding/typstTour.ts` (driver.js) présente la vue : modes d'affichage, aperçu, palette de mise en page, ajout d'un exercice (démontré par de vrais clics dans la modale), réglages du document — dont les liens vers les deux autres exports —, versions et export. Elle se déclenche au premier passage (hors mobile, hors `localhost`, hors lien partagé) et se relance depuis le bouton « Aide ».
+
+Deux précautions, sans lesquelles driver.js reste bloqué à attendre une cible introuvable (`waitForElement`) :
+
+- `ensureTourReadyState()` remet la vue dans l'état ciblé par la visite (mode Aperçu, panneau de réglages ouvert, palette de mise en page affichée) et le restaure à la fin ;
+- les étapes dont la cible n'existe pas sur toutes les fiches sont **retirées de la liste** au démarrage : la pastille colonnes/espacement (`findTasksWidget`, absente d'une fiche « Course aux nombres » sans correction, puisque ses questions sont dans un tableau), le saut de page et l'ajout d'exercice. Le compteur d'étapes s'ajuste donc à la fiche.
+
 ## Fichiers
 
 | Fichier | Rôle |
 | --- | --- |
 | `src/components/setup/typst/Typst.svelte` | La vue : barre d'outils, éditeur, aperçu, exports |
+| `src/lib/onboarding/typstTour.ts` | Visite guidée de la vue (driver.js) |
 | `src/components/setup/typst/TypstLayoutOverlay.svelte` | Palette de mise en page dessinée par-dessus l'aperçu |
 | `src/components/setup/typst/addExercise/TypstAddExerciseModal.svelte` | Modale « Ajouter un exercice » (navigation dans les référentiels) |
 | `src/components/setup/typst/addExercise/TypstExercisePreview.svelte` | Aperçu d'un exercice dans cette modale (réglages et ajout) |

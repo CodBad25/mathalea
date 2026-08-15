@@ -55,10 +55,20 @@ const CUSTOM_TEX_MACROS: Record<string, string> = {
  * elle déborde de la colonne / de la page). La largeur naturelle est mesurée,
  * puis le contenu est mis à l'échelle avec ses labels. Inclus dès qu'une
  * figure est présente.
+ *
+ * `zoom` multiplie ce ratio d'ajustement automatique plutôt que d'être
+ * plafonné par lui (\`calc.min(zoom, ratio)\`) : pour une image d'exercice
+ * statique, la largeur intrinsèque volontairement énorme
+ * (`STATIC_IMAGE_INTRINSIC_WIDTH_PT`) rend ce ratio toujours très inférieur à
+ * 1, donc un `min` y laisserait `zoom` sans aucun effet dès qu'il dépasse ce
+ * ratio (le cas normal, y compris à 100 %). Sans effet pour les appelants par
+ * défaut (`zoom: 1.0`, jamais renseigné) : `base * 1.0 = base`, identique à
+ * `calc.min(1.0, ratio)`.
  */
 export const MATHALEA_FIT_HELPER = `#let mathalea-fit(body, zoom: 1.0) = layout(size => {
   let natural = measure(body).width
-  let f = if natural > 0pt { calc.min(zoom, size.width / natural) } else { zoom }
+  let base = if natural > 0pt { calc.min(1.0, size.width / natural) } else { 1.0 }
+  let f = base * zoom
   if f != 1.0 { box(scale(f * 100%, origin: top + left, reflow: true, body)) } else { body }
 })`
 
@@ -2364,8 +2374,18 @@ function protectKatexSpans(
  * en une expression `image(...)` ajoutée au collecteur et référencée dans
  * le balisage par `#fig-N` (variable déclarée par buildTypstDocument).
  * Sans collecteur, la figure est remplacée par un encart.
+ *
+ * `zoomVariable`, fourni uniquement pour un énoncé/correction statique sans
+ * source `.typ`/`_cor.typ` (image scannée seule, voir
+ * `TypstExerciseInput.isStaticImage`/`isStaticCorrectionImage`), branche le
+ * zoom de l'image scannée trouvée sur cette variable Typst (`exo-N-zoom` ou
+ * `exo-N-corr-zoom`) plutôt que sur le zoom par défaut de `mathalea-fit`.
  */
-export function htmlToTypst(html: string, figures?: string[]): string {
+export function htmlToTypst(
+  html: string,
+  figures?: string[],
+  zoomVariable?: string,
+): string {
   // 1. Les formules et les blocs générés sont protégés par des jetons
   //    pour traverser intacts l'échappement du texte.
   const protectedSegments: string[] = []
@@ -2476,7 +2496,8 @@ export function htmlToTypst(html: string, figures?: string[]): string {
             // étroite que la page
             STATIC_IMAGE_INTRINSIC_WIDTH_PT
       figures.push(`image(${typstStringLiteral(path)}, width: ${widthPt}pt)`)
-      return protect(`#mathalea-fit(fig-${figures.length})\n\n`)
+      const zoomArg = zoomVariable != null ? `, zoom: ${zoomVariable}` : ''
+      return protect(`#mathalea-fit(fig-${figures.length}${zoomArg})\n\n`)
     },
   )
   text = text.replace(/<img[^>]*>/gi, () =>

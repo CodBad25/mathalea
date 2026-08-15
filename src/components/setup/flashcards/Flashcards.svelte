@@ -14,6 +14,7 @@
   import { context } from '../../../modules/context'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
+  import ExportViewLinks from '../shared/ExportViewLinks.svelte'
   import { MATH_FONTS, TEXT_FONTS } from '../typst/buildTypstDocument'
   import type { TypstAnchor } from '../typst/typstCompiler'
   import {
@@ -672,6 +673,8 @@
             verso. Imprimez en recto-verso (retournement sur les bords longs)
             puis découpez en suivant les pointillés.
           </p>
+
+          <ExportViewLinks current="flashcards" />
 
           <label class="flex items-center justify-between gap-4 text-sm">
             Format

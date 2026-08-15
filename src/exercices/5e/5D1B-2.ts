@@ -289,7 +289,7 @@ class Population {
 export const uuid = 'e9c50'
 
 export const refs = {
-  'fr-fr': ['5D1B-2', 'BP2AutoA3', 'BP2SP4', '3AutoP02-2'],
+  'fr-fr': ['5D1B-2', 'BP2AutoA3', 'BP2SP4', '3AutoS02-2'],
   'fr-2016': ['5S13-2', 'BP2AutoA3', 'BP2SP4', '3AutoP02-2'],
   'fr-ch': ['11NO4A-8'],
 }

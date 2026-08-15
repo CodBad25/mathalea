@@ -538,7 +538,7 @@ function questionRecouvrirSurface(exo: Exercice, i: number) {
 export const uuid = 'b0f4e'
 
 export const refs = {
-  'fr-fr': ['6P3C-2', 'BP2AutoL8', '3AutoP07-1'],
+  'fr-fr': ['6P3C-2', 'BP2AutoL8', '3AutoP02'],
   'fr-2016': ['6P12', 'BP2AutoL8'],
   'fr-ch': ['9FA2B-6'],
 }

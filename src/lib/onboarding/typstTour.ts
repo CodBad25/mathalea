@@ -1,4 +1,4 @@
-import { driver } from 'driver.js'
+import { driver, type DriveStep } from 'driver.js'
 import { get } from 'svelte/store'
 import 'driver.js/dist/driver.css'
 import './tour.css'
@@ -116,22 +116,30 @@ function moveNextAfterRender(driverObj: { moveNext: () => void }): void {
 }
 
 /**
- * Pastille de mise en page (colonnes/espacement des questions) de l'énoncé
- * de l'exercice 1&nbsp;: son `data-testid` n'est pas unique (un par
- * exercice), on la retrouve donc par le titre de sa rangée « Colonnes ».
+ * Pastille de mise en page (colonnes/espacement) d'une liste de questions,
+ * pour les étapes qui la décrivent. Celle de l'énoncé de l'exercice 1 est
+ * privilégiée (son `data-testid` n'est pas unique, on la retrouve par le
+ * titre de sa rangée « Colonnes ») ; à défaut, la première pastille de ce
+ * type — une fiche « Course aux nombres » présente ses questions en tableau
+ * et n'en a que pour les corrections. Renvoie `null` quand la fiche n'en a
+ * aucune&nbsp;: les étapes correspondantes sont alors retirées de la visite,
+ * sans quoi driver.js resterait à attendre une cible introuvable.
  */
-function findExercise1TasksWidget(): HTMLElement | null {
+function findTasksWidget(): HTMLElement | null {
+  const widgets = Array.from(
+    document.querySelectorAll<HTMLElement>(
+      '[data-testid="typst-overlay-tasks"]',
+    ),
+  )
   return (
-    Array.from(
-      document.querySelectorAll<HTMLElement>(
-        '[data-testid="typst-overlay-tasks"]',
-      ),
-    ).find(
+    widgets.find(
       (widget) =>
         widget.querySelector(
           '[title="Colonnes des questions de l\'exercice 1"]',
         ) != null,
-    ) ?? null
+    ) ??
+    widgets[0] ??
+    null
   )
 }
 
@@ -194,6 +202,19 @@ export function startTypstTour(): void {
   // panneau qui s'ouvre) avant que driver.js ne cherche la cible de ses
   // premières étapes.
   setTimeout(() => {
+    // Cibles qui n'existent pas sur toutes les fiches : leurs étapes sont
+    // retirées plutôt que de laisser driver.js patienter (`waitForElement`)
+    // devant une pastille qui ne viendra jamais.
+    const tasksWidget = findTasksWidget()
+    const hasPagebreak =
+      document.querySelector(
+        '.typst-pill:has([data-testid="typst-overlay-pagebreak"])',
+      ) != null
+    const hasAddExercise =
+      document.querySelector(
+        '.typst-pill:has([data-testid="typst-overlay-add-exercise"])',
+      ) != null
+
     const driverObj = driver({
       showProgress: true,
       progressText: '{{current}} / {{total}}',
@@ -273,105 +294,126 @@ export function startTypstTour(): void {
             align: 'start',
           },
         },
-        {
-          element: () => findExercise1TasksWidget() as Element,
-          popover: {
-            title: 'Colonnes des questions',
-            description:
-              "Sur la liste de questions d'un exercice, ces flèches règlent son nombre de colonnes (auto par défaut).",
-            side: 'left',
-            align: 'start',
-          },
-        },
-        {
-          element: () => findExercise1TasksWidget() as Element,
-          popover: {
-            title: 'Espacement des questions',
-            description:
-              "Juste en dessous, ces flèches règlent l'espacement vertical entre les questions.",
-            side: 'left',
-            align: 'start',
-          },
-        },
-        {
-          // `data-testid="typst-overlay-pagebreak"` n'est pas unique (un par
-          // repère de mise en page) ; `querySelector` retient le premier du
-          // DOM, qui est toujours celui du repère juste après le premier
-          // exercice, qu'il y ait ou non d'autres exercices ensuite. La
-          // pastille entière (pas juste le bouton) est ciblée pour que le
-          // halo de la visite ne mette pas en avant qu'une moitié de
-          // pastille, l'autre restant délavée (voir tour.css).
-          element: '.typst-pill:has([data-testid="typst-overlay-pagebreak"])',
-          popover: {
-            title: 'Un saut de page',
-            description:
-              "Ce bouton insère un saut de page juste après l'exercice qui précède&nbsp;: pratique pour forcer un exercice à démarrer en haut d'une page.",
-            side: 'top',
-            align: 'center',
-          },
-        },
-        {
-          element:
-            '.typst-pill:has([data-testid="typst-overlay-add-exercise"])',
-          popover: {
-            title: 'Ajouter un exercice',
-            description:
-              "Au bas de l'aperçu, ce bouton permet d'ajouter un exercice à la fin de la fiche. Essayons-le.",
-            side: 'top',
-            align: 'center',
-            disableButtons: ['previous'],
-            onNextClick: (_element, _step, opts) => {
-              document
-                .querySelector<HTMLButtonElement>(
-                  '[data-testid="typst-overlay-add-exercise"]',
-                )
-                ?.click()
-              // laisse la modale se monter avant de commencer à y cliquer ;
-              // la navigation se poursuit en arrière-plan pendant que
-              // l'étape suivante affiche déjà son explication (pas besoin
-              // d'attendre chaque « Suivant »)
-              setTimeout(
-                () =>
-                  autoNavigateAddExerciseTiles([
-                    'Lycée Général',
-                    'Terminale',
-                    'Terminale Spé',
-                    'Les suites numériques',
-                    'Limites de suites',
-                  ]),
-                200,
-              )
-              moveNextAfterRender(opts.driver)
-            },
-          },
-        },
-        {
-          element: '[data-tour="add-exercise-results"]',
-          popover: {
-            title: 'Parcourir les référentiels',
-            description:
-              'On retrouve les mêmes rubriques que la page d’accueil. Ici&nbsp;: «&nbsp;Lycée Général&nbsp;» → «&nbsp;Terminale&nbsp;» → «&nbsp;Terminale Spé&nbsp;» → «&nbsp;Les suites numériques&nbsp;» → «&nbsp;Limites de suites&nbsp;».',
-            side: 'right',
-            align: 'start',
-            disableButtons: ['previous'],
-          },
-        },
-        {
-          element:
-            '[data-tour="add-exercise-results"] [data-tour="exercise-preview"]',
-          popover: {
-            title: 'Aperçu et paramètres avant ajout',
-            description:
-              'On obtient un aperçu de chaque exercice du sous-thème comme il apparaîtra dans la fiche. La roue dentée <i class="bx bx-cog"></i> permet de le paramétrer (nombre de questions, variantes…) avant de cliquer sur «&nbsp;Ajouter&nbsp;».',
-            side: 'left',
-            align: 'start',
-            disableButtons: ['previous'],
-            onNextClick: (_element, _step, opts) => {
-              closeAddExerciseModal()
-              moveNextAfterRender(opts.driver)
-            },
-          },
-        },
+        ...(tasksWidget != null
+          ? [
+              {
+                element: () => tasksWidget,
+                popover: {
+                  title: 'Colonnes des questions',
+                  description:
+                    "Sur une liste de questions (l'énoncé d'un exercice ou sa correction), ces flèches règlent son nombre de colonnes (auto par défaut).",
+                  side: 'left' as const,
+                  align: 'start' as const,
+                },
+              },
+              {
+                element: () => tasksWidget,
+                popover: {
+                  title: 'Espacement des questions',
+                  description:
+                    "Juste en dessous, ces flèches règlent l'espacement vertical entre les questions.",
+                  side: 'left' as const,
+                  align: 'start' as const,
+                },
+              },
+            ]
+          : []),
+        ...(hasPagebreak
+          ? [
+              {
+                // `data-testid="typst-overlay-pagebreak"` n'est pas unique (un
+                // par repère de mise en page) ; `querySelector` retient le
+                // premier du DOM, qui est toujours celui du repère juste après
+                // le premier exercice, qu'il y ait ou non d'autres exercices
+                // ensuite. La pastille entière (pas juste le bouton) est ciblée
+                // pour que le halo de la visite ne mette pas en avant qu'une
+                // moitié de pastille, l'autre restant délavée (voir tour.css).
+                element:
+                  '.typst-pill:has([data-testid="typst-overlay-pagebreak"])',
+                popover: {
+                  title: 'Un saut de page',
+                  description:
+                    "Ce bouton insère un saut de page juste après l'exercice qui précède&nbsp;: pratique pour forcer un exercice à démarrer en haut d'une page.",
+                  side: 'top' as const,
+                  align: 'center' as const,
+                },
+              },
+            ]
+          : []),
+        ...(hasAddExercise
+          ? [
+              {
+                element:
+                  '.typst-pill:has([data-testid="typst-overlay-add-exercise"])',
+                popover: {
+                  title: 'Ajouter un exercice',
+                  description:
+                    "Au bas de l'aperçu, ce bouton permet d'ajouter un exercice à la fin de la fiche. Essayons-le.",
+                  side: 'top' as const,
+                  align: 'center' as const,
+                  disableButtons: ['previous' as const],
+                  onNextClick: (
+                    _element: Element | undefined,
+                    _step: DriveStep,
+                    opts: { driver: { moveNext: () => void } },
+                  ) => {
+                    document
+                      .querySelector<HTMLButtonElement>(
+                        '[data-testid="typst-overlay-add-exercise"]',
+                      )
+                      ?.click()
+                    // laisse la modale se monter avant de commencer à y
+                    // cliquer ; la navigation se poursuit en arrière-plan
+                    // pendant que l'étape suivante affiche déjà son
+                    // explication (pas besoin d'attendre chaque « Suivant »)
+                    setTimeout(
+                      () =>
+                        autoNavigateAddExerciseTiles([
+                          'Lycée Général',
+                          'Terminale',
+                          'Terminale Spé',
+                          'Les suites numériques',
+                          'Limites de suites',
+                        ]),
+                      200,
+                    )
+                    moveNextAfterRender(opts.driver)
+                  },
+                },
+              },
+              {
+                element: '[data-tour="add-exercise-results"]',
+                popover: {
+                  title: 'Parcourir les référentiels',
+                  description:
+                    'On retrouve les mêmes rubriques que la page d’accueil. Ici&nbsp;: «&nbsp;Lycée Général&nbsp;» → «&nbsp;Terminale&nbsp;» → «&nbsp;Terminale Spé&nbsp;» → «&nbsp;Les suites numériques&nbsp;» → «&nbsp;Limites de suites&nbsp;».',
+                  side: 'right' as const,
+                  align: 'start' as const,
+                  disableButtons: ['previous' as const],
+                },
+              },
+              {
+                element:
+                  '[data-tour="add-exercise-results"] [data-tour="exercise-preview"]',
+                popover: {
+                  title: 'Aperçu et paramètres avant ajout',
+                  description:
+                    'On obtient un aperçu de chaque exercice du sous-thème comme il apparaîtra dans la fiche. La roue dentée <i class="bx bx-cog"></i> permet de le paramétrer (nombre de questions, variantes…) avant de cliquer sur «&nbsp;Ajouter&nbsp;».',
+                  side: 'left' as const,
+                  align: 'start' as const,
+                  disableButtons: ['previous' as const],
+                  onNextClick: (
+                    _element: Element | undefined,
+                    _step: DriveStep,
+                    opts: { driver: { moveNext: () => void } },
+                  ) => {
+                    closeAddExerciseModal()
+                    moveNextAfterRender(opts.driver)
+                  },
+                },
+              },
+            ]
+          : []),
         {
           element: '[data-tour="typst-settings-toggle"]',
           popover: {
@@ -380,7 +422,17 @@ export function startTypstTour(): void {
               'Ce bouton ouvre le panneau de réglages pour modifier le document en direct.',
             side: 'bottom',
             align: 'start',
-            disableButtons: ['previous'],
+            disableButtons: hasAddExercise ? ['previous'] : undefined,
+          },
+        },
+        {
+          element: '[data-tour="export-view-links"]',
+          popover: {
+            title: 'Les deux autres exports',
+            description:
+              'En tête des réglages, ces liens reprennent les mêmes exercices, avec les mêmes données, dans la vue <strong>Flash-cards</strong> (cartes question au recto, réponse au verso, à découper) et dans la vue <strong>Diaporama PDF</strong> (une question en grand par page, au format d’un écran, puis les corrections). Chacune de ces vues renvoie vers les deux autres.',
+            side: 'right',
+            align: 'start',
           },
         },
         {

@@ -39,7 +39,7 @@ export const dateDeModifImportante = '28/12/2024' // Changements pour homogéné
 export const uuid = 'b429f'
 
 export const refs = {
-  'fr-fr': ['4F12', '3AutoP09-1'],
+  'fr-fr': ['4F12', '3AutoP04-1'],
   'fr-ch': ['10FA1B-18'],
 }
 export default class ExploiterRepresentationGraphique extends Exercice {

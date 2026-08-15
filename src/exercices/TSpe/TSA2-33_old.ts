@@ -15,10 +15,10 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '37ce7'
 export const refs = {
-  'fr-fr': ['TSA2-33', 'TCA2-33'],
+  'fr-fr': [],
   'fr-ch': [],
 }
-
+// exo en doublon avec le TSA2-31
 type TypeQuestion = 'polynome' | 'quotient'
 type SensLimite = '+' | '-'
 

@@ -8,7 +8,7 @@ import ExerciceCan from '../ExerciceCan'
 
 export const uuid = 'ca881'
 export const refs = {
-  'fr-fr': ['3AutoP05-3'],
+  'fr-fr': ['3AutoS03'],
   'fr-ch': [],
 }
 export const interactifReady = true

@@ -236,6 +236,12 @@
       Ce code est nécessaire seulement si coopmaths est intégré dans un autre site pour permettre de redimensionner la fenêtre
       */
       resizeObserver = new ResizeObserver((x) => {
+        // En plein écran natif, l'iframe occupe tout l'écran : `min-h-screen`
+        // fait alors gonfler la hauteur mesurée bien au-delà de celle du
+        // contenu. La transmettre à la page hôte figerait l'iframe à cette
+        // hauteur une fois le plein écran quitté (voir `mathalea:fullscreen`
+        // dans fullscreen.ts et `moodle.js`).
+        if (document.fullscreenElement != null) return
         const url = new URL(window.location.href)
         const iframe = url.searchParams.get('iframe')
         window.parent.postMessage(
@@ -317,7 +323,7 @@
     <Banner {brandImagePath} {productImagePath} />
   {/if}
   <div
-    class="fixed z-20 h-16 bottom-4 right-2 pointer-events-none {(typeof $globalOptions.title ===
+    class="fixed z-20 bottom-4 right-2 pointer-events-none {(typeof $globalOptions.title ===
       'string' &&
       $globalOptions.title.length === 0 &&
       $globalOptions.presMode === 'liste_exos') ||

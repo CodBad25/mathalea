@@ -91,12 +91,17 @@ export default class AutoQ3ANbrevet2026 extends ExerciceQcmA {
       })
     }
 
-    if (context.isTypst) return apigeomFigureToSvg(figure)
-    if (!context.isHtml) return figure.tikz()
     // addHandDrawnFilter() est appelé inconditionnellement dans clearHtml() :
     // les <defs> avec le filtre feTurbulence sont toujours présents dans le SVG.
     // On injecte l'attribut SVG filter="url(#handDrawn)" directement dans la balise,
-    // plus robuste que svg.style.filter qui peut être perdu lors des re-rendus Svelte.
+    // plus robuste que svg.style.filter qui peut être perdu lors des re-rendus Svelte
+    // (et applicable tel quel à la chaîne SVG statique générée pour Typst).
+    if (context.isTypst)
+      return apigeomFigureToSvg(figure).replace(
+        /<svg\b/,
+        '<svg filter="url(#handDrawn)"',
+      )
+    if (!context.isHtml) return figure.tikz()
     return figure
       .getStaticHtml({ center: true })
       .replace(/<svg\b/, '<svg filter="url(#handDrawn)"')

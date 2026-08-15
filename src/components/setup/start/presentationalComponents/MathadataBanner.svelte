@@ -19,7 +19,7 @@
     </p>
     <div>
       <a
-        href="https://mathadata.fr"
+        href="https://mathadata.fr/fr/lycee/ressources"
         target="_blank"
         rel="noopener noreferrer"
         class="inline-block rounded bg-coopmaths-action dark:bg-coopmathsdark-action text-coopmaths-canvas dark:text-coopmathsdark-canvas px-4 py-2 font-semibold hover:opacity-90"

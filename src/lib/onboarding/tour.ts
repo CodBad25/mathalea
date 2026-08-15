@@ -11,6 +11,24 @@ const DEMO_EXERCISE_2_ID = '4G20'
 
 let originalExercicesParams: InterfaceParams[] | null = null
 let demoExerciseIndex = -1
+let demo4G20Added = false
+
+/**
+ * Verrou anti-double-clic&nbsp;: un `onNextClick`/`onPrevClick` rejoue une
+ * action sur la page (saisie, clic…) puis fait avancer/reculer driver.js
+ * après un court délai (cf. `moveNextAfterRender`). Pendant ce délai, le
+ * bouton reste cliquable côté driver.js&nbsp;; un double-clic (fréquent sur
+ * Firefox où le rendu est perçu comme plus lent) rejouerait alors l'action et
+ * ferait avancer/reculer la visite deux fois d'affilée. Ce verrou ignore les
+ * clics reçus pendant qu'une transition est déjà en cours.
+ */
+let navLock = false
+
+function withNavGuard(action: () => void): void {
+  if (navLock) return
+  navLock = true
+  action()
+}
 
 /**
  * `true` si la visite guidée a déjà été vue sur ce poste (localStorage).
@@ -65,7 +83,17 @@ function setNumberInput(selecteur: string, value: string): void {
  * Svelte remplace juste après si on ne lui laisse pas ce délai.
  */
 function moveNextAfterRender(driverObj: { moveNext: () => void }): void {
-  setTimeout(() => driverObj.moveNext(), 50)
+  setTimeout(() => {
+    driverObj.moveNext()
+    navLock = false
+  }, 50)
+}
+
+function movePreviousAfterRender(driverObj: { movePrevious: () => void }): void {
+  setTimeout(() => {
+    driverObj.movePrevious()
+    navLock = false
+  }, 50)
 }
 
 function restoreExercicesParams(): void {
@@ -107,6 +135,18 @@ function playAddExerciseDemo(): void {
 }
 
 /**
+ * Étape 4 → 3 (Précédent)&nbsp;: retire l'exercice de démonstration ajouté
+ * par `playAddExerciseDemo`, pour permettre un aller-retour sans dupliquer
+ * l'exercice dans la feuille.
+ */
+function undoAddExerciseDemo(): void {
+  if (demoExerciseIndex < 0) return
+  const index = demoExerciseIndex
+  exercicesParams.update((list) => list.filter((_, i) => i !== index))
+  demoExerciseIndex = -1
+}
+
+/**
  * Étape 5 → 6 : règle le nombre de questions à 4, puis coche la première forme
  * de développement avec un poids de 3 et la deuxième avec un poids de 1, pour
  * illustrer concrètement le mécanisme (3 questions sous la forme 1, 1 question
@@ -144,9 +184,24 @@ function findNodeButtonByText(text: string): Element | null {
   return null
 }
 
+/**
+ * `true` si le nœud porté par `button` est actuellement déplié (son
+ * conteneur d'enfants contient une liste `<ul>` — rendue uniquement quand
+ * `unfold` est vrai côté `ReferentielNode.svelte`).
+ */
+function isNodeUnfolded(button: HTMLButtonElement): boolean {
+  const wrapper = button.parentElement?.lastElementChild
+  return wrapper?.querySelector('ul') != null
+}
+
 function clickNodeByText(text: string): void {
   const button = findNodeButtonByText(text)
-  if (button instanceof HTMLButtonElement) button.click()
+  // Un clic sur ce bouton bascule le pli/dépli du nœud : si la visite
+  // rejoue cette action après un aller-retour Précédent/Suivant sur un nœud
+  // déjà ouvert, un clic non gardé le refermerait.
+  if (button instanceof HTMLButtonElement && !isNodeUnfolded(button)) {
+    button.click()
+  }
 }
 
 /**
@@ -154,10 +209,22 @@ function clickNodeByText(text: string): void {
  * niveau « Quatrième » puis le chapitre « Théorème de Pythagore » dépliés.
  */
 function playChoisirExerciceParNiveauDemo(): void {
+  demo4G20Added = true
   const button = document.querySelector<HTMLButtonElement>(
     `[data-tour-id="${DEMO_EXERCISE_2_ID}"] button`,
   )
   button?.click()
+}
+
+/**
+ * Étape « raccourci Ctrl+K » → 4G20 (Précédent)&nbsp;: retire l'exercice de
+ * démonstration ajouté par `playChoisirExerciceParNiveauDemo` (toujours en
+ * fin de liste), pour permettre un aller-retour sans le dupliquer.
+ */
+function undoChoisirExerciceParNiveauDemo(): void {
+  if (!demo4G20Added) return
+  exercicesParams.update((list) => list.slice(0, -1))
+  demo4G20Added = false
 }
 
 /** Simule Ctrl+K (ou Cmd+K) pour ouvrir la modale « Ajouter un exercice ». */
@@ -183,6 +250,22 @@ function closeAddExerciseModal(): void {
 }
 
 /**
+ * Ouvre la modale « Ajouter un exercice » (Ctrl+K) et y saisit « Pythagore »,
+ * puis appelle `callback`. Factorisé pour être rejoué à l'identique en
+ * avançant (étape « raccourci » → aperçus) comme en reculant (étape
+ * « aperçus » → « raccourci », la modale ayant été refermée entre-temps).
+ */
+function openAndSearchPythagore(callback: () => void): void {
+  openAddExerciseShortcut()
+  // La modale se monte de façon asynchrone (juste après le raccourci) : on
+  // attend qu'elle existe avant d'y saisir la recherche.
+  setTimeout(() => {
+    playPythagoreSearchDemo()
+    callback()
+  }, 100)
+}
+
+/**
  * Lance la visite guidée de la page d'accueil (driver.js). La visite
  * démontre elle-même les actions (recherche, ajout, saisie) : l'utilisateur
  * n'a qu'à cliquer sur « Suivant ». Les exercices de démonstration ajoutés
@@ -192,6 +275,8 @@ function closeAddExerciseModal(): void {
 export function startTour(): void {
   originalExercicesParams = get(exercicesParams)
   demoExerciseIndex = -1
+  demo4G20Added = false
+  navLock = false
 
   const driverObj = driver({
     showProgress: true,
@@ -215,6 +300,9 @@ export function startTour(): void {
       ? 'mathalea-tour-popover mathalea-tour-popover-dark'
       : 'mathalea-tour-popover',
     onDestroyed: () => {
+      // Sans effet si la modale Ctrl+K n'est pas ouverte : si la visite est
+      // fermée pendant une de ses étapes, elle ne doit pas rester affichée.
+      closeAddExerciseModal()
       restoreExercicesParams()
       markTourSeen()
     },
@@ -224,6 +312,9 @@ export function startTour(): void {
           title: 'Bienvenue sur MathALÉA',
           description:
             'MathALÉA génère des exercices de mathématiques à données aléatoires, prêts à imprimer, à vidéoprojeter ou à utiliser sur mobile. On cherche, on choisit les exercices à gauche&nbsp;; ils s’affichent ensuite à droite et on peut les paramétrer.',
+          // Pas d'étape précédente à cette première étape : inutile d'y
+          // afficher un bouton « Précédent » désactivé.
+          showButtons: ['next', 'close'],
         },
       },
       {
@@ -235,8 +326,10 @@ export function startTour(): void {
           side: 'right',
           align: 'start',
           onNextClick: (_element, _step, opts) => {
-            playSearchDemo()
-            moveNextAfterRender(opts.driver)
+            withNavGuard(() => {
+              playSearchDemo()
+              moveNextAfterRender(opts.driver)
+            })
           },
         },
       },
@@ -245,12 +338,14 @@ export function startTour(): void {
         popover: {
           title: '3L11 — Simple distributivité',
           description:
-            'Cliquez sur un résultat (ou appuyez sur Entrée) pour l’ajouter à votre feuille d’exercices, à droite.',
+            'Cliquons sur un résultat (ou appuyons sur Entrée) pour l’ajouter à votre feuille d’exercices, à droite.',
           side: 'right',
           align: 'start',
           onNextClick: (_element, _step, opts) => {
-            playAddExerciseDemo()
-            moveNextAfterRender(opts.driver)
+            withNavGuard(() => {
+              playAddExerciseDemo()
+              moveNextAfterRender(opts.driver)
+            })
           },
         },
       },
@@ -263,6 +358,12 @@ export function startTour(): void {
             'Chaque exercice ajouté s’affiche ici, avec son panneau de paramètres à droite&nbsp;: nombre de questions, niveau de difficulté…',
           side: 'left',
           align: 'start',
+          onPrevClick: (_element, _step, opts) => {
+            withNavGuard(() => {
+              undoAddExerciseDemo()
+              movePreviousAfterRender(opts.driver)
+            })
+          },
         },
       },
       {
@@ -270,30 +371,38 @@ export function startTour(): void {
           document.querySelector(
             `#settings-formTextListe3-${demoExerciseIndex}`,
           ) as Element,
+        // Les cases restent, par défaut, cliquables sous le halo de
+        // driver.js : on désactive l'interaction pour que la démonstration
+        // (forme 1 à 3, forme 2) reste fidèle au texte affiché.
+        disableActiveInteraction: true,
         popover: {
           title: 'Paramétrer finement un exercice',
           description:
-            'Pour certains exercices, on choisit les variantes proposées en cochant des cases, et on règle leur poids d’apparition. Exemple&nbsp;: avec 4 questions, cocher la <strong>forme 1 avec un poids de 3</strong> et la <strong>forme 2</strong> donne trois quarts de questions sous une 1re forme et un quart de questions sous une autre forme.',
+            'Pour certains exercices, on choisit les variantes proposées en cochant des cases, et on règle leur poids d’apparition. Cliquons sur Suivant pour ne garder que les <strong>formes 1</strong> (avec un poids de 3) <strong>et 2</strong>&nbsp;: sur 4 questions, cela donne trois questions sous la forme 1 et une sous la forme 2.',
           side: 'left',
           align: 'start',
           onNextClick: (_element, _step, opts) => {
-            playFormeDeveloppementDemo()
-            clearSearchInput()
-            moveNextAfterRender(opts.driver)
+            withNavGuard(() => {
+              playFormeDeveloppementDemo()
+              clearSearchInput()
+              moveNextAfterRender(opts.driver)
+            })
           },
         },
       },
       {
         element: () => findNodeButtonByText('Course aux nombres') as Element,
         popover: {
-          title: 'Travailler les automatismes',
+          title: 'Course aux nombres',
           description:
-            'Le menu <strong>Course aux nombres</strong> propose des exercices pour s’entraîner à tous les automatismes sans calculatrice.',
+            'La Course Aux Nombres (CAN) est un concours d\'activités mentales qui vise à valoriser l’acquisition d\'automatismes chez les élèves à tous les niveaux.',
           side: 'right',
           align: 'start',
           onNextClick: (_element, _step, opts) => {
-            clickNodeByText('Quatrième')
-            moveNextAfterRender(opts.driver)
+            withNavGuard(() => {
+              clickNodeByText('Quatrième')
+              moveNextAfterRender(opts.driver)
+            })
           },
         },
       },
@@ -306,8 +415,10 @@ export function startTour(): void {
           side: 'right',
           align: 'start',
           onNextClick: (_element, _step, opts) => {
-            clickNodeByText('Pythagore')
-            moveNextAfterRender(opts.driver)
+            withNavGuard(() => {
+              clickNodeByText('Pythagore')
+              moveNextAfterRender(opts.driver)
+            })
           },
         },
       },
@@ -330,8 +441,10 @@ export function startTour(): void {
           side: 'right',
           align: 'start',
           onNextClick: (_element, _step, opts) => {
-            playChoisirExerciceParNiveauDemo()
-            moveNextAfterRender(opts.driver)
+            withNavGuard(() => {
+              playChoisirExerciceParNiveauDemo()
+              moveNextAfterRender(opts.driver)
+            })
           },
         },
       },
@@ -341,29 +454,51 @@ export function startTour(): void {
           description:
             'À tout moment, <strong>Ctrl+K</strong> ou <strong>Cmd+K</strong> ouvre une recherche avec aperçu des exercices. Essayons avec « Pythagore ».',
           onNextClick: (_element, _step, opts) => {
-            openAddExerciseShortcut()
-            // La modale se monte de façon asynchrone (juste après le
-            // raccourci) : on attend qu'elle existe avant d'y saisir la
-            // recherche.
-            setTimeout(() => {
-              playPythagoreSearchDemo()
-              moveNextAfterRender(opts.driver)
-            }, 100)
+            withNavGuard(() => {
+              openAndSearchPythagore(() => moveNextAfterRender(opts.driver))
+            })
+          },
+          onPrevClick: (_element, _step, opts) => {
+            withNavGuard(() => {
+              undoChoisirExerciceParNiveauDemo()
+              movePreviousAfterRender(opts.driver)
+            })
           },
         },
       },
       {
-        element: () =>
-          document.querySelector('[data-tour-exam^="dnb"]') as Element,
+        // On cible tout le conteneur de résultats plutôt qu'un aperçu de
+        // brevet précis&nbsp;: une recherche « Pythagore » remonte une
+        // centaine de résultats dont les aperçus se chargent tous de façon
+        // asynchrone (et font grandir la liste en continu pendant plusieurs
+        // secondes), si bien qu'un aperçu ciblé précisément dérive sans
+        // cesse hors du halo de driver.js — qui reste alors figé sur une
+        // position obsolète et laisse tout apparaître grisé sous le voile.
+        // Le conteneur, lui, a une taille fixée par la mise en page de la
+        // modale (`overflow-y-auto`) et ne bouge jamais, quel que soit ce
+        // qui charge à l'intérieur.
+        element: '[data-tour="add-exercise-results"]',
         popover: {
-          title: 'Aperçus des exercices de brevet',
+          title: 'Aperçus des exercices',
           description:
             'La recherche mélange exercices d’entraînement et sujets d’examen. Plus bas dans les résultats, chaque sujet de brevet s’affiche en aperçu, prêt à être ajouté à la feuille&nbsp;: pratique pour faire son choix.',
           side: 'top',
           align: 'center',
           onNextClick: (_element, _step, opts) => {
-            closeAddExerciseModal()
-            moveNextAfterRender(opts.driver)
+            withNavGuard(() => {
+              closeAddExerciseModal()
+              moveNextAfterRender(opts.driver)
+            })
+          },
+          onPrevClick: (_element, _step, opts) => {
+            // On revient à l'étape « raccourci Ctrl+K » : la modale a été
+            // refermée en arrivant ici, donc on la referme aussi en
+            // reculant (elle ne doit rester ouverte à aucune étape en amont
+            // de celle-ci).
+            withNavGuard(() => {
+              closeAddExerciseModal()
+              movePreviousAfterRender(opts.driver)
+            })
           },
         },
       },
@@ -375,6 +510,15 @@ export function startTour(): void {
             'Cinq boutons permettent de l’exploiter&nbsp;: <strong>Diaporama</strong> pour la présenter question par question, <strong>Vidéoprojection</strong> pour l’afficher au tableau, <strong>Lien élèves</strong> pour paramétrer un lien (interactif ou pas, correction ou pas...), <strong>Impression</strong> pour générer un PDF, et <strong>Plus d’exports</strong> pour les autres formats (Moodle, À la carte, AMC, Anki…).',
           side: 'bottom',
           align: 'end',
+          onPrevClick: (_element, _step, opts) => {
+            // On revient à l'étape « aperçus des exercices » : la modale
+            // Ctrl+K, refermée en la quittant, doit être rouverte (avec la
+            // même recherche) pour que son aperçu de brevet existe à nouveau
+            // dans la page.
+            withNavGuard(() => {
+              openAndSearchPythagore(() => movePreviousAfterRender(opts.driver))
+            })
+          },
         },
       },
       {

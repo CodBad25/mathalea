@@ -38,7 +38,7 @@ export const dateDeModifImportante = '06/10/2024'
 export const uuid = '374b6'
 
 export const refs = {
-  'fr-fr': ['4C23', 'BP2AutoH17', '3AutoN03-2'],
+  'fr-fr': ['4C23', 'BP2AutoH17', '3AutoN03'],
   'fr-ch': ['10NO3A-1'],
 }
 export default class SommeOuProduitFractions extends Exercice {

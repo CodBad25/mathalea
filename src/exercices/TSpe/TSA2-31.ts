@@ -187,7 +187,8 @@ export default class FactoriserPourCalculerUneLimite extends Exercice {
               : `\\dfrac{1}{${puissanceDeX(-differenceDegres)}}\\times`
         const derniereLigne = `${facteurExterieur}\\dfrac{${facteurNumerateur}}{${facteurDenominateur}}`
 
-        correction = `Soit $x\\neq 0$. On factorise le numérateur et le dénominateur par leurs termes de plus haut degré :<br>`
+        correction = `On obtient une forme indéterminée du type « $\\dfrac{\\infty}{\\infty}$ ».<br>`
+        correction += `On factorise le numérateur et le dénominateur par leurs termes de plus haut degré.<br>Soit $x\\neq 0$.<br>`
         correction += `$\\begin{aligned}
           f(x)&=\\dfrac{${polynomeNumerateur}}{${polynomeDenominateur}}\\\\
           &=\\dfrac{${puissanceDeX(degreNumerateur)}\\left(${facteurNumerateur}\\right)}{${puissanceDeX(degreDenominateur)}\\left(${facteurDenominateur}\\right)}\\\\

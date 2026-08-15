@@ -16,7 +16,7 @@ export const dateDePublication = '12/10/2025'
 export const uuid = '3b4d6'
 
 export const refs = {
-  'fr-fr': ['can3C21', '3AutoN05-1'],
+  'fr-fr': ['can3C21', '3AutoN05'],
   'fr-ch': [],
 }
 export default class PrendreUnPourcentage extends ExerciceSimple {

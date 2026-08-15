@@ -40,10 +40,10 @@ export default class EquationsProduitsNuls2 extends Exercice {
     this.besoinFormulaireNumerique = [
       'Niveau de difficulté',
       5,
-      '1 : (ax+b)(cx+d)=0 a,b,c et d entiers\n 2 : (ax+b)(cx+d)=0 a et c rationnels\n 3 : (ax+b)(cx+d)=0 b et d rationnels\n4 : Mélange des cas précédents',
+      '1 : ax(bx+d)=0 avec a, b et d entiers\n2 : (ax+b)(cx+d)=0 avec a, b, c et d entiers\n3 : (ax+b)(cx+d)=0 avec a et c rationnels\n4 : (ax+b)(cx+d)=0 avec b et d rationnels\n5 : Mélange des cas précédents',
     ]
 
-    this.nbQuestions = 3
+    this.nbQuestions = 2
     this.sup = 1
     this.spacingCorr = 3
     this.nbQuestions = 2
@@ -59,10 +59,10 @@ export default class EquationsProduitsNuls2 extends Exercice {
         : "l'équation suivante") +
       '.'
     let typesDeQuestionsDisponibles = []
-    if (this.sup < 4) {
+    if (this.sup < 5) {
       typesDeQuestionsDisponibles = [this.sup]
     } else {
-      typesDeQuestionsDisponibles = [1, 2, 3]
+      typesDeQuestionsDisponibles = [1, 2, 3, 4]
     }
 
     const listeTypeDeQuestions = combinaisonListes(
@@ -87,7 +87,27 @@ export default class EquationsProduitsNuls2 extends Exercice {
       let reponse
 
       switch (typesDeQuestions) {
-        case 1:
+        case 1: {
+          texte = `$${reduireAxPlusB(a, 0)}(${reduireAxPlusB(c, d)})=0$`
+          texteCorr = `On reconnaît une équation produit-nul, donc on applique la propriété :<br>
+                    ${texteEnCouleur('Un produit est nul si et seulement si au moins un de ses facteurs est nul.')}<br>`
+          texteCorr += texte + '<br>'
+          texteCorr += `$\\iff ${reduireAxPlusB(a, 0)}=0$ ou $${reduireAxPlusB(c, d)}=0$<br>`
+          if (this.correctionDetaillee) {
+            texteCorr += `$\\iff x=0$ ou $${reduireAxPlusB(c, 0)}=${-d}$<br>`
+          }
+          f1 = fraction(-d, c)
+          texteCorr += `$\\iff x=0$ ou $x=${f1.texFraction}$<br>On en déduit : `
+          if (f1.s > 0) {
+            texteCorr += `$S=\\left\\{0;${f1.texFractionSimplifiee}\\right\\}$`
+            reponse = `\\{0;${f1.texFractionSimplifiee}\\}`
+          } else {
+            texteCorr += `$S=\\left\\{${f1.texFractionSimplifiee};0\\right\\}$`
+            reponse = `\\{${f1.texFractionSimplifiee};0\\}`
+          }
+          break
+        }
+        case 2:
           texte = `$(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})=0$`
           texteCorr = `On reconnaît une équation produit-nul, donc on applique la propriété :<br>
                     ${texteEnCouleur('Un produit est nul si et seulement si au moins un de ses facteurs est nul.')}<br>`
@@ -111,7 +131,7 @@ export default class EquationsProduitsNuls2 extends Exercice {
             reponse = `\\{${f1.texFractionSimplifiee}\\}`
           }
           break
-        case 2:
+        case 3:
           f3 = f1.inverse().multiplieEntier(-b)
           f4 = f2.inverse().multiplieEntier(-d)
           texte = `$(${f1.texFraction}x${ecritureAlgebrique(b)})(${f2.texFraction}x${ecritureAlgebrique(d)})=0$`
@@ -138,7 +158,7 @@ export default class EquationsProduitsNuls2 extends Exercice {
           }
 
           break
-        case 3: // (ax+f1)(bx+f2)=0
+        case 4: // (ax+f1)(bx+f2)=0
         default:
           f3 = f1.entierDivise(-a)
           f4 = f2.entierDivise(-b)

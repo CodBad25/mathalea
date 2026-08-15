@@ -38,4 +38,14 @@ Dans les modes `1` et `2`, la correction est une diapositive à part entière : 
 
 Le décompte est porté par `ratioTime` (0 à 100) et `startTimer()` dans `SlideshowPlay.svelte` ; `nextQuestion()` est la seule porte de sortie d'une diapositive, qu'elle soit déclenchée par le décompte, par la flèche droite ou par le bouton suivant.
 
+## Passerelles vers les exports PDF
+
+L'écran de réglages propose deux sorties PDF, à côté du bouton « Play » :
+
+- `goToTypstWithSeries()` ouvre la [vue Typst](typst.md) avec autant de séries
+  que de vues du diaporama (sujets + corrigés à imprimer) ;
+- l'icône diaporama ouvre la [vue Diaporama PDF](diaporama-pdf.md)
+  (`$globalOptions.v = 'slides'`) : une question en grand par page, au format
+  d'un écran.
+
 Tests : `tests/unit/automatismesCan.test.ts`, `tests/unit/diaporamaAnswersTable.test.ts`.

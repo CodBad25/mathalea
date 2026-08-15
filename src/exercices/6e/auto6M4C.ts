@@ -17,7 +17,7 @@ export const interactifType = 'liste-deroulante'
 export const uuid = 'd040a'
 
 export const refs = {
-  'fr-fr': ['auto6M4C', '3AutoG06-6'],
+  'fr-fr': ['auto6M4C', '3AutoM01-2'],
   'fr-2016': ['6D10-1'],
   'fr-ch': [''],
 }
@@ -29,7 +29,7 @@ export default class AutoChoisirDureeMinutes extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const durees = [
         ['jour', 'heures', 24, 'j', 'h'],
         ['heure', 'minutes', 60, 'h', 'min'],

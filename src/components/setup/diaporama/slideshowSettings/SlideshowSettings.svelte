@@ -209,6 +209,11 @@
             tooltip="PDF sujets + corrigés"
             on:click={goToTypstWithSeries}
           />
+          <ButtonIconTooltip
+            icon="bxs-slideshow text-3xl"
+            tooltip="Diaporama PDF (une question par page)"
+            on:click={() => ($globalOptions.v = 'slides')}
+          />
           <button
             type="button"
             class="inline-flex items-center justify-center shadow-2xl rounded-lg p-4 pr-2

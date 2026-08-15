@@ -50,22 +50,32 @@ export class Price {
     this.value = Math.round(price * 100) / 100
   }
 
+  /**
+   * Renvoie la valeur formattée en latex
+   *
+   * @returns {string}
+   *
+   * @example
+   * // → "$20 \\text{centimes}$"
+   * // → "$1$€$05$"
+   */
+
   public toString(): string {
     const euro = Math.floor(this.value)
-    const cent = Math.floor((this.value - euro)*100)
-    let res = ""
+    const cent = Math.round((this.value - euro)*100)
+    let res = "$"
     if (euro === 0) {
-      res = cent + ' cent' 
+      res += cent + ' \\text{centime'
       if (cent != 1) res += 's'
+      res += '}$'
     } else {
-      res = euro + ' € '
-      if (cent > 10) {
-        res += cent
+      res += euro + '$€'
+      if (cent > 9) {
+        res += '$' + cent + '$'
       } else {
-        res += (cent != 0) ? '0' + cent : ''
+        res += (cent != 0) ? '$0' + cent + '$' : ''
       }
     }
-    
     return res;
   }
 }

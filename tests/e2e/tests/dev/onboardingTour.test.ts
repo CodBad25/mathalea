@@ -64,27 +64,6 @@ async function testOnboardingTour(page: Page): Promise<boolean> {
     )
   }
 
-  /**
-   * Attend que l'élément mis en évidence par driver.js porte l'attribut
-   * `name` avec une valeur commençant par `prefix`.
-   */
-  async function waitForActiveElementAttrStartsWith(
-    name: string,
-    prefix: string,
-  ) {
-    await page.waitForFunction(
-      ({ name, prefix }) =>
-        Boolean(
-          document
-            .querySelector('.driver-active-element')
-            ?.getAttribute(name)
-            ?.startsWith(prefix),
-        ),
-      { name, prefix },
-      { timeout: 15_000 },
-    )
-  }
-
   async function clickNext() {
     await page.locator('.driver-popover-next-btn').click()
   }
@@ -185,10 +164,14 @@ async function testOnboardingTour(page: Page): Promise<boolean> {
   const exercice1 = await page.locator('#exercice1').count()
   if (exercice1 < 1) throw new Error("l'exercice 4G20 n'a pas été ajouté")
 
-  // Étape 11/13 : ouvre la modale Ctrl+K, cherche « Pythagore », scrolle
-  // jusqu'à un aperçu d'exercice de brevet (DNB)
+  // Étape 11/13 : ouvre la modale Ctrl+K, cherche « Pythagore ». On met en
+  // évidence tout le conteneur de résultats plutôt qu'un aperçu de brevet
+  // précis&nbsp;: ses aperçus se chargent tous de façon asynchrone et font
+  // grandir la liste en continu, si bien qu'un aperçu ciblé précisément
+  // dérive hors du halo de driver.js (cf commentaire dans tour.ts) ; le
+  // conteneur, lui, a une taille fixe et ne bouge jamais.
   await clickNext()
-  await waitForStepTitle('Aperçus des exercices de brevet')
+  await waitForStepTitle('Aperçus des exercices')
   const modalSearchValue = await page.inputValue(
     '[data-tour="add-exercise-search-input"]',
   )
@@ -197,7 +180,7 @@ async function testOnboardingTour(page: Page): Promise<boolean> {
       `recherche Ctrl+K attendue "Pythagore", obtenu "${modalSearchValue}"`,
     )
   }
-  await waitForActiveElementAttrStartsWith('data-tour-exam', 'dnb')
+  await waitForActiveElementAttrEquals('data-tour', 'add-exercise-results')
 
   // Étape 12/13 : la modale se referme, les 5 boutons d'export sont mis en
   // évidence

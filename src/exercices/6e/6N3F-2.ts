@@ -1,6 +1,7 @@
 import Figure from 'apigeom'
 import type { MathfieldElement } from 'mathlive'
 import { createApigeomFigureHtml } from '../../lib/apigeom/apigeom-figure'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { generateCleaner } from '../../lib/interactif/cleaners'
 import ce from '../../lib/interactif/comparisonFunctions'
@@ -16,7 +17,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Décomposer une fraction (partie entière + fraction inférieure à 1) puis donner l'écriture décimale"
@@ -31,7 +31,7 @@ export const dateDeModifImportante = '29/03/2026'
 export const uuid = 'ab44e'
 
 export const refs = {
-  'fr-fr': ['6N3F-2', '3AutoN06-2'],
+  'fr-fr': ['6N3F-2', '3AutoN06'],
   'fr-2016': ['6N20-2'],
   'fr-ch': ['9NO3C-2'],
 }

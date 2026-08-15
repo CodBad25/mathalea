@@ -12,6 +12,8 @@ La vue Flash-cards (`v=flashcards` dans l'URL) génère des cartes à découper 
 
 ## Réglages
 
+En tête du panneau, `shared/ExportViewLinks.svelte` renvoie vers les deux autres exports Typst ([Impression](typst.md) et [Diaporama PDF](diaporama-pdf.md)) en gardant les exercices en place.
+
 Panneau latéral, persisté dans `localStorage` (`mathaleaFlashcardsView`) : format (A4/A5), orientation, cartes par ligne (1 à 4), lignes par page (1 à 6), taille du texte, polices (texte et maths, mêmes listes que la vue Typst), numérotation des cartes, titre recto/verso.
 
 Le titre (texte affiché sur chaque carte) se saisit dans le panneau de réglages (« Titre recto », « Titre verso ») ; l'icône ⚙️ à côté de « Titre des cartes » ouvre une modale de style — point d'ancrage sur la carte (sélecteur graphique à 6 points : coins et milieux des bords haut/bas), taille, couleur et opacité — commune aux deux faces.

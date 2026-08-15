@@ -191,7 +191,7 @@
   "can1E1": {
     "titre": "Propriétés"
   },
-   "can1F": {
+  "can1F": {
     "titre": "Fonctions"
   },
   "can1F0": {
@@ -1925,6 +1925,21 @@
   "3AutoG14": {
     "titre": "Mobiliser les propriétés de la symétrie axiale, de la symétrie centrale, de la translation"
   },
+  "3AutoL": {
+    "titre": "Calcul littéral"
+  },
+  "3AutoL01": {
+    "titre": "Simplifier, réduire des expressions littérales"
+  },
+  "3AutoL02": {
+    "titre": "Calculer la valeur d'une expression algébrique y compris avec des puissances"
+  },
+  "3AutoL03": {
+    "titre": "Développer et factoriser une expression simple"
+  },
+  "3AutoL04": {
+    "titre": "Résoudre des équations du type ax = c, a + b = c, ax + b = c"
+  },
   "3AutoM": {
     "titre": "Mesures"
   },
@@ -1939,6 +1954,15 @@
   },
   "3AutoM04": {
     "titre": "Conversions d'unités de volumes"
+  },
+  "3AutoM05": {
+    "titre": "Calculer des périmètres"
+  },
+  "3AutoM06": {
+    "titre": "Calculer des aires de surfaces de référence"
+  },
+  "3AutoM07": {
+    "titre": "Calculer des volumes de solides de référence"
   },
   "3AutoN": {
     "titre": "Nombres et calcul"
@@ -1989,34 +2013,31 @@
     "titre": "Sur une droite graduée, lire l'abscisse d'un point et placer un point d'abscisse donnée"
   },
   "3AutoP": {
-    "titre": "Organisation et gestion de données et probabilités"
+    "titre": "Proportionnalité et fonctions"
   },
   "3AutoP01": {
-    "titre": "Attribuer des probabilités dans des cas simples (équiprobabilité)"
-  },
-  "3AutoP02": {
-    "titre": "Exprimer une fréquence simple"
-  },
-  "3AutoP03": {
-    "titre": "Exprimer une moyenne"
-  },
-  "3AutoP04": {
-    "titre": "Déterminer une médiane pour une série comportant un petit nombre de valeurs"
-  },
-  "3AutoP05": {
-    "titre": "Lire et interpréter des informations présentées sous forme de tableaux, de diagrammes et de graphiques"
-  },
-  "3AutoP06": {
     "titre": "Reconnaître si une situation donnée entre dans le cadre de la proportionnalité ou non"
   },
-  "3AutoP07": {
+  "3AutoP02": {
     "titre": "Mobiliser une procédure adaptée pour résoudre un problème lié à la proportionnalité"
   },
-  "3AutoP08": {
+  "3AutoP03": {
     "titre": "Appliquer une augmentation ou une diminution exprimée en pourcentage"
   },
-  "3AutoP09": {
+  "3AutoP04": {
     "titre": "Exploiter un graphique représentant la dépendance de deux grandeurs"
+  },
+  "3AutoS": {
+    "titre": "Statistiques et probabilités"
+  },
+  "3AutoS01": {
+    "titre": "Calculer des probabilités"
+  },
+  "3AutoS02": {
+    "titre": "Calculer des fréquences, des médianes, des moyennes"
+  },
+  "3AutoS03": {
+    "titre": "Exploiter les représentations graphiques"
   },
   "3AutoI": {
     "titre": "Algorithmique et programmation"
@@ -2510,7 +2531,7 @@
   "2F13": {
     "titre": "Déterminer un antécédent à partir d'une représentation graphique ou d'un tableau de valeurs d'une fonction"
   },
-   "2F14": {
+  "2F14": {
     "titre": "Recherche du domaine de définition"
   },
   "2F15": {

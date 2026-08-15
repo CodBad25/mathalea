@@ -101,7 +101,7 @@
       </div>
     </div>
     <div
-      class="flex flex-row space-x-4 pt-2
+      class="flex flex-row items-center space-x-4 pt-2
       pr-0 md:pr-4"
     >
       {#if !showLanguage}

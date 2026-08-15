@@ -934,31 +934,3 @@ testExosModifiedLatex:
   artifacts:
     when: on_failure
     expire_in: 2 day
-
-testTypescriptOk:
-  image: node:23.9.0
-  extends: .pnpm_setup
-  allow_failure: true
-  stage: build-projet
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-        - node_modules
-    paths:
-      - .pnpm-store/
-    policy: pull
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: always
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: always
-    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: never
-    - when: never
-  script:
-    - pnpm run makeJson
-    - pnpm check
-  artifacts:
-    when: on_failure
-    expire_in: 2 day

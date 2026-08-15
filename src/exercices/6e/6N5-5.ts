@@ -237,7 +237,7 @@ export default class RepresenterUneFraction extends Exercice {
 
   nouvelleVersion() {
     const listeDeProblemes = combinaisonListes(listePb, this.nbQuestions)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const probleme = listeDeProblemes[i]
       const { contexte, question, reponses, reponseRedigee } = probleme()
       let lesReponses = reponses.map((r) => `$${texNombre(r)}$`)
@@ -270,10 +270,11 @@ export default class RepresenterUneFraction extends Exercice {
         ],
         options: { ordered: false },
       }
-      const monQcm = propositionsQcm(this, i)
-      texte += monQcm.texte
-      const texteCorr = reponseRedigee + monQcm.texteCorr
+
       if (this.questionJamaisPosee(i, ...reponses)) {
+        const monQcm = propositionsQcm(this, i)
+        texte += monQcm.texte
+        const texteCorr = reponseRedigee + monQcm.texteCorr
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

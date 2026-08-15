@@ -52,7 +52,7 @@
       "can2F": {
         "can2F1": {},
         "can2F2": {},
-        "can2F3": {}  ,
+        "can2F3": {},
         "can2F4": {}
       },
       "can2G": {},
@@ -921,23 +921,7 @@
   "3e": {
     "3Auto": {
       "3AutoDNB": {},
-      "3AutoN": {
-        "3AutoN01": {},
-        "3AutoN02": {},
-        "3AutoN03": {},
-        "3AutoN04": {},
-        "3AutoN05": {},
-        "3AutoN06": {},
-        "3AutoN07": {},
-        "3AutoN08": {},
-        "3AutoN09": {},
-        "3AutoN10": {},
-        "3AutoN11": {},
-        "3AutoN12": {},
-        "3AutoN13": {},
-        "3AutoN14": {},
-        "3AutoN15": {}
-      },
+
       "3AutoF": {
         "3AutoF01": {},
         "3AutoF02": {}
@@ -957,6 +941,29 @@
         "3AutoG12": {},
         "3AutoG13": {}
       },
+      "3AutoL": {
+        "3AutoL01": {},
+        "3AutoL02": {},
+        "3AutoL03": {},
+        "3AutoL04": {}
+      },
+      "3AutoN": {
+        "3AutoN01": {},
+        "3AutoN02": {},
+        "3AutoN03": {},
+        "3AutoN04": {},
+        "3AutoN05": {},
+        "3AutoN06": {},
+        "3AutoN07": {},
+        "3AutoN08": {},
+        "3AutoN09": {},
+        "3AutoN10": {},
+        "3AutoN11": {},
+        "3AutoN12": {},
+        "3AutoN13": {},
+        "3AutoN14": {},
+        "3AutoN15": {}
+      },
       "3AutoP": {
         "3AutoP01": {},
         "3AutoP02": {},
@@ -975,7 +982,15 @@
         "3AutoM01": {},
         "3AutoM02": {},
         "3AutoM03": {},
-        "3AutoM04": {}
+        "3AutoM04": {},
+        "3AutoM05": {},
+        "3AutoM06": {},
+        "3AutoM07": {}
+      },
+      "3AutoS": {
+        "3AutoS01": {},
+        "3AutoS02": {},
+        "3AutoS03": {}
       }
     },
     "3A1": {

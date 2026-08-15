@@ -69,7 +69,7 @@ Correction de quelques coquilles
 export const uuid = 'dc8ce'
 
 export const refs = {
-  'fr-fr': ['6G6D', '3AutoG05-1'],
+  'fr-fr': ['6G6D', '3AutoG05'],
   'fr-2016': ['5G31'],
   'fr-ch': ['9ES1C-4', '11ES1A-1', '1mG1-2'],
 }

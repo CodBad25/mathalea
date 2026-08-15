@@ -91,6 +91,14 @@
       action: () => exportAndClose('flashcards'),
     },
     {
+      id: 'slides',
+      label: 'Diaporama PDF',
+      description:
+        "Pour projeter un PDF au format d'un écran : une question en grand par page, puis les corrections",
+      icon: 'bx bxs-slideshow',
+      action: () => exportAndClose('slides'),
+    },
+    {
       id: 'qcmcam',
       label: 'QCM Cam',
       description: "La web'app pour sonder avec une webcam ou un smartphone",

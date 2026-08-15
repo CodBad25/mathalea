@@ -247,9 +247,11 @@ function cleanLatexLabel(text: string): string {
  *
  * Limite connue : `addTextElementsToSvg` ne couvre que les éléments de type
  * `TextByPosition`/`TextByPoint`/`TextDynamicByPosition`/`TextDynamicByPoint`
- * (donc les labels de points, qui sont des `TextByPoint`) — le texte porté
- * par des marques (`MarkRightAngle`, `MarkBetweenPoints`) ou des mesures
- * (`MeasureSegment`) n'est pour l'instant pas repris par cette fonction.
+ * (donc les labels de points, qui sont des `TextByPoint`). Les codages
+ * textuels (`MarkBetweenPoints`, `MarkArc`), qui héritent pourtant de
+ * `TextByPosition`, sont contournés en réécrivant temporairement leur `type`
+ * avant l'appel (cf. `MARK_TYPES_WITH_TEXT_TYPE` ci-dessous) — le texte porté
+ * par `MeasureSegment` n'est en revanche pas repris par cette fonction.
  */
 export function apigeomFigureToSvg(figure: BaseFigure): string {
   // Assure que la figure est attachée à un conteneur et dimensionnée
@@ -265,7 +267,22 @@ export function apigeomFigureToSvg(figure: BaseFigure): string {
   svg.setAttribute('viewBox', `${xMin} ${yMax} ${width} ${height}`)
   svg.setAttribute('width', width.toString())
   svg.setAttribute('height', height.toString())
+
+  // Ces marques héritent de TextByPosition mais réécrivent `type` dans leur
+  // constructeur, ce qui les fait ignorer par addTextElementsToSvg (filtre
+  // par égalité stricte de `type`). On bascule temporairement leur `type`
+  // pour les lui faire reconnaître, plutôt que de dupliquer sa logique de
+  // positionnement/anti-débordement.
+  const marksWithHiddenType = [...figure.elements.values()].filter(
+    (e) => e.type === 'MarkBetweenPoints' || e.type === 'MarkArc',
+  )
+  const originalTypes = marksWithHiddenType.map((mark) => mark.type)
+  for (const mark of marksWithHiddenType) mark.type = 'TextByPosition'
   addTextElementsToSvg(svg, figure, { xMin, yMax, width, height })
+  marksWithHiddenType.forEach((mark, i) => {
+    mark.type = originalTypes[i]
+  })
+
   for (const textNode of svg.querySelectorAll('text')) {
     textNode.textContent = cleanLatexLabel(textNode.textContent ?? '')
   }

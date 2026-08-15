@@ -35,7 +35,7 @@ export const amcType = 'AMCHybride'
 export const uuid = 'adac4'
 
 export const refs = {
-  'fr-fr': ['auto6P1A-1', '3AutoP05-1', 'BP1AUTO028'],
+  'fr-fr': ['auto6P1A-1', '3AutoS03-1', 'BP1AUTO028'],
   'fr-2016': ['6S10-1'],
   'fr-ch': ['9FA3A-4'],
 }

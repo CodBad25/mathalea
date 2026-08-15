@@ -20,7 +20,7 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { choice } from '../../lib/outils/arrayOutils'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 
 export const titre =
   'Déterminer une équation réduite à partir de sa représentation graphique'
@@ -44,8 +44,8 @@ export default class Lecturegraphiquedeaetb extends Exercice {
     super()
     this.besoinFormulaireNumerique = [
       'Types de questions ',
-      2,
-      '1 : Valeurs entières\n2 : Valeurs fractionnaires',
+      3,
+      '1 : Valeurs entières\n2 : Valeurs fractionnaires\n3 : Mélange',
     ]
 
     this.nbQuestions = 1 // On complète le nb de questions
@@ -54,23 +54,30 @@ export default class Lecturegraphiquedeaetb extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    const typesDeQuestionsDisponibles = this.sup === 3 ? [1, 2] : [this.sup]
+    const listeTypeDeQuestions = combinaisonListes(
+      typesDeQuestionsDisponibles,
+      this.nbQuestions,
+    )
+
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // on rajoute les variables dont on a besoin
       let texte = ''
       let texteCorr = ''
+      const typeDeQuestion = listeTypeDeQuestions[i]
       const b = randint(-5, 5) // ordonnée à l'origine
 
       const choix = context.isAmc ? 1 : choice([1, 1, 1, 1, 2])
 
-      let d = this.sup === 1 ? 1 : choice([4, 5, 3]) * choice([-1, 1]) // dénominateur coefficient directeur
+      let d = typeDeQuestion === 1 ? 1 : choice([4, 5, 3]) * choice([-1, 1]) // dénominateur coefficient directeur
       let a =
-        this.sup === 1
+        typeDeQuestion === 1
           ? randint(-5, 5)
           : choice([d + 1, d - 1]) * choice([-1, 1]) // coefficient directeur
       if (a === 0 && b === 0) {
-        d = this.sup === 1 ? 1 : choice([4, 5, 3]) * choice([-1, 1]) // dénominateur coefficient directeur
+        d = typeDeQuestion === 1 ? 1 : choice([4, 5, 3]) * choice([-1, 1]) // dénominateur coefficient directeur
         a =
-          this.sup === 1
+          typeDeQuestion === 1
             ? randint(-5, 5)
             : choice([d + 1, d - 1]) * choice([-1, 1]) // coefficient directeur
       } // On évite la situation de double nullité
@@ -138,12 +145,14 @@ export default class Lecturegraphiquedeaetb extends Exercice {
             'On sait que $a=\\dfrac{\\text{Dénivelé vertical}}{\\text{Déplacement horizontal}}$.'
 
           texteCorr +=
-            this.sup === 1
+            typeDeQuestion === 1
               ? ''
               : '<br>On cherche un déplacement horizontal correspondant à un déplacement vertical entier.'
           texteCorr += '<br>On lit que pour un déplacement vers la droite '
           texteCorr +=
-            this.sup === 1 ? "d'une unité" : `de ${texNombre(d, 1)} unités`
+            typeDeQuestion === 1
+              ? "d'une unité"
+              : `de ${texNombre(d, 1)} unités`
           texteCorr += ', il faut '
           texteCorr += a > 0 ? 'monter de ' : 'descendre de '
           texteCorr += `${abs(a)} unité${abs(a) === 1 ? '' : 's'} `
@@ -200,8 +209,8 @@ export default class Lecturegraphiquedeaetb extends Exercice {
                       texte: 'coefficient directeur',
                       valeur: coeffDir.toNumber(),
                       param: {
-                        digits: this.sup === 1 ? 1 : 3,
-                        decimals: this.sup === 1 ? 0 : 2,
+                        digits: typeDeQuestion === 1 ? 1 : 3,
+                        decimals: typeDeQuestion === 1 ? 0 : 2,
                         signe: true,
                         approx: 0,
                       },

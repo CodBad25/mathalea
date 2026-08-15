@@ -309,6 +309,17 @@
             class="text-start text-coopmaths-corpus dark:text-coopmathsdark-corpus"
           >
             {ending.titre}
+            {#if ending.tags.length > 0}
+              <div class="pl-2 pt-px">
+                {#each ending.tags as tag}
+                  <span
+                    class="inline-flex flex-wrap items-center justify-center rounded-full bg-coopmaths-struct-light dark:bg-coopmathsdark-struct-light text-coopmaths-canvas dark:text-coopmathsdark-canvas text-[0.6rem] px-2 py-px leading-snug font-semibold mr-1"
+                  >
+                    {tag}
+                  </span>
+                {/each}
+              </div>
+            {/if}
           </div>
         {:else}
           <!-- Exercice de la bibliothèque -->

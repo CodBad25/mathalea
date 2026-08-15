@@ -95,6 +95,39 @@
         </a>
       {/if}
       <a
+        href="https://forge.apps.education.fr/coopmaths/mathalea/-/wikis/1.-Utilisation-de-MathAL%C3%89A/1.1-Documentation-g%C3%A9n%C3%A9rale/Tutos-destin%C3%A9s-aux-utilisateurs-de-MathALEA?redirected_from=Tutos-destin%C3%A9s-aux-utilisateurs-de-MathALEA"
+        target="_blank"
+        rel="noreferrer"
+        class="inline-flex items-center justify-center gap-2
+          text-coopmaths-action dark:text-coopmathsdark-action
+          hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest"
+      >
+        <i class="bx bx-book text-xl"></i>
+        Tutoriels d'utilisation
+      </a>
+      <a
+        href="https://podeduc.apps.education.fr/coopmaths/"
+        target="_blank"
+        rel="noreferrer"
+        class="inline-flex items-center justify-center gap-2
+          text-coopmaths-action dark:text-coopmathsdark-action
+          hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest"
+      >
+        <i class="bx bx-video text-xl"></i>
+        Vidéos tutorielles
+      </a>
+      <a
+        href="https://coopmaths.fr/www/contribuer"
+        target="_blank"
+        rel="noreferrer"
+        class="inline-flex items-center justify-center gap-2
+          text-coopmaths-action dark:text-coopmathsdark-action
+          hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest"
+      >
+        <i class="bx bx-heart text-xl"></i>
+        Contribuer à MathALÉA
+      </a>
+      <a
         href="mailto:contact@coopmaths.fr"
         class="inline-flex items-center justify-center gap-2
           text-coopmaths-action dark:text-coopmathsdark-action
