@@ -25,6 +25,11 @@ export interface SlideInput {
   question: string
   /** Correction correspondante */
   correction: string
+  /**
+   * Autres versions de la même question, affichées côte à côte sur la même
+   * diapositive (réglage « multivue », comme dans le diaporama en direct).
+   */
+  extraVersions?: { question: string; correction: string }[]
 }
 
 /** Ce que le diaporama contient, et dans quel ordre */
@@ -33,6 +38,8 @@ export type SlidesContent =
   | 'questions-corrections'
   /** chaque correction juste après sa question */
   | 'alternees'
+  /** toutes les questions, puis chaque question suivie de sa correction */
+  | 'toutes-questions-puis-alternees'
   /** les questions seules */
   | 'questions'
   /** les corrections seules */
@@ -62,6 +69,11 @@ export interface SlidesDocumentOptions {
   ratio: '16-9' | '4-3'
   /** Contenu et ordre des diapositives */
   content: SlidesContent
+  /**
+   * Affiche deux versions différentes de chaque question côte à côte sur la
+   * même diapositive (comme le réglage « multivue » du diaporama en direct).
+   */
+  multivue: boolean
   /** Alignement vertical par défaut du contenu (réglable diapo par diapo) */
   align: SlideAlign
   /** Alignement horizontal du contenu, commun à toutes les diapositives */
@@ -113,6 +125,7 @@ export const defaultSlidesDocumentOptions: SlidesDocumentOptions = {
   correctionFontSize: 32,
   ratio: '16-9',
   content: 'questions-corrections',
+  multivue: false,
   align: 'center',
   horizontalAlign: 'center',
   figureZoom: 1.5,
@@ -149,7 +162,15 @@ export interface SlidesCarryOver {
   figureAligns?: Record<number, 'left' | 'center' | 'right'>
 }
 
-/** Relit dans le code les réglages faits sur l'aperçu */
+/**
+ * Relit dans le code les réglages faits sur l'aperçu. Pour l'alignement, seul
+ * l'écart au défaut *alors actif* (marqué par `diapo-align-defaut`, écrit à
+ * la génération précédente) est retenu comme une vraie surcharge à figer —
+ * comme pour la taille du texte, dont seul l'écart à son défaut fixe (1) est
+ * retenu. Comparer au défaut qui vient d'être choisi, lui, figerait les
+ * diapositives qui ne faisaient que suivre l'ancien défaut et empêcherait un
+ * nouveau réglage global de leur être appliqué.
+ */
 export function harvestSlidesCarryOver(code: string): SlidesCarryOver {
   const carryOver: SlidesCarryOver = {}
 
@@ -164,11 +185,18 @@ export function harvestSlidesCarryOver(code: string): SlidesCarryOver {
   }
   if (Object.keys(slideScales).length > 0) carryOver.slideScales = slideScales
 
+  const defaultAlignMatch = /^#let diapo-align-defaut = "(top|center|bottom)"/m.exec(
+    code,
+  )
+  const defaultAlign = (defaultAlignMatch?.[1] as SlideAlign | undefined) ?? 'center'
   const slideAligns: Record<string, SlideAlign> = {}
   for (const match of code.matchAll(
     /^#let diapo-(\d+)-(question|correction)-align = "(top|center|bottom)"/gm,
   )) {
-    slideAligns[`${match[1]}-${match[2]}`] = match[3] as SlideAlign
+    const value = match[3] as SlideAlign
+    if (value !== defaultAlign) {
+      slideAligns[`${match[1]}-${match[2]}`] = value
+    }
   }
   if (Object.keys(slideAligns).length > 0) carryOver.slideAligns = slideAligns
 
@@ -275,7 +303,12 @@ export function buildSlidesDocument(
   const converted = slides.map((slide) => ({
     question: htmlToTypst(slide.question, figures),
     correction: htmlToTypst(slide.correction, figures),
+    extraVersions: (slide.extraVersions ?? []).map((version) => ({
+      question: htmlToTypst(version.question, figures),
+      correction: htmlToTypst(version.correction, figures),
+    })),
   }))
+  const usesMultivue = converted.some((slide) => slide.extraVersions.length > 0)
 
   const { order, hidden } = resolveOrder(converted.length, carryOver)
 
@@ -289,6 +322,16 @@ export function buildSlidesDocument(
     slideLines.push(`#let diapo-${num}-correction = [`)
     slideLines.push(indent(slide.correction))
     slideLines.push(']')
+    // versions supplémentaires du multivue : diapo-N-question-v2, -v3...
+    for (const [versionIndex, version] of slide.extraVersions.entries()) {
+      const vNum = versionIndex + 2
+      slideLines.push(`#let diapo-${num}-question-v${vNum} = [`)
+      slideLines.push(indent(version.question))
+      slideLines.push(']')
+      slideLines.push(`#let diapo-${num}-correction-v${vNum} = [`)
+      slideLines.push(indent(version.correction))
+      slideLines.push(']')
+    }
     // taille et alignement de chaque face, réglables par les boutons de
     // l'aperçu (repris du code courant à la régénération)
     for (const side of ['question', 'correction'] as const) {
@@ -304,7 +347,14 @@ export function buildSlidesDocument(
   }
 
   const allBodies = converted
-    .flatMap((slide) => [slide.question, slide.correction])
+    .flatMap((slide) => [
+      slide.question,
+      slide.correction,
+      ...slide.extraVersions.flatMap((version) => [
+        version.question,
+        version.correction,
+      ]),
+    ])
     .join('\n')
   const usesMathaleaFigure = allBodies.includes('mathalea-figure(')
   const usesSchema = allBodies.includes('mathalea-schema-span')
@@ -380,6 +430,13 @@ export function buildSlidesDocument(
   lines.push('#let titre-en-bas = titre-affiche and not titre-en-haut')
   lines.push(
     `#let diapos-masquees = ${typstArray(hidden)} // masquées depuis l’aperçu (pour mémoire)`,
+  )
+  // non utilisée par la mise en page : sert uniquement de repère à
+  // `harvestSlidesCarryOver` pour distinguer un alignement de diapositive
+  // réglé à la main (à figer) de celui qui ne fait que suivre ce défaut (à
+  // laisser suivre un nouveau défaut choisi dans les réglages)
+  lines.push(
+    `#let diapo-align-defaut = ${typstString(options.align)} // pour mémoire`,
   )
   if (usesQcm) {
     lines.push('#let couleur = black // couleur des bonnes réponses de QCM')
@@ -523,6 +580,58 @@ export function buildSlidesDocument(
   lines.push('    inset: (top: bandeau(true), bottom: bandeau(false)),')
   lines.push('    align(aligne(alignement), ajuster(corps, taille-texte)))')
   lines.push(']')
+  if (usesMultivue) {
+    lines.push('// variante « multivue » : plusieurs versions différentes de la')
+    lines.push('// même question côte à côte, en colonnes de largeur égale')
+    lines.push(
+      '#let diapo-multi(num, corps-liste, taille: 1, alignement: "center", correction: false) = box(',
+    )
+    lines.push('  width: 100%, height: 100%,')
+    lines.push(')[')
+    lines.push(
+      '  #place(top + right, mathalea-anchor(if correction { "diapo-correction" } else { "diapo-question" }, num))',
+    )
+    lines.push(
+      '  #let numero-en-haut = not (titre-en-haut and titre-position == "top-left")',
+    )
+    lines.push('  #if numeroter {')
+    lines.push(
+      '    place((if numero-en-haut { top } else { bottom }) + left, text(size: taille-numero, fill: gray,',
+    )
+    lines.push(
+      '      if correction and etiquette-correction { "Correction " + str(num) } else { str(num) }))',
+    )
+    lines.push('  }')
+    lines.push('  #if titre-en-haut {')
+    lines.push('    place(')
+    lines.push('      top + (if titre-position.ends-with("left") { left }')
+    lines.push('        else if titre-position.ends-with("right") { right }')
+    lines.push('        else { center }),')
+    lines.push('      text(size: titre-taille, fill: titre-couleur, titre))')
+    lines.push('  }')
+    lines.push(
+      '  #let taille-texte = (if correction { taille-corrections } else { taille-questions }) * taille',
+    )
+    lines.push('  #let bandeau(en-haut) = calc.max(')
+    lines.push(
+      '    if numeroter and numero-en-haut == en-haut { taille-numero * 1.6 } else { 0pt },',
+    )
+    lines.push(
+      '    if titre-en-haut and en-haut { titre-taille * 1.6 } else { 0pt })',
+    )
+    lines.push('  #block(width: 100%, height: 100%,')
+    lines.push('    inset: (top: bandeau(true), bottom: bandeau(false)),')
+    // rows: (1fr,) : la ligne occupe toute la hauteur restante, sans quoi
+    // chaque cellule ne mesurerait que la hauteur de son contenu et
+    // l'alignement vertical n'aurait rien à centrer/monter/descendre
+    lines.push(
+      '    grid(columns: (1fr,) * corps-liste.len(), rows: (1fr,), gutter: 16pt,',
+    )
+    lines.push(
+      '      ..corps-liste.map(corps => align(aligne(alignement), ajuster(corps, taille-texte)))))',
+    )
+    lines.push(']')
+  }
   lines.push('// la page de garde n’a ni numéro ni titre : son contenu, libre,')
   lines.push('// occupe toute la page (crayon de l’aperçu pour l’éditer)')
   lines.push('#let garde(corps) = box(width: 100%, height: 100%)[')
@@ -546,6 +655,22 @@ export function buildSlidesDocument(
 
   // corps du document : une page par diapositive, dans l'ordre choisi
   const page = (num: number, side: 'question' | 'correction') => {
+    const slide = converted[num - 1]
+    const extraVersions = slide?.extraVersions ?? []
+    if (extraVersions.length > 0) {
+      const bodies = [
+        `diapo-${num}-${side}`,
+        ...extraVersions.map((_, index) => `diapo-${num}-${side}-v${index + 2}`),
+      ]
+      const args = [
+        `${num}`,
+        `(${bodies.join(', ')})`,
+        `taille: diapo-${num}-${side}-taille`,
+        `alignement: diapo-${num}-${side}-align`,
+      ]
+      if (side === 'correction') args.push('correction: true')
+      return `#diapo-multi(${args.join(', ')})`
+    }
     const args = [
       `${num}`,
       `diapo-${num}-${side}`,
@@ -557,18 +682,33 @@ export function buildSlidesDocument(
   }
 
   const pages: { num: number; side: 'question' | 'correction' }[] = []
-  for (const num of order) {
-    if (options.content === 'corrections') {
-      pages.push({ num, side: 'correction' })
-    } else {
-      pages.push({ num, side: 'question' })
-      if (options.content === 'alternees') {
+  switch (options.content) {
+    case 'corrections':
+      for (const num of order) pages.push({ num, side: 'correction' })
+      break
+    case 'alternees':
+      for (const num of order) {
+        pages.push({ num, side: 'question' })
         pages.push({ num, side: 'correction' })
       }
-    }
-  }
-  if (options.content === 'questions-corrections') {
-    for (const num of order) pages.push({ num, side: 'correction' })
+      break
+    case 'questions-corrections':
+      for (const num of order) pages.push({ num, side: 'question' })
+      for (const num of order) pages.push({ num, side: 'correction' })
+      break
+    case 'toutes-questions-puis-alternees':
+      // toutes les questions une première fois, puis chaque question
+      // suivie de sa correction (la question réapparaît donc deux fois)
+      for (const num of order) pages.push({ num, side: 'question' })
+      for (const num of order) {
+        pages.push({ num, side: 'question' })
+        pages.push({ num, side: 'correction' })
+      }
+      break
+    case 'questions':
+    default:
+      for (const num of order) pages.push({ num, side: 'question' })
+      break
   }
 
   lines.push('// ----- Diapositives -----')

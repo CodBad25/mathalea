@@ -6,7 +6,6 @@ export const titre =
 
 export const dateDePublication = '12/07/2026'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const uuid = '9ca7f'
 export const refs = {

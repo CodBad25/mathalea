@@ -1,4 +1,4 @@
-import type LabyrintheElement from './customElements/labyrinthe/LabyrintheElement'
+import type MathaleaLabyrintheElement from './customElements/MathaleaLabyrintheElement'
 import type { MathfieldElement } from 'mathlive'
 import { get } from 'svelte/store'
 import { type MathaleaSVG } from '../lib/types'
@@ -297,7 +297,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
           .then(() => {
             const labyrinthe = document.querySelector(
               `#${answer}`,
-            ) as LabyrintheElement
+            ) as MathaleaLabyrintheElement
             if (labyrinthe !== null) {
               labyrinthe.state = answers[answer]
               const time = window.performance.now()

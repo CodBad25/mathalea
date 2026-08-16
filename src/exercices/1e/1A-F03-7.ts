@@ -23,7 +23,7 @@ export const dateDePublication = '17/07/2026'
 //
 /**
  *
- * @author Gilles Mora 
+ * @author Gilles Mora et Stéphane Guyon  pour mise à jour été 2026
  *
  */
 // Une courbe à tracer : f la fonction, [xmin ; xmax] le domaine tracé, label son expression.
@@ -81,7 +81,7 @@ export default class ReconnaitreCourbeAffine extends ExerciceQcmA {
 
     this.enonce = `Une seule des courbes suivantes représente une fonction affine. Laquelle ?`
 
-    this.correction = `La représentation graphique d'une fonction affine est une droite.<br>
+    this.correction = `La représentation graphique d'une fonction affine est une droite non parallèle à l'axe des ordonnées.<br>
 Seul le graphique ci-dessous est une droite, c'est donc lui qui représente une fonction affine :<br>${genererGraphique(bonne)}`
 
     this.reponses = [

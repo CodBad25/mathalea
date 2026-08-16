@@ -29,7 +29,13 @@ type Scenario = {
  */
 export default class ChoisirRepresentationGraphique extends ExerciceQcmA {
   private scenarioDiagrammeBatons(): Scenario {
-    const activites = ['Football', 'Basket-ball', 'Théâtre', 'Musique', 'Échecs']
+    const activites = [
+      'Football',
+      'Basket-ball',
+      'Théâtre',
+      'Musique',
+      'Échecs',
+    ]
     const effectifs = activites.map(() => randint(12, 45))
     const tableau = tableauColonneLigne(
       ['\\text{Activité choisie}', '\\text{Effectif}'],
@@ -45,7 +51,13 @@ export default class ChoisirRepresentationGraphique extends ExerciceQcmA {
   }
 
   private scenarioDiagrammeCirculaire(): Scenario {
-    const postes = ['Logement', 'Alimentation', 'Transport', 'Loisirs', 'Autres']
+    const postes = [
+      'Logement',
+      'Alimentation',
+      'Transport',
+      'Loisirs',
+      'Autres',
+    ]
     const frequences = choice([
       [35, 25, 18, 12, 10],
       [40, 22, 16, 14, 8],
@@ -89,11 +101,9 @@ export default class ChoisirRepresentationGraphique extends ExerciceQcmA {
 
   private scenarioDiagrammeCartesien(): Scenario {
     const pasDistance = choice([20, 25])
-    const distances = [1, 2, 3, 4, 5, 6].map(
-      (valeur) => valeur * pasDistance,
-    )
-    const consommations = distances.map(
-      (distance) => Math.round(distance * choice([0.06, 0.07, 0.08]) + randint(0, 2)),
+    const distances = [1, 2, 3, 4, 5, 6].map((valeur) => valeur * pasDistance)
+    const consommations = distances.map((distance) =>
+      Math.round(distance * choice([0.06, 0.07, 0.08]) + randint(0, 2)),
     )
     const tableau = tableauColonneLigne(
       [
@@ -136,17 +146,9 @@ export default class ChoisirRepresentationGraphique extends ExerciceQcmA {
     ]
     this.bonnesReponses = undefined
 
-    const propositionsTypst = context.isTypst
-      ? `<br><br>${this.reponses
-          .map(
-            (proposition, index) =>
-              `${String.fromCharCode(65 + index)}. ${proposition}`,
-          )
-          .join('<br>')}`
-      : ''
     this.enonce = `${scenario.introduction}<br><br>
       ${scenario.tableau}<br><br>
-      Quel diagramme semble être le plus adapté pour représenter ces données ?${propositionsTypst}`
+      Quel diagramme semble être le plus adapté pour représenter ces données ?`
     this.correction = scenario.justification
   }
 

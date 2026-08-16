@@ -61,14 +61,8 @@ export default class ComparerDeuxBoitesMoustaches extends ExerciceQcmA {
     const q1Haut = pointAbstrait(x(resume.q1), ordonnee + demiHauteur)
     const q3Bas = pointAbstrait(x(resume.q3), ordonnee - demiHauteur)
     const q3Haut = pointAbstrait(x(resume.q3), ordonnee + demiHauteur)
-    const medianeBas = pointAbstrait(
-      x(resume.mediane),
-      ordonnee - demiHauteur,
-    )
-    const medianeHaut = pointAbstrait(
-      x(resume.mediane),
-      ordonnee + demiHauteur,
-    )
+    const medianeBas = pointAbstrait(x(resume.mediane), ordonnee - demiHauteur)
+    const medianeHaut = pointAbstrait(x(resume.mediane), ordonnee + demiHauteur)
 
     const boite = polygone([q1Bas, q1Haut, q3Haut, q3Bas], bleuMathalea)
     boite.epaisseur = 2
@@ -95,7 +89,11 @@ export default class ComparerDeuxBoitesMoustaches extends ExerciceQcmA {
     return objets
   }
 
-  private appliquerTransformation(resume: Resume, a: number, b: number): Resume {
+  private appliquerTransformation(
+    resume: Resume,
+    a: number,
+    b: number,
+  ): Resume {
     return {
       min: a * resume.min + b,
       q1: a * resume.q1 + b,
@@ -195,16 +193,7 @@ export default class ComparerDeuxBoitesMoustaches extends ExerciceQcmA {
         : texteEnCouleurEtGras('Fausse')
     this.enonce = `On donne les diagrammes en boîte de deux séries statistiques.<br>
       ${figure}<br>
-      On peut affirmer que :${
-        context.isTypst
-          ? `<br><br>${affirmations
-              .map(
-                (affirmation, index) =>
-                  `${String.fromCharCode(65 + index)}. ${affirmation}`,
-              )
-              .join('<br><br>')}`
-          : ''
-      }`
+      On peut affirmer que :`
     this.correction = `$\\bullet$ « ${affirmations[0]} » ${estVraie(0)} : le troisième quartile de la série 2 vaut $${resume2.q3}$ et la médiane de la série 1 vaut $${resume1.mediane}$.<br><br>
       $\\bullet$ « ${affirmations[1]} » ${estVraie(1)} : le premier quartile de la série 1 vaut $${resume1.q1}$ et la médiane de la série 2 vaut $${resume2.mediane}$.<br><br>
       $\\bullet$ « ${affirmations[2]} » ${estVraie(2)} : le minimum de la série 2 vaut $${resume2.min}$ et celui de la série 1 vaut $${resume1.min}$.<br><br>

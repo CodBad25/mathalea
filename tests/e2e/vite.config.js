@@ -1,5 +1,6 @@
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { defineConfig /*, splitVendorChunkPlugin */ } from 'vite'
 
 // tant qu'on a de gros soucis de RAM consommée on vire le plugin legacy
@@ -103,6 +104,7 @@ export default defineConfig({
   //   exclude: ['jquery', 'jquery-ui']
   // },
   plugins: [
+    svelte(),
     dynamicImport(),
     // splitVendorChunkPlugin ne semble pas servir à grand chose, on a toujours tous les node_modules dans le même chunk, même sans rollupOptions.manualChunks
     // avec on passe de 1486 fichiers à 1513, mais les gros restent énormes

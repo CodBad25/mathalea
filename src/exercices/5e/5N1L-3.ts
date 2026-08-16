@@ -5,7 +5,6 @@ export const titre = 'Parcourir un labyrinthe de nombres premiers'
 
 export const dateDePublication = '30/10/2026'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const uuid = 'b7aee'
 export const refs = {

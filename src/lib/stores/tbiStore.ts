@@ -39,6 +39,46 @@ export const TBI_TRAFFIC_LIGHT_MAX_W = 500
 export const TBI_TRAFFIC_LIGHT_MIN_H = 220
 export const TBI_TRAFFIC_LIGHT_MAX_H = 1200
 
+export const TBI_CALCULATOR_MIN_W = 160
+export const TBI_CALCULATOR_MAX_W = 480
+
+/**
+ * Ratio largeur/hauteur de la zone opaque (calculatrice) de l'image WebP de
+ * chaque modèle, une fois recadrée pour exclure la marge transparente
+ * (ombre portée) qui l'entoure — voir le recadrage en CSS dans
+ * public/calculators/numworks-*.html (.col-calculator / .calculator-container).
+ * La hauteur du widget est toujours dérivée de sa largeur via ce ratio, pour
+ * qu'aucun fond ne dépasse de la calculatrice quel que soit le
+ * redimensionnement.
+ */
+export const TBI_CALCULATOR_ASPECT: Record<TbiCalculatorKind, number> = {
+  college: 0.571,
+  lycee: 0.5159,
+}
+
+/**
+ * Hors de la zone d'affichage de la calculatrice elle-même (qui doit suivre
+ * TBI_CALCULATOR_ASPECT), le widget ajoute une bordure (1px de chaque côté)
+ * et une barre de titre de 32px (h-8) : la largeur totale doit en tenir
+ * compte pour que l'iframe (zone sous la barre de titre) ait exactement le
+ * ratio de l'image, sans quoi un bandeau gris apparaît dans l'iframe.
+ */
+const TBI_CALCULATOR_BORDER_PX = 2
+const TBI_CALCULATOR_HEADER_PX = 32
+
+/** Hauteur totale du widget pour une largeur `w` donnée, sans fond parasite */
+export function calculatorHeightForWidth(
+  kind: TbiCalculatorKind,
+  w: number,
+): number {
+  const contentW = w - TBI_CALCULATOR_BORDER_PX
+  return Math.round(
+    TBI_CALCULATOR_HEADER_PX +
+      TBI_CALCULATOR_BORDER_PX +
+      contentW / TBI_CALCULATOR_ASPECT[kind],
+  )
+}
+
 /** Bornes de largeur de carte en mode libre, indépendantes du zoom */
 export const TBI_MIN_CARD_WIDTH = 240
 export const TBI_MAX_CARD_WIDTH = 1800
@@ -82,6 +122,17 @@ export interface TbiTrafficLightState {
   h: number
 }
 
+/** Les deux modèles de calculatrice NumWorks proposés en widget TBI */
+export type TbiCalculatorKind = 'college' | 'lycee'
+
+export interface TbiCalculatorState {
+  visible: boolean
+  x: number
+  y: number
+  w: number
+  h: number
+}
+
 export interface TbiState {
   mode: TbiMode
   nbColumns: number
@@ -91,6 +142,8 @@ export interface TbiState {
   tabConfigs: TbiTabConfig[]
   widget: TbiWidgetState
   trafficLight: TbiTrafficLightState
+  collegeCalculator: TbiCalculatorState
+  lyceeCalculator: TbiCalculatorState
 }
 
 export function defaultTbiCardState(index: number): TbiCardState {
@@ -124,7 +177,29 @@ export function defaultTbiState(): TbiState {
       w: 130,
       h: 340,
     },
+    collegeCalculator: {
+      visible: false,
+      x: 0,
+      y: 0,
+      w: 260,
+      h: calculatorHeightForWidth('college', 260),
+    },
+    lyceeCalculator: {
+      visible: false,
+      x: 0,
+      y: 0,
+      w: 260,
+      h: calculatorHeightForWidth('lycee', 260),
+    },
   }
+}
+
+/** Renvoie l'état du widget calculatrice correspondant au modèle demandé */
+export function calculatorStateOf(
+  state: TbiState,
+  kind: TbiCalculatorKind,
+): TbiCalculatorState {
+  return kind === 'college' ? state.collegeCalculator : state.lyceeCalculator
 }
 
 export const tbiState = writable<TbiState>(defaultTbiState())
@@ -155,6 +230,10 @@ function clampTrafficLightWidth(w: number): number {
 
 function clampTrafficLightHeight(h: number): number {
   return clamp(h, TBI_TRAFFIC_LIGHT_MIN_H, TBI_TRAFFIC_LIGHT_MAX_H)
+}
+
+function clampCalculatorWidth(w: number): number {
+  return clamp(w, TBI_CALCULATOR_MIN_W, TBI_CALCULATOR_MAX_W)
 }
 
 /** Fait varier le zoom du widget horloge/minuteur/chronomètre de `delta` */
@@ -339,12 +418,18 @@ export interface TbiSharedState {
   tabConfigs: TbiTabConfig[]
   widgetVisible: boolean
   trafficLightVisible: boolean
+  collegeCalculatorVisible: boolean
+  lyceeCalculatorVisible: boolean
   /** Zoom de chaque exercice, aligné par indice sur exercicesParams */
   zooms: number[]
   widgetX: number
   widgetY: number
   trafficLightX: number
   trafficLightY: number
+  collegeCalculatorX: number
+  collegeCalculatorY: number
+  lyceeCalculatorX: number
+  lyceeCalculatorY: number
 }
 
 export function getTbiSharedState(state: TbiState): TbiSharedState {
@@ -356,11 +441,17 @@ export function getTbiSharedState(state: TbiState): TbiSharedState {
     tabConfigs: state.tabConfigs.map((config) => ({ ...config })),
     widgetVisible: state.widget.visible,
     trafficLightVisible: state.trafficLight.visible,
+    collegeCalculatorVisible: state.collegeCalculator.visible,
+    lyceeCalculatorVisible: state.lyceeCalculator.visible,
     zooms: state.cards.map((card) => card.zoom),
     widgetX: state.widget.x,
     widgetY: state.widget.y,
     trafficLightX: state.trafficLight.x,
     trafficLightY: state.trafficLight.y,
+    collegeCalculatorX: state.collegeCalculator.x,
+    collegeCalculatorY: state.collegeCalculator.y,
+    lyceeCalculatorX: state.lyceeCalculator.x,
+    lyceeCalculatorY: state.lyceeCalculator.y,
   }
 }
 
@@ -419,6 +510,8 @@ export function encodeTbiParam(shared: TbiSharedState): string {
   }
   if (shared.widgetVisible) fields.push('w-1')
   if (shared.trafficLightVisible) fields.push('f-1')
+  if (shared.collegeCalculatorVisible) fields.push('cc-1')
+  if (shared.lyceeCalculatorVisible) fields.push('cl-1')
   if (!isDefaultZooms(shared.zooms)) {
     fields.push(
       `z-${shared.zooms
@@ -431,6 +524,16 @@ export function encodeTbiParam(shared: TbiSharedState): string {
   }
   if (shared.trafficLightX !== 0 || shared.trafficLightY !== 0) {
     fields.push(`fp-${encodePosition(shared.trafficLightX, shared.trafficLightY)}`)
+  }
+  if (shared.collegeCalculatorX !== 0 || shared.collegeCalculatorY !== 0) {
+    fields.push(
+      `ccp-${encodePosition(shared.collegeCalculatorX, shared.collegeCalculatorY)}`,
+    )
+  }
+  if (shared.lyceeCalculatorX !== 0 || shared.lyceeCalculatorY !== 0) {
+    fields.push(
+      `clp-${encodePosition(shared.lyceeCalculatorX, shared.lyceeCalculatorY)}`,
+    )
   }
   return fields.join(TBI_PARAM_FIELD_SEP)
 }
@@ -481,6 +584,12 @@ export function decodeTbiParam(param: string): Partial<TbiSharedState> {
       case 'f':
         shared.trafficLightVisible = value === '1'
         break
+      case 'cc':
+        shared.collegeCalculatorVisible = value === '1'
+        break
+      case 'cl':
+        shared.lyceeCalculatorVisible = value === '1'
+        break
       case 'z':
         shared.zooms = value
           .split(TBI_PARAM_LIST_SEP)
@@ -500,6 +609,22 @@ export function decodeTbiParam(param: string): Partial<TbiSharedState> {
         if (position) {
           shared.trafficLightX = position.x
           shared.trafficLightY = position.y
+        }
+        break
+      }
+      case 'ccp': {
+        const position = decodePosition(value)
+        if (position) {
+          shared.collegeCalculatorX = position.x
+          shared.collegeCalculatorY = position.y
+        }
+        break
+      }
+      case 'clp': {
+        const position = decodePosition(value)
+        if (position) {
+          shared.lyceeCalculatorX = position.x
+          shared.lyceeCalculatorY = position.y
         }
         break
       }
@@ -551,6 +676,12 @@ export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
     if (typeof shared.trafficLightVisible === 'boolean') {
       state.trafficLight.visible = shared.trafficLightVisible
     }
+    if (typeof shared.collegeCalculatorVisible === 'boolean') {
+      state.collegeCalculator.visible = shared.collegeCalculatorVisible
+    }
+    if (typeof shared.lyceeCalculatorVisible === 'boolean') {
+      state.lyceeCalculator.visible = shared.lyceeCalculatorVisible
+    }
     if (Array.isArray(shared.zooms)) {
       shared.zooms.forEach((zoom, i) => {
         if (state.cards[i] && typeof zoom === 'number') {
@@ -572,6 +703,20 @@ export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
       state.trafficLight.x = shared.trafficLightX
       state.trafficLight.y = shared.trafficLightY
     }
+    if (
+      typeof shared.collegeCalculatorX === 'number' &&
+      typeof shared.collegeCalculatorY === 'number'
+    ) {
+      state.collegeCalculator.x = shared.collegeCalculatorX
+      state.collegeCalculator.y = shared.collegeCalculatorY
+    }
+    if (
+      typeof shared.lyceeCalculatorX === 'number' &&
+      typeof shared.lyceeCalculatorY === 'number'
+    ) {
+      state.lyceeCalculator.x = shared.lyceeCalculatorX
+      state.lyceeCalculator.y = shared.lyceeCalculatorY
+    }
     ensureTabConfigs(state)
     return state
   })
@@ -588,6 +733,8 @@ interface TbiLocalLayout {
     h: number
     active: TbiTrafficLightColor
   }
+  collegeCalculator?: { x: number; y: number; w: number; h: number }
+  lyceeCalculator?: { x: number; y: number; w: number; h: number }
 }
 
 function tbiStorageKey(uuids: string[]): string {
@@ -606,6 +753,18 @@ export function saveTbiLocalLayout(uuids: string[]) {
       w: state.trafficLight.w,
       h: state.trafficLight.h,
       active: state.trafficLight.active,
+    },
+    collegeCalculator: {
+      x: state.collegeCalculator.x,
+      y: state.collegeCalculator.y,
+      w: state.collegeCalculator.w,
+      h: state.collegeCalculator.h,
+    },
+    lyceeCalculator: {
+      x: state.lyceeCalculator.x,
+      y: state.lyceeCalculator.y,
+      w: state.lyceeCalculator.w,
+      h: state.lyceeCalculator.h,
     },
   }
   try {
@@ -675,6 +834,29 @@ export function loadTbiLocalLayout(uuids: string[]) {
       layout.trafficLight?.active === 'green'
     ) {
       state.trafficLight.active = layout.trafficLight.active
+    }
+    const calculatorKindOf = {
+      collegeCalculator: 'college',
+      lyceeCalculator: 'lycee',
+    } as const
+    for (const key of ['collegeCalculator', 'lyceeCalculator'] as const) {
+      const saved = layout[key]
+      if (
+        typeof saved?.x === 'number' &&
+        typeof saved?.y === 'number'
+      ) {
+        state[key].x = saved.x
+        state[key].y = saved.y
+      }
+      // la hauteur est toujours dérivée de la largeur (ratio fixe) : une
+      // ancienne sauvegarde au ratio différent est ainsi corrigée au chargement
+      if (typeof saved?.w === 'number') {
+        state[key].w = clampCalculatorWidth(saved.w)
+        state[key].h = calculatorHeightForWidth(
+          calculatorKindOf[key],
+          state[key].w,
+        )
+      }
     }
     return state
   })

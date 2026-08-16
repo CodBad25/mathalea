@@ -93,8 +93,13 @@
     persistPreferences()
   }
 
-  /** Regénère le contenu (listeQuestions, listeCorrections...) de l'exercice k */
-  function regenerate(k: number) {
+  /**
+   * Regénère le contenu (listeQuestions, listeCorrections...) de l'exercice
+   * k. `idVue` (0 par défaut) tire une version différente de la même graine,
+   * pour construire la deuxième colonne du multivue (comme le `reroll` du
+   * diaporama) : la graine d'origine est toujours restaurée après coup.
+   */
+  function regenerate(k: number, idVue = 0) {
     const exercise = exercises[k]
     if (exercise == null) return
     exercise.numeroExercice = k
@@ -104,30 +109,56 @@
     ) {
       exercise.applyNewSeed()
     }
-    seedrandom(exercise.seed, { global: true })
-    if (exercise.typeExercice === 'statique') {
-      // Contenu figé (images/texte fixes) : rien à régénérer.
-      return
-    }
-    context.isTypst = true
+    const originalSeed = exercise.seed
     try {
-      if (exercise.typeExercice === 'simple') {
-        mathaleaHandleExerciceSimple(exercise, false, k)
-      } else if (typeof exercise.nouvelleVersionWrapper === 'function') {
-        exercise.nouvelleVersionWrapper(k)
+      if (idVue > 0 && exercise.seed !== undefined) {
+        exercise.seed = exercise.seed + String(idVue)
+      }
+      seedrandom(exercise.seed, { global: true })
+      if (exercise.typeExercice === 'statique') {
+        // Contenu figé (images/texte fixes) : rien à régénérer.
+        return
+      }
+      context.isTypst = true
+      try {
+        if (exercise.typeExercice === 'simple') {
+          mathaleaHandleExerciceSimple(exercise, false, k)
+        } else if (typeof exercise.nouvelleVersionWrapper === 'function') {
+          exercise.nouvelleVersionWrapper(k)
+        }
+      } finally {
+        context.isTypst = false
       }
     } finally {
-      context.isTypst = false
+      exercise.seed = originalSeed
     }
   }
 
   /**
    * Une diapositive par question : la question (précédée de la consigne de
    * l'exercice s'il en a une) en grand, sa correction sur une autre page.
+   * En multivue, une deuxième version de chaque question (autre graine) est
+   * générée et affichée à côté de la première, comme dans le diaporama.
    */
   function buildSlides(): SlideInput[] {
     const slides: SlideInput[] = []
     const newWarnings: string[] = []
+    const format = (text: string) =>
+      mathaleaFormatExercice(text).replaceAll('{zoomFactor}', '1')
+    const buildVersions = (k: number, exercise: IExercice, idVue: number) => {
+      regenerate(k, idVue)
+      const intro = [exercise.consigne, exercise.introduction]
+        .filter((text) => text != null && text.length > 0)
+        .join('<br>')
+      const questions = exercise.listeQuestions ?? []
+      const corrections = exercise.listeCorrections ?? []
+      return questions.map((question, i) => ({
+        question: format(
+          intro.length > 0 ? `${intro}<br>${question}` : question,
+        ),
+        correction: format(corrections[i] ?? ''),
+      }))
+    }
     for (const [k, exercise] of exercises.entries()) {
       if (exercise == null) {
         newWarnings.push(
@@ -144,21 +175,17 @@
         )
         continue
       }
-      regenerate(k)
-      const intro = [exercise.consigne, exercise.introduction]
-        .filter((text) => text != null && text.length > 0)
-        .join('<br>')
-      const format = (text: string) =>
-        mathaleaFormatExercice(text).replaceAll('{zoomFactor}', '1')
-      const questions = exercise.listeQuestions ?? []
-      const corrections = exercise.listeCorrections ?? []
-      for (const [i, question] of questions.entries()) {
-        slides.push({
-          question: format(
-            intro.length > 0 ? `${intro}<br>${question}` : question,
-          ),
-          correction: format(corrections[i] ?? ''),
-        })
+      const primary = buildVersions(k, exercise, 0)
+      const extra = documentOptions.multivue
+        ? buildVersions(k, exercise, 1)
+        : []
+      for (const [i, version] of primary.entries()) {
+        const extraVersion = extra[i]
+        slides.push(
+          extraVersion != null
+            ? { ...version, extraVersions: [extraVersion] }
+            : version,
+        )
       }
     }
     warnings = newWarnings
@@ -858,9 +885,21 @@
               <option value="alternees">
                 Chaque correction après sa question
               </option>
+              <option value="toutes-questions-puis-alternees">
+                Toutes les questions, puis alternance question/réponse
+              </option>
               <option value="questions">Questions seules</option>
               <option value="corrections">Corrections seules</option>
             </select>
+          </label>
+
+          <label class="flex items-center gap-2 text-sm cursor-pointer">
+            <input
+              type="checkbox"
+              bind:checked={documentOptions.multivue}
+              onchange={applyDocumentOptions}
+            />
+            Multivue (deux versions différentes côte à côte)
           </label>
 
           <label class="flex items-center justify-between gap-4 text-sm">

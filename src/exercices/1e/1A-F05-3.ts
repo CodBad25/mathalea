@@ -165,17 +165,9 @@ export default class TableauDeVariationsGraphique extends ExerciceQcmA {
         ? `<div style="margin: 1.25rem 0.75rem;">${tableau}</div>`
         : tableau,
     )
-    const propositionsTypst = context.isTypst
-      ? `<br><br>${this.reponses
-          .map(
-            (proposition, index) =>
-              `${String.fromCharCode(65 + index)}. ${proposition}`,
-          )
-          .join('<br><br>')}`
-      : ''
     this.enonce = `On donne ci-dessous la représentation graphique d'une fonction $f$.<br>
     ${figure}<br><br>
-    Quel est le tableau de variations de la fonction $f$ ?${propositionsTypst}`
+    Quel est le tableau de variations de la fonction $f$ ?`
 
     const intervalles = abscisses
       .slice(0, -1)

@@ -118,7 +118,7 @@ async function testOnboardingTour(page: Page): Promise<boolean> {
   // et la forme 2 (soit « 1-1-1-2 » dans l'URL), vide la recherche, puis met en
   // évidence « Course aux nombres »
   await clickNext()
-  await waitForStepTitle('Travailler les automatismes')
+  await waitForStepTitle('Course aux nombres')
   const nbQuestions = await page.inputValue('#settings-nb-questions-0')
   const poidsForme1 = await page.inputValue(
     '#settings-formTextListe3-0-1-poids',

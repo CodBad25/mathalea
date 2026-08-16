@@ -5,7 +5,8 @@ import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
-export const titre = 'Calculer des probabilités conditionnelles et des intersections'
+export const titre =
+  'Calculer des probabilités conditionnelles et des intersections'
 export const dateDePublication = '07/08/2026'
 export const amcReady = true
 export const amcType = 'qcmMono'
@@ -106,12 +107,6 @@ export default class ProbabilitesConditionnellesEtIntersections extends Exercice
     Parmi ceux qui ${situation.eAffirmatif}, ${donneeSachantE}.<br>
     Parmi ceux qui ${situation.eNegatif}, ${donneeSachantNonE}.<br><br>
     Parmi les affirmations suivantes, laquelle est vraie ?`
-
-    if (context.isTypst) {
-      this.enonce += `<br>${this.reponses
-        .map((reponse, index) => `${String.fromCharCode(65 + index)}. ${reponse}`)
-        .join('<br>')}`
-    }
 
     const traductionSachantE = donneComplementSachantE
       ? `La deuxième donnée donne la probabilité de ne pas réaliser $F$ sachant que $E$ est réalisé. C'est donc une probabilité conditionnelle :

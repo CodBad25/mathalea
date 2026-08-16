@@ -338,6 +338,7 @@ export type InteractivityType =
   | 'objets-cliquables' // Non compatible AMC
   | 'fraction-cliquable' // Non compatible AMC
   | 'mathalea-labyrinthe' // Non compatible AMC
+  | 'echiquier-probleme' // Non compatible AMC
   | 'dnd' // Non compatible AMC
   | 'drag-and-drop' // Non compatible AMC
   | 'custom' // Non compatible AMC
@@ -382,6 +383,7 @@ export function isInteractivityType(
     value === 'objets-cliquables' ||
     value === 'fraction-cliquable' ||
     value === 'mathalea-labyrinthe' ||
+    value === 'echiquier-probleme' ||
     value === 'dnd' ||
     value === 'drag-and-drop' ||
     value === 'custom' ||
@@ -452,6 +454,7 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'objets-cliquables' ||
     value === 'fraction-cliquable' ||
     value === 'drag-and-drop' ||
+    value === 'echiquier-probleme' ||
     value === 'meta-interactif-2d' ||
     value === 'relier-etiquettes' ||
     value === 'diagram-builder' ||

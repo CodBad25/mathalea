@@ -1,4 +1,4 @@
-import { driver, type DriveStep } from 'driver.js'
+import { driver, type DriveStep, type Driver } from 'driver.js'
 import { get } from 'svelte/store'
 import 'driver.js/dist/driver.css'
 import './tour.css'
@@ -189,12 +189,13 @@ function closeAddExerciseModal(): void {
  * l'état par défaut d'un premier passage (mode Aperçu, panneau de réglages
  * ouvert) — voir `ensureTourReadyState`.
  *
- * Le « Précédent » est désactivé sur les étapes qui touchent à la modale
- * (de son ouverture à sa fermeture)&nbsp;: y revenir demanderait de rejouer
- * la navigation dans l'autre sens, ce que driver.js ne sait pas faire tout
- * seul — sans cette désactivation, cliquer sur « Précédent » y reste sans
- * effet visible (la cible de l'étape précédente existe toujours dans le
- * DOM, mais cachée derrière la modale).
+ * Le « Précédent » est désactivé sur les étapes internes à la navigation
+ * dans la modale (une fois les tuiles parcourues, driver.js ne sait pas
+ * rejouer cette navigation dans l'autre sens). Juste après, l'étape
+ * « Les réglages du document » redirige plutôt « Précédent » vers la
+ * pastille « Ajouter un exercice » (voir son `onPrevClick`) plutôt que de le
+ * désactiver&nbsp;: un retour standard viserait l'étape juste avant elle,
+ * dont la cible a disparu avec la fermeture de la modale.
  */
 export function startTypstTour(): void {
   const restoreState = ensureTourReadyState()
@@ -269,7 +270,7 @@ export function startTypstTour(): void {
           popover: {
             title: 'Un aperçu compilé en temps réel',
             description:
-              'Le document est recompilé automatiquement à chaque modification, page par page, exactement comme le PDF final. Double-cliquez sur un exercice pour sauter directement à son code.',
+              'Le document est recompilé automatiquement à chaque modification, page par page, exactement comme le PDF final. Double-cliquez sur un exercice pour accéder directement à son code.',
             side: 'left',
             align: 'start',
           },
@@ -289,7 +290,7 @@ export function startTypstTour(): void {
           popover: {
             title: 'Gérer les exercices depuis l’aperçu',
             description:
-              'Les mêmes pastilles permettent d’ajouter, supprimer ou déplacer un exercice, de tirer de nouvelles données pour un seul exercice, d’ouvrir ses réglages, d’éditer directement son code (énoncé ou correction au format Typst) ou une ligne du tableau «&nbsp;Course aux nombres&nbsp;», et de modifier le titre, le sous-titre, l’en-tête, la page de garde ou le pied de page.',
+              'Les mêmes pastilles permettent d’ajouter, supprimer ou déplacer un exercice, de regénérer de nouvelles données pour un seul exercice, d’ouvrir ses réglages, d’éditer directement son code (énoncé ou correction au format Typst) ou une ligne du tableau «&nbsp;Course aux nombres&nbsp;», et de modifier le titre, le sous-titre, l’en-tête, la page de garde ou le pied de page.',
             side: 'bottom',
             align: 'start',
           },
@@ -351,7 +352,6 @@ export function startTypstTour(): void {
                     "Au bas de l'aperçu, ce bouton permet d'ajouter un exercice à la fin de la fiche. Essayons-le.",
                   side: 'top' as const,
                   align: 'center' as const,
-                  disableButtons: ['previous' as const],
                   onNextClick: (
                     _element: Element | undefined,
                     _step: DriveStep,
@@ -422,7 +422,28 @@ export function startTypstTour(): void {
               'Ce bouton ouvre le panneau de réglages pour modifier le document en direct.',
             side: 'bottom',
             align: 'start',
-            disableButtons: hasAddExercise ? ['previous'] : undefined,
+            // La modale « Ajouter un exercice » vient de se refermer&nbsp;:
+            // un « Précédent » standard viserait l'étape « Aperçu et
+            // paramètres avant ajout », dont la cible a disparu avec elle
+            // (driver.js resterait bloqué 8&nbsp;s à l'attendre avant
+            // d'abandonner). On revient donc directement à la pastille
+            // « Ajouter un exercice », dernière étape dont la cible existe
+            // toujours dans le DOM.
+            ...(hasAddExercise
+              ? {
+                  onPrevClick: (
+                    _element: Element | undefined,
+                    _step: DriveStep,
+                    opts: { driver: Driver },
+                  ) => {
+                    const steps = opts.driver.getConfig().steps ?? []
+                    const addExerciseIndex = steps.findIndex(
+                      (step) => step.popover?.title === 'Ajouter un exercice',
+                    )
+                    if (addExerciseIndex >= 0) opts.driver.moveTo(addExerciseIndex)
+                  },
+                }
+              : {}),
           },
         },
         {
@@ -470,7 +491,7 @@ export function startTypstTour(): void {
           popover: {
             title: 'Nouvelles données pour toute la fiche',
             description:
-              'Retire de nouvelles valeurs aléatoires pour tous les exercices d’un coup, sans avoir à les régénérer un par un.',
+              'Regénère de nouvelles valeurs aléatoires pour tous les exercices d’un coup, sans avoir à les régénérer un par un.',
             side: 'bottom',
             align: 'start',
           },
@@ -480,7 +501,7 @@ export function startTypstTour(): void {
           popover: {
             title: 'Plusieurs versions',
             description:
-              'De 1 à 4 versions différentes (données aléatoires distinctes) de la même fiche, générées et exportées ensemble&nbsp;: pratique pour limiter la triche entre élèves voisins.',
+              'De 1 à 4 versions différentes (données aléatoires distinctes) de la même fiche, générées et exportées ensemble&nbsp;: pratique pour que les élèves n\'aient pas la même copie.',
             side: 'bottom',
             align: 'end',
           },
@@ -507,7 +528,7 @@ export function startTypstTour(): void {
           popover: {
             title: 'Besoin d’aide plus tard ?',
             description:
-              'Ce bouton permet à tout moment de relancer cette visite guidée, de consulter la liste complète des raccourcis clavier de l’éditeur, et d’en savoir plus sur le langage Typst.',
+              'Ce bouton permet à tout moment de relancer cette visite guidée, de consulter la liste complète des raccourcis clavier de l’éditeur, d’en savoir plus sur le langage Typst ou de nous contacter.',
             side: 'bottom',
             align: 'end',
           },

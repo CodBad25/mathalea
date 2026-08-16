@@ -4,7 +4,6 @@ export const titre = 'Parcourir un labyrinthe de fractions égales'
 
 export const dateDePublication = '30/10/2026'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 export const uuid = 'e1a0a'
 export const refs = {

@@ -179,6 +179,46 @@ describe('buildSlidesDocument', () => {
     expect(regenerated).toContain('#let diapo-1-question-taille = 1')
   })
 
+  it("change d'alignement global même après une première génération (pas de figement par défaut)", () => {
+    // aucune diapositive n'a été retouchée à la main : tout est encore à
+    // l'alignement par défaut de cette première génération (« center »)
+    const first = buildSlidesDocument(slides.slice(0, 2))
+    expect(first).toContain('#let diapo-align-defaut = "center"')
+    // en relisant ce code pour une régénération avec un nouveau défaut, ces
+    // valeurs qui ne faisaient que reprendre l'ancien défaut ne doivent pas
+    // être vues comme des surcharges à figer, sans quoi le nouveau réglage
+    // global n'aurait plus aucun effet
+    const carryOver = harvestSlidesCarryOver(first)
+    expect(carryOver.slideAligns).toBeUndefined()
+    const regenerated = buildSlidesDocument(
+      slides.slice(0, 2),
+      { ...defaultSlidesDocumentOptions, align: 'top' },
+      carryOver,
+    )
+    expect(regenerated).toContain('#let diapo-1-question-align = "top"')
+    expect(regenerated).toContain('#let diapo-2-correction-align = "top"')
+    expect(regenerated).toContain('#let diapo-align-defaut = "top"')
+
+    // une diapositive réglée à la main, elle, doit survivre au changement
+    // du réglage global suivant
+    const edited = regenerated.replace(
+      '#let diapo-2-correction-align = "top"',
+      '#let diapo-2-correction-align = "bottom"',
+    )
+    const carryOverWithOverride = harvestSlidesCarryOver(edited)
+    expect(carryOverWithOverride.slideAligns).toEqual({
+      '2-correction': 'bottom',
+    })
+    const regeneratedAgain = buildSlidesDocument(
+      slides.slice(0, 2),
+      { ...defaultSlidesDocumentOptions, align: 'center' },
+      carryOverWithOverride,
+    )
+    // tout suit le nouveau défaut, sauf la diapositive réglée à la main
+    expect(regeneratedAgain).toContain('#let diapo-1-question-align = "center"')
+    expect(regeneratedAgain).toContain('#let diapo-2-correction-align = "bottom"')
+  })
+
   it('respecte l’ordre et les diapositives masquées, et ajoute les nouvelles', () => {
     const code = buildSlidesDocument(slides, defaultSlidesDocumentOptions, {
       order: [3, 1],
@@ -223,5 +263,67 @@ describe('buildSlidesDocument', () => {
     expect(withFigure).toContain('#let fig-1 = ')
     expect(withFigure).toContain('#let fig-1-zoom = 1.5')
     expect(withFigure).toContain('mathalea-fit')
+  })
+
+  it("place toutes les questions, puis chaque question suivie de sa correction", () => {
+    const readPages = (code: string) =>
+      [...code.matchAll(/^#diapo\((\d+), diapo-\d+-(\w+),/gm)].map(
+        (match) => `${match[1]}-${match[2]}`,
+      )
+    expect(
+      readPages(
+        buildSlidesDocument(slides, {
+          ...defaultSlidesDocumentOptions,
+          content: 'toutes-questions-puis-alternees',
+        }),
+      ),
+    ).toEqual([
+      '1-question',
+      '2-question',
+      '3-question',
+      '1-question',
+      '1-correction',
+      '2-question',
+      '2-correction',
+      '3-question',
+      '3-correction',
+    ])
+  })
+
+  it('affiche deux versions côte à côte quand le multivue est activé', () => {
+    const code = buildSlidesDocument(
+      [
+        {
+          question: '$2+2$',
+          correction: '$4$',
+          extraVersions: [{ question: '$3+3$', correction: '$6$' }],
+        },
+        { question: '$5+5$', correction: '$10$' },
+      ],
+      { ...defaultSlidesDocumentOptions, multivue: true },
+    )
+    // la diapositive multivue déclare une deuxième version...
+    expect(code).toContain('#let diapo-1-question-v2 = [\n  $3 + 3$\n]')
+    expect(code).toContain('#let diapo-1-correction-v2 = [\n  $6$\n]')
+    // ...et sa page appelle diapo-multi avec les deux versions
+    expect(code).toContain(
+      '#diapo-multi(1, (diapo-1-question, diapo-1-question-v2), taille: diapo-1-question-taille, alignement: diapo-1-question-align)',
+    )
+    expect(code).toContain('#let diapo-multi(num, corps-liste')
+    // la ligne du multivue occupe toute la hauteur (rows: (1fr,)) : sans
+    // cela chaque cellule ne mesurerait que son contenu et l'alignement
+    // vertical (haut/centre/bas) n'aurait rien à ajuster
+    expect(code).toContain(
+      'grid(columns: (1fr,) * corps-liste.len(), rows: (1fr,), gutter: 16pt,',
+    )
+    // la diapositive sans version supplémentaire reste une page simple
+    expect(code).toContain(
+      '#diapo(2, diapo-2-question, taille: diapo-2-question-taille, alignement: diapo-2-question-align)',
+    )
+  })
+
+  it("n'émet pas diapo-multi quand aucune diapositive n'a de version supplémentaire", () => {
+    const code = buildSlidesDocument(slides)
+    expect(code).not.toContain('diapo-multi')
   })
 })

@@ -5,7 +5,8 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
-export const titre = 'Calculer la probabilité d’une réunion ou d’une intersection'
+export const titre =
+  'Calculer la probabilité d’une réunion ou d’une intersection'
 export const dateDePublication = '07/08/2026'
 export const amcReady = true
 export const amcType = 'qcmMono'
@@ -34,7 +35,10 @@ export default class ProbabiliteDeuxConditions extends ExerciceQcmA {
     seuil: number,
     diviseur: number,
   ) {
-    const univers = Array.from({ length: nombreCartes }, (_, index) => index + 1)
+    const univers = Array.from(
+      { length: nombreCartes },
+      (_, index) => index + 1,
+    )
     const utilisePairs = typeEvenement.startsWith('pair')
     const utiliseEt = typeEvenement.includes('Et')
     const utiliseInferieur = typeEvenement === 'multipleEtInferieur'
@@ -48,9 +52,9 @@ export default class ProbabiliteDeuxConditions extends ExerciceQcmA {
     const intersection = premiereCondition.filter((nombre) =>
       secondeCondition.includes(nombre),
     )
-    const reunion = [...new Set([...premiereCondition, ...secondeCondition])].sort(
-      (premierNombre, secondNombre) => premierNombre - secondNombre,
-    )
+    const reunion = [
+      ...new Set([...premiereCondition, ...secondeCondition]),
+    ].sort((premierNombre, secondNombre) => premierNombre - secondNombre)
     const favorables = utiliseEt ? intersection : reunion
 
     const premiereDescription = utilisePairs
@@ -80,7 +84,8 @@ export default class ProbabiliteDeuxConditions extends ExerciceQcmA {
         .texFractionSimplifiee,
       new FractionEtendue(secondeCondition.length, nombreCartes)
         .texFractionSimplifiee,
-      new FractionEtendue(nombreCartes, favorables.length).texFractionSimplifiee,
+      new FractionEtendue(nombreCartes, favorables.length)
+        .texFractionSimplifiee,
       new FractionEtendue(favorables.length + 1, nombreCartes)
         .texFractionSimplifiee,
     ]
@@ -96,12 +101,6 @@ export default class ProbabiliteDeuxConditions extends ExerciceQcmA {
     On considère l'événement $E$ :<br>
     « Le nombre obtenu est ${premiereDescription} ${liaison} ${secondeDescription}. »<br><br>
     Calculer $P(E)$.`
-
-    if (context.isTypst) {
-      this.enonce += `<br>${this.reponses
-        .map((reponse, index) => `${String.fromCharCode(65 + index)}. ${reponse}`)
-        .join('<br>')}`
-    }
 
     const ecritureEnsemble = (nombres: number[]) =>
       nombres.map((nombre) => `${nombre}`).join('\\,;\\,')

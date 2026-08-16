@@ -1,9 +1,8 @@
-import { Labyrinthe } from '../lib/customElements/labyrinthe/model'
 import MathaleaLabyrintheElement from '../lib/customElements/MathaleaLabyrintheElement'
+import { handleAnswers } from '../lib/interactif/gestionInteractif'
 import { listeQuestionsToContenu } from '../modules/outils'
 import Exercice from './Exercice'
 export const interactifReady = true
-export const interactifType = 'custom'
 
 /**
  * @author Rémi Angot
@@ -11,7 +10,6 @@ export const interactifType = 'custom'
 export default class ExerciceLabyrinthe extends Exercice {
   consigneDeplacement =
     '<br>Dans ce labyrinthe, on peut se déplacer horizontalement, verticalement et en diagonale.'
-  labyrinthe!: Labyrinthe
   labyrintheElement!: MathaleaLabyrintheElement
   cols = 6
   rows = 6
@@ -24,7 +22,6 @@ export default class ExerciceLabyrinthe extends Exercice {
     this.nbQuestions = 1
     this.interactifObligatoire = true
     this.nbQuestionsModifiable = false
-    this.exoCustomResultat = true
   }
 
   init() {}
@@ -33,22 +30,18 @@ export default class ExerciceLabyrinthe extends Exercice {
     this.goodAnswers = []
     this.badAnswers = []
 
-    this.labyrinthe = new Labyrinthe({
-      seed: this.seed,
+    this.init()
+    const cellCounts = MathaleaLabyrintheElement.getCellCounts({
+      seed: this.seed ?? '',
       rows: this.rows,
       cols: this.cols,
       orientation: this.orientation,
     })
-    this.init()
-    this.labyrinthe.regenerate()
 
-    const actualGoodCount = this.labyrinthe.numberOfGoodAnswers()
-    const actualBadCount = this.labyrinthe.numberOfIncorrectAnswers()
-
-    for (let i = 0; i < actualGoodCount; i++) {
+    for (let i = 0; i < cellCounts.goodAnswers; i++) {
       this.goodAnswers.push(String(this.generateGoodAnswers()))
     }
-    for (let i = 0; i < actualBadCount; i++) {
+    for (let i = 0; i < cellCounts.badAnswers; i++) {
       this.badAnswers.push(String(this.generateBadAnswers()))
     }
 
@@ -80,6 +73,23 @@ export default class ExerciceLabyrinthe extends Exercice {
       disabled: true,
     })
 
+    handleAnswers(
+      this,
+      0,
+      {
+        reponse: {
+          value: JSON.stringify({
+            seed: this.seed ?? '',
+            rows: this.rows,
+            cols: this.cols,
+            orientation: this.orientation,
+            goodAnswers: this.goodAnswers,
+            badAnswers: this.badAnswers,
+          }),
+        },
+      },
+      { formatInteractif: MathaleaLabyrintheElement.elementTag },
+    )
     this.listeQuestions[0] = texte
     this.listeCorrections[0] = texteCorr
     listeQuestionsToContenu(this)
@@ -91,39 +101,5 @@ export default class ExerciceLabyrinthe extends Exercice {
 
   generateBadAnswers(): number | string {
     return 0
-  }
-
-  correctionInteractive = (i: number) => {
-    if (this.answers == null) this.answers = {}
-    const labyrintheElement = document.querySelector<MathaleaLabyrintheElement>(
-      `#labyrintheEx${this.numeroExercice}Q0`,
-    )
-    if (labyrintheElement == null) {
-      throw new Error('Labyrinthe not found')
-    }
-    this.labyrintheElement = labyrintheElement
-    this.answers[`labyrintheEx${this.numeroExercice}Q0`] =
-      this.labyrintheElement.state
-    const divFeedback = document.querySelector(
-      `#feedbackEx${this.numeroExercice}Q${i}`,
-    )
-    const isValid = this.labyrintheElement.win
-    if (divFeedback != null) {
-      if (isValid) {
-        divFeedback.innerHTML = 'Bravo !'
-        return ['OK', 'OK', 'OK', 'OK']
-      }
-      const ratio =
-        this.labyrintheElement.correctClicks / this.labyrintheElement.totalGood
-      if (ratio <= 0.25) {
-        return ['KO', 'KO', 'KO', 'KO']
-      } else if (ratio <= 0.5) {
-        return ['OK', 'KO', 'KO', 'KO']
-      } else if (ratio <= 0.75) {
-        return ['OK', 'OK', 'KO', 'KO']
-      }
-      return ['OK', 'OK', 'KO', 'KO']
-    }
-    throw new Error('Feedback not found')
   }
 }

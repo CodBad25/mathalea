@@ -34,10 +34,8 @@ export default class ProbabiliteSommeDeuxDes extends ExerciceQcmA {
       ([premierDe, secondDe]) => premierDe + secondDe === somme,
     )
     const nombreIssuesFavorables = issuesFavorables.length
-    const bonneReponse = new FractionEtendue(
-      nombreIssuesFavorables,
-      16,
-    ).texFractionSimplifiee
+    const bonneReponse = new FractionEtendue(nombreIssuesFavorables, 16)
+      .texFractionSimplifiee
 
     const candidats = [
       new FractionEtendue(nombreIssuesFavorables, 8).texFractionSimplifiee,
@@ -46,8 +44,7 @@ export default class ProbabiliteSommeDeuxDes extends ExerciceQcmA {
       new FractionEtendue(4, 16).texFractionSimplifiee,
       new FractionEtendue(16 - nombreIssuesFavorables, 16)
         .texFractionSimplifiee,
-      new FractionEtendue(nombreIssuesFavorables + 1, 16)
-        .texFractionSimplifiee,
+      new FractionEtendue(nombreIssuesFavorables + 1, 16).texFractionSimplifiee,
       new FractionEtendue(Math.max(1, nombreIssuesFavorables - 1), 16)
         .texFractionSimplifiee,
     ]
@@ -62,12 +59,6 @@ export default class ProbabiliteSommeDeuxDes extends ExerciceQcmA {
 
     this.enonce = `On lance deux dés équilibrés à quatre faces numérotées de $1$ à $4$.<br>
     La probabilité que la somme des deux dés soit égale à $${somme}$ est :`
-
-    if (context.isTypst) {
-      this.enonce += `<br>${this.reponses
-        .map((reponse, index) => `${String.fromCharCode(65 + index)}. ${reponse}`)
-        .join('<br>')}`
-    }
 
     const listeIssues = issuesFavorables
       .map(([premierDe, secondDe]) => `$(${premierDe}\\,;\\,${secondDe})$`)
@@ -84,7 +75,8 @@ export default class ProbabiliteSommeDeuxDes extends ExerciceQcmA {
     =\\dfrac{${nombreIssuesFavorables}}{16}=${miseEnEvidence(bonneReponse)}$.`
   }
 
-  versionAleatoire = () => this.appliqueLesValeurs(choice([2, 3, 4, 5, 6, 7, 8]))
+  versionAleatoire = () =>
+    this.appliqueLesValeurs(choice([2, 3, 4, 5, 6, 7, 8]))
 
   constructor() {
     super()

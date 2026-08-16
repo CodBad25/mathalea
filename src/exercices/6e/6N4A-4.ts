@@ -118,8 +118,8 @@ class SystemSimple extends Exercice {
           texte += `Combien y a-t-il de ${obj1['name']} et de ${obj2['name']} ?<br>`
           break
         case 'fleurs':
-          obj1['name'] = "rose"
-          obj2['name'] = "oeillet"
+          obj1['name'] = "roses"
+          obj2['name'] = "oeillets"
           count1['name'] = "fleurs"
           count2['name'] = "pétales"
           // double variation: le nombre de pétales
@@ -129,11 +129,11 @@ class SystemSimple extends Exercice {
           count2['value'] = obj1['value']*obj1['count'] + obj2['value']*obj2['count']
 
           texte = `Sam utilise deux tampons pour faire un dessin. `
-          texte += `Le premier tampon représente une ${obj1['name']} à $${obj1['value']}$ ${count2['name']}, `
-          texte += `le second un ${obj2['name']} à $${obj2['value']}$ ${count2['name']}.<br>`
+          texte += `Le premier tampon représente une ${obj1['name'].slice(0, -1)} à $${obj1['value']}$ ${count2['name']}, `
+          texte += `le second un ${obj2['name'].slice(0, -1)} à $${obj2['value']}$ ${count2['name']}.<br>`
           texte += `Il a imprimé $${count1['value']}$ ${count1['name']} en tout et s’il compte `
           texte += `tous les ${count2['name']}, il trouve $${count2['value']}$ ${count2['name']}.<br>`
-          texte += `Combien y a-t-il de ${obj1['name']}s et d'${obj2['name']}s imprimés ?<br>`
+          texte += `Combien y a-t-il de ${obj1['name']} et d'${obj2['name']} imprimés ?<br>`
           break
         case 'monnaie':
           count1['name'] = "pièces"
@@ -157,29 +157,49 @@ class SystemSimple extends Exercice {
 
       question = obj1['name'] + " : %{champ1} \n " + obj2['name'] + " : %{champ2}"
 
+      let test1 = obj1['value'] + obj2['value']*(count1['value']-1)
       texteCorr = `Il y a $${miseEnEvidence(obj1['count'])}$ ${obj1['name']} et $${miseEnEvidence(obj2['count'])}$ ${obj2['name']}.<br>`
-      texteCorr += `$${obj1['count']} \\text{${count1['name']}} + ${obj2['count']} \\text{${count1['name']}} = ${count1['value']} \\text{${count1['name']}}$<br>`
-      texteCorr += `$${obj1['count']} \\times ${obj1['value']} \\text{${count2['name']}} + ${obj2['count']} \\times ${obj2['value']} \\text{${count2['name']}} = ${count2['value']} \\text{${count2['name']}}$<br>`
+      texteCorr += `On peut commencer par tester avec $1$ ${obj1['name'].slice(0, -1)} et $${count1['value']-1}$ ${obj2['name']}. `
+      texteCorr += `Ce qui nous donne $1 \\times ${obj1['value']} + ${count1['value']-1} \\times ${obj2['value']}= ${test1}$, `
+      texteCorr += `il y a donc $${test1}$ ${count2['name']}.<br>`
+      texteCorr += (test1 < count2['value']) ? 'Ce n\'est pas assez' : 'C\'est trop'
+      texteCorr += `, on va donc essayer avec $2$ ${obj1['name']} et $${count1['value']-2}$ ${obj2['name']}.<br>`
+      if (obj1['count'] != 2) {
+        texteCorr += `Et ainsi de suite jusqu'à trouver $${obj1['count']}$ ${obj1['name']} et $${obj2['count']}$ ${obj2['name']}.<br>`
+      }
+      texteCorr += `$${obj1['count']} \\text{ ${count1['name']}} + ${obj2['count']} \\text{ ${count1['name']}} = ${count1['value']} \\text{ ${count1['name']}}$<br>`
+      texteCorr += `$${obj1['count']} \\times ${obj1['value']} \\text{ ${count2['name']}} + ${obj2['count']} \\times ${obj2['value']} \\text{ ${count2['name']}} = ${count2['value']} \\text{ ${count2['name']}}$<br>`
 
       switch (listeTypeQuestions[i]) {
         case 'pattes et bosses':
           texteCorr = `Il y a $${miseEnEvidence(obj1['count'])}$ ${obj1['name']} et $${miseEnEvidence(obj2['count'])}$ ${obj2['name']}.<br>`
+          // variation from generic correction: count1['value']/4
+          texteCorr += `Comme il y a $${count1['value']}$ ${count1['name']} on a en tout $${count1['value']/4}$ animaux.<br>`
+          texteCorr += `On peut commencer par tester avec $1$ ${obj1['name'].slice(0, -1)} et $${count1['value']/4-1}$ ${obj2['name']}.<br>`
+          test1 = obj1['value'] + obj2['value']*(count1['value']/4-1)
+          texteCorr += `Ce qui nous donne $1 \\times ${obj1['value']} + ${count1['value']/4-1} \\times ${obj2['value']} = ${test1}$, `
+          texteCorr += `il y a donc $${test1}$ ${count2['name']}.<br>`
+          texteCorr += (test1 < count2['value']) ? 'Ce n\'est pas assez' : 'C\'est trop'
+          texteCorr += `, on va donc essayer avec $2$ ${obj1['name']} et $${count1['value']/4-2}$ ${obj2['name']}.<br>`
+          if (obj1['count'] != 2) {
+            texteCorr += `Et ainsi de suite jusqu'à trouver $${obj1['count']}$ ${obj1['name']} et $${obj2['count']}$ ${obj2['name']}.<br>`
+          }
           // variation from generic correction: add \\times 4
-          texteCorr += `$${obj1['count']} \\times 4 \\text{${count1['name']}} + ${obj2['count']} \\times 4 \\text{${count1['name']}} = ${count1['value']} \\text{${count1['name']}}$<br>`
-          texteCorr += `$${obj1['count']} \\text{${count2['name']}} + ${obj2['count']} \\times 2 \\text{${count2['name']}} = ${count2['value']} \\text{${count2['name']}}$<br>`
-          break
-        case 'fleurs':
-          // variation from generic question & correction: plural
-          question = obj1['name'] + "s : %{champ1} \n " + obj2['name'] + "s : %{champ2}"
-          texteCorr = `Il y a $${miseEnEvidence(obj1['count'])}$ ${obj1['name']}s et $${miseEnEvidence(obj2['count'])}$ ${obj2['name']}s.<br>`
-          texteCorr += `$${obj1['count']} \\text{${count1['name']}} + ${obj2['count']} \\text{${count1['name']}} = ${count1['value']} \\text{${count1['name']}}$<br>`
-          texteCorr += `$${obj1['count']} \\times ${obj1['value']} \\text{${count2['name']}} + ${obj2['count']} \\times ${obj2['value']} \\text{${count2['name']}} = ${count2['value']} \\text{${count2['name']}}$<br>`
+          texteCorr += `$${obj1['count']} \\times 4 \\text{ ${count1['name']}} + ${obj2['count']} \\times 4 \\text{ ${count1['name']}} = ${count1['value']} \\text{ ${count1['name']}}$<br>`
+          texteCorr += `$${obj1['count']} \\text{ ${count2['name']}} + ${obj2['count']} \\times 2 \\text{ ${count2['name']}} = ${count2['value']} \\text{ ${count2['name']}}$<br>`
           break
         case 'monnaie':
-          // variation from generic correction: add "pièces"
+          // variation from generic correction: add "pièces de", remove slice() and format with texPrix
           texteCorr = `Il y a $${miseEnEvidence(obj1['count'])}$ pièces de ${obj1['name']} et $${miseEnEvidence(obj2['count'])}$ pièces de ${obj2['name']}.<br>`
-          texteCorr += `$${obj1['count']} \\text{${count1['name']}} + ${obj2['count']} \\text{${count1['name']}} = ${count1['value']} \\text{${count1['name']}}$<br>`
-          // variation from generic correction: format with texPrix
+          texteCorr += `On peut commencer par tester avec $1$ pièce de ${obj1['name']} et $${count1['value']-1}$ pièces de ${obj2['name']}. `
+          texteCorr += `Ce qui nous donne $1 \\times ${texPrix(obj1['value'])} + ${count1['value']-1} \\times ${texPrix(obj2['value'])} = ${texPrix(test1)}$ , `
+          texteCorr += `il y a donc $${texPrix(test1)}$ ${count2['name']}.<br>`
+          texteCorr += (test1 < count2['value']) ? 'Ce n\'est pas assez' : 'C\'est trop'
+          texteCorr += `, on va donc essayer avec $2$ pièces de ${obj1['name']} et $${count1['value']-2}$ pièces de ${obj2['name']}.<br>`
+          if (obj1['count'] != 2) {
+            texteCorr += `Et ainsi de suite jusqu'à trouver $${obj1['count']}$ pièce de ${obj1['name']} et $${obj2['count']}$ pièce de ${obj2['name']}.<br>`
+          }
+          texteCorr += `$${obj1['count']} \\text{ ${count1['name']}} + ${obj2['count']} \\text{ ${count1['name']}} = ${count1['value']} \\text{ ${count1['name']}}$<br>`
           texteCorr += `$${obj1['count']} \\times ${texPrix(obj1['value'])} + ${obj2['count']} \\times ${texPrix(obj2['value'])} = ${texPrix(count2['value'])}$ €<br>`
           break
       }

@@ -69,6 +69,10 @@
     handleInput(inputSearch)
   } else {
     results.length = 0
+    // Sans ça, retaper le même terme après avoir vidé le champ ne relance
+    // aucune recherche (`handleInput` ne fait rien si `input === lastInput`)
+    // et les résultats restent vides indéfiniment.
+    lastInput = ''
   }
 
   // ===================================================================================

@@ -26,6 +26,9 @@
     saveTbiLocalLayout,
     tbiState,
   } from '../../../lib/stores/tbiStore'
+  import TbiCalculatorWidget from './TbiCalculatorWidget.svelte'
+  import type { InterfaceParams } from '../../../lib/types'
+  import TypstAddExerciseModal from '../../setup/typst/addExercise/TypstAddExerciseModal.svelte'
   import TbiClockWidget from './TbiClockWidget.svelte'
   import TbiToolbar from './TbiToolbar.svelte'
   import TbiTrafficLightWidget from './TbiTrafficLightWidget.svelte'
@@ -43,30 +46,34 @@
 
   let nextItemKey = 0
 
+  async function buildTbiItem(
+    param: InterfaceParams,
+    index: number,
+  ): Promise<TbiItem> {
+    const base = {
+      paramsIndex: index,
+      uuid: param.uuid,
+      id: param.id ?? param.uuid,
+      key: nextItemKey++,
+    }
+    if (isStatic(param.uuid) || isSvelte(param.uuid)) {
+      return { ...base, exercise: null }
+    }
+    const exercise = await mathaleaLoadExerciceFromUuid(param.uuid)
+    if (!exercise) {
+      return { ...base, exercise: null }
+    }
+    mathaleaHandleParamOfOneExercice(exercise, param)
+    exercise.numeroExercice = index
+    exercise.interactif = false
+    return { ...base, exercise }
+  }
+
   async function loadItems() {
     const params = get(exercicesParams)
     const result: TbiItem[] = []
     for (let i = 0; i < params.length; i++) {
-      const param = params[i]
-      const base = {
-        paramsIndex: i,
-        uuid: param.uuid,
-        id: param.id ?? param.uuid,
-        key: nextItemKey++,
-      }
-      if (isStatic(param.uuid) || isSvelte(param.uuid)) {
-        result.push({ ...base, exercise: null })
-        continue
-      }
-      const exercise = await mathaleaLoadExerciceFromUuid(param.uuid)
-      if (!exercise) {
-        result.push({ ...base, exercise: null })
-        continue
-      }
-      mathaleaHandleParamOfOneExercice(exercise, param)
-      exercise.numeroExercice = i
-      exercise.interactif = false
-      result.push({ ...base, exercise })
+      result.push(await buildTbiItem(params[i], i))
     }
     items = result
     uuids = items.map((item) => item.uuid)
@@ -74,6 +81,28 @@
 
   function persistLayout() {
     saveTbiLocalLayout(uuids)
+  }
+
+  /** Modale « Ajouter un exercice » (déclenchée depuis la barre d'outils) */
+  let isAddExerciseOpen = $state(false)
+
+  function openAddExercise() {
+    isAddExerciseOpen = true
+  }
+
+  /**
+   * Ajoute une ressource à la fin de l'affichage : ses paramètres rejoignent
+   * exercicesParams (donc l'URL), une carte TBI est créée pour elle
+   * (reconcileTbiCards) et la disposition est persistée.
+   * @param {InterfaceParams} params paramètres de l'exercice choisi
+   */
+  async function addExerciseToTbi(params: InterfaceParams) {
+    exercicesParams.update((list) => [...list, params])
+    const item = await buildTbiItem(params, items.length)
+    items = [...items, item]
+    uuids = items.map((i) => i.uuid)
+    reconcileTbiCards(uuids)
+    persistLayout()
   }
 
   /** Déplace un exercice (sémantique splice) et réaligne items sur le nouvel ordre */
@@ -145,14 +174,14 @@
 <main
   class="min-h-screen w-full bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
 >
-  <TbiToolbar />
+  <TbiToolbar onAddExercise={openAddExercise} />
   {#if isReady}
     {#if items.length === 0}
       <div
         class="flex flex-col items-center justify-center min-h-screen gap-4 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
       >
         <i class="bx bx-chalkboard text-6xl"></i>
-        <p>Aucun exercice à afficher. Retournez à l'éditeur pour en ajouter.</p>
+        <p>Aucun exercice à afficher. Cliquez sur le + en bas à droite pour en ajouter.</p>
       </div>
     {:else if $tbiState.mode === 'columns'}
       <TbiColumnsLayout
@@ -177,5 +206,17 @@
   {/if}
   {#if $tbiState.trafficLight.visible}
     <TbiTrafficLightWidget {persistLayout} />
+  {/if}
+  {#if $tbiState.collegeCalculator.visible}
+    <TbiCalculatorWidget kind="college" {persistLayout} />
+  {/if}
+  {#if $tbiState.lyceeCalculator.visible}
+    <TbiCalculatorWidget kind="lycee" {persistLayout} />
+  {/if}
+  {#if isAddExerciseOpen}
+    <TypstAddExerciseModal
+      onAdd={addExerciseToTbi}
+      onClose={() => (isAddExerciseOpen = false)}
+    />
   {/if}
 </main>

@@ -34,7 +34,8 @@ export default class ReconnaitreUneProbabilite extends ExerciceQcmA {
     return {
       latex: texNombre(valeur, 1),
       estUneProbabilite: false,
-      justification: valeur < 0 ? 'est strictement négatif' : 'est supérieur à $1$',
+      justification:
+        valeur < 0 ? 'est strictement négatif' : 'est supérieur à $1$',
     }
   }
 
@@ -95,15 +96,13 @@ export default class ReconnaitreUneProbabilite extends ExerciceQcmA {
           },
           {
             latex: '100 \\%',
-            justification:
-              'est égal à $1$, probabilité d’un événement certain',
+            justification: 'est égal à $1$, probabilité d’un événement certain',
           },
         ]
       : [
           {
             latex: '0',
-            justification:
-              'est la probabilité d’un événement impossible',
+            justification: 'est la probabilité d’un événement impossible',
           },
           {
             latex: '1',
@@ -116,8 +115,7 @@ export default class ReconnaitreUneProbabilite extends ExerciceQcmA {
           },
           {
             latex: '100 \\%',
-            justification:
-              'est égal à $1$, probabilité d’un événement certain',
+            justification: 'est égal à $1$, probabilité d’un événement certain',
           },
         ]
     const extreme = choice(extremes)
@@ -156,8 +154,7 @@ export default class ReconnaitreUneProbabilite extends ExerciceQcmA {
     }
 
     const bonneProposition = propositions.find(
-      (proposition) =>
-        proposition.estUneProbabilite === demandeValeurPossible,
+      (proposition) => proposition.estUneProbabilite === demandeValeurPossible,
     )!
     const distracteurs = propositions.filter(
       (proposition) => proposition !== bonneProposition,
@@ -170,12 +167,6 @@ export default class ReconnaitreUneProbabilite extends ExerciceQcmA {
     this.enonce = demandeValeurPossible
       ? 'Parmi les réels suivants, lequel peut être une probabilité ?'
       : 'Parmi les réels suivants, lequel ne peut pas être une probabilité ?'
-
-    if (context.isTypst) {
-      this.enonce += `<br>${this.reponses
-        .map((reponse, index) => `${String.fromCharCode(65 + index)}. ${reponse}`)
-        .join('<br>')}`
-    }
 
     this.correction = `Une probabilité est un réel compris entre $0$ et $1$. Lorsqu'elle est écrite en pourcentage, elle est comprise entre $0 \\%$ et $100 \\%$. La bonne réponse est donc $${miseEnEvidence(bonneProposition.latex)}$.`
   }

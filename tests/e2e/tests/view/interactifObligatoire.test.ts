@@ -4,10 +4,21 @@ import { runTest } from '../../helpers/run'
 
 async function test(page: Page) {
   const url = 'http://localhost:5173/alea/?uuid=424b2&i=0'
-  const labyrintheSelector = 'mathalea-labyrinthe#labyrintheEx0 labyrinthe-grid'
+  const labyrintheSelector = 'mathalea-labyrinthe#labyrintheEx0Q0'
 
   await page.goto(url)
   await page.locator(labyrintheSelector).waitFor()
+  await page.waitForFunction(
+    (selector) =>
+      Boolean(
+        (
+          document.querySelector(selector) as
+            | (HTMLElement & { ready?: boolean })
+            | null
+        )?.ready,
+      ),
+    labyrintheSelector,
+  )
   expect(
     await page
       .locator(
@@ -27,6 +38,17 @@ async function test(page: Page) {
 
   await page.goto(`${url}&v=eleve&es=021100`)
   await page.locator(labyrintheSelector).waitFor()
+  await page.waitForFunction(
+    (selector) =>
+      Boolean(
+        (
+          document.querySelector(selector) as
+            | (HTMLElement & { ready?: boolean })
+            | null
+        )?.ready,
+      ),
+    labyrintheSelector,
+  )
   expect(
     await page
       .locator(

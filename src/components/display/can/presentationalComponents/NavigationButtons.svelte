@@ -2,6 +2,8 @@
   import { onMount } from 'svelte'
   import type { QuestionResult } from '../../../../lib/types'
   import type { CanState } from '../../../../lib/types/can'
+  import { canOptions } from '../../../../lib/stores/canStore'
+  import { enumeration } from '../../../../lib/outils/ecritures'
   import BasicClassicModal from '../../../shared/modal/BasicClassicModal.svelte'
   import ShortPagination from './ShortPagination.svelte'
 
@@ -12,6 +14,12 @@
   export let resultsByQuestion: QuestionResult[]
 
   let isModalOpen = false
+
+  $: unansweredQuestionNumbers = $canOptions.isInteractive
+    ? $canOptions.questionGetAnswer
+        .map((answered, index) => (answered ? null : index + 1))
+        .filter((n): n is number => n !== null)
+    : []
 
   function swipe(node: HTMLElement) {
     let touchStartX = 0
@@ -170,6 +178,15 @@
       <span class="font-bold">Terminer</span>
       alors vous ne pourrez plus revenir en arrière.
     </div>
+    {#if unansweredQuestionNumbers.length > 0}
+      <div class="mt-4 font-bold">
+        Attention, vous n'avez pas répondu {unansweredQuestionNumbers.length >
+        1
+          ? 'aux questions'
+          : 'à la question'}
+        {enumeration(unansweredQuestionNumbers.map(String))}.
+      </div>
+    {/if}
     <div class="mt-4">Que souhaitez-vous faire ?</div>
   </div>
   <div slot="footer" class="flex flex-wrap items-center justify-center gap-2">

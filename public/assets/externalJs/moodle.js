@@ -25,6 +25,79 @@ if (typeof window.iMathAlea === 'undefined') {
   }
 
   /*
+    Encodage des réponses (voir src/lib/lms/answersCodec.ts, dont ceci est le
+    pendant : ce script est servi tel quel à Moodle et ne peut pas importer de
+    module).
+
+    Les réponses sont compressées en gzip puis encodées en base64url, ce qui les
+    rend transportables telles quelles dans une URL. C'est indispensable en vue
+    Course aux nombres, où la copie contient les réponses de toutes les questions
+    de la course.
+
+    Le préfixe 'z:' permet de distinguer ce format du JSON brut, de sorte que les
+    copies enregistrées avant la compression restent lisibles.
+  */
+  const COMPRESSED_PREFIX = 'z:'
+
+  const encodeAnswers = async (answers) => {
+    const json = JSON.stringify(answers)
+    if (typeof CompressionStream !== 'function') return json
+    const bytes = new TextEncoder().encode(json)
+    const stream = new Blob([bytes])
+      .stream()
+      .pipeThrough(new CompressionStream('gzip'))
+    const gzipped = new Uint8Array(await new Response(stream).arrayBuffer())
+    let binary = ''
+    for (const byte of gzipped) binary += String.fromCharCode(byte)
+    const base64url = btoa(binary)
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '')
+    return COMPRESSED_PREFIX + base64url
+  }
+
+  /*
+    Une entrée de `resultsByExercice` par exercice en vue élève, une par question
+    en vue Course aux nombres : le score est la somme des points sur la somme des
+    questions, et les réponses sont fusionnées (les clés `ExiQj` sont uniques).
+  */
+  const totalScoreInPercent = (resultsByExercice) => {
+    let points = 0
+    let questions = 0
+    for (const result of resultsByExercice) {
+      points += result.numberOfPoints
+      questions += result.numberOfQuestions
+    }
+    return questions === 0 ? 0 : (points / questions) * 100
+  }
+
+  const mergeAnswers = (resultsByExercice) =>
+    Object.assign(
+      {},
+      ...resultsByExercice.map((result) => result.answers || {}),
+    )
+
+  /*
+    La réponse enregistrée dans Moodle a la forme `score[|métadonnées]|réponses`.
+
+    Le score doit rester seul devant le premier `|` : c'est lui qui est comparé
+    aux réponses `=%x%score|*` de la question GIFT, donc à la note obtenue.
+
+    Le segment de métadonnées, `graine[;d=durée]`, n'est présent que lorsque
+    l'exercice est en graine aléatoire ou en vue Course aux nombres (qui doit
+    mémoriser le temps mis par l'élève, que le chronomètre ne peut plus fournir
+    lors de la relecture). Sa présence se déduit donc des attributs de l'élément,
+    et non du contenu de la valeur enregistrée.
+  */
+  const hasMetaData = (element) =>
+    element.getAttribute('graine') === '-1' || element.hasAttribute('can')
+
+  const buildMetaData = (element, duration) => {
+    const seed = element.getAttribute('graine') === '-1' ? element.aleaSeed : ''
+    return Number.isFinite(duration) ? seed + ';d=' + duration : seed
+  }
+
+  /*
     Repli du plein écran demandé par MathALÉA (message `mathalea:fullscreen`,
     voir src/lib/fullscreen.ts) : l'API Fullscreen native est normalement
     autorisée ici (l'iframe est créée avec allow="fullscreen"), mais si le
@@ -56,7 +129,7 @@ if (typeof window.iMathAlea === 'undefined') {
     }
   }
 
-  window.addEventListener('message', (event) => {
+  window.addEventListener('message', async (event) => {
     // V3 ou V4
     if (
       typeof event.data.action !== 'undefined' &&
@@ -81,10 +154,7 @@ if (typeof window.iMathAlea === 'undefined') {
           setPseudoFullscreen(iframe, event.data.value === true)
         }
         if (event.data.action === 'mathalea:score') {
-          const score =
-            (event.data.resultsByExercice[0].numberOfPoints /
-              event.data.resultsByExercice[0].numberOfQuestions) *
-            100
+          const score = totalScoreInPercent(event.data.resultsByExercice)
           // On regarde le score le plus proche parmi les scores compatibles moodle
           let compatibleScore
           if (iframe.getAttribute('v')) {
@@ -103,16 +173,17 @@ if (typeof window.iMathAlea === 'undefined') {
           const moodleScore = compatibleScore.reduce((prev, curr) => {
             return Math.abs(curr - score) < Math.abs(prev - score) ? curr : prev
           })
-          let seedData = ''
-          if (iframe.getAttribute('graine') === '-1') {
-            // On est en mode aléatoire, il faut enregistrer la graine avec le score
-            seedData = '|' + iframe.aleaSeed
+          const encodedAnswers = await encodeAnswers(
+            mergeAnswers(event.data.resultsByExercice),
+          )
+          const parts = [moodleScore]
+          if (hasMetaData(iframe)) {
+            // Graine tirée au sort et/ou durée de la course : il faut les
+            // enregistrer avec le score pour pouvoir rejouer la copie.
+            parts.push(buildMetaData(iframe, event.data.duration))
           }
-          question.querySelector('[name$="_answer"]').value =
-            moodleScore +
-            seedData +
-            '|' +
-            JSON.stringify(event.data.resultsByExercice[0].answers)
+          parts.push(encodedAnswers)
+          question.querySelector('[name$="_answer"]').value = parts.join('|')
           question.querySelector('[name$="_-submit"]')?.click()
         }
       }
@@ -250,30 +321,54 @@ if (typeof window.iMathAlea === 'undefined') {
       questionDiv.classList.add('mathalea-question-type')
 
       let answer
+      let duration = ''
+      const isCan = this.hasAttribute('can')
       const addIframe = () => {
         iframe.setAttribute('width', '100%')
-        iframe.setAttribute('height', '400')
+        /*
+          La Course aux nombres occupe toute la hauteur de la fenêtre : dans un
+          cadre de la hauteur d'un exercice, elle serait illisible. Le bouton
+          plein écran reste à la disposition de l'élève.
+        */
+        iframe.setAttribute('height', isCan ? '600' : '400')
         if (VERSION >= 3) {
           let exoUrl = this.getAttribute('url')
           const ES =
             this.getAttribute('titre') === 'false' ? '01101000' : '01101011'
-          // uuid=XXX&id=XXX&cols=2 => uuid=XXX&id=XXX[&alea=XX]&cols=2
-          // uuid=XXX&id=XXX => uuid=XXX&id=XXX[&alea=XX]
-          exoUrl = exoUrl.replaceAll(
-            /(uuid=[A-Za-z0-9]+(?:&id=[A-Za-z0-9-]+)?)(&|$)/g,
-            '$1&alea=' + questionSeed + '$2',
-          ) // on ajoute la graine
+          /*
+            uuid=XXX&id=XXX&cols=2 => uuid=XXX&id=XXX[&alea=XX]&cols=2
+            uuid=XXX&id=XXX => uuid=XXX&id=XXX[&alea=XX]
+
+            Une Course aux nombres réunit plusieurs exercices dans une seule
+            question Moodle : chacun reçoit la graine suffixée de son rang, sans
+            quoi deux exercices identiques poseraient la même question.
+          */
+          if (!/(^|&)alea=/.test(exoUrl)) {
+            // Sans graine imposée par l'enseignant, on ajoute celle de la question
+            let exoIndex = 0
+            exoUrl = exoUrl.replaceAll(
+              /(uuid=[A-Za-z0-9]+(?:&id=[A-Za-z0-9-]+)?)(&|$)/g,
+              (match, params, separator) =>
+                params +
+                '&alea=' +
+                questionSeed +
+                (isCan ? '-' + exoIndex++ : '') +
+                separator,
+            )
+          }
           iframe.setAttribute(
             'src',
             SERVEUR_URL +
               '?' +
               exoUrl +
-              '&i=1&v=eleve&recorder=moodle&title=&es=' +
-              ES +
+              (isCan
+                ? '&v=can&recorder=moodle'
+                : '&i=1&v=eleve&recorder=moodle&title=&es=' + ES) +
               '&iframe=' +
               iMoodle +
               (this.getAttribute('correction') !== null ? '&done=1' : '') +
-              (typeof answer !== 'undefined' ? '&answers=' + answer : ''),
+              (typeof answer !== 'undefined' ? '&answers=' + answer : '') +
+              (duration !== '' ? '&duration=' + duration : ''),
           )
         } else {
           // 4A11-0,s\=3,s2\=true,s3\=false,s4\=false,n\=4,video\=0,cc\=1,cd\=1
@@ -333,14 +428,22 @@ if (typeof window.iMathAlea === 'undefined') {
               shadow.appendChild(successMessage)
             }
           }
+          // Réponse enregistrée : `score[|graine[;d=durée]]|réponses`
           answer = questionDiv.querySelector('[name$="_answer"]').value
-          if (this.getAttribute('graine') === '-1') {
-            // On est en mode aléatoire, il faut récupérer la graine présent avec la réponse
+          answer = answer.slice(answer.indexOf('|') + 1)
+          if (hasMetaData(this)) {
+            const metaData = answer.slice(0, answer.indexOf('|'))
             answer = answer.slice(answer.indexOf('|') + 1)
-            questionSeed = answer.slice(0, answer.indexOf('|'))
-            answer = answer.slice(answer.indexOf('|') + 1)
-          } else {
-            answer = answer.slice(answer.indexOf('|') + 1)
+            const [seed, ...extras] = metaData.split(';')
+            if (this.getAttribute('graine') === '-1') {
+              // On est en mode aléatoire, il faut récupérer la graine présente avec la réponse
+              questionSeed = seed
+            }
+            // La Course aux nombres affiche aussi le temps mis par l'élève, que
+            // le chronomètre ne peut plus fournir puisqu'elle n'est pas rejouée.
+            duration = (
+              extras.find((extra) => extra.startsWith('d=')) ?? ''
+            ).slice(2)
           }
           answer = encodeURIComponent(answer)
           addIframe()

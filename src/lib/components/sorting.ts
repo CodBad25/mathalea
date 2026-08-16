@@ -3,6 +3,7 @@ import {
   isExerciceItemInReferentiel,
   isStaticType,
   resourceHasMonth,
+  type JSONReferentielObject,
   type ResourceAndItsPath,
 } from '../types/referentiels'
 import { monthes } from './handleDate'
@@ -193,6 +194,107 @@ export const sortArrayOfResourcesBasedOnProp = (
     return { index: i, value: parts, o: elt, s: string }
   })
   mapped.sort(customSortingForResources[order] || customSortingForResources.asc)
+  return mapped.map(function (el) {
+    return data[el.index]
+  })
+}
+
+/**
+ * Trie une liste de ressources en comparant d'abord leur chapitre (position
+ * réelle de chaque maillon de `pathToResource` dans le référentiel JSON
+ * fourni), puis leur `id` pour départager les variantes d'un même exercice
+ * (`4C10` < `4C10-1` < `4C10-10`).
+ *
+ * Contrairement à `sortArrayOfResourcesBasedOnProp`, qui compare uniquement
+ * les `id`, cette fonction ne risque pas de mélanger des chapitres entre eux
+ * (ex. l'id `4C2QCM-01`, une fois découpé en tronçons alterné texte/nombre,
+ * se retrouverait avant `4C10` puisque `2 < 10`) : l'ordre des chapitres et
+ * sous-chapitres est celui déclaré par les auteurs du référentiel, pas un
+ * ordre alphanumérique recalculé sur leur nom.
+ * @param data la liste à trier
+ * @param referentiel le référentiel d'où proviennent les `pathToResource` de `data`, utilisé pour retrouver la position déclarée de chaque chapitre/sous-chapitre
+ * @param order l'ordre du tri (ascendant ou descendant)
+ * @returns la liste triée
+ */
+export const sortArrayOfResourcesBasedOnPathThenId = (
+  data: ResourceAndItsPath[],
+  referentiel: JSONReferentielObject,
+  order: 'asc' | 'desc' = 'asc',
+): ResourceAndItsPath[] => {
+  if (data.length === 0) {
+    return data
+  }
+  const ordinalsCache = new Map<string, number[]>()
+  const ordinalsOfChapterPath = (chapterPath: string[]): number[] => {
+    const cacheKey = chapterPath.join('/')
+    const cached = ordinalsCache.get(cacheKey)
+    if (cached) {
+      return cached
+    }
+    const ordinals: number[] = []
+    let node: JSONReferentielObject = referentiel
+    for (const key of chapterPath) {
+      ordinals.push(Object.keys(node).indexOf(key))
+      node = node[key] as JSONReferentielObject
+    }
+    ordinalsCache.set(cacheKey, ordinals)
+    return ordinals
+  }
+  const tokenize = (s: string): string[] => {
+    const regex = /(\d+)|([^0-9.]+)/g
+    const parts: string[] = []
+    let m: RegExpExecArray | null
+    while ((m = regex.exec(s)) !== null) {
+      parts.push(m[0])
+    }
+    return parts
+  }
+  const mapped = data.map((elt, i) => {
+    const r = elt.resource
+    if (!isExerciceItemInReferentiel(r)) {
+      throw new Error(
+        "sortArrayOfResourcesBasedOnPathThenId ne gère que les ressources de type exercice.",
+      )
+    }
+    // Dernier maillon (l'exercice lui-même) : même normalisation que
+    // `sortArrayOfResourcesBasedOnProp` pour départager les variantes
+    // (4C10 < 4C10-1 < 4C10-10) et ranger les automatismes en fin de chapitre.
+    let idString = transformAutomatismId(r.id)
+    idString = idString.replace(/\d(?=[a-z])|[a-z](?=\.)/gi, '$&. .')
+    return {
+      index: i,
+      chapterOrdinals: ordinalsOfChapterPath(elt.pathToResource.slice(0, -1)),
+      idParts: tokenize(idString),
+    }
+  })
+  const compareAsc = (a: (typeof mapped)[number], b: (typeof mapped)[number]) => {
+    const l = Math.min(a.chapterOrdinals.length, b.chapterOrdinals.length)
+    for (let i = 0; i < l; i++) {
+      if (a.chapterOrdinals[i] !== b.chapterOrdinals[i]) {
+        return a.chapterOrdinals[i] - b.chapterOrdinals[i]
+      }
+    }
+    if (a.chapterOrdinals.length !== b.chapterOrdinals.length) {
+      return a.chapterOrdinals.length - b.chapterOrdinals.length
+    }
+    // même chapitre : on départage par id, dans l'ordre alphanumérique naturel
+    const li = Math.min(a.idParts.length, b.idParts.length)
+    let i = 0
+    while (i < li && a.idParts[i] === b.idParts[i]) {
+      i++
+    }
+    if (i === li) {
+      return a.idParts.length - b.idParts.length
+    }
+    if (
+      thisStringRepresentsANumber(a.idParts[i]) &&
+      thisStringRepresentsANumber(b.idParts[i])
+    ) {
+      return parseInt(a.idParts[i]) - parseInt(b.idParts[i])
+    }
+    return a.idParts[i].localeCompare(b.idParts[i])
+  }
+  mapped.sort(order === 'desc' ? (a, b) => compareAsc(b, a) : compareAsc)
   return mapped.map(function (el) {
     return data[el.index]
   })

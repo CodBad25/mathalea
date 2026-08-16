@@ -17,7 +17,7 @@ import {
 import { referentielMathadata } from '../components/mathadataReferentiel'
 import { referentielBanquesExternes } from './banquesExternesStore'
 import {
-  sortArrayOfResourcesBasedOnProp,
+  sortArrayOfResourcesBasedOnPathThenId,
   triAnnales,
 } from '../components/sorting'
 import type { Language } from '../types/languages'
@@ -74,18 +74,22 @@ function createOriginalReferentiels(lang: Language): ReferentielInMenu[] {
     ] = { ...item.resource }
   }
 
-  // on trie les exercice aléatoires par ID ('4-C10' < '4-C10-1' <'4-C10-10')
-  // EE : Puisqu'on a déjà le référentiel, je ne comprends pas à quoi cela sert
-  // d'autant que cela change les ordres alphabétiques pour les terminales.
-  // Bon, j'ai compris mais comme les exos de terminales n'ont pas une entête cohérente alphabétiquement, on n'a pas le choix
-  // que d'enlever ces lignes.
-
+  // on trie les exercices aléatoires par chapitre (chemin dans le
+  // référentiel) puis par ID ('4-C10' < '4-C10-1' <'4-C10-10'), afin de
+  // préserver l'ordre des chapitres voulu par les auteurs (ex. 4C1 avant
+  // 4C2) même quand un id d'exercice (comme 4C2QCM-01) trierait autrement
+  // s'il était comparé seul.
   const baseAndNewsReferentiel: JSONReferentielObject = {
     Nouveautés: { ...newExercisesReferentiel },
     ...baseReferentiel,
   }
   let exercices = getAllEndings(baseAndNewsReferentiel)
-  exercices = [...sortArrayOfResourcesBasedOnProp(exercices, 'id')]
+  exercices = [
+    ...sortArrayOfResourcesBasedOnPathThenId(
+      exercices,
+      baseAndNewsReferentiel,
+    ),
+  ]
 
   const aleaReferentiel = buildReferentiel(exercices)
 

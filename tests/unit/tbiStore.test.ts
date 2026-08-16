@@ -173,6 +173,12 @@ describe('tbiStore', () => {
       state.widget.y = 80
       state.trafficLight.x = 200
       state.trafficLight.y = 150
+      state.collegeCalculator.visible = true
+      state.collegeCalculator.x = 10
+      state.collegeCalculator.y = 20
+      state.lyceeCalculator.visible = true
+      state.lyceeCalculator.x = 30
+      state.lyceeCalculator.y = 40
       return state
     })
     const shared = getTbiSharedState(get(tbiState))
@@ -187,11 +193,17 @@ describe('tbiStore', () => {
       ],
       widgetVisible: true,
       trafficLightVisible: true,
+      collegeCalculatorVisible: true,
+      lyceeCalculatorVisible: true,
       zooms: [1.5, 1, 1],
       widgetX: 120,
       widgetY: 80,
       trafficLightX: 200,
       trafficLightY: 150,
+      collegeCalculatorX: 10,
+      collegeCalculatorY: 20,
+      lyceeCalculatorX: 30,
+      lyceeCalculatorY: 40,
     })
 
     tbiState.set(defaultTbiState())
@@ -211,6 +223,12 @@ describe('tbiStore', () => {
     expect(state.widget.y).toBe(80)
     expect(state.trafficLight.x).toBe(200)
     expect(state.trafficLight.y).toBe(150)
+    expect(state.collegeCalculator.visible).toBe(true)
+    expect(state.collegeCalculator.x).toBe(10)
+    expect(state.collegeCalculator.y).toBe(20)
+    expect(state.lyceeCalculator.visible).toBe(true)
+    expect(state.lyceeCalculator.x).toBe(30)
+    expect(state.lyceeCalculator.y).toBe(40)
   })
 
   it('zoomAllCardsBy fait varier et borne le zoom de tous les exercices', () => {
@@ -239,11 +257,17 @@ describe('tbiStore', () => {
       tabConfigs: [],
       widgetVisible: true,
       trafficLightVisible: true,
+      collegeCalculatorVisible: false,
+      lyceeCalculatorVisible: false,
       zooms: [1.5, 0.8],
       widgetX: 0,
       widgetY: 0,
       trafficLightX: 0,
       trafficLightY: 0,
+      collegeCalculatorX: 0,
+      collegeCalculatorY: 0,
+      lyceeCalculatorX: 0,
+      lyceeCalculatorY: 0,
     })
     expect(encoded).toBe('w-1_f-1_z-15.8')
     expect(decodeTbiParam(encoded)).toEqual({
@@ -261,13 +285,51 @@ describe('tbiStore', () => {
         tabConfigs: [],
         widgetVisible: false,
         trafficLightVisible: false,
+        collegeCalculatorVisible: false,
+        lyceeCalculatorVisible: false,
         zooms: [1, 1],
         widgetX: 0,
         widgetY: 0,
         trafficLightX: 0,
         trafficLightY: 0,
+        collegeCalculatorX: 0,
+        collegeCalculatorY: 0,
+        lyceeCalculatorX: 0,
+        lyceeCalculatorY: 0,
       }),
     ).toBe('')
+  })
+
+  it('encodeTbiParam / decodeTbiParam gèrent la visibilité et la position des calculatrices', () => {
+    const encoded = encodeTbiParam({
+      mode: 'columns',
+      nbColumns: 1,
+      tabs: [],
+      breaks: [],
+      tabConfigs: [],
+      widgetVisible: false,
+      trafficLightVisible: false,
+      collegeCalculatorVisible: true,
+      lyceeCalculatorVisible: true,
+      zooms: [],
+      widgetX: 0,
+      widgetY: 0,
+      trafficLightX: 0,
+      trafficLightY: 0,
+      collegeCalculatorX: 10,
+      collegeCalculatorY: 20,
+      lyceeCalculatorX: -5,
+      lyceeCalculatorY: 15,
+    })
+    expect(encoded).toBe('cc-1_cl-1_ccp-10.20_clp--5.15')
+    expect(decodeTbiParam(encoded)).toEqual({
+      collegeCalculatorVisible: true,
+      lyceeCalculatorVisible: true,
+      collegeCalculatorX: 10,
+      collegeCalculatorY: 20,
+      lyceeCalculatorX: -5,
+      lyceeCalculatorY: 15,
+    })
   })
 
   it('encodeTbiParam / decodeTbiParam gèrent la position des widgets (y compris négative)', () => {
@@ -279,11 +341,17 @@ describe('tbiStore', () => {
       tabConfigs: [],
       widgetVisible: false,
       trafficLightVisible: false,
+      collegeCalculatorVisible: false,
+      lyceeCalculatorVisible: false,
       zooms: [],
       widgetX: 120,
       widgetY: -40,
       trafficLightX: -15,
       trafficLightY: 300,
+      collegeCalculatorX: 0,
+      collegeCalculatorY: 0,
+      lyceeCalculatorX: 0,
+      lyceeCalculatorY: 0,
     })
     expect(encoded).toBe('wp-120.-40_fp--15.300')
     expect(decodeTbiParam(encoded)).toEqual({

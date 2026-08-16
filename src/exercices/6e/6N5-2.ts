@@ -80,6 +80,7 @@ export default class QuestionsMasses extends Exercice {
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
+      let donnees = []
       const typesQuestionsDisponibles = gestionnaireFormulaireTexte({
         max: 8,
         defaut: 9,
@@ -129,6 +130,8 @@ export default class QuestionsMasses extends Exercice {
           2,
         )
       }
+      donnees = [PrixUnitaire, AutrePrix, PrixReduction]
+
       const quidame = prenomF()
       const FamilleH = [
         'père',
@@ -394,7 +397,7 @@ export default class QuestionsMasses extends Exercice {
           enleveElementNo(propositionsAMC, 2 * kk + 1)
         }
       }
-      if (this.questionJamaisPosee(i, PrixUnitaire)) {
+      if (this.questionJamaisPosee(i, donnees.map(String).join('-'))) {
         if (context.isAmc) {
           this.autoCorrectionAMC[i] = {
             propositions: propositionsAMC,

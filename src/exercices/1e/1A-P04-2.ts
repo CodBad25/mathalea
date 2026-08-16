@@ -11,7 +11,8 @@ type CouleurJetons = {
   nombre: number
 }
 
-export const titre = 'Calculer une probabilité dans une situation d’équiprobabilité'
+export const titre =
+  'Calculer une probabilité dans une situation d’équiprobabilité'
 export const dateDePublication = '07/08/2026'
 export const amcReady = true
 export const amcType = 'qcmMono'
@@ -86,12 +87,6 @@ export default class ProbabiliteTirageJeton extends ExerciceQcmA {
     On tire au hasard un jeton.<br>
     On note $A$ l'événement : « obtenir un jeton ${cible.nom} ».<br>
     Calculer $P(A)$.`
-
-    if (context.isTypst) {
-      this.enonce += `<br>${this.reponses
-        .map((reponse, index) => `${String.fromCharCode(65 + index)}. ${reponse}`)
-        .join('<br>')}`
-    }
 
     const fractionObtenue = `\\dfrac{${cible.nombre}}{${nombreTotal}}`
     const calculFinal =

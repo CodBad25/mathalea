@@ -75,12 +75,6 @@ export default class TraduirePhraseParProbabilite extends ExerciceQcmA {
     ${donnee}<br><br>
     En utilisant les événements $E$ et $F$, quelle probabilité est égale à $${valeur}$ ?`
 
-    if (context.isTypst) {
-      this.enonce += `<br>${this.reponses
-        .map((reponse, index) => `${String.fromCharCode(65 + index)}. ${reponse}`)
-        .join('<br>')}`
-    }
-
     this.correction = `${explication}<br>
     On a donc : $${miseEnEvidence(`${bonneReponse}=${valeur}`)}$.`
   }
@@ -97,8 +91,7 @@ export default class TraduirePhraseParProbabilite extends ExerciceQcmA {
         fPluriel: 'sont demi-pensionnaires',
       },
       {
-        introduction:
-          'Dans une médiathèque, on choisit au hasard un abonné.',
+        introduction: 'Dans une médiathèque, on choisit au hasard un abonné.',
         individu: 'abonné',
         population: 'abonnés',
         evenementE: 'l’abonné utilise le service numérique',
@@ -107,8 +100,7 @@ export default class TraduirePhraseParProbabilite extends ExerciceQcmA {
         fPluriel: 'ont emprunté un roman ce mois-ci',
       },
       {
-        introduction:
-          'Dans un club sportif, on choisit au hasard un adhérent.',
+        introduction: 'Dans un club sportif, on choisit au hasard un adhérent.',
         individu: 'adhérent',
         population: 'adhérents',
         evenementE: 'l’adhérent possède une licence de compétition',

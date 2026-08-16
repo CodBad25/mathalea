@@ -3,7 +3,6 @@ import { randint } from '../../modules/outils'
 import ExerciceLabyrinthe from '../_Exercice_labyrinthe'
 export const titre =
   'Parcourir un labyrinthe des multiples basé sur des critères de divisibilité de 2, 3, 5 ou 9'
-export const interactifType = 'custom'
 export const interactifReady = true
 
 export const uuid = '424b2'

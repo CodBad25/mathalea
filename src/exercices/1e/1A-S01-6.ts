@@ -54,7 +54,10 @@ export default class ExploiterHistogrammeAges extends ExerciceQcmA {
     pasAge: number,
     habitantsParCarreau: number,
   ): string {
-    const largeurTotale = largeurs.reduce((somme, largeur) => somme + largeur, 0)
+    const largeurTotale = largeurs.reduce(
+      (somme, largeur) => somme + largeur,
+      0,
+    )
     const hauteurMax = Math.max(...hauteurs)
     const bornesClasses = [0]
     for (const largeur of largeurs) {
@@ -166,7 +169,9 @@ export default class ExploiterHistogrammeAges extends ExerciceQcmA {
     const indiceSeuil = randint(1, nombreClasses - 2)
     const seuil =
       pasAge *
-      largeurs.slice(0, indiceSeuil).reduce((somme, largeur) => somme + largeur, 0)
+      largeurs
+        .slice(0, indiceSeuil)
+        .reduce((somme, largeur) => somme + largeur, 0)
     const aires = largeurs.map((largeur, index) => largeur * hauteurs[index])
     const aireTotale = aires.reduce((somme, aire) => somme + aire, 0)
     const aireApresSeuil = aires
@@ -191,14 +196,6 @@ export default class ExploiterHistogrammeAges extends ExerciceQcmA {
     }
     this.reponses = reponses.map((reponse) => `$${texNombre(reponse, 0)}$`)
 
-    const propositionsTypst = context.isTypst
-      ? `<br><br>${this.reponses
-          .map(
-            (proposition, index) =>
-              `${String.fromCharCode(65 + index)}. ${proposition}`,
-          )
-          .join('<br>')}`
-      : ''
     const figure = this.construireHistogramme(
       largeurs,
       hauteurs,
@@ -208,7 +205,7 @@ export default class ExploiterHistogrammeAges extends ExerciceQcmA {
     this.enonce = `L'histogramme ci-dessous représente la répartition des âges des habitants d'un village des Cévennes.<br>
       ${figure}<br>
       On note $c$ le nombre de classes d'âge, $N$ le nombre total d'habitants du village et $n$ le nombre d'habitants âgés de $${seuil}$ ans ou plus.<br>
-      Soit $t=c+N+n$. Alors $t$ est égal à :${propositionsTypst}`
+      Soit $t=c+N+n$. Alors $t$ est égal à :`
 
     const calculAireTotale = aires.join('+')
     const calculAireApresSeuil = aires.slice(indiceSeuil).join('+')

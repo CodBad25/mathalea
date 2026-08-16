@@ -79,11 +79,26 @@ export default class ImageSpline extends ExerciceSimple {
       )
     }
     let bornes = { xMin: 0, xMax: 0, yMin: 0, yMax: 0 }
-    const antecedent = this.quotaRandint('antecedent', 0, 8)
     const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
     const nuage = aleatoiriseCourbe(mesFonctions)
     const theSpline = spline(nuage)
     this.spline = theSpline
+    // Le distracteur "piège de l'antécédent" propose l'abscisse à la place de l'image
+    // (erreur classique de lecture). Si les deux coïncident pour un nœud, ce piège devient
+    // la bonne réponse : on évite donc ces nœuds, sauf si aucun ne convient.
+    const indicesAvecPiegeInvalide = theSpline.x
+      .map((x, i) => (x === theSpline.y[i] ? i : -1))
+      .filter((i) => i !== -1)
+    const indicesAEviter =
+      indicesAvecPiegeInvalide.length === theSpline.x.length
+        ? []
+        : indicesAvecPiegeInvalide
+    const antecedent = this.quotaRandint(
+      'antecedent',
+      0,
+      theSpline.x.length - 1,
+      indicesAEviter,
+    )
     bornes = theSpline.trouveMaxes()
     const repere1 = repere({
       xMin: bornes.xMin - 1,

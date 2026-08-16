@@ -338,7 +338,7 @@ export function startTour(): void {
         popover: {
           title: '3L11 — Simple distributivité',
           description:
-            'Cliquons sur un résultat (ou appuyons sur Entrée) pour l’ajouter à votre feuille d’exercices, à droite.',
+            'Cliquez sur un résultat (ou appuyons sur Entrée) pour l’ajouter à votre feuille d’exercices, à droite.',
           side: 'right',
           align: 'start',
           onNextClick: (_element, _step, opts) => {
