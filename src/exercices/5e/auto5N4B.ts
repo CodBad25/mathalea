@@ -1,6 +1,7 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import type { AllChoicesType } from '../../lib/interactif/listeDeroulante/ListeDeroulante'
-import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import {
+  choixDeroulant,
+  type AllChoicesType,
+} from '../../lib/customElements/ListeDeroulanteElement'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import {
   combinaisonListes,
@@ -139,7 +140,7 @@ export default class DefinitionUnitesVolumes extends Exercice {
     ]
     let indiceInteractif = 0
     this.tabIndiceInteractif = [0]
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const unite = unitesChoisies[cpt] // cpt choisi ici et dans tous les tableaux comme indice par pas assez de questions sinon.
       const match = unite.match(/\{ *([^}]*) *\}/)
       let uniteBrut = ''
@@ -200,11 +201,9 @@ export default class DefinitionUnitesVolumes extends Exercice {
           }
           texte = texteFixe[0]
           texte += this.interactif
-            ? choixDeroulant(
-                this,
-                indiceInteractif,
-                { choices: choixListeDeroulantePourCeCas[0] },
-              )
+            ? choixDeroulant(this, indiceInteractif, {
+                choices: choixListeDeroulantePourCeCas[0],
+              })
             : '$\\ldots\\ldots\\ldots$'
           texte += texteFixe[1]
           break
@@ -289,19 +288,15 @@ export default class DefinitionUnitesVolumes extends Exercice {
           }
           texte = texteFixe[0]
           texte += this.interactif
-            ? choixDeroulant(
-                this,
-                indiceInteractif,
-                { choices: choixListeDeroulantePourCeCas[0] },
-              )
+            ? choixDeroulant(this, indiceInteractif, {
+                choices: choixListeDeroulantePourCeCas[0],
+              })
             : '$\\ldots\\ldots\\ldots$'
           texte += texteFixe[1]
           texte += this.interactif
-            ? choixDeroulant(
-                this,
-                indiceInteractif + 1,
-                { choices: choixListeDeroulantePourCeCas[1] },
-              )
+            ? choixDeroulant(this, indiceInteractif + 1, {
+                choices: choixListeDeroulantePourCeCas[1],
+              })
             : '$\\ldots\\ldots\\ldots$'
           texte += texteFixe[2]
           break
@@ -353,38 +348,23 @@ export default class DefinitionUnitesVolumes extends Exercice {
 
           texte = texteFixe[0]
           texte += this.interactif
-            ? choixDeroulant(
-                this,
-                indiceInteractif,
-                { choices: choixListeDeroulantePourCeCas[0] },
-              )
+            ? choixDeroulant(this, indiceInteractif, {
+                choices: choixListeDeroulantePourCeCas[0],
+              })
             : '$\\ldots\\ldots\\ldots$'
-          handleAnswers(this, indiceInteractif, {
-            reponse: { value: choixListeDeroulantePourCeCas[0][0].label ?? '' },
-          })
           texte += texteFixe[1]
           texte += this.interactif
-            ? choixDeroulant(
-                this,
-                indiceInteractif + 1,
-                { choices: choixListeDeroulantePourCeCas[1] },
-              )
+            ? choixDeroulant(this, indiceInteractif + 1, {
+                choices: choixListeDeroulantePourCeCas[1],
+              })
             : '$\\ldots\\ldots\\ldots$'
-          handleAnswers(this, indiceInteractif, {
-            reponse: { value: choixListeDeroulantePourCeCas[1][0].label ?? '' },
-          })
           texte += texteFixe[2]
           texte += this.interactif
-            ? choixDeroulant(
-                this,
-                indiceInteractif + 2,
-                { choices: choixListeDeroulantePourCeCas[2] },
-              )
+            ? choixDeroulant(this, indiceInteractif + 2, {
+                choices: choixListeDeroulantePourCeCas[2],
+              })
             : '$\\ldots\\ldots\\ldots$'
           texte += texteFixe[3]
-          handleAnswers(this, indiceInteractif, {
-            reponse: { value: choixListeDeroulantePourCeCas[2][0].label ?? '' },
-          })
           break
       }
 
@@ -416,21 +396,24 @@ export default class DefinitionUnitesVolumes extends Exercice {
     let isOk = false
     if (this.listeReponses[i].length === 3) {
       const select1 = document.querySelector(
-        `#ex${this.numeroExercice}Q${this.tabIndiceInteractif[i]}`,
+        `#liste-deroulanteEx${this.numeroExercice}Q${this.tabIndiceInteractif[i]}`,
       ) as HTMLSelectElement
       const select2 = document.querySelector(
-        `#ex${this.numeroExercice}Q${this.tabIndiceInteractif[i] + 1}`,
+        `#liste-deroulanteEx${this.numeroExercice}Q${this.tabIndiceInteractif[i] + 1}`,
       ) as HTMLSelectElement
       const select3 = document.querySelector(
-        `#ex${this.numeroExercice}Q${this.tabIndiceInteractif[i] + 2}`,
+        `#liste-deroulanteEx${this.numeroExercice}Q${this.tabIndiceInteractif[i] + 2}`,
       ) as HTMLSelectElement
       if (this.answers === undefined) this.answers = {}
       if (select1?.value)
-        this.answers[`ex${this.numeroExercice}Q${3 * i}`] = select1.value
+        this.answers[`liste-deroulanteEx${this.numeroExercice}Q${3 * i}`] =
+          select1.value
       if (select2?.value)
-        this.answers[`ex${this.numeroExercice}Q${3 * i + 1}`] = select2.value
+        this.answers[`liste-deroulanteEx${this.numeroExercice}Q${3 * i + 1}`] =
+          select2.value
       if (select3?.value)
-        this.answers[`ex${this.numeroExercice}Q${3 * i + 2}`] = select3.value
+        this.answers[`liste-deroulanteEx${this.numeroExercice}Q${3 * i + 2}`] =
+          select3.value
       let isOk1 = false
       let isOk23 = false
       if (
@@ -454,10 +437,10 @@ export default class DefinitionUnitesVolumes extends Exercice {
       )
     } else if (this.listeReponses[i].length === 2) {
       const select1 = document.querySelector(
-        `#ex${this.numeroExercice}Q${this.tabIndiceInteractif[i]}`,
+        `#liste-deroulanteEx${this.numeroExercice}Q${this.tabIndiceInteractif[i]}`,
       ) as HTMLSelectElement
       const select2 = document.querySelector(
-        `#ex${this.numeroExercice}Q${this.tabIndiceInteractif[i] + 1}`,
+        `#liste-deroulanteEx${this.numeroExercice}Q${this.tabIndiceInteractif[i] + 1}`,
       ) as HTMLSelectElement
       let isOk1 = false
       let isOk2 = false
@@ -476,7 +459,7 @@ export default class DefinitionUnitesVolumes extends Exercice {
     } else {
       // if (this.listeReponses[i].length === 1) {
       const select1 = document.querySelector(
-        `#ex${this.numeroExercice}Q${this.tabIndiceInteractif[i]}`,
+        `#liste-deroulanteEx${this.numeroExercice}Q${this.tabIndiceInteractif[i]}`,
       ) as HTMLSelectElement
       if (select1?.value != null) {
         const choix1 = select1.value

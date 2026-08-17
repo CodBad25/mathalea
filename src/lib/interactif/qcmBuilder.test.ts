@@ -94,4 +94,23 @@ describe('buildQcmForExercise', () => {
     expect(qcmData.correction).toContain('Mauvaise 2')
     expect(qcmData.correction).toContain('La bonne réponse est la réponse')
   })
+
+  it('permet un affichage interactif compact avec cases et lettres', () => {
+    const exercice = new Exercice()
+    exercice.interactif = true
+    exercice.numeroExercice = 4
+
+    const qcmData = buildQcmForExercise(exercice, 0, {
+      question: 'Question',
+      propositions: [
+        { texte: 'Bonne', statut: true },
+        { texte: 'Mauvaise', statut: false },
+      ],
+      options: { radio: true, format: 'caseLettre', compact: true },
+    })
+
+    expect(qcmData.question).toContain('Question<br><mathalea-qcm')
+    expect(qcmData.question).not.toContain('Question<br><br>')
+    expect(qcmData.question).toContain('format="caseLettre"')
+  })
 })

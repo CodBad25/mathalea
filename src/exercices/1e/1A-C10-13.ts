@@ -1,5 +1,5 @@
 import SolutionInequation from '../can/2e/can2L05'
-export const titre = 'Résoudre une inéquation'
+export const titre = 'Résoudre une inéquation $ax+b>0$'
 export const dateDePublication = '23/07/2025'
 export const amcReady = true
 export const amcType = 'qcmMono'

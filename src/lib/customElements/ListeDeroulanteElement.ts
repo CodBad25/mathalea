@@ -1,12 +1,20 @@
 import { context } from '../../modules/context'
+import { renderMathInElement } from 'mathlive'
 import { uniformiseResults } from '../interactif/gestionInteractif'
-import ListeDeroulante, {
-  type AllChoicesType,
-} from '../interactif/listeDeroulante/ListeDeroulante'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from './MathaleaCustomElement'
+export type AllChoiceType =
+  | string
+  | {
+      latex?: string
+      image?: string
+      label?: string
+      value: string
+      svg?: string
+    }
+export type AllChoicesType = AllChoiceType[]
 export type ListeDeroulanteDataOptions = {
   choix0?: boolean
   className?: string
@@ -91,7 +99,9 @@ export function listeDeroulanteToQcm(
     )
     return
   }
-  if (!choix.some((el) => el.value === reponse)) {
+  const choiceValue = (choice: AllChoiceType): string =>
+    typeof choice === 'string' ? choice : choice.value
+  if (!choix.some((el) => choiceValue(el) === reponse)) {
     window.notify('La réponse doit faire partie de la liste !', {
       choix,
       reponse,
@@ -122,20 +132,28 @@ export function listeDeroulanteToQcm(
   }
 
   for (let j = 0; j < choix.length; j++) {
-    if (choix[j].value === '') continue
-    if (choix[j].label != null) {
+    const currentChoice = choix[j]
+    const currentValue = choiceValue(currentChoice)
+    if (currentValue === '') continue
+    if (typeof currentChoice === 'string') {
       exercice.autoCorrection[question].propositions.push({
-        texte: String(choix[j].label),
-        statut: choix[j].value === reponse,
+        texte: currentChoice,
+        statut: currentValue === reponse,
         feedback: getFeedback(),
       })
-    } else if (choix[j].latex != null) {
+    } else if (currentChoice.label != null) {
       exercice.autoCorrection[question].propositions.push({
-        texte: `$${choix[j].latex}$`,
-        statut: choix[j].value === reponse,
+        texte: String(currentChoice.label),
+        statut: currentValue === reponse,
         feedback: getFeedback(),
       })
-    } else if (choix[j].svg != null) {
+    } else if (currentChoice.latex != null) {
+      exercice.autoCorrection[question].propositions.push({
+        texte: `$${currentChoice.latex}$`,
+        statut: currentValue === reponse,
+        feedback: getFeedback(),
+      })
+    } else if (currentChoice.svg != null) {
       const body = document.querySelector('body')
       if (body == null) {
         window.notify(
@@ -152,23 +170,23 @@ export function listeDeroulanteToQcm(
       svg.style.width = '20px'
       svg.style.height = '20px'
       svg.style.verticalAlign = 'middle'
-      svg.innerHTML = choix[j].svg ?? ''
+      svg.innerHTML = currentChoice.svg ?? ''
       exercice.autoCorrection[question].propositions.push({
         texte: svg.outerHTML,
-        statut: choix[j].value === reponse,
+        statut: currentValue === reponse,
         feedback: getFeedback(),
       })
       setTimeout(() => {
         if (svg) body.removeChild(svg)
       }, 0)
-    } else if (choix[j].image != null) {
+    } else if (currentChoice.image != null) {
       const image = document.createElement('img')
-      image.src = choix[j].image ?? choix[j].value
+      image.src = currentChoice.image ?? currentValue
       image.style.width = '30px'
       image.style.height = '30px'
       exercice.autoCorrection[question].propositions.push({
         texte: image.outerHTML,
-        statut: choix[j].value === reponse,
+        statut: currentValue === reponse,
         feedback: getFeedback(),
       })
     } else {
@@ -180,7 +198,7 @@ export function listeDeroulanteToQcm(
   }
 }
 
-class ListeDeroulanteElement extends MathaleaCustomElement {
+export class ListeDeroulanteElement extends MathaleaCustomElement {
   static readonly elementTag = 'liste-deroulante'
 
   static verifQuestion(
@@ -232,9 +250,13 @@ class ListeDeroulanteElement extends MathaleaCustomElement {
     return uniformiseResults(resultat)
   }
 
-  private _listeDeroulante?: ListeDeroulante
-  private _container?: HTMLSpanElement
+  // Compatibilité temporaire avec quelques tests et usages internes historiques.
+  _listeDeroulante?: { select: (index: number) => void }
   private _lastValue = ''
+  private _selectedValue = ''
+  private _isOpen = false
+  private _choices: AllChoicesType = []
+  private _documentClickListener?: (event: MouseEvent) => void
 
   constructor() {
     super()
@@ -266,22 +288,44 @@ class ListeDeroulanteElement extends MathaleaCustomElement {
   }
 
   static get observedAttributes() {
-    return ['choices']
+    return ['choices', 'choix0']
   }
 
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (name === 'choices' && oldValue !== newValue) {
+  attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ) {
+    if ((name === 'choices' || name === 'choix0') && oldValue !== newValue) {
       this.render()
     }
   }
 
   connectedCallback() {
     this.hydrateCommonAttributes()
+    this._documentClickListener = (event: MouseEvent) => {
+      if (event.composedPath().includes(this)) return
+      this.close()
+    }
+    document.addEventListener('click', this._documentClickListener)
+    if (this.choix0 && this._selectedValue === '' && this.choices[0] != null) {
+      this._selectedValue = this.choiceValue(this.choices[0])
+      this._lastValue = this._selectedValue
+    }
     this.render()
     const spanId = this.id.replace('liste-deroulante', 'resultatCheck')
-    const resultatCheck = document.createElement('span')
-    resultatCheck.id = spanId
-    this.appendChild(resultatCheck)
+    if (this.querySelector(`[id="${spanId}"]`) == null) {
+      const resultatCheck = document.createElement('span')
+      resultatCheck.id = spanId
+      this.appendChild(resultatCheck)
+    }
+  }
+
+  disconnectedCallback() {
+    if (this._documentClickListener != null) {
+      document.removeEventListener('click', this._documentClickListener)
+      this._documentClickListener = undefined
+    }
   }
 
   set choices(val: AllChoicesType) {
@@ -290,10 +334,9 @@ class ListeDeroulanteElement extends MathaleaCustomElement {
   }
 
   get choices(): AllChoicesType {
-    return this._choices
+    if (this._choices.length > 0) return this._choices
+    return this.choicesFromAttribute
   }
-
-  private _choices: AllChoicesType = []
 
   private emitValueChangedIfNeeded() {
     const currentValue = this.value
@@ -313,10 +356,9 @@ class ListeDeroulanteElement extends MathaleaCustomElement {
   render() {
     if (this.shadowRoot) this.shadowRoot.innerHTML = ''
 
-    // Ajoute le CSS compilé directement ici (copie-colle le contenu du .css généré)
     const style = document.createElement('style')
     style.textContent = `
-span.listeDeroulante {
+.listeDeroulante {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -331,19 +373,20 @@ span.listeDeroulante {
   padding: 2px 6px;
 }
 
-span.listeDeroulante:hover {
+.listeDeroulante:hover {
   border-color: #3b82f6; /* bleu Tailwind */
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
-span.listeDeroulante span.currentChoice {
+.listeDeroulante span.currentChoice {
   display: flex;
   align-items: center;
   padding: 6px 10px;
   outline: none;
+  min-width: 4rem;
 }
 
-span.listeDeroulante .trigger {
+.listeDeroulante .trigger {
   margin-left: auto;
   padding: 6px 8px;
   font-weight: bold;
@@ -353,20 +396,20 @@ span.listeDeroulante .trigger {
   transition: color 0.2s ease;
 }
 
-span.listeDeroulante .trigger:hover {
+.listeDeroulante .trigger:hover {
   color: #111827; /* noir doux */
 }
 
-span.listeDeroulante .ok {
+.listeDeroulante .ok {
   color: #10b981; /* vert moderne */
 }
 
-span.listeDeroulante .ko {
+.listeDeroulante .ko {
   color: #ef4444; /* rouge moderne */
 }
 
 /* Liste déroulante */
-span.listeDeroulante ul {
+.listeDeroulante ul {
   position: fixed;
   width: max-content;
   background: #fff;
@@ -382,11 +425,11 @@ span.listeDeroulante ul {
   overflow-y: auto;
 }
 
-span.listeDeroulante ul.visible {
+.listeDeroulante ul.visible {
   display: block;
 }
 
-span.listeDeroulante ul li {
+.listeDeroulante ul li {
   display: flex;
   align-items: center;
   list-style-type: none;
@@ -399,33 +442,33 @@ span.listeDeroulante ul li {
   border: none;
 }
 
-span.listeDeroulante ul li:hover {
+.listeDeroulante ul li:hover {
   background: #f3f4f6;
   color: #1d4ed8; /* bleu accent */
 }
 
-span.listeDeroulante ul li.selected {
+.listeDeroulante ul li.selected {
   background: #e0f2fe;
   color: #0284c7;
   font-weight: 500;
 }
 
-span.listeDeroulante.disabled {
+.listeDeroulante.disabled {
   cursor: not-allowed;
   background: #f9fafb;
   border-color: #e5e7eb;
   color: #9ca3af;
 }
 
-span.listeDeroulante.disabled .trigger {
+.listeDeroulante.disabled .trigger {
   color: #d1d5db;
 }
 
-span.listeDeroulante.disabled span.currentChoice {
+.listeDeroulante.disabled span.currentChoice {
   pointer-events: none;
 }
 
-span.listeDeroulante math-field {
+.listeDeroulante math-field {
   pointer-events: none;
   background: transparent !important;
   border: none !important;
@@ -434,7 +477,7 @@ span.listeDeroulante math-field {
   padding: 0 !important;
 }
 
-span.listeDeroulante ul li svg.svgChoice {
+.listeDeroulante ul li svg.svgChoice {
   width: 1.2em;
   height: 1.2em;
   margin-right: 6px;
@@ -456,72 +499,221 @@ span.listeDeroulante ul li svg.svgChoice {
 `
     this.shadowRoot!.appendChild(style)
 
-    // Création du conteneur
     const container = document.createElement('span')
+    container.className = 'listeDeroulante'
+    container.classList.toggle('disabled', !this.interactivityOn)
+    if (!this.interactivityOn) container.setAttribute('aria-disabled', 'true')
+    const current = document.createElement('span')
+    current.className = 'currentChoice'
+    current.role = 'listbox'
+    current.tabIndex = this.interactivityOn ? 0 : -1
+    this.renderChoice(current, this.selectedChoice ?? this.initialChoice)
+    if (this.value === '') {
+      current.style.fontStyle = 'italic'
+      current.style.color = 'Grey'
+    }
+    current.addEventListener('keydown', (event) => this.handleKeydown(event))
+    const trigger = document.createElement('span')
+    trigger.className = 'trigger'
+    trigger.textContent = '˅'
+    container.addEventListener('click', (event) => {
+      event.stopPropagation()
+      if (!this.interactivityOn) return
+      this.toggle()
+    })
+    const list = document.createElement('ul')
+    list.classList.toggle('visible', this._isOpen)
+    this.selectableChoices.forEach((choice, index) => {
+      const item = document.createElement('li')
+      item.role = 'option'
+      item.classList.toggle('selected', this.choiceValue(choice) === this.value)
+      this.renderChoice(item, choice)
+      item.addEventListener('click', (event) => {
+        event.stopPropagation()
+        this.selectSelectableIndex(index)
+      })
+      list.appendChild(item)
+    })
+    container.append(current, trigger, list)
     this.shadowRoot!.appendChild(container)
-
-    // Récupère les choix depuis l'attribut ou la propriété
-    let choices: AllChoicesType = this.choices
-    if (!choices.length && this.hasAttribute('choices')) {
-      try {
-        const attr = decodeURIComponent(this.getAttribute('choices')!)
-        choices = JSON.parse(attr)
-      } catch {
-        choices = []
-      }
-    }
-    const choix0 = this.hasAttribute('choix0')
-      ? this.getAttribute('choix0') !== 'false'
-      : false
-
-    // Création de la liste déroulante
-    this._listeDeroulante = new ListeDeroulante(choices, { choix0 })
-    this._listeDeroulante._init({ conteneur: container })
-    this._container = container
-    this.applyInteractivity(this.interactivityOn)
-    const originalSelect = this._listeDeroulante.select.bind(
-      this._listeDeroulante,
-    )
-    this._listeDeroulante.select = (
-      index: number,
-      options?: { withoutOffset?: boolean },
-    ) => {
-      const result = originalSelect(index, options)
-      this.emitValueChangedIfNeeded()
-      return result
-    }
-    this._lastValue = this.value
-  }
-
-  /**
-   * Grise la liste et bloque la sélection quand l'interactivité est coupée
-   * (par exemple au moment de la correction).
-   */
-  private applyInteractivity(isOn: boolean) {
-    if (this._listeDeroulante == null || this._container == null) return
-    this._listeDeroulante.disabled = !isOn
-    this._container.classList.toggle('disabled', !isOn)
-    if (isOn) this._container.removeAttribute('aria-disabled')
-    else this._container.setAttribute('aria-disabled', 'true')
+    this.positionList()
+    this._listeDeroulante = { select: (index: number) => this.select(index) }
   }
 
   protected onInteractivityChanged(isOn: boolean): void {
-    this.applyInteractivity(isOn)
+    if (!isOn) this.close()
+    this.render()
   }
 
-  // API JS pour récupérer la valeur sélectionnée
-  get value() {
-    return this._listeDeroulante?.reponse ?? ''
+  get value(): string {
+    return this._selectedValue
   }
 
-  set value(val) {
-    if (this._listeDeroulante) {
-      this._listeDeroulante.select(
-        this._listeDeroulante.choices.findIndex((el) => el.value === val) +
-          this._listeDeroulante._offset,
+  set value(val: string) {
+    const normalized = val ?? ''
+    if (
+      normalized !== '' &&
+      !this.selectableChoices.some(
+        (choice) => this.choiceValue(choice) === normalized,
       )
-      this.emitValueChangedIfNeeded()
+    ) {
+      return
     }
+    this._selectedValue = normalized
+    this.render()
+    this.emitValueChangedIfNeeded()
+  }
+
+  select(index: number): void {
+    const selectableIndex = index - this.offset
+    this.selectSelectableIndex(selectableIndex)
+  }
+
+  private selectSelectableIndex(index: number): void {
+    const choice = this.selectableChoices[index]
+    if (choice == null) return
+    this._selectedValue = this.choiceValue(choice)
+    this.close()
+    this.render()
+    this.emitValueChangedIfNeeded()
+  }
+
+  private toggle(): void {
+    this._isOpen = !this._isOpen
+    this.render()
+  }
+
+  private close(): void {
+    if (!this._isOpen) return
+    this._isOpen = false
+    this.render()
+  }
+
+  private handleKeydown(event: KeyboardEvent): void {
+    if (!this.interactivityOn) return
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      this.toggle()
+    } else if (event.key === 'Escape' || event.key === 'Tab') {
+      this.close()
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault()
+      this.selectRelative(1)
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault()
+      this.selectRelative(-1)
+    }
+  }
+
+  private selectRelative(delta: number): void {
+    const currentIndex = this.selectableChoices.findIndex(
+      (choice) => this.choiceValue(choice) === this.value,
+    )
+    const nextIndex =
+      currentIndex < 0
+        ? delta > 0
+          ? 0
+          : this.selectableChoices.length - 1
+        : Math.min(
+            this.selectableChoices.length - 1,
+            Math.max(0, currentIndex + delta),
+          )
+    this.selectSelectableIndex(nextIndex)
+  }
+
+  private get choicesFromAttribute(): AllChoicesType {
+    if (!this.hasAttribute('choices')) return []
+    try {
+      return JSON.parse(
+        decodeURIComponent(this.getAttribute('choices') ?? '[]'),
+      ) as AllChoicesType
+    } catch {
+      return []
+    }
+  }
+
+  private get choix0(): boolean {
+    return this.hasAttribute('choix0')
+      ? this.getAttribute('choix0') !== 'false'
+      : false
+  }
+
+  private get offset(): number {
+    return this.choix0 ? 0 : 1
+  }
+
+  private get initialChoice(): AllChoiceType | undefined {
+    return this.choices[0]
+  }
+
+  private get selectableChoices(): AllChoicesType {
+    return this.offset === 0 ? this.choices : this.choices.slice(1)
+  }
+
+  private get selectedChoice(): AllChoiceType | undefined {
+    return this.selectableChoices.find(
+      (choice) => this.choiceValue(choice) === this.value,
+    )
+  }
+
+  private choiceValue(choice: AllChoiceType): string {
+    return typeof choice === 'string' ? choice : choice.value
+  }
+
+  private renderChoice(
+    container: HTMLElement,
+    choice: AllChoiceType | undefined,
+  ): void {
+    container.textContent = ''
+    if (choice == null) return
+    if (typeof choice === 'string') {
+      container.textContent = choice
+      return
+    }
+    if (choice.latex != null) {
+      container.innerHTML = `$$${choice.latex}$$`
+      renderMathInElement(container)
+      const spans = container.querySelectorAll('span')
+      if (spans.length > 2) spans[2].style.display = 'none'
+      return
+    }
+    if (choice.image != null) {
+      const image = document.createElement('img')
+      image.src = choice.image
+      image.style.width = '30px'
+      image.style.height = '30px'
+      container.appendChild(image)
+      return
+    }
+    if (choice.svg != null) {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+      svg.setAttribute('viewBox', '-10 -10 20 20')
+      svg.classList.add('svgChoice')
+      svg.style.display = 'block'
+      svg.style.width = '20px'
+      svg.style.height = '20px'
+      svg.style.verticalAlign = 'middle'
+      svg.innerHTML = choice.svg
+      container.appendChild(svg)
+      return
+    }
+    const span = document.createElement('span')
+    span.innerHTML = choice.label ?? choice.value
+    container.appendChild(span)
+    renderMathInElement(container)
+  }
+
+  private positionList(): void {
+    if (!this._isOpen || this.shadowRoot == null) return
+    const container =
+      this.shadowRoot.querySelector<HTMLElement>('.listeDeroulante')
+    const list = this.shadowRoot.querySelector<HTMLUListElement>('ul')
+    if (container == null || list == null) return
+    const rect = container.getBoundingClientRect()
+    list.style.top = `${rect.bottom}px`
+    list.style.left = `${rect.left}px`
+    list.style.minWidth = `${rect.width}px`
+    list.style.maxHeight = `${Math.max(window.innerHeight - rect.bottom - 10, 100)}px`
   }
 }
 

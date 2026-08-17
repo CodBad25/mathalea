@@ -46,9 +46,8 @@ export class MetaInteractif2dElement extends MathaleaCustomElement {
       const firstField = document.querySelector(
         `#MetaInteractif2dEx${exercice.numeroExercice}Q${i}field0`,
       )
-      const svgContainer = firstField?.closest(
-        'div[style*="position: relative"]',
-      )
+      const svgContainer =
+        firstField == null ? null : findRelativePositionContainer(firstField)
       const insertAfter =
         svgContainer ??
         firstField?.parentElement ??
@@ -215,3 +214,17 @@ function formatMetaInteractif2dAnswer(rawAnswer: string): string {
 }
 
 registerMathaleaCustomElement(MetaInteractif2dElement)
+
+function findRelativePositionContainer(element: Element): HTMLElement | null {
+  let current = element.parentElement
+  while (current != null) {
+    if (
+      current.tagName === 'DIV' &&
+      current.style.position.toLowerCase() === 'relative'
+    ) {
+      return current
+    }
+    current = current.parentElement
+  }
+  return null
+}

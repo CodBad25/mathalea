@@ -1,25 +1,141 @@
-import seuilFctAff from '../can/2e/can2F2-06'
-export const titre = 'Déterminer un seuil avec une fonction affine'
-export const dateDePublication = '27/08/2025'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { shuffle } from '../../lib/outils/arrayOutils'
+import { reduireAxPlusB } from '../../lib/outils/ecritures'
+import { miseEnCouleur, texteEnCouleur } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
+import ExerciceSimple from '../ExerciceSimple'
+
+export const titre = 'Résoudre une inéquation $ax+b>cx+d$'
+export const dateDePublication = '16/08/2026'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
- * Clone de can2F2-06 pour les auto 1er
- * @author Gilles Mora
+ * Résoudre une inéquation du type ax+b < cx+d.
+ * @author Arnaud Meistermann
  */
 
-export const uuid = '029b7'
+export const uuid = 'b8716'
 
 export const refs = {
   'fr-fr': ['1A-C10-14'],
   'fr-ch': [],
 }
-export default class Auto1AC12a extends seuilFctAff {
+
+const symbols = ['\\leqslant', '<', '\\geqslant', '>'] as const
+type InequalitySymbol = (typeof symbols)[number]
+
+function inverseSymbol(symbol: InequalitySymbol): InequalitySymbol {
+  const inverses: Record<InequalitySymbol, InequalitySymbol> = {
+    '\\leqslant': '\\geqslant',
+    '<': '>',
+    '\\geqslant': '\\leqslant',
+    '>': '<',
+  }
+  return inverses[symbol]
+}
+
+function isStrict(symbol: InequalitySymbol): boolean {
+  return symbol === '<' || symbol === '>'
+}
+
+function withStrictness(
+  symbol: InequalitySymbol,
+  strict: boolean,
+): InequalitySymbol {
+  if (symbol === '<' || symbol === '\\leqslant') {
+    return strict ? '<' : '\\leqslant'
+  }
+  return strict ? '>' : '\\geqslant'
+}
+
+function makeInterval(
+  symbol: InequalitySymbol,
+  root: number,
+  big = false,
+): string {
+  const bigCommand = big ? '\\bigg' : ''
+  const strict = isStrict(symbol)
+
+  if (symbol === '<' || symbol === '\\leqslant') {
+    return `${bigCommand}]-\\infty~;~${root}${bigCommand}${strict ? '[' : ']'}`
+  }
+  return `${bigCommand}${strict ? ']' : '['}${root}~;~+\\infty${bigCommand}[`
+}
+
+export default class Auto1AC1014 extends ExerciceSimple {
   constructor() {
     super()
+
+    this.typeExercice = 'simple'
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.formatChampTexte = KeyboardType.clavierEnsemble
+    this.optionsDeComparaison = { intervalle: true }
+    this.versionQcmDisponible = true
     this.versionQcm = true
+    this.versionQcmOptions = {
+      radio: true,
+      format: 'caseLettre',
+      compact: true,
+    }
+  }
+
+  nouvelleVersion() {
+    if (context.isAmc) this.versionQcm = false
+
+    const difference =
+      this.quotaRandint('difference', 2, 6) *
+      this.quotaChoice('signeDifference', [-1, 1])
+    const c = this.quotaRandint('c', -6, 6, [0, -difference])
+    const a = c + difference
+    const root =
+      this.quotaRandint('root', 2, 7) * this.quotaChoice('signeRoot', [-1, 1])
+    const b = this.quotaRandint('b', -9, 9, [0, -difference * root])
+    const d = b + difference * root
+
+    const symbol = symbols[this.quotaRandint('symbol', 0, symbols.length - 1)]
+    const finalSymbol = difference < 0 ? inverseSymbol(symbol) : symbol
+    const wrongDirection = inverseSymbol(finalSymbol)
+    const wrongStrictness = withStrictness(finalSymbol, !isStrict(finalSymbol))
+
+    const inequation = (align = false) =>
+      `${reduireAxPlusB(a, b)}${align ? '&' : ''}${symbol} ${reduireAxPlusB(c, d)}`
+
+    this.question = `Quel est l'ensemble des solutions de l'inéquation $${inequation()}$ ?`
+    if (this.interactif && this.versionQcm === false) {
+      this.question += '$S=$'
+    }
+
+    this.correction = `$
+\\begin{aligned}
+${inequation(true)}\\\\
+${reduireAxPlusB(difference, b)}&${symbol}${d}\\\\
+${reduireAxPlusB(difference, 0)}&${symbol}${d - b}\\\\
+x&${difference < 0 ? miseEnCouleur(finalSymbol) : finalSymbol}\\dfrac{${d - b}}{${difference}}\\\\
+x&${finalSymbol}${root}
+\\end{aligned}
+$<br>`
+    this.correction += `L'ensemble de solutions est : ${texteEnCouleur(` $${makeInterval(finalSymbol, root, true)}$`)}.<br>`
+
+    this.reponse = makeInterval(finalSymbol, root)
+
+    if (this.versionQcm) {
+      // Les trois caractéristiques visibles sont équilibrées pour éviter qu'une
+      // réponse puisse être devinée par fréquence : deux directions, deux
+      // bornes et deux types d'inégalité de chaque sorte.
+      const propositions = [
+        makeInterval(finalSymbol, root),
+        makeInterval(inverseSymbol(wrongStrictness), root),
+        makeInterval(wrongStrictness, -root),
+        makeInterval(wrongDirection, -root),
+      ]
+      this.distracteurs = shuffle(propositions).map(
+        (proposition) => `$${proposition}$`,
+      )
+      this.reponse = `$${this.reponse}$`
+    }
   }
 }

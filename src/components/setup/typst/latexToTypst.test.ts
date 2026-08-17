@@ -98,18 +98,33 @@ describe('latexMathToTypst', () => {
   })
 
   it('convertit le texte inclus dans les formules via #txt (police du texte)', () => {
-    expect(latexMathToTypst('5\\,\\text{cm}')).toBe('5 thin #txt("cm")')
+    expect(latexMathToTypst('5\\,\\text{cm}')).toBe('5 thin#txt("cm")')
+  })
+
+  it('ne double pas les espaces autour du texte inclus', () => {
+    // Typst rend les espaces sources qui bordent une chaîne en mode maths :
+    // celles que tex2typst ajoute comme séparateurs de jetons s'ajouteraient
+    // à l'espace du \text{…} (ou à l'espace insécable de `~`) et afficheraient
+    // une double espace (ex. 4G22-3).
+    expect(latexMathToTypst('5\\text{ cm}')).toBe('5#txt(" cm")')
+    expect(latexMathToTypst('5~\\text{cm}')).toBe('5 space.nobreak#txt("cm")')
+    expect(latexMathToTypst('\\text{aire} = 5\\text{ cm}^2')).toBe(
+      '#txt("aire")= 5#txt(" cm")^2',
+    )
+    // espace insécable entre deux nombres : pas de chaîne en jeu, l'espace
+    // source n'est pas rendue et l'insécable reste seule
+    expect(latexMathToTypst('1~200')).toBe('1 space.nobreak 200')
   })
 
   it('gère les unités avec exposant et $ imbriqués dans \\text{}', () => {
     // unités MathALÉA écrites `m$^2$` / `$\\text{cm}^2$` : le $ intérieur
     // rebascule en mode math dans \text{} — ne doit pas casser la conversion
     expect(latexMathToTypst('387\\text{ m$^2$/h}')).toBe(
-      '387 #txt(" m")^2 #txt("/h")',
+      '387#txt(" m")^2#txt("/h")',
     )
     expect(latexMathToTypst('\\text{ dam$^2$}')).toBe('#txt(" dam")^2')
     expect(latexMathToTypst('648\\text{ $\\text{cm}^2$/h}')).toBe(
-      '648 " " #txt("cm")^2 #txt("/h")',
+      '648" "#txt("cm")^2#txt("/h")',
     )
   })
 
@@ -118,7 +133,7 @@ describe('latexMathToTypst', () => {
     // bloc et ne le referme pas prématurément
     expect(
       htmlToTypst('$387\\text{ m$^2$/h} = \\dfrac{387\\text{ m$^2$}}{1}$'),
-    ).toBe('$387 #txt(" m")^2 #txt("/h") = frac(387 #txt(" m")^2, 1)$')
+    ).toBe('$387#txt(" m")^2#txt("/h")= frac(387#txt(" m")^2, 1)$')
   })
 
   it('supprime le saut de ligne final qui échapperait le $ fermant', () => {
@@ -140,7 +155,7 @@ describe('latexMathToTypst', () => {
 
   it('décode les entités HTML présentes dans la formule', () => {
     expect(latexMathToTypst('\\text{Donc&nbsp;: }x=2')).toBe(
-      '#txt("Donc\u00a0: ") x = 2',
+      '#txt("Donc\u00a0: ")x = 2',
     )
   })
 
@@ -181,11 +196,11 @@ describe('latexMathToTypst — accents nus en mode maths', () => {
   })
 
   it('protège un caractère accentué isolé au milieu d\'une formule', () => {
-    expect(latexMathToTypst('x = é')).toBe('x = #txt("é")')
+    expect(latexMathToTypst('x = é')).toBe('x =#txt("é")')
   })
 
   it('laisse les mots déjà protégés par \\text{} inchangés', () => {
-    expect(latexMathToTypst('3 \\text{ à } 5')).toBe('3 #txt(" à ") 5')
+    expect(latexMathToTypst('3 \\text{ à } 5')).toBe('3#txt(" à ")5')
   })
 })
 

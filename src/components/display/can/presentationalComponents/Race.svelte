@@ -46,7 +46,16 @@
       current += 1
     }
   }
+
+  function handleKeyUp(e: KeyboardEvent) {
+    /* keyup plutôt que keydown, sinon plusieurs events tirés pour une même pression prolongée */
+    if (e.key === 'Enter') {
+      nextQuestion()
+    }
+  }
 </script>
+
+<svelte:window on:keyup={handleKeyUp} />
 
 <div
   class="w-full h-full flex flex-col justify-between items-center overflow-y-auto bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
@@ -85,7 +94,6 @@
         mode={'display'}
         visible={current === i}
         index={i}
-        {nextQuestion}
       />
     {/each}
   </div>

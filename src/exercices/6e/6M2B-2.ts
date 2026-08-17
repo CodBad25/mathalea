@@ -226,7 +226,8 @@ export default class AireAssemblageCarreRectangleTriangle extends ExerciceSimple
 
       this.correction += '<br>'
       this.correction += figureCorrectionHtml
-    } else if (configuration === 'aireGrandCarre') {
+    }
+    else if (configuration === 'aireGrandCarre') {
       this.optionsChampTexte = {
         texteApres: ' $\\text{cm}^2$',
         texteAvant: 'Aire du grand carré : ',
@@ -273,8 +274,8 @@ export default class AireAssemblageCarreRectangleTriangle extends ExerciceSimple
       })
 
       figure.create('TextByPosition', {
-        x: a + 2,
-        y: a + b + a / 2,
+        x: a + 1.8,
+        y: a + b + a / 3,
         text: `$${texNombre((a * b) / 2)}~\\text{cm}^2$`,
       })
 
@@ -349,7 +350,8 @@ export default class AireAssemblageCarreRectangleTriangle extends ExerciceSimple
 
       this.correction += '<br>'
       this.correction += figureCorrectionHtml
-    } else if (configuration === 'aireTriangleQuatreCarres') {
+    }
+    else if (configuration === 'aireTriangleQuatreCarres') {
       this.optionsChampTexte = {
         texteApres: ' $\\text{cm}^2$',
         texteAvant: 'Aire du triangle : ',
@@ -464,7 +466,7 @@ export default class AireAssemblageCarreRectangleTriangle extends ExerciceSimple
 
       figure.create('TextByPosition', {
         // Assez bas dans le petit triangle pour que le texte reste sous l'hypoténuse
-        x: cote + base + basePetit / 4,
+        x: cote + base + basePetit / 2,
         y: hauteurRectangle + hauteurPetit / 4,
         text: `$${texNombre(airePetit)}~\\text{cm}^2$`,
       })

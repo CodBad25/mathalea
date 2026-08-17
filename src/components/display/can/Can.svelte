@@ -637,7 +637,6 @@
           mode={'display'}
           visible={false}
           index={i}
-          nextQuestion={() => {}}
         />
       {/each}
     </div>

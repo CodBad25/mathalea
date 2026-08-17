@@ -333,6 +333,7 @@ Particularités de la conversion des formules (`latexMathToTypst`) :
 - virgule décimale française rendue sans espace (`3,5` → `3","5`) ;
 - `\num`/`\numprint` dépliés en conservant les espaces fines (`\,`) ;
 - espaces LaTeX explicites (`\thinspace`, `\medspace`, `\thickspace`) normalisées vers les espaces mathématiques Typst ;
+- les espaces sources qui bordent une chaîne de texte (`#txt("…")`, `" "`) sont supprimées : contrairement à LaTeX, Typst rend en mode maths l'espace qui précède ou suit une chaîne, elle s'ajouterait donc à celle contenue dans le `\text{…}` (`5\text{ cm}`) ou à l'espace insécable qui précède (`5~\text{cm}`) et afficherait une double espace ;
 - la mise en évidence `{\color{...}\boldsymbol{...}}` de `miseEnEvidence` est convertie en `#text(fill: rgb("..."))` ;
 - en cas d'échec de conversion, la formule est insérée verbatim entre guillemets.
 

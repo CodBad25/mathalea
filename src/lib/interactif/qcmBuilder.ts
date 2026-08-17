@@ -98,7 +98,8 @@ export function buildQcmForExercise(
       texte: 'Je ne sais pas',
       statut: false,
     })
-    autoCorrectionOptions.lastChoice = qcmPropositions.length - (hasAucune ? 3 : 2)
+    autoCorrectionOptions.lastChoice =
+      qcmPropositions.length - (hasAucune ? 3 : 2)
   } else if (hasAucune) {
     autoCorrectionOptions.lastChoice = qcmPropositions.length - 2
   }
@@ -117,7 +118,7 @@ export function buildQcmForExercise(
 
   const qcm = propositionsQcm(exercice, questionIndex, {
     style: 'margin:0 3px 0 3px;',
-    format: exercice.interactif ? 'case' : 'lettre',
+    format: exercice.interactif ? (options?.format ?? 'case') : 'lettre',
   })
 
   const shuffledPropositions =
@@ -156,7 +157,7 @@ export function buildQcmForExercise(
   }
 
   return {
-    question: `${question}<br><br>${qcm.texte}`,
+    question: `${question}${options?.compact ? '<br>' : '<br><br>'}${qcm.texte}`,
     correction: correctionTexte,
   }
 }

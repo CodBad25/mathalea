@@ -11,6 +11,8 @@ export const refs = {
 export default class ArrondirUneValeur2nde extends ArrondirUneValeur6e {
   constructor() {
     super()
+    this.version = 2
     this.sup = 5
+    this.besoinFormulaireNumerique = false
   }
 }

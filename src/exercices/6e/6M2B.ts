@@ -1,5 +1,7 @@
-import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
-import type { AllChoicesType } from '../../lib/interactif/listeDeroulante/ListeDeroulante'
+import {
+  choixDeroulant,
+  type AllChoicesType,
+} from '../../lib/customElements/ListeDeroulanteElement'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -259,22 +261,25 @@ export default class FormulesAireCarreRectangle extends Exercice {
 
   correctionInteractive = (i: number) => {
     const select1 = document.querySelector(
-      `#ex${this.numeroExercice}Q${3 * i}`,
+      `#liste-deroulanteEx${this.numeroExercice}Q${3 * i}`,
     ) as HTMLSelectElement
     const select2 = document.querySelector(
-      `#ex${this.numeroExercice}Q${3 * i + 1}`,
+      `#liste-deroulanteEx${this.numeroExercice}Q${3 * i + 1}`,
     ) as HTMLSelectElement
     const select3 = document.querySelector(
-      `#ex${this.numeroExercice}Q${3 * i + 2}`,
+      `#liste-deroulanteEx${this.numeroExercice}Q${3 * i + 2}`,
     ) as HTMLSelectElement
 
     if (this.answers === undefined) this.answers = {}
     if (select1?.value)
-      this.answers[`ex${this.numeroExercice}Q${3 * i}`] = select1.value
+      this.answers[`liste-deroulanteEx${this.numeroExercice}Q${3 * i}`] =
+        select1.value
     if (select2?.value)
-      this.answers[`ex${this.numeroExercice}Q${3 * i + 1}`] = select2.value
+      this.answers[`liste-deroulanteEx${this.numeroExercice}Q${3 * i + 1}`] =
+        select2.value
     if (select3?.value)
-      this.answers[`ex${this.numeroExercice}Q${3 * i + 2}`] = select3.value
+      this.answers[`liste-deroulanteEx${this.numeroExercice}Q${3 * i + 2}`] =
+        select3.value
     let isOk = false
     let isOk1 = false
     let isOk23 = false

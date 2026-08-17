@@ -455,6 +455,24 @@ export function tableau(tableauParams: TableauParams) {
  * |  3   | A3 | B3 | C3 |
  * -----------------------
  *
+ * @example avec fin de ligne
+ * tableauColonneLigne(['~1','A','B','C','coin2'],['1','2'],['A1','B1','C1','A2','B2','C2'],['f1','f2']) affiche le tableau ci-dessous
+ * --------------------------
+ * | ~1 | A  | B  | C  | ~1 |
+ * --------------------------
+ * | 1  | A1 | B1 | C1 | f1 |
+ * --------------------------
+ * | 2  | A2 | B2 | C2 | f2 |
+ * --------------------------
+ *
+ * @example sans entête de colonne
+ * tableauColonneLigne([],['1','2'],['A1','B1','C1','A2','B2','C2']) affiche le tableau ci-dessous
+ * -----------------------
+ * |  1   | A1 | B1 | C1 |
+ * -----------------------
+ * |  2   | A2 | B2 | C2 |
+ * -----------------------
+ * 
  * @author Sébastien Lozano
  */
 export function tableauColonneLigne(
@@ -467,17 +485,9 @@ export function tableauColonneLigne(
   question = 0,
   isInteractif = false,
   style: { [key: string]: string } = {},
+  tabColFooters: (string | number)[] = [],
+  tabLineFooters: (string | number)[] = [],
 ): string {
-  // on définit le nombre de colonnes
-  const nbColonnes =
-    tabEntetesColonnes.length > 0
-      ? tabEntetesColonnes.length
-      : tabLignes.length / tabEntetesLignes.length + 1
-  // on définit le nombre de lignes
-  const nbLignes =
-    tabEntetesLignes.length > 0
-      ? tabEntetesLignes.length
-      : tabLignes.length / tabEntetesColonnes.length + 1
   // On construit le string pour obtenir le tableau pour compatibilité HTML et LaTeX
   if (context.isHtml && !context.isTypst) {
     const tableauCL = AddTabDbleEntryMathlive.create(
@@ -487,6 +497,8 @@ export function tableauColonneLigne(
         tabEntetesColonnes,
         tabEntetesLignes,
         tabLignes,
+        tabColFooters,
+        tabLineFooters,
       ),
       `tableauMathlive ${style.classes ? style.classes : ''}`,
       isInteractif,
@@ -494,16 +506,28 @@ export function tableauColonneLigne(
     )
     return tableauCL.output
   } else {
-    let tableauCL = ''
-    if (arraystretch === undefined || typeof arraystretch === 'boolean') {
-      arraystretch = 1
+    // on définit le nombre de data colonnes (sans header ni footer)
+    // on définit le nombre de tab colonnes (avec header et footer)
+    let nbTabCols = tabEntetesColonnes.length
+    let nbDataCols = tabLignes.length / tabEntetesLignes.length
+    if (tabEntetesColonnes.length === 0) {
+      nbTabCols = nbDataCols
+      if (tabEntetesLignes.length > 0) nbTabCols++;
+      if (tabLineFooters.length > 0) nbTabCols++;
     }
+
+    // on définit le nombre de lignes (sans header ni footer)
+    const nbLignes = tabEntetesLignes.length
+    let tableauCL = ''
+      if (arraystretch === undefined || typeof arraystretch === 'boolean') {
+        arraystretch = 1
+      }
 
     tableauCL += `$\\renewcommand{\\arraystretch}{${arraystretch}}\n`
     tableauCL += '\\begin{array}{|'
 
     // on construit la 1ere ligne avec toutes les colonnes
-    for (let k = 0; k < nbColonnes; k++) {
+    for (let k = 0; k < nbTabCols; k++) {
       tableauCL += 'c|'
     }
     tableauCL += '}\n'
@@ -517,7 +541,7 @@ export function tableauColonneLigne(
       } else {
         tableauCL += `\\cellcolor${color0Hex ? '[HTML]' : ''}{${color0Hex ? color0Hex.withoutHash : color0}} ${latex ? tabEntetesColonnes[0] : '\\text{' + tabEntetesColonnes[0] + '}'}`
       }
-      for (let k = 1; k < nbColonnes; k++) {
+      for (let k = 1; k < tabEntetesColonnes.length; k++) {
         const enTeteColonne = tabEntetesColonnes[k]
         const color = style[`L0C${k}`] != null ? style[`L0C${k}`] : 'lightgray'
         const colorHex = parseHexColor(color)
@@ -545,8 +569,8 @@ export function tableauColonneLigne(
       } else {
         tableauCL += `\\cellcolor${colorHex ? '[HTML]' : ''}{${colorHex ? colorHex.withoutHash : color}} ${latex ? enTeteLigne : '\\text{' + enTeteLigne + '}'}`
       }
-      for (let m = 0; m < nbColonnes - 1; m++) {
-        const cellule = tabLignes[(nbColonnes - 1) * k + m]
+      for (let m = 0; m < nbDataCols; m++) {
+        const cellule = tabLignes[nbDataCols * k + m]
         const color =
           style[`L${k + 1}C${m + 1}`] != null ? style[`L${k + 1}C${m + 1}`] : ''
         const colorHex = parseHexColor(color)
@@ -564,9 +588,43 @@ export function tableauColonneLigne(
           }
         }
       }
+      if (tabLineFooters.length > 0) {
+        const lineFooter = tabLineFooters[k]
+        const color = style[`L${k + 1}C${nbTabCols}`]
+        ? style[`L${k + 1}C${nbTabCols}`]
+          : style.LC0
+            ? style.LC0
+            : 'lightgray'
+        const colorHex = parseHexColor(color)
+        if (typeof lineFooter === 'number') {
+          tableauCL += ` & \\cellcolor${colorHex ? '[HTML]' : ''}{${colorHex ? colorHex.withoutHash : color}} ${latex ? texNombre(lineFooter, 6) : '\\text{' + stringNombre(lineFooter, 6) + '}'}`
+        } else {
+          tableauCL += ` & \\cellcolor${colorHex ? '[HTML]' : ''}{${colorHex ? colorHex.withoutHash : color}} ${latex ? lineFooter : '\\text{' + lineFooter + '}'}`
+        }
+      }
       tableauCL += '\\\\\n'
       tableauCL += '\\hline\n '
       // tableauCL += k === nbLignes - 1 ? '' : '\\rule[-2ex]{0pt} {6ex}\\ '
+    }
+
+    if (tabColFooters.length > 0) {
+      if (typeof tabColFooters[0] === 'number') {
+        tableauCL += `\\cellcolor${color0Hex ? '[HTML]' : ''}{${color0Hex ? color0Hex.withoutHash : color0}} ${latex ? texNombre(tabColFooters[0], 2) : '\\text{' + stringNombre(tabColFooters[0], 2) + '}'}`
+      } else {
+        tableauCL += `\\cellcolor${color0Hex ? '[HTML]' : ''}{${color0Hex ? color0Hex.withoutHash : color0}} ${latex ? tabColFooters[0] : '\\text{' + tabColFooters[0] + '}'}`
+      }
+      for (let k = 1; k < nbTabCols; k++) {
+        const lineFooter = tabColFooters[k]
+        const color = style[`L0C${k}`] != null ? style[`L0C${k}`] : 'lightgray'
+        const colorHex = parseHexColor(color)
+        if (typeof lineFooter === 'number') {
+          tableauCL += ` & \\cellcolor${colorHex ? '[HTML]' : ''}{${colorHex ? colorHex.withoutHash : color}} ${latex ? texNombre(lineFooter, 6) : '\\text{' + stringNombre(lineFooter, 6) + '}'}`
+        } else {
+          tableauCL += ` & \\cellcolor${colorHex ? '[HTML]' : ''}{${colorHex ? colorHex.withoutHash : color}} ${latex ? lineFooter : '\\text{' + lineFooter + '}'}`
+        }
+      }
+      tableauCL += '\\\\\n'
+      tableauCL += '\\hline\n'
     }
     tableauCL += '\\end{array}\n'
 

@@ -102,7 +102,6 @@
           mode={'correction'}
           visible={true}
           index={current}
-          nextQuestion={() => {}}
         />
         {#if $canOptions.isInteractive}
           <div

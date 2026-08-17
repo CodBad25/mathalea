@@ -42,6 +42,7 @@ import '../customElements/PointsCliquablesElement'
 import '../customElements/ObjetsCliquablesElement'
 import '../customElements/FractionCliquableElement'
 import '../customElements/MathaleaLabyrintheElement'
+import '../customElements/MathaleaBranchingQcm'
 
 export function isClickFiguresArray(
   figures: Figure[] | ClickFigures[],
@@ -111,8 +112,7 @@ function getSaisieBruteChampAvecUnite(
   if (key === 'reponse') {
     if (mathaleaMathfield != null) return mathaleaMathfield.value ?? ''
     const champTexte = document.getElementById(baseId) as
-      | (HTMLElement & { value?: string })
-      | null
+      (HTMLElement & { value?: string }) | null
     return champTexte?.value ?? null
   }
   if (/^champ\d+$/.test(key)) {

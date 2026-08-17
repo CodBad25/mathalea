@@ -361,6 +361,7 @@ export type InteractivityType =
   | 'mathalea-textfield'
   | 'tableau-mathlive'
   | 'mathalea-qcm'
+  | 'mathalea-branching-qcm'
   | 'alea-iep-editeur'
   | 'relier-etiquettes' // Non compatible AMC
   | 'diagram-builder' // Non compatible AMC
@@ -406,6 +407,7 @@ export function isInteractivityType(
     value === 'mathalea-textfield' ||
     value === 'tableau-mathlive' ||
     value === 'mathalea-qcm' ||
+    value === 'mathalea-branching-qcm' ||
     value === 'alea-iep-editeur' ||
     value === 'clique-figure' ||
     value === 'points-cliquables' ||
@@ -448,6 +450,7 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'mathalea-textfield' ||
     value === 'tableau-mathlive' ||
     value === 'mathalea-qcm' ||
+    value === 'mathalea-branching-qcm' ||
     value === 'alea-iep-editeur' ||
     value === 'clique-figure' ||
     value === 'points-cliquables' ||
@@ -908,7 +911,7 @@ export type ParamForQcmInteractif = {
   ordered?: boolean
   vertical?: boolean
   lastChoice?: number
-  format?: 'lettre' | 'case'
+  format?: 'lettre' | 'case' | 'caseLettre'
   nbCols?: number
   correction?: string
 }
@@ -935,6 +938,7 @@ export type AutoCorrection = {
   formatInteractif?: InteractivityType
   options?: ParamForQcmInteractif
   propositions?: UneProposition[]
+  branchingQcm?: unknown
 }
 
 export type LegacyReponse =
@@ -1211,6 +1215,8 @@ export interface IExerciceQcmOptions {
   vertical?: boolean
   lastChoice?: number
   dontKnow?: boolean
+  format?: 'case' | 'lettre' | 'caseLettre'
+  compact?: boolean
 }
 
 export interface IExerciceQcm extends IExercice {

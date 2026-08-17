@@ -38,6 +38,7 @@ Les custom elements maison sont centralisés dans `src/lib/customElements/`. Dan
 | `texte`                        | Obsolète   | Alias historique de `mathalea-textfield`                                        | `ajouteChampTexte()`                  | `src/lib/interactif/questionMathLive.ts`, `src/lib/customElements/MathaleaTextfield.ts`                                                |
 | `qcm`                          | Obsolète   | API historique des QCM, rendue en HTML par `mathalea-qcm`                       | `propositionsQcm()`                   | `src/lib/interactif/qcm.ts`, `src/lib/customElements/MathaleaQcm.ts`                                                                   |
 | `mathalea-qcm`                 | Moderne    | QCM déclaré par `handleAnswers()`                                               | `addMathaleaQcm()`                    | `src/lib/customElements/MathaleaQcm.ts`                                                                                                |
+| `mathalea-branching-qcm`       | Moderne    | QCM dont le choix affiche une question de justification associée                | `addMathaleaBranchingQcm()`           | `src/lib/customElements/MathaleaBranchingQcm.ts`                                                                                       |
 | `echiquier-probleme`           | Moderne    | Construction interactive d'un échiquier de problème avec lignes/colonnes libres | `addEchiquierProbleme()`              | `src/lib/customElements/EchiquierProblemeElement.ts`                                                                                   |
 | `liste-deroulante`             | Moderne    | Liste déroulante HTML custom                                                    | `choixDeroulant()`                    | `src/lib/customElements/ListeDeroulanteElement.ts`                                                                                     |
 | `dnd`                          | Historique | Alias historique de `drag-and-drop`                                             | helpers de `DragAndDrop.ts`           | `src/lib/interactif/DragAndDrop.ts`, `src/lib/customElements/DragAndDropElement.ts`                                                    |
@@ -138,6 +139,7 @@ Les QCM n'installent plus de listener de validation depuis `propositionsQcm()` :
 | `meta-interactif-2d`           | `MetaInteractif2dElement.verifQuestion()` dans `src/lib/customElements/MetaInteractif2dElement.ts`                                                                           |
 | `qcm`                          | Routé vers `MathaleaQcmElement.verifQuestion()` dans `src/lib/customElements/MathaleaQcm.ts`                                                                                 |
 | `mathalea-qcm`                 | `MathaleaQcmElement.verifQuestion()` dans `src/lib/customElements/MathaleaQcm.ts`                                                                                            |
+| `mathalea-branching-qcm`       | `MathaleaBranchingQcmElement.verifQuestion()` dans `src/lib/customElements/MathaleaBranchingQcm.ts`, vérification pondérée du choix et de la justification affichée          |
 | `echiquier-probleme`           | `EchiquierProblemeElement.verifQuestion()` dans `src/lib/customElements/EchiquierProblemeElement.ts`, vérification des grandeurs, des objets, puis du type et de l'opération |
 | `liste-deroulante`             | `ListeDeroulanteElement.verifQuestion()`                                                                                                                                     |
 | `svg-selection`                | `SvgSelectionElement.verifQuestion()` dans `src/lib/customElements/SvgSelectionElement.ts`                                                                                   |
@@ -176,18 +178,99 @@ proposés et, si besoin, le type d'échiquier et l'opération attendus. L'option
 - `automatic` : les cellules se remplissent dès que les entêtes correspondantes
   sont choisies ;
 - `student` : chaque cellule est complétée par l'élève avec une liste construite
-  à partir des valeurs des cellules de référence.
+  à partir des valeurs des cellules de référence ;
+- `correction` : les cellules sont remplies par les valeurs attendues, sans
+  liste déroulante. Ce mode sert au rendu corrigé HTML et aux rendus statiques.
 
 Les cellules peuvent porter `kind: 'given'` ou `kind: 'computed'`. Les cellules
 `computed` représentent des résultats intermédiaires ou finaux à produire pour
 résoudre le problème. En mode `student`, l'option `cellChoices` permet d'enrichir
 la liste proposée avec ces résultats et des distracteurs ; à défaut, la liste est
-construite à partir des valeurs de `cells`.
+construite à partir des valeurs de `cells`. Les choix de cellules acceptent les
+chaînes simples et les objets de `liste-deroulante`, notamment `{ value, label }`
+et `{ value, latex }`. Dès qu'un choix riche est présent, les cellules utilisent
+le custom element `liste-deroulante` au lieu d'un `<select>` natif, ce qui permet
+le rendu MathLive/KaTeX dans les propositions.
+
+Exemple minimal avec résultats intermédiaires :
+
+```ts
+const html = addEchiquierProbleme(this, i, {
+  expectedRows: ['Prix unitaire', 'Masse totale', 'Prix total'],
+  expectedColumns: ['Pommes', 'Bananes', 'Courses'],
+  rowChoices: [
+    'Prix unitaire',
+    'Masse totale',
+    'Prix total',
+    'Nombre de fruits',
+  ],
+  columnChoices: ['Pommes', 'Bananes', 'Courses', 'Clients'],
+  cellFillMode: 'student',
+  cells: [
+    {
+      row: 'Prix unitaire',
+      column: 'Pommes',
+      value: '2 €/kg',
+      kind: 'given',
+    },
+    {
+      row: 'Masse totale',
+      column: 'Pommes',
+      value: '3 kg',
+      kind: 'given',
+    },
+    {
+      row: 'Prix total',
+      column: 'Pommes',
+      value: '6 €',
+      kind: 'computed',
+    },
+  ],
+  cellChoices: [
+    '2 €/kg',
+    '3 kg',
+    '6 €',
+    { value: '1/2 kg', latex: '\\frac{1}{2}\\text{ kg}' },
+  ],
+})
+```
 
 L'option `simplificationMode: 'grey'` ajoute un bouton de grisage sur chaque
 entête de ligne et de colonne. La réponse attendue peut alors préciser
 `expectedGreyedRows` et `expectedGreyedColumns` pour vérifier l'échiquier
 simplifié conservé par l'élève.
+
+Le score est attribué par groupes de vérification, avec un maximum de 5 points
+pour un échiquier complet :
+
+- 1 point si toutes les grandeurs attendues sont présentes ;
+- 1 point si tous les objets attendus sont présents ;
+- 1 point si toutes les cellules internes sont correctement remplies, seulement
+  en mode `cellFillMode: 'student'` ;
+- 1 point si tous les éléments à griser sont corrects, seulement en mode
+  `simplificationMode: 'grey'` ;
+- 1 point si le type d'échiquier et l'opération sont corrects, seulement quand
+  `expectedStructure` ou `expectedOperation` est renseigné.
+
+Le maximum affiché dans le bloc de réglages de l'exercice est calculé par
+`pointsMaxQuestion()`. Pour rester cohérent avec `verifQuestion()` sans imposer
+au helper d'enregistrer `handleAnswers()`, ce calcul lit la réponse attendue
+stockée dans `autoCorrection`, puis complète avec les attributs du custom
+element présents dans `listeQuestions` (`cell-fill-mode`,
+`simplification-mode`, etc.). Les exercices peuvent donc continuer à appeler
+`handleAnswers()` uniquement après avoir retenu la question.
+
+Quand `interactivityOn` vaut `false`, le composant affiche l'échiquier corrigé
+avec les entêtes, les valeurs attendues et les grisages attendus. En LaTeX et
+en Typst, le rendu d'énoncé est un échiquier complet imprimable avec les entêtes
+attendues et des `...` dans les cellules à compléter ; la correction affiche les
+valeurs attendues.
+
+Le helper n'enregistre pas la réponse attendue : conformément aux habitudes de
+MathALÉA, l'exercice doit appeler `handleAnswers()` dans `nouvelleVersion()`
+uniquement quand la question est effectivement retenue. La valeur attendue est
+habituellement le JSON de l'objet `EchiquierProblemeAnswer`, avec le format
+interactif `echiquier-probleme`.
 
 ### Exception `multi-mathfield` pour le feedback visuel
 
@@ -323,6 +406,7 @@ Pour les exercices qui ont besoin de critères multiples ou d'un score partiel, 
 - `src/lib/interactif/baremeExercice.ts` : points maximum d'un exercice et coefficient multiplicateur du barème.
 - `src/lib/interactif/qcm.ts` : QCM.
 - `src/lib/customElements/MathaleaQcm.ts` : custom element `mathalea-qcm`, helper `addMathaleaQcm()` et vérification QCM partagée. En contexte HTML, `propositionsQcm()` injecte ce composant tout en conservant les identifiants internes historiques.
+- `src/lib/customElements/MathaleaBranchingQcm.ts` : custom element `mathalea-branching-qcm`, helper `addMathaleaBranchingQcm()` et vérification pondérée d'un choix de QCM suivi d'une question de justification propre à la branche choisie.
 - `src/lib/customElements/CliqueFigureElement.ts` : custom element `clique-figure`, helper `addCliqueFigure()` et vérification des questions `cliqueFigure`. Les exercices historiques qui renseignent `cliqueFiguresArray` et appellent `setCliqueFigure()` sont normalisés vers ce tag sans devoir réécrire leurs énoncés.
 - `src/lib/customElements/PointsCliquablesElement.ts` : custom element `points-cliquables`, helper `addPointsCliquables()` et vérification des points injectés dans une figure MathALÉA 2D identifiée par `figureId`.
 - `src/lib/customElements/ObjetsCliquablesElement.ts` : custom element `objets-cliquables`, helper `addObjetsCliquables()` et vérification d'objets géométriques injectés dans une figure MathALÉA 2D identifiée par `figureId`.

@@ -3,9 +3,11 @@
   import type TypeExercice from '../../../../../../exercices/Exercice'
   import ButtonTextAction from '../../../../forms/ButtonTextAction.svelte'
   import BasicClassicModal from '../../../../modal/BasicClassicModal.svelte'
+  import BugReportModal from '../../../shared/BugReportModal.svelte'
   export let exercise: TypeExercice
 
   let isIndiceModalDisplayed = false
+  let isBugReportDisplayed = false
   export let indiceLastExercice: number
   export let globalOptions: InterfaceGlobalOptions
   export let newData: () => void
@@ -97,6 +99,27 @@
         on:click={switchInteractif}
       />
     </div>
+  {/if}
+  <!-- juste avant le réglage du nombre de colonnes -->
+  <button
+    class="flex items-center ml-2"
+    type="button"
+    title="Signaler un problème dans cet exercice"
+    aria-label="Signaler un problème dans cet exercice"
+    on:click={() => {
+      isBugReportDisplayed = true
+    }}
+  >
+    <i
+      class="text-coopmaths-action hover:text-coopmaths-action-darkest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-darkest bx bx-bug text-base"
+    ></i>
+  </button>
+  {#if isBugReportDisplayed}
+    <BugReportModal
+      bind:isDisplayed={isBugReportDisplayed}
+      exerciceId={exercise.id}
+      exerciceTitle={exercise.titre}
+    />
   {/if}
   {#if globalOptions.recorder === undefined}
     <div

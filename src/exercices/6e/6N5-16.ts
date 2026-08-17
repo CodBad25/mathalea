@@ -2,6 +2,7 @@ import {
   addEchiquierProbleme,
   type EchiquierProblemeOptions,
 } from '../../lib/customElements/EchiquierProblemeElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { prenomF, prenomM } from '../../lib/outils/Personne'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -367,11 +368,27 @@ const creerProblemes: (() => ProblemeEchiquier)[] = [
 export default class CompleterEchiquierResultatsIntermediaires extends Exercice {
   constructor() {
     super()
-    this.nbQuestions = 4
+    this.nbQuestions = 1
     this.consigne =
       "Construire l'échiquier complet du problème et compléter les cellules, y compris les résultats intermédiaires nécessaires."
     this.spacing = 2
     this.spacingCorr = 2
+    this.comment = `Cet exercice a été inspiré par le fascicule de l'IREM de Lorraine : <a style="text-decoration: underline; color: blue;" target="_blank" href="https://irem.univ-lorraine.fr/liste-des-brochures-editees-par-lirem-de-lorraine/#:~:text=La%20Lecture%20d%E2%80%99%C3%A9nonc%C3%A9s%20et%20le%20sens%20des%20op%C3%A9rations.">"La lecture d'énoncés et le sens des opérations"</a>.<br>
+    L'autrice, Michèle Muniglia, y expose une méthode pour classer et résoudre les problèmes concrets.<br>
+    Le terme d'<b>échiquier</b> employé ici est tiré de ce fascicule et symbolise la position des élèves participant à la mise en scène du problème (la méthode reposant sur une activité théatrale réelle).<br>
+    On l'a conservé pour rester fidèle à l'autrice de la méthode.<br>
+    La méthode et cet exercice poursuivent plusieurs objectifs :<br><br>
+- <b>identifier les grandeurs</b>;<br>
+Exemple : prix unitaire, masse, prix total, distance, durée, vitesse, nombre d’objets, etc.<br><br>
+- <b>identifier les objets</b>;<br>
+Exemple : pommes, oranges, cahiers, trajets, lots, élèves, boîtes, etc.<br><br>
+- <b>comprendre quelles données sont utiles et les relations qui les lient</b>;<br>
+- <b>aider l'élève à organiser les données et à effectuer les calculs intermédiaires nécessaires</b>;<br>
+- <b>comprendre la structure opératoire</b>.<br>
+Une fois l’échiquier construit, on peut faire apparaître que :<br>
+- une relation sur une même ligne renvoie plutôt à une structure additive ;<br>
+- une relation sur une même colonne renvoie plutôt à une structure multiplicative ;<br>
+- les unités aident fortement à contrôler la cohérence des cases.`
   }
 
   nouvelleVersion() {
@@ -385,8 +402,20 @@ export default class CompleterEchiquierResultatsIntermediaires extends Exercice 
         ...probleme,
         cellFillMode: 'student',
       })
+      const echiquierCorr = addEchiquierProbleme(this, i, {
+        ...probleme,
+        id: `echiquier-corr-${this.numeroExercice}-Q${i}`,
+        cellFillMode: 'correction',
+        interactivityOn: false,
+      })
+      handleAnswers(
+        this,
+        i,
+        { reponse: { value: JSON.stringify(probleme) } },
+        { formatInteractif: 'echiquier-probleme' },
+      )
       this.listeQuestions[i] = `${probleme.enonce}<br>${echiquier}`
-      this.listeCorrections[i] = probleme.correction
+      this.listeCorrections[i] = `${probleme.correction}<br>${echiquierCorr}`
     }
     listeQuestionsToContenu(this)
   }

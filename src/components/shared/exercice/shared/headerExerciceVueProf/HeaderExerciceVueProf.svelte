@@ -10,6 +10,7 @@
   import MobileMenuAction from '../../../../setup/mobile/MobileMenuAction.svelte'
   import MobileOverlay from '../../../../setup/mobile/MobileOverlay.svelte'
   import InteractivityIcon from '../../../icons/TwoStatesIcon.svelte'
+  import BugReportModal from '../BugReportModal.svelte'
   import BoutonDescendre from './BoutonDescendre.svelte'
   import BoutonMonter from './BoutonMonter.svelte'
 
@@ -39,6 +40,7 @@
   const isContentVisible = true
   let isCorrectionVisible = false
   let showPdfDialog = false
+  let isBugReportDisplayed = false
   // redéfinition du titre lorsqu'un exercice apparait plusieurs fois :
   // si le titre contient le caractère | (ajouté lors de la création de l'exercice)
   // on coupe le titre en deux et on distingue le titre de base de l'addendum
@@ -236,6 +238,16 @@
             }}
           />
         {/if}
+        <!-- toujours en dernier -->
+        <MobileMenuAction
+          icon="bx-bug"
+          label="Signaler un problème"
+          description="Nous aider à corriger cet exercice"
+          onclick={() => {
+            isMobileMenuOpen = false
+            isBugReportDisplayed = true
+          }}
+        />
       </div>
     </div>
   {/if}
@@ -422,6 +434,18 @@
       <div
         class="flex flex-row justify-start items-center space-x-4 md:space-x-1"
       >
+        <!-- en dernier des actions, juste avant les boutons monter/descendre -->
+        <button
+          class="mx-2 tooltip tooltip-left tooltip-neutral text-xl"
+          data-tip="Signaler un problème"
+          type="button"
+          aria-label="Signaler un problème"
+          on:click={() => (isBugReportDisplayed = true)}
+        >
+          <i
+            class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-bug"
+          ></i>
+        </button>
         {#if isSortable}
           <BoutonMonter indice={indiceExercice} />
           <BoutonDescendre indice={indiceExercice} {indiceLastExercice} />
@@ -430,4 +454,12 @@
     </div>
   </h1>
   </div>
+{/if}
+
+{#if isBugReportDisplayed}
+  <BugReportModal
+    bind:isDisplayed={isBugReportDisplayed}
+    exerciceId={id}
+    exerciceTitle={titleBase}
+  />
 {/if}

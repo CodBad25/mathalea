@@ -18,7 +18,6 @@
   export let mode: 'display' | 'correction' = 'display'
   export let visible: boolean
   export let index: number
-  export let nextQuestion: () => void
 
   let questionContainer: HTMLDivElement
 
@@ -27,7 +26,6 @@
       'math-field',
     ) as NodeListOf<MathfieldElement>
     for (const mf of mathfields ?? []) {
-      mf.removeEventListener('keyup', handleKeyUp)
       mf.removeEventListener('input', handleMathfieldElement)
       mf.removeEventListener('focusin', handleMathfieldFocus)
     }
@@ -64,13 +62,6 @@
       setSizeWithinSvgContainer(questionContent)
     }
   })
-
-  function handleKeyUp(e: KeyboardEvent) {
-    /* MGu obliger de mettre l'event quand on relache la touche, car sinon events multiples pour la même touche */
-    if (e.key === 'Enter') {
-      nextQuestion()
-    }
-  }
 
   function handleMathfieldElement(this: HTMLElement, ev: Event) {
     /* ca peut venir du clavier vituel ou du clavier physique */
@@ -148,7 +139,6 @@
           for (const mf of mathfields) {
             if (!mf.dataset.canListenerAdded) {
               mf.dataset.canListenerAdded = 'true' // Marquer comme ajouté
-              //   mf.addEventListener('keyup', handleKeyUp) => Ne pas pas passer à la question suivante avec enter, il y a plusieurs champs
               mf.addEventListener('input', handleMultiMathfieldElement)
             }
             $keyboardState.idMathField = mf.id
@@ -215,7 +205,6 @@
         for (const mathfield of mathfields) {
           if (!mathfield.dataset.canListenerAdded) {
             mathfield.dataset.canListenerAdded = 'true' // Marquer comme ajouté
-            mathfield.addEventListener('keyup', handleKeyUp)
             mathfield.addEventListener('input', handleMathfieldElement)
             mathfield.addEventListener('focusin', handleMathfieldFocus)
           }

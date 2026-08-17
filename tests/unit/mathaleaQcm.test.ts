@@ -310,6 +310,24 @@ describe('MathaleaQcmElement', () => {
     )
   })
 
+  it('convertit aussi une liste deroulante avec des choix texte simples', () => {
+    exercice.interactif = true
+
+    listeDeroulanteToQcm(
+      exercice,
+      0,
+      ['addition', 'multiplication', 'soustraction'],
+      'multiplication',
+      { ordered: true },
+    )
+
+    expect(exercice.autoCorrection[0].propositions).toEqual([
+      { texte: 'addition', statut: false, feedback: '' },
+      { texte: 'multiplication', statut: true, feedback: undefined },
+      { texte: 'soustraction', statut: false, feedback: undefined },
+    ])
+  })
+
   it('reconstruit les identifiants QCM dans MetaExerciceCan', () => {
     const meta = new MetaExercice([SourceModernQcm, SourceModernQcm])
     meta.numeroExercice = 7

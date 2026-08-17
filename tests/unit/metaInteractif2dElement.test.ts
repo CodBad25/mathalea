@@ -64,7 +64,7 @@ describe('MetaInteractif2dElement', () => {
       numeroExercice: 5,
       questionIndex: 0,
       fieldIndex: 0,
-      innerHtml: '<math-field id="MetaInteractif2dEx5Q0field0"></math-field>',
+      innerHtml: '<span id="MetaInteractif2dEx5Q0field0"></span>',
     })
     const field = document.getElementById(
       'MetaInteractif2dEx5Q0field0',

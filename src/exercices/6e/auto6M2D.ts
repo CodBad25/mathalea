@@ -1,5 +1,7 @@
-import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
-import type { AllChoicesType } from '../../lib/interactif/listeDeroulante/ListeDeroulante'
+import {
+  choixDeroulant,
+  type AllChoicesType,
+} from '../../lib/customElements/ListeDeroulanteElement'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import {
   choice,
@@ -237,13 +239,15 @@ export default class EgalitesUnitesAires extends Exercice {
     const select = []
     for (let j = 0; j < 4; j++) {
       const questionIndex = 4 * i + j
+      if (this.answers === undefined) this.answers = {}
       const liste = document.querySelector(
         `#liste-deroulanteEx${this.numeroExercice}Q${questionIndex}`,
       ) as (HTMLElement & { value?: string }) | null
-      const legacySelect = document.querySelector(
-        `#ex${this.numeroExercice}Q${questionIndex}`,
-      ) as HTMLSelectElement | null
-      const value = liste?.value ?? legacySelect?.value
+
+      const value = liste?.value
+      this.answers[
+        `liste-deroulanteEx${this.numeroExercice}Q${questionIndex}`
+      ] = value ?? ''
       if (value == null) {
         window.notify(
           `Liste déroulante introuvable pour la question ${questionIndex} de l'exercice ${this.id}`,
@@ -256,7 +260,9 @@ export default class EgalitesUnitesAires extends Exercice {
 
     let isOk = true
     for (let j = 0; j < 4; j++) {
-      isOk &&= select[j] === this.listeReponses[i][j]
+      isOk &&=
+        select[j] ===
+        this.listeReponses[i][j].replace('$\\text{', '').replace('}$', '')
     }
 
     // const spanReponseLigne = document.querySelector(`#resultatCheckEx${this.numeroExercice}Q${4 * i + 3}`)

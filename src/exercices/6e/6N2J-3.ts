@@ -298,10 +298,10 @@ export default class DivisibleDiviseurMultiple extends Exercice {
 
   correctionInteractive = (i: number) => {
     const select1 = document.querySelector(
-      `#ex${this.numeroExercice}Q${2 * i}`,
+      `#liste-deroulanteEx${this.numeroExercice}Q${2 * i}`,
     ) as HTMLSelectElement
     const select2 = document.querySelector(
-      `#ex${this.numeroExercice}Q${2 * i + 1}`,
+      `#liste-deroulanteEx${this.numeroExercice}Q${2 * i + 1}`,
     ) as HTMLSelectElement
     if (this.answers === undefined) {
       this.answers = {}

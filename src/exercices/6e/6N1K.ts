@@ -68,6 +68,9 @@ export default class ArrondirUneValeur6e extends Exercice {
     } else if (this.version === 4) {
       this.sup = 4
     }
+    if (this.version === 2) {
+      this.sup = 5
+    }
     if (this.sup === 2 && !context.isHtml) {
       this.spacingCorr = 2.5
       this.spacing = 1.5

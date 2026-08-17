@@ -1,4 +1,5 @@
 // Utilitaire pour styliser les items a), b), ... dans un texte brut
+import renderMathInElement from 'katex/contrib/auto-render'
 import katexCss from 'katex/dist/katex.min.css?inline'
 import { MathfieldElement } from 'mathlive'
 import { context } from '../../modules/context'
@@ -14,10 +15,11 @@ import {
 } from '../interactif/baremeExercice'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
 import { toutAUnPoint } from '../interactif/fonctionsBaremes'
-import type { AllChoicesType } from '../interactif/listeDeroulante/ListeDeroulante'
 import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
+import { optionsKatex } from '../latex/Katex'
 import type { IExercice, ValeurNames } from '../types'
 import type ListeDeroulanteElement from './ListeDeroulanteElement'
+import type { AllChoiceType, AllChoicesType } from './ListeDeroulanteElement'
 import './ListeDeroulanteElement'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
@@ -80,8 +82,14 @@ export type DataOptionsMultiMathfield = Partial<
        * déroulante proposant ces choix.
        */
       choices?: AllChoicesType
+      /**
+       * Si ce tableau est fourni, le champ n'est pas un MathLive mais un QCM
+       * radio proposant ces choix.
+       */
+      qcm?: AllChoicesType
       /** Le premier choix de la liste est-il sélectionnable ? */
       choix0?: boolean
+      vertical?: boolean
     }
   >
 >
@@ -105,12 +113,37 @@ type MultiMathfieldOption = {
   texteApres?: string
   ldots?: boolean
   choices?: AllChoicesType
+  qcm?: AllChoicesType
   choix0?: boolean
+  vertical?: boolean
+}
+
+function choiceValue(choice: AllChoiceType): string {
+  return typeof choice === 'string' ? choice : choice.value
+}
+
+function choiceHtml(choice: AllChoiceType): string {
+  if (typeof choice === 'string') return choice
+  if (choice.label != null) return String(choice.label)
+  if (choice.latex != null) return `$${choice.latex}$`
+  if (choice.svg != null) return choice.svg
+  if (choice.image != null) {
+    return `<img src="${choice.image}" alt="${choice.value}" style="width:30px;height:30px;display:inline-block;vertical-align:middle;">`
+  }
+  return choice.value
 }
 
 const buildDataKeyboardString = (style = '') => {
   const blocks = buildDataKeyboardFromStyle(style)
   return blocks.join(' ')
+}
+
+function renderKatexInElement(element: HTMLElement): void {
+  Object.assign(optionsKatex, {
+    preProcess: (chaine: string) =>
+      '{' + chaine.replaceAll(String.fromCharCode(160), '\\,') + '}',
+  })
+  renderMathInElement(element, optionsKatex as any)
 }
 
 export class MultiMathfieldElement extends MathaleaCustomElement {
@@ -317,6 +350,44 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
     return liste
   }
 
+  private createQcm(
+    name: string,
+    fieldOptions: MultiMathfieldOption,
+  ): HTMLSpanElement {
+    const qcm = document.createElement('span')
+    qcm.setAttribute('data-name', name)
+    qcm.setAttribute('data-type', 'qcm')
+    qcm.className = 'mx-2 inline-block'
+    const choices = fieldOptions.qcm ?? []
+    const inputName = `qcm-${this.id || 'multi-mathfield'}-${name}`
+    const vertical = fieldOptions.vertical ?? false
+
+    choices.forEach((choice, index) => {
+      const value = choiceValue(choice)
+      const id = `${inputName}-${index}`
+      const item = document.createElement('span')
+      item.className = vertical ? 'block my-1' : 'inline-block mr-3'
+
+      const input = document.createElement('input')
+      input.type = 'radio'
+      input.id = id
+      input.name = inputName
+      input.value = value
+      input.disabled = !this.interactivityOn
+      input.className = 'align-middle'
+      item.appendChild(input)
+
+      const label = document.createElement('label')
+      label.htmlFor = id
+      label.className = 'ml-1'
+      label.innerHTML = choiceHtml(choice)
+      item.appendChild(label)
+      qcm.appendChild(item)
+    })
+
+    return qcm
+  }
+
   render() {
     const template = (this.getAttribute('data-template') || '').replaceAll(
       '<br>',
@@ -395,6 +466,22 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
             currentSpan.appendChild(texteApresListe)
           }
           currentSpan.appendChild(checkSpanListe)
+          lastIndex = regex.lastIndex
+          continue
+        }
+        if (Array.isArray(fieldOptions.qcm) && fieldOptions.qcm.length > 0) {
+          const qcm = this.createQcm(name, fieldOptions)
+          const checkSpanQcm = document.createElement('span')
+          checkSpanQcm.id =
+            'check-' + (this.id ? this.id : 'multi-mathfield') + '-' + name
+          currentSpan.appendChild(qcm)
+          if (fieldOptions.texteApres) {
+            const texteApresQcm = document.createElement('span')
+            texteApresQcm.style.marginLeft = '0'
+            texteApresQcm.innerHTML = fieldOptions.texteApres
+            currentSpan.appendChild(texteApresQcm)
+          }
+          currentSpan.appendChild(checkSpanQcm)
           lastIndex = regex.lastIndex
           continue
         }
@@ -529,6 +616,13 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
 
     // On ne remplace que le contenu, les styles du shadowRoot restent en place.
     this.contentHost.replaceChildren(container)
+    try {
+      renderKatexInElement(this.contentHost)
+    } catch (error) {
+      window.notify('Erreur lors du rendu KaTeX du multi-mathfield.', {
+        error,
+      })
+    }
   }
 
   getValue() {
@@ -546,6 +640,16 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         const name = liste.getAttribute('data-name')
         if (name) {
           result[name] = liste.value ?? ''
+        }
+      })
+      this.shadowRoot.querySelectorAll('[data-type="qcm"]').forEach((el) => {
+        const qcm = el as HTMLElement
+        const name = qcm.getAttribute('data-name')
+        const checked = qcm.querySelector<HTMLInputElement>(
+          'input[type="radio"]:checked',
+        )
+        if (name) {
+          result[name] = checked?.value ?? ''
         }
       })
     }
@@ -607,6 +711,16 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         if (name && answers[name] !== undefined) {
           liste.value = answers[name]
         }
+      })
+      this.shadowRoot.querySelectorAll('[data-type="qcm"]').forEach((el) => {
+        const qcm = el as HTMLElement
+        const name = qcm.getAttribute('data-name')
+        if (name == null || answers[name] === undefined) return
+        qcm
+          .querySelectorAll<HTMLInputElement>('input[type="radio"]')
+          .forEach((input) => {
+            input.checked = input.value === answers[name]
+          })
       })
     }
   }
@@ -707,6 +821,40 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         if (eltFeedbackListe) {
           setStyles(eltFeedbackListe, 'marginBottom: 20px')
           eltFeedbackListe.innerHTML = isOk ? '😎' : '☹️'
+        }
+        continue
+      }
+
+      const qcm = multi?.shadowRoot?.querySelector(
+        `[data-type="qcm"][data-name="${field}"]`,
+      ) as HTMLElement | null
+      if (qcm != null) {
+        qcm
+          .querySelectorAll<HTMLInputElement>('input[type="radio"]')
+          .forEach((input) => {
+            input.disabled = true
+          })
+        const saisie =
+          qcm.querySelector<HTMLInputElement>('input[type="radio"]:checked')
+            ?.value ?? ''
+        const eltFeedbackQcm = multi?.shadowRoot?.getElementById(
+          `check-${fieldIdPrefix}-${field}`,
+        ) as HTMLSpanElement | null
+        if (saisie === '') {
+          compteurSaisiesVides++
+          points.push(0)
+          continue
+        }
+        saisies[field] = saisie
+        const attendues: unknown[] = Array.isArray(reponse.value)
+          ? reponse.value
+          : [reponse.value]
+        const isOk = attendues.some((valeur) => String(valeur) === saisie)
+        points.push(isOk ? 1 : 0)
+        if (isOk) compteurBonnesReponses++
+        if (eltFeedbackQcm) {
+          setStyles(eltFeedbackQcm, 'marginBottom: 20px')
+          eltFeedbackQcm.innerHTML = isOk ? '😎' : '☹️'
         }
         continue
       }

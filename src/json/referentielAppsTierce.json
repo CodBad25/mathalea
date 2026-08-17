@@ -50,6 +50,13 @@
         "uuid": "parcoursTables"
       },
       {
+        "title": "Challenge Calcul littéral",
+        "typeExercice": "tierce",
+        "presentation": "Développer et réduire en temps limité.",
+        "imgPath": "images/apps/app_challenge_litteral.png",
+        "uuid": "challengeLitteral"
+      },
+      {
         "title": "Équations",
         "typeExercice": "tierce",
         "presentation": "Déterminer l'opération à effectuer sur les deux membres d'une équation pour la résoudre. Les calculs sont automatiquement réalisés.",

@@ -12,7 +12,7 @@ import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import type { AllChoicesType } from '../../lib/interactif/listeDeroulante/ListeDeroulante'
+import type { AllChoicesType } from '../../lib/customElements/ListeDeroulanteElement'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,

@@ -16,6 +16,7 @@ import { setOutputHtml } from '../../src/modules/context'
 // Les custom elements doivent être enregistrés pour que le barème sache
 // combien de points chaque question peut rapporter.
 import '../../src/lib/customElements/FillInTheBlank'
+import '../../src/lib/customElements/EchiquierProblemeElement'
 import '../../src/lib/customElements/MathaleaMathfield'
 import '../../src/lib/customElements/MultiMathfield'
 import '../../src/lib/customElements/RelierEtiquettesElement'
@@ -137,6 +138,34 @@ describe('pointsMaxExercice', () => {
     )
 
     expect(pointsMaxExercice(exercice)).toBe(3)
+  })
+
+  it("compte le barème d'un échiquier de problème depuis la réponse et le HTML de la question", () => {
+    const probleme = {
+      expectedRows: ['Prix unitaire', 'Masse totale', 'Prix total'],
+      expectedColumns: ['Pommes'],
+      rowChoices: ['Prix unitaire', 'Masse totale', 'Prix total'],
+      columnChoices: ['Pommes'],
+      cells: [
+        { row: 'Prix unitaire', column: 'Pommes', value: '2 €/kg' },
+        { row: 'Masse totale', column: 'Pommes', value: '3 kg' },
+        { row: 'Prix total', column: 'Pommes', value: '6 €' },
+      ],
+      expectedGreyedRows: ['Prix unitaire'],
+      expectedGreyedColumns: [],
+      expectedStructure: 'colonne',
+      expectedOperation: 'multiplication',
+    }
+    handleAnswers(
+      exercice,
+      0,
+      { reponse: { value: JSON.stringify(probleme) } },
+      { formatInteractif: 'echiquier-probleme' },
+    )
+    exercice.listeQuestions[0] =
+      '<echiquier-probleme cell-fill-mode="student" simplification-mode="grey"></echiquier-probleme>'
+
+    expect(pointsMaxExercice(exercice)).toBe(5)
   })
 
   it('compte une question par point pour un exercice à correction custom', () => {

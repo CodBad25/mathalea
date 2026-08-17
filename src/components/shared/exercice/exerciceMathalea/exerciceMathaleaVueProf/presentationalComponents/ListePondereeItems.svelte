@@ -28,7 +28,7 @@
 -->
 
 {#each items as item, index (item.nom)}
-  <div class="flex flex-row items-center gap-x-1">
+  <div class="flex flex-row items-center gap-x-2">
     <input
       id={idItem(item)}
       type="checkbox"
@@ -40,9 +40,13 @@
       on:change={(e) =>
         dispatch('bascule', { index, actif: e.currentTarget.checked })}
     />
+    <!--
+      La marge laisse passer l'anneau de focus de la case (`focus:ring-3`), qui
+      déborde vers le libellé et le masquait quand la case était sélectionnée.
+    -->
     <label
       for={idItem(item)}
-      class="grow min-w-0 text-sm font-light leading-tight cursor-pointer
+      class="ml-1 grow min-w-0 text-sm font-light leading-tight cursor-pointer
         {item.poids > 0 ? '' : 'opacity-50'}">{item.label}</label
     >
     {#if poidsMax > 0}

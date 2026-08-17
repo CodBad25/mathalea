@@ -580,11 +580,21 @@ function postprocessTypst(typst: string): string {
     // du texte via #txt. tex2typst a transformé \text{⟨mark⟩X⟨mark⟩} en la
     // chaîne "⟨mark⟩X⟨mark⟩" ; on la remplace par #txt("X"). Un indice ou
     // exposant (`_"…"`, `^"…"`) reçoit des parenthèses pour rester valide.
+    // Les espaces que tex2typst place autour de la chaîne (simples séparateurs
+    // de jetons) sont consommées : contrairement à LaTeX, Typst rend une
+    // espace source qui borde une chaîne, elle s'ajouterait donc à celle déjà
+    // contenue dans le \text{…} d'origine (`5\text{ cm}` → `5 #txt(" cm")`
+    // afficherait une double espace) ou à l'espace insécable qui précède
+    // (`5~\text{cm}` → `5 space.nobreak #txt("cm")`).
     .replace(
-      new RegExp(`([_^]?)"${TXT_MARK_OPEN}([^"]*)${TXT_MARK_CLOSE}"`, 'g'),
+      new RegExp(` ?([_^]?)"${TXT_MARK_OPEN}([^"]*)${TXT_MARK_CLOSE}" ?`, 'g'),
       (_m, script: string, body: string) =>
         script ? `${script}(#txt("${body}"))` : `#txt("${body}")`,
     )
+    // `\text{ }` (espace seule, non marquée car sans lettre) devient la chaîne
+    // `" "` : même raison que ci-dessus, les espaces sources qui l'encadrent
+    // doubleraient l'espace rendue.
+    .replace(/ ?(" +") ?/g, '$1')
     // tex2typst émet `fill: #f15929` pour \textcolor : Typst attend rgb("...")
     .replace(
       /fill: #([0-9a-fA-F]{3,8})\b/g,

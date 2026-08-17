@@ -228,6 +228,52 @@ texte += addMathaleaQcm(this, i, { radio: true })
 
 `addMathaleaQcm()` injecte un custom element `mathalea-qcm`. Pour un nouvel exercice, préférer ce format moderne à l'ancien helper `propositionsQcm()`, qui reste utile pour maintenir les exercices existants.
 
+## QCM ramifié
+
+À utiliser quand un choix de QCM détermine la question de justification à
+afficher. Chaque proposition peut porter son propre barème et sa propre question
+de suite.
+
+```ts
+import { addMathaleaBranchingQcm } from '../../lib/customElements/MathaleaBranchingQcm'
+
+texte += addMathaleaBranchingQcm(this, i, {
+  choices: [
+    {
+      texte: 'Vrai',
+      statut: true,
+      points: 1,
+      followup: {
+        prompt: 'Donner une expression réduite commune.',
+        expected: {
+          value: '4x',
+          options: { developpementEgal: true },
+        },
+        points: 3,
+      },
+    },
+    {
+      texte: 'Faux',
+      statut: false,
+      points: 1,
+      followup: {
+        prompt: 'Donner un contre-exemple.',
+        texteAvant: '$x=$',
+        callback: (answer) => ({
+          isOk: answer === '0',
+          feedback: 'Ce nombre ne fournit pas un contre-exemple.',
+        }),
+        points: 3,
+      },
+    },
+  ],
+})
+```
+
+Le composant injecté est `mathalea-branching-qcm`. La branche affichée est celle
+choisie par l'élève, et la vérification additionne les points du choix initial et
+ceux de la justification associée.
+
 ## Points cliquables dans une figure MathALEA2D
 
 À utiliser quand l'élève doit sélectionner des points dans une figure produite par `mathalea2d()`.
@@ -437,6 +483,49 @@ Points à connaître :
   permet d'accepter plusieurs choix ;
 - les libellés sont du **texte** : éviter le LaTeX, qui n'est pas rendu dans le
   shadow DOM de la liste.
+
+### Un QCM parmi les champs
+
+Un champ dont les options contiennent `qcm` n'est pas un MathLive mais un QCM
+radio imbriqué dans le `multi-mathfield`. Cela permet de mélanger, dans une
+même question interactive, des calculs saisis et des choix de conclusion.
+
+```ts
+texte += addMultiMathfield(this, i, {
+  dataTemplate: `a) Le membre de gauche vaut %{field0}.
+b) Le membre de droite vaut %{field1}.
+c) Le nombre proposé est-il solution ? %{field2}`,
+  dataOptions: {
+    field0: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+    field1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+    field2: {
+      qcm: [
+        { label: 'Oui', value: 'oui' },
+        { label: 'Non', value: 'non' },
+      ],
+    },
+  },
+})
+
+handleAnswers(
+  this,
+  i,
+  {
+    field0: { value: membreGauche },
+    field1: { value: membreDroit },
+    field2: { value: 'oui' },
+  },
+  { formatInteractif: 'multi-mathfield' },
+)
+```
+
+Points à connaître :
+
+- `qcm` a le même format de choix que `choixDeroulant()` ;
+- la comparaison est une égalité stricte avec `value` ; un tableau de valeurs
+  permet d'accepter plusieurs choix ;
+- ajouter `vertical: true` dans les options du champ pour afficher les choix les
+  uns sous les autres.
 
 ### Barème personnalisé
 
