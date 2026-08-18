@@ -1,4 +1,5 @@
 import { context } from '../../modules/context'
+import { orangeMathalea } from '../colors'
 import { texNombre } from '../outils/texNombre'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
@@ -15,6 +16,7 @@ export type BarAssessmentMode = 'hauteur' | 'effectif' | 'label'
 export type BarAssessmentLabelValueKind = 'hauteur' | 'effectif'
 type BarAssessmentLegacyMode = 'height'
 type BarAssessmentLegacyLabelValueKind = 'height'
+type BarAssessmentStaticColumn = 'label' | 'effectif' | 'hauteur'
 
 export type BarAssessmentState = {
   version: 1
@@ -22,6 +24,8 @@ export type BarAssessmentState = {
   labelValueKind: BarAssessmentLabelValueKind
   title: string
   infosStatus: boolean
+  colorOn: boolean
+  correctionOn: boolean
   unitLabel: string
   unitValue: number
   tolerance: number
@@ -36,6 +40,8 @@ export type BarAssessmentSerializedState = {
   labelValueKind:
     BarAssessmentLabelValueKind | BarAssessmentLegacyLabelValueKind
   infosStatus: boolean
+  colorOn?: boolean
+  correctionOn?: boolean
   unitValue: number
   items: Array<{
     label: string
@@ -78,6 +84,8 @@ export type BarAssessmentCreateOptions = {
     BarAssessmentLabelValueKind | BarAssessmentLegacyLabelValueKind
   title?: string
   infosStatus?: boolean
+  colorOn?: boolean
+  correctionOn?: boolean
   unitLabel?: string
   unitValue: number
   tolerance?: number
@@ -114,6 +122,8 @@ const DEFAULT_STATE: BarAssessmentState = {
   labelValueKind: 'effectif',
   title: '',
   infosStatus: false,
+  colorOn: true,
+  correctionOn: false,
   unitLabel: 'unité',
   unitValue: 1,
   tolerance: 0,
@@ -135,7 +145,7 @@ function safeNumber(value: unknown, fallback: number): number {
 
 function normalizeHeight(value: unknown): number | null {
   if (value == null || value === '') return null
-  const parsed = Number(value)
+  const parsed = Number(String(value).replace(',', '.'))
   if (!Number.isFinite(parsed)) return null
   return parsed
 }
@@ -335,6 +345,8 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
     labelValueKind,
     title,
     infosStatus,
+    colorOn,
+    correctionOn,
     unitLabel,
     unitValue,
     tolerance,
@@ -344,10 +356,11 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
   }: {
     mode: BarAssessmentMode | BarAssessmentLegacyMode
     labelValueKind:
-      | BarAssessmentLabelValueKind
-      | BarAssessmentLegacyLabelValueKind
+      BarAssessmentLabelValueKind | BarAssessmentLegacyLabelValueKind
     title: string
     infosStatus: boolean
+    colorOn: boolean
+    correctionOn: boolean
     unitLabel: string
     unitValue: number
     tolerance: number
@@ -356,16 +369,15 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
     interactivityOn: boolean
   }): DiagramBarAssessmentElement {
     const element = new DiagramBarAssessmentElement()
-    element.setAttribute(
-      'interactivity-on',
-      interactivityOn ? 'true' : 'false',
-    )
+    element.setAttribute('interactivity-on', interactivityOn ? 'true' : 'false')
     element.state = {
       ...structuredClone(DEFAULT_STATE),
       mode: normalizeMode(mode),
       labelValueKind: normalizeLabelValueKind(labelValueKind),
       title,
       infosStatus,
+      colorOn,
+      correctionOn,
       unitLabel,
       unitValue: Math.max(1, unitValue),
       tolerance,
@@ -379,6 +391,8 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
     return [
       'title',
       'infos-status',
+      'color-on',
+      'correction-on',
       'mode',
       'label-value-kind',
       'unit-label',
@@ -398,6 +412,8 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
     labelValueKind = 'effectif',
     title = '',
     infosStatus = false,
+    colorOn = true,
+    correctionOn = false,
     unitLabel = 'unité',
     unitValue,
     tolerance = 0,
@@ -426,6 +442,8 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
         labelValueKind,
         title,
         infosStatus,
+        colorOn,
+        correctionOn,
         unitLabel,
         unitValue,
         tolerance,
@@ -442,6 +460,8 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
         labelValueKind,
         title,
         infosStatus,
+        colorOn,
+        correctionOn,
         unitLabel,
         unitValue,
         tolerance,
@@ -462,6 +482,8 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
       labelValueKind,
       title,
       infosStatus,
+      colorOn,
+      correctionOn,
       unitLabel,
       unitValue,
       tolerance,
@@ -763,9 +785,85 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
           padding: 5px;
           text-align: left;
         }
+        .static-conversion-table {
+          border: 2.5px solid #334155;
+          border-collapse: collapse;
+          background: #ffffff;
+        }
+        .static-conversion-table th {
+          border: 2px solid #64748b;
+          border-bottom: 4px solid #334155;
+          padding: 8px 10px;
+          background: #cbd5e1;
+          color: #0f172a;
+          font-weight: 700;
+          text-align: center;
+        }
+        .static-conversion-table td {
+          border: 1.5px solid #64748b;
+          padding: 8px 10px;
+          background: #ffffff;
+          color: #000000;
+        }
+        .static-conversion-table tbody tr:nth-child(even) td {
+          background: #f1f5f9;
+        }
+        .static-conversion-table thead th {
+          border-bottom: 4px solid #334155;
+        }
+        .static-conversion-table thead th:first-child,
+        .static-conversion-table tbody td:first-child,
+        .static-conversion-table .category-header,
+        .static-conversion-table .category-cell {
+          border-right: 4px solid #334155;
+        }
         td input {
           width: 100%;
           box-sizing: border-box;
+        }
+        td input:disabled {
+          display: block;
+          width: 100%;
+          color: #000000;
+          opacity: 1;
+          background: #e2e8f0;
+          border: 1px solid #94a3b8;
+          border-radius: 3px;
+          padding: 2px 6px;
+        }
+        td input[type="number"]:disabled {
+          text-align: center;
+        }
+        td.correction-value-cell,
+        td.correction-value-cell input:disabled,
+        .correction-value-cell .frozen-cell {
+          color: ${orangeMathalea};
+          font-weight: 700;
+        }
+        .frozen-cell {
+          color: #000000;
+          background: #e2e8f0;
+          border: 1px solid #94a3b8;
+          border-radius: 3px;
+          padding: 2px 6px;
+        }
+        .numeric-cell,
+        .numeric-header {
+          text-align: center;
+        }
+        .static-empty-cell {
+          color: transparent;
+          height: 2.4rem;
+          text-align: center;
+          vertical-align: bottom;
+        }
+        .static-empty-cell::before {
+          content: "";
+          display: block;
+          width: 4rem;
+          max-width: 100%;
+          margin: 1.2rem auto 0;
+          border-bottom: 1px dotted #64748b;
         }
         .preview {
           border: 1px solid #e5e7eb;
@@ -777,6 +875,9 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
           font-size: 0.9rem;
           color: #334155;
           margin-top: 6px;
+        }
+        .status.warning {
+          color: #b45309;
         }
         svg {
           width: 100%;
@@ -813,9 +914,10 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
     const title = this.state.title.trim()
     const titleLatex =
       title === '' ? '' : `\\textbf{${this.escapeLatex(title)}}\\\\[0.4em]\n`
-    const diagram = this.interactivityOn
-      ? this.renderEmptyBarTikz()
-      : this.renderFilledBarTikz()
+    const diagram =
+      !this.interactivityOn && this.state.correctionOn
+        ? this.renderFilledBarTikz()
+        : this.renderEmptyBarTikz()
     return `\\begin{center}
 ${titleLatex}\\begin{minipage}[t]{0.48\\linewidth}
 \\vspace{0pt}
@@ -835,13 +937,14 @@ ${diagram}
     const title = this.state.title.trim()
     const titleTypst =
       title === '' ? '' : `#strong[${this.escapeTypst(title)}]\n#v(0.4em)\n`
-    const diagram = this.interactivityOn
-      ? this.renderEmptyBarTypst()
-      : this.renderFilledBarTypst()
+    const diagram =
+      !this.interactivityOn && this.state.correctionOn
+        ? this.renderFilledBarTypst()
+        : this.renderEmptyBarTypst()
     return `#align(center)[
 ${titleTypst}#grid(
-  columns: (0.48fr, 0.48fr),
-  gutter: 0.1fr,
+  columns: (auto, auto),
+  gutter: 14pt,
   align: top,
   [#align(center)[${this.renderTypstTable()}]],
   [#align(center)[${diagram}]],
@@ -916,6 +1019,12 @@ ${titleTypst}#grid(
 
     if (typeof raw.infosStatus === 'boolean') {
       this.state.infosStatus = raw.infosStatus
+    }
+    if (typeof raw.colorOn === 'boolean') {
+      this.state.colorOn = raw.colorOn
+    }
+    if (typeof raw.correctionOn === 'boolean') {
+      this.state.correctionOn = raw.correctionOn
     }
 
     this.render()
@@ -998,6 +1107,14 @@ ${titleTypst}#grid(
       this.getAttribute('infos-status'),
       DEFAULT_STATE.infosStatus,
     )
+    this.state.colorOn = parseBooleanAttribute(
+      this.getAttribute('color-on'),
+      DEFAULT_STATE.colorOn,
+    )
+    this.state.correctionOn = parseBooleanAttribute(
+      this.getAttribute('correction-on'),
+      DEFAULT_STATE.correctionOn,
+    )
     this.state.unitLabel = this.getAttribute('unit-label') ?? 'unité'
     this.state.unitValue = safeNumber(this.getAttribute('unit-value'), 1)
     if (this.state.unitValue <= 0) this.state.unitValue = 1
@@ -1029,6 +1146,8 @@ ${titleTypst}#grid(
   }
 
   private renderTable(disableAttr: string): string {
+    if (!this.interactivityOn) return this.renderStaticTable()
+
     const isLabelMode = this.state.mode === 'label'
     const isLabelInteractive = isLabelMode && this.interactivityOn
     const isHeightMode = this.state.mode === 'hauteur'
@@ -1048,13 +1167,17 @@ ${titleTypst}#grid(
         ? "Hauteur (nombre d'unités)"
         : 'Effectif'
 
+    const tableClass = this.interactivityOn
+      ? ''
+      : ' class="static-conversion-table"'
+
     return `
     <div style="display: inline-grid;">
-      <table>
+      <table${tableClass}>
         <thead>
           <tr>
-            <th>Catégorie</th>
-            <th>${valueColumnHeader}</th>
+            <th class="category-header">Catégorie</th>
+            <th class="numeric-header">${valueColumnHeader}</th>
           </tr>
         </thead>
         <tbody>
@@ -1065,16 +1188,15 @@ ${titleTypst}#grid(
               const displayStudentEffectif = this.studentEffectifs[index]
               const displayStudentHeight = this.studentHeights[index]
               const selectedLabel = this.studentLabels[index] ?? ''
-              const labelCell = isLabelMode
-                ? isLabelInteractive
-                  ? `<select data-kind="label-select" data-index="${index}" ${disableAttr}><option value="" ${selectedLabel === '' ? 'selected' : ''}>Choisir...</option>${labelOptions
-                      .map(
-                        (label) =>
-                          `<option value="${this.escapeText(label)}" ${selectedLabel === label ? 'selected' : ''}>${this.escapeText(label)}</option>`,
-                      )
-                      .join('')}</select>`
-                  : this.escapeText(selectedLabel || item.label)
-                : this.escapeText(item.label)
+              const labelCell = this.renderHtmlLabelCell({
+                item,
+                index,
+                isLabelMode,
+                isLabelInteractive,
+                selectedLabel,
+                labelOptions,
+                disableAttr,
+              })
               const valueCell = isLabelMode
                 ? this.state.labelValueKind === 'hauteur'
                   ? displayHeight
@@ -1082,12 +1204,14 @@ ${titleTypst}#grid(
                 : undefined
               return `
                 <tr>
-                  <td>${labelCell}</td>
-                  <td>
+                  ${labelCell}
+                  <td class="numeric-cell${isHeightMode ? this.correctionValueClass('hauteur') : this.correctionValueClass('effectif')}">
                     ${
                       isLabelMode
-                        ? valueCell
-                        : `<input
+                        ? this.renderHtmlStaticValueCellContent(valueCell ?? '')
+                        : !this.interactivityOn && !this.state.correctionOn
+                          ? this.renderHtmlStaticValueCellContent('')
+                          : `<input
                       type="number"
                       step="${isHeightMode ? '0.1' : '1'}"
                       inputmode="decimal"
@@ -1120,20 +1244,119 @@ ${titleTypst}#grid(
     `
   }
 
+  private renderStaticTable(): string {
+    return `
+    <div style="display: inline-grid;">
+      <table class="static-conversion-table">
+        <thead>
+          <tr>
+            <th>Catégorie</th>
+            <th class="numeric-header">Effectifs</th>
+            <th class="numeric-header">Hauteurs</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${this.state.items
+            .map(
+              (item, index) => `
+                <tr>
+                  ${this.renderStaticLabelCell(item, index)}
+                  ${this.renderStaticNumberCell(item.effectif, 'effectif')}
+                  ${this.renderStaticNumberCell(item.height, 'hauteur')}
+                </tr>
+              `,
+            )
+            .join('')}
+        </tbody>
+      </table>
+    </div>
+    `
+  }
+
+  private renderStaticLabelCell(
+    item: BarAssessmentItem,
+    index: number,
+  ): string {
+    if (item.label.trim() === '') {
+      return this.renderStaticEmptyTableCell()
+    }
+    const label =
+      this.state.mode === 'label' && this.state.correctionOn
+        ? item.label
+        : item.label || `B${index + 1}`
+    if (this.interactivityOn) {
+      return `<td class="${this.correctionValueClass('label')}"><span class="frozen-cell">${this.escapeText(label)}</span></td>`
+    }
+    return `<td class="category-cell${this.correctionValueClass('label')}">${this.escapeText(label)}</td>`
+  }
+
+  private renderStaticNumberCell(
+    value: number | null,
+    column: BarAssessmentStaticColumn,
+  ): string {
+    if (value == null) return this.renderStaticEmptyTableCell()
+    return `<td class="numeric-cell${this.correctionValueClass(column)}">${this.escapeText(this.formatHtmlNumber(value))}</td>`
+  }
+
+  private correctionValueClass(column: BarAssessmentStaticColumn): string {
+    return this.state.correctionOn && this.state.mode === column
+      ? ' correction-value-cell'
+      : ''
+  }
+
+  private renderHtmlLabelCell({
+    item,
+    index,
+    isLabelMode,
+    isLabelInteractive,
+    selectedLabel,
+    labelOptions,
+    disableAttr,
+  }: {
+    item: BarAssessmentItem
+    index: number
+    isLabelMode: boolean
+    isLabelInteractive: boolean
+    selectedLabel: string
+    labelOptions: string[]
+    disableAttr: string
+  }): string {
+    if (isLabelMode && !this.interactivityOn && !this.state.correctionOn) {
+      return this.renderStaticEmptyTableCell()
+    }
+    if (isLabelMode && isLabelInteractive) {
+      return `<td><select data-kind="label-select" data-index="${index}" ${disableAttr}><option value="" ${selectedLabel === '' ? 'selected' : ''}>Choisir...</option>${labelOptions
+        .map(
+          (label) =>
+            `<option value="${this.escapeText(label)}" ${selectedLabel === label ? 'selected' : ''}>${this.escapeText(label)}</option>`,
+        )
+        .join('')}</select></td>`
+    }
+    const label = selectedLabel || item.label
+    return `<td class="${this.correctionValueClass('label')}"><input type="text" value="${this.escapeText(label)}" disabled /></td>`
+  }
+
+  private renderHtmlStaticValueCellContent(value: number | string): string {
+    if (
+      !this.interactivityOn &&
+      !this.state.correctionOn &&
+      (value === '' || value == null)
+    ) {
+      return '<span class="static-empty-cell" aria-label="cellule à compléter"></span>'
+    }
+    return this.escapeText(String(value))
+  }
+
+  private renderStaticEmptyTableCell(): string {
+    return '<td class="static-empty-cell" aria-label="cellule à compléter"></td>'
+  }
+
   private bindEvents(): void {
     if (this.shadowRoot == null) return
 
     this.shadowRoot
       .querySelectorAll<HTMLInputElement>('input[data-kind]')
       .forEach((input) => {
-        input.addEventListener('input', () => {
-          const normalizedValue = input.value.replaceAll(',', '.')
-          const kind = safeText(input.dataset.kind)
-          if (kind !== 'label' && normalizedValue !== input.value) {
-            input.value = normalizedValue
-          }
-        })
-
         input.addEventListener('input', () => {
           const index = safeNumber(input.dataset.index, -1)
           const kind = safeText(input.dataset.kind)
@@ -1181,7 +1404,9 @@ ${titleTypst}#grid(
     const unitValue = Math.max(1, this.state.unitValue)
 
     let heights: number[]
-    if (this.state.mode === 'effectif') {
+    if (!this.interactivityOn && !this.state.correctionOn) {
+      heights = this.state.items.map(() => 0)
+    } else if (this.state.mode === 'effectif') {
       heights = this.interactivityOn
         ? this.studentEffectifs.map((value) =>
             value == null ? 0 : Math.max(0, value) / unitValue,
@@ -1231,6 +1456,11 @@ ${titleTypst}#grid(
         ? Math.max(20, Math.min(44, slotWidth * 0.62))
         : 0
 
+    const defs = this.state.colorOn
+      ? ''
+      : `<defs>${this.state.items
+          .map((_item, index) => this.renderSvgHatchPattern(index))
+          .join('')}</defs>`
     const bars = this.state.items
       .map((item, index) => {
         const heightValue = heights[index] ?? 0
@@ -1240,7 +1470,10 @@ ${titleTypst}#grid(
         const y = axisBottom - h
         const label = item.label.trim() === '' ? `B${index + 1}` : item.label
         const tooltip = `${label} : hauteur ${heightValue} (soit ${representedEffectif})`
-        return `<rect x="${x}" y="${y}" width="${barWidth}" height="${h}" fill="${this.colorForIndex(index)}"><title>${this.escapeText(tooltip)}</title></rect>`
+        const fill = this.state.colorOn
+          ? this.colorForIndex(index)
+          : `url(#${this.svgHatchPatternId(index)})`
+        return `<rect x="${x}" y="${y}" width="${barWidth}" height="${h}" fill="${fill}" stroke="${this.state.colorOn ? 'none' : '#334155'}" stroke-width="0.5"><title>${this.escapeText(tooltip)}</title></rect>`
       })
       .join('')
 
@@ -1273,11 +1506,16 @@ ${titleTypst}#grid(
       unitValue,
     )
 
-    const svg = `<svg viewBox="0 0 ${width} ${height}"><line x1="${axisLeft}" y1="${axisBottom}" x2="${axisLeft + axisWidth}" y2="${axisBottom}" stroke="#475569"/><line x1="${axisLeft}" y1="${axisTop}" x2="${axisLeft}" y2="${axisBottom}" stroke="#475569"/>${ticks}${bars}${labels}</svg>`
+    const svg = `<svg viewBox="0 0 ${width} ${height}">${defs}<line x1="${axisLeft}" y1="${axisBottom}" x2="${axisLeft + axisWidth}" y2="${axisBottom}" stroke="#475569"/><line x1="${axisLeft}" y1="${axisTop}" x2="${axisLeft}" y2="${axisBottom}" stroke="#475569"/>${ticks}${bars}${labels}</svg>`
 
-    const status = this.state.infosStatus
-      ? `<div class="status">Chaque hauteur est exprimée en nombre d'unités de ${unitValue} ${this.escapeText(this.state.unitLabel)}.</div>`
-      : ''
+    const totalHeight = heights.reduce(
+      (sum, value) => sum + Math.max(0, value ?? 0),
+      0,
+    )
+    const status =
+      this.interactivityOn && this.state.infosStatus
+        ? `<div class="status warning">Hauteur totale : ${this.escapeText(this.formatHtmlNumber(totalHeight))} unité(s), soit ${this.escapeText(this.formatHtmlNumber(totalHeight * unitValue))} ${this.escapeText(this.state.unitLabel)}.</div>`
+        : ''
     preview.innerHTML = `${svg}${status}`
   }
 
@@ -1310,6 +1548,8 @@ ${titleTypst}#grid(
   }
 
   private renderLatexTable(): string {
+    if (!this.interactivityOn) return this.renderStaticLatexTable()
+
     const isLabelMode = this.state.mode === 'label'
     const isHeightMode = this.state.mode === 'hauteur'
     const valueColumnHeader = isLabelMode
@@ -1335,17 +1575,52 @@ ${rows}
 \\end{tabular}`
   }
 
+  private renderStaticLatexTable(): string {
+    const rows = this.state.items
+      .map((item, index) => {
+        const labelValue =
+          item.label.trim() === ''
+            ? '\\makebox[3cm]{\\dotfill}'
+            : this.escapeLatex(item.label || `B${index + 1}`)
+        const effectifValue =
+          item.effectif == null
+            ? '\\makebox[2cm]{\\dotfill}'
+            : this.formatLatexNumber(item.effectif)
+        const heightValue =
+          item.height == null
+            ? '\\makebox[2cm]{\\dotfill}'
+            : this.formatLatexNumber(item.height)
+        const label = this.formatLatexCorrectionValue(labelValue, 'label')
+        const effectif = this.formatLatexCorrectionValue(
+          effectifValue,
+          'effectif',
+        )
+        const height = this.formatLatexCorrectionValue(heightValue, 'hauteur')
+        return `${label} & ${effectif} & ${height} \\\\ \\hline`
+      })
+      .join('\n')
+
+    return `\\begin{tabular}{|c|c|c|}
+\\hline
+Catégorie & Effectifs & Hauteurs \\\\ \\hline
+${rows}
+\\end{tabular}`
+  }
+
   private renderLatexLabelCell(item: BarAssessmentItem, index: number): string {
-    if (this.interactivityOn && this.state.mode === 'label') {
+    if (
+      this.state.mode === 'label' &&
+      (this.interactivityOn || !this.state.correctionOn)
+    ) {
       return '\\makebox[3cm]{\\dotfill}'
     }
     const label = item.label.trim() === '' ? `B${index + 1}` : item.label
-    return this.escapeLatex(label)
+    return this.formatLatexCorrectionValue(this.escapeLatex(label), 'label')
   }
 
   private renderLatexValueCell(item: BarAssessmentItem, index: number): string {
     if (
-      this.interactivityOn &&
+      (this.interactivityOn || !this.state.correctionOn) &&
       (this.state.mode === 'hauteur' || this.state.mode === 'effectif')
     ) {
       return '\\makebox[2cm]{\\dotfill}'
@@ -1354,22 +1629,39 @@ ${rows}
     if (this.state.mode === 'label') {
       const value =
         this.state.labelValueKind === 'hauteur'
-          ? (item.height ?? this.deriveExpectedHeightsFromUnit()[index] ?? 0)
+          ? item.height
           : (item.effectif ??
             this.deriveExpectedEffectifsFromUnit()[index] ??
-            0)
+            null)
+      if (value == null) return '\\makebox[2cm]{\\dotfill}'
       return this.formatLatexNumber(value)
     }
 
     if (this.state.mode === 'hauteur') {
-      return this.formatLatexNumber(
-        item.height ?? this.deriveExpectedHeightsFromUnit()[index] ?? 0,
-      )
+      const value = item.height ?? this.deriveExpectedHeightsFromUnit()[index]
+      return value == null
+        ? '\\makebox[2cm]{\\dotfill}'
+        : this.formatLatexCorrectionValue(
+            this.formatLatexNumber(value),
+            'hauteur',
+          )
     }
 
-    return this.formatLatexNumber(
-      item.effectif ?? this.deriveExpectedEffectifsFromUnit()[index] ?? 0,
-    )
+    const value = item.effectif ?? this.deriveExpectedEffectifsFromUnit()[index]
+    return value == null
+      ? '\\makebox[2cm]{\\dotfill}'
+      : this.formatLatexCorrectionValue(
+          this.formatLatexNumber(value),
+          'effectif',
+        )
+  }
+
+  private formatLatexCorrectionValue(
+    value: string,
+    column: BarAssessmentStaticColumn,
+  ): string {
+    if (!this.state.correctionOn || this.state.mode !== column) return value
+    return `\\textcolor[HTML]{${orangeMathalea.slice(1)}}{\\textbf{${value}}}`
   }
 
   private renderEmptyBarTikz(): string {
@@ -1414,7 +1706,7 @@ ${rows}
             const representedEffectif = heightValue * unitValue
             const h = Math.max(0, (representedEffectif / yMax) * axisHeight)
             const x = index * slotWidth + (slotWidth - barWidth) / 2
-            return `\\filldraw[fill=${this.tikzColorName(index)}, draw=white] (${this.formatTikzNumber(x)},0) rectangle (${this.formatTikzNumber(x + barWidth)},${this.formatTikzNumber(h)});`
+            return `\\filldraw[${this.renderLatexBarStyle(index)}] (${this.formatTikzNumber(x)},0) rectangle (${this.formatTikzNumber(x + barWidth)},${this.formatTikzNumber(h)});`
           })
           .join('\n')
       : ''
@@ -1467,6 +1759,8 @@ ${rows}
   }
 
   private renderTypstTable(): string {
+    if (!this.interactivityOn) return this.renderStaticTypstTable()
+
     const isLabelMode = this.state.mode === 'label'
     const isHeightMode = this.state.mode === 'hauteur'
     const valueColumnHeader = isLabelMode
@@ -1493,23 +1787,40 @@ ${rows}
 )`
   }
 
-  private renderTypstLabelCell(
-    item: BarAssessmentItem,
-    index: number,
-  ): string {
-    if (this.interactivityOn && this.state.mode === 'label') {
+  private renderStaticTypstTable(): string {
+    const cells = [
+      '[Catégorie]',
+      '[Effectifs]',
+      '[Hauteurs]',
+      ...this.state.items.flatMap((item, index) => [
+        `[${this.formatTypstCorrectionValue(item.label.trim() === '' ? '#text(fill: luma(55%))[........]' : this.escapeTypst(item.label || `B${index + 1}`), 'label')}]`,
+        `[${this.formatTypstCorrectionValue(item.effectif == null ? '#text(fill: luma(55%))[........]' : this.formatTypstNumber(item.effectif), 'effectif')}]`,
+        `[${this.formatTypstCorrectionValue(item.height == null ? '#text(fill: luma(55%))[........]' : this.formatTypstNumber(item.height), 'hauteur')}]`,
+      ]),
+    ]
+
+    return `#table(
+  columns: 3,
+  stroke: 0.6pt + luma(70%),
+  inset: 4pt,
+  ${cells.join(',\n  ')},
+)`
+  }
+
+  private renderTypstLabelCell(item: BarAssessmentItem, index: number): string {
+    if (
+      this.state.mode === 'label' &&
+      (this.interactivityOn || !this.state.correctionOn)
+    ) {
       return '#text(fill: luma(55%))[........]'
     }
     const label = item.label.trim() === '' ? `B${index + 1}` : item.label
-    return this.escapeTypst(label)
+    return this.formatTypstCorrectionValue(this.escapeTypst(label), 'label')
   }
 
-  private renderTypstValueCell(
-    item: BarAssessmentItem,
-    index: number,
-  ): string {
+  private renderTypstValueCell(item: BarAssessmentItem, index: number): string {
     if (
-      this.interactivityOn &&
+      (this.interactivityOn || !this.state.correctionOn) &&
       (this.state.mode === 'hauteur' || this.state.mode === 'effectif')
     ) {
       return '#text(fill: luma(55%))[........]'
@@ -1518,22 +1829,39 @@ ${rows}
     if (this.state.mode === 'label') {
       const value =
         this.state.labelValueKind === 'hauteur'
-          ? (item.height ?? this.deriveExpectedHeightsFromUnit()[index] ?? 0)
+          ? item.height
           : (item.effectif ??
             this.deriveExpectedEffectifsFromUnit()[index] ??
-            0)
+            null)
+      if (value == null) return '#text(fill: luma(55%))[........]'
       return this.formatTypstNumber(value)
     }
 
     if (this.state.mode === 'hauteur') {
-      return this.formatTypstNumber(
-        item.height ?? this.deriveExpectedHeightsFromUnit()[index] ?? 0,
-      )
+      const value = item.height ?? this.deriveExpectedHeightsFromUnit()[index]
+      return value == null
+        ? '#text(fill: luma(55%))[........]'
+        : this.formatTypstCorrectionValue(
+            this.formatTypstNumber(value),
+            'hauteur',
+          )
     }
 
-    return this.formatTypstNumber(
-      item.effectif ?? this.deriveExpectedEffectifsFromUnit()[index] ?? 0,
-    )
+    const value = item.effectif ?? this.deriveExpectedEffectifsFromUnit()[index]
+    return value == null
+      ? '#text(fill: luma(55%))[........]'
+      : this.formatTypstCorrectionValue(
+          this.formatTypstNumber(value),
+          'effectif',
+        )
+  }
+
+  private formatTypstCorrectionValue(
+    value: string,
+    column: BarAssessmentStaticColumn,
+  ): string {
+    if (!this.state.correctionOn || this.state.mode !== column) return value
+    return `#text(fill: rgb("${orangeMathalea}"), weight: "bold")[${value}]`
   }
 
   private renderEmptyBarTypst(): string {
@@ -1585,7 +1913,7 @@ ${rows}
             const h = Math.max(0, (representedEffectif / yMax) * axisHeight)
             const x = axisLeft + index * slotWidth + (slotWidth - barWidth) / 2
             const y = axisBottom - h
-            return `  #place(top + left, dx: ${this.pt(x)}, dy: ${this.pt(y)}, rect(width: ${this.pt(barWidth)}, height: ${this.pt(h)}, fill: rgb("${this.colorForIndex(index)}"), stroke: none))`
+            return `  #place(top + left, dx: ${this.pt(x)}, dy: ${this.pt(y)}, rect(width: ${this.pt(barWidth)}, height: ${this.pt(h)}, fill: ${this.renderTypstBarFill(index)}, stroke: ${this.state.colorOn ? 'none' : '0.5pt + black'}))`
           })
           .join('\n')
       : ''
@@ -1665,6 +1993,8 @@ ${rows},
       mode: this.state.mode,
       labelValueKind: this.state.labelValueKind,
       infosStatus: this.state.infosStatus,
+      colorOn: this.state.colorOn,
+      correctionOn: this.state.correctionOn,
       unitValue: this.state.unitValue,
       items: this.state.items.map((item, index) => ({
         label:
@@ -1705,6 +2035,37 @@ ${rows},
     return `mathaleaBarColor${index}`
   }
 
+  private renderLatexBarStyle(index: number): string {
+    if (this.state.colorOn) {
+      return `fill=${this.tikzColorName(index)}, draw=white`
+    }
+    const patterns = [
+      'north east lines',
+      'north west lines',
+      'horizontal lines',
+      'vertical lines',
+      'grid',
+      'crosshatch',
+    ]
+    return `pattern=${patterns[index % patterns.length]}, pattern color=black, draw=black`
+  }
+
+  private renderTypstBarFill(index: number): string {
+    return this.state.colorOn
+      ? `rgb("${this.colorForIndex(index)}")`
+      : `luma(${90 - (index % 5) * 10}%)`
+  }
+
+  private renderSvgHatchPattern(index: number): string {
+    const id = this.svgHatchPatternId(index)
+    const rotation = [45, -45, 0, 90][index % 4]
+    return `<pattern id="${id}" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(${rotation})"><rect width="8" height="8" fill="#fff"/><path d="M 0 0 L 0 8" stroke="#334155" stroke-width="1.2"/></pattern>`
+  }
+
+  private svgHatchPatternId(index: number): string {
+    return `mathalea-bar-hatch-${index}`
+  }
+
   private formatLatexNumber(value: number): string {
     return texNombre(value, Number.isInteger(value) ? 0 : 1)
   }
@@ -1716,6 +2077,13 @@ ${rows},
   private formatTypstNumber(value: number): string {
     const rounded = Number.isInteger(value) ? String(value) : value.toFixed(1)
     return rounded.replace('.', ',')
+  }
+
+  private formatHtmlNumber(value: number): string {
+    return (Number.isInteger(value) ? String(value) : value.toFixed(1)).replace(
+      '.',
+      ',',
+    )
   }
 
   private pt(value: number): string {

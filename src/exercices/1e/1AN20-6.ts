@@ -1,7 +1,9 @@
-
 import { createList } from '../../lib/format/lists'
 import { texteCentre } from '../../lib/format/miseEnPage'
-import { tableauDeVariation, tableauSignesFonction} from '../../lib/mathFonctions/etudeFonction'
+import {
+  tableauDeVariation,
+  tableauSignesFonction,
+} from '../../lib/mathFonctions/etudeFonction'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
@@ -17,7 +19,7 @@ import {
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 export const titre =
-  "Étudier une fonction rationnelle avec une fonction auxiliaire"
+  'Étudier une fonction rationnelle avec une fonction auxiliaire'
 export const dateDePublication = '05/05/2026'
 export const interactifReady = false
 export const uuid = 'bd636'
@@ -27,18 +29,18 @@ export const refs = {
 }
 
 /**
- * Étudier le sens de variations d'une fonction polynôme du troisième degré (avec discriminant)'
+ * Étudier le sens de variation d'une fonction polynôme du troisième degré (avec discriminant)'
  * @author Gilles Mora
  */
 
 export default class EtudeFctPoly3 extends Exercice {
-    constructor() {
+  constructor() {
     super()
     this.nbQuestions = 1
-    this.spacing=2
-    this.spacingCorr=2
+    this.spacing = 2
+    this.spacingCorr = 2
     this.besoinFormulaireTexte = [
-      'Choix de l\'intervalle',
+      "Choix de l'intervalle",
       'Nombres séparés par des tirets :\n1 : Intervalle $]a\\,;+\\infty[$ (minimum)\n2 : Intervalle $]-\\infty\\,;a[$ (maximum)\n3 : Intervalle $\\mathbb{R}\\setminus\\{-a\\}$ (max et min locaux)\n4 : Mélange',
     ]
     this.sup = '4'
@@ -54,7 +56,7 @@ export default class EtudeFctPoly3 extends Exercice {
       nbQuestions: this.nbQuestions,
     })
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const cas = listeDeQuestions[i]
 
       // --- Tirage des paramètres ---
@@ -98,24 +100,19 @@ export default class EtudeFctPoly3 extends Exercice {
         if (x === -a) continue
         if (cas === 1 && x <= -a) continue
         if (cas === 2 && x >= -a) continue
-         if (x === x1 || x === x2) continue
+        if (x === x1 || x === x2) continue
         candidatsTangente.push(x)
       }
       if (candidatsTangente.length === 0) {
         cpt++
         continue
       }
-      const x0 =
-        candidatsTangente[randint(0, candidatsTangente.length - 1)]
+      const x0 = candidatsTangente[randint(0, candidatsTangente.length - 1)]
 
       // Coefficient directeur de la tangente (fraction exacte)
-      const numDerivee =
-        (2 * x0 + b) * (x0 + a) - (x0 ** 2 + b * x0 + c)
+      const numDerivee = (2 * x0 + b) * (x0 + a) - (x0 ** 2 + b * x0 + c)
       const denDerivee = (x0 + a) ** 2
-      const coeffDir = new FractionEtendue(
-        numDerivee,
-        denDerivee,
-      ).simplifie()
+      const coeffDir = new FractionEtendue(numDerivee, denDerivee).simplifie()
 
       // P(x) = x² + 2a·x + (a·b - c)
       const coeffPx = 2 * a
@@ -167,8 +164,7 @@ export default class EtudeFctPoly3 extends Exercice {
 
       // --- Correction ---
       // Q1 : signe de P avec discriminant (Trinome) et tableau de signes
-      let correctionQ1 =
-        `$P(x)=${reduirePolynomeDegre3(0, 1, coeffPx, cstPx)}$ est un polynôme du second degré.<br>`
+      let correctionQ1 = `$P(x)=${reduirePolynomeDegre3(0, 1, coeffPx, cstPx)}$ est un polynôme du second degré.<br>`
 
       if (coeffPx === 0) {
         // Cas x² + cstPx : on factorise directement x² - k² = (x-k)(x+k) si cstPx = -k²
@@ -227,16 +223,7 @@ f'(x)&=\\dfrac{u'(x)v(x)-u(x)v'(x)}{(v(x))^2}\\\\
         const ligneP = ['Line', 30, 't', 0, '-', 20, 'z', 5, '+', 20]
         const ligneDen = ['Line', 30, 'z', 0, '+', 20, 't', 5, '+', 20]
         const ligneFprime = ['Line', 30, 'd', 0, '-', 20, 'z', 5, '+', 20]
-        const ligneVar = [
-          'Var',
-          10,
-          'D+/',
-          20,
-          `-/$${fDeX2Tex}$`,
-          20,
-          '+/',
-          10,
-        ]
+        const ligneVar = ['Var', 10, 'D+/', 20, `-/$${fDeX2Tex}$`, 20, '+/', 10]
         tableauVar = tableauDeVariation({
           tabInit: [
             [
@@ -259,17 +246,21 @@ f'(x)&=\\dfrac{u'(x)v(x)-u(x)v'(x)}{(v(x))^2}\\\\
         // P : + 0 -   ;   (x+a)² : + +   ;   f' : + 0 -   ;   f : croit puis décroit (max en x1)
         const ligneP = ['Line', 30, '', 0, '+', 20, 'z', 5, '-', 20, 't', 0]
         const ligneDen = ['Line', 30, '', 0, '+', 20, 't', 5, '+', 20, 'z', 0]
-        const ligneFprime = ['Line', 30, '', 0, '+', 20, 'z', 5, '-', 20, 'd', 0]
-        const ligneVar = [
-          'Var',
-          10,
-          '-/',
+        const ligneFprime = [
+          'Line',
+          30,
+          '',
+          0,
+          '+',
           20,
-          `+/$${fDeX1Tex}$`,
+          'z',
+          5,
+          '-',
           20,
-          '-D/',
-          10,
+          'd',
+          0,
         ]
+        const ligneVar = ['Var', 10, '-/', 20, `+/$${fDeX1Tex}$`, 20, '-D/', 10]
         tableauVar = tableauDeVariation({
           tabInit: [
             [
@@ -414,8 +405,7 @@ f'(x)&=\\dfrac{u'(x)v(x)-u(x)v'(x)}{(v(x))^2}\\\\
 
       // Q5 : équation réduite de la tangente en x0
       // T : y = f'(x0)(x - x0) + f(x0)
-      const x0PlusATex =
-        x0 === 0 ? `${a}` : `${x0}${ecritureAlgebrique(a)}`
+      const x0PlusATex = x0 === 0 ? `${a}` : `${x0}${ecritureAlgebrique(a)}`
       const coeffDirTex = coeffDir.estEntiere
         ? `${coeffDir.num}`
         : coeffDir.texFractionSimplifiee
@@ -431,32 +421,25 @@ f'(x)&=\\dfrac{u'(x)v(x)-u(x)v'(x)}{(v(x))^2}\\\\
 
       // Ordonnée à l'origine de la tangente : p = f(x0) - f'(x0)·x0
       // p = fDeX0 - coeffDir * x0
-      const ordOrigine = fDeX0.differenceFraction(
-        coeffDir.multiplieEntier(x0),
-      )
+      const ordOrigine = fDeX0.differenceFraction(coeffDir.multiplieEntier(x0))
       const ordOrigineTex = ordOrigine.estEntiere
         ? `${ordOrigine.num}`
         : ordOrigine.texFractionSimplifiee
 
-      let correctionQ5 =
-        `L'équation réduite de la tangente $T$ à $\\mathscr{C}_f$ au point d'abscisse $${x0}$ est donnée par $y=f'(${x0})(x-${x0})+f(${x0})$.<br>`
+      let correctionQ5 = `L'équation réduite de la tangente $T$ à $\\mathscr{C}_f$ au point d'abscisse $${x0}$ est donnée par $y=f'(${x0})(x-${x0})+f(${x0})$.<br>`
 
       // Calcul de f'(x0)
-      correctionQ5 +=
-        `$f'(${x0})=\\dfrac{P(${x0})}{${x0===0 ? `${ecritureParentheseSiNegatif(x0+a)}^2` :`(${x0PlusATex})^2`}}=\\dfrac{${pDeX0}}{${denDerivee}}=${coeffDirTex}$.<br>`
+      correctionQ5 += `$f'(${x0})=\\dfrac{P(${x0})}{${x0 === 0 ? `${ecritureParentheseSiNegatif(x0 + a)}^2` : `(${x0PlusATex})^2`}}=\\dfrac{${pDeX0}}{${denDerivee}}=${coeffDirTex}$.<br>`
 
       // Calcul de f(x0)
-      correctionQ5 +=
-        `$f(${x0})=\\dfrac{${x0}^2${ecritureAlgebrique(b)}\\times ${x0}${ecritureAlgebrique(c)}}{${x0PlusATex}}=\\dfrac{${x0 ** 2 + b * x0 + c}}{${x0 + a}}=${fDeX0Tex}$.<br>`
+      correctionQ5 += `$f(${x0})=\\dfrac{${x0}^2${ecritureAlgebrique(b)}\\times ${x0}${ecritureAlgebrique(c)}}{${x0PlusATex}}=\\dfrac{${x0 ** 2 + b * x0 + c}}{${x0 + a}}=${fDeX0Tex}$.<br>`
 
       // Équation réduite
       if (x0 === 0) {
         // y = f'(0)·x + f(0) = coeffDir·x + fDeX0
-        correctionQ5 +=
-          `L'équation réduite de la tangente est $y=${coeffDirTex}x${ordOrigine.s >= 0 ? '+' : ''}${ordOrigineTex}$`
+        correctionQ5 += `L'équation réduite de la tangente est $y=${coeffDirTex}x${ordOrigine.s >= 0 ? '+' : ''}${ordOrigineTex}$`
       } else {
-        correctionQ5 +=
-          `$y=${coeffDirTex}(x-${x0})+${fDeX0Tex}$`
+        correctionQ5 += `$y=${coeffDirTex}(x-${x0})+${fDeX0Tex}$`
         // Forme réduite y = coeffDir·x + ordOrigine
         if (ordOrigine.num === 0) {
           correctionQ5 += `, soit $y=${coeffDirTex}x$.`

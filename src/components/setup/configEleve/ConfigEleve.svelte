@@ -98,6 +98,17 @@
     }
     mathaleaUpdateUrlFromExercicesParams($exercicesParams)
   }
+
+  // `buildMathAleaURL` lit `globalOptions` via `get()`, ce qui n'est pas
+  // détecté par le compilateur Svelte comme une dépendance réactive : on
+  // référence explicitement `$globalOptions.presMode` pour forcer le
+  // recalcul à chaque changement des réglages (interactivité, etc.)
+  $: eleveUrl = buildMathAleaURL({
+    view: $canOptions.isChoosen ? 'can' : 'eleve',
+    isEncrypted: availableLinkFormats[currentLinkFormat].isEncrypted,
+    removeSeed: isDataRandom,
+    mode: $globalOptions.presMode,
+  }).toString()
 </script>
 
 <main
@@ -558,12 +569,7 @@
             <div class="my-1">
               <ButtonActionInfo
                 action="copy"
-                textToCopy={buildMathAleaURL({
-                  view: $canOptions.isChoosen ? 'can' : 'eleve',
-                  isEncrypted:
-                    availableLinkFormats[currentLinkFormat].isEncrypted,
-                  removeSeed: isDataRandom,
-                }).toString()}
+                textToCopy={eleveUrl}
                 tooltip={'Lien ' +
                   availableLinkFormats[currentLinkFormat].toolTipsMessage}
                 icon={'bx-link text-2xl'}
@@ -585,12 +591,7 @@
                 tooltip={'QR-code (lien ' +
                   availableLinkFormats[currentLinkFormat].toolTipsMessage +
                   ')'}
-                customUrl={buildMathAleaURL({
-                  view: $canOptions.isChoosen ? 'can' : 'eleve',
-                  isEncrypted:
-                    availableLinkFormats[currentLinkFormat].isEncrypted,
-                  removeSeed: isDataRandom,
-                }).toString()}
+                customUrl={eleveUrl}
                 cornerIcon={availableLinkFormats[currentLinkFormat].icon}
               />
             </div>
@@ -604,12 +605,7 @@
             <div class="my-1">
               <ButtonActionInfo
                 action="copy"
-                textToCopy={`<iframe src="${buildMathAleaURL({
-                  view: $canOptions.isChoosen ? 'can' : 'eleve',
-                  isEncrypted:
-                    availableLinkFormats[currentLinkFormat].isEncrypted,
-                  removeSeed: isDataRandom,
-                }).toString()}" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>`}
+                textToCopy={`<iframe src="${eleveUrl}" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>`}
                 tooltip={'Code (lien ' +
                   availableLinkFormats[currentLinkFormat].toolTipsMessage +
                   ')'}
@@ -629,12 +625,7 @@
             <div class="my-1">
               <ButtonActionInfo
                 action="download"
-                urlToDownload={buildMathAleaURL({
-                  view: $canOptions.isChoosen ? 'can' : 'eleve',
-                  isEncrypted:
-                    availableLinkFormats[currentLinkFormat].isEncrypted,
-                  removeSeed: isDataRandom,
-                }).toString()}
+                urlToDownload={eleveUrl}
                 fileName={$globalOptions.title
                   ? $globalOptions.title
                   : 'mathAlea'}

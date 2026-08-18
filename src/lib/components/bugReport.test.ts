@@ -86,6 +86,20 @@ describe('buildBugReportTitle', () => {
   it('reste générique sans référence ni titre', () => {
     expect(buildBugReportTitle({})).toBe('Bug dans un exercice')
   })
+  it('ajoute l’indice (1-based) entre parenthèses quand il est fourni', () => {
+    expect(
+      buildBugReportTitle({
+        exerciceId: '3L11',
+        exerciceTitle: 'Calcul littéral',
+        exerciceIndex: 1,
+      }),
+    ).toBe("Bug dans l'exercice 3L11 (ex n°2) : Calcul littéral")
+  })
+  it('ajoute l’indice pour le premier exercice de la série (n°1)', () => {
+    expect(
+      buildBugReportTitle({ exerciceId: '3L11', exerciceIndex: 0 }),
+    ).toBe("Bug dans l'exercice (ex n°1) : 3L11")
+  })
 })
 
 describe('buildBugReportDescription', () => {

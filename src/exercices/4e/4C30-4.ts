@@ -115,7 +115,7 @@ export default class PuissancesEtPrefixe extends Exercice {
             ajouteChampTexteMathLive(
               this,
               i,
-              KeyboardType.clavierDeBaseAvecFraction,
+              KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
             )
           : `${prefixe}`
         handleAnswers(this, i, { reponse: { value: `10^{${exposant}}` } })

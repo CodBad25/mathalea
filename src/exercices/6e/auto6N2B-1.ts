@@ -404,6 +404,8 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
         raws,
         headingCols: entetesColonnes.map(enTete),
         headingLines: numerosLignes.map(enTete),
+        colFooters: [],
+        lineFooters: [],
       },
       'tableauMathlive',
       false,

@@ -71,7 +71,7 @@ export default class ResolutionTrianglesCCA extends Exercice {
     })
     const listeTypes = combinaisonListes(typesDisponibles, this.nbQuestions)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const listeDeNomsDePolygones = ['QD']
       const nom = shuffleLettres(creerNomDePolygone(3, listeDeNomsDePolygones))
       listeDeNomsDePolygones.push(nom)
@@ -186,13 +186,7 @@ $\\sin(\\widehat{${angC}}) = \\dfrac{${sc} \\times \\sin(\\widehat{${angA}})}{${
           this,
           i,
           buildAmbiguousCaseAnswers(
-            [
-              [
-                texResult(angleC1),
-                texResult(angleB),
-                texResult(sideB),
-              ],
-            ],
+            [[texResult(angleC1), texResult(angleB), texResult(sideB)]],
             angB,
             angC,
             sb,
@@ -286,16 +280,8 @@ ${sb} &= \\dfrac{${sa} \\times \\sin(\\widehat{${angB}})}{\\sin(\\widehat{${angA
         texte += `<br>${precisionInstruction}`
 
         const solutionsAttendues: [TriangleSolution, TriangleSolution] = [
-          [
-            texResult(angleC1),
-            texResult(angleB1),
-            texResult(sideB1),
-          ],
-          [
-            texResult(angleC2),
-            texResult(angleB2),
-            texResult(sideB2),
-          ],
+          [texResult(angleC1), texResult(angleB1), texResult(sideB1)],
+          [texResult(angleC2), texResult(angleB2), texResult(sideB2)],
         ]
         handleAnswers(
           this,
@@ -402,18 +388,44 @@ function buildAmbiguousCaseTable(
     {
       headingCols: [
         { texte: '\\text{}', latex: true, gras: true, color: 'black' },
-        { texte: `\\widehat{${angC}}`, latex: true, gras: true, color: 'black' },
-        { texte: `\\widehat{${angB}}`, latex: true, gras: true, color: 'black' },
+        {
+          texte: `\\widehat{${angC}}`,
+          latex: true,
+          gras: true,
+          color: 'black',
+        },
+        {
+          texte: `\\widehat{${angB}}`,
+          latex: true,
+          gras: true,
+          color: 'black',
+        },
         { texte: sideBName, latex: true, gras: true, color: 'black' },
       ],
       headingLines: [
-        { texte: '\\text{Solution 1}', latex: true, gras: true, color: 'black' },
-        { texte: '\\text{Solution 2}', latex: true, gras: true, color: 'black' },
+        {
+          texte: '\\text{Solution 1}',
+          latex: true,
+          gras: true,
+          color: 'black',
+        },
+        {
+          texte: '\\text{Solution 2}',
+          latex: true,
+          gras: true,
+          color: 'black',
+        },
       ],
       raws: [
-        [emptyAngleCell, emptyAngleCell, emptyLengthCell].map((cell) => ({ ...cell })),
-        [emptyAngleCell, emptyAngleCell, emptyLengthCell].map((cell) => ({ ...cell })),
+        [emptyAngleCell, emptyAngleCell, emptyLengthCell].map((cell) => ({
+          ...cell,
+        })),
+        [emptyAngleCell, emptyAngleCell, emptyLengthCell].map((cell) => ({
+          ...cell,
+        })),
       ],
+      colFooters: [],
+      lineFooters: [],
     },
     'tableauMathlive',
     true,

@@ -181,6 +181,25 @@ function closeAddExerciseModal(): void {
 }
 
 /**
+ * Fait passer la visite à l'étape suivante quand l'utilisateur appuie sur
+ * Entrée (même mécanisme que `tour.ts`)&nbsp;: driver.js gère déjà la flèche
+ * droite comme « Suivant », y compris la résolution du bon gestionnaire
+ * (action de démo de l'étape courante, ou bouton « Terminer » en fin de
+ * visite) — on réutilise cette logique plutôt que de la dupliquer.
+ */
+function handleTourEnterKey(event: KeyboardEvent): void {
+  if (event.key !== 'Enter') return
+  if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+  // Empêche l'activation native du bouton actuellement focalisé dans le
+  // popover (souvent le bouton de fermeture « × », premier élément
+  // focalisable) avant de déclencher l'avancée de la visite.
+  event.preventDefault()
+  window.dispatchEvent(
+    new KeyboardEvent('keyup', { key: 'ArrowRight', bubbles: true }),
+  )
+}
+
+/**
  * Lance la visite guidée de la vue Typst (driver.js). Une partie décrit
  * simplement l'interface (comme la visite de la page d'accueil dans les
  * grandes lignes), une autre — l'ouverture de la modale « Ajouter un
@@ -244,6 +263,7 @@ export function startTypstTour(): void {
         ? 'mathalea-tour-popover mathalea-tour-popover-dark'
         : 'mathalea-tour-popover',
       onDestroyed: () => {
+        window.removeEventListener('keydown', handleTourEnterKey)
         markTypstTourSeen()
         restoreState()
       },
@@ -536,6 +556,7 @@ export function startTypstTour(): void {
       ],
     })
 
+    window.addEventListener('keydown', handleTourEnterKey)
     driverObj.drive()
   }, 60)
 }

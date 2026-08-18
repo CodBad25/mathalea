@@ -266,6 +266,26 @@ function openAndSearchPythagore(callback: () => void): void {
 }
 
 /**
+ * Fait passer la visite à l'étape suivante quand l'utilisateur appuie sur
+ * Entrée (comme annoncé par le texte de l'étape « 3L11 »). On ne réimplémente
+ * pas ici la résolution du bon gestionnaire (action de démo de l'étape
+ * courante, ou bouton « Terminer » en fin de visite)&nbsp;: driver.js le fait
+ * déjà pour la flèche droite, donc on simule cette touche pour réutiliser
+ * exactement la même logique plutôt que de la dupliquer.
+ */
+function handleTourEnterKey(event: KeyboardEvent): void {
+  if (event.key !== 'Enter') return
+  if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+  // Empêche l'activation native du bouton actuellement focalisé dans le
+  // popover (souvent le bouton de fermeture « × », premier élément
+  // focalisable) avant de déclencher l'avancée de la visite.
+  event.preventDefault()
+  window.dispatchEvent(
+    new KeyboardEvent('keyup', { key: 'ArrowRight', bubbles: true }),
+  )
+}
+
+/**
  * Lance la visite guidée de la page d'accueil (driver.js). La visite
  * démontre elle-même les actions (recherche, ajout, saisie) : l'utilisateur
  * n'a qu'à cliquer sur « Suivant ». Les exercices de démonstration ajoutés
@@ -288,7 +308,6 @@ export function startTour(): void {
     overlayOpacity: 0.65,
     stagePadding: 6,
     waitForElement: 8000,
-    smoothScroll: true,
     // driver.js anime les transitions entre étapes via requestAnimationFrame ;
     // dans un onglet en arrière-plan ou peu prioritaire (navigateur headless,
     // onglet non actif…), rAF peut être fortement throttlé et la transition
@@ -296,10 +315,24 @@ export function startTour(): void {
     // précédente. On désactive donc l'animation : chaque étape s'affiche
     // instantanément, sans dépendre du rythme des frames.
     animate: false,
+    // Avec l'animation désactivée, driver.js ne calcule la position du halo
+    // (l'« encart ») qu'une seule fois, sur la frame suivant le changement
+    // d'étape — il ne se resynchronise jamais ensuite (il ne réécoute que le
+    // scroll de `window`, jamais celui d'un conteneur interne comme le
+    // panneau de paramètres ou le menu du référentiel). Avec un défilement
+    // fluide (`smoothScroll: true`), cette frame arrive avant la fin du
+    // défilement animé&nbsp;: le halo reste alors figé sur la position
+    // d'avant le scroll (encart vide ou mal placé), un décalage d'autant
+    // plus visible que l'étape nécessite un grand défilement — et invisible
+    // quand l'élément est déjà à l'écran, d'où son caractère intermittent
+    // selon les étapes. Un défilement instantané se termine avant cette
+    // frame, donc la position capturée est toujours la bonne.
+    smoothScroll: false,
     popoverClass: get(darkMode).isActive
       ? 'mathalea-tour-popover mathalea-tour-popover-dark'
       : 'mathalea-tour-popover',
     onDestroyed: () => {
+      window.removeEventListener('keydown', handleTourEnterKey)
       // Sans effet si la modale Ctrl+K n'est pas ouverte : si la visite est
       // fermée pendant une de ses étapes, elle ne doit pas rester affichée.
       closeAddExerciseModal()
@@ -534,5 +567,6 @@ export function startTour(): void {
     ],
   })
 
+  window.addEventListener('keydown', handleTourEnterKey)
   driverObj.drive()
 }

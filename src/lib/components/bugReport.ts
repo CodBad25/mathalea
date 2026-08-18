@@ -19,6 +19,8 @@ export type BugReportContext = {
   exerciceId?: string
   /** Titre de l'exercice (ex : `Calcul littéral`) */
   exerciceTitle?: string
+  /** Indice (0-based) de l'exercice dans la série */
+  exerciceIndex?: number
   /** URL complète de la page au moment du signalement */
   url?: string
   /** `navigator.userAgent` */
@@ -88,13 +90,19 @@ export function formatBugReportDate(date: Date): string {
 export function buildBugReportTitle({
   exerciceId,
   exerciceTitle,
+  exerciceIndex,
 }: BugReportContext): string {
   const reference = exerciceId?.trim() ?? ''
   const titre = exerciceTitle?.trim() ?? ''
-  if (reference && titre) return `Bug dans l'exercice ${reference} : ${titre}`
+  const rang =
+    exerciceIndex != null && exerciceIndex >= 0
+      ? ` (ex n°${exerciceIndex + 1})`
+      : ''
+  if (reference && titre)
+    return `Bug dans l'exercice ${reference}${rang} : ${titre}`
   const designation = titre || reference
   return designation
-    ? `Bug dans l'exercice : ${designation}`
+    ? `Bug dans l'exercice${rang} : ${designation}`
     : 'Bug dans un exercice'
 }
 

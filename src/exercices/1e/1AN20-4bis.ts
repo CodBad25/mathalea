@@ -8,7 +8,7 @@ import {
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre =
-  "Étudier le sens de variations d'une fonction polynôme du troisième degré (sans discriminant)"
+  "Étudier le sens de variation d'une fonction polynôme du troisième degré (sans discriminant)"
 export const dateDePublication = '08/06/2025'
 export const dateDeModifImportante = '08/06/2025'
 export const interactifReady = false
@@ -20,7 +20,7 @@ export const refs = {
 }
 
 /**
- * Étudier le sens de variations d'une fonction polynôme du troisième degré (sans discriminant)'
+ * Étudier le sens de variation d'une fonction polynôme du troisième degré (sans discriminant)'
  * @author Louis Paternault
  */
 
@@ -147,7 +147,7 @@ export default class EtudeFctPoly3 extends Exercice {
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
 
@@ -169,7 +169,7 @@ export default class EtudeFctPoly3 extends Exercice {
       const fonction = (x: number) =>
         (a / 3) * x ** 3 - ((a * (x1 + x2)) / 2) * x ** 2 + a * x1 * x2 * x + k
 
-      texte = `On considère la fonction $f$ définie sur $${intervalle}$ par : $f(x)=${reduirePolynomeDegre3(a / 3, (-a * (x1 + x2)) / 2, a * x1 * x2, k)}$. Le but de l'exercice est d'étudier le sens de variations de la fonction $f$ sur son intervalle de définition, puis de déterminer ses éventuels extremums.`
+      texte = `On considère la fonction $f$ définie sur $${intervalle}$ par : $f(x)=${reduirePolynomeDegre3(a / 3, (-a * (x1 + x2)) / 2, a * x1 * x2, k)}$. Le but de l'exercice est d'étudier le sens de variation de la fonction $f$ sur son intervalle de définition, puis de déterminer ses éventuels extremums.`
 
       texte += createList({
         items: [

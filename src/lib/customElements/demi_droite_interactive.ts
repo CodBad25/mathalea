@@ -21,6 +21,7 @@ type DemiDroiteInteractiveValue = {
 
 type DemiDroiteInteractiveIncomingValue = DemiDroiteInteractiveValue & {
   showNegative?: boolean
+  showwNegative?: boolean
 }
 
 function formatPointValue(pointValue: number, partsCount: number): string {
@@ -82,8 +83,10 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
   private initialPartsCount = 1
   private minT = 2
   private maxT = 10
+  private axisMin: number | undefined
   private showNegative = false
   private initialShowNegative = false
+  private showEqualityMarks = true
   private allowMultiplePoints = false
   private points: ValeurPoint[] = []
   private initialPoints: ValeurPoint[] = []
@@ -225,20 +228,24 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     const maxT = options.maxT ?? 10
     const partsCount = options.partsCount ?? 1
     const showNegative = options.showNegative ?? false
+    const showEqualityMarks = options.showEqualityMarks ?? true
     const multiplePoints = options.multiplePoints ?? false
     const interactivityOn = options.interactivityOn ?? true
     const pointsColor = options.pointsColor ?? bleuMathalea
     const pointsAttribute = escapeHtmlAttribute(
       JSON.stringify(options.points ?? []),
     )
+    const axisMinAttribute =
+      options.axisMin === undefined ? '' : ` axis-min="${options.axisMin}"`
 
-    return `<demi-droite-interactive ${idAttribute} x0="${x0}" initial-t="${initialT}" min-t="${minT}" max-t="${maxT}" show-negative="${showNegative}" multiple-points="${multiplePoints}" interactivity-on="${interactivityOn}" parts-count="${partsCount}" points="${pointsAttribute}" points-color="${pointsColor}"></demi-droite-interactive>`
+    return `<demi-droite-interactive ${idAttribute} x0="${x0}"${axisMinAttribute} initial-t="${initialT}" min-t="${minT}" max-t="${maxT}" show-negative="${showNegative}" show-equality-marks="${showEqualityMarks}" multiple-points="${multiplePoints}" interactivity-on="${interactivityOn}" parts-count="${partsCount}" points="${pointsAttribute}" points-color="${pointsColor}"></demi-droite-interactive>`
   }
 
   private applyOptions(options: DemiDroiteInteractiveOptions = {}): void {
     this.pointsColor = options.pointsColor ?? bleuMathalea
     this.minT = options.minT ?? 2
     this.maxT = options.maxT ?? 10
+    this.axisMin = options.axisMin
     this.initialTMax = options.initialT ?? this.minT
     this.tMax = Math.max(this.minT, Math.min(this.maxT, this.initialTMax))
     this.initialX0 = options.x0 ?? 0
@@ -247,6 +254,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     this.partsCount = this.initialPartsCount
     this.showNegative = options.showNegative ?? false
     this.initialShowNegative = this.showNegative
+    this.showEqualityMarks = options.showEqualityMarks ?? true
     this.allowMultiplePoints = options.multiplePoints ?? false
     this.interactivityOn = options.interactivityOn ?? true
     this.initialPoints = (options.points ?? []).map((point, index) => ({
@@ -264,6 +272,8 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     this.id = String(this.getAttribute('id'))
     this.minT = Number(this.getAttribute('min-t') ?? '2')
     this.maxT = Number(this.getAttribute('max-t') ?? '10')
+    const axisMin = Number(this.getAttribute('axis-min'))
+    this.axisMin = Number.isFinite(axisMin) ? axisMin : undefined
     this.initialTMax = Number(
       this.getAttribute('initial-t') ?? String(this.minT),
     )
@@ -278,6 +288,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     this.partsCount = this.initialPartsCount
     this.showNegative = this.getAttribute('show-negative') === 'true'
     this.initialShowNegative = this.showNegative
+    this.showEqualityMarks = this.getAttribute('show-equality-marks') !== 'false'
     this.allowMultiplePoints = this.getAttribute('multiple-points') === 'true'
     this.interactivityOn = this.getAttribute('interactivity-on') !== 'false'
     this.initialPoints = this.parsePointsAttribute(this.getAttribute('points'))
@@ -337,7 +348,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     }
 
     const incomingShowNegative =
-      nextValue.showNegative ?? nextValue.showNegative
+      nextValue.showNegative ?? nextValue.showwNegative
     this.showNegative = incomingShowNegative === true
 
     const availableValues = this.getAvailableValues()
@@ -371,6 +382,9 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
   }
 
   private getAxisStartValue(): number {
+    if (this.axisMin !== undefined) {
+      return this.axisMin
+    }
     if (this.showNegative) {
       return -this.initialTMax
     }
@@ -437,7 +451,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       `\\draw[->, line width=0.8pt] (${formatDecimal(geometry.axisStart)},0) -- (${formatDecimal(geometry.axisEnd)},0);`,
     ]
     const parts = this.getParts()
-    if (parts >= 2) {
+    if (this.showEqualityMarks && parts >= 2) {
       for (let partIndex = 0; partIndex < parts; partIndex++) {
         const segmentStartValue =
           geometry.minValue +
@@ -501,7 +515,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       `<line x1="${xSvg(geometry.axisStart)}" y1="${axisY}" x2="${xSvg(geometry.axisEnd)}" y2="${axisY}" stroke="#111" stroke-width="1.6" />`,
       `<path d="M ${xSvg(geometry.axisEnd - 0.24)} ${axisY - 5} L ${xSvg(geometry.axisEnd)} ${axisY} L ${xSvg(geometry.axisEnd - 0.24)} ${axisY + 5}" stroke="#111" stroke-width="1.6" />`,
     ]
-    if (parts >= 2) {
+    if (this.showEqualityMarks && parts >= 2) {
       for (let partIndex = 0; partIndex < parts; partIndex++) {
         const segmentStartValue =
           geometry.minValue +
@@ -770,7 +784,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
     this.svg.appendChild(axis)
 
     const parts = this.getParts()
-    if (parts >= 2) {
+    if (this.showEqualityMarks && parts >= 2) {
       const markerYOffset = 0
       const markerHalfWidth = 4
       const markerHalfHeight = 5
@@ -977,17 +991,20 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       parsed === null ||
       !('partsCount' in parsed) ||
       !('maxT' in parsed) ||
-      !('showwNegative' in parsed) ||
+      !('showNegative' in parsed || 'showwNegative' in parsed) ||
       !('points' in parsed) ||
       !('x0' in parsed)
     ) {
       return rawAnswer
     }
-    const { partsCount, maxT, showwNegative, points, x0 } = parsed
+    const { partsCount, maxT, points, x0 } = parsed
+    const axisMin = Number(parsed.axisMin ?? x0)
+    const showNegative = parsed.showNegative ?? parsed.showwNegative
     if (
       !Number.isFinite(partsCount) ||
       !Number.isFinite(maxT) ||
-      typeof showwNegative !== 'boolean' ||
+      !Number.isFinite(axisMin) ||
+      typeof showNegative !== 'boolean' ||
       !Array.isArray(points) ||
       !Number.isFinite(x0)
     ) {
@@ -1010,7 +1027,7 @@ class DemiDroiteInteractiveElement extends MathaleaCustomElement {
       }
       return `${label}(${fraction(numericPointValue * partsCount, partsCount).texFraction})`
     })
-    return `Un segment de longueur $${maxT - x0}$ unités a été partagé en $${partsCount}$ parties.<br>
+    return `Un axe allant de $${axisMin}$ à $${maxT}$ a été partagé en $${partsCount}$ parties.<br>
     ${points.length > 1 ? 'Les points suivants sont placés :' : 'Le point suivant est placé :'} $${pointsDescriptions.filter((v): v is string => !!v).join(';')}$`
   }
 }
@@ -1023,7 +1040,9 @@ type DemiDroiteInteractiveOptions = {
   minT?: number
   maxT?: number
   partsCount?: number
+  axisMin?: number
   showNegative?: boolean
+  showEqualityMarks?: boolean
   multiplePoints?: boolean
   interactivityOn?: boolean
   points?: ValeurPoint[]

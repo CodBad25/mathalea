@@ -26,10 +26,9 @@ export default class Auto1AC3j extends ExerciceQcmA {
   private appliquerLesValeurs(a: number, n: number, choix: string): void {
     this.enonce = `Le ${choix} de  $${texNombre(a * a, 0)}^{${n}}$ est égal à :`
     const k = choix === 'double' ? 2 : 3
-    this.correction = `On a $${a * a}=${a}^{2}$ donc :<br>
+    this.correction = `On a $${a * a}=${a}^{2}$ et on cherche ${choix === 'double' ? `le double de ` : `le triple de `} $${texNombre(a * a, 0)}^{${n}}$, soit $${k} \\times ${texNombre(a * a, 0)}^{${n}}$ donc :<br>
     $\\begin{aligned}
-    \\text{${choix === 'double' ? `Le double de ` : `Le triple de `} } ${texNombre(a * a, 0)}^{${n}} & = ${k} \\times ${texNombre(a * a, 0)}^{${n}} \\\\
-    & = ${k}\\times ${choix === 'double' ? ` \\left(2^{2}\\right)^{${n}}` : `\\left(3^{2}\\right)^{${n}}`} \\\\
+    ${k} \\times ${texNombre(a * a, 0)}^{${n}} & = ${k}\\times ${choix === 'double' ? ` \\left(2^{2}\\right)^{${n}}` : `\\left(3^{2}\\right)^{${n}}`} \\\\
     &=${k}\\times ${choix === 'double' ? ` 2^{${2 * n}}` : `3^{${2 * n}}`} \\\\
     &=${choix === 'double' ? `${miseEnEvidence(`2^{${2 * n + 1}}`)}` : `${miseEnEvidence(`3^{${2 * n + 1}}`)}`} \\\\
     \\end{aligned}$`
@@ -66,7 +65,6 @@ export default class Auto1AC3j extends ExerciceQcmA {
     <li>Utiliser les propriétés des puissances pour identifier la bonne réponse.</li>
     <li>Procéder par élimination si plusieurs réponses semblent possibles.</li>
   </ul>`
-    // this.options = { vertical: true, ordered: false }
     this.versionAleatoire()
   }
 }

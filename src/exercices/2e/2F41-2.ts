@@ -1,3 +1,7 @@
+import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import {
   tableauVariationsFonction,
   type Substitut,
@@ -18,6 +22,7 @@ export const titre =
   'Utiliser les variations des fonctions de référence pour comparer ou encadrer'
 export const dateDePublication = '31/01/2022'
 export const dateDeModifImportante = '12/07/2023'
+export const interactifReady = true
 /**
  *
  * @author Gilles Mora, Louis Paternault
@@ -28,9 +33,258 @@ export const refs = {
   'fr-fr': ['2F41-2'],
   'fr-ch': ['2mIneq-5'],
 }
+
+type PromptInequalitySymbolsPayload = {
+  numeroExercice: number
+  questionIndex: number
+}
+
+type FillInTheBlankElementLike = {
+  getPromptValue: (id: string) => string
+  setPromptState: (
+    id: string,
+    state: 'correct' | 'incorrect' | 'undefined' | undefined,
+    value: boolean,
+  ) => void
+}
+
+type DoubleInequalityPart = {
+  bound: string
+  operator: '<' | '<=' | '>' | '>='
+}
+
+const promptInequalitySymbolsAction = '2F41-2:prompt-inequality-symbols'
+let promptInequalitySymbolsActionRegistered = false
+
+export const inequalitySymbolButtons = [
+  { label: '<', insertText: '<' },
+  { label: '>', insertText: '>' },
+  { label: '≤', insertText: '\\leqslant' },
+  { label: '≥', insertText: '\\geqslant' },
+]
+
+function registerPromptInequalitySymbolsAction() {
+  if (promptInequalitySymbolsActionRegistered) return
+  promptInequalitySymbolsActionRegistered = true
+  DomReadyActionElement.registerCallback<PromptInequalitySymbolsPayload>(
+    promptInequalitySymbolsAction,
+    ({ element, payload }) => {
+      element.innerHTML = ''
+      element.classList.add('my-2', 'block')
+      const fillInTheBlank = document.querySelector(
+        `fill-in-the-blank[mathfield-id="champTexteEx${payload.numeroExercice}Q${payload.questionIndex}"]`,
+      )
+      const mathfield = fillInTheBlank?.querySelector('math-field') as
+        | (HTMLElement & {
+            insert?: (text: string) => void
+            executeCommand?: (command: unknown) => void
+            value?: string
+          })
+        | null
+      if (mathfield == null) return
+
+      const wrapper = document.createElement('div')
+      wrapper.className = 'inline-flex items-center gap-2 flex-wrap'
+      const label = document.createElement('span')
+      label.textContent = 'Symboles possibles :'
+      label.className = 'text-sm'
+      wrapper.appendChild(label)
+
+      const listeners: Array<{
+        button: HTMLButtonElement
+        onClick: () => void
+        onPointerDown: (event: PointerEvent) => void
+      }> = []
+      for (const symbol of inequalitySymbolButtons) {
+        const button = document.createElement('button')
+        button.type = 'button'
+        button.textContent = symbol.label
+        button.className =
+          'inline-flex mx-4 justify-center items-center text-sm md:text-xl border-b-2 border-r border-r-slate-400 dark:border-r-gray-500 border-b-slate-300 dark:border-b-gray-600 active:border-b-0 active:border-r-0 text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light active:text-coopmaths-canvas active:translate-y-[1.5px] dark:active:text-coopmathsdark-canvas active:bg-coopmaths-action active:shadow-none dark:active:bg-coopmathsdark-action dark:active:shadow-none transition-transform ease-in-out shadow-[2px_2px_4px_rgba(180,180,180,0.5)] bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas py-1 px-1 md:py-2 md:px-4 text-center rounded-md font-mono touch-none'
+        const onPointerDown = (event: PointerEvent) => {
+          event.preventDefault()
+        }
+        const onClick = () => {
+          mathfield.focus()
+          if (mathfield.insert != null) {
+            mathfield.insert(symbol.insertText)
+          } else if (mathfield.executeCommand != null) {
+            mathfield.executeCommand(['insert', symbol.insertText])
+          } else {
+            mathfield.value = `${mathfield.value ?? ''}${symbol.insertText}`
+          }
+        }
+        button.addEventListener('pointerdown', onPointerDown)
+        button.addEventListener('click', onClick)
+        listeners.push({ button, onClick, onPointerDown })
+        wrapper.appendChild(button)
+      }
+      element.appendChild(wrapper)
+
+      return () => {
+        for (const { button, onClick, onPointerDown } of listeners) {
+          button.removeEventListener('pointerdown', onPointerDown)
+          button.removeEventListener('click', onClick)
+        }
+        element.innerHTML = ''
+      }
+    },
+  )
+}
+
+function promptInequalitySymbolsReadyMarkup(
+  numeroExercice: number,
+  questionIndex: number,
+): string {
+  return DomReadyActionElement.create({
+    action: promptInequalitySymbolsAction,
+    payload: {
+      numeroExercice,
+      questionIndex,
+    },
+  })
+}
+
+function normalizeInequalityOperator(operator: string) {
+  if (['\\leqslant', '\\leq', '\\le', '≤'].includes(operator)) return '<='
+  if (['\\geqslant', '\\geq', '\\ge', '≥'].includes(operator)) return '>='
+  if (operator === '<' || operator === '>') return operator
+  return null
+}
+
+function reverseInequalityOperator(operator: DoubleInequalityPart['operator']) {
+  if (operator === '<') return '>'
+  if (operator === '>') return '<'
+  if (operator === '<=') return '>='
+  return '<='
+}
+
+function parseLeftInequalityPart(value: string): DoubleInequalityPart | null {
+  const match =
+    /^\s*(.*?)\s*(\\leqslant|\\geqslant|\\leq|\\geq|\\le|\\ge|≤|≥|<|>)\s*$/.exec(
+      value,
+    )
+  if (match == null) return null
+  const operator = normalizeInequalityOperator(match[2])
+  if (operator == null || match[1].trim() === '') return null
+  return { bound: match[1].trim(), operator }
+}
+
+function parseRightInequalityPart(value: string): DoubleInequalityPart | null {
+  const match =
+    /^\s*(\\leqslant|\\geqslant|\\leq|\\geq|\\le|\\ge|≤|≥|<|>)\s*(.*?)\s*$/.exec(
+      value,
+    )
+  if (match == null) return null
+  const operator = normalizeInequalityOperator(match[1])
+  if (operator == null || match[2].trim() === '') return null
+  return { bound: match[2].trim(), operator }
+}
+
+function sameBound(input: string, expected: string): boolean {
+  return fonctionComparaison(input, expected).isOk
+}
+
+function sameInequalityPart(
+  input: DoubleInequalityPart,
+  expected: DoubleInequalityPart,
+): boolean {
+  return (
+    input.operator === expected.operator &&
+    sameBound(input.bound, expected.bound)
+  )
+}
+
+export function areEquivalentDoubleInequalityParts({
+  inputLeft,
+  inputRight,
+  expectedLeft,
+  expectedRight,
+}: {
+  inputLeft: string
+  inputRight: string
+  expectedLeft: string
+  expectedRight: string
+}): boolean {
+  const inputLeftPart = parseLeftInequalityPart(inputLeft)
+  const inputRightPart = parseRightInequalityPart(inputRight)
+  const expectedLeftPart = parseLeftInequalityPart(expectedLeft)
+  const expectedRightPart = parseRightInequalityPart(expectedRight)
+  if (
+    inputLeftPart == null ||
+    inputRightPart == null ||
+    expectedLeftPart == null ||
+    expectedRightPart == null
+  ) {
+    return false
+  }
+  const sameOrder =
+    sameInequalityPart(inputLeftPart, expectedLeftPart) &&
+    sameInequalityPart(inputRightPart, expectedRightPart)
+  const reverseOrder =
+    inputLeftPart.operator ===
+      reverseInequalityOperator(expectedRightPart.operator) &&
+    sameBound(inputLeftPart.bound, expectedRightPart.bound) &&
+    inputRightPart.operator ===
+      reverseInequalityOperator(expectedLeftPart.operator) &&
+    sameBound(inputRightPart.bound, expectedLeftPart.bound)
+  return sameOrder || reverseOrder
+}
+
+function verify2F412FillInTheBlank(
+  fillInTheBlank: FillInTheBlankElementLike | null,
+  reponseValue: {
+    champ1: { value: string }
+    champ2?: { value: string }
+  },
+) {
+  if (fillInTheBlank == null) {
+    return {
+      isOk: false,
+      feedback: 'erreur dans le programme',
+      score: { nbBonnesReponses: 0, nbReponses: 1 },
+    }
+  }
+
+  const saisie1 = fillInTheBlank.getPromptValue('champ1')
+  const saisie2 =
+    reponseValue.champ2 == null ? '' : fillInTheBlank.getPromptValue('champ2')
+  const champ1IsOk =
+    saisie1 !== '' &&
+    fonctionComparaison(saisie1, reponseValue.champ1.value).isOk
+  const isOk =
+    reponseValue.champ2 == null
+      ? champ1IsOk
+      : areEquivalentDoubleInequalityParts({
+          inputLeft: saisie1,
+          inputRight: saisie2,
+          expectedLeft: reponseValue.champ1.value,
+          expectedRight: reponseValue.champ2.value,
+        })
+
+  fillInTheBlank.setPromptState('champ1', isOk ? 'correct' : 'incorrect', true)
+  if (reponseValue.champ2 != null) {
+    fillInTheBlank.setPromptState(
+      'champ2',
+      isOk ? 'correct' : 'incorrect',
+      true,
+    )
+  }
+
+  return {
+    isOk,
+    feedback: isOk ? '' : "L'inégalité proposée n'est pas correcte.",
+    score: {
+      nbBonnesReponses: isOk ? 1 : 0,
+      nbReponses: 1,
+    },
+  }
+}
+
 export default class EncadrerAvecFctRef extends Exercice {
   constructor() {
     super()
+    registerPromptInequalitySymbolsAction()
     this.besoinFormulaireTexte = [
       'Type de questions ',
       'Nombres séparés par des tirets :\n1 : Carré\n2 : Inverse\n3 : Racine carrée\n4 : Cube\n5 : Mélange',
@@ -70,6 +324,11 @@ export default class EncadrerAvecFctRef extends Exercice {
       let a, b // Les valeurs seuils
       const large1 = choice([true, false]) // pour décider des inégalités larges ou pas
       const large2 = choice([true, false])
+      let texteACompleter: string = ''
+      let reponseValue: {
+        champ1: { value: string }
+        champ2?: { value: string }
+      }
       switch (
         listeTypeQuestions[i] // Suivant le type de question, le contenu sera différent
       ) {
@@ -92,19 +351,32 @@ export default class EncadrerAvecFctRef extends Exercice {
                     imgTex: ' ',
                   },
                 ]
-                texte = `Si $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $x^2$ ......`
+                texteACompleter = this.interactif
+                  ? remplisLesBlancs(this, i, `x^2 %{champ1}`)
+                  : '$x^2$ ......'
+                texte = `Si $x${large1 ? '\\leqslant' : ' < '}${a}$ alors, ${texteACompleter}`
                 texteCorrAvantTableau = `$x${large1 ? '\\leqslant' : ' < '} ${a}$ signifie $x\\in ]-\\infty;${a}${large1 ? ']' : ' [ '}$. <br>
                 Puisque la fonction carré est strictement décroissante sur $]-\\infty;0]$ et strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
                     sur l'intervalle $]-\\infty;${a}]$ : <br>
                 `
                 if (a < 0) {
                   texteCorrApresTableau = `<br>On constate que le minimum de $x^2$ sur $]-\\infty;${a}]$ est $${a ** 2}$. <br>
-            On en déduit que si  $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $x^2\\geqslant ${a ** 2}$.<br> Remarque :  la fonction carré étant strictement décroissante sur $]-\\infty;0]$, elle change l'ordre.<br>
+            On en déduit que si  $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $x^2${large1 ? '\\geqslant' : ' > '} ${a ** 2}$.<br> Remarque :  la fonction carré étant strictement décroissante sur $]-\\infty;0]$, elle change l'ordre.<br>
             Ainsi, les antécédents et les images sont rangés dans l'ordre inverse. <br>
-            Si $x${large1 ? '\\leqslant' : ' < '}${a}$ alors, $x^2\\geqslant (${a})^2$ soit $x^2\\geqslant ${a ** 2}$.`
+            Si $x${large1 ? '\\leqslant' : ' < '}${a}$ alors, $x^2${large1 ? '\\geqslant' : ' > '} (${a})^2$ soit $x^2${large1 ? '\\geqslant' : ' > '} ${a ** 2}$.`
+                  reponseValue = {
+                    champ1: {
+                      value: `${large1 ? '\\geqslant' : ' > '} ${a ** 2}`,
+                    },
+                  }
                 } else {
                   texteCorrApresTableau = `<br>On constate que le minimum de $x^2$ sur $]-\\infty;${a}]$ est $0$. <br>
         On en déduit que si  $x${large1 ? '\\leqslant' : ' < '}${a}$ alors, $x^2\\geqslant 0$.`
+                  reponseValue = {
+                    champ1: {
+                      value: `\\geqslant 0`,
+                    },
+                  }
                 }
 
                 break
@@ -119,7 +391,10 @@ export default class EncadrerAvecFctRef extends Exercice {
                     imgTex: ' ',
                   },
                 ]
-                texte = `Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  $x^2$ ......`
+                texteACompleter = this.interactif
+                  ? remplisLesBlancs(this, i, `x^2 %{champ1}`)
+                  : '$x^2$ ......'
+                texte = `Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  ${texteACompleter}`
                 texteCorrAvantTableau = `$x${large1 ? '\\geqslant' : ' > '} ${a}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};+\\infty[$. <br>
                 Puisque la fonction carré est strictement décroissante sur $]-\\infty;0]$ et strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
                     sur l'intervalle $[${a};+\\infty[$ : <br>
@@ -129,10 +404,20 @@ export default class EncadrerAvecFctRef extends Exercice {
             On en déduit que si  $x${large1 ? '\\geqslant' : ' > '}${a}$ alors, $x^2${large1 ? '\\geqslant' : ' > '} ${a ** 2}$.<br> Remarque :  la fonction carré étant strictement croissante sur $[0;+\\infty[$, elle conserve l'ordre sur cet intervalle.<br>
             Ainsi, les antécédents et les images sont rangés dans le même ordre. <br>
           Si  $x${large1 ? '\\geqslant' : ' > '}${a}$ alors, $x^2${large1 ? '\\geqslant' : ' > '} ${a}^2$ soit  $x^2${large1 ? '\\geqslant' : ' > '} ${a ** 2}$.`
+                  reponseValue = {
+                    champ1: {
+                      value: `${large1 ? '\\geqslant' : ' > '} ${a ** 2}`,
+                    },
+                  }
                 } else {
                   texteCorrApresTableau = `<br>On constate que le minimum de $x^2$ sur $[${a};+\\infty[$ est $0$. <br>
           On en déduit que si  $x${large1 ? '\\geqslant' : ' > '}${a}$ alors, $x^2\\geqslant 0$.
           `
+                  reponseValue = {
+                    champ1: {
+                      value: `\\geqslant 0`,
+                    },
+                  }
                 }
 
                 break
@@ -141,7 +426,10 @@ export default class EncadrerAvecFctRef extends Exercice {
                 b = randint(a + 1, 12)
                 xMin = a
                 xMax = b
-                texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $x^2$ ........`
+                texteACompleter = this.interactif
+                  ? remplisLesBlancs(this, i, `%{champ1} x^2 %{champ2}`)
+                  : '.......  $x^2$ ........'
+                texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} ${texteACompleter}`
                 texteCorrAvantTableau = `$${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};${b}${large2 ? ']' : ' [ '}$. <br>
                   Puisque la fonction carré est strictement décroissante sur $]-\\infty;0]$ et strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
                       sur l'intervalle $[${a};${b}]$ : <br>`
@@ -149,14 +437,25 @@ export default class EncadrerAvecFctRef extends Exercice {
               On en déduit que si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$${a ** 2} ${large1 ? '\\leqslant' : ' < '} x^2 ${large2 ? '\\leqslant' : ' < '}${b ** 2}$.<br> Remarque : la fonction carré étant strictement croissante sur $[0;+\\infty[$, elle conserve l'ordre sur cet intervalle.<br>
               Ainsi, les antécédents et les images sont rangés dans le même ordre. <br>
             Si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, $${sp(2)}${a}^2 ${large1 ? '\\leqslant' : ' < '} x^2 ${large2 ? '\\leqslant' : ' < '}${b}^2$, soit $${sp(2)}${a ** 2} ${large1 ? '\\leqslant' : ' < '} x^2 ${large2 ? '\\leqslant' : ' < '}${b ** 2}$.`
-
+                reponseValue = {
+                  champ1: {
+                    value: `${a ** 2} ${large1 ? '\\leqslant' : ' < '}`,
+                  },
+                  champ2: {
+                    value: `${large2 ? '\\leqslant' : ' < '}${b ** 2}`,
+                  },
+                }
                 break
               case 4: // cas a<x<b avec b<0
                 a = -randint(2, 12)
                 b = randint(a + 1, -1)
                 xMin = a
                 xMax = b
-                texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $x^2$  .......`
+                texteACompleter = this.interactif
+                  ? remplisLesBlancs(this, i, `%{champ1} x^2 %{champ2}`)
+                  : '.......  $x^2$ ........'
+
+                texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} ${texteACompleter}`
                 texteCorrAvantTableau = `$${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};${b}${large2 ? ']' : ' [ '}$. <br>
                       Puisque la fonction carré est strictement décroissante sur $]-\\infty;0]$ et strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
                           sur l'intervalle $[${a};${b}]$ : <br>`
@@ -164,7 +463,14 @@ export default class EncadrerAvecFctRef extends Exercice {
                   On en déduit que si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$${b ** 2} ${large2 ? '\\leqslant' : ' < '} x^2 ${large1 ? '\\leqslant' : ' < '}${a ** 2}$.<br> Remarque :  la fonction carré étant strictement décroissante sur $]-\\infty;0]$, elle change l'ordre sur cet intervalle.<br>
                   Ainsi, les antécédents et les images sont rangés dans l'ordre inverse. <br>
             Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$(${a})^2 ${large1 ? '\\geqslant' : ' > '} x^2 ${large2 ? '\\geqslant' : ' > '}(${b})^2$ soit $${a ** 2} ${large1 ? '\\geqslant' : ' > '} x^2 ${large2 ? '\\geqslant' : ' > '}${b ** 2}$.`
-
+                reponseValue = {
+                  champ1: {
+                    value: `${a ** 2} ${large1 ? '\\geqslant' : ' > '}`,
+                  },
+                  champ2: {
+                    value: `${large2 ? '\\geqslant' : ' > '}${b ** 2}`,
+                  },
+                }
                 break
               case 5: // cas a<x<b avec a<0 et b>0
               default:
@@ -172,14 +478,24 @@ export default class EncadrerAvecFctRef extends Exercice {
                 b = randint(1, 10)
                 xMin = a
                 xMax = b
-                texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $x^2$ ........`
+                texteACompleter = this.interactif
+                  ? remplisLesBlancs(this, i, `%{champ1} x^2 %{champ2}`)
+                  : '.......  $x^2$ ........'
+                texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} ${texteACompleter}`
                 texteCorrAvantTableau = `$${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};${b}${large2 ? ']' : ' [ '}$. <br>
                   Puisque la fonction carré est strictement décroissante sur $]-\\infty;0]$ et strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
                       sur l'intervalle $[${a};${b}]$ : <br>
                   `
                 texteCorrApresTableau = `<br>On constate que le minimum de $x^2$ sur $[${a};${b}]$  est $0$ et son maximum est $${Math.max(abs(a), b) ** 2}$. <br>
-              On en déduit que si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$0 ${large1 ? '\\leqslant' : ' < '} x^2 ${large2 ? '\\leqslant' : ' < '}${Math.max(abs(a), b) ** 2}$.`
-
+              On en déduit que si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$0 \\leqslant x^2 ${large2 ? '\\leqslant' : ' < '}${Math.max(abs(a), b) ** 2}$.`
+                reponseValue = {
+                  champ1: {
+                    value: `0 \\leqslant`,
+                  },
+                  champ2: {
+                    value: `${large2 ? '\\leqslant' : ' < '}${Math.max(abs(a), b) ** 2}`,
+                  },
+                }
                 break
             }
           }
@@ -208,7 +524,11 @@ export default class EncadrerAvecFctRef extends Exercice {
                   imgTex: `$\\frac{1}{${b}}$`,
                 },
               ]
-              texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $\\dfrac{1}{x}$  .......`
+              texteACompleter = this.interactif
+                ? remplisLesBlancs(this, i, `%{champ1} \\dfrac{1}{x} %{champ2}`)
+                : '.......  $\\dfrac{1}{x}$  .......'
+
+              texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} ${texteACompleter}`
               texteCorrAvantTableau = `$${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};${b}${large2 ? ']' : ' [ '}$. <br>
                       Puisque la fonction inverse est strictement décroissante sur $]-\\infty;0[$ et strictement décroissante sur $[0;+\\infty[$, on obtient son tableau de variations
                           sur l'intervalle $[${a};${b}]$ : <br>
@@ -217,6 +537,14 @@ export default class EncadrerAvecFctRef extends Exercice {
                   On en déduit que si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$\\dfrac{1}{${b}} ${large2 ? '\\leqslant' : ' < '} \\dfrac{1}{x} ${large1 ? '\\leqslant' : ' < '}\\dfrac{1}{${a}}$.<br> Remarque :  la fonction inverse étant strictement décroissante sur $]0; +\\infty[$, elle change l'ordre.<br>
                   Ainsi, les antécédents et les images sont rangés dans l'ordre inverse. <br>
             Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$\\dfrac{1}{${a}} ${large1 ? '\\geqslant' : ' > '} \\dfrac{1}{x} ${large2 ? '\\geqslant' : ' > '}\\dfrac{1}{${b}}$. `
+              reponseValue = {
+                champ1: {
+                  value: `\\dfrac{1}{${a}} ${large1 ? '\\geqslant' : ' > '}`,
+                },
+                champ2: {
+                  value: `${large2 ? '\\geqslant' : ' > '}\\dfrac{1}{${b}}`,
+                },
+              }
               break
             case 2: // cas a<x<b avec b<0
               a = randint(-20, -3)
@@ -235,7 +563,11 @@ export default class EncadrerAvecFctRef extends Exercice {
                   imgTex: `$-\\frac{1}{${-b}}$`,
                 },
               ]
-              texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} .......  $\\dfrac{1}{x}$  .......`
+              texteACompleter = this.interactif
+                ? remplisLesBlancs(this, i, `%{champ1} \\dfrac{1}{x} %{champ2}`)
+                : '.......  $\\dfrac{1}{x}$  .......'
+
+              texte = `Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(3)} ${texteACompleter}`
               texteCorrAvantTableau = `$${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};${b}${large2 ? ']' : ' [ '}$. <br>
                       Puisque la fonction inverse est strictement décroissante sur $]-\\infty;0[$ et strictement décroissante sur $[0;+\\infty[$, on obtient son tableau de variations
                           sur l'intervalle $[${a};${b}]$ : <br>`
@@ -243,6 +575,15 @@ export default class EncadrerAvecFctRef extends Exercice {
                   On en déduit que si  $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$-\\dfrac{1}{${-b}} ${large2 ? '\\leqslant' : ' < '} \\dfrac{1}{x} ${large1 ? '\\leqslant' : ' < '}-\\dfrac{1}{${-a}}$.<br> Remarque :  la fonction inverse étant strictement décroissante sur $]-\\infty;0[$, elle change l'ordre.<br>
                   Ainsi, les antécédents et les images sont rangés dans l'ordre inverse. <br>
             Si $${a} ${large1 ? '\\leqslant' : ' < '} x ${large2 ? '\\leqslant' : ' < '}${b}$ alors, ${sp(2)}$-\\dfrac{1}{${-a}} ${large1 ? '\\geqslant' : ' > '} \\dfrac{1}{x} ${large2 ? '\\geqslant' : ' > '}-\\dfrac{1}{${-b}}$. `
+              reponseValue = {
+                champ1: {
+                  value: `-\\dfrac{1}{${-a}} ${large1 ? '\\geqslant' : ' > '}`,
+                },
+                champ2: {
+                  value: `${large2 ? '\\geqslant' : ' > '}-\\dfrac{1}{${-b}}`,
+                },
+              }
+
               break
             case 3: // cas x<a avec a<0 ou x>a avec a>0
             default:
@@ -267,7 +608,11 @@ export default class EncadrerAvecFctRef extends Exercice {
                     imgTex: '',
                   },
                 ]
-                texte = `Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors, $\\dfrac{1}{x}$ ......`
+                texteACompleter = this.interactif
+                  ? remplisLesBlancs(this, i, `\\dfrac{1}{x} %{champ1}`)
+                  : '$\\dfrac{1}{x}$  .......'
+
+                texte = `Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors, ${texteACompleter}`
                 texteCorrAvantTableau = `$x${large1 ? '\\geqslant' : ' > '} ${a}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};+\\infty[$. <br>
               Puisque la fonction inverse est strictement décroissante sur $]0;+\\infty[$, on obtient son tableau de variations
                   sur l'intervalle $]0;+\\infty[$ : <br>`
@@ -275,8 +620,16 @@ export default class EncadrerAvecFctRef extends Exercice {
             On en déduit que si  $x${large1 ? '\\geqslant' : ' < '}${a}$ alors,  $\\dfrac{1}{x}${large1 ? '\\leqslant' : ' < '} \\dfrac{1}{${a}}$.<br> Remarque :  la fonction inverse étant strictement décroissante sur $]0;+\\infty[$, elle change l'ordre.<br>
             Ainsi, les antécédents et les images sont rangés dans l'ordre inverse. <br>
             Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  $\\dfrac{1}{x}${large1 ? '\\leqslant' : ' < '}\\dfrac{1}{${a}}$.`
+                reponseValue = {
+                  champ1: {
+                    value: `${large1 ? '\\leqslant' : ' < '}\\dfrac{1}{${a}}`,
+                  },
+                }
               } else {
-                texte = `Si $x${large1 ? '\\leqslant' : ' < '}${b}$ alors,  $\\dfrac{1}{x}$ ......`
+                texteACompleter = this.interactif
+                  ? remplisLesBlancs(this, i, `\\dfrac{1}{x} %{champ1}`)
+                  : '$\\dfrac{1}{x}$  .......'
+                texte = `Si $x${large1 ? '\\leqslant' : ' < '}${b}$ alors,  ${texteACompleter}`
                 texteCorrAvantTableau = `$x${large1 ? '\\leqslant' : ' < '} ${b}$ signifie $x\\in ]-\\infty;${b}${large1 ? ']' : ' [ '}$. <br>
               Puisque la fonction inverse est strictement décroissante sur $]-\\infty;0[$ et strictement décroissante sur $]0;+\\infty[$, on obtient son tableau de variations
                   sur l'intervalle $]-\\infty;${b}]$ : <br>`
@@ -297,6 +650,11 @@ export default class EncadrerAvecFctRef extends Exercice {
                     imgTex: `$\\frac{1}{${b}}$`,
                   },
                 ]
+                reponseValue = {
+                  champ1: {
+                    value: `${large1 ? '\\geqslant' : ' > '}-\\dfrac{1}{${-b}}`,
+                  },
+                }
               } // a est toujours le min et b le max
 
               break
@@ -330,8 +688,12 @@ export default class EncadrerAvecFctRef extends Exercice {
                 ]
                 xMin = 0
                 xMax = a
+                texteACompleter = this.interactif
+                  ? remplisLesBlancs(this, i, `\\sqrt{x} %{champ1}`)
+                  : '$\\sqrt{x}$  .......'
+
                 texte = `Si $x${large1 ? '\\leqslant' : ' < '}${a}$
-               alors,  $\\sqrt{x}$ ......`
+               alors,  ${texteACompleter}`
                 texteCorrAvantTableau = `$x${large1 ? '\\leqslant' : ' < '} ${a}$ signifie $x\\in [0;${a}${large1 ? ']' : ' [ '}$ puisque $x\\geqslant 0$. <br>
 Puisque la fonction racine carrée est strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
 sur l'intervalle $[0;${a}]$ : <br>`
@@ -339,7 +701,13 @@ sur l'intervalle $[0;${a}]$ : <br>`
 On en déduit que si  $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $\\sqrt{x}\\leqslant ${racineDeA}$.<br> Remarque :  la fonction racine carrée étant strictement croissante sur $[0+\\infty[$, elle conserve l'ordre.<br>
 Ainsi, les antécédents et les images sont rangés dans le même ordre : <br>
 Si $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $\\sqrt{x}${large1 ? '\\leqslant' : ' < '} ${racineDeA}$.`
+                reponseValue = {
+                  champ1: {
+                    value: `${large1 ? '\\leqslant' : ' < '} ${racineDeA}`,
+                  },
+                }
               }
+
               break
             case 2:
               {
@@ -363,9 +731,11 @@ Si $x${large1 ? '\\leqslant' : ' < '}${a}$ alors,  $\\sqrt{x}${large1 ? '\\leqsl
                     imgTex: ' ',
                   },
                 ]
-
+                texteACompleter = this.interactif
+                  ? remplisLesBlancs(this, i, `\\sqrt{x} %{champ1}`)
+                  : '$\\sqrt{x}$  .......'
                 texte = `Si $x${large1 ? '\\geqslant' : ' > '}${a}$
-               alors,  $\\sqrt{x}$ ......`
+               alors,  ${texteACompleter}`
                 texteCorrAvantTableau = `$x${large1 ? '\\geqslant' : ' > '} ${a}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};+\\infty[$. <br>
 Puisque la fonction racine carrée est strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
 sur l'intervalle $[${a};+\\infty[$ : <br>`
@@ -373,6 +743,11 @@ sur l'intervalle $[${a};+\\infty[$ : <br>`
 On en déduit que si  $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  $\\sqrt{x}\\geqslant ${racineDeA}$.<br> Remarque :  la fonction racine carrée étant strictement croissante sur $[0+\\infty[$, elle conserve l'ordre.<br>
 Ainsi, les antécédents et les images sont rangés dans le même ordre : <br>
 Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  $\\sqrt{x}${large1 ? '\\geqslant' : ' > '} ${racineDeA}$.`
+                reponseValue = {
+                  champ1: {
+                    value: `${large1 ? '\\geqslant' : ' > '} ${racineDeA}`,
+                  },
+                }
               }
               break
             case 3:
@@ -403,9 +778,12 @@ Si $x${large1 ? '\\geqslant' : ' > '}${a}$ alors,  $\\sqrt{x}${large1 ? '\\geqsl
                     imgTex: `$${racineDeB}$`,
                   },
                 ]
+                texteACompleter = this.interactif
+                  ? remplisLesBlancs(this, i, `%{champ1} \\sqrt{x} %{champ2}`)
+                  : '...... $\\sqrt{x}$ ......'
 
                 texte = `Si $${a}${large1 ? ' \\leqslant ' : ' < '} x ${large1 ? '\\leqslant' : ' < '} ${b}$
-               alors,  ...... $\\sqrt{x}$ ......`
+               alors,  ${texteACompleter}`
                 texteCorrAvantTableau = `$${a}${large1 ? '\\leqslant' : ' < '} x ${large1 ? '\\leqslant' : ' < '}${b}$ signifie $x\\in ${large1 ? '[' : ' ] '}${a};${b}${large1 ? ']' : ' [ '}$. <br>
 Puisque la fonction racine carrée est strictement croissante sur $[0;+\\infty[$, on obtient son tableau de variations
 sur l'intervalle $[${a};${b}]$ : <br>`
@@ -413,6 +791,14 @@ sur l'intervalle $[${a};${b}]$ : <br>`
 On en déduit que si $${a}${large1 ? '\\leqslant' : ' < '} x ${large1 ? '\\leqslant' : ' < '}${b}$ alors, $${racineDeA}${large1 ? '\\leqslant' : ' < '} \\sqrt{x} ${large1 ? '\\leqslant' : ' < '}${racineDeB}$.<br> Remarque :  la fonction racine carrée étant strictement croissante sur $[0+\\infty[$, elle conserve l'ordre.<br>
 Ainsi, les antécédents et les images sont rangés dans le même ordre : <br>
 Si $${a}${large1 ? '\\leqslant' : ' < '} x ${large1 ? '\\leqslant' : ' < '}${b}$ alors,  $${racineDeA}${large1 ? '\\leqslant' : ' < '} \\sqrt{x} ${large1 ? '\\leqslant' : ' < '}${racineDeB}$.`
+                reponseValue = {
+                  champ1: {
+                    value: `${racineDeA}${large1 ? '\\leqslant' : ' < '}`,
+                  },
+                  champ2: {
+                    value: `${large1 ? '\\leqslant' : ' < '}${racineDeB}`,
+                  },
+                }
               }
               break
           }
@@ -427,10 +813,7 @@ Si $${a}${large1 ? '\\leqslant' : ' < '} x ${large1 ? '\\leqslant' : ' < '}${b}$
           tolerance = 0.005
           if (N === 1) {
             // cas x<a ou x>a
-            const a = choice([
-              randint(-10, 10),
-              randint(11, 20) * choice([-1, 1]),
-            ])
+            const a = choice([randint(-5, 5)])
             const inférieur = choice([true, false]) // x < a ou x > a ?
             if (inférieur) {
               xMin = -200 // a peut aller jusqu'à -100 !
@@ -469,7 +852,11 @@ Si $${a}${large1 ? '\\leqslant' : ' < '} x ${large1 ? '\\leqslant' : ' < '}${b}$
               symbole = '>'
               intervalle = `]${a} ; +\\infty[`
             }
-            texte = `Si $x${symbole}${a}$ alors, $x^3$ ......`
+            texteACompleter = this.interactif
+              ? remplisLesBlancs(this, i, `x^3 %{champ1}`)
+              : '$x^3$ ......'
+
+            texte = `Si $x${symbole}${a}$ alors, ${texteACompleter}`
             texteCorrAvantTableau = `$x${symbole} ${a}$ signifie $x\\in ${intervalle}$. <br>
 Puisque $(${a})^3=${Math.pow(a, 3)}$ et que la fonction cube est strictement croissante sur $\\mathbb{R}$, on obtient son tableau de variations
 sur l'intervalle $]-\\infty;${a}]$ : <br>`
@@ -477,12 +864,17 @@ sur l'intervalle $]-\\infty;${a}]$ : <br>`
 On en déduit que si  $x${symbole}${a}$ alors,  $x^3${symbole} ${Math.pow(a, 3)}$.<br> Remarque :  la fonction cube étant strictement croissante sur $\\mathbb{R}$, elle conserve l'ordre.<br>
 Ainsi, les antécédents et les images sont rangés dans le même ordre : <br>
 Si $x${symbole}${a}$ alors,  $x^3${symbole} ${Math.pow(a, 3)}$.`
+            reponseValue = {
+              champ1: {
+                value: `${symbole} ${Math.pow(a, 3)}`,
+              },
+            }
           } else {
             // cas a<x<b
             let a, b
             do {
-              a = choice([randint(-10, 10), randint(11, 20) * choice([-1, 1])])
-              b = choice([randint(-10, 10), randint(11, 20) * choice([-1, 1])])
+              a = randint(-5, 5)
+              b = randint(-5, 5)
             } while (a === b)
             if (a > b) {
               ;[a, b] = [b, a]
@@ -506,7 +898,11 @@ Si $x${symbole}${a}$ alors,  $x^3${symbole} ${Math.pow(a, 3)}$.`
               inégalité = `${b} > x > ${a}`
               intervalle = `]${a} ; ${b}[`
             }
-            texte = `Si $${inégalité}$ alors, $x^3$ ......`
+            texteACompleter = this.interactif
+              ? remplisLesBlancs(this, i, `%{champ1} x^3 %{champ2}`)
+              : '...... $x^3$ ......'
+
+            texte = `Si $${inégalité}$ alors, ${texteACompleter}`
             texteCorrAvantTableau = `$${inégalité}$ signifie $x\\in ${intervalle}$. <br>
 Puisque $(${a})^3=${Math.pow(a, 3)}$ et $(${b})^3=${Math.pow(b, 3)}$, et que la fonction cube est strictement croissante sur $\\mathbb{R}$, on obtient son tableau de variations
 sur l'intervalle $${intervalle}$ : <br>`
@@ -514,6 +910,14 @@ sur l'intervalle $${intervalle}$ : <br>`
 On en déduit que si  $${inégalité}$ alors, $${Math.pow(a, 3)} ${large1 ? ' \\leqslant ' : ' < '} x^3 ${large1 ? ' \\leqslant ' : ' < '} ${Math.pow(b, 3)}$.<br> Remarque :  la fonction cube étant strictement croissante sur $\\mathbb{R}$, elle conserve l'ordre.<br>
 Ainsi, les antécédents et les images sont rangés dans le même ordre : <br>
 Si $${inégalité}$ alors, $${Math.pow(a, 3)} ${large1 ? ' \\leqslant ' : ' < '} x^3 ${large1 ? ' \\leqslant ' : ' < '} ${Math.pow(b, 3)}$.`
+            reponseValue = {
+              champ1: {
+                value: `${Math.pow(a, 3)} ${large1 ? ' \\leqslant ' : ' < '}`,
+              },
+              champ2: {
+                value: `${large1 ? ' \\leqslant ' : ' < '} ${Math.pow(b, 3)}`,
+              },
+            }
           }
           break
         }
@@ -535,10 +939,26 @@ Si $${inégalité}$ alors, $${Math.pow(a, 3)} ${large1 ? ' \\leqslant ' : ' < '}
       )
       texteCorr = texteCorrAvantTableau + tableau + texteCorrApresTableau
       if (this.questionJamaisPosee(i, this.listeQuestions[i], xMin, xMax)) {
+        handleAnswers(
+          this,
+          i,
+          {
+            ...reponseValue,
+            callback: (exercice, question) => {
+              const fillInTheBlank = document.querySelector(
+                `fill-in-the-blank[mathfield-id="champTexteEx${exercice.numeroExercice}Q${question}"]`,
+              ) as FillInTheBlankElementLike | null
+              return verify2F412FillInTheBlank(fillInTheBlank, reponseValue)
+            },
+          },
+          { formatInteractif: 'fill-in-the-blank' },
+        )
         // Si la question n'a jamais été posée, on en crée une autre
-        texte += listeTypeQuestions[i] + '<br>'
-
-        this.listeQuestions[i] = texte
+        this.listeQuestions[i] =
+          texte +
+          (context.isHtml
+            ? promptInequalitySymbolsReadyMarkup(this.numeroExercice ?? 0, i)
+            : '')
         this.listeCorrections[i] = texteCorr
         i++
       }

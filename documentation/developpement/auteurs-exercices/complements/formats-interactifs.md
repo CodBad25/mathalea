@@ -761,6 +761,7 @@ texte += demiDroiteInteractive(this, i, {
   minT: 0,
   maxT: 10,
   partsCount: 10,
+  showEqualityMarks: false,
   points: [],
 })
 
@@ -784,7 +785,7 @@ handleAnswers(
 )
 ```
 
-La réponse attendue est une configuration sérialisée, pas seulement l'abscisse du point. L'objet `points` contient les points que l'élève doit placer, avec leur `pointValue` et leur `label`. La clé `showwNegative` correspond au nom historique attendu par la vérification. Vérifier un exercice existant proche, par exemple `6N3D-2.ts`, si plusieurs points ou des fractions sont attendus.
+La réponse attendue est une configuration sérialisée, pas seulement l'abscisse du point. L'objet `points` contient les points que l'élève doit placer, avec leur `pointValue` et leur `label`. `showEqualityMarks: false` masque les marques d'égalité de longueur quand les graduations sont très serrées. `axisMin` permet de fixer la borne gauche visible quand `showNegative` ne doit pas produire une portion symétrique par rapport à 0. La clé `showwNegative` correspond au nom historique encore accepté par certains affichages de réponses. Vérifier un exercice existant proche, par exemple `6N3D-2.ts`, si plusieurs points ou des fractions sont attendus.
 
 Hors HTML, `demiDroiteInteractive()` produit une figure statique :
 
@@ -1051,6 +1052,19 @@ Il peut être utilisé selon 3 modes :
 - 'effectif' demande l'effectif associé à chaque label
 - 'label' demande le label associé à au choix : l'effectif ou l'angle fourni.
 
+Quand `interactivityOn` vaut `false`, le composant n'affiche plus les
+champs interactifs : le diagramme reste vide avec sa légende en dessous, et la
+table devient une table statique de conversion. La colonne correspondant au
+mode demandé (`angle`, `effectif` ou `label`) contient des cellules vides ; les
+autres colonnes visibles sont remplies avec les valeurs fournies ou calculées.
+Si une valeur non demandée vaut `null` (`effectif` en mode `angle`, ou `angle`
+en mode `effectif`), la cellule statique affiche aussi des pointillés afin de
+ne jamais rendre le texte `null`. La valeur `0` reste affichée comme une donnée
+valide.
+L'option `colorOn`, à `true` par défaut, contrôle les couleurs de légende dans
+les rendus statiques. Avec `colorOn: false`, les carrés de légende sont blancs
+avec un contour afin de laisser les élèves choisir leurs propres couleurs.
+
 Pour un exemple d'utilisation, un exemple à étudier est `src/exercices/5e/5D1D-1.ts`.
 Il contient les versions 'pie' et 'semi-pie' (shape), mais aussi d'autre diagrammes comme le DiagramBarAssessmentElement décrit ci-après.
 
@@ -1078,6 +1092,14 @@ Il peut être utilisé selon 3 modes :
 - 'hauteur' demande la hauteur de la barre associée à chaque label (cas d'usage dans 5D1D-1)
 - 'effectif' demande l'effectif associé à chaque label (on fournira les hauteurs par exemple)
 - 'label' demande le label associé à chaque barre donnée par au choix : sa hauteur ou son effectif.
+
+Quand `interactivityOn` vaut `false`, le diagramme en barres affiche une table
+statique complète (`Catégorie`, `Effectifs`, `Hauteurs`) avec des pointillés
+pour les valeurs `null`. Sans `correctionOn`, le repère reste vide ; en
+correction, passer `correctionOn: true` pour afficher les barres. L'option
+`colorOn`, à `true` par défaut, contrôle la couleur des barres ; avec
+`colorOn: false`, le rendu HTML et LaTeX utilise des hachures, et le rendu Typst
+des niveaux de gris.
 
 Pour un exemple d'utilisation, un exemple à étudier est `src/exercices/5e/5D1D-1.ts`.
 

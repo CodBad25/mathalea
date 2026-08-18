@@ -46,6 +46,11 @@ export function deparenthise(latexIn: string): string {
         // (-x) -> on garde les parenthèses si précédé de +, -, \ ou on supprime sinon
         if (prev === '+' || prev === '-' || prev === '\\') {
           result += `(-${content})` // garde les parenthèses
+        } else if (
+          result.slice(k - 4, k + 1) === 'times' ||
+          result.slice(k - 2, k + 1) === 'div'
+        ) {
+          result += `(-${content})` // garde les parenthèses
         } else {
           result += `-${content}` // enlève les parenthèses
         }

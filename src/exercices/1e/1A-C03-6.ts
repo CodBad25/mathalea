@@ -17,7 +17,7 @@ export default class Auto1AC3f extends ExerciceQcmA {
   private appliquerLesValeurs(k: number, p: number): void {
     this.enonce = `Soit $a$ un nombre réel non nul et $n$ un entier non nul. <br>À quelle expression est égale $a^{${k}n}(a^n)^${p}$ ?`
 
-    this.correction = `On applique la propriété du produit des puissances d'un réel : <br>
+    this.correction = `On applique la propriété du produit des puissances d'un réel.<br>
    Soient $n$ et $p$ deux entiers et $a$ un réel :  $a^n\\times a^p=a^{n+p}$<br>
     et la propriété des puissances de puissances : <br>
      Pour tous entiers $n$ et $p$ et $a$ réel, on a :  $\\left(a^{n}\\right)^p=a^{np}$<br>

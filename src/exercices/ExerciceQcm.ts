@@ -39,13 +39,19 @@ export default class ExerciceQcm extends Exercice implements IExerciceQcm {
 
     this.spacingCorr = 2 // idem pour la correction
     // Les options pour le qcm à modifier éventuellement (vertical à true pour les longues réponses par exemple)
-    this.options = { vertical: false, ordered: false, lastChoice: 8 }
+    this.options = {
+      vertical: false,
+      ordered: false,
+      lastChoice: 8,
+      radio: true,
+    }
     this.enonce = ''
     this.reponses = []
     this.correction = ''
   }
 
   nouvelleVersion() {
+    if (this.bonnesReponses !== null) this.options.radio = false
     if (this.sup2) {
       this.consigne =
         this.bonnesReponses == null
@@ -66,7 +72,7 @@ ${this.interactif || context.isAmc ? 'Cocher la (ou les) case(s) correspondante(
       }
     }
     if (this.versionAleatoire != null) {
-      for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 30; ) {
+      for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 30;) {
         if (this.sup && this.versionOriginale != null) this.versionOriginale()
         else this.versionAleatoire()
 

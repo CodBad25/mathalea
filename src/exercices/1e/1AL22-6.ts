@@ -16,7 +16,7 @@ import {
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 export const titre =
-  "Étudier le sens de variations d'une fonction polynôme du second degré"
+  "Étudier le sens de variation d'une fonction polynôme du second degré"
 export const dateDePublication = '04/08/2024'
 export const interactifReady = false
 export const uuid = '16f97'
@@ -50,7 +50,7 @@ export default class variationPol2 extends Exercice {
       defaut: 8,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
 

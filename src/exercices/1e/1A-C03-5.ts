@@ -20,7 +20,7 @@ export default class Auto1AC3e extends ExerciceQcmA {
       // Cas inversé : a^n / a^(n^k)
       this.enonce = `Soit $a$ un nombre réel non nul et $n$ un entier non nul.<br> À quelle expression est égale $\\dfrac{a^{n}}{a^{n^{${k}}}}$ ?`
 
-      this.correction = `On applique la propriété du quotient des puissances d'un réel : <br>
+      this.correction = `On applique la propriété du quotient des puissances d'un réel.<br>
       Soit $n$ et $p$ deux entiers et $a$ un réel :  $\\dfrac{a^n}{a^p}=a^{n-p}$<br>
       $\\begin{aligned} \\dfrac{a^{n}}{a^{n^{${k}}}}&=a^{n-n^{${k}}}\\\\
       &=a^{-n(-1+n^{${rienSi1(k - 1)}})}\\\\
@@ -37,7 +37,7 @@ export default class Auto1AC3e extends ExerciceQcmA {
       // Cas normal : a^(n^k) / a^n
       this.enonce = `Soit $a$ un nombre réel non nul et $n$ un entier non nul.<br> À quelle expression est égale $\\dfrac{a^{n^{${k}}}}{a^{n}}$ ?`
 
-      this.correction = `On applique la propriété du quotient des puissances d'un réel : <br>
+      this.correction = `On applique la propriété du quotient des puissances d'un réel.<br>
       Soit $n$ et $p$ deux entiers et $a$ un réel :  $\\dfrac{a^n}{a^p}=a^{n-p}$<br>
       $\\begin{aligned} \\dfrac{a^{n^{${k}}}}{a^{n}}&=a^{n^{${k}}-n}\\\\
       &=${miseEnEvidence(`a^{n(n^{${rienSi1(k - 1)}}-1)}`)}

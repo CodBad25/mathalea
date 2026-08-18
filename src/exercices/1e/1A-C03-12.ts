@@ -25,7 +25,6 @@ export default class TrouverEgalite extends ExerciceQcmA {
   // S'occupe de passser les données originales à la fonction appliquerLesValeurs
 
   versionOriginale: () => void = () => {
-    this.enonce = 'La seule égalité vraie est :'
     this.correction = `La seule égalité vraie est  : $${miseEnEvidence('\\dfrac{10^{-5}}{10^8}=10^{-13}')}$.<br>
     En effet, <br>  
       $\\begin{aligned}
@@ -65,12 +64,11 @@ export default class TrouverEgalite extends ExerciceQcmA {
     const calc2F = `${a1}\\times \\dfrac{1}{${a1}^{${n1}}}=${a1}^{${n1 - 1}}` // a*1/a^n=a^(1-n) réponse fausse
     const calc3F = `\\left(${a2}^{${n2}}\\right)^${p2}=${a2}^{${n2 + p2}}` // (a^n)^p=a^(n*p) réponse fausse
     const calc4F = `${a3}^{${n3}}\\times ${b3}^{${n3}}=${a3 * b3}^{${2 * n3}}` // a^n*b^n=(a*b)^n
-
+    this.enonce = 'Parmi ces égalités, la seule égalité vraie est :'
     switch (
       randint(1, 4) //
     ) {
       case 1: //  a^n/a^p=a^n-p
-        this.enonce = 'La seule égalité vraie est :'
         this.correction = `La seule égalité vraie est  : $${miseEnEvidence(`${calc1}`)}$.<br>
     En effet, <br>  
       $\\begin{aligned}
@@ -90,7 +88,6 @@ export default class TrouverEgalite extends ExerciceQcmA {
         break
 
       case 2: // égalité vraie est la a*1/a^n
-        this.enonce = 'La seule égalité vraie est :'
         this.correction = `La seule égalité vraie est  : $${miseEnEvidence(`${calc2}`)}$.<br>
     En effet, <br>  
       $\\begin{aligned}
@@ -111,7 +108,6 @@ export default class TrouverEgalite extends ExerciceQcmA {
         break
 
       case 3: // égalité vraie est la (a^n)^p
-        this.enonce = 'La seule égalité vraie est :'
         this.correction = `La seule égalité vraie est  : $${miseEnEvidence(`${calc3}`)}$.<br>
     En effet, <br>  
       $\\begin{aligned}
@@ -132,7 +128,6 @@ export default class TrouverEgalite extends ExerciceQcmA {
 
       case 4: // égalité vraie est a^n*b^n=(a*b)*n
       default:
-        this.enonce = 'La seule égalité vraie est :'
         this.correction = `La seule égalité vraie est  : $${miseEnEvidence(`${calc4}`)}$.<br>
     En effet, <br>  
       $\\begin{aligned}

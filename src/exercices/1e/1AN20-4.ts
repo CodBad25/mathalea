@@ -16,18 +16,18 @@ import {
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 export const titre =
-  "Étudier le sens de variations d'une fonction polynôme du troisième degré (avec discriminant)"
+  "Étudier le sens de variation d'une fonction polynôme du troisième degré (avec discriminant)"
 export const dateDePublication = '08/07/2024'
 export const dateDeModifImportante = '26/09/2024'
 export const interactifReady = false
 export const uuid = 'e1890'
 export const refs = {
-  'fr-fr': ['1AN20-4','TSA3-14', 'TCA7-14'],
+  'fr-fr': ['1AN20-4', 'TSA3-14', 'TCA7-14'],
   'fr-ch': ['3mA3-1'],
 }
 
 /**
- * Étudier le sens de variations d'une fonction polynôme du troisième degré (avec discriminant)'
+ * Étudier le sens de variation d'une fonction polynôme du troisième degré (avec discriminant)'
  * @author Gilles Mora
  */
 
@@ -51,7 +51,7 @@ export default class EtudeFctPoly3 extends Exercice {
       defaut: 4,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let fonction // La fonction étudiée
@@ -100,7 +100,7 @@ export default class EtudeFctPoly3 extends Exercice {
             )
 
             texte = `On considère la fonction $f$ définie sur $\\mathbb{R}$ par : $f(x)=${reduirePolynomeDegre3(2 * a, -3 * a * x1 - 3 * a * x2, 6 * a * x1 * x2, k)}$.<br>
-      Étudier le sens de variations de la fonction $f$ sur $\\mathbb{R}$.
+      Étudier le sens de variation de la fonction $f$ sur $\\mathbb{R}$.
       `
 
             texteCorr += `$f$ est une fonction polynôme du troisième degré, dérivable sur $\\mathbb{R}$.<br>
@@ -165,7 +165,7 @@ export default class EtudeFctPoly3 extends Exercice {
             )
 
             texte = `On considère la fonction $f$ définie sur $\\mathbb{R}$ par : $f(x)=${reduirePolynomeDegre3(a, b, c, d)}$.<br>
-      Étudier le sens de variations de la fonction $f$ sur $\\mathbb{R}$.`
+      Étudier le sens de variation de la fonction $f$ sur $\\mathbb{R}$.`
             texteCorr = `$f$ est une fonction polynôme du troisième degré, dérivable sur $\\mathbb{R}$.<br>
       Pour tout  $x\\in\\mathbb{R}$, $f^\\prime(x)=${reduirePolynomeDegre3(0, 3 * a, 2 * b, c)}$.<br><br>
       $f^\\prime$ est une fonction polynôme du second degré. <br>`
@@ -203,7 +203,7 @@ export default class EtudeFctPoly3 extends Exercice {
             xMax = 10
 
             texte = `On considère la fonction $f$ définie sur $\\mathbb{R}$ par : $f(x)=${reduirePolynomeDegre3(a, b, c, d)}$.<br>
-      Étudier le sens de variations de la fonction $f$ sur $\\mathbb{R}$.
+      Étudier le sens de variation de la fonction $f$ sur $\\mathbb{R}$.
       `
 
             texteCorr += `$f$ est une fonction polynôme du troisième degré, dérivable sur $\\mathbb{R}$.<br>

@@ -25,12 +25,12 @@ export const dateDePublication = '05/05/2025'
 export const interactifReady = false
 export const uuid = 'b0576'
 export const refs = {
-  'fr-fr': ['1AN20-5','TSA3-15', 'TCA7-15'],
+  'fr-fr': ['1AN20-5', 'TSA3-15', 'TCA7-15'],
   'fr-ch': [],
 }
 
 /**
- * Étudier le sens de variations d'une fonction polynôme du troisième degré'
+ * Étudier le sens de variation d'une fonction polynôme du troisième degré'
  * @author Gilles Mora avec l'aide précieuse de Jean-claude Lhote
  */
 
@@ -264,7 +264,7 @@ export default class EtudeFctRatio extends Exercice {
             }
 
             texte = `On considère la fonction $f$ définie sur $\\mathbb{R}\\smallsetminus\\{${texNombre(-d / c, 0)}\\}$ par : $f(x)=\\dfrac{${reduireAxPlusB(a, b)}}{${reduireAxPlusB(c, d)}}$.<br>
-      Étudier le sens de variations de la fonction $f$ sur son ensemble de définition.<br>`
+      Étudier le sens de variation de la fonction $f$ sur son ensemble de définition.<br>`
             texteCorr +=
               `$f$ est le quotient de deux fonctions dérivables sur  $\\mathbb{R}\\smallsetminus\\{${texNombre(-d / c, 0)}\\}$ dont le dénominateur ne s'annule pas $\\mathbb{R}\\smallsetminus\\{${texNombre(-d / c, 0)}\\}$.<br>
             On en déduit que $f$ est dérivable sur  $\\mathbb{R}\\smallsetminus\\{${texNombre(-d / c, 0)}\\}$.<br>
@@ -327,7 +327,7 @@ export default class EtudeFctRatio extends Exercice {
             }
 
             texte = `On considère la fonction $f$ définie sur $\\mathbb{R}\\smallsetminus\\{${texNombre(-d / c, 0)}\\}$ par : $f(x)=\\dfrac{${a}}{${reduireAxPlusB(c, d)}}$.<br>
-      Étudier le sens de variations de la fonction $f$ sur son ensemble de définition.<br>`
+      Étudier le sens de variation de la fonction $f$ sur son ensemble de définition.<br>`
             texteCorr +=
               `$f$ est le quotient de deux fonctions dérivables sur  $\\mathbb{R}\\smallsetminus\\{${texNombre(-d / c, 0)}\\}$ dont le dénominateur ne s'annule pas $\\mathbb{R}\\smallsetminus\\{${texNombre(-d / c, 0)}\\}$.<br>
             On en déduit que $f$ est dérivable sur  $\\mathbb{R}\\smallsetminus\\{${texNombre(-d / c, 0)}\\}$.<br>
@@ -406,7 +406,7 @@ export default class EtudeFctRatio extends Exercice {
             }
 
             texte = `On considère la fonction $f$ définie sur $\\mathbb{R}$ par : $f(x)=\\dfrac{${a}}{${rienSi1(c)}x^2${ecritureAlgebrique(d)}}$.<br>
-     Étudier le sens de variations de la fonction $f$ sur son ensemble de définition.<br>`
+     Étudier le sens de variation de la fonction $f$ sur son ensemble de définition.<br>`
             texteCorr +=
               `$f$ est le quotient de deux fonctions dérivables sur  $\\mathbb{R}$ dont le dénominateur ne s'annule pas $\\mathbb{R}$.<br>
            On en déduit que $f$ est dérivable sur  $\\mathbb{R}$.<br>
@@ -611,7 +611,7 @@ export default class EtudeFctRatio extends Exercice {
                   ]
                 }
                 texte = `eeeeOn considère la fonction $f$ définie sur $\\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFSD}\\right\\}$ par : $f(x)=\\dfrac{${p}}{${reduireAxPlusB(d, e)}}$.<br>
-       Étudier le sens de variations de la fonction $f$ sur son ensemble de définition.<br>`
+       Étudier le sens de variation de la fonction $f$ sur son ensemble de définition.<br>`
                 texteCorr += `$f$ est le quotient de deux fonctions dérivables sur  $\\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFSD}\\right\\}$ dont le dénominateur ne s'annule pas $\\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFSD}\\right\\}$.<br>
             On en déduit que $f$ est dérivable sur  $\\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFSD}\\right\\}$.<br>
 
@@ -694,7 +694,7 @@ export default class EtudeFctRatio extends Exercice {
                   ligneVar = ['Var', 10, '+/', 20, '-D+/ /', 20, '-/', 10]
                 }
                 texte = `On considère la fonction $f$ définie sur $\\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFSD}\\right\\}$ par : $f(x)=\\dfrac{${p}}{${reduireAxPlusB(d, e)}}$.<br>
-       Étudier le sens de variations de la fonction $f$ sur son ensemble de définition.<br>`
+       Étudier le sens de variation de la fonction $f$ sur son ensemble de définition.<br>`
                 texteCorr += `$f$ est le quotient de deux fonctions dérivables sur  $\\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFSD}\\right\\}$ dont le dénominateur ne s'annule pas $\\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFSD}\\right\\}$.<br>
             On en déduit que $f$ est dérivable sur  $\\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFSD}\\right\\}$.<br>
             Pour tout $x\\in\\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFSD}\\right\\}$, <br>

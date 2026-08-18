@@ -17,7 +17,7 @@ export default class Puissances extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     this.enonce =
       'Soit $a$ un nombre réel non nul et $n$ un entier non nul. À quelle expression est égale $\\left(a^2\\right)^{n}$ ?'
-    this.correction = `On applique la propriété des puissances de puissances d'un réel : <br>
+    this.correction = `On applique la propriété des puissances de puissances d'un réel.<br>
     Soit $n\\in \\mathbb{N}$, et $p \\in \\mathbb{N}$, on a $\\left(a^{n}\\right)^{p}=a^{np}$.<br>
          Dans notre situation : $\\left(a^2\\right)^{n}= ${miseEnEvidence(`a^{2n}`)}$`
 
@@ -32,7 +32,7 @@ export default class Puissances extends ExerciceQcmA {
   versionAleatoire = () => {
     const k = randint(2, 6)
     this.enonce = `Soient $a$ un nombre réel non nul et $n$ un entier.  À quelle expression est égale $\\left(a^${k}\\right)^{n}$ ?`
-    this.correction = `On applique la propriété des puissances de puissances d'un réel : <br>
+    this.correction = `On applique la propriété des puissances de puissances d'un réel.<br>
     Soit $n\\in \\mathbb{N}$, et $p \\in \\mathbb{N}$, on a $\\left(a^{n}\\right)^{p}=a^{np}$.<br>
          Dans notre situation : $\\left(a^${k}\\right)^{n}= ${miseEnEvidence(`a^{${k}n}`)}$`
     this.reponses = [

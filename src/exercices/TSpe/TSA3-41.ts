@@ -5,6 +5,7 @@ import { latex2d } from '../../lib/2d/textes'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
@@ -22,11 +23,11 @@ export const refs = {
   'fr-fr': ['TSA3-41', 'TCA7-41'],
   'fr-ch': [],
 }
-export const tags = ['programme de transition']
+
 type TypeRepresentation = 1 | 2 | 3
 
 function intervalle(a: number, b: number): string {
-  return `[${a}\\,;\\,${b}]`
+  return `[${texNombre(a, 1)}\\,;\\,${texNombre(b, 1)}]`
 }
 
 function uniteVerticale(ymin: number, ymax: number): number {
@@ -63,6 +64,7 @@ function positionLabelCourbe(
   ymax: number,
   pasY: number,
   yUnite: number,
+  xUnite: number,
 ): { x: number; y: number } {
   const margeVerticale = Math.max(pasY * 0.7, (ymax - ymin) * 0.08)
   const candidats = Array.from(
@@ -78,7 +80,7 @@ function positionLabelCourbe(
   const pasDerivee = Math.max((xmax - xmin) / 1000, 0.001)
   const penteGraphique =
     ((fonction(x + pasDerivee) - fonction(x - pasDerivee)) / (2 * pasDerivee)) *
-    yUnite
+    (yUnite / xUnite)
   const norme = Math.hypot(penteGraphique, 1)
   const decalage = 1.5
   const normaleXBrute = (-penteGraphique * decalage) / norme
@@ -87,13 +89,13 @@ function positionLabelCourbe(
   const margeX = 0.65
   const margeY = 0.45
   const candidatsLabel = [1, -1].map((sens) => ({
-    x: x + sens * normaleX,
+    x: x * xUnite + sens * normaleX,
     y: image * yUnite + sens * normaleY,
   }))
   const espaceDansCadre = (position: { x: number; y: number }): number =>
     Math.min(
-      position.x - (xmin + margeX),
-      xmax - margeX - position.x,
+      position.x - (xmin * xUnite + margeX),
+      xmax * xUnite - margeX - position.x,
       position.y - (ymin * yUnite + margeY),
       ymax * yUnite - margeY - position.y,
     )
@@ -103,7 +105,10 @@ function positionLabelCourbe(
   )[0]
 
   return {
-    x: Math.max(xmin + margeX, Math.min(xmax - margeX, position.x)),
+    x: Math.max(
+      xmin * xUnite + margeX,
+      Math.min(xmax * xUnite - margeX, position.x),
+    ),
     y: Math.max(
       ymin * yUnite + margeY,
       Math.min(ymax * yUnite - margeY, position.y),
@@ -119,15 +124,19 @@ function graphique(
   ymax: number,
   nomCourbe: string,
   objetsSupplementaires: ReturnType<typeof segment>[] = [],
+  scale = 0.7,
+  xUnite = 1,
+  yUniteImposee?: number,
 ): string {
   const parametresY = parametresVerticaux(ymin, ymax)
   ymin = parametresY.ymin
   ymax = parametresY.ymax
-  const yUnite = parametresY.unite
+  const yUnite = yUniteImposee ?? parametresY.unite
   const pasY = parametresY.pas
   const r = repere({
     xMin: xmin,
     xMax: xmax,
+    xUnite,
     yMin: ymin,
     yMax: ymax,
     yUnite,
@@ -136,7 +145,7 @@ function graphique(
     grilleX: false,
     grilleY: false,
     grilleSecondaire: true,
-    grilleSecondaireXDistance: 1,
+    grilleSecondaireXDistance: xUnite,
     grilleSecondaireYDistance: pasY,
   })
   const c = courbe(fonction, {
@@ -157,16 +166,17 @@ function graphique(
     ymax,
     pasY,
     yUnite,
+    xUnite,
   )
   const label = latex2d(nomCourbe, positionLabel.x, positionLabel.y, {
     color: bleuMathalea,
     letterSize: 'small',
   })
   const cadre = [
-    segment(xmin, ymin * yUnite, xmax, ymin * yUnite),
-    segment(xmax, ymin * yUnite, xmax, ymax * yUnite),
-    segment(xmax, ymax * yUnite, xmin, ymax * yUnite),
-    segment(xmin, ymax * yUnite, xmin, ymin * yUnite),
+    segment(xmin * xUnite, ymin * yUnite, xmax * xUnite, ymin * yUnite),
+    segment(xmax * xUnite, ymin * yUnite, xmax * xUnite, ymax * yUnite),
+    segment(xmax * xUnite, ymax * yUnite, xmin * xUnite, ymax * yUnite),
+    segment(xmin * xUnite, ymax * yUnite, xmin * xUnite, ymin * yUnite),
   ]
   cadre.forEach((cote) => {
     cote.epaisseur = 1
@@ -174,12 +184,12 @@ function graphique(
 
   return mathalea2d(
     {
-      xmin: xmin - 0.3,
-      xmax: xmax + 0.3,
+      xmin: xmin * xUnite - 0.3,
+      xmax: xmax * xUnite + 0.3,
       ymin: ymin * yUnite - 0.3,
       ymax: ymax * yUnite + 0.3,
       pixelsParCm: 22,
-      scale: 0.7,
+      scale,
       center: true,
     },
     r,
@@ -251,21 +261,21 @@ export default class ConvexiteEtCourbesDerivees extends ExerciceQcmA {
     this.correction = `La tangente à $\\mathcal C_f$ au point d’abscisse $${a}$ traverse la courbe : le point correspondant est donc un point d’inflexion.<br>
     Lorsque la courbe est orientée vers le haut, la fonction est convexe ; lorsqu’elle est orientée vers le bas, la fonction est concave.<br>
     On examine les quatre affirmations :<br>
-    • ${texteEnCouleurEtGras(bonneReponse, 'black')} Elle est vraie : ${proposerPointInflexion ? `la tangente traverse la courbe au point d’abscisse $${a}$` : `sur l’intervalle proposé, la courbe est orientée vers ${signe > 0 ? 'le bas' : 'le haut'}`}.<br>
-    • ${texteEnCouleurEtGras(reponseInversee, 'black')} Elle est fausse : sur cet intervalle, la courbe est orientée vers ${signe > 0 ? 'le haut' : 'le bas'}.<br>
-    • ${texteEnCouleurEtGras(courbureAutourDuPoint, 'black')} Elle est fausse puisque cet intervalle contient le point d’inflexion d’abscisse $${a}$.<br>
-    • ${texteEnCouleurEtGras(distracteurVariation, 'black')} Elle est fausse : ${proposerPointInflexion ? `le point d’abscisse $${a}$ est un point d’inflexion, pas un extremum` : `le changement de convexité a lieu en $${a}$`}.<br>
+    • ${texteEnCouleurEtGras(bonneReponse, 'black')} ${proposerPointInflexion ? `La tangente traverse la courbe au point d’abscisse $${a}$` : `Sur l’intervalle proposé, la courbe est orientée vers ${signe > 0 ? 'le bas' : 'le haut'}`}. Cette affirmation est vraie.<br>
+    • ${texteEnCouleurEtGras(reponseInversee, 'black')} Sur cet intervalle, la courbe est orientée vers ${signe > 0 ? 'le haut' : 'le bas'}. Cette affirmation est fausse.<br>
+    • ${texteEnCouleurEtGras(courbureAutourDuPoint, 'black')} Cet intervalle contient le point d’inflexion d’abscisse $${a}$. Cette affirmation est fausse.<br>
+    • ${texteEnCouleurEtGras(distracteurVariation, 'black')} ${proposerPointInflexion ? `Le point d’abscisse $${a}$ est un point d’inflexion, pas un extremum` : `Le changement de convexité a lieu en $${a}$`}. Cette affirmation est fausse.<br>
     La bonne réponse est donc : ${texteEnCouleurEtGras(bonneReponse)}`
   }
 
   private casCourbeDeFPrime(): void {
-    const centre = randint(-1, 1)
+    const centre = randint(-2, 2)
     const h = randint(1, 2)
     const a = centre - h
     const b = centre + h
     const signe = randint(0, 1) === 0 ? -1 : 1
-    const xmin = a - 1
-    const xmax = b + 1
+    const xmin = centre - 2 * h
+    const xmax = centre + 2 * h
     const fPrime = (x: number) => {
       const t = x - centre
       return signe * (t ** 3 - 3 * h ** 2 * t)
@@ -273,18 +283,20 @@ export default class ConvexiteEtCourbesDerivees extends ExerciceQcmA {
     const valeurs = [xmin, a, b, xmax].map(fPrime)
     const ymin = Math.floor(Math.min(...valeurs)) - 2
     const ymax = Math.ceil(Math.max(...valeurs)) + 2
-    const yUnite = parametresVerticaux(ymin, ymax).unite
+    const parametresY = parametresVerticaux(ymin, ymax)
+    const xUnite = 16 / (xmax - xmin)
+    const yUnite = 12 / (parametresY.ymax - parametresY.ymin)
     const tangenteA = segment(
-      a - 0.65,
+      (a - 0.65) * xUnite,
       fPrime(a) * yUnite,
-      a + 0.65,
+      (a + 0.65) * xUnite,
       fPrime(a) * yUnite,
       orangeMathalea,
     )
     const tangenteB = segment(
-      b - 0.65,
+      (b - 0.65) * xUnite,
       fPrime(b) * yUnite,
-      b + 0.65,
+      (b + 0.65) * xUnite,
       fPrime(b) * yUnite,
       orangeMathalea,
     )
@@ -298,43 +310,85 @@ export default class ConvexiteEtCourbesDerivees extends ExerciceQcmA {
       ymax,
       "\\mathcal C_{f'}",
       [tangenteA, tangenteB],
+      1,
+      xUnite,
+      yUnite,
     )
-    const interieur = intervalle(a, b)
     const gauche = intervalle(xmin, a)
-    const bonneReponse =
+    const interieur = intervalle(a, b)
+    const droite = intervalle(b, xmax)
+    const bonnesReponses =
       signe > 0
-        ? `$f$ est concave sur $${interieur}$.`
-        : `$f$ est convexe sur $${interieur}$.`
-    const reponseInversee =
-      signe > 0
-        ? `$f$ est concave sur $${gauche}$.`
-        : `$f$ est convexe sur $${gauche}$.`
-    const proposerMaximum = randint(0, 1) === 0
-    const proposerPointInflexion = randint(0, 1) === 0
-    const distracteurVariation = proposerPointInflexion
-      ? `La courbe de $f$ admet un point d’inflexion d’abscisse $${centre}$.`
-      : proposerMaximum
-        ? `$f$ admet un maximum en $${signe > 0 ? a : b}$.`
-        : `$f$ admet un minimum en $${signe > 0 ? b : a}$.`
-    const distracteurConvexiteDeFPrime =
-      signe > 0
-        ? `$f'$ est convexe sur $${intervalle(b, xmax)}$.`
-        : `$f'$ est concave sur $${intervalle(b, xmax)}$.`
+        ? [
+            {
+              texte: `$f$ est convexe sur $${gauche}$.`,
+              justification: `sur $${gauche}$, $f'$ est croissante, donc $f''$ est positive sur cet intervalle`,
+            },
+            {
+              texte: `$f$ est concave sur $${interieur}$.`,
+              justification: `sur $${interieur}$, $f'$ est décroissante, donc $f''$ est négative sur cet intervalle`,
+            },
+            {
+              texte: `$f$ est convexe sur $${droite}$.`,
+              justification: `sur $${droite}$, $f'$ est croissante, donc $f''$ est positive sur cet intervalle`,
+            },
+          ]
+        : [
+            {
+              texte: `$f$ est concave sur $${gauche}$.`,
+              justification: `sur $${gauche}$, $f'$ est décroissante, donc $f''$ est négative sur cet intervalle`,
+            },
+            {
+              texte: `$f$ est convexe sur $${interieur}$.`,
+              justification: `sur $${interieur}$, $f'$ est croissante, donc $f''$ est positive sur cet intervalle`,
+            },
+            {
+              texte: `$f$ est concave sur $${droite}$.`,
+              justification: `sur $${droite}$, $f'$ est décroissante, donc $f''$ est négative sur cet intervalle`,
+            },
+          ]
+    const bonneReponseChoisie = choice(bonnesReponses)
+    const bonneReponse = bonneReponseChoisie.texte
+
+    const intervalleSigneConstant = intervalle(a, centre)
+    const distracteurs = shuffle([
+      {
+        texte:
+          signe > 0
+            ? `$f$ est concave sur $${gauche}$.`
+            : `$f$ est convexe sur $${gauche}$.`,
+        justification:
+          signe > 0
+            ? `sur $${gauche}$, la courbe de $f'$ est concave, mais $f'$ est croissante : $f$ est donc convexe`
+            : `sur $${gauche}$, la courbe de $f'$ est convexe, mais $f'$ est décroissante : $f$ est donc concave`,
+      },
+      {
+        texte:
+          signe > 0
+            ? `$f$ est croissante sur $${gauche}$.`
+            : `$f$ est décroissante sur $${gauche}$.`,
+        justification: `sur $${gauche}$, $f'$ est ${signe > 0 ? 'croissante' : 'décroissante'}, mais elle change de signe. La fonction $f$ est donc ${signe > 0 ? 'décroissante puis croissante' : 'croissante puis décroissante'}`,
+      },
+      {
+        texte:
+          signe > 0
+            ? `$f$ est convexe sur $${intervalleSigneConstant}$.`
+            : `$f$ est concave sur $${intervalleSigneConstant}$.`,
+        justification: `sur $${intervalleSigneConstant}$, $f'$ est ${signe > 0 ? 'positive' : 'négative'}, ce qui renseigne sur les variations de $f$, pas sur sa convexité. Comme $f'$ y est ${signe > 0 ? 'décroissante' : 'croissante'}, $f$ y est ${signe > 0 ? 'concave' : 'convexe'}`,
+      },
+      {
+        texte: `La courbe de $f$ admet un point d’inflexion d’abscisse $${centre}$.`,
+        justification: `$${centre}$ est une racine de $f'$, ce qui correspond à un extremum de $f$. Les changements de variation de $f'$ ont lieu en $${a}$ et $${b}$ : ce sont ces abscisses qui correspondent aux points d’inflexion de la courbe de $f$`,
+      },
+    ]).slice(0, 3)
 
     this.enonce = `On considère une fonction $f$ deux fois dérivable sur $${intervalle(xmin, xmax)}$. On a représenté ci-dessous la courbe de sa fonction dérivée $f'$. Les tangentes aux sommets d’abscisses $${a}$ et $${b}$ sont horizontales.<br>${figure}<br>
     Quelle affirmation décrit correctement la convexité de la fonction $f$ ?`
-    this.reponses = [
-      bonneReponse,
-      reponseInversee,
-      distracteurVariation,
-      distracteurConvexiteDeFPrime,
-    ]
+    this.reponses = [bonneReponse, ...distracteurs.map(({ texte }) => texte)]
     this.correction = `La fonction $f$ est convexe lorsque sa dérivée $f'$ est croissante et concave lorsque $f'$ est décroissante.<br>
     On examine les quatre affirmations :<br>
-    • ${texteEnCouleurEtGras(bonneReponse, 'black')} Elle est vraie car, sur $${interieur}$, $f'$ est ${signe > 0 ? 'décroissante' : 'croissante'}.<br>
-    • ${texteEnCouleurEtGras(reponseInversee, 'black')} Elle est fausse : sur $${gauche}$, $f'$ est ${signe > 0 ? 'croissante' : 'décroissante'}, donc $f$ y est ${signe > 0 ? 'convexe' : 'concave'}.<br>
-    • ${texteEnCouleurEtGras(distracteurVariation, 'black')} Elle est fausse : ${proposerPointInflexion ? `les changements de variation de $f'$ ont lieu en $${a}$ et $${b}$ ; ce sont donc ces abscisses qui correspondent aux points d’inflexion de la courbe de $f$` : `l’abscisse indiquée est celle d’un extremum de la fonction $f'$ représentée, et non d’un extremum de $f$`}.<br>
-    • ${texteEnCouleurEtGras(distracteurConvexiteDeFPrime, 'black')} Cette affirmation décrit correctement la courbure de $f'$, mais elle ne répond pas à la question, qui porte sur la convexité de $f$.<br>
+    • ${texteEnCouleurEtGras(bonneReponse, 'black')} ${bonneReponseChoisie.justification[0].toUpperCase()}${bonneReponseChoisie.justification.slice(1)}. Cette affirmation est vraie.<br>
+    ${distracteurs.map(({ texte, justification }) => `• ${texteEnCouleurEtGras(texte, 'black')} ${justification[0].toUpperCase()}${justification.slice(1)}. Cette affirmation est fausse.`).join('<br>')}<br>
     La bonne réponse est donc : ${texteEnCouleurEtGras(bonneReponse)}`
   }
 
@@ -377,6 +431,9 @@ export default class ConvexiteEtCourbesDerivees extends ExerciceQcmA {
       signe > 0
         ? `$f'$ est décroissante sur $${droite}$.`
         : `$f'$ est croissante sur $${droite}$.`
+    const distracteurConfusionFEtFSeconde = `$f$ est concave sur $${intervalle(xmin, xmax)}$.`
+    const troisiemeDistracteur =
+      signe < 0 ? distracteurConfusionFEtFSeconde : distracteurVariationDeFPrime
     const proposerPointInflexion = randint(0, 1) === 0
     const distracteurExtremumDeFSeconde = proposerPointInflexion
       ? `La courbe de $f$ admet un point d’inflexion d’abscisse $${sommet}$.`
@@ -389,15 +446,15 @@ export default class ConvexiteEtCourbesDerivees extends ExerciceQcmA {
     this.reponses = [
       bonneReponse,
       reponseInversee,
-      distracteurVariationDeFPrime,
+      troisiemeDistracteur,
       distracteurExtremumDeFSeconde,
     ]
     this.correction = `La fonction $f$ est convexe lorsque $f''$ est positive et concave lorsque $f''$ est négative.<br>
     On examine les quatre affirmations :<br>
-    • ${texteEnCouleurEtGras(bonneReponse, 'black')} Elle est vraie d’après le signe de $f''$ entre ses deux racines.<br>
-    • ${texteEnCouleurEtGras(reponseInversee, 'black')} Elle est fausse : sur $${gauche}$, $f''$ est ${signe > 0 ? 'positive' : 'négative'}, donc $f$ y est ${signe > 0 ? 'convexe' : 'concave'}.<br>
-    • ${texteEnCouleurEtGras(distracteurVariationDeFPrime, 'black')} Elle est fausse : sur $${droite}$, $f''$ est ${signe > 0 ? 'positive' : 'négative'}, donc $f'$ est ${signe > 0 ? 'croissante' : 'décroissante'}.<br>
-    • ${texteEnCouleurEtGras(distracteurExtremumDeFSeconde, 'black')} Elle est fausse : ${proposerPointInflexion ? `la dérivée seconde change de signe en $${a}$ et en $${b}$ ; les points d’inflexion de la courbe de $f$ ont donc ces abscisses` : `l’abscisse indiquée est celle de l’extremum de la fonction $f''$ représentée, et non d’un extremum de $f'$`}.<br>
+    • ${texteEnCouleurEtGras(bonneReponse, 'black')} Le signe de $f''$ entre ses deux racines permet de conclure. Cette affirmation est vraie.<br>
+    • ${texteEnCouleurEtGras(reponseInversee, 'black')} Sur $${gauche}$, $f''$ est ${signe > 0 ? 'positive' : 'négative'}, donc $f$ y est ${signe > 0 ? 'convexe' : 'concave'}. Cette affirmation est fausse.<br>
+    • ${texteEnCouleurEtGras(troisiemeDistracteur, 'black')} ${signe < 0 ? `La courbe représentée est celle de $f''$. Le fait que cette courbe soit concave ne signifie pas que $f$ est concave : la convexité de $f$ dépend du signe de $f''$` : `Sur $${droite}$, $f''$ est positive, donc $f'$ est croissante`}. Cette affirmation est fausse.<br>
+    • ${texteEnCouleurEtGras(distracteurExtremumDeFSeconde, 'black')} ${proposerPointInflexion ? `La dérivée seconde change de signe en $${a}$ et en $${b}$ ; les points d’inflexion de la courbe de $f$ ont donc ces abscisses` : `L’abscisse indiquée est celle de l’extremum de la fonction $f''$ représentée, et non d’un extremum de $f'$`}. Cette affirmation est fausse.<br>
     La bonne réponse est donc : ${texteEnCouleurEtGras(bonneReponse)}`
   }
 
@@ -418,7 +475,10 @@ export default class ConvexiteEtCourbesDerivees extends ExerciceQcmA {
   }
 
   nouvelleVersion(): void {
-    this.ordreDesCas = shuffle([1, 2, 3] as TypeRepresentation[])
+    this.ordreDesCas =
+      this.sup3 >= 1 && this.sup3 <= 3
+        ? [this.sup3 as TypeRepresentation]
+        : shuffle([1, 2, 3] as TypeRepresentation[])
     this.indiceDuCas = 0
     super.nouvelleVersion()
     if (!context.isHtml) {
@@ -434,6 +494,12 @@ export default class ConvexiteEtCourbesDerivees extends ExerciceQcmA {
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
+    this.sup3 = 4
+    this.besoinFormulaire3Numerique = [
+      'Situations proposées',
+      4,
+      "1 : Courbe de f\n2 : Courbe de f'\n3 : Courbe de f''\n4 : Mélange",
+    ]
     this.options = { vertical: false, ordered: false }
     this.versionAleatoire()
   }

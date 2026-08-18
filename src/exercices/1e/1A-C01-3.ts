@@ -318,7 +318,7 @@ export default class AutoC1c extends ExerciceQcmA {
 
     const propriete = typeExercice === 1 ? 'masse' : 'taille'
 
-    correctionTexte += `<br><br>Donc il s'agit de la ${texteEnCouleurEtGras(valeursTriees[0].nom)} qui a la ${propriete} la plus importante.`
+    correctionTexte += `<br><br> Donc il s'agit de la ${texteEnCouleurEtGras(valeursTriees[0].nom.toLowerCase())} qui a la ${propriete} la plus importante.`
 
     this.correction = correctionTexte
 

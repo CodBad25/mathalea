@@ -18,7 +18,7 @@ export default class Auto1AC3c extends ExerciceQcmA {
   private appliquerLesValeurs(a: number, k: number): void {
     this.enonce = `Soit $n$ un entier${a === 3 && k === 2 ? ' non nul' : ''}. <br>À quelle expression est égale $\\left(${a}^n\\right)^{${k}}$ ?`
 
-    this.correction = `On applique la propriété des puissances de puissances d'un réel : <br>
+    this.correction = `On applique la propriété des puissances de puissances d'un réel.<br>
     Soit $n\\in \\mathbb{N}$, et $p \\in \\mathbb{N}$, on a : 
      $\\left(a^{n}\\right)^{p}=a^{np}$<br>
     $\\begin{aligned}\\left(${a}^{n}\\right)^{${k}}&=${a}^{${k}n}\\\\

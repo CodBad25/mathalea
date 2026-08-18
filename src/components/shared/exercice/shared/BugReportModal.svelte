@@ -14,12 +14,15 @@
     exerciceId?: string
     /** titre de l'exercice */
     exerciceTitle?: string
+    /** indice (0-based) de l'exercice dans la série */
+    exerciceIndex?: number
   }
 
   let {
     isDisplayed = $bindable(),
     exerciceId = undefined,
     exerciceTitle = undefined,
+    exerciceIndex = undefined,
   }: Props = $props()
 
   let dialog: HTMLDialogElement | undefined = $state()
@@ -43,6 +46,7 @@
     const context = {
       exerciceId,
       exerciceTitle,
+      exerciceIndex,
       url: window.location.href,
       userAgent: navigator.userAgent,
     }

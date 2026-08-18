@@ -50,7 +50,7 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
 
         this.question = this.versionQcm
           ? `Choisir deux nombres puis calculer la somme de leurs carrés.  <br>
-     Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
+     Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
           : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} la somme de leurs carrés.  <br>
      Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''} comme nombres $${a}$ et $${b}$ ?`
         this.reponse = this.versionQcm
@@ -73,7 +73,7 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
 
         this.question = this.versionQcm
           ? `Choisir deux nombres puis calculer le carré de leur somme. <br>
-   Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
+   Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
           : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} le carré de leur somme. <br>
    Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
 
@@ -94,7 +94,7 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
 
         this.question = this.versionQcm
           ? `Choisir deux nombres puis calculer le double du carré de leur somme. <br>
-   Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
+   Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
           : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} le double du carré de leur somme. <br>
    Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
 
@@ -116,7 +116,7 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
 
           this.question = this.versionQcm
             ? `Choisir deux nombres puis calculer le double de leur produit. <br>
-     Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
+     Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
             : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} le double de leur produit. <br>
      Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
 
@@ -135,7 +135,7 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
 
           this.question = this.versionQcm
             ? `Choisir deux nombres puis calculer le double de leur somme. <br>
-       Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
+       Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
             : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} le double de leur somme. <br>
        Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
 
@@ -159,7 +159,7 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
 
         this.question = this.versionQcm
           ? `Choisir deux nombres puis calculer la somme de leur inverse. <br>
-   Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
+   Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
           : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} la somme de leur inverse. <br>
    Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
 
@@ -187,7 +187,7 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
 
         this.question = this.versionQcm
           ? `Choisir deux nombres puis calculer l'inverse de leur somme. <br>
-   Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
+   Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
           : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} l'inverse de leur somme. <br>
    Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''} comme nombres $${a}$ et $${b}$ ?`
 
@@ -213,7 +213,7 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
 
         this.question = this.versionQcm
           ? `Choisir deux nombres puis calculer l'inverse de leur somme. <br>
-   Le résultat obtenu si on choisit comme nombres $${f1.texFraction}$ et $${b}$ est :`
+   Le résultat obtenu, si on choisit comme nombres $${f1.texFraction}$ et $${b}$, est :`
           : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} l'inverse de leur somme. <br>
    Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''} comme nombres $${f1.texFraction}$ et $${b}$ ?`
 
@@ -243,7 +243,7 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
 
         this.question = this.versionQcm
           ? `Choisir deux nombres puis calculer l'inverse du carré de leur somme. <br>
-   Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
+   Le résultat obtenu, si on choisit comme nombres $${a}$ et $${b}$, est :`
           : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} l'inverse du carré de leur somme. <br>
    Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''} comme nombres $${a}$ et $${b}$ ?`
 

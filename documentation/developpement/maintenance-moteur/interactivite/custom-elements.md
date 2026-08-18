@@ -86,7 +86,9 @@ export type DemiDroiteInteractiveOptions = {
   minT?: number
   maxT?: number
   partsCount?: number
+  axisMin?: number
   showNegative?: boolean
+  showEqualityMarks?: boolean
   multiplePoints?: boolean
   interactivityOn?: boolean
   points?: ValeurPoint[]

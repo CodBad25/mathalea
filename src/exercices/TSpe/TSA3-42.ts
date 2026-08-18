@@ -45,12 +45,14 @@ function correctionAvecPuces(
       /cette proposition est vraie/gi,
       (verdict) => texteEnCouleurEtGras(verdict, 'black'),
     )
-    return context.isHtml
-      ? `<div><div>${proposition}</div><div class="-mt-1 leading-tight">${justification}</div></div>`
-      : `${proposition}<br>${justification}`
+    if (context.isTypst) return `${proposition} ${justification}`
+    if (context.isHtml) {
+      return `<div><div>${proposition}</div><div class="-mt-1 leading-tight">${justification}</div></div>`
+    }
+    return `${proposition}<br>${justification}`
   })
   const bonneReponseEnGras = texteEnCouleurEtGras(bonneReponse, 'black')
-  return `On reprend chaque proposition une par une.<br>${createList({ items, style: 'fleches', classOptions: context.isHtml ? 'space-y-4' : undefined })}<br>La bonne réponse est donc : ${bonneReponseEnGras}.`
+  return `On reprend chaque proposition une par une.<br>${createList({ items, style: 'fleches', classOptions: context.isHtml && !context.isTypst ? 'space-y-4' : undefined })}<br>La bonne réponse est donc : ${bonneReponseEnGras}.`
 }
 
 function tableauVariationsPolynesie(): string {

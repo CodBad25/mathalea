@@ -119,6 +119,7 @@
       bind:isDisplayed={isBugReportDisplayed}
       exerciceId={exercise.id}
       exerciceTitle={exercise.titre}
+      exerciceIndex={exercise.numeroExercice}
     />
   {/if}
   {#if globalOptions.recorder === undefined}

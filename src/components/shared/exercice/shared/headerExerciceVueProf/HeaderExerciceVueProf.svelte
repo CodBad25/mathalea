@@ -461,5 +461,6 @@
     bind:isDisplayed={isBugReportDisplayed}
     exerciceId={id}
     exerciceTitle={titleBase}
+    exerciceIndex={indiceExercice}
   />
 {/if}

@@ -1,4 +1,5 @@
 import { context } from '../../modules/context'
+import { orangeMathalea } from '../colors'
 import { texNombre } from '../outils/texNombre'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
@@ -11,7 +12,7 @@ export type PieAssessmentColumn = 'label' | 'effectif' | 'angle'
 
 export type PieAssessmentItem = {
   label: string
-  effectif: number
+  effectif: number | null
   angle: number | null
 }
 
@@ -23,6 +24,8 @@ export type PieAssessmentState = {
   targetAngle: number
   tolerance: number
   infosStatus: boolean
+  colorOn: boolean
+  correctionOn: boolean
   hiddenColumns: PieAssessmentColumn[]
   items: PieAssessmentItem[]
 }
@@ -35,9 +38,11 @@ export type PieAssessmentSerializedState = {
   targetAngle: number
   hiddenColumns?: PieAssessmentColumn[]
   infosStatus: boolean
+  colorOn?: boolean
+  correctionOn?: boolean
   items: Array<{
     label: string
-    effectif: number
+    effectif: number | null
     angle: number | null
   }>
 }
@@ -72,8 +77,14 @@ export type PieAssessmentCreateOptions = {
   targetAngle?: number
   tolerance?: number
   infosStatus?: boolean
+  colorOn?: boolean
+  correctionOn?: boolean
   hiddenColumns?: PieAssessmentColumn[]
-  items: Array<{ label: string; effectif: number; angle?: number | null }>
+  items: Array<{
+    label: string
+    effectif?: number | null
+    angle?: number | null
+  }>
   interactivityOn?: boolean
   verifyCallbackName?: string
   verifyCallback?: PieAssessmentVerificationCallback
@@ -109,6 +120,8 @@ const DEFAULT_STATE: PieAssessmentState = {
   targetAngle: 360,
   tolerance: 0,
   infosStatus: false,
+  colorOn: true,
+  correctionOn: false,
   hiddenColumns: [],
   items: [
     { label: 'A', effectif: 1, angle: null },
@@ -132,6 +145,13 @@ function normalizeAngle(value: unknown): number | null {
   return Math.max(0, Math.trunc(parsed))
 }
 
+function normalizeEffectif(value: unknown): number | null {
+  if (value == null || value === '') return null
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed)) return null
+  return Math.max(0, parsed)
+}
+
 function sanitizeIntegerInput(rawValue: string): string {
   if (rawValue.trim() === '') return ''
   const normalized = rawValue.replace(',', '.')
@@ -152,7 +172,7 @@ function normalizeItems(value: unknown): PieAssessmentItem[] {
       }
       return {
         label: safeText(raw.label),
-        effectif: safeNumber(raw.effectif, 0),
+        effectif: normalizeEffectif(raw.effectif),
         angle: normalizeAngle(raw.angle),
       }
     })
@@ -354,6 +374,8 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
     targetAngle,
     tolerance,
     infosStatus,
+    colorOn,
+    correctionOn,
     hiddenColumns,
     items,
     interactivityOn,
@@ -364,6 +386,8 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
     targetAngle: number
     tolerance: number
     infosStatus: boolean
+    colorOn: boolean
+    correctionOn: boolean
     hiddenColumns: PieAssessmentColumn[]
     items: PieAssessmentCreateOptions['items']
     interactivityOn: boolean
@@ -378,6 +402,8 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
       targetAngle,
       tolerance,
       infosStatus,
+      colorOn,
+      correctionOn,
       hiddenColumns,
       items: normalizeItems(items),
     }
@@ -392,6 +418,8 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
       'target-angle',
       'tolerance',
       'infos-status',
+      'color-on',
+      'correction-on',
       'hidden-columns',
       'items',
       'interactivity-on',
@@ -408,6 +436,8 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
     targetAngle,
     tolerance = 0,
     infosStatus = false,
+    colorOn = true,
+    correctionOn = false,
     hiddenColumns = [],
     items,
     interactivityOn = true,
@@ -437,6 +467,8 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
         targetAngle: target,
         tolerance,
         infosStatus,
+        colorOn,
+        correctionOn,
         hiddenColumns,
         items,
         interactivityOn,
@@ -452,6 +484,8 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
         targetAngle: target,
         tolerance,
         infosStatus,
+        colorOn,
+        correctionOn,
         hiddenColumns,
         items,
         interactivityOn,
@@ -471,6 +505,8 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
       targetAngle: target,
       tolerance,
       infosStatus,
+      colorOn,
+      correctionOn,
       hiddenColumns,
       items,
       interactivityOn,
@@ -717,8 +753,6 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
     }
     if (this.shadowRoot == null) return
 
-    const disableAttr = this.interactivityOn ? '' : 'disabled'
-
     this.shadowRoot.innerHTML = `
       <style>
         :host {
@@ -745,9 +779,79 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
           padding: 5px;
           text-align: left;
         }
+        .static-conversion-table {
+          border: 2.5px solid #334155;
+          border-collapse: collapse;
+          background: #ffffff;
+        }
+        .static-conversion-table th {
+          border: 2px solid #64748b;
+          border-bottom: 4px solid #334155;
+          padding: 8px 10px;
+          background: #cbd5e1;
+          color: #0f172a;
+          font-weight: 700;
+          text-align: center;
+        }
+        .static-conversion-table td {
+          border: 1.5px solid #64748b;
+          padding: 8px 10px;
+          background: #ffffff;
+          color: #000000;
+        }
+        .static-conversion-table tbody tr:nth-child(even) td {
+          background: #f1f5f9;
+        }
+        .static-conversion-table thead th {
+          border-bottom: 4px solid #334155;
+        }
+        .static-conversion-table thead th:first-child,
+        .static-conversion-table tbody td:first-child,
+        .static-conversion-table .category-header,
+        .static-conversion-table .category-cell {
+          border-right: 4px solid #334155;
+        }
         td input {
           width: 100%;
           box-sizing: border-box;
+        }
+        td input:disabled {
+          display: block;
+          width: 100%;
+          color: #000000;
+          opacity: 1;
+          background: #e2e8f0;
+          border: 1px solid #94a3b8;
+          border-radius: 3px;
+          padding: 2px 6px;
+        }
+        td input[type="number"]:disabled {
+          text-align: center;
+        }
+        td.correction-value-cell,
+        td.correction-value-cell input:disabled {
+          color: ${orangeMathalea};
+          font-weight: 700;
+        }
+        .numeric-cell {
+          text-align: center;
+        }
+        .static-empty-cell {
+          color: transparent;
+          height: 2.4rem;
+          text-align: center;
+          vertical-align: bottom;
+        }
+        .static-empty-cell::before {
+          content: "";
+          display: block;
+          width: 4rem;
+          max-width: 100%;
+          margin: 1.2rem auto 0;
+          border-bottom: 1px dotted #64748b;
+        }
+        .numeric-header {
+          text-align: center;
         }
         .preview {
           border: 1px solid #e5e7eb;
@@ -802,7 +906,7 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
             ? ''
             : `<div class="title">${this.escapeText(this.state.title.trim())}</div>`
         }
-        ${this.renderTable(disableAttr)}
+        ${this.renderTable()}
         <div class="preview" id="preview"></div>
       </div>
     `
@@ -815,9 +919,11 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
     const title = this.state.title.trim()
     const titleLatex =
       title === '' ? '' : `\\textbf{${this.escapeLatex(title)}}\\\\[0.4em]\n`
-    const diagram = this.interactivityOn
-      ? this.renderEmptyPieTikz()
-      : this.renderFilledPieTikz()
+    const diagram = this.renderEmptyPieTikz()
+    const renderedDiagram =
+      !this.interactivityOn && this.state.correctionOn
+        ? this.renderFilledPieTikz()
+        : diagram
     const legend = this.interactivityOn ? '' : `\n${this.renderLatexLegend()}`
     return `\\begin{center}
 ${titleLatex}\\begin{minipage}[t]{0.48\\linewidth}
@@ -829,7 +935,7 @@ ${this.renderLatexTable()}
 \\begin{minipage}[t]{0.48\\linewidth}
 \\vspace{0pt}
 \\centering
-${diagram}${legend}
+${renderedDiagram}${legend}
 \\end{minipage}
 \\end{center}`
   }
@@ -838,17 +944,18 @@ ${diagram}${legend}
     const title = this.state.title.trim()
     const titleTypst =
       title === '' ? '' : `#strong[${this.escapeTypst(title)}]\n#v(0.4em)\n`
-    const diagram = this.interactivityOn
-      ? this.renderEmptyPieTypst()
-      : this.renderFilledPieTypst()
+    const diagram =
+      !this.interactivityOn && this.state.correctionOn
+        ? this.renderFilledPieTypst()
+        : this.renderEmptyPieTypst()
     const diagramWithLegend = this.interactivityOn
       ? diagram
       : this.renderTypstDiagramWithLegend(diagram)
 
     return `#align(center)[
 ${titleTypst}#grid(
-  columns: (0.48fr, 0.48fr),
-  gutter: 0.1fr,
+  columns: (auto, auto),
+  gutter: 14pt,
   align: top,
   [#align(center)[${this.renderTypstTable()}]],
   [#align(center)[${diagramWithLegend}]],
@@ -882,11 +989,13 @@ ${titleTypst}#grid(
     this.state.items = this.state.items.map((item, index) => {
       const incoming = itemsByIndex[index]
       if (incoming == null) return item
+      const effectif =
+        'effectif' in incoming
+          ? normalizeEffectif(incoming.effectif)
+          : item.effectif
       return {
         label: safeText(incoming.label) || item.label,
-        effectif: Number.isFinite(Number(incoming.effectif))
-          ? Number(incoming.effectif)
-          : item.effectif,
+        effectif,
         angle: normalizeAngle(incoming.angle),
       }
     })
@@ -911,6 +1020,12 @@ ${titleTypst}#grid(
     if (typeof raw.infosStatus === 'boolean') {
       this.state.infosStatus = raw.infosStatus
     }
+    if (typeof raw.colorOn === 'boolean') {
+      this.state.colorOn = raw.colorOn
+    }
+    if (typeof raw.correctionOn === 'boolean') {
+      this.state.correctionOn = raw.correctionOn
+    }
 
     this.state.targetAngle = effectiveTargetAngle(
       this.state.shape,
@@ -931,7 +1046,7 @@ ${titleTypst}#grid(
   }
 
   getStudentEffectifs(): number[] {
-    return this.state.items.map((item) => Math.max(0, item.effectif))
+    return this.state.items.map((item) => Math.max(0, item.effectif ?? 0))
   }
 
   getStudentLabels(): string[] {
@@ -954,6 +1069,14 @@ ${titleTypst}#grid(
     this.state.infosStatus = parseBooleanAttribute(
       this.getAttribute('infos-status'),
       DEFAULT_STATE.infosStatus,
+    )
+    this.state.colorOn = parseBooleanAttribute(
+      this.getAttribute('color-on'),
+      DEFAULT_STATE.colorOn,
+    )
+    this.state.correctionOn = parseBooleanAttribute(
+      this.getAttribute('correction-on'),
+      DEFAULT_STATE.correctionOn,
     )
     this.state.hiddenColumns = parseHiddenColumns(
       this.getAttribute('hidden-columns'),
@@ -981,15 +1104,15 @@ ${titleTypst}#grid(
     )
   }
 
-  private renderTable(disableAttr: string): string {
-    const showLabel = this.isColumnVisible('label')
-    const showEffectif = this.isColumnVisible('effectif')
-    const showAngle = this.isColumnVisible('angle')
+  private renderTable(): string {
+    const showLabel = this.isTableColumnVisible('label')
+    const showEffectif = this.isTableColumnVisible('effectif')
+    const showAngle = this.isTableColumnVisible('angle')
 
     const columns: string[] = []
-    if (showLabel) columns.push('<th>Catégorie</th>')
-    if (showEffectif) columns.push('<th>Effectif</th>')
-    if (showAngle) columns.push('<th>Angle (°)</th>')
+    if (showLabel) columns.push('<th class="category-header">Catégorie</th>')
+    if (showEffectif) columns.push('<th class="numeric-header">Effectifs</th>')
+    if (showAngle) columns.push('<th class="numeric-header">Angles (°)</th>')
 
     const noColumnMessage =
       !showLabel && !showEffectif && !showAngle
@@ -997,9 +1120,12 @@ ${titleTypst}#grid(
         : ''
 
     if (noColumnMessage !== '') return noColumnMessage
+    const tableClass = this.interactivityOn
+      ? ''
+      : ' class="static-conversion-table"'
 
     return `
-      <table>
+      <table${tableClass}>
         <thead>
           <tr>
             ${columns.join('')}
@@ -1008,7 +1134,6 @@ ${titleTypst}#grid(
         <tbody>
           ${this.state.items
             .map((item, index) => {
-              const displayedAngle = this.itemAngleForDisplay(item, index)
               const angleInputDisabled =
                 this.interactivityOn && this.state.mode === 'angle'
                   ? ''
@@ -1025,17 +1150,32 @@ ${titleTypst}#grid(
                 <tr>
                   ${
                     showLabel
-                      ? `<td><input type="text" data-kind="label" data-index="${index}" value="${this.escapeText(item.label)}" ${disableAttr} ${labelInputDisabled} /></td>`
+                      ? this.renderTableCell(
+                          item,
+                          index,
+                          'label',
+                          labelInputDisabled,
+                        )
                       : ''
                   }
                   ${
                     showEffectif
-                      ? `<td><input type="number" step="1" data-kind="effectif" data-index="${index}" value="${item.effectif}" ${disableAttr} ${effectifInputDisabled} /></td>`
+                      ? this.renderTableCell(
+                          item,
+                          index,
+                          'effectif',
+                          effectifInputDisabled,
+                        )
                       : ''
                   }
                   ${
                     showAngle
-                      ? `<td><input type="number" step="1" inputmode="numeric" data-kind="angle" data-index="${index}" value="${Number.isFinite(displayedAngle) ? displayedAngle : 0}" ${disableAttr} ${angleInputDisabled} /></td>`
+                      ? this.renderTableCell(
+                          item,
+                          index,
+                          'angle',
+                          angleInputDisabled,
+                        )
                       : ''
                   }
                 </tr>
@@ -1045,6 +1185,51 @@ ${titleTypst}#grid(
         </tbody>
       </table>
     `
+  }
+
+  private renderTableCell(
+    item: PieAssessmentItem,
+    index: number,
+    column: PieAssessmentColumn,
+    inputDisabled: string,
+  ): string {
+    const displayedAngle = this.itemAngleForDisplay(item, index)
+
+    if (!this.interactivityOn && !this.state.correctionOn) {
+      if (this.state.mode === column) {
+        return this.renderStaticEmptyTableCell()
+      }
+
+      if (column === 'label') {
+        return `<td class="category-cell">${this.escapeText(item.label)}</td>`
+      }
+      if (column === 'effectif') {
+        if (item.effectif == null) return this.renderStaticEmptyTableCell()
+        return `<td class="numeric-cell">${this.escapeText(this.formatHtmlNumber(item.effectif))}</td>`
+      }
+      if (this.state.mode === 'effectif' && item.angle == null) {
+        return this.renderStaticEmptyTableCell()
+      }
+      return `<td class="numeric-cell">${this.escapeText(this.formatHtmlNumber(displayedAngle))}</td>`
+    }
+
+    if (column === 'label') {
+      return `<td class="category-cell${this.correctionValueClass(column)}"><input type="text" data-kind="label" data-index="${index}" value="${this.escapeText(item.label)}" ${inputDisabled} /></td>`
+    }
+    if (column === 'effectif') {
+      return `<td class="numeric-cell${this.correctionValueClass(column)}"><input type="number" step="1" data-kind="effectif" data-index="${index}" value="${item.effectif ?? ''}" ${inputDisabled} /></td>`
+    }
+    return `<td class="numeric-cell${this.correctionValueClass(column)}"><input type="number" step="1" inputmode="numeric" data-kind="angle" data-index="${index}" value="${Number.isFinite(displayedAngle) ? displayedAngle : 0}" ${inputDisabled} /></td>`
+  }
+
+  private correctionValueClass(column: PieAssessmentColumn): string {
+    return this.state.correctionOn && this.state.mode === column
+      ? ' correction-value-cell'
+      : ''
+  }
+
+  private renderStaticEmptyTableCell(): string {
+    return '<td class="static-empty-cell" aria-label="cellule à compléter"></td>'
   }
 
   private bindEvents(): void {
@@ -1080,10 +1265,7 @@ ${titleTypst}#grid(
           if (!Number.isInteger(index) || index < 0) return
           if (this.state.mode !== 'effectif') return
           if (this.state.items[index] == null) return
-          this.state.items[index].effectif = Math.max(
-            0,
-            safeNumber(input.value, 0),
-          )
+          this.state.items[index].effectif = normalizeEffectif(input.value)
           this.renderPreview()
         })
 
@@ -1117,6 +1299,11 @@ ${titleTypst}#grid(
     ) as HTMLDivElement | null
     if (preview == null) return
 
+    if (!this.interactivityOn && !this.state.correctionOn) {
+      preview.innerHTML = `${this.renderEmptyPieSvg()}${this.renderLegend()}`
+      return
+    }
+
     const { svg, usedAngle } = this.renderPieSvg()
     const remaining = this.state.targetAngle - usedAngle
     const statusText =
@@ -1147,6 +1334,11 @@ ${titleTypst}#grid(
     let startDeg = isSemi ? 180 : -90
 
     const slices: string[] = []
+    const defs = this.shouldRenderLegendColors()
+      ? ''
+      : `<defs>${this.state.items
+          .map((_item, index) => this.renderSvgHatchPattern(index))
+          .join('')}</defs>`
 
     this.state.items.forEach((item, index) => {
       const requested = Math.max(0, this.itemAngleForDisplay(item, index))
@@ -1159,8 +1351,11 @@ ${titleTypst}#grid(
       const endDeg = startDeg + drawn
       const path = this.arcPath(cx, cy, radius, startDeg, endDeg)
       const tooltip = `${item.label} : ${requested.toFixed(1)}°`
+      const fill = this.shouldRenderLegendColors()
+        ? this.colorForIndex(index)
+        : `url(#${this.svgHatchPatternId(index)})`
       slices.push(
-        `<path d="${path}" fill="${this.colorForIndex(index)}"><title>${this.escapeText(tooltip)}</title></path>`,
+        `<path d="${path}" fill="${fill}" stroke="#334155" stroke-width="0.5"><title>${this.escapeText(tooltip)}</title></path>`,
       )
       usedAngle += drawn
       startDeg = endDeg
@@ -1170,23 +1365,55 @@ ${titleTypst}#grid(
       ? `<path d="${this.arcPath(cx, cy, radius, 180, 360)}" fill="none" stroke="#94a3b8" stroke-width="1"/>`
       : `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="#94a3b8" stroke-width="1"/>`
 
-    const svg = `<svg viewBox="0 0 ${width} ${height}">${frame}${slices.join('')}</svg>`
+    const svg = `<svg viewBox="0 0 ${width} ${height}">${defs}${frame}${slices.join('')}</svg>`
 
     return { svg, usedAngle }
   }
 
+  private renderEmptyPieSvg(): string {
+    const width = 320
+    const height = 220
+    const margin = 12
+    const isSemi = this.state.shape === 'semi-pie'
+    const cx = width / 2
+    const cy = isSemi ? height - 20 : height / 2
+    const radius = isSemi
+      ? Math.min(width / 2 - margin, height - 34)
+      : Math.min(width, height) / 2 - margin
+    const frame = isSemi
+      ? `<path d="${this.arcPath(cx, cy, radius, 180, 360)}" fill="none" stroke="#94a3b8" stroke-width="1"/>`
+      : `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="#94a3b8" stroke-width="1"/>`
+
+    return `<svg viewBox="0 0 ${width} ${height}">${frame}${this.renderSvgCenterCross(cx, cy)}</svg>`
+  }
+
+  private renderSvgCenterCross(cx: number, cy: number): string {
+    const size = 5
+    return `<line x1="${cx - size}" y1="${cy}" x2="${cx + size}" y2="${cy}" stroke="#0f172a" stroke-width="1.4"/><line x1="${cx}" y1="${cy - size}" x2="${cx}" y2="${cy + size}" stroke="#0f172a" stroke-width="1.4"/>`
+  }
+
+  private renderSvgHatchPattern(index: number): string {
+    const id = this.svgHatchPatternId(index)
+    const rotation = [45, -45, 0, 90][index % 4]
+    return `<pattern id="${id}" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(${rotation})"><rect width="8" height="8" fill="#fff"/><path d="M 0 0 L 0 8" stroke="#334155" stroke-width="1.2"/></pattern>`
+  }
+
+  private svgHatchPatternId(index: number): string {
+    return `mathalea-pie-hatch-${index}`
+  }
+
   private renderLatexTable(): string {
     const columns: PieAssessmentColumn[] = []
-    if (this.isColumnVisible('label')) columns.push('label')
-    if (this.isColumnVisible('effectif')) columns.push('effectif')
-    if (this.isColumnVisible('angle')) columns.push('angle')
+    if (this.isTableColumnVisible('label')) columns.push('label')
+    if (this.isTableColumnVisible('effectif')) columns.push('effectif')
+    if (this.isTableColumnVisible('angle')) columns.push('angle')
 
     if (columns.length === 0) return '\\emph{Aucune colonne à afficher.}'
 
     const headers: Record<PieAssessmentColumn, string> = {
       label: 'Catégorie',
-      effectif: 'Effectif',
-      angle: 'Angle ($^\\circ$)',
+      effectif: 'Effectifs',
+      angle: 'Angles ($^\\circ$)',
     }
     const columnSpec = `|${columns.map(() => 'c').join('|')}|`
     const headerRow = columns.map((column) => headers[column]).join(' & ')
@@ -1211,27 +1438,65 @@ ${rows}
     index: number,
     column: PieAssessmentColumn,
   ): string {
-    if (this.interactivityOn && this.state.mode === column) {
+    if (!this.state.correctionOn && this.state.mode === column) {
       return column === 'label'
         ? '\\makebox[3cm]{\\dotfill}'
         : '\\makebox[1.8cm]{\\dotfill}'
     }
 
-    if (column === 'label') return this.escapeLatex(item.label)
-    if (column === 'effectif') return this.formatLatexNumber(item.effectif)
-    return this.formatLatexNumber(this.itemAngleForDisplay(item, index))
+    if (column === 'label') {
+      return this.formatLatexCorrectionValue(
+        this.escapeLatex(item.label),
+        column,
+      )
+    }
+    if (column === 'effectif') {
+      const value =
+        item.effectif == null
+          ? '\\makebox[1.8cm]{\\dotfill}'
+          : this.formatLatexNumber(item.effectif)
+      return this.formatLatexCorrectionValue(value, column)
+    }
+    if (
+      !this.interactivityOn &&
+      this.state.mode === 'effectif' &&
+      item.angle == null
+    ) {
+      return '\\makebox[1.8cm]{\\dotfill}'
+    }
+    return this.formatLatexCorrectionValue(
+      this.formatLatexNumber(this.itemAngleForDisplay(item, index)),
+      column,
+    )
+  }
+
+  private formatLatexCorrectionValue(
+    value: string,
+    column: PieAssessmentColumn,
+  ): string {
+    if (!this.state.correctionOn || this.state.mode !== column) return value
+    return `\\textcolor[HTML]{${orangeMathalea.slice(1)}}{\\textbf{${value}}}`
   }
 
   private renderEmptyPieTikz(): string {
     const radius = 2
+    const colorDefinitions = this.renderLatexColorDefinitions()
     const frame =
       this.state.shape === 'semi-pie'
         ? `\\draw[thick] (-${radius},0) arc[start angle=0,end angle=180,radius=${radius}] -- cycle;`
         : `\\draw[thick] (0,0) circle (${radius});`
 
-    return `\\begin{tikzpicture}
+    return `${colorDefinitions}
+\\begin{tikzpicture}
 ${frame}
+${this.renderTikzCenterCross()}
 \\end{tikzpicture}`
+  }
+
+  private renderTikzCenterCross(): string {
+    const size = 0.08
+    return `\\draw[thick] (-${size},0) -- (${size},0);
+\\draw[thick] (0,-${size}) -- (0,${size});`
   }
 
   private renderFilledPieTikz(): string {
@@ -1240,10 +1505,7 @@ ${frame}
     const target = this.state.targetAngle
     let usedAngle = 0
     let startDeg = isSemi ? 0 : -90
-    const colorDefinitions = this.state.items.map(
-      (_item, index) =>
-        `\\definecolor{${this.tikzColorName(index)}}{HTML}{${this.colorForIndex(index).slice(1)}}`,
-    )
+    const colorDefinitions = this.renderLatexColorDefinitions()
     const slices: string[] = []
 
     this.state.items.forEach((item, index) => {
@@ -1255,17 +1517,10 @@ ${frame}
 
       const drawn = Math.min(requested, remaining)
       const endDeg = startDeg + drawn
-      const colorName = this.tikzColorName(index)
-      if (isSemi) {
-        // Pour les demi-cercles, les arcs doivent commencer depuis le point en haut (0,2)
-        slices.push(
-          `\\filldraw[fill=${colorName}, draw=white] (0,0) -- (${this.formatTikzNumber(startDeg)}:${radius}) arc[start angle=${this.formatTikzNumber(startDeg)}, end angle=${this.formatTikzNumber(endDeg)}, radius=${radius}] -- cycle;`,
-        )
-      } else {
-        slices.push(
-          `\\filldraw[fill=${colorName}, draw=white] (0,0) -- (${this.formatTikzNumber(startDeg)}:${radius}) arc[start angle=${this.formatTikzNumber(startDeg)}, end angle=${this.formatTikzNumber(endDeg)}, radius=${radius}] -- cycle;`,
-        )
-      }
+      const style = this.renderLatexSectorStyle(index)
+      slices.push(
+        `\\filldraw[${style}] (0,0) -- (${this.formatTikzNumber(startDeg)}:${radius}) arc[start angle=${this.formatTikzNumber(startDeg)}, end angle=${this.formatTikzNumber(endDeg)}, radius=${radius}] -- cycle;`,
+      )
       usedAngle += drawn
       startDeg = endDeg
     })
@@ -1274,7 +1529,7 @@ ${frame}
       ? `\\draw[thick] (${radius},0) arc[start angle=0,end angle=180,radius=${radius}] -- cycle;`
       : `\\draw[thick] (0,0) circle (${radius});`
 
-    return `${colorDefinitions.join('\n')}
+    return `${colorDefinitions}
 \\begin{tikzpicture}
 ${slices.join('\n')}
 ${frame}
@@ -1286,9 +1541,8 @@ ${frame}
 
     const rows = this.state.items
       .map((item, index) => {
-        const colorName = this.tikzColorName(index)
         const label = item.label.trim() === '' ? `S${index + 1}` : item.label
-        return `\\tikz\\fill[fill=${colorName}] (0,0) rectangle (0.25,0.25); & ${this.escapeLatex(label)} \\\\`
+        return `${this.renderLatexLegendSwatch(index)} & ${this.escapeLatex(label)} \\\\`
       })
       .join('\n')
 
@@ -1297,18 +1551,52 @@ ${rows}
 \\end{tabular}`
   }
 
+  private renderLatexColorDefinitions(): string {
+    return this.state.items
+      .map(
+        (_item, index) =>
+          `\\definecolor{${this.tikzColorName(index)}}{HTML}{${this.colorForIndex(index).slice(1)}}`,
+      )
+      .join('\n')
+  }
+
+  private renderLatexLegendSwatch(index: number): string {
+    if (!this.state.colorOn && this.state.correctionOn) {
+      return `\\tikz\\filldraw[${this.renderLatexSectorStyle(index)}] (0,0) rectangle (0.25,0.25);`
+    }
+    if (!this.shouldRenderLegendColors()) {
+      return '\\tikz\\draw[draw=black] (0,0) rectangle (0.25,0.25);'
+    }
+    return `\\tikz\\fill[fill=${this.tikzColorName(index)}] (0,0) rectangle (0.25,0.25);`
+  }
+
+  private renderLatexSectorStyle(index: number): string {
+    if (this.state.colorOn) {
+      return `fill=${this.tikzColorName(index)}, draw=white`
+    }
+    const patterns = [
+      'north east lines',
+      'north west lines',
+      'horizontal lines',
+      'vertical lines',
+      'grid',
+      'crosshatch',
+    ]
+    return `pattern=${patterns[index % patterns.length]}, pattern color=black, draw=black`
+  }
+
   private renderTypstTable(): string {
     const columns: PieAssessmentColumn[] = []
-    if (this.isColumnVisible('label')) columns.push('label')
-    if (this.isColumnVisible('effectif')) columns.push('effectif')
-    if (this.isColumnVisible('angle')) columns.push('angle')
+    if (this.isTableColumnVisible('label')) columns.push('label')
+    if (this.isTableColumnVisible('effectif')) columns.push('effectif')
+    if (this.isTableColumnVisible('angle')) columns.push('angle')
 
     if (columns.length === 0) return '#emph[Aucune colonne à afficher.]'
 
     const headers: Record<PieAssessmentColumn, string> = {
       label: 'Catégorie',
-      effectif: 'Effectif',
-      angle: 'Angle (°)',
+      effectif: 'Effectifs',
+      angle: 'Angles (°)',
     }
     const cells = [
       ...columns.map((column) => `[${this.escapeTypst(headers[column])}]`),
@@ -1332,19 +1620,51 @@ ${rows}
     index: number,
     column: PieAssessmentColumn,
   ): string {
-    if (this.interactivityOn && this.state.mode === column) {
+    if (!this.state.correctionOn && this.state.mode === column) {
       return '#text(fill: luma(55%))[........]'
     }
 
-    if (column === 'label') return this.escapeTypst(item.label)
-    if (column === 'effectif') return this.formatTypstNumber(item.effectif)
-    return this.formatTypstNumber(this.itemAngleForDisplay(item, index))
+    if (column === 'label') {
+      return this.formatTypstCorrectionValue(
+        this.escapeTypst(item.label),
+        column,
+      )
+    }
+    if (column === 'effectif') {
+      const value =
+        item.effectif == null
+          ? '#text(fill: luma(55%))[........]'
+          : this.formatTypstNumber(item.effectif)
+      return this.formatTypstCorrectionValue(value, column)
+    }
+    if (
+      !this.interactivityOn &&
+      this.state.mode === 'effectif' &&
+      item.angle == null
+    ) {
+      return '#text(fill: luma(55%))[........]'
+    }
+    return this.formatTypstCorrectionValue(
+      this.formatTypstNumber(this.itemAngleForDisplay(item, index)),
+      column,
+    )
+  }
+
+  private formatTypstCorrectionValue(
+    value: string,
+    column: PieAssessmentColumn,
+  ): string {
+    if (!this.state.correctionOn || this.state.mode !== column) return value
+    return `#text(fill: rgb("${orangeMathalea}"), weight: "bold")[${value}]`
   }
 
   private renderEmptyPieTypst(): string {
-    const size = 120
-    const radius = 52
-    const center = { x: size / 2, y: this.state.shape === 'semi-pie' ? 96 : 60 }
+    const size = 140
+    const radius = 62
+    const center = {
+      x: size / 2,
+      y: this.state.shape === 'semi-pie' ? 122 : size / 2,
+    }
     const frame =
       this.state.shape === 'semi-pie'
         ? `  #place(top + left, dx: ${this.pt(center.x - radius)}, dy: ${this.pt(center.y)}, line(start: (0pt, 0pt), end: (${this.pt(radius * 2)}, 0pt), stroke: 1pt + luma(35%)))
@@ -1353,14 +1673,21 @@ ${rows}
 
     return `#block(width: ${this.pt(size)}, height: ${this.pt(size)})[
 ${frame}
+${this.renderTypstCenterCross(center.x, center.y)}
 ]`
   }
 
+  private renderTypstCenterCross(cx: number, cy: number): string {
+    const size = 4
+    return `  #place(top + left, line(start: (${this.pt(cx - size)}, ${this.pt(cy)}), end: (${this.pt(cx + size)}, ${this.pt(cy)}), stroke: 1pt + luma(10%)))
+  #place(top + left, line(start: (${this.pt(cx)}, ${this.pt(cy - size)}), end: (${this.pt(cx)}, ${this.pt(cy + size)}), stroke: 1pt + luma(10%)))`
+  }
+
   private renderFilledPieTypst(): string {
-    const size = 120
-    const radius = 52
+    const size = 140
+    const radius = 62
     const isSemi = this.state.shape === 'semi-pie'
-    const center = { x: size / 2, y: isSemi ? 96 : 60 }
+    const center = { x: size / 2, y: isSemi ? 122 : size / 2 }
     const target = this.state.targetAngle
     let usedAngle = 0
     let startDeg = isSemi ? 180 : -90
@@ -1382,7 +1709,7 @@ ${frame}
           radius,
           startDeg,
           endDeg,
-          this.colorForIndex(index),
+          index,
         ),
       )
       usedAngle += drawn
@@ -1406,7 +1733,7 @@ ${frame}
     radius: number,
     startDeg: number,
     endDeg: number,
-    color: string,
+    index: number,
   ): string {
     const points = [
       `(${this.pt(cx)}, ${this.pt(cy)})`,
@@ -1414,7 +1741,10 @@ ${frame}
         (point) => `(${this.pt(point.x)}, ${this.pt(point.y)})`,
       ),
     ]
-    return `  #place(top + left, polygon(${points.join(', ')}, fill: rgb("${color}"), stroke: 0.5pt + white))`
+    const fill = this.state.colorOn
+      ? `rgb("${this.colorForIndex(index)}")`
+      : `luma(${90 - (index % 5) * 10}%)`
+    return `  #place(top + left, polygon(${points.join(', ')}, fill: ${fill}, stroke: 0.5pt + ${this.state.colorOn ? 'white' : 'black'}))`
   }
 
   private renderTypstArc(
@@ -1456,7 +1786,7 @@ ${frame}
     const rows = this.state.items
       .map((item, index) => {
         const label = item.label.trim() === '' ? `S${index + 1}` : item.label
-        return `  rect(width: 7pt, height: 7pt, fill: rgb("${this.colorForIndex(index)}"), stroke: none), [${this.escapeTypst(label)}]`
+        return `  ${this.renderTypstLegendSwatch(index)}, [${this.escapeTypst(label)}]`
       })
       .join(',\n')
 
@@ -1470,11 +1800,20 @@ ${rows},
   private renderTypstDiagramWithLegend(diagram: string): string {
     return `#grid(
   columns: (auto, auto),
-  gutter: 8pt,
+  gutter: 6pt,
   align: horizon,
   [${diagram}],
   [${this.renderTypstLegend()}],
 )`
+  }
+
+  private renderTypstLegendSwatch(index: number): string {
+    if (!this.state.colorOn && this.state.correctionOn) {
+      return `rect(width: 7pt, height: 7pt, fill: luma(${90 - (index % 5) * 10}%), stroke: 0.7pt + black)`
+    }
+    return this.shouldRenderLegendColors()
+      ? `rect(width: 7pt, height: 7pt, fill: rgb("${this.colorForIndex(index)}"), stroke: none)`
+      : 'rect(width: 7pt, height: 7pt, fill: none, stroke: 0.7pt + luma(20%))'
   }
 
   private arcPath(
@@ -1499,9 +1838,20 @@ ${rows},
     return `<div class="legend">${this.state.items
       .map((item, index) => {
         const tooltip = `${item.label}: ${this.itemAngleForDisplay(item, index).toFixed(1)}°`
-        return `<div class="legend-item" title="${this.escapeText(tooltip)}"><span class="legend-color" style="background:${this.colorForIndex(index)};"></span><span>${this.escapeText(item.label)}</span></div>`
+        const colorStyle = this.renderHtmlLegendSwatchStyle(index)
+        return `<div class="legend-item" title="${this.escapeText(tooltip)}"><span class="legend-color" style="${colorStyle}"></span><span>${this.escapeText(item.label)}</span></div>`
       })
       .join('')}</div>`
+  }
+
+  private renderHtmlLegendSwatchStyle(index: number): string {
+    if (!this.state.colorOn && this.state.correctionOn) {
+      const rotation = [45, -45, 0, 90][index % 4]
+      return `background:repeating-linear-gradient(${rotation}deg,#fff 0,#fff 3px,#334155 3px,#334155 4px);border:1px solid #334155;`
+    }
+    return this.shouldRenderLegendColors()
+      ? `background:${this.colorForIndex(index)};`
+      : 'background:#ffffff;border:1px solid #334155;'
   }
 
   private itemAngleForDisplay(item: PieAssessmentItem, _index: number): number {
@@ -1511,7 +1861,7 @@ ${rows},
 
     const total = this.totalEffectif()
     if (total <= 0) return 0
-    const ratio = item.effectif / total
+    const ratio = (item.effectif ?? 0) / total
     const angle = ratio * this.state.targetAngle
     if (!Number.isFinite(angle)) return 0
 
@@ -1521,7 +1871,7 @@ ${rows},
 
   private totalEffectif(): number {
     return this.state.items.reduce(
-      (sum, item) => sum + Math.max(0, item.effectif),
+      (sum, item) => sum + Math.max(0, item.effectif ?? 0),
       0,
     )
   }
@@ -1534,6 +1884,8 @@ ${rows},
       mode: this.state.mode,
       targetAngle: this.state.targetAngle,
       infosStatus: this.state.infosStatus,
+      colorOn: this.state.colorOn,
+      correctionOn: this.state.correctionOn,
       hiddenColumns: this.state.hiddenColumns,
       items: this.state.items.map((item, index) => ({
         label: item.label,
@@ -1571,6 +1923,10 @@ ${rows},
     return `mathaleaPieColor${index}`
   }
 
+  private shouldRenderLegendColors(): boolean {
+    return this.interactivityOn || this.state.colorOn
+  }
+
   private formatLatexNumber(value: number): string {
     return texNombre(value, Number.isInteger(value) ? 0 : 1)
   }
@@ -1584,6 +1940,10 @@ ${rows},
     return rounded.replace('.', ',')
   }
 
+  private formatHtmlNumber(value: number): string {
+    return Number.isInteger(value) ? String(value) : value.toFixed(1)
+  }
+
   private pt(value: number): string {
     return `${Number(value.toFixed(2))}pt`
   }
@@ -1593,6 +1953,12 @@ ${rows},
     if (this.state.mode === 'angle' && column === 'effectif') return false
     if (this.state.mode === 'effectif' && column === 'angle') return false
     return true
+  }
+
+  private isTableColumnVisible(column: PieAssessmentColumn): boolean {
+    if (this.state.hiddenColumns.includes(column)) return false
+    if (!this.interactivityOn) return true
+    return this.isColumnVisible(column)
   }
 
   private escapeText(value: string): string {

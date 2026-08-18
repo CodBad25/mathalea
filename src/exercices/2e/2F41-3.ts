@@ -47,7 +47,7 @@ export default class ComparerImagesTableau extends Exercice {
       defaut: 4,
       nbQuestions: this.nbQuestions,
     })
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
 
@@ -334,7 +334,7 @@ export default class ComparerImagesTableau extends Exercice {
                   xMax,
                   { ligneDerivee: false, substituts, step: 0.5, tolerance },
                 )
-                texteCorr = `Comme $${x1}$ et $${x2}$ n'appartiennent pas à un intervalle sur lequel $f$ est monotone, on ne peut pas utiliser le sens de variations de $f$ pour comparer $f(${x1})$ et $f(${x2})$.<br>
+                texteCorr = `Comme $${x1}$ et $${x2}$ n'appartiennent pas à un intervalle sur lequel $f$ est monotone, on ne peut pas utiliser le sens de variation de $f$ pour comparer $f(${x1})$ et $f(${x2})$.<br>
                 Mais, d'après le tableau de variations, $f(${x2})=${ImBorneSup}$ et comme $${x1}\\in [${borneInf}\\,;\\,${alpha}]$, ${
                   a > 0
                     ? ` alors $${ImAlpha}< f(${x1}) < ${ImBorneInf}$.`
@@ -414,7 +414,7 @@ export default class ComparerImagesTableau extends Exercice {
                   xMax,
                   { ligneDerivee: false, substituts, step: 0.5, tolerance },
                 )
-                texteCorr = `Comme $${x1}$ et $${x2}$ n'appartiennent pas à un intervalle sur lequel $f$ est monotone, on ne peut pas utiliser le sens de variations de $f$ pour comparer $f(${x1})$ et $f(${x2})$.<br>
+                texteCorr = `Comme $${x1}$ et $${x2}$ n'appartiennent pas à un intervalle sur lequel $f$ est monotone, on ne peut pas utiliser le sens de variation de $f$ pour comparer $f(${x1})$ et $f(${x2})$.<br>
                 Mais, d'après le tableau de variations :<br>
                 $\\bullet$ Comme $${x1}\\in [${borneInf}\\,;\\,${Math.min(rac1, rac2)}]$, alors ${a > 0 ? `$${ImBorneInf} < f(${x1}) < ${Imx1}$` : `$${Imx1} < f(${x1}) < ${ImBorneInf}$`}. <br>
                 $\\bullet$ Comme $${x2}\\in [${Math.max(rac1, rac2)}\\,;\\,${borneSup}]$, alors ${a > 0 ? `$${Imx2} < f(${x2}) < ${ImBorneSup}$` : `$${ImBorneSup} < f(${x2}) < ${Imx2}$`}. <br>
@@ -496,7 +496,7 @@ export default class ComparerImagesTableau extends Exercice {
                   xMax,
                   { ligneDerivee: false, substituts, step: 0.5, tolerance },
                 )
-                texteCorr = `Comme $${x1}$ et $${x2}$ n'appartiennent pas à un intervalle sur lequel $f$ est monotone, on ne peut pas utiliser le sens de variations de $f$ pour comparer $f(${x1})$ et $f(${x2})$.<br>
+                texteCorr = `Comme $${x1}$ et $${x2}$ n'appartiennent pas à un intervalle sur lequel $f$ est monotone, on ne peut pas utiliser le sens de variation de $f$ pour comparer $f(${x1})$ et $f(${x2})$.<br>
               D'après le tableau de variations :<br>
               $\\bullet$ Comme $${x1}\\in [${borneInf}\\,;\\,${alpha}]$, ${
                 a > 0
@@ -578,7 +578,7 @@ export default class ComparerImagesTableau extends Exercice {
                   xMax,
                   { ligneDerivee: false, substituts, step: 0.5, tolerance },
                 )
-                texteCorr = `Comme $${x1}$ et $${x2}$ n'appartiennent pas à un intervalle sur lequel $f$ est monotone, on ne peut pas utiliser le sens de variations de $f$ pour comparer $f(${x1})$ et $f(${x2})$.<br>
+                texteCorr = `Comme $${x1}$ et $${x2}$ n'appartiennent pas à un intervalle sur lequel $f$ est monotone, on ne peut pas utiliser le sens de variation de $f$ pour comparer $f(${x1})$ et $f(${x2})$.<br>
                 Mais, d'après le tableau de variations : <br>
                 $\\bullet$ Comme $${x1}\\in [${borneInf}\\,;\\,${Math.min(rac1, rac2)}]$, alors ${a > 0 ? `$${ImBorneInf} < f(${x1}) < ${Imx1}$` : `$${Imx1} < f(${x1}) < ${ImBorneInf}$`}. <br>
                 $\\bullet$ Comme $${x2}\\in [${Math.max(rac1, rac2)}\\,;\\,${borneSup}]$, alors ${a > 0 ? `$${Imx2} < f(${x2}) < ${ImBorneSup}$` : `$${ImBorneSup} < f(${x2}) < ${Imx2}$`}. <br>
