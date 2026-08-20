@@ -33,14 +33,14 @@ export default class ElectionPourcentages extends ExerciceQcmA {
     • Candidat B : $20\\,\\% = \\dfrac{20}{100} = \\dfrac{1}{5}$<br>
     • Candidat C : $\\dfrac{1}{3}$<br>
     • Candidat D : $1 - \\dfrac{1}{4} - \\dfrac{1}{5} - \\dfrac{1}{3} = \\dfrac{60 - 15 - 12 - 20}{60} = \\dfrac{13}{60}$<br>
-    En comparant les fractions : $\\dfrac{1}{5} < \\dfrac{13}{60} < \\dfrac{1}{4} < \\dfrac{1}{3}$<br>
+    En comparant les fractions, on a : $\\dfrac{1}{5} < \\dfrac{13}{60} < \\dfrac{1}{4} < \\dfrac{1}{3}$.<br>
     Le candidat ayant recueilli le moins de votes est donc $${miseEnEvidence('B')}$.`
 
     this.reponses = [
-      'Le candidat B',
-      'Le candidat A',
-      'Le candidat C',
-      'Le candidat D',
+      'le candidat B',
+      'le candidat A',
+      'le candidat C',
+      'le candidat D',
     ]
   }
 
@@ -168,12 +168,12 @@ export default class ElectionPourcentages extends ExerciceQcmA {
 • Candidat B : ${this.formaterPourcentage(pB)}<br>
 • Candidat C : ${propC.tex} $= \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numC60}}{60}$<br>
 • Candidat D : $1 - \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} - \\dfrac{${pB}}{100} - \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numD60}}{60}$<br>
-En comparant les fractions : $${comparaison1}$<br>
-Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc le candidat ${texteEnCouleurEtGras(choix ? 'A' : 'C')}.`
+En comparant les fractions, on a : $${comparaison1}$.<br>
+Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc ${texteEnCouleurEtGras(choix ? 'le candidat A' : 'le candidat C')}.`
 
         this.reponses = choix
-          ? ['Le candidat A', 'Le candidat B', 'Le candidat C', 'Le candidat D']
-          : ['Le candidat C', 'Le candidat B', 'Le candidat A', 'Le candidat D']
+          ? ['le candidat A', 'le candidat B', 'le candidat C', 'le candidat D']
+          : ['le candidat C', 'le candidat B', 'le candidat A', 'le candidat D']
 
         break
       }
@@ -226,12 +226,12 @@ Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc 
 • Candidat B : ${this.formaterPourcentage(pB)}<br>
 • Candidat C : ${propC.tex} $= \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numC60Case2}}{60}$<br>
 • Candidat D : $1 - \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} - \\dfrac{${pB}}{100} - \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numD60Case2}}{60}$<br>
-En comparant les fractions : $${comparaison2}$<br>
-Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc le candidat ${texteEnCouleurEtGras(choix ? 'B' : 'D')}.`
+En comparant les fractions, on a : $${comparaison2}$.<br>
+Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc ${texteEnCouleurEtGras(choix ? 'le candidat B' : 'le candidat D')}.`
 
         this.reponses = choix
-          ? ['Le candidat B', 'Le candidat A', 'Le candidat C', 'Le candidat D']
-          : ['Le candidat D', 'Le candidat B', 'Le candidat A', 'Le candidat C']
+          ? ['le candidat B', 'le candidat A', 'le candidat C', 'le candidat D']
+          : ['le candidat D', 'le candidat B', 'le candidat A', 'le candidat C']
         break
       }
       case 3: {
@@ -283,12 +283,12 @@ Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc 
 • Candidat B : ${this.formaterPourcentage(pB)}<br>
 • Candidat C : ${propC.tex} $= \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numC60Case3}}{60}$<br>
 • Candidat D : $1 - \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} - \\dfrac{${pB}}{100} - \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numD60Case3}}{60}$<br>
-En comparant les fractions : $${comparaison3}$<br>
-Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc le candidat ${texteEnCouleurEtGras(choix ? 'C' : 'B')}.`
+En comparant les fractions, on a : $${comparaison3}$.<br>
+Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc ${texteEnCouleurEtGras(choix ? 'le candidat C' : 'le candidat B')}.`
 
         this.reponses = choix
-          ? ['Le candidat C', 'Le candidat A', 'Le candidat B', 'Le candidat D']
-          : ['Le candidat B', 'Le candidat C', 'Le candidat A', 'Le candidat D']
+          ? ['le candidat C', 'le candidat A', 'le candidat B', 'le candidat D']
+          : ['le candidat B', 'le candidat C', 'le candidat A', 'le candidat D']
         break
       }
       case 4:
@@ -341,12 +341,12 @@ Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc 
 • Candidat B : ${this.formaterPourcentage(pB)}<br>
 • Candidat C : ${propC.tex} $= \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numC60Case4}}{60}$<br>
 • Candidat D : $1 - \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} - \\dfrac{${pB}}{100} - \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numD60Case4}}{60}$<br>
-En comparant les fractions : $${comparaison4}$<br>
-Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc le candidat ${texteEnCouleurEtGras(choix ? 'D' : 'A')}.`
+En comparant les fractions, on a : $${comparaison4}$.<br>
+Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc ${texteEnCouleurEtGras(choix ? 'le candidat D' : 'le candidat A')}.`
 
         this.reponses = choix
-          ? ['Le candidat D', 'Le candidat A', 'Le candidat B', 'Le candidat C']
-          : ['Le candidat A', 'Le candidat D', 'Le candidat B', 'Le candidat C']
+          ? ['le candidat D', 'le candidat A', 'le candidat B', 'le candidat C']
+          : ['le candidat A', 'le candidat D', 'le candidat B', 'le candidat C']
         break
       }
     }

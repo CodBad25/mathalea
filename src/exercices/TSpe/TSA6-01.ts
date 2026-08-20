@@ -69,7 +69,7 @@ export default class Binomiale extends ExerciceQcm {
   constructor() {
     super()
     this.optionsDeComparaison = { egaliteExpression: true } // pour le test qcm_exercices
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionOriginale()
   }
 }

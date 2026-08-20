@@ -6,8 +6,8 @@ import { bleuMathalea } from '../../lib/colors'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
-import ExerciceQcmA from '../ExerciceQcmA'
 import { nombreElementsDifferents } from '../ExerciceQcm'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const titre = 'Reconnaître la courbe d’une fonction de référence'
 export const dateDePublication = '09/08/2026'
@@ -341,7 +341,7 @@ export default class ReconnaitreFonctionReference extends ExerciceQcmA {
       '1 : Nouveau programme 2026\n2 : Années de transition\n3 : Toutes les fonctions de référence',
     ]
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: false, ordered: false }
+
     this.ordreDesCas = shuffle(this.casDisponibles())
     this.versionAleatoire()
   }

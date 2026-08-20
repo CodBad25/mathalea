@@ -155,7 +155,7 @@ export default class Auto1C19b extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version originale pour un exercice statique
   constructor() {
     super()
-    // this.options = { vertical: true, ordered: false }
+
     this.versionOriginale() // Changé de versionAleatoire() à versionOriginale()
     this.spacing = 1.5
     this.spacingCorr = 2.5

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import { tweened } from 'svelte/motion'
   import type Latex from '../../../lib/Latex'
   import {
@@ -25,9 +25,28 @@
   let clockAbled = $state(false)
   let errorMessage: string | null = $state(null) // 🟠 <-- nouvelle variable d’état
   let errorLog = $state('') // 🔹 pour stocker le texte brut du serveur
+  let attempt = $state(0)
+  let isWaitingRetry = $state(false)
+  let retrySecondsLeft = $state(0)
+  let cancelled = false
 
-  const original = 60 // secondes
+  const original = 60 // secondes de délai avant abandon d’une tentative
   const timer = tweened(original)
+
+  const maxAttempts = 4 // 1 tentative initiale + 3 relances automatiques
+  const retryDelaySeconds = 8
+  const retryTimer = tweened(retryDelaySeconds)
+
+  let compileIntervalId: ReturnType<typeof setInterval> | undefined
+  let retryIntervalId: ReturnType<typeof setInterval> | undefined
+  let retryTimeoutId: ReturnType<typeof setTimeout> | undefined
+
+  onDestroy(() => {
+    cancelled = true
+    clearInterval(compileIntervalId)
+    clearInterval(retryIntervalId)
+    clearTimeout(retryTimeoutId)
+  })
 
   // fabrique un nom de fichier
   function generateFilename(prefix = 'document', ext = 'pdf') {
@@ -43,14 +62,94 @@
     downloadFilename = filename
   }
 
-  // 🟢 fonction de compilation
+  /**
+   * Traduit l’erreur brute du `fetch` en message français compréhensible, et
+   * indique si l’erreur est transitoire (service injoignable : on peut
+   * relancer automatiquement) ou définitive (erreur de compilation LaTeX :
+   * relancer ne changera rien).
+   */
+  function describeError(err: unknown): { message: string; retryable: boolean } {
+    if (err instanceof DOMException && err.name === 'TimeoutError') {
+      return {
+        message: `Le serveur n’a pas répondu dans le délai imparti (${original}s).`,
+        retryable: true,
+      }
+    }
+    if (err instanceof TypeError) {
+      // Échec réseau générique du navigateur (service injoignable, hors-ligne...)
+      return {
+        message: 'Le service de compilation est momentanément injoignable.',
+        retryable: true,
+      }
+    }
+    return {
+      message: err instanceof Error ? err.message : String(err),
+      retryable: false,
+    }
+  }
+
+  // une seule tentative de compilation
+  async function tryCompileOnce(formData: FormData) {
+    timer.set(original)
+    clockAbled = true
+    clearInterval(compileIntervalId)
+    compileIntervalId = setInterval(() => {
+      timer.update((n) => {
+        if (n > 0) return n - 1
+        clearInterval(compileIntervalId)
+        return 0
+      })
+    }, 1000)
+
+    try {
+      const res = await fetch('https://latexcompiler.duckdns.org/generate', {
+        method: 'POST',
+        body: formData,
+        signal: AbortSignal.timeout(original * 1000),
+      })
+      if (!res.ok) {
+        // Récupère le contenu d’erreur (même en 500)
+        errorLog = await res.text()
+        console.error('Réponse serveur:', res.status, errorLog)
+        throw new Error(`La compilation a échoué (erreur ${res.status}).`)
+      }
+      const blob = await res.blob()
+      await downloadAndExtractPDF(blob, generateFilename('document', 'pdf'))
+    } finally {
+      clockAbled = false
+      clearInterval(compileIntervalId)
+    }
+  }
+
+  // attend `seconds` secondes en affichant un décompte, avant de relancer
+  function waitBeforeRetry(seconds: number): Promise<void> {
+    return new Promise((resolve) => {
+      isWaitingRetry = true
+      retrySecondsLeft = seconds
+      retryTimer.set(seconds)
+      clearInterval(retryIntervalId)
+      retryIntervalId = setInterval(() => {
+        retrySecondsLeft = Math.max(retrySecondsLeft - 1, 0)
+        retryTimer.set(retrySecondsLeft)
+        if (retrySecondsLeft <= 0) clearInterval(retryIntervalId)
+      }, 1000)
+      retryTimeoutId = setTimeout(() => {
+        isWaitingRetry = false
+        resolve()
+      }, seconds * 1000)
+    })
+  }
+
+  // 🟢 fonction de compilation, avec relance automatique en cas d’erreur réseau
   export async function compileToPDF() {
     errorMessage = null // 🧹 reset erreur à chaque tentative
     errorLog = '' // 🔹 reset log d’erreur
+    pdfBlob = null
+    downloadFilename = null
+    attempt = 0
+
     const contents = await latex.getContents(latexFileInfos)
     if (contents.content === '') {
-      pdfBlob = null
-      downloadFilename = null
       return
     }
     const { latexWithPreamble } = await latex.getFile(latexFileInfos)
@@ -66,8 +165,6 @@
     formData.append('originalname', 'document.tex')
     formData.append('file', new Blob([latexWithPreamble]), 'document.tex')
 
-    console.log(latexWithPreamble)
-
     for (let im = 0; im < imagesUrls.length; im++) {
       const imaUrl = imagesUrls[im].replace(
         'https://coopmaths.fr',
@@ -80,37 +177,25 @@
       formData.append('file', blob, imaUrl.split('/').slice(-1)[0])
     }
 
-    // timer
-    timer.set(original)
-    clockAbled = true
-    const timeValue = setInterval(() => {
-      timer.update((n) => {
-        if (n > 0) return n - 1
-        clearInterval(timeValue)
-        return 0
-      })
-    }, 1000)
+    for (attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        await tryCompileOnce(formData)
+        return // succès
+      } catch (err) {
+        if (cancelled) return
+        const { message, retryable } = describeError(err)
+        console.error(
+          `Erreur de compilation (tentative ${attempt}/${maxAttempts}) :`,
+          err,
+        )
+        errorMessage = message
 
-    try {
-      const res = await fetch('https://latexcompiler.duckdns.org/generate', {
-        method: 'POST',
-        body: formData,
-        signal: AbortSignal.timeout(60 * 1000),
-      })
-      if (!res.ok) {
-        // Récupère le contenu d’erreur (même en 500)
-        errorLog = await res.text()
-        console.error('Réponse serveur:', res.status, errorLog)
-        throw new Error(`Erreur compilation (${res.status})`)
+        const isLastAttempt = attempt === maxAttempts
+        if (!retryable || isLastAttempt) return
+
+        await waitBeforeRetry(retryDelaySeconds)
+        if (cancelled) return
       }
-      // if (res.status !== 200) throw new Error('Erreur compilation')
-      const blob = await res.blob()
-      await downloadAndExtractPDF(blob, generateFilename('document', 'pdf'))
-    } catch (err) {
-      console.error('Erreur de compilation:', err)
-      errorMessage = err instanceof Error ? err.message : String(err)
-    } finally {
-      clockAbled = false
     }
   }
 
@@ -144,10 +229,12 @@
       <button
         onclick={compileToPDF}
         class="px-3 py-1 rounded bg-coopmaths-action text-white hover:bg-coopmaths-action-lightest disabled:opacity-50"
-        disabled={clockAbled}
+        disabled={clockAbled || isWaitingRetry}
       >
         {#if clockAbled}
           Compilation en cours...
+        {:else if isWaitingRetry}
+          Nouvelle tentative en cours...
         {:else}
           Compiler en PDF
         {/if}
@@ -157,8 +244,22 @@
 
   {#if clockAbled}
     <div class="loader text-center m-2">
+      <i class="bx bx-loader-alt bx-spin text-lg"></i>
       <progress value={$timer / original}></progress>
       {$timer.toFixed(0)}s
+      {#if attempt > 1}
+        <div class="text-xs text-coopmaths-corpus dark:text-coopmathsdark-corpus">
+          Tentative {attempt}/{maxAttempts}
+        </div>
+      {/if}
+    </div>
+  {/if}
+
+  {#if isWaitingRetry}
+    <div class="m-2 p-2 text-center text-amber-700 border border-amber-400 bg-amber-50 rounded">
+      <i class="bx bx-loader-alt bx-spin text-lg"></i>
+      Nouvelle tentative dans {retrySecondsLeft}s… (tentative {attempt + 1}/{maxAttempts})
+      <progress class="block w-full mt-1" value={$retryTimer / retryDelaySeconds}></progress>
     </div>
   {/if}
 
@@ -181,7 +282,7 @@
     {/if}
   {/if}
 
-  {#if !pdfBlob && !clockAbled && !errorMessage}
+  {#if !pdfBlob && !clockAbled && !isWaitingRetry && !errorMessage}
     <div
       class="m-2 text-center text-coopmaths-corpus dark:text-coopmathsdark-corpus"
     >
@@ -189,12 +290,25 @@
     </div>
   {/if}
 
-  <!-- 🔴 Message d’erreur -->
-  {#if errorMessage}
+  <!-- 🔴 Message d’erreur (affiché seulement une fois toutes les tentatives épuisées) -->
+  {#if errorMessage && !clockAbled && !isWaitingRetry}
     <div
       class="m-2 p-2 text-center text-red-600 border border-red-400 bg-red-50 rounded"
     >
       ⚠️ Aucun PDF généré : {errorMessage}
+      {#if attempt > 1}
+        <div class="text-xs mt-1">
+          Échec après {attempt} tentative{attempt > 1 ? 's' : ''}.
+        </div>
+      {/if}
+      <div class="mt-2">
+        <button
+          onclick={compileToPDF}
+          class="px-3 py-1 rounded bg-coopmaths-action text-white hover:bg-coopmaths-action-lightest"
+        >
+          Réessayer
+        </button>
+      </div>
     </div>
   {/if}
 

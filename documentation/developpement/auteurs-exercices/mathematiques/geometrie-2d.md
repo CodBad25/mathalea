@@ -320,6 +320,33 @@ texte += mathalea2d(
 
 Avec `usePgfplots`, le repère est ignoré côté TikZ par le rendu pgfplots, mais il reste utile côté HTML et pour les bornes.
 
+## Lecture Graphique Animée
+
+Pour une correction HTML où l'on veut montrer la lecture de l'image d'un nombre,
+utiliser `lectureImageAnimee()` avec une figure `mathalea2d` qui possède un
+`id`. Le helper injecte un bouton `Revoir`, affiche l'antécédent sous l'axe des
+abscisses, trace le segment vertical puis le segment horizontal, et place l'image
+sur l'axe des ordonnées.
+
+```ts
+import { lectureImage, lectureImageAnimee } from '../../lib/2d/LectureImage'
+
+const figureId = `lectureImageEx${this.numeroExercice}Q${i}`
+
+texteCorr += context.isHtml && !context.isTypst
+  ? mathalea2d({ ...optionsFigure, id: figureId }, objetsEnonce) +
+    lectureImageAnimee({
+      figureId,
+      x: antecedent,
+      y: image,
+      pixelsParCm: optionsFigure.pixelsParCm,
+    })
+  : mathalea2d(optionsFigure, [...objetsEnonce, lectureImage(antecedent, image)])
+```
+
+La figure animée est réservée au HTML. Pour LaTeX et Typst, garder une figure
+MathALEA2D statique avec `lectureImage()` afin que l'export reste autonome.
+
 ## Intégration Dans Une Question
 
 Dans `nouvelleVersion()`, le schéma classique est :

@@ -2,7 +2,7 @@ import AutoQ6FMns2026 from '../EAMPremiere/EAM-FMnonSpe-2026-Q6'
 
 export const uuid = '00867'
 export const refs = {
-  'fr-fr': ['1A-F02-21'],
+  'fr-fr': ['1A-F02-21', '2A-F2-1'],
   'fr-ch': [],
 }
 export const interactifReady = true

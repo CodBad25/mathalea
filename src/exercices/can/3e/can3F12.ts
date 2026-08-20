@@ -1,5 +1,10 @@
+import {
+  lectureAntecedent,
+  lectureAntecedentAnimee,
+} from '../../../lib/2d/LectureAntecedent'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
+import { bleuMathalea, orangeMathalea, vertMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { Spline, spline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -11,7 +16,6 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const dateDePublication = '26/10/2023'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -112,7 +116,12 @@ export default class AntecedentSpline extends ExerciceSimple {
     const courbe1 = theSpline.courbe({
       epaisseur: 1.5,
       ajouteNoeuds: true,
-      optionsNoeuds: { color: bleuMathalea, taille: 2, style: 'x', epaisseur: 2 },
+      optionsNoeuds: {
+        color: bleuMathalea,
+        taille: 2,
+        style: 'x',
+        epaisseur: 2,
+      },
       color: bleuMathalea,
     })
     const objetsEnonce = [repere1, courbe1]
@@ -151,20 +160,16 @@ export default class AntecedentSpline extends ExerciceSimple {
     }
     const solutions1 = theSpline.solve(y1)
     let reponse1
-
-    const graphique = mathalea2d(
-      Object.assign(
-        { pixelsParCm: 30, scale: 0.65, center: true },
-        {
-          xmin: bornes.xMin - 1,
-          ymin: bornes.yMin - 1,
-          xmax: bornes.xMax + 1,
-          ymax: bornes.yMax + 1,
-        },
-      ),
-      objetsEnonce,
-      o,
-    ) // fixeBordures(objetsEnonce))
+    const figureOptions = Object.assign(
+      { pixelsParCm: 30, scale: 0.65, center: true },
+      {
+        xmin: bornes.xMin - 1,
+        ymin: bornes.yMin - 1,
+        xmax: bornes.xMax + 1,
+        ymax: bornes.yMax + 1,
+      },
+    )
+    const graphique = mathalea2d(figureOptions, [objetsEnonce, o]) // fixeBordures(objetsEnonce))
     if (this.versionQcm) {
       reponse1 =
         !solutions1 || solutions1.length === 0
@@ -192,9 +197,35 @@ export default class AntecedentSpline extends ExerciceSimple {
     if (this.versionQcm) {
       this.question += `L'ensemble des antécédents de $${y1}$ est : `
     }
+    const correctionFigureId = `can3F12CorrectionEx${this.numeroExercice ?? 0}Q0`
+    const objetsCorrection = [
+      repere1,
+      courbe1,
+      ...solutions1!.map((x) =>
+        lectureAntecedent(x, y1, 1, 1, orangeMathalea, '', `${x}`),
+      ),
+    ]
+
+    const correctionFigure =
+      !context.isHtml || context.isTypst
+        ? mathalea2d(figureOptions, objetsCorrection, o)
+        : `<div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">${mathalea2d(
+            Object.assign({ id: correctionFigureId }, figureOptions, {
+              center: false,
+            }),
+            objetsEnonce,
+            o,
+          )}${lectureAntecedentAnimee({
+            figureId: correctionFigureId,
+            x: solutions1!,
+            y: y1,
+            pixelsParCm: figureOptions.pixelsParCm,
+            couleurHorizontale: vertMathalea,
+          })}</div>`
 
     this.correction = `Déterminer les antécédents de $${y1}$ revient à déterminer les nombres qui ont pour image $${y1}$.<br>
     On part de $${y1}$ sur l'axe des ordonnées et on lit les antécédents (éventuels) sur l'axe des abscisses.<br>`
+    this.correction += correctionFigure
     if (!solutions1 || solutions1.length === 0) {
       this.correction += `Il n'y en a pas. <br> $${miseEnEvidence(y1)}$ ${texteEnCouleurEtGras("n'a pas d'antécédent par $\\boldsymbol{f}$")}.`
     } else {

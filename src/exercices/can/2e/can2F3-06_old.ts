@@ -7,7 +7,7 @@ import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 import { bleuMathalea } from '../../../lib/colors'
 export const titre =
-  'Utiliser une fonction de référence (inverse, cube, racine) pour comparer deux images'
+  'Utiliser une fonction de référence pour comparer deux images (ancien exercice)'
 export const interactifReady = true
 export const interactifType = 'qcm'
 
@@ -16,17 +16,18 @@ export const dateDePublication = '03/01/2022' // La date de publication initiale
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Gilles Mora
-
-*/
+ * @author Gilles Mora et Stéphane Guyon
+ */
 
 export const uuid = '25143'
 
 export const refs = {
-  'fr-fr': ['can2F3-06','2F22-11'],
-  'fr-ch': ['NR'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class ComparerAvecFctRef extends Exercice {
+  protected typeQuestionFixe?: number
+
   constructor() {
     super()
 
@@ -39,9 +40,7 @@ export default class ComparerAvecFctRef extends Exercice {
     let texte, texteCorr, a, b, N, props
     for (let i = 0; i < this.nbQuestions;) {
       N = randint(1, 2)
-      switch (
-        choice([1, 2, 3]) //
-      ) {
+      switch (this.typeQuestionFixe ?? choice([1, 2, 3])) {
         case 1:
           if (N === 1) {
             a = randint(1, 9) + randint(5, 9) / 10
@@ -209,7 +208,6 @@ export default class ComparerAvecFctRef extends Exercice {
 
           break
         case 3:
-        default:
           a = randint(0, 10) + randint(6, 9) / 10
           b = a + (randint(1, 5, 0) / 10) * choice([-1, 1])
           if (b === 1) {
@@ -266,6 +264,56 @@ export default class ComparerAvecFctRef extends Exercice {
           }
           this.canEnonce = `Comparer $\\sqrt{${texNombre(a)}}$  et $\\sqrt{${texNombre(b)}}$.`
 
+          break
+        case 4:
+        default:
+          a = randint(-10, 10, 0)
+          do {
+            b = randint(-10, 10, [0, a])
+          } while (Math.abs(a) === Math.abs(b))
+          texte = 'Sélectionner l’affirmation correcte. '
+          if (Math.abs(a) < Math.abs(b)) {
+            this.autoCorrection[i] = {
+              enonce: texte,
+              propositions: [
+                {
+                  texte: `$|${a}|<|${b}|$`,
+                  statut: true,
+                },
+                {
+                  texte: `$|${a}|>|${b}|$`,
+                  statut: false,
+                },
+              ],
+            }
+          } else {
+            this.autoCorrection[i] = {
+              enonce: texte,
+              propositions: [
+                {
+                  texte: `$|${a}|>|${b}|$`,
+                  statut: true,
+                },
+                {
+                  texte: `$|${a}|<|${b}|$`,
+                  statut: false,
+                },
+              ],
+            }
+          }
+
+          props = propositionsQcm(this, i)
+          if (this.interactif) texte += props.texte
+          else texte = `Comparer $|${a}|$ et $|${b}|$.`
+
+          texteCorr = `La valeur absolue d'un nombre est sa distance à zéro.<br>
+          On a $|${a}|=${Math.abs(a)}$ et $|${b}|=${Math.abs(b)}$.<br>`
+          if (Math.abs(a) < Math.abs(b)) {
+            texteCorr += `Comme $${Math.abs(a)}<${Math.abs(b)}$, alors $${miseEnEvidence(`|${a}|<|${b}|`)}$.`
+          } else {
+            texteCorr += `Comme $${Math.abs(b)}<${Math.abs(a)}$, alors $${miseEnEvidence(`|${b}|<|${a}|`)}$.`
+          }
+          this.canEnonce = `Comparer $|${a}|$ et $|${b}|$.`
           break
       }
       if (this.questionJamaisPosee(i, N, a, b)) {

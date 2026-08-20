@@ -272,7 +272,7 @@ La droite qui possède ces deux caractéristiques est $${miseEnEvidence(`\\left(
   constructor() {
     super()
     this.versionAleatoire()
-    this.options = { vertical: false, ordered: false }
+
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false
   }

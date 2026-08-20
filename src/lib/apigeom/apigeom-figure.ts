@@ -303,14 +303,18 @@ export function createApigeomFigureHtml(
   {
     numeroExercice,
     index = 0,
+    indexQuestionHote = 0,
   }: {
     numeroExercice: number | undefined
     index?: number
+    /** Décalage des questions quand l'exercice est réhébergé par un méta-exercice */
+    indexQuestionHote?: number
   },
 ): string {
   if (context.isTypst) {
     return apigeomFigureToSvg(figure)
   }
   handleApigeomFigureElement()
-  return `<apigeom-figure interactive default-action='FILL' x-min=${figure.xMin} y-min=${figure.yMin} width=${figure.width} height=${figure.height} numero-exercice=${numeroExercice ?? 0} index=${index} auto-index><script type="application/json">${figure.json}</script></apigeom-figure>`
+  const indexQuestionAffichee = index + indexQuestionHote
+  return `<apigeom-figure interactive default-action='FILL' x-min=${figure.xMin} y-min=${figure.yMin} width=${figure.width} height=${figure.height} numero-exercice=${numeroExercice ?? 0} index=${indexQuestionAffichee} auto-index><script type="application/json">${figure.json}</script></apigeom-figure>`
 }

@@ -15,7 +15,7 @@ export const refs = {
   'fr-ch': ['4mProbStat-20'],
 }
 export const titre =
-  'Préparation DNB : Statistiques, pourcentages, trigonométrie'
+  'Préparation DNB : Probabilité, arithmétique'
 export const dateDePublication = '27/06/2025'
 
 /*

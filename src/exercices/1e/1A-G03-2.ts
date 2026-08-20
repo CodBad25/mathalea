@@ -14,8 +14,6 @@ export const titre = 'Calculer une longueur avec la trigonométrie'
 export const dateDePublication = '20/06/2026'
 /**
  * Version QCM de 3G3QCM-1.
- * @author Stéphane Guyon
- * Date 18/08/26
  */
 export const uuid = 'e51a4'
 
@@ -211,8 +209,9 @@ ${mathalea2d(
         : fonction === 'cos'
           ? '\\dfrac{AB}{BC}'
           : '\\dfrac{AC}{AB}'
-    this.correction = `$\\${fonction} ${angle}^\\circ=${quotient}=${valeurTrigonometrie}$.<br>
-On en déduit que $${coteCherche}=${longueurConnue}\\times ${valeurTrigonometrie}=${miseEnEvidence(`${longueurChercheeTex}\\text{ cm}`)}$.`
+    this.correction = `Le triangle $ABC$ est rectangle en $A$ donc <br>`
+    this.correction += `$\\${fonction} ${angle}^\\circ=\\${fonction} (\\widehat{ABC})=${quotient}=${valeurTrigonometrie}$.<br>
+On en déduit que $${coteCherche}=${coteConnu}\\times ${valeurTrigonometrie}=${longueurConnue}\\times ${valeurTrigonometrie}=${miseEnEvidence(`${longueurChercheeTex}\\text{ cm}`)}$.`
   }
 
   versionOriginale = () => {
@@ -229,7 +228,7 @@ On en déduit que $${coteCherche}=${longueurConnue}\\times ${valeurTrigonometrie
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

@@ -70,8 +70,8 @@ export default class ReduireAvecFraction extends ExerciceSimple {
     const n = couplend[0]
     const d = couplend[1]
     const a = this.quotaRandint('a', 1, 9)
-    const frac = fraction(n, d).texFraction
-    const frac2 = fraction(a * d, d).texFraction
+    const frac = fraction(n, d).texFSD
+    const frac2 = fraction(a * d, d).texFSD
     const decompo = `\\dfrac{${a}\\times${d}}{${d}}`
     const frac10 = `\\dfrac{x}{${d}}`
     const enonceIntro = `Réduire l'expression :`
@@ -85,7 +85,7 @@ export default class ReduireAvecFraction extends ExerciceSimple {
     ) {
       case 1:
         {
-          const frac3 = fraction(n + a * d, d).texFraction
+          const frac3 = fraction(n + a * d, d).texFSD
           if (choice([true, false])) {
             this.question = this.versionQcm
               ? `Une simplification de $${frac}x+${rienSi1(a)}x$ est :`
@@ -106,7 +106,7 @@ export default class ReduireAvecFraction extends ExerciceSimple {
         break
       case 2:
         if (choice([true, false])) {
-          const frac4 = fraction(n - a * d, d).texFraction
+          const frac4 = fraction(n - a * d, d).texFSD
           this.question = this.versionQcm
             ? `Une simplification de $${frac}x-${rienSi1(a)}x$ est :`
             : `${enonceIntro} $${frac}x-${rienSi1(a)}x$`
@@ -119,7 +119,7 @@ export default class ReduireAvecFraction extends ExerciceSimple {
             (n - a * d) / d + 'x',
           ]
         } else {
-          const frac5 = fraction(a * d - n, d).texFraction
+          const frac5 = fraction(a * d - n, d).texFSD
           this.question = this.versionQcm
             ? `Une simplification de $${rienSi1(a)}x-${frac}x$ est :`
             : `${enonceIntro} $${rienSi1(a)}x-${frac}x$`

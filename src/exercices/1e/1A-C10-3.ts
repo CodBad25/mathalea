@@ -8,11 +8,11 @@ import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 
+import { crochetD, crochetG } from '../../lib/2d/intervalles'
+import { bleuMathalea } from '../../lib/colors'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
-import { bleuMathalea } from '../../lib/colors'
-import { crochetD, crochetG } from '../../lib/2d/intervalles'
 export const dateDePublication = '07/08/2025'
 export const dateDeModifImportante = '12/10/2025'
 export const uuid = '5d29b'
@@ -33,7 +33,7 @@ export const amcType = 'qcmMono'
 export const titre =
   "Résoudre une inéquation du type $x^2<a$ ou $x^2>a$ avec ou sans courbe (solutions sous forme d'inégalités)"
 export default class InequationsSecondDegre extends ExerciceQcmA {
-   private appliquerLesValeurs(
+  private appliquerLesValeurs(
     val: number,
     estInegStrict: boolean,
     typeInequation: 'inf' | 'sup',
@@ -117,8 +117,8 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
       sAxBx.epaisseur = 2
       segmentsSolution = [sAxBx]
       crochets = [
-        estInegStrict ? crochetG(Bx, 'red') : crochetD(Bx, 'red'),  // ]-√val (strict) ou [-√val (large)
-        estInegStrict ? crochetD(Ax, 'red') : crochetG(Ax, 'red'),  // √val[  (strict) ou √val]  (large)
+        estInegStrict ? crochetG(Bx, 'red') : crochetD(Bx, 'red'), // ]-√val (strict) ou [-√val (large)
+        estInegStrict ? crochetD(Ax, 'red') : crochetG(Ax, 'red'), // √val[  (strict) ou √val]  (large)
       ]
     } else {
       // ]-∞,-√val[ ∪ ]√val,+∞[ (strict) ou ]-∞,-√val] ∪ [√val,+∞[ (large)
@@ -132,8 +132,8 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
 
       segmentsSolution = [sBxBxI, sAxAxI]
       crochets = [
-        estInegStrict ? crochetD(Bx, 'red') : crochetG(Bx, 'red'),  // -√val[ (strict) ou -√val] (large)
-        estInegStrict ? crochetG(Ax, 'red') : crochetD(Ax, 'red'),  // ]√val  (strict) ou [√val  (large)
+        estInegStrict ? crochetD(Bx, 'red') : crochetG(Bx, 'red'), // -√val[ (strict) ou -√val] (large)
+        estInegStrict ? crochetG(Ax, 'red') : crochetD(Ax, 'red'), // ]√val  (strict) ou [√val  (large)
       ]
     }
 
@@ -167,7 +167,8 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
 
   // Méthode utilitaire pour créer le repère et les graphiques
   private creerGraphiques(val: number, elements: any) {
-    const { o, sAAx, sBBx, segmentsSolution, crochets, textes, valGraphique } = elements
+    const { o, sAAx, sBBx, segmentsSolution, crochets, textes, valGraphique } =
+      elements
 
     const r1 = repere({
       xMin: -4,
@@ -318,7 +319,7 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
   constructor() {
     super()
     this.versionAleatoire()
-    // this.options = { vertical: true, ordered: false }
+
     this.besoinFormulaire5CaseACocher = ['Sans la courbe']
   }
 }

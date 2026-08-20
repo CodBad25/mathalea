@@ -45,7 +45,7 @@ Son aire est égale à :`
     this.correction = `Pour calculer l'aire, il faut d'abord exprimer les deux dimensions dans la même unité :<br>
 $${largeurEnCm}\\text{ cm}=${texNombre(largeurEnM)}\\text{ m}$.<br>
 L'aire d'un rectangle est le produit de sa longueur par sa largeur :<br>
-$\\mathcal{A}=${longueurEnM}\\times ${texNombre(largeurEnM)}=${miseEnEvidence(`${texNombre(aireEnM2)}\\text{ m}^2`)}$.`
+$\\mathcal{A}=${longueurEnM}\\times ${texNombre(largeurEnM)}=${miseEnEvidence(`${texNombre(aireEnM2)}\\text{ m}^2`)}$`
   }
 
   versionOriginale = () => {
@@ -65,7 +65,7 @@ $\\mathcal{A}=${longueurEnM}\\times ${texNombre(largeurEnM)}=${miseEnEvidence(`$
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

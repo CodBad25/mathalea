@@ -67,7 +67,7 @@ ${mathalea2d(
   ),
   objets,
 )}
-La valeur exacte de son périmètre est `
+La valeur exacte de son périmètre est :`
 
     this.reponses = [
       `$${diametre}\\pi\\text{ cm}$`,
@@ -82,9 +82,11 @@ La valeur exacte de son périmètre est `
 
     this.correction = donneLeDiametre
       ? `Le périmètre d'un cercle de diamètre $D$ est $P=\\pi\\times D$.<br>
-Ainsi, $P=\\pi\\times ${diametre}=${miseEnEvidence(`${diametre}\\pi\\text{ cm}`)}$.`
+Ainsi, $P=\\pi\\times ${diametre}=${miseEnEvidence(`${diametre}\\pi\\text{ cm}`)}$.<br>`
       : `Le périmètre d'un cercle de rayon $r$ est $P=2\\times\\pi\\times r$.<br>
-Ainsi, $P=2\\times\\pi\\times ${rayon}=${miseEnEvidence(`${diametre}\\pi\\text{ cm}`)}$.`
+Ainsi, $P=2\\times\\pi\\times ${rayon}=${miseEnEvidence(`${diametre}\\pi\\text{ cm}`)}$.<br>`
+    this.correction += `
+$${texNombre(valeurAvecPi314, 2)}\\text{ cm}$ n'est qu'une valeur approchée de ce périmètre.`
   }
 
   versionOriginale = () => {
@@ -97,7 +99,7 @@ Ainsi, $P=2\\times\\pi\\times ${rayon}=${miseEnEvidence(`${diametre}\\pi\\text{ 
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

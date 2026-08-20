@@ -66,7 +66,7 @@ export default class Auto1AC3j extends ExerciceQcmA {
     <li>Compter soigneusement le nombre de rangs de déplacement.</li>
     <li>Construire au brouillon un tableau de numération en cas d'hésitation.</li>
   </ul>`
-    // this.options = { vertical: true, ordered: false }
+
     this.versionAleatoire()
   }
 }

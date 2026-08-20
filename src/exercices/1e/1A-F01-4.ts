@@ -13,13 +13,15 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 
-import { bleuMathalea } from '../../lib/colors'
+import { lectureImage, lectureImageAnimee } from '../../lib/2d/LectureImage'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
+import { context } from '../../modules/context'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '03/01/2026'
 export const uuid = '26795'
 
 export const refs = {
-  'fr-fr': ['1A-F01-4'],
+  'fr-fr': ['1A-F01-4', '2A-F1-4'],
   'fr-ch': [''],
 }
 export const interactifReady = true
@@ -96,23 +98,19 @@ export default class AutoF01d extends ExerciceQcmA {
       color: bleuMathalea,
     })
 
-    const objetsEnonce = [repere1, courbe1]
+    const objetsEnonce = [repere1, courbe1, o]
 
     this.enonce = `On considère une fonction $f$ dont la représentation graphique  est tracée ci-dessous.<br>`
-    this.enonce +=
-      mathalea2d(
-        Object.assign(
-          { pixelsParCm: 30, scale: 1, center: true },
-          {
-            xmin: bornes.xMin - 1,
-            ymin: bornes.yMin - 1,
-            xmax: bornes.xMax + 1,
-            ymax: bornes.yMax + 1,
-          },
-        ),
-        objetsEnonce,
-        o,
-      ) + '<br><br>'
+    const optionsFigure = {
+      pixelsParCm: 30,
+      scale: 1,
+      center: true,
+      xmin: bornes.xMin - 1,
+      ymin: bornes.yMin - 1,
+      xmax: bornes.xMax + 1,
+      ymax: bornes.yMax + 1,
+    }
+    this.enonce += mathalea2d(optionsFigure, objetsEnonce) + '<br><br>'
 
     const x1 = theSpline.x[abs1]
     const y1 = theSpline.y[abs1]
@@ -154,11 +152,44 @@ export default class AutoF01d extends ExerciceQcmA {
       `$${texNombre(resultat)}$`, // Bonne réponse en premier
       ...mauvaisesReponsesUniques.map((val) => `$${texNombre(val)}$`), // Mauvaises réponses ensuite
     ]
+    const figureCorrectionId = `1A-F01-4-correctionEx${this.numeroExercice ?? 0}Q0`
+    const objetsCorrection = [
+      ...objetsEnonce,
+      ...[abs1, abs2].map((abs, index) =>
+        lectureImage(
+          theSpline.x[abs],
+          theSpline.y[abs],
+          1,
+          1,
+          orangeMathalea,
+          '',
+          `${theSpline.y[abs]}`,
+        ),
+      ),
+    ]
 
+    const optionsFigureCorrection = Object.assign(
+      { id: figureCorrectionId },
+      optionsFigure,
+    )
+    const correctionFigure =
+      !context.isHtml || context.isTypst
+        ? mathalea2d(optionsFigure, objetsCorrection)
+        : `<div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">${mathalea2d(
+            optionsFigureCorrection,
+            objetsEnonce,
+          )}${lectureImageAnimee({
+            figureId: figureCorrectionId,
+            x: [theSpline.x[abs1], theSpline.x[abs2]],
+            y: [theSpline.y[abs1], theSpline.y[abs2]],
+            pixelsParCm: optionsFigure.pixelsParCm,
+            couleurHorizontale: orangeMathalea,
+          })}</div>`
     this.correction = `D'après le graphique, on lit :<br>
           $f(${texNombre(x1)}) = ${texNombre(y1)}$ et
           $f(${texNombre(x2)}) = ${texNombre(y2)}$.<br>
-          Donc $f(${texNombre(x1)}) ${operateur} f(${texNombre(x2)}) = ${texNombre(y1)} ${operateur} ${ecritureParentheseSiNegatif(y2)} = ${miseEnEvidence(texNombre(resultat))}$.`
+          Donc $f(${texNombre(x1)}) ${operateur} f(${texNombre(x2)}) = ${texNombre(y1)} ${operateur} ${ecritureParentheseSiNegatif(y2)} = ${miseEnEvidence(texNombre(resultat))}$.<br>
+          ${correctionFigure}`
   }
 
   versionOriginale: () => void = () => {
@@ -227,6 +258,5 @@ export default class AutoF01d extends ExerciceQcmA {
   constructor() {
     super()
     this.versionAleatoire()
-    this.options = { vertical: false, ordered: false }
   }
 }

@@ -259,7 +259,6 @@ export default class AmeriqueSud1224Ex1Q4 extends ExerciceQcmA {
   constructor() {
     super()
 
-    this.options = { vertical: false, ordered: false }
     this.versionAleatoire()
   }
 }

@@ -44,7 +44,7 @@ La limite de la fonction $f$ en $+\\infty$ est égale à :`
 
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionOriginale()
   }
 }

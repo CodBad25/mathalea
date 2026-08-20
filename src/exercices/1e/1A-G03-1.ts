@@ -85,7 +85,7 @@ export default class TrigonometrieTriangleRectangleQCM extends ExerciceQcmA {
         `$${this.fractionTex(numerateur, denominateur)}$`,
     )
 
-    this.enonce = `Dans le triangle $ABC$ rectangle en $A$ ci-contre, qui n'est pas en vraie grandeur, quelle est la valeur de $\\${fonction} \\alpha$ ?`
+    this.enonce = `Dans le triangle $ABC$ rectangle en $A$ ci-dessous, qui n'est pas en vraie grandeur, quelle est la valeur de $\\${fonction} \\alpha$ ?`
     const triangle = polygone([
       pointAbstrait(0, 0, 'A', 'below left'),
       pointAbstrait(0, 3, 'C', 'above left'),
@@ -136,7 +136,8 @@ export default class TrigonometrieTriangleRectangleQCM extends ExerciceQcmA {
       ),
       objets,
     )
-    this.correction =
+    this.correction = `Le triangle $ABC$ est rectangle en $A$ donc <br>`
+    this.correction +=
       fonction === 'cos'
         ? `$\\cos\\alpha=\\dfrac{AB}{BC}=\\dfrac{${adjacent}}{${hypotenuse}}=${miseEnEvidence(bonneReponse)}$.`
         : fonction === 'sin'
@@ -162,7 +163,7 @@ export default class TrigonometrieTriangleRectangleQCM extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

@@ -111,14 +111,20 @@ export function pointsMaxQuestion(exercice: IExercice, i: number): number {
  */
 export function pointsMaxExercice(exercice?: IExercice | null): number {
   if (exercice == null) return 0
-  if (exercice.interactifType === 'custom') {
-    // La correction est entièrement à la charge de l'exercice
-    // (`verifExerciceCustom()` compte une réponse par question).
-    return exercice.nbQuestions ?? 0
-  }
   if (!Array.isArray(exercice.autoCorrection)) return 0
+  const nbQuestions =
+    exercice.interactifType === 'custom'
+      ? Math.max(exercice.autoCorrection.length, exercice.nbQuestions ?? 0)
+      : exercice.autoCorrection.length
   let total = 0
-  for (let i = 0; i < exercice.autoCorrection.length; i++) {
+  for (let i = 0; i < nbQuestions; i++) {
+    if (
+      exercice.autoCorrection[i] == null &&
+      exercice.interactifType === 'custom'
+    ) {
+      total++
+      continue
+    }
     total += pointsMaxQuestion(exercice, i)
   }
   return total

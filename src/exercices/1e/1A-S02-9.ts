@@ -117,7 +117,7 @@ export default class AjouterUneNotePourMedianeQCM extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.versionAleatoire()
   }
 }

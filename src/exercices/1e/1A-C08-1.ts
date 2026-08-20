@@ -123,6 +123,5 @@ export default class auto1AC8a extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
   }
 }

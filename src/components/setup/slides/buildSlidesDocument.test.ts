@@ -326,4 +326,78 @@ describe('buildSlidesDocument', () => {
     const code = buildSlidesDocument(slides)
     expect(code).not.toContain('diapo-multi')
   })
+
+  it("n'ajoute aucun récapitulatif par défaut", () => {
+    const code = buildSlidesDocument(slides)
+    expect(code).not.toContain('#recap(')
+    expect(code).not.toContain('recap-taille')
+  })
+
+  it('ajoute en fin de document le récapitulatif de toutes les questions', () => {
+    const code = buildSlidesDocument(slides, {
+      ...defaultSlidesDocumentOptions,
+      content: 'questions',
+      recapQuestions: true,
+      recapFontSize: 14,
+      recapColumns: 3,
+    })
+    expect(code).toContain('#let recap-taille = 14pt')
+    expect(code).toContain('#let recap-colonnes = 3')
+    expect(code).toContain('#let recap-titre-questions = "Toutes les questions"')
+    // le récapitulatif reprend les diapositives, dans leur ordre, et vient
+    // après la dernière d'entre elles
+    expect(code).toContain(
+      '#recap(recap-titre-questions, (\n  (1, diapo-1-question),\n  (2, diapo-2-question),\n  (3, diapo-3-question),\n))',
+    )
+    expect(code.indexOf('#recap(')).toBeGreaterThan(
+      code.indexOf('#diapo(3, diapo-3-question'),
+    )
+    // pas de récapitulatif des réponses tant qu'il n'est pas demandé
+    expect(code).not.toContain('recap-titre-reponses')
+    expect(code).not.toContain('recap-1-reponse')
+  })
+
+  it('réduit les réponses du récapitulatif à ce qui est mis en évidence', () => {
+    const code = buildSlidesDocument(
+      [
+        {
+          question: '$2+2$',
+          correction:
+            'On calcule : $2 + 2 = {\\color{#f15929}\\boldsymbol{4}}$.',
+        },
+        { question: 'Le double de 8', correction: 'Le double de 8 est 16.' },
+      ],
+      {
+        ...defaultSlidesDocumentOptions,
+        recapAnswers: true,
+      },
+    )
+    // la correction mise en évidence est réduite à sa réponse...
+    expect(code).toContain('#let recap-1-reponse = [')
+    expect(code).not.toContain('#let recap-1-reponse = diapo-1-correction')
+    expect(code).toMatch(/#let recap-1-reponse = \[\n {2}\$[^\n]*4[^\n]*\$\n\]/)
+    // ...celle qui n'en a aucune est reprise telle quelle, sans être
+    // convertie une seconde fois
+    expect(code).toContain(
+      '#let recap-2-reponse = diapo-2-correction // aucune réponse mise en évidence',
+    )
+    expect(code).toContain(
+      '#recap(recap-titre-reponses, (\n' +
+        '  (1, recap-question-reponse(diapo-1-question, recap-1-reponse)),\n' +
+        '  (2, recap-question-reponse(diapo-2-question, recap-2-reponse)),\n' +
+        '))',
+    )
+    expect(code).toContain('#let recap-question-reponse(question, reponse) = [')
+  })
+
+  it('ne récapitule que les diapositives visibles, dans leur ordre', () => {
+    const code = buildSlidesDocument(
+      slides,
+      { ...defaultSlidesDocumentOptions, recapQuestions: true },
+      { order: [3, 1], hidden: [2] },
+    )
+    expect(code).toContain(
+      '#recap(recap-titre-questions, (\n  (3, diapo-3-question),\n  (1, diapo-1-question),\n))',
+    )
+  })
 })

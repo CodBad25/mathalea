@@ -220,8 +220,8 @@ export default class CalculsAvecPriorité extends Exercice {
     const scale = 1.2
     if (context.isHtml) {
       return value.replace(
-        "<pre class='blocks'>",
-        `<pre class='blocks2' scale='${scale}'>`,
+        '<pre class="blocks" >',
+        `<pre class="blocks2" scale="${scale}">`,
       )
     } else {
       return '\\setscratch{scale=1.5,line width=1pt}' + value

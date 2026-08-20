@@ -16,7 +16,7 @@ export const interactifType = 'mathLive'
 export const uuid = '15638'
 
 export const refs = {
-  'fr-fr': ['1A-C11-5'],
+  'fr-fr': ['1A-C11-5', '2A-C4-5'],
   'fr-ch': [],
 }
 export default class Auto1AC11e extends ExprimerEnFonctionRac {

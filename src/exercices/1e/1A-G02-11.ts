@@ -110,12 +110,14 @@ export default class VolumeConeAvecFigureQcm extends ExerciceQcmA {
     this.enonce = `Le cône ci-dessous n'est pas représenté à l'échelle.<br>
 On a indiqué le diamètre de sa base et sa hauteur.<br>
  ${figure}
- La valeur exacte de son volume en $\\text{cm}^3$ est `
-
+ La valeur exacte de son volume en $\\text{cm}^3$ est :`
+    const volumeAvecPiDecimal = coefficientVolume * 3.14
     this.reponses = [
       `$${texNombre(coefficientVolume)}\\pi\\text{ cm}^3$`,
       `$${texNombre(coefficientAvecRayonNonCarre)}\\pi\\text{ cm}^3$`,
-      `$${texNombre(coefficientAvecAireLaterale)}\\pi\\text{ cm}^3$`,
+      coefficientAvecAireLaterale !== coefficientVolume
+        ? `$${texNombre(coefficientAvecAireLaterale)}\\pi\\text{ cm}^3$`
+        : `$${texNombre(volumeAvecPiDecimal)}\\text{ cm}^3$`,
       `$${texNombre(produit)}\\pi\\text{ cm}^3$`,
     ]
 
@@ -131,7 +133,8 @@ On a indiqué le diamètre de sa base et sa hauteur.<br>
     this.correction = `${conversionDiametre}${conversionHauteur}Le rayon est la moitié du diamètre : $r=${diametreEnCm}\\div 2=${rayonEnCm}\\text{ cm}$.<br>
 Le volume d'un cône de rayon de base $r$ et de hauteur $h$ est donné par la formule :<br>
 $V=\\dfrac{\\pi r^2h}{3}$.<br>
-Donc $V=\\dfrac{\\pi\\times ${rayonEnCm}^2\\times ${hauteurEnCm}}{3}=\\dfrac{${produit}\\pi}{3}=${miseEnEvidence(`${texNombre(coefficientVolume)}\\pi\\text{ cm}^3`)}$.`
+Donc $V=\\dfrac{\\pi\\times ${rayonEnCm}^2\\times ${hauteurEnCm}}{3}=\\dfrac{${produit}\\pi}{3}=${miseEnEvidence(`${texNombre(coefficientVolume)}\\pi\\text{ cm}^3`)}$.<br>
+$${texNombre(volumeAvecPiDecimal)}\\text{ cm}^3$ n'est qu'une version approchée du volume.`
   }
 
   versionOriginale = () => {
@@ -164,7 +167,7 @@ Donc $V=\\dfrac{\\pi\\times ${rayonEnCm}^2\\times ${hauteurEnCm}}{3}=\\dfrac{${p
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

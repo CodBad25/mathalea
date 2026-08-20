@@ -189,7 +189,7 @@ $${miseEnEvidence(`(u_n)`)}$  ${texteEnCouleur(`est donc une suite arithmétique
 
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionAleatoire()
   }
 }

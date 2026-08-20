@@ -42,7 +42,7 @@ Une des primitives $F$ de la fonction $f$ sur $\\mathbb R$ est définie par :`
 
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionOriginale()
   }
 }

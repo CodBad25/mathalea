@@ -34,11 +34,11 @@ const leSuperFormulaire: FormulaireComplexe = {
     {
       type: 'selection',
       nom: 'nbEspeces',
-      label: "Nombre d'espèces différentes",
+      label: 'Nombre de catégories différentes',
       options: [
-        { valeur: '1', label: 'Deux espèces' },
-        { valeur: '2', label: 'Trois espèces' },
-        { valeur: '3', label: 'Quatre espèces' },
+        { valeur: '1', label: 'Deux catégories' },
+        { valeur: '2', label: 'Trois catégories' },
+        { valeur: '3', label: 'Quatre catégories' },
       ],
       defaut: '3',
     },
@@ -59,20 +59,20 @@ const leSuperFormulaire: FormulaireComplexe = {
       options: [
         { valeur: '1', label: 'Diagramme circulaire' },
         { valeur: '2', label: 'Diagramme semi-circulaire' },
-        { valeur: '3', label: 'Diagramme en bâtons' },
+        { valeur: '3', label: 'Diagramme en barres' },
       ],
       defaut: '1',
     },
     {
       type: 'case',
       nom: 'status',
-      label: "Avec aide pour l'intéractivité (affiche le status du graphique)",
+      label: "Avec aide pour l'interactivité (informations dynamiques)",
       defaut: false,
     },
     {
       type: 'case',
       nom: 'melange',
-      label: 'Noms des animaux mélangés',
+      label: 'Noms des catégories mélangées',
       defaut: false,
     },
     {
@@ -94,6 +94,102 @@ export const refs = {
   'fr-2016': [],
   'fr-ch': ['10FA3A-5'],
 }
+
+type DiagrammeTheme = {
+  entete: string
+  unite: string
+  effectifFormule: string
+  effectifParCategorie: string
+  categories: string[]
+  lieux: string[]
+  introduction: (lieu: string) => string
+}
+
+const themesDiagrammes: DiagrammeTheme[] = [
+  {
+    entete: 'Couleurs',
+    unite: 'voitures',
+    effectifFormule: 'effectif de la couleur',
+    effectifParCategorie: 'nombre de voitures de chaque couleur',
+    categories: [
+      'blanches',
+      'grises',
+      'noires',
+      'bleues',
+      'rouges',
+      'vertes',
+      'jaunes',
+      'beiges',
+      'marron',
+    ],
+    lieux: [
+      'de la gare',
+      'de la médiathèque',
+      'de la piscine municipale',
+      'de la salle des fêtes',
+      'du centre commercial',
+      'du stade',
+      'du cinéma',
+      'de la zone artisanale',
+      "de l'hôpital",
+      "de l'université",
+    ],
+    introduction: (lieu) =>
+      `Sur le parking ${lieu}, on relève la couleur des voitures garées.<br> Voici un tableau qui donne le nombre de voitures de quelques couleurs.<br><br>`,
+  },
+  {
+    entete: 'Genres',
+    unite: 'livres',
+    effectifFormule: 'effectif du genre',
+    effectifParCategorie: 'nombre de livres de chaque genre',
+    categories: [
+      'romans',
+      'bandes dessinées',
+      'mangas',
+      'documentaires',
+      'albums',
+      'contes',
+      'poésies',
+      'théâtre',
+      'revues',
+    ],
+    lieux: [
+      'à la médiathèque municipale',
+      'à la bibliothèque du collège',
+      'à la bibliothèque de quartier',
+      'à la médiathèque intercommunale',
+      'à la bibliothèque centrale',
+    ],
+    introduction: (lieu) =>
+      `On relève les emprunts de livres ${lieu}, selon leur genre.<br> Voici un tableau qui donne le nombre de livres empruntés dans quelques genres.<br><br>`,
+  },
+  {
+    entete: 'Menus',
+    unite: 'repas',
+    effectifFormule: 'effectif du menu',
+    effectifParCategorie: 'nombre de repas de chaque menu',
+    categories: [
+      'menu classique',
+      'menu végétarien',
+      'menu poisson',
+      'menu salade',
+      'menu pâtes',
+      'menu sandwich',
+      'menu soupe',
+      'menu du jour',
+      'menu dessert',
+    ],
+    lieux: [
+      'à la cantine du collège',
+      'au restaurant universitaire',
+      'à la restauration du stade',
+      'à la cafétéria municipale',
+      "à la cantine de l'entreprise",
+    ],
+    introduction: (lieu) =>
+      `On relève les repas servis ${lieu}, selon le menu choisi.<br> Voici un tableau qui donne le nombre de repas servis pour quelques menus.<br><br>`,
+  },
+]
 
 function shuffleNumbers(values: number[]): number[] {
   const shuffled = [...values]
@@ -165,10 +261,21 @@ function effectifsBasePourDiagrammeCirculaire(nbAnimaux: number): number[] {
 }
 
 function effectifsBasePourDiagrammeEnBarres(nbAnimaux: number): number[] {
-  return shuffleNumbers([2, 4, 6, 8, 10, 12, 14, 16, 18, 20]).slice(
-    0,
-    nbAnimaux,
-  )
+  const effectifs = shuffleNumbers(
+    Array.from({ length: 30 }, (_value, index) => (index + 1) * 2),
+  ).slice(0, nbAnimaux)
+
+  if (Math.max(...effectifs) <= 20) {
+    const grandsEffectifs = shuffleNumbers(
+      Array.from({ length: 20 }, (_value, index) => (index + 11) * 2),
+    )
+    const grandEffectif = grandsEffectifs.find(
+      (effectif) => !effectifs.includes(effectif),
+    )
+    if (grandEffectif != null) effectifs[0] = grandEffectif
+  }
+
+  return effectifs
 }
 
 export default class ConstruireUnDiagramme2 extends Exercice {
@@ -179,23 +286,6 @@ export default class ConstruireUnDiagramme2 extends Exercice {
       leSuperFormulaire,
       valeursParDefaut(leSuperFormulaire),
     )
-    /*   this.besoinFormulaireTexte = [
-      "Nombre d'espèces différentes",
-      '0 : Mélange\n1 : Deux espèces\n2 : Trois espèces\n3 : Quatre espèces',
-    ]
-    this.besoinFormulaire2Texte = [
-      'Valeurs numériques',
-      '0 : Mélange\n1 : Entre 1 et 100\n2 : Entre 100 et 1 000',
-    ]
-    this.besoinFormulaire3Texte = [
-      'Type de diagramme',
-      '0 : Mélange\n1 : Diagramme circulaire\n2 : Diagramme semi-circulaire\n3 : Diagramme en bâtons',
-    ]
-    this.besoinFormulaire4CaseACocher = [
-      'Afficher le status du graphique',
-      false,
-    ]
-      */
 
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
@@ -222,82 +312,43 @@ export default class ConstruireUnDiagramme2 extends Exercice {
     for (let i = 0; i < this.nbQuestions; i++) {
       let nom
       const contenutableau: string[] = []
-      const lstAnimauxExo: string[] = [] // liste des animaux uniquement cités dans l'exercice
-      const lstNombresAnimaux: number[] = [] // liste des effectifs de chaque animal
+      const theme = choice(themesDiagrammes)
+      const categoriesExo: string[] = []
+      const effectifs: number[] = []
 
-      const lstAnimaux = [
-        'girafes',
-        'zèbres',
-        'buffles',
-        'gazelles',
-        'crocodiles',
-        'rhinocéros',
-        'léopards',
-        'guépards',
-        'hyènes',
-      ]
-      const lstNomParc = [
-        'Dramve',
-        'Fatenmin',
-        'Batderfa',
-        'Vihi',
-        'Genser',
-        'Barbetdou',
-        'Dramrendu',
-        'Secai',
-        'Cipeudram',
-        'Cigel',
-        'Lisino',
-        'Fohenlan',
-        'Farnfoss',
-        'Kinecardine',
-        'Zeffari',
-        'Barmwich',
-        'Swadlincote',
-        'Swordbreak',
-        'Loshull',
-        'Ruyron',
-        'Fluasall',
-        'Blueross',
-        'Vlane',
-      ]
-
-      let texte =
-        'Dans le parc naturel de ' +
-        choice(lstNomParc) +
-        ", il y a beaucoup d'animaux.<br> Voici un tableau qui donne le nombre d'individus de quelques espèces.<br><br>"
+      let texte = theme.introduction(choice(theme.lieux))
       let texteCorr = ''
-      const entete = ['\\text{Animaux}']
+      const entete = [`\\text{${theme.entete}}`]
 
-      const nbAnimaux = listeNombreEspeces // nombre d'animaux différents dans l'énoncé
+      const nbCategories = listeNombreEspeces // nombre de catégories différentes dans l'énoncé
 
       const effectifsBase =
         typeDeDiagramme === 1 || typeDeDiagramme === 2
-          ? effectifsBasePourDiagrammeCirculaire(nbAnimaux)
-          : effectifsBasePourDiagrammeEnBarres(nbAnimaux)
+          ? effectifsBasePourDiagrammeCirculaire(nbCategories)
+          : effectifsBasePourDiagrammeEnBarres(nbCategories)
       const facteurValeurs = indexValeursNumeriques === 1 ? 1 : 10
-      lstNombresAnimaux.push(
+      effectifs.push(
         ...effectifsBase.map((effectif) => effectif * facteurValeurs),
       )
       let effectiftotal = 0
-      for (let k = 0; k < nbAnimaux; k++) {
-        effectiftotal += lstNombresAnimaux[k]
+      for (let k = 0; k < nbCategories; k++) {
+        effectiftotal += effectifs[k]
       }
-      for (let k = 0; k < nbAnimaux; k++) {
-        nom = choice(lstAnimaux, lstAnimauxExo) // choisit un animal au hasard sauf parmi ceux déjà utilisés
-        lstAnimauxExo.push(nom)
+      for (let k = 0; k < nbCategories; k++) {
+        nom = choice(theme.categories, categoriesExo) // choisit une catégorie au hasard sauf parmi celles déjà utilisées
+        categoriesExo.push(nom)
         entete.push(`\\text{${nom}}`)
       }
 
       entete.push('\\text{Total}')
-      for (let k = 0; k < nbAnimaux; k++) {
-        contenutableau.push(texNombre(lstNombresAnimaux[k], 0))
+      for (let k = 0; k < nbCategories; k++) {
+        contenutableau.push(texNombre(effectifs[k], 0))
       }
       contenutableau.push(texNombre(effectiftotal, 0))
       texte += `${tableauColonneLigne(entete, ['\\text{Effectifs}'], contenutableau.map(String))}<br><br>`
       // On mélange les données pour en changer l'ordre (pour tous les cas)
       if (melangeOn) {
-        shuffle2tableaux(lstAnimauxExo, lstNombresAnimaux)
+        shuffle2tableaux(categoriesExo, effectifs)
       }
       let expectedAnswer: string = ''
       switch (typeDeDiagramme) {
@@ -307,8 +358,11 @@ export default class ConstruireUnDiagramme2 extends Exercice {
           const shape = typeDeDiagramme === 1 ? 'pie' : 'semi-pie'
           const targetAngle = shape === 'pie' ? 360 : 180
           const emptyValues = {
-            items: lstAnimauxExo.map((animal) =>
-              Object.assign({}, { label: animal, effectif: null, angle: null }),
+            items: categoriesExo.map((categorie) =>
+              Object.assign(
+                {},
+                { label: categorie, effectif: null, angle: null },
+              ),
             ),
             mode: 'angle' as PieAssessmentMode,
             shape: shape as PieAssessmentShape,
@@ -318,14 +372,13 @@ export default class ConstruireUnDiagramme2 extends Exercice {
             colorOn,
           }
           const value = {
-            items: lstAnimauxExo.map((animal, index) =>
+            items: categoriesExo.map((categorie, index) =>
               Object.assign(
                 {},
                 {
-                  label: animal,
-                  effectif: lstNombresAnimaux[index],
-                  angle:
-                    (targetAngle * lstNombresAnimaux[index]) / effectiftotal,
+                  label: categorie,
+                  effectif: effectifs[index],
+                  angle: (targetAngle * effectifs[index]) / effectiftotal,
                 },
               ),
             ),
@@ -341,45 +394,43 @@ export default class ConstruireUnDiagramme2 extends Exercice {
           texte +=
             'Représenter ces données par un diagramme circulaire.<br><br>' +
             addDiagramPieAssessment(this, i, emptyValues)
-          texteCorr = `Pour réaliser le diagramme ${targetAngle === 360 ? 'circulaire' : 'semi-circulaire'}, on calcule l'angle de chaque secteur proportionnellement à l'effectif de chaque animal par rapport à l'effectif total.<br>
-          Il y a ${effectiftotal} animaux au total, donc l'angle de chaque secteur est calculé par la formule :<br>
-          $\\text{angle du secteur} = \\dfrac{\\text{effectif de l'animal}}{${effectiftotal}} \\times ${targetAngle}^\\circ$.<br>
+          texteCorr = `Pour réaliser le diagramme ${targetAngle === 360 ? 'circulaire' : 'semi-circulaire'}, on calcule l'angle de chaque secteur proportionnellement au ${theme.effectifParCategorie} par rapport à l'effectif total.<br>
+          Il y a ${effectiftotal} ${theme.unite} au total, donc l'angle de chaque secteur est calculé par la formule :<br>
+          $\\text{angle du secteur} = \\dfrac{\\text{${theme.effectifFormule}}}{${effectiftotal}} \\times ${targetAngle}^\\circ$.<br>
           Ce qui donne les angles suivants :<br>
-          ${lstNombresAnimaux.map((effectif, index) => `${lstAnimauxExo[index]} : $\\dfrac{${effectif}}{${effectiftotal}}\\times ${targetAngle}^\\circ = ${miseEnEvidence(texNombre((targetAngle * effectif) / effectiftotal, 0))}^\\circ$`).join('<br><br>')}<br>
-          Le diagramme circulaire correspondant est le suivant :<br><br>${addDiagramPieAssessment(this, i, value)}`
+          ${effectifs.map((effectif, index) => `${categoriesExo[index]} : $\\dfrac{${effectif}}{${effectiftotal}}\\times ${targetAngle}^\\circ = ${miseEnEvidence(texNombre((targetAngle * effectif) / effectiftotal, 0))}^\\circ$`).join('<br><br>')}<br>
+          On complète le tableau avec les valeurs calculées et on trace les secteurs correspondants :<br><br>${addDiagramPieAssessment(this, i, value)}`
 
           break
         }
         case 3:
         default: {
-          // diagramme en bâtons
-          const valMax = Math.max(...lstNombresAnimaux)
+          // diagramme en barres
+          const valMax = Math.max(...effectifs)
           const unitValue = indexValeursNumeriques === 1 ? 20 : 200
 
           const emptyValues = {
             unitValue,
-            unitLabel: `individus`,
+            unitLabel: theme.unite,
             yMax: Math.ceil(valMax / unitValue) * unitValue,
             mode: 'hauteur' as BarAssessmentMode,
             infosStatus: statusOn,
             interactivityOn: this.interactif,
             colorOn,
-            items: lstAnimauxExo.map((animal, index) =>
+            items: categoriesExo.map((categorie, index) =>
               Object.assign(
                 {},
                 {
-                  label: animal,
-                  effectif: this.interactif ? lstNombresAnimaux[index] : null,
-                  height: this.interactif
-                    ? lstNombresAnimaux[index] / unitValue
-                    : null,
+                  label: categorie,
+                  effectif: this.interactif ? effectifs[index] : null,
+                  height: this.interactif ? effectifs[index] / unitValue : null,
                 },
               ),
             ),
           }
           const value = {
             unitValue,
-            unitLabel: `individus`,
+            unitLabel: theme.unite,
             yMax: Math.ceil(valMax / unitValue) * unitValue,
             mode: 'hauteur' as BarAssessmentMode,
             labelValueKind: 'hauteur' as const,
@@ -387,92 +438,27 @@ export default class ConstruireUnDiagramme2 extends Exercice {
             interactivityOn: false,
             colorOn,
             correctionOn: true,
-            items: lstAnimauxExo.map((animal, index) =>
+            items: categoriesExo.map((categorie, index) =>
               Object.assign(
                 {},
                 {
-                  label: animal,
-                  effectif: lstNombresAnimaux[index],
-                  height: lstNombresAnimaux[index] / unitValue,
+                  label: categorie,
+                  effectif: effectifs[index],
+                  height: effectifs[index] / unitValue,
                 },
               ),
             ),
           }
           expectedAnswer = JSON.stringify(value)
           texte +=
-            `Représenter ces données par un diagramme en bâtons (une unité représente ${unitValue} individus).<br><br>` +
+            `Représenter ces données par un diagramme en barres (une unité représente ${unitValue} ${theme.unite}).<br><br>` +
             addDiagramBarAssessment(this, i, emptyValues)
-          texteCorr = `Pour réaliser le diagramme en bâtons, on calcule la hauteur de chaque barre proportionnellement à l'effectif de chaque animal par rapport à l'unité choisie.<br>
+          texteCorr = `Pour réaliser le diagramme en barres, on calcule la hauteur de chaque barre proportionnellement au ${theme.effectifParCategorie} par rapport à l'unité choisie.<br>
           Ce qui donne les hauteurs suivantes :<br>
-          ${lstNombresAnimaux.map((effectif, index) => `${lstAnimauxExo[index]} : $\\dfrac{${effectif}}{${unitValue}} = ${miseEnEvidence(texNombre(effectif / unitValue, 2))}$ unité(s)`).join('<br><br>')}<br>
-          Le diagramme en bâtons correspondant est le suivant :<br><br>${addDiagramBarAssessment(this, i, value)}`
+          ${effectifs.map((effectif, index) => `${categoriesExo[index]} : $\\dfrac{${effectif}}{${unitValue}} = ${miseEnEvidence(texNombre(effectif / unitValue, 2))}$ unité${effectif / unitValue > 1 ? 's' : ''}`).join('<br><br>')}<br>
+          On complète le tableau avec les valeurs calculées et on trace les barres de hauteurs correspondantes :<br><br>${addDiagramBarAssessment(this, i, value)}`
           break
         }
-        // Ce cas n'a aucun intérêt ici c'est juste pour illustrer le payload du diagramme cartésien inutilisé dans cet exercice
-        /*   case 4: {
-          const valMax = Math.max(...lstNombresAnimaux)
-          const unitValue = listeIndexValeursNumeriques[i] === 1 ? 20 : 200
-          const emptyValues = {
-            unitValue,
-            unitLabel: `individus`,
-            xMin: 0,
-            xMax: 5,
-            yMin: 0,
-            yMax: Math.ceil(valMax / unitValue) * unitValue,
-            points: lstAnimauxExo.map((animal, index) =>
-              Object.assign({}, { label: animal, x: null, y: null }),
-            ),
-            infosStatus: this.sup4,
-            interactivityOn: true,
-            items: lstAnimauxExo.map((animal, index) =>
-              Object.assign(
-                {},
-                {
-                  label: animal,
-                  height: lstNombresAnimaux[index] / unitValue,
-                },
-              ),
-            ),
-          }
-          const value = {
-            unitValue,
-            unitLabel: `individus`,
-            xMin: 0,
-            xMax: 5,
-            yMin: 0,
-            yMax: Math.ceil(valMax / unitValue) * unitValue,
-            points: lstAnimauxExo.map((animal, index) =>
-              Object.assign(
-                {},
-                {
-                  label: animal,
-                  x: index,
-                  y: lstNombresAnimaux[index] / unitValue,
-                },
-              ),
-            ),
-            mode: 'hauteur' as BarAssessmentMode,
-            labelValueKind: 'hauteur' as const,
-            infosStatus: this.sup4,
-            interactivityOn: false,
-            items: lstAnimauxExo.map((animal, index) =>
-              Object.assign(
-                {},
-                {
-                  label: animal,
-                  effectif: lstNombresAnimaux[index],
-                  height: lstNombresAnimaux[index] / unitValue,
-                },
-              ),
-            ),
-          }
-          expectedAnswer = JSON.stringify(value)
-          texte +=
-            `Représenter ces données par un diagramme en bâtons (une unité représente ${unitValue} individus).<br><br>` +
-            addDiagramCartesianAssessment(this, i, emptyValues)
-          texteCorr = `Le diagramme en bâtons correspondant est le suivant :<br><br>${addDiagramCartesianAssessment(this, i, value)}`
-        }
-          */
       }
       handleAnswers(
         this,

@@ -2,7 +2,7 @@ import ReduireAvecFraction from '../can/3e/can3L06'
 
 export const uuid = 'c1c68'
 export const refs = {
-  'fr-fr': ['1A-C08-4'],
+  'fr-fr': ['1A-C08-4', '2A-C1-2'],
   'fr-ch': [''],
 }
 export const interactifReady = true

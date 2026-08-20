@@ -104,13 +104,13 @@ export default class VolumeCylindreAvecFigureQcm extends ExerciceQcmA {
 
     this.enonce = `Le cylindre ci-dessous n'est pas représenté à l'échelle.<br>
 On a codé le diamètre de sa base et sa hauteur.${figure}
-La valeur exacte de son volume en $\\text{cm}^3$ est  `
+La valeur exacte de son volume en $\\text{cm}^3$ est :`
 
     this.reponses = [
-      `$${coefficientVolume}\\pi\\text{ cm}^3$`,
+      `$${texNombre(coefficientVolume)}\\pi\\text{ cm}^3$`,
       `$${texNombre(volumeAvecPiDecimal)}\\text{ cm}^3$`,
-      `$${coefficientDiametrePrisPourRayon}\\pi\\text{ cm}^3$`,
-      `$${coefficientAvecPerimetreBase}\\pi\\text{ cm}^3$`,
+      `$${texNombre(coefficientDiametrePrisPourRayon)}\\pi\\text{ cm}^3$`,
+      `$${texNombre(coefficientAvecPerimetreBase)}\\pi\\text{ cm}^3$`,
     ]
 
     const conversionDiametre =
@@ -122,7 +122,8 @@ La valeur exacte de son volume en $\\text{cm}^3$ est  `
 $V=\\pi r^2h$.<br>
 ${conversionDiametre}le rayon de la base vaut $r=${diametreEnCm}\\div 2=${rayonEnCm}\\text{ cm}$.<br>
 Ici, $h=${hauteurEnCm}\\text{ cm}$.<br>
-Donc $V=\\pi\\times ${rayonEnCm}^2\\times ${hauteurEnCm}=${miseEnEvidence(`${coefficientVolume}\\pi\\text{ cm}^3`)}$.`
+Donc $V=\\pi\\times ${rayonEnCm}^2\\times ${hauteurEnCm}=${miseEnEvidence(`${coefficientVolume}\\pi\\text{ cm}^3`)}$.<br>
+$${texNombre(volumeAvecPiDecimal)}\\text{ cm}^3$ n'est qu'une version approchée du volume.`
   }
 
   versionOriginale = () => {
@@ -139,7 +140,7 @@ Donc $V=\\pi\\times ${rayonEnCm}^2\\times ${hauteurEnCm}=${miseEnEvidence(`${coe
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

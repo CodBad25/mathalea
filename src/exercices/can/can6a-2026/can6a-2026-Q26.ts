@@ -6,7 +6,6 @@ import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
 import { wrapperApigeomToMathalea } from '../../../lib/apigeom/apigeomZoom'
 import figureApigeom from '../../../lib/figureApigeom'
-import { ajouteFeedback } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
@@ -154,13 +153,15 @@ export default class Can2026Q26 extends ExerciceCan {
 
     const emplacementPourFigure = figureApigeom({
       exercice: this,
-      i: 25, // On est obligé de mettre le Numéro de la question qui sera dans le MetaExercice sinon le listener ne trouve pas le div !
+      // L'index de la question dans un méta-exercice est appliqué par
+      // `figureApigeom()` à partir de `indexQuestionHote`.
+      i: 0,
       figure,
       defaultAction: 'SEGMENT',
     })
     if (context.isHtml) {
       if (this.interactif) {
-        this.question += emplacementPourFigure + ajouteFeedback(this, 0)
+        this.question += emplacementPourFigure
       } else {
         this.question += wrapperApigeomToMathalea(figure)
       }

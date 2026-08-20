@@ -94,7 +94,7 @@ export default class Auto1AE026 extends ExerciceQcmA {
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: false, ordered: false }
+
     this.versionAleatoire()
   }
 }

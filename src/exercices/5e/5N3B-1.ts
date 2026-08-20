@@ -1,4 +1,10 @@
-import ExerciceAdditionnerSoustraireFractions5ebis from './5N3B'
+import {
+  serialiseFormulaireComplexe,
+  valeursParDefaut,
+} from '../../lib/formulaireComplexe'
+import ExerciceAdditionnerSoustraireFractions5ebis, {
+  leSuperFormulaire,
+} from './5N3B'
 export const titre =
   'Additionner ou soustraire deux fractions relatives (dénominateurs multiples)'
 export const amcReady = true
@@ -15,6 +21,9 @@ export const refs = {
 export default class ExerciceAdditionnerSoustraireFractions5eter extends ExerciceAdditionnerSoustraireFractions5ebis {
   constructor() {
     super()
-    this.sup5 = 50
+    this.sup = serialiseFormulaireComplexe(leSuperFormulaire, {
+      ...valeursParDefaut(leSuperFormulaire),
+      negatifs: 50,
+    })
   }
 }

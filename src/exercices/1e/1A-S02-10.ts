@@ -16,9 +16,7 @@ export const titre = "Étudier l'effet du remplacement de deux valeurs"
 export const dateDePublication = '05/07/2026'
 
 type AffirmationVraie =
-  | 'La moyenne augmente.'
-  | "L'étendue augmente."
-  | 'La médiane augmente.'
+  'La moyenne augmente.' | "L'étendue augmente." | 'La médiane augmente.'
 
 /**
  * @author Stéphane Guyon
@@ -166,7 +164,7 @@ export default class RemplacerValeurSerieQCM extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionAleatoire()
   }
 }

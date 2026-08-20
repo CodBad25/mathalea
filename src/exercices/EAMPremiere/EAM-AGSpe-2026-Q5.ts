@@ -16,7 +16,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Retrouver une fonction à partir d\'un tableau de signes'
+export const titre = "Retrouver une fonction à partir d'un tableau de signes"
 export const dateDePublication = '02/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -25,7 +25,7 @@ export const dateDePublication = '02/06/2026'
  *
  */
 export default class AutoQ5AGs2026 extends ExerciceQcmA {
- // Tableau de signes d'une parabole : racines r1 < 0 < r2, orientation S (=signe de a).
+  // Tableau de signes d'une parabole : racines r1 < 0 < r2, orientation S (=signe de a).
   // Distracteurs forçables (distA/B/C) pour reproduire la version officielle.
   private appliquerLesValeurs(
     r1: number,
@@ -47,7 +47,8 @@ export default class AutoQ5AGs2026 extends ExerciceQcmA {
     }
 
     // Fonction servant à tracer le tableau de l'énoncé : signe +0-0+ si S>0, -0+0- si S<0
-    const f = (x: number | FractionEtendue) => S * (Number(x) - r1) * (Number(x) - r2)
+    const f = (x: number | FractionEtendue) =>
+      S * (Number(x) - r1) * (Number(x) - r2)
 
     const opts = {
       step: 1,
@@ -83,9 +84,10 @@ export default class AutoQ5AGs2026 extends ExerciceQcmA {
 
     this.correction = `Les expressions proposées sont des formes factorisées de polynômes du second degré.<br>`
     this.correction += `D'après le tableau, $f$ s'annule en $x = ${r1}$ et $x = ${r2}$ : ce sont les racines $x_1$ et $x_2$.<br>`
-    this.correction += S > 0
-      ? `À l'extérieur des racines, $f(x)$ est positive : le coefficient $a$ est donc positif ($a > 0$).<br>`
-      : `À l'extérieur des racines, $f(x)$ est négative : le coefficient $a$ est donc négatif ($a < 0$).<br>`
+    this.correction +=
+      S > 0
+        ? `À l'extérieur des racines, $f(x)$ est positive : le coefficient $a$ est donc positif ($a > 0$).<br>`
+        : `À l'extérieur des racines, $f(x)$ est négative : le coefficient $a$ est donc négatif ($a < 0$).<br>`
     this.correction += `Une seule expression vérifie ces conditions, il s'agit de  $f(x) = ${miseEnEvidence(correct)}$.`
   }
 
@@ -112,7 +114,7 @@ export default class AutoQ5AGs2026 extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionAleatoire()
   }
 }

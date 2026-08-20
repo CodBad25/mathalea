@@ -3,12 +3,12 @@ import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { bleuMathalea } from '../../lib/colors'
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   ecritureAlgebrique,
   reduireAxPlusB,
   rienSi1,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -124,14 +124,14 @@ export default class ReconnaitreExpressionDepuisCourbeQcm extends ExerciceQcmA {
         fonction = (x: number) => a * x ** 2 + b
         bonneReponse = expressions.parabole
         justification =
-          "La courbe est une parabole. On élimine donc les expressions qui ne sont pas du second degré."
+          'La courbe est une parabole. On élimine donc les expressions qui ne sont pas du second degré.'
         break
 
       case 'hyperbole':
         fonction = (x: number) => 1 / (a * x) + b
         bonneReponse = expressions.hyperbole
         justification =
-          "La courbe est une hyperbole. On élimine les polynômes du premier, deuxième et troisième degré."
+          'La courbe est une hyperbole. On élimine les polynômes du premier, deuxième et troisième degré.'
         break
 
       case 'cubique':
@@ -182,7 +182,7 @@ La seule expression possible de $f$ est donc $${miseEnEvidence(`f(x)=${bonneRepo
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.versionAleatoire()
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

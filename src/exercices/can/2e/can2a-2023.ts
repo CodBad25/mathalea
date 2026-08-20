@@ -145,6 +145,7 @@ export default class SujetCAN2023Seconde extends Exercice {
       let texteCorr = ''
       let nbChamps = 1
       let choix = 'a'
+      this.canReponseACompleter = ''
       switch (typeQuestionsDisponibles[i]) {
         case 1:
           a = randint(3, 9)

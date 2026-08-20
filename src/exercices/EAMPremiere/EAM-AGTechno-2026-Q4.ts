@@ -23,7 +23,7 @@ export const dateDePublication = '29/06/2026'
  *
  */
 export default class AutoQ4AGt2026 extends ExerciceQcmA {
-   private appliquerLesValeurs(
+  private appliquerLesValeurs(
     temperatureCelsius: number,
     debutPhrase: string,
     finPhrase: string,
@@ -33,7 +33,7 @@ export default class AutoQ4AGt2026 extends ExerciceQcmA {
     const dist2 = texNombre(0.18 * temperatureCelsius + 32, 2)
     const dist3 = texNombre(temperatureCelsius, 2)
     this.enonce = `On considère la formule suivante permettant de transformer des degrés Celsius ($^\\circ \\text{C}$) en degrés Fahrenheit ($^\\circ \\text{F}$) : $F =1,8C +32$<br>
-Où $F$ désigne la température en $^\\circ \\text{F}$ et $C$ désigne la température en $^\\circ \\text{C}$.<br>
+où $F$ désigne la température en $^\\circ \\text{F}$ et $C$ désigne la température en $^\\circ \\text{C}$.<br>
 ${debutPhrase} $${texNombre(temperatureCelsius, 2)}\\,^\\circ \\text{C}$, ${finPhrase} en degrés Fahrenheit est donc :<br>`
 
     this.correction = `On applique la formule de conversion :<br>

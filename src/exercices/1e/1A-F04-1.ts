@@ -9,10 +9,10 @@ import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 
+import { bleuMathalea } from '../../lib/colors'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import ExerciceQcmA from '../ExerciceQcmA'
-import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '30/07/2025'
 export const uuid = '3d696'
 
@@ -499,6 +499,6 @@ export default class AutoF4 extends ExerciceQcmA {
   constructor() {
     super()
     this.versionAleatoire()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
   }
 }

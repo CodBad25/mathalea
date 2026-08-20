@@ -3,6 +3,7 @@ import type PointApigeom from 'apigeom/src/elements/points/Point'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { similitude } from '../../lib/2d/transformations'
 import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import figureApigeom from '../../lib/figureApigeom'
 import { Matrice } from '../../lib/mathFonctions/Matrice'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
@@ -12,7 +13,6 @@ import type FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const interactifReady = true
 export const interactifType = 'custom'
@@ -20,7 +20,7 @@ export const uuid = 'df171'
 export const titre =
   'Placer un point dans un repère orthogonal, normé ou quelconque'
 export const refs = {
-  'fr-fr': ['2G12-7'],
+  'fr-fr': ['2G12-7', '2A-G2-3'],
   'fr-ch': ['3G90-2'],
 }
 
@@ -82,7 +82,7 @@ export default class BetaReperage2e extends Exercice {
     const y: FractionEtendue[][] = []
     const points: PointApigeom[][] = []
 
-    for (let i = 0; i < this.nbQuestions; ) {
+    for (let i = 0; i < this.nbQuestions;) {
       const options = {}
       x[i] = []
       y[i] = []
@@ -365,7 +365,7 @@ export default class BetaReperage2e extends Exercice {
       let question: string = ''
       if (context.isHtml) {
         if (this.interactif) {
-          question = `Placer les points $${this.labelsPoints[i].map((el, k) => `${el}(${x[i][k].texFractionSimplifiee};${y[i][k].texFractionSimplifiee})`).join('$, $')}$ dans le repère $(${labelO},${labelI},${labelK})$.<br>`
+          question = `Placer les points $${this.labelsPoints[i].map((el, k) => `${el}(${x[i][k].texFractionSimplifiee};${y[i][k].texFractionSimplifiee})`).join('$, $')}$ dans le repère $(${labelO},~${labelI},~${labelK})$.<br>`
           question += figureApigeom({
             exercice: this,
             figure: this.figuresApiGeom[i],
@@ -374,14 +374,14 @@ export default class BetaReperage2e extends Exercice {
             defaultAction: 'POINT_INTERSECTION',
           })
         } else {
-          question = `Placer les points $${this.labelsPoints[i].map((el, k) => `${el}(${x[i][k].texFractionSimplifiee};${y[i][k].texFractionSimplifiee})`).join('$, $')}$ dans le repère $(${labelO},${labelI},${labelK})$.<br>`
+          question = `Placer les points $${this.labelsPoints[i].map((el, k) => `${el}(${x[i][k].texFractionSimplifiee};${y[i][k].texFractionSimplifiee})`).join('$, $')}$ dans le repère $(${labelO},~${labelI},~${labelK})$.<br>`
           question += wrapperApigeomToMathalea(this.figuresApiGeom[i])
         }
       } else {
-        question = `Placer les points $${this.labelsPoints[i].map((el, k) => `${el}(${x[i][k].texFractionSimplifiee};${y[i][k].texFractionSimplifiee})`).join('$, $')}$ dans le repère $(${labelO},${labelI},${labelK})$.\\\\`
+        question = `Placer les points $${this.labelsPoints[i].map((el, k) => `${el}(${x[i][k].texFractionSimplifiee};${y[i][k].texFractionSimplifiee})`).join('$, $')}$ dans le repère $(${labelO},~${labelI},~${labelK})$.\\\\`
         question += this.figuresApiGeom[i].tikz()
       }
-      let reponse = `Les points $${this.labelsPoints[i].map((el, k) => `${el}(${x[i][k].texFractionSimplifiee};${y[i][k].texFractionSimplifiee})`).join('$, $')}$ dans le repère $(${labelO},${labelI},${labelK})$ :<br>`
+      let reponse = `Les points $${this.labelsPoints[i].map((el, k) => `${el}(${x[i][k].texFractionSimplifiee};${y[i][k].texFractionSimplifiee})`).join('$, $')}$ dans le repère $(${labelO},~${labelI},~${labelK})$ :<br>`
 
       reponse += context.isHtml
         ? figureApigeom({

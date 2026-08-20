@@ -9,8 +9,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
-export const titre =
-  'Calculer un côté dans un triangle rectangle avec le théorème de Pythagore'
+export const titre = "Calculer la longueur d'un côté d'un triangle rectangle"
 export const dateDePublication = '22/06/2026'
 
 export const uuid = '7c4e2'
@@ -83,7 +82,7 @@ export default class CoteTriangleRectanglePythagoreQcm extends ExerciceQcmA {
       objets,
     )
 
-    this.enonce = `Dans le triangle $ABC$ rectangle en $A$ ci-contre, qui n'est pas représentée à l'échelle, on donne $BC=${bc}\\text{ cm}$ et $${coteDonne}=${longueurDonnee}\\text{ cm}$. <br>Quelle est la longueur du segment $[${coteCherche}]$ ?${figure}`
+    this.enonce = `Dans le triangle $ABC$ rectangle en $A$, qui n'est pas représenté à l'échelle, on donne $BC=${bc}\\text{ cm}$ et $${coteDonne}=${longueurDonnee}\\text{ cm}$. <br>Quelle est la longueur exacte du segment $[${coteCherche}]$ ?${figure}`
 
     this.correction = `Le triangle $ABC$ est rectangle en $A$. D'après le théorème de Pythagore :<br>
 $BC^2=AB^2+AC^2$.<br>
@@ -103,7 +102,7 @@ Comme une longueur est positive, $${coteCherche}=${miseEnEvidence(`${longueurCor
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

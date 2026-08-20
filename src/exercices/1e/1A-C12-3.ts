@@ -2,7 +2,7 @@ import AutoQ7AGns2026 from '../EAMPremiere/EAM-AGnonSpe-2026-Q7'
 
 export const uuid = '8e0cd'
 export const refs = {
-  'fr-fr': ['1A-C12-3'],
+  'fr-fr': ['1A-C12-3', '2A-C5-3'],
   'fr-ch': [],
 }
 export const interactifReady = true

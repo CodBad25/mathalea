@@ -303,13 +303,17 @@ async function fullAction(
     await closeScratchSimulatorModalIfOpen(page)
     const refreshAfterInteractivityCount =
       options?.refreshAfterInteractivityCount ?? 1
-    logIfVerbose(
-      `Actualier (nouvel énoncé) ${refreshAfterInteractivityCount} fois`,
-    )
-    await buttonNewData.click({ clickCount: refreshAfterInteractivityCount })
-    logIfVerbose(
-      `fin Actualier (nouvel énoncé) ${refreshAfterInteractivityCount} fois`,
-    )
+    // Même garde que plus haut : sans bouton (pasDeVersionAleatoire = true),
+    // le clic attendrait en vain jusqu'au timeout.
+    if (hasButtonNewData) {
+      logIfVerbose(
+        `Actualier (nouvel énoncé) ${refreshAfterInteractivityCount} fois`,
+      )
+      await buttonNewData.click({ clickCount: refreshAfterInteractivityCount })
+      logIfVerbose(
+        `fin Actualier (nouvel énoncé) ${refreshAfterInteractivityCount} fois`,
+      )
+    }
   } else {
     // MGu : obligé car parfois on rate l'exception car trop rapide
     // await new Promise((resolve) => setTimeout(resolve, 1000)) // GV : Si on attend 1 seconde après chaque cas, il va falloir 1 an si on veut tester toutes les possibilités

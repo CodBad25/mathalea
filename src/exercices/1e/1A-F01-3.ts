@@ -12,13 +12,19 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 
-import { bleuMathalea } from '../../lib/colors'
+import {
+  lectureAntecedent,
+  lectureAntecedentAnimee,
+} from '../../lib/2d/LectureAntecedent'
+import { lectureImage, lectureImageAnimee } from '../../lib/2d/LectureImage'
+import { bleuMathalea, orangeMathalea, vertMathalea } from '../../lib/colors'
+import { context } from '../../modules/context'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '11/11/2025'
 export const uuid = '3833f'
 
 export const refs = {
-  'fr-fr': ['1A-F01-3'],
+  'fr-fr': ['1A-F01-3', '2A-F1-3'],
   'fr-ch': [''],
 }
 export const interactifReady = true
@@ -104,20 +110,17 @@ export default class AutoF01c extends ExerciceQcmA {
     const objetsEnonce = [repere1, courbe1]
 
     this.enonce = `On considère une fonction $f$ dont la représentation graphique $\\mathscr{C}$ est tracée dans un repère ci-dessous.<br><br>`
-    this.enonce +=
-      mathalea2d(
-        Object.assign(
-          { pixelsParCm: 30, scale: 1, center: true },
-          {
-            xmin: bornes.xMin - 1,
-            ymin: bornes.yMin - 1,
-            xmax: bornes.xMax + 1,
-            ymax: bornes.yMax + 1,
-          },
-        ),
-        objetsEnonce,
-        o,
-      ) + '<br><br>'
+    const optionsFigure = Object.assign(
+      { pixelsParCm: 30, scale: 1, center: true },
+      {
+        xmin: bornes.xMin - 1,
+        ymin: bornes.yMin - 1,
+        xmax: bornes.xMax + 1,
+        ymax: bornes.yMax + 1,
+      },
+    )
+    const figureEnonce = mathalea2d(optionsFigure, objetsEnonce, o)
+    this.enonce += figureEnonce + '<br><br>'
     this.enonce += 'Une seule affirmation est correcte :'
 
     // Définir toutes les bonnes réponses possibles avec leur numéro d'ordre
@@ -209,6 +212,10 @@ export default class AutoF01c extends ExerciceQcmA {
       return phrase
     })
 
+    const correctionFigureId = `figureCorrection-1A-F01-3Ex${this.numeroExercice ?? 0}Q0`
+    const optionsFigureCorrection = Object.assign(optionsFigure, {
+      id: correctionFigureId,
+    })
     this.correction = `Les images se lisent sur l'axe des ordonnées et les antécédents sur l'axe des abscisses.<br>
           Ainsi, on peut dire que :<br>
           $\\bullet$ ${phrasesAvecCouleur[0]},<br>
@@ -217,6 +224,77 @@ export default class AutoF01c extends ExerciceQcmA {
           $\\bullet$ ${phrasesAvecCouleur[3]},<br>
           $\\bullet$ ${phrasesAvecCouleur[4]}, <br>
           $\\bullet$ ${phrasesAvecCouleur[5]}.`
+    let correctionFigure = ''
+    if (bonneReponseChoisie.texte.includes('image')) {
+      const objetsCorrection = [
+        repere1,
+        courbe1,
+        lectureImage(
+          theSpline.x[abs1],
+          theSpline.y[abs1],
+          1,
+          1,
+          orangeMathalea,
+          '',
+          `${theSpline.x[abs1]}`,
+        ),
+      ]
+      correctionFigure =
+        !context.isHtml || context.isTypst
+          ? mathalea2d(optionsFigureCorrection, objetsCorrection)
+          : `<div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">${mathalea2d(
+              Object.assign(
+                { id: correctionFigureId },
+                optionsFigureCorrection,
+                {
+                  center: false,
+                },
+              ),
+              objetsEnonce,
+              o,
+            )}${lectureImageAnimee({
+              figureId: correctionFigureId,
+              x: theSpline.x[abs1],
+              y: theSpline.y[abs1],
+              pixelsParCm: optionsFigureCorrection.pixelsParCm,
+              couleurHorizontale: orangeMathalea,
+            })}</div>`
+    } else {
+      const objetsCorrection = [
+        repere1,
+        courbe1,
+        lectureAntecedent(
+          theSpline.x[abs1],
+          theSpline.y[abs1],
+          1,
+          1,
+          orangeMathalea,
+          '',
+          `${theSpline.y[abs1]}`,
+        ),
+      ]
+      correctionFigure =
+        !context.isHtml || context.isTypst
+          ? mathalea2d(optionsFigureCorrection, objetsCorrection)
+          : `<div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">${mathalea2d(
+              Object.assign(
+                { id: correctionFigureId },
+                optionsFigureCorrection,
+                {
+                  center: false,
+                },
+              ),
+              objetsEnonce,
+              o,
+            )}${lectureAntecedentAnimee({
+              figureId: correctionFigureId,
+              x: theSpline.x[abs1],
+              y: theSpline.y[abs1],
+              pixelsParCm: optionsFigureCorrection.pixelsParCm,
+              couleurHorizontale: vertMathalea,
+            })}</div>`
+    }
+    this.correction += correctionFigure
   }
 
   versionOriginale: () => void = () => {
@@ -298,6 +376,6 @@ export default class AutoF01c extends ExerciceQcmA {
   constructor() {
     super()
     this.versionAleatoire()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
   }
 }

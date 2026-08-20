@@ -10,8 +10,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 
-import ExerciceQcmA from '../ExerciceQcmA'
 import { bleuMathalea } from '../../lib/colors'
+import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '30/07/2025'
 export const uuid = '0b1fc'
 
@@ -623,6 +623,6 @@ Cette affirmation est fausse : Les solutions de l'inéquation $f(x) \\geqslant 0
   constructor() {
     super()
     this.versionAleatoire()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
   }
 }

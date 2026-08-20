@@ -239,6 +239,17 @@ composant reçoit un nom d'action et un payload sérialisable, puis exécute le
 callback enregistré à son `connectedCallback()`. Si le callback retourne une
 fonction, elle est appelée au `disconnectedCallback()`.
 
+Attention au cycle de régénération d'un énoncé (« Nouvel énoncé ») : les noms
+d'action sont le plus souvent stables (ils ne dépendent que des numéros
+d'exercice et de question), et `nouvelleVersion()` réinscrit le nouveau callback
+**avant** que Svelte ne retire l'ancien élément du DOM. Une fonction de nettoyage
+qui appelle `unregisterCallback(action)` désinscrirait donc l'inscription toute
+fraîche. `DomReadyActionElement.unregisterCallback()` ignore pour cette raison
+les désinscriptions obsolètes : elle ne supprime l'entrée que si le callback
+inscrit est bien celui dont le nettoyage est en cours (ou celui passé en second
+argument, à utiliser quand la désinscription a lieu hors de ce nettoyage — voir
+`destroy()` dans `src/lib/figureApigeom.ts`).
+
 ## Cas avancés
 
 ## Cas spécifique : diagrammes (outil prof vs évaluation)

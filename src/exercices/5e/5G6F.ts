@@ -24,7 +24,7 @@ export const amcType = 'qcmMono'
 export const uuid = '8812e'
 
 export const refs = {
-  'fr-fr': ['5G6F', '3AutoG02-3'],
+  'fr-fr': ['5G6F', '3AutoG02-1'],
   'fr-2016': ['5G42', '3AutoG02-3'],
   'fr-ch': ['9ES1E-6'],
 }

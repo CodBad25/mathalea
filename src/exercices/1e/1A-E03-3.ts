@@ -160,6 +160,5 @@ export default class TauxEvolution extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
   }
 }

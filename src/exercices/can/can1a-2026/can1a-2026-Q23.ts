@@ -2,7 +2,6 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { Arbre } from '../../../modules/arbres'
-import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
@@ -22,7 +21,7 @@ export const refs = {
 export default class Can1a2026Q23 extends ExerciceCan {
   constructor() {
     super()
-     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
@@ -95,26 +94,24 @@ export default class Can1a2026Q23 extends ExerciceCan {
         }),
       ],
     })
-
-    const arbreProfCollege = `\\Proba[Arbre,Angle=30,Branche=3,Rayon=0.65,Incline=false]{A/,$\\overline{A}$/$${texNombre(pAbarre, 1)}$,B
-/,$\\overline{B}$/$${texNombre(pBbarreSachantA, 1)}$,B/$${texNombre(pBsachantAbarre, 1)}$,$\\overline{B}$/$${texNombre(pBbarreSachantAbarre, 1)}$}`
+    // Cause une erreur de compilation latex et est incompatible avec Typst
+    //const arbreProfCollege = `\\Proba[Arbre,Angle=30,Branche=3,Rayon=0.65,Incline=false]{A/,$\\overline{A}$/$${texNombre(pAbarre, 1)}$,B/,$\\overline{B}$/$${texNombre(pBbarreSachantA, 1)}$,B/$${texNombre(pBsachantAbarre, 1)}$,$\\overline{B}$/$${texNombre(pBbarreSachantAbarre, 1)}$}`
 
     omega.setTailles()
     const objets = omega.represente(0, 6, 0, 2, true, 1, 6)
 
-    this.question = context.isHtml
-      ? mathalea2d(
-          {
-            xmin: -0.1,
-            xmax: 14,
-            ymin: -1,
-            ymax: 6,
-            display: 'inline',
-            scale: 0.5,
-          },
-          ...objets,
-        )
-      : arbreProfCollege
+    this.question = mathalea2d(
+      {
+        xmin: -0.1,
+        xmax: 14,
+        ymin: -1.5,
+        ymax: 6,
+        display: 'inline',
+        scale: 0.5,
+      },
+      ...objets,
+    )
+    // : arbreProfCollege. ! ne foonctionne pas
 
     if (this.interactif) {
       this.question += '$P(A\\cap \\overline{B})=$ '
@@ -130,7 +127,17 @@ export default class Can1a2026Q23 extends ExerciceCan {
     &=${miseEnEvidence(this.reponse)}
               \\end{aligned}$
           `
-    this.canEnonce = arbreProfCollege
+    this.canEnonce = mathalea2d(
+      {
+        xmin: -0.1,
+        xmax: 14,
+        ymin: -1.5,
+        ymax: 6,
+        display: 'inline',
+        scale: 0.5,
+      },
+      ...objets,
+    )
     this.canReponseACompleter = '$P(A\\cap \\overline{B})=\\ldots$'
   }
 

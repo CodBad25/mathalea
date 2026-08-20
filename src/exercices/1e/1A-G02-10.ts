@@ -30,7 +30,7 @@ export default class VolumeConeQcm extends ExerciceQcmA {
     const volumeAvecPiDecimal = coefficientVolume * 3.14
 
     this.enonce = `Un cône a pour rayon de base $${rayon}\\text{ cm}$ et pour hauteur $${hauteur}\\text{ cm}$.<br>
-La valeur exacte de son volume est `
+La valeur exacte de son volume est :`
 
     this.reponses = [
       `$${texNombre(coefficientVolume)}\\pi\\text{ cm}^3$`,
@@ -42,7 +42,8 @@ La valeur exacte de son volume est `
     this.correction = `Le volume d'un cône de rayon de base $r$ et de hauteur $h$ est donné par la formule :<br>
 $V=\\dfrac{\\pi r^2h}{3}$.<br>
 Ici, $r=${rayon}\\text{ cm}$ et $h=${hauteur}\\text{ cm}$.<br>
-Donc $V=\\dfrac{\\pi\\times ${rayon}^2\\times ${hauteur}}{3}=\\dfrac{${produit}\\pi}{3}=${miseEnEvidence(`${texNombre(coefficientVolume)}\\pi\\text{ cm}^3`)}$.`
+Donc $V=\\dfrac{\\pi\\times ${rayon}^2\\times ${hauteur}}{3}=\\dfrac{${produit}\\pi}{3}=${miseEnEvidence(`${texNombre(coefficientVolume)}\\pi\\text{ cm}^3`)}$.<br>
+$${texNombre(volumeAvecPiDecimal)}\\text{ cm}^3$ n'est qu'une version approchée du volume.`
   }
 
   versionOriginale = () => {
@@ -61,7 +62,7 @@ Donc $V=\\dfrac{\\pi\\times ${rayon}^2\\times ${hauteur}}{3}=\\dfrac{${produit}\
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

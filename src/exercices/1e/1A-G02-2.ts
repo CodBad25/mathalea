@@ -96,7 +96,7 @@ $\\mathcal{A}=AB\\times BC=${longueurEnCm}\\times ${largeurEnCm}=${miseEnEvidenc
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

@@ -26,10 +26,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = true
 export const amcType = 'qcmMono'
-/**
- * Calculer ZO dans une configuration de Thalès en résolvant une équation.
- * @author Stéphane Guyon
- */
+
 type CoteParallele = 'petit' | 'grand'
 type Diagonale = 'HBA' | 'DBC'
 type Fraction = [numerateur: number, denominateur: number]
@@ -140,6 +137,7 @@ Quelle est la longueur du segment $[${nomCoteCherche}]$ ?`
     const relationThales = `\\dfrac{${nomPetitCoteParallele}}{${nomGrandCoteParallele}}=\\dfrac{${nomPetiteDemiDiagonale}}{${nomGrandeDemiDiagonale}}`
     this.correction = `Le point $${nomB}$ appartient au segment $[${nomDiagonaleComplete}]$. On calcule d'abord la longueur manquante :<br>
 $${nomDemiDiagonaleCalculee}=${nomDiagonaleComplete}-${nomDemiDiagonaleDonnee}=${diagonaleComplete}-${demiDiagonaleDonnee}=${demiDiagonaleCalculee}\\text{ cm}$.<br>
+Le point $${nomB}$ appartient au segment $[${nomD}${nomC}]$.<br>
 Les droites $(${nomH}${nomD})$ et $(${nomA}${nomC})$ sont parallèles. D'après le théorème de Thalès :<br>
 $${relationThales}$.<br>
 On en déduit que $${nomCoteCherche}=\\dfrac{${nomCoteParalleleDonne}\\times ${nomDemiDiagonaleDonnee}}{${nomDemiDiagonaleCalculee}}=\\dfrac{${coteParalleleDonne}\\times ${demiDiagonaleDonnee}}{${demiDiagonaleCalculee}}=${miseEnEvidence(`${valeurCorrecte}\\text{ cm}`)}$.`
@@ -160,7 +158,7 @@ On en déduit que $${nomCoteCherche}=\\dfrac{${nomCoteParalleleDonne}\\times ${n
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

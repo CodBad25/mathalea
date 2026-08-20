@@ -359,7 +359,7 @@ export default class EgaliteFG11 extends Exercice {
         }
       }
       const divFeedback = document.querySelector(
-        `#feedbackEx${this.numeroExercice}Q0`,
+        `#feedbackEx${this.numeroExercice}Q${i}`,
       ) as HTMLDivElement
       if (divFeedback) divFeedback.innerHTML = feedback
       figure.isDynamic = false

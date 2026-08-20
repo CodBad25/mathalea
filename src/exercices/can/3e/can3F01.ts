@@ -1,9 +1,11 @@
+import { lectureImage, lectureImageAnimee } from '../../../lib/2d/LectureImage'
 import { repere } from '../../../lib/2d/reperes'
 import { latex2d } from '../../../lib/2d/textes'
-import { bleuMathalea } from '../../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../../lib/colors'
 import { Spline, spline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -138,6 +140,15 @@ export default class ImageSpline extends ExerciceSimple {
       color: bleuMathalea,
     })
     const objetsEnonce = [repere1, courbe1]
+    const figureOptions = Object.assign(
+      { pixelsParCm: 30, scale: 0.7, center: true },
+      {
+        xmin: bornes.xMin - 1,
+        ymin: bornes.yMin - 1,
+        xmax: bornes.xMax + 1,
+        ymax: bornes.yMax + 1,
+      },
+    )
 
     this.reponse = this.versionQcm
       ? `est $${theSpline.y[antecedent]}$`
@@ -151,40 +162,45 @@ export default class ImageSpline extends ExerciceSimple {
     ]
     if (this.versionQcm) {
       this.question =
-        mathalea2d(
-          Object.assign(
-            { pixelsParCm: 30, scale: 0.7, center: true },
-            {
-              xmin: bornes.xMin - 1,
-              ymin: bornes.yMin - 1,
-              xmax: bornes.xMax + 1,
-              ymax: bornes.yMax + 1,
-            },
-          ),
-          objetsEnonce,
-          o,
-        ) +
+        mathalea2d(figureOptions, objetsEnonce, o) +
         '<br>' +
         `L'image de $${theSpline.x[antecedent]}$ : `
     } else {
       this.question =
         `Quelle est l'image de $${theSpline.x[antecedent]}$ ?
-    ` +
-        mathalea2d(
-          Object.assign(
-            { pixelsParCm: 30, scale: 0.7, center: true },
-            {
-              xmin: bornes.xMin - 1,
-              ymin: bornes.yMin - 1,
-              xmax: bornes.xMax + 1,
-              ymax: bornes.yMax + 1,
-            },
-          ),
-          objetsEnonce,
-          o,
-        )
+    ` + mathalea2d(figureOptions, objetsEnonce, o)
     }
+    const correctionFigureId = `can3F01CorrectionEx${this.numeroExercice ?? 0}Q0`
+    const objetsCorrection = [
+      repere1,
+      courbe1,
+      lectureImage(
+        theSpline.x[antecedent],
+        theSpline.y[antecedent],
+        1,
+        1,
+        orangeMathalea,
+        '',
+        `${theSpline.y[antecedent]}`,
+      ),
+    ]
+    const correctionFigure =
+      !context.isHtml || context.isTypst
+        ? mathalea2d(figureOptions, objetsCorrection, o)
+        : `<div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">${mathalea2d(
+            Object.assign({ id: correctionFigureId }, figureOptions, {
+              center: false,
+            }),
+            objetsEnonce,
+            o,
+          )}${lectureImageAnimee({
+            figureId: correctionFigureId,
+            x: theSpline.x[antecedent],
+            y: theSpline.y[antecedent],
+            pixelsParCm: figureOptions.pixelsParCm,
+            couleurHorizontale: orangeMathalea,
+          })}</div>`
     this.correction = `Pour lire l'image de $${theSpline.x[antecedent]}$, on place la valeur de $${theSpline.x[antecedent]}$ sur l'axe des abscisses (axe de lecture  des antécédents) et on lit
-    son image  sur l'axe des ordonnées (axe de lecture des images). On obtient :  $f(${theSpline.x[antecedent]})=${miseEnEvidence(theSpline.y[antecedent])}$.`
+    son image  sur l'axe des ordonnées (axe de lecture des images). On obtient :  $f(${theSpline.x[antecedent]})=${miseEnEvidence(theSpline.y[antecedent])}$.<br>${correctionFigure}`
   }
 }

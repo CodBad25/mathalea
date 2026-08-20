@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = '42237'
 
 export const refs = {
-  'fr-fr': ['1A-C12-1'],
+  'fr-fr': ['1A-C12-1', '2A-C5-1'],
   'fr-ch': ['11QCM-2'],
 }
 export default class Auto1AC14 extends CalculExpAvecValeurs {

@@ -80,7 +80,7 @@ La raison est donc $${miseEnEvidence(`r=${r}.`)}$ `
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.versionAleatoire()
   }
 }

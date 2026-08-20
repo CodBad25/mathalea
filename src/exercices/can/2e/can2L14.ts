@@ -46,8 +46,8 @@ export default class EquationsCarree extends ExerciceSimple {
             ? `$S=\\{${sol1}\\,;\\,${sol2}\\}$`
             : `\\{${sol1};${sol2}\\}`
           this.question = this.versionQcm
-            ? `L'ensemble $S$ des solutions de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$ est :`
-            : `Donner l'ensemble $S$ des solutions de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$.`
+            ? `L'ensemble $S$ des solutions (sur $\\mathbb{R}$) de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$ est :`
+            : `Donner l'ensemble $S$ des solutions (sur $\\mathbb{R}$) de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$.`
 
           this.correction = `L'équation est de la forme $X^2=k$ avec $X=(x${ecritureAlgebrique(a)})$ et $k=${k}$.<br>
           Comme $k>0$, les solutions de $(x${ecritureAlgebrique(a)})^2=${k}$ sont données par les solutions de chacune des équations :           $x${ecritureAlgebrique(a)}=-\\sqrt{${k}}$ et $x${ecritureAlgebrique(a)}=\\sqrt{${k}}$.<br>
@@ -76,8 +76,8 @@ export default class EquationsCarree extends ExerciceSimple {
             ? `$S=\\{-\\sqrt{${k}}${ecritureAlgebrique(-a)}\\,;\\,\\sqrt{${k}}${ecritureAlgebrique(-a)}\\}$`
             : `\\{-\\sqrt{${k}}${ecritureAlgebrique(-a)};\\sqrt{${k}}${ecritureAlgebrique(-a)}\\}`
           this.question = this.versionQcm
-            ? `L'ensemble $S$ des solutions de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$ est :`
-            : `Donner l'ensemble $S$ des solutions de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$.`
+            ? `L'ensemble $S$ des solutions (sur $\\mathbb{R}$) de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$ est :`
+            : `Donner l'ensemble $S$ des solutions (sur $\\mathbb{R}$) de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$.`
           this.correction = `L'équation est de la forme $X^2=k$ avec $X=(x${ecritureAlgebrique(a)})$ et $k=${k}$.<br>
         Comme $k>0$, les solutions de $(x${ecritureAlgebrique(a)})^2=${k}$ sont données par les solutions de chacune des équations :         $x${ecritureAlgebrique(a)}=-\\sqrt{${k}}$ et $x${ecritureAlgebrique(a)}=\\sqrt{${k}}$.<br>
         $x${ecritureAlgebrique(a)}=-\\sqrt{${k}}$ a pour solution $-\\sqrt{${k}}${ecritureAlgebrique(-a)}$ et 
@@ -104,11 +104,11 @@ export default class EquationsCarree extends ExerciceSimple {
           const k = randint(-10, -1)
           this.reponse = this.versionQcm ? '$S=\\emptyset$' : '\\emptyset'
           this.question = this.versionQcm
-            ? `L'ensemble $S$ des solutions de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$ est :`
-            : `Donner l'ensemble $S$ des solutions de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$.`
+            ? `L'ensemble $S$ des solutions (sur $\\mathbb{R}$) de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$ est :`
+            : `Donner l'ensemble $S$ des solutions (sur $\\mathbb{R}$) de l'équation  $(x${ecritureAlgebrique(a)})^2=${k}$.`
 
           this.correction = `L'équation est de la forme $X^2=k$ avec $X=(x${ecritureAlgebrique(a)})$ et $k=${k}$.<br>
-        Comme $k<0$, l'équation n'a pas de solution.<br>
+        Comme $k<0$, l'équation n'a pas de solution sur $\\mathbb{R}$.<br>
         Ainsi, l'ensemble des solutions de l'équation est $S=${miseEnEvidence('\\emptyset')}$.`
           this.distracteurs = [
             // Erreur : comme si k était positif avec √|k|

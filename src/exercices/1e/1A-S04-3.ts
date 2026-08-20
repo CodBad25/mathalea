@@ -14,7 +14,8 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Calculer le pourcentage d'élèves à partir d'un diagramme en barres"
+export const titre =
+  "Calculer le pourcentage d'élèves à partir d'un diagramme en barres"
 export const dateDePublication = '31/12/2025'
 /**
  * @author Jean-claude Lhote
@@ -114,7 +115,7 @@ export default class CalculPourcentageEtMoyenneQCM extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionAleatoire()
   }
 }

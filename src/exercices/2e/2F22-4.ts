@@ -330,7 +330,7 @@ export default class ReconnaitreFonctionDepuisCourbe extends ExerciceQcmA {
       '1 : Nouveau programme 2026\n2 : Années de transition\n3 : Toutes les fonctions de référence',
     ]
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: false, ordered: false }
+
     this.ordreDesCas = shuffle(this.casDisponibles())
     this.versionAleatoire()
   }

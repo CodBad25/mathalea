@@ -342,6 +342,7 @@ export type InteractivityType =
   | 'dnd' // Non compatible AMC
   | 'drag-and-drop' // Non compatible AMC
   | 'custom' // Non compatible AMC
+  | 'meta-custom' // Non compatible AMC : question custom réhébergée par un méta-exercice
   // MathaleaCustomElement
   | 'liste-deroulante' // Compatible AMC si on remplace par un qcm
   | 'my-spreadsheet' // Difficile à faire rentrer dans AMC
@@ -388,6 +389,7 @@ export function isInteractivityType(
     value === 'dnd' ||
     value === 'drag-and-drop' ||
     value === 'custom' ||
+    value === 'meta-custom' ||
     // MathleaCustomElement
     value === 'liste-deroulante' ||
     value === 'my-spreadsheet' ||
@@ -432,6 +434,7 @@ export function isInteractivityType(
  */
 export function isMathaleaCustomElementFormat(value: unknown): boolean {
   return (
+    value === 'meta-custom' ||
     value === 'liste-deroulante' ||
     value === 'my-spreadsheet' ||
     value === 'MetaInteractif2d' ||
@@ -1079,6 +1082,14 @@ export interface IExercice {
   interactifObligatoire: boolean
   interactifReady: boolean
   interactifType?: string
+  /**
+   * Index de la question dans l'exercice affiché quand cet exercice est
+   * réhébergé comme une question d'un méta-exercice (`MetaExerciceCan`) :
+   * la question locale 0 devient la question `indexQuestionHote` de l'hôte.
+   * Sert à générer directement des identifiants DOM uniques plutôt qu'à les
+   * réécrire après coup. Vaut 0 hors méta-exercice.
+   */
+  indexQuestionHote?: number
   besoinFormulaireNumerique:
     | boolean
     | [titre: string, max: number, tooltip: string]

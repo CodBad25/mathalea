@@ -287,7 +287,7 @@ export default class ComprendreSensPourcentage extends Exercice {
         case 12:
           unites = 'kWh'
           pourcentage = randint(3, 29, [10, 20])
-          texteAvant[0] = `Si un appareil utilise $${pourcentage}\\ \\%$ de l'énergie d'un foyer, alors pour $100$ kilowattheures (kWh), cet appareil consomme`
+          texteAvant[0] = `Si un appareil utilise $${pourcentage}\\ \\%$ de l'énergie d'un foyer, alors pour $100$ kilowatt-heures (kWh), cet appareil consomme`
           texteApres = `${unites}.`
 
           texteAvant[1] = `On peut en déduire que pour $${multiplePour100[i] * 100}$ kWh, cet appareil consomme`

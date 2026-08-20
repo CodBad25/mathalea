@@ -205,6 +205,58 @@ describe('parseFormulaireComplexe', () => {
   })
 })
 
+describe('champ nombre', () => {
+  const formulaireNombre: FormulaireComplexe = {
+    champs: [
+      { type: 'nombre', nom: 'coefficient', label: 'Coefficient', max: 10 },
+      {
+        type: 'nombre',
+        nom: 'pourcentage',
+        label: 'Pourcentage',
+        min: 0,
+        max: 100,
+        defaut: 25,
+      },
+    ],
+  }
+
+  it('utilise `defaut`, ou `min`, ou 0', () => {
+    expect(valeursParDefaut(formulaireNombre)).toEqual({
+      coefficient: 0,
+      pourcentage: 25,
+    })
+  })
+
+  it('sérialise et désérialise la valeur entière', () => {
+    const valeurs = { coefficient: 7, pourcentage: 50 }
+    const serialisation = serialiseFormulaireComplexe(formulaireNombre, valeurs)
+    expect(serialisation).toBe('7*50')
+    expect(parseFormulaireComplexe(formulaireNombre, serialisation)).toEqual(
+      valeurs,
+    )
+  })
+
+  it('borne la valeur entre min et max', () => {
+    expect(parseFormulaireComplexe(formulaireNombre, '99*-5')).toEqual({
+      coefficient: 10,
+      pourcentage: 0,
+    })
+  })
+
+  it('retombe sur la valeur par défaut si la valeur est invalide', () => {
+    expect(parseFormulaireComplexe(formulaireNombre, 'x*')).toEqual({
+      coefficient: 0,
+      pourcentage: 25,
+    })
+  })
+
+  it('est accessible via ParametresFormulaireComplexe.nombre()', () => {
+    const params = lireFormulaireComplexe(formulaireNombre, '3*80')
+    expect(params.nombre('coefficient')).toBe(3)
+    expect(params.nombre('pourcentage')).toBe(80)
+  })
+})
+
 describe('répartitions pondérées', () => {
   const items: ItemPondere[] = [
     { nom: 'm', label: 'Longueurs', poids: 2 },

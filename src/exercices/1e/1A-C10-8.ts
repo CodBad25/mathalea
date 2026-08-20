@@ -11,7 +11,7 @@ import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '2e7a5'
 export const refs = {
-  'fr-fr': ['1A-C10-8'],
+  'fr-fr': ['1A-C10-8', '2A-C3-6'],
   'fr-ch': ['11QCM-12', '1mQCM-12'],
 }
 export const interactifReady = true
@@ -138,7 +138,7 @@ export default class Auto1C11 extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    // this.options = { vertical: true, ordered: false }
+
     this.versionAleatoire()
     this.spacing = 1.5
   }

@@ -63,7 +63,6 @@ export default class ComparerFractionsAvecDifference extends ExerciceQcmA {
       </p>
     `
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: false, ordered: false }
     this.versionAleatoire()
   }
 }

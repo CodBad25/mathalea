@@ -42,10 +42,10 @@ export default class ExprimerVariable extends ExerciceSimple {
       const var1 = choice(['x', 'z', 'a'])
       const var2 = choice(['b', 'c', 'y'])
       const corr1 = `De la relation $${rienSi1(a)}${var1}${ecritureAlgebriqueSauf1(b)}${var2}=${c}$, on déduit en ajoutant $${rienSi1(-b)}${var2}$ dans chaque membre :
-          $${rienSi1(a)}${var1}=${c}${ecritureAlgebrique(-b)}${var2}$`
+          $${rienSi1(a)}${var1}=${c}${ecritureAlgebrique(-b)}${var2}$.`
       const corr2 = ` Puis, en divisant par $${a}$, on obtient : $${var1}=\\dfrac{${c}${ecritureAlgebriqueSauf1(-b)}${var2}}{${a}}$`
       const corr3 = `De la relation $${rienSi1(a)}${var1}${ecritureAlgebriqueSauf1(b)}${var2}=${c}$, on déduit en ajoutant $${rienSi1(-a)}${var1}$ dans chaque membre :
-          $${rienSi1(b)}${var2}=${c}${ecritureAlgebriqueSauf1(-a)}${var1}$`
+          $${rienSi1(b)}${var2}=${c}${ecritureAlgebriqueSauf1(-a)}${var1}$.`
       const corr4 = ` Puis, en divisant par $${b}$, on obtient : $${var2}=\\dfrac{${c}${ecritureAlgebriqueSauf1(-a)}${var1}}{${b}}$`
 
       if (this.quotaChoice('ordre', [true, false])) {

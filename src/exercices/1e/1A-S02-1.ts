@@ -169,7 +169,7 @@ export default class MedianeQCM extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.versionAleatoire()
   }
 }

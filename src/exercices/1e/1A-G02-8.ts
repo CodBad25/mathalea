@@ -42,7 +42,8 @@ La valeur exacte de son volume est :`
     this.correction = `Le volume d'un cylindre de rayon de base $r$ et de hauteur $h$ est donné par la formule :<br>
 $V=\\pi r^2h$.<br>
 Ici, $r=${rayon}\\text{ cm}$ et $h=${hauteur}\\text{ cm}$.<br>
-Donc $V=\\pi\\times ${rayon}^2\\times ${hauteur}=${miseEnEvidence(`${coefficientVolume}\\pi\\text{ cm}^3`)}$.`
+Donc $V=\\pi\\times ${rayon}^2\\times ${hauteur}=${miseEnEvidence(`${coefficientVolume}\\pi\\text{ cm}^3`)}$.<br>
+$${texNombre(volumeAvecPiDecimal)}\\text{ cm}^3$ n'est qu'une version approchée du volume.`
   }
 
   versionOriginale = () => {
@@ -57,7 +58,7 @@ Donc $V=\\pi\\times ${rayon}^2\\times ${hauteur}=${miseEnEvidence(`${coefficient
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

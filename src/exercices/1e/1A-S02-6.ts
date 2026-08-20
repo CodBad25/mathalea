@@ -150,7 +150,7 @@ Laquelle de ces 4 propositions est vraie ?`
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionAleatoire()
   }
 }

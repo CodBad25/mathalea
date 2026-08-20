@@ -161,7 +161,7 @@ export default class EquationsGSpline extends ExerciceSimple {
     this.compteur = 0
     const solutions1 = theSpline.solve(y1) ?? []
     const reponse1 =
-      solutions1.length === 0 ? '\\emptyset' : `${solutions1.join(';')}`
+      solutions1.length === 0 ? '\\emptyset' : `\\{${solutions1.join(';')}\\}`
     this.reponse = reponse1
     this.question =
       `On donne la représentation graphique d'une fonction $f$. <br>

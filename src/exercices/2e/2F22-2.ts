@@ -16,7 +16,7 @@ export const dateDeModifImportante = '26/08/2025'
 
 /**
  *
- * @author Gilles Mora
+ * @author Gilles Mora - Mise à jour été 2026 : Stéphane Guyon
 
  */
 export const uuid = '9315e'
@@ -30,8 +30,8 @@ export default class ComparerAvecFonctionRef extends Exercice {
     super()
     this.besoinFormulaireNumerique = [
       'Choix des questions',
-      6,
-      '1 : Avec une fonction affine\n2 : Avec la fonction carré\n3 : Avec la fonction inverse\n4 : Avec la fonction racine carrée\n5 : Avec la fonction cube\n6 : Mélange',
+      8,
+      '1 : Avec une fonction affine\n2 : Avec la fonction carré\n3 : Avec la fonction inverse\n4 : Avec la fonction valeur absolue\n5 : Mélange programme 2026\n6 : Avec la fonction cube (année de transition)\n7 : Avec la fonction racine carrée (année de transition)\n8 : Mélange',
     ]
     this.besoinFormulaire2Numerique = [
       'Choix des énoncés',
@@ -41,7 +41,7 @@ export default class ComparerAvecFonctionRef extends Exercice {
 
     this.nbQuestions = 1
 
-    this.sup = 6
+    this.sup = 5
     this.sup2 = true
     this.sup2 = 1
 
@@ -57,9 +57,20 @@ export default class ComparerAvecFonctionRef extends Exercice {
     } else if (this.sup === 3) {
       typeDeQuestionsDisponibles = ['typeE4', 'typeE5']
     } else if (this.sup === 4) {
-      typeDeQuestionsDisponibles = ['typeE6']
+      typeDeQuestionsDisponibles = ['typeE8']
     } else if (this.sup === 5) {
+      typeDeQuestionsDisponibles = [
+        'typeE1',
+        'typeE2',
+        'typeE3',
+        'typeE4',
+        'typeE5',
+        'typeE8',
+      ]
+    } else if (this.sup === 6) {
       typeDeQuestionsDisponibles = ['typeE7']
+    } else if (this.sup === 7) {
+      typeDeQuestionsDisponibles = ['typeE6']
     } else {
       typeDeQuestionsDisponibles = [
         'typeE1',
@@ -69,6 +80,7 @@ export default class ComparerAvecFonctionRef extends Exercice {
         'typeE5',
         'typeE6',
         'typeE7',
+        'typeE8',
       ] //
     }
     //
@@ -362,7 +374,6 @@ export default class ComparerAvecFonctionRef extends Exercice {
           }
           break
         case 'typeE7': // fct cube
-        default:
           {
             const partiedec1x1 = (randint(-9, 9, 0) / 10) * choice([1, -1])
             const partiedec1x2 = (randint(1, 9) / 10) * choice([1, -1])
@@ -400,6 +411,46 @@ export default class ComparerAvecFonctionRef extends Exercice {
               }
               reponse = ['croissante', 'R', '>']
             }
+            variables.push(x1, x2)
+          }
+          break
+        case 'typeE8': // fct valeur absolue
+        default:
+          {
+            const signe = choice([1, -1])
+            const premierNombrePositif = randint(1, 9) + randint(5, 9) / 10
+            const ecart = (randint(1, 9) / 10) * choice([1, -1])
+            x1 = signe * premierNombrePositif
+            x2 = signe * (premierNombrePositif + ecart)
+            const x1B = Math.round(x1 * 10) / 10
+            const x2B = Math.round(x2 * 10) / 10
+            const fonctionCroissante = signe > 0
+            const premierEstInferieur = x1B < x2B
+            const symboleReponse =
+              premierEstInferieur === fonctionCroissante ? '<' : '>'
+            nom = choice(nomF)
+
+            if (this.sup2 === 1) {
+              texte = ` Soit $${nom}$ la fonction valeur absolue.<br>
+            Sans effectuer de calcul, comparer $${nom}(${texNombre(x1, 1)})$ et $${nom}(${texNombre(x2, 1)})$.`
+            } else {
+              texte = `Sans effectuer de calcul, comparer $\\left|${texNombre(x1, 1)}\\right|$ et $\\left|${texNombre(x2, 1)}\\right|$.`
+            }
+
+            texteCorr = `La fonction valeur absolue est strictement ${fonctionCroissante ? 'croissante' : 'décroissante'} sur $${fonctionCroissante ? ']0\\,;\\,+\\infty[' : ']-\\infty\\,;\\,0['}$. Les antécédents et les images sont donc rangés dans ${fonctionCroissante ? 'le même ordre' : "l'ordre inverse"}.<br>
+            Or $${texNombre(Math.min(x1B, x2B), 1)}${sp(1)}${miseEnEvidence('\\boldsymbol{<}')}${sp(1)}${texNombre(Math.max(x1B, x2B), 1)}$.<br>`
+
+            if (this.sup2 === 1) {
+              texteCorr += `On en déduit que $${nom}(${texNombre(x1, 1)})${sp(1)}${miseEnEvidence(`\\boldsymbol{${symboleReponse}}`)}${sp(1)}${nom}(${texNombre(x2, 1)})$.`
+            } else {
+              texteCorr += `On en déduit que $\\left|${texNombre(x1, 1)}\\right|${sp(1)}${miseEnEvidence(`\\boldsymbol{${symboleReponse}}`)}${sp(1)}\\left|${texNombre(x2, 1)}\\right|$.`
+            }
+
+            reponse = [
+              fonctionCroissante ? 'croissante' : 'decroissante',
+              fonctionCroissante ? 'R+' : 'R-',
+              symboleReponse,
+            ]
             variables.push(x1, x2)
           }
           break

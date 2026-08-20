@@ -53,7 +53,7 @@ $\\qquad$ return(n)<br><br>
 
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionOriginale()
   }
 }

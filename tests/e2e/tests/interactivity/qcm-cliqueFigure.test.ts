@@ -37,7 +37,7 @@ async function test1(page: Page) {
   const indexCorrect = status.findIndex((s) => s)
   const checkboxe = await page
     .locator('.ex0')
-    .locator('input[type="checkbox"]')
+    .locator('input[type="radio"]')
     .nth(indexCorrect)
   await checkboxe.check()
 

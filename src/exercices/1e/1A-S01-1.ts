@@ -36,7 +36,7 @@ import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '26/09/2025'
 export const uuid = 'q5c12f'
 export const refs = {
-  'fr-fr': ['1A-S01-1', '2A-S1-1', 'BP1AUTO023'],
+  'fr-fr': ['1A-S01-1', '2A-S1-1', '2A-S1-6', 'BP1AUTO023'],
   'fr-ch': ['9FA4A-4'],
 }
 export const interactifReady = true

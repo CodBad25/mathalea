@@ -48,7 +48,7 @@ export async function sendActivityParams() {
     view: 'eleve',
     mode: 'un_exo_par_page',
     removeSeed: true,
-    recorder: 'Moodle',
+    recorder: true,
   }).toString()
   console.info(url)
   window.parent.postMessage(

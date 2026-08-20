@@ -43,6 +43,7 @@ import '../customElements/ObjetsCliquablesElement'
 import '../customElements/FractionCliquableElement'
 import '../customElements/MathaleaLabyrintheElement'
 import '../customElements/MathaleaBranchingQcm'
+import '../customElements/MetaCustomElement'
 
 export function isClickFiguresArray(
   figures: Figure[] | ClickFigures[],
@@ -163,25 +164,43 @@ export function exerciceInteractif(
   let nbQuestionsValidees = 0
   let nbQuestionsNonValidees = 0
   const perQuestionIsOk: boolean[] = []
+  let customFeedbackReady = false
   exercice.answers = {}
 
-  if (exercice.interactifType === 'custom') {
-    return verifExerciceCustom(exercice, divScore, buttonScore)
-  }
+  const nbQuestions =
+    exercice.interactifType === 'custom'
+      ? Math.max(exercice.autoCorrection.length, exercice.nbQuestions ?? 0)
+      : exercice.autoCorrection.length
 
-  for (let i = 0; i < exercice.autoCorrection.length; i++) {
+  for (let i = 0; i < nbQuestions; i++) {
     // Une question sans réponse attendue (question de démonstration, de rédaction...)
     // au milieu de questions interactives ne doit pas être vérifiée ni comptée.
-    if (exercice.autoCorrection[i] == null) continue
-    const format = exercice.autoCorrection[i]?.formatInteractif ?? 'mathlive'
+    if (
+      exercice.autoCorrection[i] == null &&
+      exercice.interactifType !== 'custom'
+    )
+      continue
+    const format =
+      exercice.autoCorrection[i]?.formatInteractif ??
+      (exercice.interactifType === 'custom' ? 'custom' : 'mathlive')
     const customElementFormat =
       interactivityTypeToCustomElementFormat(format) ?? format
     if (format === 'custom') {
+      if (!customFeedbackReady) {
+        ensureCustomFeedbackElement(exercice)
+        customFeedbackReady = true
+      }
       if (isMetaExercice(exercice)) {
         const result = exercice.correctionInteractives[i](i)
         perQuestionIsOk[i] = result === 'OK'
         if (result === 'OK') nbQuestionsValidees++
         else nbQuestionsNonValidees++
+      } else {
+        const result = verifQuestionCustom(exercice, i)
+        nbQuestionsValidees += result.score.nbBonnesReponses
+        nbQuestionsNonValidees +=
+          result.score.nbReponses - result.score.nbBonnesReponses
+        perQuestionIsOk[i] = result.isOk
       }
     } else if (listOfCustomElements.includes(customElementFormat)) {
       // On traite le cas de tous les MathaleaCustomElement ici
@@ -244,21 +263,7 @@ export function exerciceInteractif(
   )
 }
 
-/**
- * Le cas à part : un exercice custom fournit une fonction correctionInteractive qui doit corriger toutes les questions et s'occuper du feedback
- * @param exercice
- * @param divScore
- * @param buttonScore
- * @return {{numberOfPoints, numberOfQuestions: *}}
- */
-function verifExerciceCustom(
-  exercice: IExercice,
-  divScore: HTMLDivElement,
-  buttonScore: HTMLButtonElement,
-) {
-  let nbBonnesReponses = 0
-  let nbMauvaisesReponses = 0
-  const perQuestionIsOk: boolean[] = []
+function ensureCustomFeedbackElement(exercice: IExercice): void {
   // Le get est non strict car on sait que l'élément n'existe pas à la première itération de l'exercice
   let eltFeedback = get(`feedbackEx${exercice.numeroExercice}`, false)
   // On ajoute le div pour le feedback
@@ -277,42 +282,43 @@ function verifExerciceCustom(
   }
   setStyles(eltFeedback, 'marginBottom: 20px')
   if (eltFeedback) eltFeedback.innerHTML = ''
-  // On utilise la correction définie dans l'exercice
-  if (exercice.exoCustomResultat) {
-    for (let i = 0; i < exercice.nbQuestions; i++) {
-      if (exercice.correctionInteractive != null) {
-        const correction = exercice.correctionInteractive(i)
-        if (Array.isArray(correction)) {
-          perQuestionIsOk[i] = correction.every((result) => result === 'OK')
-          for (const result of correction) {
-            if (result === 'OK') nbBonnesReponses++
-            else nbMauvaisesReponses++
-          }
-        } else {
-          perQuestionIsOk[i] = correction === 'OK'
-          if (correction === 'OK') nbBonnesReponses++
-          else nbMauvaisesReponses++
-        }
-      }
-    }
-  } else {
-    for (let i = 0; i < exercice.nbQuestions; i++) {
-      if (exercice.correctionInteractive != null) {
-        const correction = exercice.correctionInteractive(i)
-        perQuestionIsOk[i] = correction === 'OK'
-        if (correction === 'OK') nbBonnesReponses++
-        else nbMauvaisesReponses++
-      }
+}
+
+function verifQuestionCustom(
+  exercice: IExercice,
+  questionIndex: number,
+): {
+  isOk: boolean
+  feedback: string
+  score: { nbBonnesReponses: number; nbReponses: number }
+} {
+  const correction = exercice.correctionInteractive?.(questionIndex)
+  if (correction == null) {
+    return {
+      isOk: false,
+      feedback: '',
+      score: { nbBonnesReponses: 0, nbReponses: 1 },
     }
   }
-  return afficheScore(
-    exercice,
-    nbBonnesReponses,
-    nbMauvaisesReponses,
-    divScore,
-    buttonScore,
-    perQuestionIsOk,
-  )
+  if (Array.isArray(correction) && exercice.exoCustomResultat) {
+    const nbBonnesReponses = correction.filter(
+      (result) => result === 'OK',
+    ).length
+    return {
+      isOk: nbBonnesReponses === correction.length,
+      feedback: '',
+      score: {
+        nbBonnesReponses,
+        nbReponses: correction.length,
+      },
+    }
+  }
+  const isOk = correction === 'OK'
+  return {
+    isOk,
+    feedback: '',
+    score: { nbBonnesReponses: isOk ? 1 : 0, nbReponses: 1 },
+  }
 }
 
 export function prepareExerciceCliqueFigure(exercice: IExercice) {

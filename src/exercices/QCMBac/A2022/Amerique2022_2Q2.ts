@@ -26,7 +26,7 @@ export const dateDePublication = '09/03/2025'
 export default class SujetZero2024Ex5Q5 extends ExerciceQcm {
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.reponses = [
       "L'équation $(E)$ admet une unique solution réelle.", // Réponse correcte (c)
       '3 est solution de $(E)$.', // Mauvaise réponse (a)

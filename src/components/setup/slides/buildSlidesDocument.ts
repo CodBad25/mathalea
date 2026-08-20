@@ -4,6 +4,7 @@ import {
   MATHALEA_FIT_HELPER,
   MATHALEA_QCM_HELPERS,
   MATHALEA_SCHEMA_HELPER,
+  MATHALEA_TASKS_HELPER,
   TASKIZE_IMPORT,
   htmlToTypst,
 } from '../typst/latexToTypst'
@@ -11,6 +12,7 @@ import {
   BREATHER_IMPORT,
   MATHALEA_ANCHOR_HELPER,
 } from '../typst/buildTypstDocument'
+import { minimalCorrection } from '../typst/minimalCorrection'
 
 /**
  * Construction du document Typst du « Diaporama PDF » : une question en grand
@@ -98,6 +100,27 @@ export interface SlidesDocumentOptions {
   autoVerticalSpacing: boolean
   /** Texte du pied de page (vide pour ne pas en mettre) */
   footer: string
+  /**
+   * Ajoute à la fin du document une page récapitulant toutes les questions
+   * (autant de pages que nécessaire : le contenu s'y enchaîne au lieu
+   * d'occuper toute la page comme une diapositive). En multivue, seule la
+   * première version de chaque question y figure.
+   */
+  recapQuestions: boolean
+  /**
+   * Ajoute à la fin du document une page récapitulant toutes les questions
+   * avec leur réponse, réduite à l'essentiel (correction minimale, comme le
+   * réglage du même nom de la vue Typst).
+   */
+  recapAnswers: boolean
+  /** Titre du récapitulatif des questions (vide pour ne pas en mettre) */
+  recapQuestionsTitle: string
+  /** Titre du récapitulatif des questions et réponses */
+  recapAnswersTitle: string
+  /** Taille du texte des récapitulatifs en points */
+  recapFontSize: number
+  /** Nombre de colonnes des récapitulatifs */
+  recapColumns: number
   /** Texte affiché sur chaque diapositive (ex. le thème de la séance) */
   slideTitle: string
   /** Point d'ancrage de ce texte sur la diapositive */
@@ -134,6 +157,12 @@ export const defaultSlidesDocumentOptions: SlidesDocumentOptions = {
   autoFit: true,
   autoVerticalSpacing: true,
   footer: 'MathALÉA - CC BY-SA',
+  recapQuestions: false,
+  recapAnswers: false,
+  recapQuestionsTitle: 'Toutes les questions',
+  recapAnswersTitle: 'Toutes les questions et leurs réponses',
+  recapFontSize: 16,
+  recapColumns: 2,
   slideTitle: '',
   titlePosition: 'bottom-right',
   titleSize: 14,
@@ -300,14 +329,28 @@ export function buildSlidesDocument(
   // figures SVG rencontrées pendant la conversion, déclarées en tête de
   // document (#let fig-N = image(...)) comme dans buildTypstDocument
   const figures: string[] = []
-  const converted = slides.map((slide) => ({
-    question: htmlToTypst(slide.question, figures),
-    correction: htmlToTypst(slide.correction, figures),
-    extraVersions: (slide.extraVersions ?? []).map((version) => ({
-      question: htmlToTypst(version.question, figures),
-      correction: htmlToTypst(version.correction, figures),
-    })),
-  }))
+  const converted = slides.map((slide) => {
+    // réponse du récapitulatif : la correction réduite à ses réponses mises
+    // en évidence. `minimalCorrection` rend la correction inchangée quand
+    // elle n'en contient aucune : le récapitulatif réutilise alors la
+    // correction de la diapositive plutôt que de la convertir une seconde
+    // fois (contenu et figures ne sont pas dupliqués).
+    const minimalAnswer = options.recapAnswers
+      ? minimalCorrection(slide.correction)
+      : slide.correction
+    return {
+      question: htmlToTypst(slide.question, figures),
+      correction: htmlToTypst(slide.correction, figures),
+      minimalAnswer:
+        minimalAnswer === slide.correction
+          ? null
+          : htmlToTypst(minimalAnswer, figures),
+      extraVersions: (slide.extraVersions ?? []).map((version) => ({
+        question: htmlToTypst(version.question, figures),
+        correction: htmlToTypst(version.correction, figures),
+      })),
+    }
+  })
   const usesMultivue = converted.some((slide) => slide.extraVersions.length > 0)
 
   const { order, hidden } = resolveOrder(converted.length, carryOver)
@@ -331,6 +374,17 @@ export function buildSlidesDocument(
       slideLines.push(`#let diapo-${num}-correction-v${vNum} = [`)
       slideLines.push(indent(version.correction))
       slideLines.push(']')
+    }
+    if (options.recapAnswers) {
+      if (slide.minimalAnswer == null) {
+        slideLines.push(
+          `#let recap-${num}-reponse = diapo-${num}-correction // aucune réponse mise en évidence`,
+        )
+      } else {
+        slideLines.push(`#let recap-${num}-reponse = [`)
+        slideLines.push(indent(slide.minimalAnswer))
+        slideLines.push(']')
+      }
     }
     // taille et alignement de chaque face, réglables par les boutons de
     // l'aperçu (repris du code courant à la régénération)
@@ -368,7 +422,7 @@ export function buildSlidesDocument(
   lines.push('')
   if (usesTasks || options.autoVerticalSpacing) {
     lines.push('// ----- Paquets -----')
-    if (usesTasks) lines.push(TASKIZE_IMPORT)
+    if (usesTasks) lines.push(TASKIZE_IMPORT, MATHALEA_TASKS_HELPER)
     if (options.autoVerticalSpacing) lines.push(BREATHER_IMPORT)
     lines.push('')
   }
@@ -423,6 +477,30 @@ export function buildSlidesDocument(
     `#let titre-couleur = ${typstColorWithOpacity(options.titleColor, options.titleOpacity)}`,
   )
   lines.push(`#let pied-de-page = ${typstString(options.footer)}`)
+  if (options.recapQuestions || options.recapAnswers) {
+    // un champ de réglage vidé donnerait NaN : le document entier ne
+    // compilerait plus (`(1fr,) * NaN`), on retombe sur le défaut
+    const recapFontSize = Number.isFinite(options.recapFontSize)
+      ? options.recapFontSize
+      : defaultSlidesDocumentOptions.recapFontSize
+    const recapColumns = Number.isFinite(options.recapColumns)
+      ? Math.max(1, Math.round(options.recapColumns))
+      : defaultSlidesDocumentOptions.recapColumns
+    lines.push(
+      `#let recap-taille = ${recapFontSize}pt // texte des récapitulatifs`,
+    )
+    lines.push(`#let recap-colonnes = ${recapColumns}`)
+    if (options.recapQuestions) {
+      lines.push(
+        `#let recap-titre-questions = ${typstString(options.recapQuestionsTitle)}`,
+      )
+    }
+    if (options.recapAnswers) {
+      lines.push(
+        `#let recap-titre-reponses = ${typstString(options.recapAnswersTitle)}`,
+      )
+    }
+  }
   lines.push('#let titre-affiche = titre.trim() != ""')
   lines.push(
     '#let titre-en-haut = titre-affiche and titre-position.starts-with("top")',
@@ -639,6 +717,35 @@ export function buildSlidesDocument(
   lines.push('  #block(width: 100%, height: 100%,')
   lines.push('    align(center + horizon, ajuster(corps, taille-questions)))')
   lines.push(']')
+  if (options.recapQuestions || options.recapAnswers) {
+    lines.push(
+      '// les récapitulatifs de fin de document ne sont pas des diapositives :',
+      '// leur contenu, en petit, s’enchaîne sur autant de pages ordinaires',
+      '// qu’il en faut. Une grille (plutôt que `columns`) répartit les',
+      '// questions de gauche à droite : elles s’équilibrent alors entre les',
+      '// colonnes même quand elles ne remplissent pas la page.',
+      '#let recap(titre, items) = {',
+      '  set text(size: recap-taille)',
+      '  if titre.trim() != "" {',
+      '    block(below: 1.6em, text(size: recap-taille * 1.4, weight: "bold", titre))',
+      '  }',
+      '  grid(columns: (1fr,) * recap-colonnes,',
+      '    column-gutter: 1.5em, row-gutter: 0.9em,',
+      '    ..items.map(((num, corps)) => [',
+      '      #text(fill: gray, weight: "bold")[#num.] #corps',
+      '    ]))',
+      '}',
+    )
+    if (options.recapAnswers) {
+      lines.push(
+        '// une ligne du récapitulatif des réponses : la question, puis sa',
+        '// réponse (correction réduite à ce qui est mis en évidence)',
+        '#let recap-question-reponse(question, reponse) = [',
+        '  #question #h(0.4em) #text(fill: gray)[#sym.arrow] #h(0.4em) #reponse',
+        ']',
+      )
+    }
+  }
   lines.push('')
   lines.push('// ----- Page de garde -----')
   lines.push('// titre et sous-titre se règlent au crayon, sur l’aperçu')
@@ -720,6 +827,29 @@ export function buildSlidesDocument(
       `// Diapositive ${num} — ${side === 'correction' ? 'correction' : 'question'}`,
     )
     lines.push(page(num, side))
+  }
+
+  // récapitulatifs, à la fin du document : les questions visibles dans
+  // l'ordre des diapositives, sur autant de pages que nécessaire
+  if (options.recapQuestions) {
+    lines.push('')
+    lines.push('// ----- Récapitulatif des questions -----')
+    lines.push('#pagebreak()')
+    lines.push('#recap(recap-titre-questions, (')
+    for (const num of order) lines.push(`  (${num}, diapo-${num}-question),`)
+    lines.push('))')
+  }
+  if (options.recapAnswers) {
+    lines.push('')
+    lines.push('// ----- Récapitulatif des questions et de leurs réponses -----')
+    lines.push('#pagebreak()')
+    lines.push('#recap(recap-titre-reponses, (')
+    for (const num of order) {
+      lines.push(
+        `  (${num}, recap-question-reponse(diapo-${num}-question, recap-${num}-reponse)),`,
+      )
+    }
+    lines.push('))')
   }
   lines.push('')
 

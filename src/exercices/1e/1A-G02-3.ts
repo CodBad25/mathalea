@@ -6,8 +6,8 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
 import { tracePoint } from '../../lib/2d/TracePoint'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { milieu } from '../../lib/2d/utilitairesPoint'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -74,7 +74,7 @@ ${mathalea2d(
   ),
   objets,
 )}
-Son aire est égale à `
+Son aire est égale à :`
 
     this.reponses = [
       `$${aireEnCm2}\\text{ cm}^2$`,
@@ -106,7 +106,7 @@ $\\mathcal{A}=AB\\times BC=${longueurEnCm}\\times ${largeurEnCm}=${miseEnEvidenc
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

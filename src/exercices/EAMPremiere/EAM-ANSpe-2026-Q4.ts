@@ -204,7 +204,7 @@ Le tableau de signes du produit $(${facteurTex(signe1, racine1)})(${facteurTex(
 
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionAleatoire()
   }
 }

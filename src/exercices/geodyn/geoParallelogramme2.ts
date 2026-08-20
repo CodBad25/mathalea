@@ -89,7 +89,7 @@ class ConstructionParallelogramme extends ExerciceSimple {
     this.correction = texteCorr + emplacementPourFigureCorrection
   }
 
-  correctionInteractive = () => {
+  correctionInteractive = (i: number) => {
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
     this.answers[this.figure.id] = figureAnswerJson(this.figure)
@@ -97,7 +97,7 @@ class ConstructionParallelogramme extends ExerciceSimple {
     let feedback = ''
     // 1 point par angle droit + 1 point si tout est correct (on ne vérifie pas que le triangle est tracé)
     const divFeedback = document.querySelector(
-      `#feedbackEx${this.numeroExercice}Q${0}`,
+      `#feedbackEx${this.numeroExercice}Q${i}`,
     ) as HTMLDivElement
     const { isValid, message } = this.figure.checkSameDistance({
       label1: 'AB',

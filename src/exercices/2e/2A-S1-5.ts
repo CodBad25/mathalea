@@ -1,8 +1,8 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { latex2d } from '../../lib/2d/textes'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polyline } from '../../lib/2d/Polyline'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
+import { latex2d } from '../../lib/2d/textes'
 import { coopmathsAction } from '../../lib/colors'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteGras } from '../../lib/outils/embellissements'
@@ -13,7 +13,7 @@ export const titre = 'Interpréter une courbe des effectifs cumulés croissants'
 export const dateDePublication = '06/08/2026'
 export const uuid = '76b4a'
 export const refs = {
-  'fr-fr': ['2A-S1-5','1A-S01-7'],
+  'fr-fr': ['2A-S1-5', '1A-S01-7'],
   'fr-ch': [],
 }
 export const interactifReady = true
@@ -215,7 +215,7 @@ export default class LireEffectifsCumules extends ExerciceQcmA {
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionAleatoire()
   }
 }

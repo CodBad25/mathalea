@@ -45,7 +45,7 @@ On note $\\mathcal{C}_g$ sa courbe représentative dans un repère du plan.`
 
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionOriginale()
   }
 }

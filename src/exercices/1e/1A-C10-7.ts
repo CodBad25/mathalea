@@ -15,7 +15,7 @@ export const interactifType = 'mathLive'
 export const uuid = '3dd44'
 
 export const refs = {
-  'fr-fr': ['1A-C10-7'],
+  'fr-fr': ['1A-C10-7', '2A-C3-3'],
   'fr-ch': [],
 }
 export default class Auto1AC10 extends EquationPlusMoinsX2PlusAEgalB {

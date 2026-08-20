@@ -176,7 +176,7 @@ export default class MoyenneQCM extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.versionAleatoire() // Appel de la méthode pour initialiser l'exercice
   }
 }

@@ -27,6 +27,7 @@
   import ButtonOverleaf from '../../shared/forms/ButtonOverleaf.svelte'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
+  import BugReportModal from '../../shared/exercice/shared/BugReportModal.svelte'
   import { decodeBase64, encodeBase64 } from '../latex/LatexConfig'
   import {
     codeEditorExtensions,
@@ -65,6 +66,7 @@
 
   const isMobile = window.innerWidth < SM_BREAKPOINT
   let displayMode: DisplayMode = $state(isMobile ? 'preview' : 'split')
+  let isBugReportDisplayed = $state(false)
 
   /** Réglages par défaut du document (aussi utilisés par « Réinitialiser ») */
   function defaultFileInfos(): LatexFileInfos {
@@ -944,6 +946,15 @@
         >
           <i class="bx bx-help-circle text-xl"></i>
         </button>
+        <button
+          type="button"
+          title="Signaler un problème"
+          aria-label="Signaler un problème"
+          class="flex items-center justify-center rounded-lg border border-coopmaths-action py-1 px-2 text-coopmaths-action hover:bg-coopmaths-action hover:text-coopmaths-canvas dark:border-coopmathsdark-action dark:text-coopmathsdark-action dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
+          onclick={() => (isBugReportDisplayed = true)}
+        >
+          <i class="bx bx-bug text-xl"></i>
+        </button>
       </div>
     </div>
   </div>
@@ -1159,6 +1170,13 @@
         </div>
       {/if}
     </div>
+  {/if}
+
+  {#if isBugReportDisplayed}
+    <BugReportModal
+      bind:isDisplayed={isBugReportDisplayed}
+      titleOverride="Bug dans la création du PDF (LaTeX)"
+    />
   {/if}
 
   {#if isShortcutsOpen}

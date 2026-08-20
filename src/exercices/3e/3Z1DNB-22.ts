@@ -43,9 +43,10 @@ export default class ExerciceMetropole392024 extends ExerciceBrevetA {
     super()
     this.besoinFormulaireCaseACocher = ['Sujet original', false]
     this.sup = false
-    this.introduction = texteItalique(
-      "D'après l'exercice 3 du brevet Métropole septembre 2024.",
-    ) + '<br>'
+    this.introduction =
+      texteItalique(
+        "D'après l'exercice 3 du brevet Métropole septembre 2024.",
+      ) + '<br>'
 
     this.versionAleatoire()
   }
@@ -111,7 +112,7 @@ export default class ExerciceMetropole392024 extends ExerciceBrevetA {
     const contenu = productions.map((valeur) => String(valeur))
     const tableau = tableauColonneLigne(entetesColonne, entetesLigne, contenu)
     this.enonce = `Une entreprise décide de faire poser sur le toit de son hangar des panneaux solaires.
-Pendant une semaine d'utilisation, les productions d'électricité journalières en kilowattheures (kWh) de ces panneaux ont été relevées dans le tableau ci-dessous :<br>
+Pendant une semaine d'utilisation, les productions d'électricité journalières en kilowatt-heures (kWh) de ces panneaux ont été relevées dans le tableau ci-dessous :<br>
 ${tableau}`
     const question1a =
       "Quel jour la production d'électricité a-t-elle été la plus grande ?"

@@ -2,7 +2,7 @@ import ReduireDecimaux from '../can/4e/can4L09'
 
 export const uuid = 'c4012'
 export const refs = {
-  'fr-fr': ['1A-C08-5'],
+  'fr-fr': ['1A-C08-5', '2A-C1-3'],
   'fr-ch': [''],
 }
 export const interactifReady = true

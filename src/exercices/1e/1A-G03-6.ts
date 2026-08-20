@@ -1,8 +1,8 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
-import { homothetie } from '../../lib/2d/transformations'
 import { labelPoint } from '../../lib/2d/textes'
+import { homothetie } from '../../lib/2d/transformations'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -123,7 +123,7 @@ Les droites $(${nomH}${nomD})$ et $(${nomA}${nomC})$ sont parallèles.<br>
 On donne ${donnees} et $${coteInutile}=${longueurInutile}\\text{ cm}$.<br>
 Quelle est la longueur du segment $[${nomsCotes[coteCherche]}]$ ?`
 
-    this.correction = `Les points $${nomH}$, $${nomB}$, $${nomA}$ et $${nomD}$, $${nomB}$, $${nomC}$ sont alignés et les droites $(${nomH}${nomD})$ et $(${nomA}${nomC})$ sont parallèles.<br>
+    this.correction = `Les points $${nomH}$, $${nomB}$ et $${nomA}$ sont alignés, ainsi que les points  $${nomD}$, $${nomB}$ et $${nomC}$. Les droites $(${nomH}${nomD})$ et $(${nomA}${nomC})$ sont parallèles.<br>
 D'après le théorème de Thalès :
 $\\dfrac{${nomsCotes.BD}}{${nomsCotes.BC}}=\\dfrac{${nomsCotes.HD}}{${nomsCotes.AC}}$.<br>
 <br>On en déduit que $${nomsCotes[coteCherche]}=\\dfrac{${nomsCotes[premierFacteur]}\\times ${nomsCotes[secondFacteur]}}{${nomsCotes[diviseur]}}=\\dfrac{${longueurs[premierFacteur]}\\times ${longueurs[secondFacteur]}}{${longueurs[diviseur]}}=${miseEnEvidence(`${texNombre(valeurCorrecte, 2)}\\text{ cm}`)}$.`
@@ -147,7 +147,7 @@ $\\dfrac{${nomsCotes.BD}}{${nomsCotes.BC}}=\\dfrac{${nomsCotes.HD}}{${nomsCotes.
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

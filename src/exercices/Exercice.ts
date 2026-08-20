@@ -34,6 +34,15 @@ import {
  * @author Rémi Angot
  */
 export default class Exercice implements IExercice {
+  /**
+   * Valeur de l'export de module `interactifType`, recopiée sur la classe par
+   * les chargeurs qui instancient un exercice sans passer par
+   * `mathaleaLoadExerciceFromUuid` — c'est le cas des méta-exercices, qui ont
+   * besoin de connaître le format d'interactivité avant de construire
+   * l'instance.
+   */
+  static interactifTypeModule?: string
+
   titre: string
   id?: string
   uuid!: string
@@ -46,6 +55,14 @@ export default class Exercice implements IExercice {
   duree?: number
   seed?: string
   numeroExercice?: number
+  /**
+   * Index de la question dans l'exercice affiché quand cet exercice est
+   * réhébergé comme une question d'un méta-exercice (`MetaExerciceCan`) :
+   * la question locale 0 devient la question `indexQuestionHote` de l'hôte.
+   * Sert à générer directement des identifiants DOM uniques plutôt qu'à les
+   * réécrire après coup. Vaut 0 hors méta-exercice.
+   */
+  indexQuestionHote?: number
   typeExercice?: string
   duration?: number
   // boutonAide: boolean | HTMLButtonElement

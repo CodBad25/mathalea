@@ -4,6 +4,7 @@ import {
   MATHALEA_FIT_HELPER,
   MATHALEA_QCM_HELPERS,
   MATHALEA_SCHEMA_HELPER,
+  MATHALEA_TASKS_HELPER,
   TASKIZE_IMPORT,
   htmlToTypst,
 } from '../typst/latexToTypst'
@@ -187,6 +188,7 @@ export function buildFlashcardsDocument(
   if (usesTasks) {
     lines.push('// ----- Paquets -----')
     lines.push(TASKIZE_IMPORT)
+    lines.push(MATHALEA_TASKS_HELPER)
     lines.push('')
   }
   // chaque carte publie un repère (boutons +/− de taille sur l'aperçu) ;

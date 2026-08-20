@@ -14,7 +14,8 @@ import { sp } from '../../../lib/outils/outilString'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-export const titre = 'Résoudre une équation avec une fonction de référence'
+export const titre =
+  'Résoudre une équation avec une fonction de référence (ancien exercice)'
 export const interactifReady = true
 export const interactifType = 'qcm'
 
@@ -23,13 +24,14 @@ export const dateDePublication = '27/12/2021' // La date de publication initiale
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres
+ * @author Stéphane Guyon
  * @author Gilles Mora
 
 */
 export const uuid = 'a7515'
 
 export const refs = {
-  'fr-fr': ['can2F3-03','2F22-8'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 
@@ -92,6 +94,8 @@ function illustrationDistance(a: number, b: number): string {
   )
 }
 export default class ResoudreEquationsFonctionDeReference extends Exercice {
+  protected typeQuestionFixe?: number
+
   private casDisponibles(): number[] {
     switch (this.sup3) {
       case 1:
@@ -124,7 +128,7 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
       b = 0
       c = 0
       k = 0
-      typeQuestion = choice(this.casDisponibles())
+      typeQuestion = this.typeQuestionFixe ?? choice(this.casDisponibles())
       switch (typeQuestion) {
         case 1: {
           const distance = randint(1, 6)

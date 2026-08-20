@@ -20,6 +20,15 @@ describe('latexMathToTypst', () => {
     expect(latexMathToTypst('x\\in\\mathbb{R}')).toBe('x in RR')
   })
 
+  it('convertit \\phantom même avec un contenu imbriqué sur plusieurs niveaux', () => {
+    expect(latexMathToTypst('\\phantom{x}=6')).toBe(
+      latexMathToTypst('\\phantom{\\sqrt{\\dfrac{36}{4}}}=6'),
+    )
+    expect(latexMathToTypst('\\phantom{\\sqrt{\\dfrac{36}{4}}}=6')).not.toContain(
+      'phantom',
+    )
+  })
+
   it('rend la virgule décimale française sans espace', () => {
     expect(latexMathToTypst('3,5')).toBe('3","5')
     expect(latexMathToTypst('3{,}5')).toBe('3","5')

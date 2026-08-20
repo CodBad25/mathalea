@@ -159,7 +159,7 @@ export default class ProportionPartieRestante extends ExerciceQcmA {
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: false, ordered: false }
+
     this.versionAleatoire()
   }
 }

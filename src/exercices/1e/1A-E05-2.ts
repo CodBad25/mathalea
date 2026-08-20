@@ -107,7 +107,7 @@ export default class TauxReciproqueP extends ExerciceQcmA {
 
   constructor() {
     super()
-    // this.options = { vertical: true, ordered: false }
+
     this.versionAleatoire()
   }
 }

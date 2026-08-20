@@ -81,6 +81,7 @@
   } from '../shared/editor/editorSetup'
   import { typstLanguage } from './editor/typstLanguage'
   import { hasSeenTypstTour, startTypstTour } from '../../../lib/onboarding/typstTour'
+  import BugReportModal from '../../shared/exercice/shared/BugReportModal.svelte'
 
   /** Libellés des habillages d'en-tête */
   const HEADER_STYLE_LABELS: Record<(typeof HEADER_STYLES)[number], string> = {
@@ -131,6 +132,7 @@
 
   let displayMode: DisplayMode = $state('preview')
   let isSettingsOpen = $state(!isMobile)
+  let isBugReportDisplayed = $state(false)
   /** Affiche la palette de mise en page sur l'aperçu */
   let showOverlay = $state(!isMobile)
   /**
@@ -3262,6 +3264,16 @@
 
       <div class="grow"></div>
 
+      <button
+        type="button"
+        title="Signaler un problème"
+        aria-label="Signaler un problème"
+        class="flex items-center justify-center rounded-lg border border-coopmaths-action py-1 px-2 text-coopmaths-action hover:bg-coopmaths-action hover:text-coopmaths-canvas dark:border-coopmathsdark-action dark:text-coopmathsdark-action dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
+        onclick={() => (isBugReportDisplayed = true)}
+      >
+        <i class="bx bx-bug text-xl"></i>
+      </button>
+
       {#if displayMode === 'code' || displayMode === 'split'}
         <button
           type="button"
@@ -3993,6 +4005,13 @@
         </div>
       {/if}
     </div>
+  {/if}
+
+  {#if isBugReportDisplayed}
+    <BugReportModal
+      bind:isDisplayed={isBugReportDisplayed}
+      titleOverride="Bug dans la création du PDF (Typst)"
+    />
   {/if}
 
   {#if $typstShortcutsOpen}

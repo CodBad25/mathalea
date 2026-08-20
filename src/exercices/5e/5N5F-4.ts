@@ -3,6 +3,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import {
   contraindreValeur,
   listeQuestionsToContenu,
@@ -38,11 +39,17 @@ export default class SimplifierEcritureLitterale extends Exercice {
     this.sup = 3
     this.besoinFormulaire2CaseACocher = ['Procédure inverse']
     this.sup2 = false
+    this.besoinFormulaire3CaseACocher = [
+      'Calculs nommés avec des lettres',
+      false,
+    ]
+    this.sup3 = false
     this.nbCols = 2
     this.nbColsCorr = 2
   }
 
   nouvelleVersion() {
+    this.listeAvecNumerotation = !this.sup3
     if (this.nbQuestions > 1)
       if (this.sup2) {
         this.consigne =
@@ -119,6 +126,7 @@ export default class SimplifierEcritureLitterale extends Exercice {
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
+      const lettre = this.sup3 ? `${lettreDepuisChiffre(i + 1)}=` : ''
       const a = randint(2, 9)
       const b = randint(2, 9, [a])
       const c = randint(2, 9, [a, b])
@@ -387,14 +395,14 @@ export default class SimplifierEcritureLitterale extends Exercice {
           break
       }
       if (this.sup2) {
-        texte = `$${resultat}$`
+        texte = `$${lettre}${resultat}$`
         // reponse = rangerFacteurs(donnee) // C'est ce qu'il y avait avant mais ça renvoie NaN
         reponse = donnee // C'est la réponse attendue mais il y a des faux positifs sans ×
-        texteCorr = `$${resultat} = ${miseEnEvidence(donnee)}$`
+        texteCorr = `$${lettre}${resultat} = ${miseEnEvidence(donnee)}$`
       } else {
-        texte = `$${donnee}$`
+        texte = `$${lettre}${donnee}$`
         reponse = resultat
-        texteCorr = `$${donnee} = `
+        texteCorr = `$${lettre}${donnee} = `
         texteCorr += `${miseEnEvidence(reponse)}$`
       }
       // On formate la réponse de façon à ce qu'elle corresponde exactement à celle attendue par MathLive

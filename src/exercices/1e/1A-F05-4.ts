@@ -7,8 +7,8 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
-import ExerciceQcmA from '../ExerciceQcmA'
 import { nombreElementsDifferents } from '../ExerciceQcm'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const titre = 'Déterminer une courbe à partir d’un tableau de variations'
 export const dateDePublication = '06/08/2026'
@@ -211,7 +211,7 @@ export default class CourbeDepuisTableauDeVariations extends ExerciceQcmA {
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionAleatoire()
   }
 }

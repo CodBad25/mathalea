@@ -6,7 +6,6 @@
   import { mathaleaGenerateSeed } from '../../../../../lib/mathalea'
   import { exercicesParams } from '../../../../../lib/stores/generalStore'
   import { globalOptions } from '../../../../../lib/stores/globalOptions'
-  import PdfDialog from '../../../../setup/latex/PdfDialog.svelte'
   import MobileMenuAction from '../../../../setup/mobile/MobileMenuAction.svelte'
   import MobileOverlay from '../../../../setup/mobile/MobileOverlay.svelte'
   import InteractivityIcon from '../../../icons/TwoStatesIcon.svelte'
@@ -39,7 +38,6 @@
   export let isSettingsVisible = true
   const isContentVisible = true
   let isCorrectionVisible = false
-  let showPdfDialog = false
   let isBugReportDisplayed = false
   // redéfinition du titre lorsqu'un exercice apparait plusieurs fois :
   // si le titre contient le caractère | (ajouté lors de la création de l'exercice)
@@ -416,20 +414,6 @@
             class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-slider"
           ></i>
         </button>
-        <button
-          class="mx-2 tooltip tooltip-left tooltip-neutral"
-          data-tip="Fichier PDF"
-          aria-label="pdf"
-          type="button"
-          on:click={() => (showPdfDialog = true)}
-        >
-          <i
-            class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bxs-file-pdf"
-          ></i>
-        </button>
-        {#if showPdfDialog}
-          <PdfDialog {indiceExercice} onClose={() => (showPdfDialog = false)} />
-        {/if}
       </div>
       <div
         class="flex flex-row justify-start items-center space-x-4 md:space-x-1"

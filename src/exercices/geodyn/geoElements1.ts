@@ -177,17 +177,17 @@ class ConstructionSegmentRayLine extends ExerciceSimple {
     this.correction = emplacementPourFigureCorrection
   }
 
-  correctionInteractive = () => {
+  correctionInteractive = (i: number) => {
     const resultat: ('OK' | 'KO')[] = []
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
     this.answers[this.figure.id] = figureAnswerJson(this.figure)
     let feedback = ''
     const divFeedback = document.querySelector(
-      `#feedbackEx${this.numeroExercice}Q${0}`,
+      `#feedbackEx${this.numeroExercice}Q${i}`,
     )
     const resultatCheck = document.querySelector(
-      `#resultatCheckEx${this.numeroExercice}Q${0}`,
+      `#resultatCheckEx${this.numeroExercice}Q${i}`,
     )
     const points = [...this.figure.elements.values()].filter(
       (element) => element instanceof Point && element.type !== 'pointer',

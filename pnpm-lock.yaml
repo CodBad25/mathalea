@@ -73,8 +73,8 @@ importers:
         specifier: ^0.185.1
         version: 0.185.1
       apigeom:
-        specifier: git+https://forge.apps.education.fr/coopmaths/apigeom.git#v1.8.0
-        version: git+https://forge.apps.education.fr/coopmaths/apigeom.git#b9b06308a18b237507be48df38ae37703d013e46
+        specifier: git+https://forge.apps.education.fr/coopmaths/apigeom.git#v1.8.1
+        version: git+https://forge.apps.education.fr/coopmaths/apigeom.git#21151a9edd3d430ab0787632672043b7202f7bb9
       blockly:
         specifier: 12.5.1
         version: 12.5.1(supports-color@4.4.0)
@@ -1552,9 +1552,9 @@ packages:
     resolution: {integrity: sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==}
     engines: {node: '>=10'}
 
-  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git#b9b06308a18b237507be48df38ae37703d013e46:
-    resolution: {commit: b9b06308a18b237507be48df38ae37703d013e46, repo: https://forge.apps.education.fr/coopmaths/apigeom.git, type: git}
-    version: 1.8.0
+  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git#21151a9edd3d430ab0787632672043b7202f7bb9:
+    resolution: {commit: 21151a9edd3d430ab0787632672043b7202f7bb9, repo: https://forge.apps.education.fr/coopmaths/apigeom.git, type: git}
+    version: 1.8.1
 
   archive-type@4.0.0:
     resolution: {integrity: sha512-zV4Ky0v1F8dBrdYElwTvQhweQ0P7Kwc1aluqJsYtOBP01jXcWCyW2IEfI1YiqsG+Iy7ZR+o5LF1N+PGECBxHWA==}
@@ -3565,8 +3565,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  sesajstools@git+https://git.sesamath.net/sesamath/sesajstools.git#47c73bf8dc4892229cff930111fc66a1b9abd333:
-    resolution: {commit: 47c73bf8dc4892229cff930111fc66a1b9abd333, repo: https://git.sesamath.net/sesamath/sesajstools.git, type: git}
+  sesajstools@git+https://git.sesamath.net/sesamath/sesajstools.git#97dfcbe7c705d4ec777935ab2d33b855789d49d8:
+    resolution: {commit: 97dfcbe7c705d4ec777935ab2d33b855789d49d8, repo: https://git.sesamath.net/sesamath/sesajstools.git, type: git}
     version: 1.1.6
 
   set-blocking@2.0.0:
@@ -5345,7 +5345,7 @@ snapshots:
 
   ansi-styles@5.2.0: {}
 
-  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git#b9b06308a18b237507be48df38ae37703d013e46:
+  apigeom@git+https://forge.apps.education.fr/coopmaths/apigeom.git#21151a9edd3d430ab0787632672043b7202f7bb9:
     dependencies:
       katex: 0.16.47
       mathjs: 15.2.0
@@ -6391,7 +6391,7 @@ snapshots:
 
   instrumenpoche@git+https://git.sesamath.net/sesamath/instrumenpoche.git#638a049c93f037a36db9b570959bcf3410832ad6:
     dependencies:
-      sesajstools: git+https://git.sesamath.net/sesamath/sesajstools.git#47c73bf8dc4892229cff930111fc66a1b9abd333
+      sesajstools: git+https://git.sesamath.net/sesamath/sesajstools.git#97dfcbe7c705d4ec777935ab2d33b855789d49d8
 
   into-stream@3.1.0:
     dependencies:
@@ -7455,7 +7455,7 @@ snapshots:
 
   semver@7.8.5: {}
 
-  sesajstools@git+https://git.sesamath.net/sesamath/sesajstools.git#47c73bf8dc4892229cff930111fc66a1b9abd333:
+  sesajstools@git+https://git.sesamath.net/sesamath/sesajstools.git#97dfcbe7c705d4ec777935ab2d33b855789d49d8:
     dependencies:
       lodash.isequal: 4.5.0
 

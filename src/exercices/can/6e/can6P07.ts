@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   simplificationDeFractionAvecEtapes,
@@ -95,18 +96,21 @@ export default class PoucentageProportion extends ExerciceSimple {
         b = arrondi((a * randint(1, 7, 5)) / 10)
         c = (b / a) * 100
         choix = choice([true, false])
-        this.question = `Le prix d'un article coûtant $${a}$ euros ${choix ? 'baisse' : 'augmente'} de $${b}$ euros.<br>`
+        this.question = `Le prix d'un article coûtant $${a}$ € ${choix ? 'baisse' : 'augmente'} de $${b}$ €.<br>`
         this.question += this.versionQcm
           ? `Le pourcentage ${choix ? 'de réduction' : 'd’augmentation'} de ce prix est :`
           : ` Quel est le pourcentage ${choix ? 'de réduction' : 'd’augmentation'} de ce prix ?`
 
         this.optionsChampTexte = { texteAvant: '<br>', texteApres: '$\\%$' }
-        this.correction = `${choix ? 'La réduction' : 'L’augmentation'} est de $${b}$ euros sur un total de $${a}$ euros.<br>
+        this.correction = `${choix ? 'La réduction' : 'L’augmentation'} est de $${b}$ € sur un total de $${a}$ €.<br>
           Le pourcentage  ${choix ? 'de baisse' : 'd’augmentation'} est donné par le quotient : $\\dfrac{${b}}{${a}}${simplificationDeFractionAvecEtapes(b, a)}=${texNombre(b / a)}= ${miseEnEvidence(texNombre((b / a) * 100))}\\,\\%$.
           `
-        this.correction += texteEnCouleur(`<br> Mentalement : <br>
-        Calculez $10\\, \\%$ du prix. <br>${choix ? 'La réduction' : 'L’augmentation'} est un multiple de $10\\, \\%$.
-             `)
+        this.correction += texteEnCouleur(
+          `<br> Mentalement : <br>
+        Ici, calculez $10\\, \\%$ du prix. <br>${choix ? 'La réduction' : 'L’augmentation'} est un multiple de $10\\, \\%$.
+             `,
+          bleuMathalea,
+        )
         this.reponse = this.versionQcm ? `$${texNombre(c, 2)}\\,\\%$` : c
 
         this.distracteurs =

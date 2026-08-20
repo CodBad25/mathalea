@@ -50,8 +50,7 @@ export default class Polynesie2022DeriveeLogarithme extends ExerciceQcmA {
 
     this.correction =
       'La fonction $g$ est dérivable comme composée de fonctions dérivables.<br>'
-    this.correction +=
-      `On pose $u(x) = ${polynome}$. Sur $[0~;~+\\infty[$, ${polynomePositif}.<br>`
+    this.correction += `On pose $u(x) = ${polynome}$. Sur $[0~;~+\\infty[$, ${polynomePositif}.<br>`
     this.correction += `Sa dérivée est $u'(x) = ${deriveePolynome}$.<br>`
     this.correction +=
       "La dérivée de $\\ln(u(x))$ est donnée par $\\dfrac{u'(x)}{u(x)}$.<br>"
@@ -98,7 +97,7 @@ export default class Polynesie2022DeriveeLogarithme extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionAleatoire()
   }
 }

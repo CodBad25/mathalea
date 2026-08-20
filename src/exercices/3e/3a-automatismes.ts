@@ -2,8 +2,11 @@ import {
   createAutomatismesCanExercice,
   type ExerciceModule,
 } from '../_automatismesCan'
+import refToUuid from '../../json/refToUuidFR.json'
+import exercices from '../../json/exercicesFR.json'
+import uuidToUrl from '../../json/uuidsToUrlFR.json'
 
-export const titre = 'Sélection d\'automatismes'
+export const titre = "Sélection d'automatismes"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'c6be6'
@@ -14,26 +17,56 @@ export const dateDePublication = '08/05/2026'
  * @author Rémi Angot
  */
 
-// Chargement lazy : seuls les modules sélectionnés sont téléchargés
-const allModules = import.meta.glob('./3Auto*.ts') as Record<
-  string,
-  () => Promise<ExerciceModule>
->
+// Chargement lazy : seuls les modules sélectionnés sont téléchargés.
+// Les automatismes de 3e sont recensés par référence dans le référentiel, mais
+// certaines références 3Auto... pointent vers des exercices dont le fichier ne
+// s'appelle pas 3Auto*.ts. On indexe donc les modules par référence, puis on
+// résout le fichier réel via les tables générées ref -> uuid -> url.
+const modulesByUrl = import.meta.glob([
+  './*.ts',
+  './*.js',
+  '../**/*.ts',
+  '../**/*.js',
+]) as Record<string, () => Promise<ExerciceModule>>
+
+const allModules: Record<string, () => Promise<ExerciceModule>> = {}
+for (const [ref, uuid] of Object.entries(refToUuid)) {
+  if (!/^3Auto[GIMNPLS]/.test(ref)) continue
+  const metadata = (
+    exercices as Record<
+      string,
+      { features?: { interactif?: { isActive?: boolean; type?: string } } }
+    >
+  )[ref]
+  if (metadata?.features?.interactif?.isActive !== true) continue
+  if (metadata.features.interactif.type === "'custom'") continue
+
+  const url = (uuidToUrl as Record<string, string>)[uuid]
+  if (!url) continue
+
+  const modulePath = url.startsWith('3e/')
+    ? `./${url.slice('3e/'.length)}`
+    : `../${url}`
+  const loader = modulesByUrl[modulePath]
+  if (loader) allModules[ref] = loader
+}
 
 export default createAutomatismesCanExercice({
   modules: allModules,
-  refRegex: /^3Auto([GIMNP])/,
-  categories: ['G', 'I', 'M', 'N', 'P'],
+  refRegex: /^3Auto([GIMNPLS])/,
+  categories: ['G', 'I', 'M', 'N', 'P', 'L', 'S'],
   categoriesForm: {
     titre: 'Nombre de questions par catégorie',
     categories: [
-      { label: 'Géométrie :', max: 12 },
-      { label: 'Scratch :', max: 12 },
+      { label: 'Espace et géométrie :', max: 12 },
+      { label: 'Algorithmique et programmation:', max: 12 },
       { label: 'Mesure :', max: 12 },
-      { label: 'Calcul :', max: 12 },
+      { label: 'Nombres et calculs :', max: 12 },
       { label: 'Statistiques :', max: 12 },
+      { label: 'Calcul littéral :', max: 12 },
+      { label: 'Proportionnalité et fonctions :', max: 12 },
     ],
-    defaut: [2, 2, 2, 2, 2],
+    defaut: [2, 1, 1, 2, 2, 1, 1],
   },
-  defaultSup: '2-2-2-2-2',
+  defaultSup: '2-1-1-2-2-1-1',
 })

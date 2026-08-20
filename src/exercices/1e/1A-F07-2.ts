@@ -7,8 +7,8 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 // import ExerciceQcmA from '../../ExerciceQcmA'
-import ExerciceQcmA from '../ExerciceQcmA'
 import { bleuMathalea } from '../../lib/colors'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '35c0e'
 export const refs = {
@@ -124,7 +124,7 @@ export default class Auto1AF6b extends ExerciceQcmA {
     const direction = a > 0 ? 'monte' : 'descend'
 
     return `On reconnaît la droite grâce à son ordonnée à l'origine ($${b}${signeB}0$) et son coefficient directeur ($${a}${signeA}0$).<br>
-    Il s'agit de la droite coupant l'axe des ordonnées ${positionY} de l'axe des abscisses et qui ${direction}.<br>
+    Parmi ces 4 droites, il s'agit de la droite coupant l'axe des ordonnées ${positionY} de l'axe des abscisses et qui ${direction}.<br>
     Il s'agit de la droite $${miseEnEvidence(`D_${indice[bonneReponseIndex]}`)}$.`
   }
 

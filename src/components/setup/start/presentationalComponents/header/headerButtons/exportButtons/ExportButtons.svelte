@@ -45,16 +45,8 @@
 
   const exportOptions: ExportOption[] = [
     {
-      id: 'latex',
-      label: 'PDF via LaTeX',
-      description:
-        'Pour générer un PDF à partir du moteur de composition LaTeX',
-      icon: 'bx bx-code-alt',
-      action: () => exportAndClose('latex'),
-    },
-    {
       id: 'latex2',
-      label: 'PDF via LaTeX (beta)',
+      label: 'PDF via LaTeX',
       description:
         'Nouvel éditeur pour générer un PDF à partir du moteur de composition LaTeX',
       icon: 'bx bx-code-alt',
@@ -123,6 +115,14 @@
         'Pour les flashcards et apprentissage par répétition espacée',
       component: AnkiIcon,
       action: () => exportAndClose('anki'),
+    },
+    {
+      id: 'latex',
+      label: 'PDF via LaTeX (ancienne version)',
+      description:
+        'Pour générer un PDF à partir du moteur de composition LaTeX',
+      icon: 'bx bx-code-alt',
+      action: () => exportAndClose('latex'),
     },
     {
       id: 'kutsum',

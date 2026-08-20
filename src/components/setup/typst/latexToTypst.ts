@@ -132,9 +132,89 @@ export const MATHALEA_FIGURE_HELPERS = `#let mathalea-label(x, y, body, angle: 0
   }
 ]`
 
-/** Import du paquet taskize (mise en colonnes des propositions de QCM) */
+/**
+ * Import du paquet taskize (mise en colonnes des questions et des
+ * propositions de QCM). `tasks` est importée sous le nom `taskize-tasks` :
+ * `MATHALEA_TASKS_HELPER` redéfinit `tasks` par-dessus (voir ce helper).
+ */
 export const TASKIZE_IMPORT =
-  '#import "@preview/taskize:0.2.8": tasks, tasks-setup'
+  '#import "@preview/taskize:0.2.8": tasks as taskize-tasks, tasks-setup, is-inline-content, format-label'
+
+/**
+ * Enrobage de `tasks` : aligne le numéro d'une question sur la première
+ * ligne de son énoncé, même quand celui-ci contient un bloc (propositions de
+ * QCM, figure, tableau).
+ *
+ * taskize sait déjà le faire quand l'énoncé tient entièrement en ligne : il
+ * pose alors l'étiquette sur la première ligne du texte, donc sur sa ligne
+ * de base. Sinon il met l'étiquette et l'énoncé dans deux cellules alignées
+ * par le haut : une fraction en display (toutes le sont, voir le
+ * `#show math.frac` du préambule) creuse la première ligne du texte, dont la
+ * ligne de base descend sans que le numéro suive — c'est le décalage visible
+ * sur les QCM à fractions.
+ *
+ * L'enrobage ne change rien aux listes dont toutes les questions sont
+ * purement en ligne (elles sont passées telles quelles au paquet). Pour les
+ * autres, il numérote lui-même : chaque question est décalée du retrait de
+ * l'étiquette (`pad`), et son numéro, posé en tête de la première ligne dans
+ * une boîte de largeur nulle, est ramené dans la marge ainsi libérée
+ * (`move`) — il partage donc la ligne du texte, quelle que soit sa hauteur.
+ * Une question commençant par un bloc n'a pas de ligne de texte où poser le
+ * numéro : elle garde la présentation en deux cellules.
+ *
+ * Conséquence : dans une liste ainsi numérotée, la syntaxe de fusion de
+ * colonnes de taskize (`+ () ...`, `+ (2) ...`) n'est plus reconnue, le
+ * repère n'étant plus en tête du contenu de l'item. MathALÉA ne l'émet pas.
+ *
+ * Contournement temporaire : le correctif a été proposé en amont (paquet MIT,
+ * nathan-ed/typst-package-taskize). Dès qu'une version du paquet aligne le
+ * numéro dans ce cas, retirer cet enrobage plutôt que de l'empiler dessus —
+ * marche à suivre dans `documentation/developpement/maintenance-moteur/
+ * exports/typst.md`, section « Numérotation des questions ».
+ */
+export const MATHALEA_TASKS_HELPER = `#let mathalea-items-questions(corps) = {
+  if type(corps) != content { return () }
+  if corps.func() == enum.item { return (corps.body,) }
+  if corps.has("children") { return corps.children.map(mathalea-items-questions).flatten() }
+  ()
+}
+#let mathalea-question-numerotee(etiquette, largeur, ecart, corps) = {
+  let retrait = largeur + ecart
+  let boite = box(width: largeur, { h(1fr); etiquette })
+  let en-ligne = if is-inline-content(corps) { true } else if type(corps) == content and corps.has("children") {
+    is-inline-content(corps.children.at(0, default: none))
+  } else { false }
+  if en-ligne {
+    pad(left: retrait, { box(width: 0pt, move(dx: -retrait, boite)); corps })
+  } else {
+    grid(columns: (largeur, 1fr), column-gutter: ecart, align(top, boite), corps)
+  }
+}
+// numéro aligné sur la première ligne de l'énoncé, y compris quand celui-ci
+// contient un bloc (QCM, figure) : taskize alignerait alors par le haut
+#let tasks(
+  label: auto, start: 1, label-width: auto, indent-after-label: auto,
+  label-weight: "regular", ..args, corps,
+) = context {
+  let items = mathalea-items-questions(corps)
+  if label in (auto, none) or items.len() == 0 or items.all(is-inline-content) {
+    taskize-tasks(
+      label: label, start: start, label-width: label-width,
+      indent-after-label: indent-after-label, label-weight: label-weight, ..args, corps,
+    )
+  } else {
+    let etiquettes = range(items.len()).map(i => text(weight: label-weight, format-label(start + i, label)))
+    let largeur = if label-width == auto { calc.max(..etiquettes.map(e => measure(e).width)) } else { label-width }
+    let ecart = if indent-after-label == auto { 0.4em } else { indent-after-label }
+    let numerotees = items.enumerate().map(((i, item)) => enum.item(
+      mathalea-question-numerotee(etiquettes.at(i), largeur, ecart, item),
+    ))
+    taskize-tasks(
+      label: none, label-width: 0pt, indent-after-label: 0pt, start: start,
+      ..args, numerotees.join(),
+    )
+  }
+}`
 
 /**
  * Import du paquet vartable (tableaux de signes/variations, `#tabvar(...)`),
@@ -411,12 +491,9 @@ function preprocessTex(tex: string): string {
   // tex2typst ne supporte pas l'argument optionnel — on le supprime
   output = output.replace(/\\\\\s*\[[^\]]*\]/g, '\\\\')
   // \phantom / \vphantom n'ont pas d'équivalent direct : on les remplace par une espace.
-  // Le contenu peut avoir un niveau d'imbrication (ex. \phantom{\frac{a}{b}})
-  // → [^{}]|\{[^{}]*\} capture les groupes imbriqués
-  output = output.replace(
-    /\\(?:phantom|hphantom|vphantom)\s*\{(?:[^{}]|\{[^{}]*\})*\}/g,
-    '\\;',
-  )
+  // Le contenu peut être imbriqué sur plusieurs niveaux (ex. \phantom{\sqrt{\dfrac{a}{b}}})
+  // → on scanne les accolades via `readBraced` plutôt qu'une regex limitée à un niveau
+  output = replacePhantomCommands(output)
   // Contenu LaTeX avec un niveau d'imbrication de {} (ex. \xrightarrow{+x~\text{min}})
   const B1 = '(?:[^{}]|\\{[^{}]*\\})*'
   // \xrightarrow[dessous]{dessus} → \overset/\underset autour de la flèche
@@ -806,6 +883,32 @@ function readBraced(
   return null
 }
 
+/**
+ * Remplace \phantom{…}, \hphantom{…} et \vphantom{…} par une espace, quel que
+ * soit le niveau d'imbrication de leur contenu (ex. \phantom{\sqrt{\dfrac{a}{b}}}) :
+ * une regex à un seul niveau de `{}` laisse passer les cas plus profonds tels
+ * quels vers tex2typst, qui émet alors `phantom` comme variable inconnue.
+ */
+function replacePhantomCommands(text: string): string {
+  const marker = /\\(?:phantom|hphantom|vphantom)\s*\{/g
+  let output = ''
+  let index = 0
+  let match: RegExpExecArray | null
+  while ((match = marker.exec(text)) != null) {
+    const openIndex = match.index + match[0].length - 1
+    const arg = readBraced(text, openIndex)
+    if (arg == null) {
+      marker.lastIndex = match.index + match[0].length
+      continue
+    }
+    output += text.slice(index, match.index) + '\\;'
+    index = arg.end
+    marker.lastIndex = arg.end
+  }
+  output += text.slice(index)
+  return output
+}
+
 function splitTopLevel(text: string, separator: string): string[] {
   const parts: string[] = []
   let depth = 0
@@ -1070,15 +1173,28 @@ function stripCellLatex(cell: string): string {
     .trim()
 }
 
+/**
+ * Déballe une cellule entièrement enrobée par `\text{...}`, répété autant de
+ * fois que nécessaire : `tableauColonneLigne` enrobe automatiquement d'un
+ * `\text{}` supplémentaire tout en-tête/pied de tableau textuel (paramètre
+ * `latex` à `false`) même si la valeur d'origine était déjà elle-même un
+ * `\text{...}` (ex. `5I1E.ts`, en-têtes passés comme `'\\text{Scratch}'`) ;
+ * un seul niveau de déballage laissait alors un `\text{Scratch}` résiduel,
+ * non reconnu par `convertCellTextFormatting` et donc affiché tel quel.
+ */
 function unwrapWholeTextCommand(cell: string): string | null {
-  const trimmed = cell.trim()
-  if (!trimmed.startsWith('\\text')) return null
-  const commandEnd = '\\text'.length
-  let cursor = commandEnd
-  while (/\s/.test(trimmed[cursor] ?? '')) cursor++
-  const arg = readBraced(trimmed, cursor)
-  if (arg == null || arg.end !== trimmed.length) return null
-  return arg.value
+  let current = cell.trim()
+  let unwrapped = false
+  for (;;) {
+    if (!current.startsWith('\\text')) break
+    let cursor = '\\text'.length
+    while (/\s/.test(current[cursor] ?? '')) cursor++
+    const arg = readBraced(current, cursor)
+    if (arg == null || arg.end !== current.length) break
+    current = arg.value.trim()
+    unwrapped = true
+  }
+  return unwrapped ? current : null
 }
 
 /** Couleurs nommées CSS/LaTeX absentes de Typst, converties en hexadécimal */
@@ -1192,13 +1308,74 @@ function convertCellTextFormatting(text: string): string {
   return output
 }
 
-function latexTableCell(cell: string): TypstTableCell {
+/**
+ * Convertit le contenu texte d'une cellule `\text{...}`, en tenant compte
+ * d'un éventuel bloc Scratch déjà rendu en SVG par `renderScratchBlocksToSvg`
+ * (ex. la colonne « Scratch » de `tableauColonneLigne`, qui embarque le
+ * balisage HTML produit par `scratchblock()` directement dans une cellule de
+ * tableau LaTeX au lieu du HTML traité par `htmlToTypst`) : sans ce
+ * traitement, le SVG (et son wrapper `<div class="scratchblocks">`) fuyait
+ * tel quel, échappé en texte littéral illisible par `convertCellTextFormatting`.
+ * Les autres balises restantes (le wrapper) sont retirées, leur contenu
+ * n'ayant pas d'équivalent Typst utile hors du SVG lui-même.
+ */
+function convertCellTextContent(text: string, figures?: string[]): string {
+  const svgRe = /<svg[\s\S]*?<\/svg>/gi
+  if (!svgRe.test(text)) return convertCellTextFormatting(text)
+  svgRe.lastIndex = 0
+  let output = ''
+  let cursor = 0
+  let match: RegExpExecArray | null
+  while ((match = svgRe.exec(text)) != null) {
+    const before = text.slice(cursor, match.index).replace(/<\/?[^>]+>/g, '')
+    output += convertCellTextFormatting(before)
+    if (figures != null) {
+      figures.push(svgToTypstImage(match[0], TABLE_CELL_FIGURE_MAX_WIDTH_PT))
+      const figureIndex = figures.length
+      const figureName = `fig-${figureIndex}`
+      // mathalea-figure-block (plutôt que mathalea-fit) : la figure reçoit
+      // les mêmes contrôles de zoom/alignement dans la palette de mise en
+      // page que les figures mathalea2d (voir mathalea2dContainerToTypst)
+      output += `#mathalea-figure-block(${figureIndex}, ${figureName}-align, ${figureName}-zoom, ${figureName})`
+    } else {
+      output += missingBox('figure non convertie')
+    }
+    cursor = svgRe.lastIndex
+  }
+  output += convertCellTextFormatting(
+    text.slice(cursor).replace(/<\/?[^>]+>/g, ''),
+  )
+  return output
+}
+
+/**
+ * Un contenu `\text{...}` composé d'une formule brute, non délimitée par
+ * `$...$` (ex. `\text{(6 \times 2) - 7}`, cas de la colonne « Calculs avec
+ * priorité » de `5I1E.ts` : `tableauColonneLigne`, en mode `latex: false`,
+ * enrobe automatiquement chaque cellule texte d'un `\text{}`, y compris
+ * celles qui contiennent déjà une formule). Un `\` suivi d'une commande
+ * LaTeX n'a de sens qu'en mode mathématique (`\times`, `\div`, `\frac`…) ;
+ * sa présence signale donc une formule plutôt que du texte à échapper
+ * littéralement. Ignoré dès qu'un `\textbf`/`\textit` apparaît : un en-tête
+ * mettant du texte en forme reste traité comme du texte, quitte à laisser
+ * une éventuelle formule qui y serait mêlée telle quelle (cas non rencontré
+ * en pratique, plus sûr qu'un faux positif sur du texte mis en forme).
+ */
+function looksLikeUnwrappedMath(text: string): boolean {
+  if (/\\text(bf|it)\s*\{/.test(text)) return false
+  return /\\[a-zA-Z]+/.test(text)
+}
+
+function latexTableCell(cell: string, figures?: string[]): TypstTableCell {
   const { color, rest } = extractCellColor(cell)
   const stripped = stripCellLatex(rest)
   if (stripped.length === 0) return { body: '', fill: color }
   const textContent = unwrapWholeTextCommand(stripped)
   if (textContent != null) {
-    return { body: convertCellTextFormatting(textContent), fill: color }
+    if (!/<svg/i.test(textContent) && looksLikeUnwrappedMath(textContent)) {
+      return { body: `$${latexMathToTypst(textContent)}$`, fill: color }
+    }
+    return { body: convertCellTextContent(textContent, figures), fill: color }
   }
   return { body: `$${latexMathToTypst(stripped)}$`, fill: color }
 }
@@ -1331,7 +1508,10 @@ function renderTypstTable(
   return `#table(\n  ${[...header, ...strokes, ...cells].join(',\n  ')},\n)`
 }
 
-function latexVisualTableToTypst(tex: string): string | null {
+function latexVisualTableToTypst(
+  tex: string,
+  figures?: string[],
+): string | null {
   const table = findLatexTableEnvironment(tex)
   if (table == null || !shouldConvertAsVisualTable(table)) return null
 
@@ -1340,7 +1520,8 @@ function latexVisualTableToTypst(tex: string): string | null {
   const hlineYs = new Set<number>()
   for (const item of items) {
     if (item.type === 'hline') hlineYs.add(rows.length)
-    else rows.push(item.cells.map(latexTableCell))
+    else
+      rows.push(item.cells.map((cell) => latexTableCell(cell, figures)))
   }
   const maxColumns = Math.max(0, ...rows.map((row) => row.length))
   if (maxColumns === 0) return null
@@ -1404,14 +1585,18 @@ function htmlTableToTypst(table: HTMLTableElement, figures?: string[]): string {
   return renderTypstTable(aligns, rows, 4, vlines, hlineYs)
 }
 
-function latexSegmentToTypst(tex: string, display: boolean): string {
+function latexSegmentToTypst(
+  tex: string,
+  display: boolean,
+  figures?: string[],
+): string {
   // Un `&` brut (séparateur de colonnes `array`/`tabular`/`tblr`/`tabularx`)
   // peut avoir traversé un aller-retour DOM (`template.innerHTML`, utilisé par
   // les `protect*Containers` pour repérer figures/QCM/tableaux/KaTeX) et se
   // retrouver ré-échappé en `&amp;` avant d'atteindre ce segment : aucun texte
   // LaTeX destiné à ce convertisseur ne contient légitimement `&amp;`.
   tex = tex.replace(/&amp;/g, '&')
-  const table = latexVisualTableToTypst(tex)
+  const table = latexVisualTableToTypst(tex, figures)
   if (table != null) return table
   const converted = latexMathToTypst(tex)
   if (converted.length === 0) return ''
@@ -1686,15 +1871,24 @@ function normalizeOverlayLatex(tex: string): {
  */
 const MAX_FIGURE_WIDTH_PT = 380
 
-/** Dimensions (pt) d'une figure, mises à l'échelle pour ne pas dépasser `MAX_FIGURE_WIDTH_PT` */
+/**
+ * Plafond de largeur (pt) d'une image embarquée dans une cellule de tableau
+ * (ex. un bloc Scratch de `tableauColonneLigne`, voir `convertCellTextContent`) :
+ * bien plus étroit que `MAX_FIGURE_WIDTH_PT`, qui laisserait la colonne
+ * `auto` de `#table` s'élargir jusqu'à la largeur pleine page.
+ */
+const TABLE_CELL_FIGURE_MAX_WIDTH_PT = 130
+
+/** Dimensions (pt) d'une figure, mises à l'échelle pour ne pas dépasser `maxWidthPt` */
 function scaledFigureDimensions(
   widthPx: number,
   heightPx: number,
+  maxWidthPt: number = MAX_FIGURE_WIDTH_PT,
 ): { widthPt: number; heightPt: number } {
   let widthPt = widthPx * 0.75
   let heightPt = heightPx * 0.75
-  if (widthPt > MAX_FIGURE_WIDTH_PT) {
-    const factor = MAX_FIGURE_WIDTH_PT / widthPt
+  if (widthPt > maxWidthPt) {
+    const factor = maxWidthPt / widthPt
     widthPt *= factor
     heightPt *= factor
   }
@@ -1705,9 +1899,17 @@ function scaledFigureDimensions(
  * Expression Typst affichant un SVG mathalea2d embarqué dans le code
  * (le document reste autonome : il compile aussi avec le CLI typst).
  * La largeur reprend celle de la figure (96 px CSS = 72 pt), plafonnée à
- * `MAX_FIGURE_WIDTH_PT`.
+ * `maxWidthPt` (`MAX_FIGURE_WIDTH_PT`, largeur pleine page, par défaut).
+ * Un plafond plus étroit est nécessaire pour une image embarquée dans une
+ * cellule de tableau (`#table` dimensionne chaque colonne `auto` sur sa
+ * largeur intrinsèque, mesurée avant tout redimensionnement à l'exécution
+ * type `mathalea-fit`/`mathalea-figure-block` : sans un plafond déjà étroit
+ * ici, la colonne s'élargit pour accueillir l'image à sa taille pleine page).
  */
-export function svgToTypstImage(svg: string): string {
+export function svgToTypstImage(
+  svg: string,
+  maxWidthPt: number = MAX_FIGURE_WIDTH_PT,
+): string {
   const cleaned = sanitizeSvg(svg)
   // SVG with zero width or height is rejected by Typst's parser
   const h = cleaned.match(/<svg[^>]*?\sheight="([\d.]+)"/i)
@@ -1719,7 +1921,11 @@ export function svgToTypstImage(svg: string): string {
   let widthPt = ''
   if (width != null) {
     const heightPx = h != null ? parseFloat(h[1]) : parseFloat(width[1])
-    const scaled = scaledFigureDimensions(parseFloat(width[1]), heightPx)
+    const scaled = scaledFigureDimensions(
+      parseFloat(width[1]),
+      heightPx,
+      maxWidthPt,
+    )
     widthPt = `, width: ${scaled.widthPt.toFixed(1)}pt`
   }
   return `image(bytes(${typstStringLiteral(cleaned)}), format: "svg"${widthPt})`
@@ -2426,13 +2632,13 @@ export function htmlToTypst(
   text = text.replace(/~\$€\$/g, '~\\euro ')
   text = text.replace(/\$€\$/g, '\\euro ')
   text = text.replace(/\\\[([\s\S]+?)\\\]/g, (_, tex: string) =>
-    protect(latexSegmentToTypst(tex, true)),
+    protect(latexSegmentToTypst(tex, true, figures)),
   )
   text = text.replace(/\\\(([\s\S]+?)\\\)/g, (_, tex: string) =>
-    protect(latexSegmentToTypst(tex, false)),
+    protect(latexSegmentToTypst(tex, false, figures)),
   )
   text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, tex: string) =>
-    protect(latexSegmentToTypst(tex, true)),
+    protect(latexSegmentToTypst(tex, true, figures)),
   )
   // Traite $...$ avant de supprimer les $ adjacents : cela évite que
   // `$\bullet$ $f(x)$` soit fusionné en `$\bulletf(x)$` (bulletf = variable inconnue).
@@ -2442,7 +2648,7 @@ export function htmlToTypst(
   // (ex. `\text{ m$^2$/h}`, unité avec exposant) fait partie du bloc et ne
   // le referme pas.
   text = replaceBalancedInlineMath(text, (tex) => {
-    const converted = latexSegmentToTypst(tex, false)
+    const converted = latexSegmentToTypst(tex, false, figures)
     return converted.length > 0 ? protect(converted) : ''
   })
   // Supprime les $ orphelins restants (ne contenant que des espaces)

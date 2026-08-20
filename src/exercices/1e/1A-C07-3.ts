@@ -34,14 +34,14 @@ export default class auto1AC7b extends ExerciceQcmA {
 
   versionAleatoire: () => void = () => {
     let compteur = 0
+    const choix = prenomF()
     do {
       switch (choice([1, 2, 3, 4])) {
         case 1: {
-          const choix = prenomF()
           const dist = randint(1, 4)
           this.enonce = `${dist > 2 ? 'Une athlète' : `${choix}`} parcourt $${dist}\\text{ km}$ en $12$ minutes. <br>Quelle est sa vitesse moyenne ?   `
           this.correction = `Dans une $1$ heure, il y a $12\\times 5$ minutes.<br>
-      Ainsi, en $1$ heure, elle parcourt $5$ fois plus de distance, soit $${texNombre(5 * dist)}\\text{ km}$.<br>
+      Ainsi, en $1$ heure, ${dist > 2 ? 'cette athlète' : `${choix}`}  parcourt $5$ fois plus de distance, soit $${texNombre(5 * dist)}\\text{ km}$.<br>
       Sa vitesse moyenne est donc $${miseEnEvidence(5 * dist)}\\text{ km/h}$. `
           this.reponses = [
             `$${texNombre(5 * dist)}\\text{ km/h}$`,
@@ -53,11 +53,10 @@ export default class auto1AC7b extends ExerciceQcmA {
         }
 
         case 2: {
-          const choix = prenomF()
           const dist = randint(3, 9)
           this.enonce = `${choix} parcourt $${texNombre(dist * 100, 0)}\\text{ m}$ en $5$ minutes. <br>Quelle est sa vitesse moyenne ?   `
           this.correction = `Dans une $1$ heure, il y a $5\\times 12$ minutes.<br>
-      Ainsi, en $1$ heure, elle parcourt $12$ fois plus de distance, soit $${texNombre(dist / 10, 2)}\\times 12=${texNombre((12 * dist) / 10, 2)}\\text{ km}$.<br>
+      Ainsi, en $1$ heure, ${choix} parcourt $12$ fois plus de distance, soit $${texNombre(dist / 10, 2)}\\times 12=${texNombre((12 * dist) / 10, 2)}\\text{ km}$.<br>
       Sa vitesse moyenne est donc $${miseEnEvidence(texNombre((12 * dist) / 10, 2))}\\text{ km/h}$. `
           this.reponses = [
             `$${texNombre((12 * dist) / 10, 2)}\\text{ km/h}$`,
@@ -68,11 +67,10 @@ export default class auto1AC7b extends ExerciceQcmA {
           break
         }
         case 3: {
-          const choix = prenomF()
           const dist = randint(3, 9)
           this.enonce = `${choix} parcourt $${texNombre(dist * 100, 0)}\\text{ m}$ en $3$ minutes. <br>Quelle est sa vitesse moyenne ?   `
           this.correction = `Dans une $1$ heure, il y a $3\\times 20$ minutes.<br>
-    Ainsi, en $1$ heure, elle parcourt $20$ fois plus de distance, soit $${texNombre(dist / 10, 2)}\\times 20=${texNombre((20 * dist) / 10, 2)}\\text{ km}$.<br>
+    Ainsi, en $1$ heure, ${choix} parcourt $20$ fois plus de distance, soit $${texNombre(dist / 10, 2)}\\times 20=${texNombre((20 * dist) / 10, 2)}\\text{ km}$.<br>
     Sa vitesse moyenne est donc $${miseEnEvidence(texNombre((20 * dist) / 10, 2))}\\text{ km/h}$. `
           this.reponses = [
             `$${texNombre((20 * dist) / 10, 2)}\\text{ km/h}$`,
@@ -84,11 +82,10 @@ export default class auto1AC7b extends ExerciceQcmA {
         }
 
         case 4: {
-          const choix = prenomF()
           const dist = randint(3, 9)
           this.enonce = `${choix} parcourt $${texNombre(dist * 100, 0)}\\text{ m}$ en $4$ minutes. <br>Quelle est sa vitesse moyenne ?   `
           this.correction = `Dans une $1$ heure, il y a $4\\times 15$ minutes.<br>
-    Ainsi, en $1$ heure, elle parcourt $15$ fois plus de distance, soit $${texNombre(dist / 10, 2)}\\times 15=${texNombre((15 * dist) / 10, 2)}\\text{ km}$.<br>
+    Ainsi, en $1$ heure, ${choix} parcourt $15$ fois plus de distance, soit $${texNombre(dist / 10, 2)}\\times 15=${texNombre((15 * dist) / 10, 2)}\\text{ km}$.<br>
     Sa vitesse moyenne est donc $${miseEnEvidence(texNombre((15 * dist) / 10, 2))}\\text{ km/h}$. `
           this.reponses = [
             `$${texNombre((15 * dist) / 10, 2)}\\text{ km/h}$`,

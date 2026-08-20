@@ -12,7 +12,7 @@ import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '690d1'
 export const refs = {
-  'fr-fr': ['1A-S04-8'],
+  'fr-fr': ['1A-S04-8', '2A-S1-7'],
   'fr-ch': [],
 }
 export const interactifReady = true
@@ -66,14 +66,7 @@ export default class CalculAmplitudeThermique extends ExerciceQcmA {
       grilleYDistance: 0.5,
       yLegende: 'Température (en °C)',
     })
-    const legendeAxeX = texteParPosition(
-      'Heure (en h)',
-      5,
-      -1.3,
-      0,
-      'black',
-      1,
-    )
+    const legendeAxeX = texteParPosition('Heure (en h)', 5, -1.3, 0, 'black', 1)
 
     const figure = mathalea2d(
       {
@@ -96,9 +89,7 @@ export default class CalculAmplitudeThermique extends ExerciceQcmA {
       temperatureMin,
       temperatureMax,
       temperatureMax + temperatureMin,
-    ].map(
-      (valeur) => `$${valeur}\\,^{\\circ}\\text{C}$`,
-    )
+    ].map((valeur) => `$${valeur}\\,^{\\circ}\\text{C}$`)
 
     this.enonce = `Le graphique ci-dessous représente l'évolution de la température relevée à MathALÉA-city, entre minuit et 20 h, le ${jour} ${mois} 2025.<br>
     ${figure}<br>
@@ -110,7 +101,14 @@ export default class CalculAmplitudeThermique extends ExerciceQcmA {
   }
 
   versionAleatoire: () => void = () => {
-    const mois = choice(['mars', 'avril', 'mai', 'juin', 'septembre', 'octobre'])
+    const mois = choice([
+      'mars',
+      'avril',
+      'mai',
+      'juin',
+      'septembre',
+      'octobre',
+    ])
     const amplitude = 2 * randint(4, 8)
     const temperatureMin = randint(-4, 8, [0, amplitude])
     const temperatureMax = temperatureMin + amplitude
@@ -142,17 +140,13 @@ export default class CalculAmplitudeThermique extends ExerciceQcmA {
       )
     }
 
-    this.appliquerLesValeurs(
-      randint(1, 28),
-      mois,
-      temperatures,
-    )
+    this.appliquerLesValeurs(randint(1, 28), mois, temperatures)
   }
 
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: false, ordered: false }
+
     this.versionAleatoire()
   }
 }

@@ -24,30 +24,34 @@ export const titre =
   'Résoudre une équation du premier degré (utilisant éventuellement la distributivité)'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const dateDeModifImportante = '29/10/2025'
+export const dateDeModifImportante = '18/08/2026'
 
 /**
  * Équation du premier degré
  * * Type 1 : ax+b=cx+d
  * * Type 2 : k(ax+b)=cx+d
  * * Type 3 : k-(ax+b)=cx+d
+ * * Type 4 : x²+a=(x+b)²
  * * Tous les types
  * @author Rémi Angot
  * Rendre interactif Laurence Candille
  * Éric Elter : Rajouter de deux paramètres, passage de la réponse en couleur
+ * Arnaud Meistermann : ajout du cas x²+a=(x+b)²
  */
-export const uuid = 'b81d0'
+export const uuid = '01b77'
 
 export const refs = {
   'fr-fr': ['3L13-1', 'BP2RES12'],
   'fr-ch': ['10FA5C-7'],
 }
 export default class ExerciceEquation1Tiret2 extends Exercice {
-  constructor() {
-    super()
+  protected niveau: number
 
-    this.comment =
-      'Les équations sont de la forme :<br>$ax+b=cx+d$<br>$k(ax+b)=cx+d$<br>$k-(ax+b)=cx+d$<br>avec des nombres à un chiffre.'
+  constructor(niveau = 3) {
+    super()
+    this.niveau = niveau
+
+    this.comment = `Les équations sont de la forme :<br>$ax+b=cx+d$<br>$k(ax+b)=cx+d$<br>$k-(ax+b)=cx+d$${this.niveau === 2 ? '<br>$x^2+a=(x+b)^2$' : ''}<br>avec des nombres à un chiffre${this.niveau === 2 ? ' (sauf pour le dernier type où $a$ et $b$ sont compris entre $-10$ et $10$)' : ''}.`
     this.spacing = 2
     this.interactifType = 'mathLive'
     this.spacingCorr = context.isHtml ? 3 : 2
@@ -60,13 +64,14 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
       "Type d'équations",
       [
         'Nombres séparés par des tirets  :',
+        '0 : Mélange', // Important pour que Mélange coïncide quels que soient le niveau et le formulaire.
         '1 : $ax+b=cx+d$',
         '2 : $k(ax+b)=cx+d$',
         '3 : $k-(ax+b)=cx+d$',
-        '4 : Mélange',
+        ...(this.niveau === 2 ? ['4 : $x^2+a=(x+b)^2$'] : []),
       ].join('\n'),
     ]
-    this.sup = '4'
+    this.sup = '0'
 
     this.besoinFormulaire2CaseACocher = [
       'Avec des solutions uniquement entières',
@@ -85,11 +90,16 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
 
     const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup,
-      max: 3,
-      melange: 4,
-      defaut: 4,
+      max: this.niveau === 3 ? 3 : 4,
+      melange: 0,
+      defaut: 0,
       nbQuestions: this.nbQuestions,
-      listeOfCase: ['ax+b=cx+d', 'k(ax+b)=cx+d', 'k-(ax+b)=cx+d'],
+      listeOfCase: [
+        'ax+b=cx+d',
+        'k(ax+b)=cx+d',
+        'k-(ax+b)=cx+d',
+        'x²+a=(x+b)²',
+      ],
     })
 
     let listeTypeDeQuestions = combinaisonListes(
@@ -111,6 +121,10 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
       do {
         a = randint(-9, 9, 0)
         b = randint(-9, 9, 0)
+        if (listeTypeDeQuestions[i] === 'x²+a=(x+b)²') {
+          a = randint(-10, 10, 0)
+          b = randint(-10, 10, 0)
+        }
         k = randint(2, 9)
         c =
           listeTypeDeQuestions[i] === 'ax+b=cx+d'
@@ -123,14 +137,20 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
 
         d = randint(-9, 9, 0)
         reponse =
-          listeTypeDeQuestions[i] === 'k(ax+b)=cx+d'
-            ? new FractionEtendue(d - k * b, k * a - c)
-            : listeTypeDeQuestions[i] === 'k-(ax+b)=cx+d'
-              ? new FractionEtendue(d + b - k, -a - c)
-              : new FractionEtendue(d - b, a - c)
+          listeTypeDeQuestions[i] === 'x²+a=(x+b)²'
+            ? new FractionEtendue(a - b ** 2, 2 * b)
+            : listeTypeDeQuestions[i] === 'k(ax+b)=cx+d'
+              ? new FractionEtendue(d - k * b, k * a - c)
+              : listeTypeDeQuestions[i] === 'k-(ax+b)=cx+d'
+                ? new FractionEtendue(d + b - k, -a - c)
+                : new FractionEtendue(d - b, a - c)
       } while (this.sup2 && !reponse.estEntiere)
 
-      if (this.questionJamaisPosee(i, a, b, c, d, k)) {
+      const questionJamaisPosee =
+        listeTypeDeQuestions[i] === 'x²+a=(x+b)²'
+          ? this.questionJamaisPosee(i, a, b)
+          : this.questionJamaisPosee(i, a, b, c, d, k)
+      if (questionJamaisPosee) {
         // Si la question n'a jamais été posée, on en créé une autre
         if (listeTypeDeQuestions[i] === 'ax+b=cx+d') {
           if (c === a) {
@@ -210,7 +230,7 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
             texteCorr += `<br>Par simplification, $x=${reponse.simplifie().texFSD}$.`
           }
           texteCorr += `<br>`
-        } else {
+        } else if (listeTypeDeQuestions[i] === 'k-(ax+b)=cx+d') {
           equation = `$${k}-(${rienSi1(a)}x${ecritureAlgebrique(b)})=${rienSi1(c)}x${ecritureAlgebrique(d)}$`
           texte = equation + '<br>'
           texteCorr = texte
@@ -253,6 +273,40 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
             texteCorr += `<br>Par simplification, $x=${reponse.simplifie().texFSD}$.`
           }
           texteCorr += `<br>`
+        } else {
+          equation = `$x^2${ecritureAlgebrique(a)}=(x${ecritureAlgebrique(b)})^2$`
+          texte = equation + '<br>'
+          texteCorr = texte
+
+          if (this.correctionDetaillee) {
+            if (b > 0) {
+              texteCorr += `On développe le membre de droite à l'aide de l'identité remarquable $(a+b)^2=a^2+2ab+b^2$, avec $a=x$ et $b=${b}$.<br>`
+              texteCorr += `$x^2${ecritureAlgebrique(a)}=x^2+2\\times x\\times ${b}+${b}^2$<br>`
+            } else {
+              texteCorr += `On développe le membre de droite à l'aide de l'identité remarquable $(a-b)^2=a^2-2ab+b^2$, avec $a=x$ et $b=${-b}$.<br>`
+              texteCorr += `$x^2${ecritureAlgebrique(a)}=x^2-2\\times x\\times ${-b}+${-b}^2$<br>`
+            }
+          }
+          texteCorr += `$x^2${ecritureAlgebrique(a)}=x^2${ecritureAlgebrique(2 * b)}x${ecritureAlgebrique(b ** 2)}$<br>`
+          if (this.correctionDetaillee) {
+            texteCorr += 'On soustrait $x^2$ aux deux membres.<br>'
+          }
+          texteCorr += `$x^2${ecritureAlgebrique(a)}${miseEnEvidence('-x^2', bleuMathalea)}=x^2${ecritureAlgebrique(2 * b)}x${ecritureAlgebrique(b ** 2)}${miseEnEvidence('-x^2', bleuMathalea)}$<br>`
+          texteCorr += `$${a}=${rienSi1(2 * b)}x${ecritureAlgebrique(b ** 2)}$<br>`
+          if (this.correctionDetaillee) {
+            texteCorr += `On soustrait $${b ** 2}$ aux deux membres.<br>`
+          }
+          texteCorr += `$${a}${miseEnEvidence(ecritureAlgebrique(-(b ** 2)), bleuMathalea)}=${rienSi1(2 * b)}x${ecritureAlgebrique(b ** 2)}${miseEnEvidence(ecritureAlgebrique(-(b ** 2)), bleuMathalea)}$<br>`
+          texteCorr += `$${a - b ** 2}=${rienSi1(2 * b)}x$<br>`
+          if (this.correctionDetaillee) {
+            texteCorr += `On divise les deux membres par $${2 * b}$.<br>`
+          }
+          texteCorr += `$${a - b ** 2}${miseEnEvidence(`\\div${ecritureParentheseSiNegatif(2 * b)}`, bleuMathalea)}=${rienSi1(2 * b)}x${miseEnEvidence(`\\div${ecritureParentheseSiNegatif(2 * b)}`, bleuMathalea)}$<br>`
+          texteCorr += `$x=${reponse.texFSD}$`
+          if (pgcd(abs(a - b ** 2), abs(2 * b)) > 1) {
+            texteCorr += `<br>Par simplification, $x=${reponse.simplifie().texFSD}$.`
+          }
+          texteCorr += '<br>'
         }
 
         texteCorr += `La solution de l'équation ${equation} est $${miseEnEvidence(reponse.simplifie().texFSD)}$.`

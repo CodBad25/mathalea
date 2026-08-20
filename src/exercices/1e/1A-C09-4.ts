@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'aa40c'
 
 export const refs = {
-  'fr-fr': ['1A-C09-4', 'BP1AUTO072'],
+  'fr-fr': ['1A-C09-4', '2A-C2-2', 'BP1AUTO072'],
   'fr-ch': [],
 }
 export default class Auto1AC9c extends DeveloppementNiveau1 {

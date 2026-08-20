@@ -102,7 +102,7 @@ export default class SujetCAN2022Seconde extends Exercice {
       [5, 8],
     ]
 
-    for (let i = 0, index = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, index = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let a = 0
       let b = 0
       let c = 0
@@ -1324,17 +1324,19 @@ export default class SujetCAN2022Seconde extends Exercice {
             a = 0
             b = randint(50, 300)
             const q = randint(2, 5)
-            texte = 'On considère le script python : <br>$\\begin{array}{|l|}\n'
-            texte += '\\hline\n'
-            texte += '\\\n \\texttt{def fin(b):}  \\\n '
-            texte += `\\\\\n ${sp(6)} \\texttt{a=0}\\\n `
-            texte += `\\\\\n ${sp(6)} \\texttt{while a$<$b:}\\\n `
-            texte += `\\\\\n ${sp(12)} \\texttt{a=a+${q}}\\\n `
-            texte += `\\\\\n ${sp(6)} \\texttt{return a}\\\\\n `
-            texte += '\\hline\n'
-            texte += '\\end{array}\n$<br>'
+            texte = `On considère le script python : <br>
+            $\\begin{array}{|l|}
+\\hline\\\\
+\\texttt{def fin(b):}\\\\
+${sp(6)} \\texttt{a=0}\\\\
+${sp(6)} \\texttt{while a < b:}\\\\
+${sp(12)} \\texttt{a=a+${q}}\\\\
+${sp(6)} \\texttt{return a}\\\\
+\\hline
+\\end{array}$
+<br>`
             texte += `Que renvoie l'instruction $\\texttt{fin(${b})}$ ?`
-            texteCorr = ` L'instruction $\\texttt{while a<${b}}$ signifie : tant que a<$${b}$.<br>
+            texteCorr = ` L'instruction $\\texttt{while a < ${b}}$ signifie : tant que a$<${b}$.<br>
           On a au départ, a=0 et l'algorithme s'arrête lorsque a dépasse $${b}$. La valeur retournée est donc le plus petit multiple de $${q}$ supérieur ou égal à $${b}$.`
 
             while (a < b) {

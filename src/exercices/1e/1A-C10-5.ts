@@ -391,7 +391,7 @@ export default class Auto1AC10e extends ExerciceQcmA {
 
   constructor() {
     super()
-    // this.options = { vertical: true, ordered: false }
+
     this.versionAleatoire()
     this.besoinFormulaire5CaseACocher = ['Sans la courbe']
   }

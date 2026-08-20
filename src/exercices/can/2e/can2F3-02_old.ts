@@ -14,7 +14,8 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
-export const titre = 'Déterminer des antécédents avec une fonction de référence'
+export const titre =
+  'Déterminer des antécédents avec une fonction de référence (ancien exercice)'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '1/11/2021'
@@ -23,9 +24,14 @@ export const dateDeModifImportante = '12/08/2026'
 export const uuid = '82d4a'
 
 export const refs = {
-  'fr-fr': ['can2F3-02'],
+  'fr-fr': [],
   'fr-ch': [],
 }
+
+/**
+ * @author Stéphane Guyon
+ * @author Gilles Mora
+ */
 
 function illustrationDistance(centre: number, distance: number): string {
   const gauche = centre - distance
@@ -79,6 +85,8 @@ function illustrationDistance(centre: number, distance: number): string {
 }
 
 export default class AntecedentFonctionReference extends ExerciceSimple {
+  protected typeFonction?: number
+
   private casDisponibles(): number[] {
     switch (this.sup3) {
       case 1:
@@ -107,7 +115,7 @@ export default class AntecedentFonctionReference extends ExerciceSimple {
   nouvelleVersion() {
     if (context.isHtml) this.spacingCorr = 2
 
-    switch (choice(this.casDisponibles())) {
+    switch (this.typeFonction ?? choice(this.casDisponibles())) {
       case 1: {
         this.optionsDeComparaison = { ensembleDeNombres: true }
         const centre = randint(-5, 5)

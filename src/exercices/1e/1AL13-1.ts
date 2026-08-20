@@ -60,7 +60,6 @@ export default class ProblemesAvecSuitesE3C extends Exercice {
   nouvelleVersion() {
     const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup,
-      min: 1,
       max: 10,
       melange: 11,
       defaut: 11,
@@ -70,7 +69,7 @@ export default class ProblemesAvecSuitesE3C extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       const ListeNomS = ['u', 'w', 'v']
@@ -401,10 +400,11 @@ On a donc $${NomS}_0 = ${texNombre(u0, 0)}$.`
               ${scriptPython(
                 `def seuil():
  ${NomS} = ${u0}
-  n = 0
-  while ${NomS} < ${b}:
-   ${NomS} = ${cm}*${NomS}
-  return n`,
+ n = 0
+ while ${NomS} < ${b}:
+  ${NomS} = ${cm}*${NomS}
+  n = n+1
+ return n`,
                 6,
               )}<br>
     Déterminer la valeur affichée par cet algorithme et interpréter le résultat précédent

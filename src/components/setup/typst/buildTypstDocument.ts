@@ -5,6 +5,7 @@ import {
   MATHALEA_FIGURE_HELPERS,
   MATHALEA_FIT_HELPER,
   MATHALEA_QCM_HELPERS,
+  MATHALEA_TASKS_HELPER,
   MATHALEA_SCHEMA_HELPER,
   TASKIZE_IMPORT,
   VARTABLE_IMPORT,
@@ -1464,7 +1465,7 @@ export function buildStandaloneExerciseCode(
 
   const lines: string[] = []
   const importLines: string[] = []
-  if (usesTasks) importLines.push(TASKIZE_IMPORT)
+  if (usesTasks) importLines.push(TASKIZE_IMPORT, MATHALEA_TASKS_HELPER)
   if (options.autoVerticalSpacing) importLines.push(BREATHER_IMPORT)
   if (usesCetz) importLines.push(CETZ_IMPORT)
   if (usesCetzPlotChart) importLines.push(CETZ_PLOT_CHART_IMPORT)
@@ -2192,7 +2193,7 @@ export function buildTypstDocument(
   ) {
     lines.push('// ----- Paquets -----')
     if (usesExerciseBank) lines.push(EXERCISE_BANK_IMPORT)
-    if (usesTasks) lines.push(TASKIZE_IMPORT)
+    if (usesTasks) lines.push(TASKIZE_IMPORT, MATHALEA_TASKS_HELPER)
     if (options.autoVerticalSpacing) lines.push(BREATHER_IMPORT)
     if (usesVarTable) lines.push(VARTABLE_IMPORT)
     if (usesCetz) lines.push(CETZ_IMPORT)

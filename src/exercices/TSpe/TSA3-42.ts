@@ -12,8 +12,8 @@ import { spline, type NoeudSpline } from '../../lib/mathFonctions/Spline'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-import { mathalea2d } from '../../modules/mathalea2d'
 import { context } from '../../modules/context'
+import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
@@ -686,7 +686,7 @@ export default class metropoleSept2024Ex4Q1 extends ExerciceQcmA {
       5,
       "1 : Courbe de f\n2 : Courbe de f'\n3 : Courbe de f''\n4 : Tableau de variations de f'\n5 : Mélange",
     ]
-    this.options = { vertical: false, ordered: false }
+
     this.versionAleatoire()
   }
 }

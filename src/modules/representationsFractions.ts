@@ -9,11 +9,11 @@ import { segment } from '../lib/2d/segmentsVecteurs'
 import { latex2d, texteParPosition } from '../lib/2d/textes'
 import { rotation, translation } from '../lib/2d/transformations'
 import { vecteur } from '../lib/2d/Vecteur'
+import { bleuMathalea } from '../lib/colors'
 import { stringNombre } from '../lib/outils/texNombre'
 import type { NestedObjetMathalea2dArray } from '../types/2d'
 import type FractionEtendue from './FractionEtendue'
 import { quotientier } from './outils'
-import { bleuMathalea } from '../lib/colors'
 
 type FractionRepresentationType = 'gateau' | 'barre' | 'segment'
 
@@ -300,7 +300,7 @@ export function representationFraction(
   depart: number = 0,
   type: FractionRepresentationType = 'gateau',
   couleur = 'gray',
-  unite0: String | number = 0,
+  unite0: string | number = 0,
   unite1: string | number = 1,
   scale = 1,
   label = '',

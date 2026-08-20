@@ -15,7 +15,7 @@ export const interactifType = 'mathLive'
 export const uuid = '08208'
 
 export const refs = {
-  'fr-fr': ['1A-F02-9'],
+  'fr-fr': ['1A-F02-9', '2A-F2-3'],
   'fr-ch': ['1mQCM-5'],
 }
 export default class Auto1AF2a extends CoordonneesPointIntersectionAxeAbscissesDroite {

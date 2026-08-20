@@ -1,5 +1,8 @@
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '22/12/2025'
@@ -63,15 +66,21 @@ export default class AutoARO1e extends ExerciceQcmA {
     }
 
     // Trouver quel calcul donne le max pour la conclusion
-    let bonCalculTexte = ''
-    if (r1 === max)
-      bonCalculTexte = `$${miseEnEvidence(p1 + '\\,\\% \\text{ de } ' + n1)}$`
-    else if (r2 === max)
-      bonCalculTexte = `$${miseEnEvidence(p2 + '\\,\\% \\text{ de } ' + n2)}$`
-    else if (r3 === max)
-      bonCalculTexte = `$${miseEnEvidence(p3 + '\\,\\% \\text{ de } ' + n3)}$`
-    else if (r4 === max)
-      bonCalculTexte = `$${miseEnEvidence(p4 + '\\,\\% \\text{ de } ' + n4)}$`
+    let pBon, nBon
+    if (r1 === max) {
+      pBon = p1
+      nBon = n1
+    } else if (r2 === max) {
+      pBon = p2
+      nBon = n2
+    } else if (r3 === max) {
+      pBon = p3
+      nBon = n3
+    } else {
+      pBon = p4
+      nBon = n4
+    }
+    const bonCalculTexte = `$${miseEnEvidence(pBon + '\\,\\%')}$ ${texteEnCouleurEtGras('de')} $${miseEnEvidence(nBon)}$`
 
     correctionTexte += `Le plus grand résultat est donc donné par le calcul ${bonCalculTexte} $ =${texNombre(max)}$.`
 

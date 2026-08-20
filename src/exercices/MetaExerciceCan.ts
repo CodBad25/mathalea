@@ -3,6 +3,7 @@ import {
   listOfCustomElements,
   mathaleaCustomElementsRegistry,
 } from '../lib/customElements/MathaleaCustomElement'
+import { MetaCustomElement } from '../lib/customElements/MetaCustomElement'
 import { handleAnswers } from '../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../lib/interactif/qcm'
 import { buildSimpleVersionQcm } from '../lib/interactif/qcmBuilder'
@@ -20,9 +21,15 @@ import { getDistracteurs } from '../lib/mathalea'
 import { Complexe } from '../lib/mathFonctions/Complexe'
 import { combinaisonListes, shuffle } from '../lib/outils/arrayOutils'
 import { range1 } from '../lib/outils/nombres'
-import type { AnswerValueType, AutoCorrection, Valeur } from '../lib/types'
+import type {
+  AnswerValueType,
+  AutoCorrection,
+  ClickFigures,
+  Valeur,
+} from '../lib/types'
 import {
   interactivityTypeToCustomElementFormat,
+  isMathaleaCustomElementFormat,
   isValeur,
   mathliveCompatibleToCustomElementFormat,
   type InteractivityType,
@@ -137,14 +144,13 @@ function remapLegacyFieldIds(
 }
 
 function decodeHtmlAttribute(value: string) {
-  return value
-    .replace(
-      /&(quot|amp|lt|gt);/g,
-      (_match, entity: string) =>
-        ({ quot: '"', amp: '&', lt: '<', gt: '>' })[
-          entity as 'quot' | 'amp' | 'lt' | 'gt'
-        ],
-    )
+  return value.replace(
+    /&(quot|amp|lt|gt);/g,
+    (_match, entity: string) =>
+      ({ quot: '"', amp: '&', lt: '<', gt: '>' })[
+        entity as 'quot' | 'amp' | 'lt' | 'gt'
+      ],
+  )
 }
 
 function encodeHtmlAttribute(value: string) {
@@ -213,6 +219,14 @@ function remapCustomElementQuestionIds(
       `feedbackEx${destinationExercice}Q${destinationIndex}`,
     )
     .replaceAll(
+      `tabMathliveEx${sourceExercice}Q0`,
+      `tabMathliveEx${destinationExercice}Q${destinationIndex}`,
+    )
+    .replaceAll(
+      `Ex${sourceExercice}Q0`,
+      `Ex${destinationExercice}Q${destinationIndex}`,
+    )
+    .replaceAll(
       'resultatCheckEx0Q0',
       `resultatCheckEx${destinationExercice}Q${destinationIndex}`,
     )
@@ -220,6 +234,11 @@ function remapCustomElementQuestionIds(
       'feedbackEx0Q0',
       `feedbackEx${destinationExercice}Q${destinationIndex}`,
     )
+    .replaceAll(
+      'tabMathliveEx0Q0',
+      `tabMathliveEx${destinationExercice}Q${destinationIndex}`,
+    )
+    .replaceAll('Ex0Q0', `Ex${destinationExercice}Q${destinationIndex}`)
 
   if (tag === 'meta-interactif-2d') {
     html = html.replace(
@@ -228,6 +247,27 @@ function remapCustomElementQuestionIds(
     )
   }
   return html
+}
+
+function remapClickFigures(
+  figures: ClickFigures | undefined,
+  sourceNumeroExercice: number,
+  destinationNumeroExercice: number,
+  destinationIndex: number,
+): ClickFigures | undefined {
+  if (!Array.isArray(figures)) return undefined
+  return figures.map((figure) => ({
+    ...figure,
+    id: figure.id
+      .replaceAll(
+        `Ex${sourceNumeroExercice}Q0`,
+        `Ex${destinationNumeroExercice}Q${destinationIndex}`,
+      )
+      .replaceAll(
+        'Ex0Q0',
+        `Ex${destinationNumeroExercice}Q${destinationIndex}`,
+      ),
+  }))
 }
 
 function injectSimpleQuestionCustomElement({
@@ -361,6 +401,78 @@ function buildSimpleQuestionAnswerValue(
   }
 }
 
+/**
+ * Une sous-question est « custom » quand l'exercice corrige lui-même les
+ * réponses via `correctionInteractive`. Selon l'âge de l'exercice, le format
+ * est déclaré à trois endroits : l'export de module recopié sur l'instance,
+ * le champ des exercices simples, ou l'objet réponse des exercices classiques.
+ */
+function estQuestionCustom(question: Exercice): boolean {
+  // Sans fonction de correction il n'y a rien de custom à brancher : on laisse
+  // le traitement par défaut s'appliquer.
+  if (typeof question.correctionInteractive !== 'function') return false
+  // Un exercice qui délègue à un customElement enregistré n'est pas custom,
+  // même s'il garde `interactifType = 'custom'` par compatibilité historique
+  // (cf. `_Exercice_labyrinthe`).
+  if (isMathaleaCustomElementFormat(question.formatInteractif)) return false
+  if (
+    isMathaleaCustomElementFormat(question.autoCorrection[0]?.formatInteractif)
+  ) {
+    return false
+  }
+  return (
+    question.interactifType === 'custom' ||
+    question.formatInteractif === 'custom' ||
+    question.autoCorrection[0]?.formatInteractif === 'custom'
+  )
+}
+
+/**
+ * Un sous-exercice qui déclare `nouvelleVersion(numeroExercice, numeroQuestion)`
+ * produit lui-même sa question à l'index demandé : lui appliquer en plus le
+ * décalage `indexQuestionHote` décalerait ses identifiants deux fois.
+ */
+function gereSonIndexDeQuestion(question: Exercice): boolean {
+  return question.nouvelleVersion.length >= 2
+}
+
+/**
+ * Un sous-exercice range la figure de son unique question à l'index 0, alors
+ * que `correctionInteractive(i)` est appelée avec l'index de la question dans
+ * l'exercice affiché. On déplace donc la figure de tête à cet index, les
+ * éventuelles figures suivantes (corrections, figures annexes) restant dans le
+ * tableau pour être détruites par `reinit()`.
+ */
+function alignFiguresSurIndexHote(
+  question: Exercice,
+  indexQuestion: number,
+): void {
+  if (indexQuestion === 0) return
+  for (const cle of ['figuresApiGeom', 'figuresApiGeomCorr'] as const) {
+    const figures = question[cle]
+    if (figures == null || figures.length === 0) continue
+    const [figureQuestion, ...autres] = figures
+    const alignees: typeof figures = []
+    alignees[indexQuestion] = figureQuestion
+    alignees.push(...autres)
+    question[cle] = alignees
+  }
+}
+
+/**
+ * Nombre de points d'une question custom. Un exercice `exoCustomResultat`
+ * renvoie un tableau de résultats dont la longueur n'est connue qu'après
+ * correction : quand il expose ses bonnes réponses, on s'en sert pour annoncer
+ * le barème avant toute saisie.
+ */
+function pointsMaxQuestionCustom(question: Exercice): number {
+  const goodAnswers = (question as { goodAnswers?: unknown }).goodAnswers
+  if (Array.isArray(goodAnswers) && goodAnswers.length > 0) {
+    return goodAnswers.length
+  }
+  return 1
+}
+
 export default class MetaExercice extends Exercice {
   Exercices: (typeof Exercice)[]
   correctionInteractives: ((i: number) => string | string[])[]
@@ -377,7 +489,65 @@ export default class MetaExercice extends Exercice {
     this.sup3 = false
   }
 
+  /**
+   * Les vues qui corrigent question par question appellent
+   * `correctionInteractive` sur l'exercice affiché : pour un méta-exercice,
+   * c'est celle du sous-exercice réhébergé à cet index.
+   */
+  correctionInteractive(i: number): string | string[] {
+    return this.correctionInteractives[i]?.(i) ?? 'KO'
+  }
+
+  /**
+   * Branche une sous-question custom sur le pipeline générique : la
+   * `correctionInteractive` du sous-exercice est enregistrée en callback et
+   * l'énoncé reçoit l'ancre `<meta-custom>` que `verifQuestion()` retrouvera.
+   * Retourne le HTML de la question, ancre comprise.
+   */
+  private brancheQuestionCustom(
+    Question: Exercice,
+    indexQuestion: number,
+    questionHtml: string,
+  ): string {
+    alignFiguresSurIndexHote(Question, Question.indexQuestionHote ?? 0)
+    const numeroExercice = this.numeroExercice ?? 0
+    const pointsMax = pointsMaxQuestionCustom(Question)
+    const callbackKey = MetaCustomElement.keyFor(numeroExercice, indexQuestion)
+    // La fermeture sur `Question` est indispensable : `correctionInteractive`
+    // est parfois une méthode de prototype qui lit `this.numeroExercice` et
+    // `this.answers`.
+    const corrige = (i: number) => {
+      const resultat = Question.correctionInteractive!(i)
+      if (Question.answers != null) {
+        this.answers = { ...this.answers, ...Question.answers }
+      }
+      return resultat
+    }
+    MetaCustomElement.registerCallback(callbackKey, {
+      exercice: Question,
+      run: corrige,
+      pointsMax,
+    })
+    // Chemin historique, conservé pour les CAN qui lisent `correctionInteractives`
+    this.correctionInteractives[indexQuestion] = corrige
+    this.autoCorrection[indexQuestion] = { formatInteractif: 'meta-custom' }
+    return (
+      questionHtml +
+      MetaCustomElement.create({
+        numeroExercice,
+        questionIndex: indexQuestion,
+        callbackKey,
+        pointsMax,
+      })
+    )
+  }
+
   nouvelleVersion(): void {
+    // Les sous-exercices de la version précédente ne doivent pas rester dans le
+    // registre statique des callbacks.
+    MetaCustomElement.unregisterCallbacksWithPrefix(
+      `${MetaCustomElement.elementTag}:${this.numeroExercice ?? 0}:`,
+    )
     this.correctionInteractives = []
     this.listeCanEnonces = []
     this.listeCanReponsesACompleter = []
@@ -456,10 +626,20 @@ export default class MetaExercice extends Exercice {
         if (item === numExo) {
           // Permet de ne choisir que certaines questions
           const Question = new UnExercice()
+          // Les exports de module ne sont recopiés sur l'instance que par
+          // `mathaleaLoadExerciceFromUuid` : un sous-exercice construit
+          // directement doit récupérer son `interactifType` ici.
+          Question.interactifType ??= UnExercice.interactifTypeModule
           Question.numeroExercice = this.numeroExercice
           Question.canOfficielle = !!this.sup
           Question.interactif = this.interactif
           Question.seed = this.seed
+          // Le sous-exercice fabrique ses identifiants DOM à partir de cet
+          // index : il produit ainsi directement ceux de la question affichée,
+          // sans réécriture de chaîne après coup.
+          Question.indexQuestionHote = gereSonIndexDeQuestion(Question)
+            ? 0
+            : indexQuestion
           Question.nouvelleVersionWrapper()
           //* ************ Question Exo simple *************//
           if (Question.listeQuestions.length === 0) {
@@ -512,6 +692,43 @@ export default class MetaExercice extends Exercice {
                 cloneQcmAutoCorrection(qcmAutoCorrection)
               this.listeQuestions[indexQuestion] =
                 consigne + String(Question.question ?? '')
+            } else if (estQuestionCustom(Question)) {
+              // Avant `customElementFormat` : faute de `formatInteractif`,
+              // `getSimpleQuestionCustomElementFormat()` retombe sur
+              // `mathalea-mathfield` et collerait un champ de saisie à une
+              // question qui se corrige toute seule.
+              // Les identifiants apigeom sont produits au bon index par
+              // `figureApigeom()` ; seuls restent à réindexer les blocs que
+              // l'exercice écrit lui-même dans son énoncé.
+              const enonce = String(Question.question ?? '')
+                .replaceAll(
+                  `feedbackEx${this.numeroExercice}Q0`,
+                  `feedbackEx${this.numeroExercice}Q${indexQuestion}`,
+                )
+                .replaceAll(
+                  `resultatCheckEx${this.numeroExercice}Q0`,
+                  `resultatCheckEx${this.numeroExercice}Q${indexQuestion}`,
+                )
+              // Même règle que `mathaleaHandleExerciceSimple` : un exercice
+              // simple custom dont l'énoncé contient des `%{}` est un texte à
+              // trous. Le moteur pose les champs, la vérification reste à la
+              // charge de l'exercice.
+              const questionHtml = enonce.includes('%{')
+                ? remplisLesBlancs(
+                    this,
+                    indexQuestion,
+                    enonce,
+                    `fillInTheBlank ${formatChampTexte}`,
+                    '\\ldots',
+                  )
+                : enonce
+              this.listeQuestions[indexQuestion] =
+                consigne +
+                this.brancheQuestionCustom(
+                  Question,
+                  indexQuestion,
+                  questionHtml,
+                )
             } else if (customElementFormat != null) {
               const tag = customElementFormat
               const questionHtml = injectSimpleQuestionCustomElement({
@@ -533,43 +750,20 @@ export default class MetaExercice extends Exercice {
                 },
               )
             } else {
-              if (Question.formatInteractif === 'custom') {
-                this.correctionInteractives[indexQuestion] =
-                  Question.correctionInteractive!
-                this.listeQuestions[indexQuestion] =
-                  consigne + Question.question
-                this.listeQuestions[indexQuestion] = this.listeQuestions[
-                  indexQuestion
-                ]
-                  .replaceAll(
-                    `feedbackEx${this.numeroExercice}Q0`,
-                    `feedbackEx${this.numeroExercice}Q${indexQuestion}`,
-                  )
-                  .replaceAll(
-                    `resultatCheckEx${this.numeroExercice}Q0`,
-                    `resultatCheckEx${this.numeroExercice}Q${indexQuestion}`,
-                  )
-                  .replaceAll(
-                    `apigeomEx${this.numeroExercice}F0`,
-                    `apigeomEx${this.numeroExercice}F${indexQuestion}`,
-                  )
-              } else {
-                // * ***************** Question MathLive *****************//
-
-                this.listeQuestions[indexQuestion] =
-                  consigne +
-                  remapDomReadyPayloadQuestionIds(
-                    String(Question.question ?? ''),
-                    this.numeroExercice ?? 0,
-                    indexQuestion,
-                  ) +
-                  ajouteChampTexteMathLive(
-                    this,
-                    indexQuestion,
-                    formatChampTexte,
-                    optionsChampTexte,
-                  )
-              }
+              // * ***************** Question MathLive *****************//
+              this.listeQuestions[indexQuestion] =
+                consigne +
+                remapDomReadyPayloadQuestionIds(
+                  String(Question.question ?? ''),
+                  this.numeroExercice ?? 0,
+                  indexQuestion,
+                ) +
+                ajouteChampTexteMathLive(
+                  this,
+                  indexQuestion,
+                  formatChampTexte,
+                  optionsChampTexte,
+                )
               if (Question.compare == null) {
                 const reponse = Question.reponse
                 const options =
@@ -759,14 +953,30 @@ export default class MetaExercice extends Exercice {
 
               this.listeQuestions[indexQuestion] =
                 Question.consigne + questionHtml
-              handleAnswers(
-                this,
-                indexQuestion,
-                Question.autoCorrection[0].valeur as Valeur,
-                {
-                  formatInteractif: tag as InteractivityType,
-                },
-              )
+              if (tag === 'clique-figure') {
+                this.autoCorrection[indexQuestion] = {
+                  ...(Question.autoCorrection[0] ?? {}),
+                  formatInteractif: tag,
+                }
+                this.cliqueFiguresArray ??= []
+                const figures = remapClickFigures(
+                  Question.cliqueFiguresArray?.[0],
+                  Question.numeroExercice ?? 0,
+                  this.numeroExercice ?? 0,
+                  indexQuestion,
+                )
+                if (figures != null)
+                  this.cliqueFiguresArray[indexQuestion] = figures
+              } else {
+                handleAnswers(
+                  this,
+                  indexQuestion,
+                  Question.autoCorrection[0].valeur as Valeur,
+                  {
+                    formatInteractif: tag as InteractivityType,
+                  },
+                )
+              }
             } else if (qcmAutoCorrection == null) {
               this.listeQuestions[indexQuestion] = remapLegacyFieldIds(
                 this.listeQuestions[indexQuestion],
@@ -789,28 +999,26 @@ export default class MetaExercice extends Exercice {
               // fin d'alimentation des listes de question et de correction pour cette question
               const formatInteractif =
                 Question.autoCorrection[0]?.formatInteractif
-              if (formatInteractif === 'custom') {
-                Question.reinit()
-                Question.nouvelleVersionWrapper(
-                  this.numeroExercice,
-                  indexQuestion,
-                )
-                this.correctionInteractives[indexQuestion] = function (
-                  this: MetaExercice,
-                  i: number,
-                ) {
-                  const result = Question.correctionInteractive!(i)
-                  if (Question.answers) {
-                    this.answers = { ...this.answers, ...Question.answers }
-                  }
-                  return result
+              if (estQuestionCustom(Question)) {
+                if (gereSonIndexDeQuestion(Question)) {
+                  // L'exercice sait produire sa question directement à l'index
+                  // demandé : on le relance avec les coordonnées de l'hôte.
+                  Question.reinit()
+                  Question.nouvelleVersionWrapper(
+                    this.numeroExercice,
+                    indexQuestion,
+                  )
+                  this.listeQuestions[indexQuestion] =
+                    Question.listeQuestions[indexQuestion] ?? ''
+                  this.listeCorrections[indexQuestion] =
+                    Question.listeCorrections[indexQuestion] ?? ''
                 }
-                this.autoCorrection[indexQuestion] =
-                  Question.autoCorrection[indexQuestion]
                 this.listeQuestions[indexQuestion] =
-                  Question.listeQuestions[indexQuestion]
-                this.listeCorrections[indexQuestion] =
-                  Question.listeCorrections[indexQuestion]
+                  this.brancheQuestionCustom(
+                    Question,
+                    indexQuestion,
+                    this.listeQuestions[indexQuestion] ?? '',
+                  )
               } else {
                 const reponse = Question.autoCorrection[0]?.valeur
                 if (reponse != null)

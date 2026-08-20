@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'a78e8'
 
 export const refs = {
-  'fr-fr': ['1A-C11-1'],
+  'fr-fr': ['1A-C11-1', '2A-C4-1'],
   'fr-ch': [],
 }
 export default class Auto1AC13a extends ExprimerVariable {

@@ -12,7 +12,8 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Exprimer une probabilité à l'aide de la fonction de répartition d'une loi binomiale (QCM Bac)"
+export const titre =
+  "Exprimer une probabilité à l'aide de la fonction de répartition d'une loi binomiale (QCM Bac)"
 export const dateDePublication = '08/11/2024'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -75,7 +76,7 @@ export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionAleatoire()
     this.besoinFormulaire3CaseACocher = ["Avec le préambule de l'énoncé", true]
     this.sup3 = true

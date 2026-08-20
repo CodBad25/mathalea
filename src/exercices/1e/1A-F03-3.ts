@@ -9,14 +9,15 @@ import {
   vertMathalea,
 } from '../../lib/colors'
 import { shuffle } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
-export const titre = "Reconnaître la représentation graphique d'une fonction affine (coefficient directeur entier)"
+export const titre =
+  "Reconnaître la représentation graphique d'une fonction affine (coefficient directeur entier)"
 export const dateDePublication = '29/06/2026'
 
 export const uuid = 'efa32'
@@ -83,14 +84,12 @@ export default class ReconnaissanceGraphiqueFonctionAffine extends ExerciceQcmA 
         y <= yMax + ecartExterieur,
     )
 
-    const label =
-      candidats.find(({ x, y }) =>
-        labelsUtilises.every(
-          (labelUtilise) =>
-            Math.hypot(x - labelUtilise.x, y - labelUtilise.y) >
-            distanceMinimale,
-        ),
-      ) ??
+    const label = candidats.find(({ x, y }) =>
+      labelsUtilises.every(
+        (labelUtilise) =>
+          Math.hypot(x - labelUtilise.x, y - labelUtilise.y) > distanceMinimale,
+      ),
+    ) ??
       candidats[0] ?? {
         x: xMax + ecartExterieur,
         y: Math.max(
@@ -232,7 +231,9 @@ La droite qui représente la fonction $f$ est :`
 
     this.reponses = [
       `$\\left(d_${bonneDroite?.numero}\\right)$`,
-      ...mauvaisesDroites.map((droite) => `$\\left(d_${droite.numero}\\right)$`),
+      ...mauvaisesDroites.map(
+        (droite) => `$\\left(d_${droite.numero}\\right)$`,
+      ),
     ]
 
     this.correction = `La représentation graphique de la fonction $f$ est la droite d'équation $y=${fonction}$.<br>
@@ -256,7 +257,7 @@ La droite qui possède ces deux caractéristiques est $${miseEnEvidence(`\\left(
   constructor() {
     super()
     this.versionAleatoire()
-    this.options = { vertical: false, ordered: false }
+
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false
   }

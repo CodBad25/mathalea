@@ -218,7 +218,7 @@ Mais cette valeur dépasse 20. Il est donc <strong>impossible</strong> d'obtenir
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: false, ordered: false }
+
     this.versionAleatoire()
   }
 }

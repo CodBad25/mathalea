@@ -379,6 +379,5 @@ export default class auto1AF4e extends ExerciceQcmA {
   constructor() {
     super()
     this.versionAleatoire()
-    // this.options = { vertical: true, ordered: false }
   }
 }

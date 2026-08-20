@@ -1103,6 +1103,51 @@ des niveaux de gris.
 
 Pour un exemple d'utilisation, un exemple à étudier est `src/exercices/5e/5D1D-1.ts`.
 
+## Correction maison (`custom`)
+
+Quand aucun custom element ne convient — c'est le cas des exercices apiGeom, où l'élève construit une figure —, l'exercice corrige lui-même :
+
+```ts
+export const interactifReady = true
+export const interactifType = 'custom'
+
+export default class MonExercice extends Exercice {
+  correctionInteractive = (i: number) => {
+    // Sauvegarde de la réponse pour le LMS : la clé doit être l'id de la figure
+    this.answers[this.figuresApiGeom![i].id] = figureAnswerJson(
+      this.figuresApiGeom![i],
+    )
+    const divFeedback = document.querySelector(
+      `#feedbackEx${this.numeroExercice}Q${i}`,
+    )
+    const { isValid, message } = this.figuresApiGeom![i].checkAngle({
+      angle: 90,
+      label1: 'A',
+      label2: 'B',
+      label3: 'C',
+    })
+    if (divFeedback != null) divFeedback.innerHTML = message
+    return isValid ? 'OK' : 'KO'
+  }
+}
+```
+
+`correctionInteractive(i)` renvoie `'OK'` ou `'KO'`. Pour qu'une question rapporte plusieurs points, poser `this.exoCustomResultat = true` dans le constructeur et renvoyer un tableau (`['OK', 'KO', 'OK']`) : chaque entrée vaut un point.
+
+Le moteur n'affiche rien à la place de l'exercice : c'est à `correctionInteractive` d'écrire le feedback dans `#feedbackEx{numeroExercice}Q{i}` et, s'il y a lieu, de figer la figure (`figure.isDynamic = false`).
+
+Le modèle complet est `src/exercices/modèlesExos/20_exercice_classique_apigeom.ts`.
+
+### Toujours indexer par `i`
+
+C'est la condition pour que l'exercice puisse être repris comme une question parmi d'autres par un méta-exercice — une CAN ou une « Sélection d'automatismes » (`1A`, `3A`). Dans ce cas, `correctionInteractive` est appelée avec l'index de la question **dans l'exercice affiché**, qui n'est plus 0.
+
+- `#feedbackEx${this.numeroExercice}Q${i}`, jamais `Q0` ni `Q${0}` ;
+- `this.figuresApiGeom[i]`, jamais `[0]` ;
+- `figureApigeom({ exercice: this, i, figure })` avec l'indice de la boucle de `nouvelleVersion()`, et la figure rangée dans `this.figuresApiGeom[i]`.
+
+Aucun décalage n'est à gérer dans l'exercice : `figureApigeom()` s'en charge à partir de `this.indexQuestionHote`, posé par le méta-exercice. Le détail du mécanisme est dans [le système d'interactivité](../../maintenance-moteur/interactivite/systeme-interactivite.md#réhébergement-dune-question-custom).
+
 ## fin de la liste des éléments
 
 # Bonnes pratiques

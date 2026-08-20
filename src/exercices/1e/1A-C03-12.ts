@@ -161,7 +161,7 @@ export default class TrouverEgalite extends ExerciceQcmA {
     <li>Vérifier si cette propriété est appliquée correctement.</li>
     <li>Procéder par élimination : une seule égalité est vraie dans ce QCM.</li>
   </ul>`
-    // this.options = { vertical: true, ordered: false }
+
     this.versionAleatoire()
   }
 }

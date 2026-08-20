@@ -500,7 +500,7 @@ export default class ConvexiteEtCourbesDerivees extends ExerciceQcmA {
       4,
       "1 : Courbe de f\n2 : Courbe de f'\n3 : Courbe de f''\n4 : Mélange",
     ]
-    this.options = { vertical: false, ordered: false }
+
     this.versionAleatoire()
   }
 }

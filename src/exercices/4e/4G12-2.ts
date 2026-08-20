@@ -11,7 +11,7 @@ export const dateDePublication = '16/05/2022'
 export const uuid = '3174f'
 
 export const refs = {
-  'fr-fr': ['4G12-2', '3AutoG14-1'],
+  'fr-fr': ['4G12-2'],
   'fr-ch': ['NR'],
 }
 export default class ConservationTransformation4e extends ConservationTransformation {

@@ -147,7 +147,7 @@ export default class LireEffectifCumuleHistogramme extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.versionAleatoire()
   }
 }

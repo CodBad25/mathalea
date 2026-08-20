@@ -63,6 +63,11 @@ export default class nomExercice extends Exercice {
     listeQuestionsToContenu(this)
   }
 
+  // Toujours indexer par `i` (figure, feedback, resultatCheck) et jamais en dur
+  // par 0 : c'est ce qui permet à l'exercice d'être agrégé comme une question
+  // parmi d'autres par un méta-exercice (MetaExerciceCan, « Sélection
+  // d'automatismes »), qui appelle alors la correction avec l'index de la
+  // question dans l'exercice affiché.
   correctionInteractive = (i: number) => {
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale

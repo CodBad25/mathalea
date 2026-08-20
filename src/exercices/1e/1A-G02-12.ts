@@ -36,7 +36,7 @@ export default class VolumePrismeDroitBaseTriangleRectangleQcm extends ExerciceQ
 
     this.enonce = `Un prisme droit a pour base un triangle rectangle dont les côtés de l'angle droit mesurent $${coteAngleDroit1}\\text{ cm}$ et $${coteAngleDroit2}\\text{ cm}$.<br>
 La hauteur du prisme est $${hauteurPrisme}\\text{ cm}$.<br>
-Son volume est égal à `
+Son volume est égal à :`
 
     this.reponses = [
       `$${texNombre(volume)}\\text{ cm}^3$`,
@@ -48,7 +48,7 @@ Son volume est égal à `
     this.correction = `
 Si $\\mathcal{A}$ désigne l'aire de la base et si $h$ désigne la hauteur du prisme, alors le volume d'un prisme droit est donné par :<br>
 $V=\\mathcal{A}\\times h$.<br>
-Or la base est un triangle rectangle. Si $a$ et $b$ désignent les deux côtés de l'angle droit, alors :<br>
+Or, la base est un triangle rectangle. Si $a$ et $b$ désignent les deux côtés de l'angle droit, alors :<br>
 $\\mathcal{A}=\\dfrac{a\\times b}{2}$.<br>
 Donc :<br>
 $\\mathcal{A}=\\dfrac{${coteAngleDroit1}\\times ${coteAngleDroit2}}{2}=\\dfrac{${coteAngleDroit1 * coteAngleDroit2}}{2}=${texNombre(aireBase)}\\text{ cm}^2$.<br>
@@ -73,7 +73,7 @@ $V=${texNombre(aireBase)}\\times ${hauteurPrisme}=${miseEnEvidence(`${texNombre(
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

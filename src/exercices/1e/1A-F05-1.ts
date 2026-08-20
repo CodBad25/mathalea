@@ -8,13 +8,13 @@ import {
 
 // import { reduireAxPlusB } from '../../lib/outils/ecritures'
 
+import { bleuMathalea } from '../../lib/colors'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import type FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
-import { bleuMathalea } from '../../lib/colors'
 /**
  * @author Gilles Mora
  *
@@ -610,8 +610,6 @@ export default class Auto1AF5 extends ExerciceQcmA {
     super()
     // Appel de la version originale par défaut, ou de la version aléatoire selon les besoins
     this.versionOriginale()
-    context.isHtml
-      ? (this.options = { vertical: false, ordered: false })
-      : (this.options = { vertical: true, ordered: false })
+    if (!context.isHtml) this.options = { ...this.options, vertical: true }
   }
 }

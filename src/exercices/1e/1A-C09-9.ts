@@ -12,7 +12,7 @@ export const dateDePublication = '20/02/2026'
 export const uuid = '6df3d'
 // @Author Gilles Mora
 export const refs = {
-  'fr-fr': ['1A-C09-9'],
+  'fr-fr': ['1A-C09-9', '2A-C1-4'],
   'fr-ch': [],
 }
 export const interactifReady = true
@@ -74,6 +74,5 @@ export default class Puissances extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
   }
 }

@@ -65,8 +65,7 @@ const qcmBac: QcmItem[] = [
       'On choisit 3 élèves parmi les 20 élèves ayant choisi SES, puis 2 élèves parmi les 11 autres. On obtient donc $\\displaystyle\\binom{20}{3}\\times\\binom{11}{2}$.',
   },
   {
-    enonce:
-      "Sur l'intervalle $[0;2\\pi]$, l'équation $\\sin(x)=0,1$ admet :",
+    enonce: "Sur l'intervalle $[0;2\\pi]$, l'équation $\\sin(x)=0,1$ admet :",
     reponses: [
       'deux solutions',
       'zéro solution',
@@ -78,7 +77,7 @@ const qcmBac: QcmItem[] = [
   },
   {
     enonce:
-      "On considère la fonction $f$ définie sur $[0;\\pi]$ par $f(x)=x+\\sin(x)$. On admet que $f$ est deux fois dérivable. Alors :",
+      'On considère la fonction $f$ définie sur $[0;\\pi]$ par $f(x)=x+\\sin(x)$. On admet que $f$ est deux fois dérivable. Alors :',
     reponses: [
       'la fonction $f$ est concave sur $[0;\\pi]$',
       'la fonction $f$ est convexe sur $[0;\\pi]$',
@@ -122,7 +121,7 @@ const qcmBac: QcmItem[] = [
       '$1+n+\\dfrac{n(n-1)}{2}$',
     ],
     correction:
-      "Si $X$ désigne le nombre de piles, alors $X$ suit la loi binomiale de paramètres $n$ et $\\dfrac12$. On calcule $P(X\\leqslant2)=P(X=0)+P(X=1)+P(X=2)$.",
+      'Si $X$ désigne le nombre de piles, alors $X$ suit la loi binomiale de paramètres $n$ et $\\dfrac12$. On calcule $P(X\\leqslant2)=P(X=0)+P(X=1)+P(X=2)$.',
   },
   {
     enonce:
@@ -146,7 +145,7 @@ const qcmBac: QcmItem[] = [
       'convergente vers $\\mathrm{e}$',
     ],
     correction:
-      "Pour tout $n$, $u_{n+1}=\\mathrm{e}^{2n+3}=\\mathrm{e}^2\\mathrm{e}^{2n+1}=\\mathrm{e}^2u_n$. La suite est donc géométrique de raison $\\mathrm{e}^2$.",
+      'Pour tout $n$, $u_{n+1}=\\mathrm{e}^{2n+3}=\\mathrm{e}^2\\mathrm{e}^{2n+1}=\\mathrm{e}^2u_n$. La suite est donc géométrique de raison $\\mathrm{e}^2$.',
   },
   {
     enonce:
@@ -170,7 +169,7 @@ const qcmBac: QcmItem[] = [
       'ni géométrique ni arithmétique',
     ],
     correction:
-      "On a $v_{n+1}=u_{n+1}+60=1,2u_n+72=1,2(u_n+60)=1,2v_n$. La suite $(v_n)$ est donc géométrique de raison $1,2$.",
+      'On a $v_{n+1}=u_{n+1}+60=1,2u_n+72=1,2(u_n+60)=1,2v_n$. La suite $(v_n)$ est donc géométrique de raison $1,2$.',
   },
   {
     enonce:
@@ -206,14 +205,14 @@ const qcmBac: QcmItem[] = [
       '$H$ est croissante sur $\\mathbb{R}$',
     ],
     correction:
-      "Comme $h(x)<0$ pour $x<1$, la primitive $H$ est décroissante sur $]-\\infty;1]$. Pour $x\\leqslant0$, on a donc $H(x)\\geqslant H(0)=0$.",
+      'Comme $h(x)<0$ pour $x<1$, la primitive $H$ est décroissante sur $]-\\infty;1]$. Pour $x\\leqslant0$, on a donc $H(x)\\geqslant H(0)=0$.',
   },
   {
     enonce:
       'Soit $f$ continue et strictement croissante sur $[a;b]$, avec $a<b$, et telle que $f$ s’annule en $\\alpha$. Dans un algorithme de dichotomie, si $m=\\dfrac{a+b}{2}$ et $f(m)<0$, il faut remplacer :',
     reponses: ['$a$ par $m$', '$b$ par $m$', '$m$ par $a$', '$m$ par $b$'],
     correction:
-      "Comme $f$ est croissante et $f(m)<0$, la racine est dans $[m;b]$. Il faut donc remplacer $a$ par $m$.",
+      'Comme $f$ est croissante et $f(m)<0$, la racine est dans $[m;b]$. Il faut donc remplacer $a$ par $m$.',
   },
   {
     enonce:
@@ -225,7 +224,7 @@ const qcmBac: QcmItem[] = [
       '$\\displaystyle\\binom{10}{2}\\left(\\dfrac7{10}\\right)\\left(\\dfrac3{10}\\right)^2$',
     ],
     correction:
-      "Le nombre de boules vertes suit la loi binomiale de paramètres $3$ et $\\dfrac3{10}$. On calcule $P(X=2)=\\binom32\\left(\\dfrac3{10}\\right)^2\\left(\\dfrac7{10}\\right)$.",
+      'Le nombre de boules vertes suit la loi binomiale de paramètres $3$ et $\\dfrac3{10}$. On calcule $P(X=2)=\\binom32\\left(\\dfrac3{10}\\right)^2\\left(\\dfrac7{10}\\right)$.',
   },
   {
     enonce:
@@ -249,7 +248,7 @@ const qcmBac: QcmItem[] = [
       '$]-2;1[$',
     ],
     correction:
-      "Il faut $\\dfrac{x-1}{2x+4}>0$. Le quotient est positif lorsque le numérateur et le dénominateur sont de même signe, soit sur $]-\\infty;-2[\\cup]1;+\\infty[$.",
+      'Il faut $\\dfrac{x-1}{2x+4}>0$. Le quotient est positif lorsque le numérateur et le dénominateur sont de même signe, soit sur $]-\\infty;-2[\\cup]1;+\\infty[$.',
   },
   {
     enonce:
@@ -273,7 +272,7 @@ const qcmBac: QcmItem[] = [
       'la suite $(u_n)$ est constante à partir d’un certain rang',
     ],
     correction:
-      "Si $u_n\\geqslant3$ pour tout $n$ et si $(u_n)$ converge vers $\\ell$, alors la limite vérifie $\\ell\\geqslant3$.",
+      'Si $u_n\\geqslant3$ pour tout $n$ et si $(u_n)$ converge vers $\\ell$, alors la limite vérifie $\\ell\\geqslant3$.',
   },
   {
     enonce:
@@ -305,7 +304,7 @@ export default class ShuffleQcmBac extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.besoinFormulaireCaseACocher = false
     this.nbQuestions = 3
     this.nbQuestionsModifiable = true

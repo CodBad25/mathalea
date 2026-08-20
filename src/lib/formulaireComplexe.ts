@@ -13,6 +13,7 @@ import { shuffle } from './outils/arrayOutils'
  *
  * * `case` : une case à cocher (booléen) ;
  * * `selection` : un choix unique dans une liste d'options ;
+ * * `nombre` : un entier saisi librement entre un minimum et un maximum ;
  * * `liste` : une liste d'items à activer ou désactiver ;
  * * `listePonderee` : idem, avec un poids d'apparition par item ;
  * * `listePondereeOrdonnee` : idem, avec en plus des flèches de réordonnancement et une
@@ -64,6 +65,16 @@ export type ChampSelection = {
   options: OptionSelection[]
   /** Valeur d'une des options ; à défaut, la première option est utilisée. */
   defaut?: string
+}
+
+export type ChampNombre = {
+  type: 'nombre'
+  nom: string
+  label: string
+  min?: number
+  max: number
+  /** Valeur par défaut ; à défaut, `min` (ou 0). */
+  defaut?: number
 }
 
 export type ItemListe = {
@@ -119,7 +130,7 @@ export type ChampListeQuelconque =
   ChampListe | ChampListePonderee | ChampListePondereeOrdonnee
 
 export type ChampFormulaireComplexe =
-  ChampCase | ChampSelection | ChampListeQuelconque
+  ChampCase | ChampSelection | ChampNombre | ChampListeQuelconque
 
 export type FormulaireComplexe = {
   titre?: string
@@ -140,7 +151,7 @@ export type ValeurListeOrdonnee = {
 }
 
 export type ValeurChampComplexe =
-  boolean | string | ItemPondere[] | ValeurListeOrdonnee
+  boolean | string | number | ItemPondere[] | ValeurListeOrdonnee
 
 export type ValeursFormulaireComplexe = Record<string, ValeurChampComplexe>
 
@@ -195,6 +206,8 @@ function valeurParDefaut(champ: ChampFormulaireComplexe): ValeurChampComplexe {
       return champ.defaut ?? false
     case 'selection':
       return champ.defaut ?? champ.options[0]?.valeur ?? ''
+    case 'nombre':
+      return champ.defaut ?? champ.min ?? 0
     case 'listePondereeOrdonnee':
       return { ordre: champ.defautOrdre ?? false, items: itemsParDefaut(champ) }
     default:
@@ -239,6 +252,7 @@ export function ordreDeLaValeur(valeur: ValeurChampComplexe): boolean {
  *
  * * `case` : `1` ou `0` ;
  * * `selection` : la valeur de l'option ;
+ * * `nombre` : l'entier saisi ;
  * * `liste` : un caractère `1`/`0` par item, dans l'ordre de déclaration ;
  * * `listePonderee` : les poids séparés par `-`, dans l'ordre de déclaration ;
  * * `listePondereeOrdonnee` : `<ordre>_<indice>.<poids>-…`, dans l'ordre choisi.
@@ -252,6 +266,8 @@ function serialiseChamp(
     case 'case':
       return valeurEffective ? '1' : '0'
     case 'selection':
+      return String(valeurEffective)
+    case 'nombre':
       return String(valeurEffective)
     case 'liste': {
       const items = itemsDeLaValeur(valeurEffective)
@@ -340,6 +356,11 @@ function parseChamp(
       return champ.options.some((option) => option.valeur === partie)
         ? partie
         : (valeurParDefaut(champ) as string)
+    case 'nombre': {
+      const valeur = Number.parseInt(partie)
+      if (Number.isNaN(valeur)) return valeurParDefaut(champ)
+      return Math.min(champ.max, Math.max(champ.min ?? -Infinity, valeur))
+    }
     case 'liste':
       return parseListePositionnelle(champ, [...partie])
     case 'listePonderee':
@@ -505,6 +526,11 @@ export class ParametresFormulaireComplexe {
   /** Valeur (identifiant de l'option) d'un champ de sélection. */
   selection(nom: string): string {
     return String(this.valeurs[nom] ?? '')
+  }
+
+  /** Valeur entière d'un champ nombre. */
+  nombre(nom: string): number {
+    return Number(this.valeurs[nom] ?? 0)
   }
 
   /** Items d'une liste, dans l'ordre affiché, items décochés (poids nul) compris. */

@@ -1,8 +1,5 @@
 import { choice } from '../../lib/outils/arrayOutils'
-import {
-  ecritureAlgebrique,
-  rienSi1,
-} from '../../lib/outils/ecritures'
+import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { abs } from '../../lib/outils/nombres'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -52,7 +49,7 @@ export default class Primitives extends ExerciceQcm {
 
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionOriginale()
   }
 }

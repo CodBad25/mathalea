@@ -62,9 +62,9 @@ describe('buildTypstDocument', () => {
     // juste avant son badge, voir buildVersionContent
     expect(code).toContain('#exo-solution-box(')
     expect(code).toContain('exercise-id: "6e23-1",')
-    expect(code).toContain(
-      '#import "@preview/taskize:0.2.8": tasks, tasks-setup',
-    )
+    expect(code).toContain('#import "@preview/taskize:0.2.8": tasks as taskize-tasks')
+    // l'enrobage qui aligne le numéro sur la première ligne de l'énoncé
+    expect(code).toContain('#let mathalea-question-numerotee(')
     expect(code).toContain(
       '#tasks-setup(columns: "auto-fit", auto-fit-mode: "uniform", max-columns: 4)',
     )
@@ -220,12 +220,70 @@ describe('buildTypstDocument', () => {
         ],
       }),
     ])
-    expect(code).toContain(
-      '#import "@preview/taskize:0.2.8": tasks, tasks-setup',
-    )
+    expect(code).toContain('#import "@preview/taskize:0.2.8": tasks as taskize-tasks')
+    // l'enrobage qui aligne le numéro sur la première ligne de l'énoncé
+    expect(code).toContain('#let mathalea-question-numerotee(')
     expect(code).toContain('#let qcm-colonnes = 2')
     expect(code).toContain('#let qcm-bonne(')
     expect(code).toContain('#tasks(columns: qcm-colonnes')
+  })
+
+  describe('numérotation alignée sur la première ligne de l’énoncé', () => {
+    // un QCM fait de l'énoncé un contenu mixte (texte puis bloc de
+    // propositions) : taskize alignerait alors le numéro sur le haut de la
+    // cellule, donc au-dessus de la ligne de base du texte dès qu'une
+    // fraction (en display) creuse la première ligne
+    const qcm = (enonce: string) =>
+      `${enonce}<div class="my-3">` +
+      '<div class="ex1 inline-block"><input type="checkbox" disabled><label id="labelEx1Q0R0">$\\dfrac{-4}{3}$</label></div>' +
+      '<div class="ex1 inline-block"><input type="checkbox" disabled><label id="labelEx1Q0R1">$12$</label></div>' +
+      '</div>'
+
+    const qcmDocument = () =>
+      buildTypstDocument([
+        exercise({
+          questions: [
+            qcm('La solution de $\\dfrac{4}{x} = -3$ est : '),
+            qcm('La solution de $\\dfrac{x}{5} = 1$ est : '),
+          ],
+          numbered: true,
+        }),
+      ])
+
+    it('importe taskize sous un alias et déclare l’enrobage', () => {
+      const code = qcmDocument()
+      expect(code).toContain(
+        '#import "@preview/taskize:0.2.8": tasks as taskize-tasks, tasks-setup, is-inline-content, format-label',
+      )
+      expect(code).toContain('#let tasks(')
+      expect(code).toContain('#let mathalea-question-numerotee(')
+      // les listes de questions restent écrites de la même façon : c'est
+      // l'enrobage qui décide, à la compilation, du rendu de chaque item
+      expect(code).toContain('#tasks(columns: ex1-colonnes')
+    })
+
+    it('ne déclare pas l’enrobage sans liste de questions ni QCM', () => {
+      const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
+      expect(code).not.toContain('mathalea-question-numerotee')
+    })
+
+    it.skipIf(!shouldRunTypstCliTests())(
+      'compile avec typst : QCM à fractions',
+      async () => {
+        const { execFileSync } = await import('node:child_process')
+        const { writeFileSync, mkdtempSync } = await import('node:fs')
+        const { tmpdir } = await import('node:os')
+        const { join } = await import('node:path')
+        const dir = mkdtempSync(join(tmpdir(), 'typst-qcm-'))
+        const file = join(dir, 'doc.typ')
+        writeFileSync(file, qcmDocument(), 'utf-8')
+        expect(() =>
+          execFileSync('typst', ['compile', file, join(dir, 'doc.pdf')], {
+            stdio: 'pipe',
+          }),
+        ).not.toThrow()
+      },
+    )
   })
 
   it("n'ajoute pas de section figures sans figure", () => {

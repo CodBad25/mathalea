@@ -2,9 +2,10 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
+  texteEnCouleurEtGras,
 } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
-import { texNombre } from '../../../lib/outils/texNombre'
+import { texNombre, texPrix } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec un pourcentage de proportion'
@@ -108,27 +109,28 @@ export default class PoucentageP2 extends ExerciceSimple {
         this.optionsChampTexte = { texteAvant: '<br>', texteApres: '€' }
         if (a === 25) {
           this.correction = ` $25\\,\\%$ du prix représente $${b}$ €, donc $100~\\%$ du prix représente $4$ fois plus que $${b}$ € (car $4\\times 25=100$).<br>
-        Le prix de l'article était  donc : $4\\times${b}=${miseEnEvidence(4 * b)}$ €. `
+        Le prix de l'article était  donc : $4\\times${b}=${miseEnEvidence(4 * b)}$`
         }
         if (a === 20) {
           this.correction = ` $20\\,\\%$ du prix représente $${b}$ €, donc $100~\\%$ du prix représente $5$ fois plus que $${b}$ € (car $5\\times 20=100$).<br>
-          Le prix de l'article était donc : $5\\times${b}=${miseEnEvidence(5 * b)}$ €.  `
+          Le prix de l'article était donc : $5\\times${b}=${miseEnEvidence(5 * b)}$`
         }
         if (a === 10) {
           this.correction = ` $10\\,\\%$ du prix représente $${b}$ €, donc $100~\\%$ du prix représente $10$ fois plus que $${b}$ € (car $10\\times 10=100$).<br>
-          Le prix de l'article était donc : $10\\times${b}=${miseEnEvidence(10 * b)}$ €.  `
+          Le prix de l'article était donc : $10\\times${b}=${miseEnEvidence(10 * b)}$`
         }
         if (a === 50) {
           this.correction = ` $50\\,\\%$ du prix représente $${b}$ €, donc $100~\\%$ du prix représente $2$ fois plus que $${b}$ € (car $2\\times 50=100$).<br>
-           Le prix de l'article était donc : $2\\times${b}=${miseEnEvidence(2 * b)}$ €.  `
+           Le prix de l'article était donc : $2\\times${b}=${miseEnEvidence(2 * b)}$`
         }
+        this.correction += ' ' + texteEnCouleurEtGras('€') + '.'
         this.distracteurs = [
-          `$${texNombre(b + (b * a) / 100, 2)}$ €`,
-          `$${texNombre(b - (b * a) / 100, 2)}$ €`,
-          `$${texNombre(a + b, 2)}$ €`,
+          `$${texPrix(b + (b * a) / 100)}$ €`,
+          `$${texPrix(b - (b * a) / 100)}$ €`,
+          `$${texPrix(a + b)}$ €`,
         ]
         this.reponse = this.versionQcm
-          ? `$${texNombre((100 * b) / a, 2)}$ €`
+          ? `$${texPrix((100 * b) / a)}$ €`
           : arrondi((100 * b) / a)
 
         this.canReponseACompleter = '$\\ldots$ €'

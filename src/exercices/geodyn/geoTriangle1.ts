@@ -108,14 +108,14 @@ class ConstructionTriangle extends ExerciceSimple {
     this.correction = texteCorr + emplacementPourFigureCorrection
   }
 
-  correctionInteractive = () => {
+  correctionInteractive = (i: number) => {
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
     this.answers[this.figure.id] = figureAnswerJson(this.figure)
     const resultat = []
     // 1 point par distance correcte + 2 points si tout est correct (on ne vérifie pas que le triangle est tracé)
     const divFeedback = document.querySelector(
-      `#feedbackEx${this.numeroExercice}Q${0}`,
+      `#feedbackEx${this.numeroExercice}Q${i}`,
     ) as HTMLDivElement
     let feedback = ''
     const [labelA, labelB, labelC] = this.triangle.label.split('') as [

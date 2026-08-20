@@ -177,15 +177,16 @@ class ReperagePointDuPlan extends ExerciceSimple {
     }
   }
 
-  correctionInteractive = () => {
+  correctionInteractive = (i: number) => {
     if (this.figuresApiGeom === undefined) return ['KO']
-    const figure = this.figuresApiGeom[0]
+    const figure = this.figuresApiGeom[i]
+    if (figure == null) return ['KO']
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
     this.answers[figure.id] = figureAnswerJson(figure)
     const resultat = [] // Tableau de 'OK' ou de'KO' pour le calcul du score
     const divFeedback = document.querySelector(
-      `#feedbackEx${this.numeroExercice}Q0`,
+      `#feedbackEx${this.numeroExercice}Q${i}`,
     )
     for (const coord of this.points) {
       const { points, isValid, message } = figure.checkCoords({

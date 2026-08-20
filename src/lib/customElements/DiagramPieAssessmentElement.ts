@@ -664,7 +664,7 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
           .filter((entry) => entry.expected !== entry.actual)
         isOk = mismatches.length === 0
         if (!isOk) {
-          feedback = `Catégories incorrectes pour ${mismatches.length} secteur(s).`
+          feedback = `Catégories incorrectes pour ${mismatches.length} secteur${mismatches.length > 1 ? 's' : ''}.`
         }
       }
     } else if (mode === 'effectif') {
@@ -681,7 +681,7 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
           )
         isOk = mismatches.length === 0
         if (!isOk) {
-          feedback = `Effectifs incorrects pour ${mismatches.length} secteur(s).`
+          feedback = `Effectifs incorrects pour ${mismatches.length} secteur${mismatches.length > 1 ? 's' : ''}.`
         }
       }
     } else {
@@ -698,7 +698,7 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
           )
         isOk = mismatches.length === 0
         if (!isOk) {
-          feedback = `Angles incorrects pour ${mismatches.length} secteur(s).`
+          feedback = `Angles incorrects pour ${mismatches.length} secteur${mismatches.length > 1 ? 's' : ''}.`
         }
       }
     }
@@ -810,6 +810,7 @@ export class DiagramPieAssessmentElement extends MathaleaCustomElement {
         .static-conversion-table .category-header,
         .static-conversion-table .category-cell {
           border-right: 4px solid #334155;
+          text-align: center;
         }
         td input {
           width: 100%;

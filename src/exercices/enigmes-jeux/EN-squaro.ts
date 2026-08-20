@@ -361,12 +361,12 @@ class squaro extends Exercice {
     this.listeCorrections.push(texteCorr)
   }
 
-  correctionInteractive = () => {
+  correctionInteractive = (i: number) => {
     if (this.answers == null) this.answers = {}
     // Sauvegarde de la réponse pour Capytale
     this.answers[this.figure.id] = figureAnswerJson(this.figure)
     const divFeedback = document.querySelector(
-      `#feedbackEx${this.numeroExercice}Q${0}`,
+      `#feedbackEx${this.numeroExercice}Q${i}`,
     ) as HTMLDivElement
     let isValid = true
     let validUnPoint = true

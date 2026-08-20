@@ -1,10 +1,10 @@
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
@@ -29,12 +29,7 @@ export const amcType = 'qcmMono'
  * @author Stéphane Guyon
  */
 export default class FonctionAffineDeuxPointsQcm extends ExerciceQcmA {
-  private appliquerLesValeurs(
-    a: number,
-    b: number,
-    xA: number,
-    xB: number,
-  ) {
+  private appliquerLesValeurs(a: number, b: number, xA: number, xB: number) {
     const yA = a * xA + b
     const yB = a * xB + b
     const expression = reduireAxPlusB(a, b)
@@ -101,7 +96,7 @@ ${elimination}`
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.versionAleatoire()
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

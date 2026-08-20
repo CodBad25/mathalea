@@ -182,12 +182,17 @@
       questionIndex,
       customElementType,
     )
-    const answerTxt = getQuestionAnswerValue(
-      exercice,
-      exerciceIndex,
-      questionIndex,
-      customElementType,
-    )
+    // Certaines réponses ne sont pas indexées par `<tag>Ex{n}Q{i}` : une figure
+    // apiGeom est enregistrée sous son propre identifiant. On retombe alors sur
+    // la première réponse collectée pour la question.
+    const answerTxt =
+      getQuestionAnswerValue(
+        exercice,
+        exerciceIndex,
+        questionIndex,
+        customElementType,
+      ) ||
+      (Object.values(answers)[0] ?? '')
     return {
       type,
       index: displayQuestionIndex,

@@ -6,9 +6,10 @@ import { pointAdistance } from '../../../lib/2d/utilitairesPoint'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Déterminer une longueur avec des triangles semblables'
+export const titre = "Déterminer une longueur d'un triangle rectangle par proportionnalité"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
@@ -48,6 +49,8 @@ export default class LongueurPythagore extends ExerciceSimple {
     ])
     const nom = creerNomDePolygone(3, ['QD'])
     const [a, b, c] = triplet
+    context.pixelsParCm = 140 / b
+    context.scale = 4 / b
     const A = pointAbstrait(0, 0, nom[0])
     const B = pointAdistance(A, b, 0, nom[1]) // triplet[1] sera la longueur c
     const C = pointAdistance(B, a, 90, nom[2]) // triplet[0] sera la longueur a

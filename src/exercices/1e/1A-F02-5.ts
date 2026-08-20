@@ -39,7 +39,7 @@ export default class AutoF1f extends ExerciceQcmA {
     &=\\dfrac{25}{8}-\\dfrac{50}{8}+\\dfrac{64}{8}\\\\
     &=\\dfrac{25-50+64}{8}\\\\
     &=\\dfrac{39}{8}
-    \\end{aligned}$<br>
+    \\end{aligned}$<br><br>
     
     
     L'image de $-\\dfrac{5}{4}$  par la  fonction  $f$ est : $${miseEnEvidence('\\dfrac{39}{8}')}$.`
@@ -153,7 +153,7 @@ export default class AutoF1f extends ExerciceQcmA {
     &=${aXCarre.texFSD}${bX.ecritureAlgebrique}${cFraction.ecritureAlgebrique}\\\\
     &=\\dfrac{${aXCarreCommun.num}${bXCommun.num >= 0 ? '+' : ''}${bXCommun.num}${cFractionCommun.num >= 0 ? '+' : ''}${cFractionCommun.num}}{${denominateurCommun}}\\\\
     &=${resultat.texFractionSimplifiee}
-    \\end{aligned}$<br>
+    \\end{aligned}$<br><br>
     
     L'image de $${f.texFSD}$ par la fonction $f$ est : $${miseEnEvidence(resultat.texFractionSimplifiee)}$.`
 

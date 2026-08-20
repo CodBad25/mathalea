@@ -143,6 +143,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
+      this.canReponseACompleter = ''
       switch (typeQuestionsDisponibles[i]) {
         case 1:
           a = randint(4, 8)

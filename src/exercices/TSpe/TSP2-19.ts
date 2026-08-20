@@ -10,7 +10,8 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Calculer une probabilité à l'aide de l'événement contraire dans une loi binomiale (QCM Bac)"
+export const titre =
+  "Calculer une probabilité à l'aide de l'événement contraire dans une loi binomiale (QCM Bac)"
 export const dateDePublication = '11/03/2025'
 /**
  * Ceci est un exo construit à partir d'une question de qcm de Bac.
@@ -56,7 +57,7 @@ $\\bullet~~$ $G$ :  "Le joueur gagne la partie" .<br><br>`
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.versionOriginale()
     this.besoinFormulaire3CaseACocher = ["Avec le préambule de l'énoncé", true]
     this.sup3 = true

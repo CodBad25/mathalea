@@ -1,4 +1,10 @@
 import { bleuMathalea } from '../../lib/colors'
+import {
+  lireFormulaireComplexe,
+  serialiseFormulaireComplexe,
+  valeursParDefaut,
+  type FormulaireComplexe,
+} from '../../lib/formulaireComplexe'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
@@ -6,14 +12,14 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { sp } from '../../lib/outils/outilString'
+import { lettreDepuisChiffre, sp } from '../../lib/outils/outilString'
 import { pgcd } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const dateDeModifImportante = '04/12/2025'
+export const dateDeModifImportante = '19/08/2026'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
@@ -32,7 +38,7 @@ export const titre =
  * Modif le 4/4/26 les termes pouvaient être interchangés pour ne pas avoir de résultats négatifs
  * sans recalculer le résultat
  */
-export const uuid = 'd5ee3'
+export const uuid = '51ab4'
 export const refs = {
   'fr-fr': ['5N3B', 'BP2AutoH22'],
   'fr-2016': ['5N20', 'BP2AutoH22'],
@@ -65,40 +71,82 @@ function buildFractionQcmPropositions(
   return propositions.length === fractions.length ? propositions : undefined
 }
 
+export const leSuperFormulaire: FormulaireComplexe = {
+  champs: [
+    {
+      type: 'nombre',
+      nom: 'coefficient',
+      label: 'Valeur maximale du coefficient multiplicateur',
+      min: 1,
+      max: 11,
+      defaut: 11,
+    },
+    {
+      type: 'selection',
+      nom: 'typeDeCalculs',
+      label: 'Type de calculs',
+      options: [
+        { valeur: 'add', label: 'Additions' },
+        { valeur: 'sous', label: 'Soustractions' },
+        { valeur: 'melange', label: 'Mélange' },
+      ],
+      defaut: 'melange',
+    },
+    {
+      type: 'case',
+      nom: 'simplifier',
+      label: "Avec l'écriture simplifiée de la fraction résultat",
+      defaut: true,
+    },
+    {
+      type: 'case',
+      nom: 'qcm',
+      label: "QCM pour l'interactif",
+      defaut: true,
+    },
+    {
+      type: 'nombre',
+      nom: 'negatifs',
+      label: 'Pourcentage de fractions avec numérateur négatif',
+      min: 0,
+      max: 100,
+      defaut: 0,
+    },
+    {
+      type: 'case',
+      nom: 'lettres',
+      label: 'Calculs nommés avec des lettres',
+      defaut: true,
+    },
+  ],
+}
+
 export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercice {
   level: number
   constructor() {
     super()
-    this.sup = 11 // Correspond au facteur commun
-    this.sup2 = 3 // Si 1 alors il n'y aura pas de soustraction
-    this.sup3 = true // Si false alors le résultat n'est pas en fraction simplifiée
-    this.sup4 = true // QCM pour l'interactif
-    this.sup5 = 0 // Pourcentage de fractions avec numérateur négatif
+    this.besoinFormulaireComplexe = leSuperFormulaire
+    this.sup = serialiseFormulaireComplexe(
+      leSuperFormulaire,
+      valeursParDefaut(leSuperFormulaire),
+    )
     this.spacing = 2
     this.spacingCorr = 2
     this.nbQuestions = 5
-    this.besoinFormulaireNumerique = [
-      'Valeur maximale du coefficient multiplicateur',
-      10,
-    ]
-    this.besoinFormulaire2Numerique = [
-      'Type de calculs',
-      3,
-      '1 : Additions\n2 : Soustractions\n3 : Mélange',
-    ]
-    this.besoinFormulaire3CaseACocher = [
-      "Avec l'écriture simplifiée de la fraction résultat",
-    ]
-    this.besoinFormulaire4CaseACocher = ["QCM pour l'interactif"]
-    this.besoinFormulaire5Numerique = [
-      'Pourcentage de fractions avec numérateur négatif',
-      100,
-    ]
     this.level = 5
   }
 
   nouvelleVersion() {
-    if (this.sup3 && !context.isAmc) {
+    const params = lireFormulaireComplexe(leSuperFormulaire, this.sup)
+    const coefficientMax = params.nombre('coefficient')
+    const typeDeCalculs = params.selection('typeDeCalculs')
+    const simplifier = params.case('simplifier')
+    const qcm = params.case('qcm')
+    const pourcentageNegatifs = params.nombre('negatifs')
+    const avecLettres = params.case('lettres')
+    this.listeAvecNumerotation = !avecLettres
+
+    if (simplifier && !context.isAmc) {
       this.consigne = 'Calculer'
       this.consigne += this.interactif
         ? ' au brouillon et indiquer seulement le résultat final simplifié au maximum.'
@@ -117,15 +165,15 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
 
     let listeTypeDeQuestions
 
-    if (this.sup2 === 1) {
+    if (typeDeCalculs === 'add') {
       listeTypeDeQuestions = combinaisonListes(['+'], this.nbQuestions)
-    } else if (this.sup2 === 2) {
+    } else if (typeDeCalculs === 'sous') {
       listeTypeDeQuestions = combinaisonListes(['-'], this.nbQuestions)
     } else {
       listeTypeDeQuestions = combinaisonListes(['+', '-'], this.nbQuestions)
     }
 
-    this.interactifType = this.sup4 ? 'qcm' : 'mathLive'
+    this.interactifType = qcm ? 'qcm' : 'mathLive'
 
     for (
       let i = 0, a, b, c, d, k, s, ordreDesFractions, texte, texteCorr, cpt = 0;
@@ -134,12 +182,13 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
       this.autoCorrection[i] = {}
       texte = ''
       texteCorr = ''
+      const lettre = avecLettres ? `${lettreDepuisChiffre(i + 1)}=` : ''
       let qcmPropositionsValides = true
       let aNegatif, cNegatif, f1, f2, f2PlusGdQuef1, numerateur, denominateur
       // Décision si les numérateurs seront négatifs ou non
       do {
-        aNegatif = randint(1, 100) <= this.sup5
-        cNegatif = randint(1, 100) <= this.sup5
+        aNegatif = randint(1, 100) <= pourcentageNegatifs
+        cNegatif = randint(1, 100) <= pourcentageNegatifs
 
         // Les numérateurs (positifs ou négatifs selon décision précédente)
         a = randint(1, 9) * (aNegatif ? -1 : 1)
@@ -147,8 +196,8 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
         // Les dénominateurs (toujours positifs)
         b = randint(2, 9, Math.abs(a))
 
-        if (this.sup > 1) {
-          k = randint(2, this.sup)
+        if (coefficientMax > 1) {
+          k = randint(2, coefficientMax)
         } else k = 1
 
         d = b * k
@@ -174,7 +223,7 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
         } else {
           // S'il y a 0% de numérateur négatifs alors on
           // interchange f1 et f2 pour s'assurer que le résultat sera positif
-          f2PlusGdQuef1 = this.sup5 === 0 && f2.superieurstrict(f1)
+          f2PlusGdQuef1 = pourcentageNegatifs === 0 && f2.superieurstrict(f1)
           if (f2PlusGdQuef1) {
             ;[f2, f1] = [f1, f2]
             ;[a, b, c, d] = [c, d, a, b]
@@ -232,7 +281,7 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
                     statut: false,
                   },
                 ],
-            this.sup3,
+            simplifier,
           )
           if (propositions) {
             this.autoCorrection[i].propositions = propositions
@@ -260,16 +309,16 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
           }
 
         if (ordreDesFractions === 1) {
-          texteCorr = `$${f1.texFraction}+${f2.texFraction}=`
-          texte = `$${f1.texFraction}+${f2.texFraction}$`
-          if (this.level !== 6 && this.sup !== 1) {
+          texteCorr = `$${lettre}${f1.texFraction}+${f2.texFraction}=`
+          texte = `$${lettre}${f1.texFraction}+${f2.texFraction}$`
+          if (this.level !== 6 && coefficientMax !== 1) {
             texteCorr += `\\dfrac{${a}${miseEnEvidence('\\times ' + k, bleuMathalea)}}{${b}${miseEnEvidence('\\times ' + k, bleuMathalea)}}+${f2.texFraction}=${new FractionEtendue(a * k, b * k).texFraction}+${f2.texFraction}=`
           }
           texteCorr += `\\dfrac{${a * k}+${ecritureParentheseSiNegatif(c)}}{${d}}=${new FractionEtendue(a * k + c, d).texFraction}`
         } else {
-          texteCorr = `$${f2.texFraction}+${f1.texFraction}=`
-          texte = `$${f2.texFraction}+${f1.texFraction}$`
-          if (this.level !== 6 && this.sup !== 1) {
+          texteCorr = `$${lettre}${f2.texFraction}+${f1.texFraction}=`
+          texte = `$${lettre}${f2.texFraction}+${f1.texFraction}$`
+          if (this.level !== 6 && coefficientMax !== 1) {
             texteCorr += `${f2.texFraction}+\\dfrac{${a}${miseEnEvidence('\\times ' + k, bleuMathalea)}}{${b}${miseEnEvidence('\\times ' + k, bleuMathalea)}}=${f2.texFraction}+${new FractionEtendue(a * k, b * k).texFraction}=`
           }
 
@@ -279,7 +328,7 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
           a * k + c < 0 ? `=${new FractionEtendue(a * k + c, d).texFSD}$` : '$'
 
         // Est-ce que le résultat est simplifiable ?
-        if (this.sup3) {
+        if (simplifier) {
           s = pgcd(Math.abs(a * k + c), d)
           if (s !== 1) {
             if (a * k + c < 0) {
@@ -305,8 +354,8 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
               reponse: {
                 value: new FractionEtendue(a * k + c, d).toLatex(),
                 options: {
-                  fractionIrreductible: this.sup3,
-                  fractionEgale: !this.sup3,
+                  fractionIrreductible: simplifier,
+                  fractionEgale: !simplifier,
                 },
               },
             })
@@ -361,7 +410,7 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
                     statut: false,
                   },
                 ],
-            this.sup3,
+            simplifier,
           )
           if (propositions) {
             this.autoCorrection[i].propositions = propositions
@@ -375,11 +424,11 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
           /*********************************************************************************/
         }
 
-        texte = `$${f1.texFraction}-${f2.texFraction}$`
+        texte = `$${lettre}${f1.texFraction}-${f2.texFraction}$`
         const reponse = new FractionEtendue(numerateur, denominateur).toLatex()
 
-        texteCorr = `$${f1.texFraction}-${f2.texFraction}=`
-        if (this.level !== 6 && this.sup !== 1) {
+        texteCorr = `$${lettre}${f1.texFraction}-${f2.texFraction}=`
+        if (this.level !== 6 && coefficientMax !== 1) {
           texteCorr += f2PlusGdQuef1
             ? `${f1.texFraction}-\\dfrac{${c}${miseEnEvidence('\\times ' + k, bleuMathalea)}}{${d}${miseEnEvidence('\\times ' + k, bleuMathalea)}}=${f1.texFraction}-${new FractionEtendue(c * k, b).texFraction}=`
             : `\\dfrac{${a}${miseEnEvidence('\\times ' + k, bleuMathalea)}}{${b}${miseEnEvidence('\\times ' + k, bleuMathalea)}}-${f2.texFraction}=${new FractionEtendue(a * k, b * k).texFraction}-${f2.texFraction}=`
@@ -396,7 +445,7 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
             : '$'
 
         // Est-ce que le résultat est simplifiable ?
-        if (this.sup3) {
+        if (simplifier) {
           s = pgcd(Math.abs(numerateur), denominateur)
           if (Math.abs(numerateur) % denominateur === 0) {
             // Si la fraction peut être un nombre entier
@@ -425,8 +474,8 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
               reponse: {
                 value: reponse,
                 options: {
-                  fractionIrreductible: this.sup3,
-                  fractionEgale: !this.sup3,
+                  fractionIrreductible: simplifier,
+                  fractionEgale: !simplifier,
                 },
               },
             })

@@ -526,7 +526,7 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
     ) as HTMLElement | null
 
     if (element == null) {
-      const feedback = 'Diagramme en bâtons interactif introuvable.'
+      const feedback = 'Diagramme en barres interactif introuvable.'
       if (spanResult) spanResult.innerHTML = '☹️'
       if (feedbackDiv) {
         feedbackDiv.innerHTML = feedback
@@ -633,12 +633,12 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
           .filter((entry) => entry.expected !== entry.actual)
         isOk = mismatches.length === 0
         if (!isOk) {
-          feedback = `Catégorie incorrecte pour ${mismatches.length} bâton(s).`
+          feedback = `Catégorie incorrecte pour ${mismatches.length} barre${mismatches.length > 1 ? 's' : ''}.`
         }
       }
     } else if (mode === 'effectif') {
       if (expectedEffectifs.length !== actualEffectifs.length) {
-        feedback = 'Le nombre de bâtons saisis ne correspond pas.'
+        feedback = 'Le nombre de barres saisis ne correspond pas.'
       } else {
         const mismatches = expectedEffectifs
           .map((value, index) => ({
@@ -650,12 +650,12 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
           )
         isOk = mismatches.length === 0
         if (!isOk) {
-          feedback = `Effectif incorrect pour ${mismatches.length} bâton(s).`
+          feedback = `Effectif incorrect pour ${mismatches.length} barre${mismatches.length > 1 ? 's' : ''}.`
         }
       }
     } else {
       if (expectedHeights.length !== actualHeights.length) {
-        feedback = 'Le nombre de bâtons saisis ne correspond pas.'
+        feedback = 'Le nombre de barres saisis ne correspond pas.'
       } else {
         const mismatches = expectedHeights
           .map((value, index) => ({
@@ -667,7 +667,7 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
           )
         isOk = mismatches.length === 0
         if (!isOk) {
-          feedback = `Hauteur incorrecte pour ${mismatches.length} bâton(s).`
+          feedback = `Hauteur incorrecte pour ${mismatches.length} barre${mismatches.length > 1 ? 's' : ''}.`
         }
       }
     }
@@ -816,6 +816,7 @@ export class DiagramBarAssessmentElement extends MathaleaCustomElement {
         .static-conversion-table .category-header,
         .static-conversion-table .category-cell {
           border-right: 4px solid #334155;
+          text-align: center;
         }
         td input {
           width: 100%;
@@ -1176,7 +1177,7 @@ ${titleTypst}#grid(
       <table${tableClass}>
         <thead>
           <tr>
-            <th class="category-header">Catégorie</th>
+            <th class="category-header">Catégories</th>
             <th class="numeric-header">${valueColumnHeader}</th>
           </tr>
         </thead>
@@ -1250,7 +1251,7 @@ ${titleTypst}#grid(
       <table class="static-conversion-table">
         <thead>
           <tr>
-            <th>Catégorie</th>
+            <th>Catégories</th>
             <th class="numeric-header">Effectifs</th>
             <th class="numeric-header">Hauteurs</th>
           </tr>
@@ -1469,7 +1470,7 @@ ${titleTypst}#grid(
         const x = axisLeft + index * slotWidth + (slotWidth - barWidth) / 2
         const y = axisBottom - h
         const label = item.label.trim() === '' ? `B${index + 1}` : item.label
-        const tooltip = `${label} : hauteur ${heightValue} (soit ${representedEffectif})`
+        const tooltip = `${label} : hauteur ${heightValue} unité${heightValue > 1 ? 's' : ''}`
         const fill = this.state.colorOn
           ? this.colorForIndex(index)
           : `url(#${this.svgHatchPatternId(index)})`
@@ -1514,7 +1515,7 @@ ${titleTypst}#grid(
     )
     const status =
       this.interactivityOn && this.state.infosStatus
-        ? `<div class="status warning">Hauteur totale : ${this.escapeText(this.formatHtmlNumber(totalHeight))} unité(s), soit ${this.escapeText(this.formatHtmlNumber(totalHeight * unitValue))} ${this.escapeText(this.state.unitLabel)}.</div>`
+        ? `<div class="status warning">Hauteur totale : ${this.escapeText(this.formatHtmlNumber(totalHeight))} unité${totalHeight > 1 ? 's' : ''}.</div>`
         : ''
     preview.innerHTML = `${svg}${status}`
   }
@@ -1570,7 +1571,7 @@ ${titleTypst}#grid(
 
     return `\\begin{tabular}{|c|c|}
 \\hline
-Catégorie & ${this.escapeLatex(valueColumnHeader)} \\\\ \\hline
+Catégories & ${this.escapeLatex(valueColumnHeader)} \\\\ \\hline
 ${rows}
 \\end{tabular}`
   }
@@ -1602,7 +1603,7 @@ ${rows}
 
     return `\\begin{tabular}{|c|c|c|}
 \\hline
-Catégorie & Effectifs & Hauteurs \\\\ \\hline
+Catégories & Effectifs & Hauteurs \\\\ \\hline
 ${rows}
 \\end{tabular}`
   }
@@ -1771,7 +1772,7 @@ ${rows}
         ? "Hauteur (nombre d'unités)"
         : 'Effectif'
     const cells = [
-      `[Catégorie]`,
+      `[Catégories]`,
       `[${this.escapeTypst(valueColumnHeader)}]`,
       ...this.state.items.flatMap((item, index) => [
         `[${this.renderTypstLabelCell(item, index)}]`,
@@ -1789,7 +1790,7 @@ ${rows}
 
   private renderStaticTypstTable(): string {
     const cells = [
-      '[Catégorie]',
+      '[Catégories]',
       '[Effectifs]',
       '[Hauteurs]',
       ...this.state.items.flatMap((item, index) => [

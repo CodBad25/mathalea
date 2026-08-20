@@ -73,19 +73,14 @@ export default class ComparerAvecLeSigneDUneDifference extends ExerciceQcmA {
       [lettre1, lettre2],
       [lettre2, lettre1],
     ] as const)
-    const signe = choice([
-      '>',
-      '<',
-      '\\geqslant',
-      '\\leqslant',
-    ] as const)
+    const signe = choice(['>', '<', '\\geqslant', '\\leqslant'] as const)
     this.appliquerLesValeurs(premier, second, signe, choice([true, false]))
   }
 
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { vertical: false, ordered: false }
+
     this.tip = `
       <p style="margin: 0;">
         On peut ajouter un même nombre aux deux membres d'une inégalité sans changer son sens.

@@ -90,14 +90,14 @@ export default class LireCoordonneesPointQCM extends ExerciceQcmA {
 
     const figure = this.construireFigure(x, y, label)
     this.enonce = `On considère le repère ci-dessous : ${figure}
-Les coordonnées du point $${label}$ sont `
+Les coordonnées du point $${label}$ sont :`
     this.correction = `On lit d'abord l'abscisse sur l'axe horizontal, puis l'ordonnée sur l'axe vertical.<br>
 Le point $${label}$ a donc pour coordonnées $${miseEnEvidence(bonneReponse.slice(1, -1))}$.`
   }
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

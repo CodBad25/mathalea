@@ -175,6 +175,24 @@ describe('pointsMaxExercice', () => {
     expect(pointsMaxExercice(exercice)).toBe(4)
   })
 
+  it("somme les formats par question meme si l'exercice reste custom legacy", () => {
+    exercice.interactifType = 'custom'
+    exercice.nbQuestions = 3
+    exercice.autoCorrection[0] = { formatInteractif: 'custom' }
+    handleAnswers(
+      exercice,
+      1,
+      {
+        bareme: toutAUnPoint,
+        champ1: { value: '2' },
+        champ2: { value: '3' },
+      },
+      { formatInteractif: 'fill-in-the-blank' },
+    )
+
+    expect(pointsMaxExercice(exercice)).toBe(4)
+  })
+
   it("vaut 0 quand l'exercice n'a aucune réponse attendue", () => {
     expect(pointsMaxExercice(exercice)).toBe(0)
     expect(pointsMaxExercice(undefined)).toBe(0)

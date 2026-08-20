@@ -186,6 +186,5 @@ export default class AutoC4e extends ExerciceQcmA {
     <li>Convertir la fraction décimale en écriture décimale ou vice-versa.</li>
     <li>Vérifier les propositions en repérant les erreurs classiques de virgule pour vous piéger.</li>
   </ul>`
-    this.options = { vertical: false, ordered: false }
   }
 }

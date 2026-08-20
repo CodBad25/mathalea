@@ -902,6 +902,92 @@
             Multivue (deux versions différentes côte à côte)
           </label>
 
+          <div
+            class="space-y-3 rounded border border-coopmaths-canvas-darkest dark:border-coopmathsdark-canvas-darkest p-3"
+          >
+            <div
+              class="text-sm font-bold text-coopmaths-struct dark:text-coopmathsdark-struct"
+            >
+              Récapitulatifs (fin du document)
+            </div>
+
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                bind:checked={documentOptions.recapQuestions}
+                onchange={applyDocumentOptions}
+              />
+              Toutes les questions
+            </label>
+
+            {#if documentOptions.recapQuestions}
+              <input
+                type="text"
+                aria-label="Titre du récapitulatif des questions"
+                placeholder="Titre du récapitulatif"
+                class="w-full rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.recapQuestionsTitle}
+                onchange={applyDocumentOptions}
+              />
+            {/if}
+
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                bind:checked={documentOptions.recapAnswers}
+                onchange={applyDocumentOptions}
+              />
+              Toutes les questions et leurs réponses
+            </label>
+
+            {#if documentOptions.recapAnswers}
+              <input
+                type="text"
+                aria-label="Titre du récapitulatif des questions et réponses"
+                placeholder="Titre du récapitulatif"
+                class="w-full rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.recapAnswersTitle}
+                onchange={applyDocumentOptions}
+              />
+              <p class="text-xs opacity-75">
+                Les réponses sont réduites à ce que la correction met en
+                évidence, comme la « correction minimale » de la vue Typst.
+              </p>
+            {/if}
+
+            {#if documentOptions.recapQuestions || documentOptions.recapAnswers}
+              <div class="flex items-center justify-between gap-4 text-sm">
+                <label for="slides-recap-fontsize-input">
+                  Taille du texte (pt)
+                </label>
+                <input
+                  id="slides-recap-fontsize-input"
+                  type="number"
+                  min="6"
+                  max="48"
+                  step="1"
+                  class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                  bind:value={documentOptions.recapFontSize}
+                  onchange={applyDocumentOptions}
+                />
+              </div>
+
+              <div class="flex items-center justify-between gap-4 text-sm">
+                <label for="slides-recap-columns-input">Colonnes</label>
+                <input
+                  id="slides-recap-columns-input"
+                  type="number"
+                  min="1"
+                  max="4"
+                  step="1"
+                  class="w-16 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                  bind:value={documentOptions.recapColumns}
+                  onchange={applyDocumentOptions}
+                />
+              </div>
+            {/if}
+          </div>
+
           <label class="flex items-center justify-between gap-4 text-sm">
             Format
             <select

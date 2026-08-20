@@ -120,7 +120,7 @@ Les droites $(${nomH}${nomD})$ et $(${nomA}${nomC})$ sont parallèles.<br>
 On donne ${donnees}.<br>
 Quelle est la longueur du segment $[${nomsCotes[coteCherche]}]$ ?`
 
-    this.correction = `Les points $${nomB}$, $${nomH}$, $${nomA}$ et $${nomB}$, $${nomD}$, $${nomC}$ sont alignés et les droites $(${nomH}${nomD})$ et $(${nomA}${nomC})$ sont parallèles.<br>
+    this.correction = `Les points $${nomB}$, $${nomH}$ et $${nomA}$ sont alignés, ainsi que les points $${nomB}$, $${nomD}$ et $${nomC}$. Les droites $(${nomH}${nomD})$ et $(${nomA}${nomC})$ sont parallèles.<br>
 D'après le théorème de Thalès :
 $\\dfrac{${nomsCotes.BD}}{${nomsCotes.BC}}=\\dfrac{${nomsCotes.HD}}{${nomsCotes.AC}}$.<br>
 <br>On en déduit que $${nomsCotes[coteCherche]}=\\dfrac{${nomsCotes[premierFacteur]}\\times ${nomsCotes[secondFacteur]}}{${nomsCotes[diviseur]}}=\\dfrac{${longueurs[premierFacteur]}\\times ${longueurs[secondFacteur]}}{${longueurs[diviseur]}}=${miseEnEvidence(`${texNombre(valeurCorrecte, 2)}\\text{ cm}`)}$.`
@@ -144,7 +144,7 @@ $\\dfrac{${nomsCotes.BD}}{${nomsCotes.BC}}=\\dfrac{${nomsCotes.HD}}{${nomsCotes.
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

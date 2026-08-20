@@ -114,7 +114,7 @@ export function buildMathAleaURL(options: {
   isShort?: boolean
   removeSeed?: boolean
   /** S'il y a un recorder l'url est cachée et doit être construite à partir du store exercicesParams */
-  recorder?: 'Moodle'
+  recorder?: boolean
 }): URL {
   const url = options.recorder
     ? MathAleaURL.fromExercisesParams()

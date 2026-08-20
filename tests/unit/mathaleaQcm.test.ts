@@ -201,6 +201,82 @@ describe('MathaleaQcmElement', () => {
     expect(exercice.answers?.['mathalea-qcmEx2Q0']).toBe('[0]')
   })
 
+  it('corrige une question custom legacy puis une question custom element dans le meme exercice', () => {
+    exercice.interactifType = 'custom'
+    exercice.nbQuestions = 2
+    exercice.correctionInteractive = (i: number) => (i === 0 ? 'OK' : 'KO')
+    exercice.autoCorrection[0] = { formatInteractif: 'custom' }
+    exercice.autoCorrection[1] = {
+      formatInteractif: 'mathalea-qcm',
+      propositions: propositions.map((proposition) => ({ ...proposition })),
+      options: {},
+    }
+    document.body.innerHTML = `
+      <div id="exercice2">
+        ${MathaleaQcmElement.create({
+          numeroExercice: exercice.numeroExercice,
+          questionIndex: 1,
+          propositions,
+        })}
+      </div>
+    `
+    const qcm = document.querySelector('mathalea-qcm') as MathaleaQcmElement
+    qcm.value = '[0]'
+    const score = document.createElement('div')
+    const button = document.createElement('button')
+
+    const result = exerciceInteractif(exercice, score, button)
+
+    expect(result).toEqual({
+      numberOfPoints: 2,
+      numberOfQuestions: 2,
+      perQuestionIsOk: [true, true],
+    })
+    expect(exercice.answers?.['mathalea-qcmEx2Q1']).toBe('[0]')
+    expect(qcm.interactivityOn).toBe(false)
+  })
+
+  it('corrige une question declaree custom par handleAnswers sans interactifType global', () => {
+    exercice.nbQuestions = 2
+    exercice.correctionInteractive = (i: number) => (i === 0 ? 'OK' : 'KO')
+    handleAnswers(
+      exercice,
+      0,
+      { reponse: { value: '' } },
+      { formatInteractif: 'custom' },
+    )
+    exercice.autoCorrection[1] = {
+      formatInteractif: 'mathalea-qcm',
+      propositions: propositions.map((proposition) => ({ ...proposition })),
+      options: {},
+    }
+    document.body.innerHTML = `
+      <div id="exercice2">
+        ${MathaleaQcmElement.create({
+          numeroExercice: exercice.numeroExercice,
+          questionIndex: 1,
+          propositions,
+        })}
+      </div>
+    `
+    const qcm = document.querySelector('mathalea-qcm') as MathaleaQcmElement
+    qcm.value = '[0]'
+
+    const result = exerciceInteractif(
+      exercice,
+      document.createElement('div'),
+      document.createElement('button'),
+    )
+
+    expect(exercice.autoCorrection[0].formatInteractif).toBe('custom')
+    expect(result).toEqual({
+      numberOfPoints: 2,
+      numberOfQuestions: 2,
+      perQuestionIsOk: [true, true],
+    })
+    expect(exercice.answers?.['mathalea-qcmEx2Q1']).toBe('[0]')
+  })
+
   it('expose un helper qui renseigne le format interactif', () => {
     const html = addMathaleaQcm(exercice, 0, { radio: true })
 

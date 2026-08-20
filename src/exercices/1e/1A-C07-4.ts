@@ -37,7 +37,7 @@ export default class auto1AC7d extends ExerciceQcmA {
     const resultatApprox = numApprox / 4
 
     this.enonce = `Un appareil a besoin d'une énergie de $${texNombre(energieCoeff)} \\times 10^{6}$ Joules (J) pour se mettre en route.<br>
-À combien de kiloWatts-heure (kWh) cela correspond-il ?<br>
+À combien de kilowatt-heures (kWh) cela correspond-il ?<br>
 <br>
 $\\textit{Données :}$ $1~\\text{kWh} = 3,6 \\times 10^{6}~\\text{J}.$`
 

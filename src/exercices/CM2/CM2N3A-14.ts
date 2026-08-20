@@ -1,13 +1,20 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
 
 import Exercice from '../Exercice'
 
-export const titre = 'Trouver le complément à 100'
+export const titre = 'Trouver le complément à 10, 100 ou 1 000'
+export const dateDeModifImportante = '18/08/2026'
 export const amcReady = true
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -16,9 +23,9 @@ export const amcType = 'AMCNum'
 /**
  * 100-...=
  * @author Rémi Angot
-
+ * Rajout des compléments à 10 et 1000 par Éric Elter le 18/08/2026
  */
-export const uuid = '67962'
+export const uuid = '6796e'
 
 export const refs = {
   'fr-fr': ['CM2N3A-14'],
@@ -29,46 +36,95 @@ export default class ComplementA100 extends Exercice {
   constructor() {
     super()
 
-    this.besoinFormulaireNumerique = [
+    this.besoinFormulaireTexte = [
       "Type d'écriture",
-      2,
-      `   1 : 100 - n = ...
-    2 : n + ... = 100`,
+      [
+        'Nombres séparés par des tirets  :',
+        '1 : 10 - n = ...',
+        '2 : n + ... = 10',
+        '3 : 100 - n = ...',
+        '4 : n + ... = 100',
+        '5 : 1 000 - n = ...',
+        '6 : n + ... = 1 000',
+        '7 : Mélange',
+      ].join('\n'),
     ]
-    this.sup = 1
-
+    this.sup = '7'
     this.nbCols = 2
     this.nbColsCorr = 2
   }
 
   nouvelleVersion() {
+    const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      max: 6,
+      melange: 7,
+      defaut: 7,
+      nbQuestions: this.nbQuestions,
+    }).map(Number)
+    const listeTypeDeQuestions = combinaisonListes(
+      typesDeQuestionsDisponibles,
+      this.nbQuestions,
+    )
+
     for (
       let i = 0, texte, texteCorr, a, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
-      a = randint(11, 89)
-      this.sup === 1
-        ? (texte = `$100 - ${texNombre(a)} = $`)
-        : (texte = `$ ${texNombre(a)} + $`)
-
-      if (this.interactif && this.sup === 1) {
-        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
-      } else if (this.sup === 1) {
-        texte += `$ ...... $`
+      let aCompleter
+      switch (listeTypeDeQuestions[i]) {
+        case 1:
+        case 2:
+          a = randint(1, 9)
+          aCompleter = 10
+          break
+        case 3:
+        case 4:
+          a = randint(11, 89)
+          aCompleter = 100
+          break
+        default:
+          a = randint(111, 899)
+          aCompleter = 1000
+          break
       }
-      if (this.interactif && this.sup === 2) {
-        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
-        texte += `$ = 100$`
-      } else if (this.sup === 2) {
-        texte += `$ ...... = 100$`
+      const aCompleterTex = texNombre(aCompleter)
+      texte =
+        listeTypeDeQuestions[i] % 2 === 1
+          ? `$${aCompleterTex} - ${texNombre(a)} = `
+          : `$ ${texNombre(a)} + `
+      if (this.interactif)
+        if (listeTypeDeQuestions[i] % 2 === 1) {
+          texte += ajouteChampTexteMathLive(
+            this,
+            i,
+            KeyboardType.clavierNumbers,
+            { texteAvant: '$' },
+          )
+        } else {
+          texte += ajouteChampTexteMathLive(
+            this,
+            i,
+            KeyboardType.clavierNumbers,
+            { texteAvant: '$' },
+          )
+        }
+      else {
+        if (listeTypeDeQuestions[i] % 2 === 1) texte += ` ...... $`
+        else texte += ` ...... = ${aCompleterTex}$`
       }
-      this.sup === 1
-        ? (texteCorr = `$ 100 - ${a}=${miseEnEvidence(texNombre(100 - a))}$`)
-        : (texteCorr = `$ ${texNombre(a)} + ${miseEnEvidence(texNombre(100 - a))} = 100$`)
-      setReponse(this, i, 100 - a)
+      texteCorr =
+        listeTypeDeQuestions[i] % 2 === 1
+          ? `$${aCompleterTex} - ${a}=${miseEnEvidence(texNombre(aCompleter - a))}$ ${sp(5)} et ${sp(5)} $${texNombre(a)} + ${miseEnEvidence(texNombre(aCompleter - a))} = ${aCompleterTex}$`
+          : `$${texNombre(a)} + ${miseEnEvidence(texNombre(aCompleter - a))} = ${aCompleterTex}$ ${sp(5)} car ${sp(5)}  $${aCompleterTex} - ${a}=${miseEnEvidence(texNombre(aCompleter - a))}$`
+      handleAnswers(this, i, {
+        reponse: {
+          value: aCompleter - a,
+          options: { nombreDecimalSeulement: true },
+        },
+      })
 
-      if (this.listeQuestions.indexOf(texte) === -1) {
-        // Si la question n'a jamais été posée, on en crée une autre
+      if (this.questionJamaisPosee(i, aCompleter, a)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
@@ -77,5 +133,4 @@ export default class ComplementA100 extends Exercice {
     }
     listeQuestionsToContenu(this)
   }
-  // this.besoinFormulaireNumerique = ['Niveau de difficulté',3];
 }

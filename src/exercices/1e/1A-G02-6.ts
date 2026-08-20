@@ -93,7 +93,7 @@ export default class AireTriangleQuelconqueQcm extends ExerciceQcmA {
     this.correction = `L'aire d'un triangle est donnée par la formule :<br>
 $\\mathcal{A}=\\dfrac{\\text{base}\\times\\text{hauteur}}{2}$.<br>
 Ici, la base mesure $${base}\\text{ cm}$ et la hauteur relative à cette base mesure $${hauteur}\\text{ cm}$.<br>
-$\\mathcal{A}=\\dfrac{${base}\\times ${hauteur}}{2}=\\dfrac{${produit}}{2}=${miseEnEvidence(`${texNombre(aire)}\\text{ cm}^2`)}$.`
+$\\mathcal{A}=\\dfrac{${base}\\times ${hauteur}}{2}=\\dfrac{${produit}}{2}=${miseEnEvidence(`${texNombre(aire)}\\text{ cm}^2`)}$`
   }
 
   versionOriginale = () => {
@@ -112,7 +112,7 @@ $\\mathcal{A}=\\dfrac{${base}\\times ${hauteur}}{2}=\\dfrac{${produit}}{2}=${mis
 
   constructor() {
     super()
-    this.options = { vertical: false, ordered: false }
+
     this.nbQuestions = 1
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaire4CaseACocher = false

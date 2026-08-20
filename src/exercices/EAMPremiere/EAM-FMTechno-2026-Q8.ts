@@ -121,7 +121,7 @@ Le tableau de signes de cette fonction $f$ est :`
 
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionAleatoire()
   }
 }

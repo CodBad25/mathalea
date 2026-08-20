@@ -13,6 +13,7 @@
     type ItemPondere,
     type ValeursFormulaireComplexe,
   } from '../../../../../../lib/formulaireComplexe'
+  import InputNumber from '../../../../forms/InputNumber.svelte'
   import ListePondereeItems from './ListePondereeItems.svelte'
 
   export let formulaire: FormulaireComplexe
@@ -167,6 +168,25 @@
             >
           {/each}
         </select>
+      </div>
+    {:else if champ.type === 'nombre'}
+      <div class="flex flex-col">
+        <label
+          class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
+          for="settings-complexe-{champ.nom}-{exerciceIndex}"
+          >{champ.label} :</label
+        >
+        <InputNumber
+          id="settings-complexe-{champ.nom}-{exerciceIndex}"
+          min={champ.min ?? 0}
+          max={champ.max}
+          value={valeurs[champ.nom] as number}
+          on:change={(e) => {
+            valeurs = { ...valeurs, [champ.nom]: e.detail ?? champ.min ?? 0 }
+            propage()
+          }}
+          darkBackground={true}
+        />
       </div>
     {:else if estChampListe(champ)}
       <div class="flex flex-col gap-y-1">

@@ -1,4 +1,7 @@
-import { miseEnEvidence, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { abs } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
@@ -79,10 +82,10 @@ export default class Automatismes extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     this.appliquerLesValeurs(-50, 50) // valeurs originales
     this.reponses = [
-      "Une réduction de  $25\\,\\%$",
-      "Une réduction de  $50\\,\\%$",
-      "Une augmentation de $25\\,\\%$",
-      "Une augmentation de $75\\,\\%$",
+      'Une réduction de  $25\\,\\%$',
+      'Une réduction de  $50\\,\\%$',
+      'Une augmentation de $25\\,\\%$',
+      'Une augmentation de $75\\,\\%$',
     ]
   }
 
@@ -101,7 +104,7 @@ export default class Automatismes extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionAleatoire()
   }
 }

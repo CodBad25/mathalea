@@ -85,13 +85,41 @@ diapositives —, comme la page de garde de la [vue Typst](typst.md). Ils font
 partie des options du document (donc persistés dans `localStorage` et rejoués à
 chaque régénération) ; le titre donne aussi le nom du fichier exporté.
 
+## Récapitulatifs de fin de document
+
+Deux pages facultatives, ajoutées **après** les diapositives (réglages
+« Récapitulatifs ») :
+
+- **toutes les questions** (`recapQuestions`) ;
+- **toutes les questions et leurs réponses** (`recapAnswers`), la réponse étant
+  la correction réduite à ce qu'elle met en évidence — la fonction
+  `minimalCorrection` de la [vue Typst](typst.md), partagée telle quelle.
+
+Ce ne sont pas des diapositives : le helper `recap(titre, items)` pose un titre
+puis une **grille** de `recap-colonnes` colonnes (`recap-taille` pour le
+texte). Une grille, et non `columns` : celui-ci remplit la première colonne sur
+toute la hauteur de la page avant de passer à la suivante, ce qui déséquilibre
+un récapitulatif court, alors que la grille répartit les questions de gauche à
+droite et se poursuit d'elle-même sur autant de pages que nécessaire.
+
+Le récapitulatif ne reprend que les diapositives **visibles**, dans l'ordre de
+l'aperçu (le même `order` que les pages), et réutilise leurs contenus
+(`diapo-N-question`) : rien n'est converti deux fois. Chaque réponse est un
+`#let recap-N-reponse` ; quand la correction ne met aucune réponse en évidence,
+`minimalCorrection` la rend inchangée et la variable est un simple alias de
+`diapo-N-correction` (ni contenu ni figure dupliqués). En multivue, seule la
+première version de chaque question figure au récapitulatif.
+
 ## Réglages
 
 Panneau latéral, persisté dans `localStorage` (`mathaleaSlidesView`) — rien n'y
 concerne la page de garde, qui se règle depuis l'aperçu :
 
 - **Contenu** : questions puis corrections (défaut), chaque correction après sa
-  question, questions seules, corrections seules ;
+  question, toutes les questions puis l'alternance question/correction,
+  questions seules, corrections seules ;
+- **Récapitulatifs** : les deux pages de fin (voir plus haut), leur titre, la
+  taille de leur texte et leur nombre de colonnes ;
 - format (16/9 ou 4/3), taille des questions et des corrections (en points),
   alignements vertical et horizontal, zoom des figures ;
 - polices (texte et maths, mêmes listes que la vue Typst) ;
@@ -147,4 +175,5 @@ Typst (`src/components/setup/typst/latexToTypst.ts`, `typstCompiler.ts`).
 
 - `src/components/setup/slides/buildSlidesDocument.test.ts` : structure du
   document généré (ordre des pages selon le contenu choisi, masquage et
-  réordonnancement, carry-over, helpers conditionnels).
+  réordonnancement, carry-over, helpers conditionnels, récapitulatifs de fin de
+  document).

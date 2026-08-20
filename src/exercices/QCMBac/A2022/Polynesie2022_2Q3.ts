@@ -1,7 +1,4 @@
-import {
-  miseEnEvidence,
-  texteEnCouleurEtGras,
-} from '../../../lib/outils/embellissements'
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import ExerciceQcm from '../../ExerciceQcm'
 
 export const uuid = '06571'
@@ -52,7 +49,7 @@ export default class SujetZero2024Ex5Q5 extends ExerciceQcm {
 
   constructor() {
     super()
-    this.options = { vertical: true, ordered: false }
+    this.options = { ...this.options, vertical: true }
     this.versionOriginale()
   }
 }
