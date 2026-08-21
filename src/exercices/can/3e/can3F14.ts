@@ -23,7 +23,7 @@ export const dateDePublication = '26/07/2025'
 export const uuid = '2bbd1'
 
 export const refs = {
-  'fr-fr': ['can3F14'],
+  'fr-fr': ['can3F14', 'can2F13-08'],
   'fr-ch': ['10QCM-9', '11QCM-11'],
 }
 export default class CalculProduitSommeImageParFonctionAffine extends ExerciceSimple {

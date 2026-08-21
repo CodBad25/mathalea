@@ -34,7 +34,11 @@ export default class CalculEffectifQCM extends ExerciceQcmA {
     const histogramme = maSerie.diagramme({
       cumul: false,
       barres: true,
-      valuesOn: true,
+      valuesOn: false,
+      effectifsOn: false,
+      titre: 'Notes obtenues par la classe de 1ère',
+      labelHorizontal: 'Notes sur 20',
+      labelVertical: "Nombre d'élèves",
     })
 
     const n = maSerie.serie.length

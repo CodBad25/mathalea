@@ -416,6 +416,21 @@
     }
   }
 
+  /**
+   * Un custom element de l'énoncé (le sélecteur des questions de cours par
+   * exemple) peut demander de nouveaux réglages en émettant l'événement DOM
+   * `settings`, avec le même `detail` que le panneau latéral.
+   */
+  function ecouteReglagesDeLEnonce(node: HTMLElement) {
+    const ecouteur = (event: Event) => handleNewSettings(event as CustomEvent)
+    node.addEventListener('settings', ecouteur)
+    return {
+      destroy() {
+        node.removeEventListener('settings', ecouteur)
+      },
+    }
+  }
+
   async function updateDisplay(withNewVersion = true) {
     log('updateDisplay:' + exercise.id)
     if (
@@ -775,6 +790,7 @@
           style="font-size: {(
             $globalOptions.z || 1
           ).toString()}rem; line-height: calc({$globalOptions.z || 1});"
+          use:ecouteReglagesDeLEnonce
         >
           {#if exercise.tip && exercise.tip.length > 0 && isTipAvailable}
             <div class="ml-2 lg:ml-5 mt-4">
@@ -920,7 +936,9 @@
         {#if isMobileView}
           <!-- Actions les plus courantes, répétées sous l'exercice pour rester
                à portée de pouce sans remonter jusqu'à la barre de titre -->
-          <div class="print-hidden flex flex-row flex-wrap items-center gap-2 mt-4 mb-8 ml-6">
+          <div
+            class="print-hidden flex flex-row flex-wrap items-center gap-2 mt-4 mb-8 ml-6"
+          >
             <div
               class={exercise.listeCorrections.length > 0 &&
               (!isInteractif || isExerciceChecked)

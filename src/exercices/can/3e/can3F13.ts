@@ -18,7 +18,7 @@ export const dateDePublication = '23/07/2025'
 export const uuid = 'adb5c'
 
 export const refs = {
-  'fr-fr': ['can3F13'],
+  'fr-fr': ['can3F13', 'can2F13-07'],
   'fr-ch': [],
 }
 export default class CalculImageParFonctionAffineFraction extends ExerciceSimple {

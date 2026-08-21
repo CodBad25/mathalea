@@ -6,9 +6,12 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texPrix } from '../../lib/format/style'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
+import { arrondi } from '../../lib/outils/nombres'
 import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 
 // une fonction pour les textes de correction
 /**
@@ -973,9 +976,72 @@ ${situations[k].tableau_corr}
       texte = `${enonces[listeTypeDeQuestions[i]].enonce}`
       texteCorr = `${enonces[listeTypeDeQuestions[i]].correction}`
 
+      let texteAffiche = texte
+      const kSituation = listeTypeDeQuestions[i]
+      if (this.interactif && kSituation !== 4) {
+        // Le tableau à compléter version élève : une colonne de référence
+        // (déjà remplie) suivie de kSituation + 1 colonnes à compléter.
+        const numDataCols = kSituation + 2
+        const colHeaders = [
+          '\\text{Prix en €}',
+          ...prix.slice(0, numDataCols).map((p: number) => texPrix(p)),
+        ]
+        const rowHeadersInteractif = [
+          '\\text{Remise en pourcentage}',
+          '\\text{Montant de la remise en €}',
+          '\\text{Nouveau prix en €}',
+        ]
+        const contenuInteractif: string[] = []
+        for (let col = 0; col < numDataCols; col++) {
+          contenuInteractif.push(remises[col].str)
+        }
+        for (let col = 0; col < numDataCols; col++) {
+          contenuInteractif.push(
+            col === 0 ? texPrix((prix[0] * remises[0].nb) / 100) : '',
+          )
+        }
+        for (let col = 0; col < numDataCols; col++) {
+          contenuInteractif.push(
+            col === 0
+              ? texPrix(prix[0] - (prix[0] * remises[0].nb) / 100)
+              : '',
+          )
+        }
+
+        const tableauInteractif = AddTabDbleEntryMathlive.create(
+          this.numeroExercice ?? 0,
+          i,
+          AddTabDbleEntryMathlive.convertTclToTableauMathlive(
+            colHeaders,
+            rowHeadersInteractif,
+            contenuInteractif,
+          ),
+          'clavierNumbers',
+          true,
+          {},
+        )
+        texteAffiche = tableauInteractif.output
+
+        const objetReponse: Record<string, { value: number }> = {}
+        for (let col = 1; col < numDataCols; col++) {
+          objetReponse[`L2C${col + 1}`] = {
+            value: arrondi((prix[col] * remises[col].nb) / 100, 2),
+          }
+          objetReponse[`L3C${col + 1}`] = {
+            value: arrondi(
+              prix[col] - (prix[col] * remises[col].nb) / 100,
+              2,
+            ),
+          }
+        }
+        handleAnswers(this, i, objetReponse, {
+          formatInteractif: 'tableau-mathlive',
+        })
+      }
+
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en créé une autre
-        this.listeQuestions[i] = texte
+        this.listeQuestions[i] = texteAffiche
         this.listeCorrections[i] = texteCorr
         i++
       }

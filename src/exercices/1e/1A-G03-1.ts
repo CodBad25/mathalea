@@ -85,7 +85,7 @@ export default class TrigonometrieTriangleRectangleQCM extends ExerciceQcmA {
         `$${this.fractionTex(numerateur, denominateur)}$`,
     )
 
-    this.enonce = `Dans le triangle $ABC$ rectangle en $A$ ci-dessous, qui n'est pas en vraie grandeur, quelle est la valeur de $\\${fonction} \\alpha$ ?`
+    this.enonce = `Dans le triangle $ABC$ rectangle en $A$ ci-dessous, qui n'est pas en vraie grandeur, quelle est la valeur de $\\${fonction} (\\alpha)$ ?`
     const triangle = polygone([
       pointAbstrait(0, 0, 'A', 'below left'),
       pointAbstrait(0, 3, 'C', 'above left'),
@@ -139,10 +139,10 @@ export default class TrigonometrieTriangleRectangleQCM extends ExerciceQcmA {
     this.correction = `Le triangle $ABC$ est rectangle en $A$ donc <br>`
     this.correction +=
       fonction === 'cos'
-        ? `$\\cos\\alpha=\\dfrac{AB}{BC}=\\dfrac{${adjacent}}{${hypotenuse}}=${miseEnEvidence(bonneReponse)}$.`
+        ? `$\\cos(\\alpha)=\\dfrac{AB}{BC}=\\dfrac{${adjacent}}{${hypotenuse}}=${miseEnEvidence(bonneReponse)}$.`
         : fonction === 'sin'
-          ? `$\\sin\\alpha=\\dfrac{AC}{BC}=\\dfrac{${oppose}}{${hypotenuse}}=${miseEnEvidence(bonneReponse)}$.`
-          : `$\\tan\\alpha=\\dfrac{AC}{AB}=\\dfrac{${oppose}}{${adjacent}}=${miseEnEvidence(bonneReponse)}$.`
+          ? `$\\sin(\\alpha)=\\dfrac{AC}{BC}=\\dfrac{${oppose}}{${hypotenuse}}=${miseEnEvidence(bonneReponse)}$.`
+          : `$\\tan(\\alpha)=\\dfrac{AC}{AB}=\\dfrac{${oppose}}{${adjacent}}=${miseEnEvidence(bonneReponse)}$.`
   }
 
   versionOriginale: () => void = () => {

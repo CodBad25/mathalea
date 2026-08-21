@@ -39,7 +39,7 @@ export const titre =
 export const uuid = 'ba521'
 
 export const refs = {
-  'fr-fr': ['3F10-2', '2F10-2', 'BP2AutoO3'],
+  'fr-fr': ['3F10-2', '2F13-1', 'BP2AutoO3'],
   'fr-ch': ['10FA1B-4', '1mF1-10'],
 }
 export default class CalculsImagesFonctions extends Exercice {

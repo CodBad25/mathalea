@@ -52,4 +52,6 @@ connu. Le meilleur score persisté entre deux sessions arrive par Capytale dans
 
 ## Voir aussi
 
+- [Questions de cours](questions-de-cours.md) : l'app `questionsDeCours` a
+  désormais un équivalent natif, les deux cohabitent
 - [Utilisation avec Capytale](../../../utilisation/integrations/capytale.md)

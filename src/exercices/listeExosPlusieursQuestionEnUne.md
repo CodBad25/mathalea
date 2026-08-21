@@ -1,7 +1,7 @@
 [Cette liste est disponible et modifiable ici](https://codimd.apps.education.fr/s/BduSo3TRb)
 
 1P10-4 Compatible : (long car 4 cas à traiter)
-2S20-5 Compatible : 3 champs
+2S30-5 Compatible : 3 champs
 3A12-1 Compatible : 3 cas 3 champs
 3F12-4 Compatible : 1 cas à 2 champs, 1 autre à 3 champs
 3F20-4 Compatible : 2 champs

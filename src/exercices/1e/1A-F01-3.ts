@@ -212,7 +212,8 @@ export default class AutoF01c extends ExerciceQcmA {
       return phrase
     })
 
-    const correctionFigureId = `figureCorrection-1A-F01-3Ex${this.numeroExercice ?? 0}Q0`
+    const questionId = this.compteur++
+    const correctionFigureId = `figureCorrection-1A-F01-3Ex${this.numeroExercice ?? 0}Q${questionId}`
     const optionsFigureCorrection = Object.assign(optionsFigure, {
       id: correctionFigureId,
     })

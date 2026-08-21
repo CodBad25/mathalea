@@ -2277,7 +2277,7 @@ function handletexteAvecCasse(
     'fractions',
     'virgules',
   ])
-  // Ligne ci-dessous utile si la réponse est (B,F) comme dans 2S30-5
+  // Ligne ci-dessous utile si la réponse est (B,F) comme dans 2S40-5
   saisie = saisie.replace(
     /\\lparen\s*([^{}]+)\s*\{,\}\s*([^{}]+)\s*\\rparen/g,
     '($1,$2)',

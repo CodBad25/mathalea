@@ -35,7 +35,12 @@ function registerLectureAntecedentAnimee() {
   DomReadyActionElement.registerCallback<LectureAntecedentAnimeePayload>(
     lectureAntecedentAnimeeAction,
     ({ element, payload }) => {
-      const svg = document.getElementById(payload.figureId)
+      const previousElement = element.previousElementSibling
+      const svg =
+        previousElement instanceof SVGSVGElement &&
+        previousElement.id === payload.figureId
+          ? previousElement
+          : document.getElementById(payload.figureId)
       if (!(svg instanceof SVGSVGElement)) return
       const namespace = 'http://www.w3.org/2000/svg'
       const xValues = Array.isArray(payload.x) ? payload.x : [payload.x]

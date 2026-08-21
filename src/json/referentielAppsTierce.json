@@ -69,6 +69,13 @@
         "presentation": "Utiliser les propriétés pour faire une démonstration. 10 questions, non aléatoires, avec la possibilité de modifier ses réponses jusqu'à la validation.",
         "imgPath": "images/apps/app_parallelogramme.png",
         "uuid": "parallelogramme"
+      },
+      {
+        "title": "Questions de cours",
+        "typeExercice": "tierce",
+        "presentation": "Choisir des questions au hasard parmi une grande collection.",
+        "imgPath": "images/apps/app_questions_de_cours.png",
+        "uuid": "afd39"
       }
     ]
   }

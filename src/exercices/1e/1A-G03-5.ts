@@ -120,10 +120,21 @@ Les droites $(${nomH}${nomD})$ et $(${nomA}${nomC})$ sont parallèles.<br>
 On donne ${donnees}.<br>
 Quelle est la longueur du segment $[${nomsCotes[coteCherche]}]$ ?`
 
+    const nomBH = `${nomB}${nomH}`
+    const nomBA = `${nomB}${nomA}`
+    const afficheCote = (cote: Cote) =>
+      cote === coteCherche ? nomsCotes[cote] : String(longueurs[cote])
+    const egaliteUtile = `\\dfrac{${afficheCote('BD')}}{${afficheCote('BC')}}=\\dfrac{${afficheCote('HD')}}{${afficheCote('AC')}}`
+
     this.correction = `Les points $${nomB}$, $${nomH}$ et $${nomA}$ sont alignés, ainsi que les points $${nomB}$, $${nomD}$ et $${nomC}$. Les droites $(${nomH}${nomD})$ et $(${nomA}${nomC})$ sont parallèles.<br>
-D'après le théorème de Thalès :
-$\\dfrac{${nomsCotes.BD}}{${nomsCotes.BC}}=\\dfrac{${nomsCotes.HD}}{${nomsCotes.AC}}$.<br>
-<br>On en déduit que $${nomsCotes[coteCherche]}=\\dfrac{${nomsCotes[premierFacteur]}\\times ${nomsCotes[secondFacteur]}}{${nomsCotes[diviseur]}}=\\dfrac{${longueurs[premierFacteur]}\\times ${longueurs[secondFacteur]}}{${longueurs[diviseur]}}=${miseEnEvidence(`${texNombre(valeurCorrecte, 2)}\\text{ cm}`)}$.`
+D'après le théorème de Thalès :<br><br>
+$\\dfrac{${nomBH}}{${nomBA}}=\\dfrac{${nomsCotes.BD}}{${nomsCotes.BC}}=\\dfrac{${nomsCotes.HD}}{${nomsCotes.AC}}$<br><br>
+On remplace par les valeurs connues :<br><br>
+$\\dfrac{${nomBH}}{${nomBA}}=${egaliteUtile}$<br><br>
+On utilise l'égalité $${egaliteUtile}$.<br><br>
+Les produits en croix sont égaux, donc $${afficheCote('BD')}\\times ${afficheCote('AC')}=${afficheCote('BC')}\\times ${afficheCote('HD')}$.<br><br>
+On divise les deux membres par $${longueurs[diviseur]}$ :<br><br>
+$${nomsCotes[coteCherche]}=\\dfrac{${longueurs[premierFacteur]}\\times ${longueurs[secondFacteur]}}{${longueurs[diviseur]}}=${miseEnEvidence(`${texNombre(valeurCorrecte, 2)}\\text{ cm}`)}$.`
   }
 
   versionAleatoire = () => {

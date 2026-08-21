@@ -93,23 +93,13 @@ export default class ComplementA100 extends Exercice {
         listeTypeDeQuestions[i] % 2 === 1
           ? `$${aCompleterTex} - ${texNombre(a)} = `
           : `$ ${texNombre(a)} + `
-      if (this.interactif)
-        if (listeTypeDeQuestions[i] % 2 === 1) {
-          texte += ajouteChampTexteMathLive(
-            this,
-            i,
-            KeyboardType.clavierNumbers,
-            { texteAvant: '$' },
-          )
-        } else {
-          texte += ajouteChampTexteMathLive(
-            this,
-            i,
-            KeyboardType.clavierNumbers,
-            { texteAvant: '$' },
-          )
+      if (this.interactif) {
+        texte += `$`
+        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
+        if (listeTypeDeQuestions[i] % 2 === 0) {
+          texte += `$ = ${aCompleterTex}$`
         }
-      else {
+      } else {
         if (listeTypeDeQuestions[i] % 2 === 1) texte += ` ...... $`
         else texte += ` ...... = ${aCompleterTex}$`
       }

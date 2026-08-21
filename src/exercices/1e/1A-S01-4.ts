@@ -4,7 +4,10 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { latex2d } from '../../lib/2d/textes'
 import { coopmathsAction, coopmathsStruct } from '../../lib/colors'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { nombreElementsDifferents } from '../ExerciceQcm'
@@ -179,7 +182,7 @@ export default class ChoixTerminaleDiagrammeCirculaireQCM extends ExerciceQcmA {
     $\\dfrac{\\text{angle du secteur}}{360}\\times \\text{effectif total}$.<br>
     Ici, l'effectif total est $${total}$.<br>
     ${lignesCorrection}<br>
-    La bonne affirmation est donc : $${miseEnEvidence(effectifCorrect)}$ élèves choisissent « ${choixCorrect.nom} ».`
+    La bonne affirmation est donc : $${miseEnEvidence(effectifCorrect)}$ ${texteEnCouleurEtGras(`élèves choisissent « ${choixCorrect.nom} »`)}.`
   }
 
   versionAleatoire: () => void = () => {

@@ -8,6 +8,7 @@ const KEYBOARD_CATEGORIES = [
   'angles',
   'clavierHms',
   'clavierDeBase',
+  'clavierPersonnalisable',
   'clavierLimites',
   'clavierLectureLimites',
   'clavierLimitesSimple',
@@ -109,6 +110,10 @@ export const convertKeyboardTypeToBlocks = (
   switch (type) {
     case KeyboardType.clavierDeBase:
       return ['numbersOperations']
+    // Base sobre : les touches spécifiques à chaque question sont ajoutées
+    // par `dataKeys` (voir `components/keyboard/lib/touchesPersonnalisees.ts`).
+    case KeyboardType.clavierPersonnalisable:
+      return ['numbers', 'basicOperations']
     case KeyboardType.college6eme: // A supprimer
       return ['numbersOperations']
     case KeyboardType.clavierLimites:

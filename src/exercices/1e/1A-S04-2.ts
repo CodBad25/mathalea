@@ -33,6 +33,9 @@ export default class CalculPourcentageQCM extends ExerciceQcmA {
       cumul: false,
       barres: true,
       valuesOn: true,
+      titre: 'Notes obtenues par la classe de 1ère',
+      labelHorizontal: 'Notes sur 20',
+      labelVertical: "Nombre d'élèves",
     })
     const effectifCible =
       maSerie.serieTableau.find(([note]) => note === valeurCible)?.[1] ?? 0

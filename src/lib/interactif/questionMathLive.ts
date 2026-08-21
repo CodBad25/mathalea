@@ -177,6 +177,11 @@ type OptionsChamp = {
   blocCenter?: boolean
   espace?: boolean
   placeholder?: string
+  /**
+   * Touches propres à cette question, ajoutées au clavier en plus des blocs
+   * du `style` (voir `components/keyboard/lib/touchesPersonnalisees.ts`).
+   */
+  dataKeys?: string[]
   verifyCallbackName?: string
   verifyCallback?:
     | MathaleaMathfieldVerificationCallback
@@ -216,6 +221,7 @@ function ajouteChamp(params: ParamsChamp, options: OptionsChamp = {}) {
     blocCenter = false,
     espace = false,
     placeholder = '',
+    dataKeys,
   } = options
   if (texteApres !== '') texteApres = sp() + texteApres
   if (!context.isHtml || !exercice.interactif || style === 'none') return ''
@@ -237,6 +243,7 @@ function ajouteChamp(params: ParamsChamp, options: OptionsChamp = {}) {
           numeroExercice: exercice.numeroExercice ?? 0,
           questionIndex: i,
           dataKeyboard,
+          dataKeys,
           espace,
           placeholder,
           className: style,

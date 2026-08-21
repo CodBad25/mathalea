@@ -26,6 +26,8 @@ export type MathaleaMathfieldOptions = {
   id?: string
   className?: string
   dataKeyboard?: string
+  /** Touches propres à la question, ajoutées au clavier (voir `touchesPersonnalisees.ts`). */
+  dataKeys?: string[]
   espace?: boolean
   placeholder?: string
   readonly?: boolean
@@ -56,6 +58,7 @@ export class MathaleaMathfieldElement extends MathaleaCustomElement {
     questionIndex,
     className = '',
     dataKeyboard = '',
+    dataKeys,
     espace = false,
     placeholder = '',
     readonly = false,
@@ -80,6 +83,7 @@ export class MathaleaMathfieldElement extends MathaleaCustomElement {
       mathfieldId: legacyMathfieldId,
       className,
       dataKeyboard,
+      dataKeys: dataKeys == null || dataKeys.length === 0 ? null : dataKeys,
       dataSpace: espace,
       placeholder,
       readonly: readonly ? true : null,
@@ -206,6 +210,10 @@ export class MathaleaMathfieldElement extends MathaleaCustomElement {
       'data-keyboard',
       this.getAttribute('data-keyboard') ?? '',
     )
+    const dataKeys = this.getAttribute('data-keys')
+    if (dataKeys != null && dataKeys !== '') {
+      this.mathfield.setAttribute('data-keys', dataKeys)
+    }
     this.mathfield.setAttribute('virtual-keyboard-mode', 'manual')
     this.mathfield.className = [
       this.getAttribute('class-name') ?? '',

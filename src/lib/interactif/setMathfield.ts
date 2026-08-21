@@ -1,6 +1,7 @@
 import { MathfieldElement } from 'mathlive'
 import { get } from 'svelte/store'
 import { keyboardState } from '../../components/keyboard/stores/keyboardStore'
+import { litTouchesPersonnalisees } from '../../components/keyboard/lib/touchesPersonnalisees'
 import type { BlockForKeyboard } from '../../components/keyboard/types/keyboardContent'
 import { injectFontInMetaInteractif2d } from '../../modules/loaders'
 import { globalOptions } from '../stores/globalOptions'
@@ -49,6 +50,7 @@ function handleFocusMathField(event: FocusEvent) {
         'keyboard' in mf.dataset
           ? ((mf.dataset.keyboard || '').split(' ') as BlockForKeyboard[])
           : (['numbers', 'fullOperations', 'variables'] as BlockForKeyboard[]),
+      customKeys: litTouchesPersonnalisees(mf.dataset.keys),
     }
   })
 }

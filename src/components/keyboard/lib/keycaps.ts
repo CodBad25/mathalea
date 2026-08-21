@@ -1,3 +1,4 @@
+import type { KeyCap } from '../types/keycap'
 import {
   areaMetricUnits,
   areaOtherUnits,
@@ -731,4 +732,14 @@ export const keys = {
   ...volumeUnitsKeys,
   ...capacityUnitsKeys,
   ...algoKeys,
+}
+
+/**
+ * Ajoute une touche définie à la volée, question par question, par un exercice
+ * (voir `touchesPersonnalisees.ts`). `keys` reste ainsi l'unique table
+ * consultée par les composants du clavier : pas de second chemin de résolution
+ * à maintenir dans `BlockOfKeycaps` ou `Alphanumeric`.
+ */
+export function ajouteTouche(nom: string, touche: KeyCap): void {
+  Object.assign(keys, { [nom]: touche })
 }

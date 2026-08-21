@@ -1,4 +1,4 @@
-import seuilFctAff from '../can/2e/can2F2-06'
+import seuilFctAff from '../can/2e/can2F31-01'
 export const titre = 'Déterminer un seuil avec une fonction affine'
 export const dateDePublication = '27/08/2025'
 export const amcReady = true
@@ -7,7 +7,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
- * Clone de can2F2-06 pour les auto 1er
+ * Clone de can2F31-01 pour les auto 1er
  * @author Gilles Mora
  */
 

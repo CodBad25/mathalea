@@ -41,7 +41,7 @@ export const dateDeModifImportante = '15/03/2024'
 export const uuid = '4daef'
 
 export const refs = {
-  'fr-fr': ['3F10-3', '2F10-3', 'BP2AutoO4'],
+  'fr-fr': ['3F10-3', '2F10-2', 'BP2AutoO4'],
   'fr-ch': ['10FA1B-5', '1mF1-5'],
 }
 export default class VocabulaireNotationsFonctions2 extends Exercice {

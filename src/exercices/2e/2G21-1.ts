@@ -1,198 +1,351 @@
+import { grille } from '../../lib/2d/Grille'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { tracePoint } from '../../lib/2d/TracePoint'
-import { polygoneAvecNom } from '../../lib/2d/polygones'
-import { latexParPoint } from '../../lib/2d/textes'
-import {
-  homothetie,
-  similitude,
-  translation,
-} from '../../lib/2d/transformations'
-import { longueur } from '../../lib/2d/utilitairesGeometriques'
-import { pointAdistance } from '../../lib/2d/utilitairesPoint'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { translationAnimee } from '../../modules/2dAnimation'
-import Alea2iep from '../../modules/Alea2iep'
-import { context } from '../../modules/context'
-
+import { representantNomme } from '../../lib/2d/representantVecteur'
+import { segment } from '../../lib/2d/segmentsVecteurs'
 import { vecteur } from '../../lib/2d/Vecteur'
-import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
-import { fixeBordures } from '../../lib/2d/fixeBordures'
-import {
-  representant,
-  representantNomme,
-} from '../../lib/2d/representantVecteur'
+import { propositionsQcm } from '../../lib/interactif/qcm'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../modules/mathalea2d'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import type { NestedObjetMathalea2dArray } from '../../types/2d'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
 import Exercice from '../Exercice'
 import { bleuMathalea } from '../../lib/colors'
-export const titre = "Construire un point à partir d'une égalité vectorielle"
-export const dateDeModifImportante = '29/01/2023'
+
+export const titre = 'Reconnaitre des vecteurs égaux/opposés/colinéaires (QCM)'
+export const interactifReady = true
+export const interactifType = 'qcm'
+
+export const dateDePublication = '31/03/2025'
+
+export const uuid = '57d64'
+export const refs = {
+  'fr-fr': ['2G21-1', 'BP1GEO08'],
+  'fr-ch': ['3G91-1'],
+}
 
 /**
- * @author Jean-claude Lhote
+ * Reconnaitre des vecteurs égaux/opposés/colinéaires (QCM).
+ * @author Stéphan Grignon
+ * stephan.grignon@ac-strasbourg.fr
  */
-export const uuid = '2b8bf'
 
-export const refs = {
-  'fr-fr': ['2G21-1'],
-  'fr-ch': ['3G91-2'],
-}
-export default class SommeDeVecteurs extends Exercice {
+export default class ReconnaitreVecteurs extends Exercice {
   constructor() {
     super()
-    this.besoinFormulaireNumerique = [
-      'Situations différentes ',
-      2,
-      '1 :Avec un point origine\n2 : Cas général\n3 : Mélange',
+    this.sup = 4
+    this.nbQuestions = 1
+    this.spacing = 1.5
+    this.spacingCorr = 1.5
+    this.besoinFormulaireTexte = [
+      'Type de questions',
+      [
+        'Nombres séparés par des tirets  :',
+        '1 : Vecteurs égaux',
+        '2 : Vecteurs opposés',
+        '3 : Vecteurs colinéaires',
+        '4 : Mélange',
+      ].join('\n'),
     ]
-
-    this.nbQuestions = 2
-    this.nbCols = 2
-    this.nbColsCorr = 2
-    this.sup = 3 //
   }
 
-  nouvelleVersion(numeroExercice: number) {
-    let choix = 1
-    let u, v, A, B, C, xU, yU, xV, yV, p, U, V, M, N, UU, VV, posLabelA
-    let questionsDisponibles = [1, 2]
-    if (this.sup === 1) {
-      questionsDisponibles = [1]
-    } else if (this.sup === 2) {
-      questionsDisponibles = [2]
-    }
-    const typesDeQuestions = combinaisonListes(
-      questionsDisponibles,
+  nouvelleVersion() {
+    const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      min: 1,
+      max: 3,
+      melange: 4,
+      defaut: 4,
+      nbQuestions: this.nbQuestions,
+    })
+    const listeTypeDeQuestions = combinaisonListes(
+      typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      let texte = ''
-      let texteCorr = ''
-      choix = typesDeQuestions[i]
-      const anim = new Alea2iep()
-      do {
-        xU = randint(0, 8) * 0.5
-        yU =
-          randint(Math.round(4 - xU), 8, Math.round(xU)) * choice([-0.5, 0.5])
-        xV = randint(-8, -1) * 0.5
-        yV = randint(Math.round(4 + xV), 8) * choice([-0.5, 0.5])
-        u = vecteur(xU, yU)
-        v = vecteur(xV, yV)
-        A = pointAbstrait(0, 0, 'A', 'center')
-        B = translation(A, u, 'B')
-        C = translation(B, v, 'C')
-      } while (A.x === C.x && A.y === C.y)
-      posLabelA = homothetie(C, A, -1 / longueur(A, C))
-      posLabelA.positionLabel = 'center'
-      p = polygoneAvecNom(B, C)
-      if (choix === 1) {
-        M = pointAdistance(A, 0)
-        N = pointAdistance(A, 0)
+
+    // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
+
+    for (
+      let i = 0, monQcm, texte, texteCorr, cpt = 0;
+      i < this.nbQuestions && cpt < 50;
+    ) {
+      let k1 = randint(-5, 5)
+      let k2
+      if (k1 === 0) {
+        k2 = randint(-5, 5, 0)
       } else {
-        M = pointAdistance(A, randint(2, 3), randint(20, 45))
-        N = similitude(M, A, randint(-90, -45), randint(2, 5) / 2)
+        k2 = randint(-5, 5)
+      } // pas de vecteur nul
+      const A = pointAbstrait(0, 0) // pt origine vecteur de base
+      const B = pointAbstrait(A.x + k1, A.y + k2) // pt extrémité vecteur de base
+
+      let xC = 0
+      let yC = 0
+      let d = Math.abs(k2 * xC - k1 * yC) / Math.sqrt(k1 ** 2 + k2 ** 2)
+      while (d < 2 || d > 3) {
+        // vecteurs colinaires : distance des directions entre 2 et 3
+        xC = randint(-3, 3)
+        yC = randint(-3, 3)
+        d = Math.abs(k2 * xC - k1 * yC) / Math.sqrt(k1 ** 2 + k2 ** 2)
       }
-      U = representantNomme(u, M, 'u', 1, bleuMathalea)
-      UU = representant(u, M)
-      UU.color = colorToLatexOrHTML(bleuMathalea)
-      V = representantNomme(v, N, 'v', 1, 'green')
-      VV = representant(v, N)
-      VV.color = colorToLatexOrHTML('green')
-      texte =
-        'Construire le point $C$ tel que $\\overrightarrow{AC} = \\vec{u} + \\vec{v}$.<br>'
-      texte += mathalea2d(
-        {
-          xmin: Math.min(0, B.x, C.x, M.x, M.x + xU, N.x, N.x + xV) - 2,
-          ymin: Math.min(0, B.y, C.y, M.y, M.y + yU, N.y, N.y + yV) - 2,
-          xmax: Math.max(0, B.x, C.x, M.x, M.x + xU, N.x, N.x + xV) + 2,
-          ymax: Math.max(0, B.y, C.y, M.y, M.y + yU, N.y, N.y + yV) + 2,
-          scale: 0.7,
-        },
-        U,
-        V,
-        UU,
-        VV,
-        tracePoint(A, 'red'),
-        latexParPoint('A', posLabelA, 'red', 12, 6, ''),
-      )
-      texteCorr =
-        'Construisons le point $B$ tel que $\\overrightarrow{AB} = \\vec{u}$ puis le point $C$ tel que $\\overrightarrow{BC} = \\vec{v}$.<br>'
-      anim.couleur = 'black'
-      anim.xMin = Math.min(0, B.x, C.x, M.x, M.x + xU, N.x, N.x + xV) - 1
-      anim.yMin = Math.min(0, B.y, C.y, M.y, M.y + yU, N.y, N.y + yV) - 1
-      anim.xMax = Math.max(0, B.x, C.x, M.x, M.x + xU, N.x, N.x + xV) + 2
-      anim.yMax = Math.max(0, B.y, C.y, M.y, M.y + yU, N.y, N.y + yV) + 2
-      anim.recadre(anim.xMin, anim.yMax)
-      anim.crayonMontrer(M)
-      anim.tracer(translation(M, u), { vecteur: true, couleur: bleuMathalea })
-      anim.crayonDeplacer(N)
-      anim.tracer(translation(N, v), { vecteur: true, couleur: 'green' })
-      anim.crayonMasquer()
-      anim.pointCreer(A)
-      if (choix === 2) {
-        anim.compasMontrer(M)
-        anim.compasEcarter2Points(M, translation(M, u))
-        anim.compasDeplacer(A)
-        anim.compasTracerArcCentrePoint(A, B)
-        anim.compasDeplacer(M)
-        anim.compasEcarter2Points(M, A)
-        anim.compasDeplacer(translation(M, u))
-        anim.compasTracerArcCentrePoint(translation(M, u), B)
-        anim.crayonMontrer(B)
-        anim.tracer(translation(M, u), { couleur: bleuMathalea, pointilles: true })
-        anim.crayonDeplacer(M)
-        anim.tracer(A, { couleur: bleuMathalea, pointilles: true })
-        anim.tracer(B, { vecteur: true, couleur: bleuMathalea })
-        anim.crayonMasquer()
+
+      const C = pointAbstrait(xC, yC) // pt origine second vecteur
+      const D = pointAbstrait(xC + k1, yC + k2) // pt extrémité vecteur égal
+      const E = pointAbstrait(xC - k1, yC - k2) // pt extrémité vecteur opposé
+
+      const k3 = choice([0.5, 0.75, 1.25, 1.5])
+      const F = pointAbstrait(xC + k1 * k3, yC + k2 * k3) // pt extrémité vecteur colinéaire de même sens mais pas égal
+
+      const k4 = choice([-k1, k1])
+      let k5
+      if (k4 === k1) {
+        k5 = -k2
+      } else {
+        k5 = k2
       }
-      anim.compasDeplacer(N)
-      anim.compasEcarter2Points(N, translation(N, v))
-      anim.compasDeplacer(B)
-      anim.compasTracerArcCentrePoint(B, C)
-      anim.compasDeplacer(N)
-      anim.compasEcarter2Points(N, B)
-      anim.compasDeplacer(translation(N, v))
-      anim.compasTracerArcCentrePoint(translation(N, v), C)
-      anim.crayonMontrer(C)
-      anim.tracer(translation(N, v), { couleur: 'green', pointilles: true })
-      anim.crayonDeplacer(N)
-      anim.tracer(B, { couleur: 'green', pointilles: true })
-      anim.tracer(C, { vecteur: true, couleur: 'green' })
-      anim.crayonMasquer()
-      anim.compasMasquer()
-      anim.pointCreer(C)
-      const objets: NestedObjetMathalea2dArray = [
-        U,
-        V,
-        p[1],
-        tracePoint(A, 'red'),
-        UU,
-        VV,
-        representant(u, A),
-        representant(v, B),
-        latexParPoint('A', posLabelA, 'red', 12, 12, ''),
-      ]
-      if (context.isHtml)
-        objets.push(
-          translationAnimee([UU], vecteur(M, A)),
-          translationAnimee([VV], vecteur(N, B)),
+      const G = pointAbstrait(xC + k4, yC + k5) // pt extrémité vecteur quelconque avec norme égale et "même sens"
+
+      const k6 = choice([-0.5, -0.75, -1.25, -1.5])
+      const H = pointAbstrait(xC + k1 * k6, yC + k2 * k6) // pt extrémité vecteur colinéaire de sens contraire mais pas opposé
+
+      const K = pointAbstrait(xC + k4 * k3, yC + k5 * k3) // pt extrémité vecteur quelconque avec norme différente et "même sens"
+
+      const AB = segment(A, B, bleuMathalea, '->') // vecteur de base
+      AB.epaisseur = 2
+      const vAB = vecteur(A, B)
+      const nomvAB = representantNomme(vAB, A, 'u', 1.5, bleuMathalea)
+
+      const ptsExt = [D, E, F, H, G, K, G, K] // liste des pts d'extrémité
+      let choixPtExt = choice(ptsExt) // choix du pt d'extrémité
+      while ((choixPtExt === G || choixPtExt === K) && (k1 === 0 || k2 === 0)) {
+        // pas de vecteur horizontal ou vertical dans ces cas sinon direction + sens changé
+        choixPtExt = choice(ptsExt)
+        k1 = 0
+        k2 = 0
+      }
+
+      const CptExt = segment(C, choixPtExt, 'red', '->') // second vecteur
+      CptExt.epaisseur = 2
+      const vCptExt = vecteur(C, choixPtExt)
+      const nomvCptExt = representantNomme(vCptExt, C, 'v', 1.5, 'red')
+
+      // grille dépassant les vecteurs d'une unité
+      const xmin = Math.floor(Math.min(A.x, B.x, C.x, choixPtExt.x) - 1)
+      const ymin = Math.floor(Math.min(A.y, B.y, C.y, choixPtExt.y) - 1)
+      const xmax = Math.ceil(Math.max(A.x, B.x, C.x, choixPtExt.x) + 1)
+      const ymax = Math.ceil(Math.max(A.y, B.y, C.y, choixPtExt.y) + 1)
+      const Grille = grille(xmin, ymin, xmax, ymax)
+
+      switch (listeTypeDeQuestions[i]) {
+        case 1: {
+          // Vecteurs égaux
+          texte = mathalea2d(
+            {
+              xmin,
+              xmax,
+              ymin,
+              ymax,
+              center: true,
+              pixelsParCm: 30,
+              scale: 0.75,
+            },
+            AB,
+            nomvAB,
+            CptExt,
+            nomvCptExt,
+            Grille,
+          )
+          texte += '<br>Les vecteurs $\\vec{u}$ et $\\vec{v}$ sont-ils égaux ?'
+          texteCorr = "Deux vecteurs sont égaux s'ils ont :"
+          texteCorr += '<br>- la même direction,'
+          texteCorr += '<br>- le même sens,'
+          texteCorr += '<br>- la même norme.'
+
+          let rep1, rep2, rep3, rep4
+          if (choixPtExt === D) {
+            ;[rep1, rep2, rep3, rep4] = [true, false, false, false]
+          } else if (choixPtExt === G) {
+            ;[rep1, rep2, rep3, rep4] = [false, true, false, false]
+          } else if (choixPtExt === E) {
+            ;[rep1, rep2, rep3, rep4] = [false, false, true, false]
+          } else if (choixPtExt === F) {
+            ;[rep1, rep2, rep3, rep4] = [false, false, false, true]
+          } else if (choixPtExt === H) {
+            ;[rep1, rep2, rep3, rep4] = [false, false, true, true]
+          } else if (choixPtExt === K) {
+            ;[rep1, rep2, rep3, rep4] = [false, true, false, true]
+          }
+
+          this.autoCorrection[i] = {
+            enonce: texte,
+            options: { ordered: true, vertical: true },
+            propositions: [
+              {
+                texte: 'Oui.',
+                statut: rep1,
+              },
+              {
+                texte: "Non, les deux vecteurs n'ont pas la même direction.",
+                statut: rep2,
+              },
+              {
+                texte: "Non, les deux vecteurs n'ont pas le même sens.",
+                statut: rep3,
+              },
+              {
+                texte: "Non, les deux vecteurs n'ont pas la même norme.",
+                statut: rep4,
+              },
+            ],
+          }
+          monQcm = propositionsQcm(this, i)
+          texte = texte + monQcm.texte
+          break
+        }
+
+        case 2: {
+          // Vecteurs opposés
+          texte = mathalea2d(
+            {
+              xmin,
+              xmax,
+              ymin,
+              ymax,
+              center: true,
+              pixelsParCm: 30,
+              scale: 0.75,
+            },
+            AB,
+            nomvAB,
+            CptExt,
+            nomvCptExt,
+            Grille,
+          )
+          texte +=
+            '<br>Les vecteurs $\\vec{u}$ et $\\vec{v}$ sont-ils opposés ?'
+          texteCorr = "Deux vecteurs sont opposés s'ils ont :"
+          texteCorr += '<br>- la même direction,'
+          texteCorr += '<br>- des sens opposés,'
+          texteCorr += '<br>- la même norme.'
+
+          let rep1, rep2, rep3, rep4
+          if (choixPtExt === E) {
+            ;[rep1, rep2, rep3, rep4] = [true, false, false, false]
+          } else if (choixPtExt === G) {
+            ;[rep1, rep2, rep3, rep4] = [false, true, false, false]
+          } else if (choixPtExt === D) {
+            ;[rep1, rep2, rep3, rep4] = [false, false, true, false]
+          } else if (choixPtExt === F) {
+            ;[rep1, rep2, rep3, rep4] = [false, false, true, true]
+          } else if (choixPtExt === H) {
+            ;[rep1, rep2, rep3, rep4] = [false, false, false, true]
+          } else if (choixPtExt === K) {
+            ;[rep1, rep2, rep3, rep4] = [false, true, false, true]
+          }
+
+          this.autoCorrection[i] = {
+            enonce: texte,
+            options: { ordered: true, vertical: true },
+            propositions: [
+              {
+                texte: 'Oui.',
+                statut: rep1,
+              },
+              {
+                texte: "Non, les deux vecteurs n'ont pas la même direction.",
+                statut: rep2,
+              },
+              {
+                texte: "Non, les deux vecteurs n'ont pas des sens opposés.",
+                statut: rep3,
+              },
+              {
+                texte: "Non, les deux vecteurs n'ont pas la même norme.",
+                statut: rep4,
+              },
+            ],
+          }
+          monQcm = propositionsQcm(this, i)
+          texte = texte + monQcm.texte
+          break
+        }
+
+        case 3:
+        default: {
+          // Vecteurs colinéaires
+          texte = mathalea2d(
+            {
+              xmin,
+              xmax,
+              ymin,
+              ymax,
+              center: true,
+              pixelsParCm: 30,
+              scale: 0.75,
+            },
+            AB,
+            nomvAB,
+            CptExt,
+            nomvCptExt,
+            Grille,
+          )
+          texte +=
+            '<br>Les vecteurs $\\vec{u}$ et $\\vec{v}$ sont-ils colinéaires ?'
+          texteCorr =
+            "Deux vecteurs sont colinéaires s'ils ont la même direction."
+
+          let rep1, rep2
+          if (
+            choixPtExt === D ||
+            choixPtExt === E ||
+            choixPtExt === F ||
+            choixPtExt === H
+          ) {
+            ;[rep1, rep2] = [true, false]
+          } else if (choixPtExt === G || choixPtExt === K) {
+            ;[rep1, rep2] = [false, true]
+          }
+
+          this.autoCorrection[i] = {
+            enonce: texte,
+            options: { ordered: true, vertical: true },
+            propositions: [
+              {
+                texte: 'Oui.',
+                statut: rep1,
+              },
+              {
+                texte: 'Non.',
+                statut: rep2,
+              },
+            ],
+          }
+          monQcm = propositionsQcm(this, i)
+          texte = texte + monQcm.texte
+          break
+        }
+      }
+
+      if (
+        this.questionJamaisPosee(
+          i,
+          k1,
+          listeTypeDeQuestions[i],
+          choixPtExt.x,
+          choixPtExt.y,
         )
-      texteCorr += mathalea2d(
-        Object.assign({ scale: 0.7 }, fixeBordures(objets)),
-        objets,
-      ) // translationAnimee n'a pas de bordure
-      texteCorr +=
-        "Remarque : comme $\\overrightarrow{AB} = \\vec{u}$ et $\\overrightarrow{BC} = \\vec{v}$, alors $\\vec{u}+\\vec{v}=\\overrightarrow{AB}+\\overrightarrow{BC}=\\overrightarrow{AC}$ d'après la relation de Chasles."
-      texteCorr += anim.htmlBouton(numeroExercice ?? 0, i)
-      if (this.questionJamaisPosee(i, xU, yU, xV, yV)) {
-        // Si la question n'a jamais été posée, on en créé une autre
+      ) {
+        // Si la question n'a jamais été posée, on en créé une autre.
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
-        i++
+        i++ // On passe à la question suivante
+      } else {
+        this.autoCorrection.length -= 1 // On enlève la dernière correction ajoutée car question déjà posée
       }
-      cpt++
+      cpt++ // Sinon on incrémente le compteur d'essai pour avoir une question nouvelle
     }
-    listeQuestionsToContenu(this)
+    listeQuestionsToContenu(this) // La liste de question et la liste de la correction
   }
 }

@@ -90,11 +90,15 @@
     themeCode: string,
     level: string = '6',
   ): boolean {
-    const regexp = new RegExp(`^(auto)?${level}[A-Z]\\d+[A-Z0-9]$`, 'g')
+    const normalizedThemeCode = themeCode.replace(/^(auto|can)/, '')
+    const normalizedLevel = /^\d/.test(normalizedThemeCode)
+      ? normalizedThemeCode[0]
+      : level
+    const regexp = new RegExp(`^${normalizedLevel}[A-Z]\\d+[A-Z0-9]$`)
     const regexp3Auto = new RegExp(`^(3Auto)?[A-Z]\\d+[A-Z0-9]$`, `g`)
     const regexp1Auto = new RegExp(`^[12]A-[A-Z]\\d{1,2}$`, `g`)
     return (
-      regexp.test(themeCode) ||
+      regexp.test(normalizedThemeCode) ||
       regexp3Auto.test(themeCode) ||
       regexp1Auto.test(themeCode)
     )
@@ -280,6 +284,18 @@
       if (current.includes('CAN')) {
         return entries.sort(([keyA], [keyB]) => {
           return levels.indexOf(keyA) - levels.indexOf(keyB)
+        })
+      }
+      const normalizedCurrent = current.replace(/^(auto|can)/, '')
+      if (
+        /^[12T]/.test(normalizedCurrent) &&
+        entries.some(([key]) => key.toLowerCase().includes('-flash'))
+      ) {
+        return entries.sort(([keyA], [keyB]) => {
+          const isFlashA = keyA.toLowerCase().includes('-flash')
+          const isFlashB = keyB.toLowerCase().includes('-flash')
+          if (isFlashA !== isFlashB) return isFlashA ? -1 : 1
+          return keyA.localeCompare(keyB, 'fr', { numeric: true })
         })
       }
       // niveau feuille : terminaisons d'examens

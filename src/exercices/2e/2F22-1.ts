@@ -37,8 +37,17 @@ export const refs = {
   'fr-fr': ['2F22-1'],
   'fr-ch': ['11FA1A-7'],
 }
+
+type FonctionReference =
+  | 'carré'
+  | 'cube'
+  | 'racine carrée'
+  | 'inverse'
+  | 'valeur absolue'
+
 export default class ImageFonctionsRefs extends Exercice {
   can: boolean
+  protected typeQuestionFixe?: FonctionReference
   constructor() {
     super()
 
@@ -59,11 +68,15 @@ export default class ImageFonctionsRefs extends Exercice {
   }
 
   nouvelleVersion() {
-    const typeQuestionsDisponibles = []
-    this.sup && typeQuestionsDisponibles.push('carré')
-    this.sup2 && typeQuestionsDisponibles.push('cube')
-    this.sup3 && typeQuestionsDisponibles.push('racine carrée')
-    this.sup4 && typeQuestionsDisponibles.push('inverse')
+    const typeQuestionsDisponibles: FonctionReference[] = []
+    if (this.typeQuestionFixe !== undefined) {
+      typeQuestionsDisponibles.push(this.typeQuestionFixe)
+    } else {
+      this.sup && typeQuestionsDisponibles.push('carré')
+      this.sup2 && typeQuestionsDisponibles.push('cube')
+      this.sup3 && typeQuestionsDisponibles.push('racine carrée')
+      this.sup4 && typeQuestionsDisponibles.push('inverse')
+    }
 
     if (typeQuestionsDisponibles.length === 0) {
       typeQuestionsDisponibles.push('carré')
@@ -114,6 +127,12 @@ export default class ImageFonctionsRefs extends Exercice {
           solution = new FractionEtendue(calcul, 1)
           nombre = calcul * calcul
           texteCorr = `$${nom}(${nombre}) = ${miseEnEvidence(`\\sqrt{${nombre}}`)} = ${miseEnEvidence(solution.texFraction)} $ car $ ${ecritureParentheseSiNegatif(solution.valeurDecimale)}^2 = ${texNombre(nombre, 0)}$.`
+          break
+        case 'valeur absolue':
+          nombre = randint(-10, 10, [0, 1])
+          calcul = Math.abs(nombre)
+          solution = new FractionEtendue(calcul, 1)
+          texteCorr = `$${nom}(${nombre})=|${nombre}|=${miseEnEvidence(texNombre(calcul, 0))}$`
           break
         case 'inverse':
         default:

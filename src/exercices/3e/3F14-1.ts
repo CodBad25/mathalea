@@ -28,7 +28,7 @@ export const dateDePublication = '06/07/2026'
 export const uuid = '5622b'
 
 export const refs = {
-  'fr-fr': ['3F14-1', '2F13-1'],
+  'fr-fr': ['3F14-1', '2F16-1'],
   'fr-ch': ['10FA1B-15', '11FA1C-1'],
 }
 export default class ModeliserSituations extends Exercice {

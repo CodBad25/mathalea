@@ -1,0 +1,3 @@
+# La banque des questions de cours est reprise telle quelle du dépôt de l'app
+# questions-de-cours : la reformater rendrait les synchronisations illisibles.
+src/json/questionsDeCours/

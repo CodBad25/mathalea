@@ -1,289 +1,375 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { traceBarre } from '../../lib/2d/diagrammes'
+import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { polyline } from '../../lib/2d/Polyline'
+import { segment } from '../../lib/2d/segmentsVecteurs'
+import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { latex2d, texteParPosition } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
+import { createList } from '../../lib/format/lists'
+import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
+import { mathalea2d } from '../../modules/mathalea2d'
+import { listeQuestionsToContenu } from '../../modules/outils'
+import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
-import { tableauColonneLigne } from '../../lib/2d/tableau'
-import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { numAlpha } from '../../lib/outils/outilString'
-import FractionEtendue from '../../modules/FractionEtendue'
-import { context } from '../../modules/context'
-import {
-  gestionnaireFormulaireTexte,
-  listeQuestionsToContenu,
-  randint,
-} from '../../modules/outils'
 export const titre =
-  'Calculer des probabilités dans une situation concrète (union et intersection)'
-export const dateDePublication = '26/05/2024'
-export const interactifReady = true
-export const interactifType = 'multi-mathfield'
-/**
- *
- * @author Gilles Mora
- */
-export const uuid = 'ac940'
+  'Construire un diagramme en bâtons et déterminer des indicateurs statistiques'
+export const dateDePublication = '18/08/2026'
+export const uuid = 'd7e4b'
+
 export const refs = {
   'fr-fr': ['2S30-7'],
   'fr-ch': [],
 }
-export default class ProbaConcret extends Exercice {
-  constructor() {
-    super()
-    // this.consigne = 'Calculer '
-    this.sup = 7
-    this.nbQuestions = 1
-    this.spacing = context.isHtml ? 1.5 : 2
-    this.spacingCorr = context.isHtml ? 1.5 : 2
+
+type Scenario = {
+  introduction: string
+  valeurs: number[]
+  titreValeurs: string
+  titreEffectifs: string
+  uniteAbscisses: string
+  individus: string
+  caractere: string
+}
+
+const scenarios: Scenario[] = [
+  {
+    introduction:
+      "Une enquête a été réalisée sur le nombre d'occupants par véhicule lors du passage à un péage d'autoroute.",
+    valeurs: [1, 2, 3, 4, 5],
+    titreValeurs: "Nombre d'occupants",
+    titreEffectifs: 'Nombre de véhicules',
+    uniteAbscisses: "Nombre d'occupants par véhicule",
+    individus: 'véhicules',
+    caractere: "le nombre d'occupants par véhicule",
+  },
+  {
+    introduction:
+      'Une enquête a été réalisée auprès des élèves d’un lycée sur le nombre de livres lus durant l’été.',
+    valeurs: [0, 1, 2, 3, 4],
+    titreValeurs: "Nombre de livres lus durant l'été",
+    titreEffectifs: "Nombre d'élèves",
+    uniteAbscisses: "Nombre de livres lus durant l'été",
+    individus: 'élèves',
+    caractere: "le nombre de livres lus durant l'été",
+  },
+  {
+    introduction:
+      "Une enquête a été réalisée auprès des membres d'un club sur le nombre de séances de sport pratiquées pendant une semaine.",
+    valeurs: [0, 1, 2, 3, 4],
+    titreValeurs: 'Nombre de séances',
+    titreEffectifs: 'Nombre de membres',
+    uniteAbscisses: 'Nombre de séances dans la semaine',
+    individus: 'membres du club',
+    caractere: 'le nombre de séances pratiquées pendant la semaine',
+  },
+]
+
+const repartitions = [
+  [4, 7, 3, 4, 2],
+  [3, 8, 3, 4, 2],
+  [4, 8, 2, 3, 3],
+  [2, 4, 3, 6, 5],
+  [3, 3, 3, 7, 4],
+  [2, 3, 4, 7, 4],
+]
+
+function valeurAuRang(
+  rang: number,
+  valeurs: number[],
+  effectifsCumules: number[],
+): number {
+  const indice = effectifsCumules.findIndex((effectif) => effectif >= rang)
+  return valeurs[indice]
+}
+
+function construitDiagramme(scenario: Scenario, effectifs: number[]): string {
+  const objets: NestedObjetMathalea2dArray = []
+  const maximumEnCentaines = Math.ceil(Math.max(...effectifs) / 100)
+  const axeHorizontal = segment(0, 0, 6.2, 0, 'black')
+  const axeVertical = segment(0, 0, 0, maximumEnCentaines + 0.8, 'black')
+  axeHorizontal.styleExtremites = '->'
+  axeVertical.styleExtremites = '->'
+  objets.push(axeHorizontal, axeVertical)
+
+  for (let centaine = 0; centaine <= maximumEnCentaines; centaine++) {
+    objets.push(
+      segment(-0.1, centaine, 0.1, centaine, 'black'),
+      latex2d(texNombre(100 * centaine), -0.45, centaine, {
+        letterSize: 'scriptsize',
+      }),
+    )
+    if (centaine > 0) {
+      const ligneGuide = segment(0, centaine, 5.7, centaine, 'gray')
+      ligneGuide.opacite = 0.18
+      objets.push(ligneGuide)
+    }
   }
 
-  nouvelleVersion() {
-    const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
-      saisie: this.sup,
-      min: 1,
-      max: 6,
-      melange: 7,
-      defaut: 7,
-      nbQuestions: this.nbQuestions,
+  for (let indice = 0; indice < effectifs.length; indice++) {
+    const x = indice + 1
+    const hauteur = effectifs[indice] / 100
+    objets.push(
+      traceBarre(x, hauteur, String(scenario.valeurs[indice]), {
+        epaisseur: 0.45,
+        couleurDeRemplissage: bleuMathalea,
+        opaciteDeRemplissage: 0.35,
+        angle: 0,
+      }),
+      latex2d(texNombre(effectifs[indice]), x, hauteur + 0.35, {
+        letterSize: 'scriptsize',
+      }),
+    )
+  }
+  const titreHorizontal = texteParPosition(
+    scenario.uniteAbscisses,
+    3,
+    -0.85,
+    0,
+    'black',
+    1,
+    'milieu',
+  )
+  const titreVertical = texteParPosition(
+    scenario.titreEffectifs,
+    -1.25,
+    (maximumEnCentaines + 0.8) / 2,
+    90,
+    'black',
+    1,
+    'milieu',
+  )
+  objets.push(titreHorizontal, titreVertical)
+
+  return mathalea2d(
+    {
+      ...fixeBordures(objets, {
+        rxmin: -0.4,
+        rxmax: 0.4,
+        rymin: -0.4,
+        rymax: 0.5,
+      }),
+      pixelsParCm: 25,
+      scale: 0.7,
+      center: true,
+    },
+    objets,
+  )
+}
+
+function construitSchemaQuartiles(
+  effectifTotal: number,
+  q1: number,
+  mediane: number,
+  q3: number,
+): string {
+  const objets: NestedObjetMathalea2dArray = []
+  const yAxe = 2.2
+  const longueur = 12
+  const axe = segment(0, yAxe, longueur + 0.4, yAxe, 'black')
+  axe.styleExtremites = '->'
+  objets.push(axe)
+
+  const reperes = [
+    {
+      x: 3,
+      indicateur: `Q_1=${q1}`,
+      rang: `\\text{rang }${effectifTotal / 4}`,
+    },
+    {
+      x: 6,
+      indicateur: `\\operatorname{Med}=${texNombre(mediane)}`,
+      rang: `\\text{rangs }${effectifTotal / 2}\\text{ et }${effectifTotal / 2 + 1}`,
+    },
+    {
+      x: 9,
+      indicateur: `Q_3=${q3}`,
+      rang: `\\text{rang }${(3 * effectifTotal) / 4}`,
+    },
+  ]
+
+  for (const repere of reperes) {
+    objets.push(
+      segment(repere.x, yAxe - 0.15, repere.x, yAxe + 0.25, 'black'),
+      latex2d(repere.indicateur, repere.x, 3.25, {
+        letterSize: 'small',
+      }),
+      latex2d(repere.rang, repere.x, 2.75, {
+        letterSize: 'scriptsize',
+      }),
+    )
+  }
+
+  objets.push(
+    latex2d('\\text{rang }1', 0, 2.65, { letterSize: 'scriptsize' }),
+    latex2d(`\\text{rang }${effectifTotal}`, longueur, 2.65, {
+      letterSize: 'scriptsize',
+    }),
+  )
+
+  for (let quart = 0; quart < 4; quart++) {
+    const debut = 3 * quart
+    const fin = debut + 3
+    const milieu = (debut + fin) / 2
+    const accolade = polyline(
+      pointAbstrait(debut, 1.65),
+      pointAbstrait(debut + 0.15, 1.65),
+      pointAbstrait(debut + 0.3, 1.4),
+      pointAbstrait(milieu - 0.2, 1.35),
+      pointAbstrait(milieu, 1.1),
+      pointAbstrait(milieu + 0.2, 1.35),
+      pointAbstrait(fin - 0.3, 1.4),
+      pointAbstrait(fin - 0.15, 1.65),
+      pointAbstrait(fin, 1.65),
+    )
+    accolade.epaisseur = 1.2
+    objets.push(
+      accolade,
+      latex2d('25\\,\\%', milieu, 0.75, { letterSize: 'scriptsize' }),
+    )
+  }
+
+  return mathalea2d(
+    {
+      xmin: -0.8,
+      xmax: 12.9,
+      ymin: 0.35,
+      ymax: 3.65,
+      pixelsParCm: 25,
+      scale: 0.72,
+      center: true,
+    },
+    objets,
+  )
+}
+
+/**
+ * Construire un diagramme en bâtons, puis déterminer et interpréter les
+ * quartiles et la médiane d'une série statistique discrète.
+ * @author Stéphane Guyon
+ */
+export default class DiagrammeBatonsEtQuartiles extends Exercice {
+  constructor() {
+    super()
+    this.nbQuestions = 1
+    this.nbQuestionsModifiable = false
+    this.sup = 4
+    this.besoinFormulaireNumerique = [
+      'Scénario',
+      4,
+      '1 : Nombre de livres lus\n2 : Nombre de passagers par véhicule\n3 : Nombre de séances d’entraînement\n4 : Mélange',
+    ]
+  }
+
+  nouvelleVersion(): void {
+    const numeroScenario = Number(this.sup)
+    const scenario =
+      numeroScenario === 1
+        ? scenarios[1]
+        : numeroScenario === 2
+          ? scenarios[0]
+          : numeroScenario === 3
+            ? scenarios[2]
+            : choice(scenarios)
+    const effectifTotal = choice([1600, 2000, 2400])
+    const coefficient = effectifTotal / 20
+    const effectifs = choice(repartitions).map(
+      (proportion) => proportion * coefficient,
+    )
+    const effectifsCumules: number[] = []
+    effectifs.reduce((cumul, effectif) => {
+      const nouveauCumul = cumul + effectif
+      effectifsCumules.push(nouveauCumul)
+      return nouveauCumul
+    }, 0)
+
+    const rangQ1 = effectifTotal / 4
+    const rangMedian1 = effectifTotal / 2
+    const rangMedian2 = rangMedian1 + 1
+    const rangQ3 = (3 * effectifTotal) / 4
+    const q1 = valeurAuRang(rangQ1, scenario.valeurs, effectifsCumules)
+    const mediane1 = valeurAuRang(
+      rangMedian1,
+      scenario.valeurs,
+      effectifsCumules,
+    )
+    const mediane2 = valeurAuRang(
+      rangMedian2,
+      scenario.valeurs,
+      effectifsCumules,
+    )
+    const mediane = (mediane1 + mediane2) / 2
+    const q3 = valeurAuRang(rangQ3, scenario.valeurs, effectifsCumules)
+
+    const tableau = tableauColonneLigne(
+      [
+        `\\text{\\textbf{${scenario.titreValeurs}}}`,
+        ...scenario.valeurs.map(String),
+      ],
+      [`\\text{\\textbf{${scenario.titreEffectifs}}}`],
+      effectifs,
+      1.5,
+    )
+    const tableauCumule = tableauColonneLigne(
+      [
+        `\\text{\\textbf{${scenario.titreValeurs}}}`,
+        ...scenario.valeurs.map(String),
+      ],
+      ['\\text{\\textbf{Effectifs cumulés croissants}}'],
+      effectifsCumules,
+      1.5,
+    )
+    const diagramme = construitDiagramme(scenario, effectifs)
+    const schemaQuartiles = construitSchemaQuartiles(
+      effectifTotal,
+      q1,
+      mediane,
+      q3,
+    )
+    const calculsParametres = createList({
+      items: [
+        `Le premier quartile est la valeur de rang $\\dfrac{${effectifTotal}}{4}=${rangQ1}$. D'après les effectifs cumulés, $${miseEnEvidence(`Q_1=${q1}`)}$.`,
+        `Comme l'effectif total $${effectifTotal}$ est pair, la médiane est une valeur comprise entre la $${rangMedian1}^{\\text{e}}$ valeur et la $${rangMedian2}^{\\text{e}}$ valeur de la série ordonnée. Ces deux valeurs sont toutes les deux égales à $${mediane}$, donc $${miseEnEvidence(`\\operatorname{Med}=${texNombre(mediane)}`)}$.`,
+        `Le troisième quartile est la valeur de rang $\\dfrac{3\\times${effectifTotal}}{4}=${rangQ3}$. D'après les effectifs cumulés, $${miseEnEvidence(`Q_3=${q3}`)}$.`,
+      ],
+      style: 'fleches',
+    })
+    const interpretations = createList({
+      items: [
+        `Pour au moins $25\\,\\%$ des ${scenario.individus}, ${scenario.caractere} est inférieur ou égal à $${q1}$.`,
+        `Pour au moins la moitié des ${scenario.individus}, ${scenario.caractere} est inférieur ou égal à $${texNombre(mediane)}$ et, pour au moins la moitié, il est supérieur ou égal à $${texNombre(mediane)}$.`,
+        `Pour au moins $75\\,\\%$ des ${scenario.individus}, ${scenario.caractere} est inférieur ou égal à $${q3}$.`,
+      ],
+      style: 'fleches',
+    })
+    const organisationCorrection = createList({
+      items: [
+        `<b>Calcul des paramètres</b><br>
+L'effectif total est :<br>
+$${effectifs.map((effectif) => texNombre(effectif)).join('+')}=${texNombre(effectifTotal)}$.<br>
+Pour repérer les rangs des quartiles et de la médiane, on calcule les effectifs cumulés croissants :<br><br>
+${tableauCumule}<br>
+${calculsParametres}`,
+        `<b>Schéma explicatif</b><br>${schemaQuartiles}`,
+        `<b>Interprétations</b><br>${interpretations}`,
+      ],
+      style: 'fleches',
     })
 
-    const listeTypeDeQuestions = combinaisonListes(
-      typesDeQuestionsDisponibles,
-      this.nbQuestions,
-    )
+    this.listeQuestions[0] = `${scenario.introduction}<br>
+Les résultats de cette enquête sont consignés dans le tableau suivant :<br><br>
+${tableau}<br>
+1. Construire un diagramme en bâtons représentant cette étude.<br><br>
+2. Déterminer la médiane, le premier quartile et le troisième quartile de cette série statistique. Interpréter ces valeurs.`
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      const a = randint(1, 20)
-      let texte = ''
-      let texteCorr = ''
+    this.listeCorrections[0] = `<b>1.</b> Sur l'axe horizontal, on place les différentes valeurs du caractère étudié. La hauteur de chaque bâton est égale à l'effectif correspondant.<br>
+${diagramme}<br>
+<b>2.</b><br>
+${organisationCorrection}`
 
-      const total = randint(6, 9) * 20
-      const nbCadres = randint(20, 60)
-      const nbEmployes = total - nbCadres
-      const nbFemmes = randint(25, 50)
-      const nbHommes = total - nbFemmes
-      const nbFemmesEtCadres = randint(10, 15)
-      const nbHommesEtCadres = nbCadres - nbFemmesEtCadres
-      const nbFemmesEtEmployees = nbFemmes - nbFemmesEtCadres
-      const nbHommesEtEmployes = nbHommes - nbHommesEtCadres
-
-      const listeEvenementIntersection = [
-        [
-          'F\\cap C',
-          'la personne choisie est une femme qui fait partie des cadres',
-          new FractionEtendue(nbFemmesEtCadres, total).texFraction,
-          'de femmes cadres',
-        ],
-        [
-          '\\overline{F}\\cap C',
-          'la personne choisie est un homme qui fait partie des cadres',
-          new FractionEtendue(nbHommesEtCadres, total).texFraction,
-          "d'hommes cadres",
-        ],
-        [
-          '\\overline{F}\\cap \\overline{C}',
-          'la personne choisie est un homme qui fait partie des employés',
-          new FractionEtendue(nbHommesEtEmployes, total).texFraction,
-          "d'hommes employés",
-        ],
-        [
-          'F\\cap \\overline{C}',
-          'la personne choisie est une femme qui fait partie des employés',
-          new FractionEtendue(nbFemmesEtEmployees, total).texFraction,
-          'de femmes employées',
-        ],
-      ]
-      const EvInter = choice(listeEvenementIntersection)
-
-      const listeEvenementUnion = [
-        [
-          'F\\cup C',
-          'F',
-          new FractionEtendue(nbFemmes, total).texFraction,
-          'C',
-          new FractionEtendue(nbCadres, total).texFraction,
-          'F\\cap C',
-          new FractionEtendue(nbFemmesEtCadres, total).texFraction,
-          'la personne choisie est une femme ou fait partie des cadres',
-          new FractionEtendue(nbFemmes + nbCadres - nbFemmesEtCadres, total)
-            .texFraction,
-        ],
-        [
-          '\\overline{F}\\cup C',
-          '\\overline{F}',
-          new FractionEtendue(nbHommes, total).texFraction,
-          'C',
-          new FractionEtendue(nbCadres, total).texFraction,
-          '\\overline{F}\\cap C',
-          new FractionEtendue(nbHommesEtCadres, total).texFraction,
-          'la personne choisie est un homme ou fait partie des cadres',
-          new FractionEtendue(nbHommes + nbCadres - nbHommesEtCadres, total)
-            .texFraction,
-        ],
-        [
-          'F\\cup \\overline{C}',
-          'F',
-          new FractionEtendue(nbFemmes, total).texFraction,
-          '\\overline{C}',
-          new FractionEtendue(nbEmployes, total).texFraction,
-          'F\\cap \\overline{C}',
-          new FractionEtendue(nbFemmesEtEmployees, total).texFraction,
-          'la personne choisie est une femme ou fait partie des employés',
-          new FractionEtendue(
-            nbFemmes + nbEmployes - nbFemmesEtEmployees,
-            total,
-          ).texFraction,
-        ],
-        [
-          '\\overline{F}\\cup \\overline{C}',
-          '\\overline{F}',
-          new FractionEtendue(nbHommes, total).texFraction,
-          '\\overline{C}',
-          new FractionEtendue(nbEmployes, total).texFraction,
-          '\\overline{F}\\cap \\overline{C}',
-          new FractionEtendue(nbHommesEtEmployes, total).texFraction,
-          'la personne choisie est une femme ou fait partie des employés',
-          new FractionEtendue(nbHommes + nbEmployes - nbHommesEtEmployes, total)
-            .texFraction,
-        ],
-      ]
-      const EvUnion = choice(listeEvenementUnion)
-
-      const listeEvenementCond = [
-        [
-          'est une femme',
-          "qu'elle soit cadre",
-          'Nombre de femmes',
-          'Nombre de femmes cadres',
-          new FractionEtendue(nbFemmesEtCadres, nbFemmes).texFraction,
-        ],
-        [
-          'est un homme',
-          "qu'il soit cadre",
-          "Nombre d'hommes",
-          "Nombre d'hommes cadres",
-          new FractionEtendue(nbHommesEtCadres, nbHommes).texFraction,
-        ],
-        [
-          'est un homme',
-          "qu'il soit employé",
-          "Nombre d'hommes",
-          "Nombre d'hommes employés",
-          new FractionEtendue(nbHommesEtEmployes, nbHommes).texFraction,
-        ],
-        [
-          'est une femme',
-          "qu'elle soit employée",
-          'Nombre de femmes',
-          'Nombre de femmes employées',
-          new FractionEtendue(nbFemmesEtEmployees, nbFemmes).texFraction,
-        ],
-        [
-          'fait partie des cadres',
-          'que ce soit une femme',
-          'Nombre de cadres',
-          'Nombre de femmes cadres',
-          new FractionEtendue(nbFemmesEtCadres, nbCadres).texFraction,
-        ],
-        [
-          'fait partie des cadres',
-          'que ce soit un homme',
-          'Nombre de cadres',
-          "Nombre d'hommes cadres",
-          new FractionEtendue(nbHommesEtCadres, nbCadres).texFraction,
-        ],
-        [
-          'fait partie des employés',
-          'que ce soit une femme',
-          "Nombre d'employés",
-          'Nombre de femmes employées',
-          new FractionEtendue(nbFemmesEtEmployees, nbEmployes).texFraction,
-        ],
-        [
-          'fait partie des employés',
-          'que ce soit un homme',
-          "Nombre d'employés",
-          "Nombre d'hommes employées",
-          new FractionEtendue(nbHommesEtEmployes, nbEmployes).texFraction,
-        ],
-      ]
-      const EvCond = choice(listeEvenementCond)
-
-      const choix1 = choice([true, false])
-      const choix2 = choice([true, false])
-      const tableau = tableauColonneLigne(
-        ['', '\\text{Femmes}', '\\text{Hommes}', '\\text{Total}'],
-        ['\\text{Cadres}', '\\text{Employés}', '\\text{Total}'],
-        [
-          `${nbFemmesEtCadres}`,
-          `${nbHommesEtCadres}`,
-          `${nbCadres}`,
-          `${nbFemmesEtEmployees}`,
-          `${nbHommesEtEmployes}`,
-          `${nbEmployes}`,
-          `${nbFemmes}`,
-          `${nbHommes}`,
-          `${total}`,
-        ],
-      )
-
-      texte = `Le personnel d'une entreprise est constitué de $${total}$ personnes qui se répartissent de
-          la manière suivante :  <br>
-            ${tableau}
-               `
-
-      texte += `Au cours de la fête de fin d'année, le comité d'entreprise offre un séjour à la
-               montagne à une personne choisie au hasard parmi les $${total}$ personnes de cette
-               entreprise.<br>
-               On définit les évènements suivants : <br>
-               C : « la personne choisie fait partie des cadres » ;
-               F : « la personne choisie est une femme ».<br>`
-      texte += `${addMultiMathfield(this, i, {
-        dataTemplate: `a) Calculer la probabilité de l'événement ${choix1 ? `$${EvInter[0]}$` : `: « ${EvInter[1]} »`}. %{champ1}<br>
-        b) Calculer la probabilité de l'événement ${choix2 ? `$${EvUnion[0]}$` : `: « ${EvUnion[7]} »`}. %{champ2}<br>
-        c) On sait que la personne choisie ${EvCond[0]}. Quelle est la probabilité ${EvCond[1]} ? %{champ3}`,
-        dataOptions: {
-          champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-          champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-          champ3: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-        },
-      })}`
-      handleAnswers(
-        this,
-        i,
-        {
-          champ1: { value: EvInter[2] },
-          champ2: { value: EvUnion[8] },
-          champ3: { value: EvCond[4] },
-          bareme: toutAUnPoint,
-        },
-        { formatInteractif: 'multi-mathfield' },
-      )
-      texteCorr = `${numAlpha(0)} La probabilité est donnée par : <br>
-          $P(${EvInter[0]})=\\dfrac{\\text{Nombre ${EvInter[3]}}}{\\text{Effectif total}}=${miseEnEvidence(EvInter[2])}$.
-               `
-      texteCorr += `<br><br>${numAlpha(1)} La probabilité est donnée par : <br>
-$\\begin{aligned}
-P(${EvUnion[0]})&=P(${EvUnion[1]})+P(${EvUnion[3]})-P(${EvUnion[5]})\\\\
-&=${EvUnion[2]}+${EvUnion[4]}-${EvUnion[6]}\\\\
-&=${miseEnEvidence(EvUnion[8])}
-  \\end{aligned}$
-                    `
-      texteCorr += `<br><br>${numAlpha(2)} La probabilité est donnée par : <br>
-          $P=\\dfrac{\\text{${EvCond[3]}}}{\\text{${EvCond[2]}}}=${miseEnEvidence(EvCond[4])}$.
-        
-               `
-
-      if (this.questionJamaisPosee(i, listeTypeDeQuestions[i], a)) {
-        // Si la question n'a jamais été posée, on en créé une autre
-        this.listeQuestions[i] = texte
-        this.listeCorrections[i] = texteCorr
-        i++
-      }
-      cpt++
-    }
     listeQuestionsToContenu(this)
   }
 }

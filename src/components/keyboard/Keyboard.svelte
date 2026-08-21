@@ -5,6 +5,7 @@
   import { mathaleaRenderDiv } from '../../lib/mathalea'
   import { keyboardBlocks } from './layouts/keysBlocks'
   import { GAP_BETWEEN_BLOCKS, getMode } from './lib/sizes'
+  import { enregistreTouchesPersonnalisees } from './lib/touchesPersonnalisees'
   import Alphanumeric from './presentationalComponents/alphanumeric/Alphanumeric.svelte'
   import KeyboardPage from './presentationalComponents/keyboardpage/KeyboardPage.svelte'
   import { keyboardState } from './stores/keyboardStore'
@@ -59,6 +60,17 @@
     isInLine = value.isInLine
     pageType = value.alphanumericLayout
     myKeyboard.empty()
+    // Les touches propres à la question sont présentées en premier : ce sont
+    // celles dont l'élève a besoin pour cette réponse précise.
+    if (value.customKeys.length > 0) {
+      const noms = enregistreTouchesPersonnalisees(value.customKeys)
+      myKeyboard.add({
+        keycaps: { inline: noms, block: noms },
+        cols: Math.min(noms.length, 3),
+        title: 'Pour cette question',
+        isUnits: false,
+      })
+    }
     for (const block of value.blocks) {
       if (block !== 'alphanumeric') myKeyboard.add(keyboardBlocks[block])
     }

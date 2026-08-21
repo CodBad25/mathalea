@@ -16,7 +16,7 @@ export const dateDePublication = '02/10/2023'
 export const uuid = 'd85c2'
 
 export const refs = {
-  'fr-fr': ['can3F11'],
+  'fr-fr': ['can3F11', 'can2F10-01', '2F10-flash1'],
   'fr-ch': [],
 }
 export default class VocabulaireImageAntecedent extends ExerciceSimple {

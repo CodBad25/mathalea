@@ -19,11 +19,12 @@
     tbiState,
   } from '../../../lib/stores/tbiStore'
   import type { IExercice } from '../../../lib/types'
+  import { minimalCorrection } from '../../setup/typst/minimalCorrection'
   import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
   import BasicClassicModal from '../../shared/modal/BasicClassicModal.svelte'
   import TbiCardActions from './TbiCardActions.svelte'
   import TbiCorrectionToolbar from './TbiCorrectionToolbar.svelte'
-  import type { TbiCorrectionMode } from './tbiTypes'
+  import type { TbiCorrectionDetail, TbiCorrectionMode } from './tbiTypes'
 
   interface Props {
     exercise: IExercice
@@ -63,6 +64,7 @@
   }: Props = $props()
 
   let correctionMode: TbiCorrectionMode = $state('hidden')
+  let correctionDetail: TbiCorrectionDetail = $state('full')
   let isSettingsModalDisplayed = $state(false)
   /** Zoom propre à la correction en plein écran, indépendant du zoom de la carte */
   let modalZoom = $state(1.2)
@@ -73,6 +75,18 @@
     // propre à chaque carte : ouvrir celle-ci ferme celle d'une autre carte
     activeTbiModalCard.set(mode === 'modal' ? paramsIndex : null)
     if (mode === 'modal') modalZoom = Math.max(zoom, 1.2)
+  }
+
+  /**
+   * Correction telle qu'affichée : entière, ou réduite à ses réponses mises
+   * en évidence en orange (`minimalCorrection` la rend inchangée quand elle
+   * n'en contient aucune), comme le réglage « Correction minimale » de la
+   * vue Typst.
+   */
+  function displayedCorrection(correction: string): string {
+    return correctionDetail === 'minimal'
+      ? minimalCorrection(correction)
+      : correction
   }
 
   function zoomModalBy(delta: number) {
@@ -313,7 +327,12 @@
         onDelete={() => onDelete(paramsIndex)}
       />
       {#if exercise.listeCorrections.length > 0}
-        <TbiCorrectionToolbar {correctionMode} onCorrection={setCorrectionMode} />
+        <TbiCorrectionToolbar
+          {correctionMode}
+          {correctionDetail}
+          onCorrection={setCorrectionMode}
+          onDetail={(detail) => (correctionDetail = detail)}
+        />
       {/if}
     </div>
 
@@ -351,23 +370,33 @@
                   {@html mathaleaFormatExercice(question)}
                 </li>
                 {#if correctionMode === 'perQuestion' && exercise.listeCorrections[i]}
-                  <div
-                    class="relative border-l-coopmaths-struct dark:border-l-coopmathsdark-struct border-l-[3px] mt-6 mb-4 py-2 pl-4"
-                    use:renderMath={zoom}
-                  >
+                  <!--
+                    Recalé sur `correctionDetail` : le passage de la correction
+                    complète à la correction minimale change le HTML injecté,
+                    l'action de rendu (typesetting KaTeX) doit donc être
+                    ré-exécutée sur le nouveau contenu.
+                  -->
+                  {#key correctionDetail}
                     <div
-                      class="absolute flex flex-row py-[1.5px] px-3 rounded-t-md justify-center items-center -left-0.75 -top-3.75 bg-coopmaths-struct dark:bg-coopmathsdark-struct font-semibold text-xs text-coopmaths-canvas dark:text-coopmathsdark-canvas"
+                      class="relative border-l-coopmaths-struct dark:border-l-coopmathsdark-struct border-l-[3px] mt-6 mb-4 py-2 pl-4"
+                      use:renderMath={zoom}
                     >
-                      Correction
+                      <div
+                        class="absolute flex flex-row py-[1.5px] px-3 rounded-t-md justify-center items-center -left-0.75 -top-3.75 bg-coopmaths-struct dark:bg-coopmathsdark-struct font-semibold text-xs text-coopmaths-canvas dark:text-coopmathsdark-canvas"
+                      >
+                        Correction
+                      </div>
+                      <div
+                        class="overflow-x-auto"
+                        style="line-height: {exercise.spacingCorr || 1}"
+                      >
+                        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                        {@html mathaleaFormatExercice(
+                          displayedCorrection(exercise.listeCorrections[i]),
+                        )}
+                      </div>
                     </div>
-                    <div
-                      class="overflow-x-auto"
-                      style="line-height: {exercise.spacingCorr || 1}"
-                    >
-                      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                      {@html mathaleaFormatExercice(exercise.listeCorrections[i])}
-                    </div>
-                  </div>
+                  {/key}
                 {/if}
               </div>
             {/each}
@@ -375,40 +404,44 @@
         </div>
       {/if}
       {#if correctionMode === 'below' || correctionMode === 'replace'}
-        <div
-          class="relative border-l-coopmaths-struct dark:border-l-coopmathsdark-struct border-l-[3px] mt-6 py-2 pl-4"
-          use:renderMath={zoom}
-        >
+        {#key correctionDetail}
           <div
-            class="absolute flex flex-row py-[1.5px] px-3 rounded-t-md justify-center items-center -left-0.75 -top-3.75 bg-coopmaths-struct dark:bg-coopmathsdark-struct font-semibold text-xs text-coopmaths-canvas dark:text-coopmathsdark-canvas"
+            class="relative border-l-coopmaths-struct dark:border-l-coopmathsdark-struct border-l-[3px] mt-6 py-2 pl-4"
+            use:renderMath={zoom}
           >
-            Correction
+            <div
+              class="absolute flex flex-row py-[1.5px] px-3 rounded-t-md justify-center items-center -left-0.75 -top-3.75 bg-coopmaths-struct dark:bg-coopmathsdark-struct font-semibold text-xs text-coopmaths-canvas dark:text-coopmathsdark-canvas"
+            >
+              Correction
+            </div>
+            {#if exercise.consigneCorrection && exercise.consigneCorrection.length > 0}
+              <p class="mb-2 font-light">
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                {@html exercise.consigneCorrection}
+              </p>
+            {/if}
+            <ul
+              class="{exercise.listeCorrections.length === 1 ||
+              !exercise.listeAvecNumerotation
+                ? 'list-none'
+                : 'numbered-list'} w-full list-inside marker:text-coopmaths-struct dark:marker:text-coopmathsdark-struct marker:font-bold"
+            >
+              {#each exercise.listeCorrections as correction, i (i)}
+                <div>
+                  <li
+                    class="py-1 overflow-x-auto"
+                    style="line-height: {exercise.spacingCorr || 1}"
+                  >
+                    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                    {@html mathaleaFormatExercice(
+                      displayedCorrection(correction),
+                    )}
+                  </li>
+                </div>
+              {/each}
+            </ul>
           </div>
-          {#if exercise.consigneCorrection && exercise.consigneCorrection.length > 0}
-            <p class="mb-2 font-light">
-              <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-              {@html exercise.consigneCorrection}
-            </p>
-          {/if}
-          <ul
-            class="{exercise.listeCorrections.length === 1 ||
-            !exercise.listeAvecNumerotation
-              ? 'list-none'
-              : 'numbered-list'} w-full list-inside marker:text-coopmaths-struct dark:marker:text-coopmathsdark-struct marker:font-bold"
-          >
-            {#each exercise.listeCorrections as correction, i (i)}
-              <div>
-                <li
-                  class="py-1 overflow-x-auto"
-                  style="line-height: {exercise.spacingCorr || 1}"
-                >
-                  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                  {@html mathaleaFormatExercice(correction)}
-                </li>
-              </div>
-            {/each}
-          </ul>
-        </div>
+        {/key}
       {/if}
     </article>
 
@@ -426,6 +459,22 @@
         onclose={() => setCorrectionMode('hidden')}
       >
         <div class="absolute top-3 right-3 flex flex-row items-center gap-2">
+          <!--
+            Le menu de la carte est masqué derrière la modale : le niveau de
+            détail doit rester réglable ici, sans fermer la correction.
+          -->
+          <button
+            type="button"
+            class="rounded-full px-3 h-9 text-sm text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-action hover:bg-coopmaths-action-darkest dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-darkest"
+            title={correctionDetail === 'minimal'
+              ? 'Afficher la correction entière'
+              : "Quand une correction met sa réponse en évidence (en orange), n'afficher que cette réponse"}
+            onclick={() =>
+              (correctionDetail =
+                correctionDetail === 'minimal' ? 'full' : 'minimal')}
+          >
+            {correctionDetail === 'minimal' ? 'Complète' : 'Minimale'}
+          </button>
           <button
             type="button"
             class="flex items-center justify-center w-9 h-9 rounded-full text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-action hover:bg-coopmaths-action-darkest dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-darkest"
@@ -459,32 +508,36 @@
           Correction — {exercise.id?.replace('.js', '').replace('.ts', '') ??
             ''}
         </h2>
-        <div use:renderMath={modalZoom}>
-          {#if exercise.consigneCorrection && exercise.consigneCorrection.length > 0}
-            <p class="mb-2 font-light">
-              <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-              {@html exercise.consigneCorrection}
-            </p>
-          {/if}
-          <ul
-            class="{exercise.listeCorrections.length === 1 ||
-            !exercise.listeAvecNumerotation
-              ? 'list-none'
-              : 'numbered-list'} w-full list-inside marker:text-coopmaths-struct dark:marker:text-coopmathsdark-struct marker:font-bold"
-          >
-            {#each exercise.listeCorrections as correction, i (i)}
-              <div>
-                <li
-                  class="py-1"
-                  style="line-height: {exercise.spacingCorr || 1}"
-                >
-                  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                  {@html mathaleaFormatExercice(correction)}
-                </li>
-              </div>
-            {/each}
-          </ul>
-        </div>
+        {#key correctionDetail}
+          <div use:renderMath={modalZoom}>
+            {#if exercise.consigneCorrection && exercise.consigneCorrection.length > 0}
+              <p class="mb-2 font-light">
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                {@html exercise.consigneCorrection}
+              </p>
+            {/if}
+            <ul
+              class="{exercise.listeCorrections.length === 1 ||
+              !exercise.listeAvecNumerotation
+                ? 'list-none'
+                : 'numbered-list'} w-full list-inside marker:text-coopmaths-struct dark:marker:text-coopmathsdark-struct marker:font-bold"
+            >
+              {#each exercise.listeCorrections as correction, i (i)}
+                <div>
+                  <li
+                    class="py-1"
+                    style="line-height: {exercise.spacingCorr || 1}"
+                  >
+                    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                    {@html mathaleaFormatExercice(
+                      displayedCorrection(correction),
+                    )}
+                  </li>
+                </div>
+              {/each}
+            </ul>
+          </div>
+        {/key}
       </dialog>
     {/if}
   {/key}

@@ -233,6 +233,27 @@ installer et nettoyer des listeners liés à un rendu. Exemple :
 `cube-iso-interaction`, injecté par `mathalea2d()` quand `updateCubeIso()`
 enregistre une projection 3D manipulable.
 
+Un composant technique qui doit **changer les réglages de son exercice** (donc
+provoquer une régénération et une mise à jour de l'URL) émet l'événement DOM
+`settings`, avec le même `detail` que le panneau de réglages (`sup`, `sup2`,
+`nbQuestions`…) :
+
+```ts
+this.dispatchEvent(
+  new CustomEvent('settings', {
+    detail: { sup: nouvelleValeur },
+    bubbles: true,
+    composed: true,
+  }),
+)
+```
+
+`ExerciceMathaleaVueProf` écoute cet événement sur l'`<article>` de l'énoncé et
+le traite avec `handleNewSettings()`. Ne pas écrire directement dans
+`exercicesParams` : l'exercice ne serait pas régénéré. Exemple :
+`questions-de-cours-selecteur`, voir
+[Questions de cours](../architecture/questions-de-cours.md).
+
 Pour remplacer un écouteur global `exercicesAffiches` qui ne sert qu'à attendre
 que le HTML d'un exercice soit dans le DOM, utiliser `mathalea-dom-ready`. Le
 composant reçoit un nom d'action et un payload sérialisable, puis exécute le

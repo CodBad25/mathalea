@@ -70,6 +70,25 @@
     }
   }
 
+  // Mêmes précautions pour les réglages qu'un composant de l'énoncé peut
+  // changer lui-même (le sélecteur des questions de cours par exemple) : le
+  // formulaire doit refléter la nouvelle valeur, sans écraser une saisie en
+  // cours puisque celle-ci ne modifie pas `exercice`.
+  let previousNbQuestions: number | undefined
+  $: {
+    if (previousNbQuestions !== exercice.nbQuestions) {
+      previousNbQuestions = exercice.nbQuestions
+      nbQuestions = exercice.nbQuestions
+    }
+  }
+  let previousSup: string | number | boolean | undefined
+  $: {
+    if (previousSup !== exercice.sup) {
+      previousSup = exercice.sup
+      sup = exercice.sup === 'false' ? false : exercice.sup
+    }
+  }
+
   onMount(() => {
     nbQuestions = exercice.nbQuestions
     coeffBareme = normaliseCoeffBareme(exercice.coeffBareme)

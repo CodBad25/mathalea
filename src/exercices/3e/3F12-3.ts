@@ -44,7 +44,7 @@ export const dateDeModifImportante = '20/02/2023'
 export const uuid = 'bfb2f'
 
 export const refs = {
-  'fr-fr': ['3F12-3', '2F11-3'],
+  'fr-fr': ['3F12-3', '2F14-1'],
   'fr-ch': ['10FA1B-10', '11FA1A-2', '1mF1-11'],
 }
 export default class TableauDeValeurs extends Exercice {

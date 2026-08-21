@@ -133,7 +133,7 @@ $\\dfrac{1}{\\dfrac{1}{${p}}} = 1 \\times \\dfrac{${p}}{1} = ${miseEnEvidence(`$
             ['m', 'n', 'p'],
           ])
 
-          this.enonce = `Que vaut $\\dfrac{${p}}{${q}} \\times \\dfrac{${q}}{${r}}$ avec $${q}\\neq 0$ et $${r}\\neq 0$ ?`
+          this.enonce = `Que vaut $\\dfrac{${p}}{${q}} \\times \\dfrac{${q}}{${r}}$ avec $${q}\\neq 0$, $${r}\\neq 0$ et $${p}\\neq 0$ ?`
           this.correction = `$\\dfrac{${p}}{${q}} \\times \\dfrac{${q}}{${r}} = \\dfrac{${p} \\times ${q}}{${q} \\times ${r}}$<br>
 On simplifie par $${q}$ au numérateur et au dénominateur : $${miseEnEvidence(`\\dfrac{${p}}{${r}}`)}$`
           this.reponses = [

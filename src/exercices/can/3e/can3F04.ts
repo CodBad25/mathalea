@@ -17,7 +17,7 @@ export const dateDeModifImportante = '13/10/2022'
 export const uuid = '4b600'
 
 export const refs = {
-  'fr-fr': ['can3F04'],
+  'fr-fr': ['can3F04', 'can2F13-05'],
   'fr-ch': [],
 }
 export default class CalculAntecedentLineaire extends ExerciceSimple {

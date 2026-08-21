@@ -418,19 +418,19 @@ export default class Stat {
     // Ajout des étiquettes (valeurs numériques)
     if (valeursOn) {
       objetsToTrace.push(
-        latex2d(texNombre(boxplotData.min), minPoint.x, minPoint.y - 0.8, {
+        latex2d(texNombre(boxplotData.min), minPoint.x, minPoint.y - 0.45, {
           letterSize: 'scriptsize',
         }),
-        latex2d(texNombre(boxplotData.q1), q1Point.x, q1Point.y - 0.8, {
+        latex2d(texNombre(boxplotData.q1), q1Point.x, q1Point.y + 0.45, {
           letterSize: 'scriptsize',
         }),
-        latex2d(texNombre(boxplotData.q2), q2Point.x, q2Point.y - 0.8, {
+        latex2d(texNombre(boxplotData.q2), q2Point.x, q2Point.y - 0.45, {
           letterSize: 'scriptsize',
         }),
-        latex2d(texNombre(boxplotData.q3), q3Point.x, q3Point.y - 0.8, {
+        latex2d(texNombre(boxplotData.q3), q3Point.x, q3Point.y + 0.45, {
           letterSize: 'scriptsize',
         }),
-        latex2d(texNombre(boxplotData.max), maxPoint.x, maxPoint.y - 0.8, {
+        latex2d(texNombre(boxplotData.max), maxPoint.x, maxPoint.y - 0.45, {
           letterSize: 'scriptsize',
         }),
       )
@@ -622,10 +622,22 @@ export default class Stat {
       if (effectifsOn) {
         if (percentVsEffectifs) {
           objets.push(
-            latex2d(texNombre((pairs[i][1] / total) * 100, 2), C.x, C.y, {}),
+            latex2d(
+              `${valuesOn ? (this.isQualitative ? `\\text{${pairs[i][0]}}` : texNombre(Number(pairs[i][0]), 2)) : ''}${texNombre((pairs[i][1] / total) * 100, 2)}`,
+              C.x,
+              C.y,
+              {},
+            ),
           )
         } else {
-          objets.push(latex2d(texNombre(pairs[i][1], 2), C.x, C.y, {}))
+          objets.push(
+            latex2d(
+              `${valuesOn ? (this.isQualitative ? `\\text{${pairs[i][0]}}` : texNombre(Number(pairs[i][0]), 2)) : ''}${texNombre(pairs[i][1], 2)}`,
+              C.x,
+              C.y,
+              {},
+            ),
+          )
         }
       }
     }
@@ -645,6 +657,9 @@ export default class Stat {
     percentVsEffectifs = false,
     effectifsOn = false,
     valuesOn = true,
+    titre = '',
+    labelVertical = '',
+    labelHorizontal = '',
   } = {}) {
     const precision = 2
     // copier et trier selon croissance
@@ -698,16 +713,30 @@ export default class Stat {
     }
 
     const yName = percentVsEffectifs ? 'fréquences' : 'effectifs'
-    const ylabel = percentVsEffectifs ? 'Fréquences en \\%' : 'Effectifs'
-    const title = `${
-      barres
-        ? cumul
-          ? `diagramme cumulé (${croissance ? 'croissant' : 'décroissant'})`
-          : 'Diagramme en barres'
-        : cumul
-          ? `Polygone des ${yName} cumulé${yName === 'fréquences' ? 'es' : 's'} (${croissance ? 'croissantes' : 'décroissantes'})`
-          : `Polygone des ${yName}`
-    } `
+    const labelY =
+      labelVertical !== ''
+        ? labelVertical
+        : percentVsEffectifs
+          ? 'Fréquences en \\%'
+          : 'Effectifs'
+    const labelX =
+      labelHorizontal !== ''
+        ? labelHorizontal
+        : this.isQualitative
+          ? 'Modalités'
+          : 'Valeurs'
+    const title =
+      titre !== ''
+        ? titre
+        : `${
+            barres
+              ? cumul
+                ? `diagramme cumulé (${croissance ? 'croissant' : 'décroissant'})`
+                : 'Diagramme en barres'
+              : cumul
+                ? `Polygone des ${yName} cumulé${yName === 'fréquences' ? 'es' : 's'} (${croissance ? 'croissantes' : 'décroissantes'})`
+                : `Polygone des ${yName}`
+          } `
 
     if (context.isHtml) {
       // code HTML existant inchangé
@@ -723,14 +752,15 @@ export default class Stat {
       let min: number, max: number
       if (this.isQualitative) {
         min = 0
-        max = (this.serieTableau as [any, number][]).length + 1
+        max = (this.serieTableau as [string | number, number][]).length + 1
       } else {
         const numericSerie = (this.serie as number[]).map(Number)
         min = Math.min(...numericSerie) - 1
         max = Math.max(...numericSerie) + 1
       }
 
-      const echelleY = effectifMax < 15 ? 2 : effectifMax < 30 ? 3 : 4
+      const echelleY =
+        effectifMax < 10 ? 1 : effectifMax < 20 ? 2 : effectifMax < 40 ? 4 : 10
       let yLabelsAndOrdinate: [number, number][] = []
       if (percentVsEffectifs) {
         yLabelsAndOrdinate = Array.from({ length: 5 }, (_, i) => [
@@ -864,19 +894,29 @@ export default class Stat {
             }),
           )
         }
-        const texLabel = latex2d(`\\text{${ylabel}}`, -1.5, topCadre / 2, {
+        const texLabelY = latex2d(`\\text{${labelY}}`, -1.5, topCadre / 2, {
           letterSize: 'normalsize',
           orientation: 90,
           opacity: 0.7,
         })
-        histo.push(texLabel)
+
+        histo.push(texLabelY)
+        const texLabelX = latex2d(`\\text{${labelX}}`, max - min, -1.4, {
+          letterSize: 'normalsize',
+          orientation: 0,
+          opacity: 0.7,
+          justify: 'milieu',
+        })
+
+        histo.push(texLabelX)
         const texteTitle = latex2d(
           `\\text{${title}}`,
-          nbValeursDifferentes + 1,
-          topCadre + 0.5,
+          max - min,
+          topCadre + 0.7,
           {
             letterSize: 'normalsize',
             opacity: 0.7,
+            justify: 'milieu',
           },
         )
         histo.push(texteTitle)
@@ -913,8 +953,8 @@ export default class Stat {
       // Options conditionnelles pour pgfplots selon les flags fournis
       const axisOptionsArr: string[] = []
       axisOptionsArr.push(`title={${title}}`)
-      axisOptionsArr.push(`ylabel={${ylabel}}`)
-      axisOptionsArr.push(`xlabel={Valeurs}`)
+      axisOptionsArr.push(`ylabel={${labelY}}`)
+      axisOptionsArr.push(`xlabel={${labelX}}`)
       axisOptionsArr.push(`ymin=0`)
       axisOptionsArr.push(`enlarge x limits=0.15`)
       axisOptionsArr.push(`grid=major`)

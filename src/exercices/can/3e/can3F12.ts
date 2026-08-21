@@ -29,7 +29,7 @@ export const titre = 'Lire des antécédents graphiquement'
 export const uuid = '0e1c6'
 
 export const refs = {
-  'fr-fr': ['can3F12'],
+  'fr-fr': ['can3F12', 'can2F12-02', '2F12-flash2'],
   'fr-ch': ['1mF1-17'],
 }
 type Noeud = {
@@ -40,6 +40,7 @@ type Noeud = {
   isVisible: boolean
 }
 export default class AntecedentSpline extends ExerciceSimple {
+  compteur = 0
   spline: Spline | undefined
   constructor() {
     super()
@@ -197,7 +198,8 @@ export default class AntecedentSpline extends ExerciceSimple {
     if (this.versionQcm) {
       this.question += `L'ensemble des antécédents de $${y1}$ est : `
     }
-    const correctionFigureId = `can3F12CorrectionEx${this.numeroExercice ?? 0}Q0`
+    const questionId = this.compteur++
+    const correctionFigureId = `can3F12CorrectionEx${this.numeroExercice ?? 0}Q${questionId}`
     const objetsCorrection = [
       repere1,
       courbe1,

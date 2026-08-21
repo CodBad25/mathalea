@@ -30,7 +30,7 @@ export const dateDePublication = '25/10/2021' // La date de publication initiale
 export const uuid = 'f554f'
 
 export const refs = {
-  'fr-fr': ['can3F08'],
+  'fr-fr': ['can3F08', 'can2F21-08'],
   'fr-ch': [],
 }
 export default class LectureGraphiqueFonctionAffine2 extends ExerciceSimple {

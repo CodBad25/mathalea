@@ -9,6 +9,13 @@ export type TbiCorrectionMode =
   | 'modal'
 
 /**
+ * Niveau de détail de la correction affichée dans une carte TBI :
+ * la correction entière, ou réduite à ses réponses mises en évidence
+ * (même réglage que « Correction minimale » de la vue Typst).
+ */
+export type TbiCorrectionDetail = 'full' | 'minimal'
+
+/**
  * Un exercice affiché dans la vue TBI.
  * exercise est null pour les exercices non pris en charge (statiques, svelte).
  */

@@ -152,7 +152,8 @@ export default class AutoF01d extends ExerciceQcmA {
       `$${texNombre(resultat)}$`, // Bonne réponse en premier
       ...mauvaisesReponsesUniques.map((val) => `$${texNombre(val)}$`), // Mauvaises réponses ensuite
     ]
-    const figureCorrectionId = `1A-F01-4-correctionEx${this.numeroExercice ?? 0}Q0`
+    const questionId = this.compteur++
+    const figureCorrectionId = `1A-F01-4-correctionEx${this.numeroExercice ?? 0}Q${questionId}`
     const objetsCorrection = [
       ...objetsEnonce,
       ...[abs1, abs2].map((abs, index) =>

@@ -63,6 +63,38 @@ handleAnswers(
 
 Le helper injecte un custom element `mathalea-mathfield`.
 
+### Ajouter des touches propres à une question
+
+Les `KeyboardType` sont des claviers figés. Quand une question a besoin de
+touches qui lui sont propres (une variable, une notation, un modèle
+d'expression), utiliser `KeyboardType.clavierPersonnalisable` — chiffres et
+opérations de base — et lui passer ces touches :
+
+```ts
+texte += ajouteChampTexteMathLive(
+  this,
+  i,
+  KeyboardType.clavierPersonnalisable,
+  { dataKeys: ['u_n', 'q', 'POW', '+\\infty'] },
+)
+```
+
+Elles apparaissent dans un bloc « Pour cette question », en tête du clavier.
+Chaque touche est décrite par une chaîne :
+
+- un nom de raccourci prédéfini (`POW`, `SQRT`, `VECT`, `SIGMA`,
+  `PMATRIX11`…) donne la touche correspondante ;
+- toute autre chaîne est du LaTeX inséré tel quel, affiché sur la touche entre
+  `$…$` (`a`, `\pi`, `u_n`, `\overrightarrow{AB}`…) ;
+- les emplacements MathLive (`#0`, `#1`, `#@`) sont affichés comme des carrés
+  et conservés à l'insertion, si bien que le curseur se place dans le trou :
+  `f(#0)` affiche `f(□)`.
+
+Les raccourcis disponibles et cette mécanique vivent dans
+`src/components/keyboard/lib/touchesPersonnalisees.ts`. Le clavier lit ces
+touches dans l'attribut `data-keys` du champ au moment où il prend le focus :
+elles changent donc d'une question à l'autre.
+
 ## Champ texte simple
 
 À utiliser pour une réponse textuelle sans MathLive.

@@ -110,6 +110,12 @@ Pour un exercice de lecture graphique, gardez la spline sur l'instance si la cor
 this.spline = f
 ```
 
+Pour les exercices qui cherchent beaucoup d'antecedents, calculez les valeurs
+utiles une seule fois puis reutilisez-les. Les appels a `solve()` sont mis en
+cache par instance de `Spline`, mais les boucles du type
+`trouveYPourNAntecedents()` / `nombreAntecedentsMaximum()` restent couteuses si
+elles sont relancees plusieurs fois avec les memes bornes.
+
 ## Faire un tableau de signes simple
 
 Utilisez `tableauSignesFonction()` quand vous avez une fonction JavaScript et un intervalle.

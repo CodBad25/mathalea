@@ -1,4 +1,4 @@
-import ProbabilitesUnionIntersection from '../2e/2S30-7'
+import ProbabilitesUnionIntersection from '../2e/2S21-1'
 export const titre =
   'Calculer des probabilités dans une situation concrète (union, intersection, probabilité conditionnelle)'
 export const interactifReady = true
@@ -6,7 +6,7 @@ export const interactifType = 'multi-mathfield'
 export const dateDePublication = '30/07/2026'
 
 /**
- * Clone de 2S30-7 pour le Bac Pro Première.
+ * Clone de 2S21-1 pour le Bac Pro Première.
  * Probabilité conditionnelle à rajouter dans le titre de l'exercice.
  */
 

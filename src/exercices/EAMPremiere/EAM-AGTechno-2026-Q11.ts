@@ -14,7 +14,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Interprêter un diagramme circulaire'
+export const titre = 'Interpréter un diagramme circulaire'
 export const dateDePublication = '29/06/2026'
 
 const ages = [
@@ -58,7 +58,7 @@ export default class AutoQ11AGt2026 extends ExerciceQcmA {
     serie.isQualitative = true
     this.enonce = `${raisonDiag}.<br>
     ${serie.diagrammeCirc({ percentVsEffectifs: true, effectifsOn: true })}<br>
-    La proportions de joueurs ${question} est :`
+    La proportion de joueurs ${question} est :`
     let sol: string
     let dist1: string
     let dist2: string
@@ -75,10 +75,10 @@ export default class AutoQ11AGt2026 extends ExerciceQcmA {
       suiteCorrection = `la somme des pourcentages des classes d'âge inférieures ou égales à $${age}$ ans, soit :<br>
       $${liste
         .slice(0, index + 1)
-        .map((el, i) => `${texNombre(el / 10, 1)}\\,\\%`)
+        .map((el, _i) => `${texNombre(el / 10, 1)}\\,\\%`)
         .join(
           '+',
-        )}=${miseEnEvidence(texNombre((effectifsCumulesCroissants[index] / total) * 100, 1))}\\,\\%$`
+        )}=${miseEnEvidence(texNombre((effectifsCumulesCroissants[index] / total) * 100, 1) + `\\,\\%`)}$`
     } else if (question === `de $${age}$ ans et plus`) {
       index = agesMin.findIndex((el) => el === age)
       sol = `$${texNombre((effectifsCumulesDecroissants[index] / total) * 100, 1)}\\,\\%$`
@@ -90,25 +90,25 @@ export default class AutoQ11AGt2026 extends ExerciceQcmA {
       suiteCorrection = `la somme des pourcentages des classes d'âge supérieures ou égales à $${age}$ ans, soit :<br>
       $${liste
         .slice(index)
-        .map((el, i) => `${texNombre(el / 10, 1)}\\,\\%`)
+        .map((el, _i) => `${texNombre(el / 10, 1)}\\,\\%`)
         .join(
           '+',
-        )}=${miseEnEvidence(texNombre((effectifsCumulesDecroissants[index] / total) * 100, 1))}\\,\\%$`
+        )}=${miseEnEvidence(texNombre((effectifsCumulesDecroissants[index] / total) * 100, 1) + `\\,\\%`)}$`
     } else if (question === `de moins de $${age}$ ans`) {
       index = agesMin.findIndex((el) => el === age)
-      sol = `$${texNombre((effectifsCumulesCroissants[index] / total) * 100, 1)}\\,\\%$`
+      sol = `$${texNombre((effectifsCumulesCroissants[index - 1] / total) * 100, 1)}\\,\\%$`
       dist1 = `$${texNombre((liste[index] / total) * 100, 1)}\\,\\%$`
       dist2 = `$${texNombre(
-        100 - (effectifsCumulesCroissants[index] / total) * 100,
+        100 - (effectifsCumulesCroissants[index - 1] / total) * 100,
         1,
       )}\\,\\%$`
       suiteCorrection = `la somme des pourcentages des classes d'âge inférieures à $${age}$ ans, soit :<br>
       $${liste
         .slice(0, index)
-        .map((el, i) => `${texNombre(el / 10, 1)}\\,\\%`)
+        .map((el, _i) => `${texNombre(el / 10, 1)}\\,\\%`)
         .join(
           '+',
-        )}=${miseEnEvidence(texNombre((effectifsCumulesCroissants[index] / total) * 100, 1))}\\,\\%$`
+        )}=${miseEnEvidence(texNombre((effectifsCumulesCroissants[index - 1] / total) * 100, 1) + `\\,\\%`)}$`
     } else if (question === `de plus de $${age}$ ans`) {
       index = agesMax.findIndex((el) => el === age)
       sol = `$${texNombre((effectifsCumulesDecroissants[index + 1] / total) * 100, 1)}\\,\\%$`
@@ -120,10 +120,10 @@ export default class AutoQ11AGt2026 extends ExerciceQcmA {
       suiteCorrection = `la somme des pourcentages des classes d'âge supérieures à $${age}$ ans, soit :<br>
       $${liste
         .slice(index + 1)
-        .map((el, i) => `${texNombre(el / 10, 1)}\\,\\%`)
+        .map((el, _i) => `${texNombre(el / 10, 1)}\\,\\%`)
         .join(
           '+',
-        )}=${miseEnEvidence(texNombre((effectifsCumulesDecroissants[index + 1] / total) * 100, 1))}\\,\\%$`
+        )}=${miseEnEvidence(texNombre((effectifsCumulesDecroissants[index + 1] / total) * 100, 1) + `\\,\\%`)}$`
     } else {
       throw new Error(`question non prévue : ${question}`)
     }

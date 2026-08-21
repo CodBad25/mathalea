@@ -109,7 +109,7 @@ export default class OrdonnerCroissant extends ExerciceQcmA {
       {
         a: { tex: '0,125', val: 0.125, desc: 'décimal' },
         b: {
-          tex: '\\dfrac{127}{${texNombre(1000)}}',
+          tex: `\\dfrac{127}{${texNombre(1000)}}`,
           val: 0.127,
           desc: `fraction sur $${texNombre(1000)}$`,
         },

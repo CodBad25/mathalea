@@ -1,258 +1,290 @@
-import Exercice from '../Exercice'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-
-import { texNombre } from '../../lib/outils/texNombre'
-import Decimal from 'decimal.js'
+import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import ce from '../../lib/interactif/comparisonFunctions'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { tableauColonneLigne } from '../../lib/2d/tableau'
-import { sp } from '../../lib/outils/outilString'
+import Exercice from '../Exercice'
+
 export const titre =
-  "Calculer des probabilités avec des unions et intersections d'événements"
-export const dateDePublication = '25/05/2024'
+  "Déterminer une médiane ou un quartile à partir d'un tableau d'effectifs"
 export const interactifReady = true
 export const interactifType = 'mathLive'
-/**
- *
- * @author Gilles Mora
- */
-export const uuid = 'ea35b'
+export const dateDePublication = '18/08/2026'
+export const uuid = '640f6'
+
 export const refs = {
-  'fr-fr': ['2S30-6', 'BP1SP01'],
-  'fr-ch': [],
+  'fr-fr': ['2S30-6'],
+  'fr-ch': ['NR'],
 }
-export default class ProbaUnionInter extends Exercice {
+
+type Indicateur = 'mediane' | 'q1' | 'q3'
+
+interface Situation {
+  introduction: string
+  intituleValeurs: string
+  intituleEffectifs: string
+  valeurs: number[]
+  effectifs: number[]
+}
+
+function valeurDeRang(
+  valeurs: number[],
+  effectifsCumules: number[],
+  rang: number,
+): number {
+  return valeurs[effectifsCumules.findIndex((effectif) => effectif >= rang)]
+}
+
+function ecritureDecimaleFrancaise(valeur: number): string {
+  return String(valeur).replace('.', '{,}')
+}
+
+/**
+ * @author Arnaud Meistermann
+ */
+export default class DeterminerMedianeQuartilesTableau extends Exercice {
   constructor() {
     super()
-    // this.consigne = 'Calculer '
-    this.sup = 7
-    this.nbQuestions = 1
+    this.nbQuestions = 3
+    this.nbQuestionsModifiable = true
+    this.consigne = ''
     this.besoinFormulaireTexte = [
-      'Type de questions',
-      [
-        'Nombres séparés par des tirets  :',
-        '1 : On cherche P(A union B)',
-        '2 : On cherche P(A inter B)',
-        '3 : On cherche P(A)',
-        '4 : Avec des événements incompatibles',
-        '5 : Avec des événements contraires',
-        '6 : Avec un tableau',
-        '7 : Mélange',
-      ].join('\n'),
+      'Indicateur à calculer',
+      '1 : Médiane\n2 : Premier quartile Q1\n3 : Troisième quartile Q3\n4 : Mélange',
     ]
+    this.sup = 4
   }
 
   nouvelleVersion() {
-    const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
+    const listeIndicateurs = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
-      max: 6,
-      melange: 7,
-      defaut: 7,
+      max: 3,
+      defaut: 4,
+      melange: 4,
+      listeOfCase: ['mediane', 'q1', 'q3'] satisfies Indicateur[],
       nbQuestions: this.nbQuestions,
-    })
+    }) as Indicateur[]
+    const listeSituations = combinaisonListes([0, 1, 2, 3], this.nbQuestions)
 
-    const listeTypeDeQuestions = combinaisonListes(
-      typesDeQuestionsDisponibles,
-      this.nbQuestions,
-    )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      const a = randint(1, 20)
-      let reponse = ''
-      let texte = ''
-      let texteCorr = ''
-      let pA
-      let pB
-      pA = new Decimal(randint(1, 99)).div(100)
-      pB = new Decimal(randint(1, 99)).div(100)
-      let pAinterB
-      pAinterB = new Decimal(randint(1, 99)).div(100)
-      let pAunionB = pA.add(pB).sub(pAinterB)
-      while (
-        pAunionB.greaterThan(0.99) === true ||
-        pAunionB.lessThan(0.01) === true ||
-        pAinterB.greaterThan(pA.sub(0.01)) === true ||
-        pAinterB.greaterThan(pB.sub(0.01)) === true
-      ) {
-        pA = new Decimal(randint(1, 99)).div(100)
-        pB = new Decimal(randint(1, 99)).div(100)
-        pAinterB = new Decimal(randint(1, 99)).div(100)
-        pAunionB = pA.add(pB).sub(pAinterB)
-      }
-      switch (listeTypeDeQuestions[i]) {
-        case 1: // on cherche p(A union B)
-          reponse = texNombre(pAunionB, 2)
-          texte = `Soient $A$ et $B$ deux événements vérifiant :  <br>
-           $\\bullet$  $P(A)=${texNombre(pA, 2)}$ ${sp(4)} $\\bullet$  $P(B)=${texNombre(pB, 2)}$ ${sp(4)}
-           $\\bullet$  $P(A\\cap B)=${texNombre(pAinterB, 2)}$.<br>
-            Calculer $P(A\\cup B)$.
-           `
-          texteCorr = `On sait que $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$.<br><br>
-            $\\begin{aligned} 
-            P(A\\cup B)&=P(A)+P(B)-P(A\\cap B)\\\\
-            &=${texNombre(pA, 2)}+${texNombre(pB, 2)}-${texNombre(pAinterB, 2)}\\\\
-            &=${reponse}
-            \\end{aligned}$<br>
-            Ainsi $P(A\\cup B)=${miseEnEvidence(reponse)}$.`
-          texte +=
-            '<br>' +
-            ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
-              texteAvant: ' $P(A\\cup B)=$',
-            })
-          break
-        case 2: // on cherche P(Ainter B)
-          reponse = texNombre(pAinterB, 2)
-          texte = `Soient $A$ et $B$ deux événements vérifiant :  <br>
-         $\\bullet$  $P(A)=${texNombre(pA, 2)}$  ${sp(4)} $\\bullet$  $P(B)=${texNombre(pB, 2)}$  ${sp(4)} $\\bullet$  $P(A\\cup B)=${texNombre(pAunionB, 2)}$.<br>
-          Calculer $P(A\\cap B)$.
-         `
-          texteCorr = `On sait que $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$.<br><br>
-          $\\begin{aligned} 
-          P(A\\cup B)&=P(A)+P(B)-P(A\\cap B)\\\\
-          ${texNombre(pAunionB, 2)} &=${texNombre(pA, 2)}+${texNombre(pB, 2)}-P(A\\cap B)\\\\
-          P(A\\cap B) &=${texNombre(pA, 2)}+${texNombre(pB, 2)}-${texNombre(pAunionB, 2)}\\\\
-          P(A\\cap B)&=${reponse}
-          \\end{aligned}$<br>
-          Ainsi $P(A\\cap B)=${miseEnEvidence(reponse)}$.`
-          texte +=
-            '<br>' +
-            ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
-              texteAvant: '$P(A\\cap B)=$',
-            })
-          break
+    for (let i = 0; i < this.nbQuestions; i++) {
+      const situations: Situation[] = [
+        {
+          introduction:
+            "Une enquête a été réalisée sur le nombre d'occupants par véhicule lors du passage au péage d'une autoroute. Les résultats de cette enquête sont consignés dans le tableau ci-dessous.",
+          intituleValeurs: "Nombre d'occupants",
+          intituleEffectifs: 'Nombre de véhicules',
+          valeurs: [1, 2, 3, 4, 5],
+          effectifs: Array.from({ length: 5 }, () => 50 * randint(1, 8)),
+        },
+        {
+          introduction:
+            "On a relevé le nombre de livres empruntés au CDI par les élèves d'un groupe pendant un mois. Les résultats sont consignés dans le tableau ci-dessous.",
+          intituleValeurs: 'Nombre de livres empruntés',
+          intituleEffectifs: "Nombre d'élèves",
+          valeurs: [0, 1, 2, 3, 4],
+          effectifs: [
+            randint(1, 10),
+            ...Array.from({ length: 4 }, () => randint(0, 10)),
+          ],
+        },
+        {
+          introduction:
+            "Une enquête a été menée auprès de familles sur leur nombre d'enfants. Les résultats sont consignés dans le tableau ci-dessous.",
+          intituleValeurs: "Nombre d'enfants",
+          intituleEffectifs: 'Nombre de familles',
+          valeurs: [0, 1, 2, 3, 4],
+          effectifs: Array.from({ length: 5 }, () => randint(5, 40)),
+        },
+        {
+          introduction:
+            "On a relevé le nombre de buts marqués par les équipes lors d'une journée de championnat. Les résultats sont consignés dans le tableau ci-dessous.",
+          intituleValeurs: 'Nombre de buts marqués',
+          intituleEffectifs: "Nombre d'équipes",
+          valeurs: [0, 1, 2, 3, 4],
+          effectifs: Array.from({ length: 5 }, () => randint(1, 10)),
+        },
+      ]
+      const situation = situations[listeSituations[i]]
+      const { effectifs, valeurs } = situation
+      const effectifsCumules = effectifs.map((_, index) =>
+        effectifs
+          .slice(0, index + 1)
+          .reduce((somme, valeur) => somme + valeur, 0),
+      )
+      const effectifTotal = effectifsCumules[4]
+      const indicateur = listeIndicateurs[i]
+      const tableau = tableauColonneLigne(
+        [`\\text{${situation.intituleValeurs}}`, ...valeurs.map(String)],
+        [`\\text{${situation.intituleEffectifs}}`],
+        effectifs.map(String),
+      )
+      const tableauCumule = tableauColonneLigne(
+        [`\\text{${situation.intituleValeurs}}`, ...valeurs.map(String)],
+        ['\\text{Effectif}', '\\text{Effectif cumulé croissant}'],
+        [...effectifs, ...effectifsCumules].map(String),
+      )
 
-        case 3: // on cherche P(A)
-          reponse = texNombre(pA, 2)
-          texte = `Soient $A$ et $B$ deux événements vérifiant :  <br>
-           $\\bullet$  $P(B)=${texNombre(pB, 2)}$  ${sp(4)} $\\bullet$  $P(A\\cap B)=${texNombre(pAinterB, 2)}$  ${sp(4)}$\\bullet$  $P(A\\cup B)=${texNombre(pAunionB, 2)}$.<br>
-            Calculer $P(A)$.
-           `
-          texteCorr = `On sait que $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$.<br><br>
-            $\\begin{aligned} 
-            P(A\\cup B)&=P(A)+P(B)-P(A\\cap B)\\\\
-            ${texNombre(pAunionB, 2)}&=P(A)+${texNombre(pB, 2)}-${texNombre(pAinterB, 2)}\\\\
-            P(A)&=${texNombre(pAunionB, 2)}-${texNombre(pB, 2)}+${texNombre(pAinterB, 2)}\\\\
-            &=${reponse}
-            \\end{aligned}$<br>
-            Ainsi $P(A)=${miseEnEvidence(reponse)}$.`
-          texte +=
-            '<br>' +
-            ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
-              texteAvant: '$P(A)=$',
-            })
-          break
-        case 4: // on cherche P(A union B) avec événements incompatibles
-          {
-            const pAI = new Decimal(randint(1, 40)).div(100)
-            const pBI = new Decimal(randint(1, 40)).div(100)
-            const pAIunionBI = pAI.add(pBI)
-            reponse = texNombre(pAIunionBI, 2)
-            texte = `Soient $A$ et $B$ deux événements incompatibles vérifiant :  <br>
-          $\\bullet$  $P(A)=${texNombre(pAI, 2)}$ ${sp(4)} $\\bullet$  $P(B)=${texNombre(pBI, 2)}$.<br>
-           Calculer $P(A\\cup B)$.`
-            texteCorr = `Lorsque deux événements sont incompatibles,  $P(A\\cup B)=P(A)+P(B)$.<br><br>
-          $\\begin{aligned} 
-            P(A\\cup B)&=P(A)+P(B)\\\\
-            P(A\\cup B)&=${texNombre(pAI, 2)}+${texNombre(pBI, 2)}\\\\
-            P(A\\cup B) &=${reponse}           
-            \\end{aligned}$<br>
-            Ainsi $P(A\\cup B)=${miseEnEvidence(reponse)}$.`
-            texte +=
-              '<br>' +
-              ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
-                texteAvant: '$P(A\\cup B)=$',
-              })
-          }
-          break
-        case 5:
-          {
-            // on cherche P(A union  B) avec des événements contraires
-            const pAbarre = pA.mul(-1).add(1)
-            const pBbarre = pB.mul(-1).add(1)
-            reponse = texNombre(pAunionB, 2)
-            texte = `Soient $A$ et $B$ deux événements  vérifiant :  <br>
-             $\\bullet$  $P(\\bar{A})=${texNombre(pAbarre, 2)}$  ${sp(4)} $\\bullet$  $P(\\bar{B})=${texNombre(pBbarre, 2)}$  ${sp(4)} $\\bullet$  $P(A\\cap B)=${texNombre(pAinterB, 2)}$.<br>
-              Calculer $P(A\\cup B)$.`
-            texteCorr = `On sait que $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$.<br><br>
-             Or $P(A)=1-P(\\bar{A})=${texNombre(pA, 2)}$ et $P(B)=1-P(\\bar{B})=${texNombre(pB, 2)}$.<br>
-             <br>$\\begin{aligned} 
-             P(A\\cup B)&=P(A)+P(B)-P(A\\cap B)\\\\
-             P(A\\cup B)&=${texNombre(pA, 2)}+${texNombre(pB, 2)}-${texNombre(pAinterB, 2)}\\\\
-             P(A\\cup B)&=${texNombre(pAunionB, 2)}
-             \\end{aligned}$<br>
-             Ainsi $P(A\\cup B)=${miseEnEvidence(reponse)}$.`
-            texte +=
-              '<br>' +
-              ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
-                texteAvant: '$P(A\\cup B)=$',
-              })
-          }
-          break
+      let demande: string
+      let inviteReponse: string
+      let correctionCalcul: string
+      let resultat: string
+      let bornesMedianes: [number, number] | undefined
 
-        case 6:
-          {
-            // avec un tableau
-            const pAbarre = pA.mul(-1).add(1)
-            const pBbarre = pB.mul(-1).add(1)
-            const nbA = pA.mul(100)
-            const nbB = pB.mul(100)
-            const nbAinterB = pAinterB.mul(100)
-            const nbAbinterB = nbB.sub(nbAinterB)
-            const nbAinterBb = nbA.sub(nbAinterB)
-            const nbAb = pAbarre.mul(100)
-            const nbBb = pBbarre.mul(100)
-            const nbAbinterBb = nbAb.sub(nbAbinterB)
-            const tableau = tableauColonneLigne(
-              ['', 'A', '\\overline{A}', '\\text{Total}'],
-              ['B', '\\overline{B}', '\\text{Total}'],
-              [
-                `${texNombre(nbAinterB, 2)}`,
-                `${texNombre(nbAbinterB, 2)}`,
-                `${texNombre(nbB, 2)}`,
-                `${texNombre(nbAinterBb, 2)}`,
-                `${texNombre(nbAbinterBb, 2)}`,
-                `${texNombre(nbBb, 2)}`,
-                `${texNombre(nbA, 2)}`,
-                `${texNombre(nbAb, 2)}`,
-                100,
-              ],
-            )
-            reponse = texNombre(pAunionB, 2)
-            texte = `Voici un tableau d'effectifs concernant deux événements $A$ et $B$ :  <br>
-            ${tableau}
-              
-                Calculer $P(A\\cup B)$.`
-            texteCorr = `On sait que $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$.<br><br>
-               <br>$\\begin{aligned} 
-               P(A\\cup B)&=P(A)+P(B)-P(A\\cap B)\\\\
-               P(A\\cup B)&=${texNombre(pA, 2)}+${texNombre(pB, 2)}-${texNombre(pAinterB, 2)}\\\\
-               P(A\\cup B)&=${texNombre(pAunionB, 2)}
-               \\end{aligned}$<br>
-               Ainsi $P(A\\cup B)=${miseEnEvidence(reponse)}$.`
-            texte +=
-              '<br>' +
-              ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
-                texteAvant: '$P(A\\cup B)=$',
-              })
-          }
-          break
+      if (indicateur === 'q1') {
+        const rang = Math.ceil(effectifTotal / 4)
+        const q1 = valeurDeRang(valeurs, effectifsCumules, rang)
+        demande = 'Déterminer le premier quartile $Q_1$ de cette série.'
+        inviteReponse = 'Le premier quartile est égal à '
+        resultat = String(q1)
+        correctionCalcul =
+          'Le premier quartile est la plus petite valeur pour laquelle au moins 25 % des données lui sont inférieures ou égales.<br>' +
+          'Pour trouver son rang, on prend le plus petit entier supérieur ou égal à $\\dfrac{N}{4}$.<br>' +
+          '$\\dfrac{' +
+          effectifTotal +
+          '}{4}=' +
+          ecritureDecimaleFrancaise(effectifTotal / 4) +
+          '$.<br>Son rang est donc $' +
+          rang +
+          '$.<br>' +
+          "D'après les effectifs cumulés, la valeur de rang $" +
+          rang +
+          '$ est $' +
+          q1 +
+          '$.<br>Ainsi, $Q_1=' +
+          miseEnEvidence(q1) +
+          '$.'
+      } else if (indicateur === 'q3') {
+        const rang = Math.ceil((3 * effectifTotal) / 4)
+        const q3 = valeurDeRang(valeurs, effectifsCumules, rang)
+        demande = 'Déterminer le troisième quartile $Q_3$ de cette série.'
+        inviteReponse = 'Le troisième quartile est égal à '
+        resultat = String(q3)
+        correctionCalcul =
+          'Le troisième quartile est la plus petite valeur pour laquelle au moins 75 % des données lui sont inférieures ou égales.<br>' +
+          'Pour trouver son rang, on prend le plus petit entier supérieur ou égal à $\\dfrac{3N}{4}$.<br>' +
+          '$\\dfrac{3\\times' +
+          effectifTotal +
+          '}{4}=' +
+          ecritureDecimaleFrancaise((3 * effectifTotal) / 4) +
+          '$.<br>Son rang est donc $' +
+          rang +
+          '$.<br>' +
+          "D'après les effectifs cumulés, la valeur de rang $" +
+          rang +
+          '$ est $' +
+          q3 +
+          '$.<br>Ainsi, $Q_3=' +
+          miseEnEvidence(q3) +
+          '$.'
+      } else {
+        demande = 'Déterminer une médiane de cette série.'
+        inviteReponse = 'Une valeur possible de la médiane est '
+        if (effectifTotal % 2 === 0) {
+          const rang1 = effectifTotal / 2
+          const rang2 = rang1 + 1
+          const valeur1 = valeurDeRang(valeurs, effectifsCumules, rang1)
+          const valeur2 = valeurDeRang(valeurs, effectifsCumules, rang2)
+          bornesMedianes = [valeur1, valeur2]
+          const mediane = new FractionEtendue(valeur1 + valeur2, 2).simplifie()
+          resultat = mediane.texFractionSimplifiee
+          correctionCalcul =
+            "L'effectif de la série est pair.<br>" +
+            '$\\dfrac{' +
+            effectifTotal +
+            '}{2}=' +
+            rang1 +
+            '$. La médiane est donc entre la $' +
+            rang1 +
+            '^{\\text{e}}$ et la $' +
+            rang2 +
+            '^{\\text{e}}$ valeur.<br>' +
+            "D'après les effectifs cumulés, ces valeurs sont $" +
+            valeur1 +
+            '$ et $' +
+            valeur2 +
+            '$.<br>Une valeur possible de la médiane est :<br>' +
+            '$\\dfrac{' +
+            valeur1 +
+            '+' +
+            valeur2 +
+            '}{2}=' +
+            miseEnEvidence(resultat) +
+            '$.'
+        } else {
+          const rang = (effectifTotal + 1) / 2
+          const mediane = valeurDeRang(valeurs, effectifsCumules, rang)
+          bornesMedianes = [mediane, mediane]
+          resultat = String(mediane)
+          correctionCalcul =
+            "L'effectif de la série est impair.<br>" +
+            '$\\dfrac{' +
+            effectifTotal +
+            '}{2}=' +
+            ecritureDecimaleFrancaise(effectifTotal / 2) +
+            '$. La médiane est donc la $' +
+            rang +
+            '^{\\text{e}}$ valeur.<br>' +
+            "D'après les effectifs cumulés, cette valeur est $" +
+            miseEnEvidence(mediane) +
+            '$.'
+        }
       }
 
-      handleAnswers(this, i, { reponse: { value: reponse } })
-      if (this.questionJamaisPosee(i, listeTypeDeQuestions[i], a)) {
-        // Si la question n'a jamais été posée, on en créé une autre
-        this.listeQuestions[i] = texte
-        this.listeCorrections[i] = texteCorr
-        i++
+      let question = situation.introduction + '<br>' + tableau
+      if (this.interactif) {
+        question += '<br>' + inviteReponse
+        question += ajouteChampTexteMathLive(
+          this,
+          i,
+          KeyboardType.clavierDeBase,
+        )
+      } else {
+        question += '<br>' + demande
       }
-      cpt++
+
+      const somme = effectifs.join('+') + '=' + effectifTotal
+      const correction =
+        "L'effectif total est $N=" +
+        somme +
+        '$.<br>' +
+        'On complète le tableau avec les effectifs cumulés croissants :<br>' +
+        tableauCumule +
+        '<br>' +
+        correctionCalcul
+
+      handleAnswers(this, i, {
+        reponse: {
+          value: resultat,
+          ...(bornesMedianes == null
+            ? {}
+            : {
+                compare: (saisie: string) => {
+                  const saisieNormalisee = saisie
+                    .replaceAll('{,}', '.')
+                    .replaceAll(',', '.')
+                  const valeurSaisie = ce.parse(saisieNormalisee).N().re
+                  return {
+                    isOk:
+                      valeurSaisie != null &&
+                      Number.isFinite(valeurSaisie) &&
+                      valeurSaisie >= bornesMedianes[0] &&
+                      valeurSaisie <= bornesMedianes[1],
+                  }
+                },
+              }),
+        },
+      })
+      this.listeQuestions[i] = question
+      this.listeCorrections[i] = correction
     }
     listeQuestionsToContenu(this)
   }

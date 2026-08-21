@@ -1,4 +1,4 @@
-import TrouverpDroite from '../can/2e/can2G24'
+import TrouverpDroite from '../can/2e/can2G31-05'
 export const titre =
   'Déterminer un coefficient directeur à partir des coordonnées'
 export const dateDePublication = '22/07/2025'
@@ -8,7 +8,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
- * Clone de can2G24 pour les auto 1er
+ * Clone de can2G31-05 pour les auto 1er
  * @author Gilles Mora
  */
 

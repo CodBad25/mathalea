@@ -1,3 +1,9 @@
+import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
+import { fixeBordures } from '../../../lib/2d/fixeBordures'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
+import { latex2d } from '../../../lib/2d/textes'
+import { tracePoint } from '../../../lib/2d/TracePoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { extraireRacineCarree } from '../../../lib/outils/calculs'
@@ -10,6 +16,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 export const titre =
@@ -30,6 +37,62 @@ export const refs = {
   'fr-fr': [],
   'fr-ch': [],
 }
+
+function illustrationDistance(a: number, distance: number): string {
+  const gauche = a - distance
+  const droite = a + distance
+  const min = gauche - 1
+  const axe = droiteGraduee({
+    Unite: 1,
+    Min: min,
+    Max: droite + 1,
+    thickDistance: 1,
+    labelsPrincipaux: false,
+    labelListe: [[a, `${a}`]],
+    pointListe: [[a, '']],
+    pointStyle: '|',
+    pointEpaisseur: 3,
+  })
+  const solutionGauche = pointAbstrait(gauche - min, 0)
+  const solutionDroite = pointAbstrait(droite - min, 0)
+  const marqueGauche = tracePoint(solutionGauche, bleuMathalea)
+  const marqueDroite = tracePoint(solutionDroite, bleuMathalea)
+  marqueGauche.style = '|'
+  marqueDroite.style = '|'
+  marqueGauche.epaisseur = 3
+  marqueDroite.epaisseur = 3
+  const objets = [
+    axe,
+    marqueGauche,
+    marqueDroite,
+    latex2d(`${gauche}`, solutionGauche.x, -0.7, {
+      color: bleuMathalea,
+    }),
+    latex2d(`${droite}`, solutionDroite.x, -0.7, {
+      color: bleuMathalea,
+    }),
+    latex2d(
+      `\\overbrace{\\hspace{${distance * 0.55}cm}}^{${distance}}`,
+      (solutionGauche.x + (a - min)) / 2,
+      1,
+      { color: bleuMathalea },
+    ),
+    latex2d(
+      `\\overbrace{\\hspace{${distance * 0.55}cm}}^{${distance}}`,
+      (a - min + solutionDroite.x) / 2,
+      1,
+      { color: bleuMathalea },
+    ),
+  ]
+  return mathalea2d(
+    Object.assign({}, fixeBordures(objets), {
+      pixelsParCm: 24,
+      scale: 0.8,
+    }),
+    objets,
+  )
+}
+
 export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
   protected typeQuestionFixe?: number
 
@@ -1053,7 +1116,7 @@ Ainsi, $${miseEnEvidence('S=\\emptyset')}$.`
         default: {
           const a = randint(-6, 6, 0)
           b = randint(-8, 8, [0, a])
-          k = choice([-randint(1, 4), 0, randint(1, 6)])
+          k = randint(1, 6)
           c = b + k
           const membreValeurAbsolue = `|x${ecritureAlgebrique(-a)}|`
           texte = `L'ensemble des solutions $S$ de l'équation $${membreValeurAbsolue}${ecritureAlgebrique(b)}=${c}$ est :`
@@ -1116,17 +1179,12 @@ ${membreValeurAbsolue}&=${c}-${ecritureParentheseSiNegatif(b)}\\\\
 ${membreValeurAbsolue}&=${k}.
 \\end{aligned}$<br>`
 
-          if (k > 0) {
-            texteCorr += `$${membreValeurAbsolue}=${k}$ signifie que la distance entre $x$ et $${a}$ est égale à $${k}$.<br>
-On a donc $x${ecritureAlgebrique(-a)}=-${k}$ ou $x${ecritureAlgebrique(-a)}=${k}$, soit $x=${a - k}$ ou $x=${a + k}$.<br>
+          texteCorr += `<strong>Résolution géométrique :</strong><br>
+$${membreValeurAbsolue}=${k}$ signifie que la distance entre $x$ et $${a}$ est égale à $${k}$.<br>
+Sur une droite graduée, les deux nombres situés à une distance de $${k}$ de $${a}$ sont :<br>
+${illustrationDistance(a, k)}<br>
+$${a}-${k}=${a - k}$ et $${a}+${k}=${a + k}$.<br>
 Ainsi, $${miseEnEvidence(`S=\\{${a - k}${sp(1)};${sp(1)}${a + k}\\}`)}$.`
-          } else if (k === 0) {
-            texteCorr += `L'équation $${membreValeurAbsolue}=0$ admet une unique solution : $x=${a}$.<br>
-Ainsi, $${miseEnEvidence(`S=\\{${a}\\}`)}$.`
-          } else {
-            texteCorr += `Une valeur absolue est toujours positive ou nulle. Elle ne peut donc pas être égale à $${k}<0$.<br>
-Ainsi, $${miseEnEvidence('S=\\emptyset')}$.`
-          }
           this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation $${membreValeurAbsolue}${ecritureAlgebrique(b)}=${c}$.`
           break
         }

@@ -17,7 +17,6 @@ import {
   tableauDeVariation,
   variationsFonction,
 } from './etudeFonction'
-import { Matrice, matrice } from './Matrice'
 import { chercheMinMaxLocal, Polynome } from './Polynome'
 
 export type NoeudSpline = {
@@ -216,6 +215,8 @@ export class Spline {
   y: number[]
   visibles: boolean[]
   fonctions: ((x: number) => number)[]
+  private readonly solveCache = new Map<string, number[] | undefined>()
+  private deriveesCache?: Polynome[]
 
   constructor(noeuds: NoeudSpline[]) {
     this.polys = []
@@ -251,20 +252,15 @@ export class Spline {
       const x1 = noeuds[i + 1].x
       const y1 = noeuds[i + 1].y
       const d1 = noeuds[i + 1].deriveeGauche
-      const maMatrice = matrice([
-        [x0 ** 3, x0 ** 2, x0, 1],
-        [x1 ** 3, x1 ** 2, x1, 1],
-        [3 * x0 ** 2, 2 * x0, 1, 0],
-        [3 * x1 ** 2, 2 * x1, 1, 0],
-      ])
       if (y0 + (x1 - x0) * d1 === y1 && d0 === d1) {
         const a = (y1 - y0) / (x1 - x0)
         const b = y0 - a * x0
         this.polys.push(new Polynome({ coeffs: [b, a, 0, 0] }))
-      } else if (maMatrice != null) {
-        if (maMatrice.determinant() === 0) {
+      } else {
+        const h = x1 - x0
+        if (h === 0) {
           window.notify(
-            "Spline : impossible de trouver un polynome ici car la matrice n'est pas inversible, il faut revoir vos noeuds : ",
+            "Spline : impossible de trouver un polynome ici car deux noeuds ont la même abscisse : ",
             {
               noeudGauche: noeuds[i],
               noeudDroit: noeuds[i + 1],
@@ -272,34 +268,20 @@ export class Spline {
           )
           return
         }
-        const matriceInverse = maMatrice.inverse()
-        if (matriceInverse != null) {
-          const vecteur = [y0, y1, d0, d1]
-          const prodV = matriceInverse.multiply(vecteur)
-          if (prodV != null) {
-            this.polys.push(
-              new Polynome({
-                useFraction: true,
-                coeffs: (
-                  (prodV instanceof Matrice
-                    ? prodV.toArray()
-                    : prodV) as number[]
-                )
-                  .reverse()
-                  .map((el) => Number(Number(el).toFixed(6))), // parti pris : on arrondit au millionnième pour les entiers qui s'ignorent (pour les 1/3 c'est rapé, mais c'est suffisamment précis)
-              }),
-            )
-          } else {
-            window.notify(
-              "Spline : impossible de trouver un polynome ici car la matrice n'est pas inversible, il faut revoir vos noeuds : ",
-              {
-                noeudGauche: noeuds[i],
-                noeudDroit: noeuds[i + 1],
-              },
-            )
-            return
-          }
-        }
+        const deltaY = y1 - y0
+        const a = (d0 + d1) / h ** 2 - (2 * deltaY) / h ** 3
+        const b = (3 * deltaY) / h ** 2 - (2 * d0 + d1) / h
+        this.polys.push(
+          new Polynome({
+            useFraction: true,
+            coeffs: [
+              -a * x0 ** 3 + b * x0 ** 2 - d0 * x0 + y0,
+              3 * a * x0 ** 2 - 2 * b * x0 + d0,
+              -3 * a * x0 + b,
+              a,
+            ].map((el) => Number(el.toFixed(6))), // même arrondi que l'ancien calcul matriciel
+          }),
+        )
       }
     }
     this.noeuds = [...noeuds]
@@ -404,6 +386,8 @@ export class Spline {
     const yArg = y
     y = Number(y)
     if (!isNaN(y)) {
+      const cacheKey = `${y}|${precision}`
+      if (this.solveCache.has(cacheKey)) return this.solveCache.get(cacheKey)
       const antecedents: number[] = []
       for (let i = 0; i < this.polys.length; i++) {
         const polEquation = this.polys[i].add(-y) // Le polynome dont les racines sont les antécédents de y
@@ -449,6 +433,7 @@ export class Spline {
           window.notify('Erreur dans Spline.solve()' + err, { valeur_de_y: y })
         }
       }
+      this.solveCache.set(cacheKey, antecedents)
       return antecedents
     } else {
       window.notify(
@@ -742,10 +727,12 @@ export class Spline {
    * donc on ne peut pas en faire une Spline.
    */
   get derivees() {
+    if (this.deriveesCache != null) return this.deriveesCache
     const derivees = []
     for (let i = 0; i < this.polys.length; i++) {
       derivees.push(this.polys[i].derivee())
     }
+    this.deriveesCache = derivees
     return derivees
   }
 

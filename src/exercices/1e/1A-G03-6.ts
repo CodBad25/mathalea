@@ -48,6 +48,8 @@ export default class LongueurAvecThalesPapillonQcm extends ExerciceQcmA {
       HD: `${nomH}${nomD}`,
       AC: `${nomA}${nomC}`,
     }
+    const nomBH = `${nomB}${nomH}`
+    const nomBA = `${nomB}${nomA}`
     const longueurs: Record<Cote, number> = { BD: bd, BC: bc, HD: hd, AC: ac }
     const formules: Record<
       Cote,
@@ -90,7 +92,7 @@ export default class LongueurAvecThalesPapillonQcm extends ExerciceQcmA {
     const pointD = homothetie(pointC, pointB, rapportHomothetie, nomD)
     pointH.positionLabel = 'below left'
     pointD.positionLabel = 'above left'
-    const coteInutile = choice([`${nomB}${nomA}`, `${nomB}${nomH}`])
+    const coteInutile = choice([nomBA, nomBH])
     const longueurInutile = randint(5, 15)
     const grandTriangle = polygone([pointA, pointB, pointC])
     const petitTriangle = polygone([pointH, pointB, pointD])
@@ -123,10 +125,21 @@ Les droites $(${nomH}${nomD})$ et $(${nomA}${nomC})$ sont parallèles.<br>
 On donne ${donnees} et $${coteInutile}=${longueurInutile}\\text{ cm}$.<br>
 Quelle est la longueur du segment $[${nomsCotes[coteCherche]}]$ ?`
 
+    const afficheCote = (cote: Cote) =>
+      cote === coteCherche ? nomsCotes[cote] : String(longueurs[cote])
+    const afficheBH = coteInutile === nomBH ? String(longueurInutile) : nomBH
+    const afficheBA = coteInutile === nomBA ? String(longueurInutile) : nomBA
+    const egaliteUtile = `\\dfrac{${afficheCote('BD')}}{${afficheCote('BC')}}=\\dfrac{${afficheCote('HD')}}{${afficheCote('AC')}}`
+
     this.correction = `Les points $${nomH}$, $${nomB}$ et $${nomA}$ sont alignés, ainsi que les points  $${nomD}$, $${nomB}$ et $${nomC}$. Les droites $(${nomH}${nomD})$ et $(${nomA}${nomC})$ sont parallèles.<br>
-D'après le théorème de Thalès :
-$\\dfrac{${nomsCotes.BD}}{${nomsCotes.BC}}=\\dfrac{${nomsCotes.HD}}{${nomsCotes.AC}}$.<br>
-<br>On en déduit que $${nomsCotes[coteCherche]}=\\dfrac{${nomsCotes[premierFacteur]}\\times ${nomsCotes[secondFacteur]}}{${nomsCotes[diviseur]}}=\\dfrac{${longueurs[premierFacteur]}\\times ${longueurs[secondFacteur]}}{${longueurs[diviseur]}}=${miseEnEvidence(`${texNombre(valeurCorrecte, 2)}\\text{ cm}`)}$.`
+D'après le théorème de Thalès :<br><br>
+$\\dfrac{${nomBH}}{${nomBA}}=\\dfrac{${nomsCotes.BD}}{${nomsCotes.BC}}=\\dfrac{${nomsCotes.HD}}{${nomsCotes.AC}}$<br><br>
+On remplace par les valeurs connues :<br><br>
+$\\dfrac{${afficheBH}}{${afficheBA}}=${egaliteUtile}$<br><br>
+On utilise l'égalité $${egaliteUtile}$.<br><br>
+Les produits en croix sont égaux, donc $${afficheCote('BD')}\\times ${afficheCote('AC')}=${afficheCote('BC')}\\times ${afficheCote('HD')}$.<br><br>
+On divise les deux membres par $${longueurs[diviseur]}$ :<br><br>
+$${nomsCotes[coteCherche]}=\\dfrac{${longueurs[premierFacteur]}\\times ${longueurs[secondFacteur]}}{${longueurs[diviseur]}}=${miseEnEvidence(`${texNombre(valeurCorrecte, 2)}\\text{ cm}`)}$.`
   }
 
   versionAleatoire = () => {

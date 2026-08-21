@@ -60,7 +60,10 @@ export default class LireEffectifCumuleHistogramme extends ExerciceQcmA {
       cumul: false,
       barres: true,
       valuesOn: true,
-      effectifsOn: true,
+      effectifsOn: false,
+      titre: "Nombre d'exercices réalisés par des élèves en une semaine",
+      labelHorizontal: "Nombre d'exercices",
+      labelVertical: "Nombre d'élèves",
     })
     const total = serie.reduce((somme, [, effectif]) => somme + effectif, 0)
     const reponse = this.effectifCumule(serie, seuil, sens)

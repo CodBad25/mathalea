@@ -1,6 +1,8 @@
+import { addMathaleaQcm } from '../../lib/customElements/MathaleaQcm'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../lib/outils/ecritures'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -26,7 +28,7 @@ export const refs = {
   'fr-ch': ['10FA1B-16', '1mF2-17'],
 }
 export const dateDePublication = '08/10/2024'
-export const dateDeModifImportante = '11/06/2025'
+export const dateDeModifImportante = '20/08/2026'
 
 /**
  * Reconnaitre une fonction affine
@@ -40,6 +42,9 @@ export const dateDeModifImportante = '11/06/2025'
  * f(x) = ax + b avec a et b grands relatifs
  * f(x) = a(x + b) + c avec a, b, c petits relatifs
  * f(x) = a(bx + c) + dx + e  avec a, b, c, d petits relatifs
+ * Une version QCM est disponible : ses distracteurs reproduisent les erreurs
+ * les plus fréquentes (image prise pour l'antécédent, terme constant changé de
+ * membre sans changer de signe, quotient inversé, développement incomplet).
  */
 
 export default class AntecedentParCalcul extends Exercice {
@@ -50,6 +55,7 @@ export default class AntecedentParCalcul extends Exercice {
       'Type de fonction affine',
       '1 : ax+b (a et b petits relatifs)\n2 : ax+b (a et b grands relatifs)\n3 : a(x+b) + c (petits relatifs)\n4 : a(bx + c) + dx + e (petits relatifs)\n5 : Mélange',
     ]
+    this.besoinFormulaire2CaseACocher = ['Version QCM', false]
 
     this.consigne =
       'Répondre aux questions suivantes avec une valeur exacte simplifiée. '
@@ -57,9 +63,21 @@ export default class AntecedentParCalcul extends Exercice {
 
     this.spacingCorr = context.isHtml ? 2 : 1
     this.sup = '1'
+    this.sup2 = false
   }
 
   nouvelleVersion() {
+    const versionQcm = Boolean(this.sup2)
+    this.interactifType = versionQcm ? 'mathalea-qcm' : 'mathLive'
+    this.consigne = versionQcm
+      ? 'Pour chaque question, choisir la bonne réponse. '
+      : 'Répondre aux questions suivantes avec une valeur exacte simplifiée. '
+    const qcmOptions = { radio: true }
+    // Une proposition s'écrit comme la bonne réponse : fraction simplifiée, signe
+    // devant. Un dénominateur nul rend une chaîne vide, écartée avec les doublons.
+    const enFraction = (num: number, den: number) =>
+      den === 0 ? '' : `$${new FractionEtendue(num, den).simplifie().texFSD}$`
+
     const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup,
       nbQuestions: this.nbQuestions,
@@ -87,6 +105,12 @@ export default class AntecedentParCalcul extends Exercice {
       let expr = ''
       let ante: FractionEtendue
       texteCorr = ''
+      // Forme réduite f(x) = coeffReduit x + constanteReduite, commune aux quatre cas :
+      // l'antécédent cherché vaut (m - constanteReduite) / coeffReduit.
+      let coeffReduit = 0
+      let constanteReduite = 0
+      // Erreurs propres au cas traité, prioritaires sur les erreurs communes.
+      let distracteursSpecifiques: { texte: string; feedback: string }[] = []
 
       switch (
         listeTypeDeQuestions[i] // Chaque question peut être d'un type différent
@@ -102,6 +126,8 @@ export default class AntecedentParCalcul extends Exercice {
           texteCorr += ` ${a}x ${ecritureAlgebrique(b)}&= ${m} \\\\ `
           texteCorr += ` ${a}x &= ${m} ${ecritureAlgebrique(-b)}\\\\ `
           ante = new FractionEtendue(m - b, a)
+          coeffReduit = a
+          constanteReduite = b
           break
 
         case 3:
@@ -118,6 +144,15 @@ export default class AntecedentParCalcul extends Exercice {
           texteCorr += `${a}x ${ecritureAlgebrique(a * b + c)} &= ${m}\\\\`
           texteCorr += `${a}x &= ${m} ${ecritureAlgebrique(-a * b - c)}\\\\`
           ante = new FractionEtendue(m - b * a - c, a)
+          coeffReduit = a
+          constanteReduite = a * b + c
+          distracteursSpecifiques = [
+            {
+              // Distributivité oubliée : a(x + b) réduit en ax + b.
+              texte: enFraction(m - b - c, a),
+              feedback: `dans $${a}(x ${ecritureAlgebrique(b)})$, le facteur $${a}$ multiplie aussi $${b}$ : le développement donne $${a}x ${ecritureAlgebrique(a * b)}$.`,
+            },
+          ]
           break
 
         case 4:
@@ -137,6 +172,20 @@ export default class AntecedentParCalcul extends Exercice {
           texteCorr += `${a * b + d}x  &= ${m}${ecritureAlgebrique(-a * c - e)}\\\\`
           texteCorr += `${a * b + d}x &= ${m - a * c - e}\\\\`
           ante = new FractionEtendue(m - a * c - e, a * b + d)
+          coeffReduit = a * b + d
+          constanteReduite = a * c + e
+          distracteursSpecifiques = [
+            {
+              // Réduction incomplète : le terme dx n'est pas regroupé avec abx.
+              texte: enFraction(m - a * c - e, a * b),
+              feedback: `le terme $${d}x$ se regroupe avec $${a * b}x$ : le coefficient de $x$ vaut $${a * b + d}$, pas $${a * b}$.`,
+            },
+            {
+              // Distributivité partielle : a ne multiplie que bx.
+              texte: enFraction(m - e, a * b + d),
+              feedback: `dans $${a}(${b}x ${ecritureAlgebrique(c)})$, le facteur $${a}$ multiplie aussi $${c}$ : le développement donne $${a * b}x ${ecritureAlgebrique(a * c)}$.`,
+            },
+          ]
           break
         case 1:
         default:
@@ -153,6 +202,8 @@ export default class AntecedentParCalcul extends Exercice {
           texteCorr += `${a}x &= ${m - b} \\\\ `
           texteCorr += `${texFractionFromString(a + 'x', a)} &= ${texFractionFromString(m - b, a)} \\\\ ` // EE : Ne pas mettre fractionEtendue car sinon 0/14 affiche 0.
           ante = new FractionEtendue(m - b, a)
+          coeffReduit = a
+          constanteReduite = b
           break
       }
 
@@ -165,8 +216,93 @@ export default class AntecedentParCalcul extends Exercice {
         texteCorr += `x &=${ante.texFraction}${ante.texSimplificationAvecEtapes('none', orangeMathalea)} \\\\` // c'est la couleur de miseEnEvidence
       else texteCorr += `x &=${miseEnEvidence(ante.texFSD)}`
       texteCorr += '\\end{aligned}$'
-      if (this.questionJamaisPosee(i, a, b, listeTypeDeQuestions[i])) {
-        if (this.interactif) {
+
+      let propositions: {
+        texte: string
+        statut: boolean
+        feedback?: string
+      }[] = []
+      if (versionQcm) {
+        const bonneReponse = enFraction(ante.num, ante.den)
+        // Les erreurs d'élève repérées sur cette question, de la plus fréquente à
+        // la moins fréquente : les trois premières qui ne retombent ni sur la
+        // bonne réponse ni sur une autre proposition deviennent les distracteurs.
+        const erreursFrequentes = [
+          ...distracteursSpecifiques,
+          {
+            // Image et antécédent confondus : l'élève calcule f(m).
+            texte: enFraction(coeffReduit * m + constanteReduite, 1),
+            feedback: `c'est $f(${m})$, donc l'image de $${m}$ par $f$. Ici, c'est $x$ qui est cherché, pas $f(x)$.`,
+          },
+          {
+            // Terme constant changé de membre sans changer de signe.
+            texte: enFraction(m + constanteReduite, coeffReduit),
+            feedback: `en changeant $${constanteReduite}$ de membre, il change aussi de signe : l'équation devient $${coeffReduit}x = ${m} ${ecritureAlgebrique(-constanteReduite)}$.`,
+          },
+          {
+            // Quotient inversé : le coefficient de x divisé par le second membre.
+            texte: enFraction(coeffReduit, m - constanteReduite),
+            feedback: `le quotient est inversé : c'est $${m - constanteReduite}$ qui se divise par $${coeffReduit}$, et pas l'inverse.`,
+          },
+          {
+            // Division par le coefficient de x oubliée.
+            texte: enFraction(m - constanteReduite, 1),
+            feedback: `l'équation $${coeffReduit}x = ${m - constanteReduite}$ n'est pas terminée : il reste à diviser les deux membres par $${coeffReduit}$.`,
+          },
+          {
+            // Signe du quotient inversé.
+            texte: enFraction(constanteReduite - m, coeffReduit),
+            feedback: `le second membre vaut $${m} ${ecritureAlgebrique(-constanteReduite)} = ${m - constanteReduite}$, c'est lui qui se divise par $${coeffReduit}$.`,
+          },
+        ]
+        const distracteurs = erreursFrequentes
+          .filter(
+            (erreur, rang) =>
+              erreur.texte !== '' &&
+              erreur.texte !== bonneReponse &&
+              erreursFrequentes.findIndex(
+                (autre) => autre.texte === erreur.texte,
+              ) === rang,
+          )
+          .slice(0, 3)
+        propositions = shuffle([
+          { texte: bonneReponse, statut: true },
+          ...distracteurs.map((erreur) => ({ ...erreur, statut: false })),
+        ])
+      }
+      // Un tirage dégénéré (par exemple un antécédent nul) peut faire retomber
+      // presque tous les distracteurs sur la bonne réponse : on retire alors.
+      const qcmComplet = !versionQcm || propositions.length === 4
+
+      if (
+        qcmComplet &&
+        this.questionJamaisPosee(i, a, b, listeTypeDeQuestions[i])
+      ) {
+        if (versionQcm) {
+          handleAnswers(
+            this,
+            i,
+            {
+              qcm: {
+                enonce: texte,
+                propositions,
+                correction: texteCorr,
+                options: qcmOptions,
+              },
+            },
+            { formatInteractif: 'mathalea-qcm' },
+          )
+          if (context.isHtml) {
+            texte += addMathaleaQcm(this, i, {
+              ...qcmOptions,
+              interactivityOn: this.interactif,
+            })
+          } else if (!context.isAmc) {
+            const qcmLatex = propositionsQcm(this, i)
+            texte += qcmLatex.texte
+            texteCorr += qcmLatex.texteCorr
+          }
+        } else if (this.interactif) {
           texte += `<br>${ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBaseAvecFraction)}`
           handleAnswers(this, i, {
             reponse: {

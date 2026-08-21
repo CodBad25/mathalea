@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastRun": "2026-07-20T12:44:41.388Z",
+  "lastRun": "2026-08-20T09:01:37.857Z",
   "exercises": {
     "10151": {
       "uuid": "10151",
@@ -33222,6 +33222,20 @@
       "notes": "",
       "variationsTested": [
         "sup=undefined:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
+      ],
+      "diagnostics": []
+    },
+    "afd39": {
+      "uuid": "afd39",
+      "ref": "afd39",
+      "file": "src/exercices/questionsDeCours/QuestionsDeCours.ts",
+      "lastChecked": "2026-08-20T09:01:37.666Z",
+      "status": "passing",
+      "checkedLevel": 2,
+      "failureMode": null,
+      "notes": "",
+      "variationsTested": [
+        "sup=:sup2=undefined:sup3=undefined:sup4=undefined:sup5=undefined"
       ],
       "diagnostics": []
     }
