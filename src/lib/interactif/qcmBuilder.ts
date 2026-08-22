@@ -1,4 +1,3 @@
-import { context } from '../../modules/context'
 import { createList } from '../format/lists'
 import { formaterReponse } from '../outils/ecritures'
 import { texteEnCouleurEtGras } from '../outils/embellissements'
@@ -37,20 +36,28 @@ function buildCorrectAnswersMessage(
   return `La bonne réponse est la réponse ${texteEnCouleurEtGras(bonnesLettres[0] ?? '')}.`
 }
 
-function buildCorrectionsList(propositions: SharedQcmProposition[]): string {
+function buildCorrectionsList(
+  propositions: SharedQcmProposition[],
+  exoInteractif: boolean,
+): string {
   const corrections = propositions
     .map((proposition, index) => {
       if (proposition.correction == null || proposition.correction === '')
         return ''
-      return `réponse ${QCM_LETTERS[index] ?? String(index + 1)} : ${proposition.correction}${
+      // return `réponse ${(!exoInteractif && QCM_LETTERS[index]) ?? String(index + 1)} : ${proposition.correction}${
+      return (
+        `${!exoInteractif && QCM_LETTERS[index] ? `réponse ${String(index + 1)} : ` : ''} ${proposition.correction}` +
+        /* +`${ // Eric : J'ai enlevé les coches (21/08/2026)
         context.isHtml
           ? proposition.statut
-            ? '\u2705' // ✅
-            : '\u274C' // ❌
+            ? ' \u2705' // ✅
+            : ' \u274C' // ❌
           : proposition.statut
             ? '$ {\\bf \\color[cmyk]{.63,.23,.93,.06}\\boldsymbol{\\checkmark}} $' // ✅
             : '$ {\\bf \\color[rgb]{1,.1,.1}\\boldsymbol{\\times}} $' // ❌
-      }<br>`
+      }*/
+        `<br>`
+      )
     })
     .filter((correction) => correction !== '')
 
@@ -134,7 +141,10 @@ export function buildQcmForExercise(
       },
     ) ?? []
 
-  let correctionTexte = buildCorrectionsList(shuffledPropositions)
+  let correctionTexte = buildCorrectionsList(
+    shuffledPropositions,
+    exercice.interactif,
+  )
   if (correctionTexte === '') {
     correctionTexte = correction
     const extrasAreAdded = ajouteQcmCorr || !exercice.interactif

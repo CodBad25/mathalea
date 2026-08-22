@@ -45,7 +45,7 @@ export function labelOnLine(
     usedPosition = [],
     letterSize = 'footnotesize',
     color = 'red',
-    backgroundColor = 'white',
+    // backgroundColor = 'white',
   }: {
     preferedPosition?: 'left' | 'right' | 'above' | 'below' | 'auto'
     usedPosition?: Latex2d[]
@@ -790,6 +790,14 @@ export class Droite extends ObjetMathalea2D {
         this.x2 = arg2.x
         this.y1 = arg1.y
         this.y2 = arg2.y
+        if (egal(this.x1, this.x2) && !egal(this.y1, this.y2)) {
+          this.pente = Number.POSITIVE_INFINITY
+        } else if (egal(this.y1, this.y2) && !egal(this.x1, this.x2)) {
+          this.pente = 0
+        } else {
+          this.pente = (this.y2 - this.y1) / (this.x2 - this.x1)
+        }
+        this.ordonneeOrigine = this.y1 - this.pente * this.x1
       } else {
         window.notify(
           'Droite : (attendus : A et B) les arguments de sont pas des points valides',

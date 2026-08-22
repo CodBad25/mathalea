@@ -15,7 +15,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'cc882'
 
 export const refs = {
-  'fr-fr': ['can6N09', '6N2A-flash8'],
+  'fr-fr': ['can6N09', '6N2A-flash8', '6AutoN3-2'],
   'fr-ch': [],
 }
 export default class PositionDesChiffres extends ExerciceSimple {

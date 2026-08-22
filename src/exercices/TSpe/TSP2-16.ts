@@ -68,7 +68,7 @@ export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {
     super()
     this.besoinFormulaire3CaseACocher = ["Avec le préambule de l'énoncé", true]
     this.sup3 = true
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionAleatoire()
   }
 }

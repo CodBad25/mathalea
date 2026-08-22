@@ -213,6 +213,11 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
     const style = document.createElement('style')
     style.textContent = `
       ${katexCss}
+      /* Le shadowRoot ne reçoit pas la surcharge globale de app.css : sans elle,
+         KaTeX rendrait ici en 1,21em et la police jurerait avec le reste de la question. */
+      .katex {
+        font-size: 1em;
+      }
       math-field::part(menu-toggle) {
         display: none;
       }

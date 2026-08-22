@@ -103,7 +103,7 @@ export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionAleatoire()
   }
 }

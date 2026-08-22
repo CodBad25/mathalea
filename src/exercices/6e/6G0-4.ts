@@ -33,7 +33,7 @@ export const interactifType = 'cliqueFigure'
 export const uuid = '83763'
 
 export const refs = {
-  'fr-fr': ['6G0-4'],
+  'fr-fr': ['6G0-4', '6AutoG1-1'],
   'fr-2016': ['6G10-3'],
   'fr-ch': ['9ES1A-16'],
 }

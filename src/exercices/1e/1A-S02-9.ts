@@ -78,14 +78,14 @@ export default class AjouterUneNotePourMedianeQCM extends ExerciceQcmA {
 
     this.reponses = reponses.map((reponse) => `$${texNombre(reponse, 0)}$`)
 
-    this.enonce = `On considère la série de notes suivante : $${serieEnonce.join('\\,;\\,')}$.<br>
+    this.enonce = `On considère la série suivante de notes : $${serieEnonce.join('\\,;\\,')}$.<br>
     Quelle note faut-il ajouter à cette série pour que sa médiane soit égale à $${texNombre(medianeVoulue, 0)}$ ?`
 
     this.correction = `On commence par ranger la série dans l'ordre croissant : $${serieTriee.join('\\,;\\,')}$.<br>
       Après ajout d'une note, la série contient $5$ notes : l'effectif est impair.<br>
       La médiane est donc la $3^e$ valeur de la série rangée dans l'ordre croissant.<br>
-      En ajoutant $${noteAAjouter}$, la série ordonnée devient $${serieCompleteTriee.join('\\,;\\,')}$.<br>
-      La médiane est alors $${miseEnEvidence(texNombre(medianeFinale, 0))}$.`
+      En ajoutant $${miseEnEvidence(noteAAjouter)}$, la série ordonnée devient $${serieCompleteTriee.join('\\,;\\,')}$ 
+      et la médiane est alors $${texNombre(medianeFinale, 0)}$.`
   }
 
   private creerCasEffectifInitial4(): CasMediane {

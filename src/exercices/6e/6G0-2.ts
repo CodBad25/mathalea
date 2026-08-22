@@ -27,7 +27,7 @@ export const dateDeModifImportante = '07/10/2023' // Interactivité type Qcm par
 export const uuid = 'd81c6'
 
 export const refs = {
-  'fr-fr': ['6G0-2'],
+  'fr-fr': ['6G0-2', '6AutoG1'],
   'fr-2016': ['6G10-1'],
   'fr-ch': ['9ES1A-2'],
 }

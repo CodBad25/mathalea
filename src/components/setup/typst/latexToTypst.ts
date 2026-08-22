@@ -760,8 +760,13 @@ function postprocessTypst(typst: string): string {
     while (prevBrackets !== result) {
       prevBrackets = result
       result = result
+        // Le contenu purement en minuscules (union, inter, without…) est laissé de
+        // côté ici : ce sont les mots-symboles produits par tex2typst pour \cup/\cap,
+        // traités juste après (ils doivent être dépouillés, pas encadrés). Toute
+        // autre paire [contenu] (chiffres, notation géométrique en majuscules comme
+        // [YS]…) est encadrée avec de vrais délimiteurs Typst.
         .replace(
-          /\[([^\[\]]*[^a-zA-Z \t\[\]][^\[\]]*)\]/g,
+          /\[([^\[\]]*[^a-z \t\[\]][^\[\]]*)\]/g,
           'lr(bracket.l $1 bracket.r)',
         )
         // Contexte 2a : [union] ou [ union ] entre délimiteurs ']' et '[' —
@@ -769,7 +774,11 @@ function postprocessTypst(typst: string): string {
         // Contexte 2b : ']'+espaces+mot+espaces+'[' — l'opérateur d'ensemble (\cup, \cap)
         //   apparaît ENTRE deux crochets d'intervalles ; on doit aussi l'extraire.
         // Traitement unifié : tous les [alpha+] et ]alpha+[ sans autre contenu sont nettoyés.
-        .replace(/\[([a-zA-Z ]+)\]/g, ' $1 ')
+        // Le contenu est restreint aux minuscules : les identifiants Typst produits par
+        // tex2typst pour ces opérateurs (union, inter, without…) sont toujours en
+        // minuscules, alors qu'une notation géométrique comme [YS] (segment) utilise des
+        // noms de points en majuscules qui ne doivent jamais perdre leurs crochets.
+        .replace(/\[([a-z ]+)\]/g, ' $1 ')
         // ]opérateur[ (ex. ]\cup[ devenu ] union [) entre deux délimiteurs d'intervalles :
         // supprimer les crochets parasites autour du mot pour que l'intervalle englobant
         // soit correctement reconnu par la règle ]...[  ci-après.
@@ -1372,10 +1381,13 @@ function latexTableCell(cell: string, figures?: string[]): TypstTableCell {
   if (stripped.length === 0) return { body: '', fill: color }
   const textContent = unwrapWholeTextCommand(stripped)
   if (textContent != null) {
-    if (!/<svg/i.test(textContent) && looksLikeUnwrappedMath(textContent)) {
-      return { body: `$${latexMathToTypst(textContent)}$`, fill: color }
+    const sizedContent = /<svg/i.test(textContent)
+      ? textContent
+      : stripLatexSizeCommands(textContent)
+    if (!/<svg/i.test(sizedContent) && looksLikeUnwrappedMath(sizedContent)) {
+      return { body: `$${latexMathToTypst(sizedContent)}$`, fill: color }
     }
-    return { body: convertCellTextContent(textContent, figures), fill: color }
+    return { body: convertCellTextContent(sizedContent, figures), fill: color }
   }
   return { body: `$${latexMathToTypst(stripped)}$`, fill: color }
 }
@@ -1600,7 +1612,10 @@ function latexSegmentToTypst(
   if (table != null) return table
   const converted = latexMathToTypst(tex)
   if (converted.length === 0) return ''
-  return display ? `$ ${converted} $` : `$${converted}$`
+  // Une formule en ligne ne doit jamais être coupée entre deux lignes (une
+  // partie sur chacune) : `box(...)` empêche Typst de la scinder au niveau
+  // d'un opérateur, comme il le ferait pour du texte normal.
+  return display ? `$ ${converted} $` : `#box($${converted}$)`
 }
 
 /**

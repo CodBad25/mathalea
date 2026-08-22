@@ -254,6 +254,10 @@ export default class Pythagore2D extends Exercice {
       3,
       "1 : Hypoténuse\n2 : Côtés de l'angle droit\n3: Mélange",
     ]
+    this.besoinFormulaire3CaseACocher = [
+      'Écrire les unités dans les calculs de la correction',
+      false,
+    ]
   }
 
   nouvelleVersion() {
@@ -362,6 +366,9 @@ export default class Pythagore2D extends Exercice {
             reponse,
             longueurAC,
             longueurBC,
+            'cm',
+            undefined,
+            this.sup3,
           )
         } else if (listeTypeDeQuestions[i] === 'BC') {
           nomCote = B.nom + C.nom
@@ -374,6 +381,9 @@ export default class Pythagore2D extends Exercice {
             longueurAB,
             longueurAC,
             reponse,
+            'cm',
+            undefined,
+            this.sup3,
           )
         } else {
           // listeTypeDeQuestions[i] === 'AC'
@@ -387,6 +397,9 @@ export default class Pythagore2D extends Exercice {
             reponse,
             longueurAB,
             longueurBC,
+            'cm',
+            undefined,
+            this.sup3,
           )
         }
         texteCorr = redaction[0] ?? ''

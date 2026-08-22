@@ -3,6 +3,7 @@ import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { rotation } from '../../../lib/2d/transformations'
+import { amcConvert } from '../../../lib/amc/amcBuilders'
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
@@ -13,8 +14,6 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { amcConvert } from '../../../lib/amc/amcBuilders'
-
 
 export const titre = "Lire l'heure"
 export const dateDePublication = '4/11/2021'
@@ -29,7 +28,7 @@ export const amcType = 'AMCHybride'
 export const uuid = '2ce11'
 
 export const refs = {
-  'fr-fr': ['canc3D01', 'auto6M4A-flash1'],
+  'fr-fr': ['canc3D01', 'auto6M4A-flash1', '6AutoT1'],
   'fr-ch': ['NR'],
 }
 export default class LireHeure extends ExerciceSimple {
@@ -57,7 +56,9 @@ export default class LireHeure extends ExerciceSimple {
       horloge.push(rotation(t, O, 30 + i * 90), rotation(t, O, 60 + i * 90))
     }
 
-    const isAfternoon = this.sup ? this.quotaRandint('isAfternoon', 0, 1) === 1 : false
+    const isAfternoon = this.sup
+      ? this.quotaRandint('isAfternoon', 0, 1) === 1
+      : false
     const h = isAfternoon ? randint(1, 11) + 12 : randint(0, 11)
     const m = this.quotaRandint('m', 0, 11) * 5
 
@@ -135,7 +136,9 @@ export default class LireHeure extends ExerciceSimple {
           ],
         },
       ]
-      this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) => amcConvert(questionAMC))
+      this.questionsAMC = this.autoCorrectionAMC.map((questionAMC) =>
+        amcConvert(questionAMC),
+      )
     }
 
     this.canReponseACompleter = '$\\ldots$ h $\\ldots$ min'

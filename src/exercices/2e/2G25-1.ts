@@ -98,8 +98,10 @@ export default class RepresenterUnVecteur extends Exercice {
       this.figuresApiGeom[i] = new Figure({
         xMin: -this.longueur - 0.25, // On enlève 0.25 unités
         yMin: -this.largeur - 0.25,
-        width: 0.65 * (this.longueur * 2 * 30 + 20), // On ajoute 20 pixels
-        height: 0.65 * (this.largeur * 2 * 30 + 20),
+        // `width`/`height` sont exprimées à l'échelle 1 (30 px par unité) ;
+        // `scale` réduit ensuite le SVG à 65 %.
+        width: this.longueur * 2 * 30 + 20, // On ajoute 20 pixels
+        height: this.largeur * 2 * 30 + 20,
         border: false,
         scale: 0.65,
       })

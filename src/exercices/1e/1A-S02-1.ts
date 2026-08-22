@@ -1,4 +1,4 @@
-import { texteGras } from '../../lib/outils/embellissements'
+import { miseEnEvidence, texteGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import { nombreElementsDifferents } from '../ExerciceQcm'
@@ -114,7 +114,7 @@ export default class MedianeQCM extends ExerciceQcmA {
     } else {
       this.correction += `un nombre impair,  donc la médiane est le terme de rang $${rang}$.<br>`
     }
-    this.correction += `La médiane est donc $${texNombre(mediane)}$.`
+    this.correction += `La médiane est donc $${miseEnEvidence(texNombre(mediane))}$.`
     this.reponse = `$${texNombre(mediane)}$`
   }
 

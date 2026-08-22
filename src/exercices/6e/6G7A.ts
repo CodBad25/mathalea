@@ -348,8 +348,11 @@ class ConstrctionsSymetriquesPoints extends Exercice {
         this.figuresApiGeom[i] = new Figure({
           xMin: -10,
           yMin: -10,
-          width: 300,
-          height: 300,
+          // `width`/`height` sont exprimées à l'échelle 1 : `scale` les réduit
+          // ensuite, d'où un SVG de 300×300 px pour une fenêtre de 20×20
+          // unités ([-10;10]²).
+          width: 600,
+          height: 600,
           border: true,
           scale: 0.5,
           snapGrid: this.sup2 === 1,

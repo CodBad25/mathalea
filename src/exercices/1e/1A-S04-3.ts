@@ -34,6 +34,9 @@ export default class CalculPourcentageEtMoyenneQCM extends ExerciceQcmA {
       cumul: false,
       barres: true,
       valuesOn: true,
+      titre: 'Notes obtenues par la classe de 1ère',
+      labelHorizontal: 'Notes sur 20',
+      labelVertical: "Nombre d'élèves",
     })
     const effectifCible = maSerie.serieTableau
       .filter(([note]) => Number(note) >= valeurCible)
@@ -115,7 +118,7 @@ export default class CalculPourcentageEtMoyenneQCM extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionAleatoire()
   }
 }

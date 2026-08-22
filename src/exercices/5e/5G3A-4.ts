@@ -142,8 +142,11 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
         Object.assign(options, {
           xMin: -10,
           yMin: -10,
-          width: 300,
-          height: 300,
+          // `width`/`height` sont exprimées à l'échelle 1 : `scale` les réduit
+          // ensuite, d'où un SVG de 300×300 px pour une fenêtre de 20×20
+          // unités ([-10;10]²).
+          width: 600,
+          height: 600,
           scale: 0.5,
         }),
       )
@@ -314,8 +317,9 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
         Object.assign(options, {
           xMin: -10,
           yMin: -10,
-          width: 300,
-          height: 300,
+          // Même cadrage que la figure de l'énoncé (cf. plus haut).
+          width: 600,
+          height: 600,
           scale: 0.5,
           isDynamic: false,
         }),

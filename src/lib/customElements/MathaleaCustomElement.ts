@@ -23,6 +23,7 @@ export const listOfCustomElements = [
   'mathalea-textfield',
   'tableau-mathlive',
   'mathalea-qcm',
+  'mathalea-couteau-suisse',
   'mathalea-branching-qcm',
   'clique-figure',
   'points-cliquables',

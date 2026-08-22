@@ -1,5 +1,6 @@
 import Figure from 'apigeom/src/Figure'
 import { createApigeomFigureHtml } from '../../lib/apigeom/apigeom-figure'
+import { bleuMathalea } from '../../lib/colors'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { context } from '../../modules/context'
@@ -10,7 +11,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Décomposer une fraction (partie entière + fraction inférieure à 1)'
@@ -24,7 +24,7 @@ export const dateDeModifImportante = '24/11/2024'
  */
 export const uuid = '6c8a1'
 export const refs = {
-  'fr-fr': ['auto6N2B-6'],
+  'fr-fr': ['auto6N2B-6', '6AutoF1-5'],
   'fr-2016': ['6N20'],
   'fr-ch': ['NR'],
 }

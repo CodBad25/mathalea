@@ -95,6 +95,37 @@ Les raccourcis disponibles et cette mécanique vivent dans
 touches dans l'attribut `data-keys` du champ au moment où il prend le focus :
 elles changent donc d'une question à l'autre.
 
+## Bouton de réponse prédéfinie
+
+À utiliser quand une réponse revient telle quelle et serait pénible à saisir au
+clavier MathLive, typiquement « Pas factorisable » quand l'énoncé demande de
+factoriser « si possible ».
+
+```ts
+import { boutonReponsePredefinie } from '../../lib/interactif/boutonReponsePredefinie'
+
+handleAnswers(this, i, {
+  reponse: { value: '\\text{Pas factorisable}' },
+})
+
+if (this.interactif) {
+  texte += boutonReponsePredefinie({
+    numeroExercice: this.numeroExercice,
+    indiceQuestion: i,
+    label: 'Pas factorisable',
+  })
+}
+```
+
+Le bouton remplit le champ MathLive de la question avec `valeur` (par défaut
+`\text{label}`). Il n'a de sens qu'en interactif, d'où le test sur
+`this.interactif`.
+
+Si une seule question de l'exercice appelle cette réponse, ajouter le bouton à
+**toutes** les questions : sinon il désigne la bonne réponse. Voir
+[2N41-7](../../../../src/exercices/2e/2N41-7.ts), [1AL21-41](../../../../src/exercices/1e/1AL21-41.ts)
+et [1AL21-42](../../../../src/exercices/1e/1AL21-42.ts).
+
 ## Champ texte simple
 
 À utiliser pour une réponse textuelle sans MathLive.
@@ -1032,6 +1063,14 @@ texteCorr += 'Le tableau complété est donné ci-dessus.'
 ```
 
 Ce helper déclare lui-même les données nécessaires à la vérification. Lire aussi `src/lib/interactif/tableauSignesVariations/DOCUMENTATION.md` avant de créer un nouveau tableau.
+
+## Couteau suisse
+
+À utiliser quand une même question doit enchaîner plusieurs custom elements
+interactifs autonomes. Lire la page dédiée :
+[Mathalea Couteau Suisse](couteau-suisse.md).
+
+Exemple de référence : `src/exercices/2e/2F21-11.ts`.
 
 ## Scratch et Blockly
 

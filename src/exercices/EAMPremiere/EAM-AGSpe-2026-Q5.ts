@@ -114,7 +114,7 @@ export default class AutoQ5AGs2026 extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionAleatoire()
   }
 }

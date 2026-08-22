@@ -28,7 +28,7 @@ export const dateDeModifImportante = '09/08/2022'
 export const uuid = 'bb9d8'
 
 export const refs = {
-  'fr-fr': ['6N2C-1', 'auto5N1E'],
+  'fr-fr': ['6N2C-1', 'auto5N1E', '6AutoN4-2'],
   'fr-2016': ['6N12'],
   'fr-ch': [''], // Primaire anciennement :['9NO3-2'],
 }

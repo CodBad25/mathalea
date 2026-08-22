@@ -623,6 +623,6 @@ Cette affirmation est fausse : Les solutions de l'inéquation $f(x) \\geqslant 0
   constructor() {
     super()
     this.versionAleatoire()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
   }
 }

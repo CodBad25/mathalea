@@ -26,7 +26,7 @@ export const interactifType = 'qcm'
 export const uuid = '28e58'
 
 export const refs = {
-  'fr-fr': ['6N3F'],
+  'fr-fr': ['6N3F', '6AutoF1-2'],
   'fr-2016': ['6N22-6'],
   'fr-ch': ['9NO3C-1'],
 }

@@ -1,5 +1,6 @@
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 
@@ -101,7 +102,7 @@ export default class QuartileQCM extends ExerciceQcmA {
       if (effectif % 4 !== 0) {
         this.correction += `<br>On arrondit à l'entier supérieur qui vaut $${rangQ1}$.`
       }
-      this.correction += `<br> Le premier quartile est donc la valeur de rang $${rangQ1}$ de la série classée : $Q_1=${Q1}$.`
+      this.correction += `<br> Le premier quartile est donc la valeur de rang $${rangQ1}$ de la série classée : $Q_1=${miseEnEvidence(Q1)}$.`
       this.reponse = `$${Q1}$`
     } else {
       this.reponses = [
@@ -122,7 +123,7 @@ export default class QuartileQCM extends ExerciceQcmA {
       if ((3 * effectif) % 4 !== 0) {
         this.correction += `<br>On arrondit à l'entier supérieur qui vaut $${rangQ3}$ .`
       }
-      this.correction += `<br> Le troisième quartile est donc la valeur de rang $${rangQ3}$ de la série classée : $Q_3=${Q3}$.`
+      this.correction += `<br> Le troisième quartile est donc la valeur de rang $${rangQ3}$ de la série classée : $Q_3=${miseEnEvidence(Q3)}$.`
       this.reponse = `$${Q3}$`
     }
   }

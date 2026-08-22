@@ -43,7 +43,7 @@ export default class metropoleSept2023Q2 extends ExerciceQcm {
 
   constructor() {
     super()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionOriginale()
   }
 }

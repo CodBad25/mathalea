@@ -2,6 +2,7 @@ import Figure from 'apigeom'
 import LineFractionDiagram from 'apigeom/src/elements/diagrams/LineFractionDiagram'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { amcConvert } from '../../lib/amc/amcBuilders'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import { bleuMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -11,7 +12,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { representeFractionSurBarre } from '../../modules/representationsFractions'
 import Exercice from '../Exercice'
-import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 
 export const titre = "Représenter une fraction de l'unité"
 export const amcReady = true
@@ -28,7 +28,7 @@ export const dateDeModifImportante = '7/10/2024'
 export const uuid = 'c28e5'
 
 export const refs = {
-  'fr-fr': ['CM2N2A-1'],
+  'fr-fr': ['CM2N2A-1', '6AutoF1-1'],
   'fr-2016': ['6N32'],
   'fr-ch': ['9NO3A-3'],
 }

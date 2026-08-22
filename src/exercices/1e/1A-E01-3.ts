@@ -1,4 +1,4 @@
-import CoeffMul from '../can/2e/can2C24'
+import CoeffMul from '../can/2e/can2S11-03'
 export const titre = 'Calculer un coefficient multiplicateur'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true

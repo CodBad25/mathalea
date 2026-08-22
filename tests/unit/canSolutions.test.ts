@@ -20,6 +20,7 @@ import handleInteractiveClock from '../../src/lib/customElements/InteractiveCloc
 import '../../src/lib/customElements/LabyrintheBlockly'
 import '../../src/lib/customElements/ListeDeroulanteElement'
 import '../../src/lib/customElements/MathaleaMathfield'
+import '../../src/lib/customElements/MathaleaCouteauSuisse'
 import '../../src/lib/customElements/MathaleaQcm'
 import '../../src/lib/customElements/MathaleaTextfield'
 import '../../src/lib/customElements/MetaInteractif2dElement'

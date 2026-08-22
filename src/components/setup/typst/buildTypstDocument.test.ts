@@ -77,12 +77,12 @@ describe('buildTypstDocument', () => {
     expect(code).toContain('#tasks(columns: ex1-corr-colonnes')
     expect(code).toContain('#mathalea-anchor("tasks-corr", 1)')
     expect(code).toContain(
-      '#tasks(columns: ex1-colonnes, label: "1.", row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + $2 + 2$\n      + $3 times 4$\n    ]',
+      '#tasks(columns: ex1-colonnes, label: "1.", row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + #box($2 + 2$)\n      + #box($3 times 4$)\n    ]',
     )
     expect(code).toContain('#if corrige [')
     // les corrections démarrent sur une nouvelle page
     expect(code).toContain('#pagebreak(weak: true)')
-    expect(code).toContain('$3 times 4 = 12$')
+    expect(code).toContain('#box($3 times 4 = 12$)')
   })
 
   it('ne déclare pas de réglages de questions pour un exercice à question unique', () => {
@@ -141,7 +141,7 @@ describe('buildTypstDocument', () => {
       exercise({ questions: ['a) $1+1$', 'b) $2+2$'], numbered: false }),
     ])
     expect(code).toContain(
-      '#tasks(columns: ex1-colonnes, label: none, row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + a) $1 + 1$\n      + b) $2 + 2$\n    ]',
+      '#tasks(columns: ex1-colonnes, label: none, row-gutter: ex1-gutter, above: 1.2em, below: 0.8em, start: 1)[\n      + a) #box($1 + 1$)\n      + b) #box($2 + 2$)\n    ]',
     )
     expect(code).toContain('#let ex1-colonnes = "auto-fit"')
   })
@@ -533,8 +533,14 @@ describe('buildTypstDocument', () => {
       { ...defaultTypstDocumentOptions, showQrCode: true },
     )
     // depuis exercise-bank 0.6.0, le QR-code est un paramètre de exo.with(...)
-    // (le paquet le génère et le place lui-même, plus besoin de tiaoma)
-    expect(withQr).toContain(`  qr: "${url}",`)
+    // (le paquet le place lui-même, plus besoin de tiaoma) ; il est fourni en
+    // image SVG pré-rendue (fond blanc explicite) plutôt qu'en URL brute, car
+    // tiaoma (utilisé en interne par exercise-bank pour une URL) ignore toute
+    // option de fond et produit un QR-code transparent
+    expect(withQr).toContain('  qr: image(bytes(')
+    expect(withQr).toContain('format: "svg", width: 100%),')
+    expect(withQr).toContain('#ffffff')
+    expect(withQr).not.toContain(`  qr: "${url}",`)
     expect(withQr).toContain(`  qr-size: 1.8cm,`)
     expect(withQr).not.toContain('tiaoma')
     expect(withQr).not.toContain('#place(')
@@ -1062,16 +1068,18 @@ describe('mode « Course aux nombres » (canMode)', () => {
     expect(code).toContain('#let can-tableau(')
     expect(code).toContain('#can-tableau(')
     // les questions des deux exercices se suivent dans le même tableau
-    expect(code).toContain('[$7 times 5$],')
+    expect(code).toContain('[#box($7 times 5$)],')
     expect(code).toContain('[Combien de boules ?],')
-    expect(code).toContain('[$...$ boules],')
+    expect(code).toContain('[#box($...$) boules],')
     // corrections numérotées à la suite, dans l'ordre des lignes, et
     // réparties en colonnes (les réponses tiennent en quelques caractères)
     expect(code).toContain('#if corrige [')
     expect(code).toContain(
       '#tasks(columns: "auto-fit", label: (..n) => strong(numbering("1.", ..n))',
     )
-    expect(code).toContain('      + $35$\n      + $66$\n      + $12$ boules')
+    expect(code).toContain(
+      '      + #box($35$)\n      + #box($66$)\n      + #box($12$) boules',
+    )
     // ni banque d'exercices ni badges : il n'y a plus de titre d'exercice
     expect(code).not.toContain('exercise-bank')
     expect(code).not.toContain('#let ex1 = exo.with(')
@@ -1091,7 +1099,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
       [],
       { exportMode: true },
     )
-    expect(code).toContain('[$7 times 5$],')
+    expect(code).toContain('[#box($7 times 5$)],')
     expect(code).not.toContain('Calculer')
   })
 
@@ -1104,7 +1112,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
       { exportMode: true },
     )
     expect(code).toContain(
-      '#can-tableau(\n    (\n      [$1 + 1$],\n      [$2 + 2$],\n    ),\n    (\n      [],\n      [],\n    ),\n  )',
+      '#can-tableau(\n    (\n      [#box($1 + 1$)],\n      [#box($2 + 2$)],\n    ),\n    (\n      [],\n      [],\n    ),\n  )',
     )
   })
 
@@ -1137,11 +1145,13 @@ describe('mode « Course aux nombres » (canMode)', () => {
     // un repère « exo » par exercice, dans sa première cellule, et un repère
     // « can-row » dans chaque cellule (édition d'une ligne du tableau)
     expect(code).toContain(
-      '[#mathalea-anchor("exo", 1)\n      #mathalea-anchor("can-row", 1)\n      $1 + 1$],',
+      '[#mathalea-anchor("exo", 1)\n      #mathalea-anchor("can-row", 1)\n      #box($1 + 1$)],',
     )
-    expect(code).toContain('[#mathalea-anchor("can-row", 2)\n      $2 + 2$],')
     expect(code).toContain(
-      '[#mathalea-anchor("exo", 2)\n      #mathalea-anchor("can-row", 3)\n      $3 + 3$],',
+      '[#mathalea-anchor("can-row", 2)\n      #box($2 + 2$)],',
+    )
+    expect(code).toContain(
+      '[#mathalea-anchor("exo", 2)\n      #mathalea-anchor("can-row", 3)\n      #box($3 + 3$)],',
     )
     // seuls les deux gaps qui encadrent le tableau existent
     expect(code).toContain('#mathalea-anchor("gap", 0)')
@@ -1161,7 +1171,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
       [[exercise({ questions: ['$5+5$'] })]],
     )
     expect(code).toContain('Sujet A')
-    expect(code).toContain('[$5 + 5$],')
+    expect(code).toContain('[#box($5 + 5$)],')
     // le compteur du paquet exercise-bank n'existe pas dans ce mode
     expect(code).not.toContain('#exo-counter.update(0)')
   })
@@ -1205,12 +1215,12 @@ describe('mode « Course aux nombres » (canMode)', () => {
 
     it('getGeneratedCanRowCode renvoie l’énoncé et la réponse générés de la ligne', () => {
       expect(getGeneratedCanRowCode(inputs, 1, canOptions)).toEqual({
-        enonce: '$1 + 1$',
-        reponse: '$2$',
+        enonce: '#box($1 + 1$)',
+        reponse: '#box($2$)',
       })
       expect(getGeneratedCanRowCode(inputs, 3, canOptions)).toEqual({
-        enonce: '$3 + 3$',
-        reponse: '$6$',
+        enonce: '#box($3 + 3$)',
+        reponse: '#box($6$)',
       })
     })
 
@@ -1317,7 +1327,7 @@ describe('correction minimale (minimalCorrections)', () => {
     expect(code).not.toContain('Le PGCD est')
     // les deux réponses se suivent, séparées par un cadratin
     expect(code).toContain(
-      '$text(fill: #rgb("#F15929"), upright(bold(6)))$\u2003$text(fill: #rgb("#F15929"), upright(bold(60)))$',
+      '#box($text(fill: #rgb("#F15929"), upright(bold(6)))$)\u2003#box($text(fill: #rgb("#F15929"), upright(bold(60)))$)',
     )
   })
 

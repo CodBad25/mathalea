@@ -1,14 +1,14 @@
-import Exercice from '../Exercice'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
 } from '../../modules/outils'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
+import Exercice from '../Exercice'
 
 export const interactifReady = true
 export const interactifType = 'mathlive'
@@ -21,7 +21,7 @@ export const dateDePublication = '07/06/2025'
  */
 export const uuid = '65ce1'
 export const refs = {
-  'fr-fr': ['auto6N2A'],
+  'fr-fr': ['auto6N2A', '6AutoN1'],
   'fr-2016': ['6C30-11'],
   'fr-ch': [],
 }
@@ -69,7 +69,7 @@ export default class TrouverFractionDecimale extends Exercice {
     })
     let reponse = 0
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (denominateursPossibles[i]) {
         case 1:
           reponse = 10

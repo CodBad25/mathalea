@@ -250,6 +250,6 @@ export default class AutoF2f extends ExerciceQcmA {
   constructor() {
     super()
     this.versionAleatoire()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
   }
 }

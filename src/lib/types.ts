@@ -362,6 +362,7 @@ export type InteractivityType =
   | 'mathalea-textfield'
   | 'tableau-mathlive'
   | 'mathalea-qcm'
+  | 'mathalea-couteau-suisse'
   | 'mathalea-branching-qcm'
   | 'alea-iep-editeur'
   | 'relier-etiquettes' // Non compatible AMC
@@ -409,6 +410,7 @@ export function isInteractivityType(
     value === 'mathalea-textfield' ||
     value === 'tableau-mathlive' ||
     value === 'mathalea-qcm' ||
+    value === 'mathalea-couteau-suisse' ||
     value === 'mathalea-branching-qcm' ||
     value === 'alea-iep-editeur' ||
     value === 'clique-figure' ||
@@ -453,6 +455,7 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'mathalea-textfield' ||
     value === 'tableau-mathlive' ||
     value === 'mathalea-qcm' ||
+    value === 'mathalea-couteau-suisse' ||
     value === 'mathalea-branching-qcm' ||
     value === 'alea-iep-editeur' ||
     value === 'clique-figure' ||
@@ -939,6 +942,10 @@ export type AutoCorrection = {
   // Contrat cible interactif
   valeur?: ValeurNormalized
   formatInteractif?: InteractivityType
+  elements?: {
+    formatInteractif: InteractivityType
+    autoCorrection?: unknown
+  }[]
   options?: ParamForQcmInteractif
   propositions?: UneProposition[]
   branchingQcm?: unknown

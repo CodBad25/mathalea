@@ -231,6 +231,6 @@ ${texteEnCouleurEtGras("Aucune de ces fonctions n'est affine.")}`
   constructor() {
     super()
     this.versionAleatoire()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
   }
 }

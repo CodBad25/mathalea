@@ -1,6 +1,10 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
+import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import { nombreElementsDifferents } from '../ExerciceQcm'
@@ -128,7 +132,7 @@ export default class MoyennePondereeQCM extends ExerciceQcmA {
         distracteurErreur = `$x=${texNombre(xErreur)}$`
       }
     }
-    this.enonce = `Voici les $${effectif + 1}$ notes sur 20 obtenues par un élève en mathématiques :<br><br>
+    this.enonce = `Voici les $${effectif + 1}$ notes sur $20$ obtenues par un élève en mathématiques :<br><br>
 ${tableau}
 <br><br>
 On cherche ce que doit valoir $x$ pour que la moyenne de l'élève soit égale à $${moyenne}$.`
@@ -161,7 +165,7 @@ ${sommeProduits} + ${coeffX}x &= ${moyenne} \\times ${sommeCoeff}\\\\
 ${coeffX}x &= ${moyenne * sommeCoeff} - ${sommeProduits}\\\\
  ${coeffX}x &= ${moyenne * sommeCoeff - sommeProduits}\\\\
 x &= \\dfrac{${moyenne * sommeCoeff - sommeProduits}}{${coeffX}}\\\\
-x&= ${miseEnEvidence(x)}.
+${miseEnEvidence('x' + sp())}& ${miseEnEvidence('=' + x)}
 \\end{aligned}
 $
 `
@@ -181,7 +185,7 @@ $
       shuffleArray(distracteurs)
 
       this.reponses = [
-        'Impossible, il faudrait une note supérieure à 20.',
+        'Impossible, il faudrait une note supérieure à $20$.',
         ...distracteurs,
       ]
 
@@ -198,7 +202,7 @@ $${produits} + x \\times ${coeffX} = ${sommeLitterale}$.
 $\\dfrac{${sommeProduits} + ${coeffX}x}{${sommeCoeff}} = ${moyenne}$<br>
 $${sommeProduits} + ${coeffX}x = ${moyenne * sommeCoeff}$<br>
 $x = \\dfrac{${moyenne * sommeCoeff - sommeProduits}}{${coeffX}} = ${x}$<br>
-Mais cette valeur dépasse 20. Il est donc <strong>impossible</strong> d'obtenir une telle moyenne avec une note sur 20.
+Mais cette valeur dépasse $20$. Il est donc ${texteEnCouleurEtGras("impossible d'obtenir une telle moyenne avec une note sur 20")}.
 `
     }
   }

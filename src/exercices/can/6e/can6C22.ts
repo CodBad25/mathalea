@@ -20,7 +20,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'bf6e6'
 
 export const refs = {
-  'fr-fr': ['can6C22', '6N3A-flash1', '3AutoN01-1'],
+  'fr-fr': ['can6C22', '6N3A-flash1', '3AutoN01-1', '6AutoF2'],
   'fr-ch': [],
 }
 export default class ValeursDecimalesFractions extends ExerciceSimple {

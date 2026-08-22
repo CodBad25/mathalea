@@ -52,7 +52,7 @@ export default class EquaDiff extends ExerciceQcm {
 
   constructor() {
     super()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionOriginale()
   }
 }

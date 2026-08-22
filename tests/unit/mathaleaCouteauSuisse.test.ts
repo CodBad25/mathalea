@@ -1,0 +1,116 @@
+import { beforeEach, describe, expect, it } from 'vitest'
+import Exercice from '../../src/exercices/Exercice'
+import {
+  addMathaleaCouteauSuisse,
+  MathaleaCouteauSuisseElement,
+} from '../../src/lib/customElements/MathaleaCouteauSuisse'
+import { MathaleaQcmElement } from '../../src/lib/customElements/MathaleaQcm'
+import {
+  listOfCustomElements,
+  mathaleaCustomElementsRegistry,
+} from '../../src/lib/customElements/MathaleaCustomElement'
+import { exerciceInteractif } from '../../src/lib/interactif/gestionInteractif'
+import { setOutputHtml } from '../../src/modules/context'
+
+const propositions = [
+  { texte: '$4$', statut: true },
+  { texte: '$5$', statut: false },
+]
+
+describe('MathaleaCouteauSuisseElement', () => {
+  let exercice: Exercice
+
+  beforeEach(() => {
+    setOutputHtml()
+    document.body.innerHTML = ''
+    exercice = new Exercice()
+    exercice.numeroExercice = 3
+    exercice.nbQuestions = 1
+    exercice.interactifType = 'custom'
+    exercice.autoCorrection[0] = {}
+  })
+
+  it('enregistre le tag dans les registres MathALEA', () => {
+    expect(customElements.get('mathalea-couteau-suisse')).toBe(
+      MathaleaCouteauSuisseElement,
+    )
+    expect(listOfCustomElements).toContain('mathalea-couteau-suisse')
+    expect(mathaleaCustomElementsRegistry.get('mathalea-couteau-suisse')).toBe(
+      MathaleaCouteauSuisseElement,
+    )
+  })
+
+  it('delegue la verification aux elements declares', () => {
+    document.body.innerHTML = addMathaleaCouteauSuisse(exercice, 0, {
+      contenu: MathaleaQcmElement.create({
+        numeroExercice: exercice.numeroExercice,
+        questionIndex: 0,
+        propositions,
+      }),
+      elements: [
+        {
+          formatInteractif: 'mathalea-qcm',
+          autoCorrection: {
+            propositions: propositions.map((proposition) => ({
+              ...proposition,
+            })),
+            options: {},
+          },
+        },
+      ],
+    })
+    const qcm = document.querySelector('mathalea-qcm') as MathaleaQcmElement
+    qcm.value = '[0]'
+
+    const result = MathaleaCouteauSuisseElement.verifQuestion(exercice, 0)
+
+    expect(result).toEqual({
+      isOk: true,
+      feedback: '',
+      score: { nbBonnesReponses: 1, nbReponses: 1 },
+    })
+    expect(exercice.autoCorrection[0].formatInteractif).toBe(
+      'mathalea-couteau-suisse',
+    )
+    expect(exercice.answers?.['mathalea-qcmEx3Q0']).toBe('[0]')
+    expect(exercice.answers?.['mathalea-couteau-suisseEx3Q0']).toContain(
+      'mathalea-qcmEx3Q0',
+    )
+    expect(qcm.interactivityOn).toBe(false)
+  })
+
+  it('fonctionne via le dispatch interactif central', () => {
+    document.body.innerHTML = addMathaleaCouteauSuisse(exercice, 0, {
+      contenu: MathaleaQcmElement.create({
+        numeroExercice: exercice.numeroExercice,
+        questionIndex: 0,
+        propositions,
+      }),
+      elements: [
+        {
+          formatInteractif: 'mathalea-qcm',
+          autoCorrection: {
+            propositions: propositions.map((proposition) => ({
+              ...proposition,
+            })),
+            options: {},
+          },
+        },
+      ],
+    })
+    const qcm = document.querySelector('mathalea-qcm') as MathaleaQcmElement
+    qcm.value = '[0]'
+
+    const result = exerciceInteractif(
+      exercice,
+      document.createElement('div'),
+      document.createElement('button'),
+    )
+
+    expect(result).toMatchObject({
+      numberOfPoints: 1,
+      numberOfQuestions: 1,
+      perQuestionIsOk: [true],
+    })
+  })
+})

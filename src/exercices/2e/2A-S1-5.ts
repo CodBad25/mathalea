@@ -5,7 +5,10 @@ import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { latex2d } from '../../lib/2d/textes'
 import { coopmathsAction } from '../../lib/colors'
 import { choice } from '../../lib/outils/arrayOutils'
-import { texteGras } from '../../lib/outils/embellissements'
+import {
+  texteEnCouleurEtGras,
+  texteGras,
+} from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
 import ExerciceQcmA from '../ExerciceQcmA'
 
@@ -200,9 +203,9 @@ export default class LireEffectifsCumules extends ExerciceQcmA {
     this.corrections = [
       ...typesDansOrdre.map(
         (type) =>
-          `${texteGras(`« ${affirmationsProposees[type]} »`)}<br>${justifications[type]}`,
+          `« ${typeBonneReponse === type ? texteEnCouleurEtGras(affirmationsProposees[type]) : affirmationsProposees[type]} »<br>${justifications[type]}`,
       ),
-      `${texteGras(`« L'effectif total est égal à $${abscisses.at(-1)}$. »`)}<br>
+      `« L'effectif total est égal à $${abscisses.at(-1)}$. »<br>
       On lit sur l'axe des ordonnées que l'effectif de la série est $50$, et non $${abscisses.at(-1)}$. Cette affirmation est donc ${texteGras('fausse')}.`,
     ]
     this.correction = ''
@@ -215,7 +218,7 @@ export default class LireEffectifsCumules extends ExerciceQcmA {
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionAleatoire()
   }
 }

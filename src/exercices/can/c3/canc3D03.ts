@@ -17,7 +17,7 @@ export const dateDePublication = '20/11/2021'
 export const uuid = 'e3b7d'
 
 export const refs = {
-  'fr-fr': ['canc3D03', '6M4A-flash2'],
+  'fr-fr': ['canc3D03', '6M4A-flash2', '6AutoT1-2'],
   'fr-ch': [],
 }
 export default class AjouterDesDurees extends ExerciceSimple {

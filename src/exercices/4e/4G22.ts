@@ -53,6 +53,11 @@ export default class ProblemesPythagore extends Exercice {
       3,
       '1 : Sens direct\n2 : Réciproque/contraposée\n3 : Mélange',
     ]
+    this.sup2 = false
+    this.besoinFormulaire2CaseACocher = [
+      'Écrire les unités dans les calculs de la correction',
+      false,
+    ]
   }
 
   nouvelleVersion() {
@@ -237,6 +242,7 @@ export default class ProblemesPythagore extends Exercice {
             c,
             'cm',
             bleuMathalea,
+            this.sup2,
           )[0]
           texteCorr += `<br>Finalement comme $O$ est aussi le milieu de $[${
             D + B
@@ -259,7 +265,18 @@ export default class ProblemesPythagore extends Exercice {
             : ''
           handleAnswers(this, i, { reponse: { value: b } })
           texteCorr = `$${nomQuadrilatere}$ est un rectangle donc il possède 4 angles droits. `
-          texteCorr += RedactionPythagore(B, C, A, 2, b, a, c)[0]
+          texteCorr += RedactionPythagore(
+            B,
+            C,
+            A,
+            2,
+            b,
+            a,
+            c,
+            'cm',
+            undefined,
+            this.sup2,
+          )[0]
           break
 
         case 'rectangle_diagonale_a_trouver':
@@ -276,7 +293,18 @@ export default class ProblemesPythagore extends Exercice {
             : ''
           handleAnswers(this, i, { reponse: { value: c } })
           texteCorr = `$${nomQuadrilatere}$ est un rectangle donc il possède 4 angles droits. `
-          texteCorr += RedactionPythagore(B, A, C, 1, b, a, c)[0]
+          texteCorr += RedactionPythagore(
+            B,
+            A,
+            C,
+            1,
+            b,
+            a,
+            c,
+            'cm',
+            undefined,
+            this.sup2,
+          )[0]
           break
 
         case 'parallelogramme_est_losange':

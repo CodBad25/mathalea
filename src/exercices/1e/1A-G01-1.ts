@@ -42,7 +42,7 @@ export default class Auto2AG10 extends ExerciceQcmA {
     super()
     this.interactif = true
     this.nbQuestions = 1
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.besoinFormulaireCaseACocher = false
     this.besoinFormulaireNumerique = false
     this.versionAleatoire()

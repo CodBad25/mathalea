@@ -19,7 +19,7 @@ export const interactifReady = true
 export const interactifType = 'svg-selection'
 export const uuid = '1574f'
 export const refs = {
-  'fr-fr': [],
+  'fr-fr': ['6AutoF3-3'],
   'fr-ch': ['PR-20'],
 }
 

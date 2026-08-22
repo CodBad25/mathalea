@@ -106,6 +106,15 @@ describe('latexMathToTypst', () => {
     expect(result).toContain('union')
   })
 
+  it('conserve les crochets d\'une notation de segment comme [YS]', () => {
+    // Régression : la règle qui enlève les crochets autour de "union"/"inter"
+    // (issus de \cup/\cap) matchait aussi tout contenu purement alphabétique,
+    // donc [YS] (segment) perdait ses crochets à tort.
+    const result = latexMathToTypst('[YS]')
+    expect(result).toContain('bracket.l')
+    expect(result).toContain('bracket.r')
+  })
+
   it('convertit le texte inclus dans les formules via #txt (police du texte)', () => {
     expect(latexMathToTypst('5\\,\\text{cm}')).toBe('5 thin#txt("cm")')
   })
@@ -142,7 +151,7 @@ describe('latexMathToTypst', () => {
     // bloc et ne le referme pas prématurément
     expect(
       htmlToTypst('$387\\text{ m$^2$/h} = \\dfrac{387\\text{ m$^2$}}{1}$'),
-    ).toBe('$387#txt(" m")^2#txt("/h")= frac(387#txt(" m")^2, 1)$')
+    ).toBe('#box($387#txt(" m")^2#txt("/h")= frac(387#txt(" m")^2, 1)$)')
   })
 
   it('supprime le saut de ligne final qui échapperait le $ fermant', () => {
@@ -303,7 +312,7 @@ describe('htmlToTypst — schémas en barres (SchemaEnBoite)', () => {
 describe('htmlToTypst', () => {
   it('convertit du texte avec formules', () => {
     expect(htmlToTypst('Calculer $\\dfrac{1}{2}+\\dfrac{1}{3}$.')).toBe(
-      'Calculer $frac(1, 2) + frac(1, 3)$.',
+      'Calculer #box($frac(1, 2) + frac(1, 3)$).',
     )
   })
 
@@ -353,6 +362,16 @@ describe('htmlToTypst', () => {
     )
     expect(result).toContain('#strong[Sports]')
     expect(result).toContain('#strong[TOTAL]')
+    expect(result).not.toContain('textbf')
+  })
+
+  it('retire \\large d\'une cellule de tableau \\text{\\large \\textbf{X}} au lieu de le laisser fuir (P020)', () => {
+    const result = htmlToTypst(
+      '$\\begin{array}{|c|c|}\\hline \\text{\\large \\textbf{Sports}} & \\text{\\large \\textbf{TOTAL}} \\\\ \\hline 12 & 100 \\\\ \\hline\\end{array}$',
+    )
+    expect(result).toContain('#strong[Sports]')
+    expect(result).toContain('#strong[TOTAL]')
+    expect(result).not.toContain('large')
     expect(result).not.toContain('textbf')
   })
 
@@ -416,7 +435,7 @@ describe('htmlToTypst', () => {
     const result = htmlToTypst(
       'Angle : <span class="katex"><span class="katex-mathml"><math><semantics><mrow></mrow><annotation encoding="application/x-tex">78^\\circ</annotation></semantics></math></span><span class="katex-html">78∘{\\color{black} \\scriptsize{78^\\circ}}78∘</span></span>',
     )
-    expect(result).toBe('Angle : $78^circle.small$')
+    expect(result).toBe('Angle : #box($78^circle.small$)')
     expect(result).not.toContain('78∘')
     expect(result).not.toContain('\\scriptsize')
   })
@@ -522,8 +541,8 @@ describe('htmlToTypst', () => {
         '</div><div class="m-2" id="resultatCheckEx1Q0"></div>',
     )
     expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
-    expect(result).toContain('+ $1$')
-    expect(result).toContain('+ $2$')
+    expect(result).toContain('+ #box($1$)')
+    expect(result).toContain('+ #box($2$)')
     expect(result).not.toContain('#qcm-bonne')
   })
 
@@ -535,8 +554,8 @@ describe('htmlToTypst', () => {
         '</div>',
     )
     expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
-    expect(result).toContain('+ #qcm-bonne[$8$]')
-    expect(result).toContain('+ $4$')
+    expect(result).toContain('+ #qcm-bonne[#box($8$)]')
+    expect(result).toContain('+ #box($4$)')
   })
 
   it('conserve le QCM quand une figure mathalea2d suit dans le même contenu', () => {
@@ -556,8 +575,8 @@ describe('htmlToTypst', () => {
       figures,
     )
     expect(result).toContain('#tasks(columns: qcm-colonnes, label: "A)"')
-    expect(result).toContain('+ $1$')
-    expect(result).toContain('+ $2$')
+    expect(result).toContain('+ #box($1$)')
+    expect(result).toContain('+ #box($2$)')
     expect(result).toContain('#mathalea-figure-block(1, fig-1-align, fig-1-zoom,')
     expect(result).not.toMatch(/(^|[^-\w])0($|[^.\w])/m)
     expect(figures).toHaveLength(1)
@@ -573,9 +592,9 @@ describe('htmlToTypst', () => {
     expect(result).toContain('#table(')
     expect(result).toContain('columns: 2')
     expect(result).toContain('stroke: 0.5pt')
-    expect(result).toContain('table.cell(fill: rgb("#d3d3d3"))[$x$]')
-    expect(result).toContain('[$1$]')
-    expect(result).toContain('[$f(x)$]')
+    expect(result).toContain('table.cell(fill: rgb("#d3d3d3"))[#box($x$)]')
+    expect(result).toContain('[#box($1$)]')
+    expect(result).toContain('[#box($f(x)$)]')
   })
 
   describe('protection des `&` bruts (tableau LaTeX) contre le round-trip DOM', () => {

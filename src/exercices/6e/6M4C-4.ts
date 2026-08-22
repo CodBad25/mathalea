@@ -6,7 +6,7 @@ export const interactifReady = true
 export const interactifType = 'multi-mathfield'
 export const uuid = '8013e'
 export const refs = {
-  'fr-fr': ['6M4C-4'],
+  'fr-fr': ['6M4C-4', '6AutoT1-6'],
   'fr-ch': ['9GM3A-7', '10GM3B-5'],
 }
 /**

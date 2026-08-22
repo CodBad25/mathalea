@@ -393,6 +393,49 @@ Pour un nouveau QCM, préférer systématiquement :
 parcours historique : les conserver pour maintenir les exercices qui les
 utilisent déjà.
 
+### Classes `ExerciceQcm` et `ExerciceQcmA`
+
+`ExerciceQcm` sert aux QCM historiques sans aléatoirisation propre à l'exercice.
+`ExerciceQcmA` ajoute une méthode `versionAleatoire()` pour les exercices dont
+les valeurs ou les propositions changent à chaque génération.
+
+Ces classes construisent elles-mêmes `autoCorrection` à partir des propriétés
+suivantes :
+
+- `this.enonce` contient l'énoncé ;
+- `this.reponses` contient les propositions ;
+- `this.correction` contient la correction générale de la question ;
+- `this.corrections` peut contenir une correction associée à chaque proposition ;
+- `this.options` contient les options du QCM, par exemple `vertical`, `ordered`,
+  `radio`, `compact` ou `dontKnow`.
+
+Pour un QCU, laisser `this.bonnesReponses` à `undefined`. La première
+proposition est alors considérée comme la seule bonne réponse :
+
+```ts
+this.reponses = [
+  '$4$', // bonne réponse
+  '$5$',
+  '$6$',
+]
+this.corrections = [
+  '$2+2=4$.',
+  '$5$ est trop grand.',
+  '$6$ est trop grand.',
+]
+this.bonnesReponses = undefined
+this.options = { vertical: true, radio: true }
+```
+
+Le moteur brasse les propositions et garde chaque entrée de `this.corrections`
+associée à la proposition correspondante. Ne pas utiliser `this.correction` pour
+porter une correction différente par proposition.
+
+Renseigner `this.bonnesReponses` uniquement pour un vrai QCM à plusieurs
+réponses possibles. Dès que cette propriété existe, `ExerciceQcm` bascule en
+mode multi-réponses et force `options.radio = false`, donc des cases à cocher
+remplacent les boutons radio.
+
 ## Prévisualiser et tester
 
 Pendant le développement :

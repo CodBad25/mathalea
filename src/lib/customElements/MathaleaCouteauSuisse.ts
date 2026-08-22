@@ -1,0 +1,198 @@
+import { context } from '../../modules/context'
+import type { IExercice, InteractivityType } from '../types'
+import MathaleaCustomElement, {
+  mathaleaCustomElementsRegistry,
+  registerMathaleaCustomElement,
+} from './MathaleaCustomElement'
+
+export type MathaleaCouteauSuisseChild = {
+  formatInteractif: InteractivityType
+  autoCorrection?: unknown
+}
+
+export type MathaleaCouteauSuisseOptions = {
+  id?: string
+  numeroExercice: number
+  questionIndex: number
+  elements: MathaleaCouteauSuisseChild[]
+  contenu: string
+  interactivityOn?: boolean
+}
+
+type VerificationResult = {
+  isOk: boolean
+  feedback: string
+  score: { nbBonnesReponses: number; nbReponses: number }
+}
+
+export class MathaleaCouteauSuisseElement extends MathaleaCustomElement {
+  static readonly elementTag = 'mathalea-couteau-suisse'
+
+  static create({
+    id,
+    numeroExercice,
+    questionIndex,
+    elements,
+    contenu,
+    interactivityOn = true,
+  }: MathaleaCouteauSuisseOptions): string {
+    if (!context.isHtml) return ''
+    const computedId =
+      id ??
+      `${MathaleaCouteauSuisseElement.elementTag}Ex${numeroExercice}Q${questionIndex}`
+    const attrs = this.buildAttributes({
+      id: computedId,
+      numeroExercice,
+      questionIndex,
+      elements,
+      interactivityOn,
+    })
+    return `<${this.elementTag}${attrs}>${contenu}</${this.elementTag}>`
+  }
+
+  static verifQuestion(
+    exercice: IExercice,
+    questionIndex: number,
+  ): VerificationResult {
+    const ac = exercice.autoCorrection?.[questionIndex]
+    const elements = parseElements(
+      (ac as { elements?: unknown } | undefined)?.elements ??
+        document
+          .getElementById(
+            `${MathaleaCouteauSuisseElement.elementTag}Ex${exercice.numeroExercice}Q${questionIndex}`,
+          )
+          ?.getAttribute('elements'),
+    )
+
+    const originalAutoCorrection = exercice.autoCorrection[questionIndex]
+    const results: VerificationResult[] = []
+
+    try {
+      for (const element of elements) {
+        const elementClass = mathaleaCustomElementsRegistry.get(
+          element.formatInteractif,
+        )
+        if (elementClass == null) {
+          throw Error(
+            `mathalea-couteau-suisse : élément inconnu '${element.formatInteractif}'`,
+          )
+        }
+        exercice.autoCorrection[questionIndex] = {
+          ...((originalAutoCorrection ?? {}) as Record<string, unknown>),
+          ...((element.autoCorrection ?? {}) as Record<string, unknown>),
+          formatInteractif: element.formatInteractif,
+        }
+        results.push(elementClass.verifQuestion(exercice, questionIndex))
+      }
+    } finally {
+      exercice.autoCorrection[questionIndex] = originalAutoCorrection
+    }
+
+    const score = results.reduce(
+      (acc, result) => ({
+        nbBonnesReponses: acc.nbBonnesReponses + result.score.nbBonnesReponses,
+        nbReponses: acc.nbReponses + result.score.nbReponses,
+      }),
+      { nbBonnesReponses: 0, nbReponses: 0 },
+    )
+
+    const wrapper = document.getElementById(
+      `${MathaleaCouteauSuisseElement.elementTag}Ex${exercice.numeroExercice}Q${questionIndex}`,
+    ) as MathaleaCouteauSuisseElement | null
+    if (wrapper != null) {
+      wrapper.interactivityOn = false
+      exercice.answers ??= {}
+      exercice.answers[wrapper.id] = wrapper.value
+    }
+
+    return {
+      isOk: results.length > 0 && results.every((result) => result.isOk),
+      feedback: results
+        .map((result) => result.feedback)
+        .filter(Boolean)
+        .join('<br>'),
+      score:
+        score.nbReponses > 0 ? score : { nbBonnesReponses: 0, nbReponses: 1 },
+    }
+  }
+
+  render(): string | void {
+    this.hydrateCommonAttributes()
+    this.onInteractivityChanged(this.interactivityOn)
+    return ''
+  }
+
+  get value(): string {
+    const values: Record<string, unknown> = {}
+    this.querySelectorAll<HTMLElement>('*').forEach((element) => {
+      const tag = element.tagName.toLowerCase()
+      if (!mathaleaCustomElementsRegistry.has(tag) || !('value' in element))
+        return
+      const id = element.id || tag
+      values[id] = (element as HTMLElement & { value: unknown }).value
+    })
+    return JSON.stringify(values)
+  }
+
+  protected onInteractivityChanged(isOn: boolean): void {
+    this.querySelectorAll<HTMLElement>('*').forEach((element) => {
+      const tag = element.tagName.toLowerCase()
+      if (!mathaleaCustomElementsRegistry.has(tag)) return
+      if ('interactivityOn' in element) {
+        ;(
+          element as HTMLElement & { interactivityOn: boolean }
+        ).interactivityOn = isOn
+      } else {
+        element.setAttribute('interactivity-on', isOn ? 'true' : 'false')
+      }
+    })
+  }
+}
+
+export function addMathaleaCouteauSuisse(
+  exercice: IExercice,
+  questionIndex: number,
+  options: Omit<
+    MathaleaCouteauSuisseOptions,
+    'numeroExercice' | 'questionIndex'
+  >,
+): string {
+  if (!context.isHtml) return ''
+  exercice.autoCorrection[questionIndex] ??= {}
+  const ac = exercice.autoCorrection[questionIndex] as {
+    formatInteractif?: InteractivityType
+    elements?: MathaleaCouteauSuisseChild[]
+  }
+  ac.formatInteractif = MathaleaCouteauSuisseElement.elementTag
+  ac.elements = options.elements
+  return MathaleaCouteauSuisseElement.create({
+    ...options,
+    numeroExercice: exercice.numeroExercice ?? 0,
+    questionIndex,
+  })
+}
+
+function parseElements(value: unknown): MathaleaCouteauSuisseChild[] {
+  if (Array.isArray(value)) return value.filter(isChild)
+  if (typeof value !== 'string' || value.trim() === '') return []
+  try {
+    const decoded = value.includes('%') ? decodeURIComponent(value) : value
+    const parsed = JSON.parse(decoded)
+    return Array.isArray(parsed) ? parsed.filter(isChild) : []
+  } catch {
+    return []
+  }
+}
+
+function isChild(value: unknown): value is MathaleaCouteauSuisseChild {
+  return (
+    value != null &&
+    typeof value === 'object' &&
+    typeof (value as { formatInteractif?: unknown }).formatInteractif ===
+      'string'
+  )
+}
+
+registerMathaleaCustomElement(MathaleaCouteauSuisseElement)
+
+export default MathaleaCouteauSuisseElement

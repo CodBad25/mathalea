@@ -66,6 +66,9 @@ export default class CalculProportionCumuleeHistogramme extends ExerciceQcmA {
       barres: true,
       valuesOn: true,
       effectifsOn: true,
+      titre: "Nombre d'exercices réalisés en une semaine par des élèves",
+      labelHorizontal: "Nombre d'exercices réalisés",
+      labelVertical: "Nombre d'élèves",
     })
     const total = serie.reduce((somme, [, effectif]) => somme + effectif, 0)
     const effectifReponse = this.effectifCumule(serie, seuil, sens)

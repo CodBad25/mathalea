@@ -1,4 +1,4 @@
-import CalculExpAvecValeurs from '../can/2e/can2C22'
+import CalculExpAvecValeurs from '../can/2e/can2N40-01'
 export const titre = 'Calculer une expression avec des valeurs'
 export const dateDePublication = '23/07/2025'
 export const amcReady = true
@@ -7,7 +7,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
- * Clone de can2C22 pour les auto 1er
+ * Clone de can2N40-01 pour les auto 1er
  * @author Gilles Mora
  */
 

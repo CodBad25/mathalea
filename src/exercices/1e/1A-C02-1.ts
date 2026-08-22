@@ -1,4 +1,4 @@
-import ProgrammeCalcul2 from '../can/2e/can2C16'
+import ProgrammeCalcul2 from '../can/2e/can2N31-04'
 export const titre = 'Calculer avec un programme de calcul'
 export const dateDePublication = '04/08/2025'
 export const amcReady = true
@@ -7,7 +7,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
- * Clone de can2C16 pour les auto 1er
+ * Clone de can2N31-04 pour les auto 1er
  * @author Gilles Mora
  */
 

@@ -1,5 +1,5 @@
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 
@@ -87,7 +87,7 @@ export default class RemplacerValeurSerieQCM extends ExerciceQcmA {
         : 'ne change pas'
     const mettreEnEvidenceSiVrai = (texte: string, affirmation: string) =>
       affirmation === affirmationVraie
-        ? `$${miseEnEvidence(`\\text{${texte}}`)}$`
+        ? `${texteEnCouleurEtGras(texte)}`
         : texte
 
     this.enonce = `La série suivante est donnée : $${serieEnonce.join('\\,;\\,')}$.<br>
@@ -164,7 +164,7 @@ export default class RemplacerValeurSerieQCM extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionAleatoire()
   }
 }

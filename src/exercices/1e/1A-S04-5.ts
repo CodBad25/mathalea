@@ -33,6 +33,8 @@ export default class CalculMoyenneHistogrammeQCM extends ExerciceQcmA {
       cumul: false,
       barres: true,
       valuesOn: true,
+      titre: 'Diagramme de la série statistique étudiée',
+      labelHorizontal: 'Valeurs de la série',
     })
     const moyenne = maSerie.moyenne()
     const q1 = maSerie.q1
@@ -84,7 +86,7 @@ export default class CalculMoyenneHistogrammeQCM extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionAleatoire()
   }
 }

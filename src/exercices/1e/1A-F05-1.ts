@@ -610,6 +610,6 @@ export default class Auto1AF5 extends ExerciceQcmA {
     super()
     // Appel de la version originale par défaut, ou de la version aléatoire selon les besoins
     this.versionOriginale()
-    if (!context.isHtml) this.options = { ...this.options, vertical: true }
+    if (!context.isHtml) this.options.vertical = true
   }
 }

@@ -32,6 +32,8 @@ export default class LireFrequenceHistogrammeQCM extends ExerciceQcmA {
       valuesOn: true,
       effectifsOn: false,
       percentVsEffectifs: true,
+      titre: 'Diagramme des fréquences cumulées croissantes',
+      labelHorizontal: 'Valeurs de la série',
     })
     const q1 = maSerie.q1
     const q3 = maSerie.q3
@@ -83,7 +85,7 @@ export default class LireFrequenceHistogrammeQCM extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionAleatoire()
   }
 }

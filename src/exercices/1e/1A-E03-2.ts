@@ -99,7 +99,7 @@ export default class TauxEvolution extends ExerciceQcmA {
 
   constructor() {
     super()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionAleatoire()
   }
 }

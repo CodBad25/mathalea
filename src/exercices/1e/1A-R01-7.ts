@@ -1,4 +1,4 @@
-import calculAvecPourcentage from '../can/2e/can2C29'
+import calculAvecPourcentage from '../can/2e/can2S10-03'
 export const titre = "Calculer un effectif à partir d'un pourcentage"
 export const dateDePublication = '23/03/2026'
 export const amcReady = true
@@ -7,7 +7,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
- * Clone de can2C29 pour les auto 1er
+ * Clone de can2S10-03 pour les auto 1er
  * @author Gilles Mora
  */
 

@@ -34,7 +34,7 @@ export default class CalculEffectifQCM extends ExerciceQcmA {
     const histogramme = maSerie.diagramme({
       cumul: false,
       barres: true,
-      valuesOn: false,
+      valuesOn: true,
       effectifsOn: false,
       titre: 'Notes obtenues par la classe de 1ère',
       labelHorizontal: 'Notes sur 20',
@@ -52,7 +52,7 @@ export default class CalculEffectifQCM extends ExerciceQcmA {
           : n - 1
     const distracteur2 = listeTableau.length
     const distracteur3 = listeTableau
-      .map(([note, effectif]) => Number(note))
+      .map(([note]) => Number(note))
       .reduce((a, b) => a + b)
 
     this.reponses = [
@@ -66,12 +66,14 @@ export default class CalculEffectifQCM extends ExerciceQcmA {
       Quel est l'effectif total de cette classe ?`
 
     // Correction : explication simple, claire
-    this.correction = `L'effectif total est le nombre de notes représentées dans l'histogramme.<br>
+    this.correction = `L'effectif total est le nombre de notes représentées dans le diagramme en barres.<br>
       On peut le calculer en additionnant les effectifs de chaque barre.<br>
-      Les effectifs sont : ${maSerie.serieTableau
+      Les effectifs sont : <br>${maSerie.serieTableau
         .map(([note, effectif]) => `$${effectif}$ pour la note $${note}$`)
-        .join('<br>')}.<br>
-      Ici, on trouve un effectif total de $${miseEnEvidence(n)}$ élèves.`
+        .join(',<br>')}.<br>
+      Ici, on trouve un effectif total de $${maSerie.serieTableau
+        .map(([_note, effectif]) => effectif)
+        .join('+')}=${miseEnEvidence(n)}$ élèves.`
   }
 
   versionOriginale: () => void = () => {
@@ -103,7 +105,6 @@ export default class CalculEffectifQCM extends ExerciceQcmA {
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    this.options = { ...this.options, vertical: true }
     this.versionAleatoire()
   }
 }

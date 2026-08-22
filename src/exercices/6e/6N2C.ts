@@ -22,7 +22,7 @@ export const dateDePublication = '07/06/2025'
  */
 export const uuid = '795b9'
 export const refs = {
-  'fr-fr': ['6N2C'],
+  'fr-fr': ['6N2C', '6AutoN4-1'],
   'fr-2016': ['6C30-10'],
   'fr-ch': [],
 }
@@ -70,7 +70,7 @@ export default class DiviserPar10 extends Exercice {
     let combien = 0
     let reponse = ''
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       switch (diviseursPossibles[i]) {
         case 1:
           combien = 10

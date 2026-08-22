@@ -20,5 +20,7 @@ export default class EgalitePythagore2D extends Pythagore2D {
       2,
       "1 : Donner l'égalité de Pythagore\n2 : Compléter l'égalité de Pythagore",
     ]
+    // Aucune longueur n'est calculée ici : l'option sur les unités n'a pas d'objet.
+    this.besoinFormulaire3CaseACocher = false
   }
 }

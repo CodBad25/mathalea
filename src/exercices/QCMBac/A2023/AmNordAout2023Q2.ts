@@ -42,7 +42,7 @@ On peut affirmer que :`
 
   constructor() {
     super()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionOriginale()
   }
 }

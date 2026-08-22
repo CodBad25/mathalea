@@ -952,7 +952,7 @@ export default class MetaExercice extends Exercice {
               )
 
               this.listeQuestions[indexQuestion] =
-                Question.consigne + questionHtml
+                Question.consigne + '<br><br>' + questionHtml
               if (tag === 'clique-figure') {
                 this.autoCorrection[indexQuestion] = {
                   ...(Question.autoCorrection[0] ?? {}),
@@ -1013,12 +1013,11 @@ export default class MetaExercice extends Exercice {
                   this.listeCorrections[indexQuestion] =
                     Question.listeCorrections[indexQuestion] ?? ''
                 }
-                this.listeQuestions[indexQuestion] =
-                  this.brancheQuestionCustom(
-                    Question,
-                    indexQuestion,
-                    this.listeQuestions[indexQuestion] ?? '',
-                  )
+                this.listeQuestions[indexQuestion] = this.brancheQuestionCustom(
+                  Question,
+                  indexQuestion,
+                  this.listeQuestions[indexQuestion] ?? '',
+                )
               } else {
                 const reponse = Question.autoCorrection[0]?.valeur
                 if (reponse != null)

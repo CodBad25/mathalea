@@ -47,7 +47,7 @@ La suite $\\left(v_n\\right)$ est:`
 
   constructor() {
     super()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionOriginale()
   }
 }

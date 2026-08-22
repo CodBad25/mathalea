@@ -17,7 +17,7 @@ export const dateDePublication = '03/07/2025'
 export const uuid = '59129'
 
 export const refs = {
-  'fr-fr': ['can6C50', 'auto6N2A-flash1'],
+  'fr-fr': ['can6C50', 'auto6N2A-flash1', '6AutoN1-1'],
   'fr-ch': ['NR'],
 }
 export default class RelationUniteDixiemeCentiemeMillieme extends ExerciceSimple {

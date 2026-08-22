@@ -748,7 +748,7 @@ export default class ÉcrireUneExpressionLitterale extends Exercice {
         case 17: // pair
           texte =
             'Écrire une expression littérale qui permet de représenter un nombre pair.'
-          texteCorr = `Un nombre pair peut s'écrire sous la forme $${miseEnEvidence('2n')}$')}$ avec $n$ un entier naturel.`
+          texteCorr = `Un nombre pair peut s'écrire sous la forme $${miseEnEvidence('2n')}$ avec $n$ un entier naturel.`
           this.autoCorrection[i].propositions = [
             {
               texte: '$2n$',

@@ -1,5 +1,8 @@
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
-import { diagrammeCirculaire } from '../../lib/2d/diagrammes'
+import {
+  DiagrammeCirculaire,
+  diagrammeCirculaire,
+} from '../../lib/2d/diagrammes'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { latex2d } from '../../lib/2d/textes'
 import { coopmathsAction, coopmathsStruct } from '../../lib/colors'
@@ -37,7 +40,7 @@ type ChoixOrientation = {
 export default class ChoixTerminaleDiagrammeCirculaireQCM extends ExerciceQcmA {
   private construireDiagramme(choixTerminale: ChoixOrientation[]): string {
     const rayon = 3.2
-    const diag = diagrammeCirculaire({
+    const diag: DiagrammeCirculaire = diagrammeCirculaire({
       effectifs: choixTerminale.map(({ angle }) => angle),
       labels: choixTerminale.map(({ nom }) => nom),
       rayon,
@@ -52,7 +55,7 @@ export default class ChoixTerminaleDiagrammeCirculaireQCM extends ExerciceQcmA {
       coopmathsStruct,
       '#14415C',
     ].map(colorToLatexOrHTML)
-    const objetsDiagramme = (diag as any).objets as Array<{
+    const objetsDiagramme = diag.objets as Array<{
       couleurDeRemplissage?: [string, string]
       couleurDesHachures?: [string, string]
       hachures?: boolean | string
@@ -195,7 +198,7 @@ export default class ChoixTerminaleDiagrammeCirculaireQCM extends ExerciceQcmA {
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = false
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionAleatoire()
   }
 }

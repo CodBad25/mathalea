@@ -10,9 +10,8 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 
-import type { MathfieldElement } from 'mathlive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { DomReadyActionElement } from '../../lib/customElements/DomReadyAction'
+import { boutonReponsePredefinie } from '../../lib/interactif/boutonReponsePredefinie'
 import {
   miseEnEvidence,
   texteEnCouleurEtGras,
@@ -23,7 +22,6 @@ export const titre =
 export const interactifReady = true
 export const interactifType = 'mathlive'
 export const dateDeModifImportante = '9/10/2024'
-const notFactorizableButtonAction = '1AL21-41:not-factorizable-button'
 
 /**
  *
@@ -47,7 +45,6 @@ export default class ResoudreEquationDegre2 extends Exercice {
   }
 
   nouvelleVersion() {
-    registerNotFactorizableButton()
     this.consigne =
       'Factoriser, si cela est possible, ' +
       (this.nbQuestions !== 1 ? 'chaque' : 'le') +
@@ -163,12 +160,10 @@ export default class ResoudreEquationDegre2 extends Exercice {
           texteAvant: '$P(x)=$',
         })
       if (this.interactif) {
-        texte += DomReadyActionElement.create({
-          action: notFactorizableButtonAction,
-          payload: {
-            numeroExercice: this.numeroExercice,
-            indiceQuestion: i,
-          },
+        texte += boutonReponsePredefinie({
+          numeroExercice: this.numeroExercice,
+          indiceQuestion: i,
+          label: 'Pas factorisable',
         })
       }
 
@@ -181,62 +176,4 @@ export default class ResoudreEquationDegre2 extends Exercice {
     }
     listeQuestionsToContenu(this)
   }
-}
-
-let notFactorizableButtonRegistered = false
-
-function registerNotFactorizableButton() {
-  if (notFactorizableButtonRegistered) return
-  notFactorizableButtonRegistered = true
-  DomReadyActionElement.registerCallback<{
-    numeroExercice: number
-    indiceQuestion: number
-  }>(notFactorizableButtonAction, ({ element, payload }) => {
-    element.innerHTML = ''
-    const button = document.createElement('button')
-    button.classList.add(
-      'flex-inline',
-      'px-6',
-      'py-2.5',
-      'ml-6',
-      'bg-coopmaths-action',
-      'dark:bg-coopmathsdark-action',
-      'text-coopmaths-canvas',
-      'dark:text-coopmathsdark-canvas',
-      'font-medium',
-      'text-xs',
-      'leading-tight',
-      'uppercase',
-      'rounded',
-      'shadow-md',
-      'transform',
-      'hover:bg-coopmaths-action-lightest',
-      'dark:hover:bg-coopmathsdark-action-lightest',
-      'hover:shadow-lg',
-      'focus:bg-coopmaths-action-lightest',
-      'dark:focus:bg-coopmathsdark-action-lightest',
-      'focus:shadow-lg',
-      'focus:outline-none',
-      'focus:ring-0',
-      'active:bg-coopmaths-action-lightest',
-      'dark:active:bg-coopmathsdark-action-lightest',
-      'active:shadow-lg',
-      'transition',
-      'duration-150',
-      'ease-in-out',
-    )
-    button.textContent = 'Pas factorisable'
-    const onClick = () => {
-      const mathfield = document.getElementById(
-        `champTexteEx${payload.numeroExercice}Q${payload.indiceQuestion}`,
-      ) as MathfieldElement | null
-      mathfield?.setValue('\\text{Pas factorisable}')
-    }
-    button.addEventListener('click', onClick)
-    element.appendChild(button)
-    return () => {
-      button.removeEventListener('click', onClick)
-      element.innerHTML = ''
-    }
-  })
 }

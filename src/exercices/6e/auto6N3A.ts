@@ -35,7 +35,7 @@ export const dateDeModifImportante = '20/05/2026'
 export const uuid = '50d4f'
 
 export const refs = {
-  'fr-fr': ['auto6N3A'],
+  'fr-fr': ['auto6N3A', '6AutoF1'],
   'fr-ch': [],
 }
 /**
@@ -106,7 +106,7 @@ export default class reconnaitreDesFractions extends Exercice {
     })
     const tailleFigure = 3
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
       let typeDeNonCoupe = ''

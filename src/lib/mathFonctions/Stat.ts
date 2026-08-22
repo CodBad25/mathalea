@@ -894,34 +894,33 @@ export default class Stat {
             }),
           )
         }
-        const texLabelY = latex2d(`\\text{${labelY}}`, -1.5, topCadre / 2, {
-          letterSize: 'normalsize',
-          orientation: 90,
-          opacity: 0.7,
-        })
+      }
+      const texLabelY = latex2d(`\\text{${labelY}}`, -1.5, topCadre / 2, {
+        letterSize: 'normalsize',
+        orientation: 90,
+        opacity: 0.7,
+      })
 
-        histo.push(texLabelY)
-        const texLabelX = latex2d(`\\text{${labelX}}`, max - min, -1.4, {
+      histo.push(texLabelY)
+      const texLabelX = latex2d(`\\text{${labelX}}`, max - min, -1.4, {
+        letterSize: 'normalsize',
+        orientation: 0,
+        opacity: 0.7,
+        justify: 'milieu',
+      })
+
+      histo.push(texLabelX)
+      const texteTitle = latex2d(
+        `\\text{${title}}`,
+        max - min,
+        topCadre + 0.7,
+        {
           letterSize: 'normalsize',
-          orientation: 0,
           opacity: 0.7,
           justify: 'milieu',
-        })
-
-        histo.push(texLabelX)
-        const texteTitle = latex2d(
-          `\\text{${title}}`,
-          max - min,
-          topCadre + 0.7,
-          {
-            letterSize: 'normalsize',
-            opacity: 0.7,
-            justify: 'milieu',
-          },
-        )
-        histo.push(texteTitle)
-      }
-
+        },
+      )
+      histo.push(texteTitle)
       return mathalea2d(
         Object.assign(
           { display: 'inline-block' } as const,

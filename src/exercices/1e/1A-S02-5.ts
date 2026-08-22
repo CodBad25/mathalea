@@ -91,7 +91,7 @@ export default class MoyenneClasseQCM extends ExerciceQcmA {
     this.enonce = `On donne ci-dessous le tableau de répartition des tailles de plants d'une serre, rangées en classes.
  <br><br> ${tableau}
  <br><br> Les tailles sont exprimées en centimètres.<br>
-  Quelle est la taille moyenne en cm des plants de cette serre ?`
+  Quelle est la taille moyenne en $\\text{cm}$ des plants de cette serre ?`
     this.correction = `Pour calculer la taille d'une série rangée en classes, on calcule d'abord la valeur centrale de chaque classe :<br>
     La première classe a pour centre $\\dfrac{${valeurInferieure} + ${valeurInferieure + pas}}{2} = ${valeurInferieure + pas / 2}\\text{ cm}$.<br>
     La seconde classe a pour centre $\\dfrac{${valeurInferieure + pas} + ${valeurInferieure + 2 * pas}}{2} = ${valeurInferieure + (3 * pas) / 2}\\text{ cm}$.<br>

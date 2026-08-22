@@ -1,3 +1,4 @@
+import QRCode from 'qrcode'
 import {
   CETZ_IMPORT,
   CETZ_PLOT_CHART_IMPORT,
@@ -11,9 +12,34 @@ import {
   VARTABLE_IMPORT,
   escapeTypstText,
   htmlToTypst,
+  sanitizeSvg,
 } from './latexToTypst'
 import { LOGO_CAN_VIRTUAL_PATH } from './mathaleaLogo'
 import { minimalCorrection } from './minimalCorrection'
+
+/**
+ * Rend le QR-code en SVG côté mathalea (fond blanc explicite) plutôt que de
+ * laisser `exercise-bank` passer l'URL brute à `tiaoma` : ce dernier ne
+ * reçoit alors qu'une couleur de trait (`fg-color`), sans option de fond, ce
+ * qui produit un QR-code transparent (illisible sur fond sombre ou coloré).
+ * `exercise-bank` accepte aussi bien une URL (`str`, déléguée à tiaoma) que
+ * du contenu Typst déjà mis en forme (`box(width: size, qr)`) : lui fournir
+ * directement une image évite ce chemin défaillant. `QRCode.toString` est
+ * synchrone en interne (le rendu SVG ne fait aucune E/S) ; son callback est
+ * donc appelé avant que la fonction ne retourne.
+ */
+function qrCodeToTypstImage(url: string): string {
+  let svg = ''
+  QRCode.toString(
+    url,
+    { type: 'svg', margin: 1, color: { dark: '#000000', light: '#ffffff' } },
+    (error: Error | null, result: string) => {
+      if (error != null) throw error
+      svg = result
+    },
+  )
+  return `image(bytes(${typstString(sanitizeSvg(svg))}), format: "svg", width: 100%)`
+}
 
 /**
  * Logo de la page de garde « Course aux nombres », référencé par chemin
@@ -1937,7 +1963,7 @@ function buildVersionContent(
           qrUrl != null &&
           carryOver.codeOverrides?.[group.head + 1] == null
         ) {
-          bankLines.push(`  qr: ${typstString(qrUrl)},`)
+          bankLines.push(`  qr: ${qrCodeToTypstImage(qrUrl)},`)
         }
       }
       bankLines.push('  exercise: [')

@@ -14,6 +14,7 @@ import { texNombre } from '../../lib/outils/texNombre'
  * @param {number} [BC = 5] Longueur BC
  * @param {string}  [unite = 'cm'] Unité de la longueur recherchée
  * @param {string} [couleurReponse = orangeMathalea] Couleur de la réponse : du type 'red', du type '#010101' ou du type orangeMathalea
+ * @param {boolean} [avecUnites = false] Si true, les unités sont écrites dans les calculs (par exemple $4\text{ cm}\times 4\text{ cm}=16\text{ cm}^2$)
  * @example RedactionPythagore()
  * // Crée la rédaction du théorème de Pythagore dans un triangle ABC rectangle en A de dimensions 3-4-5 cm dont on recherche la longueur de l'hypoténuse.
  * @example RedactionPythagore('M','N','P',2,reponse,5,13,'dm')
@@ -32,7 +33,18 @@ export function RedactionPythagore(
   BC = 5,
   unite = 'cm',
   couleurReponse = orangeMathalea,
+  avecUnites = false,
 ) {
+  const uniteTex = unite === '' ? '' : `\\text{ ${unite}}`
+  const uniteCarreeTex = avecUnites && unite !== '' ? `\\text{ ${unite}}^2` : ''
+  // Avec les unités, `4^2` s'écrit `4 cm × 4 cm` et le résultat porte l'unité au carré.
+  const carre = (x: number, precision = 8) =>
+    avecUnites
+      ? `${texNombre(x, precision)}${uniteTex}\\times ${texNombre(x, precision)}${uniteTex}`
+      : `${texNombre(x, precision)}^2`
+  const aire = (x: number, precision = 8) =>
+    `${texNombre(x, precision)}${uniteCarreeTex}`
+
   let texte = ``
   let signeEgal = ``
   texte = `Le triangle $${A + B + C}$ est rectangle en $${A}$.`
@@ -44,35 +56,33 @@ export function RedactionPythagore(
     texte += `$ ${miseEnEvidence(`${B + C}^2=${A + B}^2+${A + C}^2`, couleurReponse)}\\\\$`
   }
   if (rechercheHypotenuse === 1) {
-    texte += `${B + C}^2&=${texNombre(AB, 2)}^2+${texNombre(AC, 2)}^2\\\\`
-    texte += `${B + C}^2&=${texNombre(AB ** 2)}+${texNombre(AC ** 2)}\\\\`
-    texte += `${B + C}^2&=${texNombre(AB ** 2 + AC ** 2, 2)}\\\\`
+    texte += `${B + C}^2&=${carre(AB, 2)}+${carre(AC, 2)}\\\\`
+    texte += `${B + C}^2&=${aire(AB ** 2)}+${aire(AC ** 2)}\\\\`
+    texte += `${B + C}^2&=${aire(AB ** 2 + AC ** 2, 2)}\\\\`
     texte += `\\text{Donc :}\\\\`
-    texte += `${B + C}&=\\sqrt{${texNombre(
-      AB ** 2 + AC ** 2,
-      2,
-    )}}\\text{ ${unite}}\\\\`
+    texte += avecUnites
+      ? `${B + C}&=\\sqrt{${aire(AB ** 2 + AC ** 2, 2)}}\\\\`
+      : `${B + C}&=\\sqrt{${texNombre(AB ** 2 + AC ** 2, 2)}}${uniteTex}\\\\`
     signeEgal = egalOuApprox(Math.sqrt(AB ** 2 + AC ** 2), 2)
     texte += `${B + C} &${signeEgal} ${miseEnEvidence(
       texNombre(BC, 2),
       couleurReponse,
-    )}${miseEnEvidence(`\\text{ ${unite}}`, couleurReponse)}\\\\`
+    )}${miseEnEvidence(uniteTex, couleurReponse)}\\\\`
     texte += `\\end{aligned}$ `
   } else if (rechercheHypotenuse === 2) {
-    texte += `${texNombre(BC, 2)}^2&=${A + B}^2+${texNombre(AC)}^2\\\\`
-    texte += `${texNombre(BC ** 2)}&=${A + B}^2+${texNombre(AC ** 2)}\\\\`
-    texte += `${A + B}^2&=${texNombre(BC ** 2)} - ${texNombre(AC ** 2)}\\\\`
-    texte += `${A + B}^2&=${texNombre(BC ** 2 - AC ** 2, 2)}\\\\`
+    texte += `${carre(BC, 2)}&=${A + B}^2+${carre(AC)}\\\\`
+    texte += `${aire(BC ** 2)}&=${A + B}^2+${aire(AC ** 2)}\\\\`
+    texte += `${A + B}^2&=${aire(BC ** 2)} - ${aire(AC ** 2)}\\\\`
+    texte += `${A + B}^2&=${aire(BC ** 2 - AC ** 2, 2)}\\\\`
     texte += `\\text{Donc : }\\\\`
-    texte += `${A + B}&=\\sqrt{${texNombre(
-      BC ** 2 - AC ** 2,
-      2,
-    )}}\\text{ ${unite}}\\\\`
+    texte += avecUnites
+      ? `${A + B}&=\\sqrt{${aire(BC ** 2 - AC ** 2, 2)}}\\\\`
+      : `${A + B}&=\\sqrt{${texNombre(BC ** 2 - AC ** 2, 2)}}${uniteTex}\\\\`
     signeEgal = egalOuApprox(Math.sqrt(BC ** 2 - AC ** 2), 2)
     texte += `${A + B} &${signeEgal} ${miseEnEvidence(
       texNombre(AB, 2),
       couleurReponse,
-    )}${miseEnEvidence(`\\text{ ${unite}}`, couleurReponse)}\\\\`
+    )}${miseEnEvidence(uniteTex, couleurReponse)}\\\\`
     texte += `\\end{aligned}$ `
   }
   return [texte, signeEgal]

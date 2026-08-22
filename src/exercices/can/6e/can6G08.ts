@@ -34,7 +34,7 @@ export const interactifType = 'multi-mathfield'
 export const uuid = '85dfd'
 
 export const refs = {
-  'fr-fr': ['can6G08', '6G7B-flash3'],
+  'fr-fr': ['can6G08', '6G7B-flash3', '6AutoG3-1'],
   'fr-ch': [],
 }
 
@@ -73,7 +73,7 @@ export default class TrouverLeSym extends Exercice {
       defaut: 1,
     }).map(Number)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       // on remet à vide tous les tableaux utilisés pour la question suivante
       let indexNumerosChoisis: number[] = []
       const numerosAEviter =

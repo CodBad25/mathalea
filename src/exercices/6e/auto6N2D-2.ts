@@ -13,7 +13,8 @@ export const amcType = 'AMCNum'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
-export const titre = 'Multiplier ou diviser un nombre décimal par 10, 100 ou 1 000'
+export const titre =
+  'Multiplier ou diviser un nombre décimal par 10, 100 ou 1 000'
 export const dateDePublication = '17/08/2026'
 
 /**
@@ -23,7 +24,7 @@ export const dateDePublication = '17/08/2026'
 export const uuid = 'c5e16'
 
 export const refs = {
-  'fr-fr': ['auto6N2D-2'],
+  'fr-fr': ['auto6N2D-2', '6AutoN4-5'],
   'fr-2016': [],
   'fr-ch': [],
 }
@@ -86,7 +87,7 @@ export default class MultiplierOuDiviserDecimauxPar101001000 extends Exercice {
     this.comment +=
       "Le quatrième paramètre permet de choisir si cet exercice dispose d'un glisse-nombre.<br><br>"
     this.comment +=
-      "Le cinquième paramètre permet de choisir si les questions portent sur des divisions, des multiplications ou un mélange des deux.<br><br>"
+      'Le cinquième paramètre permet de choisir si les questions portent sur des divisions, des multiplications ou un mélange des deux.<br><br>'
     this.comment +=
       'Le sixième paramètre permet de choisir si cet exercice propose une correction sèche ou une correction détaillée.'
     this.correctionDetaillee = false

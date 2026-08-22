@@ -55,7 +55,7 @@ $\\widehat{\\mathrm{ABC}}\\approx 34^{\\circ}$.<br>`
 
   constructor() {
     super()
-    this.options = { ...this.options, vertical: true }
+    this.options.vertical = true
     this.versionOriginale()
     this.besoinFormulaire3CaseACocher = ["Avec le préambule de l'énoncé", true]
     this.sup3 = true

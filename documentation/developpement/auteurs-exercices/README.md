@@ -25,18 +25,19 @@ mathématique simple.
 
 ## Compléments selon le besoin
 
-| Besoin | Guide |
-| --- | --- |
-| Proposer des réglages à l'enseignant | [Formulaires de paramétrage](complements/formulaires-parametres.md) |
-| Utiliser un format interactif spécialisé | [Formats interactifs spécialisés](complements/formats-interactifs.md) |
-| Créer un QCM | [Coder un QCM](complements/coder-un-qcm.md) |
-| Préparer un export AMC | [Export AMC](complements/export-amc.md) |
-| Créer une figure ou une scène 3D | [Faire un exercice 3D](complements/faire-un-exercice-3d.md) |
-| Utiliser Blockly | [BlocklyEditor](complements/blockly-editor.md) |
-| Utiliser Scratch | [ScratchEditor](complements/scratch-editor.md) |
-| Utiliser le tableur | [Tableur](complements/tableur.md) |
-| Choisir une autre classe ou une génération avancée | [Variantes d'exercices](complements/variantes-exercices.md) |
-| Afficher ou calculer des objets mathématiques | [Recettes mathématiques](mathematiques/README.md) |
+| Besoin                                                | Guide                                                                 |
+| ----------------------------------------------------- | --------------------------------------------------------------------- |
+| Proposer des réglages à l'enseignant                  | [Formulaires de paramétrage](complements/formulaires-parametres.md)   |
+| Utiliser un format interactif spécialisé              | [Formats interactifs spécialisés](complements/formats-interactifs.md) |
+| Enchaîner plusieurs custom elements dans une question | [Mathalea Couteau Suisse](complements/couteau-suisse.md)              |
+| Créer un QCM                                          | [Coder un QCM](complements/coder-un-qcm.md)                           |
+| Préparer un export AMC                                | [Export AMC](complements/export-amc.md)                               |
+| Créer une figure ou une scène 3D                      | [Faire un exercice 3D](complements/faire-un-exercice-3d.md)           |
+| Utiliser Blockly                                      | [BlocklyEditor](complements/blockly-editor.md)                        |
+| Utiliser Scratch                                      | [ScratchEditor](complements/scratch-editor.md)                        |
+| Utiliser le tableur                                   | [Tableur](complements/tableur.md)                                     |
+| Choisir une autre classe ou une génération avancée    | [Variantes d'exercices](complements/variantes-exercices.md)           |
+| Afficher ou calculer des objets mathématiques         | [Recettes mathématiques](mathematiques/README.md)                     |
 
 ## Quand passer au niveau moteur
 

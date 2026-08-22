@@ -11,7 +11,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Interprêter les caractéristiques d'une série statistique"
+export const titre = "Interpréter les caractéristiques d'une série statistique"
 export const dateDePublication = '29/06/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
